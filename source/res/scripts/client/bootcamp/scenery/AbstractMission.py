@@ -1,10 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bootcamp/scenery/AbstractMission.py
 import weakref
-import BattleReplay
 import BigWorld
-import SoundGroups
-from constants import ARENA_PERIOD
 from bootcamp.BootCampEvents import g_bootcampEvents
 from bootcamp.hints.HintCustom import HintCustom
 from bootcamp.scenery.HintLink import HintLink
@@ -16,8 +13,7 @@ from bootcamp_shared import BOOTCAMP_BATTLE_ACTION
 from debug_utils import LOG_ERROR
 from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP
 import TriggersManager
-import MusicControllerWWISE as MC
-from helpers import dependency, isPlayerAvatar
+from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 
 class AbstractMission(object):
@@ -39,7 +35,6 @@ class AbstractMission(object):
          BOOTCAMP_BATTLE_ACTION.PLAYER_SPOTTED: self.__onActionPlayerSpoted,
          BOOTCAMP_BATTLE_ACTION.PLAYER_HIT_VEHICLE: self.__onActionPlayerHitVehicle,
          BOOTCAMP_BATTLE_ACTION.SET_SCENERY_CONSTANT: self.__onActionSetSceneryConstant}
-        self.__combatMusic = None
         BigWorld.player().arena.onPeriodChange += self._onPeriodChange
         return
 
@@ -67,15 +62,18 @@ class AbstractMission(object):
     def updatePeriod():
         pass
 
+    @property
+    def assistant(self):
+        return self._assistant
+
     def start(self):
         LOG_DEBUG_DEV_BOOTCAMP('Mission {0} start'.format(self.__class__.__name__))
+        self.assistant.combatSound.onStartMission()
         for id_, vehicle in self._avatar.arena.vehicles.items():
             vehLink = self.__getVehLink(id_)
             if vehLink is None:
                 self.createVehicle(vehicle['name'])
 
-        MC.g_musicController.skipArenaChanges = True
-        self._avatar.muteSounds(())
         for vehicle in self._avatar.vehicles:
             self.__onVehicleEnterWorld(vehicle)
 
@@ -108,7 +106,7 @@ class AbstractMission(object):
         if self.__callbackID is not None:
             BigWorld.cancelCallback(self.__callbackID)
             self.__callbackID = None
-        MC.g_musicController.skipArenaChanges = False
+        self.assistant.combatSound.onStopMission()
         LOG_DEBUG_DEV_BOOTCAMP('Mission {0} stop'.format(self.__class__.__name__))
         return
 
@@ -144,9 +142,11 @@ class AbstractMission(object):
             self.__vehicles.append(vehLink)
         return vehLink
 
-    def playSound2D(self, soundId):
-        if not BattleReplay.g_replayCtrl.isTimeWarpInProgress:
-            SoundGroups.g_instance.playSound2D(soundId)
+    def playSound2D(self, soundID):
+        self.assistant.combatSound.playSound2D(soundID, True)
+
+    def muteSounds(self, sounds):
+        self.assistant.combatSound.muteSounds(sounds)
 
     def createHint(self, hintTypeId=HINT_TYPE.HINT_CUSTOM, timeCompleted=0, cooldownAfter=0, message='default message', timeStartDelay=0.4, timeDuration=-1.0, timeInnerCooldown=-1.0, timeCompleteDuration=3.0, voiceover=None):
         hintLink = HintLink(hintTypeId, timeCompleted, cooldownAfter, message, timeStartDelay, timeDuration, timeInnerCooldown, timeCompleteDuration, voiceover)
@@ -237,29 +237,13 @@ class AbstractMission(object):
         pass
 
     def _onPeriodChange(self, *args):
-        if args[0] == ARENA_PERIOD.BATTLE and self.__combatMusic is None:
-            player = BigWorld.player()
-            if not isPlayerAvatar():
-                return
-            if player.arena is None:
-                return
-            arenaType = player.arena.arenaType
-            soundEventName = None
-            if arenaType.wwmusicSetup is not None:
-                soundEventName = arenaType.wwmusicSetup.get('wwmusicRelaxed', None)
-            if soundEventName:
-                self.__combatMusic = SoundGroups.g_instance.getSound2D(soundEventName)
-        return
+        pass
 
     def _muteCombatMusic(self):
-        if self.__combatMusic is not None and self.__combatMusic.isPlaying:
-            self.__combatMusic.stop()
-        return
+        self.assistant.combatSound.muteCombatMusic()
 
     def _playCombatMusic(self):
-        if self.__combatMusic is not None and not self.__combatMusic.isPlaying and not BattleReplay.g_replayCtrl.isTimeWarpInProgress:
-            self.__combatMusic.play()
-        return
+        self.assistant.combatSound.playCombatMusic()
 
     def __getVehLink(self, vehId):
         for vehLink in self.__vehicles:

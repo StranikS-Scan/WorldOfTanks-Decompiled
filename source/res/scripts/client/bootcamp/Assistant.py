@@ -65,12 +65,13 @@ class BattleAssistant(BaseAssistant):
      'ConsumableSlot6': BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL,
      'ConsumablesAppear': BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL}
 
-    def __init__(self, avatar, lessonId, entities, bootcampGui):
+    def __init__(self, avatar, lessonId, entities, bootcampGui, soundAssistant):
         lessonSettings = getBattleSettings(lessonId)
         super(BattleAssistant, self).__init__(HintSystem(avatar, lessonSettings.hints))
         self.__idHighlight = None
         self.__lessonId = lessonId
         self.__idClosePrebattleTimer = None
+        self.__soundAssistant = soundAssistant
         self.__highlightedElements = set()
         for animationName, panelName in BattleAssistant.HIGHLIGHTED_GUI_DICT.iteritems():
             curPanels = lessonSettings.visiblePanels
@@ -90,6 +91,10 @@ class BattleAssistant(BaseAssistant):
         self._markerManager.init(entities, markers, bootcampGui)
         g_bootcampEvents.onUIStateChanged += self._onUIStateChanged
         return
+
+    @property
+    def combatSound(self):
+        return self.__soundAssistant
 
     def getMarkers(self):
         return self._markerManager

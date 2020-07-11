@@ -1,0 +1,55 @@
+<60_asia_miao.xml>
+  <name>	#arenas:60_asia_miao/name	</name>
+  <description>	#arenas:60_asia_miao/description	</description>
+  <geometry>	spaces/60_asia_miao	</geometry>
+  <estimatedLoad>	0.3	</estimatedLoad>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/60_asia_miao/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_perl_river_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_perl_river_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_perl_river_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_perl_river_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_perl_river_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_perl_river_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_summer_02	</wwambientSound>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-317.599976 299.599701	</position1>
+        </team1>
+        <team2>
+          <position1>	300.999878 -304.499908	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <domination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-317 300	</position>
+        </team1>
+        <team2>
+          <position>	300 -305	</position>
+        </team2>
+      </teamSpawnPoints>
+      <controlPoint>	-265.739685 -303.382355	</controlPoint>
+    </domination>
+  </gameplayTypes>
+</60_asia_miao.xml>

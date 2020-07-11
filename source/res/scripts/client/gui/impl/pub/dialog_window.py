@@ -5,12 +5,12 @@ from collections import namedtuple
 from async import async, await, AsyncEvent, AsyncReturn, AsyncScope, BrokenPromiseError
 from frameworks.wulf import ViewFlags, WindowSettings, ViewSettings
 from frameworks.wulf import WindowFlags, Window
+from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from gui.impl.gen import R
 from gui.impl.gen.view_models.ui_kit.dialog_button_model import DialogButtonModel
 from gui.impl.gen.view_models.windows.dialog_window_model import DialogWindowModel
 from gui.impl.pub.view_impl import ViewImpl
-from gui.impl.wrappers.background_blur import WGUIBackgroundBlurSupportImpl
 from helpers import dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.impl import IGuiLoader
@@ -90,11 +90,10 @@ class DialogWindow(Window):
         self.__result = DialogButtons.CANCEL
         self.__blur = None
         if enableBlur:
-            self.__blur = WGUIBackgroundBlurSupportImpl()
             blurLayers = [APP_CONTAINERS_NAMES.VIEWS, APP_CONTAINERS_NAMES.SUBVIEW, APP_CONTAINERS_NAMES.BROWSER]
             if layer > DialogLayer.WINDOW:
                 blurLayers.append(APP_CONTAINERS_NAMES.WINDOWS)
-            self.__blur.enable(APP_CONTAINERS_NAMES.DIALOGS, blurLayers)
+            self.__blur = CachedBlur(enabled=True, ownLayer=APP_CONTAINERS_NAMES.DIALOGS, layers=blurLayers)
         return
 
     @async
@@ -134,7 +133,7 @@ class DialogWindow(Window):
         super(DialogWindow, self)._finalize()
         self.__scope.destroy()
         if self.__blur is not None:
-            self.__blur.disable()
+            self.__blur.fini()
         return
 
     def _onClosed(self, _=None):

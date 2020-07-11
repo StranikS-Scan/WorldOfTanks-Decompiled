@@ -45,7 +45,6 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         super(CustomizationBottomPanel, self).__init__()
         self.__ctx = None
         self._carouselDP = None
-        self._propertySheetShown = False
         self._projectionDecalOnlyOnceHintShow = False
         self._selectedItem = None
         return
@@ -64,16 +63,13 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__ctx.events.onItemsRemoved += self.__onItemsRemoved
         self.__ctx.events.onModeChanged += self.__onModeChanged
         self.__ctx.events.onChangesCanceled += self.__onChangesCanceled
-        self.__ctx.events.onItemSold += self.__onItemSold
         self.__ctx.events.onComponentChanged += self.__onComponentChanged
         self.__ctx.events.onInstallNextCarouselItem += self.__onInstallNextCarouselItem
-        self.__ctx.events.onResetItemsNovelty += self.__onResetItemsNovelty
         self.__ctx.events.onItemSelected += self.__onItemSelected
         self.__ctx.events.onItemUnselected += self.__onItemUnselected
+        self.__ctx.events.onSlotSelected += self.__onSlotSelected
         self.__ctx.events.onSlotUnselected += self.__onSlotUnselected
         self.__ctx.events.onFilterPopoverClosed += self.__onFilterPopoverClosed
-        self.__ctx.events.onPropertySheetShown += self.__onPropertySheetShown
-        self.__ctx.events.onPropertySheetHidden += self.__onPropertySheetHidden
         self.__ctx.events.onGetItemBackToHand += self.__onGetItemBackToHand
         g_currentVehicle.onChanged += self.__onVehicleChanged
         g_clientUpdateManager.addMoneyCallback(self.__setBottomPanelBillData)
@@ -88,7 +84,6 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         super(CustomizationBottomPanel, self)._dispose()
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__ctx.events.onComponentChanged -= self.__onComponentChanged
-        self.__ctx.events.onItemSold -= self.__onItemSold
         self.__ctx.events.onChangesCanceled -= self.__onChangesCanceled
         self.__ctx.events.onModeChanged -= self.__onModeChanged
         self.__ctx.events.onItemsRemoved -= self.__onItemsRemoved
@@ -98,13 +93,11 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__ctx.events.onCacheResync -= self.__onCacheResync
         self.__ctx.events.onCarouselFiltered -= self.__onCarouselFiltered
         self.__ctx.events.onInstallNextCarouselItem -= self.__onInstallNextCarouselItem
-        self.__ctx.events.onResetItemsNovelty -= self.__onResetItemsNovelty
         self.__ctx.events.onItemSelected -= self.__onItemSelected
         self.__ctx.events.onItemUnselected -= self.__onItemUnselected
+        self.__ctx.events.onSlotSelected -= self.__onSlotSelected
         self.__ctx.events.onSlotUnselected -= self.__onSlotUnselected
         self.__ctx.events.onFilterPopoverClosed -= self.__onFilterPopoverClosed
-        self.__ctx.events.onPropertySheetShown -= self.__onPropertySheetShown
-        self.__ctx.events.onPropertySheetHidden -= self.__onPropertySheetHidden
         self.__ctx.events.onGetItemBackToHand -= self.__onGetItemBackToHand
         g_currentVehicle.onChanged -= self.__onVehicleChanged
         self._carouselDP = None
@@ -126,7 +119,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     def onSelectHotFilter(self, index, value):
         filterType = (FilterTypes.INVENTORY, FilterTypes.APPLIED)[index]
         self._carouselDP.updateCarouselFilter(filterType, value)
-        self.__refreshCarousel()
+        self.__rebuildCarousel()
         self.__updateHints()
 
     def showGroupFromTab(self, tabIndex):
@@ -151,8 +144,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     def resetFilter(self):
         self.__clearFilter()
         self.refreshFilterData()
-        self.__refreshHotFilters()
-        self.__refreshCarousel()
+        self.__rebuildCarousel()
 
     def refreshFilterData(self):
         filterData = self._carouselDP.getFilterData()
@@ -205,17 +197,27 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             if item is None:
                 return
             self.__ctx.mode.selectItem(item.intCD)
-            self.__scrollToItem(item.intCD)
             return
 
-    def __onResetItemsNovelty(self):
-        self.__setNotificationCounters()
+    def __onSlotSelected(self, *_, **__):
+        if self.__ctx.mode.tabId == CustomizationTabs.PROJECTION_DECALS:
+            self.__rebuildCarousel(scroll=True)
+        else:
+            self._carouselDP.refresh()
+            self.__updateSelection(scroll=True)
+        self.__updateFilterMessage()
 
     def __onSlotUnselected(self):
         if self.__ctx.mode.tabId == CustomizationTabs.PROJECTION_DECALS:
-            self.__refreshCarousel()
+            prevSelected = self._selectedItem
+            self.__rebuildCarousel()
+            if prevSelected is not None:
+                self.__scrollToItem(prevSelected.intCD, True)
         else:
             self._carouselDP.refresh()
+            self.__updateSelection(scroll=True)
+        self.__updateFilterMessage()
+        return
 
     def __setNotificationCounters(self):
         vehicle = g_currentVehicle.item
@@ -223,9 +225,10 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         tabsCounters = []
         visibleTabs = self.getVisibleTabs()
         season = self.__ctx.season
+        itemFilter = self.__ctx.mode.style.isItemInstallable if self.__ctx.modeId == CustomizationModes.EDITABLE_STYLE else None
         for tabId in visibleTabs:
             tabItemTypes = CustomizationTabs.ITEM_TYPES[tabId]
-            tabsCounters.append(vehicle.getC11nItemsNoveltyCounter(proxy, itemTypes=tabItemTypes, season=season))
+            tabsCounters.append(vehicle.getC11nItemsNoveltyCounter(proxy, itemTypes=tabItemTypes, season=season, itemFilter=itemFilter))
 
         if self.__ctx.modeId == CustomizationModes.STYLED:
             availableItemTypes = getItemTypesAvailableForVehicle() - {GUI_ITEM_TYPE.STYLE}
@@ -236,6 +239,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             switchersCounter += getEditableStylesExtraNotificationCounter(styles)
         self.as_setNotificationCountersS({'tabsCounters': tabsCounters,
          'switchersCounter': switchersCounter})
+        return
 
     def __resetTabs(self):
         self.as_setBottomPanelTabsDataS({'tabsDP': [],
@@ -267,9 +271,11 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
 
     def __updateFilterMessage(self):
         message = backport.text(R.strings.vehicle_customization.carousel.message.description())
-        if self._propertySheetShown and self.__ctx.mode.tabId == CustomizationTabs.PROJECTION_DECALS:
+        selectedSlot = self.__ctx.mode.selectedSlot
+        if selectedSlot is not None and selectedSlot.slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
             message = backport.text(R.strings.vehicle_customization.carousel.message.propertysheet())
         self.as_carouselFilterMessageS('{}{}\n{}'.format(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICONFILLED, vSpace=-3), text_styles.neutral(VEHICLE_CUSTOMIZATION.CAROUSEL_MESSAGE_HEADER), text_styles.main(message)))
+        return
 
     def __updateSetSwitcherData(self):
         switchersData = self.__getSwitcherInitData()
@@ -375,12 +381,12 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self._carouselDP.clearFilter()
         self.__refreshHotFilters()
 
-    def __refreshCarousel(self, scroll=False):
+    def __rebuildCarousel(self, scroll=False):
         self._carouselDP.invalidateFilteredItems()
         self._carouselDP.buildList()
-        self.as_setCarouselDataS(self.__buildCustomizationCarouselDataVO())
         self._carouselDP.refresh()
         self.__updateSelection(scroll)
+        self.as_setCarouselDataS(self.__buildCustomizationCarouselDataVO())
 
     def _carouseItemWrapper(self, itemCD):
         item = self.service.getItemByCD(itemCD)
@@ -448,10 +454,8 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             self._carouselDP.updateCarouselFilter(FilterTypes.EDITABLE_STYLES, kwargs['onlyEditableStyles'], FilterAliases.EDITABLE_STYLES)
         if 'onlyNonEditableStyles' in kwargs:
             self._carouselDP.updateCarouselFilter(FilterTypes.EDITABLE_STYLES, kwargs['onlyNonEditableStyles'], FilterAliases.NON_EDITABLE_STYLES)
-        self.__refreshCarousel()
         self.__refreshHotFilters()
-        if not self._propertySheetShown:
-            self.__scrollToItem(-1, True)
+        self.__rebuildCarousel()
         self.__updateHints()
 
     def __onCacheResync(self, *_):
@@ -460,7 +464,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self._carouselDP.invalidateItems()
         self.__updateTabs()
         self.__setBottomPanelBillData()
-        self.__refreshCarousel()
+        self.__rebuildCarousel()
         self.__updateStyleLabel()
         self.__setNotificationCounters()
 
@@ -476,7 +480,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
 
     def __onSeasonChanged(self, seasonType):
         self.__updateTabs()
-        self.__refreshCarousel()
+        self.__rebuildCarousel()
         self.__updatePopoverBtnIcon()
         self.__setBottomPanelBillData()
         self.__setNotificationCounters()
@@ -502,16 +506,19 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     def __onItemsInstalled(self, item, slotId, season, component):
         self.__updateTabs()
         self.__setBottomPanelBillData()
-        self.__refreshCarousel()
+        self.__rebuildCarousel()
+        if slotId == self.__ctx.mode.selectedSlot and (season is None or season == self.__ctx.season):
+            self.__scrollToItem(item.intCD)
         self.__updateSetSwitcherData()
+        return
 
     def __onTabChanged(self, tabIndex, itemCD=None):
         self.__updateTabs()
-        self.__refreshCarousel()
+        self.__rebuildCarousel()
         self.__updateStyleLabel()
-        self.__updateHints()
         self.__updateSetSwitcherData()
         self.__setNotificationCounters()
+        itemCD = itemCD or self.__updateHints()
         if itemCD is not None:
             self.__scrollToItem(itemCD)
         else:
@@ -521,15 +528,17 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     def __onItemsRemoved(self, *_, **__):
         self.__updateTabs()
         self.__setBottomPanelBillData()
-        self._carouselDP.invalidateFilteredItems()
-        self.__refreshCarousel()
+        selectedItem = self._selectedItem
+        self.__rebuildCarousel()
+        if selectedItem is not None:
+            self.__scrollToItem(selectedItem.intCD, immediately=True)
         self.__updateSetSwitcherData()
+        return
 
     def __onModeChanged(self, modeId, prevModeId):
         self._carouselDP.onModeChanged(modeId, prevModeId)
         self.__setBottomPanelBillData()
         self.__setFooterInitData()
-        self.__scrollToNewItem()
         self.__refreshHotFilters()
         self.__resetTabs()
         if modeId == CustomizationModes.EDITABLE_STYLE:
@@ -540,16 +549,13 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__updateTabs()
         self.__setBottomPanelBillData()
         self._carouselDP.invalidateFilteredItems()
-        self.__refreshCarousel()
+        self.__rebuildCarousel()
         self.__updateSetSwitcherData()
-
-    def __onItemSold(self, item, count):
-        self._needCaruselFullRebuild = self._carouselDP.isFilterApplied(FilterTypes.INVENTORY)
 
     def __onComponentChanged(self, slotId, refreshCarousel):
         self.__setBottomPanelBillData()
         if refreshCarousel:
-            self.__refreshCarousel()
+            self.__rebuildCarousel()
 
     def __scrollToNewItem(self):
         itemTypes = CustomizationTabs.ITEM_TYPES[self.__ctx.mode.tabId]
@@ -571,20 +577,6 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     def __onFilterPopoverClosed(self):
         self.blinkCounter()
 
-    def __onPropertySheetShown(self, *_):
-        self._propertySheetShown = True
-        self.__refreshCarousel(scroll=True)
-        self.__updateFilterMessage()
-
-    def __onPropertySheetHidden(self):
-        self._propertySheetShown = False
-        self.__refreshCarousel()
-        prevSelected = self._selectedItem
-        if prevSelected is not None:
-            self.__scrollToItem(prevSelected.intCD, True)
-        self.__updateFilterMessage()
-        return
-
     def __onGetItemBackToHand(self, item, progressionLevel=-1, scrollToItem=False):
         if scrollToItem:
             self.__scrollToItem(item.intCD, immediately=True)
@@ -598,11 +590,11 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     def __updateSelection(self, scroll=False):
         if self.__ctx.mode.selectedItem is not None:
             self._selectedItem = self.__ctx.mode.selectedItem
-        elif self.__ctx.mode.selectedSlot is not None and self._propertySheetShown:
-            if self.__ctx.modeId == CustomizationModes.STYLED:
+        elif self.__ctx.mode.selectedSlot is not None:
+            slotId = self.__ctx.mode.selectedSlot
+            if slotId.slotType == GUI_ITEM_TYPE.STYLE:
                 self._selectedItem = self.__ctx.mode.modifiedStyle
             else:
-                slotId = self.__ctx.mode.selectedSlot
                 self._selectedItem = self.__ctx.mode.getItemFromSlot(slotId)
         else:
             self._selectedItem = None
@@ -612,14 +604,16 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         return
 
     def __updateHints(self):
+        intCD = None
         if self.__ctx.mode.tabId == CustomizationTabs.PROJECTION_DECALS:
             self.__onProjectionDecalOnlyOnceHintShown()
         else:
             self.__onProjectionDecalOnlyOnceHintHidden()
         if self.__ctx.mode.tabId == CustomizationTabs.STYLES:
-            self.__onEditableStylesHintsShown()
+            intCD = self.__onEditableStylesHintsShown()
         else:
             self.__onEditableStylesHintsHidden()
+        return intCD
 
     def __onProjectionDecalOnlyOnceHintShown(self):
         if not self.__c11nSettings.get(PROJECTION_DECAL_HINT_SHOWN_FIELD, False):
@@ -639,26 +633,22 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             for intCD in self._carouselDP.collection:
                 item = self.service.getItemByCD(intCD)
                 if item.itemTypeID != GUI_ITEM_TYPE.STYLE:
-                    break
-                if item.isEditable:
+                    return
+                if item.canBeEditedForVehicle(g_currentVehicle.item.intCD):
                     self.as_setEditableStyleHintVisibilityS(True)
-                    self.__scrollToItem(item.intCD)
-                    break
-            else:
-                self.__onEditableStylesHintsHidden(record=False)
+                    return item.intCD
 
+            self.__onEditableStylesHintsHidden(record=False)
         elif not self.__serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLES_HINT):
             for intCD in self._carouselDP.collection:
                 item = self.service.getItemByCD(intCD)
                 if item.itemTypeID != GUI_ITEM_TYPE.STYLE:
-                    break
+                    return
                 if item.isProgressionRequiredCanBeEdited(g_currentVehicle.item.intCD):
                     self.as_setEditableProgressionRequiredStyleHintVisibilityS(True)
-                    self.__scrollToItem(item.intCD)
-                    break
-            else:
-                self.__onEditableStylesHintsHidden(record=False)
+                    return item.intCD
 
+            self.__onEditableStylesHintsHidden(record=False)
         else:
             self.__onEditableStylesHintsHidden(record=False)
 

@@ -33,6 +33,10 @@ class IItemsRequester(requesters.IRequester):
         raise NotImplementedError
 
     @property
+    def battleRoyale(self):
+        raise NotImplementedError
+
+    @property
     def badges(self):
         raise NotImplementedError
 
@@ -90,6 +94,9 @@ class IItemsRequester(requesters.IRequester):
     def getTankmen(self, criteria=None):
         raise NotImplementedError
 
+    def removeUnsuitableTankmen(self, tankmen, criteria=None):
+        raise NotImplementedError
+
     def getItems(self, itemTypeID=None, criteria=None, nationID=None, onlyWithPrices=True):
         raise NotImplementedError
 
@@ -135,6 +142,7 @@ class IItemsRequester(requesters.IRequester):
 
 class IHangarSpace(object):
     onStatsReceived = None
+    onSpaceCreating = None
     onSpaceCreate = None
     onSpaceDestroy = None
     onMouseEnter = None
@@ -144,9 +152,11 @@ class IHangarSpace(object):
     onVehicleChangeStarted = None
     onVehicleChanged = None
     onSpaceRefresh = None
+    onSpaceRefreshCompleted = None
     onHeroTankReady = None
     onSpaceChanged = None
     onNotifyCursorOver3dScene = None
+    onSpaceChangedByAction = None
 
     @property
     def space(self):
@@ -170,6 +180,14 @@ class IHangarSpace(object):
 
     @property
     def isCursorOver3DScene(self):
+        raise NotImplementedError
+
+    @property
+    def spacePath(self):
+        raise NotImplementedError
+
+    @property
+    def visibilityMask(self):
         raise NotImplementedError
 
     def spaceLoading(self):
@@ -215,6 +233,22 @@ class IHangarSpace(object):
         raise NotImplementedError
 
     def updateAnchorsParams(self, *args):
+        raise NotImplementedError
+
+
+class IHangarSpaceReloader(object):
+
+    def init(self):
+        raise NotImplementedError
+
+    def destroy(self):
+        raise NotImplementedError
+
+    def changeHangarSpace(self, spaceName, waitingMessage=None, backgroundImage=None):
+        raise NotImplementedError
+
+    @property
+    def hangarSpacePath(self):
         raise NotImplementedError
 
 

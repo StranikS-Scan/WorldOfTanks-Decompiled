@@ -324,6 +324,7 @@ class CustomMode(CustomizationMode):
             modifiedSeasons = SeasonType.COMMON_SEASONS
         else:
             modifiedSeasons = tuple((season for season in SeasonType.COMMON_SEASONS if not modifiedOutfits[season].isEqual(self._originalOutfits[season])))
+        self._soundEventChacker.lockPlayingSounds()
         for season in modifiedSeasons:
             emptyOutfit = self._service.getEmptyOutfit()
             yield OutfitApplier(g_currentVehicle.item, emptyOutfit, season).request()
@@ -336,6 +337,7 @@ class CustomMode(CustomizationMode):
             result = yield OutfitApplier(g_currentVehicle.item, outfit, season).request()
             results.append(result)
 
+        self._soundEventChacker.unlockPlayingSounds()
         if self.isInited:
             self._events.onItemsBought(purchaseItems, results)
         callback(self)

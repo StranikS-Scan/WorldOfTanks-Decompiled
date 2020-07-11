@@ -235,6 +235,7 @@ class EditableStyleMode(CustomMode):
         vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
         modifiedOutfits = {season:outfit.copy() for season, outfit in self._modifiedOutfits.iteritems()}
         removeUnselectedItemsFromEditableStyle(modifiedOutfits, self.__baseOutfits, purchaseItems)
+        self._soundEventChacker.lockPlayingSounds()
         outfit = self._modifiedOutfits[self.season]
         result = yield OutfitApplier(g_currentVehicle.item, outfit, SeasonType.ALL).request()
         results.append(result)
@@ -247,6 +248,7 @@ class EditableStyleMode(CustomMode):
                 result = yield OutfitApplier(g_currentVehicle.item, outfit, season).request()
                 results.append(result)
 
+        self._soundEventChacker.unlockPlayingSounds()
         if self.isInited:
             self._events.onItemsBought(purchaseItems, results)
         callback(self)

@@ -5,6 +5,7 @@ import SoundGroups
 import nations
 from PlayerEvents import g_playerEvents
 from constants import ARENA_PERIOD
+import BigWorld
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.controllers.interfaces import IBattleController
 from items import vehicles
@@ -83,6 +84,8 @@ class OptionalDevicesController(IBattleController):
     def setOptionalDevice(self, deviceID, isOn):
         intCD = _makeIntCD(deviceID)
         deviceIsOn = False
+        if BigWorld.player().isObserver():
+            deviceIsOn = deviceID not in self.__optionalDevices
         if deviceID in self.__optionalDevices:
             deviceIsOn = self.__optionalDevices[deviceID]
             self.__optionalDevices[deviceID] = isOn

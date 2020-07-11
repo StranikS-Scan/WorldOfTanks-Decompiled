@@ -26,12 +26,8 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
     def __init__(self, _=None):
         super(BattleTypeSelectPopover, self).__init__()
 
-    @process
     def selectFight(self, actionName):
-        navigationPossible = yield self.__lobbyContext.isHeaderNavigationPossible()
-        if not navigationPossible:
-            return
-        battle_selector_items.getItems().select(actionName)
+        self.__selectFight(actionName)
 
     def getTooltipData(self, itemData, itemIsDisabled):
         if itemData is None:
@@ -63,9 +59,9 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
             elif itemData == PREBATTLE_ACTION_NAME.SANDBOX:
                 isSpecial = True
                 tooltip = TOOLTIPS_CONSTANTS.BATTLE_TRAINING
-            elif itemData == PREBATTLE_ACTION_NAME.BOB or itemData == PREBATTLE_ACTION_NAME.BOB_SQUAD:
+            elif itemData == PREBATTLE_ACTION_NAME.BATTLE_ROYALE:
+                tooltip = TOOLTIPS_CONSTANTS.BATTLE_ROYALE_SELECTOR_INFO
                 isSpecial = True
-                tooltip = TOOLTIPS_CONSTANTS.BOB_SELECTOR_INFO
             result = {'isSpecial': isSpecial,
              'tooltip': tooltip}
             return result
@@ -91,3 +87,10 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
 
     def __getEpicAvailabilityData(self):
         return (TOOLTIPS_CONSTANTS.EVENT_PROGRESSION_SELECTOR_INFO, True)
+
+    @process
+    def __selectFight(self, actionName):
+        navigationPossible = yield self.__lobbyContext.isHeaderNavigationPossible()
+        if not navigationPossible:
+            return
+        battle_selector_items.getItems().select(actionName)

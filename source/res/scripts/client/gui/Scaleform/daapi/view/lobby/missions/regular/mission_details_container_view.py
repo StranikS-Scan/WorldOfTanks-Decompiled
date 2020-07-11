@@ -8,12 +8,15 @@ from gui.Scaleform.daapi.view.meta.MissionDetailsContainerViewMeta import Missio
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.server_events.events_helpers import isDailyQuest, isPremium
 from gui.server_events.formatters import parseComplexToken
+from gui.server_events.events_constants import EVENT_PROGRESSION_GROUPS_ID
 from gui.shared import events, event_bus_handlers, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.game_control import IEventProgressionController
 
 class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta):
     eventsCache = dependency.descriptor(IEventsCache)
+    __eventProgression = dependency.descriptor(IEventProgressionController)
     __showDQInMissionsTab = False
     __metaclass__ = event_bus_handlers.EventBusListener
 
@@ -41,10 +44,11 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
             return
         else:
             quest = self.__quests.get(eventID)
-            criteria, extraConditions = missions_helper.getDetailedMissionData(quest).getVehicleRequirementsCriteria()
+            detailedData = missions_helper.getDetailedMissionData(quest)
+            criteria, extraConditions, isForBattleRoyale = detailedData.getVehicleRequirementsCriteria()
             vehicleSelector.as_closeS()
             if criteria and not quest.isCompleted():
-                vehicleSelector.setCriteria(criteria, extraConditions)
+                vehicleSelector.setCriteria(criteria, extraConditions, isForBattleRoyale)
             else:
                 vehicleSelector.as_hideSelectedVehicleS()
             return
@@ -80,13 +84,16 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
             checkDaily = True if self.__showDQInMissionsTab else not isDailyQuest(q.getID()) and not isPremium(q.getID())
             return checkDaily and q.getFinishTimeLeft()
 
-        self.__quests = self.eventsCache.getQuests(missionsFilter)
         eventID = self.__ctx.get('eventID')
         groupID = self.__ctx.get('groupID')
         if self.__groupPacker is not None:
             self.__groupPacker.clear()
         self.__groupPacker = getGroupPackerByContextID(groupID, self.eventsCache)
         self.__datailedList = []
+        if groupID in EVENT_PROGRESSION_GROUPS_ID:
+            self.__quests = self.__eventProgression.getActiveQuestsAsDict()
+        else:
+            self.__quests = self.eventsCache.getQuests(missionsFilter)
         if self.__groupPacker is not None:
             for quest in self.__groupPacker.findEvents(self.__quests):
                 data = missions_helper.getDetailedMissionData(quest).getInfo()

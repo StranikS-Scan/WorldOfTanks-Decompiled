@@ -331,6 +331,9 @@ class IStatsRequester(IRequester):
     def getMaxResearchedLevel(self, nationID):
         raise NotImplementedError
 
+    def getWeeklyVehicleCrystals(self, vehCD):
+        raise NotImplementedError
+
 
 class IDossierRequester(IRequester):
 
@@ -731,6 +734,21 @@ class IRankedRequester(IRequester):
 
     @property
     def divisionsStats(self):
+        raise NotImplementedError
+
+
+class IBattleRoyaleRequester(IRequester):
+
+    @property
+    def accTitle(self):
+        raise NotImplementedError
+
+    @property
+    def battleCount(self):
+        raise NotImplementedError
+
+    @property
+    def killCount(self):
         raise NotImplementedError
 
 

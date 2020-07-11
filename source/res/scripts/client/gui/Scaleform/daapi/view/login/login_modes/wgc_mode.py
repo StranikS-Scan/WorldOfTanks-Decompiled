@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/login_modes/wgc_mode.py
 import BigWorld
+from constants import IS_CHINA
 from gui.Scaleform.locale.MENU import MENU
+from gui.impl import backport
+from gui.impl.gen import R
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -41,6 +44,8 @@ class WgcMode(BaseMode):
 
     def updateForm(self):
         if self.__wgcStoredUserSelected:
+            if IS_CHINA:
+                self._view.as_showHealthNoticeS(backport.text(R.strings.menu.login.healthNotice()))
             self._view.as_showFilledLoginFormS({'haveToken': True,
              'userName': BigWorld.WGC_getUserName(),
              'icoPath': '',

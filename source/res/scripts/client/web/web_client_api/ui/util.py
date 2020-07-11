@@ -7,7 +7,6 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HEADER_BUTTONS_COUNTERS_CHANGED_EVENT
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import lookupItem, showItemTooltip, getCDFromId, canInstallStyle
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS as TC
-from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.shared import g_eventBus
 from gui.shared.events import HasCtxEvent
 from gui.shared.gui_items.dossier import dumpDossier
@@ -93,10 +92,6 @@ class _PlatformProductListSchema(W2CSchema):
     response_fields_profile = Field(required=False, type=basestring)
     category = Field(required=False, type=basestring)
     product_codes = Field(required=False, type=list)
-
-
-class _SelectBattleTypeSchema(W2CSchema):
-    battle_type = Field(required=True, type=basestring)
 
 
 class UtilWebApiMixin(object):
@@ -231,7 +226,3 @@ class UtilWebApiMixin(object):
     @staticmethod
     def __getErrorResponse(data, defaultError=''):
         return data if data else {'description': defaultError}
-
-    @w2c(_SelectBattleTypeSchema, 'select_battle_type')
-    def selectBattleType(self, cmd):
-        battle_selector_items.getItems().select(cmd.battle_type, onlyActive=True)

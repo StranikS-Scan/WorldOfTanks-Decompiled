@@ -1,0 +1,316 @@
+<250_br_battle_city2-1.xml>
+  <name>	#arenas:250_br_battle_city2-1/name	</name>
+  <description>	#arenas:250_br_battle_city2-1/description	</description>
+  <geometry>	spaces/250_br_battle_city2-1	</geometry>
+  <runDelay>	45	</runDelay>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <boundingBox>
+    <bottomLeft>	-500.000000 -500.000000	</bottomLeft>
+    <upperRight>	1500.000000 1500.000000	</upperRight>
+  </boundingBox>
+  <deathZoneBorders>
+    <maxAlpha>	0.5	</maxAlpha>
+    <height>	16.0	</height>
+    <activeColor>	0.8 0.0 0.0 0.0	</activeColor>
+    <waitingColor>	1.0 0.6 0.0 0.0	</waitingColor>
+  </deathZoneBorders>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/250_br_battle_city2-1/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	winter	</vehicleCamouflageKind>
+  <wwmusicSetup>
+    <wwmusicLoading>	ev_br_2019_music	</wwmusicLoading>
+    <wwmusicIntensive>	ev_br_2019_music_battle	</wwmusicIntensive>
+    <wwmusicRelaxed>	ev_br_2019_music_battle	</wwmusicRelaxed>
+    <wwmusicStop></wwmusicStop>
+    <wwmusicEndbattleStop></wwmusicEndbattleStop>
+    <wwmusicResultWin>	ev_br_2019_music_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	ev_br_2019_music_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	ev_br_2019_music_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	ev_battle_royale_2019_gameplay.bnk	</bank>
+      <bank>	ev_battle_royale_2019_gameplay.pck	</bank>
+    </loadBanks>
+    <events>
+      <event>
+        <name>	gui_random_reward_appear	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_ally_killed_by_player	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_commander_killed	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_crew_deactivated	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_damage_by_near_explosion_by_enemy	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_damage_by_near_explosion_by_player	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_fire_stopped	</name>
+        <mod>	BR_fire_stopped	</mod>
+      </event>
+      <event>
+        <name>	vo_surveying_devices_crit_damaged	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_target_captured	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_target_lost	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_target_unlocked	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_track_damaged	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_track_functional	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_vehicle_destroyed	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_hp_damaged_by_explosion_at_direct_hit_by_player	</name>
+        <mod>	BR_armor_pierced_crit_by_player	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player	</name>
+        <mod>	BR_armor_pierced_by_player	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_hp_damaged_by_projectile_and_gun_damaged_by_player	</name>
+        <mod>	BR_armor_pierced_by_player	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_hp_damaged_by_projectile_by_player	</name>
+        <mod>	BR_armor_pierced_by_player	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player	</name>
+        <mod>	BR_armor_not_pierced_by_player	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player	</name>
+        <mod>	BR_armor_not_pierced_by_player	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_no_hp_damage_at_no_attempt_and_chassis_damaged_by_player	</name>
+        <mod>	BR_armor_pierced_crit_by_player	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_no_hp_damage_at_no_attempt_and_gun_damaged_by_player	</name>
+        <mod>	BR_armor_pierced_crit_by_player	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_no_hp_damage_at_no_attempt_by_player	</name>
+        <mod>	BR_armor_pierced_crit_by_player	</mod>
+      </event>
+      <event>
+        <name>	vo_ammo_bay_damaged	</name>
+        <mod>	BR_ammo_bay_damaged	</mod>
+      </event>
+      <event>
+        <name>	vo_armor_not_pierced_by_player	</name>
+        <mod>	BR_armor_not_pierced_by_player	</mod>
+      </event>
+      <event>
+        <name>	vo_armor_ricochet_by_player	</name>
+        <mod>	BR_armor_ricochet_by_player	</mod>
+      </event>
+      <event>
+        <name>	vo_driver_killed	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_fire_started_by_player	</name>
+        <mod>	BR_enemy_fire_started_by_player	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_killed	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_killed_by_player	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_engine_damaged	</name>
+        <mod>	BR_engine_damaged	</mod>
+      </event>
+      <event>
+        <name>	vo_engine_destroyed	</name>
+        <mod>	BR_engine_destroyed	</mod>
+      </event>
+      <event>
+        <name>	vo_engine_functional	</name>
+        <mod>	BR_engine_functional	</mod>
+      </event>
+      <event>
+        <name>	vo_fire_started	</name>
+        <mod>	BR_fire_started	</mod>
+      </event>
+      <event>
+        <name>	vo_fuel_tank_damaged	</name>
+        <mod>	BR_fuel_tank_damaged	</mod>
+      </event>
+      <event>
+        <name>	vo_gun_damaged	</name>
+        <mod>	BR_gun_damaged	</mod>
+      </event>
+      <event>
+        <name>	vo_gun_destroyed	</name>
+        <mod>	BR_gun_destroyed	</mod>
+      </event>
+      <event>
+        <name>	vo_gun_functional	</name>
+        <mod>	BR_gun_functional	</mod>
+      </event>
+      <event>
+        <name>	vo_gunner_killed	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_loader_killed	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_radio_damaged	</name>
+        <mod>	BR_radio_damaged	</mod>
+      </event>
+      <event>
+        <name>	vo_radioman_killed	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_start_battle	</name>
+        <mod>	BR_char_start_battle	</mod>
+      </event>
+      <event>
+        <name>	vo_surveying_devices_damaged	</name>
+        <mod>	BR_surveying_devices_damaged	</mod>
+      </event>
+      <event>
+        <name>	vo_surveying_devices_destroyed	</name>
+        <mod>	BR_surveying_devices_destroyed	</mod>
+      </event>
+      <event>
+        <name>	vo_surveying_devices_functional	</name>
+        <mod>	BR_surveying_devices_functional	</mod>
+      </event>
+      <event>
+        <name>	vo_track_destroyed	</name>
+        <mod>	BR_track_destroyed	</mod>
+      </event>
+      <event>
+        <name>	vo_track_functional_can_move	</name>
+        <mod>	BR_track_functional_can_move	</mod>
+      </event>
+      <event>
+        <name>	vo_turret_rotator_damaged	</name>
+        <mod>	BR_turret_rotator_damaged	</mod>
+      </event>
+      <event>
+        <name>	vo_turret_rotator_destroyed	</name>
+        <mod>	BR_turret_rotator_destroyed	</mod>
+      </event>
+      <event>
+        <name>	vo_turret_rotator_functional	</name>
+        <mod>	BR_turret_rotator_functional	</mod>
+      </event>
+      <event>
+        <name>	be_nitro_activating	</name>
+        <mod>	BR_perk_nitro_activation	</mod>
+      </event>
+      <event>
+        <name>	be_nitro_empty	</name>
+        <mod>	BR_perk_nitro_deactivation	</mod>
+      </event>
+      <event>
+        <name>	vo_eb_support_air_scout	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_eb_support_inspire	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_eb_support_general	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_eb_support_smoke_screen	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_eb_support_airstrike	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_eb_support_artillery	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_eb_support_airstrike	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_eb_support_smoke_screen	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_eb_support_inspire	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_flt_combat_reserve	</name>
+        <mod>	BR_silence	</mod>
+      </event>
+      <event>
+        <name>	eb_ability_ready_to_use	</name>
+        <mod>	BR_perk_ready_to_use	</mod>
+      </event>
+    </events>
+  </soundRemapping>
+  <wwambientSound>	ev_amb_map_250_wind	</wwambientSound>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <estimatedLoad>	0.75	</estimatedLoad>
+  <gameplayTypes>
+    <ctf>
+      <enabledChatCommandFlags>	EPIC_BATTLE_COMMANDS	</enabledChatCommandFlags>
+      <battleEndWarningAppearTime>	0	</battleEndWarningAppearTime>
+      <battleEndWarningDuration>	0	</battleEndWarningDuration>
+      <battleEndingSoonTime>	120	</battleEndingSoonTime>
+      <maxTeamsInArena>	20	</maxTeamsInArena>
+      <minTeamsInArena>	7	</minTeamsInArena>
+      <maxPlayersInTeam>	3	</maxPlayersInTeam>
+      <squadTeamNumbers>	1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20	</squadTeamNumbers>
+    </ctf>
+  </gameplayTypes>
+  <mapActivities></mapActivities>
+</250_br_battle_city2-1.xml>

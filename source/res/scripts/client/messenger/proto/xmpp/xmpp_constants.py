@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/xmpp_constants.py
-from constants import IS_CLIENT
+from constants import IS_CLIENT, IS_CHINA
 from debug_utils import LOG_WARNING
 _COOLDOWN_OFFSET = 0.0 if IS_CLIENT else -0.1
+_DEFAULT_COOLDOWN = 0.5
+_CHINA_USER_MESSAGE_COOLDOWN = 3.0
 
 class MESSAGE_LIMIT(object):
-    COOLDOWN = 0.5
+    COOLDOWN = _DEFAULT_COOLDOWN if not IS_CHINA else _CHINA_USER_MESSAGE_COOLDOWN
     MESSAGE_MAX_SIZE = 512
     HISTORY_MAX_LEN = 100
 

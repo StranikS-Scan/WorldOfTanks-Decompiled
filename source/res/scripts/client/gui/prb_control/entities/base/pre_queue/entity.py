@@ -222,7 +222,7 @@ class PreQueueEntity(BasePreQueueEntity, ListenersCollection):
         SystemMessages.pushMessage(messages.getJoinFailureMessage(errorCode), type=SystemMessages.SM_TYPE.Error)
 
     def onKickedFromQueue(self, *args):
-        if self._requestCtx.getRequestType() == REQUEST_TYPE.QUEUE:
+        if self._requestCtx.getRequestType() in (REQUEST_TYPE.QUEUE, REQUEST_TYPE.DEQUEUE):
             self._requestCtx.stopProcessing(True)
         self._invokeListeners('onKickedFromQueue', self.getQueueType(), *args)
         self._exitFromQueueUI()

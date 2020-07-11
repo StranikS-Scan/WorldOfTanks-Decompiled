@@ -1,43 +1,32 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/registrar.py
 import inspect
-from constants import IS_CLIENT, IS_CELLAPP, IS_BASEAPP, IS_EDITOR
-from block import Block, ASPECT
-__all__ = ['regVScriptBlock',
- 'regAllVScriptBlocksInModule',
- 'getBlocks',
- 'aspectActive',
- 'anyAspectActive']
-__PY_VISUAL_SCRIPT_BLOCKS = []
-__VS_ENGINE_LOAD_BLOCKS = False
+from block import Block
+__all__ = ['VSBlockRegistrar']
 
-def __findVScriptConponentsInModule(module):
+def _findVScriptConponentsInModule(module):
     return list((value for key, value in inspect.getmembers(module, inspect.isclass) if issubclass(value, Block) and value is not Block))
 
 
-def aspectActive(aspect):
-    if IS_EDITOR:
-        return True
-    if aspect is ASPECT.CLIENT:
-        return IS_CLIENT
-    return IS_CELLAPP if aspect is ASPECT.SERVER else False
+class VSBlockRegistrar(object):
 
+    def __init__(self, *aspect):
+        self._aspects = set(aspect)
+        self._domainBlocks = []
+        self._isEngineLoadBlocks = False
 
-def anyAspectActive(*aspects):
-    return any(map(aspectActive, aspects))
+    @property
+    def aspects(self):
+        return ' | '.join(self._aspects)
 
+    def regBlock(self, block):
+        if block not in self._domainBlocks:
+            self._domainBlocks.append(block)
 
-def regVScriptBlock(value):
-    if value not in __PY_VISUAL_SCRIPT_BLOCKS:
-        __PY_VISUAL_SCRIPT_BLOCKS.append(value)
+    def regBlocksFromModule(self, module):
+        for block in _findVScriptConponentsInModule(module):
+            self.regBlock(block)
 
-
-def regAllVScriptBlocksInModule(module):
-    for block in __findVScriptConponentsInModule(module):
-        regVScriptBlock(block)
-
-
-def getBlocks():
-    global __VS_ENGINE_LOAD_BLOCKS
-    __VS_ENGINE_LOAD_BLOCKS = True
-    return __PY_VISUAL_SCRIPT_BLOCKS
+    def getBlocks(self):
+        self._isEngineLoadBlocks = True
+        return self._domainBlocks

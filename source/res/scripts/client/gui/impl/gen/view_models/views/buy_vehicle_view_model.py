@@ -9,7 +9,7 @@ from gui.impl.gen.view_models.views.buy_vehicle_view.vehicle_congratulation_mode
 class BuyVehicleViewModel(ViewModel):
     __slots__ = ('onCloseBtnClick', 'onBuyBtnClick', 'onInHangarClick', 'onBackClick', 'onCommanderLvlChange', 'onCheckboxWithoutCrewChanged')
 
-    def __init__(self, properties=22, commands=6):
+    def __init__(self, properties=21, commands=6):
         super(BuyVehicleViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -120,23 +120,17 @@ class BuyVehicleViewModel(ViewModel):
     def setNoCrewCheckboxLabel(self, value):
         self._setResource(18, value)
 
-    def getIsMovingTextEnabled(self):
+    def getIsContentHidden(self):
         return self._getBool(19)
 
-    def setIsMovingTextEnabled(self, value):
+    def setIsContentHidden(self, value):
         self._setBool(19, value)
 
-    def getIsContentHidden(self):
-        return self._getBool(20)
-
-    def setIsContentHidden(self, value):
-        self._setBool(20, value)
-
     def getBgSource(self):
-        return self._getResource(21)
+        return self._getResource(20)
 
     def setBgSource(self, value):
-        self._setResource(21, value)
+        self._setResource(20, value)
 
     def _initialize(self):
         super(BuyVehicleViewModel, self)._initialize()
@@ -159,7 +153,6 @@ class BuyVehicleViewModel(ViewModel):
         self._addResourceProperty('withoutCommanderAltText', R.invalid())
         self._addResourceProperty('priceDescription', R.invalid())
         self._addResourceProperty('noCrewCheckboxLabel', R.invalid())
-        self._addBoolProperty('isMovingTextEnabled', False)
         self._addBoolProperty('isContentHidden', False)
         self._addResourceProperty('bgSource', R.invalid())
         self.onCloseBtnClick = self._addCommand('onCloseBtnClick')

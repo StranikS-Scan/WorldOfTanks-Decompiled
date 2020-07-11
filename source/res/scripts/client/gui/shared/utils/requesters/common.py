@@ -61,14 +61,11 @@ class BaseDelta(object):
         self._prevIsInitialized = False
 
     def hasDiff(self, entryId):
-        if entryId in self._currValues:
-            if entryId in self._prevValues:
-                return self._hasEntryChanged(entryId)
-            return True
-        return False
+        return self._hasEntryChanged(entryId) if entryId in self._currValues else False
 
     def _hasEntryChanged(self, entryId):
-        return self._currValues.get(entryId) != self._prevValues.get(entryId)
+        prevValues = self.getPrevValue(entryId)
+        return self._currValues.get(entryId) != prevValues
 
     def _removeOutdatedValues(self):
         for entryId in self._prevValues.keys():

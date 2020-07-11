@@ -138,6 +138,8 @@ class _QuestInfo(_EventInfo, QuestInfoModel):
         if self.event.isCompleted(progress=pCur):
             if self.event.bonusCond.isDaily():
                 msg = self._getCompleteDailyStatus('#quests:details/status/completed/daily')
+            elif self.event.bonusCond.isWeekly():
+                msg = self._getCompleteWeeklyStatus('#quests:details/status/completed/weekly')
             else:
                 msg = i18n.makeString('#quests:details/status/completed')
             return (MISSIONS_STATES.COMPLETED, msg)

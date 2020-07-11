@@ -1133,55 +1133,6 @@ class SettingsKeyChargeFire(BlocksTooltipData):
         return tooltipBlocks
 
 
-class SettingsKeyFollowMe(SettingsBaseKey):
-
-    def __init__(self, context):
-        super(SettingsKeyFollowMe, self).__init__(context)
-        self._enemyBlockImage = RES_ICONS.MAPS_ICONS_SETTINGS_SUPPORTTOOLTIP
-        self._enemyBlockTitle = TOOLTIPS.SETTINGS_SUPPORT_SUBTITLE
-        self._allyBlockImage = RES_ICONS.MAPS_ICONS_SETTINGS_FOLLOWMETOOLTIP
-        self._allyBlockTitle = TOOLTIPS.SETTINGS_FOLLOWME_SUBTITLE
-
-
-class SettingsKeyTurnBack(SettingsBaseKey):
-
-    def __init__(self, context):
-        super(SettingsKeyTurnBack, self).__init__(context)
-        self._enemyBlockImage = RES_ICONS.MAPS_ICONS_SETTINGS_DEFENDBASETOOLTIP
-        self._enemyBlockTitle = TOOLTIPS.SETTINGS_DEFENDBASE_SUBTITLE
-        self._allyBlockImage = RES_ICONS.MAPS_ICONS_SETTINGS_TURNBACKTOOLTIP
-        self._allyBlockTitle = TOOLTIPS.SETTINGS_TURNBACK_SUBTITLE
-
-    def _getEnemyDescription(self):
-        return text_styles.main(TOOLTIPS.SETTINGS_DEFENDBASE_ENEMY_BODY)
-
-
-class SettingsKeyNeedHelp(SettingsBaseKey):
-
-    def __init__(self, context):
-        super(SettingsKeyNeedHelp, self).__init__(context)
-        self._enemyBlockImage = RES_ICONS.MAPS_ICONS_SETTINGS_NEEDHELPTOOLTIP
-        self._enemyBlockTitle = TOOLTIPS.SETTINGS_NEEDHELP_SUBTITLE
-        self._allyBlockImage = RES_ICONS.MAPS_ICONS_SETTINGS_NEEDHELPTOOLTIP
-        self._allyBlockTitle = TOOLTIPS.SETTINGS_HELPME_SUBTITLE
-
-    def _getEnemyDescription(self):
-        return text_styles.main(TOOLTIPS.SETTINGS_NEEDHELP_ENEMY_BODY)
-
-
-class SettingsKeyReload(SettingsBaseKey):
-
-    def __init__(self, context):
-        super(SettingsKeyReload, self).__init__(context)
-        self._enemyBlockImage = RES_ICONS.MAPS_ICONS_SETTINGS_RESETTOOLTIP
-        self._enemyBlockTitle = TOOLTIPS.SETTINGS_RELOAD_SUBTITLE
-        self._allyBlockImage = RES_ICONS.MAPS_ICONS_SETTINGS_STOPICONTOOLTIP
-        self._allyBlockTitle = TOOLTIPS.SETTINGS_STOP_SUBTITLE
-
-    def _getEnemyDescription(self):
-        return text_styles.main(TOOLTIPS.SETTINGS_RELOAD_ENEMY_BODY)
-
-
 class SettingKeySwitchMode(BlocksTooltipData):
 
     def __init__(self, context):
@@ -1190,6 +1141,41 @@ class SettingKeySwitchMode(BlocksTooltipData):
     def _packBlocks(self, *args, **kwargs):
         tooltipBlocks = super(SettingKeySwitchMode, self)._packBlocks(*args, **kwargs)
         tooltipBlocks.append(formatters.packTitleDescBlock(text_styles.highTitle(TOOLTIPS.SETTINGS_KEYMOVEMENT_TITLE), text_styles.main(TOOLTIPS.SETTINGS_SWITCHMODE_BODY)))
+        return tooltipBlocks
+
+
+class SettingsKeyHighlightLocation(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(SettingsKeyHighlightLocation, self).__init__(context, TOOLTIP_TYPE.CONTROL)
+
+    def _packBlocks(self, *args, **kwargs):
+        tooltipBlocks = super(SettingsKeyHighlightLocation, self)._packBlocks(*args, **kwargs)
+        tooltipBlocks.append(formatters.packTitleDescBlock(text_styles.highTitle(TOOLTIPS.SETTINGS_KEY_HIGHLIGHTLOCATION_TITLE), text_styles.main(TOOLTIPS.SETTINGS_KEY_HIGHLIGHTLOCATION_BODY)))
+        return tooltipBlocks
+
+
+class SettingsKeyHighlightTarget(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(SettingsKeyHighlightTarget, self).__init__(context, TOOLTIP_TYPE.CONTROL)
+
+    def _packBlocks(self, *args, **kwargs):
+        tooltipBlocks = super(SettingsKeyHighlightTarget, self)._packBlocks(*args, **kwargs)
+        tooltipBlocks.append(formatters.packTitleDescBlock(text_styles.highTitle(TOOLTIPS.SETTINGS_KEY_HIGHLIGHTTARGET_TITLE), text_styles.main(TOOLTIPS.SETTINGS_KEY_HIGHLIGHTTARGET_BODY)))
+        return tooltipBlocks
+
+
+class SettingsKeyShowRadialMenu(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(SettingsKeyShowRadialMenu, self).__init__(context, TOOLTIP_TYPE.CONTROL)
+        self._setWidth(350)
+
+    def _packBlocks(self, *args, **kwargs):
+        tooltipBlocks = super(SettingsKeyShowRadialMenu, self)._packBlocks(*args, **kwargs)
+        tooltipBlocks.append(formatters.packBuildUpBlockData([formatters.packTitleDescBlock(text_styles.highTitle(TOOLTIPS.SETTINGS_KEY_SHOWRADIALMENU_TITLE), text_styles.main(TOOLTIPS.SETTINGS_KEY_SHOWRADIALMENU_BODYA)), formatters.packImageTextBlockData(desc=text_styles.alert(TOOLTIPS.SETTINGS_KEY_SHOWRADIALMENU_ATTENTION), img=RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON1, imgAtLeft=True, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', blockWidth=280, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGETEXT_BLOCK_LINKAGE, padding={'top': -8,
+          'left': 8}), formatters.packTitleDescBlock(text_styles.main(TOOLTIPS.SETTINGS_KEY_SHOWRADIALMENU_BODYB))]))
         return tooltipBlocks
 
 

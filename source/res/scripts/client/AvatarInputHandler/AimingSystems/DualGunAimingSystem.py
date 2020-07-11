@@ -16,10 +16,10 @@ class GunMatCalc(object):
 
     @staticmethod
     def gunShotOffset(vehicleDescr, currentGun):
-        if vehicleDescr.turret.multiGun is not None:
+        if vehicleDescr.isDualgunVehicle and vehicleDescr.turret.multiGun is not None:
             if 0 <= currentGun < len(vehicleDescr.turret.multiGun):
                 return vehicleDescr.turret.multiGun[currentGun].shotPosition
-        return vehicleDescr.turret.gunShotPosition
+        return vehicleDescr.activeGunShotPosition
 
     @staticmethod
     def turretOffset(vehicleDescr):

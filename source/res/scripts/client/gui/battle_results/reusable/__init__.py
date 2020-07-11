@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/reusable/__init__.py
 import weakref
+import typing
 from account_helpers import getAccountDatabaseID
 from constants import ARENA_BONUS_TYPE
 from debug_utils import LOG_WARNING
@@ -46,7 +47,7 @@ def createReusableInfo(results):
 
     record = _fetchRecord(results, _RECORD.COMMON)
     if record is not None:
-        commonInfo = _checkInfo(CommonInfo(**record), _RECORD.COMMON)
+        commonInfo = _checkInfo(CommonInfo(vehicles=results[_RECORD.VEHICLES], **record), _RECORD.COMMON)
     else:
         return
     record = _fetchRecord(results, _RECORD.PERSONAL)
@@ -304,6 +305,25 @@ class _ReusableInfo(object):
 
         info.addAvatarInfo(weakref.proxy(self.getAvatarInfo()))
         return info
+
+    def getAllPlayersIterator(self, result, sortKey=sort_keys.TeamItemSortKey):
+        allPlayers = []
+        getAvatarInfo = self.__avatars.getAvatarInfo
+        for dbID, player in self.__players.getPlayerInfoIterator():
+            info = self.__vehicles.getVehicleSummarizeInfo(player, result)
+            info.addAvatarInfo(weakref.proxy(getAvatarInfo(dbID)))
+            allPlayers.append(info)
+
+        bots = self.__common.getBots()
+        for bot in bots.iteritems():
+            info = self.__vehicles.getAIBotVehicleSummarizeInfo(bot[0], bot[1], result)
+            allPlayers.append(info)
+
+        def __allPlayers():
+            for player in sorted(allPlayers, key=sortKey):
+                yield player
+
+        return __allPlayers()
 
     def getBiDirectionTeamsIterator(self, result, sortKey=sort_keys.TeamItemSortKey):
         allies = []

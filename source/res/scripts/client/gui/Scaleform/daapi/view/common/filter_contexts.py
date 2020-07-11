@@ -15,7 +15,8 @@ def getFilterSetupContexts(xpRateMultiplier):
      'elite': FilterSetupContext(asset='elite_small_icon'),
      'premium': FilterSetupContext(asset='prem_small_icon'),
      'igr': FilterSetupContext(asset='premium_small'),
-     'bonus': FilterSetupContext(ctx={'multiplier': xpRateMultiplier}, asset='bonus_x{multiplier}')}
+     'bonus': FilterSetupContext(ctx={'multiplier': xpRateMultiplier}, asset='bonus_x{multiplier}'),
+     'battleRoyale': FilterSetupContext(asset='battle_royale_toggle')}
 
 
 def getFilterPopoverSetupContexts(xpRateMultiplier):
@@ -25,5 +26,6 @@ def getFilterPopoverSetupContexts(xpRateMultiplier):
      'igr': FilterSetupContext(asset='premium_igr_small'),
      'bonus': FilterSetupContext(ctx={'multiplier': xpRateMultiplier}, asset='bonus_x'),
      'rented': FilterSetupContext(asset='marathon/time_icon'),
-     'event': FilterSetupContext(asset='event-1'),
-     'isCommonProgression': FilterSetupContext(asset='common_progression')}
+     'event': FilterSetupContext(asset='event_small_icon'),
+     'isCommonProgression': FilterSetupContext(asset='common_progression'),
+     'crystals': FilterSetupContext(asset='bons_small')}

@@ -5,10 +5,13 @@ import functools
 import inspect
 import BigWorld
 import debug_utils
+from constants import IS_EDITOR
 _MAX_PRIORITY = 96
 _HIGH_PRIORITY = 128
 
 def loadingPriority(vehicleID):
+    if IS_EDITOR:
+        return _MAX_PRIORITY
     if not BigWorld.player().userSeesWorld():
         priority = _HIGH_PRIORITY if vehicleID == BigWorld.player().playerVehicleID else _MAX_PRIORITY
     else:

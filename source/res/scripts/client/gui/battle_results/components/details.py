@@ -8,6 +8,7 @@ from gui.battle_results.components import base
 from gui.battle_results.components import style
 from gui.battle_results.reusable.records import convertFactorToPercent
 from gui.impl import backport
+from gui.impl.backport.backport_system_locale import getIntegralFormat
 from gui.impl.gen.resources import R
 from gui.impl.lobby.premacc import premacc_helpers
 from gui.shared.formatters import icons, text_styles
@@ -21,12 +22,13 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
 class _GainResourceInBattleItem(base.StatsItem):
-    __slots__ = ('__records', '__method')
+    __slots__ = ('__records', '__method', '__styler')
 
-    def __init__(self, records, method, field, *path):
+    def __init__(self, records, method, styler, field, *path):
         super(_GainResourceInBattleItem, self).__init__(field, *path)
         self.__records = records
         self.__method = method
+        self.__styler = styler
 
     def _convert(self, value, reusable):
         personal = reusable.personal
@@ -42,28 +44,82 @@ class _GainResourceInBattleItem(base.StatsItem):
                     resource += records.getRecord(name)
                 resource -= records.getRecord(name)
 
-        return backport.getIntegralFormat(resource)
+        return self.__styler(resource)
 
 
 class GainCreditsInBattleItem(_GainResourceInBattleItem):
     __slots__ = ()
 
     def __init__(self, field, *path):
-        super(GainCreditsInBattleItem, self).__init__(((True, 'credits'), (True, 'originalCreditsToDraw')), 'getMoneyRecords', field, *path)
+        super(GainCreditsInBattleItem, self).__init__(((True, 'credits'), (True, 'originalCreditsToDraw')), 'getMoneyRecords', getIntegralFormat, field, *path)
+
+
+class GainCreditsValueInBattleItem(_GainResourceInBattleItem):
+    __slots__ = ()
+
+    def __init__(self, field, *path):
+        super(GainCreditsValueInBattleItem, self).__init__(((True, 'credits'), (True, 'originalCreditsToDraw')), 'getMoneyRecords', (lambda x: x), field, *path)
 
 
 class GainCrystalInBattleItem(_GainResourceInBattleItem):
     __slots__ = ()
 
     def __init__(self, field, *path):
-        super(GainCrystalInBattleItem, self).__init__(((True, Currency.CRYSTAL),), 'getCrystalRecords', field, *path)
+        super(GainCrystalInBattleItem, self).__init__(((True, Currency.CRYSTAL),), 'getCrystalRecords', getIntegralFormat, field, *path)
+
+
+class GainCrystalValueInBattleItem(_GainResourceInBattleItem):
+    __slots__ = ()
+
+    def __init__(self, field, *path):
+        super(GainCrystalValueInBattleItem, self).__init__(((True, Currency.CRYSTAL),), 'getCrystalRecords', (lambda x: x), field, *path)
 
 
 class GainXPInBattleItem(_GainResourceInBattleItem):
     __slots__ = ()
 
     def __init__(self, field, *path):
-        super(GainXPInBattleItem, self).__init__(((True, 'xpToShow'),), 'getXPRecords', field, *path)
+        super(GainXPInBattleItem, self).__init__(((True, 'xpToShow'),), 'getXPRecords', getIntegralFormat, field, *path)
+
+
+class GainXPValueInBattleItem(_GainResourceInBattleItem):
+    __slots__ = ()
+
+    def __init__(self, field, *path):
+        super(GainXPValueInBattleItem, self).__init__(((True, 'xpToShow'),), 'getXPRecords', (lambda x: x), field, *path)
+
+
+class TotalBRReward(base.StatsItem):
+    __slots__ = ('__record',)
+
+    def __init__(self, record, field, *path):
+        super(TotalBRReward, self).__init__(field, *path)
+        self.__record = record
+
+    def _convert(self, value, reusable):
+        infoAvatar = value['avatar']
+        return infoAvatar.get(self.__record)
+
+
+class BRCredits(TotalBRReward):
+    __slots__ = ()
+
+    def __init__(self, field, *path):
+        super(BRCredits, self).__init__('credits', field, *path)
+
+
+class BRXp(TotalBRReward):
+    __slots__ = ()
+
+    def __init__(self, field, *path):
+        super(BRXp, self).__init__('xp', field, *path)
+
+
+class BRCrystal(TotalBRReward):
+    __slots__ = ()
+
+    def __init__(self, field, *path):
+        super(BRCrystal, self).__init__('crystal', field, *path)
 
 
 class BaseCreditsBlock(base.StatsBlock):
@@ -105,6 +161,21 @@ class XPTitleBlock(base.StatsBlock):
             if factor > 1:
                 value = ' '.join((value, icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.dyn('bonus_x{}'.format(factor))()), 46, 18)))
             self.addNextComponent(base.DirectStatsItem('', value))
+
+
+class XPTitleTooltipBlock(base.StatsBlock):
+    __slots__ = ()
+
+    def setRecord(self, result, reusable):
+        showSquadLabels, squadHasBonus = reusable.getPersonalSquadFlags()
+        for records in reusable.personal.getBaseXPRecords():
+            factor = int(records.getFactor('dailyXPFactor10'))
+            value = None
+            if factor == 1 and showSquadLabels and squadHasBonus:
+                value = backport.text(R.strings.battle_results.common.tooltip.xpTitleSquad())
+            self.addNextComponent(base.DirectStatsItem('', value))
+
+        return
 
 
 class BaseXPBlock(base.StatsBlock):
@@ -516,18 +587,17 @@ class CrystalDetailsBlock(_EconomicsDetailsBlock):
 
     def setRecord(self, result, reusable):
         crystalTotal = 0
-        crystalAchive = 0
-        for details in result:
+        for details in result.earned:
             achievementName, value = details
             if achievementName == 'originalCrystal':
                 if value > 0:
                     crystalTotal += value
                     self._addRecord(backport.text(R.strings.battle_results.details.calculations.crystal.total()), value)
-            crystalAchive += value
 
-        if crystalAchive > 0:
-            self._addRecord(backport.text(R.strings.battle_results.details.calculations.crystal.achievement()), crystalAchive)
-        crystalTotal += crystalAchive
+        autoBoosters = result.expenses
+        if autoBoosters:
+            self._addRecord(backport.text(R.strings.battle_results.details.calculations.autoBoosters()), autoBoosters)
+            crystalTotal += autoBoosters
         if crystalTotal > 0:
             self.addNextComponent(style.EmptyStatRow())
             i18nText = backport.text(R.strings.battle_results.details.calculations.total())

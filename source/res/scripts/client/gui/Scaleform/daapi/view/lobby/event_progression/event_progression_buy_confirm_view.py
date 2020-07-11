@@ -4,10 +4,10 @@ from adisp import process
 from gui import SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.EventProgressionBuyConfirmViewMeta import EventProgressionBuyConfirmViewMeta
+from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.shared import event_dispatcher as shared_event
 from gui.shared.gui_items.processors.event_progression import EventProgressionBuyRewardVehicle
 from gui.sounds.filters import switchHangarOverlaySoundFilter
-from gui.impl.wrappers.background_blur import WGUIBackgroundBlurSupportImpl
 from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from gui.shared.formatters import text_styles, icons
 from gui.impl import backport
@@ -19,11 +19,10 @@ class EventProgressionBuyConfirmView(EventProgressionBuyConfirmViewMeta):
         super(EventProgressionBuyConfirmView, self).__init__(ctx)
         self.__vehicle = ctx.get('vehicle')
         self.__price = ctx.get('price')
-        self.__blur = WGUIBackgroundBlurSupportImpl()
-        self.__blur.enable(APP_CONTAINERS_NAMES.DIALOGS, [APP_CONTAINERS_NAMES.VIEWS,
+        self.__blur = CachedBlur(enabled=True, ownLayer=APP_CONTAINERS_NAMES.DIALOGS, layers=(APP_CONTAINERS_NAMES.VIEWS,
          APP_CONTAINERS_NAMES.WINDOWS,
          APP_CONTAINERS_NAMES.SUBVIEW,
-         APP_CONTAINERS_NAMES.BROWSER])
+         APP_CONTAINERS_NAMES.BROWSER))
 
     def _populate(self):
         super(EventProgressionBuyConfirmView, self)._populate()
@@ -31,7 +30,7 @@ class EventProgressionBuyConfirmView(EventProgressionBuyConfirmViewMeta):
         switchHangarOverlaySoundFilter(on=True)
 
     def destroy(self):
-        self.__blur.disable()
+        self.__blur.fini()
         super(EventProgressionBuyConfirmView, self).destroy()
 
     def onClose(self):

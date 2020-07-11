@@ -30,7 +30,7 @@ TOOLTIP_PRB_DATA = namedtuple('TOOLTIP_PRB_DATA', ('tooltipId', 'label'))
 _SQUAD_TYPE_TO_ALIAS = {PREBATTLE_TYPE.EVENT: PREBATTLE_ALIASES.EVENT_SQUAD_WINDOW_PY,
  PREBATTLE_TYPE.SQUAD: PREBATTLE_ALIASES.SQUAD_WINDOW_PY,
  PREBATTLE_TYPE.EPIC: PREBATTLE_ALIASES.EPIC_SQUAD_WINDOW_PY,
- PREBATTLE_TYPE.BOB: PREBATTLE_ALIASES.BOB_SQUAD_WINDOW_PY}
+ PREBATTLE_TYPE.BATTLE_ROYALE: PREBATTLE_ALIASES.BATTLE_ROYALE_SQUAD_WINDOW_PY}
 _CarouselItemCtx = namedtuple('_CarouselItemCtx', ['label',
  'canClose',
  'isNotified',
@@ -87,9 +87,6 @@ class EventDispatcher(object):
     def updateUI(self, loadedAlias=None):
         self.__fireEvent(events.FightButtonEvent(events.FightButtonEvent.FIGHT_BUTTON_UPDATE))
         self.__invalidatePrbEntity(loadedAlias)
-
-    def updateSquadUI(self):
-        self.__fireEvent(events.EventSquadEvent(events.EventSquadEvent.READY_BUTTON_UPDATE))
 
     def loadHangar(self):
         self.__fireLoadEvent(VIEW_ALIAS.LOBBY_HANGAR)

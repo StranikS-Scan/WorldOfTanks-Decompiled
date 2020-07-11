@@ -40,8 +40,9 @@ def getGameControllersConfig(manager):
     from gui.game_control.trade_in import TradeInController as _TradeIn
     from gui.game_control.quests_controller import QuestsController as _Quests
     from gui.game_control.ranked_battles_controller import RankedBattlesController as _Ranked
-    from gui.game_control.ten_year_countdown_controller import TenYearsCountdownController as _TenYears
     from gui.game_control.hangar_loading_controller import HangarLoadingController as _HangarLoading
+    from gui.game_control.ten_year_countdown_controller import TenYearsCountdownController as _TenYears
+    from gui.game_control.battle_royale_controller import BattleRoyaleController as _BattleRoyale
     from gui.game_control.epic_mode_controller import EpicModeController as _Epic
     from gui.game_control.bootcamp_controller import BootcampController as _Bootcamp
     from gui.game_control.hero_tank_controller import HeroTankController as _HeroTankController
@@ -57,9 +58,6 @@ def getGameControllersConfig(manager):
     from gui.game_control.battle_pass_controller import BattlePassController
     from gui.game_control.clan_notification_controller import ClanNotificationController as _ClanNotification
     from gui.game_control.craftmachine_controller import CraftmachineController
-    from gui.game_control.wot_spg_controller import WOTSPGEventController
-    from gui.game_control.bob_controller import BobController as _BobCtrl
-    from gui.game_control.bob_sound_controller import BobSoundController as _BobSoundCtrl
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -98,23 +96,21 @@ def getGameControllersConfig(manager):
     _config(_interface.IHeroTankController, _HeroTankController())
     _config(_interface.IMarathonEventsController, _MarathonEventsController())
     _config(_interface.ICalendarController, _Calendar())
-    _config(_interface.IEventProgressionController, _EventProgression())
     _config(_interface.IEpicBattleMetaGameController, _EpicMeta())
+    _config(_interface.IBattleRoyaleController, _BattleRoyale())
     _config(_interface.IManualController, _ManualController())
     _config(_interface.IReferralProgramController, _ReferralController())
     _config(_interface.ISpecialSoundCtrl, _SpecialSoundCtrl())
     _config(_interface.IBattlePassController, BattlePassController())
-    _config(_interface.ITenYearsCountdownController, _TenYears())
     _config(_interface.IHangarLoadingController, _HangarLoading())
-    _config(_interface.IWOTSPGController, WOTSPGEventController())
+    _config(_interface.ITenYearsCountdownController, _TenYears())
     if constants.IS_CHINA:
         _config(_interface.IChinaController, _China())
     else:
         _config(_interface.IChinaController, _NoChina())
-    _config(_interface.IBobController, _BobCtrl())
-    _config(_interface.IBobSoundController, _BobSoundCtrl())
     _config(_interface.ISeasonsController, _Seasons())
     _config(_interface.IBadgesController, _Badges())
     _config(_interface.IAnonymizerController, _Anonymizer())
     _config(_interface.ICraftmachineController, CraftmachineController())
     _config(_interface.IClanNotificationController, _ClanNotification())
+    _config(_interface.IEventProgressionController, _EventProgression())

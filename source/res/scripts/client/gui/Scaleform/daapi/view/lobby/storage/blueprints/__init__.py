@@ -94,9 +94,9 @@ class BlueprintsStorageCarouselDataProvider(StorageCarouselDataProvider):
         self._baseCriteria = self.filter.criteria
         self.__filterCallback = filterCallback
 
-    def applyFilter(self):
+    def applyFilter(self, forceApply=False):
         self._buildVehicleItems()
-        super(BlueprintsStorageCarouselDataProvider, self).applyFilter()
+        super(BlueprintsStorageCarouselDataProvider, self).applyFilter(forceApply=forceApply)
         if self.__filterCallback is not None:
             self.__filterCallback()
         return

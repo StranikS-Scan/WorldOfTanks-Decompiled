@@ -46,8 +46,26 @@ class _DamageEfficiencyInfo(_FeedbackEventEfficiencyInfo):
     def getDamage(self):
         return self.__damage.getDamage()
 
+    def isSpawnedBotExplosion(self, primary=True):
+        return self.__damage.isSpawnedBotExplosion(primary=primary)
+
+    def isSpawnedBotRam(self, primary=True):
+        return self.__damage.isSpawnedBotRam(primary=primary)
+
+    def isHidden(self):
+        return self.__damage.isNone()
+
     def isFire(self):
         return self.__damage.isFire()
+
+    def isBerserker(self):
+        return self.__damage.isBerserker()
+
+    def isMinefield(self):
+        return self.__damage.isMinefield()
+
+    def isDamagingSmoke(self):
+        return self.__damage.isDamagingSmoke()
 
     def isRam(self):
         return self.__damage.isRam()
@@ -57,6 +75,9 @@ class _DamageEfficiencyInfo(_FeedbackEventEfficiencyInfo):
 
     def isWorldCollision(self):
         return self.__damage.isWorldCollision()
+
+    def isDeathZone(self):
+        return self.__damage.isDeathZone()
 
     def isShellGold(self):
         return self.__damage.isShellGold()
@@ -72,6 +93,9 @@ class _DamageEfficiencyInfo(_FeedbackEventEfficiencyInfo):
 
     def isBombersDamage(self, primary=True):
         return self.__damage.isBombers(primary=primary)
+
+    def isMineFieldDamage(self, primary=True):
+        return self.__damage.isMineField(primary=primary)
 
     def getShellType(self):
         return self.__damage.getShellType()
@@ -90,6 +114,15 @@ class _CriticalHitsEfficiencyInfo(_FeedbackEventEfficiencyInfo):
     def isFire(self):
         return self.__critsExtra.isFire()
 
+    def isBerserker(self):
+        return self.__critsExtra.isBerserker()
+
+    def isMinefield(self):
+        return self.__critsExtra.isMinefield()
+
+    def isDamagingSmoke(self):
+        return self.__critsExtra.isDamagingSmoke()
+
     def isRam(self):
         return self.__critsExtra.isRam()
 
@@ -98,6 +131,9 @@ class _CriticalHitsEfficiencyInfo(_FeedbackEventEfficiencyInfo):
 
     def isWorldCollision(self):
         return self.__critsExtra.isWorldCollision()
+
+    def isDeathZone(self):
+        return self.__critsExtra.isDeathZone()
 
     def isShellGold(self):
         return self.__critsExtra.isShellGold()
@@ -142,6 +178,9 @@ class _DestructibleDamagedEfficiencyInfo(_FeedbackEventEfficiencyInfo):
 
     def isShot(self):
         return True
+
+    def isDeathZone(self):
+        return False
 
 
 _AGGREGATED_DAMAGE_EFFICIENCY_TYPES = (_ETYPE.DAMAGE,

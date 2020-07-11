@@ -53,6 +53,8 @@ class TeamMessageBuilder(_BattleMessageBuilder):
             pColor = pColorScheme.getHexStr('teamkiller')
         elif ctx.isSquadMan(avatarSessionID=avatarSessionID):
             pColor = pColorScheme.getHexStr('squadman')
+        elif ctx.isEnemy(avatarSessionID=avatarSessionID):
+            pColor = pColorScheme.getHexStr('enemy')
         self._ctx['playerColor'] = pColor
         self._ctx['messageColor'] = g_settings.getColorScheme('battle/message').getHexStr('team')
         return self

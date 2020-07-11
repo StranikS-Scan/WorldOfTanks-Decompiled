@@ -1,15 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/event_progression/event_progression_widget_tooltip.py
-from collections import namedtuple
 from gui.shared.tooltips import TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData
 from helpers import dependency
-from skeletons.gui.game_control import IEpicBattleMetaGameController
-from gui.Scaleform.daapi.view.lobby.event_progression.event_progression_helpers import EventProgressionTooltipHelpers
-EpicBattlesWidgetTooltipVO = namedtuple('EpicBattlesWidgetTooltipVO', 'progressBarData')
+from skeletons.gui.game_control import IEventProgressionController
 
 class EventProgressionWidgetTooltip(BlocksTooltipData):
-    __epicController = dependency.descriptor(IEpicBattleMetaGameController)
+    __eventProgression = dependency.descriptor(IEventProgressionController)
     __slots__ = ()
 
     def __init__(self, context):
@@ -19,16 +16,14 @@ class EventProgressionWidgetTooltip(BlocksTooltipData):
 
     def _packBlocks(self):
         blocks = super(EventProgressionWidgetTooltip, self)._packBlocks()
-        season = self.__epicController.getCurrentSeason() or self.__epicController.getNextSeason()
+        season = self.__eventProgression.getCurrentSeason() or self.__eventProgression.getNextSeason()
         if season is None:
             return blocks
         else:
-            _evc = EventProgressionTooltipHelpers.getInstance()
-            blocks.append(_evc.getHeaderTooltipPack())
-            isPrimeTime = _evc.isCurrentSeasonInPrimeTime()
-            if isPrimeTime or self.__epicController.isAvailable():
-                blocks.append(_evc.getCycleStatusPack())
+            blocks.append(self.__eventProgression.getHeaderTooltipPack())
+            isPrimeTime = self.__eventProgression.isCurrentSeasonInPrimeTime()
+            if isPrimeTime or self.__eventProgression.modeIsAvailable():
+                blocks.append(self.__eventProgression.getCycleStatusTooltipPack())
             else:
-                blocks.append(_evc.getSeasonInfoPack())
-            _evc = None
+                blocks.append(self.__eventProgression.getSeasonInfoTooltipPack())
             return blocks

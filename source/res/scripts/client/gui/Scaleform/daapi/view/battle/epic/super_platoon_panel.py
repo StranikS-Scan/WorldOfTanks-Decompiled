@@ -11,3 +11,6 @@ class SuperPlatoonPanel(SuperPlatoonPanelMeta):
         super(SuperPlatoonPanel, self)._populate()
         self.as_setPlatoonTitleS(i18n.makeString(EPIC_BATTLE.SUPER_PLATOON_PANEL_TITLE))
         self.as_setMaxDisplayedInviteMessagesS(_MAX_INVITES_DISPLAYED)
+
+    def _handleNextMode(self, _):
+        pass

@@ -2,7 +2,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/stronghold_battle_room_window.py
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_DEBUG
+from gui import SystemMessages
 from gui.clans.clan_helpers import isLeaguesEnabled
+from gui.impl import backport
+from gui.impl.gen import R
 from helpers import time_utils
 from gui.Scaleform.daapi.view.meta.FortBattleRoomWindowMeta import FortBattleRoomWindowMeta
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
@@ -72,6 +75,9 @@ class StrongholdBattleRoomWindow(FortBattleRoomWindowMeta, IStrongholdListener):
             self.__addPlayerNotification(settings.UNIT_NOTIFICATION_KEY.PLAYER_REMOVED, pInfo)
 
     def onUnitFlagsChanged(self, flags, timeLeft):
+        if flags.isExternalLegionariesMatchingChanged() and not flags.isInExternalLegionariesMatching():
+            msgBody = backport.text(R.strings.system_messages.unit.warnings.EXTERNAL_LEGIONARIES_MATCHING_CANCELED())
+            SystemMessages.pushMessage(msgBody, type=SystemMessages.SM_TYPE.Warning)
         self.__initState()
 
     def onUnitErrorReceived(self, errorCode):

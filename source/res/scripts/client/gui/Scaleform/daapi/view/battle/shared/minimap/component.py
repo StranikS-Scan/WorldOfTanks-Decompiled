@@ -6,7 +6,6 @@ import GUI
 import Math
 import SoundGroups
 from AvatarInputHandler import AvatarInputHandler
-from constants import IS_DEVELOPMENT
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings, plugins
 from gui.Scaleform.daapi.view.meta.MinimapMeta import MinimapMeta
 from gui.Scaleform.flash_wrapper import InputKeyMode
@@ -51,8 +50,8 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
         self.__plugins = None
         return
 
-    def setAttentionToCell(self, x, y, isRightClick):
-        self.__plugins.setAttentionToCell(x, y, isRightClick)
+    def onMinimapClicked(self, x, y, buttonIdx):
+        self.__plugins.onMinimapClicked(x, y, buttonIdx)
 
     def applyNewSize(self, sizeIndex):
         if self.__plugins is not None:
@@ -145,8 +144,6 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
          'vehicles': plugins.ArenaVehiclesPlugin,
          'personal': plugins.PersonalEntriesPlugin,
          'area': plugins.AreaStaticMarkerPlugin}
-        if IS_DEVELOPMENT:
-            setup['teleport'] = plugins.TeleportPlugin
         return setup
 
     def _createFlashComponent(self):
@@ -225,8 +222,8 @@ class MinimapPluginsCollection(PluginsCollection):
         super(MinimapPluginsCollection, self).stop()
         return
 
-    def setAttentionToCell(self, x, y, isRightClick):
-        self._invoke('setAttentionToCell', x, y, isRightClick)
+    def onMinimapClicked(self, x, y, buttonIdx):
+        self._invoke('onMinimapClicked', x, y, buttonIdx)
 
     def applyNewSize(self, sizeIndex):
         self._invoke('applyNewSize', sizeIndex)

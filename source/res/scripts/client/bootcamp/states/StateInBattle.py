@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/bootcamp/states/StateInBattle.py
 import BattleReplay
 import BigWorld
-import SoundGroups
 from AbstractState import AbstractState
 from bootcamp.aop.in_battle import weave
 from bootcamp.Assistant import BattleAssistant
@@ -20,9 +19,10 @@ from bootcamp.Bootcamp import g_bootcamp
 class StateInBattle(AbstractState):
     soundController = dependency.descriptor(ISoundsController)
 
-    def __init__(self, lessonId, avatar, entities, bootcampGui):
+    def __init__(self, lessonId, avatar, entities, bootcampGui, soundAssistant):
         super(StateInBattle, self).__init__(STATE.IN_BATTLE)
-        self.__assistant = BattleAssistant(avatar, lessonId, entities, bootcampGui)
+        self.__assistant = BattleAssistant(avatar, lessonId, entities, bootcampGui, soundAssistant)
+        self.__soundAssistant = soundAssistant
         self.__lessonId = lessonId
         self.__avatar = avatar
         self.__scenery = Scenery(lessonId, self.__assistant)
@@ -103,11 +103,11 @@ class StateInBattle(AbstractState):
             asBattleResultType = BOOTCAMP_BATTLE_RESULT_MESSAGE.DRAW
         g_bootcamp.setBattleResults(BigWorld.player().arenaUniqueID, asBattleResultType, reason)
         if asBattleResultType == BOOTCAMP_BATTLE_RESULT_MESSAGE.VICTORY:
-            SoundGroups.g_instance.playSound2D('vo_bc_victory')
+            self.__soundAssistant.playSound2D('vo_bc_victory')
         elif asBattleResultType == BOOTCAMP_BATTLE_RESULT_MESSAGE.DEFEAT:
-            SoundGroups.g_instance.playSound2D('vo_bc_defeat')
+            self.__soundAssistant.playSound2D('vo_bc_defeat')
         elif asBattleResultType == BOOTCAMP_BATTLE_RESULT_MESSAGE.DRAW:
-            SoundGroups.g_instance.playSound2D('vo_bc_draw')
+            self.__soundAssistant.playSound2D('vo_bc_draw')
 
     def __onAvatarBecomeNonPlayer(self):
         player = BigWorld.player()

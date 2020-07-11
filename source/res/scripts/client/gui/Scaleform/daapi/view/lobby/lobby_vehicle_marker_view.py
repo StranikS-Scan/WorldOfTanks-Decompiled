@@ -55,6 +55,9 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
 
         return
 
+    def getIsMarkerDisabled(self):
+        return self.__isMarkerDisabled
+
     def __onSpaceDestroy(self, _):
         self.__destroyMarker()
 

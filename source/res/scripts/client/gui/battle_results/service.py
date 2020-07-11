@@ -271,22 +271,24 @@ class BattleResultsService(IBattleResultsService):
     def __showResults(self, ctx):
         yield self.requestResults(ctx)
 
-    @staticmethod
-    def __notifyBattleResultsPosted(arenaUniqueID, needToShowUI=False):
+    def __notifyBattleResultsPosted(self, arenaUniqueID, needToShowUI=False):
+        composerObj = self.__composers[arenaUniqueID]
         if needToShowUI:
-            event_dispatcher.showBattleResultsWindow(arenaUniqueID)
-        event_dispatcher.notifyBattleResultsPosted(arenaUniqueID)
+            composerObj.onShowResults(arenaUniqueID)
+        composerObj.onResultsPosted(arenaUniqueID)
 
     def __handleLobbyViewLoaded(self, _):
         battleCtx = self.sessionProvider.getCtx()
         arenaUniqueID = battleCtx.lastArenaUniqueID
+        arenaBonusType = battleCtx.lastArenaBonusType or ARENA_BONUS_TYPE.UNKNOWN
         if arenaUniqueID:
             try:
-                self.__showResults(context.RequestResultsContext(arenaUniqueID))
+                self.__showResults(context.RequestResultsContext(arenaUniqueID, arenaBonusType))
             except Exception:
                 LOG_CURRENT_EXCEPTION()
 
             battleCtx.lastArenaUniqueID = None
+            battleCtx.lastArenaBonusType = None
         return
 
     @async

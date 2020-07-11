@@ -1,45 +1,55 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/markers2d/plugins.py
-from functools import partial
+import logging
 from collections import defaultdict
-from BattleReplay import CallbackDataNames
+from functools import partial
 import BattleReplay
 import BigWorld
+import Math
 import constants
+from AvatarInputHandler import aih_global_binding
+from AvatarInputHandler.aih_global_binding import BINDING_ID
+from BattleReplay import CallbackDataNames
 from Math import Matrix
 from PlayerEvents import g_playerEvents
-from account_helpers.settings_core.settings_constants import MARKERS, GRAPHICS, GAME
 from account_helpers.settings_core.options import VehicleMarkerSetting
-from battleground.StunAreaManager import STUN_AREA_STATIC_MARKER
+from account_helpers.settings_core.settings_constants import MARKERS, GRAPHICS
+from battleground.location_point_manager import g_locationPointManager, COMMAND_NAME_TO_LOCATION_MARKER_SUBTYPE
+from chat_commands_consts import getUniqueTeamOrControlPointID, INVALID_MARKER_SUBTYPE, INVALID_MARKER_ID, LocationMarkerSubType, MarkerType, DefaultMarkerSubType
 from gui.Scaleform.daapi.view.battle.shared.markers2d import markers
 from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
-from gui.Scaleform.daapi.view.battle.shared.markers2d.timer import MarkerTimer
+from gui.Scaleform.daapi.view.battle.shared.markers2d.markers import LocationMarker, BaseMarker, Marker, ReplyStateForMarker
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
-from gui.battle_control.arena_info.arena_vos import VehicleActions
+from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _EVENT_ID
-from gui.battle_control.battle_constants import PLAYER_GUI_PROPS, MARKER_HIT_STATE, VEHICLE_VIEW_STATE
+from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.doc_loaders import GuiColorsLoader
 from gui.shared import g_eventBus
 from gui.shared.events import GameEvent
 from gui.shared.utils.plugins import IPlugin
 from helpers import dependency
 from helpers import i18n
-from messenger.m_constants import PROTO_TYPE
-from messenger.proto import proto_getter
-from messenger.proto.events import g_messengerEvents
+from messenger.proto.bw_chat2.battle_chat_cmd import AUTOCOMMIT_COMMAND_NAMES
+from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
-from skeletons.gui.game_control import IBootcampController
-_TO_FLASH_SYMBOL_NAME_MAPPING = {STUN_AREA_STATIC_MARKER: settings.MARKER_SYMBOL_NAME.STATIC_ARTY_MARKER}
-STUN_STATE = 0
-INSPIRING_STATE = 1
-INSPIRED_STATE = 2
-ENGINEER_STATE = 3
-_STATUS_EFFECTS_PRIORITY = {INSPIRED_STATE: 0,
- STUN_STATE: 1,
- INSPIRING_STATE: 2,
- ENGINEER_STATE: 3}
+_logger = logging.getLogger(__name__)
+_LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME = {LocationMarkerSubType.SPG_AIM_AREA_SUBTYPE: settings.MARKER_SYMBOL_NAME.STATIC_ARTY_MARKER,
+ LocationMarkerSubType.GOING_TO_MARKER_SUBTYPE: settings.MARKER_SYMBOL_NAME.LOCATION_MARKER,
+ LocationMarkerSubType.PREBATTLE_WAYPOINT_SUBTYPE: settings.MARKER_SYMBOL_NAME.LOCATION_MARKER,
+ LocationMarkerSubType.ATTENTION_TO_MARKER_SUBTYPE: settings.MARKER_SYMBOL_NAME.ATTENTION_MARKER}
+_STATIC_MARKER_CULL_DISTANCE = 2000
+_STATIC_MARKER_MIN_SCALE = 60.0
+_BASE_MARKER_MIN_SCALE = 100.0
+RANDOM_BATTLE_BASE_ID = 7
+_STATIC_MARKER_BOUNDS = Math.Vector4(30, 30, 90, 10)
+_INNER_STATIC_MARKER_BOUNDS = Math.Vector4(15, 15, 70, 1)
+_STATIC_MARKER_BOUNDS_MIN_SCALE = Math.Vector2(1.0, 0.8)
+_BASE_MARKER_BOUNDS = Math.Vector4(30, 30, 30, 30)
+_INNER_BASE_MARKER_BOUNDS = Math.Vector4(17, 17, 18, 18)
+_BASE_MARKER_BOUND_MIN_SCALE = Math.Vector2(1.0, 1.0)
+MAX_DISTANCE_TEMP_STICKY = 350
 
 class IMarkersManager(object):
 
@@ -53,6 +63,12 @@ class IMarkersManager(object):
         raise NotImplementedError
 
     def setMarkerActive(self, markerID, active):
+        raise NotImplementedError
+
+    def setMarkerLocationOffset(self, markerID, minY, maxY, distForMinY):
+        raise NotImplementedError
+
+    def setMarkerRenderInfo(self, markerID, minScale, offset, innerOffset, cullDistance, boundsMinScale):
         raise NotImplementedError
 
     def destroyMarker(self, markerID):
@@ -69,6 +85,15 @@ class MarkerPlugin(IPlugin):
     __slots__ = ()
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
+
+    def getTargetIDFromMarkerID(self, markerID):
+        return INVALID_MARKER_ID
+
+    def getMarkerType(self):
+        return MarkerType.INVALID_MARKER_TYPE
+
+    def getMarkerSubtype(self, markerID):
+        return INVALID_MARKER_SUBTYPE
 
     def _createMarkerWithPosition(self, symbol, position, active=True):
         matrixProvider = Matrix()
@@ -95,24 +120,53 @@ class MarkerPlugin(IPlugin):
     def _destroyMarker(self, markerID):
         self._parentObj.destroyMarker(markerID)
 
+    def _setMarkerSticky(self, markerID, isSticky):
+        self._parentObj.setMarkerSticky(markerID, isSticky)
+
+    def _setMarkerRenderInfo(self, markerID, minScale, offset, innerOffset, cullDistance, boundsMinScale):
+        self._parentObj.setMarkerRenderInfo(markerID, minScale, offset, innerOffset, cullDistance, boundsMinScale)
+
+    def _setMarkerLocationOffset(self, markerID, minYOffset, maxYOffset, distanceForMinYOffset):
+        self._parentObj.setMarkerLocationOffset(markerID, minYOffset, maxYOffset, distanceForMinYOffset)
+
+    def _setMarkerBoundEnabled(self, markerID, isBoundEnabled):
+        self._parentObj.setMarkerBoundCheckEnabled(markerID, isBoundEnabled)
+
+    def _setMarkerObjectInFocus(self, markerID, isBoundEnabled):
+        self._parentObj.setMarkerObjectInFocus(markerID, isBoundEnabled)
+
+
+class ControlModePlugin(MarkerPlugin):
+    _aimOffset = aih_global_binding.bindRO(aih_global_binding.BINDING_ID.AIM_OFFSET)
+
+    def start(self):
+        aih_global_binding.subscribe(BINDING_ID.AIM_OFFSET, self.__onAimOffsetChanged)
+        self.__onAimOffsetChanged(self._aimOffset)
+
+    def stop(self):
+        aih_global_binding.unsubscribe(BINDING_ID.AIM_OFFSET, self.__onAimOffsetChanged)
+
+    def __onAimOffsetChanged(self, offset):
+        self._parentObj.setActiveCameraAimOffset(offset)
+
 
 class SettingsPlugin(MarkerPlugin):
 
-    def init(self, *args):
+    def start(self, *args):
         super(SettingsPlugin, self).init(*args)
-        self.__setMarkerSettings(notify=False)
+        self._setMarkerSettings(notify=False)
         self.__setColorsSchemes()
         self._parentObj.setColorBlindFlag(self.settingsCore.getSetting(GRAPHICS.COLOR_BLIND))
         self._parentObj.setScale(self.settingsCore.interfaceScale.get())
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         self.settingsCore.interfaceScale.onScaleChanged += self.__onScaleChanged
 
-    def fini(self):
+    def stop(self):
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.settingsCore.interfaceScale.onScaleChanged -= self.__onScaleChanged
         super(SettingsPlugin, self).fini()
 
-    def __setMarkerSettings(self, notify=False):
+    def _setMarkerSettings(self, notify=False):
         getter = self.settingsCore.getSetting
         self._parentObj.setMarkerSettings(dict(((name, getter(name)) for name in MARKERS.ALL())), notify=notify)
 
@@ -136,7 +190,7 @@ class SettingsPlugin(MarkerPlugin):
         if GRAPHICS.COLOR_BLIND in diff:
             self._parentObj.setColorBlindFlag(diff[GRAPHICS.COLOR_BLIND])
         if set(MARKERS.ALL()) & set(diff):
-            self.__setMarkerSettings(notify=True)
+            self._setMarkerSettings(notify=True)
 
     def __onScaleChanged(self, scale):
         self._parentObj.setScale(scale)
@@ -144,14 +198,14 @@ class SettingsPlugin(MarkerPlugin):
 
 class EventBusPlugin(MarkerPlugin):
 
-    def init(self, *args):
+    def start(self, *args):
         super(EventBusPlugin, self).init(*args)
         add = g_eventBus.addListener
         add(GameEvent.SHOW_EXTENDED_INFO, self.__handleShowExtendedInfo, scope=settings.SCOPE)
         add(GameEvent.GUI_VISIBILITY, self.__handleGUIVisibility, scope=settings.SCOPE)
         add(GameEvent.MARKERS_2D_VISIBILITY, self.__handleMarkerVisibility, scope=settings.SCOPE)
 
-    def fini(self):
+    def stop(self):
         remove = g_eventBus.removeListener
         remove(GameEvent.SHOW_EXTENDED_INFO, self.__handleShowExtendedInfo, scope=settings.SCOPE)
         remove(GameEvent.GUI_VISIBILITY, self.__handleGUIVisibility, scope=settings.SCOPE)
@@ -168,384 +222,78 @@ class EventBusPlugin(MarkerPlugin):
         self._parentObj.setVisible(not self._parentObj.isVisible())
 
 
-class AreaStaticMarkerPlugin(MarkerPlugin):
-    __slots__ = ('__objects',)
+class ChatCommunicationComponent(object):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, parentObj):
-        super(AreaStaticMarkerPlugin, self).__init__(parentObj)
-        self.__objects = {}
-
-    def init(self, *args):
-        super(AreaStaticMarkerPlugin, self).init(*args)
-        ctrl = self.sessionProvider.shared.feedback
-        if ctrl is not None:
-            ctrl.onStaticMarkerAdded += self.__addStaticMarker
-            ctrl.onStaticMarkerRemoved += self.__delStaticMarker
-        return
-
-    def fini(self):
-        ctrl = self.sessionProvider.shared.feedback
-        if ctrl is not None:
-            ctrl.onStaticMarkerAdded -= self.__addStaticMarker
-            ctrl.onStaticMarkerRemoved -= self.__delStaticMarker
-        for key in self.__objects.iterkeys():
-            self._destroyMarker(self.__objects[key])
-
-        super(AreaStaticMarkerPlugin, self).fini()
-        return
-
-    def __addStaticMarker(self, areaID, position, markerSymbolName, show3DMarker=True):
-        if not show3DMarker:
-            return
-        if areaID in self.__objects or markerSymbolName not in _TO_FLASH_SYMBOL_NAME_MAPPING:
-            return
-        markerID = self._createMarkerWithPosition(_TO_FLASH_SYMBOL_NAME_MAPPING[markerSymbolName], position, active=True)
-        self.__objects[areaID] = markerID
-
-    def __delStaticMarker(self, areaID):
-        if areaID in self.__objects:
-            markerID = self.__objects.pop(areaID, None)
-            if markerID is not None:
-                self._destroyMarker(markerID)
-        return
-
-
-class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
-    bootcamp = dependency.descriptor(IBootcampController)
-    __slots__ = ('_markers', '_markersStates', '_clazz', '__playerVehicleID', '_isSquadIndicatorEnabled', '__showDamageIcon', '_markerTimers')
-
-    def __init__(self, parentObj, clazz=markers.VehicleMarker):
-        super(VehicleMarkerPlugin, self).__init__(parentObj)
-        self._markers = {}
-        self._markersStates = defaultdict(list)
-        self._clazz = clazz
-        self._markerTimers = {}
-        self._isSquadIndicatorEnabled = False
-        self.__playerVehicleID = 0
-        self.__showDamageIcon = False
-
-    @proto_getter(PROTO_TYPE.BW_CHAT2)
-    def bwProto(self):
-        return None
-
-    def init(self, *args):
-        super(VehicleMarkerPlugin, self).init()
-        settingsDamageIcon = self.settingsCore.getSetting(GAME.SHOW_DAMAGE_ICON)
-        isInBootcamp = self.bootcamp.isInBootcamp()
-        enableInBootcamp = isInBootcamp and self.bootcamp.isEnableDamageIcon()
-        self.__showDamageIcon = settingsDamageIcon and (not isInBootcamp or enableInBootcamp)
-        ctrl = self.sessionProvider.shared.feedback
-        if ctrl is not None:
-            ctrl.onVehicleMarkerAdded += self.__onVehicleMarkerAdded
-            ctrl.onVehicleMarkerRemoved += self.__onVehicleMarkerRemoved
-            ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
-        g_messengerEvents.voip.onPlayerSpeaking += self.__onPlayerSpeaking
-        g_playerEvents.onTeamChanged += self.__onTeamChanged
-        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
-        return
-
-    def fini(self):
-        ctrl = self.sessionProvider.shared.feedback
-        if ctrl is not None:
-            ctrl.onVehicleMarkerAdded -= self.__onVehicleMarkerAdded
-            ctrl.onVehicleMarkerRemoved -= self.__onVehicleMarkerRemoved
-            ctrl.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
-        g_messengerEvents.voip.onPlayerSpeaking -= self.__onPlayerSpeaking
-        g_playerEvents.onTeamChanged -= self.__onTeamChanged
-        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
-        super(VehicleMarkerPlugin, self).fini()
-        return
+        self._parentObj = parentObj
 
     def start(self):
-        super(VehicleMarkerPlugin, self).start()
-        self.__playerVehicleID = self.sessionProvider.getArenaDP().getPlayerVehicleID()
-        self.sessionProvider.addArenaCtrl(self)
+        ctrl = self.sessionProvider.shared.feedback
+        if ctrl is not None:
+            ctrl.onReplyFeedbackReceived += self._onReplyFeedbackReceived
+        return
 
     def stop(self):
-        while self._markers:
-            _, marker = self._markers.popitem()
-            marker.destroy()
-
-        while self._markerTimers:
-            _, timer = self._markerTimers.popitem()
-            timer.clear()
-
-        super(VehicleMarkerPlugin, self).stop()
-
-    def invalidateArenaInfo(self):
-        self.invalidateVehiclesInfo(self.sessionProvider.getArenaDP())
-
-    def invalidateVehiclesInfo(self, arenaDP):
-        getProps = arenaDP.getPlayerGuiProps
-        getParts = self.sessionProvider.getCtx().getPlayerFullNameParts
-        feedback = self.sessionProvider.shared.feedback
-        for vInfo in arenaDP.getVehiclesInfoIterator():
-            vehicleID = vInfo.vehicleID
-            if vehicleID == self.__playerVehicleID or vInfo.isObserver():
-                continue
-            if vehicleID not in self._markers:
-                marker = self.__addMarkerToPool(vehicleID, vProxy=feedback.getVehicleProxy(vehicleID))
-            else:
-                marker = self._markers[vehicleID]
-            self.__setVehicleInfo(marker, vInfo, getProps(vehicleID, vInfo.team), getParts(vehicleID))
-            self._setMarkerInitialState(marker, accountDBID=vInfo.player.accountDBID)
-
-    def addVehicleInfo(self, vInfo, arenaDP):
-        if vInfo.isObserver():
-            return
-        vehicleID = vInfo.vehicleID
-        if vehicleID in self._markers:
-            return
-        ctx = self.sessionProvider.getCtx()
-        feedback = self.sessionProvider.shared.feedback
-        marker = self.__addMarkerToPool(vehicleID, vProxy=feedback.getVehicleProxy(vehicleID))
-        self.__setVehicleInfo(marker, vInfo, ctx.getPlayerGuiProps(vehicleID, vInfo.team), ctx.getPlayerFullNameParts(vehicleID))
-        self._setMarkerInitialState(marker, accountDBID=vInfo.player.accountDBID)
-
-    def updateVehiclesInfo(self, updated, arenaDP):
-        getProps = arenaDP.getPlayerGuiProps
-        getParts = self.sessionProvider.getCtx().getPlayerFullNameParts
-        for _, vInfo in updated:
-            vehicleID = vInfo.vehicleID
-            if vehicleID not in self._markers:
-                continue
-            marker = self._markers[vehicleID]
-            self.__setVehicleInfo(marker, vInfo, getProps(vehicleID, vInfo.team), getParts(vehicleID))
-
-    def invalidatePlayerStatus(self, flags, vInfo, arenaDP):
-        self.__setEntityName(vInfo, arenaDP)
-
-    def showMarkerTimer(self, vehicleID, handle, statusID, leftTime, animated):
-        self._updateStatusMarkerState(vehicleID, leftTime > 0, handle, statusID, leftTime, animated, False)
-
-    def updateMarkerTimer(self, handle, leftTime, animated, statusID):
-        self._updateStatusEffectTimer(handle, statusID, leftTime, animated)
-
-    def hideMarkerTimer(self, vehicleID, handle, statusID, animated):
-        self._updateStatusMarkerState(vehicleID, False, handle, statusID, 0, animated, False)
-
-    def _setMarkerInitialState(self, marker, accountDBID=0):
-        self.__setupDynamic(marker, accountDBID=accountDBID)
-        if marker.isActive():
-            self.__setupHealth(marker)
-
-    def _hideVehicleMarker(self, vehicleID):
-        if vehicleID in self._markers:
-            marker = self._markers[vehicleID]
-            if marker.setActive(False):
-                markerID = marker.getMarkerID()
-                self._setMarkerActive(markerID, False)
-                self._setMarkerMatrix(markerID, None)
-            marker.detach()
+        ctrl = self.sessionProvider.shared.feedback
+        if ctrl is not None:
+            ctrl.onReplyFeedbackReceived -= self._onReplyFeedbackReceived
         return
 
-    def _destroyVehicleMarker(self, vehicleID):
-        if vehicleID in self._markers:
-            marker = self._markers.pop(vehicleID)
-            self._destroyMarker(marker.getMarkerID())
-            marker.destroy()
+    def _getMarkerFromTargetID(self, targetID, markerType):
+        raise NotImplementedError
 
-    def __addMarkerToPool(self, vehicleID, vProxy=None):
-        if vProxy is not None:
-            matrixProvider = self._clazz.fetchMatrixProvider(vProxy)
-            active = True
-        else:
-            matrixProvider = None
-            active = False
-        markerID = self._createMarkerWithMatrix(settings.MARKER_SYMBOL_NAME.VEHICLE_MARKER, matrixProvider=matrixProvider, active=active)
-        marker = self._clazz(markerID, vehicleID, vProxy=vProxy, active=active)
-        marker.onVehicleModelChanged += self.__onVehicleModelChanged
-        self._markers[vehicleID] = marker
-        if marker.isActive() and not marker.isAlive():
-            self.__updateMarkerState(markerID, 'dead', True, '')
-        return marker
+    def _onReplyFeedbackReceived(self, targetID, replierID, markerType, oldReplyCount, newReplyCount):
+        marker = self._getMarkerFromTargetID(targetID, markerType)
+        if marker is not None:
+            self._setMarkerRepliesAndCheckState(marker, newReplyCount, replierID == avatar_getter.getPlayerVehicleID())
+        return
 
-    def __hide(self, handle, vehicleID):
-        if handle in self._markerTimers:
-            timer = self._markerTimers.pop(handle)
-            timer.hide()
-            timer.clear()
-        if vehicleID in self._markersStates:
-            currentStates = self._markersStates[vehicleID]
-            for state in currentStates:
-                self._markersStates[vehicleID].remove(state)
-                self._invokeMarker(handle, 'hideStatusMarker', state, -1, False)
-
-    def __setVehicleInfo(self, marker, vInfo, guiProps, nameParts):
+    def _setMarkerRepliesAndCheckState(self, marker, count, isTargetForPlayer, checkState=True):
         markerID = marker.getMarkerID()
-        vType = vInfo.vehicleType
-        if self._isSquadIndicatorEnabled and vInfo.squadIndex:
-            squadIndex = vInfo.squadIndex
+        oldReplyCount = marker.getReplyCount()
+        if isTargetForPlayer:
+            if marker.getIsRepliedByPlayer():
+                isRepliedByPlayer = count >= oldReplyCount
+            else:
+                isRepliedByPlayer = count > oldReplyCount
+            marker.setIsRepliedByPlayer(isRepliedByPlayer)
+            self._parentObj.invokeMarker(markerID, 'triggerClickAnimation')
+        if oldReplyCount != count and (oldReplyCount == 0 or count == 0):
+            self._setMarkerReplied(marker, count > 0)
+        self._parentObj.invokeMarker(markerID, 'setReplyCount', count)
+        marker.setReplyCount(count)
+        if checkState:
+            self._checkNextState(marker)
+
+    def _checkNextState(self, marker, forceUpdate=False):
+        oldState = marker.getState()
+        if marker.getReplyCount() == 0:
+            self._setMarkerReplied(marker, False)
+            if marker.getActiveCommandID() is not None and marker.getActiveCommandID() == -1:
+                newState = ReplyStateForMarker.NO_ACTION
+            else:
+                newState = ReplyStateForMarker.CREATE_STATE
+        elif marker.getIsRepliedByPlayer():
+            newState = ReplyStateForMarker.REPLIED_ME_STATE
         else:
-            squadIndex = 0
-        hunting = VehicleActions.isHunting(vInfo.events)
-        self._invokeMarker(markerID, 'setVehicleInfo', vType.classTag, vType.iconPath, nameParts.vehicleName, vType.level, nameParts.playerFullName, nameParts.playerName, nameParts.clanAbbrev, nameParts.regionCode, vType.maxHealth, guiProps.name(), hunting, squadIndex, i18n.makeString(INGAME_GUI.STUN_SECONDS))
-        self._invokeMarker(markerID, 'update')
+            newState = ReplyStateForMarker.REPLIED_ALLY_STATE
+        if oldState != newState or forceUpdate:
+            marker.setState(newState)
+            self._setActiveState(marker, newState)
+        return
 
-    def __setupDynamic(self, marker, accountDBID=0):
-        if accountDBID:
-            speaking = self.bwProto.voipController.isPlayerSpeaking(accountDBID)
-        else:
-            speaking = False
-        if marker.setSpeaking(speaking):
-            self._invokeMarker(marker.getMarkerID(), 'setSpeaking', speaking)
+    def _setMarkerReplied(self, marker, isReplied):
+        if marker.getIsReplied() != isReplied:
+            self._parentObj.invokeMarker(marker.getMarkerID(), 'setMarkerReplied', isReplied)
+            marker.setIsReplied(isReplied)
 
-    def __setupHealth(self, marker):
-        self._invokeMarker(marker.getMarkerID(), 'setHealth', marker.getHealth())
-
-    def __setEntityName(self, vInfo, arenaDP):
-        vehicleID = vInfo.vehicleID
-        if vehicleID not in self._markers:
-            return
-        handle = self._markers[vehicleID].getMarkerID()
-        self._invokeMarker(handle, 'setEntityName', arenaDP.getPlayerGuiProps(vehicleID, vInfo.team).name())
-
-    def __onVehicleMarkerAdded(self, vProxy, vInfo, guiProps):
-        vehicleID = vInfo.vehicleID
-        accountDBID = vInfo.player.accountDBID
-        if vehicleID in self._markers:
-            marker = self._markers[vInfo.vehicleID]
-            if marker.setActive(True):
-                marker.attach(vProxy)
-                self._setMarkerMatrix(marker.getMarkerID(), marker.getMatrixProvider())
-                self._setMarkerActive(marker.getMarkerID(), True)
-                self._setMarkerInitialState(marker, accountDBID=accountDBID)
-        else:
-            if vInfo.isObserver():
-                return
-            marker = self.__addMarkerToPool(vehicleID, vProxy)
-            self.__setVehicleInfo(marker, vInfo, guiProps, self.sessionProvider.getCtx().getPlayerFullNameParts(vehicleID))
-            self._setMarkerInitialState(marker, accountDBID=accountDBID)
-
-    def __onVehicleMarkerRemoved(self, vehicleID):
-        self._hideVehicleMarker(vehicleID)
-
-    def __onVehicleFeedbackReceived(self, eventID, vehicleID, value):
-        if vehicleID not in self._markers:
-            return
-        else:
-            handle = self._markers[vehicleID].getMarkerID()
-            hitStates = MARKER_HIT_STATE
-            if eventID in hitStates and self.__showDamageIcon:
-                newState = 'hit'
-                iconAnimation = ''
-                stateText = ''
-                stateData = hitStates.get(eventID)
-                if stateData is not None:
-                    newState = stateData[0]
-                    iconAnimation = stateData[1]
-                    stateText = i18n.makeString(stateData[2])
-                self.__updateMarkerState(handle, newState, value, stateText, iconAnimation)
-            elif eventID == _EVENT_ID.VEHICLE_DEAD:
-                self.__hide(handle, vehicleID)
-                self.__updateMarkerState(handle, 'dead', value)
-            elif eventID == _EVENT_ID.VEHICLE_SHOW_MARKER:
-                self.__showActionMarker(handle, value)
-            elif eventID == _EVENT_ID.VEHICLE_HEALTH:
-                self.__updateVehicleHealth(handle, *value)
-            elif eventID == _EVENT_ID.VEHICLE_STUN:
-                self.__updateStunMarker(vehicleID, handle, value.duration)
-            elif eventID == _EVENT_ID.VEHICLE_INSPIRE:
-                self.__updateInspireMarker(vehicleID, handle, **value)
-            elif eventID == _EVENT_ID.VEHICLE_PASSIVE_ENGINEERING:
-                self.__updatePassiveEngineeringMarker(vehicleID, handle, *value)
-            return
-
-    def __onVehicleModelChanged(self, markerID, matrixProvider):
-        self._setMarkerMatrix(markerID, matrixProvider)
-
-    def __onSettingsChanged(self, diff):
-        if GAME.SHOW_DAMAGE_ICON in diff:
-            self.__showDamageIcon = diff[GAME.SHOW_DAMAGE_ICON]
-
-    def _updateStatusEffectTimer(self, handle, statusID, leftStunTime, animated):
-        self._invokeMarker(handle, 'updateStatusEffectTimer', statusID, leftStunTime, animated)
-
-    def __updateMarkerState(self, handle, newState, isImmediate, text='', iconAnimation=''):
-        self._invokeMarker(handle, 'updateState', newState, isImmediate, text, iconAnimation)
-
-    def __showActionMarker(self, handle, newState):
-        self._invokeMarker(handle, 'showActionMarker', newState)
-
-    def __updateStunMarker(self, vehicleID, handle, duration):
-        self.__updateMarkerTimer(vehicleID, handle, duration, STUN_STATE)
-
-    def __updatePassiveEngineeringMarker(self, vehicleID, handle, isAttacker, enabled, animated=True):
-        self._updateStatusMarkerState(vehicleID, enabled, handle, ENGINEER_STATE, enabled, animated, isAttacker)
-
-    def __statusCompareFunction(self, x, y):
-        return x > y
-
-    def _updateStatusMarkerState(self, vehicleID, isShown, handle, statusID, duration, animated, isSourceVehicle):
-        activeStatuses = self._markersStates[vehicleID]
-        if isShown and statusID not in activeStatuses:
-            activeStatuses.append(statusID)
-            self._markersStates[vehicleID] = activeStatuses
-        elif not isShown and statusID in activeStatuses:
-            self._markersStates[vehicleID].remove(statusID)
-        if self._markersStates[vehicleID]:
-            activeStatuses = sorted(activeStatuses, cmp=lambda x, y: _STATUS_EFFECTS_PRIORITY[y] - _STATUS_EFFECTS_PRIORITY[x])
-            self._markersStates[vehicleID] = activeStatuses
-        currentlyActiveStatusID = self._markersStates[vehicleID][0] if self._markersStates[vehicleID] else -1
-        if isShown:
-            self._invokeMarker(handle, 'showStatusMarker', statusID, isSourceVehicle, duration, currentlyActiveStatusID, animated)
-        else:
-            self._invokeMarker(handle, 'hideStatusMarker', statusID, currentlyActiveStatusID, animated)
-
-    def __updateInspireMarker(self, vehicleID, handle, duration, isSourceVehicle, isInactivation=False, endTime=0):
-        self.__updateMarkerTimer(vehicleID, handle, duration, INSPIRING_STATE if isSourceVehicle else INSPIRED_STATE)
-
-    def __updateMarkerTimer(self, vehicleID, handle, duration, statusID):
-        if handle in self._markerTimers:
-            timer = self._markerTimers.pop(handle)
-            timer.hide()
-            timer.clear()
-        if duration > 0:
-            timer = MarkerTimer(self, vehicleID, handle, duration, statusID=statusID)
-            self._markerTimers[handle] = timer
-            timer.show(True)
-
-    def __updateVehicleHealth(self, handle, newHealth, aInfo, attackReasonID):
-        if newHealth < 0 and not constants.SPECIAL_VEHICLE_HEALTH.IS_AMMO_BAY_DESTROYED(newHealth):
-            newHealth = 0
-        replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
-            self._invokeMarker(handle, 'setHealth', newHealth)
-        else:
-            self._invokeMarker(handle, 'updateHealth', newHealth, self.__getVehicleDamageType(aInfo), constants.ATTACK_REASONS[attackReasonID])
-
-    def __onPlayerSpeaking(self, accountDBID, flag):
-        vehicleID = self.sessionProvider.getArenaDP().getVehIDByAccDBID(accountDBID)
-        if vehicleID in self._markers:
-            marker = self._markers[vehicleID]
-            if marker.setSpeaking(flag):
-                self._invokeMarker(marker.getMarkerID(), 'setSpeaking', flag)
-
-    def __onTeamChanged(self, teamID):
-        self.invalidateArenaInfo()
-
-    def __getVehicleDamageType(self, attackerInfo):
-        if not attackerInfo:
-            return settings.DAMAGE_TYPE.FROM_UNKNOWN
-        attackerID = attackerInfo.vehicleID
-        if attackerID == self.__playerVehicleID:
-            return settings.DAMAGE_TYPE.FROM_PLAYER
-        entityName = self.sessionProvider.getCtx().getPlayerGuiProps(attackerID, attackerInfo.team)
-        if entityName == PLAYER_GUI_PROPS.squadman:
-            return settings.DAMAGE_TYPE.FROM_SQUAD
-        if entityName == PLAYER_GUI_PROPS.ally:
-            return settings.DAMAGE_TYPE.FROM_ALLY
-        return settings.DAMAGE_TYPE.FROM_ENEMY if entityName == PLAYER_GUI_PROPS.enemy else settings.DAMAGE_TYPE.FROM_UNKNOWN
-
-
-class RespawnableVehicleMarkerPlugin(VehicleMarkerPlugin):
-
-    def start(self):
-        super(RespawnableVehicleMarkerPlugin, self).start()
-        self._isSquadIndicatorEnabled = False
-
-    def _hideVehicleMarker(self, vehicleID):
-        self._destroyVehicleMarker(vehicleID)
+    def _setActiveState(self, marker, state):
+        markerID = marker.getMarkerID()
+        if state is None:
+            state = marker.getState()
+        self._parentObj.invokeMarker(markerID, 'setActiveState', state.value)
+        return
 
 
 class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
@@ -564,8 +312,9 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
         self.__arenaDP = None
         return
 
-    def init(self, *args):
-        super(VehicleMarkerTargetPlugin, self).init()
+    def start(self):
+        super(VehicleMarkerTargetPlugin, self).start()
+        self.sessionProvider.addArenaCtrl(self)
         vStateCtrl = self.sessionProvider.shared.vehicleState
         if vStateCtrl is not None:
             vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
@@ -581,7 +330,11 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         return
 
-    def fini(self):
+    def stop(self):
+        while self._markers:
+            _, marker = self._markers.popitem()
+            marker.destroy()
+
         vStateCtrl = self.sessionProvider.shared.vehicleState
         if vStateCtrl is not None:
             vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
@@ -594,20 +347,9 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
         remove(GameEvent.HIDE_AUTO_AIM_MARKER, self._hideAllMarkers, scope=settings.SCOPE)
         remove(GameEvent.SHOW_EXTENDED_INFO, self.__ShowExtendedInfo, scope=settings.SCOPE)
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
-        super(VehicleMarkerTargetPlugin, self).fini()
-        return
-
-    def start(self):
-        super(VehicleMarkerTargetPlugin, self).start()
-        self.sessionProvider.addArenaCtrl(self)
-
-    def stop(self):
-        while self._markers:
-            _, marker = self._markers.popitem()
-            marker.destroy()
-
         self.sessionProvider.removeArenaCtrl(self)
         super(VehicleMarkerTargetPlugin, self).stop()
+        return
 
     def onVehicleFeedbackReceived(self, eventID, vehicleID, _):
         if vehicleID not in self._markers:
@@ -642,28 +384,6 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
             self.__addMarkerToPool(vehicleID, vProxy)
         return
 
-    def __addMarkerToPool(self, vehicleID, vProxy=None):
-        if vProxy is not None:
-            matrixProvider = self._clazz.fetchMatrixProvider(vProxy)
-            active = True
-        else:
-            matrixProvider = None
-            active = False
-        markerID = self._createMarkerWithMatrix(self.__markerType, matrixProvider=matrixProvider, active=active)
-        marker = self._clazz(markerID, vehicleID, vProxy=vProxy, active=active)
-        self._markers[vehicleID] = marker
-        return
-
-    def __addAutoAimMarker(self, event):
-        vehicle = event.ctx.get('vehicle')
-        self._vehicleID = vehicle.id if vehicle is not None else None
-        if self._showExtendedInfo:
-            if self.settingsCore.getSetting(MARKERS.ENEMY).get(self.__markerAltAimMarker2D):
-                self._addMarker(self._vehicleID)
-        elif self.settingsCore.getSetting(MARKERS.ENEMY).get(self.__markerBaseAimMarker2D):
-            self._addMarker(self._vehicleID)
-        return
-
     def _addMarker(self, vehicleID):
         self._hideAllMarkers()
         if vehicleID is not None:
@@ -686,6 +406,28 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
                 self._setMarkerActive(markerID, False)
                 self._setMarkerMatrix(markerID, None)
             marker.detach()
+        return
+
+    def __addMarkerToPool(self, vehicleID, vProxy=None):
+        if vProxy is not None:
+            matrixProvider = self._clazz.fetchMatrixProvider(vProxy)
+            active = True
+        else:
+            matrixProvider = None
+            active = False
+        markerID = self._createMarkerWithMatrix(self.__markerType, matrixProvider=matrixProvider, active=active)
+        marker = self._clazz(markerID, vehicleID, vProxy=vProxy, active=active)
+        self._markers[vehicleID] = marker
+        return
+
+    def __addAutoAimMarker(self, event):
+        vehicle = event.ctx.get('vehicle')
+        self._vehicleID = vehicle.id if vehicle is not None else None
+        if self._showExtendedInfo:
+            if self.settingsCore.getSetting(MARKERS.ENEMY).get(self.__markerAltAimMarker2D):
+                self._addMarker(self._vehicleID)
+        elif self.settingsCore.getSetting(MARKERS.ENEMY).get(self.__markerBaseAimMarker2D):
+            self._addMarker(self._vehicleID)
         return
 
     def __onVehicleStateUpdated(self, state, value):
@@ -745,18 +487,11 @@ class EquipmentsMarkerPlugin(MarkerPlugin):
         self.__finishTime = {}
         self.__defaultPostfix = i18n.makeString(INGAME_GUI.FORTCONSUMABLES_TIMER_POSTFIX)
 
-    def init(self):
+    def start(self):
         super(EquipmentsMarkerPlugin, self).init()
         ctrl = self.sessionProvider.shared.equipments
         if ctrl is not None:
             ctrl.onEquipmentMarkerShown += self.__onEquipmentMarkerShown
-        return
-
-    def fini(self):
-        ctrl = self.sessionProvider.shared.equipments
-        if ctrl is not None:
-            ctrl.onEquipmentMarkerShown -= self.__onEquipmentMarkerShown
-        super(EquipmentsMarkerPlugin, self).fini()
         return
 
     def stop(self):
@@ -765,6 +500,9 @@ class EquipmentsMarkerPlugin(MarkerPlugin):
             if callbackID is not None:
                 BigWorld.cancelCallback(callbackID)
 
+        ctrl = self.sessionProvider.shared.equipments
+        if ctrl is not None:
+            ctrl.onEquipmentMarkerShown -= self.__onEquipmentMarkerShown
         super(EquipmentsMarkerPlugin, self).stop()
         return
 
@@ -791,3 +529,341 @@ class EquipmentsMarkerPlugin(MarkerPlugin):
             self._invokeMarker(markerID, 'updateTimer', _EQUIPMENT_DELAY_FORMAT.format(abs(delay)))
             self.__setCallback(markerID, finishTime)
         return
+
+
+_AREA_STATIC_MARKER_DEFAULT_CREATED_TIME = 3.0
+
+class AreaStaticMarkerPlugin(MarkerPlugin, ChatCommunicationComponent):
+    _MIN_Y_OFFSET = 0.4
+    _MAX_Y_OFFSET = 1.2
+    _DISTANCE_FOR_MIN_Y_OFFSET = 400
+    __slots__ = ('_markers', '__defaultPostfix', '__clazz')
+
+    def __init__(self, parentObj, clazz=LocationMarker):
+        super(AreaStaticMarkerPlugin, self).__init__(parentObj)
+        self._markers = {}
+        self.__defaultPostfix = 0
+        self.__clazz = clazz
+        ChatCommunicationComponent.__init__(self, parentObj)
+
+    def start(self):
+        super(AreaStaticMarkerPlugin, self).start()
+        ChatCommunicationComponent.start(self)
+        ctrl = self.sessionProvider.shared.feedback
+        if ctrl is not None:
+            ctrl.onStaticMarkerAdded += self.__onStaticMarkerAdded
+            ctrl.onStaticMarkerRemoved += self.__onStaticMarkerRemoved
+            ctrl.setInFocusForPlayer += self.__setInFocusForPlayer
+            g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+        self.__checkMarkers()
+        return
+
+    def stop(self):
+        ctrl = self.sessionProvider.shared.feedback
+        if ctrl is not None:
+            ctrl.onStaticMarkerAdded -= self.__onStaticMarkerAdded
+            ctrl.onStaticMarkerRemoved -= self.__onStaticMarkerRemoved
+            ctrl.setInFocusForPlayer -= self.__setInFocusForPlayer
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+        for markerKey in self._markers.iterkeys():
+            self._destroyMarker(self._markers[markerKey].getMarkerID())
+
+        super(AreaStaticMarkerPlugin, self).stop()
+        ChatCommunicationComponent.stop(self)
+        return
+
+    def getMarkerType(self):
+        return MarkerType.LOCATION_MARKER_TYPE
+
+    def getTargetIDFromMarkerID(self, markerID):
+        for targetID in self._markers:
+            if self._markers[targetID].getMarkerID() == markerID:
+                return targetID
+
+    def getMarkerSubtype(self, markerID):
+        if markerID not in self._markers:
+            return INVALID_MARKER_SUBTYPE
+        markerSubtypeName = self._markers[markerID].getMarkerSubtype()
+        if markerSubtypeName not in COMMAND_NAME_TO_LOCATION_MARKER_SUBTYPE.values():
+            _logger.warning("Marker subtype name '%s' is not supported.", markerSubtypeName)
+            return INVALID_MARKER_SUBTYPE
+        return markerSubtypeName
+
+    def _getMarkerFromMarkerID(self, markerID):
+        for marker in self._markers.itervalues():
+            if marker.getMarkerID() == markerID:
+                return marker
+
+        return None
+
+    def _getMarkerFromTargetID(self, targetID, markerType):
+        return None if targetID not in self._markers or markerType != self.getMarkerType() else self._markers[targetID]
+
+    def __onVehicleStateUpdated(self, state, value):
+        if state in (VEHICLE_VIEW_STATE.DESTROYED, VEHICLE_VIEW_STATE.CREW_DEACTIVATED):
+            for marker in self._markers.values():
+                self._setMarkerBoundEnabled(marker.getMarkerID(), False)
+
+        elif state in (VEHICLE_VIEW_STATE.SWITCHING, VEHICLE_VIEW_STATE.RESPAWNING):
+            if not self.sessionProvider.getCtx().isPlayerObserver() and avatar_getter.isVehicleAlive():
+                for marker in self._markers.values():
+                    self._setMarkerBoundEnabled(marker.getMarkerID(), True)
+
+    def __checkMarkers(self):
+        _logger.debug('__checkPrebattleMarkers')
+        for key in g_locationPointManager.markedAreas:
+            locationPoint = g_locationPointManager.markedAreas[key]
+            _logger.debug('created a marker')
+            self.__onStaticMarkerAdded(locationPoint.targetID, locationPoint.creatorID, locationPoint.position, locationPoint.markerSubType, True, locationPoint.markerText, locationPoint.replyCount, False)
+
+    def __onStaticMarkerAdded(self, areaID, creatorID, position, locationMarkerSubtype, show3DMarker=False, markerText='', numberOfReplies=0, isTargetForPlayer=False):
+        if not show3DMarker or locationMarkerSubtype not in _LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME:
+            return
+        if areaID in self._markers:
+            _logger.debug('__onStaticMarkerAdded should not be called 2 times with the same areaID')
+            return
+        markerID = self._createMarkerWithPosition(_LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME[locationMarkerSubtype], position)
+        marker = self.__clazz(markerID, position, True, locationMarkerSubtype)
+        self._setMarkerRenderInfo(markerID, _STATIC_MARKER_MIN_SCALE, _STATIC_MARKER_BOUNDS, _INNER_STATIC_MARKER_BOUNDS, _STATIC_MARKER_CULL_DISTANCE, _STATIC_MARKER_BOUNDS_MIN_SCALE)
+        self._setMarkerLocationOffset(markerID, self._MIN_Y_OFFSET, self._MAX_Y_OFFSET, self._DISTANCE_FOR_MIN_Y_OFFSET)
+        self._markers[areaID] = marker
+        marker.setState(ReplyStateForMarker.CREATE_STATE)
+        if locationMarkerSubtype == LocationMarkerSubType.PREBATTLE_WAYPOINT_SUBTYPE:
+            currentPeriod = avatar_getter.getArena().period
+            if currentPeriod not in [constants.ARENA_PERIOD.BATTLE, constants.ARENA_PERIOD.AFTERBATTLE]:
+                self._invokeMarker(markerID, 'alwaysShowCreatorName', True)
+            else:
+                self._invokeMarker(markerID, 'alwaysShowCreatorName', False)
+        if locationMarkerSubtype == LocationMarkerSubType.GOING_TO_MARKER_SUBTYPE:
+            marker.setIsSticky(isTargetForPlayer)
+            self._setMarkerRepliesAndCheckState(marker, 1, isTargetForPlayer)
+        else:
+            self._setActiveState(marker, ReplyStateForMarker.CREATE_STATE)
+        self._invokeMarker(markerID, 'setCreator', markerText)
+        if self.sessionProvider.getCtx().isPlayerObserver() or not avatar_getter.isVehicleAlive():
+            self._setMarkerBoundEnabled(marker.getMarkerID(), False)
+
+    def __onStaticMarkerRemoved(self, targetID):
+        if targetID in self._markers:
+            marker = self._markers[targetID]
+            markerID = marker.getMarkerID()
+            self._markers.pop(targetID, None)
+            marker.setReplyCount(0)
+            marker.setState(0)
+            self._destroyMarker(markerID)
+        return
+
+    def __onArenaPeriodChange(self, period, endTime, *_):
+        if period == constants.ARENA_PERIOD.BATTLE:
+            self.__onArenaPeriodBattleState()
+
+    def __onArenaPeriodBattleState(self):
+        if self.parentObj is None:
+            return
+        else:
+            advChatCmp = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'advancedChatComponent', None)
+            if advChatCmp is None:
+                return
+            for targetID in self._markers:
+                marker = self._markers[targetID]
+                replyCount = marker.getReplyCount()
+                if marker.getMarkerSubtype() == LocationMarkerSubType.PREBATTLE_WAYPOINT_SUBTYPE and replyCount > 0:
+                    self._invokeMarker(marker.getMarkerID(), 'alwaysShowCreatorName', False)
+
+            return
+
+    def __setInFocusForPlayer(self, oldTargetID, oldTargetType, newTargetID, newTargetType, oneShot):
+        if oldTargetType == self.getMarkerType() and oldTargetID in self._markers:
+            self.__makeMarkerSticky(oldTargetID, False)
+        if newTargetType == self.getMarkerType() and newTargetID in self._markers:
+            newMarker = self._markers[newTargetID]
+            pos = newMarker.getPosition()
+            if pos is not None and newMarker.getMarkerSubtype() in [LocationMarkerSubType.SPG_AIM_AREA_SUBTYPE, LocationMarkerSubType.ATTENTION_TO_MARKER_SUBTYPE]:
+                if pos.distTo(avatar_getter.getOwnVehiclePosition()) > MAX_DISTANCE_TEMP_STICKY:
+                    return
+            self.__makeMarkerSticky(newTargetID, True)
+        return
+
+    def __makeMarkerSticky(self, targetID, setSticky):
+        marker = self._markers[targetID]
+        markerID = marker.getMarkerID()
+        self._setMarkerSticky(markerID, setSticky)
+        marker.setIsSticky(setSticky)
+        self._checkNextState(marker)
+
+
+class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
+    __slots__ = ('__personalTeam', '_markers', '__clazz')
+
+    def __init__(self, parentObj, clazz=BaseMarker):
+        super(TeamsOrControlsPointsPlugin, self).__init__(parentObj)
+        self.__personalTeam = 0
+        self.__clazz = clazz
+        self._markers = {}
+        ChatCommunicationComponent.__init__(self, parentObj)
+
+    def start(self):
+        super(TeamsOrControlsPointsPlugin, self).start()
+        ChatCommunicationComponent.start(self)
+        g_playerEvents.onTeamChanged += self.__onTeamChanged
+        ctrl = self.sessionProvider.shared.feedback
+        if ctrl is not None:
+            ctrl.onActionAddedToMarkerReceived += self.__onActionAddedToMarkerReceived
+            ctrl.setInFocusForPlayer += self.__setInFocusForPlayer
+            ctrl.onRemoveCommandReceived += self.__onRemoveCommandReceived
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+        self._restart()
+        return
+
+    def stop(self):
+        g_playerEvents.onTeamChanged -= self.__onTeamChanged
+        ctrl = self.sessionProvider.shared.feedback
+        if ctrl is not None:
+            ctrl.onActionAddedToMarkerReceived -= self.__onActionAddedToMarkerReceived
+            ctrl.setInFocusForPlayer -= self.__setInFocusForPlayer
+            ctrl.onRemoveCommandReceived -= self.__onRemoveCommandReceived
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+        self.__removeExistingMarkers()
+        super(TeamsOrControlsPointsPlugin, self).stop()
+        ChatCommunicationComponent.stop(self)
+        return
+
+    def __removeExistingMarkers(self):
+        for markerKey in self._markers.iterkeys():
+            self._destroyMarker(self._markers[markerKey].getMarkerID())
+
+        self._markers.clear()
+
+    def getMarkerType(self):
+        return MarkerType.BASE_MARKER_TYPE
+
+    def getTargetIDFromMarkerID(self, markerID):
+        for baseID, marker in self._markers.iteritems():
+            if markerID == marker.getMarkerID():
+                return baseID
+
+    def getMarkerSubtype(self, markerID):
+        foundMarker = None
+        for _, marker in self._markers.iteritems():
+            if markerID == marker.getMarkerID():
+                foundMarker = marker
+                break
+
+        if foundMarker is None:
+            return INVALID_MARKER_SUBTYPE
+        else:
+            return DefaultMarkerSubType.ALLY_MARKER_SUBTYPE if foundMarker.getOwningTeam() == 'ally' else DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE
+
+    def _getMarkerFromMarkerID(self, markerID):
+        for marker in self._markers.itervalues():
+            if marker.getMarkerID() == markerID:
+                return marker
+
+        return None
+
+    def _restart(self):
+        self.__personalTeam = self.sessionProvider.getArenaDP().getNumberOfTeam()
+        self.__removeExistingMarkers()
+        self.__addTeamBasePositions()
+        self.__addControlPoints()
+
+    def _getMarkerFromTargetID(self, targetID, markerType):
+        return None if targetID not in self._markers or markerType != self.getMarkerType() else self._markers[targetID]
+
+    def _getTerrainHeightAt(self, spaceID, x, z):
+        collisionWithTerrain = BigWorld.wg_collideSegment(spaceID, Math.Vector3(x, 1000.0, z), Math.Vector3(x, -1000.0, z), 128)
+        return collisionWithTerrain.closestPoint if collisionWithTerrain is not None else (x, 0, z)
+
+    def __addBaseOrControlPointMarker(self, owner, position, baseOrControlPointID):
+        position = self._getTerrainHeightAt(BigWorld.player().spaceID, position[0], position[2])
+        truePosition = position + settings.MARKER_POSITION_ADJUSTMENT
+        markerID = self._createMarkerWithPosition(settings.MARKER_SYMBOL_NAME.SECTOR_BASE_TYPE, truePosition)
+        if markerID < 0:
+            return
+        self._invokeMarker(markerID, 'setOwningTeam', owner)
+        self._invokeMarker(markerID, 'setIdentifier', RANDOM_BATTLE_BASE_ID)
+        self._invokeMarker(markerID, 'setActive', True)
+        self._setMarkerRenderInfo(markerID, _BASE_MARKER_MIN_SCALE, _BASE_MARKER_BOUNDS, _INNER_BASE_MARKER_BOUNDS, _STATIC_MARKER_CULL_DISTANCE, _BASE_MARKER_BOUND_MIN_SCALE)
+        marker = self.__clazz(markerID, True, owner)
+        self._markers[baseOrControlPointID] = marker
+        marker.setState(ReplyStateForMarker.NO_ACTION)
+        self._setActiveState(marker, marker.getState())
+        self._setMarkerSticky(markerID, False)
+
+    def __addTeamBasePositions(self):
+        positions = self.sessionProvider.arenaVisitor.type.getTeamBasePositionsIterator()
+        for team, position, number in positions:
+            if team == self.__personalTeam:
+                owner = 'ally'
+            else:
+                owner = 'enemy'
+            baseID = getUniqueTeamOrControlPointID(team, number)
+            self.__addBaseOrControlPointMarker(owner, position, baseID)
+
+    def __addControlPoints(self):
+        points = self.sessionProvider.arenaVisitor.type.getControlPointsIterator()
+        for position, number in points:
+            baseID = getUniqueTeamOrControlPointID(0, number)
+            self.__addBaseOrControlPointMarker('neutral', position, baseID)
+
+    def __onTeamChanged(self, teamID):
+        self._restart()
+
+    def __onActionAddedToMarkerReceived(self, senderID, commandID, markerType, uniqueBaseID):
+        if markerType != self.getMarkerType() or uniqueBaseID not in self._markers:
+            return
+        marker = self._markers[uniqueBaseID]
+        marker.setState(ReplyStateForMarker.CREATE_STATE)
+        marker.setActiveCommandID(commandID)
+        if _ACTIONS.battleChatCommandFromActionID(commandID).name in AUTOCOMMIT_COMMAND_NAMES:
+            marker.setIsSticky(senderID == avatar_getter.getPlayerVehicleID())
+            self._setMarkerRepliesAndCheckState(marker, 1, senderID == avatar_getter.getPlayerVehicleID())
+        else:
+            self._setActiveState(marker, ReplyStateForMarker.CREATE_STATE)
+        if not avatar_getter.isVehicleAlive() and marker.getBoundCheckEnabled():
+            marker.setBoundCheckEnabled(False)
+            self._setMarkerBoundEnabled(marker.getMarkerID(), False)
+
+    def __onRemoveCommandReceived(self, removeID, markerType):
+        if markerType != MarkerType.BASE_MARKER_TYPE or removeID not in self._markers:
+            return
+        marker = self._markers[removeID]
+        marker.setActiveCommandID(-1)
+        self._checkNextState(marker)
+        if marker.getState() == ReplyStateForMarker.NO_ACTION and not marker.getBoundCheckEnabled():
+            marker.setBoundCheckEnabled(True)
+            self._setMarkerBoundEnabled(marker.getMarkerID(), True)
+
+    def __onVehicleStateUpdated(self, state, value):
+        if state in (VEHICLE_VIEW_STATE.DESTROYED, VEHICLE_VIEW_STATE.CREW_DEACTIVATED):
+            for marker in self._markers.values():
+                if marker.getState() != ReplyStateForMarker.NO_ACTION:
+                    self._setMarkerBoundEnabled(marker.getMarkerID(), False)
+
+        elif state in (VEHICLE_VIEW_STATE.SWITCHING, VEHICLE_VIEW_STATE.RESPAWNING):
+            if not self.sessionProvider.getCtx().isPlayerObserver() and avatar_getter.isVehicleAlive():
+                for marker in self._markers.values():
+                    if not marker.getBoundCheckEnabled():
+                        self._setMarkerBoundEnabled(marker.getMarkerID(), True)
+
+    def __setInFocusForPlayer(self, oldTargetID, oldTargetType, newTargetID, newTargetType, oneShot):
+        if oldTargetType == self.getMarkerType() and oldTargetID in self._markers:
+            self.__makeMarkerSticky(oldTargetID, False)
+        if newTargetType == self.getMarkerType() and newTargetID in self._markers:
+            self.__makeMarkerSticky(newTargetID, True)
+
+    def __makeMarkerSticky(self, targetID, setSticky):
+        marker = self._markers[targetID]
+        markerID = marker.getMarkerID()
+        self._setMarkerSticky(markerID, setSticky)
+        marker.setIsSticky(setSticky)
+        self._checkNextState(marker)

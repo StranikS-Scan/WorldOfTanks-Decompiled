@@ -65,7 +65,7 @@ class ViewPointsController(IViewPointsController):
         else:
             vehiclesCollection = AllyItemsCollection(sortKey=sortKey)
         vehicles = AliveItemsCollection(vehiclesCollection).iterator(self.__arenaDP)
-        items = [ (False, vInfo.vehicleID) for vInfo, _ in vehicles ]
+        items = [ (False, vInfo.vehicleID) for vInfo, _ in vehicles if 'unobservable' not in vInfo.vehicleType.tags ]
         for index, _ in enumerate(self.__points):
             items.append((True, index))
 

@@ -55,5 +55,6 @@ class VehicleCompareConfiguratorBaseView(VehicleCompareConfiguratorBaseViewMeta)
 
     def __tryToInit(self):
         if self.isCreated() and self._container is not None and not self.__isInited:
+            self.__isInited = True
             self._init()
         return

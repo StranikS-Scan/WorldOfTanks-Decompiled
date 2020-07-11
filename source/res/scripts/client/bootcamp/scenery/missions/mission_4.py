@@ -16,7 +16,7 @@ class Mission4(AbstractMission):
         super(Mission4, self).start()
         self.playSound2D('vo_bc_main_task')
         self.playSound2D('bc_main_tips_task_start')
-        self._avatar.muteSounds(('crew_member_contusion', 'track_destroyed', 'fire_started', 'gunner_killed'))
+        self.muteSounds(('crew_member_contusion', 'track_destroyed', 'fire_started', 'gunner_killed'))
 
     def onEnemyObserved(self, isObserved):
         if not self._combatMusicTriggered and self._callbackID is None:
@@ -25,10 +25,11 @@ class Mission4(AbstractMission):
         return
 
     def stop(self):
-        self._avatar.muteSounds(())
+        self.muteSounds(())
         if self._callbackID:
             BigWorld.cancelCallback(self._callbackID)
             self._callbackID = None
+        super(Mission4, self).stop()
         return
 
     def _playCombatMusic(self):

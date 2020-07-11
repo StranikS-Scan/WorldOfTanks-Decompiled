@@ -3,9 +3,11 @@
 import weakref
 from collections import namedtuple
 import BigWorld
+from constants import ARENA_GUI_TYPE
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from vehicle_systems.CompoundAppearance import CompoundAppearance
 from vehicle_systems.stricted_loading import loadingPriority, makeCallbackWeak
+from items import vehicles
 _ENABLE_CACHE_TRACKER = False
 _ENABLE_PRECACHE = True
 _g_cache = None
@@ -18,7 +20,7 @@ _VehicleInfo = namedtuple('_VehicleInfo', ['typeDescr',
 _AssemblerData = namedtuple('_AssemblerData', ['appearance', 'info', 'prereqsNames'])
 
 class _AppearanceCache(object):
-    __slots__ = ('__arena', '__appearanceCache', '__assemblersCache', '__spaceLoaded')
+    __slots__ = ('__arena', '__appearanceCache', '__assemblersCache', '__spaceLoaded', '__wholeVehResources')
 
     @property
     def cache(self):
@@ -37,6 +39,7 @@ class _AppearanceCache(object):
             self.__arena.componentSystem.playerDataComponent.onPlayerGroupsUpdated += self.__onPlayerGroupsUpdated
         if _ENABLE_CACHE_TRACKER:
             d_cacheInfo = dict()
+        self.__wholeVehResources = None
         return
 
     def destroy(self):
@@ -52,6 +55,7 @@ class _AppearanceCache(object):
         self.__arena = None
         self.__appearanceCache = None
         self.__assemblersCache = None
+        self.__wholeVehResources = None
         if _ENABLE_CACHE_TRACKER:
             d_cacheInfo = None
         return
@@ -70,6 +74,55 @@ class _AppearanceCache(object):
         self.__spaceLoaded = True
         if _ENABLE_PRECACHE:
             self.__precacheVehicle(self.__arena.vehicles)
+        if self.__arena.guiType == ARENA_GUI_TYPE.BATTLE_ROYALE:
+            brprereqs = set()
+            cachedDescs = set()
+            for veh in self.__arena.vehicles.values():
+                vDesc = veh['vehicleType']
+                if vDesc.name in cachedDescs:
+                    continue
+                cachedDescs.add(vDesc.name)
+                brprereqs.update(self.__getWholeVehModels(vDesc))
+
+            BigWorld.loadResourceListBG(list(brprereqs), makeCallbackWeak(_wholeVehicleResourcesLoaded, brprereqs))
+
+    def __getWholeVehModels(self, vDesc):
+        nationID, vehicleTypeID = vehicles.g_list.getIDsByName(vDesc.name)
+        vType = vehicles.g_cache.vehicle(nationID, vehicleTypeID)
+        brprereqs = set(vDesc.prerequisites(True))
+        bspModels = set()
+        index = 0
+        for chassie in vType.chassis:
+            brprereqs.add(chassie.models.undamaged)
+            splineDesc = chassie.splineDesc
+            if splineDesc is not None:
+                brprereqs.add(splineDesc.segmentModelLeft())
+                brprereqs.add(splineDesc.segmentModelRight())
+                brprereqs.add(splineDesc.segment2ModelLeft())
+                brprereqs.add(splineDesc.segment2ModelRight())
+            bspModels.add((index, chassie.hitTester.bspModelName))
+            index = index + 1
+
+        for hull in vType.hulls:
+            brprereqs.add(hull.models.undamaged)
+            bspModels.add((index, hull.hitTester.bspModelName))
+            index = index + 1
+
+        for turrets in vType.turrets:
+            for turret in turrets:
+                brprereqs.add(turret.models.undamaged)
+                bspModels.add((index, turret.hitTester.bspModelName))
+                index = index + 1
+                for gun in turret.guns:
+                    brprereqs.add(gun.models.undamaged)
+                    bspModels.add((index, gun.hitTester.bspModelName))
+                    index = index + 1
+
+        brprereqs.add(BigWorld.CollisionAssembler(tuple(bspModels), BigWorld.player().spaceID))
+        return brprereqs
+
+    def saveWholeVehicleResources(self, resources):
+        self.__wholeVehResources = resources
 
     def cacheApperance(self, vId, info):
         if vId in self.__assemblersCache or vId in self.__appearanceCache:
@@ -82,6 +135,13 @@ class _AppearanceCache(object):
             outfitCD = info['outfitCD']
             self.__cacheApperance(vId, _VehicleInfo(typeDescriptor, 1 if isAlive else 0, True if isAlive else False, False, outfitCD))
             return
+
+    def removeAppearance(self, vId):
+        if vId in self.__appearanceCache:
+            self.__appearanceCache[vId][0].destroy()
+            del self.__appearanceCache[vId]
+            if _ENABLE_CACHE_TRACKER:
+                LOG_DEBUG('Appearance cache. Removing appearance vID = {0}'.format(vId))
 
     def createAppearance(self, vId, vInfo, forceReloadingFromCache):
         appearanceInfo = self.__appearanceCache.get(vId, None)
@@ -201,6 +261,14 @@ def _resourceLoaded(resNames, vId, resourceRefs):
         return
 
 
+def _wholeVehicleResourcesLoaded(resNames, resourceRefs):
+    if _g_cache is None:
+        return
+    else:
+        _g_cache.saveWholeVehicleResources(resourceRefs)
+        return
+
+
 def init(clientArena):
     global _g_cache
     _g_cache = _AppearanceCache(clientArena)
@@ -228,6 +296,10 @@ def getAppearance(vId, resourceRefs):
 
 def cacheApperance(vID, info):
     _g_cache.cacheApperance(vID, info)
+
+
+def removeAppearance(vID):
+    _g_cache.removeAppearance(vID)
 
 
 def dCacheStatus():

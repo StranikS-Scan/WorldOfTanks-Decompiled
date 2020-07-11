@@ -7,15 +7,14 @@ from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview import Vehic
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.shared.formatters import text_styles, icons
 from helpers import dependency
-from skeletons.gui.game_control import IEpicBattleMetaGameController, IEventProgressionController
+from skeletons.gui.game_control import IEventProgressionController
 from web.web_client_api.common import ItemPackEntry, ItemPackType
 from gui.shared.utils.functions import makeTooltip
 from gui.impl import backport
 from gui.impl.gen import R
 
 class EventProgressionVehiclePreview(VehiclePreview):
-    __eventProgressionController = dependency.descriptor(IEventProgressionController)
-    __epicMetaGameController = dependency.descriptor(IEpicBattleMetaGameController)
+    __eventProgression = dependency.descriptor(IEventProgressionController)
 
     def __init__(self, ctx=None):
         super(EventProgressionVehiclePreview, self).__init__(ctx)
@@ -33,8 +32,8 @@ class EventProgressionVehiclePreview(VehiclePreview):
             viewPy.setVehicleCrews((ItemPackEntry(id=g_currentPreviewVehicle.item.intCD, groupID=1),), (ItemPackEntry(type=ItemPackType.CREW_100, groupID=1),))
 
     def _getBuyingPanelData(self):
-        vehiclePrice = self.__eventProgressionController.getRewardVehiclePrice(g_currentPreviewVehicle.item.intCD)
-        storedPoints = self.__eventProgressionController.actualRewardPoints
+        vehiclePrice = self.__eventProgression.getRewardVehiclePrice(g_currentPreviewVehicle.item.intCD)
+        storedPoints = self.__eventProgression.actualRewardPoints
         haveEnoughPoints = 0 < storedPoints >= vehiclePrice
         if not haveEnoughPoints:
             resID = R.strings.tooltips.vehiclePreview.buyButton.notEnoughPrestigePoints
@@ -55,7 +54,7 @@ class EventProgressionVehiclePreview(VehiclePreview):
         self.as_setBottomPanelS(VEHPREVIEW_CONSTANTS.EVENT_PROGRESSION_BUYING_PANEL_LINKAGE)
 
     def _processBackClick(self, ctx=None):
-        self.__eventProgressionController.openURL(self._backAlias)
+        self.__eventProgression.openURL(self._backAlias)
 
     def _getBackBtnLabel(self):
         pass

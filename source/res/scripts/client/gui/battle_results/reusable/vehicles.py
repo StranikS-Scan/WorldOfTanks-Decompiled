@@ -2,10 +2,13 @@
 # Embedded file name: scripts/client/gui/battle_results/reusable/vehicles.py
 import weakref
 from collections import defaultdict, namedtuple
+import typing
 from constants import DEATH_REASON_ALIVE
 from gui.battle_results.reusable import shared
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
+if typing.TYPE_CHECKING:
+    from players import PlayerInfo
 _VehicleShortInfo = namedtuple('_ShortVehicleInfo', ('intCD', 'team', 'accountDBID', 'deathReason', 'isTeamKiller'))
 _VehicleShortInfo.__new__.__defaults__ = (0,
  0,

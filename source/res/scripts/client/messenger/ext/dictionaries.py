@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/messenger/ext/dictionaries.py
 import re
 import sre_compile
+import types
 import ResMgr
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 _defaultReplacementFunction = lambda word: '*' * len(word)
@@ -109,6 +110,70 @@ class SpecialOLDictionary(ObsceneLanguageDictionary):
         try:
             for pat in self.__badWordPatterns:
                 lowerText = text.lower()
+                processed = []
+                offset = 0
+                for m in pat.finditer(lowerText):
+                    start = m.start()
+                    end = m.end()
+                    processed.append(text[offset:start])
+                    processed.append(self.replace(text[start:end]))
+                    offset = end
+
+                if offset:
+                    processed.append(text[offset:])
+                if processed:
+                    text = ''.join(processed)
+
+        except Exception:
+            LOG_ERROR('There is exception in special bad words filter')
+            LOG_CURRENT_EXCEPTION()
+
+        return text
+
+
+class ChinaOLDictionary(SpecialOLDictionary):
+    __badWordPatterns = []
+    __equivalents = {}
+
+    @classmethod
+    def load(cls, resourceId):
+        obj = ChinaOLDictionary.__new__(cls)
+        dSection = ResMgr.openSection(resourceId)
+        if dSection is None:
+            return obj
+        else:
+            eqsSection = dSection['equivalents']
+            if eqsSection is not None:
+                for eqSection in eqsSection.values():
+                    find = eqSection['find'].asWideString if eqSection.has_key('find') else None
+                    replace = eqSection['replace'].asWideString if eqSection.has_key('replace') else None
+                    if find and replace:
+                        obj.__equivalents[find] = replace
+
+            badWordsSection = dSection['badWords']
+            if badWordsSection is not None:
+                for badWordSet in badWordsSection.values():
+                    try:
+                        badWordWS = badWordSet.asWideString
+                        if not isinstance(badWordWS, types.UnicodeType):
+                            badWordWS = unicode(badWordWS, 'utf-8')
+                        badWordC = re.compile(badWordWS, re.M | re.S | re.U | re.I)
+                        obj.__badWordPatterns.append(badWordC)
+                    except sre_compile.error:
+                        LOG_CURRENT_EXCEPTION()
+
+            ResMgr.purge(resourceId, True)
+            return obj
+
+    def searchAndReplace(self, text):
+        try:
+            if not isinstance(text, types.UnicodeType):
+                text = unicode(text, 'utf-8')
+            lowerText = text.lower()
+            for find, replace in self.__equivalents.iteritems():
+                lowerText = lowerText.replace(find, replace)
+
+            for pat in self.__badWordPatterns:
                 processed = []
                 offset = 0
                 for m in pat.finditer(lowerText):

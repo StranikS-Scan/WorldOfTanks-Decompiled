@@ -200,6 +200,12 @@ class VehiclesItemsCollection(_Collection):
         return item[0].vehicleID
 
 
+class ActiveVehiclesItemsCollection(VehiclesItemsCollection):
+
+    def _buildSeq(self, arenaDP):
+        return list(arenaDP.getActiveVehiclesGenerator())
+
+
 class AllyItemsCollection(VehiclesItemsCollection):
     __slots__ = ()
 

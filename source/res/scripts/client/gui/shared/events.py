@@ -3,7 +3,7 @@
 from collections import namedtuple
 from gui.shared.event_bus import SharedEvent
 from shared_utils import CONST_CONTAINER
-__all__ = ('ArgsEvent', 'LoadEvent', 'ComponentEvent', 'LoadViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginCreateEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent')
+__all__ = ('ArgsEvent', 'LoadEvent', 'ComponentEvent', 'LoadViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginCreateEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'HasCtxEvent')
 
 class HasCtxEvent(SharedEvent):
 
@@ -43,7 +43,9 @@ class GameEvent(HasCtxEvent):
     GUN_MARKER_VISIBILITY = 'game/gunMarkerVisibility'
     CROSSHAIR_VIEW = 'game/crosshairView'
     FULL_STATS = 'game/fullStats'
+    EVENT_STATS = 'game/eventStats'
     FULL_STATS_QUEST_PROGRESS = 'game/fullStats/questProgress'
+    HIDE_VEHICLE_UPGRADE = 'game/battleRoyale/hideVehicleUpgrade'
     SHOW_CURSOR = 'game/showCursor'
     HIDE_CURSOR = 'game/hideCursor'
     NEXT_PLAYERS_PANEL_MODE = 'game/nextPlayersPanelMode'
@@ -54,7 +56,6 @@ class GameEvent(HasCtxEvent):
     ON_BACKGROUND_ALPHA_CHANGE = 'game/onBackgroundAlphaChange'
     HIDE_AUTO_AIM_MARKER = 'game/hideAutoIamMarker'
     BATTLE_LOADING = 'game/battleLoading'
-    EPIC_GLOBAL_MSG_CMD = 'game/setGlobalMessageCmd'
     ADD_AUTO_AIM_MARKER = 'game/addAutoIamMarker'
     SHOW_BTN_HINT = 'game/showBtnHint'
     HIDE_BTN_HINT = 'game/hideBtnHint'
@@ -66,6 +67,9 @@ class GameEvent(HasCtxEvent):
     PRE_CHARGE = 'game/preCharge'
     CONTROL_MODE_CHANGE = 'game/controlModeChange'
     SNIPER_CAMERA_TRANSITION = 'game/sniperCameraTransition'
+    FADE_OUT_AND_IN = 'game/fadeOutIn'
+    CALLOUT_DISPLAY_EVENT = 'game/calloutDisplayEvent'
+    RESPOND_TO_CALLOUT = 'game/respondToCallout'
 
 
 class GUICommonEvent(SharedEvent):
@@ -666,6 +670,13 @@ class ProgressiveRewardEvent(HasCtxEvent):
     WIDGET_WAS_SHOWN = 'progressiveWidgetWasShown'
 
 
+class AirDropEvent(HasCtxEvent):
+    AIR_DROP_SPAWNED = 'onAirDropSpawned'
+    AIR_DROP_LANDED = 'onAirDropLanded'
+    AIR_DROP_LOOP_ENTERED = 'onAirDropLootEntered'
+    AIR_DROP_LOOP_LEFT = 'onAirDropLootLeft'
+
+
 class HangarCameraManagerEvent(HasCtxEvent):
     ON_CREATE = 'hangarCameraManagerEvent/onCreate'
     ON_DESTROY = 'hangarCameraManagerEvent/onDestroy'
@@ -718,5 +729,9 @@ class PrbActionEvent(HasCtxEvent):
         self.action = action
 
 
-class EventSquadEvent(HasCtxEvent):
-    READY_BUTTON_UPDATE = 'readyButtonUpdate'
+class RadialMenuEvent(SharedEvent):
+    RADIAL_MENU_ACTION = 'radialMenuAction'
+
+
+class HangarSpacesSwitcherEvent(HasCtxEvent):
+    SWITCH_TO_HANGAR_SPACE = 'hangarSpacesSwitcherEvent/SwitchToHangarSpace'

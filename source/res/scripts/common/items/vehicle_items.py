@@ -188,23 +188,23 @@ class FuelTank(InstallableItem):
 
 @add_shallow_copy()
 class Radio(InstallableItem):
-    __slots__ = ('distance',)
+    __slots__ = ('distance', 'radarRadius', 'radarCooldown')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Radio, self).__init__(typeID, componentID, componentName, compactDescr, level)
         self.distance = component_constants.ZERO_FLOAT
+        self.radarRadius = component_constants.ZERO_FLOAT
+        self.radarCooldown = component_constants.ZERO_FLOAT
 
 
 @add_shallow_copy()
 class Turret(InstallableItem):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('gunPosition', 'gunShotOffset', 'gunShotPosition', 'rotationSpeed', 'turretRotatorHealth', 'surveyingDeviceHealth', 'invisibilityFactor', 'primaryArmor', 'ceilless', 'showEmblemsOnGun', 'guns', 'turretRotatorSoundManual', 'turretRotatorSoundGear', 'AODecals', 'turretDetachmentEffects', 'physicsShape', 'circularVisionRadius', 'customizableVehicleAreas', 'multiGun')
+    __slots__ = ('gunPosition', 'rotationSpeed', 'turretRotatorHealth', 'surveyingDeviceHealth', 'invisibilityFactor', 'primaryArmor', 'ceilless', 'showEmblemsOnGun', 'guns', 'turretRotatorSoundManual', 'turretRotatorSoundGear', 'AODecals', 'turretDetachmentEffects', 'physicsShape', 'circularVisionRadius', 'customizableVehicleAreas', 'multiGun')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Turret, self).__init__(typeID, componentID, componentName, compactDescr, level)
         self.gunPosition = None
-        self.gunShotOffset = None
-        self.gunShotPosition = None
         self.rotationSpeed = component_constants.ZERO_FLOAT
         self.turretRotatorHealth = None
         self.surveyingDeviceHealth = None
@@ -231,7 +231,7 @@ class Turret(InstallableItem):
 @add_shallow_copy()
 class Gun(InstallableItem):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'reloadEffect', 'impulse', 'recoil', 'animateEmblemSlots', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'autoreload', 'drivenJoints', 'customizableVehicleAreas', 'dualGun')
+    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'reloadEffect', 'impulse', 'recoil', 'animateEmblemSlots', 'shotOffset', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'autoreload', 'drivenJoints', 'customizableVehicleAreas', 'dualGun')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Gun, self).__init__(typeID, componentID, componentName, compactDescr, level)
@@ -241,6 +241,7 @@ class Gun(InstallableItem):
         self.maxAmmo = component_constants.ZERO_INT
         self.invisibilityFactorAtShot = component_constants.ZERO_FLOAT
         self.turretYawLimits = None
+        self.shotOffset = None
         self.pitchLimits = None
         self.staticTurretYaw = None
         self.staticPitch = None

@@ -32,6 +32,7 @@ from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityA
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler, ViewLifecycleWatcher
 from gui.Scaleform.locale.DIALOGS import DIALOGS
+from gui.Scaleform.locale.EVENT import EVENT
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.awards.event_dispatcher import showCrewSkinAward, showDynamicAward
@@ -380,11 +381,20 @@ class PunishWindowHandler(ServiceChannelHandler):
             elif fairplayViolations[0] != 0:
                 penaltyType = 'warning'
                 violation = fairplayViolations[0]
+            violationName = getFairPlayViolationName(violation)
+            msgID = 'punishmentWindow/reason/%s' % violationName
             showDialog(I18PunishmentDialogMeta('punishmentWindow', None, {'penaltyType': penaltyType,
              'arenaName': i18n.makeString(arenaType.name),
              'time': TimeFormatter.getActualMsgTimeStr(arenaCreateTime),
-             'reason': i18n.makeString(DIALOGS.all('punishmentWindow/reason/%s' % getFairPlayViolationName(violation)))}), lambda *args: None)
+             'reason': i18n.makeString(self.__getLocalizationString(msgID, violationName))}), lambda *args: None)
         return
+
+    def __getLocalizationString(self, msgID, violationName):
+        if 'event' in violationName:
+            res = EVENT.all(msgID)
+        else:
+            res = DIALOGS.all(msgID)
+        return res
 
 
 class PersonalMissionBonusHandler(ServiceChannelHandler):

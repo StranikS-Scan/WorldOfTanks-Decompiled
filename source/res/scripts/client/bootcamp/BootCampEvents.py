@@ -21,6 +21,7 @@ class _BootCampEvents(object):
         self.onBattleLessonFinished = self._createEvent()
         self.onRequestBootcampFinish = self._createEvent()
         self.onBattleLoaded = self._createEvent()
+        self.onResultScreenPopulated = self._createEvent()
         self.onResultScreenFinished = self._createEvent()
         self.onBCGUIComponentLifetime = self._createEvent()
         self.onBattleComponentVisibility = self._createEvent()

@@ -1,16 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/smoke_screen.py
+import logging
 from helpers.EffectsList import effectsFromSection
 from items import vehicles
 import BigWorld
 import ResMgr
 import Math
-from helpers import dependency
-from skeletons.gui.battle_session import IBattleSessionProvider
 from Flock import DebugGizmo
 ENVIRONMENT_EFFECTS_CONFIG_FILE = 'scripts/dynamic_objects.xml'
 _SHOW_DEBUG_SMOKE = False
-_SMOKE_VIGNETTE_PARAMS = Math.Vector4(0.08, 200, 0, 0)
+_DEFAULT_SMOKE_INTENSITY = 0.08
+_DEFAULT_SMOKE_COLOR = Math.Vector3(200, 200, 200)
+_logger = logging.getLogger(__name__)
 
 class _SmokeDebugVisualization(object):
 
@@ -63,8 +64,8 @@ class _SmokeDebugVisualization(object):
 
 
 class SmokeScreen(object):
-    guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
     vignetteEnabled = False
+    activeVignetteEquipmentID = -1
     renderSettings = BigWorld.WGRenderSettings()
 
     def __init__(self, smokeId, args):
@@ -104,12 +105,25 @@ class SmokeScreen(object):
         return
 
     @staticmethod
-    def enableSmokePostEffect(enabled):
-        if enabled == SmokeScreen.vignetteEnabled:
-            return
-        SmokeScreen.vignetteEnabled = enabled
+    def enableSmokePostEffect(enabled, smokeInfos=None):
         if enabled:
-            SmokeScreen.defaultVignetteParams = SmokeScreen.renderSettings.getVignetteSettings()
-            SmokeScreen.renderSettings.setVignetteSettings(_SMOKE_VIGNETTE_PARAMS)
+            if smokeInfos:
+                equipmentID = smokeInfos[0]['equipmentID']
+                if SmokeScreen.vignetteEnabled and SmokeScreen.activeVignetteEquipmentID == equipmentID:
+                    return
+                smokeScreenEquipment = vehicles.g_cache.equipments()[equipmentID]
+                vignetteColor = smokeScreenEquipment.vignetteColor
+                vignetteParams = Math.Vector4(vignetteColor.x, vignetteColor.y, vignetteColor.z, smokeScreenEquipment.vignetteIntensity)
+            else:
+                _logger.warning('No smoke infos set for smoke posteffect, using default values.')
+                vignetteParams = Math.Vector4(_DEFAULT_SMOKE_COLOR.x, _DEFAULT_SMOKE_COLOR.y, _DEFAULT_SMOKE_COLOR.z, _DEFAULT_SMOKE_INTENSITY)
+            if SmokeScreen.activeVignetteEquipmentID == -1:
+                SmokeScreen.defaultVignetteParams = SmokeScreen.renderSettings.getVignetteSettings()
+            SmokeScreen.renderSettings.setVignetteSettings(vignetteParams)
+            SmokeScreen.activeVignetteEquipmentID = equipmentID
         else:
+            if not SmokeScreen.vignetteEnabled:
+                return
             SmokeScreen.renderSettings.setVignetteSettings(SmokeScreen.defaultVignetteParams)
+            SmokeScreen.activeVignetteEquipmentID = -1
+        SmokeScreen.vignetteEnabled = enabled

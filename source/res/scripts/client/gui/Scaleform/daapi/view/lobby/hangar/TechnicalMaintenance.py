@@ -25,8 +25,10 @@ from helpers.i18n import makeString
 from account_helpers.settings_core.settings_constants import TUTORIAL
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.shared import IItemsCache
+from gui.prb_control.entities.listener import IGlobalListener
+from constants import QUEUE_TYPE
 
-class TechnicalMaintenance(TechnicalMaintenanceMeta):
+class TechnicalMaintenance(TechnicalMaintenanceMeta, IGlobalListener):
     itemsCache = dependency.descriptor(IItemsCache)
     bootcamp = dependency.descriptor(IBootcampController)
 
@@ -58,13 +60,19 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         self.populateTechnicalMaintenance()
         self.populateTechnicalMaintenanceEquipmentDefaults()
         self.setupContextHints(TUTORIAL.TECHNICAL_MAINTENANCE)
+        self.startGlobalListening()
 
     def _dispose(self):
         self.itemsCache.onSyncCompleted -= self._onShopResync
         g_clientUpdateManager.removeObjectCallbacks(self)
         g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
         self.removeListener(events.TechnicalMaintenanceEvent.RESET_EQUIPMENT, self.__resetEquipment, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.stopGlobalListening()
         super(TechnicalMaintenance, self)._dispose()
+
+    def onPrbEntitySwitched(self):
+        if self.prbDispatcher.getFunctionalState().isQueueSelected(QUEUE_TYPE.BATTLE_ROYALE):
+            self.destroy()
 
     def onCreditsChange(self, value):
         value = self.itemsCache.items.stats.credits
@@ -327,7 +335,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         self.as_setEquipmentS(installed, setup, modules)
 
     def __onCurrentVehicleChanged(self, *args):
-        if g_currentVehicle.isLocked() or not g_currentVehicle.isPresent() or g_currentVehicle.isEvent():
+        if g_currentVehicle.isLocked() or not g_currentVehicle.isPresent() or g_currentVehicle.isEquipmentLocked():
             self.destroy()
         else:
             self.populateTechnicalMaintenance()

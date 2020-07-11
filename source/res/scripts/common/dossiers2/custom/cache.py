@@ -26,6 +26,8 @@ def buildCache():
         for vehDescr in nationList.itervalues():
             if 'bob' in vehDescr.tags:
                 continue
+            elif 'battle_royale' in vehDescr.tags:
+                continue
             vehiclesByLevel.setdefault(vehDescr.level, set()).add(vehDescr.compactDescr)
             for tag in ('beast', 'sinai', 'patton'):
                 if tag in vehDescr.tags:

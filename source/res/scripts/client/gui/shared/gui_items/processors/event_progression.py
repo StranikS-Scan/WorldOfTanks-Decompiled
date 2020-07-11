@@ -11,7 +11,7 @@ from skeletons.gui.game_control import IEventProgressionController
 _logger = logging.getLogger(__name__)
 
 class EventProgressionBuyRewardVehicle(Processor):
-    __eventProgressionController = dependency.descriptor(IEventProgressionController)
+    __eventProgression = dependency.descriptor(IEventProgressionController)
 
     def __init__(self, vehicle):
         self.__vehicle = vehicle
@@ -29,7 +29,7 @@ class EventProgressionBuyRewardVehicle(Processor):
 
     def __getMsgCtx(self):
         return {'veh_name': self.__vehicle.shortUserName,
-         'count': self.__eventProgressionController.getRewardVehiclePrice(self.__vehicle.intCD),
+         'count': self.__eventProgression.getRewardVehiclePrice(self.__vehicle.intCD),
          'date': self.__formatTime()}
 
     @staticmethod
@@ -39,13 +39,13 @@ class EventProgressionBuyRewardVehicle(Processor):
 
 
 class RewardPointsValidator(plugins.SyncValidator):
-    __eventProgressionController = dependency.descriptor(IEventProgressionController)
+    __eventProgression = dependency.descriptor(IEventProgressionController)
 
     def __init__(self, vehicle):
         super(RewardPointsValidator, self).__init__()
         self.__vehicle = vehicle
 
     def _validate(self):
-        storedPoints = self.__eventProgressionController.actualRewardPoints
-        price = self.__eventProgressionController.getRewardVehiclePrice(self.__vehicle.intCD)
+        storedPoints = self.__eventProgression.actualRewardPoints
+        price = self.__eventProgression.getRewardVehiclePrice(self.__vehicle.intCD)
         return plugins.makeSuccess() if price and storedPoints >= price else plugins.makeError('ne_points')

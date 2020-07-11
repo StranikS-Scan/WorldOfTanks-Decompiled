@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattle/epic_quest_progress_view.py
 from helpers import dependency
-from shared_utils import findFirst
 from frameworks.wulf import ViewSettings, ViewFlags, Array
 from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
 from gui.impl import backport
@@ -10,10 +9,10 @@ from gui.impl.gen.view_models.views.lobby.epic.epic_quest_progress_model import 
 from gui.impl.gen.view_models.views.lobby.epic.quest_progress_item_model import QuestProgressItemModel
 from gui.impl.pub import ViewImpl
 from gui.shared import g_eventBus, events
+from shared_utils import findFirst
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.goodies import IGoodiesCache
-from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.game_control import IEventProgressionController, IEpicBattleMetaGameController
+from skeletons.gui.game_control import IEventProgressionController
 from skeletons.gui.lobby_context import ILobbyContext
 _BONUS_CRYSTAL = 'crystal'
 _BONUS_GOODIES = 'goodies'
@@ -44,10 +43,8 @@ class EpicQuestProgressView(ViewImpl):
     __slots__ = ('__arenaUniqueID', '__maxEpicLevel', '__currentEpicLevel')
     __battleResults = dependency.descriptor(IBattleResultsService)
     __goodiesCache = dependency.descriptor(IGoodiesCache)
-    __eventsCache = dependency.descriptor(IEventsCache)
-    __eventProgressionController = dependency.descriptor(IEventProgressionController)
+    __eventProgression = dependency.descriptor(IEventProgressionController)
     __lobbyCtx = dependency.descriptor(ILobbyContext)
-    __epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
 
     def __init__(self):
         settings = ViewSettings(R.views.lobby.epic.PostbattleQuestProgress())
@@ -56,7 +53,8 @@ class EpicQuestProgressView(ViewImpl):
         super(EpicQuestProgressView, self).__init__(settings)
         self.__arenaUniqueID = None
         self.__maxEpicLevel = self.__lobbyCtx.getServerSettings().epicMetaGame.metaLevel.get('maxLevel', 0)
-        _, self.__currentEpicLevel, _ = self.__epicMetaGameCtrl.getPlayerLevelInfo()
+        levelInfo = self.__eventProgression.getPlayerLevelInfo()
+        self.__currentEpicLevel = levelInfo.currentLevel
         return
 
     @property
@@ -100,9 +98,6 @@ class EpicQuestProgressView(ViewImpl):
 
         return rewards
 
-    def __frontlineQuestFilter(self, quest):
-        return quest.getID() in self.__eventProgressionController.questIDs
-
     def __getDifference(self, quest):
         progress = quest['progressList']
         return progress[0]['progressDiff'] if progress else ''
@@ -112,15 +107,14 @@ class EpicQuestProgressView(ViewImpl):
             return
         self.__arenaUniqueID = arenaUniqueID
         battleResultsVO = self.__battleResults.getResultsVO(self.__arenaUniqueID)['quests']
-        frontlineQuests = self.__eventsCache.getAllQuests(filterFunc=self.__frontlineQuestFilter)
+        progressionQuests = self.__eventProgression.getActiveQuestsAsDict().values()
         battleResultsVOSorted = []
         for br in battleResultsVO:
             questInfo = br['questInfo']
             questID = questInfo['questID']
-            for fq in frontlineQuests:
-                quest = frontlineQuests[fq]
-                if questID == quest.getID():
-                    battleResultsVOSorted.append((quest.getPriority(), br))
+            for epq in progressionQuests:
+                if questID == epq.getID():
+                    battleResultsVOSorted.append((epq.getPriority(), br))
                     break
 
         battleResultsVOSorted.sort(key=lambda q: q[0], reverse=True)
@@ -129,7 +123,7 @@ class EpicQuestProgressView(ViewImpl):
             for _, quest in battleResultsVOSorted:
                 questInfo = quest['questInfo']
                 questID = questInfo['questID']
-                if questID in self.__eventProgressionController.questIDs:
+                if questID in self.__eventProgression.getActiveQuestIDs():
                     questModel = QuestProgressItemModel()
                     questModel.setId(questID)
                     questModel.setEventType(questInfo['eventType'])
@@ -138,7 +132,8 @@ class EpicQuestProgressView(ViewImpl):
                     questModel.setDeltaLabel(self.__getDifference(quest))
                     questModel.setValue(questInfo['currentProgrVal'])
                     questModel.setMaximum(questInfo['maxProgrVal'])
-                    questModel.setRewards(', '.join(self.__getRewards(frontlineQuests[questID])))
+                    currentQuest = findFirst(lambda q: q.getID() == questID, progressionQuests)
+                    questModel.setRewards(', '.join(self.__getRewards(currentQuest)))
                     questsArray.addViewModel(questModel)
 
             model.setQuests(questsArray)

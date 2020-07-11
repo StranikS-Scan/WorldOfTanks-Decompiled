@@ -104,6 +104,10 @@
     <Sovam_de_250cv_IGR>	60005	</Sovam_de_250cv_IGR>
     <Hispano-Suiza_HS110_IGR>	60006	</Hispano-Suiza_HS110_IGR>
     <Renault_S6Bis_bootcamp>	64001	</Renault_S6Bis_bootcamp>
+    <Development_Engine>	65000	</Development_Engine>
+    <AMX_B_271_SH>	10000	</AMX_B_271_SH>
+    <Detroit_Diesel_6V53T_SH>	10001	</Detroit_Diesel_6V53T_SH>
+    <Hispano-Suiza_HS110_SH>	10002	</Hispano-Suiza_HS110_SH>
   </ids>
   <shared>
     <Somua_S-40>
@@ -145,7 +149,7 @@
       <price>	125000	</price>
       <wwsoundPC>	eng_Skoda_Prague_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Skoda_Prague_npc	</wwsoundNPC>
-      <power>	580	</power>
+      <power>	560	</power>
       <weight>	279	</weight>
       <maxHealth>	320	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>
@@ -1527,12 +1531,12 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_Skoda_Prague_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Skoda_Prague_npc	</wwsoundNPC>
-      <power>	750	</power>
+      <power>	720	</power>
       <weight>	279	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	145	</maxRegenHealth>
       <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.1	</fireStartingChance>
+      <fireStartingChance>	0.15	</fireStartingChance>
       <rpm_min>	400	</rpm_min>
       <rpm_max>	3200	</rpm_max>
     </Panhard_12H_6000_X>
@@ -1822,5 +1826,74 @@
       <rpm_min>	328	</rpm_min>
       <rpm_max>	2216	</rpm_max>
     </Hispano-Suiza_HS110_IGR>
+    <Development_Engine>
+      <userString>	Development Engine	</userString>
+      <tags>	diesel	</tags>
+      <level>	5	</level>
+      <notInShop>	true	</notInShop>
+      <price>	1	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	540	</power>
+      <weight>	750	</weight>
+      <maxHealth>	105	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <notInShop>	true	</notInShop>
+      <rpm_min>	376	</rpm_min>
+      <rpm_max>	2072	</rpm_max>
+    </Development_Engine>
+    <AMX_B_271_SH>
+      <userString>	#france_vehicles:AMX_B_271_SH	</userString>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	495	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <fireStartingChance>	0.0	</fireStartingChance>
+      <rpm_min>	450	</rpm_min>
+      <rpm_max>	2300	</rpm_max>
+    </AMX_B_271_SH>
+    <Detroit_Diesel_6V53T_SH>
+      <userString>	#france_vehicles:Detroit_Diesel_6V53T_SH	</userString>
+      <tags>	diesel	</tags>
+      <level>	3	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	745	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <fireStartingChance>	0.0	</fireStartingChance>
+      <rpm_min>	220	</rpm_min>
+      <rpm_max>	2250	</rpm_max>
+    </Detroit_Diesel_6V53T_SH>
+    <Hispano-Suiza_HS110_SH>
+      <userString>	#france_vehicles:Hispano-Suiza_HS110_SH	</userString>
+      <tags>	diesel	</tags>
+      <level>	3	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	1030	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <fireStartingChance>	0.0	</fireStartingChance>
+      <rpm_min>	330	</rpm_min>
+      <rpm_max>	2220	</rpm_max>
+    </Hispano-Suiza_HS110_SH>
   </shared>
 </engines.xml>

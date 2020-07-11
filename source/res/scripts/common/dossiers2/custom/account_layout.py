@@ -568,8 +568,7 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'se2020Medal',
  'june20',
  'BattlePassCommonPr_2',
- 'TenYearsCountdownSPGEventMedal',
- 'TenYearsCountdownBrawlMedal']
+ 'TenYearsCountdownSPGEventMedal']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -678,8 +677,7 @@ _singleAchievementsPopUps = ['titleSniper',
  'se2020Medal',
  'june20',
  'BattlePassCommonPr_2',
- 'TenYearsCountdownSPGEventMedal',
- 'TenYearsCountdownBrawlMedal']
+ 'TenYearsCountdownSPGEventMedal']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, {}, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',
@@ -762,6 +760,7 @@ EPIC_BATTLE_ACHIEVEMENTS_BLOCK_LAYOUT = ['occupyingForce',
 _epicBattleAchievementsPopUps = ['frontlineMedal']
 _epicBattleAchievementsBlockBuilder = StaticSizeBlockBuilder('epicBattleAchievements', EPIC_BATTLE_ACHIEVEMENTS_BLOCK_LAYOUT, EPIC_BATTLE_STATS_DEPENDENCIES, _epicBattleAchievementsPopUps)
 _epicBattleSeasonsBlockBuilder = DictBlockBuilder('epicSeasons', 'II', 'HHBB', {})
+_battleRoyaleSeasonsBlockBuilder = DictBlockBuilder('battleRoyaleSeasons', 'II', 'HHBB', {})
 accountDossierLayout = (_a15x15BlockBuilder,
  _a15x15_2BlockBuilder,
  _clanBlockBuilder,
@@ -836,7 +835,8 @@ accountDossierLayout = (_a15x15BlockBuilder,
  _rankedArchiveBlockBuilder,
  _maxRankedArchiveBlockBuilder,
  _rankedCutArchiveBlockBuilder,
- _epicBattleSeasonsBlockBuilder)
+ _epicBattleSeasonsBlockBuilder,
+ _battleRoyaleSeasonsBlockBuilder)
 ACCOUNT_DOSSIER_BLOCKS = {b.name:b for b in accountDossierLayout}
 ACCOUNT_DOSSIER_STATIC_BLOCKS = frozenset((b.name for b in accountDossierLayout if type(b) == StaticSizeBlockBuilder))
 ACCOUNT_DOSSIER_BINARY_SET_BLOCKS = [ b.name for b in accountDossierLayout if type(b) == BinarySetDossierBlockBuilder ]

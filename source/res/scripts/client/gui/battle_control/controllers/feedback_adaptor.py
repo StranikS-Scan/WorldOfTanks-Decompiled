@@ -42,7 +42,7 @@ class _DamagedDevicesExtraFetcher(object):
 
 
 class BattleFeedbackAdaptor(IBattleController):
-    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onRoundFinished', 'onDevelopmentInfoSet', 'onStaticMarkerAdded', 'onStaticMarkerRemoved', 'onMinimapFeedbackReceived', 'onShotDone', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache')
+    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onRoundFinished', 'onDevelopmentInfoSet', 'onStaticMarkerAdded', 'onStaticMarkerRemoved', 'onReplyFeedbackReceived', 'onRemoveCommandReceived', 'setInFocusForPlayer', 'onMinimapFeedbackReceived', 'onActionAddedToMarkerReceived', 'onShotDone', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache')
 
     def __init__(self, setup):
         super(BattleFeedbackAdaptor, self).__init__()
@@ -67,6 +67,10 @@ class BattleFeedbackAdaptor(IBattleController):
         self.onStaticMarkerRemoved = Event.Event()
         self.onRoundFinished = Event.Event()
         self.onShotDone = Event.Event()
+        self.onReplyFeedbackReceived = Event.Event()
+        self.onRemoveCommandReceived = Event.Event()
+        self.setInFocusForPlayer = Event.Event()
+        self.onActionAddedToMarkerReceived = Event.Event()
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.FEEDBACK
@@ -182,11 +186,14 @@ class BattleFeedbackAdaptor(IBattleController):
         if vehicleID != avatar_getter.getPlayerVehicleID():
             self.onVehicleFeedbackReceived(eventID, vehicleID, isImmediate)
 
-    def showActionMarker(self, vehicleID, vMarker='', mMarker=''):
+    def showActionMarker(self, vehicleID, vMarker='', mMarker='', numberOfReplies=0, isTargetForPlayer=False, isPermanent=True):
         if vMarker and vehicleID != avatar_getter.getPlayerVehicleID():
-            self.onVehicleFeedbackReceived(_FET.VEHICLE_SHOW_MARKER, vehicleID, vMarker)
+            self.onVehicleFeedbackReceived(_FET.VEHICLE_SHOW_MARKER, vehicleID, (vMarker,
+             numberOfReplies,
+             isTargetForPlayer,
+             isPermanent))
         if mMarker:
-            self.onMinimapFeedbackReceived(_FET.MINIMAP_SHOW_MARKER, vehicleID, mMarker)
+            self.onMinimapFeedbackReceived(_FET.MINIMAP_SHOW_MARKER, vehicleID, (mMarker, numberOfReplies))
 
     def setVehicleNewHealth(self, vehicleID, newHealth, attackerID=0, attackReasonID=0):
         self._setVehicleHealthChanged(vehicleID, newHealth, attackerID, attackReasonID)
@@ -194,8 +201,11 @@ class BattleFeedbackAdaptor(IBattleController):
     def invalidateStun(self, vehicleID, stunDuration):
         self.onVehicleFeedbackReceived(_FET.VEHICLE_STUN, vehicleID, stunDuration)
 
-    def invalidateInspire(self, vehicleID, data):
-        self.onVehicleFeedbackReceived(_FET.VEHICLE_INSPIRE, vehicleID, data)
+    def invalidateDebuff(self, vehicleID, debuffInfo):
+        self.onVehicleFeedbackReceived(_FET.VEHICLE_DEBUFF, vehicleID, debuffInfo)
+
+    def invalidateBuffEffect(self, feedbackEventID, vehicleID, data):
+        self.onVehicleFeedbackReceived(feedbackEventID, vehicleID, data)
 
     def invalidatePassiveEngineering(self, vehicleID, data):
         self.onVehicleFeedbackReceived(_FET.VEHICLE_PASSIVE_ENGINEERING, vehicleID, data)
@@ -203,17 +213,17 @@ class BattleFeedbackAdaptor(IBattleController):
     def invalidateActiveGunChanges(self, vehicleID, data):
         self.onVehicleFeedbackReceived(_FET.VEHICLE_ACTIVE_GUN_CHANGED, vehicleID, data)
 
-    def markCellOnMinimap(self, cell):
-        self.onMinimapFeedbackReceived(_FET.MINIMAP_MARK_CELL, 0, (cell, _CELL_BLINKING_DURATION))
-
-    def markPositionOnMinimap(self, senderID, position):
-        self.onMinimapFeedbackReceived(_FET.MINIMAP_MARK_POSITION, senderID, (position, _CELL_BLINKING_DURATION))
-
     def markObjectiveOnMinimap(self, senderID, hqIdx):
         self.onMinimapFeedbackReceived(_FET.MINIMAP_MARK_OBJECTIVE, senderID, (hqIdx, _CELL_BLINKING_DURATION))
 
-    def markBaseOnMinimap(self, senderID, baseIdx, baseName):
-        self.onMinimapFeedbackReceived(_FET.MINIMAP_MARK_BASE, senderID, (baseIdx, baseName, _CELL_BLINKING_DURATION))
+    def onActionAddedToMarker(self, senderID, commandID, markerType, markerID):
+        self.onActionAddedToMarkerReceived(senderID, commandID, markerType, markerID)
+
+    def onReplyToCommand(self, uniqueCommandID, replierID, markerType, oldReplyCount, newReplyCount):
+        self.onReplyFeedbackReceived(uniqueCommandID, replierID, markerType, oldReplyCount, newReplyCount)
+
+    def onCommandRemoved(self, removedID, markerType):
+        self.onRemoveCommandReceived(removedID, markerType)
 
     def showVehicleDamagedDevices(self, vehicleID, criticalExtras, destroyedExtras):
         totalExtras = self.__arenaVisitor.vehicles.getVehicleExtras(vehicleID)
@@ -225,6 +235,9 @@ class BattleFeedbackAdaptor(IBattleController):
     def hideVehicleDamagedDevices(self, vehicleID=0):
         self.onVehicleFeedbackReceived(_FET.HIDE_VEHICLE_DAMAGES_DEVICES, vehicleID, None)
         return
+
+    def showActionMessage(self, vehicleID, message, isAlly):
+        self.onVehicleFeedbackReceived(_FET.VEHICLE_SHOW_MESSAGE, vehicleID, (message, isAlly))
 
     def setVehicleAttrs(self, vehicleID, attrs):
         self.__attrs = attrs

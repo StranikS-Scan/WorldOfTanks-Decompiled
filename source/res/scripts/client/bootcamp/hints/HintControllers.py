@@ -23,8 +23,11 @@ class PrimaryHintController(object):
     HIDE_SOUND_ID = 'bc_main_tips_activity_done'
     TASK_START_SOUND_ID = 'bc_main_tips_activity_start'
     TASK_DONE_SOUND_ID = 'bc_main_tips_activity_done'
-    HINT_IDS_TO_MUTE = (HINT_TYPE.HINT_ROTATE_LOBBY,)
-    HINT_IDS_TO_COMPLETE = (HINT_TYPE.HINT_MOVE, HINT_TYPE.HINT_MOVE_TURRET, HINT_TYPE.HINT_SHOOT)
+    HINT_IDS_TO_MUTE = tuple()
+    HINT_IDS_TO_COMPLETE = (HINT_TYPE.HINT_MOVE,
+     HINT_TYPE.HINT_MOVE_TURRET,
+     HINT_TYPE.HINT_SHOOT,
+     HINT_TYPE.HINT_ROTATE_LOBBY)
 
     def __init__(self, system, hintId, typeId, completed, timeCompleted, timeCooldown, message, voiceover):
         super(PrimaryHintController, self).__init__()

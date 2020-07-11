@@ -39,7 +39,7 @@ def pickPackers(itemTypes):
 
 
 def isComponentComplex(component):
-    return True if component and not isinstance(component, int) else False
+    return True if component and not isinstance(component, (long, int)) else False
 
 
 class CustomizationPacker(object):

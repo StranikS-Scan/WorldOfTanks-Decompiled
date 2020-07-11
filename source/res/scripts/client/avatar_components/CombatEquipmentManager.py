@@ -79,7 +79,7 @@ class CombatEquipmentManager(object):
         pass
 
     def handleKey(self, isDown, key, mods):
-        pass
+        return False
 
     def onBecomeNonPlayer(self):
         for area in self.__selectedAreas.itervalues():
@@ -91,6 +91,7 @@ class CombatEquipmentManager(object):
         self.__callbackDelayer.destroy()
         self.__selectedAreas = {}
         self.__wings = {}
+        SmokeScreen.enableSmokePostEffect(False)
 
     def updatePlaneTrajectory(self, equipmentID, team, curTime, curPos, curDir, nextTime, nextPos, nextDir, isEndOfFlight):
         if _ENABLE_DEBUG_LOG:
@@ -277,7 +278,7 @@ class CombatEquipmentManager(object):
         if visual is None:
             visual = CombatSelectedArea.DEFAULT_RADIUS_MODEL
         if color is None:
-            color = CombatSelectedArea.COLOR_WHITE
+            pass
         if marker is None:
             pass
         area.setup(pos, direction, size, visual, color, marker)
@@ -288,7 +289,8 @@ class CombatEquipmentManager(object):
         self.__lastSmokeInfos = smokeInfos
         if ctrl is not None:
             ctrl.notifyStateChanged(VEHICLE_VIEW_STATE.SMOKE, smokeInfos)
-            SmokeScreen.enableSmokePostEffect(bool(smokeInfos))
+            SmokeScreen.enableSmokePostEffect(bool(smokeInfos), smokeInfos)
+        SmokeScreen.enableSmokePostEffect(bool(smokeInfos), smokeInfos)
         return
 
     @property

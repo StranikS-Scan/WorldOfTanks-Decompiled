@@ -939,6 +939,9 @@ class Style(Customization):
     def isProgressionRequiredCanBeEdited(self, vehicleIntCD):
         return self.isProgressionRequired and self.canBeEditedForVehicle(vehicleIntCD)
 
+    def isItemInstallable(self, item):
+        return self.descriptor.isItemInstallable(item.descriptor)
+
     def isEditedForVehicle(self, vehicleIntCD):
         c11nCtx = self._service.getCtx()
         if c11nCtx is not None and vehicleIntCD == g_currentVehicle.item.intCD:

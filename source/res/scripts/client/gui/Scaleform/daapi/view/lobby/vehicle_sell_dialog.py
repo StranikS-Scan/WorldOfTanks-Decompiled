@@ -202,9 +202,9 @@ class VehicleSellDialog(VehicleSellDialogMeta):
             vehicleAction = packItemActionTooltipData(self.__vehicle, False)
         vehType = self.__vehicle.type
         if self.__vehicle.isElite:
-            description = backport.text(R.strings.tooltips.tankCaruselTooltip.vehicleType.elite.dyn(vehType)())
+            description = backport.text(R.strings.tooltips.tankCaruselTooltip.vehicleType.elite.dyn(vehType.replace('-', '_'))())
         else:
-            description = backport.text(R.strings.dialogs.vehicleSellDialog.vehicleType.dyn(vehType)())
+            description = backport.text(R.strings.dialogs.vehicleSellDialog.vehicleType.dyn(vehType.replace('-', '_'))())
         levelText = backport.text(R.strings.dialogs.vehicleSellDialog.vehicle.level())
         levelStr = text_styles.concatStylesWithSpace(text_styles.stats(int2roman(self.__vehicle.level)), text_styles.main(levelText))
         hasCrew, crewTooltip = self.__getCrewData()

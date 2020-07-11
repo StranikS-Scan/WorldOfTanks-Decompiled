@@ -37,7 +37,7 @@ class MessageFiltersChain(chain.FiltersChain):
             self.addFilter('postBattleFilter', collection.PostBattleLinksFilter())
         if g_settings.userPrefs.enableOlFilter:
             if not self.hasFilter('enableOlFilter'):
-                self.addFilter('olFilter', collection.ObsceneLanguageFilter(), removed=['coloringOlFilter'])
+                self.addFilter('olFilter', collection.getObsceneLanguageFilter(), removed=['coloringOlFilter'])
         else:
             ctx = self.playerCtx
             isAdmin = ctx.isChatAdmin() or ctx.isGameAdmin()

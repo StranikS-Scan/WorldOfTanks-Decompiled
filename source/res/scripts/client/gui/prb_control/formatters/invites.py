@@ -16,6 +16,8 @@ from messenger.ext import passCensor
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.lobby_context import ILobbyContext
 _logger = logging.getLogger(__name__)
+QUEUE_LEAVE_PREFIX = 'QUEUE_'
+PREBATTLE_LEAVE_PREFIX = 'PREBATTLE_'
 _R_INVITES = R.strings.invites.invites
 
 class _PrbInvitePart(CONST_CONTAINER):
@@ -94,9 +96,9 @@ def getLeaveOrChangeText(funcState, invitePrbType, peripheryID, lobbyContext=Non
     text = ''
     if funcState.doLeaveToAcceptInvite(invitePrbType):
         if funcState.isInLegacy() or funcState.isInUnit():
-            entityName = getPrbName(funcState.entityTypeID)
+            entityName = PREBATTLE_LEAVE_PREFIX + getPrbName(funcState.entityTypeID)
         elif funcState.isInPreQueue():
-            entityName = getPreQueueName(funcState.entityTypeID)
+            entityName = QUEUE_LEAVE_PREFIX + getPreQueueName(funcState.entityTypeID)
         else:
             _logger.error('Can not resolve name of entity. %s', funcState)
             return text

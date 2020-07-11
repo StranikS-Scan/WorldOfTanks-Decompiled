@@ -34,7 +34,7 @@ class _RestoreVehiclesDataProvider(StorageCarouselDataProvider):
         super(_RestoreVehiclesDataProvider, self).__init__(carouselFilter, itemsCache, currentVehicle)
         self._baseCriteria = REQ_CRITERIA.VEHICLE.IS_RESTORE_POSSIBLE | ~REQ_CRITERIA.INVENTORY
 
-    def applyFilter(self):
+    def applyFilter(self, forceApply=False):
         pass
 
     def _buildVehicle(self, item):

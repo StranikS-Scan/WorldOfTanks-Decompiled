@@ -82,6 +82,18 @@ def getBonsUrl():
     return _getUrl('bonsUrl')
 
 
+def getBonsDevicesUrl():
+    return _getUrl('bonsDevicesUrl')
+
+
+def getBonsVehiclesUrl():
+    return _getUrl('bonsVehiclesUrl')
+
+
+def getBonsInstructionsUrl():
+    return _getUrl('bonsInstructionsUrl')
+
+
 def getTradeInVehiclesUrl():
     return _getUrl('tradeIn')
 

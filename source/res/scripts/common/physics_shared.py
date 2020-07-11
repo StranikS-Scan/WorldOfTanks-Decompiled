@@ -15,6 +15,7 @@ import copy
 from items.components import gun_components
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES
 from gun_rotation_shared import encodeRestrictedValueToUint, decodeRestrictedValueFromUint
+from typing import Dict, Any
 G = 9.81
 GRAVITY_FACTOR = 1.25
 WEIGHT_SCALE = 0.001
@@ -184,6 +185,8 @@ g_defaultWheeledChassisXPhysicsCfg = copy.deepcopy(g_defaultChassisXPhysicsCfg)
 g_defaultWheeledChassisXPhysicsCfg.update({'axleSteeringLockAngles': (0.0, 0.0, 0.0, 30.0),
  'axleSteeringAngles': (0.0, 0.0, 0.0, 15.0),
  'axleSteeringSpeed': (0.0, 0.0, 0.0, 90.0),
+ 'brokenWheelPowerLoss': (0.0, 0.0, 0.0, 0.0),
+ 'brokenWheelSpeedLoss': (0.0, 0.0, 0.0, 0.0),
  'fwdFrictionOnAxisModifiers': (1.0, 1.0, 1.0, 1.0),
  'sideFrictionOnAxisModifiers': (1.0, 1.0, 1.0, 1.0),
  'sideFrictionConstantRatioOnAxis': (0.0, 0.0, 0.0, 0.0),
@@ -200,7 +203,6 @@ g_defaultWheeledChassisXPhysicsCfg.update({'axleSteeringLockAngles': (0.0, 0.0, 
  'wheelRiseSpeed': 1.0,
  'enableRail': True,
  'handbrakeBrakeForce': 10.0,
- 'brokenWheelRollingFrictionModifier': 10.0,
  'noSignalBrakeForce': 10.0,
  'afterDeathBrakeForce': 10.0,
  'afterDeathMinSpeedForImpulse': 29.0,
@@ -393,14 +395,7 @@ def configurePhysics(physics, baseCfg, typeDesc, gravityFactor, updateSiegeModeF
     try:
         cfg['fakegearbox'] = typeDesc.type.xphysics['detailed']['fakegearbox']
     except:
-        cfg['fakegearbox'] = {'fwdgears': {'switchSpeed': (2, 5, 15),
-                      'switchHysteresis': (1, 2, 3),
-                      'lowRpm': (0.2, 0.2, 0.2),
-                      'highRpm': (0.9, 0.9, 0.9)},
-         'bkwdgears': {'switchSpeed': (2, 5, 15),
-                       'switchHysteresis': (1, 2, 3),
-                       'lowRpm': (0.2, 0.2, 0.2),
-                       'highRpm': (0.9, 0.9, 0.9)}}
+        cfg['fakegearbox'] = _DEFAULT_FAKE_GEARBOX_SETTINGS
 
     if baseCfg:
         updatePhysicsCfg(baseCfg, defaultVehicleDescr, cfg)
@@ -427,12 +422,57 @@ def configurePhysics(physics, baseCfg, typeDesc, gravityFactor, updateSiegeModeF
     return cfg
 
 
+def updatePhysics(physics, typeDesc):
+    baseCfg = typeDesc.type.xphysics['detailed']
+    gravityFactor = baseCfg['gravityFactor']
+    updateSiegeModeFromCfg = False
+    vehiclePhysicsType = typeDesc.type.xphysics['detailed'].get('vehiclePhysicsType', VEHICLE_PHYSICS_TYPE.TANK)
+    isTank = vehiclePhysicsType == VEHICLE_PHYSICS_TYPE.TANK
+    cfg = copy.deepcopy(g_defaultTankXPhysicsCfg if isTank else g_defaultWheeledTechXPhysicsCfg)
+    if typeDesc.hasSiegeMode:
+        defaultVehicleDescr = typeDesc.defaultVehicleDescr
+        siegeVehicleDescr = typeDesc.siegeVehicleDescr
+    else:
+        defaultVehicleDescr = typeDesc
+    try:
+        cfg['fakegearbox'] = typeDesc.type.xphysics['detailed']['fakegearbox']
+    except:
+        cfg['fakegearbox'] = _DEFAULT_FAKE_GEARBOX_SETTINGS
+
+    updatePhysicsCfg(baseCfg, defaultVehicleDescr, cfg)
+    if typeDesc.hasSiegeMode:
+        if updateSiegeModeFromCfg and 'modes' in baseCfg and 'siegeMode' in baseCfg['modes']:
+            siegeBaseCfg = baseCfg['modes']['siegeMode']
+        else:
+            siegeBaseCfg = siegeVehicleDescr.type.xphysics['detailed']
+        updatePhysicsCfg(siegeBaseCfg, siegeVehicleDescr, cfg['modes']['siegeMode'])
+    cfg = __buildConfigurations(cfg)
+    for name, mode in cfg['modes'].iteritems():
+        configurePhysicsMode(mode, typeDesc, gravityFactor)
+
+    oldMatrix = Math.Matrix(physics.matrix)
+    inversedMatrix = Math.Matrix(oldMatrix)
+    inversedMatrix.invert()
+    oldCoM = physics.centerOfMass
+    newCoM = Math.Vector3((0.0, cfg['modes']['normal']['clearance'] + cfg['modes']['normal']['bodyHeight'] * 0.5 + cfg['modes']['normal']['hullCOMShiftY'], physics.hullCOMZ))
+    compression = inversedMatrix.applyPoint(physics.currentCenterOfMass).y / oldCoM.y
+    dy = (newCoM.y - oldCoM.y) * compression
+    physics.centerOfMass = newCoM
+    newMatrix = Math.Matrix()
+    newMatrix.setTranslate(oldMatrix.applyToAxis(1) * dy)
+    newMatrix.preMultiply(oldMatrix)
+    physics.matrix = newMatrix
+    physics.isFrozen = False
+    physics.updateSettings(cfg)
+    return cfg
+
+
 def configurePhysicsMode(cfg, typeDesc, gravityFactor):
     cfg['angVelocityFactor'] = cfg['chassis']['angVelocityFactor']
     cfg['angVelocityFactor0'] = cfg['chassis']['angVelocityFactor0']
     cfg['axleCount'] = cfg['chassis']['axleCount']
     if cfg['vehiclePhysicsType'] == VEHICLE_PHYSICS_TYPE.WHEELED_TECH:
-        for key in ('axleSteeringLockAngles', 'axleSteeringAngles', 'axleSteeringSpeed', 'fwdFrictionOnAxisModifiers', 'sideFrictionOnAxisModifiers', 'sideFrictionConstantRatioOnAxis', 'sinkageResistOnAxis', 'axleIsLeading', 'axleCanBeRised', 'wheelRiseHeight', 'wheelRiseSpeed', 'enableRail', 'handbrakeBrakeForce', 'brokenWheelRollingFrictionModifier', 'noSignalBrakeForce', 'afterDeathBrakeForce', 'afterDeathMinSpeedForImpulse', 'afterDeathImpulse', 'jumpingFactor', 'jumpingMinForce', 'slowTurnChocker', 'airPitchReduction', 'wheelToHullRollTransmission', 'steeringSpeedInTurnMultiplier'):
+        for key in ('axleSteeringLockAngles', 'axleSteeringAngles', 'axleSteeringSpeed', 'fwdFrictionOnAxisModifiers', 'sideFrictionOnAxisModifiers', 'sideFrictionConstantRatioOnAxis', 'sinkageResistOnAxis', 'axleIsLeading', 'axleCanBeRised', 'wheelRiseHeight', 'wheelRiseSpeed', 'enableRail', 'handbrakeBrakeForce', 'noSignalBrakeForce', 'steeringSpeedInTurnMultiplier', 'afterDeathBrakeForce', 'afterDeathMinSpeedForImpulse', 'afterDeathImpulse', 'jumpingFactor', 'jumpingMinForce', 'slowTurnChocker', 'airPitchReduction', 'wheelToHullRollTransmission'):
             cfg[key] = cfg['chassis'][key]
 
     cfg['gimletGoalWOnSpot'] = cfg['chassis']['gimletGoalWOnSpot']
@@ -567,92 +607,8 @@ def initVehiclePhysicsForced(physics, typeDesc, forcedCfg):
 
 
 def initVehiclePhysicsEditor(physics, typeDesc):
-    if not hasattr(typeDesc.type.xphysics, 'detailed'):
-        typeDesc.type.xphysics['detailed'] = {'vehiclePhysicsType': VEHICLE_PHYSICS_TYPE.TANK,
-         'engines': {typeDesc.engine.name: {'startRPM': 1500,
-                                            'powerFactor': 1,
-                                            'rotationFactor': 0.857143,
-                                            'engineTorque': ((500, 2.7),
-                                                             (1000, 3.15),
-                                                             (1500, 3.45),
-                                                             (2500, 2.55)),
-                                            'engineLoses': (0.13229, 6.614494),
-                                            'engineSupression': (0, 1, 1, 1),
-                                            'engineInertia': 0.01777,
-                                            'idleRPM': 1000,
-                                            'idleChoker': 0.1,
-                                            'smplEnginePower': 634.3687,
-                                            'smplFwMaxSpeed': 34,
-                                            'smplBkMaxSpeed': 14,
-                                            'rotationChoker': 0.9}},
-         'chassis': {typeDesc.chassis.name: {'angVelocityFactor0': 0.847066,
-                                             'hullCOM': (0, 1.118153, -0.00721),
-                                             'chassisMassFraction': 0.3,
-                                             'hullCOMShiftY': -0.1,
-                                             'wheelRadius': 0.4,
-                                             'bodyHeight': 1.136306,
-                                             'clearance': 0.65,
-                                             'wheelStroke': 0.3,
-                                             'roadWheelPositions': (-2.702271, -1.35474, -0.00721, 1.340321, 2.687851),
-                                             'rearDriveWheelPosition': (-3.211225, 1.786306),
-                                             'frontDriveWheelPosition': (3.218897, 1.786306),
-                                             'stiffness0': 243.6666,
-                                             'stiffness1': 263.4825,
-                                             'stiffnessFactors': (1, 1, 1, 1, 1),
-                                             'damping': 26.34825,
-                                             'movementRevertSpeed': 2,
-                                             'isRotationAroundCenter': False,
-                                             'comSideFriction': 1.5,
-                                             'comFrictionYOffs': 0,
-                                             'hullInertiaFactors': (1.8, 2, 1.6),
-                                             'rotationBrake': 30.04625,
-                                             'brake': 46225,
-                                             'wheelInertiaFactor': 1,
-                                             'angVelocityFactor': 0.720007,
-                                             'wheelSinkageResistFactor': 0,
-                                             'rotFritionFactor': 0,
-                                             'pushStop': 0.116733,
-                                             'sideFrictionConstantRatio': 0,
-                                             'centerRotationFwdSpeed': 7.462401,
-                                             'rotationByLockChoker': 0.8,
-                                             'fwLagRatio': 0.6,
-                                             'bkLagRatio': 0.4,
-                                             'grounds': {'soft': {'dirtCumulationRate': 4,
-                                                                  'dirtReleaseRate': 4,
-                                                                  'dirtSideVelocity': 32.4,
-                                                                  'maxDirt': 1,
-                                                                  'sideFriction': 1.1,
-                                                                  'fwdFriction': 1.3,
-                                                                  'rollingFriction': 0.2093,
-                                                                  'hbComSideFriction': 0,
-                                                                  'hbSideFrictionAddition': 0,
-                                                                  'rotationFactor': 0.405392}},
-                                             'gimletGoalWOnSpot': 0.65159,
-                                             'gimletPushOnSpotInit': 0.1,
-                                             'gimletPushOnSpotFinal': 4,
-                                             'pushRotOnSpotFixedPeriod': 0.13,
-                                             'pushRotOnSpotGrowPeriod': 0.433333,
-                                             'gimletGoalWOnMove': 0.553851,
-                                             'gimletPushOnMoveInit': 0.391833,
-                                             'gimletPushOnMoveFinal': 4,
-                                             'pushRotOnMoveFixedPeriod': 0.03,
-                                             'pushRotOnMoveGrowPeriod': 0.4,
-                                             'gimletVelScaleMin': 0.1,
-                                             'gimletVelScaleMax': 2,
-                                             'chsDmgMultiplier': 1,
-                                             'axleCount': 5}},
-         'gravityFactor': 1.25,
-         'fakegearbox': {'fwdgears': {'switchSpeed': (2.833334, 4.722222, 7.555556),
-                                      'switchHysteresis': (0.5, 0.472222, 0.755556),
-                                      'lowRpm': (0.4, 0.3, 0.3),
-                                      'highRpm': (1.2, 1, 1)},
-                         'bkwdgears': {'switchSpeed': (1.166667, 2.333333),
-                                       'switchHysteresis': (1, 1),
-                                       'lowRpm': (0.4, 0.4),
-                                       'highRpm': (1, 1)}}}
-    baseCfg = typeDesc.type.xphysics['detailed']
-    gravityFactor = 1.0
-    configurePhysics(physics, baseCfg, typeDesc, gravityFactor, False)
+    initVehiclePhysicsServer(physics, typeDesc)
+    initVehiclePhysicsClient(physics, typeDesc)
 
 
 def initVehiclePhysicsClient(physics, typeDesc):
@@ -677,7 +633,8 @@ def initVehiclePhysicsClient(physics, typeDesc):
     suspCompression = _computeSuspCompression(fullMass)
     carringSpringLength = clearance / suspCompression
     cmShift = _computeCenterOfMassShift(srcMass, srcEnginePower)
-    physics.centerOfMass = Math.Vector3((0.0, hullY + cmShift * hullHeight, 0.0))
+    if not IS_EDITOR:
+        physics.centerOfMass = Math.Vector3((0.0, hullY + cmShift * hullHeight, 0.0))
     chassisMaxY = bmax[1]
     hullPosY = typeDesc.chassis.hullPosition[1]
     hullMaxY = hullPosY + hullMax[1]
@@ -755,7 +712,7 @@ def computeBarrelLocalPoint(vehDescr, turretYaw, gunPitch):
     maxGunZ = vehDescr.gun.hitTester.bbox[1][2]
     m = Math.Matrix()
     m.setRotateX(gunPitch)
-    pt = m.applyVector((0.0, 0.0, maxGunZ)) + vehDescr.turret.gunShotPosition
+    pt = m.applyVector((0.0, 0.0, maxGunZ)) + vehDescr.activeGunShotPosition
     m.setRotateY(turretYaw)
     pt = m.applyVector(pt)
     pt += vehDescr.hull.turretPositions[vehDescr.activeTurretPosition]
@@ -811,67 +768,6 @@ def _clamp(minBound, arg, maxBound):
     return max(minBound, min(maxBound, arg))
 
 
-def initVehiclePhysicsFromParams(physics, params, xmlPath):
-
-    class _SimpleObject(object):
-        pass
-
-    typeDesc = _SimpleObject()
-    typeDesc.physics = {}
-    typeDesc.physics['weight'] = params['weight']
-    typeDesc.physics['enginePower'] = params['enginePower']
-    typeDesc.physics['speedLimits'] = params['speedLimits']
-    typeDesc.physics['rotationIsAroundCenter'] = params['rotationIsAroundCenter']
-    typeDesc.physics['rotationSpeedLimit'] = params['rotationSpeedLimit']
-    typeDesc.physics['terrainResistance'] = params['terrainResistance']
-    typeDesc.physics['trackCenterOffset'] = params['trackCenterOffset']
-    typeDesc.hull = vehicle_items.Hull()
-    typeDesc.hull.hitTester = _SimpleObject()
-    typeDesc.hull.hitTester.bbox = (params['hullHitTesterMin'], params['hullHitTesterMax'], None)
-    typeDesc.hull.turretPositions = (params['turretPosition'],)
-    typeDesc.turret = vehicle_items.createTurret(0, 0, 'Turret')
-    typeDesc.turret.hitTester = _SimpleObject()
-    typeDesc.turret.hitTester.bbox = (params['turretHitTesterMin'], params['turretHitTesterMax'], None)
-    typeDesc.turret.gunPosition = params['gunPosition']
-    typeDesc.type = _SimpleObject()
-    typeDesc.type.name = ''
-    section = ResMgr.openSection(xmlPath)
-    try:
-        typeDesc.type.xphysics = vehicles._readXPhysics((None, xmlPath), section, 'physics')
-        chassisName = xphysics['detailed']['chassis'].keys()[0]
-        engineName = xphysics['detailed']['engines'].keys()[0]
-    except:
-        typeDesc.type.xphysics = {'mode': 1}
-        chassisName = 'Chassis'
-        engineName = 'Engine'
-
-    typeDesc.chassis = vehicle_items.createChassis(0, 0, chassisName)
-    typeDesc.chassis.hullPosition = params['hullPosition']
-    typeDesc.chassis.hitTester = _SimpleObject()
-    typeDesc.chassis.hitTester.bbox = (params['chassisHitTesterMin'], params['chassisHitTesterMax'], None)
-    typeDesc.engine = vehicle_items.createEngine(0, 0, engineName)
-    typeDesc.shot = gun_components.GunShot(None, 1.0, (10.0, 10.0), 100.0, 9.8, 500.0, 1000000.0)
-    typeDesc.gun = vehicle_items.createGun(0, 0, 'Gun')
-    typeDesc.gun.staticTurretYaw = None
-    typeDesc.gun.hitTester = _SimpleObject()
-    typeDesc.gun.hitTester.bbox = (params['turretHitTesterMin'], params['turretHitTesterMax'], None)
-    typeDesc.hasSiegeMode = False
-    typeDesc.isWheeledVehicle = False
-    typeDesc.type.isRotationStill = False
-    typeDesc.type.useHullZSize = False
-    typeDesc.type.useHullZOffset = False
-    typeDesc.type.hullAimingParams = {'pitch': {'isAvailable': False,
-               'isFlexible': False,
-               'wheelCorrectionCenterZ': 0.0,
-               'wheelsCorrectionSpeed': 0.2,
-               'wheelsCorrectionAngles': {'pitchMax': 1.0,
-                                          'pitchMin': 1.0}},
-     'yaw': {'isAvailable': False}}
-    initVehiclePhysicsEditor(physics, typeDesc)
-    physics.visibilityMask = 4294967295L
-    return
-
-
 TRACK_SCROLL_LIMITS = (-15.0, 30.0)
 
 def encodeTrackScrolling(leftScroll, rightScroll):
@@ -910,3 +806,13 @@ def __buildConfigurations(configuration):
 
 def getShootTimeCorrection(roundTripTime):
     return min(0.3, roundTripTime + SERVER_TICK_LENGTH * 0.5)
+
+
+_DEFAULT_FAKE_GEARBOX_SETTINGS = {'fwdgears': {'switchSpeed': (2, 5, 15),
+              'switchHysteresis': (1, 2, 3),
+              'lowRpm': (0.2, 0.2, 0.2),
+              'highRpm': (0.9, 0.9, 0.9)},
+ 'bkwdgears': {'switchSpeed': (2, 5, 15),
+               'switchHysteresis': (1, 2, 3),
+               'lowRpm': (0.2, 0.2, 0.2),
+               'highRpm': (0.9, 0.9, 0.9)}}

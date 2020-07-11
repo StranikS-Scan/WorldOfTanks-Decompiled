@@ -7,7 +7,7 @@ from shared_utils import CONST_CONTAINER
 class StatesGroup(CONST_CONTAINER):
     HANGAR_FILTERED = 'STATE_hangar_filtered'
     BOOTCAMP_ARENA_FILTERED = 'STATE_bootcamp_arena_filtered'
-    HANGAR_PLACE_BATTLE_PASS = 'STATE_hanger_place_battle_pass'
+    HANGAR_PLACE_BATTLE_PASS = 'STATE_hangar_place_battle_pass'
     OVERLAY_HANGAR_GENERAL = 'STATE_overlay_hangar_general'
     VIDEO_OVERLAY = 'STATE_video_overlay'
 

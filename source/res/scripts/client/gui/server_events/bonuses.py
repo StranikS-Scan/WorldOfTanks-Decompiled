@@ -70,6 +70,12 @@ _EPIC_AWARD_STATIC_VO_ENTRIES = {'compensationTooltip': QUESTS.BONUSES_COMPENSAT
  'highlightType': '',
  'overlayType': ''}
 _ZERO_COMPENSATION_MONEY = Money(credits=0, gold=0)
+_CUSTOMIZATION_BONUSES = frozenset(['camouflage',
+ 'style',
+ 'paint',
+ 'modification',
+ 'projection_decal',
+ 'personal_number'])
 _logger = logging.getLogger(__name__)
 
 def _getAchievement(block, record, value):
@@ -441,9 +447,19 @@ class ResourceBonus(TokensBonus):
         return self._resourceName
 
 
+class ProgressionXPToken(TokensBonus):
+
+    def __init__(self, name, value, isCompensation=False, ctx=None):
+        super(ProgressionXPToken, self).__init__(name, value, isCompensation, ctx)
+        self._name = 'progressionXPToken'
+
+    def isShowInGUI(self):
+        return True
+
+
 class BattleTokensBonus(TokensBonus):
     eventsCache = dependency.descriptor(IEventsCache)
-    __eventProgCtrl = dependency.descriptor(IEventProgressionController)
+    __eventProgression = dependency.descriptor(IEventProgressionController)
 
     def __init__(self, name, value, isCompensation=False, ctx=None):
         super(TokensBonus, self).__init__(name, value, isCompensation, ctx)
@@ -465,7 +481,7 @@ class BattleTokensBonus(TokensBonus):
     def getWrappedEpicBonusList(self):
         result = []
         for tokenID, value in self._value.iteritems():
-            if tokenID == self.__eventProgCtrl.rewardPointsTokenID:
+            if tokenID == self.__eventProgression.rewardPointsTokenID:
                 result.append({'id': 0,
                  'value': value.get('count', 1),
                  'icon': {AWARDS_SIZES.SMALL: backport.image(R.images.gui.maps.icons.epicBattles.rewardPoints.c_48x48()),
@@ -546,6 +562,9 @@ class X5BattleTokensBonus(TokensBonus):
 
     def isShowInGUI(self):
         return True
+
+    def getUserName(self):
+        return backport.text(R.strings.quests.bonusName.battle_bonus_x5())
 
 
 class EntitlementBonus(SimpleBonus):
@@ -635,7 +654,8 @@ def createBonusFromTokens(result, prefix, bonusId, value):
         result.append(bonus[0])
 
 
-def tokensFactory(name, value, isCompensation=False, ctx=None):
+@dependency.replace_none_kwargs(eventProgressionController=IEventProgressionController)
+def tokensFactory(name, value, isCompensation=False, ctx=None, eventProgressionController=None):
     result = []
     for tID, tValue in value.iteritems():
         if tID.startswith(LOOTBOX_TOKEN_PREFIX):
@@ -650,6 +670,8 @@ def tokensFactory(name, value, isCompensation=False, ctx=None):
             createBonusFromTokens(result, CURRENCY_TOKEN_PREFIX, tID, tValue)
         if tID.startswith(RESOURCE_TOKEN_PREFIX):
             result.append(ResourceBonus(name, {tID: tValue}, RESOURCE_TOKEN_PREFIX, isCompensation, ctx))
+        if eventProgressionController.isAvailable() and tID.startswith(eventProgressionController.getProgressionXPTokenID()):
+            result.append(ProgressionXPToken(name, {tID: tValue}, isCompensation, ctx))
         result.append(BattleTokensBonus(name, {tID: tValue}, isCompensation, ctx))
 
     return result
@@ -842,8 +864,8 @@ class GoodiesBonus(SimpleBonus):
                 result.append({'id': booster.boosterID,
                  'type': 'goodie/{}'.format(booster.getTypeAsString()),
                  'value': count,
-                 'icon': {AWARDS_SIZES.SMALL: booster.icon,
-                          AWARDS_SIZES.BIG: booster.bigIcon},
+                 'icon': {AWARDS_SIZES.SMALL: RES_ICONS.getBonusIcon(AWARDS_SIZES.SMALL, booster.boosterGuiType),
+                          AWARDS_SIZES.BIG: RES_ICONS.getBonusIcon(AWARDS_SIZES.BIG, booster.boosterGuiType)},
                  'name': booster.userName,
                  'description': booster.getBonusDescription()})
 
@@ -964,14 +986,14 @@ class VehiclesBonus(SimpleBonus):
             if isinstance(self._value, dict):
                 for intCD, vehInfo in self._value.iteritems():
                     item = self.itemsCache.items.getItemByCD(intCD)
-                    if item is not None:
+                    if item is not None and not item.isOnlyForBattleRoyaleBattles:
                         result.append((item, vehInfo))
 
             elif isinstance(self._value, list):
                 for subDict in self._value:
                     for intCD, vehInfo in subDict.iteritems():
                         item = self.itemsCache.items.getItemByCD(intCD)
-                        if item is not None:
+                        if item is not None and not item.isOnlyForBattleRoyaleBattles:
                             result.append((item, vehInfo))
 
         return result
@@ -1353,21 +1375,16 @@ class CustomizationsBonus(SimpleBonus):
         result = []
         for itemData in self.getCustomizations():
             itemType = itemData.get('custType')
-            if itemType == 'projection_decal':
-                itemTypeID = GUI_ITEM_TYPE.PROJECTION_DECAL
-            else:
-                itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemType)
+            itemTypeID = self.__getItemTypeID(itemType)
             item = self.c11n.getItemByID(itemTypeID, itemData.get('id'))
             smallIcon = item.getBonusIcon(AWARDS_SIZES.SMALL)
             bigIcon = item.getBonusIcon(AWARDS_SIZES.BIG)
             typeStr = itemType
             if itemType == 'decal':
                 typeStr = 'decal/1'
-            elif itemType == 'paint':
-                typeStr = 'paint/all'
-            elif itemType == 'camouflage':
-                typeStr = 'camouflage/all'
-            elif itemType == 'style':
+            elif itemType in _CUSTOMIZATION_BONUSES:
+                typeStr = ''.join([typeStr, '/all'])
+            if itemType == 'style':
                 smallIcon = RES_ICONS.getBonusIcon(AWARDS_SIZES.SMALL, itemType)
                 bigIcon = RES_ICONS.getBonusIcon(AWARDS_SIZES.BIG, itemType)
             result.append({'id': itemData.get('id'),
@@ -1418,25 +1435,9 @@ class CustomizationsBonus(SimpleBonus):
     def getC11nItem(self, item):
         itemTypeName = item.get('custType')
         itemID = item.get('id')
-        if itemTypeName == 'projection_decal':
-            itemTypeID = GUI_ITEM_TYPE.PROJECTION_DECAL
-        elif itemTypeName == 'personal_number':
-            itemTypeID = GUI_ITEM_TYPE.PERSONAL_NUMBER
-        else:
-            itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemTypeName)
+        itemTypeID = self.__getItemTypeID(itemTypeName)
         c11nItem = self.c11n.getItemByID(itemTypeID, itemID)
         return c11nItem
-
-    def __getCommonAwardsVOs(self, item, data, iconSize='small', align=TEXT_ALIGN.RIGHT, withCounts=False):
-        c11nItem = self.getC11nItem(item)
-        count = item.get('value', 1)
-        itemData = {'imgSource': RES_ICONS.getBonusIcon(iconSize, c11nItem.itemTypeName),
-         'label': text_styles.hightlight('x{}'.format(count)),
-         'align': align}
-        itemData.update(self.__itemTooltip(data))
-        if withCounts:
-            itemData['count'] = count
-        return itemData
 
     def getEpicAwardVOs(self, withDescription=False, iconSize='big', withCounts=False):
         result = []
@@ -1451,10 +1452,31 @@ class CustomizationsBonus(SimpleBonus):
 
         return result
 
+    def __getCommonAwardsVOs(self, item, data, iconSize='small', align=TEXT_ALIGN.RIGHT, withCounts=False):
+        c11nItem = self.getC11nItem(item)
+        count = item.get('value', 1)
+        itemData = {'imgSource': RES_ICONS.getBonusIcon(iconSize, c11nItem.itemTypeName),
+         'label': text_styles.hightlight('x{}'.format(count)),
+         'align': align}
+        itemData.update(self.__itemTooltip(data))
+        if withCounts:
+            itemData['count'] = count
+        return itemData
+
     def __itemTooltip(self, data):
         return {'isSpecial': True,
          'specialAlias': TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM,
          'specialArgs': CustomizationTooltipContext(itemCD=data['intCD'], showInventoryBlock=data['showPrice'])}
+
+    @staticmethod
+    def __getItemTypeID(itemTypeName):
+        if itemTypeName == 'projection_decal':
+            itemTypeID = GUI_ITEM_TYPE.PROJECTION_DECAL
+        elif itemTypeName == 'personal_number':
+            itemTypeID = GUI_ITEM_TYPE.PERSONAL_NUMBER
+        else:
+            itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemTypeName)
+        return itemTypeID
 
 
 class BoxBonus(SimpleBonus):

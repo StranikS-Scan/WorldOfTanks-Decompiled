@@ -94,3 +94,54 @@ class PythonTimer(TimerComponent):
 
     def _setViewSnapshot(self, timeLeft):
         raise NotImplementedError
+
+
+class PrecisePythonTimer(PythonTimer):
+    __slots__ = ('__short1stPeriodCbId', '__interval', '_timeInterval', '_startTime')
+
+    def __init__(self, viewObject, typeID, viewID, totalTime, finishTime, startTime=None, interval=1.0, secondInRow=False, **kwargs):
+        super(PrecisePythonTimer, self).__init__(viewObject, typeID, viewID, totalTime, finishTime, startTime, interval, secondInRow, **kwargs)
+        if startTime is not None:
+            self._startTime = startTime
+        self.__interval = interval
+        self.__short1stPeriodCbId = None
+        return
+
+    def _startTick(self):
+        if self._totalTime:
+            timeLeft = max(0, self._finishTime - BigWorld.serverTime())
+            if timeLeft:
+                self._setViewSnapshot(timeLeft)
+                self._timeInterval = TimeInterval(self.__interval, self, '_tick')
+                firstShortPeriod = float(self._totalTime) % self.__interval
+                if round(firstShortPeriod, 4) > 0.0:
+                    self.__short1stPeriodCbId = BigWorld.callback(firstShortPeriod, self.__onShort1stPeriodFinished)
+                else:
+                    self._timeInterval.restart()
+
+    def clear(self):
+        self.__clearShort1stPeriodCb()
+        super(PrecisePythonTimer, self).clear()
+
+    def _stopTick(self):
+        self.__clearShort1stPeriodCb()
+        super(PrecisePythonTimer, self)._stopTick()
+
+    def _setViewSnapshot(self, timeLeft):
+        raise NotImplementedError
+
+    def __clearShort1stPeriodCb(self):
+        if self.__short1stPeriodCbId is not None:
+            BigWorld.cancelCallback(self.__short1stPeriodCbId)
+        self.__short1stPeriodCbId = None
+        return
+
+    def __onShort1stPeriodFinished(self):
+        self.__short1stPeriodCbId = None
+        self._tick()
+        timeLeft = self._finishTime - BigWorld.serverTime()
+        if timeLeft > 0:
+            self._timeInterval.restart()
+        else:
+            self.hide()
+        return

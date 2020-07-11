@@ -237,6 +237,10 @@ def getAbsoluteUrl(url):
     return url.replace('../', 'img://gui/')
 
 
+def getRelativeUrl(url):
+    return url.replace('img://gui', '..')
+
+
 _viewIdsGen = None
 
 def getViewName(viewAlias, *args):

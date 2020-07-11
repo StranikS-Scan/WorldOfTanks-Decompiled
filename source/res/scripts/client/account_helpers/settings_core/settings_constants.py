@@ -319,6 +319,7 @@ class OnceOnlyHints(CONST_CONTAINER):
     ACCOUNT_BUTTON_HINT = 'AccountButtonHint'
     SESSION_STATS_OPEN_BTN_HINT = 'SessionStatsOpenBtnHint'
     SESSION_STATS_SETTINGS_BTN_HINT = 'SessionStatsSettingsBtnHint'
+    CRYSTAL_BTN_HINT = 'CrystalsBtnHint'
     BATTLE_SESSION_UP_BUTTON_TOURNAMENT_HINT = 'BattleSessionUpButtonTournamentHint'
     CREW_OPERATION_BTN_HINT = 'CrewOperationBtnHint'
     SOUND_BUTTONEX_HINT = 'SoundButtonExHint'
@@ -417,3 +418,11 @@ class BattlePassStorageKeys(CONST_CONTAINER):
     SHOWN_VIDEOS_FLAGS = 'shownVideosFlags'
     BUY_ANIMATION_WAS_SHOWN = 'buyAnimationWasShown'
     FLAGS_VERSION = 'flagsVersion'
+
+
+class BattleCommStorageKeys(CONST_CONTAINER):
+    ENABLE_BATTLE_COMMUNICATION = 'enableBattleComm'
+    SHOW_COM_IN_PLAYER_LIST = 'showCommInPlayerlist'
+    SHOW_STICKY_MARKERS = 'showStickyMarkers'
+    SHOW_CALLOUT_MESSAGES = 'showCalloutMessages'
+    SHOW_BASE_MARKERS = 'showMarkers'

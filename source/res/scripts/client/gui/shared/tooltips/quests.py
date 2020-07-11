@@ -27,7 +27,7 @@ from helpers import dependency, time_utils
 from helpers.i18n import makeString as _ms
 from shared_utils import findFirst
 from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.game_control import IQuestsController, IEpicBattleMetaGameController, IEventProgressionController, IRankedBattlesController
+from skeletons.gui.game_control import IQuestsController, IEventProgressionController, IRankedBattlesController
 from gui.impl.gen import R
 _MAX_AWARDS_PER_TOOLTIP = 5
 _MAX_QUESTS_PER_TOOLTIP = 4
@@ -48,7 +48,7 @@ class _StringTokenBonusFormatter(TokenBonusFormatter):
 
 
 class QuestsPreviewTooltipData(BlocksTooltipData):
-    _eventProgressionController = dependency.descriptor(IEventProgressionController)
+    __eventProgression = dependency.descriptor(IEventProgressionController)
     _questController = dependency.descriptor(IQuestsController)
     _eventsCache = dependency.descriptor(IEventsCache)
 
@@ -61,7 +61,7 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
     def _packBlocks(self, *args, **kwargs):
         items = super(QuestsPreviewTooltipData, self)._packBlocks()
         vehicle = g_currentVehicle.item
-        quests = sorted([ q for q in self._questController.getQuestForVehicle(vehicle) if not q.isCompleted() and q.getID() not in self._eventProgressionController.questIDs and not isDailyQuest(q.getID()) and not isPremium(q.getID()) and not isRankedQuestID(q.getID()) ], key=events_helpers.questsSortFunc)
+        quests = sorted([ q for q in self._questController.getQuestForVehicle(vehicle) if not q.isCompleted() and self.__eventProgression.questPrefix not in q.getID() and not isDailyQuest(q.getID()) and not isPremium(q.getID()) and not isRankedQuestID(q.getID()) ], key=events_helpers.questsSortFunc)
         if quests:
             items.append(self._getHeader(len(quests), vehicle.shortUserName, R.strings.tooltips.hangar.header.quests.description.vehicle()))
             for quest in quests:
@@ -167,7 +167,7 @@ class ScheduleQuestTooltipData(BlocksTooltipData):
         if weekDays:
             days = [ _ms(MENU.datetime_weekdays_full(idx)) for idx in event.getWeekDays() ]
             items.append(self._getSubBlock(TOOLTIPS.QUESTS_SCHEDULE_WEEKDAYS, days))
-        intervals = event.getCollapsedActiveTimeIntervals()
+        intervals = event.getActiveTimeIntervals()
         if intervals:
             times = []
             for low, high in intervals:
@@ -182,7 +182,6 @@ class ScheduleQuestTooltipData(BlocksTooltipData):
 
 class UnavailableQuestTooltipData(BlocksTooltipData):
     _eventsCache = dependency.descriptor(IEventsCache)
-    __epicController = dependency.descriptor(IEpicBattleMetaGameController)
     __eventProgressionController = dependency.descriptor(IEventProgressionController)
     __rankedController = dependency.descriptor(IRankedBattlesController)
 
@@ -220,8 +219,8 @@ class UnavailableQuestTooltipData(BlocksTooltipData):
          'message': text_styles.error('{0} {1}'.format(icons.notAvailable(), text))}))
 
     def __getEventProgressionOverrides(self):
-        _, level, _ = self.__epicController.getPlayerLevelInfo()
-        maxLevel = self.__epicController.getMaxPlayerLevel()
+        _, level, _ = self.__eventProgressionController.getPlayerLevelInfo()
+        maxLevel = self.__eventProgressionController.getMaxPlayerLevel()
         if level < maxLevel:
             msg = backport.text(R.strings.event_progression.questsTooltip.frontLine.notReachLevel(), level=maxLevel)
             return formatters.packAlignedTextBlockData(text=text_styles.main(msg), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=5))

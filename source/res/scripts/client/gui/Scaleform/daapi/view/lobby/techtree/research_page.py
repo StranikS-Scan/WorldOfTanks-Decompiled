@@ -76,14 +76,12 @@ def _getEquipmentBenefits(benefits, root, itemsCache=None):
 
 
 def _formatBenefits(benefitData):
-    benefitIconPattern = 'benefit%dIconSrc'
-    benefitLabelPattern = 'benefit%dLabelStr'
-    formattedBenefits = {}
+    formattedBenefits = []
     for i, (icon, title, body) in enumerate(benefitData, 1):
         if i > _BENEFIT_ITEMS_LIMIT:
             break
-        formattedBenefits[benefitIconPattern % i] = icon
-        formattedBenefits[benefitLabelPattern % i] = text_styles.concatStylesToMultiLine(text_styles.highTitle(title), text_styles.main(body))
+        formattedBenefits.append({'iconSrc': icon,
+         'labelStr': text_styles.concatStylesToMultiLine(text_styles.highTitle(title), text_styles.main(body))})
 
     return formattedBenefits
 
@@ -386,7 +384,7 @@ class Research(ResearchMeta):
             for benefitGetter in _BENEFIT_GETTERS:
                 benefitGetter(benefitData, root)
 
-            result.update(_formatBenefits(benefitData))
+            result['benefitsData'] = _formatBenefits(benefitData)
         return result
 
     def __getBackBtnData(self):

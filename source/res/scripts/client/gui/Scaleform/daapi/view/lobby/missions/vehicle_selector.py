@@ -56,9 +56,11 @@ class MissionVehicleSelector(MissionsVehicleSelectorMeta):
     def __init__(self):
         super(MissionVehicleSelector, self).__init__()
         self._carousel = None
+        self.__isQuestForBattleRoyale = False
         return
 
-    def setCriteria(self, criteria, extraConditions):
+    def setCriteria(self, criteria, extraConditions, isQuestForBattleRoyale=False):
+        self.__isQuestForBattleRoyale = isQuestForBattleRoyale
         self._carousel.setCriteria(criteria, extraConditions)
         self.__updateSelectedVehicle()
 
@@ -90,31 +92,38 @@ class MissionVehicleSelector(MissionsVehicleSelectorMeta):
     def __updateSelectedVehicle(self):
         vehicle = g_currentVehicle.item
         suitableVehicles = self._carousel.getSuitableVehicles()
-        if suitableVehicles and vehicle and vehicle.intCD in suitableVehicles:
-            selectedVeh = getVehicleDataVO(vehicle)
-            selectedVeh.update({'tooltip': TOOLTIPS.MISSIONS_VEHICLE_SELECTOR_LIST})
-            status = text_styles.bonusAppliedText(QUESTS.MISSIONS_VEHICLESELECTOR_STATUS_SELECTED)
-        elif suitableVehicles:
-            label = QUESTS.MISSIONS_VEHICLESELECTOR_STATUS_SELECT
-            style = text_styles.premiumVehicleName
-            selectedVeh = {'buyTank': True,
-             'iconSmall': RES_ICONS.MAPS_ICONS_LIBRARY_EMPTY_SELECTION,
-             'smallInfoText': style(label),
-             'tooltip': TOOLTIPS.MISSIONS_VEHICLE_SELECTOR_SELECT}
+        if self.__isQuestForBattleRoyale:
+            selectedVeh = None
             status = ''
+            title = ''
         else:
-            label = QUESTS.MISSIONS_VEHICLESELECTOR_STATUS_LIST
-            style = text_styles.premiumVehicleName
-            selectedVeh = {'buyTank': True,
-             'iconSmall': RES_ICONS.MAPS_ICONS_LIBRARY_EMPTY_SELECTION,
-             'smallInfoText': style(label),
-             'tooltip': TOOLTIPS.MISSIONS_VEHICLE_SELECTOR_LIST}
-            status = self._getNotAvailableStatusText()
-        selectedVeh.update(isUseRightBtn=False)
-        selectedVeh.update(clickEnabled=True)
-        self.as_setInitDataS({'title': self._getTitle(),
+            if suitableVehicles and vehicle and vehicle.intCD in suitableVehicles:
+                selectedVeh = getVehicleDataVO(vehicle)
+                selectedVeh.update({'tooltip': TOOLTIPS.MISSIONS_VEHICLE_SELECTOR_LIST})
+                status = text_styles.bonusAppliedText(QUESTS.MISSIONS_VEHICLESELECTOR_STATUS_SELECTED)
+            elif suitableVehicles:
+                label = QUESTS.MISSIONS_VEHICLESELECTOR_STATUS_SELECT
+                style = text_styles.premiumVehicleName
+                selectedVeh = {'buyTank': True,
+                 'iconSmall': RES_ICONS.MAPS_ICONS_LIBRARY_EMPTY_SELECTION,
+                 'smallInfoText': style(label),
+                 'tooltip': TOOLTIPS.MISSIONS_VEHICLE_SELECTOR_SELECT}
+                status = ''
+            else:
+                label = QUESTS.MISSIONS_VEHICLESELECTOR_STATUS_LIST
+                style = text_styles.premiumVehicleName
+                selectedVeh = {'buyTank': True,
+                 'iconSmall': RES_ICONS.MAPS_ICONS_LIBRARY_EMPTY_SELECTION,
+                 'smallInfoText': style(label),
+                 'tooltip': TOOLTIPS.MISSIONS_VEHICLE_SELECTOR_LIST}
+                status = self._getNotAvailableStatusText()
+            selectedVeh.update(isUseRightBtn=False)
+            selectedVeh.update(clickEnabled=True)
+            title = self._getTitle()
+        self.as_setInitDataS({'title': title,
          'statusText': status})
         self.as_showSelectedVehicleS(selectedVeh)
+        return
 
     def _getTitle(self):
         pass

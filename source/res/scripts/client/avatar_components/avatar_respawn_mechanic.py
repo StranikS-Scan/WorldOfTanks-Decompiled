@@ -15,7 +15,7 @@ class AvatarRespawnMechanic(object):
         return None if not self.__enabled else None
 
     def handleKey(self, isDown, key, mods):
-        pass
+        return False
 
     def onBecomeNonPlayer(self):
         return None if not self.__enabled else None

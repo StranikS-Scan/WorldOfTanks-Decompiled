@@ -1,31 +1,59 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/player_ranks.py
+import typing
+from collections import namedtuple
+from typing import NamedTuple, Type
+from enum import Enum, unique
 import ResMgr
-from constants import PLAYER_RANK
+from constants import PLAYER_RANK, ARENA_BONUS_TYPE
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 _CONFIG_FILE = 'scripts/item_defs/player_ranks.xml'
+if typing.TYPE_CHECKING:
+    from ResMgr import DataSection
 
-class BasicThresholdRankSettings(object):
+@unique
+class ALGORITHM_NAMES(Enum):
+    BASIC_THRESHOLD = 'BasicThreshold'
+    BATTLE_ROYALE = 'BattleRoyaleDeathOrder'
+    BATTLE_ROYALE_INDEPENDENT = 'BattleRoyaleDeathOrderIndependent'
+    NONE = 'None'
 
-    def __init__(self, section, order):
-        self.rank = PLAYER_RANK.RANK_BY_NAME[section.name]
-        self.order = order
-        self.threshold = section.readInt('threshold')
+
+@unique
+class SETTINGS_NAMES(Enum):
+    DEFAULT = 'DEFAULT'
+    BATTLE_ROYALE = 'BattleRoyale'
+    BATTLE_ROYALE_INDEPENDENT = 'BattleRoyaleIndependent'
+    NONE = 'None'
+
+    @classmethod
+    def hasValue(cls, value):
+        return value in cls._value2member_map_
 
 
 class AlgorithmSettings(object):
+    initialRank = property(lambda self: self._initialRank)
+    name = property(lambda self: self._name)
 
-    def __init__(self, section):
-        self.name = section.name
+    def __init__(self, initialRank, section=None):
+        self._initialRank = initialRank
+        self._name = ALGORITHM_NAMES(section.name) if section is not None else ALGORITHM_NAMES.NONE
+        return
 
 
 class BasicThresholdSettings(AlgorithmSettings):
+    _BasicThresholdRankSettings = namedtuple('_BasicThresholdRankSettings', ('rank', 'order', 'threshold'))
 
-    def __init__(self, section):
-        super(BasicThresholdSettings, self).__init__(section)
+    def _readBasicThresholdRankSettings(self, section, order):
+        rank = parseRankFromSectionName(section.name)
+        return self._BasicThresholdRankSettings(rank, order, section.readInt('threshold'))
+
+    def __init__(self, initialRank, section):
+        super(BasicThresholdSettings, self).__init__(initialRank, section)
         self.ranks = []
         order = 1
         for subsection in section.values():
-            self.ranks.append(BasicThresholdRankSettings(subsection, order))
+            self.ranks.append(self._readBasicThresholdRankSettings(subsection, order))
             order += 1
 
         self.byOrder = {settings.order:settings for settings in self.ranks}
@@ -33,30 +61,39 @@ class BasicThresholdSettings(AlgorithmSettings):
         self.orderByRank = {settings.rank:settings.order for settings in self.ranks}
 
 
-class BonusSettings(object):
+BonusSettings = NamedTuple('BonusSettings', [('factor100ByRank', dict)])
 
-    def __init__(self, section):
-        self.factor100ByRank = {}
-        if not section:
-            return
+def makeBonusSettings(section=None):
+    factor100ByRank = {}
+    if section:
         for rankName in section.keys():
-            rank = PLAYER_RANK.RANK_BY_NAME[rankName]
+            rank = parseRankFromSectionName(rankName)
             bonusFactor100 = section.readInt(rankName)
-            self.factor100ByRank[rank] = bonusFactor100
+            factor100ByRank[rank] = bonusFactor100
+
+    return BonusSettings(factor100ByRank)
 
 
-class PlayerRanksSettings(object):
-    ALGORITHM_SETTINGS = {'BasicThreshold': BasicThresholdSettings}
+PlayerRanksSettings = NamedTuple('PlayerRankSettings', [('initialRank', int), ('algorithm', Type[AlgorithmSettings]), ('bonus', BonusSettings)])
 
-    def __init__(self, section):
-        algorithmKeys = set(section.keys()).intersection(set(self.ALGORITHM_SETTINGS))
-        algorithmName = algorithmKeys.__iter__().next()
-        self.algorithm = self.ALGORITHM_SETTINGS[algorithmName](section[algorithmName])
-        self.bonus = BonusSettings(section['bonus'])
-        initialRankName = section.readString('initialRank', PLAYER_RANK.NAMES[PLAYER_RANK.NO_RANK])
-        self.initialRank = PLAYER_RANK.RANK_BY_NAME[initialRankName]
+def makePlayerRankSettings(section=None):
+    initialRank = section.readInt('initialRank') if section else PLAYER_RANK.NO_RANK
+    bonus = makeBonusSettings(section['bonus'] if section else None)
+    if section is None:
+        algorithm = AlgorithmSettings(initialRank)
+    else:
+        algorithmKeys = set(section.keys()).intersection((c.value for c in ALGORITHM_NAMES))
+        algorithmName = algorithmKeys.pop()
+        algorithm = ALGORITHM_NAME_TO_SETTINGS[ALGORITHM_NAMES(algorithmName)](initialRank, section[algorithmName])
+    return PlayerRanksSettings(initialRank, algorithm, bonus)
 
 
+ALGORITHM_NAME_TO_SETTINGS = {ALGORITHM_NAMES.BASIC_THRESHOLD: BasicThresholdSettings,
+ ALGORITHM_NAMES.BATTLE_ROYALE: AlgorithmSettings,
+ ALGORITHM_NAMES.BATTLE_ROYALE_INDEPENDENT: AlgorithmSettings}
+ARENA_BONUS_TYPE_TO_SETTINGS_NAME = {ARENA_BONUS_TYPE.EPIC_BATTLE: SETTINGS_NAMES.DEFAULT,
+ ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO: SETTINGS_NAMES.BATTLE_ROYALE_INDEPENDENT,
+ ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD: SETTINGS_NAMES.BATTLE_ROYALE}
 g_cache = None
 
 def init():
@@ -64,8 +101,26 @@ def init():
     g_cache = settings = {}
     section = ResMgr.openSection(_CONFIG_FILE)
     for name, subsection in section.items():
-        settings[name] = PlayerRanksSettings(subsection)
+        settings[SETTINGS_NAMES(name)] = makePlayerRankSettings(subsection)
+
+    for arenaBonusType, caps in ARENA_BONUS_TYPE_CAPS._typeToCaps.iteritems():
+        if ARENA_BONUS_TYPE_CAPS.PLAYER_RANK_MECHANICS in caps:
+            pass
+
+    if SETTINGS_NAMES.NONE not in settings:
+        settings[SETTINGS_NAMES.NONE] = makePlayerRankSettings()
 
 
-def getSettings():
-    return g_cache['DEFAULT']
+def parseRankFromSectionName(name, checkInPlayerRanks=True):
+    rank = int(name[1:])
+    if checkInPlayerRanks:
+        pass
+    return rank
+
+
+def getSettingsForBonusType(bonusType=None):
+    return getSettings(ARENA_BONUS_TYPE_TO_SETTINGS_NAME.get(bonusType, SETTINGS_NAMES.NONE))
+
+
+def getSettings(settingsName=SETTINGS_NAMES.DEFAULT):
+    return g_cache.get(settingsName, g_cache[SETTINGS_NAMES.NONE])

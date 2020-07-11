@@ -12,6 +12,7 @@ from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.game_control import IBrowserController
 from skeletons.gui.lobby_context import ILobbyContext
+from sound_constants import BROWSER_VIEW_SOUND_SPACES
 
 def makeBrowserParams(waitingMessage=R.invalid(), isModal=False, isHidden=False, bgAlpha=1.0):
     if not waitingMessage:
@@ -28,9 +29,10 @@ class BrowserView(LobbySubView, BrowserScreenMeta):
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, ctx=None):
+        self.__ctx = ctx
+        self.__initSoundSpace()
         super(BrowserView, self).__init__(ctx)
         self.__browserId = None
-        self.__ctx = ctx
         self.__hasFocus = False
         self.__browser = None
         self.__browserComponent = None
@@ -40,6 +42,12 @@ class BrowserView(LobbySubView, BrowserScreenMeta):
         self.__isBrowserLoading = True
         self.__pendingRequest = None
         self.__viewSize = None
+        return
+
+    def __initSoundSpace(self):
+        soundSpaceID = self.__getFromCtx('soundSpaceID')
+        if soundSpaceID is not None:
+            self._COMMON_SOUND_SPACE = BROWSER_VIEW_SOUND_SPACES.get(soundSpaceID)
         return
 
     def onFocusChange(self, hasFocus):

@@ -191,7 +191,10 @@ def makeFreeXpLabel(value, canBeFaded=False):
 
 
 def makeCrystalLabel(value):
-    return makeHtmlString('html_templates:lobby/battle_results', 'crystal_small_label', {'value': backport.getIntegralFormat(int(value))})
+    formatted = backport.getIntegralFormat(int(value))
+    if value < 0:
+        formatted = markValueAsError(formatted)
+    return makeHtmlString('html_templates:lobby/battle_results', 'crystal_small_label', {'value': formatted})
 
 
 def makePercentLabel(value):

@@ -5,7 +5,7 @@ import types
 from collections import namedtuple
 import logging
 from Event import Event
-from constants import IS_TUTORIAL_ENABLED, PremiumConfigs, DAILY_QUESTS_CONFIG, ClansConfig
+from constants import IS_TUTORIAL_ENABLED, PremiumConfigs, DAILY_QUESTS_CONFIG, ClansConfig, MAGNETIC_AUTO_AIM_CONFIG, Configs
 from collector_vehicle import CollectorVehicleConsts
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from battle_pass_common import BattlePassConfig, BATTLE_PASS_CONFIG_NAME
@@ -290,7 +290,7 @@ _ProgressiveReward.__new__.__defaults__ = (True,
  'pr:probability',
  0)
 
-class _EventProgressionConfig(namedtuple('_EventProgressionConfig', ('isEnabled', 'url', 'rewardVehicles', 'rewardPointsTokenID', 'seasonPointsTokenID', 'maxRewardPoints', 'questIDs'))):
+class _EventProgressionConfig(namedtuple('_EventProgressionConfig', ('isEnabled', 'isFrontLine', 'isSteelHunter', 'url', 'questPrefix', 'exchange', 'rewardVehicles', 'rewardPointsTokenID', 'seasonPointsTokenID', 'maxRewardPoints'))):
 
     def __new__(cls, *args, **kwargs):
         defaults = {attr:copy.deepcopy(cls.__new__.__defaults__[i]) for i, attr in enumerate(cls._fields)}
@@ -307,12 +307,15 @@ class _EventProgressionConfig(namedtuple('_EventProgressionConfig', ('isEnabled'
 
 
 _EventProgressionConfig.__new__.__defaults__ = (False,
+ False,
+ False,
  '',
+ '',
+ {},
  [],
  '',
  '',
- 0,
- [])
+ 0)
 
 class _EpicMetaGameConfig(namedtuple('_EpicMetaGameConfig', ['maxCombatReserveLevel',
  'seasonData',
@@ -386,6 +389,27 @@ class _SquadPremiumBonus(namedtuple('_SquadPremiumBonus', ('isEnabled', 'ownCred
         if 'premium_owner_squadmate' in creditsSettings:
             result['mateCredits'] = creditsSettings['premium_owner_squadmate']
         return result
+
+
+class _BattleRoyaleConfig(namedtuple('_BattleRoyaleConfig', ('isEnabled', 'peripheryIDs', 'unburnableTitles', 'eventProgression', 'primeTimes', 'seasons', 'cycleTimes', 'maps', 'battleXP', 'coneVisibility', 'loot', 'defaultAmmo', 'vehiclesSlotsConfig'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, peripheryIDs={}, eventProgression={}, unburnableTitles=(), primeTimes={}, seasons={}, cycleTimes={}, maps=(), battleXP={}, coneVisibility={}, loot={}, defaultAmmo={}, vehiclesSlotsConfig={})
+        defaults.update(kwargs)
+        return super(_BattleRoyaleConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
 
 
 class _TelecomConfig(object):
@@ -475,25 +499,34 @@ class _SeniorityAwardsConfig(namedtuple('_SeniorityAwardsConfig', ('enabled', 'a
         return self.hangarWidgetVisibility
 
 
-class _BobConfig(namedtuple('_BobConfig', ('isEnabled', 'peripheryIDs', 'primeTimes', 'seasons', 'cycleTimes', 'levels', 'forbiddenClassTags', 'forbiddenVehTypes'))):
+_crystalRewardInfo = namedtuple('_crystalRewardInfo', 'level, arenaType, winTop3, loseTop3, winTop10, loseTop10')
+
+class _crystalRewardConfigSection(namedtuple('_crystalRewardConfigSection', ('level', 'vehicle'))):
     __slots__ = ()
 
+    def __new__(cls, params):
+        defaults = {'level': {},
+         'vehicle': {}}
+        defaults.update(params)
+        return super(_crystalRewardConfigSection, cls).__new__(cls, **defaults)
+
+
+class _crystalRewardsConfig(namedtuple('_crystalRewardsConfig', ('limits', 'rewards'))):
+    __slots__ = ()
+    CONFIG_NAME = 'crystal_rewards_config'
+
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, peripheryIDs={}, primeTimes={}, seasons={}, cycleTimes={}, levels=set(), forbiddenClassTags=set(), forbiddenVehTypes=set())
-        defaults.update(kwargs)
-        return super(_BobConfig, cls).__new__(cls, **defaults)
+        defaults = {'limits': _crystalRewardConfigSection(kwargs.get('limits', {})),
+         'rewards': _crystalRewardConfigSection(kwargs.get('rewards', {}))}
+        return super(_crystalRewardsConfig, cls).__new__(cls, **defaults)
 
-    def asDict(self):
-        return self._asdict()
+    def getRewardInfoData(self):
+        results = []
+        for level, rewardData in self.rewards.level.iteritems():
+            for arenaBonusType, scoreData in rewardData.iteritems():
+                results.append(_crystalRewardInfo(level, arenaBonusType, winTop3=max(scoreData[True].itervalues()), loseTop3=max(scoreData[False].itervalues()), winTop10=min(scoreData[True].itervalues()), loseTop10=min(scoreData[False].itervalues())))
 
-    def replace(self, data):
-        allowedFields = self._fields
-        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
-        return self._replace(**dataToUpdate)
-
-    @classmethod
-    def defaults(cls):
-        return cls()
+        return results
 
 
 class ServerSettings(object):
@@ -521,6 +554,7 @@ class ServerSettings(object):
         self.__telecomConfig = _TelecomConfig.defaults()
         self.__squadPremiumBonus = _SquadPremiumBonus.defaults()
         self.__battlePassConfig = BattlePassConfig({})
+        self.__crystalRewardsConfig = _crystalRewardsConfig()
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -568,6 +602,11 @@ class ServerSettings(object):
             self.__epicGameSettings = makeTupleByDict(_EpicGameConfig, self.__serverSettings['epic_config'])
         if PremiumConfigs.PREM_SQUAD in self.__serverSettings:
             self.__squadPremiumBonus = _SquadPremiumBonus.create(self.__serverSettings[PremiumConfigs.PREM_SQUAD])
+        if Configs.BATTLE_ROYALE_CONFIG.value in self.__serverSettings:
+            LOG_DEBUG('battle_royale_config', self.__serverSettings[Configs.BATTLE_ROYALE_CONFIG.value])
+            self.__battleRoyaleSettings = makeTupleByDict(_BattleRoyaleConfig, self.__serverSettings[Configs.BATTLE_ROYALE_CONFIG.value])
+        else:
+            self.__battleRoyaleSettings = _BattleRoyaleConfig.defaults()
         if 'telecom_config' in self.__serverSettings:
             self.__telecomConfig = _TelecomConfig(self.__serverSettings['telecom_config'])
         if 'blueprints_config' in self.__serverSettings:
@@ -586,11 +625,8 @@ class ServerSettings(object):
             self.__battlePassConfig = BattlePassConfig(self.__serverSettings.get(BATTLE_PASS_CONFIG_NAME, {}))
         else:
             self.__battlePassConfig = BattlePassConfig({})
-        if 'bob_config' in self.__serverSettings:
-            LOG_DEBUG('bob_config', self.__serverSettings['bob_config'])
-            self.__bobSettings = makeTupleByDict(_BobConfig, self.__serverSettings['bob_config'])
-        else:
-            self.__bobSettings = _BobConfig.defaults()
+        if _crystalRewardsConfig.CONFIG_NAME in self.__serverSettings:
+            self.__crystalRewardsConfig = makeTupleByDict(_crystalRewardsConfig, self.__serverSettings[_crystalRewardsConfig.CONFIG_NAME])
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -611,8 +647,8 @@ class ServerSettings(object):
         if 'epic_config' in serverSettingsDiff:
             self.__updateEpic(serverSettingsDiff)
             self.__serverSettings['epic_config'] = serverSettingsDiff['epic_config']
-        if 'bob_config' in serverSettingsDiff:
-            self.__updateBob(serverSettingsDiff)
+        if Configs.BATTLE_ROYALE_CONFIG.value in serverSettingsDiff:
+            self.__updateBattleRoyale(serverSettingsDiff)
         if 'telecom_config' in serverSettingsDiff:
             self.__telecomConfig = _TelecomConfig(self.__serverSettings['telecom_config'])
         if 'disabledPMOperations' in serverSettingsDiff:
@@ -644,6 +680,8 @@ class ServerSettings(object):
             self.__battlePassConfig = BattlePassConfig(self.__serverSettings.get(BATTLE_PASS_CONFIG_NAME, {}))
         if CollectorVehicleConsts.CONFIG_NAME in serverSettingsDiff:
             self.__serverSettings[CollectorVehicleConsts.CONFIG_NAME] = serverSettingsDiff[CollectorVehicleConsts.CONFIG_NAME]
+        if _crystalRewardsConfig.CONFIG_NAME in serverSettingsDiff:
+            self.__crystalRewardsConfig = makeTupleByDict(_crystalRewardsConfig, self.__serverSettings[_crystalRewardsConfig.CONFIG_NAME])
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -717,8 +755,8 @@ class ServerSettings(object):
         return self.__epicGameSettings
 
     @property
-    def bobConfig(self):
-        return self.__bobSettings
+    def battleRoyale(self):
+        return self.__battleRoyaleSettings
 
     @property
     def telecomConfig(self):
@@ -785,6 +823,9 @@ class ServerSettings(object):
     def isNationChangeEnabled(self):
         return self.__getGlobalSetting('isNationChangeEnabled', True)
 
+    def getCrystalRewardConfig(self):
+        return self.__crystalRewardsConfig
+
     @property
     def shop(self):
         return self.__bwShop
@@ -830,6 +871,9 @@ class ServerSettings(object):
 
     def getDailyQuestConfig(self):
         return self.__getGlobalSetting(DAILY_QUESTS_CONFIG, {})
+
+    def getMagneticAutoAimConfig(self):
+        return self.__getGlobalSetting(MAGNETIC_AUTO_AIM_CONFIG, {})
 
     def getPreferredMapsConfig(self):
         return self.__getGlobalSetting(PremiumConfigs.PREFERRED_MAPS, {})
@@ -960,14 +1004,14 @@ class ServerSettings(object):
         self.__epicMetaGameSettings = self.__epicMetaGameSettings.replace(targetSettings['epic_config'].get('epicMetaGame', {}))
         self.__epicGameSettings = self.__epicGameSettings.replace(targetSettings['epic_config'])
 
-    def __updateBob(self, targetSettings):
-        self.__bobSettings = self.__bobSettings.replace(targetSettings['bob_config'])
-
     def __updateSquadBonus(self, sourceSettings):
         self.__squadPremiumBonus = self.__squadPremiumBonus.replace(sourceSettings[PremiumConfigs.PREM_SQUAD])
 
     def __updateShop(self, targetSettings):
         self.__bwShop = self.__bwShop.replace(targetSettings['shop'])
+
+    def __updateBattleRoyale(self, targetSettings):
+        self.__battleRoyaleSettings = self.__battleRoyaleSettings.replace(targetSettings['battle_royale_config'])
 
     def __updateBlueprints(self, targetSettings):
         self.__blueprintsConfig = self.__blueprintsConfig._replace(**targetSettings)

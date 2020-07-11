@@ -1,10 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/classic/stats_exchange.py
 from collections import defaultdict
+from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from gui.Scaleform.daapi.view.battle.shared.stats_exchage import BattleStatisticsDataController
 from gui.Scaleform.daapi.view.battle.shared.stats_exchage import createExchangeBroker
 from gui.Scaleform.daapi.view.battle.shared.stats_exchage import broker
 from gui.Scaleform.daapi.view.battle.shared.stats_exchage import vehicle
+from gui.battle_control.arena_info.arena_vos import ChatCommandVO
+from skeletons.account_helpers.settings_core import ISettingsCore
+from helpers import dependency
 
 class FragsCollectableStats(broker.CollectableStats):
     __slots__ = ('__teamsDeaths',)
@@ -39,27 +43,38 @@ class FragsCollectableStats(broker.CollectableStats):
          'rightScope': enemyScope} if allyScope or enemyScope else {}
 
 
-class VehicleFragsComponent(vehicle.VehicleStatsComponent):
-    __slots__ = ('_frags', '_vehicleID')
+class DynamicVehicleStatsComponent(vehicle.VehicleStatsComponent):
+    settingsCore = dependency.descriptor(ISettingsCore)
+    __slots__ = ('_frags', '_vehicleID', '_chatCommand', '_chatCommandFlags')
 
     def __init__(self):
-        super(VehicleFragsComponent, self).__init__()
+        super(DynamicVehicleStatsComponent, self).__init__()
         self._frags = 0
+        self._chatCommand = ''
+        self._chatCommandFlags = 0
 
     def clear(self):
         self._frags = 0
-        super(VehicleFragsComponent, self).clear()
+        self._chatCommand = ''
+        self._chatCommandFlags = 0
+        super(DynamicVehicleStatsComponent, self).clear()
 
     def get(self, forced=False):
-        if forced or self._frags:
-            data = super(VehicleFragsComponent, self).get()
+        if forced or self._frags or self._chatCommand:
+            data = super(DynamicVehicleStatsComponent, self).get()
             data['frags'] = self._frags
+            data['chatCommand'] = self._chatCommand
+            data['chatCommandFlags'] = self._chatCommandFlags
             return data
         return {}
 
     def addStats(self, vStatsVO):
         self._vehicleID = vStatsVO.vehicleID
         self._frags = vStatsVO.frags
+        chatCmdState = vStatsVO.chatCommandState
+        if chatCmdState and bool(self.settingsCore.getSetting(BattleCommStorageKeys.SHOW_COM_IN_PLAYER_LIST)) is True:
+            self._chatCommand = chatCmdState.activeChatCommand
+            self._chatCommandFlags = chatCmdState.chatCommandFlags
 
 
 class ClassicStatisticsDataController(BattleStatisticsDataController):
@@ -67,7 +82,7 @@ class ClassicStatisticsDataController(BattleStatisticsDataController):
     def _createExchangeBroker(self, exchangeCtx):
         exchangeBroker = createExchangeBroker(exchangeCtx)
         exchangeBroker.setVehiclesInfoExchange(vehicle.VehiclesExchangeBlock(vehicle.VehicleInfoComponent(), positionComposer=broker.BiDirectionComposer(), idsComposers=(vehicle.TeamsSortedIDsComposer(), vehicle.TeamsCorrelationIDsComposer()), statsComposers=None))
-        exchangeBroker.setVehiclesStatsExchange(vehicle.VehiclesExchangeBlock(VehicleFragsComponent(), positionComposer=broker.BiDirectionComposer(), idsComposers=None, statsComposers=(vehicle.TotalStatsComposer(),)))
+        exchangeBroker.setVehiclesStatsExchange(vehicle.VehiclesExchangeBlock(DynamicVehicleStatsComponent(), positionComposer=broker.BiDirectionComposer(), idsComposers=None, statsComposers=(vehicle.TotalStatsComposer(),)))
         exchangeBroker.setVehicleStatusExchange(vehicle.VehicleStatusComponent(idsComposers=(vehicle.TeamsSortedIDsComposer(), vehicle.TeamsCorrelationIDsComposer()), statsComposers=(vehicle.TotalStatsComposer(),)))
         return exchangeBroker
 

@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/frontline/__init__.py
+from collections import namedtuple
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import checkIfVehicleIsHidden
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import checkEpicRewardVehAlreadyBought
-from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import getAwardsForLevel
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import getFrontLineSkills
 from helpers import dependency
 from shared_utils import first
@@ -10,6 +10,8 @@ from skeletons.gui.game_control import IEpicBattleMetaGameController, IEventProg
 from skeletons.gui.server_events import IEventsCache
 from web.web_client_api import w2c, w2capi, W2CSchema, Field
 from skeletons.gui.shared import IItemsCache
+EpicSeasonAchievements = namedtuple('EpicSeasonAchievements', ('season_id', 'episode_id', 'battle_count', 'average_xp', 'award_points', 'lvl'))
+BattleRoyaleSeasonAchievements = namedtuple('EpicSeasonAchievements', ('season_id', 'episode_id', 'battle_count', 'kill_count', 'award_points', 'lvl'))
 
 class _RewardsSchema(W2CSchema):
     category = Field(type=basestring)
@@ -26,70 +28,19 @@ _REWARD_VEHICLE_PURCHASED = 'purchased'
 @w2capi(name='frontline', key='action')
 class FrontLineWebApi(W2CSchema):
     __frontlineCtrl = dependency.descriptor(IEpicBattleMetaGameController)
-    __eventProgCtrl = dependency.descriptor(IEventProgressionController)
+    __eventProgression = dependency.descriptor(IEventProgressionController)
     __eventsCache = dependency.descriptor(IEventsCache)
     __itemsCache = dependency.descriptor(IItemsCache)
-
-    @w2c(W2CSchema, name='get_metascreen_data')
-    def handleGetMetaScreenData(self, _):
-        _, level, exp = self.__frontlineCtrl.getPlayerLevelInfo()
-        nextLevelExp = self.__frontlineCtrl.getPointsProgressForLevel(level)
-        metaGameStats = self.__itemsCache.items.epicMetaGame
-        dossier = self.__itemsCache.items.getAccountDossier()
-        achievements = dossier.getDossierDescr().expand('epicSeasons')
-        seasonsAchievements = []
-        for seasonID, episodeID in achievements:
-            key = (seasonID, episodeID)
-            battleCount, averageXp, awardPoints, lvl = achievements[key]
-            seasonsAchievements.append({'season_id': seasonID,
-             'episode_id': episodeID,
-             'battle_count': battleCount,
-             'average_xp': averageXp,
-             'award_points': awardPoints,
-             'lvl': lvl})
-
-        data = {'lvl': level,
-         'max_lvl': self.__frontlineCtrl.getMaxPlayerLevel(),
-         'exp': exp,
-         'exp_for_lvl': nextLevelExp,
-         'rewards_for_lvl': getAwardsForLevel(level + 1),
-         'quest_ids': self.__eventProgCtrl.questIDs,
-         'average_xp': metaGameStats.averageXP,
-         'battle_count': metaGameStats.battleCount,
-         'award_points': self.__eventProgCtrl.actualRewardPoints,
-         'season_award_points': self.__eventProgCtrl.seasonRewardPoints,
-         'max_award_points': self.__eventProgCtrl.maxRewardPoints,
-         'seasons_achievements': seasonsAchievements,
-         'is_reserves_available_in_fl_menu': self.__frontlineCtrl.isReservesAvailableInFLMenu()}
-        return data
-
-    @w2c(W2CSchema, name='get_calendar_info')
-    def handleGetCalendarInfo(self, _):
-        calendarData = dict()
-        seasons = (self.__frontlineCtrl.getCurrentSeason(), self.__frontlineCtrl.getNextSeason(), self.__frontlineCtrl.getPreviousSeason())
-        selectedSeason = first(filter(None, seasons))
-        if selectedSeason is not None:
-            calendarData['season'] = {'id': selectedSeason.getSeasonID(),
-             'start': selectedSeason.getStartDate(),
-             'end': selectedSeason.getEndDate()}
-            calendarData['cycles'] = list()
-            for cycle in selectedSeason.getAllCycles().values():
-                calendarData['cycles'].append({'id': cycle.ID,
-                 'start': cycle.startDate,
-                 'end': cycle.endDate,
-                 'announce_only': cycle.announceOnly})
-
-        return calendarData
 
     @w2c(_RewardsSchema, name='get_rewards_data')
     def handleGetRewardsData(self, cmd):
         if hasattr(cmd, 'category') and cmd.category:
             if cmd.category == 'level':
-                return getAwardsForLevel()
+                return self.__eventProgression.getAllLevelAwards()
             if cmd.category == 'vehicles':
                 rewardsData = {}
                 vehicleInfo = []
-                for intCD, price in self.__eventProgCtrl.rewardVehicles:
+                for intCD, price in self.__eventProgression.rewardVehicles:
                     vehicle = self.__itemsCache.items.getItemByCD(intCD)
                     obtained = checkEpicRewardVehAlreadyBought(intCD)
                     owned = bool(vehicle.inventoryCount)
@@ -107,6 +58,10 @@ class FrontLineWebApi(W2CSchema):
                 rewardsData['vehicles'] = sorted(vehicleInfo, key=lambda v: v['price'])
                 return rewardsData
         return None
+
+    @w2c(W2CSchema, name='get_exchange_info')
+    def getExchangeInfo(self, _):
+        return self.__eventProgression.getExchangeInfo()
 
     @w2c(W2CSchema, name='get_all_skills')
     def handleSkillsInfo(self, _):
@@ -135,3 +90,45 @@ class FrontLineWebApi(W2CSchema):
     @w2c(W2CSchema, name='get_player_discount')
     def handleGetPlayerDiscount(self, _):
         return self.__frontlineCtrl.getStoredEpicDiscount()
+
+    @w2c(W2CSchema, name='get_metascreen_data')
+    def handleGetMetaScreenData(self, _):
+        levelInfo = self.__eventProgression.getPlayerLevelInfo()
+        nextLevelExp = self.__eventProgression.getPointsProgressForLevel(levelInfo.currentLevel)
+        metaGameStats = self.__eventProgression.getStats()
+        data = {'lvl': levelInfo.currentLevel,
+         'mode_alias': self.__eventProgression.getCurrentModeAlias(),
+         'max_lvl': self.__eventProgression.getMaxPlayerLevel(),
+         'exp': levelInfo.levelProgress,
+         'exp_for_lvl': nextLevelExp,
+         'rewards_for_lvl': self.__eventProgression.getLevelAwards(levelInfo.currentLevel + 1),
+         'quest_ids': self.__eventProgression.getActiveQuestIDs(),
+         'battle_count': metaGameStats.battleCount,
+         'award_points': self.__eventProgression.actualRewardPoints,
+         'season_award_points': self.__eventProgression.seasonRewardPoints,
+         'max_award_points': self.__eventProgression.maxRewardPoints}
+        modeData = self.__eventProgression.getEpicMetascreenData()
+        if modeData:
+            data.update(modeData)
+        return data
+
+    @w2c(W2CSchema, name='get_calendar_info')
+    def handleGetCalendarInfo(self, _):
+        return self.__eventProgression.getCalendarInfo()
+
+    @w2c(W2CSchema, name='get_seasons_achievements')
+    def getSeasonAchievements(self, _):
+        dossierDescr = self.__itemsCache.items.getAccountDossier().getDossierDescr()
+        seasonsAchievements = {'frontline': self.__getSeasonAchievements(dossierDescr.expand('epicSeasons'), EpicSeasonAchievements),
+         'steel_hunter': self.__getSeasonAchievements(dossierDescr.expand('battleRoyaleSeasons'), BattleRoyaleSeasonAchievements)}
+        return seasonsAchievements
+
+    def __getSeasonAchievements(self, achievements, template):
+        seasonsAchievements = []
+        for seasonID, cycleID in achievements:
+            if not self.__eventProgression.validateSeasonData(seasonID, cycleID):
+                continue
+            key = (seasonID, cycleID)
+            seasonsAchievements.append(template(*(key + achievements[key]))._asdict())
+
+        return seasonsAchievements

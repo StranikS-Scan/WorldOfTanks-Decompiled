@@ -15,6 +15,14 @@ class _Relations(CONST_CONTAINER):
     TMP_IGNORED = 4
 
 
+_MODULE_LIST_SIZE_FORMAT = '<B'
+_MODULE_LIST_FORMAT = '{}i'
+_MODULE_LIST_RECORD_FORMAT = _MODULE_LIST_SIZE_FORMAT + _MODULE_LIST_FORMAT
+_MODULE_LIST_SIZE_LEN = struct.calcsize(_MODULE_LIST_SIZE_FORMAT)
+_IGNORE_LIST_SIZE_FORMAT = '<B'
+_IGNORE_LIST_FORMAT = '{}L'
+_IGNORE_LIST_RECORD_FORMAT = _IGNORE_LIST_SIZE_FORMAT + _IGNORE_LIST_FORMAT
+_IGNORE_LIST_SIZE_LEN = struct.calcsize(_IGNORE_LIST_SIZE_FORMAT)
 _RELATIONS_SIZE_FORMAT = '<B'
 _RELATIONS_KEYS_LIST_FORMAT = '{}L'
 _RELATIONS_VALUES_LIST_FORMAT = '{}B'
@@ -50,6 +58,49 @@ class AbstractCacheRecord(object):
 
     def load(self):
         return self.__cache.load()
+
+
+class TmpBRProgressionCacheRecord(AbstractCacheRecord):
+
+    def __init__(self, cache):
+        super(TmpBRProgressionCacheRecord, self).__init__(cache)
+        self._modules = set()
+
+    @classmethod
+    def getRecordID(cls):
+        return CACHE_RECORDS_IDS.TMP_PROGRESSION
+
+    def addModule(self, value):
+        if value not in self._modules:
+            self._modules.add(value)
+            return True
+        return False
+
+    def getModules(self):
+        return self._modules
+
+    def pack(self):
+        modulesCount = len(self._modules)
+        return struct.pack(_MODULE_LIST_RECORD_FORMAT.format(modulesCount), modulesCount, *self._modules)
+
+    def unpack(self, record):
+        if record:
+            try:
+                modulesCount = struct.unpack(_MODULE_LIST_SIZE_FORMAT, record[:_MODULE_LIST_SIZE_LEN])[0]
+                if modulesCount > 0:
+                    self._modules = set(struct.unpack_from(_MODULE_LIST_FORMAT.format(modulesCount), record, offset=_MODULE_LIST_SIZE_LEN))
+            except struct.error as e:
+                LOG_ERROR('Could not unpack the following record: ', record, e)
+
+        else:
+            self._modules.clear()
+
+
+class BRInitialModules(TmpBRProgressionCacheRecord):
+
+    @classmethod
+    def getRecordID(cls):
+        return CACHE_RECORDS_IDS.INITIAL_MODULES
 
 
 class RelationsCacheRecord(AbstractCacheRecord):

@@ -6,13 +6,13 @@ from async import async, await, AsyncEvent, AsyncReturn, AsyncScope, BrokenPromi
 from frameworks.wulf import Window, WindowStatus, WindowSettings, ViewSettings
 from gui import SystemMessages, DialogsInterface
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsSingleItemModalMeta
+from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew_books.crew_books_buy_dialog_model import CrewBooksBuyDialogModel
 from gui.impl.lobby.dialogs.contents.common_balance_content import CommonBalanceContent
 from gui.impl.pub.dialog_window import DialogButtons, DialogLayer, DialogContent, DialogResult
-from gui.impl.wrappers.background_blur import WGUIBackgroundBlurSupportImpl
 from gui.impl.wrappers.user_format_string_arg_model import UserFormatStringArgModel
 from gui.shared.formatters.tankmen import getItemPricesViewModel
 from gui.shared.gui_items.Vehicle import getIconResourceName
@@ -36,16 +36,15 @@ class CrewBooksBuyDialog(Window):
         settings.parent = parent
         super(CrewBooksBuyDialog, self).__init__(settings)
         self.__bookGuiItem = self.__itemsCache.items.getItemByCD(crewBookCD)
-        self.__blur = WGUIBackgroundBlurSupportImpl()
         blurLayers = [APP_CONTAINERS_NAMES.VIEWS,
          APP_CONTAINERS_NAMES.SUBVIEW,
          APP_CONTAINERS_NAMES.BROWSER,
          APP_CONTAINERS_NAMES.WINDOWS]
+        self.__blur = CachedBlur(enabled=True, ownLayer=APP_CONTAINERS_NAMES.DIALOGS, layers=blurLayers)
         self.__bookCount = 1
         self.__scope = AsyncScope()
         self.__event = AsyncEvent(scope=self.__scope)
         self.__result = None
-        self.__blur.enable(APP_CONTAINERS_NAMES.DIALOGS, blurLayers)
         return
 
     @property
@@ -81,7 +80,7 @@ class CrewBooksBuyDialog(Window):
         self.__bookGuiItem = None
         self.__bookCount = None
         super(CrewBooksBuyDialog, self)._finalize()
-        self.__blur.disable()
+        self.__blur.fini()
         self.__scope.destroy()
         return
 

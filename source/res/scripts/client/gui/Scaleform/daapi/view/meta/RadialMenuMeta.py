@@ -10,11 +10,14 @@ class RadialMenuMeta(BaseDAAPIComponent):
     def onAction(self, action):
         self._printOverrideError('onAction')
 
+    def onHideCompleted(self):
+        self._printOverrideError('onHideCompleted')
+
     def as_buildDataS(self, data):
         return self.flashObject.as_buildData(data) if self._isDAAPIInited() else None
 
-    def as_showS(self, radialState, offset, ratio):
-        return self.flashObject.as_show(radialState, offset, ratio) if self._isDAAPIInited() else None
+    def as_showS(self, radialState, replyStateDiff, offset):
+        return self.flashObject.as_show(radialState, replyStateDiff, offset) if self._isDAAPIInited() else None
 
-    def as_hideS(self):
-        return self.flashObject.as_hide() if self._isDAAPIInited() else None
+    def as_hideS(self, allowAction):
+        return self.flashObject.as_hide(allowAction) if self._isDAAPIInited() else None

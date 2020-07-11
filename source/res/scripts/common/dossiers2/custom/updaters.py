@@ -4173,6 +4173,7 @@ def __updateFromAccountDossier127(compDescr):
      'versionFormat': 'H',
      'blocksLayout': blocksLayout}
     getHeader(updateCtx)
+    addBlock(updateCtx, 'battleRoyaleSeasons')
     formats = [('TenYearsCountdownStageMedal', 'B')]
     addRecords(updateCtx, 'achievements', formats, {})
     setVersion(updateCtx, 128)

@@ -85,3 +85,7 @@ class RankedVehicleXpSortKey(_VehicleSortKey):
 
     def _cmp(self, other):
         return cmp(other.info.xp - other.info.xpPenalty, self.info.xp - self.info.xpPenalty)
+
+
+def placeSortKey(a):
+    return (a.avatar.extensionInfo.get('playerRank', {}).get('rank', 0), a.player.realName) if a.avatar is not None else (-1, 0)

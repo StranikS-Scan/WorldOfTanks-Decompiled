@@ -20,6 +20,7 @@ class RankedCarouselDataProvider(HangarCarouselDataProvider):
         return (not cls._isSuitableForQueue(vehicle),
          not vehicle.isInInventory,
          not vehicle.isEvent,
+         not vehicle.isOnlyForBattleRoyaleBattles,
          not vehicle.isFavorite,
          not cls.__rankedController.hasVehicleRankedBonus(vehicle.intCD),
          GUI_NATIONS_ORDER_INDEX[vehicle.nationName],

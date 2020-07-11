@@ -8,6 +8,7 @@ from helpers.EffectsList import EffectsListPlayer
 class StaticSceneBoundEffects(object):
 
     def __init__(self):
+        super(StaticSceneBoundEffects, self).__init__()
         self._models = {}
         self.__incrementalEffectID = -1
 

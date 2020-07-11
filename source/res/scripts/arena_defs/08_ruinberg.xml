@@ -5,8 +5,8 @@
   <estimatedLoad>	0.3	</estimatedLoad>
   <roundLength>	900	</roundLength>
   <boundingBox>
-    <bottomLeft>	-400.0 -400.0	</bottomLeft>
-    <upperRight>	400.0 400.0	</upperRight>
+    <bottomLeft>	-425.000000 -400.000000	</bottomLeft>
+    <upperRight>	425.000000 450.000000	</upperRight>
   </boundingBox>
   <minimap>	spaces/08_ruinberg/mmap.dds	</minimap>
   <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
@@ -27,16 +27,15 @@
   <gameplayTypes>
     <ctf>
       <teamBasePositions>
-        <team1>
-          <position1>	-66.399994 306.100006	</position1>
-        </team1>
         <team2>
-          <position1>	-82.900002 -290.899994	</position1>
+          <position1>	-82.999992 -290.899963	</position1>
         </team2>
+        <team1>
+          <position1>	-66.399986 306.099945	</position1>
+        </team1>
       </teamBasePositions>
     </ctf>
     <domination>
-      <controlPoint>	-346 -60	</controlPoint>
       <teamSpawnPoints>
         <team1>
           <position>	-49 337	</position>
@@ -45,6 +44,7 @@
           <position>	-9 -282	</position>
         </team2>
       </teamSpawnPoints>
+      <controlPoint>	-346.377228 -60.446960	</controlPoint>
     </domination>
     <assault2>
       <winnerIfTimeout>	1	</winnerIfTimeout>
@@ -59,10 +59,9 @@
       </teamSpawnPoints>
       <teamBasePositions>
         <team1>
-          <position1>	-66.4 306.100	</position1>
-          <position2>	218.304 -88.969	</position2>
+          <position1>	-66.490181 305.920776	</position1>
+          <position2>	218.213928 -89.148491	</position2>
         </team1>
-        <team2></team2>
       </teamBasePositions>
     </assault2>
     <bootcamp>
@@ -76,14 +75,6 @@
         <wwmusicResultDrawn>	music_ruinberg_result_drawn	</wwmusicResultDrawn>
         <wwmusicResultDefeat>	music_ruinberg_result_defeat	</wwmusicResultDefeat>
       </wwmusicSetup>
-      <teamBasePositions>
-        <team1>
-          <position1>	-66.399994 306.100006	</position1>
-        </team1>
-        <team2>
-          <position1>	-82.900002 -290.899994	</position1>
-        </team2>
-      </teamBasePositions>
       <boundingBox>
         <bottomLeft>	-200.000000 -400.000000	</bottomLeft>
         <upperRight>	350.000000 400.000000	</upperRight>
@@ -91,6 +82,14 @@
       <maxPlayersInTeam>	1	</maxPlayersInTeam>
       <minimap>	spaces/08_ruinberg/mmap_bootcamp.dds	</minimap>
       <runDelay>	10	</runDelay>
+      <teamBasePositions>
+        <team2>
+          <position1>	-82.999992 -290.899963	</position1>
+        </team2>
+        <team1>
+          <position1>	-66.490181 305.920776	</position1>
+        </team1>
+      </teamBasePositions>
     </bootcamp>
   </gameplayTypes>
 </08_ruinberg.xml>

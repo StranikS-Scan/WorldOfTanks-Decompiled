@@ -154,7 +154,7 @@ class MusicController(object):
                 self.__eventID = None
             return
 
-    __lastBattleResultEventName = ''
+    __lastBattleResultEvents = {}
 
     def __init__(self):
         self.__overriddenEvents = {}
@@ -278,21 +278,17 @@ class MusicController(object):
             elif period == ARENA_PERIOD.AFTERBATTLE:
                 wwSetup = self.__specialSounds.arenaMusicSetup
                 self.stopAmbient()
-                MusicController.__lastBattleResultEventName = ''
                 if wwSetup is not None:
                     import SoundGroups
                     SoundGroups.g_instance.playSound2D(wwSetup.get('wwmusicEndbattleStop', ''))
-                winnerTeam = arena.periodAdditionalInfo[0]
-                if winnerTeam == BigWorld.player().team:
-                    if wwSetup is not None:
-                        MusicController.__lastBattleResultEventName = wwSetup.get('wwmusicResultWin', '')
-                elif winnerTeam == 0:
-                    if wwSetup is not None:
-                        MusicController.__lastBattleResultEventName = wwSetup.get('wwmusicResultDrawn', '')
-                elif wwSetup is not None:
-                    MusicController.__lastBattleResultEventName = wwSetup.get('wwmusicResultDefeat', '')
-                else:
-                    MusicController.__lastBattleResultEventName = arena.arenaType.battleLoseMusic if hasattr(arena.arenaType, 'battleLoseMusic') else ''
+                lastBattleEvents = {}
+                if wwSetup is not None:
+                    lastBattleEvents[MUSIC_EVENT_COMBAT_VICTORY] = wwSetup.get('wwmusicResultWin', '')
+                    lastBattleEvents[MUSIC_EVENT_COMBAT_DRAW] = wwSetup.get('wwmusicResultDrawn', '')
+                    lastBattleEvents[MUSIC_EVENT_COMBAT_LOSE] = wwSetup.get('wwmusicResultDefeat', '')
+                elif hasattr(arena.arenaType, 'battleLoseMusic'):
+                    lastBattleEvents[MUSIC_EVENT_COMBAT_LOSE] = arena.arenaType.battleLoseMusic
+                MusicController.__lastBattleResultEvents = lastBattleEvents
             return
 
     def __onArenaVehicleKilled(self, *args):
@@ -303,7 +299,7 @@ class MusicController(object):
     def __getArenaSoundEvent(self, eventId):
         soundEventName = None
         if eventId in _BATTLE_RESULT_MUSIC_EVENTS:
-            soundEventName = MusicController.__lastBattleResultEventName
+            soundEventName = MusicController.__lastBattleResultEvents.get(eventId, '')
         else:
             player = BigWorld.player()
             if not isPlayerAvatar():

@@ -26,29 +26,30 @@ class AvatarRecoveryMechanic(object):
 
     def handleKey(self, isDown, key, mods):
         if not self.__enabled:
-            return
+            return False
+        cmdMap = CommandMapping.g_instance
+        isFired = cmdMap.isFired(CommandMapping.CMD_REQUEST_RECOVERY, key)
+        if isFired and self.isVehicleAlive and not self.isObserver():
+            if isDown and not self.isForcedGuiControlMode():
+                if self.__currentRevcoveryState() in (None, RM_STATE.NOT_RECOVERING):
+                    ownVehicle = BigWorld.entity(self.playerVehicleID)
+                    ownVehicle.cell.recoveryMechanic_startRecovering()
+                    if not self.__keyCheckCallback:
+                        self.__keyCheckCallback = BigWorld.callback(0.1, partial(self.__checkKey, key))
+                if self.__currentRevcoveryState() == RM_STATE.TEMPORARILY_BLOCKED_FROM_RECOVERING:
+                    activated, _, timerDuration, endOfTimer = self.__lastRecoveryArgs
+                    self.guiSessionProvider.shared.feedback.setVehicleRecoveryState(self.playerVehicleID, activated, RM_STATE.TEMPORARILY_BLOCKED_RECOVER_TRY, timerDuration, endOfTimer)
+            elif not isDown:
+                if self.__currentRevcoveryState() == RM_STATE.RECOVERING:
+                    ownVehicle = BigWorld.entity(self.playerVehicleID)
+                    ownVehicle.cell.recoveryMechanic_stopRecovering()
+                    if self.__keyCheckCallback:
+                        BigWorld.cancelCallback(self.__keyCheckCallback)
+                        self.__keyCheckCallback = None
+            self.__recoveryRequested = True
+            return True
         else:
-            cmdMap = CommandMapping.g_instance
-            isFired = cmdMap.isFired(CommandMapping.CMD_REQUEST_RECOVERY, key)
-            if isFired and self.isVehicleAlive and not self.isObserver():
-                if isDown and not self.isForcedGuiControlMode():
-                    if self.__currentRevcoveryState() in (None, RM_STATE.NOT_RECOVERING):
-                        ownVehicle = BigWorld.entity(self.playerVehicleID)
-                        ownVehicle.cell.recoveryMechanic_startRecovering()
-                        if not self.__keyCheckCallback:
-                            self.__keyCheckCallback = BigWorld.callback(0.1, partial(self.__checkKey, key))
-                    if self.__currentRevcoveryState() == RM_STATE.TEMPORARILY_BLOCKED_FROM_RECOVERING:
-                        activated, _, timerDuration, endOfTimer = self.__lastRecoveryArgs
-                        self.guiSessionProvider.shared.feedback.setVehicleRecoveryState(self.playerVehicleID, activated, RM_STATE.TEMPORARILY_BLOCKED_RECOVER_TRY, timerDuration, endOfTimer)
-                elif not isDown:
-                    if self.__currentRevcoveryState() == RM_STATE.RECOVERING:
-                        ownVehicle = BigWorld.entity(self.playerVehicleID)
-                        ownVehicle.cell.recoveryMechanic_stopRecovering()
-                        if self.__keyCheckCallback:
-                            BigWorld.cancelCallback(self.__keyCheckCallback)
-                            self.__keyCheckCallback = None
-                self.__recoveryRequested = True
-            return
+            return False
 
     def onBecomeNonPlayer(self):
         if not self.__enabled:

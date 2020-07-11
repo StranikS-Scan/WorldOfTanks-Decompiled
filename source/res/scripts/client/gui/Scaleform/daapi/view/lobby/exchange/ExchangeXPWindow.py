@@ -8,7 +8,6 @@ from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.impl import backport
 from gui.shop import showBuyGoldForXpWebOverlay
 from gui.shared.formatters import icons
 from gui.shared.formatters.text_styles import builder
@@ -19,6 +18,7 @@ from gui.shared.utils.decorators import process
 from helpers import i18n, dependency
 from skeletons.gui.game_control import IWalletController
 from skeletons.gui.shared import IItemsCache
+from gui.impl import backport
 
 class ExchangeXPWindow(ExchangeXpWindowMeta):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -65,8 +65,9 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
                 vehicle = self.itemsCache.items.getItemByCD(vehicleCD)
                 if not vehicle.xp or not vehicle.activeInNationGroup:
                     continue
+                isBattleRoyaleVehicle = vehicle.isOnlyForBattleRoyaleBattles
                 values.append({'id': vehicle.intCD,
-                 'vehicleType': getVehicleTypeAssetPath(vehicle.type),
+                 'vehicleType': getVehicleTypeAssetPath(vehicle.type) if not isBattleRoyaleVehicle else None,
                  'vehicleName': vehicle.shortUserName,
                  'xp': vehicle.xp,
                  'xpStrValue': backport.getIntegralFormat(vehicle.xp),

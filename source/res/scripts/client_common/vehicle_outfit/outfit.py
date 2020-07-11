@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client_common/vehicle_outfit/outfit.py
 import typing
 from collections import Counter, namedtuple
+from constants import IS_EDITOR
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.gui_item import HasStrCD
 from items.components.c11n_constants import ApplyArea, CustomizationType, MAX_PROJECTION_DECALS
@@ -59,7 +60,7 @@ REGIONS_BY_SLOT_TYPE = {container.getAreaID():{slotType:slot.getRegions() for sl
 class Outfit(HasStrCD):
     __slots__ = ('_id', '_styleDescr', '_containers', '_vehicleCD', '__itemsCounter')
 
-    def __init__(self, strCompactDescr=None, component=None, vehicleCD=''):
+    def __init__(self, strCompactDescr=None, component=None, vehicleCD='', vehicleType=None):
         super(Outfit, self).__init__(strCompactDescr)
         self._containers = {}
         self._vehicleCD = vehicleCD
@@ -75,7 +76,7 @@ class Outfit(HasStrCD):
             self._styleDescr = getItemByCompactDescr(intCD)
         else:
             self._styleDescr = None
-        self._construct()
+        self._construct(vehicleType=vehicleType)
         for container in self._containers.itervalues():
             container.unpack(component)
 
@@ -90,21 +91,26 @@ class Outfit(HasStrCD):
             result += '\n' + containers
         return result
 
-    def _construct(self):
+    def _construct(self, vehicleType=None):
         for container in scaffold():
             self._containers[container.getAreaID()] = container
 
         if not self.vehicleCD:
             return
-        vehicleDescriptor = VehicleDescr(compactDescr=self.vehicleCD)
-        projDecalType = SLOT_TYPE_TO_ANCHOR_TYPE_MAP[GUI_ITEM_TYPE.PROJECTION_DECAL]
-        areasAnchors = ((anchor for anchor in vehicleDescriptor.chassis.slotsAnchors),
-         (anchor for anchor in vehicleDescriptor.hull.slotsAnchors),
-         (anchor for anchor in vehicleDescriptor.turret.slotsAnchors),
-         (anchor for anchor in vehicleDescriptor.gun.slotsAnchors))
-        projDecalRegions = [ anchor.slotId for areaAnchors in areasAnchors for anchor in areaAnchors if anchor.type == projDecalType ]
-        projectionDeclasMultiSlot = ProjectionDecalsMultiSlot(slotTypes=(GUI_ITEM_TYPE.PROJECTION_DECAL,), regions=projDecalRegions, limit=MAX_PROJECTION_DECALS)
-        self.misc.setSlotFor(GUI_ITEM_TYPE.PROJECTION_DECAL, projectionDeclasMultiSlot)
+        else:
+            if IS_EDITOR and vehicleType is not None:
+                vehicleDescriptor = vehicleType
+            else:
+                vehicleDescriptor = VehicleDescr(compactDescr=self.vehicleCD)
+            projDecalType = SLOT_TYPE_TO_ANCHOR_TYPE_MAP[GUI_ITEM_TYPE.PROJECTION_DECAL]
+            areasAnchors = ((anchor for anchor in vehicleDescriptor.chassis.slotsAnchors),
+             (anchor for anchor in vehicleDescriptor.hull.slotsAnchors),
+             (anchor for anchor in vehicleDescriptor.turret.slotsAnchors),
+             (anchor for anchor in vehicleDescriptor.gun.slotsAnchors))
+            projDecalRegions = [ anchor.slotId for areaAnchors in areasAnchors for anchor in areaAnchors if anchor.type == projDecalType ]
+            projectionDeclasMultiSlot = ProjectionDecalsMultiSlot(slotTypes=(GUI_ITEM_TYPE.PROJECTION_DECAL,), regions=projDecalRegions, limit=MAX_PROJECTION_DECALS)
+            self.misc.setSlotFor(GUI_ITEM_TYPE.PROJECTION_DECAL, projectionDeclasMultiSlot)
+            return
 
     def pack(self):
         component = CustomizationOutfit()

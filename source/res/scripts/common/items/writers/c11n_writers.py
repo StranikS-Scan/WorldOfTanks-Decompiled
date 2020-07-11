@@ -1,14 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/writers/c11n_writers.py
 import Math
-import math
-from items import _xml, parseIntCompactDescr
-import os
-from realm_utils import ResMgr
-from soft_exception import SoftException
+import ResMgr
+import typing
+import re
 import items.vehicles as iv
-from items.components.c11n_constants import SeasonType, DecalType
-from nations import NAMES, INDICES
+from items import _xml, parseIntCompactDescr
+from soft_exception import SoftException
+from items.components.c11n_constants import SeasonType, DecalType, CamouflageTilingType, RENT_DEFAULT_BATTLES, EMPTY_ITEM_ID
+from items.components.c11n_components import StyleItem, ApplyArea
+from items.customizations import FieldTypes, FieldFlags, FieldType, SerializableComponent, SerializationException
+from items.type_traits import equalComparator
+from nations import NAMES
 
 def findOrCreate(section, subsectionName):
     if not section.has_key(subsectionName):
@@ -48,6 +51,8 @@ def writeItemType(writer, items, folder, itemName):
     isections = {}
     changedRefs = set()
     for id, item in items.items():
+        if id == EMPTY_ITEM_ID:
+            continue
         if item.editorData.reference is None:
             SoftException('Item {} has no reference, data format has changed?'.format(itemName + str(id)))
         ref = item.editorData.reference
@@ -125,24 +130,39 @@ def parseReference(reference, itemName, refsections, gsections, isections):
         return
 
 
+def _natkey(s):
+
+    def convert(t):
+        try:
+            return int(t)
+        except ValueError:
+            return t.lower()
+
+    return map(convert, re.split('([0-9]+)', s))
+
+
+def natsorted(seq):
+    return sorted(seq, key=_natkey)
+
+
 class VehicleFilterTagsConvertor(object):
 
     def convertToString(self, valuesList):
-        result = ' '.join(valuesList)
+        result = ' '.join(natsorted(valuesList))
         return result
 
 
 class VehicleFilterLevelConvertor(object):
 
     def convertToString(self, valuesList):
-        result = ' '.join(map(str, valuesList))
+        result = ' '.join(map(str, sorted(valuesList)))
         return result
 
 
 class VehicleFilterNationConvertor(object):
 
     def convertToString(self, valuesList):
-        result = ' '.join(map(lambda item: NAMES[item], valuesList))
+        result = ' '.join(natsorted(map(lambda item: NAMES[item], valuesList)))
         return result
 
 
@@ -156,7 +176,7 @@ class VehicleFilterVehicleConvertor(object):
             tank = g_cache.vehicle(nationId, vehId)
             return tank.name
 
-        result = ' '.join(map(lambda item: getTankName(item), valuesList))
+        result = ' '.join(natsorted(map(lambda item: getTankName(item), valuesList)))
         return result
 
 
@@ -236,8 +256,8 @@ class BaseCustomizationItemXmlWriter(object):
         changed |= rewriteInt(gsection, isection, 'maxNumber', item.maxNumber, 0)
         changed |= rewriteTags(gsection, isection, item.tags)
         changed |= rewriteString(gsection, isection, 'season', encodeEnum(SeasonType, item.season), 'UNDEFINED')
-        changed |= rewriteString(gsection, isection, 'userString', item.i18n.userKey)
-        changed |= rewriteString(gsection, isection, 'description', item.i18n.descriptionKey)
+        changed |= rewriteString(gsection, isection, 'userString', item.i18n.userKey, '')
+        changed |= rewriteString(gsection, isection, 'description', item.i18n.descriptionKey, '')
         changed |= saveVehicleFilter(item, gsection, isection)
         return changed
 
@@ -256,7 +276,7 @@ class PaintXmlWriter(BaseCustomizationItemXmlWriter):
             c_g = color >> 8 & 255
             c_b = color & 255
         color = Math.Vector4(c_b, c_g, c_r, c_a)
-        changed |= rewriteVector4(gsection, isection, 'color', color, 0.0)
+        changed |= rewriteVector4(gsection, isection, 'color', color)
         return changed
 
 
@@ -286,6 +306,7 @@ class CamouflageXmlWriter(BaseCustomizationItemXmlWriter):
         changed |= rewriteCamouflageRotation(gsection, isection, item)
         changed |= rewriteCamouflageScales(gsection, isection, item)
         changed |= rewriteCamouflageTiling(gsection, isection, item)
+        changed |= rewriteCamouflageTilingSettings(gsection, isection, item)
         return changed
 
 
@@ -329,13 +350,143 @@ class ModificationXmlWriter(BaseCustomizationItemXmlWriter):
         return changed
 
 
+class ComponentXmlSerializer(object):
+
+    def __init__(self):
+        super(ComponentXmlSerializer, self).__init__()
+
+    def encode(self, section, target):
+        return self.__encodeCustomType(section, None, target)
+
+    def __encodeCustomType(self, section, key, obj):
+        changed = False
+        if key is None:
+            objSection = section
+        else:
+            objSection = section[key]
+            if objSection is None:
+                objSection = section.createSection(key)
+                changed = True
+        for fieldName, fieldType in obj.fields.iteritems():
+            if fieldType.flags & FieldFlags.DEPRECATED:
+                continue
+            if fieldType.flags & FieldFlags.NON_XML:
+                continue
+            value = getattr(obj, fieldName)
+            if value is not None:
+                changed |= self.__encodeValue(objSection, fieldName, value, fieldType)
+            changed |= objSection.deleteSection(fieldName)
+
+        return changed
+
+    def __encodeArray(self, section, key, value, fieldType):
+        changed = False
+        if key is None:
+            array = section
+        else:
+            array = section[key]
+            if array is None:
+                array = section.createSection(key)
+                changed = True
+        for name, child in array.items():
+            if name != 'item':
+                array.deleteSection(child)
+                changed = True
+
+        with _xml.ListRewriter(array, 'item') as children:
+            for item in value:
+                preferred = None
+                try:
+                    if 'id' in item:
+                        preferred = lambda s: s.readInt('id') == item.id
+                except TypeError:
+                    pass
+
+                child = children.next(preferred)
+                changed |= self.__encodeValue(child, None, item, fieldType)
+
+        return changed
+
+    def __encodeValue(self, section, key, value, fieldType):
+        if fieldType.type == FieldTypes.VARINT:
+            return _xml.rewriteInt(section, key, value)
+        if fieldType.type == FieldTypes.FLOAT:
+            return _xml.rewriteFloat(section, key, value)
+        if fieldType.type == FieldTypes.APPLY_AREA_ENUM:
+            return self.__encodeEnum(section, key, value, ApplyArea, fieldType.flags)
+        if fieldType.type == FieldTypes.TAGS:
+            return _xml.rewriteString(section, key, ' '.join(value))
+        if fieldType.type == FieldTypes.STRING:
+            return _xml.rewriteString(section, key, value)
+        if fieldType.type == FieldTypes.OPTIONS_ENUM:
+            return _xml.rewriteInt(section, key, value)
+        if fieldType.type & FieldTypes.TYPED_ARRAY:
+            ft = fieldType._asdict()
+            ft['type'] ^= FieldTypes.TYPED_ARRAY
+            return self.__encodeArray(section, key, value, FieldType(**ft))
+        if fieldType.type >= FieldTypes.CUSTOM_TYPE_OFFSET:
+            return self.__encodeCustomType(section, key, value)
+        raise SerializationException('Unsupported field type %d' % (fieldType.type,))
+
+    def __encodeEnum(self, section, key, value, enum, flags):
+        if flags & FieldFlags.SAVE_AS_STRING:
+            items = []
+            degree = 1
+            while value > 0:
+                value = value >> 1
+                if value % 2 == 1:
+                    items.append(encodeEnum(enum, 1 << degree))
+                degree += 1
+
+            return _xml.rewriteString(section, key, ' '.join(items).upper())
+        return _xml.rewriteInt(section, key, value)
+
+
 class StyleXmlWriter(BaseCustomizationItemXmlWriter):
+    __outfitSerializer = ComponentXmlSerializer()
 
     def write(self, item, gsection, isection):
         changed = super(StyleXmlWriter, self).write(item, gsection, isection)
-        changed |= rewriteBool(gsection, isection, 'isRent', item.isRent, False)
-        changed |= rewriteString(gsection, isection, 'modelsSet', item.modelsSet, '')
-        changed |= rewriteInt(gsection, isection, 'rentCount', item.rentCount, 0)
+        changed |= rewriteBool(gsection, isection, 'isRent', item.isRent)
+        if item.isRent:
+            changed |= rewriteInt(gsection, isection, 'rentCount', item.rentCount, RENT_DEFAULT_BATTLES)
+        else:
+            changed |= isection.deleteSection('rentCount')
+        changed |= rewriteString(gsection, isection, 'modelsSet', item.modelsSet)
+        changed |= self.__writeOutfits(item.outfits, isection)
+        return changed
+
+    def __writeOutfits(self, outfits, section):
+        singleOutfit = None
+        seasonsMask = 0
+        for season, outfit in outfits.iteritems():
+            seasonsMask |= season
+            if singleOutfit is None:
+                singleOutfit = outfit
+                continue
+            if outfit != singleOutfit:
+                singleOutfit = None
+                break
+
+        if seasonsMask != SeasonType.ALL:
+            singleOutfit = None
+        changed = False
+        with _xml.ListRewriter(section, 'outfits/outfit') as oSections:
+            if singleOutfit is None:
+                for season, outfit in outfits.iteritems():
+                    changed |= self.__writeOutfit(oSections, season, outfit)
+
+            else:
+                changed |= self.__writeOutfit(oSections, seasonsMask, singleOutfit)
+            changed |= oSections.changed
+        return changed
+
+    def __writeOutfit(self, oSections, season, outfit):
+        changed = False
+        seasonName = encodeEnum(SeasonType, season)
+        oSection = oSections.next(lambda s: s.readString('season').lower() == seasonName)
+        changed |= _xml.rewriteString(oSection, 'season', seasonName)
+        changed |= self.__outfitSerializer.encode(oSection, outfit)
         return changed
 
 
@@ -358,7 +509,7 @@ class InsigniaXmlWriter(BaseCustomizationItemXmlWriter):
         return changed
 
 
-def writeFintAlphabet(item):
+def writeFontAlphabet(item):
     xmlPath = item.editorData.alphabet
     section = ResMgr.openSection(xmlPath)
     if section is None:
@@ -387,7 +538,7 @@ class FontXmlWriter(object):
     def write(self, item, isection):
         changed = _xml.rewriteString(isection, 'texture', item.texture)
         changed |= _xml.rewriteString(isection, 'alphabet', item.alphabet)
-        writeFintAlphabet(item)
+        writeFontAlphabet(item)
         return changed
 
 
@@ -398,33 +549,34 @@ def selectSection(gsection, isection, subsectionName):
         return gsection
 
 
-def rewriteInt(gsection, isection, subsectionName, value, defaultValue=None, createNew=True):
-    return _xml.rewriteInt(selectSection(gsection, isection, subsectionName), subsectionName, value, defaultValue, createNew)
+def _rewriteFn(tp):
+    eq = equalComparator(tp)
+    readTp = 'read' + tp
+    writeTp = 'write' + tp
+
+    def read(section, name, defaultValue=None):
+        r = getattr(section, readTp)
+        return r(name) if defaultValue is None else r(name, defaultValue)
+
+    def rewrite(gsection, isection, name, value, defaultValue=None):
+        if gsection.has_key(name):
+            defaultValue = read(gsection, name, defaultValue)
+        if eq(read(isection, name, defaultValue), value):
+            return False
+        w = getattr(isection, writeTp)
+        w(name, value)
+        return True
+
+    return rewrite
 
 
-def rewriteBool(gsection, isection, subsectionName, value, defaultValue=None, createNew=True):
-    return _xml.rewriteBool(selectSection(gsection, isection, subsectionName), subsectionName, value, defaultValue, createNew)
-
-
-def rewriteString(gsection, isection, subsectionName, value, defaultValue=None, createNew=True):
-    return _xml.rewriteString(selectSection(gsection, isection, subsectionName), subsectionName, value, defaultValue, createNew)
-
-
-def rewriteFloat(gsection, isection, subsectionName, value, defaultValue=None, createNew=True):
-    return _xml.rewriteFloat(selectSection(gsection, isection, subsectionName), subsectionName, value, defaultValue, createNew)
-
-
-def rewriteVector2(gsection, isection, subsectionName, value, defaultValue=None, createNew=True):
-    return _xml.rewriteVector2(selectSection(gsection, isection, subsectionName), subsectionName, value, defaultValue, createNew)
-
-
-def rewriteVector3(gsection, isection, subsectionName, value, defaultValue=None, createNew=True):
-    return _xml.rewriteVector3(selectSection(gsection, isection, subsectionName), subsectionName, value, defaultValue, createNew)
-
-
-def rewriteVector4(gsection, isection, subsectionName, value, defaultValue=None, createNew=True):
-    return _xml.rewriteVector4(selectSection(gsection, isection, subsectionName), subsectionName, value, defaultValue, createNew)
-
+rewriteInt = _rewriteFn('Int')
+rewriteBool = _rewriteFn('Bool')
+rewriteString = _rewriteFn('String')
+rewriteFloat = _rewriteFn('Float')
+rewriteVector2 = _rewriteFn('Vector2')
+rewriteVector3 = _rewriteFn('Vector3')
+rewriteVector4 = _rewriteFn('Vector4')
 
 def rewriteTags(gsection, isection, tags):
     section = selectSection(gsection, isection, 'tags')
@@ -437,7 +589,7 @@ def rewriteTags(gsection, isection, tags):
         rewrite = oldTags != tags
     if rewrite:
         tagsStr = ' '.join(tags)
-        return _xml.rewriteFloat(section, 'tags', tagsStr)
+        return _xml.rewriteString(section, 'tags', tagsStr)
     else:
         return False
 
@@ -519,6 +671,28 @@ def rewriteCamouflageTiling(gsection, isection, camouflageItem):
     return changed
 
 
+def rewriteCamouflageTilingSettings(gsection, isection, camouflageItem):
+    changed = False
+    tilingSettingsSection = selectSection(gsection, isection, 'tilingSettings')
+    tilingSettings = camouflageItem.tilingSettings
+    tilingType = tilingSettings[0]
+    if tilingSettingsSection.has_key('tilingSettings'):
+        tilingSettingsSection = tilingSettingsSection['tilingSettings']
+    elif tilingType != CamouflageTilingType.LEGACY:
+        tilingSettingsSection = tilingSettingsSection.createSection('tilingSettings')
+    else:
+        return changed
+    tilingTypeStr = encodeEnum(CamouflageTilingType, tilingType)
+    changed |= _xml.rewriteString(tilingSettingsSection, 'type', tilingTypeStr, 'legacy')
+    if tilingSettings[1] is not None:
+        factor = Math.Vector2(tilingSettings[1][0], tilingSettings[1][1])
+        changed |= _xml.rewriteVector2(tilingSettingsSection, 'factor', factor, [0, 0])
+    if tilingSettings[2] is not None:
+        offset = Math.Vector2(tilingSettings[2][0], tilingSettings[2][1])
+        changed |= _xml.rewriteVector2(tilingSettingsSection, 'offset', offset, [0, 0])
+    return changed
+
+
 def encodeEnum(enumClass, intValue):
     for enum, value in enumClass.__dict__.iteritems():
         if enum.startswith('_'):
@@ -526,4 +700,4 @@ def encodeEnum(enumClass, intValue):
         if intValue == value:
             return enum.lower()
 
-    return None
+    raise SerializationException('failed to convert {} to enum {}'.format(intValue, enumClass.__name__))

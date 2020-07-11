@@ -62,9 +62,9 @@ class CallbacksSetByID(object):
 
         return
 
-    def delayCallback(self, uniqueID, seconds, function):
+    def delayCallback(self, uniqueID, seconds, function, *args, **kwargs):
         self.stopCallback(uniqueID)
-        self.__callbackIDs[uniqueID] = BigWorld.callback(seconds, functools.partial(self.__handleCallback, uniqueID, function))
+        self.__callbackIDs[uniqueID] = BigWorld.callback(seconds, functools.partial(self.__funcWrapper, uniqueID, function, *args, **kwargs))
 
     def stopCallback(self, uniqueID):
         callbackID = self.__callbackIDs.pop(uniqueID, None)
@@ -72,9 +72,12 @@ class CallbacksSetByID(object):
             BigWorld.cancelCallback(callbackID)
         return
 
-    def __handleCallback(self, uniqueID, function):
+    def hasDelayedCallbackID(self, uniqueID):
+        return uniqueID in self.__callbackIDs
+
+    def __funcWrapper(self, uniqueID, func, *args, **kwargs):
         self.__callbackIDs[uniqueID] = None
-        function(uniqueID)
+        func(*args, **kwargs)
         return
 
 

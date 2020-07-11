@@ -14,6 +14,8 @@ from gui.shared.money import MONEY_UNDEFINED
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
 from gui.shared.utils.functions import makeTooltip, stripColorTagDescrTags
 from helpers import i18n, time_utils
+from gui.impl.gen import R
+from gui.impl import backport
 TXT_GAP_FOR_BIG_TITLE = 2
 TXT_GAP_FOR_SMALL_TITLE = 3
 RENDERERS_ALIGN_LEFT = 'renderers_left'
@@ -204,6 +206,35 @@ def packItemTitleDescBlockData(title=None, desc=None, img=None, imgPadding=None,
         if highlightPadding is not None:
             data['highlightPadding'] = highlightPadding
     return packBlockDataItem(linkage, data, padding)
+
+
+def packAtlasIconTextBlockData(title=None, desc=None, atlas=None, icon=None, iconPadding=None, iconAtLeft=True, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', ignoreIconSize=False, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_ATLASICON_TEXT_BLOCK_LINKAGE, padding=None, descPadding=None, descLeading=0, titleAtMiddle=False, blockWidth=0, snapIcon=False):
+    data = {'spriteAtLeft': iconAtLeft,
+     'snapImage': snapIcon,
+     'textsAlign': txtAlign,
+     'ignoreIconSize': ignoreIconSize,
+     'titleAtMiddle': titleAtMiddle}
+    if title is not None:
+        data['title'] = title
+    if desc is not None:
+        data['description'] = desc
+    if atlas is not None:
+        data['atlasName'] = atlas
+    if icon is not None:
+        data['iconName'] = icon
+    if iconPadding is not None:
+        data['spritePadding'] = iconPadding
+    if txtPadding is not None:
+        data['textsPadding'] = txtPadding
+    if txtGap != 0:
+        data['textsGap'] = txtGap
+    if txtOffset != 0:
+        data['textsOffset'] = txtOffset
+    if descPadding is not None:
+        data['descPadding'] = descPadding
+    if descLeading != 0:
+        data['descLeading'] = descLeading
+    return packBlockDataItem(linkage, data, padding, blockWidth)
 
 
 def packRendererTextBlockData(rendererType, dataType, rendererData, title=None, desc=None, rendererPadding=None, imgAtLeft=True, titleAtMiddle=False, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_RENDERER_TEXT_BLOCK_LINKAGE, padding=None):
@@ -445,11 +476,21 @@ def packMoneyAndXpBlocks(tooltipBlocks, btnType, valueBlocks, alternativeData=No
         tooltipBlocks.append(packBuildUpBlockData(valueBlocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
     if btnType != CURRENCIES_CONSTANTS.GOLD:
         decsBlocks = list()
-        decsBlocks.append(packTextBlockData(text_styles.main(TOOLTIPS.getHeaderBtnDesc(alternativeData.get('btnDesc') or btnType)), padding=packPadding(bottom=15)))
-        tooltipBlocks.append(packBuildUpBlockData(decsBlocks))
-    actionBlocks = list()
-    actionBlocks.append(packAlignedTextBlockData(text=text_styles.standard(TOOLTIPS.getHeaderBtnClickDesc(alternativeData.get('btnClickDesc') or btnType)), align=alternativeData.get('btnClickDescAlign') or BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
-    tooltipBlocks.append(packBuildUpBlockData(actionBlocks))
+        descLinkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE
+        if btnType == CURRENCIES_CONSTANTS.CRYSTAL:
+            descLinkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILD_BLOCK_VIOLET_BIG_LINKAGE
+            padding = packPadding(bottom=8)
+            decsBlocks.append(packTextBlockData(text_styles.middleTitle(backport.text(R.strings.tooltips.header.buttons.crystal.descriptionTitle())), padding=padding))
+            descVehicle = text_styles.vehicleStatusInfoText(backport.text(R.strings.tooltips.header.buttons.crystal.descriptionVehicle()))
+            decsBlocks.append(packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.header.buttons.crystal.description0(), vehicle=descVehicle)), padding=padding))
+            decsBlocks.append(packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.header.buttons.crystal.description1())), padding=packPadding(bottom=20)))
+        else:
+            decsBlocks.append(packTextBlockData(text_styles.main(TOOLTIPS.getHeaderBtnDesc(alternativeData.get('btnDesc') or btnType)), padding=packPadding(bottom=15)))
+        tooltipBlocks.append(packBuildUpBlockData(decsBlocks, linkage=descLinkage))
+    if btnType != CURRENCIES_CONSTANTS.CRYSTAL:
+        actionBlocks = list()
+        actionBlocks.append(packAlignedTextBlockData(text=text_styles.standard(TOOLTIPS.getHeaderBtnClickDesc(alternativeData.get('btnClickDesc') or btnType)), align=alternativeData.get('btnClickDescAlign') or BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
+        tooltipBlocks.append(packBuildUpBlockData(actionBlocks))
     return tooltipBlocks
 
 

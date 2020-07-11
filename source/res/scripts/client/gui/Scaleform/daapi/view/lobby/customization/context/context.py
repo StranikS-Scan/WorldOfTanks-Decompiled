@@ -2,7 +2,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/context/context.py
 import logging
 import typing
+import BigWorld
 import Event
+from AccountCommands import isCodeValid
 from CurrentVehicle import g_currentVehicle
 from gui import g_tankActiveCamouflage
 from gui.Scaleform.daapi.view.lobby.customization.context.custom_mode import CustomMode
@@ -13,6 +15,7 @@ from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTab
 from gui.Scaleform.daapi.view.lobby.customization.vehicle_anchors_updater import VehicleAnchorsUpdater
 from gui.customization.constants import CustomizationModes
 from gui.hangar_cameras.c11n_hangar_camera_manager import C11nHangarCameraManager
+from gui.shared.utils import code2str
 from gui.shared.utils.decorators import process
 from helpers import dependency
 from items.components.c11n_constants import SeasonType
@@ -55,7 +58,6 @@ class _CustomizationEvents(object):
         self.onAnchorsStateChanged = Event.Event(self._eventsManager)
         self.onGetItemBackToHand = Event.Event(self._eventsManager)
         self.onUpdateSwitchers = Event.Event(self._eventsManager)
-        self.onResetItemsNovelty = Event.Event(self._eventsManager)
         self.onInstallNextCarouselItem = Event.Event(self._eventsManager)
         self.onShowStyleInfo = Event.Event(self._eventsManager)
         self.onHideStyleInfo = Event.Event(self._eventsManager)
@@ -74,6 +76,7 @@ class CustomizationContext(object):
     _hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self):
+        self._vehicle = None
         self.__season = None
         self.__modeId = None
         self.__startMode = None
@@ -141,6 +144,7 @@ class CustomizationContext(object):
     def init(self, season=None, modeId=None, tabId=None):
         if not g_currentVehicle.isPresent():
             raise SoftException('There is no vehicle in hangar for customization.')
+        self._vehicle = g_currentVehicle.item
         self._itemsCache.onSyncCompleted += self.__onCacheResync
         self._service.onOutfitChanged += self.__onOutfitChanged
         g_currentVehicle.onChangeStarted += self.__onVehicleChangeStarted
@@ -269,6 +273,14 @@ class CustomizationContext(object):
             return True
         return self.mode.isOutfitsModified()
 
+    def resetItemsNovelty(self, itemsList):
+
+        def _callback(resultID):
+            if not isCodeValid(resultID):
+                _logger.error('Error occurred while trying to reset c11n items novelty, reason by resultId = %d: %s', resultID, code2str(resultID))
+
+        BigWorld.player().shop.resetC11nItemsNovelty([ (g_currentVehicle.item.intCD, intCD) for intCD in itemsList ], _callback)
+
     def __onCacheResync(self, *_):
         if g_currentVehicle.isPresent():
             for mode in self.__modes.itervalues():
@@ -279,16 +291,31 @@ class CustomizationContext(object):
         self.events.onCacheResync()
 
     def __onVehicleChanged(self):
-        for mode in self.__modes.itervalues():
-            if mode.isInited:
-                mode.updateOutfits()
+        if self._vehicle is None or not g_currentVehicle.isPresent():
+            _logger.error('There is no vehicle in hangar for customization.')
+            return
+        else:
+            preserve = self._vehicle.intCD == g_currentVehicle.item.intCD
+            self._vehicle = g_currentVehicle.item
+            for mode in self.__modes.itervalues():
+                if mode.isInited:
+                    mode.updateOutfits(preserve=preserve)
 
-        self.refreshOutfit()
+            self.refreshOutfit()
+            return
 
     def __onVehicleChangeStarted(self):
-        for mode in self.__modes.itervalues():
-            if mode.isInited:
-                mode.onVehicleChangeStarted()
+        if self._vehicle is None or not g_currentVehicle.isPresent():
+            _logger.error('There is no vehicle in hangar for customization.')
+            return
+        elif self._vehicle.intCD == g_currentVehicle.item.intCD:
+            return
+        else:
+            for mode in self.__modes.itervalues():
+                if mode.isInited:
+                    mode.onVehicleChangeStarted()
+
+            return
 
     def __onOutfitChanged(self):
         self.refreshOutfit()

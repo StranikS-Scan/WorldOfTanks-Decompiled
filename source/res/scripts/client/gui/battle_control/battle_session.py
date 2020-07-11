@@ -102,16 +102,16 @@ class BattleSessionProvider(IBattleSessionProvider):
         return
 
     def updateObservedVehicleData(self, vID, extraData):
-        ctrl = self.__sharedRepo.ammo
-        if ctrl is not None:
-            ctrl.clear(False)
-            ctrl.setGunSettings(extraData.gunSettings)
+        ammoCtrl = self.__sharedRepo.ammo
+        if ammoCtrl is not None:
+            ammoCtrl.clear(False)
+            ammoCtrl.setGunSettings(extraData.gunSettings)
             for intCD, quantity, quantityInClip in extraData.orderedAmmo:
-                ctrl.setShells(intCD, quantity, quantityInClip)
+                ammoCtrl.setShells(intCD, quantity, quantityInClip)
 
-            ctrl.setCurrentShellCD(extraData.currentShellCD)
-            ctrl.setNextShellCD(extraData.nextShellCD)
-            ctrl.setGunReloadTime(extraData.reloadTimeLeft, extraData.reloadBaseTime)
+            ammoCtrl.setCurrentShellCD(extraData.currentShellCD)
+            ammoCtrl.setNextShellCD(extraData.nextShellCD)
+            ammoCtrl.setGunReloadTime(extraData.reloadTimeLeft, extraData.reloadBaseTime)
         ctrl = self.__sharedRepo.equipments
         if ctrl is not None:
             ctrl.clear(False)
@@ -129,7 +129,27 @@ class BattleSessionProvider(IBattleSessionProvider):
         if ctrl is not None:
             ctrl.refreshVehicleStateValue(VEHICLE_VIEW_STATE.HEALTH)
             ctrl.notifyStateChanged(VEHICLE_VIEW_STATE.VEHICLE_CHANGED, vID)
+            vehicle = ctrl.getControllingVehicle()
+            if vehicle is not None:
+                shotIdx = ammoCtrl.getGunSettings().getShotIndex(extraData.currentShellCD)
+                if shotIdx > -1:
+                    vehicle.typeDescriptor.activeGunShotIndex = shotIdx
+        self.updateVehicleEffects()
         return
+
+    def updateVehicleEffects(self):
+        if not self.__sharedRepo.vehicleState:
+            return
+        else:
+            vehicle = self.__sharedRepo.vehicleState.getControllingVehicle()
+            if vehicle is not None:
+                if vehicle.stunInfo > 0.0:
+                    vehicle.updateStunInfo()
+                if vehicle.inspired:
+                    vehicle.set_inspired()
+                if vehicle.healing:
+                    vehicle.set_healing()
+            return
 
     def getArenaDP(self):
         return self.__arenaDP
@@ -167,7 +187,7 @@ class BattleSessionProvider(IBattleSessionProvider):
         return
 
     def getExitResult(self):
-        if not self.__isReplayPlaying and not self.__arenaVisitor.gui.isTrainingBattle() and not self.__arenaVisitor.gui.isEventBattle():
+        if not self.__isReplayPlaying and not self.__arenaVisitor.gui.isTrainingBattle():
             vInfo = self.__arenaDP.getVehicleInfo()
             vStats = self.__arenaDP.getVehicleStats()
             if self.__arenaVisitor.hasRespawns():
@@ -338,10 +358,21 @@ class BattleSessionProvider(IBattleSessionProvider):
             ctrl.handleShortcutChatCommand(key)
             return
 
+    def handleContexChatCommand(self, key):
+        ctrl = self.__sharedRepo.chatCommands
+        if ctrl is None:
+            return
+        else:
+            ctrl.handleContexChatCommand(key)
+            return
+
     def __pe_onBattleResultsReceived(self, isActiveVehicle, _):
         if isActiveVehicle and not BattleReplay.g_replayCtrl.isPlaying:
             arenaUniqueID = self.__arenaVisitor.getArenaUniqueID()
-            LOG_DEBUG('Try to exit from arena', arenaUniqueID)
+            arenaBonusType = self.__arenaVisitor.getArenaBonusType()
+            LOG_DEBUG('Try to exit from arena', arenaUniqueID, arenaBonusType)
             if arenaUniqueID:
                 self.__ctx.lastArenaUniqueID = arenaUniqueID
+            if arenaBonusType:
+                self.__ctx.lastArenaBonusType = arenaBonusType
             BattleSessionProvider.exit()

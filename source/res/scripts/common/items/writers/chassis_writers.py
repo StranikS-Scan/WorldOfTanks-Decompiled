@@ -18,6 +18,7 @@ def writeWheelsAndGroups(wheelsConfig, section):
             _xml.rewriteFloat(subsection, 'radius', group.radius)
             groupId += 1
         if sname == 'wheel':
+            from items.vehicles import _writeHitTester, _writeArmor
             index = _xml.readIntOrNone(None, subsection, 'index')
             if index is not None:
                 wheelId = index
@@ -29,6 +30,8 @@ def writeWheelsAndGroups(wheelsConfig, section):
             _xml.rewriteBool(subsection, 'isLeading', wheel.isLeading)
             _xml.rewriteFloat(subsection, 'syncAngle', wheel.leadingSyncAngle, defSyncAngle)
             _xml.rewriteVector3(subsection, 'wheelPos', wheel.position, Vector3(0, 0, 0))
+            _writeHitTester(wheel.hitTester, None, subsection, 'hitTester')
+            _writeArmor(wheel.materials, None, subsection, 'armor', optional=True, index=wheelId)
             wheelId += 1
 
     return

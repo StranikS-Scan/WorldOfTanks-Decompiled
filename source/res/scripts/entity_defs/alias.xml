@@ -186,6 +186,9 @@
       <drrScale>
         <Type>	UINT8	</Type>
       </drrScale>
+      <memoryCritical>
+        <Type>	UINT8	</Type>
+      </memoryCritical>
       <gameSessionDuration>
         <Type>	INT16	</Type>
       </gameSessionDuration>
@@ -860,6 +863,12 @@
       <attackerSiegeState>
         <Type>	INT8	</Type>
       </attackerSiegeState>
+      <attackerMasterVehID>
+        <Type>	UINT16	</Type>
+      </attackerMasterVehID>
+      <needsCount>
+        <Type>	BOOL	</Type>
+      </needsCount>
     </Properties>
   </ATTACKER_INFO>
   <DESTRUCTIBLE_ATTACK_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -875,6 +884,16 @@
       </attacker>
     </Properties>
   </DESTRUCTIBLE_ATTACK_INFO>
+  <CLIENT_STATUS_STATISTICS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <ping>
+        <Type>	INT16	</Type>
+      </ping>
+      <lag>
+        <Type>	UINT8	</Type>
+      </lag>
+    </Properties>
+  </CLIENT_STATUS_STATISTICS>
   <VEHICLE_SPATIAL_INFO>	FIXED_DICT	  <Properties>
       <vehicleID>
         <Type>	OBJECT_ID	</Type>
@@ -900,6 +919,9 @@
       <circularVisionRadius>
         <Type>	UINT16	</Type>
       </circularVisionRadius>
+      <gunPiercing>
+        <Type>	FLOAT	</Type>
+      </gunPiercing>
     </Properties>
   </VEHICLE_SYNC_ATTRS>
   <SpaceToD>	FIXED_DICT	  <TypeName>	SpaceToD	</TypeName>
@@ -1141,7 +1163,7 @@
       </vehPerks>
     </Properties>
   </RESPAWN_INFO_VEHICLE>
-  <INSPIRING_EFFECT>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+  <BUFF_EFFECT>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <radius>
         <Type>	FLOAT32	</Type>
@@ -1156,9 +1178,28 @@
         <Type>	FLOAT32	</Type>
       </inactivationDelay>
     </Properties>
-  </INSPIRING_EFFECT>
-  <INSPIRED>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+  </BUFF_EFFECT>
+  <DOT_EFFECT>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
+      <endTime>
+        <Type>	FLOAT64	</Type>
+      </endTime>
+      <period>
+        <Type>	FLOAT32	</Type>
+      </period>
+      <groupId>
+        <Type>	UINT8	</Type>
+      </groupId>
+      <attackReasonID>
+        <Type>	UINT8	</Type>
+      </attackReasonID>
+    </Properties>
+  </DOT_EFFECT>
+  <BUFF_EFFECT_INACTIVATION>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <senderKey>
+        <Type>	STRING	</Type>
+      </senderKey>
       <startTime>
         <Type>	FLOAT64	</Type>
       </startTime>
@@ -1172,7 +1213,51 @@
         <Type>	FLOAT64	</Type>
       </inactivationEndTime>
     </Properties>
-  </INSPIRED>
+  </BUFF_EFFECT_INACTIVATION>
+  <HOT_EFFECT>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <senderKey>
+        <Type>	STRING	</Type>
+      </senderKey>
+      <startTime>
+        <Type>	FLOAT64	</Type>
+      </startTime>
+      <endTime>
+        <Type>	FLOAT64	</Type>
+      </endTime>
+      <inactivationStartTime>
+        <Type>	FLOAT64	</Type>
+      </inactivationStartTime>
+      <inactivationEndTime>
+        <Type>	FLOAT64	</Type>
+      </inactivationEndTime>
+      <isInfluenceZone>
+        <Type>	BOOL	</Type>
+      </isInfluenceZone>
+    </Properties>
+  </HOT_EFFECT>
+  <INSPIRED_EFFECT>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <primary>
+        <Type>	BOOL	</Type>
+      </primary>
+      <startTime>
+        <Type>	FLOAT64	</Type>
+      </startTime>
+      <endTime>
+        <Type>	FLOAT64	</Type>
+      </endTime>
+      <inactivationStartTime>
+        <Type>	FLOAT64	</Type>
+      </inactivationStartTime>
+      <inactivationEndTime>
+        <Type>	FLOAT64	</Type>
+      </inactivationEndTime>
+      <equipmentID>
+        <Type>	UINT16	</Type>
+      </equipmentID>
+    </Properties>
+  </INSPIRED_EFFECT>
   <SMOKE_INFO>	FIXED_DICT	  <Properties>
       <smokeID>
         <Type>	UINT16	</Type>
@@ -1301,4 +1386,13 @@
       </dailyPlayLimit>
     </Properties>
   </PLAY_LIMITS>
+  <TIME_WITH_REASON>	FIXED_DICT	  <Properties>
+      <time>
+        <Type>	INT32	</Type>
+      </time>
+      <reason>
+        <Type>	UINT8	</Type>
+      </reason>
+    </Properties>
+  </TIME_WITH_REASON>
 </alias.xml>

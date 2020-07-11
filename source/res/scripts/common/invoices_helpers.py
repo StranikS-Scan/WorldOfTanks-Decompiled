@@ -11,7 +11,7 @@ def checkAccountDossierOperation(dossierType, blockName, recordName, opType):
         return (False, 'Dossier operation param required')
     if blockName in ACCOUNT_DOSSIER_STATIC_BLOCKS or blockName in ACCOUNT_DOSSIER_BINARY_SET_BLOCKS:
         blockBuilder = ACCOUNT_DOSSIER_BLOCKS[blockName]
-        if not (recordName in blockBuilder.recordsLayout or recordName.startswith('tankExpert') or recordName.startswith('mechanicEngineer')):
+        if not (recordName in blockBuilder.recordsLayout or recordName.startswith('tankExpert') or recordName.startswith('mechanicEngineer') or recordName.startswith('collectorVehicle')):
             return (False, 'Invalid dossier record')
         if opType not in ('add', 'set'):
             return (False, 'Invalid dossier operation')

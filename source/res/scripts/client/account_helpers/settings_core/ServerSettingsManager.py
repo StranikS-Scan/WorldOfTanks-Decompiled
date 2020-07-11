@@ -30,11 +30,11 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     CAROUSEL_FILTER_2 = 'CAROUSEL_FILTER_2'
     RANKED_CAROUSEL_FILTER_1 = 'RANKED_CAROUSEL_FILTER_1'
     RANKED_CAROUSEL_FILTER_2 = 'RANKED_CAROUSEL_FILTER_2'
+    ROYALE_CAROUSEL_FILTER_1 = 'ROYALE_CAROUSEL_FILTER_1'
+    ROYALE_CAROUSEL_FILTER_2 = 'ROYALE_CAROUSEL_FILTER_2'
     EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
     EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
     BATTLEPASS_CAROUSEL_FILTER_1 = 'BATTLEPASS_CAROUSEL_FILTER_1'
-    BOB_CAROUSEL_FILTER_1 = 'BOB_CAROUSEL_FILTER_1'
-    BOB_CAROUSEL_FILTER_2 = 'BOB_CAROUSEL_FILTER_2'
     GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
     EULA_VERSION = 'EULA_VERSION'
     MARKS_ON_GUN = 'MARKS_ON_GUN'
@@ -52,6 +52,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     LINKEDSET_QUESTS = 'LINKEDSET_QUESTS'
     SESSION_STATS = 'SESSION_STATS'
     BATTLE_PASS_STORAGE = 'BATTLE_PASS_STORAGE'
+    BATTLE_COMM = 'BATTLE_COMM'
 
 
 class UI_STORAGE_KEYS(CONST_CONTAINER):
@@ -80,6 +81,7 @@ class ServerSettingsManager(object):
     BATTLE_BORDER_MAP = settings_constants.BATTLE_BORDER_MAP
     QUESTS_PROGRESS = settings_constants.QUESTS_PROGRESS
     SESSION_STATS = settings_constants.SESSION_STATS
+    BATTLE_COMM = settings_constants.BattleCommStorageKeys
     SECTIONS = {SETTINGS_SECTIONS.GAME: Section(masks={GAME.ENABLE_OL_FILTER: 0,
                               GAME.ENABLE_SPAM_FILTER: 1,
                               GAME.INVITES_FROM_FRIENDS: 2,
@@ -181,7 +183,8 @@ class ServerSettingsManager(object):
                                            'igr': 3,
                                            'favorite': 5,
                                            'bonus': 6,
-                                           'event': 7}, offsets={}),
+                                           'event': 7,
+                                           'crystals': 8}, offsets={}),
      SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
                                                   'germany': 1,
                                                   'usa': 2,
@@ -216,6 +219,7 @@ class ServerSettingsManager(object):
                                                   'favorite': 5,
                                                   'bonus': 6,
                                                   'event': 7,
+                                                  'crystals': 8,
                                                   ROLES_COLLAPSE: 9,
                                                   'notDefined': 10,
                                                   'tank1': 11,
@@ -262,49 +266,16 @@ class ServerSettingsManager(object):
                                                       'gameMode': 4,
                                                       'favorite': 5,
                                                       'bonus': 6,
-                                                      'event': 7}, offsets={}),
+                                                      'event': 7,
+                                                      'crystals': 8}, offsets={}),
      SETTINGS_SECTIONS.BATTLEPASS_CAROUSEL_FILTER_1: Section(masks={'isCommonProgression': 0}, offsets={}),
-     SETTINGS_SECTIONS.BOB_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
-                                               'germany': 1,
-                                               'usa': 2,
-                                               'china': 3,
-                                               'france': 4,
-                                               'uk': 5,
-                                               'japan': 6,
-                                               'czech': 7,
-                                               'sweden': 8,
-                                               'poland': 9,
-                                               'italy': 10,
-                                               'lightTank': 15,
-                                               'mediumTank': 16,
-                                               'heavyTank': 17,
-                                               'SPG': 18,
-                                               'AT-SPG': 19,
-                                               'level_1': 20,
-                                               'level_2': 21,
-                                               'level_3': 22,
-                                               'level_4': 23,
-                                               'level_5': 24,
-                                               'level_6': 25,
-                                               'level_7': 26,
-                                               'level_8': 27,
-                                               'level_9': 28,
-                                               'level_10': 29}, offsets={}),
-     SETTINGS_SECTIONS.BOB_CAROUSEL_FILTER_2: Section(masks={'premium': 0,
-                                               'elite': 1,
-                                               'rented': 2,
-                                               'igr': 3,
-                                               'gameMode': 4,
-                                               'favorite': 5,
-                                               'bonus': 6,
-                                               'event': 7}, offsets={}),
      SETTINGS_SECTIONS.GUI_START_BEHAVIOR: Section(masks={GuiSettingsBehavior.FREE_XP_INFO_DIALOG_SHOWED: 0,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED: 1,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_STARTED: 2,
                                             GuiSettingsBehavior.EPIC_RANDOM_CHECKBOX_CLICKED: 3,
                                             GuiSettingsBehavior.EPIC_WELCOME_VIEW_SHOWED: 5,
                                             GuiSettingsBehavior.TECHTREE_INTRO_BLUEPRINTS_RECEIVED: 23,
-                                            GuiSettingsBehavior.TECHTREE_INTRO_SHOWED: 24}, offsets={GuiSettingsBehavior.LAST_SHOWN_EPIC_WELCOME_SCREEN: Offset(6, 4194240)}),
+                                            GuiSettingsBehavior.TECHTREE_INTRO_SHOWED: 24}, offsets={GuiSettingsBehavior.LAST_SHOWN_EPIC_WELCOME_SCREEN: Offset(7, 8388480)}),
      SETTINGS_SECTIONS.EULA_VERSION: Section(masks={}, offsets={'version': Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.MARKS_ON_GUN: Section(masks={}, offsets={GAME.SHOW_MARKS_ON_GUN: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.CONTACTS: Section(masks={CONTACTS.SHOW_OFFLINE_USERS: 0,
@@ -351,7 +322,8 @@ class ServerSettingsManager(object):
                                          OnceOnlyHints.C11N_EDITABLE_STYLE_SLOT_HINT: 26,
                                          OnceOnlyHints.C11N_EDITABLE_STYLE_SLOT_BUTTON_HINT: 27,
                                          OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLE_SLOT_HINT: 28,
-                                         OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLE_SLOT_BUTTON_HINT: 29}, offsets={}),
+                                         OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLE_SLOT_BUTTON_HINT: 29,
+                                         OnceOnlyHints.CRYSTAL_BTN_HINT: 30}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESET_CRITS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -426,7 +398,48 @@ class ServerSettingsManager(object):
                                              BattlePassStorageKeys.VOTED_WITH_BOUGHT_BP: 18,
                                              BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN: 19,
                                              BattlePassStorageKeys.INTRO_VIDEO_SHOWN: 20}, offsets={BattlePassStorageKeys.SHOWN_VIDEOS_FLAGS: Offset(0, 65535),
-                                             BattlePassStorageKeys.FLAGS_VERSION: Offset(21, 266338304)})}
+                                             BattlePassStorageKeys.FLAGS_VERSION: Offset(21, 266338304)}),
+     SETTINGS_SECTIONS.BATTLE_COMM: Section(masks={BATTLE_COMM.ENABLE_BATTLE_COMMUNICATION: 0,
+                                     BATTLE_COMM.SHOW_COM_IN_PLAYER_LIST: 1,
+                                     BATTLE_COMM.SHOW_STICKY_MARKERS: 2,
+                                     BATTLE_COMM.SHOW_CALLOUT_MESSAGES: 3,
+                                     BATTLE_COMM.SHOW_BASE_MARKERS: 4}, offsets={}),
+     SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
+                                                  'germany': 1,
+                                                  'usa': 2,
+                                                  'china': 3,
+                                                  'france': 4,
+                                                  'uk': 5,
+                                                  'japan': 6,
+                                                  'czech': 7,
+                                                  'sweden': 8,
+                                                  'poland': 9,
+                                                  'italy': 10,
+                                                  'lightTank': 15,
+                                                  'mediumTank': 16,
+                                                  'heavyTank': 17,
+                                                  'SPG': 18,
+                                                  'AT-SPG': 19,
+                                                  'level_1': 20,
+                                                  'level_2': 21,
+                                                  'level_3': 22,
+                                                  'level_4': 23,
+                                                  'level_5': 24,
+                                                  'level_6': 25,
+                                                  'level_7': 26,
+                                                  'level_8': 27,
+                                                  'level_9': 28,
+                                                  'level_10': 29}, offsets={}),
+     SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2: Section(masks={'premium': 0,
+                                                  'elite': 1,
+                                                  'rented': 2,
+                                                  'igr': 3,
+                                                  'gameMode': 4,
+                                                  'favorite': 5,
+                                                  'bonus': 6,
+                                                  'event': 7,
+                                                  'crystals': 8,
+                                                  'battleRoyale': 9}, offsets={})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -724,6 +737,7 @@ class ServerSettingsManager(object):
          'uiStorage': {},
          'epicCarouselFilter2': {},
          'sessionStats': {},
+         'battleComm': {},
          GUI_START_BEHAVIOR: {},
          'battlePassStorage': {},
          'clear': {},
@@ -796,6 +810,10 @@ class ServerSettingsManager(object):
         clearSessionStats = clear.get('sessionStats', 0)
         if sessionStats or clearSessionStats:
             settings[SETTINGS_SECTIONS.SESSION_STATS] = self._buildSectionSettings(SETTINGS_SECTIONS.SESSION_STATS, sessionStats) ^ clearSessionStats
+        battleComm = data.get('battleComm', {})
+        clearBattleComm = clear.get('battleComm', 0)
+        if battleComm or clearBattleComm:
+            settings[SETTINGS_SECTIONS.BATTLE_COMM] = self._buildSectionSettings(SETTINGS_SECTIONS.BATTLE_COMM, battleComm) ^ clearBattleComm
         guiStartBehavior = data.get(GUI_START_BEHAVIOR, {})
         clearGuiStartBehavior = clear.get(GUI_START_BEHAVIOR, 0)
         if guiStartBehavior or clearGuiStartBehavior:

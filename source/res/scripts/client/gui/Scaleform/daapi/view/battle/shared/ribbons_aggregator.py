@@ -274,6 +274,20 @@ class _WorldCollisionHitRibbon(_SingleVehicleDamageRibbon):
         return BATTLE_EFFICIENCY_TYPES.WORLD_COLLISION
 
 
+class _SpawnedBotCausedDamageRibbon(_SingleVehicleDamageRibbon):
+    __slots__ = ()
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.SPAWNED_BOT_DMG
+
+
+class _MinefieldDamageRibbon(_SingleVehicleDamageRibbon):
+    __slots__ = ()
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.DAMAGE_BY_MINEFIELD
+
+
 class _ReceivedCriticalHitRibbon(_CriticalHitRibbon):
     __slots__ = ()
 
@@ -346,6 +360,27 @@ class _ReceivedFireHitRibbon(_SingleVehicleReceivedHitRibbon):
 
     def getType(self):
         return BATTLE_EFFICIENCY_TYPES.RECEIVED_BURN
+
+
+class _ReceivedBerserkerHitRibbon(_SingleVehicleReceivedHitRibbon):
+    __slots__ = ()
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.BERSERKER
+
+
+class _ReceivedBySpawnedBotHitRibbon(_SingleVehicleReceivedHitRibbon):
+    __slots__ = ()
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.RECEIVED_DMG_BY_SPAWNED_BOT
+
+
+class _ReceivedByMinefieldRibbon(_SingleVehicleReceivedHitRibbon):
+    __slots__ = ()
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.RECEIVED_BY_MINEFIELD
 
 
 class _BombersReceivedFireHitRibbon(_ReceivedFireHitRibbon):
@@ -425,6 +460,41 @@ class _EnemiesStunRibbon(_MultiTargetsRibbon):
 
     def getType(self):
         return BATTLE_EFFICIENCY_TYPES.STUN
+
+
+class _ReceivedDamageByUnknownSourceRibbon(_Ribbon):
+    __slots__ = ('__extraValue',)
+
+    def __init__(self, ribbonID, extra):
+        super(_ReceivedDamageByUnknownSourceRibbon, self).__init__(ribbonID)
+        self.__extraValue = extra
+
+    def getDamageSource(self):
+        pass
+
+    def getExtraValue(self):
+        return self.__extraValue
+
+    def isRoleBonus(self):
+        return False
+
+    @classmethod
+    def createFromFeedbackEvent(cls, ribbonID, event):
+        return cls(ribbonID, event.getExtra().getDamage())
+
+
+class _ReceivedByDamagingSmokeRibbon(_ReceivedDamageByUnknownSourceRibbon):
+    __slots__ = ()
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.RECEIVED_BY_SMOKE
+
+
+class _DeathZoneRibbon(_ReceivedDamageByUnknownSourceRibbon):
+    __slots__ = ()
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.DEATH_ZONE
 
 
 class _MultiVehicleRibbon(_MultiTargetsRibbon):
@@ -507,9 +577,9 @@ class _CriticalRibbonClassFactory(_RibbonClassFactory):
 
 
 class _DamageRibbonClassFactory(_RibbonClassFactory):
-    __slots__ = ('__damageCls', '__fireCls', '__ramCls', '__wcCls', '__artDmgCls', '__bombDmgCls', '__artFireCls', '__bombFireCls', '__recoveryCls')
+    __slots__ = ('__damageCls', '__fireCls', '__ramCls', '__wcCls', '__artDmgCls', '__bombDmgCls', '__artFireCls', '__bombFireCls', '__recoveryCls', '__deathZoneCls', '__berserker', '__spawnedBotDmgCls', '__damageByMinefield', '__damagedBySmoke')
 
-    def __init__(self, damageCls, fireCls, ramCls, wcCls, artDmgCls, bombDmgCls, artFireCls, bombFireCls, recoveryCls):
+    def __init__(self, damageCls, fireCls, ramCls, wcCls, artDmgCls, bombDmgCls, artFireCls, bombFireCls, deathZoneCls, recoveryCls, berserker, spawnedBotDmgCls, minefieldDamageCls, damagedBySmoke):
         super(_DamageRibbonClassFactory, self).__init__()
         self.__damageCls = damageCls
         self.__fireCls = fireCls
@@ -520,6 +590,11 @@ class _DamageRibbonClassFactory(_RibbonClassFactory):
         self.__bombDmgCls = bombDmgCls
         self.__bombFireCls = bombFireCls
         self.__recoveryCls = recoveryCls
+        self.__deathZoneCls = deathZoneCls
+        self.__berserker = berserker
+        self.__spawnedBotDmgCls = spawnedBotDmgCls
+        self.__damageByMinefield = minefieldDamageCls
+        self.__damagedBySmoke = damagedBySmoke
 
     def getRibbonClass(self, event):
         damageExtra = event.getExtra()
@@ -540,6 +615,16 @@ class _DamageRibbonClassFactory(_RibbonClassFactory):
             ribbonCls = self.__bombDmgCls
         elif damageExtra.isAttackReason(ATTACK_REASON.RECOVERY):
             ribbonCls = self.__recoveryCls
+        elif damageExtra.isDeathZone():
+            ribbonCls = self.__deathZoneCls
+        elif damageExtra.isBerserker():
+            ribbonCls = self.__berserker
+        elif damageExtra.isSpawnedBotExplosion() or damageExtra.isSpawnedBotRam():
+            ribbonCls = self.__spawnedBotDmgCls
+        elif damageExtra.isMineField():
+            ribbonCls = self.__damageByMinefield
+        elif damageExtra.isDamagingSmoke():
+            ribbonCls = self.__damagedBySmoke
         else:
             ribbonCls = self.__ramCls
         if not ribbonCls:
@@ -699,8 +784,8 @@ _FEEDBACK_EVENT_TO_RIBBON_CLS_FACTORY = {FEEDBACK_EVENT_ID.PLAYER_CAPTURED_BASE:
  FEEDBACK_EVENT_ID.PLAYER_DAMAGED_DEVICE_ENEMY: _RibbonSingleClassFactory(_CriticalHitRibbon),
  FEEDBACK_EVENT_ID.PLAYER_KILLED_ENEMY: _RibbonSingleClassFactory(_EnemyKillRibbon),
  FEEDBACK_EVENT_ID.ENEMY_DAMAGED_DEVICE_PLAYER: _CriticalRibbonClassFactory(),
- FEEDBACK_EVENT_ID.PLAYER_DAMAGED_HP_ENEMY: _DamageRibbonClassFactory(damageCls=_CausedDamageRibbon, fireCls=_FireHitRibbon, ramCls=_RamHitRibbon, wcCls=_WorldCollisionHitRibbon, artDmgCls=_ArtilleryHitRibbon, bombDmgCls=_BombersHitRibbon, artFireCls=_ArtilleryFireHitRibbon, bombFireCls=_BombersFireHitRibbon, recoveryCls=_EpicRecoveryRibbon),
- FEEDBACK_EVENT_ID.ENEMY_DAMAGED_HP_PLAYER: _DamageRibbonClassFactory(damageCls=_ReceivedDamageHitRibbon, fireCls=_ReceivedFireHitRibbon, ramCls=_ReceivedRamHitRibbon, wcCls=_ReceivedWorldCollisionHitRibbon, artDmgCls=_ArtilleryReceivedDamageHitRibbon, bombDmgCls=_BombersReceivedDamageHitRibbon, artFireCls=_ArtilleryReceivedFireHitRibbon, bombFireCls=_BombersReceivedFireHitRibbon, recoveryCls=_EpicRecoveryRibbon),
+ FEEDBACK_EVENT_ID.PLAYER_DAMAGED_HP_ENEMY: _DamageRibbonClassFactory(damageCls=_CausedDamageRibbon, fireCls=_FireHitRibbon, ramCls=_RamHitRibbon, wcCls=_WorldCollisionHitRibbon, artDmgCls=_ArtilleryHitRibbon, bombDmgCls=_BombersHitRibbon, artFireCls=_ArtilleryFireHitRibbon, bombFireCls=_BombersFireHitRibbon, recoveryCls=_EpicRecoveryRibbon, deathZoneCls=_DeathZoneRibbon, berserker=_ReceivedBerserkerHitRibbon, spawnedBotDmgCls=_SpawnedBotCausedDamageRibbon, minefieldDamageCls=_MinefieldDamageRibbon, damagedBySmoke=_ReceivedByDamagingSmokeRibbon),
+ FEEDBACK_EVENT_ID.ENEMY_DAMAGED_HP_PLAYER: _DamageRibbonClassFactory(damageCls=_ReceivedDamageHitRibbon, fireCls=_ReceivedFireHitRibbon, ramCls=_ReceivedRamHitRibbon, wcCls=_ReceivedWorldCollisionHitRibbon, artDmgCls=_ArtilleryReceivedDamageHitRibbon, bombDmgCls=_BombersReceivedDamageHitRibbon, artFireCls=_ArtilleryReceivedFireHitRibbon, bombFireCls=_BombersReceivedFireHitRibbon, recoveryCls=_EpicRecoveryRibbon, deathZoneCls=_DeathZoneRibbon, berserker=_ReceivedBerserkerHitRibbon, spawnedBotDmgCls=_ReceivedBySpawnedBotHitRibbon, minefieldDamageCls=_ReceivedByMinefieldRibbon, damagedBySmoke=_ReceivedByDamagingSmokeRibbon),
  FEEDBACK_EVENT_ID.PLAYER_ASSIST_TO_KILL_ENEMY: _AssistRibbonClassFactory(trackAssistCls=_TrackAssistRibbon, radioAssistCls=_RadioAssistRibbon, stunAssistCls=_StunAssistRibbon),
  FEEDBACK_EVENT_ID.PLAYER_ASSIST_TO_STUN_ENEMY: _AssistRibbonClassFactory(trackAssistCls=_TrackAssistRibbon, radioAssistCls=_RadioAssistRibbon, stunAssistCls=_StunAssistRibbon),
  FEEDBACK_EVENT_ID.ENEMY_SECTOR_CAPTURED: _RibbonSingleClassFactory(_EpicEnemySectorCapturedRibbon),
@@ -710,6 +795,7 @@ _FEEDBACK_EVENT_TO_RIBBON_CLS_FACTORY = {FEEDBACK_EVENT_ID.PLAYER_CAPTURED_BASE:
  FEEDBACK_EVENT_ID.DEFENDER_BONUS: _RibbonSingleClassFactory(_EpicDefenderBonus),
  FEEDBACK_EVENT_ID.SMOKE_ASSIST: _RibbonSingleClassFactory(_EpicAbilityAssist),
  FEEDBACK_EVENT_ID.INSPIRE_ASSIST: _RibbonSingleClassFactory(_EpicAbilityAssist)}
+_FEEDBACK_EVENTS_TO_IGNORE = (FEEDBACK_EVENT_ID.EQUIPMENT_TIMER_EXPIRED,)
 
 def _isRoleBonus(event):
     return event.getExtra().isRoleAction()
@@ -722,7 +808,8 @@ def _createRibbonFromPlayerFeedbackEvent(ribbonID, event):
         ribbonCls = factory.getRibbonClass(event)
         if ribbonCls is not None:
             return ribbonCls.createFromFeedbackEvent(ribbonID, event)
-    _logger.error('Could not find a proper ribbon class associated with the given feedback event %s', event)
+    if etype not in _FEEDBACK_EVENTS_TO_IGNORE:
+        _logger.error('Could not find a proper ribbon class associated with the given feedback event %s', event)
     return
 
 

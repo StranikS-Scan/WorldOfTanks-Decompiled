@@ -66,6 +66,7 @@ class MissionsBonusConditionsFormatter(MissionsBattleConditionsFormatter):
          'vehicleDamageCumulative': _VehicleDamageCumulativeFormatter(),
          'vehicleStunCumulative': _VehicleStunCumulativeFormatter(),
          'cumulative': _CumulativeResultFormatter(),
+         'cumulativeExt': _CumulativeResultFormatter(),
          'unit': _CumulativeResultFormatter()})
 
 

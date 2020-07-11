@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/time_tracking.py
-from constants import SERVER_TICK_LENGTH
+from constants import SERVER_TICK_LENGTH, IS_CLIENT, IS_BOT
 from debug_utils import LOG_WARNING
 import sys
 from time import time
+if not IS_CLIENT and not IS_BOT:
+    from insights.common import incrTickOverspends
 DEFAULT_TIME_LIMIT = 0.02
 DEFAULT_TICK_LENGTH = SERVER_TICK_LENGTH
 
@@ -33,6 +35,8 @@ class TimeTracker(object):
     def __exit__(self, exc_type, exc_val, exc_tb):
         spentTime = time() - self.startTime
         if spentTime > self.timeLimit:
+            if not IS_CLIENT and not IS_BOT:
+                incrTickOverspends()
             context = self.context
             if context is None:
                 context = sys._getframe(1).f_code.co_name
@@ -65,6 +69,8 @@ def timetracked(func=None, context=None, timeLimit=DEFAULT_TIME_LIMIT, tickLengt
                 spentTime = time() - startTime
                 if spentTime > timeLimit:
                     LOG_TIME_WARNING(spentTime, context if context is not None else f.__name__, tickLength)
+                    if not IS_CLIENT and not IS_BOT:
+                        incrTickOverspends()
 
             return
 

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/plugins.py
-import weakref
 import operator
+import weakref
 from debug_utils import LOG_ERROR
 from shared_utils import forEach
 
@@ -41,6 +41,9 @@ class PluginsCollection(IPlugin):
     def __init__(self, parentObj):
         super(PluginsCollection, self).__init__(weakref.proxy(parentObj))
         self.__plugins = {}
+
+    def __iter__(self):
+        return iter(self.__plugins)
 
     def addPlugins(self, plugins):
         for pluginName, pluginClass in plugins.iteritems():

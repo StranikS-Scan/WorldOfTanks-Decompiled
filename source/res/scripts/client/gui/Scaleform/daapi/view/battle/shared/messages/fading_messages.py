@@ -67,6 +67,7 @@ class FadingMessages(BattleMessageListMeta):
     def _dispose(self):
         self.__messages = None
         self.__styles = None
+        self.clear()
         self._removeGameListeners()
         super(FadingMessages, self)._dispose()
         return

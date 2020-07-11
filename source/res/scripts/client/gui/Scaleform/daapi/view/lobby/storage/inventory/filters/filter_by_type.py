@@ -96,7 +96,7 @@ class FiltrableInventoryCategoryByTypeTabView(ItemsWithTypeFilterTabViewMeta):
 
     def _getVoList(self):
         totalItems = self._getItemList()
-        self._totalCount = sum((item.inventoryCount for item in totalItems.values()))
+        self._totalCount = len(totalItems.values())
         filterCriteria = self._getFilteredCriteria()
         dataProviderListVoItems = []
         for item in sorted(totalItems.itervalues(), cmp=self._getComparator()):

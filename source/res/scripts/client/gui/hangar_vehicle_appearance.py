@@ -150,7 +150,7 @@ class HangarVehicleAppearance(ScriptGameObject):
 
     def recreate(self, vDesc, vState=None, callback=None, outfit=None):
         self.__onLoadedCallback = callback
-        self.__reload(vDesc, vState or self.__vState, outfit or self._getActiveOutfit())
+        self.__reload(vDesc, vState or self.__vState, outfit or self._getActiveOutfit(vDesc))
 
     def remove(self):
         self.__clearModelAnimators()
@@ -294,7 +294,8 @@ class HangarVehicleAppearance(ScriptGameObject):
         from vehicle_systems import model_assembler
         resources.append(model_assembler.prepareCompoundAssembler(self.__vDesc, ModelsSetParams(modelsSet, self.__vState, self.__attachments), self.__spaceId))
         g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.VEHICLE_LOADING, ctx={'started': True,
-         'vEntityId': self.__vEntity.id}), scope=EVENT_BUS_SCOPE.DEFAULT)
+         'vEntityId': self.__vEntity.id,
+         'intCD': self.__vDesc.type.compactDescr}), scope=EVENT_BUS_SCOPE.DEFAULT)
         cfg = hangarCFG()
         gunScale = Math.Vector3(1.0, 1.0, 1.1)
         capsuleScale = Math.Vector3(1.5, 1.5, 1.5)
@@ -342,9 +343,13 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.__setupModel(buildInd)
         self.turretRotator = SimpleTurretRotator(self.compoundModel, easingCls=math_utils.Easing.squareEasing)
         self.__applyAttachmentsVisibility()
-        g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.VEHICLE_LOADING, ctx={'started': False,
-         'vEntityId': self.__vEntity.id}), scope=EVENT_BUS_SCOPE.DEFAULT)
+        self.__fireResourcesLoadedEvent()
         super(HangarVehicleAppearance, self).activate()
+
+    def __fireResourcesLoadedEvent(self):
+        g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.VEHICLE_LOADING, ctx={'started': False,
+         'vEntityId': self.__vEntity.id,
+         'intCD': self.__vDesc.type.compactDescr}), scope=EVENT_BUS_SCOPE.DEFAULT)
 
     def __onAnimatorsLoaded(self, buildInd, outfit, resourceRefs):
         if not self.__vDesc:
@@ -365,23 +370,29 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.__showMarksOnGun = not diff['showMarksOnGun']
             self.refresh()
 
-    def _getActiveOutfit(self):
+    def _getActiveOutfit(self, vDesc):
         if g_currentPreviewVehicle.isPresent() and not g_currentPreviewVehicle.isHeroTank:
             vehicleCD = g_currentPreviewVehicle.item.descriptor.makeCompactDescr()
             return self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehicleCD)
-        if not g_currentVehicle.isPresent():
-            _logger.error('Failed to get base vehicle outfit. There is no vehicle in hangar.')
-            return self.itemsFactory.createOutfit()
-        vehicle = g_currentVehicle.item
-        season = g_tankActiveCamouflage.get(vehicle.intCD, SeasonType.UNDEFINED)
-        if season == SeasonType.UNDEFINED:
-            season = vehicle.getAnyOutfitSeason()
-        g_tankActiveCamouflage[vehicle.intCD] = season
-        outfit = vehicle.getOutfit(season)
-        if not outfit:
-            vehicleCD = vehicle.descriptor.makeCompactDescr()
-            outfit = self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehicleCD)
-        return outfit
+        elif not g_currentVehicle.isPresent():
+            if vDesc is not None:
+                vehicleCD = vDesc.makeCompactDescr()
+                outfit = self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehicleCD)
+            else:
+                _logger.error('Failed to get base vehicle outfit. VehicleDescriptor is None.')
+                outfit = self.itemsFactory.createOutfit()
+            return outfit
+        else:
+            vehicle = g_currentVehicle.item
+            season = g_tankActiveCamouflage.get(vehicle.intCD, SeasonType.UNDEFINED)
+            if season == SeasonType.UNDEFINED:
+                season = vehicle.getAnyOutfitSeason()
+            g_tankActiveCamouflage[vehicle.intCD] = season
+            outfit = vehicle.getOutfit(season)
+            if not outfit:
+                vehicleCD = vehicle.descriptor.makeCompactDescr()
+                outfit = self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehicleCD)
+            return outfit
 
     def __assembleModel(self):
         from vehicle_systems import model_assembler

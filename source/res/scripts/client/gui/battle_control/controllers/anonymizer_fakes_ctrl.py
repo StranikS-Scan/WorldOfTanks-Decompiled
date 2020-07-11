@@ -3,6 +3,7 @@
 import typing
 import logging
 import BigWorld
+import constants
 from avatar_helpers import getAvatarSessionID
 from constants import BattleUserActions
 from gui.anonymizer.battle_cooldown_manager import BattleCooldownManager
@@ -25,6 +26,11 @@ _ACTION_BY_TAG = {(USER_TAG.FRIEND, True): USER_ACTION_ID.FRIEND_ADDED,
  (USER_TAG.IGNORED, False): USER_ACTION_ID.IGNORED_REMOVED,
  (USER_TAG.MUTED, True): USER_ACTION_ID.MUTE_SET}
 _CREATION_UPDATED_TAGS = (USER_TAG.FRIEND, USER_TAG.IGNORED, USER_TAG.MUTED)
+_IGNORED_DEPS_TAGS = [USER_TAG.IGNORED]
+_IGNORE_TMP_DEPS_TAGS = [USER_TAG.IGNORED_TMP]
+if not constants.IS_CHINA:
+    _IGNORED_DEPS_TAGS.append(USER_TAG.MUTED)
+    _IGNORE_TMP_DEPS_TAGS.append(USER_TAG.MUTED)
 
 class _RelationData(object):
     __slots__ = ('vehicleID', 'sessionID', 'databaseID', 'name')
@@ -50,9 +56,10 @@ class AnonymizerFakesController(IAnonymizerFakesController):
         self.__fakeIDs = set()
         self.__mergedDBIDs = set()
         self.__avatarSessionID = ''
-        self.__postProcs = {USER_ACTION_ID.FRIEND_ADDED: self.__addBattleFriend,
-         USER_ACTION_ID.IGNORED_ADDED: self.__addBattleIgnored,
-         USER_ACTION_ID.IGNORED_REMOVED: self.__removeBattleIgnored}
+        self.__postProcs = {USER_ACTION_ID.FRIEND_ADDED: self.__addBattleFriend}
+        if not constants.IS_CHINA:
+            self.__postProcs.update({USER_ACTION_ID.IGNORED_ADDED: self.__addBattleIgnored,
+             USER_ACTION_ID.IGNORED_REMOVED: self.__removeBattleIgnored})
 
     @proto_getter(PROTO_TYPE.MIGRATION)
     def proto(self):
@@ -270,10 +277,10 @@ class AnonymizerFakesController(IAnonymizerFakesController):
         if self.__relationsCache.isFriend(vehicleData.vehicleID):
             tags.add(USER_TAG.FRIEND)
         if self.__relationsCache.isIgnored(vehicleData.vehicleID):
-            tags.update((USER_TAG.IGNORED, USER_TAG.MUTED))
+            tags.update(_IGNORED_DEPS_TAGS)
         elif self.__relationsCache.isTmpIgnored(vehicleData.vehicleID):
-            tags.update((USER_TAG.IGNORED_TMP, USER_TAG.MUTED))
-        if vehicleData.databaseID > 0:
+            tags.update(_IGNORE_TMP_DEPS_TAGS)
+        if vehicleData.databaseID > 0 and not constants.IS_CHINA:
             realUser = self.usersStorage.getUser(vehicleData.databaseID)
             if realUser and realUser.isMuted():
                 tags.update((USER_TAG.MUTED,))

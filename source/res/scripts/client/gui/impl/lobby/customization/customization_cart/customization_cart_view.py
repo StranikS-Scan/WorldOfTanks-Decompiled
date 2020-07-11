@@ -3,13 +3,13 @@
 from collections import namedtuple
 import logging
 import typing
-import GUI
 from frameworks.wulf import ViewFlags, ViewSettings
 from adisp import process as adisp_process
 from async import async, await
 from CurrentVehicle import g_currentVehicle
 from gui import DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.customization.constants import CustomizationModes
 from gui.impl.dialogs import dialogs
 from gui.impl.dialogs.builders import ResSimpleDialogBuilder
@@ -85,7 +85,7 @@ class CustomizationCartView(ViewImpl):
         self.__items = {}
         self.__counters = {season:[0, 0] for season in SeasonType.COMMON_SEASONS}
         self.__moneyState = MoneyForPurchase.NOT_ENOUGH
-        self.__blur = GUI.WGUIBackgroundBlur()
+        self.__blur = CachedBlur()
         if ctx is not None:
             self.__c11nView = ctx.get('c11nView', None)
             self.__isProlongStyleRent = ctx.get('prolongStyleRent', False)
@@ -157,7 +157,7 @@ class CustomizationCartView(ViewImpl):
 
     @uniprof.regionDecorator(label='customization_cart.loading', scope='exit')
     def _onLoaded(self, *args, **kwargs):
-        self.__blur.enable = True
+        self.__blur.enable()
 
     def _initialize(self, *args, **kwargs):
         super(CustomizationCartView, self)._initialize(*args, **kwargs)
@@ -177,7 +177,7 @@ class CustomizationCartView(ViewImpl):
                     self.__ctx.changeMode(CustomizationModes.STYLED)
                 self.__c11nView.changeVisible(True)
             self.__c11nView = None
-        self.__blur.enable = False
+        self.__blur.fini()
         self.__ctx = None
         self.__items.clear()
         del self.__purchaseItems[:]
@@ -304,8 +304,6 @@ class CustomizationCartView(ViewImpl):
             builder.setPreset(DialogPresets.CUSTOMIZATION_INSTALL_BOUND)
             builder.setMessagesAndButtons(R.strings.dialogs.customization.buy_install_bound)
             isOk = yield await(dialogs.showSimple(builder.build(self)))
-            if not isOk:
-                self.__blur.enable = True
             self.__onBuyConfirmed(isOk)
             return
         self.__onBuyConfirmed(True)

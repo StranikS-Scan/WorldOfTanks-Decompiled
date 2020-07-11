@@ -163,6 +163,7 @@ class CYBERSPORT(object):
     WINDOW_UNIT_UNITLISTVIEW_DESCRIPTION = '#cyberSport:window/unit/unitListView/description'
     WINDOW_UNIT_UNITLISTVIEW_PLAYERS = '#cyberSport:window/unit/unitListView/players'
     WINDOW_UNIT_SLOT_EMPTYSLOT = '#cyberSport:window/unit/slot/emptySlot'
+    WINDOW_UNIT_SLOT_BATTLEROYALE = '#cyberSport:window/unit/slot/battleRoyale'
     WINDOW_UNIT_SLOT_NOTAVAILABLE = '#cyberSport:window/unit/slot/notAvailable'
     WINDOW_UNIT_SLOT_NOTALLOWED = '#cyberSport:window/unit/slot/notAllowed'
     WINDOW_UNIT_SLOT_TAKEPLACE = '#cyberSport:window/unit/slot/takePlace'
@@ -225,8 +226,6 @@ class CYBERSPORT(object):
     RESPAWN_FIGHT_STATUS_COMMANDER = '#cyberSport:respawn/fight/status/commander'
     RESPAWN_FIGHT_STATUS_PRIVATE = '#cyberSport:respawn/fight/status/private'
     SQUADWINDOW_WAITINGFORBATTLE = '#cyberSport:squadWindow/waitingForBattle'
-    SQUADWINDOW_EVENTDISABLEDMESSAGE = '#cyberSport:squadWindow/eventDisabledMessage'
-    SQUADWINDOW_EVENTNOTSETMESSAGE = '#cyberSport:squadWindow/eventNotSetMessage'
     WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_ENUM = (WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_UNRESOLVED,
      WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_6,
      WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_7,

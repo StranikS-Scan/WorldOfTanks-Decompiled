@@ -83,7 +83,7 @@ class BattleQuestUIDataPacker(_EventUIDataPacker):
     def _packBonuses(self, model):
         packer = getDefaultBonusPacker()
         self.__tooltipData = {}
-        packQuestBonusModelAndTooltipData(self._event, packer, model.getBonuses(), tooltipData=self.__tooltipData)
+        packQuestBonusModelAndTooltipData(packer, model.getBonuses(), self._event, tooltipData=self.__tooltipData)
 
     def _packPostBattleConds(self, model):
         postBattleContitionPacker = PostBattleConditionPacker()
@@ -158,8 +158,8 @@ def packQuestBonusModel(quest, packer, array):
                 array.addViewModel(item)
 
 
-def packQuestBonusModelAndTooltipData(quest, packer, array, tooltipData=None):
-    bonuses = quest.getBonuses()
+def packQuestBonusModelAndTooltipData(packer, array, quest, tooltipData=None, questBonuses=None):
+    bonuses = quest.getBonuses() if questBonuses is None else questBonuses
     bonusIndexTotal = 0
     bonusTooltipList = []
     for bonus in bonuses:

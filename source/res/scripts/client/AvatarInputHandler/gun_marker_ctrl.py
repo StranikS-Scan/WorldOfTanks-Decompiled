@@ -77,6 +77,11 @@ def createArtyHit(artyEquipmentUDO, areaRadius):
     return _ArtyHitMarkerController(_MARKER_TYPE.CLIENT, factory.getClientSPGProvider(), artyEquipmentUDO, areaRadius, interval=0.0 if BattleReplay.g_replayCtrl.isPlaying else 0.1)
 
 
+def createArcadeArtilleryHit(artyEquipmentUDO, areaRadius):
+    factory = _GunMarkersDPFactory()
+    return _ArcadeArtilleryHitMarkerController(_MARKER_TYPE.CLIENT, factory.getClientSPGProvider(), artyEquipmentUDO, areaRadius, interval=0.0 if BattleReplay.g_replayCtrl.isPlaying else 0.1)
+
+
 if _IS_EXTENDED_GUN_MARKER_ENABLED:
 
     def createShotResultResolver():
@@ -92,7 +97,7 @@ else:
 class _StandardShotResult(object):
 
     @classmethod
-    def getShotResult(cls, hitPoint, collision, _, excludeTeam=0):
+    def getShotResult(cls, hitPoint, collision, _, excludeTeam=0, piercingMultiplier=1):
         if collision is None:
             return _SHOT_RESULT.UNDEFINED
         else:
@@ -143,9 +148,9 @@ class _CrosshairShotResults(object):
     _VEHICLE_TRACE_FORWARD_LENGTH = 20.0
 
     @classmethod
-    def _computePiercingPowerAtDist(cls, ppDesc, dist, maxDist):
+    def _computePiercingPowerAtDist(cls, ppDesc, dist, maxDist, piercingMultiplier):
         p100, p500 = ppDesc
-        return _computePiercingPowerAtDistImpl(dist, maxDist, p100, p500)
+        return _computePiercingPowerAtDistImpl(dist, maxDist, p100 * piercingMultiplier, p500 * piercingMultiplier)
 
     @classmethod
     def _computePiercingPowerRandomization(cls, shell):
@@ -197,7 +202,7 @@ class _CrosshairShotResults(object):
         return entity.collideSegmentExt(startPoint, endPoint)
 
     @classmethod
-    def getShotResult(cls, hitPoint, collision, direction, excludeTeam=0):
+    def getShotResult(cls, hitPoint, collision, direction, excludeTeam=0, piercingMultiplier=1):
         if collision is None:
             return _SHOT_RESULT.UNDEFINED
         else:
@@ -216,7 +221,7 @@ class _CrosshairShotResults(object):
             ppDesc = vDesc.shot.piercingPower
             maxDist = vDesc.shot.maxDistance
             dist = (hitPoint - player.getOwnVehiclePosition()).length
-            piercingPower = cls._computePiercingPowerAtDist(ppDesc, dist, maxDist)
+            piercingPower = cls._computePiercingPowerAtDist(ppDesc, dist, maxDist, piercingMultiplier)
             fullPiercingPower = piercingPower
             minPP, maxPP = cls._computePiercingPowerRandomization(shell)
             result = _SHOT_RESULT.NOT_PIERCED
@@ -752,6 +757,32 @@ class _ArtyHitMarkerController(_SPGGunMarkerController):
     def __tick(self):
         self.__trajectoryDrawer.update(self._position, self._position + self.__artyEquipmentUDO.position, self.__artyEquipmentUDO.launchVelocity, self.__interval)
         return self.__interval
+
+
+class _ArcadeArtilleryHitMarkerController(_SPGGunMarkerController):
+
+    def __init__(self, gunMakerType, dataProvider, artyEquipmentUDO, areaRadius, interval=0.1):
+        super(_ArcadeArtilleryHitMarkerController, self).__init__(gunMakerType, dataProvider, enabledFlag=_MARKER_FLAG.ARTY_HIT_ENABLED)
+        self.__artyEquipmentUDO = artyEquipmentUDO
+        self.__areaRadius = areaRadius
+        self.__interval = interval
+
+    def destroy(self):
+        self.__artyEquipmentUDO = None
+        super(_ArcadeArtilleryHitMarkerController, self).destroy()
+        return
+
+    def getPointsInside(self, positions):
+        return self._dataProvider.getPointsInside(positions)
+
+    def _getCurrentShotInfo(self):
+        launchPosition = self._position + self.__artyEquipmentUDO.position
+        launchVelocity = self.__artyEquipmentUDO.launchVelocity
+        gravity = Math.Vector3(0, -self.__artyEquipmentUDO.gravity, 0)
+        return (launchPosition, launchVelocity, gravity)
+
+    def _updateDispersionData(self):
+        self._dataProvider.setupFlatRadialDispersion(self.__areaRadius)
 
 
 def _makeWorldMatrix(positionMatrix):

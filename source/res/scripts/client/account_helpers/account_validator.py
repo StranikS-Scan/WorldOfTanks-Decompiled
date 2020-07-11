@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/account_validator.py
 import logging
+from functools import partial
 import constants
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
 from items import vehicles, tankmen, ITEM_TYPE_NAMES
+from items.vehicles import isItemWithCompactDescrExist
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from soft_exception import SoftException
@@ -33,6 +35,7 @@ class ValidationCodes(object):
     EQ_MISMATCH = 1011
     VEHICLE_CREW_MISMATCH = 1012
     OUTFIT_MISMATCH = 1013
+    UNLOCKS_MISMATCH = 1014
 
 
 def _packItemData(itemTypeID, itemData, *args):
@@ -44,15 +47,16 @@ class AccountValidator(object):
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
 
     def validate(self):
-        handlers = (lambda : self.__validateInvItem(GUI_ITEM_TYPE.CHASSIS, ValidationCodes.CHASSIS_MISMATCH),
-         lambda : self.__validateInvItem(GUI_ITEM_TYPE.TURRET, ValidationCodes.TURRET_MISMATCH),
-         lambda : self.__validateInvItem(GUI_ITEM_TYPE.GUN, ValidationCodes.GUN_MISMATCH),
-         lambda : self.__validateInvItem(GUI_ITEM_TYPE.ENGINE, ValidationCodes.ENGINE_MISMATCH),
-         lambda : self.__validateInvItem(GUI_ITEM_TYPE.FUEL_TANK, ValidationCodes.FUEL_TANK_MISMATCH),
-         lambda : self.__validateInvItem(GUI_ITEM_TYPE.RADIO, ValidationCodes.RADIO_MISMATCH),
-         lambda : self.__validateInvItem(GUI_ITEM_TYPE.OPTIONALDEVICE, ValidationCodes.OPT_DEV_MISMATCH),
-         lambda : self.__validateInvItem(GUI_ITEM_TYPE.SHELL, ValidationCodes.SHELL_MISMATCH),
-         lambda : self.__validateInvItem(GUI_ITEM_TYPE.EQUIPMENT, ValidationCodes.EQ_MISMATCH),
+        handlers = (partial(self.__validateInvItem, GUI_ITEM_TYPE.CHASSIS, ValidationCodes.CHASSIS_MISMATCH),
+         partial(self.__validateInvItem, GUI_ITEM_TYPE.TURRET, ValidationCodes.TURRET_MISMATCH),
+         partial(self.__validateInvItem, GUI_ITEM_TYPE.GUN, ValidationCodes.GUN_MISMATCH),
+         partial(self.__validateInvItem, GUI_ITEM_TYPE.ENGINE, ValidationCodes.ENGINE_MISMATCH),
+         partial(self.__validateInvItem, GUI_ITEM_TYPE.FUEL_TANK, ValidationCodes.FUEL_TANK_MISMATCH),
+         partial(self.__validateInvItem, GUI_ITEM_TYPE.RADIO, ValidationCodes.RADIO_MISMATCH),
+         partial(self.__validateInvItem, GUI_ITEM_TYPE.OPTIONALDEVICE, ValidationCodes.OPT_DEV_MISMATCH),
+         partial(self.__validateInvItem, GUI_ITEM_TYPE.SHELL, ValidationCodes.SHELL_MISMATCH),
+         partial(self.__validateInvItem, GUI_ITEM_TYPE.EQUIPMENT, ValidationCodes.EQ_MISMATCH),
+         self.__validateUnlocks,
          self.__validateInventoryVehicles,
          self.__validateInventoryOutfit,
          self.__validateInventoryTankmen,
@@ -121,3 +125,13 @@ class AccountValidator(object):
                     raise SoftException('Expected {} to be of type {}, got {} instead'.format(intCompactDescr, itemTypeID, item.typeID))
             except Exception as e:
                 raise ValidateException(e.message, errorCode, _packItemData(itemTypeID, itemData))
+
+    def __validateUnlocks(self):
+        try:
+            unlocks = self.itemsCache.items.stats.unlocks
+            for cd in unlocks:
+                if not isItemWithCompactDescrExist(cd):
+                    raise SoftException('Unknown cd {} in unlocks'.format(cd))
+
+        except Exception as e:
+            raise ValidateException(e.message, ValidationCodes.UNLOCKS_MISMATCH, ())

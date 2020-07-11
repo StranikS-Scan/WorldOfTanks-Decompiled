@@ -1,16 +1,29 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/avatar_components/avatar_epic_data.py
 import BigWorld
-from constants import DEATH_ZONES, SECTOR_STATE, VEHICLE_HIT_FLAGS
-import constants
-import Event
-from debug_utils import LOG_DEBUG_DEV
-from gui.battle_control import avatar_getter
 import CommandMapping
-from gui.battle_control import event_dispatcher as gui_event_dispatcher
-from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
+import Event
+import constants
 from aih_constants import CTRL_MODE_NAME
+from arena_component_system.sector_base_arena_component import ID_TO_BASENAME, _MISSION_SECTOR_ID_MAPPING
+from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES
+from constants import DEATH_ZONES, SECTOR_STATE, VEHICLE_HIT_FLAGS
+from debug_utils import LOG_DEBUG_DEV
+from epic_constants import EPIC_BATTLE_TEAM_ID
+from gui.battle_control import avatar_getter
+from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.sounds.epic_sound_constants import EPIC_SOUND
+_KB_MAPPING = {'EPIC_GLOBAL_SAVETANKS': CommandMapping.EPIC_GLOBAL_MSG_SAVE_TANKS,
+ 'EPIC_GLOBAL_TIME': CommandMapping.EPIC_GLOBAL_MSG_TIME,
+ 'EPIC_GLOBAL_HQ': CommandMapping.EPIC_GLOBAL_MSG_FOCUS_HQ,
+ BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_WEST: CommandMapping.EPIC_GLOBAL_MSG_LEFT_LANE,
+ BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_CENTER: CommandMapping.EPIC_GLOBAL_MSG_CENTER_LANE,
+ BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_EAST: CommandMapping.EPIC_GLOBAL_MSG_RIGHT_LANE}
+_COMMAND_TO_LANE_MAPPING = {BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_WEST: 1,
+ BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_CENTER: 2,
+ BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_EAST: 3}
+_ATTACKER_POSTFIX = '_ATK'
+_DEFENDER_POSTFIX = '_DEF'
 
 class AvatarEpicData(object):
 
@@ -29,13 +42,12 @@ class AvatarEpicData(object):
 
     def handleKey(self, isDown, key, mods):
         cmdMap = CommandMapping.g_instance
-        if cmdMap.isFiredList((CommandMapping.EPIC_GLOBAL_MSG_SAVE_TANKS,
+        return self.__sendGlobalChatCmdIfPossible(key) if cmdMap.isFiredList((CommandMapping.EPIC_GLOBAL_MSG_SAVE_TANKS,
          CommandMapping.EPIC_GLOBAL_MSG_TIME,
          CommandMapping.EPIC_GLOBAL_MSG_LEFT_LANE,
          CommandMapping.EPIC_GLOBAL_MSG_CENTER_LANE,
          CommandMapping.EPIC_GLOBAL_MSG_RIGHT_LANE,
-         CommandMapping.EPIC_GLOBAL_MSG_FOCUS_HQ), key):
-            gui_event_dispatcher.setGlobalMessageCmd(key, isDown)
+         CommandMapping.EPIC_GLOBAL_MSG_FOCUS_HQ), key) and isDown else False
 
     def onBecomeNonPlayer(self):
         if constants.IS_DEVELOPMENT:
@@ -168,6 +180,39 @@ class AvatarEpicData(object):
         attackerIntruder = params[1]
         defenderIntruder = params[2]
         self.onFrontLineInfoUpdated(frontlinePoints, attackerIntruder, defenderIntruder)
+
+    def __sendGlobalChatCmdIfPossible(self, key):
+        sectorBaseCmp = getattr(self.guiSessionProvider.arenaVisitor.getComponentSystem(), 'sectorBaseComponent', None)
+        if not sectorBaseCmp:
+            return False
+        ctrl = self.guiSessionProvider.dynamic.maps
+        if not ctrl:
+            return False
+        elif not ctrl.overviewMapScreenVisible:
+            return False
+        lane = 0
+        chatCommandName = None
+        cmdMap = CommandMapping.g_instance
+        isAttacker = BigWorld.player().team == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER
+        for chatCmd, keyboardCmd in _KB_MAPPING.iteritems():
+            if cmdMap.isFired(keyboardCmd, key):
+                if chatCmd in _COMMAND_TO_LANE_MAPPING.keys():
+                    lane = _COMMAND_TO_LANE_MAPPING[chatCmd]
+                    chatCommandName = chatCmd
+                    break
+                else:
+                    chatCommandName = chatCmd + (_ATTACKER_POSTFIX if isAttacker else _DEFENDER_POSTFIX)
+                    break
+
+        commands = self.guiSessionProvider.shared.chatCommands
+        if chatCommandName is not None and commands is not None:
+            baseName = ''
+            if lane > 0:
+                baseName = ID_TO_BASENAME[_MISSION_SECTOR_ID_MAPPING[lane][sectorBaseCmp.getNumNonCapturedBasesByLane(lane)]]
+            commands.sendEpicGlobalCommand(chatCommandName, baseName)
+            return True
+        else:
+            return False
 
     def __playSound(self, eventName):
         if not EPIC_SOUND.EPIC_MSG_SOUNDS_ENABLED:

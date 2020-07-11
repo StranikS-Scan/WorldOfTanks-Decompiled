@@ -305,8 +305,8 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
     def isEpicBattle(self):
         return self._guiType == _GUI_TYPE.EPIC_BATTLE
 
-    def isBobBattle(self):
-        return self._guiType == _GUI_TYPE.BOB
+    def isBattleRoyale(self):
+        return self._guiType == _GUI_TYPE.BATTLE_ROYALE
 
     def hasLabel(self):
         return self._guiType != _GUI_TYPE.UNKNOWN and self._guiType in _GUI_TYPE_LABEL.LABELS
@@ -363,6 +363,9 @@ class _ArenaBonusTypeVisitor(IArenaVisitor):
 
     def hasPlayerRanks(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.PLAYER_RANK_MECHANICS)
+
+    def hasInBattleUpgrade(self):
+        return _CAPS.checkAny(self._bonusType, _CAPS.IN_BATTLE_UPGRADES)
 
     def isFriendlyFireMode(self, enabledBonusTypes):
         return self._bonusType in enabledBonusTypes

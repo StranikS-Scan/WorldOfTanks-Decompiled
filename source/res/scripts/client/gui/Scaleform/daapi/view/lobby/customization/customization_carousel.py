@@ -250,8 +250,6 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         super(CustomizationCarouselDataProvider, self).refresh()
         self.__appliedItems = self.__ctx.mode.getAppliedItems(isOriginal=False)
         self.__baseStyleItems = self.__getBaseStyleItems()
-        self.__updateSwitchers()
-        self.__updateSelection(self.__selectedItem.intCD)
 
     def buildList(self):
         self.__updateCarouselData()
@@ -434,6 +432,7 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
     def __updateSelection(self, intCD):
         idx = self.collection.index(intCD) if intCD in self.collection else -1
         self.__selectedItem = SelectedItem(intCD, idx)
+        self.__updateSwitchers()
 
     def __getBaseStyleItems(self):
         return getBaseStyleItems()

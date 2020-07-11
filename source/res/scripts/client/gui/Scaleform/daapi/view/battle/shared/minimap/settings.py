@@ -41,11 +41,14 @@ class ENTRY_SYMBOL_NAME(object):
     STRATEGIC_CAMERA = 'StrategicCameraEntry'
     VIEW_RANGE_CIRCLES = 'ViewRangeCirclesEntry'
     ANIMATION = 'AnimationEntry'
-    MARK_CELL = 'CellFlashEntry'
     MARK_OBJECTIVE_DEF = 'PositionDefendEntry'
     MARK_OBJECTIVE_ATK = 'PositionAttackEntry'
+    MARK_OBJECTIVE_REPLY_DEF = 'PositionDefendReplyEntry'
+    MARK_OBJECTIVE_REPLY_ATK = 'PositionAttackReplyEntry'
     MARK_POSITION = 'PositionFlashEntry'
     ARTY_MARKER = 'ArtyMarkerMinimapEntry'
+    LOCATION_MARKER = 'MarkGoingToPositionEntryUI'
+    ATTENTION_MARKER = 'MarkAttentionEntryUI'
     EPIC_SECTOR_BASE = 'SectorBaseEntry'
     EPIC_SECTOR = 'SectorEntry'
     EPIC_SECTOR_OVERLAY = 'SectorOverlayEntry'
@@ -55,6 +58,8 @@ class ENTRY_SYMBOL_NAME(object):
     EPIC_PROTECTION_ZONE = 'LandingZoneEntry'
     EPIC_DEPLOY_SECTOR_BASE = 'SectorBaseEntryDeployment'
     EPIC_DEPLOY_HQ = 'HeadquarterEntryDeployment'
+    RADAR_ANIM = 'RadarUI'
+    DISCOVERED_ITEM_MARKER = 'net.wg.gui.battle.views.minimap.components.entries.battleRoyale.DiscoveredItemMarker'
 
 
 class TRANSFORM_FLAG(object):

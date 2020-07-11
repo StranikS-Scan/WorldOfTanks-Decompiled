@@ -11,6 +11,8 @@ from gui.Scaleform.genConsts.QUESTSPROGRESS import QUESTSPROGRESS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.formatters import text_styles, icons
 from helpers import dependency
 from helpers.i18n import makeString
@@ -18,7 +20,16 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 
-class FullStatsComponent(TabbedFullStatsMeta):
+class IFullStatsComponent(object):
+
+    def setActiveTabIndex(self, index):
+        raise NotImplementedError
+
+    def showQuestProgressAnimation(self):
+        raise NotImplementedError
+
+
+class FullStatsComponent(TabbedFullStatsMeta, IFullStatsComponent):
     settingsCore = dependency.descriptor(ISettingsCore)
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -68,6 +79,10 @@ class FullStatsComponent(TabbedFullStatsMeta):
         if BattleReplay.g_replayCtrl.isPlaying:
             g_replayEvents.onTimeWarpStart += self.__onReplayTimeWarpStart
             g_replayEvents.onTimeWarpFinish += self.__onReplayTimeWarpFinished
+        tabs = [{'label': backport.text(R.strings.ingame_gui.statistics.tab.line_up.header())}]
+        if self.lobbyContext.getServerSettings().isPersonalMissionsEnabled():
+            tabs.append({'label': backport.text(R.strings.ingame_gui.statistics.tab.quests.header())})
+        self.as_updateTabsS(tabs)
         return
 
     def _dispose(self):

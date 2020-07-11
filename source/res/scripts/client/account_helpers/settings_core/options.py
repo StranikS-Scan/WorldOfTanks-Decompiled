@@ -23,7 +23,7 @@ import Settings
 import SoundGroups
 import ArenaType
 import WWISE
-from constants import CONTENT_TYPE
+from constants import CONTENT_TYPE, IS_CHINA
 from gui.Scaleform.genConsts.ACOUSTICS import ACOUSTICS
 from gui.app_loader import app_getter
 from gui.impl import backport
@@ -1700,10 +1700,7 @@ class KeyboardSettings(SettingsContainer):
        ('alternate_mode', 'CMD_CM_ALTERNATE_MODE'),
        ('trajectory_view', 'CMD_CM_TRAJECTORY_VIEW'),
        ('reloadPartialClip', 'CMD_RELOAD_PARTIAL_CLIP'))),
-     ('vehicle_other', (('showHUD', 'CMD_TOGGLE_GUI'),
-       ('showRadialMenu', 'CMD_RADIAL_MENU_SHOW'),
-       ('showQuestProgress', 'CMD_QUEST_PROGRESS_SHOW'),
-       ('frontlineSelfDestruction', 'CMD_REQUEST_RECOVERY'))),
+     ('vehicle_other', (('showHUD', 'CMD_TOGGLE_GUI'), ('showQuestProgress', 'CMD_QUEST_PROGRESS_SHOW'), ('frontlineSelfDestruction', 'CMD_REQUEST_RECOVERY'))),
      ('equipment', (('item01', 'CMD_AMMO_CHOICE_1'),
        ('item02', 'CMD_AMMO_CHOICE_2'),
        ('item03', 'CMD_AMMO_CHOICE_3'),
@@ -1711,28 +1708,29 @@ class KeyboardSettings(SettingsContainer):
        ('item05', 'CMD_AMMO_CHOICE_5'),
        ('item06', 'CMD_AMMO_CHOICE_6'),
        ('item07', 'CMD_AMMO_CHOICE_7'),
-       ('item08', 'CMD_AMMO_CHOICE_8'))),
-     ('shortcuts', (('my_target/follow_me', 'CMD_CHAT_SHORTCUT_ATTACK_MY_TARGET'),
-       ('attack', 'CMD_CHAT_SHORTCUT_ATTACK'),
-       ('to_base/to_back', 'CMD_CHAT_SHORTCUT_BACKTOBASE'),
-       ('positive', 'CMD_CHAT_SHORTCUT_POSITIVE'),
-       ('negative', 'CMD_CHAT_SHORTCUT_NEGATIVE'),
-       ('sos/help_me', 'CMD_CHAT_SHORTCUT_HELPME'),
-       ('reload/stop', 'CMD_CHAT_SHORTCUT_RELOAD'))),
+       ('item08', 'CMD_AMMO_CHOICE_8'),
+       ('item09', 'CMD_AMMO_CHOICE_9'),
+       ('item00', 'CMD_AMMO_CHOICE_0'))),
+     ('team_communication', (('highlightLocation', 'CMD_CHAT_SHORTCUT_CONTEXT_COMMAND'),
+       ('highlightTarget', 'CMD_CHAT_SHORTCUT_CONTEXT_COMMIT'),
+       ('showRadialMenu', 'CMD_RADIAL_MENU_SHOW'),
+       ('help', 'CMD_CHAT_SHORTCUT_HELPME'),
+       ('reloading', 'CMD_CHAT_SHORTCUT_RELOAD'),
+       ('fallBack', 'CMD_CHAT_SHORTCUT_BACKTOBASE'),
+       ('thankYou', 'CMD_CHAT_SHORTCUT_THANKYOU'))),
      ('camera', (('camera_up', 'CMD_CM_CAMERA_ROTATE_UP'),
        ('camera_down', 'CMD_CM_CAMERA_ROTATE_DOWN'),
        ('camera_left', 'CMD_CM_CAMERA_ROTATE_LEFT'),
        ('camera_right', 'CMD_CM_CAMERA_ROTATE_RIGHT'))),
      ('voicechat', (('pushToTalk', 'CMD_VOICECHAT_MUTE'), ('voicechat_enable', 'CMD_VOICECHAT_ENABLE'))),
      ('minimap', (('sizeUp', 'CMD_MINIMAP_SIZE_UP'), ('sizeDown', 'CMD_MINIMAP_SIZE_DOWN'), ('visible', 'CMD_MINIMAP_VISIBLE'))))
-    IMPORTANT_BINDS = ('forward', 'backward', 'left', 'right', 'fire', 'item01', 'item02', 'item03', 'item04', 'item05', 'item06', 'item07', 'item08')
-    KEYS_TOOLTIPS = {'my_target/follow_me': 'SettingsKeyFollowMe',
-     'to_base/to_back': 'SettingsKeyTurnBack',
-     'sos/help_me': 'SettingsKeyNeedHelp',
-     'reload/stop': 'SettingsKeyReload',
-     'auto_rotation': 'SettingKeySwitchMode',
-     'chargeFire': 'SettingsKeyChargeFire'}
-    __hiddenGroups = {}
+    IMPORTANT_BINDS = ('forward', 'backward', 'left', 'right', 'fire', 'item01', 'item02', 'item03', 'item04', 'item05', 'item06', 'item07', 'item08', 'item09', 'item00')
+    KEYS_TOOLTIPS = {'auto_rotation': 'SettingKeySwitchMode',
+     'chargeFire': 'SettingsKeyChargeFire',
+     'highlightLocation': 'SettingsKeyHighlightLocation',
+     'highlightTarget': 'SettingsKeyHighlightTarget',
+     'showRadialMenu': 'SettingsKeyShowRadialMenu'}
+    __hiddenGroups = set()
 
     def __init__(self):
         if not GUI_SETTINGS.minimapSize:
@@ -1761,6 +1759,13 @@ class KeyboardSettings(SettingsContainer):
             if groupName == 'firing' and not GUI_SETTINGS.spgAlternativeAimingCameraEnabled:
                 groupValues = list(groupValues)
                 del groupValues[4]
+            if groupName == 'vehicle_other':
+                progressEnabled = True
+                if IS_CHINA:
+                    progressEnabled = False
+                if not progressEnabled:
+                    groupValues = list(groupValues)
+                    del groupValues[2]
             layout.append({'key': groupName,
              'values': [ cls.__mapValues(*x) for x in groupValues ]})
 
@@ -1777,7 +1782,8 @@ class KeyboardSettings(SettingsContainer):
             cls.__hiddenGroups.add(group)
         else:
             LOG_DEBUG('Reveal settings group', group)
-            cls.__hiddenGroups.remove(group)
+            if group in cls.__hiddenGroups:
+                cls.__hiddenGroups.remove(group)
 
     @classmethod
     def isGroupHidden(cls, group):

@@ -882,8 +882,6 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         return
 
     def __onUpdateSwitchers(self, left, right):
-        if not self.visible:
-            return
         self.as_setArrowsStatesS(left, right)
 
     def __onVehicleChanged(self):

@@ -4,11 +4,11 @@ from functools import partial
 import BigWorld
 from bootcamp.BootCampEvents import g_bootcampEvents
 from gui.Scaleform.daapi.view.meta.BCMessageWindowMeta import BCMessageWindowMeta
+from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from gui.Scaleform.genConsts.BOOTCAMP_MESSAGE_ALIASES import BOOTCAMP_MESSAGE_ALIASES
 import SoundGroups
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
-from gui.impl.wrappers.background_blur import WGUIBackgroundBlurSupportImpl
 from gui.shared import EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
@@ -19,8 +19,7 @@ class BCMessageWindow(BCMessageWindowMeta):
 
     def __init__(self, content):
         super(BCMessageWindow, self).__init__(content)
-        self.__blur = WGUIBackgroundBlurSupportImpl()
-        self.__blurHidden = False
+        self.__blur = CachedBlur(ownLayer=APP_CONTAINERS_NAMES.VIEWS, layers=(APP_CONTAINERS_NAMES.TOP_SUB_VIEW, APP_CONTAINERS_NAMES.SUBVIEW, APP_CONTAINERS_NAMES.WINDOWS), blurAnimRepeatCount=1)
 
     def onMessageButtonClicked(self):
         self.onCustomButton(needStopEffect=True, needCloseWindow=False)
@@ -30,10 +29,7 @@ class BCMessageWindow(BCMessageWindowMeta):
 
     @subtitleDecorator
     def onMessageAppear(self, type):
-        if type == BOOTCAMP_MESSAGE_ALIASES.RENDERER_FIN_UI:
-            SoundGroups.g_instance.playSound2D('bc_info_line_graduate')
-        elif type != BOOTCAMP_MESSAGE_ALIASES.RENDERER_INTRO:
-            SoundGroups.g_instance.playSound2D('bc_info_line_universal')
+        pass
 
     def onMessageDisappear(self, type):
         if type != BOOTCAMP_MESSAGE_ALIASES.RENDERER_INTRO:
@@ -52,15 +48,10 @@ class BCMessageWindow(BCMessageWindowMeta):
             callback(True)
         return
 
-    def hideBlur(self):
-        if not self.__blurHidden:
-            self.__blur.disable()
-            self.__blurHidden = True
-
     def _populate(self):
         super(BCMessageWindow, self)._populate()
         self.as_setMessageDataS(self._content['messages'])
-        self.__blur.enable(APP_CONTAINERS_NAMES.VIEWS, (APP_CONTAINERS_NAMES.TOP_SUB_VIEW, APP_CONTAINERS_NAMES.SUBVIEW, APP_CONTAINERS_NAMES.WINDOWS), blurAnimRepeatCount=1)
+        self.__blur.enable()
         self.as_blurOtherWindowsS(APP_CONTAINERS_NAMES.DIALOGS)
         g_bootcampEvents.onRequestBootcampMessageWindowClose += self.onMessageRemoved
         if self._hangarSpace.spaceInited:
@@ -70,7 +61,7 @@ class BCMessageWindow(BCMessageWindowMeta):
 
     def _dispose(self):
         super(BCMessageWindow, self)._dispose()
-        self.hideBlur()
+        self.__blur.fini()
         g_bootcampEvents.onRequestBootcampMessageWindowClose -= self.onMessageRemoved
         self._hangarSpace.onSpaceCreate -= self.__onSpaceCreated
         self.__setCameraDisabled(False)

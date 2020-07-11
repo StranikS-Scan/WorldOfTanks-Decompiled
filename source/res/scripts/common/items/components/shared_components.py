@@ -2,8 +2,9 @@
 # Embedded file name: scripts/common/items/components/shared_components.py
 from collections import namedtuple
 from constants import IS_CLIENT, IS_WEB, IS_EDITOR
-from items.components import component_constants
+from items.components import component_constants, c11n_constants
 from items.components import path_builder
+from items.components.c11n_constants import ApplyArea
 from soft_exception import SoftException
 from wrapped_reflection_framework import ReflectionMetaclass, reflectedNamedTuple
 if IS_CLIENT:
@@ -20,11 +21,47 @@ else:
 
 
 __all__ = ('MaterialInfo', 'DEFAULT_MATERIAL_INFO', 'EmblemSlot', 'LodSettings', 'NodesAndGroups', 'Camouflage', 'DEFAULT_CAMOUFLAGE', 'SwingingSettings', 'I18nComponent', 'DeviceHealth', 'ModelStatesPaths')
-MaterialInfo = namedtuple('MaterialInfo', ('kind', 'armor', 'extra', 'multipleExtra', 'vehicleDamageFactor', 'useArmorHomogenization', 'useHitAngle', 'useAntifragmentationLining', 'mayRicochet', 'collideOnceOnly', 'checkCaliberForRichet', 'checkCaliberForHitAngleNorm', 'damageKind', 'chanceToHitByProjectile', 'chanceToHitByExplosion', 'continueTraceIfNoHit'))
+MaterialInfo = reflectedNamedTuple('MaterialInfo', ('kind', 'armor', 'extra', 'multipleExtra', 'vehicleDamageFactor', 'useArmorHomogenization', 'useHitAngle', 'useAntifragmentationLining', 'mayRicochet', 'collideOnceOnly', 'checkCaliberForRichet', 'checkCaliberForHitAngleNorm', 'damageKind', 'chanceToHitByProjectile', 'chanceToHitByExplosion', 'continueTraceIfNoHit'))
 DEFAULT_MATERIAL_INFO = MaterialInfo(0, 0, None, False, 0.0, False, False, False, False, False, False, False, 0, 0.0, 0.0, False)
 EmblemSlot = reflectedNamedTuple('EmblemSlot', ('rayStart', 'rayEnd', 'rayUp', 'size', 'hideIfDamaged', 'type', 'isMirrored', 'isUVProportional', 'emblemId', 'slotId', 'applyToFabric'))
-CustomizationSlotDescription = reflectedNamedTuple('CustomizationSlotDescription', ('type', 'slotId', 'anchorPosition', 'anchorDirection', 'applyTo', 'position', 'rotation', 'scale', 'scaleFactors', 'doubleSided', 'canBeMirroredVertically', 'showOn', 'tags', 'clipAngle', 'attachedParts', 'compatibleModels', 'itemId', 'options'))
-MiscSlot = namedtuple('MiscSlot', ('type', 'slotId', 'position', 'rotation', 'attachNode'))
+
+class CustomizationSlotDescription(object):
+    __metaclass__ = ReflectionMetaclass
+    __slots__ = ('type', 'slotId', 'anchorPosition', 'anchorDirection', 'applyTo')
+
+    def __init__(self, slotType='', slotId=0, anchorPosition=None, anchorDirection=None, applyTo=None, tags=None):
+        self.type = slotType
+        self.slotId = slotId
+        self.anchorPosition = anchorPosition
+        self.anchorDirection = anchorDirection
+        self.applyTo = applyTo
+
+
+class ProjectionDecalSlotDescription(object):
+    __metaclass__ = ReflectionMetaclass
+    __slots__ = ('type', 'slotId', 'anchorPosition', 'anchorDirection', 'position', 'rotation', 'scale', 'scaleFactors', 'doubleSided', 'canBeMirroredVertically', 'showOn', 'tags', 'clipAngle', 'attachedParts', 'compatibleModels', 'itemId', 'options')
+
+    def __init__(self, slotType='', slotId=0, anchorPosition=None, anchorDirection=None, position=None, rotation=None, scale=None, scaleFactors=c11n_constants.DEFAULT_DECAL_SCALE_FACTORS, doubleSided=False, canBeMirroredVertically=False, showOn=None, tags=None, clipAngle=c11n_constants.DEFAULT_DECAL_CLIP_ANGLE, attachedParts=None, compatibleModels=(c11n_constants.SLOT_DEFAULT_ALLOWED_MODEL,), itemId=None, options=c11n_constants.Options.NONE):
+        self.type = slotType
+        self.slotId = slotId
+        self.anchorPosition = anchorPosition
+        self.anchorDirection = anchorDirection
+        self.position = position
+        self.rotation = rotation
+        self.scale = scale
+        self.scaleFactors = scaleFactors
+        self.doubleSided = doubleSided
+        self.canBeMirroredVertically = canBeMirroredVertically
+        self.showOn = showOn
+        self.tags = tags or ()
+        self.clipAngle = clipAngle
+        self.attachedParts = attachedParts
+        self.compatibleModels = compatibleModels
+        self.itemId = itemId
+        self.options = options
+
+
+MiscSlot = reflectedNamedTuple('MiscSlot', ('type', 'slotId', 'position', 'rotation', 'attachNode'))
 LodSettings = namedtuple('LodSettings', ('maxLodDistance', 'maxPriority'))
 NodesAndGroups = reflectedNamedTuple('NodesAndGroups', ('nodes', 'groups', 'activePostmortem', 'lodSettings'))
 Camouflage = reflectedNamedTuple('Camouflage', ('tiling', 'exclusionMask', 'density', 'aoTextureSize'))

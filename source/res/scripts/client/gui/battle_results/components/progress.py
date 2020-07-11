@@ -32,6 +32,10 @@ from battle_pass_common import BattlePassConsts
 MIN_BATTLES_TO_SHOW_PROGRESS = 5
 _logger = logging.getLogger(__name__)
 
+def isQuestCompleted(_, pPrev, pCur):
+    return pCur.get('bonusCount', 0) - pPrev.get('bonusCount', 0) > 0
+
+
 class VehicleProgressHelper(object):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -244,7 +248,7 @@ class QuestsProgressBlock(base.StatsBlock):
         if questsProgress:
             for qID, qProgress in questsProgress.iteritems():
                 pGroupBy, pPrev, pCur = qProgress
-                isCompleted = pCur.get('bonusCount', 0) - pPrev.get('bonusCount', 0) > 0
+                isCompleted = isQuestCompleted(pGroupBy, pPrev, pCur)
                 if qID in allCommonQuests:
                     quest = allCommonQuests[qID]
                     isProgressReset = not isCompleted and quest.bonusCond.isInRow() and pCur.get('battlesCount', 0) == 0

@@ -7,18 +7,13 @@ from PlayerEvents import g_playerEvents
 from account_helpers import gameplay_ctx
 from constants import QUEUE_TYPE
 from debug_utils import LOG_DEBUG
-from gui import SystemMessages
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.prb_control import prb_getters
-from gui.prb_control.entities.random.pre_queue.actions_validator import RandomActionsValidator
-from gui.prb_control.entities.random.pre_queue.scheduler import RandomScheduler
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base import vehicleAmmoCheck
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueSubscriber, PreQueueEntryPoint, PreQueueEntity
 from gui.prb_control.entities.random.pre_queue.ctx import RandomQueueCtx
 from gui.prb_control.items import SelectResult
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG, REQUEST_TYPE
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
 from soft_exception import SoftException
 from vehicles_watcher import RandomVehiclesWatcher
 
@@ -31,7 +26,6 @@ class RandomSubscriber(PreQueueSubscriber):
         g_playerEvents.onKickedFromRandomQueue += entity.onKickedFromQueue
         g_playerEvents.onKickedFromArena += entity.onKickedFromArena
         g_playerEvents.onArenaJoinFailure += entity.onArenaJoinFailure
-        g_playerEvents.onKickedFromEventBattles += entity.onKickedFromEventBattles
 
     def unsubscribe(self, entity):
         g_playerEvents.onEnqueuedRandom -= entity.onEnqueued
@@ -40,7 +34,6 @@ class RandomSubscriber(PreQueueSubscriber):
         g_playerEvents.onKickedFromRandomQueue -= entity.onKickedFromQueue
         g_playerEvents.onKickedFromArena -= entity.onKickedFromArena
         g_playerEvents.onArenaJoinFailure -= entity.onArenaJoinFailure
-        g_playerEvents.onKickedFromEventBattles -= entity.onKickedFromEventBattles
 
 
 class RandomEntryPoint(PreQueueEntryPoint):
@@ -78,13 +71,6 @@ class RandomEntity(PreQueueEntity):
         name = action.actionName
         return SelectResult(True) if name == PREBATTLE_ACTION_NAME.RANDOM else super(RandomEntity, self).doSelectAction(action)
 
-    def onKickedFromEventBattles(self, *args):
-        if self._requestCtx.getRequestType() == REQUEST_TYPE.QUEUE:
-            self._requestCtx.stopProcessing(True)
-        self._invokeListeners('onKickedFromQueue', QUEUE_TYPE.EVENT_BATTLES, *args)
-        self._exitFromQueueUI()
-        SystemMessages.pushI18nMessage(backport.text(R.strings.system_messages.arena_start_errors.join.EVENT_DISABLED()), type=SystemMessages.SM_TYPE.Error)
-
     def _doQueue(self, ctx):
         mapID = ctx.getDemoArenaTypeID()
         if mapID:
@@ -112,9 +98,3 @@ class RandomEntity(PreQueueEntity):
 
     def _exitFromQueueUI(self):
         g_eventDispatcher.loadHangar()
-
-    def _createActionsValidator(self):
-        return RandomActionsValidator(self)
-
-    def _createScheduler(self):
-        return RandomScheduler(self)

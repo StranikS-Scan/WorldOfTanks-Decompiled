@@ -8,16 +8,14 @@ import varint
 import ResMgr
 from collections import namedtuple, OrderedDict, defaultdict
 from soft_exception import SoftException
-from items.components.c11n_constants import ApplyArea, SeasonType, Options, CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID, StyleFlags, MAX_USERS_PROJECTION_DECALS, CUSTOMIZATION_SLOTS_VEHICLE_PARTS, DEFAULT_SCALE_FACTOR_ID, EMPTY_ITEM_ID
+from items.components.c11n_constants import ApplyArea, SeasonType, Options, CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID, StyleFlags, MAX_USERS_PROJECTION_DECALS, CUSTOMIZATION_SLOTS_VEHICLE_PARTS, DEFAULT_SCALE_FACTOR_ID, EMPTY_ITEM_ID, DEFAULT_SCALE, DEFAULT_ROTATION, DEFAULT_POSITION, DOUBLE_SIDED_DECAL, DEFAULT_DECAL_TINT_COLOR
 from items.components import c11n_components as cn
 from constants import IS_CELLAPP, IS_BASEAPP, IS_EDITOR
 from items import decodeEnum, makeIntCompactDescrByID
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
+import enum
 from typing import List, Dict, Type, Tuple, Any, TypeVar, Optional, MutableMapping
-try:
-    from xml.etree import cElementTree as ET
-except ImportError:
-    from xml.etree import ElementTree as ET
+from wrapped_reflection_framework import ReflectionMetaclass
 
 class FieldTypes(object):
     VARINT = 2
@@ -30,7 +28,16 @@ class FieldTypes(object):
     STRING = 512
 
 
-FieldType = namedtuple('FieldType', 'type default deprecated weakEqualIgnored xmlOnly')
+@enum.unique
+class FieldFlags(enum.IntEnum):
+    NONE = 0
+    DEPRECATED = 1
+    WEAK_EQUAL_IGNORED = 2
+    NON_XML = 4
+    NON_BIN = 8
+    NON_SERIALIZABLE = NON_XML | NON_BIN
+    SAVE_AS_STRING = 16
+
 
 class _C11nSerializationTypes(object):
     DEFAULT = 0
@@ -45,52 +52,54 @@ class _C11nSerializationTypes(object):
     ATTACHMENT = 10
 
 
-def arrayField(itemType, default=None, xmlOnly=False):
-    return FieldType(FieldTypes.TYPED_ARRAY | itemType, default or [], False, False, xmlOnly)
+FieldType = namedtuple('FieldType', 'type default flags')
+
+def arrayField(itemType, default=None, flags=FieldFlags.NONE):
+    return FieldType(FieldTypes.TYPED_ARRAY | itemType, default or [], flags)
 
 
-def intField(default=0):
-    return FieldType(FieldTypes.VARINT, default, False, False, False)
+def intField(default=0, nonXml=False):
+    return FieldType(FieldTypes.VARINT, default, FieldFlags.NON_XML if nonXml else FieldFlags.NONE)
 
 
 def strField(default=''):
-    return FieldType(FieldTypes.STRING, default, False, False, False)
+    return FieldType(FieldTypes.STRING, default, FieldFlags.NONE)
 
 
 def xmlOnlyIntField(default=0):
-    return FieldType(FieldTypes.VARINT, default, False, False, True)
+    return FieldType(FieldTypes.VARINT, default, FieldFlags.NON_BIN)
 
 
 def xmlOnlyFloatField(default=0):
-    return FieldType(FieldTypes.FLOAT, default, False, False, True)
+    return FieldType(FieldTypes.FLOAT, default, FieldFlags.NON_BIN)
 
 
 def xmlOnlyFloatArrayField(default=None):
-    return FieldType(FieldTypes.TYPED_ARRAY | FieldTypes.FLOAT, default or [], False, False, True)
+    return FieldType(FieldTypes.TYPED_ARRAY | FieldTypes.FLOAT, default or [], FieldFlags.NON_BIN)
 
 
 def applyAreaEnumField(default=0):
-    return FieldType(FieldTypes.APPLY_AREA_ENUM, default, False, True, False)
+    return FieldType(FieldTypes.APPLY_AREA_ENUM, default, FieldFlags.WEAK_EQUAL_IGNORED)
 
 
-def xmlOnlyApplyAreaEnumField(default=0):
-    return FieldType(FieldTypes.APPLY_AREA_ENUM, default, False, True, True)
+def xmlOnlyApplyAreaEnumField(default=0, flags=FieldFlags.NONE):
+    return FieldType(FieldTypes.APPLY_AREA_ENUM, default, FieldFlags.WEAK_EQUAL_IGNORED | FieldFlags.NON_BIN | flags)
 
 
 def xmlOnlyTagsField(default=()):
-    return FieldType(FieldTypes.TAGS, default, False, True, True)
+    return FieldType(FieldTypes.TAGS, default, FieldFlags.WEAK_EQUAL_IGNORED | FieldFlags.NON_BIN)
 
 
 def optionsEnumField(default=0):
-    return FieldType(FieldTypes.OPTIONS_ENUM, default, False, False, False)
+    return FieldType(FieldTypes.OPTIONS_ENUM, default, FieldFlags.NONE)
 
 
 def customFieldType(customType):
-    return FieldType(FieldTypes.CUSTOM_TYPE_OFFSET * customType, None, False, False, False)
+    return FieldType(FieldTypes.CUSTOM_TYPE_OFFSET * customType, None, FieldFlags.NONE)
 
 
-def intArrayField(default=None, xmlOnly=False):
-    return arrayField(FieldTypes.VARINT, default or [], xmlOnly=xmlOnly)
+def intArrayField(default=None, flags=FieldFlags.NONE):
+    return arrayField(FieldTypes.VARINT, default or [], flags)
 
 
 def customArrayField(customType, default=None):
@@ -111,14 +120,14 @@ class SerializableComponent(object):
     customType = _C11nSerializationTypes.DEFAULT
     preview = False
 
-    def __eq__(self, o):
+    def __eq(self, o, ignoreFlags):
         if self.__class__ != o.__class__:
             return False
-        for name, ftype in self.fields.iteritems():
-            if ftype.deprecated:
+        for fname, ftype in self.fields.iteritems():
+            if ftype.flags & ignoreFlags:
                 continue
-            v1 = getattr(self, name)
-            v2 = getattr(o, name)
+            v1 = getattr(self, fname)
+            v2 = getattr(o, fname)
             if ftype.type & FieldTypes.TYPED_ARRAY:
                 v1 = set(v1)
                 v2 = set(v2)
@@ -127,13 +136,16 @@ class SerializableComponent(object):
 
         return True
 
+    def __eq__(self, o):
+        return self.__eq(o, FieldFlags.DEPRECATED)
+
     def __ne__(self, o):
         return not self.__eq__(o)
 
     def __hash__(self):
         result = 17
         for name, ftype in self.fields.iteritems():
-            if ftype.deprecated:
+            if ftype.flags & FieldFlags.DEPRECATED:
                 continue
             v1 = getattr(self, name)
             if isinstance(v1, list):
@@ -148,22 +160,7 @@ class SerializableComponent(object):
         return buf.getvalue()
 
     def weak_eq(self, o):
-        if self.__class__ != o.__class__:
-            return False
-        for name, ftype in self.fields.iteritems():
-            if ftype.deprecated:
-                continue
-            if ftype.weakEqualIgnored:
-                continue
-            v1 = getattr(self, name)
-            v2 = getattr(o, name)
-            if ftype.type & FieldTypes.TYPED_ARRAY:
-                v1 = set(v1)
-                v2 = set(v2)
-            if v1 != v2:
-                return False
-
-        return True
+        return self.__eq(o, FieldFlags.DEPRECATED | FieldFlags.WEAK_EQUAL_IGNORED)
 
     def copy(self):
         o = self.__class__()
@@ -180,7 +177,7 @@ class SerializableComponent(object):
         i = 0
         n = len(self.fields)
         for name, fieldInfo in self.fields.iteritems():
-            if fieldInfo.deprecated:
+            if fieldInfo.flags & FieldFlags.DEPRECATED:
                 continue
             v = getattr(self, name)
             stream.write('%s: %s' % (name, repr(v)))
@@ -206,10 +203,10 @@ class ComponentBinSerializer(object):
         offset = 1
         result = ['\x00']
         for fieldName, fieldInfo in obj.fields.iteritems():
-            if fieldInfo.deprecated:
+            if fieldInfo.flags & FieldFlags.DEPRECATED:
                 offset <<= 1
                 continue
-            if fieldInfo.xmlOnly:
+            if fieldInfo.flags & FieldFlags.NON_BIN:
                 continue
             value = getattr(obj, fieldName)
             if value != fieldInfo.default:
@@ -284,7 +281,7 @@ class ComponentBinDeserializer(object):
         valueMap = varint.decode_stream(io)
         offset = 1
         for k, t in fields.iteritems():
-            if t.xmlOnly:
+            if t.flags & FieldFlags.NON_BIN:
                 continue
             next = None if not path or path[0] != k else path[1]
             if valueMap & offset:
@@ -303,7 +300,7 @@ class ComponentBinDeserializer(object):
                     value = self.__decodeCustomType(ftype / FieldTypes.CUSTOM_TYPE_OFFSET, next, wanted)
                 else:
                     raise SerializationException('Unsupported field type index')
-                if not t.deprecated or hasattr(obj, k) or obj is None:
+                if not t.flags & FieldFlags.DEPRECATED or hasattr(obj, k) or obj is None:
                     if wanted is None:
                         setattr(obj, k, value)
                     elif path and path[1] is None and path[0] == k and value == wanted:
@@ -332,47 +329,6 @@ class ComponentBinDeserializer(object):
         return stream.read(varint.decode_stream(stream))
 
 
-class ComponentXmlSerializer(object):
-
-    def __init__(self):
-        super(ComponentXmlSerializer, self).__init__()
-
-    def serialize(self, parent, target):
-        self.__serializeCustomType(parent, target)
-
-    def __serializeCustomType(self, xmlObj, obj):
-        for fieldName, fieldinfo in obj.fields.iteritems():
-            if fieldinfo.deprecated:
-                continue
-            value = getattr(obj, fieldName)
-            if value != fieldinfo.default:
-                child = ET.SubElement(xmlObj, fieldName)
-                self.__serialize(child, value, fieldinfo.type)
-
-        return xmlObj
-
-    def __serializeArray(self, parent, value, itemType):
-        for item in value:
-            child = ET.SubElement(parent, 'item')
-            self.__serialize(child, item, itemType)
-
-    def __serialize(self, current, value, itemType):
-        if itemType == FieldTypes.VARINT:
-            current.text = str(value)
-        elif itemType == FieldTypes.FLOAT:
-            current.text = str(value)
-        elif itemType == FieldTypes.APPLY_AREA_ENUM:
-            current.text = str(value)
-        elif itemType == FieldTypes.OPTIONS_ENUM:
-            current.text = str(value)
-        elif itemType & FieldTypes.TYPED_ARRAY:
-            self.__serializeArray(current, value, itemType ^ FieldTypes.TYPED_ARRAY)
-        elif itemType >= FieldTypes.CUSTOM_TYPE_OFFSET:
-            self.__serializeCustomType(current, value)
-        else:
-            raise SerializationException('Unsupported field type %d' % (itemType,))
-
-
 class ComponentXmlDeserializer(object):
     __slots__ = ('customTypes',)
 
@@ -388,9 +344,11 @@ class ComponentXmlDeserializer(object):
         cls = self.customTypes[customType]
         instance = cls()
         for fname, finfo in cls.fields.iteritems():
-            ftype = finfo.type
+            if finfo.flags & FieldFlags.NON_XML:
+                continue
             if not section.has_key(fname):
                 continue
+            ftype = finfo.type
             if ftype == FieldTypes.VARINT:
                 value = section.readInt(fname)
             elif ftype == FieldTypes.FLOAT:
@@ -411,7 +369,7 @@ class ComponentXmlDeserializer(object):
                 value = self.__decodeCustomType(ftype, (ctx, fname), section[fname])
             else:
                 raise SerializationException('Unsupported item type')
-            if not finfo.deprecated or hasattr(instance, fname):
+            if not finfo.flags & FieldFlags.DEPRECATED or hasattr(instance, fname):
                 setattr(instance, fname, value)
 
         return instance
@@ -440,6 +398,7 @@ class EmptyComponent(SerializableComponent):
 
 
 class PaintComponent(SerializableComponent):
+    __metaclass__ = ReflectionMetaclass
     customType = _C11nSerializationTypes.PAINT
     fields = OrderedDict((('id', intField()), ('appliedTo', applyAreaEnumField(ApplyArea.PAINT_REGIONS_VALUE))))
     __slots__ = ('id', 'appliedTo')
@@ -456,6 +415,7 @@ class PaintComponent(SerializableComponent):
 
 
 class CamouflageComponent(SerializableComponent):
+    __metaclass__ = ReflectionMetaclass
     customType = _C11nSerializationTypes.CAMOUFLAGE
     fields = OrderedDict((('id', intField()),
      ('patternSize', intField(1)),
@@ -472,6 +432,7 @@ class CamouflageComponent(SerializableComponent):
 
 
 class DecalComponent(SerializableComponent):
+    __metaclass__ = ReflectionMetaclass
     customType = _C11nSerializationTypes.DECAL
     fields = OrderedDict((('id', intField()), ('appliedTo', applyAreaEnumField(ApplyArea.NONE)), ('progressionLevel', intField(0))))
     __slots__ = ('id', 'appliedTo', 'progressionLevel')
@@ -484,6 +445,7 @@ class DecalComponent(SerializableComponent):
 
 
 class InsigniaComponent(SerializableComponent):
+    __metaclass__ = ReflectionMetaclass
     customType = _C11nSerializationTypes.INSIGNIA
     fields = OrderedDict((('id', xmlOnlyIntField()), ('appliedTo', xmlOnlyApplyAreaEnumField(ApplyArea.NONE))))
     __slots__ = ('id', 'appliedTo')
@@ -495,23 +457,24 @@ class InsigniaComponent(SerializableComponent):
 
 
 class ProjectionDecalComponent(SerializableComponent):
+    __metaclass__ = ReflectionMetaclass
     customType = _C11nSerializationTypes.PROJECTION_DECAL
     fields = OrderedDict((('id', intField()),
      ('options', optionsEnumField(Options.NONE)),
      ('slotId', intField(0)),
      ('scaleFactorId', intField(DEFAULT_SCALE_FACTOR_ID)),
-     ('showOn', xmlOnlyApplyAreaEnumField(ApplyArea.NONE)),
+     ('showOn', xmlOnlyApplyAreaEnumField(ApplyArea.NONE, FieldFlags.SAVE_AS_STRING)),
      ('scale', xmlOnlyFloatArrayField()),
      ('rotation', xmlOnlyFloatArrayField()),
      ('position', xmlOnlyFloatArrayField()),
-     ('tintColor', intArrayField(xmlOnly=not IS_EDITOR)),
-     ('doubleSided', xmlOnlyIntField(0)),
+     ('tintColor', intArrayField(flags=FieldFlags.NON_BIN if not IS_EDITOR else FieldFlags.NONE)),
+     ('doubleSided', xmlOnlyIntField(DOUBLE_SIDED_DECAL)),
      ('tags', xmlOnlyTagsField(())),
      ('preview', xmlOnlyIntField(0)),
      ('progressionLevel', intField(0))))
     __slots__ = ('id', 'options', 'slotId', 'scaleFactorId', 'showOn', 'scale', 'rotation', 'position', 'tintColor', 'doubleSided', 'tags', 'preview', 'progressionLevel')
 
-    def __init__(self, id=0, options=Options.NONE, slotId=0, scaleFactorId=DEFAULT_SCALE_FACTOR_ID, showOn=ApplyArea.NONE, scale=(1, 10, 1), rotation=(0, 0, 0), position=(0, 0, 0), tintColor=(255, 255, 255, 255), doubleSided=0, tags=(), preview=False, progressionLevel=0):
+    def __init__(self, id=0, options=Options.NONE, slotId=0, scaleFactorId=DEFAULT_SCALE_FACTOR_ID, showOn=ApplyArea.NONE, scale=DEFAULT_SCALE, rotation=DEFAULT_ROTATION, position=DEFAULT_POSITION, tintColor=DEFAULT_DECAL_TINT_COLOR, doubleSided=DOUBLE_SIDED_DECAL, tags=None, preview=False, progressionLevel=0):
         self.id = id
         self.options = options
         self.slotId = slotId
@@ -541,6 +504,7 @@ class ProjectionDecalComponent(SerializableComponent):
 
 
 class PersonalNumberComponent(SerializableComponent):
+    __metaclass__ = ReflectionMetaclass
     customType = _C11nSerializationTypes.PERSONAL_NUMBER
     fields = OrderedDict((('id', intField()), ('number', strField()), ('appliedTo', applyAreaEnumField(ApplyArea.NONE))))
     __slots__ = ('id', 'number', 'appliedTo')
@@ -556,6 +520,7 @@ class PersonalNumberComponent(SerializableComponent):
 
 
 class SequenceComponent(SerializableComponent):
+    __metaclass__ = ReflectionMetaclass
     customType = _C11nSerializationTypes.SEQUENCE
     fields = OrderedDict((('id', intField()),
      ('slotId', xmlOnlyIntField(0)),
@@ -572,6 +537,7 @@ class SequenceComponent(SerializableComponent):
 
 
 class AttachmentComponent(SerializableComponent):
+    __metaclass__ = ReflectionMetaclass
     customType = _C11nSerializationTypes.ATTACHMENT
     fields = OrderedDict((('id', intField()),
      ('slotId', xmlOnlyIntField(0)),
@@ -588,12 +554,13 @@ class AttachmentComponent(SerializableComponent):
 
 
 class CustomizationOutfit(SerializableComponent):
+    __metaclass__ = ReflectionMetaclass
     customType = _C11nSerializationTypes.OUTFIT
     fields = OrderedDict((('modifications', intArrayField()),
      ('paints', customArrayField(PaintComponent.customType)),
      ('camouflages', customArrayField(CamouflageComponent.customType)),
      ('decals', customArrayField(DecalComponent.customType)),
-     ('styleId', intField()),
+     ('styleId', intField(nonXml=True)),
      ('projection_decals', customArrayField(ProjectionDecalComponent.customType)),
      ('insignias', customArrayField(InsigniaComponent.customType)),
      ('personal_numbers', customArrayField(PersonalNumberComponent.customType)),

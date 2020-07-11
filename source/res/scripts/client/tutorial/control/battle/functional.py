@@ -242,7 +242,7 @@ class _VehicleMarker(_IMarker):
         if vehicle is not None and vehicle.isStarted and not vehicle.isPlayerVehicle:
             if self.__nextTime <= BigWorld.time():
                 if feedback is not None:
-                    feedback.showActionMarker(self.__vehicleID, mMarker='attack')
+                    feedback.showActionMarker(self.__vehicleID, mMarker='attack', isPermanent=True)
                 self.__nextTime = BigWorld.time() + self.__period
             if self.__dIndicator is not None:
                 vPosition = vehicle.position

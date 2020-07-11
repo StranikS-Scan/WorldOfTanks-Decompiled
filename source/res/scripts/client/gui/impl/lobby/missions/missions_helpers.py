@@ -6,7 +6,7 @@ from skeletons.gui.server_events import IEventsCache
 if typing.TYPE_CHECKING:
     from typing import Iterable
     from gui.impl.gen.view_models.common.missions.event_model import EventModel
-    from gui.server_events.event_items import DailyQuest
+    from gui.server_events.event_items import Quest, DailyQuest
     from frameworks.wulf.view.array import Array
 __all__ = ('needToUpdateQuestsInModel',)
 NUM_OF_COMMON_DAILY_QUESTS = 3

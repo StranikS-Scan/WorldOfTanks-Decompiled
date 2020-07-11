@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/chat_handlers.py
-from collections import namedtuple
 import weakref
+from collections import namedtuple
+import BigWorld
 import BattleReplay
+from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_DEBUG
 from gui import GUI_SETTINGS
@@ -16,10 +18,11 @@ from messenger.proto.bw_chat2.unit_chat_cmd import UnitCommandFactory
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.interfaces import IBattleCommandFactory
 from messenger.storage import storage_getter
+from messenger_common_chat2 import BATTLE_CHAT_COMMANDS
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from messenger_common_chat2 import MESSENGER_LIMITS as _LIMITS
-from messenger_common_chat2 import BATTLE_CHAT_COMMANDS
 from messenger_common_chat2 import UNIT_CHAT_COMMANDS
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 _ActionsCollection = namedtuple('_ActionsCollection', 'initID deInitID onBroadcastID broadcastID')
 
@@ -344,13 +347,18 @@ class UnitChatHandler(_EntityChatHandler):
         g_messengerEvents.channels.onCommandReceived(cmd)
 
 
+_MUTE_CHAT_COMMAND_AND_SENDER_DURATION = 15
+
 class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandFactory):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, provider):
         super(BattleChatCommandHandler, self).__init__(provider)
         self.__factory = BattleCommandFactory()
         self.__targetIDs = []
+        self.__receivedChatCommands = {}
+        self.__isEnabled = True
 
     @property
     def factory(self):
@@ -359,6 +367,7 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
     def clear(self):
         self.__factory = None
         self.__targetIDs = []
+        self.__receivedChatCommands = None
         super(BattleChatCommandHandler, self).clear()
         return
 
@@ -370,6 +379,7 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
             arena = self.__sessionProvider.arenaVisitor.getArenaSubscription()
             if arena is not None:
                 arena.onVehicleKilled += self.__onVehicleKilled
+                self.__isEnabled = self.__settingsCore.getSetting(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION)
             return
 
     def send(self, decorator):
@@ -382,7 +392,7 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
             if success:
                 if decorator.isEnemyTarget():
                     self.__targetIDs.append(decorator.getTargetID())
-                provider.setActionCoolDown(command.id, command.cooldownPeriod)
+                provider.setActionCoolDown(command.id, command.cooldownPeriod, decorator.getTargetID())
         else:
             LOG_ERROR('Battle command is not found', decorator)
 
@@ -391,6 +401,7 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
         for command in BATTLE_CHAT_COMMANDS:
             register(command.id, self.__onCommandReceived)
 
+        self.__settingsCore.onSettingsChanged += self.__onSettingsChanged
         super(BattleChatCommandHandler, self).registerHandlers()
 
     def unregisterHandlers(self):
@@ -398,13 +409,11 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
         for command in BATTLE_CHAT_COMMANDS:
             unregister(command.id, self.__onCommandReceived)
 
+        self.__settingsCore.onSettingsChanged -= self.__onSettingsChanged
         super(BattleChatCommandHandler, self).unregisterHandlers()
 
     def createByName(self, name):
         return self.__factory.createByName(name)
-
-    def createSPGAimAreaCommand(self, desiredShotPosition, cellIdx, reloadTime):
-        return self.__factory.createSPGAimAreaCommand(desiredShotPosition, cellIdx, reloadTime)
 
     def createSPGAimTargetCommand(self, targetID, reloadTime):
         return self.__factory.createSPGAimTargetCommand(targetID, reloadTime)
@@ -412,17 +421,14 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
     def createByNameTarget(self, name, targetID):
         return self.__factory.createByNameTarget(name, targetID)
 
-    def createByCellIdx(self, cellIdx):
-        return self.__factory.createByCellIdx(cellIdx)
-
-    def createByPosition(self, position):
-        return self.__factory.createByPosition(position)
+    def createByPosition(self, position, name, reloadTime=0.0):
+        return self.__factory.createByPosition(position, name, reloadTime)
 
     def createByObjectiveIndex(self, idx, isAtk):
         return self.__factory.createByObjectiveIndex(idx, isAtk)
 
-    def createByBaseIndex(self, idx, name, isAtk):
-        return self.__factory.createByBaseIndex(idx, name, isAtk)
+    def createByBaseIndexAndName(self, pointId, commandName, baseName):
+        return self.__factory.createByBaseIndexAndName(pointId, commandName, baseName)
 
     def createByGlobalMsgName(self, actionID, baseName=''):
         return self.__factory.createByGlobalMsgName(actionID, baseName)
@@ -430,19 +436,60 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
     def create4Reload(self, isCassetteClip, timeLeft, quantity):
         return self.__factory.create4Reload(isCassetteClip, timeLeft, quantity)
 
+    def createReplyByName(self, replyID, replyType, replierID):
+        return self.__factory.createReplyByName(replyID, replyType, replierID)
+
+    def createCancelReplyByName(self, replyID, replyType, replierID):
+        return self.__factory.createCancelReplyByName(replyID, replyType, replierID)
+
+    def createClearChatCommandsFromTarget(self, targetID, targetMarkerType):
+        return self.__factory.createClearChatCommandsFromTarget(targetID, targetMarkerType)
+
     def _onResponseFailure(self, ids, args):
         command = super(BattleChatCommandHandler, self)._onResponseFailure(ids, args)
         if command:
+            self.provider().clearActionCoolDown(command.id)
             error = errors.createBattleCommandError(args, command)
             if error:
                 g_messengerEvents.onErrorReceived(error)
             else:
                 LOG_WARNING('Error is not resolved on the client', command, args)
 
+    def __isSilentMode(self, cmd):
+        arenaDP = self.__sessionProvider.getArenaDP()
+        if not cmd.isMuteTypeMessage() or cmd.getSenderID() == '' or arenaDP is None:
+            return False
+        elif arenaDP.getVehIDBySessionID(cmd.getSenderID()) == arenaDP.getPlayerVehicleID():
+            return False
+        else:
+            silentMode = False
+            currTime = BigWorld.time()
+            cmdID = cmd.getID()
+            key = (cmd.getSenderID(), cmdID)
+            if key not in self.__receivedChatCommands:
+                self.__receivedChatCommands[key] = currTime + _MUTE_CHAT_COMMAND_AND_SENDER_DURATION
+            elif currTime < self.__receivedChatCommands[key]:
+                silentMode = True
+            else:
+                self.__receivedChatCommands[key] = currTime + _MUTE_CHAT_COMMAND_AND_SENDER_DURATION
+            return silentMode
+
+    def __onSettingsChanged(self, diff):
+        battleCommunicationEnabled = diff.get(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION)
+        if not battleCommunicationEnabled:
+            return
+        self.__isEnabled = bool(battleCommunicationEnabled)
+
     def __onCommandReceived(self, ids, args):
         actionID, _ = ids
         cmd = self.__factory.createByAction(actionID, args)
+        if self.__isEnabled is False:
+            return
+        silentMode = self.__isSilentMode(cmd)
+        if silentMode:
+            cmd.setSilentMode(silentMode)
         if cmd.isIgnored():
+            g_mutedMessages[cmd.getFirstTargetID()] = cmd
             LOG_DEBUG('Chat command is ignored', cmd)
             return
         if cmd.isPrivate() and not (cmd.isReceiver() or cmd.isSender()):
@@ -494,3 +541,6 @@ class AdminChatCommandHandler(bw2_provider.ResponseDictHandler):
         cmd = super(AdminChatCommandHandler, self)._onResponseSuccess(ids, args)
         if cmd:
             g_messengerEvents.channels.onCommandReceived(cmd)
+
+
+g_mutedMessages = {}

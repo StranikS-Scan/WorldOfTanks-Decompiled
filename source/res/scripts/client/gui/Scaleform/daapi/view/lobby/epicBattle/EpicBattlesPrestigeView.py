@@ -5,7 +5,7 @@ import SoundGroups
 from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.epicBattle.epic_meta_level_icon import getEpicMetaIconVODict
+from gui.Scaleform.daapi.view.lobby.event_progression.after_battle_reward_view_helpers import getProgressionIconVODict
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_prestige_progress import getPrestigeLevelAwardsVOs
 from gui.Scaleform.daapi.view.meta.EpicBattlesPrestigeViewMeta import EpicBattlesPrestigeViewMeta
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
@@ -54,7 +54,7 @@ class EpicBattlesPrestigeView(LobbySubView, EpicBattlesPrestigeViewMeta):
             return
         awardsVO = getPrestigeLevelAwardsVOs(self.eventsCache.getAllQuests(), nextPrestigeLevel, AWARDS_SIZES.BIG)
         prestigeLvlTxt = i18n.makeString(EPIC_BATTLE.EPICBATTLESPRESTIGEVIEW_PRESTIGELEVEL, level=int2roman(nextPrestigeLevel + 1))
-        iconData = getEpicMetaIconVODict(nextPrestigeLevel, 1)
+        iconData = getProgressionIconVODict(nextPrestigeLevel, 1)
         data = {'prestigeLevelText': prestigeLvlTxt,
          'prestigeTitleText': i18n.makeString(EPIC_BATTLE.EPICBATTLESPRESTIGEVIEW_MAINTITLE),
          'removeAbilitiesContainerTitleText': i18n.makeString(EPIC_BATTLE.EPICBATTLESPRESTIGEVIEW_REMOVEABILITIES_TITLE),

@@ -10,6 +10,7 @@ from gui.battle_results.components import base, shared, style, ranked
 from gui.battle_results.components.base import PropertyValue
 from gui.battle_results.components.personal import fillKillerInfoBlock
 from gui.battle_results.reusable import sort_keys
+from gui.battle_results.reusable.avatars import AvatarInfo
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles

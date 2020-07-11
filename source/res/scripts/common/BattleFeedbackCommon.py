@@ -30,12 +30,14 @@ class BATTLE_EVENT_TYPE:
     INSPIRE_ASSIST = 19
     BASE_CAPTURE_BLOCKED = 20
     MULTI_STUN = 21
+    EQUIPMENT_TIMER_EXPIRED = 22
     HIDE_IF_TARGET_INVISIBLE = (CRIT,
      DAMAGE,
      TRACK_ASSIST,
      STUN_ASSIST,
      RADIO_ASSIST,
      MULTI_STUN)
+    DISCLOSED_ATTACK_REASON_IDS = (ATTACK_REASON_INDICES[ATTACK_REASON.MINEFIELD_EQ],)
     DAMAGE_EVENTS = frozenset([RADIO_ASSIST,
      TRACK_ASSIST,
      STUN_ASSIST,
@@ -54,6 +56,7 @@ class BATTLE_EVENT_TYPE:
      DESTRUCTIBLES_DEFENDED,
      ENEMY_SECTOR_CAPTURED,
      DEFENDER_BONUS])
+    EQUIPMENT_EVENTS = frozenset([EQUIPMENT_TIMER_EXPIRED])
     ALL = frozenset([SPOTTED,
      RADIO_ASSIST,
      TRACK_ASSIST,
@@ -75,7 +78,8 @@ class BATTLE_EVENT_TYPE:
      SMOKE_ASSIST,
      INSPIRE_ASSIST,
      BASE_CAPTURE_BLOCKED,
-     MULTI_STUN])
+     MULTI_STUN,
+     EQUIPMENT_TIMER_EXPIRED])
 
     @staticmethod
     def packDamage(damage, attackReasonID, isBurst=False, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=ATTACK_REASON_INDICES[ATTACK_REASON.NONE], isRoleAction=False):
@@ -90,6 +94,10 @@ class BATTLE_EVENT_TYPE:
          packedDamage >> 8 & 1,
          packedDamage & 255,
          packedDamage >> 41 & 1)
+
+    @staticmethod
+    def unpackAttackReason(packedDamage):
+        return packedDamage >> 17 & 255
 
     @staticmethod
     def packCrits(critsCount, attackReasonID, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=ATTACK_REASON_INDICES[ATTACK_REASON.NONE]):

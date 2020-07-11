@@ -63,3 +63,6 @@ class BattleStatisticDataControllerMeta(BaseDAAPIComponent):
 
     def as_updateQuestHeaderProgressS(self, headerProgress):
         return self.flashObject.as_updateQuestHeaderProgress(headerProgress) if self._isDAAPIInited() else None
+
+    def as_updateTriggeredChatCommandsS(self, data):
+        return self.flashObject.as_updateTriggeredChatCommands(data) if self._isDAAPIInited() else None

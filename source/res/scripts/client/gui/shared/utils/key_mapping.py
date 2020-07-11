@@ -155,6 +155,14 @@ def getKey(command):
     return CommandMapping.g_instance.get(commandName)
 
 
+def canGetVirtualKey(key):
+    return key < Keys.KEY_NUMLOCK
+
+
 def getReadableKey(command):
     key = getKey(command)
+    if canGetVirtualKey(key):
+        vk = BigWorld.mapVirtualKey(key, 1)
+        if vk != 0:
+            key = SCALEFORM_TO_BW[vk]
     return makeString(READABLE_KEY_NAMES.key(BigWorld.keyToString(key)))

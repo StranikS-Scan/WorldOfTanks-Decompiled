@@ -170,6 +170,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     CUSTOMIZATION_STYLE_INFO = 'CustomizationStyleInfo'
     TANK_CAROUSEL_FILTER_POPOVER = 'TankCarouselFilterPopover'
     BATTLEPASS_CAROUSEL_FILTER_POPOVER = 'BattlePassCarouselFilterPopover'
+    BATTLEROYALE_CAROUSEL_FILTER_POPOVER = 'BattleRoyaleCarouselFilterPopover'
     VEHICLES_FILTER_POPOVER = 'VehiclesFilterPopover'
     STORAGE_VEHICLES_FILTER_POPOVER = 'StorageVehiclesFilterPopover'
     STORAGE_BLUEPRINTS_FILTER_POPOVER = 'StorageBlueprintsFilterPopover'
@@ -184,6 +185,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     EPIC_BATTLE_PAGE = 'epicBattlePage'
     EVENT_BATTLE_PAGE = 'classicBattlePage'
     RANKED_BATTLE_PAGE = 'rankedBattlePage'
+    BATTLE_ROYALE_PAGE = 'battleRoyalePage'
     MISSION_AWARD_WINDOW = 'missionAwardWindow'
     CRYSTALS_PROMO_WINDOW = 'crystalsPromoWindow'
     BOOTCAMP_BATTLE_PAGE = 'bootcampBattlePage'
@@ -194,6 +196,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     INGAME_DETAILS_HELP = 'ingameDetailsHelp'
     INGAME_DESERTER = 'ingameDeserter'
     BOTS_MENU = 'botsMenu'
+    EVENT_LOADING = 'eventLoading'
     BOOTCAMP_INTRO = 'bootcampIntro'
     BOOTCAMP_INTRO_VIDEO = 'bootcampIntroVideo'
     BOOTCAMP_OUTRO_VIDEO = 'bootcampOutroVideo'
@@ -233,4 +236,5 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
      EVENT_BATTLE_PAGE,
      RANKED_BATTLE_PAGE,
      BOOTCAMP_BATTLE_PAGE,
-     EPIC_BATTLE_PAGE)
+     EPIC_BATTLE_PAGE,
+     BATTLE_ROYALE_PAGE)

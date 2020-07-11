@@ -55,7 +55,7 @@ class CredentialsMode(BaseMode):
         return True
 
     def updateForm(self):
-        self._view.as_showSimpleFormS(False, None)
+        self._view.as_showSimpleFormS(False, None, not constants.IS_CHINA)
         return
 
     @staticmethod

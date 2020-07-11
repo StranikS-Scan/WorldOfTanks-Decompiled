@@ -1,8 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/_xml.py
+from typing import *
 from functools import wraps, partial
 from soft_exception import SoftException
 from constants import SEASON_TYPE_BY_NAME, RentType, IS_BASEAPP, IS_EDITOR
+from debug_utils import LOG_ERROR
+import type_traits
 _g_floats = {'count': 0}
 _g_intTuples = {'count': 0}
 _g_floatTuples = {'count': 0}
@@ -63,7 +66,11 @@ def raiseWrongXml(xmlContext, subsectionName, msg):
         fileName = xmlContext[1] + ('/' + fileName if fileName else '')
         xmlContext = xmlContext[0]
 
-    raise SoftException("error in '" + fileName + "': " + msg)
+    text = "error in '" + fileName + "': " + msg
+    if IS_EDITOR:
+        LOG_ERROR(text)
+    else:
+        raise SoftException(text)
     return
 
 
@@ -125,6 +132,16 @@ def readNonEmptyString(xmlCtx, section, subsectionName):
     if not v:
         raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
     return intern(v)
+
+
+def readStringWithDefaultValue(xmlCtx, section, subsectionName, defaultValue=None):
+    if defaultValue is None:
+        return readStringOrNone(xmlCtx, section, subsectionName)
+    elif defaultValue == '':
+        return readStringOrEmpty()
+    else:
+        subsection = section[subsectionName]
+        return intern(str(defaultValue)) if subsection is None else intern(subsection.asString)
 
 
 def readBool(xmlCtx, section, subsectionName, default=None):
@@ -313,7 +330,7 @@ def readTupleOfStrings(xmlCtx, section, subsectionName, count=None, separator=' 
     strings = getSubsection(xmlCtx, section, subsectionName).asString.split(separator)
     if count is not None and len(strings) != count:
         raiseWrongXml(xmlCtx, subsectionName, '%d strings expected' % count)
-    return tuple(strings)
+    return tuple(map(intern, strings))
 
 
 def readTupleOfBools(xmlCtx, section, subsectionName, count=None):
@@ -453,27 +470,11 @@ def rewriteInt(section, subsectionName, value, defaultValue=None, createNew=True
 
 
 def rewriteFloat(section, subsectionName, value, defaultValue=None, createNew=True):
-
-    def cmp(x, y):
-        if x is None or y is None:
-            return x == y
-        else:
-            return abs(x - y) < 1e-05
-            return
-
-    return rewriteData(section, subsectionName, value, defaultValue, createNew, 'Float', cmp)
+    return rewriteData(section, subsectionName, value, defaultValue, createNew, 'Float')
 
 
 def rewriteString(section, subsectionName, value, defaultValue=None, createNew=True):
-
-    def cmp(x, y):
-        if x is None or y is None:
-            return x == y
-        else:
-            return x.lower() == y.lower()
-            return
-
-    return rewriteData(section, subsectionName, value, defaultValue, createNew, 'String', cmp)
+    return rewriteData(section, subsectionName, value, defaultValue, createNew, 'String')
 
 
 def rewriteVector2(section, subsectionName, value, defaultValue=None, createNew=True):
@@ -492,20 +493,114 @@ def rewriteMatrix(section, subsectionName, value, defaultValue=None, createNew=T
     return rewriteData(section, subsectionName, value, defaultValue, createNew, 'Matrix')
 
 
-def rewriteData(section, subsectionName, value, defaultValue, createNew, accessFunSuffix, cmp=None):
-    readFunc = getattr(section, 'read{}'.format(accessFunSuffix))
-    writeFunc = getattr(section, 'write{}'.format(accessFunSuffix))
-    if cmp is None:
-        cmp = lambda x, y: x == y
-    if section.has_key(subsectionName):
-        sectionValue = readFunc(subsectionName)
-        if cmp(value, defaultValue) and not cmp(value, sectionValue):
-            section.deleteSection(subsectionName)
-            return True
-        if not cmp(sectionValue, value):
+def rewriteData(section, subsectionName, value, defaultValue, createNew, accessFunSuffix):
+    equal = type_traits.equalComparator(accessFunSuffix)
+    isDefaultValue = equal(value, defaultValue)
+    if subsectionName is not None:
+        readFunc = getattr(section, 'read' + accessFunSuffix)
+        writeFunc = getattr(section, 'write' + accessFunSuffix)
+        if section.has_key(subsectionName):
+            if not equal(value, readFunc(subsectionName)):
+                writeFunc(subsectionName, value)
+                return True
+        elif createNew and not isDefaultValue:
             writeFunc(subsectionName, value)
             return True
-    elif createNew and not cmp(value, defaultValue):
-        writeFunc(subsectionName, value)
-        return True
+    else:
+        asProp = 'as' + accessFunSuffix
+        if isDefaultValue:
+            section.parentSection().deleteSection(section)
+            return True
+        if not equal(value, getattr(section, asProp)):
+            setattr(section, asProp, value)
+            return True
     return False
+
+
+def listChildren(section, path):
+    sep = path.find('/')
+    if sep >= 0:
+        for c1 in listChildren(section, path[:sep]):
+            for c2 in listChildren(c1, path[sep + 1:]):
+                yield c2
+
+    else:
+        for name, child in section.items():
+            if name == path or path == '*':
+                yield child
+
+
+def matchChildren(section, path, predicate):
+    for child in listChildren(section, path):
+        if predicate is None or predicate(child):
+            yield child
+
+    return
+
+
+def matchChild(section, path, predicate):
+    for child in matchChildren(section, path, predicate):
+        return child
+
+    return None
+
+
+def keyMatches(section, key, value):
+    for k in listChildren(section, key):
+        if k.asString == value:
+            return True
+
+    return False
+
+
+def keyExists(section, key):
+    for _ in listChildren(section, key):
+        return True
+
+    return False
+
+
+class ListRewriter(object):
+    __slots__ = ('__section', '__path', '__changed', '__sections')
+
+    def __init__(self, section, path, predicate=None):
+        self.__section = section
+        self.__path = path
+        self.__changed = False
+        self.__sections = list(matchChildren(section, path, predicate))
+
+    def __iter__(self):
+        return self
+
+    def next(self, preferredPredicate=None):
+        if preferredPredicate is None:
+            try:
+                return self.__sections.pop(0)
+            except IndexError:
+                pass
+
+        else:
+            for i, s in enumerate(self.__sections):
+                if preferredPredicate(s):
+                    return self.__sections.pop(i)
+
+        self.__changed = True
+        return self.__section.createSection(self.__path)
+
+    def flush(self):
+        for s in self.__sections:
+            s.parentSection().deleteSection(s)
+            self.__changed = True
+
+        return self.__changed
+
+    @property
+    def changed(self):
+        return self.__changed or len(self.__sections) > 0
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.flush()
+        return False

@@ -8,6 +8,7 @@ from debug_utils import LOG_DEBUG
 from helpers import i18n
 from gui.shared.utils import getPlayerDatabaseID
 from messenger import g_settings
+from messenger.ext import passCensor
 from messenger.m_constants import LAZY_CHANNEL, MESSENGER_SCOPE, USER_TAG, PROTO_TYPE
 from messenger.proto.bw.ChatActionsListener import ChatActionsListener
 from messenger.proto.bw import entities
@@ -121,7 +122,8 @@ class ChannelsManager(ChatActionsListener):
         else:
             if name.startswith('#'):
                 name = name[1:]
-            self.__creationInfo[unicode(name, 'utf-8', errors='ignore')] = password
+            name = passCensor(name).encode('utf-8')
+            self.__creationInfo[name] = password
             BigWorld.player().createChatChannel(name, password)
             return None
 

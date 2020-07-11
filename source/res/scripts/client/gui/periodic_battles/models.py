@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/periodic_battles/models.py
 from collections import namedtuple
-import typing
 from helpers import time_utils
 from shared_utils import collapseIntervals, findFirst, first
 
@@ -11,10 +10,6 @@ class PrimeTime(object):
         super(PrimeTime, self).__init__()
         self.__peripheryID = peripheryID
         self.__periods = periods or {}
-
-    @property
-    def periods(self):
-        return self.__periods
 
     def hasAnyPeriods(self):
         return bool(self.__periods)
@@ -72,9 +67,6 @@ class PrimeTime(object):
             startTimeDayStart += time_utils.ONE_DAY
 
         return collapseIntervals(periods)
-
-    def getPeriods(self):
-        return self.__periods
 
 
 CalendarStatusVO = namedtuple('CalendarStatusVO', ('alertIcon', 'buttonIcon', 'buttonLabel', 'buttonVisible', 'buttonTooltip', 'statusText', 'popoverAlias', 'bgVisible', 'shadowFilterVisible', 'tooltip'))

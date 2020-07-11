@@ -89,7 +89,7 @@ class EpicRoster(BaseUnitRoster):
     MAX_VEHICLES = 10000
 
 
-class BobRoster(BaseUnitRoster):
+class BattleRoyaleRoster(BaseUnitRoster):
     MAX_SLOTS = 3
     MAX_EMPTY_SLOTS = 2
     SLOT_TYPE = RosterSlot10

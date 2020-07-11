@@ -68,7 +68,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.vehicle_obtain_windows import VehicleBuyWindow
     from gui.Scaleform.daapi.view.lobby.vehicle_obtain_windows import VehicleRestoreWindow
     from gui.Scaleform.daapi.view.lobby.VehicleInfoWindow import VehicleInfoWindow
-    from gui.Scaleform.daapi.view.lobby.CrystalPromoWindow import CrystalsPromoWindow
     from gui.Scaleform.daapi.view.lobby.vehicle_sell_dialog import VehicleSellDialog
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview import VehiclePreview
     from gui.Scaleform.daapi.view.lobby.event_progression.event_progression_vehicle_preview import EventProgressionVehiclePreview
@@ -144,7 +143,6 @@ def getViewSettings():
      GroupedViewSettings(VIEW_ALIAS.VEHICLE_SELL_DIALOG, VehicleSellDialog, 'vehicleSellDialog.swf', ViewTypes.TOP_WINDOW, 'vehicleSellWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.SANDBOX_QUEUE_DIALOG, SandboxQueueDialog, 'PvESandboxQueueWindow.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canClose=False),
      GroupedViewSettings(VIEW_ALIAS.MISSION_AWARD_WINDOW, MissionAwardWindow, 'missionAwardWindow.swf', ViewTypes.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
-     GroupedViewSettings(VIEW_ALIAS.CRYSTALS_PROMO_WINDOW, CrystalsPromoWindow, 'crystalsPromoWindow.swf', ViewTypes.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.TRADEIN_POPOVER, TradeInPopup, 'TradeInPopover.swf', ViewTypes.TOP_WINDOW, 'TradeInPopover', VIEW_ALIAS.TRADEIN_POPOVER, ScopeTemplates.TOP_WINDOW_SCOPE),
      ViewSettings(VIEW_ALIAS.REFERRAL_PROGRAM_WINDOW, BrowserView, 'browserScreen.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True),
      ViewSettings(VIEW_ALIAS.CLAN_NOTIFICATION_WINDOW, BrowserView, 'browserScreen.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True),

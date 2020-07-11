@@ -27,12 +27,12 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.TechnicalMaintenance import TechnicalMaintenance
     from gui.Scaleform.daapi.view.lobby.hangar.TmenXpPanel import TmenXpPanel
     from gui.Scaleform.daapi.view.lobby.hangar.VehicleParameters import VehicleParameters
-    from gui.Scaleform.daapi.view.common.filter_popover import TankCarouselFilterPopover, BattlePassCarouselFilterPopover
+    from gui.Scaleform.daapi.view.common.filter_popover import TankCarouselFilterPopover, BattlePassCarouselFilterPopover, BattleRoyaleCarouselFilterPopover
     from gui.Scaleform.daapi.view.lobby.hangar.carousels import TankCarousel
     from gui.Scaleform.daapi.view.lobby.hangar.carousels import RankedTankCarousel
     from gui.Scaleform.daapi.view.lobby.hangar.carousels import EpicBattleTankCarousel
     from gui.Scaleform.daapi.view.lobby.hangar.carousels import BattlePassTankCarousel
-    from gui.Scaleform.daapi.view.lobby.hangar.carousels import BobTankCarousel
+    from gui.Scaleform.daapi.view.lobby.hangar.carousels import RoyaleTankCarousel
     from gui.Scaleform.daapi.view.lobby.hangar.StrongholdView import StrongholdView
     from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import BrowserView
     from gui.Scaleform.daapi.view.lobby.hangar.hangar_header import HangarHeader
@@ -68,6 +68,7 @@ def getViewSettings():
      ConditionalViewSettings(VIEW_ALIAS.TECHNICAL_MAINTENANCE, BootcampComponentOverride(TechnicalMaintenance, BCTechnicalMaintenance), 'technicalMaintenance.swf', ViewTypes.WINDOW, '', None, BootcampComponentOverride(ScopeTemplates.DEFAULT_SCOPE, ScopeTemplates.LOBBY_SUB_SCOPE)),
      GroupedViewSettings(VIEW_ALIAS.TANK_CAROUSEL_FILTER_POPOVER, TankCarouselFilterPopover, 'filtersPopoverView.swf', ViewTypes.WINDOW, VIEW_ALIAS.TANK_CAROUSEL_FILTER_POPOVER, VIEW_ALIAS.TANK_CAROUSEL_FILTER_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.BATTLEPASS_CAROUSEL_FILTER_POPOVER, BattlePassCarouselFilterPopover, 'filtersPopoverView.swf', ViewTypes.WINDOW, VIEW_ALIAS.BATTLEPASS_CAROUSEL_FILTER_POPOVER, VIEW_ALIAS.BATTLEPASS_CAROUSEL_FILTER_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
+     GroupedViewSettings(VIEW_ALIAS.BATTLEROYALE_CAROUSEL_FILTER_POPOVER, BattleRoyaleCarouselFilterPopover, 'filtersPopoverView.swf', ViewTypes.WINDOW, VIEW_ALIAS.BATTLEROYALE_CAROUSEL_FILTER_POPOVER, VIEW_ALIAS.BATTLEROYALE_CAROUSEL_FILTER_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.FITTING_SELECT_POPOVER, HangarFittingSelectPopover, 'fittingSelectPopover.swf', ViewTypes.WINDOW, VIEW_ALIAS.FITTING_SELECT_POPOVER, VIEW_ALIAS.FITTING_SELECT_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.FITTING_CMP_SELECT_POPOVER, VehCmpConfigSelectPopover, 'fittingSelectPopover.swf', ViewTypes.WINDOW, VIEW_ALIAS.FITTING_CMP_SELECT_POPOVER, VIEW_ALIAS.FITTING_CMP_SELECT_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.BOOSTER_CMP_SELECT_POPOVER, VehCmpBattleBoosterSelectPopover, 'fittingSelectPopover.swf', ViewTypes.WINDOW, VIEW_ALIAS.BOOSTER_CMP_SELECT_POPOVER, VIEW_ALIAS.BOOSTER_CMP_SELECT_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
@@ -82,7 +83,7 @@ def getViewSettings():
      ConditionalViewSettings(HANGAR_ALIASES.TANK_CAROUSEL, BootcampComponentOverride(TankCarousel, BCTankCarousel), None, ViewTypes.COMPONENT, None, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(HANGAR_ALIASES.RANKED_TANK_CAROUSEL, RankedTankCarousel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(HANGAR_ALIASES.EPICBATTLE_TANK_CAROUSEL, EpicBattleTankCarousel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(HANGAR_ALIASES.BOB_TANK_CAROUSEL, BobTankCarousel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(HANGAR_ALIASES.ROYALE_TANK_CAROUSEL, RoyaleTankCarousel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(HANGAR_ALIASES.TMEN_XP_PANEL, TmenXpPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(HANGAR_ALIASES.VEHICLE_PARAMETERS, VehicleParameters, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ConditionalViewSettings(HANGAR_ALIASES.CREW, BootcampComponentOverride(Crew, BCCrew), None, ViewTypes.COMPONENT, None, None, ScopeTemplates.DEFAULT_SCOPE),
@@ -106,6 +107,7 @@ class HangarPackageBusinessHandler(PackageBusinessHandler):
     def __init__(self):
         listeners = ((VIEW_ALIAS.TANK_CAROUSEL_FILTER_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLEPASS_CAROUSEL_FILTER_POPOVER, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.BATTLEROYALE_CAROUSEL_FILTER_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.CREW_ABOUT_DOG_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.LOBBY_HANGAR, self.loadViewByCtxEvent),
          (VIEW_ALIAS.LOBBY_STRONGHOLD, self.loadViewByCtxEvent),

@@ -3,12 +3,11 @@
 import logging
 from collections import namedtuple
 import nations
-import GUI
 import constants
+from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.game_control.event_progression_controller import EventProgressionScreens
 from items import UNDEFINED_ITEM_CD
 from rent_common import parseRentID
-from gui import GUI_SETTINGS
 from gui import SystemMessages
 from gui.DialogsInterface import showI18nConfirmDialog
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -73,7 +72,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
     __wallet = dependency.descriptor(IWalletController)
     __restore = dependency.descriptor(IRestoreController)
     __bootcamp = dependency.descriptor(IBootcampController)
-    __progressionCtrl = dependency.descriptor(IEventProgressionController)
+    __eventProgression = dependency.descriptor(IEventProgressionController)
     __RENT_NOT_SELECTED_IDX = -2
     __RENT_UNLIM_IDX = -1
     __CREW_NOT_SELECTED_IDX = -1
@@ -143,8 +142,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
 
     def _initialize(self, *args, **kwargs):
         super(BuyVehicleView, self)._initialize()
-        self._blur = GUI.WGUIBackgroundBlur()
-        self._blur.enable = True
+        self._blur = CachedBlur(enabled=True)
         self.__addListeners()
         isElite = self.__vehicle.isElite
         vehType = self.__vehicle.type.replace('-', '_')
@@ -165,7 +163,6 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             vm.setCountCrew(len(self.__vehicle.crew))
             vm.setBuyVehicleIntCD(self.__vehicle.intCD)
             vm.setIsElite(isElite)
-            vm.setIsMovingTextEnabled(constants.IS_CHINA and GUI_SETTINGS.movingText.show)
             if self.__vehicle.hasCrew:
                 vm.setWithoutCommanderAltText(R.strings.store.buyVehicleWindow.crewInVehicle())
             equipmentBlock = vm.equipmentBlock
@@ -188,11 +185,9 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             self.__updateTotalPrice()
 
     def _finalize(self):
-        self._blur.enable = False
-        self._blur = None
+        self._blur.fini()
         self.__removeListeners()
         super(BuyVehicleView, self)._finalize()
-        return
 
     def __addListeners(self):
         self.addListener(ShopEvent.CONFIRM_TRADE_IN, self.__onTradeInConfirmed, EVENT_BUS_SCOPE.LOBBY)
@@ -380,7 +375,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             if self.__previousAlias in _VP_SHOW_HANGAR_ON_SUCCESS_ALIASES:
                 event_dispatcher.selectVehicleInHangar(self.__vehicle.intCD)
             elif self.__previousAlias == VIEW_ALIAS.EVENT_PROGRESSION_VEHICLE_PREVIEW:
-                self.__progressionCtrl.showCustomScreen(EventProgressionScreens.MAIN)
+                self.__eventProgression.showCustomScreen(EventProgressionScreens.MAIN)
 
     def __playSlotAnimation(self):
         if self.viewStatus != ViewStatus.LOADED:

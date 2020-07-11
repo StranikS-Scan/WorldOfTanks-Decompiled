@@ -16,6 +16,7 @@ from gui.shared.formatters import text_styles, icons as gui_icons
 from gui.shared.money import Currency
 from helpers import i18n
 from shared_utils import CONST_CONTAINER
+COMPLEX_TOKEN = 'complex_token'
 COMPLEX_TOKEN_TEMPLATE = 'img:(?P<styleID>.+):(?P<webID>.+)'
 TokenComplex = namedtuple('TokenComplex', 'isDisplayable styleID webID')
 _logger = logging.getLogger(__name__)
@@ -345,6 +346,8 @@ def getUniqueBonusTypes(bonusTypes):
             bonusType = ARENA_BONUS_TYPE.REGULAR
         if bonusType in (ARENA_BONUS_TYPE.EVENT_BATTLES_2,):
             bonusType = ARENA_BONUS_TYPE.EVENT_BATTLES
+        if bonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
+            bonusType = ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO
         uniqueTypes.add(bonusType)
 
     return uniqueTypes

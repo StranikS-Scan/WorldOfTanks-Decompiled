@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/battle_session/legacy/entity.py
-from gui.prb_control.entities.battle_session.legacy.vehicles_watcher import SpecialVehiclesWatcher
 from soft_exception import SoftException
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from gui import SystemMessages
@@ -80,8 +79,6 @@ class BattleSessionEntity(LegacyEntity):
          REQUEST_TYPE.SET_PLAYER_STATE: self.setPlayerState,
          REQUEST_TYPE.KICK: self.kickPlayer}
         super(BattleSessionEntity, self).__init__(FUNCTIONAL_FLAG.BATTLE_SESSION, settings, permClass=BattleSessionPermissions, limits=BattleSessionLimits(self), requestHandlers=requests)
-        self.__watcher = None
-        return
 
     def init(self, clientPrb=None, ctx=None):
         result = super(BattleSessionEntity, self).init(clientPrb=clientPrb, ctx=ctx)
@@ -90,8 +87,6 @@ class BattleSessionEntity(LegacyEntity):
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_WINDOW)
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_PAGE)
         g_eventBus.addListener(ChannelCarouselEvent.CAROUSEL_INITED, self.__handleCarouselInited, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.__watcher = SpecialVehiclesWatcher()
-        self.__watcher.start()
         return result
 
     def isGUIProcessed(self):
@@ -106,9 +101,6 @@ class BattleSessionEntity(LegacyEntity):
         else:
             g_eventDispatcher.removeSpecBattleFromCarousel(prbType, closeWindow=False)
         g_eventBus.removeListener(ChannelCarouselEvent.CAROUSEL_INITED, self.__handleCarouselInited, scope=EVENT_BUS_SCOPE.LOBBY)
-        if self.__watcher is not None:
-            self.__watcher.stop()
-            self.__watcher = None
         return result
 
     def getQueueType(self):

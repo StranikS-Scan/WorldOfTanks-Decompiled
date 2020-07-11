@@ -5,11 +5,11 @@ from abc import abstractproperty
 from PlayerEvents import g_playerEvents
 from async import AsyncScope, AsyncEvent, await, async, BrokenPromiseError, AsyncReturn
 from frameworks.wulf import WindowSettings, Window
+from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from gui.impl.gen.view_models.windows.full_screen_dialog_window_model import FullScreenDialogWindowModel
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.dialog_window import DialogResult, DialogButtons, DialogLayer
-from gui.impl.wrappers.background_blur import WGUIBackgroundBlurSupportImpl
 from gui.shared.money import Currency
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
@@ -28,7 +28,12 @@ class FullScreenDialogView(ViewImpl):
 
     def __init__(self, settings):
         super(FullScreenDialogView, self).__init__(settings)
-        self.__blur = WGUIBackgroundBlurSupportImpl()
+        blurLayers = [APP_CONTAINERS_NAMES.VIEWS,
+         APP_CONTAINERS_NAMES.SUBVIEW,
+         APP_CONTAINERS_NAMES.BROWSER,
+         APP_CONTAINERS_NAMES.WINDOWS,
+         APP_CONTAINERS_NAMES.MARKER]
+        self.__blur = CachedBlur(ownLayer=APP_CONTAINERS_NAMES.WINDOWS, layers=blurLayers)
         self.__scope = AsyncScope()
         self.__event = AsyncEvent(scope=self.__scope)
         self.__result = DialogButtons.CANCEL
@@ -68,14 +73,13 @@ class FullScreenDialogView(ViewImpl):
 
     def _onLoaded(self, *args, **kwargs):
         super(FullScreenDialogView, self)._onLoaded()
-        self._blurBackGround()
+        self.__blur.enable()
 
     def _finalize(self):
         super(FullScreenDialogView, self)._finalize()
         self._removeListeners()
         self.__scope.destroy()
-        if self.__blur:
-            self.__blur.disable()
+        self.__blur.fini()
 
     def _addListeners(self):
         self.viewModel.onAcceptClicked += self._onAcceptClicked
@@ -88,15 +92,6 @@ class FullScreenDialogView(ViewImpl):
         self.viewModel.onCancelClicked -= self._onCancelClicked
         self._itemsCache.onSyncCompleted -= self._onInventoryResync
         g_playerEvents.onAccountBecomeNonPlayer -= self.destroyWindow
-
-    def _blurBackGround(self):
-        if self.__blur:
-            blurLayers = [APP_CONTAINERS_NAMES.VIEWS,
-             APP_CONTAINERS_NAMES.SUBVIEW,
-             APP_CONTAINERS_NAMES.BROWSER,
-             APP_CONTAINERS_NAMES.WINDOWS,
-             APP_CONTAINERS_NAMES.MARKER]
-            self.__blur.enable(APP_CONTAINERS_NAMES.WINDOWS, blurLayers)
 
     def _onAcceptClicked(self):
         self.__result = DialogButtons.SUBMIT

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/filter_popover.py
+import logging
 import itertools
 import constants
 from account_helpers.settings_core import settings_constants
@@ -21,6 +22,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.game_control import IBattlePassController
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.battle_pass import BattlePassFilterConsts
+_logger = logging.getLogger(__name__)
 
 class _SECTION(CONST_CONTAINER):
     NATIONS, VEHICLE_TYPES, LEVELS, SPECIALS, HIDDEN, PROGRESSIONS, TEXT_SEARCH, ROLES, ROLES_WITH_EXTRA = range(0, 9)
@@ -55,15 +57,17 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
         return
 
     def setTankCarousel(self, carousel):
-        self.__mapping = self._generateMapping(carousel.hasRentedVehicles() or not carousel.filter.isDefault(('rented',)), carousel.hasEventVehicles() or not carousel.filter.isDefault(('event',)), carousel.hasRoles())
+        self.__mapping = self._generateMapping(carousel.hasRentedVehicles() or not carousel.filter.isDefault(('rented',)), carousel.hasEventVehicles() or not carousel.filter.isDefault(('event',)), carousel.hasRoles(), carousel.hasBattleRoyaleVehicles())
         self.__usedFilters = list(itertools.chain.from_iterable(self.__mapping.itervalues()))
         self._carousel = carousel
         self._carousel.setPopoverCallback(self.__onCarouselSwitched)
         self._update(isInitial=True)
 
     def changeFilter(self, sectionId, itemId):
-        self._carousel.filter.switch(self.__mapping[sectionId][itemId], save=False)
-        self._update()
+        if self._carousel is not None and self._carousel.filter is not None:
+            self._carousel.filter.switch(self.__mapping[sectionId][itemId], save=False)
+            self._update()
+        return
 
     def changeSearchNameVehicle(self, inputText):
         self._carousel.filter.update({'searchNameVehicle': inputText}, save=False)
@@ -109,7 +113,7 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
          'hidden': [],
          'progressions': [],
          'roles': [],
-         'hiddenSectionVisible': False,
+         'hiddenSectionVisible': True,
          'specialSectionVisible': True,
          'tankTierSectionVisible': True,
          'searchSectionVisible': True,
@@ -195,7 +199,7 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
         self.as_showCounterS(text_styles.main(backport.text(R.strings.tank_carousel_filter.popover.counter(), count=self._carousel.formatCountVehicles())))
 
     @classmethod
-    def _generateMapping(cls, hasRented, hasEvent, hasRoles):
+    def _generateMapping(cls, hasRented, hasEvent, hasRoles, isBattleRoyaleEnabled=False):
         mapping = {_SECTION.NATIONS: GUI_NATIONS,
          _SECTION.VEHICLE_TYPES: VEHICLE_TYPES_ORDER,
          _SECTION.LEVELS: _VEHICLE_LEVEL_FILTERS,
@@ -205,6 +209,12 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
          _SECTION.ROLES: VEHICLE_ACTION_GROUPS_LABELS if hasRoles else [],
          _SECTION.ROLES_WITH_EXTRA: VEHICLE_ACTION_GROUPS_LABELS + [constants.ROLES_COLLAPSE] if hasRoles else [],
          _SECTION.TEXT_SEARCH: ['searchNameVehicle']}
+        if isBattleRoyaleEnabled:
+            mapping[_SECTION.HIDDEN].append('battleRoyale')
+        elif hasEvent:
+            mapping[_SECTION.HIDDEN].append('event')
+        if isBattleRoyaleEnabled and hasEvent:
+            _logger.warning('It is not correct to show event and battleRoyale filters once')
         return mapping
 
     def __onCarouselSwitched(self):
@@ -240,12 +250,9 @@ class TankCarouselFilterPopover(VehiclesFilterPopover):
         self.__settingsCore.serverSettings.setSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED, {settings_constants.GAME.CAROUSEL_TYPE: self.__carouselRowCount})
 
     @classmethod
-    def _generateMapping(cls, hasRented, hasEvent, hasRoles):
-        mapping = super(TankCarouselFilterPopover, cls)._generateMapping(hasRented, hasEvent, hasRoles)
-        mapping[_SECTION.SPECIALS].extend(['bonus',
-         'favorite',
-         'premium',
-         'elite'])
+    def _generateMapping(cls, hasRented, hasEvent, hasRoles, isBattleRoyaleEnabled=False):
+        mapping = super(TankCarouselFilterPopover, cls)._generateMapping(hasRented, hasEvent, hasRoles, isBattleRoyaleEnabled)
+        mapping[_SECTION.SPECIALS].extend(cls._getBaseSpecialSection())
         if hasRented:
             mapping[_SECTION.SPECIALS].append('rented')
         if hasEvent:
@@ -254,12 +261,20 @@ class TankCarouselFilterPopover(VehiclesFilterPopover):
             mapping[_SECTION.SPECIALS].append('igr')
         return mapping
 
+    @classmethod
+    def _getBaseSpecialSection(cls):
+        return ['bonus',
+         'favorite',
+         'premium',
+         'elite',
+         'crystals']
+
 
 class BattlePassCarouselFilterPopover(TankCarouselFilterPopover):
     __battlePassController = dependency.descriptor(IBattlePassController)
 
     @classmethod
-    def _generateMapping(cls, hasRented, hasEvent, hasRoles):
+    def _generateMapping(cls, hasRented, hasEvent, hasRoles, isBattleRoyaleEnabled=False):
         mapping = super(BattlePassCarouselFilterPopover, cls)._generateMapping(hasRented, hasEvent, hasRoles)
         if cls.__battlePassController.isVisible():
             mapping[_SECTION.PROGRESSIONS].extend([BattlePassFilterConsts.FILTER_KEY_COMMON])
@@ -269,6 +284,16 @@ class BattlePassCarouselFilterPopover(TankCarouselFilterPopover):
         dataVO = super(BattlePassCarouselFilterPopover, self)._getInitialVO(filters, xpRateMultiplier)
         dataVO['progressionsSectionVisible'] = self.__battlePassController.isVisible()
         return dataVO
+
+
+class BattleRoyaleCarouselFilterPopover(TankCarouselFilterPopover):
+
+    @classmethod
+    def _getBaseSpecialSection(cls):
+        return ['bonus',
+         'favorite',
+         'premium',
+         'elite']
 
 
 class BattleTankCarouselFilterPopover(TankCarouselFilterPopover):
@@ -281,8 +306,8 @@ class BattleTankCarouselFilterPopover(TankCarouselFilterPopover):
         dataVO['progressionsSectionVisible'] = False
         return dataVO
 
-    def _generateMapping(self, hasRented, hasEvent, hasRoles):
-        mapping = super(BattleTankCarouselFilterPopover, self)._generateMapping(hasRented, hasEvent, hasRoles)
+    def _generateMapping(self, hasRented, hasEvent, hasRoles, isBattleRoyaleEnabled=False):
+        mapping = super(BattleTankCarouselFilterPopover, self)._generateMapping(hasRented, hasEvent, hasRoles, isBattleRoyaleEnabled)
         mapping[_SECTION.SPECIALS] = []
         if constants.IS_KOREA:
             mapping[_SECTION.SPECIALS].append('igr')
@@ -303,7 +328,7 @@ class StorageBlueprintsFilterPopover(VehiclesFilterPopover):
         return vo
 
     @classmethod
-    def _generateMapping(cls, hasRented, hasEvent, hasRoles):
-        mapping = super(StorageBlueprintsFilterPopover, cls)._generateMapping(hasRented, hasEvent, hasRoles)
+    def _generateMapping(cls, hasRented, hasEvent, hasRoles, isBattleRoyaleEnabled=False):
+        mapping = super(StorageBlueprintsFilterPopover, cls)._generateMapping(hasRented, hasEvent, hasRoles, isBattleRoyaleEnabled)
         mapping[_SECTION.HIDDEN].append('unlock_available')
         return mapping

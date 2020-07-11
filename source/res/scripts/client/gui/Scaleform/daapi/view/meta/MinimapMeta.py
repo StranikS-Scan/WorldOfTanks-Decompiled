@@ -4,8 +4,8 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class MinimapMeta(BaseDAAPIComponent):
 
-    def setAttentionToCell(self, x, y, isRightClick):
-        self._printOverrideError('setAttentionToCell')
+    def onMinimapClicked(self, x, y, buttonIdx):
+        self._printOverrideError('onMinimapClicked')
 
     def applyNewSize(self, sizeIndex):
         self._printOverrideError('applyNewSize')
@@ -24,3 +24,12 @@ class MinimapMeta(BaseDAAPIComponent):
 
     def as_setBackgroundS(self, path):
         return self.flashObject.as_setBackground(path) if self._isDAAPIInited() else None
+
+    def as_enableHintPanelWithDataS(self, isStrategicArtyView, isSPG):
+        return self.flashObject.as_enableHintPanelWithData(isStrategicArtyView, isSPG) if self._isDAAPIInited() else None
+
+    def as_disableHintPanelS(self):
+        return self.flashObject.as_disableHintPanel() if self._isDAAPIInited() else None
+
+    def as_updateHintPanelDataS(self, isStrategicArtyView, isSPG):
+        return self.flashObject.as_updateHintPanelData(isStrategicArtyView, isSPG) if self._isDAAPIInited() else None

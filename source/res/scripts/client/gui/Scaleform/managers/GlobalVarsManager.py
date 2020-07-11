@@ -58,9 +58,6 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
     def isShowLoginRssFeed(self):
         return GUI_SETTINGS.loginRssFeed.show
 
-    def isShowTicker(self):
-        return constants.IS_CHINA and GUI_SETTINGS.movingText.show
-
     def isRentalsEnabled(self):
         return constants.IS_RENTALS_ENABLED
 

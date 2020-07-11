@@ -5,8 +5,8 @@ from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP
 import SoundGroups
 
 class BCHighlights(BCHighlightsMeta):
-    BUTTON_SOUNDS = ('InBattleExtinguisher', 'InBattleHealKit', 'InBattleRepairKit')
-    HIGHLIGHT_NO_SOUNDS = ('LoadingRightButton', 'LoadingLeftButton', 'StartBattleButton')
+    BUTTON_SOUNDS = ('InBattleExtinguisher', 'InBattleHealKit', 'InBattleRepairKit', 'StartBattleButton')
+    HIGHLIGHT_NO_SOUNDS = ('LoadingRightButton', 'LoadingLeftButton')
 
     def __init__(self, settings):
         super(BCHighlights, self).__init__()

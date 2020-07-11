@@ -3,7 +3,7 @@
 import math
 from Event import Event
 from adisp import process
-from constants import DENUNCIATIONS_PER_DAY, ARENA_GUI_TYPE
+from constants import DENUNCIATIONS_PER_DAY, ARENA_GUI_TYPE, IS_CHINA
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages, DialogsInterface
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
@@ -15,6 +15,7 @@ from gui.prb_control import prbDispatcherProperty, prbEntityProperty
 from gui.prb_control.entities.base.ctx import PrbAction, SendInvitesCtx
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared import event_dispatcher as shared_events, events, g_eventBus, utils
+from gui.ranked_battles.constants import PrimeTimeStatus
 from gui.shared.ClanCache import ClanInfo
 from gui.shared.denunciator import LobbyDenunciator, DENUNCIATIONS, DENUNCIATIONS_MAP
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -27,7 +28,7 @@ from messenger.m_constants import PROTO_TYPE, USER_TAG
 from messenger.proto import proto_getter
 from messenger.storage import storage_getter
 from nation_change_helpers.client_nation_change_helper import getValidVehicleCDForNationChange
-from skeletons.gui.game_control import IVehicleComparisonBasket, IBobController
+from skeletons.gui.game_control import IVehicleComparisonBasket, IEventProgressionController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -52,7 +53,7 @@ class USER(object):
     UNSET_MUTED = 'unsetMuted'
     CREATE_SQUAD = 'createSquad'
     CREATE_EVENT_SQUAD = 'createEventSquad'
-    CREATE_BOB_SQUAD = 'createBobSquad'
+    CREATE_BATTLE_ROYALE_SQUAD = 'createBattleRoyaleSquad'
     INVITE = 'invite'
     REQUEST_FRIENDSHIP = 'requestFriendship'
     VEHICLE_INFO = 'vehicleInfoEx'
@@ -67,7 +68,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     eventsCache = dependency.descriptor(IEventsCache)
     clanCtrl = dependency.descriptor(IWebController)
     lobbyContext = dependency.descriptor(ILobbyContext)
-    bobCtrl = dependency.descriptor(IBobController)
+    __eventProgression = dependency.descriptor(IEventProgressionController)
 
     def __init__(self, cmProxy, ctx=None):
         super(BaseUserCMHandler, self).__init__(cmProxy, ctx, handlers=self._getHandlers())
@@ -157,8 +158,8 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     def createEventSquad(self):
         self._doSelect(PREBATTLE_ACTION_NAME.EVENT_SQUAD, (self.databaseID,))
 
-    def createBobSquad(self):
-        self._doSelect(PREBATTLE_ACTION_NAME.BOB_SQUAD, (self.databaseID,))
+    def createBattleRoyaleSquad(self):
+        self._doSelect(PREBATTLE_ACTION_NAME.BATTLE_ROYALE_SQUAD, (self.databaseID,))
 
     def invite(self):
         user = self.usersStorage.getUser(self.databaseID)
@@ -170,7 +171,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
         return self._generateOptions(ctx) if not self._getUseCmInfo().isCurrentPlayer else None
 
     def _getHandlers(self):
-        return {USER.INFO: 'showUserInfo',
+        handlers = {USER.INFO: 'showUserInfo',
          USER.CLAN_INFO: 'showClanInfo',
          USER.SEND_CLAN_INVITE: 'sendClanInvite',
          USER.CREATE_PRIVATE_CHANNEL: 'createPrivateChannel',
@@ -179,13 +180,15 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
          USER.ADD_TO_IGNORED: 'setIgnored',
          USER.REMOVE_FROM_IGNORED: 'unsetIgnored',
          USER.COPY_TO_CLIPBOARD: 'copyToClipboard',
-         USER.SET_MUTED: 'setMuted',
-         USER.UNSET_MUTED: 'unsetMuted',
          USER.CREATE_SQUAD: 'createSquad',
-         USER.CREATE_BOB_SQUAD: 'createBobSquad',
          USER.CREATE_EVENT_SQUAD: 'createEventSquad',
+         USER.CREATE_BATTLE_ROYALE_SQUAD: 'createBattleRoyaleSquad',
          USER.INVITE: 'invite',
          USER.REQUEST_FRIENDSHIP: 'requestFriendship'}
+        if not IS_CHINA:
+            handlers.update({USER.SET_MUTED: 'setMuted',
+             USER.UNSET_MUTED: 'unsetMuted'})
+        return handlers
 
     def _initFlashValues(self, ctx):
         self.databaseID = long(ctx.dbID)
@@ -225,7 +228,8 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
             options = self._addContactsNoteInfo(options, userCMInfo)
             options = self._addAppealInfo(options)
             options = self._addIgnoreInfo(options, userCMInfo)
-            options = self._addMutedInfo(options, userCMInfo)
+            if not IS_CHINA:
+                options = self._addMutedInfo(options, userCMInfo)
             options = self._addRejectFriendshipInfo(options, userCMInfo)
             options = self._addRemoveFromGroupInfo(options, userCMInfo)
             options = self._addRemoveFriendInfo(options, userCMInfo)
@@ -257,8 +261,9 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
             if self.eventsCache.isEventEnabled():
                 options.append(self._makeItem(USER.CREATE_EVENT_SQUAD, MENU.contextmenu(USER.CREATE_EVENT_SQUAD), optInitData={'enabled': canCreate,
                  'textColor': 13347959}))
-            if self.bobCtrl.isModeActive():
-                options.append(self._makeItem(USER.CREATE_BOB_SQUAD, MENU.contextmenu(USER.CREATE_BOB_SQUAD), optInitData={'enabled': canCreate,
+            if self.__eventProgression.modeIsAvailable():
+                primeTimeStatus, _, _ = self.__eventProgression.getPrimeTimeStatus()
+                options.append(self._makeItem(USER.CREATE_BATTLE_ROYALE_SQUAD, MENU.contextmenu(USER.CREATE_BATTLE_ROYALE_SQUAD), optInitData={'enabled': canCreate and primeTimeStatus == PrimeTimeStatus.AVAILABLE,
                  'textColor': 13347959}))
         return options
 

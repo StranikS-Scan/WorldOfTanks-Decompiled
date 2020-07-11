@@ -1,32 +1,32 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/game.py
 import cPickle
-import zlib
-import sys
 import functools
 import locale
-import services_config
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR, LOG_NOTE
+import sys
+import zlib
 import AreaDestructibles
 import BigWorld
-import constants
 import CommandMapping
-from helpers import dependency, log
 import GUI
+import MusicControllerWWISE
+import Settings
+import SoundGroups
+import TriggersManager
+import VOIP
+import WebBrowser
+import constants
+import services_config
+from MemoryCriticalController import g_critMemHandler
+from bootcamp.Bootcamp import g_bootcamp
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR, LOG_NOTE
 from gui import CLIENT_ENCODING, onRepeatKeyEvent, g_keyEventHandlers, g_mouseEventHandlers, InputHandler, GUI_SETTINGS
 from gui.Scaleform.game_loading import GameLoading
 from gui.shared import personality as gui_personality
-from messenger import MessengerEntry
-import MusicControllerWWISE
-import TriggersManager
 from helpers import RSSDownloader, OfflineMode, LightingGenerationMode
-import Settings
-from MemoryCriticalController import g_critMemHandler
-import VOIP
-import WebBrowser
-import SoundGroups
+from helpers import dependency, log
+from messenger import MessengerEntry
 from skeletons.connection_mgr import IConnectionManager
-from bootcamp.Bootcamp import g_bootcamp
 from skeletons.gameplay import IGameplayLogic
 tutorialLoaderInit = lambda : None
 tutorialLoaderFini = lambda : None
@@ -510,7 +510,8 @@ _PYTHON_MACROS = {'p': 'BigWorld.player()',
  'camera': 'BigWorld.player().inputHandler.ctrl',
  'resetEpic': 'BigWorld.player().epicMetaGame.resetEpicMetaGame',
  'setHero': 'from HeroTank import debugReloadHero; debugReloadHero',
- 'switchNation': 'import Account; Account.g_accountRepository.inventory.switchNation()'}
+ 'switchNation': 'import Account; Account.g_accountRepository.inventory.switchNation()',
+ 'plugins': 'from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import Ping3DPositionPlugin'}
 
 def expandMacros(line):
     import re

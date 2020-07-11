@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/reusable/players.py
+import typing
 from collections import namedtuple
 from gui.battle_results.components import style
 from gui.battle_results.reusable import shared

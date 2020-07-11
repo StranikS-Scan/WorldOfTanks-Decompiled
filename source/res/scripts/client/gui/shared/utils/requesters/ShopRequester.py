@@ -6,9 +6,7 @@ from abc import ABCMeta, abstractmethod
 import logging
 import BigWorld
 from adisp import async
-from arena_achievements import getAchievementCondition
-from constants import WIN_XP_FACTOR_MODE, IS_CHINA, ARENA_BONUS_TYPE
-from dossiers2.custom.records import RECORD_DB_IDS
+from constants import WIN_XP_FACTOR_MODE, ARENA_BONUS_TYPE
 from items import ItemsPrices
 from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_TARGET_TYPE, GOODIE_RESOURCE_TYPE
 from goodies.goodie_helpers import getPremiumCost, getPriceWithDiscount, GoodieData
@@ -126,34 +124,7 @@ class ShopCommonStats(IShopCommonStats):
         return (self.getItemPrice(intCD), intCD in self.getHiddens())
 
     def getAchievementReward(self, achievement, arenaType=ARENA_BONUS_TYPE.REGULAR):
-        result = None
-        rewards = self.getValue('achievementsReward', None)
-        if rewards is None:
-            _logger.warning('AchievementsReward is undefined!')
-            return result
-        else:
-            isRewardEnabled = rewards.get('isEnabled', False)
-            if not isRewardEnabled:
-                return result
-            achievementID = RECORD_DB_IDS.get(achievement.getRecordName(), None)
-            if achievementID is not None and isRewardEnabled:
-                achiveData = rewards['medals'].get((achievementID, 0), None)
-                if achiveData is not None:
-                    for groupID in achiveData:
-                        group = rewards['groups'].get(groupID, None)
-                        if group is not None and arenaType in group['arenaTypes']:
-                            result = group
-                            break
-
-            if result is not None:
-                result = dict(result)
-                achievementCond = getAchievementCondition(arenaType, achievement.getName())
-                if 'minLevel' in achievementCond:
-                    vehs = result['vehicleMultipliers']
-                    for i in range(achievementCond['minLevel'] - 1):
-                        vehs[i] = 0.0
-
-            return result
+        return None
 
     @property
     def revision(self):
@@ -207,13 +178,7 @@ class ShopCommonStats(IShopCommonStats):
     @property
     def tankmenRestoreConfig(self):
         config = self.__getRestoreConfig().get('tankmen', {})
-        if IS_CHINA:
-            duration = config.get('goldDuration', 0)
-            price = Money(gold=config.get('goldCost', 0))
-        else:
-            duration = config.get('creditsDuration', 0)
-            price = Money(credits=config.get('creditsCost', 0))
-        return _TankmenRestoreConfig(config.get('freeDuration', 0), duration, price, config.get('limit', 100))
+        return _TankmenRestoreConfig(config.get('freeDuration', 0), config.get('creditsDuration', 0), Money(credits=config.get('creditsCost', 0)), config.get('limit', 100))
 
     def sellPriceModifiers(self, compDescr):
         sellPriceModif = self.sellPriceModif

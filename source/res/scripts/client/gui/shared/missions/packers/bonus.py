@@ -9,8 +9,8 @@ from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusMo
 from gui.impl.gen.view_models.common.missions.bonuses.icon_bonus_model import IconBonusModel
 from gui.impl.gen.view_models.common.missions.bonuses.item_bonus_model import ItemBonusModel
 from gui.impl.gen.view_models.common.missions.bonuses.token_bonus_model import TokenBonusModel
-from gui.server_events.awards_formatters import TOKEN_SIZES, ItemsBonusFormatter
-from gui.server_events.formatters import parseComplexToken, TokenComplex
+from gui.server_events.awards_formatters import TOKEN_SIZES, BATTLE_BONUS_X5_TOKEN, ItemsBonusFormatter, TokenBonusFormatter
+from gui.server_events.formatters import COMPLEX_TOKEN, parseComplexToken, TokenComplex
 from gui.shared.gui_items.customization import CustomizationTooltipContext
 from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
@@ -60,6 +60,7 @@ def getDefaultBonusPackersMap():
      'xp': simpleBonusPacker,
      'xpFactor': simpleBonusPacker,
      'groups': GroupsBonusUIPacker(),
+     'progressionXPToken': tokenBonusPacker,
      Currency.CREDITS: simpleBonusPacker,
      Currency.CRYSTAL: simpleBonusPacker,
      Currency.GOLD: simpleBonusPacker,
@@ -107,25 +108,67 @@ class SimpleBonusUIPacker(BaseBonusUIPacker):
 
 
 class TokenBonusUIPacker(BaseBonusUIPacker):
-    eventsCache = dependency.descriptor(IEventsCache)
+    _eventsCache = dependency.descriptor(IEventsCache)
 
     @classmethod
     def _pack(cls, bonus):
         bonusTokens = bonus.getTokens()
         result = []
+        bonusPackers = cls.__getTokenBonusPackers()
         for tokenID, token in bonusTokens.iteritems():
             complexToken = parseComplexToken(tokenID)
-            if not complexToken.isDisplayable:
+            tokenType = cls.__getTokenBonusType(tokenID, complexToken)
+            specialPacker = bonusPackers.get(tokenType)
+            if specialPacker is None:
                 continue
-            result.append(cls._packComplexToken(complexToken, token, bonus))
+            packedBonus = cls.__packToken(specialPacker, bonus, complexToken, token)
+            if packedBonus is not None:
+                result.append(packedBonus)
 
         return result
 
     @classmethod
-    def _packComplexToken(cls, complexToken, token, bonus):
-        webCache = cls.eventsCache.prefetcher
+    def _getToolTip(cls, bonus):
+        bonusTokens = bonus.getTokens()
+        tooltipPackers = cls.__getTooltipsPackers()
+        result = []
+        for tokenID, _ in bonusTokens.iteritems():
+            complexToken = parseComplexToken(tokenID)
+            tokenType = cls.__getTokenBonusType(tokenID, complexToken)
+            tooltipPacker = tooltipPackers.get(tokenType)
+            if tooltipPacker is None:
+                _logger.warning('There is not a tooltip creator for a token bonus')
+                return result
+            tooltip = tooltipPacker(complexToken)
+            result.append(createTooltipData(tooltip))
+
+        return result
+
+    @classmethod
+    def __getTokenBonusType(cls, tokenID, complexToken):
+        if complexToken.isDisplayable:
+            return COMPLEX_TOKEN
+        return BATTLE_BONUS_X5_TOKEN if tokenID.startswith(BATTLE_BONUS_X5_TOKEN) else ''
+
+    @classmethod
+    def __getTokenBonusPackers(cls):
+        return {BATTLE_BONUS_X5_TOKEN: cls.__packBattleBonusX5Token,
+         COMPLEX_TOKEN: cls.__packComplexToken}
+
+    @classmethod
+    def __getTooltipsPackers(cls):
+        return {BATTLE_BONUS_X5_TOKEN: TokenBonusFormatter.getBattleBonusX5Tooltip,
+         COMPLEX_TOKEN: cls.__getComplexToolTip}
+
+    @classmethod
+    def __packToken(cls, bonusPacker, bonus, *args):
         model = TokenBonusModel()
         cls._packCommon(bonus, model)
+        return bonusPacker(model, bonus, *args)
+
+    @classmethod
+    def __packComplexToken(cls, model, bonus, complexToken, token):
+        webCache = cls._eventsCache.prefetcher
         model.setValue(str(token.count))
         model.setUserName(i18n.makeString(webCache.getTokenInfo(complexToken.styleID)))
         model.setIconSmall(webCache.getTokenImage(complexToken.styleID, TOKEN_SIZES.SMALL))
@@ -133,19 +176,16 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
         return model
 
     @classmethod
-    def _getToolTip(cls, bonus):
-        bonusTokens = bonus.getTokens()
-        result = []
-        for tokenID, _ in bonusTokens.iteritems():
-            complexToken = parseComplexToken(tokenID)
-            if not complexToken.isDisplayable:
-                continue
-            webCache = cls.eventsCache.prefetcher
-            userName = i18n.makeString(webCache.getTokenInfo(complexToken.styleID))
-            tooltip = makeTooltip(i18n.makeString(TOOLTIPS.QUESTS_BONUSES_TOKEN_HEADER, userName=userName), i18n.makeString(TOOLTIPS.QUESTS_BONUSES_TOKEN_BODY))
-            result.append(createTooltipData(tooltip))
+    def __packBattleBonusX5Token(cls, model, bonus, *args):
+        model.setValue(str(bonus.getCount()))
+        return model
 
-        return result
+    @classmethod
+    def __getComplexToolTip(cls, complexToken):
+        webCache = cls._eventsCache.prefetcher
+        userName = i18n.makeString(webCache.getTokenInfo(complexToken.styleID))
+        tooltip = makeTooltip(i18n.makeString(TOOLTIPS.QUESTS_BONUSES_TOKEN_HEADER, userName=userName), i18n.makeString(TOOLTIPS.QUESTS_BONUSES_TOKEN_BODY))
+        return tooltip
 
 
 class ItemBonusUIPacker(BaseBonusUIPacker):
@@ -500,7 +540,7 @@ class BonusUIPacker(object):
         packer = self._getBonusPacker(bonus.getName())
         if packer:
             return packer.pack(bonus)
-        _logger.error('Bonus packer for bonus type %s was not implemnted yet.', bonus.getName())
+        _logger.error('Bonus packer for bonus type %s was not implemented yet.', bonus.getName())
         return []
 
     def getPackers(self):
@@ -513,7 +553,7 @@ class BonusUIPacker(object):
         packer = self._getBonusPacker(bonus.getName())
         if packer:
             return packer.getToolTip(bonus)
-        _logger.error('Bonus packer for bonus type %s was not implemnted yet.', bonus.getName())
+        _logger.error('Bonus packer for bonus type %s was not implemented yet.', bonus.getName())
         return []
 
 

@@ -2,10 +2,13 @@
 # Embedded file name: scripts/common/wotdecorators.py
 import inspect
 from functools import update_wrapper
+from constants import IS_CLIENT, IS_BOT
 from debug_utils import LOG_WRAPPED_CURRENT_EXCEPTION, CRITICAL_ERROR, LOG_ERROR
 from time_tracking import LOG_TIME_WARNING
 import time
 import time_tracking
+if not IS_CLIENT and not IS_BOT:
+    from insights.common import incrTickOverspends
 
 def _argsToLogID(args):
     for arg in args:
@@ -27,31 +30,49 @@ def _logErrorMessageFromArgs(prefix, args):
 
 def noexcept(func):
 
-    def wrapper(*args, **kwArgs):
+    def noexceptWrapper(*args, **kwArgs):
         try:
             return func(*args, **kwArgs)
         except:
             _logErrorMessageFromArgs('Exception in noexcept', args)
-            LOG_WRAPPED_CURRENT_EXCEPTION(wrapper.__name__, func.__name__, func.func_code.co_filename, func.func_code.co_firstlineno + 1)
+            LOG_WRAPPED_CURRENT_EXCEPTION(noexceptWrapper.__name__, func.__name__, func.func_code.co_filename, func.func_code.co_firstlineno + 1)
 
-    return wrapper
+    return noexceptWrapper
+
+
+def noexceptReturn(returnOnExcept):
+
+    def noexcept(func):
+
+        def noexceptWrapper(*args, **kwArgs):
+            try:
+                return func(*args, **kwArgs)
+            except:
+                _logErrorMessageFromArgs('Exception in noexcept', args)
+                LOG_WRAPPED_CURRENT_EXCEPTION(noexceptWrapper.__name__, func.__name__, func.func_code.co_filename, func.func_code.co_firstlineno + 1)
+
+            return returnOnExcept
+
+        return noexceptWrapper
+
+    return noexcept
 
 
 def nofail(func):
 
-    def wrapper(*args, **kwArgs):
+    def nofailWrapper(*args, **kwArgs):
         try:
             return func(*args, **kwArgs)
         except:
-            LOG_WRAPPED_CURRENT_EXCEPTION(wrapper.__name__, func.__name__, func.func_code.co_filename, func.func_code.co_firstlineno + 1)
+            LOG_WRAPPED_CURRENT_EXCEPTION(nofailWrapper.__name__, func.__name__, func.func_code.co_filename, func.func_code.co_firstlineno + 1)
             CRITICAL_ERROR('Exception in no-fail code')
 
-    return wrapper
+    return nofailWrapper
 
 
 def exposedtoclient(func):
 
-    def wrapper(*args, **kwArgs):
+    def exposedtoclientWrapper(*args, **kwArgs):
         try:
             lastTick = time.time()
             result = func(*args, **kwArgs)
@@ -61,12 +82,14 @@ def exposedtoclient(func):
                  func.__name__,
                  args,
                  kwArgs))
+                if not IS_CLIENT and not IS_BOT:
+                    incrTickOverspends()
             return result
         except:
             _logErrorMessageFromArgs('Exception in exposedtoclient', args)
-            LOG_WRAPPED_CURRENT_EXCEPTION(wrapper.__name__, func.__name__, func.func_code.co_filename, func.func_code.co_firstlineno + 1)
+            LOG_WRAPPED_CURRENT_EXCEPTION(exposedtoclientWrapper.__name__, func.__name__, func.func_code.co_filename, func.func_code.co_firstlineno + 1)
 
-    return wrapper
+    return exposedtoclientWrapper
 
 
 def singleton(cls):

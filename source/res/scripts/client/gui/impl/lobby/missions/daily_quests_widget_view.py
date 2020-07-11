@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/missions/daily_quests_widget_view.py
 import logging
 import typing
+import BigWorld
 from frameworks.wulf import Array, ViewFlags, WindowFlags
 from frameworks.wulf.view.view import ViewSettings
 from gui.impl.gen import R
@@ -28,6 +29,7 @@ if typing.TYPE_CHECKING:
 MOUSE_BUTTON_RIGHT = 2
 MOUSE_BUTTON_LEFT = 0
 LARGE_WIDGET_LAYOUT_ID = 0
+MARK_VISITED_TIMEOUT = 1.0
 _logger = logging.getLogger(__name__)
 
 def predicateTooltipWindow(window):
@@ -35,7 +37,7 @@ def predicateTooltipWindow(window):
 
 
 class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
-    __slots__ = ('__parentId', '__tooltipEnabled', '__layout')
+    __slots__ = ('__parentId', '__tooltipEnabled', '__layout', '__visitedQuests', '__markVisitedCallbackID')
     eventsCache = dependency.descriptor(IEventsCache)
     __gui = dependency.descriptor(IGuiLoader)
 
@@ -45,6 +47,8 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
         self.__parentId = None
         self.__tooltipEnabled = True
         self.__layout = 0
+        self.__visitedQuests = set()
+        self.__markVisitedCallbackID = 0
         return
 
     def setParentId(self, parentId):
@@ -95,6 +99,8 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
     def _finalize(self):
         self.mainWindowWatcherDestroy()
         self.__removeListeners()
+        if self.__markVisitedCallbackID != 0:
+            BigWorld.cancelCallback(self.__markVisitedCallbackID)
 
     @classmethod
     def _getFirstConditionModelFromQuestModel(cls, dailyQuestModel):
@@ -137,7 +143,20 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
     def _markVisited(self):
         if self.__layout == LARGE_WIDGET_LAYOUT_ID:
             for quest in self.eventsCache.getDailyQuests().values():
-                self.eventsCache.questsProgress.markQuestProgressAsViewed(quest.getID())
+                self._scheduleMarkVisited(quest.getID())
+
+    def _executeMarkVisited(self):
+        for qid in self.__visitedQuests:
+            self.eventsCache.questsProgress.markQuestProgressAsViewed(qid)
+
+        self.__visitedQuests.clear()
+        self.__markVisitedCallbackID = 0
+
+    def _scheduleMarkVisited(self, qid):
+        self.__visitedQuests.add(qid)
+        if self.__markVisitedCallbackID != 0:
+            return
+        self.__markVisitedCallbackID = BigWorld.callback(MARK_VISITED_TIMEOUT, self._executeMarkVisited)
 
     def _onClientMainWindowStateChanged(self, isWindowVisible):
         if isWindowVisible:
@@ -169,7 +188,7 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
         for quest in sortedQuests:
             questCompletionChanged = self.eventsCache.questsProgress.getQuestCompletionChanged(quest.getID())
             if questCompletionChanged and markViewed:
-                self.eventsCache.questsProgress.markQuestProgressAsViewed(quest.getID())
+                self._scheduleMarkVisited(quest.getID())
             modelMissionsCompletedVisitedArray.addBool(not questCompletionChanged)
 
         modelMissionsCompletedVisitedArray.invalidate()

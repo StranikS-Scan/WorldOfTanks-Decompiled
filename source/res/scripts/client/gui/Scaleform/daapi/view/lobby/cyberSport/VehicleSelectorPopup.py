@@ -75,7 +75,7 @@ class VehicleSelectorPopup(VehicleSelectorPopupMeta, VehicleSelectorBase):
 
     def updateData(self):
         if not self.getFilters().get('compatibleOnly', True) or self._vehicles is None:
-            vehicleVOs = self._updateData(self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY))
+            vehicleVOs = self._updateData(self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE))
         else:
             vehicleVOs = self._updateData(self._vehicles)
         if self.__selectedVehicles is not None:
@@ -102,6 +102,6 @@ class VehicleSelectorPopup(VehicleSelectorPopupMeta, VehicleSelectorBase):
 
     def _makeVehicleVOAction(self, vehicle):
         vehicleVO = makeVehicleVO(vehicle, self._levelsRange, self.__vehicleTypes)
-        if vehicle.isOnlyForEpicBattles or vehicle.isOnlyForBob:
+        if vehicle.isOnlyForEpicBattles:
             vehicleVO['enabled'], vehicleVO['tooltip'] = False, TOOLTIPS.CYBERSPORT_UNIT_FIGHTBTN_EVENTVEHICLEWRONGMODE
         return vehicleVO

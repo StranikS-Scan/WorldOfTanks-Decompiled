@@ -20,6 +20,7 @@
     <MB_837_Aa>	17	</MB_837_Aa>
     <MB_837_Ea>	18	</MB_837_Ea>
     <Mitsubishi_10ZF>	19	</Mitsubishi_10ZF>
+    <Development_Engine>	65000	</Development_Engine>
   </ids>
   <shared>
     <FIAT_604>
@@ -319,14 +320,14 @@
       <price>	115000	</price>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	750	</power>
+      <power>	690	</power>
       <weight>	1420	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	170	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.1	</fireStartingChance>
-      <rpm_min>	320	</rpm_min>
-      <rpm_max>	2240	</rpm_max>
+      <rpm_min>	336	</rpm_min>
+      <rpm_max>	2192	</rpm_max>
     </MB_837_Ea>
     <Mitsubishi_10ZF>
       <userString>	#italy_vehicles:Mitsubishi_10ZF	</userString>
@@ -345,5 +346,23 @@
       <rpm_min>	320	</rpm_min>
       <rpm_max>	2240	</rpm_max>
     </Mitsubishi_10ZF>
+    <Development_Engine>
+      <userString>	Development Engine	</userString>
+      <tags>	diesel	</tags>
+      <level>	5	</level>
+      <notInShop>	true	</notInShop>
+      <price>	1	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	540	</power>
+      <weight>	750	</weight>
+      <maxHealth>	105	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <notInShop>	true	</notInShop>
+      <rpm_min>	376	</rpm_min>
+      <rpm_max>	2072	</rpm_max>
+    </Development_Engine>
   </shared>
 </engines.xml>

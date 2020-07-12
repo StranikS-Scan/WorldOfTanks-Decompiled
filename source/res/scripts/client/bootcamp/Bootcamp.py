@@ -34,6 +34,7 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.shared import IItemsCache
+from .BootcampCombatSoundAssistant import BootcampCombatSoundAssistant
 from .BootcampGUI import BootcampGUI
 from .BootcampReplayController import BootcampReplayController
 from .BootcampConstants import BOOTCAMP_BATTLE_RESULT_MESSAGE
@@ -99,6 +100,7 @@ class Bootcamp(EventSystemEntity):
         self.__requestBootcampFinishFromBattle = False
         self.__isSniperModeUsed = False
         self.__showingWaitingActionWindow = False
+        self.__combatSoundAssistant = None
         self.__nation = 0
         self.__nationsData = {}
         self.__checkpoint = ''
@@ -221,6 +223,7 @@ class Bootcamp(EventSystemEntity):
         g_bootcampEvents.onBattleLessonFinished += self.onBattleLessonFinished
         g_bootcampEvents.onGarageLessonFinished += self.onGarageLessonFinished
         g_bootcampEvents.onBattleLoaded += self.onBattleLoaded
+        g_bootcampEvents.onResultScreenPopulated += self.onResultScreenPopulated
         g_bootcampEvents.onResultScreenFinished += self.onResultScreenFinished
         g_bootcampEvents.onRequestBootcampFinish += self.onRequestBootcampFinish
         g_bootcampEvents.onBootcampBecomeNonPlayer += self.onBootcampBecomeNonPlayer
@@ -291,6 +294,7 @@ class Bootcamp(EventSystemEntity):
         if self.__gui is None:
             self.__gui = BootcampGUI()
         WWISE.loadSoundPool(self.BOOTCAMP_SOUND_BANKS, 'Bootcamp')
+        self.__combatSoundAssistant = BootcampCombatSoundAssistant()
         self.sessionProvider.getCtx().setPlayerFullNameFormatter(_BCNameFormatter())
         return
 
@@ -308,6 +312,7 @@ class Bootcamp(EventSystemEntity):
         g_bootcampEvents.onBattleLessonFinished -= self.onBattleLessonFinished
         g_bootcampEvents.onGarageLessonFinished -= self.onGarageLessonFinished
         g_bootcampEvents.onBattleLoaded -= self.onBattleLoaded
+        g_bootcampEvents.onResultScreenPopulated -= self.onResultScreenPopulated
         g_bootcampEvents.onResultScreenFinished -= self.onResultScreenFinished
         g_bootcampEvents.onRequestBootcampFinish -= self.onRequestBootcampFinish
         g_playerEvents.onAvatarBecomeNonPlayer -= self.__onAvatarBecomeNonPlayer
@@ -326,6 +331,8 @@ class Bootcamp(EventSystemEntity):
             self.__replayController = None
         MC.g_musicController.stopAmbient(True)
         WWISE.unloadSoundPool()
+        self.__combatSoundAssistant.fini()
+        self.__combatSoundAssistant = None
         self.sessionProvider.getCtx().resetPlayerFullNameFormatter()
         return
 
@@ -370,7 +377,7 @@ class Bootcamp(EventSystemEntity):
             self.sessionProvider.exit()
         else:
             self.__avatar = BigWorld.player()
-            self.__currentState = StateInBattle(lessonId, self.__avatar, self.__chapter, self.__gui)
+            self.__currentState = StateInBattle(lessonId, self.__avatar, self.__chapter, self.__gui, self.__combatSoundAssistant)
             self.__currentState.activate()
 
     def onBattleLessonFinished(self, lessonId, lessonResults):
@@ -413,6 +420,10 @@ class Bootcamp(EventSystemEntity):
 
     def isInBattleResultState(self):
         return isinstance(self.__currentState, StateResultScreen)
+
+    def onResultScreenPopulated(self):
+        if self.__combatSoundAssistant:
+            self.__combatSoundAssistant.fini()
 
     def onResultScreenFinished(self):
         self.__currentState.deactivate()

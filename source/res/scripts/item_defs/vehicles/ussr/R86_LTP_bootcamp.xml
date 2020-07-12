@@ -113,7 +113,7 @@
       <maxLoad>	13000	</maxLoad>
       <terrainResistance>	1.2 1.3 2.3	</terrainResistance>
       <brakeForce>	11000	</brakeForce>
-      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	23	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.26	</vehicleMovement>
@@ -851,7 +851,7 @@
         <maxRegenHealth>	35	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	310	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	50	</maxHealth>
         <maxRegenHealth>	25	</maxRegenHealth>

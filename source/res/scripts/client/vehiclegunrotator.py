@@ -56,6 +56,7 @@ class VehicleGunRotator(object):
         self.__aimingPerfectionStartTime = None
         self.__gunPosition = None
         self.__transitionCallbackID = None
+        self.ignoreAimingMode = False
         return
 
     def destroy(self):
@@ -265,7 +266,7 @@ class VehicleGunRotator(object):
     shotPointSourceFunctor = property(lambda self: self.__shotPointSourceFunctor, __set_shotPointSourceFunctor)
 
     def __shotPointSourceFunctor_Default(self):
-        return self._avatar.inputHandler.getDesiredShotPoint()
+        return self._avatar.inputHandler.getDesiredShotPoint(self.ignoreAimingMode)
 
     turretMatrix = property(lambda self: self.__turretMatrixAnimator.matrix)
     gunMatrix = property(lambda self: self.__gunMatrixAnimator.matrix)
@@ -547,7 +548,7 @@ class VehicleGunRotator(object):
         descr = self._avatar.getVehicleDescriptor()
         turretOffs = descr.hull.turretPositions[0] + descr.chassis.hullPosition
         if gunOffset is None:
-            gunOffset = descr.turret.gunShotPosition if self.__gunPosition is None else self.__gunPosition
+            gunOffset = descr.activeGunShotPosition if self.__gunPosition is None else self.__gunPosition
         shotSpeed = descr.shot.speed
         turretWorldMatrix = Math.Matrix()
         turretWorldMatrix.setRotateY(turretYaw)
@@ -655,11 +656,12 @@ class VehicleGunRotator(object):
             self.__gunPosition = None
             return
         else:
-            turret = playerVehicle.typeDescriptor.turret
+            vehDescr = playerVehicle.typeDescriptor
+            turret = vehDescr.turret
             if turret.multiGun is not None:
                 self.__gunPosition = turret.multiGun[activeGun].shotPosition
             else:
-                self.__gunPosition = turret.gunShotPosition
+                self.__gunPosition = vehDescr.activeGunShotPosition
             return
 
     def __getGunPitchLimits(self):

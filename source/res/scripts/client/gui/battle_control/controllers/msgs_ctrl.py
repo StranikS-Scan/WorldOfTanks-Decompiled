@@ -1,16 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/msgs_ctrl.py
 import weakref
-import BattleReplay
 import BigWorld
+from helpers import dependency
+import BattleReplay
 import Event
 from ReplayEvents import g_replayEvents
 from constants import ATTACK_REASON_INDICES as _AR_INDICES
+from gui.battle_control.arena_info.arena_vos import EPIC_BATTLE_KEYS
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.controllers.interfaces import IBattleController
-from helpers import dependency
+from items.battle_royale import isSpawnedBot
 from skeletons.gui.battle_session import IBattleSessionProvider
-from gui.battle_control.arena_info.arena_vos import EPIC_BATTLE_KEYS
 
 class _ENTITY_TYPE(object):
     UNKNOWN = 'unknown'
@@ -32,7 +33,9 @@ _ATTACK_REASON_CODE = {_AR_INDICES['shot']: 'DEATH_FROM_SHOT',
  _AR_INDICES['bombers']: 'DEATH_FROM_SECTOR_BOMBERS',
  _AR_INDICES['recovery']: 'DEATH_FROM_RECOVERY',
  _AR_INDICES['artillery_eq']: 'DEATH_FROM_SHOT',
- _AR_INDICES['bomber_eq']: 'DEATH_FROM_SHOT'}
+ _AR_INDICES['bomber_eq']: 'DEATH_FROM_SHOT',
+ _AR_INDICES['minefield_eq']: 'DEATH_FROM_SHOT',
+ _AR_INDICES['spawned_bot_explosion']: 'DEATH_FROM_SHOT'}
 _PLAYER_KILL_ENEMY_SOUND = 'enemy_killed_by_player'
 _PLAYER_KILL_ALLY_SOUND = 'ally_killed_by_player'
 _ALLY_KILLED_SOUND = 'ally_killed_by_enemy'
@@ -259,16 +262,75 @@ class EpicBattleMessagesController(BattleMessagesController):
         return True
 
 
+@dependency.replace_none_kwargs(battleSessionProvider=IBattleSessionProvider)
+def _isVehicleSpawnedBot(vehicleID, battleSessionProvider=None):
+    ctx = battleSessionProvider.getCtx()
+    vTypeInfoVO = ctx.getArenaDP().getVehicleInfo(vehicleID).vehicleType
+    return isSpawnedBot(vTypeInfoVO.tags)
+
+
+@dependency.replace_none_kwargs(battleSessionProvider=IBattleSessionProvider)
+def _getSpawnedBotMsgData(vehicleID, battleSessionProvider=None):
+    ctx = battleSessionProvider.getCtx()
+    vTypeInfoVO = ctx.getArenaDP().getVehicleInfo(vehicleID).vehicleType
+    if isSpawnedBot(vTypeInfoVO.tags):
+        botMasterPlayer = ctx.getPlayerFullName(vehicleID, showVehShortName=False)
+        playerInfo = '%s (%s)' % (botMasterPlayer, vTypeInfoVO.shortNameWithPrefix)
+        return ('ALLY_HIT', {'entity': playerInfo}, (('entity', vehicleID),))
+    else:
+        return None
+
+
+class BattleRoyaleBattleMessagesController(BattleMessagesController):
+
+    def showAllyHitMessage(self, vehicleID=None):
+        spawnBotData = _getSpawnedBotMsgData(vehicleID)
+        if spawnBotData:
+            self.onShowPlayerMessageByKey(*spawnBotData)
+            return
+        super(BattleRoyaleBattleMessagesController, self).showAllyHitMessage(vehicleID)
+
+    def showVehicleKilledMessage(self, avatar, targetID, attackerID, equipmentID, reason):
+        if _isVehicleSpawnedBot(targetID):
+            return
+        super(BattleRoyaleBattleMessagesController, self).showVehicleKilledMessage(avatar, targetID, attackerID, equipmentID, reason)
+
+
+class BattleRoyaleBattleMessagesPlayer(BattleMessagesPlayer):
+
+    def showAllyHitMessage(self, vehicleID=None):
+        if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
+            return
+        spawnBotData = _getSpawnedBotMsgData(vehicleID)
+        if spawnBotData:
+            self.onShowPlayerMessageByKey(*spawnBotData)
+            return
+        super(BattleRoyaleBattleMessagesPlayer, self).showAllyHitMessage(vehicleID)
+
+    def showVehicleKilledMessage(self, avatar, targetID, attackerID, equipmentID, reason):
+        if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
+            return
+        if _isVehicleSpawnedBot(targetID):
+            return
+        super(BattleRoyaleBattleMessagesPlayer, self).showVehicleKilledMessage(avatar, targetID, attackerID, equipmentID, reason)
+
+
 def createBattleMessagesCtrl(setup):
     sessionProvider = dependency.instance(IBattleSessionProvider)
     arenaVisitor = sessionProvider.arenaVisitor
-    if not arenaVisitor.gui.isInEpicRange():
+    gui = arenaVisitor.gui
+    if gui.isInEpicRange():
         if setup.isReplayPlaying:
-            ctrl = BattleMessagesPlayer(setup)
+            ctrl = EpicBattleMessagesPlayer(setup)
         else:
-            ctrl = BattleMessagesController(setup)
+            ctrl = EpicBattleMessagesController(setup)
+    elif gui.isBattleRoyale():
+        if setup.isReplayPlaying:
+            ctrl = BattleRoyaleBattleMessagesPlayer(setup)
+        else:
+            ctrl = BattleRoyaleBattleMessagesController(setup)
     elif setup.isReplayPlaying:
-        ctrl = EpicBattleMessagesPlayer(setup)
+        ctrl = BattleMessagesPlayer(setup)
     else:
-        ctrl = EpicBattleMessagesController(setup)
+        ctrl = BattleMessagesController(setup)
     return ctrl

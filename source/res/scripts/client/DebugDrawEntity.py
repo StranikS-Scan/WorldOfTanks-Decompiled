@@ -6,7 +6,6 @@ import GUI
 from Math import Vector3, Matrix
 import math_utils
 from helpers.CallbackDelayer import CallbackDelayer
-from constants import SERVER_TICK_LENGTH
 
 class DebugDrawEntity(BigWorld.Entity):
     CUBE_MODEL = 'helpers/models/unit_cube.model'
@@ -20,9 +19,33 @@ class DebugDrawEntity(BigWorld.Entity):
         self.reuseModels = defaultdict(list)
         self.reuse3DTexts = []
         self.timer = CallbackDelayer()
-        self.timer.delayCallback(0, self.__onPeriodicCheckTimer, SERVER_TICK_LENGTH)
 
     def set_drawObjects(self, prev):
+        self.__update()
+
+    def onEnterWorld(self, prereqs):
+        self.__update()
+
+    def onLeaveWorld(self):
+        for _, state in self.objectStates.iteritems():
+            for _, model, _ in state['models']:
+                BigWorld.delModel(model)
+
+            for model, _, _ in state['3Dtexts']:
+                BigWorld.delModel(model)
+
+        for listOfModels in self.reuseModels.itervalues():
+            for model, _ in listOfModels:
+                BigWorld.delModel(model)
+
+        for model, _, _ in self.reuse3DTexts:
+            BigWorld.delModel(model)
+
+        self.timer.destroy()
+        self.timer = None
+        return
+
+    def __update(self):
         objectsToUpdate = []
         objectsPresent = []
         for drawObject in self.drawObjects:
@@ -84,25 +107,6 @@ class DebugDrawEntity(BigWorld.Entity):
         self.reuseModels.clear()
         self.reuse3DTexts[:] = []
 
-    def onLeaveWorld(self):
-        for _, state in self.objectStates.iteritems():
-            for _, model, _ in state['models']:
-                BigWorld.delModel(model)
-
-            for model, _, _ in state['3Dtexts']:
-                BigWorld.delModel(model)
-
-        for listOfModels in self.reuseModels.itervalues():
-            for model, _ in listOfModels:
-                BigWorld.delModel(model)
-
-        for model, _, _ in self.reuse3DTexts:
-            BigWorld.delModel(model)
-
-        self.timer.destroy()
-        self.timer = None
-        return
-
     def __createDirectedLine(self, pointA, pointB, width):
         modelName = self.CUBE_MODEL
         model, motor = self.__getModel(modelName)
@@ -162,6 +166,3 @@ class DebugDrawEntity(BigWorld.Entity):
         component.colour = color
         motor.signal = math_utils.createTranslationMatrix(position)
         return (model, motor, component)
-
-    def __onPeriodicCheckTimer(self, timeSlice):
-        return timeSlice

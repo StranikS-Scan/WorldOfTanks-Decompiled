@@ -6,7 +6,7 @@ from debug_utils import LOG_ERROR, LOG_CODEPOINT_WARNING
 from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.epicBattle.epic_meta_level_icon import getEpicMetaIconVODict
+from gui.Scaleform.daapi.view.lobby.event_progression.after_battle_reward_view_helpers import getProgressionIconVODict
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_prestige_progress import getPrestigeProgressVO, getPrestigeLevelAwardsVOs, getFinalTankRewardIconPath, getFinalTankRewardVehicleID
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_cycle_helpers import getActiveCycleTimeFrameStrings
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import AWARDS_SIZES, CurtailingAwardsComposer
@@ -158,7 +158,7 @@ class EpicBattlesInfoView(LobbySubView, EpicBattlesInfoViewMeta):
          'pageDescriptionHtmlText': text_styles.promoSubTitle(cycleDescText),
          'aboutButtonLabel': i18n.makeString(EPIC_BATTLE.INFOVIEW_ABOUTBUTTON_ABOUTFRONTLINE).upper(),
          'canClaimFinalReward': self.__canClaimFinalReward(),
-         'epicMetaLevelIconData': getEpicMetaIconVODict(pPrestigeLevel, pMetaLevel),
+         'epicMetaLevelIconData': getProgressionIconVODict(pPrestigeLevel, pMetaLevel),
          'epicRewardRibbonData': self._packRewardRibbonData(pPrestigeLevel + 1, self.eventsCache.getAllQuests(), maxRewardTokens),
          'epicCombatReservesData': self._packCombatReservesVO(self.epicMetaGameCtrl.getSkillPoints()),
          'epicMetaProgressData': self._packMetaProgressVO(prestigeAllowed, maxRewardClaimed),

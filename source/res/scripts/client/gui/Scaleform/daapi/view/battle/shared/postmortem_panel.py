@@ -9,7 +9,7 @@ from gui import makeHtmlString
 from gui.Scaleform.daapi.view.meta.PostmortemPanelMeta import PostmortemPanelMeta
 from gui.shared.badges import buildBadge
 from gui.shared.gui_items import Vehicle
-from constants import ATTACK_REASON_INDICES
+from constants import ATTACK_REASON_INDICES, ATTACK_REASON
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.shared.view_helpers import UsersInfoHelper
@@ -32,7 +32,9 @@ _ATTACK_REASON_CODE_TO_MSG = {ATTACK_REASON_INDICES['shot']: 'DEATH_FROM_SHOT',
  ATTACK_REASON_INDICES['bombers']: 'DEATH_FROM_SECTOR_BOMBERS',
  ATTACK_REASON_INDICES['recovery']: 'DEATH_FROM_RECOVERY',
  ATTACK_REASON_INDICES['artillery_eq']: 'DEATH_FROM_SHOT',
- ATTACK_REASON_INDICES['bomber_eq']: 'DEATH_FROM_SHOT'}
+ ATTACK_REASON_INDICES['bomber_eq']: 'DEATH_FROM_SHOT',
+ ATTACK_REASON_INDICES[ATTACK_REASON.MINEFIELD_EQ]: 'DEATH_FROM_MINE_EXPLOSION'}
+_ALLOWED_EQUIPMENT_DEATH_CODES = ['DEATH_FROM_MINE_EXPLOSION']
 
 class _ENTITIES_POSTFIX(object):
     UNKNOWN = '_UNKNOWN'
@@ -101,7 +103,9 @@ class _BasePostmortemPanel(PostmortemPanelMeta):
             device = None
         if equipmentID:
             equipment = vehicles.g_cache.equipments().get(equipmentID)
-            if equipment is not None:
+            if code in _ALLOWED_EQUIPMENT_DEATH_CODES:
+                pass
+            elif equipment is not None:
                 code = '_'.join((code, equipment.name.split('_')[0].upper()))
                 entityID = 0
         elif postfix:
@@ -261,9 +265,13 @@ class PostmortemPanel(_SummaryPostmortemPanel):
                     showVehicle = True
                     vInfoVO = battleCtx.getArenaDP().getVehicleInfo(killerVehID)
                     vTypeInfoVO = vInfoVO.vehicleType
-                    vehLvl = int2roman(vTypeInfoVO.level)
                     vehImg = _VEHICLE_SMALL_ICON_RES_PATH.format(vTypeInfoVO.iconName)
-                    vehClass = Vehicle.getTypeBigIconPath(vTypeInfoVO.classTag)
+                    if not vTypeInfoVO.isOnlyForBattleRoyaleBattles:
+                        vehLvl = int2roman(vTypeInfoVO.level)
+                        vehClass = Vehicle.getTypeBigIconPath(vTypeInfoVO.classTag)
+                    else:
+                        vehLvl = None
+                        vehClass = None
                     vehName = vTypeInfoVO.shortNameWithPrefix
                     killerUserVO = self.__makeKillerVO(vInfoVO)
                 else:

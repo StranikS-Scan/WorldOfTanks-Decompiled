@@ -12,6 +12,11 @@
     <Interface>	RecoveryMechanic_Avatar	</Interface>
     <Interface>	DestructibleEntity_Avatar	</Interface>
     <Interface>	RespawnController_Avatar	</Interface>
+    <Interface>	VehiclesSpawnListStorage_Avatar	</Interface>
+    <Interface>	VehicleRemovalController_Avatar	</Interface>
+    <Interface>	VehicleHealthBroadcastListenerComponent_Avatar	</Interface>
+    <Interface>	AvatarLoot	</Interface>
+    <Interface>	AvatarSpawnKeyPoints	</Interface>
     <Interface>	AvatarEpic	</Interface>
   </Implements>
   <Volatile>
@@ -242,6 +247,7 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	INT32	</Arg>
       <Arg>	UINT16	</Arg>
+      <Arg>	UINT8	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	INT16	</Arg>
       <Arg>	INT16	</Arg>
@@ -497,10 +503,10 @@
     <forbidUnbindingFromVehicle>
       <Arg>	INT8	</Arg>
     </forbidUnbindingFromVehicle>
-    <fullyDiscloseVehicles>
+    <fullyDiscloseEntities>
       <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
       </Arg>
-    </fullyDiscloseVehicles>
+    </fullyDiscloseEntities>
     <receiveVisibilityUpdate>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	BOOL	</Arg>
@@ -594,8 +600,19 @@
       <Exposed>	OWN_CLIENT	</Exposed>
       <Arg>	BOOL	</Arg>
     </setDualGunCharger>
+    <reportClientStats>
+      <Arg>	CLIENT_STATUS_STATISTICS	</Arg>
+    </reportClientStats>
+    <chooseSpawnKeyPoint>
+      <Exposed>	OWN_CLIENT	</Exposed>
+      <Arg>	STRING	</Arg>
+    </chooseSpawnKeyPoint>
+    <placeVehicle>
+      <Exposed>	OWN_CLIENT	</Exposed>
+    </placeVehicle>
   </CellMethods>
   <BaseMethods>
+    <onCreateCellSuccess></onCreateCellSuccess>
     <kickSelf>
       <Arg>	STRING	</Arg>
       <Arg>	BOOL	</Arg>
@@ -752,5 +769,9 @@
       <Exposed></Exposed>
     </logStreamCorruption>
     <sendFinalStats></sendFinalStats>
+    <reportClientStats>
+      <Exposed></Exposed>
+      <Arg>	CLIENT_STATUS_STATISTICS	</Arg>
+    </reportClientStats>
   </BaseMethods>
 </Avatar.def>

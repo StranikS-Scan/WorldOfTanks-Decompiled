@@ -1,14 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic/deployment_map.py
 import GUI
-from gui.Scaleform.daapi.view.meta.EpicDeploymentMapMeta import EpicDeploymentMapMeta
-from gui.Scaleform.daapi.view.battle.epic.minimap import _FRONT_LINE_DEV_VISUALIZATION_SUPPORTED, DevelopmentRespawnEntriesPlugin, EpicGlobalSettingsPlugin, HeadquartersStatusEntriesPlugin, MarkPositionPlugin, MINIMAP_SCALE_TYPES, ProtectionZoneEntriesPlugin, RespawningPersonalEntriesPlugin, RecoveringVehiclesPlugin, SectorBaseEntriesPlugin, SectorOverlayEntriesPlugin, SectorStatusEntriesPlugin, StepRepairPointEntriesPlugin
-from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
-from helpers import dependency
-from skeletons.gui.battle_session import IBattleSessionProvider
+from gui.Scaleform.daapi.view.battle.epic.minimap import _FRONT_LINE_DEV_VISUALIZATION_SUPPORTED, DevelopmentRespawnEntriesPlugin, EpicGlobalSettingsPlugin, HeadquartersStatusEntriesPlugin, MINIMAP_SCALE_TYPES, ProtectionZoneEntriesPlugin, RespawningPersonalEntriesPlugin, RecoveringVehiclesPlugin, SectorBaseEntriesPlugin, SectorOverlayEntriesPlugin, SectorStatusEntriesPlugin, StepRepairPointEntriesPlugin, EpicMinimapPingPlugin
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings
 from gui.Scaleform.daapi.view.battle.shared.minimap.component import _IMAGE_PATH_FORMATTER
+from gui.Scaleform.daapi.view.meta.EpicDeploymentMapMeta import EpicDeploymentMapMeta
+from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from gui.battle_control import minimap_utils
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
 _S_NAME = settings.ENTRY_SYMBOL_NAME
 _C_NAME = settings.CONTAINER_NAME
 _DEPLOY_MAP_PATH = '_level0.root.{}.main.epicDeploymentMap.mapContainer.entriesContainer'.format(APP_CONTAINERS_NAMES.VIEWS)
@@ -54,7 +54,7 @@ class EpicDeploymentMapComponent(EpicDeploymentMapMeta):
         setup = super(EpicDeploymentMapComponent, self)._setupPlugins(visitor)
         setup['settings'] = EpicGlobalSettingsPlugin
         setup['personal'] = RespawningPersonalEntriesPlugin
-        setup['cells'] = MarkPositionPlugin
+        setup['pinging'] = EpicMinimapPingPlugin
         if visitor.hasSectors():
             setup['epic_bases'] = DeploymentSectorBaseEntriesPlugin
             setup['epic_sector_overlay'] = SectorOverlayEntriesPlugin
@@ -77,8 +77,7 @@ class EpicDeploymentMapComponent(EpicDeploymentMapMeta):
         return self._size
 
     def _processMinimapSize(self, minSize, maxSize):
-        mapWidthPx = int(abs(maxSize[0] - minSize[0]) * 0.001 * minimap_utils.EPIC_1KM_IN_PX)
-        mapHeightPx = int(abs(maxSize[1] - minSize[1]) * 0.001 * minimap_utils.EPIC_1KM_IN_PX)
+        mapWidthPx, mapHeightPx = minimap_utils.metersToMinimapPixels(minSize, maxSize)
         self.as_setMapDimensionsS(mapWidthPx, mapHeightPx)
         self._size = (mapWidthPx, mapHeightPx)
         self._bounds = (minSize, maxSize)

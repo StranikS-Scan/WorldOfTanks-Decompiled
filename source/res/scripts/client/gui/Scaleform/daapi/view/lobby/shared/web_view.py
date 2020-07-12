@@ -6,8 +6,8 @@ from adisp import process
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import makeBrowserParams
 from gui.Scaleform.daapi.view.meta.BrowserScreenMeta import BrowserScreenMeta
+from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
-from gui.impl.wrappers.background_blur import WGUIBackgroundBlurSupportImpl
 from gui.shared import events, EVENT_BUS_SCOPE
 from skeletons.gui.game_control import IBrowserController
 from helpers import dependency
@@ -137,8 +137,7 @@ class WebViewTransparent(WebView):
 
     def _populate(self):
         super(WebViewTransparent, self)._populate()
-        self.__blur = WGUIBackgroundBlurSupportImpl()
-        self.__blur.enable(APP_CONTAINERS_NAMES.TOP_SUB_VIEW, (APP_CONTAINERS_NAMES.SUBVIEW,
+        self.__blur = CachedBlur(enabled=True, ownLayer=APP_CONTAINERS_NAMES.TOP_SUB_VIEW, layers=(APP_CONTAINERS_NAMES.SUBVIEW,
          APP_CONTAINERS_NAMES.WINDOWS,
          APP_CONTAINERS_NAMES.DIALOGS,
          APP_CONTAINERS_NAMES.IME,
@@ -150,5 +149,5 @@ class WebViewTransparent(WebView):
     def _dispose(self):
         super(WebViewTransparent, self)._dispose()
         if self.__blur is not None:
-            self.__blur.disable()
+            self.__blur.fini()
         return

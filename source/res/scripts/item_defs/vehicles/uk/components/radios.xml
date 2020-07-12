@@ -27,6 +27,10 @@
     <N19Mk3_IGR>	60002	</N19Mk3_IGR>
     <N22_IGR>	60003	</N22_IGR>
     <C45_IGR>	60004	</C45_IGR>
+    <Development_Radio>	65000	</Development_Radio>
+    <N19Mk1_SH>	10000	</N19Mk1_SH>
+    <C45A_SH>	10001	</C45A_SH>
+    <C42_B47_SH>	10002	</C42_B47_SH>
   </ids>
   <shared>
     <Alarm_flags_bot>
@@ -341,5 +345,59 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </Radio_FV4202>
+    <Development_Radio>
+      <userString>	Development Radio	</userString>
+      <tags></tags>
+      <notInShop>	true	</notInShop>
+      <level>	1	</level>
+      <price>	0	</price>
+      <weight>	1	</weight>
+      <distance>	90	</distance>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+    </Development_Radio>
+    <N19Mk1_SH>
+      <userString>	#gb_vehicles:N19Mk1_SH	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	2000	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <radarRadius>	410	</radarRadius>
+      <radarCooldown>	30	</radarCooldown>
+    </N19Mk1_SH>
+    <C45A_SH>
+      <userString>	#gb_vehicles:C45A_SH	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	2000	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <radarRadius>	440	</radarRadius>
+      <radarCooldown>	20	</radarCooldown>
+    </C45A_SH>
+    <C42_B47_SH>
+      <userString>	#gb_vehicles:C42_B47_SH	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	2000	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <radarRadius>	520	</radarRadius>
+      <radarCooldown>	45	</radarCooldown>
+    </C42_B47_SH>
   </shared>
 </radios.xml>

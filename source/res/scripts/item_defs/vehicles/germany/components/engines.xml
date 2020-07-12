@@ -135,13 +135,15 @@
     <MB_837_F>	149	</MB_837_F>
     <GT_101>	150	</GT_101>
     <Continental_AVI_1790_8>	151	</Continental_AVI_1790_8>
-    <Development_Engine>	65535	</Development_Engine>
     <Maybach_HL57TR_bot>	247	</Maybach_HL57TR_bot>
     <Krupp_M301_bot>	248	</Krupp_M301_bot>
     <Engine_PzIV>	253	</Engine_PzIV>
     <Engine_VK4502P>	254	</Engine_VK4502P>
     <Engine_Auf_Panther>	255	</Engine_Auf_Panther>
-    <SturmtigerEngine>	256	</SturmtigerEngine>
+    <Maybach_HL_210_TRM_P30_SH>	324	</Maybach_HL_210_TRM_P30_SH>
+    <Maybach_HL_230_TRM_P30_SH>	325	</Maybach_HL_230_TRM_P30_SH>
+    <Maybach_HL_230_TRM_P35_SH>	326	</Maybach_HL_230_TRM_P35_SH>
+    <G00_Bomber_SH_Engine>	261	</G00_Bomber_SH_Engine>
     <Maybach_HL_210P30_Ausf_A_IGR>	60001	</Maybach_HL_210P30_Ausf_A_IGR>
     <Maybach_HL_230_TRM_P30_IGR>	60002	</Maybach_HL_230_TRM_P30_IGR>
     <Maybach_HL_230_TRM_P45_IGR>	60003	</Maybach_HL_230_TRM_P45_IGR>
@@ -155,6 +157,7 @@
     <Maybach_HL_120_TR_bootcamp>	64005	</Maybach_HL_120_TR_bootcamp>
     <Maybach_HL_108TR_bootcamp>	64006	</Maybach_HL_108TR_bootcamp>
     <Ganz_VIII_VGT_107_bootcamp>	64007	</Ganz_VIII_VGT_107_bootcamp>
+    <Development_Engine>	65000	</Development_Engine>
   </ids>
   <shared>
     <Maybach_HL_120_TR>
@@ -1400,7 +1403,6 @@
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	4	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <notInShop>	true	</notInShop>
       <rpm_min>	376	</rpm_min>
       <rpm_max>	2072	</rpm_max>
     </Development_Engine>
@@ -2735,22 +2737,73 @@
       <rpm_min>	250	</rpm_min>
       <rpm_max>	2800	</rpm_max>
     </MB507_IGR>
-    <SturmtigerEngine>
-      <userString>	#germany_vehicles:SturmtigerEngine	</userString>
+    <Maybach_HL_210_TRM_P30_SH>
+      <userString>	#germany_vehicles:Maybach_HL_210_TRM_P30_BR	</userString>
       <tags>	gasoline	</tags>
-      <level>	10	</level>
-      <price>	55000	</price>
+      <level>	1	</level>
+      <price>	0	</price>
       <notInShop>	true	</notInShop>
-      <wwsoundPC>	ev_10y_eng_pc	</wwsoundPC>
-      <wwsoundNPC>	ev_10y_eng_npc	</wwsoundNPC>
-      <power>	4200	</power>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	630	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <fireStartingChance>	0.0	</fireStartingChance>
+      <rpm_min>	360	</rpm_min>
+      <rpm_max>	2970	</rpm_max>
+    </Maybach_HL_210_TRM_P30_SH>
+    <Maybach_HL_230_TRM_P35_SH>
+      <userString>	#germany_vehicles:Maybach_HL_230_TRM_P35_SH	</userString>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1975	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <fireStartingChance>	0.0	</fireStartingChance>
+      <rpm_min>	460	</rpm_min>
+      <rpm_max>	2125	</rpm_max>
+    </Maybach_HL_230_TRM_P35_SH>
+    <Maybach_HL_230_TRM_P30_SH>
+      <userString>	#germany_vehicles:Maybach_HL_230_TRM_P30_SH	</userString>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1480	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <fireStartingChance>	0.0	</fireStartingChance>
+      <rpm_min>	380	</rpm_min>
+      <rpm_max>	2400	</rpm_max>
+    </Maybach_HL_230_TRM_P30_SH>
+    <G00_Bomber_SH_Engine>
+      <userString>	#germany_vehicles:G00_Bomber_SH_Engine	</userString>
+      <tags>	diesel	</tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	1500	</power>
       <weight>	750	</weight>
-      <maxHealth>	260	</maxHealth>
-      <maxRegenHealth>	129	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	400	</rpm_min>
-      <rpm_max>	2800	</rpm_max>
-    </SturmtigerEngine>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	72	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.0	</fireStartingChance>
+      <rpm_min>	386	</rpm_min>
+      <rpm_max>	2040	</rpm_max>
+    </G00_Bomber_SH_Engine>
   </shared>
 </engines.xml>

@@ -11,6 +11,7 @@
     <Radiostanice_RM_31T>	8	</Radiostanice_RM_31T>
     <Radiostanice_R_113>	9	</Radiostanice_R_113>
     <Radiostanice_RM_31T_A>	10	</Radiostanice_RM_31T_A>
+    <Development_Radio>	65000	</Development_Radio>
   </ids>
   <shared>
     <Radiostanice_vz_29>
@@ -137,5 +138,17 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </Radiostanice_R_113>
+    <Development_Radio>
+      <userString>	Development Radio	</userString>
+      <tags></tags>
+      <notInShop>	true	</notInShop>
+      <level>	1	</level>
+      <price>	0	</price>
+      <weight>	1	</weight>
+      <distance>	90	</distance>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+    </Development_Radio>
   </shared>
 </radios.xml>

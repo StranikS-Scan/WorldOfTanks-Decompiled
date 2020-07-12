@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/reusable/avatars.py
+import typing
 from gui.battle_results.reusable import shared
 from gui.doc_loaders.badges_loader import getSelectedByLayout
 from gui.shared.badges import buildBadge

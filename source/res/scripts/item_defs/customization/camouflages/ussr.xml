@@ -275,8 +275,8 @@
         <R10_AT-1>	4.5 4.5 0.000000 0.09	</R10_AT-1>
         <R110_Object_260>	6.6 6.5 0.000000 0.000000	</R110_Object_260>
         <R111_ISU130>	9.6 9.7 0.000000 0.000000	</R111_ISU130>
-        <R112_T54_45>	8.3 8.3 0.000000 0.82	</R112_T54_45>
-        <R112_T54_45_FL>	8.3 8.3 0.000000 0.82	</R112_T54_45_FL>
+        <R112_T54_45>	4.38 4.38 0.000000 0.82	</R112_T54_45>
+        <R112_T54_45_FL>	4.38 4.38 0.000000 0.82	</R112_T54_45_FL>
         <R113_Object_730>	3.3 3.3 0.06 0.26	</R113_Object_730>
         <R114_Object_244>	8.6 8.6 1.71 0.34	</R114_Object_244>
         <R115_IS-3_auto>	3.6 3.6 0.52 0.04	</R115_IS-3_auto>
@@ -9250,42 +9250,6 @@
       </rotation>
       <tiling>
         <ussr:R01_IS23>	5 5 -2.04 0.77	</ussr:R01_IS23>
-      </tiling>
-    </camouflage>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:camouflage/opaque	</userString>
-    <season>	ALL	</season>
-    <historical>	false	</historical>
-    <priceGroup>	camouflages 50g notInShop	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <vehicles>	ussr:R134_Object_252U	</vehicles>
-      </include>
-    </vehicleFilter>
-    <camouflage>
-      <id>	169	</id>
-      <texture>	vehicles/russian/Camouflage/10years_object252.dds	</texture>
-      <description>	#vehicle_customization:camouflage/10years_object252/description	</description>
-      <scales>	1.3 1 0.7	</scales>
-      <userString>	#vehicle_customization:camouflage/10years_object252/label	</userString>
-      <tags>	fullRGB	</tags>
-      <invisibilityFactor>	1	</invisibilityFactor>
-      <palettes>
-        <palette>
-          <c0>	255 0 0 255	</c0>
-          <c1>	0 255 0 255	</c1>
-          <c2>	0 0 255 255	</c2>
-          <c3>	0 0 0 255	</c3>
-        </palette>
-      </palettes>
-      <rotation>
-        <HULL>	-0.328122	</HULL>
-        <TURRET>	-0.328122	</TURRET>
-        <GUN>	-0.328122	</GUN>
-      </rotation>
-      <tiling>
-        <ussr:R04_T-349>	1.5 1.5 -0.17 -1.15	</ussr:R04_T-349>
       </tiling>
     </camouflage>
   </itemGroup>

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_pass/battle_pass_helpers.py
+import logging
 from collections import namedtuple
 from battle_pass_common import BattlePassConsts, BattlePassState, BattlePassInBattleProgress
 from gui import GUI_SETTINGS
@@ -9,6 +10,7 @@ from gui.shared.formatters import time_formatters
 from helpers import dependency, time_utils
 from helpers.http.url_formatters import addParamsToUrlQuery
 from skeletons.gui.game_control import IBattlePassController
+_logger = logging.getLogger(__name__)
 
 class BattlePassProgressionSubTabs(object):
     BUY_TAB = 0
@@ -125,6 +127,9 @@ def setInBattleProgress(section, basePoints, sumPoints, hasBattlePass):
 
 
 def showVideo(videoSource, onVideoClosed=None, isAutoClose=False):
+    if not videoSource:
+        _logger.error('videoSource is not specified!')
+        return
     from gui.impl.lobby.video.video_view import VideoViewWindow
     window = VideoViewWindow(videoSource, onVideoClosed=onVideoClosed, isAutoClose=isAutoClose, soundControl=AwardVideoSoundControl(videoSource))
     window.load()

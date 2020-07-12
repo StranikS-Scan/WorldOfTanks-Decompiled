@@ -18,7 +18,6 @@ from gui.prb_control.entities.stronghold.unit.actions_validator import Stronghol
 from gui.prb_control.entities.stronghold.unit.permissions import StrongholdPermissions
 from gui.prb_control.entities.stronghold.unit.requester import StrongholdUnitRequestProcessor
 from gui.prb_control.entities.base.external_battle_unit.base_external_battle_waiting_manager import BaseExternalUnitWaitingManager
-from gui.prb_control.entities.stronghold.unit.vehicles_watcher import StrongholdVehiclesWatcher
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.formatters import messages
 from gui.prb_control.items import SelectResult
@@ -147,22 +146,9 @@ class StrongholdBrowserEntity(UnitBrowserEntity):
 
     def __init__(self):
         super(StrongholdBrowserEntity, self).__init__(FUNCTIONAL_FLAG.STRONGHOLD, PREBATTLE_TYPE.STRONGHOLD)
-        self.__watcher = None
-        return
 
     def canKeepMode(self):
         return False
-
-    def init(self, ctx=None):
-        self.__watcher = StrongholdVehiclesWatcher()
-        self.__watcher.start()
-        return super(StrongholdBrowserEntity, self).init(ctx)
-
-    def fini(self, ctx=None, woEvents=False):
-        if self.__watcher is not None:
-            self.__watcher.stop()
-            self.__watcher = None
-        return super(StrongholdBrowserEntity, self).fini(ctx, woEvents)
 
     def _loadUnit(self):
         g_eventDispatcher.loadStrongholds()

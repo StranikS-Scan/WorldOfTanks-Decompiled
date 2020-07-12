@@ -4,6 +4,7 @@ import re
 import sre_compile
 import BigWorld
 from debug_utils import LOG_CURRENT_EXCEPTION
+from constants import IS_CHINA
 from external_strings_utils import normalized_unicode_trim
 from gui import GUI_SETTINGS
 from helpers import html
@@ -23,6 +24,16 @@ class ObsceneLanguageFilter(IIncomingMessageFilter):
 
     def filter(self, senderID, text):
         return text if isCurrentPlayer(senderID) else g_olDictionary.searchAndReplace(text)
+
+
+class ChinaMessageFilter(ObsceneLanguageFilter):
+
+    def filter(self, senderID, text):
+        return g_olDictionary.searchAndReplace(text)
+
+
+def getObsceneLanguageFilter():
+    return ChinaMessageFilter() if IS_CHINA else ObsceneLanguageFilter()
 
 
 class ColoringObsceneLanguageFilter(IIncomingMessageFilter):

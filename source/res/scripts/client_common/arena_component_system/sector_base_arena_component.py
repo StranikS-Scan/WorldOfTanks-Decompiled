@@ -9,6 +9,15 @@ ID_TO_BASENAME = {1: 'A',
  4: 'D',
  5: 'E',
  6: 'F'}
+_MISSION_SECTOR_ID_MAPPING = {1: {0: 4,
+     1: 4,
+     2: 1},
+ 2: {0: 5,
+     1: 5,
+     2: 2},
+ 3: {0: 6,
+     1: 6,
+     2: 3}}
 
 class SectorBaseArenaComponent(ClientArenaComponent):
     sectorBases = property(lambda self: self.__sectorBases)

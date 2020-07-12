@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/messenger_common_chat2.py
 from collections import namedtuple
-from constants import IS_CLIENT, IS_CHINA
 from string import Template
+from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES
+from constants import IS_CLIENT, IS_CHINA
 _g_id = None
 
 def _makeID(start=None, range=None):
@@ -14,6 +15,18 @@ def _makeID(start=None, range=None):
 
 
 _COOLDOWN_OFFSET = 0.0 if IS_CLIENT else -0.1
+_INITIAL_DEFAULT_BATTLE_CHAT_COOLDOWN_DURATION = 0.1
+_SHORT_BATTLE_CHAT_COOLDOWN_DURATION = 0.0
+_TEAM_BATTLE_CHAT_CMD_COOLDOWN_DURATION = 6.0
+_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION = 5.0
+_SAME_PRIVATE_BATTLE_CHAT_CMD_COOLDOWN_DURATION = 2.0
+_OTHER_BATTLE_CHAT_CMD_COOLDOWN_DURATION = 1.0
+_ATTENTION_TO_COMMAND_COOLDOWN_DURATION = 0.2
+_SAME_TARGET_PERSONAL_BATTLE_CHAT_CMD_COOLDOWN_DURATION = 3.0
+_REACTIONAL_CHAT_CMD_COOLDOWN_DURATION = 0.1
+_MAX_ATTENTION_TO_CHAT_COMMANDS_WITHIN_TIMEFRAME = 3
+_TIMEFRAME_FOR_ATTENTION_TO_STORAGE = 5
+_MAX_ATTENTION_TO_PER_TEAM = 3
 
 def messageArgs(int32Arg1=0, int64Arg1=0, floatArg1=0, strArg1='', strArg2=''):
     return {'int32Arg1': int32Arg1,
@@ -30,6 +43,7 @@ class MESSENGER_ERRORS:
     GENERIC_ERROR = _makeID()
     NOT_READY = _makeID()
     IN_COOLDOWN = _makeID()
+    COMMAND_IN_TEAM_COOLDOWN = _makeID()
     IN_CHAT_BAN = _makeID()
     IS_BUSY = _makeID()
     NOT_ALLOWED = _makeID()
@@ -113,7 +127,12 @@ class MESSENGER_ACTION_IDS:
         if actionID == actions.BROADCAST_BATTLE_MESSAGE or actionID == actions.BROADCAST_UNIT_MESSAGE:
             return True
         battleChatCmdStartID = actions._BATTLE_CHAT_COMMAND_START_ID
-        return True if battleChatCmdStartID <= actionID < battleChatCmdStartID + len(BATTLE_CHAT_COMMANDS) else False
+        if battleChatCmdStartID <= actionID < battleChatCmdStartID + len(BATTLE_CHAT_COMMANDS):
+            attentionToCmdName = actions.battleChatCommandFromActionID(actionID).name
+            if attentionToCmdName == BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION:
+                return False
+            return True
+        return False
 
     @staticmethod
     def isChatActionSusceptibleToBan(actionID):
@@ -141,47 +160,76 @@ class MESSENGER_ACTION_IDS:
         return ADMIN_CHAT_COMMANDS[actionID - startID] if startID <= actionID < startID + len(ADMIN_CHAT_COMMANDS) else None
 
 
+class CHAT_COMMAND_COOLDOWN_TYPE_IDS:
+    TIMEFRAME_DATA_COOLDOWN = _makeID()
+    SAME_COMMAND_COOLDOWN = _makeID()
+    OTHER_COMMANDS_COOLDOWN = _makeID()
+    PRIVATE_COMMANDS_COOLDOWN = _makeID()
+    ATTENTION_TO_BLOCKED_COOLDOWN = _makeID()
+
+
 _MESSENGER_ACTION_NAMES = {_id:_name for _name, _id in MESSENGER_ACTION_IDS.__dict__.iteritems() if isinstance(_id, int) and not _name.startswith('_')}
 _MESSENGER_ERROR_NAMES = {_id:_name for _name, _id in MESSENGER_ERRORS.__dict__.iteritems() if not _name.startswith('_')}
 AdminChatCommand = namedtuple('AdminChatCommand', ('id', 'name', 'timeout'))
 ADMIN_CHAT_COMMANDS = (AdminChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._ADMIN_COMMAND_START_ID), name='USERBAN', timeout=30.0), AdminChatCommand(id=_makeID(), name='USERUNBAN', timeout=30.0))
 ADMIN_CHAT_COMMANDS_BY_NAMES = {v.name:v for v in ADMIN_CHAT_COMMANDS}
-BattleChatCommand = namedtuple('BattleChatCommand', ('id', 'name', 'cooldownPeriod', 'msgText', 'vehMarker', 'soundNotification'))
+BattleChatCommand = namedtuple('BattleChatCommand', ('id', 'name', 'cooldownPeriod', 'msgText', 'vehMarker', 'senderVehMarker', 'soundNotification', 'msgOnMarker', 'soundNotificationReply'))
+BattleChatCommand.__new__.__defaults__ = (0, None, 0, None, None, None, None)
 UnitChatCommand = namedtuple('UnitChatCommand', ('id', 'name', 'cooldownPeriod', 'msgText'))
 UNIT_CHAT_COMMANDS = (UnitChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._UNIT_COMMAND_START_ID), name='ATTENTIONTOCELL', cooldownPeriod=1.0 + _COOLDOWN_OFFSET, msgText='attention_to_cell'),)
 UNIT_CHAT_COMMANDS_BY_NAMES = {v.name:v for v in UNIT_CHAT_COMMANDS}
-BATTLE_CHAT_COMMANDS = (BattleChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._BATTLE_CHAT_COMMAND_START_ID), name='HELPME', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='help_me', vehMarker='help_me', soundNotification='help_me'),
- BattleChatCommand(id=_makeID(), name='FOLLOWME', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='follow_me', vehMarker='follow_me', soundNotification='follow_me'),
- BattleChatCommand(id=_makeID(), name='ATTACK', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='attack', vehMarker=None, soundNotification='attack'),
- BattleChatCommand(id=_makeID(), name='BACKTOBASE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='back_to_base', vehMarker=None, soundNotification='back_to_base'),
- BattleChatCommand(id=_makeID(), name='POSITIVE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='positive', vehMarker='positive', soundNotification='positive'),
- BattleChatCommand(id=_makeID(), name='NEGATIVE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='negative', vehMarker='negative', soundNotification='negative'),
- BattleChatCommand(id=_makeID(), name='ATTENTIONTOCELL', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='attention_to_cell', vehMarker=None, soundNotification=None),
- BattleChatCommand(id=_makeID(), name='ATTENTIONTOPOSITION', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='attention_to_position', vehMarker=None, soundNotification=None),
- BattleChatCommand(id=_makeID(), name='ATTENTIONTOOBJECTIVE_ATK', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='attention_to_objective_atk', vehMarker=None, soundNotification=None),
- BattleChatCommand(id=_makeID(), name='ATTENTIONTOOBJECTIVE_DEF', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='attention_to_objective_def', vehMarker=None, soundNotification=None),
- BattleChatCommand(id=_makeID(), name='ATTENTIONTOBASE_ATK', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='attention_to_base_atk', vehMarker=None, soundNotification=None),
- BattleChatCommand(id=_makeID(), name='ATTENTIONTOBASE_DEF', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='attention_to_base_def', vehMarker=None, soundNotification=None),
- BattleChatCommand(id=_makeID(), name='SPG_AIM_AREA', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='spg_aim_area', vehMarker=None, soundNotification=None),
- BattleChatCommand(id=_makeID(), name='ATTACKENEMY', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='attack_enemy', vehMarker='attack', soundNotification='attack_the_enemy'),
- BattleChatCommand(id=_makeID(), name='TURNBACK', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='turn_back', vehMarker='turn_back', soundNotification='turn_back'),
- BattleChatCommand(id=_makeID(), name='HELPMEEX', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='help_me_ex', vehMarker='help_me_ex', soundNotification='help_me_ex'),
- BattleChatCommand(id=_makeID(), name='SUPPORTMEWITHFIRE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='support_me_with_fire', vehMarker='attack', soundNotification='support_me_with_fire'),
- BattleChatCommand(id=_makeID(), name='RELOADINGGUN', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='reloading_gun', vehMarker='reloading_gun', soundNotification='reloading_gun'),
- BattleChatCommand(id=_makeID(), name='STOP', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='stop', vehMarker='stop', soundNotification='stop'),
- BattleChatCommand(id=_makeID(), name='RELOADING_CASSETE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='reloading_cassette', vehMarker='reloading_gun', soundNotification='reloading_gun'),
- BattleChatCommand(id=_makeID(), name='RELOADING_READY', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='reloading_ready', vehMarker=None, soundNotification=None),
- BattleChatCommand(id=_makeID(), name='RELOADING_READY_CASSETE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='reloading_ready_cassette', vehMarker=None, soundNotification=None),
- BattleChatCommand(id=_makeID(), name='RELOADING_UNAVAILABLE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='reloading_unavailable', vehMarker=None, soundNotification=None),
- BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_SAVETANKS_ATK', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/atk/save_tanks', vehMarker=None, soundNotification=None),
- BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_SAVETANKS_DEF', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/def/save_tanks', vehMarker=None, soundNotification=None),
- BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_TIME_ATK', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/atk/time', vehMarker=None, soundNotification=None),
- BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_TIME_DEF', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/def/time', vehMarker=None, soundNotification=None),
- BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_HQ_ATK', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/atk/focus_hq', vehMarker=None, soundNotification=None),
- BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_HQ_DEF', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/def/focus_hq', vehMarker=None, soundNotification=None),
- BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_WEST', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/lane/west', vehMarker=None, soundNotification=None),
- BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_CENTER', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/lane/center', vehMarker=None, soundNotification=None),
- BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_EAST', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/lane/east', vehMarker=None, soundNotification=None))
+BATTLE_CHAT_COMMANDS = (BattleChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._BATTLE_CHAT_COMMAND_START_ID), name=BATTLE_CHAT_COMMAND_NAMES.SOS, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='help_me', vehMarker='help_me', senderVehMarker=None, soundNotification='ibc_ping_request', soundNotificationReply='ibc_ping_help_me_ex_reply'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.POSITIVE, cooldownPeriod=_SAME_PRIVATE_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='positive', vehMarker='positive', senderVehMarker=None, soundNotification='ibc_ping_affirmative', soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name='ATTENTIONTOCELL', cooldownPeriod=_SHORT_BATTLE_CHAT_COOLDOWN_DURATION + _COOLDOWN_OFFSET, msgText='attention_to_cell', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION, cooldownPeriod=_ATTENTION_TO_COMMAND_COOLDOWN_DURATION, msgText='attention_to_position', vehMarker='attention_to', senderVehMarker=None, soundNotification='ibc_ping_attention', soundNotificationReply='ibc_ping_reply'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.REPLY, cooldownPeriod=_REACTIONAL_CHAT_CMD_COOLDOWN_DURATION, msgText='reply_to_player', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.CANCEL_REPLY, cooldownPeriod=_REACTIONAL_CHAT_CMD_COOLDOWN_DURATION, msgText='cancel_reply', vehMarker=None, senderVehMarker=None, soundNotification='ibc_ping_cancel', soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.ATTENTIONTOOBJECTIVE_ATK, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='attention_to_objective_atk', vehMarker=None, senderVehMarker=None, soundNotification='ibc_ping_action', soundNotificationReply='ibc_ping_reply'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.ATTENTIONTOOBJECTIVE_DEF, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='attention_to_objective_def', vehMarker=None, senderVehMarker=None, soundNotification='ibc_ping_request', soundNotificationReply='ibc_ping_reply'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.ATTACK_BASE, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='attention_to_base_atk', vehMarker='attackBase', senderVehMarker=None, soundNotification='ibc_ping_request', soundNotificationReply='ibc_ping_reply'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.DEFEND_BASE, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='attention_to_base_def', vehMarker='defendBase', senderVehMarker=None, soundNotification='ibc_ping_request', soundNotificationReply='ibc_ping_reply'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.SPG_AIM_AREA, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='spg_aim_area', vehMarker=None, senderVehMarker=None, soundNotification='ibc_ping_attention', soundNotificationReply='ibc_ping_reply'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY_WITH_SPG, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='attack_enemy_with_SPG', vehMarker='attack', senderVehMarker='attackSender', soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.TURNBACK, cooldownPeriod=_SAME_PRIVATE_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='turn_back', vehMarker='turn_back', senderVehMarker=None, soundNotification='ibc_ping_retreat', soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.HELPME, cooldownPeriod=_SAME_PRIVATE_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='help_me_ex', vehMarker='help_me_ex', senderVehMarker=None, soundNotification='ibc_ping_help_me_ex', soundNotificationReply='ibc_ping_help_me_ex_reply'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='attack_enemy', vehMarker='attack', senderVehMarker='attackSender', soundNotification='ibc_ping_request', soundNotificationReply='ibc_ping_reply'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.RELOADINGGUN, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='reloading_gun', vehMarker='reloading_gun', senderVehMarker=None, soundNotification='ibc_ping_attention', soundNotificationReply='ibc_ping_reply'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.THANKS, cooldownPeriod=_SAME_PRIVATE_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='thanks', vehMarker='thanks', senderVehMarker=None, soundNotification='ibc_ping_thanks', soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.RELOADING_CASSETE, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='reloading_cassette', vehMarker='reloading_gun', senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.RELOADING_READY, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='reloading_ready', vehMarker=None, senderVehMarker=None, soundNotification='ibc_ping_attention', soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.RELOADING_READY_CASSETE, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='reloading_ready_cassette', vehMarker=None, senderVehMarker=None, soundNotification='ibc_ping_attention', soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.RELOADING_UNAVAILABLE, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='reloading_unavailable', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_SAVE_TANKS_ATK, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg/atk/save_tanks', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.GOING_THERE, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='going_there', vehMarker='goingTo', senderVehMarker=None, soundNotification='ibc_ping_action', soundNotificationReply='ibc_ping_reply'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_SAVE_TANKS_DEF, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg/def/save_tanks', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_TIME_ATK, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg/atk/time', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_TIME_DEF, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg/def/time', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_HQ_ATK, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg/atk/focus_hq', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_HQ_DEF, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg/def/focus_hq', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_WEST, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg/lane/west', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_CENTER, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg/lane/center', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_EAST, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg/lane/east', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_1, cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_1', msgOnMarker='event_chat_1'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_2, cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_2', msgOnMarker='event_chat_2'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_3, cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_3', msgOnMarker='event_chat_3'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_4, cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_4', msgOnMarker='event_chat_4'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_5, cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_5', msgOnMarker='event_chat_5'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_6, cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_6', msgOnMarker='event_chat_6'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_7, cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_7', msgOnMarker='event_chat_7'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_1_EX, cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_1_ex', msgOnMarker='event_chat_1'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_2_EX, cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_2_ex', msgOnMarker='event_chat_2'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_3_EX, cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_3_ex', msgOnMarker='event_chat_3'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_4_EX, cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_4_ex', msgOnMarker='event_chat_4'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_5_EX, cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_5_ex', msgOnMarker='event_chat_5'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_6_EX, cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_6_ex', msgOnMarker='event_chat_6'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_7_EX, cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_7_ex', msgOnMarker='event_chat_7'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.CLEAR_CHAT_COMMANDS, cooldownPeriod=_REACTIONAL_CHAT_CMD_COOLDOWN_DURATION, msgText='cancel_reply', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='attacking_enemy', vehMarker='attack', senderVehMarker='attackSender', soundNotification='ibc_ping_action', soundNotificationReply='ibc_ping_reply'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='supporting_ally', vehMarker='supportingAlly', senderVehMarker=None, soundNotification='ibc_ping_help_me_ex_reply', soundNotificationReply='ibc_ping_reply'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='defending_base', vehMarker='attention_to_base_def_and_commit', senderVehMarker=None, soundNotification='ibc_ping_action', soundNotificationReply='ibc_ping_reply'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='attacking_base', vehMarker='attention_to_base_atk_and_commit', senderVehMarker=None, soundNotification='ibc_ping_action', soundNotificationReply='ibc_ping_reply'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.PREBATTLE_WAYPOINT, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='going_there', vehMarker='goingTo', senderVehMarker=None, soundNotification=None, soundNotificationReply='ibc_ping_reply'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.CONFIRM, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='confirm', vehMarker='positive', senderVehMarker=None, soundNotification='ibc_ping_attention', soundNotificationReply=None))
 BATTLE_CHAT_COMMANDS_BY_NAMES = {v.name:v for v in BATTLE_CHAT_COMMANDS}
 
 class MUC_SERVICE_TYPE(object):
@@ -206,3 +254,48 @@ def canResolveMucRoomsOfService(service):
         pass
 
     return canResolve
+
+
+ChatCommandBlockedData = namedtuple('ChatCommandBlockedData', ('cmdID', 'cooldownType', 'cooldownEnd', 'targetID'))
+
+def areSenderCooldownsActive(currTime, listOfCoolDownTimeData, cmdIDToSend, targetIDToSend):
+    if listOfCoolDownTimeData is None:
+        return listOfCoolDownTimeData
+    else:
+        removeDataList = list()
+        blockReasonData = None
+        for cmdBlockedData in listOfCoolDownTimeData:
+            if cmdBlockedData.cooldownEnd < currTime:
+                removeDataList.append(cmdBlockedData)
+            validBlockData = None
+            if cmdBlockedData.cooldownType == CHAT_COMMAND_COOLDOWN_TYPE_IDS.SAME_COMMAND_COOLDOWN and cmdBlockedData.cmdID == cmdIDToSend:
+                validBlockData = cmdBlockedData
+            elif cmdBlockedData.cooldownType == CHAT_COMMAND_COOLDOWN_TYPE_IDS.OTHER_COMMANDS_COOLDOWN and cmdBlockedData.cmdID != cmdIDToSend:
+                validBlockData = cmdBlockedData
+            elif cmdBlockedData.cooldownType == CHAT_COMMAND_COOLDOWN_TYPE_IDS.PRIVATE_COMMANDS_COOLDOWN and cmdBlockedData.targetID == targetIDToSend:
+                validBlockData = cmdBlockedData
+            elif cmdBlockedData.cooldownType == CHAT_COMMAND_COOLDOWN_TYPE_IDS.ATTENTION_TO_BLOCKED_COOLDOWN and cmdBlockedData.cmdID == cmdIDToSend:
+                validBlockData = cmdBlockedData
+            if cmdBlockedData.cooldownType != CHAT_COMMAND_COOLDOWN_TYPE_IDS.TIMEFRAME_DATA_COOLDOWN and validBlockData is not None:
+                blockReasonData = validBlockData
+
+        if removeDataList:
+            for cdData in removeDataList:
+                if cdData in listOfCoolDownTimeData:
+                    listOfCoolDownTimeData.remove(cdData)
+
+        return blockReasonData
+
+
+def addCoolDowns(currTime, listOfCoolDownTimeData, cmdID, cmdName, cmdCooldownTime, cmdTargetID):
+    listOfCoolDownTimeData.append(ChatCommandBlockedData(cmdID=cmdID, cooldownType=CHAT_COMMAND_COOLDOWN_TYPE_IDS.SAME_COMMAND_COOLDOWN, cooldownEnd=currTime + cmdCooldownTime, targetID=cmdTargetID))
+    listOfCoolDownTimeData.append(ChatCommandBlockedData(cmdID=cmdID, cooldownType=CHAT_COMMAND_COOLDOWN_TYPE_IDS.OTHER_COMMANDS_COOLDOWN, cooldownEnd=currTime + _OTHER_BATTLE_CHAT_CMD_COOLDOWN_DURATION, targetID=cmdTargetID))
+    if cmdName in (BATTLE_CHAT_COMMAND_NAMES.HELPME, BATTLE_CHAT_COMMAND_NAMES.THANKS, BATTLE_CHAT_COMMAND_NAMES.TURNBACK):
+        listOfCoolDownTimeData.append(ChatCommandBlockedData(cmdID=cmdID, cooldownType=CHAT_COMMAND_COOLDOWN_TYPE_IDS.PRIVATE_COMMANDS_COOLDOWN, cooldownEnd=currTime + _SAME_TARGET_PERSONAL_BATTLE_CHAT_CMD_COOLDOWN_DURATION, targetID=cmdTargetID))
+    if cmdName == BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION:
+        activeOldAttComands = [ blockData for blockData in listOfCoolDownTimeData if blockData[0] == cmdID and blockData[1] == CHAT_COMMAND_COOLDOWN_TYPE_IDS.TIMEFRAME_DATA_COOLDOWN ]
+        if activeOldAttComands and len(activeOldAttComands) >= _MAX_ATTENTION_TO_CHAT_COMMANDS_WITHIN_TIMEFRAME - 1:
+            data = ChatCommandBlockedData(cmdID=cmdID, cooldownType=CHAT_COMMAND_COOLDOWN_TYPE_IDS.ATTENTION_TO_BLOCKED_COOLDOWN, cooldownEnd=currTime + _SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, targetID=cmdTargetID)
+        else:
+            data = ChatCommandBlockedData(cmdID=cmdID, cooldownType=CHAT_COMMAND_COOLDOWN_TYPE_IDS.TIMEFRAME_DATA_COOLDOWN, cooldownEnd=currTime + _TIMEFRAME_FOR_ATTENTION_TO_STORAGE, targetID=cmdTargetID)
+        listOfCoolDownTimeData.append(data)

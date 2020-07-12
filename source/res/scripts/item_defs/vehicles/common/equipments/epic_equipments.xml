@@ -880,6 +880,8 @@
       <noOwner>	false	</noOwner>
       <shotSoundPreDelay>	2	</shotSoundPreDelay>
       <wwsoundShot>	eb_ability_smoke_firing	</wwsoundShot>
+      <vignetteColor>	200 200 200	</vignetteColor>
+      <vignetteIntensity>	0.08	</vignetteIntensity>
     </script>
   </smoke_epic_level1>
   <smoke_epic_level2>
@@ -934,6 +936,8 @@
       <noOwner>	false	</noOwner>
       <shotSoundPreDelay>	2	</shotSoundPreDelay>
       <wwsoundShot>	eb_ability_smoke_firing	</wwsoundShot>
+      <vignetteColor>	200 200 200	</vignetteColor>
+      <vignetteIntensity>	0.08	</vignetteIntensity>
     </script>
   </smoke_epic_level2>
   <smoke_epic_level3>
@@ -988,6 +992,8 @@
       <noOwner>	false	</noOwner>
       <shotSoundPreDelay>	2	</shotSoundPreDelay>
       <wwsoundShot>	eb_ability_smoke_firing	</wwsoundShot>
+      <vignetteColor>	200 200 200	</vignetteColor>
+      <vignetteIntensity>	0.08	</vignetteIntensity>
     </script>
   </smoke_epic_level3>
   <smoke_epic_level4>
@@ -1042,6 +1048,8 @@
       <noOwner>	false	</noOwner>
       <shotSoundPreDelay>	2	</shotSoundPreDelay>
       <wwsoundShot>	eb_ability_smoke_firing	</wwsoundShot>
+      <vignetteColor>	200 200 200	</vignetteColor>
+      <vignetteIntensity>	0.08	</vignetteIntensity>
     </script>
   </smoke_epic_level4>
   <smoke_epic_level5>
@@ -1096,6 +1104,8 @@
       <noOwner>	false	</noOwner>
       <shotSoundPreDelay>	2	</shotSoundPreDelay>
       <wwsoundShot>	eb_ability_smoke_firing	</wwsoundShot>
+      <vignetteColor>	200 200 200	</vignetteColor>
+      <vignetteIntensity>	0.08	</vignetteIntensity>
     </script>
   </smoke_epic_level5>
   <inspire_level1>
@@ -1121,15 +1131,17 @@
       <longDescription>	#artefacts:inspire/longDescr	</longDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
-      <tooltips>	cooldownTime radius duration-inspire crewIncreaseFactor inactivationDelay	</tooltips>
+      <tooltips>	cooldownTime radius duration-inspire increaseFactors[crewRolesFactor] inactivationDelay	</tooltips>
       <cooldownTime>	240.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
       <sharedCooldownTime>	15.0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
       <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <increaseFactors>
+        <crewRolesFactor>	1.1	</crewRolesFactor>
+      </increaseFactors>
       <duration>	50	</duration>
-      <crewIncreaseFactor>	1.1	</crewIncreaseFactor>
       <inactivationDelay>	10	</inactivationDelay>
       <radius>	40	</radius>
       <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
@@ -1158,15 +1170,17 @@
       <longDescription>	#artefacts:inspire/longDescr	</longDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
-      <tooltips>	cooldownTime radius duration-inspire crewIncreaseFactor inactivationDelay	</tooltips>
+      <tooltips>	cooldownTime radius duration-inspire increaseFactors[crewRolesFactor] inactivationDelay	</tooltips>
       <cooldownTime>	240.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
       <sharedCooldownTime>	15.0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
       <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <increaseFactors>
+        <crewRolesFactor>	1.11	</crewRolesFactor>
+      </increaseFactors>
       <duration>	53	</duration>
-      <crewIncreaseFactor>	1.11	</crewIncreaseFactor>
       <inactivationDelay>	10	</inactivationDelay>
       <radius>	40	</radius>
       <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
@@ -1195,15 +1209,17 @@
       <longDescription>	#artefacts:inspire/longDescr	</longDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
-      <tooltips>	cooldownTime radius duration-inspire crewIncreaseFactor inactivationDelay	</tooltips>
+      <tooltips>	cooldownTime radius duration-inspire increaseFactors[crewRolesFactor] inactivationDelay	</tooltips>
       <cooldownTime>	240.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
       <sharedCooldownTime>	15.0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
       <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <increaseFactors>
+        <crewRolesFactor>	1.125	</crewRolesFactor>
+      </increaseFactors>
       <duration>	55	</duration>
-      <crewIncreaseFactor>	1.125	</crewIncreaseFactor>
       <inactivationDelay>	10	</inactivationDelay>
       <radius>	40	</radius>
       <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
@@ -1232,15 +1248,17 @@
       <longDescription>	#artefacts:inspire/longDescr	</longDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
-      <tooltips>	cooldownTime radius duration-inspire crewIncreaseFactor inactivationDelay	</tooltips>
+      <tooltips>	cooldownTime radius duration-inspire increaseFactors[crewRolesFactor] inactivationDelay	</tooltips>
       <cooldownTime>	240.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
       <sharedCooldownTime>	15.0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
       <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <increaseFactors>
+        <crewRolesFactor>	1.14	</crewRolesFactor>
+      </increaseFactors>
       <duration>	58	</duration>
-      <crewIncreaseFactor>	1.14	</crewIncreaseFactor>
       <inactivationDelay>	10	</inactivationDelay>
       <radius>	40	</radius>
       <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
@@ -1269,15 +1287,17 @@
       <longDescription>	#artefacts:inspire/longDescr	</longDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
-      <tooltips>	cooldownTime radius duration-inspire crewIncreaseFactor inactivationDelay	</tooltips>
+      <tooltips>	cooldownTime radius duration-inspire increaseFactors[crewRolesFactor] inactivationDelay	</tooltips>
       <cooldownTime>	240.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
       <sharedCooldownTime>	15.0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
       <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <increaseFactors>
+        <crewRolesFactor>	1.15	</crewRolesFactor>
+      </increaseFactors>
       <duration>	60	</duration>
-      <crewIncreaseFactor>	1.15	</crewIncreaseFactor>
       <inactivationDelay>	10	</inactivationDelay>
       <radius>	40	</radius>
       <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>

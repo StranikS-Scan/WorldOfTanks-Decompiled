@@ -15,7 +15,7 @@ def ownVehicleGunShotPositionGetter():
     if not ownVehicle:
         return Math.Vector3(0.0, 0.0, 0.0)
     else:
-        return Math.Vector3(0.0, 0.0, 0.0) if not ownVehicle.typeDescriptor else ownVehicle.typeDescriptor.turret.gunShotPosition
+        return Math.Vector3(0.0, 0.0, 0.0) if not ownVehicle.typeDescriptor else ownVehicle.typeDescriptor.activeGunShotPosition
 
 
 class ProjectileMover(object):

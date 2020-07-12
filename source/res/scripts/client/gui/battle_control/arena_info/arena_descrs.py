@@ -3,6 +3,8 @@
 import weakref
 import BattleReplay
 from constants import IS_DEVELOPMENT
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.Scaleform import getNecessaryArenaFrameName
 from gui.Scaleform.locale.MENU import MENU
 from gui.battle_control.arena_info import settings
@@ -260,6 +262,16 @@ class BootcampBattleDescription(ArenaWithLabelDescription):
         return settings.DEFAULT_SCREEN_MAP_IMAGE_RES_PATH
 
 
+class BattleRoyaleDescription(ArenaWithLabelDescription):
+    __slots__ = ()
+
+    def getScreenIcon(self):
+        return settings.DEFAULT_SCREEN_MAP_IMAGE_RES_PATH
+
+    def getWinString(self, isInBattle=True):
+        return backport.text(R.strings.arenas.c_250_br_battle_city2_1.description())
+
+
 class EpicBattlesDescription(ArenaWithLabelDescription):
     __slots__ = ()
 
@@ -276,13 +288,6 @@ class EpicBattlesDescription(ArenaWithLabelDescription):
         return EPIC_BATTLE.TEAM1NAME if team == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER else EPIC_BATTLE.TEAM2NAME
 
 
-class BobBattlesDescription(ArenaWithLabelDescription):
-
-    def isInvitationEnabled(self):
-        replayCtrl = BattleReplay.g_replayCtrl
-        return not replayCtrl.isPlaying or replayCtrl.isBattleSimulation
-
-
 def createDescription(arenaVisitor):
     guiVisitor = arenaVisitor.gui
     if guiVisitor.isRandomBattle() or guiVisitor.isTrainingBattle():
@@ -293,8 +298,8 @@ def createDescription(arenaVisitor):
         description = BootcampBattleDescription(arenaVisitor)
     elif guiVisitor.isInEpicRange():
         description = EpicBattlesDescription(arenaVisitor)
-    elif guiVisitor.isBobBattle():
-        description = BobBattlesDescription(arenaVisitor)
+    elif guiVisitor.isBattleRoyale():
+        description = BattleRoyaleDescription(arenaVisitor)
     elif guiVisitor.hasLabel():
         description = ArenaWithLabelDescription(arenaVisitor)
     else:

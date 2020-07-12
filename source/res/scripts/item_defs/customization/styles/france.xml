@@ -273,6 +273,7 @@
       <description>	#vehicle_customization:special_style/bdr_g1b_w_description	</description>
       <longDescriptionSpecial>	#vehicle_customization:special_style/bdr_g1b_w_description/long	</longDescriptionSpecial>
       <modelsSet>	WH	</modelsSet>
+      <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/bdr_g1b_w	</userString>
       <outfits>
         <outfit>
@@ -350,88 +351,6 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/main_styles	</userString>
-    <season>	ALL	</season>
-    <historical>	true	</historical>
-    <priceGroup>	styles 700g	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <nations>	france	</nations>
-      </include>
-    </vehicleFilter>
-    <style>
-      <id>	244	</id>
-      <texture>	gui/maps/vehicles/styles/generic_custom_look_france.png	</texture>
-      <description>	#vehicle_customization:main_style/generic_custom_look_france_desc	</description>
-      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_france_desc/long	</longDescriptionSpecial>
-      <userString>	#vehicle_customization:main_style/generic_custom_look_france	</userString>
-      <tags>	progression_required	</tags>
-      <itemFilters>
-        <projection_decal>
-          <include>
-            <itemGroupName>	Progression Decals	</itemGroupName>
-          </include>
-        </projection_decal>
-      </itemFilters>
-      <outfits>
-        <outfit>
-          <season>	summer	</season>
-          <camouflages>
-            <item>
-              <id>	15417	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	677	</id>
-              <appliedTo>	13104	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	winter	</season>
-          <camouflages>
-            <item>
-              <id>	15404	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	677	</id>
-              <appliedTo>	13104	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	desert	</season>
-          <camouflages>
-            <item>
-              <id>	15406	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	677	</id>
-              <appliedTo>	13104	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	event	</season>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
@@ -446,6 +365,7 @@
       <texture>	gui/maps/vehicles/styles/Siroco.png	</texture>
       <longDescriptionSpecial>	#vehicle_customization:special_style/siroco_desc/long	</longDescriptionSpecial>
       <modelsSet>	Siroco	</modelsSet>
+      <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/siroco	</userString>
       <tags>	progression_required	</tags>
       <itemFilters>

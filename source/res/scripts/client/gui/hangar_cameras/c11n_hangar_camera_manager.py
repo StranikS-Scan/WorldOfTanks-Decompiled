@@ -120,13 +120,14 @@ class C11nHangarCameraManager(TimeDeltaMeter):
             self.__prevPitch = None
             return
 
-    def locateCameraToStartState(self):
+    def locateCameraToStartState(self, needToSetCameraLocation=True):
         if self.__hangarCameraManager is None or self.__hangarCameraManager.camera is None:
             return
         else:
             from gui.ClientHangarSpace import hangarCFG
             cfg = hangarCFG()
-            self.__hangarCameraManager.setCameraLocation(targetPos=cfg['cam_start_target_pos'], pivotPos=cfg['cam_pivot_pos'], yaw=math.radians(cfg['cam_start_angles'][0]), pitch=math.radians(cfg['cam_start_angles'][1]), dist=cfg['cam_start_dist'], camConstraints=[cfg['cam_pitch_constr'], cfg['cam_yaw_constr'], cfg['cam_dist_constr']])
+            if needToSetCameraLocation:
+                self.__hangarCameraManager.setCameraLocation(targetPos=cfg['cam_start_target_pos'], pivotPos=cfg['cam_pivot_pos'], yaw=math.radians(cfg['cam_start_angles'][0]), pitch=math.radians(cfg['cam_start_angles'][1]), dist=cfg['cam_start_dist'], camConstraints=[cfg['cam_pitch_constr'], cfg['cam_yaw_constr'], cfg['cam_dist_constr']])
             self.__currentMode = C11nCameraModes.START_STATE
             self.enableMovementByMouse()
             return

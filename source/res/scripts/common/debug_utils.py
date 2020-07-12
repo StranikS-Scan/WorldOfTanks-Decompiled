@@ -216,8 +216,8 @@ def LOG_WRONG_CLIENT(entity, *kargs):
     return
 
 
-def _doLog(category, msg, args=None, kwargs={}):
-    header = _makeMsgHeader(sys._getframe(2))
+def _doLog(category, msg, args=None, kwargs={}, frameDepth=2):
+    header = _makeMsgHeader(sys._getframe(frameDepth))
     logFunc = _g_logMapping.get(category, None)
     if not logFunc:
         logFunc = BigWorld.logDebug

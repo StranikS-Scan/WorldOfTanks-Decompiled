@@ -17,6 +17,9 @@ ZERO_FLOAT = 0.0
 ZERO_INT = 0
 EMPTY_STRING = ''
 EMPTY_TUPLE = ()
+INFLUENCE_ALL = 0
+INFLUENCE_ALLY = 1
+INFLUENCE_ENEMY = 2
 
 class _ReadOnlyDict(dict):
 
@@ -49,6 +52,7 @@ MS_TO_KMH = 3.5999712
 KG_TO_NEWTON = 9.81
 HP_TO_WATTS = 735.5
 ALLOWED_EMBLEM_SLOTS = ('player', 'clan', 'inscription', 'insignia', 'insigniaOnGun', 'fixedEmblem', 'fixedInscription')
-ALLOWED_SLOTS_ANCHORS = ('paint', 'camouflage', 'projectionDecal', 'effect', 'style', 'fixedProjectionDecal')
+ALLOWED_PROJECTION_DECALS_ANCHORS = ('projectionDecal', 'fixedProjectionDecal')
 ALLOWED_MISC_SLOTS = ('sequence', 'attachment')
+ALLOWED_SLOTS_ANCHORS = ('paint', 'camouflage', 'effect', 'style')
 TANKMEN_GROUPS = ('normalGroups', 'premiumGroups')

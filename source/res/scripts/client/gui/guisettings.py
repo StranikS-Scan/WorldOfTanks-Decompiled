@@ -11,7 +11,6 @@ from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 GUI_SETTINGS_FILE_PATH = 'gui/gui_settings.xml'
 VIDEO_SETTINGS_FILE_PATH = 'gui/video_settings.xml'
-MovingTextProps = namedtuple('MovingTextProps', 'show internalBrowser')
 LoginRssFeedProps = namedtuple('LoginRssFeedProps', 'show url internalBrowser')
 BrowserProps = namedtuple('BrowserProps', 'url params')
 PostBattleExchangeProps = namedtuple('PostBattleExchangeProps', 'enabled url')
@@ -66,10 +65,8 @@ def _convertEULASetting(_, item):
 
 
 _SETTING_CONVERTERS = {'loginRssFeed': _convertToNamedTuple,
- 'movingText': _convertToNamedTuple,
  'eula': _convertEULASetting,
  'markerScaleSettings': _convertVector4ToTuple,
- 'markerBgSettings': _convertVector4ToTuple,
  'browser': _convertToNamedTuple,
  'postBattleExchange': _convertToNamedTuple,
  'easterEgg': _convertToNamedTuple}
@@ -100,10 +97,8 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'rememberPassVisible': True,
  'clearLoginValue': False,
  'markerScaleSettings': (0, 0, 0, 0),
- 'markerBgSettings': (0, 0, 0, 0),
  'specPrebatlesVisible': True,
  'roaming': True,
- 'movingText': MovingTextProps(False, False),
  'loginRssFeed': LoginRssFeedProps(True, '', False),
  'eula': EULAProps(),
  'igrCredentialsReset': False,
@@ -113,7 +108,7 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'csisRequestRate': 0,
  'showSectorLines': False,
  'showDirectionLine': False,
- 'isBattleCmdCoolDownVisible': False,
+ 'isBattleCmdCoolDownVisible': True,
  'browser': BrowserProps('about:blank', ''),
  'reportBugLinks': [],
  'cache': [],

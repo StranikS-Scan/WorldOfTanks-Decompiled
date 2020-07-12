@@ -53,6 +53,9 @@ class _MusicID(CONST_CONTAINER):
     STOP = 'wwmusicStop'
 
 
+MUSIC_ID_TO_SEVERITY = {_MusicID.INTENSIVE: _Severity.MEDIUM,
+ _MusicID.RELAXED: _Severity.LOW}
+
 class _RtpcEvents(CONST_CONTAINER):
     ALLIES_INVADERS_COUNT = 'RTPC_ext_base_capturing_invaders_ally'
     ENEMIES_INVADERS_COUNT = 'RTPC_ext_base_capturing_invaders_enemy'
@@ -350,7 +353,6 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
 
         self.__playingMusicID = None
         self._initialized = False
-        self.__previouslySatisfied = None
         return
 
     @_delegate
@@ -403,9 +405,6 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
             condition.onValidChangedInternally -= self.__onConditionChangedItself
             condition.dispose()
 
-        self.__previouslySatisfied = None
-        return
-
     def _initializeMusicData(self):
         wwSetup = self.__specialSounds.arenaMusicSetup
         outcome = {}
@@ -454,9 +453,8 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
     def _launchEvent(self, soundType):
         soundID = self._musicSetup[soundType]
         LOG_DEBUG('[Drone] Attempt to launch Drone event "{}"'.format(soundID))
-        if soundID is not None:
+        if soundID:
             SoundGroups.g_instance.playSound2D(soundID)
-        return
 
     def __onConditionChangedItself(self):
         if self.__isProperBattlePeroid():
@@ -478,10 +476,17 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
 
     def _validateConditions(self):
         satisfied = [ c for c in self._conditions if c.isSatisfied() ]
-        if self.__isMusicCurrentlyPlaying() and self.__previouslySatisfied is not None:
-            if any((condition not in satisfied for condition in self.__previouslySatisfied)):
+        if self.__isMusicCurrentlyPlaying() and satisfied:
+            currSeverity = MUSIC_ID_TO_SEVERITY[self.__playingMusicID]
+            above = equal = below = False
+            for condition in satisfied:
+                condSeverity = condition.getSeverity()
+                above = above or condSeverity > currSeverity
+                equal = equal or condSeverity == currSeverity
+                below = below or condSeverity < currSeverity
+
+            if above or not equal and below:
                 self.__stopMusic()
-        self.__previouslySatisfied = satisfied
         if satisfied:
             if not self.__isMusicCurrentlyPlaying():
                 for condition in satisfied:
@@ -495,7 +500,6 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
                 self.__playMusic()
         elif self.__isMusicCurrentlyPlaying():
             self.__stopMusic()
-        return
 
     def __checkInitialization(self):
         if self.__isProperBattlePeroid():

@@ -54,6 +54,13 @@
       <undamaged>	vehicles/german/G99_RhB_Waffentrager/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/german/G99_RhB_Waffentrager/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/german/G99_RhB_Waffentrager/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <G99_RhB_Waffentrager_3Dst>
+          <undamaged>	vehicles/german/G99_RhB_Waffentrager/_skins/G99_RhB_Waffentrager_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G99_RhB_Waffentrager/_skins/G99_RhB_Waffentrager_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G99_RhB_Waffentrager/_skins/G99_RhB_Waffentrager_3Dst/crash/lod0/Hull.model	</exploded>
+        </G99_RhB_Waffentrager_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -86,8 +93,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.564992 0.395727 2.94735	</rayStart>
-        <rayEnd>	0.564992 0.220203 2.85148	</rayEnd>
+        <rayStart>	0.724404 0.442564 2.86157	</rayStart>
+        <rayEnd>	0.724404 0.267038 2.7657	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
@@ -1325,6 +1332,34 @@
         <anchorDirection>	0.000044 0.999998 -0.00174268	</anchorDirection>
         <verticalMirror>	true	</verticalMirror>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15090	</slotId>
+        <position>	-0.553496 1.40201 2.02701	</position>
+        <rotation>	0.097075 0.00297821 3.13571	</rotation>
+        <scale>	0.537331 0.53733 0.53733	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	-0.553496 0.54046 2.02701	</anchorPosition>
+        <anchorDirection>	0.00616719 0.995275 0.096903	</anchorDirection>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G99_RhB_Waffentrager_3Dst	</compatibleModels>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15091	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G99_RhB_Waffentrager_3Dst	</compatibleModels>
+        <position>	0.279186 1.21296 -2.55949	</position>
+        <rotation>	2.81834 -0.00815487 0.0232153	</rotation>
+        <scale>	0.469734 0.1 0.469737	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	0.28125 0.427255 -2.58488	</anchorPosition>
+        <anchorDirection>	0.0258021 0.947953 -0.317363	</anchorDirection>
+      </slot>
     </customizationSlots>
     <camouflage>
       <tiling>	0.9 0.9 0.000000 0.000000	</tiling>
@@ -1364,6 +1399,13 @@
         <undamaged>	vehicles/german/G99_RhB_Waffentrager/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G99_RhB_Waffentrager/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G99_RhB_Waffentrager/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <G99_RhB_Waffentrager_3Dst>
+            <undamaged>	vehicles/german/G99_RhB_Waffentrager/_skins/G99_RhB_Waffentrager_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G99_RhB_Waffentrager/_skins/G99_RhB_Waffentrager_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G99_RhB_Waffentrager/_skins/G99_RhB_Waffentrager_3Dst/crash/lod0/Chassis.model	</exploded>
+          </G99_RhB_Waffentrager_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -2234,6 +2276,13 @@
         <undamaged>	vehicles/german/G99_RhB_Waffentrager/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G99_RhB_Waffentrager/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G99_RhB_Waffentrager/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <G99_RhB_Waffentrager_3Dst>
+            <undamaged>	vehicles/german/G99_RhB_Waffentrager/_skins/G99_RhB_Waffentrager_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G99_RhB_Waffentrager/_skins/G99_RhB_Waffentrager_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G99_RhB_Waffentrager/_skins/G99_RhB_Waffentrager_3Dst/crash/lod0/Chassis.model	</exploded>
+          </G99_RhB_Waffentrager_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -3135,6 +3184,13 @@
             <undamaged>	vehicles/german/G99_RhB_Waffentrager/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G99_RhB_Waffentrager/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G99_RhB_Waffentrager/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <G99_RhB_Waffentrager_3Dst>
+                <undamaged>	vehicles/german/G99_RhB_Waffentrager/_skins/G99_RhB_Waffentrager_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G99_RhB_Waffentrager/_skins/G99_RhB_Waffentrager_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G99_RhB_Waffentrager/_skins/G99_RhB_Waffentrager_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </G99_RhB_Waffentrager_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G99_RhB_Waffentrager/collision/Gun_01.model	</collisionModelServer>
@@ -3215,6 +3271,13 @@
             <undamaged>	vehicles/german/G99_RhB_Waffentrager/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/german/G99_RhB_Waffentrager/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/german/G99_RhB_Waffentrager/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <G99_RhB_Waffentrager_3Dst>
+                <undamaged>	vehicles/german/G99_RhB_Waffentrager/_skins/G99_RhB_Waffentrager_3Dst/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/german/G99_RhB_Waffentrager/_skins/G99_RhB_Waffentrager_3Dst/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/german/G99_RhB_Waffentrager/_skins/G99_RhB_Waffentrager_3Dst/crash/lod0/Gun_02.model	</exploded>
+              </G99_RhB_Waffentrager_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G99_RhB_Waffentrager/collision/Gun_02.model	</collisionModelServer>
@@ -3273,6 +3336,13 @@
         <undamaged>	vehicles/german/G99_RhB_Waffentrager/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/german/G99_RhB_Waffentrager/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/german/G99_RhB_Waffentrager/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <G99_RhB_Waffentrager_3Dst>
+            <undamaged>	vehicles/german/G99_RhB_Waffentrager/_skins/G99_RhB_Waffentrager_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G99_RhB_Waffentrager/_skins/G99_RhB_Waffentrager_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G99_RhB_Waffentrager/_skins/G99_RhB_Waffentrager_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </G99_RhB_Waffentrager_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G99_RhB_Waffentrager/collision/Turret_01.model	</collisionModelServer>
@@ -3627,6 +3697,34 @@
           <clipAngle>	1.1106	</clipAngle>
           <anchorPosition>	1.24325 0.288614 -0.446105	</anchorPosition>
           <anchorDirection>	0.999877 -0.0110709 -0.0111224	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35022	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G99_RhB_Waffentrager_3Dst	</compatibleModels>
+          <position>	1.16302 1.68587 0.261222	</position>
+          <rotation>	1.55564 -1.46664 0.099652	</rotation>
+          <scale>	0.411968 0.0999998 0.411969	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.950482	</clipAngle>
+          <anchorPosition>	1.26301 0.269363 0.160711	</anchorPosition>
+          <anchorDirection>	0.999876 -0.0150768 -0.00448862	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35023	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G99_RhB_Waffentrager_3Dst	</compatibleModels>
+          <position>	-0.307518 1.50329 -1.40593	</position>
+          <rotation>	3.11348 -0.00267243 0.022367	</rotation>
+          <scale>	0.608042 0.129444 0.608046	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.000000	</clipAngle>
+          <anchorPosition>	-0.305499 0.178236 -1.50851	</anchorPosition>
+          <anchorDirection>	0.0224402 0.999355 -0.028047	</anchorDirection>
         </slot>
       </customizationSlots>
       <camouflage>

@@ -281,7 +281,7 @@ class CardTokenConditionFormatter(ConditionsFormatter):
                 LOG_ERROR('Wrong quest xml. Tokens types limit exceeded in account requirement section. SSE bug.')
             return [self._packConditions(preFormattedConditions)]
         else:
-            return [self._packConditionFromDescription(event)]
+            return [self.__packConditionFromDescription(event)]
 
     def getPreformattedConditions(self, event):
         return self.tokensCondFormatter.format(event.accountReqs, event)
@@ -330,7 +330,7 @@ class CardTokenConditionFormatter(ConditionsFormatter):
         data.update(self._getIconData(preFormattedCondition))
         return data
 
-    def _packConditionFromDescription(self, event):
+    def __packConditionFromDescription(self, event):
         return {'linkage': MISSIONS_ALIASES.ANG_GROUP_LINKAGE,
          'linkageBig': MISSIONS_ALIASES.ANG_GROUP_BIG_LINKAGE,
          'rendererLinkage': MISSIONS_ALIASES.MINIMIZED_BATTLE_CONDITION,
@@ -371,13 +371,6 @@ class DetailedCardTokenConditionFormatter(CardTokenConditionFormatter):
          'linkageBig': MISSIONS_ALIASES.TOKENS_GROUP_BIG_LINKAGE,
          'rendererLinkage': MISSIONS_ALIASES.TOKEN_CONDITION,
          'data': result,
-         'isDetailed': True}
-
-    def _packConditionFromDescription(self, event):
-        return {'linkage': MISSIONS_ALIASES.ANG_GROUP_LINKAGE,
-         'linkageBig': MISSIONS_ALIASES.ANG_GROUP_BIG_LINKAGE,
-         'rendererLinkage': MISSIONS_ALIASES.BATTLE_CONDITION,
-         'data': [self._packBattleCondition(_packNoGuiCondition(event))],
          'isDetailed': True}
 
 

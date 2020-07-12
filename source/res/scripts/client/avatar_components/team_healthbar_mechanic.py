@@ -10,7 +10,7 @@ class TeamHealthbarMechanic(object):
         return
 
     def handleKey(self, isDown, key, mods):
-        pass
+        return False
 
     def onBecomePlayer(self):
         self.__enabled = BONUS_CAPS.checkAny(self.arenaBonusType, BONUS_CAPS.TEAM_HEALTH_BAR)

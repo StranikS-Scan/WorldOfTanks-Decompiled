@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_control/arena_info/arena_dp.py
 import logging
 import operator
-from constants import TEAMS_IN_ARENA
+from constants import TEAMS_IN_ARENA, PLAYER_RANK
 from shared_utils import first
 from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info import arena_descrs
@@ -10,14 +10,14 @@ from gui.battle_control.arena_info import arena_vos
 from gui.battle_control.arena_info import settings
 from gui.battle_control.arena_info import squad_finder
 from gui.battle_control.arena_info import vos_collections
+from gui.battle_control.arena_info.arena_vos import EPIC_BATTLE_KEYS
 from gui.battle_control.battle_constants import MULTIPLE_TEAMS_TYPE
 from gui.battle_control.battle_constants import PLAYER_GUI_PROPS
+from items.battle_royale import isSpawnedBot
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.battle_session import IArenaDataProvider
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
-from gui.battle_control.arena_info.arena_vos import EPIC_BATTLE_KEYS
-from constants import PLAYER_RANK
 _logger = logging.getLogger(__name__)
 _OP = settings.INVALIDATE_OP
 _INVITATION_STATUS = settings.INVITATION_DELIVERY_STATUS
@@ -151,6 +151,11 @@ class ArenaDataProvider(IArenaDataProvider):
             flags, vInfoVO = _OP.NONE, None
         return (flags, vInfoVO)
 
+    def updateChatCommandState(self, vID, chatCommandState):
+        vStatsVO = self.__vStatsVOs[vID]
+        flags = vStatsVO.updateChatCommandState(chatCommandState)
+        return (flags, vStatsVO)
+
     def isRequiredDataExists(self):
         return self.__checkRequiredData()
 
@@ -209,6 +214,9 @@ class ArenaDataProvider(IArenaDataProvider):
 
     def getPersonalDescription(self):
         return self.__description
+
+    def getNumberOfSquads(self):
+        return self.__squadFinder.getNumberOfSquads()
 
     def getPlayerVehicleID(self, forceUpdate=False):
         if forceUpdate and self.__playerVehicleID is None:
@@ -314,6 +322,11 @@ class ArenaDataProvider(IArenaDataProvider):
     def getVehiclesItemsGenerator(self):
         for vInfo in self.__vInfoVOs.itervalues():
             yield (vInfo, self.__vStatsVOs[vInfo.vehicleID])
+
+    def getActiveVehiclesGenerator(self):
+        for vInfo in self.__vInfoVOs.itervalues():
+            if not isSpawnedBot(vInfo.vehicleType.tags):
+                yield (vInfo, self.__vStatsVOs[vInfo.vehicleID])
 
     def getAlliesVehiclesNumber(self):
         return vos_collections.AllyItemsCollection().count(self)

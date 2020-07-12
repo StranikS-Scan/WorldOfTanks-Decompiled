@@ -47,6 +47,10 @@ class ITEM_OPERATION:
     ALL = (UPGRADE,)
 
 
+HEAL_GROUP_HEAL_POINT = 100
+HEAL_GROUP_HOT = 101
+PREDEFINED_HEAL_GROUPS = (HEAL_GROUP_HEAL_POINT, HEAL_GROUP_HOT)
+
 class ItemsPrices(object):
 
     def __init__(self, prices=None):

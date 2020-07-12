@@ -33,8 +33,8 @@ class StorageCarouselEnvironment(ICarouselEnvironment, IGlobalListener, StorageC
     def filter(self):
         return self._dataProvider.filter if self._dataProvider is not None else None
 
-    def applyFilter(self):
-        self._dataProvider.applyFilter()
+    def applyFilter(self, forceApply=False):
+        self._dataProvider.applyFilter(forceApply)
         self.updateCounter()
 
     def resetFilter(self):

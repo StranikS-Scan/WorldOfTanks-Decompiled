@@ -47,8 +47,6 @@ class EPIC_BATTLE(object):
     CHAT_SHORTCUTS_ATTENTION_TO_POSITION = '#epic_battle:chat_shortcuts/attention_to_position'
     CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_ATK = '#epic_battle:chat_shortcuts/attention_to_objective_atk'
     CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_DEF = '#epic_battle:chat_shortcuts/attention_to_objective_def'
-    CHAT_SHORTCUTS_ATTENTION_TO_BASE_ATK = '#epic_battle:chat_shortcuts/attention_to_base_atk'
-    CHAT_SHORTCUTS_ATTENTION_TO_BASE_DEF = '#epic_battle:chat_shortcuts/attention_to_base_def'
     PROGRESS_TIMERS_BASE_CAPTURE = '#epic_battle:progress_timers/base_capture'
     PROGRESS_TIMERS_CAPTURED = '#epic_battle:progress_timers/captured'
     PROGRESS_TIMERS_BLOCKED = '#epic_battle:progress_timers/blocked'
@@ -237,6 +235,7 @@ class EPIC_BATTLE(object):
     SELECTORTOOLTIP_EPICBATTLE_ATTENTION_INFORMATIVELOWPERFORMANCE_TITLE = '#epic_battle:selectorTooltip/epicBattle/attention/informativeLowPerformance/title'
     SELECTORTOOLTIP_EPICBATTLE_ATTENTION_INFORMATIVELOWPERFORMANCE_DESCRIPTION = '#epic_battle:selectorTooltip/epicBattle/attention/informativeLowPerformance/description'
     QUESTSTOOLTIP_EPICBATTLE_HEADER = '#epic_battle:questsTooltip/epicBattle/header'
+    QUESTSTOOLTIP_EPICBATTLE_STEELHUNTER_HEADER = '#epic_battle:questsTooltip/epicBattle/steelhunter/header'
     QUESTSTOOLTIP_EPICBATTLE_TIMELEFT = '#epic_battle:questsTooltip/epicBattle/timeLeft'
     QUESTSTOOLTIP_EPICBATTLE_STARTIN = '#epic_battle:questsTooltip/epicBattle/startIn'
     QUESTSTOOLTIP_EPICBATTLE_LESSTHANDAY = '#epic_battle:questsTooltip/epicBattle/lessThanDay'
@@ -270,6 +269,7 @@ class EPIC_BATTLE(object):
     FITTINGSELECTPOPOVERBATTKEABILITY_TITLETEXT = '#epic_battle:fittingSelectPopoverBattkeAbility/titleText'
     FITTINGSELECTPOPOVERBATTKEABILITY_DESCTEXT = '#epic_battle:fittingSelectPopoverBattkeAbility/descText'
     PRIMETIME_TITLE = '#epic_battle:primeTime/title'
+    PRIMETIME_STEELHUNTER_TITLE = '#epic_battle:primeTime/steelhunter/title'
     PRIMETIME_TITLEWELCOME = '#epic_battle:primeTime/titleWelcome'
     PRIMETIME_APPLYBTN = '#epic_battle:primeTime/applyBtn'
     PRIMETIME_CANCELBTN = '#epic_battle:primeTime/cancelBtn'
@@ -292,6 +292,7 @@ class EPIC_BATTLE(object):
     TUTORIAL_HINT_EPICRESERVESBTNHINT = '#epic_battle:tutorial/hint/epicReservesBtnHint'
     SEASON_201902_NAME = '#epic_battle:season/201902/name'
     SEASON_202002_NAME = '#epic_battle:season/202002/name'
+    SEASON_202008_NAME = '#epic_battle:season/202008/name'
     EPICBATTLEITEM_REWARDPOINTS_HEADER = '#epic_battle:epicBattleItem/rewardPoints/header'
     EPICBATTLEITEM_REWARDPOINTS_DESCRIPTION = '#epic_battle:epicBattleItem/rewardPoints/description'
     EPICBATTLEITEM_SUPPLYPOINTS_HEADER = '#epic_battle:epicBattleItem/supplyPoints/header'
@@ -302,7 +303,7 @@ class EPIC_BATTLE(object):
      RANK_RANK4,
      RANK_RANK5,
      RANK_RANK6)
-    SEASON_ALL_NAME_ENUM = (SEASON_201902_NAME, SEASON_202002_NAME)
+    SEASON_ALL_NAME_ENUM = (SEASON_201902_NAME, SEASON_202002_NAME, SEASON_202008_NAME)
 
     @classmethod
     def getRankLabel(cls, key0):

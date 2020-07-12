@@ -7,8 +7,8 @@
     <radioman></radioman>
   </crew>
   <speedLimits>
-    <forward>	95	</forward>
-    <backward>	70	</backward>
+    <forward>	91	</forward>
+    <backward>	65	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.371	</moving>
@@ -35,7 +35,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	8131	</weight>
-    <maxHealth>	900	</maxHealth>
+    <maxHealth>	1040	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	180	</maxRegenHealth>
@@ -561,8 +561,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	34	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.06	</vehicleMovement>
-        <vehicleRotation>	0.06	</vehicleRotation>
+        <vehicleMovement>	0.08	</vehicleMovement>
+        <vehicleRotation>	0.08	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
@@ -1000,14 +1000,14 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4000	</weight>
-      <maxHealth>	400	</maxHealth>
+      <maxHealth>	260	</maxHealth>
       <rotationSpeed>	66	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
         <maxRegenHealth>	75	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	350	</circularVisionRadius>
+      <circularVisionRadius>	340	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	110	</maxHealth>
         <maxRegenHealth>	55	</maxRegenHealth>
@@ -1028,9 +1028,9 @@
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	12	</reloadTime>
-          <aimingTime>	1.2	</aimingTime>
+          <aimingTime>	1.4	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.03	</turretRotation>
+            <turretRotation>	0.04	</turretRotation>
             <afterShot>	2.4	</afterShot>
             <whileGunDamaged>	1.6	</whileGunDamaged>
           </shotDispersionFactors>
@@ -1683,8 +1683,8 @@
     <detailed>
       <engines>
         <Panhard_12H_6000_X>
-          <smplEnginePower>	800	</smplEnginePower>
-          <smplFwMaxSpeed>	95	</smplFwMaxSpeed>
+          <smplEnginePower>	720	</smplEnginePower>
+          <smplFwMaxSpeed>	91	</smplFwMaxSpeed>
         </Panhard_12H_6000_X>
       </engines>
       <chassis>

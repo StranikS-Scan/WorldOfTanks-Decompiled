@@ -7,7 +7,6 @@ import weakref
 from collections import namedtuple
 import BigWorld
 import Math
-import NetworkFilters
 import WoT
 import AreaDestructibles
 import ArenaType
@@ -21,7 +20,7 @@ from TriggersManager import TRIGGER_TYPE
 from VehicleEffects import DamageFromShotDecoder
 from constants import SPT_MATKIND
 from constants import VEHICLE_HIT_EFFECT, VEHICLE_SIEGE_STATE
-from debug_utils import LOG_WARNING
+from debug_utils import LOG_WARNING, LOG_DEBUG_DEV
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _GUI_EVENT_ID, VEHICLE_VIEW_STATE
 from gun_rotation_shared import decodeGunAngles
 from helpers import dependency
@@ -37,6 +36,7 @@ from vehicle_systems import appearance_cache
 from vehicle_systems.entity_components.battle_abilities_component import BattleAbilitiesComponent
 from vehicle_systems.stricted_loading import loadingPriority
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, TankSoundObjectsIndexes
+from shared_utils.vehicle_utils import createWheelFilters
 _logger = logging.getLogger(__name__)
 LOW_ENERGY_COLLISION_D = 0.3
 HIGH_ENERGY_COLLISION_D = 0.6
@@ -78,6 +78,7 @@ StunInfo = namedtuple('StunInfo', ('startTime',
  'endTime',
  'duration',
  'totalTime'))
+DebuffInfo = namedtuple('DebuffInfo', ('duration', 'animated'))
 VEHICLE_COMPONENTS = {BattleAbilitiesComponent}
 
 class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
@@ -127,6 +128,9 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
     def getSpeed(self):
         return self.__speedInfo.value[0]
 
+    def getMasterVehID(self):
+        return self.masterVehID
+
     def __init__(self):
         global _g_waitingVehicle
         for comp in VEHICLE_COMPONENTS:
@@ -149,8 +153,10 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.__handbrakeFired = False
         self.__wheelsScrollFilter = None
         self.__wheelsSteeringFilter = None
+        self.isUpgrading = False
         self.__activeGunIndex = None
         self.refreshNationalVoice()
+        self.autoUpgradeOnChangeDescriptor = True
         self.prereqsCompDescr = None
         return
 
@@ -160,7 +166,8 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
 
     def set_publicInfo(self, prev):
         if self.prereqsCompDescr is not None and self.prereqsCompDescr != self.publicInfo.compDescr:
-            Vehicle.respawnVehicle(self.id, self.publicInfo.compDescr)
+            if self.autoUpgradeOnChangeDescriptor:
+                Vehicle.respawnVehicle(self.id, self.publicInfo.compDescr)
         return
 
     def reload(self):
@@ -179,8 +186,22 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             self.respawnOutfitCompactDescr = None
         else:
             outfitDescr = self.publicInfo.outfit
+        oldTypeDescriptor = self.typeDescriptor
         self.typeDescriptor = self.getDescr(respawnCompactDescr)
         forceReloading = respawnCompactDescr is not None
+        if 'battle_royale' in self.typeDescriptor.type.tags:
+            if oldTypeDescriptor:
+                forceReloading = False
+                for moduleName in ('gun', 'turret', 'chassis'):
+                    oldModule = getattr(oldTypeDescriptor, moduleName)
+                    newModule = getattr(self.typeDescriptor, moduleName)
+                    if oldModule.id != newModule.id:
+                        forceReloading = True
+                        _logger.info('Battle royale force appearance reloading!')
+                        break
+
+            else:
+                forceReloading = True
         self.appearance, prereqs = appearance_cache.createAppearance(self.id, self.typeDescriptor, self.health, self.isCrewActive, self.isTurretDetached, outfitDescr, forceReloading)
         self.prereqsCompDescr = self.respawnCompactDescr if self.respawnCompactDescr else self.publicInfo.compDescr
         return (loadingPriority(self.id), prereqs)
@@ -188,7 +209,10 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
     def getDescr(self, respawnCompactDescr):
         if respawnCompactDescr is not None:
             descr = vehicles.VehicleDescr(respawnCompactDescr)
-            self.health = descr.maxHealth
+            if 'battle_royale' in descr.type.tags:
+                pass
+            else:
+                self.health = descr.maxHealth
             return descr
         else:
             return vehicles.VehicleDescr(compactDescr=_stripVehCompDescrIfRoaming(self.publicInfo.compDescr))
@@ -215,22 +239,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         return
 
     def __initAdditionalFilters(self):
-        self.__wheelsScrollFilter = None
-        self.__wheelsSteeringFilter = None
-        if self.typeDescriptor.chassis.generalWheelsAnimatorConfig is not None:
-            scrollableWheelsCount = self.typeDescriptor.chassis.generalWheelsAnimatorConfig.getNonTrackWheelsCount()
-            self.__wheelsScrollFilter = []
-            for _ in range(scrollableWheelsCount):
-                self.__wheelsScrollFilter.append(NetworkFilters.FloatLatencyDelayingFilter())
-                self.__wheelsScrollFilter[-1].input(BigWorld.time(), 0.0)
-
-            steerableWheelsCount = self.typeDescriptor.chassis.generalWheelsAnimatorConfig.getSteerableWheelsCount()
-            self.__wheelsSteeringFilter = []
-            for _ in range(steerableWheelsCount):
-                self.__wheelsSteeringFilter.append(NetworkFilters.FloatLatencyDelayingFilter())
-                self.__wheelsSteeringFilter[-1].input(BigWorld.time(), 0.0)
-
-        return
+        self.__wheelsScrollFilter, self.__wheelsSteeringFilter = createWheelFilters(self.typeDescriptor)
 
     def onEnterWorld(self, prereqs):
         self.__prereqs = prereqs
@@ -264,7 +273,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             if not isPredictedShot and self.isPlayerVehicle and not BigWorld.player().isWaitingForShot:
                 if not BattleReplay.g_replayCtrl.isPlaying:
                     return
-            extra = self.typeDescriptor.extrasDict['shoot']
+            extra = self.typeDescriptor.extrasDict[self.typeDescriptor.shootExtraName]
             extra.stopFor(self)
             extra.startFor(self, (burstCount, gunIndex))
             if not isPredictedShot and self.isPlayerVehicle:
@@ -527,13 +536,22 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
 
         return
 
+    def set_dotEffect(self, _=None):
+        attachedVehicle = BigWorld.player().getVehicleAttached()
+        if attachedVehicle is None:
+            return
+        else:
+            if self.id == attachedVehicle.id:
+                self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.DOT_EFFECT, self.dotEffect)
+            return
+
     def onHealthChanged(self, newHealth, attackerID, attackReasonID):
         if newHealth > 0 and self.health <= 0:
             self.health = newHealth
             return
+        self.guiSessionProvider.setVehicleHealth(self.isPlayerVehicle, self.id, newHealth, attackerID, attackReasonID)
         if not self.isStarted:
             return
-        self.guiSessionProvider.setVehicleHealth(self.isPlayerVehicle, self.id, newHealth, attackerID, attackReasonID)
         if not self.appearance.damageState.isCurrentModelDamaged:
             self.appearance.onVehicleHealthChanged()
         if self.health <= 0 and self.isCrewActive:
@@ -719,8 +737,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.guiSessionProvider.startVehicleVisual(self.proxy, True)
         if self.stunInfo > 0.0:
             self.updateStunInfo()
-        self.set_inspiringEffect()
-        self.set_inspired()
+        self.refreshBuffEffects()
         if self.isSpeedCapturing:
             self.set_isSpeedCapturing()
         if self.isBlockingCapture:
@@ -732,6 +749,9 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.__startWGPhysics()
         self.__prereqs = None
         self.appearance.highlighter.setVehicleOwnership()
+        progressionCtrl = self.guiSessionProvider.dynamic.progression
+        if progressionCtrl is not None:
+            progressionCtrl.vehicleVisualChangingFinished(self.id)
         if self.respawnCompactDescr:
             _logger.debug('respawn compact descr is still valid, request reloading of tank resources %s', self.id)
             BigWorld.callback(0.0, lambda : Vehicle.respawnVehicle(self.id, self.respawnCompactDescr))
@@ -882,6 +902,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
                 ctrl.setVehicleState(self.id, _GUI_EVENT_ID.VEHICLE_DEAD, isDeadStarted)
         TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.VEHICLE_DESTROYED, vehicleId=self.id)
         self._removeInspire()
+        self._removeHealing()
         bwfilter = self.filter
         if hasattr(bwfilter, 'velocityErrorCompensation'):
             bwfilter.velocityErrorCompensation = 100.0
@@ -927,6 +948,21 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         if self.appearance.detailedEngineState is not None:
             self.appearance.detailedEngineState.throttle = 0
         return
+
+    def onDebuffEffectApplied(self, applied):
+        attachedVehicle = BigWorld.player().getVehicleAttached()
+        if attachedVehicle is not None and self.id == attachedVehicle.id:
+            playerDebuffInfo = DebuffInfo(duration=0.1 if applied else 0, animated=applied)
+            self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.DEBUFF, playerDebuffInfo)
+        else:
+            ctrl = self.guiSessionProvider.shared.feedback
+            if ctrl is not None:
+                enemyDebuffInfo = DebuffInfo(duration=99 if applied else 0, animated=True)
+                ctrl.invalidateDebuff(self.id, enemyDebuffInfo)
+        return
+
+    def onDynamicComponentCreated(self, component):
+        LOG_DEBUG_DEV('Component created', component)
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)

@@ -82,6 +82,10 @@
     <Rolls_Royse_Meteor_MkV_IGR>	60005	</Rolls_Royse_Meteor_MkV_IGR>
     <Vauxhall_Bedford_Twin_Six_IGR>	60006	</Vauxhall_Bedford_Twin_Six_IGR>
     <Rolls_Royce_Griffon_IGR>	60007	</Rolls_Royce_Griffon_IGR>
+    <Development_Engine>	65000	</Development_Engine>
+    <Rolls_Royse_Meteor_SH>	10000	</Rolls_Royse_Meteor_SH>
+    <Rolls_Royse_Meteor_Mk_XI_supercharged_SH>	10001	</Rolls_Royse_Meteor_Mk_XI_supercharged_SH>
+    <Leyland_L60_No_4_SH>	10002	</Leyland_L60_No_4_SH>
   </ids>
   <shared>
     <Vickers-Armstrong>
@@ -1434,5 +1438,74 @@
       <rpm_min>	416	</rpm_min>
       <rpm_max>	2848	</rpm_max>
     </Engine_FV4202>
+    <Development_Engine>
+      <userString>	Development Engine	</userString>
+      <tags>	diesel	</tags>
+      <level>	5	</level>
+      <notInShop>	true	</notInShop>
+      <price>	1	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	540	</power>
+      <weight>	750	</weight>
+      <maxHealth>	105	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <notInShop>	true	</notInShop>
+      <rpm_min>	376	</rpm_min>
+      <rpm_max>	2072	</rpm_max>
+    </Development_Engine>
+    <Rolls_Royse_Meteor_SH>
+      <userString>	#gb_vehicles:Rolls_Royse_Meteor_SH	</userString>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	590	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <fireStartingChance>	0	</fireStartingChance>
+      <rpm_min>	700	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </Rolls_Royse_Meteor_SH>
+    <Rolls_Royse_Meteor_Mk_XI_supercharged_SH>
+      <userString>	#gb_vehicles:Rolls_Royse_Meteor_Mk_XI_supercharged_SH	</userString>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1180	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <fireStartingChance>	0	</fireStartingChance>
+      <rpm_min>	488	</rpm_min>
+      <rpm_max>	2035	</rpm_max>
+    </Rolls_Royse_Meteor_Mk_XI_supercharged_SH>
+    <Leyland_L60_No_4_SH>
+      <userString>	#gb_vehicles:Leyland_L60_No_4_SH	</userString>
+      <tags>	diesel	</tags>
+      <level>	3	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	1475	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <fireStartingChance>	0	</fireStartingChance>
+      <rpm_min>	320	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
+    </Leyland_L60_No_4_SH>
   </shared>
 </engines.xml>

@@ -112,8 +112,8 @@ class LoginPageMeta(View):
     def as_switchToAutoAndSubmitS(self, key):
         return self.flashObject.as_switchToAutoAndSubmit(key) if self._isDAAPIInited() else None
 
-    def as_showSimpleFormS(self, isShow, socialList):
-        return self.flashObject.as_showSimpleForm(isShow, socialList) if self._isDAAPIInited() else None
+    def as_showSimpleFormS(self, isShow, socialList, isShowServersDD):
+        return self.flashObject.as_showSimpleForm(isShow, socialList, isShowServersDD) if self._isDAAPIInited() else None
 
     def as_showFilledLoginFormS(self, data):
         return self.flashObject.as_showFilledLoginForm(data) if self._isDAAPIInited() else None
@@ -126,3 +126,6 @@ class LoginPageMeta(View):
 
     def as_setSelectedServerIndexS(self, serverIndex):
         return self.flashObject.as_setSelectedServerIndex(serverIndex) if self._isDAAPIInited() else None
+
+    def as_showHealthNoticeS(self, text):
+        return self.flashObject.as_showHealthNotice(text) if self._isDAAPIInited() else None

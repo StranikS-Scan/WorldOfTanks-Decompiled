@@ -27,20 +27,20 @@
   <hull>
     <armor>
       <armor_1>	200	</armor_1>
-      <armor_2>	140	</armor_2>
+      <armor_2>	155	</armor_2>
       <armor_3>	160	</armor_3>
       <armor_4>	100	</armor_4>
       <armor_5>	160	</armor_5>
       <armor_6>	160	</armor_6>
       <armor_7>	120	</armor_7>
       <armor_8>	30	</armor_8>
-      <armor_9>	50	</armor_9>
+      <armor_9>	140	</armor_9>
       <armor_10>	30	</armor_10>
       <armor_11>	0	</armor_11>
-      <armor_12>	210	</armor_12>
+      <armor_12>	240	</armor_12>
       <armor_13>	140	</armor_13>
       <armor_14>	50	</armor_14>
-      <armor_15>	30	</armor_15>
+      <armor_15>	40	</armor_15>
       <armor_16>	180	</armor_16>
     </armor>
     <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
@@ -721,10 +721,10 @@
       <terrainResistance>	1.2 1.6 2.7	</terrainResistance>
       <brakeForce>	39500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	26	</rotationSpeed>
+      <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.25	</vehicleMovement>
-        <vehicleRotation>	0.25	</vehicleRotation>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
@@ -1395,15 +1395,16 @@
         <armor_9>	100	</armor_9>
         <armor_10>	0	</armor_10>
         <armor_11>	275	</armor_11>
-        <armor_12>	30	</armor_12>
-        <armor_14>	230	</armor_14>
+        <armor_12>	55	</armor_12>
+        <armor_13>	52	</armor_13>
+        <armor_14>	135	</armor_14>
         <armor_15>	30	</armor_15>
         <armor_16>	75	</armor_16>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	14200	</weight>
       <maxHealth>	500	</maxHealth>
-      <rotationSpeed>	22	</rotationSpeed>
+      <rotationSpeed>	25	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
         <maxRegenHealth>	85	</maxRegenHealth>
@@ -1416,11 +1417,11 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_122-mm_D-25T_with_wedges_shutter>	shared	  <maxAmmo>	30	</maxAmmo>
+        <_122-mm_D-25T_with_wedges_shutter_KV4>	shared	  <maxAmmo>	30	</maxAmmo>
           <armor>
             <armor_1>	300	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	170	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
@@ -1430,7 +1431,7 @@
             </armor_5>
             <gun>	50	</gun>
           </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <shotDispersionRadius>	0.44	</shotDispersionRadius>
           <reloadTime>	11	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
@@ -1499,12 +1500,12 @@
             <density>	116.654 139.905	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_122-mm_D-25T_with_wedges_shutter>
+        </_122-mm_D-25T_with_wedges_shutter_KV4>
         <_122mm_M62-T2>	shared	  <maxAmmo>	30	</maxAmmo>
           <armor>
             <armor_1>	300	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	170	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
@@ -1514,11 +1515,11 @@
             </armor_5>
             <gun>	60	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	12	</reloadTime>
-          <aimingTime>	2.9	</aimingTime>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <reloadTime>	11.5	</reloadTime>
+          <aimingTime>	2.5	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
+            <turretRotation>	0.06	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>

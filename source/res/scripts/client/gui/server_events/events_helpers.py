@@ -18,7 +18,7 @@ from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX, DAILY_QUEST_ID_PREFIX, FRONTLINE_GROUP_ID, RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID
+from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX, DAILY_QUEST_ID_PREFIX, EVENT_PROGRESSION_GROUPS_ID, RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.locale.LINKEDSET import LINKEDSET
 from gui.server_events.conditions import getProgressFromQuestWithSingleAccumulative
@@ -71,6 +71,21 @@ class EventInfoModel(object):
         return newDayUTC
 
     @classmethod
+    def _getWeeklyProgressResetTimeUTC(cls):
+        regionalSettings = BigWorld.player().serverSettings['regional_settings']
+        if 'starting_day_of_a_new_week' in regionalSettings:
+            newWeek = regionalSettings['starting_day_of_a_new_week']
+        else:
+            newWeek = 0
+        if 'starting_time_of_a_new_game_day' in regionalSettings:
+            newDayUTC = regionalSettings['starting_time_of_a_new_game_day']
+        elif 'starting_time_of_a_new_day' in regionalSettings:
+            newDayUTC = regionalSettings['starting_time_of_a_new_day']
+        else:
+            newDayUTC = 0
+        return (newWeek, newDayUTC)
+
+    @classmethod
     def getDailyProgressResetTimeDelta(cls):
         currentDayUTC = time_utils.getServerTimeCurrentDay()
         dailyProgressResetTimeUTC = cls._getDailyProgressResetTimeUTC()
@@ -98,7 +113,7 @@ class EventInfoModel(object):
                 i18nKey = '#quests:details/header/tillDate'
                 args = {'finishTime': self._getDateTimeString(self.event.getFinishTime())}
             weekDays = self.event.getWeekDays()
-            intervals = self.event.getCollapsedActiveTimeIntervals()
+            intervals = self.event.getActiveTimeIntervals()
             if weekDays or intervals:
                 if i18nKey is None:
                     i18nKey = '#quests:details/header/schedule'
@@ -137,8 +152,29 @@ class QuestInfoModel(EventInfoModel):
             if resetHourUTC >= 0:
                 return labeFormatter(resetLabelKey) % {'time': time.strftime(i18n.makeString('#quests:details/conditions/postBattle/dailyReset/timeFmt'), time_utils.getTimeStructInLocal(time_utils.getTimeTodayForUTC(hour=resetHourUTC)))}
 
+    def _getWeeklyResetStatus(self, resetLabelKey, labeFormatter):
+        if self.event.bonusCond.isWeekly():
+            day, resetSeconds = self._getWeeklyProgressResetTimeUTC()
+            resetHourUTC = resetSeconds / time_utils.ONE_HOUR
+            dayStr = i18n.makeString('#menu:dateTime/weekDays/full/' + str(day + 1)) + ', '
+            if resetHourUTC >= 0:
+                resetTime = time_utils.getTimeStructInLocal(time_utils.getTimeTodayForUTC(hour=resetHourUTC))
+                resetTime = time.struct_time(resetTime[:6] + (day,) + resetTime[7:])
+                return labeFormatter(resetLabelKey) % {'time': dayStr + time.strftime(i18n.makeString('#quests:details/conditions/postBattle/weeklyReset/timeFmt'), resetTime)}
+
     def _getCompleteDailyStatus(self, completeKey):
         return i18n.makeString(completeKey, time=self._getTillTimeString(time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay()))
+
+    def _getCompleteWeeklyStatus(self, completeKey):
+        curTime = time_utils.getTimeStructInUTC(time_utils.getCurrentTimestamp())
+        resetDay, resetSeconds = self._getWeeklyProgressResetTimeUTC()
+        dayDelta = (resetDay - curTime.tm_wday) % 7
+        if dayDelta == 0:
+            dayDelta = 7
+        timeDelta = dayDelta * time_utils.ONE_DAY + resetSeconds - (curTime.tm_hour * time_utils.ONE_HOUR + curTime.tm_min * time_utils.ONE_MINUTE + curTime.tm_sec)
+        if timeDelta > time_utils.ONE_WEEK:
+            timeDelta -= time_utils.ONE_WEEK
+        return i18n.makeString(completeKey, time=self._getTillTimeString(timeDelta))
 
 
 class EVENT_STATUS(CONST_CONTAINER):
@@ -232,7 +268,7 @@ def isPremium(eventID):
 
 
 def isDailyEpic(eventID):
-    return eventID == FRONTLINE_GROUP_ID if eventID else False
+    return eventID in EVENT_PROGRESSION_GROUPS_ID if eventID else False
 
 
 def isRankedDaily(eventID):

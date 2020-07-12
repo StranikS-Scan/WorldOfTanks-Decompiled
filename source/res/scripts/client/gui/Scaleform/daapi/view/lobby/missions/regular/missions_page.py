@@ -108,6 +108,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
             self.__updateFilterLabel()
             self.currentTab.setFilters(self.__filterData)
         elif self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS:
+            self.currentTab.markVisited()
             self.__onPageUpdate()
         self.__fireTabChangedEvent()
         self.__showFilter()
@@ -233,8 +234,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         return
 
     def __fireTabChangedEvent(self):
-        self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_TAB_CHANGED, ctx={'alias': self.__currentTabAlias,
-         'marathonPrefix': self.__marathonPrefix}), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_TAB_CHANGED, ctx=self.__currentTabAlias), EVENT_BUS_SCOPE.LOBBY)
 
     @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_MISSIONS_PAGE_VIEW, EVENT_BUS_SCOPE.DEFAULT)
     def __handleMissionsPageClose(self, _):
@@ -264,8 +264,6 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
 
     def __onPageUpdate(self, *args):
         if self.currentTab is not None:
-            if self.__currentTabAlias != QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS:
-                self.currentTab.markVisited()
             self.__updateFilterLabel()
             self.__updateHeader()
             self.__scrollToGroup()

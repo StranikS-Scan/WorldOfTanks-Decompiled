@@ -20,7 +20,7 @@ from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL
 from gui.Scaleform.daapi.view.lobby.clans.clan_helpers import getClanQuestURL
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.entities.View import ViewKey
-from gui.Scaleform.genConsts.EVENT10YC_ALIASES import EVENT10YC_ALIASES
+from gui.Scaleform.genConsts.BATTLEROYALE_ALIASES import BATTLEROYALE_ALIASES
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
@@ -28,10 +28,10 @@ from gui.Scaleform.genConsts.EVENTPROGRESSION_ALIASES import EVENTPROGRESSION_AL
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
-from gui.Scaleform.genConsts.BATTLE_OF_BLOGGERS_ALIASES import BATTLE_OF_BLOGGERS_ALIASES
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.game_control.links import URLMacros
 from gui.impl import backport
+from gui.impl.battle.battle_royale.battle_result_view import BrBattleResultsViewInBattle
 from gui.impl.gen import R
 from gui.impl.lobby.demount_kit.optional_device_dialogs import BuyAndInstallOpDevDialog, BuyAndStorageOpDevDialog, DemountOpDevSinglePriceDialog, DestroyOpDevDialog, InstallOpDevDialog
 from gui.impl.lobby.demount_kit.selector_dialog import DemountOpDevDialog
@@ -100,10 +100,6 @@ def showRankedPrimeTimeWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(alias=RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME, ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showSPGPrimeTimeWindow():
-    g_eventBus.handleEvent(events.LoadViewEvent(alias=EVENT10YC_ALIASES.EVENT_10YC_PRIME_TIME_ALIAS, ctx={}), EVENT_BUS_SCOPE.LOBBY)
-
-
 def showEpicBattlesPrimeTimeWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(alias=EPICBATTLES_ALIASES.EPIC_BATTLES_PRIME_TIME_ALIAS, ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
@@ -112,16 +108,36 @@ def showEventProgressionBuyConfirmView(ctx):
     g_eventBus.handleEvent(events.LoadViewEvent(alias=EVENTPROGRESSION_ALIASES.EVENT_PROGRESION_BUY_CONFIRM_VIEW_ALIAS, ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showBobPrimeTimeWindow():
-    g_eventBus.handleEvent(events.LoadViewEvent(alias=BATTLE_OF_BLOGGERS_ALIASES.BOB_PRIME_TIME_ALIAS, ctx={}), EVENT_BUS_SCOPE.LOBBY)
-
-
 def showEpicBattlesWelcomeBackWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(alias=EPICBATTLES_ALIASES.EPIC_BATTLES_WELCOME_BACK_ALIAS, ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showEpicBattlesAfterBattleWindow(reusableInfo):
     g_eventBus.handleEvent(events.LoadViewEvent(alias=EPICBATTLES_ALIASES.EPIC_BATTLES_AFTER_BATTLE_ALIAS, ctx={'reusableInfo': reusableInfo}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showBattleRoyaleLevelUpWindow(reusableInfo):
+    g_eventBus.handleEvent(events.LoadViewEvent(alias=BATTLEROYALE_ALIASES.LEVEL_UP, ctx={'reusableInfo': reusableInfo}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showBattleRoyaleResultsView(ctx, isInBattle=False):
+    if isInBattle:
+        g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.battle.battle_royale.BattleResultView(), BrBattleResultsViewInBattle, ScopeTemplates.OVERLAY_SCOPE, ctx=ctx), scope=EVENT_BUS_SCOPE.BATTLE)
+    else:
+        from gui.impl.lobby.battle_royale.battle_result_view import BrBattleResultsViewInLobby
+        uiLoader = dependency.instance(IGuiLoader)
+        contentResId = R.views.lobby.battle_royale.BattleResultView()
+        battleResultView = uiLoader.windowsManager.getViewByLayoutID(contentResId)
+        if battleResultView is not None:
+            if battleResultView.arenaUniqueID == ctx.get('arenaUniqueID', -1):
+                return
+            battleResultView.destroyWindow()
+        g_eventBus.handleEvent(events.LoadUnboundViewEvent(contentResId, BrBattleResultsViewInLobby, ScopeTemplates.LOBBY_SUB_SCOPE, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+    return
+
+
+def showHangarVehicleConfigurator(isFirstEnter=False):
+    g_eventBus.handleEvent(events.LoadViewEvent(BATTLEROYALE_ALIASES.HANGAR_VEH_INFO_VIEW, ctx={'isFirstEnter': isFirstEnter}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showVehicleInfo(vehTypeCompDescr):
@@ -232,6 +248,7 @@ def showBlueprintView(vehicleCD, exitEvent=None, itemsCache=None):
     from gui.impl.lobby.blueprints.blueprint_screen import BlueprintScreen
     exitEvent = exitEvent or events.LoadViewEvent(VIEW_ALIAS.LOBBY_TECHTREE, ctx={'nation': itemsCache.items.getItemByCD(vehicleCD).nationName,
      'blueprintMode': True})
+    _killOldView(R.views.lobby.blueprints.blueprint_screen.blueprint_screen.BlueprintScreen())
     g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.lobby.blueprints.blueprint_screen.blueprint_screen.BlueprintScreen(), BlueprintScreen, ScopeTemplates.LOBBY_SUB_SCOPE, ctx={'vehicleCD': vehicleCD,
      'exitEvent': exitEvent}), scope=EVENT_BUS_SCOPE.LOBBY)
 
@@ -446,6 +463,10 @@ def hideBattleResults():
     g_eventBus.handleEvent(events.HideWindowEvent(events.HideWindowEvent.HIDE_BATTLE_RESULT_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+def hideSquadWindow():
+    g_eventBus.handleEvent(events.HideWindowEvent(events.HideWindowEvent.HIDE_UNIT_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
 def hideWebBrowser(browserID=None):
     g_eventBus.handleEvent(events.HideWindowEvent(events.HideWindowEvent.HIDE_BROWSER_WINDOW, ctx={'browserID': browserID}), scope=EVENT_BUS_SCOPE.LOBBY)
 
@@ -603,8 +624,13 @@ def showVehicleCompare():
 
 
 @pointcutable
-def showCrystalWindow():
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.CRYSTALS_PROMO_WINDOW), EVENT_BUS_SCOPE.LOBBY)
+def showCrystalWindow(visibility):
+    from gui.impl.lobby.crystals_promo.crystals_promo_view import CrystalsPromoView
+    uiLoader = dependency.instance(IGuiLoader)
+    contentResId = R.views.lobby.crystalsPromo.CrystalsPromoView()
+    if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
+        g_eventBus.handleEvent(events.LoadUnboundViewEvent(contentResId, CrystalsPromoView, ScopeTemplates.LOBBY_SUB_SCOPE, visibility=visibility), scope=EVENT_BUS_SCOPE.LOBBY)
+    return
 
 
 @pointcutable

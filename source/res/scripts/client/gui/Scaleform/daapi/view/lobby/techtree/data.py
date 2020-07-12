@@ -90,7 +90,7 @@ class _ItemsData(object):
 
     def getInventoryVehicles(self):
         nodeCDs = [ node.getNodeCD() for node in self._getNodesToInvalidate() ]
-        _logger.debug('getInventoryVehicles: %d', nodeCDs)
+        _logger.debug('getInventoryVehicles: %r', nodeCDs)
         inventoryVehicles = self._items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.IN_CD_LIST(nodeCDs))
         return {item.invID:item for item in inventoryVehicles.itervalues()}
 
@@ -331,6 +331,14 @@ class _ItemsData(object):
 
     def _needLast2BuyFlag(self, nodeCD):
         raise NotImplementedError
+
+    def _isLastUnlocked(self, nodeCD):
+        if self.getItem(nodeCD).isPremium:
+            return False
+        nextLevels = g_techTreeDP.getNextLevel(nodeCD)
+        isAvailable = lambda self, nextCD: self.getItem(nextCD).isUnlocked or g_techTreeDP.isVehicleAvailableToUnlock(nextCD)[0]
+        isNextUnavailable = any((not isAvailable(self, nextCD) for nextCD in nextLevels))
+        return isNextUnavailable or not nextLevels
 
     def _invalidateMoney(self, nodes_):
         result = []
@@ -879,14 +887,6 @@ class NationTreeData(_ItemsData):
 
     def _needLast2BuyFlag(self, nodeCD):
         return self._isLastUnlocked(nodeCD)
-
-    def _isLastUnlocked(self, nodeCD):
-        if self.getItem(nodeCD).isPremium:
-            return False
-        nextLevels = g_techTreeDP.getNextLevel(nodeCD)
-        isAvailable = lambda self, nextCD: self.getItem(nextCD).isUnlocked or g_techTreeDP.isVehicleAvailableToUnlock(nextCD)[0]
-        isNextUnavailable = any((not isAvailable(self, nextCD) for nextCD in nextLevels))
-        return isNextUnavailable or not nextLevels
 
     def _findSelectedNode(self, nationID):
         if not g_currentVehicle.isPresent():

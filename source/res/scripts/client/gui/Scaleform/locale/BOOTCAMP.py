@@ -22,6 +22,7 @@ class BOOTCAMP(object):
     BTN_TUTORIAL_CLOSE = '#bootcamp:btn/tutorial/close'
     PROMO_VEHICLEBUYVIEW = '#bootcamp:promo/vehicleBuyView'
     COST_MESSAGEVIEWBUY = '#bootcamp:cost/messageViewBuy'
+    ARENA_NAME = '#bootcamp:arena/name'
     AWARD_OPTIONS = '#bootcamp:award/options'
     AWARD_OPTIONS_TITLE = '#bootcamp:award/options/title'
     AWARD_OPTIONS_NATION_US = '#bootcamp:award/options/nation/us'

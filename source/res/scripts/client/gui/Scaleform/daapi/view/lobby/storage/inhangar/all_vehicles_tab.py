@@ -39,8 +39,8 @@ class AllVehiclesTabView(AllVehiclesTabViewMeta, StorageCarouselEnvironment):
     def navigateToStore(self):
         showShop(getVehicleUrl())
 
-    def applyFilter(self):
-        super(AllVehiclesTabView, self).applyFilter()
+    def applyFilter(self, forceApply=False):
+        super(AllVehiclesTabView, self).applyFilter(forceApply)
         self.__updateFilterWarning()
 
     def _populate(self):
@@ -80,8 +80,8 @@ class AllVehiclesTabView(AllVehiclesTabViewMeta, StorageCarouselEnvironment):
         elif GUI_ITEM_TYPE.VEHICLE in diff:
             self.__updateVehicles(diff.get(GUI_ITEM_TYPE.VEHICLE))
 
-    def __updateVehicles(self, vehicles=None, filterCriteria=None):
-        self._dataProvider.updateVehicles(vehicles, filterCriteria)
+    def __updateVehicles(self, vehicles=None, filterCriteria=None, forceFilter=False):
+        self._dataProvider.updateVehicles(vehicles, filterCriteria, forceFilter)
         self.updateCounter()
         self.__updateFilterWarning()
         hasNoVehicles = self._dataProvider.getTotalVehiclesCount() == 0
@@ -103,4 +103,4 @@ class AllVehiclesTabView(AllVehiclesTabViewMeta, StorageCarouselEnvironment):
         self.__updateVehicles(vehicles)
 
     def __onVehicleClientStateChanged(self, vehicles):
-        self.__updateVehicles(vehicles)
+        self.__updateVehicles(vehicles, forceFilter=True)

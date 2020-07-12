@@ -114,6 +114,9 @@ class SharedPage(BattlePageMeta):
         self.addListener(events.GameEvent.HIDE_EXTERNAL_COMPONENTS, self.__handleHideExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.SHOW_BTN_HINT, self.__handleShowBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.HIDE_BTN_HINT, self.__handleHideBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
+        self.addListener(events.GameEvent.CALLOUT_DISPLAY_EVENT, self.__handleCalloutDisplayEvent, scope=EVENT_BUS_SCOPE.GLOBAL)
+        self.addListener(events.GameEvent.HELP, self._handleHelpEvent, scope=EVENT_BUS_SCOPE.BATTLE)
+        self.addListener(events.GameEvent.HELP_DETAILED, self._handleHelpEvent, scope=EVENT_BUS_SCOPE.BATTLE)
         self.gameplay.postStateEvent(PlayerEventID.AVATAR_SHOW_GUI)
 
     @uniprof.regionDecorator(label='avatar.show_gui', scope='exit')
@@ -133,6 +136,9 @@ class SharedPage(BattlePageMeta):
         self.removeListener(events.GameEvent.HIDE_EXTERNAL_COMPONENTS, self.__handleHideExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.SHOW_BTN_HINT, self.__handleShowBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.HIDE_BTN_HINT, self.__handleHideBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
+        self.removeListener(events.GameEvent.CALLOUT_DISPLAY_EVENT, self.__handleCalloutDisplayEvent, scope=EVENT_BUS_SCOPE.GLOBAL)
+        self.removeListener(events.GameEvent.HELP, self._handleHelpEvent, scope=EVENT_BUS_SCOPE.BATTLE)
+        self.removeListener(events.GameEvent.HELP_DETAILED, self._handleHelpEvent, scope=EVENT_BUS_SCOPE.BATTLE)
         self._stopBattleSession()
         super(SharedPage, self)._dispose()
 
@@ -204,6 +210,9 @@ class SharedPage(BattlePageMeta):
     def _handleGUIToggled(self, event):
         raise NotImplementedError
 
+    def _handleHelpEvent(self, event):
+        raise NotImplementedError
+
     def _onBattleLoadingStart(self):
         self._isBattleLoading = True
         if not self._blToggling:
@@ -258,6 +267,18 @@ class SharedPage(BattlePageMeta):
         elif self.as_isComponentVisibleS(alias):
             self._setComponentsVisibility(hidden={alias})
 
+    def _processCallout(self, needShow):
+        alias = _ALIASES.CALLOUT_PANEL
+        if needShow:
+            if self._isBattleLoading:
+                self._blToggling.add(alias)
+            elif not self.as_isComponentVisibleS(alias):
+                self._setComponentsVisibility(visible={alias})
+        elif self._isBattleLoading:
+            self._blToggling.discard(alias)
+        elif self.as_isComponentVisibleS(alias):
+            self._setComponentsVisibility(hidden={alias})
+
     def _onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
         if not self.sessionProvider.getCtx().isPlayerObserver() and not BattleReplay.g_replayCtrl.isPlaying:
             self.as_setPostmortemTipsVisibleS(True)
@@ -302,6 +323,9 @@ class SharedPage(BattlePageMeta):
 
     def __handleHideBtnHint(self, _):
         self._processHint(False)
+
+    def __handleCalloutDisplayEvent(self, event):
+        self._processCallout(needShow=event.ctx['isDown'])
 
 
 class BattlePageBusinessHandler(PackageBusinessHandler):

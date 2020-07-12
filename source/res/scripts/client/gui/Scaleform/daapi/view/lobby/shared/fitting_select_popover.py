@@ -321,13 +321,13 @@ class HangarFittingSelectPopover(CommonFittingSelectPopover):
 
 
 class BattleAbilitySelectPopover(HangarFittingSelectPopover):
-    __progressionController = dependency.descriptor(IEventProgressionController)
+    __eventProgression = dependency.descriptor(IEventProgressionController)
 
     def __init__(self, ctx, *_):
         super(BattleAbilitySelectPopover, self).__init__(ctx, _BattleAbilityLogicProvider)
 
     def onManageBattleAbilitiesClicked(self):
-        self.__progressionController.showCustomScreen(EventProgressionScreens.FRONTLINE_RESERVES)
+        self.__eventProgression.showCustomScreen(EventProgressionScreens.FRONTLINE_RESERVES)
         self.destroy()
 
     def _prepareInitialData(self):

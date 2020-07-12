@@ -5,8 +5,10 @@ from collections import namedtuple
 from constants import RentType
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
+from gui.game_control.veh_comparison_basket import isValidVehicleForComparing
 from gui.shop import SHOP_RENT_SEASON_TYPE_MAP, SHOP_RENT_TYPE_MAP
 from gui.shared.gui_items import KPI, CREW_SKILL_TO_KPI_NAME_MAP
+from gui.shared.gui_items.Vehicle import Vehicle, getUserName, getShortUserName
 from helpers import dependency, i18n, time_utils
 from items.components.skills_constants import PERKS
 from rent_common import SeasonRentDuration
@@ -80,7 +82,7 @@ def _formatVehicleRestore(item):
 
 
 def _formatVehicleOwnership(item):
-    if item.isInInventory and item.activeInNationGroup and not item.isOnlyForEventBattles:
+    if item.isInInventory and item.activeInNationGroup:
         result = {}
         if not item.isRented:
             result['type'] = 'permanent'
@@ -119,9 +121,21 @@ def _formatVehicleNationChange(item):
         return None
 
 
+def _formatVehicleComparingAvailability(item):
+    return not isValidVehicleForComparing(item)
+
+
+def _formatUserName(item):
+    return getUserName(item.descriptor.type, textPrefix=True) if isinstance(item, Vehicle) else item.userName
+
+
+def _formatShortUserName(item):
+    return getShortUserName(item.descriptor.type, textPrefix=True) if isinstance(item, Vehicle) else item.shortUserName
+
+
 Field = namedtuple('Field', ('name', 'getter'))
 idField = Field('id', lambda i: i.intCD)
-nameField = Field('name', lambda i: i.userName)
+nameField = Field('name', _formatUserName)
 nationField = Field('nation', lambda i: i.nationName)
 nationNameField = Field('nationName', lambda i: i.nationUserName)
 typeField = Field('type', lambda i: i.type)
@@ -174,7 +188,7 @@ def makeVehicleFormatter(includeInventoryFields=False):
     isPremiumField = Field('isPremium', lambda i: i.isPremium)
     levelField = Field('level', lambda i: i.level)
     isUnlockedField = Field('isUnlocked', lambda i: i.isUnlocked)
-    shortName = Field('shortName', lambda i: i.shortUserName)
+    shortName = Field('shortName', _formatShortUserName)
     restore = Field('restore', _formatVehicleRestore)
     isTradeInAvailableField = Field('isTradeInAvailable', lambda i: i.isTradeInAvailable)
     isTradeOffAvailableField = Field('isTradeOffAvailable', lambda i: i.isTradeOffAvailable)
@@ -184,6 +198,7 @@ def makeVehicleFormatter(includeInventoryFields=False):
     nationChangeField = Field('nationChange', _formatVehicleNationChange)
     clanLockField = Field('clanLock', lambda i: i.clanLock)
     isCollectibleField = Field('isCollectible', lambda i: i.isCollectible)
+    isNotComparingAvailableField = Field('isNotComparingAvailable', _formatVehicleComparingAvailability)
     fields = [idField,
      nameField,
      shortName,
@@ -209,7 +224,8 @@ def makeVehicleFormatter(includeInventoryFields=False):
      ownershipField,
      nationChangeField,
      clanLockField,
-     isCollectibleField]
+     isCollectibleField,
+     isNotComparingAvailableField]
     if includeInventoryFields:
         shellFormatter = makeShellFormatter(includeCount=True)
         shellsField = Field('shells', lambda i: [ shellFormatter.format(s) for s in i.shells ])

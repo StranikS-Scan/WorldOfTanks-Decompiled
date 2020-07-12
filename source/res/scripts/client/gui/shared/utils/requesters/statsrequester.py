@@ -265,6 +265,9 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     def getMaxResearchedLevel(self, nationID):
         return self.getMaxResearchedLevelByNations().get(nationID, MIN_VEHICLE_LEVEL)
 
+    def getWeeklyVehicleCrystals(self, vehCD):
+        return self.getCacheValue('weeklyVehicleCrystals', {}).get(vehCD, 0)
+
     @async
     def _requestCache(self, callback):
         BigWorld.player().stats.getCache(lambda resID, value: self._response(resID, value, callback))

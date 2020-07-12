@@ -24,6 +24,9 @@ class SoundEventChecker(ISoundEventChecker):
     def __init__(self):
         super(SoundEventChecker, self).__init__()
         self.__currentMoney = MONEY_UNDEFINED
+        self.__isLocked = False
+        self.__spendCurrencies = []
+        self.__earnCurrencies = []
 
     @sf_lobby
     def app(self):
@@ -39,7 +42,17 @@ class SoundEventChecker(ISoundEventChecker):
     def onDisconnected(self):
         self.__stop()
 
+    def lockPlayingSounds(self):
+        self.__isLocked = True
+
+    def unlockPlayingSounds(self):
+        self.__isLocked = False
+        self.__playAllSounds()
+
     def __stop(self):
+        self.__isLocked = False
+        self.__spendCurrencies = []
+        self.__earnCurrencies = []
         g_clientUpdateManager.removeObjectCallbacks(self)
 
     def __playSound(self, soundName):
@@ -48,21 +61,25 @@ class SoundEventChecker(ISoundEventChecker):
             app.soundManager.playEffectSound(soundName)
         return
 
+    def __playAllSounds(self):
+        if self.__spendCurrencies:
+            self.__playSound(self.__getSoundID(self.__spendCurrencies, _SPEND_SINGLE_SOUNDS, _SPEND_MULTI_SOUNDS, SoundEffectsId.SPEND_DEFAULT_SOUND))
+        elif self.__earnCurrencies:
+            self.__playSound(self.__getSoundID(self.__earnCurrencies, _EARN_SINGLE_SOUNDS, _EARN_MULTI_SOUNDS, SoundEffectsId.EARN_DEFAULT_SOUND))
+        self.__spendCurrencies = []
+        self.__earnCurrencies = []
+
     def __onStatsChanged(self, stats):
         newValues = Money.extractMoneyDict(stats)
         if newValues:
-            spendCurrencies = []
-            earnCurrencies = []
             for currency, value in newValues.iteritems():
                 if value < self.__currentMoney.get(currency, 0):
-                    spendCurrencies.append(currency)
+                    self.__spendCurrencies.append(currency)
                 if value > self.__currentMoney.get(currency, 0):
-                    earnCurrencies.append(currency)
+                    self.__earnCurrencies.append(currency)
 
-            if spendCurrencies:
-                self.__playSound(self.__getSoundID(spendCurrencies, _SPEND_SINGLE_SOUNDS, _SPEND_MULTI_SOUNDS, SoundEffectsId.SPEND_DEFAULT_SOUND))
-            elif earnCurrencies:
-                self.__playSound(self.__getSoundID(earnCurrencies, _EARN_SINGLE_SOUNDS, _EARN_MULTI_SOUNDS, SoundEffectsId.EARN_DEFAULT_SOUND))
+            if not self.__isLocked:
+                self.__playAllSounds()
             self.__currentMoney = self.__currentMoney.replaceAll(newValues)
 
     @classmethod

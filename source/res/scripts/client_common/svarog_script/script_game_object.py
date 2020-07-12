@@ -21,6 +21,16 @@ class ComponentDescriptor(AutoProperty):
         return
 
 
+class ComponentDescriptorTyped(ComponentDescriptor):
+
+    def __init__(self, allowedType, fieldName=None):
+        ComponentDescriptor.__init__(self, fieldName)
+        self.allowedType = allowedType
+
+    def __set__(self, instance, value):
+        ComponentDescriptor.__set__(self, instance, value)
+
+
 class ScriptGameObject(object):
     __metaclass__ = AutoPropertyInitMetaclass
 
@@ -40,7 +50,8 @@ class ScriptGameObject(object):
 
     def removeComponent(self, component):
         self._nativeSystem.removeComponent(component)
-        self._components.remove(component)
+        if component in self._components:
+            self._components.remove(component)
 
     def destroy(self):
         self._components = []

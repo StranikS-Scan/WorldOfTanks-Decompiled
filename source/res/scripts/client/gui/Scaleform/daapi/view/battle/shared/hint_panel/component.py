@@ -19,8 +19,9 @@ class BattleHintPanel(BattleHintPanelMeta, IAbstractPeriodView):
         return
 
     def setBtnHint(self, btnID, hintData):
-        self.__hints[btnID] = hintData
-        self.__invalidateBtnHint()
+        if hintData:
+            self.__hints[btnID] = hintData
+            self.__invalidateBtnHint()
 
     def removeBtnHint(self, btnID):
         if btnID in self.__hints:

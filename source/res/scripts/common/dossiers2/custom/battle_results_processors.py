@@ -324,7 +324,10 @@ def __updateBaseStatistics(block, block2, results, dossierXP, winnerTeam=None):
         block['losses'] += 1
     if results['deathCount'] == 0:
         block['survivedBattles'] += 1
-    for record in ('shots', 'directHits', 'spotted', 'damageDealt', 'damageReceived', 'capturePoints'):
+    directHits = results['directEnemyHits']
+    if directHits != 0:
+        block['directHits'] += directHits
+    for record in ('shots', 'spotted', 'damageDealt', 'damageReceived', 'capturePoints'):
         if bool(results[record]):
             block[record] += results[record]
 

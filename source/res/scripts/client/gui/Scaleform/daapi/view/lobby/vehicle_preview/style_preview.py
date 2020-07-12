@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_preview/style_preview.py
+import logging
 from CurrentVehicle import g_currentPreviewVehicle
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
@@ -17,6 +18,7 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 _SHOW_CLOSE_BTN = False
 _SHOW_BACK_BTN = True
+_logger = logging.getLogger(__name__)
 
 class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
     __background_alpha__ = 0.0
@@ -32,6 +34,8 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         self.__styleDescr = ctx.get('styleDescr')
         self.__backCallback = ctx.get('backCallback', event_dispatcher.showHangar)
         self.__backBtnDescrLabel = ctx.get('backBtnDescrLabel', backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.personalAwards()))
+        self.__selectedVehicleEntityId = None
+        return
 
     def closeView(self):
         event_dispatcher.showHangar()
@@ -41,7 +45,8 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
 
     def _populate(self):
         super(VehicleStylePreview, self)._populate()
-        g_currentPreviewVehicle.selectVehicleWithoutHeroTankUpdate(self.__vehicleCD)
+        g_currentPreviewVehicle.selectVehicle(self.__vehicleCD)
+        self.__selectedVehicleEntityId = g_currentPreviewVehicle.vehicleEntityID
         if not g_currentPreviewVehicle.isPresent() or self.__style is None:
             event_dispatcher.showHangar()
         self.__hangarSpace.onSpaceCreate += self.__onHangarCreateOrRefresh
@@ -58,6 +63,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         return
 
     def _dispose(self):
+        self.__selectedVehicleEntityId = None
         self.removeListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading, EVENT_BUS_SCOPE.DEFAULT)
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__hangarSpace.onSpaceCreate -= self.__onHangarCreateOrRefresh
@@ -65,12 +71,29 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         g_currentPreviewVehicle.resetAppearance()
         g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.VEHICLE_PREVIEW_HIDDEN), scope=EVENT_BUS_SCOPE.LOBBY)
         super(VehicleStylePreview, self)._dispose()
+        return
 
     def _createSelectableLogic(self):
         return PreviewSelectableLogic()
 
     def __onVehicleLoading(self, ctxEvent):
-        self.removeListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading, EVENT_BUS_SCOPE.DEFAULT)
+        isVehicleLoadingStarted = ctxEvent.ctx['started']
+        if isVehicleLoadingStarted:
+            _logger.warning('Too early VEHICLE_LOADING handler call.')
+            return
+        elif ctxEvent.ctx['intCD'] != self.__vehicleCD:
+            _logger.warning('VEHICLE_LOADING handler: incompatible "intCD" parameter.')
+            return
+        elif ctxEvent.ctx['vEntityId'] != self.__selectedVehicleEntityId:
+            _logger.warning('VEHICLE_LOADING handler: incompatible "vEntityId" parameter.')
+            return
+        else:
+            self.removeListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading, EVENT_BUS_SCOPE.DEFAULT)
+            self.__selectedVehicleEntityId = None
+            self.__onVehicleLoaded()
+            return
+
+    def __onVehicleLoaded(self):
         g_currentPreviewVehicle.previewStyle(self.__style)
 
     def __onHangarCreateOrRefresh(self):

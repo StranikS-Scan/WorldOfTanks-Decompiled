@@ -7,6 +7,9 @@ class HangarMeta(View):
     def onEscape(self):
         self._printOverrideError('onEscape')
 
+    def onCloseBtnClick(self):
+        self._printOverrideError('onCloseBtnClick')
+
     def showHelpLayout(self):
         self._printOverrideError('showHelpLayout')
 
@@ -73,17 +76,17 @@ class HangarMeta(View):
     def as_setNotificationEnabledS(self, value):
         return self.flashObject.as_setNotificationEnabled(value) if self._isDAAPIInited() else None
 
-    def as_updateSeniorityAwardsEntryPointS(self, isVisible):
-        return self.flashObject.as_updateSeniorityAwardsEntryPoint(isVisible) if self._isDAAPIInited() else None
-
     def as_createDQWidgetS(self):
         return self.flashObject.as_createDQWidget() if self._isDAAPIInited() else None
 
     def as_destroyDQWidgetS(self):
         return self.flashObject.as_destroyDQWidget() if self._isDAAPIInited() else None
 
-    def as_toggleSPGEventS(self, isVisible):
-        return self.flashObject.as_toggleSPGEvent(isVisible) if self._isDAAPIInited() else None
+    def as_updateSeniorityAwardsEntryPointS(self, isVisible):
+        return self.flashObject.as_updateSeniorityAwardsEntryPoint(isVisible) if self._isDAAPIInited() else None
 
     def as_updateEventEntryPointS(self, alias, isVisible):
         return self.flashObject.as_updateEventEntryPoint(alias, isVisible) if self._isDAAPIInited() else None
+
+    def as_toggleBattleRoyaleS(self, isBattleRoyale):
+        return self.flashObject.as_toggleBattleRoyale(isBattleRoyale) if self._isDAAPIInited() else None

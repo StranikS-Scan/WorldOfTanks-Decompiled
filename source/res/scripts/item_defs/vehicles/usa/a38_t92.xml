@@ -112,6 +112,7 @@
       <slot>
         <slotType>	player	</slotType>
         <slotId>	13001	</slotId>
+        <isMirrored>	true	</isMirrored>
         <rayStart>	1.70001 0.599954 -1.79456	</rayStart>
         <rayEnd>	1.3 0.599953 -1.79456	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1444,7 +1445,7 @@
             </sync>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	15.1009	</startAngle>
+              <startAngle>	15	</startAngle>
               <teethCount>	13	</teethCount>
             </sync>
           </teethSyncs>
@@ -1736,7 +1737,7 @@
             </sync>
             <sync>
               <name>	WD_R0	</name>
-              <startAngle>	15.1046	</startAngle>
+              <startAngle>	15.24	</startAngle>
               <teethCount>	13	</teethCount>
             </sync>
           </teethSyncs>

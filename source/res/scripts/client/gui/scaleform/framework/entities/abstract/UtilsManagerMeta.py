@@ -16,6 +16,9 @@ class UtilsManagerMeta(BaseDAAPIComponent):
     def changeStringCasing(self, string, isUpper, properties):
         self._printOverrideError('changeStringCasing')
 
+    def mapScaleformToVirtualKey(self, inKey):
+        self._printOverrideError('mapScaleformToVirtualKey')
+
     def getAbsoluteUrl(self, relativeUrl):
         self._printOverrideError('getAbsoluteUrl')
 

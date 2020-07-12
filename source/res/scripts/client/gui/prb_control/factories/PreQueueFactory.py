@@ -4,6 +4,7 @@ import inspect
 import gui.prb_control.prb_getters
 from constants import QUEUE_TYPE
 from debug_utils import LOG_ERROR
+from gui.prb_control.entities.battle_royale.pre_queue import entity as br_entity
 from gui.prb_control.factories.ControlFactory import ControlFactory
 from gui.prb_control.entities.base.pre_queue.ctx import LeavePreQueueCtx
 from gui.prb_control.entities.random.pre_queue.entity import RandomEntity, RandomEntryPoint
@@ -12,7 +13,6 @@ from gui.prb_control.entities.bootcamp.pre_queue.entity import BootcampEntity, B
 from gui.prb_control.entities.tutorial.pre_queue.entity import TutorialEntity, TutorialEntryPoint
 from gui.prb_control.entities.ranked.pre_queue.entity import RankedEntity, RankedEntryPoint
 from gui.prb_control.entities.epic.pre_queue.entity import EpicEntity, EpicEntryPoint, EpicForcedEntryPoint
-from gui.prb_control.entities.bob.pre_queue.entity import BobEntity, BobEntryPoint, BobForcedEntryPoint
 from gui.prb_control.items import FunctionalState
 from gui.prb_control.settings import FUNCTIONAL_FLAG as _FLAG
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE
@@ -24,7 +24,7 @@ _SUPPORTED_QUEUES = {QUEUE_TYPE.RANDOMS: RandomEntity,
  QUEUE_TYPE.RANKED: RankedEntity,
  QUEUE_TYPE.BOOTCAMP: BootcampEntity,
  QUEUE_TYPE.EPIC: EpicEntity,
- QUEUE_TYPE.BOB: BobEntity}
+ QUEUE_TYPE.BATTLE_ROYALE: br_entity.BattleRoyaleEntity}
 _SUPPORTED_ENTRY_BY_ACTION = {PREBATTLE_ACTION_NAME.RANDOM: RandomEntryPoint,
  PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL: TutorialEntryPoint,
  PREBATTLE_ACTION_NAME.SANDBOX: SandboxEntryPoint,
@@ -32,8 +32,7 @@ _SUPPORTED_ENTRY_BY_ACTION = {PREBATTLE_ACTION_NAME.RANDOM: RandomEntryPoint,
  PREBATTLE_ACTION_NAME.BOOTCAMP: BootcampEntryPoint,
  PREBATTLE_ACTION_NAME.EPIC: EpicEntryPoint,
  PREBATTLE_ACTION_NAME.EPIC_FORCED: EpicForcedEntryPoint,
- PREBATTLE_ACTION_NAME.BOB: BobEntryPoint,
- PREBATTLE_ACTION_NAME.BOB_FORCED: BobForcedEntryPoint}
+ PREBATTLE_ACTION_NAME.BATTLE_ROYALE: br_entity.BattleRoyaleEntryPoint}
 
 class PreQueueFactory(ControlFactory):
 
@@ -49,8 +48,8 @@ class PreQueueFactory(ControlFactory):
     def epicStorage(self):
         return None
 
-    @prequeue_storage_getter(QUEUE_TYPE.BOB)
-    def bobStorage(self):
+    @prequeue_storage_getter(QUEUE_TYPE.BATTLE_ROYALE)
+    def battleRoyaleStorage(self):
         return None
 
     def createEntry(self, ctx):
@@ -108,4 +107,4 @@ class PreQueueFactory(ControlFactory):
         elif self.epicStorage.isModeSelected():
             return EpicEntity()
         else:
-            return BobEntity() if self.bobStorage.isModeSelected() else None
+            return br_entity.BattleRoyaleEntity() if self.battleRoyaleStorage.isModeSelected() else None

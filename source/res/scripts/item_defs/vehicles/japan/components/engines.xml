@@ -37,6 +37,7 @@
     <_Mitsubishi_10ZF21WT_IGR>	60003	</_Mitsubishi_10ZF21WT_IGR>
     <_Type100_V6_Kuurei_bootcamp>	64001	</_Type100_V6_Kuurei_bootcamp>
     <BMW_IV_Kai_bootcamp>	64002	</BMW_IV_Kai_bootcamp>
+    <Development_Engine>	65000	</Development_Engine>
   </ids>
   <shared>
     <_Type100_A_1>
@@ -648,5 +649,23 @@
       <rpm_min>	320	</rpm_min>
       <rpm_max>	2240	</rpm_max>
     </_Mitsubishi_10ZF21WT_IGR>
+    <Development_Engine>
+      <userString>	Development Engine	</userString>
+      <tags>	diesel	</tags>
+      <level>	5	</level>
+      <notInShop>	true	</notInShop>
+      <price>	1	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	540	</power>
+      <weight>	750	</weight>
+      <maxHealth>	105	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <notInShop>	true	</notInShop>
+      <rpm_min>	376	</rpm_min>
+      <rpm_max>	2072	</rpm_max>
+    </Development_Engine>
   </shared>
 </engines.xml>

@@ -154,12 +154,15 @@ class Source(object):
                 self.__readBattleResultsConditionList(conditionReaders, condition, commonNode)
             daily = commonNode.getChildNode('daily')
             info['isDaily'] = daily is not None
+            weekly = commonNode.getChildNode('weekly')
+            info['isWeekly'] = weekly is not None
             groupBy = commonNode.getChildNode('groupBy')
             info['groupBy'] = groupBy.getChildNode('groupName').getFirstChildValue() if groupBy else None
             inrow = commonNode.getChildNode('inrow')
             unit = commonNode.getChildNode('unit')
             bonusLimit = commonNode.getChildNode('bonusLimit')
             cumulative = commonNode.getChildNode('cumulative')
+            cumulativeExt = commonNode.getChildNode('cumulativeExt')
             vehicleKills = commonNode.getChildNode('vehicleKills')
             battles = commonNode.getChildNode('battles')
             battleCount = battles.getChildNode('count').getFirstChildValue() if battles else None
@@ -168,17 +171,17 @@ class Source(object):
                 bonusLimitNode.addChild(1 if eventType in EVENT_TYPE.ONE_BONUS_QUEST else MAX_BONUS_LIMIT)
                 commonNode.addChild(bonusLimitNode)
             if eventType in EVENT_TYPE.LIKE_BATTLE_QUESTS:
-                if (cumulative or unit or vehicleKills) and inrow:
-                    raise SoftException('battleQuest: Unexpected tags (vehicleKills, cumulative, unit/cumulative) with inrow')
-                if not (cumulative or unit or vehicleKills or bonusLimit or battles) and (daily or groupBy):
-                    raise SoftException('battleQuest: daily and groupBy should be used with cumulative, unit, vehicleKills, bonusLimit or battles tags')
+                if (cumulative or cumulativeExt or unit or vehicleKills) and inrow:
+                    raise SoftException('battleQuest: Unexpected tags (vehicleKills, cumulative, cumulativeExtunit/cumulative, unit/cumulativeExt) with inrow')
+                if not (cumulative or cumulativeExt or unit or vehicleKills or bonusLimit or battles) and (daily or weekly or groupBy):
+                    raise SoftException('battleQuest: daily, weekly and groupBy should be used with cumulative, cumulativeExt, unit, vehicleKills, bonusLimit or battles tags')
                 if battles and not battleCount:
                     raise SoftException('Invalid battles section')
             elif eventType in EVENT_TYPE.LIKE_TOKEN_QUESTS:
-                if cumulative or unit or vehicleKills or groupBy or battles:
-                    raise SoftException('tokenQuest: Unexpected tags (cumulative, unit, vehicleKills, groupBy, battles)')
-                if not bonusLimit and daily:
-                    raise SoftException('tokenQuest: daily should be used with bonusLimit tag')
+                if cumulative or cumulativeExt or unit or vehicleKills or groupBy or battles:
+                    raise SoftException('tokenQuest: Unexpected tags (cumulative, cumulativeExt, unit, vehicleKills, groupBy, battles)')
+                if not bonusLimit and (daily or weekly):
+                    raise SoftException('tokenQuest: daily or weekly should be used with bonusLimit tag')
             mainNode.bonus = readBonusSection(availableBonuses, questSection['bonus'], eventType)
             mainNode.bonusDelayed = readBonusSection(availableBonuses, questSection['bonusDelayed'], eventType)
             if eventType in (EVENT_TYPE.NT_QUEST, EVENT_TYPE.POTAPOV_QUEST):
@@ -346,6 +349,7 @@ class Source(object):
          'premiumVip': self.__readCondition_bool,
          'isPremiumQuestsEnabled': self.__readCondition_bool,
          'daily': self.__readCondition_true,
+         'weekly': self.__readCondition_true,
          'bonusLimit': self.__readCondition_int,
          'isTutorialCompleted': self.__readCondition_bool,
          'isLinkedSetEnabled': self.__readCondition_bool,
@@ -433,14 +437,16 @@ class Source(object):
              'groupBy': self.__readBattleResultsConditionList,
              'groupName': self.__readCondition_groupBy,
              'cumulative': self.__readCondition_cumulative,
+             'cumulativeExt': self.__readBattleResultsConditionList,
              'crits': self.__readBattleResultsConditionList,
              'destroyed': self.__readBattleResultsConditionList,
              'tankman': self.__readBattleResultsConditionList,
              'critical': self.__readBattleResultsConditionList,
              'crit': self.__readBattleResultsConditionList,
              'critName': self.__readCritName,
-             'unregularAmmo': self.__readCondition_true})
-        if eventType in (EVENT_TYPE.BATTLE_QUEST,):
+             'unregularAmmo': self.__readCondition_true,
+             'isNotLeaver': self.__readCondition_true})
+        if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST):
             condition_readers.update({'red': self.__readListOfInts,
              'silver': self.__readListOfInts,
              'gold': self.__readListOfInts,
@@ -548,13 +554,30 @@ class Source(object):
         node.addChild(critName)
 
     def __readCondition_cumulative(self, _, section, node):
+        description = None
         for name, sub in section.items():
+            if name == 'description':
+                description = sub
+                break
+
+        for name, sub in section.items():
+            results = XMLNode('results')
             if name in ('meta', 'title', 'description'):
-                node.questClientConditions.append((name, self.__readMetaSection(sub)))
                 continue
             if name not in battle_results_shared.VEH_FULL_RESULTS.names() and name not in battle_results_shared.VEH_BASE_RESULTS.names():
                 raise SoftException("Unsupported misc variable '%s'" % name)
-            node.addChild((name, int(sub.asFloat)))
+            key = XMLNode('key')
+            key.addChild(name)
+            relation = XMLNode('greaterOrEqual')
+            relation.relatedGroup = intern('operator')
+            relation.addChild(sub.asFloat)
+            if description is not None:
+                results.questClientConditions.append(('description', self.__readMetaSection(description)))
+            results.addChild(key)
+            results.addChild(relation)
+            node.addChild(results)
+
+        return
 
     def __readBattleResultsConditionList(self, conditionReaders, section, node):
         for name, sub in section.items():
@@ -616,7 +639,7 @@ class Source(object):
                 if type(blockBuilder) not in (StaticSizeBlockBuilder, BinarySetDossierBlockBuilder):
                     continue
                 if blockBuilder.name == blockName:
-                    if rec in blockBuilder.recordsLayout or rec.startswith('tankExpert') or rec.startswith('mechanicEngineer'):
+                    if rec in blockBuilder.recordsLayout or rec.startswith('tankExpert') or rec.startswith('mechanicEngineer') or rec.startswith('collectorVehicle'):
                         break
             else:
                 raise SoftException('Invalid dossier record %s' % (record,))

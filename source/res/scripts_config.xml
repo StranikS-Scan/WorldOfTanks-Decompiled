@@ -1,96 +1,24 @@
 <scripts_config.xml>
   <login>
     <host>
-      <name>	WOT RU1	</name>
-      <short_name>	RU1	</short_name>
-      <url>	login.p1.worldoftanks.net:20014	</url>
-      <url_token>	login2.p1.worldoftanks.net:20014	</url_token>
+      <name>	WOT CT1	</name>
+      <short_name>	CT1	</short_name>
+      <url>	login-ct-p1.worldoftanks.net:20015	</url>
+      <url_token>	login2-ct-p1.worldoftanks.net:20015	</url_token>
       <public_key_path>	loginapp_wot.pubkey	</public_key_path>
-      <periphery_id>	101	</periphery_id>
+      <periphery_id>	11	</periphery_id>
     </host>
     <host>
-      <name>	WOT RU2	</name>
-      <short_name>	RU2	</short_name>
-      <url>	login.p2.worldoftanks.net:20014	</url>
-      <url_token>	login2.p2.worldoftanks.net:20014	</url_token>
+      <name>	WOT CT2	</name>
+      <short_name>	CT2	</short_name>
+      <url>	login-ct-p2.worldoftanks.net:20015	</url>
+      <url_token>	login2-ct-p2.worldoftanks.net:20015	</url_token>
       <public_key_path>	loginapp_wot.pubkey	</public_key_path>
-      <periphery_id>	102	</periphery_id>
-    </host>
-    <host>
-      <name>	WOT RU3	</name>
-      <short_name>	RU3	</short_name>
-      <url>	login.p3.worldoftanks.net:20014	</url>
-      <url_token>	login2.p3.worldoftanks.net:20014	</url_token>
-      <public_key_path>	loginapp_wot.pubkey	</public_key_path>
-      <periphery_id>	103	</periphery_id>
-    </host>
-    <host>
-      <name>	WOT RU4	</name>
-      <short_name>	RU4	</short_name>
-      <url>	login.p4.worldoftanks.net:20014	</url>
-      <url_token>	login2.p4.worldoftanks.net:20014	</url_token>
-      <public_key_path>	loginapp_wot.pubkey	</public_key_path>
-      <periphery_id>	104	</periphery_id>
-    </host>
-    <host>
-      <name>	WOT RU5	</name>
-      <short_name>	RU5	</short_name>
-      <url>	login.p5.worldoftanks.net:20014	</url>
-      <url_token>	login2.p5.worldoftanks.net:20014	</url_token>
-      <public_key_path>	loginapp_wot.pubkey	</public_key_path>
-      <periphery_id>	105	</periphery_id>
-    </host>
-    <host>
-      <name>	WOT RU6	</name>
-      <short_name>	RU6	</short_name>
-      <url>	login.p6.worldoftanks.net:20014	</url>
-      <url_token>	login2.p6.worldoftanks.net:20014	</url_token>
-      <public_key_path>	loginapp_wot.pubkey	</public_key_path>
-      <periphery_id>	106	</periphery_id>
-    </host>
-    <host>
-      <name>	WOT RU7	</name>
-      <short_name>	RU7	</short_name>
-      <url>	login.p7.worldoftanks.net:20014	</url>
-      <url_token>	login2.p7.worldoftanks.net:20014	</url_token>
-      <public_key_path>	loginapp_wot.pubkey	</public_key_path>
-      <periphery_id>	107	</periphery_id>
-    </host>
-    <host>
-      <name>	WOT RU8	</name>
-      <short_name>	RU8	</short_name>
-      <url>	login.p8.worldoftanks.net:20014	</url>
-      <url_token>	login2.p8.worldoftanks.net:20014	</url_token>
-      <public_key_path>	loginapp_wot.pubkey	</public_key_path>
-      <periphery_id>	108	</periphery_id>
-    </host>
-    <host>
-      <name>	WOT RU9	</name>
-      <short_name>	RU9	</short_name>
-      <url>	login.p9.worldoftanks.net:20014	</url>
-      <url_token>	login2.p9.worldoftanks.net:20014	</url_token>
-      <public_key_path>	loginapp_wot.pubkey	</public_key_path>
-      <periphery_id>	109	</periphery_id>
-    </host>
-    <host>
-      <name>	WOT RU10	</name>
-      <short_name>	RU10	</short_name>
-      <url>	login.p10.worldoftanks.net:20014	</url>
-      <url_token>	login2.p10.worldoftanks.net:20014	</url_token>
-      <public_key_path>	loginapp_wot.pubkey	</public_key_path>
-      <periphery_id>	110	</periphery_id>
-    </host>
-    <host>
-      <name>	WOT RU11	</name>
-      <short_name>	RU11	</short_name>
-      <url>	login.p11.worldoftanks.net:20014	</url>
-      <url_token>	login2.p11.worldoftanks.net:20014	</url_token>
-      <public_key_path>	loginapp_wot.pubkey	</public_key_path>
-      <periphery_id>	111	</periphery_id>
+      <periphery_id>	12	</periphery_id>
     </host>
   </login>
   <updateUrl>	http://worldoftanks.ru/update	</updateUrl>
-  <csisUrl>	http://csis.worldoftanks.ru/csis/wotru1/	</csisUrl>
+  <csisUrl>	http://csis-ct.worldoftanks.net/csis/wotct/	</csisUrl>
   <silhouetteColors>
     <common>
       <self>	0.5 0.5 0.5 1	</self>
@@ -133,6 +61,9 @@
       <explosion_ground_GMM>
         <texture>	maps/fx/decal_ground_1_GMM.dds	</texture>
       </explosion_ground_GMM>
+      <explosion_ground_small_GMM>
+        <texture>	maps/fx/decal_ground_small_1_GMM.dds	</texture>
+      </explosion_ground_small_GMM>
       <explosion_sand_AM>
         <texture>	maps/fx/decal_sand_1_AM.dds	</texture>
       </explosion_sand_AM>
@@ -173,23 +104,47 @@
         <texture>	maps/fx/dark_hole_GMM.dds	</texture>
       </explosion_metal_GMM>
       <explosion_dirt_AM>
-        <texture>	maps/fx/decal_dirt_1_AM.dds	</texture>
+        <texture>	maps/fx/decal_ground_1_AM.dds	</texture>
       </explosion_dirt_AM>
       <explosion_dirt_NM>
-        <texture>	maps/fx/decal_dirt_1_NM.dds	</texture>
+        <texture>	maps/fx/decal_ground_1_NM.dds	</texture>
       </explosion_dirt_NM>
       <explosion_dirt_GMM>
-        <texture>	maps/fx/decal_dirt_1_GMM.dds	</texture>
+        <texture>	maps/fx/decal_ground_1_GMM.dds	</texture>
       </explosion_dirt_GMM>
+      <explosion_dirt_small_GMM>
+        <texture>	maps/fx/decal_ground_small_1_GMM.dds	</texture>
+      </explosion_dirt_small_GMM>
       <explosion_oil_AM>
         <texture>	maps/fx/decal_oil_1_AM.dds	</texture>
       </explosion_oil_AM>
       <explosion_oil_NM>
-        <texture>	maps/fx/decal_oil_1_NM.dds	</texture>
+        <texture>	maps/fx/decal_ground_1_NM.dds	</texture>
       </explosion_oil_NM>
       <explosion_oil_GMM>
         <texture>	maps/fx/decal_oil_1_GMM.dds	</texture>
       </explosion_oil_GMM>
+      <explosion_oil_small_GMM>
+        <texture>	maps/fx/decal_oil_small_1_GMM.dds	</texture>
+      </explosion_oil_small_GMM>
+      <Mine_1_AM>
+        <texture>	maps/decals_pbs/Mine_1_AM.dds	</texture>
+      </Mine_1_AM>
+      <Mine_1_NM>
+        <texture>	maps/decals_pbs/Mine_1_NM.dds	</texture>
+      </Mine_1_NM>
+      <Mine_1_GMM>
+        <texture>	maps/decals_pbs/Mine_1_GMM.dds	</texture>
+      </Mine_1_GMM>
+      <Mine_2_AM>
+        <texture>	maps/decals_pbs/Mine_2_AM.dds	</texture>
+      </Mine_2_AM>
+      <Mine_2_NM>
+        <texture>	maps/decals_pbs/Mine_2_NM.dds	</texture>
+      </Mine_2_NM>
+      <Mine_2_GMM>
+        <texture>	maps/decals_pbs/Mine_2_GMM.dds	</texture>
+      </Mine_2_GMM>
     </textures>
   </decal>
   <camouflage>

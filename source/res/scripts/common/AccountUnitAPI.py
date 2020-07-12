@@ -79,14 +79,14 @@ class UnitClientAPI(object):
     def createEpicSquad(self):
         return self._doCreate(PREBATTLE_TYPE.EPIC)
 
+    def createBattleRoyaleSquad(self):
+        return self._doCreate(PREBATTLE_TYPE.BATTLE_ROYALE)
+
     def createFalloutSquad(self, queueType):
         return self._doCreate(PREBATTLE_TYPE.FALLOUT, queueType)
 
     def createEventSquad(self):
         return self._doCreate(PREBATTLE_TYPE.EVENT)
-
-    def createBobSquad(self):
-        return self._doCreate(PREBATTLE_TYPE.BOB)
 
     def join(self, unitMgrID, slotIdx=UNIT_SLOT.ANY):
         self._callAPI('join', unitMgrID, slotIdx)

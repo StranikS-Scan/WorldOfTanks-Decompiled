@@ -16,11 +16,11 @@ class ConsumablesPanelMeta(BaseDAAPIComponent):
     def as_setItemQuantityInSlotS(self, idx, quantity):
         return self.flashObject.as_setItemQuantityInSlot(idx, quantity) if self._isDAAPIInited() else None
 
-    def as_setItemTimeQuantityInSlotS(self, idx, quantity, timeRemaining, maxTime):
-        return self.flashObject.as_setItemTimeQuantityInSlot(idx, quantity, timeRemaining, maxTime) if self._isDAAPIInited() else None
+    def as_setItemTimeQuantityInSlotS(self, idx, quantity, timeRemaining, maxTime, animation):
+        return self.flashObject.as_setItemTimeQuantityInSlot(idx, quantity, timeRemaining, maxTime, animation) if self._isDAAPIInited() else None
 
-    def as_setCoolDownTimeS(self, idx, duration, baseTime, startTime, isReloading):
-        return self.flashObject.as_setCoolDownTime(idx, duration, baseTime, startTime, isReloading) if self._isDAAPIInited() else None
+    def as_setCoolDownTimeS(self, idx, duration, baseTime, startTime):
+        return self.flashObject.as_setCoolDownTime(idx, duration, baseTime, startTime) if self._isDAAPIInited() else None
 
     def as_setCoolDownPosAsPercentS(self, idx, percent):
         return self.flashObject.as_setCoolDownPosAsPercent(idx, percent) if self._isDAAPIInited() else None
@@ -37,8 +37,8 @@ class ConsumablesPanelMeta(BaseDAAPIComponent):
     def as_setCurrentShellS(self, idx):
         return self.flashObject.as_setCurrentShell(idx) if self._isDAAPIInited() else None
 
-    def as_addEquipmentSlotS(self, idx, keyCode, sfKeyCode, tag, quantity, timeRemaining, reloadingTime, iconPath, tooltipText):
-        return self.flashObject.as_addEquipmentSlot(idx, keyCode, sfKeyCode, tag, quantity, timeRemaining, reloadingTime, iconPath, tooltipText) if self._isDAAPIInited() else None
+    def as_addEquipmentSlotS(self, idx, keyCode, sfKeyCode, quantity, timeRemaining, reloadingTime, iconPath, tooltipText, animation):
+        return self.flashObject.as_addEquipmentSlot(idx, keyCode, sfKeyCode, quantity, timeRemaining, reloadingTime, iconPath, tooltipText, animation) if self._isDAAPIInited() else None
 
     def as_showEquipmentSlotsS(self, show):
         return self.flashObject.as_showEquipmentSlots(show) if self._isDAAPIInited() else None
@@ -58,8 +58,8 @@ class ConsumablesPanelMeta(BaseDAAPIComponent):
     def as_hideGlowS(self, idx):
         return self.flashObject.as_hideGlow(idx) if self._isDAAPIInited() else None
 
-    def as_setEquipmentActivatedS(self, idx):
-        return self.flashObject.as_setEquipmentActivated(idx) if self._isDAAPIInited() else None
+    def as_setEquipmentActivatedS(self, idx, isActivated):
+        return self.flashObject.as_setEquipmentActivated(idx, isActivated) if self._isDAAPIInited() else None
 
     def as_handleAsReplayS(self):
         return self.flashObject.as_handleAsReplay() if self._isDAAPIInited() else None

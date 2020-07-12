@@ -35,11 +35,17 @@ class DynAccessor(object):
     def exists(self):
         return self.__resId > 0
 
+    def isValid(self):
+        return True
+
 
 class _InvalidDynAccessor(DynAccessor):
 
     def keys(self):
         return iter(())
+
+    def isValid(self):
+        return False
 
 
 _g_invalid = _InvalidDynAccessor(-1)

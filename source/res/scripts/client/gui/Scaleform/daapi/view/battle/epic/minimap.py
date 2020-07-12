@@ -1,25 +1,25 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic/minimap.py
 import os
-import Math
+import logging
 import BigWorld
 import GUI
-from gui.Scaleform.daapi.view.meta.EpicMinimapMeta import EpicMinimapMeta
-from gui.Scaleform.daapi.view.battle.classic.minimap import GlobalSettingsPlugin
-from gui.Scaleform.daapi.view.battle.shared.minimap.plugins import PersonalEntriesPlugin, ArenaVehiclesPlugin
-from gui.Scaleform.daapi.view.battle.shared.minimap.common import SimplePlugin, AttentionToCellPlugin
-from gui.Scaleform.daapi.view.battle.shared.minimap import settings
-from gui.Scaleform.daapi.view.battle.shared.minimap.component import _IMAGE_PATH_FORMATTER
-from gui.battle_control import minimap_utils, avatar_getter
-from aih_constants import CTRL_MODE_NAME
-from epic_constants import EPIC_BATTLE_TEAM_ID
-from gui.battle_control.battle_constants import PROGRESS_CIRCLE_TYPE, SECTOR_STATE_ID
-from constants import IS_DEVELOPMENT
-from debug_utils import LOG_ERROR
+import Math
 from account_helpers import AccountSettings
-from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
-from coordinate_system import AXIS_ALIGNED_DIRECTION as AAD
+from aih_constants import CTRL_MODE_NAME
 from arena_component_system.sector_base_arena_component import ID_TO_BASENAME
+from chat_commands_consts import MarkerType
+from constants import IS_DEVELOPMENT
+from coordinate_system import AXIS_ALIGNED_DIRECTION as AAD
+from epic_constants import EPIC_BATTLE_TEAM_ID
+from gui.Scaleform.daapi.view.battle.classic.minimap import GlobalSettingsPlugin
+from gui.Scaleform.daapi.view.battle.shared.minimap import settings, plugins, common
+from gui.Scaleform.daapi.view.battle.shared.minimap.common import SimplePlugin
+from gui.Scaleform.daapi.view.battle.shared.minimap.plugins import PersonalEntriesPlugin, ArenaVehiclesPlugin, _LOCATION_PING_RANGE, _EMinimapMouseKey, _BASE_PING_RANGE
+from gui.Scaleform.daapi.view.meta.EpicMinimapMeta import EpicMinimapMeta
+from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
+from gui.battle_control import minimap_utils, avatar_getter
+from gui.battle_control.battle_constants import PROGRESS_CIRCLE_TYPE, SECTOR_STATE_ID
 _C_NAME = settings.CONTAINER_NAME
 _S_NAME = settings.ENTRY_SYMBOL_NAME
 _EPIC_TEAM_POINTS = settings.CONTAINER_NAME.TEAM_POINTS
@@ -35,11 +35,11 @@ _FRONT_LINE_DEV_VISUALIZATION_SUPPORTED = IS_DEVELOPMENT
 _MINI_MINIMAP_HIGHLIGHT_PATH = '_level0.root.{}.main.minimap.mapShortcutLabel.sectorOverview.mmapAreaHighlight'.format(APP_CONTAINERS_NAMES.VIEWS)
 _MINI_MINIMAP_SIZE = 46
 _ZOOM_MODE_MIN = 1
-_ZOOM_MODE_MAX = 3
 _ZOOM_MODE_STEP = 0.5
 _ZOOM_MULTIPLIER_TEXT = 'x'
+_METERS_IN_1X_ZOOM = 1000
 EPIC_MINIMAP_HIT_AREA = 210
-EPIC_1KM_IN_PX = 210
+_logger = logging.getLogger(__name__)
 
 def makeMousePositionToEpicWorldPosition(clickedX, clickedY, bounds, hitArea=EPIC_MINIMAP_HIT_AREA):
     upperLeftX, upperLeftZ, lowerRightX, lowerRightZ = bounds
@@ -62,11 +62,15 @@ class EpicMinimapComponent(EpicMinimapMeta):
         super(EpicMinimapComponent, self).__init__()
         self.__mode = None
         self.__minimapCenterPos = (-1, -1)
+        self.__maxZoomMode = None
         return
 
     def _populate(self):
         super(EpicMinimapComponent, self)._populate()
-        self.updateZoomMode(AccountSettings.getSettings('epicMinimapZoom'))
+        mode = AccountSettings.getSettings('epicMinimapZoom')
+        if mode > self.__maxZoomMode:
+            mode = self.__maxZoomMode
+        self.updateZoomMode(mode)
 
     def setMinimapCenterEntry(self, entryID):
         component = self.getComponent()
@@ -96,8 +100,8 @@ class EpicMinimapComponent(EpicMinimapMeta):
 
     def onZoomModeChanged(self, change):
         mode = self.__mode + change * _ZOOM_MODE_STEP
-        if mode > _ZOOM_MODE_MAX:
-            mode = _ZOOM_MODE_MAX
+        if mode > self.__maxZoomMode:
+            mode = self.__maxZoomMode
         elif mode < _ZOOM_MODE_MIN:
             mode = _ZOOM_MODE_MIN
         self.updateZoomMode(mode)
@@ -118,7 +122,9 @@ class EpicMinimapComponent(EpicMinimapMeta):
         setup = super(EpicMinimapComponent, self)._setupPlugins(visitor)
         setup['settings'] = EpicGlobalSettingsPlugin
         setup['personal'] = CenteredPersonalEntriesPlugin
-        setup['cells'] = MarkPositionPlugin
+        setup['pinging'] = EpicMinimapPingPlugin
+        if IS_DEVELOPMENT:
+            setup['teleport'] = EpicTeleportPlugin
         if visitor.hasSectors():
             setup['epic_bases'] = SectorBaseEntriesPlugin
             setup['epic_sector_overlay'] = SectorOverlayEntriesPlugin
@@ -137,8 +143,8 @@ class EpicMinimapComponent(EpicMinimapMeta):
         return setup
 
     def _processMinimapSize(self, minSize, maxSize):
-        mapWidthPx = int(abs(maxSize[0] - minSize[0]) * 0.001 * minimap_utils.EPIC_1KM_IN_PX)
-        mapHeightPx = int(abs(maxSize[1] - minSize[1]) * 0.001 * minimap_utils.EPIC_1KM_IN_PX)
+        self.__maxZoomMode = self._getMaxZoomMode(minSize, maxSize)
+        mapWidthPx, mapHeightPx = minimap_utils.metersToMinimapPixels(minSize, maxSize)
         self.as_setMapDimensionsS(mapWidthPx, mapHeightPx)
 
     def _createFlashComponent(self):
@@ -146,11 +152,12 @@ class EpicMinimapComponent(EpicMinimapMeta):
         comp.setMiniMinimapHighlightProps(_MINI_MINIMAP_HIGHLIGHT_PATH, _MINI_MINIMAP_SIZE)
         return comp
 
-    def _getMinimapSize(self):
-        return minimap_utils.MINIMAP_SIZE
-
-    def _getMinimapTexture(self, arenaVisitor):
-        return _IMAGE_PATH_FORMATTER.format(arenaVisitor.type.getMinimapTexture())
+    def _getMaxZoomMode(self, bl, tr):
+        topRightX, topRightY = tr
+        bottomLeftX, bottomLeftY = bl
+        d1 = abs(topRightX - bottomLeftX)
+        d2 = abs(topRightY - bottomLeftY)
+        return max(d1, d2) / _METERS_IN_1X_ZOOM
 
     def __zoomText(self):
         return str(round(self.__mode, 1)) + _ZOOM_MULTIPLIER_TEXT
@@ -247,13 +254,17 @@ class CenteredPersonalEntriesPlugin(RespawningPersonalEntriesPlugin):
         super(CenteredPersonalEntriesPlugin, self).updateControlMode(mode, vehicleID)
         self.__centerMapBasedOnMode()
 
+    def _getPostmortemCenterEntry(self):
+        iah = avatar_getter.getInputHandler()
+        if iah and iah.ctrls[CTRL_MODE_NAME.POSTMORTEM].altTargetMode == CTRL_MODE_NAME.DEATH_FREE_CAM:
+            newEntryID = self._getViewPointID()
+        else:
+            newEntryID = self._getDeadPointID()
+        return newEntryID
+
     def __centerMapBasedOnMode(self):
         if self._isInPostmortemMode():
-            iah = avatar_getter.getInputHandler()
-            if iah and iah.ctrls[CTRL_MODE_NAME.POSTMORTEM].altTargetMode == CTRL_MODE_NAME.DEATH_FREE_CAM:
-                newEntryID = self._getViewPointID()
-            else:
-                newEntryID = self._getDeadPointID()
+            newEntryID = self._getPostmortemCenterEntry()
             self.__mode = CTRL_MODE_NAME.POSTMORTEM
         elif self._isInStrategicMode():
             newEntryID = self._getCameraIDs()[_S_NAME.STRATEGIC_CAMERA]
@@ -273,12 +284,12 @@ class CenteredPersonalEntriesPlugin(RespawningPersonalEntriesPlugin):
         return
 
 
-class SectorBaseEntriesPlugin(SimplePlugin):
-    __slots__ = ('__personalTeam', '__basesDict', '_symbol')
+class SectorBaseEntriesPlugin(common.EntriesPlugin):
+    __slots__ = ('__personalTeam', '__markerIDs', '_symbol')
 
     def __init__(self, parentObj):
         super(SectorBaseEntriesPlugin, self).__init__(parentObj)
-        self.__basesDict = {}
+        self.__markerIDs = {}
         self.__personalTeam = -1
         self._symbol = _S_NAME.EPIC_SECTOR_BASE
 
@@ -295,8 +306,13 @@ class SectorBaseEntriesPlugin(SimplePlugin):
                 if 0 < base.capturePercentage < 1:
                     self.__onSectorBasePointsUpdate(base.baseID, base.isPlayerTeam(), base.capturePercentage, base.capturingStopped, 0, '')
 
+        ctrl = self.sessionProvider.shared.feedback
+        if ctrl is not None:
+            ctrl.onActionAddedToMarkerReceived += self.__onActionAddedToMarkerReceived
+            ctrl.onReplyFeedbackReceived += self.__onReplyFeedbackReceived
+            ctrl.onRemoveCommandReceived += self.__onRemoveCommandReceived
         else:
-            LOG_ERROR('Expected SectorBaseComponent not present!')
+            _logger.error('Seesion Provider Feedback present - Could not set marker receiver events!')
         return
 
     def fini(self):
@@ -306,39 +322,86 @@ class SectorBaseEntriesPlugin(SimplePlugin):
             sectorBaseComp.onSectorBaseAdded -= self.__onSectorBaseAdded
             sectorBaseComp.onSectorBaseCaptured -= self.__onSectorBaseCaptured
             sectorBaseComp.onSectorBasePointsUpdate -= self.__onSectorBasePointsUpdate
+        ctrl = self.sessionProvider.shared.feedback
+        if ctrl is not None:
+            ctrl.onActionAddedToMarkerReceived -= self.__onActionAddedToMarkerReceived
+            ctrl.onReplyFeedbackReceived -= self.__onReplyFeedbackReceived
+            ctrl.onRemoveCommandReceived -= self.__onRemoveCommandReceived
         return
 
     def __onSectorBaseAdded(self, sectorBase):
-        entryID = self.__basesDict[sectorBase.baseID] = self.__addPointEntry(self._symbol, sectorBase.position)
-        if entryID is not None:
-            self._invoke(entryID, 'setOwningTeam', sectorBase.isPlayerTeam())
-            self._invoke(entryID, 'setIdentifier', sectorBase.baseID)
+        model = self.__markerIDs[sectorBase.baseID] = self.__addPointEntry(self._symbol, sectorBase)
+        if model is not None:
+            self._invoke(model.getID(), 'setOwningTeam', sectorBase.isPlayerTeam())
+            self._invoke(model.getID(), 'setIdentifier', sectorBase.baseID)
         return
 
     def __onSectorBaseCaptured(self, baseId, isPlayerTeam):
-        entryID = self.__basesDict[baseId]
-        if entryID is None:
-            LOG_ERROR('[ZoneBaseEntriesPlugins:__onSectorBaseCaptured] NO ENTRY WITH ID: ', baseId)
+        model = self.__markerIDs[baseId]
+        if model is None:
+            _logger.error('[ZoneBaseEntriesPlugins:__onSectorBaseCaptured] NO ENTRY WITH ID: %d', baseId)
             return
         else:
-            self._invoke(entryID, 'setCapturePoints', 1)
-            self._invoke(entryID, 'setOwningTeam', isPlayerTeam)
+            self._invoke(model.getID(), 'setCapturePoints', 1)
+            self._invoke(model.getID(), 'setOwningTeam', isPlayerTeam)
             return
 
     def __onSectorBasePointsUpdate(self, baseId, isPlayerTeam, points, capturingStopped, invadersCount, expectedCaptureTime):
-        entryID = self.__basesDict[baseId]
-        if entryID is None:
-            LOG_ERROR('[ZoneBaseEntriesPlugins:__onSectorBasePointsUpdate] NO ENTRY WITH ID: ', baseId)
+        model = self.__markerIDs[baseId]
+        if model is None:
+            _logger.error('[ZoneBaseEntriesPlugins:__onSectorBasePointsUpdate] NO ENTRY WITH ID: %d', baseId)
             return
         else:
-            self._invoke(entryID, 'setCapturePoints', points)
+            self._invoke(model.getID(), 'setCapturePoints', points)
             return
 
-    def __addPointEntry(self, symbol, position):
+    def __addPointEntry(self, symbol, sectorBase):
         matrix = Math.Matrix()
-        matrix.setTranslate(position)
-        entryID = self._addEntry(symbol, _EPIC_TEAM_POINTS, matrix, True)
-        return entryID
+        matrix.setTranslate(sectorBase.position)
+        return self._addEntryEx(sectorBase.baseID, symbol, _EPIC_TEAM_POINTS, matrix, True)
+
+    def __onActionAddedToMarkerReceived(self, senderID, commandID, markerType, objectID):
+        pass
+
+    def __onReplyFeedbackReceived(self, ucmdID, replierID, markerType, oldReplyCount, newReplyCount):
+        if markerType != MarkerType.BASE_MARKER_TYPE or ucmdID not in self.__markerIDs:
+            return
+        newReply = newReplyCount > oldReplyCount and replierID == avatar_getter.getPlayerVehicleID()
+        if newReply:
+            pass
+        if newReplyCount < oldReplyCount and replierID == avatar_getter.getPlayerVehicleID() or newReplyCount <= 0:
+            pass
+
+    def __onRemoveCommandReceived--- This code section failed: ---
+
+ 428       0	LOAD_FAST         'self'
+           3	LOAD_ATTR         '__markerIDs'
+           6	UNARY_NOT         ''
+           7	POP_JUMP_IF_TRUE  '25'
+          10	LOAD_FAST         'markerType'
+          13	LOAD_GLOBAL       'MarkerType'
+          16	LOAD_ATTR         'BASE_MARKER_TYPE'
+          19	COMPARE_OP        '!='
+        22_0	COME_FROM         '7'
+          22	POP_JUMP_IF_FALSE '29'
+
+ 429      25	LOAD_CONST        ''
+          28	JUMP_FORWARD      50
+
+ 431      29	LOAD_FAST         'removeID'
+          32	LOAD_FAST         'self'
+          35	LOAD_ATTR         '__markerIDs'
+          38	COMPARE_OP        'in'
+          41	POP_JUMP_IF_FALSE '47'
+
+ 434      44	JUMP_FORWARD      '47'
+        47_0	COME_FROM         '44'
+          47	LOAD_CONST        ''
+        50_0	COME_FROM         '28'
+          50	RETURN_VALUE      ''
+          -1	RETURN_LAST       ''
+
+Syntax error at or near 'COME_FROM' token at offset 47_0
 
 
 class SectorStatusEntriesPlugin(SimplePlugin):
@@ -364,7 +427,7 @@ class SectorStatusEntriesPlugin(SimplePlugin):
                 self.__onSectorGroupUpdated(group.id, group.state, group.center, group.getBound())
 
         else:
-            LOG_ERROR('Expected SectorComponent not present!')
+            _logger.error('Expected SectorComponent not present!')
         return
 
     def fini(self):
@@ -402,7 +465,7 @@ class SectorStatusEntriesPlugin(SimplePlugin):
                 group = sectorComponent.sectorGroups[sectorGroupId]
                 self._invoke(entryID, 'changeSectorState', sectorStateID, self.__personalTeam == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER, group.numSubSectors > 1)
             else:
-                LOG_ERROR('Expected SectorComponent not present!')
+                _logger.error('Expected SectorComponent not present!')
         sectors = []
         for groupID in sectorComponent.sectorGroups:
             group = sectorComponent.sectorGroups[groupID]
@@ -441,7 +504,7 @@ class HeadquartersStatusEntriesPlugin(SimplePlugin):
                 self.__onDestructibleEntityAdded(hq)
 
         else:
-            LOG_ERROR('Expected DestructibleEntityComponent not present!')
+            _logger.error('Expected DestructibleEntityComponent not present!')
         return
 
     def fini(self):
@@ -527,139 +590,13 @@ class DevelopmentRespawnEntriesPlugin(SimplePlugin):
         position = (pos.x, 0, pos.y)
         matrix = Math.Matrix()
         matrix.setTranslate(position)
-        entryID = self._addEntry(symbol, _EPIC_TEAM_POINTS, matrix=matrix, active=True)
-        return entryID
+        return self._addEntry(symbol, _EPIC_TEAM_POINTS, matrix=matrix, active=True)
 
 
 class EpicGlobalSettingsPlugin(GlobalSettingsPlugin):
 
     def _toogleVisible(self):
         pass
-
-
-class MarkPositionPlugin(AttentionToCellPlugin):
-
-    def __init__(self, parentObj):
-        super(MarkPositionPlugin, self).__init__(parentObj)
-        self.__hqsList = {}
-        self.__hqListInited = False
-        self.__baseList = {}
-        self.__baseListInited = False
-        self._hitAreaSize = minimap_utils.EPIC_MINIMAP_HIT_AREA
-
-    def start(self):
-        super(MarkPositionPlugin, self).start()
-        destructibleComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'destructibleEntityComponent', None)
-        if destructibleComponent is not None:
-            destructibleComponent.onDestructibleEntityAdded += self.__onDestructibleEntityAdded
-            hqs = destructibleComponent.destructibleEntities
-            for hq in hqs.values():
-                self.__onDestructibleEntityAdded(hq)
-
-            self.__hqListInited = True
-        sectorBaseComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'sectorBaseComponent', None)
-        if sectorBaseComponent is not None:
-            sectorBases = sectorBaseComponent.sectorBases
-            for base in sectorBases:
-                self.__onSectorBaseAdded(base)
-
-            self.__baseListInited = True
-        return
-
-    def stop(self):
-        super(MarkPositionPlugin, self).stop()
-        destructibleComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'destructibleEntityComponent', None)
-        if destructibleComponent is not None:
-            destructibleComponent.onDestructibleEntityAdded -= self.__onDestructibleEntityAdded
-        return
-
-    def setAttentionToCell(self, x, y, isRightClick):
-        finalPos = self._getPositionFromClick(x, y)
-        if isRightClick:
-            handler = avatar_getter.getInputHandler()
-            if handler is not None:
-                handler.onMinimapClicked(finalPos)
-        else:
-            commands = self.sessionProvider.shared.chatCommands
-            hqIdx = self.__getNearestHQForPosition(finalPos, 30)
-            baseIdx, baseName = self.__getNearestBaseForPosition(finalPos, 30)
-            if not hqIdx and not baseIdx:
-                if commands is not None:
-                    commands.sendAttentionToPosition(Math.Vector3(int(finalPos.x), int(finalPos.y), int(finalPos.z)))
-            elif hqIdx:
-                if commands is not None:
-                    commands.sendAttentionToObjective(hqIdx, self._arenaDP.getNumberOfTeam() == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER)
-            elif baseIdx:
-                if commands is not None:
-                    commands.sendAttentionToBase(baseIdx, baseName, self._arenaDP.getNumberOfTeam() == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER)
-        return
-
-    def _doAttention(self, index, duration):
-        pass
-
-    def _doAttentionAtPosition(self, senderID, position, duration):
-        self.__doAttentionToItem(position, _S_NAME.MARK_POSITION, duration)
-
-    def _doAttentionToObjective(self, senderID, hqId, duration):
-        position = self.__hqsList[hqId]
-        isAtk = avatar_getter.getPlayerTeam() == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER
-        entryName = _S_NAME.MARK_OBJECTIVE_ATK if isAtk else _S_NAME.MARK_OBJECTIVE_DEF
-        self.__doAttentionToItem(position, entryName, duration)
-
-    def _doAttentionToBase(self, senderID, baseId, baseName, duration):
-        position = self.__baseList[baseId]
-        isAtk = avatar_getter.getPlayerTeam() == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER
-        entryName = _S_NAME.MARK_OBJECTIVE_ATK if isAtk else _S_NAME.MARK_OBJECTIVE_DEF
-        self.__doAttentionToItem(position, entryName, duration)
-
-    def __doAttentionToItem(self, position, entryName, duration):
-        newX = position.x * 2 if position.x >= 0 else position.x * -1 * 2 - 1
-        newZ = position.z * 2 if position.z >= 0 else position.z * -1 * 2 - 1
-        uniqueIndex = int(0.5 * (newX + newZ) * (newX + newZ + 1) + newZ)
-        matrix = Math.Matrix()
-        matrix.setTranslate(position)
-        if self._isCallbackExisting(uniqueIndex):
-            self._clearCallback(uniqueIndex)
-        model = self._addEntryEx(uniqueIndex, entryName, _C_NAME.PERSONAL, matrix=matrix, active=True)
-        if model:
-            self._invoke(model.getID(), 'playAnimation')
-            self._setCallback(uniqueIndex, duration)
-            self._playSound2D(settings.MINIMAP_ATTENTION_SOUND_ID)
-
-    def __onDestructibleEntityAdded(self, destEntity):
-        self.__hqsList[destEntity.destructibleEntityID] = destEntity.position
-
-    def __onSectorBaseAdded(self, sectorBase):
-        self.__baseList[sectorBase.baseID] = sectorBase.position
-
-    def __getNearestHQForPosition(self, clickPos, range_):
-        destructibleComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'destructibleEntityComponent', None)
-        if destructibleComponent is None:
-            LOG_ERROR('Expected DestructibleEntityComponent not present!')
-            return
-        else:
-            closestHqIdx, distance = destructibleComponent.getNearestDestructibleEntityID(clickPos)
-            destEntity = destructibleComponent.getDestructibleEntity(closestHqIdx)
-            return closestHqIdx if distance <= range_ and destEntity.isActive else None
-
-    def __getNearestBaseForPosition(self, clickPos, range_):
-        sectorBaseComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'sectorBaseComponent', None)
-        if sectorBaseComponent is None:
-            LOG_ERROR('Expected SectorBaseComponent not present!')
-            return (None, None)
-        else:
-            openBases = [ base for base in sectorBaseComponent.sectorBases if not base.isCaptured and base.active() ]
-            if not openBases:
-                return (None, None)
-
-            def getDistance(entity):
-                return entity.position.flatDistTo(clickPos)
-
-            closestBase = min(openBases, key=getDistance)
-            return (closestBase.baseID, ID_TO_BASENAME[closestBase.baseID]) if getDistance(closestBase) <= range_ else (None, None)
-
-    def _getPositionFromClick(self, x, y):
-        return makeMousePositionToEpicWorldPosition(x, y, self._parentObj.getVisualBounds(), self._hitAreaSize)
 
 
 class StepRepairPointEntriesPlugin(SimplePlugin):
@@ -680,7 +617,7 @@ class StepRepairPointEntriesPlugin(SimplePlugin):
                 self.__onStepRepairPointAdded(pt)
 
         else:
-            LOG_ERROR('Expected StepRepairPointComponent not present!')
+            _logger.error('Expected StepRepairPointComponent not present!')
         ctrl = self.sessionProvider.dynamic.progressTimer
         ctrl.onCircleStatusChanged += self.__onCircleStatusChanged
         return
@@ -740,7 +677,7 @@ class ProtectionZoneEntriesPlugin(SimplePlugin):
                 self.__onProtZoneAdded(zone.zoneID, zone.position, zone.bound)
 
         else:
-            LOG_ERROR('Expected ProtectionZoneComponent not present!')
+            _logger.error('Expected ProtectionZoneComponent not present!')
         return
 
     def fini(self):
@@ -754,7 +691,7 @@ class ProtectionZoneEntriesPlugin(SimplePlugin):
         lowerleft, upperright = bounds
         protZoneComp = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'protectionZoneComponent', None)
         if protZoneComp is None:
-            LOG_ERROR('Expected ProtectionZoneComponent not present!')
+            _logger.error('Expected ProtectionZoneComponent not present!')
             return
         else:
             zone = protZoneComp.getProtectionZoneById(protZone)
@@ -819,3 +756,105 @@ class SectorOverlayEntriesPlugin(SectorStatusEntriesPlugin):
         if not visible:
             return
         self.__onOverlayTriggered(True)
+
+
+class EpicMinimapPingPlugin(plugins.MinimapPingPlugin):
+
+    def __init__(self, parentObj):
+        super(EpicMinimapPingPlugin, self).__init__(parentObj)
+        self.__hqsList = {}
+        self.__baseList = {}
+        self._hitAreaSize = minimap_utils.EPIC_MINIMAP_HIT_AREA
+
+    def _getClickPosition(self, x, y):
+        return makeMousePositionToEpicWorldPosition(x, y, self._parentObj.getVisualBounds(), self._hitAreaSize)
+
+    def _getIdByBaseNumber(self, team, number):
+        return number
+
+    def _processCommandByPosition(self, commands, locationCommand, position):
+        hqIdx = self.__getNearestHQForPosition(position, _BASE_PING_RANGE)
+        if hqIdx:
+            commands.sendAttentionToObjective(hqIdx, self._arenaDP.getNumberOfTeam() == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER)
+            return
+        else:
+            baseIdx, baseName = self.__getNearestBaseForPosition(position, _BASE_PING_RANGE)
+            if baseIdx:
+                self._make3DPingBases(commands, (self._arenaDP.getNumberOfTeam(), 0, baseIdx), baseName)
+                return
+            locationID = self._getNearestLocationIDForPosition(position, _LOCATION_PING_RANGE)
+            if locationID is not None:
+                self._replyPing3DMarker(commands, locationID)
+                return
+            commands.sendAttentionToPosition3D(position, locationCommand)
+            return
+
+    def start(self):
+        super(EpicMinimapPingPlugin, self).start()
+        destructibleComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'destructibleEntityComponent', None)
+        if destructibleComponent is not None:
+            destructibleComponent.onDestructibleEntityAdded += self.__onDestructibleEntityAdded
+            hqs = destructibleComponent.destructibleEntities
+            for hq in hqs.values():
+                self.__onDestructibleEntityAdded(hq)
+
+        sectorBaseComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'sectorBaseComponent', None)
+        if sectorBaseComponent is not None:
+            sectorBases = sectorBaseComponent.sectorBases
+            for base in sectorBases:
+                self.__onSectorBaseAdded(base)
+
+        return
+
+    def stop(self):
+        super(EpicMinimapPingPlugin, self).stop()
+        destructibleComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'destructibleEntityComponent', None)
+        if destructibleComponent is not None:
+            destructibleComponent.onDestructibleEntityAdded -= self.__onDestructibleEntityAdded
+        return
+
+    def __onDestructibleEntityAdded(self, destEntity):
+        self.__hqsList[destEntity.destructibleEntityID] = destEntity.position
+
+    def __onSectorBaseAdded(self, sectorBase):
+        self.__baseList[sectorBase.baseID] = sectorBase.position
+
+    def __getNearestHQForPosition(self, clickPos, range_):
+        destructibleComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'destructibleEntityComponent', None)
+        if destructibleComponent is None:
+            _logger.error('Expected DestructibleEntityComponent not present!')
+            return
+        else:
+            closestHqIdx, distance = destructibleComponent.getNearestDestructibleEntityID(clickPos)
+            destEntity = destructibleComponent.getDestructibleEntity(closestHqIdx)
+            return closestHqIdx if distance <= range_ and destEntity.isActive else None
+
+    def __getNearestBaseForPosition(self, clickPos, range_):
+        sectorBaseComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'sectorBaseComponent', None)
+        if sectorBaseComponent is None:
+            _logger.error('Expected SectorBaseComponent not present!')
+            return (None, None)
+        else:
+            openBases = [ base for base in sectorBaseComponent.sectorBases if not base.isCaptured and base.active() ]
+            if not openBases:
+                return (None, None)
+
+            def getDistance(entity):
+                return entity.position.flatDistTo(clickPos)
+
+            closestBase = min(openBases, key=getDistance)
+            return (closestBase.baseID, ID_TO_BASENAME[closestBase.baseID]) if getDistance(closestBase) <= range_ else (None, None)
+
+
+class EpicTeleportPlugin(EpicMinimapPingPlugin):
+
+    def onMinimapClicked(self, x, y, buttonIdx):
+        if buttonIdx != _EMinimapMouseKey.KEY_MBL.value:
+            return
+        else:
+            player = BigWorld.player()
+            if player is not None and player.isTeleport:
+                position = self._getClickPosition(x, y)
+                result = BigWorld.collide(player.spaceID, (position.x, 1000.0, position.z), (position.x, -1000.0, position.z))
+                player.base.vehicle_teleport((position[0], result[0][1], position[2]), 0)
+            return

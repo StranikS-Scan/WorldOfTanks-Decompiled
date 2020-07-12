@@ -167,7 +167,8 @@ class DeathFreeCamMode(VideoCameraControlMode):
                 targetMode = CTRL_MODE_NAME.POSTMORTEM
                 BigWorld.player().inputHandler.onControlModeChanged(targetMode, postmortemParams=None, newVehicleID=toId, bPostmortemDelay=False, respawn=True, camMatrix=BigWorld.camera().matrix, transitionDuration=self._cameraTransitionDurations[targetMode])
                 BigWorld.player().inputHandler.onCameraChanged(targetMode, toId)
-                self.guiSessionProvider.switchToPostmortem(False)
+                if toId is None:
+                    self.guiSessionProvider.switchToPostmortem(False)
             return
 
     def __onRespawnInfoUpdated(self, respawnInfo):

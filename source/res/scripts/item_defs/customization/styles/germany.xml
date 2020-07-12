@@ -380,103 +380,6 @@
       </exclude>
     </vehicleFilter>
     <style>
-      <id>	240	</id>
-      <texture>	gui/maps/vehicles/styles/generic_custom_look_germany.png	</texture>
-      <description>	#vehicle_customization:main_style/generic_custom_look_germany_desc	</description>
-      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_germany_desc/long	</longDescriptionSpecial>
-      <userString>	#vehicle_customization:main_style/generic_custom_look_germany	</userString>
-      <tags>	progression_required	</tags>
-      <itemFilters>
-        <projection_decal>
-          <include>
-            <itemGroupName>	Progression Decals	</itemGroupName>
-          </include>
-        </projection_decal>
-      </itemFilters>
-      <outfits>
-        <outfit>
-          <season>	summer	</season>
-          <camouflages>
-            <item>
-              <id>	15118	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	671	</id>
-              <appliedTo>	13104	</appliedTo>
-            </item>
-            <item>
-              <id>	14618	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	winter	</season>
-          <camouflages>
-            <item>
-              <id>	15101	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	671	</id>
-              <appliedTo>	13104	</appliedTo>
-            </item>
-            <item>
-              <id>	14618	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	desert	</season>
-          <camouflages>
-            <item>
-              <id>	15105	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	671	</id>
-              <appliedTo>	13104	</appliedTo>
-            </item>
-            <item>
-              <id>	14618	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	event	</season>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/main_styles	</userString>
-    <season>	ALL	</season>
-    <historical>	true	</historical>
-    <priceGroup>	styles 700g	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <nations>	germany	</nations>
-      </include>
-      <exclude>
-        <vehicles>	germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <style>
       <id>	26	</id>
       <texture>	gui/maps/vehicles/styles/generic_custom_look_2_germany.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_2_germany_desc	</description>
@@ -1023,49 +926,34 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	false	</historical>
-    <priceGroup>	styles 1750g notInShop	</priceGroup>
+    <historical>	true	</historical>
+    <priceGroup>	styles 2500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <vehicles>	germany:G114_Skorpian	</vehicles>
+        <vehicles>	germany:G99_RhB_Waffentrager	</vehicles>
       </include>
     </vehicleFilter>
     <style>
-      <id>	331	</id>
-      <texture>	gui/maps/vehicles/styles/10years_skorpian.png	</texture>
-      <description>	#vehicle_customization:special_style/10years_skorpian_desc	</description>
-      <longDescriptionSpecial>	#vehicle_customization:special_style/10years_skorpian_desc/long	</longDescriptionSpecial>
+      <id>	326	</id>
+      <texture>	gui/maps/vehicles/styles/G99_RhB_Waffentrager_3Dst.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/G99_RhB_Waffentrager_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	G99_RhB_Waffentrager_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:special_style/10years_skorpian	</userString>
+      <userString>	#vehicle_customization:main_style/G99_RhB_Waffentrager_3Dst	</userString>
       <tags>	progression_required	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
           <camouflages>
             <item>
-              <id>	170	</id>
+              <id>	1	</id>
               <appliedTo>	4368	</appliedTo>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
             </item>
           </camouflages>
-          <modifications>
-            <item>	4	</item>
-          </modifications>
-          <paints>
-            <item>
-              <id>	54	</id>
-              <appliedTo>	30583	</appliedTo>
-            </item>
-          </paints>
-          <decals>
-            <item>
-              <id>	295	</id>
-              <appliedTo>	13104	</appliedTo>
-            </item>
-          </decals>
         </outfit>
       </outfits>
       <itemFilters>

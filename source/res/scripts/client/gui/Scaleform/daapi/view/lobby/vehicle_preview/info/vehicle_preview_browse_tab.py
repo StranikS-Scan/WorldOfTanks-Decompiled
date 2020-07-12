@@ -3,12 +3,15 @@
 from CurrentVehicle import g_currentPreviewVehicle
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import OFFER_CHANGED_EVENT
 from gui.Scaleform.daapi.view.meta.VehiclePreviewBrowseTabMeta import VehiclePreviewBrowseTabMeta
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.shared import g_eventBus
-from gui.shared.formatters import text_styles
+from gui.shared.formatters import text_styles, icons
 from gui.shared.money import Currency
 from gui.impl import backport
 from gui.impl.gen import R
 from helpers import dependency
+from helpers.i18n import makeString as _ms
 from skeletons.gui.shared import IItemsCache
 _MAX_LENGTH_FULL_DESCRIPTION_NO_KPI = 400
 _MAX_LENGTH_FULL_DESCRIPTION_WITH_KPI = 280
@@ -56,14 +59,14 @@ class VehiclePreviewBrowseTab(VehiclePreviewBrowseTabMeta):
                 maxDescriptionLength = _MAX_LENGTH_FULL_DESCRIPTION_WITH_KPI
                 bonuses = []
                 if not self.__isFrontlineCreditsOffer():
-                    bonuses.append({'icon': backport.image(R.images.gui.maps.shop.kpi.star_icon_benefits()),
-                     'title': text_styles.concatStylesToMultiLine(text_styles.highTitle(backport.text(R.strings.vehicle_preview.infoPanel.premium.freeExpMultiplier())), text_styles.main(backport.text(R.strings.vehicle_preview.infoPanel.premium.freeExpText())))})
+                    bonuses.append({'iconSrc': backport.image(R.images.gui.maps.shop.kpi.star_icon_benefits()),
+                     'labelStr': text_styles.concatStylesToMultiLine(text_styles.highTitle(backport.text(R.strings.vehicle_preview.infoPanel.premium.freeExpMultiplier())), text_styles.main(backport.text(R.strings.vehicle_preview.infoPanel.premium.freeExpText())))})
                 if not (item.isSpecial or self.__isFrontlineCreditsOffer()):
-                    bonuses.append({'icon': backport.image(R.images.gui.maps.shop.kpi.money_benefits()),
-                     'title': text_styles.concatStylesToMultiLine(text_styles.highTitle(backport.text(R.strings.vehicle_preview.infoPanel.premium.creditsMultiplier())), text_styles.main(backport.text(R.strings.vehicle_preview.infoPanel.premium.creditsText())))})
+                    bonuses.append({'iconSrc': backport.image(R.images.gui.maps.shop.kpi.money_benefits()),
+                     'labelStr': text_styles.concatStylesToMultiLine(text_styles.highTitle(backport.text(R.strings.vehicle_preview.infoPanel.premium.creditsMultiplier())), text_styles.main(backport.text(R.strings.vehicle_preview.infoPanel.premium.creditsText())))})
                 if not item.isCrewLocked:
-                    bonuses.append({'icon': backport.image(R.images.gui.maps.shop.kpi.crow_benefits()),
-                     'title': text_styles.concatStylesToMultiLine(text_styles.highTitle(backport.text(R.strings.vehicle_preview.infoPanel.premium.crewTransferTitle())), text_styles.main(backport.text(R.strings.vehicle_preview.infoPanel.premium.crewTransferText())))})
+                    bonuses.append({'iconSrc': backport.image(R.images.gui.maps.shop.kpi.crow_benefits()),
+                     'labelStr': text_styles.concatStylesToMultiLine(text_styles.highTitle(backport.text(R.strings.vehicle_preview.infoPanel.premium.crewTransferTitle())), text_styles.main(backport.text(R.strings.vehicle_preview.infoPanel.premium.crewTransferText())))})
                 builtInEquipmentIDs = item.getBuiltInEquipmentIDs()
                 builtInCount = len(builtInEquipmentIDs) if builtInEquipmentIDs else 0
                 if builtInCount > 0:
@@ -72,8 +75,8 @@ class VehiclePreviewBrowseTab(VehiclePreviewBrowseTabMeta):
                         mainText = equipment.userName
                     else:
                         mainText = backport.text(R.strings.vehicle_preview.infoPanel.premium.builtInEqupmentText(), value=builtInCount)
-                    bonuses.append({'icon': backport.image(R.images.gui.maps.shop.kpi.infinity_benefits()),
-                     'title': text_styles.concatStylesToMultiLine(text_styles.highTitle(backport.text(R.strings.vehicle_preview.infoPanel.premium.builtInEqupmentTitle())), text_styles.main(mainText))})
+                    bonuses.append({'iconSrc': backport.image(R.images.gui.maps.shop.kpi.infinity_benefits()),
+                     'labelStr': text_styles.concatStylesToMultiLine(text_styles.highTitle(backport.text(R.strings.vehicle_preview.infoPanel.premium.builtInEqupmentTitle())), text_styles.main(mainText))})
             else:
                 maxDescriptionLength = _MAX_LENGTH_FULL_DESCRIPTION_NO_KPI
                 bonuses = None
@@ -81,7 +84,12 @@ class VehiclePreviewBrowseTab(VehiclePreviewBrowseTabMeta):
             hasTooltip = len(description) > maxDescriptionLength
             if hasTooltip:
                 description = description[:maxDescriptionLength - 3] + '...'
-            self.as_setDataS(text_styles.main(description), hasTooltip, g_currentPreviewVehicle.getVehiclePreviewType(), bonuses)
+            icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_INFO, 24, 24, -7, -4)
+            self.as_setDataS({'historicReferenceTxt': text_styles.main(description),
+             'showTooltip': hasTooltip,
+             'vehicleType': g_currentPreviewVehicle.getVehiclePreviewType(),
+             'titleInfo': '%s%s' % (_ms(VEHICLE_PREVIEW.INFOPANEL_TAB_ELITEFACTSHEET_INFO), icon),
+             'benefitsData': bonuses})
         return
 
     def __onOfferChanged(self, event):

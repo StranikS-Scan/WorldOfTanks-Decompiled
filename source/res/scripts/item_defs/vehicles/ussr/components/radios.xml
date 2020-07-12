@@ -47,10 +47,14 @@
     <_10RKM_IGR>	60004	</_10RKM_IGR>
     <Mk19R_IGR>	60005	</Mk19R_IGR>
     <_10RK-26_IGR>	60006	</_10RK-26_IGR>
+    <_10RK_SH>	314	</_10RK_SH>
+    <_12RT_SH>	315	</_12RT_SH>
+    <R113_SH>	316	</R113_SH>
     <_10RB_bootcamp>	64001	</_10RB_bootcamp>
     <_9R_O_bootcamp>	64002	</_9R_O_bootcamp>
     <_71-TK-3_bootcamp>	64003	</_71-TK-3_bootcamp>
     <_9R_bootcamp>	64004	</_9R_bootcamp>
+    <Development_Radio>	65000	</Development_Radio>
   </ids>
   <shared>
     <Alarm_flags_bot>
@@ -654,5 +658,59 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </_10RK-26_IGR>
+    <Development_Radio>
+      <userString>	Development Radio	</userString>
+      <tags></tags>
+      <notInShop>	true	</notInShop>
+      <level>	1	</level>
+      <price>	0	</price>
+      <weight>	1	</weight>
+      <distance>	90	</distance>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+    </Development_Radio>
+    <_10RK_SH>
+      <userString>	#ussr_vehicles:_10RK_SH	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	2000	</distance>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <radarRadius>	350	</radarRadius>
+      <radarCooldown>	30	</radarCooldown>
+    </_10RK_SH>
+    <_12RT_SH>
+      <userString>	#ussr_vehicles:_12RT_SH	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	2000	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <radarRadius>	370	</radarRadius>
+      <radarCooldown>	20	</radarCooldown>
+    </_12RT_SH>
+    <R113_SH>
+      <userString>	#ussr_vehicles:R113_SH	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	2000	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <radarRadius>	450	</radarRadius>
+      <radarCooldown>	45	</radarCooldown>
+    </R113_SH>
   </shared>
 </radios.xml>

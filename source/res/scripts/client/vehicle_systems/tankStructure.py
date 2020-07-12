@@ -26,6 +26,7 @@ class TankCollisionPartNames(object):
     HULL = 'hullCollision'
     TURRET = 'turretCollision'
     GUN = 'gunCollision'
+    WHEEL = 'wheelCollision'
     ALL = (CHASSIS,
      HULL,
      TURRET,
@@ -181,7 +182,7 @@ def getPartModelsFromDesc(vehicleDesc, modelsSetParams):
         elif modelsSetParams.state != 'undamaged':
             skin = chooseCrashSkin(part.modelsSets)
         else:
-            skin = part.modelsSets['default']
+            skin = part.models
         path = skin.getPathByStateName(modelsSetParams.state)
         paths.append(path)
 

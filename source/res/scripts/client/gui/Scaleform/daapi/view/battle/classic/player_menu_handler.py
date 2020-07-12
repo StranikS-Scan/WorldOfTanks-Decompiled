@@ -8,7 +8,7 @@ from gui.shared import events, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.denunciator import DENUNCIATIONS, BattleDenunciator, DENUNCIATIONS_MAP
 from helpers import dependency
 from helpers import i18n
-from constants import DENUNCIATIONS_PER_DAY
+from constants import DENUNCIATIONS_PER_DAY, IS_CHINA
 from messenger.m_constants import PROTO_TYPE, UserEntityScope
 from messenger.proto import proto_getter
 from messenger.storage import storage_getter
@@ -32,8 +32,6 @@ _OPTIONS_HANDLERS = {USER.ADD_TO_FRIENDS: 'addFriend',
  USER.REMOVE_FROM_IGNORED: 'unsetIgnored',
  BATTLE_CHAT_OPTION_ID.ENABLE_COMMUNICATIONS: 'enableCommunications',
  BATTLE_CHAT_OPTION_ID.DISABLE_COMMUNICATIONS: 'disableCommunications',
- USER.SET_MUTED: 'setMuted',
- USER.UNSET_MUTED: 'unsetMuted',
  DENUNCIATIONS.INCORRECT_BEHAVIOR: 'appealIncorrectBehavior',
  DENUNCIATIONS.NOT_FAIR_PLAY: 'appealNotFairPlay',
  DENUNCIATIONS.FORBIDDEN_NICK: 'appealForbiddenNick',
@@ -41,18 +39,22 @@ _OPTIONS_HANDLERS = {USER.ADD_TO_FRIENDS: 'addFriend',
  DYN_SQUAD_OPTION_ID.SENT_INVITATION: 'sendInvitation',
  DYN_SQUAD_OPTION_ID.ACCEPT_INVITATION: 'acceptInvitation',
  DYN_SQUAD_OPTION_ID.REJECT_INVITATION: 'rejectInvitation'}
+if not IS_CHINA:
+    _OPTIONS_HANDLERS.update({USER.SET_MUTED: 'setMuted',
+     USER.UNSET_MUTED: 'unsetMuted'})
 _OPTION_ICONS = {USER.ADD_TO_FRIENDS: 'addToFriends',
  USER.REMOVE_FROM_FRIENDS: 'removeFromFriends',
  USER.ADD_TO_IGNORED: 'addToBlacklist',
  USER.REMOVE_FROM_IGNORED: 'removeFromBlacklist',
  BATTLE_CHAT_OPTION_ID.ENABLE_COMMUNICATIONS: 'enableCommunications',
  BATTLE_CHAT_OPTION_ID.DISABLE_COMMUNICATIONS: 'disableCommunications',
- USER.SET_MUTED: 'disableVoice',
- USER.UNSET_MUTED: 'enableVoice',
  DYN_SQUAD_OPTION_ID.SENT_INVITATION: 'addToSquad',
  DYN_SQUAD_OPTION_ID.IN_SQUAD: 'inSquad',
  DYN_SQUAD_OPTION_ID.ACCEPT_INVITATION: 'acceptInvitation',
  DYN_SQUAD_OPTION_ID.REJECT_INVITATION: 'rejectInvitation'}
+if not IS_CHINA:
+    _OPTION_ICONS.update({USER.SET_MUTED: 'disableVoice',
+     USER.UNSET_MUTED: 'enableVoice'})
 _BOT_NO_ACTIONS_OPTION_ID = 'botNoActions'
 
 class PlayerContextMenuInfo(object):
@@ -162,12 +164,15 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
 
     def _generateOptions(self, ctx=None):
         options = []
+        if self.sessionProvider.isReplayPlaying:
+            return options
         if not self.__userInfo.isBot:
             options = self.__addDyncSquadInfo(options)
             options = self.__addFriendshipInfo(options)
             options = self.__addIgnoreInfo(options)
             options = self.__addCommunicationInfo(options)
-            options = self.__addMutedInfo(options)
+            if not IS_CHINA:
+                options = self.__addMutedInfo(options)
             options = self.__addDenunciationsInfo(options)
         else:
             options = self.__addBotInfo(options)

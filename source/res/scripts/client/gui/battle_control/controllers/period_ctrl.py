@@ -30,6 +30,9 @@ class IAbstractPeriodView(IPlayersPanelsSwitcher):
     def setPeriod(self, period):
         pass
 
+    def setAdditionalInfo(self, additionalInfo):
+        pass
+
     def setTotalTime(self, totalTime):
         pass
 
@@ -145,6 +148,7 @@ class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
         self._endTime = endTime
         self._length = length
         self.__invokeViewPeriodUpdate()
+        self.__invokeAdditionInfoUpdate(additionalInfo)
         self.__setCallback()
 
     def invalidatePeriodInfo(self, period, endTime, length, additionalInfo):
@@ -152,6 +156,7 @@ class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
         self._endTime = endTime
         self._length = length
         self.__invokeViewPeriodUpdate()
+        self.__invokeAdditionInfoUpdate(additionalInfo)
         self.__clearCallback()
         self.__setCallback()
         self._setArenaWinStatus(additionalInfo)
@@ -247,6 +252,13 @@ class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
     def __invokeViewPeriodUpdate(self):
         for view in self._viewComponents:
             view.setPeriod(self._period)
+
+    def __invokeAdditionInfoUpdate(self, additionalInfo):
+        if additionalInfo is not None:
+            for view in self._viewComponents:
+                view.setAdditionalInfo(additionalInfo)
+
+        return
 
     def __tick(self):
         floatLength = self._calculate()

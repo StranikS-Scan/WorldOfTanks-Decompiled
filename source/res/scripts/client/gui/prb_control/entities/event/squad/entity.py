@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/event/squad/entity.py
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
-from gui.prb_control.entities.event.squad.scheduler import EventBattleSquadScheduler
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base.squad.entity import SquadEntryPoint, SquadEntity
 from gui.prb_control.entities.event.squad.actions_handler import EventBattleSquadActionsHandler
@@ -43,6 +42,3 @@ class EventBattleSquadEntity(SquadEntity):
 
     def _createActionsHandler(self):
         return EventBattleSquadActionsHandler(self)
-
-    def _createScheduler(self):
-        return EventBattleSquadScheduler(self)

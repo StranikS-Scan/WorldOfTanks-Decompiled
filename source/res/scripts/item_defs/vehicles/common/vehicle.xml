@@ -1,4 +1,5 @@
 <vehicle.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <lodLevels>
     <NEAR>	30	</NEAR>
     <SPLINE_TRACK>	50	</SPLINE_TRACK>
@@ -27,6 +28,10 @@
 			200
 			400
 			800	</explosionCandleVolumes>
+    <radarDefaults>
+      <radarRadius>	0.	</radarRadius>
+      <radarCooldown>	0.	</radarCooldown>
+    </radarDefaults>
   </miscParams>
   <defaultVehicleEffects>
     <damagedStateGroup>	medium	</damagedStateGroup>
@@ -128,6 +133,7 @@
     <largeMedkit>	NoneExtra : Repairkit	</largeMedkit>
     <smallRepairkit>	NoneExtra : Repairkit	</smallRepairkit>
     <largeRepairkit>	NoneExtra : Repairkit	</largeRepairkit>
+    <regenerationKit>	NoneExtra : RegenerationKit	</regenerationKit>
     <lendLeaseOil>	NoneExtra : Fuel	</lendLeaseOil>
     <gasoline100>	NoneExtra : Fuel	</gasoline100>
     <gasoline105>	NoneExtra : Fuel	</gasoline105>
@@ -156,6 +162,7 @@
     </overturn>
     <drowning>	NoneExtra : Drowning	</drowning>
     <burnout>	NoneExtra : Burnout	</burnout>
+    <afterburning>	NoneExtra : Afterburning	</afterburning>
     <engineHealth>	DamageMarker : EngineHealth	  <sounds>
         <critical>	engine_damaged	</critical>
         <destroyed>	engine_destroyed	</destroyed>
@@ -285,6 +292,22 @@
     <siegeMode>	NoneExtra : SiegeMode	</siegeMode>
     <tuner>	NoneExtra: Tuner	</tuner>
     <builtinRepairkit>	NoneExtra : Repairkit	</builtinRepairkit>
+    <dualShoot>	ShowShootingMultiGun : DualGunShoot	</dualShoot>
+    <charger>	NoneExtra : DualGunCharger	</charger>
+    <large_repairkit_battle_royale>	NoneExtra : RepairkitBattleRoyale	</large_repairkit_battle_royale>
+    <overturn_battle_royale>	NoneExtra : OverturnBattleRoyale	  <isOnboardShotAllowed>	true	</isOnboardShotAllowed>
+      <gameplayFactors>
+        <reloadTime>	2.0	</reloadTime>
+        <turretRotationSpeed>	0.5	</turretRotationSpeed>
+        <gunRotationSpeed>	0.5	</gunRotationSpeed>
+        <aimingTime>	2.0	</aimingTime>
+        <shotDispersion>	2.0	</shotDispersion>
+        <visionRadius>	0.5	</visionRadius>
+      </gameplayFactors>
+    </overturn_battle_royale>
+    <afterburning_battle_royale>	AfterburningBattleRoyale : AfterburningBattleRoyale	</afterburning_battle_royale>
+    <trappoint>	NoneExtra : TrapPoint	</trappoint>
+    <repairpoint>	NoneExtra : TrapPoint	</repairpoint>
   </extras>
   <deviceExtras>
     <devices>

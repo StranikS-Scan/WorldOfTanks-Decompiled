@@ -5,12 +5,12 @@ import BigWorld
 import MusicControllerWWISE
 import constants
 from CurrentVehicle import g_currentVehicle
-from GUI import WGUIBackgroundBlur
 from PlayerEvents import g_playerEvents
 from adisp import process, async
 from client_request_lib.exceptions import ResponseCodes
 from debug_utils import LOG_DEBUG
 from gui import makeHtmlString
+from gui.impl.gen import R
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.event_boards.formaters import getClanTag
@@ -18,10 +18,11 @@ from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.meta.BattleQueueMeta import BattleQueueMeta
 from gui.Scaleform.daapi.view.meta.BattleStrongholdsQueueMeta import BattleStrongholdsQueueMeta
 from gui.Scaleform.framework import ViewTypes
+from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
-from gui.impl.gen import R
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.prb_control import prb_getters, prbEntityProperty
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.events_dispatcher import g_eventDispatcher
@@ -98,6 +99,12 @@ class _QueueProvider(object):
     def getTankInfoLabel(self):
         return makeString(MENU.PREBATTLE_TANKLABEL)
 
+    def getTankIcon(self, vehicle):
+        return getTypeBigIconPath(vehicle.type)
+
+    def getLayoutStr(self):
+        pass
+
     def forceStart(self):
         currPlayer = BigWorld.player()
         if currPlayer is not None and hasattr(currPlayer, 'createArenaFromQueue'):
@@ -120,7 +127,7 @@ class _RandomQueueProvider(_QueueProvider):
         else:
             vClasses = []
             vClassesLen = 0
-        self._proxy.flashObject.as_setPlayers(makeHtmlString(_HTMLTEMP_PLAYERSLABEL, 'players', {'count': sum(vClasses)}))
+        self._createCommonPlayerString(sum(vClasses))
         if vClassesLen:
             vClassesData = []
             for vClass, message in TYPES_ORDERED:
@@ -138,11 +145,14 @@ class _RandomQueueProvider(_QueueProvider):
         return self._needAdditionalInfo
 
     def additionalInfo(self):
-        return text_styles.main(backport.text(R.strings.menu.prebattle.waitingTimeWarning()))
+        return text_styles.main(makeString(MENU.PREBATTLE_WAITINGTIMEWARNING))
 
     @staticmethod
     def _isStartButtonDisplayed(vClasses):
         return constants.IS_DEVELOPMENT and sum(vClasses) > 1
+
+    def _createCommonPlayerString(self, playerCount):
+        self._proxy.flashObject.as_setPlayers(makeHtmlString(_HTMLTEMP_PLAYERSLABEL, 'players', {'count': playerCount}))
 
 
 class _EpicQueueProvider(_RandomQueueProvider):
@@ -158,24 +168,38 @@ class _EpicQueueProvider(_RandomQueueProvider):
 
 
 class _EventQueueProvider(_RandomQueueProvider):
-
-    def additionalInfo(self):
-        return text_styles.main(backport.text(R.strings.menu.prebattle.eventWaitingTimeWarning()))
+    pass
 
 
 class _RankedQueueProvider(_RandomQueueProvider):
     pass
 
 
-class _BobQueueProvider(_RandomQueueProvider):
-    pass
+class _BattleRoyaleQueueProvider(_RandomQueueProvider):
+
+    def processQueueInfo(self, qInfo):
+        playersCount = qInfo.get('players', 0)
+        self._createCommonPlayerString(playersCount)
+        modesData = []
+        for mode in constants.BattleRoyaleMode.ALL:
+            modesData.append({'type': backport.text(R.strings.menu.prebattle.battleRoyale.dyn(mode)()),
+             'icon': RES_ICONS.getBattleRoyaleModeIconPath(mode),
+             'count': qInfo.get(mode, 0)})
+
+        self._proxy.as_setDPS(modesData)
+
+    def getTankIcon(self, vehicle):
+        return RES_ICONS.getBattleRoyaleTankIconPath(vehicle.nationName)
+
+    def getLayoutStr(self):
+        pass
 
 
 _PROVIDER_BY_QUEUE_TYPE = {constants.QUEUE_TYPE.RANDOMS: _RandomQueueProvider,
  constants.QUEUE_TYPE.EVENT_BATTLES: _EventQueueProvider,
  constants.QUEUE_TYPE.RANKED: _RankedQueueProvider,
  constants.QUEUE_TYPE.EPIC: _EpicQueueProvider,
- constants.QUEUE_TYPE.BOB: _BobQueueProvider}
+ constants.QUEUE_TYPE.BATTLE_ROYALE: _BattleRoyaleQueueProvider}
 
 def _providerFactory(proxy, qType):
     return _PROVIDER_BY_QUEUE_TYPE.get(qType, _QueueProvider)(proxy, qType)
@@ -189,7 +213,7 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         self.__createTime = 0
         self.__timerCallback = None
         self.__provider = None
-        self._blur = WGUIBackgroundBlur()
+        self._blur = CachedBlur()
         return
 
     @prbEntityProperty
@@ -214,7 +238,7 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
 
     def _populate(self):
         super(BattleQueue, self)._populate()
-        self._blur.enable = True
+        self._blur.enable()
         self.fireEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': True}), EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.GameEvent.SHOW_EXTERNAL_COMPONENTS, self._onShowExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.HIDE_EXTERNAL_COMPONENTS, self._onHideExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
@@ -229,7 +253,7 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         g_playerEvents.onArenaCreated -= self.onStartBattle
         self.removeListener(events.GameEvent.SHOW_EXTERNAL_COMPONENTS, self._onShowExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.HIDE_EXTERNAL_COMPONENTS, self._onHideExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
-        self._blur.enable = False
+        self._blur.fini()
         self.fireEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': False}), EVENT_BUS_SCOPE.LOBBY)
         super(BattleQueue, self)._dispose()
 
@@ -254,14 +278,16 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
             vehicle = g_currentVehicle.item
             textLabel = self.__provider.getTankInfoLabel()
             tankName = vehicle.shortUserName
-            iconPath = getTypeBigIconPath(vehicle.type)
+            iconPath = self.__provider.getTankIcon(vehicle)
+            layoutStr = self.__provider.getLayoutStr()
             self.as_setTypeInfoS({'iconLabel': iconlabel,
              'title': title,
              'description': description,
              'additional': additional,
              'tankLabel': text_styles.main(textLabel),
              'tankIcon': iconPath,
-             'tankName': tankName})
+             'tankName': tankName,
+             'layoutStr': layoutStr})
             return
 
     def __stopUpdateScreen(self):
@@ -297,10 +323,10 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         return self.__provider
 
     def _onHideExternals(self, _):
-        self._blur.enable = False
+        self._blur.disable()
 
     def _onShowExternals(self, _):
-        self._blur.enable = True
+        self._blur.enable()
 
 
 class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmblemsHelper, IGlobalListener):
@@ -316,7 +342,7 @@ class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmble
         self.__groups = []
         self.__battleQueueVO = {}
         self.__imagesFetchCoordinator = ImagesFetchCoordinator()
-        self._blur = WGUIBackgroundBlur()
+        self._blur = CachedBlur()
         return
 
     @prbEntityProperty
@@ -355,7 +381,7 @@ class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmble
 
     def _populate(self):
         super(BattleStrongholdsQueue, self)._populate()
-        self._blur.enable = True
+        self._blur.enable()
         self.fireEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': True}), EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.GameEvent.SHOW_EXTERNAL_COMPONENTS, self._onShowExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.HIDE_EXTERNAL_COMPONENTS, self._onHideExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
@@ -379,7 +405,7 @@ class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmble
         self.__imagesFetchCoordinator.fini()
         self.removeListener(events.GameEvent.SHOW_EXTERNAL_COMPONENTS, self._onShowExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.HIDE_EXTERNAL_COMPONENTS, self._onHideExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
-        self._blur.enable = False
+        self._blur.fini()
         self.fireEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': False}), EVENT_BUS_SCOPE.LOBBY)
         super(BattleStrongholdsQueue, self)._dispose()
 
@@ -530,7 +556,7 @@ class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmble
         g_eventDispatcher.loadHangar()
 
     def _onHideExternals(self, _):
-        self._blur.enable = False
+        self._blur.disable()
 
     def _onShowExternals(self, _):
-        self._blur.enable = True
+        self._blur.enable()

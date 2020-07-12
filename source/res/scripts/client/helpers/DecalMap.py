@@ -36,13 +36,13 @@ class DecalMap(object):
     def getIndex(self, name):
         if not self.__texMap.has_key(name):
             if name != '':
-                LOG_ERROR("Invalid texture name '%s'" % name)
+                LOG_ERROR("Invalid texture name '%s'" % name, stack=True)
             return -1
         return self.__texMap[name]
 
     def getTextureSet(self, name):
         if not self.__textureSets.has_key(name):
-            LOG_ERROR("Invalid texture set name '%s'" % name)
+            LOG_ERROR("Invalid texture set name '%s'" % name, stack=True)
             return dict()
         return self.__textureSets[name]
 

@@ -22,6 +22,7 @@
     <Skoda_AHK>	20	</Skoda_AHK>
     <Praga_AXK>	21	</Praga_AXK>
     <Skoda_16_AH_145_A>	22	</Skoda_16_AH_145_A>
+    <Development_Engine>	65000	</Development_Engine>
   </ids>
   <shared>
     <Hanomag_WD_50PS>
@@ -380,5 +381,23 @@
       <rpm_min>	280	</rpm_min>
       <rpm_max>	2360	</rpm_max>
     </Skoda_16_AH_145_A>
+    <Development_Engine>
+      <userString>	Development Engine	</userString>
+      <tags>	diesel	</tags>
+      <level>	5	</level>
+      <notInShop>	true	</notInShop>
+      <price>	1	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	540	</power>
+      <weight>	750	</weight>
+      <maxHealth>	105	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <notInShop>	true	</notInShop>
+      <rpm_min>	376	</rpm_min>
+      <rpm_max>	2072	</rpm_max>
+    </Development_Engine>
   </shared>
 </engines.xml>

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/conditions.py
+import logging
 import operator
 import typing
 import weakref
@@ -22,6 +23,7 @@ from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from typing import Optional
+_logger = logging.getLogger(__name__)
 _AVAILABLE_GUI_TYPES_LABELS = {constants.ARENA_BONUS_TYPE.REGULAR: constants.ARENA_GUI_TYPE.RANDOM,
  constants.ARENA_BONUS_TYPE.TRAINING: constants.ARENA_GUI_TYPE.TRAINING,
  constants.ARENA_BONUS_TYPE.TOURNAMENT_REGULAR: constants.ARENA_GUI_TYPE.TRAINING}
@@ -57,7 +59,7 @@ class GROUP_TYPE(CONST_CONTAINER):
     AND = 'and'
 
 
-_SORT_ORDER = ('igrType', 'premiumPlusAccount', 'premiumAccount', 'inClan', 'GR', 'accountDossier', 'vehiclesUnlocked', 'vehiclesOwned', 'token', 'hasReceivedMultipliedXP', 'vehicleDossier', 'vehicleDescr', 'bonusTypes', 'isSquad', 'mapCamouflageKind', 'geometryNames', 'win', 'isAlive', 'achievements', 'results', 'unitResults', 'vehicleKills', 'vehicleDamage', 'vehicleStun', 'clanKills', 'multiStunEventcumulative', 'vehicleKillsCumulative', 'vehicleDamageCumulative', 'vehicleStunCumulative')
+_SORT_ORDER = ('igrType', 'premiumPlusAccount', 'premiumAccount', 'inClan', 'GR', 'accountDossier', 'vehiclesUnlocked', 'vehiclesOwned', 'token', 'hasReceivedMultipliedXP', 'vehicleDossier', 'vehicleDescr', 'bonusTypes', 'isSquad', 'mapCamouflageKind', 'geometryNames', 'win', 'isAlive', 'achievements', 'results', 'unitResults', 'vehicleKills', 'vehicleDamage', 'vehicleStun', 'clanKills', 'multiStunEventcumulative', 'cumulativeExt', 'vehicleKillsCumulative', 'vehicleDamageCumulative', 'vehicleStunCumulative')
 _SORT_ORDER_INDICES = dict(((name, idx) for idx, name in enumerate(_SORT_ORDER)))
 
 def _handleRelation(relation, source, toCompare):
@@ -1133,6 +1135,9 @@ class BattlesCount(_Cumulativable):
         for bType in self._bonusTypes:
             result.append(i18n.makeString(QUESTS.getDetailsDossier(bType, self._getKey())))
 
+        if not result:
+            _logger.warning('There are no matching condition strings for selected arenaBonusTypes')
+            return ''
         return ', '.join(result)
 
     def getTotalValue(self):

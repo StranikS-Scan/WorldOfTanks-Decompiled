@@ -58,6 +58,7 @@
     <_12150LS_IGR>	60002	</_12150LS_IGR>
     <_12150L7_IGR>	60003	</_12150L7_IGR>
     <_Type97_bootcamp>	64001	</_Type97_bootcamp>
+    <Development_Engine>	65000	</Development_Engine>
   </ids>
   <shared>
     <NORINCO_12150L7>
@@ -1014,5 +1015,23 @@
       <rpm_min>	365	</rpm_min>
       <rpm_max>	2104	</rpm_max>
     </_12150L7_IGR>
+    <Development_Engine>
+      <userString>	Development Engine	</userString>
+      <tags>	diesel	</tags>
+      <level>	5	</level>
+      <notInShop>	true	</notInShop>
+      <price>	1	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	540	</power>
+      <weight>	750	</weight>
+      <maxHealth>	105	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <notInShop>	true	</notInShop>
+      <rpm_min>	376	</rpm_min>
+      <rpm_max>	2072	</rpm_max>
+    </Development_Engine>
   </shared>
 </engines.xml>

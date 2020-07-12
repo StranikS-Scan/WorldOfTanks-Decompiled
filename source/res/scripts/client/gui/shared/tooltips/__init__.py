@@ -62,6 +62,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     EPIC_PRESTIGE_PROGRESS_BLOCK_INFO = 'epicPrestigeProgressBlockInfo'
     BLUEPRINTS = 'blueprintsInfo'
     FRONTLINE = 'frontlineInfo'
+    BATTLE_ROYALE_SELECTOR_INFO = 'battleRoyaleSelectorInfo'
     SQUAD_BONUS = 'squadBonus'
     SESSION_STATS = 'sessionStats'
     TRADE_IN_INFO = 'tradeInInfo'
@@ -69,8 +70,6 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     TRADE_IN_STATE_NOT_AVAILABLE = 'tradeInStateNotAvailable'
     DEMOUNT_KIT = 'demountKit'
     VEHICLE_COLLECTOR = 'vehicleCollector'
-    BOB_SELECTOR_INFO = 'bobSelectorInfo'
-    BOB_CALENDAR_DAY = 'bobCalendarDay'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -281,7 +280,13 @@ def getUnlockPrice(compactDescr, parentCD=None, vehicleLevel=UNKNOWN_VEHICLE_LEV
     pricesDict = g_techTreeDP.getUnlockPrices(compactDescr)
 
     def getUnlockProps(isAvailable, vehCompDescr, unlockProps=None):
-        unlockPrice = unlockProps.xpCost if unlockProps is not None else pricesDict.get(vehCompDescr, 0)
+        if unlockProps is not None:
+            unlockPrice = unlockProps.xpCost
+        elif vehCompDescr in pricesDict:
+            unlockPrice = pricesDict[vehCompDescr]
+        else:
+            vehicle = itemsCache.items.getItemByCD(parentCD)
+            _, unlockPrice, _ = vehicle.getUnlockDescrByIntCD(compactDescr)
         oldPrice = unlockProps.xpFullCost if unlockProps is not None else unlockPrice
         discount = unlockProps.discount if unlockProps is not None else 0
         pVehXp = xpVehs.get(vehCompDescr, 0)
@@ -303,12 +308,6 @@ def getUnlockPrice(compactDescr, parentCD=None, vehicleLevel=UNKNOWN_VEHICLE_LEV
         return getUnlockProps(isAvailable, unlockProps.parentID, unlockProps)
     else:
         isAvailable = compactDescr in unlocks
-        if not pricesDict:
-            return (isAvailable,
-             0,
-             0,
-             0,
-             0)
         if parentCD is not None:
             return getUnlockProps(isAvailable, parentCD)
         vehsCompDescrs = [ compDescr for compDescr in pricesDict.keys() if compDescr in unlocks ]

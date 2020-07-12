@@ -74,18 +74,28 @@ class _BattleCommandError(IChatError):
 
 class _BattleCommandCoolDownError(_BattleCommandError):
 
-    def __init__(self, command):
+    def __init__(self, command, remainingTime=0.0):
         super(_BattleCommandCoolDownError, self).__init__(command)
-        self._coolDown = command.cooldownPeriod
+        self._coolDown = remainingTime if remainingTime > 0 else command.cooldownPeriod
 
     def getMessage(self):
-        return i18n.makeString(I18N_MESSENGER.CLIENT_ERROR_COMMANDINCOOLDOWN_LIMITED, self._example, self._coolDown)
+        return i18n.makeString(I18N_MESSENGER.CLIENT_ERRORS_COMMANDINCOOLDOWN_SUSPENDEDTEXT, self._coolDown)
 
 
 class _BattleCommandGenericError(_BattleCommandError):
 
     def getMessage(self):
         return i18n.makeString(I18N_MESSENGER.CLIENT_ERROR_COMMAND_GENERIC_ERROR, strArg1=self._example)
+
+
+class _BattleCommandTeamCooldownError(_BattleCommandError):
+
+    def __init__(self, command, remainingTime):
+        super(_BattleCommandTeamCooldownError, self).__init__(command)
+        self._coolDown = remainingTime
+
+    def getMessage(self):
+        return i18n.makeString(I18N_MESSENGER.SERVER_ERRORS_COMMANDINTEAMCOOLDOWN_MESSAGE)
 
 
 class _SimpleActionError(ClientActionError):
@@ -126,14 +136,14 @@ class _AdminCommandCoolDownError(_AdminCommandError):
         super(_AdminCommandCoolDownError, self).__init__(i18n.makeString(I18N_MESSENGER.CLIENT_ERROR_COMMAND_IN_COOLDOWN_WO_NAME, floatArg1=_LIMITS.ADMIN_COMMANDS_FROM_CLIENT_COOLDOWN_SEC))
 
 
-def createCoolDownError(actionID):
+def createCoolDownError(actionID, remainingTime=0.0):
     command = _ACTIONS.adminChatCommandFromActionID(actionID)
     if command:
         return _AdminCommandCoolDownError()
     else:
         command = _ACTIONS.battleChatCommandFromActionID(actionID)
         if command:
-            return _BattleCommandCoolDownError(command)
+            return _BattleCommandCoolDownError(command, remainingTime)
         if _ACTIONS.isRateLimitedBroadcastFromClient(actionID):
             coolDown = _LIMITS.BROADCASTS_FROM_CLIENT_COOLDOWN_SEC
         elif actionID == _ACTIONS.FIND_USERS_BY_NAME:
@@ -172,6 +182,9 @@ def createBattleCommandError(args, command):
         error = _BattleCommandCoolDownError(command)
     elif errorID == _ERRORS.GENERIC_ERROR:
         error = _BattleCommandGenericError(command)
+    elif errorID == _ERRORS.COMMAND_IN_TEAM_COOLDOWN:
+        cooldownTimeRemaining = args['floatArg1']
+        error = _BattleCommandTeamCooldownError(command, cooldownTimeRemaining)
     return error
 
 

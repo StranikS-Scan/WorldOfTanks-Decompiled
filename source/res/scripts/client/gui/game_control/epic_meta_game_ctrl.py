@@ -2,24 +2,19 @@
 # Embedded file name: scripts/client/gui/game_control/epic_meta_game_ctrl.py
 import logging
 from itertools import chain
-from collections import defaultdict
 import BigWorld
 import WWISE
 import Event
-from shared_utils import collapseIntervals
-from gui.periodic_battles.models import PrimeTime
 from constants import ARENA_BONUS_TYPE, PREBATTLE_TYPE, QUEUE_TYPE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared import event_dispatcher
 from helpers import dependency, i18n, time_utils
 from items import vehicles
-from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from skeletons.connection_mgr import IConnectionManager
-from gui.ranked_battles.constants import PrimeTimeStatus
+from season_provider import SeasonProvider
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from CurrentVehicle import g_currentVehicle
@@ -30,15 +25,14 @@ from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import FUNCTIONAL_FLAG
 from helpers.statistics import HARDWARE_SCORE_PARAMS
-from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY
 from account_helpers.AccountSettings import AccountSettings, GUI_START_BEHAVIOR
 from gui import DialogsInterface
 from adisp import async, process
-from skeletons.account_helpers.settings_core import ISettingsCore
 from account_helpers.settings_core.settings_constants import GRAPHICS
-from season_provider import SeasonProvider
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_cycle_helpers import getCurrentWelcomeScreenVersion
 from player_ranks import getSettings as getRankSettings
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.battle_results import IBattleResultsService
 _logger = logging.getLogger(__name__)
 _VALID_PREBATTLE_TYPES = [PREBATTLE_TYPE.EPIC, PREBATTLE_TYPE.EPIC_TRAINING]
 
@@ -109,18 +103,21 @@ class _FrontLineSounds(object):
             WWISE.WW_setState(_FrontLineSounds.__STATE_GROUP, _FrontLineSounds.__STATE_DESELECTED)
 
 
-class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, SeasonProvider, IGlobalListener):
-    itemsCache = dependency.descriptor(IItemsCache)
-    battleResultsService = dependency.descriptor(IBattleResultsService)
-    connectionMgr = dependency.descriptor(IConnectionManager)
-    lobbyContext = dependency.descriptor(ILobbyContext)
-    settingsCore = dependency.descriptor(ISettingsCore)
+class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGameController, IGlobalListener):
     bootcampController = dependency.descriptor(IBootcampController)
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __settingsCore = dependency.descriptor(ISettingsCore)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+    __battleResultsService = dependency.descriptor(IBattleResultsService)
     MAX_STORED_ARENAS_RESULTS = 20
+    TOKEN_QUEST_ID = 'epicmetagame:levelup:'
+    DAILY_QUEST_ID = 'front_line'
+    MODE_ALIAS = 'frontline'
 
     def __init__(self):
         super(EpicBattleMetaGameController, self).__init__()
-        self._setSeasonSettingsProvider(self.__getSettingsEpicBattles)
+        self._setSeasonSettingsProvider(self.getModeSettings)
+        self._setPrimeTimesIteratorGetter(self.getPrimeTimesIter)
         self.onUpdated = Event.Event()
         self.onPrimeTimeStatusUpdated = Event.Event()
         self.onEventEnded = Event.Event()
@@ -152,9 +149,9 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
         super(EpicBattleMetaGameController, self).fini()
 
     def onLobbyInited(self, ctx):
-        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__updateEpicMetaGameSettings
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__updateEpicMetaGameSettings
         g_currentVehicle.onChanged += self.__invalidateBattleAbilities
-        self.itemsCache.onSyncCompleted += self.__invalidateBattleAbilities
+        self.__itemsCache.onSyncCompleted += self.__invalidateBattleAbilities
         g_clientUpdateManager.addCallbacks({'epicMetaGame': self.__updateEpic,
          'inventory': self.__onInventoryUpdate})
         self.startGlobalListening()
@@ -162,7 +159,7 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
         self.__invalidateBattleAbilities()
         self.startNotification()
         if self.getPerformanceGroup() == EPIC_PERF_GROUP.HIGH_RISK:
-            self.lobbyContext.addFightButtonConfirmator(self.__confirmFightButtonPressEnabled)
+            self.__lobbyContext.addFightButtonConfirmator(self.__confirmFightButtonPressEnabled)
         self.__isFrSoundMode = False
         self.__updateSounds()
 
@@ -174,17 +171,17 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
         self.__updateSounds()
 
     def onAccountBecomePlayer(self):
-        self.battleResultsService.onResultPosted += self.__showBattleResults
+        self.__battleResultsService.onResultPosted += self.__showBattleResults
 
     def onAvatarBecomePlayer(self):
         self.__clear()
-        self.battleResultsService.onResultPosted -= self.__showBattleResults
+        self.__battleResultsService.onResultPosted -= self.__showBattleResults
 
     def isEnabled(self):
-        return self.__getSettingsEpicBattles().isEnabled
+        return self.getModeSettings().isEnabled
 
     def isReservesAvailableInFLMenu(self):
-        return self.__getSettingsEpicBattles().reservesAvailableInFLMenu
+        return self.getModeSettings().reservesAvailableInFLMenu
 
     def getPerformanceGroup(self):
         if not self.__performanceGroup:
@@ -222,7 +219,7 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
         return self.__skillData
 
     def getPlayerLevelInfo(self):
-        return self.itemsCache.items.epicMetaGame.playerLevelInfo
+        return self.__itemsCache.items.epicMetaGame.playerLevelInfo
 
     def getPlayerRanksInfo(self):
         if not self.__rankSettings:
@@ -232,16 +229,16 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
         return self.__rankSettings
 
     def getSeasonData(self):
-        return self.itemsCache.items.epicMetaGame.seasonData
+        return self.__itemsCache.items.epicMetaGame.seasonData
 
     def getSkillPoints(self):
-        return self.itemsCache.items.epicMetaGame.skillPoints
+        return self.__itemsCache.items.epicMetaGame.skillPoints
 
     def getSkillLevels(self):
-        return self.itemsCache.items.epicMetaGame.skillLevels
+        return self.__itemsCache.items.epicMetaGame.skillLevels
 
     def getSelectedSkills(self, vehicleCD):
-        selected = self.itemsCache.items.epicMetaGame.selectedSkills(vehicleCD)
+        selected = self.__itemsCache.items.epicMetaGame.selectedSkills(vehicleCD)
         numSlots = vehicles.ABILITY_SLOTS_BY_VEHICLE_CLASS[vehicles.getVehicleClass(vehicleCD)]
         while len(selected) < numSlots:
             selected.append(-1)
@@ -249,99 +246,9 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
         return selected
 
     def hasSuitableVehicles(self):
-        requiredLevel = self.__getSettingsEpicBattles().validVehicleLevels
-        v = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(requiredLevel))
+        requiredLevel = self.getModeSettings().validVehicleLevels
+        v = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(requiredLevel))
         return len(v) > 0
-
-    def isFrozen(self):
-        for primeTime in self.getPrimeTimes().values():
-            if primeTime.hasAnyPeriods():
-                return False
-
-        return True
-
-    def getPrimeTimes(self):
-        if not self.hasAnySeason():
-            return {}
-        epicBattlesConfig = self.lobbyContext.getServerSettings().epicBattles
-        primeTimes = epicBattlesConfig.primeTimes
-        peripheryIDs = epicBattlesConfig.peripheryIDs
-        primeTimesPeriods = defaultdict(lambda : defaultdict(list))
-        for primeTime in primeTimes:
-            period = (primeTime['start'], primeTime['end'])
-            weekdays = primeTime['weekdays']
-            for pID in primeTime['peripheryIDs']:
-                if pID not in peripheryIDs:
-                    continue
-                periphery = primeTimesPeriods[pID]
-                for wDay in weekdays:
-                    periphery[wDay].append(period)
-
-        return {pID:PrimeTime(pID, {wDay:collapseIntervals(periods) for wDay, periods in pPeriods.iteritems()}) for pID, pPeriods in primeTimesPeriods.iteritems()}
-
-    def getPrimeTimeStatus(self, peripheryID=None):
-        if peripheryID is None:
-            peripheryID = self.connectionMgr.peripheryID
-        primeTime = self.getPrimeTimes().get(peripheryID)
-        if primeTime is None:
-            return (PrimeTimeStatus.NOT_SET, 0, False)
-        elif not primeTime.hasAnyPeriods():
-            return (PrimeTimeStatus.FROZEN, 0, False)
-        else:
-            season = self.getCurrentSeason() or self.getNextSeason()
-            currTime = time_utils.getCurrentLocalServerTimestamp()
-            if season and season.hasActiveCycle(currTime) and primeTime.getPeriodsBetween(currTime, season.getCycleEndDate()):
-                self.__isNow, timeTillUpdate = primeTime.getAvailability(currTime, season.getCycleEndDate())
-            else:
-                timeTillUpdate = 0
-                if season:
-                    nextCycle = season.getNextByTimeCycle(currTime)
-                    if nextCycle:
-                        primeTimeStart = primeTime.getNextPeriodStart(nextCycle.startDate, season.getEndDate(), includeBeginning=True)
-                        if primeTimeStart:
-                            timeTillUpdate = max(primeTimeStart, nextCycle.startDate) - currTime
-                self.__isNow = False
-            return (PrimeTimeStatus.AVAILABLE, timeTillUpdate, self.__isNow) if self.__isNow else (PrimeTimeStatus.NOT_AVAILABLE, timeTillUpdate, False)
-
-    def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
-        hostsList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming(), withShortName=True)
-        if self.connectionMgr.peripheryID == 0:
-            hostsList.insert(0, (self.connectionMgr.url,
-             self.connectionMgr.serverUserName,
-             self.connectionMgr.serverUserNameShort,
-             HOST_AVAILABILITY.IGNORED,
-             0))
-        primeTimes = self.getPrimeTimes()
-        dayStart, dayEnd = time_utils.getDayTimeBoundsForLocal(selectedTime)
-        dayEnd += 1
-        serversPeriodsMapping = {}
-        for _, _, serverShortName, _, peripheryID in hostsList:
-            if peripheryID not in primeTimes:
-                continue
-            dayPeriods = primeTimes[peripheryID].getPeriodsBetween(dayStart, dayEnd)
-            if groupIdentical and dayPeriods in serversPeriodsMapping.values():
-                for name, period in serversPeriodsMapping.iteritems():
-                    serverInMapping = name if period == dayPeriods else None
-                    if serverInMapping:
-                        newName = '{0}, {1}'.format(serverInMapping, serverShortName)
-                        serversPeriodsMapping[newName] = serversPeriodsMapping.pop(serverInMapping)
-                        break
-
-            serversPeriodsMapping[serverShortName] = dayPeriods
-
-        return serversPeriodsMapping
-
-    def hasAvailablePrimeTimeServers(self):
-        if self.connectionMgr.isStandalone():
-            allPeripheryIDs = {self.connectionMgr.peripheryID}
-        else:
-            allPeripheryIDs = set([ host.peripheryID for host in g_preDefinedHosts.hostsWithRoaming() ])
-        for peripheryID in allPeripheryIDs:
-            primeTimeStatus, _, _ = self.getPrimeTimeStatus(peripheryID)
-            if primeTimeStatus == PrimeTimeStatus.AVAILABLE:
-                return True
-
-        return False
 
     def increaseSkillLevel(self, skillID):
         BigWorld.player().epicMetaGame.increaseAbility(skillID)
@@ -352,15 +259,6 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
         else:
             BigWorld.player().epicMetaGame.setSelectedAbilities(skillIDArray, vehicleCD, callback)
         return
-
-    def getCurrentCycleInfo(self):
-        season = self.getCurrentSeason()
-        if season is not None:
-            if season.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp()):
-                return (season.getCycleEndDate(), True)
-            return (season.getCycleStartDate(), False)
-        else:
-            return (None, False)
 
     def getCycleInfo(self, cycleID=None):
         season = self.getCurrentSeason()
@@ -397,65 +295,20 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
     def getStoredEpicDiscount(self):
         return BigWorld.player().epicMetaGame.getStoredDiscount()
 
-    def isAvailable(self):
-        return self.isInPrimeTime() and self.isActive()
-
-    def isActive(self):
-        return self.isEnabled() and not self.bootcampController.isInBootcamp() and self.getCurrentSeason() is not None and self.getCurrentCycleInfo()[1]
-
-    def isInPrimeTime(self):
-        _, _, isNow = self.getPrimeTimeStatus()
-        return isNow
-
     def isWelcomeScreenUpToDate(self, serverSettings):
         lastSeen = serverSettings.getSectionSettings(GUI_START_BEHAVIOR, 'lastShownEpicWelcomeScreen')
         currentVersion = getCurrentWelcomeScreenVersion()
         return lastSeen >= currentVersion
 
-    def getCurrentCycleTimeLeft(self):
-        currentCycleEndTime, isCycleActive = self.getCurrentCycleInfo()
-        cycleTimeLeft = currentCycleEndTime - time_utils.getCurrentLocalServerTimestamp() if isCycleActive else None
-        return cycleTimeLeft
-
-    def getTimer(self):
-        primeTimeStatus, timeLeft, _ = self.getPrimeTimeStatus()
-        if primeTimeStatus != PrimeTimeStatus.AVAILABLE and not self.connectionMgr.isStandalone():
-            allPeripheryIDs = set([ host.peripheryID for host in g_preDefinedHosts.hostsWithRoaming() ])
-            for peripheryID in allPeripheryIDs:
-                peripheryStatus, peripheryTime, _ = self.getPrimeTimeStatus(peripheryID)
-                if peripheryStatus == PrimeTimeStatus.NOT_AVAILABLE and peripheryTime < timeLeft:
-                    timeLeft = peripheryTime
-
-        seasonsChangeTime = self.getClosestStateChangeTime()
-        currTime = time_utils.getCurrentLocalServerTimestamp()
-        if seasonsChangeTime and (currTime + timeLeft > seasonsChangeTime or timeLeft == 0):
-            timeLeft = seasonsChangeTime - currTime
-        return timeLeft + 1 if timeLeft > 0 else time_utils.ONE_MINUTE
-
     def getEventTimeLeft(self):
         timeLeft = self.getSeasonTimeRange()[1] - time_utils.getCurrentLocalServerTimestamp()
         return timeLeft + 1 if timeLeft > 0 else time_utils.ONE_MINUTE
 
-    def getCurrentPrimeTimeEnd(self):
-        primeTimes = self.getPrimeTimes()
-        currentPrimeTimeEnd = None
-        for primeTime in primeTimes.values():
-            periods = primeTime.getPeriodsActiveForTime(time_utils.getCurrentLocalServerTimestamp(), preferPeriodBounds=True)
-            for period in periods:
-                _, endTime = period
-                currentPrimeTimeEnd = max(endTime, currentPrimeTimeEnd)
-
-        return currentPrimeTimeEnd
-
-    def hasPrimeTimesLeft(self):
-        currentCycleEndTime, isCycleActive = self.getCurrentCycleInfo()
-        if not isCycleActive:
-            return False
-        primeTimes = self.getPrimeTimes()
-        return any([ primeTime.getNextPeriodStart(time_utils.getCurrentLocalServerTimestamp(), currentCycleEndTime) for primeTime in primeTimes.values() ])
+    def getStats(self):
+        return self.__itemsCache.items.epicMetaGame
 
     def __invalidateBattleAbilities(self, *_):
-        if not self.itemsCache.isSynced():
+        if not self.__itemsCache.isSynced():
             return
         self.__invalidateBattleAbilityItems()
         self.__invalidateBattleAbilitiesForVehicle()
@@ -490,12 +343,12 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
     def __clear(self):
         self.stopNotification()
         self.stopGlobalListening()
-        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__updateEpicMetaGameSettings
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__updateEpicMetaGameSettings
         g_currentVehicle.onChanged -= self.__invalidateBattleAbilities
-        self.itemsCache.onSyncCompleted -= self.__invalidateBattleAbilities
+        self.__itemsCache.onSyncCompleted -= self.__invalidateBattleAbilities
         g_clientUpdateManager.removeObjectCallbacks(self)
         if self.getPerformanceGroup() == EPIC_PERF_GROUP.HIGH_RISK:
-            self.lobbyContext.deleteFightButtonConfirmator(self.__confirmFightButtonPressEnabled)
+            self.__lobbyContext.deleteFightButtonConfirmator(self.__confirmFightButtonPressEnabled)
 
     def __updateEpic(self, diff):
         changes = set(diff.keys())
@@ -538,7 +391,7 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
             return None
 
     def __invalidateBattleAbilityItems(self):
-        data = self.itemsCache.items.getItems(GUI_ITEM_TYPE.BATTLE_ABILITY, REQ_CRITERIA.EMPTY)
+        data = self.__itemsCache.items.getItems(GUI_ITEM_TYPE.BATTLE_ABILITY, REQ_CRITERIA.EMPTY)
         for item in data.values():
             if self.__isInValidPrebattle():
                 newLevel = next((lvl.level for lvl in chain.from_iterable((skillInfo.levels.itervalues() for skillInfo in self.getAllSkillsInformation().itervalues())) if lvl.eqID == item.innationID), 0)
@@ -548,13 +401,13 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
             item.isUnlocked = False
 
     def getNumAbilitySlots(self, vehicleType):
-        config = self.lobbyContext.getServerSettings().epicMetaGame
+        config = self.__lobbyContext.getServerSettings().epicMetaGame
         vehClass = getVehicleClassFromVehicleType(vehicleType)
         return config.defaultSlots[vehClass]
 
     def __invalidateBattleAbilitiesForVehicle(self):
         vehicle = g_currentVehicle.item
-        if vehicle is None or vehicle.descriptor.type.level not in self.lobbyContext.getServerSettings().epicBattles.validVehicleLevels or not self.__isInValidPrebattle():
+        if vehicle is None or vehicle.descriptor.type.level not in self.__lobbyContext.getServerSettings().epicBattles.validVehicleLevels or not self.__isInValidPrebattle():
             if vehicle is not None:
                 vehicle.equipment.setBattleAbilityConsumables(BattleAbilityConsumables(*[]))
             return
@@ -563,7 +416,7 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
             selectedItems = [None] * amountOfSlots
             skillInfo = self.getAllSkillsInformation()
             selectedSkills = self.getSelectedSkills(vehicle.intCD)
-            battleAbilities = self.itemsCache.items.getItems(GUI_ITEM_TYPE.BATTLE_ABILITY, REQ_CRITERIA.EMPTY)
+            battleAbilities = self.__itemsCache.items.getItems(GUI_ITEM_TYPE.BATTLE_ABILITY, REQ_CRITERIA.EMPTY)
             for item in battleAbilities.values():
                 for index, skillID in enumerate(selectedSkills):
                     if skillID is not None and skillID >= 0:
@@ -575,7 +428,7 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
 
     def __analyzeClientSystem(self):
         stats = BigWorld.wg_getClientStatistics()
-        stats['graphicsEngine'] = self.settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE)
+        stats['graphicsEngine'] = self.__settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE)
         self.__performanceGroup = EPIC_PERF_GROUP.LOW_RISK
         for groupName, conditions in PERFORMANCE_GROUP_LIMITS.iteritems():
             for currentLimit in conditions:
@@ -612,6 +465,10 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
                 self.__isFrSoundMode = isFrSoundMode
             return
 
+    def getPrimeTimesIter(self, primeTimes):
+        for primeTime in primeTimes:
+            yield primeTime
+
     @async
     @process
     def __confirmFightButtonPressEnabled(self, callback):
@@ -619,7 +476,7 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
             callback(True)
             return
         defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
-        filters = self.settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
+        filters = self.__settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
         isEpicPerformanceWarningEnabled = not AccountSettings.getSettings('isEpicPerformanceWarningClicked')
         if isEpicPerformanceWarningEnabled:
             result, checkboxChecked = yield DialogsInterface.showI18nCheckBoxDialog('epicBattleConfirmDialog')
@@ -636,7 +493,7 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
         return generalSettings
 
     @staticmethod
-    def __getSettingsEpicBattles():
+    def getModeSettings():
         lobbyContext = dependency.instance(ILobbyContext)
         generalSettings = lobbyContext.getServerSettings().epicBattles
         return generalSettings

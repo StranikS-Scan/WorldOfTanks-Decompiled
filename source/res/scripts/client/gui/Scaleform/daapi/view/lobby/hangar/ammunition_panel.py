@@ -100,10 +100,10 @@ def _getVehicleModulesBySlotType(vehicle):
     return modules
 
 
-def getAmmo(shells, isEventVehicle=False):
+def getAmmo(shells):
     outcome = []
     for shell in shells:
-        if shell.isHidden and not isEventVehicle:
+        if shell.isHidden:
             continue
         outcome.append({'id': str(shell.intCD),
          'type': shell.type,
@@ -153,9 +153,6 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
         if itemCD is not None and int(itemCD) > 0:
             shared_events.showModuleInfo(itemCD, g_currentVehicle.item.descriptor)
         return
-
-    def onPrbEntitySwitched(self):
-        self._update()
 
     def _populate(self):
         super(AmmunitionPanel, self)._populate()
@@ -238,7 +235,7 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
         isOptionalDevicesEnabled = not vehicle.isOptionalDevicesLocked
         if g_currentVehicle.isPresent():
             stateWarning = vehicle.isBroken or not vehicle.isAmmoFull or not g_currentVehicle.isAutoLoadFull() or not g_currentVehicle.isAutoEquipFull()
-            shells = getAmmo(vehicle.shells, vehicle.isOnlyForEventBattles)
+            shells = getAmmo(vehicle.shells)
         self.as_setAmmoS(shells, stateWarning)
         self.as_setModulesEnabledS(True)
         self.as_setVehicleHasTurretS(vehicle.hasTurrets)

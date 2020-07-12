@@ -1914,7 +1914,7 @@
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	9000	</weight>
       <maxHealth>	380	</maxHealth>
-      <rotationSpeed>	36	</rotationSpeed>
+      <rotationSpeed>	34	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
         <maxRegenHealth>	85	</maxRegenHealth>
@@ -1945,17 +1945,17 @@
             </armor_7>
             <gun>	40	</gun>
           </armor>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	2.5	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
-            <afterShot>	3.0	</afterShot>
+            <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 9 0.375 9 0.402778 6 0.444444 3 0.555556 3 0.597222 6 0.625 9 1 9	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.33	</shotDispersionRadius>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <reloadTime>	15.4	</reloadTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <clip>

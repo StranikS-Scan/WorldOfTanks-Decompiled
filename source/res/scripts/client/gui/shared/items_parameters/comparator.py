@@ -20,7 +20,9 @@ _BACKWARD_QUALITY_PARAMS = ['aimingTime',
  'switchOffTime',
  WHEELED_SWITCH_ON_TIME,
  WHEELED_SWITCH_OFF_TIME,
- DUAL_GUN_CHARGE_TIME]
+ DUAL_GUN_CHARGE_TIME,
+ 'radarCooldown',
+ 'hullWeight']
 NEGATIVE_PARAMS = ['switchOnTime', 'switchOffTime']
 _CUSTOM_QUALITY_PARAMS = {'vehicleWeight': (True, False),
  'clipFireRate': (True, True, False),
@@ -195,7 +197,7 @@ def _getParamStateInfo(paramName, val1, val2, customReverted=False):
 
 
 def rateParameterState(paramName, val1, val2, customQualityParams=None):
-    if isinstance(val1, collections.Iterable):
+    if isinstance(val1, (tuple, list)):
         if customQualityParams is None:
             customQualityParams = _CUSTOM_QUALITY_PARAMS.get(paramName)
         customQualityLen = len(customQualityParams) if customQualityParams else 0

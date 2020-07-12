@@ -592,11 +592,7 @@ class VehicleStickers(object):
         self.__componentNames = [(TankPartNames.HULL, TankPartNames.HULL), (TankPartNames.TURRET, TankPartNames.TURRET), (TankPartNames.GUN, TankNodeNames.GUN_INCLINATION)]
         if outfit is None:
             outfit = Outfit(vehicleCD=vehicleDesc.makeCompactDescr())
-        componentSlots = ((TankPartNames.HULL, vehicleDesc.hull.emblemSlots), (TankPartNames.GUN if self.__showEmblemsOnGun else TankPartNames.TURRET, vehicleDesc.turret.emblemSlots), (TankPartNames.TURRET if self.__showEmblemsOnGun else TankPartNames.GUN, []))
-        if len(vehicleDesc.gun.emblemSlots) > 1:
-            componentSlots += ((Insignia.Types.DUAL_LEFT, (vehicleDesc.gun.emblemSlots[0],)), (Insignia.Types.DUAL_RIGHT, (vehicleDesc.gun.emblemSlots[1],)))
-        else:
-            componentSlots += ((Insignia.Types.SINGLE, vehicleDesc.gun.emblemSlots),)
+        componentSlots = self._createComponentSlots(vehicleDesc, self.__showEmblemsOnGun)
         if not isUseDebugStickers():
             self.__stickerPacks = self._createStickerPacks(vehicleDesc, outfit, insigniaRank)
         else:
@@ -687,6 +683,15 @@ class VehicleStickers(object):
                 del componentStickers.damageStickers[code]
 
         return
+
+    @staticmethod
+    def _createComponentSlots(vehicleDesc, showEmblemsOnGun):
+        componentSlots = ((TankPartNames.HULL, vehicleDesc.hull.emblemSlots), (TankPartNames.GUN if showEmblemsOnGun else TankPartNames.TURRET, vehicleDesc.turret.emblemSlots), (TankPartNames.TURRET if showEmblemsOnGun else TankPartNames.GUN, []))
+        if len(vehicleDesc.gun.emblemSlots) > 1:
+            componentSlots += ((Insignia.Types.DUAL_LEFT, (vehicleDesc.gun.emblemSlots[0],)), (Insignia.Types.DUAL_RIGHT, (vehicleDesc.gun.emblemSlots[1],)))
+        else:
+            componentSlots += ((Insignia.Types.SINGLE, vehicleDesc.gun.emblemSlots),)
+        return componentSlots
 
     def _createStickerPacks(self, vehicleDesc, outfit, insigniaRank):
         insignias = InsigniaStickerPack(vehicleDesc, outfit, insigniaRank)

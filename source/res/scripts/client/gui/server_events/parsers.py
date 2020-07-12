@@ -7,6 +7,7 @@ from gui.server_events.conditions import _Cumulativable, CumulativeResult, _Cond
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
+from soft_exception import SoftException
 
 class ConditionsParser(object):
     LOGICAL_OPS = {'and': conditions.AndGroup,
@@ -192,7 +193,9 @@ class PreBattleConditions(ConditionsParser):
         if name == 'unit':
             tmpGroup = self.LOGICAL_OPS['and']()
             self._parseNode(uniqueName, data, tmpGroup)
-            group.add(tmpGroup.items[0])
+            for element in tmpGroup.items:
+                group.add(element)
+
         else:
             if name == 'bonusTypes':
                 return conditions.BattleBonusType(uniqueName, data)
@@ -244,6 +247,7 @@ class BonusConditions(ConditionsParser):
         super(BonusConditions, self).__init__(section, rootName='bonusBattle')
         dictSec = dict(section)
         self._isDaily = conditions._getNodeValue(dictSec, 'daily', False)
+        self._isWeekly = conditions._getNodeValue(dictSec, 'weekly', False)
         self._bonusLimit = conditions._getNodeValue(dictSec, 'bonusLimit')
         self._groupBy = None
         if 'groupBy' in dictSec:
@@ -254,6 +258,9 @@ class BonusConditions(ConditionsParser):
 
     def isDaily(self):
         return self._isDaily
+
+    def isWeekly(self):
+        return self._isWeekly
 
     def getBonusLimit(self):
         return self._bonusLimit
@@ -276,28 +283,33 @@ class BonusConditions(ConditionsParser):
             return conditions.VehicleDamageCumulative(uniqueName, data, self)
         if name == 'vehicleStun':
             return conditions.VehicleStunCumulative(uniqueName, data, self)
-        if name == 'cumulative':
-
-            def isDescription(el):
-                return el[0] == 'description'
-
+        if name == 'cumulativeExt' or name == 'cumulative' or name == 'unit':
+            unitFlag = bool(name == 'unit')
             result = []
-            description = tuple()
-            for _, element in enumerate(data):
-                if isDescription(element):
-                    description = (element,)
-                    break
+            if unitFlag:
+                if 'cumulative' in dict(data):
+                    conditionKey = 'cumulative'
+                else:
+                    conditionKey = 'cumulativeExt'
+                currentCollection = enumerate(dict(data)[conditionKey])
+            else:
+                currentCollection = enumerate(data)
+            for idx, element in currentCollection:
+                _, elements = element
+                description = tuple()
+                for elementName, value in elements:
+                    if elementName == 'description':
+                        description = ((elementName, value),)
+                    if elementName == 'key':
+                        key = value[0][1]
+                    if elementName in ('equal', 'greater', 'greaterOrEqual'):
+                        elementValue = value[0][1]
+                    raise SoftException('Incorrect tag in cumulative or cummulativeExt (%s)' % elementName)
 
-            for idx, element in enumerate(data):
-                if isDescription(element):
-                    continue
+                element = ('value', (key, elementValue))
+                if unitFlag:
+                    result.append(conditions.CumulativeResult('%s%d' % (uniqueName, idx), (element,) + description, self, isUnit=True, preBattleCond=self.__preBattleCond))
                 result.append(conditions.CumulativeResult('%s%d' % (uniqueName, idx), (element,) + description, self))
-
-            return result
-        if name == 'unit':
-            result = []
-            for idx, element in enumerate(dict(data)['cumulative']):
-                result.append(conditions.CumulativeResult('%s%d' % (uniqueName, idx), (element,), self, isUnit=True, preBattleCond=self.__preBattleCond))
 
             return result
 

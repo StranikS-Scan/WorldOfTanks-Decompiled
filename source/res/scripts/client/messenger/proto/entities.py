@@ -80,6 +80,9 @@ class ReceivedBattleChatCommand(_ChatCommand):
     def getSenderID(self):
         pass
 
+    def getPosition3D(self):
+        return None
+
     def getFirstTargetID(self):
         pass
 
@@ -92,22 +95,28 @@ class ReceivedBattleChatCommand(_ChatCommand):
     def getCommandText(self):
         pass
 
-    def getVehMarker(self, mode=None, vehicle=None):
+    def getVehMarker(self, mode=None):
         result = self._getCommandVehMarker()
-        if vehicle:
-            mode = 'SPG' if vehicle.vehicleType.classTag == 'SPG' else ''
         if mode and result:
             result = '{0:>s}{1:>s}'.format(result, mode)
         return result
 
-    def getVehMarkers(self, vehicle=None):
-        mode = ''
-        if vehicle:
-            mode = 'SPG' if vehicle.vehicleType.classTag == 'SPG' else ''
-        return (self.getVehMarker(mode=mode), 'attackSender{0:>s}'.format(mode))
+    def getSenderVehMarker(self, mode=None):
+        result = self._getCommandSenderVehMarker()
+        if mode and result:
+            result = '{0:>s}{1:>s}'.format(result, mode)
+        return result
 
-    def getSoundEventName(self):
-        pass
+    def getVehMarkers(self):
+        mode = ''
+        return (self.getVehMarker(mode=mode), self.getSenderVehMarker(mode=mode))
+
+    def getSoundEventName(self, useSoundNotification):
+        if useSoundNotification is True:
+            result = self._getSoundNotification()
+            if result is not None:
+                return result
+        return 'chat_shortcut_common_fx'
 
     def isIgnored(self):
         user = storage_getter('users')().getUser(self.getSenderID(), scope=UserEntityScope.BATTLE)
@@ -135,7 +144,19 @@ class ReceivedBattleChatCommand(_ChatCommand):
     def showMarkerForReceiver(self):
         return False
 
+    def isMsgOnMarker(self):
+        return False
+
+    def messageOnMarker(self):
+        pass
+
     def _getCommandVehMarker(self):
+        pass
+
+    def _getCommandSenderVehMarker(self):
+        pass
+
+    def _getSoundNotification(self):
         pass
 
 

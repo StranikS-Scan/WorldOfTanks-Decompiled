@@ -11,6 +11,9 @@ from items import vehicles
 from helpers import i18n
 from helpers.EffectsList import EffectsListPlayer
 from helpers.EntityExtra import EntityExtra
+from constants import IS_EDITOR
+if not IS_EDITOR:
+    from vehicle_extras_battle_royale import AfterburningBattleRoyale
 
 def reload():
     modNames = (reload.__module__,)
@@ -72,16 +75,17 @@ class ShowShooting(EntityExtra):
                 data['_timerID'] = BigWorld.callback(burstInterval, partial(self.__doShot, data))
                 effPlayer.play(gunModel)
                 withShot = 2
-            avatar = BigWorld.player()
-            if data['entity'].isPlayerVehicle or vehicle is avatar.getVehicleAttached():
-                avatar.getOwnVehicleShotDispersionAngle(avatar.gunRotator.turretRotationSpeed, withShot)
-            groundWaveEff = effPlayer.effectsList.relatedEffects.get('groundWave')
-            if groundWaveEff is not None:
-                self._doGroundWaveEffect(data['entity'], groundWaveEff, gunModel)
-            self.__doRecoil(vehicle, gunModel)
-            if vehicle.isPlayerVehicle:
-                appearance = vehicle.appearance
-                appearance.executeShootingVibrations(vehicle.typeDescriptor.shot.shell.caliber)
+            if not IS_EDITOR:
+                avatar = BigWorld.player()
+                if data['entity'].isPlayerVehicle or vehicle is avatar.getVehicleAttached():
+                    avatar.getOwnVehicleShotDispersionAngle(avatar.gunRotator.turretRotationSpeed, withShot)
+                groundWaveEff = effPlayer.effectsList.relatedEffects.get('groundWave')
+                if groundWaveEff is not None:
+                    self._doGroundWaveEffect(data['entity'], groundWaveEff, gunModel)
+                self.__doRecoil(vehicle, gunModel)
+                if vehicle.isPlayerVehicle:
+                    appearance = vehicle.appearance
+                    appearance.executeShootingVibrations(vehicle.typeDescriptor.shot.shell.caliber)
         except Exception:
             LOG_CURRENT_EXCEPTION()
             self.stop(data)
@@ -158,13 +162,14 @@ class ShowShootingMultiGun(ShowShooting):
                 self.stop(data)
                 return
             self.__doGunEffect(data)
-            avatar = BigWorld.player()
-            if data['entity'].isPlayerVehicle or vehicle is avatar.getVehicleAttached():
-                avatar.getOwnVehicleShotDispersionAngle(avatar.gunRotator.turretRotationSpeed, withShot=1)
-            self.__doRecoil(data)
-            if vehicle.isPlayerVehicle:
-                appearance = vehicle.appearance
-                appearance.executeShootingVibrations(vehicle.typeDescriptor.shot.shell.caliber)
+            if not IS_EDITOR:
+                avatar = BigWorld.player()
+                if data['entity'].isPlayerVehicle or vehicle is avatar.getVehicleAttached():
+                    avatar.getOwnVehicleShotDispersionAngle(avatar.gunRotator.turretRotationSpeed, withShot=1)
+                self.__doRecoil(data)
+                if vehicle.isPlayerVehicle:
+                    appearance = vehicle.appearance
+                    appearance.executeShootingVibrations(vehicle.typeDescriptor.shot.shell.caliber)
         except Exception:
             LOG_CURRENT_EXCEPTION()
             self.stop(data)
@@ -176,9 +181,10 @@ class ShowShootingMultiGun(ShowShooting):
         for gunIndex, effPlayer in data['_effectsListPlayers'].items():
             effPlayer.stop()
             effPlayer.play(gunModel, None, partial(self.stop, data))
-            groundWaveEff = effPlayer.effectsList.relatedEffects.get('groundWave')
-            if groundWaveEff is not None:
-                self._doGroundWaveEffect(vehicle, groundWaveEff, gunModel, gunNode=multiGun[gunIndex].gunFire)
+            if not IS_EDITOR:
+                groundWaveEff = effPlayer.effectsList.relatedEffects.get('groundWave')
+                if groundWaveEff is not None:
+                    self._doGroundWaveEffect(vehicle, groundWaveEff, gunModel, gunNode=multiGun[gunIndex].gunFire)
 
         return
 

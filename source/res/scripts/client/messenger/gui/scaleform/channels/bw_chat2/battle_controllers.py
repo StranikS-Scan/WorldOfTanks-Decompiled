@@ -94,9 +94,11 @@ class TeamChannelController(_ChannelController):
     def isEnabled(self):
         result = super(TeamChannelController, self).isEnabled()
         arenaDP = self.sessionProvider.getArenaDP()
+        arenaVisitor = self.sessionProvider.arenaVisitor
         hasAnyTeammates = arenaDP.getAlliesVehiclesNumber() > 1
         isObserver = arenaDP.isPlayerObserver()
-        return result and (hasAnyTeammates or isObserver)
+        isBattleRoyale = arenaVisitor.gui.isBattleRoyale()
+        return result and (hasAnyTeammates or isObserver) and not isBattleRoyale
 
     def _formatCommand(self, command):
         isCurrent = False
@@ -145,9 +147,11 @@ class EpicTeamChannelController(TeamChannelController):
             targetID = cmd.getFirstTargetID()
             targetPos = mapsCtrl.getVehiclePosition(targetID)
             targetInRange = validatePosition(targetPos)
-        elif cmd.isOnEpicBattleMinimap():
+        elif cmd.isLocationRelatedCommand():
             markingPos = cmd.getMarkedPosition()
             targetInRange = validatePosition(markingPos)
+        elif cmd.isBaseRelatedCommand():
+            targetInRange = True
         if cmd.isEpicGlobalMessage():
             senderInRange = True
         return senderInRange or targetInRange

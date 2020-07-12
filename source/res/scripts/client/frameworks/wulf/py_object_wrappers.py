@@ -1,10 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/frameworks/wulf/py_object_wrappers.py
-try:
-    import _wulf as _py_objects
-except ImportError:
-    import wulf_wrapper as _py_objects
+from constants import IS_EDITOR
+if not IS_EDITOR:
+    try:
+        import _wulf as _py_objects
+    except ImportError:
+        import wulf_wrapper as _py_objects
 
+else:
+    import wulf_wrapper as _py_objects
 PyObjectArray = _py_objects.PyObjectArray
 PyObjectCommand = _py_objects.PyObjectCommand
 PyGuiApplication = _py_objects.PyGuiApplication

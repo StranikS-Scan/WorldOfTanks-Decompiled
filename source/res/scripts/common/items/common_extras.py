@@ -9,7 +9,8 @@ import collections
 def readExtras(xmlCtx, section, subsectionName, moduleName, **kwargs):
     try:
         mod = importlib.import_module(moduleName)
-    except ImportError:
+    except ImportError as err:
+        LOG_DEBUG('{}'.format(err))
         LOG_DEBUG('No module', moduleName)
 
     noneExtra = mod.NoneExtra('_NoneExtra', 0, '', None)
@@ -23,16 +24,17 @@ def readExtras(xmlCtx, section, subsectionName, moduleName, **kwargs):
         clientName, sep, serverName = extraSection.asString.partition(':')
         className = (clientName if IS_CLIENT or IS_EDITOR or IS_BOT else serverName).strip()
         classObj = getattr(mod, className, None)
-        if classObj is None:
-            _xml.raiseWrongXml(ctx, '', "class '%s' is not found in '%s'" % (className, mod.__name__))
-        classExtras = classObj(extraName, len(extras), xmlCtx[1], extraSection, **kwargs)
-        if isinstance(classExtras, collections.Iterable):
-            for extra in classExtras:
-                extrasDict[extra.name] = extra
+        if classObj is not None:
+            classExtras = classObj(extraName, len(extras), xmlCtx[1], extraSection, **kwargs)
+            if isinstance(classExtras, collections.Iterable):
+                for extra in classExtras:
+                    extrasDict[extra.name] = extra
 
-            extras.extend(classExtras)
-        extras.append(classExtras)
-        extrasDict[extraName] = classExtras
+                extras.extend(classExtras)
+            else:
+                extras.append(classExtras)
+                extrasDict[extraName] = classExtras
+        _xml.raiseWrongXml(ctx, '', "class '%s' is not found in '%s'" % (className, mod.__name__))
 
     if len(extras) > 200:
         _xml.raiseWrongXml(xmlCtx, subsectionName, 'too many extras')

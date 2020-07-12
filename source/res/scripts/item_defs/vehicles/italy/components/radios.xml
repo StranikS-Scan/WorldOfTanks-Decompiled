@@ -9,6 +9,7 @@
     <R300>	6	</R300>
     <RV_4>	7	</RV_4>
     <R_19>	8	</R_19>
+    <Development_Radio>	65000	</Development_Radio>
   </ids>
   <shared>
     <R_F_C_R>
@@ -113,5 +114,17 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </R_19>
+    <Development_Radio>
+      <userString>	Development Radio	</userString>
+      <tags></tags>
+      <notInShop>	true	</notInShop>
+      <level>	1	</level>
+      <price>	0	</price>
+      <weight>	1	</weight>
+      <distance>	90	</distance>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+    </Development_Radio>
   </shared>
 </radios.xml>

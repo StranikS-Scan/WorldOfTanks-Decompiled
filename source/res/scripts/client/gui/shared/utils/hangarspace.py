@@ -157,6 +157,8 @@ class HangarSpace(IHangarSpace):
         self.__spaceDestroyedDuringLoad = False
         self.__lastUpdatedVehicle = None
         self.onSpaceRefresh = Event.Event()
+        self.onSpaceRefreshCompleted = Event.Event()
+        self.onSpaceCreating = Event.Event()
         self.onSpaceCreate = Event.Event()
         self.onSpaceDestroy = Event.Event()
         self.onSpaceChanged = Event.Event()
@@ -167,6 +169,7 @@ class HangarSpace(IHangarSpace):
         self.onHeroTankReady = Event.Event()
         self.onVehicleChanged = Event.Event()
         self.onVehicleChangeStarted = Event.Event()
+        self.onSpaceChangedByAction = Event.Event()
         self.onNotifyCursorOver3dScene = Event.Event()
         self.__isCursorOver3DScene = False
         return
@@ -190,6 +193,14 @@ class HangarSpace(IHangarSpace):
     @property
     def isModelLoaded(self):
         return self.__isModelLoaded
+
+    @property
+    def spacePath(self):
+        return None if self.__space is None else self.__space.spacePath
+
+    @property
+    def visibilityMask(self):
+        return None if self.__space is None else self.__space.visibilityMask
 
     def spaceLoading(self):
         return self.__space.spaceLoading() if self.__space is not None else False
@@ -218,6 +229,7 @@ class HangarSpace(IHangarSpace):
             self.__isSpacePremium = isPremium
             self.__igrSpaceType = self.igrCtrl.getRoomType()
             self.__space.create(isPremium, self.__spaceDone)
+            self.onSpaceCreating()
             if self.__lastUpdatedVehicle is not None:
                 self.startToUpdateVehicle(self.__lastUpdatedVehicle)
             self.gameSession.onPremiumNotify += self.onPremiumChanged
@@ -243,6 +255,7 @@ class HangarSpace(IHangarSpace):
             self.init(isPremium)
             self.__isSpacePremium = isPremium
             self.__igrSpaceType = igrType
+            self.onSpaceRefreshCompleted()
             return
 
     def destroy(self):

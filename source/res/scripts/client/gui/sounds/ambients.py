@@ -29,6 +29,11 @@ def _getViewSoundEnv(view):
         return ModalWindowEnv if isinstance(view, WindowViewMeta) and view.isViewModal() else None
 
 
+def _getGFViewSoundEnv(viewImplAdaptor):
+    viewImpl = getattr(viewImplAdaptor, 'view', None)
+    return getattr(viewImpl, '__sound_env__', None) if viewImpl is not None else None
+
+
 class SoundEvent(Notifiable):
 
     def __init__(self, soundEventID, params=None, checkFinish=False):
@@ -422,7 +427,10 @@ class GuiAmbientsCtrl(object):
 
     def _restartSounds(self):
         result = []
-        for vt in (ViewTypes.TOP_WINDOW, ViewTypes.WINDOW, ViewTypes.LOBBY_SUB):
+        for vt in (ViewTypes.TOP_WINDOW,
+         ViewTypes.WINDOW,
+         ViewTypes.LOBBY_TOP_SUB,
+         ViewTypes.LOBBY_SUB):
             result.extend(self._customEnvs[vt].values())
 
         result.append(self._spaceEnv)
@@ -490,7 +498,7 @@ class GuiAmbientsCtrl(object):
         return
 
     def __onViewLoaded(self, view, *args, **kwargs):
-        if view is not None and view.settings is not None:
+        if view is not None:
             self.__registerSoundEnv(view)
             self._restartSounds()
         return
@@ -511,7 +519,7 @@ class GuiAmbientsCtrl(object):
         self._restartSounds()
 
     def __registerSoundEnv(self, view):
-        soundEnvClass = _getViewSoundEnv(view)
+        soundEnvClass = _getViewSoundEnv(view) or _getGFViewSoundEnv(view)
         if soundEnvClass is not None:
             alias = view.alias
             SOUND_DEBUG('Custom sound environ has been detected', alias, soundEnvClass)

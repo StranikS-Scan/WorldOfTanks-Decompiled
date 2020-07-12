@@ -1,7 +1,7 @@
 <battle_settings.xml>
   <lesson>
     <id>	0	</id>
-    <panels>	prebattleTimer battleTimer destroyTimersPanel battleDamageLogPanel	</panels>
+    <panels>	prebattleTimer battleTimer timersPanel battleDamageLogPanel	</panels>
     <ribbons>	damage kill ram	</ribbons>
     <lesson_pages></lesson_pages>
     <prebattle></prebattle>
@@ -25,13 +25,14 @@
   </lesson>
   <lesson>
     <id>	1	</id>
-    <panels>	teamBasesPanel destroyTimersPanel ribbonsPanel fragCorrelationBar prebattleTimer battleTimer
+    <panels>	teamBasesPanel timersPanel ribbonsPanel fragCorrelationBar prebattleTimer battleTimer
 			battleDamageLogPanel	</panels>
     <ribbons>	damage kill ram	</ribbons>
     <lesson_pages>	movement	</lesson_pages>
     <prebattle>
       <timeout>	5.0	</timeout>
       <hints>	hitpointsHint	</hints>
+      <wwSound>	bc_new_ui_element	</wwSound>
     </prebattle>
     <primary_hints>
       <hintSniperOnDistance>
@@ -59,7 +60,7 @@
   </lesson>
   <lesson>
     <id>	2	</id>
-    <panels>	destroyTimersPanel minimap sixthSense teamBasesPanel ribbonsPanel fragCorrelationBar battleTimer
+    <panels>	timersPanel minimap sixthSense teamBasesPanel ribbonsPanel fragCorrelationBar battleTimer
 			prebattleTimer battleDamageLogPanel	</panels>
     <ribbons>	damage kill ram spotted capture	</ribbons>
     <lesson_pages>	penetration sniper modules movement	</lesson_pages>
@@ -78,7 +79,7 @@
   </lesson>
   <lesson>
     <id>	3	</id>
-    <panels>	destroyTimersPanel minimap teamBasesPanel ribbonsPanel fragCorrelationBar battleTimer
+    <panels>	timersPanel minimap teamBasesPanel ribbonsPanel fragCorrelationBar battleTimer
 			consumablesPanel sixthSense prebattleTimer battleDamageLogPanel	</panels>
     <ribbons>	damage kill ram spotted capture crits	</ribbons>
     <lesson_pages>	visibility victory crosshair penetration sniper modules movement	</lesson_pages>
@@ -102,7 +103,7 @@
   </lesson>
   <lesson>
     <id>	4	</id>
-    <panels>	destroyTimersPanel minimap teamBasesPanel ribbonsPanel fragCorrelationBar battleTimer
+    <panels>	timersPanel minimap teamBasesPanel ribbonsPanel fragCorrelationBar battleTimer
 			consumablesPanel playersPanel sixthSense prebattleTimer battleDamageLogPanel	</panels>
     <ribbons>	damage kill ram spotted capture crits	</ribbons>
     <lesson_pages>	equipment visibility victory crosshair penetration sniper modules movement	</lesson_pages>

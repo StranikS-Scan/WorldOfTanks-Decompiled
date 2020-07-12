@@ -33,8 +33,7 @@
             <checkpoint-not-reached>	SkillLearnedCheckpoint	</checkpoint-not-reached>
           </condition>
           <effects>
-            <request-exclusive-hint>	PersonalCaseSkill	  <sound></sound>
-            </request-exclusive-hint>
+            <request-exclusive-hint>	PersonalCaseSkill	</request-exclusive-hint>
             <request-exclusive-hint>	PersonalCaseSkillSelect	  <condition>
                 <active>	PersonalCaseSkillClicked	</active>
               </condition>
@@ -511,7 +510,7 @@
             <label>	#bootcamp:message/skills/and/perks/label	</label>
             <text>	#bootcamp:message/skills/and/perks/text	</text>
             <subtitle>	SubtitleSkillsAbilities	</subtitle>
-            <voiceover>	vo_bc_hangar_skills_abilities	</voiceover>
+            <voiceover>	bc_info_line_universal	</voiceover>
           </data>
         </message>
       </sequence>

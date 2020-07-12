@@ -114,7 +114,7 @@ class PromoController(IPromoController):
     def showFieldPost(self):
         url = GUI_SETTINGS.promoscreens
         loadingCallback = self.__logger.getLoggingFuture(action=PromoLogActions.OPEN_FROM_MENU, type=PromoLogSubjectType.INDEX, url=url)
-        self.__showBrowserView(url, loadingCallback)
+        self.__showBrowserView(url, loadingCallback, soundSpaceID='field_post')
 
     @process
     def showLastTeaserPromo(self):
@@ -279,10 +279,10 @@ class PromoController(IPromoController):
         self.__showBrowserView(url, loadingCallback)
 
     @process
-    def __showBrowserView(self, url, loadingCallback=None):
+    def __showBrowserView(self, url, loadingCallback=None, soundSpaceID=None):
         promoUrl = yield self.__urlMacros.parse(url)
         self.__registerLoadingCallback(promoUrl, loadingCallback)
-        _showBrowserView(promoUrl, self.__onPromoClosed)
+        _showBrowserView(promoUrl, self.__onPromoClosed, soundSpaceID=soundSpaceID)
         self.__isPromoOpen = True
 
     def __registerLoadingCallback(self, url, callback):
@@ -336,9 +336,13 @@ class PromoController(IPromoController):
                 self.__isInHangar = False
 
 
-def _showBrowserView(url, returnClb):
+def _showBrowserView(url, returnClb, soundSpaceID=None):
     webHandlers = webApiCollection(PromoWebApi, VehiclesWebApi, RequestWebApi, RankedBattlesWebApi, BattlePassWebApi, ui_web_api.OpenWindowWebApi, ui_web_api.CloseWindowWebApi, ui_web_api.OpenTabWebApi, ui_web_api.NotificationWebApi, ui_web_api.ContextMenuWebApi, ui_web_api.UtilWebApi, sound_web_api.SoundWebApi, sound_web_api.HangarSoundWebApi)
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BROWSER_VIEW, ctx={'url': url,
+    ctx = {'url': url,
      'returnClb': returnClb,
      'webHandlers': webHandlers,
-     'returnAlias': VIEW_ALIAS.LOBBY_HANGAR}), EVENT_BUS_SCOPE.LOBBY)
+     'returnAlias': VIEW_ALIAS.LOBBY_HANGAR}
+    if soundSpaceID is not None:
+        ctx['soundSpaceID'] = soundSpaceID
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BROWSER_VIEW, ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
+    return

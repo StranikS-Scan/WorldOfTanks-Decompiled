@@ -37,6 +37,10 @@
     <ER_56_IGR>	60003	</ER_56_IGR>
     <SCR_508_IGR>	60004	</SCR_508_IGR>
     <ER_51_bootcamp>	64001	</ER_51_bootcamp>
+    <Development_Radio>	65000	</Development_Radio>
+    <SCR_528_F_SH>	43	</SCR_528_F_SH>
+    <TRVP_13_SH>	44	</TRVP_13_SH>
+    <SCR_508_SH>	45	</SCR_508_SH>
   </ids>
   <shared>
     <FuG_Spr.D>
@@ -467,5 +471,59 @@
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	1.2	</repairCost>
     </SCR_508_IGR>
+    <Development_Radio>
+      <userString>	Development Radio	</userString>
+      <tags></tags>
+      <notInShop>	true	</notInShop>
+      <level>	1	</level>
+      <price>	0	</price>
+      <weight>	1	</weight>
+      <distance>	90	</distance>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+    </Development_Radio>
+    <SCR_508_SH>
+      <userString>	#france_vehicles:SCR_508_SH	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	400	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <radarRadius>	450	</radarRadius>
+      <radarCooldown>	30	</radarCooldown>
+    </SCR_508_SH>
+    <SCR_528_F_SH>
+      <userString>	#france_vehicles:SCR_528_F_SH	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	745	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <radarRadius>	470	</radarRadius>
+      <radarCooldown>	20	</radarCooldown>
+    </SCR_528_F_SH>
+    <TRVP_13_SH>
+      <userString>	#france_vehicles:TRVP_13_SH	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <radarRadius>	550	</radarRadius>
+      <radarCooldown>	45	</radarCooldown>
+    </TRVP_13_SH>
   </shared>
 </radios.xml>

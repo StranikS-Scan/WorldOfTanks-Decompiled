@@ -945,8 +945,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	52	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.12	</vehicleMovement>
-        <vehicleRotation>	0.12	</vehicleRotation>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
@@ -1777,6 +1777,12 @@
         <armor_13>	100	</armor_13>
         <armor_14>	220	</armor_14>
         <armor_15>	50	</armor_15>
+        <armor_16>	270	</armor_16>
+        <armor_17>	110	</armor_17>
+        <armor_18>	90	</armor_18>
+        <armor_19>	160	</armor_19>
+        <armor_20>	135	</armor_20>
+        <armor_21>	240	</armor_21>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	10000	</weight>
@@ -1827,7 +1833,7 @@
           </pitchLimits>
           <reloadTime>	10.2	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>

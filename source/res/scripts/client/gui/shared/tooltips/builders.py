@@ -9,8 +9,9 @@ from gui.shared.tooltips import contexts, advanced
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from soft_exception import SoftException
+from constants import IS_CHINA
 _logger = logging.getLogger(__name__)
-_SUPPORT_ADVANCED = True
+_SUPPORT_ADVANCED = not IS_CHINA
 DISABLED_ITEMS_ID = 12793
 
 class TooltipBuilder(object):
@@ -48,10 +49,11 @@ class AdvancedBuilder(TooltipBuilder):
     __settingsCore = dependency.descriptor(ISettingsCore)
 
     def _getDisableAnimFlag(self):
-        return self.__settingsCore.serverSettings.getDisableAnimTooltipFlag()
+        return self.__settingsCore.serverSettings.getDisableAnimTooltipFlag() if self.__settingsCore.serverSettings.settingsCache.settings.isSynced() else True
 
     def _setDisableAnimFlag(self):
-        self.__settingsCore.serverSettings.setDisableAnimTooltipFlag()
+        if self.__settingsCore.serverSettings.settingsCache.settings.isSynced():
+            self.__settingsCore.serverSettings.setDisableAnimTooltipFlag()
 
 
 class DataBuilder(SimpleBuilder):

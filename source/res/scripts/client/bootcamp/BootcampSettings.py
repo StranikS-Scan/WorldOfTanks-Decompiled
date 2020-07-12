@@ -84,6 +84,8 @@ class BattleSettings(object):
         prebattleSettings = {}
         if prebattleSection.has_key('timeout'):
             prebattleSettings['timeout'] = prebattleSection['timeout'].asFloat
+        if prebattleSection.has_key('wwSound'):
+            prebattleSettings['wwSound'] = prebattleSection['wwSound'].asString
         if prebattleSection.has_key('hints'):
             prebattleSettings['visible_hints'] = set(prebattleSection['hints'].asString.split())
             prebattleSettings['invisible_hints'] = self.__defaults['prebattle'] - prebattleSettings['visible_hints']

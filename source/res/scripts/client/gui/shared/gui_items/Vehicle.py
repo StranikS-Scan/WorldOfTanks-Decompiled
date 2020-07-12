@@ -46,6 +46,7 @@ from shared_utils import findFirst, CONST_CONTAINER
 from skeletons.gui.game_control import IIGRController, IRentalsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 from nation_change.nation_change_helpers import hasNationGroup, iterVehTypeCDsInNationGroup
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsRequester
@@ -141,14 +142,16 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     OPTIONAL_DEVICES_LOCKED = 'lockOptionalDevices'
     EQUIPMENT_LOCKED = 'lockEquipment'
     EPIC_BATTLES = 'epic_battles'
+    BATTLE_ROYALE = 'battle_royale'
     RENT_PROMOTION = 'rent_promotion'
-    BOB = 'bob'
+    EARN_CRYSTALS = 'earn_crystals'
 
 
 EPIC_ACTION_VEHICLE_CDS = (44033, 63265)
 _NOT_FULL_AMMO_MULTIPLIER = 0.2
 _MAX_RENT_MULTIPLIER = 2
 RentPackagesInfo = namedtuple('RentPackagesInfo', ('hasAvailableRentPackages', 'mainRentType', 'seasonType'))
+CrystalsEarnedInfo = namedtuple('CrystalsEarnedInfo', ('current', 'max'))
 
 class Vehicle(FittingItem):
     __slots__ = ('__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_rentPackagesInfo', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_tradeInAvailable', '_tradeOffAvailable', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_optDevices', '_shells', '_equipment', '_equipmentLayout', '_bonuses', '_crewIndices', '_slotsIds', '_crew', '_lastCrew', '_hasModulesToSelect', '_outfits', '_isStyleInstalled', '_slotsAnchors', '_unlockedBy', '_maxRentDuration', '_minRentDuration', '_slotsAnchorsById', '_hasNationGroup', '_extraSettings', '_perksController')
@@ -209,6 +212,7 @@ class Vehicle(FittingItem):
     lobbyContext = dependency.descriptor(ILobbyContext)
     eventsCache = dependency.descriptor(IEventsCache)
     igrCtrl = dependency.descriptor(IIGRController)
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None):
         if strCompactDescr is not None:
@@ -367,17 +371,18 @@ class Vehicle(FittingItem):
                     areaId = Area.MISC
                 else:
                     areaId = slotHelper.tankAreaId
-                if anchor.applyTo is not None:
-                    regions = REGIONS_BY_SLOT_TYPE[areaId][slotType]
-                    if anchor.applyTo in regions:
-                        regionIdx = regions.index(anchor.applyTo)
-                    else:
-                        continue
-                else:
-                    regionIdx = len(slotsAnchors[slotType][areaId])
                 if slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
+                    regionIdx = len(slotsAnchors[slotType][areaId])
                     customizationSlot = ProjectionDecalSlot(anchor, slotHelper.tankAreaId, regionIdx)
                 else:
+                    if anchor.applyTo is not None:
+                        regions = REGIONS_BY_SLOT_TYPE[areaId][slotType]
+                        if anchor.applyTo in regions:
+                            regionIdx = regions.index(anchor.applyTo)
+                        else:
+                            continue
+                    else:
+                        regionIdx = len(slotsAnchors[slotType][areaId])
                     customizationSlot = BaseCustomizationSlot(anchor, slotHelper.tankAreaId, regionIdx)
                 slotsAnchors[slotType][areaId][regionIdx] = customizationSlot
                 slotsAnchorsById[customizationSlot.slotId] = customizationSlot
@@ -1233,8 +1238,8 @@ class Vehicle(FittingItem):
         return self.isOnlyForEpicBattles and self.intCD in EPIC_ACTION_VEHICLE_CDS
 
     @property
-    def isOnlyForBob(self):
-        return checkForTags(self.tags, VEHICLE_TAGS.BOB)
+    def isOnlyForBattleRoyaleBattles(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.BATTLE_ROYALE)
 
     @property
     def isTelecom(self):
@@ -1255,6 +1260,22 @@ class Vehicle(FittingItem):
     @property
     def isOptionalDevicesLocked(self):
         return checkForTags(self.tags, VEHICLE_TAGS.OPTIONAL_DEVICES_LOCKED)
+
+    @property
+    def isEarnCrystals(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.EARN_CRYSTALS)
+
+    def getCrystalsEarnedInfo(self):
+        limit = 0
+        stats = self.itemsCache.items.stats
+        if self.isEarnCrystals:
+            limits = self.lobbyContext.getServerSettings().getCrystalRewardConfig().limits
+            if limits is not None:
+                if self.level in limits.level:
+                    limit = limits.level[self.level]
+                if self.intCD in limits.vehicle:
+                    limit = limits.vehicle[self.intCD]
+        return CrystalsEarnedInfo(stats.getWeeklyVehicleCrystals(self.intCD), limit)
 
     def hasLockMode(self):
         isBS = prb_getters.isBattleSession()

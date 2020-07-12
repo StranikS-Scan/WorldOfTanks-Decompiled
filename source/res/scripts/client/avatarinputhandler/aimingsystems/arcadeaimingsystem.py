@@ -9,6 +9,7 @@ import math_utils
 from AvatarInputHandler import AimingSystems
 from AvatarInputHandler.AimingSystems import IAimingSystem
 from ProjectileMover import collideDynamic
+from constants import CollisionFlags
 from debug_utils import LOG_WARNING
 import gun_rotation_shared
 
@@ -71,6 +72,7 @@ class ArcadeAimingSystem(IAimingSystem):
         self.__cursor.focusRadius = focusRadius
         self.__idealMatrix = Math.Matrix(self._matrix)
         self.__shotPointCalculator = ShotPointCalculatorPlanar() if enableSmartShotPointCalc else None
+        self.__worldSpaceAimingWithLimits = _WorldSpaceAimingWithLimits(self.__vehicleMProv)
         self._vehicleTypeDescriptor = None
         self.__cachedScanDirection = Vector3(0.0, 0.0, 0.0)
         self.__cachedScanStart = Vector3(0.0, 0.0, 0.0)
@@ -131,14 +133,7 @@ class ArcadeAimingSystem(IAimingSystem):
         xzDir = Vector3(self.__cursor.focusRadius * math.sin(self.__cursor.yaw), 0.0, self.__cursor.focusRadius * math.cos(self.__cursor.yaw))
         pivotPos = posOnVehicle + xzDir
         self.pitch = self.__calcPitchAngle(self.__cursor.distanceFromFocus, preferredPos - pivotPos)
-        self.__cursor.update(True)
-        aimMatrix = self.__getLookToAimMatrix()
-        aimMatrix.postMultiply(self.__cursor.matrix)
-        self._matrix.set(aimMatrix)
-        self.__updateScanRay()
-        aimMatrix = self.__getLookToAimMatrix()
-        aimMatrix.postMultiply(self.__cursor.idealMatrix)
-        self.__idealMatrix.set(aimMatrix)
+        self.update(0)
 
     def __calcPitchAngle(self, distanceFromFocus, direction):
         alpha = -self.__aimMatrix.pitch
@@ -163,18 +158,28 @@ class ArcadeAimingSystem(IAimingSystem):
 
     def getDesiredShotPoint(self):
         scanStart, scanDir = self.__getScanRay()
-        return self.getThirdPersonShotPoint() if self.__shotPointCalculator is None else self.__shotPointCalculator.getDesiredShotPoint(scanStart, scanDir)
+        if self.__worldSpaceAimingWithLimits.isEnabled:
+            return self.__worldSpaceAimingWithLimits.getShotPoint()
+        else:
+            return self.getThirdPersonShotPoint() if self.__shotPointCalculator is None else self.__shotPointCalculator.getDesiredShotPoint(scanStart, scanDir)
 
     def getThirdPersonShotPoint(self):
-        if self.__shotPointCalculator is not None:
+        if self.__worldSpaceAimingWithLimits.isEnabled:
+            return self.__worldSpaceAimingWithLimits.getAimPoint()
+        elif self.__shotPointCalculator is not None:
             return self.__shotPointCalculator.aimPlane.intersectRay(*self.__getScanRay())
         else:
             shotDistance = self._vehicleTypeDescriptor.shot.maxDistance if self._vehicleTypeDescriptor else 10000.0
             return AimingSystems.getDesiredShotPoint(shotDistance=shotDistance, *self.__getScanRay())
 
     def handleMovement(self, dx, dy):
-        self.yaw += dx
-        self.pitch += dy
+        if self.__worldSpaceAimingWithLimits.isEnabled:
+            ddx, ddy = self.__calculateWorldAimMovement(dx, dy)
+            self.__worldSpaceAimingWithLimits.move(ddx, ddy)
+            self.__cursor.lookAt(self.__worldSpaceAimingWithLimits.getAimPoint())
+        else:
+            self.yaw += dx
+            self.pitch += dy
 
     def update(self, deltaTime):
         self.__cursor.update(True)
@@ -185,7 +190,7 @@ class ArcadeAimingSystem(IAimingSystem):
         aimWithIdealMatrix = self.__getLookToAimMatrix()
         aimWithIdealMatrix.postMultiply(self.__cursor.idealMatrix)
         self.__idealMatrix.set(aimWithIdealMatrix)
-        if self.__shotPointCalculator is not None:
+        if self.__shotPointCalculator is not None and not self.__worldSpaceAimingWithLimits.isEnabled:
             self.__shotPointCalculator.update(*self.__getScanRay())
         return 0.0
 
@@ -198,6 +203,26 @@ class ArcadeAimingSystem(IAimingSystem):
     def __updateScanRay(self):
         self.__cachedScanDirection = self._matrix.applyVector(Vector3(0.0, 0.0, 1.0))
         self.__cachedScanStart = self._matrix.translation + self.__cachedScanDirection * 0.3
+
+    def setAimingLimits(self, limits):
+        if limits is None:
+            self.__worldSpaceAimingWithLimits.isEnabled = False
+            return
+        else:
+            currentLookPoint = self.getThirdPersonShotPoint()
+            self.__worldSpaceAimingWithLimits.init(limits, currentLookPoint)
+            self.__worldSpaceAimingWithLimits.isEnabled = True
+            self.__cursor.lookAt(currentLookPoint)
+            return
+
+    def __calculateWorldAimMovement(self, dx, dy):
+        nextAimRadius = currentAimRadius = math.fabs(self.__cursor.heightAboveBase / math.tan(self.pitch))
+        if dy != 0:
+            newPitch = math_utils.clamp(self.__anglesRange[0], -0.001, self.pitch + dy)
+            nextAimRadius = math.fabs(self.__cursor.heightAboveBase / math.tan(newPitch))
+        ddx = math.tan(dx) * currentAimRadius
+        ddy = nextAimRadius - currentAimRadius
+        return (ddx, ddy)
 
 
 class _AimPlane(object):
@@ -349,3 +374,81 @@ class ShotPointCalculatorPlanar(object):
         dirFromSniperPos.y = 0.0
         dirFromTurretPos.y = 0.0
         return viewDir.dot(dirFromSniperPos) < 0.0 or viewDir.dot(dirFromTurretPos) < 0.0
+
+
+class _WorldSpaceAimingWithLimits(object):
+
+    def __init__(self, basis):
+        self.__aimingLimit = (0, 0)
+        self.__basis = basis
+        self.__aimingPoint = Vector3(0, 0, 0)
+        self.__enabled = False
+        self.__lastCachedFrame = None
+        self.__cachedShotPoint = Vector3(0, 0, 0)
+        return
+
+    @property
+    def isEnabled(self):
+        return self.__enabled
+
+    @isEnabled.setter
+    def isEnabled(self, enabled):
+        if self.__enabled != enabled:
+            self.__enabled = enabled
+            if enabled:
+                self.move(0, 0)
+
+    def init(self, aimingLimits, initialAimingPoint):
+        near = max(min(aimingLimits[0], aimingLimits[1]), 1)
+        far = max(aimingLimits[0], aimingLimits[1], near)
+        self.__aimingLimit = (near, far)
+        origin = Matrix(self.__basis).translation
+        self.__aimingPoint = initialAimingPoint - origin
+        self.__aimingPoint.y = 0
+        if self.__aimingPoint.lengthSquared == 0:
+            self.__aimingPoint = Vector3(0, 0, near)
+        self.__lastCachedFrame = None
+        return
+
+    def getAimPoint(self):
+        return Matrix(self.__basis).translation + self.__aimingPoint
+
+    def getShotPoint(self):
+        currentFrameStamp = BigWorld.wg_getFrameTimestamp()
+        if self.__lastCachedFrame != currentFrameStamp:
+            wsAimPoint = self.getAimPoint()
+            groundIntersection = BigWorld.wg_collideSegment(BigWorld.player().spaceID, wsAimPoint + Vector3(0, 200, 0), wsAimPoint - Vector3(0, 200, 0), CollisionFlags.TRIANGLE_PROJECTILENOCOLLIDE)
+            if groundIntersection is None:
+                LOG_WARNING('Cannot determine on-ground target, point: ', wsAimPoint, ' not over or under ground')
+                self.__cachedShotPoint = wsAimPoint
+            else:
+                self.__cachedShotPoint = groundIntersection.closestPoint
+            self.__lastCachedFrame = currentFrameStamp
+        return self.__cachedShotPoint
+
+    def move(self, dx, dy):
+        forward = Vector3(self.__aimingPoint)
+        if forward.x == forward.z == 0:
+            forward.z = 1
+        forward.normalise()
+        right = forward * Vector3(0, -1, 0)
+        aimPoint = self.__aimingPoint + forward * dy + right * dx
+        self.__aimingPoint = self.__clampToAimLimits(aimPoint)
+        self.__lastCachedFrame = None
+        return
+
+    def __clampToAimLimits(self, position):
+        if not self.isEnabled:
+            return position
+        if position.x == position.z == 0:
+            position.z = 1
+        planarAimingVector = Vector3(position.x, 0, position.z)
+        length = planarAimingVector.length
+        planarAimingVector = planarAimingVector.scale(1.0 / length)
+        minLimit = self.__aimingLimit[0]
+        maxLimit = self.__aimingLimit[1]
+        if minLimit > 0 and length < minLimit:
+            position = planarAimingVector * minLimit
+        elif maxLimit > 0 and length > maxLimit:
+            position = planarAimingVector * maxLimit
+        return position

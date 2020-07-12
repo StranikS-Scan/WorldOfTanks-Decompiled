@@ -161,7 +161,9 @@ _PREMIUM_BLOCK_VO_META = base.PropertyMeta((('creditsPremiumBonusStr', '', 'cred
  ('premiumBonusStr', '', 'premiumBonusStr'),
  ('backgroundIcon', '', 'backgroundIcon'),
  ('isGetPremium', False, 'isGetPremium'),
- ('isUpgradeToPremiumPlus', False, 'isUpgradeToPremiumPlus')))
+ ('isUpgradeToPremiumPlus', False, 'isUpgradeToPremiumPlus'),
+ ('inBattleQueue', False, 'inBattleQueue'),
+ ('visibleDetailsBtn', False, 'visibleDetailsBtn')))
 _PREMIUM_BLOCK_VO_META.bind(personal.PremiumInfoBlock)
 _DAMAGE_DETAILS_VO_META = base.PropertyMeta((('damageTotalItems', 0, 'piercings'), ('damageDealtVals', None, 'damageDealtValues'), ('damageDealtNames', None, 'damageDealtNames')))
 _DAMAGE_DETAILS_VO_META.bind(personal.DamageDetailsBlock)
@@ -252,6 +254,7 @@ _PREMIUM_BONUS_VO_META = base.PropertyMeta((('description', '', 'description'),
  ('bonusIcon', '', 'bonusIcon')))
 _PREMIUM_BONUS_VO_META.bind(details.PremiumBonusDetailsBlock)
 _PREMIUM_EARNINGS_VO_META = base.DictMeta({'xpTitleStrings': [],
+ 'xpTitleTooltips': [],
  'xpPremValues': [],
  'xpNoPremValues': [],
  'creditsPremValues': [],
@@ -263,6 +266,7 @@ _PREMIUM_EARNINGS_BLOCK.addComponent(1, details.PremiumXPBlock(base.ListMeta(), 
 _PREMIUM_EARNINGS_BLOCK.addComponent(3, details.BaseXPBlock(base.ListMeta(), 'xpNoPremValues'))
 _PREMIUM_EARNINGS_BLOCK.addComponent(4, details.PremiumCreditsBlock(base.ListMeta(), 'creditsPremValues'))
 _PREMIUM_EARNINGS_BLOCK.addComponent(5, details.BaseCreditsBlock(base.ListMeta(), 'creditsNoPremValues'))
+_PREMIUM_EARNINGS_BLOCK.addComponent(6, details.XPTitleTooltipBlock(base.ListMeta(), 'xpTitleTooltips'))
 REGULAR_PERSONAL_STATS_BLOCK = base.StatsBlock(_PERSONAL_VO_META, 'personal')
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(0, personal.TotalEfficiencyDetailsHeader(_TOTAL_EFFICIENCY_HEADER_META, 'efficiencyHeader', _RECORD.PERSONAL))
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(1, personal.TotalEfficiencyDetailsBlock(base.ListMeta(), 'details', _RECORD.PERSONAL))

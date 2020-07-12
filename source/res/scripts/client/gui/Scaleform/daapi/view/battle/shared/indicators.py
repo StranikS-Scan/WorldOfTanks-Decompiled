@@ -575,7 +575,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         vStateCtrl = self.sessionProvider.shared.vehicleState
         vTypeDesc = vehicle.typeDescriptor
         vType = vTypeDesc.type
-        if vehicle.isAlive() and vTypeDesc.hasSiegeMode and not vTypeDesc.isWheeledVehicle and not vTypeDesc.isDualgunVehicle:
+        if vehicle.isAlive() and vTypeDesc.hasSiegeMode and not vTypeDesc.isWheeledVehicle and not vTypeDesc.type.isDualgunVehicleType:
             siegeModeParams = vType.siegeModeParams
             self._siegeComponent.staticMode = vTypeDesc.hasAutoSiegeMode
             self._switchTimeTable.update({_SIEGE_STATE.DISABLED: siegeModeParams[_SIEGE_STATE.SWITCHING_ON],

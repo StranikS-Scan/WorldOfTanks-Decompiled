@@ -319,8 +319,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
 
     def __updateTanksList(self):
         data = list()
-        criteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
-        modulesAll = self.itemsCache.items.getVehicles(criteria).values()
+        modulesAll = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE).values()
         modulesAll.sort()
         for module in modulesAll:
             if self.filter['nation'] != -1 and self.filter['nation'] != module.descriptor.type.id[0] or self.filter['tankType'] != 'None' and self.filter['tankType'] != -1 and self.filter['tankType'] != module.type:
@@ -336,12 +335,12 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         isNotRecruited = self.filter['location'] == BARRACKS_CONSTANTS.LOCATION_FILTER_NOT_RECRUITED
         self.__switchTankmanFiltersEnable(not isNotRecruited)
         if self.filter['location'] == BARRACKS_CONSTANTS.LOCATION_FILTER_DISMISSED:
-            self.__showDismissedTankmen(self.__buildCriteria())
+            self.__showDismissedTankmen(*self.__buildCriteria())
         elif isNotRecruited:
             self.__updateNotRecruitedTankmenField()
             self.__showNotRecruitedTankmen()
         else:
-            self.__showActiveTankmen(self.__buildCriteria())
+            self.__showActiveTankmen(*self.__buildCriteria())
 
     def __updateCachedTankmenList(self, *args):
         self.__sortedCachedTankmen = self.__getSortedTankmen()
@@ -350,12 +349,19 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
     def __getSortedTankmen(self):
         return sorted(self.itemsCache.items.getTankmen().itervalues(), cmp=TankmenComparator(self.itemsCache.items.getVehicle))
 
-    def __showActiveTankmen(self, criteria):
-        if self.__sortedCachedTankmen is None:
-            self.__sortedCachedTankmen = self.__getSortedTankmen()
+    def __getshownTankmens(self, vehicleCriteria):
+        if vehicleCriteria:
+            return self.itemsCache.items.removeUnsuitableTankmen(self.itemsCache.items.getTankmen().values(), vehicleCriteria)
+        else:
+            if self.__sortedCachedTankmen is None:
+                self.__sortedCachedTankmen = self.__getSortedTankmen()
+            return self.__sortedCachedTankmen
+
+    def __showActiveTankmen(self, criteria, vehicleCriteria=None):
+        allTankmen = self.__getshownTankmens(vehicleCriteria)
         tankmenInBarracks = 0
         tankmenList = [_packBuyBerthsSlot()]
-        for tankman in self.__sortedCachedTankmen:
+        for tankman in allTankmen:
             if not tankman.isInTank:
                 tankmenInBarracks += 1
             if not criteria(tankman):
@@ -381,14 +387,14 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         if tankmenInBarracks < slots:
             tankmenList.insert(1, {'empty': True,
              'freePlaces': slots - tankmenInBarracks})
-        self.as_setTankmenS({'tankmenCount': self.__getTankmenCountStr(tankmenInSlots, totalCount=len(self.__sortedCachedTankmen)),
+        self.as_setTankmenS({'tankmenCount': self.__getTankmenCountStr(tankmenInSlots, totalCount=len(allTankmen)),
          'placesCount': self.__getPlaceCountStr(free=max(slots - tankmenInBarracks, 0), totalCount=slots),
          'placesCountTooltip': None,
          'tankmenData': tankmenList,
          'hasNoInfoData': False})
         return
 
-    def __showDismissedTankmen(self, criteria):
+    def __showDismissedTankmen(self, criteria, vehicleCriteria=None):
         allTankmen = self.restore.getDismissedTankmen()
         tankmenList = list()
         for tankman in allTankmen:
@@ -508,13 +514,12 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         if self.filter['nationID'] is not None:
             vehicle = self.itemsCache.items.getItem(GUI_ITEM_TYPE.VEHICLE, int(self.filter['nationID']), int(self.filter['location']))
             criteria |= REQ_CRITERIA.TANKMAN.NATIVE_TANKS([vehicle.intCD])
-        eventVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.EVENT_BATTLE).keys()
-        criteria |= ~REQ_CRITERIA.TANKMAN.NATIVE_TANKS(eventVehicles)
-        return criteria
+        vehicleCriteria = ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+        return (criteria, vehicleCriteria)
 
     def __updateDismissedTankmen(self):
         if self.filter['location'] == BARRACKS_CONSTANTS.LOCATION_FILTER_DISMISSED:
-            self.__showDismissedTankmen(self.__buildCriteria())
+            self.__showDismissedTankmen(*self.__buildCriteria())
 
     def __switchTankmanFiltersEnable(self, value):
         self.as_switchFilterEnableS(nationEnable=value, roleEnable=value, typeEnable=value)

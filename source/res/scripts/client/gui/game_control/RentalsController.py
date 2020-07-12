@@ -6,7 +6,7 @@ import copy
 import typing
 import BigWorld
 import Event
-from constants import RentType, SEASON_NAME_BY_TYPE
+from constants import RentType, SEASON_NAME_BY_TYPE, IS_RENTALS_ENABLED
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.money import Money
 from helpers import dependency
@@ -36,10 +36,11 @@ class RentalsController(IRentalsController):
         super(RentalsController, self).fini()
 
     def onLobbyInited(self, event):
-        self.itemsCache.onSyncCompleted += self._update
-        self.epicController.onUpdated += self._update
-        if self.__rentNotifyTimeCallback is None:
-            self.__startRentTimeNotifyCallback()
+        if self.isEnabled():
+            self.itemsCache.onSyncCompleted += self._update
+            self.epicController.onUpdated += self._update
+            if self.__rentNotifyTimeCallback is None:
+                self.__startRentTimeNotifyCallback()
         return
 
     def onAvatarBecomePlayer(self):
@@ -48,12 +49,16 @@ class RentalsController(IRentalsController):
     def onDisconnected(self):
         self._stop()
 
+    def isEnabled(self):
+        return IS_RENTALS_ENABLED
+
     def _stop(self):
-        self.__clearRentTimeNotifyCallback()
-        self.__vehiclesForUpdate = None
         self.onRentChangeNotify.clear()
-        self.itemsCache.onSyncCompleted -= self._update
-        self.epicController.onUpdated -= self._update
+        if self.isEnabled():
+            self.__clearRentTimeNotifyCallback()
+            self.__vehiclesForUpdate = None
+            self.itemsCache.onSyncCompleted -= self._update
+            self.epicController.onUpdated -= self._update
         return
 
     def _update(self, *args):
@@ -62,12 +67,13 @@ class RentalsController(IRentalsController):
 
     def filterRentPackages(self, rentPrices):
         filteredRentPrices = {}
-        for rentType, packagesToFilter in rentPrices.iteritems():
-            if rentType == RentType.SEASON_RENT:
-                filteredRentPrices[rentType] = self.__filterSeasonCyclePackages(packagesToFilter, self.__seasonFilter)
-            if rentType == RentType.SEASON_CYCLE_RENT:
-                filteredRentPrices[rentType] = self.__filterSeasonCyclePackages(packagesToFilter, self.__cycleFilter)
-            filteredRentPrices[rentType] = copy.deepcopy(packagesToFilter)
+        if self.isEnabled():
+            for rentType, packagesToFilter in rentPrices.iteritems():
+                if rentType == RentType.SEASON_RENT:
+                    filteredRentPrices[rentType] = self.__filterSeasonCyclePackages(packagesToFilter, self.__seasonFilter)
+                if rentType == RentType.SEASON_CYCLE_RENT:
+                    filteredRentPrices[rentType] = self.__filterSeasonCyclePackages(packagesToFilter, self.__cycleFilter)
+                filteredRentPrices[rentType] = copy.deepcopy(packagesToFilter)
 
         return filteredRentPrices
 
@@ -77,27 +83,28 @@ class RentalsController(IRentalsController):
         mainRentType = None
         mainRentTypeWeight = float('-inf')
         seasonType = None
-        for rentType, packages in self.filterRentPackages(rentPrices).iteritems():
-            if packages:
-                if rentType == RentType.TIME_RENT:
-                    if mainRentType is None:
-                        mainRentType = RentType.TIME_RENT
-                        hasAvailableRentPackages = True
-                elif rentType == RentType.SEASON_RENT:
-                    if seasonRent:
-                        if seasonRent.duration == SeasonRentDuration.SEASON_CYCLE:
+        if self.isEnabled():
+            for rentType, packages in self.filterRentPackages(rentPrices).iteritems():
+                if packages:
+                    if rentType == RentType.TIME_RENT:
+                        if mainRentType is None:
+                            mainRentType = RentType.TIME_RENT
                             hasAvailableRentPackages = True
-                    else:
-                        hasAvailableRentPackages = True
-                elif rentType == RentType.SEASON_CYCLE_RENT:
-                    if not seasonRent:
-                        hasAvailableRentPackages = True
-                if hasAvailableRentPackages:
-                    rentTypeWeight = RENT_TYPE_WEIGHTS.get(rentType, 0)
-                    if rentTypeWeight > mainRentTypeWeight:
-                        mainRentType = rentType
-                        mainRentTypeWeight = rentTypeWeight
-                        seasonType = packages.itervalues().next().get('seasonType', None)
+                    elif rentType == RentType.SEASON_RENT:
+                        if seasonRent:
+                            if seasonRent.duration == SeasonRentDuration.SEASON_CYCLE:
+                                hasAvailableRentPackages = True
+                        else:
+                            hasAvailableRentPackages = True
+                    elif rentType == RentType.SEASON_CYCLE_RENT:
+                        if not seasonRent:
+                            hasAvailableRentPackages = True
+                    if hasAvailableRentPackages:
+                        rentTypeWeight = RENT_TYPE_WEIGHTS.get(rentType, 0)
+                        if rentTypeWeight > mainRentTypeWeight:
+                            mainRentType = rentType
+                            mainRentTypeWeight = rentTypeWeight
+                            seasonType = packages.itervalues().next().get('seasonType', None)
 
         return (hasAvailableRentPackages, mainRentType, seasonType)
 

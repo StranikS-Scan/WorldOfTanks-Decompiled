@@ -8,6 +8,7 @@ from gui.impl.gen.view_models.views.lobby.video.video_view_model import VideoVie
 from gui.impl.lobby.video.video_sound_manager import DummySoundManager
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
+from gui.Scaleform.Waiting import Waiting
 from gui.sounds.filters import switchVideoOverlaySoundFilter
 from helpers import getClientLanguage
 from shared_utils import CONST_CONTAINER
@@ -90,7 +91,6 @@ class VideoView(ViewImpl):
         super(VideoView, self)._initialize(*args, **kwargs)
         if videoSource is None:
             _logger.error('__videoSource is not specified!')
-            self.__onCloseWindow()
         else:
             self.viewModel.setVideoSource(videoSource)
             language = getClientLanguage()
@@ -103,7 +103,11 @@ class VideoView(ViewImpl):
             switchVideoOverlaySoundFilter(on=True)
         return
 
+    def _onLoaded(self, *args, **kwargs):
+        Waiting.suspend(id(self))
+
     def _finalize(self):
+        Waiting.resume(id(self))
         self.viewModel.onCloseBtnClick -= self.__onCloseWindow
         self.viewModel.onVideoStarted -= self.__onVideoStarted
         self.viewModel.onVideoStopped -= self.__onVideoStopped

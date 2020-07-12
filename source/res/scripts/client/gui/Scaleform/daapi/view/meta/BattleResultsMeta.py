@@ -36,3 +36,6 @@ class BattleResultsMeta(AbstractWindowView):
 
     def as_setTeamInfoS(self, uid, iconTag, teamName):
         return self.flashObject.as_setTeamInfo(uid, iconTag, teamName) if self._isDAAPIInited() else None
+
+    def as_setIsInBattleQueueS(self, value):
+        return self.flashObject.as_setIsInBattleQueue(value) if self._isDAAPIInited() else None

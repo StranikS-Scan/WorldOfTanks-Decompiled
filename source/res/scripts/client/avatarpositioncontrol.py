@@ -24,12 +24,15 @@ def logFunc(func):
 class ConsistentMatrices(object):
     attachedVehicleMatrix = property(lambda self: self.__attachedVehicleMatrix)
     ownVehicleMatrix = property(lambda self: self.__ownVehicleMProv)
+    ownVehicleTurretMProv = property(lambda self: self.__ownVehicleTurretMProv)
 
     def __init__(self):
         self.__attachedVehicleMatrix = Math.WGAdaptiveMatrixProvider()
         self.__attachedVehicleMatrix.target = math_utils.createIdentityMatrix()
         self.__ownVehicleMProv = Math.WGAdaptiveMatrixProvider()
         self.__ownVehicleMProv.target = math_utils.createIdentityMatrix()
+        self.__ownVehicleTurretMProv = Math.WGAdaptiveMatrixProvider()
+        self.__ownVehicleTurretMProv.target = math_utils.createIdentityMatrix()
         self.onVehicleMatrixBindingChanged = Event()
 
     def notifyEnterWorld(self, avatar):
@@ -83,8 +86,11 @@ class ConsistentMatrices(object):
     def __linkOwnVehicle(self, vehicle):
         if isinstance(vehicle.filter, BigWorld.WGVehicleFilter):
             self.__ownVehicleMProv.target = vehicle.filter.bodyMatrix
+            self.__ownVehicleTurretMProv.target = vehicle.filter.turretMatrix
         else:
             self.__ownVehicleMProv.target = vehicle.matrix
+            if vehicle.appearance:
+                self.__ownVehicleTurretMProv.target = vehicle.appearance.turretMatrix
 
 
 class AvatarPositionControl(CallbackDelayer):

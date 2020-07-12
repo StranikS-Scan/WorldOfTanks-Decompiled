@@ -2711,23 +2711,26 @@
         </turret>
       </unlocks>
       <armor>
-        <armor_1>	185	</armor_1>
-        <armor_2>	80	</armor_2>
+        <armor_1>	245	</armor_1>
+        <armor_2>	120	</armor_2>
         <armor_3>	80	</armor_3>
         <armor_4>	80	</armor_4>
-        <armor_6>	150	</armor_6>
-        <armor_7>	80	</armor_7>
+        <armor_5>	40	</armor_5>
+        <armor_6>	40	</armor_6>
+        <armor_7>	155	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	80	</armor_9>
+        <armor_9>	70	</armor_9>
         <armor_10>	40	</armor_10>
-        <armor_11>	40	</armor_11>
-        <armor_13>	0	</armor_13>
-        <armor_15>	150	</armor_15>
+        <armor_11>	80	</armor_11>
+        <armor_12>	80	</armor_12>
+        <armor_13>	140	</armor_13>
+        <armor_14>	50	</armor_14>
+        <armor_15>	100	</armor_15>
         <armor_16>	100	</armor_16>
       </armor>
-      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <primaryArmor>	armor_1 armor_2 armor_4	</primaryArmor>
       <weight>	10938	</weight>
-      <maxHealth>	364	</maxHealth>
+      <maxHealth>	394	</maxHealth>
       <rotationSpeed>	24	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	160	</maxHealth>
@@ -2741,13 +2744,13 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_88mm_KwK_43_L71>	shared	  <maxAmmo>	92	</maxAmmo>
+        <_88mm_KwK_43_L71_N>	shared	  <maxAmmo>	92	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 0.002778 8 0.016667 8 0.417779 8 0.437241 6 0.458333 6 0.472222 6 0.527778 6 0.541667 6 0.602594 8 0.983333 8 0.997222 8 1 8	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	_105mm_KwK45_L52	  <cost>	16800	</cost>
+            <gun>	_105mm_KwK45_L52_N	  <cost>	16800	</cost>
             </gun>
           </unlocks>
           <reloadTime>	7.7	</reloadTime>
@@ -2757,14 +2760,18 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
-            <armor_1>	185	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	250	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	195	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
+            <armor_5>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
@@ -2825,14 +2832,14 @@
             <density>	85.8401 80.2419	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_88mm_KwK_43_L71>
-        <_105mm_KwK45_L52>	shared	  <maxAmmo>	56	</maxAmmo>
+        </_88mm_KwK_43_L71_N>
+        <_105mm_KwK45_L52_N>	shared	  <maxAmmo>	56	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 0.002778 8 0.016667 8 0.417779 8 0.437241 6 0.458333 6 0.472222 6 0.527778 6 0.541667 6 0.602594 8 0.983333 8 0.997222 8 1 8	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	_105mm_KwK46_L68	  <cost>	46000	</cost>
+            <gun>	_105mm_KwK46_L68_N	  <cost>	46000	</cost>
             </gun>
           </unlocks>
           <reloadTime>	10.1	</reloadTime>
@@ -2842,14 +2849,18 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
-            <armor_1>	185	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	250	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	195	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
+            <armor_5>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
@@ -2911,8 +2922,8 @@
             <density>	87.7032 82.607	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_105mm_KwK45_L52>
-        <_105mm_KwK46_L68>	shared	  <maxAmmo>	42	</maxAmmo>
+        </_105mm_KwK45_L52_N>
+        <_105mm_KwK46_L68_N>	shared	  <maxAmmo>	42	</maxAmmo>
           <reloadTime>	10.3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
@@ -2920,14 +2931,18 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
-            <armor_1>	185	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	250	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	195	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
+            <armor_5>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
@@ -2993,7 +3008,7 @@
             <density>	81.5288 80.2971	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_105mm_KwK46_L68>
+        </_105mm_KwK46_L68_N>
       </guns>
       <models>
         <undamaged>	vehicles/german/G55_E-75/normal/lod0/Turret_01.model	</undamaged>
@@ -3492,11 +3507,11 @@
       <level>	9	</level>
       <price>	59500	</price>
       <unlocks>
-        <gun>	_128mm_KwK44_L55	  <cost>	63000	</cost>
+        <gun>	_128mm_KwK44_L55_N	  <cost>	63000	</cost>
         </gun>
       </unlocks>
       <armor>
-        <armor_1>	252	</armor_1>
+        <armor_1>	280	</armor_1>
         <armor_2>	252	</armor_2>
         <armor_3>	160	</armor_3>
         <armor_4>	160	</armor_4>
@@ -3507,6 +3522,7 @@
         <armor_9>	160	</armor_9>
         <armor_10>	40	</armor_10>
         <armor_11>	40	</armor_11>
+        <armor_12>	55	</armor_12>
         <armor_13>	0	</armor_13>
         <armor_15>	180	</armor_15>
         <armor_16>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -3514,7 +3530,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	16520	</weight>
-      <maxHealth>	464	</maxHealth>
+      <maxHealth>	494	</maxHealth>
       <rotationSpeed>	18	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	160	</maxHealth>
@@ -3529,7 +3545,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.976	</invisibilityFactor>
       <guns>
-        <_88mm_KwK_43_L71>	shared	  <maxAmmo>	92	</maxAmmo>
+        <_88mm_KwK_43_L71_N>	shared	  <maxAmmo>	92	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 0.002778 8 0.016667 8 0.417779 8 0.437241 6 0.458333 6 0.472222 5.5 0.527778 5.5 0.541667 6 0.602594 8 0.983333 8 0.997222 8 1 8	</maxPitch>
@@ -3541,7 +3557,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
-            <armor_1>	252	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	285	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
@@ -3609,8 +3625,8 @@
             <density>	85.8401 80.2419	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_88mm_KwK_43_L71>
-        <_105mm_KwK45_L52>	shared	  <maxAmmo>	56	</maxAmmo>
+        </_88mm_KwK_43_L71_N>
+        <_105mm_KwK45_L52_N>	shared	  <maxAmmo>	56	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 0.002778 8 0.016667 8 0.417779 8 0.437241 6 0.458333 6 0.472222 5.5 0.527778 5.5 0.541667 6 0.602594 8 0.983333 8 0.997222 8 1 8	</maxPitch>
@@ -3622,7 +3638,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
-            <armor_1>	252	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	285	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
@@ -3691,8 +3707,8 @@
             <density>	87.7032 82.607	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_105mm_KwK45_L52>
-        <_105mm_KwK46_L68>	shared	  <maxAmmo>	42	</maxAmmo>
+        </_105mm_KwK45_L52_N>
+        <_105mm_KwK46_L68_N>	shared	  <maxAmmo>	42	</maxAmmo>
           <reloadTime>	9.1	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
@@ -3700,7 +3716,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
-            <armor_1>	252	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	285	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
@@ -3708,6 +3724,10 @@
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
+            <armor_5>	175	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
@@ -3773,8 +3793,8 @@
             <density>	81.5288 80.2971	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_105mm_KwK46_L68>
-        <_128mm_KwK44_L55>	shared	  <maxAmmo>	36	</maxAmmo>
+        </_105mm_KwK46_L68_N>
+        <_128mm_KwK44_L55_N>	shared	  <maxAmmo>	36	</maxAmmo>
           <unlocks>
             <vehicle>	G56_E-100	  <cost>	183010	</cost>
             </vehicle>
@@ -3788,7 +3808,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
-            <armor_1>	252	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	285	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
@@ -3859,7 +3879,7 @@
             <density>	82.6601 88.1717	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_128mm_KwK44_L55>
+        </_128mm_KwK44_L55_N>
       </guns>
       <models>
         <undamaged>	vehicles/german/G55_E-75/normal/lod0/Turret_02.model	</undamaged>
@@ -4421,9 +4441,9 @@
   </physics>
   <clientAdjustmentFactors>
     <guns>
-      <_128mm_KwK44_L55>
+      <_128mm_KwK44_L55_N>
         <delta>	1.16901408	</delta>
-      </_128mm_KwK44_L55>
+      </_128mm_KwK44_L55_N>
     </guns>
     <armour>	1.039360667	</armour>
   </clientAdjustmentFactors>

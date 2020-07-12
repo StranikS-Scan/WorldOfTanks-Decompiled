@@ -3,7 +3,6 @@
 from shared_utils import CONST_CONTAINER
 
 class BROWSER(CONST_CONTAINER):
-    CHINA_BROWSER_COUNT = 999
     SIZE = (990, 550)
     VIDEO_SIZE = (864, 486)
 

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_control/arena_info/interfaces.py
 from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE as _SCOPE
 from gui.battle_control.controllers.interfaces import IBattleController
+from gui.battle_control.view_components import ViewComponentsController
 
 class IArenaController(IBattleController):
     __slots__ = ('__weakref__',)
@@ -87,6 +88,9 @@ class IArenaVehiclesController(IArenaLoadController, IContactsController):
     def invalidateFogOfWarEnabledFlag(self, flag):
         pass
 
+    def updateTriggeredChatCommands(self, chatCommands, arenaDP):
+        pass
+
 
 class ITeamsBasesController(IArenaController):
     __slots__ = ()
@@ -154,6 +158,73 @@ class IBattleFieldController(IArenaVehiclesController):
         pass
 
 
+class IProgressionController(IArenaLoadController):
+    __slots__ = ()
+    onVehicleUpgradeStarted = None
+    onVehicleUpgradeFinished = None
+
+    def getCurrentVehicle(self):
+        raise NotImplementedError
+
+    def getCurrentVehicleLevel(self):
+        raise NotImplementedError
+
+    def updateXP(self, xp):
+        raise NotImplementedError
+
+    def mayInstallModule(self, moduleItem):
+        raise NotImplementedError
+
+    def updateLevel(self, level, minXP, maxXP):
+        pass
+
+    def updateVehicleXP(self):
+        pass
+
+    def vehicleVisualChangingStarted(self, vehicleID):
+        pass
+
+    def vehicleVisualChangingFinished(self, vehicleID):
+        pass
+
+    def addRuntimeView(self, view):
+        pass
+
+    def removeRuntimeView(self, view):
+        pass
+
+    def vehicleUpgradeRequest(self, intCD, moduleItem):
+        pass
+
+    def vehicleUpgradeResponse(self, intCD, successfullyProcessed):
+        pass
+
+    def isModuleSelected(self, intCD):
+        pass
+
+    def getModule(self, intCD):
+        raise NotImplementedError
+
+    def getInstalledOnVehicleAnalogByIntCD(self, intCD):
+        raise NotImplementedError
+
+    def getWindowCtrl(self):
+        raise NotImplementedError
+
+    def updateVehicleReadinessTime(self, cooldownTime, reason):
+        raise NotImplementedError
+
+    def isVehicleReady(self):
+        raise NotImplementedError
+
+    def setAverageBattleLevel(self, level):
+        raise NotImplementedError
+
+    @property
+    def maxLevel(self):
+        raise NotImplementedError
+
+
 class IContactsAndPersonalInvitationsController(IContactsController, IPersonalInvitationsController):
     __slots__ = ()
 
@@ -202,4 +273,34 @@ class IAnonymizerFakesController(IArenaVehiclesController):
         raise NotImplementedError
 
     def removeTmpIgnored(self, avatarSessionID):
+        raise NotImplementedError
+
+
+class IRadarController(object):
+
+    def activateRadar(self):
+        raise NotImplementedError
+
+    def updateRadarReadinessTime(self, radarReadinessTime):
+        raise NotImplementedError
+
+    def updateRadarReadiness(self, isReady):
+        raise NotImplementedError
+
+    def addRuntimeView(self, view):
+        raise NotImplementedError
+
+    def removeRuntimeView(self, view):
+        raise NotImplementedError
+
+
+class ISpawnController(object):
+
+    def showSpawnPoints(self, points):
+        raise NotImplementedError
+
+
+class IVehicleCountController(IArenaVehiclesController, ViewComponentsController):
+
+    def updateAttachedVehicle(self, vehicleID):
         raise NotImplementedError

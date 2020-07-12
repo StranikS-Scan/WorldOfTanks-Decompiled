@@ -259,7 +259,7 @@ class RecruitParamsComponent(RecruitParametersMeta):
          'data': data}
 
     def __getNationsCriteria(self):
-        return REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.VEHICLE.OBSERVER
+        return REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.VEHICLE.OBSERVER | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
 
     def __getVehicleTypeCriteria(self, nationID, vclass):
         criteria = self.__getClassesCriteria(nationID) | REQ_CRITERIA.VEHICLE.CLASSES([vclass])
@@ -300,6 +300,7 @@ class RecruitParamsComponent(RecruitParametersMeta):
             criteria |= ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
         if constants.IS_DEVELOPMENT:
             criteria |= ~REQ_CRITERIA.VEHICLE.IS_BOT
+        criteria |= ~(REQ_CRITERIA.SECRET | ~REQ_CRITERIA.INVENTORY_OR_UNLOCKED)
         modulesAll = self.itemsCache.items.getVehicles(criteria=criteria).values()
         modulesAll.sort()
         self.__filteredNations = dict()

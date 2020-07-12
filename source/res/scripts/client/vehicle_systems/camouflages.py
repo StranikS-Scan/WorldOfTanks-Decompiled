@@ -16,6 +16,7 @@ import items.vehicles
 from constants import IS_EDITOR
 from items.vehicles import makeIntCompactDescrByID, getItemByCompactDescr
 from items.customizations import parseOutfitDescr, CustomizationOutfit, createNationalEmblemComponents
+from vehicle_outfit.outfit import Outfit
 from vehicle_outfit.packers import ProjectionDecalPacker
 from vehicle_systems.tankStructure import VehiclePartsTuple
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes
@@ -28,7 +29,7 @@ from helpers import newFakeModel
 from soft_exception import SoftException
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 if typing.TYPE_CHECKING:
-    from items.components.shared_components import CustomizationSlotDescription
+    from items.components.shared_components import ProjectionDecalSlotDescription
     from vehicle_outfit.containers import MultiSlot
 _logger = logging.getLogger(__name__)
 RepaintParams = namedtuple('PaintParams', ('enabled', 'baseColor', 'color', 'metallic', 'gloss', 'fading', 'strength'))
@@ -128,6 +129,10 @@ def getOutfitComponent(outfitCD, vehicleDescriptor=None):
         if outfitComponent.styleId != 0 and season is not None:
             intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, outfitComponent.styleId)
             styleDescr = getItemByCompactDescr(intCD)
+            if IS_EDITOR:
+                if hasattr(outfitComponent, 'edSeasonsMask'):
+                    enyOutfit = styleDescr.outfits[season]
+                    season = enyOutfit.edSeasonsMask
             baseOutfitComponent = deepcopy(styleDescr.outfits[season])
             if vehicleDescriptor and ItemTags.ADD_NATIONAL_EMBLEM in styleDescr.tags:
                 emblems = createNationalEmblemComponents(vehicleDescriptor)
@@ -136,6 +141,15 @@ def getOutfitComponent(outfitCD, vehicleDescriptor=None):
         return outfitComponent
     else:
         return CustomizationOutfit()
+
+
+def prepareBattleOutfit(outfitCD, vehicleDescriptor, vehicleId):
+    vehicleCD = vehicleDescriptor.makeCompactDescr()
+    outfitComponent = getOutfitComponent(outfitCD, vehicleDescriptor)
+    outfit = Outfit(component=outfitComponent, vehicleCD=vehicleCD)
+    player = BigWorld.player()
+    forceHistorical = player.isHistoricallyAccurate and player.playerVehicleID != vehicleId and not outfit.isHistorical()
+    return Outfit(vehicleCD=vehicleCD) if forceHistorical else outfit
 
 
 def createSlotMap(vehDescr, slotTypeName):
@@ -560,39 +574,39 @@ def getGenericProjectionDecals(outfit, vehDesc):
             fixedDecalParams = __getFixedProjectionDecalParams(slotParams)
             decalsParams.append(fixedDecalParams)
 
-    if decalsParams:
-        return decalsParams
-    else:
-        slotsByIdMap, slotsByTagMap = __createVehSlotsMaps(vehDesc)
-        projectionDecalsMultiSlot = outfit.misc.slotFor(GUI_ITEM_TYPE.PROJECTION_DECAL)
-        if style is not None:
-            succeeded = _matchTaggedProjectionDecalsToSlots(projectionDecalsMultiSlot, slotsByTagMap)
-            if not succeeded:
-                _logger.error('Failed to match tagged projection decals of style: %(styleId)s to vehicle: %(vehName)s slots.', {'styleId': outfit.id,
+    if not IS_EDITOR:
+        if decalsParams:
+            return decalsParams
+    slotsByIdMap, slotsByTagMap = __createVehSlotsMaps(vehDesc)
+    projectionDecalsMultiSlot = outfit.misc.slotFor(GUI_ITEM_TYPE.PROJECTION_DECAL)
+    if style is not None:
+        succeeded = _matchTaggedProjectionDecalsToSlots(projectionDecalsMultiSlot, slotsByTagMap)
+        if not succeeded:
+            _logger.error('Failed to match tagged projection decals of style: %(styleId)s to vehicle: %(vehName)s slots.', {'styleId': outfit.id,
+             'vehName': vehDesc.type.name})
+            return decalsParams
+    for idx in projectionDecalsMultiSlot.order():
+        slotData = projectionDecalsMultiSlot.getSlotData(idx)
+        if slotData.isEmpty():
+            continue
+        item = getItemByCompactDescr(slotData.intCD)
+        component = slotData.component
+        slotId = component.slotId
+        if slotId != ProjectionDecalPacker.STYLED_SLOT_ID:
+            if slotId not in slotsByIdMap:
+                _logger.error('Projection Decal slot mismatch. SlotId: %(slotId)s; Vehicle: %(vehName)s', {'slotId': slotId,
                  'vehName': vehDesc.type.name})
-                return decalsParams
-        for idx in projectionDecalsMultiSlot.order():
-            slotData = projectionDecalsMultiSlot.getSlotData(idx)
-            if slotData.isEmpty():
                 continue
-            item = getItemByCompactDescr(slotData.intCD)
-            component = slotData.component
-            slotId = component.slotId
-            if slotId != ProjectionDecalPacker.STYLED_SLOT_ID:
-                if slotId not in slotsByIdMap:
-                    _logger.error('Projection Decal slot mismatch. SlotId: %(slotId)s; Vehicle: %(vehName)s', {'slotId': slotId,
-                     'vehName': vehDesc.type.name})
-                    continue
-                slotParams = slotsByIdMap[slotId]
-            elif component.tags:
-                continue
-            else:
-                slotParams = None
-            decalParams = __getProjectionDecalParams(vehDesc, item, component, slotParams)
-            if decalParams is not None:
-                decalsParams.append(decalParams)
+            slotParams = slotsByIdMap[slotId]
+        elif component.tags:
+            continue
+        else:
+            slotParams = None
+        decalParams = __getProjectionDecalParams(vehDesc, item, component, slotParams)
+        if decalParams is not None:
+            decalsParams.append(decalParams)
 
-        return decalsParams
+    return decalsParams
 
 
 def __vehicleSlotsByType(vehDesc, slotType):
@@ -683,22 +697,25 @@ def __getProjectionDecalScale(component, slotParams=None):
 def __getProjectionDecalTextures(item, component, vehDesc):
     texture = item.texture
     glossTexture = item.glossTexture
-    if item.isProgressive():
-        progressionLevel = component.progressionLevel
-        if progressionLevel == 0:
-            itemsCache = dependency.instance(IItemsCache)
-            inventory = itemsCache.items.inventory
-            intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.PROJECTION_DECAL, item.id)
-            progressData = inventory.getC11nProgressionData(intCD, vehDesc.type.compactDescr)
-            if progressData is not None:
-                progressionLevel = progressData.currentLevel
-        if progressionLevel:
-            texture = Customization.getTextureByProgressionLevel(texture, progressionLevel)
-            if glossTexture:
-                glossTexture = Customization.getTextureByProgressionLevel(glossTexture, progressionLevel)
-        else:
-            return (None, None)
-    return (texture, glossTexture)
+    if IS_EDITOR:
+        return (texture, glossTexture)
+    else:
+        if item.isProgressive():
+            progressionLevel = component.progressionLevel
+            if progressionLevel == 0:
+                itemsCache = dependency.instance(IItemsCache)
+                inventory = itemsCache.items.inventory
+                intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.PROJECTION_DECAL, item.id)
+                progressData = inventory.getC11nProgressionData(intCD, vehDesc.type.compactDescr)
+                if progressData is not None:
+                    progressionLevel = progressData.currentLevel
+            if progressionLevel:
+                texture = Customization.getTextureByProgressionLevel(texture, progressionLevel)
+                if glossTexture:
+                    glossTexture = Customization.getTextureByProgressionLevel(glossTexture, progressionLevel)
+            else:
+                return (None, None)
+        return (texture, glossTexture)
 
 
 def getOutfitData(appearance, outfit, vehicleDescr, isDamaged):

@@ -1,28 +1,28 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/AccountSettings.py
 import base64
-import copy
 import cPickle as pickle
+import copy
 from copy import deepcopy
-import constants
 import BigWorld
 import CommandMapping
-import Settings
 import Event
+import Settings
 import WWISE
-from constants import VEHICLE_CLASSES, MAX_VEHICLE_LEVEL
-from items.components.crew_books_constants import CREW_BOOK_RARITY
-from account_helpers.settings_core.settings_constants import GAME
+import constants
+import nations
 from account_helpers import gameplay_ctx
+from account_helpers.settings_core.settings_constants import GAME, BattleCommStorageKeys
+from constants import VEHICLE_CLASSES, MAX_VEHICLE_LEVEL
 from debug_utils import LOG_CURRENT_EXCEPTION
-from gui.Scaleform.genConsts.PROFILE_CONSTANTS import PROFILE_CONSTANTS
 from gui.Scaleform.genConsts.MISSIONS_CONSTANTS import MISSIONS_CONSTANTS
+from gui.Scaleform.genConsts.PROFILE_CONSTANTS import PROFILE_CONSTANTS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
-from soft_exception import SoftException
-from skeletons.account_helpers.settings_core import ISettingsCore
 from helpers import dependency
-import nations
+from items.components.crew_books_constants import CREW_BOOK_RARITY
+from skeletons.account_helpers.settings_core import ISettingsCore
+from soft_exception import SoftException
 KEY_FILTERS = 'filters'
 KEY_SESSION_SETTINGS = 'session_settings'
 KEY_SETTINGS = 'settings'
@@ -42,15 +42,16 @@ RANKED_CAROUSEL_FILTER_CLIENT_1 = 'RANKED_CAROUSEL_FILTER_CLIENT_1'
 EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
 EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
 EPICBATTLE_CAROUSEL_FILTER_CLIENT_1 = 'EPICBATTLE_CAROUSEL_FILTER_CLIENT_1'
-BOB_CAROUSEL_FILTER_1 = 'BOB_CAROUSEL_FILTER_1'
-BOB_CAROUSEL_FILTER_2 = 'BOB_CAROUSEL_FILTER_2'
-BOB_CAROUSEL_FILTER_CLIENT_1 = 'BOB_CAROUSEL_FILTER_CLIENT_1'
 STORAGE_VEHICLES_CAROUSEL_FILTER_1 = 'STORAGE_CAROUSEL_FILTER_1'
 BATTLEPASS_CAROUSEL_FILTER_1 = 'BATTLEPASS_CAROUSEL_FILTER_1'
 BATTLEPASS_CAROUSEL_FILTER_CLIENT_1 = 'BATTLEPASS_CAROUSEL_FILTER_CLIENT_1'
+ROYALE_CAROUSEL_FILTER_1 = 'ROYALE_CAROUSEL_FILTER_1'
+ROYALE_CAROUSEL_FILTER_2 = 'ROYALE_CAROUSEL_FILTER_2'
+ROYALE_CAROUSEL_FILTER_CLIENT_1 = 'ROYALE_CAROUSEL_FILTER_CLIENT_1'
 BARRACKS_FILTER = 'barracks_filter'
 ORDERS_FILTER = 'ORDERS_FILTER'
 CURRENT_VEHICLE = 'current'
+ROYALE_VEHICLE = 'ROYALE_VEHICLE'
 GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
 EULA_VERSION = 'EULA_VERSION'
 LINKEDSET_QUESTS = 'LINKEDSET_QUEST'
@@ -109,6 +110,7 @@ LAST_SELECTED_PM_BRANCH = 'lastSelectedPMBranch'
 WHEELED_DEATH_DELAY_COUNT = 'wheeledDeathCounter'
 LAST_BATTLE_PASS_POINTS_SEEN = 'lastBattlePassPointsSeen'
 BATTLE_PASS_VIDEOS_CONFIG = 'battlePassVideosConfig'
+CRYSTALS_INFO_SHOWN = 'crystalsInfoShown'
 ANONYMIZER = GAME.ANONYMIZER
 CUSTOMIZATION_SECTION = 'customization'
 CAROUSEL_ARROWS_HINT_SHOWN_FIELD = 'isCarouselsArrowsHintShown'
@@ -118,9 +120,12 @@ BATTLE_EFFICIENCY_SECTION_EXPANDED_FIELD = 'battleEfficiencySectionExpanded'
 SIEGE_HINT_SECTION = 'siegeModeHint'
 WHEELED_MODE_HINT_SECTION = 'wheeledModeScreenHint'
 TRAJECTORY_VIEW_HINT_SECTION = 'trajectoryViewHint'
+RADAR_HINT_SECTION = 'radarHint'
 PRE_BATTLE_HINT_SECTION = 'preBattleHintSection'
 QUEST_PROGRESS_HINT_SECTION = 'questProgressHint'
 HELP_SCREEN_HINT_SECTION = 'helpScreenHint'
+IBC_HINT_SECTION = 'battleCommunicationHint'
+MINIMAP_IBC_HINT_SECTION = 'minimapHintSection'
 WATCHED_PRE_BATTLE_TIPS_SECTION = 'watchedPreBattleTipsSection'
 LAST_DISPLAY_DAY = 'lastDisplayDay'
 HINTS_LEFT = 'hintsLeft'
@@ -139,6 +144,7 @@ RANKED_WEB_INFO_UPDATE = 'rankedWebLeagueUpdate'
 RANKED_AWARDS_BUBBLE_YEAR_REACHED = 'rankedAwardsBubbleYearReached'
 RANKED_ENTITLEMENT_EVENTS_AMOUNT = 'rankedEntitlementEventsAmount'
 RANKED_YEAR_POSITION = 'rankedYearPosition'
+BATTLE_ROYALE_HANGAR_BOTTOM_PANEL_VIEWED = 'battleRoyaleHangarBottomPanelViewed'
 MARATHON_REWARD_WAS_SHOWN_PREFIX = 'marathonRewardScreenWasShown'
 MARATHON_VIDEO_WAS_SHOWN_PREFIX = 'marathonRewardVideoWasShown'
 SUBTITLES = 'subtitles'
@@ -238,7 +244,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                    'rented': True,
                                    'event': True,
                                    'favorite': False,
-                                   'bonus': False},
+                                   'bonus': False,
+                                   'crystals': False},
                CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                BATTLEPASS_CAROUSEL_FILTER_CLIENT_1: {'battlePassSeason': 0},
                RANKED_CAROUSEL_FILTER_1: {'ussr': False,
@@ -275,6 +282,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'gameMode': False,
                                           'favorite': False,
                                           'bonus': False,
+                                          'crystals': False,
                                           constants.ROLES_COLLAPSE: False,
                                           'notDefined': True,
                                           'tank1': False,
@@ -289,6 +297,43 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'scout2': False,
                                           'SPG1': False},
                RANKED_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
+               ROYALE_CAROUSEL_FILTER_1: {'ussr': False,
+                                          'germany': False,
+                                          'usa': False,
+                                          'china': False,
+                                          'france': False,
+                                          'uk': False,
+                                          'japan': False,
+                                          'czech': False,
+                                          'sweden': False,
+                                          'poland': False,
+                                          'italy': False,
+                                          'lightTank': False,
+                                          'mediumTank': False,
+                                          'heavyTank': False,
+                                          'SPG': False,
+                                          'AT-SPG': False,
+                                          'level_1': False,
+                                          'level_2': False,
+                                          'level_3': False,
+                                          'level_4': False,
+                                          'level_5': False,
+                                          'level_6': False,
+                                          'level_7': False,
+                                          'level_8': False,
+                                          'level_9': False,
+                                          'level_10': False},
+               ROYALE_CAROUSEL_FILTER_2: {'premium': False,
+                                          'elite': False,
+                                          'igr': False,
+                                          'rented': True,
+                                          'event': True,
+                                          'gameMode': False,
+                                          'favorite': False,
+                                          'bonus': False,
+                                          'crystals': False,
+                                          'battleRoyale': True},
+               ROYALE_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                EPICBATTLE_CAROUSEL_FILTER_1: {'ussr': False,
                                               'germany': False,
                                               'usa': False,
@@ -322,44 +367,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'event': True,
                                               'gameMode': False,
                                               'favorite': False,
-                                              'bonus': False},
+                                              'bonus': False,
+                                              'crystals': False},
                EPICBATTLE_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                BATTLEPASS_CAROUSEL_FILTER_1: {'isCommonProgression': False},
-               BOB_CAROUSEL_FILTER_1: {'ussr': False,
-                                       'germany': False,
-                                       'usa': False,
-                                       'china': False,
-                                       'france': False,
-                                       'uk': False,
-                                       'japan': False,
-                                       'czech': False,
-                                       'sweden': False,
-                                       'poland': False,
-                                       'italy': False,
-                                       'lightTank': False,
-                                       'mediumTank': False,
-                                       'heavyTank': False,
-                                       'SPG': False,
-                                       'AT-SPG': False,
-                                       'level_1': False,
-                                       'level_2': False,
-                                       'level_3': False,
-                                       'level_4': False,
-                                       'level_5': False,
-                                       'level_6': False,
-                                       'level_7': False,
-                                       'level_8': False,
-                                       'level_9': False,
-                                       'level_10': True},
-               BOB_CAROUSEL_FILTER_2: {'premium': False,
-                                       'elite': False,
-                                       'igr': False,
-                                       'rented': True,
-                                       'event': True,
-                                       'gameMode': False,
-                                       'favorite': False,
-                                       'bonus': False},
-               BOB_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                MISSION_SELECTOR_FILTER: {'inventory': False},
                PM_SELECTOR_FILTER: {'inventory': False},
                BLUEPRINTS_STORAGE_FILTER: {'unlock_available': False,
@@ -425,6 +436,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'selectedColumnSorting': 'descending'},
                SPEAKERS_DEVICE: 0},
  KEY_FAVORITES: {CURRENT_VEHICLE: 0,
+                 ROYALE_VEHICLE: 0,
                  FALLOUT_VEHICLES: {}},
  KEY_SETTINGS: {'unitWindow': {SELECTED_INTRO_VEHICLES_FIELD: []},
                 'vehicleSellDialog': {'isOpened': False},
@@ -596,6 +608,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'vehicleCarouselStats': True,
                 WHEELED_DEATH_DELAY_COUNT: 10,
                 NEW_SETTINGS_COUNTER: {'GameSettings': {'gameplay_epicStandard': True,
+                                                        BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION: True,
                                                         'c11nHistoricallyAccurate': True,
                                                         'hangarCamParallaxEnabled': True,
                                                         'hangarCamPeriod': True,
@@ -611,7 +624,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                             'feedbackQuestsProgress': {'progressViewType': True,
                                                                                        'progressViewConditions': True},
                                                             'feedbackDamageIndicator': {'damageIndicatorAllies': True}},
-                                       'ControlsSettings': {'showQuestProgress': True,
+                                       'ControlsSettings': {'highlightLocation': True,
+                                                            'showQuestProgress': True,
                                                             'chargeFire': True}},
                 SHOW_OPT_DEVICE_HINT: True,
                 SHOW_OPT_DEVICE_HINT_TROPHY: True,
@@ -624,13 +638,16 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 SELECTED_QUEST_IN_REPLAY: None,
                 APPLIED_COLOR_SETTINGS: {},
                 LAST_SELECTED_PM_BRANCH: 0,
+                CRYSTALS_INFO_SHOWN: False,
                 TRAJECTORY_VIEW_HINT_SECTION: {HINTS_LEFT: 3,
                                                LAST_DISPLAY_DAY: 0,
                                                NUM_BATTLES: 0},
                 PRE_BATTLE_HINT_SECTION: {QUEST_PROGRESS_HINT_SECTION: {HINTS_LEFT: 3,
                                                                         LAST_DISPLAY_DAY: 0,
                                                                         NUM_BATTLES: 0},
-                                          HELP_SCREEN_HINT_SECTION: {}},
+                                          HELP_SCREEN_HINT_SECTION: {},
+                                          IBC_HINT_SECTION: {HINTS_LEFT: 10}},
+                MINIMAP_IBC_HINT_SECTION: {HINTS_LEFT: 10},
                 WATCHED_PRE_BATTLE_TIPS_SECTION: {},
                 SIEGE_HINT_SECTION: {HINTS_LEFT: 3,
                                      LAST_DISPLAY_DAY: 0,
@@ -638,6 +655,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 WHEELED_MODE_HINT_SECTION: {HINTS_LEFT: 3,
                                             LAST_DISPLAY_DAY: 0,
                                             NUM_BATTLES: 0},
+                RADAR_HINT_SECTION: {HINTS_LEFT: 3,
+                                     LAST_DISPLAY_DAY: 0,
+                                     NUM_BATTLES: 0},
                 CREW_SKINS_VIEWED: set(),
                 CREW_BOOKS_VIEWED: {CREW_BOOK_RARITY.CREW_COMMON: {},
                                     CREW_BOOK_RARITY.CREW_EPIC: {},
@@ -648,6 +668,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 VEHICLES_WITH_BLUEPRINT_CONFIRM: {},
                 IS_FIRST_ENTRY_BY_DIVISION_ID: {},
                 STYLE_PREVIEW_VEHICLES_POOL: [],
+                BATTLE_ROYALE_HANGAR_BOTTOM_PANEL_VIEWED: False,
                 RANKED_STYLED_VEHICLES_POOL: [],
                 RANKED_WEB_INFO: None,
                 RANKED_WEB_INFO_UPDATE: None,
@@ -660,6 +681,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 SUBTITLES: True,
                 RANKED_YEAR_POSITION: None,
                 TOP_OF_TREE_CONFIG: {},
+                NATION_CHANGE_VIEWED: False,
                 TEN_YEARS_COUNTDOWN_ON_BOARDING_LAST_VISITED_BLOCK: 0},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
@@ -717,6 +739,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                              'gameMode': False,
                                                              'favorite': False,
                                                              'bonus': False,
+                                                             'battleRoyale': False,
                                                              'searchNameVehicle': ''},
                         'storage_shells': {'filterMask': 0,
                                            'vehicleCD': None},
@@ -764,7 +787,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 41
+    version = 43
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -1148,18 +1171,7 @@ class AccountSettings(object):
                             accSettings.write(NEW_LOBBY_TAB_COUNTER, _pack(counters))
 
             if currVersion < 37:
-                cmSection = AccountSettings._readSection(Settings.g_instance.userPrefs, Settings.KEY_COMMAND_MAPPING)
-                for command, section in cmSection.items()[:]:
-                    newSection = None
-                    fireKey = AccountSettings._readSection(section, 'fireKey').asString
-                    if fireKey == 'KEY_N':
-                        if command == 'CMD_QUEST_PROGRESS_SHOW':
-                            pass
-                        else:
-                            newSection = cmSection.createSection('CMD_QUEST_PROGRESS_SHOW')
-                    if newSection is not None:
-                        newSection.writeString('fireKey', 'KEY_NONE')
-
+                AccountSettings.checkAndResetFireKeyIfInUse('CMD_QUEST_PROGRESS_SHOW', 'KEY_N')
                 CommandMapping.g_instance.restoreUserConfig()
             if currVersion < 38:
                 for key, section in _filterAccountSection(ads):
@@ -1202,6 +1214,26 @@ class AccountSettings(object):
                         if flushName in counterSettings.keys():
                             counterSettings.write(flushName, _pack(1))
 
+            if currVersion < 42:
+                for key, section in _filterAccountSection(ads):
+                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    if PRE_BATTLE_HINT_SECTION in accSettings.keys():
+                        preBattleSection = DEFAULT_VALUES[KEY_SETTINGS][PRE_BATTLE_HINT_SECTION].copy()
+                        defPre = DEFAULT_VALUES[KEY_SETTINGS][PRE_BATTLE_HINT_SECTION].copy()[IBC_HINT_SECTION]
+                        for key1, section1 in accSettings.items()[:]:
+                            if key1 == PRE_BATTLE_HINT_SECTION:
+                                preBattleSection = _unpack(section1.asString)
+                                preBattleSection[IBC_HINT_SECTION] = defPre
+                                accSettings.deleteSection(key1)
+                                break
+
+                        accSettings.write('preBattleHintSection', _pack(preBattleSection))
+
+            if currVersion < 43:
+                AccountSettings.checkAndResetFireKeyIfInUse(expectedCommand='CMD_CHAT_SHORTCUT_THANKYOU', expectedKey='KEY_F3')
+                AccountSettings.checkAndResetFireKeyIfInUse(expectedCommand='CMD_CHAT_SHORTCUT_CONTEXT_COMMIT', expectedKey='KEY_F2')
+                AccountSettings.removeOldCommandAndReuseFireKey(oldCommand='CMD_CHAT_SHORTCUT_ATTACK_MY_TARGET', newCommand='CMD_CHAT_SHORTCUT_CONTEXT_COMMAND')
+                CommandMapping.g_instance.restoreUserConfig()
             ads.writeInt('version', AccountSettings.version)
         return
 
@@ -1220,6 +1252,32 @@ class AccountSettings(object):
                 savedNewSettingsCounters = _unpack(accSettings[NEW_SETTINGS_COUNTER].asString)
                 newSettingsCounters = AccountSettings.updateNewSettingsCounter(currentDefaults, savedNewSettingsCounters)
                 accSettings.write(NEW_SETTINGS_COUNTER, _pack(newSettingsCounters))
+
+    @staticmethod
+    def checkAndResetFireKeyIfInUse(expectedCommand, expectedKey):
+        cmSection = AccountSettings._readSection(Settings.g_instance.userPrefs, Settings.KEY_COMMAND_MAPPING)
+        for command, section in cmSection.items()[:]:
+            fireKey = AccountSettings._readSection(section, 'fireKey').asString
+            if fireKey == expectedKey:
+                if command == expectedCommand:
+                    break
+                else:
+                    cmSection.deleteSection(expectedCommand)
+                    newSection = cmSection.createSection(expectedCommand)
+                    newSection.writeString('fireKey', 'KEY_NONE')
+                    break
+
+    @staticmethod
+    def removeOldCommandAndReuseFireKey(oldCommand, newCommand):
+        cmSection = AccountSettings._readSection(Settings.g_instance.userPrefs, Settings.KEY_COMMAND_MAPPING)
+        for command, section in cmSection.items()[:]:
+            if command == oldCommand:
+                fireKey = AccountSettings._readSection(section, 'fireKey').asString
+                cmSection.deleteSection(newCommand)
+                newSection = cmSection.createSection(newCommand)
+                newSection.writeString('fireKey', fireKey)
+                cmSection.deleteSection(command)
+                break
 
     @staticmethod
     def getFilterDefaults(names):

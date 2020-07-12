@@ -45,10 +45,14 @@ class RankedBattlesPrimeTimeView(RankedPrimeTimeMeta):
     def _populate(self):
         super(RankedBattlesPrimeTimeView, self)._populate()
         self._setHeaderData()
+        self._setBackground()
 
     def _setHeaderData(self):
         header = {'title': backport.text(R.strings.ranked_battles.rankedBattleView.title())}
         self.as_setHeaderDataS(header)
+
+    def _setBackground(self):
+        self.as_setBackgroundSourceS(backport.image(R.images.gui.maps.icons.rankedBattles.bg.main()))
 
     def _prepareData(self, serverList, serverInfo):
         isSingleServer = len(serverList) == 1
@@ -57,8 +61,7 @@ class RankedBattlesPrimeTimeView(RankedPrimeTimeMeta):
          'serversText': text_styles.expText(self._getServerText(serverList, serverInfo, True)),
          'serversDDEnabled': not isSingleServer,
          'serverDDVisible': not isSingleServer,
-         'timeText': text_styles.expText(self.__getTimeText(serverInfo)),
-         'background': backport.image(R.images.gui.maps.icons.rankedBattles.bg.main())}
+         'timeText': text_styles.expText(self.__getTimeText(serverInfo))}
 
     def _getPrbActionName(self):
         return self._getPrbForcedActionName()

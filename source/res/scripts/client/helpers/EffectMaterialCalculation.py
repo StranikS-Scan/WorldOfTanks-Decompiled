@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/EffectMaterialCalculation.py
 from collections import namedtuple
-import AreaDestructibles
+from constants import DESTRUCTIBLE_MATKIND, IS_EDITOR
 import BigWorld
 from DestructiblesCache import DESTR_TYPE_STRUCTURE
-from constants import DESTRUCTIBLE_MATKIND
 import material_kinds
+if not IS_EDITOR:
+    import AreaDestructibles
 SurfaceMaterial = namedtuple('SurfaceMaterial', ('point', 'surfaceNormal', 'matKind', 'effectIdx'))
 
 def calcSurfaceMaterialNearPoint(point, normal, spaceID, defaultEffectMaterial='ground'):
@@ -44,18 +45,19 @@ def calcEffectMaterialIndex(matKind):
         return material_kinds.EFFECT_MATERIAL_INDEXES_BY_IDS.get(matKind)
     else:
         effectIndex = -1
-        player = BigWorld.player()
-        if player.__class__.__name__ in ('PlayerAvatar', 'BotPlayerAvatar'):
-            arenaSpecificEffect = player.arena.arenaType.defaultGroundEffect
-            if arenaSpecificEffect is not None:
-                if arenaSpecificEffect == 'None':
-                    return
-                if not isinstance(arenaSpecificEffect, int):
-                    effectIndex = material_kinds.EFFECT_MATERIAL_INDEXES_BY_NAMES.get(arenaSpecificEffect)
-                    effectIndex = -1 if effectIndex is None else effectIndex
-                    player.arena.arenaType.defaultGroundEffect = effectIndex
-                else:
-                    effectIndex = arenaSpecificEffect
+        if not IS_EDITOR:
+            player = BigWorld.player()
+            if player.__class__.__name__ in ('PlayerAvatar', 'BotPlayerAvatar'):
+                arenaSpecificEffect = player.arena.arenaType.defaultGroundEffect
+                if arenaSpecificEffect is not None:
+                    if arenaSpecificEffect == 'None':
+                        return
+                    if not isinstance(arenaSpecificEffect, int):
+                        effectIndex = material_kinds.EFFECT_MATERIAL_INDEXES_BY_NAMES.get(arenaSpecificEffect)
+                        effectIndex = -1 if effectIndex is None else effectIndex
+                        player.arena.arenaType.defaultGroundEffect = effectIndex
+                    else:
+                        effectIndex = arenaSpecificEffect
         return effectIndex
         return
 

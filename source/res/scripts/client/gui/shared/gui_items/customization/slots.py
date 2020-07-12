@@ -104,10 +104,6 @@ class BaseCustomizationSlot(BaseSlot):
         return self.descriptor.anchorDirection
 
     @property
-    def tags(self):
-        return self.descriptor.tags
-
-    @property
     def areaId(self):
         return self._areaId
 
@@ -119,20 +115,20 @@ class BaseCustomizationSlot(BaseSlot):
     def descriptor(self):
         return self._descriptor
 
-    @property
-    def hiddenForUser(self):
-        return HIDDEN_FOR_USER_TAG in self.tags
-
-    @property
-    def compatibleModels(self):
-        return self._descriptor.compatibleModels
-
 
 class ProjectionDecalSlot(BaseCustomizationSlot):
 
     @property
     def applyTo(self):
         return self.descriptor.applyTo
+
+    @property
+    def tags(self):
+        return self.descriptor.tags
+
+    @property
+    def hiddenForUser(self):
+        return HIDDEN_FOR_USER_TAG in self.tags
 
     @property
     def position(self):
@@ -178,6 +174,10 @@ class ProjectionDecalSlot(BaseCustomizationSlot):
 
     def isFitForFormfactor(self, formfactor):
         return formfactor in self.formfactors
+
+    @property
+    def compatibleModels(self):
+        return self._descriptor.compatibleModels
 
 
 def getProgectionDecalAspect(slotDescriptor):

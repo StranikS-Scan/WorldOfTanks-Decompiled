@@ -7,18 +7,15 @@ from gui.shared.tooltips.common import BlocksTooltipData
 from gui.shared.formatters.time_formatters import formatDate
 from helpers import dependency, time_utils
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IEpicBattleMetaGameController, IEventProgressionController
+from skeletons.gui.game_control import IEventProgressionController
 from gui.game_control.epic_meta_game_ctrl import EPIC_PERF_GROUP
 from gui.shared.formatters import text_styles, icons
-from skeletons.gui.shared import IItemsCache
-from gui.Scaleform.daapi.view.lobby.event_progression.event_progression_helpers import EventProgressionTooltipHelpers
 _R_TIMETABLE = R.strings.epic_battle.selectorTooltip.epicBattle.timeTable
 
 class EventProgressionSelectorTooltip(BlocksTooltipData):
-    __eventProgressionController = dependency.descriptor(IEventProgressionController)
-    __epicController = dependency.descriptor(IEpicBattleMetaGameController)
     __connectionMgr = dependency.descriptor(IConnectionManager)
-    __itemsCache = dependency.descriptor(IItemsCache)
+    __eventProgression = dependency.descriptor(IEventProgressionController)
+    __slots__ = ()
 
     def __init__(self, context):
         super(EventProgressionSelectorTooltip, self).__init__(context, None)
@@ -27,46 +24,45 @@ class EventProgressionSelectorTooltip(BlocksTooltipData):
         return
 
     def _packBlocks(self, *args, **kwargs):
-        if self.__epicController.getCurrentSeason() is not None:
-            _evc = EventProgressionTooltipHelpers.getInstance()
-            if _evc.isCurrentSeasonInPrimeTime() or self.__epicController.isAvailable():
+        if self.__eventProgression.getCurrentSeason() is not None:
+            if self.__eventProgression.isCurrentSeasonInPrimeTime() or self.__eventProgression.modeIsAvailable():
                 packers = self.__getPackersInProgress()
             else:
                 packers = self.__getPackersBeforeStart()
-        elif self.__epicController.getNextSeason() is not None:
+        elif self.__eventProgression.getNextSeason() is not None:
             packers = self.__getPackersBeforeStart()
         else:
             packers = self.__getPackersAfterEnd()
         return [ p for p in [ pack() for pack in packers ] if p is not None ]
 
     def __getPackersBeforeStart(self):
-        return (EventProgressionTooltipHelpers.getInstance().getHeaderTooltipPack, EventProgressionTooltipHelpers.getInstance().getSeasonInfoPack)
+        return (self.__eventProgression.getHeaderTooltipPack, self.__eventProgression.getSeasonInfoTooltipPack)
 
     def __getPackersInProgress(self):
-        return (EventProgressionTooltipHelpers.getInstance().getHeaderTooltipPack,
-         EventProgressionTooltipHelpers.getInstance().getSeasonInfoPack,
+        return (self.__eventProgression.getHeaderTooltipPack,
+         self.__eventProgression.getSeasonInfoTooltipPack,
          self.__packScheduleBlock,
          self.__packPerformanceWarningBlock)
 
     def __getPackersAfterEnd(self):
-        return (EventProgressionTooltipHelpers.getInstance().getHeaderTooltipPack, self.__packWaitNextBlock)
+        return (self.__eventProgression.getHeaderTooltipPack, self.__packWaitNextBlock)
 
     def __packHeader(self):
-        return EventProgressionTooltipHelpers.getInstance().getHeaderTooltipPack()
+        return self.__eventProgression.getHeaderTooltipPack()
 
     def __packSeasonInfoBlock(self):
-        return EventProgressionTooltipHelpers.getInstance().getSeasonInfoPack()
+        return self.__eventProgression.getSeasonInfoTooltipPack()
 
     def __packScheduleBlock(self):
-        primeTime = self.__epicController.getPrimeTimes().get(self.__connectionMgr.peripheryID, None)
-        if primeTime is None or self.__epicController.hasAnySeason() is None:
+        primeTime = self.__eventProgression.getPrimeTimes().get(self.__connectionMgr.peripheryID)
+        if primeTime is None or self.__eventProgression.hasAnySeason() is None:
             return
         else:
             timeTableBlocks = [self.__packTimeTableHeaderBlock()]
             todayStart, todayEnd = time_utils.getDayTimeBoundsForLocal()
             todayEnd += 1
             tomorrowStart, tomorrowEnd = todayStart + time_utils.ONE_DAY, todayEnd + time_utils.ONE_DAY
-            boundaryTime, _ = self.__epicController.getCurrentCycleInfo()
+            boundaryTime, _ = self.__eventProgression.getCurrentCycleInfo()
             tomorrowPeriods = ()
             todayPeriods = primeTime.getPeriodsBetween(todayStart, min(todayEnd, boundaryTime))
             if tomorrowStart < boundaryTime:
@@ -78,7 +74,7 @@ class EventProgressionSelectorTooltip(BlocksTooltipData):
             return formatters.packBuildUpBlockData(timeTableBlocks)
 
     def __packPerformanceWarningBlock(self):
-        performanceGroup = self.__epicController.getPerformanceGroup()
+        performanceGroup = self.__eventProgression.getPerformanceGroup()
         attention = R.strings.epic_battle.selectorTooltip.epicBattle.attention
         if performanceGroup == EPIC_PERF_GROUP.HIGH_RISK:
             icon = icons.markerBlocked()
@@ -95,7 +91,7 @@ class EventProgressionSelectorTooltip(BlocksTooltipData):
         return formatters.packTitleDescBlock(title=text_styles.concatStylesWithSpace(icon, titleStyle(backport.text(attention.title()))), desc=text_styles.main(backport.text(attention.description())), padding=formatters.packPadding(left=20, right=20))
 
     def __packWaitNextBlock(self):
-        return formatters.packTextBlockData(text_styles.main(backport.text(R.strings.event_progression.selectorTooltip.eventProgression.waitNext())), padding=formatters.packPadding(left=20, bottom=10))
+        return formatters.packTextBlockData(text_styles.main(backport.text(self.__eventProgression.allCyclesWasEndedResId)), padding=formatters.packPadding(left=20, bottom=10))
 
     def __packTimeTableHeaderBlock(self):
         return formatters.packImageTextBlockData(title=text_styles.middleTitle(backport.text(_R_TIMETABLE.title())), img=backport.image(R.images.gui.maps.icons.buttons.calendar()), imgPadding=formatters.packPadding(top=-1, left=20), txtPadding=formatters.packPadding(left=5, top=-4))

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/login_modes/social_mode.py
 from base_mode import BaseMode, INVALID_FIELDS
 from connection_mgr import LOGIN_STATUS
+from constants import IS_CHINA
 from gui import makeHtmlString
 from gui.Scaleform.Waiting import Waiting
 from gui.login.social_networks import SOCIAL_NETWORKS
@@ -73,7 +74,7 @@ class SocialMode(BaseMode):
              'icoPath': makeHtmlString('html_templates:socialNetworkLogin', 'transparentLogo', {'socialNetwork': lastLoginType}),
              'socialId': lastLoginType})
         else:
-            self._view.as_showSimpleFormS(True, self.__setSocialDataList(socialList))
+            self._view.as_showSimpleFormS(True, self.__setSocialDataList(socialList), not IS_CHINA)
 
     def changeAccount(self):
         logOutAccount = self._loginManager.getPreference('login_type')

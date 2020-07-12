@@ -35,7 +35,7 @@ from personal_missions import PM_BRANCH
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IBattlePassController, IBootcampController
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IQuestsController, IMarathonEventsController, IFestivityController, IEventProgressionController, IRankedBattlesController
+from skeletons.gui.game_control import IMarathonEventsController, IFestivityController, IEventProgressionController, IRankedBattlesController, IQuestsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -190,6 +190,7 @@ def _getPersonalMissionsTooltip(branch, key):
 
 
 class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
+    __slots__ = ('_currentVehicle', '__screenWidth')
     _itemsCache = dependency.descriptor(IItemsCache)
     _eventsCache = dependency.descriptor(IEventsCache)
     _questController = dependency.descriptor(IQuestsController)
@@ -198,7 +199,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     _lobbyContext = dependency.descriptor(ILobbyContext)
     _marathonsCtrl = dependency.descriptor(IMarathonEventsController)
     _festivityController = dependency.descriptor(IFestivityController)
-    _eventProgressionController = dependency.descriptor(IEventProgressionController)
+    _eventProgression = dependency.descriptor(IEventProgressionController)
     __battlePassController = dependency.descriptor(IBattlePassController)
     __bootcampController = dependency.descriptor(IBootcampController)
     __rankedController = dependency.descriptor(IRankedBattlesController)
@@ -278,18 +279,9 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         return
 
     def _makeHeaderVO(self):
-        if self.prbDispatcher:
-            state = self.prbDispatcher.getFunctionalState()
-            isBob = state.isInPreQueue(constants.QUEUE_TYPE.BOB) or state.isInUnit(constants.PREBATTLE_TYPE.BOB)
-        else:
-            isBob = False
         emptyHeaderVO = {'isVisible': False,
          'quests': []}
         if not self.app.tutorialManager.hangarHeaderEnabled:
-            return emptyHeaderVO
-        if self._currentVehicle.isEvent():
-            return emptyHeaderVO
-        if isBob:
             return emptyHeaderVO
         if self.__rankedController.isRankedPrbActive():
             return {'isVisible': True,
@@ -299,9 +291,10 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
 
     def _getCommonQuestsToHeaderVO(self, vehicle):
         quests = []
-        personalMissions = self.__getPersonalMissionsVO(vehicle)
-        if personalMissions:
-            quests.append(personalMissions)
+        if not constants.IS_CHINA:
+            personalMissions = self.__getPersonalMissionsVO(vehicle)
+            if personalMissions:
+                quests.append(personalMissions)
         battleQuests = self.__getBattleQuestsVO(vehicle)
         if battleQuests:
             quests.append(battleQuests)
@@ -326,7 +319,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
 
     def __updateBPWidget(self):
         isBPAvailable = not self.__battlePassController.isDisabled()
-        isValidBattleType = self.prbDispatcher and self.prbDispatcher.getEntity() and self.__battlePassController.isValidBattleType(self.prbDispatcher.getEntity().getEntityType())
+        isValidBattleType = self.prbDispatcher and self.prbDispatcher.getEntity() and self.__battlePassController.isValidBattleType(self.prbDispatcher.getEntity())
         isVisible = isBPAvailable and isValidBattleType and not self.__bootcampController.isInBootcamp()
         if isVisible:
             self.as_createBattlePassS()
@@ -359,7 +352,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         states = []
         for branch in reversed(PM_BRANCH.ACTIVE_BRANCHES):
             questType = QUEST_TYPE_BY_PM_BRANCH[branch]
-            if not self._lobbyContext.getServerSettings().isPersonalMissionsEnabled(branch):
+            if not self._lobbyContext.getServerSettings().isPersonalMissionsEnabled(branch) or constants.IS_CHINA:
                 result.append(self._headerQuestFormaterVo(False, _getPersonalMissionsIcon(vehicle, branch, False), _ms(MENU.hangarHeaderPersonalMissionsLabel(LABEL_STATE.EMPTY)), questType, tooltip=_getPersonalMissionsTooltip(branch, WIDGET_PM_STATE.BRANCH_DISABLED)))
                 states.append(WIDGET_PM_STATE.BRANCH_DISABLED)
             pmState, quest = _findPersonalMissionsState(self._eventsCache, vehicle, branch)
@@ -427,7 +420,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             self.update()
 
     def __getBattleQuestsVO(self, vehicle):
-        quests = [ q for q in self._questController.getQuestForVehicle(vehicle) if q.getID() not in self._eventProgressionController.questIDs and not isDailyQuest(q.getID()) and not isPremium(q.getID()) and not isRankedQuestID(q.getID()) ]
+        quests = [ q for q in self._questController.getQuestForVehicle(vehicle) if q.getID() not in self._eventProgression.getActiveQuestIDs() and not isDailyQuest(q.getID()) and not isPremium(q.getID()) and not isRankedQuestID(q.getID()) ]
         totalCount = len(quests)
         completedQuests = len([ q for q in quests if q.isCompleted() ])
         festivityFlagData = self._festivityController.getHangarQuestsFlagData()
@@ -572,3 +565,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
 
     def __onSetHangarHeaderEnabled(self, _=None):
         self.update()
+
+    def __hideHeader(self):
+        return {'isVisible': False,
+         'quests': []}

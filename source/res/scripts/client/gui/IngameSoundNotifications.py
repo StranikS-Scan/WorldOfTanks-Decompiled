@@ -8,10 +8,11 @@ import BattleReplay
 import SoundGroups
 import WWISE
 from debug_utils import LOG_WARNING
+from Math import Matrix
 
 class IngameSoundNotifications(object):
     __CFG_SECTION_PATH = 'gui/sound_notifications.xml'
-    QueueItem = namedtuple('QueueItem', ('soundPath', 'time', 'minTimeBetweenEvents', 'idToBind', 'checkFn', 'soundPos'))
+    QueueItem = namedtuple('QueueItem', ('soundPath', 'time', 'minTimeBetweenEvents', 'idToBind', 'checkFn', 'soundPos', 'soundObjectName', 'matrixProvider'))
 
     def __init__(self):
         self.__activeEvents = None
@@ -19,6 +20,7 @@ class IngameSoundNotifications(object):
         self.__isEnabled = False
         self.__enabledSoundCategories = set()
         self.__lastEnqueuedTime = {}
+        self.__remappedNotifications = {}
         self.__readConfig()
         return
 
@@ -59,13 +61,16 @@ class IngameSoundNotifications(object):
 
         return
 
-    def play(self, eventName, vehicleIdToBind=None, checkFn=None, eventPos=None):
+    def play(self, eventName, vehicleIdToBind=None, checkFn=None, eventPos=None, soundObjectName=None, matrixProvider=None):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
             return
         elif not self.__isEnabled or BigWorld.isWindowVisible() is False:
             return
         else:
+            eventName = self.__remappedNotifications.get(eventName, eventName)
+            if eventName is None:
+                return
             event = self.__events.get(eventName, None)
             if event is None:
                 LOG_WARNING("Couldn't find %s event" % eventName)
@@ -82,10 +87,14 @@ class IngameSoundNotifications(object):
                             idToBind = BigWorld.player().vehicle.id
                     soundPath = soundDesc['sound']
                     minTimeBetweenEvents = soundDesc['minTimeBetweenEvents']
-                    queueItem = IngameSoundNotifications.QueueItem(soundPath, time + soundDesc['timeout'], minTimeBetweenEvents, idToBind, checkFn, eventPos)
+                    queueItem = IngameSoundNotifications.QueueItem(soundPath, time + soundDesc['timeout'], minTimeBetweenEvents, idToBind, checkFn, eventPos, soundObjectName, matrixProvider)
                     if rules == 0:
                         try:
-                            if eventPos is not None:
+                            if matrixProvider is not None:
+                                mProv = Matrix(matrixProvider)
+                                mProvPos = mProv.translation
+                                SoundGroups.g_instance.playSoundPos(soundDesc['sound'], mProvPos)
+                            elif eventPos is not None:
                                 SoundGroups.g_instance.playCameraOriented(soundDesc['sound'], eventPos)
                             else:
                                 SoundGroups.g_instance.playSound2D(soundDesc['sound'])
@@ -127,15 +136,22 @@ class IngameSoundNotifications(object):
     def enableFX(self, isEnabled):
         self.enableCategory('fx', isEnabled)
 
-    def enableVoices(self, isEnabled):
-        self.enableCategory('voice', isEnabled)
+    def enableVoices(self, isEnabled, clearQueue=True):
+        self.enableCategory('voice', isEnabled, clearQueue)
 
-    def enableCategory(self, category, isEnabled):
+    def enableCategory(self, category, isEnabled, clearQueue=True):
         if isEnabled:
             self.__enabledSoundCategories.add(category)
         else:
             self.__enabledSoundCategories.remove(category)
-            self.__clearQueue(category)
+            if clearQueue:
+                self.__clearQueue(category)
+
+    def setRemapping(self, remap):
+        self.__remappedNotifications = remap
+
+    def isCategoryEnabled(self, category):
+        return True if category in self.__enabledSoundCategories else False
 
     def isPlaying(self, eventName):
         for category in ('fx', 'voice'):
@@ -181,7 +197,7 @@ class IngameSoundNotifications(object):
             queue = self.__soundQueues[category]
             time = BigWorld.time()
             while queue:
-                soundPath, timeout, _, vehicleIdToBind, checkFn, sndPos = queue[0]
+                soundPath, timeout, _, vehicleIdToBind, checkFn, sndPos, soundObjectName, matrixProvider = queue[0]
                 del queue[0]
                 if vehicleIdToBind is not None:
                     vehicles = BigWorld.player().arena.vehicles
@@ -192,7 +208,9 @@ class IngameSoundNotifications(object):
                     continue
                 if time > timeout:
                     continue
-                if sndPos is not None:
+                if matrixProvider is not None:
+                    sound = SoundGroups.g_instance.WWgetSound(soundPath, soundObjectName, matrixProvider)
+                elif sndPos is not None:
                     sound = SoundGroups.g_instance.getCameraOriented(soundPath, sndPos)
                 else:
                     sound = SoundGroups.g_instance.getSound2D(soundPath)

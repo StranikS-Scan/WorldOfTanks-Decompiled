@@ -25,7 +25,7 @@ from gui.server_events import settings
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.cond_formatters.tokens import TokensMarathonFormatter
 from gui.server_events.event_items import DEFAULTS_GROUPS
-from gui.server_events.events_constants import FRONTLINE_GROUP_ID, RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID
+from gui.server_events.events_constants import EVENT_PROGRESSION_GROUPS_ID, RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID
 from gui.server_events.events_helpers import hasAtLeastOneAvailableQuest, isAllQuestsCompleted, isLinkedSet, getLocalizedQuestNameForLinkedSetQuest, getLocalizedQuestDescForLinkedSetQuest, getLinkedSetMissionIDFromQuest, isPremium, premMissionsSortFunc, isPremiumQuestsEnable, getPremiumGroup, getDailyEpicGroup, getRankedDailyGroup, getRankedPlatformGroup
 from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import DECORATION_SIZES
@@ -33,7 +33,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.formatters.icons import makeImageTag
 from helpers import dependency, time_utils, getLanguageCode
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IEpicBattleMetaGameController, IRankedBattlesController
+from skeletons.gui.game_control import IRankedBattlesController, IEventProgressionController
 from skeletons.gui.linkedset import ILinkedSetController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -246,7 +246,7 @@ class MarathonsDumbBuilder(GroupedEventsBlocksBuilder):
 class QuestsGroupsBuilder(GroupedEventsBlocksBuilder):
     linkedSet = dependency.descriptor(ILinkedSetController)
     lobbyContext = dependency.descriptor(ILobbyContext)
-    epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
+    __eventProgression = dependency.descriptor(IEventProgressionController)
     __rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self):
@@ -259,10 +259,10 @@ class QuestsGroupsBuilder(GroupedEventsBlocksBuilder):
             self._cache['groupedEvents']['linkedset'] = _LinkedSetQuestsBlockInfo()
             self.__wasLinkedSetShowed = True
         group = getDailyEpicGroup()
-        _, isCycleActive = self.epicMetaGameCtrl.getCurrentCycleInfo()
-        frontlineQuestsAvailable = isCycleActive and (self.epicMetaGameCtrl.isInPrimeTime() or self.epicMetaGameCtrl.hasPrimeTimesLeft())
-        if group and frontlineQuestsAvailable and FRONTLINE_GROUP_ID not in self._cache['groupedEvents']:
-            self._cache['groupedEvents'][FRONTLINE_GROUP_ID] = self._createGroupedEventsBlock(group)
+        _, isCycleActive = self.__eventProgression.getCurrentCycleInfo()
+        frontlineQuestsAvailable = isCycleActive and (self.__eventProgression.isInPrimeTime() or self.__eventProgression.hasPrimeTimesLeft())
+        if group and frontlineQuestsAvailable and EVENT_PROGRESSION_GROUPS_ID not in self._cache['groupedEvents']:
+            self._cache['groupedEvents'][EVENT_PROGRESSION_GROUPS_ID] = self._createGroupedEventsBlock(group)
         if self.__rankedController.getCurrentSeason() is not None:
             rankedDaily = getRankedDailyGroup()
             if rankedDaily and RANKED_DAILY_GROUP_ID not in self._cache['groupedEvents']:
@@ -390,7 +390,8 @@ class _EventsBlockInfo(object):
             else:
                 missionData = getMissionInfoData(e)
                 self._cachedInfo[eventID] = missionData
-            cardsList.append(missionData.getInfo())
+            if missionData is not None:
+                cardsList.append(missionData.getInfo())
 
         return {'missions': cardsList,
          'dummy': {'iconSource': RES_ICONS.MAPS_ICONS_LIBRARY_ALERTBIGICON,
@@ -465,6 +466,7 @@ class _GroupedEventsBlockInfo(_CollapsableEventsBlockInfo):
 
 class _GroupedQuestsBlockInfo(_GroupedEventsBlockInfo):
     blockType = GuiGroupBlockID.REGULAR_GROUPED_BLOCK
+    __eventProgression = dependency.descriptor(IEventProgressionController)
 
     def __init__(self, group, headerLinkage=QUESTS_ALIASES.MISSION_PACK_CATEGORY_HEADER_LINKAGE, bodyLinkage=QUESTS_ALIASES.MISSION_PACK_MARATHON_BODY_LINKAGE):
         super(_GroupedQuestsBlockInfo, self).__init__(group, headerLinkage, bodyLinkage)
@@ -472,7 +474,10 @@ class _GroupedQuestsBlockInfo(_GroupedEventsBlockInfo):
         self._completedQuestsCount = 0
 
     def _findEvents(self, srvEvents):
-        result = self._group.getGroupContent(srvEvents)
+        if self._group.getID() in EVENT_PROGRESSION_GROUPS_ID:
+            result = self.__eventProgression.getActiveQuestsAsDict().values()
+        else:
+            result = self._group.getGroupContent(srvEvents)
         self._completedQuestsCount = 0
         for quest in result:
             if quest.isCompleted():

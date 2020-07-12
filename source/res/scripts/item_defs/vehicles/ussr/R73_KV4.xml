@@ -2519,7 +2519,7 @@
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	_122-mm_D-25T_with_wedges_shutter	  <cost>	19000	</cost>
+            <gun>	_122-mm_D-25T_with_wedges_shutter_KV4	  <cost>	19000	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -2592,10 +2592,10 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_122-mm_D-25T_with_a_piston_shutter>
-        <_122-mm_D-25T_with_wedges_shutter>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_122-mm_D-25T_with_wedges_shutter_KV4>	shared	  <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -12 1 -12	</minPitch>
-            <maxPitch>	0 6 1 6	</maxPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
           <unlocks>
             <turret>	Turret_2_KV4	  <cost>	14800	</cost>
@@ -2674,7 +2674,7 @@
             <density>	91.9872 97.5424	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_122-mm_D-25T_with_wedges_shutter>
+        </_122-mm_D-25T_with_wedges_shutter_KV4>
         <_107mm_ZiS-24>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
             <armor_1>	180	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -3264,15 +3264,20 @@
       <level>	8	</level>
       <price>	31000	</price>
       <armor>
-        <armor_1>	180	</armor_1>
-        <armor_2>	180	</armor_2>
+        <armor_1>	220	</armor_1>
+        <armor_2>	220	</armor_2>
         <armor_3>	150	</armor_3>
         <armor_4>	140	</armor_4>
         <armor_5>	150	</armor_5>
         <armor_6>	40	</armor_6>
         <armor_7>	40	</armor_7>
         <armor_8>	0	</armor_8>
+        <armor_9>	180	</armor_9>
+        <armor_10>	220	</armor_10>
         <armor_11>	180	</armor_11>
+        <armor_12>	200	</armor_12>
+        <armor_13>	180	</armor_13>
+        <armor_14>	170	</armor_14>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	24000	</weight>
@@ -3293,7 +3298,7 @@
       <guns>
         <_107mm_ZiS-6>	shared	  <maxAmmo>	60	</maxAmmo>
           <armor>
-            <armor_1>	180	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	220	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_3>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
@@ -3399,7 +3404,7 @@
         </_107mm_ZiS-6>
         <_122-mm_D-25T_with_a_piston_shutter>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
-            <armor_1>	180	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	220	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_3>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
@@ -3503,9 +3508,9 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_122-mm_D-25T_with_a_piston_shutter>
-        <_122-mm_D-25T_with_wedges_shutter>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_122-mm_D-25T_with_wedges_shutter_KV4>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
-            <armor_1>	180	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	220	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_3>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
@@ -3513,17 +3518,17 @@
             </armor_4>
             <gun>	50	</gun>
           </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
-          <reloadTime>	12.1	</reloadTime>
+          <shotDispersionRadius>	0.44	</shotDispersionRadius>
+          <reloadTime>	12	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	3.4	</aimingTime>
+          <aimingTime>	3	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -18 1 -18	</minPitch>
-            <maxPitch>	0 6 1 6	</maxPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
@@ -3608,10 +3613,10 @@
             <density>	91.9872 97.5424	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_122-mm_D-25T_with_wedges_shutter>
+        </_122-mm_D-25T_with_wedges_shutter_KV4>
         <_107mm_ZiS-24>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
-            <armor_1>	180	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	220	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_3>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
@@ -3619,14 +3624,14 @@
             </armor_4>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	10.3	</reloadTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	9	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.9	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -18 1 -18	</minPitch>
@@ -4391,9 +4396,9 @@
   </physics>
   <clientAdjustmentFactors>
     <guns>
-      <_122-mm_D-25T_with_wedges_shutter>
+      <_122-mm_D-25T_with_wedges_shutter_KV4>
         <delta>	1.02	</delta>
-      </_122-mm_D-25T_with_wedges_shutter>
+      </_122-mm_D-25T_with_wedges_shutter_KV4>
     </guns>
     <armour>	1.020863187	</armour>
   </clientAdjustmentFactors>

@@ -52,3 +52,4 @@ class VehiclePointsTooltipView(ViewImpl):
             model.setPointsCurrent(currentPoints)
             model.setPointsTotal(limitPoints)
             model.setPointsReward(pointsReward)
+            model.setIsElite(vehicle.isFullyElite)

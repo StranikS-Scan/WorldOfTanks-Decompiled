@@ -1,93 +1,114 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/chat_cmd_ctrl.py
+import logging
 import math
-import struct
 import weakref
 import BigWorld
 import CommandMapping
+import DestructibleEntity
 import Math
-from battleground.StunAreaManager import g_stunAreaManager
-from debug_utils import LOG_ERROR
-from gui.battle_control import avatar_getter, minimap_utils
+import Vehicle
+from AvatarInputHandler import aih_global_binding
+from AvatarInputHandler.cameras import getWorldRayAndPoint
+from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
+from aih_constants import CTRL_MODE_NAME
+from arena_component_system.sector_base_arena_component import ID_TO_BASENAME
+from chat_commands_consts import MarkerType, DefaultMarkerSubType, ReplyState, BATTLE_CHAT_COMMAND_NAMES, INVALID_MARKER_SUBTYPE, _COMMAND_NAME_TRANSFORM_MARKER_TYPE, ONE_SHOT_COMMANDS_TO_REPLIES
+from epic_constants import EPIC_BATTLE_TEAM_ID
+from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.controllers.interfaces import IBattleController
-from messenger import MessengerEntry
-from messenger.m_constants import MESSENGER_COMMAND_TYPE, PROTO_TYPE
-from messenger.proto import proto_getter
-from messenger.proto.events import g_messengerEvents
-from gui.sounds.epic_sound_constants import EPIC_SOUND
-import Vehicle
-import DestructibleEntity
+from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
+from helpers import dependency
 from helpers import isPlayerAvatar
-from epic_constants import EPIC_BATTLE_TEAM_ID
+from messenger import MessengerEntry
+from messenger.m_constants import PROTO_TYPE
+from messenger.proto import proto_getter
+from messenger.proto.bw_chat2.battle_chat_cmd import EPIC_GLOBAL_CMD_NAMES, LOCATION_CMD_NAMES, TARGETED_VEHICLE_CMD_NAMES
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.battle_session import IBattleSessionProvider
+_logger = logging.getLogger(__name__)
+CONTEXTCOMMAND = 'CONTEXTCOMMAND'
+CONTEXTCOMMAND2 = 'CONTEXTCOMMAND2'
+KB_MAPPING = {BATTLE_CHAT_COMMAND_NAMES.TURNBACK: CommandMapping.CMD_CHAT_SHORTCUT_BACKTOBASE,
+ BATTLE_CHAT_COMMAND_NAMES.SOS: CommandMapping.CMD_CHAT_SHORTCUT_HELPME,
+ BATTLE_CHAT_COMMAND_NAMES.RELOADINGGUN: CommandMapping.CMD_CHAT_SHORTCUT_RELOAD,
+ BATTLE_CHAT_COMMAND_NAMES.THANKS: CommandMapping.CMD_CHAT_SHORTCUT_THANKYOU,
+ BATTLE_CHAT_COMMAND_NAMES.REPLY: CommandMapping.CMD_RADIAL_MENU_SHOW,
+ CONTEXTCOMMAND: CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND,
+ CONTEXTCOMMAND2: CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMIT}
+TARGET_TYPE_TRANSLATION_MAPPING = {CONTEXTCOMMAND: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.HELPME,
+                                                   DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY},
+                  MarkerType.BASE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.DEFEND_BASE,
+                                                DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTACK_BASE},
+                  MarkerType.HEADQUARTER_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTENTIONTOOBJECTIVE_DEF,
+                                                       DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTENTIONTOOBJECTIVE_ATK},
+                  MarkerType.INVALID_MARKER_TYPE: {INVALID_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION}},
+ CONTEXTCOMMAND2: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY,
+                                                    DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY},
+                   MarkerType.BASE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE,
+                                                 DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE},
+                   MarkerType.HEADQUARTER_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTENTIONTOOBJECTIVE_DEF,
+                                                        DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTENTIONTOOBJECTIVE_ATK},
+                   MarkerType.INVALID_MARKER_TYPE: {INVALID_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.GOING_THERE}},
+ BATTLE_CHAT_COMMAND_NAMES.TURNBACK: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.TURNBACK}},
+ BATTLE_CHAT_COMMAND_NAMES.THANKS: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.THANKS}},
+ BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_1_EX: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_1}},
+ BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_2_EX: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_2}},
+ BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_3_EX: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_3}},
+ BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_4_EX: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_4}},
+ BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_5_EX: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_5}},
+ BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_6_EX: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_6}},
+ BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_7_EX: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_7}}}
+DIRECT_ACTION_BATTLE_CHAT_COMMANDS = [BATTLE_CHAT_COMMAND_NAMES.SOS, BATTLE_CHAT_COMMAND_NAMES.RELOADINGGUN]
+PROHIBITED_IF_DEAD = [BATTLE_CHAT_COMMAND_NAMES.GOING_THERE,
+ BATTLE_CHAT_COMMAND_NAMES.SOS,
+ BATTLE_CHAT_COMMAND_NAMES.HELPME,
+ BATTLE_CHAT_COMMAND_NAMES.PREBATTLE_WAYPOINT,
+ BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY,
+ BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE,
+ BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE,
+ BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY]
+PROHIBITED_IF_SPECTATOR = [BATTLE_CHAT_COMMAND_NAMES.GOING_THERE,
+ BATTLE_CHAT_COMMAND_NAMES.SOS,
+ BATTLE_CHAT_COMMAND_NAMES.HELPME,
+ BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY,
+ BATTLE_CHAT_COMMAND_NAMES.ATTACK_BASE,
+ BATTLE_CHAT_COMMAND_NAMES.DEFEND_BASE,
+ BATTLE_CHAT_COMMAND_NAMES.PREBATTLE_WAYPOINT,
+ BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE,
+ BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE,
+ BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY]
 
-class CHAT_COMMANDS(object):
-    ATTACK = 'ATTACK'
-    BACKTOBASE = 'BACKTOBASE'
-    POSITIVE = 'POSITIVE'
-    NEGATIVE = 'NEGATIVE'
-    SOS = 'HELPME'
-    RELOADINGGUN = 'RELOADINGGUN'
-    FOLLOWME = 'FOLLOWME'
-    TURNBACK = 'TURNBACK'
-    HELPME = 'HELPMEEX'
-    SUPPORTMEWITHFIRE = 'SUPPORTMEWITHFIRE'
-    ATTACKENEMY = 'ATTACKENEMY'
-    STOP = 'STOP'
-    SPG_AIM_AREA = 'SPG_AIM_AREA'
-    GLOBAL_SAVE_TANKS_ATK = 'EPIC_GLOBAL_SAVETANKS_ATK'
-    GLOBAL_TIME_ATK = 'EPIC_GLOBAL_TIME_ATK'
-    GLOBAL_FOCUSHQ_ATK = 'EPIC_GLOBAL_HQ_ATK'
-    GLOBAL_SAVE_TANKS_DEF = 'EPIC_GLOBAL_SAVETANKS_DEF'
-    GLOBAL_TIME_DEF = 'EPIC_GLOBAL_TIME_DEF'
-    GLOBAL_FOCUSHQ_DEF = 'EPIC_GLOBAL_HQ_DEF'
-    GLOBAL_LANE_WEST = 'EPIC_GLOBAL_WEST'
-    GLOBAL_LANE_CENTER = 'EPIC_GLOBAL_CENTER'
-    GLOBAL_LANE_EAST = 'EPIC_GLOBAL_EAST'
+def getAimedAtPositionWithinBorders(aimOffsetX, aimOffsetY):
+    ray, _ = getWorldRayAndPoint(aimOffsetX, aimOffsetY)
+    player = BigWorld.player()
+    staticHitPoint = BigWorld.wg_collideSegment(player.spaceID, BigWorld.camera().position, BigWorld.camera().position + ray * 100000, 128)
+    if staticHitPoint is not None:
+        staticHitPoint = staticHitPoint.closestPoint
+        boundingBox = player.arena.arenaType.boundingBox
+        if not boundingBox[0][0] <= staticHitPoint.x <= boundingBox[1][0] or not boundingBox[0][1] <= staticHitPoint.z <= boundingBox[1][1]:
+            return
+        return staticHitPoint
+    else:
+        return
+        return
 
-
-KB_MAPPING = {CHAT_COMMANDS.ATTACKENEMY: CommandMapping.CMD_CHAT_SHORTCUT_ATTACK_MY_TARGET,
- CHAT_COMMANDS.ATTACK: CommandMapping.CMD_CHAT_SHORTCUT_ATTACK,
- CHAT_COMMANDS.BACKTOBASE: CommandMapping.CMD_CHAT_SHORTCUT_BACKTOBASE,
- CHAT_COMMANDS.POSITIVE: CommandMapping.CMD_CHAT_SHORTCUT_POSITIVE,
- CHAT_COMMANDS.NEGATIVE: CommandMapping.CMD_CHAT_SHORTCUT_NEGATIVE,
- CHAT_COMMANDS.SOS: CommandMapping.CMD_CHAT_SHORTCUT_HELPME,
- CHAT_COMMANDS.RELOADINGGUN: CommandMapping.CMD_CHAT_SHORTCUT_RELOAD}
-TARGET_ACTIONS = [CHAT_COMMANDS.FOLLOWME,
- CHAT_COMMANDS.TURNBACK,
- CHAT_COMMANDS.HELPME,
- CHAT_COMMANDS.SUPPORTMEWITHFIRE,
- CHAT_COMMANDS.ATTACKENEMY,
- CHAT_COMMANDS.STOP]
-EPIC_GLOBAL_ACTIONS = [CHAT_COMMANDS.GLOBAL_SAVE_TANKS_ATK,
- CHAT_COMMANDS.GLOBAL_TIME_ATK,
- CHAT_COMMANDS.GLOBAL_FOCUSHQ_ATK,
- CHAT_COMMANDS.GLOBAL_SAVE_TANKS_DEF,
- CHAT_COMMANDS.GLOBAL_TIME_DEF,
- CHAT_COMMANDS.GLOBAL_FOCUSHQ_DEF,
- CHAT_COMMANDS.GLOBAL_LANE_WEST,
- CHAT_COMMANDS.GLOBAL_LANE_CENTER,
- CHAT_COMMANDS.GLOBAL_LANE_EAST]
-DEFAULT_CUT = 'default'
-ALLY_CUT = 'ally'
-ENEMY_CUT = 'enemy'
-ENEMY_SPG_CUT = 'enemy_spg'
-OBJECTIVE_CUT = 'objective'
-TARGET_TRANSLATION_MAPPING = {CHAT_COMMANDS.ATTACKENEMY: {ALLY_CUT: CHAT_COMMANDS.FOLLOWME,
-                             ENEMY_CUT: CHAT_COMMANDS.SUPPORTMEWITHFIRE,
-                             ENEMY_SPG_CUT: CHAT_COMMANDS.ATTACKENEMY},
- CHAT_COMMANDS.BACKTOBASE: {ALLY_CUT: CHAT_COMMANDS.TURNBACK},
- CHAT_COMMANDS.SOS: {ALLY_CUT: CHAT_COMMANDS.HELPME},
- CHAT_COMMANDS.RELOADINGGUN: {ALLY_CUT: CHAT_COMMANDS.STOP}}
 
 class ChatCommandsController(IBattleController):
-    __slots__ = ('__arenaDP', '__feedback', '__ammo')
+    __slots__ = ('__isEnabled', '__arenaDP', '__feedback', '__ammo', '__markersManager')
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    settingsCore = dependency.descriptor(ISettingsCore)
+    _aimOffset = aih_global_binding.bindRW(aih_global_binding.BINDING_ID.AIM_OFFSET)
 
     def __init__(self, setup, feedback, ammo):
         super(ChatCommandsController, self).__init__()
         self.__arenaDP = weakref.proxy(setup.arenaDP)
         self.__feedback = weakref.proxy(feedback)
         self.__ammo = weakref.proxy(ammo)
+        self.__markersManager = None
+        self.__isEnabled = False
+        return
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
     def proto(self):
@@ -97,267 +118,238 @@ class ChatCommandsController(IBattleController):
         return BATTLE_CTRL_ID.CHAT_COMMANDS
 
     def startControl(self):
-        g_messengerEvents.channels.onCommandReceived += self.__me_onCommandReceived
-        import BattleReplay
-        BattleReplay.g_replayCtrl.onCommandReceived += self.__me_onCommandReceived
+        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
+        g_eventBus.addListener(events.MarkersManagerEvent.MARKERS_CREATED, self.__onMarkersManagerMarkersCreated, EVENT_BUS_SCOPE.BATTLE)
 
     def stopControl(self):
         self.__arenaDP = None
         self.__feedback = None
         self.__ammo = None
-        g_messengerEvents.channels.onCommandReceived -= self.__me_onCommandReceived
-        import BattleReplay
-        BattleReplay.g_replayCtrl.onCommandReceived -= self.__me_onCommandReceived
+        self.__markersManager = None
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        g_eventBus.removeListener(events.MarkersManagerEvent.MARKERS_CREATED, self.__onMarkersManagerMarkersCreated, EVENT_BUS_SCOPE.BATTLE)
         return
 
-    def handleShortcutChatCommand(self, key):
+    def getAimedAtTargetData(self):
+        advChatCmp = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'advancedChatComponent', None)
+        if advChatCmp is None:
+            return
+        else:
+            targetID, targetMarkerType, markerSubType = self.__getAimedAtVehicleOrObject()
+            if targetMarkerType == MarkerType.INVALID_MARKER_TYPE:
+                targetID, targetMarkerType, markerSubType = self.__markersManager.getCurrentlyAimedAtMarkerIDAndType()
+            return (targetID, targetMarkerType, markerSubType)
+
+    def handleContexChatCommand(self, key):
         cmdMap = CommandMapping.g_instance
-        player = BigWorld.player()
-        target = BigWorld.target()
-        for chatCmd, keyboardCmd in KB_MAPPING.iteritems():
-            if cmdMap.isFired(keyboardCmd, key):
-                action = chatCmd
-                crosshairType = self.__getCrosshairType(player, target)
-                if crosshairType != DEFAULT_CUT and chatCmd in TARGET_TRANSLATION_MAPPING and crosshairType in TARGET_TRANSLATION_MAPPING[chatCmd]:
-                    action = TARGET_TRANSLATION_MAPPING[chatCmd][crosshairType]
-                if action in TARGET_ACTIONS:
-                    if crosshairType == OBJECTIVE_CUT:
-                        self.sendAttentionToObjective(target.destructibleEntityID, player.team == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER)
-                    elif crosshairType != DEFAULT_CUT:
-                        self.handleChatCommand(action, targetID=target.id)
-                else:
-                    self.handleChatCommand(action)
+        advChatCmp = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'advancedChatComponent', None)
+        if advChatCmp is None:
+            return
+        else:
+            for chatCmd, keyboardCmd in KB_MAPPING.iteritems():
+                if cmdMap.isFired(keyboardCmd, key):
+                    if chatCmd in DIRECT_ACTION_BATTLE_CHAT_COMMANDS:
+                        self.handleChatCommand(chatCmd)
+                        return
+                    targetID, targetMarkerType, markerSubType = self.getAimedAtTargetData()
+                    replyState, replyToAction = advChatCmp.getReplyStateForTargetIDAndMarkerType(targetID, targetMarkerType)
+                    if chatCmd in (BATTLE_CHAT_COMMAND_NAMES.THANKS, BATTLE_CHAT_COMMAND_NAMES.TURNBACK):
+                        replyState = ReplyState.NO_REPLY
+                    if replyState == ReplyState.NO_REPLY:
+                        if chatCmd in TARGET_TYPE_TRANSLATION_MAPPING and targetMarkerType in TARGET_TYPE_TRANSLATION_MAPPING[chatCmd] and markerSubType in TARGET_TYPE_TRANSLATION_MAPPING[chatCmd][targetMarkerType]:
+                            action = TARGET_TYPE_TRANSLATION_MAPPING[chatCmd][targetMarkerType][markerSubType]
+                        else:
+                            _logger.debug('Action %s (at key %s) is not supported for target type %s (cut type: %s)', chatCmd, key, targetMarkerType, markerSubType)
+                            return
+                        if action == BATTLE_CHAT_COMMAND_NAMES.HELPME:
+                            if advChatCmp.isTargetAllyCommitedToMe(targetID):
+                                action = BATTLE_CHAT_COMMAND_NAMES.THANKS
+                        self.handleChatCommand(action, targetID=targetID)
+                    else:
+                        if chatCmd == CONTEXTCOMMAND2 and replyState != ReplyState.CAN_REPLY:
+                            return
+                        if replyState == ReplyState.CAN_CANCEL_REPLY:
+                            self.sendCancelReplyChatCommand(targetID, replyToAction)
+                        elif replyState == ReplyState.CAN_REPLY:
+                            if replyToAction in (BATTLE_CHAT_COMMAND_NAMES.HELPME, BATTLE_CHAT_COMMAND_NAMES.SOS):
+                                self.handleChatCommand(BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY, targetID=targetID)
+                            else:
+                                self.sendReplyChatCommand(targetID, replyToAction)
+                        elif replyState == ReplyState.CAN_CONFIRM and replyToAction in ONE_SHOT_COMMANDS_TO_REPLIES.keys():
+                            self.handleChatCommand(ONE_SHOT_COMMANDS_TO_REPLIES[replyToAction], targetID=targetID)
 
-    def handleSPGAimAreaCommand(self, player):
-        boundingBox = player.arena.arenaType.boundingBox
-        desiredShotPoint = player.inputHandler.getMarkerPoint()
-        if not boundingBox[0][0] <= desiredShotPoint.x <= boundingBox[1][0] or not boundingBox[0][1] <= desiredShotPoint.z <= boundingBox[1][1]:
-            desiredShotPoint = None
-        if desiredShotPoint is not None:
-            reloadTime = self.__getReloadTime()
-            cellIdx = minimap_utils.getCellIdxFromPosition(desiredShotPoint, boundingBox)
-            command = self.proto.battleCmd.createSPGAimAreaCommand(desiredShotPoint, cellIdx, reloadTime)
-            if command:
-                self.__sendChatCommand(command)
-            else:
-                LOG_ERROR('Failed to create {} command: {}'.format(CHAT_COMMANDS.SPG_AIM_AREA, (desiredShotPoint, boundingBox, reloadTime)))
+            return
+
+    def sendAdvancedPositionPing(self, action, isInRadialMenu=False):
+        aimedAtPosition = getAimedAtPositionWithinBorders(self._aimOffset[0], self._aimOffset[1])
+        if aimedAtPosition is not None:
+            if self.__isSPG() and action == BATTLE_CHAT_COMMAND_NAMES.GOING_THERE or self.__isSPGAndInStrategicOrArtyMode() and isInRadialMenu is False and action == BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION:
+                action = BATTLE_CHAT_COMMAND_NAMES.SPG_AIM_AREA
+            self.sendAttentionToPosition3D(position=aimedAtPosition, name=action)
         return
 
-    def handleChatCommand(self, action, targetID=None):
-        if action in TARGET_ACTIONS:
-            self.sendTargetedCommand(action, targetID)
-        elif action in EPIC_GLOBAL_ACTIONS:
+    def sendReplyChatCommand(self, targetID, action):
+        if not avatar_getter.isVehicleAlive() or self.sessionProvider.getCtx().isPlayerObserver() or self.__isEnabled is False:
+            return
+        player = BigWorld.player()
+        command = self.proto.battleCmd.createReplyByName(targetID, action, player.id)
+        if command:
+            self.__sendChatCommand(command)
+        else:
+            _logger.error('Reply command not valid for command id: %d', targetID)
+
+    def sendCancelReplyChatCommand(self, targetID, action):
+        if not avatar_getter.isVehicleAlive():
+            return
+        player = BigWorld.player()
+        command = self.proto.battleCmd.createCancelReplyByName(targetID, action, player.id)
+        if command:
+            self.__sendChatCommand(command)
+        else:
+            _logger.error('Cancel reply command not valid for command id: %d', targetID)
+
+    def sendClearChatCommandsFromTarget(self, targetID, targetMarkerType):
+        command = self.proto.battleCmd.createClearChatCommandsFromTarget(targetID, targetMarkerType)
+        if command:
+            self.__sendChatCommand(command)
+        else:
+            _logger.error('Clear chat commands not valid for command id: %d and marker type: %s', targetID, targetMarkerType)
+
+    def handleChatCommand(self, action, targetID=None, isInRadialMenu=False):
+        player = BigWorld.player()
+        targetType = _COMMAND_NAME_TRANSFORM_MARKER_TYPE[action]
+        if targetType == MarkerType.HEADQUARTER_MARKER_TYPE:
+            self.sendAttentionToObjective(targetID, player.team == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER)
+        elif targetType == MarkerType.BASE_MARKER_TYPE:
+            self.sendCommandToBase(targetID, action)
+        elif action in LOCATION_CMD_NAMES:
+            self.sendAdvancedPositionPing(action, isInRadialMenu)
+        elif action in TARGETED_VEHICLE_CMD_NAMES:
+            self.sendTargetedCommand(action, targetID, isInRadialMenu)
+        elif action in EPIC_GLOBAL_CMD_NAMES:
             self.sendEpicGlobalCommand(action)
-        elif action == CHAT_COMMANDS.RELOADINGGUN:
+        elif action == BATTLE_CHAT_COMMAND_NAMES.RELOADINGGUN:
             self.sendReloadingCommand()
         else:
             self.sendCommand(action)
 
-    def sendAttentionToCell(self, cellIdx):
-        if avatar_getter.isForcedGuiControlMode():
-            command = self.proto.battleCmd.createByCellIdx(cellIdx)
-            if command:
-                self.__sendChatCommand(command)
-            else:
-                LOG_ERROR('Minimap command not found', cellIdx)
-
-    def sendAttentionToPosition(self, position):
-        if avatar_getter.isForcedGuiControlMode():
-            command = self.proto.battleCmd.createByPosition(position)
-            if command:
-                self.__sendChatCommand(command)
-            else:
-                LOG_ERROR('Minimap command not found', position)
+    def sendAttentionToPosition3D(self, position, name):
+        if not avatar_getter.isVehicleAlive() and name in PROHIBITED_IF_DEAD or self.sessionProvider.getCtx().isPlayerObserver() and name in PROHIBITED_IF_SPECTATOR or self.__isEnabled is False:
+            return
+        positionVec = Math.Vector3(position[0], position[1], position[2])
+        if name == BATTLE_CHAT_COMMAND_NAMES.SPG_AIM_AREA and self.__isSPG():
+            command = self.proto.battleCmd.createByPosition(positionVec, name, self.__getReloadTime())
+        else:
+            command = self.proto.battleCmd.createByPosition(positionVec, name)
+        if command:
+            self.__sendChatCommand(command)
+        else:
+            _logger.error('Minimap command for position (%d, %d, %d) not found', positionVec.x, positionVec.y, positionVec.z)
 
     def sendAttentionToObjective(self, hqIdx, isAtk):
+        if self.__isEnabled is False:
+            return
         command = self.proto.battleCmd.createByObjectiveIndex(hqIdx, isAtk)
         if command:
             self.__sendChatCommand(command)
         else:
-            LOG_ERROR('Minimap command not found', hqIdx)
+            _logger.error('Minimap command for objective with id: %d not found', hqIdx)
 
-    def sendAttentionToBase(self, baseIdx, baseName, isAtk):
-        if avatar_getter.isForcedGuiControlMode():
-            command = self.proto.battleCmd.createByBaseIndex(baseIdx, baseName, isAtk)
-            if command:
-                self.__sendChatCommand(command)
-            else:
-                LOG_ERROR('Minimap command not found', baseIdx)
+    def sendCommandToBase(self, baseIdx, cmdName, baseName=''):
+        if not avatar_getter.isVehicleAlive() and cmdName in PROHIBITED_IF_DEAD or self.sessionProvider.getCtx().isPlayerObserver() and cmdName in PROHIBITED_IF_SPECTATOR or self.__isEnabled is False:
+            return
+        if self.sessionProvider.arenaVisitor.gui.isInEpicRange():
+            baseName = ID_TO_BASENAME[baseIdx]
+        command = self.proto.battleCmd.createByBaseIndexAndName(baseIdx, cmdName, baseName)
+        if command:
+            self.__sendChatCommand(command)
+        else:
+            _logger.error('Command not found: %s', cmdName)
 
     def sendCommand(self, cmdName):
-        if not avatar_getter.isVehicleAlive():
+        if not avatar_getter.isVehicleAlive() and cmdName in PROHIBITED_IF_DEAD or self.sessionProvider.getCtx().isPlayerObserver() and cmdName in PROHIBITED_IF_SPECTATOR or self.__isEnabled is False:
             return
         command = self.proto.battleCmd.createByName(cmdName)
         if command:
             self.__sendChatCommand(command)
         else:
-            LOG_ERROR('Command is not found', cmdName)
+            _logger.error('Command not found: %s', cmdName)
 
     def sendEpicGlobalCommand(self, cmdName, baseName=''):
+        if not avatar_getter.isVehicleAlive() and cmdName in PROHIBITED_IF_DEAD or self.sessionProvider.getCtx().isPlayerObserver() and cmdName in PROHIBITED_IF_SPECTATOR or self.__isEnabled is False:
+            return
         command = self.proto.battleCmd.createByGlobalMsgName(cmdName, baseName)
         if command:
             self.__sendChatCommand(command)
         else:
-            LOG_ERROR('Global Command is not found', cmdName)
+            _logger.error('Command not found: %s', cmdName)
 
-    def sendTargetedCommand(self, cmdName, targetID):
-        if not avatar_getter.isVehicleAlive():
+    def sendTargetedCommand(self, cmdName, targetID, isInRadialMenu=False):
+        if not avatar_getter.isVehicleAlive() and cmdName in PROHIBITED_IF_DEAD or self.sessionProvider.getCtx().isPlayerObserver() and cmdName in PROHIBITED_IF_SPECTATOR or self.__isEnabled is False:
             return
-        if cmdName == CHAT_COMMANDS.ATTACKENEMY:
+        if self.__isSPG() and cmdName == BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY or self.__isSPGAndInStrategicOrArtyMode() and cmdName == BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY and isInRadialMenu is False:
             command = self.proto.battleCmd.createSPGAimTargetCommand(targetID, self.__getReloadTime())
         else:
             command = self.proto.battleCmd.createByNameTarget(cmdName, targetID)
         if command:
             self.__sendChatCommand(command)
         else:
-            LOG_ERROR('Targeted command is not found or targetID is not defined', cmdName)
+            _logger.error('Targeted command(%s) was not found or targetID(%d) is not valid', cmdName, targetID)
 
     def sendReloadingCommand(self):
-        if not avatar_getter.isPlayerOnArena():
+        if not avatar_getter.isPlayerOnArena() or self.__isEnabled is False:
             return
         state = self.__ammo.getGunReloadingState()
         command = self.proto.battleCmd.create4Reload(self.__ammo.getGunSettings().isCassetteClip(), math.ceil(state.getTimeLeft()), self.__ammo.getShellsQuantityLeft())
         if command:
             self.__sendChatCommand(command)
         else:
-            LOG_ERROR('Can not create reloading command')
+            _logger.error('Can not create reloading command')
+
+    def __isSPG(self):
+        return self.sessionProvider.getArenaDP().getVehicleInfo().isSPG()
+
+    def __isSPGAndInStrategicOrArtyMode(self):
+        return self.__isSPG() and avatar_getter.getInputHandler().ctrlModeName in (CTRL_MODE_NAME.STRATEGIC, CTRL_MODE_NAME.ARTY, CTRL_MODE_NAME.MAP_CASE)
 
     def __getReloadTime(self):
         reloadState = self.__ammo.getGunReloadingState()
         reloadTime = reloadState.getTimeLeft()
         return reloadTime
 
-    def __playSound(self, cmd):
-        soundNotifications = avatar_getter.getSoundNotifications()
-        if soundNotifications and hasattr(soundNotifications, 'play'):
-            soundNotifications.play(cmd.getSoundEventName())
-        if cmd is None:
-            return
-        else:
-            if cmd.isEpicGlobalMessage():
-                if soundNotifications and hasattr(soundNotifications, 'play'):
-                    soundNotifications.play(EPIC_SOUND.BF_EB_GLOBAL_MESSAGE)
-            elif soundNotifications and hasattr(soundNotifications, 'play'):
-                soundNotifications.play(cmd.getSoundEventName())
-            return
-
-    def __findVehicleInfoBySessionID(self, avatarSessionID):
-        result = None
-        if self.__arenaDP is None:
-            return result
-        else:
-            vehicleID = self.__arenaDP.getVehIDBySessionID(avatarSessionID)
-            if vehicleID:
-                result = self.__findVehicleInfoByVehicleID(vehicleID)
-            return result
-
-    def __findVehicleInfoByVehicleID(self, vehicleID):
-        result = None
-        if self.__arenaDP is None:
-            return result
-        else:
-            vehicleInfo = self.__arenaDP.getVehicleInfo(vehicleID)
-            if vehicleInfo.isAlive() and not vehicleInfo.isObserver():
-                result = vehicleInfo
-            return result
-
     def __sendChatCommand(self, command):
         controller = MessengerEntry.g_instance.gui.channelsCtrl.getController(command.getClientID())
         if controller:
             controller.sendCommand(command)
 
-    def __handleSimpleCommand(self, cmd):
-        vMarker = cmd.getVehMarker()
-        if vMarker:
-            vehicleInfo = self.__findVehicleInfoBySessionID(cmd.getSenderID())
-            vehicleID = vehicleInfo.vehicleID if vehicleInfo else 0
-            if vehicleID:
-                self.__feedback.showActionMarker(vehicleID, vMarker, vMarker)
-
-    def __handlePrivateCommand(self, cmd):
-        vehicleInfo = self.__findVehicleInfoBySessionID(cmd.getSenderID())
-        if cmd.isReceiver() or cmd.isSender():
-            self.__playSound(cmd)
-            if vehicleInfo is None:
-                vehicleInfo = self.__findVehicleInfoByVehicleID(avatar_getter.getPlayerVehicleID())
-            vehicleID = vehicleInfo.vehicleID if vehicleInfo else 0
-            vMarker = cmd.getVehMarker(vehicle=vehicleInfo)
-            if vMarker and vehicleID:
-                self.__feedback.showActionMarker(vehicleID, vMarker, cmd.getVehMarker())
-        return
-
-    def __handlePublicCommand(self, cmd):
-        senderInfo = self.__findVehicleInfoBySessionID(cmd.getSenderID())
-        if senderInfo is None:
-            senderInfo = self.__findVehicleInfoByVehicleID(avatar_getter.getPlayerVehicleID())
-        showReceiver = cmd.showMarkerForReceiver()
-        recvMarker, senderMarker = cmd.getVehMarkers(vehicle=senderInfo)
-        receiverID = cmd.getFirstTargetID()
-        senderID = senderInfo.vehicleID if senderInfo else 0
-        if showReceiver:
-            if receiverID:
-                self.__feedback.showActionMarker(receiverID, recvMarker, recvMarker)
-            if senderID:
-                self.__feedback.showActionMarker(senderID, senderMarker, senderMarker)
-        elif senderID:
-            self.__feedback.showActionMarker(senderID, recvMarker, recvMarker)
-        return
-
-    def __me_onCommandReceived(self, cmd):
-        if cmd.getCommandType() != MESSENGER_COMMAND_TYPE.BATTLE:
+    def __onSettingsChanged(self, diff):
+        enableBattleCommunication = diff.get(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION)
+        if enableBattleCommunication is None:
             return
         else:
-            controller = MessengerEntry.g_instance.gui.channelsCtrl.getController(cmd.getClientID())
-            if controller is None:
-                LOG_ERROR('Controller not found', cmd)
-                return
-            if not controller.filterMessage(cmd):
-                return
-            if cmd.isOnMinimap():
-                if cmd.isSPGAimCommand():
-                    try:
-                        coordX, coordY, coordZ = struct.unpack('<fffif', cmd.getCommandData()['strArg1'])[:3]
-                    except struct.error as e:
-                        LOG_ERROR('The following command can not be unpacked: ', e)
-                        return
-
-                    senderID = cmd.getSenderID()
-                    g_stunAreaManager.manageStunArea(Math.Vector3(coordX, coordY, coordZ), senderID)
-                else:
-                    self.__feedback.markCellOnMinimap(cmd.getCellIndex())
-            elif cmd.isOnEpicBattleMinimap():
-                if cmd.isMarkedPosition():
-                    self.__feedback.markPositionOnMinimap(cmd.getSenderID(), cmd.getMarkedPosition())
-                elif cmd.isMarkedObjective():
-                    self.__feedback.markObjectiveOnMinimap(cmd.getSenderID(), cmd.getMarkedObjective())
-                elif cmd.isMarkedBase():
-                    self.__feedback.markBaseOnMinimap(cmd.getSenderID(), cmd.getMarkedBase(), cmd.getMarkedBaseName())
-            elif cmd.isEpicGlobalMessage():
-                self.__playSound(cmd)
-            elif cmd.isPrivate():
-                self.__handlePrivateCommand(cmd)
-            else:
-                self.__playSound(cmd)
-                if cmd.isPublic():
-                    self.__handlePublicCommand(cmd)
-                else:
-                    self.__handleSimpleCommand(cmd)
+            self.__isEnabled = enableBattleCommunication
             return
 
-    def __getCrosshairType(self, player, target):
-        outcome = DEFAULT_CUT
+    def __getAimedAtVehicleOrObject(self):
+        player = BigWorld.player()
+        target = BigWorld.target()
+        targetID = -1
+        markerSubType = INVALID_MARKER_SUBTYPE
+        targetMarkerType = MarkerType.INVALID_MARKER_TYPE
         if self.__isTargetCorrect(player, target):
             if isinstance(target, DestructibleEntity.DestructibleEntity):
-                outcome = OBJECTIVE_CUT
-            elif target.publicInfo['team'] == player.team:
-                outcome = ALLY_CUT
+                targetID = target.destructibleEntityID
+                targetMarkerType = MarkerType.HEADQUARTER_MARKER_TYPE
+                markerSubType = DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE if avatar_getter.getPlayerTeam() == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER else DefaultMarkerSubType.ALLY_MARKER_SUBTYPE
+            elif target.publicInfo['team'] == avatar_getter.getPlayerTeam():
+                targetID = target.id
+                targetMarkerType = MarkerType.VEHICLE_MARKER_TYPE
+                markerSubType = DefaultMarkerSubType.ALLY_MARKER_SUBTYPE
             else:
-                vehicleDesc = self.__getVehicleDesc(player.playerVehicleID)['vehicleType']
-                if vehicleDesc is not None and 'SPG' in vehicleDesc.type.tags:
-                    outcome = ENEMY_SPG_CUT
-                else:
-                    outcome = ENEMY_CUT
-        return outcome
+                targetID = target.id
+                targetMarkerType = MarkerType.VEHICLE_MARKER_TYPE
+                markerSubType = DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE
+        return (targetID, targetMarkerType, markerSubType)
 
     def __isTargetCorrect(self, player, target):
         if target is not None and isinstance(target, DestructibleEntity.DestructibleEntity):
@@ -372,10 +364,6 @@ class ChatCommandsController(IBattleController):
                     return not vInfo.isChatCommandsDisabled(isAlly)
         return False
 
-    def __getVehicleDesc(self, vehicleID):
-        vehicles = BigWorld.player().arena.vehicles
-        for vID, desc in vehicles.items():
-            if vID == vehicleID:
-                return desc
-
-        return None
+    def __onMarkersManagerMarkersCreated(self, event):
+        self.__markersManager = event.getMarkersManager()
+        self.__isEnabled = bool(self.settingsCore.getSetting(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION))

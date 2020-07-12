@@ -193,10 +193,17 @@ def getResultsData(condition):
     labelKey = '#quests:details/conditions/results'
     topRangeUpper, topRangeLower = condition.getMaxRange()
     if topRangeLower < TOP_RANGE_LOWEST:
-        labelKey = '%s/%s/%s' % (labelKey, condition.localeKey, 'bothTeams' if condition.isTotal() else 'halfTeam')
+        if condition.keyName == 'brPosInBattle':
+            teamKey = 'battleRoyale'
+            key = ''
+        elif condition.isTotal():
+            teamKey = 'bothTeams'
+        else:
+            teamKey = 'halfTeam'
+        labelKey = '%s/%s/%s' % (labelKey, condition.localeKey, teamKey)
         if topRangeUpper == TOP_RANGE_HIGHEST:
             if topRangeLower == 1 and condition.isTotal():
-                label = i18n.makeString('#quests:details/conditions/results/single/bothTeams/top1', param=key)
+                label = i18n.makeString('%s/top1' % labelKey, param=key)
             else:
                 label = _makeStr('%s/top' % labelKey, param=key, count=topRangeLower)
         elif topRangeLower == topRangeUpper:

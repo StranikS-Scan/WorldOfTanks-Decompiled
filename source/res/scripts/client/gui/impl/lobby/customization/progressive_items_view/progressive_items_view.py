@@ -2,12 +2,12 @@
 # Embedded file name: scripts/client/gui/impl/lobby/customization/progressive_items_view/progressive_items_view.py
 import logging
 import BigWorld
-import GUI
 from adisp import process
 from CurrentVehicle import g_currentVehicle
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from frameworks.wulf import ViewFlags, ViewSettings, Window, WindowSettings, WindowFlags
 from gui import GUI_SETTINGS
+from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.game_control.links import URLMacros
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey
@@ -59,7 +59,7 @@ class ProgressiveItemsView(ViewImpl):
         self._itemsProgressData = None
         self._possibleItems = None
         self._vehicle = None
-        self.__blur = GUI.WGUIBackgroundBlur()
+        self.__blur = CachedBlur()
         self.__layoutID = layoutID
         self.__c11nView = c11nView
         self.__urlMacros = URLMacros()
@@ -92,8 +92,7 @@ class ProgressiveItemsView(ViewImpl):
         if self.__c11nView is not None:
             self.__c11nView.changeVisible(True)
             self.__c11nView = None
-        self.__blur.enable = False
-        self.__blur = None
+        self.__blur.fini()
         self.viewModel.onSelectItem -= self._onSelectItem
         self.viewModel.tutorial.showVideo -= self._showVideoPage
         return
@@ -113,7 +112,7 @@ class ProgressiveItemsView(ViewImpl):
         return
 
     def _onLoaded(self, *args, **kwargs):
-        self.__blur.enable = True
+        self.__blur.enable()
         self.__settingsCore.serverSettings.setOnceOnlyHintsSettings({OnceOnlyHints.C11N_PROGRESSION_VIEW_HINT: HINT_SHOWN_STATUS})
 
     def _onSelectItem(self, args=None):
@@ -122,13 +121,13 @@ class ProgressiveItemsView(ViewImpl):
             level = int(args['level'])
             item = self.__customizationService.getItemByCD(intCD)
             ctx = self.__customizationService.getCtx()
-            noveltyCount = self._vehicle.getC11nItemNoveltyCounter(proxy=self.__itemsCache.items, item=item)
-            if noveltyCount:
-                BigWorld.player().shop.resetC11nItemsNovelty([(self._vehicle.intCD, item.intCD)], callback=None)
 
             def changeTabAndGetItemToHand():
                 ctx.changeModeWithProgressionDecal(intCD)
                 ctx.events.onGetItemBackToHand(item, level, scrollToItem=True)
+                noveltyCount = self._vehicle.getC11nItemNoveltyCounter(proxy=self.__itemsCache.items, item=item)
+                if noveltyCount:
+                    BigWorld.callback(0.0, lambda : ctx.resetItemsNovelty([item.intCD]))
 
             BigWorld.callback(0.0, changeTabAndGetItemToHand)
         self.destroyWindow()

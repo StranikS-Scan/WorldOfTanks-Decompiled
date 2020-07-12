@@ -49,8 +49,8 @@ class ModuleInfoWindow(ModuleInfoMeta):
          GUI_ITEM_TYPE.CREW_BOOKS):
             description = stripColorTagDescrTags(module.fullDescription)
         if itemTypeID == GUI_ITEM_TYPE.BATTLE_ABILITY:
-            if module.level == 0:
-                label = _ms(EPIC_BATTLE.METAABILITYSCREEN_ABILITY_NOT_UNLOCKED)
+            if module.level == 0 or not module.isUnlocked:
+                label = ''
             else:
                 romanLvl = int2roman(module.level)
                 label = _ms(EPIC_BATTLE.METAABILITYSCREEN_ABILITY_LEVEL, lvl=romanLvl)

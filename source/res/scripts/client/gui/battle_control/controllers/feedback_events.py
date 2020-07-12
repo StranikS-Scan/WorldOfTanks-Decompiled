@@ -47,7 +47,8 @@ _BATTLE_EVENT_TO_PLAYER_FEEDBACK_EVENT = {_BET.KILL: _FET.PLAYER_KILLED_ENEMY,
  _BET.DEFENDER_BONUS: _FET.DEFENDER_BONUS,
  _BET.SMOKE_ASSIST: _FET.SMOKE_ASSIST,
  _BET.INSPIRE_ASSIST: _FET.INSPIRE_ASSIST,
- _BET.MULTI_STUN: _FET.PLAYER_STUN_ENEMIES}
+ _BET.MULTI_STUN: _FET.PLAYER_STUN_ENEMIES,
+ _BET.EQUIPMENT_TIMER_EXPIRED: _FET.EQUIPMENT_TIMER_EXPIRED}
 _PLAYER_FEEDBACK_EXTRA_DATA_CONVERTERS = {_FET.PLAYER_DAMAGED_HP_ENEMY: _unpackDamage,
  _FET.PLAYER_ASSIST_TO_KILL_ENEMY: _unpackDamage,
  _FET.PLAYER_CAPTURED_BASE: _unpackInteger,
@@ -93,6 +94,9 @@ class _DamageExtra(object):
     def getShellType(self):
         return self.__shellType
 
+    def isNone(self):
+        return self.isAttackReason(ATTACK_REASON.NONE)
+
     def isBurst(self):
         return self.__isBurst
 
@@ -102,6 +106,12 @@ class _DamageExtra(object):
     def isFire(self):
         return self.isAttackReason(ATTACK_REASON.FIRE)
 
+    def isBerserker(self):
+        return self.isAttackReason(ATTACK_REASON.BERSERKER)
+
+    def isMinefield(self):
+        return self.isAttackReason(ATTACK_REASON.MINEFIELD_EQ)
+
     def isRam(self):
         return self.isAttackReason(ATTACK_REASON.RAM)
 
@@ -110,6 +120,9 @@ class _DamageExtra(object):
 
     def isWorldCollision(self):
         return self.isAttackReason(ATTACK_REASON.WORLD_COLLISION)
+
+    def isDeathZone(self):
+        return self.isAttackReason(ATTACK_REASON.DEATH_ZONE)
 
     def isProtectionZone(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.ARTILLERY_PROTECTION) or self.isAttackReason(ATTACK_REASON.ARTILLERY_SECTOR) if primary else self.isSecondaryAttackReason(ATTACK_REASON.ARTILLERY_PROTECTION) or self.isSecondaryAttackReason(ATTACK_REASON.ARTILLERY_SECTOR)
@@ -123,6 +136,12 @@ class _DamageExtra(object):
     def isBombers(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.BOMBERS) if primary else self.isSecondaryAttackReason(ATTACK_REASON.BOMBERS)
 
+    def isMineField(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.MINEFIELD_EQ) if primary else self.isSecondaryAttackReason(ATTACK_REASON.MINEFIELD_EQ)
+
+    def isDamagingSmoke(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.SMOKE) if primary else self.isSecondaryAttackReason(ATTACK_REASON.SMOKE)
+
     def isAttackReason(self, attackReason):
         return ATTACK_REASONS[self.__attackReasonID] == attackReason
 
@@ -131,6 +150,12 @@ class _DamageExtra(object):
 
     def isRoleAction(self):
         return self.__isRoleAction
+
+    def isSpawnedBotExplosion(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.SPAWNED_BOT_EXPLOSION) if primary else self.isSecondaryAttackReason(ATTACK_REASON.SPAWNED_BOT_EXPLOSION)
+
+    def isSpawnedBotRam(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.SPAWNED_BOT_RAM) if primary else self.isSecondaryAttackReason(ATTACK_REASON.SPAWNED_BOT_RAM)
 
 
 class _VisibilityExtra(object):
@@ -192,6 +217,15 @@ class _CritsExtra(object):
     def isFire(self):
         return self.isAttackReason(ATTACK_REASON.FIRE)
 
+    def isBerserker(self):
+        return self.isAttackReason(ATTACK_REASON.BERSERKER)
+
+    def isMinefield(self):
+        return self.isAttackReason(ATTACK_REASON.MINEFIELD_EQ)
+
+    def isDamagingSmoke(self):
+        return self.isAttackReason(ATTACK_REASON.SMOKE)
+
     def isRam(self):
         return self.isAttackReason(ATTACK_REASON.RAM)
 
@@ -200,6 +234,9 @@ class _CritsExtra(object):
 
     def isWorldCollision(self):
         return self.isAttackReason(ATTACK_REASON.WORLD_COLLISION)
+
+    def isDeathZone(self):
+        return self.isAttackReason(ATTACK_REASON.DEATH_ZONE)
 
     def isProtectionZone(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.ARTILLERY_PROTECTION) or self.isAttackReason(ATTACK_REASON.ARTILLERY_SECTOR) if primary else self.isSecondaryAttackReason(ATTACK_REASON.ARTILLERY_PROTECTION) or self.isSecondaryAttackReason(ATTACK_REASON.ARTILLERY_SECTOR)

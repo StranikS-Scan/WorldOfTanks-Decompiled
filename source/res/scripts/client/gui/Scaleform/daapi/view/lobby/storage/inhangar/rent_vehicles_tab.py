@@ -33,7 +33,7 @@ class _RentVehiclesDataProvider(StorageCarouselDataProvider):
         super(_RentVehiclesDataProvider, self).__init__(carouselFilter, itemsCache, currentVehicle)
         self._baseCriteria = REQ_CRITERIA.VEHICLE.RENT | REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.TELECOM
 
-    def applyFilter(self):
+    def applyFilter(self, forceApply=False):
         pass
 
     def _buildVehicle(self, item):

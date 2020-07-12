@@ -281,13 +281,16 @@ class LegacyEntity(_LegacyEntity):
         return result
 
     def isPlayerJoined(self, ctx):
-        return ctx.getCtrlType() is CTRL_ENTITY_TYPE.LEGACY and ctx.getEntityType() == self.getEntityType() and ctx.getID() == self.getID()
+        return ctx.getCtrlType() is CTRL_ENTITY_TYPE.LEGACY and ctx.getEntityType() == self.getEntityType() and ctx.getID() == self.getID() and ctx.getBonusType() == self.getBonusType()
 
     def getID(self):
         return prb_getters.getPrebattleID()
 
     def getEntityType(self):
         return self._settings['type'] if self._settings else 0
+
+    def getBonusType(self):
+        return self._settings['bonusType'] if self._settings else 0
 
     def getSettings(self):
         return self._settings

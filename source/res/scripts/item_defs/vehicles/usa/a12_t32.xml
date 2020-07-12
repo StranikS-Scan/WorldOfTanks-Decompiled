@@ -2679,7 +2679,7 @@
             <maxPitch>	0 10 0.366894 10 0.430556 5 0.569444 5 0.633106 10 1 10	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	_105mm_Gun_T5E1	  <cost>	18100	</cost>
+            <gun>	_105mm_Gun_T5E1_32	  <cost>	18100	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -2794,12 +2794,12 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_90mm_Gun_T15E2>
-        <_105mm_Gun_T5E1>	shared	  <maxAmmo>	43	</maxAmmo>
+        <_105mm_Gun_T5E1_32>	shared	  <maxAmmo>	43	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.366894 10 0.430556 5 0.569444 5 0.633106 10 1 10	</maxPitch>
           </pitchLimits>
-          <reloadTime>	12.6	</reloadTime>
+          <reloadTime>	10.6	</reloadTime>
           <armor>
             <armor_1>	298	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2923,7 +2923,7 @@
             <density>	112.521 114.546	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_105mm_Gun_T5E1>
+        </_105mm_Gun_T5E1_32>
       </guns>
       <models>
         <undamaged>	vehicles/american/A12_T32/normal/lod0/Turret_01.model	</undamaged>
@@ -3635,15 +3635,15 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_90mm_Gun_T15E2>
-        <_105mm_Gun_T5E1>	shared	  <maxAmmo>	43	</maxAmmo>
+        <_105mm_Gun_T5E1_32>	shared	  <maxAmmo>	43	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.366894 10 0.430556 5 0.569444 5 0.633106 10 1 10	</maxPitch>
           </pitchLimits>
-          <reloadTime>	10.6	</reloadTime>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <reloadTime>	9.4	</reloadTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3662,7 +3662,7 @@
             </armor_9>
             <gun>	45	</gun>
           </armor>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A12_T32/normal/lod0/Gun_04.model	</undamaged>
@@ -3771,7 +3771,7 @@
             <density>	112.521 114.546	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_105mm_Gun_T5E1>
+        </_105mm_Gun_T5E1_32>
       </guns>
       <models>
         <undamaged>	vehicles/american/A12_T32/normal/lod0/Turret_02.model	</undamaged>
@@ -4368,9 +4368,9 @@
   </physics>
   <clientAdjustmentFactors>
     <guns>
-      <_105mm_Gun_T5E1>
+      <_105mm_Gun_T5E1_32>
         <delta>	1.25592	</delta>
-      </_105mm_Gun_T5E1>
+      </_105mm_Gun_T5E1_32>
     </guns>
     <armour>	0.985043868	</armour>
   </clientAdjustmentFactors>

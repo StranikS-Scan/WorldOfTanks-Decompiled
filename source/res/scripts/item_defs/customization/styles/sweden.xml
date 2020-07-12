@@ -260,88 +260,6 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	true	</historical>
-    <priceGroup>	styles 700g	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <nations>	sweden	</nations>
-      </include>
-    </vehicleFilter>
-    <style>
-      <id>	246	</id>
-      <texture>	gui/maps/vehicles/styles/generic_custom_look_sweden.png	</texture>
-      <description>	#vehicle_customization:main_style/generic_custom_look_sweden_desc	</description>
-      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_sweden_desc/long	</longDescriptionSpecial>
-      <userString>	#vehicle_customization:main_style/generic_custom_look_sweden	</userString>
-      <tags>	progression_required addNationalEmblem	</tags>
-      <itemFilters>
-        <projection_decal>
-          <include>
-            <itemGroupName>	Progression Decals	</itemGroupName>
-          </include>
-        </projection_decal>
-      </itemFilters>
-      <outfits>
-        <outfit>
-          <season>	summer	</season>
-          <camouflages>
-            <item>
-              <id>	15803	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	674	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	winter	</season>
-          <camouflages>
-            <item>
-              <id>	15800	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	674	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	desert	</season>
-          <camouflages>
-            <item>
-              <id>	15804	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	674	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	event	</season>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/main_styles	</userString>
-    <season>	ALL	</season>
     <historical>	false	</historical>
     <priceGroup>	styles 3500g notInShop	</priceGroup>
     <vehicleFilter>
@@ -355,6 +273,7 @@
       <description>	#vehicle_customization:special_style/wolves_of_odin_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:special_style/wolves_of_odin_desc/long	</longDescriptionSpecial>
       <modelsSet>	WolvesOfOdin	</modelsSet>
+      <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/wolves_of_odin	</userString>
       <tags>	progression_required	</tags>
       <itemFilters>
@@ -691,68 +610,6 @@
           </decals>
         </outfit>
       </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
-    <season>	ALL	</season>
-    <historical>	false	</historical>
-    <priceGroup>	styles 1750g notInShop	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <vehicles>	sweden:S01_Strv_74_A2	</vehicles>
-      </include>
-    </vehicleFilter>
-    <style>
-      <id>	332	</id>
-      <texture>	gui/maps/vehicles/styles/10years_strv.png	</texture>
-      <description>	#vehicle_customization:special_style/10years_strv_desc	</description>
-      <longDescriptionSpecial>	#vehicle_customization:special_style/10years_strv_desc/long	</longDescriptionSpecial>
-      <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:special_style/10years_strv	</userString>
-      <tags>	progression_required	</tags>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	171	</id>
-              <appliedTo>	272	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-            <item>
-              <id>	172	</id>
-              <appliedTo>	4096	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <paints>
-            <item>
-              <id>	55	</id>
-              <appliedTo>	7	</appliedTo>
-            </item>
-            <item>
-              <id>	56	</id>
-              <appliedTo>	30576	</appliedTo>
-            </item>
-          </paints>
-          <decals>
-            <item>
-              <id>	296	</id>
-              <appliedTo>	13104	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-      </outfits>
-      <itemFilters>
-        <projection_decal>
-          <include>
-            <itemGroupName>	Progression Decals	</itemGroupName>
-          </include>
-        </projection_decal>
-      </itemFilters>
     </style>
   </itemGroup>
 </sweden.xml>

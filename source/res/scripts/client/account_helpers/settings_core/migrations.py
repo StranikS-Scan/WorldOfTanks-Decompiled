@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/migrations.py
 import BigWorld
 import constants
-from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys
+from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys, BattleCommStorageKeys
 from adisp import process, async
 from debug_utils import LOG_DEBUG
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
@@ -500,6 +500,15 @@ def _migrateTo57(core, data, initialized):
     data['guiStartBehavior']['isRankedWelcomeViewShowed'] = False
 
 
+def _migrateTo58(core, data, initialized):
+    gameData = data['battleComm']
+    gameData[BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION] = True
+    gameData[BattleCommStorageKeys.SHOW_COM_IN_PLAYER_LIST] = True
+    gameData[BattleCommStorageKeys.SHOW_STICKY_MARKERS] = True
+    gameData[BattleCommStorageKeys.SHOW_CALLOUT_MESSAGES] = True
+    gameData[BattleCommStorageKeys.SHOW_BASE_MARKERS] = True
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -722,6 +731,10 @@ _versions = ((1,
   False),
  (57,
   _migrateTo57,
+  False,
+  False),
+ (58,
+  _migrateTo58,
   False,
   False))
 

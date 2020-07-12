@@ -53,6 +53,7 @@ class SettingsCore(ISettingsCore):
         BATTLE_EVENTS = settings_constants.BATTLE_EVENTS
         BATTLE_BORDER_MAP = settings_constants.BATTLE_BORDER_MAP
         QUESTS_PROGRESS = settings_constants.QUESTS_PROGRESS
+        BATTLE_COMM = settings_constants.BattleCommStorageKeys
         self.__serverSettings = ServerSettingsManager(self)
         self.__interfaceScale = InterfaceScaleManager(self)
         VIDEO_SETTINGS_STORAGE = settings_storages.VideoSettingsStorage(self.serverSettings, self)
@@ -72,6 +73,7 @@ class SettingsCore(ISettingsCore):
         BATTLE_EVENTS_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.BATTLE_EVENTS)
         BATTLE_BORDER_MAP_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.BATTLE_BORDER_MAP)
         QUESTS_PROGRESS_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.QUESTS_PROGRESS)
+        BATTLE_COMM_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.BATTLE_COMM)
         MESSENGER_SETTINGS_STORAGE = settings_storages.MessengerSettingsStorage(GAME_SETTINGS_STORAGE)
         EXTENDED_MESSENGER_SETTINGS_STORAGE = settings_storages.MessengerSettingsStorage(EXTENDED_GAME_SETTINGS_STORAGE)
         self.__storages = {'game': GAME_SETTINGS_STORAGE,
@@ -92,7 +94,8 @@ class SettingsCore(ISettingsCore):
          'damageLog': DAMAGE_LOG_SETTINGS_STORAGE,
          'battleEvents': BATTLE_EVENTS_SETTINGS_STORAGE,
          'battleBorderMap': BATTLE_BORDER_MAP_SETTINGS_STORAGE,
-         'questsProgress': QUESTS_PROGRESS_SETTINGS_STORAGE}
+         'questsProgress': QUESTS_PROGRESS_SETTINGS_STORAGE,
+         'battleComm': BATTLE_COMM_SETTINGS_STORAGE}
         self.isDeviseRecreated = False
         self.isChangesConfirmed = True
         graphicSettings = tuple(((settingName, options.GraphicSetting(settingName, settingName == GRAPHICS.COLOR_GRADING_TECHNIQUE)) for settingName in BigWorld.generateGfxSettings()))
@@ -276,7 +279,12 @@ class SettingsCore(ISettingsCore):
          (BATTLE_BORDER_MAP.MODE_SHOW_BORDER, options.BattleBorderMapModeShow(BATTLE_BORDER_MAP.MODE_SHOW_BORDER, storage=BATTLE_BORDER_MAP_SETTINGS_STORAGE)),
          (BATTLE_BORDER_MAP.TYPE_BORDER, options.BattleBorderMapType(BATTLE_BORDER_MAP.TYPE_BORDER, storage=BATTLE_BORDER_MAP_SETTINGS_STORAGE)),
          (QUESTS_PROGRESS.VIEW_TYPE, options.QuestsProgressViewType(QUESTS_PROGRESS.VIEW_TYPE, storage=QUESTS_PROGRESS_SETTINGS_STORAGE)),
-         (QUESTS_PROGRESS.DISPLAY_TYPE, options.QuestsProgressDisplayType(QUESTS_PROGRESS.DISPLAY_TYPE, storage=QUESTS_PROGRESS_SETTINGS_STORAGE))))
+         (QUESTS_PROGRESS.DISPLAY_TYPE, options.QuestsProgressDisplayType(QUESTS_PROGRESS.DISPLAY_TYPE, storage=QUESTS_PROGRESS_SETTINGS_STORAGE)),
+         (BATTLE_COMM.ENABLE_BATTLE_COMMUNICATION, options.SettingTrueByDefault(BATTLE_COMM.ENABLE_BATTLE_COMMUNICATION, storage=BATTLE_COMM_SETTINGS_STORAGE)),
+         (BATTLE_COMM.SHOW_BASE_MARKERS, options.SettingTrueByDefault(BATTLE_COMM.SHOW_BASE_MARKERS, storage=BATTLE_COMM_SETTINGS_STORAGE)),
+         (BATTLE_COMM.SHOW_CALLOUT_MESSAGES, options.SettingTrueByDefault(BATTLE_COMM.SHOW_CALLOUT_MESSAGES, storage=BATTLE_COMM_SETTINGS_STORAGE)),
+         (BATTLE_COMM.SHOW_COM_IN_PLAYER_LIST, options.SettingTrueByDefault(BATTLE_COMM.SHOW_COM_IN_PLAYER_LIST, storage=BATTLE_COMM_SETTINGS_STORAGE)),
+         (BATTLE_COMM.SHOW_STICKY_MARKERS, options.SettingTrueByDefault(BATTLE_COMM.SHOW_STICKY_MARKERS, storage=BATTLE_COMM_SETTINGS_STORAGE))))
         self.__options.init()
         AccountSettings.onSettingsChanging += self.__onAccountSettingsChanging
         self.interfaceScale.init()

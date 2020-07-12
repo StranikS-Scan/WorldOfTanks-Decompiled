@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/game_control/ChinaController.py
 from adisp import process
 from gui.Scaleform.locale.MENU import MENU
-from gui.game_control import gc_constants
 from helpers import dependency
 from skeletons.gui.game_control import IBrowserController, IChinaController, IGameSessionController
 
@@ -20,10 +19,6 @@ class ChinaController(IChinaController):
         super(ChinaController, self).__init__()
         self.__browserID = None
         return
-
-    def onLobbyInited(self, event):
-        if not self.gameSession.battlesCount % gc_constants.BROWSER.CHINA_BROWSER_COUNT:
-            self.showBrowser()
 
     def onDisconnected(self):
         if self.__browserID is not None:

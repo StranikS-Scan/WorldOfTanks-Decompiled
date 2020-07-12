@@ -43,7 +43,6 @@ NOT_FOR_PERSONAL_MISSIONS_TOKENS = (LOOTBOX_TOKEN_PREFIX,
  TWITCH_TOKEN_PREFIX,
  OFFER_TOKEN_PREFIX)
 _ProgressiveReward = namedtuple('_ProgressiveReward', ('currentStep', 'probability', 'maxSteps'))
-EventPrimeTime = namedtuple('EventPrimeTime', ('peripheryIDs', 'weekdays', 'start', 'end'))
 
 class _DailyQuestsData(object):
     __slots__ = ('_lastReroll',)
@@ -350,7 +349,7 @@ class EventsCache(IEventsCache):
         return EventBattles(battles.get('vehicleTags', set()), battles.get('vehicles', []), bool(battles.get('enabled', 0)), battles.get('arenaTypeID')) if battles else EventBattles(set(), [], 0, None)
 
     def isEventEnabled(self):
-        return len(self.__getEventBattles()) > 0 and len(self.getEventVehicles()) > 0
+        return self.getEventBattles().enabled
 
     @dependency.replace_none_kwargs(itemsCache=IItemsCache)
     def getEventVehicles(self, itemsCache=None):
@@ -521,10 +520,6 @@ class EventsCache(IEventsCache):
             currentStep = self.questsProgress.getTokenCount(progressiveConfig.levelTokenID)
             probability = self.questsProgress.getTokenCount(progressiveConfig.probabilityTokenID) / 100
             return _ProgressiveReward(currentStep, probability, maxSteps)
-
-    def getEventPrimeTimes(self):
-        primeTimes = [ EventPrimeTime(primeTime.get('peripheryIDs', set()), primeTime.get('weekdays', set()), primeTime.get('start', ()), primeTime.get('end', ())) for primeTime in self.__getPrimeTimes().itervalues() ]
-        return primeTimes
 
     def _getDailyQuests(self, filterFunc=None):
         result = {}
@@ -785,9 +780,6 @@ class EventsCache(IEventsCache):
 
     def __getEventBattles(self):
         return self.__getIngameEventsData().get('eventBattles', {})
-
-    def __getPrimeTimes(self):
-        return self.__getIngameEventsData().get('primeTimes', {})
 
     def __getUnitRestrictions(self):
         return self.__getUnitData().get('restrictions', {})

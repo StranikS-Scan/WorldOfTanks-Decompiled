@@ -134,9 +134,3 @@ class EquipmentPacker(HeaderPacker):
         super(EquipmentPacker, self).__init__(context)
         self._title = TOOLTIPS.HANGARTUTORIAL_EQUIPMENT_TITLE
         self._descr = TOOLTIPS.HANGARTUTORIAL_EQUIPMENT_DESCRIPTION
-
-    def _packBlocks(self, *args, **kwargs):
-        items = super(EquipmentPacker, self)._packBlocks(*args, **kwargs)
-        blocksGap = 10
-        items.append(formatters.packBuildUpBlockData([formatters.packTitleDescBlockSmallTitle(text_styles.middleTitle(TOOLTIPS.HANGARTUTORIAL_EQUIPMENT_PREM_TITLE), text_styles.main(TOOLTIPS.HANGARTUTORIAL_EQUIPMENT_PREM_DESCRIPTION))], blocksGap))
-        return items

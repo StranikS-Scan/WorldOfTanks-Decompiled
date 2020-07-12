@@ -37,9 +37,6 @@ class GlobalVarsMgrMeta(BaseDAAPIComponent):
     def isFortificationAvailable(self):
         self._printOverrideError('isFortificationAvailable')
 
-    def isShowTicker(self):
-        self._printOverrideError('isShowTicker')
-
     def isRentalsEnabled(self):
         self._printOverrideError('isRentalsEnabled')
 

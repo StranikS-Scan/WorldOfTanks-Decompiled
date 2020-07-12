@@ -248,7 +248,7 @@ def getItemTitle(rawItem, item, forBox=False):
     elif rawItem.type == ItemPackType.CUSTOM_CREDITS:
         title = backport.text(R.strings.quests.bonuses.credits.description(), value=backport.getIntegralFormat(rawItem.count))
     elif rawItem.type == ItemPackType.CUSTOM_CRYSTAL:
-        title = _ms(key=QUESTS.BONUSES_CRYSTAL_DESCRIPTION, value=rawItem.count)
+        title = _ms(key=QUESTS.BONUSES_CRYSTAL_DESCRIPTION, value=backport.getIntegralFormat(rawItem.count))
     elif rawItem.type in (ItemPackType.CUSTOM_EVENT_COIN, ItemPackType.CUSTOM_EVENT_COIN_EXTERNAL):
         title = _ms(key=QUESTS.BONUSES_EVENTCOIN_DESCRIPTION, value=rawItem.count)
     elif rawItem.type == ItemPackType.CUSTOM_SUPPLY_POINT:

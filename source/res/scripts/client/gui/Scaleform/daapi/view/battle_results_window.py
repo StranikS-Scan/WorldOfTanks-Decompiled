@@ -7,6 +7,7 @@ from constants import PremiumConfigs
 from gui import SystemMessages
 from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.battle_results.settings import PROGRESS_ACTION
 from gui.battle_results import RequestEmblemContext, EMBLEM_TYPE
 from gui.prb_control.dispatcher import g_prbLoader
@@ -91,6 +92,8 @@ class BattleResultsWindow(BattleResultsMeta):
         super(BattleResultsWindow, self)._populate()
         g_eventBus.addListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__updateVO)
         g_eventBus.addListener(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, self.__onBattleResultWindowShowQuest)
+        g_eventBus.addListener(VIEW_ALIAS.BATTLE_QUEUE, self._lockButtons, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(VIEW_ALIAS.LOBBY_HANGAR, self._unlockButtons, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.addCallbacks({'account._additionalXPCache': self.__updateVO,
          'inventory.1': self.__updateVO,
          'inventory.8': self.__updateVO})
@@ -99,9 +102,17 @@ class BattleResultsWindow(BattleResultsMeta):
         if self.__battleResults.areResultsPosted(self.__arenaUniqueID):
             self.__setBattleResults()
 
+    def _lockButtons(self, *_):
+        self.as_setIsInBattleQueueS(True)
+
+    def _unlockButtons(self, *_):
+        self.as_setIsInBattleQueueS(False)
+
     def _dispose(self):
         g_eventBus.removeListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__updateVO)
         g_eventBus.removeListener(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, self.__onBattleResultWindowShowQuest)
+        g_eventBus.removeListener(VIEW_ALIAS.BATTLE_QUEUE, self._lockButtons, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(VIEW_ALIAS.LOBBY_HANGAR, self._unlockButtons, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__gameSession.onPremiumTypeChanged -= self.__onPremiumStateChanged
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange

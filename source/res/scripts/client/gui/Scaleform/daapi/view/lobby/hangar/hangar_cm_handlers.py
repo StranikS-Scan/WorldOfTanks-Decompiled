@@ -19,7 +19,7 @@ from gui.shared.gui_items.processors.tankman import TankmanUnload
 from gui.shared.gui_items.processors.vehicle import VehicleFavoriteProcessor
 from gui.shared.utils import decorators
 from helpers import dependency
-from skeletons.gui.game_control import IVehicleComparisonBasket, IEpicBattleMetaGameController, ITradeInController, IWOTSPGController
+from skeletons.gui.game_control import IVehicleComparisonBasket, IEpicBattleMetaGameController, ITradeInController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from account_helpers import AccountSettings
@@ -159,7 +159,6 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
     _epicController = dependency.descriptor(IEpicBattleMetaGameController)
     _tradeInController = dependency.descriptor(ITradeInController)
     _lobbyContext = dependency.descriptor(ILobbyContext)
-    _spgEvent = dependency.descriptor(IWOTSPGController)
 
     def __init__(self, cmProxy, ctx=None):
         super(VehicleContextMenuHandler, self).__init__(cmProxy, ctx, {VEHICLE.EXCHANGE: 'showVehicleExchange',
@@ -247,7 +246,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                 if vehicle.canTradeOff:
                     options.append(self._makeItem(VEHICLE.EXCHANGE, MENU.contextmenu(VEHICLE.EXCHANGE), {'enabled': vehicle.isReadyToTradeOff,
                      'textColor': CM_BUY_COLOR}))
-                options.extend([self._makeItem(VEHICLE.INFO, MENU.contextmenu(VEHICLE.INFO), {'enabled': not vehicle.isOnlyForEventBattles}), self._makeItem(VEHICLE.STATS, MENU.contextmenu(VEHICLE.STATS), {'enabled': vehicleWasInBattle})])
+                options.extend([self._makeItem(VEHICLE.INFO, MENU.contextmenu(VEHICLE.INFO)), self._makeItem(VEHICLE.STATS, MENU.contextmenu(VEHICLE.STATS), {'enabled': vehicleWasInBattle})])
                 if not vehicleWasInBattle:
                     options.append(self._makeSeparator())
                 self._manageVehCompareOptions(options, vehicle)
@@ -255,9 +254,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                     isNavigationEnabled = not self.prbDispatcher.getFunctionalState().isNavigationDisabled()
                 else:
                     isNavigationEnabled = True
-                if vehicle.isOnlyForEventBattles:
-                    isNavigationEnabled = False
-                if not vehicle.isOnlyForEpicBattles and not vehicle.isOnlyForBob:
+                if not vehicle.isOnlyForEpicBattles:
                     options.append(self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH), {'enabled': isNavigationEnabled}))
                 if vehicle.isCollectible:
                     options.append(self._makeItem(VEHICLE.GO_TO_COLLECTION, MENU.contextmenu(VEHICLE.GO_TO_COLLECTION), {'enabled': self._lobbyContext.getServerSettings().isCollectorVehicleEnabled()}))
@@ -272,8 +269,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                         label = MENU.CONTEXTMENU_RESTORE if vehicle.isRestoreAvailable() else MENU.CONTEXTMENU_BUY
                         options.append(self._makeItem(VEHICLE.BUY, label, {'enabled': enabled}))
                     options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.REMOVE), {'enabled': vehicle.canSell and vehicle.rentalIsOver}))
-                    rentRenewEnabled = vehicle.isOnlyForEpicBattles and vehicle.rentInfo.canCycleRentRenewForSeason(GameSeasonType.EPIC) or vehicle.isOnlyForBob and vehicle.rentInfo.canCycleRentRenewForSeason(GameSeasonType.BOB)
-                    options.append(self._makeItem(VEHICLE.RENEW, MENU.contextmenu(VEHICLE.RENEW), {'enabled': rentRenewEnabled}))
+                    options.append(self._makeItem(VEHICLE.RENEW, MENU.contextmenu(VEHICLE.RENEW), {'enabled': vehicle.isOnlyForEpicBattles and vehicle.rentInfo.canCycleRentRenewForSeason(GameSeasonType.EPIC)}))
                 else:
                     options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.SELL), {'enabled': vehicle.canSell and not isEventVehicle}))
                 if vehicle.isFavorite:

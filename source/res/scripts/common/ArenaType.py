@@ -80,7 +80,7 @@ def init():
     ResMgr.purge(_LIST_XML, True)
     ResMgr.purge(_DEFAULT_XML, True)
     g_gameplaysMask = getGameplaysMask(g_gameplayNames)
-    g_geometryNamesToIDs = dict([ (arenaType.geometryName, arenaType.geometryID) for arenaType in g_cache.itervalues() ])
+    g_geometryNamesToIDs = {arenaType.geometryName:arenaType.geometryID for arenaType in g_cache.itervalues()}
     return
 
 
@@ -149,6 +149,7 @@ def __readGeometryCfg(geometryID, geometryName, section, defaultXml):
             cfg['waterFreqX'] = section.readFloat('water/freqX', 1.0)
             cfg['waterFreqZ'] = section.readFloat('water/freqZ', 1.0)
             cfg['defaultGroundEffect'] = __readDefaultGroundEffect(section, defaultXml)
+            cfg['deathZoneBorders'] = __readDeathZoneBordersSection(section, defaultXml)
         cfg.update(__readCommonCfg(section, defaultXml, True, {}))
     except Exception as e:
         LOG_CURRENT_EXCEPTION()
@@ -193,6 +194,9 @@ def __readGameplayCfg(gameplayName, section, defaultXml, geometryCfg):
 
         if gameplayName == 'nations':
             raise SoftException('national battles are disabled')
+        notificationsRemapping = __readNotificationsRemappingSection(section, defaultXml)
+        if notificationsRemapping is not None:
+            cfg['notificationsRemapping'] = notificationsRemapping
         cfg.update(__readCommonCfg(section, defaultXml, False, geometryCfg))
     except Exception as e:
         LOG_CURRENT_EXCEPTION()
@@ -237,8 +241,6 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
         cfg['numPlayerGroups'] = _readInt('numPlayerGroups', section, defaultXml, 0)
     if raiseIfMissing or __hasKey('playerGroupLimit', section, defaultXml):
         cfg['playerGroupLimit'] = _readInt('playerGroupLimit', section, defaultXml, 0)
-    if raiseIfMissing or __hasKey('crystalRewardFactor', section, defaultXml):
-        cfg['crystalRewardFactor'] = _readFloat('crystalRewardFactor', section, defaultXml, 1.0)
     if raiseIfMissing or __hasKey('respawnType', section, defaultXml):
         cfg['respawnType'] = _readString('respawnType', section, defaultXml, '')
     if raiseIfMissing or __hasKey('unlockUnusedVehiclesOnLeave', section, defaultXml):
@@ -325,6 +327,28 @@ def __readWWmusicSection(section, defaultXml):
             wwmusic[name] = value.asString
 
     return wwmusic
+
+
+def __readDeathZoneBordersSection(section, defaultXml):
+    if __hasKey('deathZoneBorders', section, defaultXml):
+        dataSection = section['deathZoneBorders']
+        return {'maxAlpha': dataSection.readFloat('maxAlpha'),
+         'height': dataSection.readFloat('height'),
+         'activeColor': dataSection.readVector4('activeColor'),
+         'waitingColor': dataSection.readVector4('waitingColor')}
+    else:
+        return None
+
+
+def __readNotificationsRemappingSection(section, defaultXml):
+    notificationsRemapping = None
+    if __hasKey('notificationsRemapping', section, defaultXml):
+        notificationsRemapping = {}
+        dataSection = section if section.has_key('notificationsRemapping') else defaultXml
+        for _, event in _xml.getChildren(defaultXml, dataSection, 'notificationsRemapping'):
+            notificationsRemapping[event['name'].asString] = event['mod'].asString if event.has_key('mod') else None
+
+    return notificationsRemapping
 
 
 def __readWWmusicDroneSection(wwmusicDroneSetup, section, defaultXml):
@@ -453,7 +477,7 @@ def __calcSpaceBoundingBox(arenaBoundingBox):
 
 
 def __readChatCommandFlags(name, section, defaultXml):
-    if section[name] is not None:
+    if section.has_key(name):
         flagsAsWhitespaceSeparatedString = section.readString(name)
     else:
         flagsAsWhitespaceSeparatedString = defaultXml.readString(name)

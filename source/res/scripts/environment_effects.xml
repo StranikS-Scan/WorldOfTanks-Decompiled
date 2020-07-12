@@ -263,7 +263,7 @@
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Hawthorn/Hawthorn_03.srt	</modelName>
       <offset>	0 1.5 0	</offset>
-      <wwsound>	ambient_trees_green_comb_small_01	</wwsound>
+      <wwsoundName></wwsoundName>
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Hawthorn/Hawthorn_04.srt	</modelName>
@@ -498,7 +498,7 @@
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Hawthorn/Hawthorn_06.srt	</modelName>
       <offset>	0 0.5 0	</offset>
-      <wwsound>	ambient_trees_green_bush_few_foliage_01	</wwsound>
+      <wwsoundName></wwsoundName>
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Rose/Rose_White_1m.srt	</modelName>
@@ -923,7 +923,7 @@
     <model>
       <modelName>	vegetation/Conifers/Pine_Young/Pine_Young_almoust_2m_Brr.srt	</modelName>
       <offset>	0.000000 0.800000 0.000000	</offset>
-      <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
+      <wwsound>	ambient_trees_coniferous_01	</wwsound>
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Bush_Wild_Autumn/Bush_Wild_Autumn_5m.srt	</modelName>
@@ -1396,6 +1396,11 @@
       <wwsound>	ambient_trees_green_comb_mid_01	</wwsound>
     </model>
     <model>
+      <modelName>	vegetation/Broadleaves/Acacia/Acacia_03.srt	</modelName>
+      <offset>	0 7 0	</offset>
+      <wwsound>	ambient_trees_green_comb_mid_01	</wwsound>
+    </model>
+    <model>
       <modelName>	vegetation/Conifers/Cypress_regular/Cypress_regular_19m.srt	</modelName>
       <offset>	0 10 0	</offset>
       <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
@@ -1633,7 +1638,7 @@
     <model>
       <modelName>	vegetation/Conifers/Scots_Pine/Scots_Pine_37m.srt	</modelName>
       <offset>	0.000000 30.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_dry_comb_mid_01	</wwsound>
+      <wwsound>	ambient_trees_coniferous_01	</wwsound>
     </model>
     <model>
       <modelName>	vegetation/Conifers/Scots_Pine/Scots_Pine_hv3_1.srt	</modelName>
@@ -1703,7 +1708,7 @@
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Hawthorn/Hawthorn_08_small.srt	</modelName>
       <offset>	0.000000 0.800000 0.000000	</offset>
-      <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
+      <wwsoundName></wwsoundName>
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Bush_Wild_Dry/Bush_Wild_Dry_6m_Small_Ragged.srt	</modelName>
@@ -1713,7 +1718,7 @@
     <model>
       <modelName>	vegetation/Conifers/Scots_Pine/Scots_Pine_hv3_3.srt	</modelName>
       <offset>	0.000000 20.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_dry_comb_mid_01	</wwsound>
+      <wwsound>	ambient_trees_coniferous_01	</wwsound>
     </model>
     <model>
       <modelName>	content/Decor/hd_env403_TownEnv_StreetLamp6/normal/lod0/hd_env403_TownEnv_StreetLamp6_anim.model	</modelName>
@@ -1869,6 +1874,151 @@
       <modelName>	vegetation/Broadleaves/Birch_Dry/Birch_Dry_Curve_01.srt	</modelName>
       <offset>	0.000000 1.500000 0.000000	</offset>
       <wwsound>	ambient_trees_without_foliage_bush_big_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/DryTree_Frost_Light/DryTree_Frost_Light_01.srt	</modelName>
+      <offset>	0 10 0	</offset>
+      <wwsound>	ambient_trees_without_foliage_tree_big_02	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Birch_Fall_Frost/Birch_Fall_Frost_01.srt	</modelName>
+      <offset>	0.000000 5.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_yellow_soft_comb_mid_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Linden_High_Bald_Snow/Linden_High_Bald_Snow_18m.srt	</modelName>
+      <offset>	0.000000 15.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_without_foliage_tree_big_02	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Acacia/Acacia_05.srt	</modelName>
+      <offset>	0.000000 7.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_comb_small_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Bamboo_cluster/Bamboo_cluster_02.srt	</modelName>
+      <offset>	0.000000 5.000000 0.000000	</offset>
+      <wwsound>	ambient_palm_green_mid	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Osmanthus/Osmanthus_01.srt	</modelName>
+      <offset>	0.000000 5.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_comb_small_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Salix_Alba/Salix_Alba_bush_02.srt	</modelName>
+      <offset>	0.000000 5.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_bush_few_foliage_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Bamboo_Bambusa/Bamboo_Bambusa_01.srt	</modelName>
+      <offset>	0.000000 9.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_comb_mid_02	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Bamboo_Bambusa/Bamboo_Bambusa_mid.srt	</modelName>
+      <offset>	0.000000 9.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_comb_mid_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Bamboo_Bambusa/Bamboo_Bambusa_side_01.srt	</modelName>
+      <offset>	0.000000 8.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_comb_mid_02	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Salix_Alba/Salix_Alba_01.srt	</modelName>
+      <offset>	0.000000 9.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_comb_mid_02	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Osmanthus/Osmanthus_bush_01.srt	</modelName>
+      <offset>	0.000000 1.500000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_bush_few_foliage_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Misc/Monstera/Monstera_01.srt	</modelName>
+      <offset>	0.000000 0.500000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_bush_few_foliage_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Ficus_Elastica/Ficus_Elastica_bush_01.srt	</modelName>
+      <offset>	0.000000 1.500000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_bush_few_foliage_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Bamboo_cluster/Bamboo_cluster_01.srt	</modelName>
+      <offset>	0.000000 3.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_without_foliage_tree_big_02	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Misc/Dune_Grass/Dune_Grass_04.srt	</modelName>
+      <offset>	0.000000 0.900000 0.000000	</offset>
+      <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	content/Environment/hd_env_EU_468_FactoryDoubleCistern/normal/lod0/hd_env_EU_468_FactoryDoubleCistern.model	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	ev_battle_royale_2020_amb_cistern	</wwsound>
+    </model>
+    <model>
+      <modelName>	content/Buildings/hd_bld_SU_124_Tank/normal/lod0/hd_bld_SU_124_Tank.model	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	ev_battle_royale_2020_amb_fueltank	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Misc/Broom_Snakeweed/Broom_Snakeweed_03_Large_dry.srt	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Misc/Broom_Snakeweed_Dead/Broom_Snakeweed_Dead_cluster_01.srt	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/DryTree/DryTree_Bush_var2.srt	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_dry_comb_mid_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Shrubs/Bush_thorny_dry/Bush_thorny_dry_4m.srt	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Misc/Hedera/Hedera_Corner_01.srt	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_bush_few_foliage_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Misc/Hedera/Hedera_6m.srt	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_bush_few_foliage_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Misc/Thicket_Dry/Thicket_Dry_cluster_01.srt	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Misc/ivy/ivy_ground_down_v3.srt	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_bush_few_foliage_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Misc/Hedera/Hedera_Upper_01.srt	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_bush_few_foliage_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Misc/ivy/ivy_ground_up_v1.srt	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_bush_few_foliage_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	content/Buildings/hd_bld_SU_124_Tank/normal/lod0/hd_bld_SU_124_Tank_01.model	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	ev_battle_royale_2020_amb_fueltank	</wwsound>
     </model>
   </lightSounds>
   <birds>

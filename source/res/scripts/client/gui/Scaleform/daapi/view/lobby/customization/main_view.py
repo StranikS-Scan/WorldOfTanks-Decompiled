@@ -4,13 +4,11 @@ import logging
 from collections import namedtuple
 import BigWorld
 from BWUtil import AsyncReturn
-from AccountCommands import isCodeValid
 from CurrentVehicle import g_currentVehicle
 from Math import Matrix
 from account_helpers.AccountSettings import AccountSettings, CUSTOMIZATION_SECTION, CAROUSEL_ARROWS_HINT_SHOWN_FIELD
 import adisp
 from async import async, await
-from debug_utils import LOG_WARNING
 from gui import g_tankActiveCamouflage, SystemMessages
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi import LobbySubView
@@ -44,7 +42,6 @@ from gui.shared.event_dispatcher import showProgressiveItemsView
 from gui.shared.formatters import formatPrice, formatPurchaseItems, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
-from gui.shared.utils import code2str
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.event_dispatcher import tryToShowReplaceExistingStyleDialog
 from helpers import dependency, int2roman
@@ -435,6 +432,8 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             if component is not None and not component.isFilled():
                 BigWorld.callback(0.0, lambda : self.__selectSlot(slotId))
         elif slotId == self.__ctx.mode.selectedSlot:
+            if season is None or season == self.__ctx.season:
+                self.soundManager.playInstantSound(SOUNDS.APPLY)
             self.__locateCameraOnAnchor(slotId)
         return
 
@@ -523,18 +522,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             return
 
     def resetC11nItemsNovelty(self, itemsList):
-        self.__resetItemsNovelty(itemsList)
-
-    def __resetItemsNovelty(self, itemsList):
-
-        def _callback(callback, resultID):
-            if isCodeValid(resultID):
-                callback()
-            else:
-                LOG_WARNING('Error occurred while trying to reset c11n items novelty, reason by resultId = {}: {}'.format(resultID, code2str(resultID)))
-
-        callback = self.__ctx.events.onResetItemsNovelty
-        BigWorld.player().shop.resetC11nItemsNovelty([ (g_currentVehicle.item.intCD, intCD) for intCD in itemsList ], lambda resultId: _callback(callback, resultId))
+        self.__ctx.resetItemsNovelty(itemsList)
 
     def __locateCameraOnAnchor(self, slotId, forceRotate=False):
         if self.__ctx.c11nCameraManager is None:
@@ -641,7 +629,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__ctx.events.onProlongStyleRent += self.__onProlongStyleRent
         self.__ctx.events.onShowStyleInfo += self.__onShowStyleInfo
         self.__ctx.events.onHideStyleInfo += self.__onHideStyleInfo
-        self.__ctx.events.onResetItemsNovelty += self.__onResetItemsNovelty
         self.__ctx.events.onEditModeEnabled += self.__onEditModeEnabled
         self.__ctx.events.onGetItemBackToHand += self.__onGetItemBackToHand
         self.__ctx.events.onSlotSelected += self.__onSlotSelected
@@ -745,7 +732,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__ctx.events.onProlongStyleRent -= self.__onProlongStyleRent
         self.__ctx.events.onShowStyleInfo -= self.__onShowStyleInfo
         self.__ctx.events.onHideStyleInfo -= self.__onHideStyleInfo
-        self.__ctx.events.onResetItemsNovelty -= self.__onResetItemsNovelty
         self.__ctx.events.onEditModeEnabled -= self.__onEditModeEnabled
         self.__ctx.events.onGetItemBackToHand -= self.__onGetItemBackToHand
         self.__ctx.events.onAnchorsStateChanged -= self.__onAnchorsStateChanged
@@ -974,7 +960,10 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             itemTypes = (GUI_ITEM_TYPE.STYLE,)
         else:
             itemTypes = getItemTypesAvailableForVehicle() - {GUI_ITEM_TYPE.STYLE}
-        itemsFilter = lambda item: not item.isAllSeason()
+        if self.__ctx.modeId == CustomizationModes.EDITABLE_STYLE:
+            itemsFilter = lambda item: self.__ctx.mode.style.isItemInstallable(item) and not item.isAllSeason()
+        else:
+            itemsFilter = lambda item: not item.isAllSeason()
         for season in SEASONS_ORDER:
             if self.__ctx.season != season:
                 seasonCounters[season] = g_currentVehicle.item.getC11nItemsNoveltyCounter(g_currentVehicle.itemsCache.items, itemTypes, season, itemsFilter)
@@ -1087,9 +1076,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
                 self.__locateCameraToCustomizationPreview(preserveAngles=True)
             self.service.resumeHighlighter()
             return
-
-    def __onResetItemsNovelty(self):
-        self.__setNotificationCounters()
 
     def __onAnchorsStateChanged(self, changedStates):
         anchorStateVOs = [ CustomizationAnchorsStateVO(uid, state)._asdict() for uid, state in changedStates.iteritems() ]

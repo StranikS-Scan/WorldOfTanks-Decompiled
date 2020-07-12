@@ -35,6 +35,7 @@ class INGAME_GUI(object):
     PLAYER_ERRORS_EQUIPMENT_MEDKIT_ALLTANKMENARESAFE = '#ingame_gui:player_errors/equipment/medkit/allTankmenAreSafe'
     PLAYER_ERRORS_EQUIPMENT_REPAIRKIT_DEVICEISNOTDAMAGED = '#ingame_gui:player_errors/equipment/repairkit/deviceIsNotDamaged'
     PLAYER_ERRORS_EQUIPMENT_REPAIRKIT_ALLDEVICESARENOTDAMAGED = '#ingame_gui:player_errors/equipment/repairkit/allDevicesAreNotDamaged'
+    PLAYER_ERRORS_EQUIPMENT_REPAIREVERYTHING_CREWANDDEVICESAREOK = '#ingame_gui:player_errors/equipment/repairEverything/crewAndDevicesAreOk'
     PLAYER_ERRORS_EQUIPMENT_EXTINGUISHER_DOESNOTACTIVATED = '#ingame_gui:player_errors/equipment/extinguisher/doesNotActivated'
     PLAYER_ERRORS_EQUIPMENT_ORDER_NOTREADY = '#ingame_gui:player_errors/equipment/order/notReady'
     PLAYER_MESSAGES_DEVICE_CRITICAL_AT_SHOT = '#ingame_gui:player_messages/DEVICE_CRITICAL_AT_SHOT'
@@ -74,29 +75,34 @@ class INGAME_GUI(object):
     PLAYER_MESSAGES_REPLAYCONTROLSHELP2 = '#ingame_gui:player_messages/replayControlsHelp2'
     PLAYER_MESSAGES_REPLAYCONTROLSHELP3 = '#ingame_gui:player_messages/replayControlsHelp3'
     PLAYER_MESSAGES_LOADER_INTUITION_WAS_USED = '#ingame_gui:player_messages/loader_intuition_was_used'
-    CHAT_SHORTCUTS_TURN_BACK = '#ingame_gui:chat_shortcuts/turn_back'
-    CHAT_SHORTCUTS_SUPPORT_ME_WITH_FIRE = '#ingame_gui:chat_shortcuts/support_me_with_fire'
+    CHAT_SHORTCUTS_ATTENTION_TO_POSITION = '#ingame_gui:chat_shortcuts/attention_to_position'
+    CHAT_SHORTCUTS_GOING_THERE = '#ingame_gui:chat_shortcuts/going_there'
+    CHAT_SHORTCUTS_HELP_ME = '#ingame_gui:chat_shortcuts/help_me'
     CHAT_SHORTCUTS_RELOADING_GUN = '#ingame_gui:chat_shortcuts/reloading_gun'
     CHAT_SHORTCUTS_RELOADING_CASSETTE = '#ingame_gui:chat_shortcuts/reloading_cassette'
     CHAT_SHORTCUTS_RELOADING_READY = '#ingame_gui:chat_shortcuts/reloading_ready'
     CHAT_SHORTCUTS_RELOADING_READY_CASSETTE = '#ingame_gui:chat_shortcuts/reloading_ready_cassette'
     CHAT_SHORTCUTS_RELOADING_UNAVAILABLE = '#ingame_gui:chat_shortcuts/reloading_unavailable'
-    CHAT_SHORTCUTS_STOP = '#ingame_gui:chat_shortcuts/stop'
-    CHAT_SHORTCUTS_HELP_ME = '#ingame_gui:chat_shortcuts/help_me'
-    CHAT_SHORTCUTS_HELP_ME_EX = '#ingame_gui:chat_shortcuts/help_me_ex'
-    CHAT_SHORTCUTS_FOLLOW_ME = '#ingame_gui:chat_shortcuts/follow_me'
-    CHAT_SHORTCUTS_ATTACK = '#ingame_gui:chat_shortcuts/attack'
-    CHAT_SHORTCUTS_BACK_TO_BASE = '#ingame_gui:chat_shortcuts/back_to_base'
-    CHAT_SHORTCUTS_POSITIVE = '#ingame_gui:chat_shortcuts/positive'
-    CHAT_SHORTCUTS_NEGATIVE = '#ingame_gui:chat_shortcuts/negative'
-    CHAT_SHORTCUTS_ATTENTION_TO_CELL = '#ingame_gui:chat_shortcuts/attention_to_cell'
     CHAT_SHORTCUTS_SPG_AIM_AREA = '#ingame_gui:chat_shortcuts/spg_aim_area'
     CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING = '#ingame_gui:chat_shortcuts/spg_aim_area_reloading'
-    CHAT_SHORTCUTS_ATTENTION_TO_POSITION = '#ingame_gui:chat_shortcuts/attention_to_position'
-    CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_ATK = '#ingame_gui:chat_shortcuts/attention_to_objective_atk'
-    CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_DEF = '#ingame_gui:chat_shortcuts/attention_to_objective_def'
+    CHAT_SHORTCUTS_ATTACK_ENEMY = '#ingame_gui:chat_shortcuts/attack_enemy'
+    CHAT_SHORTCUTS_ATTACKING_ENEMY = '#ingame_gui:chat_shortcuts/attacking_enemy'
+    CHAT_SHORTCUTS_ATTACK_ENEMY_WITH_SPG = '#ingame_gui:chat_shortcuts/attack_enemy_with_SPG'
+    CHAT_SHORTCUTS_ATTACK_ENEMY_WITH_SPG_RELOADING = '#ingame_gui:chat_shortcuts/attack_enemy_with_SPG_reloading'
     CHAT_SHORTCUTS_ATTENTION_TO_BASE_ATK = '#ingame_gui:chat_shortcuts/attention_to_base_atk'
+    CHAT_SHORTCUTS_ATTENTION_TO_BASE_ATK_NUMBERED = '#ingame_gui:chat_shortcuts/attention_to_base_atk_numbered'
+    CHAT_SHORTCUTS_ATTACKING_BASE = '#ingame_gui:chat_shortcuts/attacking_base'
+    CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_ATK = '#ingame_gui:chat_shortcuts/attention_to_objective_atk'
     CHAT_SHORTCUTS_ATTENTION_TO_BASE_DEF = '#ingame_gui:chat_shortcuts/attention_to_base_def'
+    CHAT_SHORTCUTS_ATTENTION_TO_BASE_DEF_NUMBERED = '#ingame_gui:chat_shortcuts/attention_to_base_def_numbered'
+    CHAT_SHORTCUTS_DEFENDING_BASE = '#ingame_gui:chat_shortcuts/defending_base'
+    CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_DEF = '#ingame_gui:chat_shortcuts/attention_to_objective_def'
+    CHAT_SHORTCUTS_HELP_ME_EX = '#ingame_gui:chat_shortcuts/help_me_ex'
+    CHAT_SHORTCUTS_SUPPORTING_ALLY = '#ingame_gui:chat_shortcuts/supporting_ally'
+    CHAT_SHORTCUTS_TURN_BACK = '#ingame_gui:chat_shortcuts/turn_back'
+    CHAT_SHORTCUTS_THANKS = '#ingame_gui:chat_shortcuts/thanks'
+    CHAT_SHORTCUTS_POSITIVE = '#ingame_gui:chat_shortcuts/positive'
+    CHAT_SHORTCUTS_ATTENTION_TO_CELL = '#ingame_gui:chat_shortcuts/attention_to_cell'
     CHAT_SHORTCUTS_GLOBAL_MSG_ATK_SAVE_TANKS = '#ingame_gui:chat_shortcuts/global_msg/atk/save_tanks'
     CHAT_SHORTCUTS_GLOBAL_MSG_DEF_SAVE_TANKS = '#ingame_gui:chat_shortcuts/global_msg/def/save_tanks'
     CHAT_SHORTCUTS_GLOBAL_MSG_ATK_TIME = '#ingame_gui:chat_shortcuts/global_msg/atk/time'
@@ -106,8 +112,9 @@ class INGAME_GUI(object):
     CHAT_SHORTCUTS_GLOBAL_MSG_LANE_EAST = '#ingame_gui:chat_shortcuts/global_msg/lane/east'
     CHAT_SHORTCUTS_GLOBAL_MSG_ATK_FOCUS_HQ = '#ingame_gui:chat_shortcuts/global_msg/atk/focus_hq'
     CHAT_SHORTCUTS_GLOBAL_MSG_DEF_FOCUS_HQ = '#ingame_gui:chat_shortcuts/global_msg/def/focus_hq'
-    CHAT_SHORTCUTS_ATTACK_ENEMY = '#ingame_gui:chat_shortcuts/attack_enemy'
-    CHAT_SHORTCUTS_ATTACK_ENEMY_RELOADING = '#ingame_gui:chat_shortcuts/attack_enemy_reloading'
+    CHAT_EXAMPLE_ATTENTION_TO_BASE_DEF = '#ingame_gui:chat_example/attention_to_base_def'
+    CHAT_EXAMPLE_ATTENTION_TO_BASE_ATK = '#ingame_gui:chat_example/attention_to_base_atk'
+    CHAT_EXAMPLE_GOING_THERE = '#ingame_gui:chat_example/going_there'
     CHAT_EXAMPLE_GLOBAL_MSG_DEF_SAVE_TANKS = '#ingame_gui:chat_example/global_msg/def/save_tanks'
     MARKER_METERS = '#ingame_gui:marker/meters'
     CHAT_EXAMPLE_GLOBAL_MSG_ATK_SAVE_TANKS = '#ingame_gui:chat_example/global_msg/atk/save_tanks'
@@ -118,25 +125,23 @@ class INGAME_GUI(object):
     CHAT_EXAMPLE_GLOBAL_MSG_LANE_EAST = '#ingame_gui:chat_example/global_msg/lane/east'
     CHAT_EXAMPLE_GLOBAL_MSG_ATK_FOCUS_HQ = '#ingame_gui:chat_example/global_msg/atk/focus_hq'
     CHAT_EXAMPLE_GLOBAL_MSG_DEF_FOCUS_HQ = '#ingame_gui:chat_example/global_msg/def/focus_hq'
-    CHAT_EXAMPLE_SUPPORT_ME_WITH_FIRE = '#ingame_gui:chat_example/support_me_with_fire'
+    CHAT_EXAMPLE_ATTACK_ENEMY = '#ingame_gui:chat_example/attack_enemy'
     CHAT_EXAMPLE_RELOADING_GUN = '#ingame_gui:chat_example/reloading_gun'
     CHAT_EXAMPLE_RELOADING_CASSETTE = '#ingame_gui:chat_example/reloading_cassette'
     CHAT_EXAMPLE_RELOADING_READY = '#ingame_gui:chat_example/reloading_ready'
     CHAT_EXAMPLE_TURN_BACK = '#ingame_gui:chat_example/turn_back'
     CHAT_EXAMPLE_RELOADING_READY_CASSETTE = '#ingame_gui:chat_example/reloading_ready_cassette'
     CHAT_EXAMPLE_RELOADING_UNAVAILABLE = '#ingame_gui:chat_example/reloading_unavailable'
-    CHAT_EXAMPLE_STOP = '#ingame_gui:chat_example/stop'
     CHAT_EXAMPLE_HELP_ME = '#ingame_gui:chat_example/help_me'
     CHAT_EXAMPLE_HELP_ME_EX = '#ingame_gui:chat_example/help_me_ex'
-    CHAT_EXAMPLE_FOLLOW_ME = '#ingame_gui:chat_example/follow_me'
-    CHAT_EXAMPLE_ATTACK = '#ingame_gui:chat_example/attack'
-    CHAT_EXAMPLE_BACK_TO_BASE = '#ingame_gui:chat_example/back_to_base'
     CHAT_EXAMPLE_POSITIVE = '#ingame_gui:chat_example/positive'
-    CHAT_EXAMPLE_NEGATIVE = '#ingame_gui:chat_example/negative'
+    CHAT_EXAMPLE_THANKS = '#ingame_gui:chat_example/thanks'
     CHAT_EXAMPLE_ATTENTION_TO_CELL = '#ingame_gui:chat_example/attention_to_cell'
-    CHAT_EXAMPLE_ATTACK_ENEMY = '#ingame_gui:chat_example/attack_enemy'
+    CHAT_EXAMPLE_ATTACK_ENEMY_WITH_SPG = '#ingame_gui:chat_example/attack_enemy_with_SPG'
     CHAT_EXAMPLE_SPG_AIM_AREA = '#ingame_gui:chat_example/spg_aim_area'
     CHAT_EXAMPLE_ATTENTION_TO_POSITION = '#ingame_gui:chat_example/attention_to_position'
+    CHAT_EXAMPLE_REPLY_TO_PLAYER = '#ingame_gui:chat_example/reply_to_player'
+    CHAT_EXAMPLE_SUPPORTING_ALLY = '#ingame_gui:chat_example/supporting_ally'
     STATISTICS_TAB_LINE_UP_HEADER = '#ingame_gui:statistics/tab/line_up/header'
     STATISTICS_TAB_LINE_UP_TITLE = '#ingame_gui:statistics/tab/line_up/title'
     STATISTICS_TAB_QUESTS_HEADER = '#ingame_gui:statistics/tab/quests/header'
@@ -337,6 +342,7 @@ class INGAME_GUI(object):
     POSTMORTEM_MESSAGES_DEATH_FROM_OVERTURN_SELF_SUICIDE = '#ingame_gui:postmortem_messages/DEATH_FROM_OVERTURN_SELF_SUICIDE'
     POSTMORTEM_MESSAGES_DEATH_FROM_OVERTURN_ENEMY_SELF = '#ingame_gui:postmortem_messages/DEATH_FROM_OVERTURN_ENEMY_SELF'
     POSTMORTEM_MESSAGES_DEATH_FROM_OVERTURN_ALLY_SELF = '#ingame_gui:postmortem_messages/DEATH_FROM_OVERTURN_ALLY_SELF'
+    POSTMORTEM_MESSAGES_DEATH_FROM_MINE_EXPLOSION = '#ingame_gui:postmortem_messages/DEATH_FROM_MINE_EXPLOSION'
     PLAYER_MESSAGES_DEATH_FROM_SHOT_SELF_ALLY = '#ingame_gui:player_messages/DEATH_FROM_SHOT_SELF_ALLY'
     PLAYER_MESSAGES_DEATH_FROM_SHOT_SELF_ALLY_ARTILLERY = '#ingame_gui:player_messages/DEATH_FROM_SHOT_SELF_ALLY_ARTILLERY'
     PLAYER_MESSAGES_DEATH_FROM_SHOT_SELF_ALLY_BOMBER = '#ingame_gui:player_messages/DEATH_FROM_SHOT_SELF_ALLY_BOMBER'
@@ -416,6 +422,8 @@ class INGAME_GUI(object):
     PLAYER_MESSAGES_COMBAT_EQUIPMENT_USED_RECON = '#ingame_gui:player_messages/COMBAT_EQUIPMENT_USED_RECON'
     PLAYER_MESSAGES_COMBAT_EQUIPMENT_USED_SMOKE = '#ingame_gui:player_messages/COMBAT_EQUIPMENT_USED_SMOKE'
     PLAYER_MESSAGES_COMBAT_EQUIPMENT_USED_INSPIRE = '#ingame_gui:player_messages/COMBAT_EQUIPMENT_USED_INSPIRE'
+    PLAYER_MESSAGES_COMBAT_EQUIPMENT_USED_HEALPOINT = '#ingame_gui:player_messages/COMBAT_EQUIPMENT_USED_HEALPOINT'
+    PLAYER_MESSAGES_COMBAT_BR_EQUIPMENT_READY = '#ingame_gui:player_messages/COMBAT_BR_EQUIPMENT_READY'
     VEHICLE_MESSAGES_DEATH_FROM_WORLD_COLLISION_SELF_SUICIDE = '#ingame_gui:vehicle_messages/DEATH_FROM_WORLD_COLLISION_SELF_SUICIDE'
     POSTMORTEM_MESSAGES_DEATH_FROM_WORLD_COLLISION_SELF_SUICIDE = '#ingame_gui:postmortem_messages/DEATH_FROM_WORLD_COLLISION_SELF_SUICIDE'
     VEHICLE_MESSAGES_DEATH_FROM_WORLD_COLLISION_ENEMY_SELF = '#ingame_gui:vehicle_messages/DEATH_FROM_WORLD_COLLISION_ENEMY_SELF'
@@ -490,6 +498,7 @@ class INGAME_GUI(object):
     PLAYER_MESSAGES_DEATH_FROM_RAMMING_ALLY_SELF = '#ingame_gui:player_messages/DEATH_FROM_RAMMING_ALLY_SELF'
     PLAYER_MESSAGES_DEATH_FROM_RAMMING_ALLY_ALLY = '#ingame_gui:player_messages/DEATH_FROM_RAMMING_ALLY_ALLY'
     PLAYER_MESSAGES_DEATH_FROM_RAMMING_ALLY_ENEMY = '#ingame_gui:player_messages/DEATH_FROM_RAMMING_ALLY_ENEMY'
+    POSTMORTEM_MESSAGES_DEATH_FROM_KAMIKAZE = '#ingame_gui:postmortem_messages/DEATH_FROM_KAMIKAZE'
     PLAYER_MESSAGES_DEATH_FROM_OVERTURN_SELF_SUICIDE = '#ingame_gui:player_messages/DEATH_FROM_OVERTURN_SELF_SUICIDE'
     PLAYER_MESSAGES_DEATH_FROM_OVERTURN_SELF_ALLY = '#ingame_gui:player_messages/DEATH_FROM_OVERTURN_SELF_ALLY'
     PLAYER_MESSAGES_DEATH_FROM_OVERTURN_SELF_ENEMY = '#ingame_gui:player_messages/DEATH_FROM_OVERTURN_SELF_ENEMY'
@@ -527,12 +536,19 @@ class INGAME_GUI(object):
     EFFICIENCYRIBBONS_RECEIVEDCRITS = '#ingame_gui:efficiencyRibbons/receivedCrits'
     EFFICIENCYRIBBONS_RECEIVEDDAMAGE = '#ingame_gui:efficiencyRibbons/receivedDamage'
     EFFICIENCYRIBBONS_RECEIVEDBURN = '#ingame_gui:efficiencyRibbons/receivedBurn'
+    EFFICIENCYRIBBONS_BERSERKER = '#ingame_gui:efficiencyRibbons/berserker'
+    EFFICIENCYRIBBONS_SPAWNEDBOTDMG = '#ingame_gui:efficiencyRibbons/spawnedBotDmg'
+    EFFICIENCYRIBBONS_RECEIVEDDMGBYSPAWNEDBOT = '#ingame_gui:efficiencyRibbons/receivedDmgBySpawnedBot'
+    EFFICIENCYRIBBONS_DAMAGEBYMINEFIELD = '#ingame_gui:efficiencyRibbons/damageByMinefield'
+    EFFICIENCYRIBBONS_RECEIVEDBYMINEFIELD = '#ingame_gui:efficiencyRibbons/receivedByMinefield'
+    EFFICIENCYRIBBONS_RECEIVEDBYSMOKE = '#ingame_gui:efficiencyRibbons/receivedBySmoke'
     EFFICIENCYRIBBONS_RECEIVEDRAM = '#ingame_gui:efficiencyRibbons/receivedRam'
     EFFICIENCYRIBBONS_RECEIVEDWORLDCOLLISION = '#ingame_gui:efficiencyRibbons/receivedWorldCollision'
     EFFICIENCYRIBBONS_VEHICLERECOVERY = '#ingame_gui:efficiencyRibbons/vehicleRecovery'
     EFFICIENCYRIBBONS_BONUSRIBBON = '#ingame_gui:efficiencyRibbons/bonusRibbon'
     EFFICIENCYRIBBONS_STUN = '#ingame_gui:efficiencyRibbons/stun'
     EFFICIENCYRIBBONS_ASSISTSTUN = '#ingame_gui:efficiencyRibbons/assistStun'
+    EFFICIENCYRIBBONS_DEATHZONE = '#ingame_gui:efficiencyRibbons/deathZone'
     DAMAGELOG_SHELLTYPE_ARMOR_PIERCING = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING'
     DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE = '#ingame_gui:damageLog/shellType/HIGH_EXPLOSIVE'
     DAMAGELOG_SHELLTYPE_ARMOR_PIERCING_HE = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING_HE'
@@ -699,6 +715,8 @@ class INGAME_GUI(object):
     BATTLEPROGRESS_HINT_NOBINDINGKEY = '#ingame_gui:battleProgress/hint/noBindingKey'
     HELPSCREEN_HINT_PRESS = '#ingame_gui:helpScreen/hint/press'
     HELPSCREEN_HINT_DESCRIPTION = '#ingame_gui:helpScreen/hint/description'
+    BATTLECOMMUNICATION_HINT_PRESS = '#ingame_gui:battleCommunication/hint/press'
+    BATTLECOMMUNICATION_HINT_DESCRIPTION = '#ingame_gui:battleCommunication/hint/description'
     BURNOUT_HINT_ENGINEDAMAGEWARNING = '#ingame_gui:burnout/hint/engineDamageWarning'
     BURNOUT_HINT_ENGINEDAMAGED = '#ingame_gui:burnout/hint/engineDamaged'
     REWARDWINDOW_ANNIVERSARY_GA_WINHEADERTEXT = '#ingame_gui:rewardWindow/anniversary_ga/winHeaderText'
@@ -706,6 +724,9 @@ class INGAME_GUI(object):
     REWARDWINDOW_ANNIVERSARY_GA_SUBHEADERTEXT = '#ingame_gui:rewardWindow/anniversary_ga/subHeaderText'
     REWARDWINDOW_ANNIVERSARY_GA_DESCTEXT = '#ingame_gui:rewardWindow/anniversary_ga/descText'
     REWARDWINDOW_ANNIVERSARY_GA_BTNLABEL = '#ingame_gui:rewardWindow/anniversary_ga/btnLabel'
+    QUICKREPLY_HINT_PRESS = '#ingame_gui:quickReply/hint/press'
+    QUICKREPLY_HINT_TOHELP = '#ingame_gui:quickReply/hint/toHelp'
+    QUICKREPLY_HINT_TOACKNOWLEDGE = '#ingame_gui:quickReply/hint/toAcknowledge'
     REWARDWINDOW_PIGGYBANK_WINHEADERTEXT = '#ingame_gui:rewardWindow/piggyBank/winHeaderText'
     REWARDWINDOW_PIGGYBANK_HEADERTEXT = '#ingame_gui:rewardWindow/piggyBank/headerText'
     REWARDWINDOW_PIGGYBANK_SUBHEADERTEXT = '#ingame_gui:rewardWindow/piggyBank/subHeaderText'
@@ -720,29 +741,87 @@ class INGAME_GUI(object):
     REWARDWINDOW_COMMANDER_PATRICK_DESCTEXT = '#ingame_gui:rewardWindow/commander_patrick/descText'
     REWARDWINDOW_COMMANDER_PATRICK_BTNLABEL = '#ingame_gui:rewardWindow/commander_patrick/btnLabel'
     DAMAGEINDICATOR_FRIENDLYFIRE_NODAMAGELABEL = '#ingame_gui:damageIndicator/friendlyFire/noDamageLabel'
-    CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_TURN_BACK,
-     CHAT_SHORTCUTS_SUPPORT_ME_WITH_FIRE,
+    PREBATTLEMARKER_PREBATTLEMARKER_0 = '#ingame_gui:prebattlemarker/prebattlemarker_0'
+    PREBATTLEMARKER_PREBATTLEMARKER_1 = '#ingame_gui:prebattlemarker/prebattlemarker_1'
+    PREBATTLEMARKER_PREBATTLEMARKER_2 = '#ingame_gui:prebattlemarker/prebattlemarker_2'
+    PREBATTLEMARKER_PREBATTLEMARKER_3 = '#ingame_gui:prebattlemarker/prebattlemarker_3'
+    PREBATTLEMARKER_PREBATTLEMARKER_4 = '#ingame_gui:prebattlemarker/prebattlemarker_4'
+    PREBATTLEMARKER_PREBATTLEMARKER_5 = '#ingame_gui:prebattlemarker/prebattlemarker_5'
+    PREBATTLEMARKER_PREBATTLEMARKER_6 = '#ingame_gui:prebattlemarker/prebattlemarker_6'
+    PREBATTLEMARKER_PREBATTLEMARKER_7 = '#ingame_gui:prebattlemarker/prebattlemarker_7'
+    PREBATTLEMARKER_PREBATTLEMARKER_8 = '#ingame_gui:prebattlemarker/prebattlemarker_8'
+    PREBATTLEMARKER_PREBATTLEMARKER_9 = '#ingame_gui:prebattlemarker/prebattlemarker_9'
+    PREBATTLEMARKER_PREBATTLEMARKER_10 = '#ingame_gui:prebattlemarker/prebattlemarker_10'
+    PREBATTLEMARKER_PREBATTLEMARKER_11 = '#ingame_gui:prebattlemarker/prebattlemarker_11'
+    PREBATTLEMARKER_PREBATTLEMARKER_12 = '#ingame_gui:prebattlemarker/prebattlemarker_12'
+    PREBATTLEMARKER_PREBATTLEMARKER_13 = '#ingame_gui:prebattlemarker/prebattlemarker_13'
+    PREBATTLEMARKER_PREBATTLEMARKER_14 = '#ingame_gui:prebattlemarker/prebattlemarker_14'
+    PREBATTLEMARKER_PREBATTLEMARKER_15 = '#ingame_gui:prebattlemarker/prebattlemarker_15'
+    PREBATTLEMARKER_PREBATTLEMARKER_16 = '#ingame_gui:prebattlemarker/prebattlemarker_16'
+    PREBATTLEMARKER_PREBATTLEMARKER_17 = '#ingame_gui:prebattlemarker/prebattlemarker_17'
+    PREBATTLEMARKER_PREBATTLEMARKER_18 = '#ingame_gui:prebattlemarker/prebattlemarker_18'
+    PREBATTLEMARKER_PREBATTLEMARKER_19 = '#ingame_gui:prebattlemarker/prebattlemarker_19'
+    PREBATTLEMARKER_PREBATTLEMARKER_20 = '#ingame_gui:prebattlemarker/prebattlemarker_20'
+    PREBATTLEMARKER_PREBATTLEMARKER_21 = '#ingame_gui:prebattlemarker/prebattlemarker_21'
+    PREBATTLEMARKER_PREBATTLEMARKER_22 = '#ingame_gui:prebattlemarker/prebattlemarker_22'
+    PREBATTLEMARKER_PREBATTLEMARKER_23 = '#ingame_gui:prebattlemarker/prebattlemarker_23'
+    PREBATTLEMARKER_PREBATTLEMARKER_24 = '#ingame_gui:prebattlemarker/prebattlemarker_24'
+    PREBATTLEMARKER_PREBATTLEMARKER_25 = '#ingame_gui:prebattlemarker/prebattlemarker_25'
+    PREBATTLEMARKER_PREBATTLEMARKER_26 = '#ingame_gui:prebattlemarker/prebattlemarker_26'
+    PREBATTLEMARKER_PREBATTLEMARKER_27 = '#ingame_gui:prebattlemarker/prebattlemarker_27'
+    PREBATTLEMARKER_PREBATTLEMARKER_28 = '#ingame_gui:prebattlemarker/prebattlemarker_28'
+    PREBATTLEMARKER_PREBATTLEMARKER_29 = '#ingame_gui:prebattlemarker/prebattlemarker_29'
+    PREBATTLEMARKER_PREBATTLEMARKER_30 = '#ingame_gui:prebattlemarker/prebattlemarker_30'
+    PREBATTLEMARKER_PREBATTLEMARKER_31 = '#ingame_gui:prebattlemarker/prebattlemarker_31'
+    PREBATTLEMARKER_PREBATTLEMARKER_32 = '#ingame_gui:prebattlemarker/prebattlemarker_32'
+    PREBATTLEMARKER_PREBATTLEMARKER_33 = '#ingame_gui:prebattlemarker/prebattlemarker_33'
+    PREBATTLEMARKER_PREBATTLEMARKER_34 = '#ingame_gui:prebattlemarker/prebattlemarker_34'
+    PREBATTLEMARKER_PREBATTLEMARKER_35 = '#ingame_gui:prebattlemarker/prebattlemarker_35'
+    PREBATTLEMARKER_PREBATTLEMARKER_36 = '#ingame_gui:prebattlemarker/prebattlemarker_36'
+    PREBATTLEMARKER_PREBATTLEMARKER_37 = '#ingame_gui:prebattlemarker/prebattlemarker_37'
+    PREBATTLEMARKER_PREBATTLEMARKER_38 = '#ingame_gui:prebattlemarker/prebattlemarker_38'
+    PREBATTLEMARKER_PREBATTLEMARKER_39 = '#ingame_gui:prebattlemarker/prebattlemarker_39'
+    PREBATTLEMARKER_PREBATTLEMARKER_40 = '#ingame_gui:prebattlemarker/prebattlemarker_40'
+    PREBATTLEMARKER_PREBATTLEMARKER_41 = '#ingame_gui:prebattlemarker/prebattlemarker_41'
+    PREBATTLEMARKER_PREBATTLEMARKER_42 = '#ingame_gui:prebattlemarker/prebattlemarker_42'
+    PREBATTLEMARKER_PREBATTLEMARKER_43 = '#ingame_gui:prebattlemarker/prebattlemarker_43'
+    PREBATTLEMARKER_PREBATTLEMARKER_44 = '#ingame_gui:prebattlemarker/prebattlemarker_44'
+    PREBATTLEMARKER_PREBATTLEMARKER_45 = '#ingame_gui:prebattlemarker/prebattlemarker_45'
+    PREBATTLEMARKER_PREBATTLEMARKER_46 = '#ingame_gui:prebattlemarker/prebattlemarker_46'
+    PREBATTLEMARKER_PREBATTLEMARKER_47 = '#ingame_gui:prebattlemarker/prebattlemarker_47'
+    PREBATTLEMARKER_PREBATTLEMARKER_48 = '#ingame_gui:prebattlemarker/prebattlemarker_48'
+    PREBATTLEMARKER_PREBATTLEMARKER_49 = '#ingame_gui:prebattlemarker/prebattlemarker_49'
+    PREBATTLEMARKER_PREBATTLEMARKER_50 = '#ingame_gui:prebattlemarker/prebattlemarker_50'
+    PREBATTLEMARKER_PREBATTLEMARKER_51 = '#ingame_gui:prebattlemarker/prebattlemarker_51'
+    LEVELPROGRESS_MAXLEVEL = '#ingame_gui:levelProgress/maxLevel'
+    CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_ATTENTION_TO_POSITION,
+     CHAT_SHORTCUTS_GOING_THERE,
+     CHAT_SHORTCUTS_HELP_ME,
      CHAT_SHORTCUTS_RELOADING_GUN,
      CHAT_SHORTCUTS_RELOADING_CASSETTE,
      CHAT_SHORTCUTS_RELOADING_READY,
      CHAT_SHORTCUTS_RELOADING_READY_CASSETTE,
      CHAT_SHORTCUTS_RELOADING_UNAVAILABLE,
-     CHAT_SHORTCUTS_STOP,
-     CHAT_SHORTCUTS_HELP_ME,
-     CHAT_SHORTCUTS_HELP_ME_EX,
-     CHAT_SHORTCUTS_FOLLOW_ME,
-     CHAT_SHORTCUTS_ATTACK,
-     CHAT_SHORTCUTS_BACK_TO_BASE,
-     CHAT_SHORTCUTS_POSITIVE,
-     CHAT_SHORTCUTS_NEGATIVE,
-     CHAT_SHORTCUTS_ATTENTION_TO_CELL,
      CHAT_SHORTCUTS_SPG_AIM_AREA,
      CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING,
-     CHAT_SHORTCUTS_ATTENTION_TO_POSITION,
-     CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_ATK,
-     CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_DEF,
+     CHAT_SHORTCUTS_ATTACK_ENEMY,
+     CHAT_SHORTCUTS_ATTACKING_ENEMY,
+     CHAT_SHORTCUTS_ATTACK_ENEMY_WITH_SPG,
+     CHAT_SHORTCUTS_ATTACK_ENEMY_WITH_SPG_RELOADING,
      CHAT_SHORTCUTS_ATTENTION_TO_BASE_ATK,
+     CHAT_SHORTCUTS_ATTENTION_TO_BASE_ATK_NUMBERED,
+     CHAT_SHORTCUTS_ATTACKING_BASE,
+     CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_ATK,
      CHAT_SHORTCUTS_ATTENTION_TO_BASE_DEF,
+     CHAT_SHORTCUTS_ATTENTION_TO_BASE_DEF_NUMBERED,
+     CHAT_SHORTCUTS_DEFENDING_BASE,
+     CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_DEF,
+     CHAT_SHORTCUTS_HELP_ME_EX,
+     CHAT_SHORTCUTS_SUPPORTING_ALLY,
+     CHAT_SHORTCUTS_TURN_BACK,
+     CHAT_SHORTCUTS_THANKS,
+     CHAT_SHORTCUTS_POSITIVE,
+     CHAT_SHORTCUTS_ATTENTION_TO_CELL,
      CHAT_SHORTCUTS_GLOBAL_MSG_ATK_SAVE_TANKS,
      CHAT_SHORTCUTS_GLOBAL_MSG_DEF_SAVE_TANKS,
      CHAT_SHORTCUTS_GLOBAL_MSG_ATK_TIME,
@@ -751,10 +830,11 @@ class INGAME_GUI(object):
      CHAT_SHORTCUTS_GLOBAL_MSG_LANE_CENTER,
      CHAT_SHORTCUTS_GLOBAL_MSG_LANE_EAST,
      CHAT_SHORTCUTS_GLOBAL_MSG_ATK_FOCUS_HQ,
-     CHAT_SHORTCUTS_GLOBAL_MSG_DEF_FOCUS_HQ,
-     CHAT_SHORTCUTS_ATTACK_ENEMY,
-     CHAT_SHORTCUTS_ATTACK_ENEMY_RELOADING)
-    CHAT_EXAMPLE_ENUM = (CHAT_EXAMPLE_GLOBAL_MSG_DEF_SAVE_TANKS,
+     CHAT_SHORTCUTS_GLOBAL_MSG_DEF_FOCUS_HQ)
+    CHAT_EXAMPLE_ENUM = (CHAT_EXAMPLE_ATTENTION_TO_BASE_DEF,
+     CHAT_EXAMPLE_ATTENTION_TO_BASE_ATK,
+     CHAT_EXAMPLE_GOING_THERE,
+     CHAT_EXAMPLE_GLOBAL_MSG_DEF_SAVE_TANKS,
      CHAT_EXAMPLE_GLOBAL_MSG_ATK_SAVE_TANKS,
      CHAT_EXAMPLE_GLOBAL_MSG_ATK_TIME,
      CHAT_EXAMPLE_GLOBAL_MSG_DEF_TIME,
@@ -763,25 +843,23 @@ class INGAME_GUI(object):
      CHAT_EXAMPLE_GLOBAL_MSG_LANE_EAST,
      CHAT_EXAMPLE_GLOBAL_MSG_ATK_FOCUS_HQ,
      CHAT_EXAMPLE_GLOBAL_MSG_DEF_FOCUS_HQ,
-     CHAT_EXAMPLE_SUPPORT_ME_WITH_FIRE,
+     CHAT_EXAMPLE_ATTACK_ENEMY,
      CHAT_EXAMPLE_RELOADING_GUN,
      CHAT_EXAMPLE_RELOADING_CASSETTE,
      CHAT_EXAMPLE_RELOADING_READY,
      CHAT_EXAMPLE_TURN_BACK,
      CHAT_EXAMPLE_RELOADING_READY_CASSETTE,
      CHAT_EXAMPLE_RELOADING_UNAVAILABLE,
-     CHAT_EXAMPLE_STOP,
      CHAT_EXAMPLE_HELP_ME,
      CHAT_EXAMPLE_HELP_ME_EX,
-     CHAT_EXAMPLE_FOLLOW_ME,
-     CHAT_EXAMPLE_ATTACK,
-     CHAT_EXAMPLE_BACK_TO_BASE,
      CHAT_EXAMPLE_POSITIVE,
-     CHAT_EXAMPLE_NEGATIVE,
+     CHAT_EXAMPLE_THANKS,
      CHAT_EXAMPLE_ATTENTION_TO_CELL,
-     CHAT_EXAMPLE_ATTACK_ENEMY,
+     CHAT_EXAMPLE_ATTACK_ENEMY_WITH_SPG,
      CHAT_EXAMPLE_SPG_AIM_AREA,
-     CHAT_EXAMPLE_ATTENTION_TO_POSITION)
+     CHAT_EXAMPLE_ATTENTION_TO_POSITION,
+     CHAT_EXAMPLE_REPLY_TO_PLAYER,
+     CHAT_EXAMPLE_SUPPORTING_ALLY)
     EFFICIENCYRIBBONS_ENUM = (EFFICIENCYRIBBONS_ARMOR,
      EFFICIENCYRIBBONS_CAPTURE,
      EFFICIENCYRIBBONS_DAMAGE,
@@ -797,12 +875,19 @@ class INGAME_GUI(object):
      EFFICIENCYRIBBONS_RECEIVEDCRITS,
      EFFICIENCYRIBBONS_RECEIVEDDAMAGE,
      EFFICIENCYRIBBONS_RECEIVEDBURN,
+     EFFICIENCYRIBBONS_BERSERKER,
+     EFFICIENCYRIBBONS_SPAWNEDBOTDMG,
+     EFFICIENCYRIBBONS_RECEIVEDDMGBYSPAWNEDBOT,
+     EFFICIENCYRIBBONS_DAMAGEBYMINEFIELD,
+     EFFICIENCYRIBBONS_RECEIVEDBYMINEFIELD,
+     EFFICIENCYRIBBONS_RECEIVEDBYSMOKE,
      EFFICIENCYRIBBONS_RECEIVEDRAM,
      EFFICIENCYRIBBONS_RECEIVEDWORLDCOLLISION,
      EFFICIENCYRIBBONS_VEHICLERECOVERY,
      EFFICIENCYRIBBONS_BONUSRIBBON,
      EFFICIENCYRIBBONS_STUN,
      EFFICIENCYRIBBONS_ASSISTSTUN,
+     EFFICIENCYRIBBONS_DEATHZONE,
      EFFICIENCYRIBBONS_ENEMYSECTORCAPTURED,
      EFFICIENCYRIBBONS_DESTRUCTIBLEDAMAGED,
      EFFICIENCYRIBBONS_DESTRUCTIBLEDESTROYED,

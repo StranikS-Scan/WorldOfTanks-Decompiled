@@ -3,7 +3,6 @@
   <stunAreaVisual>
     <radius>	15.0	</radius>
     <areasNum>	3	</areasNum>
-    <lifetime>	5.0	</lifetime>
     <visual>	content/Interface/CheckPoint/CheckPoint_white.visual	</visual>
     <color>	0xffffd04f	</color>
     <lineColor>	0xffffffff	</lineColor>
@@ -140,11 +139,368 @@
       </sound>
     </effects>
   </SmokeScreenEffect_lev5>
+  <SmokeScreenEffect_gray>
+    <timeline>
+      <effectEnd>	36000	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/interior/250_smokescreen_gray.eff	</file>
+        <force>	1	</force>
+        <position>	HP_module_0	</position>
+      </pixie>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <wwsound>	eb_ability_smoke_expl_02	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </SmokeScreenEffect_gray>
+  <SmokeScreenEffect_red>
+    <timeline>
+      <effectEnd>	36000	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/interior/250_smokescreen_red.eff	</file>
+        <force>	1	</force>
+        <position>	HP_module_0	</position>
+      </pixie>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <wwsound>	eb_ability_smoke_expl_02	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </SmokeScreenEffect_red>
   <InspireAreaVisual>
-    <visual>	content/Interface/TargetPoint/inspire.model	</visual>
-    <color>	0xffffffff	</color>
-    <enableAccurateCollision>	False	</enableAccurateCollision>
-    <maxUpdateInterval>	0.04	</maxUpdateInterval>
-    <overTerrainHeight>	0.5	</overTerrainHeight>
+    <ally>
+      <visual>	content/Interface/TargetPoint/inspire.model	</visual>
+      <color>	0xffffffff	</color>
+      <enableAccurateCollision>	False	</enableAccurateCollision>
+      <maxUpdateInterval>	0.04	</maxUpdateInterval>
+      <overTerrainHeight>	0.5	</overTerrainHeight>
+    </ally>
   </InspireAreaVisual>
+  <HealPointVisual>
+    <ally>
+      <visual>	content/Interface/TargetPoint/inspire.model	</visual>
+      <color>	0xffffffff	</color>
+      <enableAccurateCollision>	False	</enableAccurateCollision>
+      <maxUpdateInterval>	0.04	</maxUpdateInterval>
+      <overTerrainHeight>	0.5	</overTerrainHeight>
+    </ally>
+  </HealPointVisual>
+  <battleRoyaleHealpoint>
+    <enemy>
+      <visual>	content/Interface/TargetPoint/inspire_enemy.model	</visual>
+      <color>	0xffffffff	</color>
+      <enableAccurateCollision>	False	</enableAccurateCollision>
+      <maxUpdateInterval>	0.04	</maxUpdateInterval>
+      <overTerrainHeight>	0.5	</overTerrainHeight>
+    </enemy>
+    <ally>
+      <visual>	content/Interface/TargetPoint/inspire.model	</visual>
+      <color>	0xffffffff	</color>
+      <enableAccurateCollision>	False	</enableAccurateCollision>
+      <maxUpdateInterval>	0.04	</maxUpdateInterval>
+      <overTerrainHeight>	0.5	</overTerrainHeight>
+    </ally>
+  </battleRoyaleHealpoint>
+  <lootTypes>
+    <item>	&gt;	  <name>	lootBase	</name>
+      <id>	1	</id>
+    </item>
+    <item>	&gt;	  <name>	lootImproved	</name>
+      <id>	2	</id>
+    </item>
+    <item>	&gt;	  <name>	lootAir	</name>
+      <id>	3	</id>
+    </item>
+    <item>	&gt;	  <name>	lootCorpse	</name>
+      <id>	4	</id>
+    </item>
+  </lootTypes>
+  <lootBase>
+    <model>
+      <name>	content/MilitaryEnvironment/hd_mle_UNI_500_Lootbox/normal/lod0/hd_mle_UNI_500_Lootbox01.model	</name>
+      <border>	content/Environment/env_null_model/null_model.model	</border>
+    </model>
+    <effect>
+      <path_fwd>	particles/eff_sequence/br_loot.seq	</path_fwd>
+      <path>	particles/eff_sequence/br_loot.seq	</path>
+    </effect>
+    <pickupEffect>
+      <path_fwd>	particles/eff_sequence/br_loot_end.seq	</path_fwd>
+      <path>	particles/eff_sequence/br_loot_end.seq	</path>
+    </pickupEffect>
+  </lootBase>
+  <lootImproved>
+    <model>
+      <name>	content/MilitaryEnvironment/hd_mle_UNI_500_Lootbox/normal/lod0/hd_mle_UNI_500_Lootbox02.model	</name>
+      <border>	content/Environment/env_null_model/null_model.model	</border>
+    </model>
+    <effect>
+      <path_fwd>	particles/eff_sequence/br_loot_upgraded.seq	</path_fwd>
+      <path>	particles/eff_sequence/br_loot_upgraded.seq	</path>
+    </effect>
+    <pickupEffect>
+      <path_fwd>	particles/eff_sequence/br_loot_upgraded_end.seq	</path_fwd>
+      <path>	particles/eff_sequence/br_loot_upgraded_end.seq	</path>
+    </pickupEffect>
+  </lootImproved>
+  <lootAir>
+    <model>
+      <name>	content/MilitaryEnvironment/hd_mle_UNI_500_Lootbox/normal/lod0/hd_mle_UNI_500_Lootbox03.model	</name>
+      <border>	content/Environment/env_null_model/null_model.model	</border>
+    </model>
+    <effect>
+      <path_fwd>	particles/eff_sequence/br_airdrop.seq	</path_fwd>
+      <path>	particles/eff_sequence/br_airdrop.seq	</path>
+    </effect>
+    <pickupEffect>
+      <path_fwd>	particles/eff_sequence/br_airdrop_end.seq	</path_fwd>
+      <path>	particles/eff_sequence/br_airdrop_end.seq	</path>
+    </pickupEffect>
+  </lootAir>
+  <dropPlane>
+    <model>	content/MilitaryEnvironment/hd_mle_UNI_AN12/normal/lod0/hd_mle_UNI_AN12.model	</model>
+    <flyAnimation>	content/MilitaryEnvironment/hd_mle_UNI_AN12/animation/hd_mle_UNI_AN12.ssm	</flyAnimation>
+    <sound>	BR_airdrop_plane	</sound>
+  </dropPlane>
+  <airDrop>
+    <model>	content/MilitaryEnvironment/hd_mle_UNI_Drop_Platform/normal/lod0/hd_mle_UNI_Drop_Platform_B.model	</model>
+    <dropAnimation>	content/MilitaryEnvironment/hd_mle_UNI_Drop_Platform/animation/hd_mle_UNI_Drop_Platform_B.ssm	</dropAnimation>
+  </airDrop>
+  <lootCorpse>
+    <model>
+      <border>	content/Environment/env_null_model/null_model.model	</border>
+      <overTerrainHeight>	3.00	</overTerrainHeight>
+    </model>
+    <effect>
+      <path_fwd>	particles/eff_sequence/br_loot_corpse.seq	</path_fwd>
+      <path>	particles/eff_sequence/br_loot_corpse.seq	</path>
+    </effect>
+    <pickupEffect>
+      <path_fwd>	particles/eff_sequence/br_loot_corpse_end.seq	</path_fwd>
+      <path>	particles/eff_sequence/br_loot_corpse_end.seq	</path>
+    </pickupEffect>
+  </lootCorpse>
+  <TrapPoint>
+    <enemy>
+      <effect>
+        <path_fwd>	particles/eff_sequence/br_traparea_fwd.seq	</path_fwd>
+        <path>	particles/eff_sequence/br_traparea.seq	</path>
+        <rate>	10.0	</rate>
+        <offset>	0.0 10.0 0.0	</offset>
+      </effect>
+      <vehicleEffect>
+        <path_fwd>	particles/Environment/Scenarios/br_trapdamage.eff	</path_fwd>
+        <path>	particles/Environment/Scenarios/br_trapdamage.eff	</path>
+        <rate>	10.0	</rate>
+        <offset>	0.0 0.0 0.0	</offset>
+      </vehicleEffect>
+    </enemy>
+    <ally>
+      <effect>
+        <path_fwd>	particles/eff_sequence/br_traparea_friendly_fwd.seq	</path_fwd>
+        <path>	particles/eff_sequence/br_traparea_friendly.seq	</path>
+        <rate>	10.0	</rate>
+        <offset>	0.0 10.0 0.0	</offset>
+      </effect>
+    </ally>
+  </TrapPoint>
+  <RepairPoint>
+    <enemy>
+      <effect>
+        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_repairarea_2/br_repairarea_2_enemy.seq	</path_fwd>
+        <path>	particles/content_deferred/GFX_models/gameplay/br_repairarea_2/br_repairarea_2_enemy.seq	</path>
+        <rate>	10.0	</rate>
+        <scaleRatio>	1.5	</scaleRatio>
+        <offset>	0.0 10.0 0.0	</offset>
+      </effect>
+    </enemy>
+    <ally>
+      <effect>
+        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_repairarea_2/br_repairarea_2_friendly.seq	</path_fwd>
+        <path>	particles/content_deferred/GFX_models/gameplay/br_repairarea_2/br_repairarea_2_friendly.seq	</path>
+        <rate>	10.0	</rate>
+        <scaleRatio>	1.5	</scaleRatio>
+        <offset>	0.0 10.0 0.0	</offset>
+      </effect>
+    </ally>
+  </RepairPoint>
+  <VehicleUpgrade>
+    <effect>
+      <path>	particles/Environment/scenarios/br_module_change.eff	</path>
+      <path_fwd>	particles/Environment/scenarios/br_module_change.eff	</path_fwd>
+      <rate>	10.0	</rate>
+      <offset>	0.0 0.0 0.0	</offset>
+    </effect>
+  </VehicleUpgrade>
+  <KamikazeActivated>
+    <effect>
+      <path>	particles/content_deferred/GFX_models/gameplay/br_kamikadze/br_kamikadze_glow.ssm	</path>
+      <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_kamikadze/br_kamikadze_glow.ssm	</path_fwd>
+      <rate>	10.0	</rate>
+      <offset>	0.0 0.0 0.0	</offset>
+    </effect>
+  </KamikazeActivated>
+  <BotDeliveryArea>
+    <enemy>
+      <effect>
+        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_bot_delivery_area/br_bot_delivery_area_enemy.seq	</path_fwd>
+        <path>	particles/content_deferred/GFX_models/gameplay/br_bot_delivery_area/br_bot_delivery_area_enemy.seq	</path>
+        <rate>	10.0	</rate>
+        <offset>	0.0 0.0 0.0	</offset>
+      </effect>
+    </enemy>
+    <ally>
+      <effect>
+        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_bot_delivery_area/br_bot_delivery_area_friendly.seq	</path_fwd>
+        <path>	particles/content_deferred/GFX_models/gameplay/br_bot_delivery_area/br_bot_delivery_area_friendly.seq	</path>
+        <rate>	10.0	</rate>
+        <offset>	0.0 0.0 0.0	</offset>
+      </effect>
+    </ally>
+  </BotDeliveryArea>
+  <BotDeliveryEffect>
+    <enemy>
+      <effect>
+        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_kamikadze/br_kamikadze_drop.seq	</path_fwd>
+        <path>	particles/content_deferred/GFX_models/gameplay/br_kamikadze/br_kamikadze_drop.seq	</path>
+        <rate>	10.0	</rate>
+        <offset>	0.0 0.0 0.0	</offset>
+      </effect>
+    </enemy>
+    <ally>
+      <effect>
+        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_kamikadze/br_kamikadze_drop.seq	</path_fwd>
+        <path>	particles/content_deferred/GFX_models/gameplay/br_kamikadze/br_kamikadze_drop.seq	</path>
+        <rate>	10.0	</rate>
+        <offset>	0.0 0.0 0.0	</offset>
+      </effect>
+    </ally>
+  </BotDeliveryEffect>
+  <minesPlantEffect>
+    <effect>
+      <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_plant.seq	</path_fwd>
+      <path>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_plant.seq	</path>
+    </effect>
+  </minesPlantEffect>
+  <minesDecalEffect>
+    <timeline>
+      <end>	100	</end>
+    </timeline>
+    <effects>
+      <decal>
+        <startKey>	start	</startKey>
+        <groupName>	fast	</groupName>
+        <texName>	Mine_1_AM Mine_2_AM	</texName>
+        <bumpTexName>	Mine_1_NM Mine_2_NM	</bumpTexName>
+        <smTexName>	Mine_1_GMM Mine_2_GMM	</smTexName>
+        <size>	1.5 1.5	</size>
+        <variation>	0.2	</variation>
+        <randomYaw>	True	</randomYaw>
+      </decal>
+    </effects>
+  </minesDecalEffect>
+  <minesIdleEffect>
+    <ally>
+      <effect>
+        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_idle_friendly.seq	</path_fwd>
+        <path>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_idle_friendly.seq	</path>
+      </effect>
+    </ally>
+    <enemy>
+      <effect>
+        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_idle_enemy.seq	</path_fwd>
+        <path>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_idle_enemy.seq	</path>
+      </effect>
+    </enemy>
+  </minesIdleEffect>
+  <minesBlowUpEffect>
+    <timeline>
+      <lightingEnd>	0.22	</lightingEnd>
+      <soundplaystop>	7	</soundplaystop>
+      <endpixie>	1	</endpixie>
+      <end>	1.2	</end>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+        <file>	particles/Shells_Eff/groundHit_HC_4.eff	</file>
+        <force>	1	</force>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lightingEnd	</endKey>
+        <innerRadius>	0.2	</innerRadius>
+        <outerRadius>	6	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	Scene Root	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 85 0	</color>
+          <multiplier>	3	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.25	</time>
+          <color>	255 150 100	</color>
+          <multiplier>	5	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.75	</time>
+          <color>	125 45 0	</color>
+          <multiplier>	3	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	1	</multiplier>
+        </animation>
+      </light>
+      <decal>
+        <startKey>	start	</startKey>
+        <groupName>	slow	</groupName>
+        <texName>	explosion_sand_AM	</texName>
+        <bumpTexName>	explosion_sand_NM	</bumpTexName>
+        <smTexName>	explosion_sand_GMM	</smTexName>
+        <size>	6.2 6.2	</size>
+        <variation>	0.2	</variation>
+        <randomYaw>	True	</randomYaw>
+      </decal>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <wwsound>	BR_perk_minefield_explosion	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </minesBlowUpEffect>
+  <minesDestroyEffect>
+    <effect>
+      <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_destroy.seq	</path_fwd>
+      <path>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_destroy.seq	</path>
+    </effect>
+  </minesDestroyEffect>
+  <berserkerHullEffect>
+    <effect>
+      <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_berserk/br_berserk_hull.ssm	</path_fwd>
+      <path>	particles/content_deferred/GFX_models/gameplay/br_berserk/br_berserk_hull.ssm	</path>
+    </effect>
+  </berserkerHullEffect>
+  <berserkerTurretEffect>
+    <effect>
+      <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_berserk/br_berserk_turret.ssm	</path_fwd>
+      <path>	particles/content_deferred/GFX_models/gameplay/br_berserk/br_berserk_turret.ssm	</path>
+    </effect>
+  </berserkerTurretEffect>
+  <berserkerTransformPath>	particles/content_deferred/GFX_models/gameplay/br_berserk/transform.xml	</berserkerTransformPath>
 </dynamic_objects.xml>

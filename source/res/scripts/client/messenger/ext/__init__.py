@@ -16,6 +16,8 @@ MESSENGER_DOMAIN_FILE_PATH = 'text/messenger_dndictionary.xml'
 g_dnDictionary = dictionaries.DomainNameDictionary.load(MESSENGER_DOMAIN_FILE_PATH)
 if constants.SPECIAL_OL_FILTER:
     g_olDictionary = dictionaries.SpecialOLDictionary.load(MESSENGER_OLDICT_FILE_PATH)
+elif constants.IS_CHINA:
+    g_olDictionary = dictionaries.ChinaOLDictionary.load(MESSENGER_OLDICT_FILE_PATH)
 else:
     g_olDictionary = dictionaries.BasicOLDictionary.load(MESSENGER_OLDICT_FILE_PATH)
 

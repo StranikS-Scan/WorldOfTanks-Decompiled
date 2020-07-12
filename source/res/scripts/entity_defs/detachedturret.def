@@ -29,6 +29,10 @@
       <Type>	VECTOR3	</Type>
       <Flags>	CELL_PUBLIC	</Flags>
     </velocity>
+    <arenaBase>
+      <Type>	MAILBOX	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </arenaBase>
     <angularVelocity>
       <Type>	VECTOR3	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
@@ -37,6 +41,10 @@
       <Type>	STRING	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </vehicleCompDescr>
+    <outfitCD>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </outfitCD>
     <isUnderWater>
       <Type>	BOOL	</Type>
       <Flags>	ALL_CLIENTS	</Flags>

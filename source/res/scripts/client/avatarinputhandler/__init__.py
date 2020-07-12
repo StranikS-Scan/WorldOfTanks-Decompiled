@@ -30,6 +30,9 @@ from AvatarInputHandler.commands.dualgun_control import DualGunController
 from AvatarInputHandler.commands.siege_mode_control import SiegeModeControl
 from AvatarInputHandler.remote_camera_sender import RemoteCameraSender
 from AvatarInputHandler.siege_mode_player_notifications import SiegeModeSoundNotifications, SiegeModeCameraShaker
+from AvatarInputHandler.commands.radar_control import RadarControl
+from AvatarInputHandler.commands.vehicle_upgrade_control import VehicleUpdateControl
+from AvatarInputHandler.commands.vehicle_upgrade_control import VehicleUpgradePanelControl
 from Event import Event
 from constants import ARENA_PERIOD, AIMING_MODE
 from control_modes import _ARCADE_CAM_PIVOT_POS
@@ -42,7 +45,9 @@ from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBootcampController
+from skeletons.gui.lobby_context import ILobbyContext
 from svarog_script.script_game_object import ScriptGameObject, ComponentDescriptor
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 INPUT_HANDLER_CFG = 'gui/avatar_input_handler.xml'
 
 class _CTRL_TYPE(object):
@@ -59,6 +64,10 @@ _GUN_MARKER_FLAG = aih_constants.GUN_MARKER_FLAG
 _BINDING_ID = aih_global_binding.BINDING_ID
 _CTRL_MODES = aih_constants.CTRL_MODES
 _CTRLS_FIRST = _CTRL_MODE.DEFAULT
+_CTRL_MODULES = (control_modes,
+ MapCaseMode,
+ RespawnDeathMode,
+ epic_battle_death_mode)
 _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: ('ArcadeControlMode', 'arcadeMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.STRATEGIC: ('StrategicControlMode', 'strategicMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.ARTY: ('ArtyControlMode', 'artyMode', _ARTY_CTRL_TYPE),
@@ -68,6 +77,7 @@ _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: ('ArcadeControlMode', 'arcadeMode', _CTRL_
  _CTRL_MODE.CAT: ('CatControlMode', None, _CTRL_TYPE.DEVELOPMENT),
  _CTRL_MODE.VIDEO: ('VideoCameraControlMode', 'videoMode', _CTRL_TYPE.OPTIONAL),
  _CTRL_MODE.MAP_CASE: ('MapCaseControlMode', 'strategicMode', _CTRL_TYPE.USUAL),
+ _CTRL_MODE.MAP_CASE_ARCADE: ('ArcadeMapCaseControlMode', 'arcadeMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.RESPAWN_DEATH: ('RespawnDeathMode', 'postMortemMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.DEATH_FREE_CAM: ('DeathFreeCamMode', 'epicVideoMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.DUAL_GUN: ('DualGunControlMode', 'dualGunMode', _CTRL_TYPE.USUAL)}
@@ -133,11 +143,10 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     bootcampCtrl = dependency.descriptor(IBootcampController)
     ctrl = property(lambda self: self.__curCtrl)
     ctrls = property(lambda self: self.__ctrls)
-    isEvent = property(lambda self: self.__isEvent)
     isSPG = property(lambda self: self.__isSPG)
     isATSPG = property(lambda self: self.__isATSPG)
-    isWheeledTech = property(lambda self: self.__isWheeledTech)
     isDualGun = property(lambda self: self.__isDualGun)
+    isMagneticAimEnabled = property(lambda self: self.__isMagnetAimEnabled)
     isFlashBangAllowed = property(lambda self: self.__ctrls['video'] != self.__curCtrl)
     isDetached = property(lambda self: self.__isDetached)
     isGuiVisible = property(lambda self: self.__isGUIVisible)
@@ -198,8 +207,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         self.__prevModeAutorotation = None
         self.__isSPG = False
         self.__isATSPG = False
-        self.__isWheeledTech = False
         self.__isDualGun = False
+        self.__isMagnetAimEnabled = False
         self.__setupCtrls(sec)
         self.__curCtrl = self.__ctrls[_CTRLS_FIRST]
         self.__ctrlModeName = _CTRLS_FIRST
@@ -208,6 +217,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         self.__observerVehicle = None
         self.__observerIsSwitching = False
         self.__commands = []
+        self.__detachedCommands = []
         self.__remoteCameraSender = None
         self.__isGUIVisible = False
         return
@@ -227,8 +237,17 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             self.siegeModeControl.onSiegeStateChanged += SiegeModeCameraShaker.shake
         if typeDescr.isDualgunVehicle and not self.dualGunControl:
             self.dualGunControl = DualGunController(typeDescr)
+        elif not typeDescr.isDualgunVehicle:
+            self.dualGunControl = None
         if self.bootcampCtrl.isInBootcamp() and constants.HAS_DEV_RESOURCES:
             self.__commands.append(BootcampModeControl())
+        if ARENA_BONUS_TYPE_CAPS.checkAny(player.arena.bonusType, ARENA_BONUS_TYPE_CAPS.RADAR):
+            self.__commands.append(RadarControl())
+        if ARENA_BONUS_TYPE_CAPS.checkAny(player.arena.bonusType, ARENA_BONUS_TYPE_CAPS.BATTLEROYALE):
+            self.__commands.append(VehicleUpdateControl())
+            self.__commands.append(VehicleUpgradePanelControl())
+            self.__detachedCommands.append(VehicleUpgradePanelControl())
+        return
 
     def prerequisites(self):
         out = []
@@ -245,6 +264,10 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         elif self.__isStarted and self.__isDetached:
             if self.__curCtrl.alwaysReceiveKeyEvents(isDown=isDown) and not self.isObserverFPV or CommandMapping.g_instance.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key):
                 self.__curCtrl.handleKeyEvent(isDown, key, mods, event)
+            for command in self.__detachedCommands:
+                if command.handleKeyEvent(isDown, key, mods, event):
+                    return True
+
             return BigWorld.player().handleKey(isDown, key, mods)
         elif not self.__isStarted or self.__isDetached:
             return False
@@ -472,8 +495,6 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         else:
             player = BigWorld.player()
             isObserverMode = 'observer' in player.vehicleTypeDescriptor.type.tags if player is not None else True
-            if not isObserverMode and self.isSPG and self.isEvent and eMode in (_CTRL_MODE.ARTY, _CTRL_MODE.STRATEGIC):
-                return
             if self.__waitObserverCallback is not None:
                 self.__waitObserverCallback = None
             if not isObserverMode and self.__isDualGun:
@@ -543,7 +564,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             elif vehicle is not None and isReplayPlaying:
                 vehicleID = vehicle.id
             self.onCameraChanged(eMode, vehicleID)
-            if not isReplayPlaying:
+            if not isReplayPlaying and not vehicle.isUpgrading:
                 self.__curCtrl.handleMouseEvent(0.0, 0.0, 0.0)
             return
 
@@ -572,7 +593,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         self.__curCtrl.selectPlayer(vehId)
 
     def onMinimapClicked(self, worldPos):
-        self.__curCtrl.onMinimapClicked(worldPos)
+        return self.__curCtrl.onMinimapClicked(worldPos)
 
     def onVehicleShaken(self, vehicle, impulsePosition, impulseDir, caliber, shakeReason):
         if shakeReason == _ShakeReason.OWN_SHOT_DELAYED:
@@ -706,16 +727,17 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         return (impulseDir, impulseValue)
 
     def __identifyVehicleType(self):
-        veh = BigWorld.entity(BigWorld.player().playerVehicleID)
+        avatar = BigWorld.player()
+        magnetAimTags = avatar.magneticAutoAimTags
+        veh = BigWorld.entity(avatar.playerVehicleID)
         if veh is None:
             return
         else:
             vehTypeDesc = veh.typeDescriptor.type
-            self.__isEvent = 'event_battles' in vehTypeDesc.tags
             self.__isSPG = 'SPG' in vehTypeDesc.tags
             self.__isATSPG = 'AT-SPG' in vehTypeDesc.tags
-            self.__isDualGun = 'dualgun' in vehTypeDesc.tags
-            self.__isWheeledTech = 'wheeledVehicle' in vehTypeDesc.tags
+            self.__isDualGun = veh.typeDescriptor.isDualgunVehicle
+            self.__isMagnetAimEnabled = bool(magnetAimTags & vehTypeDesc.tags)
             return
 
     def reloadDynamicSettings(self):
@@ -744,10 +766,6 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             return sec
 
     def __setupCtrls(self, section):
-        modules = (control_modes,
-         MapCaseMode,
-         RespawnDeathMode,
-         epic_battle_death_mode)
         bonusType = BigWorld.player().arenaBonusType
         bonusTypeCtrlsMap = _OVERWRITE_CTRLS_DESC_MAP.get(bonusType, {})
         for name, desc in _CTRLS_DESC_MAP.items():
@@ -756,7 +774,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             try:
                 if desc[2] != _CTRL_TYPE.DEVELOPMENT or desc[2] == _CTRL_TYPE.DEVELOPMENT and constants.HAS_DEV_RESOURCES:
                     if name not in self.__ctrls:
-                        for module in modules:
+                        for module in _CTRL_MODULES:
                             classType = getattr(module, desc[0], None)
                             if classType is None:
                                 pass

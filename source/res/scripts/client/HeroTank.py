@@ -28,9 +28,9 @@ class _HeroTankAppearance(HangarVehicleAppearance):
         self.__gunPitch = gunPitch
         self.__typeDescriptor = vEntity.typeDescriptor
 
-    def _getActiveOutfit(self):
+    def _getActiveOutfit(self, vDesc):
         styleId = self._heroTankCtrl.getCurrentTankStyleId()
-        vehicleCD = self.__typeDescriptor.makeCompactDescr()
+        vehicleCD = vDesc.makeCompactDescr()
         if styleId:
             style = self._c11nService.getItemByID(GUI_ITEM_TYPE.STYLE, styleId)
             return style.getOutfit(self.__season, vehicleCD=vehicleCD)
@@ -57,10 +57,8 @@ class HeroTank(ClientSelectableCameraVehicle):
         self._hangarSpace.onHeroTankReady += self._updateHeroTank
         self._heroTankCtrl.onUpdated += self._updateHeroTank
         self._heroTankCtrl.onInteractive += self._updateInteractive
-        g_currentPreviewVehicle.onSelected += self._updateHeroTank
 
     def onLeaveWorld(self):
-        g_currentPreviewVehicle.onSelected -= self._updateHeroTank
         self._hangarSpace.onHeroTankReady -= self._updateHeroTank
         self._heroTankCtrl.onUpdated -= self._updateHeroTank
         self._heroTankCtrl.onInteractive -= self._updateInteractive

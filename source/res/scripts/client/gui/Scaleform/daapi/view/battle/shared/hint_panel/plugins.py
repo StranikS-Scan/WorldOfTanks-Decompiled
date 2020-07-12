@@ -2,24 +2,29 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/hint_panel/plugins.py
 from collections import namedtuple
 from datetime import datetime
+import BigWorld
 import CommandMapping
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import TRAJECTORY_VIEW_HINT_SECTION, PRE_BATTLE_HINT_SECTION, QUEST_PROGRESS_HINT_SECTION, HELP_SCREEN_HINT_SECTION, SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY
-from gui.impl import backport
-from gui.impl.gen import R
+from account_helpers.AccountSettings import TRAJECTORY_VIEW_HINT_SECTION, PRE_BATTLE_HINT_SECTION, QUEST_PROGRESS_HINT_SECTION, HELP_SCREEN_HINT_SECTION, SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY, IBC_HINT_SECTION, RADAR_HINT_SECTION
+from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ARENA_PERIOD, ARENA_GUI_TYPE
 from debug_utils import LOG_DEBUG
 from gui import GUI_SETTINGS
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CROSSHAIR_VIEW_ID
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.battle_control.controllers.radar_ctrl import IRadarListener
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from gui.shared.utils.key_mapping import getReadableKey
 from gui.shared.utils.plugins import IPlugin
 from helpers import dependency, time_utils
 from helpers.CallbackDelayer import CallbackDelayer
+from items import makeIntCompactDescrByID
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
-from items import makeIntCompactDescrByID
+from skeletons.gui.lobby_context import ILobbyContext
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 HintData = namedtuple('HintData', ['key',
  'messageLeft',
  'messageRight',
@@ -47,6 +52,8 @@ def createPlugins():
         result['siegeIndicatorHint'] = SiegeIndicatorHintPlugin
     if PreBattleHintPlugin.isSuitable():
         result['prebattleHints'] = PreBattleHintPlugin
+    if RadarHintPlugin.isSuitable():
+        result['radarHint'] = RadarHintPlugin
     return result
 
 
@@ -73,6 +80,11 @@ class HintPanelPlugin(IPlugin):
         return settings
 
     @staticmethod
+    def _updateBattleCounterOnUsed(settings):
+        settings[HINTS_LEFT] = max(0, settings[HINTS_LEFT] - 1)
+        return settings
+
+    @staticmethod
     def _updateCounterOnStart(setting, dayCoolDown, battleCoolDown):
         hintsLeft = setting[HINTS_LEFT]
         numBattles = setting[NUM_BATTLES]
@@ -95,8 +107,10 @@ class HintPanelPlugin(IPlugin):
 class HintPriority(object):
     TRAJECTORY = 0
     HELP = 1
-    QUESTS = 2
-    SIEGE = 3
+    BATTLE_COMMUNICATION = 2
+    QUESTS = 3
+    SIEGE = 4
+    RADAR = 4
 
 
 class PRBSettings(object):
@@ -349,7 +363,7 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         vStateCtrl = self.sessionProvider.shared.vehicleState
         vTypeDesc = vehicle.typeDescriptor
         self.__isWheeledTech = vTypeDesc.isWheeledVehicle
-        if vehicle.isAlive() and vTypeDesc.hasSiegeMode and not vTypeDesc.isDualgunVehicle:
+        if vehicle.isAlive() and vTypeDesc.hasSiegeMode and not vTypeDesc.type.isDualgunVehicleType:
             self.__isEnabled = True
             state = VEHICLE_VIEW_STATE.SIEGE_MODE
             value = vStateCtrl.getStateValue(state)
@@ -420,8 +434,153 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         return self._isUnderFire or self._isInRecovery or self._isInProgressCircle
 
 
+class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
+    _sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    _settingsCore = dependency.descriptor(ISettingsCore)
+    _HINT_DAY_COOLDOWN = 30
+    _HINT_BATTLES_COOLDOWN = 10
+    _TIME_AFTER_RADAR_COOLDOWN = 1
+
+    def __init__(self, parentObj):
+        super(RadarHintPlugin, self).__init__(parentObj)
+        CallbackDelayer.__init__(self)
+        self.__isEnabled = False
+        self.__settings = {}
+        self.__isHintShown = False
+        self.__isInPostmortem = False
+        self.__isObserver = False
+        self.__period = None
+        self.__isInDisplayPeriod = False
+        self._isInRecovery = False
+        self._isInProgressCircle = False
+        self._isUnderFire = False
+        self.__cbOnRadarCooldown = None
+        return
+
+    def start(self):
+        self.__settings = AccountSettings.getSettings(RADAR_HINT_SECTION)
+        self._updateCounterOnStart(self.__settings, self._HINT_DAY_COOLDOWN, self._HINT_BATTLES_COOLDOWN)
+        arenaDP = self._sessionProvider.getArenaDP()
+        self.__isObserver = arenaDP.getVehicleInfo().isObserver() if arenaDP is not None else False
+        arena = BigWorld.player().arena
+        if arena is not None:
+            self.__isEnabled = ARENA_BONUS_TYPE_CAPS.checkAny(arena.bonusType, ARENA_BONUS_TYPE_CAPS.RADAR)
+        if self._sessionProvider.dynamic.radar:
+            self._sessionProvider.dynamic.radar.addRuntimeView(self)
+        vStateCtrl = self._sessionProvider.shared.vehicleState
+        if vStateCtrl:
+            vStateCtrl.onPostMortemSwitched += self.__onPostMortemSwitched
+            vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+        return
+
+    @classmethod
+    def isSuitable(cls):
+        return cls._sessionProvider.arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.BATTLE_ROYALE
+
+    def stop(self):
+        if self._sessionProvider.dynamic.radar:
+            self._sessionProvider.dynamic.radar.removeRuntimeView(self)
+        vStateCtrl = self._sessionProvider.shared.vehicleState
+        self.__clearRadarCooldown()
+        if vStateCtrl:
+            vStateCtrl.onPostMortemSwitched -= self.__onPostMortemSwitched
+            vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+        AccountSettings.setSettings(RADAR_HINT_SECTION, self.__settings)
+        self.destroy()
+
+    def updateMapping(self):
+        if not self.__isEnabled:
+            return
+        self.__updateHint()
+
+    def setPeriod(self, period):
+        if period is ARENA_PERIOD.BATTLE:
+            self.__isInDisplayPeriod = self.__period is not None
+            self._updateCounterOnBattle(self.__settings)
+        self.__period = period
+        return
+
+    def radarActivated(self, _):
+        self.__hideHint()
+
+    def radarActivationFailed(self, code):
+        self.__hideHint()
+
+    def startTimeOut(self, timeLeft, duration):
+        if self.__isEnabled and self.__isInDisplayPeriod and self.__cbOnRadarCooldown is None:
+            self.__cbOnRadarCooldown = BigWorld.callback(timeLeft + self._TIME_AFTER_RADAR_COOLDOWN, self.__updateHint)
+        return
+
+    def _getHint(self):
+        keyName = getReadableKey(CommandMapping.CMD_CM_VEHICLE_ACTIVATE_RADAR)
+        pressText = ''
+        if keyName:
+            pressText = backport.text(R.strings.battle_royale.radar.hint.press())
+            hintText = backport.text(R.strings.battle_royale.radar.hint.text())
+        else:
+            hintText = backport.text(R.strings.battle_royale.radar.hint.noBinding())
+        return HintData(keyName, pressText, hintText, 0, 0, HintPriority.RADAR)
+
+    def __showHint(self):
+        self._parentObj.setBtnHint(CommandMapping.CMD_CM_VEHICLE_ACTIVATE_RADAR, self._getHint())
+        self.__isHintShown = True
+        self.__isInDisplayPeriod = False
+        self.delayCallback(_HINT_TIMEOUT, self.__onHintTimeOut)
+        self._updateCounterOnUsed(self.__settings)
+
+    def __hideHint(self):
+        if self.__isHintShown:
+            self._parentObj.removeBtnHint(CommandMapping.CMD_CM_VEHICLE_ACTIVATE_RADAR)
+            self.__isHintShown = False
+            self.stopCallback(self.__onHintTimeOut)
+
+    def __updateHint(self):
+        LOG_DEBUG('Updating radar hints')
+        if self.__isInPostmortem or self.__isObserver or not self.__isEnabled:
+            return
+        if self.__isInDisplayPeriod and self._haveHintsLeft(self.__settings) and not self.__areOtherIndicatorsShown():
+            self.__showHint()
+        else:
+            self.__hideHint()
+        self.__clearRadarCooldown()
+
+    def __onVehicleStateUpdated(self, state, value):
+        if not self.__isEnabled:
+            return
+        if state == VEHICLE_VIEW_STATE.RECOVERY:
+            self._isInRecovery = value[0]
+            self.__updateHint()
+        elif state == VEHICLE_VIEW_STATE.PROGRESS_CIRCLE:
+            self._isInProgressCircle = value[1]
+            self.__updateHint()
+        elif state == VEHICLE_VIEW_STATE.UNDER_FIRE:
+            self._isUnderFire = value
+            self.__updateHint()
+        elif state == VEHICLE_VIEW_STATE.DESTROYED:
+            self.__isInDisplayPeriod = False
+            self.__updateHint()
+
+    def __onPostMortemSwitched(self, *args):
+        self.__isInPostmortem = True
+        self.__isHintShown = False
+
+    def __onHintTimeOut(self):
+        self._parentObj.removeBtnHint(CommandMapping.CMD_CM_VEHICLE_ACTIVATE_RADAR)
+        self.__isHintShown = False
+
+    def __areOtherIndicatorsShown(self):
+        return self._isUnderFire or self._isInRecovery or self._isInProgressCircle
+
+    def __clearRadarCooldown(self):
+        if self.__cbOnRadarCooldown is not None:
+            BigWorld.cancelCallback(self.__cbOnRadarCooldown)
+            self.__cbOnRadarCooldown = None
+        return
+
+
 class PreBattleHintPlugin(HintPanelPlugin):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, parentObj):
         super(PreBattleHintPlugin, self).__init__(parentObj)
@@ -430,6 +589,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
         self.__callbackDelayer = CallbackDelayer()
         self.__questHintSettings = {}
         self.__helpHintSettings = {}
+        self.__battleComHintSettings = {}
         self.__isInDisplayPeriod = False
         self.__haveReqLevel = False
         self.__vehicleId = None
@@ -437,12 +597,14 @@ class PreBattleHintPlugin(HintPanelPlugin):
 
     @classmethod
     def isSuitable(cls):
-        return cls.sessionProvider.arenaVisitor.getArenaGuiType() != ARENA_GUI_TYPE.RANKED
+        guiType = cls.sessionProvider.arenaVisitor.getArenaGuiType()
+        return guiType != ARENA_GUI_TYPE.RANKED and guiType != ARENA_GUI_TYPE.BATTLE_ROYALE
 
     def start(self):
         prbSettings = dict(AccountSettings.getSettings(PRE_BATTLE_HINT_SECTION))
         self.__questHintSettings = prbSettings[QUEST_PROGRESS_HINT_SECTION]
         self.__helpHintSettings = prbSettings[HELP_SCREEN_HINT_SECTION]
+        self.__battleComHintSettings = prbSettings[IBC_HINT_SECTION]
         HintPanelPlugin._updateCounterOnStart(self.__questHintSettings, PRBSettings.HINT_DAY_COOLDOWN, PRBSettings.HINT_BATTLES_COOLDOWN)
         self.__isActive = True
         g_eventBus.addListener(GameEvent.SHOW_BTN_HINT, self.__handleShowBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
@@ -465,9 +627,10 @@ class PreBattleHintPlugin(HintPanelPlugin):
                 vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
             self.__callbackDelayer.destroy()
             self.__isActive = False
-            prbHintSettings = {}
+            prbHintSettings = dict()
             prbHintSettings[QUEST_PROGRESS_HINT_SECTION] = self.__questHintSettings
             prbHintSettings[HELP_SCREEN_HINT_SECTION] = self.__helpHintSettings
+            prbHintSettings[IBC_HINT_SECTION] = self.__battleComHintSettings
             AccountSettings.setSettings(PRE_BATTLE_HINT_SECTION, prbHintSettings)
             return
 
@@ -490,14 +653,20 @@ class PreBattleHintPlugin(HintPanelPlugin):
             pressText = backport.text(R.strings.ingame_gui.helpScreen.hint.press())
             hintText = backport.text(R.strings.ingame_gui.helpScreen.hint.description())
             return HintData(keyName, pressText, hintText, 0, 0, HintPriority.HELP)
+        if self.__hintInQueue is CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND:
+            keyName = getReadableKey(CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND)
+            pressText = backport.text(R.strings.ingame_gui.battleCommunication.hint.press())
+            hintText = backport.text(R.strings.ingame_gui.battleCommunication.hint.description())
+            return HintData(keyName, pressText, hintText, 0, 0, HintPriority.BATTLE_COMMUNICATION)
         if self.__hintInQueue is CommandMapping.CMD_QUEST_PROGRESS_SHOW:
-            keyName = getReadableKey(CommandMapping.CMD_QUEST_PROGRESS_SHOW)
-            pressText = ''
-            hintText = backport.text(R.strings.ingame_gui.battleProgress.hint.noBindingKey())
-            if keyName:
-                pressText = backport.text(R.strings.ingame_gui.battleProgress.hint.press())
-                hintText = backport.text(R.strings.ingame_gui.battleProgress.hint.description())
-            return HintData(keyName, pressText, hintText, 0, 0, HintPriority.QUESTS)
+            if self.lobbyContext.getServerSettings().isPersonalMissionsEnabled():
+                keyName = getReadableKey(CommandMapping.CMD_QUEST_PROGRESS_SHOW)
+                pressText = ''
+                hintText = backport.text(R.strings.ingame_gui.battleProgress.hint.noBindingKey())
+                if keyName:
+                    pressText = backport.text(R.strings.ingame_gui.battleProgress.hint.press())
+                    hintText = backport.text(R.strings.ingame_gui.battleProgress.hint.description())
+                return HintData(keyName, pressText, hintText, 0, 0, HintPriority.QUESTS)
 
     def __onVehicleControlling(self, vehicle):
         if not self.isActive():
@@ -509,10 +678,15 @@ class PreBattleHintPlugin(HintPanelPlugin):
             vehicleType = vTypeDesc.type.id
             self.__vehicleId = makeIntCompactDescrByID('vehicle', vehicleType[0], vehicleType[1])
             self.__haveReqLevel = vTypeDesc.level >= _HINT_MIN_VEHICLE_LEVEL
-            if vTypeDesc.isWheeledVehicle or vTypeDesc.isDualgunVehicle:
-                self.__updateHintCounteronStart(self.__helpHintSettings, self.__vehicleId)
+            if vTypeDesc.isWheeledVehicle or vTypeDesc.type.isDualgunVehicleType:
+                self.__updateHintCounterOnStart(self.__helpHintSettings, self.__vehicleId)
             if self.__canDisplayHelpHint(vTypeDesc):
                 self.__displayHint(CommandMapping.CMD_SHOW_HELP)
+                return
+            elif self.__canDisplayBattleCommunicationHint():
+                isDisplayed = self.__displayHint(CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND)
+                if isDisplayed:
+                    self.__battleComHintSettings = self._updateBattleCounterOnUsed(self.__battleComHintSettings)
                 return
             elif self.__canDisplayQuestHint():
                 self.__displayHint(CommandMapping.CMD_QUEST_PROGRESS_SHOW)
@@ -520,10 +694,11 @@ class PreBattleHintPlugin(HintPanelPlugin):
             if self.__hintInQueue is not None:
                 self._parentObj.removeBtnHint(CommandMapping.CMD_SHOW_HELP)
                 self._parentObj.removeBtnHint(CommandMapping.CMD_QUEST_PROGRESS_SHOW)
+                self._parentObj.removeBtnHint(CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND)
                 self.__callbackDelayer.destroy()
             return
 
-    def __updateHintCounteronStart(self, setting, vehicleId):
+    def __updateHintCounterOnStart(self, setting, vehicleId):
         if vehicleId not in setting:
             setting[vehicleId] = {HINTS_LEFT: 1,
              LAST_DISPLAY_DAY: 0,
@@ -533,28 +708,39 @@ class PreBattleHintPlugin(HintPanelPlugin):
 
     def __onHintTimeOut(self):
         self._parentObj.removeBtnHint(self.__hintInQueue)
-        if self.__hintInQueue is CommandMapping.CMD_SHOW_HELP:
-            self.__callbackDelayer.delayCallback(_HINT_COOLDOWN, self.__onHintTimeCooldown)
+        if self.__hintInQueue is CommandMapping.CMD_SHOW_HELP or self.__hintInQueue is CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND:
+            self.__callbackDelayer.delayCallback(_HINT_COOLDOWN, self.__onHintTimeCooldown, self.__hintInQueue)
         self.__hintInQueue = None
         return
 
     def __canDisplayHelpHint(self, typeDescriptor):
-        return (typeDescriptor.isWheeledVehicle or typeDescriptor.isDualgunVehicle) and self.__isInDisplayPeriod and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])
+        return (typeDescriptor.isWheeledVehicle or typeDescriptor.type.isDualgunVehicleType) and self.__isInDisplayPeriod and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])
+
+    def __canDisplayBattleCommunicationHint(self):
+        settingsCore = dependency.instance(ISettingsCore)
+        battleCommunicationIsEnabled = bool(settingsCore.getSetting(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION))
+        return self.__isInDisplayPeriod and self._haveHintsLeft(self.__battleComHintSettings) and self.sessionProvider.arenaVisitor.getArenaGuiType() != ARENA_GUI_TYPE.BOOTCAMP and battleCommunicationIsEnabled
 
     def __canDisplayQuestHint(self):
-        return self.__isInDisplayPeriod and self._haveHintsLeft(self.__questHintSettings) and self.__haveReqLevel and self.sessionProvider.arenaVisitor.getArenaGuiType() in ARENA_GUI_TYPE.RANDOM_RANGE
+        return self.__isInDisplayPeriod and self._haveHintsLeft(self.__questHintSettings) and self.__haveReqLevel and self.sessionProvider.arenaVisitor.getArenaGuiType() in ARENA_GUI_TYPE.RANDOM_RANGE and self.lobbyContext.getServerSettings().isPersonalMissionsEnabled()
 
-    def __onHintTimeCooldown(self):
-        if self.__canDisplayQuestHint():
+    def __onHintTimeCooldown(self, lastHint):
+        if lastHint == CommandMapping.CMD_SHOW_HELP and self.__canDisplayBattleCommunicationHint():
+            isDisplayed = self.__displayHint(CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND)
+            if isDisplayed:
+                self.__battleComHintSettings = self._updateBattleCounterOnUsed(self.__battleComHintSettings)
+        elif (lastHint == CommandMapping.CMD_SHOW_HELP or lastHint == CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND) and self.__canDisplayQuestHint():
             self.__displayHint(CommandMapping.CMD_QUEST_PROGRESS_SHOW)
 
     def __displayHint(self, hintType):
         if self.__isInDisplayPeriod:
             self.__hintInQueue = hintType
             self._parentObj.setBtnHint(hintType, self._getHint())
+            return True
+        return False
 
     def __handleShowBtnHint(self, event):
-        if event.ctx.get('btnID') == CommandMapping.CMD_SHOW_HELP or event.ctx.get('btnID') == CommandMapping.CMD_QUEST_PROGRESS_SHOW:
+        if event.ctx.get('btnID') == CommandMapping.CMD_SHOW_HELP or event.ctx.get('btnID') == CommandMapping.CMD_QUEST_PROGRESS_SHOW or event.ctx.get('btnID') == CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND:
             self.__callbackDelayer.delayCallback(_HINT_TIMEOUT, self.__onHintTimeOut)
         elif self.__callbackDelayer.hasDelayedCallback(self.__onHintTimeOut):
             self.__callbackDelayer.stopCallback(self.__onHintTimeOut)
@@ -562,8 +748,8 @@ class PreBattleHintPlugin(HintPanelPlugin):
     def __handlePressHelpBtn(self, event):
         if self.__hintInQueue == CommandMapping.CMD_SHOW_HELP:
             self._parentObj.removeBtnHint(CommandMapping.CMD_SHOW_HELP)
+            self.__callbackDelayer.delayCallback(_HINT_COOLDOWN, self.__onHintTimeCooldown, self.__hintInQueue)
             self.__hintInQueue = None
-            self.__callbackDelayer.delayCallback(_HINT_COOLDOWN, self.__onHintTimeCooldown)
         hintStats = self.__helpHintSettings[self.__vehicleId]
         self.__helpHintSettings[self.__vehicleId] = self._updateCounterOnUsed(hintStats)
         return

@@ -1,15 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/consumables/equipment_ctrl.py
+import itertools
+import logging
 from collections import namedtuple
 from functools import partial
 import BigWorld
 import Event
 import SoundGroups
-from constants import VEHICLE_SETTING, EQUIPMENT_STAGES
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from constants import VEHICLE_SETTING, EQUIPMENT_STAGES, ARENA_BONUS_TYPE
+from gui.Scaleform.genConsts.ANIMATION_TYPES import ANIMATION_TYPES
 from gui.battle_control import avatar_getter, vehicle_getter
 from gui.battle_control.battle_constants import makeExtraName, VEHICLE_COMPLEX_ITEMS, BATTLE_CTRL_ID
 from gui.battle_control.controllers.interfaces import IBattleController
+from gui.game_control.br_battle_sounds import BREvents
 from gui.shared.utils.MethodsRules import MethodsRules
 from gui.shared.utils.decorators import ReprInjector
 from helpers import i18n
@@ -17,13 +20,28 @@ from items import vehicles, EQUIPMENT_TYPES
 from shared_utils import findFirst, forEach
 from soft_exception import SoftException
 _ActivationError = namedtuple('_ActivationError', 'key ctx')
+_logger = logging.getLogger(__name__)
 
 class NotApplyingError(_ActivationError):
     pass
 
 
 class InCooldownError(_ActivationError):
-    pass
+
+    def __new__(cls, name):
+        return super(InCooldownError, cls).__new__(cls, 'equipmentIsInCooldown', {'name': name})
+
+    def __init__(self, name):
+        super(InCooldownError, self).__init__('equipmentIsInCooldown', {'name': name})
+
+
+class NotReadyError(_ActivationError):
+
+    def __new__(cls, name):
+        return super(NotReadyError, cls).__new__(cls, 'orderNotReady', {'name': name})
+
+    def __init__(self, name):
+        super(NotReadyError, self).__init__('orderNotReady', {'name': name})
 
 
 class NeedEntitySelection(_ActivationError):
@@ -56,40 +74,43 @@ class EquipmentSound(object):
 
     @staticmethod
     def playReady(item):
-        if item.requiresSoundNotification:
-            equipment = vehicles.g_cache.equipments()[item.getEquipmentID()]
-            if equipment is not None:
-                if equipment.soundNotification is not None:
-                    avatar_getter.getSoundNotifications().play(equipment.soundNotification)
-                    return
-            avatar_getter.getSoundNotifications().play('combat_reserve')
+        equipment = vehicles.g_cache.equipments()[item.getEquipmentID()]
+        if equipment is not None:
+            if equipment.soundNotification is not None:
+                avatar_getter.getSoundNotifications().play(equipment.soundNotification)
         return
 
 
-@ReprInjector.simple(('_tag', 'tag'), ('_quantity', 'quantity'), ('_stage', 'stage'), ('_prevStage', 'prevStage'), ('_timeRemaining', 'timeRemaining'), ('_totalTime', 'totalTime'))
+@ReprInjector.simple(('_tags', 'tags'), ('_quantity', 'quantity'), ('_stage', 'stage'), ('_prevStage', 'prevStage'), ('_timeRemaining', 'timeRemaining'), ('_totalTime', 'totalTime'), ('_animationType', 'animationType'))
 class _EquipmentItem(object):
-    __slots__ = ('_tag', '_descriptor', '_quantity', '_stage', '_prevStage', '_timeRemaining', '_prevQuantity', '_totalTime')
+    __slots__ = ('_tags', '_descriptor', '_quantity', '_stage', '_prevStage', '_timeRemaining', '_prevQuantity', '_totalTime', '_animationType', '_serverPrevStage')
 
-    def __init__(self, descriptor, quantity, stage, timeRemaining, totalTime, tag=None):
+    def __init__(self, descriptor, quantity, stage, timeRemaining, totalTime, tags):
         super(_EquipmentItem, self).__init__()
-        self._tag = tag
+        self._tags = tags
         self._descriptor = descriptor
         self._quantity = 0
         self._stage = 0
+        self._serverPrevStage = None
         self._prevStage = 0
         self._prevQuantity = 0
         self._timeRemaining = 0
-        self._totalTime = 0
-        self.update(quantity, stage, timeRemaining, totalTime)
         if self.isReusable:
             self._totalTime = self._descriptor.cooldownSeconds
+        else:
+            self._totalTime = 0
+        self._animationType = ANIMATION_TYPES.MOVE_ORANGE_BAR_UP | ANIMATION_TYPES.SHOW_COUNTER_ORANGE | ANIMATION_TYPES.DARK_COLOR_TRANSFORM
+        self.update(quantity, stage, timeRemaining, totalTime)
+        return
 
-    @property
-    def requiresSoundNotification(self):
-        return self._tag not in ('extinguisher', 'medkit', 'repairkit')
+    def getAnimationType(self):
+        return self._animationType
 
-    def getTag(self):
-        return _getSupportedTag(self._descriptor)
+    def setServerPrevStage(self, prevStage):
+        self._serverPrevStage = prevStage
+
+    def getTags(self):
+        return self._tags
 
     def isEntityRequired(self):
         return False
@@ -113,8 +134,8 @@ class _EquipmentItem(object):
             error = None
             if self._stage == EQUIPMENT_STAGES.ACTIVE:
                 error = _ActivationError('equipmentAlreadyActivated', {'name': self._descriptor.userString})
-            elif self._stage == EQUIPMENT_STAGES.COOLDOWN:
-                error = InCooldownError('equipmentIsInCooldown', {'name': self._descriptor.userString})
+            elif self._stage == EQUIPMENT_STAGES.COOLDOWN and self._quantity:
+                error = InCooldownError(self._descriptor.userString)
         elif self._quantity <= 0:
             result = False
             error = None
@@ -168,10 +189,12 @@ class _EquipmentItem(object):
 
     @property
     def becomeReady(self):
-        return self.isReady and self._prevStage in (EQUIPMENT_STAGES.DEPLOYING,
+        return self.isReady and self._serverPrevStage in (EQUIPMENT_STAGES.DEPLOYING,
          EQUIPMENT_STAGES.UNAVAILABLE,
          EQUIPMENT_STAGES.COOLDOWN,
-         EQUIPMENT_STAGES.SHARED_COOLDOWN)
+         EQUIPMENT_STAGES.SHARED_COOLDOWN,
+         EQUIPMENT_STAGES.EXHAUSTED,
+         EQUIPMENT_STAGES.NOT_RUNNING)
 
     def getDescriptor(self):
         return self._descriptor
@@ -338,6 +361,25 @@ class _RepairKitItem(_ExpandedItem):
         return i18n.makeString('#ingame_gui:devices/{0}'.format(entityName)) if entityName in VEHICLE_COMPLEX_ITEMS else super(_RepairKitItem, self)._getEntityUserString(entityName, avatar)
 
 
+class _RepairCrewAndModules(_ExpandedItem):
+
+    def getEntitiesIterator(self, avatar=None):
+        return itertools.chain(vehicle_getter.VehicleDeviceStatesIterator(avatar_getter.getVehicleDeviceStates(avatar), avatar_getter.getVehicleTypeDescriptor(avatar)), vehicle_getter.TankmenStatesIterator(avatar_getter.getVehicleDeviceStates(avatar), avatar_getter.getVehicleTypeDescriptor(avatar)))
+
+    def canActivate(self, entityName=None, avatar=None):
+        result, error = super(_RepairCrewAndModules, self).canActivate(entityName, avatar)
+        return (True, IgnoreEntitySelection('', None)) if not result and type(error) not in (NeedEntitySelection, NotApplyingError) and avatar_getter.isVehicleStunned() else (result, error)
+
+    def _getEntitiesAreSafeKey(self):
+        pass
+
+    def _getEntityIsSafeKey(self):
+        pass
+
+    def _getEntityUserString(self, entityName, avatar=None):
+        return i18n.makeString('#ingame_gui:devices/{0}'.format(entityName)) if entityName in VEHICLE_COMPLEX_ITEMS else super(_RepairCrewAndModules, self)._getEntityUserString(entityName, avatar)
+
+
 class _OrderItem(_TriggerItem):
 
     def deactivate(self):
@@ -348,17 +390,23 @@ class _OrderItem(_TriggerItem):
     def canActivate(self, entityName=None, avatar=None):
         if self._timeRemaining > 0 and self._stage and self._stage in (EQUIPMENT_STAGES.DEPLOYING, EQUIPMENT_STAGES.COOLDOWN, EQUIPMENT_STAGES.SHARED_COOLDOWN):
             result = False
-            error = _ActivationError('orderNotReady', {'name': self._descriptor.userString})
+            error = self._getErrorMsg()
             return (result, error)
         return super(_OrderItem, self).canActivate(entityName, avatar)
 
     def update(self, quantity, stage, timeRemaining, totalTime):
         from AvatarInputHandler import MapCaseMode
         if stage == EQUIPMENT_STAGES.PREPARING and self._stage != stage:
-            MapCaseMode.activateMapCase(self.getEquipmentID(), partial(self.deactivate))
+            MapCaseMode.activateMapCase(self.getEquipmentID(), partial(self.deactivate), self.isArcadeCamera())
         elif self._stage == EQUIPMENT_STAGES.PREPARING and self._stage != stage:
-            MapCaseMode.turnOffMapCase(self.getEquipmentID())
+            MapCaseMode.turnOffMapCase(self.getEquipmentID(), self.isArcadeCamera())
         super(_OrderItem, self).update(quantity, stage, timeRemaining, totalTime)
+
+    def _getErrorMsg(self):
+        return NotReadyError(self._descriptor.userString)
+
+    def isArcadeCamera(self):
+        return False
 
 
 class _ArtilleryItem(_OrderItem):
@@ -367,10 +415,57 @@ class _ArtilleryItem(_OrderItem):
         pass
 
 
+class _ArcadeArtileryItem(_ArtilleryItem):
+
+    def isArcadeCamera(self):
+        return True
+
+
+class _ArcadeKamikazeSpawner(_ArtilleryItem):
+
+    def isArcadeCamera(self):
+        return True
+
+    def _getErrorMsg(self):
+        return InCooldownError(self._descriptor.userString) if self._quantity else None
+
+
 class _BomberItem(_OrderItem):
 
     def getMarker(self):
         pass
+
+
+class _BattleRoyaleBomber(_BomberItem):
+
+    def _getErrorMsg(self):
+        return InCooldownError(self._descriptor.userString)
+
+
+class _ArcadeBomberItem(_BomberItem):
+
+    def isArcadeCamera(self):
+        return True
+
+    def _getErrorMsg(self):
+        return InCooldownError(self._descriptor.userString) if self._quantity else None
+
+
+class _ArcadeMineFieldItem(_OrderItem):
+
+    def isArcadeCamera(self):
+        return True
+
+
+class _ArcadeMineFieldBattleRoyaleItem(_ArcadeMineFieldItem):
+
+    def update(self, quantity, stage, timeRemaining, totalTime):
+        if stage == EQUIPMENT_STAGES.PREPARING and self._stage != stage:
+            BREvents.playSound(BREvents.MINEFIELD_ACTIVATION)
+        super(_ArcadeMineFieldBattleRoyaleItem, self).update(quantity, stage, timeRemaining, totalTime)
+
+    def _getErrorMsg(self):
+        return InCooldownError(self._descriptor.userString) if self._quantity else None
 
 
 class _ReconItem(_OrderItem):
@@ -385,30 +480,263 @@ class _SmokeItem(_OrderItem):
         pass
 
 
-def _triggerItemFactory(descriptor, quantity, stage, timeRemaining, totalTime, tag=None):
+class _BattleRoyaleSmokeItem(_SmokeItem):
+
+    def _getErrorMsg(self):
+        return InCooldownError(self._descriptor.userString)
+
+
+class _ArcadeSmokeItem(_SmokeItem):
+
+    def isArcadeCamera(self):
+        return True
+
+    def _getErrorMsg(self):
+        return InCooldownError(self._descriptor.userString) if self._quantity else None
+
+
+class _AfterburningItem(_TriggerItem):
+    __slots__ = ('__totalDeployingTime', '__totalConsumingTime', '__totalRechargingTime', '__totalCooldownTime', '_prevTimeRemaining', '__fullyChargedSoundCbId', '__almostChargedSoundCbId', '__almostChargedSound', '__playingSoundObj')
+    _FULL_CHARGE_DELAY_SOUND_TIME = 5.0
+    _ALMOST_CHARGED_SOUND_ID = 'be_pre_replenishment'
+    _EXAUSTED_SOUND_ID = 'be_nitro_empty'
+    _STOPPED_BY_USER_SOUND_ID = 'be_nitro_stop'
+    _ACTIVATED_SOUND_ID = 'be_nitro_activating'
+
+    def __init__(self, descriptor, quantity, stage, timeRemaining, totalTime, tags=None):
+        self.__totalDeployingTime = descriptor.deploySeconds
+        self.__totalConsumingTime = descriptor.consumeSeconds
+        self.__totalRechargingTime = descriptor.rechargeSeconds
+        self.__totalCooldownTime = descriptor.cooldownSeconds
+        self._prevTimeRemaining = -1
+        self.__fullyChargedSoundCbId = None
+        self.__almostChargedSoundCbId = None
+        self.__almostChargedSound = None
+        self.__playingSoundObj = None
+        super(_AfterburningItem, self).__init__(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+        return
+
+    def getTags(self):
+        pass
+
+    def clear(self):
+        super(_AfterburningItem, self).clear()
+        if self.__playingSoundObj and self.__playingSoundObj.isPlaying:
+            self.__playingSoundObj.stop()
+        self.__playingSoundObj = None
+        if self.__fullyChargedSoundCbId is not None:
+            BigWorld.cancelCallback(self.__fullyChargedSoundCbId)
+        if self.__almostChargedSoundCbId is not None:
+            BigWorld.cancelCallback(self.__almostChargedSoundCbId)
+        return
+
+    def update(self, quantity, stage, timeRemaining, totalTime):
+        self._prevTimeRemaining = self._timeRemaining
+        if self._stage != stage and self._stage in (EQUIPMENT_STAGES.READY, EQUIPMENT_STAGES.PREPARING):
+            self._cleanReadyStageSounds()
+        super(_AfterburningItem, self).update(quantity, stage, timeRemaining, totalTime)
+        if stage == EQUIPMENT_STAGES.ACTIVE and self._prevStage != EQUIPMENT_STAGES.ACTIVE:
+            self._animationType = ANIMATION_TYPES.MOVE_GREEN_BAR_DOWN | ANIMATION_TYPES.CENTER_COUNTER | ANIMATION_TYPES.GREEN_GLOW_SHOW | ANIMATION_TYPES.DARK_COLOR_TRANSFORM
+            totalTime = self.__totalConsumingTime
+            self.__createAndPlaySound(self._ACTIVATED_SOUND_ID)
+        elif stage == EQUIPMENT_STAGES.PREPARING:
+            self._animationType = ANIMATION_TYPES.MOVE_GREEN_BAR_UP | ANIMATION_TYPES.SHOW_COUNTER_GREEN
+            if self._prevStage != stage and self._prevStage != EQUIPMENT_STAGES.COOLDOWN:
+                self._animationType |= ANIMATION_TYPES.GREEN_GLOW_HIDE
+            totalTime = self.__totalRechargingTime
+            self.__processReadyStateSounds(timeRemaining)
+            if self._prevStage == EQUIPMENT_STAGES.ACTIVE:
+                self.__playSoundOnce(self._STOPPED_BY_USER_SOUND_ID)
+        elif stage == EQUIPMENT_STAGES.DEPLOYING:
+            self._animationType = ANIMATION_TYPES.MOVE_ORANGE_BAR_UP | ANIMATION_TYPES.SHOW_COUNTER_ORANGE
+            totalTime = self.__totalDeployingTime
+        elif stage == EQUIPMENT_STAGES.COOLDOWN:
+            self._animationType = ANIMATION_TYPES.MOVE_ORANGE_BAR_UP | ANIMATION_TYPES.SHOW_COUNTER_ORANGE | ANIMATION_TYPES.FILL_PARTIALLY
+            totalTime = self.__totalCooldownTime
+            if self._prevStage == EQUIPMENT_STAGES.ACTIVE:
+                self.__playSoundOnce(self._EXAUSTED_SOUND_ID)
+        elif stage == EQUIPMENT_STAGES.READY and self.becomeReady:
+            self.__processReadyStateSounds(timeRemaining)
+        self._totalTime = totalTime
+
+    def canActivate(self, entityName=None, avatar=None):
+        result, error = False, None
+        if self._stage in (EQUIPMENT_STAGES.READY, EQUIPMENT_STAGES.PREPARING, EQUIPMENT_STAGES.ACTIVE):
+            result = True
+        elif self._stage == EQUIPMENT_STAGES.COOLDOWN and self._quantity:
+            error = InCooldownError(self._descriptor.userString)
+        elif self._stage == EQUIPMENT_STAGES.DEPLOYING:
+            error = NotReadyError(self._descriptor.userString)
+        return (result, error)
+
+    def getEntitiesIterator(self, avatar=None):
+        return []
+
+    @property
+    def becomeReady(self):
+        return super(_AfterburningItem, self).becomeReady
+
+    def _soundUpdate(self, prevQuantity, quantity):
+        pass
+
+    def _cleanReadyStageSounds(self):
+        self.__cleanFullReadySound()
+        self.__cleanAlmostReadySound()
+
+    def _playChargedSound(self):
+        EquipmentSound.playReady(self)
+        self.__fullyChargedSoundCbId = None
+        return
+
+    def _playAlmostChargedSound(self):
+        if self.__almostChargedSound is None:
+            self.__almostChargedSound = SoundGroups.g_instance.getSound2D(self._ALMOST_CHARGED_SOUND_ID)
+        else:
+            self.__almostChargedSound.stop()
+        self.__almostChargedSound.play()
+        self.__almostChargedSoundCbId = None
+        return
+
+    def __processReadyStateSounds(self, timeRemaining):
+        if timeRemaining > -1:
+            self.__cleanFullReadySound()
+            self.__fullyChargedSoundCbId = BigWorld.callback(timeRemaining, self._playChargedSound)
+            if timeRemaining >= self._FULL_CHARGE_DELAY_SOUND_TIME:
+                self.__cleanAlmostReadySound()
+                if self.__almostChargedSound is not None:
+                    self.__almostChargedSound.stop()
+                self.__almostChargedSoundCbId = BigWorld.callback(timeRemaining - self._FULL_CHARGE_DELAY_SOUND_TIME, self._playAlmostChargedSound)
+        elif self.becomeReady:
+            self.__cleanFullReadySound()
+            self._playChargedSound()
+        return
+
+    def __cleanAlmostReadySound(self):
+        if self.__almostChargedSoundCbId is not None:
+            BigWorld.cancelCallback(self.__almostChargedSoundCbId)
+            self.__almostChargedSoundCbId = None
+        return
+
+    def __cleanFullReadySound(self):
+        if self.__fullyChargedSoundCbId is not None:
+            BigWorld.cancelCallback(self.__fullyChargedSoundCbId)
+            self.__fullyChargedSoundCbId = None
+        return
+
+    def __playSoundOnce(self, sound):
+        SoundGroups.g_instance.playSound2D(sound)
+
+    def __createAndPlaySound(self, sound):
+        self.__playingSoundObj = SoundGroups.g_instance.getSound2D(sound)
+        self.__playingSoundObj.play()
+
+
+class _RegenerationKitItem(_EquipmentItem):
+
+    def canActivate(self, entityName=None, avatar=None):
+        if self._timeRemaining <= 0 < self._quantity and self._stage in (EQUIPMENT_STAGES.READY, EQUIPMENT_STAGES.PREPARING):
+            result = True
+            error = None
+        else:
+            result = False
+            error = None
+            if self._stage == EQUIPMENT_STAGES.COOLDOWN and self._quantity:
+                error = InCooldownError(self._descriptor.userString)
+        if not result or not avatar:
+            return (result, error)
+        else:
+            vehicle = BigWorld.entities.get(avatar.playerVehicleID)
+            return (False, _ActivationError('vehicleIsNotDamaged', {'name': self._descriptor.userString})) if not vehicle or vehicle.health >= vehicle.typeDescriptor.maxHealth else (True, None)
+
+    def getActivationCode(self, entityName=None, avatar=None):
+        return 65536 + self._descriptor.id[1]
+
+    def getAnimationType(self):
+        return ANIMATION_TYPES.MOVE_GREEN_BAR_DOWN | ANIMATION_TYPES.SHOW_COUNTER_ORANGE | ANIMATION_TYPES.DARK_COLOR_TRANSFORM if self._stage == EQUIPMENT_STAGES.ACTIVE else super(_RegenerationKitItem, self).getAnimationType()
+
+
+class _GameplayConsumableItem(_TriggerItem):
+
+    def getTags(self):
+        pass
+
+    def getEntitiesIterator(self, avatar=None):
+        return []
+
+
+class _RepairPointItem(_TriggerItem):
+
+    def getTags(self):
+        pass
+
+    def getEntitiesIterator(self, avatar=None):
+        return []
+
+
+def _isBattleRoyaleBattle():
+    return BigWorld.player().arena.bonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE if BigWorld.player() is not None else False
+
+
+def _triggerItemFactory(descriptor, quantity, stage, timeRemaining, totalTime, tags=None):
+    if descriptor.name.startswith('arcade_artillery'):
+        return _ArcadeArtileryItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+    if descriptor.name.startswith('arcade_bomber'):
+        return _ArcadeBomberItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+    if descriptor.name.startswith('arcade_minefield_battle_royale'):
+        return _ArcadeMineFieldBattleRoyaleItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+    if descriptor.name.startswith('arcade_minefield'):
+        return _ArcadeMineFieldItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
     if descriptor.name.startswith('artillery'):
-        return _ArtilleryItem(descriptor, quantity, stage, timeRemaining, totalTime, tag)
+        return _ArtilleryItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
     if descriptor.name.startswith('bomber'):
-        return _BomberItem(descriptor, quantity, stage, timeRemaining, totalTime, tag)
+        return _getBomberItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+    if descriptor.name.startswith('smoke'):
+        return _getSmokeItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+    if descriptor.name.startswith('arcade_smoke'):
+        return _ArcadeSmokeItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
     if descriptor.name.startswith('recon'):
-        return _ReconItem(descriptor, quantity, stage, timeRemaining, totalTime, tag)
-    return _SmokeItem(descriptor, quantity, stage, timeRemaining, totalTime, tag) if descriptor.name.startswith('smoke') else _TriggerItem(descriptor, quantity, stage, timeRemaining, totalTime, tag)
+        return _ReconItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+    if descriptor.name.startswith('afterburning'):
+        return _AfterburningItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+    if descriptor.name.endswith('trappoint'):
+        return _GameplayConsumableItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+    if descriptor.name.endswith('repairpoint'):
+        return _RepairPointItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+    return _ArcadeKamikazeSpawner(descriptor, quantity, stage, timeRemaining, totalTime, tags) if descriptor.name.startswith('spawn') else _TriggerItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
 
 
-_EQUIPMENT_TAG_TO_ITEM = {'fuel': _AutoItem,
- 'stimulator': _AutoItem,
- 'trigger': _triggerItemFactory,
- 'extinguisher': _ExtinguisherItem,
- 'medkit': _MedKitItem,
- 'repairkit': _RepairKitItem}
+def _getBomberItem(descriptor, quantity, stage, timeRemaining, totalTime, tags=None):
+    isBattleRoyaleMode = _isBattleRoyaleBattle()
+    return _BattleRoyaleBomber(descriptor, quantity, stage, timeRemaining, totalTime, tags) if isBattleRoyaleMode else _BomberItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
 
-def _getSupportedTag(descriptor):
-    keys = set(_EQUIPMENT_TAG_TO_ITEM.keys()) & descriptor.tags
-    if len(keys) == 1:
-        tag = keys.pop()
-    else:
-        tag = None
-    return tag
+
+def _getSmokeItem(descriptor, quantity, stage, timeRemaining, totalTime, tags=None):
+    isBattleRoyaleMode = _isBattleRoyaleBattle()
+    return _BattleRoyaleSmokeItem(descriptor, quantity, stage, timeRemaining, totalTime, tags) if isBattleRoyaleMode else _SmokeItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+
+
+_EQUIPMENT_TAG_TO_ITEM = {('fuel',): _AutoItem,
+ ('stimulator',): _AutoItem,
+ ('trigger',): _triggerItemFactory,
+ ('extinguisher',): _ExtinguisherItem,
+ ('medkit',): _MedKitItem,
+ ('repairkit',): _RepairKitItem,
+ ('regenerationKit',): _RegenerationKitItem,
+ ('medkit', 'repairkit'): _RepairCrewAndModules}
+
+def _getInitialTagsAndClass(descriptor, tagsToItems):
+    descrTags = descriptor.tags
+    tagsCandidate, clazzCandidate = tuple(), None
+    for requiredTags, itemClass in tagsToItems.iteritems():
+        for tag in requiredTags:
+            if tag not in descrTags:
+                break
+        else:
+            if len(requiredTags) > len(tagsCandidate):
+                tagsCandidate = requiredTags
+                clazzCandidate = itemClass
+
+    return (tagsCandidate, clazzCandidate)
 
 
 class EquipmentsController(MethodsRules, IBattleController):
@@ -441,17 +769,16 @@ class EquipmentsController(MethodsRules, IBattleController):
 
     @classmethod
     def createItem(cls, descriptor, quantity, stage, timeRemaining, totalTime):
-        tag = _getSupportedTag(descriptor)
-        if tag:
-            clazz = _EQUIPMENT_TAG_TO_ITEM[tag]
-            item = clazz(descriptor, quantity, stage, timeRemaining, totalTime, tag)
+        tags, clazz = _getInitialTagsAndClass(descriptor, _EQUIPMENT_TAG_TO_ITEM)
+        if tags:
+            item = clazz(descriptor, quantity, stage, timeRemaining, totalTime, tags)
         else:
-            item = _EquipmentItem(descriptor, quantity, stage, timeRemaining, totalTime)
+            item = _EquipmentItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
         return item
 
     def clear(self, leave=True):
-        super(EquipmentsController, self).clear()
-        LOG_DEBUG('EquipmentsController CLEARED')
+        super(EquipmentsController, self).clear(leave)
+        _logger.debug('EquipmentsController CLEARED')
         if leave:
             self.__eManager.clear()
         self._order = []
@@ -471,13 +798,17 @@ class EquipmentsController(MethodsRules, IBattleController):
         return intCD in self._equipments
 
     def iterEquipmentsByTag(self, tag, condition=None):
-        return ((intCD, item) for intCD, item in self._equipments.iteritems() if item.getTag() == tag and (condition is None or condition(item)))
+        return ((intCD, item) for intCD, item in self._equipments.iteritems() if tag in item.getTags() and (condition is None or condition(item)))
+
+    def getEquipmentNameByID(self, itemID):
+        item = vehicles.g_cache.equipments().get(itemID, None)
+        return item.name if item is not None else None
 
     def getEquipment(self, intCD):
         try:
             item = self._equipments[intCD]
         except KeyError:
-            LOG_ERROR('Equipment is not found.', intCD)
+            _logger.error('Equipment is not found. %d', intCD)
             item = None
 
         return item
@@ -491,7 +822,8 @@ class EquipmentsController(MethodsRules, IBattleController):
 
     @MethodsRules.delayable('notifyPlayerVehicleSet')
     def setEquipment(self, intCD, quantity, stage, timeRemaining, totalTime):
-        LOG_DEBUG('Equipment added: ', str(intCD), ' ', str(quantity), ' ', str(stage), ' ', str(timeRemaining), ' ', str(totalTime))
+        _logger.debug('Equipment added: intCD=%d, quantity=%d, stage=%s, timeRemaining=%d, totalTime=%d', intCD, quantity, stage, timeRemaining, totalTime)
+        item = None
         if not intCD:
             if len(self._order) < vehicles.NUM_EQUIPMENT_SLOTS_BY_TYPE[EQUIPMENT_TYPES.regular]:
                 self._order.append(0)
@@ -507,7 +839,13 @@ class EquipmentsController(MethodsRules, IBattleController):
                 self._equipments[intCD] = item
                 self._order.append(intCD)
                 self.onEquipmentAdded(intCD, item)
+        if item:
+            item.setServerPrevStage(None)
         return
+
+    def setServerPrevStage(self, prevStage, intCD):
+        if intCD in self._equipments:
+            self._equipments[intCD].setServerPrevStage(prevStage)
 
     def getActivationCode(self, intCD, entityName=None, avatar=None):
         code = None
@@ -539,7 +877,7 @@ class EquipmentsController(MethodsRules, IBattleController):
         else:
             result, error = True, None
             for _, item in self._equipments.iteritems():
-                if item.getTag() == tag and item.isAvailableToUse:
+                if tag in item.getTags() and item.isAvailableToUse:
                     result, error = self.__doChangeSetting(item, entityName, avatar)
                     break
 
@@ -574,8 +912,8 @@ class EquipmentsController(MethodsRules, IBattleController):
 class _ReplayItem(_EquipmentItem):
     __slots__ = ('__cooldownTime',)
 
-    def __init__(self, descriptor, quantity, stage, timeRemaining, totalTime, tag=None):
-        super(_ReplayItem, self).__init__(descriptor, quantity, stage, timeRemaining, totalTime, tag)
+    def __init__(self, descriptor, quantity, stage, timeRemaining, totalTime, tags=None):
+        super(_ReplayItem, self).__init__(descriptor, quantity, stage, timeRemaining, totalTime, tags)
         self.__cooldownTime = BigWorld.serverTime() + timeRemaining
 
     def update(self, quantity, stage, timeRemaining, totalTime):
@@ -654,22 +992,168 @@ class _ReplaySmokeItem(_ReplayOrderItem):
         pass
 
 
-def _replayTriggerItemFactory(descriptor, quantity, stage, timeRemaining, totalTime, tag=None):
+class _ReplayAfterburningItem(_ReplayItem):
+    __slots__ = ('__totalDeployingTime', '__totalConsumingTime', '__totalRechargingTime', '__totalCooldownTime', '_prevTimeRemaining', '__fullyChargedSoundCbId', '__almostChargedSoundCbId', '__almostChargedSound', '__playingSoundObj', '_animationType', '_totalTime')
+    _FULL_CHARGE_DELAY_SOUND_TIME = 5.0
+    _ALMOST_CHARGED_SOUND_ID = 'be_pre_replenishment'
+    _EXAUSTED_SOUND_ID = 'be_nitro_empty'
+    _STOPPED_BY_USER_SOUND_ID = 'be_nitro_stop'
+    _ACTIVATED_SOUND_ID = 'be_nitro_activating'
+
+    def __init__(self, descriptor, quantity, stage, timeRemaining, totalTime, tags=None):
+        self.__totalDeployingTime = descriptor.deploySeconds
+        self.__totalConsumingTime = descriptor.consumeSeconds
+        self.__totalRechargingTime = descriptor.rechargeSeconds
+        self.__totalCooldownTime = descriptor.cooldownSeconds
+        self._prevTimeRemaining = -1
+        self.__fullyChargedSoundCbId = None
+        self.__almostChargedSoundCbId = None
+        self.__almostChargedSound = None
+        self.__playingSoundObj = None
+        super(_ReplayAfterburningItem, self).__init__(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+        return
+
+    def getTags(self):
+        pass
+
+    def clear(self):
+        super(_ReplayAfterburningItem, self).clear()
+        if self.__playingSoundObj and self.__playingSoundObj.isPlaying:
+            self.__playingSoundObj.stop()
+        self.__playingSoundObj = None
+        if self.__fullyChargedSoundCbId is not None:
+            BigWorld.cancelCallback(self.__fullyChargedSoundCbId)
+        if self.__almostChargedSoundCbId is not None:
+            BigWorld.cancelCallback(self.__almostChargedSoundCbId)
+        return
+
+    def update(self, quantity, stage, timeRemaining, totalTime):
+        self._prevTimeRemaining = self._timeRemaining
+        if self._stage != stage and self._stage in (EQUIPMENT_STAGES.READY, EQUIPMENT_STAGES.PREPARING):
+            self._cleanReadyStageSounds()
+        super(_ReplayAfterburningItem, self).update(quantity, stage, timeRemaining, totalTime)
+        if stage == EQUIPMENT_STAGES.ACTIVE and self._prevStage != EQUIPMENT_STAGES.ACTIVE:
+            self._animationType = ANIMATION_TYPES.MOVE_GREEN_BAR_DOWN | ANIMATION_TYPES.CENTER_COUNTER | ANIMATION_TYPES.GREEN_GLOW_SHOW | ANIMATION_TYPES.DARK_COLOR_TRANSFORM
+            totalTime = self.__totalConsumingTime
+            self.__createAndPlaySound(self._ACTIVATED_SOUND_ID)
+        elif stage == EQUIPMENT_STAGES.PREPARING:
+            self._animationType = ANIMATION_TYPES.MOVE_GREEN_BAR_UP | ANIMATION_TYPES.SHOW_COUNTER_GREEN
+            if self._prevStage != stage and self._prevStage != EQUIPMENT_STAGES.COOLDOWN:
+                self._animationType |= ANIMATION_TYPES.GREEN_GLOW_HIDE
+            totalTime = self.__totalRechargingTime
+            self.__processReadyStateSounds(timeRemaining)
+            if self._prevStage == EQUIPMENT_STAGES.ACTIVE:
+                self.__playSoundOnce(self._STOPPED_BY_USER_SOUND_ID)
+        elif stage == EQUIPMENT_STAGES.DEPLOYING:
+            self._animationType = ANIMATION_TYPES.MOVE_ORANGE_BAR_UP | ANIMATION_TYPES.SHOW_COUNTER_ORANGE
+            totalTime = self.__totalDeployingTime
+        elif stage == EQUIPMENT_STAGES.COOLDOWN:
+            self._animationType = ANIMATION_TYPES.MOVE_ORANGE_BAR_UP | ANIMATION_TYPES.SHOW_COUNTER_ORANGE | ANIMATION_TYPES.FILL_PARTIALLY
+            totalTime = self.__totalCooldownTime
+            if self._prevStage == EQUIPMENT_STAGES.ACTIVE:
+                self.__playSoundOnce(self._EXAUSTED_SOUND_ID)
+        elif stage == EQUIPMENT_STAGES.READY and self.becomeReady:
+            self.__processReadyStateSounds(timeRemaining)
+        self._totalTime = totalTime
+
+    def canActivate(self, entityName=None, avatar=None):
+        result, error = False, None
+        if self._stage in (EQUIPMENT_STAGES.READY, EQUIPMENT_STAGES.PREPARING, EQUIPMENT_STAGES.ACTIVE):
+            result = True
+        elif self._stage == EQUIPMENT_STAGES.COOLDOWN:
+            error = InCooldownError(self._descriptor.userString)
+        elif self._stage == EQUIPMENT_STAGES.DEPLOYING:
+            error = NotReadyError(self._descriptor.userString)
+        return (result, error)
+
+    def getEntitiesIterator(self, avatar=None):
+        return []
+
+    @property
+    def becomeReady(self):
+        return super(_ReplayAfterburningItem, self).becomeReady
+
+    def _soundUpdate(self, prevQuantity, quantity):
+        pass
+
+    def _cleanReadyStageSounds(self):
+        self.__cleanFullReadySound()
+        self.__cleanAlmostReadySound()
+
+    def _playChargedSound(self):
+        EquipmentSound.playReady(self)
+        self.__fullyChargedSoundCbId = None
+        return
+
+    def _playAlmostChargedSound(self):
+        if self.__almostChargedSound is None:
+            self.__almostChargedSound = SoundGroups.g_instance.getSound2D(self._ALMOST_CHARGED_SOUND_ID)
+        else:
+            self.__almostChargedSound.stop()
+        self.__almostChargedSound.play()
+        self.__almostChargedSoundCbId = None
+        return
+
+    def __processReadyStateSounds(self, timeRemaining):
+        if timeRemaining > -1:
+            self.__cleanFullReadySound()
+            self.__fullyChargedSoundCbId = BigWorld.callback(timeRemaining, self._playChargedSound)
+            if timeRemaining >= self._FULL_CHARGE_DELAY_SOUND_TIME:
+                self.__cleanAlmostReadySound()
+                if self.__almostChargedSound is not None:
+                    self.__almostChargedSound.stop()
+                self.__almostChargedSoundCbId = BigWorld.callback(timeRemaining - self._FULL_CHARGE_DELAY_SOUND_TIME, self._playAlmostChargedSound)
+        elif self.becomeReady:
+            self.__cleanFullReadySound()
+            self._playChargedSound()
+        return
+
+    def __cleanAlmostReadySound(self):
+        if self.__almostChargedSoundCbId is not None:
+            BigWorld.cancelCallback(self.__almostChargedSoundCbId)
+            self.__almostChargedSoundCbId = None
+        return
+
+    def __cleanFullReadySound(self):
+        if self.__fullyChargedSoundCbId is not None:
+            BigWorld.cancelCallback(self.__fullyChargedSoundCbId)
+            self.__fullyChargedSoundCbId = None
+        return
+
+    def __playSoundOnce(self, sound):
+        SoundGroups.g_instance.getSound2D(sound)
+
+    def __createAndPlaySound(self, sound):
+        self.__playingSoundObj = SoundGroups.g_instance.getSound2D(sound)
+        self.__playingSoundObj.play()
+
+
+def _replayTriggerItemFactory(descriptor, quantity, stage, timeRemaining, totalTime, tags=None):
+    if descriptor.name.startswith('arcade_artillery'):
+        return _ReplayArtilleryItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+    if descriptor.name.startswith('arcade_bomber'):
+        return _ReplayBomberItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+    if descriptor.name.startswith('arcade_minefield'):
+        return _ReplayOrderItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
     if descriptor.name.startswith('artillery'):
-        return _ReplayArtilleryItem(descriptor, quantity, stage, timeRemaining, totalTime, tag)
+        return _ReplayArtilleryItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
     if descriptor.name.startswith('bomber'):
-        return _ReplayBomberItem(descriptor, quantity, stage, timeRemaining, totalTime, tag)
+        return _ReplayBomberItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
     if descriptor.name.startswith('recon'):
-        return _ReplayReconItem(descriptor, quantity, stage, timeRemaining, totalTime, tag)
-    return _ReplaySmokeItem(descriptor, quantity, stage, timeRemaining, totalTime, tag) if descriptor.name.startswith('smoke') else _ReplayItem(descriptor, quantity, stage, timeRemaining, totalTime, tag)
+        return _ReplayReconItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+    if descriptor.name.startswith('smoke'):
+        return _ReplaySmokeItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+    return _ReplayAfterburningItem(descriptor, quantity, stage, timeRemaining, totalTime, tags) if descriptor.name.endswith('afterburning') else _ReplayItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
 
 
-_REPLAY_EQUIPMENT_TAG_TO_ITEM = {'fuel': _ReplayItem,
- 'stimulator': _ReplayItem,
- 'trigger': _replayTriggerItemFactory,
- 'extinguisher': _ReplayItem,
- 'medkit': _ReplayMedKitItem,
- 'repairkit': _ReplayRepairKitItem}
+_REPLAY_EQUIPMENT_TAG_TO_ITEM = {('fuel',): _ReplayItem,
+ ('stimulator',): _ReplayItem,
+ ('trigger',): _replayTriggerItemFactory,
+ ('extinguisher',): _ReplayItem,
+ ('medkit',): _ReplayMedKitItem,
+ ('repairkit',): _ReplayRepairKitItem,
+ ('regenerationKit',): _ReplayItem,
+ ('medkit', 'repairkit'): _ReplayItem}
 
 class EquipmentsReplayPlayer(EquipmentsController):
     __slots__ = ('__callbackID', '__callbackTimeID', '__percentGetters', '__percents', '__timeGetters', '__times')
@@ -706,7 +1190,10 @@ class EquipmentsReplayPlayer(EquipmentsController):
         self.__percentGetters.pop(intCD, None)
         self.__times.pop(intCD, None)
         self.__timeGetters.pop(intCD, None)
-        if stage in (EQUIPMENT_STAGES.DEPLOYING, EQUIPMENT_STAGES.COOLDOWN, EQUIPMENT_STAGES.SHARED_COOLDOWN):
+        if stage in (EQUIPMENT_STAGES.DEPLOYING,
+         EQUIPMENT_STAGES.COOLDOWN,
+         EQUIPMENT_STAGES.SHARED_COOLDOWN,
+         EQUIPMENT_STAGES.ACTIVE) or stage == EQUIPMENT_STAGES.READY and self.getEquipment(intCD).getTimeRemaining():
             equipment = self._equipments[intCD]
             self.__percentGetters[intCD] = equipment.getCooldownPercents
             if self.__callbackID is not None:
@@ -723,12 +1210,11 @@ class EquipmentsReplayPlayer(EquipmentsController):
 
     @classmethod
     def createItem(cls, descriptor, quantity, stage, timeRemaining, totalTime):
-        tag = _getSupportedTag(descriptor)
-        if tag:
-            clazz = _REPLAY_EQUIPMENT_TAG_TO_ITEM[tag]
-            item = clazz(descriptor, quantity, stage, timeRemaining, totalTime, tag)
+        tags, clazz = _getInitialTagsAndClass(descriptor, _REPLAY_EQUIPMENT_TAG_TO_ITEM)
+        if tags:
+            item = clazz(descriptor, quantity, stage, timeRemaining, totalTime, tags)
         else:
-            item = _ReplayItem(descriptor, quantity, stage, timeRemaining, totalTime)
+            item = _ReplayItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
         return item
 
     def getActivationCode(self, intCD, entityName=None, avatar=None):

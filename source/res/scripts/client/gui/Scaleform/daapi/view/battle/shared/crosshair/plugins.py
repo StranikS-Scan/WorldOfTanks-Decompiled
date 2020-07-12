@@ -759,7 +759,7 @@ class GunMarkersInvalidatePlugin(CrosshairPlugin):
 
 
 class ShotResultIndicatorPlugin(CrosshairPlugin):
-    __slots__ = ('__isEnabled', '__playerTeam', '__cache', '__colors', '__mapping', '__shotResultResolver')
+    __slots__ = ('__isEnabled', '__playerTeam', '__cache', '__colors', '__mapping', '__shotResultResolver', '__piercingMultiplier')
 
     def __init__(self, parentObj):
         super(ShotResultIndicatorPlugin, self).__init__(parentObj)
@@ -769,6 +769,7 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
         self.__cache = defaultdict(str)
         self.__colors = None
         self.__shotResultResolver = gun_marker_ctrl.createShotResultResolver()
+        self.__piercingMultiplier = 1
         return
 
     def start(self):
@@ -777,6 +778,10 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
             raise SoftException('Crosshair controller is not found')
         ctrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
         ctrl.onGunMarkerStateChanged += self.__onGunMarkerStateChanged
+        ctrl = self.sessionProvider.shared.feedback
+        if ctrl is None:
+            raise SoftException('Crosshair controller is not found')
+        ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
         g_playerEvents.onTeamChanged += self.__onTeamChanged
         self.__playerTeam = self.sessionProvider.getArenaDP().getNumberOfTeam()
         self.__setColors(self.settingsCore.getSetting(GRAPHICS.COLOR_BLIND))
@@ -790,6 +795,9 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
         if ctrl is not None:
             ctrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
             ctrl.onGunMarkerStateChanged -= self.__onGunMarkerStateChanged
+        ctrl = self.sessionProvider.shared.feedback
+        if ctrl is not None:
+            ctrl.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
         g_playerEvents.onTeamChanged -= self.__onTeamChanged
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.__colors = None
@@ -810,7 +818,7 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
                 self.__mapping[_SETTINGS_KEY_TO_VIEW_ID[key]] = value
 
     def __updateColor(self, markerType, position, collision, direction):
-        result = self.__shotResultResolver.getShotResult(position, collision, direction, excludeTeam=self.__playerTeam)
+        result = self.__shotResultResolver.getShotResult(position, collision, direction, excludeTeam=self.__playerTeam, piercingMultiplier=self.__piercingMultiplier)
         if result in self.__colors:
             color = self.__colors[result]
             if self.__cache[markerType] != result and self._parentObj.setGunMarkerColor(markerType, color):
@@ -849,6 +857,10 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
     def __onTeamChanged(self, teamID):
         self.__playerTeam = teamID
 
+    def __onVehicleFeedbackReceived(self, eventID, _, value):
+        if eventID == FEEDBACK_EVENT_ID.VEHICLE_ATTRS_CHANGED:
+            self.__piercingMultiplier = value.get('gunPiercing', 1)
+
 
 class SiegeModePlugin(CrosshairPlugin):
     __slots__ = ('__siegeState',)
@@ -881,7 +893,7 @@ class SiegeModePlugin(CrosshairPlugin):
         if ctrl.isInPostmortem:
             return
         else:
-            if vTypeDesc.hasSiegeMode and not vTypeDesc.isWheeledVehicle and not vTypeDesc.hasAutoSiegeMode and not vTypeDesc.isDualgunVehicle:
+            if vTypeDesc.hasSiegeMode and not vTypeDesc.isWheeledVehicle and not vTypeDesc.hasAutoSiegeMode and not vTypeDesc.type.isDualgunVehicleType:
                 value = ctrl.getStateValue(VEHICLE_VIEW_STATE.SIEGE_MODE)
                 if value is not None:
                     self.__onVehicleStateUpdated(VEHICLE_VIEW_STATE.SIEGE_MODE, value)
@@ -906,7 +918,7 @@ class SiegeModePlugin(CrosshairPlugin):
         vehicle = vStateCtrl.getControllingVehicle()
         if vehicle is not None:
             vTypeDescr = vehicle.typeDescriptor
-            if vTypeDescr.isWheeledVehicle or vTypeDescr.hasAutoSiegeMode or vTypeDescr.isDualgunVehicle:
+            if vTypeDescr.isWheeledVehicle or vTypeDescr.hasAutoSiegeMode or vTypeDescr.type.isDualgunVehicleType:
                 self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.DISABLED)
                 return
         else:
@@ -1159,7 +1171,6 @@ class DualGunPlugin(CrosshairPlugin):
             crosshairCtrl.onChargeMarkerStateUpdated += self.__dualGunMarkerStateUpdated
         add = g_eventBus.addListener
         add(GameEvent.SNIPER_CAMERA_TRANSITION, self.__onSniperCameraTransition, scope=EVENT_BUS_SCOPE.BATTLE)
-        self.__dualGunMarkerStateUpdated(self.__chargeMarkerState)
         return
 
     def stop(self):
@@ -1175,12 +1186,14 @@ class DualGunPlugin(CrosshairPlugin):
         return
 
     def __onVehicleControlling(self, vehicle):
-        if vehicle is None:
+        if vehicle is None or not vehicle.isAlive():
             return
         else:
             vTypeDesc = vehicle.typeDescriptor
-            if vehicle.isAlive() and vTypeDesc.isDualgunVehicle:
+            if vTypeDesc.type.isDualgunVehicleType:
                 self._parentObj.as_setNetSeparatorVisibleS(False)
+                if vTypeDesc.isDualgunVehicle:
+                    self.__dualGunMarkerStateUpdated(self.__chargeMarkerState)
             return
 
     def __onVehicleStateUpdated(self, stateID, value):

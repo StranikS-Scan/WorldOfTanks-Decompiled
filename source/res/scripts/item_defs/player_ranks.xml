@@ -1,30 +1,40 @@
 <player_ranks.xml>
+  <BattleRoyale>
+    <initialRank>	10	</initialRank>
+    <BattleRoyaleDeathOrder></BattleRoyaleDeathOrder>
+    <bonus></bonus>
+  </BattleRoyale>
+  <BattleRoyaleIndependent>
+    <initialRank>	20	</initialRank>
+    <BattleRoyaleDeathOrderIndependent></BattleRoyaleDeathOrderIndependent>
+    <bonus></bonus>
+  </BattleRoyaleIndependent>
   <DEFAULT>
-    <initialRank>	private	</initialRank>
+    <initialRank>	1	</initialRank>
     <BasicThreshold>
-      <sergeant>
+      <_2>
         <threshold>	150	</threshold>
-      </sergeant>
-      <lieutenant>
+      </_2>
+      <_3>
         <threshold>	350	</threshold>
-      </lieutenant>
-      <captain>
+      </_3>
+      <_4>
         <threshold>	550	</threshold>
-      </captain>
-      <major>
+      </_4>
+      <_5>
         <threshold>	775	</threshold>
-      </major>
-      <general>
+      </_5>
+      <_6>
         <threshold>	1000	</threshold>
-      </general>
+      </_6>
     </BasicThreshold>
     <bonus>
-      <private>	0	</private>
-      <sergeant>	10	</sergeant>
-      <lieutenant>	25	</lieutenant>
-      <captain>	50	</captain>
-      <major>	100	</major>
-      <general>	200	</general>
+      <_1>	0	</_1>
+      <_2>	10	</_2>
+      <_3>	25	</_3>
+      <_4>	50	</_4>
+      <_5>	100	</_5>
+      <_6>	200	</_6>
     </bonus>
   </DEFAULT>
 </player_ranks.xml>

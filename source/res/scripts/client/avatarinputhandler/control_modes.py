@@ -108,7 +108,7 @@ class IControlMode(object):
         pass
 
     def onMinimapClicked(self, worldPos):
-        pass
+        return False
 
     def onSwitchViewpoint(self, vehicleID, cameraPos):
         pass
@@ -514,8 +514,8 @@ class ArcadeControlMode(_GunControlMode):
         elif BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and isDown and key == Keys.KEY_F3 and self.__videoControlModeAvailable:
             self._aih.onControlModeChanged(CTRL_MODE_NAME.VIDEO, prevModeName=CTRL_MODE_NAME.ARCADE, camMatrix=self._cam.camera.matrix)
             return True
-        isWheeledTech = self._aih.isWheeledTech
-        if isWheeledTech and cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key):
+        isMagneticAimEnabled = self._aih.isMagneticAimEnabled
+        if isMagneticAimEnabled and cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key):
             if isDown:
                 self.__lockKeyPressedTime = time.time()
             else:
@@ -531,7 +531,7 @@ class ArcadeControlMode(_GunControlMode):
             autoAimProcessor(target=BigWorld.target())
             BigWorld.player().autoAim(BigWorld.target())
             self.__simpleAimTarget = BigWorld.target()
-        if isWheeledTech and isFiredLockTarget and not isDown:
+        if isMagneticAimEnabled and isFiredLockTarget and not isDown:
             if self.__lockKeyPressedTime is not None and self.__lockKeyUpTime is not None:
                 if self.__lockKeyUpTime - self.__lockKeyPressedTime <= MagneticAimSettings.KEY_DELAY_SEC:
                     self.__magneticAimTarget = magneticAimProcessor(self.__simpleAimTarget, self.__magneticAimTarget)
@@ -580,8 +580,10 @@ class ArcadeControlMode(_GunControlMode):
         return True
 
     def onMinimapClicked(self, worldPos):
-        if self._aih.isSPG:
-            self.__activateAlternateMode(worldPos)
+        if not self._aih.isSPG:
+            return False
+        self.__activateAlternateMode(worldPos)
+        return True
 
     def onChangeControlModeByScroll(self):
         if not _isEnabledChangeModeByScroll(self._cam, self._aih):
@@ -743,6 +745,7 @@ class _TrajectoryControlMode(_GunControlMode):
 
     def onMinimapClicked(self, worldPos):
         self._cam.teleport(worldPos)
+        return True
 
     def resetGunMarkers(self):
         self._gunMarker.reset()
@@ -1371,6 +1374,8 @@ class PostMortemControlMode(IControlMode):
 
     def __onVehicleLeaveWorld(self, vehicle):
         if vehicle.id == self.__curVehicleID:
+            if vehicle.isUpgrading:
+                return
             vehicleID = BigWorld.player().playerVehicleID
             vehicle = BigWorld.entities.get(vehicleID)
             if vehicle is not None and 'observer' in vehicle.typeDescriptor.type.tags:

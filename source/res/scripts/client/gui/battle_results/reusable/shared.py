@@ -679,13 +679,13 @@ class VehicleDetailedInfo(_VehicleInfo):
     def _setSharedRecords(cls, info, records):
         info._deathReason = max(info._deathReason, records['deathReason'])
         info._spotted = records['spotted']
-        info._piercings = records['piercings']
+        info._piercings = records['piercingEnemyHits']
         info._damageDealt = records['damageDealt']
         info._damageBlockedByArmor = records['damageBlockedByArmor']
         info._noDamageDirectHitsReceived = records['noDamageDirectHitsReceived']
         info._damageAssistedTrack = records['damageAssistedTrack']
         info._damageAssistedRadio = records['damageAssistedRadio']
-        info._directHits = records['directHits']
+        info._directHits = records['directEnemyHits']
         info._explosionHits = records['explosionHits']
         info._damageAssistedStun = records['damageAssistedStun']
         info._stunNum = records['stunNum']

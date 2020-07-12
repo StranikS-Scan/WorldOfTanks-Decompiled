@@ -92,7 +92,7 @@ class AvatarObserver(CallbackDelayer):
         CallbackDelayer.destroy(self)
 
     def handleKey(self, isDown, key, mods):
-        pass
+        return False
 
     def onEnterWorld(self):
 
@@ -115,23 +115,27 @@ class AvatarObserver(CallbackDelayer):
         if self.vehicle is not None:
             typeofveh = 'observed' if self.__observedVehicleID == self.vehicle.id else 'players'
             LOG_DEBUG_DEV('Vehicle ID is ' + str(self.vehicle.id) + ' and is ' + typeofveh)
-        if self.isObserver() and self.vehicle is not None and self.__observedVehicleID != self.vehicle.id:
+        isInPostmortem = self.guiSessionProvider.shared.vehicleState.isInPostmortem
+        isObserving = self.isObserver() or isInPostmortem
+        if isObserving and self.vehicle is not None and self.__observedVehicleID != self.vehicle.id:
             self.__observedVehicleID = self.vehicle.id
-            self.guiSessionProvider.getArenaDP().switchCurrentTeam(self.vehicle.publicInfo['team'])
+            if not isInPostmortem:
+                self.guiSessionProvider.getArenaDP().switchCurrentTeam(self.vehicle.publicInfo['team'])
             extraData = self.observedVehicleData[self.__observedVehicleID]
             extraData.gunSettings = self.vehicle.typeDescriptor.gun
             self.inputHandler.setObservedVehicle(self.__observedVehicleID)
             if self.gunRotator is not None:
                 self.gunRotator.start()
             self.updateObservedVehicleData()
-            if hasattr(self.vehicle.filter, 'enableStabilisedMatrix'):
-                self.vehicle.filter.enableStabilisedMatrix(True)
-            BigWorld.target.exclude = self.vehicle
-            for v in BigWorld.entities.values():
-                if isinstance(v, Vehicle.Vehicle) and v.appearance is not None:
-                    v.appearance.highlighter.setVehicleOwnership()
-                    self.guiSessionProvider.stopVehicleVisual(v.id, False)
-                    self.guiSessionProvider.startVehicleVisual(v, True)
+            if not isInPostmortem:
+                if hasattr(self.vehicle.filter, 'enableStabilisedMatrix'):
+                    self.vehicle.filter.enableStabilisedMatrix(True)
+                BigWorld.target.exclude = self.vehicle
+                for v in BigWorld.entities.values():
+                    if isinstance(v, Vehicle.Vehicle) and v.appearance is not None:
+                        v.appearance.highlighter.setVehicleOwnership()
+                        self.guiSessionProvider.stopVehicleVisual(v.id, False)
+                        self.guiSessionProvider.startVehicleVisual(v, True)
 
         return
 
@@ -142,10 +146,6 @@ class AvatarObserver(CallbackDelayer):
                 turretYaw, gunPitch = self.vehicle.getAimParams()
                 self.gunRotator.forceGunParams(turretYaw, gunPitch, extraData.dispAngle)
             self.guiSessionProvider.updateObservedVehicleData(self.__observedVehicleID, extraData)
-            ammoCtrl = self.guiSessionProvider.shared.ammo
-            shotIdx = ammoCtrl.getGunSettings().getShotIndex(extraData.currentShellCD)
-            if shotIdx > -1:
-                self.vehicle.typeDescriptor.activeGunShotIndex = shotIdx
         return
 
     def vehicle_onEnterWorld(self, vehicle):
@@ -193,6 +193,16 @@ class AvatarObserver(CallbackDelayer):
                 if isinstance(vehicle.filter, BigWorld.WGVehicleFilter):
                     return vehicle.filter.stabilisedMatrix
                 return vehicle.matrix
+        return
+
+    def getObservedVehicleTurretMatrix(self):
+        player = BigWorld.player()
+        if player.isObserver():
+            vehicle = player.getVehicleAttached()
+            if vehicle is not None:
+                if isinstance(vehicle.filter, BigWorld.WGVehicleFilter):
+                    return vehicle.filter.bodyMatrix
+                return vehicle.appearance.turretMatrix
         return
 
     def getVehicleAttached(self):

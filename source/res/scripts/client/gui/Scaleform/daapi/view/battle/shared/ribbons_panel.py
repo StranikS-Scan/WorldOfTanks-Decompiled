@@ -27,7 +27,7 @@ _ADDITIONAL_USER_SETTINGS = (BATTLE_EVENTS.VEHICLE_INFO,
  BATTLE_EVENTS.SHOW_IN_BATTLE,
  GRAPHICS.RENDER_PIPELINE,
  GRAPHICS.COLOR_BLIND)
-_BATTLE_EVENTS_SETTINGS_TO_BATTLE_EFFICIENCY_TYPES = {BATTLE_EVENTS.ENEMY_HP_DAMAGE: (_BET.DAMAGE,),
+_BATTLE_EVENTS_SETTINGS_TO_BATTLE_EFFICIENCY_TYPES = {BATTLE_EVENTS.ENEMY_HP_DAMAGE: (_BET.DAMAGE, _BET.SPAWNED_BOT_DMG, _BET.DAMAGE_BY_MINEFIELD),
  BATTLE_EVENTS.BLOCKED_DAMAGE: (_BET.ARMOR,),
  BATTLE_EVENTS.ENEMY_RAM_ATTACK: (_BET.RAM,),
  BATTLE_EVENTS.ENEMY_BURNING: (_BET.BURN,),
@@ -42,7 +42,11 @@ _BATTLE_EVENTS_SETTINGS_TO_BATTLE_EFFICIENCY_TYPES = {BATTLE_EVENTS.ENEMY_HP_DAM
  BATTLE_EVENTS.RECEIVED_DAMAGE: (_BET.RECEIVED_DAMAGE,
                                  _BET.RECEIVED_BURN,
                                  _BET.RECEIVED_RAM,
-                                 _BET.RECEIVED_WORLD_COLLISION),
+                                 _BET.RECEIVED_WORLD_COLLISION,
+                                 _BET.BERSERKER,
+                                 _BET.RECEIVED_DMG_BY_SPAWNED_BOT,
+                                 _BET.RECEIVED_BY_MINEFIELD,
+                                 _BET.RECEIVED_BY_SMOKE),
  BATTLE_EVENTS.RECEIVED_CRITS: (_BET.RECEIVED_CRITS,),
  BATTLE_EVENTS.ENEMIES_STUN: (_BET.STUN,),
  BATTLE_EVENTS.ENEMY_ASSIST_STUN: (_BET.ASSIST_STUN,)}
@@ -157,7 +161,14 @@ _RIBBONS_FMTS = {_BET.CAPTURE: _baseRibbonFormatter,
  _BET.DESTRUCTIBLES_DEFENDED: _epicEventRibbonFormatter,
  _BET.DEFENDER_BONUS: _epicEventRibbonFormatter,
  _BET.BASE_CAPTURE_BLOCKED: _baseRibbonFormatter,
- _BET.ASSIST_BY_ABILITY: _singleVehRibbonFormatter}
+ _BET.ASSIST_BY_ABILITY: _singleVehRibbonFormatter,
+ _BET.DEATH_ZONE: _singleVehRibbonFormatter,
+ _BET.BERSERKER: _singleVehRibbonFormatter,
+ _BET.SPAWNED_BOT_DMG: _singleVehRibbonFormatter,
+ _BET.RECEIVED_DMG_BY_SPAWNED_BOT: _singleVehRibbonFormatter,
+ _BET.DAMAGE_BY_MINEFIELD: _singleVehRibbonFormatter,
+ _BET.RECEIVED_BY_MINEFIELD: _singleVehRibbonFormatter,
+ _BET.RECEIVED_BY_SMOKE: _singleVehRibbonFormatter}
 
 class BattleRibbonsPanel(RibbonsPanelMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -316,4 +327,11 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
          [_BET.DESTRUCTIBLES_DEFENDED, backport.text(R.strings.ingame_gui.efficiencyRibbons.destructiblesDefended())],
          [_BET.DEFENDER_BONUS, backport.text(R.strings.ingame_gui.efficiencyRibbons.defenderBonus())],
          [_BET.BASE_CAPTURE_BLOCKED, backport.text(R.strings.ingame_gui.efficiencyRibbons.defence())],
-         [_BET.ASSIST_BY_ABILITY, backport.text(R.strings.ingame_gui.efficiencyRibbons.assistByAbility())]], self.__isExtendedAnim, self.__enabled, self.__isWithRibbonName, self.__isWithVehName, [backport.text(R.strings.ingame_gui.efficiencyRibbons.bonusRibbon())])
+         [_BET.ASSIST_BY_ABILITY, backport.text(R.strings.ingame_gui.efficiencyRibbons.assistByAbility())],
+         [_BET.DEATH_ZONE, backport.text(R.strings.ingame_gui.efficiencyRibbons.deathZone())],
+         [_BET.BERSERKER, backport.text(R.strings.ingame_gui.efficiencyRibbons.berserker())],
+         [_BET.SPAWNED_BOT_DMG, backport.text(R.strings.ingame_gui.efficiencyRibbons.spawnedBotDmg())],
+         [_BET.RECEIVED_DMG_BY_SPAWNED_BOT, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedDmgBySpawnedBot())],
+         [_BET.DAMAGE_BY_MINEFIELD, backport.text(R.strings.ingame_gui.efficiencyRibbons.damageByMinefield())],
+         [_BET.RECEIVED_BY_MINEFIELD, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedByMinefield())],
+         [_BET.RECEIVED_BY_SMOKE, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedBySmoke())]], self.__isExtendedAnim, self.__enabled, self.__isWithRibbonName, self.__isWithVehName, [backport.text(R.strings.ingame_gui.efficiencyRibbons.bonusRibbon())])

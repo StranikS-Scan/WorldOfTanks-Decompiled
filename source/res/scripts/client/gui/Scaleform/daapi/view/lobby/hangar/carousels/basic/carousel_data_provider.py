@@ -12,8 +12,6 @@ from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
-from gui.impl import backport
-from gui.impl.gen import R
 
 class _SUPPLY_ITEMS(object):
     BUY_TANK = 0
@@ -26,7 +24,7 @@ class HangarCarouselDataProvider(CarouselDataProvider):
 
     def __init__(self, carouselFilter, itemsCache, currentVehicle):
         super(HangarCarouselDataProvider, self).__init__(carouselFilter, itemsCache, currentVehicle)
-        self._baseCriteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.BOB_BATTLE
+        self._setBaseCriteria()
         self._supplyItems = []
         self._emptySlotsCount = 0
         self._restorableVehiclesCount = 0
@@ -48,6 +46,9 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         super(HangarCarouselDataProvider, self).clear()
         self._supplyItems = []
 
+    def _setBaseCriteria(self):
+        self._baseCriteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+
     def _buildRentPromitionVehicleItems(self):
         rentPromotionCriteria = REQ_CRITERIA.VEHICLE.RENT_PROMOTION | ~self._baseCriteria
         self._addVehicleItemsByCriteria(rentPromotionCriteria)
@@ -56,18 +57,6 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         super(HangarCarouselDataProvider, self)._buildVehicleItems()
         self._buildRentPromitionVehicleItems()
         self._buildSupplyItems()
-
-    def _buildVehicle(self, vehicle):
-        vo = super(HangarCarouselDataProvider, self)._buildVehicle(vehicle)
-        vo['isEvent'] = vehicle.isEvent
-        if vehicle.isEvent and vehicle.name == 'germany:G62_Roket_Sturmtiger':
-            vo['visibleStats'] = False
-            vo['icon'] = backport.image(R.images.gui.maps.icons.tenYearsCountdown.vehicle.g62_rocket_sturmtiger_big())
-            vo['iconSmall'] = backport.image(R.images.gui.maps.icons.tenYearsCountdown.vehicle.g62_rocket_sturmtiger_small())
-        return vo
-
-    def _getVehicleStats(self, vehicle):
-        return {'visibleStats': False} if vehicle.isEvent and vehicle.name == 'germany:G62_Roket_Sturmtiger' else super(HangarCarouselDataProvider, self)._getVehicleStats(vehicle)
 
     def _getAdditionalItemsIndexes(self):
         supplyIndices = self.__getSupplyIndices()

@@ -1,13 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/reusable/common.py
 from collections import defaultdict
+import logging
+import typing
 import ArenaType
 from gui.battle_results.reusable.players import PlayerInfo
 from constants import ARENA_GUI_TYPE, ARENA_BONUS_TYPE, FINISH_REASON
-from debug_utils import LOG_ERROR
 from gui.battle_control import arena_visitor
 from gui.battle_results.reusable import shared
 from helpers.bots import preprocessBotName
+_logger = logging.getLogger(__name__)
 
 class CommonInfo(shared.UnpackedInfo):
     __slots__ = ('__arenaTypeID', '__winnerTeam', '__finishReason', '__arenaVisitor', '__bots', '__extCommon')
@@ -20,12 +22,16 @@ class CommonInfo(shared.UnpackedInfo):
         self.__bots = defaultdict()
         self.__extCommon = kwargs.get('extCommon', {})
         if bots is not None:
+            allActiveVehicles = kwargs.get('vehicles', {})
             for info in bots.iteritems():
-                if len(info) > 1:
-                    botPlayerInfo = PlayerInfo(team=info[1][0], realName=preprocessBotName(info[1][1]))
-                    self.__bots[info[0]] = botPlayerInfo
-                LOG_ERROR('Bot information can not be unpacked', info)
-                break
+                if len(info) <= 1:
+                    _logger.error('Bot information can not be unpacked: not enough data')
+                    break
+                vehicleID = info[0]
+                if vehicleID in allActiveVehicles:
+                    team, name = info[1][:2]
+                    botPlayerInfo = PlayerInfo(team=team, realName=preprocessBotName(name))
+                    self.__bots[vehicleID] = botPlayerInfo
 
         if self.__arenaTypeID and self.__arenaTypeID in ArenaType.g_cache:
             arenaType = ArenaType.g_cache[self.__arenaTypeID]

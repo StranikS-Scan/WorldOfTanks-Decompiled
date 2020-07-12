@@ -14,6 +14,7 @@ from gui.shared.utils.decorators import process as wrappedProcess
 from helpers import dependency
 from shared_utils import first, nextTick
 from skeletons.gui.customization import ICustomizationService
+from skeletons.gui.game_control import ISoundEventChecker
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from gui.hangar_vehicle_appearance import AnchorParams
@@ -30,6 +31,7 @@ class CustomizationMode(object):
     _tabs = ()
     _itemsCache = dependency.descriptor(IItemsCache)
     _service = dependency.descriptor(ICustomizationService)
+    _soundEventChacker = dependency.descriptor(ISoundEventChecker)
 
     def __init__(self, ctx):
         self._ctx = ctx

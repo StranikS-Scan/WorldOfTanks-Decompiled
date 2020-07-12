@@ -20,6 +20,7 @@
     <_130mm_R_14_wz_56>	22	</_130mm_R_14_wz_56>
     <_152mm_J_2>	23	</_152mm_J_2>
     <_85mm_ZiS_S-53_B>	24	</_85mm_ZiS_S-53_B>
+    <_105mm_wz_52>	25	</_105mm_wz_52>
   </ids>
   <shared>
     <_20mm_n_k_m_20_A>
@@ -890,6 +891,64 @@
         </_105mm_tung_sgr_m_34>
       </shots>
     </_105mm_Bofors_wz_34>
+    <_105mm_wz_52>
+      <userString>	#poland_vehicles:_105mm_wz_52	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	105000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.44	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.56	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 15.0 1.0 15.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	33	</rotationSpeed>
+      <reloadTime>	8	</reloadTime>
+      <maxAmmo>	34	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	2250	</weight>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_slpgr_m_52>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	980	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	208 192	</piercingPower>
+        </_105mm_slpgr_m_52>
+        <_105mm_slpprj_m_59>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1569	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	252 222	</piercingPower>
+        </_105mm_slpprj_m_59>
+        <_105mm_sgr_m_50_B>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	822	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	53 53	</piercingPower>
+        </_105mm_sgr_m_50_B>
+      </shots>
+    </_105mm_wz_52>
     <_122_mm_wz_43_50>
       <userString>	#poland_vehicles:_122_mm_wz_43_50	</userString>
       <tags></tags>

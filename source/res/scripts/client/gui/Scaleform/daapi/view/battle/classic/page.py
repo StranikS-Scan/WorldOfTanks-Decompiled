@@ -30,6 +30,7 @@ class _ClassicComponentsConfig(ComponentsConfig):
            DynamicAliases.DRONE_MUSIC_PLAYER,
            DynamicAliases.PERIOD_MUSIC_LISTENER)),
          (BATTLE_CTRL_ID.TEAM_BASES, (BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, DynamicAliases.DRONE_MUSIC_PLAYER)),
+         (BATTLE_CTRL_ID.CALLOUT, (BATTLE_VIEW_ALIASES.CALLOUT_PANEL,)),
          (BATTLE_CTRL_ID.DEBUG, (BATTLE_VIEW_ALIASES.DEBUG_PANEL,)),
          (BATTLE_CTRL_ID.BATTLE_FIELD_CTRL, (DynamicAliases.DRONE_MUSIC_PLAYER,)),
          (BATTLE_CTRL_ID.ARENA_LOAD_PROGRESS, (DynamicAliases.DRONE_MUSIC_PLAYER,)),
@@ -51,24 +52,25 @@ class ClassicPage(SharedPage):
     def __del__(self):
         LOG_DEBUG('ClassicPage is deleted')
 
-    def _toggleRadialMenu(self, isShown):
+    def _toggleRadialMenu(self, isShown, allowAction=True):
         manager = self.app.containerManager
         if not manager.isContainerShown(ViewTypes.DEFAULT):
             return
         elif manager.isModalViewsIsExists():
             return
         else:
-            radialMenu = self.getComponent(BATTLE_VIEW_ALIASES.RADIAL_MENU)
+            radialMenuLinkage = BATTLE_VIEW_ALIASES.RADIAL_MENU
+            radialMenu = self.getComponent(radialMenuLinkage)
             if radialMenu is None:
                 return
             elif self._fullStatsAlias and self.as_isComponentVisibleS(self._fullStatsAlias):
                 return
             if isShown:
                 radialMenu.show()
-                self.app.enterGuiControlMode(BATTLE_VIEW_ALIASES.RADIAL_MENU, cursorVisible=False, enableAiming=False)
+                self.app.enterGuiControlMode(radialMenuLinkage, cursorVisible=False, enableAiming=False)
             else:
-                self.app.leaveGuiControlMode(BATTLE_VIEW_ALIASES.RADIAL_MENU)
-                radialMenu.hide()
+                self.app.leaveGuiControlMode(radialMenuLinkage)
+                radialMenu.hide(allowAction)
             return
 
     def _toggleFullStats(self, isShown, permanent=None, tabIndex=None):
@@ -128,9 +130,28 @@ class ClassicPage(SharedPage):
         elif self.as_isComponentVisibleS(alias):
             self._setComponentsVisibility(hidden={alias})
 
+    def _processCallout(self, needShow):
+        alias = BATTLE_VIEW_ALIASES.CALLOUT_PANEL
+        if needShow:
+            if self._isBattleLoading:
+                self._blToggling.add(alias)
+            elif self._fsToggling:
+                self._fsToggling.add(alias)
+            elif not self.as_isComponentVisibleS(alias):
+                self._setComponentsVisibility(visible={alias})
+        elif self._isBattleLoading:
+            self._blToggling.discard(alias)
+        elif self._fsToggling:
+            self._fsToggling.discard(alias)
+        elif self.as_isComponentVisibleS(alias):
+            self._setComponentsVisibility(hidden={alias})
+
     def _handleRadialMenuCmd(self, event):
-        isDown = event.ctx['isDown']
-        self._toggleRadialMenu(isDown)
+        self._toggleRadialMenu(isShown=event.ctx['isDown'])
+
+    def _handleHelpEvent(self, event):
+        if self.as_isComponentVisibleS(BATTLE_VIEW_ALIASES.RADIAL_MENU):
+            self._toggleRadialMenu(False, False)
 
     def _handleToggleFullStats(self, event):
         self._toggleFullStats(event.ctx['isDown'], tabIndex=0)
@@ -158,6 +179,8 @@ class ClassicPage(SharedPage):
         super(ClassicPage, self)._switchToPostmortem()
         if self.as_isComponentVisibleS(BATTLE_VIEW_ALIASES.RADIAL_MENU):
             self._toggleRadialMenu(False)
+        if self.as_isComponentVisibleS(BATTLE_VIEW_ALIASES.CALLOUT_PANEL):
+            self._processCallout(needShow=False)
 
     def _changeCtrlMode(self, ctrlMode):
 

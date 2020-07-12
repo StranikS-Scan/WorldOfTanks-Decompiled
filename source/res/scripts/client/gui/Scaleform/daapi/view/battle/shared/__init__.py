@@ -25,13 +25,15 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.shared import ingame_help
     from gui.Scaleform.daapi.view.battle.shared import ingame_menu
     from gui.Scaleform.daapi.view.battle.shared import messages
-    from gui.Scaleform.daapi.view.battle.shared import radial_menu
-    from gui.Scaleform.daapi.view.battle.shared import battle_ticker
+    from gui.Scaleform.daapi.view.battle.event.component_override import EventComponentOverride
+    from gui.Scaleform.daapi.view.battle.shared.radial_menu import RadialMenu
+    from gui.Scaleform.daapi.view.battle.event.radial_menu import EventRadialMenu
     from gui.Scaleform.daapi.view.dialogs import deserter_dialog
     from gui.Scaleform.daapi.view.battle.shared import postmortem_panel
     from gui.Scaleform.daapi.view.battle.shared import damage_log_panel
     from gui.Scaleform.daapi.view.battle.shared import battle_loading_minimap
     from gui.Scaleform.daapi.view.battle.shared.vehicles import dualgun_component
+    from gui.Scaleform.daapi.view.battle.shared import callout_panel
     return (ViewSettings(VIEW_ALIAS.INGAME_MENU, ingame_menu.IngameMenu, 'ingameMenu.swf', ViewTypes.TOP_WINDOW, None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canClose=False, canDrag=False),
      ViewSettings(VIEW_ALIAS.INGAME_DESERTER, deserter_dialog.IngameDeserterDialog, 'deserterDialog.swf', ViewTypes.TOP_WINDOW, None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True, canDrag=False),
      ViewSettings(BATTLE_VIEW_ALIASES.BATTLE_DAMAGE_LOG_PANEL, damage_log_panel.DamageLogPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
@@ -43,14 +45,14 @@ def getViewSettings():
      ConditionalViewSettings(BATTLE_VIEW_ALIASES.VEHICLE_MESSAGES, BootcampComponentOverride(messages.VehicleMessages, BCVehicleMessages), None, ViewTypes.COMPONENT, None, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.VEHICLE_ERROR_MESSAGES, messages.VehicleErrorMessages, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.PLAYER_MESSAGES, messages.PlayerMessages, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.RADIAL_MENU, radial_menu.RadialMenu, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ConditionalViewSettings(BATTLE_VIEW_ALIASES.RADIAL_MENU, EventComponentOverride(RadialMenu, EventRadialMenu), None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.DAMAGE_INFO_PANEL, damage_info_panel.DamageInfoPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.SIXTH_SENSE, indicators.SixthSenseIndicator, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.TICKER, battle_ticker.BattleTicker, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL, postmortem_panel.PostmortemPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.MINIMAP_ON_BATTLE_LOADING, battle_loading_minimap.BattleLoadingMinimapComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR, indicators.SiegeModeIndicator, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL, dualgun_component.DualGunComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
+     ViewSettings(BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL, dualgun_component.DualGunComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(BATTLE_VIEW_ALIASES.CALLOUT_PANEL, callout_panel.CalloutPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():
@@ -87,9 +89,15 @@ class BattlePackageBusinessHandler(PackageBusinessHandler):
         window = self.findViewByAlias(ViewTypes.WINDOW, VIEW_ALIAS.INGAME_DETAILS_HELP)
         if window is not None:
             window.destroy()
-        elif self._app is None or not self._app.isModalViewShown():
+        elif self._app is None or not (self._app.isModalViewShown() or self.__isFullStatsShown(event.ctx)):
             self.loadViewWithDefName(VIEW_ALIAS.INGAME_DETAILS_HELP, None, event.ctx)
         return
+
+    def __isFullStatsShown(self, ctx):
+        if not ctx.get('battleRoyale', False):
+            return False
+        battlePage = self.findViewByAlias(ViewTypes.DEFAULT, VIEW_ALIAS.BATTLE_ROYALE_PAGE)
+        return battlePage.isFullStatsShown()
 
 
 class BattleDialogHandler(PackageBusinessHandler):

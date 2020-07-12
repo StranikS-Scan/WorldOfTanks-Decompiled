@@ -425,7 +425,7 @@ class HangarContext(ToolTipContext):
             value.buyPrice = not item.isInInventory
         elif item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER:
             value.buyPrice = True
-        else:
+        elif self._vehicle is not None:
             value.buyPrice = not item.isInstalled(self._vehicle, self._slotIdx)
         value.xp = True
         value.dailyXP = True

@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/1.9.1.2</Path>
-    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.9.1.2</Path>
+    <Path cacheSubdirs="true">./res_mods/1.10.0.0 Common Test</Path>
+    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.10.0.0 Common Test</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part1.pkg</Package>
@@ -64,6 +64,10 @@
       <Package type="hd">./res/packages/222_er_clime_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/23_westfeld.pkg</Package>
       <Package type="hd">./res/packages/23_westfeld_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/250_br_battle_city2-1.pkg</Package>
+      <Package type="hd">./res/packages/250_br_battle_city2-1_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/251_br_battle_city3.pkg</Package>
+      <Package type="hd">./res/packages/251_br_battle_city3_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/28_desert.pkg</Package>
       <Package type="hd">./res/packages/28_desert_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/29_el_hallouf.pkg</Package>
@@ -90,6 +94,8 @@
       <Package type="hd">./res/packages/47_canada_a_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/59_asia_great_wall.pkg</Package>
       <Package type="hd">./res/packages/59_asia_great_wall_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/60_asia_miao.pkg</Package>
+      <Package type="hd">./res/packages/60_asia_miao_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/63_tundra.pkg</Package>
       <Package type="hd">./res/packages/63_tundra_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/83_kharkiv.pkg</Package>
@@ -100,11 +106,15 @@
       <Package type="hd">./res/packages/95_lost_city_ctf_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/99_poland.pkg</Package>
       <Package type="hd">./res/packages/99_poland_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/h31_battle_royale_2020.pkg</Package>
+      <Package type="hd">./res/packages/h31_battle_royale_2020_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/hangar_v3.pkg</Package>
       <Package type="hd">./res/packages/hangar_v3_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part1.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part2.pkg</Package>
-      <Package type="sandbox,sd,hd">./res/packages/gui.pkg</Package>
+      <Package type="sandbox,sd,hd">./res/packages/battle_royale.pkg</Package>
+      <Package type="sandbox,sd,hd">./res/packages/gui-part2.pkg</Package>
+      <Package type="sandbox,sd,hd">./res/packages/gui-part1.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/misc.pkg</Package>
       <Package type="hd">./res/packages/misc_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/particles.pkg</Package>

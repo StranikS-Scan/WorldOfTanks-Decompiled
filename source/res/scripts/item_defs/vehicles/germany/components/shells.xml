@@ -3,8 +3,6 @@
     <ap>	ARMOR_PIERCING.png 0 0	</ap>
     <ap_he>	ARMOR_PIERCING_HE.png 0 0	</ap_he>
     <ap_cr>	ARMOR_PIERCING_CR.png 0 0	</ap_cr>
-    <hc_ev>	HOLLOW_CHARGE_EV.png 0 0	</hc_ev>
-    <he_ev>	HIGH_EXLOSIVE_EV.png 0 0	</he_ev>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
     <hc>	HOLLOW_CHARGE.png 0 0	</hc>
@@ -1140,6 +1138,20 @@
       <devices>	119	</devices>
     </damage>
   </_88mm_Pzgr39_43>
+  <_88mm_Pzgr39_43_n>
+    <id>	293	</id>
+    <userString>	#germany_vehicles:_88mm_Pzgr39_43_n	</userString>
+    <icon>	ap	</icon>
+    <price>	405	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	88	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	280	</armor>
+      <devices>	119	</devices>
+    </damage>
+  </_88mm_Pzgr39_43_n>
   <_88mm_Pzgr_39_43A>
     <id>	198	</id>
     <userString>	#germany_vehicles:_88mm_Pzgr_39_43A	</userString>
@@ -1184,6 +1196,36 @@
       <devices>	119	</devices>
     </damage>
   </_88mm_Sprg.43>
+  <_88mm_Pzgr.40_43_n>
+    <id>	291	</id>
+    <userString>	#germany_vehicles:_88mm_Pzgr.40_43_n	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	88	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	280	</armor>
+      <devices>	119	</devices>
+    </damage>
+  </_88mm_Pzgr.40_43_n>
+  <_88mm_Sprg.43_n>
+    <id>	292	</id>
+    <userString>	#germany_vehicles:_88mm_Sprg.43_n	</userString>
+    <icon>	he	</icon>
+    <price>	295	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	88	</caliber>
+    <explosionRadius>	1.4	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	370	</armor>
+      <devices>	119	</devices>
+    </damage>
+  </_88mm_Sprg.43_n>
   <_88mm_Pzgr39L>
     <id>	35	</id>
     <userString>	#germany_vehicles:_88mm_Pzgr39L	</userString>
@@ -1704,6 +1746,50 @@
       <devices>	150	</devices>
     </damage>
   </_105mm_Sprg_L>
+  <_105mm_PzGr39L_n>
+    <id>	288	</id>
+    <userString>	#germany_vehicles:_105mm_PzGr39L_n	</userString>
+    <icon>	ap	</icon>
+    <price>	1080	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_PzGr39L_n>
+  <_105mm_Pzgr.40_n>
+    <id>	289	</id>
+    <userString>	#germany_vehicles:_105mm_Pzgr.40_n	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_Pzgr.40_n>
+  <_105mm_Sprg_L_n>
+    <id>	290	</id>
+    <userString>	#germany_vehicles:_105mm_Sprg_L_n	</userString>
+    <icon>	he	</icon>
+    <price>	670	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_Sprg_L_n>
   <_105mm_PzGr39G>
     <id>	57	</id>
     <userString>	#germany_vehicles:_105mm_PzGr39G	</userString>
@@ -2161,6 +2247,50 @@
       <devices>	180	</devices>
     </damage>
   </_128mm_SprG18>
+  <_128mm_PzGr39_n>
+    <id>	285	</id>
+    <userString>	#germany_vehicles:_128mm_PzGr39_n	</userString>
+    <icon>	ap	</icon>
+    <price>	1130	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	128	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	530	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_128mm_PzGr39_n>
+  <_128mm_PzGr40_n>
+    <id>	286	</id>
+    <userString>	#germany_vehicles:_128mm_PzGr40_n	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	128	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	530	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_128mm_PzGr40_n>
+  <_128mm_SprG18_n>
+    <id>	287	</id>
+    <userString>	#germany_vehicles:_128mm_SprG18_n	</userString>
+    <icon>	he	</icon>
+    <price>	960	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	128	</caliber>
+    <explosionRadius>	2.71	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	670	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_128mm_SprG18_n>
   <_128mm_PzGr39A>
     <id>	202	</id>
     <userString>	#germany_vehicles:_128mm_PzGr39A	</userString>
@@ -2986,41 +3116,279 @@
     <effects>	epicAirbombStrike	</effects>
     <damage>
       <armor>	160	</armor>
-      <devices>	150	</devices>
+      <devices>	10	</devices>
     </damage>
     <explosionDamageFactor>	1.0	</explosionDamageFactor>
     <explosionEdgeDamageFactor>	1.0	</explosionEdgeDamageFactor>
   </bomber_shell_epic_level5>
-  <_380mm_Rocket_1>
-    <id>	2660	</id>
-    <userString>	#germany_vehicles:_380mm_Rocket_1	</userString>
-    <icon>	he_ev	</icon>
-    <price>	0	</price>
+  <Development_Shell>
+    <id>	65000	</id>
+    <userString>	Development_Shell	</userString>
+    <icon>	ap	</icon>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <explosionRadius>	20	</explosionRadius>
+    <caliber>	12.7	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	autoArmorPiercing	</effects>
+    <damage>
+      <armor>	8	</armor>
+      <devices>	17	</devices>
+    </damage>
+  </Development_Shell>
+  <bomber_shell_wo_damage>
+    <id>	266	</id>
+    <userString>	#germany_vehicles:bomber_shell	</userString>
+    <icon>	he	</icon>
+    <price>	1170	</price>
     <notInShop>	true	</notInShop>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	380	</caliber>
-    <explosionRadius>	15	</explosionRadius>
+    <caliber>	1	</caliber>
+    <explosionRadius>	2.0	</explosionRadius>
+    <hasStun>	false	</hasStun>
     <isTracer>	true	</isTracer>
-    <effects>	hugeRocket	</effects>
+    <effects>	epicAirbombStrike	</effects>
     <damage>
-      <armor>	3000	</armor>
-      <devices>	140	</devices>
+      <armor>	1	</armor>
+      <devices>	1	</devices>
     </damage>
-  </_380mm_Rocket_1>
-  <_380mm_Rocket_2>
-    <id>	2661	</id>
-    <userString>	#germany_vehicles:_380mm_Rocket_2	</userString>
-    <icon>	hc_ev	</icon>
+    <explosionDamageFactor>	1.0	</explosionDamageFactor>
+    <explosionEdgeDamageFactor>	1.0	</explosionEdgeDamageFactor>
+  </bomber_shell_wo_damage>
+  <_105mmGr39H1A_SH>
+    <id>	330	</id>
+    <userString>	#germany_vehicles:_105mmGr39H1A_SH	</userString>
+    <icon>	hc	</icon>
     <price>	0	</price>
+    <improved>	true	</improved>
     <notInShop>	true	</notInShop>
     <kind>	HOLLOW_CHARGE	</kind>
-    <caliber>	380	</caliber>
+    <caliber>	105	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	hugeRocketSlow	</effects>
+    <effects>	BRmainHollowCharge	</effects>
     <damage>
-      <armor>	7000	</armor>
-      <devices>	140	</devices>
+      <armor>	250	</armor>
+      <devices>	80	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
-  </_380mm_Rocket_2>
+  </_105mmGr39H1A_SH>
+  <_105mm_AP_DM7_SH>
+    <id>	316	</id>
+    <userString>	#germany_vehicles:_105mm_AP_DM7_SH	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	0	</price>
+    <improved>	true	</improved>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRlargeAPCR	</effects>
+    <damage>
+      <armor>	190	</armor>
+      <devices>	80	</devices>
+    </damage>
+  </_105mm_AP_DM7_SH>
+  <_105mm_Gr_39H1H_SH>
+    <id>	331	</id>
+    <userString>	#germany_vehicles:_105mm_Gr_39H1H_SH	</userString>
+    <icon>	hc	</icon>
+    <price>	0	</price>
+    <improved>	True	</improved>
+    <notInShop>	true	</notInShop>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRmainHollowCharge	</effects>
+    <damage>
+      <armor>	340	</armor>
+      <devices>	80	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_105mm_Gr_39H1H_SH>
+  <_105mm_APDS_M_SH>
+    <id>	318	</id>
+    <userString>	#germany_vehicles:_105mm_APDS_M_SH	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	0	</price>
+    <improved>	True	</improved>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRlargeAPCR	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	80	</devices>
+    </damage>
+  </_105mm_APDS_M_SH>
+  <_128mm_PzGr.40E_SH>
+    <id>	332	</id>
+    <userString>	#germany_vehicles:_128mm_PzGr40E_HEAT_SH	</userString>
+    <icon>	hc	</icon>
+    <price>	0	</price>
+    <improved>	true	</improved>
+    <notInShop>	true	</notInShop>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	128	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRmainHollowCharge	</effects>
+    <damage>
+      <armor>	490	</armor>
+      <devices>	80	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_128mm_PzGr.40E_SH>
+  <_128mm_PzGr.43D1_SH>
+    <id>	320	</id>
+    <userString>	#germany_vehicles:_128mm_PzGr.43D1_SH	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	0	</price>
+    <improved>	true	</improved>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	128	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRlargeAPCR	</effects>
+    <damage>
+      <armor>	345	</armor>
+      <devices>	80	</devices>
+    </damage>
+  </_128mm_PzGr.43D1_SH>
+  <_105mm_Pzgr.41L1_SH>
+    <id>	321	</id>
+    <userString>	#germany_vehicles:_105mm_Pzgr.41L1_SH	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRmainAPCR	</effects>
+    <damage>
+      <armor>	375	</armor>
+      <devices>	80	</devices>
+    </damage>
+  </_105mm_Pzgr.41L1_SH>
+  <_105mm_AP_DS11_SH>
+    <id>	322	</id>
+    <userString>	#germany_vehicles:_105mm_AP_DS11_SH	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	0	</price>
+    <improved>	true	</improved>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRlargeAPCR	</effects>
+    <damage>
+      <armor>	265	</armor>
+      <devices>	80	</devices>
+    </damage>
+  </_105mm_AP_DS11_SH>
+  <_128mm_PzGr40E_HEAT_SH>
+    <id>	333	</id>
+    <userString>	#germany_vehicles:_128mm_PzGr40E_HEAT_SH	</userString>
+    <icon>	hc	</icon>
+    <price>	0	</price>
+    <improved>	true	</improved>
+    <notInShop>	true	</notInShop>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	128	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRmainHollowCharge	</effects>
+    <damage>
+      <armor>	515	</armor>
+      <devices>	80	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_128mm_PzGr40E_HEAT_SH>
+  <_128mm_PzGr44M_SH>
+    <id>	324	</id>
+    <userString>	#germany_vehicles:_128mm_PzGr44M_SH	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	0	</price>
+    <improved>	true	</improved>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	128	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRlargeAPCR	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	80	</devices>
+    </damage>
+  </_128mm_PzGr44M_SH>
+  <_150mm_PzGr39H2_SH>
+    <id>	334	</id>
+    <userString>	#germany_vehicles:_128mm_PzGr40E_HEAT_SH	</userString>
+    <icon>	hc	</icon>
+    <price>	0	</price>
+    <improved>	true	</improved>
+    <notInShop>	true	</notInShop>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	150	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRmainHollowCharge	</effects>
+    <damage>
+      <armor>	765	</armor>
+      <devices>	80	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_150mm_PzGr39H2_SH>
+  <_150mm_Exp_APDS_SH>
+    <id>	326	</id>
+    <userString>	#germany_vehicles:_150mm_Exp_APDS_SH	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	0	</price>
+    <improved>	true	</improved>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	150	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRlargeAPCR	</effects>
+    <damage>
+      <armor>	540	</armor>
+      <devices>	80	</devices>
+    </damage>
+  </_150mm_Exp_APDS_SH>
+  <mine_shell>
+    <id>	328	</id>
+    <userString>	#germany_vehicles:bomber_shell	</userString>
+    <icon>	he	</icon>
+    <price>	1170	</price>
+    <improved>	true	</improved>
+    <notInShop>	true	</notInShop>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	100	</caliber>
+    <explosionRadius>	7.0	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	10	</stunDuration>
+    <guaranteedStunDuration>	0.5	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.75	</damageDurationCoeff>
+    <isTracer>	true	</isTracer>
+    <effects>	epicAirbombStrike	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	10	</devices>
+    </damage>
+    <explosionDamageFactor>	1.0	</explosionDamageFactor>
+    <explosionEdgeDamageFactor>	1.0	</explosionEdgeDamageFactor>
+  </mine_shell>
+  <G00_Bomber_SH_AP>
+    <id>	329	</id>
+    <userString>	#germany_vehicles:G00_Bomber_SH_AP	</userString>
+    <icon>	ap	</icon>
+    <price>	0	</price>
+    <improved>	true	</improved>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	45	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing	</effects>
+    <damage>
+      <armor>	32	</armor>
+      <devices>	61	</devices>
+    </damage>
+  </G00_Bomber_SH_AP>
 </shells.xml>

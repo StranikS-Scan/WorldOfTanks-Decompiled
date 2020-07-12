@@ -14,6 +14,7 @@
     <RKD>	13	</RKD>
     <R_113_P>	14	</R_113_P>
     <_9RM_O>	15	</_9RM_O>
+    <Development_Radio>	65000	</Development_Radio>
   </ids>
   <shared>
     <N2>
@@ -176,5 +177,17 @@
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	1.5	</repairCost>
     </_9RM_O>
+    <Development_Radio>
+      <userString>	Development Radio	</userString>
+      <tags></tags>
+      <notInShop>	true	</notInShop>
+      <level>	1	</level>
+      <price>	0	</price>
+      <weight>	1	</weight>
+      <distance>	90	</distance>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+    </Development_Radio>
   </shared>
 </radios.xml>

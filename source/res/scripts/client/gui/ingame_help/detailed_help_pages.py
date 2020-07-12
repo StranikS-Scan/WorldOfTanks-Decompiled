@@ -4,7 +4,9 @@ import logging
 import CommandMapping
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.shared.utils.functions import replaceHyphenToUnderscore
 from gui.shared.utils.key_mapping import getReadableKey
+from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 
 def buildPagesData(ctx):
@@ -17,6 +19,8 @@ def buildPagesData(ctx):
         datailedList.extend(buildWheeledPages())
     if ctx.get('isDualGun'):
         datailedList.extend(buildDualGunPages())
+    if ctx.get('battleRoyale') and ctx.get('mapGeometryName'):
+        datailedList.extend(_buildBattleRoyalePages(ctx['mapGeometryName']))
     return datailedList
 
 
@@ -59,6 +63,21 @@ def buildDualGunPages():
     chargeKey = getReadableKey(CommandMapping.CMD_CM_CHARGE_SHOT)
     _addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.dualGun.volley_fire.title()), backport.text(R.strings.ingame_help.detailsHelp.dualGun.volley_fire()), [chargeKey], backport.image(R.images.gui.maps.icons.battleHelp.dualGunHelp.volley_fire()))
     _addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.dualGun.quick_fire.title()), backport.text(R.strings.ingame_help.detailsHelp.dualGun.quick_fire()), [shootKey], backport.image(R.images.gui.maps.icons.battleHelp.dualGunHelp.quick_fire()))
+    return pages
+
+
+def _buildBattleRoyalePages(mapGeometryName):
+    pages = []
+    mapResourceName = 'c_' + replaceHyphenToUnderscore(mapGeometryName)
+    imagePath = R.images.gui.maps.icons.battleHelp.battleRoyale.dyn(mapResourceName)
+    if not imagePath.isValid():
+        raise SoftException('No icons found for map {}'.format(mapGeometryName))
+    _addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.radar.title()), backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.radar.description()), [], backport.image(imagePath.br_radar()))
+    _addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.zone.title()), backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.zone.description()), [], backport.image(imagePath.br_zone()))
+    _addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.sectorVision.title()), backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.sectorVision.description()), [], backport.image(imagePath.br_sector()))
+    _addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.airDrop.title()), backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.airDrop.description()), [], backport.image(imagePath.br_airdrop()))
+    _addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.upgrade.title()), backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.upgrade.description()), [], backport.image(imagePath.br_tree()))
+    _addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.uniqueAbilities.title()), backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.uniqueAbilities.description()), [], backport.image(imagePath.br_unique_abilities()))
     return pages
 
 

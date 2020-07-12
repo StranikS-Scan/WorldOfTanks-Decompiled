@@ -26,6 +26,7 @@ from nation_change.nation_change_helpers import iterVehiclesWithNationGroupInOrd
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
 if TYPE_CHECKING:
     import skeletons.gui.shared.utils.requesters as requesters
+DO_LOG_BROKEN_SYNC = False
 
 def _getDiffID(itemdID):
     if isinstance(itemdID, tuple):
@@ -240,6 +241,7 @@ class REQ_CRITERIA(object):
         PREMIUM = RequestCriteria(PredicateCondition(lambda item: item.isPremium))
         READY = RequestCriteria(PredicateCondition(lambda item: item.isReadyToFight))
         OBSERVER = RequestCriteria(PredicateCondition(lambda item: item.isObserver))
+        EARN_CRYSTALS = RequestCriteria(PredicateCondition(lambda item: item.isEarnCrystals))
         LOCKED = RequestCriteria(PredicateCondition(lambda item: item.isLocked))
         CLASSES = staticmethod(lambda types=constants.VEHICLE_CLASS_INDICES.keys(): RequestCriteria(PredicateCondition(lambda item: item.type in types)))
         LEVELS = staticmethod(lambda levels=range(1, constants.MAX_VEHICLE_LEVEL + 1): RequestCriteria(PredicateCondition(lambda item: item.level in levels)))
@@ -268,7 +270,7 @@ class REQ_CRITERIA(object):
         EVENT = RequestCriteria(PredicateCondition(lambda item: item.isEvent))
         EVENT_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEventBattles))
         EPIC_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEpicBattles))
-        BOB_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForBob))
+        BATTLE_ROYALE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForBattleRoyaleBattles))
         HAS_XP_FACTOR = RequestCriteria(PredicateCondition(lambda item: item.dailyXPFactor != -1))
         IS_RESTORE_POSSIBLE = RequestCriteria(PredicateCondition(lambda item: item.isRestorePossible()))
         CAN_TRADE_IN = RequestCriteria(PredicateCondition(lambda item: item.canTradeIn))
@@ -355,13 +357,13 @@ class REQ_CRITERIA(object):
 
 
 class RESEARCH_CRITERIA(object):
-    VEHICLE_TO_UNLOCK = ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR | ~REQ_CRITERIA.VEHICLE.EVENT
+    VEHICLE_TO_UNLOCK = ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR | ~REQ_CRITERIA.VEHICLE.EVENT | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
 
 
 class ItemsRequester(IItemsRequester):
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
 
-    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None):
+    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None):
         self.__inventory = inventory
         self.__stats = stats
         self.__dossiers = dossiers
@@ -370,6 +372,7 @@ class ItemsRequester(IItemsRequester):
         self.__vehicleRotation = vehicleRotation
         self.__recycleBin = recycleBin
         self.__ranked = ranked
+        self.__battleRoyale = battleRoyale
         self.__badges = badges
         self.__epicMetaGame = epicMetaGame
         self.__blueprints = blueprints
@@ -418,6 +421,10 @@ class ItemsRequester(IItemsRequester):
     @property
     def ranked(self):
         return self.__ranked
+
+    @property
+    def battleRoyale(self):
+        return self.__battleRoyale
 
     @property
     def badges(self):
@@ -479,6 +486,9 @@ class ItemsRequester(IItemsRequester):
         Waiting.show('download/ranked')
         yield self.__ranked.request()
         Waiting.hide('download/ranked')
+        Waiting.show('download/ranked')
+        yield self.__battleRoyale.request()
+        Waiting.hide('download/ranked')
         Waiting.show('download/badges')
         yield self.__badges.request()
         Waiting.hide('download/badges')
@@ -501,7 +511,7 @@ class ItemsRequester(IItemsRequester):
         callback(self)
 
     def isSynced(self):
-        return self.__stats.isSynced() and self.__inventory.isSynced() and self.__recycleBin.isSynced() and self.__shop.isSynced() and self.__dossiers.isSynced() and self.__goodies.isSynced() and self.__vehicleRotation.isSynced() and self.ranked.isSynced() and self.__anonymizer.isSynced() and self.epicMetaGame.isSynced() and self.__blueprints.isSynced() if self.__blueprints is not None else False
+        return self.__stats.isSynced() and self.__inventory.isSynced() and self.__recycleBin.isSynced() and self.__shop.isSynced() and self.__dossiers.isSynced() and self.__goodies.isSynced() and self.__vehicleRotation.isSynced() and self.ranked.isSynced() and self.__anonymizer.isSynced() and self.epicMetaGame.isSynced() and self.__battleRoyale.isSynced() and self.__blueprints.isSynced() if self.__blueprints is not None else False
 
     @async
     @process
@@ -547,6 +557,7 @@ class ItemsRequester(IItemsRequester):
         self.__vehicleRotation.clear()
         self.__recycleBin.clear()
         self.__ranked.clear()
+        self.__battleRoyale.clear()
         self.__badges.clear()
         self.__tokens.clear()
         self.epicMetaGame.clear()
@@ -775,6 +786,21 @@ class ItemsRequester(IItemsRequester):
 
         return result
 
+    def removeUnsuitableTankmen(self, allTankmen, criteria=None):
+        if criteria is None:
+            return allTankmen
+        else:
+            result = []
+            for tankman in allTankmen:
+                vehicleDescr = tankman.vehicleDescr
+                if vehicleDescr is not None:
+                    currentVehicle = self.getItemByCD(vehicleDescr.type.compactDescr)
+                    if not criteria(currentVehicle):
+                        continue
+                result.append(tankman)
+
+            return result
+
     def getVehicles(self, criteria=REQ_CRITERIA.EMPTY):
         return self.getItems(GUI_ITEM_TYPE.VEHICLE, criteria=criteria)
 
@@ -959,4 +985,14 @@ class ItemsRequester(IItemsRequester):
         if not unsyncedList or itemTypeID in self.__brokenSyncAlreadyLoggedTypes:
             return
         self.__brokenSyncAlreadyLoggedTypes.add(itemTypeID)
+        requesters = (self.__stats,
+         self.__inventory,
+         self.__recycleBin,
+         self.__shop,
+         self.__dossiers,
+         self.__goodies,
+         self.__vehicleRotation,
+         self.ranked,
+         self.__battleRoyale)
+        unsyncedList = [ r.__class__.__name__ for r in [ r for r in requesters if not r.isSynced() ] ]
         LOG_ERROR('Trying to create fitting item when requesters are not fully synced:', unsyncedList, stack=True)

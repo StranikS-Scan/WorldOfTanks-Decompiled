@@ -20,7 +20,7 @@ class SettingsParams(object):
         return diff
 
     def getGameSettings(self):
-        return self.settingsCore.packSettings(settings_constants.GAME.ALL())
+        return self.settingsCore.packSettings(settings_constants.GAME.ALL() + settings_constants.BattleCommStorageKeys.ALL())
 
     def getSoundSettings(self):
         return self.settingsCore.packSettings(settings_constants.SOUND.ALL())

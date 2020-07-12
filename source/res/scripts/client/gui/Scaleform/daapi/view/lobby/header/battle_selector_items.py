@@ -1,28 +1,33 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/battle_selector_items.py
-import datetime
 import logging
 from adisp import process
 from gui.prb_control.entities.base.ctx import PrbAction
 from account_helpers import isDemonstrator
-from constants import PREBATTLE_TYPE, QUEUE_TYPE, ACCOUNT_ATTR
+from constants import PREBATTLE_TYPE, QUEUE_TYPE, ACCOUNT_ATTR, IS_CHINA
 from gui import GUI_SETTINGS
 from gui.prb_control.dispatcher import g_prbLoader
+from gui.battle_royale.constants import BattleRoyalePerfProblems
+from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.prb_control.prb_getters import areSpecBattlesHidden
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
+from gui.ranked_battles.constants import PrimeTimeStatus
 from gui.shared.formatters import text_styles, icons
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
-from helpers import time_utils, dependency, int2roman
-from shared_utils import findFirst
-from skeletons.gui.game_control import IRankedBattlesController, IEventProgressionController, IEpicBattleMetaGameController, IBootcampController, IBobController
+from helpers import i18n, time_utils, dependency
+from gui.shared.utils.functions import makeTooltip
+from skeletons.gui.game_control import IRankedBattlesController, IEventProgressionController
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.clans.clan_helpers import isStrongholdsEnabled
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
-from gui.Scaleform.locale.MENU import MENU
-from gui.game_control.epic_meta_game_ctrl import EPIC_PERF_GROUP
 from gui.impl import backport
 from gui.impl.gen import R
+from skeletons.gui.server_events import IEventsCache
+from battle_selector_item import SelectorItem
+from battle_selector_event_progression_providers import EventProgressionDataProvider
+from battle_selector_event_progression_item import EventProgressionItem
 _logger = logging.getLogger(__name__)
 _R_HEADER_BUTTONS = R.strings.menu.headerButtons
 _R_BATTLE_TYPES = R.strings.menu.headerButtons.battle.types
@@ -95,7 +100,7 @@ class _SelectorItem(object):
         return False
 
     def isInSquad(self, state):
-        return state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInUnit(PREBATTLE_TYPE.EPIC) or state.isInUnit(PREBATTLE_TYPE.BOB)
+        return state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInUnit(PREBATTLE_TYPE.EPIC)
 
     def setLocked(self, value):
         self._isLocked = value
@@ -295,204 +300,6 @@ class _SandboxItem(_SelectorItem):
         self._isVisible = self.lobbyContext.getServerSettings().isSandboxEnabled()
 
 
-class _EventProgressionDefaultDataProvider(_SelectorExtraItem):
-    __eventProgressionController = dependency.descriptor(IEventProgressionController)
-
-    def __init__(self):
-        super(_EventProgressionDefaultDataProvider, self).__init__(label=backport.text(_R_BATTLE_TYPES.eventProgression.about(), year=datetime.datetime.now().year), data=PREBATTLE_ACTION_NAME.EPIC, order=0, selectorType=SELECTOR_BATTLE_TYPES.EVENT_PROGRESSION)
-        self._isDisabled = False
-        self._isNew = False
-
-    def select(self):
-        self.__eventProgressionController.openURL()
-
-    def getFormattedLabel(self):
-        return text_styles.main(self._label)
-
-    def getSmallIcon(self):
-        pass
-
-    def getLargerIcon(self):
-        pass
-
-    def getMainLabel(self):
-        return text_styles.highTitle(backport.text(_R_BATTLE_TYPES.eventProgression()))
-
-    def getInfoLabel(self):
-        return '{} {}'.format(text_styles.highTitle(self.__eventProgressionController.actualRewardPoints), icons.makeImageTag(backport.image(_R_ICONS.epicBattles.rewardPoints.c_16x16()), vSpace=-1))
-
-    def _update(self, state):
-        pass
-
-
-class _EventProgressionEpicDataProvider(_SelectorExtraItem):
-    __evProgCtrl = dependency.descriptor(IEventProgressionController)
-    __epicCtrl = dependency.descriptor(IEpicBattleMetaGameController)
-    __bootcampCtrl = dependency.descriptor(IBootcampController)
-
-    def __init__(self):
-        super(_EventProgressionEpicDataProvider, self).__init__(label=backport.text(_R_BATTLE_TYPES.epic()), data=PREBATTLE_ACTION_NAME.EPIC, order=0, selectorType=SELECTOR_BATTLE_TYPES.EVENT_PROGRESSION, isVisible=True)
-
-    def isRandomBattle(self):
-        return True
-
-    def getMainLabel(self):
-        return text_styles.highTitle(backport.text(_R_BATTLE_TYPES.eventProgression()))
-
-    def getInfoLabel(self):
-        return '{} {}'.format(text_styles.highTitle(self.__evProgCtrl.actualRewardPoints), icons.makeImageTag(backport.image(_R_ICONS.epicBattles.rewardPoints.c_16x16()), vSpace=-2))
-
-    def getFormattedLabel(self):
-        battleTypeName = super(_EventProgressionEpicDataProvider, self).getFormattedLabel()
-        availabilityStr = self.__getPerformanceAlarmStr() or self.__getScheduleStr()
-        return battleTypeName if availabilityStr is None else '{}\n{}'.format(battleTypeName, availabilityStr)
-
-    def getSpecialBGIcon(self):
-        return backport.image(_R_ICONS.buttons.selectorRendererExtraBGEvent()) if self.__epicCtrl.isInPrimeTime() else ''
-
-    def isShowNewIndicator(self):
-        return False
-
-    @process
-    def _doSelect(self, dispatcher):
-        if self.__epicCtrl.getCurrentSeason() is not None or self.__epicCtrl.getNextSeason() is not None:
-            isSuccess = yield dispatcher.doSelectAction(PrbAction(self._data))
-            if isSuccess and self._isNew:
-                selectorUtils.setBattleTypeAsKnown(self._selectorType)
-            else:
-                return
-        self.__evProgCtrl.openURL()
-        return
-
-    def _update(self, state):
-        self._isSelected = state.isQueueSelected(QUEUE_TYPE.EPIC)
-        self._isDisabled = not self.__epicCtrl.isEnabled() or self.__epicCtrl.isFrozen()
-        self._isVisible = any((self.__epicCtrl.getCurrentSeason(), self.__epicCtrl.getNextSeason()))
-        if self._selectorType is not None:
-            self._isNew = not selectorUtils.isKnownBattleType(self._selectorType)
-        return
-
-    def __getScheduleStr(self):
-        if self._isDisabled:
-            return text_styles.error(backport.text(_R_BATTLE_TYPES.epic.extra.frozen()))
-        else:
-            currentSeason = self.__epicCtrl.getCurrentSeason()
-            if currentSeason:
-                seasonResID = R.strings.epic_battle.season.num(currentSeason.getSeasonID())
-                seasonName = backport.text(seasonResID.name()) if seasonResID else None
-                if currentSeason.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp()):
-                    cycleNumber = currentSeason.getCycleInfo().getEpicCycleNumber()
-                    scheduleStr = backport.text(_R_BATTLE_TYPES.epic.extra.currentCycle(), cycle=int2roman(cycleNumber), season=seasonName)
-                else:
-                    nextCycle = currentSeason.getNextCycleInfo(time_utils.getCurrentLocalServerTimestamp())
-                    if nextCycle is None:
-                        nextCycle = currentSeason.getNextByTimeCycle(time_utils.getCurrentLocalServerTimestamp())
-                    if nextCycle:
-                        nextCycleStartTime = backport.getDateTimeFormat(nextCycle.startDate)
-                        scheduleStr = backport.text(_R_BATTLE_TYPES.epic.extra.startsAt(), time=nextCycleStartTime)
-                    else:
-                        scheduleStr = None
-            else:
-                nextSeason = self.__epicCtrl.getNextSeason()
-                nextCycle = nextSeason.getNextByTimeCycle(time_utils.getCurrentLocalServerTimestamp())
-                if nextCycle:
-                    startTime = backport.getDateTimeFormat(nextCycle.startDate)
-                    scheduleStr = backport.text(_R_BATTLE_TYPES.epic.extra.startsAt(), time=startTime)
-                else:
-                    scheduleStr = None
-            return text_styles.main(scheduleStr) if scheduleStr else None
-
-    def __getPerformanceAlarmStr(self):
-        currPerformanceGroup = self.__epicCtrl.getPerformanceGroup()
-        attentionText, iconPath = (None, None)
-        if currPerformanceGroup == EPIC_PERF_GROUP.HIGH_RISK:
-            attentionText = text_styles.error(backport.text(_R_BATTLE_MENU.attention.lowPerformance()))
-            iconPath = backport.image(_R_ICONS.library.marker_blocked())
-        elif currPerformanceGroup == EPIC_PERF_GROUP.MEDIUM_RISK:
-            attentionText = text_styles.alert(backport.text(_R_BATTLE_MENU.attention.reducedPerformance()))
-            iconPath = backport.image(_R_ICONS.library.alertIcon())
-        return icons.makeImageTag(iconPath, vSpace=-3) + ' ' + attentionText if attentionText and iconPath else None
-
-
-class _EventProgressionItem(_SelectorExtraItem):
-    __bootcampController = dependency.descriptor(IBootcampController)
-    __eventProgressionController = dependency.descriptor(IEventProgressionController)
-
-    def __init__(self, *dataProviders):
-        self.__dataProviders = dataProviders or []
-        self.__dataProvider = None
-        self.__switchDataProvider()
-        super(_EventProgressionItem, self).__init__(label=self.getLabel(), data=self.getData(), order=self.getOrder(), selectorType=self.getSelectorType(), isVisible=self.__dataProvider.isVisible())
-        self._isNew = False
-        return
-
-    def getLabel(self):
-        return self.__dataProvider.getLabel()
-
-    def getData(self):
-        return self.__dataProvider.getData()
-
-    def getOrder(self):
-        return self.__dataProvider.getOrder()
-
-    def getSelectorType(self):
-        return self.__dataProvider.getSelectorType()
-
-    def getVO(self):
-        return self.__dataProvider.getVO()
-
-    def getMainLabel(self):
-        return self.__dataProvider.getMainLabel()
-
-    def getInfoLabel(self):
-        return self.__dataProvider.getInfoLabel()
-
-    def getFormattedLabel(self):
-        return self.__dataProvider.getFormattedLabel()
-
-    def isRandomBattle(self):
-        return self.__dataProvider.isRandomBattle()
-
-    def isSelected(self):
-        return self.__dataProvider.isSelected()
-
-    def isDisabled(self):
-        return self.__dataProvider.isDisabled()
-
-    def isSelectorBtnEnabled(self):
-        return self.__dataProvider.isSelectorBtnEnabled()
-
-    def select(self):
-        self.__dataProvider.select()
-
-    def _update(self, state):
-        self.__switchDataProvider()
-        self.__dataProvider.update(state)
-        self._isVisible = self.__eventProgressionController.isEnabled and not self.__bootcampController.isInBootcamp()
-
-    def __switchDataProvider(self):
-        self.__dataProvider = findFirst(lambda dp: dp.isVisible(), self.__dataProviders, _EventProgressionDefaultDataProvider())
-
-
-class _BobItem(_SelectorItem):
-    bobController = dependency.descriptor(IBobController)
-
-    def isRandomBattle(self):
-        return True
-
-    def getSpecialBGIcon(self):
-        return backport.image(_R_ICONS.buttons.selectorRendererBGEvent()) if self.bobController.isModeActive() else ''
-
-    def select(self):
-        super(_BobItem, self).select()
-        selectorUtils.setBattleTypeAsKnown(self._selectorType)
-
-    def _update(self, state):
-        self._isSelected = state.isQueueSelected(QUEUE_TYPE.BOB)
-        self._isDisabled = state.hasLockedState
-        self._isVisible = self.bobController.isModeActive()
-
-
 class _BattleSelectorItems(object):
 
     def __init__(self, items, extraItems=None):
@@ -534,16 +341,17 @@ class _BattleSelectorItems(object):
             if item.isRandomBattle():
                 item.setLocked(locked)
 
-    def select(self, action, onlyActive=False):
+    def select(self, action):
         if action in self.__items:
-            item = self.__items[action]
-            if not onlyActive or item.isVisible() and not item.isDisabled():
-                item.select()
+            self.__items[action].select()
         elif action in self.__extraItems:
-            item = self.__extraItems[action]
-            if not onlyActive or item.isVisible() and not item.isDisabled():
-                item.select()
+            self.__extraItems[action].select()
         else:
+            for _, value in self.__extraItems.items():
+                if action in value.getData():
+                    value.select()
+                    return
+
             _logger.error('Can not invoke action: %s', action)
 
     def getVOs(self):
@@ -577,30 +385,93 @@ class _SquadSelectorItems(_BattleSelectorItems):
         return _DEFAULT_SQUAD_PAN
 
 
-class _SimpleSquadItem(_SelectorItem):
+class _SquadItem(SelectorItem):
 
     def __init__(self, label, data, order, selectorType=None, isVisible=True):
-        super(_SimpleSquadItem, self).__init__(label, data, order, selectorType, isVisible)
+        super(_SquadItem, self).__init__(label, data, order, selectorType, isVisible)
         self._isDisabled = False
         self._isSelected = False
         self._isVisible = True
+        self._isDescription = True
+        self._prebattleType = None
+        return
+
+    def getFormattedLabel(self):
+        title = text_styles.middleTitle(backport.text(R.strings.menu.headerButtons.battle.types.dyn(self._data)()))
+        if self._isDescription:
+            description = text_styles.main(backport.text(R.strings.menu.headerButtons.battle.types.dyn(self._data).description()))
+            return ''.join((title, '\n', description))
+        return title
+
+    def getVO(self):
+        vo = super(_SquadItem, self).getVO()
+        vo['tooltip'] = self._createTooltip()
+        return vo
+
+    def _createTooltip(self):
+        return makeTooltip(backport.text(R.strings.tooltips.header.dyn(self._data).header()), backport.text(R.strings.tooltips.header.dyn(self._data).body()))
+
+    def getPrebattleType(self):
+        return self._prebattleType
+
+
+class _SimpleSquadItem(_SquadItem):
 
     def _update(self, state):
         self._isSelected = state.isInUnit(PREBATTLE_TYPE.SQUAD)
         self._isDisabled = state.hasLockedState and not state.isInUnit(PREBATTLE_TYPE.SQUAD)
+        self._isVisible = not state.isInPreQueue(queueType=QUEUE_TYPE.BATTLE_ROYALE)
 
 
-class _EventSquadItem(_SelectorItem):
+class _SpecialSquadItem(_SquadItem):
+
+    def __init__(self, label, data, order, selectorType=None, isVisible=False):
+        super(_SpecialSquadItem, self).__init__(label, data, order, selectorType, isVisible)
+        self._isDisabled = False
+        self._isSelected = False
+        self._isVisible = isVisible
+        self._isSpecialBgIcon = False
+
+    def getVO(self):
+        vo = super(_SpecialSquadItem, self).getVO()
+        if self._isSpecialBgIcon:
+            vo['specialBgIcon'] = backport.image(R.images.gui.maps.icons.lobby.eventPopoverBtnBG())
+        return vo
+
+    def _update(self, state):
+        self._isSelected = state.isInUnit(self._prebattleType)
+        self._isDisabled = state.hasLockedState and not state.isInUnit(self._prebattleType)
+
+
+class _EventSquadItem(_SpecialSquadItem):
+    __eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, label, data, order, selectorType=None, isVisible=True):
         super(_EventSquadItem, self).__init__(label, data, order, selectorType, isVisible)
-        self._isDisabled = False
-        self._isSelected = False
-        self._isVisible = True
+        self._prebattleType = PREBATTLE_TYPE.EVENT
+        self._isVisible = self.__eventsCache.isEventEnabled()
+        self._isSpecialBgIcon = True
+        self._isDescription = False
+
+
+class _BattleRoyaleSquadItem(_SpecialSquadItem):
+    __eventProgression = dependency.descriptor(IEventProgressionController)
+
+    def __init__(self, label, data, order, selectorType=None, isVisible=True):
+        super(_BattleRoyaleSquadItem, self).__init__(label, data, order, selectorType, isVisible)
+        primeTimeStatus, _, _ = self.__eventProgression.getPrimeTimeStatus()
+        self._prebattleType = PREBATTLE_TYPE.BATTLE_ROYALE
+        self._isVisible = self.__eventProgression.modeIsAvailable()
+        self._isDisabled = self._isDisabled or primeTimeStatus != PrimeTimeStatus.AVAILABLE
 
     def _update(self, state):
-        self._isSelected = state.isInUnit(PREBATTLE_TYPE.EVENT)
-        self._isDisabled = state.hasLockedState and not state.isInUnit(PREBATTLE_TYPE.EVENT)
+        super(_BattleRoyaleSquadItem, self)._update(state)
+        primeTimeStatus, _, _ = self.__eventProgression.getPrimeTimeStatus()
+        self._isVisible = self.__eventProgression.modeIsAvailable() and state.isInPreQueue(queueType=QUEUE_TYPE.BATTLE_ROYALE)
+        self._isDisabled = self._isDisabled or primeTimeStatus != PrimeTimeStatus.AVAILABLE
+
+    def getSpecialBGIcon(self):
+        return backport.image(_R_ICONS.lobby.eventPopoverBtnBG())
 
 
 class _RankedItem(_SelectorItem):
@@ -663,6 +534,67 @@ class _RankedItem(_SelectorItem):
             return
 
 
+class _BattleRoyaleItem(SelectorItem):
+    __eventProgression = dependency.descriptor(IEventProgressionController)
+
+    def __init__(self, label, data, order, selectorType=None, isVisible=True):
+        super(_BattleRoyaleItem, self).__init__(label, data, order, selectorType, isVisible)
+        self.__isFrozen = False
+
+    def isRandomBattle(self):
+        return True
+
+    def getVO(self):
+        vo = super(_BattleRoyaleItem, self).getVO()
+        if self.__eventProgression.modeIsAvailable():
+            vo['specialBgIcon'] = RES_ICONS.MAPS_ICONS_BUTTONS_SELECTORRENDERERBGEVENT
+        return vo
+
+    def getFormattedLabel(self):
+        battleTypeName = super(_BattleRoyaleItem, self).getFormattedLabel()
+        availabilityStr = self.__getPerformanceAlarmStr() or self.__getScheduleStr()
+        return battleTypeName if availabilityStr is None else '%s\n%s' % (battleTypeName, availabilityStr)
+
+    @process
+    def _doSelect(self, dispatcher):
+        isSuccess = yield dispatcher.doSelectAction(PrbAction(self._data))
+        if isSuccess and self._isNew:
+            selectorUtils.setBattleTypeAsKnown(self._selectorType)
+
+    def _update(self, state):
+        isNow = self.__eventProgression.modeIsAvailable()
+        isEnabled = self.__eventProgression.modeIsEnabled()
+        self.__isFrozen = self.__eventProgression.isFrozen()
+        if not isEnabled or not isNow:
+            self._isLocked = True
+        self._isDisabled = state.hasLockedState or not isEnabled
+        self._isSelected = state.isQueueSelected(QUEUE_TYPE.BATTLE_ROYALE)
+        self._isVisible = isEnabled
+
+    def __getScheduleStr(self):
+        if self.__isFrozen:
+            return text_styles.main(i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_BATTLEROYALE_EXTRA_FROZEN))
+        currentSeason = self.__eventProgression.getCurrentSeason()
+        nextSeason = self.__eventProgression.getNextSeason()
+        if not currentSeason and nextSeason:
+            startTime = backport.getDateTimeFormat(nextSeason.getStartDate())
+            scheduleStr = i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_EPIC_EXTRA_STARTSAT, time=startTime)
+            return text_styles.main(scheduleStr)
+        else:
+            return text_styles.alert(i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_BATTLEROYALE_EXTRA_FINISHED)) if not (currentSeason or self.__eventProgression.getPreviousSeason() and nextSeason) else None
+
+    def __getPerformanceAlarmStr(self):
+        currPerformanceGroup = self.__eventProgression.getPerformanceGroup()
+        attentionText, iconPath = (None, None)
+        if currPerformanceGroup == BattleRoyalePerfProblems.HIGH_RISK:
+            attentionText = text_styles.error(MENU.HEADERBUTTONS_BATTLE_MENU_ATTENTION_LOWPERFORMANCE)
+            iconPath = RES_ICONS.MAPS_ICONS_LIBRARY_MARKER_BLOCKED
+        elif currPerformanceGroup == BattleRoyalePerfProblems.MEDIUM_RISK:
+            attentionText = text_styles.alert(MENU.HEADERBUTTONS_BATTLE_MENU_ATTENTION_REDUCEDPERFORMANCE)
+            iconPath = RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON
+        return icons.makeImageTag(iconPath, vSpace=-3) + ' ' + attentionText if attentionText and iconPath else None
+
+
 _g_items = None
 _g_squadItems = None
 _DEFAULT_PAN = PREBATTLE_ACTION_NAME.RANDOM
@@ -674,7 +606,6 @@ def _createItems(lobbyContext=None):
     isInRoaming = settings.roaming.isInRoaming()
     items = []
     _addRandomBattleType(items)
-    _addBobBattleType(items)
     _addRankedBattleType(items, settings)
     _addCommandBattleType(items, settings)
     _addStrongholdsBattleType(items, isInRoaming)
@@ -685,13 +616,18 @@ def _createItems(lobbyContext=None):
     if settings is not None and settings.isSandboxEnabled() and not isInRoaming:
         _addSandboxType(items)
     extraItems = []
-    _addEventProgressionExtraType(extraItems)
+    _addEventProgressionItems(extraItems)
     return _BattleSelectorItems(items, extraItems)
+
+
+def _addEventProgressionItems(extraItems):
+    extraItems.append(EventProgressionItem(EventProgressionDataProvider()))
 
 
 def _createSquadSelectorItems():
     items = []
     _addSimpleSquadType(items)
+    _addBattleRoyaleSquadType(items)
     _addEventSquadType(items)
     return _SquadSelectorItems(items)
 
@@ -706,6 +642,12 @@ def _addRankedBattleType(items, settings):
     return
 
 
+def _addRoyaleBattleType(items, settings):
+    visible = settings is not None and settings.battleRoyale.isEnabled
+    items.append(_BattleRoyaleItem(MENU.HEADERBUTTONS_BATTLE_TYPES_BATTLEROYALE, PREBATTLE_ACTION_NAME.BATTLE_ROYALE, 1, SELECTOR_BATTLE_TYPES.BATTLE_ROYALE, isVisible=visible))
+    return
+
+
 def _addCommandBattleType(items, settings):
     visible = settings is not None and settings.isCommandBattleEnabled()
     items.append(_CommandItem(backport.text(_R_BATTLE_TYPES.unit()), PREBATTLE_ACTION_NAME.E_SPORT, 3, SELECTOR_BATTLE_TYPES.UNIT, isVisible=visible))
@@ -713,7 +655,8 @@ def _addCommandBattleType(items, settings):
 
 
 def _addStrongholdsBattleType(items, isInRoaming):
-    items.append((_DisabledSelectorItem if isInRoaming else _StrongholdsItem)(backport.text(_R_BATTLE_TYPES.strongholds()), PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST, 4, SELECTOR_BATTLE_TYPES.SORTIE))
+    visible = isStrongholdsEnabled()
+    items.append((_DisabledSelectorItem if isInRoaming else _StrongholdsItem)(backport.text(_R_BATTLE_TYPES.strongholds()), PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST, 4, SELECTOR_BATTLE_TYPES.SORTIE, isVisible=visible))
 
 
 def _addTrainingBattleType(items):
@@ -727,7 +670,7 @@ def _addEpicTrainingBattleType(items, settings=None):
 
 
 def _addSpecialBattleType(items):
-    items.append(_SpecBattleItem(backport.text(_R_BATTLE_TYPES.spec()), PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST, 6))
+    items.append(_SpecBattleItem(backport.text(_R_BATTLE_TYPES.spec()), PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST, 6, isVisible=not IS_CHINA))
 
 
 def _addTutorialBattleType(items, isInRoaming):
@@ -738,20 +681,17 @@ def _addSandboxType(items):
     items.append(_SandboxItem(backport.text(_R_BATTLE_TYPES.battleTeaching()), PREBATTLE_ACTION_NAME.SANDBOX, 9))
 
 
-def _addEventProgressionExtraType(items):
-    items.append(_EventProgressionItem(_EventProgressionEpicDataProvider()))
-
-
-def _addBobBattleType(items):
-    items.append(_BobItem(MENU.HEADERBUTTONS_BATTLE_TYPES_BOB, PREBATTLE_ACTION_NAME.BOB, 1, SELECTOR_BATTLE_TYPES.BOB))
-
-
 def _addSimpleSquadType(items):
     items.append(_SimpleSquadItem(text_styles.middleTitle(backport.text(_R_BATTLE_TYPES.simpleSquad())), PREBATTLE_ACTION_NAME.SQUAD, 0))
 
 
+def _addBattleRoyaleSquadType(items):
+    label = text_styles.middleTitle(backport.text(R.strings.menu.headerButtons.battle.types.battleRoyaleSquad()))
+    items.append(_BattleRoyaleSquadItem(label, PREBATTLE_ACTION_NAME.BATTLE_ROYALE_SQUAD, 1))
+
+
 def _addEventSquadType(items):
-    items.append(_EventSquadItem(text_styles.middleTitle(backport.text(_R_BATTLE_TYPES.eventSquad())), PREBATTLE_ACTION_NAME.EVENT_SQUAD, 1))
+    items.append(_EventSquadItem(text_styles.middleTitle(backport.text(_R_BATTLE_TYPES.eventSquad())), PREBATTLE_ACTION_NAME.EVENT_SQUAD, 2))
 
 
 def create():

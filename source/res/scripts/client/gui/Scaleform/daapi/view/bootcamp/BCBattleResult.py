@@ -97,6 +97,7 @@ class BCBattleResult(BCBattleResultMeta):
             self.__setBattleResults()
         self.app.as_loadLibrariesS(['guiControlsLobbyBattleDynamic.swf', 'guiControlsLobbyDynamic.swf'])
         self.appLoader.attachCursor(app_settings.APP_NAME_SPACE.SF_LOBBY, _CTRL_FLAG.GUI_ENABLED)
+        g_bootcampEvents.onResultScreenPopulated()
         return
 
     @simpleLog(action=BC_LOG_ACTIONS.CONTINUE_BUTTON_PRESSED)

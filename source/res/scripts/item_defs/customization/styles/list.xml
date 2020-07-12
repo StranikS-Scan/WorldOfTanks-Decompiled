@@ -7674,6 +7674,60 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	296	</id>
+      <texture>	gui/maps/vehicles/styles/battlepass_2020_vietnam.png	</texture>
+      <description>	#vehicle_customization:special_style/battlepass_2020_vietnam_desc	</description>
+      <userString>	#vehicle_customization:special_style/battlepass_2020_vietnam	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	139	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	39	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	238	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	239	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
     <historical>	false	</historical>
     <priceGroup>	styles 1750g notInShop	</priceGroup>
     <vehicleFilter>
@@ -7853,60 +7907,6 @@
           <season>	event	</season>
         </outfit>
       </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
-    <season>	ALL	</season>
-    <historical>	true	</historical>
-    <priceGroup>	styles 750g notInShop	</priceGroup>
-    <vehicleFilter>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <style>
-      <id>	296	</id>
-      <texture>	gui/maps/vehicles/styles/battlepass_2020_vietnam.png	</texture>
-      <description>	#vehicle_customization:special_style/battlepass_2020_vietnam_desc	</description>
-      <userString>	#vehicle_customization:special_style/battlepass_2020_vietnam	</userString>
-      <tags>	progression_required	</tags>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	139	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <paints>
-            <item>
-              <id>	39	</id>
-              <appliedTo>	30583	</appliedTo>
-            </item>
-          </paints>
-          <decals>
-            <item>
-              <id>	238	</id>
-              <appliedTo>	13104	</appliedTo>
-            </item>
-            <item>
-              <id>	239	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-      </outfits>
-      <itemFilters>
-        <projection_decal>
-          <include>
-            <itemGroupName>	Progression Decals	</itemGroupName>
-          </include>
-        </projection_decal>
-      </itemFilters>
     </style>
   </itemGroup>
   <itemGroup>
@@ -8161,77 +8161,34 @@
       </exclude>
     </vehicleFilter>
     <style>
-      <id>	329	</id>
-      <texture>	gui/maps/vehicles/styles/10years_universal_4.png	</texture>
-      <description>	#vehicle_customization:special_style/10years_universal_4_desc	</description>
-      <userString>	#vehicle_customization:special_style/10years_universal_4	</userString>
-      <tags>	progression_required	</tags>
+      <id>	318	</id>
+      <texture>	gui/maps/vehicles/styles/sh2020_award_1.png	</texture>
+      <description>	#vehicle_customization:special_style/sh2020_award_1_desc	</description>
+      <userString>	#vehicle_customization:special_style/sh2020_award_1	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
       <outfits>
         <outfit>
-          <season>	summer	</season>
+          <season>	ALL	</season>
           <camouflages>
             <item>
-              <id>	166	</id>
+              <id>	151	</id>
               <appliedTo>	4368	</appliedTo>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
             </item>
           </camouflages>
+          <paints>
+            <item>
+              <id>	47	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
           <decals>
             <item>
-              <id>	292	</id>
-              <appliedTo>	4384	</appliedTo>
-            </item>
-            <item>
-              <id>	293	</id>
-              <appliedTo>	8720	</appliedTo>
+              <id>	271	</id>
+              <appliedTo>	52416	</appliedTo>
             </item>
           </decals>
-        </outfit>
-        <outfit>
-          <season>	winter	</season>
-          <camouflages>
-            <item>
-              <id>	168	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	292	</id>
-              <appliedTo>	4384	</appliedTo>
-            </item>
-            <item>
-              <id>	293	</id>
-              <appliedTo>	8720	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	desert	</season>
-          <camouflages>
-            <item>
-              <id>	167	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	292	</id>
-              <appliedTo>	4384	</appliedTo>
-            </item>
-            <item>
-              <id>	293	</id>
-              <appliedTo>	8720	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	event	</season>
         </outfit>
       </outfits>
       <itemFilters>
@@ -8241,6 +8198,343 @@
           </include>
         </projection_decal>
       </itemFilters>
+    </style>
+    <style>
+      <id>	319	</id>
+      <texture>	gui/maps/vehicles/styles/sh2020_award_2.png	</texture>
+      <description>	#vehicle_customization:special_style/sh2020_award_2_desc	</description>
+      <userString>	#vehicle_customization:special_style/sh2020_award_2	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	152	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	48	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	272	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	320	</id>
+      <texture>	gui/maps/vehicles/styles/sh2020_award_3.png	</texture>
+      <description>	#vehicle_customization:special_style/sh2020_award_3_desc	</description>
+      <userString>	#vehicle_customization:special_style/sh2020_award_3	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	153	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	49	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	273	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	321	</id>
+      <texture>	gui/maps/vehicles/styles/sh2020_award_4.png	</texture>
+      <description>	#vehicle_customization:special_style/sh2020_award_4_desc	</description>
+      <userString>	#vehicle_customization:special_style/sh2020_award_4	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	154	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	50	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	274	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	322	</id>
+      <texture>	gui/maps/vehicles/styles/sh2020_paid_1.png	</texture>
+      <description>	#vehicle_customization:special_style/sh2020_paid_1_desc	</description>
+      <userString>	#vehicle_customization:special_style/sh2020_paid_1	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	155	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	47	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	271	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	323	</id>
+      <texture>	gui/maps/vehicles/styles/sh2020_paid_2.png	</texture>
+      <description>	#vehicle_customization:special_style/sh2020_paid_2_desc	</description>
+      <userString>	#vehicle_customization:special_style/sh2020_paid_2	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	156	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	48	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	272	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	324	</id>
+      <texture>	gui/maps/vehicles/styles/sh2020_paid_3.png	</texture>
+      <description>	#vehicle_customization:special_style/sh2020_paid_3_desc	</description>
+      <userString>	#vehicle_customization:special_style/sh2020_paid_3	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	157	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	49	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	273	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	325	</id>
+      <texture>	gui/maps/vehicles/styles/sh2020_paid_4.png	</texture>
+      <description>	#vehicle_customization:special_style/sh2020_paid_4_desc	</description>
+      <userString>	#vehicle_customization:special_style/sh2020_paid_4	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	158	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	50	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	274	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 2000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	328	</id>
+      <texture>	gui/maps/vehicles/styles/10years_tanker_day.png	</texture>
+      <description>	#vehicle_customization:special_style/10years_tanker_day_desc	</description>
+      <userString>	#vehicle_customization:special_style/10years_tanker_day	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	159	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	51	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	279	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	277	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <alternateItems>
+        <camouflage>
+          <id>	159 160	</id>
+        </camouflage>
+        <paint>
+          <id>	51 52	</id>
+        </paint>
+        <decal>
+          <id>	277 278 279 280	</id>
+        </decal>
+      </alternateItems>
     </style>
   </itemGroup>
   <itemGroup>
@@ -8524,11 +8818,10 @@
       </exclude>
     </vehicleFilter>
     <style>
-      <id>	248	</id>
-      <texture>	gui/maps/vehicles/styles/generic_custom_look_china.png	</texture>
-      <description>	#vehicle_customization:main_style/generic_custom_look_china_desc	</description>
-      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_china_desc/long	</longDescriptionSpecial>
-      <userString>	#vehicle_customization:main_style/generic_custom_look_china	</userString>
+      <id>	65	</id>
+      <texture>	gui/maps/vehicles/styles/generic_custom_look_3_china.png	</texture>
+      <description>	#vehicle_customization:main_style/generic_custom_look_3_china_desc	</description>
+      <userString>	#vehicle_customization:main_style/generic_custom_look_3_china	</userString>
       <tags>	progression_required addNationalEmblem	</tags>
       <itemFilters>
         <projection_decal>
@@ -8537,6 +8830,83 @@
           </include>
         </projection_decal>
       </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	24	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	16	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	23	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	16	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	25	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	16	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 700g	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	248	</id>
+      <texture>	gui/maps/vehicles/styles/generic_custom_look_china.png	</texture>
+      <description>	#vehicle_customization:main_style/generic_custom_look_china_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_china_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:main_style/generic_custom_look_china	</userString>
       <outfits>
         <outfit>
           <season>	summer	</season>
@@ -8613,14 +8983,6 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_2_china.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_2_china_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_2_china	</userString>
-      <tags>	progression_required addNationalEmblem	</tags>
-      <itemFilters>
-        <projection_decal>
-          <include>
-            <itemGroupName>	Progression Decals	</itemGroupName>
-          </include>
-        </projection_decal>
-      </itemFilters>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -8669,90 +9031,6 @@
           <decals>
             <item>
               <id>	14819	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	event	</season>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/main_styles	</userString>
-    <season>	ALL	</season>
-    <historical>	true	</historical>
-    <priceGroup>	styles 700g	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <nations>	china	</nations>
-      </include>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <style>
-      <id>	65	</id>
-      <texture>	gui/maps/vehicles/styles/generic_custom_look_3_china.png	</texture>
-      <description>	#vehicle_customization:main_style/generic_custom_look_3_china_desc	</description>
-      <userString>	#vehicle_customization:main_style/generic_custom_look_3_china	</userString>
-      <tags>	progression_required addNationalEmblem	</tags>
-      <itemFilters>
-        <projection_decal>
-          <include>
-            <itemGroupName>	Progression Decals	</itemGroupName>
-          </include>
-        </projection_decal>
-      </itemFilters>
-      <outfits>
-        <outfit>
-          <season>	winter	</season>
-          <camouflages>
-            <item>
-              <id>	24	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	16	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	summer	</season>
-          <camouflages>
-            <item>
-              <id>	23	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	16	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	desert	</season>
-          <camouflages>
-            <item>
-              <id>	25	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	16	</id>
               <appliedTo>	52416	</appliedTo>
             </item>
           </decals>
@@ -9209,87 +9487,6 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/main_styles	</userString>
-    <season>	ALL	</season>
-    <historical>	true	</historical>
-    <priceGroup>	styles 700g	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <nations>	czech	</nations>
-      </include>
-    </vehicleFilter>
-    <style>
-      <id>	31	</id>
-      <texture>	gui/maps/vehicles/styles/generic_custom_look_2_czech.png	</texture>
-      <description>	#vehicle_customization:main_style/generic_custom_look_2_czech_desc	</description>
-      <userString>	#vehicle_customization:main_style/generic_custom_look_2_czech	</userString>
-      <tags>	progression_required addNationalEmblem	</tags>
-      <itemFilters>
-        <projection_decal>
-          <include>
-            <itemGroupName>	Progression Decals	</itemGroupName>
-          </include>
-        </projection_decal>
-      </itemFilters>
-      <outfits>
-        <outfit>
-          <season>	winter	</season>
-          <camouflages>
-            <item>
-              <id>	675	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	15215	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	summer	</season>
-          <camouflages>
-            <item>
-              <id>	661	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	15215	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	desert	</season>
-          <camouflages>
-            <item>
-              <id>	662	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	15215	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	event	</season>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
@@ -9304,6 +9501,7 @@
       <texture>	gui/maps/vehicles/styles/czech_veteran.png	</texture>
       <longDescriptionSpecial>	#vehicle_customization:special_style/czech_veteran_desc/long	</longDescriptionSpecial>
       <modelsSet>	T_27_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/czech_veteran	</userString>
       <tags>	progression_required	</tags>
       <itemFilters>
@@ -9508,6 +9706,79 @@
           </include>
         </projection_decal>
       </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 700g	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	czech	</nations>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31	</id>
+      <texture>	gui/maps/vehicles/styles/generic_custom_look_2_czech.png	</texture>
+      <description>	#vehicle_customization:main_style/generic_custom_look_2_czech_desc	</description>
+      <userString>	#vehicle_customization:main_style/generic_custom_look_2_czech	</userString>
+      <outfits>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	675	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	15215	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	661	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	15215	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	662	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	15215	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+      </outfits>
     </style>
   </itemGroup>
   <itemGroup>
@@ -9784,6 +10055,7 @@
       <description>	#vehicle_customization:special_style/bdr_g1b_w_description	</description>
       <longDescriptionSpecial>	#vehicle_customization:special_style/bdr_g1b_w_description/long	</longDescriptionSpecial>
       <modelsSet>	WH	</modelsSet>
+      <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/bdr_g1b_w	</userString>
       <outfits>
         <outfit>
@@ -9861,88 +10133,6 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/main_styles	</userString>
-    <season>	ALL	</season>
-    <historical>	true	</historical>
-    <priceGroup>	styles 700g	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <nations>	france	</nations>
-      </include>
-    </vehicleFilter>
-    <style>
-      <id>	244	</id>
-      <texture>	gui/maps/vehicles/styles/generic_custom_look_france.png	</texture>
-      <description>	#vehicle_customization:main_style/generic_custom_look_france_desc	</description>
-      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_france_desc/long	</longDescriptionSpecial>
-      <userString>	#vehicle_customization:main_style/generic_custom_look_france	</userString>
-      <tags>	progression_required	</tags>
-      <itemFilters>
-        <projection_decal>
-          <include>
-            <itemGroupName>	Progression Decals	</itemGroupName>
-          </include>
-        </projection_decal>
-      </itemFilters>
-      <outfits>
-        <outfit>
-          <season>	summer	</season>
-          <camouflages>
-            <item>
-              <id>	15417	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	677	</id>
-              <appliedTo>	13104	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	winter	</season>
-          <camouflages>
-            <item>
-              <id>	15404	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	677	</id>
-              <appliedTo>	13104	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	desert	</season>
-          <camouflages>
-            <item>
-              <id>	15406	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	677	</id>
-              <appliedTo>	13104	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	event	</season>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
@@ -9957,6 +10147,7 @@
       <texture>	gui/maps/vehicles/styles/Siroco.png	</texture>
       <longDescriptionSpecial>	#vehicle_customization:special_style/siroco_desc/long	</longDescriptionSpecial>
       <modelsSet>	Siroco	</modelsSet>
+      <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/siroco	</userString>
       <tags>	progression_required	</tags>
       <itemFilters>
@@ -10441,6 +10632,80 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 700g	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	france	</nations>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	244	</id>
+      <texture>	gui/maps/vehicles/styles/generic_custom_look_france.png	</texture>
+      <description>	#vehicle_customization:main_style/generic_custom_look_france_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_france_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:main_style/generic_custom_look_france	</userString>
+      <outfits>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	15417	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	677	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	15404	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	677	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	15406	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	677	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
@@ -10803,103 +11068,6 @@
               <appliedTo>	52416	</appliedTo>
             </item>
           </decals>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/main_styles	</userString>
-    <season>	ALL	</season>
-    <historical>	true	</historical>
-    <priceGroup>	styles 700g	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <nations>	germany	</nations>
-      </include>
-      <exclude>
-        <vehicles>	germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <style>
-      <id>	240	</id>
-      <texture>	gui/maps/vehicles/styles/generic_custom_look_germany.png	</texture>
-      <description>	#vehicle_customization:main_style/generic_custom_look_germany_desc	</description>
-      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_germany_desc/long	</longDescriptionSpecial>
-      <userString>	#vehicle_customization:main_style/generic_custom_look_germany	</userString>
-      <tags>	progression_required	</tags>
-      <itemFilters>
-        <projection_decal>
-          <include>
-            <itemGroupName>	Progression Decals	</itemGroupName>
-          </include>
-        </projection_decal>
-      </itemFilters>
-      <outfits>
-        <outfit>
-          <season>	summer	</season>
-          <camouflages>
-            <item>
-              <id>	15118	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	671	</id>
-              <appliedTo>	13104	</appliedTo>
-            </item>
-            <item>
-              <id>	14618	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	winter	</season>
-          <camouflages>
-            <item>
-              <id>	15101	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	671	</id>
-              <appliedTo>	13104	</appliedTo>
-            </item>
-            <item>
-              <id>	14618	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	desert	</season>
-          <camouflages>
-            <item>
-              <id>	15105	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	671	</id>
-              <appliedTo>	13104	</appliedTo>
-            </item>
-            <item>
-              <id>	14618	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	event	</season>
         </outfit>
       </outfits>
     </style>
@@ -11464,49 +11632,34 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	false	</historical>
-    <priceGroup>	styles 1750g notInShop	</priceGroup>
+    <historical>	true	</historical>
+    <priceGroup>	styles 2500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <vehicles>	germany:G114_Skorpian	</vehicles>
+        <vehicles>	germany:G99_RhB_Waffentrager	</vehicles>
       </include>
     </vehicleFilter>
     <style>
-      <id>	331	</id>
-      <texture>	gui/maps/vehicles/styles/10years_skorpian.png	</texture>
-      <description>	#vehicle_customization:special_style/10years_skorpian_desc	</description>
-      <longDescriptionSpecial>	#vehicle_customization:special_style/10years_skorpian_desc/long	</longDescriptionSpecial>
+      <id>	326	</id>
+      <texture>	gui/maps/vehicles/styles/G99_RhB_Waffentrager_3Dst.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/G99_RhB_Waffentrager_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	G99_RhB_Waffentrager_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:special_style/10years_skorpian	</userString>
+      <userString>	#vehicle_customization:main_style/G99_RhB_Waffentrager_3Dst	</userString>
       <tags>	progression_required	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
           <camouflages>
             <item>
-              <id>	170	</id>
+              <id>	1	</id>
               <appliedTo>	4368	</appliedTo>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
             </item>
           </camouflages>
-          <modifications>
-            <item>	4	</item>
-          </modifications>
-          <paints>
-            <item>
-              <id>	54	</id>
-              <appliedTo>	30583	</appliedTo>
-            </item>
-          </paints>
-          <decals>
-            <item>
-              <id>	295	</id>
-              <appliedTo>	13104	</appliedTo>
-            </item>
-          </decals>
         </outfit>
       </outfits>
       <itemFilters>
@@ -11516,6 +11669,95 @@
           </include>
         </projection_decal>
       </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 700g	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	germany	</nations>
+      </include>
+      <exclude>
+        <vehicles>	germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	240	</id>
+      <texture>	gui/maps/vehicles/styles/generic_custom_look_germany.png	</texture>
+      <description>	#vehicle_customization:main_style/generic_custom_look_germany_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_germany_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:main_style/generic_custom_look_germany	</userString>
+      <outfits>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	15118	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	671	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	14618	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	15101	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	671	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	14618	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	15105	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	671	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	14618	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+      </outfits>
     </style>
   </itemGroup>
   <itemGroup>
@@ -11787,88 +12029,6 @@
       </include>
     </vehicleFilter>
     <style>
-      <id>	247	</id>
-      <texture>	gui/maps/vehicles/styles/generic_custom_look_japan.png	</texture>
-      <description>	#vehicle_customization:main_style/generic_custom_look_japan_desc	</description>
-      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_japan_desc/long	</longDescriptionSpecial>
-      <userString>	#vehicle_customization:main_style/generic_custom_look_japan	</userString>
-      <tags>	progression_required addNationalEmblem	</tags>
-      <itemFilters>
-        <projection_decal>
-          <include>
-            <itemGroupName>	Progression Decals	</itemGroupName>
-          </include>
-        </projection_decal>
-      </itemFilters>
-      <outfits>
-        <outfit>
-          <season>	summer	</season>
-          <camouflages>
-            <item>
-              <id>	15602	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	15108	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	winter	</season>
-          <camouflages>
-            <item>
-              <id>	15600	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	15108	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	desert	</season>
-          <camouflages>
-            <item>
-              <id>	15605	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	15108	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	event	</season>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/main_styles	</userString>
-    <season>	ALL	</season>
-    <historical>	true	</historical>
-    <priceGroup>	styles 700g	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <nations>	japan	</nations>
-      </include>
-    </vehicleFilter>
-    <style>
       <id>	43	</id>
       <texture>	gui/maps/vehicles/styles/generic_custom_look_2_japan.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_2_japan_desc	</description>
@@ -12010,6 +12170,80 @@
           <decals>
             <item>
               <id>	16	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 700g	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	japan	</nations>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	247	</id>
+      <texture>	gui/maps/vehicles/styles/generic_custom_look_japan.png	</texture>
+      <description>	#vehicle_customization:main_style/generic_custom_look_japan_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_japan_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:main_style/generic_custom_look_japan	</userString>
+      <outfits>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	15602	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	15108	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	15600	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	15108	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	15605	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	15108	</id>
               <appliedTo>	52416	</appliedTo>
             </item>
           </decals>
@@ -12281,88 +12515,6 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	true	</historical>
-    <priceGroup>	styles 700g	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <nations>	sweden	</nations>
-      </include>
-    </vehicleFilter>
-    <style>
-      <id>	246	</id>
-      <texture>	gui/maps/vehicles/styles/generic_custom_look_sweden.png	</texture>
-      <description>	#vehicle_customization:main_style/generic_custom_look_sweden_desc	</description>
-      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_sweden_desc/long	</longDescriptionSpecial>
-      <userString>	#vehicle_customization:main_style/generic_custom_look_sweden	</userString>
-      <tags>	progression_required addNationalEmblem	</tags>
-      <itemFilters>
-        <projection_decal>
-          <include>
-            <itemGroupName>	Progression Decals	</itemGroupName>
-          </include>
-        </projection_decal>
-      </itemFilters>
-      <outfits>
-        <outfit>
-          <season>	summer	</season>
-          <camouflages>
-            <item>
-              <id>	15803	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	674	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	winter	</season>
-          <camouflages>
-            <item>
-              <id>	15800	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	674	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	desert	</season>
-          <camouflages>
-            <item>
-              <id>	15804	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	674	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	event	</season>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/main_styles	</userString>
-    <season>	ALL	</season>
     <historical>	false	</historical>
     <priceGroup>	styles 3500g notInShop	</priceGroup>
     <vehicleFilter>
@@ -12376,6 +12528,7 @@
       <description>	#vehicle_customization:special_style/wolves_of_odin_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:special_style/wolves_of_odin_desc/long	</longDescriptionSpecial>
       <modelsSet>	WolvesOfOdin	</modelsSet>
+      <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/wolves_of_odin	</userString>
       <tags>	progression_required	</tags>
       <itemFilters>
@@ -12715,65 +12868,77 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	false	</historical>
-    <priceGroup>	styles 1750g notInShop	</priceGroup>
+    <historical>	true	</historical>
+    <priceGroup>	styles 700g	</priceGroup>
     <vehicleFilter>
       <include>
-        <vehicles>	sweden:S01_Strv_74_A2	</vehicles>
+        <nations>	sweden	</nations>
       </include>
     </vehicleFilter>
     <style>
-      <id>	332	</id>
-      <texture>	gui/maps/vehicles/styles/10years_strv.png	</texture>
-      <description>	#vehicle_customization:special_style/10years_strv_desc	</description>
-      <longDescriptionSpecial>	#vehicle_customization:special_style/10years_strv_desc/long	</longDescriptionSpecial>
-      <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:special_style/10years_strv	</userString>
-      <tags>	progression_required	</tags>
+      <id>	246	</id>
+      <texture>	gui/maps/vehicles/styles/generic_custom_look_sweden.png	</texture>
+      <description>	#vehicle_customization:main_style/generic_custom_look_sweden_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_sweden_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:main_style/generic_custom_look_sweden	</userString>
       <outfits>
         <outfit>
-          <season>	ALL	</season>
+          <season>	summer	</season>
           <camouflages>
             <item>
-              <id>	171	</id>
-              <appliedTo>	272	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-            <item>
-              <id>	172	</id>
-              <appliedTo>	4096	</appliedTo>
+              <id>	15803	</id>
+              <appliedTo>	4368	</appliedTo>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
             </item>
           </camouflages>
-          <paints>
-            <item>
-              <id>	55	</id>
-              <appliedTo>	7	</appliedTo>
-            </item>
-            <item>
-              <id>	56	</id>
-              <appliedTo>	30576	</appliedTo>
-            </item>
-          </paints>
           <decals>
             <item>
-              <id>	296	</id>
-              <appliedTo>	13104	</appliedTo>
+              <id>	674	</id>
+              <appliedTo>	52416	</appliedTo>
             </item>
           </decals>
         </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	15800	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	674	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	15804	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	674	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
       </outfits>
-      <itemFilters>
-        <projection_decal>
-          <include>
-            <itemGroupName>	Progression Decals	</itemGroupName>
-          </include>
-        </projection_decal>
-      </itemFilters>
     </style>
   </itemGroup>
   <itemGroup>
@@ -13125,88 +13290,6 @@
               <appliedTo>	52416	</appliedTo>
             </item>
           </decals>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/main_styles	</userString>
-    <season>	ALL	</season>
-    <historical>	true	</historical>
-    <priceGroup>	styles 700g	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <nations>	uk	</nations>
-      </include>
-    </vehicleFilter>
-    <style>
-      <id>	239	</id>
-      <texture>	gui/maps/vehicles/styles/generic_custom_look_uk.png	</texture>
-      <description>	#vehicle_customization:main_style/generic_custom_look_uk_desc	</description>
-      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_uk_desc/long	</longDescriptionSpecial>
-      <userString>	#vehicle_customization:main_style/generic_custom_look_uk	</userString>
-      <tags>	progression_required addNationalEmblem	</tags>
-      <itemFilters>
-        <projection_decal>
-          <include>
-            <itemGroupName>	Progression Decals	</itemGroupName>
-          </include>
-        </projection_decal>
-      </itemFilters>
-      <outfits>
-        <outfit>
-          <season>	summer	</season>
-          <camouflages>
-            <item>
-              <id>	15506	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	15040	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	winter	</season>
-          <camouflages>
-            <item>
-              <id>	15511	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	15040	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	desert	</season>
-          <camouflages>
-            <item>
-              <id>	15501	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	15040	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	event	</season>
         </outfit>
       </outfits>
     </style>
@@ -13910,6 +13993,80 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 700g	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	uk	</nations>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	239	</id>
+      <texture>	gui/maps/vehicles/styles/generic_custom_look_uk.png	</texture>
+      <description>	#vehicle_customization:main_style/generic_custom_look_uk_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_uk_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:main_style/generic_custom_look_uk	</userString>
+      <outfits>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	15506	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	15040	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	15511	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	15040	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	15501	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	15040	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
@@ -14222,91 +14379,6 @@
               <appliedTo>	52416	</appliedTo>
             </item>
           </decals>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/main_styles	</userString>
-    <season>	ALL	</season>
-    <historical>	true	</historical>
-    <priceGroup>	styles 700g	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <nations>	usa	</nations>
-      </include>
-      <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <style>
-      <id>	243	</id>
-      <texture>	gui/maps/vehicles/styles/generic_custom_look_usa.png	</texture>
-      <description>	#vehicle_customization:main_style/generic_custom_look_usa_desc	</description>
-      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_usa_desc/long	</longDescriptionSpecial>
-      <userString>	#vehicle_customization:main_style/generic_custom_look_usa	</userString>
-      <tags>	progression_required addNationalEmblem	</tags>
-      <itemFilters>
-        <projection_decal>
-          <include>
-            <itemGroupName>	Progression Decals	</itemGroupName>
-          </include>
-        </projection_decal>
-      </itemFilters>
-      <outfits>
-        <outfit>
-          <season>	summer	</season>
-          <camouflages>
-            <item>
-              <id>	15204	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	14705	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	winter	</season>
-          <camouflages>
-            <item>
-              <id>	15210	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	14705	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	desert	</season>
-          <camouflages>
-            <item>
-              <id>	15201	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	14705	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	event	</season>
         </outfit>
       </outfits>
     </style>
@@ -15121,6 +15193,52 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A120_M48A5	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	294	</id>
+      <texture>	gui/maps/vehicles/styles/A120_M48A5_3Dst.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/A120_M48A5_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	battlepass2020	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/A120_M48A5_3Dst	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
     <historical>	false	</historical>
     <priceGroup>	styles 1750g notInShop	</priceGroup>
     <vehicleFilter>
@@ -15168,52 +15286,6 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
-    <season>	ALL	</season>
-    <historical>	true	</historical>
-    <priceGroup>	styles 3000g notInShop	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <vehicles>	usa:A120_M48A5	</vehicles>
-      </include>
-    </vehicleFilter>
-    <style>
-      <id>	294	</id>
-      <texture>	gui/maps/vehicles/styles/A120_M48A5_3Dst.png	</texture>
-      <longDescriptionSpecial>	#vehicle_customization:special_style/A120_M48A5_3Dst_desc/long	</longDescriptionSpecial>
-      <modelsSet>	battlepass2020	</modelsSet>
-      <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:special_style/A120_M48A5_3Dst	</userString>
-      <tags>	progression_required addNationalEmblem	</tags>
-      <itemFilters>
-        <projection_decal>
-          <include>
-            <itemGroupName>	Progression Decals	</itemGroupName>
-          </include>
-        </projection_decal>
-      </itemFilters>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	1	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	0	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
@@ -15249,6 +15321,83 @@
               <palette>	0	</palette>
             </item>
           </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 700g	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	usa	</nations>
+      </include>
+      <exclude>
+        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	243	</id>
+      <texture>	gui/maps/vehicles/styles/generic_custom_look_usa.png	</texture>
+      <description>	#vehicle_customization:main_style/generic_custom_look_usa_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_usa_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:main_style/generic_custom_look_usa	</userString>
+      <outfits>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	15204	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	14705	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	15210	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	14705	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	15201	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	14705	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
         </outfit>
       </outfits>
     </style>
@@ -15536,6 +15685,7 @@
       <description>	#vehicle_customization:special_style/kv2_w_description	</description>
       <longDescriptionSpecial>	#vehicle_customization:special_style/kv2_w_description/long	</longDescriptionSpecial>
       <modelsSet>	WH	</modelsSet>
+      <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/kv2_w	</userString>
       <outfits>
         <outfit>
@@ -15667,6 +15817,7 @@
       <description>	#vehicle_customization:special_style/snow_leopard_description	</description>
       <longDescriptionSpecial>	#vehicle_customization:special_style/snow_leopard_description/long	</longDescriptionSpecial>
       <modelsSet>	SnowLeopard	</modelsSet>
+      <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/snow_leopard	</userString>
       <tags>	winter_hunt progression_required	</tags>
       <itemFilters>
@@ -15892,6 +16043,7 @@
       <texture>	gui/maps/vehicles/styles/burnout.png	</texture>
       <longDescriptionSpecial>	#vehicle_customization:unique_style/burnout_desc/long	</longDescriptionSpecial>
       <modelsSet>	Burnout	</modelsSet>
+      <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:unique_style/burnout	</userString>
       <tags>	progression_required	</tags>
       <itemFilters>
@@ -16940,58 +17092,6 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
-    <season>	ALL	</season>
-    <historical>	false	</historical>
-    <priceGroup>	styles 1750g notInShop	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <vehicles>	ussr:R134_Object_252U	</vehicles>
-      </include>
-    </vehicleFilter>
-    <style>
-      <id>	330	</id>
-      <texture>	gui/maps/vehicles/styles/10years_object252.png	</texture>
-      <description>	#vehicle_customization:special_style/10years_object252_desc	</description>
-      <longDescriptionSpecial>	#vehicle_customization:special_style/10years_object252_desc/long	</longDescriptionSpecial>
-      <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:special_style/10years_object252	</userString>
-      <tags>	progression_required	</tags>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	169	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <paints>
-            <item>
-              <id>	53	</id>
-              <appliedTo>	30583	</appliedTo>
-            </item>
-          </paints>
-          <decals>
-            <item>
-              <id>	294	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-      </outfits>
-      <itemFilters>
-        <projection_decal>
-          <include>
-            <itemGroupName>	Progression Decals	</itemGroupName>
-          </include>
-        </projection_decal>
-      </itemFilters>
-    </style>
-  </itemGroup>
-  <itemGroup>
     <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
@@ -17245,88 +17345,6 @@
               <appliedTo>	12288	</appliedTo>
             </item>
           </decals>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/main_styles	</userString>
-    <season>	ALL	</season>
-    <historical>	true	</historical>
-    <priceGroup>	styles 700g	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <nations>	italy	</nations>
-      </include>
-    </vehicleFilter>
-    <style>
-      <id>	241	</id>
-      <texture>	gui/maps/vehicles/styles/generic_custom_look_italy.png	</texture>
-      <description>	#vehicle_customization:main_style/generic_custom_look_italy_desc	</description>
-      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_italy_desc/long	</longDescriptionSpecial>
-      <userString>	#vehicle_customization:main_style/generic_custom_look_italy	</userString>
-      <tags>	progression_required addNationalEmblem	</tags>
-      <itemFilters>
-        <projection_decal>
-          <include>
-            <itemGroupName>	Progression Decals	</itemGroupName>
-          </include>
-        </projection_decal>
-      </itemFilters>
-      <outfits>
-        <outfit>
-          <season>	summer	</season>
-          <camouflages>
-            <item>
-              <id>	539	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	190	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	winter	</season>
-          <camouflages>
-            <item>
-              <id>	537	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	190	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	desert	</season>
-          <camouflages>
-            <item>
-              <id>	540	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	190	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	event	</season>
         </outfit>
       </outfits>
     </style>
@@ -17630,6 +17648,80 @@
               <appliedTo>	12288	</appliedTo>
             </item>
           </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 700g	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	italy	</nations>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	241	</id>
+      <texture>	gui/maps/vehicles/styles/generic_custom_look_italy.png	</texture>
+      <description>	#vehicle_customization:main_style/generic_custom_look_italy_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_italy_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:main_style/generic_custom_look_italy	</userString>
+      <outfits>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	539	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	190	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	537	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	190	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	540	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	190	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
         </outfit>
       </outfits>
     </style>
@@ -17949,88 +18041,6 @@
       </include>
     </vehicleFilter>
     <style>
-      <id>	242	</id>
-      <texture>	gui/maps/vehicles/styles/generic_custom_look_poland.png	</texture>
-      <description>	#vehicle_customization:main_style/generic_custom_look_poland_desc	</description>
-      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_poland_desc/long	</longDescriptionSpecial>
-      <userString>	#vehicle_customization:main_style/generic_custom_look_poland	</userString>
-      <tags>	progression_required addNationalEmblem	</tags>
-      <itemFilters>
-        <projection_decal>
-          <include>
-            <itemGroupName>	Progression Decals	</itemGroupName>
-          </include>
-        </projection_decal>
-      </itemFilters>
-      <outfits>
-        <outfit>
-          <season>	summer	</season>
-          <camouflages>
-            <item>
-              <id>	639	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	673	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	winter	</season>
-          <camouflages>
-            <item>
-              <id>	640	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	673	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	desert	</season>
-          <camouflages>
-            <item>
-              <id>	641	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	673	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	event	</season>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/main_styles	</userString>
-    <season>	ALL	</season>
-    <historical>	true	</historical>
-    <priceGroup>	styles 700g	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <nations>	poland	</nations>
-      </include>
-    </vehicleFilter>
-    <style>
       <id>	28	</id>
       <texture>	gui/maps/vehicles/styles/generic_custom_look_2_poland.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_2_poland_desc	</description>
@@ -18172,6 +18182,80 @@
           <decals>
             <item>
               <id>	16	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 700g	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	poland	</nations>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	242	</id>
+      <texture>	gui/maps/vehicles/styles/generic_custom_look_poland.png	</texture>
+      <description>	#vehicle_customization:main_style/generic_custom_look_poland_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_poland_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:main_style/generic_custom_look_poland	</userString>
+      <outfits>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	639	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	673	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	640	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	673	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	641	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	673	</id>
               <appliedTo>	52416	</appliedTo>
             </item>
           </decals>

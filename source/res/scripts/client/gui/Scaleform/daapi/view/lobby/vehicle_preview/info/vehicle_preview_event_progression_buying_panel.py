@@ -12,7 +12,7 @@ from skeletons.gui.shared import IItemsCache
 from gui.shared import event_dispatcher
 
 class VehiclePreviewEventProgressionBuyingPanel(VehiclePreviewEventProgressionBuyingPanelMeta):
-    __eventProgressionController = dependency.descriptor(IEventProgressionController)
+    __eventProgression = dependency.descriptor(IEventProgressionController)
     __goodiesCache = dependency.descriptor(IGoodiesCache)
     __itemsCache = dependency.descriptor(IItemsCache)
     __appLoader = dependency.descriptor(IAppLoader)
@@ -28,7 +28,7 @@ class VehiclePreviewEventProgressionBuyingPanel(VehiclePreviewEventProgressionBu
 
     def onBuyClick(self):
         event_dispatcher.showEventProgressionBuyConfirmView(ctx={'vehicle': g_currentPreviewVehicle.item,
-         'price': self.__eventProgressionController.getRewardVehiclePrice(g_currentPreviewVehicle.item.intCD)})
+         'price': self.__eventProgression.getRewardVehiclePrice(g_currentPreviewVehicle.item.intCD)})
 
     def showTooltip(self, intCD, itemType):
         toolTipMgr = self.__appLoader.getApp().getToolTipMgr()

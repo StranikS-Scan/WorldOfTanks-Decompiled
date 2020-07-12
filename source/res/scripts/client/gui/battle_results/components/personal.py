@@ -1,9 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/components/personal.py
+import logging
 import random
 from math import ceil
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import DEATH_REASON_ALIVE, PREMIUM_TYPE, ARENA_BONUS_TYPE, ARENA_GUI_TYPE
+import BigWorld
+from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.BATTLE_RESULTS_PREMIUM_STATES import BATTLE_RESULTS_PREMIUM_STATES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
@@ -25,6 +28,8 @@ from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 _UNDEFINED_EFFICIENCY_VALUE = '-'
+_logger = logging.getLogger(__name__)
+_logger.addHandler(logging.NullHandler())
 
 class PremiumAccountFlag(base.StatsItem):
     __slots__ = ()
@@ -100,7 +105,7 @@ class DynamicPremiumState(base.StatsItem):
 
 
 class PremiumInfoBlock(base.StatsBlock):
-    __slots__ = ('creditsPremiumBonusStr', 'xpPremiumBonusStr', 'premiumBonusStr', 'isGetPremium', 'isUpgradeToPremiumPlus', 'backgroundIcon', '__xpDiff', '__creditsDiff', '__canUpgradeToBasic', '__canUpgradeToPlus', '__adsCase')
+    __slots__ = ('creditsPremiumBonusStr', 'xpPremiumBonusStr', 'premiumBonusStr', 'isGetPremium', 'isUpgradeToPremiumPlus', 'backgroundIcon', 'inBattleQueue', '__xpDiff', '__creditsDiff', '__canUpgradeToBasic', '__canUpgradeToPlus', 'visibleDetailsBtn', '__adsCase')
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __itemsCache = dependency.descriptor(IItemsCache)
     __allPremiumPlusCases = ('credits', 'premium', 'squad', 'bonus', 'quests')
@@ -116,6 +121,8 @@ class PremiumInfoBlock(base.StatsBlock):
         self.backgroundIcon = ''
         self.isGetPremium = False
         self.isUpgradeToPremiumPlus = False
+        self.inBattleQueue = False
+        self.visibleDetailsBtn = False
         self.__xpDiff = 0
         self.__creditsDiff = 0
         self.__canUpgradeToBasic = False
@@ -148,6 +155,9 @@ class PremiumInfoBlock(base.StatsBlock):
         else:
             self.creditsPremiumBonusStr = style.makeCreditsLabel(self.__creditsDiff, isDiff=True, useBigIcon=True)
             self.xpPremiumBonusStr = style.makeXpLabel(self.__xpDiff, isDiff=True, useBigIcon=True)
+        player = BigWorld.player()
+        self.inBattleQueue = player.isInBattleQueue()
+        self.visibleDetailsBtn = bool(GUI_SETTINGS.premiumInfo.get('baseURL'))
         return super(PremiumInfoBlock, self).getVO()
 
     def __setPremiumBonusData(self):

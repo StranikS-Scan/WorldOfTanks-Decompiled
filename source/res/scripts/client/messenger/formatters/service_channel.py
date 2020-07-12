@@ -1,40 +1,37 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/formatters/service_channel.py
+import logging
 import operator
 import time
 import types
 from Queue import Queue
 from collections import defaultdict
-import logging
 import ArenaType
 import BigWorld
 import constants
-import personal_missions
 import nations
+import personal_missions
 from adisp import async, process
+from battle_pass_common import BATTLE_PASS_BADGE_ID
+from battle_pass_common import BattlePassRewardReason, BattlePassState
+from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from chat_shared import decompressSysMessage, SYS_MESSAGE_TYPE, MapRemovedFromBLReason
 from constants import INVOICE_ASSET, AUTO_MAINTENANCE_TYPE, AUTO_MAINTENANCE_RESULT, PREBATTLE_TYPE, FINISH_REASON, KICK_REASON_NAMES, KICK_REASON, NC_MESSAGE_TYPE, NC_MESSAGE_PRIORITY, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, ARENA_GUI_TYPE, SYS_MESSAGE_FORT_EVENT_NAMES, PREMIUM_ENTITLEMENTS, PREMIUM_TYPE
-from battle_pass_common import BATTLE_PASS_BADGE_ID
-from blueprints.BlueprintTypes import BlueprintTypes
-from goodies.goodie_constants import GOODIE_VARIETY
-from gui.shared.utils.requesters.ShopRequester import _NamedGoodieData
-from items.components.c11n_constants import UNBOUND_VEH_KEY
-from messenger.formatters.service_channel_helpers import EOL, getCustomizationItemData, MessageData, getRewardsForQuests
-from battle_pass_common import BattlePassRewardReason, BattlePassState
-from nations import NAMES
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
 from dossiers2.ui.layouts import IGNORED_BY_BATTLE_RESULTS
+from goodies.goodie_constants import GOODIE_VARIETY
 from gui import GUI_SETTINGS, GUI_NATIONS
-from gui.impl import backport
-from gui.impl.gen import R
+from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.SystemMessages import SM_TYPE
 from gui.clans.formatters import getClanFullName
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.prb_control.formatters import getPrebattleFullDescription
 from gui.ranked_battles.constants import YEAR_POINTS_TOKEN
-from gui.ranked_battles.ranked_models import PostBattleRankInfo, RankChangeStates
 from gui.ranked_battles.ranked_helpers import getBonusBattlesIncome
+from gui.ranked_battles.ranked_models import PostBattleRankInfo, RankChangeStates
 from gui.server_events.awards_formatters import CompletionTokensBonusFormatter
 from gui.server_events.bonuses import VehiclesBonus, EntitlementBonus, DEFAULT_CREW_LVL, MetaBonus, getMergedBonusesFromDicts
 from gui.server_events.finders import PERSONAL_MISSION_TOKEN
@@ -45,22 +42,25 @@ from gui.shared.formatters.currency import getBWFormatter, getStyle, applyAll
 from gui.shared.formatters.time_formatters import getTillTimeByResource
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import getUserName, getShortUserName
-from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.gui_items.crew_skin import localizedFullName
+from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency, ZERO_MONEY
 from gui.shared.notifications import NotificationPriorityLevel, NotificationGuiSettings, NotificationGroup
-from gui.shared.utils.transport import z_loads
+from gui.shared.utils.requesters.ShopRequester import _NamedGoodieData
 from gui.shared.utils.requesters.blueprints_requester import getUniqueBlueprints, getFragmentNationID
-from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
+from gui.shared.utils.transport import z_loads
 from helpers import dependency
 from helpers import i18n, html, getLocalizedData, int2roman
 from helpers import time_utils
 from items import getTypeInfoByIndex, getTypeInfoByName, vehicles as vehicles_core, tankmen, ITEM_TYPES as I_T
-from items.components.crew_skins_constants import NO_CREW_SKIN_ID
+from items.components.c11n_constants import UNBOUND_VEH_KEY
 from items.components.crew_books_constants import CREW_BOOK_RARITY
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from messenger import g_settings
 from messenger.ext import passCensor
 from messenger.formatters import TimeFormatter, NCContextItemFormatter
+from messenger.formatters.service_channel_helpers import EOL, getCustomizationItemData, MessageData, getRewardsForQuests
+from nations import NAMES
 from shared_utils import BoundMethodWeakref, first
 from skeletons.gui.game_control import IRankedBattlesController, IEventProgressionController, IBattlePassController
 from skeletons.gui.goodies import IGoodiesCache
@@ -337,6 +337,9 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
     __battleResultKeys = {-1: 'battleDefeatResult',
      0: 'battleDrawGameResult',
      1: 'battleVictoryResult'}
+    __BRResultKeys = {-1: 'battleRoyaleDefeatResult',
+     0: 'battleRoyaleDefeatResult',
+     1: 'battleRoyaleVictoryResult'}
     __goldTemplateKey = 'battleResultGold'
     __questsTemplateKey = 'battleQuests'
 
@@ -388,6 +391,8 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                 ctx['rankedProgress'] = self.__makeRankedFlowStrings(battleResults)
                 ctx['rankedBonusBattles'] = self.__makeRankedBonusString(battleResults)
                 ctx['battlePassProgress'] = self.__makeBattlePassProgressionString(battleResults.get('ext', {}))
+                ctx['BRPoints'] = self.__makeBRPointsString(battleResults)
+                ctx['BRLevel'] = self.__makeBRLevelString(battleResults)
                 ctx['lock'] = self.__makeVehicleLockString(vehicleNames, battleResults)
                 ctx['quests'] = self.__makeQuestsAchieve(message)
                 team = battleResults.get('team', 0)
@@ -396,7 +401,11 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                         winnerIfDraw = battleResults.get('winnerIfDraw')
                         if winnerIfDraw:
                             battleResKey = 1 if winnerIfDraw == team else -1
-                templateName = self.__battleResultKeys[battleResKey]
+                if guiType == ARENA_GUI_TYPE.BATTLE_ROYALE:
+                    battleResultKeys = self.__BRResultKeys
+                else:
+                    battleResultKeys = self.__battleResultKeys
+                templateName = battleResultKeys[battleResKey]
                 bgIconSource = None
                 arenaUniqueID = battleResults.get('arenaUniqueID', 0)
                 formatted = g_settings.msgTemplates.format(templateName, ctx=ctx, data={'timestamp': arenaCreateTime,
@@ -562,6 +571,34 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
 
     def __makePiggyBankString(self, credits_):
         return '' if not credits_ else g_settings.htmlTemplates.format('piggyBank', ctx={'credits': self.__makeCurrencyString(Currency.CREDITS, credits_)})
+
+    def __makeBRPointsString(self, battleResults):
+        __serviceChannelMessages = R.strings.messenger.serviceChannelMessages
+        brPointsBlock = ''
+        if battleResults.get('guiType', 0) == ARENA_GUI_TYPE.BATTLE_ROYALE:
+            points = battleResults.get('brPointsChanges', 0)
+            if points > 0:
+                brPointsValue = str(abs(points))
+                brPointsTitle = backport.text(__serviceChannelMessages.BRbattleResults.pointsEarned())
+                brPointsBlock = g_settings.htmlTemplates.format('battleResultBRProgression', {'brProgressionTitle': brPointsTitle,
+                 'brProgressionValue': brPointsValue})
+        return brPointsBlock
+
+    def __makeBRLevelString(self, battleResults):
+        brLevelsBlock = []
+        resultMsg = R.strings.messenger.serviceChannelMessages.BRbattleResults
+        if battleResults.get('guiType', 0) == ARENA_GUI_TYPE.BATTLE_ROYALE:
+            accTitleAndPoints = battleResults.get('accBRTitle', (1, 0))
+            brTitleChange = battleResults.get('brTitleChange', 0)
+            if brTitleChange > 0:
+                brTitleStr = backport.text(resultMsg.levelEarned())
+                currentTitle = accTitleAndPoints[0]
+                for brTitleValue in range(currentTitle - brTitleChange, currentTitle):
+                    brTitleValue += 1
+                    brLevelsBlock.append(g_settings.htmlTemplates.format('battleResultBRProgression', {'brProgressionTitle': brTitleStr,
+                     'brProgressionValue': brTitleValue}))
+
+        return ''.join(brLevelsBlock)
 
 
 class AutoMaintenanceFormatter(WaitItemsSyncFormatter):
@@ -2155,7 +2192,7 @@ class QuestAchievesFormatter(object):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __goodiesCache = dependency.descriptor(IGoodiesCache)
     __itemsCache = dependency.descriptor(IItemsCache)
-    __eventProgCtrl = dependency.descriptor(IEventProgressionController)
+    __eventProgression = dependency.descriptor(IEventProgressionController)
 
     @classmethod
     def formatQuestAchieves(cls, data, asBattleFormatter, processCustomizations=True):
@@ -2233,7 +2270,7 @@ class QuestAchievesFormatter(object):
             name = backport.text(R.strings.messenger.serviceChannelMessages.battleResults.epicAbilityPoints())
             itemsNames.append(backport.text(R.strings.messenger.serviceChannelMessages.battleResults.quests.items.name(), name=name, count=backport.getIntegralFormat(abilityPts)))
         tokens = data.get('tokens')
-        rewardTokenID = cls.__eventProgCtrl.rewardPointsTokenID
+        rewardTokenID = cls.__eventProgression.rewardPointsTokenID
         if tokens and rewardTokenID in tokens:
             name = backport.text(R.strings.messenger.serviceChannelMessages.battleResults.epicRewardPoints())
             count = tokens[rewardTokenID].get('count', 1)
@@ -2392,6 +2429,20 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
             return MessageData(formatted, settings)
         else:
             return
+
+    def __buildBattleRoyaleMessageData(self, message, withCustomizations=True):
+        data = message.data or {}
+        fmt = self.formatQuestAchieves(data, asBattleFormatter=False, processCustomizations=withCustomizations)
+        settings = self._getGuiSettings(message, 'royaleVehiclesInvoiceReceived')
+        operationTime = message.sentTime
+        if operationTime:
+            fDatetime = TimeFormatter.getLongDatetimeFormat(time_utils.makeLocalServerTime(operationTime))
+        else:
+            fDatetime = 'N/A'
+        ctx = {'achieves': fmt,
+         'at': fDatetime}
+        formatted = g_settings.msgTemplates.format('royaleVehiclesInvoiceReceived', ctx)
+        return MessageData(formatted, settings)
 
 
 class NCMessageFormatter(ServiceChannelFormatter):
@@ -2950,6 +3001,45 @@ class RankedQuestAchievesFormatter(QuestAchievesFormatter):
 
     def __packAward(self, key, value):
         return '{} {}'.format(backport.text(R.strings.system_messages.ranked.notifications.bonusName.dyn(key)()), self.__awardsStyles.get(key, text_styles.stats)(value))
+
+
+class BRQuestsFormatter(TokenQuestsFormatter):
+    __eventsCache = dependency.descriptor(IEventsCache)
+
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        if isSynced:
+            completedQuestIDs = message.data.get('completedQuestIDs', set())
+            messages = self.__formatEveryLevel(completedQuestIDs, message.data.copy())
+            callback([ MessageData(formattedMessage, self._getGuiSettings(message)) for formattedMessage in messages ])
+        else:
+            callback([MessageData(None, self._getGuiSettings(message))])
+        return
+
+    def __formatEveryLevel(self, completedQuestIDs, data):
+        formattedMessage = None
+        formattedLevels = {}
+        quests = self.__eventsCache.getHiddenQuests()
+        for questID in completedQuestIDs:
+            quest = quests.get(questID)
+            if quest is not None:
+                levelID = self.__getLevel(quest)
+                textID = R.strings.system_messages.royale.notifications.singleLevel.text()
+                formattedLevels[levelID] = backport.text(textID, level=levelID)
+
+        if formattedLevels:
+            formattedMessage = g_settings.msgTemplates.format('BrLevelQuest', ctx={'levelsBlock': EOL.join([ formattedLevels[key] for key in sorted(formattedLevels) ]),
+             'awardsBlock': self._packTitleAwards(data)})
+        return [formattedMessage]
+
+    def _packTitleAwards(self, awardsDict):
+        return self._achievesFormatter.formatQuestAchieves(awardsDict, asBattleFormatter=False) or ''
+
+    @classmethod
+    def __getLevel(cls, quest):
+        return str(quest.getID().split(':')[-1])
 
 
 class RankedQuestFormatter(WaitItemsSyncFormatter):

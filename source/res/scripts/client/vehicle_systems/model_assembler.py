@@ -72,6 +72,17 @@ def attachModels(assembler, vehicleDesc, modelsSetParams, isTurretDetached, rend
         assembler.addRootPart(chassis, TankPartNames.CHASSIS)
     else:
         assembler.addPart(chassis, TankPartNames.CHASSIS, TankCollisionPartNames.CHASSIS)
+    if collisionState and vehicleDesc.isWheeledVehicle:
+        for i, wheel in enumerate(vehicleDesc.chassis.wheels.wheels):
+            bspPath = ''
+            if renderState == RenderStates.CLIENT_COLLISION:
+                bspPath = wheel.hitTester.edClientBspModel
+            elif renderState == RenderStates.SERVER_COLLISION:
+                bspPath = wheel.hitTester.edServerBspModel
+            if bspPath:
+                assembler.addNode(wheel.nodeName, partNames.CHASSIS, math_utils.createTranslationMatrix(wheel.position))
+                assembler.emplacePart(bspPath, wheel.nodeName, TankCollisionPartNames.WHEEL + str(i))
+
     if collisionState and not overlayCollision:
         assembler.addNode('V', TankPartNames.CHASSIS, math_utils.createTranslationMatrix(vehicleDesc.chassis.hullPosition))
     assembler.emplacePart(hull, 'V', partNames.HULL)
@@ -463,27 +474,27 @@ def setupSplineTracks(fashion, vDesc, chassisModel, prereqs, modelsSet):
         try:
             segmentModelLeft = prereqs[modelName]
         except Exception:
-            debug_utils.LOG_ERROR("can't load track segment model <%s>" % modelName)
+            debug_utils.LOG_ERROR("can't load track segment model '%s'" % modelName)
 
         modelName = splineDesc.segmentModelRight(modelsSet)
         try:
             segmentModelRight = prereqs[modelName]
         except Exception:
-            debug_utils.LOG_ERROR("can't load track segment model <%s>" % modelName)
+            debug_utils.LOG_ERROR("can't load track segment model '%s'" % modelName)
 
         modelName = splineDesc.segment2ModelLeft(modelsSet)
         if modelName is not None:
             try:
                 segment2ModelLeft = prereqs[modelName]
             except Exception:
-                debug_utils.LOG_ERROR("can't load track segment 2 model <%s>" % modelName)
+                debug_utils.LOG_ERROR("can't load track segment 2 model '%s'" % modelName)
 
         modelName = splineDesc.segment2ModelRight(modelsSet)
         if modelName is not None:
             try:
                 segment2ModelRight = prereqs[modelName]
             except Exception:
-                debug_utils.LOG_ERROR("can't load track segment 2 model <%s>" % modelName)
+                debug_utils.LOG_ERROR("can't load track segment 2 model '%s'" % modelName)
 
         if segmentModelLeft is not None and segmentModelRight is not None:
             identityMatrix = Math.Matrix()
@@ -655,8 +666,10 @@ def assembleSplineTracks(vehicleDesc, appearance, splineTracksImpl, tracks):
             leftSplineTracks.append(Vehicular.SplineTrack(appearance.worldID, left, appearance.compoundModel, appearance.wheelsAnimator))
             rightSplineTracks.append(Vehicular.SplineTrack(appearance.worldID, right, appearance.compoundModel, appearance.wheelsAnimator))
 
-        tracks.addTrackComponent(True, leftSplineTracks, lodSettings)
-        tracks.addTrackComponent(False, rightSplineTracks, lodSettings)
+        if leftSplineTracks:
+            tracks.addTrackComponent(True, leftSplineTracks, lodSettings)
+        if rightSplineTracks:
+            tracks.addTrackComponent(False, rightSplineTracks, lodSettings)
         return
 
 

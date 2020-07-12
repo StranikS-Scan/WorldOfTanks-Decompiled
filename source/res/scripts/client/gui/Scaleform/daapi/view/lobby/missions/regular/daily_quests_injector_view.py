@@ -12,6 +12,11 @@ class DailyQuestsInjectorView(InjectComponentAdaptor, MissionsPremiumViewMeta):
             self._injectView.setDefaultTab(tabIdx)
         return
 
+    def changeTab(self, tabIdx):
+        if self._injectView is not None:
+            self._injectView.changeTab(tabIdx)
+        return
+
     def markVisited(self):
         if self._injectView is not None:
             self._injectView.markVisited()

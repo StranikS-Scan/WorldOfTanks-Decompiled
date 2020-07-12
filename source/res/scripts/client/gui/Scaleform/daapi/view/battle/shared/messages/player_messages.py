@@ -3,8 +3,9 @@
 import logging
 import SoundGroups
 from constants import EQUIPMENT_STAGES
-from gui.Scaleform.daapi.view.battle.shared.messages import fading_messages
 from gui.battle_control import avatar_getter
+from gui.battle_royale.constants import BR_EQUIPMENTS_WITH_MESSAGES
+from gui.Scaleform.daapi.view.battle.shared.messages import fading_messages
 from items import vehicles
 from gui.sounds.epic_sound_constants import EPIC_SOUND
 _logger = logging.getLogger(__name__)
@@ -13,6 +14,8 @@ _ID_TO_DESTRUCTIBLE_ENTITY_NAME = {1: '1',
  3: '3',
  4: '4',
  5: '5'}
+_EQUIPMENT_NAME_TO_MESSAGE_KEY = {'arcade_bomber_battle_royale': 'COMBAT_EQUIPMENT_USED_BOMBER',
+ 'arcade_smoke_battle_royale': 'COMBAT_EQUIPMENT_USED_SMOKE'}
 
 class PlayerMessages(fading_messages.FadingMessages):
 
@@ -73,9 +76,15 @@ class PlayerMessages(fading_messages.FadingMessages):
         self.showMessage(key, args, extra)
 
     def __onCombatEquipmentUpdated(self, _, item):
-        if item.getPrevStage() in (EQUIPMENT_STAGES.DEPLOYING, EQUIPMENT_STAGES.UNAVAILABLE, EQUIPMENT_STAGES.COOLDOWN) and item.getStage() == EQUIPMENT_STAGES.READY:
-            postfix = item.getDescriptor().name.split('_')[0].upper()
-            self.showMessage('COMBAT_EQUIPMENT_READY', {}, postfix=postfix)
+        if item.becomeReady:
+            itemDescriptor = item.getDescriptor()
+            if itemDescriptor.name in BR_EQUIPMENTS_WITH_MESSAGES:
+                if item.getPrevStage() == EQUIPMENT_STAGES.COOLDOWN and item.getQuantity() == 0:
+                    return
+                self.showMessage('COMBAT_BR_EQUIPMENT_READY', {'equipment': itemDescriptor.userString})
+            else:
+                postfix = itemDescriptor.name.split('_')[0].upper()
+                self.showMessage('COMBAT_EQUIPMENT_READY', {}, postfix=postfix)
 
     def __onCombatEquipmentUsed(self, shooterID, eqID):
         battleCxt = self.sessionProvider.getCtx()
@@ -83,8 +92,13 @@ class PlayerMessages(fading_messages.FadingMessages):
             equipment = vehicles.g_cache.equipments().get(eqID)
             getFullName = battleCxt.getPlayerFullName
             if equipment is not None:
-                postfix = equipment.name.split('_')[0].upper()
-                self.showMessage('COMBAT_EQUIPMENT_USED', {'player': getFullName(shooterID, showClan=False)}, extra=(('player', shooterID),), postfix=postfix)
+                messageKey = _EQUIPMENT_NAME_TO_MESSAGE_KEY.get(equipment.name)
+                if messageKey is None:
+                    postfix = equipment.name.split('_')[0].upper()
+                    messageKey = 'COMBAT_EQUIPMENT_USED'
+                else:
+                    postfix = ''
+                self.showMessage(messageKey, {'player': getFullName(shooterID, showClan=False)}, extra=(('player', shooterID),), postfix=postfix)
         else:
             equipment = vehicles.g_cache.equipments().get(eqID)
             if equipment is None:

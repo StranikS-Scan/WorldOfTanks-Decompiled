@@ -25,6 +25,7 @@ class BaseRallyView(BaseRallyViewMeta, IGlobalListener, MethodsRules):
 
     def _dispose(self):
         self._stopListening()
+        self.clear()
         super(BaseRallyView, self)._dispose()
 
     def _handleSetPrebattleCoolDown(self, event):

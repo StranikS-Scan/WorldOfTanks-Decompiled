@@ -2,16 +2,16 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/ingame_help.py
 import Keys
 from account_helpers.settings_core.settings_constants import CONTROLS
-from gui.ingame_help import detailed_help_pages
-from gui.Scaleform.daapi.view.meta.IngameHelpWindowMeta import IngameHelpWindowMeta
 from gui.Scaleform.daapi.view.meta.IngameDetailsHelpWindowMeta import IngameDetailsHelpWindowMeta
+from gui.Scaleform.daapi.view.meta.IngameHelpWindowMeta import IngameHelpWindowMeta
+from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.Scaleform.genConsts.KEYBOARD_KEYS import KEYBOARD_KEYS
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
+from gui.ingame_help import detailed_help_pages
 from gui.shared import event_dispatcher
 from gui.shared.utils.key_mapping import getScaleformKey
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
-from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 _CHANGED_KEYS_IN_HELP = (KEYBOARD_KEYS.FORWARD,
  KEYBOARD_KEYS.BACKWARD,
  KEYBOARD_KEYS.LEFT,
@@ -26,7 +26,8 @@ _CHANGED_KEYS_IN_HELP = (KEYBOARD_KEYS.FORWARD,
  KEYBOARD_KEYS.RELOAD_PARTIAL_CLIP,
  KEYBOARD_KEYS.STOP_FIRE,
  KEYBOARD_KEYS.SHOW_RADIAL_MENU,
- KEYBOARD_KEYS.ATTACK,
+ KEYBOARD_KEYS.HIGHLIGHT_LOCATION,
+ KEYBOARD_KEYS.HIGHLIGHT_TARGET,
  KEYBOARD_KEYS.PUSH_TO_TALK,
  KEYBOARD_KEYS.SHOW_HUD)
 _FIXED_KEYS_IN_HELP = ((KEYBOARD_KEYS.TOGGLE_PLAYER_PANEL_MODES, Keys.KEY_TAB), (KEYBOARD_KEYS.SHOW_EX_PLAYER_INFO, Keys.KEY_LALT))

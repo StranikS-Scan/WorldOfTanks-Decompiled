@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/customization_style_info.py
 from collections import namedtuple
-import GUI
 from CurrentVehicle import g_currentVehicle
 from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.customization.shared import getSuitableText
 from gui.Scaleform.daapi.view.meta.CustomizationStyleInfoMeta import CustomizationStyleInfoMeta
+from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.customization.shared import C11nId, getPurchaseMoneyState, isTransactionValid
 from gui.impl import backport
 from gui.impl.gen import R
@@ -23,7 +23,6 @@ StyleInfoVO = namedtuple('StyleInfoVO', ('styleName', 'styleInfo', 'styleInfoBig
 ButtonVO = namedtuple('ButtonVO', ('enabled', 'label', 'disabledTooltip', 'visible'))
 ParamVO = namedtuple('ParamVO', ('iconSrc', 'paramText'))
 STYLE_INFO_BLUR_DELAY = 0.2
-_STYLE_INFO_BLUR_RECTANGLE_ID = 0
 _INSERTION_OPEN_TAG = "<font size='16' face='$FieldFont' color='#E9E2BF'>"
 _INSERTION_OPEN_TAG_BIG = "<font size='18' face='$TitleFont' color='#E9E2BF'>"
 _INSERTION_CLOSE_TAG = '</font>'
@@ -40,7 +39,8 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
         CustomizationStyleInfoMeta.__init__(self)
         CallbackDelayer.__init__(self)
         self.__ctx = None
-        self.__blur = GUI.WGUIBackgroundBlur()
+        self.__blur = None
+        self.__blurRectId = None
         self.__visible = False
         self.__prevStyle = None
         self.__selectedStyle = None
@@ -50,6 +50,7 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
 
     def _populate(self):
         self.__ctx = self.service.getCtx()
+        self.__blur = CachedBlur()
         g_clientUpdateManager.addMoneyCallback(self.updateButton)
         g_currentVehicle.onChangeStarted += self.__onVehicleChangeStarted
         self.__ctx.events.onUpdateStyleInfoDOF += self.__onUpdateStyleInfoDOF
@@ -60,8 +61,9 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
         g_currentVehicle.onChangeStarted -= self.__onVehicleChangeStarted
         self.__ctx.events.onUpdateStyleInfoDOF -= self.__onUpdateStyleInfoDOF
         self.service.onCustomizationHelperRecreated -= self.__onCustomizationHelperRecreated
-        self.__blur.removeRect(_STYLE_INFO_BLUR_RECTANGLE_ID)
         self.__ctx = None
+        if self.__blur is not None:
+            self.__blur.fini()
         return
 
     def show(self, style=None):
@@ -101,9 +103,12 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
 
     def onApply(self):
         self.__ctx.events.onHideStyleInfo(toBuyWindow=True)
-        self.__blur.removeRect(_STYLE_INFO_BLUR_RECTANGLE_ID)
+        if self.__blurRectId:
+            self.__blur.removeRect(self.__blurRectId)
+            self.__blurRectId = None
         self.service.setDOFenabled(False)
         self.__visible = False
+        return
 
     def hide(self):
         self.stopCallback(self.__enableBlur)
@@ -114,8 +119,10 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
         return
 
     def disableBlur(self):
-        self.__blur.removeRect(_STYLE_INFO_BLUR_RECTANGLE_ID)
-        self.__blur.enable = False
+        if self.__blurRectId:
+            self.__blur.removeRect(self.__blurRectId)
+            self.__blurRectId = None
+        self.__blur.disable()
         self.__paramsDOF = None
         self.service.setDOFenabled(False)
         return
@@ -191,7 +198,7 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
         return params
 
     def __enableBlur(self):
-        self.__blur.enable = True
+        self.__blur.enable()
 
     def __installStyle(self, style):
         slotId = C11nId(areaId=Area.MISC, slotType=GUI_ITEM_TYPE.STYLE, regionIdx=0)
@@ -226,4 +233,7 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
          0,
          round(x + width),
          round(height))
-        self.__blur.addRect(_STYLE_INFO_BLUR_RECTANGLE_ID, blurRect)
+        if self.__blurRectId:
+            self.__blur.changeRect(self.__blurRectId, blurRect)
+        else:
+            self.__blurRectId = self.__blur.addRect(blurRect)

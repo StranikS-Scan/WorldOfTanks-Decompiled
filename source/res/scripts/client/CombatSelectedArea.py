@@ -151,3 +151,12 @@ class CombatSelectedArea(object):
         x_side = self.__size.x / 2
         y_side = self.__size.y / 2
         return -x_side < point.x < x_side and -y_side < point.z < y_side
+
+    def setColor(self, color=None):
+        if color is None:
+            color = self.__color
+        if self.__terrainSelectedArea:
+            self.__terrainSelectedArea.setColor(color)
+        if self.__terrainAndObjectsSelectedArea:
+            self.__terrainAndObjectsSelectedArea.setColor(color)
+        return

@@ -71,26 +71,22 @@
     <fireKey>	KEY_0	</fireKey>
     <satelliteKeys></satelliteKeys>
   </CMD_AMMO_CHOICE_0>
-  <CMD_CHAT_SHORTCUT_ATTACK_MY_TARGET>
+  <CMD_CHAT_SHORTCUT_CONTEXT_COMMAND>
     <fireKey>	KEY_T	</fireKey>
     <satelliteKeys></satelliteKeys>
-  </CMD_CHAT_SHORTCUT_ATTACK_MY_TARGET>
-  <CMD_CHAT_SHORTCUT_ATTACK>
+  </CMD_CHAT_SHORTCUT_CONTEXT_COMMAND>
+  <CMD_CHAT_SHORTCUT_CONTEXT_COMMIT>
+    <fireKey>	KEY_F2	</fireKey>
+    <satelliteKeys></satelliteKeys>
+  </CMD_CHAT_SHORTCUT_CONTEXT_COMMIT>
+  <CMD_CHAT_SHORTCUT_THANKYOU>
     <fireKey>	KEY_F3	</fireKey>
     <satelliteKeys></satelliteKeys>
-  </CMD_CHAT_SHORTCUT_ATTACK>
+  </CMD_CHAT_SHORTCUT_THANKYOU>
   <CMD_CHAT_SHORTCUT_BACKTOBASE>
     <fireKey>	KEY_F4	</fireKey>
     <satelliteKeys></satelliteKeys>
   </CMD_CHAT_SHORTCUT_BACKTOBASE>
-  <CMD_CHAT_SHORTCUT_POSITIVE>
-    <fireKey>	KEY_F5	</fireKey>
-    <satelliteKeys></satelliteKeys>
-  </CMD_CHAT_SHORTCUT_POSITIVE>
-  <CMD_CHAT_SHORTCUT_NEGATIVE>
-    <fireKey>	KEY_F6	</fireKey>
-    <satelliteKeys></satelliteKeys>
-  </CMD_CHAT_SHORTCUT_NEGATIVE>
   <CMD_CHAT_SHORTCUT_HELPME>
     <fireKey>	KEY_F7	</fireKey>
     <satelliteKeys></satelliteKeys>
@@ -251,4 +247,28 @@
     <fireKey>	KEY_F1	</fireKey>
     <satelliteKeys></satelliteKeys>
   </CMD_SHOW_HELP>
+  <CMD_CM_VEHICLE_ACTIVATE_RADAR>
+    <fireKey>	KEY_X	</fireKey>
+    <satelliteKeys></satelliteKeys>
+  </CMD_CM_VEHICLE_ACTIVATE_RADAR>
+  <CMD_CM_VEHICLE_UPGRADE_PANEL_LEFT>
+    <fireKey>	KEY_1	</fireKey>
+    <satelliteKeys>	KEY_LCONTROL	</satelliteKeys>
+  </CMD_CM_VEHICLE_UPGRADE_PANEL_LEFT>
+  <CMD_CM_VEHICLE_UPGRADE_PANEL_ALTERNATIVE_LEFT>
+    <fireKey>	KEY_1	</fireKey>
+    <satelliteKeys>	KEY_RCONTROL	</satelliteKeys>
+  </CMD_CM_VEHICLE_UPGRADE_PANEL_ALTERNATIVE_LEFT>
+  <CMD_CM_VEHICLE_UPGRADE_PANEL_RIGHT>
+    <fireKey>	KEY_2	</fireKey>
+    <satelliteKeys>	KEY_LCONTROL	</satelliteKeys>
+  </CMD_CM_VEHICLE_UPGRADE_PANEL_RIGHT>
+  <CMD_CM_VEHICLE_UPGRADE_PANEL_ALTERNATIVE_RIGHT>
+    <fireKey>	KEY_2	</fireKey>
+    <satelliteKeys>	KEY_RCONTROL	</satelliteKeys>
+  </CMD_CM_VEHICLE_UPGRADE_PANEL_ALTERNATIVE_RIGHT>
+  <CMD_UPGRADE_PANEL_SHOW>
+    <fireKey>	KEY_N	</fireKey>
+    <satelliteKeys></satelliteKeys>
+  </CMD_UPGRADE_PANEL_SHOW>
 </command_mapping.xml>

@@ -43,6 +43,10 @@
       <armor_15>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
       </armor_15>
       <armor_16>	190.5	</armor_16>
+      <armor_17>	120	</armor_17>
+      <armor_18>	120	</armor_18>
+      <armor_19>	100	</armor_19>
+      <armor_20>	90	</armor_20>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	30000	</weight>
@@ -664,8 +668,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.18	</vehicleMovement>
-        <vehicleRotation>	0.18	</vehicleRotation>
+        <vehicleMovement>	0.14	</vehicleMovement>
+        <vehicleRotation>	0.14	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
@@ -1573,7 +1577,7 @@
             <gun>	50	</gun>
           </armor>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <reloadTime>	10	</reloadTime>
+          <reloadTime>	8.8	</reloadTime>
           <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <pitchLimits>
@@ -1581,6 +1585,11 @@
             <maxPitch>	0 8 0.40856 8 0.472222 5 0.527778 5 0.59144 8 1 8	</maxPitch>
           </pitchLimits>
           <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.06	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/american/A69_T110E5/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A69_T110E5/crash/lod0/Gun_01.model	</destroyed>

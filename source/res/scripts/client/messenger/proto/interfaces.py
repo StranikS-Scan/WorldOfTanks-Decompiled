@@ -62,29 +62,30 @@ class IBattleCommandFactory(object):
     def createByNameTarget(self, name, targetID):
         return None
 
-    def createByCellIdx(self, cellIdx):
-        return None
-
-    def createByPosition(self, position):
+    def createByPosition(self, position, name, reloadTime=0.0):
         return None
 
     def createByObjectiveIndex(self, idx, isAtk):
         return None
 
-    def createByBaseIndex(self, idx, name, isAtk):
+    def createByBaseIndexAndName(self, pointID, commandName, baseName):
         return None
 
     def create4Reload(self, isCassetteClip, timeLeft, quantity):
         return None
 
-    def createSPGAimAreaCommand(self, desiredShotPosition, cellIdx, reloadTime):
+    def createReplyByName(self, replyID, replyType, replierID):
+        return None
+
+    def createCancelReplyByName(self, replyID, replyType, replierID):
+        return None
+
+    def createClearChatCommandsFromTarget(self, targetID, targetMarkerType):
         return None
 
 
 class IUnitCommandFactory(object):
-
-    def createByCellIdx(self, cellIdx):
-        return None
+    pass
 
 
 class IEntityFindCriteria(object):

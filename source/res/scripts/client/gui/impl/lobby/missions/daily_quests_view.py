@@ -21,7 +21,6 @@ from gui.server_events import settings, daily_quests
 from gui.server_events.events_helpers import premMissionsSortFunc, dailyQuestsSortFunc, isPremiumQuestsEnable, isDailyQuestsEnable, isRerollEnabled, isEpicQuestEnabled, EventInfoModel, getRerollTimeout
 from gui.shared import events
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.main_wnd_state_watcher import ClientMainWindowStateWatcher
 from gui.shared.missions.packers.bonus import getDefaultBonusPacker
 from gui.shared.missions.packers.events import getEventUIDataPacker, packQuestBonusModelAndTooltipData
 from gui.shared.utils import decorators
@@ -51,15 +50,15 @@ def _isPremiumPlusAccount(itemsCache=None):
     return itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
 
 
-class DailyQuestsView(ViewImpl, ClientMainWindowStateWatcher):
+class DailyQuestsView(ViewImpl):
     eventsCache = dependency.descriptor(IEventsCache)
     gameSession = dependency.descriptor(IGameSessionController)
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
-    __slots__ = ('__tooltipData', '__proxyMissionsPage')
+    __slots__ = ('__tooltipData', '__proxyMissionsPage', 'isCloseEnabled')
 
-    def __init__(self):
-        viewSettings = ViewSettings(R.views.lobby.missions.Daily(), ViewFlags.COMPONENT, DailyQuestsViewModel())
+    def __init__(self, layoutID=R.views.lobby.missions.Daily()):
+        viewSettings = ViewSettings(layoutID, ViewFlags.COMPONENT, DailyQuestsViewModel())
         super(DailyQuestsView, self).__init__(viewSettings)
         self.__tooltipData = {}
         self.__proxyMissionsPage = None
@@ -106,6 +105,15 @@ class DailyQuestsView(ViewImpl, ClientMainWindowStateWatcher):
         self.__setCurrentTab(tabIdx, self.viewModel)
         return
 
+    def changeTab(self, tabIdx):
+        with self.viewModel.transaction() as tx:
+            if tabIdx == DailyTabs.QUESTS:
+                self._updateDailyQuestModel(tx, True)
+            elif tabIdx == DailyTabs.PREMIUM_MISSIONS:
+                self._updatePremiumMissionsModel(tx, True)
+            self._updateCountDowns(tx)
+            self.__setCurrentTab(tabIdx, tx)
+
     def markVisited(self):
         self._markVisited(self.viewModel.getCurrentTabIdx(), self.viewModel)
 
@@ -117,7 +125,7 @@ class DailyQuestsView(ViewImpl, ClientMainWindowStateWatcher):
         self.__proxyMissionsPage = proxy
 
     def _onLoading(self, *args, **kwargs):
-        _logger.debug('DailyQuestsView::_onLoading')
+        _logger.info('DailyQuestsView::_onLoading')
         with self.viewModel.transaction() as tx:
             self._updateQuestsTitles(tx)
             self._updateModel(tx)
@@ -127,10 +135,8 @@ class DailyQuestsView(ViewImpl, ClientMainWindowStateWatcher):
     def _initialize(self, *args, **kwargs):
         super(DailyQuestsView, self)._initialize()
         self.__addListeners()
-        self.mainWindowWatcherInit()
 
     def _finalize(self):
-        self.mainWindowWatcherDestroy()
         self.__proxyMissionsPage = None
         self.__removeListeners()
         super(DailyQuestsView, self)._finalize()
@@ -187,7 +193,7 @@ class DailyQuestsView(ViewImpl, ClientMainWindowStateWatcher):
             epicQuestBonusesModel = tx.getBonuses()
             epicQuestBonusesModel.clear()
             self.__tooltipData[epicQuestId] = {}
-            packQuestBonusModelAndTooltipData(epicQuest, getDefaultBonusPacker(), epicQuestBonusesModel, tooltipData=self.__tooltipData[epicQuestId])
+            packQuestBonusModelAndTooltipData(getDefaultBonusPacker(), epicQuestBonusesModel, epicQuest, tooltipData=self.__tooltipData[epicQuestId])
             epicQuestBonusesModel.invalidate()
         return
 
@@ -269,11 +275,6 @@ class DailyQuestsView(ViewImpl, ClientMainWindowStateWatcher):
             tx.setRerollCountDown(countdown)
             tx.setRerollTimeout(timeout)
 
-    def _onClientMainWindowStateChanged(self, isWindowVisible):
-        if isWindowVisible:
-            with self.viewModel.transaction() as tx:
-                self._updateCountDowns(tx)
-
     def _markVisited(self, tabIdx, model):
         if not self.__proxyMissionsPage or self.__proxyMissionsPage.getCurrentTabAlias() != QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS:
             return
@@ -307,13 +308,7 @@ class DailyQuestsView(ViewImpl, ClientMainWindowStateWatcher):
 
     @args2params(int)
     def __onTabClick(self, tabIdx):
-        with self.viewModel.transaction() as tx:
-            if tabIdx == DailyTabs.QUESTS:
-                self._updateDailyQuestModel(tx, True)
-            elif tabIdx == DailyTabs.PREMIUM_MISSIONS:
-                self._updatePremiumMissionsModel(tx, True)
-            self._updateCountDowns(tx)
-            self.__setCurrentTab(tabIdx, tx)
+        self.changeTab(tabIdx)
 
     def __onInfoToggle(self):
         with self.viewModel.transaction() as tx:

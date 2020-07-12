@@ -10,7 +10,8 @@ from VehicleEffects import DamageFromShotDecoder
 from VehicleStickers import VehicleStickers
 from svarog_script.py_component import Component
 from svarog_script.script_game_object import ScriptGameObject, ComponentDescriptor
-from vehicle_systems.tankStructure import TankPartNames, TankNodeNames, ColliderTypes
+from vehicle_systems.camouflages import prepareBattleOutfit
+from vehicle_systems.tankStructure import TankPartNames, TankNodeNames, ColliderTypes, getPartModelsFromDesc, ModelsSetParams, ModelStates
 from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
 from helpers.EffectsList import EffectsListPlayer, SoundStartParam, SpecialKeyPointNames
 from helpers.bound_effects import ModelBoundEffects
@@ -43,13 +44,22 @@ class DetachedTurret(BigWorld.Entity, ScriptGameObject):
     def __prepareModelAssembler(self):
         LOG_DEBUG('__prepareModelAssembler', self.__vehDescr.name, self.spaceID)
         assembler = BigWorld.CompoundAssembler(self.__vehDescr.name, self.spaceID)
-        turretModel = self.__vehDescr.turret.models.exploded
-        gunModel = self.__vehDescr.gun.models.exploded
+        turretModel, gunModel = self.__getModels()
         assembler.addRootPart(turretModel, TankPartNames.TURRET)
         assembler.emplacePart(gunModel, TankNodeNames.GUN_JOINT, TankPartNames.GUN)
         bspModels = ((TankPartNames.getIdx(TankPartNames.TURRET), self.__vehDescr.turret.hitTester.bspModelName), (TankPartNames.getIdx(TankPartNames.GUN), self.__vehDescr.gun.hitTester.bspModelName))
         collisionAssembler = BigWorld.CollisionAssembler(bspModels, BigWorld.player().spaceID)
         return [assembler, collisionAssembler]
+
+    def __getModels(self):
+        outfit = prepareBattleOutfit(self.outfitCD, self.__vehDescr, self.vehicleID)
+        style = outfit.style
+        if style is None:
+            return (self.__vehDescr.turret.models.exploded, self.__vehDescr.gun.models.exploded)
+        else:
+            modelsSetParams = ModelsSetParams(style.modelsSet, ModelStates.EXPLODED, [])
+            _, _, turretModel, gunModel = getPartModelsFromDesc(self.__vehDescr, modelsSetParams)
+            return (turretModel, gunModel)
 
     def prerequisites(self):
         LOG_DEBUG('prerequisites')
@@ -102,6 +112,7 @@ class DetachedTurret(BigWorld.Entity, ScriptGameObject):
         self.__vehicleStickers.attach(self.model, True, False, True)
 
     def onLeaveWorld(self):
+        LOG_DEBUG('onLeaveWorld')
         ScriptGameObject.deactivate(self)
         ScriptGameObject.destroy(self)
         DetachedTurret.allTurrets.remove(self)

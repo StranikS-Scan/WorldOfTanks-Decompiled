@@ -44,7 +44,7 @@
     <Saab_Scania_DSI_14C>	46	</Saab_Scania_DSI_14C>
     <Saab_Scania_DS14_Alt_3>	47	</Saab_Scania_DS14_Alt_3>
     <AVS_1195A>	48	</AVS_1195A>
-    <Development_Engine>	65535	</Development_Engine>
+    <Development_Engine>	65000	</Development_Engine>
   </ids>
   <shared>
     <Daimler_Benz_m_1910>
@@ -631,24 +631,6 @@
       <rpm_min>	488	</rpm_min>
       <rpm_max>	2035	</rpm_max>
     </Meteor_Mark_IVB>
-    <Development_Engine>
-      <userString>	Development Engine	</userString>
-      <tags>	diesel	</tags>
-      <level>	5	</level>
-      <notInShop>	true	</notInShop>
-      <price>	1	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	540	</power>
-      <weight>	750	</weight>
-      <maxHealth>	105	</maxHealth>
-      <maxRegenHealth>	52	</maxRegenHealth>
-      <repairCost>	4	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <notInShop>	true	</notInShop>
-      <rpm_min>	376	</rpm_min>
-      <rpm_max>	2072	</rpm_max>
-    </Development_Engine>
     <AV_1790>
       <userString>	#sweden_vehicles:AV_1790	</userString>
       <tags>	gasoline	</tags>
@@ -781,5 +763,23 @@
       <rpm_min>	360	</rpm_min>
       <rpm_max>	2120	</rpm_max>
     </Saab_Scania_DS14_Alt_3>
+    <Development_Engine>
+      <userString>	Development Engine	</userString>
+      <tags>	diesel	</tags>
+      <level>	5	</level>
+      <notInShop>	true	</notInShop>
+      <price>	1	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	540	</power>
+      <weight>	750	</weight>
+      <maxHealth>	105	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <notInShop>	true	</notInShop>
+      <rpm_min>	376	</rpm_min>
+      <rpm_max>	2072	</rpm_max>
+    </Development_Engine>
   </shared>
 </engines.xml>

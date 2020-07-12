@@ -5,10 +5,10 @@ from gui.prb_control.entities.base.scheduler import BaseScheduler
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.ranked_battles.constants import PrimeTimeStatus
 from helpers import dependency, time_utils
-from skeletons.gui.game_control import IEpicBattleMetaGameController
+from skeletons.gui.game_control import IEventProgressionController
 
 class EpicMetaScheduler(BaseScheduler):
-    __epicController = dependency.descriptor(IEpicBattleMetaGameController)
+    __eventProgression = dependency.descriptor(IEventProgressionController)
 
     def __init__(self, entity):
         super(EpicMetaScheduler, self).__init__(entity)
@@ -16,25 +16,26 @@ class EpicMetaScheduler(BaseScheduler):
         self.__isCycle = False
 
     def init(self):
-        status, _, _ = self.__epicController.getPrimeTimeStatus()
+        status, _, _ = self.__eventProgression.getPrimeTimeStatus()
         self.__isPrimeTime = status == PrimeTimeStatus.AVAILABLE
-        season = self.__epicController.getCurrentSeason()
+        season = self.__eventProgression.getCurrentSeason()
         if season is not None:
             self.__isCycle = season.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp())
-        self.__epicController.onPrimeTimeStatusUpdated += self.__update
+        self.__eventProgression.onPrimeTimeStatusUpdatedAddEvent(self.__update)
         return
 
     def fini(self):
-        self.__epicController.onPrimeTimeStatusUpdated -= self.__update
+        self.__eventProgression.onPrimeTimeStatusUpdatedRemoveEvent(self.__update)
 
     def __update(self, status):
-        hasCurrentSeason = self.__epicController.getCurrentSeason() is not None
-        if not self.__epicController.isEnabled() or self.__epicController.isFrozen() or not hasCurrentSeason:
+        hasCurrentSeason = self.__eventProgression.getCurrentSeason() is not None
+        if not self.__eventProgression.modeIsEnabled() or self.__eventProgression.isFrozen() or not hasCurrentSeason:
             self._entity.leave(LeavePreQueueCtx(waitingID='prebattle/leave'))
             return
         else:
             isPrimeTime = status == PrimeTimeStatus.AVAILABLE
-            isCycle = self.__epicController.getCurrentSeason().hasActiveCycle(time_utils.getCurrentLocalServerTimestamp())
+            time = time_utils.getCurrentLocalServerTimestamp()
+            isCycle = self.__eventProgression.getCurrentSeason().hasActiveCycle(time)
             if isPrimeTime != self.__isPrimeTime or isCycle != self.__isCycle:
                 self.__isPrimeTime = isPrimeTime
                 self.__isCycle = isCycle

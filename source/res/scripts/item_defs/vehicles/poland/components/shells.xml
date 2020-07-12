@@ -594,6 +594,50 @@
       <devices>	150	</devices>
     </damage>
   </_105mm_tung_sgr_m_34>
+  <_105mm_slpgr_m_52>
+    <id>	74	</id>
+    <userString>	#poland_vehicles:_105mm_slpgr_m_52	</userString>
+    <icon>	ap	</icon>
+    <price>	480	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_slpgr_m_52>
+  <_105mm_slpprj_m_59>
+    <id>	75	</id>
+    <userString>	#poland_vehicles:_105mm_slpprj_m_59	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_slpprj_m_59>
+  <_105mm_sgr_m_50_B>
+    <id>	76	</id>
+    <userString>	#poland_vehicles:_105mm_sgr_m_50_B	</userString>
+    <icon>	he	</icon>
+    <price>	410	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_sgr_m_50_B>
   <_122mm_UBR-471_PB>
     <id>	5	</id>
     <userString>	#poland_vehicles:_122mm_UBR-471_PB	</userString>
@@ -815,4 +859,19 @@
       <devices>	203	</devices>
     </damage>
   </_152mm_pocisk_wybuchowy>
+  <Development_Shell>
+    <id>	65000	</id>
+    <userString>	Development_Shell	</userString>
+    <icon>	ap	</icon>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	12.7	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	autoArmorPiercing	</effects>
+    <damage>
+      <armor>	8	</armor>
+      <devices>	17	</devices>
+    </damage>
+  </Development_Shell>
 </shells.xml>

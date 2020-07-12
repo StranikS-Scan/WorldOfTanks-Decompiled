@@ -61,6 +61,9 @@ class IAimingSystem(object):
     def getZoom(self):
         return None
 
+    def setAimingLimits(self, distances):
+        pass
+
 
 def getTurretJointMat(vehicleTypeDescriptor, vehicleMatrix, turretYaw=0.0, overrideTurretLocalZ=None):
     turretOffset = getTurretJointOffset(vehicleTypeDescriptor)
@@ -76,7 +79,7 @@ def getTurretJointOffset(vehicleTypeDescriptor):
 
 
 def getGunJointMat(vehicleTypeDescriptor, turretMatrix, gunPitch, overrideTurretLocalZ=None):
-    gunOffset = Vector3(vehicleTypeDescriptor.turret.gunShotPosition)
+    gunOffset = Vector3(vehicleTypeDescriptor.activeGunShotPosition)
     if overrideTurretLocalZ is not None:
         offset = getTurretJointOffset(vehicleTypeDescriptor)
         yOffset = math.tan(gunPitch) * offset.z
@@ -129,13 +132,13 @@ def getTurretMatrixProvider(vehicleTypeDescriptor, vehicleMatrixProvider, turret
 
 
 def getGunMatrixProvider(vehicleTypeDescriptor, turretMatrixProvider, gunPitchMatrixProvider):
-    gunOffset = vehicleTypeDescriptor.turret.gunShotPosition
+    gunOffset = vehicleTypeDescriptor.activeGunShotPosition
     return MatrixProviders.product(gunPitchMatrixProvider, MatrixProviders.product(math_utils.createTranslationMatrix(gunOffset), turretMatrixProvider))
 
 
 def getTurretYawGunPitch(vehTypeDescr, vehicleMatrix, targetPos, compensateGravity=False):
     turretOffs = vehTypeDescr.hull.turretPositions[0] + vehTypeDescr.chassis.hullPosition
-    gunOffs = vehTypeDescr.turret.gunShotPosition
+    gunOffs = vehTypeDescr.activeGunShotPosition
     speed = vehTypeDescr.shot.speed
     gravity = vehTypeDescr.shot.gravity if not compensateGravity else 0.0
     return BigWorld.wg_getShotAngles(turretOffs, gunOffs, vehicleMatrix, speed, gravity, 0.0, 0.0, targetPos, False)
@@ -230,7 +233,7 @@ def shootInSkyPoint(startPos, direction):
     else:
         vType = BigWorld.player().arena.vehicles[BigWorld.player().playerVehicleID]['vehicleType']
         shotPos = BigWorld.player().getOwnVehiclePosition()
-        shotPos += vType.hull.turretPositions[0] + vType.turret.gunShotPosition
+        shotPos += vType.hull.turretPositions[0] + vType.activeGunShotPosition
         shotDesc = vType.shot
     dirAtCam = shotPos - start
     dirAtCam.normalise()

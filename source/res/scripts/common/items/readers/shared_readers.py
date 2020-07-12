@@ -5,25 +5,25 @@ import ResMgr
 from constants import IS_CLIENT, IS_BOT, ITEM_DEFS_PATH, IS_EDITOR
 from debug_utils import LOG_ERROR
 from items import _xml
+from items import customization_slot_tags_validator
 from items.components import component_constants
 from items.components import shared_components
 from items.components import c11n_constants
 _ALLOWED_EMBLEM_SLOTS = component_constants.ALLOWED_EMBLEM_SLOTS
 _ALLOWED_SLOTS_ANCHORS = component_constants.ALLOWED_SLOTS_ANCHORS
 _ALLOWED_MISC_SLOTS = component_constants.ALLOWED_MISC_SLOTS
+_ALLOWED_PROJECTION_DECALS_ANCHORS = component_constants.ALLOWED_PROJECTION_DECALS_ANCHORS
 _CUSTOMIZATION_CONSTANTS_PATH = ITEM_DEFS_PATH + '/customization/constants.xml'
 
 def _readEmblemSlot(ctx, subsection, slotType):
-    slotId = _xml.readInt(ctx, subsection, 'slotId')
-    _verifySlotId(ctx, slotType, slotId)
-    descr = shared_components.EmblemSlot(_xml.readVector3(ctx, subsection, 'rayStart'), _xml.readVector3(ctx, subsection, 'rayEnd'), _xml.readVector3(ctx, subsection, 'rayUp'), _xml.readPositiveFloat(ctx, subsection, 'size'), subsection.readBool('hideIfDamaged', False), slotType, subsection.readBool('isMirrored', False), subsection.readBool('isUVProportional', True), _xml.readIntOrNone(ctx, subsection, 'emblemId'), slotId, subsection.readBool('applyToFabric', True))
+    descr = shared_components.EmblemSlot(_xml.readVector3(ctx, subsection, 'rayStart'), _xml.readVector3(ctx, subsection, 'rayEnd'), _xml.readVector3(ctx, subsection, 'rayUp'), _xml.readPositiveFloat(ctx, subsection, 'size'), subsection.readBool('hideIfDamaged', False), slotType, subsection.readBool('isMirrored', False), subsection.readBool('isUVProportional', True), _xml.readIntOrNone(ctx, subsection, 'emblemId'), _xml.readInt(ctx, subsection, 'slotId'), subsection.readBool('applyToFabric', True))
+    _verifySlotId(ctx, slotType, descr.slotId)
     return descr
 
 
 def _readMiscSlot(ctx, subsection, slotType):
-    slotId = _xml.readInt(ctx, subsection, 'slotId')
-    _verifySlotId(ctx, slotType, slotId)
-    descr = shared_components.MiscSlot(type=slotType, slotId=slotId, position=_xml.readVector3OrNone(ctx, subsection, 'position'), rotation=_xml.readVector3OrNone(ctx, subsection, 'rotation'), attachNode=_xml.readStringOrNone(ctx, subsection, 'attachNode'))
+    descr = shared_components.MiscSlot(type=slotType, slotId=_xml.readInt(ctx, subsection, 'slotId'), position=_xml.readVector3OrNone(ctx, subsection, 'position'), rotation=_xml.readVector3OrNone(ctx, subsection, 'rotation'), attachNode=_xml.readStringOrNone(ctx, subsection, 'attachNode'))
+    _verifySlotId(ctx, slotType, descr.slotId)
     return descr
 
 
@@ -33,37 +33,33 @@ def _customizationSlotTagsValidator(tag):
 
 
 def _readCustomizationSlot(ctx, subsection, slotType):
-    applyTo = _xml.readIntOrNone(ctx, subsection, 'applyTo')
-    if applyTo is not None:
-        if applyTo not in c11n_constants.ApplyArea.RANGE:
-            _xml.raiseWrongSection(ctx, 'applyTo')
-    showOn = _xml.readIntOrNone(ctx, subsection, 'showOn')
-    if showOn is not None:
+    descr = shared_components.CustomizationSlotDescription(slotType=slotType, anchorPosition=_xml.readVector3OrNone(ctx, subsection, 'anchorPosition'), anchorDirection=_xml.readVector3OrNone(ctx, subsection, 'anchorDirection'), applyTo=_xml.readIntOrNone(ctx, subsection, 'applyTo'), slotId=_xml.readInt(ctx, subsection, 'slotId'))
+    if descr.applyTo is not None and descr.applyTo not in c11n_constants.ApplyArea.RANGE:
+        _xml.raiseWrongSection(ctx, 'applyTo')
+    return descr
+
+
+def _readProjectionDecalSlot(ctx, subsection, slotType):
+    descr = shared_components.ProjectionDecalSlotDescription(slotType=slotType, slotId=_xml.readInt(ctx, subsection, 'slotId'), anchorPosition=_xml.readVector3OrNone(ctx, subsection, 'anchorPosition'), anchorDirection=_xml.readVector3OrNone(ctx, subsection, 'anchorDirection'), position=_xml.readVector3OrNone(ctx, subsection, 'position'), rotation=_xml.readVector3OrNone(ctx, subsection, 'rotation'), scale=_xml.readVector3OrNone(ctx, subsection, 'scale'), scaleFactors=_xml.readVector3(ctx, subsection, 'scaleFactors', c11n_constants.DEFAULT_DECAL_SCALE_FACTORS), doubleSided=_xml.readBool(ctx, subsection, 'doubleSided', False), canBeMirroredVertically=_xml.readBool(ctx, subsection, 'verticalMirror', False), showOn=_xml.readIntOrNone(ctx, subsection, 'showOn'), tags=readOrderedTagsOrEmpty(ctx, subsection, _customizationSlotTagsValidator), clipAngle=_xml.readFloat(ctx, subsection, 'clipAngle', c11n_constants.DEFAULT_DECAL_CLIP_ANGLE))
+    _verifySlotId(ctx, slotType, descr.slotId)
+    if descr.showOn is not None:
         availableShowOnRegions = c11n_constants.ApplyArea.HULL | c11n_constants.ApplyArea.TURRET | c11n_constants.ApplyArea.GUN
-        if showOn | availableShowOnRegions != availableShowOnRegions:
+        if descr.showOn | availableShowOnRegions != availableShowOnRegions:
             _xml.raiseWrongSection(ctx, 'showOn')
-    tags = readOrderedTagsOrEmpty(ctx, subsection, _customizationSlotTagsValidator)
-    slotId = _xml.readInt(ctx, subsection, 'slotId')
-    _verifySlotId(ctx, slotType, slotId)
-    attachedPartsData = _xml.readStringOrNone(ctx, subsection, 'attachedPart')
-    if attachedPartsData is not None:
-        attachedParts = defaultdict(set)
+    if subsection.has_key('attachedPart'):
+        attachedPartsData = _xml.readString(ctx, subsection, 'attachedPart')
+        descr.attachedParts = defaultdict(set)
         for partData in attachedPartsData.split():
             pType, pName = partData.split(':')
             if pType != 'hull':
-                attachedParts[pType].add(pName)
+                descr.attachedParts[pType].add(pName)
 
-    else:
-        attachedParts = None
     if subsection.has_key('compatibleModels'):
-        compatibleModels = _xml.readTupleOfStrings(ctx, subsection, 'compatibleModels')
-    else:
-        compatibleModels = (c11n_constants.SLOT_DEFAULT_ALLOWED_MODEL,)
+        descr.compatibleModels = _xml.readTupleOfStrings(ctx, subsection, 'compatibleModels')
+    if subsection.has_key('itemId'):
+        descr.itemId = _xml.readInt(ctx, subsection, 'itemId')
     if subsection.has_key('options'):
-        options = _xml.readNonNegativeInt(ctx, subsection, 'options')
-    else:
-        options = c11n_constants.Options.NONE
-    descr = shared_components.CustomizationSlotDescription(type=slotType, anchorPosition=_xml.readVector3OrNone(ctx, subsection, 'anchorPosition'), anchorDirection=_xml.readVector3OrNone(ctx, subsection, 'anchorDirection'), applyTo=applyTo, slotId=slotId, position=_xml.readVector3OrNone(ctx, subsection, 'position'), rotation=_xml.readVector3OrNone(ctx, subsection, 'rotation'), scale=_xml.readVector3OrNone(ctx, subsection, 'scale'), scaleFactors=_xml.readVector3(ctx, subsection, 'scaleFactors', c11n_constants.DEFAULT_DECAL_SCALE_FACTORS), doubleSided=_xml.readBool(ctx, subsection, 'doubleSided', False), canBeMirroredVertically=_xml.readBool(ctx, subsection, 'verticalMirror', False), showOn=showOn, tags=tags, clipAngle=_xml.readFloat(ctx, subsection, 'clipAngle', c11n_constants.DEFAULT_DECAL_CLIP_ANGLE), attachedParts=attachedParts, compatibleModels=compatibleModels, itemId=_xml.readIntOrNone(ctx, subsection, 'itemId'), options=options)
+        descr.options = _xml.readNonNegativeInt(ctx, subsection, 'options')
     return descr
 
 
@@ -168,6 +164,9 @@ def readCustomizationSlots(xmlCtx, section, subsectionName):
         if slotType in component_constants.ALLOWED_EMBLEM_SLOTS:
             descr = _readEmblemSlot(ctx, subsection, slotType)
             slots.append(descr)
+        elif slotType in component_constants.ALLOWED_PROJECTION_DECALS_ANCHORS:
+            descr = _readProjectionDecalSlot(ctx, subsection, slotType)
+            anchors.append(descr)
         elif slotType in component_constants.ALLOWED_SLOTS_ANCHORS:
             descr = _readCustomizationSlot(ctx, subsection, slotType)
             anchors.append(descr)
@@ -175,7 +174,7 @@ def readCustomizationSlots(xmlCtx, section, subsectionName):
             descr = _readMiscSlot(ctx, subsection, slotType)
             anchors.append(descr)
         else:
-            _xml.raiseWrongXml(xmlCtx, 'customizationSlots/{}/{}'.format(sname, slotType), 'expected value is {}'.format(_ALLOWED_EMBLEM_SLOTS + _ALLOWED_SLOTS_ANCHORS + _ALLOWED_MISC_SLOTS))
+            _xml.raiseWrongXml(xmlCtx, 'customizationSlots/{}/{}'.format(sname, slotType), 'expected value is {}'.format(_ALLOWED_EMBLEM_SLOTS + _ALLOWED_SLOTS_ANCHORS + _ALLOWED_MISC_SLOTS + _ALLOWED_PROJECTION_DECALS_ANCHORS))
         if descr is not None and descr.slotId not in slotIDs:
             slotIDs.add(descr.slotId)
         xmlContext, fileName = xmlCtx

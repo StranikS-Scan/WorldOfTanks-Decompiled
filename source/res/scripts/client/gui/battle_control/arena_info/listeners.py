@@ -1,15 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/listeners.py
-import weakref
 import operator
+import weakref
 from collections import namedtuple
 import BigWorld
 from constants import ARENA_PERIOD, FINISH_REASON
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.battle_control.arena_info.invitations import SquadInvitationsFilter
-from gui.battle_control.battle_constants import WinStatus
 from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE as _SCOPE
 from gui.battle_control.arena_info.settings import INVALIDATE_OP
+from gui.battle_control.battle_constants import WinStatus
 from gui.prb_control import prbInvitesProperty
 from messenger.m_constants import USER_ACTION_ID, USER_TAG
 from messenger.proto.events import g_messengerEvents
@@ -117,6 +117,8 @@ class ArenaVehiclesListener(_Listener):
             arena.onInteractiveStats += self.__arena_onInteractiveStats
             arena.onGameModeSpecifcStats += self.__arena_onGameModeSpecifcStats
             arena.onFogOfWarEnabled += self.__arena_onFogOfWarEnabled
+            arena.onChatCommandTargetUpdate += self.__arena_onChatCommandTargetUpdate
+            arena.onChatCommandTriggered += self.__arena_onChatCommandTriggered
         return
 
     def stop(self):
@@ -135,6 +137,8 @@ class ArenaVehiclesListener(_Listener):
             arena.onInteractiveStats -= self.__arena_onInteractiveStats
             arena.onGameModeSpecifcStats -= self.__arena_onGameModeSpecifcStats
             arena.onFogOfWarEnabled -= self.__arena_onFogOfWarEnabled
+            arena.onChatCommandTargetUpdate -= self.__arena_onChatCommandTargetUpdate
+            arena.onChatCommandTriggered -= self.__arena_onChatCommandTriggered
         super(ArenaVehiclesListener, self).stop()
         return
 
@@ -212,6 +216,22 @@ class ArenaVehiclesListener(_Listener):
                 self._invokeListenersMethod('updateVehiclesInfo', [(flags, vo)], self._arenaDP)
             if flags != INVALIDATE_OP.NONE:
                 self._invokeListenersMethod('updateVehiclesStats', [(flags, vo)], self._arenaDP)
+
+    def __arena_onChatCommandTargetUpdate(self, isStatic, chatCommandStates):
+        updateList = list()
+        updateFlag = INVALIDATE_OP.NONE
+        for vehicleID, state in chatCommandStates.iteritems():
+            chatCommand, chatCommandFlags = state
+            flags, vo = self._arenaDP.updateChatCommandState(vehicleID, (chatCommand, chatCommandFlags))
+            if flags != INVALIDATE_OP.NONE:
+                updateFlag = flags
+            updateList.append((flags, vo))
+
+        if updateFlag != INVALIDATE_OP.NONE:
+            self._invokeListenersMethod('updateVehiclesStats', updateList, self._arenaDP)
+
+    def __arena_onChatCommandTriggered(self, chatCommands):
+        self._invokeListenersMethod('updateTriggeredChatCommands', chatCommands, self._arenaDP)
 
     def __arena_onFogOfWarHiddenVehiclesSet(self, flag):
         pass

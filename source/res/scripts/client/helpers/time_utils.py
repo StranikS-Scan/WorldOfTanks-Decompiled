@@ -101,6 +101,15 @@ def getServerRegionalWeekDay():
     return datetime.datetime.utcfromtimestamp(_g_instance.serverRegionalTime).isoweekday()
 
 
+def getServerRegionalDaysLeftInGameWeek():
+    regionalSettings = BigWorld.player().serverSettings['regional_settings']
+    weekStartDayOffset = 0
+    if 'starting_day_of_a_new_week' in regionalSettings:
+        weekStartDayOffset = regionalSettings['starting_day_of_a_new_week']
+    currentDay = getServerRegionalWeekDay()
+    return (WEEK_END - currentDay + weekStartDayOffset) % WEEK_END
+
+
 def getTimeDeltaFromNow(t):
     if t and datetime.datetime.utcfromtimestamp(t) > datetime.datetime.utcnow():
         delta = datetime.datetime.utcfromtimestamp(t) - datetime.datetime.utcnow()

@@ -575,13 +575,13 @@ def _readItems(cache, itemCls, xmlCtx, section, itemSectionName, storage, progre
                         if not item.editorData.sharedPropertiesInfo.isOverriden(p):
                             item.editorData.sharedPropertiesInfo.markAsShared(p)
 
-                EditorSharedPropertiesConnector(groupItems).connect()
-
     _addEmptyItem(itemCls, storage)
     return
 
 
 def _addEmptyItem(itemCls, storage):
+    if IS_EDITOR:
+        return
     item = itemCls()
     item.id = EMPTY_ITEM_ID
     storage[EMPTY_ITEM_ID] = item

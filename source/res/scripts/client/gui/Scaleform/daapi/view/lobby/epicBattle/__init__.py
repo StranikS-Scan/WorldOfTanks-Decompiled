@@ -14,7 +14,7 @@ def getContextMenuHandlers():
 
 def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.epicBattle.EpicBattlesSkillView import EpicBattlesSkillView
-    from gui.Scaleform.daapi.view.lobby.epicBattle.EpicBattlesAfterBattleView import EpicBattlesAfterBattleView
+    from gui.Scaleform.daapi.view.lobby.epicBattle.epic_battles_after_battle_view import EpicBattlesAfterBattleView
     from gui.Scaleform.daapi.view.lobby.epicBattle.EpicBattlesInfoView import EpicBattlesInfoView
     from gui.Scaleform.daapi.view.lobby.epicBattle.EpicBattlesPrestigeView import EpicBattlesPrestigeView
     from gui.Scaleform.daapi.view.lobby.epicBattle.EpicBattlesBrowserView import EpicBattlesBrowserView

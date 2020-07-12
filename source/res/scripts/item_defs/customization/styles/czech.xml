@@ -445,87 +445,6 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/main_styles	</userString>
-    <season>	ALL	</season>
-    <historical>	true	</historical>
-    <priceGroup>	styles 700g	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <nations>	czech	</nations>
-      </include>
-    </vehicleFilter>
-    <style>
-      <id>	31	</id>
-      <texture>	gui/maps/vehicles/styles/generic_custom_look_2_czech.png	</texture>
-      <description>	#vehicle_customization:main_style/generic_custom_look_2_czech_desc	</description>
-      <userString>	#vehicle_customization:main_style/generic_custom_look_2_czech	</userString>
-      <tags>	progression_required addNationalEmblem	</tags>
-      <itemFilters>
-        <projection_decal>
-          <include>
-            <itemGroupName>	Progression Decals	</itemGroupName>
-          </include>
-        </projection_decal>
-      </itemFilters>
-      <outfits>
-        <outfit>
-          <season>	winter	</season>
-          <camouflages>
-            <item>
-              <id>	675	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	15215	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	summer	</season>
-          <camouflages>
-            <item>
-              <id>	661	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	15215	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	desert	</season>
-          <camouflages>
-            <item>
-              <id>	662	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	15215	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	event	</season>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
@@ -540,6 +459,7 @@
       <texture>	gui/maps/vehicles/styles/czech_veteran.png	</texture>
       <longDescriptionSpecial>	#vehicle_customization:special_style/czech_veteran_desc/long	</longDescriptionSpecial>
       <modelsSet>	T_27_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/czech_veteran	</userString>
       <tags>	progression_required	</tags>
       <itemFilters>

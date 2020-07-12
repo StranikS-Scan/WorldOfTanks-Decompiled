@@ -11,6 +11,7 @@ from svarog_script.py_component import Component
 from vehicle_systems import model_assembler
 from vehicle_systems.tankStructure import getPartModelsFromDesc, TankPartNames, ModelsSetParams
 from vehicle_systems.stricted_loading import loadingPriority
+from constants import IS_EDITOR
 
 class CrashedTrackController(Component):
     baseTracksComponent = AutoProperty()
@@ -37,7 +38,7 @@ class CrashedTrackController(Component):
 
     def setVehicle(self, entity):
         self.__entity = weakref.proxy(entity)
-        self.__triggerEvents = entity.isPlayerVehicle
+        self.__triggerEvents = entity.isPlayerVehicle and not IS_EDITOR
 
     def activate(self):
         if self.__entity is not None and self.__model is not None:
@@ -86,11 +87,19 @@ class CrashedTrackController(Component):
             trackAssembler = self.__setupTrackAssembler(self.__entity)
             if self.__model is None and not isFlying:
                 if not self.__loading:
-                    BigWorld.loadResourceListBG((trackAssembler,), self.__onModelLoaded, loadingPriority(self.__entity.id))
-                    self.__loading = True
+                    self.__loadModel(trackAssembler)
             else:
                 self.__setupTracksHiding()
             return
+
+    def __loadModel(self, trackAssembler):
+        if not IS_EDITOR:
+            BigWorld.loadResourceListBG((trackAssembler,), self.__onModelLoaded, loadingPriority(self.__entity.id))
+            self.__loading = True
+        else:
+            self.__loading = True
+            resourceRefs = BigWorld.loadResourceListFG((trackAssembler,))
+            self.__onModelLoaded(resourceRefs)
 
     def delTrack(self, isLeft):
         if isLeft:

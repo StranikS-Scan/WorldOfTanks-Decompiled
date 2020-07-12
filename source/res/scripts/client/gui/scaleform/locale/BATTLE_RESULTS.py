@@ -44,6 +44,7 @@ class BATTLE_RESULTS(object):
     COMMON_BATTLEEFFICIENCY_ENEMYBASE = '#battle_results:common/battleEfficiency/enemyBase'
     COMMON_BATTLEEFFICIENCY_NEUTRALBASE = '#battle_results:common/battleEfficiency/neutralBase'
     COMMON_QUESTS_NOPROGRESS = '#battle_results:common/quests/noprogress'
+    COMMON_TOOLTIP_XPTITLESQUAD = '#battle_results:common/tooltip/xpTitleSquad'
     COMMON_TOOLTIP_ASSIST_HEADER = '#battle_results:common/tooltip/assist/header'
     COMMON_TOOLTIP_ASSIST_DESCRIPTION = '#battle_results:common/tooltip/assist/description'
     COMMON_TOOLTIP_PARAMS_VAL = '#battle_results:common/tooltip/params/val'
@@ -140,6 +141,7 @@ class BATTLE_RESULTS(object):
     COMMON_DETAILS_BUYPREMIUMBTN = '#battle_results:common/details/buyPremiumBtn'
     COMMON_NOINCOME_ALERT_TITLE = '#battle_results:common/noIncome/alert/title'
     COMMON_NOINCOME_ALERT_TEXT = '#battle_results:common/noIncome/alert/text'
+    COMMON_VEHICLESTATE_VICTORY = '#battle_results:common/vehicleState/victory'
     COMMON_PREMIUMBONUS_DESCRIPTION = '#battle_results:common/premiumBonus/description'
     COMMON_PREMIUMBONUS_RULE = '#battle_results:common/premiumBonus/rule'
     COMMON_PREMIUMBONUS_EXPIREDBATTLERESULT = '#battle_results:common/premiumBonus/expiredBattleResult'
@@ -288,6 +290,7 @@ class BATTLE_RESULTS(object):
     DETAILS_CALCULATIONS_AUTOREPAIR = '#battle_results:details/calculations/autoRepair'
     DETAILS_CALCULATIONS_AUTOLOAD = '#battle_results:details/calculations/autoLoad'
     DETAILS_CALCULATIONS_AUTOEQUIP = '#battle_results:details/calculations/autoEquip'
+    DETAILS_CALCULATIONS_AUTOBOOSTERS = '#battle_results:details/calculations/autoBoosters'
     DETAILS_CALCULATIONS_AOGASFACTOR = '#battle_results:details/calculations/aogasFactor'
     DETAILS_CALCULATIONS_PREMIUMVEHICLEXP = '#battle_results:details/calculations/premiumVehicleXP'
     DETAILS_CALCULATIONS_SQUADXP = '#battle_results:details/calculations/squadXP'
@@ -304,7 +307,6 @@ class BATTLE_RESULTS(object):
     DETAILS_CALCULATIONS_MULTIPLIERINFO_VEHICLESEPARATOR = '#battle_results:details/calculations/multiplierInfo/vehicleSeparator'
     DETAILS_CALCULATIONS_SQUAD_RESTRICTIONS_TITLE = '#battle_results:details/calculations/squad/restrictions/title'
     DETAILS_CALCULATIONS_CRYSTAL_TOTAL = '#battle_results:details/calculations/crystal/total'
-    DETAILS_CALCULATIONS_CRYSTAL_ACHIEVEMENT = '#battle_results:details/calculations/crystal/achievement'
     TANKSELECTOR_NEXT = '#battle_results:tankSelector/next'
     VICTORYSCORE = '#battle_results:victoryScore'
     EXTERMINATIONVICTORY_ALLIES = '#battle_results:exterminationVictory/allies'
@@ -366,6 +368,7 @@ class BATTLE_RESULTS(object):
      DETAILS_CALCULATIONS_AUTOREPAIR,
      DETAILS_CALCULATIONS_AUTOLOAD,
      DETAILS_CALCULATIONS_AUTOEQUIP,
+     DETAILS_CALCULATIONS_AUTOBOOSTERS,
      DETAILS_CALCULATIONS_AOGASFACTOR,
      DETAILS_CALCULATIONS_PREMIUMVEHICLEXP,
      DETAILS_CALCULATIONS_SQUADXP,
@@ -381,8 +384,7 @@ class BATTLE_RESULTS(object):
      DETAILS_CALCULATIONS_MULTIPLIERINFO_BODY,
      DETAILS_CALCULATIONS_MULTIPLIERINFO_VEHICLESEPARATOR,
      DETAILS_CALCULATIONS_SQUAD_RESTRICTIONS_TITLE,
-     DETAILS_CALCULATIONS_CRYSTAL_TOTAL,
-     DETAILS_CALCULATIONS_CRYSTAL_ACHIEVEMENT)
+     DETAILS_CALCULATIONS_CRYSTAL_TOTAL)
     TEAM_STATS_LABELS_ENUM = (TEAM_STATS_LABELS_XP,
      TEAM_STATS_LABELS_XPFORATTACK,
      TEAM_STATS_LABELS_XPFORASSIST,

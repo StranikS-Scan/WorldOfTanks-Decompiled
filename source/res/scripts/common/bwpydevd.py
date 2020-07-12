@@ -102,3 +102,18 @@ def startPyDevD(ide, host='127.0.0.1', port=5678, suspend=False, traceOnlyCurren
             from traceback import print_exc
             print_exc()
             bwdebug.ERROR_MSG('Failed to load pydevd: %s' % repr(e))
+
+
+def stopPyDevD():
+    global bwPyDevDStarted
+    if bwPyDevDStarted:
+        bwPyDevDStarted = False
+        try:
+            import pydevd
+            pydevd.stoptrace()
+            del threading.currentThread().__pydevd_id__
+            bwdebug.INFO_MSG('PyDevD debug has stopped')
+        except Exception as e:
+            from traceback import print_exc
+            print_exc()
+            bwdebug.ERROR_MSG('Failed to stop pydevd: %s' % repr(e))

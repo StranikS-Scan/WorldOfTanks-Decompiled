@@ -7,8 +7,6 @@ from Math import Matrix
 import BattleReplay
 import CommandMapping
 import Flock
-import constants
-from PlayerEvents import g_playerEvents
 from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from battleground.location_point_manager import g_locationPointManager
@@ -47,7 +45,6 @@ class AvatarChatKeyHandling(object):
         self.__isEnabled = None
         self.__callbackDelayer = CallbackDelayer()
         self.__arePrivateVoiceOverBlocked = False
-        self.__categoryVoiceEnabled = True
         self.__customSoundHandler = {BATTLE_CHAT_COMMAND_NAMES.CANCEL_REPLY: self.__onCommandReceivedCancelReply,
          BATTLE_CHAT_COMMAND_NAMES.REPLY: self.__onCommandReceivedReply,
          BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY: self.__onCommandReceivedSupportingAlly}
@@ -74,6 +71,7 @@ class AvatarChatKeyHandling(object):
         if g_bootcamp.isRunning() or self.__isBattleRoyale():
             return
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self.settingsCache.onSyncCompleted -= self.__onSettingsReady
         if not self.__isEnabled:
             return
         self.__deactivateHandling()
@@ -104,7 +102,6 @@ class AvatarChatKeyHandling(object):
             ctrl.onReplyFeedbackReceived += self.__onReplyFeedbackReceived
             ctrl.onStaticMarkerAdded += self.__onStaticMarkerAdded
         g_messengerEvents.channels.onCommandReceived += self.__onCommandReceived
-        g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
 
     def __deactivateHandling(self):
         ctrl = self.guiSessionProvider.shared.feedback
@@ -112,7 +109,6 @@ class AvatarChatKeyHandling(object):
             ctrl.onReplyFeedbackReceived -= self.__onReplyFeedbackReceived
             ctrl.onStaticMarkerAdded -= self.__onStaticMarkerAdded
         g_messengerEvents.channels.onCommandReceived -= self.__onCommandReceived
-        g_playerEvents.onArenaPeriodChange -= self.__onArenaPeriodChange
         self.__callbackDelayer.destroy()
 
     def __onSettingsChanged(self, diff):
@@ -127,10 +123,6 @@ class AvatarChatKeyHandling(object):
                 self.__deactivateHandling()
             self.__isEnabled = isEnabled
             return
-
-    def __onArenaPeriodChange(self, period, endTime, *_):
-        if period == constants.ARENA_PERIOD.BATTLE and self.soundNotifications:
-            self.__categoryVoiceEnabled = self.soundNotifications.isCategoryEnabled('voice')
 
     def __onPrivateVoiceOverBlockedReset(self):
         self.__arePrivateVoiceOverBlocked = False
@@ -251,8 +243,6 @@ class AvatarChatKeyHandling(object):
 
     def __onCommandReceivedSupportingAlly(self, commandName, cmd):
         enableVoice = True
-        from debug_utils import LOG_DEBUG
-        LOG_DEBUG('LOG_GOGGI - hasTarget: ', cmd.hasTarget(), ' isSender: ', cmd.isSender(), ' isReceiver: ', cmd.isReceiver())
         if cmd.hasTarget() and not cmd.isSender() and not cmd.isReceiver():
             enableVoice = False
         markerType = _COMMAND_NAME_TRANSFORM_MARKER_TYPE.get(commandName, MarkerType.VEHICLE_MARKER_TYPE)
@@ -329,7 +319,7 @@ class AvatarChatKeyHandling(object):
             self.__playSoundNotificationOnCommandReceived(cmd, markerType, True)
 
     def __enableVoices(self, enabled, clearQueue=False):
-        if self.soundNotifications and self.__categoryVoiceEnabled is True:
+        if self.soundNotifications:
             self.soundNotifications.enableVoices(enabled, clearQueue)
 
     def __getVehicleIDByCmd(self, cmd):
@@ -368,7 +358,7 @@ class AvatarChatKeyHandling(object):
             if notificationName is None:
                 notificationName = cmd.getSoundEventName(useSoundNotification)
             if enableVoice is True:
-                if cmd.isPrivate() and cmd.isReceiver():
+                if cmd.isReceiver():
                     if self.__arePrivateVoiceOverBlocked is False:
                         self.__arePrivateVoiceOverBlocked = True
                         self.__callbackDelayer.delayCallback(_PERSONAL_MESSAGE_MUTE_DURATION, self.__onPrivateVoiceOverBlockedReset)
@@ -408,22 +398,24 @@ class AvatarChatKeyHandling(object):
         if not self.soundNotifications or notification is None:
             return
         else:
-            if enableVoice is False:
+            categoryVoiceIsEnabled = self.soundNotifications.isCategoryEnabled('voice')
+            if categoryVoiceIsEnabled and enableVoice is False:
                 self.__enableVoices(enableVoice)
             if not isSentByPlayer:
                 notification += _IS_NON_PLAYER_NOTIFICATION
             elif _PLAY_PING_SOUNDS_FOR_PLAYER_USING_DIRECTION_ONLY:
                 matrixProvider = None
             self.soundNotifications.play(notification, None, None, sndPos, soundObjectName, matrixProvider)
-            self.__enableVoices(True)
+            if categoryVoiceIsEnabled and enableVoice is False:
+                self.__enableVoices(True)
             return
 
     def __onSettingsReady(self):
         _logger.debug('Settings are synced, checking the IBC.')
+        self.settingsCache.onSyncCompleted -= self.__onSettingsReady
         if self.__isEnabled is None:
             self.__isEnabled = bool(self.settingsCore.getSetting(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION))
             if not self.__isEnabled:
                 return
             self.__activateHandling()
-        self.settingsCache.onSyncCompleted -= self.__onSettingsReady
         return

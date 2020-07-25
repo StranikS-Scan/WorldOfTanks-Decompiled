@@ -49,6 +49,21 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel):
             self._mask |= 1 << slotIdx
             return
 
+    def _onShellsUpdated(self, intCD, quantity, *args):
+        if intCD not in self._cds:
+            return
+        super(BattleRoyaleConsumablesPanel, self)._onShellsUpdated(intCD, quantity, *args)
+
+    def _onNextShellChanged(self, intCD):
+        if intCD not in self._cds:
+            return
+        super(BattleRoyaleConsumablesPanel, self)._onNextShellChanged(intCD)
+
+    def _onCurrentShellChanged(self, intCD):
+        if intCD not in self._cds:
+            return
+        super(BattleRoyaleConsumablesPanel, self)._onCurrentShellChanged(intCD)
+
     def _onGunSettingsSet(self, _):
         self.__resetShellSlots()
         self._resetDelayedReload()
@@ -71,9 +86,6 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel):
 
     def _isAvatarEquipment(self, item):
         return False
-
-    def _addOptionalDeviceSlot(self, idx, intCD, descriptor, isActive):
-        pass
 
     def _updateShellSlot(self, idx, quantity):
         super(BattleRoyaleConsumablesPanel, self)._updateShellSlot(idx, quantity)
@@ -99,7 +111,7 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel):
                 self.as_setGlowS(idx, CONSUMABLES_PANEL_SETTINGS.GLOW_ID_ORANGE)
             return
 
-    def _updateOptionalDeviceSlot(self, idx, isOn):
+    def _updateOptionalDeviceSlot(self, idx, optDeviceInBattle):
         pass
 
     def _showEquipmentGlow(self, equipmentIndex, glowType=CONSUMABLES_PANEL_SETTINGS.GLOW_ID_ORANGE):

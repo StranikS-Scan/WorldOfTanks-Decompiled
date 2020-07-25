@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/AmmunitionPanelMeta.py
-from gui.Scaleform.daapi.view.meta.ModulesPanelMeta import ModulesPanelMeta
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class AmmunitionPanelMeta(ModulesPanelMeta):
+class AmmunitionPanelMeta(BaseDAAPIComponent):
 
-    def showTechnicalMaintenance(self):
-        self._printOverrideError('showTechnicalMaintenance')
+    def showRepairDialog(self):
+        self._printOverrideError('showRepairDialog')
 
     def showCustomization(self):
         self._printOverrideError('showCustomization')
@@ -16,26 +16,11 @@ class AmmunitionPanelMeta(ModulesPanelMeta):
     def showChangeNation(self):
         self._printOverrideError('showChangeNation')
 
-    def as_setAmmoS(self, shells, stateWarning):
-        return self.flashObject.as_setAmmo(shells, stateWarning) if self._isDAAPIInited() else None
+    def as_setWarningStateS(self, stateWarning):
+        return self.flashObject.as_setWarningState(stateWarning) if self._isDAAPIInited() else None
 
     def as_updateVehicleStatusS(self, data):
         return self.flashObject.as_updateVehicleStatus(data) if self._isDAAPIInited() else None
 
-    def as_showBattleAbilitiesAlertS(self, value):
-        return self.flashObject.as_showBattleAbilitiesAlert(value) if self._isDAAPIInited() else None
-
     def as_setCustomizationBtnCounterS(self, value):
         return self.flashObject.as_setCustomizationBtnCounter(value) if self._isDAAPIInited() else None
-
-    def as_setBoosterBtnCounterS(self, value):
-        return self.flashObject.as_setBoosterBtnCounter(value) if self._isDAAPIInited() else None
-
-    def as_showAnimationS(self, slotType, slotIndex, path):
-        return self.flashObject.as_showAnimation(slotType, slotIndex, path) if self._isDAAPIInited() else None
-
-    def as_setEquipmentEnabledS(self, value):
-        return self.flashObject.as_setEquipmentEnabled(value) if self._isDAAPIInited() else None
-
-    def as_optionalDevicesEnabledS(self, value):
-        return self.flashObject.as_optionalDevicesEnabled(value) if self._isDAAPIInited() else None

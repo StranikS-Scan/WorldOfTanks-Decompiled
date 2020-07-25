@@ -140,7 +140,9 @@ class AccountClanLimits(BaseAccountClanLimits):
             return error(_CCR.CLAN_CONSCRIPTION_CLOSED)
         if not self.__profile.getPermissions(clan).isValidAccountType():
             return error(_CCR.FORBIDDEN_ACCOUNT_TYPE)
-        return error(_CCR.CLAN_IS_FULL) if not clan.hasFreePlaces() else self.__checkPermissions('canSendApplication', clan)
+        if not clan.hasFreePlaces():
+            return error(_CCR.CLAN_IS_FULL)
+        return error(_CCR.CLAN_ENTER_COOLDOWN) if self.__profile.isInClanEnterCooldown() else self.__checkPermissions('canSendApplication', clan)
 
     def canRevokeApplication(self, clan):
         return self.__checkPermissions('canRevokeApplication', clan)

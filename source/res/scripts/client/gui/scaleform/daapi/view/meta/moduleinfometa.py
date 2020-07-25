@@ -7,11 +7,5 @@ class ModuleInfoMeta(AbstractWindowView):
     def onCancelClick(self):
         self._printOverrideError('onCancelClick')
 
-    def onActionButtonClick(self):
-        self._printOverrideError('onActionButtonClick')
-
     def as_setModuleInfoS(self, moduleInfo):
         return self.flashObject.as_setModuleInfo(moduleInfo) if self._isDAAPIInited() else None
-
-    def as_setActionButtonS(self, data):
-        return self.flashObject.as_setActionButton(data) if self._isDAAPIInited() else None

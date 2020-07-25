@@ -32,45 +32,22 @@
       <RE_ATSPG_3></RE_ATSPG_3>
       <premium></premium>
       <observer></observer>
-      <enhancedSuspension_Vikkers_user></enhancedSuspension_Vikkers_user>
-      <enhancedSuspension_candle_user></enhancedSuspension_candle_user>
-      <enhancedSuspension_Christie_user></enhancedSuspension_Christie_user>
-      <enhancedTorsions1t_user></enhancedTorsions1t_user>
-      <enhancedTorsions3t_user></enhancedTorsions3t_user>
-      <enhancedTorsions5t_user></enhancedTorsions5t_user>
-      <enhancedSprings_user></enhancedSprings_user>
-      <enhancedLevers_user></enhancedLevers_user>
-      <enhancedBelwillWashers_user></enhancedBelwillWashers_user>
-      <enhancedLongitudinalTorsions_user></enhancedLongitudinalTorsions_user>
       <improvedVentilation_class1_user></improvedVentilation_class1_user>
       <improvedVentilation_class2_user></improvedVentilation_class2_user>
       <improvedVentilation_class3_user></improvedVentilation_class3_user>
-      <grousers_user></grousers_user>
-      <mediumCaliberTankRammer_user></mediumCaliberTankRammer_user>
-      <largeCaliberTankRammer_user></largeCaliberTankRammer_user>
-      <mediumCaliberHowitzerRammer_user></mediumCaliberHowitzerRammer_user>
-      <largeCaliberHowitzerRammer_user></largeCaliberHowitzerRammer_user>
-      <wetCombatPack_class1_user></wetCombatPack_class1_user>
-      <wetCombatPack_class2_user></wetCombatPack_class2_user>
-      <aimingStabilizer_Mk1_user></aimingStabilizer_Mk1_user>
-      <aimingStabilizer_Mk2_user></aimingStabilizer_Mk2_user>
       <afterburning_user></afterburning_user>
       <trappoint_user></trappoint_user>
-      <lightTankArtefacts_User></lightTankArtefacts_User>
-      <enhancedVertical_springs_user></enhancedVertical_springs_user>
-      <enhancedHorizontal_springs_user></enhancedHorizontal_springs_user>
-      <enhancedSprings_class2_user></enhancedSprings_class2_user>
-      <enhancedSprings_class3_user></enhancedSprings_class3_user>
-      <enhancedHorizontal_springs_class2_user></enhancedHorizontal_springs_class2_user>
-      <enhancedHorizontal_springs_class3_user></enhancedHorizontal_springs_class3_user>
-      <enhancedVertical_springs_class2_user></enhancedVertical_springs_class2_user>
-      <enhancedVertical_springs_class3_user></enhancedVertical_springs_class3_user>
-      <enhancedVertical_elastic_elements_user></enhancedVertical_elastic_elements_user>
-      <enhancedHorizontal_elastic_elements_user></enhancedHorizontal_elastic_elements_user>
+      <antifragmentationLining_light_user></antifragmentationLining_light_user>
+      <antifragmentationLining_medium_user></antifragmentationLining_medium_user>
+      <antifragmentationLining_heavy_user></antifragmentationLining_heavy_user>
       <antifragmentationLining_superheavy_user></antifragmentationLining_superheavy_user>
-      <enhancedSuspension_wheeled_user></enhancedSuspension_wheeled_user>
-      <noStereoscope></noStereoscope>
-      <lendLeaseVehicle></lendLeaseVehicle>
+      <tankRammer_class1_user></tankRammer_class1_user>
+      <tankRammer_class2_user></tankRammer_class2_user>
+      <aimingStabilizer_class1_user></aimingStabilizer_class1_user>
+      <aimingStabilizer_class2_user></aimingStabilizer_class2_user>
+      <extraHealthReserve_class1_user></extraHealthReserve_class1_user>
+      <extraHealthReserve_class2_user></extraHealthReserve_class2_user>
+      <extraHealthReserve_class3_user></extraHealthReserve_class3_user>
       <beast></beast>
       <sinai></sinai>
       <patton></patton>
@@ -106,6 +83,8 @@
       <autoSiege></autoSiege>
       <lockCrew></lockCrew>
       <lockCrewSkills></lockCrewSkills>
+      <hydraulicChassis></hydraulicChassis>
+      <turboshaftEngine></turboshaftEngine>
       <lockOutfit></lockOutfit>
       <wheeledVehicle></wheeledVehicle>
       <burnout></burnout>
@@ -175,7 +154,6 @@
       <reconnaissance></reconnaissance>
       <mobility></mobility>
       <camouflage></camouflage>
-      <toolbox></toolbox>
       <ventilation></ventilation>
       <rammer></rammer>
       <coatedOptics></coatedOptics>
@@ -184,13 +162,15 @@
       <antifragmentationLining></antifragmentationLining>
       <stereoscope></stereoscope>
       <camouflageNet></camouflageNet>
-      <enhancedSuspension></enhancedSuspension>
       <grousers></grousers>
-      <wetCombatPack></wetCombatPack>
-      <carbonDioxide></carbonDioxide>
-      <filterCyclone></filterCyclone>
       <trophyBasic></trophyBasic>
       <trophyUpgraded></trophyUpgraded>
+      <additInvisibilityDevice></additInvisibilityDevice>
+      <rotationMechanism></rotationMechanism>
+      <turbocharger></turbocharger>
+      <improvedSights></improvedSights>
+      <improvedConfiguration></improvedConfiguration>
+      <healthReserve></healthReserve>
     </tags>
   </optionalDevice>
   <shell>
@@ -212,7 +192,7 @@
       <equipmentBattleBooster></equipmentBattleBooster>
       <crewSkillBattleBooster></crewSkillBattleBooster>
       <deluxe></deluxe>
-      <toolbox></toolbox>
+      <improvedConfiguration></improvedConfiguration>
       <ventilation></ventilation>
       <rammer></rammer>
       <coatedOptics></coatedOptics>

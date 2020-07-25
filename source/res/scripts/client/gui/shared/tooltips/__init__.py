@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/__init__.py
 import sys
 import weakref
+import typing
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UNKNOWN_VEHICLE_LEVEL, UnlockProps
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
@@ -13,6 +14,8 @@ from helpers.i18n import makeString
 from items import vehicles
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.shared import IItemsCache
+from gui.impl import backport
+from gui.impl.gen import R
 
 class TOOLTIP_TYPE(CONST_CONTAINER):
     VEHICLE = 'vehicle'
@@ -101,6 +104,7 @@ class TOOLTIP_COMPONENT(CONST_CONTAINER):
     CREW_BOOK = 'crewBook'
     TRADE_IN = 'tradeIn'
     DEMOUNT_KIT = 'demountKit'
+    MODULE_INFO = 'moduleInfo'
 
 
 class ACTION_TOOLTIPS_TYPE(CONST_CONTAINER):
@@ -268,6 +272,20 @@ def getComplexStatus(statusKey, **kwargs):
         return (None, None)
 
     return
+
+
+def getComplexStatusWULF(statusKey, **kwargs):
+    header, text = (None, None)
+    if statusKey:
+        headerKey = statusKey.dyn('header')
+        textKey = statusKey.dyn('text')
+        if headerKey.exists():
+            header = backport.text(headerKey(), **kwargs)
+        if textKey.exists():
+            text = backport.text(textKey(), **kwargs)
+        if headerKey is R.strings.tooltips.vehicleStatus.inPremiumIgrOnly.header:
+            header = backport.text(headerKey(), icon=icons.premiumIgrSmall())
+    return (header, text)
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)

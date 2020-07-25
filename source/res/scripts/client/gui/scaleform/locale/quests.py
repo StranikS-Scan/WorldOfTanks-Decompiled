@@ -953,7 +953,6 @@ class QUESTS(object):
     DETAILS_MODIFIERS_ECONOMICS_GOLDDROPSKILLSCOST = '#quests:details/modifiers/economics/goldDropSkillsCost'
     DETAILS_MODIFIERS_ECONOMICS_EXCHANGERATE = '#quests:details/modifiers/economics/exchangeRate'
     DETAILS_MODIFIERS_ECONOMICS_EXCHANGERATEFORSHELLSANDEQS = '#quests:details/modifiers/economics/exchangeRateForShellsAndEqs'
-    DETAILS_MODIFIERS_ECONOMICS_PAIDREMOVALCOST = '#quests:details/modifiers/economics/paidRemovalCost'
     DETAILS_MODIFIERS_ECONOMICS_PASSPORTCHANGECOST = '#quests:details/modifiers/economics/passportChangeCost'
     DETAILS_MODIFIERS_ECONOMICS_FEMALEPASSPORTCHANGECOST = '#quests:details/modifiers/economics/femalePassportChangeCost'
     DETAILS_MODIFIERS_ECONOMICS_CLANCREATIONCOST = '#quests:details/modifiers/economics/clanCreationCost'

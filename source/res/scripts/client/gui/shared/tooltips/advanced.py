@@ -116,9 +116,9 @@ class HangarBoosterAdvanced(BaseAdvancedTooltip):
         itemId = item.getGUIEmblemID()
         header = self._item.userName
         if 'crewSkillBattleBooster' in item.tags:
-            movie = _SKILL_MOVIES[itemId]
+            movie = SKILL_MOVIES[itemId]
         else:
-            movie = _MODULE_MOVIES[itemId]
+            movie = MODULE_MOVIES[itemId]
         return self._packAdvancedBlocks(movie, header, itemId)
 
 
@@ -135,10 +135,10 @@ class HangarModuleAdvanced(BaseAdvancedTooltip):
             header = self._item.userType
         movieKey = itemId
         descrKey = itemId
-        if movieKey not in _MODULE_MOVIES:
+        if movieKey not in MODULE_MOVIES:
             movieModule = None
         else:
-            movieModule = _MODULE_MOVIES[movieKey]
+            movieModule = MODULE_MOVIES[movieKey]
         if isEquipment:
             if itemId in ('lendLeaseOil', 'qualityOil'):
                 descrKey = 'enhancedOil'
@@ -162,14 +162,14 @@ class TankmanTooltipAdvanced(BaseAdvancedTooltip):
 class SkillTooltipAdvanced(BaseAdvancedTooltip):
 
     def _getBlocksList(self, *args, **kwargs):
-        return self._packAdvancedBlocks(_SKILL_MOVIES[self._item.name], self._item.userName, self._item.name)
+        return self._packAdvancedBlocks(SKILL_MOVIES[self._item.name], self._item.userName, self._item.name)
 
 
 class SkillExtendedTooltipAdvanced(BaseAdvancedTooltip):
 
     def _getBlocksList(self, *args, **kwargs):
         skillType = args[0]
-        return self._packAdvancedBlocks(_SKILL_MOVIES[skillType], TOOLTIPS.skillTooltipHeader(skillType), skillType)
+        return self._packAdvancedBlocks(SKILL_MOVIES[skillType], TOOLTIPS.skillTooltipHeader(skillType), skillType)
 
 
 class VehicleParametersAdvanced(BaseAdvancedTooltip):
@@ -221,7 +221,7 @@ class DemountKitTooltipAdvanced(BaseAdvancedTooltip):
         return self._packAdvancedBlocks('demountKit', demountKit.userName, 'demountKit/{}'.format(dkType))
 
 
-_SKILL_MOVIES = {'repair': 'skillRepairs',
+SKILL_MOVIES = {'repair': 'skillRepairs',
  'camouflage': 'skillConcealment',
  'naturalCover': 'skillConcealment',
  'fireFighting': 'skillFirefighting',
@@ -247,7 +247,7 @@ _SKILL_MOVIES = {'repair': 'skillRepairs',
  'loader_intuition': 'skillIntuition',
  'loader_desperado': 'skillAdrenalineRush',
  'loader_pedant': 'skillSafeStowage'}
-_MODULE_MOVIES = {'largeRepairkit': 'consumablesRepairKitBig',
+MODULE_MOVIES = {'largeRepairkit': 'consumablesRepairKitBig',
  'smallRepairkit': 'consumablesRepairKitSmall',
  'largeMedkit': 'consumablesFirstAidBig',
  'smallMedkit': 'consumablesFirstAidSmall',
@@ -258,18 +258,13 @@ _MODULE_MOVIES = {'largeRepairkit': 'consumablesRepairKitBig',
  'removedRpmLimiter': 'consumablesSpeedGovernorRemoved',
  'gasoline105': 'consumablesGasoline105',
  'gasoline100': 'consumablesGasoline100',
- 'toolbox': 'equipmentToolbox',
  'aimingStabilizer': 'equipmentVerticalStabilizer',
- 'carbonDioxide': 'equipmentCO2',
  'enhancedAimDrives': 'equipmentGunLayingDrive',
  'coatedOptics': 'equipmentCoatedOptics',
  'stereoscope': 'equipmentBinocularTelescope',
  'camouflageNet': 'equipmentCamouflageNet',
- 'steelRollers': 'equipmentEnhancedSuspension',
  'antifragmentationLining': 'equipmentLightSpallLiner',
  'improvedVentilation': 'equipmentImprovedVentilation',
- 'wetCombatPack': 'equipmentWetAmmoRack',
- 'filterCyclone': 'equipmentCycloneFilter',
  'rammer': 'equipmentMediumCaliberTankGunRammer',
  'vehicleGun': 'moduleGun',
  'vehicleDualGun': 'moduleDualGun',

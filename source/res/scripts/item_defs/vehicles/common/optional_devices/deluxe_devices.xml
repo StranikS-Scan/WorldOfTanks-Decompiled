@@ -1,36 +1,81 @@
 <deluxe_devices.xml>
-  <deluxToolbox>
+  <deluxImprovedConfiguration>
     <id>	43	</id>
-    <userString>	#artefacts:deluxToolbox/name	</userString>
-    <description>	#artefacts:deluxToolbox/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:deluxToolbox/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:deluxToolbox/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/toolbox.png 0 0	</icon>
+    <userString>	#artefacts:deluxImprovedConfiguration/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:deluxImprovedConfiguration/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:deluxImprovedConfiguration/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/improvedConfiguration.png 0 0	</icon>
+    <groupName>	improvedConfiguration	</groupName>
     <price>	3000	  <crystal></crystal>
     </price>
     <removable>	false	</removable>
-    <tags>	toolbox deluxe armor	</tags>
+    <tags>	improvedConfiguration deluxe armor	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	5	</minLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
     <incompatibleTags>
-      <installed>	toolbox	</installed>
+      <installed>	improvedConfiguration	</installed>
     </incompatibleTags>
-    <script>	StaticFactorDevice	  <weight>	100	</weight>
-      <attribute>	miscAttrs/repairSpeedFactor	</attribute>
-      <factor>	1.4	</factor>
+    <script>	ImprovedConfiguration	  <weight>	50	</weight>
+      <engineReduceFineFactor>	0.35 0.35	</engineReduceFineFactor>
+      <ammoBayReduceFineFactor>	0.35 0.35	</ammoBayReduceFineFactor>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/repairSpeedFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.45 1.45	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/ammoBayHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.5 2.5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/fuelTankHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.5 2.5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/engineHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.5 2.5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/fireStartingChanceFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.35 0.35	</valueByLevel>
+        </factor>
+      </factors>
     </script>
     <kpi>
       <mul>
         <name>	vehicleRepairSpeed	</name>
-        <value>	1.4	</value>
+        <value>	1.45	</value>
+      </mul>
+      <mul>
+        <name>	vehicleAmmoBayEngineFuelStrength	</name>
+        <value>	2.5	</value>
+      </mul>
+      <mul>
+        <name>	vehPenaltyForDamageEngineAndCombat	</name>
+        <value>	0.35	</value>
+      </mul>
+      <mul>
+        <name>	vehicleFireChance	</name>
+        <value>	0.35	</value>
       </mul>
     </kpi>
-  </deluxToolbox>
+  </deluxImprovedConfiguration>
   <deluxImprovedVentilation>
     <id>	44	</id>
     <userString>	#artefacts:deluxImprovedVentilation/name	</userString>
-    <description>	#artefacts:deluxImprovedVentilation/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:deluxImprovedVentilation/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxImprovedVentilation/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/improvedVentilation.png 0 0	</icon>
+    <groupName>	improvedVentilation	</groupName>
     <price>	5000	  <crystal></crystal>
     </price>
     <removable>	false	</removable>
@@ -45,31 +90,35 @@
     <incompatibleTags>
       <installed>	ventilation	</installed>
     </incompatibleTags>
-    <script>	StaticAdditiveDevice	  <weight>	100	</weight>
-      <attribute>	miscAttrs/crewLevelIncrease	</attribute>
-      <value>	7.5	</value>
+    <script>	StaticOptionalDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/crewLevelIncrease	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	8.5 8.5	</valueByLevel>
+        </factor>
+      </factors>
     </script>
     <kpi>
       <mul>
         <name>	crewLevel	</name>
-        <value>	1.075	</value>
+        <value>	1.085	</value>
       </mul>
     </kpi>
   </deluxImprovedVentilation>
   <deluxRammer>
     <id>	45	</id>
     <userString>	#artefacts:deluxRammer/name	</userString>
-    <description>	#artefacts:deluxRammer/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:deluxRammer/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxRammer/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/rammer.png 0 0	</icon>
+    <groupName>	tankRammer	</groupName>
     <price>	5000	  <crystal></crystal>
     </price>
     <removable>	false	</removable>
     <vehicleFilter>
       <include>
         <vehicle>
-          <tags>	mediumCaliberTankRammer_user largeCaliberTankRammer_user mediumCaliberHowitzerRammer_user largeCaliberHowitzerRammer_user	</tags>
+          <tags>	tankRammer_class1_user tankRammer_class2_user	</tags>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -77,24 +126,28 @@
     <incompatibleTags>
       <installed>	rammer	</installed>
     </incompatibleTags>
-    <script>	StaticFactorDevice	  <weight>	200	</weight>
-      <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
-      <factor>	0.875	</factor>
+    <script>	StaticOptionalDevice	  <weight>	200	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.865 0.865	</valueByLevel>
+        </factor>
+      </factors>
     </script>
     <kpi>
       <mul>
         <name>	vehicleGunReloadTime	</name>
-        <value>	0.875	</value>
+        <value>	0.865	</value>
       </mul>
     </kpi>
   </deluxRammer>
   <deluxCoatedOptics>
     <id>	46	</id>
     <userString>	#artefacts:deluxCoatedOptics/name	</userString>
-    <description>	#artefacts:deluxCoatedOptics/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:deluxCoatedOptics/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxCoatedOptics/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/coatedOptics.png 0 0	</icon>
+    <groupName>	coatedOptics	</groupName>
     <price>	4000	  <crystal></crystal>
     </price>
     <removable>	false	</removable>
@@ -102,30 +155,34 @@
     <incompatibleTags>
       <installed>	coatedOptics	</installed>
     </incompatibleTags>
-    <script>	StaticFactorDevice	  <attribute>	miscAttrs/circularVisionRadiusFactor	</attribute>
-      <factor>	1.125	</factor>
+    <script>	StaticOptionalDevice	  <factors>
+        <factor>
+          <attribute>	miscAttrs/circularVisionRadiusFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.135 1.135	</valueByLevel>
+        </factor>
+      </factors>
     </script>
     <kpi>
       <mul>
         <name>	vehicleCircularVisionRadius	</name>
-        <value>	1.125	</value>
+        <value>	1.135	</value>
       </mul>
     </kpi>
   </deluxCoatedOptics>
   <deluxAimingStabilizer>
     <id>	47	</id>
     <userString>	#artefacts:deluxAimingStabilizer/name	</userString>
-    <description>	#artefacts:deluxAimingStabilizer/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:deluxAimingStabilizer/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxAimingStabilizer/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/aimingStabilizer.png 0 0	</icon>
+    <groupName>	aimingStabilizer	</groupName>
     <price>	5000	  <crystal></crystal>
     </price>
     <removable>	false	</removable>
     <vehicleFilter>
       <include>
         <vehicle>
-          <tags>	aimingStabilizer_Mk1_user aimingStabilizer_Mk2_user	</tags>
+          <tags>	aimingStabilizer_class1_user aimingStabilizer_class2_user	</tags>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -133,24 +190,28 @@
     <incompatibleTags>
       <installed>	aimingStabilizer	</installed>
     </incompatibleTags>
-    <script>	StaticFactorDevice	  <weight>	100	</weight>
-      <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
-      <factor>	0.75	</factor>
+    <script>	StaticOptionalDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.725 0.725	</valueByLevel>
+        </factor>
+      </factors>
     </script>
     <kpi>
       <mul>
         <name>	vehicleGunShotDispersion	</name>
-        <value>	0.75	</value>
+        <value>	0.725	</value>
       </mul>
     </kpi>
   </deluxAimingStabilizer>
   <deluxEnhancedAimDrives>
     <id>	48	</id>
     <userString>	#artefacts:deluxEnhancedAimDrives/name	</userString>
-    <description>	#artefacts:deluxEnhancedAimDrives/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:deluxEnhancedAimDrives/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxEnhancedAimDrives/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/enhancedAimDrives.png 0 0	</icon>
+    <groupName>	enhancedAimDrives	</groupName>
     <price>	5000	  <crystal></crystal>
     </price>
     <removable>	false	</removable>
@@ -158,14 +219,19 @@
     <incompatibleTags>
       <installed>	enhancedAimDrives	</installed>
     </incompatibleTags>
-    <script>	StaticFactorDevice	  <weight>	100	</weight>
-      <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
-      <factor>	0.89	</factor>
+    <script>	StaticOptionalDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.881 0.881	</valueByLevel>
+        </factor>
+      </factors>
     </script>
     <kpi>
       <mul>
         <name>	vehicleGunAimSpeed	</name>
-        <value>	1.125	</value>
+        <value>	1.135	</value>
       </mul>
     </kpi>
   </deluxEnhancedAimDrives>

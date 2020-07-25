@@ -18,10 +18,9 @@ from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.impl import backport
 from gui.impl.gen import R
-from items import EQUIPMENT_TYPES
 from items import makeIntCompactDescrByID as makeCD
 from items.components.c11n_constants import CustomizationType
-from items.vehicles import NUM_OPTIONAL_DEVICE_SLOTS, NUM_EQUIPMENT_SLOTS_BY_TYPE, NUM_SHELLS_SLOTS
+from items.vehicles import MAX_OPTIONAL_DEVICES_SLOTS, NUM_SHELLS_SLOTS
 from shared_utils import findFirst, first, CONST_CONTAINER
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.goodies import IGoodiesCache
@@ -41,7 +40,6 @@ class ITEM_SORT_RULE(CONST_CONTAINER):
 
 
 OFFER_CHANGED_EVENT = 'offerChanged'
-_NUM_REGULAR_EQUIPMENT_SLOTS = NUM_EQUIPMENT_SLOTS_BY_TYPE[EQUIPMENT_TYPES.regular]
 _UNLIMITED_ITEMS_COUNT = -1
 _EXCLUDE_ITEMS = {v for v in ItemPackTypeGroup.CREW} | {ItemPackType.FRONTLINE_TOKEN}
 _ANY_ITEM_TYPE = {v for _, v in ItemPackType.getIterator()} - _EXCLUDE_ITEMS
@@ -124,7 +122,10 @@ _ICONS = {ItemPackType.CAMOUFLAGE_ALL: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CA
  ItemPackType.CUSTOM_EVENT_COIN_EXTERNAL: RES_SHOP.MAPS_SHOP_REWARDS_48X48_MONEY_EVENT_COIN,
  ItemPackType.CUSTOM_SLOT: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_HANGARSLOT,
  ItemPackType.CUSTOM_REFERRAL_CREW: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZECREW,
- ItemPackType.CREW_100: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZECREW}
+ ItemPackType.CREW_50: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZECREW,
+ ItemPackType.CREW_75: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZECREW,
+ ItemPackType.CREW_100: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZECREW,
+ ItemPackType.CUSTOM_CREW_100: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZECREW}
 _NOT_FOUND_ICONS = {ItemPackType.TOKEN: RES_ICONS.MAPS_ICONS_QUESTS_ICON_BATTLE_MISSIONS_PRIZE_TOKEN}
 _PREM_ICONS = {1: RES_SHOP.MAPS_SHOP_REWARDS_48X48_ICON_BATTLE_MISSIONS_PRIZE_1DAYPREM,
  2: RES_SHOP.MAPS_SHOP_REWARDS_48X48_ICON_BATTLE_MISSIONS_PRIZE_2DAYPREM,
@@ -233,7 +234,7 @@ def getItemIcon(rawItem, item):
     return icon
 
 
-def getItemTitle(rawItem, item, forBox=False):
+def getItemTitle(rawItem, item, forBox=False, additionalInfo=False):
     if item is not None:
         title = item.userName
         if forBox and item.itemTypeName != '':
@@ -263,7 +264,13 @@ def getItemTitle(rawItem, item, forBox=False):
         vehicle = g_currentPreviewVehicle.item
         title = _ms(TOOLTIPS.CUSTOMCREW_REFERRAL_HEADER, vehicle=vehicle.userName)
     elif rawItem.type in ItemPackTypeGroup.CREW:
-        title = _ms(TOOLTIPS.CREW_HEADER)
+        if additionalInfo:
+            title = _ms(TOOLTIPS.CREW_BODY, value={ItemPackType.CREW_50: CrewTypes.SKILL_50,
+             ItemPackType.CREW_75: CrewTypes.SKILL_75,
+             ItemPackType.CREW_100: CrewTypes.SKILL_100,
+             ItemPackType.CUSTOM_CREW_100: CrewTypes.SKILL_100}.get(rawItem.type))
+        else:
+            title = _ms(TOOLTIPS.CREW_HEADER)
     elif rawItem.type == ItemPackType.CUSTOM_EVENT_PROGRESSION_REWARD_POINT:
         title = backport.text(R.strings.tooltips.vehiclePreview.buyingPanel.eventProgression.price.header())
     else:
@@ -478,11 +485,13 @@ class _NodeContainer(object):
 class _OptDeviceNodeContainer(_NodeContainer):
 
     def __init__(self, nextNode=None):
-        super(_OptDeviceNodeContainer, self).__init__(NUM_OPTIONAL_DEVICE_SLOTS, ItemPackType.ITEM_DEVICE, nextNode)
+        super(_OptDeviceNodeContainer, self).__init__(MAX_OPTIONAL_DEVICES_SLOTS, ItemPackType.ITEM_DEVICE, nextNode)
 
     def _install(self, item, vehicle, slotIdx):
         optDev = self.itemsCache.items.getItemByCD(item.id)
         if optDev is None:
+            return (False, 0)
+        elif slotIdx >= vehicle.optDevices.installed.getCapacity():
             return (False, 0)
         else:
             result = optDev.mayInstall(vehicle, slotIdx)[0]
@@ -519,11 +528,13 @@ class _ShellNodeContainer(_NodeContainer):
 class _EquipmentNodeContainer(_NodeContainer):
 
     def __init__(self, nextNode=None):
-        super(_EquipmentNodeContainer, self).__init__(_NUM_REGULAR_EQUIPMENT_SLOTS, ItemPackType.ITEM_EQUIPMENT, nextNode)
+        super(_EquipmentNodeContainer, self).__init__(_UNLIMITED_ITEMS_COUNT, ItemPackType.ITEM_EQUIPMENT, nextNode)
 
     def _install(self, item, vehicle, slotIdx):
         equipment = self.itemsCache.items.getItemByCD(item.id)
         if equipment is None:
+            return (False, 0)
+        elif slotIdx >= vehicle.consumables.installed.getCapacity():
             return (False, 0)
         else:
             result = equipment.mayInstall(vehicle, slotIdx)[0]
@@ -538,13 +549,15 @@ class _EquipmentNodeContainer(_NodeContainer):
 class _BuiltinEquipmentNodeContainer(_NodeContainer):
 
     def __init__(self, nextNode=None):
-        super(_BuiltinEquipmentNodeContainer, self).__init__(_NUM_REGULAR_EQUIPMENT_SLOTS, ItemPackType.ITEM_EQUIPMENT, nextNode)
+        super(_BuiltinEquipmentNodeContainer, self).__init__(_UNLIMITED_ITEMS_COUNT, ItemPackType.ITEM_EQUIPMENT, nextNode)
 
     def _install(self, item, vehicle, slotIdx):
         equipment = self.itemsCache.items.getItemByCD(item.id)
         if equipment is None:
             return (False, 0)
         elif not equipment.isBuiltIn:
+            return (False, 0)
+        elif slotIdx >= vehicle.consumables.installed.getCapacity():
             return (False, 0)
         else:
             result = equipment.mayInstall(vehicle, slotIdx)[0]
@@ -668,7 +681,7 @@ def getCouponBonusesForItemPack(itemsPack):
         for item in itemsPack:
             if item.type not in ItemPackTypeGroup.DISCOUNT + ItemPackTypeGroup.VEHICLE:
                 result.append({'img': getItemIcon(item, None),
-                 'text': getItemTitle(item, None)})
+                 'text': getItemTitle(item, None, additionalInfo=True)})
 
     return result
 

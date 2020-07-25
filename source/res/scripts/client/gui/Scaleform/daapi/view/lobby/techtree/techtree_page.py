@@ -115,6 +115,7 @@ class TechTree(TechTreeMeta):
     def goToNextVehicle(self, vehCD):
         loadEvent = events.LoadViewEvent(VIEW_ALIAS.LOBBY_RESEARCH, ctx={BackButtonContextKeys.ROOT_CD: vehCD,
          BackButtonContextKeys.EXIT: self.__exitEvent()})
+        self.soundManager.playInstantSound(Sounds.RESET)
         self.__stopTopOfTheTreeSounds()
         self.fireEvent(loadEvent, scope=EVENT_BUS_SCOPE.LOBBY)
 

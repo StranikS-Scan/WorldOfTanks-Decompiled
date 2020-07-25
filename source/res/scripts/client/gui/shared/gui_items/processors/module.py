@@ -4,7 +4,7 @@ import logging
 import AccountCommands
 import BigWorld
 from gui import makeHtmlString
-from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE, CURRENCY_TO_SM_TYPE_DISMANTLING
+from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
@@ -14,6 +14,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.gui_items.gui_item_economics import getItemBuyPrice
 from gui.shared.gui_items.processors import ItemProcessor, makeI18nSuccess, makeI18nError, VehicleItemProcessor, plugins, makeSuccess, Processor
+from gui.shared.gui_items.processors.messages.items_processor_messages import OptDevicesDemountProcessorMessage, OptDeviceRemoveProcessorMessage, ItemDestroyProcessorMessage
 from gui.shared.gui_items.vehicle_modules import VehicleTurret, VehicleGun
 from gui.shared.money import Currency
 from helpers import i18n, dependency
@@ -189,36 +190,32 @@ class OptDeviceInstaller(ModuleInstallProcessor):
         if install:
             addPlugins += (plugins.InstallDeviceConfirmator(isEnabled=not item.isRemovable and not skipConfirm, item=self.item),)
         else:
-            addPlugins += (plugins.DemountDeviceConfirmator(isEnabled=not item.isRemovable and financeOperation and not skipConfirm, item=self.item), plugins.DestroyDeviceConfirmator(isEnabled=not item.isRemovable and not financeOperation and not skipConfirm, item=item))
+            addPlugins += (plugins.DemountDeviceConfirmator(isEnabled=not item.isRemovable and financeOperation and not skipConfirm, item=self.item, vehicle=vehicle), plugins.DestroyDeviceConfirmator(isEnabled=not item.isRemovable and not financeOperation and not skipConfirm, item=item))
         self.addPlugins(addPlugins)
         self.financeOperation = financeOperation
 
     def _successHandler(self, code, ctx=None):
         item = self.item if self.install else None
-        self.vehicle.optDevices[self.slotIdx] = item
+        self.vehicle.optDevices.installed[self.slotIdx] = item
         useDemountKit = self.requestCtx.get('useDemountKit', False)
-        if useDemountKit:
-            smType = SM_TYPE.DismantlingForDemountKit
-            sysMsgKey = self._formMessage('demount_kit_success')
+        isAfterConversion = self.requestCtx.get('isAfterConversion', False)
+        if not self.install and not self.item.isRemovable and isAfterConversion and self.financeOperation:
+            return makeSuccess()
+        elif not self.install and not self.item.isRemovable and self.financeOperation:
+            return OptDeviceRemoveProcessorMessage(self.item, removalPrice=self.removalPrice.price, useDemountKit=useDemountKit).makeSuccessMsg()
         else:
-            smType = CURRENCY_TO_SM_TYPE_DISMANTLING.get(self.removalPrice.price.getCurrency(), SM_TYPE.DismantlingForGold)
-            sysMsgKey = self._formMessage('money_success')
-        return makeI18nSuccess(sysMsgKey=sysMsgKey, type=smType, **self._getMsgCtx()) if not self.install and not self.item.isRemovable and self.financeOperation else super(OptDeviceInstaller, self)._successHandler(code, ctx)
+            return ItemDestroyProcessorMessage(self.item).makeSuccessMsg() if not self.install and not self.financeOperation else super(OptDeviceInstaller, self)._successHandler(code, ctx)
 
     def _request(self, callback):
         from gui.Scaleform.Waiting import Waiting
         Waiting.show('applyModule')
         useDemountKit = self.requestCtx.get('useDemountKit', False)
         itemCD = self.item.intCD if self.install else 0
+        isAfterConversion = self.requestCtx.get('isAfterConversion', False)
         if not self.install and useDemountKit:
             g_eventBus.handleEvent(ItemRemovalByDemountKitEvent(ItemRemovalByDemountKitEvent.DECLARED, self.slotIdx), EVENT_BUS_SCOPE.LOBBY)
-        BigWorld.player().inventory.equipOptionalDevice(self.vehicle.invID, itemCD, self.slotIdx, self.financeOperation, lambda code, ext=None: self._response(code, callback, ctx=ext), useDemountKit)
+        BigWorld.player().inventory.equipOptionalDevice(self.vehicle.invID, itemCD, self.slotIdx, self.financeOperation, lambda code, ext=None: self._response(code, callback, ctx=ext), useDemountKit and not isAfterConversion)
         return
-
-    def _getMsgCtx(self):
-        return {'name': self.item.userName,
-         'kind': self.item.userType,
-         'money': formatPrice(self.removalPrice.price)}
 
     def _response(self, code, callback, errStr='', ctx=None):
         super(OptDeviceInstaller, self)._response(code, callback, errStr, ctx)
@@ -227,7 +224,7 @@ class OptDeviceInstaller(ModuleInstallProcessor):
 
     def _errorHandler(self, code, errStr='', ctx=None):
         g_eventBus.handleEvent(ItemRemovalByDemountKitEvent(ItemRemovalByDemountKitEvent.CANCELED), EVENT_BUS_SCOPE.LOBBY)
-        return super(OptDeviceInstaller, self)._errorHandler(code, errStr, ctx)
+        return OptDevicesDemountProcessorMessage().makeErrorMsg(errStr)
 
 
 class EquipmentInstaller(ModuleInstallProcessor):
@@ -237,12 +234,13 @@ class EquipmentInstaller(ModuleInstallProcessor):
 
     def _successHandler(self, code, ctx=None):
         item = self.item if self.install else None
-        self.vehicle.equipment.regularConsumables[self.slotIdx] = item
+        self.vehicle.consumables.installed[self.slotIdx] = item
         return super(EquipmentInstaller, self)._successHandler(code, ctx)
 
     def _request(self, callback):
         itemCD = self.item.intCD if self.install else 0
-        newLayout = self.vehicle.equipment.getConsumablesIntCDs()
+        newLayout = self.vehicle.consumables.getIntCDs()
+        newLayout.extend(self.vehicle.battleBoosters.getIntCDs())
         newLayout[self.slotIdx] = itemCD
         BigWorld.player().inventory.equipEquipments(self.vehicle.invID, newLayout, lambda code: self._response(code, callback))
 
@@ -496,14 +494,14 @@ class ModuleUpgradeProcessor(ModuleProcessor):
 
 
 class BattleAbilityInstaller(ModuleInstallProcessor):
+    __epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
 
     def __init__(self, vehicle, item, slotIdx, install=True, conflictedEqs=None, skipConfirm=False):
         super(BattleAbilityInstaller, self).__init__(vehicle, item, (GUI_ITEM_TYPE.BATTLE_ABILITY,), slotIdx, install, conflictedEqs, skipConfirm=skipConfirm)
 
     def _request(self, callback):
-        epicMetaGameCtrl = dependency.instance(IEpicBattleMetaGameController)
-        selectedSkill = next((skillID for skillID, levels in epicMetaGameCtrl.getAllUnlockedSkillLevelsBySkillId().iteritems() if self.item.innationID in (level.eqID for level in levels)), -1)
-        currentSkills = epicMetaGameCtrl.getSelectedSkills(self.vehicle.intCD)[:]
+        selectedSkill = next((skillID for skillID, levels in self.__epicMetaGameCtrl.getAllUnlockedSkillLevelsBySkillId().iteritems() if self.item.innationID in (level.eqID for level in levels)), -1)
+        currentSkills = self.__epicMetaGameCtrl.getSelectedSkills(self.vehicle.intCD)[:]
         previousSkill = currentSkills[self.slotIdx] if len(currentSkills) >= self.slotIdx else -1
         for idx, skillID in enumerate(currentSkills):
             if idx == self.slotIdx:
@@ -514,7 +512,7 @@ class BattleAbilityInstaller(ModuleInstallProcessor):
             if skillID == selectedSkill and skillID != -1:
                 currentSkills[idx] = previousSkill
 
-        epicMetaGameCtrl.changeEquippedSkills(currentSkills, self.vehicle.intCD, lambda code, _: self._response(code, callback))
+        self.__epicMetaGameCtrl.changeEquippedSkills(currentSkills, self.vehicle.intCD, lambda code, _: self._response(code, callback))
 
     def _successHandler(self, code, ctx=None):
         return makeSuccess()

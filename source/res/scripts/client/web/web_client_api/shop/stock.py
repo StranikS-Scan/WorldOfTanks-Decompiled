@@ -1,10 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/shop/stock.py
-from collections import defaultdict, namedtuple
+from collections import namedtuple
 from functools import partial
-from itertools import chain
 from WeakMethod import WeakMethodProxy
-from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform import MENU
 from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.money import Money
@@ -115,13 +113,6 @@ class IdInListCriteria(RequestCriteria):
 
 
 ID_IN_LIST = IdInListCriteria()
-_EXTRA_ITEMS_CRITERIA_MAP = {ShopItemType.VEHICLE: ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR,
- ShopItemType.EQUIPMENT: ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET,
- ShopItemType.DEVICE: ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET,
- ShopItemType.BATTLE_BOOSTER: ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET,
- ShopItemType.MODULE: ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET,
- ShopItemType.SHELL: ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET,
- ShopItemType.BOOSTER: REQ_CRITERIA.BOOSTER.ENABLED | ~REQ_CRITERIA.HIDDEN}
 _SHOP_CUSTOMIZATION_TYPES = (ShopItemType.PAINT,
  ShopItemType.CAMOUFLAGE,
  ShopItemType.MODIFICATION,
@@ -162,19 +153,9 @@ class ItemsWebApiMixin(object):
     def __init__(self):
         super(ItemsWebApiMixin, self).__init__()
         self.__formattersMap = {}
-        self.__compatVehiclesCache = {}
-        self.__fittedVehiclesCache = {}
-        self.__cachesInitialized = False
-        self.__inventoryUpdateHandler = WeakMethodProxy(self.updateMappingCaches)
-        g_clientUpdateManager.addCallbacks({'inventory': self.__inventoryUpdateHandler})
-
-    def __del__(self):
-        g_clientUpdateManager.removeCallback('inventory', self.__inventoryUpdateHandler)
 
     @w2c(_GetItemsSchema, 'get_items')
     def getItems(self, cmd):
-        if not self.__cachesInitialized:
-            self.updateMappingCaches()
         criteria = _parseCriteriaSpec(cmd.type, cmd.criteria, cmd.id_list)
         allowedFields = set(cmd.fields) if cmd.fields else None
         result = [ self.__getFormatter(cmd.type, criteria).format(item, allowedFields) for item in self.__collectItems(cmd.type, criteria) ]
@@ -189,13 +170,13 @@ class ItemsWebApiMixin(object):
             if itemType == ShopItemType.VEHICLE:
                 fmt = formatters.makeVehicleFormatter(criteria.lookInInventory())
             elif itemType == ShopItemType.EQUIPMENT:
-                fmt = formatters.makeEquipmentFormatter(partial(WeakMethodProxy(self.getFittedVehicles), ShopItemType.EQUIPMENT))
+                fmt = formatters.makeEquipmentFormatter(partial(WeakMethodProxy(self.__getFittedVehicles), ShopItemType.EQUIPMENT))
             elif itemType == ShopItemType.DEVICE:
-                fmt = formatters.makeDeviceFormatter(partial(WeakMethodProxy(self.getCompatVehicles), ShopItemType.DEVICE), partial(WeakMethodProxy(self.getFittedVehicles), ShopItemType.DEVICE))
+                fmt = formatters.makeDeviceFormatter(partial(WeakMethodProxy(self.__getCompatVehicles), ShopItemType.DEVICE), partial(WeakMethodProxy(self.__getFittedVehicles), ShopItemType.DEVICE))
             elif itemType == ShopItemType.BOOSTER:
                 fmt = formatters.makeBoosterFormatter()
             elif itemType == ShopItemType.BATTLE_BOOSTER:
-                fmt = formatters.makeBattleBoosterFormatter(partial(WeakMethodProxy(self.getFittedVehicles), ShopItemType.BATTLE_BOOSTER))
+                fmt = formatters.makeBattleBoosterFormatter(partial(WeakMethodProxy(self.__getFittedVehicles), ShopItemType.BATTLE_BOOSTER))
             elif itemType == ShopItemType.MODULE:
                 fmt = formatters.makeModuleFormatter()
             elif itemType == ShopItemType.PREMIUM:
@@ -268,29 +249,10 @@ class ItemsWebApiMixin(object):
 
         return [ _InstalledEnhancements(vehIntCD, enhancements) for vehIntCD, enhancements in installedEnhancements.iteritems() ]
 
-    def getCompatVehicles(self, itemType, itemID):
-        return self.__compatVehiclesCache[itemType][itemID]
+    def __getCompatVehicles(self, itemType, itemID):
+        cache = self.itemsCache.compatVehiclesCache.getCompatCache(self.itemsCache)
+        return cache[_GUI_ITEMS_TYPE_MAP[itemType]][itemID]
 
-    def getFittedVehicles(self, itemType, itemID):
-        return self.__fittedVehiclesCache[itemType][itemID]
-
-    def updateMappingCaches(self, *args):
-
-        def collectAll(itemType):
-            return ((itemType, item) for item in self.__collectItems(itemType, _EXTRA_ITEMS_CRITERIA_MAP[itemType]))
-
-        types = [ShopItemType.DEVICE, ShopItemType.EQUIPMENT, ShopItemType.BATTLE_BOOSTER]
-        self.__compatVehiclesCache.clear()
-        self.__compatVehiclesCache.update({itemType:defaultdict(list) for itemType in types})
-        self.__fittedVehiclesCache.clear()
-        self.__fittedVehiclesCache.update({itemType:defaultdict(list) for itemType in types})
-        vehicles = self.itemsCache.items.getItems(GUI_ITEM_TYPE.VEHICLE, REQ_CRITERIA.INVENTORY, onlyWithPrices=False).itervalues()
-        typedItemPairs = list(chain.from_iterable((collectAll(itemType) for itemType in types)))
-        for veh in vehicles:
-            for itemType, item in typedItemPairs:
-                if item.mayInstall(veh, 0)[0]:
-                    self.__compatVehiclesCache[itemType][item.intCD].append(veh.intCD)
-                if item.isInstalled(veh):
-                    self.__fittedVehiclesCache[itemType][item.intCD].append(veh.intCD)
-
-        self.__cachesInitialized = True
+    def __getFittedVehicles(self, itemType, itemID):
+        cache = self.itemsCache.compatVehiclesCache.getFittedCache(self.itemsCache)
+        return cache[_GUI_ITEMS_TYPE_MAP[itemType]][itemID]

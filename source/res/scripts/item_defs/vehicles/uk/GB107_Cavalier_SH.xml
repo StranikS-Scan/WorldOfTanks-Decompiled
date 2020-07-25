@@ -7,6 +7,7 @@
     <radioman></radioman>
     <loader></loader>
   </crew>
+  <supplySlots>	8 8 8	</supplySlots>
   <speedLimits>
     <forward>	64	</forward>
     <backward>	20	</backward>
@@ -15,9 +16,16 @@
     <moving>	0.19	</moving>
     <still>	0.253	</still>
     <camouflageBonus>	0.03	</camouflageBonus>
-    <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.38	</firePenalty>
   </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.1 0.125	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+  </optDevsOverrides>
   <repairCost>	16.66666709	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -49,7 +57,7 @@
           <armor_15>	60	</armor_15>
         </armor>
         <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-        <weight>	18800	</weight>
+        <weight>	16300	</weight>
         <maxHealth>	1300	</maxHealth>
         <ammoBayHealth>
           <maxHealth>	220	</maxHealth>
@@ -62,7 +70,7 @@
           <exploded>	vehicles/british/GB107_Cavalier_SH/crash/lod0/Hull_02.model	</exploded>
         </models>
         <exhaust>
-          <pixie>	diesel_medium	</pixie>
+          <pixie>	diesel_large	</pixie>
           <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
         </exhaust>
         <turretPositions>
@@ -123,7 +131,7 @@
           </armor_18>
         </armor>
         <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-        <weight>	23800	</weight>
+        <weight>	20800	</weight>
         <maxHealth>	1300	</maxHealth>
         <ammoBayHealth>
           <maxHealth>	260	</maxHealth>
@@ -136,7 +144,7 @@
           <exploded>	vehicles/british/GB107_Cavalier_SH/crash/lod0/Hull_03.model	</exploded>
         </models>
         <exhaust>
-          <pixie>	gas_medium	</pixie>
+          <pixie>	gas_large	</pixie>
           <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2 HP_Track_Exhaus_3 HP_Track_Exhaus_4	</nodes>
         </exhaust>
         <turretPositions>
@@ -197,7 +205,7 @@
       <armor_18>	20	</armor_18>
     </armor>
     <primaryArmor>	armor_10 armor_7 armor_4	</primaryArmor>
-    <weight>	11300	</weight>
+    <weight>	9800	</weight>
     <maxHealth>	780	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
@@ -216,7 +224,7 @@
       <sensitivityToImpulse>	0.58	</sensitivityToImpulse>
     </swinging>
     <exhaust>
-      <pixie>	gas_medium	</pixie>
+      <pixie>	gas_large	</pixie>
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
@@ -274,12 +282,12 @@
         <leftTrack>	20	</leftTrack>
         <rightTrack>	20	</rightTrack>
       </armor>
-      <weight>	4520	</weight>
+      <weight>	3920	</weight>
       <maxLoad>	60000	</maxLoad>
       <terrainResistance>	1.0 1.1 2.0	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	37	</rotationSpeed>
+      <rotationSpeed>	43	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.1	</vehicleMovement>
         <vehicleRotation>	0.1	</vehicleRotation>
@@ -1078,12 +1086,12 @@
         <leftTrack>	20	</leftTrack>
         <rightTrack>	20	</rightTrack>
       </armor>
-      <weight>	7520	</weight>
+      <weight>	6520	</weight>
       <maxLoad>	60000	</maxLoad>
       <terrainResistance>	1.0 1.1 2.0	</terrainResistance>
       <brakeForce>	36500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	48	</rotationSpeed>
+      <rotationSpeed>	49	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.1	</vehicleMovement>
         <vehicleRotation>	0.1	</vehicleRotation>
@@ -1806,12 +1814,12 @@
         <leftTrack>	30	</leftTrack>
         <rightTrack>	30	</rightTrack>
       </armor>
-      <weight>	9520	</weight>
+      <weight>	8320	</weight>
       <maxLoad>	60000	</maxLoad>
       <terrainResistance>	1.0 1.1 2.0	</terrainResistance>
       <brakeForce>	36500	</brakeForce>
       <rotationIsAroundCenter>	False	</rotationIsAroundCenter>
-      <rotationSpeed>	39	</rotationSpeed>
+      <rotationSpeed>	43	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.1	</vehicleMovement>
         <vehicleRotation>	0.1	</vehicleRotation>
@@ -2483,9 +2491,9 @@
         <armor_14>	20	</armor_14>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-      <weight>	6780	</weight>
+      <weight>	5880	</weight>
       <maxHealth>	420	</maxHealth>
-      <rotationSpeed>	41	</rotationSpeed>
+      <rotationSpeed>	47	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
@@ -2498,13 +2506,13 @@
         <repairCost>	0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_3.7inch_Howitzer_SH>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_3.7inch_Howitzer_SH>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
             <gun>	40	</gun>
           </armor>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.380783 10 0.444444 0 0.555556 0 0.619218 10 1 10	</maxPitch>
+            <maxPitch>	0 10 0.380783 10 0.444444 7 0.555556 7 0.619218 10 1 10	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.45	</shotDispersionRadius>
           <reloadTime>	3	</reloadTime>
@@ -2531,6 +2539,7 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <shotOffset>	-0.120000 0.000000 0.000000	</shotOffset>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -2566,7 +2575,7 @@
             <chassis>	Chassis_GB84_Chieftain_Mk6_SH	  <cost>	0	</cost>
             </chassis>
           </unlocks>
-          <maxAmmo>	60	</maxAmmo>
+          <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.25 10 0.333333 8 0.416667 3 0.5 3 0.583333 3 0.666667 8 0.75 10.01 1 10	</maxPitch>
@@ -2607,6 +2616,7 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <shotOffset>	-0.120000 0.000000 0.000000	</shotOffset>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -2642,7 +2652,7 @@
             <chassis>	Chassis_GB84_Chieftain_Mk6_SH	  <cost>	0	</cost>
             </chassis>
           </unlocks>
-          <maxAmmo>	60	</maxAmmo>
+          <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 10 0.25 10 0.333333 8 0.416667 3 0.5 3 0.583333 3 0.666667 8 0.75 10.01 1 10	</maxPitch>
@@ -2675,6 +2685,7 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <shotOffset>	-0.120000 0.000000 0.000000	</shotOffset>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -2778,9 +2789,9 @@
         <armor_15>	90	</armor_15>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-      <weight>	11280	</weight>
+      <weight>	9780	</weight>
       <maxHealth>	700	</maxHealth>
-      <rotationSpeed>	50	</rotationSpeed>
+      <rotationSpeed>	52	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
         <maxRegenHealth>	70	</maxRegenHealth>
@@ -2793,7 +2804,7 @@
         <repairCost>	0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <OQF_17pdr_Gun_Mk_VII_SH>	shared	  <maxAmmo>	60	</maxAmmo>
+        <OQF_17pdr_Gun_Mk_VII_SH>	shared	  <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.333333 10 0.416667 5.5 0.5 4.5 0.583333 5.5 0.666667 10 1 10	</maxPitch>
@@ -2871,7 +2882,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </OQF_17pdr_Gun_Mk_VII_SH>
-        <_32_pounder_Gun_OQF_SH>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_32_pounder_Gun_OQF_SH>	shared	  <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 10 0.333333 10 0.416667 5.5 0.5 4.5 0.583333 5.5 0.666667 10 1 10	</maxPitch>
@@ -2941,7 +2952,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_32_pounder_Gun_OQF_SH>
-        <_20pdr_Gun_Type_B_SH>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_20pdr_Gun_Type_B_SH>	shared	  <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 10 0.333333 10 0.416667 5 0.5 4 0.583333 5 0.666667 10 1 10	</maxPitch>
@@ -3011,7 +3022,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_20pdr_Gun_Type_B_SH>
-        <_105mm_Gun_L7_HEAT_SH>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_105mm_Gun_L7_HEAT_SH>	shared	  <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.333333 10 0.416667 4 0.5 3.5 0.583333 4 0.666667 10 1 10	</maxPitch>
@@ -3157,9 +3168,9 @@
         </armor_18>
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_12	</primaryArmor>
-      <weight>	14280	</weight>
+      <weight>	12480	</weight>
       <maxHealth>	700	</maxHealth>
-      <rotationSpeed>	41	</rotationSpeed>
+      <rotationSpeed>	47	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
         <maxRegenHealth>	70	</maxRegenHealth>
@@ -3172,7 +3183,7 @@
         <repairCost>	0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <OQF_17pdr_Gun_Mk_VII_SH>	shared	  <maxAmmo>	60	</maxAmmo>
+        <OQF_17pdr_Gun_Mk_VII_SH>	shared	  <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.333333 10 0.416667 5.5 0.5 4.5 0.583333 5.5 0.666667 10 1 10	</maxPitch>
@@ -3242,7 +3253,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </OQF_17pdr_Gun_Mk_VII_SH>
-        <_32_pounder_Gun_OQF_SH>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_32_pounder_Gun_OQF_SH>	shared	  <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 10 0.333333 10 0.416667 5.5 0.5 4.5 0.583333 5.5 0.666667 10 1 10	</maxPitch>
@@ -3304,7 +3315,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_32_pounder_Gun_OQF_SH>
-        <_105mm_Gun_L7_HEAT_SH>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_105mm_Gun_L7_HEAT_SH>	shared	  <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.333333 10 0.416667 4.5 0.5 4 0.583333 4.5 0.666667 10 1 10	</maxPitch>
@@ -3367,7 +3378,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_105mm_Gun_L7_HEAT_SH>
-        <_5_5inch_AT_Gun_SH>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_5_5inch_AT_Gun_SH>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
             <gun>	60	</gun>
           </armor>

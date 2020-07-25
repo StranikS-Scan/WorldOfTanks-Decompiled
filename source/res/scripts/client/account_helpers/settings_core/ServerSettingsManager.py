@@ -42,6 +42,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     FALLOUT = 'FALLOUT'
     TUTORIAL = 'TUTORIAL'
     ONCE_ONLY_HINTS = 'ONCE_ONLY_HINTS'
+    ONCE_ONLY_HINTS_2 = 'ONCE_ONLY_HINTS_2'
     FEEDBACK = 'FEEDBACK'
     DAMAGE_INDICATOR = 'FEEDBACK_DAMAGE_INDICATOR'
     DAMAGE_LOG = 'FEEDBACK_DAMAGE_LOG'
@@ -53,6 +54,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     SESSION_STATS = 'SESSION_STATS'
     BATTLE_PASS_STORAGE = 'BATTLE_PASS_STORAGE'
     BATTLE_COMM = 'BATTLE_COMM'
+    ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2)
 
 
 class UI_STORAGE_KEYS(CONST_CONTAINER):
@@ -64,6 +66,9 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
     DUAL_GUN_HIGHLIGHTS_COUNTER = 'dual_gun_highlights_count'
     DUAL_GUN_MARK_IS_SHOWN = 'dual_gun_mark_shown'
     DISABLE_EDITABLE_STYLE_REWRITE_WARNING = 'disable_editable_style_rewrite_warning'
+    OPTIONAL_DEVICE_SETUP_INTRO_SHOWN = 'optional_device_setup_intro_shown'
+    TURBOSHAFT_HIGHLIGHTS_COUNTER = 'turboshaft_highlights_count'
+    TURBOSHAFT_MARK_IS_SHOWN = 'turboshaft_mark_shown'
 
 
 class ServerSettingsManager(object):
@@ -300,7 +305,6 @@ class ServerSettingsManager(object):
                                          OnceOnlyHints.HOLD_SHEET_HINT: 4,
                                          OnceOnlyHints.HAVE_NEW_BADGE_HINT: 5,
                                          OnceOnlyHints.EPIC_RESERVES_SLOT_HINT: 6,
-                                         OnceOnlyHints.EPIC_RESERVES_BTN_HINT: 7,
                                          OnceOnlyHints.PAUSE_HINT: 8,
                                          OnceOnlyHints.HAVE_NEW_SUFFIX_BADGE_HINT: 9,
                                          OnceOnlyHints.BADGE_PAGE_NEW_SUFFIX_BADGE_HINT: 10,
@@ -324,6 +328,9 @@ class ServerSettingsManager(object):
                                          OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLE_SLOT_HINT: 28,
                                          OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLE_SLOT_BUTTON_HINT: 29,
                                          OnceOnlyHints.CRYSTAL_BTN_HINT: 30}, offsets={}),
+     SETTINGS_SECTIONS.ONCE_ONLY_HINTS_2: Section(masks={OnceOnlyHints.AMMUNITION_PANEL_HINT: 0,
+                                           OnceOnlyHints.AMMUNITION_FILTER_HINT: 1,
+                                           OnceOnlyHints.OPT_DEV_DRAG_AND_DROP_HINT: 2}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESET_CRITS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -369,9 +376,12 @@ class ServerSettingsManager(object):
                                     PM_TUTOR_FIELDS.PM2_MULTIPLE_FAL_SHOWN: 16,
                                     UI_STORAGE_KEYS.REFERRAL_BUTTON_CIRCLES_SHOWN: 17,
                                     UI_STORAGE_KEYS.DUAL_GUN_MARK_IS_SHOWN: 18,
-                                    UI_STORAGE_KEYS.DISABLE_EDITABLE_STYLE_REWRITE_WARNING: 22}, offsets={PM_TUTOR_FIELDS.INITIAL_FAL_COUNT: Offset(2, 124),
+                                    UI_STORAGE_KEYS.DISABLE_EDITABLE_STYLE_REWRITE_WARNING: 22,
+                                    UI_STORAGE_KEYS.TURBOSHAFT_MARK_IS_SHOWN: 26,
+                                    UI_STORAGE_KEYS.OPTIONAL_DEVICE_SETUP_INTRO_SHOWN: 27}, offsets={PM_TUTOR_FIELDS.INITIAL_FAL_COUNT: Offset(2, 124),
                                     UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER: Offset(10, 7168),
-                                    UI_STORAGE_KEYS.DUAL_GUN_HIGHLIGHTS_COUNTER: Offset(19, 3670016)}),
+                                    UI_STORAGE_KEYS.DUAL_GUN_HIGHLIGHTS_COUNTER: Offset(19, 3670016),
+                                    UI_STORAGE_KEYS.TURBOSHAFT_HIGHLIGHTS_COUNTER: Offset(23, 58720256)}),
      SETTINGS_SECTIONS.LINKEDSET_QUESTS: Section(masks={}, offsets={'shown': Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.QUESTS_PROGRESS: Section(masks={}, offsets={QUESTS_PROGRESS.VIEW_TYPE: Offset(0, 3),
                                          QUESTS_PROGRESS.DISPLAY_TYPE: Offset(2, 12)}),
@@ -455,6 +465,7 @@ class ServerSettingsManager(object):
      'zoomIndicator': 4}
     _MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT = 5
     _MAX_DUAL_GUN_HIGHLIGHTS_COUNT = 5
+    _MAX_TURBOSHAFT_HIGHLIGHTS_COUNT = 5
 
     def __init__(self, core):
         self._core = weakref.proxy(core)
@@ -487,13 +498,36 @@ class ServerSettingsManager(object):
         return self._extractValue(key, storedValue, default, masks, offsets) if storedValue is not None else default
 
     def getOnceOnlyHintsSetting(self, key, default=None):
-        return self.getSectionSettings(SETTINGS_SECTIONS.ONCE_ONLY_HINTS, key, default)
+        for onlyHintSection in SETTINGS_SECTIONS.ONCE_ONLY_HINTS_GROUP:
+            if self._hasKeyInSection(onlyHintSection, key):
+                return self.getSectionSettings(onlyHintSection, key, default)
+
+        LOG_ERROR('Trying to extract unsupported key in once only hints group: ', key)
+        return default
 
     def getOnceOnlyHintsSettings(self):
-        return self.getSection(SETTINGS_SECTIONS.ONCE_ONLY_HINTS)
+        return self.getSections(SETTINGS_SECTIONS.ONCE_ONLY_HINTS_GROUP)
 
     def setOnceOnlyHintsSettings(self, settings):
-        self.setSectionSettings(SETTINGS_SECTIONS.ONCE_ONLY_HINTS, settings)
+        settingToServer = {}
+        onceOnlyHintsDiff = {}
+        for section in SETTINGS_SECTIONS.ONCE_ONLY_HINTS_GROUP:
+            keys = self.SECTIONS[section].masks.keys() + self.SECTIONS[section].offsets.keys()
+            currentSettings = {key:value for key, value in settings.items() if key in keys}
+            storedSettings = self.getSection(section)
+            stored = self.settingsCache.getSectionSettings(section, None)
+            storing = self._buildSectionSettings(section, currentSettings)
+            if stored != storing:
+                settingToServer[section] = storing
+                for k, v in currentSettings.iteritems():
+                    if storedSettings.get(k) != v:
+                        onceOnlyHintsDiff[k] = v
+
+        if settingToServer:
+            self.setSettings(settingToServer)
+        if onceOnlyHintsDiff:
+            self._core.onOnceOnlyHintsChanged(onceOnlyHintsDiff)
+        return
 
     def getUIStorage(self, defaults=None):
         return self.getSection(SETTINGS_SECTIONS.UI_STORAGE, defaults)
@@ -511,18 +545,13 @@ class ServerSettingsManager(object):
         return self.setSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, settings)
 
     def checkAutoReloadHighlights(self, increase=False):
-        key = UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER
-        res = self.getUIStorage().get(key) < self._MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT
-        if res and increase:
-            self.updateUIStorageCounter(key)
-        return res
+        return self.__checkUIHighlights(UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER, self._MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT, increase)
 
     def checkDualGunHighlights(self, increase=False):
-        key = UI_STORAGE_KEYS.DUAL_GUN_HIGHLIGHTS_COUNTER
-        res = self.getUIStorage().get(key) < self._MAX_DUAL_GUN_HIGHLIGHTS_COUNT
-        if res and increase:
-            self.updateUIStorageCounter(key)
-        return res
+        return self.__checkUIHighlights(UI_STORAGE_KEYS.DUAL_GUN_HIGHLIGHTS_COUNTER, self._MAX_DUAL_GUN_HIGHLIGHTS_COUNT, increase)
+
+    def checkTurboshaftHighlights(self, increase=False):
+        return self.__checkUIHighlights(UI_STORAGE_KEYS.TURBOSHAFT_HIGHLIGHTS_COUNTER, self._MAX_TURBOSHAFT_HIGHLIGHTS_COUNT, increase)
 
     def updateUIStorageCounter(self, key, step=1):
         storageSection = self.getSection(SETTINGS_SECTIONS.UI_STORAGE)
@@ -640,7 +669,7 @@ class ServerSettingsManager(object):
 
         return result
 
-    def getSections(self, sections, defaults):
+    def getSections(self, sections, defaults=None):
         result = {}
         for section in sections:
             result.update(self.getSection(section, defaults))
@@ -715,6 +744,9 @@ class ServerSettingsManager(object):
             storingValue |= itemValue
 
         return storingValue
+
+    def _hasKeyInSection(self, section, key):
+        return key in self.SECTIONS[section].masks or key in self.SECTIONS[section].offsets
 
     @async
     @process
@@ -831,6 +863,12 @@ class ServerSettingsManager(object):
         if delete:
             self.settingsCache.delSettings(delete)
         return
+
+    def __checkUIHighlights(self, key, maxVal, increase):
+        res = self.getUIStorage().get(key) < maxVal
+        if res and increase:
+            self.updateUIStorageCounter(key)
+        return res
 
 
 def _updateBattlePassVersion(data):

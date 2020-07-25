@@ -23,8 +23,8 @@ def createEquipmentCtrl(setup):
     return clazz()
 
 
-def createOptDevicesCtrl():
-    return opt_devices_ctrl.OptionalDevicesController()
+def createOptDevicesCtrl(setup):
+    return opt_devices_ctrl.OptionalDevicesController(setup)
 
 
 __all__ = ('createAmmoCtrl', 'createEquipmentCtrl', 'createOptDevicesCtrl')

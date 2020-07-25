@@ -6,6 +6,7 @@
     <driver></driver>
     <gunner></gunner>
   </crew>
+  <supplySlots>	1 1 1 6 6 6 8 8 8	</supplySlots>
   <speedLimits>
     <forward>	50	</forward>
     <backward>	20	</backward>
@@ -14,9 +15,16 @@
     <moving>	0.281	</moving>
     <still>	0.281	</still>
     <camouflageBonus>	0.03	</camouflageBonus>
-    <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.422	</firePenalty>
   </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.1 0.125	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+  </optDevsOverrides>
   <repairCost>	2.749	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -3977,7 +3985,11 @@
         </engine>
       </unlocks>
     </J_V12_M>
-    <PLInz_RWA>	shared	</PLInz_RWA>
+    <PLInz_RWA>	shared	  <unlocks>
+        <vehicle>	Pl17_DS_PZlnz	  <cost>	13230	</cost>
+        </vehicle>
+      </unlocks>
+    </PLInz_RWA>
   </engines>
   <fuelTanks>
     <Medium>	shared	</Medium>

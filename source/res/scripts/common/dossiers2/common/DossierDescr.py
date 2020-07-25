@@ -36,7 +36,7 @@ class DossierDescr(object):
             return block
 
     def __contains__(self, block):
-        return block in self.__blocks or bool(self.__sizes[self.__blocksIndexes[block]])
+        return block in self.__blocks or self.__blocksIndexes.get(block, None) is not None and bool(self.__sizes[self.__blocksIndexes[block]])
 
     def removeBlock(self, name):
         self.__blocks.pop(name, None)

@@ -359,7 +359,7 @@ class DamagePanel(DamagePanelMeta):
                 self.__isAutoRotationOn = flag == AUTO_ROTATION_FLAG.TURN_ON
                 self.__isAutoRotationShown = True
         self.__isWheeledTech = vehicle.isWheeledTech
-        self.__maxHealth = vTypeDesc.maxHealth
+        self.__maxHealth = vehicle.maxHealth
         health = vehicle.health
         healthStr = formatHealthProgress(health, self.__maxHealth)
         healthProgress = normalizeHealthPercent(health, self.__maxHealth)

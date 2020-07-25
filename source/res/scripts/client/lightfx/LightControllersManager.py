@@ -6,7 +6,7 @@ import LightManager
 class LightControllersManager(object):
 
     def __init__(self, vehicle):
-        self.__healthController = HealthController(vehicle.health, vehicle.typeDescriptor.maxHealth)
+        self.__healthController = HealthController(vehicle.health, vehicle.maxHealth)
 
     def destroy(self):
         LightManager.g_instance.setStartupLights()

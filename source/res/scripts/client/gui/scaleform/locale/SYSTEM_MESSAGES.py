@@ -495,6 +495,7 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_TMENXP_ACCELERATOR_SERVER_ERROR = '#system_messages:vehicle_tmenxp_accelerator/server_error'
     VEHICLE_REPAIR_SUCCESS = '#system_messages:vehicle_repair/success'
     VEHICLE_REPAIR_NOT_ENOUGH_CREDITS = '#system_messages:vehicle_repair/not_enough_credits'
+    VEHICLE_REPAIR_CREDITS_ERROR = '#system_messages:vehicle_repair/credits_error'
     VEHICLE_REPAIR_SERVER_ERROR = '#system_messages:vehicle_repair/server_error'
     BUY_TANKMEN_BERTHS_SUCCESS = '#system_messages:buy_tankmen_berths/success'
     BUY_TANKMEN_BERTHS_SERVER_ERROR = '#system_messages:buy_tankmen_berths/server_error'
@@ -629,10 +630,7 @@ class SYSTEM_MESSAGES(object):
     ARTEFACT_UPGRADE_SERVER_ERROR = '#system_messages:artefact_upgrade/server_error'
     ARTEFACT_UPGRADE_VEHICLE_NEED_REPAIR = '#system_messages:artefact_upgrade/vehicle_need_repair'
     LAYOUT_APPLY_SUCCESS_MONEY_SPENT = '#system_messages:layout_apply/success_money_spent'
-    LAYOUT_APPLY_SERVER_ERROR = '#system_messages:layout_apply/server_error'
-    LAYOUT_APPLY_WRONG_ARGS_TYPE = '#system_messages:layout_apply/WRONG_ARGS_TYPE'
-    LAYOUT_APPLY_SHOP_DESYNC = '#system_messages:layout_apply/SHOP_DESYNC'
-    LAYOUT_APPLY_WRONG_ARG_VALUE = '#system_messages:layout_apply/WRONG_ARG_VALUE'
+    LAYOUT_APPLY_ERROR = '#system_messages:layout_apply/error'
     LAYOUT_APPLY_SHELLS_NO_CREDITS = '#system_messages:layout_apply/SHELLS_NO_CREDITS'
     LAYOUT_APPLY_SHELLS_NO_GOLD = '#system_messages:layout_apply/SHELLS_NO_GOLD'
     LAYOUT_APPLY_SHELLS_NO_WALLET_SESSION = '#system_messages:layout_apply/SHELLS_NO_WALLET_SESSION'
@@ -652,6 +650,21 @@ class SYSTEM_MESSAGES(object):
     LAYOUT_APPLY_WALLET_NOT_AVAILABLE = '#system_messages:layout_apply/wallet_not_available'
     LAYOUT_APPLY_INVALID_VEHICLE = '#system_messages:layout_apply/invalid_vehicle'
     LAYOUT_APPLY_VEHICLE_LOCKED = '#system_messages:layout_apply/vehicle_locked'
+    OPTIONALDEVICES_APPLY_ERROR = '#system_messages:optionalDevices_apply/error'
+    OPTIONALDEVICES_APPLY_NOT_ENOUGH_MONEY = '#system_messages:optionalDevices_apply/not_enough_money'
+    OPTIONALDEVICES_APPLY_WALLET_NOT_AVAILABLE = '#system_messages:optionalDevices_apply/wallet_not_available'
+    OPTIONALDEVICES_REMOVE_ERROR = '#system_messages:optionalDevices_remove/error'
+    SHELLS_APPLY_SUCCESS_MONEY_SPENT = '#system_messages:shells_apply/success_money_spent'
+    SHELLS_APPLY_ERROR = '#system_messages:shells_apply/error'
+    SHELLS_APPLY_NOT_ENOUGH_MONEY = '#system_messages:shells_apply/not_enough_money'
+    SHELLS_APPLY_WALLET_NOT_AVAILABLE = '#system_messages:shells_apply/wallet_not_available'
+    CONSUMABLES_APPLY_ERROR = '#system_messages:consumables_apply/error'
+    CONSUMABLES_APPLY_NOT_ENOUGH_MONEY = '#system_messages:consumables_apply/not_enough_money'
+    CONSUMABLES_APPLY_WALLET_NOT_AVAILABLE = '#system_messages:consumables_apply/wallet_not_available'
+    BATTLEBOOSTERS_APPLY_ERROR = '#system_messages:battleBoosters_apply/error'
+    BATTLEBOOSTERS_APPLY_NOT_ENOUGH_MONEY = '#system_messages:battleBoosters_apply/not_enough_money'
+    BATTLEBOOSTERS_APPLY_WALLET_NOT_AVAILABLE = '#system_messages:battleBoosters_apply/wallet_not_available'
+    BATTLEABILITIES_APPLY_ERROR = '#system_messages:battleAbilities_apply/error'
     REQUEST_ISINCOOLDOWN = '#system_messages:request/isInCoolDown'
     PREBATTLE_REQUEST_NAME_CHANGE_SETTINGS = '#system_messages:prebattle/request/name/CHANGE_SETTINGS'
     PREBATTLE_REQUEST_NAME_CHANGE_ARENA_VOIP = '#system_messages:prebattle/request/name/CHANGE_ARENA_VOIP'
@@ -1768,6 +1781,7 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_TMENXP_ACCELERATOR_SERVER_ERROR,
      VEHICLE_REPAIR_SUCCESS,
      VEHICLE_REPAIR_NOT_ENOUGH_CREDITS,
+     VEHICLE_REPAIR_CREDITS_ERROR,
      VEHICLE_REPAIR_SERVER_ERROR,
      BUY_TANKMEN_BERTHS_SUCCESS,
      BUY_TANKMEN_BERTHS_SERVER_ERROR,
@@ -1902,10 +1916,7 @@ class SYSTEM_MESSAGES(object):
      ARTEFACT_UPGRADE_SERVER_ERROR,
      ARTEFACT_UPGRADE_VEHICLE_NEED_REPAIR,
      LAYOUT_APPLY_SUCCESS_MONEY_SPENT,
-     LAYOUT_APPLY_SERVER_ERROR,
-     LAYOUT_APPLY_WRONG_ARGS_TYPE,
-     LAYOUT_APPLY_SHOP_DESYNC,
-     LAYOUT_APPLY_WRONG_ARG_VALUE,
+     LAYOUT_APPLY_ERROR,
      LAYOUT_APPLY_SHELLS_NO_CREDITS,
      LAYOUT_APPLY_SHELLS_NO_GOLD,
      LAYOUT_APPLY_SHELLS_NO_WALLET_SESSION,
@@ -1925,6 +1936,21 @@ class SYSTEM_MESSAGES(object):
      LAYOUT_APPLY_WALLET_NOT_AVAILABLE,
      LAYOUT_APPLY_INVALID_VEHICLE,
      LAYOUT_APPLY_VEHICLE_LOCKED,
+     OPTIONALDEVICES_APPLY_ERROR,
+     OPTIONALDEVICES_APPLY_NOT_ENOUGH_MONEY,
+     OPTIONALDEVICES_APPLY_WALLET_NOT_AVAILABLE,
+     OPTIONALDEVICES_REMOVE_ERROR,
+     SHELLS_APPLY_SUCCESS_MONEY_SPENT,
+     SHELLS_APPLY_ERROR,
+     SHELLS_APPLY_NOT_ENOUGH_MONEY,
+     SHELLS_APPLY_WALLET_NOT_AVAILABLE,
+     CONSUMABLES_APPLY_ERROR,
+     CONSUMABLES_APPLY_NOT_ENOUGH_MONEY,
+     CONSUMABLES_APPLY_WALLET_NOT_AVAILABLE,
+     BATTLEBOOSTERS_APPLY_ERROR,
+     BATTLEBOOSTERS_APPLY_NOT_ENOUGH_MONEY,
+     BATTLEBOOSTERS_APPLY_WALLET_NOT_AVAILABLE,
+     BATTLEABILITIES_APPLY_ERROR,
      REQUEST_ISINCOOLDOWN,
      PREBATTLE_REQUEST_NAME_CHANGE_SETTINGS,
      PREBATTLE_REQUEST_NAME_CHANGE_ARENA_VOIP,

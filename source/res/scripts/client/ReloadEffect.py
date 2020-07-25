@@ -1,12 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ReloadEffect.py
+import logging
 from math import fabs
 from helpers.CallbackDelayer import CallbackDelayer
-from helpers import gEffectsDisabled
+from helpers import gEffectsDisabled, dependency
 from debug_utils import LOG_DEBUG
 import SoundGroups
 import BigWorld
+from skeletons.gui.battle_session import IBattleSessionProvider
+_logger = logging.getLogger(__name__)
 BARREL_DEBUG_ENABLED = False
+GUN_RAMMER_TIME = 1.5
+GUN_RAMMER_EFFECT_NAME = 'cons_gun_rammer_start'
 _CALIBER_RELOAD_SOUND_SWITCH = 'SWITCH_ext_rld_autoloader_caliber'
 
 class ReloadEffectsType(object):
@@ -127,10 +132,21 @@ def playByName(soundName):
     SoundGroups.g_instance.playSound2D(soundName)
 
 
-class SimpleReload(CallbackDelayer):
+class _GunReload(CallbackDelayer):
+
+    def _checkAndPlayGunRammerEffect(self, reloadTime):
+        if _needGunRammerEffect():
+            timeToPlayEffect = reloadTime - GUN_RAMMER_TIME
+            if timeToPlayEffect > 0:
+                self.delayCallback(timeToPlayEffect, _playGunRammerEffect)
+            else:
+                _logger.warning('Reload time(%s) is less than gun rammer effect time(GUN_RAMMER_TIME-%s)', reloadTime, GUN_RAMMER_TIME)
+
+
+class SimpleReload(_GunReload):
 
     def __init__(self, effectDesc):
-        CallbackDelayer.__init__(self)
+        _GunReload.__init__(self)
         self._desc = effectDesc
         self._sound = None
         self._startLoopT = 0.0
@@ -154,6 +170,7 @@ class SimpleReload(CallbackDelayer):
             time = shellReloadTime - self._desc.duration
             if time < 0.0:
                 time = 0.0
+            self._checkAndPlayGunRammerEffect(shellReloadTime)
             self.delayCallback(time, self.__playSound)
             return
 
@@ -205,6 +222,7 @@ class BarrelReload(SimpleReload):
             if shellCount == 0:
                 self.stopCallback(self._startOneShoot)
                 self.__reloadSequence.schedule(shellReloadTime, reloadShellCount)
+                self._checkAndPlayGunRammerEffect(shellReloadTime)
                 if reloadStart:
                     if self._startLongSound is not None:
                         self._startLongSound.stop()
@@ -353,10 +371,10 @@ class LoopSequence(CallbackDelayer):
         return timeLine
 
 
-class AutoReload(CallbackDelayer):
+class AutoReload(_GunReload):
 
     def __init__(self, effectDesc):
-        CallbackDelayer.__init__(self)
+        _GunReload.__init__(self)
         self._desc = effectDesc
         self._sound = None
         self._almostCompleteSnd = None
@@ -392,6 +410,7 @@ class AutoReload(CallbackDelayer):
             if time < 0.0:
                 time = 0.0
             self.delayCallback(time, self.__onShellInTheBarrel, shellCount, reloadShellCount, BigWorld.time() + time)
+            self._checkAndPlayGunRammerEffect(shellReloadTime)
             return
 
     def stop(self):
@@ -459,10 +478,10 @@ class AutoReload(CallbackDelayer):
         self._almostCompleteSnd.play()
 
 
-class DualGunReload(CallbackDelayer):
+class DualGunReload(_GunReload):
 
     def __init__(self, effectDesc):
-        CallbackDelayer.__init__(self)
+        _GunReload.__init__(self)
         self.__desc = effectDesc
         self.__sound = None
         self.__ammoLowSound = None
@@ -487,6 +506,7 @@ class DualGunReload(CallbackDelayer):
                 timeToStart = shellReloadTime - self.__desc.runTimeDeltaAmmoLow
                 self.__ammoLowSound = SoundGroups.g_instance.getSound2D(self.__desc.ammoLowSound)
                 self.delayCallback(timeToStart, self.__onAmmoLow, BigWorld.time() + timeToStart)
+            self._checkAndPlayGunRammerEffect(shellReloadTime)
             return
 
     def stop(self):
@@ -522,3 +542,12 @@ class DualGunReload(CallbackDelayer):
                     return
                 self.__ammoLowSound.play()
             return
+
+
+@dependency.replace_none_kwargs(sessionProvider=IBattleSessionProvider)
+def _needGunRammerEffect(sessionProvider=None):
+    return sessionProvider.shared.optionalDevices.soundManager.needGunRammerEffect() if sessionProvider is not None else None
+
+
+def _playGunRammerEffect():
+    SoundGroups.g_instance.playSound2D(GUN_RAMMER_EFFECT_NAME)

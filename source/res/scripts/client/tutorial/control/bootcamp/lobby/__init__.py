@@ -35,7 +35,9 @@ class BootcampLobbyControlsFactory(ControlsFactory):
          EFFECT_TYPE.PLAY_VIDEO: functional.FunctionalPlayFinalVideoEffect,
          EFFECT_TYPE.PLAY_SOUND: core_func.FunctionalPlaySoundEffect,
          EFFECT_TYPE.FINISH_TRAINING: functional.FunctionalFinishBootcampEffect,
-         EFFECT_TYPE.CLOSE_VIEW: core_func.FunctionalCloseViewEffect}
+         EFFECT_TYPE.CLOSE_VIEW: core_func.FunctionalCloseViewEffect,
+         EFFECT_TYPE.GLOBAL_ACTIVATE: core_func.FunctionalGlobalActivateEffect,
+         EFFECT_TYPE.GLOBAL_DEACTIVATE: core_func.FunctionalGlobalDeactivateEffect}
         queries_ = {'bootcampVideo': queries.VideoDialogContentQuery,
          'bootcampSubtitle': queries.SubtitleDialogContentQuery,
          'bootcampMessage': queries.MessageDialogContentQuery,

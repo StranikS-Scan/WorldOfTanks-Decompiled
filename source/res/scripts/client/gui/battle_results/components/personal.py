@@ -231,7 +231,7 @@ class PersonalVehicleNamesBlock(base.StatsBlock):
 
     def setRecord(self, result, reusable):
         for _, item in reusable.personal.getVehicleItemsIterator():
-            self.addNextComponent(base.DirectStatsItem('', item.userName))
+            self.addNextComponent(base.DirectStatsItem('', item.shortUserName))
 
 
 class PersonalVehicleTypeIconsBlock(base.StatsBlock):

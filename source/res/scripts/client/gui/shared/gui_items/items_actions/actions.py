@@ -1,9 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/items_actions/actions.py
 from collections import namedtuple
+import async as future_async
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
 from adisp import process, async
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_ERROR
 from gui import SystemMessages, DialogsInterface
+from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.bootcamp.lobby.unlock import BCUnlockItemConfirmator
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import BuyModuleMeta
@@ -12,42 +16,39 @@ from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import MAX_ITEMS_FOR_OPE
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsSingleItemMeta
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeXpMeta
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import RestoreExchangeCreditsMeta
-from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import UpgradeExchangeCreditsMeta
 from gui.Scaleform.daapi.view.lobby.techtree import unlock
 from gui.Scaleform.daapi.view.lobby.techtree.settings import RequestState
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockStats
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.impl import backport
+from gui.impl.lobby.dialogs.auxiliary.buy_and_exchange_state_machine import BuyAndExchangeStateEnum
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.economics import getGUIPrice
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
+from gui.shared.gui_items.fitting_item import canBuyWithGoldExchange
+from gui.shared.gui_items.gui_item_economics import getVehicleShellsLayoutPrice
 from gui.shared.gui_items.processors.common import ConvertBlueprintFragmentProcessor
+from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
 from gui.shared.gui_items.processors.common import UseCrewBookProcessor
 from gui.shared.gui_items.processors.goodies import BoosterBuyer
-from gui.shared.gui_items.processors.module import BuyAndInstallItemProcessor, BCBuyAndInstallItemProcessor
+from gui.shared.gui_items.processors.module import BuyAndInstallItemProcessor, BCBuyAndInstallItemProcessor, OptDeviceInstaller
 from gui.shared.gui_items.processors.module import ModuleSeller
+from gui.shared.gui_items.processors.module import ModuleUpgradeProcessor
 from gui.shared.gui_items.processors.module import MultipleModulesSeller
 from gui.shared.gui_items.processors.module import getInstallerProcessor
-from gui.shared.gui_items.processors.module import ModuleUpgradeProcessor
-from gui.shared.gui_items.processors.vehicle import BuyAndInstallBattleBoosterProcessor
-from gui.shared.gui_items.processors.vehicle import VehicleBattleBoosterLayoutProcessor
-from gui.shared.gui_items.processors.vehicle import VehicleLayoutProcessor
+from gui.shared.gui_items.processors.vehicle import OptDevicesInstaller, BuyAndInstallConsumablesProcessor, AutoFillVehicleLayoutProcessor, BuyAndInstallBattleBoostersProcessor, BuyAndInstallShellsProcessor, VehicleRepairer, InstallBattleAbilitiesProcessor
 from gui.shared.gui_items.processors.vehicle import VehicleSlotBuyer
 from gui.shared.gui_items.processors.vehicle import tryToLoadDefaultShellsLayout
-from gui.shared.gui_items.vehicle_equipment import EquipmentLayoutHelper
-from gui.shared.gui_items.vehicle_equipment import ShellLayoutHelper
+from gui.shared.money import ZERO_MONEY, Money
 from gui.shared.utils import decorators
-from gui.ClientUpdateManager import g_clientUpdateManager
 from helpers import dependency
 from items import vehicles
 from shared_utils import first, allEqual
 from skeletons.gui.game_control import ITradeInController
+from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
-from account_helpers import AccountSettings
-from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
 ItemSellSpec = namedtuple('ItemSellSpec', ('typeIdx', 'intCD', 'count'))
 
 def showMessage(scopeMsg, msg, item, msgType=SystemMessages.SM_TYPE.Error, **kwargs):
@@ -99,7 +100,15 @@ def processMsg(result):
             SystemMessages.pushI18nMessage(m.userMsg, type=m.sysMsgType)
 
 
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def _needExchangeForBuy(price, itemsCache=None):
+    money = itemsCache.items.stats.money
+    rate = itemsCache.items.shop.exchangeRate
+    return canBuyWithGoldExchange(price, money, rate) and money.getShortage(price).credits > 0
+
+
 class IGUIItemAction(object):
+    __slots__ = ('__skipConfirm',)
 
     def __init__(self):
         self.__skipConfirm = False
@@ -114,6 +123,9 @@ class IGUIItemAction(object):
 
     def doAction(self):
         pass
+
+    def isAsync(self):
+        return False
 
 
 class CachedItemAction(IGUIItemAction):
@@ -439,98 +451,16 @@ class BCBuyAndInstallItemAction(BuyAndInstallItemAction):
     _buyAndInstallItemProcessorCls = BCBuyAndInstallItemProcessor
 
 
-class SetVehicleModuleAction(BuyAction):
+class VehicleAutoFillLayoutAction(IGUIItemAction):
 
-    def __init__(self, vehInvID, newItemCD, slotIdx, oldItemCD, isRemove):
-        super(SetVehicleModuleAction, self).__init__()
-        self.__vehInvID = vehInvID
-        self.__newItemCD = newItemCD
-        self.__slotIdx = slotIdx
-        self.__oldItemCD = oldItemCD
-        self.__isRemove = isRemove
-
-    @process
-    def doAction(self):
-        vehicle = self._itemsCache.items.getVehicle(self.__vehInvID)
-        if vehicle is None:
-            return
-        else:
-            isUseMoney = self.__isRemove and self.__oldItemCD is not None
-            LOG_DEBUG('isUseMoney, self.__isRemove, self.__oldItemCD', isUseMoney, self.__isRemove, self.__oldItemCD)
-            newComponentItem = self._itemsCache.items.getItemByCD(int(self.__newItemCD))
-            if newComponentItem is None:
-                return
-            oldComponentItem = None
-            if self.__oldItemCD:
-                oldComponentItem = self._itemsCache.items.getItemByCD(int(self.__oldItemCD))
-            if not self.__isRemove:
-                if oldComponentItem:
-                    if oldComponentItem.itemTypeID in (GUI_ITEM_TYPE.OPTIONALDEVICE, GUI_ITEM_TYPE.BATTLE_BOOSTER):
-                        proc = getInstallerProcessor(vehicle, oldComponentItem, self.__slotIdx, False, True, skipConfirm=self.skipConfirm)
-                        if not proc.IS_GAMEFACE_SUPPORTED:
-                            Waiting.show('installEquipment')
-                        result = yield proc.request()
-                        processMsg(result)
-                        if not proc.IS_GAMEFACE_SUPPORTED:
-                            Waiting.hide('installEquipment')
-                        if not result.success:
-                            return
-                if not self.__isRemove and not newComponentItem.isInInventory and not newComponentItem.itemTypeID == GUI_ITEM_TYPE.BATTLE_ABILITY:
-                    conflictedEqs = newComponentItem.getConflictedEquipments(vehicle)
-                    if not self._mayObtainForMoney(newComponentItem) and self._mayObtainWithMoneyExchange(newComponentItem):
-                        isOk, _ = yield DialogsInterface.showDialog(ExchangeCreditsSingleItemMeta(newComponentItem.intCD, vehicle.intCD))
-                        if not isOk:
-                            return
-                    if self._mayObtainForMoney(newComponentItem):
-                        vehicle = self._itemsCache.items.getVehicle(self.__vehInvID)
-                        gunCD = getGunCD(newComponentItem, vehicle)
-                        proc = BuyAndInstallItemProcessor(vehicle, newComponentItem, self.__slotIdx, gunCD, conflictedEqs=conflictedEqs, skipConfirm=self.skipConfirm)
-                        result = yield proc.request()
-                        processMsg(result)
-                        if result.success and newComponentItem.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN):
-                            newComponentItem = self._itemsCache.items.getItemByCD(int(self.__newItemCD))
-                            vehicle = self._itemsCache.items.getItemByCD(vehicle.intCD)
-                            newComponentItem.isInstalled(vehicle) and (yield tryToLoadDefaultShellsLayout(vehicle))
-                else:
-                    yield lambda callback=None: callback
-            else:
-                conflictedEqs = newComponentItem.getConflictedEquipments(vehicle)
-                proc = getInstallerProcessor(vehicle, newComponentItem, self.__slotIdx, not self.__isRemove, isUseMoney, conflictedEqs, self.skipConfirm)
-                if not proc.IS_GAMEFACE_SUPPORTED:
-                    Waiting.show('applyModule')
-                result = yield proc.request()
-                processMsg(result)
-                if result.success and newComponentItem.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN):
-                    newComponentItem = self._itemsCache.items.getItemByCD(int(self.__newItemCD))
-                    vehicle = self._itemsCache.items.getItemByCD(vehicle.intCD)
-                    if newComponentItem.isInstalled(vehicle):
-                        yield tryToLoadDefaultShellsLayout(vehicle)
-                if not proc.IS_GAMEFACE_SUPPORTED:
-                    Waiting.hide('applyModule')
-            return
-
-
-class SetVehicleLayoutAction(IGUIItemAction):
-
-    def __init__(self, vehicle, shellsLayout=None, eqsLayout=None, battleBooster=None):
-        super(SetVehicleLayoutAction, self).__init__()
-        self._vehicle = vehicle
-        self._shellsLayout = shellsLayout
-        self._eqsLayout = eqsLayout
-        self._battleBooster = battleBooster
+    def __init__(self, vehicle):
+        super(VehicleAutoFillLayoutAction, self).__init__()
+        self.__vehicle = vehicle
 
     @decorators.process('techMaintenance')
     def doAction(self):
-        if self._battleBooster is not None:
-            boosterLayout = (self._battleBooster.intCD, 1) if self._battleBooster else (0, 0)
-            eqsLayout = EquipmentLayoutHelper(self._vehicle, self._eqsLayout, boosterLayout)
-            result = yield VehicleBattleBoosterLayoutProcessor(self._vehicle, self._battleBooster, eqsLayout, self.skipConfirm).request()
-        else:
-            shellsHelper = ShellLayoutHelper(self._vehicle, self._shellsLayout)
-            eqsHelper = EquipmentLayoutHelper(self._vehicle, self._eqsLayout)
-            result = yield VehicleLayoutProcessor(self._vehicle, shellsHelper, eqsHelper, self.skipConfirm).request()
+        result = yield AutoFillVehicleLayoutProcessor(self.__vehicle).request()
         self._showResult(result)
-        return
 
     @staticmethod
     def _showResult(result):
@@ -542,21 +472,162 @@ class SetVehicleLayoutAction(IGUIItemAction):
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
 
-class BuyAndInstallItemVehicleLayout(SetVehicleLayoutAction):
+class AsyncGUIItemAction(IGUIItemAction):
+    __slots__ = ()
 
-    def __init__(self, vehicle, shellsLayout=None, eqsLayout=None, battleBooster=None, count=1):
-        super(BuyAndInstallItemVehicleLayout, self).__init__(vehicle, shellsLayout, eqsLayout, battleBooster)
-        self._count = count
-
-    @decorators.process('buyItem')
-    def doAction(self):
-        if self._battleBooster is not None:
-            boosterLayout = (self._battleBooster.intCD, 1)
-            helper = EquipmentLayoutHelper(self._vehicle, self._eqsLayout, boosterLayout)
-            result = yield BuyAndInstallBattleBoosterProcessor(self._vehicle, self._battleBooster, helper, self._count, self.skipConfirm).request()
+    @async
+    @process
+    def doAction(self, callback):
+        confirm = True
+        if not self.skipConfirm:
+            confirm = yield self._confirm()
+        if confirm:
+            result = yield self._action()
             self._showResult(result)
+            callback(result.success)
         else:
-            LOG_ERROR('Extend BuyAndInstallItemVehicleLayout action to support a new type of item!')
+            callback(False)
+
+    def isAsync(self):
+        return True
+
+    @async
+    def _confirm(self, callback):
+        callback(True)
+
+    @async
+    @process
+    def _action(self, callback):
+        result = yield lambda callback: callback(None)
+        callback(result)
+
+    def _showResult(self, result):
+        processMsg(result)
+
+
+class AmmunitionBuyAndInstall(AsyncGUIItemAction):
+    __slots__ = ('_vehicle', '_changedItems', '__confirmOnlyExchange')
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, vehicle, changeItems, confirmOnlyExchange=False):
+        self._vehicle = vehicle
+        self._changedItems = changeItems
+        self.__confirmOnlyExchange = confirmOnlyExchange
+        super(AmmunitionBuyAndInstall, self).__init__()
+
+    @async
+    @future_async.async
+    def _confirm(self, callback):
+        if self._changedItems and _needExchangeForBuy(sum([ item.getBuyPrice().price for item in self._changedItems if not item.isInInventory ], ZERO_MONEY)):
+            startState = BuyAndExchangeStateEnum.EXCHANGE_CONTENT
+        elif self._changedItems:
+            startState = BuyAndExchangeStateEnum.BUY_CONTENT
+        else:
+            startState = BuyAndExchangeStateEnum.BUY_NOT_REQUIRED
+        if self.__confirmOnlyExchange and startState != BuyAndExchangeStateEnum.EXCHANGE_CONTENT:
+            callback(True)
+        else:
+            result = yield future_async.await(shared_events.showTankSetupConfirmDialog(items=self._changedItems, vehInvID=self._vehicle.invID, startState=startState))
+            callback(result.result[0] if not result.busy else False)
+
+
+class BuyAndInstallOptDevices(AmmunitionBuyAndInstall):
+    __slots__ = ()
+
+    def __init__(self, vehicle, confirmOnlyExchange=False):
+        optDevices = vehicle.optDevices
+        changeItems = [ item for item in optDevices.layout.getItems() if item not in optDevices.installed ]
+        super(BuyAndInstallOptDevices, self).__init__(vehicle, changeItems, confirmOnlyExchange)
+
+    @async
+    @decorators.process('techMaintenance')
+    def _action(self, callback):
+        result = yield OptDevicesInstaller(self._vehicle).request()
+        callback(result)
+
+
+class BuyAndInstallConsumables(AmmunitionBuyAndInstall):
+    __slots__ = ()
+
+    def __init__(self, vehicle, confirmOnlyExchange=False):
+        changeItems = [ item for item in vehicle.consumables.layout.getItems() if item not in vehicle.consumables.installed ]
+        super(BuyAndInstallConsumables, self).__init__(vehicle, changeItems, confirmOnlyExchange)
+
+    @async
+    @decorators.process('techMaintenance')
+    def _action(self, callback):
+        result = yield BuyAndInstallConsumablesProcessor(self._vehicle).request()
+        callback(result)
+
+
+class BuyAndInstallBattleBoosters(AmmunitionBuyAndInstall):
+    __slots__ = ()
+
+    def __init__(self, vehicle, confirmOnlyExchange=False):
+        changeItems = [ item for item in vehicle.battleBoosters.layout.getItems() if item not in vehicle.battleBoosters.installed ]
+        super(BuyAndInstallBattleBoosters, self).__init__(vehicle, changeItems, confirmOnlyExchange)
+
+    @async
+    @decorators.process('techMaintenance')
+    def _action(self, callback):
+        result = yield BuyAndInstallBattleBoostersProcessor(self._vehicle).request()
+        callback(result)
+
+
+class BuyAndInstallShells(AsyncGUIItemAction):
+    __slots__ = ('__vehicle', '__price', '__confirmOnlyExchange')
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, vehicle, confirmOnlyExchange=False):
+        super(BuyAndInstallShells, self).__init__()
+        self.__vehicle = vehicle
+        self.__confirmOnlyExchange = confirmOnlyExchange
+        self.__price = getVehicleShellsLayoutPrice(vehicle)
+
+    @async
+    @decorators.process('techMaintenance')
+    def _action(self, callback):
+        result = yield BuyAndInstallShellsProcessor(self.__vehicle).request()
+        callback(result)
+
+    @async
+    @future_async.async
+    def _confirm(self, callback):
+        if _needExchangeForBuy(self.__price.price):
+            startState = BuyAndExchangeStateEnum.EXCHANGE_CONTENT
+        elif self.__price.price:
+            startState = BuyAndExchangeStateEnum.BUY_CONTENT
+        else:
+            startState = BuyAndExchangeStateEnum.BUY_NOT_REQUIRED
+        if self.__confirmOnlyExchange and startState != BuyAndExchangeStateEnum.EXCHANGE_CONTENT:
+            callback(True)
+        else:
+            result = yield future_async.await(shared_events.showRefillShellsDialog(price=self.__price, shells=self.__vehicle.shells.layout.getItems(), startState=startState))
+            callback(result.result[0] if not result.busy else False)
+
+
+class VehicleRepairAction(AsyncGUIItemAction):
+
+    def __init__(self, vehicle):
+        super(VehicleRepairAction, self).__init__()
+        self.__vehicle = vehicle
+
+    @async
+    @decorators.process('techMaintenance')
+    def _action(self, callback):
+        result = yield VehicleRepairer(self.__vehicle).request()
+        callback(result)
+
+    @async
+    @future_async.async
+    def _confirm(self, callback):
+        if self.__vehicle.repairCost > 0:
+            price = Money(credits=self.__vehicle.repairCost)
+            startState = BuyAndExchangeStateEnum.NEED_EXCHANGE if _needExchangeForBuy(price) else None
+        else:
+            startState = BuyAndExchangeStateEnum.BUY_NOT_REQUIRED
+        result = yield future_async.await(shared_events.showNeedRepairDialog(vehicle=self.__vehicle, startState=startState))
+        callback(result.result if not result.busy else False)
         return
 
 
@@ -595,7 +666,7 @@ class BuyBoosterAction(CachedItemAction):
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
 
-class ConvertBlueprintFragmentAction(object):
+class ConvertBlueprintFragmentAction(IGUIItemAction):
 
     def __init__(self, vehicleCD, fragmentCount=1, fragmentPosition=-1):
         super(ConvertBlueprintFragmentAction, self).__init__()
@@ -610,7 +681,7 @@ class ConvertBlueprintFragmentAction(object):
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.BLUEPRINTS_CONVERSION_ERROR, type=result.sysMsgType)
 
 
-class UseCrewBookAction(object):
+class UseCrewBookAction(IGUIItemAction):
 
     def __init__(self, bookCD, vehicleCD, tankmanId=None):
         super(UseCrewBookAction, self).__init__()
@@ -627,26 +698,87 @@ class UseCrewBookAction(object):
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.CREWBOOKS_FAILED, type=result.sysMsgType)
 
 
-class UpgradeModuleAction(CachedItemAction):
+class UpgradeOptDeviceAction(AsyncGUIItemAction):
+    __itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, module, vehicle, slotIdx):
-        super(UpgradeModuleAction, self).__init__()
+    def __init__(self, module, vehicle, slotIdx, blurd3D=False, parent=None):
+        super(UpgradeOptDeviceAction, self).__init__()
+        self.__parent = parent
+        self.__blur3D = blurd3D
         self.__module = module
         self.__vehicle = vehicle
         self.__slotIdx = slotIdx
 
-    def __canPurchaseUpgrade(self):
-        return not self.__module.mayPurchaseUpgrage(self._itemsCache.items) and self.__module.mayPurchaseUpgrageWithExchange(self._itemsCache.items)
-
-    @process
-    def doAction(self):
-        if self.__canPurchaseUpgrade():
-            isOk, _ = yield DialogsInterface.showDialog(UpgradeExchangeCreditsMeta(self.__module.intCD))
-            if not isOk:
-                return
-        Waiting.show('moduleUpgrade')
+    @async
+    @decorators.process('moduleUpgrade')
+    def _action(self, callback):
         result = yield ModuleUpgradeProcessor(self.__module, self.__vehicle, self.__slotIdx).request()
-        processMsg(result)
-        Waiting.hide('moduleUpgrade')
-        yield lambda callback=None: callback
-        return
+        callback(result)
+
+    @async
+    @future_async.async
+    def _confirm(self, callback):
+        from gui.impl.dialogs import dialogs
+        result, data = yield future_async.await(dialogs.trophyDeviceUpgradeConfirm(self.__module, parent=self.__parent, enableBlur3D=self.__blur3D))
+        if result and data.get('needCreditsExchange', False):
+            exchangeResult = yield future_async.await(dialogs.showExchangeToUpgradeDeviceDialog(self.__module, parent=self.__parent))
+            callback(not exchangeResult.busy and exchangeResult.result)
+        else:
+            callback(result)
+
+
+class InstallBattleAbilities(AsyncGUIItemAction):
+    __slots__ = ('__vehicle',)
+
+    def __init__(self, vehicle):
+        super(InstallBattleAbilities, self).__init__()
+        self.__vehicle = vehicle
+
+    @async
+    @decorators.process('techMaintenance')
+    def _action(self, callback):
+        result = yield InstallBattleAbilitiesProcessor(self.__vehicle).request()
+        callback(result)
+
+
+class RemoveOptionalDevice(AsyncGUIItemAction):
+    __slots__ = ('__vehicle', '__device', '__slotID', '__destroy', '__forFitting', '__removeProcessor')
+    __goodiesCache = dependency.descriptor(IGoodiesCache)
+
+    def __init__(self, vehicle, device, slotID, destroy=False, forFitting=False):
+        super(RemoveOptionalDevice, self).__init__()
+        self.__vehicle = vehicle
+        self.__device = device
+        self.__slotID = slotID
+        self.__destroy = destroy
+        self.__forFitting = forFitting
+        self.__removeProcessor = OptDeviceInstaller(self.__vehicle, self.__device, self.__slotID, install=False, financeOperation=not self.__destroy, skipConfirm=True)
+
+    @async
+    @future_async.async
+    def _confirm(self, callback):
+        if self.__device.isRemovable:
+            callback(True)
+        elif self.__destroy:
+            isOk, _ = yield future_async.await_callback(shared_events.showOptionalDeviceDestroy)(self.__device.intCD)
+            callback(isOk)
+        else:
+            demountKit = self.__goodiesCache.getDemountKit()
+            isDkEnabled = demountKit and demountKit.enabled
+            isCompatibile, _ = self.__device.descriptor.checkCompatibilityWithVehicle(self.__vehicle.descriptor)
+            if not isCompatibile:
+                dialog = shared_events.showDemountIncompatibleOpDevDialog
+            elif self.__device.isDeluxe or not isDkEnabled:
+                dialog = shared_events.showOptionalDeviceDemountSinglePrice
+            else:
+                dialog = shared_events.showOptionalDeviceDemount
+            isOk, data = yield future_async.await_callback(dialog)(self.__device.intCD, forFitting=self.__forFitting)
+            self.__removeProcessor.requestCtx['useDemountKit'] = data.get('useDemountKit', False)
+            self.__removeProcessor.requestCtx['isAfterConversion'] = not isCompatibile
+            callback(isOk)
+
+    @async
+    @process
+    def _action(self, callback):
+        result = yield self.__removeProcessor.request()
+        callback(result)

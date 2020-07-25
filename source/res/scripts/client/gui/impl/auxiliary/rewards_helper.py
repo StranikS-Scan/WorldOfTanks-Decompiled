@@ -36,6 +36,7 @@ from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, 
 from gui.server_events.bonuses import getNonQuestBonuses, BlueprintsBonusSubtypes
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import BonusNameQuestsBonusComposer
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import LootBoxBonusComposer
+from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import TransferGiveawayBonusComposer
 from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsEntryPointVO, getSeniorityAwardsBoxesCount
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
@@ -693,6 +694,39 @@ def getSeniorityAwardsRewardsAndBonuses(rewards, size='big', maxAwardCount=_DEFA
 
         bonuses.sort(key=_seniorityKeySortOrder)
     formattedBonuses = formatter.getVisibleFormattedBonuses(bonuses, alwaysVisibleBonuses, size)
+    orderedVehicles = []
+    for vehicleCD in vehicles:
+        vehicle = itemsCache.items.getItemByCD(vehicleCD)
+        orderedVehicles.append(VehicleAward(vehicleCD, vehicle.level, vehicle.name))
+
+    orderedVehicles.sort(key=lambda v: v.level)
+    return (formattedBonuses, orderedVehicles, countBoxes)
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def getTransferGiveawayRewardsAndBonuses(rewards, size='big', maxAwardCount=_DEFAULT_DISPLAYED_AWARDS_COUNT, itemsCache=None, sortKey=None, hiddenBonuses=None):
+    preparationRewardsCurrency(rewards)
+    formatter = TransferGiveawayBonusComposer(maxAwardCount, getLootboxesAwardsPacker(), sortKey)
+    hiddenBonuses = hiddenBonuses or []
+    bonuses = []
+    vehicles = []
+    countBoxes = 0
+    if rewards:
+        for rewardType, rewardValue in rewards.iteritems():
+            if rewardType in hiddenBonuses:
+                continue
+            if rewardType == 'vehicles':
+                for vehicle in rewardValue:
+                    vehicles.extend(vehicle.keys())
+
+            if rewardType == 'premium' or rewardType == 'premium_plus':
+                splitDays = splitPremiumDays(rewardValue)
+                for day in splitDays:
+                    bonuses.extend(getNonQuestBonuses(rewardType, day))
+
+            bonuses.extend(getNonQuestBonuses(rewardType, rewardValue))
+
+    formattedBonuses = formatter.getVisibleFormattedBonuses(bonuses, None, size)
     orderedVehicles = []
     for vehicleCD in vehicles:
         vehicle = itemsCache.items.getItemByCD(vehicleCD)

@@ -21,3 +21,6 @@ class SiegeModeIndicatorMeta(BaseDAAPIComponent):
 
     def as_setVisibleS(self, visible):
         return self.flashObject.as_setVisible(visible) if self._isDAAPIInited() else None
+
+    def as_setSiegeModeTypeS(self, type):
+        return self.flashObject.as_setSiegeModeType(type) if self._isDAAPIInited() else None

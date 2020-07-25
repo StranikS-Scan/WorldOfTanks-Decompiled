@@ -9,17 +9,15 @@ from gui.impl.lobby.common.buy_sell_item_base_dialog import DialogBuySellItemBas
 from gui.shared.gui_items.processors.module import ModuleBuyer
 from gui.shared.gui_items.processors.vehicle import VehicleAutoBattleBoosterEquipProcessor
 from adisp import process
-from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from helpers.func_utils import oncePerPeriod
 
 class BoosterBuyWindowView(DialogBuySellItemBaseView):
 
-    def __init__(self, typeCompDescr, install, layoutID=R.views.lobby.instructions.BuyWindow()):
+    def __init__(self, typeCompDescr, layoutID=R.views.lobby.instructions.BuyWindow()):
         settings = ViewSettings(layoutID)
         settings.flags = ViewFlags.TOP_WINDOW_VIEW
         settings.model = BoosterBuyModel()
         super(BoosterBuyWindowView, self).__init__(settings, typeCompDescr)
-        self.__install = install
 
     @property
     def viewModel(self):
@@ -42,7 +40,7 @@ class BoosterBuyWindowView(DialogBuySellItemBaseView):
         itemPrice = self._getItemPrice()
         currency = itemPrice.getCurrency(byWeight=True)
         vehicle = g_currentVehicle.item
-        self._setTitleArgs(model.getTitleArgs(), (('name', R.strings.artefacts.dyn(self._item.name).name()),))
+        self._setTitleArgs(model.getTitleArgs(), (('name', self._item.userName),))
         model.setTitleBody(R.strings.menu.boosterBuyWindow.title())
         model.setItemMaxCount(self.__calculateMaxCount())
         oldPrice = itemPrice.defPrice.getSignValue(currency)
@@ -80,13 +78,10 @@ class BoosterBuyWindowView(DialogBuySellItemBaseView):
         vehicle = g_currentVehicle.item
         if vehicle is not None:
             yield VehicleAutoBattleBoosterEquipProcessor(vehicle, isRearm).request()
-        if self.__install and g_currentVehicle.isPresent():
-            ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_AND_INSTALL_ITEM_VEHICLE_LAYOUT, g_currentVehicle.item, None, None, self._item, count, skipConfirm=True)
-        else:
-            currency = self._item.getBuyPrice(preferred=False).getCurrency(byWeight=True)
-            result = yield ModuleBuyer(self._item, count, currency).request()
-            if result.userMsg:
-                SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+        currency = self._item.getBuyPrice(preferred=False).getCurrency(byWeight=True)
+        result = yield ModuleBuyer(self._item, count, currency).request()
+        if result.userMsg:
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         super(BoosterBuyWindowView, self)._onAcceptClicked()
         return
 

@@ -7,10 +7,11 @@ import math
 import material_kinds
 import collections
 from items import vehicles, vehicle_items
-from items.vehicles import VEHICLE_PHYSICS_TYPE
+from items.components.component_constants import KMH_TO_MS
+from items.vehicles import VEHICLE_PHYSICS_TYPE, VehicleDescriptor, VehicleDescrType
 from math import pi
 from constants import IS_CLIENT, IS_EDITOR, IS_CELLAPP, VEHICLE_PHYSICS_MODE, SERVER_TICK_LENGTH
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR, LOG_DEBUG_DEV
 import copy
 from items.components import gun_components
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES
@@ -203,6 +204,7 @@ g_defaultWheeledChassisXPhysicsCfg.update({'axleSteeringLockAngles': (0.0, 0.0, 
  'wheelRiseSpeed': 1.0,
  'enableRail': True,
  'handbrakeBrakeForce': 10.0,
+ 'brokenWheelRollingFrictionModifier': 1.0,
  'noSignalBrakeForce': 10.0,
  'afterDeathBrakeForce': 10.0,
  'afterDeathMinSpeedForImpulse': 29.0,
@@ -383,31 +385,51 @@ def updatePhysicsCfg(baseCfg, typeDesc, cfg):
     return
 
 
-def configurePhysics(physics, baseCfg, typeDesc, gravityFactor, updateSiegeModeFromCfg):
-    vehiclePhysicsType = typeDesc.type.xphysics['detailed'].get('vehiclePhysicsType', VEHICLE_PHYSICS_TYPE.TANK)
+def applyVehDescrMiscFactors(typeDescr, mode):
+    mode['engine']['smplFwMaxSpeed'] += KMH_TO_MS * typeDescr.miscAttrs['forwardMaxSpeedKMHTerm']
+    mode['engine']['smplBkMaxSpeed'] += KMH_TO_MS * typeDescr.miscAttrs['backwardMaxSpeedKMHTerm']
+    onStillRotationSpeedFactor = typeDescr.miscAttrs['onStillRotationSpeedFactor']
+    onMoveRotationSpeedFactor = typeDescr.miscAttrs['onMoveRotationSpeedFactor']
+    if not typeDescr.isWheeledVehicle:
+        mode['chassis']['gimletGoalWOnSpot'] *= onStillRotationSpeedFactor
+        mode['chassis']['angVelocityFactor0'] *= onStillRotationSpeedFactor
+        mode['chassis']['gimletGoalWOnMove'] *= onMoveRotationSpeedFactor
+        mode['chassis']['angVelocityFactor'] *= onMoveRotationSpeedFactor
+    else:
+        factor = mode['chassis']['axleSteeringAngles']
+        mode['chassis']['axleSteeringAngles'] = tuple((fi * onMoveRotationSpeedFactor for fi in factor))
+        factor = mode['chassis']['axleSteeringSpeed']
+        mode['chassis']['axleSteeringSpeed'] = tuple((fi * onMoveRotationSpeedFactor for fi in factor))
+        mode['chassis']['slowTurnChocker'] *= onStillRotationSpeedFactor
+        mode['chassis']['centerRotationFwdSpeed'] *= typeDescr.miscAttrs['centerRotationFwdSpeedFactor']
+
+
+def configurePhysics(physics, baseCfg, typeDescr, gravityFactor, updateSiegeModeFromCfg):
+    vehiclePhysicsType = typeDescr.type.xphysics['detailed'].get('vehiclePhysicsType', VEHICLE_PHYSICS_TYPE.TANK)
     isTank = vehiclePhysicsType == VEHICLE_PHYSICS_TYPE.TANK
     cfg = copy.deepcopy(g_defaultTankXPhysicsCfg if isTank else g_defaultWheeledTechXPhysicsCfg)
-    if typeDesc.hasSiegeMode:
-        defaultVehicleDescr = typeDesc.defaultVehicleDescr
-        siegeVehicleDescr = typeDesc.siegeVehicleDescr
+    if typeDescr.hasSiegeMode:
+        defaultVehicleDescr = typeDescr.defaultVehicleDescr
+        siegeVehicleDescr = typeDescr.siegeVehicleDescr
     else:
-        defaultVehicleDescr = typeDesc
+        defaultVehicleDescr = typeDescr
     try:
-        cfg['fakegearbox'] = typeDesc.type.xphysics['detailed']['fakegearbox']
+        cfg['fakegearbox'] = typeDescr.type.xphysics['detailed']['fakegearbox']
     except:
         cfg['fakegearbox'] = _DEFAULT_FAKE_GEARBOX_SETTINGS
 
     if baseCfg:
         updatePhysicsCfg(baseCfg, defaultVehicleDescr, cfg)
-        if typeDesc.hasSiegeMode:
-            if updateSiegeModeFromCfg and 'modes' in baseCfg and 'siegeMode' in baseCfg['modes']:
+        if typeDescr.hasSiegeMode:
+            if updateSiegeModeFromCfg and 'siegeMode' in baseCfg.get('modes', {}):
                 siegeBaseCfg = baseCfg['modes']['siegeMode']
             else:
                 siegeBaseCfg = siegeVehicleDescr.type.xphysics['detailed']
             updatePhysicsCfg(siegeBaseCfg, siegeVehicleDescr, cfg['modes']['siegeMode'])
     cfg = __buildConfigurations(cfg)
     for name, mode in cfg['modes'].iteritems():
-        configurePhysicsMode(mode, typeDesc, gravityFactor)
+        applyVehDescrMiscFactors(typeDescr, mode)
+        configurePhysicsMode(mode, typeDescr, gravityFactor)
 
     if not physics.configure(cfg):
         LOG_ERROR('configureXPhysics: configure failed')
@@ -472,7 +494,7 @@ def configurePhysicsMode(cfg, typeDesc, gravityFactor):
     cfg['angVelocityFactor0'] = cfg['chassis']['angVelocityFactor0']
     cfg['axleCount'] = cfg['chassis']['axleCount']
     if cfg['vehiclePhysicsType'] == VEHICLE_PHYSICS_TYPE.WHEELED_TECH:
-        for key in ('axleSteeringLockAngles', 'axleSteeringAngles', 'axleSteeringSpeed', 'fwdFrictionOnAxisModifiers', 'sideFrictionOnAxisModifiers', 'sideFrictionConstantRatioOnAxis', 'sinkageResistOnAxis', 'axleIsLeading', 'axleCanBeRised', 'wheelRiseHeight', 'wheelRiseSpeed', 'enableRail', 'handbrakeBrakeForce', 'noSignalBrakeForce', 'steeringSpeedInTurnMultiplier', 'afterDeathBrakeForce', 'afterDeathMinSpeedForImpulse', 'afterDeathImpulse', 'jumpingFactor', 'jumpingMinForce', 'slowTurnChocker', 'airPitchReduction', 'wheelToHullRollTransmission'):
+        for key in ('axleSteeringLockAngles', 'axleSteeringAngles', 'axleSteeringSpeed', 'fwdFrictionOnAxisModifiers', 'sideFrictionOnAxisModifiers', 'sideFrictionConstantRatioOnAxis', 'sinkageResistOnAxis', 'axleIsLeading', 'axleCanBeRised', 'wheelRiseHeight', 'wheelRiseSpeed', 'enableRail', 'handbrakeBrakeForce', 'brokenWheelRollingFrictionModifier', 'noSignalBrakeForce', 'afterDeathBrakeForce', 'afterDeathMinSpeedForImpulse', 'afterDeathImpulse', 'jumpingFactor', 'jumpingMinForce', 'slowTurnChocker', 'airPitchReduction', 'wheelToHullRollTransmission', 'steeringSpeedInTurnMultiplier'):
             cfg[key] = cfg['chassis'][key]
 
     cfg['gimletGoalWOnSpot'] = cfg['chassis']['gimletGoalWOnSpot']

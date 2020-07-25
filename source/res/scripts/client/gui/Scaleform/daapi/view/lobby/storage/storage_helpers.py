@@ -3,7 +3,8 @@
 import logging
 import random
 from functools import partial
-from typing import Optional
+from itertools import chain
+from typing import Optional, List
 import nations
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import LAST_STORAGE_VISITED_TIMESTAMP
@@ -28,7 +29,7 @@ from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.utils.functions import makeTooltip
 from helpers.i18n import makeString as _ms
 from gui.shared.money import Currency
-from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items import GUI_ITEM_TYPE, getKpiValueString, KPI
 from gui.shared.gui_items.Vehicle import getTypeUserName, getVehicleStateIcon, Vehicle
 from gui.shared.items_parameters import params_helper
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
@@ -39,6 +40,7 @@ from items import vehicles
 from items.vehicles import makeVehicleTypeCompDescrByName
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+from items.components.supply_slot_categories import SlotCategories
 _logger = logging.getLogger(__name__)
 _MAX_COMPATIBLE_VEHS_COUNT = 5
 _MAX_COMPATIBLE_GUNS_COUNT = 2
@@ -53,6 +55,8 @@ _HANDLERS_MAP = {GUI_ITEM_TYPE.OPTIONALDEVICE: (CONTEXT_MENU_HANDLER_TYPE.STORAG
  GUI_ITEM_TYPE.SHELL: (CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,),
  GUI_ITEM_TYPE.CREW_BOOKS: (CONTEXT_MENU_HANDLER_TYPE.STORAGE_CREW_BOOKS_NO_SALE_ITEM, CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM),
  GUI_ITEM_TYPE.DEMOUNT_KIT: (CONTEXT_MENU_HANDLER_TYPE.STORAGE_DEMOUNT_KIT_ITEM,)}
+OPT_DEVICE_CATEGORIES_ORDER = {category:idx for idx, category in enumerate(SlotCategories.ORDER)}
+CATEGORIES_COUNT = len(OPT_DEVICE_CATEGORIES_ORDER)
 
 def getTopVehicleByNation(nationName):
     customizationCache = vehicles.g_cache.customization20()
@@ -81,13 +85,15 @@ def getStorageItemDescr(item):
             desc = item.shortDescriptionSpecial
             return text_styles.main(desc)
         return text_styles.main(item.getOptDeviceBoosterDescription(None, text_styles.bonusAppliedText))
+    elif itemType == GUI_ITEM_TYPE.OPTIONALDEVICE:
+        return OptDeviceBonusesDescriptionBuilder().getEffectDescription(item)
     else:
-        template = g_htmlTemplates['html_templates:lobby/popovers']['optionalDevice']
+        template = g_htmlTemplates['html_templates:lobby/popovers']['equipment']
         desc = item.formattedShortDescription(template.source)
         return text_styles.main(desc)
 
 
-def createStorageDefVO(itemID, title, description, count, price, image, imageAlt, itemType='', nationFlagIcon='', enabled=True, available=True, contextMenuId='', additionalInfo='', active=GOODIE_STATE.INACTIVE, upgradable=False, upgradeButtonTooltip=''):
+def createStorageDefVO(itemID, title, description, count, price, image, imageAlt, itemType='', nationFlagIcon='', enabled=True, available=True, contextMenuId='', additionalInfo='', active=GOODIE_STATE.INACTIVE, upgradable=False, upgradeButtonTooltip='', extraParams=(), specializations=()):
     return {'id': itemID,
      'title': title,
      'description': description,
@@ -103,6 +109,8 @@ def createStorageDefVO(itemID, title, description, count, price, image, imageAlt
      'active': active == GOODIE_STATE.ACTIVE,
      'upgradable': upgradable,
      'upgradeButtonTooltip': upgradeButtonTooltip,
+     'extraParams': extraParams,
+     'specializations': specializations,
      'contextMenuId': contextMenuId}
 
 
@@ -141,11 +149,11 @@ def _getVehicleInfo(vehicle):
 
 
 def _calculateVehicleMaxAdditionalPrice(vehicle):
-    items = list(vehicle.equipment.regularConsumables) + vehicle.optDevices + vehicle.shells
-    return sum((item.getSellPrice().price.get(Currency.CREDITS, 0) * getattr(item, 'count', 1) for item in items if item is not None))
+    items = vehicle.consumables.installed.getItems() + vehicle.optDevices.installed.getItems() + vehicle.shells.installed.getItems()
+    return sum((item.getSellPrice().price.get(Currency.CREDITS, 0) * getattr(item, 'count', 1) for item in items))
 
 
-def getStorageModuleName(item):
+def getStorageItemName(item):
     if item.itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES:
         return '{} {}'.format(text_styles.neutral(int2roman(item.level)), item.longUserName)
     return item.longUserNameAbbr if item.itemTypeID == GUI_ITEM_TYPE.SHELL else item.userName
@@ -267,7 +275,7 @@ def getItemVo(item):
     nationFlagIcon = RES_SHOP.getNationFlagIcon(nations.NAMES[itemNationID]) if itemNationID != nations.NONE_INDEX else ''
     serverSettings = dependency.instance(ILobbyContext).getServerSettings()
     upgradable = item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and item.isUpgradable and serverSettings.isTrophyDevicesEnabled()
-    vo = createStorageDefVO(item.intCD, getStorageModuleName(item), getStorageItemDescr(item), item.inventoryCount, priceVO, getStorageItemIcon(item, STORE_CONSTANTS.ICON_SIZE_SMALL), 'altimage', itemType=item.getOverlayType(), nationFlagIcon=nationFlagIcon, enabled=item.isForSale, contextMenuId=_getContextMenuHandlerID(item), upgradable=upgradable, upgradeButtonTooltip=makeTooltip(body=backport.text(R.strings.storage.buttonUpgrade.tooltip.body())))
+    vo = createStorageDefVO(item.intCD, getStorageItemName(item), getStorageItemDescr(item), item.inventoryCount, priceVO, getStorageItemIcon(item, STORE_CONSTANTS.ICON_SIZE_SMALL), 'altimage', itemType=item.getOverlayType(), nationFlagIcon=nationFlagIcon, enabled=item.isForSale, contextMenuId=_getContextMenuHandlerID(item), upgradable=upgradable, upgradeButtonTooltip=makeTooltip(body=backport.text(R.strings.storage.buttonUpgrade.tooltip.body())), extraParams=getItemExtraParams(item), specializations=getCategoriesIcons(item) if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE else ())
     return vo
 
 
@@ -332,3 +340,44 @@ def customizationPreview(itemCD, itemsCache=None, vehicleCD=None):
         vehicleCD = random.choice(suitableVehicles)
     showVehiclePreview(vehTypeCompDescr=vehicleCD, previewBackCb=partial(showStorage, defaultSection=STORAGE_CONSTANTS.CUSTOMIZATION), previewAlias=VIEW_ALIAS.LOBBY_STORAGE, vehParams={'styleCD': itemCD})
     return
+
+
+class OptDeviceBonusesDescriptionBuilder(object):
+    KPI_VALUE_TEMPLATE = '{{colorTagOpen}}{}{{colorTagClose}}'
+    KPI_HTML_TEMPLATE = g_htmlTemplates['html_templates:lobby/popovers']['equipment']
+
+    def getDescription(self, item):
+        return '\n'.join(chain((self.getEffectDescription(item),), self.getDescriptionByKpiStrings(item)))
+
+    def getDescriptionByKpiStrings(self, item):
+        if any((kpi.type == KPI.Type.AGGREGATE_MUL for kpi in item.getKpi())):
+            return [item.shortDescriptionSpecial]
+        return [ self.__createKpiString(kpi) for kpi in item.getKpi() ]
+
+    def getEffectDescription(self, item):
+        return self.__createEffectString(item)
+
+    def __createEffectString(self, item):
+        itemR = R.strings.artefacts.dyn(item.descriptor.groupName)
+        effectR = itemR.dyn('effect') if itemR else None
+        effectsList = [ backport.text(effect()) for effect in effectR.values() ] if effectR else []
+        return text_styles.concatStylesToSingleLine(icons.lightning(), backport.text(R.strings.storage.optDevice.hover.effect()), effectsList[0]).format(**self.KPI_HTML_TEMPLATE.source) if effectsList else ''
+
+    def __createKpiString(self, kpi):
+        value = self.__kpiFormat(kpi, kpi.value)
+        specValue = self.__kpiFormat(kpi, kpi.specValue) if kpi.specValue else None
+        generalValue = ' / '.join((value, specValue)) if specValue is not None else value
+        bonus = R.strings.tank_setup.kpi.bonus.dyn(kpi.name)
+        description = ' '.join((generalValue, backport.text(bonus()) if bonus else ''))
+        return description.format(**self.KPI_HTML_TEMPLATE.source)
+
+    def __kpiFormat(self, kpi, value):
+        return self.KPI_VALUE_TEMPLATE.format(getKpiValueString(kpi, value))
+
+
+def getItemExtraParams(item):
+    return OptDeviceBonusesDescriptionBuilder().getDescriptionByKpiStrings(item) if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE else ()
+
+
+def getCategoriesIcons(device):
+    return [ backport.image(R.images.gui.maps.icons.tanksetup.specialization.dyn('medium_{}_off'.format(category))()) for category in SlotCategories.ORDER if category in device.descriptor.categories ]

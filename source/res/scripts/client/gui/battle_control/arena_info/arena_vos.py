@@ -170,9 +170,9 @@ class PlayerInfoVO(object):
 class VehicleTypeInfoVO(object):
     __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconName', 'iconPath', 'isObserver', 'isPremiumIGR', 'isDualGunVehicle', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID', 'turretYawLimits', 'maxHealth', 'strCompactDescr', 'strCompactDescr', 'isOnlyForBattleRoyaleBattles', 'tags')
 
-    def __init__(self, vehicleType=None, **kwargs):
+    def __init__(self, vehicleType=None, maxHealth=None, **kwargs):
         super(VehicleTypeInfoVO, self).__init__()
-        self.__setVehicleData(vehicleType)
+        self.__setVehicleData(vehicleType, maxHealth)
 
     def __repr__(self):
         return 'VehicleTypeInfoVO(compactDescr = {0:n})'.format(self.compactDescr)
@@ -184,19 +184,19 @@ class VehicleTypeInfoVO(object):
         result = cmp(self.getOrderByClass(), other.getOrderByClass())
         return result if result else cmp(self.shortName, other.shortName)
 
-    def update(self, invalidate=_INVALIDATE_OP.NONE, vehicleType=None, **kwargs):
+    def update(self, invalidate=_INVALIDATE_OP.NONE, vehicleType=None, maxHealth=None, **kwargs):
         if vehicleType is not None:
             if self.compactDescr != vehicleType.type.compactDescr:
-                self.__setVehicleData(vehicleType)
+                self.__setVehicleData(vehicleType, maxHealth)
                 invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.SORTING)
             else:
                 newStrCD = vehicleType.makeCompactDescr()
                 if self.strCompactDescr != newStrCD:
-                    self.__setVehicleData(vehicleType)
+                    self.__setVehicleData(vehicleType, maxHealth)
                     invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.SORTING)
         return invalidate
 
-    def __setVehicleData(self, vehicleDescr=None):
+    def __setVehicleData(self, vehicleDescr=None, maxHealth=None):
         if vehicleDescr is not None:
             vehicleType = vehicleDescr.type
             self.compactDescr = vehicleType.compactDescr
@@ -214,7 +214,7 @@ class VehicleTypeInfoVO(object):
             self.guiName = Vehicle.getShortUserName(vehicleType)
             self.nationID = vehicleType.id[0]
             self.level = vehicleType.level
-            self.maxHealth = vehicleDescr.maxHealth
+            self.maxHealth = maxHealth
             self.isOnlyForBattleRoyaleBattles = isBattleRoyaleTank(tags)
             vName = vehicleType.name
             self.iconName = settings.makeVehicleIconName(vName)

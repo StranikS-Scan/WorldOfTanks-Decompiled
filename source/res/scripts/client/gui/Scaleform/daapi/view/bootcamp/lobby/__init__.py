@@ -22,7 +22,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.bootcamp.BCSubtitlesWindow import SubtitlesWindow
     from gui.Scaleform.daapi.view.bootcamp.BCInterludeVideoPage import BCInterludeVideoPage
     return (ViewSettings(VIEW_ALIAS.BOOTCAMP_OUTRO_VIDEO, BCOutroVideoPage, 'BCOutroVideo.swf', ViewTypes.TOP_WINDOW, VIEW_ALIAS.BOOTCAMP_OUTRO_VIDEO, ScopeTemplates.TOP_WINDOW_SCOPE, canClose=False, canDrag=True),
-     ViewSettings(VIEW_ALIAS.BOOTCAMP_TOOLTIPS_WINDOW, BCTooltipsWindow, 'BCTooltipsWindow.swf', ViewTypes.WINDOW, None, ScopeTemplates.TOP_WINDOW_SCOPE),
+     ViewSettings(VIEW_ALIAS.BOOTCAMP_TOOLTIPS_WINDOW, BCTooltipsWindow, 'BCTooltipsWindow.swf', ViewTypes.WINDOW, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BOOTCAMP_LOBBY_HIGHLIGHTS, BCHighlights, 'BCHighlights.swf', ViewTypes.LOBBY_TOP_SUB, VIEW_ALIAS.BOOTCAMP_LOBBY_HIGHLIGHTS, ScopeTemplates.DEFAULT_SCOPE, True),
      ViewSettings(VIEW_ALIAS.BOOTCAMP_VEHICLE_BUY_VIEW, BCVehicleBuyView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG, BCQueueDialog, 'BCQueueWindow.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
@@ -53,7 +53,6 @@ class BootcampPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.VEHICLE_PREVIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.IMAGE_VIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_BUY_WINDOW, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.FITTING_SELECT_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.PACK_ITEM_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BOOTCAMP_QUESTS_VIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.SUBTITLES_WINDOW, self.loadViewByCtxEvent),

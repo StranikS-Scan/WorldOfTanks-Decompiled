@@ -2,13 +2,14 @@
 # Embedded file name: scripts/common/items/utils.py
 import copy
 from operator import sub
+from typing import Any, Dict, Tuple
 from VehicleDescrCrew import VehicleDescrCrew
 from constants import VEHICLE_TTC_ASPECTS
 from debug_utils import *
 from items import tankmen
 from items import vehicles
 from items.tankmen import MAX_SKILL_LEVEL, MIN_ROLE_LEVEL
-from items.vehicles import VEHICLE_ATTRIBUTE_FACTORS
+from items.vehicles import VEHICLE_ATTRIBUTE_FACTORS, VehicleDescriptor
 
 def getItemDescrByCompactDescr(compDescr):
     itemTypeID, _, _ = vehicles.parseIntCompactDescr(compDescr)
@@ -115,7 +116,11 @@ def getDualGunReloadTime(vehicleDescr, factors):
 
 
 def getTurretRotationSpeed(vehicleDescr, factors):
-    return vehicleDescr.turret.rotationSpeed * max(factors['turret/rotationSpeed'], 0.0)
+    return vehicleDescr.turret.rotationSpeed * getTurretRotationSpeedFactor(vehicleDescr, factors)
+
+
+def getTurretRotationSpeedFactor(vehicleDescr, factors):
+    return max(factors['turret/rotationSpeed'], 0.0) * vehicleDescr.miscAttrs['turretRotationSpeed']
 
 
 def getGunRotationSpeed(vehicleDescr, factors):
@@ -127,11 +132,14 @@ def getGunAimingTime(vehicleDescr, factors):
 
 
 def getChassisRotationSpeed(vehicleDescr, factors):
-    return vehicleDescr.chassis.rotationSpeed * max(factors['vehicle/rotationSpeed'], 0.0)
+    return vehicleDescr.chassis.rotationSpeed * max(factors['vehicle/rotationSpeed'], 0.0) * max(vehicleDescr.miscAttrs['onMoveRotationSpeedFactor'], vehicleDescr.miscAttrs['onStillRotationSpeedFactor'])
 
 
-def getInvisibility(factors, baseInvisibility, isMoving):
-    return (baseInvisibility[0 if isMoving else 1] + factors['invisibility'][0]) * factors['invisibility'][1]
+def getInvisibility(vehicleDescr, factors, baseInvisibility, isMoving):
+    baseValue = baseInvisibility[0 if isMoving else 1]
+    additiveTerm = factors['invisibility'][0] + vehicleDescr.miscAttrs['invisibilityAdditiveTerm']
+    multFactor = factors['invisibility'][1]
+    return (baseValue + additiveTerm) * multFactor
 
 
 if IS_CLIENT:
@@ -169,7 +177,7 @@ if IS_CLIENT:
 
 
     def getClientShotDispersion(vehicleDescr, shotDispersionFactor):
-        return vehicleDescr.gun.shotDispersionAngle * shotDispersionFactor
+        return vehicleDescr.gun.shotDispersionAngle * vehicleDescr.miscAttrs['multShotDispersionFactor'] * shotDispersionFactor
 
 
     def getClientInvisibility(vehicleDescr, vehicle, camouflageFactor, factors):
@@ -180,9 +188,9 @@ if IS_CLIENT:
         baseInvisibility = vehicleDescr.computeBaseInvisibility(camouflageFactor, camouflageId)
         invisibilityFactors = factors['invisibility']
         factors['invisibility'] = invisibilityFactors[VEHICLE_TTC_ASPECTS.DEFAULT]
-        moving = getInvisibility(factors, baseInvisibility, True)
+        moving = getInvisibility(vehicleDescr, factors, baseInvisibility, True)
         factors['invisibility'] = invisibilityFactors[VEHICLE_TTC_ASPECTS.WHEN_STILL]
-        still = getInvisibility(factors, baseInvisibility, False)
+        still = getInvisibility(vehicleDescr, factors, baseInvisibility, False)
         factors['invisibility'] = invisibilityFactors
         return (moving, still)
 
@@ -228,12 +236,9 @@ if IS_CLIENT:
         factors['crewLevelIncrease'] = _sumCrewLevelIncrease(eqs)
         for eq in eqs:
             if eq is not None:
-                eq.updateVehicleAttrFactors(vehicleDescr, factors, aspect)
+                eq.updateVehicleAttrFactorsForAspect(vehicleDescr, factors, aspect)
 
-        for device in vehicleDescr.optionalDevices:
-            if device is not None:
-                device.updateVehicleAttrFactors(vehicleDescr, factors, aspect)
-
+        vehicleDescr.applyOptDevFactorsForAspect(factors, aspect)
         vehicleDescrCrew = VehicleDescrCrew(vehicleDescr, crewCompactDescrs)
         for eq in eqs:
             if eq is not None and 'crewSkillBattleBooster' in eq.tags:

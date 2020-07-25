@@ -7,6 +7,7 @@
     <radioman></radioman>
     <loader></loader>
   </crew>
+  <supplySlots>	1 6 8 8 8	</supplySlots>
   <speedLimits>
     <forward>	49.9	</forward>
     <backward>	12	</backward>
@@ -15,9 +16,16 @@
     <moving>	0.139	</moving>
     <still>	0.278	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
-    <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.417	</firePenalty>
   </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.05 0.075	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.03 0.04	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+  </optDevsOverrides>
   <repairCost>	2.37	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -25,6 +33,9 @@
     <tiling>	1 1 0 0	</tiling>
     <exclusionMask></exclusionMask>
   </camouflage>
+  <damageByStaticsChances>
+    <tankman>	0	</tankman>
+  </damageByStaticsChances>
   <hull>
     <fakeTurrets>
       <lobby>	0	</lobby>
@@ -39,6 +50,21 @@
       <armor_6>	12.7	</armor_6>
       <armor_7>	12.7	</armor_7>
       <armor_8>	0	</armor_8>
+      <loader_1>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+        <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+      </loader_1>
+      <radioman_1>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+        <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+      </radioman_1>
+      <driver>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+        <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+      </driver>
+      <gunner_1>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+        <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+      </gunner_1>
+      <commander>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+        <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+      </commander>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	9670	</weight>
@@ -268,6 +294,18 @@
         <armor_6>	0	</armor_6>
         <armor_7>	0	</armor_7>
         <armor_8>	0	</armor_8>
+        <loader_1>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+        </loader_1>
+        <radioman_1>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+        </radioman_1>
+        <gunner_1>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+        </gunner_1>
+        <commander>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+        </commander>
       </armor>
       <weight>	100	</weight>
       <maxHealth>	32	</maxHealth>

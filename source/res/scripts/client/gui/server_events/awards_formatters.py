@@ -1209,7 +1209,10 @@ class CustomizationsBonusFormatter(SimpleBonusFormatter):
     def _getImages(cls, c11nItem):
         result = {}
         for size in AWARDS_SIZES.ALL():
-            result[size] = RES_ICONS.getBonusIcon(size, c11nItem.itemTypeName)
+            iconName = c11nItem.itemTypeName
+            if iconName == 'style' and c11nItem.modelsSet:
+                iconName = 'style_3d'
+            result[size] = RES_ICONS.getBonusIcon(size, iconName)
 
         return result
 

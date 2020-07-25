@@ -3,7 +3,7 @@
 import logging
 from collections import namedtuple
 from data_structures import OrderedSet
-from gui.server_events.bonuses import CreditsBonus, CrystalBonus, GoldBonus, ItemsBonus, GoodiesBonus, BasicPremiumDaysBonus, PlusPremiumDaysBonus, EpicAbilityPtsBonus
+from gui.server_events.bonuses import CreditsBonus, CrystalBonus, GoldBonus, ItemsBonus, GoodiesBonus, BasicPremiumDaysBonus, PlusPremiumDaysBonus, EpicAbilityPtsBonus, X5BattleTokensBonus
 from helpers import dependency, int2roman
 from skeletons.gui.server_events import IEventsCache
 _logger = logging.getLogger(__name__)
@@ -18,6 +18,17 @@ def formatBonuses(bonuses):
 
     def __accumulateIntegralBonus(integralBonusType, bonuses):
         return integralBonusType(bonuses[0].getName(), sum([ b.getValue() for b in bonuses ]))
+
+    def accumulateX5Bonus(bonuses):
+        values = dict()
+        for b in bonuses:
+            for bid, value in b.getValue().iteritems():
+                if bid in values.iterkeys():
+                    cnt = values.get(bid).get('count', 0)
+                    values[bid]['count'] = cnt + value.get('count', 0)
+                values[bid] = {'count': value.get('count', 0)}
+
+        return X5BattleTokensBonus(values)
 
     def accumulateCredits(bonuses):
         return __accumulateIntegralBonus(CreditsBonus, bonuses)
@@ -63,7 +74,8 @@ def formatBonuses(bonuses):
      GoodiesBonus: accumulateGoodies,
      BasicPremiumDaysBonus: accumulateBasicPremiumDays,
      PlusPremiumDaysBonus: accumulatePlusPremiumDays,
-     EpicAbilityPtsBonus: accumulateEpicAbilityPtsBonus}
+     EpicAbilityPtsBonus: accumulateEpicAbilityPtsBonus,
+     X5BattleTokensBonus: accumulateX5Bonus}
     bonuses = [ bonus for singleQuestBonuses in bonuses for bonus in singleQuestBonuses ]
     accumulatedBonuses = []
     for bonusType in OrderedSet((type(b) for b in bonuses)):

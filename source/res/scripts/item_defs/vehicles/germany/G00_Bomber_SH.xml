@@ -6,6 +6,7 @@
 			loader
 			driver	</commander>
   </crew>
+  <supplySlots>	8 8 8	</supplySlots>
   <speedLimits>
     <forward>	120	</forward>
     <backward>	120	</backward>
@@ -14,9 +15,16 @@
     <moving>	0.196	</moving>
     <still>	0.196	</still>
     <camouflageBonus>	0.03	</camouflageBonus>
-    <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.294	</firePenalty>
   </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.1 0.125	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+  </optDevsOverrides>
   <repairCost>	2.0	</repairCost>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>

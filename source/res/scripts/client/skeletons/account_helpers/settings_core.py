@@ -49,6 +49,7 @@ class ISettingsCache(object):
 
 
 class ISettingsCore(object):
+    onOnceOnlyHintsChanged = None
     onSettingsChanged = None
     onSettingsApplied = None
     onSettingsReady = None

@@ -910,8 +910,12 @@ class SniperControlMode(_GunControlMode):
             return
         else:
             vehicleDescr = vehicle.typeDescriptor
-            from items.vehicles import g_cache
-            self.__setupBinoculars(g_cache.optionalDevices()[5] in vehicleDescr.optionalDevices)
+            isCoatedOptics = False
+            for optionalDevice in vehicleDescr.optionalDevices:
+                if optionalDevice is not None and 'coatedOptics' in optionalDevice.tags:
+                    isCoatedOptics = True
+
+            self.__setupBinoculars(isCoatedOptics)
             isHorizontalStabilizerAllowed = vehicleDescr.gun.turretYawLimits is None
             if self._cam.aimingSystem is not None:
                 self._cam.aimingSystem.enableHorizontalStabilizerRuntime(isHorizontalStabilizerAllowed)

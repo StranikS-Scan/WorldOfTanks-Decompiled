@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/common/format_resource_string_arg_model.py
-from gui.impl.gen import R
 from frameworks.wulf import ViewModel
 
 class FormatResourceStringArgModel(ViewModel):
@@ -10,10 +9,10 @@ class FormatResourceStringArgModel(ViewModel):
         super(FormatResourceStringArgModel, self).__init__(properties=properties, commands=commands)
 
     def getValue(self):
-        return self._getResource(0)
+        return self._getString(0)
 
     def setValue(self, value):
-        self._setResource(0, value)
+        self._setString(0, value)
 
     def getName(self):
         return self._getString(1)
@@ -23,5 +22,5 @@ class FormatResourceStringArgModel(ViewModel):
 
     def _initialize(self):
         super(FormatResourceStringArgModel, self)._initialize()
-        self._addResourceProperty('value', R.invalid())
+        self._addStringProperty('value', '')
         self._addStringProperty('name', '')

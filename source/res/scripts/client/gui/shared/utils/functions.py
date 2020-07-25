@@ -4,13 +4,14 @@ import random
 import re
 import typing
 import ArenaType
-from adisp import async, process
-from debug_utils import LOG_DEBUG
+import async as future_async
+from adisp import async
 from gui import GUI_SETTINGS, SystemMessages
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared.money import Currency, MONEY_UNDEFINED
+from gui.impl.gen.view_models.constants.dialog_presets import DialogPresets
+from gui.shared.money import Currency
 from helpers.i18n import makeString
 from ids_generators import SequenceIDGenerator
 from items import ITEM_TYPE_INDICES, vehicles as vehs_core
@@ -85,59 +86,22 @@ def makeTooltip(header=None, body=None, note=None, attention=None):
 
 
 @async
-@process
+@future_async.async
 def checkAmmoLevel(vehicles, callback):
     showAmmoWarning = False
-    ammoWarningMessage = 'lowAmmo'
-
-    def _validateMoneyForLayouts(vehicle):
-        from gui.shared.gui_items.processors.plugins import MoneyValidator
-        shellsPrice = MONEY_UNDEFINED
-        eqsPrice = MONEY_UNDEFINED
-        for shell in vehicle.shells:
-            if shell.defaultCount:
-                shellPrice = shell.getBuyPrice().price
-                shellsPrice += shellPrice * (shell.defaultCount - shell.inventoryCount - shell.count)
-
-        for idx, eq in enumerate(vehicle.equipmentLayout.regularConsumables):
-            if eq is not None:
-                vehEquipment = vehicle.equipment.regularConsumables[idx]
-                if vehEquipment:
-                    eqPrice = eq.getBuyPrice().price
-                    eqsPrice += eqPrice
-
-        return MoneyValidator(shellsPrice + eqsPrice).validate()
-
-    def _autoFillLayouts(vehicle):
-        from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
-        shellsLayout = []
-        eqsLayout = []
-        for shell in vehicle.shells:
-            shellsLayout.extend(shell.defaultLayoutValue)
-
-        for eq in vehicle.equipmentLayout.regularConsumables:
-            if eq is not None:
-                eqsLayout.extend(eq.defaultLayoutValue)
-            eqsLayout.extend((0, 0))
-
-        LOG_DEBUG('setVehicleLayouts', shellsLayout, eqsLayout)
-        ItemsActionsFactory.doAction(ItemsActionsFactory.SET_VEHICLE_LAYOUT, vehicle, shellsLayout, eqsLayout)
-        return
-
+    ammoWarningMessage = 'lowAmmoAutoLoad'
     for vehicle in vehicles:
         if vehicle.isReadyToFight:
             showAmmoWarning = showAmmoWarning or not vehicle.isAmmoFull
         if showAmmoWarning:
-            validateResult = _validateMoneyForLayouts(vehicle)
-            if vehicle.isAutoLoadFull() or not validateResult.success:
-                ammoWarningMessage = 'lowAmmoAutoLoad'
-            from gui import DialogsInterface
-            success = yield DialogsInterface.showI18nConfirmDialog(ammoWarningMessage)
-            if success:
-                if not vehicle.isAutoLoadFull() or not vehicle.isAutoEquipFull() and validateResult.success:
-                    _autoFillLayouts(vehicle)
+            from gui.impl.dialogs import dialogs
+            from gui.impl.dialogs.builders import ResSimpleDialogBuilder
+            builder = ResSimpleDialogBuilder()
+            builder.setMessagesAndButtons(R.strings.dialogs.dyn(ammoWarningMessage))
+            builder.setIcon(R.images.gui.maps.icons.tanksetup.warning.ammunition())
+            builder.setPreset(DialogPresets.TROPHY_DEVICE_UPGRADE)
+            success = yield future_async.await(dialogs.showSimple(builder.buildInLobby()))
             callback(success)
-        yield lambda callback: callback(None)
         callback(True)
 
 

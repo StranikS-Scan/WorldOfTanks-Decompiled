@@ -10,7 +10,7 @@ from gui.impl.backport.backport_system_locale import getNiceNumberFormat
 from gui.shared.formatters import text_styles
 from gui.shared.items_parameters import formatters as params_formatters
 from gui.shared.items_parameters import params as base_params
-from gui.shared.items_parameters.comparator import ItemsComparator, PARAM_STATE
+from gui.shared.items_parameters.comparator import ItemsComparator, PARAM_STATE, getParamExtendedData
 from gui.shared.items_parameters.formatters import FORMAT_SETTINGS, MEASURE_UNITS
 from gui.shared.items_parameters import params_helper
 from helpers import i18n, dependency
@@ -22,7 +22,8 @@ _ModuleDescr = namedtuple('_ModuleDescr', ('vDescr', 'currentModuleDescr', 'intC
 ROYALE_VISIBILITY_PARAMS = ('radarRadius', 'radarCooldown')
 _ROYALE_MOBILITY_PARAMS = ('forwardMaxSpeed', 'chassisModuleRotationSpeed', 'turretModuleRotationSpeed')
 _ROYALE_GUN_PARAMS = ('gunModuleAvgDamageList',)
-_PARAMS_GROUPS = (params_helper.RELATIVE_POWER_PARAMS + _ROYALE_GUN_PARAMS,
+_BACKWARD_QUALITY_PARAMS = ('radarCooldown', 'hullWeight', 'hullAndChassisWeight')
+_PARAMS_GROUPS = (_ROYALE_GUN_PARAMS + params_helper.RELATIVE_POWER_PARAMS,
  params_helper.RELATIVE_ARMOR_PARAMS,
  params_helper.RELATIVE_MOBILITY_PARAMS + _ROYALE_MOBILITY_PARAMS,
  params_helper.RELATIVE_CAMOUFLAGE_PARAMS,
@@ -87,6 +88,11 @@ class _VehicleParams(base_params.VehicleParams):
         return params.rotationSpeed if not params.isWheeled else None
 
     @property
+    def hullAndChassisWeight(self):
+        params = self.__getModuleByType(ITEM_TYPES.vehicleChassis, self._itemDescr.chassis)
+        return params.hullAndChassisWeight
+
+    @property
     def turretModuleRotationSpeed(self):
         params = self.__getModuleByType(ITEM_TYPES.vehicleTurret, self._itemDescr.turret)
         return params.rotationSpeed
@@ -112,6 +118,13 @@ class _VehicleParams(base_params.VehicleParams):
         return _ITEM_TYPE_HANDLERS[mType](moduleDescr, self._itemDescr)
 
 
+class _BRItemsComparator(ItemsComparator):
+
+    def getExtendedData(self, paramName):
+        isInvertedValue = paramName in _BACKWARD_QUALITY_PARAMS or None
+        return getParamExtendedData(paramName, self._currentParams.get(paramName), self._otherParams.get(paramName), self._getPenaltiesAndBonuses(paramName), customQualityParams=isInvertedValue)
+
+
 _ITEM_TYPE_HANDLERS = {ITEM_TYPES.vehicleRadio: _RadioParams,
  ITEM_TYPES.vehicleEngine: base_params.EngineParams,
  ITEM_TYPES.vehicleChassis: _ChassisParams,
@@ -121,6 +134,19 @@ _ITEM_TYPE_HANDLERS = {ITEM_TYPES.vehicleRadio: _RadioParams,
 def _updateSeparator(separator):
     space = ' '
     return ''.join((space, text_styles.mainBig(separator), space))
+
+
+def _reloadTimeSecsPreprocessor(value, states):
+    statesOverride = states
+    if states:
+        statesOverride = list()
+        stateOverride = states[0][0]
+        for state in states:
+            stateCopy = list(state)
+            stateCopy[0] = stateOverride
+            statesOverride.append(stateCopy)
+
+    return (value, None, statesOverride)
 
 
 def _autoReloadPreprocessor(reloadTimes, rowStates):
@@ -141,6 +167,7 @@ def _generateSettings():
      'hullAndChassisWeight': params_formatters._niceRangeFormat,
      'forwardMaxSpeed': params_formatters._niceFormat}
     s.update(FORMAT_SETTINGS)
+    s['reloadTimeSecs']['preprocessor'] = _reloadTimeSecsPreprocessor
     s[params_formatters.AUTO_RELOAD_PROP_NAME] = {'preprocessor': _autoReloadPreprocessor,
      'rounder': lambda v: getNiceNumberFormat(round(v, 1))}
     return s
@@ -167,7 +194,7 @@ def _getCurrentModule(moduleDescr, factory=None):
 
 
 def _itemsComparator(typeCD, currentItemParams, otherItem, vehicleDescr=None):
-    return ItemsComparator(currentItemParams, _getParameters(typeCD, otherItem, vehicleDescr))
+    return _BRItemsComparator(currentItemParams, _getParameters(typeCD, otherItem, vehicleDescr))
 
 
 def _makeTxtForNormal(text):

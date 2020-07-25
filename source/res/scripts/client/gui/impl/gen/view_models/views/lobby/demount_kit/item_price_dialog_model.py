@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.views.lobby.demount_kit.item_base_dialog_model imp
 class ItemPriceDialogModel(ItemBaseDialogModel):
     __slots__ = ()
 
-    def __init__(self, properties=16, commands=2):
+    def __init__(self, properties=16, commands=3):
         super(ItemPriceDialogModel, self).__init__(properties=properties, commands=commands)
 
     def getPriceDescription(self):

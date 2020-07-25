@@ -23,7 +23,7 @@ _TABS_DATA = ({'id': STORAGE_CONSTANTS.INVENTORY_TAB_ALL,
   'linkage': STORAGE_CONSTANTS.STORAGE_REGULAR_ITEMS_TAB},
  {'id': STORAGE_CONSTANTS.INVENTORY_TAB_EQUIPMENT,
   'label': R.strings.storage.storage.tabs.equipment,
-  'linkage': STORAGE_CONSTANTS.STORAGE_REGULAR_ITEMS_TAB},
+  'linkage': STORAGE_CONSTANTS.STORAGE_DEVICES_TAB},
  {'id': STORAGE_CONSTANTS.INVENTORY_TAB_CONSUMABLE,
   'label': R.strings.storage.storage.tabs.consumable,
   'linkage': STORAGE_CONSTANTS.STORAGE_CONSUMABLES_TAB},
@@ -62,11 +62,34 @@ TABS_SORT_ORDER = {n:idx for idx, n in enumerate((GUI_ITEM_TYPE.OPTIONALDEVICE,
  GUI_ITEM_TYPE.DEMOUNT_KIT))}
 
 def _defaultInGroupComparator(a, b):
-    return cmp(storage_helpers.getStorageModuleName(a), storage_helpers.getStorageModuleName(b))
+    return cmp(storage_helpers.getStorageItemName(a), storage_helpers.getStorageItemName(b))
+
+
+_OPT_DEVICE_TYPE_ORDER = (REQ_CRITERIA.OPTIONAL_DEVICE.TROPHY, REQ_CRITERIA.OPTIONAL_DEVICE.DELUXE, REQ_CRITERIA.OPTIONAL_DEVICE.SIMPLE)
+
+def _getDeviceCategoriesOrder(optDevice):
+    categories = optDevice.descriptor.categories
+    return min((storage_helpers.OPT_DEVICE_CATEGORIES_ORDER.get(category, storage_helpers.CATEGORIES_COUNT) for category in categories)) if categories else storage_helpers.CATEGORIES_COUNT
+
+
+def _trophyDeviceComparator(a, b):
+    if a.isUpgradable != b.isUpgradable:
+        if a.isUpgradable:
+            return 1
+        return -1
 
 
 def _optionalDevicesComparator(a, b):
-    return -cmp(a, b) or _defaultInGroupComparator(a, b)
+    aIdx, bIdx = (-1, -1)
+    for idx, criteria in enumerate(_OPT_DEVICE_TYPE_ORDER):
+        if criteria(a):
+            aIdx = idx
+        if criteria(b):
+            bIdx = idx
+
+    if a.isTrophy:
+        return cmp(aIdx, bIdx) or _defaultInGroupComparator(a, b) or _trophyDeviceComparator(a, b)
+    return cmp(aIdx, bIdx) or _defaultInGroupComparator(a, b) if a.isDeluxe else cmp(aIdx, bIdx) or cmp(_getDeviceCategoriesOrder(a), _getDeviceCategoriesOrder(b)) or _defaultInGroupComparator(a, b)
 
 
 def _shellsComparator(a, b):
@@ -146,9 +169,9 @@ class InventoryCategoryStorageView(StorageCategoryStorageViewMeta):
         super(InventoryCategoryStorageView, self)._onRegisterFlashComponent(viewPy, alias)
         if alias == STORAGE_CONSTANTS.STORAGE_REGULAR_ITEMS_TAB:
             self.__views[STORAGE_CONSTANTS.INVENTORY_TAB_ALL] = viewPy
-            self.__views[STORAGE_CONSTANTS.INVENTORY_TAB_EQUIPMENT] = viewPy
         if alias not in (STORAGE_CONSTANTS.STORAGE_MODULES_TAB,
          STORAGE_CONSTANTS.STORAGE_SHELLS_TAB,
+         STORAGE_CONSTANTS.STORAGE_DEVICES_TAB,
          STORAGE_CONSTANTS.STORAGE_CREW_BOOKS_TAB,
          STORAGE_CONSTANTS.STORAGE_CONSUMABLES_TAB):
             viewPy.setTabId(self.__currentTabId)

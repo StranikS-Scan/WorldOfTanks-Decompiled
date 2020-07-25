@@ -188,3 +188,8 @@ def makeImageTag(source, width=16, height=16, vSpace=-4, hSpace=0):
 def roleActionsGroup(actionsGroup, vSpace=-5):
     source = backport.image(R.images.gui.maps.icons.roleExp.actionGroups.c_20x20.dyn(actionsGroup)())
     return makeImageTag(source, width=20, height=20, vSpace=vSpace)
+
+
+def lightning(vSpace=-4):
+    source = backport.image(R.images.gui.maps.icons.library.lightning())
+    return makeImageTag(source, width=10, height=16, vSpace=vSpace)

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/indicators.py
+import typing
 import BigWorld
 import GUI
 import SoundGroups
@@ -12,8 +13,9 @@ from gui.Scaleform.daapi.view.battle.shared.vehicles import siege_component
 from gui.Scaleform.daapi.view.meta.SiegeModeIndicatorMeta import SiegeModeIndicatorMeta
 from gui.Scaleform.daapi.view.meta.SixthSenseMeta import SixthSenseMeta
 from gui.Scaleform.genConsts.DAMAGEINDICATOR import DAMAGEINDICATOR
+from gui.Scaleform.genConsts.SIEGE_MODE_CONSTS import SIEGE_MODE_CONSTS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
-from gui.battle_control.battle_constants import DEVICE_STATES_RANGE
+from gui.battle_control.battle_constants import DEVICE_STATES_RANGE, DEVICE_STATE_NORMAL, DEVICE_STATE_CRITICAL, VEHICLE_DEVICE_IN_COMPLEX_ITEM
 from gui.battle_control.battle_constants import HIT_INDICATOR_MAX_ON_SCREEN
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CROSSHAIR_VIEW_ID
 from gui.battle_control.controllers.hit_direction_ctrl import IHitIndicator
@@ -25,6 +27,9 @@ from gui.impl.gen import R
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
+from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from items.vehicles import VehicleDescriptor
 _DAMAGE_INDICATOR_SWF = 'battleDamageIndicatorApp.swf'
 _DAMAGE_INDICATOR_COMPONENT = 'WGHitIndicatorFlash'
 _DAMAGE_INDICATOR_MC_NAME = '_root.dmgIndicator.hit_{0}'
@@ -458,6 +463,7 @@ class SixthSenseIndicator(SixthSenseMeta):
                     self.__detectionSoundEvent.restart()
                 else:
                     self.__detectionSoundEvent.play()
+                self.sessionProvider.shared.optionalDevices.soundManager.playLightbulbEffect()
             self.as_showS()
             self.__callbackID = BigWorld.callback(GUI_SETTINGS.sixthSenseDuration / 1000.0, self.__hide)
             return
@@ -505,13 +511,12 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         super(SiegeModeIndicator, self).__init__()
         self._isEnabled = False
         self._siegeState = _SIEGE_STATE.DISABLED
-        self._devices = {'engine': 'normal',
-         'leftTrack': 'normal',
-         'rightTrack': 'normal'}
+        self._devices = {}
         self._switchTime = 0.0
         self._startTime = BigWorld.serverTime()
         self._switchTimeTable = {}
         self._siegeComponent = None
+        self._deviceStateConverter = lambda s, dn: s
         return
 
     def _populate(self):
@@ -549,39 +554,35 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
 
     def __updateIndicatorView(self, isSmooth=False):
         LOG_DEBUG('Updating siege mode: indicator')
-        engineState = self._devices['engine']
+        engineState = self._devices.get('engine', DEVICE_STATE_NORMAL)
         totalTime = self._switchTimeTable[self._siegeState][engineState]
         self._siegeComponent.invalidate(totalTime, self._switchTime, self._siegeState, engineState, isSmooth)
 
     def __updateDevicesView(self):
+        if self._siegeComponent.staticMode or not self._devices:
+            return
         LOG_DEBUG('Updating siege mode: devices')
-        engine = self._devices['engine']
-        leftTrack = self._devices['leftTrack']
-        rightTrack = self._devices['rightTrack']
-        if DEVICE_STATES_RANGE.index(leftTrack) > DEVICE_STATES_RANGE.index(rightTrack):
-            chassis = leftTrack
-        else:
-            chassis = rightTrack
-        if chassis == 'critical':
-            chassis = 'normal'
-        if DEVICE_STATES_RANGE.index(chassis) > DEVICE_STATES_RANGE.index(engine):
-            deviceName, deviceState = 'chassis', chassis
-        else:
-            deviceName, deviceState = 'engine', engine
-        if not self._siegeComponent.staticMode:
-            self.as_updateDeviceStateS(deviceName, deviceState)
+        device = max(self._devices.items(), key=self.__getDeviceStateLevel)
+        deviceName, deviceState = device
+        if deviceName in VEHICLE_DEVICE_IN_COMPLEX_ITEM:
+            deviceName = VEHICLE_DEVICE_IN_COMPLEX_ITEM[deviceName]
+        self.as_updateDeviceStateS(deviceName, deviceState)
 
     def __onVehicleControlling(self, vehicle):
         vStateCtrl = self.sessionProvider.shared.vehicleState
         vTypeDesc = vehicle.typeDescriptor
         vType = vTypeDesc.type
-        if vehicle.isAlive() and vTypeDesc.hasSiegeMode and not vTypeDesc.isWheeledVehicle and not vTypeDesc.type.isDualgunVehicleType:
+        if vehicle.isAlive() and vTypeDesc.hasSiegeMode and (vTypeDesc.hasTurboshaftEngine or vTypeDesc.hasHydraulicChassis or vTypeDesc.hasAutoSiegeMode):
             siegeModeParams = vType.siegeModeParams
+            uiType = self.__getUIType(vTypeDesc)
+            self.as_setSiegeModeTypeS(uiType)
             self._siegeComponent.staticMode = vTypeDesc.hasAutoSiegeMode
             self._switchTimeTable.update({_SIEGE_STATE.DISABLED: siegeModeParams[_SIEGE_STATE.SWITCHING_ON],
              _SIEGE_STATE.SWITCHING_ON: siegeModeParams[_SIEGE_STATE.SWITCHING_ON],
              _SIEGE_STATE.ENABLED: siegeModeParams[_SIEGE_STATE.SWITCHING_OFF],
              _SIEGE_STATE.SWITCHING_OFF: siegeModeParams[_SIEGE_STATE.SWITCHING_OFF]})
+            self._devices = self.__createDevicesMap(vTypeDesc)
+            self._deviceStateConverter = self.__getDeviceStateConverter(vTypeDesc)
             self._isEnabled = True
             for stateID in (VEHICLE_VIEW_STATE.DEVICES, VEHICLE_VIEW_STATE.SIEGE_MODE):
                 value = vStateCtrl.getStateValue(stateID)
@@ -597,18 +598,14 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
             self.__updateDevicesView()
         else:
             self._siegeState = _SIEGE_STATE.DISABLED
-            for deviceName in self._devices:
-                self._devices[deviceName] = 'normal'
-
+            self.__resetDevices()
             self._isEnabled = False
         self.as_setVisibleS(self._isEnabled)
         return
 
     def __onVehicleStateUpdated(self, state, value):
         if state == VEHICLE_VIEW_STATE.SWITCHING:
-            self._devices = {'engine': 'normal',
-             'leftTrack': 'normal',
-             'rightTrack': 'normal'}
+            self.__resetDevices()
         else:
             if not self._isEnabled:
                 return
@@ -620,10 +617,6 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
                 self.__updateDestroyed(value)
             elif state == VEHICLE_VIEW_STATE.CREW_DEACTIVATED:
                 self.__updateDestroyed(value)
-            elif state == VEHICLE_VIEW_STATE.SWITCHING:
-                self._devices = {'engine': 'normal',
-                 'leftTrack': 'normal',
-                 'rightTrack': 'normal'}
 
     def __onCrosshairPositionChanged(self, *args):
         if not self._isEnabled:
@@ -649,13 +642,55 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         self.__updateIndicatorView(isSmooth)
 
     def __updateDevicesState(self, deviceName, _, realState):
-        if deviceName in ('engine', 'leftTrack', 'rightTrack'):
-            self._devices[deviceName] = realState
+        if deviceName in self._devices:
+            self._devices[deviceName] = self._deviceStateConverter(deviceName, realState)
             self.__updateDevicesView()
 
     def __updateDestroyed(self, _):
         self._isEnabled = False
         self.as_setVisibleS(False)
+
+    def __resetDevices(self):
+        for deviceName in self._devices:
+            self._devices[deviceName] = DEVICE_STATE_NORMAL
+
+    @classmethod
+    def __getDeviceStateConverter(cls, vTypeDesc):
+        if vTypeDesc.hasHydraulicChassis or vTypeDesc.hasAutoSiegeMode:
+            return cls.__hydraulicDeviceStateConverter
+        if vTypeDesc.hasTurboshaftEngine:
+            return cls.__turboshaftDeviceStateConverter
+        raise SoftException("Can't get device state converter for siege mode")
+
+    @staticmethod
+    def __hydraulicDeviceStateConverter(deviceName, state):
+        return DEVICE_STATE_NORMAL if state == DEVICE_STATE_CRITICAL and deviceName in ('leftTrack', 'rightTrack') else state
+
+    @staticmethod
+    def __turboshaftDeviceStateConverter(deviceName, state):
+        return DEVICE_STATE_NORMAL if state == DEVICE_STATE_CRITICAL and deviceName == 'engine' else state
+
+    @staticmethod
+    def __getUIType(vTypeDesc):
+        if vTypeDesc.hasHydraulicChassis or vTypeDesc.hasAutoSiegeMode:
+            return SIEGE_MODE_CONSTS.HYDRAULIC_CHASSIS_TYPE
+        if vTypeDesc.hasTurboshaftEngine:
+            return SIEGE_MODE_CONSTS.TURBOSHAFT_ENGINE_TYPE
+        raise SoftException("Can't get UI siege mode type")
+
+    @staticmethod
+    def __createDevicesMap(vTypeDesc):
+        if vTypeDesc.hasHydraulicChassis or vTypeDesc.hasAutoSiegeMode:
+            deviceNames = ('engine', 'leftTrack', 'rightTrack')
+        elif vTypeDesc.hasTurboshaftEngine:
+            deviceNames = ('engine',)
+        else:
+            raise SoftException("Can't create updatable devices")
+        return {name:DEVICE_STATE_NORMAL for name in deviceNames}
+
+    @staticmethod
+    def __getDeviceStateLevel(device):
+        return DEVICE_STATES_RANGE.index(device[1])
 
 
 class IDirectionIndicator(object):

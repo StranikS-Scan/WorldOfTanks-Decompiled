@@ -22,10 +22,11 @@ class DemountOpDevDialog(BaseItemDialog):
     _wallet = dependency.descriptor(IWalletController)
     _itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, compDescr):
+    def __init__(self, compDescr, forFitting=False):
         settings = ViewSettings(layoutID=R.views.lobby.demountkit.DemountWindow(), flags=ViewFlags.TOP_WINDOW_VIEW, model=SelectorDialogModel())
         super(DemountOpDevDialog, self).__init__(settings, compDescr)
         self.removalPrice = self._item.getRemovalPrice(self._itemsCache.items)
+        self.__forFitting = forFitting
 
     @property
     def viewModel(self):
@@ -118,8 +119,11 @@ class DemountOpDevDialog(BaseItemDialog):
         super(DemountOpDevDialog, self)._setBaseParams(model)
         dk = self._goodiesCache.getDemountKit()
         goldEnought = self._isGoldEnought()
-        model.setTitleBody(R.strings.demount_kit.equipmentDemount.confirmation())
-        self._setTitleArgs(self.viewModel.getTitleArgs(), (('equipment', R.strings.artefacts.dyn(self._item.name).name()),))
+        if self.__forFitting:
+            model.setTitleBody(R.strings.demount_kit.equipmentDemount.confirmationForFitting())
+        else:
+            model.setTitleBody(R.strings.demount_kit.equipmentDemount.confirmation())
+        self._setTitleArgs(self.viewModel.getTitleArgs(), (('equipment', self._item.userName),))
         model.setAcceptButtonText(R.strings.menu.moduleFits.removeName())
         model.setCancelButtonText(R.strings.dialogs.confirmBuyAndInstall.cancel())
         model.setDescription(R.strings.demount_kit.equipmentDemount.confirmation.description())

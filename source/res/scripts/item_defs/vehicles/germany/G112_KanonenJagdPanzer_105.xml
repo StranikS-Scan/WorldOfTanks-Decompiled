@@ -6,6 +6,7 @@
     <gunner></gunner>
     <loader></loader>
   </crew>
+  <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
     <forward>	70	</forward>
     <backward>	20	</backward>
@@ -14,9 +15,16 @@
     <moving>	0.248	</moving>
     <still>	0.414	</still>
     <camouflageBonus>	0.04	</camouflageBonus>
-    <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.621	</firePenalty>
   </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.15 0.175	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.05 0.06	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+  </optDevsOverrides>
   <repairCost>	6.0	</repairCost>
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -2594,7 +2602,6 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <gunShotOffset>	0.000000 0.000000 0.000000	</gunShotOffset>
     </Turret_1_G112_KanonenJagdPanzer_105>
   </turrets0>
   <engines>

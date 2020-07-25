@@ -50,8 +50,8 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
         self.__plugins = None
         return
 
-    def onMinimapClicked(self, x, y, buttonIdx):
-        self.__plugins.onMinimapClicked(x, y, buttonIdx)
+    def onMinimapClicked(self, x, y, buttonIdx, minimapScaleIndex):
+        self.__plugins.onMinimapClicked(x, y, buttonIdx, minimapScaleIndex)
 
     def applyNewSize(self, sizeIndex):
         if self.__plugins is not None:
@@ -222,8 +222,8 @@ class MinimapPluginsCollection(PluginsCollection):
         super(MinimapPluginsCollection, self).stop()
         return
 
-    def onMinimapClicked(self, x, y, buttonIdx):
-        self._invoke('onMinimapClicked', x, y, buttonIdx)
+    def onMinimapClicked(self, x, y, buttonIdx, minimapScaleIndex):
+        self._invoke('onMinimapClicked', x, y, buttonIdx, minimapScaleIndex)
 
     def applyNewSize(self, sizeIndex):
         self._invoke('applyNewSize', sizeIndex)

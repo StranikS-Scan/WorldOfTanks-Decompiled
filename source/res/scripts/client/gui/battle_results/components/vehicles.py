@@ -224,7 +224,7 @@ class RegularVehicleStatValuesBlock(base.StatsBlock):
         if self.__rawStunNum == 0:
             self.addFilters(_STAT_STUN_FIELD_NAMES)
         self.shots = style.getIntegralFormatIfNoEmpty(result.shots)
-        self.hits = (result.directHits, result.piercings)
+        self.hits = (result.directEnemyHits, result.piercingEnemyHits)
         self.explosionHits = style.getIntegralFormatIfNoEmpty(result.explosionHits)
         self.damageDealt = style.getIntegralFormatIfNoEmpty(result.damageDealt)
         self.sniperDamageDealt = style.getIntegralFormatIfNoEmpty(result.sniperDamageDealt)
@@ -294,7 +294,7 @@ class EpicVehicleStatValuesBlock(base.StatsBlock):
         if self.__rawStunNum == 0:
             self.addFilters(_STAT_STUN_FIELD_NAMES)
         self.shots = style.getIntegralFormatIfNoEmpty(result.shots)
-        self.hits = (result.directHits, result.piercings)
+        self.hits = (result.directEnemyHits, result.piercingEnemyHits)
         self.explosionHits = style.getIntegralFormatIfNoEmpty(result.explosionHits)
         self.damageDealt = style.getIntegralFormatIfNoEmpty(result.damageDealt)
         self.sniperDamageDealt = style.getIntegralFormatIfNoEmpty(result.sniperDamageDealt)

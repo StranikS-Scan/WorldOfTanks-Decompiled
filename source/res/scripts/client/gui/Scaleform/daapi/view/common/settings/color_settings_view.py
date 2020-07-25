@@ -16,6 +16,7 @@ from gui.shared.events import GameEvent
 from gui.shared.formatters import text_styles
 from gui.shared.utils import flashObject2Dict, graphics
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
+from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency, i18n
 from skeletons.account_helpers.settings_core import ISettingsCore
 
@@ -40,6 +41,8 @@ class ColorSettingsView(ColorSettingsViewMeta):
         self.__tabsPreviewSettings = self.__getLastAppliedTabsSettings()
         if self.__selectedTabIdx == TABS.CUSTOM:
             self.__showColorPreviewFilter()
+        self.__blur = None
+        return
 
     def setViewWidth(self, width):
         self.__componentWidth = width
@@ -133,6 +136,7 @@ class ColorSettingsView(ColorSettingsViewMeta):
          'saturationLabel': i18n.makeString(SETTINGS.COLORSETTINGS_TAB_CUSTOMSETTINGS_SATURATION),
          'resetLabel': i18n.makeString(SETTINGS.COLORSETTINGS_VIEW_RESETBTN)})
         self.as_updateDataS(self.__selectedTabIdx, self.__initSettings)
+        self.__blur = CachedBlur(enabled=False)
         return
 
     def _dispose(self):
@@ -147,6 +151,8 @@ class ColorSettingsView(ColorSettingsViewMeta):
         if self.__initSettings is not None:
             self.__initSettings.clear()
             self.__initSettings = None
+        if self.__blur is not None:
+            self.__blur.fini()
         super(ColorSettingsView, self)._dispose()
         return
 

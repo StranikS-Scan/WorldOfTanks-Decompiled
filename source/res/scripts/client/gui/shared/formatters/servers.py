@@ -1,7 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/formatters/servers.py
-import constants
-from gui import makeHtmlString
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.formatters import icons
 from gui.shared.formatters import text_styles
@@ -31,7 +29,3 @@ def formatPingStatus(csisStatus, isColorBlind, isSelected, pingStatus, pingValue
 def makePingStatusIcon(pingStatus, colorBlindName=''):
     icon = RES_ICONS.pingStatusIcon(str(pingStatus), colorBlindName)
     return icons.makeImageTag(icon, 14, 14, -3)
-
-
-def wrapServerName(name):
-    return makeHtmlString('html_templates:lobby/serverStats', 'serverName', {'name': name}) if constants.IS_CHINA else name

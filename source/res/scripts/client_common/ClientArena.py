@@ -313,7 +313,8 @@ class ClientArena(object):
          'wtr': int(info[20]),
          'fakeName': info[21],
          'badges': info[22],
-         'overriddenBadge': info[23]}
+         'overriddenBadge': info[23],
+         'maxHealth': info[24]}
         return (info[0], infoAsDict)
 
     def __getVehicleType(self, intCD):

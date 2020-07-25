@@ -1,19 +1,26 @@
 <battle_boosters.xml>
-  <toolboxBattleBooster>
+  <improvedConfigurationBattleBooster>
     <id>	103	</id>
-    <userString>	#artefacts:toolboxBattleBooster/name	</userString>
-    <description>	#artefacts:toolboxBattleBooster/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:toolboxBattleBooster/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:toolboxBattleBooster/long_special	</longDescriptionSpecial>
-    <icon>	toolbox 0 0	</icon>
+    <userString>	#artefacts:improvedConfigurationBattleBooster/name	</userString>
+    <description>	#artefacts:improvedConfigurationBattleBooster/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:improvedConfigurationBattleBooster/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:improvedConfigurationBattleBooster/long_special	</longDescriptionSpecial>
+    <icon>	improvedConfiguration 0 0	</icon>
     <price>	6	  <crystal></crystal>
     </price>
     <type>	battleBoosters	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	5	</minLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
     <tags>	notForSale equipmentBattleBooster armor	</tags>
     <script>	FactorBattleBooster	  <level>
         <deviceFilter>
           <tags>
-            <required>	toolbox	</required>
+            <required>	improvedConfiguration	</required>
             <incompatible>	deluxe	</incompatible>
           </tags>
         </deviceFilter>
@@ -23,7 +30,7 @@
       <level>
         <deviceFilter>
           <tags>
-            <required>	toolbox deluxe	</required>
+            <required>	improvedConfiguration deluxe	</required>
           </tags>
         </deviceFilter>
         <attribute>	repairSpeed	</attribute>
@@ -36,7 +43,7 @@
         <value>	1.1	</value>
       </mul>
     </kpi>
-  </toolboxBattleBooster>
+  </improvedConfigurationBattleBooster>
   <improvedVentilationBattleBooster>
     <id>	104	</id>
     <userString>	#artefacts:improvedVentilationBattleBooster/name	</userString>
@@ -95,7 +102,7 @@
     <vehicleFilter>
       <include>
         <vehicle>
-          <tags>	mediumCaliberTankRammer_user largeCaliberTankRammer_user mediumCaliberHowitzerRammer_user largeCaliberHowitzerRammer_user	</tags>
+          <tags>	tankRammer_class1_user tankRammer_class2_user	</tags>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -187,7 +194,7 @@
     <vehicleFilter>
       <include>
         <vehicle>
-          <tags>	aimingStabilizer_Mk1_user aimingStabilizer_Mk2_user	</tags>
+          <tags>	aimingStabilizer_class1_user aimingStabilizer_class2_user	</tags>
         </vehicle>
       </include>
     </vehicleFilter>

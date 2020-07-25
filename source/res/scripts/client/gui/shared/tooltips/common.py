@@ -42,7 +42,7 @@ from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import TOKEN_SIZES, DISCOUNT_TYPE
 from gui.shared.formatters import formatActionPrices
 from gui.shared.formatters import icons, text_styles
-from gui.shared.formatters.servers import formatPingStatus, wrapServerName
+from gui.shared.formatters.servers import formatPingStatus
 from gui.shared.formatters.text_styles import concatStylesToMultiLine
 from gui.shared.formatters.time_formatters import getTimeLeftStr, getTillTimeByResource
 from gui.shared.gui_items import GUI_ITEM_TYPE, ACTION_ENTITY_ITEM
@@ -531,7 +531,7 @@ class SettingsButtonTooltipData(BlocksTooltipData):
         simpleHostList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming())
         isColorBlind = self.settingsCore.getSetting('isColorBlind')
         if self.connectionMgr.peripheryID == 0:
-            serverBlocks.append(self.__packServerBlock(wrapServerName(self.connectionMgr.serverUserName), self.__getPingData(self.connectionMgr.url), HOST_AVAILABILITY.IGNORED, True, isColorBlind))
+            serverBlocks.append(self.__packServerBlock(self.connectionMgr.serverUserName, self.__getPingData(self.connectionMgr.url), HOST_AVAILABILITY.IGNORED, True, isColorBlind))
         if simpleHostList:
             currServUrl = self.connectionMgr.url
             serverBlocks.append(self.__packServerListBlock(simpleHostList, currServUrl, isColorBlind))
@@ -1030,23 +1030,11 @@ def getFormattedPriceString(price, currencySetting, neededValue=None):
 
 def getFormattedNeededValue(settings, neededValue):
     needFormatted = settings.textStyle(neededValue)
-    neededText = text_styles.concatStylesToSingleLine(text_styles.standard(_PARENTHESES_OPEN), text_styles.error(backport.text(R.strings.tooltips.vehicle.graph.body.notEnough())), _SPACE, needFormatted, _SPACE, settings.icon, text_styles.standard(_PARENTHESES_CLOSE))
+    neededText = text_styles.concatStylesToSingleLine(text_styles.standard(_PARENTHESES_OPEN), _SPACE, text_styles.error(backport.text(R.strings.tooltips.vehicle.graph.body.notEnough())), _SPACE, needFormatted, settings.icon, text_styles.standard(_PARENTHESES_CLOSE))
     return neededText
 
 
-def getFormattedDiscountPriceString(currencySetting, percent, oldPrice):
-    _int = backport.getIntegralFormat
-    settings = _getCurrencySetting(currencySetting)
-    if settings is None:
-        return
-    else:
-        icon = settings.icon
-        oldPriceText = text_styles.concatStylesToSingleLine(settings.textStyle(_int(oldPrice)), icon)
-        text = text_styles.standard(backport.text(R.strings.tooltips.vehicle.action_prc(), actionPrc=text_styles.stats(str(percent) + '%'), oldPrice=oldPriceText))
-        return text
-
-
-def makePriceBlock(price, currencySetting, neededValue=None, oldPrice=None, percent=0, valueWidth=-1, leftPadding=61, forcedText=''):
+def makePriceBlock(price, currencySetting, neededValue=None, oldPrice=None, percent=0, valueWidth=-1, leftPadding=61, forcedText='', iconRightOffset=-1):
     _int = backport.getIntegralFormat
     oldPriceText = ''
     hasAction = percent != 0
@@ -1071,9 +1059,45 @@ def makePriceBlock(price, currencySetting, neededValue=None, oldPrice=None, perc
             oldPrice = Money(credits=oldPrice)
         return formatters.packSaleTextParameterBlockData(name=text, saleData={'newPrice': newPrice.toMoneyTuple(),
          'oldPrice': oldPrice.toMoneyTuple(),
-         'valuePadding': -8}, actionStyle='alignTop', padding=formatters.packPadding(left=leftPadding), currency=newPrice.getCurrency())
+         'valuePadding': -2}, actionStyle='alignTop', padding=formatters.packPadding(left=leftPadding), currency=newPrice.getCurrency())
     else:
-        return formatters.packTextParameterWithIconBlockData(name=text, value=valueFormatted, icon=settings.frame, valueWidth=valueWidth, padding=formatters.packPadding(left=-5))
+        return formatters.packTextParameterWithIconBlockData(name=text, value=valueFormatted, icon=settings.frame, valueWidth=valueWidth, padding=formatters.packPadding(left=-5), nameOffset=iconRightOffset, gap=0)
+
+
+def makeRemovalPriceBlock(price, currencySetting, neededValue=None, oldPrice=None, percent=0, valueWidth=-1, leftPadding=61, forcedText='', isDeluxe=False, gap=15):
+    _int = backport.getIntegralFormat
+    settings = _getCurrencySetting(currencySetting)
+    if settings is None:
+        return
+    icon = settings.icon
+    countFormatted = text_styles.concatStylesWithSpace(settings.textStyle(_int(price)), icon)
+    dkCount = text_styles.demountKitText('1')
+    dkIcon = icons.demountKit()
+    dkText = text_styles.concatStylesWithSpace(dkCount, dkIcon)
+    descr = R.strings.demount_kit.equipmentInstall
+    if isDeluxe:
+        dynAccId = descr.demount()
+    else:
+        dynAccId = descr.demountOr()
+    valueFormatted = backport.text(dynAccId, count=countFormatted, countDK=text_styles.main(dkText))
+    neededText = getFormattedNeededValue(settings, _int(neededValue)) if neededValue else ''
+    text = text_styles.concatStylesWithSpace(text_styles.main(settings.text if not forcedText else forcedText), neededText)
+    if percent != 0:
+        oldPriceText = text_styles.concatStylesToSingleLine(icon, settings.textStyle(_int(oldPrice)))
+        actionText = text_styles.main(makeString(TOOLTIPS.VEHICLE_ACTION_PRC, actionPrc=text_styles.stats(str(percent) + '%'), oldPrice=oldPriceText))
+        text = text_styles.concatStylesToMultiLine(text, actionText)
+        settingsFrame = settings.frame
+        if settingsFrame in Currency.ALL:
+            newPrice = MONEY_UNDEFINED.replace(settingsFrame, price)
+            oldPrice = MONEY_UNDEFINED.replace(settingsFrame, oldPrice)
+        else:
+            newPrice = Money(credits=price)
+            oldPrice = Money(credits=oldPrice)
+        return formatters.packSaleTextParameterBlockData(name=text, saleData={'newPrice': newPrice.toMoneyTuple(),
+         'oldPrice': oldPrice.toMoneyTuple(),
+         'valuePadding': -2}, actionStyle='alignTop', padding=formatters.packPadding(left=leftPadding), currency=newPrice.getCurrency())
+    else:
+        return formatters.packTextParameterBlockData(name=text, value=valueFormatted, valueWidth=valueWidth, gap=gap, padding=formatters.packPadding(left=-5))
 
 
 def makeCompoundPriceBlock(currencySetting, itemPrice, blockWidth=150, forcedText=''):

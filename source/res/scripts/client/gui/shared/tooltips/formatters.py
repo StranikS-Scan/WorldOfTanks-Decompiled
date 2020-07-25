@@ -56,10 +56,10 @@ def packTextWithBgBlockData(text, useHtml=True, linkage=BLOCKS_TOOLTIP_TYPES.TOO
      'align': align}, padding)
 
 
-def packAlignedTextBlockData(text, align, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_BLOCK_LINKAGE, padding=None):
+def packAlignedTextBlockData(text, align, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_BLOCK_LINKAGE, padding=None, blockWidth=0):
     return packBlockDataItem(linkage, {'text': makeHtmlString('html_templates:lobby/textStyle', 'alignText', {'align': align,
               'message': text}),
-     'useHtml': True}, padding)
+     'useHtml': True}, padding, blockWidth)
 
 
 def packTextParameterBlockData(name, value, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_PARAMETER_BLOCK_LINKAGE, valueWidth=-1, gap=5, padding=None, highlight=False):
@@ -72,6 +72,30 @@ def packTextParameterBlockData(name, value, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP
     if highlight:
         data['highlight'] = True
     return packBlockDataItem(linkage, data, padding)
+
+
+def packOptDeviceSlotBlockData(imagePath, slotState, showSlotHighlight=False, showUpArrow=False, slotAlpha=1, slotSpecs=None, deviceSpecs=None, specsGap=-26, slotSpecsOffset=-10, deviceSpecsOffset=-40, padding=None, overlayPath=None, overlayPadding=None, highlightPath=None, highlightPadding=None):
+    data = {'imagePath': imagePath,
+     'slotState': slotState,
+     'showSlotHighlight': bool(showSlotHighlight),
+     'showUpArrow': showUpArrow,
+     'slotAlpha': slotAlpha,
+     'specsGap': specsGap,
+     'slotSpecsOffset': slotSpecsOffset,
+     'deviceSpecsOffset': deviceSpecsOffset}
+    if slotSpecs:
+        data['slotSpecs'] = slotSpecs
+    if deviceSpecs:
+        data['deviceSpecs'] = deviceSpecs
+    if overlayPath is not None:
+        data['overlayPath'] = overlayPath
+        if overlayPadding is not None:
+            data['overlayPadding'] = overlayPadding
+    if highlightPath is not None:
+        data['highlightPath'] = highlightPath
+        if highlightPadding is not None:
+            data['highlightPadding'] = highlightPadding
+    return packBlockDataItem(BLOCKS_TOOLTIP_TYPES.TOOLTIP_OPT_DEVICE_SLOT_BLOCK, data, padding)
 
 
 def packTextParameterWithIconBlockData(name, value, icon, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_PARAMETER_WITH_ICON_BLOCK_LINKAGE, valueWidth=-1, gap=5, nameOffset=-1, padding=None, iconYOffset=None):
@@ -390,7 +414,7 @@ def packItemRentActionTooltipData(item, rentPackage):
 
 
 def packImageListParameterBlockData(listIconSrc, columnWidth, rowHeight, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TILE_LIST_BLOCK_LINKAGE, padding=None, verticalGap=0, horizontalGap=0):
-    return packBlockDataItem(linkage, {'dataType': 'String',
+    return packBlockDataItem(linkage, {'dataType': 'net.wg.gui.data.ImageRendererVO',
      'rendererType': 'ImageRendererUI',
      'listIconSrc': listIconSrc,
      'columnWidth': columnWidth,
@@ -524,3 +548,8 @@ def packCustomizationCharacteristicBlockData(icon, text, linkage=BLOCKS_TOOLTIP_
      'isTextIcon': isTextIcon,
      'isWideOffset': isWideOffset}
     return packBlockDataItem(linkage, data, padding)
+
+
+def packImageListIconData(imgSrc, imgAlpha=1):
+    return {'imgSrc': imgSrc,
+     'imgAlpha': imgAlpha}

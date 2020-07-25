@@ -5609,14 +5609,14 @@
           <speed>	600	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	100 100	</piercingPower>
+          <piercingPower>	110 110	</piercingPower>
         </_105mm_OCO_mle._1936_SH>
         <_105mm_APCR_OFL_SH>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	900	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	130 130	</piercingPower>
+          <piercingPower>	140 130	</piercingPower>
         </_105mm_APCR_OFL_SH>
       </shots>
     </Canon_de_105_court_mle_1934S_SH>
@@ -5660,14 +5660,14 @@
           <speed>	600	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	130 130	</piercingPower>
+          <piercingPower>	150 150	</piercingPower>
         </_75mm_OCO_mle._1926_SH>
         <_75mm_FrtPrf1946_SH>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	900	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	170 158	</piercingPower>
+          <piercingPower>	200 186	</piercingPower>
         </_75mm_FrtPrf1946_SH>
       </shots>
     </Canon_de_75mm_Vo_920_m_s_dualgun_SH>
@@ -5684,7 +5684,7 @@
         <recoilEffect>	large	</recoilEffect>
       </recoil>
       <effects>	shot_main_mb	</effects>
-      <reloadEffect>	reload85_107	</reloadEffect>
+      <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -28.0 1.0 -28.0	</minPitch>
         <maxPitch>	0.0 7.0 1.0 7.0	</maxPitch>
@@ -5711,14 +5711,14 @@
           <speed>	600	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	130 130	</piercingPower>
+          <piercingPower>	150 150	</piercingPower>
         </_90mm_OCC_90_SH>
         <_90mm_FrtPrf1945_SH>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	800	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	170 158	</piercingPower>
+          <piercingPower>	200 186	</piercingPower>
         </_90mm_FrtPrf1945_SH>
       </shots>
     </_90mm_F3M_SH>
@@ -5762,14 +5762,14 @@
           <speed>	900	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	200 200	</piercingPower>
+          <piercingPower>	210 210	</piercingPower>
         </_105mm_AP_OFL_SH>
         <_105mm_OFL_105_D1_SH>
           <defaultPortion>	0.0	</defaultPortion>
-          <speed>	900	</speed>
+          <speed>	1100	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	255 237	</piercingPower>
+          <piercingPower>	270 251	</piercingPower>
         </_105mm_OFL_105_D1_SH>
       </shots>
     </_105mm_CN_105_57_SH>
@@ -5813,14 +5813,14 @@
           <speed>	600	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	200 200	</piercingPower>
+          <piercingPower>	210 210	</piercingPower>
         </_90mm_HEAT_OCC_F1_SH>
         <_90mm_OFL_90_DS2_SH>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	900	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	255 237	</piercingPower>
+          <piercingPower>	270 251	</piercingPower>
         </_90mm_OFL_90_DS2_SH>
       </shots>
     </_90mm_canon_DCA_45_AC_A_dualgun_SH>
@@ -5837,7 +5837,7 @@
         <recoilEffect>	large	</recoilEffect>
       </recoil>
       <effects>	shot_large	</effects>
-      <reloadEffect>	reload115_152	</reloadEffect>
+      <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -28.0 1.0 -28.0	</minPitch>
         <maxPitch>	0.0 7.0 1.0 7.0	</maxPitch>
@@ -5859,20 +5859,20 @@
         <whileGunDamaged>	2.0	</whileGunDamaged>
       </shotDispersionFactors>
       <shots>
-        <_127mm_Capped_Common_Semi_AP_SH>
+        <_127mm_OE_127_Mle_55_SH>
           <defaultPortion>	0.90	</defaultPortion>
           <speed>	400	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	5 5	</piercingPower>
-        </_127mm_Capped_Common_Semi_AP_SH>
-        <_127mm_Common_HEAT_SH>
+          <piercingPower>	30 30	</piercingPower>
+        </_127mm_OE_127_Mle_55_SH>
+        <_127mm_OE_127_D_700_SH>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	600	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	30 30	</piercingPower>
-        </_127mm_Common_HEAT_SH>
+          <piercingPower>	55 55	</piercingPower>
+        </_127mm_OE_127_D_700_SH>
       </shots>
     </_127mm_54_Model_1948_SH>
   </shared>

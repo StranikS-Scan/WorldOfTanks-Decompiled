@@ -19,6 +19,9 @@ class UtilsManagerMeta(BaseDAAPIComponent):
     def mapScaleformToVirtualKey(self, inKey):
         self._printOverrideError('mapScaleformToVirtualKey')
 
+    def getCharFromVirtualKey(self, key):
+        self._printOverrideError('getCharFromVirtualKey')
+
     def getAbsoluteUrl(self, relativeUrl):
         self._printOverrideError('getAbsoluteUrl')
 

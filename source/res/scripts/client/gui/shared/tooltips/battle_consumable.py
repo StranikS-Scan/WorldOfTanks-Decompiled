@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/battle_consumable.py
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.formatters import text_styles
 from gui.shared.items_parameters import params_helper, formatters as params_formatters
 from gui.shared.tooltips import TOOLTIP_TYPE
@@ -72,9 +74,9 @@ class CommonStatsBlockConstructor(BattleConsumableTooltipBlockConstructor):
         params = params_helper.getParameters(self.item)
         paramsResult = params_formatters.getFormattedParamsList(self.item.descriptor, params)
         for paramName, paramValue in paramsResult:
-            block.append(self.__packParameterBloc(_ms('#menu:moduleInfo/params/' + paramName), paramValue, params_formatters.measureUnitsForParameter(paramName)))
+            block.append(self.__packParameterBloc(backport.text(R.strings.menu.moduleInfo.params.dyn(paramName)()), paramValue, params_formatters.measureUnitsForParameter(paramName)))
 
         return block
 
     def __packParameterBloc(self, name, value, measureUnits):
-        return formatters.packTextParameterBlockData(name=text_styles.main(name) + text_styles.standard(measureUnits), value=text_styles.stats(value), valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5))
+        return formatters.packTextParameterBlockData(name=text_styles.concatStylesWithSpace(text_styles.main(name), text_styles.standard(measureUnits)), value=text_styles.stats(value), valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5))

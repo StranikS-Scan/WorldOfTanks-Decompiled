@@ -6,6 +6,7 @@
     <driver></driver>
     <loader>	radioman	</loader>
   </crew>
+  <supplySlots>	1 6 8 8 8	</supplySlots>
   <speedLimits>
     <forward>	50	</forward>
     <backward>	14	</backward>
@@ -14,9 +15,16 @@
     <moving>	0.217	</moving>
     <still>	0.362	</still>
     <camouflageBonus>	0.04	</camouflageBonus>
-    <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.543	</firePenalty>
   </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.15 0.175	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.05 0.06	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+  </optDevsOverrides>
   <repairCost>	4.0	</repairCost>
   <premiumVehicleXPFactor>	0.6	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>

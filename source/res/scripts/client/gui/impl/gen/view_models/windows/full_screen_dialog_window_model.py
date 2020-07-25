@@ -5,9 +5,9 @@ from gui.impl.gen import R
 from frameworks.wulf import ViewModel
 
 class FullScreenDialogWindowModel(ViewModel):
-    __slots__ = ('onAcceptClicked', 'onCancelClicked')
+    __slots__ = ('onAcceptClicked', 'onCancelClicked', 'onExit')
 
-    def __init__(self, properties=10, commands=2):
+    def __init__(self, properties=10, commands=3):
         super(FullScreenDialogWindowModel, self).__init__(properties=properties, commands=commands)
 
     def getDialogType(self):
@@ -84,3 +84,4 @@ class FullScreenDialogWindowModel(ViewModel):
         self._addResourceProperty('cancelButtonText', R.invalid())
         self.onAcceptClicked = self._addCommand('onAcceptClicked')
         self.onCancelClicked = self._addCommand('onCancelClicked')
+        self.onExit = self._addCommand('onExit')

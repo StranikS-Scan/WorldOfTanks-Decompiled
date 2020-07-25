@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.windows.full_screen_dialog_window_model import Ful
 class BuySellItemsDialogModel(FullScreenDialogWindowModel):
     __slots__ = ()
 
-    def __init__(self, properties=23, commands=2):
+    def __init__(self, properties=23, commands=3):
         super(BuySellItemsDialogModel, self).__init__(properties=properties, commands=commands)
 
     def getBackgroundImg(self):

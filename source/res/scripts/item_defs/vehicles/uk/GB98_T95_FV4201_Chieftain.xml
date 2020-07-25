@@ -6,6 +6,7 @@
     <gunner></gunner>
     <loader>	radioman	</loader>
   </crew>
+  <supplySlots>	5 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
     <forward>	46	</forward>
     <backward>	15	</backward>
@@ -14,9 +15,16 @@
     <moving>	0.06	</moving>
     <still>	0.12	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
-    <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.18	</firePenalty>
   </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.05 0.075	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.03 0.04	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+  </optDevsOverrides>
   <repairCost>	13.00	</repairCost>
   <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -86,8 +94,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.0177606 0.120068 2.9415	</rayStart>
-        <rayEnd>	0.0177606 -0.0611964 2.85698	</rayEnd>
+        <rayStart>	-0.00824837 0.102047 2.98006	</rayStart>
+        <rayEnd>	-0.00824837 -0.0792506 2.89562	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>

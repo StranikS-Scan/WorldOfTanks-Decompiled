@@ -2,21 +2,24 @@
 # Embedded file name: scripts/client/gui/impl/lobby/demount_kit/optional_device_dialogs.py
 from frameworks.wulf import ViewSettings, ViewFlags
 from gui.goodies.goodie_items import DemountKit
+from gui.impl.gen.view_models.constants.item_highlight_types import ItemHighlightTypes
 from gui.impl.gen.view_models.views.lobby.demount_kit.optional_device_dialog_model import OptionalDeviceDialogModel
 from gui.impl.gen import R
 from gui.impl.lobby.demount_kit.item_price_dialog import ItemPriceDialog
 from gui.impl.lobby.dialogs.full_screen_dialog_view import DIALOG_TYPES
 from gui.shared import events
-from gui.shared.gui_items.gui_item_economics import ItemPrice
+from gui.shared.gui_items.fitting_item import SLOT_HIGHLIGHT_TO_ITEM_HIGHLIGHT_TYPES
+from gui.shared.gui_items.gui_item_economics import ItemPrice, ITEM_PRICE_ZERO
 from gui.shared.money import MONEY_UNDEFINED
 from helpers import dependency
 from skeletons.gui.goodies import IGoodiesCache
 
 class OpDevBaseDialog(ItemPriceDialog):
+    __slots__ = ()
 
-    def __init__(self, typeCompDescr):
+    def __init__(self, compDescr):
         settings = ViewSettings(layoutID=R.views.lobby.demountkit.CommonWindow(), flags=ViewFlags.TOP_WINDOW_VIEW, model=OptionalDeviceDialogModel())
-        super(OpDevBaseDialog, self).__init__(settings, typeCompDescr)
+        super(OpDevBaseDialog, self).__init__(settings, compDescr)
 
     @property
     def viewModel(self):
@@ -24,9 +27,9 @@ class OpDevBaseDialog(ItemPriceDialog):
 
     def _setBaseParams(self, model):
         super(OpDevBaseDialog, self)._setBaseParams(model)
-        self._setTitleArgs(model.getTitleArgs(), (('equipment', R.strings.artefacts.dyn(self._item.name).name()),))
+        self._setTitleArgs(model.getTitleArgs(), (('equipment', self._item.userName),))
         if model.getDialogType() == DIALOG_TYPES.SIMPLE:
-            model.setSpecialType(self._item.getOverlayType())
+            model.setSpecialType(SLOT_HIGHLIGHT_TO_ITEM_HIGHLIGHT_TYPES.get(self._item.getOverlayType(), ItemHighlightTypes.EMPTY))
             model.setImage(R.images.gui.maps.shop.artefacts.c_180x135.dyn(self._item.descriptor.iconName)())
         model.setCancelButtonText(R.strings.dialogs.confirmBuyAndInstall.cancel())
 
@@ -48,7 +51,12 @@ class DestroyOpDevDialog(OpDevBaseDialog):
 
 
 class DemountOpDevSinglePriceDialog(OpDevBaseDialog):
+    __slots__ = ('__forFitting',)
     _goodiesCache = dependency.descriptor(IGoodiesCache)
+
+    def __init__(self, compDescr, forFitting=False):
+        super(DemountOpDevSinglePriceDialog, self).__init__(compDescr)
+        self.__forFitting = forFitting
 
     def _onInventoryResync(self, *args, **kwargs):
         dk = self._goodiesCache.getDemountKit()
@@ -67,7 +75,10 @@ class DemountOpDevSinglePriceDialog(OpDevBaseDialog):
 
     def _setBaseParams(self, model):
         super(DemountOpDevSinglePriceDialog, self)._setBaseParams(model)
-        model.setTitleBody(R.strings.demount_kit.equipmentDemount.confirmation())
+        if self.__forFitting:
+            model.setTitleBody(R.strings.demount_kit.equipmentDemount.confirmationForFitting())
+        else:
+            model.setTitleBody(R.strings.demount_kit.equipmentDemount.confirmation())
         model.setDescription(R.strings.demount_kit.equipmentDemount.confirmation.description())
         model.setPriceDescription(R.strings.demount_kit.equipmentDemountPrice())
         model.setAcceptButtonText(R.strings.demount_kit.demountConfirmation.submit())
@@ -120,3 +131,25 @@ class BuyAndStorageOpDevDialog(OpDevBaseDialog):
         model.setDescription(R.strings.dialogs.buyInstallConfirmation.notEnoughWeight())
         model.setPriceDescription(R.strings.dialogs.equipmentBuyInstall.price())
         model.setAcceptButtonText(R.strings.dialogs.buyConfirmation.submit())
+
+
+class DemountIncompatibleOpDevDialog(OpDevBaseDialog):
+    __slots__ = ('__forFitting',)
+
+    def __init__(self, compDescr, forFitting=False):
+        super(DemountIncompatibleOpDevDialog, self).__init__(compDescr)
+        self.__forFitting = forFitting
+
+    @property
+    def _price(self):
+        return ITEM_PRICE_ZERO
+
+    def _setBaseParams(self, model):
+        super(DemountIncompatibleOpDevDialog, self)._setBaseParams(model)
+        if self.__forFitting:
+            model.setTitleBody(R.strings.demount_kit.equipmentDemount.confirmationForFitting())
+        else:
+            model.setTitleBody(R.strings.demount_kit.equipmentDemount.confirmation())
+        model.setDescription(R.strings.demount_kit.equipmentDemount.confirmation.descriptionForInappropriateClass())
+        model.setAcceptButtonText(R.strings.demount_kit.demountConfirmation.submit())
+        model.setSpecialType(ItemHighlightTypes.INCOMPATIBLE_EQUIPMENT)

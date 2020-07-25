@@ -567,7 +567,7 @@ class VehicleStatePlugin(CrosshairPlugin):
         return
 
     def __onVehicleControlling(self, vehicle):
-        self.__maxHealth = vehicle.typeDescriptor.maxHealth
+        self.__maxHealth = vehicle.maxHealth
         self.__isPlayerVehicle = vehicle.isPlayerVehicle
         self.__setHealth(vehicle.health)
         self.__updateVehicleInfo()
@@ -893,7 +893,7 @@ class SiegeModePlugin(CrosshairPlugin):
         if ctrl.isInPostmortem:
             return
         else:
-            if vTypeDesc.hasSiegeMode and not vTypeDesc.isWheeledVehicle and not vTypeDesc.hasAutoSiegeMode and not vTypeDesc.type.isDualgunVehicleType:
+            if vTypeDesc.hasSiegeMode and vTypeDesc.hasHydraulicChassis:
                 value = ctrl.getStateValue(VEHICLE_VIEW_STATE.SIEGE_MODE)
                 if value is not None:
                     self.__onVehicleStateUpdated(VEHICLE_VIEW_STATE.SIEGE_MODE, value)
@@ -923,14 +923,19 @@ class SiegeModePlugin(CrosshairPlugin):
                 return
         else:
             return
+        self._parentObj.as_setNetSeparatorVisibleS(self.__siegeState == _SIEGE_STATE.DISABLED)
         if self.__siegeState == _SIEGE_STATE.ENABLED:
-            self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.SIEGE_MODE)
+            self._parentObj.as_setNetTypeS(self.__getEnabledNetType(vTypeDescr))
         elif self.__siegeState == _SIEGE_STATE.DISABLED:
             self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.DISABLED)
         visibleMask = CROSSHAIR_CONSTANTS.VISIBLE_NET if self.bootcampController.isInBootcamp() else CROSSHAIR_CONSTANTS.VISIBLE_ALL
         visibleMask = visibleMask if self.__siegeState not in _SIEGE_STATE.SWITCHING else CROSSHAIR_CONSTANTS.INVISIBLE
         self._parentObj.as_setNetVisibleS(visibleMask)
         return
+
+    @staticmethod
+    def __getEnabledNetType(vTypeDescr):
+        return NET_TYPE_OVERRIDE.DISABLED if vTypeDescr.hasTurboshaftEngine else NET_TYPE_OVERRIDE.SIEGE_MODE
 
 
 class ShotDonePlugin(CrosshairPlugin):

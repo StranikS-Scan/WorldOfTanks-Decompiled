@@ -7,5 +7,11 @@ class BattleHintPanelMeta(BaseDAAPIComponent):
     def onPlaySound(self, soundType):
         self._printOverrideError('onPlaySound')
 
+    def onHideComplete(self):
+        self._printOverrideError('onHideComplete')
+
     def as_setDataS(self, key, messageLeft, messageRight, offsetX, offsetY):
         return self.flashObject.as_setData(key, messageLeft, messageRight, offsetX, offsetY) if self._isDAAPIInited() else None
+
+    def as_toggleS(self, isShow):
+        return self.flashObject.as_toggle(isShow) if self._isDAAPIInited() else None

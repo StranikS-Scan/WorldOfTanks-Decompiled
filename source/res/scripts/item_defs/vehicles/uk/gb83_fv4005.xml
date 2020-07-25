@@ -7,6 +7,7 @@
     <loader></loader>
     <loader></loader>
   </crew>
+  <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
     <forward>	32	</forward>
     <backward>	8	</backward>
@@ -15,9 +16,16 @@
     <moving>	0.015	</moving>
     <still>	0.024	</still>
     <camouflageBonus>	0.04	</camouflageBonus>
-    <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.036	</firePenalty>
   </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.15 0.175	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.05 0.06	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+  </optDevsOverrides>
   <repairCost>	11	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -2851,7 +2859,6 @@
           <camouflage>	TURRET	</camouflage>
         </customizableVehicleAreas>
       </customization>
-      <gunShotOffset>	0.000000 0.000000 0.000000	</gunShotOffset>
       <camouflage>
         <tiling>	1.06 0.595 0.000000 0.000000	</tiling>
         <density>	101.662 101.666	</density>

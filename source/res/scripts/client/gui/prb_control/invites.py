@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/prb_control/invites.py
 import operator
 import logging
+from itertools import chain
 from collections import namedtuple, defaultdict
 import BigWorld
 import Event
@@ -34,6 +35,7 @@ from messenger.ext.player_helpers import isCurrentPlayer
 from predefined_hosts import g_preDefinedHosts
 from shared_utils import CONST_CONTAINER
 from shared_utils.account_helpers.ClientInvitations import UniqueId
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
 from skeletons.gui.game_control import IAnonymizerController
@@ -296,6 +298,7 @@ class InvitesManager(UsersInfoHelper):
     __clanInfo = None
     itemsCache = dependency.descriptor(IItemsCache)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    settingsCore = dependency.descriptor(ISettingsCore)
     lobbyContext = dependency.descriptor(ILobbyContext)
     appLoader = dependency.descriptor(IAppLoader)
 
@@ -321,6 +324,7 @@ class InvitesManager(UsersInfoHelper):
 
     def init(self):
         self.__inited = PRB_INVITES_INIT_STEP.UNDEFINED
+        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         g_messengerEvents.users.onUsersListReceived += self.__onUsersListReceived
         g_messengerEvents.users.onUserActionReceived += self.__onUserActionReceived
         g_messengerEvents.users.onBattleUserActionReceived += self.__onUserActionReceived
@@ -333,6 +337,7 @@ class InvitesManager(UsersInfoHelper):
         self.__clearAcceptChain()
         self.__inited = PRB_INVITES_INIT_STEP.UNDEFINED
         self.__loader = None
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         g_messengerEvents.users.onUsersListReceived -= self.__onUsersListReceived
         g_messengerEvents.users.onUserActionReceived -= self.__onUserActionReceived
         g_messengerEvents.users.onBattleUserActionReceived -= self.__onUserActionReceived
@@ -450,8 +455,10 @@ class InvitesManager(UsersInfoHelper):
             result = invite.clientID > 0 and invite.isActive() and isCurrentPlayer(invite.creatorID)
         return result
 
-    def getInvites(self, incoming=None, version=None, onlyActive=None):
+    def getInvites(self, incoming=None, version=None, onlyActive=None, withIgnored=False):
         result = self.__invites.values()
+        if withIgnored:
+            result = chain(result, self.__invitesIgnored.values())
         if incoming is not None:
             result = [ item for item in result if item.isIncoming() is incoming ]
         if version is not None:
@@ -495,7 +502,7 @@ class InvitesManager(UsersInfoHelper):
         rosterGetter = self.users.getUser
         inviteMaker = self._getNewInviteMaker(rosterGetter)
         prebattleInvitations = _getNewInvites()
-        for invite in self.getInvites(version=_InviteVersion.NEW):
+        for invite in self.getInvites(version=_InviteVersion.NEW, withIgnored=True):
             if invite.creatorID in names or invite.receiverID in names:
                 senderID = invite.creatorID
                 if self.appLoader.getSpaceID() == GuiGlobalSpaceID.BATTLE:
@@ -749,7 +756,7 @@ class InvitesManager(UsersInfoHelper):
             if inviteID not in newInvites or invite.createTime > newInvites[inviteID].createTime:
                 newInvites[inviteID] = invite
 
-        for invite in self.getInvites(version=_InviteVersion.NEW):
+        for invite in self.getInvites(version=_InviteVersion.NEW, withIgnored=True):
             inviteID = invite.clientID
             if (self.appLoader.getSpaceID() != GuiGlobalSpaceID.BATTLE and invite.creatorVehID or inviteID not in newInvites) and self._delInvite(inviteID):
                 isIncoming = invite.isIncoming()
@@ -787,12 +794,13 @@ class InvitesManager(UsersInfoHelper):
         self.__invitesIgnored.clear()
         self.__unreadInvitesCount = 0
 
-    def __isInviteSenderIgnored(self, invite, user):
+    def __isInviteSenderIgnored(self, invite, user, friendsSetting=None):
         if self.__isInBattle and invite.isIncoming():
             arenaDP = self.sessionProvider.getArenaDP()
             if arenaDP and arenaDP.getVehicleInfo().prebattleID > 0:
                 return True
-        return isInviteSenderIgnored(user, g_settings.userPrefs.invitesFromFriendsOnly, invite.isCreatedInBattle())
+        friendsOnly = friendsSetting if friendsSetting is not None else g_settings.userPrefs.invitesFromFriendsOnly
+        return isInviteSenderIgnored(user, friendsOnly, invite.isCreatedInBattle())
 
     def __refreshIgnoredInvitesRemove(self, user):
         invitations = []
@@ -845,6 +853,33 @@ class InvitesManager(UsersInfoHelper):
         self.onReceivedInviteListModified(invitations, [], [])
         if self.appLoader.getSpaceID() != GuiGlobalSpaceID.BATTLE:
             self.syncUsersInfo()
+
+    def __onSettingsChanged(self, diff):
+        if 'invitesFromFriendsOnly' in diff:
+            invitations = []
+            isFriends = diff['invitesFromFriendsOnly']
+            if isFriends:
+                for invite in self.__invites.itervalues():
+                    user = self.users.getUser(invite.creatorID)
+                    if self.__isInviteSenderIgnored(invite, user, isFriends):
+                        invitations.append(invite.clientID)
+
+                for inviteID in invitations:
+                    self.__invitesIgnored[inviteID] = self.__invites.pop(inviteID)
+
+                self.onReceivedInviteListModified([], [], invitations)
+            else:
+                for invite in self.__invitesIgnored.itervalues():
+                    user = self.users.getUser(invite.creatorID)
+                    if not self.__isInviteSenderIgnored(invite, user, isFriends):
+                        invitations.append(invite.clientID)
+
+                for inviteID in invitations:
+                    self.__invites[inviteID] = self.__invitesIgnored.pop(inviteID)
+
+                self.onReceivedInviteListModified(invitations, [], [])
+            if self.appLoader.getSpaceID() != GuiGlobalSpaceID.BATTLE:
+                self.syncUsersInfo()
 
     def __acceptInvite(self, event):
         self.acceptInvite(event.inviteID, event.postActions)

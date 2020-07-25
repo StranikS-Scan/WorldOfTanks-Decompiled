@@ -26,6 +26,7 @@ from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.battle_royale.constants import SteelHunterEquipmentNames
 from gui.Scaleform.genConsts.BATTLE_MARKER_STATES import BATTLE_MARKER_STATES
 from helpers import dependency, i18n
+from items.battle_royale import isSpawnedBot
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
@@ -150,7 +151,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             if vehicleID == self._playerVehicleID or vInfo.isObserver():
                 continue
             if vehicleID not in self._markers:
-                marker = self.__addMarkerToPool(vehicleID, vProxy=feedback.getVehicleProxy(vehicleID), team=vInfo.team)
+                marker = self.__addMarkerToPool(vehicleID, vInfo=vInfo, vProxy=feedback.getVehicleProxy(vehicleID))
             else:
                 marker = self._markers[vehicleID]
             self.__setVehicleInfo(marker, vInfo, getProps(vehicleID, vInfo.team), getParts(vehicleID))
@@ -164,7 +165,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             return
         ctx = self.sessionProvider.getCtx()
         feedback = self.sessionProvider.shared.feedback
-        marker = self.__addMarkerToPool(vehicleID, vProxy=feedback.getVehicleProxy(vehicleID), team=vInfo.team)
+        marker = self.__addMarkerToPool(vehicleID, vInfo=vInfo, vProxy=feedback.getVehicleProxy(vehicleID))
         self.__setVehicleInfo(marker, vInfo, ctx.getPlayerGuiProps(vehicleID, vInfo.team), ctx.getPlayerFullNameParts(vehicleID))
         self._setMarkerInitialState(marker, accountDBID=vInfo.player.accountDBID)
 
@@ -374,25 +375,28 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
                 self._setMarkerBoundEnabled(newMarker.getMarkerID(), False)
         self.__followingIgnoredTank = vehicleID
 
-    def __addMarkerToPool(self, vehicleID, vProxy=None, team=None):
-        if vProxy is not None:
-            matrixProvider = self._clazz.fetchMatrixProvider(vProxy)
-            active = True
+    def __addMarkerToPool(self, vehicleID, vInfo, vProxy=None):
+        if not vInfo.isAlive() and isSpawnedBot(vInfo.vehicleType.tags):
+            return
         else:
-            matrixProvider = None
-            active = False
-        markerID = self._createMarkerWithMatrix(self._getMarkerSymbol(vehicleID), matrixProvider=matrixProvider, active=active)
-        self._setMarkerRenderInfo(markerID, _VEHICLE_MARKER_MIN_SCALE, _VEHICLE_MARKER_BOUNDS, _INNER_VEHICLE_MARKER_BOUNDS, _VEHICLE_MARKER_CULL_DISTANCE, _VEHICLE_MARKER_BOUNDS_MIN_SCALE)
-        marker = self._clazz(markerID, vehicleID, vProxy=vProxy, active=active, isPlayerTeam=team == avatar_getter.getPlayerTeam())
-        marker.onVehicleModelChanged += self.__onVehicleModelChanged
-        self._markers[vehicleID] = marker
-        if marker.isActive():
-            if not marker.isAlive():
-                self.__updateMarkerState(markerID, 'dead', True, '')
-                self._setMarkerBoundEnabled(markerID, False)
-            elif not avatar_getter.isVehicleAlive() and marker.getIsPlayerTeam():
-                self._setMarkerBoundEnabled(markerID, False)
-        return marker
+            if vProxy is not None:
+                matrixProvider = self._clazz.fetchMatrixProvider(vProxy)
+                active = True
+            else:
+                matrixProvider = None
+                active = False
+            markerID = self._createMarkerWithMatrix(self._getMarkerSymbol(vehicleID), matrixProvider=matrixProvider, active=active)
+            self._setMarkerRenderInfo(markerID, _VEHICLE_MARKER_MIN_SCALE, _VEHICLE_MARKER_BOUNDS, _INNER_VEHICLE_MARKER_BOUNDS, _VEHICLE_MARKER_CULL_DISTANCE, _VEHICLE_MARKER_BOUNDS_MIN_SCALE)
+            marker = self._clazz(markerID, vehicleID, vProxy=vProxy, active=active, isPlayerTeam=vInfo.team == avatar_getter.getPlayerTeam())
+            marker.onVehicleModelChanged += self.__onVehicleModelChanged
+            self._markers[vehicleID] = marker
+            if marker.isActive():
+                if not marker.isAlive():
+                    self.__updateMarkerState(markerID, 'dead', True, '')
+                    self._setMarkerBoundEnabled(markerID, False)
+                elif not avatar_getter.isVehicleAlive() and marker.getIsPlayerTeam():
+                    self._setMarkerBoundEnabled(markerID, False)
+            return marker
 
     def __hide(self, handle, vehicleID):
         if handle in self._markerTimers:
@@ -450,7 +454,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         else:
             if vInfo.isObserver():
                 return
-            marker = self.__addMarkerToPool(vehicleID, vProxy, team=vInfo.team)
+            marker = self.__addMarkerToPool(vehicleID, vInfo=vInfo, vProxy=vProxy)
             self.__setVehicleInfo(marker, vInfo, guiProps, self.sessionProvider.getCtx().getPlayerFullNameParts(vehicleID))
             self._setMarkerInitialState(marker, accountDBID=accountDBID)
 
@@ -560,6 +564,10 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             isOneShotActive = self.__callbackIDs.get(markerID, None) is not None
             if not isOneShotActive:
                 self.__stopActionMarker(markerID, vehicleID)
+                if marker.getReplyCount > 0:
+                    marker.setIsRepliedByPlayer(False)
+                    self._setMarkerReplied(marker, False)
+                    self._setMarkerReplyCount(marker, 0)
             return
 
     def __removeMarkerCallback(self, markerID):

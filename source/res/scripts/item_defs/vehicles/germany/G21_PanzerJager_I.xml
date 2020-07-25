@@ -6,6 +6,7 @@
     <driver></driver>
     <gunner></gunner>
   </crew>
+  <supplySlots>	1 6 8 8 8	</supplySlots>
   <speedLimits>
     <forward>	40	</forward>
     <backward>	8	</backward>
@@ -14,9 +15,16 @@
     <moving>	0.204	</moving>
     <still>	0.34	</still>
     <camouflageBonus>	0.04	</camouflageBonus>
-    <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.51	</firePenalty>
   </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.15 0.175	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.05 0.06	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+  </optDevsOverrides>
   <repairCost>	1.25	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -24,6 +32,9 @@
     <tiling>	1 1 0 0	</tiling>
     <exclusionMask></exclusionMask>
   </camouflage>
+  <damageByStaticsChances>
+    <tankman>	0	</tankman>
+  </damageByStaticsChances>
   <hull>
     <fakeTurrets>
       <lobby>	0	</lobby>
@@ -43,6 +54,15 @@
       <armor_12>	5	</armor_12>
       <armor_15>	13	</armor_15>
       <armor_16>	14.5	</armor_16>
+      <gunner_1>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+        <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+      </gunner_1>
+      <driver>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+        <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+      </driver>
+      <commander>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+        <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+      </commander>
     </armor>
     <primaryArmor>	armor_6 armor_6 armor_4	</primaryArmor>
     <weight>	3250	</weight>
@@ -2929,6 +2949,12 @@
       <notInShop>	true	</notInShop>
       <armor>
         <armor_2>	5	</armor_2>
+        <gunner_1>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+        </gunner_1>
+        <commander>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+        </commander>
       </armor>
       <weight>	100	</weight>
       <maxHealth>	48	</maxHealth>

@@ -43,14 +43,14 @@ TARGET_TYPE_TRANSLATION_MAPPING = {CONTEXTCOMMAND: {MarkerType.VEHICLE_MARKER_TY
                                                 DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTACK_BASE},
                   MarkerType.HEADQUARTER_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTENTIONTOOBJECTIVE_DEF,
                                                        DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTENTIONTOOBJECTIVE_ATK},
-                  MarkerType.INVALID_MARKER_TYPE: {INVALID_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION}},
+                  MarkerType.LOCATION_MARKER_TYPE: {INVALID_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION}},
  CONTEXTCOMMAND2: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY,
                                                     DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY},
                    MarkerType.BASE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE,
                                                  DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE},
                    MarkerType.HEADQUARTER_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTENTIONTOOBJECTIVE_DEF,
                                                         DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTENTIONTOOBJECTIVE_ATK},
-                   MarkerType.INVALID_MARKER_TYPE: {INVALID_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.GOING_THERE}},
+                   MarkerType.LOCATION_MARKER_TYPE: {INVALID_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.GOING_THERE}},
  BATTLE_CHAT_COMMAND_NAMES.TURNBACK: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.TURNBACK}},
  BATTLE_CHAT_COMMAND_NAMES.THANKS: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.THANKS}},
  BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_1_EX: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_1}},
@@ -138,7 +138,23 @@ class ChatCommandsController(IBattleController):
             targetID, targetMarkerType, markerSubType = self.__getAimedAtVehicleOrObject()
             if targetMarkerType == MarkerType.INVALID_MARKER_TYPE:
                 targetID, targetMarkerType, markerSubType = self.__markersManager.getCurrentlyAimedAtMarkerIDAndType()
-            return (targetID, targetMarkerType, markerSubType)
+            if targetMarkerType == MarkerType.INVALID_MARKER_TYPE and getAimedAtPositionWithinBorders(self._aimOffset[0], self._aimOffset[1]) is not None:
+                targetMarkerType = MarkerType.LOCATION_MARKER_TYPE
+                markerSubType = INVALID_MARKER_SUBTYPE
+            replyState, replyToAction = self.getReplyStateForTargetIDAndMarkerType(targetID, targetMarkerType)
+            return (targetID,
+             targetMarkerType,
+             markerSubType,
+             replyState,
+             replyToAction)
+
+    def getReplyStateForTargetIDAndMarkerType(self, targetID, targetMarkerType):
+        advChatCmp = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'advancedChatComponent', None)
+        return None if advChatCmp is None else advChatCmp.getReplyStateForTargetIDAndMarkerType(targetID, targetMarkerType)
+
+    def isTargetAllyCommittedToMe(self, targetID):
+        advChatCmp = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'advancedChatComponent', None)
+        return False if advChatCmp is None else advChatCmp.isTargetAllyCommittedToMe(targetID)
 
     def handleContexChatCommand(self, key):
         cmdMap = CommandMapping.g_instance
@@ -151,8 +167,7 @@ class ChatCommandsController(IBattleController):
                     if chatCmd in DIRECT_ACTION_BATTLE_CHAT_COMMANDS:
                         self.handleChatCommand(chatCmd)
                         return
-                    targetID, targetMarkerType, markerSubType = self.getAimedAtTargetData()
-                    replyState, replyToAction = advChatCmp.getReplyStateForTargetIDAndMarkerType(targetID, targetMarkerType)
+                    targetID, targetMarkerType, markerSubType, replyState, replyToAction = self.getAimedAtTargetData()
                     if chatCmd in (BATTLE_CHAT_COMMAND_NAMES.THANKS, BATTLE_CHAT_COMMAND_NAMES.TURNBACK):
                         replyState = ReplyState.NO_REPLY
                     if replyState == ReplyState.NO_REPLY:
@@ -162,7 +177,7 @@ class ChatCommandsController(IBattleController):
                             _logger.debug('Action %s (at key %s) is not supported for target type %s (cut type: %s)', chatCmd, key, targetMarkerType, markerSubType)
                             return
                         if action == BATTLE_CHAT_COMMAND_NAMES.HELPME:
-                            if advChatCmp.isTargetAllyCommitedToMe(targetID):
+                            if advChatCmp.isTargetAllyCommittedToMe(targetID):
                                 action = BATTLE_CHAT_COMMAND_NAMES.THANKS
                         self.handleChatCommand(action, targetID=targetID)
                     else:
@@ -285,7 +300,7 @@ class ChatCommandsController(IBattleController):
             _logger.error('Command not found: %s', cmdName)
 
     def sendTargetedCommand(self, cmdName, targetID, isInRadialMenu=False):
-        if not avatar_getter.isVehicleAlive() and cmdName in PROHIBITED_IF_DEAD or self.sessionProvider.getCtx().isPlayerObserver() and cmdName in PROHIBITED_IF_SPECTATOR or self.__isEnabled is False:
+        if not avatar_getter.isVehicleAlive() and cmdName in PROHIBITED_IF_DEAD or self.sessionProvider.getCtx().isPlayerObserver() and cmdName in PROHIBITED_IF_SPECTATOR or self.__isEnabled is False or not self.__arenaDP.getVehicleInfo(targetID).isAlive():
             return
         if self.__isSPG() and cmdName == BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY or self.__isSPGAndInStrategicOrArtyMode() and cmdName == BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY and isInRadialMenu is False:
             command = self.proto.battleCmd.createSPGAimTargetCommand(targetID, self.__getReloadTime())

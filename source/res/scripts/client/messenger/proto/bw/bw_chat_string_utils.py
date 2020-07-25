@@ -17,9 +17,9 @@ def validateUserRoomName(name):
 def validateUserRoomPwd(password, isRetype=False):
     if not password:
         if isRetype:
-            key = MESSENGER.CLIENT_ERROR_CHANNEL_PASSWORD_EMPTY
-        else:
             key = MESSENGER.CLIENT_ERROR_CHANNEL_RETYPE_EMPTY
+        else:
+            key = MESSENGER.CLIENT_ERROR_CHANNEL_PASSWORD_EMPTY
         return ('', I18nError(key))
     else:
         pwdRange = xrange(CHANNEL_LIMIT.PWD_MIN_LENGTH, CHANNEL_LIMIT.PWD_MAX_LENGTH + 1)

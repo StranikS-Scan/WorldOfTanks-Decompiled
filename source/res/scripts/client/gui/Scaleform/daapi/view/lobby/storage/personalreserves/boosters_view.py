@@ -174,7 +174,7 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
 
     def __onUpdateBoosters(self, *args):
         activeBoostersCount = len(self._goodiesCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.ACTIVE).values())
-        totalBoostersCount = sum((x.count for x in self._goodiesCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.IN_ACCOUNT).values()))
+        totalBoostersCount = len(self._goodiesCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.IN_ACCOUNT).values())
         filteredBoostersCount = 0
         criteria = REQ_CRITERIA.BOOSTER.IN_ACCOUNT | REQ_CRITERIA.BOOSTER.ENABLED
         criteria |= getCriteriaFromFilterMask(self.__filterMask)
@@ -192,7 +192,7 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
                     additionalInfo = ''
                 vo = createStorageDefVO(booster.boosterID, text_styles.hightlight(_ms(MENU.BOOSTER_DESCRIPTION_EFFECTVALUETIME, effectValue=booster.getFormattedValue(), effectTime=booster.getEffectTimeStr(hoursOnly=True))), text_styles.main(influence), booster.count, getItemPricesVO(booster.getSellPrice())[0], func_utils.makeFlashPath(booster.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL)), func_utils.makeFlashPath(booster.getShopIcon()), 'altimage', enabled=booster.isReadyToActivate, available=booster.isAvailable, active=booster.state, contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_PERSONAL_RESERVE_ITEM, additionalInfo=additionalInfo)
                 dataProviderValues.append(vo)
-                filteredBoostersCount += booster.count
+                filteredBoostersCount += 1
 
         elif totalBoostersCount == 0:
             showDummyScreen = True

@@ -15,6 +15,10 @@ class IItemsCache(requesters.IRequester):
     def items(self):
         raise NotImplementedError
 
+    @property
+    def compatVehiclesCache(self):
+        raise NotImplementedError
+
     def init(self):
         raise NotImplementedError
 

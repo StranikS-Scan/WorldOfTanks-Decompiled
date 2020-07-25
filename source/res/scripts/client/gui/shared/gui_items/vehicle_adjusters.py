@@ -84,9 +84,13 @@ def installEquipment(vehicle, intCD, slotIndex, itemsCache=None):
         if not success:
             LOG_WARNING('Equipment could not been installed, reason: '.format(reason))
             return
-    vehicle.equipment.regularConsumables[slotIndex] = equipment
-    vehicle.equipmentLayout.regularConsumables[slotIndex] = equipment
+    vehicle.consumables.installed[slotIndex] = equipment
+    vehicle.consumables.layout[slotIndex] = equipment
     return
+
+
+def swapEquipment(vehicle, leftID, rightID):
+    vehicle.consumables.swap(leftID, rightID)
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -97,23 +101,35 @@ def installOptionalDevice(vehicle, newId, slotIndex, itemsCache=None):
     mayInstall, reason = optDev.mayInstall(vehicle, slotIndex)
     if mayInstall:
         vehicle.descriptor.installOptionalDevice(optDev.intCD, slotIndex)
-        vehicle.optDevices[slotIndex] = optDev
+        vehicle.optDevices.installed[slotIndex] = optDev
+        vehicle.optDevices.layout[slotIndex] = optDev
     else:
         LOG_WARNING('Component "{}" has not been installed. Reason: {}.'.format(itemTypeID, reason))
     return (mayInstall, reason)
 
 
 def removeOptionalDevice(vehicle, slotIndex):
-    installedDevice = vehicle.optDevices[slotIndex]
+    installedDevice = vehicle.optDevices.installed[slotIndex]
     if installedDevice is not None:
         mayRemove, reason = vehicle.descriptor.mayRemoveOptionalDevice(slotIndex)
         if mayRemove:
             vehicle.descriptor.removeOptionalDevice(slotIndex)
-            vehicle.optDevices[slotIndex] = None
+            vehicle.optDevices.installed[slotIndex] = None
+            vehicle.optDevices.layout[slotIndex] = None
         return (mayRemove, reason)
     else:
         LOG_WARNING("Couldn't remove optional device from slot {} because slot is already empty!".format(slotIndex))
         return (False, 'slot is empty')
+
+
+def swapOptionalDevice(vehicle, leftID, rigthID):
+    maySwap, reason = vehicle.descriptor.maySwapOptionalDevice(leftID, rigthID)
+    if maySwap:
+        vehicle.descriptor.swapOptionalDevice(leftID, rigthID)
+        vehicle.optDevices.swap(leftID, rigthID)
+    else:
+        LOG_WARNING('Slots "{}" has not been swapped. Reason: {}.'.format((leftID, rigthID), reason))
+    return (maySwap, reason)
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -122,7 +138,8 @@ def installBattleBoosterOnVehicle(vehicle, intCD, itemsCache=None):
         booster = itemsCache.items.getItemByCD(int(intCD))
     else:
         booster = None
-    vehicle.equipment.battleBoosterConsumables[0] = booster
+    vehicle.battleBoosters.installed[0] = booster
+    vehicle.battleBoosters.layout[0] = booster
     return
 
 

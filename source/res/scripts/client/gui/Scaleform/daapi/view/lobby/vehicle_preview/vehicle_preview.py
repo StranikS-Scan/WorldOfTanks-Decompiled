@@ -354,7 +354,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
          text_styles.main(VEHICLE_PREVIEW.INFOPANEL_TAB_LISTDESC_CREWEQUIPS),
          text_styles.main(VEHICLE_PREVIEW.INFOPANEL_TAB_LISTDESC_CREWSKILLSEQUIPS))
         hasSkillBonuses = any((tMan.skills for _, tMan in vehicle.crew))
-        hasEquipBonuses = any(itertools.chain(vehicle.optDevices, vehicle.equipment.battleAbilityConsumables, vehicle.equipment.battleBoosterConsumables, (rCons and rCons.kpi for rCons in vehicle.equipment.regularConsumables), (vehicle.hasOutfit(vehicle.getAnyOutfitSeason()),)))
+        hasEquipBonuses = any(itertools.chain(vehicle.optDevices.installed, vehicle.battleAbilities.installed, vehicle.battleBoosters.installed, (rCons and rCons.kpi for rCons in vehicle.consumables.installed), (vehicle.hasOutfit(vehicle.getAnyOutfitSeason()),)))
         return descriptions[hasEquipBonuses << 1 | hasSkillBonuses]
 
     def _getBackBtnLabel(self):

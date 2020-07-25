@@ -30,6 +30,9 @@ class InjectComponentAdaptor(BaseDAAPIComponent):
     def unregisterFlashComponent(self, alias):
         _logger.warning('InjectComponentAdaptor %s does not support internal components', self.getAlias())
 
+    def getInjectView(self):
+        return self.__injected.content if self.__injected else None
+
     def _populate(self):
         super(InjectComponentAdaptor, self)._populate()
         self.__createInjectView()
@@ -40,6 +43,12 @@ class InjectComponentAdaptor(BaseDAAPIComponent):
 
     def _makeInjectView(self):
         raise NotImplementedError
+
+    def _addInjectContentListeners(self):
+        pass
+
+    def _removeInjectContentListeners(self):
+        pass
 
     def __createInjectView(self):
         if self.__injected is not None:
@@ -52,6 +61,7 @@ class InjectComponentAdaptor(BaseDAAPIComponent):
             self.__injected = Window(settings)
             self.__injected.onStatusChanged += self.__onStatusChanged
             self.__injected.load()
+            self._addInjectContentListeners()
             return
 
     def __destroyInjected(self, wasAdded=True):
@@ -61,6 +71,7 @@ class InjectComponentAdaptor(BaseDAAPIComponent):
             if wasAdded and self.flashObject is not None:
                 self.flashObject.removeViewImpl(self.__injected.content.uniqueID)
             self.__injected.onStatusChanged -= self.__onStatusChanged
+            self._removeInjectContentListeners()
             self.__injected.destroy()
             self.__injected = None
             return

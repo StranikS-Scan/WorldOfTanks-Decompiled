@@ -400,7 +400,7 @@ class Booster(BoosterUICommon):
 
         if shortage:
             currency = shortage.getCurrency(byWeight=True)
-            return (False, GUI_ITEM_ECONOMY_CODE.getMoneyError(currency))
+            return (False, GUI_ITEM_ECONOMY_CODE.getCurrencyError(currency))
         return (False, GUI_ITEM_ECONOMY_CODE.ITEM_NO_PRICE)
 
     def __getActiveBoosters(self):

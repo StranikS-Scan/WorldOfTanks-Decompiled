@@ -7,6 +7,7 @@
     <loader></loader>
     <loader>	radioman	</loader>
   </crew>
+  <supplySlots>	5 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
     <forward>	59.6	</forward>
     <backward>	15	</backward>
@@ -15,9 +16,16 @@
     <moving>	0.058	</moving>
     <still>	0.116	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
-    <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.174	</firePenalty>
   </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.05 0.075	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.03 0.04	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+  </optDevsOverrides>
   <repairCost>	11.172	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -2653,7 +2661,6 @@
           <camouflage>	TURRET	</camouflage>
         </customizableVehicleAreas>
       </customization>
-      <gunShotOffset>	0.000000 0.000000 0.000000	</gunShotOffset>
       <camouflage>
         <tiling>	1.3 0.64 0.000000 0.000000	</tiling>
         <density>	93.9797 94.3027	</density>

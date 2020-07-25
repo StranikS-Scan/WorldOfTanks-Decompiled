@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/VehicleInfoWindow.py
-from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
+import typing
 from debug_utils import LOG_ERROR
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.view.meta.VehicleInfoMeta import VehicleInfoMeta
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.shared.items_parameters import formatters
-from gui.shared.utils import AUTO_RELOAD_PROP_NAME
+from gui.shared.utils import AUTO_RELOAD_PROP_NAME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_SWITCH_TIME, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_INVISIBILITY_STILL_FACTOR
 from helpers import i18n, dependency
 from items import tankmen
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
@@ -20,6 +20,33 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
 from gui.impl import backport
 from gui.impl.gen import R
+if typing.TYPE_CHECKING:
+    from account_helpers.settings_core.ServerSettingsManager import ServerSettingsManager
+
+class _Highlight(object):
+    __slots__ = ('__checker', '__highlight')
+
+    def __init__(self, checker):
+        super(_Highlight, self).__init__()
+        self.__highlight = None
+        self.__checker = checker
+        return
+
+    def __nonzero__(self):
+        if self.__highlight is None:
+            self.__highlight = self.__checker()
+        return self.__highlight
+
+
+def _highlightsMap(settings):
+    config = (((AUTO_RELOAD_PROP_NAME,), _Highlight(lambda : settings.checkAutoReloadHighlights(increase=True))), ((TURBOSHAFT_ENGINE_POWER,
+       TURBOSHAFT_SPEED_MODE_SPEED,
+       TURBOSHAFT_SWITCH_TIME,
+       TURBOSHAFT_INVISIBILITY_STILL_FACTOR,
+       TURBOSHAFT_INVISIBILITY_MOVING_FACTOR), _Highlight(lambda : settings.checkTurboshaftHighlights(increase=True))))
+    mapping = [ zip(params, [highlight] * len(params)) for params, highlight in config ]
+    return dict([ item for sub in mapping for item in sub ])
+
 
 class VehicleInfoWindow(VehicleInfoMeta):
     _itemsCache = dependency.descriptor(IItemsCache)
@@ -30,7 +57,8 @@ class VehicleInfoWindow(VehicleInfoMeta):
     def __init__(self, ctx=None):
         super(VehicleInfoWindow, self).__init__()
         self.__vehicleCompactDescr = ctx.get('vehicleCompactDescr', 0)
-        self.__highlightPossible = False
+        serverSettings = self._settingsCore.serverSettings
+        self.__highlightsMap = _highlightsMap(serverSettings)
 
     def onCancelClick(self):
         self.destroy()
@@ -83,7 +111,6 @@ class VehicleInfoWindow(VehicleInfoMeta):
         self.destroy()
 
     def _populate(self):
-        self.__highlightPossible = self._settingsCore.serverSettings.checkAutoReloadHighlights()
         super(VehicleInfoWindow, self)._populate()
         self._comparisonBasket.onChange += self.__onVehCompareBasketChanged
         self._comparisonBasket.onSwitchChange += self.__updateCompareButtonState
@@ -102,9 +129,8 @@ class VehicleInfoWindow(VehicleInfoMeta):
         for name, value in paramsList:
             paramVO = {'name': name,
              'value': value}
-            if name == AUTO_RELOAD_PROP_NAME and self.__highlightPossible:
+            if self.__highlightsMap.get(name, False):
                 paramVO['highlight'] = True
-                self._settingsCore.serverSettings.updateUIStorageCounter(UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER)
             result.append(paramVO)
 
         return result

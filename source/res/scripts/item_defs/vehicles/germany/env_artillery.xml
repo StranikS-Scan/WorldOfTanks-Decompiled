@@ -8,6 +8,7 @@
     <loader></loader>
     <loader></loader>
   </crew>
+  <supplySlots>	8 8 8	</supplySlots>
   <speedLimits>
     <forward>	0.000001	</forward>
     <backward>	0.000001	</backward>
@@ -16,9 +17,16 @@
     <moving>	0.107	</moving>
     <still>	0.214	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
-    <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.321	</firePenalty>
   </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.05 0.075	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.03 0.04	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+  </optDevsOverrides>
   <repairCost>	6.57	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>

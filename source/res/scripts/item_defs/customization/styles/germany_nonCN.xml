@@ -18,6 +18,14 @@
       <description>	#vehicle_customization:main_style/generic_custom_look_germany_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_germany_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:main_style/generic_custom_look_germany	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	summer	</season>

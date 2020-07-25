@@ -5,7 +5,7 @@ from functools import partial
 import BigWorld
 import AccountCommands
 from constants import INVITATION_STATUS
-from helpers.time_utils import getCurrentTimestamp
+from helpers.time_utils import getCurrentTimestamp, getServerUTCTime
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
 UniqueId = namedtuple('UniqueId', ['id', 'senderID'])
 
@@ -99,7 +99,7 @@ class ClientInvitations(object):
         if self.__invitations:
             inviteId = min(self.__invitations, key=lambda k: self.__invitations[k]['expiresAt'])
             invite = self.__invitations[inviteId]
-            expTime = max(invite['expiresAt'] - getCurrentTimestamp(), 0.0)
+            expTime = max(invite['expiresAt'] - getServerUTCTime(), 0.0)
             self.__expCbID = BigWorld.callback(expTime, partial(self.__onInviteExpired, inviteId))
             LOG_DEBUG('Invite expiration callback has been loaded', inviteId, expTime)
 

@@ -162,7 +162,7 @@ class NationChangeScreen(ViewImpl):
         return
 
     def __setEquipmentViewModelData(self, slotVM, guiVh):
-        installedEquipment = guiVh.equipment.regularConsumables.getInstalledItems()
+        installedEquipment = guiVh.consumables.installed.getItems()
         for equipment in installedEquipment:
             if equipment is not None:
                 supplyModel = NationChangeSupplyModel()
@@ -173,21 +173,17 @@ class NationChangeScreen(ViewImpl):
         return
 
     def __setDevicesViewModelData(self, slotVM, guiVh):
-        devices = [ device for device in guiVh.optDevices if device is not None ]
-        for device in devices:
+        for device in guiVh.optDevices.installed.getItems():
             deviceModel = NationChangeDeviceModel()
             deviceModel.setImage(self.__icons.artefact.dyn(getIconResourceName(device.descriptor.iconName))())
-            deviceModel.setIsRemovable(device.isRemovable)
             deviceModel.setIsImproved(device.isDeluxe)
             deviceModel.setIsTrophyBasic(device.isUpgradable)
             deviceModel.setIsTrophyUpgraded(device.isUpgraded)
             deviceModel.setIntCD(device.intCD)
             slotVM.addViewModel(deviceModel)
 
-        return
-
     def __setShellsViewModelData(self, slotVM, guiVh):
-        for shell in guiVh.shells:
+        for shell in guiVh.shells.installed.getItems():
             if shell.count > 0:
                 shellModel = NationChangeShellModel()
                 shellModel.setImage(self.__icons.shell.dyn(getIconResourceName(shell.descriptor.iconName))())
@@ -195,7 +191,7 @@ class NationChangeScreen(ViewImpl):
                 slotVM.addViewModel(shellModel)
 
     def __setInstructionViewModelData(self, slotVM, guiVh):
-        booster = guiVh.equipment.battleBoosterConsumables.getInstalledItems()
+        booster = guiVh.battleBoosters.installed.getItems()
         instruction = next(iter(booster or []), None)
         if instruction:
             slotVM.setImage(self.__icons.artefact.dyn(getIconResourceName(instruction.descriptor.iconName))())
@@ -205,11 +201,11 @@ class NationChangeScreen(ViewImpl):
         return
 
     def __setInventoryViewStatus(self, slotVM, guiVh):
-        booster = guiVh.equipment.battleBoosterConsumables.getInstalledItems()
-        installedEquipment = guiVh.equipment.regularConsumables.getInstalledItems()
+        booster = guiVh.battleBoosters.installed.getItems()
+        installedEquipment = guiVh.consumables.installed.getItems()
         isInstruction = any((instruction is not None for instruction in booster))
-        isShells = any((shell.count > 0 for shell in guiVh.shells))
-        isDevices = any((device is not None for device in guiVh.optDevices))
+        isShells = any((shell.count > 0 for shell in guiVh.shells.installed.getItems()))
+        isDevices = any((device is not None for device in guiVh.optDevices.installed))
         isEquip = any((equip is not None for equip in installedEquipment))
         isInventoryView = isInstruction or isShells or isDevices or isEquip
         slotVM.setNoEquipment(not isInventoryView)

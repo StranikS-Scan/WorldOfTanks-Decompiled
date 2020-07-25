@@ -70,11 +70,11 @@ class ClientSelectableHangarsSwitcher(ClientSelectableObject):
         entityId = ctx['entityId']
         if state == CameraMovementStates.FROM_OBJECT:
             if self.__isHangarVehicleEntity(entityId):
-                self.enable(False)
+                self.setEnable(False)
         elif state == CameraMovementStates.ON_OBJECT:
             if self.__isHangarVehicleEntity(entityId):
                 if not self.enabled:
-                    self.enable(True)
+                    self.setEnable(True)
 
     def __isHangarVehicleEntity(self, entityId):
         return entityId == self.hangarSpace.space.vehicleEntityId

@@ -371,7 +371,7 @@ class _VehicleInfo(object):
 
 
 class VehicleDetailedInfo(_VehicleInfo):
-    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_isTeamKiller', '_isKilledByTeamKiller', '_rollouts', '_respawns', '_extPublic', '_deathCount', '_equipmentDamageDealt', '_equipmentDamageAssisted', '_xpForAttack', '_xpForAssist', '_xpOther', '_xpPenalty')
+    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingEnemyHits', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directEnemyHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_isTeamKiller', '_isKilledByTeamKiller', '_rollouts', '_respawns', '_extPublic', '_deathCount', '_equipmentDamageDealt', '_equipmentDamageAssisted', '_xpForAttack', '_xpForAssist', '_xpOther', '_xpPenalty')
 
     def __init__(self, vehicleID, vehicle, player, deathReason=DEATH_REASON_ALIVE):
         super(VehicleDetailedInfo, self).__init__(vehicleID, player, deathReason)
@@ -381,6 +381,7 @@ class VehicleDetailedInfo(_VehicleInfo):
         self._critsInfo = makeCritsInfo(0)
         self._spotted = 0
         self._piercings = 0
+        self._piercingEnemyHits = 0
         self._piercingsReceived = 0
         self._damageBlockedByArmor = 0
         self._rickochetsReceived = 0
@@ -397,6 +398,7 @@ class VehicleDetailedInfo(_VehicleInfo):
         self._stunNum = 0
         self._stunDuration = 0
         self._directHits = 0
+        self._directEnemyHits = 0
         self._directHitsReceived = 0
         self._explosionHits = 0
         self._explosionHitsReceived = 0
@@ -439,6 +441,10 @@ class VehicleDetailedInfo(_VehicleInfo):
     @property
     def piercings(self):
         return self._piercings
+
+    @property
+    def piercingEnemyHits(self):
+        return self._piercingEnemyHits
 
     @property
     def piercingsReceived(self):
@@ -523,6 +529,10 @@ class VehicleDetailedInfo(_VehicleInfo):
     @property
     def directHits(self):
         return self._directHits
+
+    @property
+    def directEnemyHits(self):
+        return self._directEnemyHits
 
     @property
     def directHitsReceived(self):
@@ -617,7 +627,7 @@ class VehicleDetailedInfo(_VehicleInfo):
         return self._xpPenalty
 
     def haveInteractionDetails(self):
-        return self._spotted != 0 or self._deathReason > DEATH_REASON_ALIVE or self._directHits != 0 or self._explosionHits != 0 or self._piercings != 0 or self._damageDealt != 0 or self.damageAssisted != 0 or self.damageAssistedStun != 0 or self.stunNum != 0 or self.critsCount != 0 or self._fire != 0 or self._targetKills != 0 or self.stunDuration != 0 or self._damageBlockedByArmor != 0
+        return self._spotted != 0 or self._deathReason > DEATH_REASON_ALIVE or self._directHits != 0 or self._directEnemyHits != 0 or self._explosionHits != 0 or self._piercings != 0 or self._piercingEnemyHits != 0 or self._damageDealt != 0 or self.damageAssisted != 0 or self.damageAssistedStun != 0 or self.stunNum != 0 or self.critsCount != 0 or self._fire != 0 or self._targetKills != 0 or self.stunDuration != 0 or self._damageBlockedByArmor != 0
 
     @classmethod
     @no_key_error
@@ -679,13 +689,15 @@ class VehicleDetailedInfo(_VehicleInfo):
     def _setSharedRecords(cls, info, records):
         info._deathReason = max(info._deathReason, records['deathReason'])
         info._spotted = records['spotted']
-        info._piercings = records['piercingEnemyHits']
+        info._piercings = records['piercings']
+        info._piercingEnemyHits = records['piercingEnemyHits']
         info._damageDealt = records['damageDealt']
         info._damageBlockedByArmor = records['damageBlockedByArmor']
         info._noDamageDirectHitsReceived = records['noDamageDirectHitsReceived']
         info._damageAssistedTrack = records['damageAssistedTrack']
         info._damageAssistedRadio = records['damageAssistedRadio']
-        info._directHits = records['directEnemyHits']
+        info._directHits = records['directHits']
+        info._directEnemyHits = records['directEnemyHits']
         info._explosionHits = records['explosionHits']
         info._damageAssistedStun = records['damageAssistedStun']
         info._stunNum = records['stunNum']
@@ -740,6 +752,10 @@ class VehicleSummarizeInfo(_VehicleInfo):
     @property
     def piercings(self):
         return self.__accumulate('piercings')
+
+    @property
+    def piercingEnemyHits(self):
+        return self.__accumulate('piercingEnemyHits')
 
     @property
     def piercingsReceived(self):
@@ -823,6 +839,10 @@ class VehicleSummarizeInfo(_VehicleInfo):
     @property
     def directHits(self):
         return self.__accumulate('directHits')
+
+    @property
+    def directEnemyHits(self):
+        return self.__accumulate('directEnemyHits')
 
     @property
     def directHitsReceived(self):

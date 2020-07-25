@@ -341,11 +341,15 @@ class _BattleSelectorItems(object):
             if item.isRandomBattle():
                 item.setLocked(locked)
 
-    def select(self, action):
+    def select(self, action, onlyActive=False):
         if action in self.__items:
-            self.__items[action].select()
+            item = self.__items[action]
+            if not onlyActive or item.isVisible() and not item.isDisabled():
+                item.select()
         elif action in self.__extraItems:
-            self.__extraItems[action].select()
+            item = self.__extraItems[action]
+            if not onlyActive or item.isVisible() and not item.isDisabled():
+                item.select()
         else:
             for _, value in self.__extraItems.items():
                 if action in value.getData():

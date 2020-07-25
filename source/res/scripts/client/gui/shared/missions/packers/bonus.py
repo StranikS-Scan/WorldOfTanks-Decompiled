@@ -24,6 +24,7 @@ DOSSIER_ACHIEVEMENT_POSTFIX = '_achievement'
 DOSSIER_BADGE_POSTFIX = '_badge'
 VEHICLE_RENT_ICON_POSTFIX = '_rent'
 if typing.TYPE_CHECKING:
+    from frameworks.wulf.view.array import Array
     from gui.goodies.goodie_items import BoosterUICommon
     from gui.server_events.bonuses import CustomizationsBonus, CrewSkinsBonus, TokensBonus, SimpleBonus, ItemsBonus, DossierBonus, VehicleBlueprintBonus, CrewBooksBonus, GoodiesBonus, TankmenBonus, VehiclesBonus
     from gui.shared.gui_items.fitting_item import FittingItem
@@ -559,3 +560,21 @@ class BonusUIPacker(object):
 
 def getDefaultBonusPacker():
     return BonusUIPacker(getDefaultBonusPackersMap())
+
+
+def packBonusModelAndTooltipData(bonuses, packer, model, tooltipData=None):
+    bonusIndexTotal = 0
+    bonusTooltipList = []
+    for bonus in bonuses:
+        if bonus.isShowInGUI():
+            bonusList = packer.pack(bonus)
+            if bonusList and tooltipData is not None:
+                bonusTooltipList = packer.getToolTip(bonus)
+            for bonusIndex, item in enumerate(bonusList):
+                item.setIndex(bonusIndexTotal)
+                model.addViewModel(item)
+                if tooltipData is not None:
+                    tooltipData[bonusIndexTotal] = bonusTooltipList[bonusIndex]
+                bonusIndexTotal += 1
+
+    return

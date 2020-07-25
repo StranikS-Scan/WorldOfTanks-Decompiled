@@ -454,6 +454,15 @@ class Inventory(object):
             self.__account._doCmdStr(AccountCommands.CMD_OBTAIN_VEHICLE, name, proxy)
             return
 
+    def equipOptDevsSequence(self, vehInvID, devices, callback):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER, '', {})
+            return
+        else:
+            self.__account.shop.waitForSync(partial(self.__equipOptDevsSequence_onShopSynced, vehInvID, devices, callback))
+            return
+
     def __onGetItemsResponse(self, itemTypeIdx, callback, resultID):
         if resultID < 0:
             if callback is not None:
@@ -688,4 +697,19 @@ class Inventory(object):
             if callback is not None:
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr)
             self.__commandsProxy.perform(AccountCommands.CMD_UPGRADE_OPTDEV, shopRev, optDevID, vehInvID, slotIdx, proxy)
+            return
+
+    def __equipOptDevsSequence_onShopSynced(self, vehInvID, devices, callback, resultID, shopRev):
+        if resultID < 0:
+            if callback is not None:
+                callback(resultID)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext=None: callback(resultID, ext)
+            else:
+                proxy = None
+            arr = [shopRev, vehInvID, len(devices)]
+            arr.extend(devices)
+            self.__account._doCmdIntArr(AccountCommands.CMD_EQUIP_OPT_DEVS_SEQUENCE, arr, proxy)
             return

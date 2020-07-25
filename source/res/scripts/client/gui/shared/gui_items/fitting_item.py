@@ -5,6 +5,7 @@ import BigWorld
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
+from gui.impl.gen.view_models.constants.item_highlight_types import ItemHighlightTypes
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_ECONOMY_CODE
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ItemPrices, ITEM_PRICE_EMPTY, ITEM_PRICES_EMPTY
 from gui.shared.gui_items.gui_item import GUIItem, HasIntCD
@@ -28,6 +29,13 @@ _BIG_HIGHLIGHT_TYPES_MAP = {SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_CREW_REPLACE: SL
  SLOT_HIGHLIGHT_TYPES.EQUIPMENT_TROPHY: SLOT_HIGHLIGHT_TYPES.EQUIPMENT_TROPHY_BIG,
  SLOT_HIGHLIGHT_TYPES.EQUIPMENT_TROPHY_BASIC: SLOT_HIGHLIGHT_TYPES.EQUIPMENT_TROPHY_BASIC_BIG,
  SLOT_HIGHLIGHT_TYPES.EQUIPMENT_TROPHY_UPGRADED: SLOT_HIGHLIGHT_TYPES.EQUIPMENT_TROPHY_UPGRADED_BIG}
+SLOT_HIGHLIGHT_TO_ITEM_HIGHLIGHT_TYPES = {SLOT_HIGHLIGHT_TYPES.EQUIPMENT_TROPHY: ItemHighlightTypes.TROPHY,
+ SLOT_HIGHLIGHT_TYPES.EQUIPMENT_TROPHY_BASIC: ItemHighlightTypes.TROPHY_BASIC,
+ SLOT_HIGHLIGHT_TYPES.EQUIPMENT_TROPHY_UPGRADED: ItemHighlightTypes.TROPHY_UPGRADED,
+ SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER: ItemHighlightTypes.BATTLE_BOOSTER,
+ SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_CREW_REPLACE: ItemHighlightTypes.BATTLE_BOOSTER_REPLACE,
+ SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS: ItemHighlightTypes.EQUIPMENT_PLUS,
+ SLOT_HIGHLIGHT_TYPES.BUILT_IN_EQUIPMENT: ItemHighlightTypes.BUILT_IN_EQUIPMENT}
 
 def canBuyWithGoldExchange(price, money, exchangeRate):
     money = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate, default=0)
@@ -502,7 +510,7 @@ class FittingItem(GUIItem):
         shortage = money.getShortage(price)
         if shortage:
             currency = shortage.getCurrency(byWeight=True)
-            return (False, GUI_ITEM_ECONOMY_CODE.getMoneyError(currency))
+            return (False, GUI_ITEM_ECONOMY_CODE.getCurrencyError(currency))
         return (True, GUI_ITEM_ECONOMY_CODE.UNDEFINED)
 
     def _sortByType(self, other):

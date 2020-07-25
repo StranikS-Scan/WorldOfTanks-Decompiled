@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/bonus_readers.py
 import time
+from typing import Union, TYPE_CHECKING
 import items
 import calendar
 from account_shared import validateCustomizationItem
@@ -10,6 +11,8 @@ from items.components.c11n_constants import SeasonType
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE
 from soft_exception import SoftException
+if TYPE_CHECKING:
+    from ResMgr import DataSection
 __all__ = ['readBonusSection', 'readUTC', 'SUPPORTED_BONUSES']
 
 def getBonusReaders(bonusTypes):
@@ -191,7 +194,7 @@ class IntHolder(int):
         return int(self).__ge__(x)
 
     def __str__(self):
-        return int(self).__str__()
+        return '{}: [val = {}, ukey = {}, rate = {}, isMaterialized = {}]'.format(self.__class__.__name__, int(self), self.ukey, self.rate, self.isMaterialized())
 
     def __float__(self):
         return int(self).__float__()
@@ -342,13 +345,17 @@ class FloatHolder(float):
         return float(self).__nonzero__()
 
 
-def __readBonus_int(bonus, name, section, eventType):
+def __readIntWithTokenExpansion(section):
     bindingToken = section.readString('token2int', '')
     rate = section.readInt('rate', 1)
     value = section.asInt
     if value < 0:
-        raise SoftException('Negative value (%s)' % name)
-    bonus[name] = IntHolder(value, ukey=bindingToken, rate=rate) if bindingToken else value
+        raise SoftException('Negative value (%s)' % section.name)
+    return IntHolder(value, ukey=bindingToken, rate=rate) if bindingToken else value
+
+
+def __readBonus_int(bonus, name, section, eventType):
+    bonus[name] = __readIntWithTokenExpansion(section)
 
 
 def __readBonus_factor(bonus, name, section, eventType):
@@ -613,7 +620,7 @@ def __readBonus_goodies(bonus, _name, section, eventType):
     if section.has_key('limit'):
         goodie['limit'] = section['limit'].asInt
     if section.has_key('count'):
-        goodie['count'] = section['count'].asInt
+        goodie['count'] = __readIntWithTokenExpansion(section['count'])
     else:
         goodie['count'] = 1
 

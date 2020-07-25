@@ -6,26 +6,27 @@ from functools import partial
 from types import NoneType
 import BigWorld
 import CommandMapping
-from constants import EQUIPMENT_STAGES
+from constants import EQUIPMENT_STAGES, SHELL_TYPES
+from items import vehicles
 from gui import GUI_SETTINGS
 from gui import TANKMEN_ROLES_ORDER_DICT
 from gui.Scaleform.daapi.view.battle.shared.timers_common import PythonTimer
 from gui.Scaleform.daapi.view.meta.ConsumablesPanelMeta import ConsumablesPanelMeta
 from gui.Scaleform.genConsts.CONSUMABLES_PANEL_SETTINGS import CONSUMABLES_PANEL_SETTINGS
 from gui.Scaleform.genConsts.ANIMATION_TYPES import ANIMATION_TYPES
-from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
 from gui.battle_control.battle_constants import VEHICLE_DEVICE_IN_COMPLEX_ITEM
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, DEVICE_STATE_DESTROYED
 from gui.battle_control.controllers.consumables.equipment_ctrl import IgnoreEntitySelection
 from gui.battle_control.controllers.consumables.equipment_ctrl import NeedEntitySelection, InCooldownError
-from gui.impl.gen import R
 from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
+from gui.shared.formatters import text_styles
 from gui.shared.utils.key_mapping import getScaleformKey
 from helpers import dependency
-from helpers import i18n
 from helpers.CallbackDelayer import CallbackDelayer
 from items.artefacts import SharedCooldownConsumableConfigReader
 from shared_utils import forEach
@@ -37,7 +38,7 @@ NO_AMMO_ICON_PATH = '../maps/icons/ammopanel/battle_ammo/NO_%s'
 COMMAND_AMMO_CHOICE_MASK = 'CMD_AMMO_CHOICE_{0:d}'
 TOOLTIP_FORMAT = '{{HEADER}}{0:>s}{{/HEADER}}\n/{{BODY}}{1:>s}{{/BODY}}'
 TOOLTIP_NO_BODY_FORMAT = '{{HEADER}}{0:>s}{{/HEADER}}'
-EMPTY_EQUIPMENT_TOOLTIP = TOOLTIP_NO_BODY_FORMAT.format(backport.text(R.strings.ingame_gui.consumables_panel.equipment.tooltip.empty()))
+EMPTY_EQUIPMENT_TOOLTIP = backport.text(R.strings.ingame_gui.consumables_panel.equipment.tooltip.empty())
 _EQUIPMENT_GLOW_TIME = 7
 
 def _isEquipmentAvailableToUse(eq):
@@ -165,6 +166,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         self._resetCds()
         self._mask = 0
         self.__keys.clear()
+        self.__extraKeys.clear()
         self.__currentActivatedSlotIdx = -1
         self._resetDelayedReload()
         self.as_resetS()
@@ -173,13 +175,13 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         self._cds[idx] = intCD
         keyCode, sfKeyCode = self.__genKey(idx)
         self.__extraKeys[idx] = self.__keys[keyCode] = partial(self.__handleAmmoPressed, intCD)
-        tooltipText = self.__makeShellTooltip(descriptor, int(gunSettings.getPiercingPower(intCD)))
+        tooltipText = self.__makeShellTooltip(descriptor, int(gunSettings.getPiercingPower(intCD)), gunSettings.getShotSpeed(intCD))
         icon = descriptor.icon[0]
         shellIconPath = AMMO_ICON_PATH % icon
         noShellIconPath = NO_AMMO_ICON_PATH % icon
         self.as_addShellSlotS(idx, keyCode, sfKeyCode, quantity, gunSettings.clip.size, shellIconPath, noShellIconPath, tooltipText)
 
-    def _addEquipmentSlot(self, idx, intCD, item=None):
+    def _addEquipmentSlot(self, idx, intCD, item):
         self._cds[idx] = intCD
         if item is None:
             bwKey, sfKey = self.__genKey(idx)
@@ -219,12 +221,11 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
             self.as_addEquipmentSlotS(idx, bwKey, sfKey, quantity, timeRemaining, reloadingTime, iconPath, toolTip, animationType)
         return
 
-    def _addOptionalDeviceSlot(self, idx, intCD, descriptor, isActive):
-        self._cds[idx] = intCD
-        timeRemaining = -1 if isActive else 0
+    def _addOptionalDeviceSlot(self, idx, optDeviceInBattle):
+        self._cds[idx] = optDeviceInBattle.getIntCD()
+        descriptor = optDeviceInBattle.getDescriptor()
         iconPath = descriptor.icon[0]
-        tooltipText = TOOLTIP_FORMAT.format(descriptor.userString, descriptor.description.format(colorTagOpen='', colorTagClose=''))
-        self.as_addOptionalDeviceSlotS(idx, timeRemaining, iconPath, tooltipText)
+        self.as_addOptionalDeviceSlotS(idx, -1 if optDeviceInBattle.getStatus() else 0, iconPath, TOOLTIPS_CONSTANTS.BATTLE_OPT_DEVICE, True, optDeviceInBattle.getIntCD(), optDeviceInBattle.isUsed())
 
     def _updateShellSlot(self, idx, quantity):
         self.as_setItemQuantityInSlotS(idx, quantity)
@@ -233,6 +234,8 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         quantity = item.getQuantity()
         currentTime = item.getTimeRemaining()
         maxTime = item.getTotalTime()
+        if maxTime == 0 and item.getStage() == EQUIPMENT_STAGES.COOLDOWN:
+            maxTime = item.getDescriptor().cooldownSeconds
         self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime, item.getAnimationType())
         bwKey, _ = self.__genKey(idx)
         if item.getQuantity() > 0 and bwKey not in self.__keys:
@@ -256,9 +259,14 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
             self.__currentActivatedSlotIdx = -1
             self.as_setEquipmentActivatedS(idx, False)
 
-    def _updateOptionalDeviceSlot(self, idx, isOn):
-        duration = -1 if isOn else 0
-        self.as_setCoolDownTimeS(idx, duration, duration, 0)
+    def _updateOptionalDeviceSlot(self, idx, optDeviceInBattle):
+        intCD = optDeviceInBattle.getIntCD()
+        duration = -1 if optDeviceInBattle.getStatus() else 0
+        idx = self._cds.index(intCD)
+        self.as_setOptionalDeviceUsedS(idx, optDeviceInBattle.isUsed())
+        if optDeviceInBattle.isNeedGlow():
+            self.as_setGlowS(idx, CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN)
+        self.as_setCoolDownTimeS(self._cds.index(intCD), duration, duration, 0)
 
     def _showEquipmentGlow(self, equipmentIndex, glowType=CONSUMABLES_PANEL_SETTINGS.GLOW_ID_ORANGE):
         if equipmentIndex in self.__equipmentsGlowCallbacks:
@@ -271,6 +279,25 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
     def _onShellsAdded(self, intCD, descriptor, quantity, _, gunSettings):
         idx = self.__genNextIdx(self.__ammoFullMask, self._AMMO_START_IDX)
         self._addShellSlot(idx, intCD, descriptor, quantity, gunSettings)
+
+    def _onShellsUpdated(self, intCD, quantity, *args):
+        if intCD in self._cds:
+            self._updateShellSlot(self._cds.index(intCD), quantity)
+        else:
+            _logger.error('Ammo with cd=%d is not found in panel=%s', intCD, str(self._cds))
+
+    def _onNextShellChanged(self, intCD):
+        if intCD in self._cds:
+            self.__delayedNextShellID = intCD
+            self.as_setNextShellS(self._cds.index(intCD))
+        else:
+            _logger.error('Ammo with cd=%d is not found in panel=%s', intCD, str(self._cds))
+
+    def _onCurrentShellChanged(self, intCD):
+        if intCD in self._cds:
+            self.as_setCurrentShellS(self._cds.index(intCD))
+        else:
+            _logger.error('Ammo with cd=%d is not found in panel=%s', intCD, str(self._cds))
 
     def _onGunSettingsSet(self, _):
         self._reset()
@@ -312,9 +339,9 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         if ammoCtrl is not None:
             self.__fillShells(ammoCtrl)
             ammoCtrl.onShellsAdded += self._onShellsAdded
-            ammoCtrl.onShellsUpdated += self.__onShellsUpdated
-            ammoCtrl.onNextShellChanged += self.__onNextShellChanged
-            ammoCtrl.onCurrentShellChanged += self.__onCurrentShellChanged
+            ammoCtrl.onShellsUpdated += self._onShellsUpdated
+            ammoCtrl.onNextShellChanged += self._onNextShellChanged
+            ammoCtrl.onCurrentShellChanged += self._onCurrentShellChanged
             ammoCtrl.onGunReloadTimeSet += self._onGunReloadTimeSet
             ammoCtrl.onGunSettingsSet += self._onGunSettingsSet
             ammoCtrl.onDebuffStarted += self.__onDebuffStarted
@@ -345,9 +372,9 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         ammoCtrl = self.sessionProvider.shared.ammo
         if ammoCtrl is not None:
             ammoCtrl.onShellsAdded -= self._onShellsAdded
-            ammoCtrl.onShellsUpdated -= self.__onShellsUpdated
-            ammoCtrl.onNextShellChanged -= self.__onNextShellChanged
-            ammoCtrl.onCurrentShellChanged -= self.__onCurrentShellChanged
+            ammoCtrl.onShellsUpdated -= self._onShellsUpdated
+            ammoCtrl.onNextShellChanged -= self._onNextShellChanged
+            ammoCtrl.onCurrentShellChanged -= self._onCurrentShellChanged
             ammoCtrl.onGunReloadTimeSet -= self._onGunReloadTimeSet
             ammoCtrl.onGunSettingsSet -= self._onGunSettingsSet
             ammoCtrl.onDebuffStarted -= self.__onDebuffStarted
@@ -380,22 +407,21 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
             sfKey = getScaleformKey(bwKey)
         return (bwKey, sfKey)
 
-    def __makeShellTooltip(self, descriptor, piercingPower):
+    def __makeShellTooltip(self, descriptor, piercingPower, shotSpeed):
         kind = descriptor.kind
-        header = i18n.makeString('#ingame_gui:shells_kinds/{0:>s}'.format(kind), caliber=backport.getNiceNumberFormat(descriptor.caliber), userString=descriptor.userString)
+        projSpeedFactor = vehicles.g_cache.commonConfig['miscParams']['projectileSpeedFactor']
+        header = backport.text(R.strings.ingame_gui.shells_kinds.dyn(kind)(), caliber=backport.getNiceNumberFormat(descriptor.caliber), userString=descriptor.userString)
         if GUI_SETTINGS.technicalInfo:
-            tooltipStr = INGAME_GUI.SHELLS_KINDS_PARAMS
-            paramsDict = {'damage': str(int(descriptor.damage[0])),
-             'piercingPower': str(piercingPower)}
-            if piercingPower == 0:
-                del paramsDict['piercingPower']
-                tooltipStr = INGAME_GUI.SHELLS_KINDS_PARAMSNOPIERCING
+            params = [backport.text(R.strings.ingame_gui.shells_kinds.params.damage(), value=backport.getNiceNumberFormat(descriptor.damage[0]))]
+            if piercingPower != 0:
+                params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.piercingPower(), value=backport.getNiceNumberFormat(piercingPower)))
+            params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.shotSpeed(), value=backport.getIntegralFormat(shotSpeed / projSpeedFactor)))
+            if kind == SHELL_TYPES.HIGH_EXPLOSIVE and descriptor.type.explosionRadius > 0.0:
+                params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.explosionRadius(), value=backport.getNiceNumberFormat(descriptor.type.explosionRadius)))
             if descriptor.hasStun and self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
                 stun = descriptor.stun
-                tooltipStr = INGAME_GUI.SHELLS_KINDS_STUNPARAMS
-                paramsDict['stunMinDuration'] = backport.getNiceNumberFormat(stun.guaranteedStunDuration * stun.stunDuration)
-                paramsDict['stunMaxDuration'] = backport.getNiceNumberFormat(stun.stunDuration)
-            body = i18n.makeString(tooltipStr, **paramsDict)
+                params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.stunDuration(), minValue=backport.getNiceNumberFormat(stun.guaranteedStunDuration * stun.stunDuration), maxValue=backport.getNiceNumberFormat(stun.stunDuration)))
+            body = text_styles.concatStylesToMultiLine(*params)
             fmt = TOOLTIP_FORMAT
         else:
             body = ''
@@ -519,25 +545,6 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
             self.__extraKeys = extraKeys
             return
 
-    def __onShellsUpdated(self, intCD, quantity, *args):
-        if intCD in self._cds:
-            self._updateShellSlot(self._cds.index(intCD), quantity)
-        else:
-            _logger.error('Ammo with cd=%d is not found in panel=%s', intCD, str(self._cds))
-
-    def __onNextShellChanged(self, intCD):
-        if intCD in self._cds:
-            self.__delayedNextShellID = intCD
-            self.as_setNextShellS(self._cds.index(intCD))
-        else:
-            _logger.error('Ammo with cd=%d is not found in panel=%s', intCD, str(self._cds))
-
-    def __onCurrentShellChanged(self, intCD):
-        if intCD in self._cds:
-            self.as_setCurrentShellS(self._cds.index(intCD))
-        else:
-            _logger.error('Ammo with cd=%d is not found in panel=%s', intCD, str(self._cds))
-
     def __onDebuffStarted(self, debuffTime=None):
         self.delayedReload = debuffTime
 
@@ -575,13 +582,14 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         if intCD in self._cds:
             self.as_setCoolDownTimeSnapshotS(self._cds.index(intCD), timeLeft, isBaseTime, isFlash)
 
-    def __onOptionalDeviceAdded(self, intCD, descriptor, isOn):
+    def __onOptionalDeviceAdded(self, optDeviceInBattle):
         idx = self.__genNextIdx(self.__optDeviceFullMask, self._OPT_DEVICE_START_IDX)
-        self._addOptionalDeviceSlot(idx, intCD, descriptor, isOn)
+        self._addOptionalDeviceSlot(idx, optDeviceInBattle)
 
-    def __onOptionalDeviceUpdated(self, intCD, isOn):
+    def __onOptionalDeviceUpdated(self, optDeviceInBattle):
+        intCD = optDeviceInBattle.getIntCD()
         if intCD in self._cds:
-            self._updateOptionalDeviceSlot(self._cds.index(intCD), isOn)
+            self._updateOptionalDeviceSlot(self._cds.index(intCD), optDeviceInBattle)
         else:
             _logger.error('Optional device with cd=%d is not found in panel=%s', intCD, str(self._cds))
 
@@ -708,10 +716,10 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         forEach(lambda args: self._onShellsAdded(*args), ctrl.getOrderedShellsLayout())
         shellCD = ctrl.getNextShellCD()
         if shellCD is not None:
-            self.__onNextShellChanged(shellCD)
+            self._onNextShellChanged(shellCD)
         shellCD = ctrl.getCurrentShellCD()
         if shellCD is not None:
-            self.__onCurrentShellChanged(shellCD)
+            self._onCurrentShellChanged(shellCD)
         return
 
     def __fillEquipments(self, ctrl):

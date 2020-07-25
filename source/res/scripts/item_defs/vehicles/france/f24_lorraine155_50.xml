@@ -7,6 +7,7 @@
     <radioman></radioman>
     <loader></loader>
   </crew>
+  <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
     <forward>	60	</forward>
     <backward>	14	</backward>
@@ -15,9 +16,16 @@
     <moving>	0.074	</moving>
     <still>	0.149	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
-    <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.224	</firePenalty>
   </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.05 0.075	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.03 0.04	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+  </optDevsOverrides>
   <repairCost>	10.30	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>

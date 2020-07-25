@@ -22,7 +22,7 @@ MODULES_INSTALLING_ORDER = (GUI_ITEM_TYPE.CHASSIS,
  GUI_ITEM_TYPE.ENGINE,
  GUI_ITEM_TYPE.RADIO)
 NOT_AFFECTED_DEVICES = {}
-NOT_AFFECTED_EQUIPMENTS = {'extinguisher', 'medkit', 'repairkit'}
+NOT_AFFECTED_EQUIPMENTS = {'smallRepairkit', 'smallMedkit', 'handExtinguishers'}
 OPTIONAL_DEVICE_TYPE_NAME = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.OPTIONALDEVICE]
 EQUIPMENT_TYPE_NAME = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.EQUIPMENT]
 BATTLE_BOOSTER_TYPE_NAME = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.BATTLE_BOOSTER]
@@ -78,10 +78,6 @@ def getVehCrewInfo(vehIntCD, itemsCache=None):
                 nativeVehiclesByIndexes[roleIdx] = itemsCache.items.getItemByCD(tman.vehicleNativeDescr.type.compactDescr)
 
     return (levelsByIndexes, nativeVehiclesByIndexes)
-
-
-def createTankmans(crewData):
-    return [ (strCD[0], Tankman(strCD[1]) if strCD[1] else None) for strCD in crewData ]
 
 
 def isEquipmentSame(equipment1, equipment2):
@@ -146,10 +142,3 @@ def getVehicleTopModules(vehicle):
     topModules = checker.process()
     checker.clear()
     return sorted(topModules, key=lambda module: MODULES_INSTALLING_ORDER.index(module.itemTypeID))
-
-
-def isVehicleTopConfiguration(vehicle):
-    selectedModules = getVehicleModules(vehicle)
-    topModules = getVehicleTopModules(vehicle)
-    topModulesFromStock = not topModules
-    return True if topModulesFromStock else all((bool(item in selectedModules) for item in topModules))

@@ -1,10 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/__init__.py
+import logging
+from gui.impl import backport
+from gui.impl.backport import getNiceNumberFormat
+from gui.impl.gen import R
 from shared_utils import CONST_CONTAINER
 from items import ITEM_TYPE_NAMES, vehicles, ITEM_TYPE_INDICES, EQUIPMENT_TYPES, getTypeOfCompactDescr
 from gui.shared.money import Currency
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from helpers import dependency
+_logger = logging.getLogger(__name__)
 CLAN_LOCK = 1
 GUI_ITEM_TYPE_NAMES = tuple(ITEM_TYPE_NAMES) + tuple(['reserved'] * (16 - len(ITEM_TYPE_NAMES)))
 GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill', 'battleBooster', 'badge', 'battleAbility', 'lootBox', 'demountKit', 'paint', 'camouflage', 'modification', 'outfit', 'style', 'decal', 'emblem', 'inscription', 'projectionDecal', 'insignia', 'personalNumber', 'sequence', 'attachment')
@@ -101,18 +106,19 @@ class GUI_ITEM_ECONOMY_CODE(CONST_CONTAINER):
     NOT_ENOUGH_CREDITS = _formatMoneyError(Currency.CREDITS)
     NOT_ENOUGH_CRYSTAL = _formatMoneyError(Currency.CRYSTAL)
     NOT_ENOUGH_EVENT_COIN = _formatMoneyError(Currency.EVENT_COIN)
-    _NOT_ENOUGH_MONEY = (NOT_ENOUGH_GOLD,
+    _NOT_ENOUGH_CURRENCIES = (NOT_ENOUGH_GOLD,
      NOT_ENOUGH_CRYSTAL,
      NOT_ENOUGH_CREDITS,
      NOT_ENOUGH_EVENT_COIN)
+    NOT_ENOUGH_MONEY = 'not_enough_money'
 
     @classmethod
-    def getMoneyError(cls, currency):
+    def getCurrencyError(cls, currency):
         return _formatMoneyError(currency)
 
     @classmethod
-    def isMoneyError(cls, errCode):
-        return errCode in GUI_ITEM_ECONOMY_CODE._NOT_ENOUGH_MONEY
+    def isCurrencyError(cls, errCode):
+        return errCode in GUI_ITEM_ECONOMY_CODE._NOT_ENOUGH_CURRENCIES
 
 
 class ItemsCollection(dict):
@@ -152,11 +158,11 @@ def getVehicleComponentsByType(vehicle, itemTypeIdx):
         from gui.shared.gui_items.Tankman import TankmenCollection
         return TankmenCollection([ (t.invID, t) for _, t in vehicle.crew ])
     if itemTypeIdx == vehicles._OPTIONALDEVICE:
-        return packModules(vehicle.optDevices)
+        return packModules(vehicle.optDevices.installed)
     if itemTypeIdx == vehicles._SHELL:
-        return packModules(vehicle.shells)
+        return packModules(vehicle.shells.installed)
     if itemTypeIdx == vehicles._EQUIPMENT:
-        return ItemsCollection([ (eq.intCD, eq) for eq in vehicle.equipment.regularConsumables.getInstalledItems() ])
+        return ItemsCollection([ (eq.intCD, eq) for eq in vehicle.consumables.installed.getItems() ])
     return ItemsCollection()
 
 
@@ -254,10 +260,12 @@ class ACTION_ENTITY_ITEM(object):
 
 
 class KPI(object):
+    __slots__ = ('__name', '__value', '__type', '__specValue', '__vehicleTypes')
 
     class Name(CONST_CONTAINER):
         COMPOUND_KPI = 'compoundKPI'
         VEHICLE_REPAIR_SPEED = 'vehicleRepairSpeed'
+        VEHICLE_CHASSIS_REPAIR_SPEED = 'vehicleChassisRepairSpeed'
         VEHICLE_ENGINE_POWER = 'vehicleEnginePower'
         VEHICLE_TURRET_ROTATION_SPEED = 'vehicleTurretRotationSpeed'
         VEHICLE_CIRCULAR_VISION_RADIUS = 'vehicleCircularVisionRadius'
@@ -268,15 +276,29 @@ class KPI(object):
         VEHICLE_GUN_RELOAD_TIME = 'vehicleGunReloadTime'
         VEHICLE_GUN_AIM_SPEED = 'vehicleGunAimSpeed'
         VEHICLE_GUN_SHOT_DISPERSION = 'vehicleGunShotDispersion'
+        VEHICLE_GUN_SHOT_FULL_DISPERSION = 'vehicleGunShotFullDispersion'
         VEHICLE_AMMO_BAY_STRENGTH = 'vehicleAmmoBayStrength'
         VEHICLE_FUEL_TANK_STRENGTH = 'vehicleFuelTankStrength'
         VEHICLE_ENGINE_STRENGTH = 'vehicleEngineStrength'
         VEHICLE_CHASSIS_STRENGTH = 'vehicleChassisStrength'
+        VEHICLE_AMMO_BAY_ENGINE_FUEL_STRENGTH = 'vehicleAmmoBayEngineFuelStrength'
         VEHICLE_CHASSIS_LOAD = 'vehicleChassisLoad'
         VEHICLE_CHASSIS_FALL_DAMAGE = 'vehicleChassisFallDamage'
         VEHICLE_RAM_OR_EXPLOSION_DAMAGE_RESISTANCE = 'vehicleRamOrExplosionDamageResistance'
         VEHICLE_SOFT_GROUND_PASSABILITY = 'vehicleSoftGroundPassability'
         VEHICLE_MEDIUM_GROUND_PASSABILITY = 'vehicleMediumGroundPassability'
+        VEHICLE_ENEMY_SPOTTING_TIME = 'vehicleEnemySpottingTime'
+        VEHICLE_OWN_SPOTTING_TIME = 'vehicleOwnSpottingTime'
+        VEHICLE_RELOAD_TIME_AFTER_SHELL_CHANGE = 'vehicleReloadTimeAfterShellChange'
+        VEHICLE_STRENGTH = 'vehicleStrength'
+        VEHICLE_PENALTY_FOR_DAMAGED_ENGINE_AND_COMBAT = 'vehPenaltyForDamageEngineAndCombat'
+        VEHICLE_ALL_GROUND_ROTATION_SPEED = 'vehicleAllGroundRotationSpeed'
+        VEHICLE_SPEED_GAIN = 'vehicleSpeedGain'
+        VEHICLE_TURRET_OR_CUTTING_ROTATION_SPEED = 'vehicleTurretOrCuttingRotationSpeed'
+        VEHICLE_FORWARD_MAX_SPEED = 'vehicleForwardMaxSpeed'
+        VEHICLE_BACKWARD_MAX_SPEED = 'vehicleBackwardMaxSpeed'
+        VEHICLE_CAMOUFLAGE_GROUP = 'vehicleCamouflageGroup'
+        VEHICLE_STILL_CAMOUFLAGE_GROUP = 'vehicleStillCamouflageGroup'
         CREW_LEVEL = 'crewLevel'
         CREW_HIT_CHANCE = 'crewHitChance'
         CREW_STUN_DURATION = 'crewStunDuration'
@@ -295,6 +317,8 @@ class KPI(object):
         CREW_SKILL_RANCOROUS_DURATION = 'crewSkillRancorousDuration'
         CREW_SKILL_PEDANT = 'crewSkillPedant'
         CREW_SKILL_SMOOTH_TURRET = 'crewSkillSmoothTurret'
+        DEMASK_FOLIAGE_FACTOR = 'demaskFoliageFactor'
+        DEMASK_MOVING_FACTOR = 'demaskMovingFactor'
         GAME_XP = 'gameXp'
         GAME_FREE_XP = 'gameFreeXp'
         GAME_CREW_XP = 'gameCrewXp'
@@ -306,11 +330,15 @@ class KPI(object):
         ADD = 'add'
         BOOST_SKILL = 'boostSkill'
         ONE_OF = 'oneOf'
+        AGGREGATE_MUL = 'aggregateMul'
 
-    def __init__(self, kpiName, kpiValue, kpyType=Type.MUL):
+    def __init__(self, kpiName, kpiValue, kpyType=Type.MUL, specValue=None, vehicleTypes=None):
         self.__name = kpiName
         self.__value = kpiValue
         self.__type = kpyType
+        self.__specValue = specValue
+        self.__vehicleTypes = vehicleTypes or None
+        return
 
     @property
     def name(self):
@@ -321,8 +349,82 @@ class KPI(object):
         return self.__value
 
     @property
+    def specValue(self):
+        return self.__specValue
+
+    @property
     def type(self):
         return self.__type
+
+    @property
+    def vehicleTypes(self):
+        return self.__vehicleTypes
+
+    def getDescriptionR(self):
+        res = R.strings.tank_setup.kpi.bonus.dyn(self.__name)
+        if not res:
+            _logger.debug('KPI description not found, name %s', self.__name)
+            return R.invalid()
+        return res()
+
+    def getLongDescriptionR(self):
+        res = R.strings.tank_setup.kpi.bonus.longDescr.dyn(self.__name)
+        return res() if res else self.getDescriptionR()
+
+
+def kpiFormatValue(kpiName, value):
+    ending = R.strings.tank_setup.kpi.bonus.valueTypes.dyn(kpiName, R.strings.tank_setup.kpi.bonus.valueTypes.default)()
+    return ('+' if value > 0 else '') + getNiceNumberFormat(value) + backport.text(ending)
+
+
+def kpiFormatValueRange(kpiName, valueRange):
+    ending = R.strings.tank_setup.kpi.bonus.valueTypes.dyn(kpiName, R.strings.tank_setup.kpi.bonus.valueTypes.default)()
+    minValue, maxValue = valueRange
+    return '{}-{}{}'.format(getNiceNumberFormat(minValue), getNiceNumberFormat(maxValue), backport.text(ending))
+
+
+def getKpiValueString(kpi, value):
+    if kpi.type == KPI.Type.MUL:
+        value = (value - 1.0) * 100
+    elif kpi.type == KPI.Type.AGGREGATE_MUL:
+        minValue, maxValue = value
+        formatValue = ((minValue - 1.0) * 100, (maxValue - 1.0) * 100)
+        return kpiFormatValueRange(kpi.name, formatValue)
+    return kpiFormatValue(kpi.name, value)
+
+
+def getKpiFormatDescription(kpi):
+    value = getKpiValueString(kpi, kpi.value)
+    specValue = getKpiValueString(kpi, kpi.specValue) if kpi.specValue else None
+    generalValue = ' / '.join((value, specValue)) if specValue is not None else value
+    description = ' '.join((generalValue, backport.text(kpi.getDescriptionR(), default='')))
+    return description
+
+
+def mergeAggregateKpi(aggregateKpi):
+
+    def _mergeValue(value, currentRange):
+        if currentRange is None:
+            return (value, value)
+        else:
+            minValue, maxValue = currentRange
+            return (min(minValue, value), max(maxValue, value))
+
+    if aggregateKpi.type not in (KPI.Type.AGGREGATE_MUL,):
+        _logger.debug('Only aggregate kpi type supported merge')
+        return aggregateKpi
+    else:
+        specValue = None
+        vehicleTypes = []
+        value = None
+        for kpi in aggregateKpi.value:
+            value = _mergeValue(kpi.value, value)
+            if kpi.specValue:
+                specValue = _mergeValue(kpi.specValue, specValue)
+            if kpi.vehicleTypes:
+                vehicleTypes.extend(kpi.vehicleTypes)
+
+        return KPI(aggregateKpi.name, value, aggregateKpi.type, specValue, vehicleTypes)
 
 
 VEHICLE_ATTR_TO_KPI_NAME_MAP = {'repairSpeed': KPI.Name.VEHICLE_REPAIR_SPEED,
@@ -347,3 +449,4 @@ CREW_SKILL_TO_KPI_NAME_MAP = {'repair': KPI.Name.CREW_SKILL_REPAIR,
  'loader_pedant': KPI.Name.CREW_SKILL_PEDANT,
  'radioman_lastEffort': KPI.Name.CREW_SKILL_LAST_EFFORT,
  'gunner_rancorous': KPI.Name.CREW_SKILL_RANCOROUS}
+AGGREGATE_TO_SINGLE_TYPE_KPI_MAP = {KPI.Type.AGGREGATE_MUL: KPI.Type.MUL}

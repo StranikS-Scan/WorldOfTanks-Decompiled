@@ -49,8 +49,11 @@ class ConsumablesPanelMeta(BaseDAAPIComponent):
     def as_collapseEquipmentSlotS(self):
         return self.flashObject.as_collapseEquipmentSlot() if self._isDAAPIInited() else None
 
-    def as_addOptionalDeviceSlotS(self, idx, timeRemaining, iconPath, tooltipText):
-        return self.flashObject.as_addOptionalDeviceSlot(idx, timeRemaining, iconPath, tooltipText) if self._isDAAPIInited() else None
+    def as_addOptionalDeviceSlotS(self, idx, timeRemaining, iconPath, tooltipText, isTooltipSpecial, intCD, isUsed):
+        return self.flashObject.as_addOptionalDeviceSlot(idx, timeRemaining, iconPath, tooltipText, isTooltipSpecial, intCD, isUsed) if self._isDAAPIInited() else None
+
+    def as_setOptionalDeviceUsedS(self, idx, isUsed):
+        return self.flashObject.as_setOptionalDeviceUsed(idx, isUsed) if self._isDAAPIInited() else None
 
     def as_setGlowS(self, idx, glowID):
         return self.flashObject.as_setGlow(idx, glowID) if self._isDAAPIInited() else None

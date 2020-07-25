@@ -10,7 +10,7 @@ from gui.shared.items_parameters import params, RELATIVE_PARAMS, MAX_RELATIVE_VA
 from gui.shared.items_parameters.comparator import VehiclesComparator, ItemsComparator
 from gui.shared.items_parameters.functions import getBasicShell
 from gui.shared.items_parameters.params_cache import g_paramsCache
-from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME
+from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, TURBOSHAFT_SPEED_MODE_SPEED, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_SWITCH_TIME
 from helpers import dependency
 from items import vehicles, ITEM_TYPES
 from shared_utils import findFirst, first
@@ -43,20 +43,36 @@ RELATIVE_POWER_PARAMS = ('avgDamage',
 RELATIVE_ARMOR_PARAMS = ('maxHealth', 'hullArmor', 'turretArmor')
 RELATIVE_MOBILITY_PARAMS = ('vehicleWeight',
  'enginePower',
+ TURBOSHAFT_ENGINE_POWER,
  'enginePowerPerTon',
  'speedLimits',
  WHEELED_SPEED_MODE_SPEED,
+ TURBOSHAFT_SPEED_MODE_SPEED,
  'chassisRotationSpeed',
  MAX_STEERING_LOCK_ANGLE,
  'switchOnTime',
- 'switchOffTime')
-RELATIVE_CAMOUFLAGE_PARAMS = ('invisibilityStillFactor', 'invisibilityMovingFactor')
+ 'switchOffTime',
+ TURBOSHAFT_SWITCH_TIME)
+RELATIVE_CAMOUFLAGE_PARAMS = ('invisibilityStillFactor',
+ 'invisibilityMovingFactor',
+ TURBOSHAFT_INVISIBILITY_STILL_FACTOR,
+ TURBOSHAFT_INVISIBILITY_MOVING_FACTOR)
 RELATIVE_VISIBILITY_PARAMS = ('circularVisionRadius', 'radioDistance')
 PARAMS_GROUPS = {'relativePower': RELATIVE_POWER_PARAMS,
  'relativeArmor': RELATIVE_ARMOR_PARAMS,
  'relativeMobility': RELATIVE_MOBILITY_PARAMS,
  'relativeCamouflage': RELATIVE_CAMOUFLAGE_PARAMS,
  'relativeVisibility': RELATIVE_VISIBILITY_PARAMS}
+EXTRA_POWER_PARAMS = ('vehicleGunShotDispersion', 'vehicleReloadTimeAfterShellChange')
+EXTRA_ARMOR_PARAMS = ('vehicleRepairSpeed', 'vehicleRamOrExplosionDamageResistance', 'crewHitChance', 'crewRepeatedStunDuration', 'crewStunDuration', 'vehicleChassisStrength', 'vehicleChassisFallDamage', 'vehicleChassisRepairSpeed', 'vehicleAmmoBayEngineFuelStrength', 'vehPenaltyForDamageEngineAndCombat', 'vehicleFireChance')
+EXTRA_MOBILITY_PARAMS = ('vehicleSpeedGain',)
+EXTRA_CAMOUFLAGE_PARAMS = ('vehicleOwnSpottingTime',)
+EXTRA_VISIBILITY_PARAMS = ('vehicleEnemySpottingTime', 'demaskFoliageFactor', 'demaskMovingFactor')
+EXTRA_PARAMS_GROUP = {'relativePower': EXTRA_POWER_PARAMS,
+ 'relativeArmor': EXTRA_ARMOR_PARAMS,
+ 'relativeMobility': EXTRA_MOBILITY_PARAMS,
+ 'relativeCamouflage': EXTRA_CAMOUFLAGE_PARAMS,
+ 'relativeVisibility': EXTRA_VISIBILITY_PARAMS}
 
 def _getParamsProvider(item, vehicleDescr=None):
     if vehicles.isVehicleDescr(item.descriptor):
@@ -145,7 +161,7 @@ def artifactComparator(vehicle, item, slotIdx, compareWithEmptySlot=False):
         else:
             vehicle.descriptor.removeOptionalDevice(slotIdx)
     else:
-        consumables = vehicle.equipment.regularConsumables if item.itemTypeID == ITEM_TYPES.equipment else vehicle.equipment.battleBoosterConsumables
+        consumables = vehicle.consumables.installed if item.itemTypeID == ITEM_TYPES.equipment else vehicle.battleBoosters.installed
         oldEq = consumables[slotIdx]
         if compareWithEmptySlot:
             consumables[slotIdx] = None
@@ -159,12 +175,12 @@ def artifactComparator(vehicle, item, slotIdx, compareWithEmptySlot=False):
 def artifactRemovedComparator(vehicle, item, slotIdx):
     vehicleParams = params.VehicleParams(vehicle).getParamsDict()
     if item.itemTypeID == ITEM_TYPES.optionalDevice:
-        oldOptDevice = vehicle.optDevices[slotIdx]
+        oldOptDevice = vehicle.optDevices.installed[slotIdx]
         vehicle.descriptor.removeOptionalDevice(slotIdx)
         withItemParams = params.VehicleParams(vehicle).getParamsDict()
         vehicle.descriptor.installOptionalDevice(oldOptDevice.intCD, slotIdx)
     else:
-        consumables = vehicle.equipment.regularConsumables if item.itemTypeID == ITEM_TYPES.equipment else vehicle.equipment.battleBoosterConsumables
+        consumables = vehicle.consumables.installed if item.itemTypeID == ITEM_TYPES.equipment else vehicle.battleBoosters.installed
         oldEq = consumables[slotIdx]
         consumables[slotIdx] = None
         withItemParams = params.VehicleParams(vehicle).getParamsDict()
@@ -278,6 +294,7 @@ class VehParamsBaseGenerator(object):
                             result.append(formattedParam)
                             hasParams = True
 
+                    result.extend(self._getExtraParams(comparator, groupName))
                 if hasParams and groupIdx < len(RELATIVE_PARAMS) - 1:
                     separator = self._makeSeparator()
                     if separator:
@@ -285,14 +302,47 @@ class VehParamsBaseGenerator(object):
 
         return result
 
+    def _getExtraParams(self, comparator, groupName):
+        result = []
+        if self._isExtraParamEnabled():
+            hasExtraParams = False
+            for extraParamName in EXTRA_PARAMS_GROUP[groupName]:
+                param = comparator.getExtendedData(extraParamName)
+                formattedParam, nSlashCount = self._makeExtraParamVO(param)
+                if formattedParam:
+                    if not hasExtraParams:
+                        lineSeparator = self._makeLineSeparator()
+                        if lineSeparator:
+                            result.append(lineSeparator)
+                        hasExtraParams = True
+                    result.append(formattedParam)
+                    for _ in xrange(nSlashCount):
+                        block = self._makeExtraAdditionalBlock(formattedParam['paramID'], formattedParam['tooltip'])
+                        if block is not None:
+                            result.append(block)
+
+        return result
+
+    def _isExtraParamEnabled(self):
+        return False
+
     def _makeSimpleParamHeaderVO(self, param, isOpen, comparator):
         return getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_SIMPLE_TOP, param.name)
 
     def _makeAdvancedParamVO(self, param):
         return getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_ADVANCED, param.name)
 
+    def _makeExtraParamVO(self, param):
+        return (getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_EXTRA, param.name), 0)
+
     def _makeSimpleParamBottomVO(self, param, vehIntCD=None):
         return None
 
+    def _makeExtraAdditionalBlock(self, paramID, tooltip):
+        return None
+
     def _makeSeparator(self):
+        return None
+
+    def _makeLineSeparator(self):
         return None

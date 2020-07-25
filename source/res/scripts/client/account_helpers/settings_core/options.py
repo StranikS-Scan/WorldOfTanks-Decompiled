@@ -1662,6 +1662,9 @@ class KeyboardSetting(ControlSetting):
         command = CommandMapping.g_instance.getCommand(self.cmd)
         return CommandMapping.g_instance.getDefaults().get(command, Keys.KEY_NONE)
 
+    def getKeyName(self):
+        return getBigworldNameFromKey(self.getCurrentMapping())
+
     def _set(self, value):
         return self.setSystemValue(value)
 
@@ -2429,7 +2432,8 @@ class AnonymizerSetting(AccountDumpSetting):
         return None
 
     def getExtraData(self):
-        isInClan = self.usersStorage.getUser(getPlayerDatabaseID()).getClanInfo().isInClan()
+        user = self.usersStorage.getUser(getPlayerDatabaseID())
+        isInClan = user.getClanInfo().isInClan() if user is not None else False
         tooltip = R.strings.tooltips.anonymizer
         if self.__ctrl.isRestricted:
             footer = backport.text(tooltip.bodyFooter.restricted())

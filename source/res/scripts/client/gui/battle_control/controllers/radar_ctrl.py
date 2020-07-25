@@ -152,6 +152,9 @@ class RadarController(ViewComponentsController, IRadarController):
         return avatar.vehicle.typeDescriptor.radio.radarCooldown
 
     def __onRadarInfoReceived(self, radarInfo):
+        if len(radarInfo) != 3:
+            _logger.warning('Incorrect radar data in BigWorld.player().arena.onRadarInfoReceived')
+            return
         for listener in self._viewComponents + self.__dynamicViews:
             listener.radarInfoReceived(radarInfo)
 

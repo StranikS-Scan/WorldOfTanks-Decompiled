@@ -107,10 +107,10 @@ class VehicleFilterTooltip(BlocksTooltipData):
         return formatters.packTextBlockData(text=text_styles.standard(name), padding=formatters.packPadding(bottom=6))
 
     def __packNationsListBlock(self):
-        return formatters.packImageListParameterBlockData(listIconSrc=[ getNationsFilterAssetPath(n) for n in self._nations ], columnWidth=32, rowHeight=20, padding=formatters.packPadding(left=15, bottom=8))
+        return formatters.packImageListParameterBlockData(listIconSrc=[ formatters.packImageListIconData(getNationsFilterAssetPath(n)) for n in self._nations ], columnWidth=32, rowHeight=20, padding=formatters.packPadding(left=15, bottom=8))
 
     def __packTypesListBlock(self):
-        return formatters.packImageListParameterBlockData(listIconSrc=[ getVehicleTypeAssetPath(v) for v in self._vehicleTypes ], columnWidth=27, rowHeight=20, padding=formatters.packPadding(bottom=8, left=7))
+        return formatters.packImageListParameterBlockData(listIconSrc=[ formatters.packImageListIconData(getVehicleTypeAssetPath(v)) for v in self._vehicleTypes ], columnWidth=27, rowHeight=20, padding=formatters.packPadding(bottom=8, left=7))
 
     def __packLevelBlock(self):
         string = ', '.join((int2roman(level) for level in self._levels))

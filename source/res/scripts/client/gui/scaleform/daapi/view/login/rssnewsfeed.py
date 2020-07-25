@@ -4,7 +4,6 @@ import logging
 import uuid
 import BigWorld
 import ResMgr
-import constants
 from adisp import process, async
 from external_strings_utils import unicode_from_utf8
 from gui import GUI_SETTINGS
@@ -99,8 +98,6 @@ class RssNewsFeed(RssNewsFeedMeta):
     @async
     @process
     def __getRssUrl(self, callback):
-        if constants.IS_CHINA:
-            callback('http://wot.kongzhong.com/erji/login_ticker.xml')
         url = yield self.__urlMacros.parse(str(GUI_SETTINGS.loginRssFeed.url))
         callback(url)
 

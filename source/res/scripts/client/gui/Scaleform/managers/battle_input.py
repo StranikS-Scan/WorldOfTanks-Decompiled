@@ -87,6 +87,7 @@ class BattleGameInputMgr(object):
             if isEventBattle:
                 event_dispatcher.toggleEventStats(isDown)
             else:
+                event_dispatcher.hideBattleVehicleConfigurator()
                 event_dispatcher.toggleFullStats(isDown)
             return True
         if key == Keys.KEY_TAB and mods == Keys.MODIFIER_CTRL and isDown:

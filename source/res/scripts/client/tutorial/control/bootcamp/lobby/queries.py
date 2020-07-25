@@ -110,8 +110,13 @@ class MessageDialogContentQuery(ContentQuery):
                 data['label'] = data['label'].format(lessonBonuses['equipment']['largeMedkit']['count'])
             elif labelFormat == 'getFireExtinguisher':
                 data['label'] = data['label'].format(lessonBonuses['equipment']['handExtinguishers']['count'])
-            elif labelFormat == 'getToolbox':
-                data['label'] = data['label'].format(lessonBonuses['optional']['toolbox']['count'])
+            elif labelFormat == 'getExtraHealthReserve':
+                count = 0
+                for key, value in lessonBonuses['optional'].iteritems():
+                    if key.startswith('extraHealthReserve'):
+                        count += value['count']
+
+                data['label'] = data['label'].format(count)
             return
 
 

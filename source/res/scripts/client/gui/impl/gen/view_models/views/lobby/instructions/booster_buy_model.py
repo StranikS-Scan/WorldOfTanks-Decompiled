@@ -5,7 +5,7 @@ from gui.impl.gen.view_models.views.lobby.common.buy_sell_items_dialog_model imp
 class BoosterBuyModel(BuySellItemsDialogModel):
     __slots__ = ('onSetIsRearm',)
 
-    def __init__(self, properties=26, commands=3):
+    def __init__(self, properties=26, commands=4):
         super(BoosterBuyModel, self).__init__(properties=properties, commands=commands)
 
     def getIsRearm(self):

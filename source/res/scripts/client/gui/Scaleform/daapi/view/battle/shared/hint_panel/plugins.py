@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/hint_panel/plugins.py
 from collections import namedtuple
 from datetime import datetime
+import logging
 import BigWorld
 import CommandMapping
 from account_helpers import AccountSettings
@@ -25,6 +26,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
+_logger = logging.getLogger(__name__)
 HintData = namedtuple('HintData', ['key',
  'messageLeft',
  'messageRight',
@@ -281,6 +283,7 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         self._isInProgressCircle = False
         self._isUnderFire = False
         self.__isWheeledTech = False
+        self.__hasTurboshaftEngine = False
         self.__period = None
         self.__isInDisplayPeriod = False
         self.__callbackDelayer = CallbackDelayer()
@@ -363,10 +366,13 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         vStateCtrl = self.sessionProvider.shared.vehicleState
         vTypeDesc = vehicle.typeDescriptor
         self.__isWheeledTech = vTypeDesc.isWheeledVehicle
+        self.__hasTurboshaftEngine = vTypeDesc.hasTurboshaftEngine
         if vehicle.isAlive() and vTypeDesc.hasSiegeMode and not vTypeDesc.type.isDualgunVehicleType:
             self.__isEnabled = True
             state = VEHICLE_VIEW_STATE.SIEGE_MODE
             value = vStateCtrl.getStateValue(state)
+            if self.__hasTurboshaftEngine:
+                value = (_SIEGE_STATE.ENABLED, None)
             if value is not None:
                 self.__onVehicleStateUpdated(state, value)
         else:
@@ -423,6 +429,8 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
             pressText = backport.text(R.strings.ingame_gui.siegeMode.hint.press())
             if self.__isWheeledTech:
                 hintText = backport.text(R.strings.ingame_gui.siegeMode.hint.wheeled())
+            elif self.__hasTurboshaftEngine:
+                hintText = backport.text(R.strings.ingame_gui.siegeMode.hint.turboshaftEngine())
             else:
                 hintTextID = R.strings.ingame_gui.siegeMode.hint.forMode.dyn(attr='c_{}'.format(self.__siegeState))
                 hintText = backport.text(hintTextID()) if hintTextID.exists() else None
@@ -501,9 +509,11 @@ class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
         return
 
     def radarActivated(self, _):
+        _logger.info('Radar activated')
         self.__hideHint()
 
     def radarActivationFailed(self, code):
+        _logger.info('Radar activation failed')
         self.__hideHint()
 
     def startTimeOut(self, timeLeft, duration):
@@ -522,6 +532,7 @@ class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
         return HintData(keyName, pressText, hintText, 0, 0, HintPriority.RADAR)
 
     def __showHint(self):
+        _logger.info('Showing radar hint')
         self._parentObj.setBtnHint(CommandMapping.CMD_CM_VEHICLE_ACTIVATE_RADAR, self._getHint())
         self.__isHintShown = True
         self.__isInDisplayPeriod = False
@@ -529,13 +540,14 @@ class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
         self._updateCounterOnUsed(self.__settings)
 
     def __hideHint(self):
+        _logger.info('Hiding radar hint isHintShown=%r', self.__isHintShown)
         if self.__isHintShown:
             self._parentObj.removeBtnHint(CommandMapping.CMD_CM_VEHICLE_ACTIVATE_RADAR)
             self.__isHintShown = False
             self.stopCallback(self.__onHintTimeOut)
 
     def __updateHint(self):
-        LOG_DEBUG('Updating radar hints')
+        _logger.info('Updating radar hints. isInPostmortem=%r, isObserver=%r, isEnabled=%r', self.__isInPostmortem, self.__isObserver, self.__isEnabled)
         if self.__isInPostmortem or self.__isObserver or not self.__isEnabled:
             return
         if self.__isInDisplayPeriod and self._haveHintsLeft(self.__settings) and not self.__areOtherIndicatorsShown():
@@ -545,6 +557,7 @@ class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
         self.__clearRadarCooldown()
 
     def __onVehicleStateUpdated(self, state, value):
+        _logger.info('Vehicle state updated state=%r, value=%r, isEnabled=%r', state, value, self.__isEnabled)
         if not self.__isEnabled:
             return
         if state == VEHICLE_VIEW_STATE.RECOVERY:
@@ -561,10 +574,12 @@ class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
             self.__updateHint()
 
     def __onPostMortemSwitched(self, *args):
+        _logger.info('Is in postmortem')
         self.__isInPostmortem = True
         self.__isHintShown = False
 
     def __onHintTimeOut(self):
+        _logger.info('Radar hint timed out')
         self._parentObj.removeBtnHint(CommandMapping.CMD_CM_VEHICLE_ACTIVATE_RADAR)
         self.__isHintShown = False
 
@@ -572,6 +587,7 @@ class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
         return self._isUnderFire or self._isInRecovery or self._isInProgressCircle
 
     def __clearRadarCooldown(self):
+        _logger.info('Clearing radar cooldown')
         if self.__cbOnRadarCooldown is not None:
             BigWorld.cancelCallback(self.__cbOnRadarCooldown)
             self.__cbOnRadarCooldown = None
@@ -678,7 +694,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
             vehicleType = vTypeDesc.type.id
             self.__vehicleId = makeIntCompactDescrByID('vehicle', vehicleType[0], vehicleType[1])
             self.__haveReqLevel = vTypeDesc.level >= _HINT_MIN_VEHICLE_LEVEL
-            if vTypeDesc.isWheeledVehicle or vTypeDesc.type.isDualgunVehicleType:
+            if vTypeDesc.isWheeledVehicle or vTypeDesc.type.isDualgunVehicleType or vTypeDesc.hasTurboshaftEngine:
                 self.__updateHintCounterOnStart(self.__helpHintSettings, self.__vehicleId)
             if self.__canDisplayHelpHint(vTypeDesc):
                 self.__displayHint(CommandMapping.CMD_SHOW_HELP)
@@ -714,7 +730,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
         return
 
     def __canDisplayHelpHint(self, typeDescriptor):
-        return (typeDescriptor.isWheeledVehicle or typeDescriptor.type.isDualgunVehicleType) and self.__isInDisplayPeriod and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])
+        return (typeDescriptor.isWheeledVehicle or typeDescriptor.type.isDualgunVehicleType or typeDescriptor.hasTurboshaftEngine) and self.__isInDisplayPeriod and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])
 
     def __canDisplayBattleCommunicationHint(self):
         settingsCore = dependency.instance(ISettingsCore)

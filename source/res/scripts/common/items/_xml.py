@@ -138,7 +138,7 @@ def readStringWithDefaultValue(xmlCtx, section, subsectionName, defaultValue=Non
     if defaultValue is None:
         return readStringOrNone(xmlCtx, section, subsectionName)
     elif defaultValue == '':
-        return readStringOrEmpty()
+        return readStringOrEmpty(xmlCtx, section, subsectionName)
     else:
         subsection = section[subsectionName]
         return intern(str(defaultValue)) if subsection is None else intern(subsection.asString)

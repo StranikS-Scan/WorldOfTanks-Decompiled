@@ -19,7 +19,6 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from CurrentVehicle import g_currentVehicle
 from items.vehicles import getVehicleClassFromVehicleType
-from gui.shared.gui_items.vehicle_equipment import BattleAbilityConsumables
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 from gui.prb_control.entities.listener import IGlobalListener
@@ -239,7 +238,7 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
 
     def getSelectedSkills(self, vehicleCD):
         selected = self.__itemsCache.items.epicMetaGame.selectedSkills(vehicleCD)
-        numSlots = vehicles.ABILITY_SLOTS_BY_VEHICLE_CLASS[vehicles.getVehicleClass(vehicleCD)]
+        numSlots = self.getNumAbilitySlots(vehicles.getVehicleType(vehicleCD))
         while len(selected) < numSlots:
             selected.append(-1)
 
@@ -306,6 +305,11 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
 
     def getStats(self):
         return self.__itemsCache.items.epicMetaGame
+
+    def getNumAbilitySlots(self, vehicleType):
+        config = self.__lobbyContext.getServerSettings().epicMetaGame
+        vehClass = getVehicleClassFromVehicleType(vehicleType)
+        return config.defaultSlots.get(vehClass, 0)
 
     def __invalidateBattleAbilities(self, *_):
         if not self.__itemsCache.isSynced():
@@ -400,16 +404,9 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
             item.setLevel(0)
             item.isUnlocked = False
 
-    def getNumAbilitySlots(self, vehicleType):
-        config = self.__lobbyContext.getServerSettings().epicMetaGame
-        vehClass = getVehicleClassFromVehicleType(vehicleType)
-        return config.defaultSlots[vehClass]
-
     def __invalidateBattleAbilitiesForVehicle(self):
         vehicle = g_currentVehicle.item
         if vehicle is None or vehicle.descriptor.type.level not in self.__lobbyContext.getServerSettings().epicBattles.validVehicleLevels or not self.__isInValidPrebattle():
-            if vehicle is not None:
-                vehicle.equipment.setBattleAbilityConsumables(BattleAbilityConsumables(*[]))
             return
         else:
             amountOfSlots = self.getNumAbilitySlots(vehicle.descriptor.type)
@@ -423,7 +420,8 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
                         if skillInfo[skillID].getMaxUnlockedSkillLevel() and item.innationID == skillInfo[skillID].getMaxUnlockedSkillLevel().eqID:
                             selectedItems[index] = item
 
-            vehicle.equipment.setBattleAbilityConsumables(BattleAbilityConsumables(*selectedItems))
+            vehicle.battleAbilities.setLayout(*selectedItems)
+            vehicle.battleAbilities.setInstalled(*selectedItems)
             return
 
     def __analyzeClientSystem(self):

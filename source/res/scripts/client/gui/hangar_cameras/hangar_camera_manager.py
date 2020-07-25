@@ -164,6 +164,7 @@ class HangarCameraManager(object):
         return
 
     def __onSpaceCreated(self):
+        self.__cam.isMovementEnabled = True
         g_mouseEventHandlers.add(self.__handleMouseEvent)
         g_keyEventHandlers.add(self.__handleKeyEvent)
         g_eventBus.addListener(CameraRelatedEvents.LOBBY_VIEW_MOUSE_MOVE, self.__handleLobbyViewMouseEvent)

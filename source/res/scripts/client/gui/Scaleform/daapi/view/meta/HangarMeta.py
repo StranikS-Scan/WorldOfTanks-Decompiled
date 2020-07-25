@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/HangarMeta.py
-from gui.Scaleform.framework.entities.View import View
+from gui.Scaleform.daapi.view.meta.GFTutorialViewMeta import GFTutorialViewMeta
 
-class HangarMeta(View):
+class HangarMeta(GFTutorialViewMeta):
 
     def onEscape(self):
         self._printOverrideError('onEscape')
@@ -90,3 +90,6 @@ class HangarMeta(View):
 
     def as_toggleBattleRoyaleS(self, isBattleRoyale):
         return self.flashObject.as_toggleBattleRoyale(isBattleRoyale) if self._isDAAPIInited() else None
+
+    def as_showSwitchToAmmunitionS(self):
+        return self.flashObject.as_showSwitchToAmmunition() if self._isDAAPIInited() else None

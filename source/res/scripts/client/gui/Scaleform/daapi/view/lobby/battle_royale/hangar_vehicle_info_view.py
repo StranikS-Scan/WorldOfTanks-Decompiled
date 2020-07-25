@@ -106,9 +106,6 @@ class HangarVehicleModulesConfigurator(VehicleModulesConfiguratorCmp):
     def _canBeShown(self, intCD, level, unlocks):
         return not br_helpers.isAdditionalModule(level, unlocks, self._getItem)
 
-    def _mayInstallModule(self, mItem):
-        return False
-
     def _setCurrentLevel(self, moduleLevel):
         super(HangarVehicleModulesConfigurator, self)._setCurrentLevel(1)
 
@@ -196,7 +193,6 @@ class HangarVehicleInfo(BattleRoyaleVehicleInfoMeta, IGlobalListener):
          'infoIconSource': backport.image(R.images.gui.maps.icons.library.info()),
          'engineLabel': backport.text(R.strings.battle_royale.hangarVehicleInfo.weakZones.engine()),
          'ammunitionLabel': backport.text(R.strings.battle_royale.hangarVehicleInfo.weakZones.ammunition()),
-         'fuelTankLabel': backport.text(R.strings.battle_royale.hangarVehicleInfo.weakZones.fuelTank()),
          'vehTitle': text_styles.promoSubTitle(self.__vehicle.shortUserName),
          'nationIcon': getVehicleNationIcon(self.__vehicle),
          'weakZones': _getVehicleWeakZonesImage(self.__vehicle)})

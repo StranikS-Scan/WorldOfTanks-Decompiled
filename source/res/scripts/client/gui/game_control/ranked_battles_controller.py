@@ -270,6 +270,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         criteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(vehLevels)
         criteria |= ~REQ_CRITERIA.VEHICLE.CLASSES(self.__rankedSettings.forbiddenClassTags)
         criteria |= ~REQ_CRITERIA.VEHICLE.SPECIFIC_BY_CD(self.__rankedSettings.forbiddenVehTypes)
+        criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE | ~REQ_CRITERIA.VEHICLE.EPIC_BATTLE
         return len(self.__itemsCache.items.getVehicles(criteria)) > 0
 
     def hasVehicleRankedBonus(self, compactDescr):

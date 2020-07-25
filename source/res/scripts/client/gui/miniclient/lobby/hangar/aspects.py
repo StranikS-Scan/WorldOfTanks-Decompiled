@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/miniclient/lobby/hangar/aspects.py
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.MINICLIENT import MINICLIENT
 from helpers import aop, dependency
 from helpers.i18n import makeString as _ms
@@ -28,51 +27,11 @@ class DisableTankServiceButtons(aop.Aspect):
         tooltip = makeTooltip(None, None, None, self.__config.get('sandbox_platform_message', MINICLIENT.AMMUNITION_PANEL_WARN_TOOLTIP))
         if g_currentVehicle.isPresent() and not self.__config['vehicle_is_available'](g_currentVehicle.item):
             cd.change()
-            return ((False,
-              tooltip,
-              False,
-              tooltip), cd.kwargs)
-        else:
-            return
-
-
-class MaintenanceButtonFlickering(aop.Aspect):
-
-    def __init__(self, config):
-        self.__config = config
-        aop.Aspect.__init__(self)
-
-    def atCall(self, cd):
-        if g_currentVehicle.isPresent() and not self.__config['vehicle_is_available'](g_currentVehicle.item):
-            original_args = list(cd._args)
-            shells = original_args[0]
-            original_args[1] = False
-            for shell in shells:
-                shell['tooltipType'] = TOOLTIPS_CONSTANTS.COMPLEX
-                shell['tooltip'] = makeTooltip(None, None, None, self.__config.get('sandbox_platform_message', MINICLIENT.AMMUNITION_PANEL_WARN_TOOLTIP))
-
-            cd.change()
-            return (original_args, cd.kwargs)
-        else:
-            return
-
-
-class DeviceButtonsFlickering(aop.Aspect):
-
-    def __init__(self, config):
-        self.__config = config
-        aop.Aspect.__init__(self)
-
-    def atCall(self, cd):
-        if g_currentVehicle.isPresent() and not self.__config['vehicle_is_available'](g_currentVehicle.item):
-            original_args = list(cd._args)
-            devices = original_args[0]['devices']
-            for device in devices:
-                device['tooltipType'] = TOOLTIPS_CONSTANTS.COMPLEX
-                device['tooltip'] = makeTooltip(None, None, None, self.__config.get('sandbox_platform_message', MINICLIENT.AMMUNITION_PANEL_WARN_TOOLTIP))
-
-            cd.change()
-            return (original_args, cd.kwargs)
+            cd.args[0]['maintenanceTooltip'] = tooltip
+            cd.args[0]['maintenanceEnabled'] = False
+            cd.args[0]['customizationEnabled'] = False
+            cd.args[0]['customizationTooltip'] = tooltip
+            return (cd.args, cd.kwargs)
         else:
             return
 

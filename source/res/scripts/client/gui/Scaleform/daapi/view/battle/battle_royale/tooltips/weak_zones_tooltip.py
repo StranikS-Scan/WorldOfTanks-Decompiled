@@ -33,7 +33,6 @@ class WeakZonesTooltip(BlocksTooltipData):
             data['imagePath'] = img
         data['engineLabel'] = backport.text(R.strings.battle_royale.tooltips.weakZones.engine())
         data['ammunitionLabel'] = backport.text(R.strings.battle_royale.tooltips.weakZones.ammunition())
-        data['fuelTankLabel'] = backport.text(R.strings.battle_royale.tooltips.weakZones.fuelTank())
         return formatters.packBlockDataItem(linkage, data, padding)
 
     @staticmethod

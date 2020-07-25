@@ -160,6 +160,10 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
     def isHighlighterActive(self):
         return self._helper is not None and self._isHighlighterActive
 
+    @property
+    def isOver3dScene(self):
+        return self._isOver3dScene
+
     def __init__(self):
         super(CustomizationService, self).__init__()
         self._helper = None

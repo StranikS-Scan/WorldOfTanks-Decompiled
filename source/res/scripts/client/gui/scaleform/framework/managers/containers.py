@@ -758,7 +758,7 @@ class ContainerManager(ContainerManagerMeta, IContainerManager):
     def isModalViewsIsExists(self):
         for viewType in _POPUPS_CONTAINERS:
             container = self.__globalContainer.findContainer(viewType)
-            if container is not None and container.getViewCount(isModal=True):
+            if container is not None and container.getViewCount(isModal=True) or self.__loader.isModalViewLoading():
                 return True
 
         return False

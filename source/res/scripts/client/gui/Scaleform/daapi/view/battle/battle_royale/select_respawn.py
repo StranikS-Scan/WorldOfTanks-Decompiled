@@ -60,13 +60,16 @@ class BRPrebattleTimer(IAbstractPeriodView):
         self.__timeLeft = timeLeft
         if state == COUNTDOWN_STATE.WAIT:
             self._parentView.viewModel.setLeftTime(self.__getWaitMessage())
+            self._parentView.viewModel.setIsWaitingPlayers(True)
         else:
             self.__updateTimer()
 
     def __updateTimer(self):
-        self._parentView.viewModel.setLeftTime(time.strftime('%M:%S', time.gmtime(round(self.__timeLeft))))
-        if round(self.__timeLeft) <= self.__endingTime:
-            self._parentView.viewModel.setIsTimeRunningOut(True)
+        with self._parentView.viewModel.transaction() as vm:
+            vm.setLeftTime(time.strftime('%M:%S', time.gmtime(round(self.__timeLeft))))
+            vm.setIsWaitingPlayers(False)
+            if round(self.__timeLeft) <= self.__endingTime:
+                vm.setIsTimeRunningOut(True)
 
     @staticmethod
     def __getWaitMessage():

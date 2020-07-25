@@ -21,6 +21,7 @@ from VehicleEffects import DamageFromShotDecoder
 from constants import SPT_MATKIND
 from constants import VEHICLE_HIT_EFFECT, VEHICLE_SIEGE_STATE
 from debug_utils import LOG_WARNING, LOG_DEBUG_DEV
+from gui.battle_control import vehicle_getter
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _GUI_EVENT_ID, VEHICLE_VIEW_STATE
 from gun_rotation_shared import decodeGunAngles
 from helpers import dependency
@@ -122,6 +123,10 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
     def wheelsSteeringFilters(self):
         return self.__wheelsSteeringFilter
 
+    @property
+    def maxHealth(self):
+        return self.publicInfo.maxHealth
+
     def getBounds(self, partIdx):
         return self.appearance.getBounds(partIdx) if self.appearance is not None else (Math.Vector3(0.0, 0.0, 0.0), Math.Vector3(0.0, 0.0, 0.0), 0)
 
@@ -212,7 +217,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             if 'battle_royale' in descr.type.tags:
                 pass
             else:
-                self.health = descr.maxHealth
+                self.health = self.publicInfo.maxHealth
             return descr
         else:
             return vehicles.VehicleDescr(compactDescr=_stripVehCompDescrIfRoaming(self.publicInfo.compDescr))
@@ -721,6 +726,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.appearance.setVehicle(self)
         self.appearance.activate()
         self.appearance.changeEngineMode(self.engineMode)
+        self.appearance.changeSiegeState(self.siegeState)
         self.appearance.onVehicleHealthChanged(self.isPlayerVehicle)
         if self.isPlayerVehicle:
             if self.isAlive():
@@ -802,6 +808,9 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         extra = self.typeDescriptor.extrasDict[extraName]
         if self.extras.has_key(extra.index):
             extra.updateFor(self, newValue)
+
+    def getOptionalDevices(self):
+        return vehicle_getter.getOptionalDevices() if self.isPlayerVehicle else []
 
     def _isDestructibleMayBeBroken(self, chunkID, itemIndex, matKind, itemFilename, itemScale, vehSpeed):
         desc = AreaDestructibles.g_cache.getDescByFilename(itemFilename)

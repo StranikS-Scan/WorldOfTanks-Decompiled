@@ -51,6 +51,9 @@ class BattlePassProgressionsComponent(InjectComponentAdaptor, MissionsBattlePass
         super(BattlePassProgressionsComponent, self).as_showViewS()
         self.as_setWaitingVisibleS(False)
 
+    def markVisited(self):
+        pass
+
     def dummyClicked(self, eventType):
         if eventType == 'OpenHangar':
             showHangar()
@@ -409,7 +412,7 @@ class BattlePassProgressionsView(ViewImpl):
                 tx.setShowOffSeason(True)
                 offSeason = tx.offSeason
                 offSeason.setLevel(currentLevel + 1)
-                offSeason.setSeasonName(backport.text(R.strings.battle_pass_2020.offSeason.title(), number='I'))
+                offSeason.setSeasonName(backport.text(R.strings.battle_pass_2020.offSeason.title()))
                 offSeason.setHasBattlePass(self.__battlePassController.isBought(prevSeasonStats.seasonID))
                 offSeason.setIsPostProgression(state != BattlePassState.BASE)
                 offSeason.setIsPostProgressionCompleted(state == BattlePassState.COMPLETED)

@@ -2,18 +2,22 @@
 # Embedded file name: scripts/common/items/artefacts.py
 import math
 import os
-from functools import partial
-from itertools import chain
 from re import findall
 from soft_exception import SoftException
-from typing import TYPE_CHECKING, NamedTuple, Tuple, Set
+from typing import TYPE_CHECKING, NamedTuple, Set, Dict, Optional, Any, Tuple
 import items
 import nations
+from ResMgr import DataSection
 from constants import IS_CLIENT, IS_CELLAPP, IS_WEB, VEHICLE_TTC_ASPECTS, ATTACK_REASON, ATTACK_REASON_INDICES, SERVER_TICK_LENGTH
+from debug_utils import LOG_DEBUG_DEV
 from items import ITEM_OPERATION, PREDEFINED_HEAL_GROUPS
 from items import _xml, vehicles
+from items.artefacts_helpers import VehicleFilter, _ArtefactFilter
 from items.basic_item import BasicItem
 from items.components import shared_components, component_constants
+from items.components.supply_slot_categories import SupplySlotFilter, LevelsFactor, AttrsOperation, SlotCategories
+from items.vehicles import VehicleDescriptor
+from soft_exception import SoftException
 from tankmen import MAX_SKILL_LEVEL
 from vehicles import _readPriceForOperation
 from Math import Vector3
@@ -77,7 +81,7 @@ class VehicleFactorsXmlReader(CommonXmlSectionReader):
 
 
 class Artefact(BasicItem):
-    __slots__ = ('name', 'id', 'compactDescr', 'tags', 'i18n', 'icon', 'removable', 'price', 'showInShop', 'stunResistanceEffect', 'stunResistanceDuration', 'repeatedStunDurationFactor', '_vehWeightFraction', '_weight', '_maxWeightChange', '__vehicleFilter', '__artefactFilter', 'isImproved', 'kpi', 'iconName')
+    __slots__ = ('name', 'id', 'compactDescr', 'tags', 'i18n', 'icon', 'removable', 'price', 'showInShop', '_vehWeightFraction', '_weight', '_maxWeightChange', '__vehicleFilter', '__artefactFilter', 'isImproved', 'kpi', 'iconName', '_groupName')
 
     def __init__(self, typeID, itemID, itemName, compactDescr):
         super(Artefact, self).__init__(typeID, itemID, itemName, compactDescr)
@@ -86,9 +90,6 @@ class Artefact(BasicItem):
         self.removable = False
         self.price = None
         self.showInShop = False
-        self.stunResistanceEffect = component_constants.ZERO_FLOAT
-        self.stunResistanceDuration = component_constants.ZERO_FLOAT
-        self.repeatedStunDurationFactor = 1.0
         self._vehWeightFraction = component_constants.ZERO_FLOAT
         self._weight = component_constants.ZERO_FLOAT
         self._maxWeightChange = component_constants.ZERO_FLOAT
@@ -96,6 +97,7 @@ class Artefact(BasicItem):
         self.__artefactFilter = None
         self.isImproved = None
         self.kpi = None
+        self._groupName = None
         return
 
     def init(self, xmlCtx, section):
@@ -103,7 +105,6 @@ class Artefact(BasicItem):
         xmlCtx = (xmlCtx, 'script')
         section = section['script']
         self._readWeight(xmlCtx, section)
-        self._readStun(xmlCtx, section)
         self._readConfig(xmlCtx, section)
 
     @property
@@ -117,6 +118,13 @@ class Artefact(BasicItem):
     def extraName(self):
         pass
 
+    def removeItem(self, *args, **kwargs):
+        pass
+
+    @property
+    def groupName(self):
+        return self._groupName or self.name
+
     def _readWeight(self, xmlCtx, section):
         if section.has_key('vehicleWeightFraction'):
             self._vehWeightFraction = _xml.readNonNegativeFloat(xmlCtx, section, 'vehicleWeightFraction')
@@ -127,9 +135,6 @@ class Artefact(BasicItem):
         else:
             self._weight = 0.0
         self._maxWeightChange = 0.0
-
-    def _readStun(self, xmlCtx, section):
-        self.stunResistanceEffect, self.stunResistanceDuration, self.repeatedStunDurationFactor = _readStun(xmlCtx, section)
 
     def weightOnVehicle(self, vehicleDescr):
         return (self._vehWeightFraction, self._weight, 0.0)
@@ -154,11 +159,17 @@ class Artefact(BasicItem):
     def compatibleNations(self):
         return self.__vehicleFilter.compatibleNations() if self.__vehicleFilter else {nations.INDICES[n] for n in nations.AVAILABLE_NAMES}
 
+    def checkCompatibilityWithComponents(self, vehicleDescr):
+        return True if self.__vehicleFilter is None else self.__vehicleFilter.checkCompatibilityWithComponents(vehicleDescr)
+
     def _readConfig(self, xmlCtx, scriptSection):
         pass
 
-    def updateVehicleAttrFactors(self, vehicleDescr, factors, aspect):
+    def updateVehicleAttrFactorsForAspect(self, vehicleDescr, factors, aspect, *args, **kwargs):
         pass
+
+    def getVehicleFilter(self):
+        return self.__vehicleFilter
 
     def _readBasicConfig(self, xmlCtx, section):
         self.name = section.name
@@ -176,27 +187,55 @@ class Artefact(BasicItem):
             self.kpi = _readKpi(xmlCtx, section['kpi'])
         else:
             self.kpi = []
-        if IS_CELLAPP or not section.has_key('vehicleFilter'):
-            self.__vehicleFilter = None
+        if section.has_key('vehicleFilter'):
+            self.__vehicleFilter = VehicleFilter.readVehicleFilter((xmlCtx, 'vehicleFilter'), section['vehicleFilter'])
         else:
-            self.__vehicleFilter = _VehicleFilter((xmlCtx, 'vehicleFilter'), section['vehicleFilter'])
+            self.__vehicleFilter = None
         if not section.has_key('incompatibleTags'):
             self.__artefactFilter = None
         else:
             self.__artefactFilter = _ArtefactFilter((xmlCtx, 'incompatibleTags'), section['incompatibleTags'], self.itemTypeName)
         self.removable = section.readBool('removable', False)
         self.isImproved = section.readBool('improved', False)
+        if (IS_CLIENT or IS_WEB) and section.has_key('groupName'):
+            self._groupName = section.readString('groupName')
         return
 
 
 class OptionalDevice(Artefact):
-    __slots__ = ()
+    __slots__ = ('categories', '_overridableFactors', '_tier', '_tierlessName')
 
     def __init__(self):
         super(OptionalDevice, self).__init__(items.ITEM_TYPES.optionalDevice, 0, '', 0)
+        self.categories = set()
+        self._overridableFactors = {}
+        self._tier = None
+        self._tierlessName = None
+        return
+
+    def _readBasicConfig(self, xmlCtx, section):
+        super(OptionalDevice, self)._readBasicConfig(xmlCtx, section)
+        self._readCategories(xmlCtx, section)
+        self._readTier(xmlCtx, section)
+        self._readSpecFactorsFromConfig(xmlCtx, section['script'])
 
     def extraName(self):
         return None
+
+    @property
+    def tier(self):
+        return self._tier
+
+    @property
+    def tierlessName(self):
+        return self._tierlessName or self.name
+
+    @property
+    def groupName(self):
+        return self._groupName or self.tierlessName
+
+    def updateVehicleAttrFactorsForAspect(self, vehicleDescr, factors, aspect, *args, **kwargs):
+        pass
 
     def updateVehicleDescrAttrs(self, vehicleDescr):
         pass
@@ -205,13 +244,208 @@ class OptionalDevice(Artefact):
     def isDeluxe(self):
         return 'deluxe' in self.tags
 
+    def defineActiveLevel(self, vehicleDescr):
+        supplySlot = vehicleDescr.getOptDevSupplySlot(self.compactDescr)
+        return None if supplySlot is None else SupplySlotFilter.defineActiveValuesLevel(supplySlot.categories, self.categories)
+
+    def defineActiveValueForSpecFactor(self, vehicleDescr, factorName, level=None):
+        if level is None:
+            level = self.defineActiveLevel(vehicleDescr)
+        if level is None:
+            return
+        else:
+            factor = self._defineFactorFor(vehicleDescr, factorName)
+            return None if factor is None else factor.getActiveValue(level)
+
+    def _defineFactorFor(self, vehicleDescr, factorName):
+        vehOverridedFactor = vehicleDescr.type.optDevsOverrides.get(self.tierlessName, {}).get(factorName, None)
+        if vehOverridedFactor is not None:
+            factor = vehOverridedFactor
+        else:
+            factor = self._overridableFactors.get(factorName, None)
+        return factor
+
+    def _readSpecFactorsFromConfig(self, xmlCtx, section):
+        factorsSection = section['overridableFactors']
+        if factorsSection is None:
+            return
+        else:
+            for name, subsection in factorsSection.items():
+                factor = LevelsFactor.readTypelessLevelsFactor(xmlCtx, factorsSection, name)
+                self._overridableFactors[name] = factor
+
+            return
+
+    def _readCategories(self, xmlCtx, section):
+        if section.has_key('categories'):
+            self.categories = set(_xml.readTupleOfStrings(xmlCtx, section, 'categories'))
+            for category in self.categories:
+                if category not in SlotCategories.ALL:
+                    raise SoftException("Unknown category '{}'".format(category))
+
+    def _readTier(self, xmlCtx, section):
+        tierParts = self.name.split('_tier')
+        if len(tierParts) == 2:
+            self._tierlessName, tier = tierParts
+            self._tier = int(tier)
+
+
+class StaticOptionalDevice(OptionalDevice):
+    __slots__ = ('_factors',)
+
+    def __init__(self):
+        super(StaticOptionalDevice, self).__init__()
+        self._factors = {}
+
+    def _readConfig(self, xmlCtx, scriptSection):
+        super(StaticOptionalDevice, self)._readConfig(xmlCtx, scriptSection)
+        self._readFactorsFromConfig(xmlCtx, scriptSection)
+
+    def _readFactorsFromConfig(self, xmlCtx, section):
+        factorsSection = section['factors']
+        if factorsSection is None:
+            return
+        else:
+            for name, subsection in factorsSection.items():
+                attrPath, factor = LevelsFactor.readLevelsFactor(xmlCtx, subsection)
+                splitted = tuple(attrPath.split('/'))
+                self._factors[splitted] = factor
+
+            return
+
+    @staticmethod
+    def defineAttrsDict(vehicleDescr, modulePath):
+        attrDict = getattr(vehicleDescr, modulePath[0])
+        for key in modulePath[1:]:
+            attrDict = attrDict[key]
+
+        return attrDict
+
+    def updateVehicleDescrAttrs(self, vehicleDescr):
+        level = self.defineActiveLevel(vehicleDescr)
+        if level is None:
+            LOG_DEBUG_DEV('updateVehicleDescrAttrs: optional device ({}) is not installed'.format(self))
+            return
+        else:
+            for splitted, factor in self._factors.iteritems():
+                modulePath = splitted[:-1]
+                shortName = splitted[-1]
+                attrDict = self.defineAttrsDict(vehicleDescr, modulePath)
+                factor.applyLevelToAttrsDict(level, attrDict, shortName)
+
+            return
+
+
+class StillVehicleOptionalDevice(StaticOptionalDevice):
+    __slots__ = ('activateWhenStillSec',)
+
+    def _readConfig(self, xmlCtx, scriptSection):
+        self.activateWhenStillSec = _xml.readNonNegativeFloat(xmlCtx, scriptSection, 'activateWhenStillSec')
+        super(StillVehicleOptionalDevice, self)._readConfig(xmlCtx, scriptSection)
+
+    def updateVehicleAttrFactorsForAspect(self, vehicleDescr, factors, aspect, *args, **kwargs):
+        if not self._checkAspect(aspect):
+            return
+        else:
+            level = self.defineActiveLevel(vehicleDescr)
+            if level is not None:
+                transformedFactors = self.transformFactors(level, vehicleDescr)
+                self.updateFactorsDictWithTransformed(factors, transformedFactors)
+            return
+
+    def _checkAspect(self, aspect):
+        raise NotImplementedError
+
+    def transformFactors(self, level, vehicleDescr):
+        raise NotImplementedError
+
+    def updateFactorsDictWithTransformed(self, factorsDict, transformedFactors):
+        raise NotImplementedError
+
+
+class Stereoscope(StillVehicleOptionalDevice):
+    __slots__ = ('circularVisionRadiusFactor',)
+    CIRCULAR_VISION_RADIUS = 'circularVisionRadius'
+
+    def extraName(self):
+        pass
+
+    def _checkAspect(self, aspect):
+        return aspect in (VEHICLE_TTC_ASPECTS.DEFAULT, VEHICLE_TTC_ASPECTS.WHEN_STILL)
+
+    def _readConfig(self, xmlCtx, scriptSection):
+        super(Stereoscope, self)._readConfig(xmlCtx, scriptSection)
+        self.circularVisionRadiusFactor = LevelsFactor.readTypelessLevelsFactor(xmlCtx, scriptSection, self.CIRCULAR_VISION_RADIUS)
+
+    def transformFactors(self, level, vehicleDescr):
+        activeValue = self.circularVisionRadiusFactor.getActiveValue(level)
+        factorToCompensate = vehicleDescr.miscAttrs['circularVisionRadiusFactor']
+        transformedFactor = activeValue / factorToCompensate
+        res = (transformedFactor,)
+        return res
+
+    def updateFactorsDictWithTransformed(self, factorsDict, transformedFactors):
+        transformedCVRFactor = transformedFactors
+        AttrsOperation.updateDictWithAttribute(factorsDict, self.CIRCULAR_VISION_RADIUS, AttrsOperation.MUL, transformedCVRFactor)
+
+
+class CamouflageNet(StillVehicleOptionalDevice):
+    invisibilityBonusName = 'invisibilityBonus'
+    invisibilityAttr = 'invisibility'
+
+    def extraName(self):
+        pass
+
+    @property
+    def competesBy(self):
+        pass
+
+    def transformFactors(self, level, vehicleDescr):
+        cnActiveValue = self.defineActiveValueForSpecFactor(vehicleDescr, self.invisibilityBonusName, level)
+        staticActiveValue = vehicleDescr.miscAttrs[self.competesBy]
+        activeValue = max(cnActiveValue, staticActiveValue) - staticActiveValue
+        res = (activeValue,)
+        return res
+
+    def updateFactorsDictWithTransformed(self, factorsDict, transformedFactors):
+        activeValue = transformedFactors
+        factorsDict[self.invisibilityAttr][0] += activeValue
+
+    def _checkAspect(self, aspect):
+        return aspect in (VEHICLE_TTC_ASPECTS.WHEN_STILL,)
+
+
+class LowNoiseTracks(StaticOptionalDevice):
+    invisibilityBonusName = 'invisibilityBonus'
+
+    def updateVehicleDescrAttrs(self, vehicleDescr):
+        super(LowNoiseTracks, self).updateVehicleDescrAttrs(vehicleDescr)
+        level = self.defineActiveLevel(vehicleDescr)
+        activeValue = self.defineActiveValueForSpecFactor(vehicleDescr, self.invisibilityBonusName, level)
+        vehicleDescr.miscAttrs['invisibilityAdditiveTerm'] += activeValue
+
+
+class ImprovedConfiguration(StaticOptionalDevice):
+    __slots__ = ('engineReduceFineFactor', 'ammoBayReduceFineFactor')
+
+    def extraName(self):
+        pass
+
+    def _readConfig(self, xmlCtx, scriptSection):
+        super(ImprovedConfiguration, self)._readConfig(xmlCtx, scriptSection)
+        self.engineReduceFineFactor = LevelsFactor.readTypelessLevelsFactor(xmlCtx, scriptSection, 'engineReduceFineFactor')
+        self.ammoBayReduceFineFactor = LevelsFactor.readTypelessLevelsFactor(xmlCtx, scriptSection, 'ammoBayReduceFineFactor')
+
 
 class Equipment(Artefact):
-    __slots__ = ('equipmentType', 'reuseCount', 'cooldownSeconds', 'soundNotification')
+    __slots__ = ('equipmentType', 'reuseCount', 'cooldownSeconds', 'soundNotification', 'stunResistanceEffect', 'stunResistanceDuration', 'repeatedStunDurationFactor')
 
     def __init__(self):
         super(Equipment, self).__init__(items.ITEM_TYPES.equipment, 0, '', 0)
         self.equipmentType = None
+        self.stunResistanceEffect = component_constants.ZERO_FLOAT
+        self.stunResistanceDuration = component_constants.ZERO_FLOAT
+        self.repeatedStunDurationFactor = 1.0
         self.reuseCount = component_constants.ZERO_INT
         self.cooldownSeconds = component_constants.ZERO_INT
         self.soundNotification = None
@@ -221,10 +455,12 @@ class Equipment(Artefact):
         super(Equipment, self)._readBasicConfig(xmlCtx, section)
         self.equipmentType = items.EQUIPMENT_TYPES[section.readString('type', 'regular')]
         self.soundNotification = _xml.readStringOrNone(xmlCtx, section, 'soundNotification')
+        scriptSection = section['script']
+        self.stunResistanceEffect, self.stunResistanceDuration, self.repeatedStunDurationFactor = _readStun(xmlCtx, scriptSection)
+        self.reuseCount, self.cooldownSeconds = _readReuseParams(xmlCtx, scriptSection)
 
-    def _readStun(self, xmlCtx, section):
-        super(Equipment, self)._readStun(xmlCtx, section)
-        self.reuseCount, self.cooldownSeconds = _readReuseParams(xmlCtx, section)
+    def updateVehicleAttrFactorsForAspect(self, vehicleDescr, factors, aspect, *args, **kwargs):
+        pass
 
     def extraName(self):
         return self.name
@@ -242,186 +478,73 @@ class Equipment(Artefact):
             inventoryCallback(self.compactDescr)
 
 
-class StaticFactorDevice(OptionalDevice):
-    __slots__ = ('__attr', '__factor')
-
-    def __init__(self):
-        super(StaticFactorDevice, self).__init__()
-        self.__factor = component_constants.ZERO_FLOAT
-        self.__attr = None
-        return
-
-    def updateVehicleDescrAttrs(self, vehicleDescr):
-        if len(self.__attr) == 1:
-            attrDict = vehicleDescr.__dict__
-        else:
-            attrDict = getattr(vehicleDescr, self.__attr[0])
-        val = attrDict[self.attribute]
-        attrDict[self.attribute] = val * self.factor
-        miscAttrs = vehicleDescr.miscAttrs
-        miscAttrs['stunResistanceEffect'] += self.stunResistanceEffect
-        miscAttrs['stunResistanceDuration'] += self.stunResistanceDuration
-        miscAttrs['repeatedStunDurationFactor'] *= self.repeatedStunDurationFactor
-
-    def _readConfig(self, xmlCtx, section):
-        self.__factor = _xml.readPositiveFloat(xmlCtx, section, 'factor')
-        self.__attr = _xml.readNonEmptyString(xmlCtx, section, 'attribute').split('/', 1)
-
-    @property
-    def factor(self):
-        return self.__factor
-
-    @property
-    def attribute(self):
-        return self.__attr[0] if len(self.__attr) == 1 else self.__attr[1]
-
-
-class StaticAdditiveDevice(OptionalDevice):
-    __slots__ = ('__attr', '__value')
-
-    def __init__(self):
-        super(StaticAdditiveDevice, self).__init__()
-        self.__attr = None
-        self.__value = component_constants.ZERO_FLOAT
-        return
-
-    def updateVehicleDescrAttrs(self, vehicleDescr):
-        if len(self.__attr) == 1:
-            attrDict = vehicleDescr.__dict__
-        else:
-            attrDict = getattr(vehicleDescr, self.__attr[0])
-        val = attrDict[self.attribute]
-        attrDict[self.attribute] = val + self.value
-        miscAttrs = vehicleDescr.miscAttrs
-        miscAttrs['stunResistanceEffect'] += self.stunResistanceEffect
-        miscAttrs['stunResistanceDuration'] += self.stunResistanceDuration
-        miscAttrs['repeatedStunDurationFactor'] *= self.repeatedStunDurationFactor
-
-    def _readConfig(self, xmlCtx, section):
-        self.__value = _xml.readFloat(xmlCtx, section, 'value')
-        self.__attr = _xml.readNonEmptyString(xmlCtx, section, 'attribute').split('/', 1)
-
-    @property
-    def value(self):
-        return self.__value
-
-    @property
-    def attribute(self):
-        return self.__attr[0] if len(self.__attr) == 1 else self.__attr[1]
-
-
-class Stereoscope(OptionalDevice):
-    __slots__ = ('activateWhenStillSec', 'circularVisionRadiusFactor')
-
-    def __init__(self):
-        super(Stereoscope, self).__init__()
-        self.activateWhenStillSec = component_constants.ZERO_FLOAT
-        self.circularVisionRadiusFactor = component_constants.ZERO_FLOAT
-
-    def extraName(self):
-        return self.name
-
-    def _readConfig(self, xmlCtx, section):
-        self.activateWhenStillSec = _xml.readNonNegativeFloat(xmlCtx, section, 'activateWhenStillSec')
-        self.circularVisionRadiusFactor = _xml.readPositiveFloat(xmlCtx, section, 'circularVisionRadiusFactor')
-
-    def updateVehicleAttrFactors(self, vehicleDescr, factors, aspect):
-        if aspect not in (VEHICLE_TTC_ASPECTS.DEFAULT, VEHICLE_TTC_ASPECTS.WHEN_STILL):
-            return
-        factorToCompensate = vehicleDescr.miscAttrs['circularVisionRadiusFactor']
-        factors['circularVisionRadius'] = self.circularVisionRadiusFactor / factorToCompensate
-
-
-class CamouflageNet(OptionalDevice):
-    __slots__ = ('activateWhenStillSec',)
-
-    def __init__(self):
-        super(CamouflageNet, self).__init__()
-        self.activateWhenStillSec = component_constants.ZERO_FLOAT
-
-    def extraName(self):
-        return self.name
-
-    def _readConfig(self, xmlCtx, section):
-        self.activateWhenStillSec = _xml.readNonNegativeFloat(xmlCtx, section, 'activateWhenStillSec')
-
-    def updateVehicleAttrFactors(self, vehicleDescr, factors, aspect):
-        if aspect not in (VEHICLE_TTC_ASPECTS.WHEN_STILL,):
-            return
-        factors['invisibility'][0] += vehicleDescr.type.invisibilityDeltas['camouflageNetBonus']
-
-
-class EnhancedSuspension(OptionalDevice):
-    __slots__ = ('chassisMaxLoadFactor', 'chassisHealthFactor', 'vehicleByChassisDamageFactor')
-
-    def __init__(self):
-        super(EnhancedSuspension, self).__init__()
-        self.chassisMaxLoadFactor = component_constants.ZERO_FLOAT
-        self.chassisHealthFactor = component_constants.ZERO_FLOAT
-        self.vehicleByChassisDamageFactor = component_constants.ZERO_FLOAT
+class ExtraHealthReserve(StaticOptionalDevice):
+    __slots__ = ('chassisMaxLoadFactor',)
 
     def weightOnVehicle(self, vehicleDescr):
         chassis = vehicleDescr.chassis
-        return (self._vehWeightFraction, self._weight, chassis.maxLoad * (self.chassisMaxLoadFactor - 1.0))
-
-    def _readConfig(self, xmlCtx, section):
-        reader = partial(_xml.readPositiveFloat, xmlCtx, section)
-        self.chassisMaxLoadFactor = reader('chassisMaxLoadFactor')
-        self.chassisHealthFactor = reader('chassisHealthFactor')
-        self.vehicleByChassisDamageFactor = reader('vehicleByChassisDamageFactor')
+        level = self.defineActiveLevel(vehicleDescr)
+        return super(ExtraHealthReserve, self).weightOnVehicle(vehicleDescr) if level is None else (self._vehWeightFraction, self._weight, chassis.maxLoad * (self.chassisMaxLoadFactor.getActiveValue(level) - 1.0))
 
     def updateVehicleDescrAttrs(self, vehicleDescr):
-        miscAttrs = vehicleDescr.miscAttrs
-        miscAttrs['chassisHealthFactor'] *= self.chassisHealthFactor
-        miscAttrs['vehicleByChassisDamageFactor'] *= self.vehicleByChassisDamageFactor
-        miscAttrs['stunResistanceEffect'] += self.stunResistanceEffect
-        miscAttrs['stunResistanceDuration'] += self.stunResistanceDuration
-        miscAttrs['repeatedStunDurationFactor'] *= self.repeatedStunDurationFactor
-
-
-class Grousers(OptionalDevice):
-    __slots__ = ('factorSoft', 'factorMedium')
-
-    def __init__(self):
-        super(Grousers, self).__init__()
-        self.factorSoft = component_constants.ZERO_FLOAT
-        self.factorMedium = component_constants.ZERO_FLOAT
-
-    def updateVehicleDescrAttrs(self, vehicleDescr):
-        r = vehicleDescr.physics['terrainResistance']
-        vehicleDescr.physics['terrainResistance'] = (r[0], r[1] * self.factorMedium, r[2] * self.factorSoft)
-        rff = vehicleDescr.physics['rollingFrictionFactors']
-        rff[1] *= self.factorMedium
-        rff[2] *= self.factorSoft
+        super(ExtraHealthReserve, self).updateVehicleDescrAttrs(vehicleDescr)
+        descr = vehicleDescr.chassis
+        vehicleDescr.miscAttrs['chassisHealthAfterHysteresisFactor'] = float(descr.maxHealth) / descr.maxRegenHealth
 
     def _readConfig(self, xmlCtx, section):
-        self.factorSoft = _xml.readPositiveFloat(xmlCtx, section, 'softGroundResistanceFactor')
-        self.factorMedium = _xml.readPositiveFloat(xmlCtx, section, 'mediumGroundResistanceFactor')
+        super(ExtraHealthReserve, self)._readConfig(xmlCtx, section)
+        self.chassisMaxLoadFactor = LevelsFactor.readTypelessLevelsFactor(xmlCtx, section, 'chassisMaxLoadFactor')
 
 
-class AntifragmentationLining(OptionalDevice):
-    __slots__ = ('antifragmentationLiningFactor', 'increaseCrewChanceToEvadeHit', 'armorSpallsDamageDevicesFactor')
-
-    def __init__(self):
-        super(AntifragmentationLining, self).__init__()
-        self.antifragmentationLiningFactor = component_constants.ZERO_FLOAT
-        self.increaseCrewChanceToEvadeHit = component_constants.ZERO_FLOAT
-        self.armorSpallsDamageDevicesFactor = component_constants.ZERO_FLOAT
+class Grousers(StaticOptionalDevice):
+    __slots__ = ('rotationFactor', 'rollingFrictionFactor')
 
     def updateVehicleDescrAttrs(self, vehicleDescr):
-        miscAttrs = vehicleDescr.miscAttrs
-        miscAttrs['antifragmentationLiningFactor'] *= self.antifragmentationLiningFactor
-        miscAttrs['crewChanceToHitFactor'] *= 1.0 - self.increaseCrewChanceToEvadeHit
-        miscAttrs['stunResistanceEffect'] += self.stunResistanceEffect
-        miscAttrs['stunResistanceDuration'] += self.stunResistanceDuration
-        miscAttrs['repeatedStunDurationFactor'] *= self.repeatedStunDurationFactor
-        miscAttrs['armorSpallsDamageDevicesFactor'] *= self.armorSpallsDamageDevicesFactor
+        super(Grousers, self).updateVehicleDescrAttrs(vehicleDescr)
+        level = self.defineActiveLevel(vehicleDescr)
+        if level is None:
+            LOG_DEBUG_DEV('updateVehicleDescrAttrs: optional device ({}) is not installed'.format(self))
+            return
+        else:
+            rotationFactorActiveValue = self.rotationFactor.getActiveValue(level)
+            rollingFrictionFactorActiveValue = self.rollingFrictionFactor.getActiveValue(level)
+            r = vehicleDescr.physics['terrainResistance']
+            vehicleDescr.physics['terrainResistance'] = tuple((ri * rotationFactorActiveValue for ri in r))
+            rff = vehicleDescr.physics['rollingFrictionFactors']
+            vehicleDescr.physics['rollingFrictionFactors'] = list((rffi * rollingFrictionFactorActiveValue for rffi in rff))
+            return
 
     def _readConfig(self, xmlCtx, section):
-        reader = partial(_xml.readPositiveFloat, xmlCtx, section)
-        self.antifragmentationLiningFactor = reader('antifragmentationLiningFactor')
-        self.increaseCrewChanceToEvadeHit = reader('increaseCrewChanceToEvadeHit')
-        self.armorSpallsDamageDevicesFactor = _xml.readPositiveFloat(xmlCtx, section, 'armorSpallsDamageDevicesFactor', 1.0)
+        super(Grousers, self)._readConfig(xmlCtx, section)
+        self.rotationFactor = LevelsFactor.readTypelessLevelsFactor(xmlCtx, section, 'rotationFactor')
+        self.rollingFrictionFactor = LevelsFactor.readTypelessLevelsFactor(xmlCtx, section, 'rollingFrictionFactor')
+
+
+class RotationMechanisms(StaticOptionalDevice):
+    __slots__ = ('trackMoveSpeedFactor', 'wheelMoveSpeedFactor', 'trackRotateSpeedFactor', 'wheelRotateSpeedFactor', 'wheelCenterRotationFwdSpeed')
+
+    def updateVehicleDescrAttrs(self, vehicleDescr):
+        super(RotationMechanisms, self).updateVehicleDescrAttrs(vehicleDescr)
+        level = self.defineActiveLevel(vehicleDescr)
+        if level is None:
+            LOG_DEBUG_DEV('updateVehicleDescrAttrs: optional device ({}) is not installed'.format(self))
+            return
+        else:
+            isWheeledVehicle = vehicleDescr.type.isWheeledVehicle
+            onMoveFactor = self.trackMoveSpeedFactor if not isWheeledVehicle else self.wheelMoveSpeedFactor
+            vehicleDescr.miscAttrs['onMoveRotationSpeedFactor'] = onMoveFactor.getActiveValue(level)
+            onRotationFactor = self.trackRotateSpeedFactor if not isWheeledVehicle else self.wheelRotateSpeedFactor
+            vehicleDescr.miscAttrs['onStillRotationSpeedFactor'] = onRotationFactor.getActiveValue(level)
+            vehicleDescr.miscAttrs['centerRotationFwdSpeedFactor'] = self.wheelCenterRotationFwdSpeed.getActiveValue(level)
+            return
+
+    def _readConfig(self, xmlCtx, section):
+        super(RotationMechanisms, self)._readConfig(xmlCtx, section)
+        self.trackMoveSpeedFactor = LevelsFactor.readTypelessLevelsFactor(xmlCtx, section, 'trackMoveSpeedFactor')
+        self.wheelMoveSpeedFactor = LevelsFactor.readTypelessLevelsFactor(xmlCtx, section, 'wheelMoveSpeedFactor')
+        self.trackRotateSpeedFactor = LevelsFactor.readTypelessLevelsFactor(xmlCtx, section, 'trackRotateSpeedFactor')
+        self.wheelRotateSpeedFactor = LevelsFactor.readTypelessLevelsFactor(xmlCtx, section, 'wheelRotateSpeedFactor')
+        self.wheelCenterRotationFwdSpeed = LevelsFactor.readTypelessLevelsFactor(xmlCtx, section, 'wheelCenterRotationFwdSpeed')
 
 
 class Extinguisher(Equipment):
@@ -439,7 +562,7 @@ class Extinguisher(Equipment):
             self.fireStartingChanceFactor = _xml.readPositiveFloat(xmlCtx, section, 'fireStartingChanceFactor')
         self.autoactivate = section.readBool('autoactivate', False)
 
-    def updateVehicleAttrFactors(self, vehicleDescr, factors, aspect):
+    def updateVehicleAttrFactorsForAspect(self, vehicleDescr, factors, aspect, *args, **kwargs):
         try:
             factors['engine/fireStartingChance'] *= self.fireStartingChanceFactor
         except:
@@ -458,7 +581,7 @@ class Fuel(Equipment):
         self.enginePowerFactor = _xml.readPositiveFloat(xmlCtx, section, 'enginePowerFactor')
         self.turretRotationSpeedFactor = _xml.readPositiveFloat(xmlCtx, section, 'turretRotationSpeedFactor')
 
-    def updateVehicleAttrFactors(self, vehicleDescr, factors, aspect):
+    def updateVehicleAttrFactorsForAspect(self, vehicleDescr, factors, aspect, *args, **kwargs):
         try:
             factors['engine/power'] *= self.enginePowerFactor
             factors['turret/rotationSpeed'] *= self.turretRotationSpeedFactor
@@ -506,7 +629,7 @@ class RemovedRpmLimiter(Equipment):
         self.enginePowerFactor = _xml.readPositiveFloat(xmlCtx, section, 'enginePowerFactor')
         self.engineHpLossPerSecond = _xml.readPositiveFloat(xmlCtx, section, 'engineHpLossPerSecond')
 
-    def updateVehicleAttrFactors(self, vehicleDescr, factors, aspect):
+    def updateVehicleAttrFactorsForAspect(self, vehicleDescr, factors, aspect, *args, **kwargs):
         try:
             factors['engine/power'] *= self.enginePowerFactor
         except:
@@ -531,7 +654,7 @@ class Afterburning(Equipment):
         self.enginePowerFactor = _xml.readPositiveFloat(xmlCtx, section, 'enginePowerFactor')
         self.maxSpeedFactor = _xml.readPositiveFloat(xmlCtx, section, 'maxSpeedFactor')
 
-    def updateVehicleAttrFactors(self, vehicleDescr, factors, aspect):
+    def updateVehicleAttrFactorsForAspect(self, vehicleDescr, factors, aspect, *args, **kwargs):
         try:
             factors['engine/power'] *= self.enginePowerFactor
             factors['vehicle/maxSpeed'] *= self.maxSpeedFactor
@@ -1042,7 +1165,7 @@ class DynamicEquipment(Equipment):
 
         return None
 
-    def updateVehicleAttrFactors(self, vehicleDescr, factors, _):
+    def updateVehicleAttrFactorsForAspect(self, vehicleDescr, factors, _, *args, **kwargs):
         levelID = self.getLevelIDForVehicle(vehicleDescr)
         if levelID is not None:
             self.updateVehicleAttrFactorsForLevel(factors, levelID)
@@ -1419,55 +1542,51 @@ class EpicEngineering(PassiveEngineering):
     pass
 
 
-class UpgradableItem(object):
-    UpgradeInfo = NamedTuple('UpgradeInfo', [('upgradedCompDescr', int)])
+UpgradeInfo = NamedTuple('UpgradeInfo', [('upgradedCompDescr', int)])
+
+class UpgradableItem(Artefact):
+
+    def __init__(self, typeID, itemID, itemName, compactDescr):
+        super(UpgradableItem, self).__init__(typeID, itemID, itemName, compactDescr)
+        self._upgradeInfo = None
+        return
 
     @property
     def upgradeInfo(self):
-        return self.__upgradeInfo
+        return self._upgradeInfo
 
     def initUpgradableItem(self):
-        self.__upgradeInfo = None
+        self._upgradeInfo = None
         return
+
+    def _readConfig(self, xmlCtx, section):
+        super(UpgradableItem, self)._readConfig(xmlCtx, section)
+        self._readUpgradableConfig(xmlCtx, section, self.compactDescr)
 
     def _readUpgradableConfig(self, xmlCtx, scriptSection, itemCompDescr):
         upgradeInfoSection = scriptSection['upgradeInfo']
         upgradedCD = _xml.readInt(xmlCtx, upgradeInfoSection, 'upgradedCompDescr')
-        self.__upgradeInfo = UpgradableItem.UpgradeInfo(upgradedCD)
+        self._upgradeInfo = UpgradeInfo(upgradedCD)
         _readPriceForOperation(xmlCtx, upgradeInfoSection, ITEM_OPERATION.UPGRADE, (itemCompDescr, upgradedCD))
 
 
-class UpgradedItem(object):
-    __slots__ = ()
-
-
-class UpgradableStaticFactorDevice(StaticFactorDevice, UpgradableItem):
-
-    def __init__(self):
-        super(UpgradableStaticFactorDevice, self).__init__()
-        self.initUpgradableItem()
-
-    def _readConfig(self, xmlCtx, section):
-        super(UpgradableStaticFactorDevice, self)._readConfig(xmlCtx, section)
-        self._readUpgradableConfig(xmlCtx, section, self.compactDescr)
-
-
-class UpgradableStaticAdditiveDevice(StaticAdditiveDevice, UpgradableItem):
-
-    def __init__(self):
-        super(UpgradableStaticAdditiveDevice, self).__init__()
-        self.initUpgradableItem()
-
-    def _readConfig(self, xmlCtx, section):
-        super(UpgradableStaticAdditiveDevice, self)._readConfig(xmlCtx, section)
-        self._readUpgradableConfig(xmlCtx, section, self.compactDescr)
-
-
-class UpgradedStaticFactorDevice(StaticFactorDevice, UpgradedItem):
+class UpgradedItem(Artefact):
     pass
 
 
-class UpgradedStaticAdditiveDevice(StaticAdditiveDevice, UpgradedItem):
+class UpgradableStaticDevice(StaticOptionalDevice, UpgradableItem):
+    pass
+
+
+class UpgradedStaticDevice(StaticOptionalDevice, UpgradedItem):
+    pass
+
+
+class UpgradableImprovedConfiguration(ImprovedConfiguration, UpgradableItem):
+    pass
+
+
+class UpgradedImprovedConfiguration(ImprovedConfiguration, UpgradedItem):
     pass
 
 
@@ -1778,143 +1897,6 @@ class SpawnKamikaze(ConsumableSpawnKamikaze):
     pass
 
 
-class _VehicleFilter(object):
-
-    def __init__(self, xmlCtx, section):
-        self.__include = []
-        self.__exclude = []
-        for subsection in section.values():
-            if subsection.name == 'include':
-                self.__include.append(_readVehicleFilterPattern((xmlCtx, 'include'), subsection))
-            if subsection.name == 'exclude':
-                self.__exclude.append(_readVehicleFilterPattern((xmlCtx, 'exclude'), subsection))
-            _xml.raiseWrongXml(xmlCtx, subsection.name, 'should be <include> or <exclude>')
-
-    def checkCompatibility(self, vehicleDescr):
-        if self.__exclude:
-            isVehicleTypeMatched, isVehicleMatched = _matchSubfilter(vehicleDescr, self.__exclude)
-            if isVehicleMatched and isVehicleTypeMatched:
-                return (False, 'not for current vehicle')
-        if self.__include:
-            isVehicleTypeMatched, isVehicleMatched = _matchSubfilter(vehicleDescr, self.__include)
-            if not isVehicleMatched:
-                if not isVehicleTypeMatched:
-                    return (False, 'not for this vehicle type')
-                return (False, 'not for current vehicle')
-        return (True, None)
-
-    def compatibleNations(self):
-        included = set(chain.from_iterable((params.get('nations', []) for params in self.__include)))
-        excluded = set(chain.from_iterable((params.get('nations', []) for params in self.__exclude)))
-        return list(included - excluded)
-
-
-class _ArtefactFilter(object):
-
-    def __init__(self, xmlCtx, section, itemTypeName):
-        self.__installed = set()
-        self.__active = set()
-        for subsection in section.values():
-            if subsection.name == 'installed':
-                self.__installed.update(_readTags((xmlCtx, subsection.name), subsection, '', itemTypeName))
-            if subsection.name == 'active':
-                self.__active.update(_readTags((xmlCtx, subsection.name), subsection, '', itemTypeName))
-            _xml.raiseWrongXml(xmlCtx, subsection.name, 'should be <installed> or <active>')
-
-    def inInstalled(self, tags):
-        return bool(len(self.__installed.intersection(tags)))
-
-    def inActive(self, tags):
-        return bool(len(self.__active.intersection(tags)))
-
-
-def _readVehicleFilterPattern(xmlCtx, section):
-    res = {}
-    for sname, section in section.items():
-        ctx = (xmlCtx, sname)
-        if sname == 'nations':
-            names = section.asString
-            res['nations'] = []
-            for name in names.split():
-                id = nations.INDICES.get(name)
-                if id is None:
-                    _xml.raiseWrongXml(xmlCtx, 'nations', "unknown nation '%s'" % name)
-                res['nations'].append(id)
-
-        if sname in _vehicleFilterItemTypes:
-            sname = intern(sname)
-            res[sname] = {}
-            if section.has_key('tags'):
-                tags = _readTags(ctx, section, 'tags', _vehicleFilterItemTypes[sname])
-                res[sname]['tags'] = tags
-            minLevel = section.readInt('minLevel', 1)
-            if not 1 <= minLevel <= 10:
-                _xml.raiseWrongSection(ctx, 'minLevel')
-            if minLevel != 1:
-                res[sname]['minLevel'] = minLevel
-            maxLevel = section.readInt('maxLevel', 10)
-            if not 1 <= maxLevel <= 10:
-                _xml.raiseWrongSection(ctx, 'maxLevel')
-            if maxLevel != 10:
-                res[sname]['maxLevel'] = maxLevel
-        _xml.raiseWrongXml(ctx, '', 'unknown section name')
-
-    return res
-
-
-def _matchSubfilter(vehicleDescr, subfilter):
-    vehicleType = vehicleDescr.type
-    nationID = vehicleType.id[0]
-    hasVehicleTypeOk = False
-    for entry in subfilter:
-        item = entry.get('nations')
-        if item is not None and nationID not in item:
-            continue
-        item = entry.get('vehicle')
-        if item is None:
-            hasVehicleTypeOk = True
-        else:
-            tags = item.get('tags')
-            if tags is not None and not vehicleType.tags.intersection(tags):
-                continue
-            minLevel = item.get('minLevel')
-            if minLevel is not None and minLevel > vehicleDescr.level:
-                continue
-            maxLevel = item.get('maxLevel')
-            if maxLevel is not None and maxLevel < vehicleDescr.level:
-                continue
-            hasVehicleTypeOk = True
-        isVehicleOk = True
-        for name, item in entry.iteritems():
-            if name in ('nations', 'vehicle'):
-                continue
-            descr = getattr(vehicleDescr, name)
-            tags = item.get('tags')
-            if tags is not None and not descr.tags.intersection(tags):
-                isVehicleOk = False
-                break
-            minLevel = item.get('minLevel')
-            if minLevel is not None and minLevel > descr.level:
-                isVehicleOk = False
-                break
-            maxLevel = item.get('maxLevel')
-            if maxLevel is not None and maxLevel < descr.level:
-                isVehicleOk = False
-                break
-
-        if isVehicleOk:
-            return (True, True)
-
-    return (hasVehicleTypeOk, False)
-
-
-_vehicleFilterItemTypes = {'vehicle': 'vehicle',
- 'chassis': 'vehicleChassis',
- 'engine': 'vehicleEngine',
- 'fuelTank': 'vehicleFuelTank',
- 'radio': 'vehicleRadio',
- 'gun': 'vehicleGun'}
-
 def _readKpi(xmlCtx, section):
     from gui.shared.gui_items import KPI
     kpi = []
@@ -1924,17 +1906,43 @@ def _readKpi(xmlCtx, section):
             return
         if kpiType == KPI.Type.ONE_OF:
             kpi.append(KPI(KPI.Name.COMPOUND_KPI, _readKpi(xmlCtx, subsec), KPI.Type.ONE_OF))
-        name = subsec.readString('name')
-        value = subsec.readFloat('value')
-        if not name:
-            _xml.raiseWrongXml(xmlCtx, kpiType, 'empty <name> tag not allowed')
-            return
-        if name not in KPI.Name.ALL():
-            _xml.raiseWrongXml(xmlCtx, kpiType, 'unsupported value in <name> tag')
-            return
-        kpi.append(KPI(name, value, kpiType))
+        if kpiType == KPI.Type.AGGREGATE_MUL:
+            kpi.append(_readAggregateKPI(xmlCtx, subsec, kpiType))
+        kpi.append(_readKpiValue(xmlCtx, subsec, kpiType))
 
     return kpi
+
+
+def _readKpiValue(xmlCtx, section, kpiType):
+    from gui.shared.gui_items import KPI
+    name = section.readString('name')
+    value = section.readFloat('value')
+    specValue = section.readString('specValue')
+    vehicleTypes = section.readString('vehicleTypes').split()
+    if not name:
+        _xml.raiseWrongXml(xmlCtx, kpiType, 'empty <name> tag not allowed')
+    elif name not in KPI.Name.ALL():
+        _xml.raiseWrongXml(xmlCtx, kpiType, 'unsupported value in <name> tag')
+    return KPI(name, value, kpiType, float(specValue) if specValue else None, vehicleTypes)
+
+
+def _readAggregateKPI(xmlCtx, section, kpiType):
+    from gui.shared.gui_items import KPI, AGGREGATE_TO_SINGLE_TYPE_KPI_MAP
+    subKpies = []
+    for key, subsec in section.items():
+        if key in KPI.Type.ALL():
+            if key != AGGREGATE_TO_SINGLE_TYPE_KPI_MAP.get(kpiType, None):
+                _xml.raiseWrongXml(xmlCtx, key, 'unsupported KPI type for aggregating')
+            subKpies.append(_readKpiValue(xmlCtx, subsec, key))
+
+    if not subKpies:
+        _xml.raiseWrongXml(xmlCtx, kpiType, 'has not KPI for aggregating')
+    name = section.readString('name')
+    if not name:
+        _xml.raiseWrongXml(xmlCtx, kpiType, 'empty <name> tag not allowed')
+    elif name not in KPI.Name.ALL():
+        _xml.raiseWrongXml(xmlCtx, kpiType, 'unsupported value in <name> tag')
+    return KPI(name, subKpies, kpiType)
 
 
 _readTags = vehicles._readTags

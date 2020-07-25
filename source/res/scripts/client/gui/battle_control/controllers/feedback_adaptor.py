@@ -42,7 +42,7 @@ class _DamagedDevicesExtraFetcher(object):
 
 
 class BattleFeedbackAdaptor(IBattleController):
-    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onRoundFinished', 'onDevelopmentInfoSet', 'onStaticMarkerAdded', 'onStaticMarkerRemoved', 'onReplyFeedbackReceived', 'onRemoveCommandReceived', 'setInFocusForPlayer', 'onMinimapFeedbackReceived', 'onActionAddedToMarkerReceived', 'onShotDone', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache')
+    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onRoundFinished', 'onDevelopmentInfoSet', 'onStaticMarkerAdded', 'onStaticMarkerRemoved', 'onReplyFeedbackReceived', 'onRemoveCommandReceived', 'setInFocusForPlayer', 'onMinimapFeedbackReceived', 'onVehicleDetected', 'onActionAddedToMarkerReceived', 'onShotDone', 'onAddCommandReceived', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache')
 
     def __init__(self, setup):
         super(BattleFeedbackAdaptor, self).__init__()
@@ -62,6 +62,7 @@ class BattleFeedbackAdaptor(IBattleController):
         self.onMinimapVehicleAdded = Event.Event()
         self.onMinimapVehicleRemoved = Event.Event()
         self.onMinimapFeedbackReceived = Event.Event()
+        self.onVehicleDetected = Event.Event()
         self.onDevelopmentInfoSet = Event.Event()
         self.onStaticMarkerAdded = Event.Event()
         self.onStaticMarkerRemoved = Event.Event()
@@ -69,6 +70,7 @@ class BattleFeedbackAdaptor(IBattleController):
         self.onShotDone = Event.Event()
         self.onReplyFeedbackReceived = Event.Event()
         self.onRemoveCommandReceived = Event.Event()
+        self.onAddCommandReceived = Event.Event()
         self.setInFocusForPlayer = Event.Event()
         self.onActionAddedToMarkerReceived = Event.Event()
 
@@ -142,6 +144,8 @@ class BattleFeedbackAdaptor(IBattleController):
                 targetId = feedbackEvent.getTargetID()
                 triggerId = TriggersManager.TRIGGER_TYPE.PLAYER_DETECT_ENEMY
                 TriggersManager.g_manager.activateTrigger(triggerId, targetId=targetId, isVisible=extraVis.isVisible(), isDirect=extraVis.isDirect)
+            if feedbackType == _FET.VEHICLE_DETECTED:
+                self.onVehicleDetected(feedbackEvent)
             feedbackEvents.append(feedbackEvent)
 
         if feedbackEvents:
@@ -221,6 +225,9 @@ class BattleFeedbackAdaptor(IBattleController):
 
     def onReplyToCommand(self, uniqueCommandID, replierID, markerType, oldReplyCount, newReplyCount):
         self.onReplyFeedbackReceived(uniqueCommandID, replierID, markerType, oldReplyCount, newReplyCount)
+
+    def onCommandAdded(self, addedID, markerType):
+        self.onAddCommandReceived(addedID, markerType)
 
     def onCommandRemoved(self, removedID, markerType):
         self.onRemoveCommandReceived(removedID, markerType)

@@ -186,7 +186,10 @@ def _readTips(pattern):
         if tipID:
             reMatch = tipsPattern.match(tipID)
             if reMatch is not None:
-                result.append(_buildBattleLoadingTip(tipID, descriptionResId()))
+                if tipID not in _tipsConfig:
+                    _logger.error('Tips by tipID(%s) not in prebattle_tips.xml', tipID)
+                else:
+                    result.append(_buildBattleLoadingTip(tipID, descriptionResId()))
 
     return result
 

@@ -3,7 +3,7 @@
 from collections import namedtuple
 from gui.shared.event_bus import SharedEvent
 from shared_utils import CONST_CONTAINER
-__all__ = ('ArgsEvent', 'LoadEvent', 'ComponentEvent', 'LoadViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginCreateEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'HasCtxEvent')
+__all__ = ('ArgsEvent', 'LoadEvent', 'ComponentEvent', 'LoadViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginCreateEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'HasCtxEvent', 'AmmunitionSetupViewEvent')
 
 class HasCtxEvent(SharedEvent):
 
@@ -727,6 +727,15 @@ class PrbActionEvent(HasCtxEvent):
     def __init__(self, action, eventType=None):
         super(PrbActionEvent, self).__init__(eventType)
         self.action = action
+
+
+class AmmunitionSetupViewEvent(HasCtxEvent):
+    GF_RESIZED = 'ammunitionSetupViewEvent/gfResized'
+    UPDATE_TTC = 'ammunitionSetupViewEvent/updateTTC'
+    HINT_ZONE_ADD = 'ammunitionSetupViewEvent/hintZoneAdd'
+    HINT_ZONE_HIDE = 'ammunitionSetupViewEvent/hintZoneHide'
+    HINT_ZONE_CLICK = 'ammunitionSetupViewEvent/hintZoneClick'
+    CLOSE_VIEW = 'ammunitionSetupViewEvent/closeView'
 
 
 class RadialMenuEvent(SharedEvent):

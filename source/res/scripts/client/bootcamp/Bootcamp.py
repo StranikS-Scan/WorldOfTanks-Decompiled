@@ -331,8 +331,9 @@ class Bootcamp(EventSystemEntity):
             self.__replayController = None
         MC.g_musicController.stopAmbient(True)
         WWISE.unloadSoundPool()
-        self.__combatSoundAssistant.fini()
-        self.__combatSoundAssistant = None
+        if self.__combatSoundAssistant is not None:
+            self.__combatSoundAssistant.fini()
+            self.__combatSoundAssistant = None
         self.sessionProvider.getCtx().resetPlayerFullNameFormatter()
         return
 

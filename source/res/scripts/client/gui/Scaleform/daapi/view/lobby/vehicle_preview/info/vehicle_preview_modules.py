@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_preview/info/vehicle_preview_modules.py
 from CurrentVehicle import g_currentPreviewVehicle
+from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
 from gui.Scaleform.daapi.view.lobby.shared.fitting_slot_vo import FittingSlotVO
 from gui.impl import backport
 from gui.impl.gen import R
@@ -14,6 +15,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.vehicle_collector_helper import wasModulesAnimationShown
 from helpers import dependency
 from items import ITEM_TYPES
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
 _MODULE_SLOTS = (GUI_ITEM_TYPE_NAMES[ITEM_TYPES.vehicleChassis],
  GUI_ITEM_TYPE_NAMES[ITEM_TYPES.vehicleTurret],
@@ -63,16 +65,24 @@ class VehiclePreviewModulesTab(VehiclePreviewModulesTabMeta):
 
 class ModulesPanel(ModulesPanelMeta):
     itemsCache = dependency.descriptor(IItemsCache)
+    settingsCore = dependency.descriptor(ISettingsCore)
+
+    def __init__(self):
+        super(ModulesPanel, self).__init__()
+        self.__hasCounter = None
+        return
 
     def _populate(self):
         super(ModulesPanel, self)._populate()
         g_currentPreviewVehicle.onComponentInstalled += self.update
         g_currentPreviewVehicle.onChanged += self.update
+        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         self.update()
 
     def _dispose(self):
         g_currentPreviewVehicle.onComponentInstalled -= self.update
         g_currentPreviewVehicle.onChanged -= self.update
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         super(ModulesPanel, self)._dispose()
 
     def update(self, *args):
@@ -87,13 +97,29 @@ class ModulesPanel(ModulesPanelMeta):
         if g_currentPreviewVehicle.isPresent():
             vehicle = g_currentPreviewVehicle.item
             devices = []
-            self.as_setModulesEnabledS(vehicle.hasModulesToSelect)
             self.as_setVehicleHasTurretS(vehicle.hasTurrets)
             for slotType in _MODULE_SLOTS:
                 data = self.itemsCache.items.getItems(GUI_ITEM_TYPE_INDICES[slotType], REQ_CRITERIA.CUSTOM(lambda item: item.isInstalled(vehicle))).values()
                 devices.append(FittingSlotVO(data, vehicle, slotType))
 
+            self.__setHasCounter(devices)
+            modulesEnabled = self.__hasCounter or vehicle.hasModulesToSelect
+            self.as_setModulesEnabledS(modulesEnabled)
             for item in devices:
-                item['isDisabledBgVisible'] = vehicle.hasModulesToSelect
+                item['isDisabledBgVisible'] = modulesEnabled
 
             self.as_setDataS({'devices': devices})
+
+    def __setHasCounter(self, devices):
+        if self.__hasCounter is None:
+            self.__hasCounter = False
+            for deviceData in devices:
+                if deviceData.get('counter', 0):
+                    self.__hasCounter = True
+
+        return
+
+    def __onSettingsChanged(self, diff):
+        if SETTINGS_SECTIONS.UI_STORAGE not in diff:
+            return
+        self._update()

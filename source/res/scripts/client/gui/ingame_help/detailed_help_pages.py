@@ -21,6 +21,8 @@ def buildPagesData(ctx):
         datailedList.extend(buildDualGunPages())
     if ctx.get('battleRoyale') and ctx.get('mapGeometryName'):
         datailedList.extend(_buildBattleRoyalePages(ctx['mapGeometryName']))
+    if ctx.get('hasTurboshaftEngine'):
+        datailedList.extend(buildTurboshaftEnginePages())
     return datailedList
 
 
@@ -78,6 +80,14 @@ def _buildBattleRoyalePages(mapGeometryName):
     _addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.airDrop.title()), backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.airDrop.description()), [], backport.image(imagePath.br_airdrop()))
     _addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.upgrade.title()), backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.upgrade.description()), [], backport.image(imagePath.br_tree()))
     _addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.uniqueAbilities.title()), backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.uniqueAbilities.description()), [], backport.image(imagePath.br_unique_abilities()))
+    return pages
+
+
+def buildTurboshaftEnginePages():
+    pages = []
+    siegeKeyName = getReadableKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
+    _addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.engineMode.engineModePage1.title()), backport.text(R.strings.ingame_help.detailsHelp.engineMode.engineModePage1()), [siegeKeyName], backport.image(R.images.gui.maps.icons.battleHelp.turboshaftEngineHelp.engine_mode_page_1()))
+    _addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.engineMode.engineModePage2.title()), backport.text(R.strings.ingame_help.detailsHelp.engineMode.engineModePage2()), [], backport.image(R.images.gui.maps.icons.battleHelp.turboshaftEngineHelp.engine_mode_page_2()))
     return pages
 
 

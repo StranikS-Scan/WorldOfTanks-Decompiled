@@ -261,8 +261,7 @@ class ChatCommunicationComponent(object):
             self._parentObj.invokeMarker(markerID, 'triggerClickAnimation')
         if oldReplyCount != count and (oldReplyCount == 0 or count == 0):
             self._setMarkerReplied(marker, count > 0)
-        self._parentObj.invokeMarker(markerID, 'setReplyCount', count)
-        marker.setReplyCount(count)
+        self._setMarkerReplyCount(marker, count)
         if checkState:
             self._checkNextState(marker)
 
@@ -287,6 +286,11 @@ class ChatCommunicationComponent(object):
         if marker.getIsReplied() != isReplied:
             self._parentObj.invokeMarker(marker.getMarkerID(), 'setMarkerReplied', isReplied)
             marker.setIsReplied(isReplied)
+
+    def _setMarkerReplyCount(self, marker, replyCount):
+        if marker.getReplyCount() != replyCount:
+            self._parentObj.invokeMarker(marker.getMarkerID(), 'setReplyCount', replyCount)
+            marker.setReplyCount(replyCount)
 
     def _setActiveState(self, marker, state):
         markerID = marker.getMarkerID()
@@ -838,6 +842,10 @@ class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
             return
         marker = self._markers[removeID]
         marker.setActiveCommandID(-1)
+        if marker.getReplyCount() != 0:
+            marker.setIsRepliedByPlayer(False)
+            self._setMarkerReplied(marker, False)
+            self._setMarkerReplyCount(marker, 0)
         self._checkNextState(marker)
         if marker.getState() == ReplyStateForMarker.NO_ACTION and not marker.getBoundCheckEnabled():
             marker.setBoundCheckEnabled(True)

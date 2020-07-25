@@ -670,7 +670,7 @@ def tokensFactory(name, value, isCompensation=False, ctx=None, eventProgressionC
             createBonusFromTokens(result, CURRENCY_TOKEN_PREFIX, tID, tValue)
         if tID.startswith(RESOURCE_TOKEN_PREFIX):
             result.append(ResourceBonus(name, {tID: tValue}, RESOURCE_TOKEN_PREFIX, isCompensation, ctx))
-        if eventProgressionController.isAvailable() and tID.startswith(eventProgressionController.getProgressionXPTokenID()):
+        if eventProgressionController.isAvailable() and eventProgressionController.getProgressionXPTokenID() and tID.startswith(eventProgressionController.getProgressionXPTokenID()):
             result.append(ProgressionXPToken(name, {tID: tValue}, isCompensation, ctx))
         result.append(BattleTokensBonus(name, {tID: tValue}, isCompensation, ctx))
 

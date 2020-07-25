@@ -16,6 +16,7 @@ from helpers import dependency
 from preview_selectable_logic import PreviewSelectableLogic
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
+from skeletons.gui.game_control import IHeroTankController
 _SHOW_CLOSE_BTN = False
 _SHOW_BACK_BTN = True
 _logger = logging.getLogger(__name__)
@@ -25,6 +26,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
     __metaclass__ = event_bus_handlers.EventBusListener
     __itemsCache = dependency.descriptor(IItemsCache)
     __hangarSpace = dependency.descriptor(IHangarSpace)
+    __heroTanksControl = dependency.descriptor(IHeroTankController)
     _COMMON_SOUND_SPACE = STYLE_PREVIEW_SOUND_SPACE
 
     def __init__(self, ctx=None):
@@ -51,6 +53,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
             event_dispatcher.showHangar()
         self.__hangarSpace.onSpaceCreate += self.__onHangarCreateOrRefresh
         self.addListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading, EVENT_BUS_SCOPE.DEFAULT)
+        self.__heroTanksControl.setInteractive(False)
         self.as_setDataS({'closeBtnLabel': backport.text(R.strings.vehicle_preview.header.closeBtn.label()),
          'backBtnLabel': backport.text(R.strings.vehicle_preview.header.backBtn.label()),
          'backBtnDescrLabel': self.__backBtnDescrLabel,
@@ -67,6 +70,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         self.removeListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading, EVENT_BUS_SCOPE.DEFAULT)
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__hangarSpace.onSpaceCreate -= self.__onHangarCreateOrRefresh
+        self.__heroTanksControl.setInteractive(True)
         g_currentPreviewVehicle.selectNoVehicle()
         g_currentPreviewVehicle.resetAppearance()
         g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.VEHICLE_PREVIEW_HIDDEN), scope=EVENT_BUS_SCOPE.LOBBY)

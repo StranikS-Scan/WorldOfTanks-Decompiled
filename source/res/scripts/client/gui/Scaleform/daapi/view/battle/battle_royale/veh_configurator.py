@@ -46,20 +46,6 @@ class BattleVehicleConfiguratorCmp(VehicleModulesConfiguratorCmp, IProgressionLi
             _logger.error('Invalid data has been received! New module id can not be "%s"!', newModuleIntCD)
         return
 
-    def setVehicleChangeResponse(self, _, success):
-        if success:
-            hasUpdate = False
-            columnVO = self._columnsVOs[self.getAvailableLevel() - 1]
-            for mVO in columnVO['modules']:
-                moduleItem = self._getItem(mVO['intCD'])
-                mayInstall = self._mayInstallModule(moduleItem)
-                if mayInstall != mVO['available']:
-                    mVO['available'] = mayInstall
-                    hasUpdate = True
-
-            if hasUpdate:
-                self.as_updateItemsS((columnVO,))
-
     def setVehicle(self, vehicle):
         super(BattleVehicleConfiguratorCmp, self).setVehicle(createGuiVehicle(vehicle.descriptor.makeCompactDescr()))
 
@@ -82,7 +68,7 @@ class BattleVehicleConfiguratorCmp(VehicleModulesConfiguratorCmp, IProgressionLi
         columnIdx = int(columnIdx)
         moduleIdx = int(moduleIdx)
         module = self._getItem(intCD)
-        success = self._mayInstallModule(module)
+        success = self._mayInstallModuleOnCurrentVehicle(module)
         if success:
             self.__installModuleOnLocalVehicle(module)
             column = self._columnsVOs[columnIdx]
@@ -109,8 +95,8 @@ class BattleVehicleConfiguratorCmp(VehicleModulesConfiguratorCmp, IProgressionLi
         super(BattleVehicleConfiguratorCmp, self)._dispose()
         return
 
-    def _mayInstallModule(self, mItem):
-        return self.__getProgressionCtrl().mayInstallModule(mItem)
+    def _mayInstallModuleOnCurrentVehicle(self, mItem):
+        return self.__getProgressionCtrl().mayInstallModuleOnVehicle(mItem, self._vehicle)
 
     def _installModule(self, moduleItem):
         return self.__getProgressionCtrl().vehicleUpgradeRequest(moduleItem=moduleItem)
@@ -184,10 +170,6 @@ class BattleVehicleConfigurator(BattleVehicleConfiguratorMeta, IProgressionListe
         for cmpnt in self.components.values():
             cmpnt.setVehicleChanged(vehicle, moduleIntCD, vehicleRecreated)
 
-    def setVehicleChangeResponse(self, intCD, success):
-        for cmpnt in self.components.values():
-            cmpnt.setVehicleChangeResponse(intCD, success)
-
     def onMaxLvlAchieved(self):
         for cmpnt in self.components.values():
             cmpnt.onMaxLvlAchieved()
@@ -208,7 +190,7 @@ class BattleVehicleConfigurator(BattleVehicleConfiguratorMeta, IProgressionListe
             self.app.registerGuiKeyHandler(self)
         self.addListener(GameEvent.HIDE_VEHICLE_UPGRADE, self.__handleHide, EVENT_BUS_SCOPE.BATTLE)
         self.__blur.enable = True
-        vehicle = self.__getVehicle()
+        vehicle = self.__getProgressionVehicle()
         self.as_setDataS({'nationIcon': getVehicleNationIcon(vehicle),
          'vehName': vehicle.userName,
          'weakPointsText': backport.text(R.strings.battle_royale.battleVehModuleConfigurator.weakZones()),
@@ -247,7 +229,7 @@ class BattleVehicleConfigurator(BattleVehicleConfiguratorMeta, IProgressionListe
         if alias in self.__cmpAliases:
             if isinstance(viewPy, BattleVehicleConfiguratorCmp):
                 viewPy.setModuleChangeCallback(self.__onComponentModulesChanged)
-                viewPy.setVehicle(self.__getVehicle())
+                viewPy.setVehicle(self.__getProgressionVehicle())
                 self.__configuratorCmp = viewPy
             self.__cmpAliases.remove(alias)
             if not self.__cmpAliases:
@@ -278,7 +260,7 @@ class BattleVehicleConfigurator(BattleVehicleConfiguratorMeta, IProgressionListe
     def __getModuleInfo(self, intCD, icon, index):
         module = self.__getModuleItem(intCD)
         return {'header': getTreeModuleHeader(module),
-         'parameters': getShortListParameters(module, self.__getVehicle(), self.__getInstalledOnVehicleAnalogByIntCD(intCD)),
+         'parameters': getShortListParameters(module, self.__getProgressionVehicle(), self.__getInstalledOnVehicleAnalogByIntCD(intCD)),
          'hotKeys': getHotKeyListByIndex(index),
          'module': {'icon': icon,
                     'intCD': intCD,
@@ -290,7 +272,7 @@ class BattleVehicleConfigurator(BattleVehicleConfiguratorMeta, IProgressionListe
             module = self.__getModuleItem(intCD)
             if module is not None:
                 return {'header': getTreeModuleHeader(module),
-                 'parameters': getShortListParameters(module, self.__getVehicle(), self.__getInstalledOnVehicleAnalogByIntCD(intCD)),
+                 'parameters': getShortListParameters(module, self.__getProgressionVehicle(), self.__getInstalledOnVehicleAnalogByIntCD(intCD)),
                  'module': {'icon': getTreeModuleIcon(module),
                             'available': True}}
         return
@@ -301,7 +283,7 @@ class BattleVehicleConfigurator(BattleVehicleConfiguratorMeta, IProgressionListe
     def __getInstalledOnVehicleAnalogByIntCD(self, intCD):
         return self.__getProgressionCtrl().getInstalledOnVehicleAnalogByIntCD(intCD)
 
-    def __getVehicle(self):
+    def __getProgressionVehicle(self):
         return self.__getProgressionCtrl().getCurrentVehicle()
 
     def __handleHide(self, _):

@@ -622,10 +622,10 @@ class _CurrentPreviewVehicle(_CachedVehicle):
 
     def __makePreviewVehicleFromStrCD(self, vehicleStrCD):
         vehicle = Vehicle(strCompactDescr=vehicleStrCD, proxy=self.itemsCache.items)
-        for slotID, device in enumerate(vehicle.optDevices):
+        for slotID, device in enumerate(vehicle.optDevices.installed):
             if device is not None:
                 vehicle.descriptor.removeOptionalDevice(slotID)
-                vehicle.optDevices[slotID] = None
+                vehicle.optDevices.installed[slotID] = None
 
         vehicle.crew = vehicle.getPerfectCrew()
         return vehicle

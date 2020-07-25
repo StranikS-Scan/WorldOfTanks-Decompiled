@@ -56,9 +56,14 @@
         <preBattle>
           <vehicle>
             <and>
-              <installedModules>
-                <optionalDevice>	camouflageNet	</optionalDevice>
-              </installedModules>
+              <or>
+                <installedModules>
+                  <optionalDevice>	camouflageNet_tier2	</optionalDevice>
+                </installedModules>
+                <installedModules>
+                  <optionalDevice>	camouflageNet_tier3	</optionalDevice>
+                </installedModules>
+              </or>
             </and>
           </vehicle>
         </preBattle>
@@ -97,9 +102,14 @@
           </account>
           <vehicle>
             <and>
-              <installedModules>
-                <optionalDevice>	camouflageNet	</optionalDevice>
-              </installedModules>
+              <or>
+                <installedModules>
+                  <optionalDevice>	camouflageNet_tier2	</optionalDevice>
+                </installedModules>
+                <installedModules>
+                  <optionalDevice>	camouflageNet_tier3	</optionalDevice>
+                </installedModules>
+              </or>
             </and>
           </vehicle>
         </preBattle>

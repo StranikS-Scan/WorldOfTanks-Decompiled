@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.views.lobby.demount_kit.selector_dialog_item_model
 class SelectorDialogModel(ItemBaseDialogModel):
     __slots__ = ('onSelectItem',)
 
-    def __init__(self, properties=15, commands=3):
+    def __init__(self, properties=15, commands=4):
         super(SelectorDialogModel, self).__init__(properties=properties, commands=commands)
 
     @property

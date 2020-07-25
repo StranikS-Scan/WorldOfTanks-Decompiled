@@ -416,12 +416,13 @@ class SimpleHint(HasID):
 
 class ChainHint(ActionsHolder, HasTargetID):
 
-    def __init__(self, entityID, targetID, text, hasBox=None, arrow=None, padding=None):
+    def __init__(self, entityID, targetID, text, hasBox=None, arrow=None, padding=None, hideImmediately=False):
         super(ChainHint, self).__init__(entityID=entityID, targetID=targetID)
         self.__text = text
         self.__hasBox = hasBox
         self.__arrow = arrow
         self.__padding = padding
+        self.__hideImmediately = hideImmediately
 
     def getText(self):
         return self.__text
@@ -434,6 +435,9 @@ class ChainHint(ActionsHolder, HasTargetID):
 
     def getPadding(self):
         return self.__padding
+
+    def getHideImmediately(self):
+        return self.__hideImmediately
 
 
 class TutorialSetting(HasID):

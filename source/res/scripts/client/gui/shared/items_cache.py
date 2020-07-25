@@ -20,6 +20,7 @@ from gui.shared.utils.requesters.BattleRoyaleRequester import BattleRoyaleReques
 from gui.shared.utils.requesters.EpicMetaGameRequester import EpicMetaGameRequester
 from gui.shared.utils.requesters.blueprints_requester import BlueprintsRequester
 from gui.shared.utils.requesters.session_stats_requester import SessionStatsRequester
+from gui.shared.compat_vehicles_cache import CompatVehiclesCache
 from helpers import dependency
 from skeletons.festivity_factory import IFestivityFactory
 from skeletons.gui.shared import IItemsCache
@@ -35,6 +36,7 @@ class ItemsCache(IItemsCache):
         super(ItemsCache, self).__init__()
         goodies = GoodiesRequester()
         self.__items = ItemsRequester.ItemsRequester(InventoryRequester(), StatsRequester(), DossierRequester(), goodies, ShopRequester(goodies), RecycleBinRequester(), VehicleRotationRequester(), RankedRequester(), BattleRoyaleRequester(), BadgesRequester(), EpicMetaGameRequester(), TokensRequester(), dependency.instance(IFestivityFactory).getRequester(), BlueprintsRequester(), SessionStatsRequester(), AnonymizerRequester())
+        self.__compatVehiclesCache = CompatVehiclesCache()
         self.__waitForSync = False
         self.__syncFailed = False
         self.onSyncStarted = Event()
@@ -49,6 +51,7 @@ class ItemsCache(IItemsCache):
 
     def fini(self):
         self.__items.fini()
+        self.__compatVehiclesCache.clear()
         self.onSyncStarted.clear()
         self.onSyncCompleted.clear()
         self.onSyncFailed.clear()
@@ -65,6 +68,10 @@ class ItemsCache(IItemsCache):
     def items(self):
         return self.__items
 
+    @property
+    def compatVehiclesCache(self):
+        return self.__compatVehiclesCache
+
     @async
     def update(self, updateReason, diff=None, notify=True, callback=None):
         if diff is None or self.__syncFailed:
@@ -75,6 +82,7 @@ class ItemsCache(IItemsCache):
 
     def clear(self):
         LOG_DEBUG('Clearing items cache.')
+        self.__compatVehiclesCache.clear()
         return self.items.clear()
 
     def request(self, callback):
@@ -105,8 +113,10 @@ class ItemsCache(IItemsCache):
             if not self.isSynced():
                 self.__syncFailed = True
                 self.onSyncFailed(updateReason)
-            elif notify:
-                self.onSyncCompleted(updateReason, invalidItems)
+            else:
+                self.__compatVehiclesCache.invalidateData(self, invalidItems)
+                if notify:
+                    self.onSyncCompleted(updateReason, invalidItems)
             callback(*args)
 
         self.__items.request()(cbWrapper)
@@ -127,6 +137,7 @@ class ItemsCache(IItemsCache):
                     invalidItems = self.__items.invalidateCache()
                 else:
                     invalidItems = {}
+                self.__compatVehiclesCache.invalidateFullData(self)
                 if notify:
                     self.onSyncCompleted(updateReason, invalidItems)
             callback(*args)

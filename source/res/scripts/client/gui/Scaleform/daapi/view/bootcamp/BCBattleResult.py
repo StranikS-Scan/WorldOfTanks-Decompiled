@@ -1,19 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/bootcamp/BCBattleResult.py
+import SoundGroups
+from bootcamp.BootCampEvents import g_bootcampEvents
+from bootcamp.statistic.decorators import loggerTarget, loggerEntry, simpleLog
+from bootcamp.statistic.logging_constants import BC_LOG_ACTIONS, BC_LOG_KEYS, BC_AWARDS_MAP
+from CurrentVehicle import g_currentVehicle
+from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
+from gui.app_loader import settings as app_settings
 from gui.Scaleform.daapi.view.meta.BCBattleResultMeta import BCBattleResultMeta
 from gui.Scaleform.genConsts.BOOTCAMP_BATTLE_RESULT_CONSTANTS import BOOTCAMP_BATTLE_RESULT_CONSTANTS as AWARD
 from gui.shared import event_bus_handlers, events, EVENT_BUS_SCOPE
-from CurrentVehicle import g_currentVehicle
-from helpers import dependency
 from gui.sounds.ambients import BattleResultsEnv
-import SoundGroups
-from bootcamp.BootCampEvents import g_bootcampEvents
-from gui.app_loader import settings as app_settings
-from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
+from helpers import dependency
+from PlayerEvents import g_playerEvents
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_results import IBattleResultsService
-from bootcamp.statistic.decorators import loggerTarget, loggerEntry, simpleLog
-from bootcamp.statistic.logging_constants import BC_LOG_ACTIONS, BC_LOG_KEYS, BC_AWARDS_MAP
 _SNDID_ACHIEVEMENT = 'result_screen_achievements'
 _SNDID_BONUS = 'result_screen_bonus'
 _AMBIENT_SOUND = 'bc_result_screen_ambient'
@@ -89,6 +90,7 @@ class BCBattleResult(BCBattleResultMeta):
         g_bootcampEvents.onResultScreenFinished += self.__onResultScreenFinished
         g_bootcampEvents.onInterludeVideoStarted += self.__onInterludeVideoStarted
         g_bootcampEvents.onInterludeVideoFinished += self.__onInterludeVideoFinished
+        g_playerEvents.onDisconnected += self._onDisconnected
         self.__music = SoundGroups.g_instance.getSound2D(_AMBIENT_SOUND)
         if self.__music is not None:
             self.__music.play()
@@ -105,6 +107,7 @@ class BCBattleResult(BCBattleResultMeta):
         g_bootcampEvents.onResultScreenFinished -= self.__onResultScreenFinished
         g_bootcampEvents.onInterludeVideoStarted -= self.__onInterludeVideoStarted
         g_bootcampEvents.onInterludeVideoFinished -= self.__onInterludeVideoFinished
+        g_playerEvents.onDisconnected -= self._onDisconnected
         for sound in self.__awardSounds:
             sound.stop()
 
@@ -130,3 +133,6 @@ class BCBattleResult(BCBattleResultMeta):
 
     def __onInterludeVideoFinished(self):
         self.onFocusIn(alias=self.alias)
+
+    def _onDisconnected(self):
+        self.destroy()

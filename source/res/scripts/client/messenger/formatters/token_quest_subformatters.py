@@ -200,10 +200,13 @@ class RankedSeasonTokenQuestFormatter(RankedTokenQuestFormatter):
         return ranked_helpers.isSeasonTokenQuest(questID) if super(RankedSeasonTokenQuestFormatter, cls)._isQuestOfThisGroup(questID) else False
 
     def __getRankedTokens(self, quest):
+        result = 0
         for bonus in quest.getBonuses():
             value = bonus.getValue()
             if isinstance(value, dict):
-                return value.get(YEAR_POINTS_TOKEN, {}).get('count', 0)
+                result += value.get(YEAR_POINTS_TOKEN, {}).get('count', 0)
+
+        return result
 
     def __packSeasonExtra(self, data):
         extraAwards = dict()

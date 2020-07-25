@@ -5,12 +5,10 @@ import BigWorld
 from adisp import process
 from CurrentVehicle import g_currentVehicle
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
-from frameworks.wulf import ViewFlags, ViewSettings, Window, WindowSettings, WindowFlags
+from frameworks.wulf import ViewFlags, ViewSettings
 from gui import GUI_SETTINGS
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.game_control.links import URLMacros
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework.entities.View import ViewKey
 from gui.server_events.events_dispatcher import showProgressiveItemsBrowserView
 from gui.impl.backport import BackportTooltipWindow, createTooltipData
 from gui.impl.gen import R
@@ -187,23 +185,3 @@ class ProgressiveItemsView(ViewImpl):
     @staticmethod
     def __getTooltipData(intCD, tooltip, level):
         return createTooltipData(isSpecial=True, specialAlias=tooltip, specialArgs=CustomizationTooltipContext(itemCD=intCD, level=level, showOnlyProgressBlock=True))
-
-
-class ProgressiveItemsWindow(Window):
-    appLoader = dependency.descriptor(IAppLoader)
-    __slots__ = ()
-
-    def __init__(self, *args, **kwargs):
-        app = self.appLoader.getApp()
-        view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY_CUSTOMIZATION))
-        if view is not None:
-            parent = view.getParentWindow()
-        else:
-            parent = None
-            _logger.error('ProgressiveItemsWindow shall be created only from customization')
-        settings = WindowSettings()
-        settings.flags = WindowFlags.WINDOW
-        settings.content = ProgressiveItemsView(R.views.lobby.customization.progressive_items_view.ProgressiveItemsView(), view, *args, **kwargs)
-        settings.parent = parent
-        super(ProgressiveItemsWindow, self).__init__(settings)
-        return

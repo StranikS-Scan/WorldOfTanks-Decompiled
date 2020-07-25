@@ -52,6 +52,7 @@ class ContextMenuManager(ContextMenuManagerMeta):
     def __init__(self, app):
         super(ContextMenuManager, self).__init__()
         self.setEnvironment(app)
+        self.onContextMenuHide = Event()
         self.__currentHandler = None
         return
 
@@ -60,6 +61,9 @@ class ContextMenuManager(ContextMenuManagerMeta):
 
     def pyHide(self):
         self.as_hideS()
+
+    def show(self, menuType, args):
+        self.as_showS(menuType, args)
 
     def requestOptions(self, handlerType, ctx):
         clazz = _getHandlerClass(handlerType)
@@ -76,6 +80,8 @@ class ContextMenuManager(ContextMenuManagerMeta):
         return
 
     def onHide(self):
+        if self.__isMenuActive():
+            self.onContextMenuHide()
         self.__disposeHandler()
 
     def _dispose(self):
@@ -101,6 +107,9 @@ class ContextMenuManager(ContextMenuManagerMeta):
     def __onKeyDown(self, event):
         if event.key == Keys.KEY_ESCAPE:
             self.pyHide()
+
+    def __isMenuActive(self):
+        return self.__currentHandler is not None
 
 
 class AbstractContextMenuHandler(object):

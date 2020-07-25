@@ -22,7 +22,7 @@
     <wwmusicIntensive>	ev_br_2020_music_battle	</wwmusicIntensive>
     <wwmusicRelaxed>	ev_br_2020_music_battle	</wwmusicRelaxed>
     <wwmusicStop></wwmusicStop>
-    <wwmusicEndbattleStop></wwmusicEndbattleStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
     <wwmusicResultWin>	ev_br_2020_music_result_win	</wwmusicResultWin>
     <wwmusicResultDrawn>	ev_br_2020_music_result_defeat	</wwmusicResultDrawn>
     <wwmusicResultDefeat>	ev_br_2020_music_result_defeat	</wwmusicResultDefeat>
@@ -51,6 +51,7 @@
   <mapActivities></mapActivities>
   <soundRemapping>
     <loadBanks>
+      <bank>	env_Mountain.bnk	</bank>
       <bank>	ev_battle_royale_2019_gameplay.bnk	</bank>
       <bank>	ev_battle_royale_2019_gameplay.pck	</bank>
     </loadBanks>

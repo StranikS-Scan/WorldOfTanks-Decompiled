@@ -133,7 +133,20 @@ class ArcadeAimingSystem(IAimingSystem):
         xzDir = Vector3(self.__cursor.focusRadius * math.sin(self.__cursor.yaw), 0.0, self.__cursor.focusRadius * math.cos(self.__cursor.yaw))
         pivotPos = posOnVehicle + xzDir
         self.pitch = self.__calcPitchAngle(self.__cursor.distanceFromFocus, preferredPos - pivotPos)
-        self.update(0)
+        self.__updateInternal()
+
+    def __updateInternal(self):
+        self.__cursor.update(True)
+        aimMatrix = self.__getLookToAimMatrix()
+        aimMatrix.postMultiply(self.__cursor.matrix)
+        self._matrix.set(aimMatrix)
+        self.__updateScanRay()
+        aimWithIdealMatrix = self.__getLookToAimMatrix()
+        aimWithIdealMatrix.postMultiply(self.__cursor.idealMatrix)
+        self.__idealMatrix.set(aimWithIdealMatrix)
+        if self.__shotPointCalculator is not None and not self.__worldSpaceAimingWithLimits.isEnabled:
+            self.__shotPointCalculator.update(*self.__getScanRay())
+        return 0.0
 
     def __calcPitchAngle(self, distanceFromFocus, direction):
         alpha = -self.__aimMatrix.pitch
@@ -182,17 +195,7 @@ class ArcadeAimingSystem(IAimingSystem):
             self.pitch += dy
 
     def update(self, deltaTime):
-        self.__cursor.update(True)
-        aimMatrix = self.__getLookToAimMatrix()
-        aimMatrix.postMultiply(self.__cursor.matrix)
-        self._matrix.set(aimMatrix)
-        self.__updateScanRay()
-        aimWithIdealMatrix = self.__getLookToAimMatrix()
-        aimWithIdealMatrix.postMultiply(self.__cursor.idealMatrix)
-        self.__idealMatrix.set(aimWithIdealMatrix)
-        if self.__shotPointCalculator is not None and not self.__worldSpaceAimingWithLimits.isEnabled:
-            self.__shotPointCalculator.update(*self.__getScanRay())
-        return 0.0
+        return self.__updateInternal()
 
     def __getScanRay(self):
         return (self.__cachedScanStart, self.__cachedScanDirection)

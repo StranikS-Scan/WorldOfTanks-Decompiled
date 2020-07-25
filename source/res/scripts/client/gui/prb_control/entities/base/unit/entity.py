@@ -698,6 +698,11 @@ class UnitEntity(_UnitEntity):
         self._actionsHandler.execute()
         return True
 
+    def resetPlayerReadiness(self):
+        ctx = SetReadyUnitCtx(False, 'prebattle/player_not_ready')
+        self._resetPlayerReadiness(ctx)
+        return True
+
     def leave(self, ctx, callback=None):
         ctx.startProcessing(callback)
         unitMgr = prb_getters.getClientUnitMgr()
@@ -820,14 +825,7 @@ class UnitEntity(_UnitEntity):
                 g_currentVehicle.selectVehicle(vehInfos[0].vehInvID)
         if self._isInCoolDown(settings.REQUEST_TYPE.SET_PLAYER_STATE, coolDown=ctx.getCooldown()):
             return
-        pPermissions = self.getPermissions()
-        if not pPermissions.canSetReady():
-            LOG_ERROR('Player can not set ready state', pPermissions)
-            if callback:
-                callback(False)
-            return
-        self._requestsProcessor.doRequest(ctx, 'setReady', isReady, ctx.resetVehicle, callback=callback)
-        self._cooldown.process(settings.REQUEST_TYPE.SET_PLAYER_STATE, coolDown=ctx.getCooldown())
+        self._setReady(ctx, callback)
 
     def closeSlot(self, ctx, callback=None):
         if self._isInCoolDown(settings.REQUEST_TYPE.CLOSE_SLOT, coolDown=ctx.getCooldown()):
@@ -1439,3 +1437,24 @@ class UnitEntity(_UnitEntity):
                 callback(False)
             return True
         return False
+
+    def _resetPlayerReadiness(self, ctx, callback=None):
+        pInfo = self.getPlayerInfo()
+        if not pInfo.isInSlot:
+            LOG_ERROR('Player is not in slot', ctx)
+            if callback:
+                callback(False)
+            return
+        if self._isInCoolDown(settings.REQUEST_TYPE.SET_PLAYER_STATE, coolDown=ctx.getCooldown()):
+            return
+        self._setReady(ctx, callback)
+
+    def _setReady(self, ctx, callback=None):
+        pPermissions = self.getPermissions()
+        if not pPermissions.canSetReady():
+            LOG_ERROR('Player can not set ready state', pPermissions)
+            if callback:
+                callback(False)
+            return
+        self._requestsProcessor.doRequest(ctx, 'setReady', ctx.isReady(), ctx.resetVehicle, callback=callback)
+        self._cooldown.process(settings.REQUEST_TYPE.SET_PLAYER_STATE, coolDown=ctx.getCooldown())

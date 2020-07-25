@@ -54,7 +54,9 @@ def _questAsDict(quest):
      'description': quest.getDescription(),
      'name': quest.getUserName(),
      'conditions': _formatQuestConditions(quest),
-     'bonuses': _formatQuestBonuses(quest)}
+     'bonuses': _formatQuestBonuses(quest),
+     'is_completed': quest.isCompleted(),
+     'priority': quest.getPriority()}
 
 
 @w2capi(name='user_data', key='action')

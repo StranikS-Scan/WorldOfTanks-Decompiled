@@ -25,8 +25,10 @@ class BattlePassNotStartedTooltipView(ViewImpl):
         super(BattlePassNotStartedTooltipView, self)._onLoading(*args, **kwargs)
         with self.getViewModel().transaction() as model:
             timeStart = self.__battlePassController.getSeasonStartTime()
-            sday, smonth = self.__getDayMonth(timeStart)
-            date = '{} {}'.format(str(sday), backport.text(R.strings.menu.dateTime.months.num(smonth)()))
+            date = ''
+            if timeStart > time_utils.getServerUTCTime():
+                sday, smonth = self.__getDayMonth(timeStart)
+                date = backport.text(R.strings.battle_pass_2020.tooltips.notStarted.date(), day=str(sday), month=backport.text(R.strings.menu.dateTime.months.num(smonth)()))
             model.setDate(date)
 
     @staticmethod

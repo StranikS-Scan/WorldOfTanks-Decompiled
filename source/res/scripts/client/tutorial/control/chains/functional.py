@@ -27,7 +27,7 @@ class FunctionalShowHint(FunctionalEffect):
                 text = self._tutorial.getVars().get(text, default=text)
             hintID = hint.getID()
             uniqueID = '{}_{}'.format(self._data.getID(), hintID)
-            props = HintProps(uniqueID, hintID, hint.getTargetID(), text, hint.hasBox(), hint.getArrow(), hint.getPadding(), updateRuntime=False, hideImmediately=False, checkViewArea=False)
+            props = HintProps(uniqueID, hintID, hint.getTargetID(), text, hint.hasBox(), hint.getArrow(), hint.getPadding(), updateRuntime=False, hideImmediately=hint.getHideImmediately(), checkViewArea=False)
             return self._gui.playEffect(GUI_EFFECT_NAME.SHOW_HINT, (props, hint.getActionTypes()))
 
 

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/battle_timers.py
 import SoundGroups
+import BigWorld
 import CommandMapping
 from constants import ARENA_GUI_TYPE
 from gui.Scaleform.daapi.view.meta.BattleTimerMeta import BattleTimerMeta
@@ -10,6 +11,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.battle_control.battle_constants import COUNTDOWN_STATE
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
+from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.shared.utils.key_mapping import getReadableKey
@@ -34,6 +36,7 @@ class PreBattleTimer(PrebattleTimerMeta):
 
     def _populate(self):
         super(PreBattleTimer, self)._populate()
+        self.addListener(events.GameEvent.BATTLE_LOADING, self.__handleBattleLoading, EVENT_BUS_SCOPE.BATTLE)
         self.__isRankedBattle = self.sessionProvider.arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.RANKED
         if not self.__isRankedBattle:
             self.__isPMBattleProgressEnabled = self.lobbyContext.getServerSettings().isPMBattleProgressEnabled()
@@ -82,8 +85,13 @@ class PreBattleTimer(PrebattleTimerMeta):
         if qProgressCtrl is not None and self.__isPMBattleProgressEnabled:
             qProgressCtrl.onFullConditionsUpdate -= self._onPersonalQuestConditionsUpdate
             qProgressCtrl.onQuestProgressInited -= self._onPersonalQuestConditionsUpdate
+        self.removeListener(events.GameEvent.BATTLE_LOADING, self.__handleBattleLoading, scope=EVENT_BUS_SCOPE.BATTLE)
         super(PreBattleTimer, self)._dispose()
         return
+
+    def __handleBattleLoading(self, event):
+        if not event.ctx['isShown']:
+            self.as_showInfoS()
 
 
 class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
@@ -97,6 +105,7 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
         self.__endingSoonTime = self.arenaVisitor.type.getBattleEndingSoonTime()
         self.__endWarningIsEnabled = self.__checkEndWarningStatus()
         self.__sounds = dict()
+        self.__isDeathScreenShown = False
 
     def destroy(self):
         for sound in self.__sounds.values():
@@ -110,6 +119,8 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
         return self.sessionProvider.arenaVisitor
 
     def setTotalTime(self, totalTime):
+        if self.__isDeathScreenShown:
+            return
         minutes, seconds = divmod(int(totalTime), 60)
         if self.__endWarningIsEnabled and self.__state == COUNTDOWN_STATE.STOP:
             if _BATTLE_END_TIME < totalTime <= self.__endingSoonTime:
@@ -129,6 +140,26 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
 
     def showTotalTime(self):
         self.as_showBattleTimerS(True)
+
+    def _populate(self):
+        super(BattleTimer, self)._populate()
+        ctrl = self.sessionProvider.dynamic.deathScreen
+        if ctrl is not None:
+            ctrl.onShowDeathScreen += self.__onShowDeathScreen
+        player = BigWorld.player()
+        if player is not None:
+            player.onVehicleLeaveWorld += self.__onVehicleLeaveWorld
+        return
+
+    def _dispose(self):
+        ctrl = self.sessionProvider.dynamic.deathScreen
+        if ctrl is not None:
+            ctrl.onShowDeathScreen -= self.__onShowDeathScreen
+        player = BigWorld.player()
+        if player is not None:
+            player.onVehicleLeaveWorld -= self.__onVehicleLeaveWorld
+        super(BattleTimer, self)._dispose()
+        return
 
     def _sendTime(self, minutes, seconds):
         self.as_setTotalTimeS('{:02d}'.format(minutes), '{:02d}'.format(seconds))
@@ -159,3 +190,11 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
     def __checkEndWarningStatus(self):
         endingSoonTimeIsValid = self.__validateEndingSoonTime()
         return self.arenaVisitor.isBattleEndWarningEnabled() and endingSoonTimeIsValid
+
+    def __onShowDeathScreen(self):
+        self.__isDeathScreenShown = True
+        self.__stopTicking()
+
+    def __onVehicleLeaveWorld(self, vehicle):
+        if BigWorld.player().playerVehicleID == vehicle.id:
+            self.__isDeathScreenShown = False

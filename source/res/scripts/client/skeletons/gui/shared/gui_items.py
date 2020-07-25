@@ -13,7 +13,7 @@ class IGuiItemsFactory(object):
     def createGuiItemFromCompactDescr(self, compactDescr, *args, **kwargs):
         raise NotImplementedError
 
-    def createShell(self, intCompactDescr, count=0, defaultCount=0, proxy=None, isBoughtForCredits=False):
+    def createShell(self, intCompactDescr, count=0, proxy=None, isBoughtForCredits=False):
         raise NotImplementedError
 
     def createEquipment(self, intCompactDescr, proxy=None, isBoughtForCredits=False):

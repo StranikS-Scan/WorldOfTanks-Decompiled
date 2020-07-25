@@ -22,3 +22,17 @@ class SniperAimingSystemRemote(SniperAimingSystem):
 
     def overrideZoom(self, zoom):
         return self.getZoom()
+
+    def enable(self, *args):
+        super(SniperAimingSystemRemote, self).enable(*args)
+        vehicle = BigWorld.player().getVehicleAttached()
+        if vehicle is not None:
+            vehicle.filter.enableStabilisedMatrix(True)
+        return
+
+    def disable(self):
+        super(SniperAimingSystemRemote, self).disable()
+        vehicle = BigWorld.player().getVehicleAttached()
+        if vehicle is not None:
+            vehicle.filter.enableStabilisedMatrix(False)
+        return

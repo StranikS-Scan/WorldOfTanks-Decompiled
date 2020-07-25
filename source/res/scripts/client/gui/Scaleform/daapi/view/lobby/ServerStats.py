@@ -5,7 +5,6 @@ from adisp import process
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.servers_data_provider import ServersDataProvider
 from gui.prb_control.entities.base.legacy.listener import ILegacyListener
-from gui.shared.formatters.servers import wrapServerName
 from helpers import dependency
 from helpers import i18n
 from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY, REQUEST_RATE
@@ -56,23 +55,21 @@ class ServerStats(ServerStatsMeta, ILegacyListener):
             self._updateCurrentServerInfo()
         self._updateServersList()
         self._updateRoamingCtrl()
-        if not constants.IS_CHINA:
-            if GUI_SETTINGS.csisRequestRate == REQUEST_RATE.ALWAYS:
-                g_preDefinedHosts.startCSISUpdate()
-            g_preDefinedHosts.onCsisQueryStart += self.__onServersUpdate
-            g_preDefinedHosts.onCsisQueryComplete += self.__onServersUpdate
-            g_preDefinedHosts.onPingPerformed += self.__onServersUpdate
+        if GUI_SETTINGS.csisRequestRate == REQUEST_RATE.ALWAYS:
+            g_preDefinedHosts.startCSISUpdate()
+        g_preDefinedHosts.onCsisQueryStart += self.__onServersUpdate
+        g_preDefinedHosts.onCsisQueryComplete += self.__onServersUpdate
+        g_preDefinedHosts.onPingPerformed += self.__onServersUpdate
         self.serverStats.onStatsReceived += self.__onStatsReceived
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self._updateRoamingCtrl, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _dispose(self):
         self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self._updateRoamingCtrl, scope=EVENT_BUS_SCOPE.LOBBY)
         self.serverStats.onStatsReceived -= self.__onStatsReceived
-        if not constants.IS_CHINA:
-            g_preDefinedHosts.stopCSISUpdate()
-            g_preDefinedHosts.onCsisQueryComplete -= self.__onServersUpdate
-            g_preDefinedHosts.onCsisQueryStart -= self.__onServersUpdate
-            g_preDefinedHosts.onPingPerformed -= self.__onServersUpdate
+        g_preDefinedHosts.stopCSISUpdate()
+        g_preDefinedHosts.onCsisQueryComplete -= self.__onServersUpdate
+        g_preDefinedHosts.onCsisQueryStart -= self.__onServersUpdate
+        g_preDefinedHosts.onPingPerformed -= self.__onServersUpdate
         self._serversDP.fini()
         self._serversDP = None
         super(ServerStats, self)._dispose()
@@ -90,13 +87,13 @@ class ServerStats(ServerStatsMeta, ILegacyListener):
         simpleHostList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming())
         if simpleHostList:
             for idx, (hostName, name, csisStatus, peripheryID) in enumerate(simpleHostList):
-                result.append({'label': wrapServerName(name),
+                result.append({'label': name,
                  'data': hostName,
                  'id': peripheryID,
                  'csisStatus': csisStatus})
 
         if self.connectionMgr.peripheryID == 0:
-            result.insert(0, {'label': wrapServerName(self.connectionMgr.serverUserName),
+            result.insert(0, {'label': self.connectionMgr.serverUserName,
              'id': 0,
              'csisStatus': HOST_AVAILABILITY.IGNORED,
              'data': self.connectionMgr.url})

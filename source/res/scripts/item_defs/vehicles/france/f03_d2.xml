@@ -6,6 +6,7 @@
     <driver></driver>
     <radioman></radioman>
   </crew>
+  <supplySlots>	1 1 6 6 8 8 8	</supplySlots>
   <speedLimits>
     <forward>	23	</forward>
     <backward>	12	</backward>
@@ -14,9 +15,16 @@
     <moving>	0.181	</moving>
     <still>	0.241	</still>
     <camouflageBonus>	0.03	</camouflageBonus>
-    <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.362	</firePenalty>
   </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.1 0.125	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+  </optDevsOverrides>
   <repairCost>	1.795	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>

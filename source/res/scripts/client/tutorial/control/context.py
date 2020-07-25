@@ -7,6 +7,7 @@ from skeletons.gui.game_control import IBootcampController
 from tutorial.control import TutorialProxyHolder
 from tutorial.logger import LOG_MEMORY, LOG_ERROR
 import SoundGroups
+import Event
 __all__ = ('StartReqs', 'BonusesRequester', 'SoundPlayer', 'GlobalStorage')
 
 class StartReqs(object):
@@ -165,6 +166,7 @@ class GlobalStorage(object):
     __slots__ = ('attribute',)
     __storage = {}
     __default = {}
+    onSetValue = Event.Event()
 
     def __init__(self, attribute, defaultValue):
         self.attribute = attribute
@@ -224,6 +226,7 @@ class GlobalStorage(object):
     @classmethod
     def setValue(cls, attribute, value):
         cls.__storage[attribute] = value
+        cls.onSetValue(attribute, value)
 
 
 class ClientCtx(object):

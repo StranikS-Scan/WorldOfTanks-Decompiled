@@ -7,6 +7,7 @@
     <Interface>	InterclusterSender	</Interface>
     <Interface>	ClientCommandsPort	</Interface>
     <Interface>	AccountAdmin	</Interface>
+    <Interface>	AccountAvatar	</Interface>
     <Interface>	AccountClan	</Interface>
     <Interface>	AccountAuthTokenProvider	</Interface>
     <Interface>	AccountAuthTokenProviderClient	</Interface>
@@ -33,7 +34,7 @@
     <requiredVersion_11000>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ct_1.10.0	</Default>
+      <Default>	ct_1.10.0_2	</Default>
     </requiredVersion_11000>
     <name>
       <Type>	STRING	</Type>
@@ -394,14 +395,6 @@
       <Exposed></Exposed>
       <Arg>	CLIENT_SESSION_STATS	</Arg>
     </logClientSessionStats>
-    <logStreamCorruption>
-      <Arg>	INT16	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT32	</Arg>
-      <Exposed></Exposed>
-    </logStreamCorruption>
     <logClientPB20UXStats>
       <Exposed></Exposed>
       <Arg>	CLIENT_PB_20_UX_STATS	</Arg>
@@ -506,5 +499,42 @@
     </cancelEntityCheckOut>
     <onBootcampAccountDestroyed></onBootcampAccountDestroyed>
     <onGameSessionFinish></onGameSessionFinish>
+    <makeDenunciation>
+      <Exposed></Exposed>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT8	</Arg>
+    </makeDenunciation>
+    <banUnbanUser>
+      <Exposed></Exposed>
+      <Arg>	DB_ID	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	UINT32	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	INT8	</Arg>
+    </banUnbanUser>
+    <requestToken>
+      <Arg>	UINT16	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Exposed></Exposed>
+    </requestToken>
+    <banForTKill></banForTKill>
+    <isRequestCooldown>
+      <Arg>	STRING	</Arg>
+    </isRequestCooldown>
+    <invitationSendInBattle>
+      <Arg>	INT64	</Arg>
+      <Arg>	ARRAY	  <of>	INT64	</of>
+      </Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </invitationSendInBattle>
+    <invitationAcceptOrDeclineInBattle>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT64	</Arg>
+      <Arg>	BOOL	</Arg>
+    </invitationAcceptOrDeclineInBattle>
   </BaseMethods>
 </Account.def>

@@ -3,7 +3,6 @@
 from collections import namedtuple
 import BigWorld
 from gui.Scaleform.daapi.view.battle.shared.radial_menu import RadialMenu
-from gui.Scaleform.genConsts.RADIAL_MENU_CONSTS import RADIAL_MENU_CONSTS
 from gui.battle_control.controllers.chat_cmd_ctrl import BATTLE_CHAT_COMMAND_NAMES
 from gui.Scaleform.managers.cursor_mgr import CursorManager
 from gui.Scaleform.daapi.view.meta.EventRadialMenuMeta import EventRadialMenuMeta
@@ -66,11 +65,6 @@ def __makeShortcutSet(commands):
     return tuple(((SHORTCUT_BY_ACTION[action] if action is not None else None) for action in commands))
 
 
-SHORTCUT_SETS_EVENT = {RADIAL_MENU_CONSTS.TARGET_STATE_DEFAULT: tuple(),
- RADIAL_MENU_CONSTS.TARGET_STATE_ALLY: tuple(),
- RADIAL_MENU_CONSTS.TARGET_STATE_ENEMY: tuple(),
- RADIAL_MENU_CONSTS.TARGET_STATE_SPG_ENEMY: tuple()}
-
 class EventRadialMenu(RadialMenu, EventRadialMenuMeta):
 
     def onAction(self, action):
@@ -102,6 +96,3 @@ class EventRadialMenu(RadialMenu, EventRadialMenuMeta):
                 if vInfo is not None:
                     return vInfo.player.name
         return
-
-    def _getShortcutSets(self):
-        return SHORTCUT_SETS_EVENT

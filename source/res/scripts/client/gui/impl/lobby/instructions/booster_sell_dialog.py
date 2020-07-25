@@ -28,7 +28,7 @@ class BoosterSellWindowView(DialogBuySellItemBaseView):
     def _setBaseParams(self, model):
         itemCount = self._item.inventoryCount
         model.setTitleBody(R.strings.menu.boosterSellWindow.title())
-        self._setTitleArgs(model.getTitleArgs(), (('name', R.strings.artefacts.dyn(self._item.name).name()),))
+        self._setTitleArgs(model.getTitleArgs(), (('name', self._item.userName),))
         model.setItemMaxCount(min(itemCount, MAX_ITEMS_FOR_OPERATION))
         model.setItemCount(itemCount)
         model.setSpecialType(self._item.getOverlayType())

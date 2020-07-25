@@ -81,7 +81,7 @@ class BattleSessionProvider(IBattleSessionProvider):
             ctrl.setGunSettings(vDesc.gun)
         ctrl = self.__sharedRepo.equipments
         if ctrl is not None:
-            ctrl.notifyPlayerVehicleSet()
+            ctrl.notifyPlayerVehicleSet(vID)
         ctrl = self.__sharedRepo.vehicleState
         if ctrl is not None:
             ctrl.setPlayerVehicle(vID)
@@ -118,7 +118,7 @@ class BattleSessionProvider(IBattleSessionProvider):
             for intCD, quantity, stage, timeRemaining, totalTime in extraData.orderedEquipment:
                 ctrl.setEquipment(intCD, quantity, stage, timeRemaining, totalTime)
 
-            ctrl.notifyPlayerVehicleSet()
+            ctrl.notifyPlayerVehicleSet(vID)
         ctrl = self.__sharedRepo.optionalDevices
         if ctrl is not None:
             ctrl.clear(False)
@@ -301,6 +301,9 @@ class BattleSessionProvider(IBattleSessionProvider):
             ctrl = self.__sharedRepo.equipments
             if ctrl is not None:
                 ctrl.clear(leave=False)
+            ctrl = self.__sharedRepo.optionalDevices
+            if ctrl is not None:
+                ctrl.clear(leave=False)
         return
 
     def setVehicleHealth(self, isPlayerVehicle, vehicleID, newHealth, attackerID, attackReasonID):
@@ -332,6 +335,9 @@ class BattleSessionProvider(IBattleSessionProvider):
         return
 
     def startVehicleVisual(self, vProxy, isImmediate=False):
+        ctrl = self.__sharedRepo.optionalDevices
+        if ctrl is not None:
+            ctrl.startVehicleVisual(vProxy, isImmediate)
         ctrl = self.__sharedRepo.feedback
         if ctrl is not None:
             ctrl.startVehicleVisual(vProxy, isImmediate)

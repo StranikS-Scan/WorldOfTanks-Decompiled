@@ -5,8 +5,12 @@ from account_helpers.AccountSettings import AccountSettings
 from gui.Scaleform.daapi.view.meta.VehicleParametersMeta import VehicleParametersMeta
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.shared.formatters import text_styles
 from gui.shared.items_parameters import params_helper, formatters
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
+from gui.shared.items_parameters.formatters import EXTRACTED_BONUS_SCHEME
 from gui.shared.items_parameters.params_helper import VehParamsBaseGenerator, getParameters, getCommonParam, SimplifiedBarVO
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
@@ -143,6 +147,22 @@ class _VehParamsGenerator(VehParamsBaseGenerator):
         else:
             return None
 
+    def _isExtraParamEnabled(self):
+        return True
+
+    def _makeExtraParamVO(self, param):
+        if param.value:
+            data, _ = super(_VehParamsGenerator, self)._makeExtraParamVO(param)
+            title = backport.text(R.strings.tank_setup.kpi.bonus.ttc.dyn(param.name, default=R.strings.tank_setup.kpi.bonus.dyn(param.name))())
+            data.update({'titleText': text_styles.leadingText(text_styles.main(title), 2),
+             'valueText': formatters.colorizedFullFormatParameter(param, EXTRACTED_BONUS_SCHEME),
+             'isEnabled': False,
+             'tooltip': self._getAdvancedParamTooltip(param),
+             'iconSource': formatters.getParameterSmallIconPath(param.name)})
+            return (data, title.count('\n'))
+        else:
+            return (None, 0)
+
     def _makeSimpleParamHeaderVO(self, param, isOpen, comparator):
         data = super(_VehParamsGenerator, self)._makeSimpleParamHeaderVO(param, isOpen, comparator)
         data.update({'titleText': formatters.formatVehicleParamName(param.name),
@@ -155,6 +175,17 @@ class _VehParamsGenerator(VehParamsBaseGenerator):
 
     def _makeSeparator(self):
         return {'state': HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_SEPARATOR,
+         'isEnabled': False,
+         'tooltip': ''}
+
+    def _makeExtraAdditionalBlock(self, paramID, tooltip):
+        return {'state': HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_SEPARATOR,
+         'isEnabled': False,
+         'tooltip': tooltip,
+         'paramID': paramID}
+
+    def _makeLineSeparator(self):
+        return {'state': HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_LINE_SEPARATOR,
          'isEnabled': False,
          'tooltip': ''}
 

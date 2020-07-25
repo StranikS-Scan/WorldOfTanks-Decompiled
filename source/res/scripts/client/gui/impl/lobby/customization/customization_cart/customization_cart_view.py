@@ -7,6 +7,7 @@ from frameworks.wulf import ViewFlags, ViewSettings
 from adisp import process as adisp_process
 from async import async, await
 from CurrentVehicle import g_currentVehicle
+from frameworks.wulf import WindowFlags
 from gui import DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.view_helpers.blur_manager import CachedBlur
@@ -375,8 +376,12 @@ class CustomizationCartView(ViewImpl):
         self.destroyWindow()
 
     def __hasOpenedChildWindow(self):
-        views = self.__guiLoader.windowsManager.findWindows(lambda w: w.parent == self.getParentWindow())
-        return len(views) > 0
+
+        def predicate(window):
+            isTooltip = window.windowFlags & WindowFlags.WINDOW_TYPE_MASK == WindowFlags.TOOLTIP
+            return window.parent == self.getParentWindow() and not isTooltip
+
+        return self.__guiLoader.windowsManager.findWindows(predicate)
 
 
 class _BaseUIDataPacker(object):

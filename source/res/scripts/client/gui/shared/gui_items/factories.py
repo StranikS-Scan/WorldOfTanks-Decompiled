@@ -36,8 +36,8 @@ class GuiItemFactory(IGuiItemsFactory):
     def createGuiItemFromCompactDescr(self, compactDescr, *args, **kwargs):
         return self.createGuiItem(getTypeOfCompactDescr(compactDescr), *args, **kwargs)
 
-    def createShell(self, intCompactDescr, count=0, defaultCount=0, proxy=None, isBoughtForCredits=False):
-        return Shell(intCompactDescr, count, defaultCount, proxy, isBoughtForCredits)
+    def createShell(self, intCompactDescr, count=0, proxy=None, isBoughtForCredits=False):
+        return Shell(intCompactDescr, count, proxy, isBoughtForCredits)
 
     def createEquipment(self, intCompactDescr, proxy=None, isBoughtForCredits=False):
         descriptor = vehicles.getItemByCompactDescr(intCompactDescr)

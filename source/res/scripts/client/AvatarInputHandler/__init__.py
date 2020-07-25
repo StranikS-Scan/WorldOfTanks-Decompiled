@@ -29,7 +29,7 @@ from AvatarInputHandler.commands.bootcamp_mode_control import BootcampModeContro
 from AvatarInputHandler.commands.dualgun_control import DualGunController
 from AvatarInputHandler.commands.siege_mode_control import SiegeModeControl
 from AvatarInputHandler.remote_camera_sender import RemoteCameraSender
-from AvatarInputHandler.siege_mode_player_notifications import SiegeModeSoundNotifications, SiegeModeCameraShaker
+from AvatarInputHandler.siege_mode_player_notifications import SiegeModeSoundNotifications, SiegeModeCameraShaker, TurboshaftModeSoundNotifications
 from AvatarInputHandler.commands.radar_control import RadarControl
 from AvatarInputHandler.commands.vehicle_upgrade_control import VehicleUpdateControl
 from AvatarInputHandler.commands.vehicle_upgrade_control import VehicleUpgradePanelControl
@@ -230,9 +230,15 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                 self.siegeModeControl = SiegeModeControl()
             self.__commands.append(self.siegeModeControl)
             self.siegeModeControl.onSiegeStateChanged += lambda *args: self.steadyVehicleMatrixCalculator.relinkSources()
-            if self.isATSPG:
-                self.siegeModeSoundNotifications = SiegeModeSoundNotifications()
-                self.siegeModeControl.onSiegeStateChanged += self.siegeModeSoundNotifications.onSiegeStateChanged
+            if not self.siegeModeSoundNotifications:
+                notifications = None
+                if typeDescr.hasHydraulicChassis:
+                    notifications = SiegeModeSoundNotifications()
+                elif typeDescr.hasTurboshaftEngine:
+                    notifications = TurboshaftModeSoundNotifications()
+                if notifications:
+                    self.siegeModeSoundNotifications = notifications
+                    self.siegeModeControl.onSiegeStateChanged += self.siegeModeSoundNotifications.onSiegeStateChanged
             self.siegeModeControl.onRequestFail += self.__onRequestFail
             self.siegeModeControl.onSiegeStateChanged += SiegeModeCameraShaker.shake
         if typeDescr.isDualgunVehicle and not self.dualGunControl:

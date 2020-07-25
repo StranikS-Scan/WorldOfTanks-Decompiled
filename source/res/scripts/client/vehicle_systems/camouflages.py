@@ -15,7 +15,7 @@ from skeletons.gui.shared import IItemsCache
 import items.vehicles
 from constants import IS_EDITOR
 from items.vehicles import makeIntCompactDescrByID, getItemByCompactDescr
-from items.customizations import parseOutfitDescr, CustomizationOutfit, createNationalEmblemComponents
+from items.customizations import parseOutfitDescr, CustomizationOutfit, createNationalEmblemComponents, isEditedStyle
 from vehicle_outfit.outfit import Outfit
 from vehicle_outfit.packers import ProjectionDecalPacker
 from vehicle_systems.tankStructure import VehiclePartsTuple
@@ -137,7 +137,10 @@ def getOutfitComponent(outfitCD, vehicleDescriptor=None):
             if vehicleDescriptor and ItemTags.ADD_NATIONAL_EMBLEM in styleDescr.tags:
                 emblems = createNationalEmblemComponents(vehicleDescriptor)
                 baseOutfitComponent.decals.extend(emblems)
-            outfitComponent = baseOutfitComponent.applyDiff(outfitComponent)
+            if isEditedStyle(outfitComponent):
+                outfitComponent = baseOutfitComponent.applyDiff(outfitComponent)
+            else:
+                outfitComponent = baseOutfitComponent
         return outfitComponent
     else:
         return CustomizationOutfit()

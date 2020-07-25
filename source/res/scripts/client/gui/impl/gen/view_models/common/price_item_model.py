@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class PriceItemModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=2, commands=0):
+    def __init__(self, properties=3, commands=0):
         super(PriceItemModel, self).__init__(properties=properties, commands=commands)
 
     def getName(self):
@@ -20,7 +20,14 @@ class PriceItemModel(ViewModel):
     def setValue(self, value):
         self._setReal(1, value)
 
+    def getIsEnough(self):
+        return self._getBool(2)
+
+    def setIsEnough(self, value):
+        self._setBool(2, value)
+
     def _initialize(self):
         super(PriceItemModel, self)._initialize()
         self._addStringProperty('name', '')
         self._addRealProperty('value', 0.0)
+        self._addBoolProperty('isEnough', True)

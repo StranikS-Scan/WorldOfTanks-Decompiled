@@ -2,15 +2,16 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/vehicle.py
 import logging
 from functools import partial
+from itertools import chain
 import BigWorld
 import AccountCommands
 from constants import RentType, SEASON_NAME_BY_TYPE, CLIENT_COMMAND_SOURCES
 from AccountCommands import VEHICLE_SETTINGS_FLAG
-from bootcamp.Bootcamp import g_bootcamp
+from gui.shared.gui_items.processors.messages.items_processor_messages import ItemBuyProcessorMessage, BattleAbilitiesApplyProcessorMessage, LayoutApplyProcessorMessage, BattleBoostersApplyProcessorMessage, OptDevicesApplyProcessorMessage, ConsumablesApplyProcessorMessage, ShellsApplyProcessorMessage
+from gui.shared.gui_items.vehicle_equipment import EMPTY_ITEM
 from items import EQUIPMENT_TYPES
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from items.components.c11n_constants import SeasonType
-from account_shared import LayoutIterator
 from adisp import process, async
 from gui import SystemMessages, g_tankActiveCamouflage
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -23,13 +24,11 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import getCrewCount
 from gui.shared.gui_items.processors import ItemProcessor, Processor, makeI18nSuccess, makeI18nError, plugins as proc_plugs, makeSuccess, makeCrewSkinCompensationMessage
-from gui.shared.gui_items.vehicle_equipment import ShellLayoutHelper
-from gui.shared.money import Money, MONEY_UNDEFINED, Currency
+from gui.shared.money import Money, MONEY_UNDEFINED, Currency, ZERO_MONEY
 from helpers import time_utils, dependency
-from gui.shared.gui_items.gui_item_economics import ItemPrice
+from gui.shared.gui_items.gui_item_economics import ItemPrice, getVehicleBattleBoostersLayoutPrice, getVehicleConsumablesLayoutPrice, getVehicleOptionalDevicesLayoutPrice, getVehicleShellsLayoutPrice
 from helpers.i18n import makeString
-from shared_utils import findFirst
-from skeletons.gui.game_control import IRestoreController, ITradeInController
+from skeletons.gui.game_control import IRestoreController, ITradeInController, IEpicBattleMetaGameController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from rent_common import parseRentID
@@ -46,9 +45,18 @@ def getCrewAndShellsSumPrice(result, vehicle, crewType, buyShells):
         result += Money(**tankmanCost) * tankmenCount
     if buyShells:
         for shell in vehicle.gun.defaultAmmo:
-            result += shell.buyPrices.itemPrice.price * shell.defaultCount
+            result += shell.buyPrices.itemPrice.price * shell.count
 
     return result
+
+
+def getCustomizationItemSellCountForVehicle(item, vehicleIntCD):
+    installedCount = item.installedCount(vehicleIntCD)
+    if not item.isProgressive:
+        return installedCount
+    inventoryCount = item.fullInventoryCount(vehicleIntCD)
+    availableForSell = installedCount + inventoryCount - item.descriptor.progression.autoGrantCount
+    return min(installedCount, availableForSell)
 
 
 class VehicleReceiveProcessor(ItemProcessor):
@@ -391,8 +399,8 @@ class VehicleSeller(ItemProcessor):
             moneyGain += module.sellPrices.itemPrice.price * module.inventoryCount
 
         for module in customizationItems:
-            getCount = module.installedCount
-            moneyGain += module.sellPrices.itemPrice.price * reduce(lambda acc, veh: acc + getCount(veh.intCD), vehicles, 0)
+            getCount = getCustomizationItemSellCountForVehicle
+            moneyGain += module.sellPrices.itemPrice.price * reduce(lambda acc, veh: acc + getCount(module, veh.intCD), vehicles, 0)
 
         dismantlingToInventoryDevices = getDismantlingForMoneyToInventoryDevices(optDevicesToSell, itemsForDemountKit, *vehicles)
         moneySpend = calculateSpendMoney(self.itemsCache.items, dismantlingToInventoryDevices)
@@ -446,7 +454,7 @@ class VehicleSeller(ItemProcessor):
                     self.optDevs.remove(od)
 
             for ci in list(self.customizationItems):
-                installedCount = ci.installedCount(vehicle.intCD)
+                installedCount = getCustomizationItemSellCountForVehicle(ci, vehicle.intCD)
                 if installedCount > 0 and ci.intCD not in seenCustItems:
                     customizationItems.append(ci.intCD)
                     customizationItems.append(installedCount)
@@ -483,7 +491,7 @@ def getDismantlingToInventoryDevices(optDevicesToSell, *vehicles):
     result = []
     optDevicesToSell = [ dev.intCD for dev in optDevicesToSell ]
     for vehicle in vehicles:
-        vehDevices = vehicle.optDevices if vehicle is not None else []
+        vehDevices = vehicle.optDevices.installed if vehicle is not None else []
         for dev in vehDevices:
             if dev and not dev.isRemovable:
                 if dev.intCD in optDevicesToSell:
@@ -563,147 +571,6 @@ class VehicleAutoStyleEquipProcessor(VehicleSettingsProcessor):
         super(VehicleAutoStyleEquipProcessor, self).__init__(vehicle, VEHICLE_SETTINGS_FLAG.AUTO_RENT_CUSTOMIZATION, value, source=source)
 
 
-class VehicleLayoutProcessor(Processor):
-
-    def __init__(self, vehicle, shellsLayoutHelper=None, eqsLayoutHelper=None, skipConfirm=False):
-        super(VehicleLayoutProcessor, self).__init__()
-        self.vehicle = vehicle
-        self.shellsLayoutHelper = shellsLayoutHelper
-        self.eqsLayoutHelper = eqsLayoutHelper
-        self._setupPlugins(skipConfirm)
-
-    def _setupPlugins(self, skipConfirm):
-        shellsPrice = self.getShellsLayoutPrice()
-        eqsPrice = self.getEqsLayoutPrice()
-        isWalletValidatorEnabled = bool(shellsPrice.gold or eqsPrice.gold)
-        self.addPlugins((proc_plugs.VehicleLockValidator(self.vehicle), proc_plugs.WalletValidator(isWalletValidatorEnabled), proc_plugs.VehicleLayoutValidator(shellsPrice, eqsPrice)))
-
-    def _request(self, callback):
-        shellsRaw = self.shellsLayoutHelper.getRawLayout() if self.shellsLayoutHelper else None
-        eqsRaw = self.eqsLayoutHelper.getRawLayout() if self.eqsLayoutHelper else None
-        BigWorld.player().inventory.setAndFillLayouts(self.vehicle.invID, shellsRaw, eqsRaw, self._getEquipmentType(), lambda code, errStr, ext: self._response(code, callback, errStr=errStr, ctx=ext))
-        return
-
-    def _getEquipmentType(self):
-        return EQUIPMENT_TYPES.regular
-
-    def _getSysMsgType(self, price):
-        return CURRENCY_TO_SM_TYPE.get(price.getCurrency(byWeight=False), SM_TYPE.Information)
-
-    def _successHandler(self, code, ctx=None):
-        additionalMessages = []
-        if ctx.get('shells', []):
-            totalPrice = MONEY_UNDEFINED
-            for shellCompDescr, price, count in ctx.get('shells', []):
-                price = Money.makeFromMoneyTuple(price)
-                shell = self.itemsCache.items.getItemByCD(shellCompDescr)
-                additionalMessages.append(makeI18nSuccess('shell_buy/success', name=shell.userName, count=count, money=formatPrice(price), type=self._getSysMsgType(price)))
-                totalPrice += price
-
-            additionalMessages.append(makeI18nSuccess('layout_apply/success_money_spent', money=formatPrice(totalPrice), type=self._getSysMsgType(totalPrice)))
-        if ctx.get('eqs', []):
-            for eqCompDescr, price, count in ctx.get('eqs', []):
-                price = Money.makeFromMoneyTuple(price)
-                equipment = self.itemsCache.items.getItemByCD(eqCompDescr)
-                additionalMessages.append(makeI18nSuccess(sysMsgKey='artefact_buy/success', kind=equipment.userType, name=equipment.userName, count=count, money=formatPrice(price), type=self._getSysMsgType(price)))
-
-        return makeSuccess(auxData=additionalMessages)
-
-    def _errorHandler(self, code, errStr='', ctx=None):
-        if not errStr:
-            msg = 'server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'server_error_centerDown'
-        else:
-            msg = errStr
-        return makeI18nError(sysMsgKey='layout_apply/{}'.format(msg), defaultSysMsgKey='layout_apply/server_error', vehName=self.vehicle.userName, type=SM_TYPE.Error)
-
-    def getShellsLayoutPrice(self):
-        if self.shellsLayoutHelper is None:
-            return MONEY_UNDEFINED
-        else:
-            price = MONEY_UNDEFINED
-            if g_bootcamp.isRunning():
-                return price
-            for shellCompDescr, count, isBuyingForAltPrice in LayoutIterator(self.shellsLayoutHelper.getRawLayout()):
-                if not shellCompDescr or not count:
-                    continue
-                shell = self.itemsCache.items.getItemByCD(int(shellCompDescr))
-                vehShell = findFirst(lambda s, intCD=shellCompDescr: s.intCD == intCD, self.vehicle.shells)
-                vehCount = vehShell.count if vehShell is not None else 0
-                buyCount = count - shell.inventoryCount - vehCount
-                if buyCount:
-                    itemPrice = shell.buyPrices.itemAltPrice if isBuyingForAltPrice else shell.buyPrices.itemPrice
-                    buyPrice = buyCount * itemPrice.price
-                    price += buyPrice
-
-            return price
-
-    def getEqsLayoutPrice(self):
-        if self.eqsLayoutHelper is None:
-            return MONEY_UNDEFINED
-        else:
-            price = MONEY_UNDEFINED
-            regularEqsLayout = self.eqsLayoutHelper.getRegularRawLayout()
-            for idx, (eqCompDescr, count, isBuyingForAltPrice) in enumerate(LayoutIterator(regularEqsLayout)):
-                if not eqCompDescr or not count:
-                    continue
-                equipment = self.itemsCache.items.getItemByCD(int(eqCompDescr))
-                vehEquipment = self.vehicle.equipment.regularConsumables[idx]
-                vehCount = 1 if vehEquipment is not None else 0
-                buyCount = count - equipment.inventoryCount - vehCount
-                if buyCount:
-                    itemPrice = equipment.buyPrices.itemAltPrice if isBuyingForAltPrice else equipment.buyPrices.itemPrice
-                    buyPrice = buyCount * itemPrice.price
-                    price += buyPrice
-
-            return price
-
-
-class VehicleBattleBoosterLayoutProcessor(VehicleLayoutProcessor):
-
-    def __init__(self, vehicle, battleBooster, eqsLayout, skipConfirm=False):
-        self.battleBooster = battleBooster
-        super(VehicleBattleBoosterLayoutProcessor, self).__init__(vehicle, None, eqsLayout, skipConfirm)
-        return
-
-    def _setupPlugins(self, skipConfirm):
-        if self.battleBooster:
-            self.addPlugin(proc_plugs.BattleBoosterConfirmator('confirmBattleBoosterInstall', 'confirmBattleBoosterInstallNotSuitable', self.vehicle, self.battleBooster, isEnabled=not skipConfirm))
-
-    def _errorHandler(self, code, errStr='', ctx=None):
-        msgKwargs = dict(sysMsgKey='battleBooster_buy/{}'.format(errStr), defaultSysMsgKey='battleBooster_buy/server_error', type=SM_TYPE.Error)
-        if errStr not in ('server_error', 'wallet_not_available') and self.battleBooster:
-            msgKwargs['kind'] = self.battleBooster.userType
-            msgKwargs['name'] = self.battleBooster.userName
-        return makeI18nError(**msgKwargs)
-
-    def _getEquipmentType(self):
-        return EQUIPMENT_TYPES.battleBoosters
-
-
-class BuyAndInstallBattleBoosterProcessor(VehicleBattleBoosterLayoutProcessor):
-
-    def __init__(self, vehicle, battleBooster, eqsLayout, count, skipConfirm=False):
-        self.count = count
-        super(BuyAndInstallBattleBoosterProcessor, self).__init__(vehicle, battleBooster, eqsLayout, skipConfirm)
-
-    def _setupPlugins(self, skipConfirm):
-        itemPrice = self.battleBooster.buyPrices.getSum().price
-        self.addPlugins((proc_plugs.MoneyValidator(itemPrice * self.count), proc_plugs.BattleBoosterConfirmator('confirmBattleBoosterBuyAndInstall', 'confirmBattleBoosterInstallNotSuitable', self.vehicle, self.battleBooster, isEnabled=not skipConfirm)))
-
-    def _request(self, callback):
-        BigWorld.player().shop.buy(self.battleBooster.itemTypeID, self.battleBooster.nationID, self.battleBooster.intCD, self.count, 0, lambda code: self._buyResponse(code, callback))
-
-    def _buyResponse(self, code, callback):
-        _logger.debug('Server response on buy battle booster: %s', code)
-        if code < 0:
-            return callback(self._errorHandler(code))
-        price = self.battleBooster.getBuyPrice().price
-        price *= self.count
-        message = makeI18nSuccess(sysMsgKey='battleBooster_buy/success', kind=self.battleBooster.userType, name=self.battleBooster.userName, count=self.count, money=formatPrice(price), type=self._getSysMsgType(price))
-        SystemMessages.pushI18nMessage(message.userMsg, type=message.sysMsgType)
-        super(BuyAndInstallBattleBoosterProcessor, self)._request(callback)
-
-
 class VehicleRepairer(ItemProcessor):
 
     def __init__(self, vehicle):
@@ -725,15 +592,14 @@ class VehicleRepairer(ItemProcessor):
 @process
 def tryToLoadDefaultShellsLayout(vehicle, callback=None):
     defaultLayout = []
-    for shell in vehicle.shells:
-        if shell.defaultCount > shell.inventoryCount:
+    for shell in vehicle.shells.layout.getItems():
+        if shell.count > shell.inventoryCount:
             SystemMessages.pushI18nMessage('#system_messages:charge/inventory_error', vehicle=vehicle.userName, type=SystemMessages.SM_TYPE.Warning)
             yield lambda callback: callback(None)
             break
         defaultLayout.extend(shell.defaultLayoutValue)
     else:
-        shellsLayoutHelper = ShellLayoutHelper(vehicle, defaultLayout)
-        result = yield VehicleLayoutProcessor(vehicle, shellsLayoutHelper).request()
+        result = yield BuyAndInstallShellsProcessor(vehicle).request()
         if result and result.auxData:
             for m in result.auxData:
                 SystemMessages.pushI18nMessage(m.userMsg, type=m.sysMsgType)
@@ -785,3 +651,197 @@ class DismountEnhancementProcessor(Processor):
 
     def _request(self, callback):
         BigWorld.player().dismountEnhancement(self.vehicleInvID, self.slot, lambda code, errStr, ext: self._response(code, callback, errStr=errStr, ctx=ext))
+
+
+class OptDevicesInstaller(Processor):
+
+    def __init__(self, vehicle):
+        super(OptDevicesInstaller, self).__init__()
+        self.__buyItems = [ item for item in vehicle.optDevices.layout.getItems() if not item.isInInventory and item not in vehicle.optDevices.installed ]
+        self.__price = getVehicleOptionalDevicesLayoutPrice(vehicle).price
+        self._vehicle = vehicle
+        self.__devices = vehicle.optDevices.layout.getIntCDs()
+        self._setupPlugins()
+
+    def _setupPlugins(self):
+        self.addPlugins((proc_plugs.VehicleValidator(self._vehicle), proc_plugs.MoneyValidator(self.__price, byCurrencyError=False), proc_plugs.OptionalDevicesInstallValidator(self._vehicle)))
+
+    def _request(self, callback):
+        BigWorld.player().inventory.equipOptDevsSequence(self._vehicle.invID, self.__devices, lambda code, errStr: self._response(code, callback, errStr))
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return OptDevicesApplyProcessorMessage().makeErrorMsg(errStr)
+
+    def _successHandler(self, code, ctx=None):
+        buyMessages = [ ItemBuyProcessorMessage(item, 1).makeSuccessMsg() for item in self.__buyItems ]
+        return makeSuccess(auxData=buyMessages)
+
+
+class BuyAndInstallConsumablesProcessor(Processor):
+
+    def __init__(self, vehicle):
+        super(BuyAndInstallConsumablesProcessor, self).__init__()
+        self._vehicle = vehicle
+        self._setupPlugins()
+
+    def _setupPlugins(self):
+        self.addPlugins((proc_plugs.VehicleValidator(self._vehicle), proc_plugs.MoneyValidator(getVehicleConsumablesLayoutPrice(self._vehicle).price, byCurrencyError=False), proc_plugs.ConsumablesInstallValidator(self._vehicle)))
+
+    def _request(self, callback):
+        BigWorld.player().inventory.setAndFillLayouts(self._vehicle.invID, None, self.__getLayoutRaw(), EQUIPMENT_TYPES.regular, lambda code, errStr, ext: self._response(code, callback, errStr=errStr, ctx=ext))
+        return
+
+    def _successHandler(self, code, ctx=None):
+        additionalMessages = []
+        if ctx:
+            additionalMessages = [ ItemBuyProcessorMessage(self.itemsCache.items.getItemByCD(cd), count, Money.makeFromMoneyTuple(price)).makeSuccessMsg() for cd, price, count in ctx.get('eqs', []) ]
+        return makeSuccess(auxData=additionalMessages)
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return ConsumablesApplyProcessorMessage(self._vehicle).makeErrorMsg(errStr)
+
+    def __getLayoutRaw(self):
+        layout = [ (item.defaultLayoutValue if item is not None else (0, 0)) for item in self._vehicle.consumables.layout ]
+        currentBoosters = [ (item.defaultLayoutValue if item is not None else (0, 0)) for item in self._vehicle.battleBoosters.installed ]
+        layout.extend(currentBoosters)
+        return [ v for v in chain.from_iterable(layout) ]
+
+
+class BuyAndInstallShellsProcessor(Processor):
+
+    def __init__(self, vehicle):
+        super(BuyAndInstallShellsProcessor, self).__init__()
+        self.__vehicle = vehicle
+        self._setupPlugins()
+
+    def _setupPlugins(self):
+        self.addPlugins((proc_plugs.VehicleValidator(self.__vehicle), proc_plugs.MoneyValidator(getVehicleShellsLayoutPrice(self.__vehicle).price, byCurrencyError=False), proc_plugs.ShellsInstallValidator(self.__vehicle)))
+
+    def _request(self, callback):
+        BigWorld.player().inventory.setAndFillLayouts(self.__vehicle.invID, self.__getShellsRaw(), None, 0, lambda code, errStr, ext: self._response(code, callback, errStr=errStr, ctx=ext))
+        return
+
+    def _successHandler(self, code, ctx=None):
+        additionalMessages = []
+        totalPrice = ZERO_MONEY
+        if ctx:
+            for cd, price, count in ctx.get('shells', []):
+                money = Money.makeFromMoneyTuple(price)
+                additionalMessages.append(ItemBuyProcessorMessage(self.itemsCache.items.getItemByCD(cd), count, money).makeSuccessMsg())
+                totalPrice += money
+
+            if totalPrice:
+                additionalMessages.append(ShellsApplyProcessorMessage(self.__vehicle, totalPrice).makeSuccessMsg())
+        return makeSuccess(auxData=additionalMessages)
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return ShellsApplyProcessorMessage(self.__vehicle).makeErrorMsg(errStr)
+
+    def __getShellsRaw(self):
+        itemsIntAndCount = [ item.defaultLayoutValue for item in self.__vehicle.shells.layout ]
+        return [ v for v in chain.from_iterable(itemsIntAndCount) ]
+
+
+class BuyAndInstallBattleBoostersProcessor(Processor):
+
+    def __init__(self, vehicle):
+        super(BuyAndInstallBattleBoostersProcessor, self).__init__()
+        self.__vehicle = vehicle
+        self.__boosters = self.__vehicle.battleBoosters.layout.getItems()
+        self._setupPlugins()
+
+    def _setupPlugins(self):
+        self.addPlugins((proc_plugs.VehicleValidator(self.__vehicle), proc_plugs.MoneyValidator(getVehicleBattleBoostersLayoutPrice(self.__vehicle).price, byCurrencyError=False), proc_plugs.BattleBoostersInstallValidator(self.__vehicle)))
+
+    def _request(self, callback):
+        BigWorld.player().inventory.setAndFillLayouts(self.__vehicle.invID, None, self.__getLayoutRaw(), EQUIPMENT_TYPES.battleBoosters, lambda code, errStr, ext: self._response(code, callback, errStr=errStr, ctx=ext))
+        return
+
+    def _successHandler(self, code, ctx=None):
+        return makeSuccess(auxData=[ ItemBuyProcessorMessage(i, 1).makeSuccessMsg() for i in self.__boosters if not i.isInInventory ])
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return BattleBoostersApplyProcessorMessage().makeErrorMsg(errStr)
+
+    def __getLayoutRaw(self):
+        desiredBoosters = [ (item.defaultLayoutValue if item is not None else (0, 0)) for item in self.__vehicle.battleBoosters.layout ]
+        layout = [ (item.defaultLayoutValue if item is not None else (0, 0)) for item in self.__vehicle.consumables.installed ]
+        layout.extend(desiredBoosters)
+        return [ v for v in chain.from_iterable(layout) ]
+
+
+class AutoFillVehicleLayoutProcessor(Processor):
+
+    def __init__(self, vehicle):
+        super(AutoFillVehicleLayoutProcessor, self).__init__()
+        self.__vehicle = vehicle
+        self._setupPlugins()
+
+    def _setupPlugins(self):
+        price = self.__getPrice()
+        self.addPlugins((proc_plugs.VehicleValidator(self.__vehicle),
+         proc_plugs.MoneyValidator(price),
+         proc_plugs.ShellsInstallValidator(self.__vehicle),
+         proc_plugs.ConsumablesInstallValidator(self.__vehicle)))
+
+    def _request(self, callback):
+        BigWorld.player().inventory.setAndFillLayouts(self.__vehicle.invID, self.__getShellsRaw(), self.__getConsumablesRaw(), EQUIPMENT_TYPES.regular, lambda code, errStr, ext: self._response(code, callback, errStr=errStr, ctx=ext))
+
+    def _successHandler(self, code, ctx=None):
+        additionalMessages = []
+        totalPrice = ZERO_MONEY
+        if ctx:
+            for cd, price, count in ctx.get('shells', []):
+                money = Money.makeFromMoneyTuple(price)
+                additionalMessages.append(ItemBuyProcessorMessage(self.itemsCache.items.getItemByCD(cd), count, money).makeSuccessMsg())
+                totalPrice += money
+
+            if totalPrice:
+                additionalMessages.append(LayoutApplyProcessorMessage(self.__vehicle, totalPrice).makeSuccessMsg())
+            additionalMessages.extend([ ItemBuyProcessorMessage(self.itemsCache.items.getItemByCD(cd), count, Money.makeFromMoneyTuple(price)).makeSuccessMsg() for cd, price, count in ctx.get('eqs', []) ])
+        return makeSuccess(auxData=additionalMessages)
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return LayoutApplyProcessorMessage(self.__vehicle).makeErrorMsg(errStr)
+
+    def __getShellsRaw(self):
+        itemsIntAndCount = [ item.defaultLayoutValue for item in self.__vehicle.shells.layout ]
+        return [ v for v in chain.from_iterable(itemsIntAndCount) ]
+
+    def __getConsumablesRaw(self):
+        itemsIntAndCount = [ (item.defaultLayoutValue if item is not None else (0, 0)) for item in self.__vehicle.consumables.layout ]
+        return [ v for v in chain.from_iterable(itemsIntAndCount) ]
+
+    def __getPrice(self):
+        return getVehicleShellsLayoutPrice(self.__vehicle).price + getVehicleConsumablesLayoutPrice(self.__vehicle).price
+
+
+class InstallBattleAbilitiesProcessor(Processor):
+    __epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
+
+    def __init__(self, vehicle):
+        super(InstallBattleAbilitiesProcessor, self).__init__()
+        self.__vehicle = vehicle
+        self._setupPlugins()
+
+    def _setupPlugins(self):
+        self.addPlugins((proc_plugs.VehicleValidator(self.__vehicle), proc_plugs.BattleAbilitiesValidator(self.__vehicle)))
+
+    def _request(self, callback):
+        self.__epicMetaGameCtrl.changeEquippedSkills(self.__getCurrentSkills(), self.__vehicle.intCD, lambda code, _: self._response(code, callback))
+
+    def _successHandler(self, code, ctx=None):
+        return makeSuccess()
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return BattleAbilitiesApplyProcessorMessage().makeErrorMsg(errStr)
+
+    def __getCurrentSkills(self):
+        skillToAbilitiesIds = {skillID:[ sl.eqID for sl in skillLevels ] for skillID, skillLevels in self.__epicMetaGameCtrl.getAllUnlockedSkillLevelsBySkillId().iteritems()}
+        currentSkills = [-1] * self.__epicMetaGameCtrl.getNumAbilitySlots(self.__vehicle.descriptor.type)
+        for slotIdx, item in enumerate(self.__vehicle.battleAbilities.layout):
+            for skillID, battleAbilitiesIDs in skillToAbilitiesIds.iteritems():
+                if item != EMPTY_ITEM and item.innationID in battleAbilitiesIDs:
+                    currentSkills[slotIdx] = skillID
+
+        return currentSkills

@@ -11,6 +11,8 @@ from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _EVENT_ID
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.Scaleform.daapi.view.meta.EventPlayersPanelMeta import EventPlayersPanelMeta
+from gui.Scaleform.settings import ICONS_SIZES
+from gui.shared.badges import buildBadge
 from PlayerEvents import g_playerEvents
 
 class EventPlayersPanel(EventPlayersPanelMeta, IBattleFieldController):
@@ -112,8 +114,15 @@ class EventPlayersPanel(EventPlayersPanelMeta, IBattleFieldController):
             isSquad = False
             if playerSquad > 0 and playerSquad == vInfo.squadIndex or playerSquad == 0 and vInfo.vehicleID == playerVehicleID:
                 isSquad = True
+            badgeID = vInfo.selectedBadge
+            badge = buildBadge(badgeID, vInfo.getBadgeExtraInfo())
+            badgeVO = badge.getBadgeVO(ICONS_SIZES.X24, {'isAtlasSource': True}, shortIconName=True) if badge else None
+            suffixBadgeId = vInfo.selectedSuffixBadge
             self.as_setPlayerPanelInfoS({'vehID': vInfo.vehicleID,
              'name': vInfo.player.name,
+             'badgeVO': badgeVO,
+             'suffixBadgeIcon': 'badge_{}'.format(suffixBadgeId) if suffixBadgeId else '',
+             'suffixBadgeStripIcon': 'strip_{}'.format(suffixBadgeId) if suffixBadgeId else '',
              'nameVehicle': vInfo.vehicleType.shortName,
              'typeVehicle': vInfo.vehicleType.classTag,
              'hpMax': vInfo.vehicleType.maxHealth,

@@ -7,7 +7,6 @@ from BWUtil import AsyncReturn
 from CurrentVehicle import g_currentVehicle
 from Math import Matrix
 from account_helpers.AccountSettings import AccountSettings, CUSTOMIZATION_SECTION, CAROUSEL_ARROWS_HINT_SHOWN_FIELD
-import adisp
 from async import async, await
 from gui import g_tankActiveCamouflage, SystemMessages
 from gui.Scaleform.Waiting import Waiting
@@ -37,6 +36,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.constants.dialog_presets import DialogPresets
 from gui.impl.lobby.customization.customization_cart.customization_cart_view import CustomizationCartView
 from gui.shared import events
+from gui.shared.close_confiramtor_helper import CloseConfirmatorsHelper
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showProgressiveItemsView
 from gui.shared.formatters import formatPrice, formatPurchaseItems, text_styles
@@ -88,24 +88,6 @@ CustomizationAnchorsSetVO = namedtuple('CustomizationAnchorsSetVO', ('rendererLi
 CustomizationAnchorPositionVO = namedtuple('CustomizationAnchorPositionVO', ('zIndex', 'slotId'))
 AnchorPositionData = namedtuple('AnchorPositionData', ('angleToCamera', 'clipSpacePos', 'slotId'))
 _WAITING_MESSAGE = 'loadHangarSpace'
-_RESTRICTED_EVENTS = (VIEW_ALIAS.VEHICLE_COMPARE,
- VIEW_ALIAS.LOBBY_STORE,
- VIEW_ALIAS.LOBBY_PROFILE,
- VIEW_ALIAS.LOBBY_BARRACKS,
- VIEW_ALIAS.LOBBY_MISSIONS,
- VIEW_ALIAS.WIKI_VIEW,
- VIEW_ALIAS.BROWSER_VIEW,
- VIEW_ALIAS.VEHICLE_PREVIEW,
- events.ReferralProgramEvent.SHOW_REFERRAL_PROGRAM_WINDOW,
- events.ViewEventType.LOAD_UB_VIEW,
- events.RallyWindowEvent.ON_CLOSE,
- events.PrbInvitesEvent.ACCEPT,
- events.PrbActionEvent.SELECT,
- events.PrbActionEvent.LEAVE,
- events.TrainingEvent.RETURN_TO_TRAINING_ROOM,
- events.TrainingEvent.SHOW_TRAINING_LIST,
- events.CustomizationEvent.SHOW)
-_RESTRICTED_UB_VIEWS = ()
 
 class _SeasonSoundAnimation(object):
 
@@ -206,6 +188,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__dontPlayTabChangeSound = False
         self.__itemsGrabMode = False
         self.__finishGrabModeCallback = None
+        self.__closeConfirmatorHelper = CloseConfirmatorsHelper()
         self.__closed = False
         return
 
@@ -672,7 +655,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             self.service.startHighlighter(highlightingMode)
         progressionEntryPointVisible = isVehicleCanBeCustomized(g_currentVehicle.item, GUI_ITEM_TYPE.PROJECTION_DECAL)
         self.as_progressionEntryPointVisibleS(progressionEntryPointVisible)
-        self.__addCloseConfirmators()
+        self.__closeConfirmatorHelper.start(self.__closeConfirmator)
         return
 
     def _invalidate(self, *args, **kwargs):
@@ -747,7 +730,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         super(MainView, self)._dispose()
         self.__ctx = None
         self.service.closeCustomization()
-        self.__removeCloseConfirmators()
+        self.__closeConfirmatorHelper.stop()
         if self.__itemsGrabMode:
             self.__clearGrabModeCallback()
             self.__finishGrabMode()
@@ -779,7 +762,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             region = C11nId(areaId, slotType, regionIdx)._asdict()
         else:
             region = None
-        areaMouseBehavior = self.__ctx.mode.isRegion
+        areaMouseBehavior = self.__ctx.mode.isRegion if self.service.isOver3dScene else False
         self.as_onRegionHighlightedS(region, highlightingType, highlightingResult, areaMouseBehavior)
         if highlightingType:
             if highlightingResult:
@@ -1096,37 +1079,11 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
     def __isGamefaceBuyViewOpened(self):
         return self.guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.customization.CustomizationCart())
 
-    def __addCloseConfirmators(self):
-        self.lobbyContext.addHeaderNavigationConfirmator(self.__confirmHeaderNavigation)
-        for event in _RESTRICTED_EVENTS:
-            self.addRestriction(event, self.__confirmEvent, scope=EVENT_BUS_SCOPE.LOBBY)
-
-    def __removeCloseConfirmators(self):
-        self.lobbyContext.deleteHeaderNavigationConfirmator(self.__confirmHeaderNavigation)
-        for event in _RESTRICTED_EVENTS:
-            self.removeRestriction(event, self.__confirmEvent, scope=EVENT_BUS_SCOPE.LOBBY)
-
     @async
     def __confirmClose(self):
         if self.__hasOpenedChildWindow() or self.__isGamefaceBuyViewOpened():
             return
         yield await(self.__closeConfirmator())
-
-    @adisp.async
-    @async
-    def __confirmHeaderNavigation(self, callback):
-        result = yield await(self.__closeConfirmator())
-        callback(result)
-
-    @adisp.async
-    @async
-    def __confirmEvent(self, event, callback):
-        if event.eventType == events.ViewEventType.LOAD_UB_VIEW:
-            if event.alias not in _RESTRICTED_UB_VIEWS:
-                callback(True)
-                return
-        result = yield await(self.__closeConfirmator())
-        callback(result)
 
     @async
     def __closeConfirmator(self):

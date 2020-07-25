@@ -6,6 +6,7 @@
 			loader	</commander>
     <driver></driver>
   </crew>
+  <supplySlots>	1 6 8 8 8	</supplySlots>
   <speedLimits>
     <forward>	72.4	</forward>
     <backward>	7	</backward>
@@ -14,9 +15,16 @@
     <moving>	0.168	</moving>
     <still>	0.28	</still>
     <camouflageBonus>	0.04	</camouflageBonus>
-    <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.42	</firePenalty>
   </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.15 0.175	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.05 0.06	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+  </optDevsOverrides>
   <repairCost>	2.6	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -24,6 +32,9 @@
     <tiling>	1 1 0 0	</tiling>
     <exclusionMask></exclusionMask>
   </camouflage>
+  <damageByStaticsChances>
+    <tankman>	0	</tankman>
+  </damageByStaticsChances>
   <hull>
     <fakeTurrets>
       <lobby>	0	</lobby>
@@ -46,6 +57,12 @@
       <armor_14>	15.9	</armor_14>
       <armor_15>	15.9	</armor_15>
       <armor_16>	15.9	</armor_16>
+      <driver>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+        <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+      </driver>
+      <commander>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+        <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+      </commander>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	5936	</weight>
@@ -2909,6 +2926,9 @@
         <armor_1>	15.9	</armor_1>
         <armor_2>	12.7	</armor_2>
         <armor_3>	6.4	</armor_3>
+        <commander>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+        </commander>
       </armor>
       <primaryArmor>	armor_1 armor_2 armor_3	</primaryArmor>
       <weight>	100	</weight>
@@ -3034,6 +3054,9 @@
         <armor_1>	15.9	</armor_1>
         <armor_2>	12.7	</armor_2>
         <armor_3>	6.4	</armor_3>
+        <commander>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+        </commander>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	100	</weight>
@@ -3147,7 +3170,6 @@
           <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
         </slot>
       </customizationSlots>
-      <gunShotOffset>	0.000000 0.000000 0.000000	</gunShotOffset>
       <camouflage>
         <density>	50.0 50.0	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
@@ -3163,6 +3185,9 @@
         <armor_1>	15.9	</armor_1>
         <armor_2>	12.7	</armor_2>
         <armor_3>	6.4	</armor_3>
+        <commander>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+        </commander>
       </armor>
       <primaryArmor>	armor_1 armor_2 armor_3	</primaryArmor>
       <weight>	100	</weight>
@@ -3274,7 +3299,6 @@
           <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
         </slot>
       </customizationSlots>
-      <gunShotOffset>	0.000000 0.000000 0.000000	</gunShotOffset>
       <camouflage>
         <density>	50.0 50.0	</density>
         <aoTextureSize>	512 512	</aoTextureSize>

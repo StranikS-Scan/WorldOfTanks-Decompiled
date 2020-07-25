@@ -10,13 +10,6 @@
             <inactivate>	TankCarouselOnScene	</inactivate>
           </not-on-scene-effects>
         </gui-item>
-        <gui-item>	MaintenanceButton	  <on-scene-effects>
-            <activate>	MaintenanceButtonOnScene	</activate>
-          </on-scene-effects>
-          <not-on-scene-effects>
-            <inactivate>	MaintenanceButtonOnScene	</inactivate>
-          </not-on-scene-effects>
-        </gui-item>
         <gui-item>	EquipmentItem1DropDown	  <on-scene-effects>
             <activate>	EquipmentItem1DropDownOnScene	</activate>
           </on-scene-effects>
@@ -92,11 +85,9 @@
       <post-effects>
         <clear-scene></clear-scene>
         <inactivate>	EquipmentInstalled	</inactivate>
-        <inactivate>	MaintenanceButtonClicked	</inactivate>
         <inactivate>	EquipmentItemDropDownClicked	</inactivate>
         <inactivate>	EquipmentItemRendererClicked	</inactivate>
         <inactivate>	TechnicalMaintenanceApplyButtonClicked	</inactivate>
-        <inactivate>	MaintenanceButtonOnScene	</inactivate>
         <inactivate>	EquipmentItem1DropDownOnScene	</inactivate>
         <inactivate>	EquipmentItem2DropDownOnScene	</inactivate>
         <inactivate>	EquipmentItem3DropDownOnScene	</inactivate>
@@ -144,17 +135,6 @@
             <var>	SelectedVehicleID	  <is-none></is-none>
             </var>
             <effect-not-triggered>	BuyVehicleHint	</effect-not-triggered>
-          </condition>
-        </show-hint>
-        <show-hint>	MaintenanceButtonHint	  <condition>
-            <active>	MaintenanceButtonOnScene	</active>
-            <active>	MaintenanceIsEnabled	</active>
-            <inactive>	EquipmentItem1DropDownOnScene	</inactive>
-            <var>	FindEquipmentID	  <is-not-none></is-not-none>
-            </var>
-            <var>	SelectedVehicleID	  <is-not-none></is-not-none>
-            </var>
-            <effect-not-triggered>	MaintenanceButtonHint	</effect-not-triggered>
           </condition>
         </show-hint>
         <show-hint>	ChangeVehicleHint	  <condition>
@@ -323,28 +303,6 @@
           </effects>
         </click-outside>
         <esc>	TankCarousel	  <effects>
-            <refuse-training></refuse-training>
-          </effects>
-        </esc>
-      </actions>
-    </hint>
-    <hint>	MaintenanceButtonHint	  <item-id>	MaintenanceButton	</item-id>
-      <text>	_(#tutorial:chain4/hint/openMaintenanceWindow)	</text>
-      <arrow>
-        <direction>	T	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <actions>
-        <click>	MaintenanceButton	  <effects>
-            <close-hint>	MaintenanceButtonHint	</close-hint>
-            <activate>	MaintenanceButtonClicked	</activate>
-          </effects>
-        </click>
-        <click-outside>	MaintenanceButton	  <effects>
-            <refuse-training></refuse-training>
-          </effects>
-        </click-outside>
-        <esc>	MaintenanceButton	  <effects>
             <refuse-training></refuse-training>
           </effects>
         </esc>

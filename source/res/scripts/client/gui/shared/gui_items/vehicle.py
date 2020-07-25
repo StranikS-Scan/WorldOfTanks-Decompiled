@@ -13,7 +13,6 @@ import constants
 from collector_vehicle import CollectorVehicleConsts
 from AccountCommands import LOCK_REASON, VEHICLE_SETTINGS_FLAG, VEHICLE_EXTRA_SETTING_FLAG
 from PerksParametersController import PerksParametersController
-from account_shared import LayoutIterator
 from constants import WIN_XP_FACTOR_MODE, RentType
 from gui.impl import backport
 from gui.impl.gen import R
@@ -154,7 +153,7 @@ RentPackagesInfo = namedtuple('RentPackagesInfo', ('hasAvailableRentPackages', '
 CrystalsEarnedInfo = namedtuple('CrystalsEarnedInfo', ('current', 'max'))
 
 class Vehicle(FittingItem):
-    __slots__ = ('__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_rentPackagesInfo', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_tradeInAvailable', '_tradeOffAvailable', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_optDevices', '_shells', '_equipment', '_equipmentLayout', '_bonuses', '_crewIndices', '_slotsIds', '_crew', '_lastCrew', '_hasModulesToSelect', '_outfits', '_isStyleInstalled', '_slotsAnchors', '_unlockedBy', '_maxRentDuration', '_minRentDuration', '_slotsAnchorsById', '_hasNationGroup', '_extraSettings', '_perksController')
+    __slots__ = ('__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_rentPackagesInfo', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_tradeInAvailable', '_tradeOffAvailable', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_equipment', '_bonuses', '_crewIndices', '_slotsIds', '_crew', '_lastCrew', '_hasModulesToSelect', '_outfits', '_isStyleInstalled', '_slotsAnchors', '_unlockedBy', '_maxRentDuration', '_minRentDuration', '_slotsAnchorsById', '_hasNationGroup', '_extraSettings', '_perksController')
 
     class VEHICLE_STATE(object):
         DAMAGED = 'damaged'
@@ -306,14 +305,7 @@ class Vehicle(FittingItem):
                 self._tradeOffPrice = Money(gold=int(math.ceil(self.tradeOffPriceFactor * self.buyPrices.itemPrice.defPrice.gold)))
                 if self._tradeOffPrice.gold < tradeInData.minAcceptableSellPrice:
                     self._tradeOffAvailable = False
-        self._optDevices = self._parserOptDevs(vehDescr.optionalDevices, proxy)
-        gunAmmoLayout = []
-        for shell in self.gun.defaultAmmo:
-            gunAmmoLayout += (shell.intCD, shell.defaultCount)
-
-        self._shells = self._parseShells(invData.get('shells', list()), invData.get('shellsLayout', dict()).get(self.shellsLayoutIdx, gunAmmoLayout), proxy)
-        self._equipment = VehicleEquipment(proxy, invData.get('eqs'))
-        self._equipmentLayout = VehicleEquipment(proxy, invData.get('eqsLayout'))
+        self._equipment = VehicleEquipment(proxy, vehDescr, invData)
         defaultCrew = [None] * len(vehDescr.type.crewRoles)
         crewList = invData.get('crew', defaultCrew)
         self._bonuses = self._calcCrewBonuses(crewList, proxy)
@@ -477,10 +469,10 @@ class Vehicle(FittingItem):
     def _calcCrewBonuses(self, crew, proxy):
         bonuses = dict()
         bonuses['equipment'] = 0.0
-        for eq in self.equipment.regularConsumables.getInstalledItems():
+        for eq in self.consumables.installed.getItems():
             bonuses['equipment'] += eq.crewLevelIncrease
 
-        for battleBooster in self.equipment.battleBoosterConsumables.getInstalledItems():
+        for battleBooster in self.battleBoosters.installed.getItems():
             bonuses['equipment'] += battleBooster.getCrewBonus(self)
 
         bonuses['optDevices'] = self.descriptor.miscAttrs['crewLevelIncrease']
@@ -523,22 +515,6 @@ class Vehicle(FittingItem):
     def _parseCompDescr(self, compactDescr):
         nId, innID = vehicles.parseVehicleCompactDescr(compactDescr)
         return (GUI_ITEM_TYPE.VEHICLE, nId, innID)
-
-    def _parseShells(self, layoutList, defaultLayoutList, proxy):
-        shellsDict = dict(((cd, count) for cd, count, _ in LayoutIterator(layoutList)))
-        defaultsDict = dict(((cd, (count, isBoughtForCredits)) for cd, count, isBoughtForCredits in LayoutIterator(defaultLayoutList)))
-        layoutList = list(layoutList)
-        for shot in self.descriptor.gun.shots:
-            cd = shot.shell.compactDescr
-            if cd not in shellsDict:
-                layoutList.extend([cd, 0])
-
-        result = list()
-        for intCD, count, _ in LayoutIterator(layoutList):
-            defaultCount, isBoughtForCredits = defaultsDict.get(intCD, (0, False))
-            result.append(self.itemsFactory.createShell(intCD, count, defaultCount, proxy, isBoughtForCredits))
-
-        return result
 
     def _parseOutfits(self, proxy):
         outfits = {}
@@ -593,10 +569,6 @@ class Vehicle(FittingItem):
     def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
         name = getNationLessName(self.name)
         return RES_SHOP_EXT.getVehicleIcon(size, name)
-
-    @property
-    def shellsLayoutIdx(self):
-        return (self.turret.descriptor.compactDescr, self.gun.descriptor.compactDescr)
 
     @property
     def invID(self):
@@ -768,19 +740,23 @@ class Vehicle(FittingItem):
 
     @property
     def optDevices(self):
-        return self._optDevices
+        return self._equipment.optDevices
 
     @property
     def shells(self):
-        return self._shells
+        return self._equipment.shells
 
     @property
-    def equipment(self):
-        return self._equipment
+    def consumables(self):
+        return self._equipment.consumables
 
     @property
-    def equipmentLayout(self):
-        return self._equipmentLayout
+    def battleBoosters(self):
+        return self._equipment.battleBoosters
+
+    @property
+    def battleAbilities(self):
+        return self._equipment.battleAbilities
 
     @property
     def modules(self):
@@ -914,23 +890,23 @@ class Vehicle(FittingItem):
 
     @property
     def isAmmoFull(self):
-        return sum((s.count for s in self.shells)) >= self.ammoMaxSize * _NOT_FULL_AMMO_MULTIPLIER
+        return sum((s.count for s in self.shells.installed.getItems())) >= self.ammoMaxSize * _NOT_FULL_AMMO_MULTIPLIER
 
     @property
     def hasShells(self):
-        return sum((s.count for s in self.shells)) > 0
+        return sum((s.count for s in self.shells.installed.getItems())) > 0
 
     @property
     def hasCrew(self):
         return findFirst(lambda x: x[1] is not None, self.crew) is not None
 
     @property
-    def hasEquipments(self):
-        return findFirst(None, self.equipment.regularConsumables) is not None
+    def hasConsumables(self):
+        return findFirst(None, self.consumables.installed) is not None
 
     @property
     def hasOptionalDevices(self):
-        return findFirst(None, self.optDevices) is not None
+        return findFirst(None, self.optDevices.installed) is not None
 
     @property
     def modelState(self):
@@ -1380,15 +1356,10 @@ class Vehicle(FittingItem):
         return not self.isOnlyForEventBattles and not self.isInBattle and self.isInInventory and not self.isLocked and not locked and not self.isBroken and not self.isOutfitLocked and not self.isDisabled
 
     def isAutoLoadFull(self):
-        if self.isAutoLoad:
-            for shell in self.shells:
-                if shell.count != shell.defaultCount:
-                    return False
-
-        return True
+        return self.shells.installed == self.shells.layout if self.isAutoLoad else True
 
     def isAutoEquipFull(self):
-        return self.equipment.regularConsumables == self.equipmentLayout.regularConsumables if self.isAutoEquip else True
+        return self.consumables.installed == self.consumables.layout if self.isAutoEquip else True
 
     def mayPurchase(self, money):
         if self.isOnlyForEventBattles:

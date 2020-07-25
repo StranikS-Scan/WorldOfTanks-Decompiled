@@ -192,7 +192,7 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.VEHICLE_COMPARE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR, self.loadViewByCtxEvent),
          (VIEW_ALIAS.LOBBY_MENU, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.MODULE_INFO_WINDOW, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.MODULE_INFO_WINDOW, self.__moduleWindowHandler),
          (VIEW_ALIAS.BOOSTER_INFO_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.DEMOUNT_KIT_INFO_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.PERSONAL_CASE, self.loadViewByCtxEvent),
@@ -215,6 +215,15 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.BATTLE_PASS_BADGES_DEMO, self.loadViewByCtxEvent),
          (VIEW_ALIAS.OVERLAY_TEN_YEARS_COUNTDOWN, self.loadViewByCtxEvent))
         super(LobbyPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
+
+    def __moduleWindowHandler(self, event):
+        name = event.name
+        window = self.findViewByName(ViewTypes.WINDOW, name)
+        if window is not None:
+            self.bringViewToFront(name)
+        else:
+            self.loadViewByCtxEvent(event)
+        return
 
 
 class LobbyDialogsHandler(PackageBusinessHandler):

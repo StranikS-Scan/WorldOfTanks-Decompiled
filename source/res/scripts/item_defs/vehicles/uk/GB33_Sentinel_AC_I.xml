@@ -7,6 +7,7 @@
     <radioman></radioman>
     <loader></loader>
   </crew>
+  <supplySlots>	1 1 1 6 6 6 8 8 8	</supplySlots>
   <speedLimits>
     <forward>	60.4	</forward>
     <backward>	20	</backward>
@@ -15,9 +16,16 @@
     <moving>	0.18	</moving>
     <still>	0.241	</still>
     <camouflageBonus>	0.03	</camouflageBonus>
-    <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.362	</firePenalty>
   </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.1 0.125	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+  </optDevsOverrides>
   <repairCost>	1.947	</repairCost>
   <premiumVehicleXPFactor>	0.5	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -2140,7 +2148,7 @@
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
+          <reloadTime>	2.07	</reloadTime>
           <aimingTime>	2.7	</aimingTime>
           <models>
             <undamaged>	vehicles/british/GB33_Sentinel_AC_I/normal/lod0/Gun_01.model	</undamaged>

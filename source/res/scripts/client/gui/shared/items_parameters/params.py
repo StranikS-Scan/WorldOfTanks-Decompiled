@@ -5,30 +5,37 @@ import copy
 import inspect
 import math
 import operator
+import typing
 from collections import namedtuple, defaultdict
 from math import ceil
+from itertools import izip_longest
 import BigWorld
 from constants import SHELL_TYPES, PIERCING_POWER
 from gui import GUI_SETTINGS
 from gui.shared.formatters import text_styles
+from gui.shared.gui_items import KPI
+from gui.shared.gui_items.Tankman import isSkillLearnt
 from gui.shared.items_parameters import calcGunParams, calcShellParams, getShotsPerMinute, getGunDescriptors, isAutoReloadGun, isDualGun
 from gui.shared.items_parameters import functions, getShellDescriptors, getOptionalDeviceWeight, NO_DATA
 from gui.shared.items_parameters.comparator import rateParameterState, PARAM_STATE
 from gui.shared.items_parameters.functions import getBasicShell
 from gui.shared.items_parameters.params_cache import g_paramsCache
-from gui.shared.utils import DAMAGE_PROP_NAME, PIERCING_POWER_PROP_NAME, AIMING_TIME_PROP_NAME, STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME, AUTO_RELOAD_PROP_NAME, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, RELOAD_TIME_SECS_PROP_NAME, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME
+from gui.shared.utils import DAMAGE_PROP_NAME, PIERCING_POWER_PROP_NAME, AIMING_TIME_PROP_NAME, STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME, AUTO_RELOAD_PROP_NAME, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, RELOAD_TIME_SECS_PROP_NAME, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_SWITCH_TIME, TURBOSHAFT_SWITCH_ON_TIME, TURBOSHAFT_SWITCH_OFF_TIME
 from gui.shared.utils import DISPERSION_RADIUS_PROP_NAME, SHELLS_PROP_NAME, GUN_NORMAL, SHELLS_COUNT_PROP_NAME
 from gui.shared.utils import GUN_CAN_BE_CLIP, RELOAD_TIME_PROP_NAME
 from gui.shared.utils import RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, GUN_CLIP
 from helpers import time_utils, dependency
-from items import getTypeOfCompactDescr, getTypeInfoByIndex, ITEM_TYPES, vehicles
+from items import getTypeOfCompactDescr, getTypeInfoByIndex, ITEM_TYPES, vehicles, tankmen
 from items import utils as items_utils
 from items.components import component_constants
 from shared_utils import findFirst, first
 from skeletons.gui.lobby_context import ILobbyContext
+from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from items.vehicles import VehicleDescriptor, CompositeVehicleDescriptor
 MAX_VISION_RADIUS = 500
 MIN_VISION_RADIUS = 150
-PIERCING_DISTANCES = (100, 200, 500)
+PIERCING_DISTANCES = (50, 500)
 ONE_HUNDRED_PERCENTS = 100
 MIN_RELATIVE_VALUE = 1
 EXTRAS_CAMOUFLAGE = 'camouflageExtras'
@@ -139,6 +146,10 @@ def _getMaxSteeringLockAngle(axleSteeringLockAngles):
     return max(map(abs, axleSteeringLockAngles)) if axleSteeringLockAngles else None
 
 
+def _turboshaftEnginePower(vehicleDescr, engineName):
+    return vehicleDescr.siegeVehicleDescr.physics['enginePower'] if vehicleDescr.hasTurboshaftEngine else None
+
+
 class _ParameterBase(object):
 
     def __init__(self, itemDescr, vehicleDescr=None):
@@ -203,6 +214,11 @@ class EngineParams(WeightedParam):
     @property
     def enginePower(self):
         return int(round(self._itemDescr.power / component_constants.HP_TO_WATTS, 0))
+
+    @property
+    def turboshaftEnginePower(self):
+        power = _turboshaftEnginePower(self._vehicleDescr, self._itemDescr.name)
+        return power and int(round(power / component_constants.HP_TO_WATTS))
 
     @property
     def fireStartingChance(self):
@@ -273,8 +289,14 @@ class VehicleParams(_ParameterBase):
     def __init__(self, vehicle):
         super(VehicleParams, self).__init__(self._getVehicleDescriptor(vehicle))
         self.__factors = functions.getVehicleFactors(vehicle)
+        self.__kpi = functions.getKpiFactors(vehicle)
         self.__coefficients = g_paramsCache.getSimplifiedCoefficients()
         self.__vehicle = vehicle
+
+    def __getattr__(self, item):
+        if KPI.Name.hasValue(item):
+            return self.__kpi.getFactor(item)
+        raise AttributeError
 
     @property
     def maxHealth(self):
@@ -286,24 +308,29 @@ class VehicleParams(_ParameterBase):
 
     @property
     def enginePower(self):
-        return round(self._itemDescr.physics['enginePower'] * self.__factors['engine/power'] / component_constants.HP_TO_WATTS)
+        return self.__getEnginePower(self._itemDescr.physics['enginePower'])
+
+    @property
+    def turboshaftEnginePower(self):
+        power = _turboshaftEnginePower(self._itemDescr, self._itemDescr.engine.name)
+        return power and self.__getEnginePower(power)
 
     @property
     def enginePowerPerTon(self):
-        return round(self.enginePower / self.vehicleWeight.current, 2)
+        powerPerTon = round(self.enginePower / self.vehicleWeight.current, 2)
+        return (powerPerTon, round(self.turboshaftEnginePower / self.vehicleWeight.current, 2)) if self._itemDescr.hasTurboshaftEngine else (powerPerTon,)
 
     @property
     def speedLimits(self):
-        limits = self._itemDescr.physics['speedLimits']
-        return [ round(speed * METERS_PER_SECOND_TO_KILOMETERS_PER_HOUR, 2) for speed in limits ]
+        return self.__speedLimits(self._itemDescr.physics['speedLimits'], ('forwardMaxSpeedKMHTerm', 'backwardMaxSpeedKMHTerm'))
 
     @property
     def wheeledSpeedModeSpeed(self):
-        if self.__hasWheeledSwitchMode():
-            limits = self._itemDescr.siegeVehicleDescr.physics['speedLimits']
-            return [ round(speed * METERS_PER_SECOND_TO_KILOMETERS_PER_HOUR, 2) for speed in limits ]
-        else:
-            return None
+        return self.__speedLimits(self._itemDescr.siegeVehicleDescr.physics['speedLimits']) if self.__hasWheeledSwitchMode() else None
+
+    @property
+    def turboshaftSpeedModeSpeed(self):
+        return self.__speedLimits(self._itemDescr.siegeVehicleDescr.physics['speedLimits'], ('forwardMaxSpeedKMHTerm', 'backwardMaxSpeedKMHTerm')) if self.__hasTurboshaftSwitchMode() else None
 
     @property
     def chassisRotationSpeed(self):
@@ -381,7 +408,8 @@ class VehicleParams(_ParameterBase):
 
     @property
     def aimingTime(self):
-        return items_utils.getGunAimingTime(self._itemDescr, self.__factors)
+        aimingTimeVal = items_utils.getGunAimingTime(self._itemDescr, self.__factors)
+        return (aimingTimeVal, items_utils.getGunAimingTime(self._itemDescr.siegeVehicleDescr, self.__factors)) if self._itemDescr.hasTurboshaftEngine else (aimingTimeVal,)
 
     @property
     def shotDispersionAngle(self):
@@ -468,13 +496,29 @@ class VehicleParams(_ParameterBase):
 
     @property
     def invisibilityStillFactor(self):
-        _, still = self.__getInvisibilityValues()
+        _, still = self.__getInvisibilityValues(self._itemDescr)
         return still
 
     @property
     def invisibilityMovingFactor(self):
-        moving, _ = self.__getInvisibilityValues()
+        moving, _ = self.__getInvisibilityValues(self._itemDescr)
         return moving
+
+    @property
+    def turboshaftInvisibilityStillFactor(self):
+        if not self.__hasTurboshaftSwitchMode():
+            return None
+        else:
+            _, still = self.__getInvisibilityValues(self._itemDescr.siegeVehicleDescr)
+            return still
+
+    @property
+    def turboshaftInvisibilityMovingFactor(self):
+        if not self.__hasTurboshaftSwitchMode():
+            return None
+        else:
+            moving, _ = self.__getInvisibilityValues(self._itemDescr.siegeVehicleDescr)
+            return moving
 
     @property
     def invisibilityFactorAtShot(self):
@@ -518,9 +562,20 @@ class VehicleParams(_ParameterBase):
 
     @property
     def wheeledSwitchTime(self):
-        if self.__hasWheeledSwitchMode() and (self.wheeledSwitchOnTime or self.wheeledSwitchOffTime):
-            return (self.wheeledSwitchOnTime, self.wheeledSwitchOffTime)
-        return None
+        onTime, offTime = self.wheeledSwitchOnTime, self.wheeledSwitchOffTime
+        return (onTime, offTime) if onTime or offTime else None
+
+    @property
+    def turboshaftSwitchOnTime(self):
+        return self.__getSwitchOnTime() if self.__hasTurboshaftSwitchMode() else None
+
+    @property
+    def turboshaftSwitchOffTime(self):
+        return self.__getSwitchOffTime() if self.__hasTurboshaftSwitchMode() else None
+
+    @property
+    def turboshaftSwitchTime(self):
+        return self.turboshaftSwitchOnTime or self.turboshaftSwitchOffTime
 
     @property
     def stunMaxDuration(self):
@@ -532,8 +587,26 @@ class VehicleParams(_ParameterBase):
         item = self._itemDescr.shot.shell
         return item.stun.guaranteedStunDuration * item.stun.stunDuration if item.hasStun else None
 
+    @property
+    def vehicleEnemySpottingTime(self):
+        kpiFactor = self.__kpi.getFactor('vehicleEnemySpottingTime')
+        skillName = 'gunner_rancorous'
+        skillDuration = 0.0
+        skillBattleBoosters = None
+        for battleBoosters in self.__vehicle.battleBoosters.installed:
+            if battleBoosters is not None and battleBoosters.getAffectedSkillName() == skillName:
+                skillBattleBoosters = battleBoosters
+
+        skillLearnt = isSkillLearnt(skillName, self.__vehicle)
+        if skillLearnt and skillBattleBoosters is not None:
+            skillDuration = skillBattleBoosters.descriptor.duration
+        elif skillLearnt or skillBattleBoosters is not None:
+            skillDuration = tankmen.getSkillsConfig().getSkill(skillName).duration
+        return kpiFactor + skillDuration
+
     def getParamsDict(self, preload=False):
-        conditionalParams = ('clipFireRate',
+        conditionalParams = ('aimingTime',
+         'clipFireRate',
          'turretYawLimits',
          'gunYawLimits',
          'turretRotationSpeed',
@@ -550,7 +623,14 @@ class VehicleParams(_ParameterBase):
          WHEELED_SWITCH_OFF_TIME,
          WHEELED_SWITCH_TIME,
          WHEELED_SPEED_MODE_SPEED,
-         'wheelRiseSpeed')
+         'wheelRiseSpeed',
+         TURBOSHAFT_ENGINE_POWER,
+         TURBOSHAFT_SPEED_MODE_SPEED,
+         TURBOSHAFT_INVISIBILITY_MOVING_FACTOR,
+         TURBOSHAFT_INVISIBILITY_STILL_FACTOR,
+         TURBOSHAFT_SWITCH_TIME,
+         TURBOSHAFT_SWITCH_ON_TIME,
+         TURBOSHAFT_SWITCH_OFF_TIME)
         stunConditionParams = ('stunMaxDuration', 'stunMinDuration')
         result = _ParamsDictProxy(self, preload, conditions=((conditionalParams, lambda v: v is not None), (stunConditionParams, lambda s: _isStunParamVisible(self._itemDescr.shot.shell))))
         return result
@@ -572,12 +652,12 @@ class VehicleParams(_ParameterBase):
 
     @staticmethod
     def getBonuses(vehicle):
-        installedItems = [ item for item in vehicle.equipment.regularConsumables.getInstalledItems() ]
+        installedItems = [ item for item in vehicle.consumables.installed.getItems() ]
         result = [ (eq.name, eq.itemTypeName) for eq in installedItems ]
-        optDevs = [ item for item in vehicle.optDevices if item is not None ]
+        optDevs = vehicle.optDevices.installed.getItems()
         optDevs = [ (device.name, device.itemTypeName) for device in optDevs ]
         result.extend(optDevs)
-        for battleBooster in vehicle.equipment.battleBoosterConsumables.getInstalledItems():
+        for battleBooster in vehicle.battleBoosters.installed.getItems():
             result.append((battleBooster.name, 'battleBooster'))
 
         for _, tankman in vehicle.crew:
@@ -633,6 +713,14 @@ class VehicleParams(_ParameterBase):
     def _getVehicleDescriptor(self, vehicle):
         return vehicle.descriptor
 
+    def __speedLimits(self, limits, miscAttrs=None):
+        correction = []
+        if miscAttrs:
+            if len(miscAttrs) > len(limits):
+                raise SoftException('correction can not be less than speed limits')
+            correction = map(self._itemDescr.miscAttrs.get, miscAttrs)
+        return [ round(speed * METERS_PER_SECOND_TO_KILOMETERS_PER_HOUR + correct, 2) for speed, correct in izip_longest(limits, correction, fillvalue=0) ]
+
     def __adjustmentCoefficient(self, paramName):
         return self._itemDescr.type.clientAdjustmentFactors[paramName]
 
@@ -647,19 +735,22 @@ class VehicleParams(_ParameterBase):
         return len(vDescr.hull.fakeTurrets['lobby']) != len(vDescr.turrets)
 
     def __hasHydraulicSiegeMode(self):
-        return not self._itemDescr.isWheeledVehicle and self._itemDescr.hasSiegeMode
+        return self._itemDescr.hasSiegeMode and (self._itemDescr.hasHydraulicChassis or self._itemDescr.hasAutoSiegeMode)
 
     def __hasWheeledSwitchMode(self):
         return self._itemDescr.isWheeledVehicle and self._itemDescr.hasSiegeMode
+
+    def __hasTurboshaftSwitchMode(self):
+        return self._itemDescr.hasTurboshaftEngine and self._itemDescr.hasSiegeMode
 
     def __getRealSpeedLimit(self):
         enginePower = self.__getEnginePhysics()['smplEnginePower']
         rollingFriction = self.__getChassisPhysics()['grounds']['medium']['rollingFriction']
         return enginePower / self.vehicleWeight.current * METERS_PER_SECOND_TO_KILOMETERS_PER_HOUR * self.__factors['engine/power'] / 12.25 / rollingFriction
 
-    def __getInvisibilityValues(self):
+    def __getInvisibilityValues(self, itemDescription):
         camouflageFactor = self.__factors.get('camouflage', 1)
-        moving, still = items_utils.getClientInvisibility(self._itemDescr, self.__vehicle, camouflageFactor, self.__factors)
+        moving, still = items_utils.getClientInvisibility(itemDescription, self.__vehicle, camouflageFactor, self.__factors)
         moving *= ONE_HUNDRED_PERCENTS
         still *= ONE_HUNDRED_PERCENTS
         movingAtShot = moving * self.invisibilityFactorAtShot
@@ -682,6 +773,9 @@ class VehicleParams(_ParameterBase):
             return (min([ key for _, key in minPitch ]) + hullAimingPitchMin, max([ key for _, key in maxPitch ]) + hullAimingPitchMax)
         else:
             return self._itemDescr.gun.pitchLimits['absolute']
+
+    def __getEnginePower(self, power):
+        return round(power * self.__factors['engine/power'] * self._itemDescr.miscAttrs['enginePowerFactor'] / component_constants.HP_TO_WATTS)
 
     def __getSwitchOffTime(self):
         siegeMode = self._itemDescr.type.siegeModeParams
@@ -727,7 +821,8 @@ class VehicleParams(_ParameterBase):
         return self._itemDescr.gun.shots[self._itemDescr.activeGunShotIndex]
 
     def __getTerrainResistanceFactors(self):
-        return map(operator.mul, self.__factors['chassis/terrainResistance'], self._itemDescr.physics['rollingFrictionFactors'])
+        terrainResistancePhysicsFactors = map(operator.truediv, self._itemDescr.physics['terrainResistance'], self._itemDescr.chassis.terrainResistance)
+        return map(operator.mul, self.__factors['chassis/terrainResistance'], terrainResistancePhysicsFactors)
 
 
 class GunParams(WeightedParam):
@@ -941,6 +1036,19 @@ class ShellParams(CompatibleParams):
     @property
     def stunMinDuration(self):
         return self._itemDescr.stun.guaranteedStunDuration * self._itemDescr.stun.stunDuration if self._itemDescr.hasStun else None
+
+    @property
+    def stunDurationList(self):
+        return (self.stunMinDuration, self.stunMaxDuration) if self._itemDescr.hasStun else None
+
+    @property
+    def shotSpeed(self):
+        if self._itemDescr.kind in _SHELL_KINDS and self._vehicleDescr is not None:
+            result = self.__getShellDescriptor()
+            if result:
+                projSpeedFactor = vehicles.g_cache.commonConfig['miscParams']['projectileSpeedFactor']
+                return result.speed / projSpeedFactor
+        return
 
     def getParamsDict(self):
         stunConditionParams = ('stunMaxDuration', 'stunMinDuration')

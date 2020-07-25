@@ -24,7 +24,7 @@ class ContextMenuContent(View):
     def viewModel(self):
         return super(ContextMenuContent, self).getViewModel()
 
-    def _onLoading(self):
+    def _onLoading(self, *args, **kwargs):
         with self.viewModel.transaction() as tx:
             self._initItems()
             total = len(tx.contextMenuList.getItems())

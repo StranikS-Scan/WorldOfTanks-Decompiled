@@ -274,16 +274,28 @@
             </and>
           </account>
           <vehicle>
-            <and>
-              <vehicleDescr>
-                <levels>	3 4 5 6 7 8 9 10	</levels>
-              </vehicleDescr>
-              <consumables>
-                <equipmentCount>
-                  <greaterOrEqual>	3	</greaterOrEqual>
-                </equipmentCount>
-              </consumables>
-            </and>
+            <or>
+              <and>
+                <vehicleDescr>
+                  <levels>	3	</levels>
+                </vehicleDescr>
+                <consumables>
+                  <equipmentCount>
+                    <greaterOrEqual>	2	</greaterOrEqual>
+                  </equipmentCount>
+                </consumables>
+              </and>
+              <and>
+                <vehicleDescr>
+                  <levels>	4 5 6 7 8 9 10	</levels>
+                </vehicleDescr>
+                <consumables>
+                  <equipmentCount>
+                    <greaterOrEqual>	3	</greaterOrEqual>
+                  </equipmentCount>
+                </consumables>
+              </and>
+            </or>
           </vehicle>
           <battle>
             <bonusTypes>	1 24	</bonusTypes>
@@ -366,8 +378,12 @@
         </common>
       </conditions>
       <bonus>
-        <item>	1785	  <count>	1	</count>
+        <item>	18937	  <count>	1	</count>
         </item>
+        <goodie>
+          <id>	12852	</id>
+          <count>	1	</count>
+        </goodie>
         <token>
           <id>	linkedset_2_7_unlock	</id>
           <expires>	01.12.2050 05:10	</expires>

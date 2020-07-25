@@ -1,15 +1,33 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/event_dispatcher.py
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.battle_control.avatar_getter import isVehicleAlive
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent, LoadViewEvent
+from helpers import dependency
+from skeletons.gui.app_loader import IAppLoader
 _SCOPE = EVENT_BUS_SCOPE.BATTLE
 
 def _makeKeyCtx(key=0, isDown=False):
     return {'key': key,
      'isDown': isDown}
+
+
+@dependency.replace_none_kwargs(appLoader=IAppLoader)
+def _killHelpView(appLoader=None):
+    battleApp = appLoader.getDefBattleApp()
+    if battleApp is None:
+        return False
+    else:
+        for alias in (VIEW_ALIAS.INGAME_HELP, VIEW_ALIAS.INGAME_DETAILS_HELP):
+            view = battleApp.containerManager.getViewByKey(ViewKey(alias))
+            if view is not None:
+                view.destroy()
+                return True
+
+        return False
 
 
 def showExtendedInfo(isDown):
@@ -21,10 +39,14 @@ def choiceConsumable(key):
 
 
 def toggleHelp():
+    if _killHelpView():
+        return
     g_eventBus.handleEvent(GameEvent(GameEvent.HELP), scope=_SCOPE)
 
 
 def toggleHelpDetailed(ctx):
+    if _killHelpView():
+        return
     g_eventBus.handleEvent(GameEvent(GameEvent.HELP_DETAILED, ctx), scope=_SCOPE)
 
 

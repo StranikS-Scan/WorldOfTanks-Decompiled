@@ -266,16 +266,6 @@
         </set-visible>
         <set-visible>	HangarParams	  <val>	True	</val>
         </set-visible>
-        <set-visible>	HangarModuleGun	  <val>	True	</val>
-        </set-visible>
-        <set-visible>	HangarModuleTurret	  <val>	True	</val>
-        </set-visible>
-        <set-visible>	HangarModuleEngine	  <val>	True	</val>
-        </set-visible>
-        <set-visible>	HangarModuleChassis	  <val>	True	</val>
-        </set-visible>
-        <set-visible>	HangarModuleRadio	  <val>	True	</val>
-        </set-visible>
         <update-layout>	AmmunitionPanel	</update-layout>
         <set-visible>	TankCarouselContainer	  <val>	True	</val>
         </set-visible>
@@ -283,17 +273,13 @@
         </set-visible>
         <set-visible>	CrewPanel	  <val>	True	</val>
         </set-visible>
-        <set-visible>	HangarEquipment1	  <val>	True	</val>
+        <global-activate>	BootcampPanelEquipmentMC	</global-activate>
+        <global-activate>	BootcampPanelOptDeviceMC	</global-activate>
+        <set-visible>	AmmunitionPanel	  <val>	True	</val>
         </set-visible>
-        <set-visible>	HangarEquipment2	  <val>	True	</val>
+        <set-visible>	HangarEquipmentSlots	  <val>	True	</val>
         </set-visible>
-        <set-visible>	HangarEquipment3	  <val>	True	</val>
-        </set-visible>
-        <set-visible>	OptionalDevice1DropDown	  <val>	True	</val>
-        </set-visible>
-        <set-visible>	OptionalDevice2DropDown	  <val>	True	</val>
-        </set-visible>
-        <set-visible>	OptionalDevice3DropDown	  <val>	True	</val>
+        <set-visible>	HangarOptionalDeviceSlots	  <val>	True	</val>
         </set-visible>
         <set-var>	SecondVehicleSetter	</set-var>
         <select-in-hangar>	SecondVehicleCD	</select-in-hangar>

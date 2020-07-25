@@ -17,7 +17,7 @@ from gui.shared import event_dispatcher
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.tankmen import formatDeletedTankmanStr
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.processors.vehicle import VehicleSeller
+from gui.shared.gui_items.processors.vehicle import VehicleSeller, getCustomizationItemSellCountForVehicle
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.money import Currency, MONEY_UNDEFINED
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
@@ -248,23 +248,22 @@ class VehicleSellDialog(VehicleSellDialogMeta):
 
     def __prepareVehicleOptionalDevices(self, vehicle, currentBalance):
         onVehicleOptionalDevices = []
-        for optDevice in vehicle.optDevices:
-            if optDevice is not None:
-                data = _OptionalDeviceData(optDevice)
-                removeCurrency = _findCurrency(currentBalance, data.itemRemovalPrice)
-                if removeCurrency is not None:
-                    currentBalance -= data.itemRemovalPrice.extract(removeCurrency)
-                data.removeCurrency = removeCurrency
-                if data.isRemovableForMoney:
-                    data.toInventory = data.removeCurrency is not None
-                self.__addVSDItem(data)
-                onVehicleOptionalDevices.append(data.toFlashVO())
+        for optDevice in vehicle.optDevices.installed.getItems():
+            data = _OptionalDeviceData(optDevice, vehicle)
+            removeCurrency = _findCurrency(currentBalance, data.itemRemovalPrice)
+            if removeCurrency is not None:
+                currentBalance -= data.itemRemovalPrice.extract(removeCurrency)
+            data.removeCurrency = removeCurrency
+            if data.isRemovableForMoney:
+                data.toInventory = data.removeCurrency is not None
+            self.__addVSDItem(data)
+            onVehicleOptionalDevices.append(data.toFlashVO())
 
         return (onVehicleOptionalDevices, currentBalance)
 
     def __prepareVehicleEquipments(self, vehicle):
         onVehicleEquipments = []
-        for equipment in vehicle.equipment.regularConsumables.getInstalledItems():
+        for equipment in vehicle.consumables.installed.getItems():
             if equipment.isBuiltIn:
                 continue
             data = _VSDItemData(equipment, FITTING_TYPES.EQUIPMENT)
@@ -275,7 +274,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
 
     def __prepareVehicleBoosters(self, vehicle):
         onVehicleBattleBoosters = []
-        installedItems = vehicle.equipment.battleBoosterConsumables.getInstalledItems()
+        installedItems = vehicle.battleBoosters.installed.getItems()
         for booster in installedItems:
             data = _BoosterData(booster)
             self.__addVSDItem(data)
@@ -290,11 +289,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
             installedCustomizations = sorted(installedCustomizations, key=lambda item: TYPES_ORDER.index(item.itemTypeID))
         customizationOnVehicle = []
         for customization in installedCustomizations:
-            count = customization.installedCount(vehicle.intCD)
-            if customization.isProgressive:
-                inventoryCount = customization.fullInventoryCount(vehicle.intCD)
-                count += min(0, inventoryCount - customization.descriptor.progression.autoGrantCount)
-                count = max(0, count)
+            count = getCustomizationItemSellCountForVehicle(customization, vehicle.intCD)
             if count:
                 data = _CustomizationData(customization, count)
                 self.__addVSDItem(data)
@@ -314,11 +309,10 @@ class VehicleSellDialog(VehicleSellDialogMeta):
 
     def __prepareOnVehicleShells(self, vehicle):
         onVehicleShells = []
-        for shell in vehicle.shells:
-            if shell is not None:
-                data = _ShellData(shell, False, shell.intCD in self.__otherVehicleShells)
-                self.__addVSDItem(data)
-                onVehicleShells.append(data.toFlashVO())
+        for shell in vehicle.shells.installed.getItems():
+            data = _ShellData(shell, False, shell.intCD in self.__otherVehicleShells)
+            self.__addVSDItem(data)
+            onVehicleShells.append(data.toFlashVO())
 
         return onVehicleShells
 
@@ -638,9 +632,9 @@ class _OptionalDeviceData(_VSDItemData):
     __slots__ = ()
     __itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, optDevice):
+    def __init__(self, optDevice, vehicle=None):
         super(_OptionalDeviceData, self).__init__(optDevice, FITTING_TYPES.OPTIONAL_DEVICE)
-        self._flashData['isRemovable'] = optDevice.isRemovable
+        self._flashData['isRemovable'] = optDevice.isRemovable or self.__isAfterConversion(vehicle)
         removalPrice = optDevice.getRemovalPrice(self.__itemsCache.items)
         if removalPrice.isActionPrice():
             self._flashData['removeActionPrice'] = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'paidRemovalCost', True, removalPrice.price, removalPrice.defPrice)
@@ -648,3 +642,6 @@ class _OptionalDeviceData(_VSDItemData):
         if isDemountKitApplicableTo(optDevice):
             self._itemRemovalPrice += _DEMOUNT_KIT_ONE
         self._flashData['removePrice'] = self._itemRemovalPrice.toDict()
+
+    def __isAfterConversion(self, vehicle):
+        return vehicle is not None and not self.guiItem.descriptor.checkCompatibilityWithVehicle(vehicle.descriptor)[0]

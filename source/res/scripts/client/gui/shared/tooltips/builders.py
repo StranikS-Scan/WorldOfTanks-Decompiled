@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/builders.py
 import importlib
 import logging
+from gui.Scaleform.daapi.settings.config import ADVANCED_COMPLEX_TOOLTIPS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.gui_items.artefacts import OptionalDevice
 from gui.shared.tooltips import complex_formatters
@@ -9,9 +10,7 @@ from gui.shared.tooltips import contexts, advanced
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from soft_exception import SoftException
-from constants import IS_CHINA
 _logger = logging.getLogger(__name__)
-_SUPPORT_ADVANCED = not IS_CHINA
 DISABLED_ITEMS_ID = 12793
 
 class TooltipBuilder(object):
@@ -95,10 +94,7 @@ class AdvancedDataBuilder(AdvancedBuilder):
         return self._provider
 
     def supportAdvanced(self, tooltipType, *args):
-        if not _SUPPORT_ADVANCED:
-            return False
-        else:
-            return self._condition(*args) if self._condition is not None else True
+        return self._condition(*args) if self._condition is not None else True
 
     def _buildData(self, advanced_, *args, **kwargs):
         disableAnim = self._getDisableAnimFlag()
@@ -161,7 +157,7 @@ class ComplexBuilder(AdvancedBuilder):
         self.advancedComplexTooltips = advancedComplexTooltips
 
     def supportAdvanced(self, tooltipType, *args):
-        return _SUPPORT_ADVANCED and tooltipType in self.advancedComplexTooltips
+        return tooltipType in self.advancedComplexTooltips
 
     def build(self, manager, formatType, advanced_, *args, **kwargs):
         data = complex_formatters.doFormatToolTip(args[0], formatType)
@@ -183,6 +179,34 @@ class ComplexBuilder(AdvancedBuilder):
         else:
             _logger.debug('Complex tooltip %s can not be shown: %r', formatType, args)
         return
+
+
+class AdvancedComplexBuilder(AdvancedBuilder):
+
+    def __init__(self, tooltipType, linkage, provider):
+        super(AdvancedComplexBuilder, self).__init__(tooltipType, linkage)
+        self._provider = provider
+
+    def supportAdvanced(self, _, *args):
+        linkage = args[0]
+        return linkage in ADVANCED_COMPLEX_TOOLTIPS
+
+    def build(self, manager, formatType, advanced_, *args, **kwargs):
+        disableAnim = self._getDisableAnimFlag()
+        linkage = args[0]
+        supportAdvanced = self.supportAdvanced(self.tooltipType, linkage)
+        if advanced_ and supportAdvanced:
+            item = ADVANCED_COMPLEX_TOOLTIPS[linkage]
+            data = advanced.ComplexAdvanced(contexts.ToolTipContext(None)).buildToolTip((item, linkage))
+            if not disableAnim:
+                self._setDisableAnimFlag()
+        else:
+            data = self._provider.buildToolTip(*args)
+            if supportAdvanced:
+                self._provider.addAdvancedBlock(data, disableAnim)
+        if data:
+            manager.show(data, self._linkage)
+        return self._provider
 
 
 class BuildersCollection(object):

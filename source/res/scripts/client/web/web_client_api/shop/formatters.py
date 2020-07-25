@@ -7,20 +7,27 @@ from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.game_control.veh_comparison_basket import isValidVehicleForComparing
 from gui.shop import SHOP_RENT_SEASON_TYPE_MAP, SHOP_RENT_TYPE_MAP
-from gui.shared.gui_items import KPI, CREW_SKILL_TO_KPI_NAME_MAP
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.shared.gui_items import KPI, CREW_SKILL_TO_KPI_NAME_MAP, GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle, getUserName, getShortUserName
 from helpers import dependency, i18n, time_utils
 from items.components.skills_constants import PERKS
+from items.components.supply_slot_categories import SlotCategories
 from rent_common import SeasonRentDuration
 from skeletons.gui.shared import IItemsCache
 from items.vehicles import g_list
 from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup, getGroupByVehTypeCompactDescr
 import nations
+COLOR_TAG_OPEN = '{colorTagOpen}'
+COLOR_TAG_CLOSE = '{colorTagClose}'
 _WHITESPACE_RE = re.compile('\\s+')
-_COLOR_TAG_OPEN = '{colorTagOpen}'
-_COLOR_TAG_CLOSE = '{colorTagClose}'
 _RENT_DURATION_MAP = {SeasonRentDuration.ENTIRE_SEASON: SHOP_RENT_TYPE_MAP[RentType.SEASON_RENT],
  SeasonRentDuration.SEASON_CYCLE: SHOP_RENT_TYPE_MAP[RentType.SEASON_CYCLE_RENT]}
+
+def formatValueToColorTag(value):
+    return COLOR_TAG_OPEN + value + COLOR_TAG_CLOSE
+
 
 def _formatPrice(itemPrice):
     if itemPrice.isActionPrice():
@@ -37,22 +44,22 @@ def _formatFloat(val):
 
 def _formatKPI(kpiList):
 
-    def formatKPIValue(kpi):
-        if kpi.type is KPI.Type.ONE_OF:
-            return _formatKPI(kpi.value)
-        return _formatFloat(kpi.value) if kpi.type in {KPI.Type.MUL, KPI.Type.ADD} else kpi.value
+    def _formatKPIValue(kpi, value):
+        if kpi.type == KPI.Type.AGGREGATE_MUL:
+            minValue, maxValue = value
+            return (_formatFloat(minValue), _formatFloat(maxValue))
+        return _formatFloat(value) if kpi.type in (KPI.Type.MUL, KPI.Type.ADD) else value
 
     return [ {'name': kpi.name,
      'type': kpi.type,
-     'value': formatKPIValue(kpi)} for kpi in kpiList ]
+     'specValue': _formatKPIValue(kpi, kpi.specValue) if kpi.specValue else None,
+     'vehicleTypes': kpi.vehicleTypes,
+     'value': _formatKPIValue(kpi, kpi.value) if kpi.type != KPI.Type.ONE_OF else _formatKPI(kpi.value),
+     'descr': backport.text(kpi.getDescriptionR()) if kpi.getDescriptionR() > 0 else ''} for kpi in kpiList ]
 
 
 def _formatActionParams(actionInfo):
     return actionInfo.discount.getParams()
-
-
-def _formatValueToColorTag(value):
-    return _COLOR_TAG_OPEN + value + _COLOR_TAG_CLOSE
 
 
 def _formatTechName(value):
@@ -133,6 +140,30 @@ def _formatShortUserName(item):
     return getShortUserName(item.descriptor.type, textPrefix=True) if isinstance(item, Vehicle) else item.shortUserName
 
 
+def _formatOptDeviceCategories(item):
+    return list(item.descriptor.categories) if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE else []
+
+
+def _formatOptDeviceEffects(item):
+    if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
+        itemR = R.strings.artefacts.dyn(item.descriptor.groupName)
+        effectR = itemR.dyn('effect') if itemR else None
+        effectsList = [ backport.text(effect()) for effect in effectR.values() ] if effectR else []
+        return effectsList
+    else:
+        return []
+
+
+def _formatTags(item):
+    if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
+        tags = set(item.tags)
+        tags.difference_update(SlotCategories.ALL)
+        tags.add(item.descriptor.tierlessName)
+        tags.update(item.descriptor.categories)
+        return list(tags)
+    return list(item.tags)
+
+
 Field = namedtuple('Field', ('name', 'getter'))
 idField = Field('id', lambda i: i.intCD)
 nameField = Field('name', _formatUserName)
@@ -146,10 +177,13 @@ longDescriptionSpecialField = Field('longDescriptionSpecial', lambda i: i.longDe
 inventoryCountField = Field('inventoryCount', lambda i: i.inventoryCount)
 buyPriceField = Field('buyPrice', lambda i: _formatPrice(i.buyPrices.itemPrice))
 sellPriceField = Field('sellPrice', lambda i: _formatPrice(i.sellPrices.itemPrice))
-tagsField = Field('tags', lambda i: list(i.tags))
-kpiField = Field('kpi', lambda i: _formatKPI(i.kpi))
+tagsField = Field('tags', _formatTags)
+kpiField = Field('kpi', lambda i: _formatKPI(i.getKpi()))
 techNameField = Field('techName', lambda i: _formatTechName(i.name))
 imagesField = Field('images', _formatImagePaths)
+optDeviceCategoriesField = Field('categories', _formatOptDeviceCategories)
+optDeviceEffectField = Field('effects', _formatOptDeviceEffects)
+optDeviceGroupName = Field('groupName', lambda i: backport.text(R.strings.artefacts.dyn(i.descriptor.tierlessName).name()))
 _vehicleComponentsFieldSet = (idField,
  nameField,
  techNameField,
@@ -161,6 +195,7 @@ _vehicleComponentsFieldSet = (idField,
  longDescriptionSpecialField,
  imagesField)
 _vehicleArtifactsFieldSet = _vehicleComponentsFieldSet + (tagsField, kpiField)
+_vehicleOptDeviceFieldSet = _vehicleArtifactsFieldSet + (optDeviceCategoriesField, optDeviceEffectField, optDeviceGroupName)
 
 class Formatter(object):
     __slots__ = ('__fields',)
@@ -228,13 +263,13 @@ def makeVehicleFormatter(includeInventoryFields=False):
      isNotComparingAvailableField]
     if includeInventoryFields:
         shellFormatter = makeShellFormatter(includeCount=True)
-        shellsField = Field('shells', lambda i: [ shellFormatter.format(s) for s in i.shells ])
+        shellsField = Field('shells', lambda i: [ shellFormatter.format(s) for s in i.shells.installed.getItems() ])
         moduleFormatter = makeModuleFormatter()
         modulesField = Field('modules', lambda i: [ moduleFormatter.format(m) for m in i.modules if m is not None ])
         deviceFormatter = makeDeviceFormatter()
-        devicesField = Field('devices', lambda i: [ (deviceFormatter.format(d) if d is not None else None) for d in i.optDevices ])
+        devicesField = Field('devices', lambda i: [ (deviceFormatter.format(d) if d is not None else None) for d in i.optDevices.installed ])
         equipmentFormatter = makeEquipmentFormatter()
-        equipmentField = Field('equipment', lambda i: [ (equipmentFormatter.format(e) if e is not None else None) for e in i.equipment.regularConsumables.getInstalledItems() ])
+        equipmentField = Field('equipment', lambda i: [ (equipmentFormatter.format(e) if e is not None else None) for e in i.consumables.installed.getItems() ])
         crewFormatter = makeCrewFormatter()
         crewField = Field('crew', lambda i: [ (crewFormatter.format(c) if c else None) for _, c in i.crew ])
 
@@ -261,7 +296,7 @@ def makeVehicleFormatter(includeInventoryFields=False):
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def makeDeviceFormatter(compatVehGetter=None, fittedVehGetter=None, itemsCache=None):
-    fields = list(_vehicleArtifactsFieldSet)
+    fields = list(_vehicleOptDeviceFieldSet)
     fields.append(Field('removePrice', lambda i: _formatPrice(i.getRemovalPrice(itemsCache.items))))
     if compatVehGetter:
         fields.append(Field('compatVehicles', lambda i: compatVehGetter(i.intCD)))
@@ -303,7 +338,7 @@ def makeBattleBoosterFormatter(fittedVehGetter=None):
         return i18n.makeString(key)
 
     def formatBoosterDescription(i):
-        return i.getCrewBoosterDescription(False) if i.isCrewBooster() else i.getOptDeviceBoosterDescription(vehicle=None, valueFormatter=_formatValueToColorTag)
+        return i.getCrewBoosterDescription(False) if i.isCrewBooster() else i.getOptDeviceBoosterDescription(vehicle=None, valueFormatter=formatValueToColorTag)
 
     fields.extend([Field('affectedSkill', formatAffectedSkill),
      Field('affectedSkillName', lambda i: i.getAffectedSkillUserName()),
@@ -319,7 +354,7 @@ def makeBoosterFormatter():
     fields = [Field('id', lambda booster: booster.boosterID),
      Field('inventoryCount', lambda booster: booster.count),
      Field('kpi', lambda booster: _formatKPI(booster.kpi)),
-     Field('description', lambda booster: booster.getBonusDescription(valueFormatter=_formatValueToColorTag)),
+     Field('description', lambda booster: booster.getBonusDescription(valueFormatter=formatValueToColorTag)),
      shortDescriptionSpecialField,
      longDescriptionSpecialField,
      Field('duration', lambda booster: booster.effectTime),

@@ -22,20 +22,6 @@ _DELTA_PARAM_COLOR_SCHEME = (text_styles.error, text_styles.main, text_styles.bo
 _NO_COLOR_SCHEMES = (_HEADER_PARAM_NO_COLOR_SCHEME, _PARAM_NO_COLOR_SCHEME)
 _COLOR_SCHEMES = (_HEADER_PARAM_COLOR_SCHEME, _PARAM_COLOR_SCHEME)
 
-def _generateFormatSettings():
-    space = ' '
-    copy = {}
-    for originalName, originalSetting in FORMAT_SETTINGS.iteritems():
-        settingCopy = originalSetting.copy()
-        if 'separator' in settingCopy:
-            settingCopy['separator'] = ''.join((space, settingCopy['separator'], space))
-        copy[originalName] = settingCopy
-
-    return copy
-
-
-_CMP_FORMAT_SETTINGS = _generateFormatSettings()
-
 class _BestParamsDict(dict):
 
     def __init__(self, seq=None, **kwargs):
@@ -104,13 +90,13 @@ class _VehParamsValuesGenerator(VehParamsBaseGenerator):
 
     def _makeSimpleParamHeaderVO(self, param, isOpen, comparator):
         data = super(_VehParamsValuesGenerator, self)._makeSimpleParamHeaderVO(param, isOpen, comparator)
-        data['text'] = formatters.formatParameter(param.name, param.value, param.state, self.__headerScheme, _CMP_FORMAT_SETTINGS, False)
+        data['text'] = formatters.formatParameter(param.name, param.value, param.state, self.__headerScheme, FORMAT_SETTINGS, False)
         return data
 
     def _makeAdvancedParamVO(self, param):
         data = super(_VehParamsValuesGenerator, self)._makeAdvancedParamVO(param)
         if param.value:
-            data['text'] = formatters.formatParameter(param.name, param.value, param.state, self.__bodyScheme, _CMP_FORMAT_SETTINGS, False)
+            data['text'] = formatters.formatParameter(param.name, param.value, param.state, self.__bodyScheme, FORMAT_SETTINGS, False)
         else:
             data['text'] = getUndefinedParam()
         return data
@@ -259,7 +245,7 @@ class _VehCompareParametersData(object):
         params = self.getParams()
         if paramName in params:
             pInfo = getParamExtendedData(paramName, params[paramName], paramValue)
-            return formatters.formatParameterDelta(pInfo, _DELTA_PARAM_COLOR_SCHEME, _CMP_FORMAT_SETTINGS)
+            return formatters.formatParameterDelta(pInfo, _DELTA_PARAM_COLOR_SCHEME, FORMAT_SETTINGS)
 
     @classmethod
     def _getConfigurationType(cls, mType):

@@ -14,6 +14,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
 from gui.shared.gui_items.fitting_item import FittingItem, RentalInfoProvider
 from gui.shared.image_helper import getTextureLinkByID
 from gui.shared.utils.functions import getImageResourceFromPath
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from helpers import dependency
 from items import makeIntCompactDescrByID
@@ -170,6 +171,10 @@ class ConcealmentBonus(object):
         return '{:.0%}'.format(self.getValue(vehicle))
 
     @property
+    def iconBig(self):
+        return backport.image(R.images.gui.maps.icons.customization.customization_items.c_180x135.icon_camouflage())
+
+    @property
     def icon(self):
         return backport.image(R.images.gui.maps.icons.library.qualifiers.c_42x42.camouflage())
 
@@ -310,6 +315,9 @@ class Customization(FittingItem):
     @property
     def inventoryCount(self):
         return self._inventoryCount
+
+    def getBonusIcon(self, size='small'):
+        return RES_ICONS.getBonusIcon(size, self.itemTypeName)
 
     def boundInventoryCount(self, vehicleIntCD=None):
         if vehicleIntCD is not None:

@@ -970,6 +970,8 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BRBATTLERESULTS_LEVELEARNED = '#messenger:serviceChannelMessages/BRbattleResults/levelEarned'
     SERVICECHANNELMESSAGES_BRVEHICLESINVOICE_BUTTON = '#messenger:serviceChannelMessages/BRVehiclesInvoice/button'
     SERVICECHANNELMESSAGES_BRVEHICLESINVOICE_DESCR = '#messenger:serviceChannelMessages/BRVehiclesInvoice/descr'
+    SERVICECHANNELMESSAGES_DEDICATIONREWARD_HEADER = '#messenger:serviceChannelMessages/dedicationReward/header'
+    SERVICECHANNELMESSAGES_DEDICATIONREWARD_TEXT = '#messenger:serviceChannelMessages/dedicationReward/text'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_TRY_LATER,
      CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,

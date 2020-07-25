@@ -933,7 +933,7 @@ class _DetailedPrivateMissionInfo(_DetailedMissionInfo, _PrivateMissionInfo):
 
     @classmethod
     def _getPersonalWeeklyStatusLabel(cls, statusLabel, bonusLimit, bonusCount):
-        weeklyLeftLabel = text_styles.standard(_ms(QUESTS.MISSIONDETAILS_PERSONALQUEST_COMPLETE_LEFT_WEEKLY, count=text_styles.stats(max(bonusLimit - bonusCount, 0))))
+        weeklyLeftLabel = text_styles.standard(_ms(QUESTS.MISSIONDETAILS_PERSONALQUEST_DETAILS_COMPLETE_LEFT_WEEKLY, count=text_styles.stats(max(bonusLimit - bonusCount, 0))))
         return '%s\n%s' % (statusLabel, weeklyLeftLabel)
 
 

@@ -750,6 +750,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                             'vehicleCD': None},
                         'storage_reserves': {'filterMask': 0},
                         'storage_customization': {'filterMask': 0},
+                        'storage_opt_devices': {'filterMask': 0,
+                                                'vehicleCD': None},
                         LAST_STORAGE_VISITED_TIMESTAMP: -1,
                         SESSION_STATS_PREV_BATTLE_COUNT: 0},
  KEY_UI_FLAGS: {}}

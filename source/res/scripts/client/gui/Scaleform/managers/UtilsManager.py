@@ -11,7 +11,7 @@ import BigWorld
 from gui import GUI_NATIONS
 from gui.shared import utils
 from gui.Scaleform.framework.entities.abstract.UtilsManagerMeta import UtilsManagerMeta
-from gui.shared.utils.key_mapping import SCALEFORM_TO_BW, canGetVirtualKey, BW_TO_SCALEFORM
+from gui.shared.utils.key_mapping import SCALEFORM_TO_BW, canGetVirtualKey, BW_TO_SCALEFORM, MappingType
 from helpers import i18n, getClientLanguage
 SECONDS_IN_MINUTE = 60
 MINUTES_IN_HOUR = 60
@@ -53,7 +53,10 @@ class UtilsManager(UtilsManagerMeta):
         if inKey not in SCALEFORM_TO_BW or not self.__isKeyboardKey(inKey):
             return inKey
         tkey = SCALEFORM_TO_BW[inKey]
-        return inKey if tkey == KEY_NONE or not canGetVirtualKey(tkey) else BigWorld.mapVirtualKey(tkey, 1)
+        return inKey if tkey == KEY_NONE or not canGetVirtualKey(tkey) else BigWorld.mapVirtualKey(tkey, MappingType.MAPVK_VSC_TO_VK)
+
+    def getCharFromVirtualKey(self, key):
+        return BigWorld.mapVirtualKey(key, MappingType.MAPVK_VK_TO_CHAR)
 
     def getNationIndices(self):
         return nations.INDICES

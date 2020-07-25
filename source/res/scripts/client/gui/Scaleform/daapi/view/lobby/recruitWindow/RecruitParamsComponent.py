@@ -259,7 +259,8 @@ class RecruitParamsComponent(RecruitParametersMeta):
          'data': data}
 
     def __getNationsCriteria(self):
-        return REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.VEHICLE.OBSERVER | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+        rqc = REQ_CRITERIA
+        return ~(~rqc.UNLOCKED | ~rqc.COLLECTIBLE) | ~rqc.VEHICLE.OBSERVER | ~rqc.VEHICLE.BATTLE_ROYALE
 
     def __getVehicleTypeCriteria(self, nationID, vclass):
         criteria = self.__getClassesCriteria(nationID) | REQ_CRITERIA.VEHICLE.CLASSES([vclass])
@@ -272,7 +273,10 @@ class RecruitParamsComponent(RecruitParametersMeta):
         return criteria
 
     def __getClassesCriteria(self, nationID):
-        return self.__getNationsCriteria() | REQ_CRITERIA.NATIONS([nationID])
+        maxResearchedLevel = self.itemsCache.items.stats.getMaxResearchedLevel(nationID)
+        criteria = self.__getNationsCriteria() | REQ_CRITERIA.NATIONS([nationID])
+        criteria |= ~(REQ_CRITERIA.COLLECTIBLE | ~REQ_CRITERIA.VEHICLE.LEVELS(range(1, maxResearchedLevel + 1)))
+        return criteria
 
     def __getRoleCriteria(self, nationID, vclass, typeID):
         return self.__getVehicleTypeCriteria(nationID, vclass) | REQ_CRITERIA.INNATION_IDS([typeID])
@@ -288,6 +292,7 @@ class RecruitParamsComponent(RecruitParametersMeta):
 
     def __collectPredefinedRoleData(self):
         criteria = self.__getNationsCriteria()
+        maxResLevels = self.itemsCache.items.stats.getMaxResearchedLevelByNations()
         selectedNationsIds = []
         if self.__hasPredefinedNations():
             selectedNationsIds = self.__predefinedNationsIdxs
@@ -296,6 +301,7 @@ class RecruitParamsComponent(RecruitParametersMeta):
                 selectedNationsIds.append(nId)
 
         criteria |= REQ_CRITERIA.NATIONS(selectedNationsIds)
+        criteria |= REQ_CRITERIA.CUSTOM(lambda i: not i.isCollectible or i.level <= maxResLevels.get(i.nationID, constants.MIN_VEHICLE_LEVEL))
         if not constants.IS_IGR_ENABLED:
             criteria |= ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
         if constants.IS_DEVELOPMENT:

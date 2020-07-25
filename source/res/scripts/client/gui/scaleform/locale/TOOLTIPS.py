@@ -851,6 +851,10 @@ class TOOLTIPS(object):
     MODULEFITS_OPERATION_ERROR_HEADER = '#tooltips:moduleFits/operation_error/header'
     MODULEFITS_NEED_TURRET_HEADER = '#tooltips:moduleFits/need_turret/header'
     MODULEFITS_NEED_TURRET_TEXT = '#tooltips:moduleFits/need_turret/text'
+    MODULEFITS_NEED_GUN_HEADER = '#tooltips:moduleFits/need_gun/header'
+    MODULEFITS_NEED_GUN_TEXT = '#tooltips:moduleFits/need_gun/text'
+    MODULEFITS_TOO_HEAVY_CHASSIS_HEADER = '#tooltips:moduleFits/too_heavy_chassis/header'
+    MODULEFITS_TOO_HEAVY_CHASSIS_TEXT = '#tooltips:moduleFits/too_heavy_chassis/text'
     MODULEFITS_TOO_HEAVY_HEADER = '#tooltips:moduleFits/too_heavy/header'
     MODULEFITS_TOO_HEAVY_TEXT = '#tooltips:moduleFits/too_heavy/text'
     MODULEFITS_TOO_HEAVY_CHASSI_HEADER = '#tooltips:moduleFits/too_heavy_chassi/header'
@@ -865,6 +869,8 @@ class TOOLTIPS(object):
     MODULEFITS_WRONG_SLOT_BODY = '#tooltips:moduleFits/wrong_slot/body'
     MODULEFITS_NOT_WITH_INSTALLED_EQUIPMENT_HEADER = '#tooltips:moduleFits/not_with_installed_equipment/header'
     MODULEFITS_NOT_WITH_INSTALLED_EQUIPMENT_TEXT = '#tooltips:moduleFits/not_with_installed_equipment/text'
+    MODULEFITS_CAN_NOT_REMOVE_BUILTIN_EQUIPMENT_HEADER = '#tooltips:moduleFits/can_not_remove_builtin_equipment/header'
+    MODULEFITS_CAN_NOT_REMOVE_BUILTIN_EQUIPMENT_TEXT = '#tooltips:moduleFits/can_not_remove_builtin_equipment/text'
     MODULEFITS_DUPLICATED_HEADER = '#tooltips:moduleFits/duplicated/header'
     MODULEFITS_DUPLICATED_NOTE = '#tooltips:moduleFits/duplicated/note'
     MODULEFITS_NOT_REMOVABLE_DISMANTLING_PRICE = '#tooltips:moduleFits/not_removable/dismantling/price'
@@ -873,6 +879,8 @@ class TOOLTIPS(object):
     MODULEFITS_TROPHYEQUIPMENT_BASIC_DESCRIPTION = '#tooltips:moduleFits/trophyEquipment/basic/description'
     MODULEFITS_TROPHYEQUIPMENT_UPGRADED_HEADER = '#tooltips:moduleFits/trophyEquipment/upgraded/header'
     MODULEFITS_TROPHYEQUIPMENT_UPGRADED_DESCRIPTION = '#tooltips:moduleFits/trophyEquipment/upgraded/description'
+    MODULEFITS_TROPHYEQUIPMENT_CANNOTBUY_HEADER = '#tooltips:moduleFits/trophyEquipment/cannotBuy/header'
+    MODULEFITS_TROPHYEQUIPMENT_CANNOTBUY_DESCRIPTION = '#tooltips:moduleFits/trophyEquipment/cannotBuy/description'
     DEVICEFITS_CREDITS_ERROR_HEADER = '#tooltips:deviceFits/credits_error/header'
     DEVICEFITS_CREDITS_ERROR_TEXT = '#tooltips:deviceFits/credits_error/text'
     DEVICEFITS_NEED_TURRET_HEADER = '#tooltips:deviceFits/need_turret/header'
@@ -890,10 +898,8 @@ class TOOLTIPS(object):
     DEVICEFITS_NOT_WITH_INSTALLED_EQUIPMENT_HEADER = '#tooltips:deviceFits/not_with_installed_equipment/header'
     DEVICEFITS_NOT_FOR_THIS_VEHICLE_TYPE_HEADER = '#tooltips:deviceFits/not_for_this_vehicle_type/header'
     DEVICEFITS_NOT_FOR_THIS_VEHICLE_TYPE_TEXT = '#tooltips:deviceFits/not_for_this_vehicle_type/text'
-    DEVICEFITS_NOT_REMOVABLE_BODY = '#tooltips:deviceFits/not_removable/body'
-    DEVICEFITS_NOT_REMOVABLE_NOTE_HEADER = '#tooltips:deviceFits/not_removable/note_header'
-    DEVICEFITS_NOT_REMOVABLE_NOTE01 = '#tooltips:deviceFits/not_removable/note01'
-    DEVICEFITS_NOT_REMOVABLE_NOTE02 = '#tooltips:deviceFits/not_removable/note02'
+    DEVICEFITS_INCOMPATIBLE_DEVICE_HEADER = '#tooltips:deviceFits/incompatible_device/header'
+    DEVICEFITS_INCOMPATIBLE_DEVICE_TEXT = '#tooltips:deviceFits/incompatible_device/text'
     MODULE_COUNT = '#tooltips:module/count'
     EQUIPMENT_EFFECT = '#tooltips:equipment/effect'
     EQUIPMENT_ONUSE = '#tooltips:equipment/onUse'
@@ -901,6 +907,7 @@ class TOOLTIPS(object):
     EQUIPMENT_RESTRICTION = '#tooltips:equipment/restriction'
     BATTLEBOOSTER_OPTIONALDEVICE = '#tooltips:battleBooster/optionalDevice'
     BATTLEBOOSTER_CREW = '#tooltips:battleBooster/crew'
+    BATTLEBOOSTER_INSTALLATIONEFFECTS = '#tooltips:battleBooster/installationEffects'
     BATTLEBOOSTER_SKILL_LEARNT = '#tooltips:battleBooster/skill/learnt'
     BATTLEBOOSTER_SKILL_NOT_LEARNT = '#tooltips:battleBooster/skill/not_learnt'
     BATTLEBOOSTER_USELESS_HEADER = '#tooltips:battleBooster/useless/header'
@@ -1107,8 +1114,7 @@ class TOOLTIPS(object):
     VEHICLEPARAMS_HULLARMOR = '#tooltips:vehicleParams/hullArmor'
     VEHICLEPARAMS_TURRETARMOR = '#tooltips:vehicleParams/turretArmor'
     VEHICLEPARAMS_PIERCINGPOWER = '#tooltips:vehicleParams/piercingPower'
-    PARAMETER_WEIGHT = '#tooltips:parameter/weight'
-    PARAMETER_WEIGHTUNITS = '#tooltips:parameter/weightUnits'
+    PARAMETER_CATEGORIES = '#tooltips:parameter/categories'
     LEVEL_1 = '#tooltips:level/1'
     LEVEL_2 = '#tooltips:level/2'
     LEVEL_3 = '#tooltips:level/3'
@@ -2022,13 +2028,18 @@ class TOOLTIPS(object):
     TANK_PARAMS_DESC_EXPLOSIONRADIUS = '#tooltips:tank_params/desc/explosionRadius'
     TANK_PARAMS_DESC_INVISIBILITYSTILLFACTOR = '#tooltips:tank_params/desc/invisibilityStillFactor'
     TANK_PARAMS_DESC_INVISIBILITYMOVINGFACTOR = '#tooltips:tank_params/desc/invisibilityMovingFactor'
+    TANK_PARAMS_DESC_TURBOSHAFTINVISIBILITYSTILLFACTOR = '#tooltips:tank_params/desc/turboshaftInvisibilityStillFactor'
+    TANK_PARAMS_DESC_TURBOSHAFTINVISIBILITYMOVINGFACTOR = '#tooltips:tank_params/desc/turboshaftInvisibilityMovingFactor'
     TANK_PARAMS_DESC_SWITCHONTIME = '#tooltips:tank_params/desc/switchOnTime'
     TANK_PARAMS_DESC_SWITCHOFFTIME = '#tooltips:tank_params/desc/switchOffTime'
     TANK_PARAMS_DESC_SWITCHTIME = '#tooltips:tank_params/desc/switchTime'
     TANK_PARAMS_DESC_WHEELEDSWITCHONTIME = '#tooltips:tank_params/desc/wheeledSwitchOnTime'
     TANK_PARAMS_DESC_WHEELEDSWITCHOFFTIME = '#tooltips:tank_params/desc/wheeledSwitchOffTime'
+    TANK_PARAMS_DESC_TURBOSHAFTSWITCHTIME = '#tooltips:tank_params/desc/turboshaftSwitchTime'
     TANK_PARAMS_DESC_WHEELEDSWITCHTIME = '#tooltips:tank_params/desc/wheeledSwitchTime'
     TANK_PARAMS_DESC_WHEELEDSPEEDMODESPEED = '#tooltips:tank_params/desc/wheeledSpeedModeSpeed'
+    TANK_PARAMS_DESC_TURBOSHAFTSPEEDMODESPEED = '#tooltips:tank_params/desc/turboshaftSpeedModeSpeed'
+    TANK_PARAMS_DESC_TURBOSHAFTENGINEPOWER = '#tooltips:tank_params/desc/turboshaftEnginePower'
     TANK_PARAMS_DESC_STUNMINDURATION = '#tooltips:tank_params/desc/stunMinDuration'
     TANK_PARAMS_DESC_STUNMAXDURATION = '#tooltips:tank_params/desc/stunMaxDuration'
     TANK_PARAMS_DESC_CHARGETIME = '#tooltips:tank_params/desc/chargeTime'
@@ -2328,7 +2339,6 @@ class TOOLTIPS(object):
     ADVANCED_GASOLINE100 = '#tooltips:advanced/gasoline100'
     ADVANCED_GASOLINE105 = '#tooltips:advanced/gasoline105'
     ADVANCED_REMOVEDRPMLIMITER = '#tooltips:advanced/removedRpmLimiter'
-    ADVANCED_TOOLBOX = '#tooltips:advanced/toolbox'
     ADVANCED_ENHANCEDAIMDRIVES = '#tooltips:advanced/enhancedAimDrives'
     ADVANCED_STEREOSCOPE = '#tooltips:advanced/stereoscope'
     ADVANCED_COATEDOPTICS = '#tooltips:advanced/coatedOptics'
@@ -2336,12 +2346,8 @@ class TOOLTIPS(object):
     ADVANCED_ANTIFRAGMENTATIONLINING = '#tooltips:advanced/antifragmentationLining'
     ADVANCED_RAMMER = '#tooltips:advanced/rammer'
     ADVANCED_GROUSERS = '#tooltips:advanced/grousers'
-    ADVANCED_CARBONDIOXIDE = '#tooltips:advanced/carbonDioxide'
-    ADVANCED_STEELROLLERS = '#tooltips:advanced/steelRollers'
     ADVANCED_IMPROVEDVENTILATION = '#tooltips:advanced/improvedVentilation'
     ADVANCED_AIMINGSTABILIZER = '#tooltips:advanced/aimingStabilizer'
-    ADVANCED_WETCOMBATPACK = '#tooltips:advanced/wetCombatPack'
-    ADVANCED_FILTERCYCLONE = '#tooltips:advanced/filterCyclone'
     ADVANCED_VEHICLEGUN = '#tooltips:advanced/vehicleGun'
     ADVANCED_VEHICLEDUALGUN = '#tooltips:advanced/vehicleDualGun'
     ADVANCED_VEHICLERADIO = '#tooltips:advanced/vehicleRadio'
@@ -3185,13 +3191,18 @@ class TOOLTIPS(object):
      TANK_PARAMS_DESC_EXPLOSIONRADIUS,
      TANK_PARAMS_DESC_INVISIBILITYSTILLFACTOR,
      TANK_PARAMS_DESC_INVISIBILITYMOVINGFACTOR,
+     TANK_PARAMS_DESC_TURBOSHAFTINVISIBILITYSTILLFACTOR,
+     TANK_PARAMS_DESC_TURBOSHAFTINVISIBILITYMOVINGFACTOR,
      TANK_PARAMS_DESC_SWITCHONTIME,
      TANK_PARAMS_DESC_SWITCHOFFTIME,
      TANK_PARAMS_DESC_SWITCHTIME,
      TANK_PARAMS_DESC_WHEELEDSWITCHONTIME,
      TANK_PARAMS_DESC_WHEELEDSWITCHOFFTIME,
+     TANK_PARAMS_DESC_TURBOSHAFTSWITCHTIME,
      TANK_PARAMS_DESC_WHEELEDSWITCHTIME,
      TANK_PARAMS_DESC_WHEELEDSPEEDMODESPEED,
+     TANK_PARAMS_DESC_TURBOSHAFTSPEEDMODESPEED,
+     TANK_PARAMS_DESC_TURBOSHAFTENGINEPOWER,
      TANK_PARAMS_DESC_STUNMINDURATION,
      TANK_PARAMS_DESC_STUNMAXDURATION,
      TANK_PARAMS_DESC_CHARGETIME)
@@ -3488,7 +3499,6 @@ class TOOLTIPS(object):
      ADVANCED_GASOLINE100,
      ADVANCED_GASOLINE105,
      ADVANCED_REMOVEDRPMLIMITER,
-     ADVANCED_TOOLBOX,
      ADVANCED_ENHANCEDAIMDRIVES,
      ADVANCED_STEREOSCOPE,
      ADVANCED_COATEDOPTICS,
@@ -3496,12 +3506,8 @@ class TOOLTIPS(object):
      ADVANCED_ANTIFRAGMENTATIONLINING,
      ADVANCED_RAMMER,
      ADVANCED_GROUSERS,
-     ADVANCED_CARBONDIOXIDE,
-     ADVANCED_STEELROLLERS,
      ADVANCED_IMPROVEDVENTILATION,
      ADVANCED_AIMINGSTABILIZER,
-     ADVANCED_WETCOMBATPACK,
-     ADVANCED_FILTERCYCLONE,
      ADVANCED_VEHICLEGUN,
      ADVANCED_VEHICLEDUALGUN,
      ADVANCED_VEHICLERADIO,

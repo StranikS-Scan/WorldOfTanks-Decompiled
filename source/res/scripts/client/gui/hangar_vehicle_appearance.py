@@ -113,6 +113,8 @@ class HangarVehicleAppearance(ScriptGameObject):
     def filter(self):
         return None
 
+    isVehicleDestroyed = property(lambda self: self.__isVehicleDestroyed)
+
     def __init__(self, spaceId, vEntity):
         ScriptGameObject.__init__(self, vEntity.spaceID)
         self.__loadState = _LoadStateNotifier()
@@ -324,6 +326,7 @@ class HangarVehicleAppearance(ScriptGameObject):
 
     def __onResourcesLoaded(self, buildInd, resourceRefs):
         if not self.__vDesc:
+            self.__fireResourcesLoadedEvent()
             return
         if buildInd != self.__curBuildInd:
             return
@@ -347,9 +350,11 @@ class HangarVehicleAppearance(ScriptGameObject):
         super(HangarVehicleAppearance, self).activate()
 
     def __fireResourcesLoadedEvent(self):
+        compDescr = self.__vDesc.type.compactDescr if self.__vDesc is not None else None
         g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.VEHICLE_LOADING, ctx={'started': False,
          'vEntityId': self.__vEntity.id,
-         'intCD': self.__vDesc.type.compactDescr}), scope=EVENT_BUS_SCOPE.DEFAULT)
+         'intCD': compDescr}), scope=EVENT_BUS_SCOPE.DEFAULT)
+        return
 
     def __onAnimatorsLoaded(self, buildInd, outfit, resourceRefs):
         if not self.__vDesc:

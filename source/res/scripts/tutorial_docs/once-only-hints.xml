@@ -101,15 +101,6 @@
       </arrow>
       <equal-actions>	True	</equal-actions>
     </hint>
-    <hint>	EpicReservesBtnHint	  <item-id>	EpicReservesBtn	</item-id>
-      <text>	_(#epic_battle:tutorial/hint/epicReservesBtnHint)	</text>
-      <arrow>
-        <direction>	L	</direction>
-        <loop>	True	</loop>
-        <text-padding>	-16	</text-padding>
-      </arrow>
-      <equal-actions>	True	</equal-actions>
-    </hint>
     <hint>	BlueprintsSwitchButtonHint	  <item-id>	BlueprintsSwitchButton	</item-id>
       <text>	_(#tutorial:blueprints/techtree/switchButton)	</text>
       <arrow>
@@ -398,6 +389,36 @@
       <condition>
         <global-active>	_CollectibleVehiclePreviewEnabled	</global-active>
       </condition>
+    </hint>
+    <hint>	AmmunitionPanelHintZoneHint	  <item-id>	AmmunitionPanelTutorialHintZone	</item-id>
+      <text>	_(#tank_setup:hints/ammunitionPanel/specialization)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
+      <ignore-outside-click>	True	</ignore-outside-click>
+    </hint>
+    <hint>	FilterHintZoneHint	  <item-id>	FilterTutorialHintZone	</item-id>
+      <text>	_(#tank_setup:hints/filters/specialization)	</text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
+      <ignore-outside-click>	True	</ignore-outside-click>
+    </hint>
+    <hint>	OptDevDragAndDropHint	  <item-id>	OptDevDragAndDropHintZone	</item-id>
+      <text>	_(#tank_setup:hints/dragAndDrop/section)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
+      <ignore-outside-click>	True	</ignore-outside-click>
     </hint>
   </hints>
 </once-only-hints.xml>

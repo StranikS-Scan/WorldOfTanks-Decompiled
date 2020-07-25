@@ -41,18 +41,18 @@ def validateUserRoomName(name):
 def validateUserRoomPwd(password, isRetype=False):
     if not password:
         if isRetype:
-            errorID = CHANNEL_ERROR_ID.PASSWORD_EMPTY
-        else:
             errorID = CHANNEL_ERROR_ID.RETYPE_EMPTY
+        else:
+            errorID = CHANNEL_ERROR_ID.PASSWORD_EMPTY
         return ('', ClientChannelError(errorID))
     else:
         try:
             password = ResourcePrep.prepare(password)
         except XmppStringPrepError:
             if isRetype:
-                errorID = CHANNEL_ERROR_ID.PASSWORD_INVALID
-            else:
                 errorID = CHANNEL_ERROR_ID.RETYPE_INVALID
+            else:
+                errorID = CHANNEL_ERROR_ID.PASSWORD_INVALID
             return ('', ClientChannelError(errorID))
 
         length = len(password)

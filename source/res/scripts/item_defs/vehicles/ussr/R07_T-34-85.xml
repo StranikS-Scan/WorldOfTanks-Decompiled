@@ -7,6 +7,7 @@
     <driver></driver>
     <loader></loader>
   </crew>
+  <supplySlots>	2 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
     <forward>	54	</forward>
     <backward>	20	</backward>
@@ -15,9 +16,16 @@
     <moving>	0.184	</moving>
     <still>	0.245	</still>
     <camouflageBonus>	0.03	</camouflageBonus>
-    <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.368	</firePenalty>
   </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.1 0.125	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+  </optDevsOverrides>
   <repairCost>	6.258	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -3695,7 +3703,6 @@
           <attachNode>	HP_flag	</attachNode>
         </slot>
       </customizationSlots>
-      <gunShotOffset>	0.000000 0.000000 0.000000	</gunShotOffset>
       <camouflage>
         <tiling>	0.565 0.565 0.000000 0.000000	</tiling>
         <density>	109.782 109.977	</density>
@@ -4671,7 +4678,6 @@
           <attachNode>	HP_flag	</attachNode>
         </slot>
       </customizationSlots>
-      <gunShotOffset>	0.000000 0.000000 0.000000	</gunShotOffset>
       <camouflage>
         <tiling>	0.55 0.55 0.000000 0.000000	</tiling>
         <density>	107.888 108.707	</density>

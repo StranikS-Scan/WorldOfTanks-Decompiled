@@ -4,7 +4,7 @@ import math
 from adisp import process
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs.confirm_customization_item_dialog_meta import ConfirmC11nSellMeta
-from gui.Scaleform.daapi.view.lobby.storage.cm_handlers import option, CMLabel, ContextMenu
+from gui.Scaleform.daapi.view.lobby.shared.cm_handlers import option, CMLabel, ContextMenu
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import isCustomizationAvailableForSell, getAvailableForSellCustomizationCount
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import customizationPreview
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity

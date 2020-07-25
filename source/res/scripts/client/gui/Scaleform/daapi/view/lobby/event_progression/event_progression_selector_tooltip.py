@@ -91,7 +91,7 @@ class EventProgressionSelectorTooltip(BlocksTooltipData):
         return formatters.packTitleDescBlock(title=text_styles.concatStylesWithSpace(icon, titleStyle(backport.text(attention.title()))), desc=text_styles.main(backport.text(attention.description())), padding=formatters.packPadding(left=20, right=20))
 
     def __packWaitNextBlock(self):
-        return formatters.packTextBlockData(text_styles.main(backport.text(self.__eventProgression.allCyclesWasEndedResId)), padding=formatters.packPadding(left=20, bottom=10))
+        return formatters.packTextBlockData(text_styles.main(backport.text(self.__eventProgression.aboutEventProgressionResId)), padding=formatters.packPadding(left=20, bottom=10))
 
     def __packTimeTableHeaderBlock(self):
         return formatters.packImageTextBlockData(title=text_styles.middleTitle(backport.text(_R_TIMETABLE.title())), img=backport.image(R.images.gui.maps.icons.buttons.calendar()), imgPadding=formatters.packPadding(top=-1, left=20), txtPadding=formatters.packPadding(left=5, top=-4))

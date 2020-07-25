@@ -142,11 +142,17 @@
     <PS_PERFORMANCE_LOD_OFFSET>	0	</PS_PERFORMANCE_LOD_OFFSET>
     <PS_PERFORMANCE_LOD_MULT>	1.2	</PS_PERFORMANCE_LOD_MULT>
   </ParticleSystem>
-  <debug>
-    <fullDump>	false	</fullDump>
+  <cat_config>
+    <isOnline>	true	</isOnline>
     <clientUrl>	http://cat-st1.wargaming.net	</clientUrl>
     <botsUrl>	http://cat-st1.wargaming.net	</botsUrl>
+    <fullDump>	false	</fullDump>
+    <collectPersonalData>	true	</collectPersonalData>
     <dxdiag>	false	</dxdiag>
+    <dumpTimeout>	600000	</dumpTimeout>
+    <reportArchiveSizeThresholdKb>	1024	</reportArchiveSizeThresholdKb>
+  </cat_config>
+  <debug>
     <framesCount>	0	</framesCount>
     <enableServers>	false	</enableServers>
     <profilerBufferSize>	12582912	</profilerBufferSize>
@@ -345,6 +351,9 @@
         <project>
           <name>	ev_10y_countdown_hangar.pck	</name>
         </project>
+        <project>
+          <name>	cons_hangar.bnk	</name>
+        </project>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
         <project>
@@ -414,6 +423,9 @@
         </project>
         <project>
           <name>	wheel_vehicle_GUI.bnk	</name>
+        </project>
+        <project>
+          <name>	consumables.bnk	</name>
         </project>
       </SFX_soundbanks_arena>
       <SFX_soundbanks_editor>

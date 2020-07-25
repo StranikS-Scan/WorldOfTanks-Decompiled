@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/Avatar.py
 import cPickle
 import math
+import typing
 import zlib
 from functools import partial
 from typing import List, Dict, Union
@@ -101,6 +102,8 @@ from avatar_components.vehicle_removal_controller import VehicleRemovalControlle
 from avatar_components.vehicle_health_broadcast_listener_component import VehicleHealthBroadcastListenerComponent
 from vehicle_systems import appearance_cache
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
+if typing.TYPE_CHECKING:
+    from items.vehicles import VehicleDescriptor
 
 class _CRUISE_CONTROL_MODE(object):
     NONE = 0
@@ -114,6 +117,7 @@ class _CRUISE_CONTROL_MODE(object):
 _SHOT_WAITING_MAX_TIMEOUT = 0.2
 _SHOT_WAITING_MIN_TIMEOUT = 0.12
 _MAX_SPEED_MULTIPLIER = 1.5
+_MAX_ROTATION_SPEED_MULTIPLIER = 1.5
 _SPEEDOMETER_CORRECTION_DELTA = 0.25
 
 class _MOVEMENT_FLAGS(object):
@@ -635,6 +639,14 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         self.base.setDevelopmentFeature(0, 'destroy_self', 0, '')
                     if key == Keys.KEY_8:
                         self.base.setDevelopmentFeature(0, 'kill_engine', 0, '')
+                    if key == Keys.KEY_9:
+                        self.base.setDevelopmentFeature(0, 'damage_device', 500, 'ammoBayHealth')
+                    if key == Keys.KEY_0:
+                        self.base.setDevelopmentFeature(0, 'damage_device', 500, 'fuelTankHealth')
+                    if key == Keys.KEY_MINUS:
+                        self.base.setDevelopmentFeature(0, 'damage_device', 500, 'engineHealth')
+                    if key == Keys.KEY_F9:
+                        self.__makeScreenShot()
                     if key == Keys.KEY_F:
                         vehicle = BigWorld.entity(self.playerVehicleID)
                         vehicle.filter.enableClientFilters = not vehicle.filter.enableClientFilters
@@ -769,12 +781,14 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     vehicle = self.getVehicleAttached()
                     if vehicle is not None:
                         ctx = None
-                        if vehicle.isWheeledTech or vehicle.typeDescriptor.isDualgunVehicle:
+                        vTypeDesc = vehicle.typeDescriptor
+                        if vTypeDesc.isWheeledVehicle or vTypeDesc.isDualgunVehicle or vTypeDesc.hasTurboshaftEngine:
                             ctx = {'vehName': vehicle.typeDescriptor.type.userString,
-                             'isWheeled': vehicle.isWheeledTech,
-                             'isDualGun': vehicle.typeDescriptor.isDualgunVehicle,
-                             'hasBurnout': vehicle.typeDescriptor.hasBurnout,
-                             'hasSiegeMode': vehicle.typeDescriptor.hasSiegeMode}
+                             'isWheeled': vTypeDesc.isWheeledVehicle,
+                             'isDualGun': vTypeDesc.isDualgunVehicle,
+                             'hasBurnout': vTypeDesc.hasBurnout,
+                             'hasSiegeMode': vTypeDesc.hasSiegeMode,
+                             'hasTurboshaftEngine': vTypeDesc.hasTurboshaftEngine}
                         if self.arenaBonusType in constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
                             ctx = {'battleRoyale': True,
                              'mapGeometryName': self.arena.arenaType.geometryName}
@@ -919,6 +933,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         else:
             self.consistentMatrices.notifyVehicleLoaded(self, vehicle)
         return
+
+    def __makeScreenShot(self, fileType='jpg', fileMask='./../screenshots/'):
+        BigWorld.screenShot(fileType, fileMask)
 
     def __startVehicleVisual(self, vehicle, resetControllers=False):
         vehicle.startVisual()
@@ -2029,7 +2046,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 lim = _MAX_SPEED_MULTIPLIER * physics['speedLimits'][1]
                 if self.__bckwdSpeedometerLimit > lim:
                     self.__bckwdSpeedometerLimit -= _SPEEDOMETER_CORRECTION_DELTA
-            rspeedLimit = physics['rotationSpeedLimit']
+            rspeedLimit = physics['rotationSpeedLimit'] * _MAX_ROTATION_SPEED_MULTIPLIER
             if rspeed > rspeedLimit:
                 rspeed = rspeedLimit
             elif rspeed < -rspeedLimit:
@@ -2757,7 +2774,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def __getAdditiveShotDispersionFactor(self, descriptor):
         if self.__aimingBooster is not None:
             factors = descriptor.miscAttrs.copy()
-            self.__aimingBooster.updateVehicleAttrFactors(descriptor, factors, None)
+            self.__aimingBooster.updateVehicleAttrFactorsForAspect(descriptor, factors, None)
         else:
             factors = descriptor.miscAttrs
         return factors['additiveShotDispersionFactor']

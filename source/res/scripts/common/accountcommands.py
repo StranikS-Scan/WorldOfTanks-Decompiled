@@ -211,6 +211,7 @@ CMD_RECEIVE_OFFER_GIFT = 10057
 CMD_SET_OFFER_BANNER_SEEN = 10058
 CMD_DISMOUNT_ENHANCEMENT = 10059
 CMD_CHANGE_BR_POINTS = 10060
+CMD_EQUIP_OPT_DEVS_SEQUENCE = 10061
 PLAYER_CMD_NAMES = dict([ (v, k) for k, v in globals().items() if k.startswith('CMD_') ])
 KEYS_ARE_UNIQUE = len(PLAYER_CMD_NAMES) == len(set((key for key in globals() if key.startswith('CMD_'))))
 

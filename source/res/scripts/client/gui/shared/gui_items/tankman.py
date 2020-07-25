@@ -726,8 +726,8 @@ def calculateRoleLevel(startRoleLevel, freeXpValue=0, typeID=(0, 0)):
     return __makeFakeTankmanDescr(startRoleLevel, freeXpValue, typeID).roleLevel
 
 
-def calculateRankID(startRoleLevel, freeXpValue=0, typeID=(0, 0)):
-    return __makeFakeTankmanDescr(startRoleLevel, freeXpValue, typeID).rankID
+def calculateRankID(startRoleLevel, freeXpValue=0, typeID=(0, 0), skills=(), freeSkills=(), lastSkillLevel=tankmen.MAX_SKILL_LEVEL):
+    return __makeFakeTankmanDescr(startRoleLevel, freeXpValue, typeID, skills, freeSkills, lastSkillLevel).rankID
 
 
 def isSkillLearnt(skillName, vehicle):
@@ -757,8 +757,8 @@ def __isPersonalSkillLearnt(skillName, vehicle):
     return False
 
 
-def __makeFakeTankmanDescr(startRoleLevel, freeXpValue, typeID):
+def __makeFakeTankmanDescr(startRoleLevel, freeXpValue, typeID, skills=(), freeSkills=(), lastSkillLevel=tankmen.MAX_SKILL_LEVEL):
     vehType = vehicles.VehicleDescr(typeID=typeID).type
-    tmanDescr = tankmen.TankmanDescr(tankmen.generateCompactDescr(tankmen.generatePassport(vehType.id[0], False), vehType.id[1], vehType.crewRoles[0][0], startRoleLevel))
+    tmanDescr = tankmen.TankmanDescr(tankmen.generateCompactDescr(tankmen.generatePassport(vehType.id[0], False), vehType.id[1], vehType.crewRoles[0][0], startRoleLevel, skills=skills, freeSkills=freeSkills, lastSkillLevel=lastSkillLevel))
     tmanDescr.addXP(freeXpValue)
     return tmanDescr

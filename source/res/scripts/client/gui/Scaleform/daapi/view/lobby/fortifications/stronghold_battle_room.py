@@ -75,6 +75,9 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         self._setActionButtonState()
         if self.prbEntity.isStrongholdSettingsValid():
             self._updateConfigureButtonState(self.prbEntity.isFirstBattle(), not self.prbEntity.isStrongholdUnitFreezed())
+            if flags.isExternalLegionariesMatchingChanged() and not flags.isInExternalLegionariesMatching() and not flags.isFreezed():
+                strongholdSettings = self.prbEntity.getStrongholdSettings()
+                self._updateReserves(strongholdSettings.getReserve(), strongholdSettings.getReserveOrder())
             self._updateMembersData()
             self._updateRallyData()
 
@@ -207,11 +210,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
 
     def onStrongholdDoBattleQueue(self, isFirstBattle, readyButtonEnabled, reserveOrder):
         self._updateConfigureButtonState(isFirstBattle, readyButtonEnabled)
-        enabledReserves = []
-        for _, _ in enumerate(reserveOrder):
-            enabledReserves.append(readyButtonEnabled)
-
-        self.as_setReservesEnabledS(enabledReserves)
+        self.as_setReservesEnabledS([ readyButtonEnabled for _ in reserveOrder ])
 
     def onStrongholdMaintenance(self, showWindow):
         self.__maintenanceWindowVisible = showWindow

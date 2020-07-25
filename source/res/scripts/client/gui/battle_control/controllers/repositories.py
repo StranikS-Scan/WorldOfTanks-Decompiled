@@ -299,12 +299,12 @@ class SharedControllersRepository(_ControllersRepository):
         ammo = consumables.createAmmoCtrl(setup)
         repository.addController(ammo)
         repository.addController(consumables.createEquipmentCtrl(setup))
-        repository.addController(consumables.createOptDevicesCtrl())
+        repository.addController(consumables.createOptDevicesCtrl(setup))
         state = vehicle_state_ctrl.createCtrl(setup)
         repository.addController(state)
         repository.addController(avatar_stats_ctrl.AvatarStatsController())
-        feedback = feedback_adaptor.createFeedbackAdaptor(setup)
         messages = msgs_ctrl.createBattleMessagesCtrl(setup)
+        feedback = feedback_adaptor.createFeedbackAdaptor(setup)
         repository.addController(feedback)
         repository.addController(messages)
         repository.addController(chat_cmd_ctrl.ChatCommandsController(setup, feedback, ammo))
@@ -324,7 +324,7 @@ class SharedControllersRepository(_ControllersRepository):
         repository.addArenaViewController(period_ctrl.createPeriodCtrl(setup), setup)
         repository.addViewController(hit_direction_ctrl.createHitDirectionController(setup), setup)
         repository.addViewController(game_messages_ctrl.createGameMessagesController(setup), setup)
-        repository.addViewController(callout_ctrl.createCalloutContoller(setup), setup)
+        repository.addViewController(callout_ctrl.createCalloutController(setup), setup)
         return repository
 
 

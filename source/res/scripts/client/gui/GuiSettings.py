@@ -135,7 +135,8 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'adventCalendar': {'popupIntervalInHours': 24,
                     'baseURL': ''},
  'premiumInfo': {},
- 'checkPromoFrequencyInBattles': 5}
+ 'checkPromoFrequencyInBattles': 5,
+ 'vivoxLicense': ''}
 
 class GuiSettings(object):
 

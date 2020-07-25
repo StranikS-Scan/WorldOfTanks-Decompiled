@@ -72,9 +72,12 @@ class FiltrableInventoryCategoryByTypeTabView(ItemsWithTypeFilterTabViewMeta):
             if self._filterMask & item['filterValue'] == item['filterValue']:
                 item.update({'selected': True})
 
-        typeFilters = {'items': items,
-         'minSelectedItems': 0}
+        typeFilters = self._getTypeFilters(items)
         self.as_initTypeFilterS(typeFilters)
+
+    def _getTypeFilters(self, items):
+        return {'items': items,
+         'minSelectedItems': 0}
 
     def _populate(self):
         super(FiltrableInventoryCategoryByTypeTabView, self)._populate()
@@ -103,7 +106,7 @@ class FiltrableInventoryCategoryByTypeTabView(ItemsWithTypeFilterTabViewMeta):
             if filterCriteria(item):
                 dataProviderListVoItems.append(self._getVO(item))
 
-        self._currentCount = sum((item['count'] for item in dataProviderListVoItems))
+        self._currentCount = len(dataProviderListVoItems)
         return dataProviderListVoItems
 
     def containItemType(self, itemType):

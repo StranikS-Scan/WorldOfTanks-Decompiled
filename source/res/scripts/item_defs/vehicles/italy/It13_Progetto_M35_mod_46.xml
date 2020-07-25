@@ -6,6 +6,7 @@
     <driver></driver>
     <loader></loader>
   </crew>
+  <supplySlots>	2 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
     <forward>	55	</forward>
     <backward>	20	</backward>
@@ -14,9 +15,16 @@
     <moving>	0.158	</moving>
     <still>	0.21	</still>
     <camouflageBonus>	0.03	</camouflageBonus>
-    <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.317	</firePenalty>
   </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.1 0.125	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+  </optDevsOverrides>
   <repairCost>	5.7	</repairCost>
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -1790,7 +1798,7 @@
             <rate>	30	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	8 9 12	</reloadTime>
+            <reloadTime>	7.2 8.1 10.8	</reloadTime>
             <revertFraction>	1.0	</revertFraction>
           </autoreload>
           <models>
@@ -2374,7 +2382,6 @@
           <camouflage>	TURRET	</camouflage>
         </customizableVehicleAreas>
       </customization>
-      <gunShotOffset>	0.000000 0.000000 0.000000	</gunShotOffset>
       <camouflage>
         <tiling>	2 1 0.000000 0.000000	</tiling>
         <density>	129.118 128.706	</density>

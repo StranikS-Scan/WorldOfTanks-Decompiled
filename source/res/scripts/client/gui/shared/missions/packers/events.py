@@ -12,13 +12,12 @@ from gui.impl.gen.view_models.common.missions.quest_model import QuestModel
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.events_helpers import isPremium, isDailyQuest
 from gui.server_events.formatters import DECORATION_SIZES
-from gui.shared.missions.packers.bonus import getDefaultBonusPacker
+from gui.shared.missions.packers.bonus import getDefaultBonusPacker, packBonusModelAndTooltipData
 from gui.shared.missions.packers.conditions import PostBattleConditionPacker
 from gui.shared.missions.packers.conditions import BonusConditionPacker
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
 from soft_exception import SoftException
-from gui.impl.backport import TooltipData
 if typing.TYPE_CHECKING:
     from gui.server_events.event_items import ServerEventAbstract
     from gui.server_events.bonuses import SimpleBonus
@@ -160,20 +159,7 @@ def packQuestBonusModel(quest, packer, array):
 
 def packQuestBonusModelAndTooltipData(packer, array, quest, tooltipData=None, questBonuses=None):
     bonuses = quest.getBonuses() if questBonuses is None else questBonuses
-    bonusIndexTotal = 0
-    bonusTooltipList = []
-    for bonus in bonuses:
-        if bonus.isShowInGUI():
-            bonusList = packer.pack(bonus)
-            if bonusList and tooltipData is not None:
-                bonusTooltipList = packer.getToolTip(bonus)
-            for bonusIndex, item in enumerate(bonusList):
-                item.setIndex(bonusIndexTotal)
-                array.addViewModel(item)
-                if tooltipData is not None:
-                    tooltipData[bonusIndexTotal] = bonusTooltipList[bonusIndex]
-                bonusIndexTotal += 1
-
+    packBonusModelAndTooltipData(bonuses, packer, array, tooltipData)
     return
 
 

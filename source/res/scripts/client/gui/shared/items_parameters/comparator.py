@@ -4,8 +4,8 @@ import collections
 import sys
 from constants import BonusTypes
 from gui.shared.items_parameters import params_cache
-from gui.shared.utils import WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, DUAL_GUN_CHARGE_TIME
-_BACKWARD_QUALITY_PARAMS = ['aimingTime',
+from gui.shared.utils import WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR
+_BACKWARD_QUALITY_PARAMS = frozenset(['aimingTime',
  'shotDispersionAngle',
  'weight',
  'dispertionRadius',
@@ -21,8 +21,17 @@ _BACKWARD_QUALITY_PARAMS = ['aimingTime',
  WHEELED_SWITCH_ON_TIME,
  WHEELED_SWITCH_OFF_TIME,
  DUAL_GUN_CHARGE_TIME,
- 'radarCooldown',
- 'hullWeight']
+ 'vehicleOwnSpottingTime',
+ 'vehicleGunShotDispersion',
+ 'crewStunDuration',
+ 'vehicleReloadTimeAfterShellChange',
+ 'crewRepeatedStunDuration',
+ 'vehicleChassisFallDamage',
+ 'vehPenaltyForDamageEngineAndCombat',
+ 'demaskFoliageFactor',
+ 'demaskMovingFactor',
+ 'vehicleRamOrExplosionDamageResistance',
+ 'vehicleFireChance'])
 NEGATIVE_PARAMS = ['switchOnTime', 'switchOffTime']
 _CUSTOM_QUALITY_PARAMS = {'vehicleWeight': (True, False),
  'clipFireRate': (True, True, False),
@@ -37,7 +46,7 @@ class PARAM_STATE(object):
 
 DEFAULT_AVG_VALUE = (sys.maxint, -1)
 
-def getParamExtendedData(paramName, value, otherValue, penalties=None):
+def getParamExtendedData(paramName, value, otherValue, penalties=None, customQualityParams=None):
     possibleBonuses, bonuses, inactive, penalties = penalties if penalties is not None else ([],
      [],
      [],
@@ -45,7 +54,7 @@ def getParamExtendedData(paramName, value, otherValue, penalties=None):
     if paramName not in NEGATIVE_PARAMS:
         if otherValue is None or otherValue == DEFAULT_AVG_VALUE:
             otherValue = value
-    return _ParameterInfo(paramName, value, rateParameterState(paramName, value, otherValue), possibleBonuses, inactive, bonuses, penalties)
+    return _ParameterInfo(paramName, value, rateParameterState(paramName, value, otherValue, customQualityParams=customQualityParams), possibleBonuses, inactive, bonuses, penalties)
 
 
 class ItemsComparator(object):
@@ -121,7 +130,7 @@ class VehiclesComparator(ItemsComparator):
         return (currentBonuses, affectedBonuses)
 
 
-class _ParameterInfo(collections.namedtuple('_ParamInfo', ('name', 'value', 'state', 'possibleBonuses', 'inactiveBonuses', 'bonuses', 'penalties'))):
+class _ParameterInfo(collections.namedtuple('_ParameterInfo', ('name', 'value', 'state', 'possibleBonuses', 'inactiveBonuses', 'bonuses', 'penalties'))):
 
     def getParamDiff(self):
         if isinstance(self.value, (tuple, list)):
@@ -135,36 +144,25 @@ class _ParameterInfo(collections.namedtuple('_ParamInfo', ('name', 'value', 'sta
         return
 
 
-CONDITIONAL_BONUSES = {'invisibilityMovingFactor': (('camouflage', BonusTypes.SKILL), [('brotherhood', BonusTypes.SKILL),
-                               ('chocolate', BonusTypes.EQUIPMENT),
-                               ('cocacola', BonusTypes.EQUIPMENT),
-                               ('ration', BonusTypes.EQUIPMENT),
-                               ('hotCoffee', BonusTypes.EQUIPMENT),
-                               ('ration_china', BonusTypes.EQUIPMENT),
-                               ('ration_uk', BonusTypes.EQUIPMENT),
-                               ('ration_japan', BonusTypes.EQUIPMENT),
-                               ('ration_czech', BonusTypes.EQUIPMENT),
-                               ('ration_poland', BonusTypes.EQUIPMENT),
-                               ('ration_italy', BonusTypes.EQUIPMENT),
-                               ('improvedVentilation_class1', BonusTypes.OPTIONAL_DEVICE),
-                               ('improvedVentilation_class2', BonusTypes.OPTIONAL_DEVICE),
-                               ('improvedVentilation_class3', BonusTypes.OPTIONAL_DEVICE),
-                               ('deluxImprovedVentilation', BonusTypes.OPTIONAL_DEVICE)]),
- 'invisibilityStillFactor': (('camouflage', BonusTypes.SKILL), [('brotherhood', BonusTypes.SKILL),
-                              ('chocolate', BonusTypes.EQUIPMENT),
-                              ('cocacola', BonusTypes.EQUIPMENT),
-                              ('ration', BonusTypes.EQUIPMENT),
-                              ('hotCoffee', BonusTypes.EQUIPMENT),
-                              ('ration_china', BonusTypes.EQUIPMENT),
-                              ('ration_uk', BonusTypes.EQUIPMENT),
-                              ('ration_japan', BonusTypes.EQUIPMENT),
-                              ('ration_czech', BonusTypes.EQUIPMENT),
-                              ('ration_poland', BonusTypes.EQUIPMENT),
-                              ('ration_italy', BonusTypes.EQUIPMENT),
-                              ('improvedVentilation_class1', BonusTypes.OPTIONAL_DEVICE),
-                              ('improvedVentilation_class2', BonusTypes.OPTIONAL_DEVICE),
-                              ('improvedVentilation_class3', BonusTypes.OPTIONAL_DEVICE),
-                              ('deluxImprovedVentilation', BonusTypes.OPTIONAL_DEVICE)])}
+CONDITIONAL_BONUSES = {('invisibilityMovingFactor',
+ 'invisibilityStillFactor',
+ TURBOSHAFT_INVISIBILITY_MOVING_FACTOR,
+ TURBOSHAFT_INVISIBILITY_STILL_FACTOR): (('camouflage', BonusTypes.SKILL), [('brotherhood', BonusTypes.SKILL),
+                                                                                                                                            ('chocolate', BonusTypes.EQUIPMENT),
+                                                                                                                                            ('cocacola', BonusTypes.EQUIPMENT),
+                                                                                                                                            ('ration', BonusTypes.EQUIPMENT),
+                                                                                                                                            ('hotCoffee', BonusTypes.EQUIPMENT),
+                                                                                                                                            ('ration_china', BonusTypes.EQUIPMENT),
+                                                                                                                                            ('ration_uk', BonusTypes.EQUIPMENT),
+                                                                                                                                            ('ration_japan', BonusTypes.EQUIPMENT),
+                                                                                                                                            ('ration_czech', BonusTypes.EQUIPMENT),
+                                                                                                                                            ('ration_poland', BonusTypes.EQUIPMENT),
+                                                                                                                                            ('ration_italy', BonusTypes.EQUIPMENT),
+                                                                                                                                            ('improvedVentilation_tier1', BonusTypes.OPTIONAL_DEVICE),
+                                                                                                                                            ('improvedVentilation_tier2', BonusTypes.OPTIONAL_DEVICE),
+                                                                                                                                            ('improvedVentilation_tier3', BonusTypes.OPTIONAL_DEVICE),
+                                                                                                                                            ('deluxImprovedVentilation', BonusTypes.OPTIONAL_DEVICE)])}
+CONDITIONAL_BONUSES = {k:v for keys, v in CONDITIONAL_BONUSES.items() for k in keys}
 
 def _getComparableValue(currentValue, comparableList, idx):
     return comparableList[idx] if len(comparableList) > idx else currentValue
@@ -204,6 +202,9 @@ def rateParameterState(paramName, val1, val2, customQualityParams=None):
         result = []
         val2Len = len(val2)
         for i, val in enumerate(val1):
+            if val2Len == 0:
+                result.append((PARAM_STATE.NORMAL, None))
+                continue
             if val2Len > i:
                 val2ToCompare = val2[i]
             else:

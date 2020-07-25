@@ -436,6 +436,12 @@ class ProgressionController(IProgressionController, ViewComponentsController):
             return success
         return False
 
+    def mayInstallModuleOnVehicle(self, moduleItem, vehicle):
+        if self.__moduleChangeReq:
+            success, _ = self.__moduleChangeReq.mayInstallModule(moduleItem, vehicle)
+            return success
+        return False
+
     def startControl(self, battleCtx, arenaVisitor):
         self.__vehicleModulesStorage = _VehicleModulesStorage()
         self.__vehicleHolder = _VehicleHolder(self.__notifyVehicleChanged, self.__vehicleModulesStorage)

@@ -357,7 +357,12 @@ def _isItemInstalled(itemCD, vehicleCD):
 
 def _vehicleHasRegularConsumables(vehicleCD):
     vehicle = getVehicleByIntCD(vehicleCD)
-    return False if vehicle is None or vehicle.invID == -1 else bool(filter(None, vehicle.equipment.regularConsumables))
+    return False if vehicle is None or vehicle.invID == -1 else bool(filter(None, vehicle.consumables.installed))
+
+
+def _vehicleHasOptionalDevices(vehicleCD):
+    vehicle = getVehicleByIntCD(vehicleCD)
+    return False if vehicle is None or vehicle.invID == -1 else bool(filter(None, vehicle.optDevices.installed))
 
 
 def _isItemLevelEqual(itemCD, level):
@@ -382,7 +387,8 @@ _ITEM_STATES = {CONDITION_STATE.SELECTED: _isItemSelected,
  CONDITION_STATE.LEVEL: _isItemLevelEqual,
  CONDITION_STATE.MAY_INSTALL: _isItemMayInstall,
  CONDITION_STATE.INSTALLED: _isItemInstalled,
- CONDITION_STATE.HAS_REGULAR_CONSUMABLES: _vehicleHasRegularConsumables}
+ CONDITION_STATE.HAS_REGULAR_CONSUMABLES: _vehicleHasRegularConsumables,
+ CONDITION_STATE.HAS_OPTIONAL_DEVICES: _vehicleHasOptionalDevices}
 
 def getItemStateGetter(state):
     if state in _ITEM_STATES:

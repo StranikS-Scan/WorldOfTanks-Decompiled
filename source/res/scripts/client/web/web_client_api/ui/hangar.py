@@ -1,8 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ui/hangar.py
 import logging
+import adisp
+from async import async, await
 from gui import DialogsInterface
-from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsSingleItemMeta, ExchangeCreditsWebProductMeta
+from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsWebProductMeta
+from gui.impl.dialogs.dialogs import showExchangeToBuyItemsDialog
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from web.web_client_api import W2CSchema, w2c, Field
@@ -45,7 +48,7 @@ class HangarWindowsWebApiMixin(object):
         if cmd.id is not None:
             if not self.validateItems(cmd.id):
                 return
-            isOk, _ = yield DialogsInterface.showDialog(ExchangeCreditsSingleItemMeta(itemCD=cmd.id, count=cmd.amount))
+            isOk = yield self.__showExchangeItemDialog(cmd.id, cmd.amount)
             yield {'completed': isOk}
         elif cmd.type == _EXCHANGE_WINDOW_PLATFORM:
             isOk, _ = yield DialogsInterface.showDialog(ExchangeCreditsWebProductMeta(name=cmd.name, count=cmd.amount, price=cmd.price))
@@ -73,3 +76,9 @@ class HangarWindowsWebApiMixin(object):
             return False
         else:
             return True
+
+    @adisp.async
+    @async
+    def __showExchangeItemDialog(self, itemCD, count, callback):
+        result = yield await(showExchangeToBuyItemsDialog(itemsCountMap={itemCD: count}))
+        callback(result.result if not result.busy else False)

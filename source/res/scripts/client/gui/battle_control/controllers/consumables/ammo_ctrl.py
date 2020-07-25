@@ -37,7 +37,7 @@ class _GunSettings(namedtuple('_GunSettings', 'clip burst shots reloadEffect aut
         for shotIdx, shotDescr in enumerate(gun.shots):
             nationID, itemID = shotDescr.shell.id
             intCD = vehicles.makeIntCompactDescrByID('shell', nationID, itemID)
-            shots[intCD] = (shotIdx, shotDescr.piercingPower[0])
+            shots[intCD] = (shotIdx, shotDescr.piercingPower[0], shotDescr.speed)
 
         autoReload = gun.autoreload if 'autoreload' in gun.tags else None
         return cls.__new__(cls, clip, burst, shots, reloadEffect, autoReload)
@@ -61,6 +61,13 @@ class _GunSettings(namedtuple('_GunSettings', 'clip burst shots reloadEffect aut
 
     def hasAutoReload(self):
         return self.autoReload is not None
+
+    def getShotSpeed(self, intCD):
+        if intCD in self.shots:
+            speed = self.shots[intCD][2]
+        else:
+            speed = -1
+        return speed
 
 
 class IGunReloadingSnapshot(object):

@@ -15,9 +15,10 @@ from gui.battle_control.controllers.interfaces import IBattleController
 from gui.game_control.br_battle_sounds import BREvents
 from gui.shared.utils.MethodsRules import MethodsRules
 from gui.shared.utils.decorators import ReprInjector
-from helpers import i18n
-from items import vehicles, EQUIPMENT_TYPES
+from helpers import i18n, dependency
+from items import vehicles, EQUIPMENT_TYPES, ITEM_TYPES
 from shared_utils import findFirst, forEach
+from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
 _ActivationError = namedtuple('_ActivationError', 'key ctx')
 _logger = logging.getLogger(__name__)
@@ -95,10 +96,7 @@ class _EquipmentItem(object):
         self._prevStage = 0
         self._prevQuantity = 0
         self._timeRemaining = 0
-        if self.isReusable:
-            self._totalTime = self._descriptor.cooldownSeconds
-        else:
-            self._totalTime = 0
+        self._totalTime = totalTime
         self._animationType = ANIMATION_TYPES.MOVE_ORANGE_BAR_UP | ANIMATION_TYPES.SHOW_COUNTER_ORANGE | ANIMATION_TYPES.DARK_COLOR_TRANSFORM
         self.update(quantity, stage, timeRemaining, totalTime)
         return
@@ -238,6 +236,38 @@ class _EquipmentItem(object):
             EquipmentSound.playReady(self)
 
 
+class _RefillEquipmentItem(object):
+    _sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    _PRE_REFILL_TIME = 3
+
+    def __init__(self, *args, **kwargs):
+        super(_RefillEquipmentItem, self).__init__(*args, **kwargs)
+        self._preRefillCallback = None
+        return
+
+    def update(self, quantity, stage, timeRemaining, totalTime):
+        super(_RefillEquipmentItem, self).update(quantity, stage, timeRemaining, totalTime)
+        if timeRemaining > self._PRE_REFILL_TIME and self._preRefillCallback is None:
+            self._preRefillCallback = BigWorld.callback(timeRemaining - self._PRE_REFILL_TIME, self._preRefill)
+        if self.isReady and self._prevStage in (EQUIPMENT_STAGES.COOLDOWN, EQUIPMENT_STAGES.SHARED_COOLDOWN):
+            self._refillComplete()
+        return
+
+    def clear(self):
+        if self._preRefillCallback is not None:
+            BigWorld.cancelCallback(self._preRefillCallback)
+            self._preRefillCallback = None
+        return
+
+    def _preRefill(self):
+        self._preRefillCallback = None
+        SoundGroups.g_instance.playSound2D('be_pre_replenishment')
+        return
+
+    def _refillComplete(self):
+        SoundGroups.g_instance.playSound2D('be_replenishment_full')
+
+
 class _AutoItem(_EquipmentItem):
 
     def canActivate(self, entityName=None, avatar=None):
@@ -303,7 +333,7 @@ class _ExpandedItem(_EquipmentItem):
             return (False, NotApplyingError(self._getEntityIsSafeKey(), {'entity': self._getEntityUserString(entityName)})) if entityName not in deviceStates else (True, None)
 
 
-class _ExtinguisherItem(_EquipmentItem):
+class _ExtinguisherItem(_RefillEquipmentItem, _EquipmentItem):
 
     def canActivate(self, entityName=None, avatar=None):
         result, error = super(_ExtinguisherItem, self).canActivate(entityName, avatar)
@@ -316,7 +346,7 @@ class _ExtinguisherItem(_EquipmentItem):
         return 65536 + self._descriptor.id[1]
 
 
-class _MedKitItem(_ExpandedItem):
+class _MedKitItem(_RefillEquipmentItem, _ExpandedItem):
 
     def getActivationCode(self, entityName=None, avatar=None):
         activationCode = super(_MedKitItem, self).getActivationCode(entityName, avatar)
@@ -343,7 +373,7 @@ class _MedKitItem(_ExpandedItem):
         pass
 
 
-class _RepairKitItem(_ExpandedItem):
+class _RepairKitItem(_RefillEquipmentItem, _ExpandedItem):
 
     def getEntitiesIterator(self, avatar=None):
         return vehicle_getter.VehicleDeviceStatesIterator(avatar_getter.getVehicleDeviceStates(avatar), avatar_getter.getVehicleTypeDescriptor(avatar))
@@ -646,7 +676,7 @@ class _RegenerationKitItem(_EquipmentItem):
             return (result, error)
         else:
             vehicle = BigWorld.entities.get(avatar.playerVehicleID)
-            return (False, _ActivationError('vehicleIsNotDamaged', {'name': self._descriptor.userString})) if not vehicle or vehicle.health >= vehicle.typeDescriptor.maxHealth else (True, None)
+            return (False, _ActivationError('vehicleIsNotDamaged', {'name': self._descriptor.userString})) if not vehicle or vehicle.health >= vehicle.maxHealth else (True, None)
 
     def getActivationCode(self, entityName=None, avatar=None):
         return 65536 + self._descriptor.id[1]
@@ -740,7 +770,7 @@ def _getInitialTagsAndClass(descriptor, tagsToItems):
 
 
 class EquipmentsController(MethodsRules, IBattleController):
-    __slots__ = ('__eManager', '_order', '_equipments', '__preferredPosition', 'onEquipmentAdded', 'onEquipmentUpdated', 'onEquipmentMarkerShown', 'onEquipmentCooldownInPercent', 'onEquipmentCooldownTime')
+    __slots__ = ('__eManager', '_order', '_equipments', '__preferredPosition', '__equipmentCount', 'onEquipmentAdded', 'onEquipmentUpdated', 'onEquipmentMarkerShown', 'onEquipmentCooldownInPercent', 'onEquipmentCooldownTime')
 
     def __init__(self):
         super(EquipmentsController, self).__init__()
@@ -753,6 +783,7 @@ class EquipmentsController(MethodsRules, IBattleController):
         self._order = []
         self._equipments = {}
         self.__preferredPosition = None
+        self.__equipmentCount = 0
         return
 
     def __repr__(self):
@@ -786,6 +817,8 @@ class EquipmentsController(MethodsRules, IBattleController):
             _, item = self._equipments.popitem()
             item.clear()
 
+        self.__equipmentCount = 0
+
     def cancel(self):
         item = findFirst(lambda item: item.getStage() == EQUIPMENT_STAGES.PREPARING, self._equipments.itervalues())
         if item is not None:
@@ -817,15 +850,20 @@ class EquipmentsController(MethodsRules, IBattleController):
         return map(lambda intCD: (intCD, self._equipments[intCD]), self._order)
 
     @MethodsRules.delayable()
-    def notifyPlayerVehicleSet(self):
-        pass
+    def notifyPlayerVehicleSet(self, vID):
+        vehicle = BigWorld.entity(vID)
+        if vehicle is not None:
+            self.__equipmentCount = vehicle.typeDescriptor.type.supplySlots.getAmountForType(ITEM_TYPES.equipment, EQUIPMENT_TYPES.regular)
+        else:
+            self.__equipmentCount = 0
+        return
 
     @MethodsRules.delayable('notifyPlayerVehicleSet')
     def setEquipment(self, intCD, quantity, stage, timeRemaining, totalTime):
         _logger.debug('Equipment added: intCD=%d, quantity=%d, stage=%s, timeRemaining=%d, totalTime=%d', intCD, quantity, stage, timeRemaining, totalTime)
         item = None
         if not intCD:
-            if len(self._order) < vehicles.NUM_EQUIPMENT_SLOTS_BY_TYPE[EQUIPMENT_TYPES.regular]:
+            if len(self._order) < self.__equipmentCount:
                 self._order.append(0)
                 self.onEquipmentAdded(0, None)
         elif intCD in self._equipments:

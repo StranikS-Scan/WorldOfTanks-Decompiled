@@ -93,7 +93,7 @@ def calcGunParams(gunDescr, descriptors):
         else:
             chargeTime = ()
             rateTime = -1
-            reloadTimeSecs = ()
+            reloadTimeSecs = (reloadTime,)
         _updateMinMaxValues(result, DUAL_GUN_RATE_TIME, rateTime)
         result[DUAL_GUN_CHARGE_TIME] = chargeTime
         result[RELOAD_TIME_SECS_PROP_NAME] = reloadTimeSecs

@@ -121,7 +121,7 @@ def getMoneyVO(moneyObj):
 def getMoneyVOWithReason(errorMsg, moneyObj):
     result = []
     for c, v in moneyObj.iteritems():
-        if errorMsg == GUI_ITEM_ECONOMY_CODE.getMoneyError(c):
+        if errorMsg == GUI_ITEM_ECONOMY_CODE.getCurrencyError(c):
             result.append(('%sError' % c, v))
         result.append((c, v))
 

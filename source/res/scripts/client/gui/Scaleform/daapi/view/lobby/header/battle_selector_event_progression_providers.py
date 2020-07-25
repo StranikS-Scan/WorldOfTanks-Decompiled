@@ -61,7 +61,8 @@ class EventProgressionDefaultDataProvider(SelectorExtraItem):
         return ribbonSrc
 
     def _update(self, state):
-        self._label = backport.text(self.__eventProgression.aboutEventProgressionResId)
+        resourceId = self.__eventProgression.aboutEventProgressionResId
+        self._label = backport.text(resourceId) if resourceId else ''
 
 
 class EventProgressionDataProvider(SelectorExtraItem):

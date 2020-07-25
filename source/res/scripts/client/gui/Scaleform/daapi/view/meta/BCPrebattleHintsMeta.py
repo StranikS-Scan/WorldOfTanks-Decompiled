@@ -6,3 +6,6 @@ class BCPrebattleHintsMeta(View):
 
     def as_setHintsVisibilityS(self, visible, hidden):
         return self.flashObject.as_setHintsVisibility(visible, hidden) if self._isDAAPIInited() else None
+
+    def as_setCrewCountS(self, count):
+        return self.flashObject.as_setCrewCount(count) if self._isDAAPIInited() else None

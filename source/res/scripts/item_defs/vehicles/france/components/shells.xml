@@ -2091,7 +2091,7 @@
     <isTracer>	true	</isTracer>
     <effects>	BRmainHollowCharge	</effects>
     <damage>
-      <armor>	190	</armor>
+      <armor>	220	</armor>
       <devices>	45	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
@@ -2108,7 +2108,7 @@
     <isTracer>	true	</isTracer>
     <effects>	BRlargeAPCR	</effects>
     <damage>
-      <armor>	130	</armor>
+      <armor>	150	</armor>
       <devices>	45	</devices>
     </damage>
   </_75mm_FrtPrf1946_SH>
@@ -2188,7 +2188,7 @@
     <isTracer>	true	</isTracer>
     <effects>	BRmainHollowCharge	</effects>
     <damage>
-      <armor>	255	</armor>
+      <armor>	290	</armor>
       <devices>	45	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
@@ -2205,18 +2205,18 @@
     <isTracer>	true	</isTracer>
     <effects>	BRlargeAPCR	</effects>
     <damage>
-      <armor>	180	</armor>
+      <armor>	210	</armor>
       <devices>	45	</devices>
     </damage>
   </_90mm_OFL_90_DS2_SH>
-  <_127mm_Capped_Common_Semi_AP_SH>
+  <_127mm_OE_127_Mle_55_SH>
     <id>	263	</id>
-    <userString>	#france_vehicles:_127mm_Capped_Common_Semi_AP_SH	</userString>
+    <userString>	#france_vehicles:_127mm_OE_127_Mle_55_SH	</userString>
     <icon>	he	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	152	</caliber>
+    <caliber>	127	</caliber>
     <explosionRadius>	4	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	BRlargeHighExplosive	</effects>
@@ -2224,16 +2224,16 @@
       <armor>	550	</armor>
       <devices>	45	</devices>
     </damage>
-  </_127mm_Capped_Common_Semi_AP_SH>
-  <_127mm_Common_HEAT_SH>
+  </_127mm_OE_127_Mle_55_SH>
+  <_127mm_OE_127_D_700_SH>
     <id>	264	</id>
-    <userString>	#france_vehicles:_127mm_Common_HEAT_SH	</userString>
+    <userString>	#france_vehicles:_127mm_OE_127_D_700_SH	</userString>
     <icon>	he	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
     <improved>	true	</improved>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	152	</caliber>
+    <caliber>	127	</caliber>
     <explosionRadius>	2.8	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	BRlargeHighExplosive	</effects>
@@ -2241,5 +2241,5 @@
       <armor>	450	</armor>
       <devices>	45	</devices>
     </damage>
-  </_127mm_Common_HEAT_SH>
+  </_127mm_OE_127_D_700_SH>
 </shells.xml>

@@ -446,6 +446,10 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         if constants.IS_SHOW_SERVER_STATS:
             self.serverStats.onStatsReceived += self.__onStatsReceived
             self.__onStatsReceived()
+        else:
+            self.as_setServerNameS(makeHtmlString('html_templates:lobby', 'onlineCounter', {'key': self.connectionMgr.serverUserNameShort,
+             'delimiter': '',
+             'value': ''}))
         self.updateAccountInfo()
         self.__updateServerData()
         if not isTimeToShowGoldFishPromo():
@@ -1315,9 +1319,11 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         else:
             tooltip = TOOLTIPS.HEADER_INFO_PLAYERS_ONLINE_FULL
         clusterStats = makeHtmlString('html_templates:lobby', 'onlineCounter', {'key': self.connectionMgr.serverUserNameShort,
+         'delimiter': backport.text(R.strings.common.common.colon()),
          'value': clusterUsers})
         if tooltipType == STATS_TYPE.FULL:
-            regionStats = makeHtmlString('html_templates:lobby', 'onlineCounter', {'key': i18n.makeString(MENU.ONLINECOUNTER_TOTAL),
+            regionStats = makeHtmlString('html_templates:lobby', 'onlineCounter', {'key': backport.text(R.strings.menu.onlineCounter.total()),
+             'delimiter': backport.text(R.strings.common.common.colon()),
              'value': regionUsers})
         else:
             regionStats = ''

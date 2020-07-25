@@ -3,7 +3,7 @@
 from adisp import process
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import SellModuleMeta
-from gui.Scaleform.daapi.view.lobby.storage.cm_handlers import option, CMLabel, ContextMenu
+from gui.Scaleform.daapi.view.lobby.shared.cm_handlers import option, CMLabel, ContextMenu
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.shared import EVENT_BUS_SCOPE, events
 from gui.shared import event_dispatcher as shared_events

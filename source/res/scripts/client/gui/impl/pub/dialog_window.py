@@ -76,7 +76,7 @@ class DialogWindow(Window):
     gui = dependency.descriptor(IGuiLoader)
     __slots__ = ('__blur', '__scope', '__event', '__result')
 
-    def __init__(self, content=None, bottomContent=None, parent=None, balanceContent=None, enableBlur=True, layer=DialogLayer.TOP_WINDOW):
+    def __init__(self, content=None, bottomContent=None, parent=None, balanceContent=None, enableBlur=True, enableBlur3D=True, layer=DialogLayer.TOP_WINDOW):
         if content is not None:
             pass
         settings = WindowSettings()
@@ -93,7 +93,7 @@ class DialogWindow(Window):
             blurLayers = [APP_CONTAINERS_NAMES.VIEWS, APP_CONTAINERS_NAMES.SUBVIEW, APP_CONTAINERS_NAMES.BROWSER]
             if layer > DialogLayer.WINDOW:
                 blurLayers.append(APP_CONTAINERS_NAMES.WINDOWS)
-            self.__blur = CachedBlur(enabled=True, ownLayer=APP_CONTAINERS_NAMES.DIALOGS, layers=blurLayers)
+            self.__blur = CachedBlur(enabled=True, ownLayer=APP_CONTAINERS_NAMES.DIALOGS, layers=blurLayers, blurAnimRepeatCount=4)
         return
 
     @async
@@ -142,7 +142,7 @@ class DialogWindow(Window):
     def _removeAllButtons(self):
         self.viewModel.buttons.getItems().clear()
 
-    def _addButton(self, name, label=R.invalid(), isFocused=False, invalidateAll=False, isEnabled=True, soundDown=None, rawLabel=''):
+    def _addButton(self, name, label=R.invalid(), isFocused=False, invalidateAll=False, isEnabled=True, soundDown=None, rawLabel='', tooltipHeader=R.invalid(), tooltipBody=R.invalid()):
         button = DialogButtonModel()
         button.setName(name)
         if rawLabel:
@@ -153,6 +153,8 @@ class DialogWindow(Window):
         button.setIsEnabled(isEnabled)
         if soundDown is not None:
             button.setSoundDown(soundDown)
+        button.setTooltipHeader(tooltipHeader)
+        button.setTooltipBody(tooltipBody)
         self.viewModel.buttons.addViewModel(button, isSelected=isFocused)
         if invalidateAll:
             self.viewModel.buttons.invalidate()

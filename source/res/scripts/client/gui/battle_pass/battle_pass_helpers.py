@@ -26,7 +26,9 @@ class BackgroundPositions(object):
 
 
 VEHICLES_BACKGROUND_POSITIONS = {22017: BackgroundPositions.LEFT,
- 15697: BackgroundPositions.RIGHT}
+ 15697: BackgroundPositions.RIGHT,
+ 2417: BackgroundPositions.LEFT,
+ 14113: BackgroundPositions.RIGHT}
 
 def getVehicleBackgroundPosition(vehCD):
     return VEHICLES_BACKGROUND_POSITIONS.get(vehCD)

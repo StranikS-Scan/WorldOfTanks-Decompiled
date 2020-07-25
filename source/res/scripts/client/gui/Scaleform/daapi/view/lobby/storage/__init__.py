@@ -23,6 +23,7 @@ from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_cm_handlers impo
 from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_cm_handlers import OptionalDeviceCMHandler
 from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_view import InventoryCategoryStorageView
 from gui.Scaleform.daapi.view.lobby.storage.inventory.modules_tab import ModulesTabView
+from gui.Scaleform.daapi.view.lobby.storage.inventory.opt_devices_tab import OptDevicesTabView
 from gui.Scaleform.daapi.view.lobby.storage.inventory.regular_items_tab import RegularItemsTabView
 from gui.Scaleform.daapi.view.lobby.storage.inventory.select_vehicle_popover import VehicleSelectPopover
 from gui.Scaleform.daapi.view.lobby.storage.inventory.shells_tab import ShellsTabView
@@ -67,6 +68,7 @@ def getViewSettings():
      ViewSettings(STORAGE_CONSTANTS.STORAGE_CONSUMABLES_TAB, ConsumablesTabView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(STORAGE_CONSTANTS.STORAGE_MODULES_TAB, ModulesTabView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(STORAGE_CONSTANTS.STORAGE_SHELLS_TAB, ShellsTabView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(STORAGE_CONSTANTS.STORAGE_DEVICES_TAB, OptDevicesTabView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(STORAGE_CONSTANTS.STORAGE_CREW_BOOKS_TAB, CrewBooksTabView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(STORAGE_CONSTANTS.PERSONAL_RESERVES_VIEW, StorageCategoryPersonalReservesView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.STORAGE_VEHICLES_FILTER_POPOVER, StorageVehicleFilterPopover, 'vehiclesFiltersPopoverView.swf', ViewTypes.WINDOW, VIEW_ALIAS.STORAGE_VEHICLES_FILTER_POPOVER, VIEW_ALIAS.STORAGE_VEHICLES_FILTER_POPOVER, ScopeTemplates.DEFAULT_SCOPE),

@@ -515,6 +515,14 @@
       <modelsSet>	KingTiger	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/kingtiger	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -806,7 +814,14 @@
       <modelsSet>	offspring	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:main_style/A127_TL_1_LPC_3Dst_Offspring	</userString>
-      <tags>	offspringArenaMusic	</tags>
+      <tags>	offspringArenaMusic progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -828,48 +843,6 @@
               <appliedTo>	52416	</appliedTo>
             </item>
           </decals>
-          <projection_decals>
-            <item>
-              <id>	127	</id>
-              <showOn>	HULL	</showOn>
-              <doubleSided>	0	</doubleSided>
-              <position>
-                <p0>	-1.5	</p0>
-                <p1>	1	</p1>
-                <p2>	-0.37	</p2>
-              </position>
-              <rotation>
-                <r0>	1.5708	</r0>
-                <r1>	1.5708	</r1>
-                <r2>	0.0	</r2>
-              </rotation>
-              <scale>
-                <s0>	3.4	</s0>
-                <s1>	1.0	</s1>
-                <s2>	3.4	</s2>
-              </scale>
-            </item>
-            <item>
-              <id>	138	</id>
-              <showOn>	HULL	</showOn>
-              <doubleSided>	0	</doubleSided>
-              <position>
-                <p0>	1.5	</p0>
-                <p1>	1	</p1>
-                <p2>	-0.4	</p2>
-              </position>
-              <rotation>
-                <r0>	1.5708	</r0>
-                <r1>	0.0	</r1>
-                <r2>	1.5708	</r2>
-              </rotation>
-              <scale>
-                <s0>	2.6	</s0>
-                <s1>	1.0	</s1>
-                <s2>	2.6	</s2>
-              </scale>
-            </item>
-          </projection_decals>
         </outfit>
       </outfits>
     </style>

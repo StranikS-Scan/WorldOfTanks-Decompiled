@@ -98,7 +98,9 @@ _GAME_ITEM_CONDITION_TAGS = {'selected': _COND_STATE.SELECTED,
  'installed': _COND_STATE.INSTALLED,
  'not-installed': ~_COND_STATE.INSTALLED,
  'has-regular-consumables': _COND_STATE.HAS_REGULAR_CONSUMABLES,
- 'has-no-regular-consumables': ~_COND_STATE.HAS_REGULAR_CONSUMABLES}
+ 'has-no-regular-consumables': ~_COND_STATE.HAS_REGULAR_CONSUMABLES,
+ 'has-optional-devices': _COND_STATE.HAS_OPTIONAL_DEVICES,
+ 'has-no-optional-devices': ~_COND_STATE.HAS_OPTIONAL_DEVICES}
 _GAME_ITEM_CONDITION_SET = set(_GAME_ITEM_CONDITION_TAGS.keys())
 
 def _readGameItemCondition(xmlCtx, section, _):

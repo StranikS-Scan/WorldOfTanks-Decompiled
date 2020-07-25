@@ -9,7 +9,7 @@ from gui.Scaleform.daapi.view.lobby.storage.category_view import StorageDataProv
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import createStorageDefVO
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageItemDescr
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageItemIcon
-from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageModuleName
+from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageItemName
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageShellsData
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL
 from gui.Scaleform.daapi.view.meta.StorageCategoryForSellViewMeta import StorageCategoryForSellViewMeta
@@ -44,7 +44,7 @@ def _sortKey(item):
     return (itemTypeIndex,
      -itemPrice.gold if itemPrice.gold is not None else 0,
      -itemPrice.credits if itemPrice.credits is not None else 0,
-     getStorageModuleName(item))
+     getStorageItemName(item))
 
 
 class _StorageForSellCache(FileLocalCache):
@@ -206,7 +206,7 @@ class _SelectableDataProvider(StorageDataProvider):
     def __createVO(self, item):
         priceVO = getItemPricesVO(item.getSellPrice())[0]
         nationFlagIcon = RES_SHOP.getNationFlagIcon(nations.NAMES[item.nationID]) if item.nationID != nations.NONE_INDEX else ''
-        return createStorageDefVO(item.intCD, getStorageModuleName(item), getStorageItemDescr(item), item.inventoryCount, priceVO, getStorageItemIcon(item, STORE_CONSTANTS.ICON_SIZE_SMALL), 'altimage', itemType=item.getOverlayType(), nationFlagIcon=nationFlagIcon, contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_FOR_SELL_ITEM)
+        return createStorageDefVO(item.intCD, getStorageItemName(item), getStorageItemDescr(item), item.inventoryCount, priceVO, getStorageItemIcon(item, STORE_CONSTANTS.ICON_SIZE_SMALL), 'altimage', itemType=item.getOverlayType(), nationFlagIcon=nationFlagIcon, contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_FOR_SELL_ITEM)
 
     def __getOriginalItemPrice(self, item):
         return item.getSellPrice().price * item.inventoryCount

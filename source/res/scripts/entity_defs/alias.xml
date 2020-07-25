@@ -53,6 +53,9 @@
       <hasMods>
         <Type>	UINT8	</Type>
       </hasMods>
+      <reason32bit>
+        <Type>	UINT8	</Type>
+      </reason32bit>
       <cpuFamily>
         <Type>	UINT32	</Type>
       </cpuFamily>
@@ -386,6 +389,9 @@
       <commanderSkinID>
         <Type>	UINT16	</Type>
       </commanderSkinID>
+      <maxHealth>
+        <Type>	UINT16	</Type>
+      </maxHealth>
     </Properties>
   </PUBLIC_VEHICLE_INFO>
   <ATTACK_RESULTS>	FIXED_DICT	  <Properties>
@@ -1372,6 +1378,9 @@
       <overriddenBadge>
         <Type>	UINT8	</Type>
       </overriddenBadge>
+      <maxHealth>
+        <Type>	UINT16	</Type>
+      </maxHealth>
     </Properties>
   </CLIENT_VEHICLE_PUBLIC_INFO>
   <PLAY_LIMITS>	FIXED_DICT	  <Properties>

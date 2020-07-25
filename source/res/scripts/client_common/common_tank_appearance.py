@@ -27,6 +27,8 @@ from vehicle_systems.components.vehicle_shadow_manager import VehicleShadowManag
 import items.vehicles
 from helpers import bound_effects, gEffectsDisabled
 from vehicle_outfit.outfit import Outfit
+from items.battle_royale import isSpawnedBot
+from helpers import isPlayerAvatar
 DEFAULT_STICKERS_ALPHA = 1.0
 MATKIND_COUNT = 3
 MAX_DISTANCE = 500
@@ -236,7 +238,8 @@ class CommonTankAppearance(ScriptGameObject):
                 if self.typeDescriptor.hasSiegeMode:
                     self.siegeEffects = SiegeEffectsController(self, isPlayer)
                 model_assembler.assembleVehicleAudition(isPlayer, self)
-                model_assembler.subscribeEngineAuditionToEngineState(self.engineAudition, self.detailedEngineState)
+                self.detailedEngineState.onEngineStart = self._onEngineStart
+                self.detailedEngineState.onStateChanged = self.engineAudition.onEngineStateChanged
             if isPlayer:
                 turret = self.typeDescriptor.turret
                 gunRotatorAudition = self.createComponent(Vehicular.GunRotatorAudition, turret.turretRotatorSoundManual, turret.weight / 1000.0, compoundModel.node(TankPartNames.TURRET))
@@ -457,6 +460,11 @@ class CommonTankAppearance(ScriptGameObject):
         self.flagComponent = None
         return
 
+    def _onEngineStart(self):
+        if self.engineAudition is not None:
+            self.engineAudition.onEngineStart()
+        return
+
     def __assembleNonDamagedOnly(self, resourceRefs, isPlayer, lodLink, lodStateLink):
         model_assembler.assembleTerrainMatKindSensor(self, lodStateLink, self.worldID)
         model_assembler.assembleRecoil(self, lodLink)
@@ -571,7 +579,13 @@ class CommonTankAppearance(ScriptGameObject):
                 return
             vehicle = self._vehicle
             effects = random.choice(effects)
-            self.boundEffects.addNew(None, effects[1], effects[0], isPlayerVehicle=vehicle.isPlayerVehicle, showShockWave=vehicle.isPlayerVehicle, showFlashBang=vehicle.isPlayerVehicle, entity_id=vehicle.id, isPlayer=vehicle.isPlayerVehicle, showDecal=enableDecal, start=vehicle.position + Math.Vector3(0.0, 1.0, 0.0), end=vehicle.position + Math.Vector3(0.0, -1.0, 0.0))
+            args = dict(isPlayerVehicle=vehicle.isPlayerVehicle, showShockWave=vehicle.isPlayerVehicle, showFlashBang=vehicle.isPlayerVehicle, entity_id=vehicle.id, isPlayer=vehicle.isPlayerVehicle, showDecal=enableDecal, start=vehicle.position + Math.Vector3(0.0, 1.0, 0.0), end=vehicle.position + Math.Vector3(0.0, -1.0, 0.0))
+            if isSpawnedBot(self.typeDescriptor.type.tags) and kind in ('explosion', 'destruction'):
+                player = BigWorld.player()
+                if player is not None and isPlayerAvatar():
+                    player.terrainEffects.addNew(self._vehicle.position, effects[1], effects[0], None, **args)
+            else:
+                self.boundEffects.addNew(None, effects[1], effects[0], **args)
             return
 
     def _updateCurrTerrainMatKinds(self):
@@ -601,6 +615,11 @@ class CommonTankAppearance(ScriptGameObject):
             self.detailedEngineState.mode = mode[0]
         if self.trackScrollController is not None:
             self.trackScrollController.setMode(mode)
+        return
+
+    def changeSiegeState(self, siegeState):
+        if self.engineAudition is not None:
+            self.engineAudition.onSiegeStateChanged(siegeState)
         return
 
     def turretDamaged(self):

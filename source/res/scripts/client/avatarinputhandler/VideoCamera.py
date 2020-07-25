@@ -597,9 +597,7 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         if not isPlayerAvatar():
             return endPos
         else:
-            moveDir = endPos - startPos
-            moveDir.normalise()
-            _, collisionPointWithBorders = BigWorld.player().arena.collideWithSpaceBB(startPos - moveDir, endPos + moveDir)
+            _, collisionPointWithBorders = BigWorld.player().arena.collideWithSpaceBB(startPos, endPos)
             return collisionPointWithBorders if collisionPointWithBorders is not None else endPos
 
     def __processBindToVehicleKey(self):

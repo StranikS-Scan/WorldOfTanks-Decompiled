@@ -7,5 +7,6 @@ class BattleRoyaleMarkersManager(MarkersManager):
 
     def _setupPlugins(self, arenaVisitor):
         setup = super(BattleRoyaleMarkersManager, self)._setupPlugins(arenaVisitor)
-        setup['vehicles'] = plugins.RoyalBattleVehicleMarkerPlugin
+        setup['vehicles'] = plugins.BattleRoyaleVehicleMarkerPlugin
+        setup['settings'] = plugins.BattleRoyaleSettingsPlugin
         return setup

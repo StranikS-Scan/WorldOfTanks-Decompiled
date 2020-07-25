@@ -269,7 +269,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
     def _getAmmoPrice(self):
         ammoPrice = ITEM_PRICE_EMPTY
         for shell in self.vehicle.gun.defaultAmmo:
-            ammoPrice += shell.buyPrices.itemPrice * shell.defaultCount
+            ammoPrice += shell.buyPrices.itemPrice * shell.count
 
         return ammoPrice
 
@@ -373,7 +373,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
                 operations.append('crew')
             if tradeOffVehicle.hasShells:
                 operations.append('shells')
-            if tradeOffVehicle.hasEquipments:
+            if tradeOffVehicle.hasConsumables:
                 operations.append('equipments')
             if tradeOffVehicle.hasOptionalDevices:
                 operations.append('optionalDevices')

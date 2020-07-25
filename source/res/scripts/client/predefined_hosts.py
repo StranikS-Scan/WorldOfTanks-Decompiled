@@ -15,7 +15,7 @@ from helpers.time_utils import ONE_MINUTE
 from shared_utils import BitmaskHelper
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_WARNING
 from helpers import i18n
-AUTO_LOGIN_QUERY_ENABLED = not (constants.IS_DEVELOPMENT or constants.IS_CHINA)
+AUTO_LOGIN_QUERY_ENABLED = not constants.IS_DEVELOPMENT
 AUTO_LOGIN_QUERY_URL = 'auto.login.app:0000'
 AUTO_LOGIN_QUERY_TIMEOUT = 5
 CSIS_REQUEST_TIMEOUT = 10

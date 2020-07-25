@@ -3,6 +3,7 @@
 from collections import namedtuple
 import itertools
 import math
+import typing
 import sys
 from gui.shared.items_parameters import calcGunParams, calcShellParams, getEquipmentParameters, isAutoReloadGun, isDualGun
 from gui.shared.items_parameters import xml_reader
@@ -13,10 +14,18 @@ from items import vehicles, ITEM_TYPES, EQUIPMENT_TYPES
 from items.vehicles import getVehicleType
 from gui.shared.utils import GUN_NORMAL, GUN_CAN_BE_CLIP, GUN_CLIP, GUN_CAN_BE_AUTO_RELOAD, GUN_AUTO_RELOAD, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from items.vehicles import VehicleDescriptor
 PrecachedShell = namedtuple('PrecachedShell', 'guns params')
 PrecachedEquipment = namedtuple('PrecachedEquipment', 'nations params')
 PrecachedOptionalDevice = namedtuple('PrecachedOptionalDevice', 'weight nations')
 PrecachedChassis = namedtuple('PrecachedChassis', 'isHydraulic, isWheeled, hasAutoSiege')
+PrecachedEngine = namedtuple('PrecachedEngine', 'hasTurboshaftEngine')
+
+class _PrecachedEngineTypes(object):
+    DEFAULT = PrecachedEngine(hasTurboshaftEngine=False)
+    TURBOSHAFT = PrecachedEngine(hasTurboshaftEngine=True)
+
 
 class _PrecachedChassisTypes(object):
     DEFAULT = PrecachedChassis(isHydraulic=False, isWheeled=False, hasAutoSiege=False)
@@ -30,6 +39,10 @@ class _PrecachedChassisTypes(object):
      HYDRAULIC_WHEELED,
      HYDRAULIC_AUTO_SIEGE)
     MAP = dict((((pC.isHydraulic, pC.isWheeled, pC.hasAutoSiege), pC) for pC in ALL))
+
+
+def isHydraulicChassis(vDescr):
+    return vDescr.hasHydraulicChassis or vDescr.isWheeledVehicle or vDescr.hasAutoSiegeMode if vDescr.hasSiegeMode else False
 
 
 class PrecachedGun(namedtuple('PrecachedGun', 'clipVehicles autoReloadVehicles dualGunVehicles  params turretsByVehicles')):
@@ -148,6 +161,7 @@ class _ParamsCache(object):
             self.__precacheEquipments(vehiclesCache)
             self.__precacheChassis(vehiclesCache)
             self.__cacheVehiclesWithoutCamouflage()
+            self.__precacheEngines(vehiclesCache)
             vehiclesCache.clear()
             del vehiclesCache
         except Exception:
@@ -174,6 +188,9 @@ class _ParamsCache(object):
 
     def getWheeledChassisAxleLockAngles(self, itemCD):
         return self.__wheeledChassisParams.get(itemCD)
+
+    def hasTurboshaftEngine(self, itemCD):
+        return self.getPrecachedParameters(itemCD).hasTurboshaftEngine
 
     def getSimplifiedCoefficients(self):
         return self.__simplifiedParamsCoefficients
@@ -207,6 +224,9 @@ class _ParamsCache(object):
                     if item.equipmentType == EQUIPMENT_TYPES.battleBoosters:
                         itemTypeName = 'battleBooster'
                 compatibles.append((item.name, itemTypeName))
+            if item.itemTypeName == 'optionalDevice':
+                if item in vehicleDescr.optionalDevices:
+                    compatibles.append((item.name, item.itemTypeName))
 
         return compatibles
 
@@ -306,7 +326,7 @@ class _ParamsCache(object):
             for vDescr in vehiclesCache.generator(nationIdx):
                 for vChs in vDescr.type.chassis:
                     chassisCD = vChs.compactDescr
-                    cachedChassisByNation[chassisCD] = _PrecachedChassisTypes.MAP[vDescr.hasSiegeMode, vDescr.isWheeledVehicle, vDescr.hasAutoSiegeMode]
+                    cachedChassisByNation[chassisCD] = _PrecachedChassisTypes.MAP[isHydraulicChassis(vDescr), vDescr.isWheeledVehicle, vDescr.hasAutoSiegeMode]
                     processedItems.add(chassisCD)
                     if vDescr.isWheeledVehicle:
                         chassisPhysics = vDescr.type.xphysics['chassis'][vChs.name]
@@ -315,6 +335,26 @@ class _ParamsCache(object):
             for chs in getter(nationIdx).itervalues():
                 if chs.compactDescr not in processedItems:
                     cachedChassisByNation[chs.compactDescr] = _PrecachedChassisTypes.DEFAULT
+
+    def __precacheEngines(self, vehiclesCache):
+        getter = vehicles.g_cache.engines
+        engineItemType = ITEM_TYPES.vehicleEngine
+        processedItems = set()
+        for nationIdx in nations.INDICES.itervalues():
+            self.__cache.setdefault(nationIdx, {})[engineItemType] = {}
+            cachedEngineByNation = self.__cache[nationIdx][engineItemType]
+            for vDescr in vehiclesCache.generator(nationIdx):
+                for vEng in vDescr.type.engines:
+                    engineCD = vEng.compactDescr
+                    if vDescr.hasTurboshaftEngine:
+                        cachedEngineByNation[engineCD] = _PrecachedEngineTypes.TURBOSHAFT
+                    else:
+                        cachedEngineByNation[engineCD] = _PrecachedEngineTypes.DEFAULT
+                    processedItems.add(engineCD)
+
+            for eng in getter(nationIdx).itervalues():
+                if eng.compactDescr not in processedItems:
+                    cachedEngineByNation[eng.compactDescr] = _PrecachedEngineTypes.DEFAULT
 
     def __cacheVehiclesWithoutCamouflage(self):
         vehicleCDs = []

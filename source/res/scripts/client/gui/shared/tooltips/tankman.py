@@ -242,7 +242,7 @@ class NotRecruitedTooltipData(BlocksTooltipData):
         skills = item.getLearntSkills()
         if skills:
             blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.NOTRECRUITEDTANKMAN_SKILLSTITLE), useHtml=True, padding=formatters.packPadding(top=17 if hasDescr else 18, bottom=10)))
-            blocks.append(formatters.packImageListParameterBlockData(listIconSrc=[ Tankman.getSkillIconPath(skillName=skillName, size='big') for skillName in skills ], columnWidth=52, rowHeight=52, verticalGap=10, horizontalGap=10))
+            blocks.append(formatters.packImageListParameterBlockData(listIconSrc=[ formatters.packImageListIconData(Tankman.getSkillIconPath(skillName=skillName, size='big')) for skillName in skills ], columnWidth=52, rowHeight=52, verticalGap=10, horizontalGap=10))
         expiryTime = item.getExpiryTime()
         if expiryTime:
             blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.NOTRECRUITEDTANKMAN_EXPIRETITLE), useHtml=True, padding=formatters.packPadding(top=20 if skills else (17 if hasDescr else 16), bottom=2)))

@@ -15,3 +15,6 @@ class PrebattleTimerMeta(PreBattleTimerBase):
 
     def as_setInfoHintS(self, hint):
         return self.flashObject.as_setInfoHint(hint) if self._isDAAPIInited() else None
+
+    def as_showInfoS(self):
+        return self.flashObject.as_showInfo() if self._isDAAPIInited() else None

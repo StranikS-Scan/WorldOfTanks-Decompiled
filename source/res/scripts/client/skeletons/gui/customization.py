@@ -7,6 +7,10 @@ class ICustomizationService(object):
     onOutfitChanged = None
     onCustomizationHelperRecreated = None
 
+    @property
+    def isOver3dScene(self):
+        raise NotImplementedError
+
     def init(self):
         raise NotImplementedError
 

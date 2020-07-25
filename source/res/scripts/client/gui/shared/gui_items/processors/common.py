@@ -74,11 +74,14 @@ class PremiumAccountBuyer(Processor):
 
 class GoldToCreditsExchanger(Processor):
 
-    def __init__(self, gold):
+    def __init__(self, gold, withConfirm=True):
         self.gold = gold
         self.credits = int(gold) * self.itemsCache.items.shop.exchangeRate
-        super(GoldToCreditsExchanger, self).__init__(plugins=(plugins.HtmlMessageConfirmator('exchangeGoldConfirmation', 'html_templates:lobby/dialogs', 'confirmExchange', {'primaryCurrencyAmount': backport.getGoldFormat(self.gold),
-          'resultCurrencyAmount': backport.getIntegralFormat(self.credits)}), plugins.MoneyValidator(Money(gold=self.gold))))
+        super(GoldToCreditsExchanger, self).__init__()
+        if withConfirm:
+            self.addPlugin(plugins.HtmlMessageConfirmator('exchangeGoldConfirmation', 'html_templates:lobby/dialogs', 'confirmExchange', {'primaryCurrencyAmount': backport.getGoldFormat(self.gold),
+             'resultCurrencyAmount': backport.getIntegralFormat(self.credits)}))
+        self.addPlugin(plugins.MoneyValidator(Money(gold=self.gold)))
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError(sysMsgKey='exchange/{}'.format(errStr), defaultSysMsgKey='exchange/server_error', gold=self.gold)

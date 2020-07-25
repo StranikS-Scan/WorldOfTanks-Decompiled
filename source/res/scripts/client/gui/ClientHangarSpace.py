@@ -11,7 +11,6 @@ import ResMgr
 import constants
 from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
-from gui.Scaleform.framework.managers.optimization_manager import GraphicsOptimizationManager
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IIGRController
@@ -24,6 +23,7 @@ _DEFAULT_SPACES_PATH = 'spaces'
 SERVER_CMD_CHANGE_HANGAR = 'cmd_change_hangar'
 SERVER_CMD_CHANGE_HANGAR_PREM = 'cmd_change_hangar_prem'
 _CUSTOMIZATION_HANGAR_SETTINGS_SEC = 'customizationHangarSettings'
+_LOGIN_BLACK_BG_IMG = 'gui/maps/login/blackBg.png'
 _SECONDARY_HANGAR_SETTINGS_SEC = 'secondaryHangarSettings'
 _FULL_VISIBILITY = (1 << 10) - 1 | 1 << 16 | 1 << 17 | 1 << 18 | 1 << 19
 _RANKED_ON_MASK, _RANKED_GAP_MASK, _RANKED_OFF_MASK = (128, 256, 512)
@@ -237,8 +237,6 @@ class ClientHangarSpace(object):
         self.__showMarksOnGun = False
         self.__prevDirection = 0.0
         self.__onVehicleLoadedCallback = onVehicleLoadedCallback
-        self.__gfxOptimizerMgr = None
-        self.__optimizerID = None
         self.__spacePath = None
         self.__spaceVisibilityMask = None
         _HANGAR_CFGS = _readHangarSettings()
@@ -282,9 +280,8 @@ class ClientHangarSpace(object):
         self.__cameraManager = HangarCameraManager(self.__spaceId)
         self.__cameraManager.init()
         self.__waitCallback = BigWorld.callback(0.1, self.__waitLoadingSpace)
-        self.__gfxOptimizerMgr = GraphicsOptimizationManager()
-        size = BigWorld.screenSize()
-        self.__optimizerID = self.__gfxOptimizerMgr.registerOptimizationArea(0, 0, size[0], size[1])
+        BigWorld.wg_enableGUIBackground(True, False)
+        BigWorld.wg_setGUIBackground(_LOGIN_BLACK_BG_IMG)
         self.mapActivities.generateOfflineActivities(spacePath)
         BigWorld.pauseDRRAutoscaling(True)
         return
@@ -405,11 +402,7 @@ class ClientHangarSpace(object):
         return
 
     def __closeOptimizedRegion(self):
-        if self.__gfxOptimizerMgr is not None:
-            self.__gfxOptimizerMgr.unregisterOptimizationArea(self.__optimizerID)
-            self.__gfxOptimizerMgr = None
-            self.__optimizerID = None
-        return
+        BigWorld.wg_enableGUIBackground(False, True)
 
     def setCameraLocation(self, *args):
         self.__cameraManager.setCameraLocation(*args)

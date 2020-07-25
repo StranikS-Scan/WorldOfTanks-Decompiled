@@ -18,6 +18,14 @@
       <description>	#vehicle_customization:main_style/generic_custom_look_china_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_china_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:main_style/generic_custom_look_china	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	summer	</season>
@@ -94,6 +102,14 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_2_china.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_2_china_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_2_china	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	winter	</season>

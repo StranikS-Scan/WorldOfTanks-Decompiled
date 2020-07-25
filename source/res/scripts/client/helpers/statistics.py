@@ -244,6 +244,7 @@ class StatisticsCollector(IStatisticsCollector):
          'gpuScore': BigWorld.getAutoDetectGraphicsSettingsScore(HARDWARE_SCORE_PARAMS.PARAM_GPU_SCORE),
          'osBit': statisticsDict['osBit'],
          'hasMods': statisticsDict['hasMods'],
+         'reason32bit': statisticsDict['reason32bit'],
          'cpuFamily': statisticsDict['cpuFamily'],
          'gpuFamily': statisticsDict['gpuFamily'],
          'crashed': statisticsDict['crashed'],

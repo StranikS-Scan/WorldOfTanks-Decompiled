@@ -3,6 +3,8 @@
 from collections import namedtuple
 import logging
 from typing import Iterable, Any, Optional
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.entities.View import ViewKey
 from gui.impl.lobby.dialogs.contents.checkbox_content import CheckBoxDialogContent
 from gui.impl.pub.simple_dialog_window import SimpleDialogWindow
 from gui.impl.pub.pure_dialog_window import PureDialogWindow
@@ -12,7 +14,9 @@ from gui.impl.lobby.dialogs.contents.common_balance_content import CommonBalance
 from gui.impl.gen.view_models.constants.dialog_presets import DialogPresets
 from gui.impl.gen_utils import DynAccessor
 from gui.impl.gen.view_models.common.format_string_arg_model import FormatStringArgModel
+from helpers import dependency
 from shared_utils import first
+from skeletons.gui.app_loader import IAppLoader
 _logger = logging.getLogger(__name__)
 _MessageArgs = namedtuple('_MessageArgs', ('args', 'fmtArgs', 'namedFmtArgs'))
 _DialogButton = namedtuple('DialogButton', ('name', 'label', 'isFocused', 'soundDown', 'rawLabel'))
@@ -32,6 +36,7 @@ def _setupButtonsBasedOnRes(obj, message, buttons=R.strings.dialogs.common, focu
 
 
 class PureDialogBuilder(object):
+    __appLoader = dependency.descriptor(IAppLoader)
     __slots__ = ('_windowClass', '__title', '__formattedTitle', '__titleArgs', '__icon', '__backImg', '__preset', '__layer', '__buttons', '__showBalance', '__checkboxLabel', '__checkboxCheckedByDefault')
 
     def __init__(self):
@@ -69,6 +74,14 @@ class PureDialogBuilder(object):
             if self.__backImg is not None:
                 dialog.setBackground(self.__backImg)
             return dialog
+
+    def buildInLobby(self, parent=None):
+        if parent is None:
+            app = self.__appLoader.getApp()
+            view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY))
+            if view is not None:
+                parent = view
+        return self.build(parent)
 
     def setFormattedTitle(self, formattedTitle):
         self.__formattedTitle = formattedTitle

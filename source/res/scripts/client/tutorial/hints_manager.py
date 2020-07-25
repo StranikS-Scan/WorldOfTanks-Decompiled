@@ -167,10 +167,10 @@ class HintsManager(object):
         return True if conditions is None else FunctionalConditions(conditions).allConditionsOk()
 
     def __startSettingsListening(self):
-        self.__settingsCore.onSettingsChanged += self.__onSettingsChanged
+        self.__settingsCore.onOnceOnlyHintsChanged += self.__onSettingsChanged
 
     def __stopSettingsListening(self):
-        self.__settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self.__settingsCore.onOnceOnlyHintsChanged -= self.__onSettingsChanged
 
     def __onSettingsChanged(self, diff):
         diffKeys = diff.viewkeys()

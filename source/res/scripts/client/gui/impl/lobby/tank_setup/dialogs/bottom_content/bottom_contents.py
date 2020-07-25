@@ -1,0 +1,102 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
+# Embedded file name: scripts/client/gui/impl/lobby/tank_setup/dialogs/bottom_content/bottom_contents.py
+from gui.impl.lobby.dialogs.contents.exchange_content import ExchangeContent, ExchangeMoneyInfo
+from gui.impl.lobby.tank_setup.base_sub_model_view import BaseSubModelView
+from gui.impl.lobby.tank_setup.configurations.base import BaseDealPanel
+from gui.impl.wrappers.user_compound_price_model import BuyPriceModelBuilder
+from gui.shared.gui_items.fitting_item import canBuyWithGoldExchange
+from gui.shared.gui_items.processors.vehicle import VehicleAutoRepairProcessor
+from gui.shared.money import Money
+from helpers import dependency
+from gui.shared.utils import decorators
+from skeletons.gui.shared import IItemsCache
+
+class AmmunitionBuyBottomContent(BaseSubModelView):
+
+    def __init__(self, viewModel, items):
+        super(AmmunitionBuyBottomContent, self).__init__(viewModel)
+        self.__items = items
+
+    def onLoading(self, *args, **kwargs):
+        super(AmmunitionBuyBottomContent, self).onLoading(*args, **kwargs)
+        self.update()
+
+    def update(self):
+        super(AmmunitionBuyBottomContent, self).update()
+        BaseDealPanel.updateDealPanelPrice(self.__items, self._viewModel)
+
+
+class ExchangePriceBottomContent(ExchangeContent):
+
+    def __init__(self, fromCurrency, toCurrency, viewModel, needItem=0):
+        self.__fromCurrency = ExchangeMoneyInfo(currencyType=fromCurrency)
+        self.__toCurrency = ExchangeMoneyInfo(currencyType=toCurrency)
+        self.__needItem = needItem
+        super(ExchangePriceBottomContent, self).__init__(fromItem=self.__fromCurrency, toItem=self.__toCurrency, viewModel=viewModel, needItem=needItem)
+
+    def initialize(self, *args, **kwargs):
+        super(ExchangePriceBottomContent, self).initialize(*args, **kwargs)
+        self.__fromCurrency.init()
+        self.__toCurrency.init()
+
+    def finalize(self):
+        self.__fromCurrency.fini()
+        self.__toCurrency.fini()
+        super(ExchangePriceBottomContent, self).finalize()
+
+
+class PriceBottomContent(BaseSubModelView):
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, viewModel, price, defPrice=None):
+        super(PriceBottomContent, self).__init__(viewModel)
+        self.__price = price
+        self.__defPrice = defPrice
+
+    def onLoading(self, *args, **kwargs):
+        super(PriceBottomContent, self).onLoading(*args, **kwargs)
+        self.update()
+
+    def update(self):
+        super(PriceBottomContent, self).update()
+        with self._viewModel.transaction() as model:
+            price = model.getPrice()
+            defPrice = model.getDefPrice()
+            price.clear()
+            defPrice.clear()
+            if self.__price:
+                BuyPriceModelBuilder.fillPriceModel(priceModel=model, price=self.__price, defPrice=self.__defPrice)
+            isEnabled = not self.__price.isDefined() or canBuyWithGoldExchange(self.__price, self.__itemsCache.items.stats.money, self.__itemsCache.items.shop.exchangeRate)
+            model.setIsDisabled(not isEnabled)
+
+
+class NeedRepairBottomContent(PriceBottomContent):
+
+    def __init__(self, viewModel, vehicle):
+        self.__vehicle = vehicle
+        self.__price = Money(credits=self.__vehicle.repairCost)
+        self.__autoRepair = self.__vehicle.isAutoRepair
+        super(NeedRepairBottomContent, self).__init__(viewModel, self.__price)
+
+    def initialize(self, *args, **kwargs):
+        super(NeedRepairBottomContent, self).initialize(*args, **kwargs)
+        self._viewModel.onAutoRenewalChanged += self.__updateAutoRepair
+
+    def finalize(self):
+        self._viewModel.onAutoRenewalChanged -= self.__updateAutoRepair
+        super(NeedRepairBottomContent, self).finalize()
+
+    def update(self):
+        super(NeedRepairBottomContent, self).update()
+        self._viewModel.setIsAutoRenewalEnabled(self.__autoRepair)
+
+    def __updateAutoRepair(self, args):
+        repair = args.get('value', self.__autoRepair)
+        if repair != self.__autoRepair:
+            self.__autoRepair = repair
+            self._viewModel.setIsAutoRenewalEnabled(repair)
+
+    @decorators.process('loadStats')
+    def processAutoRepair(self):
+        if self.__autoRepair != self.__vehicle.isAutoRepair:
+            yield VehicleAutoRepairProcessor(self.__vehicle, self.__autoRepair).request()

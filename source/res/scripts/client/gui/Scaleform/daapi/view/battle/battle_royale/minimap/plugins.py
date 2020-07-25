@@ -115,7 +115,11 @@ class BattleRoyalePersonalEntriesPlugin(CenteredPersonalEntriesPlugin):
         return VISIBILITY.MIN_RADIUS
 
     def _getPostmortemCenterEntry(self):
-        return self._getViewPointID()
+        if self._isInPostmortemMode() and self._ctrlVehicleID and self._ctrlVehicleID != self._getPlayerVehicleID():
+            newEntryID = self._getViewPointID()
+        else:
+            newEntryID = super(BattleRoyalePersonalEntriesPlugin, self)._getPostmortemCenterEntry()
+        return newEntryID
 
     def __onVehicleEnterWorld(self, vehicle):
         playerVehId = avatar_getter.getPlayerVehicleID()
@@ -263,6 +267,7 @@ class BattleRoyaleRadarPlugin(RadarPlugin):
         self.__radarAnimationEntry = None
         self.__isColorBlind = False
         self.__isMinimapSmall = None
+        self.__visibilitySystemSpottedVehicles = set()
         return
 
     def start(self):
@@ -296,12 +301,23 @@ class BattleRoyaleRadarPlugin(RadarPlugin):
             self._invoke(self.__radarAnimationEntry, MarkersAs3Descr.AS_PLAY_RADAR_ANIMATION)
         return
 
+    def addVisibilitySysSpottedVeh(self, vehId):
+        self.__visibilitySystemSpottedVehicles.add(vehId)
+        self.__destroyVehicleEntryByVehId(vehId)
+
+    def removeVisibilitySysSpottedVeh(self, vehId):
+        self.__visibilitySystemSpottedVehicles.remove(vehId)
+
     def _addVehicleEntry(self, vehicleId, xzPosition):
-        vEntryId = super(BattleRoyaleRadarPlugin, self)._addVehicleEntry(vehicleId, xzPosition)
-        if vEntryId is not None:
-            self._parentObj.setEntryParameters(vEntryId, doClip=False, scaleType=MINIMAP_SCALE_TYPES.NO_SCALE)
-            self._invoke(vEntryId, MarkersAs3Descr.AS_ADD_MARKER, self.__getVehicleMarker(), self.__timeParamsForAS.fadeIn, self.__timeParamsForAS.lifetime, self.__timeParamsForAS.fadeOut)
-        return vEntryId
+        if vehicleId in self.__visibilitySystemSpottedVehicles:
+            _logger.debug('Vehicle marker spotted by radar is not displayeddue to vehicle marker spotted by visibility system is still visible!')
+            return
+        else:
+            vEntryId = super(BattleRoyaleRadarPlugin, self)._addVehicleEntry(vehicleId, xzPosition)
+            if vEntryId is not None:
+                self._parentObj.setEntryParameters(vEntryId, doClip=False, scaleType=MINIMAP_SCALE_TYPES.NO_SCALE)
+                self._invoke(vEntryId, MarkersAs3Descr.AS_ADD_MARKER, self.__getVehicleMarker(), self.__timeParamsForAS.fadeIn, self.__timeParamsForAS.lifetime, self.__timeParamsForAS.fadeOut)
+            return vEntryId
 
     def _addLootEntry(self, typeId, xzPosition):
         lEntryId = super(BattleRoyaleRadarPlugin, self)._addLootEntry(typeId, xzPosition)
@@ -313,6 +329,10 @@ class BattleRoyaleRadarPlugin(RadarPlugin):
                 self._parentObj.setEntryParameters(lEntryId, doClip=False, scaleType=MINIMAP_SCALE_TYPES.NO_SCALE)
                 self._invoke(lEntryId, MarkersAs3Descr.AS_ADD_MARKER, lootTypeParam, self.__timeParamsForAS.fadeIn, self.__timeParamsForAS.lifetime, self.__timeParamsForAS.fadeOut)
         return lEntryId
+
+    def __destroyVehicleEntryByVehId(self, vehId):
+        if vehId in self._vehicleEntries:
+            self._destroyVehicleEntry(self._vehicleEntries[vehId].entryId, vehId)
 
     def __updateVehicleEntries(self):
         for entry in self._vehicleEntries.itervalues():
@@ -449,7 +469,7 @@ class BattleRoyalMinimapPingPlugin(SimpleMinimapPingPlugin):
     def _getClickPosition(self, x, y):
         return makeMousePositionToEpicWorldPosition(x, y, self._parentObj.getVisualBounds(), self._hitAreaSize)
 
-    def _processCommandByPosition(self, commands, locationCommand, position):
+    def _processCommandByPosition(self, commands, locationCommand, position, minimapScaleIndex):
         commands.sendAttentionToPosition3D(position, locationCommand)
 
 
@@ -459,7 +479,16 @@ class BattleRoyaleVehiclePlugin(ArenaVehiclesPlugin):
         super(BattleRoyaleVehiclePlugin, self).__init__(parent)
         self.__isColorBlind = False
         self.__isMinimapSmall = None
+        self.__radarSpottedVehiclesPlugin = None
         return
+
+    def fini(self):
+        self.__radarSpottedVehiclesPlugin = None
+        super(BattleRoyaleVehiclePlugin, self).fini()
+        return
+
+    def setRadarPlugin(self, plugin):
+        self.__radarSpottedVehiclesPlugin = plugin
 
     def setSettings(self):
         super(BattleRoyaleVehiclePlugin, self).setSettings()
@@ -483,6 +512,17 @@ class BattleRoyaleVehiclePlugin(ArenaVehiclesPlugin):
             self.__isMinimapSmall = newValue
             self.invalidateVehiclesInfo(self._arenaDP)
         return
+
+    def _notifyVehicleAdded(self, vehicleID):
+        super(BattleRoyaleVehiclePlugin, self)._notifyVehicleAdded(vehicleID)
+        if self.__radarSpottedVehiclesPlugin:
+            self.__radarSpottedVehiclesPlugin.addVisibilitySysSpottedVeh(vehicleID)
+        else:
+            _logger.warning("Couldn't update radar plugin. The reference is None!")
+
+    def _notifyVehicleRemoved(self, vehicleID):
+        super(BattleRoyaleVehiclePlugin, self)._notifyVehicleRemoved(vehicleID)
+        self.__radarSpottedVehiclesPlugin.removeVisibilitySysSpottedVeh(vehicleID)
 
     def _invoke(self, entryID, name, *args):
         pass

@@ -1,9 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/gui_item_economics.py
+import typing
 from collections import namedtuple
-from gui.shared.money import Money, Currency, MONEY_UNDEFINED
+from gui.shared.money import Money, Currency, MONEY_UNDEFINED, ZERO_MONEY
 from gui.shared.economics import getActionPrc
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from helpers import dependency
+from skeletons.gui.shared import IItemsCache
+if typing.TYPE_CHECKING:
+    from gui.shared.gui_items import Vehicle
 
 class ActualPrice(object):
     RESTORE_PRICE = 1
@@ -68,6 +73,34 @@ def getMinRentItemPrice(item):
         return ItemPrice(price=minRentPriceValue, defPrice=minRentDefPriceValue)
     else:
         return None
+
+
+def getVehicleConsumablesLayoutPrice(vehicle):
+    return sum([ item.getBuyPrice() for item in vehicle.consumables.layout.getItems() if not item.isInInventory and item not in vehicle.consumables.installed ], ITEM_PRICE_ZERO)
+
+
+def getVehicleBattleBoostersLayoutPrice(vehicle):
+    return sum([ item.getBuyPrice() for item in vehicle.battleBoosters.layout.getItems() if not item.isInInventory and item not in vehicle.battleBoosters.installed ], ITEM_PRICE_ZERO)
+
+
+def getVehicleOptionalDevicesLayoutPrice(vehicle):
+    return sum([ item.getBuyPrice() for item in vehicle.optDevices.layout.getItems() if not item.isInInventory and item not in vehicle.optDevices.installed ], ITEM_PRICE_ZERO)
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def getVehicleShellsLayoutPrice(vehicle, itemsCache=None):
+    price = ITEM_PRICE_ZERO
+    installedShells = {shell.intCD:shell.count for shell in vehicle.shells.installed.getItems()}
+    newShells = {shell.intCD:shell.count for shell in vehicle.shells.layout.getItems()}
+    for shell in vehicle.shells.layout.getItems():
+        installCount = installedShells.get(shell.intCD, 0)
+        newCount = newShells[shell.intCD]
+        if newCount > installCount:
+            shellInInvenory = itemsCache.items.getItemByCD(shell.intCD)
+            inventoryCount = shellInInvenory.inventoryCount
+            price += shell.getBuyPrice() * max(0, newCount - installCount - inventoryCount)
+
+    return price
 
 
 class ItemPrice(object):
@@ -145,6 +178,7 @@ class ItemPrice(object):
 
 
 ITEM_PRICE_EMPTY = ItemPrice(price=MONEY_UNDEFINED, defPrice=MONEY_UNDEFINED)
+ITEM_PRICE_ZERO = ItemPrice(price=ZERO_MONEY, defPrice=ZERO_MONEY)
 
 class ItemPrices(object):
     __slots__ = ('__itemPrice', '__itemAltPrice')

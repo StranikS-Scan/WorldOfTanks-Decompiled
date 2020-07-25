@@ -3,10 +3,11 @@
 import logging
 import math
 from collections import defaultdict, namedtuple
-from enum import Enum
 from functools import partial
+from enum import Enum
 import BattleReplay
 import BigWorld
+import Keys
 import Math
 import aih_constants
 from AvatarInputHandler import AvatarInputHandler
@@ -18,7 +19,7 @@ from battleground.location_point_manager import g_locationPointManager
 from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES, ReplyState, MarkerType, LocationMarkerSubType, ONE_SHOT_COMMANDS_TO_REPLIES
 from constants import VISIBILITY, AOI
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_DEBUG
-from gui import GUI_SETTINGS
+from gui import GUI_SETTINGS, InputHandler
 from gui.Scaleform.daapi.view.battle.shared.minimap import common
 from gui.Scaleform.daapi.view.battle.shared.minimap import entries
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings
@@ -910,9 +911,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
                 entry = self._entries[entityID]
                 if (self.__isObserver or not avatar_getter.isVehicleAlive()) and avatar_getter.getVehicleIDAttached() == entityID:
                     return
-                if entry.isInAoI():
-                    marker, numberOfReplies = value
-                    marker = numberOfReplies > 0 and marker == 'help_me' and 'allyIsSupporting'
+                marker, _ = entry.isInAoI() and value
                 self._invoke(entry.getID(), 'setAnimation', marker)
 
     def __onTeamChanged(self, teamID):
@@ -1003,6 +1002,8 @@ class AreaStaticMarkerPlugin(common.EntriesPlugin):
         self._addEntryEx(areaID, _LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME[locationMarkerSubtype], _C_NAME.EQUIPMENTS, matrix=minimap_utils.makePositionMatrix(position), active=True)
         if locationMarkerSubtype in _PING_FLASH_MINIMAP_SUBTYPES and numberOfReplies > 0 and isTargetForPlayer:
             self._invoke(self._entries[areaID].getID(), 'setState', 'reply')
+        elif locationMarkerSubtype in _PING_FLASH_MINIMAP_SUBTYPES and numberOfReplies > 0:
+            self._invoke(self._entries[areaID].getID(), 'setState', 'idle')
         elif locationMarkerSubtype in _PING_FLASH_MINIMAP_SUBTYPES:
             self._invoke(self._entries[areaID].getID(), 'setState', 'attack')
 
@@ -1051,14 +1052,14 @@ class SimpleMinimapPingPlugin(common.IntervalPlugin):
         super(SimpleMinimapPingPlugin, self).stop()
         self._mouseKeyEventHandler.clear()
 
-    def onMinimapClicked(self, x, y, buttonIdx):
+    def onMinimapClicked(self, x, y, buttonIdx, mapScaleIndex):
         if buttonIdx in self._mouseKeyEventHandler:
-            self._mouseKeyEventHandler[buttonIdx](x, y)
+            self._mouseKeyEventHandler[buttonIdx](x, y, mapScaleIndex)
 
     def _getClickPosition(self, x, y):
         raise NotImplementedError('must be implemented')
 
-    def _processCommandByPosition(self, commands, locationCommand, position):
+    def _processCommandByPosition(self, commands, locationCommand, position, mapScaleIndex):
         raise NotImplementedError('must be implemented')
 
     def _setupKeyBindingEvents(self, isSPGAndStrategicView):
@@ -1068,18 +1069,18 @@ class SimpleMinimapPingPlugin(common.IntervalPlugin):
         collisionWithTerrain = BigWorld.wg_collideSegment(spaceID, Math.Vector3(x, 1000.0, z), Math.Vector3(x, -1000.0, z), 128)
         return collisionWithTerrain.closestPoint if collisionWithTerrain is not None else (x, 0, z)
 
-    def _make3DPing(self, x, y, locationCommand):
+    def _make3DPing(self, x, y, locationCommand, mapScaleIndex):
         commands = self.sessionProvider.shared.chatCommands
         if commands is None:
             return
         else:
             position = Math.Vector3(self._getClickPosition(x, y))
             position = Math.Vector3(self._getTerrainHeightAt(BigWorld.player().spaceID, position.x, position.z))
-            self._processCommandByPosition(commands, locationCommand, position)
+            self._processCommandByPosition(commands, locationCommand, position, mapScaleIndex)
             return
 
-    def _make3DAttentionToPing(self, x, y):
-        self._make3DPing(x, y, BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION)
+    def _make3DAttentionToPing(self, x, y, mapScaleIndex):
+        self._make3DPing(x, y, BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION, mapScaleIndex)
 
 
 class MinimapPingPlugin(SimpleMinimapPingPlugin):
@@ -1098,33 +1099,52 @@ class MinimapPingPlugin(SimpleMinimapPingPlugin):
         self.__minimapSettings = dict(AccountSettings.getSettings(MINIMAP_IBC_HINT_SECTION))
         if self.__haveHintsLeft(self.__minimapSettings) and not self.sessionProvider.arenaVisitor.gui.isBootcampBattle():
             self.__registeredToMouseEvents = True
-            g_eventBus.addListener(events.GameEvent.SHOW_CURSOR, self.__handleShowCursor, EVENT_BUS_SCOPE.GLOBAL)
-            g_eventBus.addListener(events.GameEvent.HIDE_CURSOR, self.__handleHideCursor, scope=EVENT_BUS_SCOPE.GLOBAL)
+            InputHandler.g_instance.onKeyDown += self.__handleKeyDownEvent
+            InputHandler.g_instance.onKeyUp += self.__handleKeyUpEvent
         self._boundingBox = self._arenaVisitor.type.getBoundingBox()
 
     def stop(self):
         super(MinimapPingPlugin, self).stop()
         if self.__registeredToMouseEvents:
-            g_eventBus.removeListener(events.GameEvent.SHOW_CURSOR, self.__handleShowCursor, EVENT_BUS_SCOPE.GLOBAL)
-            g_eventBus.removeListener(events.GameEvent.HIDE_CURSOR, self.__handleHideCursor, scope=EVENT_BUS_SCOPE.GLOBAL)
+            InputHandler.g_instance.onKeyDown -= self.__handleKeyDownEvent
+            InputHandler.g_instance.onKeyUp -= self.__handleKeyUpEvent
         self._boundingBox = (Math.Vector2(0, 0), Math.Vector2(0, 0))
         AccountSettings.setSettings(MINIMAP_IBC_HINT_SECTION, self.__minimapSettings)
+
+    def __handleKeyDownEvent(self, event):
+        if event.key not in (Keys.KEY_LCONTROL, Keys.KEY_RCONTROL):
+            return
+        if not avatar_getter.isVehicleAlive() or self.__isHintPanelEnabled:
+            return
+        if not self.__haveHintsLeft(self.__minimapSettings):
+            return
+        self.__minimapSettings[HINTS_LEFT] = max(0, self.__minimapSettings[HINTS_LEFT] - 1)
+        self.__isHintPanelEnabled = True
+        self.parentObj.as_enableHintPanelWithDataS(self._isInStrategicMode(), self.sessionProvider.getArenaDP().getVehicleInfo().isSPG())
+
+    def __handleKeyUpEvent(self, event):
+        if event.key not in (Keys.KEY_LCONTROL, Keys.KEY_RCONTROL):
+            return
+        if not self.__isHintPanelEnabled:
+            return
+        self.__isHintPanelEnabled = False
+        self.parentObj.as_disableHintPanelS()
 
     def updateControlMode(self, crtlMode, vehicleID):
         super(MinimapPingPlugin, self).updateControlMode(crtlMode, vehicleID)
         isSPGAndStrategicView = True if crtlMode in (aih_constants.CTRL_MODE_NAME.STRATEGIC, aih_constants.CTRL_MODE_NAME.ARTY, aih_constants.CTRL_MODE_NAME.MAP_CASE) else False
         if self.__isHintPanelEnabled:
             self.parentObj.as_updateHintPanelDataS(isSPGAndStrategicView, self.sessionProvider.getArenaDP().getVehicleInfo().isSPG())
-        self._setupKeyBindingEvents(isSPGAndStrategicView)
+        self._setupKeyBindingEvents(isSPGAndStrategicView and self.sessionProvider.getArenaDP().getVehicleInfo().isSPG())
 
-    def onMinimapClicked(self, x, y, buttonIdx):
+    def onMinimapClicked(self, x, y, buttonIdx, mapScaleIndex):
         if buttonIdx in self._mouseKeyEventHandler:
-            self._mouseKeyEventHandler[buttonIdx](x, y)
+            self._mouseKeyEventHandler[buttonIdx](x, y, mapScaleIndex)
 
     def _getClickPosition(self, x, y):
         raise NotImplementedError('must be implemented')
 
-    def _processCommandByPosition(self, commands, locationCommand, position):
+    def _processCommandByPosition(self, commands, locationCommand, position, mapScaleIndex):
         raise NotImplementedError('must be implemented')
 
     def _getIdByBaseNumber(self, team, number):
@@ -1168,14 +1188,14 @@ class MinimapPingPlugin(SimpleMinimapPingPlugin):
             closestMarker = min(g_locationPointManager.markedAreas.itervalues(), key=getDistance)
             return closestMarker.targetID if getDistance(closestMarker) < pRange else None
 
-    def _specialMinimapCommand(self, x, y):
+    def _specialMinimapCommand(self, x, y, mapScaleIndex):
         handler = avatar_getter.getInputHandler()
         if handler is None:
             return
         else:
             wasHandled = handler.onMinimapClicked(self._getClickPosition(x, y))
             if not wasHandled:
-                self._make3DGoingToPing(x, y)
+                self._make3DGoingToPing(x, y, mapScaleIndex)
             return
 
     def _setupKeyBindingEvents(self, isSPGAndStrategicView):
@@ -1185,29 +1205,14 @@ class MinimapPingPlugin(SimpleMinimapPingPlugin):
         else:
             self._mouseKeyEventHandler[_EMinimapMouseKey.KEY_MBL.value] = self._make3DAttentionToPing
 
-    def _make3DGoingToPing(self, x, y):
-        self._make3DPing(x, y, BATTLE_CHAT_COMMAND_NAMES.GOING_THERE)
+    def _make3DGoingToPing(self, x, y, mapScaleIndex):
+        self._make3DPing(x, y, BATTLE_CHAT_COMMAND_NAMES.GOING_THERE, mapScaleIndex)
 
-    def _make3DSPGAimArea(self, x, y):
-        self._make3DPing(x, y, BATTLE_CHAT_COMMAND_NAMES.SPG_AIM_AREA)
+    def _make3DSPGAimArea(self, x, y, mapScaleIndex):
+        self._make3DPing(x, y, BATTLE_CHAT_COMMAND_NAMES.SPG_AIM_AREA, mapScaleIndex)
 
     def __haveHintsLeft(self, value):
         return value[HINTS_LEFT] > 0
-
-    def __handleShowCursor(self, _):
-        if not avatar_getter.isVehicleAlive():
-            return
-        if not self.__haveHintsLeft(self.__minimapSettings):
-            return
-        self.__minimapSettings[HINTS_LEFT] = max(0, self.__minimapSettings[HINTS_LEFT] - 1)
-        self.__isHintPanelEnabled = True
-        self.parentObj.as_enableHintPanelWithDataS(self._isInStrategicMode(), self.sessionProvider.getArenaDP().getVehicleInfo().isSPG())
-
-    def __handleHideCursor(self, _):
-        if not self.__isHintPanelEnabled:
-            return
-        self.__isHintPanelEnabled = False
-        self.parentObj.as_disableHintPanelS()
 
     def __processReplyCommand(self, replyState, commands, uniqueId, commandKey):
         if replyState == ReplyState.CAN_CANCEL_REPLY:
@@ -1305,9 +1310,6 @@ class RadarPlugin(common.SimplePlugin, IRadarListener):
         super(RadarPlugin, self).fini()
 
     def radarInfoReceived(self, data):
-        if len(data) != 3:
-            _logger.warning('Incorrect radar data in BigWorld.player().arena.onRadarInfoReceived')
-            return
         for vehicleId, vehicleXZPos in data[1]:
             self._addVehicleEntry(vehicleId, vehicleXZPos)
 
@@ -1324,7 +1326,7 @@ class RadarPlugin(common.SimplePlugin, IRadarListener):
                 self._parentObj.setMatrix(vEntry.entryId, matrix)
             else:
                 entryId = self._addEntry(self._params.vehicleEntryParams.symbol, self._params.vehicleEntryParams.container, matrix=self.__getMatrixByXZ(xzPosition), active=True)
-                vEntry = _RadarEntryData(entryId, self.__destroyVehicleEntry, self._params.lifetime)
+                vEntry = _RadarEntryData(entryId, self.__destroyVehicleEntryByEntryID, self._params.lifetime)
                 self._vehicleEntries[vehicleId] = vEntry
             vEntry.upTimer()
             return vEntry.entryId
@@ -1335,6 +1337,13 @@ class RadarPlugin(common.SimplePlugin, IRadarListener):
         lEntry.upTimer()
         self._lootEntries.append(lEntry)
         return lEntry.entryId
+
+    def _destroyVehicleEntry(self, entryId, destroyedVehId):
+        self._delEntry(entryId)
+        if destroyedVehId is not None:
+            entry = self._vehicleEntries.pop(destroyedVehId)
+            entry.destroy()
+        return
 
     def __clearLootEntries(self):
         while self._lootEntries:
@@ -1349,12 +1358,9 @@ class RadarPlugin(common.SimplePlugin, IRadarListener):
             self._lootEntries.remove(destroyedObj)
         return
 
-    def __destroyVehicleEntry(self, entryId):
-        self._delEntry(entryId)
+    def __destroyVehicleEntryByEntryID(self, entryId):
         destroyedObjId = findFirst(lambda vId: self._vehicleEntries[vId].entryId == entryId, self._vehicleEntries)
-        if destroyedObjId is not None:
-            self._vehicleEntries.pop(destroyedObjId)
-        return
+        self._destroyVehicleEntry(entryId, destroyedObjId)
 
     @staticmethod
     def __getMatrixByXZ(xzPosition):

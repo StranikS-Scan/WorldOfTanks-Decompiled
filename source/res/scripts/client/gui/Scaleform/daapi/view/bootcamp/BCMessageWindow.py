@@ -19,7 +19,8 @@ class BCMessageWindow(BCMessageWindowMeta):
 
     def __init__(self, content):
         super(BCMessageWindow, self).__init__(content)
-        self.__blur = CachedBlur(ownLayer=APP_CONTAINERS_NAMES.VIEWS, layers=(APP_CONTAINERS_NAMES.TOP_SUB_VIEW, APP_CONTAINERS_NAMES.SUBVIEW, APP_CONTAINERS_NAMES.WINDOWS), blurAnimRepeatCount=1)
+        self.__blur = None
+        return
 
     def onMessageButtonClicked(self):
         self.onCustomButton(needStopEffect=True, needCloseWindow=False)
@@ -51,7 +52,7 @@ class BCMessageWindow(BCMessageWindowMeta):
     def _populate(self):
         super(BCMessageWindow, self)._populate()
         self.as_setMessageDataS(self._content['messages'])
-        self.__blur.enable()
+        self.__blur = CachedBlur(enabled=True, ownLayer=APP_CONTAINERS_NAMES.VIEWS, layers=(APP_CONTAINERS_NAMES.TOP_SUB_VIEW, APP_CONTAINERS_NAMES.SUBVIEW, APP_CONTAINERS_NAMES.WINDOWS), blurAnimRepeatCount=1)
         self.as_blurOtherWindowsS(APP_CONTAINERS_NAMES.DIALOGS)
         g_bootcampEvents.onRequestBootcampMessageWindowClose += self.onMessageRemoved
         if self._hangarSpace.spaceInited:

@@ -2247,6 +2247,50 @@
       <devices>	180	</devices>
     </damage>
   </_128mm_SprG18>
+  <_128mm_PzGr39_E>
+    <id>	294	</id>
+    <userString>	#germany_vehicles:_128mm_PzGr39_E	</userString>
+    <icon>	ap	</icon>
+    <price>	1070	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	128	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	490	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_128mm_PzGr39_E>
+  <_128mm_PzGr40_E>
+    <id>	295	</id>
+    <userString>	#germany_vehicles:_128mm_PzGr40_E	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	128	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	490	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_128mm_PzGr40_E>
+  <_128mm_SprG18_E>
+    <id>	296	</id>
+    <userString>	#germany_vehicles:_128mm_SprG18_E	</userString>
+    <icon>	he	</icon>
+    <price>	935	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	128	</caliber>
+    <explosionRadius>	2.71	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	630	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_128mm_SprG18_E>
   <_128mm_PzGr39_n>
     <id>	285	</id>
     <userString>	#germany_vehicles:_128mm_PzGr39_n	</userString>
@@ -3369,7 +3413,7 @@
     <isTracer>	true	</isTracer>
     <effects>	epicAirbombStrike	</effects>
     <damage>
-      <armor>	400	</armor>
+      <armor>	200	</armor>
       <devices>	10	</devices>
     </damage>
     <explosionDamageFactor>	1.0	</explosionDamageFactor>

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/vehicle_modules.py
+import logging
 from constants import SHELL_TYPES
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
@@ -21,6 +22,7 @@ SHELL_TYPES_ORDER = (SHELL_TYPES.ARMOR_PIERCING,
  SHELL_TYPES.HIGH_EXPLOSIVE,
  SHELL_TYPES.SMOKE)
 SHELL_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(SHELL_TYPES_ORDER)))
+_logger = logging.getLogger(__name__)
 
 class VehicleModule(FittingItem):
     __slots__ = ('_vehicleModuleDescriptor',)
@@ -78,15 +80,18 @@ class VehicleChassis(VehicleModule):
     def icon(self):
         return RES_ICONS.MAPS_ICONS_MODULES_WHEELEDCHASSIS if self.isWheeledChassis() else RES_ICONS.MAPS_ICONS_MODULES_CHASSIS
 
+    def getBonusIcon(self, size='small'):
+        if size == 'small':
+            return self.icon
+        return backport.image(R.images.gui.maps.icons.modules.wheeledChassisBig()) if self.isWheeledChassis() else backport.image(R.images.gui.maps.icons.modules.chassisBig())
+
     def getExtraIconInfo(self, vehDescr=None):
         if self.isHydraulicChassis():
             if self.isWheeledChassis():
                 return RES_ICONS.MAPS_ICONS_MODULES_HYDRAULICWHEELEDCHASSISICON
-            if vehDescr is not None and vehDescr.isDualgunVehicle:
-                return
             return RES_ICONS.MAPS_ICONS_MODULES_HYDRAULICCHASSISICON
         else:
-            return
+            return None
 
     def getGUIEmblemID(self):
         return FITTING_TYPES.VEHICLE_WHEELED_CHASSIS if self.isWheeledChassis() else super(VehicleChassis, self).getGUIEmblemID()
@@ -119,6 +124,9 @@ class VehicleTurret(VehicleModule):
     @property
     def icon(self):
         return RES_ICONS.MAPS_ICONS_MODULES_TOWER
+
+    def getBonusIcon(self, size='small'):
+        return self.icon if size == 'small' else backport.image(R.images.gui.maps.icons.modules.towerBig())
 
     @property
     def isGunCarriage(self):
@@ -175,6 +183,9 @@ class VehicleGun(VehicleModule):
     def icon(self):
         return RES_ICONS.MAPS_ICONS_MODULES_GUN
 
+    def getBonusIcon(self, size='small'):
+        return self.icon if size == 'small' else backport.image(R.images.gui.maps.icons.modules.gunBig())
+
     @property
     def userType(self):
         userType = super(VehicleGun, self).userType
@@ -198,7 +209,7 @@ class VehicleGun(VehicleModule):
         result = []
         shells = veh_core.getDefaultAmmoForGun(self.descriptor)
         for i in range(0, len(shells), 2):
-            result.append(Shell(shells[i], defaultCount=shells[i + 1], proxy=proxy))
+            result.append(Shell(shells[i], count=shells[i + 1], proxy=proxy))
 
         return result
 
@@ -227,7 +238,7 @@ class VehicleEngine(VehicleModule):
         conflictEqs = list()
         oldModuleId = vehicle.engine.intCD
         vehicle.descriptor.installComponent(self.intCD)
-        for eq in vehicle.equipment.regularConsumables.getInstalledItems():
+        for eq in vehicle.consumables.installed.getItems():
             installPossible, _ = eq.descriptor.checkCompatibilityWithVehicle(vehicle.descriptor)
             if not installPossible:
                 conflictEqs.append(eq)
@@ -235,9 +246,18 @@ class VehicleEngine(VehicleModule):
         vehicle.descriptor.installComponent(oldModuleId)
         return conflictEqs
 
+    def hasTurboshaftEngine(self):
+        return g_paramsCache.hasTurboshaftEngine(self.intCD)
+
     @property
     def icon(self):
         return RES_ICONS.MAPS_ICONS_MODULES_ENGINE
+
+    def getBonusIcon(self, size='small'):
+        return self.icon if size == 'small' else backport.image(R.images.gui.maps.icons.modules.engineBig())
+
+    def getExtraIconInfo(self, vehDescr=None):
+        return RES_ICONS.MAPS_ICONS_MODULES_TURBINEENGINEICON if self.hasTurboshaftEngine() else None
 
 
 class VehicleFuelTank(VehicleModule):
@@ -273,14 +293,16 @@ class VehicleRadio(VehicleModule):
     def icon(self):
         return RES_ICONS.MAPS_ICONS_MODULES_RADIO
 
+    def getBonusIcon(self, size='small'):
+        return self.icon if size == 'small' else backport.image(R.images.gui.maps.icons.modules.radioBig())
+
 
 class Shell(FittingItem):
-    __slots__ = ('_count', '_defaultCount')
+    __slots__ = ('_count',)
 
-    def __init__(self, intCompactDescr, count=0, defaultCount=0, proxy=None, isBoughtForCredits=False):
+    def __init__(self, intCompactDescr, count=0, proxy=None, isBoughtForCredits=False):
         FittingItem.__init__(self, intCompactDescr, proxy, isBoughtForCredits)
         self._count = count
-        self._defaultCount = defaultCount
 
     @property
     def level(self):
@@ -305,9 +327,9 @@ class Shell(FittingItem):
     def count(self):
         return self._count
 
-    @property
-    def defaultCount(self):
-        return self._defaultCount
+    @count.setter
+    def count(self, value):
+        self._count = value
 
     @property
     def type(self):
@@ -327,6 +349,13 @@ class Shell(FittingItem):
          'subtype': '',
          'unicName': self.descriptor.icon[0]}
 
+    def getBonusIcon(self, size='small'):
+        sizeFldr = R.images.gui.maps.icons.shell.dyn(size)
+        if not sizeFldr:
+            _logger.warn('Shell %s icon for size %s doesnt exists!', self.descriptor.iconName, size)
+            return ''
+        return backport.image(sizeFldr.dyn(self.descriptor.iconName)())
+
     def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
         return RES_SHOP_EXT.getShellIcon(size, self.descriptor.iconName)
 
@@ -335,10 +364,10 @@ class Shell(FittingItem):
 
     @property
     def defaultLayoutValue(self):
-        return (self.intCD if not self.isBoughtForAltPrice else -self.intCD, self.defaultCount)
+        return (self.intCD if not self.isBoughtForAltPrice else -self.intCD, self.count)
 
     def isInstalled(self, vehicle, slotIdx=None):
-        for shell in vehicle.shells:
+        for shell in vehicle.shells.installed.getItems():
             if self.intCD == shell.intCD:
                 return True
 

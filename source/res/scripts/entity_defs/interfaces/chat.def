@@ -57,6 +57,36 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	INT16	</Arg>
     </keepAlive>
+    <keepAlive>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	INT16	</Arg>
+    </keepAlive>
+    <onStreamComplete>
+      <Exposed></Exposed>
+      <Arg>	INT16	</Arg>
+      <Arg>	BOOL	</Arg>
+    </onStreamComplete>
+    <setState>
+      <Arg>	UINT8	</Arg>
+    </setState>
+    <setCollectOnlyMode>
+      <Arg>	BOOL	</Arg>
+    </setCollectOnlyMode>
+    <setBattleChannels>
+      <Arg>	PYTHON	</Arg>
+    </setBattleChannels>
+    <changeMemberStatus>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+    </changeMemberStatus>
+    <setWorkingState>
+      <Arg>	UINT8	</Arg>
+    </setWorkingState>
+    <streamStringToClient>
+      <Arg>	STRING	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	INT16	</Arg>
+    </streamStringToClient>
   </BaseMethods>
   <ClientMethods>
     <onChatAction>

@@ -6,6 +6,7 @@
 			loader	</commander>
     <driver></driver>
   </crew>
+  <supplySlots>	8 8 8	</supplySlots>
   <speedLimits>
     <forward>	35	</forward>
     <backward>	12	</backward>
@@ -14,9 +15,16 @@
     <moving>	0.198	</moving>
     <still>	0.264	</still>
     <camouflageBonus>	0.03	</camouflageBonus>
-    <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.396	</firePenalty>
   </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.1 0.125	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+  </optDevsOverrides>
   <repairCost>	0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -24,6 +32,10 @@
     <tiling>	1 1 0 0	</tiling>
     <exclusionMask></exclusionMask>
   </camouflage>
+  <damageByStaticsChances>
+    <module>	0	</module>
+    <tankman>	0	</tankman>
+  </damageByStaticsChances>
   <hull>
     <armor>
       <armor_1>	11	</armor_1>
@@ -37,6 +49,33 @@
       <armor_9>	7	</armor_9>
       <armor_10>	5	</armor_10>
       <armor_11>	6	</armor_11>
+      <surveyingDevice>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+        <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+      </surveyingDevice>
+      <turretRotator>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+        <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+      </turretRotator>
+      <radio>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+        <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+      </radio>
+      <fuelTank>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+        <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+      </fuelTank>
+      <ammoBay>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+        <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+      </ammoBay>
+      <transmission>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+        <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+      </transmission>
+      <engine>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+        <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+      </engine>
+      <driver>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+        <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+      </driver>
+      <commander>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+        <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+      </commander>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	2750	</weight>
@@ -1564,6 +1603,21 @@
         <armor_6>	5	</armor_6>
         <armor_7>	4	</armor_7>
         <armor_8>	0	</armor_8>
+        <surveyingDevice>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+        </surveyingDevice>
+        <turretRotator>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+        </turretRotator>
+        <radio>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+        </radio>
+        <ammoBay>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+        </ammoBay>
+        <commander>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+        </commander>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	240	</weight>
@@ -1591,7 +1645,9 @@
             </armor_1>
             <armor_2>	9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <gun>	10	</gun>
+            <gun>	10	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+              <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+            </gun>
           </armor>
           <shotDispersionRadius>	0.48	</shotDispersionRadius>
           <reloadTime>	4.2	</reloadTime>
@@ -1662,7 +1718,9 @@
             </armor_1>
             <armor_2>	9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <gun>	10	</gun>
+            <gun>	10	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+              <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+            </gun>
           </armor>
           <shotDispersionRadius>	0.46	</shotDispersionRadius>
           <reloadTime>	5.2	</reloadTime>

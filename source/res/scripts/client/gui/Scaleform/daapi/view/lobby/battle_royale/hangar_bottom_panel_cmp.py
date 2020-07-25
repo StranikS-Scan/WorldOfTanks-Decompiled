@@ -14,7 +14,7 @@ from gui.impl import backport
 from gui.impl.backport.backport_system_locale import getIntegralFormat
 from gui.impl.backport.backport_tooltip import createTooltipData, BackportTooltipWindow
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.battle_royale.br_consumable_model import BrConsumableModel
+from gui.impl.gen.view_models.views.battle_royale.battle_royale_consumable_model import BattleRoyaleConsumableModel
 from gui.impl.gen.view_models.views.battle_royale.equipment_panel_cmp_tooltips import EquipmentPanelCmpTooltips
 from gui.impl.gen.view_models.views.battle_royale.hangar_bottom_panel_view_model import HangarBottomPanelViewModel
 from gui.impl.pub import ViewImpl
@@ -33,7 +33,7 @@ from helpers import dependency
 from skeletons.gui.game_control import IBattleRoyaleController
 from skeletons.gui.shared import IItemsCache
 _DEFAULT_SLOT_VALUE = 1
-_ArtefactData = namedtuple('_ArtefactData', ('intCD', 'count', 'icon', 'tooltip'))
+_ArtefactData = namedtuple('_ArtefactData', ('intCD', 'quantity', 'icon', 'tooltip'))
 
 class HangarBottomPanelComponent(InjectComponentAdaptor):
 
@@ -128,7 +128,7 @@ class HangarBottomPanelView(ViewImpl, IGlobalListener):
 
     def __setAmmo(self, vehicle):
         items = self.viewModel.ammunition.getItems()
-        self.__fillArtefactGroup(items, vehicle.shells, False, vehicle)
+        self.__fillArtefactGroup(items, vehicle.shells.installed, False, vehicle)
 
     def __setAbilities(self, vehicle):
         vehicleEquipment = []
@@ -158,24 +158,20 @@ class HangarBottomPanelView(ViewImpl, IGlobalListener):
         if isIncorrectVehicle(vehicle):
             return
         repairCost = vehicle.repairCost
-        isDissabled = False
         if repairCost <= 0:
             self.viewModel.setIsRepairBtnVisible(False)
             return
-        self.viewModel.setIsRepairBtnVisible(True)
         with self.viewModel.transaction() as vm:
-            repairPrice = vm.repairPrice.getItems()
-            for model in repairPrice:
-                statsMoney = self.__itemsCache.items.stats.money
-                currencyType = model.getType()
-                currencyValue = repairCost if currencyType == Currency.CREDITS else 0
-                model.setPrice(getIntegralFormat(currencyValue))
-                isEnough = currencyValue <= statsMoney.get(currencyType)
-                model.setIsEnough(isEnough)
-                if not isEnough:
-                    isDissabled = True
-
-        self.viewModel.setIsRepairBtnDisabled(isDissabled)
+            vm.setIsRepairBtnVisible(True)
+            for priceModel in vm.repairPrice.getItems():
+                currencyType = priceModel.getType()
+                if currencyType == Currency.CREDITS:
+                    isEnough = repairCost <= self.__itemsCache.items.stats.money.get(currencyType)
+                    with priceModel.transaction() as pm:
+                        pm.setPrice(getIntegralFormat(repairCost))
+                        pm.setIsEnough(isEnough)
+                    vm.setIsRepairBtnDisabled(not isEnough)
+                    break
 
     def __updateVehicleStatus(self):
         if g_currentVehicle.isPresent():
@@ -199,9 +195,9 @@ class HangarBottomPanelView(ViewImpl, IGlobalListener):
             items.clear()
             for artefact in artefactGroup:
                 data = self.__getArtefactData(artefact, vehicle, isEquipment)
-                itemModel = BrConsumableModel()
+                itemModel = BattleRoyaleConsumableModel()
                 itemModel.setIconSource(data.icon)
-                itemModel.setQuantity(int(data.count))
+                itemModel.setQuantity(data.quantity)
                 itemModel.setIntCD(data.intCD)
                 itemModel.setTooltipType(data.tooltip)
                 items.addViewModel(itemModel)
@@ -216,12 +212,12 @@ class HangarBottomPanelView(ViewImpl, IGlobalListener):
         isBasic = ShellParams(shell.descriptor, vehicle.descriptor).isBasic
         ammoType = AmmoTypes.BASIC_SHELL if isBasic else AmmoTypes.PREMIUM_SHELL
         count = self.__getEquipmentCount(ammoType) * vehicle.gun.maxAmmo
-        return _ArtefactData(intCD=shell.intCD, count=count, icon=self.__getIconPath(shell.type.lower()), tooltip=EquipmentPanelCmpTooltips.TOOLTIP_SHELL)
+        return _ArtefactData(intCD=shell.intCD, quantity=count, icon=self.__getIconPath(shell.type.lower()), tooltip=EquipmentPanelCmpTooltips.TOOLTIP_SHELL)
 
     def __getEquipmentData(self, equipment, vehicleName):
         intCD = equipment.id[1]
         count = self.__getEquipmentCount(AmmoTypes.ITEM, intCD, vehicleName)
-        return _ArtefactData(intCD=intCD, count=count, icon=self.__getIconPath(equipment.iconName), tooltip=EquipmentPanelCmpTooltips.TOOLTIP_EQUIPMENT)
+        return _ArtefactData(intCD=intCD, quantity=count, icon=self.__getIconPath(equipment.iconName), tooltip=EquipmentPanelCmpTooltips.TOOLTIP_EQUIPMENT)
 
     def __getEquipmentCount(self, typeKey, intCD=None, vehicleName=None):
         return self.__battleRoyaleController.getDefaultAmmoCount(typeKey, intCD, vehicleName)

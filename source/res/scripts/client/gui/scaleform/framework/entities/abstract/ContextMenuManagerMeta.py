@@ -16,5 +16,8 @@ class ContextMenuManagerMeta(BaseDAAPIComponent):
     def as_setOptionsS(self, data):
         return self.flashObject.as_setOptions(data) if self._isDAAPIInited() else None
 
+    def as_showS(self, type, args):
+        return self.flashObject.as_show(type, args) if self._isDAAPIInited() else None
+
     def as_hideS(self):
         return self.flashObject.as_hide() if self._isDAAPIInited() else None

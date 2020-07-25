@@ -9253,4 +9253,40 @@
       </tiling>
     </camouflage>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R134_Object_252U	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	169	</id>
+      <texture>	vehicles/russian/Camouflage/10years_object252.dds	</texture>
+      <description>	#vehicle_customization:camouflage/10years_object252/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/10years_object252/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.328122	</HULL>
+        <TURRET>	-0.328122	</TURRET>
+        <GUN>	-0.328122	</GUN>
+      </rotation>
+      <tiling>
+        <ussr:R04_T-349>	1.5 1.5 -0.17 -1.15	</ussr:R04_T-349>
+      </tiling>
+    </camouflage>
+  </itemGroup>
 </ussr.xml>

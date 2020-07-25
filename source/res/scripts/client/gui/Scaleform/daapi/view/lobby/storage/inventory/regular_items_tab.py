@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inventory/regular_items_tab.py
-from async import await, async
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyOptionalDevicesUrl, getBuyEquipmentUrl
 from gui.Scaleform.daapi.view.meta.RegularItemsTabViewMeta import RegularItemsTabViewMeta
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
@@ -10,7 +9,6 @@ from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from gui.impl.dialogs import dialogs
 
 class RegularItemsTabView(RegularItemsTabViewMeta):
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -24,12 +22,9 @@ class RegularItemsTabView(RegularItemsTabViewMeta):
         else:
             self._sellItems(itemId)
 
-    @async
     def upgradeItem(self, itemId):
         module = self.__itemsCache.items.getItemByCD(int(itemId))
-        result, _ = yield await(dialogs.trophyDeviceUpgradeConfirm(module))
-        if result:
-            ItemsActionsFactory.doAction(ItemsActionsFactory.UPGRADE_MODULE, module, None, None)
+        ItemsActionsFactory.doAction(ItemsActionsFactory.UPGRADE_OPT_DEVICE, module, None, None)
         return
 
     def navigateToStore(self):

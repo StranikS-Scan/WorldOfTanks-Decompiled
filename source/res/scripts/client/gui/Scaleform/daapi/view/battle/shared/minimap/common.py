@@ -46,7 +46,7 @@ class SimplePlugin(IPlugin):
     def updateSettings(self, diff):
         pass
 
-    def onMinimapClicked(self, x, y, buttonIdx):
+    def onMinimapClicked(self, x, y, buttonIdx, minimapScaleIndex):
         pass
 
     def applyNewSize(self, sizeIndex):

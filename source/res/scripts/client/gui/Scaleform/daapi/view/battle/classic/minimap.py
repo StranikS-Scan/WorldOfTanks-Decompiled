@@ -354,7 +354,7 @@ class ClassicMinimapPingPlugin(plugins.MinimapPingPlugin):
     def _getIdByBaseNumber(self, team, number):
         return getUniqueTeamOrControlPointID(team, number)
 
-    def _processCommandByPosition(self, commands, locationCommand, position):
+    def _processCommandByPosition(self, commands, locationCommand, position, minimapScaleIndex):
         bases = self.__getNearestBaseForPosition(position, _BASE_PING_RANGE)
         if bases is not None:
             self._make3DPingBases(commands, bases)
@@ -392,7 +392,7 @@ class ClassicMinimapPingPlugin(plugins.MinimapPingPlugin):
 
 class ClassicTeleportPlugin(ClassicMinimapPingPlugin):
 
-    def onMinimapClicked(self, x, y, buttonIdx):
+    def onMinimapClicked(self, x, y, buttonIdx, minimapScaleIndex):
         if buttonIdx != _EMinimapMouseKey.KEY_MBL.value:
             return
         else:

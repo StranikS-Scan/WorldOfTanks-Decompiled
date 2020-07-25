@@ -49,18 +49,36 @@
       <Type>	MAILBOX	</Type>
       <Flags>	BASE	</Flags>
     </arena>
-    <arenaVehiclesDBIDs>
+    <arenaVehiclesIDs>
       <Type>	PYTHON	</Type>
       <Flags>	BASE	</Flags>
-    </arenaVehiclesDBIDs>
+    </arenaVehiclesIDs>
+    <accountStartedAt>
+      <Type>	PYTHON	</Type>
+      <Flags>	BASE	</Flags>
+      <Backupable>	false	</Backupable>
+    </accountStartedAt>
+    <accountSessionID>
+      <Type>	STRING	</Type>
+      <Flags>	BASE	</Flags>
+      <Backupable>	false	</Backupable>
+    </accountSessionID>
     <arenaUniqueID>
       <Type>	UINT64	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
     </arenaUniqueID>
+    <syncData>
+      <Type>	PYTHON	</Type>
+      <Flags>	BASE	</Flags>
+    </syncData>
     <arenaTypeID>
       <Type>	INT32	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
     </arenaTypeID>
+    <accountDBID>
+      <Type>	INT64	</Type>
+      <Flags>	BASE	</Flags>
+    </accountDBID>
     <arenaBonusType>
       <Type>	UINT8	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
@@ -769,9 +787,20 @@
       <Exposed></Exposed>
     </logStreamCorruption>
     <sendFinalStats></sendFinalStats>
+    <releaseClientForLogin>
+      <Arg>	BOOL	</Arg>
+    </releaseClientForLogin>
+    <onBattleResultsAvailable>
+      <Arg>	STRING	</Arg>
+    </onBattleResultsAvailable>
+    <smartDestroy></smartDestroy>
+    <stopByFailure>
+      <Arg>	UINT8	</Arg>
+    </stopByFailure>
     <reportClientStats>
       <Exposed></Exposed>
       <Arg>	CLIENT_STATUS_STATISTICS	</Arg>
     </reportClientStats>
+    <setAvatarClient></setAvatarClient>
   </BaseMethods>
 </Avatar.def>

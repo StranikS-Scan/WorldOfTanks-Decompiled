@@ -17,9 +17,9 @@ NO_IMPL_URL = 'development/noImpl.swf'
 _logger = logging.getLogger(__name__)
 
 class _LoadingItem(object):
-    __slots__ = ('loadParams', 'pyEntity', 'factoryIdx', 'args', 'kwargs', 'isCancelled')
+    __slots__ = ('loadParams', 'pyEntity', 'factoryIdx', 'args', 'kwargs', 'isCancelled', 'isModal')
 
-    def __init__(self, loadParams, pyEntity, factoryIdx, args, kwargs):
+    def __init__(self, loadParams, pyEntity, factoryIdx, isModal, args, kwargs):
         super(_LoadingItem, self).__init__()
         self.loadParams = loadParams
         self.pyEntity = pyEntity
@@ -27,6 +27,7 @@ class _LoadingItem(object):
         self.args = args
         self.kwargs = kwargs
         self.isCancelled = False
+        self.isModal = isModal
 
     def __repr__(self):
         return '{}[{}]=[loadParams={}, pyEntity={}]'.format(self.__class__.__name__, hex(id(self)), self.loadParams, self.pyEntity)
@@ -205,6 +206,13 @@ class LoaderManager(LoaderManagerMeta):
         self.onViewLoadError(viewKey, msg, item)
         return
 
+    def isModalViewLoading(self):
+        for item in self.__loadingItems.itervalues():
+            if item.isModal:
+                return True
+
+        return False
+
     def _dispose(self):
         self.__app = None
         self.__loadingItems.clear()
@@ -251,9 +259,10 @@ class LoaderManager(LoaderManagerMeta):
                 pyEntity.setUniqueName(key.name)
                 pyEntity.setEnvironment(self.__app)
                 pyEntity.onDispose += self.__handleViewDispose
-                self.__loadingItems[key] = _LoadingItem(loadParams, pyEntity, factoryIdx, args, kwargs)
+                config = pyEntity.settings.getDAAPIObject()
+                self.__loadingItems[key] = _LoadingItem(loadParams, pyEntity, factoryIdx, args, kwargs, config.get('isModal', False))
                 self.onViewLoadInit(pyEntity)
-                viewDict = {'config': pyEntity.settings.getDAAPIObject(),
+                viewDict = {'config': config,
                  'alias': key.alias,
                  'name': key.name,
                  'viewTutorialId': viewTutorialID}
@@ -280,7 +289,7 @@ class LoaderManager(LoaderManagerMeta):
             raise SoftException('Synchronous loading does not supported: {}'.format(loadParams))
         adaptor.onDispose += self.__handleViewDispose
         adaptor.onCreated += self.__handleViewLoaded
-        self.__loadingItems[adaptor.key] = _LoadingItem(loadParams, adaptor, -1, args, kwargs)
+        self.__loadingItems[adaptor.key] = _LoadingItem(loadParams, adaptor, -1, False, args, kwargs)
         self.onViewLoadInit(adaptor)
         adaptor.loadView()
         return adaptor

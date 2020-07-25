@@ -107,6 +107,16 @@ class AdvancedChatComponent(ClientArenaComponent):
                     return (ReplyState.CAN_CONFIRM, commandName)
                 return (ReplyState.CAN_REPLY, commandName)
 
+        playerVehicleID = avatar_getter.getPlayerVehicleID()
+        if playerVehicleID in self._chatCommands[targetMarkerType]:
+            commands = self._chatCommands[targetMarkerType][playerVehicleID]
+            for commandID, commandData in ((k, commands[k]) for k in reversed(commands)):
+                if targetID in commandData.owners and self.__delayer.hasDelayedCallbackID(commandData.callbackID):
+                    commandName = _ACTIONS.battleChatCommandFromActionID(commandID).name
+                    if commandName not in BATTLE_CHAT_COMMANDS_BY_NAMES:
+                        continue
+                    return (ReplyState.CAN_CONFIRM, commandName)
+
         return (ReplyState.NO_REPLY, None)
 
     def getCommandDataForTargetIDAndMarkerType(self, targetID, targetMarkerType):
@@ -115,7 +125,7 @@ class AdvancedChatComponent(ClientArenaComponent):
         else:
             return self._chatCommands[targetMarkerType][targetID].values()[-1] if targetID in self._chatCommands[targetMarkerType] else None
 
-    def isTargetAllyCommitedToMe(self, targetID):
+    def isTargetAllyCommittedToMe(self, targetID):
         markerType = _COMMAND_NAME_TRANSFORM_MARKER_TYPE[BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY]
         if markerType != MarkerType.VEHICLE_MARKER_TYPE or markerType not in self._chatCommands or targetID == -1:
             return False
@@ -249,7 +259,7 @@ class AdvancedChatComponent(ClientArenaComponent):
                     chatStats = {senderVehID: (actionMarker, PLAYER_IS_CHAT_CMD_TARGET_FLAG)}
                 elif isOneShot and not isPlayerSender:
                     chatStats = {senderVehID: (actionMarker, EMPTY_CHAT_CMD_FLAG)}
-            if cmdTargetID != -1 and self.isTargetAllyCommitedToMe(cmdTargetID) and not isOneShot and chatStats is not None and cmdTargetID in chatStats.keys() and chatStats[cmdTargetID][1] == TARGET_CHAT_CMD_FLAG:
+            if cmdTargetID != -1 and self.isTargetAllyCommittedToMe(cmdTargetID) and not isOneShot and chatStats is not None and cmdTargetID in chatStats.keys() and chatStats[cmdTargetID][1] == TARGET_CHAT_CMD_FLAG:
                 del chatStats[cmdTargetID]
             if chatStats is not None:
                 if isOneShot:
@@ -323,6 +333,7 @@ class AdvancedChatComponent(ClientArenaComponent):
                 _logger.debug('Action in removeActiveCommands was None, %s', self.__markerInFocus.commandID)
             else:
                 commands.sendCancelReplyChatCommand(self.__markerInFocus.targetID, action.name)
+                self.__removeReplyContributionFromPlayer(avatar_getter.getPlayerVehicleID(), MarkerType.INVALID_MARKER_TYPE, -1)
             fbCtrl.setInFocusForPlayer(self.__markerInFocus.targetID, self.__markerInFocus.markerType, -1, MarkerType.INVALID_MARKER_TYPE, False)
             self.__markerInFocus = None
         for markerType in self._chatCommands.keys():
@@ -384,6 +395,8 @@ class AdvancedChatComponent(ClientArenaComponent):
         if commandName in AUTOCOMMIT_COMMAND_NAMES:
             owners.append(commandCreatorID)
         self._chatCommands[markerType][commandTargetID].update({commandID: AdvancedChatCommandData(command=command, commandCreatorVehID=commandCreatorID, callbackID=uniqueCBID, owners=owners)})
+        if self.sessionProvider.shared.feedback:
+            self.sessionProvider.shared.feedback.onCommandAdded(commandTargetID, markerType)
         updateCmdType = ChatCommandChange.CHAT_CMD_WAS_REPLIED if commandName in AUTOCOMMIT_COMMAND_NAMES else ChatCommandChange.CHAT_CMD_TRIGGERED
         self.__chatCommandsUpdated(markerType, commandTargetID, commandID, commandCreatorID, updateCmdType)
         isTemporarySticky = command and not command.isInSilentMode() and command.isTemporarySticky() and not commandCreatorID == avatar_getter.getPlayerVehicleID()

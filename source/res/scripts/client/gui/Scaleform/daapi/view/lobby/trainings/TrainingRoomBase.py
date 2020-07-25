@@ -18,7 +18,7 @@ from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base.ctx import LeavePrbAction
-from gui.prb_control.entities.base.legacy.ctx import SetTeamStateCtx, AssignLegacyCtx, SwapTeamsCtx
+from gui.prb_control.entities.base.legacy.ctx import SetTeamStateCtx, AssignLegacyCtx, SwapTeamsCtx, SetPlayerStateCtx
 from gui.prb_control.entities.base.legacy.listener import ILegacyListener
 from gui.prb_control.entities.epic_battle_training.ctx import SetPlayerObserverStateCtx, ChangeArenaVoipCtx
 from gui.prb_control.items.prb_items import getPlayersComparator
@@ -51,11 +51,16 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
 
     def __init__(self, _=None):
         super(TrainingRoomBase, self).__init__()
+        self.__currentPlayerIsOut = False
 
     def onEscape(self):
         dialogsContainer = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
         if not dialogsContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY_MENU}):
             self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def onFocusIn(self, alias):
+        super(TrainingRoomBase, self).onFocusIn(alias)
+        self.__currentPlayerEntered()
 
     def showTrainingSettings(self):
         pass
@@ -131,6 +136,8 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
         self._updateStartButton(entity)
 
     def onPlayerStateChanged(self, entity, roster, accountInfo):
+        if not self.__currentPlayerIsOut and accountInfo.isCurrentPlayer() and not accountInfo.isReady():
+            self.__currentPlayerIsOut = True
         stateString = formatters.getPlayerStateString(accountInfo.state)
         vContourIcon = ''
         vShortName = ''
@@ -433,3 +440,8 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
             self._showActionErrorMessage()
             self.as_disableControlsS(False)
             self._updateStartButton(self.prbEntity)
+
+    @process
+    def __currentPlayerEntered(self):
+        if self.__currentPlayerIsOut:
+            yield self.prbDispatcher.sendPrbRequest(SetPlayerStateCtx(True, waitingID='prebattle/player_ready'))

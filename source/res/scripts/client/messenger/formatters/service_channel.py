@@ -6,6 +6,7 @@ import time
 import types
 from Queue import Queue
 from collections import defaultdict
+import typing
 import ArenaType
 import BigWorld
 import constants
@@ -39,11 +40,12 @@ from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared import formatters as shared_fmts
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.currency import getBWFormatter, getStyle, applyAll
-from gui.shared.formatters.time_formatters import getTillTimeByResource
+from gui.shared.formatters.time_formatters import getTillTimeByResource, getTimeLeftInfo, RentDurationKeys
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import getUserName, getShortUserName
 from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
+from gui.shared.gui_items.fitting_item import RentalInfoProvider
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency, ZERO_MONEY
 from gui.shared.notifications import NotificationPriorityLevel, NotificationGuiSettings, NotificationGroup
 from gui.shared.utils.requesters.ShopRequester import _NamedGoodieData
@@ -69,9 +71,9 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 _TEMPLATE = 'template'
-_RENT_TYPES = {'time': 'rentDays',
- 'battles': 'rentBattles',
- 'wins': 'rentWins'}
+_RENT_TYPE_NAMES = {RentDurationKeys.DAYS: 'rentDays',
+ RentDurationKeys.BATTLES: 'rentBattles',
+ RentDurationKeys.WINS: 'rentWins'}
 _PREMIUM_MESSAGES = {PREMIUM_TYPE.BASIC: {str(SYS_MESSAGE_TYPE.premiumBought): R.strings.messenger.serviceChannelMessages.premiumBought(),
                       str(SYS_MESSAGE_TYPE.premiumExtended): R.strings.messenger.serviceChannelMessages.premiumExtended(),
                       str(SYS_MESSAGE_TYPE.premiumExpired): R.strings.messenger.serviceChannelMessages.premiumExpired()},
@@ -198,6 +200,21 @@ def _getCrewBookUserString(itemDescr):
     if itemDescr.type not in CREW_BOOK_RARITY.NO_NATION_TYPES:
         params['nation'] = i18n.makeString('#nations:{}'.format(itemDescr.nation))
     return i18n.makeString(itemDescr.name, **params)
+
+
+def _getAchievementsFromQuestData(data):
+    achievesList = []
+    for rec in data.get('dossier', {}).values():
+        it = rec if not isinstance(rec, dict) else rec.iteritems()
+        for (block, name), value in it:
+            if block not in ACHIEVEMENT_BLOCK.ALL:
+                continue
+            achieve = getAchievementFactory((block, name)).create(value['actualValue'])
+            if achieve is not None:
+                achievesList.append(achieve.getUserName())
+            achievesList.append(backport.text(R.strings.achievements.dyn(name)()))
+
+    return achievesList
 
 
 class ServiceChannelFormatter(object):
@@ -1017,12 +1034,14 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         return result
 
     @classmethod
-    def getGoodiesString(cls, goodies):
+    def getGoodiesString(cls, goodies, exclude=None):
         result = []
         boostersStrings = []
         discountsStrings = []
         demountKitStrings = []
         for goodieID, ginfo in goodies.iteritems():
+            if exclude is not None and goodieID in exclude:
+                continue
             if goodieID in cls._itemsCache.items.shop.boosters:
                 booster = cls.__goodiesCache.getBooster(goodieID)
                 if booster is not None and booster.enabled:
@@ -1462,16 +1481,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             vInfo.append(i18n.makeString(action))
         else:
             if 'rent' in vehData:
-                rentData = vehData['rent']
-                rentLeftCount = 0
-                rentTypeName = None
-                for rentType in _RENT_TYPES:
-                    rentTypeValue = rentData.get(rentType, 0)
-                    if rentTypeValue > 0 and rentTypeValue != float('inf'):
-                        rentTypeName = _RENT_TYPES[rentType]
-                        rentLeftCount = int(rentTypeValue)
-                        break
-
+                rentTypeName, rentLeftCount = cls.__processRentVehicleData(vehData['rent'])
                 if rentTypeName is not None and rentLeftCount > 0:
                     rentLeftStr = backport.text(R.strings.tooltips.quests.awards.vehicleRent.rentLeft.dyn(rentTypeName)(), count=rentLeftCount)
                     vInfo.append(rentLeftStr)
@@ -1483,6 +1493,21 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                     crewWithLevelString = backport.text(R.strings.messenger.serviceChannelMessages.invoiceReceived.crewOnVehicle(), crewLevel)
                 vInfo.append(crewWithLevelString)
         return '; '.join(vInfo)
+
+    @staticmethod
+    def __processRentVehicleData(rentData):
+        timeLeft = rentData.get(RentDurationKeys.TIME, 0)
+        if timeLeft:
+            rentInfo = RentalInfoProvider(time=timeLeft)
+            timeKey, rentLeftCount = getTimeLeftInfo(rentInfo.getTimeLeft())
+            return (_RENT_TYPE_NAMES.get(timeKey, None), rentLeftCount)
+        else:
+            for rentType in [RentDurationKeys.WINS, RentDurationKeys.BATTLES, RentDurationKeys.DAYS]:
+                rentTypeValue = rentData.get(rentType, 0)
+                if rentTypeValue > 0 and rentType != float('inf'):
+                    return (_RENT_TYPE_NAMES.get(rentType, None), int(rentTypeValue))
+
+            return (None, 0)
 
     @classmethod
     def __getVehicleName(cls, vehCompDescr):
@@ -2259,8 +2284,10 @@ class QuestAchievesFormatter(object):
             itemsNames.append(backport.text(R.strings.messenger.serviceChannelMessages.battleResults.quests.items.name(), name=name, count=backport.getIntegralFormat(count)))
 
         goodies = data.get('goodies', {})
+        excludeGoodies = set()
         for goodieID, ginfo in goodies.iteritems():
             if goodieID in cls.__itemsCache.items.shop.demountKits:
+                excludeGoodies.add(goodieID)
                 demountKit = cls.__goodiesCache.getDemountKit(goodieID)
                 if demountKit is not None and demountKit.enabled:
                     itemsNames.append(backport.text(R.strings.demount_kit.demountKit.gained.count(), count=ginfo.get('count')))
@@ -2292,7 +2319,7 @@ class QuestAchievesFormatter(object):
             result.append(InvoiceReceivedFormatter.getTankmenString(tmen))
         goodies = data.get('goodies', {})
         if goodies:
-            strGoodies = InvoiceReceivedFormatter.getGoodiesString(goodies)
+            strGoodies = InvoiceReceivedFormatter.getGoodiesString(goodies, exclude=excludeGoodies)
             if strGoodies:
                 result.append(strGoodies)
         enhancements = data.get('enhancements', {})
@@ -2654,18 +2681,7 @@ class BattlePassQuestAchievesFormatter(QuestAchievesFormatter):
 
     @classmethod
     def _extractAchievements(cls, data):
-        achievesList = []
-        for rec in data.get('dossier', {}).values():
-            it = rec if not isinstance(rec, dict) else rec.iteritems()
-            for (block, name), value in it:
-                if block not in ACHIEVEMENT_BLOCK.ALL:
-                    continue
-                achieve = getAchievementFactory((block, name)).create(value['actualValue'])
-                if achieve is not None:
-                    achievesList.append(achieve.getUserName())
-                achievesList.append(backport.text(R.strings.achievements.dyn(name)()))
-
-        return achievesList
+        return _getAchievementsFromQuestData(data)
 
 
 class _GoodyFormatter(WaitItemsSyncFormatter):
@@ -3421,12 +3437,16 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
         return g_settings.htmlTemplates.format(self.__GOLD_TEMPLATE_KEY, {Currency.GOLD: formatter(gold)})
 
 
-class BattlePassReachedCapFormatter(ServiceChannelFormatter):
+class BattlePassReachedCapFormatter(WaitItemsSyncFormatter):
     __itemsCache = dependency.descriptor(IItemsCache)
     __template = 'BattlePassReachedCapMessage'
 
-    def format(self, message, *args):
-        if message.data:
+    @async
+    @process
+    def format(self, message, callback=None):
+        isSynced = yield self._waitForSyncItems()
+        resultMessage = MessageData(None, None)
+        if message.data and isSynced:
             data = message.data
             vehCD = data.get('vehTypeCompDescr')
             limitPoints = data.get('vehiclePoints')
@@ -3434,7 +3454,9 @@ class BattlePassReachedCapFormatter(ServiceChannelFormatter):
             if vehCD and limitPoints and bonusPoints:
                 text = backport.text(R.strings.messenger.serviceChannelMessages.battlePass.reachedCap.text(), vehName=self.__itemsCache.items.getItemByCD(vehCD).userName, bonusPoints=text_styles.neutral(bonusPoints))
                 formatted = g_settings.msgTemplates.format(self.__template, {'text': text})
-                return [MessageData(formatted, self._getGuiSettings(message, self.__template))]
+                resultMessage = MessageData(formatted, self._getGuiSettings(message, self.__template))
+        callback([resultMessage])
+        return
 
 
 class BadgesFormatter(ServiceChannelFormatter):
@@ -3545,3 +3567,32 @@ class CustomizationProgressFormatter(WaitItemsSyncFormatter):
         elif level > 1:
             text = backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.customizationProgress.itemUpdatedNotAutoBound(), level=level, itemName=itemName)
         return text
+
+
+class DedicationRewardFormatter(ServiceChannelFormatter):
+    _template = 'DedicationRewardMessage'
+
+    @classmethod
+    def _getCountOfCustomizations(cls, rewards):
+        customizations = rewards.get('customizations', [])
+        totalCount = 0
+        for customizationItem in customizations:
+            totalCount += customizationItem['value']
+
+        return totalCount
+
+    def format(self, message, *args):
+        result = [MessageData(None, None)]
+        if message.data:
+            data = message.data
+            if 'ctx' in data and 'rewards' in data:
+                ctx = data['ctx']
+                rewards = data['rewards']
+                battleCount = ctx.get('reason', 0)
+                medalName = _getAchievementsFromQuestData(rewards)
+                decalsCount = self._getCountOfCustomizations(rewards)
+                if battleCount and medalName and decalsCount:
+                    text = backport.text(R.strings.messenger.serviceChannelMessages.dedicationReward.text(), battlesCount=battleCount, medalName=medalName[0], decalsCount=decalsCount)
+                    formatted = g_settings.msgTemplates.format(self._template, {'text': text})
+                    result = [MessageData(formatted, self._getGuiSettings(message, self._template))]
+        return result

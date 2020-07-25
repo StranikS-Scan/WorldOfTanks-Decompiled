@@ -95,6 +95,7 @@ class COMPONENTS(object):
     INDICATOR_HOVER = 'indicator_hover'
     INDICATOR_OVER = 'indicator_over'
     INDICATOR_SELECTED = 'indicator_selected'
+    INDICATOR_SELECTED_BOX = 'indicator_selected_box'
     INDICATOR_SELECTED_GREEN = 'indicator_selected_green'
     INDICATOR_TOGGLE = 'indicator_toggle'
     INPUT_ALERT = 'input_alert'

@@ -315,8 +315,8 @@ class BattleRoyaleEventProgressionBlock(base.StatsBlock):
     def __fillPointsForOneLevel(self, prevLevel, prevPoints, currentLevel, earnedPoints, pointsByLevel):
         self.currentLevel = prevLevel
         self.nextLevel = currentLevel + 1
-        self.progressValue = prevPoints / pointsByLevel * 100
-        self.progressDelta = earnedPoints / pointsByLevel * 100
+        self.progressValue = prevPoints / pointsByLevel * 100 if pointsByLevel > 0.0 else 0
+        self.progressDelta = earnedPoints / pointsByLevel * 100 if pointsByLevel > 0.0 else 0
 
     def __fillPointsForSomeLevels(self, currentLevel, currentPoints, maxLevel, pointsByLevel):
         self.progressValue = 0

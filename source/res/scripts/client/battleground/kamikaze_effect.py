@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/battleground/kamikaze_effect.py
-from functools import partial
 import logging
 import BigWorld
 import Svarog
@@ -10,6 +9,7 @@ from battleground import getKamikazeEquipmentDescr
 from battleground.components import SequenceComponent, AvatarRelatedComponent
 from helpers.CallbackDelayer import CallbackDelayer
 from items.battle_royale import isSpawnedBot
+from vehicle_systems.stricted_loading import makeCallbackWeak
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 _logger = logging.getLogger(__name__)
 
@@ -39,24 +39,32 @@ class KamikazeActivationEffect(AvatarRelatedComponent, CallbackDelayer):
 
     def __showEffect(self, vehicleID):
         vehicle = BigWorld.entities.get(vehicleID)
-        if vehicle:
+        if vehicle is None:
+            _logger.warning('Kamikaze effect vehicle not found!')
+            return
+        else:
             spaceID = BigWorld.player().spaceID
-            effectCmp = Svarog.GameObject(spaceID)
             effectDescr = self.__getConfig()
+            effectPath = effectDescr.path
+            BigWorld.loadResourceListBG((AnimationSequence.Loader(effectPath, spaceID),), makeCallbackWeak(self.__onResourceLoaded, vehicleID, effectPath))
+            return
 
-            def onResourceLoaded(effectP, resourceRefs):
-                if effectP in resourceRefs.failedIDs:
-                    _logger.warning('Resource loading failed %s', effectP)
-                    return
+    def __onResourceLoaded(self, vehicleID, effectP, resourceRefs):
+        if effectP in resourceRefs.failedIDs:
+            _logger.warning('Resource loading failed %s', effectP)
+            return
+        else:
+            vehicle = BigWorld.entities.get(vehicleID)
+            if vehicle is not None:
+                spaceID = BigWorld.player().spaceID
+                effectCmp = Svarog.GameObject(spaceID)
                 sequenceComponent = effectCmp.createComponent(SequenceComponent, resourceRefs[effectP])
                 sequenceComponent.bindToCompound(vehicle.model)
                 sequenceComponent.start()
                 _logger.info('Kamikaze Animation Started!')
                 effectCmp.activate()
                 vehicle.appearance.addTempGameObject(effectCmp, 'kamikaze')
-
-            effectPath = effectDescr.path
-            BigWorld.loadResourceListBG((AnimationSequence.Loader(effectPath, spaceID),), partial(onResourceLoaded, effectPath))
+            return
 
     def __getConfig(self):
         dynObjCache = dependency.instance(IBattleDynamicObjectsCache)

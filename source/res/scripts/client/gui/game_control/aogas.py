@@ -16,8 +16,7 @@ AOGAS_NOTIFY_MSG = Enumeration('Notification message for Anti-online game addict
  ('AOND_2', {'timeout': _DEFAULT_AOGAS_NOTIFY_TIMEOUT}),
  ('AOND_3', {'timeout': _DEFAULT_AOGAS_NOTIFY_TIMEOUT}),
  ('AOND_MORE_3', {'timeout': _DEFAULT_AOGAS_NOTIFY_TIMEOUT}),
- ('AOND_MORE_5', {'timeout': _DEFAULT_AOGAS_NOTIFY_TIMEOUT}),
- ('RESET', {'timeout': _DEFAULT_AOGAS_NOTIFY_TIMEOUT})], instance=AttributeEnumItem)
+ ('AOND_MORE_5', {'timeout': _DEFAULT_AOGAS_NOTIFY_TIMEOUT})], instance=AttributeEnumItem)
 
 class AOGAS_NOTIFY_TIME(object):
     AOND_1 = 1 * TIME_MODIFER - 600
@@ -101,8 +100,6 @@ class AOGASController(IAOGASController):
         if resultID < 0:
             LOG_ERROR('Server return error: ', resultID, accOnline)
             return
-        if not accOnline:
-            self.__notifyAccount(AOGAS_NOTIFY_MSG.RESET)
         delta = round(time.time() - self.__aogasStartedAt)
         AOND = delta + accOnline
         LOG_DEBUG('Calculate AOND (seconds,seconds,seconds) : ', AOND, delta, accOnline)

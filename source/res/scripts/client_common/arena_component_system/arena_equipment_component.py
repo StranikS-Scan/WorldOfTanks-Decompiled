@@ -223,7 +223,7 @@ class ArenaEquipmentComponent(ClientArenaComponent):
 
     def __checkAffectComponent(self, vehicleID, affectComponent, isInfluenceZone):
         vehicle = BigWorld.entities.get(vehicleID)
-        if vehicle:
+        if vehicle and vehicle.isAlive():
             gameObject = vehicle.appearance
             if gameObject.findComponentByType(affectComponent) is not None:
                 if not isInfluenceZone:

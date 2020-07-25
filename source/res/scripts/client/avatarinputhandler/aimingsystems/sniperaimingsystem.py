@@ -94,12 +94,12 @@ class SniperAimingSystem(IAimingSystem):
 
     def enable(self, targetPos, playerGunMatFunction=AimingSystems.getPlayerGunMat):
         player = BigWorld.player()
-        if player.vehicle is not None:
-            siegeState = player.vehicle.siegeState
+        vehicle = player.getVehicleAttached()
+        if vehicle is not None:
+            siegeState = vehicle.siegeState
             self.__siegeState = siegeState if siegeState is not None else VEHICLE_SIEGE_STATE.DISABLED
+            self._vehicleTypeDescriptor = vehicle.typeDescriptor
         self.__playerGunMatFunction = playerGunMatFunction
-        if player.vehicle is not None:
-            self._vehicleTypeDescriptor = player.vehicle.typeDescriptor
         self._vehicleMProv = player.inputHandler.steadyVehicleMatrixCalculator.outputMProv
         IAimingSystem.enable(self, targetPos)
         self.focusOnPos(targetPos)

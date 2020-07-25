@@ -200,11 +200,12 @@ class EventProgressionController(IEventProgressionController):
         return self.__selectorRibbonResId
 
     @property
-    def allCyclesWasEndedResId(self):
-        return self.__allCyclesWasEndedResId
-
-    @property
     def aboutEventProgressionResId(self):
+        if self.__currentMode:
+            if self.__currentMode.getCurrentSeason() or self.__currentMode.getNextSeason():
+                self.__allCyclesWasEndedResId = R.strings.event_progression.selectorTooltip.eventProgression.waitNext()
+            else:
+                self.__allCyclesWasEndedResId = R.strings.event_progression.selectorTooltip.eventProgression.ended()
         return self.__allCyclesWasEndedResId
 
     @property
@@ -228,7 +229,7 @@ class EventProgressionController(IEventProgressionController):
                 _showBrowserView(parsedUrl)
 
     def getProgressionXPTokenID(self):
-        return self.__currentController.PROGRESSION_XP_TOKEN
+        return self.__currentController.PROGRESSION_XP_TOKEN if self.__currentController else ''
 
     def isAvailable(self):
         return self.isFrontLine or self.isSteelHunter
@@ -711,10 +712,7 @@ class EventProgressionController(IEventProgressionController):
         self.__selectorQueueType = QUEUE_TYPE.BATTLE_ROYALE
         self.__primeTimeTitle = R.strings.epic_battle.primeTime.steelhunter.title()
         self.__primeTimeBg = R.images.gui.maps.icons.battleRoyale.primeTime.prime_time_back_default()
-        if self.__currentMode.getCurrentSeason() or self.__currentMode.getNextSeason():
-            self.__allCyclesWasEndedResId = R.strings.event_progression.selectorTooltip.eventProgression.waitNext()
-        else:
-            self.__allCyclesWasEndedResId = R.strings.event_progression.selectorTooltip.eventProgression.ended()
+        self.__allCyclesWasEndedResId = R.strings.event_progression.selectorTooltip.eventProgression.ended()
 
     def __updatePlayerData(self, *_):
         t = self.__itemsCache.items.tokens.getTokens()

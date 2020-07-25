@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/LegalInfoWindow.py
+from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.view.meta.LegalInfoWindowMeta import LegalInfoWindowMeta
 from debug_utils import LOG_ERROR
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared import events
 
@@ -36,6 +39,7 @@ class LegalInfoWindow(LegalInfoWindowMeta):
             LOG_ERROR('cannot open %s' % LICENSES_PATH)
         else:
             info = f.read()
+            info = info.format(header_1=backport.text(R.strings.menu.login.licenses.header_1()), header_2=backport.text(R.strings.menu.login.licenses.header_2()), vivoxLicense=GUI_SETTINGS.vivoxLicense.replace('\\n', '\n'))
             f.close()
 
         self.as_setLegalInfoS(info)

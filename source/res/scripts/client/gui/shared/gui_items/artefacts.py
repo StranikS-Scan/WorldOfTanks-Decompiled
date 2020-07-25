@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/artefacts.py
-from itertools import chain, imap
-import nations
+from constants import MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
@@ -9,16 +8,16 @@ from gui.Scaleform.locale.ARTEFACTS import ARTEFACTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.RES_SHOP_EXT import RES_SHOP_EXT
-from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE, checkForTags
+from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE, checkForTags, getKpiFormatDescription, KPI, mergeAggregateKpi
 from gui.shared.gui_items.Tankman import isSkillLearnt
 from gui.shared.gui_items.fitting_item import FittingItem
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ITEM_PRICE_EMPTY
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from gui.shared.utils.functions import stripColorTagDescrTags
 from helpers import i18n, dependency
-from items import artefacts, vehicles as vehicleItems, tankmen, ITEM_OPERATION
+from items import artefacts, tankmen, ITEM_OPERATION
 from items.tankmen import PERKS
-from items.vehicles import ABILITY_SLOTS_BY_VEHICLE_CLASS, getVehicleClassFromVehicleType
+from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
 _TAG_NOT_FOR_SALE = 'notForSale'
@@ -32,15 +31,6 @@ _TOKEN_OPT_DEVICE_SIMPLE = 'simple'
 _TOKEN_OPT_DEVICE_DELUXE = 'deluxe'
 _TOKEN_CREW_PERK_REPLACE = 'perk'
 _TOKEN_CREW_PERK_BOOST = 'boost'
-_MAX_CAMOUFLAGE_NET_BONUS = None
-
-def getMaxCamouflageNetBonus():
-    global _MAX_CAMOUFLAGE_NET_BONUS
-    if _MAX_CAMOUFLAGE_NET_BONUS is None:
-        maxNetBonusDelta = max((vehicle.invisibilityDeltas['camouflageNetBonus'] for vehicle in chain.from_iterable((imap(lambda vehicleTypeID, n=n: vehicleItems.g_cache.vehicle(n, vehicleTypeID), vehicleItems.g_list.getList(n)) for n in nations.INDICES.itervalues()))))
-        _MAX_CAMOUFLAGE_NET_BONUS = 1.0 + maxNetBonusDelta
-    return _MAX_CAMOUFLAGE_NET_BONUS
-
 
 class VehicleArtefact(FittingItem):
     __slots__ = ()
@@ -68,9 +58,21 @@ class VehicleArtefact(FittingItem):
     def tags(self):
         return self.descriptor.tags
 
-    @property
-    def kpi(self):
-        return self.descriptor.kpi
+    def getKpi(self, vehicle=None):
+        if vehicle is None:
+            return [ (mergeAggregateKpi(kpi) if kpi.type == KPI.Type.AGGREGATE_MUL else kpi) for kpi in self.descriptor.kpi ]
+        else:
+            result = []
+            for kpi in self.descriptor.kpi:
+                if kpi.type == KPI.Type.AGGREGATE_MUL:
+                    for subKpi in kpi.value:
+                        if not subKpi.vehicleTypes or vehicle.type in subKpi.vehicleTypes:
+                            result.append(subKpi)
+
+                if not kpi.vehicleTypes or vehicle.type in kpi.vehicleTypes:
+                    result.append(kpi)
+
+            return result
 
     @property
     def isStimulator(self):
@@ -91,6 +93,10 @@ class VehicleArtefact(FittingItem):
     def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM, store=RES_SHOP_EXT):
         return store.getArtefactIcon(size, self.descriptor.iconName)
 
+    def getVehicleLevelRange(self):
+        vehicleFilter = self.descriptor.getVehicleFilter()
+        return vehicleFilter.getLevelRange() if vehicleFilter else (MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL)
+
 
 class Equipment(VehicleArtefact):
     __slots__ = ()
@@ -103,7 +109,10 @@ class Equipment(VehicleArtefact):
         return '../maps/icons/artefact/%s.png' % super(Equipment, self).icon
 
     def getBonusIcon(self, size='small'):
-        return RES_ICONS.getBonusIcon(size, self.name)
+        result = RES_ICONS.getBonusIcon(size, self.descriptor.iconName)
+        if result is None:
+            result = RES_ICONS.getBonusIcon(size, self.name.split('_')[0])
+        return result
 
     @property
     def defaultLayoutValue(self):
@@ -119,14 +128,14 @@ class Equipment(VehicleArtefact):
         return _TAG_EQUEPMENT_BUILTIN in self.tags
 
     def isInstalled(self, vehicle, slotIdx=None):
-        return vehicle.equipment.regularConsumables.containsIntCD(self.intCD, slotIdx)
+        return vehicle.consumables.installed.containsIntCD(self.intCD, slotIdx)
 
     @property
     def isTrigger(self):
         return _TAG_TRIGGER in self.tags
 
     def mayInstall(self, vehicle, slotIdx=None):
-        for idx, eq in enumerate(vehicle.equipment.regularConsumables):
+        for idx, eq in enumerate(vehicle.consumables.installed):
             if slotIdx is not None and idx == slotIdx or eq is None:
                 continue
             if eq.intCD != self.intCD:
@@ -141,16 +150,16 @@ class Equipment(VehicleArtefact):
     def getInstalledVehicles(self, vehicles):
         result = set()
         for vehicle in vehicles:
-            if vehicle.equipment.regularConsumables.containsIntCD(self.intCD):
+            if vehicle.consumables.installed.containsIntCD(self.intCD):
                 result.add(vehicle)
 
         return result
 
     def getConflictedEquipments(self, vehicle):
         conflictEqs = list()
-        if self in vehicle.equipment.regularConsumables:
+        if self in vehicle.consumables.installed:
             return conflictEqs
-        for e in vehicle.equipment.regularConsumables.getInstalledItems():
+        for e in vehicle.consumables.installed.getItems():
             compatibility = e.descriptor.checkCompatibilityWithActiveEquipment(self.descriptor)
             if compatibility:
                 compatibility = self.descriptor.checkCompatibilityWithEquipment(e.descriptor)
@@ -186,6 +195,9 @@ class Equipment(VehicleArtefact):
     def getOptDeviceBoosterDescription(self, vehicle, valueFormatter=None):
         pass
 
+    def getOptDeviceBoosterGainValue(self, vehicle):
+        pass
+
     def getHighlightType(self, vehicle=None):
         return SLOT_HIGHLIGHT_TYPES.BUILT_IN_EQUIPMENT if self.isBuiltIn else SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
 
@@ -216,25 +228,28 @@ class BattleBooster(Equipment):
     def isAffectsOnVehicle(self, vehicle):
         if self.isCrewBooster():
             return True
-        for device in vehicle.optDevices:
+        for device in vehicle.optDevices.installed:
             if self.isOptionalDeviceCompatible(device):
                 return True
 
         return False
 
     def isInstalled(self, vehicle, slotIdx=None):
-        return False if vehicle is None else vehicle.equipment.battleBoosterConsumables.containsIntCD(self.intCD, slotIdx)
+        return False if vehicle is None else vehicle.battleBoosters.installed.containsIntCD(self.intCD, slotIdx)
 
     def getInstalledVehicles(self, vehicles):
         result = set()
         for vehicle in vehicles:
-            if vehicle.equipment.battleBoosterConsumables.containsIntCD(self.intCD):
+            if vehicle.battleBoosters.installed.containsIntCD(self.intCD):
                 result.add(vehicle)
 
         return result
 
     def mayInstall(self, vehicle, slotIdx=None):
         return (True, None)
+
+    def getBonusIcon(self, size='small'):
+        return RES_ICONS.getBonusIcon(size, self.name.split('_')[0])
 
     def isOptionalDeviceCompatible(self, optionalDevice):
         return not self.isCrewBooster() and optionalDevice is not None and self.descriptor.getLevelParamsForDevice(optionalDevice.descriptor) is not None
@@ -243,11 +258,10 @@ class BattleBooster(Equipment):
         if self.isCrewBooster():
             return 0
         else:
-            for device in vehicle.optDevices:
-                if device is not None:
-                    levelParams = self.descriptor.getLevelParamsForDevice(device.descriptor)
-                    if levelParams is not None and 'crewLevelIncrease' in levelParams:
-                        return levelParams[1]
+            for device in vehicle.optDevices.installed.getItems():
+                levelParams = self.descriptor.getLevelParamsForDevice(device.descriptor)
+                if levelParams is not None and 'crewLevelIncrease' in levelParams:
+                    return levelParams[1]
 
             return 0
 
@@ -285,16 +299,22 @@ class BattleBooster(Equipment):
     def getOptDeviceBoosterDescription(self, vehicle, valueFormatter=None):
         if self.isCrewBooster():
             raise SoftException('This description is only for Opt. Dev. Booster!')
+        gain = self.getOptDeviceBoosterGainValue(vehicle=vehicle)
+        formatted = valueFormatter(gain) if valueFormatter is not None else gain
+        return self.shortDescription % formatted
+
+    def getOptDeviceBoosterGainValue(self, vehicle):
+        if self.isCrewBooster():
+            raise SoftException('This description is only for Opt. Dev. Booster!')
         deviceType = _TOKEN_OPT_DEVICE_SIMPLE
         if vehicle is not None:
-            for device in vehicle.optDevices:
+            for device in vehicle.optDevices.installed:
                 if self.isOptionalDeviceCompatible(device) and device.isDeluxe:
                     deviceType = _TOKEN_OPT_DEVICE_DELUXE
                     break
 
         gain = i18n.makeString(ARTEFACTS.getDeviceGainForBattleBooster(self.name, deviceType))
-        formatted = valueFormatter(gain) if valueFormatter is not None else gain
-        return self.shortDescription % formatted
+        return gain
 
     def _getShortInfo(self, vehicle=None, expanded=False):
         return self.getCrewBoosterDescription(isPerkReplace=False, formatter=None) if self.isCrewBooster() else self.getOptDeviceBoosterDescription(vehicle=None, valueFormatter=None)
@@ -313,6 +333,7 @@ class BattleBooster(Equipment):
 
 class BattleAbility(Equipment):
     __slots__ = ('_level', '_unlocked')
+    __epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
 
     def __init__(self, *args, **kwargs):
         super(BattleAbility, self).__init__(*args, **kwargs)
@@ -350,7 +371,7 @@ class BattleAbility(Equipment):
         self._level = value
 
     def isInstalled(self, vehicle, slotIdx=None):
-        return vehicle.equipment.battleAbilityConsumables.containsIntCD(self.intCD, slotIdx)
+        return vehicle.battleAbilities.installed.containsIntCD(self.intCD, slotIdx)
 
     def getInstalledVehicles(self, vehicles):
         result = set()
@@ -364,7 +385,7 @@ class BattleAbility(Equipment):
         return (False, GUI_ITEM_ECONOMY_CODE.ITEM_NO_PRICE)
 
     def mayInstall(self, vehicle, slotIdx=None):
-        slotCheck = slotIdx < ABILITY_SLOTS_BY_VEHICLE_CLASS[getVehicleClassFromVehicleType(vehicle.descriptor.type)]
+        slotCheck = slotIdx < self.__epicMetaGameCtrl.getNumAbilitySlots(vehicle.descriptor.type)
         return (False, 'slot index exceeds limit of vehicle class') if not slotCheck else self.descriptor.checkCompatibilityWithVehicle(vehicle.descriptor)
 
     def _getAltPrice(self, buyPrice, proxy):
@@ -434,6 +455,10 @@ class OptionalDevice(RemovableDevice):
     def isTrophy(self):
         return checkForTags(self.tags, (_TAG_OPT_DEVICE_TROPHY_BASIC, _TAG_OPT_DEVICE_TROPHY_UPGRADED))
 
+    @property
+    def isRegular(self):
+        return not checkForTags(self.tags, (_TAG_OPT_DEVICE_TROPHY_BASIC, _TAG_OPT_DEVICE_TROPHY_UPGRADED, _TAG_OPT_DEVICE_DELUXE))
+
     def getRemovalPrice(self, proxy=None):
         if not self.isRemovable and proxy is not None:
             if self.isDeluxe:
@@ -455,14 +480,13 @@ class OptionalDevice(RemovableDevice):
             return super(OptionalDevice, self).getRemovalPrice(proxy)
 
     def getBonusIcon(self, size='small'):
-        iconName = self.descriptor.icon[0].split('/')[-1].split('.')[0]
-        result = RES_ICONS.getBonusIcon(size, iconName)
+        result = RES_ICONS.getBonusIcon(size, self.descriptor.iconName)
         if result is None:
             result = RES_ICONS.getBonusIcon(size, self.name.split('_')[0])
         return result
 
     def isInstalled(self, vehicle, slotIdx=None):
-        for idx, op in enumerate(vehicle.optDevices):
+        for idx, op in enumerate(vehicle.optDevices.installed):
             if op is not None and self.intCD == op.intCD:
                 if slotIdx is None:
                     return True
@@ -471,9 +495,8 @@ class OptionalDevice(RemovableDevice):
         return super(OptionalDevice, self).isInstalled(vehicle, slotIdx)
 
     def hasSimilarDevicesInstalled(self, vehicle):
-        optDevs = vehicle.optDevices
-        for device in optDevs:
-            if device is not None and not self.descriptor.checkCompatibilityWithOther(device.descriptor):
+        for device in vehicle.optDevices.installed.getItems():
+            if not self.descriptor.checkCompatibilityWithOther(device.descriptor):
                 return True
 
         return False
@@ -486,7 +509,7 @@ class OptionalDevice(RemovableDevice):
 
     def mayRemove(self, vehicle):
         try:
-            slotIdx = vehicle.optDevices.index(self)
+            slotIdx = vehicle.optDevices.installed.index(self)
             return vehicle.descriptor.mayRemoveOptionalDevice(slotIdx)
         except Exception:
             LOG_CURRENT_EXCEPTION()
@@ -495,7 +518,7 @@ class OptionalDevice(RemovableDevice):
     def getInstalledVehicles(self, vehicles):
         result = set()
         for vehicle in vehicles:
-            installed = [ (x.intCD if x is not None else None) for x in vehicle.optDevices ]
+            installed = [ x.intCD for x in vehicle.optDevices.installed.getItems() ]
             if self.intCD in installed:
                 result.add(vehicle)
 
@@ -535,3 +558,7 @@ class OptionalDevice(RemovableDevice):
         money = money.exchange(Currency.GOLD, Currency.CREDITS, proxy.shop.exchangeRate, default=0)
         canBuy, _ = self._isEnoughMoney(self.getUpgradePrice(proxy).price, money)
         return canBuy
+
+    def _getShortInfo(self, vehicle=None, expanded=False):
+        kpi = self.getKpi()
+        return stripColorTagDescrTags(self.shortDescriptionSpecial) if not kpi or len(kpi) >= 2 or any((bonus.type == KPI.Type.AGGREGATE_MUL for bonus in kpi)) else getKpiFormatDescription(kpi[0])

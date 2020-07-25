@@ -14,6 +14,7 @@ class RES_COMMON(object):
     MAPS_ICONS_BATTLEPASS2020_VOTING_BG = '../maps/icons/battlePass2020/voting/bg.png'
     MAPS_ICONS_BATTLEROYALE_BATTLERESULT_BG = '../maps/icons/battleRoyale/battleResult/bg.png'
     MAPS_ICONS_CRYSTALSINFO_BG = '../maps/icons/crystalsInfo/bg.png'
+    MAPS_ICONS_DEDICATION_BG = '../maps/icons/dedication/bg.png'
     MAPS_ICONS_DEMOUNTKIT_BG = '../maps/icons/demountKit/bg.png'
     MAPS_ICONS_PREMACC_DASHBOARD_HEADER_BADGESLOT_BG = '../maps/icons/premacc/dashboard/header/badgeSlot/bg.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_USSR_DOG_1 = '../maps/icons/tankmen/icons/small/ussr-dog-1.png'

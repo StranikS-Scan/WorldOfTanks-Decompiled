@@ -24,6 +24,7 @@ def _getEpicRandomSwitch(lobbyContext=None):
 
 
 class SettingsCore(ISettingsCore):
+    onOnceOnlyHintsChanged = Event.Event()
     onSettingsChanged = Event.Event()
     onSettingsApplied = Event.Event()
     onSettingsReady = Event.Event()

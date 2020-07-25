@@ -157,7 +157,7 @@
     <Maybach_HL_120_TR_bootcamp>	64005	</Maybach_HL_120_TR_bootcamp>
     <Maybach_HL_108TR_bootcamp>	64006	</Maybach_HL_108TR_bootcamp>
     <Ganz_VIII_VGT_107_bootcamp>	64007	</Ganz_VIII_VGT_107_bootcamp>
-    <Development_Engine>	65000	</Development_Engine>
+    <Development_Engine>	65535	</Development_Engine>
   </ids>
   <shared>
     <Maybach_HL_120_TR>
@@ -2738,7 +2738,7 @@
       <rpm_max>	2800	</rpm_max>
     </MB507_IGR>
     <Maybach_HL_210_TRM_P30_SH>
-      <userString>	#germany_vehicles:Maybach_HL_210_TRM_P30_BR	</userString>
+      <userString>	#germany_vehicles:Maybach_HL_210_TRM_P30_SH	</userString>
       <tags>	gasoline	</tags>
       <level>	1	</level>
       <price>	0	</price>
@@ -2751,8 +2751,8 @@
       <maxRegenHealth>	135	</maxRegenHealth>
       <repairCost>	0	</repairCost>
       <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	360	</rpm_min>
-      <rpm_max>	2970	</rpm_max>
+      <rpm_min>	659	</rpm_min>
+      <rpm_max>	2292	</rpm_max>
     </Maybach_HL_210_TRM_P30_SH>
     <Maybach_HL_230_TRM_P35_SH>
       <userString>	#germany_vehicles:Maybach_HL_230_TRM_P35_SH	</userString>
@@ -2768,8 +2768,8 @@
       <maxRegenHealth>	135	</maxRegenHealth>
       <repairCost>	0	</repairCost>
       <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	460	</rpm_min>
-      <rpm_max>	2125	</rpm_max>
+      <rpm_min>	250	</rpm_min>
+      <rpm_max>	2800	</rpm_max>
     </Maybach_HL_230_TRM_P35_SH>
     <Maybach_HL_230_TRM_P30_SH>
       <userString>	#germany_vehicles:Maybach_HL_230_TRM_P30_SH	</userString>
@@ -2785,8 +2785,8 @@
       <maxRegenHealth>	135	</maxRegenHealth>
       <repairCost>	0	</repairCost>
       <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	380	</rpm_min>
-      <rpm_max>	2400	</rpm_max>
+      <rpm_min>	325	</rpm_min>
+      <rpm_max>	2557	</rpm_max>
     </Maybach_HL_230_TRM_P30_SH>
     <G00_Bomber_SH_Engine>
       <userString>	#germany_vehicles:G00_Bomber_SH_Engine	</userString>
@@ -2802,8 +2802,8 @@
       <maxRegenHealth>	72	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	386	</rpm_min>
-      <rpm_max>	2040	</rpm_max>
+      <rpm_min>	200	</rpm_min>
+      <rpm_max>	2600	</rpm_max>
     </G00_Bomber_SH_Engine>
   </shared>
 </engines.xml>

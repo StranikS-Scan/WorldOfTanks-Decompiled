@@ -66,10 +66,12 @@ class BattleRoyaleLevelUpView(BattleRoyaleLevelUpViewMeta):
         if season is not None:
             cycleNumber = self.__battleRoyaleController.getCurrentOrNextActiveCycleNumber(season)
         awardsVO = self._awardsFormatter.getFormattedBonuses(self.__getBonuses(title), size=AWARDS_SIZES.BIG)
+        awardsSmallVO = self._awardsFormatter.getFormattedBonuses(self.__getBonuses(title))
         if prevTitle >= maxTitle or title >= maxTitle:
             self.__maxLvlReached = True
         lvlReachedText = _getTitleString(prevTitle, title)
         data = {'awards': awardsVO,
+         'awardsSmall': awardsSmallVO,
          'epicMetaLevelIconData': after_battle_reward_view_helpers.getProgressionIconVODict(cycleNumber, title),
          'levelUpText': lvlReachedText,
          'backgroundImageSrc': backport.image(R.images.gui.maps.icons.battleRoyale.backgrounds.back_congrats()),

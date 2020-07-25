@@ -15,6 +15,7 @@ from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.Scaleform.daapi.view.battle.shared.ribbons_aggregator import DAMAGE_SOURCE
+from items.battle_royale import isSpawnedBot, isBattleRoyale
 _logger = logging.getLogger(__name__)
 _RIBBON_SOUNDS_ENABLED = True
 _SHOW_RIBBON_SOUND_NAME = 'show_ribbon'
@@ -55,6 +56,8 @@ def _getVehicleData(arenaDP, vehArenaID):
     vTypeInfoVO = arenaDP.getVehicleInfo(vehArenaID).vehicleType
     vehicleClassTag = vTypeInfoVO.classTag or ''
     vehicleName = vTypeInfoVO.shortNameWithPrefix
+    if isBattleRoyale(vTypeInfoVO.tags) and isSpawnedBot(vTypeInfoVO.tags):
+        vehicleClassTag = ''
     return (vehicleName, vehicleClassTag)
 
 

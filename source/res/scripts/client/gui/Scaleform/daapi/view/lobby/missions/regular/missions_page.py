@@ -107,9 +107,10 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         if self.currentTab and self.__currentTabAlias not in NON_FLASH_TABS:
             self.__updateFilterLabel()
             self.currentTab.setFilters(self.__filterData)
+            self.currentTab.markVisited()
         elif self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS:
             self.currentTab.markVisited()
-            self.__onPageUpdate()
+        self.__onPageUpdate()
         self.__fireTabChangedEvent()
         self.__showFilter()
         if alias == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS:
@@ -235,6 +236,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
 
     def __fireTabChangedEvent(self):
         self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_TAB_CHANGED, ctx=self.__currentTabAlias), EVENT_BUS_SCOPE.LOBBY)
+        if self.currentTab:
+            self.currentTab.markVisited()
 
     @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_MISSIONS_PAGE_VIEW, EVENT_BUS_SCOPE.DEFAULT)
     def __handleMissionsPageClose(self, _):

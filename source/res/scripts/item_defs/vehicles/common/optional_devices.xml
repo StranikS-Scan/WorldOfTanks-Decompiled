@@ -1,1521 +1,82 @@
 <optional_devices.xml>
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
-  <toolbox>
-    <id>	0	</id>
-    <userString>	#artefacts:toolbox/name	</userString>
-    <description>	#artefacts:toolbox/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:toolbox/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:toolbox/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/toolbox.png 0 0	</icon>
-    <price>	500000	</price>
-    <removable>	true	</removable>
-    <tags>	toolbox armor	</tags>
-    <incompatibleTags>
-      <installed>	toolbox	</installed>
-    </incompatibleTags>
-    <script>	StaticFactorDevice	  <weight>	100	</weight>
-      <attribute>	miscAttrs/repairSpeedFactor	</attribute>
-      <factor>	1.25	</factor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleRepairSpeed	</name>
-        <value>	1.25	</value>
-      </mul>
-    </kpi>
-  </toolbox>
-  <antifragmentationLining_light>
-    <id>	1	</id>
-    <userString>	#artefacts:antifragmentationLining_light/name	</userString>
-    <description>	#artefacts:antifragmentationLining_light/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:antifragmentationLining/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:antifragmentationLining/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/antifragmentationLining.png 0 0	</icon>
-    <price>	50000	</price>
-    <removable>	false	</removable>
-    <tags>	antifragmentationLining armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	lightTank lightSPG lightAT-SPG lightTankArtefacts_User	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	AntifragmentationLining	  <weight>	250	</weight>
-      <antifragmentationLiningFactor>	1.2	</antifragmentationLiningFactor>
-      <increaseCrewChanceToEvadeHit>	0.2	</increaseCrewChanceToEvadeHit>
-      <stunResistanceEffect>	0.0	</stunResistanceEffect>
-      <stunResistanceDuration>	0.1	</stunResistanceDuration>
-      <armorSpallsDamageDevicesFactor>	0.9	</armorSpallsDamageDevicesFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	crewHitChance	</name>
-        <value>	1.2	</value>
-      </mul>
-      <mul>
-        <name>	vehicleRamOrExplosionDamageResistance	</name>
-        <value>	1.2	</value>
-      </mul>
-      <mul>
-        <name>	crewStunDuration	</name>
-        <value>	0.9	</value>
-      </mul>
-    </kpi>
-  </antifragmentationLining_light>
-  <antifragmentationLining_medium>
-    <id>	2	</id>
-    <userString>	#artefacts:antifragmentationLining_medium/name	</userString>
-    <description>	#artefacts:antifragmentationLining_medium/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:antifragmentationLining/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:antifragmentationLining/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/antifragmentationLining.png 0 0	</icon>
-    <price>	200000	</price>
-    <removable>	false	</removable>
-    <tags>	antifragmentationLining armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	mediumTank mediumSPG mediumAT-SPG	</tags>
-        </vehicle>
-      </include>
-      <exclude>
-        <vehicle>
-          <tags>	lightTankArtefacts_User	</tags>
-        </vehicle>
-      </exclude>
-    </vehicleFilter>
-    <script>	AntifragmentationLining	  <weight>	500	</weight>
-      <antifragmentationLiningFactor>	1.25	</antifragmentationLiningFactor>
-      <increaseCrewChanceToEvadeHit>	0.25	</increaseCrewChanceToEvadeHit>
-      <stunResistanceEffect>	0.0	</stunResistanceEffect>
-      <stunResistanceDuration>	0.1	</stunResistanceDuration>
-      <armorSpallsDamageDevicesFactor>	0.8	</armorSpallsDamageDevicesFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	crewHitChance	</name>
-        <value>	1.25	</value>
-      </mul>
-      <mul>
-        <name>	vehicleRamOrExplosionDamageResistance	</name>
-        <value>	1.25	</value>
-      </mul>
-      <mul>
-        <name>	crewStunDuration	</name>
-        <value>	0.9	</value>
-      </mul>
-    </kpi>
-  </antifragmentationLining_medium>
-  <antifragmentationLining_heavy>
-    <id>	3	</id>
-    <userString>	#artefacts:antifragmentationLining_heavy/name	</userString>
-    <description>	#artefacts:antifragmentationLining_heavy/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:antifragmentationLining/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:antifragmentationLining/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/antifragmentationLining.png 0 0	</icon>
-    <price>	500000	</price>
-    <removable>	false	</removable>
-    <tags>	antifragmentationLining armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	heavyTank heavySPG heavyAT-SPG	</tags>
-        </vehicle>
-      </include>
-      <exclude>
-        <vehicle>
-          <tags>	antifragmentationLining_superheavy_user	</tags>
-        </vehicle>
-      </exclude>
-    </vehicleFilter>
-    <script>	AntifragmentationLining	  <weight>	1000	</weight>
-      <antifragmentationLiningFactor>	1.3	</antifragmentationLiningFactor>
-      <increaseCrewChanceToEvadeHit>	0.3	</increaseCrewChanceToEvadeHit>
-      <stunResistanceEffect>	0.0	</stunResistanceEffect>
-      <stunResistanceDuration>	0.1	</stunResistanceDuration>
-      <repeatedStunDurationFactor>	0.9	</repeatedStunDurationFactor>
-      <armorSpallsDamageDevicesFactor>	0.7	</armorSpallsDamageDevicesFactor>
-      <armorSpallsDamageDevicesFactor>	0.6	</armorSpallsDamageDevicesFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	crewHitChance	</name>
-        <value>	1.3	</value>
-      </mul>
-      <mul>
-        <name>	vehicleRamOrExplosionDamageResistance	</name>
-        <value>	1.3	</value>
-      </mul>
-      <mul>
-        <name>	crewStunDuration	</name>
-        <value>	0.9	</value>
-      </mul>
-      <mul>
-        <name>	crewRepeatedStunDuration	</name>
-        <value>	0.9	</value>
-      </mul>
-    </kpi>
-  </antifragmentationLining_heavy>
-  <stereoscope>
-    <id>	4	</id>
-    <userString>	#artefacts:stereoscope/name	</userString>
-    <description>	#artefacts:stereoscope/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:stereoscope/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:stereoscope/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/stereoscope.png 0 0	</icon>
-    <price>	500000	</price>
-    <removable>	true	</removable>
-    <tags>	stereoscope reconnaissance	</tags>
-    <vehicleFilter>
-      <exclude>
-        <vehicle>
-          <tags>	noStereoscope	</tags>
-        </vehicle>
-      </exclude>
-    </vehicleFilter>
-    <script>	Stereoscope	  <weight>	50	</weight>
-      <activateWhenStillSec>	3.0	</activateWhenStillSec>
-      <circularVisionRadiusFactor>	1.25	</circularVisionRadiusFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleStillCircularVisionRadius	</name>
-        <value>	1.25	</value>
-      </mul>
-    </kpi>
-  </stereoscope>
-  <coatedOptics>
-    <id>	5	</id>
-    <userString>	#artefacts:coatedOptics/name	</userString>
-    <description>	#artefacts:coatedOptics/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:coatedOptics/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:coatedOptics/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/coatedOptics.png 0 0	</icon>
-    <price>	500000	</price>
-    <removable>	false	</removable>
-    <tags>	coatedOptics reconnaissance	</tags>
-    <incompatibleTags>
-      <installed>	coatedOptics	</installed>
-    </incompatibleTags>
-    <script>	StaticFactorDevice	  <attribute>	miscAttrs/circularVisionRadiusFactor	</attribute>
-      <factor>	1.1	</factor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleCircularVisionRadius	</name>
-        <value>	1.1	</value>
-      </mul>
-    </kpi>
-  </coatedOptics>
-  <camouflageNet>
-    <id>	6	</id>
-    <userString>	#artefacts:camouflageNet/name	</userString>
-    <description>	#artefacts:camouflageNet/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:camouflageNet/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:camouflageNet/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/camouflageNet.png 0 0	</icon>
-    <price>	100000	</price>
-    <removable>	true	</removable>
-    <tags>	camouflageNet camouflage	</tags>
-    <script>	CamouflageNet	  <weight>	100	</weight>
-      <activateWhenStillSec>	3.0	</activateWhenStillSec>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleCamouflage	</name>
-        <value>	1.15	</value>
-      </mul>
-    </kpi>
-  </camouflageNet>
-  <enhancedSuspension_Vikkers>
-    <id>	7	</id>
-    <userString>	#artefacts:enhancedSuspension_Vikkers/name	</userString>
-    <description>	#artefacts:enhancedSuspension/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:enhancedSuspension/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:enhancedSuspension/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/steelRollers.png 0 0	</icon>
-    <price>	20000	</price>
-    <removable>	false	</removable>
-    <tags>	enhancedSuspension armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	enhancedSuspension_Vikkers_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EnhancedSuspension	  <chassisMaxLoadFactor>	1.1	</chassisMaxLoadFactor>
-      <chassisHealthFactor>	1.2	</chassisHealthFactor>
-      <vehicleByChassisDamageFactor>	0.5	</vehicleByChassisDamageFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisStrength	</name>
-        <value>	1.2	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisFallDamage	</name>
-        <value>	0.5	</value>
-      </mul>
-    </kpi>
-  </enhancedSuspension_Vikkers>
-  <enhancedSuspension_candle>
-    <id>	8	</id>
-    <userString>	#artefacts:enhancedSuspension_candle/name	</userString>
-    <description>	#artefacts:enhancedSuspension/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:enhancedSuspension/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:enhancedSuspension/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/steelRollers.png 0 0	</icon>
-    <price>	40000	</price>
-    <removable>	false	</removable>
-    <tags>	enhancedSuspension armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	enhancedSuspension_candle_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EnhancedSuspension	  <chassisMaxLoadFactor>	1.1	</chassisMaxLoadFactor>
-      <chassisHealthFactor>	1.2	</chassisHealthFactor>
-      <vehicleByChassisDamageFactor>	0.5	</vehicleByChassisDamageFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisStrength	</name>
-        <value>	1.2	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisFallDamage	</name>
-        <value>	0.5	</value>
-      </mul>
-    </kpi>
-  </enhancedSuspension_candle>
-  <enhancedSuspension_Christie>
-    <id>	9	</id>
-    <userString>	#artefacts:enhancedSuspension_Christie/name	</userString>
-    <description>	#artefacts:enhancedSuspension/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:enhancedSuspension/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:enhancedSuspension/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/steelRollers.png 0 0	</icon>
-    <price>	80000	</price>
-    <removable>	false	</removable>
-    <tags>	enhancedSuspension armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	enhancedSuspension_Christie_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EnhancedSuspension	  <chassisMaxLoadFactor>	1.1	</chassisMaxLoadFactor>
-      <chassisHealthFactor>	1.2	</chassisHealthFactor>
-      <vehicleByChassisDamageFactor>	0.5	</vehicleByChassisDamageFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisStrength	</name>
-        <value>	1.2	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisFallDamage	</name>
-        <value>	0.5	</value>
-      </mul>
-    </kpi>
-  </enhancedSuspension_Christie>
-  <enhancedTorsions1t>
-    <id>	10	</id>
-    <userString>	#artefacts:enhancedTorsions1t/name	</userString>
-    <description>	#artefacts:enhancedSuspension/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:enhancedSuspension/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:enhancedSuspension/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/steelRollers.png 0 0	</icon>
-    <price>	100000	</price>
-    <removable>	false	</removable>
-    <tags>	enhancedSuspension armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	enhancedTorsions1t_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EnhancedSuspension	  <chassisMaxLoadFactor>	1.1	</chassisMaxLoadFactor>
-      <chassisHealthFactor>	1.2	</chassisHealthFactor>
-      <vehicleByChassisDamageFactor>	0.5	</vehicleByChassisDamageFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisStrength	</name>
-        <value>	1.2	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisFallDamage	</name>
-        <value>	0.5	</value>
-      </mul>
-    </kpi>
-  </enhancedTorsions1t>
-  <enhancedTorsions3t>
-    <id>	11	</id>
-    <userString>	#artefacts:enhancedTorsions3t/name	</userString>
-    <description>	#artefacts:enhancedSuspension/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:enhancedSuspension/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:enhancedSuspension/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/steelRollers.png 0 0	</icon>
-    <price>	200000	</price>
-    <removable>	false	</removable>
-    <tags>	enhancedSuspension armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	enhancedTorsions3t_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EnhancedSuspension	  <chassisMaxLoadFactor>	1.1	</chassisMaxLoadFactor>
-      <chassisHealthFactor>	1.2	</chassisHealthFactor>
-      <vehicleByChassisDamageFactor>	0.5	</vehicleByChassisDamageFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisStrength	</name>
-        <value>	1.2	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisFallDamage	</name>
-        <value>	0.5	</value>
-      </mul>
-    </kpi>
-  </enhancedTorsions3t>
-  <enhancedTorsions5t>
-    <id>	12	</id>
-    <userString>	#artefacts:enhancedTorsions5t/name	</userString>
-    <description>	#artefacts:enhancedSuspension/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:enhancedSuspension/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:enhancedSuspension/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/steelRollers.png 0 0	</icon>
-    <price>	500000	</price>
-    <removable>	false	</removable>
-    <tags>	enhancedSuspension armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	enhancedTorsions5t_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EnhancedSuspension	  <chassisMaxLoadFactor>	1.1	</chassisMaxLoadFactor>
-      <chassisHealthFactor>	1.2	</chassisHealthFactor>
-      <vehicleByChassisDamageFactor>	0.5	</vehicleByChassisDamageFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisStrength	</name>
-        <value>	1.2	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisFallDamage	</name>
-        <value>	0.5	</value>
-      </mul>
-    </kpi>
-  </enhancedTorsions5t>
-  <enhancedSprings>
-    <id>	13	</id>
-    <userString>	#artefacts:enhancedSprings/name	</userString>
-    <description>	#artefacts:enhancedSuspension/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:enhancedSuspension/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:enhancedSuspension/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/steelRollers.png 0 0	</icon>
-    <price>	20000	</price>
-    <removable>	false	</removable>
-    <tags>	enhancedSuspension armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	enhancedSprings_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EnhancedSuspension	  <chassisMaxLoadFactor>	1.1	</chassisMaxLoadFactor>
-      <chassisHealthFactor>	1.2	</chassisHealthFactor>
-      <vehicleByChassisDamageFactor>	0.5	</vehicleByChassisDamageFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisStrength	</name>
-        <value>	1.2	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisFallDamage	</name>
-        <value>	0.5	</value>
-      </mul>
-    </kpi>
-  </enhancedSprings>
-  <enhancedLevers>
-    <id>	14	</id>
-    <userString>	#artefacts:enhancedLevers/name	</userString>
-    <description>	#artefacts:enhancedSuspension/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:enhancedSuspension/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:enhancedSuspension/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/steelRollers.png 0 0	</icon>
-    <price>	200000	</price>
-    <removable>	false	</removable>
-    <tags>	enhancedSuspension armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	enhancedLevers_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EnhancedSuspension	  <chassisMaxLoadFactor>	1.1	</chassisMaxLoadFactor>
-      <chassisHealthFactor>	1.2	</chassisHealthFactor>
-      <vehicleByChassisDamageFactor>	0.5	</vehicleByChassisDamageFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisStrength	</name>
-        <value>	1.2	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisFallDamage	</name>
-        <value>	0.5	</value>
-      </mul>
-    </kpi>
-  </enhancedLevers>
-  <enhancedBelwillWashers>
-    <id>	15	</id>
-    <userString>	#artefacts:enhancedBelwillWashers/name	</userString>
-    <description>	#artefacts:enhancedSuspension/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:enhancedSuspension/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:enhancedSuspension/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/steelRollers.png 0 0	</icon>
-    <price>	600000	</price>
-    <removable>	false	</removable>
-    <tags>	enhancedSuspension armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	enhancedBelwillWashers_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EnhancedSuspension	  <chassisMaxLoadFactor>	1.1	</chassisMaxLoadFactor>
-      <chassisHealthFactor>	1.2	</chassisHealthFactor>
-      <vehicleByChassisDamageFactor>	0.5	</vehicleByChassisDamageFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisStrength	</name>
-        <value>	1.2	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisFallDamage	</name>
-        <value>	0.5	</value>
-      </mul>
-    </kpi>
-  </enhancedBelwillWashers>
-  <enhancedLongitudinalTorsions>
-    <id>	16	</id>
-    <userString>	#artefacts:enhancedLongitudinalTorsions/name	</userString>
-    <description>	#artefacts:enhancedSuspension/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:enhancedSuspension/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:enhancedSuspension/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/steelRollers.png 0 0	</icon>
-    <price>	500000	</price>
-    <removable>	false	</removable>
-    <tags>	enhancedSuspension armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	enhancedLongitudinalTorsions_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EnhancedSuspension	  <chassisMaxLoadFactor>	1.1	</chassisMaxLoadFactor>
-      <chassisHealthFactor>	1.2	</chassisHealthFactor>
-      <vehicleByChassisDamageFactor>	0.5	</vehicleByChassisDamageFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisStrength	</name>
-        <value>	1.2	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisFallDamage	</name>
-        <value>	0.5	</value>
-      </mul>
-    </kpi>
-  </enhancedLongitudinalTorsions>
-  <improvedVentilation_class1>
-    <id>	17	</id>
-    <userString>	#artefacts:improvedVentilation_class1/name	</userString>
-    <description>	#artefacts:improvedVentilation/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:improvedVentilation/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:improvedVentilation/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/improvedVentilation.png 0 0	</icon>
-    <price>	50000	</price>
-    <removable>	false	</removable>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	improvedVentilation_class1_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <tags>	ventilation armor firepower camouflage reconnaissance mobility	</tags>
-    <incompatibleTags>
-      <installed>	ventilation	</installed>
-    </incompatibleTags>
-    <script>	StaticAdditiveDevice	  <weight>	100	</weight>
-      <attribute>	miscAttrs/crewLevelIncrease	</attribute>
-      <value>	5	</value>
-    </script>
-    <kpi>
-      <mul>
-        <name>	crewLevel	</name>
-        <value>	1.05	</value>
-      </mul>
-    </kpi>
-  </improvedVentilation_class1>
-  <improvedVentilation_class2>
-    <id>	18	</id>
-    <userString>	#artefacts:improvedVentilation_class2/name	</userString>
-    <description>	#artefacts:improvedVentilation/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:improvedVentilation/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:improvedVentilation/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/improvedVentilation.png 0 0	</icon>
-    <price>	150000	</price>
-    <removable>	false	</removable>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	improvedVentilation_class2_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <tags>	ventilation armor firepower camouflage reconnaissance mobility	</tags>
-    <incompatibleTags>
-      <installed>	ventilation	</installed>
-    </incompatibleTags>
-    <script>	StaticAdditiveDevice	  <weight>	150	</weight>
-      <attribute>	miscAttrs/crewLevelIncrease	</attribute>
-      <value>	5	</value>
-    </script>
-    <kpi>
-      <mul>
-        <name>	crewLevel	</name>
-        <value>	1.05	</value>
-      </mul>
-    </kpi>
-  </improvedVentilation_class2>
-  <improvedVentilation_class3>
-    <id>	19	</id>
-    <userString>	#artefacts:improvedVentilation_class3/name	</userString>
-    <description>	#artefacts:improvedVentilation/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:improvedVentilation/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:improvedVentilation/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/improvedVentilation.png 0 0	</icon>
-    <price>	600000	</price>
-    <removable>	false	</removable>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	improvedVentilation_class3_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <tags>	ventilation armor firepower camouflage reconnaissance mobility	</tags>
-    <incompatibleTags>
-      <installed>	ventilation	</installed>
-    </incompatibleTags>
-    <script>	StaticAdditiveDevice	  <weight>	200	</weight>
-      <attribute>	miscAttrs/crewLevelIncrease	</attribute>
-      <value>	5	</value>
-    </script>
-    <kpi>
-      <mul>
-        <name>	crewLevel	</name>
-        <value>	1.05	</value>
-      </mul>
-    </kpi>
-  </improvedVentilation_class3>
-  <grousers>
-    <id>	20	</id>
-    <userString>	#artefacts:grousers/name	</userString>
-    <description>	#artefacts:grousers/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:grousers/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:grousers/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/grousers.png 0 0	</icon>
-    <price>	250000	</price>
-    <removable>	false	</removable>
-    <tags>	grousers mobility	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	grousers_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	Grousers	  <weight>	100	</weight>
-      <softGroundResistanceFactor>	0.909	</softGroundResistanceFactor>
-      <mediumGroundResistanceFactor>	0.952	</mediumGroundResistanceFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleSoftGroundPassability	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
-        <name>	vehicleMediumGroundPassability	</name>
-        <value>	1.05	</value>
-      </mul>
-    </kpi>
-  </grousers>
-  <mediumCaliberTankRammer>
-    <id>	21	</id>
-    <userString>	#artefacts:mediumCaliberTankRammer/name	</userString>
-    <description>	#artefacts:rammer/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:rammer/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:rammer/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/rammer.png 0 0	</icon>
-    <price>	200000	</price>
-    <removable>	false	</removable>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	mediumCaliberTankRammer_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <tags>	rammer firepower	</tags>
-    <incompatibleTags>
-      <installed>	rammer	</installed>
-    </incompatibleTags>
-    <script>	StaticFactorDevice	  <weight>	200	</weight>
-      <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
-      <factor>	0.9	</factor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleGunReloadTime	</name>
-        <value>	0.9	</value>
-      </mul>
-    </kpi>
-  </mediumCaliberTankRammer>
-  <largeCaliberTankRammer>
-    <id>	22	</id>
-    <userString>	#artefacts:largeCaliberTankRammer/name	</userString>
-    <description>	#artefacts:rammer/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:rammer/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:rammer/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/rammer.png 0 0	</icon>
-    <price>	500000	</price>
-    <removable>	false	</removable>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	largeCaliberTankRammer_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <tags>	rammer firepower	</tags>
-    <incompatibleTags>
-      <installed>	rammer	</installed>
-    </incompatibleTags>
-    <script>	StaticFactorDevice	  <weight>	400	</weight>
-      <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
-      <factor>	0.9	</factor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleGunReloadTime	</name>
-        <value>	0.9	</value>
-      </mul>
-    </kpi>
-  </largeCaliberTankRammer>
-  <mediumCaliberHowitzerRammer>
-    <id>	23	</id>
-    <userString>	#artefacts:mediumCaliberHowitzerRammer/name	</userString>
-    <description>	#artefacts:rammer/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:rammer/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:rammer/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/rammer.png 0 0	</icon>
-    <price>	300000	</price>
-    <removable>	false	</removable>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	mediumCaliberHowitzerRammer_user	</tags>
-        </vehicle>
-      </include>
-      <include>
-        <nations>	usa	</nations>
-        <vehicle>
-          <tags>	SPG	</tags>
-          <maxLevel>	6	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <tags>	rammer firepower	</tags>
-    <incompatibleTags>
-      <installed>	rammer	</installed>
-    </incompatibleTags>
-    <script>	StaticFactorDevice	  <weight>	300	</weight>
-      <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
-      <factor>	0.9	</factor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleGunReloadTime	</name>
-        <value>	0.9	</value>
-      </mul>
-    </kpi>
-  </mediumCaliberHowitzerRammer>
-  <largeCaliberHowitzerRammer>
-    <id>	24	</id>
-    <userString>	#artefacts:largeCaliberHowitzerRammer/name	</userString>
-    <description>	#artefacts:rammer/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:rammer/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:rammer/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/rammer.png 0 0	</icon>
-    <price>	600000	</price>
-    <removable>	false	</removable>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	largeCaliberHowitzerRammer_user	</tags>
-        </vehicle>
-      </include>
-      <include>
-        <nations>	usa	</nations>
-        <vehicle>
-          <tags>	SPG	</tags>
-          <minLevel>	8	</minLevel>
-          <maxLevel>	10	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <tags>	rammer firepower	</tags>
-    <incompatibleTags>
-      <installed>	rammer	</installed>
-    </incompatibleTags>
-    <script>	StaticFactorDevice	  <weight>	500	</weight>
-      <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
-      <factor>	0.9	</factor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleGunReloadTime	</name>
-        <value>	0.9	</value>
-      </mul>
-    </kpi>
-  </largeCaliberHowitzerRammer>
-  <enhancedAimDrives>
-    <id>	25	</id>
-    <userString>	#artefacts:enhancedAimDrives/name	</userString>
-    <description>	#artefacts:enhancedAimDrives/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:enhancedAimDrives/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:enhancedAimDrives/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/enhancedAimDrives.png 0 0	</icon>
-    <price>	500000	</price>
-    <removable>	false	</removable>
-    <tags>	enhancedAimDrives firepower	</tags>
-    <incompatibleTags>
-      <installed>	enhancedAimDrives	</installed>
-    </incompatibleTags>
-    <script>	StaticFactorDevice	  <weight>	100	</weight>
-      <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
-      <factor>	0.91	</factor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleGunAimSpeed	</name>
-        <value>	1.1	</value>
-      </mul>
-    </kpi>
-  </enhancedAimDrives>
-  <wetCombatPack_class1>
-    <id>	26	</id>
-    <userString>	#artefacts:wetCombatPack_class1/name	</userString>
-    <description>	#artefacts:wetCombatPack/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:wetCombatPack/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:wetCombatPack/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/wetCombatPack.png 0 0	</icon>
-    <price>	200000	</price>
-    <removable>	false	</removable>
-    <tags>	wetCombatPack armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	wetCombatPack_class1_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	StaticFactorDevice	  <vehicleWeightFraction>	0.01	</vehicleWeightFraction>
-      <attribute>	miscAttrs/ammoBayHealthFactor	</attribute>
-      <factor>	1.5	</factor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleAmmoBayStrength	</name>
-        <value>	1.5	</value>
-      </mul>
-    </kpi>
-  </wetCombatPack_class1>
-  <wetCombatPack_class2>
-    <id>	27	</id>
-    <userString>	#artefacts:wetCombatPack_class2/name	</userString>
-    <description>	#artefacts:wetCombatPack/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:wetCombatPack/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:wetCombatPack/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/wetCombatPack.png 0 0	</icon>
-    <price>	600000	</price>
-    <removable>	false	</removable>
-    <tags>	wetCombatPack armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	wetCombatPack_class2_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	StaticFactorDevice	  <vehicleWeightFraction>	0.01	</vehicleWeightFraction>
-      <attribute>	miscAttrs/ammoBayHealthFactor	</attribute>
-      <factor>	1.5	</factor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleAmmoBayStrength	</name>
-        <value>	1.5	</value>
-      </mul>
-    </kpi>
-  </wetCombatPack_class2>
-  <carbonDioxide>
-    <id>	28	</id>
-    <userString>	#artefacts:carbonDioxide/name	</userString>
-    <description>	#artefacts:carbonDioxide/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:carbonDioxide/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:carbonDioxide/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/carbonDioxide.png 0 0	</icon>
-    <price>	500000	</price>
-    <removable>	false	</removable>
-    <tags>	carbonDioxide armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	6	</minLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	StaticFactorDevice	  <weight>	50	</weight>
-      <attribute>	miscAttrs/fuelTankHealthFactor	</attribute>
-      <factor>	1.5	</factor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleFuelTankStrength	</name>
-        <value>	1.5	</value>
-      </mul>
-    </kpi>
-  </carbonDioxide>
-  <filterCyclone>
-    <id>	29	</id>
-    <userString>	#artefacts:filterCyclone/name	</userString>
-    <description>	#artefacts:filterCyclone/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:filterCyclone/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:filterCyclone/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/filterCyclone.png 0 0	</icon>
-    <price>	500000	</price>
-    <removable>	false	</removable>
-    <tags>	filterCyclone armor	</tags>
-    <vehicleFilter>
-      <include>
-        <nations>	ussr	</nations>
-      </include>
-      <exclude>
-        <vehicle>
-          <tags>	lendLeaseVehicle	</tags>
-        </vehicle>
-      </exclude>
-    </vehicleFilter>
-    <script>	StaticFactorDevice	  <weight>	10	</weight>
-      <attribute>	miscAttrs/engineHealthFactor	</attribute>
-      <factor>	1.5	</factor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleEngineStrength	</name>
-        <value>	1.5	</value>
-      </mul>
-    </kpi>
-  </filterCyclone>
-  <aimingStabilizer_Mk1>
-    <id>	30	</id>
-    <userString>	#artefacts:aimingStabilizer_Mk1/name	</userString>
-    <description>	#artefacts:aimingStabilizer/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:aimingStabilizer/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:aimingStabilizer/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/aimingStabilizer.png 0 0	</icon>
-    <price>	500000	</price>
-    <removable>	false	</removable>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	aimingStabilizer_Mk1_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <tags>	aimingStabilizer firepower	</tags>
-    <incompatibleTags>
-      <installed>	aimingStabilizer	</installed>
-    </incompatibleTags>
-    <script>	StaticFactorDevice	  <weight>	100	</weight>
-      <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
-      <factor>	0.8	</factor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleGunShotDispersion	</name>
-        <value>	0.8	</value>
-      </mul>
-    </kpi>
-  </aimingStabilizer_Mk1>
-  <aimingStabilizer_Mk2>
-    <id>	31	</id>
-    <userString>	#artefacts:aimingStabilizer_Mk2/name	</userString>
-    <description>	#artefacts:aimingStabilizer/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:aimingStabilizer/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:aimingStabilizer/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/aimingStabilizer.png 0 0	</icon>
-    <price>	600000	</price>
-    <removable>	false	</removable>
-    <tags>	aimingStabilizer firepower	</tags>
-    <incompatibleTags>
-      <installed>	aimingStabilizer	</installed>
-    </incompatibleTags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	aimingStabilizer_Mk2_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	StaticFactorDevice	  <weight>	200	</weight>
-      <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
-      <factor>	0.8	</factor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleGunShotDispersion	</name>
-        <value>	0.8	</value>
-      </mul>
-    </kpi>
-  </aimingStabilizer_Mk2>
-  <enhancedVertical_springs>
-    <id>	32	</id>
-    <userString>	#artefacts:enhancedVertical_springs/name	</userString>
-    <description>	#artefacts:enhancedVertical_springs/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:enhancedSuspension/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:enhancedSuspension/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/steelRollers.png 0 0	</icon>
-    <price>	20000	</price>
-    <removable>	false	</removable>
-    <tags>	enhancedSuspension armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	enhancedVertical_springs_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EnhancedSuspension	  <chassisMaxLoadFactor>	1.1	</chassisMaxLoadFactor>
-      <chassisHealthFactor>	1.2	</chassisHealthFactor>
-      <vehicleByChassisDamageFactor>	0.5	</vehicleByChassisDamageFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisStrength	</name>
-        <value>	1.2	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisFallDamage	</name>
-        <value>	0.5	</value>
-      </mul>
-    </kpi>
-  </enhancedVertical_springs>
-  <enhancedHorizontal_springs>
-    <id>	33	</id>
-    <userString>	#artefacts:enhancedHorizontal_springs/name	</userString>
-    <description>	#artefacts:enhancedHorizontal_springs/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:enhancedSuspension/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:enhancedSuspension/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/steelRollers.png 0 0	</icon>
-    <price>	20000	</price>
-    <removable>	false	</removable>
-    <tags>	enhancedSuspension armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	enhancedHorizontal_springs_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EnhancedSuspension	  <chassisMaxLoadFactor>	1.1	</chassisMaxLoadFactor>
-      <chassisHealthFactor>	1.2	</chassisHealthFactor>
-      <vehicleByChassisDamageFactor>	0.5	</vehicleByChassisDamageFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisStrength	</name>
-        <value>	1.2	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisFallDamage	</name>
-        <value>	0.5	</value>
-      </mul>
-    </kpi>
-  </enhancedHorizontal_springs>
-  <enhancedSprings_class2>
-    <id>	34	</id>
-    <userString>	#artefacts:enhancedSprings_class2/name	</userString>
-    <description>	#artefacts:enhancedSprings_class2/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:enhancedSuspension/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:enhancedSuspension/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/steelRollers.png 0 0	</icon>
-    <price>	200000	</price>
-    <removable>	false	</removable>
-    <tags>	enhancedSuspension armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	enhancedSprings_class2_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EnhancedSuspension	  <chassisMaxLoadFactor>	1.1	</chassisMaxLoadFactor>
-      <chassisHealthFactor>	1.2	</chassisHealthFactor>
-      <vehicleByChassisDamageFactor>	0.5	</vehicleByChassisDamageFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisStrength	</name>
-        <value>	1.2	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisFallDamage	</name>
-        <value>	0.5	</value>
-      </mul>
-    </kpi>
-  </enhancedSprings_class2>
-  <enhancedSprings_class3>
-    <id>	35	</id>
-    <userString>	#artefacts:enhancedSprings_class3/name	</userString>
-    <description>	#artefacts:enhancedSprings_class3/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:enhancedSuspension/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:enhancedSuspension/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/steelRollers.png 0 0	</icon>
-    <price>	500000	</price>
-    <removable>	false	</removable>
-    <tags>	enhancedSuspension armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	enhancedSprings_class3_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EnhancedSuspension	  <chassisMaxLoadFactor>	1.1	</chassisMaxLoadFactor>
-      <chassisHealthFactor>	1.2	</chassisHealthFactor>
-      <vehicleByChassisDamageFactor>	0.5	</vehicleByChassisDamageFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisStrength	</name>
-        <value>	1.2	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisFallDamage	</name>
-        <value>	0.5	</value>
-      </mul>
-    </kpi>
-  </enhancedSprings_class3>
-  <enhancedHorizontal_springs_class2>
-    <id>	36	</id>
-    <userString>	#artefacts:enhancedHorizontal_springs_class2/name	</userString>
-    <description>	#artefacts:enhancedHorizontal_springs_class2/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:enhancedSuspension/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:enhancedSuspension/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/steelRollers.png 0 0	</icon>
-    <price>	200000	</price>
-    <removable>	false	</removable>
-    <tags>	enhancedSuspension armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	enhancedHorizontal_springs_class2_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EnhancedSuspension	  <chassisMaxLoadFactor>	1.1	</chassisMaxLoadFactor>
-      <chassisHealthFactor>	1.2	</chassisHealthFactor>
-      <vehicleByChassisDamageFactor>	0.5	</vehicleByChassisDamageFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisStrength	</name>
-        <value>	1.2	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisFallDamage	</name>
-        <value>	0.5	</value>
-      </mul>
-    </kpi>
-  </enhancedHorizontal_springs_class2>
-  <enhancedHorizontal_springs_class3>
-    <id>	37	</id>
-    <userString>	#artefacts:enhancedHorizontal_springs_class3/name	</userString>
-    <description>	#artefacts:enhancedHorizontal_springs_class3/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:enhancedSuspension/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:enhancedSuspension/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/steelRollers.png 0 0	</icon>
-    <price>	500000	</price>
-    <removable>	false	</removable>
-    <tags>	enhancedSuspension armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	enhancedHorizontal_springs_class3_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EnhancedSuspension	  <chassisMaxLoadFactor>	1.1	</chassisMaxLoadFactor>
-      <chassisHealthFactor>	1.2	</chassisHealthFactor>
-      <vehicleByChassisDamageFactor>	0.5	</vehicleByChassisDamageFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisStrength	</name>
-        <value>	1.2	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisFallDamage	</name>
-        <value>	0.5	</value>
-      </mul>
-    </kpi>
-  </enhancedHorizontal_springs_class3>
-  <enhancedVertical_springs_class2>
-    <id>	38	</id>
-    <userString>	#artefacts:enhancedVertical_springs_class2/name	</userString>
-    <description>	#artefacts:enhancedVertical_springs_class2/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:enhancedSuspension/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:enhancedSuspension/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/steelRollers.png 0 0	</icon>
-    <price>	200000	</price>
-    <removable>	false	</removable>
-    <tags>	enhancedSuspension armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	enhancedVertical_springs_class2_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EnhancedSuspension	  <chassisMaxLoadFactor>	1.1	</chassisMaxLoadFactor>
-      <chassisHealthFactor>	1.2	</chassisHealthFactor>
-      <vehicleByChassisDamageFactor>	0.5	</vehicleByChassisDamageFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisStrength	</name>
-        <value>	1.2	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisFallDamage	</name>
-        <value>	0.5	</value>
-      </mul>
-    </kpi>
-  </enhancedVertical_springs_class2>
-  <enhancedVertical_springs_class3>
-    <id>	39	</id>
-    <userString>	#artefacts:enhancedVertical_springs_class3/name	</userString>
-    <description>	#artefacts:enhancedVertical_springs_class3/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:enhancedSuspension/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:enhancedSuspension/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/steelRollers.png 0 0	</icon>
-    <price>	500000	</price>
-    <removable>	false	</removable>
-    <tags>	enhancedSuspension armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	enhancedVertical_springs_class3_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EnhancedSuspension	  <chassisMaxLoadFactor>	1.1	</chassisMaxLoadFactor>
-      <chassisHealthFactor>	1.2	</chassisHealthFactor>
-      <vehicleByChassisDamageFactor>	0.5	</vehicleByChassisDamageFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisStrength	</name>
-        <value>	1.2	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisFallDamage	</name>
-        <value>	0.5	</value>
-      </mul>
-    </kpi>
-  </enhancedVertical_springs_class3>
-  <enhancedVertical_elastic_elements>
-    <id>	40	</id>
-    <userString>	#artefacts:enhancedVertical_elastic_elements/name	</userString>
-    <description>	#artefacts:enhancedVertical_elastic_elements/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:enhancedSuspension/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:enhancedSuspension/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/steelRollers.png 0 0	</icon>
-    <price>	20000	</price>
-    <removable>	false	</removable>
-    <tags>	enhancedSuspension armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	enhancedVertical_elastic_elements_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EnhancedSuspension	  <chassisMaxLoadFactor>	1.1	</chassisMaxLoadFactor>
-      <chassisHealthFactor>	1.2	</chassisHealthFactor>
-      <vehicleByChassisDamageFactor>	0.5	</vehicleByChassisDamageFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisStrength	</name>
-        <value>	1.2	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisFallDamage	</name>
-        <value>	0.5	</value>
-      </mul>
-    </kpi>
-  </enhancedVertical_elastic_elements>
-  <enhancedHorizontal_elastic_elements>
-    <id>	41	</id>
-    <userString>	#artefacts:enhancedHorizontal_elastic_elements/name	</userString>
-    <description>	#artefacts:enhancedHorizontal_elastic_elements/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:enhancedSuspension/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:enhancedSuspension/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/steelRollers.png 0 0	</icon>
-    <price>	200000	</price>
-    <removable>	false	</removable>
-    <tags>	enhancedSuspension armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	enhancedHorizontal_elastic_elements_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EnhancedSuspension	  <chassisMaxLoadFactor>	1.1	</chassisMaxLoadFactor>
-      <chassisHealthFactor>	1.2	</chassisHealthFactor>
-      <vehicleByChassisDamageFactor>	0.5	</vehicleByChassisDamageFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisStrength	</name>
-        <value>	1.2	</value>
-      </mul>
-      <mul>
-        <name>	vehicleChassisFallDamage	</name>
-        <value>	0.5	</value>
-      </mul>
-    </kpi>
-  </enhancedHorizontal_elastic_elements>
-  <antifragmentationLining_superheavy>
-    <id>	42	</id>
-    <userString>	#artefacts:antifragmentationLining_superheavy/name	</userString>
-    <description>	#artefacts:antifragmentationLining_superheavy/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:antifragmentationLining/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:antifragmentationLining/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/antifragmentationLining.png 0 0	</icon>
-    <price>	750000	</price>
-    <removable>	false	</removable>
-    <tags>	antifragmentationLining armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	antifragmentationLining_superheavy_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	AntifragmentationLining	  <weight>	1500	</weight>
-      <antifragmentationLiningFactor>	1.5	</antifragmentationLiningFactor>
-      <increaseCrewChanceToEvadeHit>	0.5	</increaseCrewChanceToEvadeHit>
-      <stunResistanceEffect>	0.0	</stunResistanceEffect>
-      <stunResistanceDuration>	0.1	</stunResistanceDuration>
-      <repeatedStunDurationFactor>	0.8	</repeatedStunDurationFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	crewHitChance	</name>
-        <value>	1.5	</value>
-      </mul>
-      <mul>
-        <name>	vehicleRamOrExplosionDamageResistance	</name>
-        <value>	1.5	</value>
-      </mul>
-      <mul>
-        <name>	crewStunDuration	</name>
-        <value>	0.9	</value>
-      </mul>
-      <mul>
-        <name>	crewRepeatedStunDuration	</name>
-        <value>	0.8	</value>
-      </mul>
-    </kpi>
-  </antifragmentationLining_superheavy>
-  <enhancedSuspension_wheeled>
-    <id>	49	</id>
-    <userString>	#artefacts:enhancedSuspension_wheeled/name	</userString>
-    <description>	#artefacts:enhancedSuspension_wheeled/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:enhancedSuspension_wheeled/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:enhancedSuspension_wheeled/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/steelRollers.png 0 0	</icon>
-    <price>	300000	</price>
-    <removable>	false	</removable>
-    <tags>	enhancedSuspension armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	enhancedSuspension_wheeled_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EnhancedSuspension	  <chassisMaxLoadFactor>	1.0	</chassisMaxLoadFactor>
-      <chassisHealthFactor>	1.5	</chassisHealthFactor>
-      <vehicleByChassisDamageFactor>	1.0	</vehicleByChassisDamageFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleChassisStrength	</name>
-        <value>	1.5	</value>
-      </mul>
-    </kpi>
-  </enhancedSuspension_wheeled>
-  <deluxToolbox>
+  <deluxImprovedConfiguration>
     <id>	43	</id>
-    <userString>	#artefacts:deluxToolbox/name	</userString>
-    <description>	#artefacts:deluxToolbox/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:deluxToolbox/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:deluxToolbox/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/toolbox.png 0 0	</icon>
+    <userString>	#artefacts:deluxImprovedConfiguration/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:deluxImprovedConfiguration/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:deluxImprovedConfiguration/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/improvedConfiguration.png 0 0	</icon>
+    <groupName>	improvedConfiguration	</groupName>
     <price>	3000	  <crystal></crystal>
     </price>
     <removable>	false	</removable>
-    <tags>	toolbox deluxe armor	</tags>
+    <tags>	improvedConfiguration deluxe armor	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	5	</minLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
     <incompatibleTags>
-      <installed>	toolbox	</installed>
+      <installed>	improvedConfiguration	</installed>
     </incompatibleTags>
-    <script>	StaticFactorDevice	  <weight>	100	</weight>
-      <attribute>	miscAttrs/repairSpeedFactor	</attribute>
-      <factor>	1.4	</factor>
+    <script>	ImprovedConfiguration	  <weight>	50	</weight>
+      <engineReduceFineFactor>	0.35 0.35	</engineReduceFineFactor>
+      <ammoBayReduceFineFactor>	0.35 0.35	</ammoBayReduceFineFactor>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/repairSpeedFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.45 1.45	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/ammoBayHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.5 2.5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/fuelTankHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.5 2.5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/engineHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.5 2.5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/fireStartingChanceFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.35 0.35	</valueByLevel>
+        </factor>
+      </factors>
     </script>
     <kpi>
       <mul>
         <name>	vehicleRepairSpeed	</name>
-        <value>	1.4	</value>
+        <value>	1.45	</value>
+      </mul>
+      <mul>
+        <name>	vehicleAmmoBayEngineFuelStrength	</name>
+        <value>	2.5	</value>
+      </mul>
+      <mul>
+        <name>	vehPenaltyForDamageEngineAndCombat	</name>
+        <value>	0.35	</value>
+      </mul>
+      <mul>
+        <name>	vehicleFireChance	</name>
+        <value>	0.35	</value>
       </mul>
     </kpi>
-  </deluxToolbox>
+  </deluxImprovedConfiguration>
   <deluxImprovedVentilation>
     <id>	44	</id>
     <userString>	#artefacts:deluxImprovedVentilation/name	</userString>
-    <description>	#artefacts:deluxImprovedVentilation/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:deluxImprovedVentilation/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxImprovedVentilation/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/improvedVentilation.png 0 0	</icon>
+    <groupName>	improvedVentilation	</groupName>
     <price>	5000	  <crystal></crystal>
     </price>
     <removable>	false	</removable>
@@ -1530,31 +91,35 @@
     <incompatibleTags>
       <installed>	ventilation	</installed>
     </incompatibleTags>
-    <script>	StaticAdditiveDevice	  <weight>	100	</weight>
-      <attribute>	miscAttrs/crewLevelIncrease	</attribute>
-      <value>	7.5	</value>
+    <script>	StaticOptionalDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/crewLevelIncrease	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	8.5 8.5	</valueByLevel>
+        </factor>
+      </factors>
     </script>
     <kpi>
       <mul>
         <name>	crewLevel	</name>
-        <value>	1.075	</value>
+        <value>	1.085	</value>
       </mul>
     </kpi>
   </deluxImprovedVentilation>
   <deluxRammer>
     <id>	45	</id>
     <userString>	#artefacts:deluxRammer/name	</userString>
-    <description>	#artefacts:deluxRammer/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:deluxRammer/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxRammer/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/rammer.png 0 0	</icon>
+    <groupName>	tankRammer	</groupName>
     <price>	5000	  <crystal></crystal>
     </price>
     <removable>	false	</removable>
     <vehicleFilter>
       <include>
         <vehicle>
-          <tags>	mediumCaliberTankRammer_user largeCaliberTankRammer_user mediumCaliberHowitzerRammer_user largeCaliberHowitzerRammer_user	</tags>
+          <tags>	tankRammer_class1_user tankRammer_class2_user	</tags>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -1562,24 +127,28 @@
     <incompatibleTags>
       <installed>	rammer	</installed>
     </incompatibleTags>
-    <script>	StaticFactorDevice	  <weight>	200	</weight>
-      <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
-      <factor>	0.875	</factor>
+    <script>	StaticOptionalDevice	  <weight>	200	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.865 0.865	</valueByLevel>
+        </factor>
+      </factors>
     </script>
     <kpi>
       <mul>
         <name>	vehicleGunReloadTime	</name>
-        <value>	0.875	</value>
+        <value>	0.865	</value>
       </mul>
     </kpi>
   </deluxRammer>
   <deluxCoatedOptics>
     <id>	46	</id>
     <userString>	#artefacts:deluxCoatedOptics/name	</userString>
-    <description>	#artefacts:deluxCoatedOptics/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:deluxCoatedOptics/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxCoatedOptics/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/coatedOptics.png 0 0	</icon>
+    <groupName>	coatedOptics	</groupName>
     <price>	4000	  <crystal></crystal>
     </price>
     <removable>	false	</removable>
@@ -1587,30 +156,34 @@
     <incompatibleTags>
       <installed>	coatedOptics	</installed>
     </incompatibleTags>
-    <script>	StaticFactorDevice	  <attribute>	miscAttrs/circularVisionRadiusFactor	</attribute>
-      <factor>	1.125	</factor>
+    <script>	StaticOptionalDevice	  <factors>
+        <factor>
+          <attribute>	miscAttrs/circularVisionRadiusFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.135 1.135	</valueByLevel>
+        </factor>
+      </factors>
     </script>
     <kpi>
       <mul>
         <name>	vehicleCircularVisionRadius	</name>
-        <value>	1.125	</value>
+        <value>	1.135	</value>
       </mul>
     </kpi>
   </deluxCoatedOptics>
   <deluxAimingStabilizer>
     <id>	47	</id>
     <userString>	#artefacts:deluxAimingStabilizer/name	</userString>
-    <description>	#artefacts:deluxAimingStabilizer/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:deluxAimingStabilizer/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxAimingStabilizer/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/aimingStabilizer.png 0 0	</icon>
+    <groupName>	aimingStabilizer	</groupName>
     <price>	5000	  <crystal></crystal>
     </price>
     <removable>	false	</removable>
     <vehicleFilter>
       <include>
         <vehicle>
-          <tags>	aimingStabilizer_Mk1_user aimingStabilizer_Mk2_user	</tags>
+          <tags>	aimingStabilizer_class1_user aimingStabilizer_class2_user	</tags>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -1618,24 +191,28 @@
     <incompatibleTags>
       <installed>	aimingStabilizer	</installed>
     </incompatibleTags>
-    <script>	StaticFactorDevice	  <weight>	100	</weight>
-      <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
-      <factor>	0.75	</factor>
+    <script>	StaticOptionalDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.725 0.725	</valueByLevel>
+        </factor>
+      </factors>
     </script>
     <kpi>
       <mul>
         <name>	vehicleGunShotDispersion	</name>
-        <value>	0.75	</value>
+        <value>	0.725	</value>
       </mul>
     </kpi>
   </deluxAimingStabilizer>
   <deluxEnhancedAimDrives>
     <id>	48	</id>
     <userString>	#artefacts:deluxEnhancedAimDrives/name	</userString>
-    <description>	#artefacts:deluxEnhancedAimDrives/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:deluxEnhancedAimDrives/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxEnhancedAimDrives/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/enhancedAimDrives.png 0 0	</icon>
+    <groupName>	enhancedAimDrives	</groupName>
     <price>	5000	  <crystal></crystal>
     </price>
     <removable>	false	</removable>
@@ -1643,24 +220,28 @@
     <incompatibleTags>
       <installed>	enhancedAimDrives	</installed>
     </incompatibleTags>
-    <script>	StaticFactorDevice	  <weight>	100	</weight>
-      <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
-      <factor>	0.89	</factor>
+    <script>	StaticOptionalDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.881 0.881	</valueByLevel>
+        </factor>
+      </factors>
     </script>
     <kpi>
       <mul>
         <name>	vehicleGunAimSpeed	</name>
-        <value>	1.125	</value>
+        <value>	1.135	</value>
       </mul>
     </kpi>
   </deluxEnhancedAimDrives>
   <trophyBasicAimDrives>
     <id>	50	</id>
     <userString>	#artefacts:trophyBasicAimDrives/name	</userString>
-    <description>	#artefacts:enhancedAimDrives/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:enhancedAimDrives/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:enhancedAimDrives/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/enhancedAimDrives.png 0 0	</icon>
+    <groupName>	enhancedAimDrives	</groupName>
     <price>	100000	</price>
     <notInShop>	true	</notInShop>
     <removable>	false	</removable>
@@ -1668,9 +249,14 @@
     <incompatibleTags>
       <installed>	enhancedAimDrives	</installed>
     </incompatibleTags>
-    <script>	UpgradableStaticFactorDevice	  <weight>	100	</weight>
-      <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
-      <factor>	0.91	</factor>
+    <script>	UpgradableStaticDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.91	</valueByLevel>
+        </factor>
+      </factors>
       <upgradeInfo>
         <upgradedCompDescr>	13305	</upgradedCompDescr>
         <price>	3000000	</price>
@@ -1686,10 +272,9 @@
   <trophyUpgradedAimDrives>
     <id>	51	</id>
     <userString>	#artefacts:trophyBasicAimDrives/name	</userString>
-    <description>	#artefacts:deluxEnhancedAimDrives/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:deluxEnhancedAimDrives/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxEnhancedAimDrives/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/enhancedAimDrives.png 0 0	</icon>
+    <groupName>	enhancedAimDrives	</groupName>
     <price>	100000	</price>
     <notInShop>	true	</notInShop>
     <removable>	false	</removable>
@@ -1697,9 +282,14 @@
     <incompatibleTags>
       <installed>	enhancedAimDrives	</installed>
     </incompatibleTags>
-    <script>	UpgradedStaticFactorDevice	  <weight>	100	</weight>
-      <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
-      <factor>	0.89	</factor>
+    <script>	UpgradedStaticDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.89	</valueByLevel>
+        </factor>
+      </factors>
     </script>
     <kpi>
       <mul>
@@ -1711,17 +301,16 @@
   <trophyBasicTankRammer>
     <id>	52	</id>
     <userString>	#artefacts:trophyBasicTankRammer/name	</userString>
-    <description>	#artefacts:rammer/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:rammer/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:rammer/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/rammer.png 0 0	</icon>
+    <groupName>	tankRammer	</groupName>
     <price>	100000	</price>
     <notInShop>	true	</notInShop>
     <removable>	false	</removable>
     <vehicleFilter>
       <include>
         <vehicle>
-          <tags>	mediumCaliberTankRammer_user largeCaliberTankRammer_user mediumCaliberHowitzerRammer_user largeCaliberHowitzerRammer_user	</tags>
+          <tags>	tankRammer_class1_user tankRammer_class2_user	</tags>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -1729,9 +318,14 @@
     <incompatibleTags>
       <installed>	rammer	</installed>
     </incompatibleTags>
-    <script>	UpgradableStaticFactorDevice	  <weight>	200	</weight>
-      <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
-      <factor>	0.9	</factor>
+    <script>	UpgradableStaticDevice	  <weight>	200	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.9	</valueByLevel>
+        </factor>
+      </factors>
       <upgradeInfo>
         <upgradedCompDescr>	13817	</upgradedCompDescr>
         <price>	3000000	</price>
@@ -1747,17 +341,16 @@
   <trophyUpgradedTankRammer>
     <id>	53	</id>
     <userString>	#artefacts:trophyBasicTankRammer/name	</userString>
-    <description>	#artefacts:deluxRammer/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:deluxRammer/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxRammer/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/rammer.png 0 0	</icon>
+    <groupName>	tankRammer	</groupName>
     <price>	100000	</price>
     <removable>	false	</removable>
     <notInShop>	true	</notInShop>
     <vehicleFilter>
       <include>
         <vehicle>
-          <tags>	mediumCaliberTankRammer_user largeCaliberTankRammer_user mediumCaliberHowitzerRammer_user largeCaliberHowitzerRammer_user	</tags>
+          <tags>	tankRammer_class1_user tankRammer_class2_user	</tags>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -1765,9 +358,14 @@
     <incompatibleTags>
       <installed>	rammer	</installed>
     </incompatibleTags>
-    <script>	UpgradedStaticFactorDevice	  <weight>	200	</weight>
-      <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
-      <factor>	0.875	</factor>
+    <script>	UpgradedStaticDevice	  <weight>	200	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.875	</valueByLevel>
+        </factor>
+      </factors>
     </script>
     <kpi>
       <mul>
@@ -1779,10 +377,9 @@
   <trophyBasicImprovedVentilation>
     <id>	54	</id>
     <userString>	#artefacts:trophyBasicImprovedVentilation/name	</userString>
-    <description>	#artefacts:improvedVentilation/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:deluxImprovedVentilation/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxImprovedVentilation/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/improvedVentilation.png 0 0	</icon>
+    <groupName>	improvedVentilation	</groupName>
     <price>	100000	</price>
     <removable>	false	</removable>
     <notInShop>	true	</notInShop>
@@ -1797,9 +394,14 @@
     <incompatibleTags>
       <installed>	ventilation	</installed>
     </incompatibleTags>
-    <script>	UpgradableStaticAdditiveDevice	  <weight>	100	</weight>
-      <attribute>	miscAttrs/crewLevelIncrease	</attribute>
-      <value>	5	</value>
+    <script>	UpgradableStaticDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/crewLevelIncrease	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	5.0	</valueByLevel>
+        </factor>
+      </factors>
       <upgradeInfo>
         <upgradedCompDescr>	14329	</upgradedCompDescr>
         <price>	3000000	</price>
@@ -1815,10 +417,9 @@
   <trophyUpgradedImprovedVentilation>
     <id>	55	</id>
     <userString>	#artefacts:trophyUpgradedImprovedVentilation/name	</userString>
-    <description>	#artefacts:deluxImprovedVentilation/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:deluxImprovedVentilation/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxImprovedVentilation/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/improvedVentilation.png 0 0	</icon>
+    <groupName>	improvedVentilation	</groupName>
     <price>	100000	</price>
     <removable>	false	</removable>
     <notInShop>	true	</notInShop>
@@ -1833,9 +434,14 @@
     <incompatibleTags>
       <installed>	ventilation	</installed>
     </incompatibleTags>
-    <script>	UpgradedStaticAdditiveDevice	  <weight>	100	</weight>
-      <attribute>	miscAttrs/crewLevelIncrease	</attribute>
-      <value>	7.5	</value>
+    <script>	UpgradedStaticDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/crewLevelIncrease	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	7.5	</valueByLevel>
+        </factor>
+      </factors>
     </script>
     <kpi>
       <mul>
@@ -1847,17 +453,16 @@
   <trophyBasicAimingStabilizer>
     <id>	56	</id>
     <userString>	#artefacts:trophyBasicAimingStabilizer/name	</userString>
-    <description>	#artefacts:aimingStabilizer/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:deluxAimingStabilizer/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxAimingStabilizer/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/aimingStabilizer.png 0 0	</icon>
+    <groupName>	aimingStabilizer	</groupName>
     <price>	100000	</price>
     <notInShop>	true	</notInShop>
     <removable>	false	</removable>
     <vehicleFilter>
       <include>
         <vehicle>
-          <tags>	aimingStabilizer_Mk1_user aimingStabilizer_Mk2_user	</tags>
+          <tags>	aimingStabilizer_class1_user aimingStabilizer_class2_user	</tags>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -1865,9 +470,14 @@
     <incompatibleTags>
       <installed>	aimingStabilizer	</installed>
     </incompatibleTags>
-    <script>	UpgradableStaticFactorDevice	  <weight>	100	</weight>
-      <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
-      <factor>	0.8	</factor>
+    <script>	UpgradableStaticDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.8	</valueByLevel>
+        </factor>
+      </factors>
       <upgradeInfo>
         <upgradedCompDescr>	14841	</upgradedCompDescr>
         <price>	3000000	</price>
@@ -1883,17 +493,16 @@
   <trophyUpgradedAimingStabilizer>
     <id>	57	</id>
     <userString>	#artefacts:trophyUpgradedAimingStabilizer/name	</userString>
-    <description>	#artefacts:deluxAimingStabilizer/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:deluxAimingStabilizer/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxAimingStabilizer/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/aimingStabilizer.png 0 0	</icon>
+    <groupName>	aimingStabilizer	</groupName>
     <price>	100000	</price>
     <notInShop>	true	</notInShop>
     <removable>	false	</removable>
     <vehicleFilter>
       <include>
         <vehicle>
-          <tags>	aimingStabilizer_Mk1_user aimingStabilizer_Mk2_user	</tags>
+          <tags>	aimingStabilizer_class1_user aimingStabilizer_class2_user	</tags>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -1901,9 +510,14 @@
     <incompatibleTags>
       <installed>	aimingStabilizer	</installed>
     </incompatibleTags>
-    <script>	UpgradedStaticFactorDevice	  <weight>	100	</weight>
-      <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
-      <factor>	0.75	</factor>
+    <script>	UpgradedStaticDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.75	</valueByLevel>
+        </factor>
+      </factors>
     </script>
     <kpi>
       <mul>
@@ -1915,10 +529,9 @@
   <trophyBasicCoatedOptics>
     <id>	58	</id>
     <userString>	#artefacts:trophyBasicCoatedOptics/name	</userString>
-    <description>	#artefacts:coatedOptics/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:deluxCoatedOptics/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxCoatedOptics/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/coatedOptics.png 0 0	</icon>
+    <groupName>	coatedOptics	</groupName>
     <price>	100000	</price>
     <notInShop>	true	</notInShop>
     <removable>	false	</removable>
@@ -1926,8 +539,13 @@
     <incompatibleTags>
       <installed>	coatedOptics	</installed>
     </incompatibleTags>
-    <script>	UpgradableStaticFactorDevice	  <attribute>	miscAttrs/circularVisionRadiusFactor	</attribute>
-      <factor>	1.1	</factor>
+    <script>	UpgradableStaticDevice	  <factors>
+        <factor>
+          <attribute>	miscAttrs/circularVisionRadiusFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.1	</valueByLevel>
+        </factor>
+      </factors>
       <upgradeInfo>
         <upgradedCompDescr>	15353	</upgradedCompDescr>
         <price>	3000000	</price>
@@ -1943,10 +561,9 @@
   <trophyUpgradedCoatedOptics>
     <id>	59	</id>
     <userString>	#artefacts:trophyUpgradedCoatedOptics/name	</userString>
-    <description>	#artefacts:deluxCoatedOptics/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:deluxCoatedOptics/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxCoatedOptics/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/coatedOptics.png 0 0	</icon>
+    <groupName>	coatedOptics	</groupName>
     <price>	100000	</price>
     <notInShop>	true	</notInShop>
     <removable>	false	</removable>
@@ -1954,8 +571,13 @@
     <incompatibleTags>
       <installed>	coatedOptics	</installed>
     </incompatibleTags>
-    <script>	UpgradedStaticFactorDevice	  <attribute>	miscAttrs/circularVisionRadiusFactor	</attribute>
-      <factor>	1.125	</factor>
+    <script>	UpgradedStaticDevice	  <factors>
+        <factor>
+          <attribute>	miscAttrs/circularVisionRadiusFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.125	</valueByLevel>
+        </factor>
+      </factors>
     </script>
     <kpi>
       <mul>
@@ -1964,4 +586,2197 @@
       </mul>
     </kpi>
   </trophyUpgradedCoatedOptics>
+  <trophyBasicImprovedConfiguration>
+    <id>	105	</id>
+    <userString>	#artefacts:trophyBasicImprovedConfiguration/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:improvedConfiguration/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:improvedConfiguration/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/improvedConfiguration.png 0 0	</icon>
+    <groupName>	improvedConfiguration	</groupName>
+    <price>	100000	</price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <tags>	improvedConfiguration armor trophyBasic	</tags>
+    <incompatibleTags>
+      <installed>	improvedConfiguration	</installed>
+    </incompatibleTags>
+    <script>	UpgradableImprovedConfiguration	  <weight>	50	</weight>
+      <upgradeInfo>
+        <upgradedCompDescr>	27385	</upgradedCompDescr>
+        <price>	3000000	</price>
+      </upgradeInfo>
+      <engineReduceFineFactor>	0.5 0.5	</engineReduceFineFactor>
+      <ammoBayReduceFineFactor>	0.5 0.5	</ammoBayReduceFineFactor>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/repairSpeedFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.25 1.25	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/ammoBayHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.0 2.0	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/fuelTankHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.0 2.0	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/engineHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.0 2.0	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/fireStartingChanceFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.5 0.5	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleRepairSpeed	</name>
+        <value>	1.25	</value>
+      </mul>
+      <mul>
+        <name>	vehicleAmmoBayEngineFuelStrength	</name>
+        <value>	2.0	</value>
+      </mul>
+      <mul>
+        <name>	vehPenaltyForDamageEngineAndCombat	</name>
+        <value>	0.5	</value>
+      </mul>
+      <mul>
+        <name>	vehicleFireChance	</name>
+        <value>	0.5	</value>
+      </mul>
+    </kpi>
+  </trophyBasicImprovedConfiguration>
+  <trophyUpgradedImprovedConfiguration>
+    <id>	106	</id>
+    <userString>	#artefacts:trophyUpgradedImprovedConfiguration/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:improvedConfiguration/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:improvedConfiguration/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/improvedConfiguration.png 0 0	</icon>
+    <groupName>	improvedConfiguration	</groupName>
+    <price>	100000	</price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <tags>	improvedConfiguration armor trophyUpgraded	</tags>
+    <incompatibleTags>
+      <installed>	improvedConfiguration	</installed>
+    </incompatibleTags>
+    <script>	UpgradedImprovedConfiguration	  <weight>	50	</weight>
+      <engineReduceFineFactor>	0.3 0.3	</engineReduceFineFactor>
+      <ammoBayReduceFineFactor>	0.3 0.3	</ammoBayReduceFineFactor>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/repairSpeedFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.4 1.4	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/ammoBayHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.5 2.5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/fuelTankHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.5 2.5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/engineHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.5 2.5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/fireStartingChanceFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.3 0.3	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleRepairSpeed	</name>
+        <value>	1.4	</value>
+      </mul>
+      <mul>
+        <name>	vehicleAmmoBayEngineFuelStrength	</name>
+        <value>	2.5	</value>
+      </mul>
+      <mul>
+        <name>	vehPenaltyForDamageEngineAndCombat	</name>
+        <value>	0.3	</value>
+      </mul>
+      <mul>
+        <name>	vehicleFireChance	</name>
+        <value>	0.3	</value>
+      </mul>
+    </kpi>
+  </trophyUpgradedImprovedConfiguration>
+  <improvedConfiguration_tier2>
+    <id>	61	</id>
+    <userString>	#artefacts:improvedConfiguration_tier2/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:improvedConfiguration/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:improvedConfiguration/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/improvedConfiguration.png 0 0	</icon>
+    <price>	200000	</price>
+    <removable>	false	</removable>
+    <tags>	improvedConfiguration armor	</tags>
+    <categories>	survivability	</categories>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	7	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <incompatibleTags>
+      <installed>	improvedConfiguration	</installed>
+    </incompatibleTags>
+    <script>	ImprovedConfiguration	  <weight>	50	</weight>
+      <engineReduceFineFactor>	0.5 0.35	</engineReduceFineFactor>
+      <ammoBayReduceFineFactor>	0.5 0.35	</ammoBayReduceFineFactor>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/repairSpeedFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.25 1.35	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/ammoBayHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.0 2.5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/fuelTankHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.0 2.5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/engineHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.0 2.5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/fireStartingChanceFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.5 0.35	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleRepairSpeed	</name>
+        <value>	1.25	</value>
+        <specValue>	1.35	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleAmmoBayEngineFuelStrength	</name>
+        <value>	2.0	</value>
+        <specValue>	2.5	</specValue>
+      </mul>
+      <mul>
+        <name>	vehPenaltyForDamageEngineAndCombat	</name>
+        <value>	0.5	</value>
+        <specValue>	0.35	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleFireChance	</name>
+        <value>	0.5	</value>
+        <specValue>	0.35	</specValue>
+      </mul>
+    </kpi>
+  </improvedConfiguration_tier2>
+  <improvedConfiguration_tier1>
+    <id>	62	</id>
+    <userString>	#artefacts:improvedConfiguration_tier1/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:improvedConfiguration/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:improvedConfiguration/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/improvedConfiguration.png 0 0	</icon>
+    <price>	600000	</price>
+    <removable>	false	</removable>
+    <tags>	improvedConfiguration armor	</tags>
+    <categories>	survivability	</categories>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <incompatibleTags>
+      <installed>	improvedConfiguration	</installed>
+    </incompatibleTags>
+    <script>	ImprovedConfiguration	  <weight>	50	</weight>
+      <engineReduceFineFactor>	0.5 0.35	</engineReduceFineFactor>
+      <ammoBayReduceFineFactor>	0.5 0.35	</ammoBayReduceFineFactor>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/repairSpeedFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.25 1.35	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/ammoBayHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.0 2.5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/fuelTankHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.0 2.5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/engineHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.0 2.5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/fireStartingChanceFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.5 0.35	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleRepairSpeed	</name>
+        <value>	1.25	</value>
+        <specValue>	1.35	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleAmmoBayEngineFuelStrength	</name>
+        <value>	2.0	</value>
+        <specValue>	2.5	</specValue>
+      </mul>
+      <mul>
+        <name>	vehPenaltyForDamageEngineAndCombat	</name>
+        <value>	0.5	</value>
+        <specValue>	0.35	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleFireChance	</name>
+        <value>	0.5	</value>
+        <specValue>	0.35	</specValue>
+      </mul>
+    </kpi>
+  </improvedConfiguration_tier1>
+  <antifragmentationLining_tier4>
+    <id>	63	</id>
+    <userString>	#artefacts:antifragmentationLining_tier4/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:antifragmentationLining/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:antifragmentationLining/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/antifragmentationLining.png 0 0	</icon>
+    <price>	50000	</price>
+    <removable>	false	</removable>
+    <tags>	antifragmentationLining armor	</tags>
+    <categories>	survivability	</categories>
+    <incompatibleTags>
+      <installed>	antifragmentationLining	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	antifragmentationLining_light_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	StaticOptionalDevice	  <weight>	250	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/antifragmentationLiningFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.5 1.6	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/crewChanceToHitFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.5 0.4	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/stunResistanceDuration	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	0.1 0.15	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/repeatedStunDurationFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.8 0.75	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleRamOrExplosionDamageResistance	</name>
+        <value>	0.5	</value>
+        <specValue>	0.4	</specValue>
+      </mul>
+      <mul>
+        <name>	crewHitChance	</name>
+        <value>	1.5	</value>
+        <specValue>	1.6	</specValue>
+      </mul>
+      <mul>
+        <name>	crewStunDuration	</name>
+        <value>	0.9	</value>
+        <specValue>	0.85	</specValue>
+      </mul>
+      <mul>
+        <name>	crewRepeatedStunDuration	</name>
+        <value>	0.8	</value>
+        <specValue>	0.75	</specValue>
+      </mul>
+    </kpi>
+  </antifragmentationLining_tier4>
+  <antifragmentationLining_tier3>
+    <id>	64	</id>
+    <userString>	#artefacts:antifragmentationLining_tier3/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:antifragmentationLining/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:antifragmentationLining/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/antifragmentationLining.png 0 0	</icon>
+    <price>	200000	</price>
+    <categories>	survivability	</categories>
+    <removable>	false	</removable>
+    <tags>	antifragmentationLining armor	</tags>
+    <incompatibleTags>
+      <installed>	antifragmentationLining	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	antifragmentationLining_medium_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	StaticOptionalDevice	  <weight>	500	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/antifragmentationLiningFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.5 1.6	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/crewChanceToHitFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.5 0.4	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/stunResistanceDuration	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	0.1 0.15	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/repeatedStunDurationFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.8 0.75	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleRamOrExplosionDamageResistance	</name>
+        <value>	0.5	</value>
+        <specValue>	0.4	</specValue>
+      </mul>
+      <mul>
+        <name>	crewHitChance	</name>
+        <value>	1.5	</value>
+        <specValue>	1.6	</specValue>
+      </mul>
+      <mul>
+        <name>	crewStunDuration	</name>
+        <value>	0.9	</value>
+        <specValue>	0.85	</specValue>
+      </mul>
+      <mul>
+        <name>	crewRepeatedStunDuration	</name>
+        <value>	0.8	</value>
+        <specValue>	0.75	</specValue>
+      </mul>
+    </kpi>
+  </antifragmentationLining_tier3>
+  <antifragmentationLining_tier2>
+    <id>	65	</id>
+    <userString>	#artefacts:antifragmentationLining_tier2/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:antifragmentationLining/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:antifragmentationLining/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/antifragmentationLining.png 0 0	</icon>
+    <price>	500000	</price>
+    <categories>	survivability	</categories>
+    <removable>	false	</removable>
+    <tags>	antifragmentationLining armor	</tags>
+    <incompatibleTags>
+      <installed>	antifragmentationLining	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	antifragmentationLining_heavy_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	StaticOptionalDevice	  <weight>	1000	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/antifragmentationLiningFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.5 1.6	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/crewChanceToHitFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.5 0.4	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/stunResistanceDuration	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	0.1 0.15	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/repeatedStunDurationFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.8 0.75	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleRamOrExplosionDamageResistance	</name>
+        <value>	0.5	</value>
+        <specValue>	0.4	</specValue>
+      </mul>
+      <mul>
+        <name>	crewHitChance	</name>
+        <value>	1.5	</value>
+        <specValue>	1.6	</specValue>
+      </mul>
+      <mul>
+        <name>	crewStunDuration	</name>
+        <value>	0.9	</value>
+        <specValue>	0.85	</specValue>
+      </mul>
+      <mul>
+        <name>	crewRepeatedStunDuration	</name>
+        <value>	0.8	</value>
+        <specValue>	0.75	</specValue>
+      </mul>
+    </kpi>
+  </antifragmentationLining_tier2>
+  <antifragmentationLining_tier1>
+    <id>	66	</id>
+    <userString>	#artefacts:antifragmentationLining_tier1/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:antifragmentationLining/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:antifragmentationLining/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/antifragmentationLining.png 0 0	</icon>
+    <price>	750000	</price>
+    <categories>	survivability	</categories>
+    <removable>	false	</removable>
+    <tags>	antifragmentationLining armor	</tags>
+    <incompatibleTags>
+      <installed>	antifragmentationLining	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	antifragmentationLining_superheavy_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	StaticOptionalDevice	  <weight>	1500	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/antifragmentationLiningFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.5 1.6	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/crewChanceToHitFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.5 0.4	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/stunResistanceDuration	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	0.1 0.15	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/repeatedStunDurationFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.8 0.75	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleRamOrExplosionDamageResistance	</name>
+        <value>	0.5	</value>
+        <specValue>	0.4	</specValue>
+      </mul>
+      <mul>
+        <name>	crewHitChance	</name>
+        <value>	1.5	</value>
+        <specValue>	1.6	</specValue>
+      </mul>
+      <mul>
+        <name>	crewStunDuration	</name>
+        <value>	0.9	</value>
+        <specValue>	0.85	</specValue>
+      </mul>
+      <mul>
+        <name>	crewRepeatedStunDuration	</name>
+        <value>	0.8	</value>
+        <specValue>	0.75	</specValue>
+      </mul>
+    </kpi>
+  </antifragmentationLining_tier1>
+  <stereoscope_tier3>
+    <id>	67	</id>
+    <userString>	#artefacts:stereoscope_tier3/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:stereoscope/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:stereoscope/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/stereoscope.png 0 0	</icon>
+    <price>	50000	</price>
+    <removable>	false	</removable>
+    <tags>	stereoscope reconnaissance	</tags>
+    <categories>	stealth	</categories>
+    <incompatibleTags>
+      <installed>	stereoscope	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	2	</minLevel>
+          <maxLevel>	4	</maxLevel>
+        </vehicle>
+      </include>
+      <exclude>
+        <vehicle>
+          <tags>	wheeledVehicle	</tags>
+        </vehicle>
+      </exclude>
+    </vehicleFilter>
+    <script>	Stereoscope	  <weight>	50	</weight>
+      <activateWhenStillSec>	3.0	</activateWhenStillSec>
+      <circularVisionRadius>	1.25 1.275	</circularVisionRadius>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleStillCircularVisionRadius	</name>
+        <value>	1.25	</value>
+        <specValue>	1.275	</specValue>
+      </mul>
+    </kpi>
+  </stereoscope_tier3>
+  <stereoscope_tier2>
+    <id>	68	</id>
+    <userString>	#artefacts:stereoscope_tier2/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:stereoscope/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:stereoscope/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/stereoscope.png 0 0	</icon>
+    <price>	200000	</price>
+    <removable>	false	</removable>
+    <tags>	stereoscope reconnaissance	</tags>
+    <categories>	stealth	</categories>
+    <incompatibleTags>
+      <installed>	stereoscope	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	7	</maxLevel>
+        </vehicle>
+      </include>
+      <exclude>
+        <vehicle>
+          <tags>	wheeledVehicle	</tags>
+        </vehicle>
+      </exclude>
+    </vehicleFilter>
+    <script>	Stereoscope	  <weight>	50	</weight>
+      <activateWhenStillSec>	3.0	</activateWhenStillSec>
+      <circularVisionRadius>	1.25 1.275	</circularVisionRadius>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleStillCircularVisionRadius	</name>
+        <value>	1.25	</value>
+        <specValue>	1.275	</specValue>
+      </mul>
+    </kpi>
+  </stereoscope_tier2>
+  <stereoscope_tier1>
+    <id>	69	</id>
+    <userString>	#artefacts:stereoscope_tier1/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:stereoscope/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:stereoscope/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/stereoscope.png 0 0	</icon>
+    <price>	600000	</price>
+    <removable>	false	</removable>
+    <tags>	stereoscope reconnaissance	</tags>
+    <categories>	stealth	</categories>
+    <incompatibleTags>
+      <installed>	stereoscope	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+      <exclude>
+        <vehicle>
+          <tags>	wheeledVehicle	</tags>
+        </vehicle>
+      </exclude>
+    </vehicleFilter>
+    <script>	Stereoscope	  <weight>	50	</weight>
+      <activateWhenStillSec>	3.0	</activateWhenStillSec>
+      <circularVisionRadius>	1.25 1.275	</circularVisionRadius>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleStillCircularVisionRadius	</name>
+        <value>	1.25	</value>
+        <specValue>	1.275	</specValue>
+      </mul>
+    </kpi>
+  </stereoscope_tier1>
+  <coatedOptics_tier3>
+    <id>	70	</id>
+    <userString>	#artefacts:coatedOptics_tier3/name	</userString>
+    <longDescriptionSpecial>	#artefacts:coatedOptics/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/coatedOptics.png 0 0	</icon>
+    <price>	50000	</price>
+    <removable>	false	</removable>
+    <tags>	coatedOptics reconnaissance	</tags>
+    <incompatibleTags>
+      <installed>	coatedOptics	</installed>
+    </incompatibleTags>
+    <categories>	stealth	</categories>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	2	</minLevel>
+          <maxLevel>	4	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	StaticOptionalDevice	  <factors>
+        <factor>
+          <attribute>	miscAttrs/circularVisionRadiusFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.1 1.115	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleCircularVisionRadius	</name>
+        <value>	1.1	</value>
+        <specValue>	1.115	</specValue>
+      </mul>
+    </kpi>
+  </coatedOptics_tier3>
+  <coatedOptics_tier2>
+    <id>	71	</id>
+    <userString>	#artefacts:coatedOptics_tier2/name	</userString>
+    <longDescriptionSpecial>	#artefacts:coatedOptics/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/coatedOptics.png 0 0	</icon>
+    <price>	200000	</price>
+    <removable>	false	</removable>
+    <tags>	coatedOptics reconnaissance	</tags>
+    <incompatibleTags>
+      <installed>	coatedOptics	</installed>
+    </incompatibleTags>
+    <categories>	stealth	</categories>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	7	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	StaticOptionalDevice	  <factors>
+        <factor>
+          <attribute>	miscAttrs/circularVisionRadiusFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.1 1.115	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleCircularVisionRadius	</name>
+        <value>	1.1	</value>
+        <specValue>	1.115	</specValue>
+      </mul>
+    </kpi>
+  </coatedOptics_tier2>
+  <coatedOptics_tier1>
+    <id>	72	</id>
+    <userString>	#artefacts:coatedOptics_tier1/name	</userString>
+    <longDescriptionSpecial>	#artefacts:coatedOptics/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/coatedOptics.png 0 0	</icon>
+    <price>	600000	</price>
+    <removable>	false	</removable>
+    <tags>	coatedOptics reconnaissance	</tags>
+    <incompatibleTags>
+      <installed>	coatedOptics	</installed>
+    </incompatibleTags>
+    <categories>	stealth	</categories>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	StaticOptionalDevice	  <factors>
+        <factor>
+          <attribute>	miscAttrs/circularVisionRadiusFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.1 1.115	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleCircularVisionRadius	</name>
+        <value>	1.1	</value>
+        <specValue>	1.115	</specValue>
+      </mul>
+    </kpi>
+  </coatedOptics_tier1>
+  <camouflageNet_tier3>
+    <id>	73	</id>
+    <userString>	#artefacts:camouflageNet_tier3/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:camouflageNet/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:camouflageNet/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/camouflageNet.png 0 0	</icon>
+    <price>	50000	</price>
+    <removable>	false	</removable>
+    <tags>	camouflageNet camouflage	</tags>
+    <categories>	stealth	</categories>
+    <incompatibleTags>
+      <installed>	camouflageNet	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	2	</minLevel>
+          <maxLevel>	4	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	CamouflageNet	  <weight>	50	</weight>
+      <activateWhenStillSec>	3.0	</activateWhenStillSec>
+      <overridableFactors>
+        <invisibilityBonus>	0.15 0.175	</invisibilityBonus>
+      </overridableFactors>
+    </script>
+    <kpi>
+      <aggregateMul>
+        <name>	vehicleStillCamouflageGroup	</name>
+        <mul>
+          <name>	vehicleStillCamouflage	</name>
+          <value>	1.15	</value>
+          <specValue>	1.175	</specValue>
+          <vehicleTypes>	AT-SPG	</vehicleTypes>
+        </mul>
+        <mul>
+          <name>	vehicleStillCamouflage	</name>
+          <value>	1.1	</value>
+          <specValue>	1.125	</specValue>
+          <vehicleTypes>	lightTank mediumTank	</vehicleTypes>
+        </mul>
+        <mul>
+          <name>	vehicleStillCamouflage	</name>
+          <value>	1.05	</value>
+          <specValue>	1.075	</specValue>
+          <vehicleTypes>	heavyTank SPG	</vehicleTypes>
+        </mul>
+      </aggregateMul>
+    </kpi>
+  </camouflageNet_tier3>
+  <camouflageNet_tier2>
+    <id>	74	</id>
+    <userString>	#artefacts:camouflageNet_tier2/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:camouflageNet/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:camouflageNet/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/camouflageNet.png 0 0	</icon>
+    <price>	100000	</price>
+    <removable>	false	</removable>
+    <tags>	camouflageNet camouflage	</tags>
+    <categories>	stealth	</categories>
+    <incompatibleTags>
+      <installed>	camouflageNet	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	CamouflageNet	  <weight>	50	</weight>
+      <activateWhenStillSec>	3.0	</activateWhenStillSec>
+      <overridableFactors>
+        <invisibilityBonus>	0.15 0.175	</invisibilityBonus>
+      </overridableFactors>
+    </script>
+    <kpi>
+      <aggregateMul>
+        <name>	vehicleStillCamouflageGroup	</name>
+        <mul>
+          <name>	vehicleStillCamouflage	</name>
+          <value>	1.15	</value>
+          <specValue>	1.175	</specValue>
+          <vehicleTypes>	AT-SPG	</vehicleTypes>
+        </mul>
+        <mul>
+          <name>	vehicleStillCamouflage	</name>
+          <value>	1.1	</value>
+          <specValue>	1.125	</specValue>
+          <vehicleTypes>	lightTank mediumTank	</vehicleTypes>
+        </mul>
+        <mul>
+          <name>	vehicleStillCamouflage	</name>
+          <value>	1.05	</value>
+          <specValue>	1.075	</specValue>
+          <vehicleTypes>	heavyTank SPG	</vehicleTypes>
+        </mul>
+      </aggregateMul>
+    </kpi>
+  </camouflageNet_tier2>
+  <improvedVentilation_tier3>
+    <id>	75	</id>
+    <userString>	#artefacts:improvedVentilation_tier3/name	</userString>
+    <longDescriptionSpecial>	#artefacts:improvedVentilation/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/improvedVentilation.png 0 0	</icon>
+    <price>	50000	</price>
+    <removable>	false	</removable>
+    <categories>	firepower mobility stealth survivability	</categories>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	improvedVentilation_class3_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <tags>	ventilation armor firepower camouflage reconnaissance mobility	</tags>
+    <incompatibleTags>
+      <installed>	ventilation	</installed>
+    </incompatibleTags>
+    <script>	StaticOptionalDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/crewLevelIncrease	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	5.0 6.0	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	crewLevel	</name>
+        <value>	1.05	</value>
+        <specValue>	1.060	</specValue>
+      </mul>
+    </kpi>
+  </improvedVentilation_tier3>
+  <improvedVentilation_tier2>
+    <id>	76	</id>
+    <userString>	#artefacts:improvedVentilation_tier2/name	</userString>
+    <longDescriptionSpecial>	#artefacts:improvedVentilation/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/improvedVentilation.png 0 0	</icon>
+    <price>	200000	</price>
+    <removable>	false	</removable>
+    <categories>	firepower mobility stealth survivability	</categories>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	improvedVentilation_class2_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <tags>	ventilation armor firepower camouflage reconnaissance mobility	</tags>
+    <incompatibleTags>
+      <installed>	ventilation	</installed>
+    </incompatibleTags>
+    <script>	StaticOptionalDevice	  <weight>	150	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/crewLevelIncrease	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	5.0 6.0	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	crewLevel	</name>
+        <value>	1.05	</value>
+        <specValue>	1.06	</specValue>
+      </mul>
+    </kpi>
+  </improvedVentilation_tier2>
+  <improvedVentilation_tier1>
+    <id>	77	</id>
+    <userString>	#artefacts:improvedVentilation_tier1/name	</userString>
+    <longDescriptionSpecial>	#artefacts:improvedVentilation/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/improvedVentilation.png 0 0	</icon>
+    <price>	600000	</price>
+    <removable>	false	</removable>
+    <categories>	firepower mobility stealth survivability	</categories>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	improvedVentilation_class1_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <tags>	ventilation armor firepower camouflage reconnaissance mobility	</tags>
+    <incompatibleTags>
+      <installed>	ventilation	</installed>
+    </incompatibleTags>
+    <script>	StaticOptionalDevice	  <weight>	200	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/crewLevelIncrease	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	5.0 6.0	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	crewLevel	</name>
+        <value>	1.05	</value>
+        <specValue>	1.06	</specValue>
+      </mul>
+    </kpi>
+  </improvedVentilation_tier1>
+  <grousers_tier3>
+    <id>	78	</id>
+    <userString>	#artefacts:grousers_tier3/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:grousers/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:grousers/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/grousers.png 0 0	</icon>
+    <price>	50000	</price>
+    <removable>	false	</removable>
+    <tags>	grousers mobility	</tags>
+    <categories>	mobility	</categories>
+    <incompatibleTags>
+      <installed>	grousers	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	lightTank mediumTank heavyTank AT-SPG	</tags>
+          <minLevel>	2	</minLevel>
+          <maxLevel>	4	</maxLevel>
+        </vehicle>
+      </include>
+      <exclude>
+        <vehicle>
+          <tags>	wheeledVehicle	</tags>
+        </vehicle>
+      </exclude>
+    </vehicleFilter>
+    <script>	Grousers	  <weight>	100	</weight>
+      <rotationFactor>	0.869 0.833	</rotationFactor>
+      <rollingFrictionFactor>	0.909 0.869	</rollingFrictionFactor>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleAllGroundRotationSpeed	</name>
+        <value>	1.15	</value>
+        <specValue>	1.2	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleSpeedGain	</name>
+        <value>	1.1	</value>
+        <specValue>	1.15	</specValue>
+      </mul>
+    </kpi>
+  </grousers_tier3>
+  <grousers_tier2>
+    <id>	79	</id>
+    <userString>	#artefacts:grousers_tier2/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:grousers/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:grousers/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/grousers.png 0 0	</icon>
+    <price>	250000	</price>
+    <removable>	false	</removable>
+    <tags>	grousers mobility	</tags>
+    <categories>	mobility	</categories>
+    <incompatibleTags>
+      <installed>	grousers	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	lightTank mediumTank heavyTank AT-SPG	</tags>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	7	</maxLevel>
+        </vehicle>
+      </include>
+      <exclude>
+        <vehicle>
+          <tags>	wheeledVehicle	</tags>
+        </vehicle>
+      </exclude>
+    </vehicleFilter>
+    <script>	Grousers	  <weight>	100	</weight>
+      <rotationFactor>	0.869 0.833	</rotationFactor>
+      <rollingFrictionFactor>	0.909 0.869	</rollingFrictionFactor>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleAllGroundRotationSpeed	</name>
+        <value>	1.15	</value>
+        <specValue>	1.2	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleSpeedGain	</name>
+        <value>	1.1	</value>
+        <specValue>	1.15	</specValue>
+      </mul>
+    </kpi>
+  </grousers_tier2>
+  <grousers_tier1>
+    <id>	80	</id>
+    <userString>	#artefacts:grousers_tier1/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:grousers/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:grousers/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/grousers.png 0 0	</icon>
+    <price>	500000	</price>
+    <removable>	false	</removable>
+    <tags>	grousers mobility	</tags>
+    <categories>	mobility	</categories>
+    <incompatibleTags>
+      <installed>	grousers	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	lightTank mediumTank heavyTank AT-SPG	</tags>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+      <exclude>
+        <vehicle>
+          <tags>	wheeledVehicle	</tags>
+        </vehicle>
+      </exclude>
+    </vehicleFilter>
+    <script>	Grousers	  <weight>	100	</weight>
+      <rotationFactor>	0.869 0.833	</rotationFactor>
+      <rollingFrictionFactor>	0.909 0.869	</rollingFrictionFactor>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleAllGroundRotationSpeed	</name>
+        <value>	1.15	</value>
+        <specValue>	1.2	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleSpeedGain	</name>
+        <value>	1.1	</value>
+        <specValue>	1.15	</specValue>
+      </mul>
+    </kpi>
+  </grousers_tier1>
+  <tankRammer_tier2>
+    <id>	81	</id>
+    <userString>	#artefacts:tankRammer_tier2/name	</userString>
+    <longDescriptionSpecial>	#artefacts:rammer/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/rammer.png 0 0	</icon>
+    <price>	300000	</price>
+    <removable>	false	</removable>
+    <tags>	rammer firepower	</tags>
+    <categories>	firepower	</categories>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	tankRammer_class2_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <incompatibleTags>
+      <installed>	rammer	</installed>
+    </incompatibleTags>
+    <script>	StaticOptionalDevice	  <weight>	200	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.9 0.885	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunReloadTime	</name>
+        <value>	0.9	</value>
+        <specValue>	0.885	</specValue>
+      </mul>
+    </kpi>
+  </tankRammer_tier2>
+  <tankRammer_tier1>
+    <id>	82	</id>
+    <userString>	#artefacts:tankRammer_tier1/name	</userString>
+    <longDescriptionSpecial>	#artefacts:rammer/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/rammer.png 0 0	</icon>
+    <price>	600000	</price>
+    <removable>	false	</removable>
+    <tags>	rammer firepower	</tags>
+    <categories>	firepower	</categories>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	tankRammer_class1_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <incompatibleTags>
+      <installed>	rammer	</installed>
+    </incompatibleTags>
+    <script>	StaticOptionalDevice	  <weight>	400	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.9 0.885	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunReloadTime	</name>
+        <value>	0.9	</value>
+        <specValue>	0.885	</specValue>
+      </mul>
+    </kpi>
+  </tankRammer_tier1>
+  <enhancedAimDrives_tier3>
+    <id>	83	</id>
+    <userString>	#artefacts:enhancedAimDrives_tier3/name	</userString>
+    <longDescriptionSpecial>	#artefacts:enhancedAimDrives/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/enhancedAimDrives.png 0 0	</icon>
+    <price>	50000	</price>
+    <removable>	false	</removable>
+    <tags>	enhancedAimDrives firepower	</tags>
+    <categories>	firepower	</categories>
+    <incompatibleTags>
+      <installed>	enhancedAimDrives	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	2	</minLevel>
+          <maxLevel>	4	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	StaticOptionalDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.909 0.897	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunAimSpeed	</name>
+        <value>	1.1	</value>
+        <specValue>	1.115	</specValue>
+      </mul>
+    </kpi>
+  </enhancedAimDrives_tier3>
+  <enhancedAimDrives_tier2>
+    <id>	84	</id>
+    <userString>	#artefacts:enhancedAimDrives_tier2/name	</userString>
+    <longDescriptionSpecial>	#artefacts:enhancedAimDrives/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/enhancedAimDrives.png 0 0	</icon>
+    <price>	200000	</price>
+    <removable>	false	</removable>
+    <tags>	enhancedAimDrives firepower	</tags>
+    <categories>	firepower	</categories>
+    <incompatibleTags>
+      <installed>	enhancedAimDrives	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	7	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	StaticOptionalDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.909 0.897	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunAimSpeed	</name>
+        <value>	1.1	</value>
+        <specValue>	1.115	</specValue>
+      </mul>
+    </kpi>
+  </enhancedAimDrives_tier2>
+  <enhancedAimDrives_tier1>
+    <id>	85	</id>
+    <userString>	#artefacts:enhancedAimDrives_tier1/name	</userString>
+    <longDescriptionSpecial>	#artefacts:enhancedAimDrives/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/enhancedAimDrives.png 0 0	</icon>
+    <price>	600000	</price>
+    <removable>	false	</removable>
+    <tags>	enhancedAimDrives firepower	</tags>
+    <categories>	firepower	</categories>
+    <incompatibleTags>
+      <installed>	enhancedAimDrives	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	StaticOptionalDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.909 0.897	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunAimSpeed	</name>
+        <value>	1.1	</value>
+        <specValue>	1.115	</specValue>
+      </mul>
+    </kpi>
+  </enhancedAimDrives_tier1>
+  <aimingStabilizer_tier2>
+    <id>	86	</id>
+    <userString>	#artefacts:aimingStabilizer_tier2/name	</userString>
+    <longDescriptionSpecial>	#artefacts:aimingStabilizer/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/aimingStabilizer.png 0 0	</icon>
+    <price>	200000	</price>
+    <removable>	false	</removable>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	aimingStabilizer_class2_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <tags>	aimingStabilizer firepower	</tags>
+    <categories>	firepower	</categories>
+    <incompatibleTags>
+      <installed>	aimingStabilizer	</installed>
+    </incompatibleTags>
+    <script>	StaticOptionalDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.8 0.77	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersion	</name>
+        <value>	0.8	</value>
+      </mul>
+    </kpi>
+  </aimingStabilizer_tier2>
+  <aimingStabilizer_tier1>
+    <id>	87	</id>
+    <userString>	#artefacts:aimingStabilizer_tier1/name	</userString>
+    <longDescriptionSpecial>	#artefacts:aimingStabilizer/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/aimingStabilizer.png 0 0	</icon>
+    <price>	600000	</price>
+    <removable>	false	</removable>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	aimingStabilizer_class1_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <tags>	aimingStabilizer firepower	</tags>
+    <categories>	firepower	</categories>
+    <incompatibleTags>
+      <installed>	aimingStabilizer	</installed>
+    </incompatibleTags>
+    <script>	StaticOptionalDevice	  <weight>	200	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.8 0.77	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersion	</name>
+        <value>	0.8	</value>
+      </mul>
+    </kpi>
+  </aimingStabilizer_tier1>
+  <additionalInvisibilityDevice_tier3>
+    <id>	88	</id>
+    <userString>	#artefacts:additionalInvisibilityDevice_tier3/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:additionalInvisibilityDevice/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:additionalInvisibilityDevice/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/additionalInvisibilityDevice.png 0 0	</icon>
+    <price>	50000	</price>
+    <tags>	additInvisibilityDevice	</tags>
+    <categories>	stealth	</categories>
+    <incompatibleTags>
+      <installed>	additInvisibilityDevice	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	2	</minLevel>
+          <maxLevel>	4	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	LowNoiseTracks	  <weight>	100	</weight>
+      <overridableFactors>
+        <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
+      </overridableFactors>
+    </script>
+    <kpi>
+      <aggregateMul>
+        <name>	vehicleCamouflageGroup	</name>
+        <mul>
+          <name>	vehicleCamouflage	</name>
+          <value>	1.06	</value>
+          <specValue>	1.08	</specValue>
+          <vehicleTypes>	lightTank mediumTank	</vehicleTypes>
+        </mul>
+        <mul>
+          <name>	vehicleCamouflage	</name>
+          <value>	1.05	</value>
+          <specValue>	1.06	</specValue>
+          <vehicleTypes>	AT-SPG	</vehicleTypes>
+        </mul>
+        <mul>
+          <name>	vehicleCamouflage	</name>
+          <value>	1.03	</value>
+          <specValue>	1.04	</specValue>
+          <vehicleTypes>	heavyTank SPG	</vehicleTypes>
+        </mul>
+      </aggregateMul>
+    </kpi>
+  </additionalInvisibilityDevice_tier3>
+  <additionalInvisibilityDevice_tier2>
+    <id>	89	</id>
+    <userString>	#artefacts:additionalInvisibilityDevice_tier2/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:additionalInvisibilityDevice/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:additionalInvisibilityDevice/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/additionalInvisibilityDevice.png 0 0	</icon>
+    <price>	200000	</price>
+    <tags>	additInvisibilityDevice	</tags>
+    <categories>	stealth	</categories>
+    <incompatibleTags>
+      <installed>	additInvisibilityDevice	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	7	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	LowNoiseTracks	  <weight>	100	</weight>
+      <overridableFactors>
+        <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
+      </overridableFactors>
+    </script>
+    <kpi>
+      <aggregateMul>
+        <name>	vehicleCamouflageGroup	</name>
+        <mul>
+          <name>	vehicleCamouflage	</name>
+          <value>	1.06	</value>
+          <specValue>	1.08	</specValue>
+          <vehicleTypes>	lightTank mediumTank	</vehicleTypes>
+        </mul>
+        <mul>
+          <name>	vehicleCamouflage	</name>
+          <value>	1.05	</value>
+          <specValue>	1.06	</specValue>
+          <vehicleTypes>	AT-SPG	</vehicleTypes>
+        </mul>
+        <mul>
+          <name>	vehicleCamouflage	</name>
+          <value>	1.03	</value>
+          <specValue>	1.04	</specValue>
+          <vehicleTypes>	heavyTank SPG	</vehicleTypes>
+        </mul>
+      </aggregateMul>
+    </kpi>
+  </additionalInvisibilityDevice_tier2>
+  <additionalInvisibilityDevice_tier1>
+    <id>	90	</id>
+    <userString>	#artefacts:additionalInvisibilityDevice_tier1/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:additionalInvisibilityDevice/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:additionalInvisibilityDevice/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/additionalInvisibilityDevice.png 0 0	</icon>
+    <price>	600000	</price>
+    <tags>	additInvisibilityDevice	</tags>
+    <categories>	stealth	</categories>
+    <incompatibleTags>
+      <installed>	additInvisibilityDevice	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	LowNoiseTracks	  <weight>	100	</weight>
+      <overridableFactors>
+        <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
+      </overridableFactors>
+    </script>
+    <kpi>
+      <aggregateMul>
+        <name>	vehicleCamouflageGroup	</name>
+        <mul>
+          <name>	vehicleCamouflage	</name>
+          <value>	1.06	</value>
+          <specValue>	1.08	</specValue>
+          <vehicleTypes>	lightTank mediumTank	</vehicleTypes>
+        </mul>
+        <mul>
+          <name>	vehicleCamouflage	</name>
+          <value>	1.05	</value>
+          <specValue>	1.06	</specValue>
+          <vehicleTypes>	AT-SPG	</vehicleTypes>
+        </mul>
+        <mul>
+          <name>	vehicleCamouflage	</name>
+          <value>	1.03	</value>
+          <specValue>	1.04	</specValue>
+          <vehicleTypes>	heavyTank SPG	</vehicleTypes>
+        </mul>
+      </aggregateMul>
+    </kpi>
+  </additionalInvisibilityDevice_tier1>
+  <extraHealthReserve_tier3>
+    <id>	91	</id>
+    <userString>	#artefacts:extraHealthReserve_tier3/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:extraHealthReserve/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:extraHealthReserve/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/extraHealthReserve.png 0 0	</icon>
+    <price>	40000	</price>
+    <tags>	healthReserve	</tags>
+    <categories>	survivability	</categories>
+    <incompatibleTags>
+      <installed>	healthReserve	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	extraHealthReserve_class3_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	ExtraHealthReserve	  <chassisMaxLoadFactor>	1.1 1.1	</chassisMaxLoadFactor>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/healthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.08 1.1	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/chassisHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.5 1.65	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/vehicleByChassisDamageFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.5 0.35	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/chassisRepairSpeedFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.15 1.2	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleStrength	</name>
+        <value>	1.08	</value>
+        <specValue>	1.1	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleChassisStrength	</name>
+        <value>	1.5	</value>
+        <specValue>	1.65	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleChassisRepairSpeed	</name>
+        <value>	1.15	</value>
+        <specValue>	1.2	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleChassisLoad	</name>
+        <value>	1.1	</value>
+        <specValue>	1.1	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleChassisFallDamage	</name>
+        <value>	0.5	</value>
+        <specValue>	0.35	</specValue>
+      </mul>
+    </kpi>
+  </extraHealthReserve_tier3>
+  <extraHealthReserve_tier2>
+    <id>	92	</id>
+    <userString>	#artefacts:extraHealthReserve_tier2/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:extraHealthReserve/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:extraHealthReserve/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/extraHealthReserve.png 0 0	</icon>
+    <price>	200000	</price>
+    <tags>	healthReserve	</tags>
+    <categories>	survivability	</categories>
+    <incompatibleTags>
+      <installed>	healthReserve	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	extraHealthReserve_class2_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	ExtraHealthReserve	  <chassisMaxLoadFactor>	1.1 1.1	</chassisMaxLoadFactor>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/healthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.08 1.1	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/chassisHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.5 1.65	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/vehicleByChassisDamageFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.5 0.35	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/chassisRepairSpeedFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.15 1.2	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleStrength	</name>
+        <value>	1.08	</value>
+        <specValue>	1.1	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleChassisStrength	</name>
+        <value>	1.5	</value>
+        <specValue>	1.65	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleChassisRepairSpeed	</name>
+        <value>	1.15	</value>
+        <specValue>	1.2	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleChassisLoad	</name>
+        <value>	1.1	</value>
+        <specValue>	1.1	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleChassisFallDamage	</name>
+        <value>	0.5	</value>
+        <specValue>	0.35	</specValue>
+      </mul>
+    </kpi>
+  </extraHealthReserve_tier2>
+  <extraHealthReserve_tier1>
+    <id>	93	</id>
+    <userString>	#artefacts:extraHealthReserve_tier1/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:extraHealthReserve/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:extraHealthReserve/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/extraHealthReserve.png 0 0	</icon>
+    <price>	600000	</price>
+    <tags>	healthReserve	</tags>
+    <categories>	survivability	</categories>
+    <incompatibleTags>
+      <installed>	healthReserve	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	extraHealthReserve_class1_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	ExtraHealthReserve	  <chassisMaxLoadFactor>	1.1 1.1	</chassisMaxLoadFactor>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/healthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.08 1.1	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/chassisHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.5 1.65	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/vehicleByChassisDamageFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.5 0.35	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/chassisRepairSpeedFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.15 1.2	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleStrength	</name>
+        <value>	1.08	</value>
+        <specValue>	1.1	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleChassisStrength	</name>
+        <value>	1.5	</value>
+        <specValue>	1.65	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleChassisRepairSpeed	</name>
+        <value>	1.15	</value>
+        <specValue>	1.2	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleChassisLoad	</name>
+        <value>	1.1	</value>
+        <specValue>	1.1	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleChassisFallDamage	</name>
+        <value>	0.5	</value>
+        <specValue>	0.35	</specValue>
+      </mul>
+    </kpi>
+  </extraHealthReserve_tier1>
+  <improvedRadioCommunication>
+    <id>	94	</id>
+    <userString>	#artefacts:improvedRadioCommunication/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:improvedRadioCommunication/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:improvedRadioCommunication/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/improvedRadioCommunication.png 0 0	</icon>
+    <price>	600000	</price>
+    <tags></tags>
+    <categories>	stealth	</categories>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	lightTank mediumTank	</tags>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	StaticOptionalDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/increaseEnemySpottingTime	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	1.5 2.0	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/decreaseOwnSpottingTime	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	1.5 2.0	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <add>
+        <name>	vehicleEnemySpottingTime	</name>
+        <value>	1.5	</value>
+        <specValue>	2.0	</specValue>
+      </add>
+      <add>
+        <name>	vehicleOwnSpottingTime	</name>
+        <value>	-1.5	</value>
+        <specValue>	-2.0	</specValue>
+      </add>
+    </kpi>
+  </improvedRadioCommunication>
+  <improvedRotationMechanism_tier2>
+    <id>	95	</id>
+    <userString>	#artefacts:improvedRotationMechanism_tier2/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:improvedRotationMechanism/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:improvedRotationMechanism/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/improvedRotationMechanism.png 0 0	</icon>
+    <price>	200000	</price>
+    <tags>	rotationMechanism	</tags>
+    <categories>	firepower mobility	</categories>
+    <incompatibleTags>
+      <installed>	rotationMechanism	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	7	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	RotationMechanisms	  <weight>	200	</weight>
+      <trackRotateSpeedFactor>	1.1 1.125	</trackRotateSpeedFactor>
+      <wheelRotateSpeedFactor>	1.1 1.125	</wheelRotateSpeedFactor>
+      <wheelCenterRotationFwdSpeed>	1.1 1.125	</wheelCenterRotationFwdSpeed>
+      <trackMoveSpeedFactor>	1.1 1.125	</trackMoveSpeedFactor>
+      <wheelMoveSpeedFactor>	1.1 1.125	</wheelMoveSpeedFactor>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/turretRotationSpeed	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.1 1.125	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.9 0.875	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleTurretOrCuttingRotationSpeed	</name>
+        <value>	1.1	</value>
+        <specValue>	1.125	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleAllGroundRotationSpeed	</name>
+        <value>	1.1	</value>
+        <specValue>	1.125	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersion	</name>
+        <value>	0.9	</value>
+        <specValue>	0.875	</specValue>
+      </mul>
+    </kpi>
+  </improvedRotationMechanism_tier2>
+  <improvedRotationMechanism_tier1>
+    <id>	96	</id>
+    <userString>	#artefacts:improvedRotationMechanism_tier1/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:improvedRotationMechanism/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:improvedRotationMechanism/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/improvedRotationMechanism.png 0 0	</icon>
+    <price>	600000	</price>
+    <tags>	rotationMechanism	</tags>
+    <categories>	firepower mobility	</categories>
+    <incompatibleTags>
+      <installed>	rotationMechanism	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	RotationMechanisms	  <weight>	200	</weight>
+      <trackRotateSpeedFactor>	1.1 1.125	</trackRotateSpeedFactor>
+      <wheelRotateSpeedFactor>	1.1 1.125	</wheelRotateSpeedFactor>
+      <wheelCenterRotationFwdSpeed>	1.1 1.125	</wheelCenterRotationFwdSpeed>
+      <trackMoveSpeedFactor>	1.1 1.125	</trackMoveSpeedFactor>
+      <wheelMoveSpeedFactor>	1.1 1.125	</wheelMoveSpeedFactor>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/turretRotationSpeed	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.1 1.125	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.9 0.875	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleTurretOrCuttingRotationSpeed	</name>
+        <value>	1.1	</value>
+        <specValue>	1.125	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleAllGroundRotationSpeed	</name>
+        <value>	1.1	</value>
+        <specValue>	1.125	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersion	</name>
+        <value>	0.9	</value>
+        <specValue>	0.875	</specValue>
+      </mul>
+    </kpi>
+  </improvedRotationMechanism_tier1>
+  <turbocharger_tier3>
+    <id>	97	</id>
+    <userString>	#artefacts:turbocharger_tier3/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:turbocharger/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:turbocharger/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/turbocharger.png 0 0	</icon>
+    <price>	50000	</price>
+    <tags>	turbocharger	</tags>
+    <categories>	mobility	</categories>
+    <incompatibleTags>
+      <installed>	turbocharger	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	2	</minLevel>
+          <maxLevel>	4	</maxLevel>
+        </vehicle>
+      </include>
+      <exclude>
+        <vehicle>
+          <tags>	wheeledVehicle	</tags>
+        </vehicle>
+      </exclude>
+    </vehicleFilter>
+    <script>	StaticOptionalDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/enginePowerFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.075 1.1	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/forwardMaxSpeedKMHTerm	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	4 5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/backwardMaxSpeedKMHTerm	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	2 3	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	1.075	</value>
+        <specValue>	1.1	</specValue>
+      </mul>
+      <add>
+        <name>	vehicleForwardMaxSpeed	</name>
+        <value>	4	</value>
+        <specValue>	5	</specValue>
+      </add>
+      <add>
+        <name>	vehicleBackwardMaxSpeed	</name>
+        <value>	2	</value>
+        <specValue>	3	</specValue>
+      </add>
+    </kpi>
+  </turbocharger_tier3>
+  <turbocharger_tier2>
+    <id>	98	</id>
+    <userString>	#artefacts:turbocharger_tier2/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:turbocharger/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:turbocharger/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/turbocharger.png 0 0	</icon>
+    <price>	200000	</price>
+    <tags>	turbocharger	</tags>
+    <categories>	mobility	</categories>
+    <incompatibleTags>
+      <installed>	turbocharger	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	7	</maxLevel>
+        </vehicle>
+      </include>
+      <exclude>
+        <vehicle>
+          <tags>	wheeledVehicle	</tags>
+        </vehicle>
+      </exclude>
+    </vehicleFilter>
+    <script>	StaticOptionalDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/enginePowerFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.075 1.1	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/forwardMaxSpeedKMHTerm	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	4 5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/backwardMaxSpeedKMHTerm	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	2 3	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	1.075	</value>
+        <specValue>	1.1	</specValue>
+      </mul>
+      <add>
+        <name>	vehicleForwardMaxSpeed	</name>
+        <value>	4	</value>
+        <specValue>	5	</specValue>
+      </add>
+      <add>
+        <name>	vehicleBackwardMaxSpeed	</name>
+        <value>	2	</value>
+        <specValue>	3	</specValue>
+      </add>
+    </kpi>
+  </turbocharger_tier2>
+  <turbocharger_tier1>
+    <id>	99	</id>
+    <userString>	#artefacts:turbocharger_tier1/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:turbocharger/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:turbocharger/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/turbocharger.png 0 0	</icon>
+    <price>	600000	</price>
+    <tags>	turbocharger	</tags>
+    <categories>	mobility	</categories>
+    <incompatibleTags>
+      <installed>	turbocharger	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+      <exclude>
+        <vehicle>
+          <tags>	wheeledVehicle	</tags>
+        </vehicle>
+      </exclude>
+    </vehicleFilter>
+    <script>	StaticOptionalDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/enginePowerFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.075 1.1	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/forwardMaxSpeedKMHTerm	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	4 5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/backwardMaxSpeedKMHTerm	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	2 3	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	1.075	</value>
+        <specValue>	1.1	</specValue>
+      </mul>
+      <add>
+        <name>	vehicleForwardMaxSpeed	</name>
+        <value>	4	</value>
+        <specValue>	5	</specValue>
+      </add>
+      <add>
+        <name>	vehicleBackwardMaxSpeed	</name>
+        <value>	2	</value>
+        <specValue>	3	</specValue>
+      </add>
+    </kpi>
+  </turbocharger_tier1>
+  <commandersView>
+    <id>	100	</id>
+    <userString>	#artefacts:commandersView/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:commandersView/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:commandersView/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/commandersView.png 0 0	</icon>
+    <price>	600000	</price>
+    <tags></tags>
+    <categories>	stealth	</categories>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	lightTank mediumTank	</tags>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	StaticOptionalDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/demaskFoliageFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.85 0.8	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/demaskMovingFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.9 0.875	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	demaskFoliageFactor	</name>
+        <value>	0.85	</value>
+        <specValue>	0.80	</specValue>
+      </mul>
+      <mul>
+        <name>	demaskMovingFactor	</name>
+        <value>	0.9	</value>
+        <specValue>	0.875	</specValue>
+      </mul>
+    </kpi>
+  </commandersView>
+  <improvedSights_tier2>
+    <id>	101	</id>
+    <userString>	#artefacts:improvedSights_tier2/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:improvedSights/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:improvedSights/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/improvedSights.png 0 0	</icon>
+    <price>	200000	</price>
+    <tags>	improvedSights	</tags>
+    <categories>	firepower	</categories>
+    <incompatibleTags>
+      <installed>	improvedSights	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	lightTank mediumTank heavyTank AT-SPG	</tags>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	7	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	StaticOptionalDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/multShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.95 0.93	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotFullDispersion	</name>
+        <value>	0.95	</value>
+        <specValue>	0.93	</specValue>
+      </mul>
+    </kpi>
+  </improvedSights_tier2>
+  <improvedSights_tier1>
+    <id>	102	</id>
+    <userString>	#artefacts:improvedSights_tier1/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:improvedSights/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:improvedSights/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/improvedSights.png 0 0	</icon>
+    <price>	600000	</price>
+    <tags>	improvedSights	</tags>
+    <categories>	firepower	</categories>
+    <incompatibleTags>
+      <installed>	improvedSights	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	lightTank mediumTank heavyTank AT-SPG	</tags>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	StaticOptionalDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/multShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.95 0.93	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotFullDispersion	</name>
+        <value>	0.95	</value>
+        <specValue>	0.93	</specValue>
+      </mul>
+    </kpi>
+  </improvedSights_tier1>
 </optional_devices.xml>

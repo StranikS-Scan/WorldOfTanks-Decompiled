@@ -246,7 +246,7 @@ def shootInSkyPoint(startPos, direction):
         if dist < 0.0:
             dist = shotDesc.maxDistance
     else:
-        _logger.warning("The point at distance from vehicle's gun can't be calculated. The maximum distance is set.")
+        _logger.info("The point at distance from vehicle's gun can't be calculated. The maximum distance is set.")
         dist = shotDesc.maxDistance
     finalPoint = start + dirFromCam.scale(dist)
     _, intersecPoint = BigWorld.player().arena.collideWithSpaceBB(start, finalPoint)

@@ -291,7 +291,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
 
     def _getCommonQuestsToHeaderVO(self, vehicle):
         quests = []
-        if not constants.IS_CHINA:
+        if self._lobbyContext.getServerSettings().isPersonalMissionsEnabled():
             personalMissions = self.__getPersonalMissionsVO(vehicle)
             if personalMissions:
                 quests.append(personalMissions)
@@ -352,7 +352,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         states = []
         for branch in reversed(PM_BRANCH.ACTIVE_BRANCHES):
             questType = QUEST_TYPE_BY_PM_BRANCH[branch]
-            if not self._lobbyContext.getServerSettings().isPersonalMissionsEnabled(branch) or constants.IS_CHINA:
+            if not self._lobbyContext.getServerSettings().isPersonalMissionsEnabled(branch):
                 result.append(self._headerQuestFormaterVo(False, _getPersonalMissionsIcon(vehicle, branch, False), _ms(MENU.hangarHeaderPersonalMissionsLabel(LABEL_STATE.EMPTY)), questType, tooltip=_getPersonalMissionsTooltip(branch, WIDGET_PM_STATE.BRANCH_DISABLED)))
                 states.append(WIDGET_PM_STATE.BRANCH_DISABLED)
             pmState, quest = _findPersonalMissionsState(self._eventsCache, vehicle, branch)

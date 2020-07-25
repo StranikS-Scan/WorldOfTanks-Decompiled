@@ -34,6 +34,7 @@ class STORAGE(object):
     STORAGE_TABS_MODULES = '#storage:storage/tabs/modules'
     STORAGE_TABS_SHELLS = '#storage:storage/tabs/shells'
     STORAGE_TABS_SHELLS_FILTER_TYPE_LABEL = '#storage:storage/tabs/shells/filter/type/label'
+    STORAGE_TABS_DEVICES_FILTER_TYPE_LABEL = '#storage:storage/tabs/devices/filter/type/label'
     STORAGE_TABS_SHELLS_FILTER_APPROPRIATE_LABEL = '#storage:storage/tabs/shells/filter/appropriate/label'
     STORAGE_TABS_MODULES_FILTER_TYPE_LABEL = '#storage:storage/tabs/modules/filter/type/label'
     STORAGE_TABS_MODULES_FILTER_APPROPRIATE_LABEL = '#storage:storage/tabs/modules/filter/appropriate/label'
@@ -106,3 +107,4 @@ class STORAGE(object):
     OFFERS_GIFTAMOUNT = '#storage:offers/giftAmount'
     OFFERS_EXPIRATION = '#storage:offers/expiration'
     OFFERS_NOITEMS_TITLE = '#storage:offers/noItems/title'
+    OPTDEVICE_HOVER_EFFECT = '#storage:optDevice/hover/effect'

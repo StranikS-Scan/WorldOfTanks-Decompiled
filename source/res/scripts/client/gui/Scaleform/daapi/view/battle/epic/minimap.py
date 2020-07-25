@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic/minimap.py
-import os
 import logging
+import os
 import BigWorld
 import GUI
 import Math
@@ -15,7 +15,7 @@ from epic_constants import EPIC_BATTLE_TEAM_ID
 from gui.Scaleform.daapi.view.battle.classic.minimap import GlobalSettingsPlugin
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings, plugins, common
 from gui.Scaleform.daapi.view.battle.shared.minimap.common import SimplePlugin
-from gui.Scaleform.daapi.view.battle.shared.minimap.plugins import PersonalEntriesPlugin, ArenaVehiclesPlugin, _LOCATION_PING_RANGE, _EMinimapMouseKey, _BASE_PING_RANGE
+from gui.Scaleform.daapi.view.battle.shared.minimap.plugins import PersonalEntriesPlugin, ArenaVehiclesPlugin, _LOCATION_PING_RANGE, _EMinimapMouseKey
 from gui.Scaleform.daapi.view.meta.EpicMinimapMeta import EpicMinimapMeta
 from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from gui.battle_control import minimap_utils, avatar_getter
@@ -39,6 +39,7 @@ _ZOOM_MODE_STEP = 0.5
 _ZOOM_MULTIPLIER_TEXT = 'x'
 _METERS_IN_1X_ZOOM = 1000
 EPIC_MINIMAP_HIT_AREA = 210
+_EPIC_BASE_PING_RANGE = 150
 _logger = logging.getLogger(__name__)
 
 def makeMousePositionToEpicWorldPosition(clickedX, clickedY, bounds, hitArea=EPIC_MINIMAP_HIT_AREA):
@@ -63,6 +64,7 @@ class EpicMinimapComponent(EpicMinimapMeta):
         self.__mode = None
         self.__minimapCenterPos = (-1, -1)
         self.__maxZoomMode = None
+        self.__rangeScale = 1.0
         return
 
     def _populate(self):
@@ -81,9 +83,12 @@ class EpicMinimapComponent(EpicMinimapMeta):
     def changeMinimapZoom(self, mode):
         component = self.getComponent()
         if component is not None:
-            self.getComponent().changeMinimapZoom(mode)
+            component.changeMinimapZoom(mode)
         AccountSettings.setSettings('epicMinimapZoom', mode)
         return
+
+    def getRangeScale(self):
+        return self.__rangeScale
 
     def setEntryParameters(self, entryId, doClip=True, scaleType=MINIMAP_SCALE_TYPES.ADAPTED_SCALE):
         self.getComponent().setEntryParameters(entryId, doClip, scaleType)
@@ -97,6 +102,7 @@ class EpicMinimapComponent(EpicMinimapMeta):
             self.__mode = mode
             self.changeMinimapZoom(self.__mode)
             self.as_setZoomModeS(self.__mode, self.__zoomText())
+            self.__rangeScale = self.__calculateRangeScale(_ZOOM_MODE_MIN, self.__maxZoomMode, mode)
 
     def onZoomModeChanged(self, change):
         mode = self.__mode + change * _ZOOM_MODE_STEP
@@ -161,6 +167,14 @@ class EpicMinimapComponent(EpicMinimapMeta):
 
     def __zoomText(self):
         return str(round(self.__mode, 1)) + _ZOOM_MULTIPLIER_TEXT
+
+    def __calculateRangeScale(self, minScale, maxScale, current):
+        if minScale == maxScale:
+            return 1.0
+        downScale = 0.35
+        upScale = 1.0
+        p = (current - minScale) / (maxScale - minScale)
+        return (1 - p) * downScale + p * upScale
 
 
 class RecoveringVehiclesPlugin(ArenaVehiclesPlugin):
@@ -374,7 +388,7 @@ class SectorBaseEntriesPlugin(common.EntriesPlugin):
 
     def __onRemoveCommandReceived--- This code section failed: ---
 
- 428       0	LOAD_FAST         'self'
+ 445       0	LOAD_FAST         'self'
            3	LOAD_ATTR         '__markerIDs'
            6	UNARY_NOT         ''
            7	POP_JUMP_IF_TRUE  '25'
@@ -385,16 +399,16 @@ class SectorBaseEntriesPlugin(common.EntriesPlugin):
         22_0	COME_FROM         '7'
           22	POP_JUMP_IF_FALSE '29'
 
- 429      25	LOAD_CONST        ''
+ 446      25	LOAD_CONST        ''
           28	JUMP_FORWARD      50
 
- 431      29	LOAD_FAST         'removeID'
+ 448      29	LOAD_FAST         'removeID'
           32	LOAD_FAST         'self'
           35	LOAD_ATTR         '__markerIDs'
           38	COMPARE_OP        'in'
           41	POP_JUMP_IF_FALSE '47'
 
- 434      44	JUMP_FORWARD      '47'
+ 451      44	JUMP_FORWARD      '47'
         47_0	COME_FROM         '44'
           47	LOAD_CONST        ''
         50_0	COME_FROM         '28'
@@ -772,13 +786,19 @@ class EpicMinimapPingPlugin(plugins.MinimapPingPlugin):
     def _getIdByBaseNumber(self, team, number):
         return number
 
-    def _processCommandByPosition(self, commands, locationCommand, position):
-        hqIdx = self.__getNearestHQForPosition(position, _BASE_PING_RANGE)
+    def _processCommandByPosition(self, commands, locationCommand, position, minimapScaleIndex):
+        minBaseScale = 1.0
+        maxBaseScale = 2.0
+        numberOfScaleModes = 5
+        p = minimapScaleIndex / numberOfScaleModes
+        minimapScaleOffset = (1 - p) * minBaseScale + maxBaseScale * p
+        scaledBaseRange = _EPIC_BASE_PING_RANGE / minimapScaleOffset * self.parentObj.getRangeScale()
+        hqIdx = self.__getNearestHQForPosition(position, scaledBaseRange)
         if hqIdx:
             commands.sendAttentionToObjective(hqIdx, self._arenaDP.getNumberOfTeam() == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER)
             return
         else:
-            baseIdx, baseName = self.__getNearestBaseForPosition(position, _BASE_PING_RANGE)
+            baseIdx, baseName = self.__getNearestBaseForPosition(position, scaledBaseRange)
             if baseIdx:
                 self._make3DPingBases(commands, (self._arenaDP.getNumberOfTeam(), 0, baseIdx), baseName)
                 return
@@ -848,7 +868,7 @@ class EpicMinimapPingPlugin(plugins.MinimapPingPlugin):
 
 class EpicTeleportPlugin(EpicMinimapPingPlugin):
 
-    def onMinimapClicked(self, x, y, buttonIdx):
+    def onMinimapClicked(self, x, y, buttonIdx, minimapScaleIndex):
         if buttonIdx != _EMinimapMouseKey.KEY_MBL.value:
             return
         else:

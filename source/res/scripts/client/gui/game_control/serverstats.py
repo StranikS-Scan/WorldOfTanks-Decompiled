@@ -48,7 +48,7 @@ class ServerStats(IServerStatsController):
     def getStats(self):
         clusterCCU = self.__stats.get('clusterCCU', 0)
         regionCCU = self.__stats.get('regionCCU', 0)
-        if regionCCU:
+        if regionCCU and not constants.IS_CHINA:
             clusterUsers = backport.getIntegralFormat(clusterCCU)
             regionUsers = backport.getIntegralFormat(regionCCU)
             if clusterCCU == regionCCU:

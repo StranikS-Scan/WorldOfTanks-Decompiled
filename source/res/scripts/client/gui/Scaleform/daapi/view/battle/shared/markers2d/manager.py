@@ -187,9 +187,8 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         setup = {'eventBus': plugins.EventBusPlugin,
          'equipments': plugins.EquipmentsMarkerPlugin,
          'vehiclesTargets': plugins.VehicleMarkerTargetPlugin,
-         'controlMode': plugins.ControlModePlugin}
-        if not arenaVisitor.gui.isInEpicRange():
-            setup['area'] = plugins.AreaStaticMarkerPlugin
+         'controlMode': plugins.ControlModePlugin,
+         'area': plugins.AreaStaticMarkerPlugin}
         if self.__showBaseMarkers:
             setup['teamAndControlPoints'] = plugins.TeamsOrControlsPointsPlugin
         if BattleReplay.g_replayCtrl.isPlaying:
@@ -249,6 +248,7 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         newShowBaseMarkers = bool(addSettings.get(BattleCommStorageKeys.SHOW_BASE_MARKERS, self.__showBaseMarkers))
         newIsSticky = bool(addSettings.get(BattleCommStorageKeys.SHOW_STICKY_MARKERS, self.__isStickyEnabled))
         if newIBCEnabled != self.__isIBCEnabled:
+            self.__isIBCEnabled = newIBCEnabled
             self.__canvas.enableMarkerHovering = self.__isMarkerHoveringEnabled
         if not newIsSticky:
             for markerId in self.__ids:
@@ -258,7 +258,6 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
             self.__setTeamOrControlPointsPlugin(addPlugin=newShowBaseMarkers)
             self.__showBaseMarkers = newShowBaseMarkers
         self.__isStickyEnabled = newIsSticky
-        self.__isIBCEnabled = newIBCEnabled
 
     def __setTeamOrControlPointsPlugin(self, addPlugin):
         tcPlugin = self.__plugins.getPlugin('teamAndControlPoints')

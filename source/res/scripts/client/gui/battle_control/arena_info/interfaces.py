@@ -175,6 +175,9 @@ class IProgressionController(IArenaLoadController):
     def mayInstallModule(self, moduleItem):
         raise NotImplementedError
 
+    def mayInstallModuleOnVehicle(self, moduleItem, vehicle):
+        raise NotImplementedError
+
     def updateLevel(self, level, minXP, maxXP):
         pass
 

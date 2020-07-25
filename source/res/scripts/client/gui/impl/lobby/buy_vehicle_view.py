@@ -431,7 +431,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
                 operations.append('crew')
             if self.__tradeOffVehicle.hasShells:
                 operations.append('shells')
-            if self.__tradeOffVehicle.hasEquipments:
+            if self.__tradeOffVehicle.hasConsumables:
                 operations.append('equipments')
             if self.__tradeOffVehicle.hasOptionalDevices:
                 operations.append('optionalDevices')
@@ -727,7 +727,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
     def __getAmmoItemPrice(self):
         ammoPrice = ITEM_PRICE_EMPTY
         for shell in self.__vehicle.gun.defaultAmmo:
-            ammoPrice += shell.buyPrices.itemPrice * shell.defaultCount
+            ammoPrice += shell.buyPrices.itemPrice * shell.count
 
         return ammoPrice
 

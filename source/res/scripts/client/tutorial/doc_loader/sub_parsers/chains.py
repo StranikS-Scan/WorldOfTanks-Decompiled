@@ -8,7 +8,7 @@ from tutorial.doc_loader.sub_parsers import lobby
 
 def readHintSection(xmlCtx, section, flags):
     sectionInfo = sub_parsers.parseHint(xmlCtx, section)
-    hint = tutorial_chapter.ChainHint(sectionInfo['hintID'], sectionInfo['itemID'], sectionInfo['text'], sectionInfo['hasBox'], sectionInfo['arrow'], sectionInfo['padding'])
+    hint = tutorial_chapter.ChainHint(sectionInfo['hintID'], sectionInfo['itemID'], sectionInfo['text'], sectionInfo['hasBox'], sectionInfo['arrow'], sectionInfo['padding'], sectionInfo['hideImmediately'])
     hint.setActions(sub_parsers.parseActions(xmlCtx, _xml.getSubsection(xmlCtx, section, 'actions'), flags))
     return hint
 

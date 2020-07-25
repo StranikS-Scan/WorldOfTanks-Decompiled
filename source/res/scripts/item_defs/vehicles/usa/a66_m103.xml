@@ -7,6 +7,7 @@
     <loader></loader>
     <loader></loader>
   </crew>
+  <supplySlots>	5 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
     <forward>	34	</forward>
     <backward>	12	</backward>
@@ -15,9 +16,16 @@
     <moving>	0.041	</moving>
     <still>	0.081	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
-    <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.122	</firePenalty>
   </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.05 0.075	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.03 0.04	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+  </optDevsOverrides>
   <repairCost>	9.123	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -3663,7 +3671,6 @@
           <tags>	formfactor_square	</tags>
         </slot>
       </customizationSlots>
-      <gunShotOffset>	0.000000 0.000000 0.000000	</gunShotOffset>
       <camouflage>
         <tiling>	0.61 0.5 0.000000 0.000000	</tiling>
         <density>	85.1358 85.9807	</density>
@@ -4672,7 +4679,6 @@
           <tags>	formfactor_square	</tags>
         </slot>
       </customizationSlots>
-      <gunShotOffset>	0.000000 0.000000 0.000000	</gunShotOffset>
       <camouflage>
         <tiling>	1.5 0.5 0.04 0.56	</tiling>
         <density>	102.522 102.928	</density>

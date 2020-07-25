@@ -124,7 +124,8 @@ class RecruitWindow(RecruitWindowMeta):
         return
 
     def __getNationsCriteria(self):
-        return REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.VEHICLE.OBSERVER | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+        rqc = REQ_CRITERIA
+        return ~(~rqc.UNLOCKED | ~rqc.COLLECTIBLE) | ~rqc.VEHICLE.OBSERVER | ~rqc.VEHICLE.BATTLE_ROYALE
 
     def updateNationDropdown(self):
         vehsItems = self.itemsCache.items.getVehicles(self.__getNationsCriteria())
@@ -141,7 +142,10 @@ class RecruitWindow(RecruitWindowMeta):
         return
 
     def __getClassesCriteria(self, nationID):
-        return self.__getNationsCriteria() | REQ_CRITERIA.NATIONS([nationID])
+        maxResearchedLevel = self.itemsCache.items.stats.getMaxResearchedLevel(nationID)
+        criteria = self.__getNationsCriteria() | REQ_CRITERIA.NATIONS([nationID])
+        criteria |= ~(REQ_CRITERIA.COLLECTIBLE | ~REQ_CRITERIA.VEHICLE.LEVELS(range(1, maxResearchedLevel + 1)))
+        return criteria
 
     def updateVehicleClassDropdown(self, nationID):
         Waiting.show('updating')

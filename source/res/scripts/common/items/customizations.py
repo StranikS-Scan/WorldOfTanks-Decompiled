@@ -670,20 +670,23 @@ class CustomizationOutfit(SerializableComponent):
                 modifiedRegions = set(modifiedComponents)
                 baseRegions = set(baseComponents)
                 for region in baseRegions - modifiedRegions:
-                    component = baseComponents[region][0].copy()
-                    _setComponentsRegion(component, region)
-                    components.append(component)
-
-                for region in modifiedRegions - baseRegions:
-                    component = modifiedComponents[region][0].copy()
-                    _setComponentsRegion(component, region)
-                    components.append(component)
-
-                for region in modifiedRegions & baseRegions:
-                    component = modifiedComponents[region][0].copy()
-                    if component.id != EMPTY_ITEM_ID:
+                    for component in baseComponents[region]:
+                        component = component.copy()
                         _setComponentsRegion(component, region)
                         components.append(component)
+
+                for region in modifiedRegions - baseRegions:
+                    for component in modifiedComponents[region]:
+                        component = component.copy()
+                        _setComponentsRegion(component, region)
+                        components.append(component)
+
+                for region in modifiedRegions & baseRegions:
+                    for component in modifiedComponents[region]:
+                        component = component.copy()
+                        if component.id != EMPTY_ITEM_ID:
+                            _setComponentsRegion(component, region)
+                            components.append(component)
 
                 if isAppliedTo:
                     components = self.applyAreaBitmaskToDict(components)

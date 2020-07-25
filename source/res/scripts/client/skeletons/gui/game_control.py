@@ -1006,10 +1006,6 @@ class IEventProgressionController(IGameController):
         raise NotImplementedError
 
     @property
-    def allCyclesWasEndedResId(self):
-        raise NotImplementedError
-
-    @property
     def aboutEventProgressionResId(self):
         raise NotImplementedError
 
@@ -1231,6 +1227,15 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
         raise NotImplementedError
 
     def getAllUnlockedSkillLevelsBySkillId(self):
+        raise NotImplementedError
+
+    def getUnlockedAbilityIds(self):
+        raise NotImplementedError
+
+    def getNumAbilitySlots(self, vehicleType):
+        raise NotImplementedError
+
+    def getCurrentCycleInfo(self):
         raise NotImplementedError
 
     def getCycleInfo(self, cycleID=None):

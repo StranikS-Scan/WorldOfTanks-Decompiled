@@ -10,8 +10,17 @@ from constants import GameSeasonType
 from season_common import getDateFromSeasonID
 _SEASON_TYPE_KEY = {GameSeasonType.EPIC: 'epic',
  GameSeasonType.RANKED: 'ranked'}
-_RENT_DURATION_KEY = {SeasonRentDuration.ENTIRE_SEASON: 'season',
- SeasonRentDuration.SEASON_CYCLE: 'cycle'}
+
+class RentDurationKeys(object):
+    SEASON = 'season'
+    CYCLE = 'cycle'
+    CYCLES = 'cycles'
+    TIME = 'time'
+    DAYS = 'days'
+    HOURS = 'hours'
+    BATTLES = 'battles'
+    WINS = 'wins'
+
 
 def defaultFormatter(key, countType, count, ctx=None):
     kwargs = ctx.copy() if ctx else {}
@@ -33,8 +42,8 @@ def formatTime(timeLeft, divisor, timeStyle=None):
 def getTimeLeftInfo(timeLeft, timeStyle=None):
     if timeLeft > 0 and timeLeft != float('inf'):
         if timeLeft > time_utils.ONE_DAY:
-            return ('days', formatTime(timeLeft, time_utils.ONE_DAY, timeStyle))
-        return ('hours', formatTime(timeLeft, time_utils.ONE_HOUR, timeStyle))
+            return (RentDurationKeys.DAYS, formatTime(timeLeft, time_utils.ONE_DAY, timeStyle))
+        return (RentDurationKeys.HOURS, formatTime(timeLeft, time_utils.ONE_HOUR, timeStyle))
 
 
 def getRentEpicSeasonTimeLeft(timeLeft, timeStyle=None):
@@ -126,7 +135,7 @@ class RentLeftFormatter(object):
         if formatter is None:
             formatter = defaultFormatter
         battlesLeft = self.__rentInfo.battlesLeft
-        return formatter(localization, 'battles', battlesLeft) if battlesLeft > 0 else ''
+        return formatter(localization, RentDurationKeys.BATTLES, battlesLeft) if battlesLeft > 0 else ''
 
     def getRentWinsLeftStr(self, localization=None, formatter=None):
         if localization is None:
@@ -134,7 +143,7 @@ class RentLeftFormatter(object):
         if formatter is None:
             formatter = defaultFormatter
         winsLeft = self.__rentInfo.winsLeft
-        return formatter(localization, 'wins', winsLeft) if winsLeft > 0 else ''
+        return formatter(localization, RentDurationKeys.WINS, winsLeft) if winsLeft > 0 else ''
 
     def getRentSeasonLeftStr(self, rentData, localization=None, formatter=None, timeStyle=None, ctx=None):
         ctx = ctx or {}
@@ -158,15 +167,15 @@ class RentLeftFormatter(object):
             return (None, None, {})
         else:
             timeLeftString = '-'.join([ str(cycle.ordinalNumber) for cycle in cycles ])
-            identifier = 'cycles' if len(cycles) > 1 else 'cycle'
+            identifier = RentDurationKeys.CYCLES if len(cycles) > 1 else RentDurationKeys.CYCLE
             return (identifier, timeLeftString, {})
 
     def getRentRankedSeasonLeftStr(self, rentData, timeStyle):
         ctx = {}
         timeLeft = self.__rentInfo.getTimeLeft()
         timeLeftString = formatTime(timeLeft, time_utils.ONE_DAY, timeStyle)
-        identifier = 'days'
+        identifier = RentDurationKeys.DAYS
         if rentData.duration == SeasonRentDuration.ENTIRE_SEASON and timeLeft > time_utils.ONE_WEEK:
             timeLeftString, _ = getDateFromSeasonID(rentData.seasonID)
-            identifier = 'season'
+            identifier = RentDurationKeys.SEASON
         return (identifier, timeLeftString, ctx)

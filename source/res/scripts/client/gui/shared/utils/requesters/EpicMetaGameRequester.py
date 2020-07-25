@@ -4,7 +4,6 @@ import BigWorld
 from adisp import async
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from skeletons.gui.shared.utils.requesters import IEpicMetaGameRequester
-from items.vehicles import ABILITY_SLOTS_BY_VEHICLE_CLASS, getVehicleClass
 
 class EpicMetaGameRequester(AbstractSyncDataRequester, IEpicMetaGameRequester):
 
@@ -22,7 +21,7 @@ class EpicMetaGameRequester(AbstractSyncDataRequester, IEpicMetaGameRequester):
 
     def selectedSkills(self, vehicleCD):
         skillsDict = self.getCacheValue('selectedAbilities', None)
-        return skillsDict.get(vehicleCD, [-1] * ABILITY_SLOTS_BY_VEHICLE_CLASS[getVehicleClass(vehicleCD)]) if skillsDict is not None else [-1] * ABILITY_SLOTS_BY_VEHICLE_CLASS[getVehicleClass(vehicleCD)]
+        return skillsDict.get(vehicleCD, []) if skillsDict is not None else []
 
     @property
     def skillLevels(self):

@@ -6,6 +6,8 @@ from gui.Scaleform.daapi.view.meta.EventStatsMeta import EventStatsMeta
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
+from gui.shared.badges import buildBadge
+from gui.Scaleform.settings import ICONS_SIZES
 
 class EventStats(EventStatsMeta, IArenaVehiclesController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -63,7 +65,7 @@ class EventStats(EventStatsMeta, IArenaVehiclesController):
         playerVehicle = self.__arenaDP.getVehicleInfo()
         playerSquad = playerVehicle.squadIndex
         vehID = vInfo.vehicleID
-        badgeId = vInfo.selectedBadge
+        badgeID = vInfo.selectedBadge
         suffixBadgeId = vInfo.selectedSuffixBadge
         vStats = self.__arenaDP.getVehicleStats(vehID)
         frags = vStats.frags if vStats is not None else 0
@@ -72,10 +74,13 @@ class EventStats(EventStatsMeta, IArenaVehiclesController):
         playerName = vInfo.player.name
         if vInfo.player.clanAbbrev:
             playerName = '{}[{}]'.format(vInfo.player.name, vInfo.player.clanAbbrev)
+        badge = buildBadge(badgeID, vInfo.getBadgeExtraInfo())
+        badgeVO = badge.getBadgeVO(ICONS_SIZES.X24, {'isAtlasSource': True}, shortIconName=True) if badge else None
         return {'playerName': playerName,
          'squadIndex': str(vInfo.squadIndex) if vInfo.squadIndex else '',
-         'badgeIcon': 'badge_{}'.format(badgeId) if badgeId else '',
+         'badgeVO': badgeVO,
          'suffixBadgeIcon': 'badge_{}'.format(suffixBadgeId) if suffixBadgeId else '',
+         'suffixBadgeStripIcon': 'strip_{}'.format(suffixBadgeId) if suffixBadgeId else '',
          'isAlive': vInfo.isAlive(),
          'isSquad': isSquad,
          'points': str(int(self.getPoints(vehID))),

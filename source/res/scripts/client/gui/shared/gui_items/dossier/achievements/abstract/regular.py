@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/abstract/regular.py
+from gui.impl.gen import R
 from helpers import i18n
 from gui.impl import backport
 from gui.shared.gui_items.gui_item import GUIItem
@@ -111,7 +112,14 @@ class RegularAchievement(GUIItem):
         return self.getIcons()[self.ICON_TYPE.IT_180X180]
 
     def getBigIcon(self):
-        return self.getSmallIcon()
+        iconName = self._getIconName()
+        if len(iconName) > 0 and iconName[0].isdigit():
+            iconName = 'c_' + iconName
+        icon = R.images.gui.maps.icons.achievement.c_80x80.dyn(iconName)()
+        if icon:
+            return backport.image(icon)
+        else:
+            return self.getSmallIcon()
 
     def getSmallIcon(self):
         return self.getIcons()[self.ICON_TYPE.IT_67X71]

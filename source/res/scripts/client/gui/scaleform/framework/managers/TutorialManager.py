@@ -3,11 +3,11 @@
 import logging
 from collections import defaultdict
 from gui.Scaleform.framework.entities.abstract.TutorialManagerMeta import TutorialManagerMeta
-from gui.Scaleform.genConsts.TUTORIAL_TRIGGER_TYPES import TUTORIAL_TRIGGER_TYPES
+from gui.Scaleform.genConsts.TUTORIAL_EFFECT_BUILDERS import TUTORIAL_EFFECT_BUILDERS
 from gui.Scaleform.genConsts.TUTORIAL_EFFECT_TYPES import TUTORIAL_EFFECT_TYPES as _EFFECT_TYPES
+from gui.Scaleform.genConsts.TUTORIAL_TRIGGER_TYPES import TUTORIAL_TRIGGER_TYPES
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.Scaleform.genConsts.TUTORIAL_EFFECT_BUILDERS import TUTORIAL_EFFECT_BUILDERS
 _logger = logging.getLogger(__name__)
 try:
     from tutorial.doc_loader import gui_config

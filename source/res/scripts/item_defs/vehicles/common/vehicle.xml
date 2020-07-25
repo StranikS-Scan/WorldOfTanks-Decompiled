@@ -96,7 +96,7 @@
   </defaultTurretDetachmentEffects>
   <extras>
     <attributeModifier>	NoneExtra : AttributeModifier	</attributeModifier>
-    <toolboxBattleBooster>	NoneExtra : BattleBoosterForOptionalDevice	</toolboxBattleBooster>
+    <improvedConfigurationBattleBooster>	NoneExtra : BattleBoosterForOptionalDevice	</improvedConfigurationBattleBooster>
     <improvedVentilationBattleBooster>	NoneExtra : BattleBoosterForOptionalDevice	</improvedVentilationBattleBooster>
     <rammerBattleBooster>	NoneExtra : BattleBoosterForOptionalDevice	</rammerBattleBooster>
     <coatedOpticsBattleBooster>	NoneExtra : BattleBoosterForOptionalDevice	</coatedOpticsBattleBooster>
@@ -125,8 +125,9 @@
     </fire>
     <stun>	NoneExtra : Stun	</stun>
     <commanderSixthSense>	NoneExtra : CommanderSixthSense	</commanderSixthSense>
-    <stereoscope>	NoneExtra : Stereoscope	</stereoscope>
-    <camouflageNet>	NoneExtra : CamouflageNet	</camouflageNet>
+    <stereoscope>	NoneExtra : StillVehicleOptionalDevice	</stereoscope>
+    <camouflageNet>	NoneExtra : StillVehicleOptionalDevice	</camouflageNet>
+    <improvedConfiguration>	NoneExtra : DevicesHealthResurrection	</improvedConfiguration>
     <handExtinguishers>	NoneExtra : Extinguisher	</handExtinguishers>
     <autoExtinguishers>	NoneExtra : Extinguisher	</autoExtinguishers>
     <smallMedkit>	NoneExtra : Repairkit	</smallMedkit>
@@ -955,4 +956,8 @@
       <continueTraceIfNoHit>	true	</continueTraceIfNoHit>
     </loader_2>
   </materials>
+  <damageByStaticsChances>
+    <module>	0.5	</module>
+    <tankman>	0.5	</tankman>
+  </damageByStaticsChances>
 </vehicle.xml>

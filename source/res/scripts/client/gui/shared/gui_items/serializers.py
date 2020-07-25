@@ -108,7 +108,6 @@ def packFittingItem(item):
 def packShell(shell):
     result = packFittingItem(shell)
     result.update({'count': shell.count,
-     'defaulCount': shell.defaultCount,
      'kind': shell.type})
     return result
 
@@ -148,10 +147,10 @@ def packVehicle(vehicle):
      'chassis': packFittingItem(vehicle.chassis),
      'radio': packFittingItem(vehicle.radio),
      'fuelTank': packFittingItem(vehicle.fuelTank),
-     'optDevices': [ (packFittingItem(dev) if dev else None) for dev in vehicle.optDevices ],
-     'shells': [ (packShell(shell) if shell else None) for shell in vehicle.shells ],
-     'eqs': [ (packFittingItem(eq) if eq else None) for eq in vehicle.equipment.regularConsumables ],
-     'eqsLayout': [ (packFittingItem(eq) if eq else None) for eq in vehicle.equipmentLayout.regularConsumables ],
+     'optDevices': [ (packFittingItem(dev) if dev else None) for dev in vehicle.optDevices.installed ],
+     'shells': [ (packShell(shell) if shell else None) for shell in vehicle.shells.installed ],
+     'eqs': [ (packFittingItem(eq) if eq else None) for eq in vehicle.consumables.installed ],
+     'eqsLayout': [ (packFittingItem(eq) if eq else None) for eq in vehicle.consumables.layout ],
      'type': vehicle.type,
      'isPremium': vehicle.isPremium,
      'isElite': vehicle.isElite,

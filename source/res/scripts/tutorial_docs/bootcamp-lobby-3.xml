@@ -210,16 +210,6 @@
         </set-visible>
         <set-visible>	HangarParams	  <val>	True	</val>
         </set-visible>
-        <set-visible>	HangarModuleGun	  <val>	True	</val>
-        </set-visible>
-        <set-visible>	HangarModuleTurret	  <val>	True	</val>
-        </set-visible>
-        <set-visible>	HangarModuleEngine	  <val>	True	</val>
-        </set-visible>
-        <set-visible>	HangarModuleChassis	  <val>	True	</val>
-        </set-visible>
-        <set-visible>	HangarModuleRadio	  <val>	True	</val>
-        </set-visible>
         <update-layout>	AmmunitionPanel	</update-layout>
         <show-window>	NewVehicleIntroDialog	  <condition>
             <checkpoint-not-reached>	VehicleUnlockedCheckpoint	</checkpoint-not-reached>

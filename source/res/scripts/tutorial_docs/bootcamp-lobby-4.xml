@@ -13,16 +13,9 @@
             <active>	WrongVehicle	</active>
           </condition>
           <effects>
-            <set-visible>	HangarEquipment1	  <val>	False	</val>
+            <global-inactivate>	BootcampPanelEquipmentMC	</global-inactivate>
+            <set-visible>	HangarEquipmentSlots	  <val>	False	</val>
             </set-visible>
-            <set-visible>	HangarEquipment2	  <val>	False	</val>
-            </set-visible>
-            <set-visible>	HangarEquipment3	  <val>	False	</val>
-            </set-visible>
-            <close-view>
-              <type>	window	</type>
-              <alias>	technicalMaintenance	</alias>
-            </close-view>
           </effects>
         </effects-group>
         <effects-group>
@@ -31,11 +24,8 @@
             <active>	IntroFinished	</active>
           </condition>
           <effects>
-            <set-visible>	HangarEquipment1	  <val>	True	</val>
-            </set-visible>
-            <set-visible>	HangarEquipment2	  <val>	True	</val>
-            </set-visible>
-            <set-visible>	HangarEquipment3	  <val>	True	</val>
+            <global-activate>	BootcampPanelEquipmentMC	</global-activate>
+            <set-visible>	HangarEquipmentSlots	  <val>	True	</val>
             </set-visible>
           </effects>
         </effects-group>
@@ -49,11 +39,8 @@
                 <active>	WrongVehicle	</active>
               </condition>
               <effects>
-                <set-visible>	OptionalDevice1DropDown	  <val>	False	</val>
-                </set-visible>
-                <set-visible>	OptionalDevice2DropDown	  <val>	False	</val>
-                </set-visible>
-                <set-visible>	OptionalDevice3DropDown	  <val>	False	</val>
+                <global-inactivate>	BootcampPanelOptDeviceMC	</global-inactivate>
+                <set-visible>	HangarOptionalDeviceSlots	  <val>	False	</val>
                 </set-visible>
               </effects>
             </effects-group>
@@ -62,21 +49,18 @@
                 <inactive>	WrongVehicle	</inactive>
               </condition>
               <effects>
-                <set-visible>	OptionalDevice1DropDown	  <val>	True	</val>
-                </set-visible>
-                <set-visible>	OptionalDevice2DropDown	  <val>	True	</val>
-                </set-visible>
-                <set-visible>	OptionalDevice3DropDown	  <val>	True	</val>
+                <global-activate>	BootcampPanelOptDeviceMC	</global-activate>
+                <set-visible>	HangarOptionalDeviceSlots	  <val>	True	</val>
                 </set-visible>
               </effects>
             </effects-group>
           </effects>
         </effects-group>
-        <request-exclusive-hint>	HangarEquipment1	  <condition>
+        <request-exclusive-hint>	HangarEquipmentSlots	  <condition>
             <checkpoint-not-reached>	EquipmentSelectedCheckpoint	</checkpoint-not-reached>
           </condition>
         </request-exclusive-hint>
-        <request-exclusive-hint>	OptionalDevice1DropDown	  <condition>
+        <request-exclusive-hint>	HangarOptionalDeviceSlots	  <condition>
             <checkpoint-reached>	EquipmentSelectedCheckpoint	</checkpoint-reached>
             <checkpoint-not-reached>	OptionalDeviceSelectedCheckpoint	</checkpoint-not-reached>
           </condition>
@@ -86,23 +70,21 @@
             <checkpoint-not-reached>	QuestsOpenedCheckpoint	</checkpoint-not-reached>
           </condition>
         </request-exclusive-hint>
-        <effects-group>
-          <condition>
+        <request-exclusive-hint>	AmmunitionSetupEquipmentApplyBtn	  <condition>
             <checkpoint-not-reached>	EquipmentSelectedCheckpoint	</checkpoint-not-reached>
+            <component-on-scene>	AmmunitionSetupEquipmentApplyBtn	</component-on-scene>
           </condition>
-          <effects>
-            <request-exclusive-hint>	EquipmentItem1DropDown	</request-exclusive-hint>
-            <request-exclusive-hint>	EquipmentItem1Renderer	</request-exclusive-hint>
-            <request-exclusive-hint>	EquipmentItem2Renderer	</request-exclusive-hint>
-            <request-exclusive-hint>	EquipmentItem3Renderer	</request-exclusive-hint>
-            <request-exclusive-hint>	TechnicalMaintenanceApplyButton	  <condition>
-                <active>	EquipmentItemSelected	</active>
-              </condition>
-            </request-exclusive-hint>
-          </effects>
-        </effects-group>
-        <request-exclusive-hint>	OptionalDevice2Renderer	  <condition>
+        </request-exclusive-hint>
+        <request-exclusive-hint>	AmmunitionSetupOptionalDeviceApplyBtn	  <condition>
             <checkpoint-not-reached>	OptionalDeviceSelectedCheckpoint	</checkpoint-not-reached>
+            <component-on-scene>	AmmunitionSetupOptionalDeviceApplyBtn	</component-on-scene>
+          </condition>
+        </request-exclusive-hint>
+        <request-exclusive-hint>	AmmunitionSetupOptionalDeviceSlots	  <condition>
+            <checkpoint-reached>	EquipmentSelectedCheckpoint	</checkpoint-reached>
+            <checkpoint-not-reached>	OptionalDeviceSelectedCheckpoint	</checkpoint-not-reached>
+            <checkpoint-not-reached>	OptionalDeviceDialogShownCheckpoint	</checkpoint-not-reached>
+            <component-not-on-scene>	AmmunitionSetupOptionalDeviceCards	</component-not-on-scene>
           </condition>
         </request-exclusive-hint>
         <request-exclusive-hint>	SecondTank	  <sound></sound>
@@ -111,62 +93,7 @@
           </condition>
         </request-exclusive-hint>
       </runtime-effects>
-      <gui-items>
-        <gui-item>	EquipmentItem1DropDown	  <on-scene-effects>
-            <play-animation>	EquipmentItem1DropDown	  <type>	overlay	</type>
-              <wait_for_finish>	False	</wait_for_finish>
-            </play-animation>
-            <effects-group>
-              <condition>
-                <checkpoint-not-reached>	EquipmentSelectedCheckpoint	</checkpoint-not-reached>
-              </condition>
-              <effects>
-                <set-gui-item-criteria>	EquipmentItem1Criteria	</set-gui-item-criteria>
-                <set-gui-item-criteria>	EquipmentItem2Criteria	</set-gui-item-criteria>
-                <set-gui-item-criteria>	EquipmentItem3Criteria	</set-gui-item-criteria>
-                <set-action>	OnTechnicalMaintenanceApplyEnable	</set-action>
-                <set-action>	OnTechnicalMaintenanceApplyDisable	</set-action>
-                <set-action>	OnTechnicalMaintenanceApplyClick	</set-action>
-              </effects>
-            </effects-group>
-          </on-scene-effects>
-          <not-on-scene-effects>
-            <remove-action>	OnTechnicalMaintenanceApplyEnable	</remove-action>
-            <remove-action>	OnTechnicalMaintenanceApplyDisable	</remove-action>
-            <remove-action>	OnTechnicalMaintenanceApplyClick	</remove-action>
-            <inactivate>	EquipmentItemSelected	</inactivate>
-          </not-on-scene-effects>
-        </gui-item>
-        <gui-item>	EquipmentItem1Renderer	  <not-on-scene-effects>
-            <set-gui-item-criteria>	EquipmentItem1Criteria	</set-gui-item-criteria>
-            <set-gui-item-criteria>	EquipmentItem2Criteria	</set-gui-item-criteria>
-            <set-gui-item-criteria>	EquipmentItem3Criteria	</set-gui-item-criteria>
-          </not-on-scene-effects>
-        </gui-item>
-        <gui-item>	EquipmentItem2Renderer	  <not-on-scene-effects>
-            <set-gui-item-criteria>	EquipmentItem1Criteria	</set-gui-item-criteria>
-            <set-gui-item-criteria>	EquipmentItem2Criteria	</set-gui-item-criteria>
-            <set-gui-item-criteria>	EquipmentItem3Criteria	</set-gui-item-criteria>
-          </not-on-scene-effects>
-        </gui-item>
-        <gui-item>	EquipmentItem3Renderer	  <not-on-scene-effects>
-            <set-gui-item-criteria>	EquipmentItem1Criteria	</set-gui-item-criteria>
-            <set-gui-item-criteria>	EquipmentItem2Criteria	</set-gui-item-criteria>
-            <set-gui-item-criteria>	EquipmentItem3Criteria	</set-gui-item-criteria>
-          </not-on-scene-effects>
-        </gui-item>
-        <gui-item>	OptionalDevice2DropDownList	  <on-scene-effects>
-            <effects-group>
-              <condition>
-                <checkpoint-not-reached>	OptionalDeviceSelectedCheckpoint	</checkpoint-not-reached>
-              </condition>
-              <effects>
-                <set-gui-item-criteria>	OptionalDeviceCriteria	</set-gui-item-criteria>
-              </effects>
-            </effects-group>
-          </on-scene-effects>
-        </gui-item>
-      </gui-items>
+      <gui-items></gui-items>
     </scene>
     <scene>	VehiclePreview	  <post-effects>
         <invoke-gui-cmd>	OverrideHeaderMenuButtons	  <condition>
@@ -298,24 +225,6 @@
         <activate>	RandomBattleSelected	</activate>
       </effects>
     </click-action>
-    <enable-action>	OnTechnicalMaintenanceApplyEnable	  <item-id>	TechnicalMaintenanceApplyButton	</item-id>
-      <effects>
-        <activate>	EquipmentItemSelected	</activate>
-      </effects>
-    </enable-action>
-    <disable-action>	OnTechnicalMaintenanceApplyDisable	  <item-id>	TechnicalMaintenanceApplyButton	</item-id>
-      <effects>
-        <inactivate>	EquipmentItemSelected	</inactivate>
-      </effects>
-    </disable-action>
-    <click-action>	OnTechnicalMaintenanceApplyClick	  <item-id>	TechnicalMaintenanceApplyButton	</item-id>
-      <effects>
-        <activate>	TechnicalMaintenanceApplyClicked	  <condition>
-            <active>	EquipmentItemSelected	</active>
-          </condition>
-        </activate>
-      </effects>
-    </click-action>
     <enable-action>	OnFightButtonEnable	  <item-id>	FightButton	</item-id>
       <effects>
         <inactivate>	FightButtonDisabled	</inactivate>
@@ -439,12 +348,12 @@
             <bottom_renderer>	rewards	</bottom_renderer>
             <bottom>
               <data>
-                <icon>	../maps/icons/bootcamp/rewards/bctoolbox.png	</icon>
-                <labelTooltip>	#bootcamp:message/bonus/equipment/label	</labelTooltip>
-                <description>	#bootcamp:message/bonus/equipment/text	</description>
-                <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcTools.png	</iconTooltip>
+                <icon>	../maps/icons/quests/bonuses/big/extraHealthReserve.png	</icon>
+                <labelTooltip>	#artefacts:extraHealthReserve/name	</labelTooltip>
+                <description>	#artefacts:extraHealthReserve/short_special	</description>
+                <iconTooltip>	../maps/shop/artefacts/180x135/extraHealthReserve.png	</iconTooltip>
                 <label>	#bootcamp:message/missionBonusCount	</label>
-                <label_format>	getToolbox	</label_format>
+                <label_format>	getExtraHealthReserve	</label_format>
               </data>
             </bottom>
           </data>
@@ -487,16 +396,6 @@
         </set-visible>
         <set-visible>	HangarParams	  <val>	True	</val>
         </set-visible>
-        <set-visible>	HangarModuleGun	  <val>	True	</val>
-        </set-visible>
-        <set-visible>	HangarModuleTurret	  <val>	True	</val>
-        </set-visible>
-        <set-visible>	HangarModuleEngine	  <val>	True	</val>
-        </set-visible>
-        <set-visible>	HangarModuleChassis	  <val>	True	</val>
-        </set-visible>
-        <set-visible>	HangarModuleRadio	  <val>	True	</val>
-        </set-visible>
         <update-layout>	AmmunitionPanel	</update-layout>
         <set-visible>	TankCarouselContainer	  <val>	True	</val>
         </set-visible>
@@ -508,29 +407,20 @@
             <checkpoint-not-reached>	EquipmentSelectedCheckpoint	</checkpoint-not-reached>
           </condition>
         </show-window>
-        <set-visible>	HangarEquipment1	  <val>	True	</val>
+        <global-activate>	BootcampPanelEquipmentMC	</global-activate>
+        <global-inactivate>	BootcampPanelOptDeviceMC	</global-inactivate>
+        <set-visible>	AmmunitionPanel	  <val>	True	</val>
         </set-visible>
-        <set-visible>	HangarEquipment2	  <val>	True	</val>
+        <set-visible>	HangarEquipmentSlots	  <val>	True	</val>
         </set-visible>
-        <set-visible>	HangarEquipment3	  <val>	True	</val>
+        <set-visible>	HangarOptionalDeviceSlots	  <val>	False	</val>
         </set-visible>
-        <play-animation>	HangarEquipment1	  <type>	tween	</type>
-          <wait_for_finish>	False	</wait_for_finish>
-        </play-animation>
-        <play-animation>	HangarEquipment2	  <type>	tween	</type>
-          <wait_for_finish>	False	</wait_for_finish>
-        </play-animation>
-        <play-animation>	HangarEquipment3	  <type>	tween	</type>
-          <wait_for_finish>	True	</wait_for_finish>
-        </play-animation>
         <activate>	IntroFinished	</activate>
       </effects>
     </checkpoint>
     <checkpoint>	EquipmentDialogShownCheckpoint	  <condition>
-        <view-present>
-          <type>	window	</type>
-          <alias>	technicalMaintenance	</alias>
-        </view-present>
+        <component-on-scene>	AmmunitionSetupEquipmentCards	</component-on-scene>
+        <checkpoint-not-reached>	EquipmentSelectedCheckpoint	</checkpoint-not-reached>
       </condition>
       <effects>
         <show-dialog>	EquipmentIntroDialog	</show-dialog>
@@ -541,35 +431,25 @@
         </game-item>
       </condition>
       <effects>
-        <set-visible>	OptionalDevice1DropDown	  <val>	True	</val>
+        <global-activate>	BootcampPanelOptDeviceMC	</global-activate>
+        <global-activate>	SetupViewSlotsOptDeviceMC	</global-activate>
+        <set-visible>	HangarOptionalDeviceSlots	  <val>	True	</val>
         </set-visible>
-        <set-visible>	OptionalDevice2DropDown	  <val>	True	</val>
+        <set-visible>	AmmunitionSetupOptionalDeviceSlots	  <val>	True	</val>
         </set-visible>
-        <set-visible>	OptionalDevice3DropDown	  <val>	True	</val>
-        </set-visible>
-        <play-animation>	OptionalDevice1DropDown	  <type>	tween	</type>
-          <wait_for_finish>	False	</wait_for_finish>
-        </play-animation>
-        <play-animation>	OptionalDevice2DropDown	  <type>	tween	</type>
-          <wait_for_finish>	False	</wait_for_finish>
-        </play-animation>
-        <play-animation>	OptionalDevice3DropDown	  <type>	tween	</type>
-          <wait_for_finish>	True	</wait_for_finish>
-        </play-animation>
       </effects>
     </checkpoint>
     <checkpoint>	OptionalDeviceDialogShownCheckpoint	  <condition>
-        <view-present>
-          <type>	window	</type>
-          <alias>	optDevicesSelectPopover	</alias>
-        </view-present>
+        <checkpoint-reached>	EquipmentSelectedCheckpoint	</checkpoint-reached>
+        <component-on-scene>	AmmunitionSetupOptionalDeviceCards	</component-on-scene>
+        <checkpoint-not-reached>	OptionalDeviceSelectedCheckpoint	</checkpoint-not-reached>
       </condition>
       <effects>
         <show-dialog>	OptionalDeviceIntroDialog	</show-dialog>
       </effects>
     </checkpoint>
     <checkpoint>	OptionalDeviceSelectedCheckpoint	  <condition>
-        <game-item>	OptionalDeviceID	  <installed>	SecondVehicleCD	</installed>
+        <game-item>	SecondVehicleCD	  <has-optional-devices></has-optional-devices>
         </game-item>
       </condition>
       <effects>
@@ -619,18 +499,6 @@
       <name>	BootcampNationDataField	</name>
       <args>	equipment	</args>
     </game-attribute>
-    <gui-item-criteria>	EquipmentItem1Criteria	  <item-id>	EquipmentItem1ID	</item-id>
-      <value>	id=$EquipmentItemID$	</value>
-    </gui-item-criteria>
-    <gui-item-criteria>	EquipmentItem2Criteria	  <item-id>	EquipmentItem2ID	</item-id>
-      <value>	id=$EquipmentItemID$	</value>
-    </gui-item-criteria>
-    <gui-item-criteria>	EquipmentItem3Criteria	  <item-id>	EquipmentItem3ID	</item-id>
-      <value>	id=$EquipmentItemID$	</value>
-    </gui-item-criteria>
-    <gui-item-criteria>	OptionalDeviceCriteria	  <item-id>	OptionalDevice2ItemID	</item-id>
-      <value>	id=$OptionalDeviceID$	</value>
-    </gui-item-criteria>
   </has-id>
   <vars>
     <var-set>	EnabledHangarMenuButtons	  <asList>

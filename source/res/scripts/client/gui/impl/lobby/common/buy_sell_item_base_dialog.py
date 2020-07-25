@@ -45,7 +45,7 @@ class DialogBuySellItemBaseView(FullScreenDialogView):
     def _setBaseParams(self, model):
         super(DialogBuySellItemBaseView, self)._setBaseParams(model)
         self._setItemPrices(model)
-        model.setBackgroundImg(R.images.gui.maps.icons.artefact.c_180x135.dyn(self._item.descriptor.icon[0])())
+        model.setBackgroundImg(R.images.gui.maps.shop.artefacts.c_180x135.dyn(self._item.descriptor.icon[0])())
 
     def _getItemPrice(self):
         if self.isBuying:

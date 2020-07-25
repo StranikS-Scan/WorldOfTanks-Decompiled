@@ -9,6 +9,7 @@ from account_helpers import isLongDisconnectedFromCenter
 from account_helpers.AccountSettings import AccountSettings
 from gui.Scaleform.daapi.view import dialogs
 from gui.shared.gui_items.artefacts import OptionalDevice
+from gui.shared.gui_items.vehicle_equipment import EMPTY_ITEM
 from items import tankmen
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -24,6 +25,7 @@ from gui.shared.money import Currency
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, PMConfirmationDialogMeta, TankmanOperationDialogMeta, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, CheckBoxDialogMeta, CrewSkinsRemovalCompensationDialogMeta, CrewSkinsRemovalDialogMeta
 from helpers import dependency
 from items.components import skills_constants
+from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -33,12 +35,6 @@ from gui.impl import backport
 from gui.impl.gen import R
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
-_SHELLS_MONEY_ERRORS = {Currency.CREDITS: 'SHELLS_NO_CREDITS',
- Currency.GOLD: 'SHELLS_NO_GOLD',
- Currency.CRYSTAL: 'SHELLS_NO_CRYSTAL'}
-_EQS_MONEY_ERRORS = {Currency.CREDITS: 'EQS_NO_CREDITS',
- Currency.GOLD: 'EQS_NO_GOLD',
- Currency.CRYSTAL: 'EQS_NO_CRYSTAL'}
 PluginResult = namedtuple('PluginResult', 'success errorMsg ctx')
 
 def makeSuccess(**kwargs):
@@ -317,9 +313,10 @@ class CompatibilityRemoveValidator(CompatibilityValidator):
 
 class MoneyValidator(SyncValidator):
 
-    def __init__(self, price):
+    def __init__(self, price, byCurrencyError=True):
         super(MoneyValidator, self).__init__()
         self.price = price
+        self.__byCurrencyError = byCurrencyError
 
     def _validate(self):
         stats = self.itemsCache.items.stats
@@ -328,8 +325,10 @@ class MoneyValidator(SyncValidator):
             currency = shortage.getCurrency(byWeight=False)
             if currency == Currency.GOLD and not stats.mayConsumeWalletResources:
                 error = GUI_ITEM_ECONOMY_CODE.WALLET_NOT_AVAILABLE
+            elif self.__byCurrencyError:
+                error = GUI_ITEM_ECONOMY_CODE.getCurrencyError(currency)
             else:
-                error = GUI_ITEM_ECONOMY_CODE.getMoneyError(currency)
+                error = GUI_ITEM_ECONOMY_CODE.NOT_ENOUGH_MONEY
             return makeError(error)
         return makeSuccess()
 
@@ -349,35 +348,6 @@ class VehicleSellsLeftValidator(SyncValidator):
 
     def _validate(self):
         return makeError('vehicle_sell_limit') if self.itemsCache.items.stats.vehicleSellsLeft <= 0 else makeSuccess()
-
-
-class VehicleLayoutValidator(SyncValidator):
-
-    def __init__(self, shellsPrice, eqsPrice):
-        super(VehicleLayoutValidator, self).__init__()
-        self.shellsPrice = shellsPrice
-        self.eqsPrice = eqsPrice
-
-    def _validate(self):
-        money = self.itemsCache.items.stats.money
-        error = self.__checkMoney(money, self.shellsPrice, _SHELLS_MONEY_ERRORS)
-        if error is not None:
-            return error
-        else:
-            money = money - self.shellsPrice
-            error = self.__checkMoney(money, self.eqsPrice, _EQS_MONEY_ERRORS)
-            return error if error is not None else makeSuccess()
-
-    def __checkMoney(self, money, price, errors):
-        shortage = money.getShortage(price)
-        if shortage:
-            currency = shortage.getCurrency(byWeight=True)
-            if currency not in errors:
-                _logger.warning('Unexpected case: unknown currency!')
-                return makeError()
-            return makeError(errors[currency])
-        else:
-            return None
 
 
 class BarracksSlotsValidator(SyncValidator):
@@ -615,16 +585,19 @@ class IconPriceMessageConfirmator(I18nMessageAbstractConfirmator):
 class DemountDeviceConfirmator(IconPriceMessageConfirmator):
     _goodiesCache = dependency.descriptor(IGoodiesCache)
 
-    def __init__(self, isEnabled=True, item=None):
+    def __init__(self, isEnabled=True, item=None, vehicle=None):
         super(DemountDeviceConfirmator, self).__init__(None, isEnabled=isEnabled)
         self.item = item
+        self.__vehicleToInstall = vehicle
         return
 
     def _gfMakeMeta(self):
         from gui.shared import event_dispatcher
         demountKit = self._goodiesCache.getDemountKit()
         isDkEnabled = demountKit and demountKit.enabled
-        if self.item.isDeluxe or not isDkEnabled:
+        if self.__vehicleToInstall is not None and not self.item.descriptor.checkCompatibilityWithVehicle(self.__vehicleToInstall.descriptor)[0]:
+            showDialog = partial(event_dispatcher.showDemountIncompatibleOpDevDialog, self.item.intCD)
+        elif self.item.isDeluxe or not isDkEnabled:
             showDialog = partial(event_dispatcher.showOptionalDeviceDemountSinglePrice, self.item.intCD)
         else:
             showDialog = partial(event_dispatcher.showOptionalDeviceDemount, self.item.intCD)
@@ -1004,3 +977,91 @@ class DismountForDemountKitValidator(SyncValidator):
                 return makeError()
 
         return makeSuccess()
+
+
+class LayoutInstallValidator(SyncValidator):
+
+    def __init__(self, vehicle, isEnabled=True):
+        self._vehicle = vehicle
+        super(LayoutInstallValidator, self).__init__(isEnabled)
+
+    def _validate(self):
+        layout = self._getLayout()
+        if not all((item.itemTypeID == self._getItemType() for item in layout.getItems())):
+            return makeError('WRONG_ITEMS_TYPE')
+        return makeError('IMPOSSIBLE_INSTALL') if not all((item.mayInstall(self._vehicle, slotIdx=slotIdx) for slotIdx, item in enumerate(layout) if item != EMPTY_ITEM and item not in self._getInstalled())) else makeSuccess()
+
+    def _getLayout(self):
+        raise NotImplementedError()
+
+    def _getInstalled(self):
+        raise NotImplementedError()
+
+    def _getItemType(self):
+        raise NotImplementedError()
+
+
+class OptionalDevicesInstallValidator(LayoutInstallValidator):
+
+    def _getLayout(self):
+        return self._vehicle.optDevices.layout
+
+    def _getInstalled(self):
+        return self._vehicle.optDevices.installed
+
+    def _getItemType(self):
+        return GUI_ITEM_TYPE.OPTIONALDEVICE
+
+
+class BattleAbilitiesValidator(LayoutInstallValidator):
+    __epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
+
+    def _validate(self):
+        if not self.__epicMetaGameCtrl.isEnabled():
+            return makeError('epic_mode_disabled')
+        return makeError('battle_abilities_locked') if not all((item.innationID in self.__epicMetaGameCtrl.getUnlockedAbilityIds() for item in self._getLayout() if item != EMPTY_ITEM and item not in self._getInstalled())) else super(BattleAbilitiesValidator, self)._validate()
+
+    def _getLayout(self):
+        return self._vehicle.battleAbilities.layout
+
+    def _getInstalled(self):
+        return self._vehicle.battleAbilities.installed
+
+    def _getItemType(self):
+        return GUI_ITEM_TYPE.BATTLE_ABILITY
+
+
+class ConsumablesInstallValidator(LayoutInstallValidator):
+
+    def _getLayout(self):
+        return self._vehicle.consumables.layout
+
+    def _getInstalled(self):
+        return self._vehicle.consumables.installed
+
+    def _getItemType(self):
+        return GUI_ITEM_TYPE.EQUIPMENT
+
+
+class ShellsInstallValidator(LayoutInstallValidator):
+
+    def _getLayout(self):
+        return self._vehicle.shells.layout
+
+    def _getInstalled(self):
+        return self._vehicle.shells.installed
+
+    def _getItemType(self):
+        return GUI_ITEM_TYPE.SHELL
+
+
+class BattleBoostersInstallValidator(LayoutInstallValidator):
+
+    def _getLayout(self):
+        return self._vehicle.battleBoosters.layout
+
+    def _getInstalled(self):
+        return self._vehicle.battleBoosters.installed
+
+    def _getItemType(self):
+        return GUI_ITEM_TYPE.BATTLE_BOOSTER

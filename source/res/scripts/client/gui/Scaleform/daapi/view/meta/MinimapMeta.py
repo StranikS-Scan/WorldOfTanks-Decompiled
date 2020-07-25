@@ -4,7 +4,7 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class MinimapMeta(BaseDAAPIComponent):
 
-    def onMinimapClicked(self, x, y, buttonIdx):
+    def onMinimapClicked(self, x, y, buttonIdx, mapScaleIndex):
         self._printOverrideError('onMinimapClicked')
 
     def applyNewSize(self, sizeIndex):

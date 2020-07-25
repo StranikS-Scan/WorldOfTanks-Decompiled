@@ -11,6 +11,7 @@ from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shop import showBuyGoldForEquipment
 
 class ItemPriceDialog(BaseItemDialog):
+    __slots__ = ()
 
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():

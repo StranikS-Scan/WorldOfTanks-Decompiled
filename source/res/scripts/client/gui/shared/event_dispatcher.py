@@ -4,13 +4,13 @@ import logging
 from operator import attrgetter
 import typing
 from BWUtil import AsyncReturn
-from CurrentVehicle import HeroTankPreviewAppearance
 import adisp
+from CurrentVehicle import HeroTankPreviewAppearance
 from async import async, await
 from constants import RentType, GameSeasonType
 from debug_utils import LOG_WARNING
+from frameworks.wulf import ViewFlags
 from gui import SystemMessages, DialogsInterface, GUI_SETTINGS
-from gui.Scaleform import MENU
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDialogMeta, DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsWebProductMeta
@@ -33,16 +33,16 @@ from gui.game_control.links import URLMacros
 from gui.impl import backport
 from gui.impl.battle.battle_royale.battle_result_view import BrBattleResultsViewInBattle
 from gui.impl.gen import R
-from gui.impl.lobby.demount_kit.optional_device_dialogs import BuyAndInstallOpDevDialog, BuyAndStorageOpDevDialog, DemountOpDevSinglePriceDialog, DestroyOpDevDialog, InstallOpDevDialog
+from gui.impl.lobby.demount_kit.optional_device_dialogs import BuyAndInstallOpDevDialog, BuyAndStorageOpDevDialog, DemountOpDevSinglePriceDialog, DestroyOpDevDialog, InstallOpDevDialog, DemountIncompatibleOpDevDialog
 from gui.impl.lobby.demount_kit.selector_dialog import DemountOpDevDialog
 from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
 from gui.impl.lobby.offers.offer_gift_dialog import makeOfferGiftDialog
+from gui.impl.lobby.tank_setup.dialogs.battle_abilities_confirm import BattleAbilitiesSetupConfirm
+from gui.impl.lobby.tank_setup.dialogs.confirm_dialog import TankSetupConfirmDialog, TankSetupExitConfirmDialog
+from gui.impl.lobby.tank_setup.dialogs.need_repair import NeedRepair
+from gui.impl.lobby.tank_setup.dialogs.refill_shells import RefillShells, ExitFromShellsConfirm
 from gui.impl.lobby.techtree.techtree_intro_view import TechTreeIntroWindow
 from gui.impl.lobby.ranked.year_leaderboard_view import YearLeaderboardAwardWindow
-from gui.shop import generateShopRentRenewProductID, showBuyGoldForRentWebOverlay
-from gui.shop import getShopProductInfo
-from gui.shop import makeBuyParamsByProductInfo
-from gui.shop import showBuyVehicleOverlay
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.shared import events, g_eventBus, money
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -53,6 +53,10 @@ from gui.shared.money import Currency
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.functions import getViewName, getUniqueViewName
 from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shop import generateShopRentRenewProductID, showBuyGoldForRentWebOverlay
+from gui.shop import getShopProductInfo
+from gui.shop import makeBuyParamsByProductInfo
+from gui.shop import showBuyVehicleOverlay
 from helpers import dependency
 from helpers.aop import pointcutable
 from helpers.i18n import makeString as _ms
@@ -210,8 +214,7 @@ def showModuleInfo(itemCD, vehicleDescr):
 
 def showStorageModuleInfo(intCD):
     intCD = int(intCD)
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.MODULE_INFO_WINDOW, getViewName(VIEW_ALIAS.MODULE_INFO_WINDOW, intCD), {'moduleCompactDescr': intCD,
-     'isAdditionalInfoShow': _ms(MENU.MODULEINFO_ADDITIONALINFO)}), EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.MODULE_INFO_WINDOW, getViewName(VIEW_ALIAS.MODULE_INFO_WINDOW, intCD), {'moduleCompactDescr': intCD}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showStorageBoosterInfo(boosterID):
@@ -280,10 +283,10 @@ def showDashboardView():
 
 
 @async
-def showBattleBoosterBuyDialog(battleBoosterIntCD, install=False):
+def showBattleBoosterBuyDialog(battleBoosterIntCD):
     from gui.impl.dialogs import dialogs
     from gui.impl.lobby.instructions.booster_buy_dialog import BoosterBuyWindowView
-    wrapper = FullScreenDialogWindowWrapper(BoosterBuyWindowView(battleBoosterIntCD, install))
+    wrapper = FullScreenDialogWindowWrapper(BoosterBuyWindowView(battleBoosterIntCD))
     yield dialogs.showSimple(wrapper)
 
 
@@ -759,6 +762,12 @@ def showSeniorityRewardAwardWindow(qID, data):
     window.load()
 
 
+def showTransferGiveawayWindow(qID, data):
+    from gui.impl.lobby.transfer_giveaway.transfer_giveaway_awards_view import TransferGiveawayAwardsWindow
+    window = TransferGiveawayAwardsWindow(qID, data)
+    window.load()
+
+
 def showBattlePassAwardsWindow(bonuses, data):
     from gui.impl.lobby.battle_pass.battle_pass_awards_view import BattlePassAwardWindow
     window = BattlePassAwardWindow(bonuses, data)
@@ -774,6 +783,12 @@ def showBattlePassVehicleAwardWindow(data):
 def showBattleVotingResultWindow(isOverlay=False, parent=None):
     from gui.impl.lobby.battle_pass.battle_pass_voting_result_view import BattlePassVotingResultWindow
     window = BattlePassVotingResultWindow(isOverlay, parent)
+    window.load()
+
+
+def showDedicationRewardWindow(bonuses, data, closeCallback=None):
+    from gui.impl.lobby.dedication.dedication_reward_view import DedicationRewardWindow
+    window = DedicationRewardWindow(bonuses, data, closeCallback)
     window.load()
 
 
@@ -906,51 +921,66 @@ def showDialog(dialog, callback):
 
 
 @async
+def showOptDeviceCommonWindowDialog(wrappedViewClass, deviceDescr):
+    from gui.impl.dialogs import dialogs
+    result = yield await(dialogs.showSingleDialogWithResultData(compDescr=deviceDescr, layoutID=R.views.lobby.demountkit.CommonWindow(), wrappedViewClass=wrappedViewClass))
+    if result.busy:
+        raise AsyncReturn((False, {}))
+    else:
+        isOk, _ = result.result
+        raise AsyncReturn((isOk, {}))
+
+
+@async
 def showOptionalDeviceDestroy(deviceDescr, callback):
-    dialog = FullScreenDialogWindowWrapper(DestroyOpDevDialog(deviceDescr))
-    yield showDialog(dialog, callback)
+    result = yield await(showOptDeviceCommonWindowDialog(DestroyOpDevDialog, deviceDescr))
+    callback(result)
 
 
 @async
 def showOptionalDeviceInstall(deviceDescr, callback):
-    dialog = FullScreenDialogWindowWrapper(InstallOpDevDialog(deviceDescr))
-    yield showDialog(dialog, callback)
+    result = yield await(showOptDeviceCommonWindowDialog(InstallOpDevDialog, deviceDescr))
+    callback(result)
 
 
 @async
-def showOptionalDeviceDemount(deviceDescr, callback):
+def showOptionalDeviceDemount(deviceDescr, callback, forFitting=False):
     from gui.impl.dialogs import dialogs
-    view = DemountOpDevDialog(deviceDescr)
-    dialog = FullScreenDialogWindowWrapper(view)
-    isOK, data = yield await(dialogs.showSimpleWithResultData(dialog))
-    if data.get('openSingleDemountWindow', False):
-        showOptionalDeviceDemountSinglePrice(deviceDescr, callback)
+    result = yield await(dialogs.showSingleDialogWithResultData(compDescr=deviceDescr, forFitting=forFitting, layoutID=R.views.lobby.demountkit.DemountWindow(), wrappedViewClass=DemountOpDevDialog))
+    if result.busy:
+        callback((False, {}))
     else:
-        callback((isOK, data))
+        isOK, data = result.result
+        if data.get('openSingleDemountWindow', False):
+            showOptionalDeviceDemountSinglePrice(deviceDescr, callback, forFitting=forFitting)
+        else:
+            callback((isOK, data))
 
 
 @async
-def showOptionalDeviceDemountSinglePrice(deviceDescr, callback):
+def showOptionalDeviceDemountSinglePrice(deviceDescr, callback, forFitting=False):
     from gui.impl.dialogs import dialogs
-    view = DemountOpDevSinglePriceDialog(deviceDescr)
-    dialog = FullScreenDialogWindowWrapper(view)
-    isOK, data = yield await(dialogs.showSimpleWithResultData(dialog))
-    if data.get('openDemountSelectorWindow', False):
-        showOptionalDeviceDemount(deviceDescr, callback)
+    result = yield await(dialogs.showSingleDialogWithResultData(compDescr=deviceDescr, forFitting=forFitting, layoutID=R.views.lobby.demountkit.CommonWindow(), wrappedViewClass=DemountOpDevSinglePriceDialog))
+    if result.busy:
+        callback((False, {}))
     else:
-        callback((isOK, data))
+        isOK, data = result.result
+        if data.get('openDemountSelectorWindow', False):
+            showOptionalDeviceDemount(deviceDescr, callback, forFitting=forFitting)
+        else:
+            callback((isOK, data))
 
 
 @async
 def showOptionalDeviceBuyAndInstall(deviceDescr, callback):
-    wrapper = FullScreenDialogWindowWrapper(BuyAndInstallOpDevDialog(deviceDescr))
-    yield showDialog(wrapper, callback)
+    result = yield await(showOptDeviceCommonWindowDialog(BuyAndInstallOpDevDialog, deviceDescr))
+    callback(result)
 
 
 @async
 def showOptionalDeviceBuyAndStorage(deviceDescr, callback):
-    wrapper = FullScreenDialogWindowWrapper(BuyAndStorageOpDevDialog(deviceDescr))
-    yield showDialog(wrapper, callback)
+    result = yield await(showOptDeviceCommonWindowDialog(BuyAndStorageOpDevDialog, deviceDescr))
+    callback(result)
 
 
 def _killOldView(layoutID):
@@ -1001,11 +1031,16 @@ def showProgressionRequiredStyleUnlockedWindow(vehicleCD):
 
 
 def showProgressiveItemsView(itemIntCD=None):
-    from gui.impl.lobby.customization.progressive_items_view.progressive_items_view import ProgressiveItemsWindow
+    from gui.impl.lobby.customization.progressive_items_view.progressive_items_view import ProgressiveItemsView
+    appLoader = dependency.instance(IAppLoader)
+    app = appLoader.getApp()
+    view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY_CUSTOMIZATION))
+    if view is None:
+        _logger.error('ProgressiveItemsView shall be created only from customization')
     uiLoader = dependency.instance(IGuiLoader)
-    if uiLoader.windowsManager.getViewByLayoutID(R.views.lobby.customization.progressive_items_view.ProgressiveItemsView()) is None:
-        window = ProgressiveItemsWindow(itemIntCD=itemIntCD)
-        window.load()
+    contentResId = R.views.lobby.customization.progressive_items_view.ProgressiveItemsView()
+    if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
+        g_eventBus.handleEvent(events.LoadUnboundViewEvent(contentResId, ProgressiveItemsView, ScopeTemplates.LOBBY_SUB_SCOPE, view, itemIntCD=itemIntCD), scope=EVENT_BUS_SCOPE.LOBBY)
     return
 
 
@@ -1013,3 +1048,69 @@ def showTenYearsCountdownOnBoarding(stageNumber, isStageActive, months, blocksCo
     from gui.impl.lobby.ten_years_countdown.ten_years_onboarding_view import TenYearsOnboardingWindow
     window = TenYearsOnboardingWindow(stageNumber, isStageActive, months, blocksCount)
     window.load()
+
+
+def showAmmunitionSetupView(**kwargs):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.AMMUNITION_SETUP_VIEW, ctx=kwargs), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showCompareAmmunitionSelectorView(**kwargs):
+    from gui.impl.lobby.vehicle_compare.ammunition_selector import CompareAmmunitionSelectorView
+    uiLoader = dependency.instance(IGuiLoader)
+    contentResId = R.views.lobby.tanksetup.VehicleCompareAmmunitionSetup()
+    if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
+        g_eventBus.handleEvent(events.LoadUnboundViewEvent(layoutID=contentResId, viewClass=CompareAmmunitionSelectorView, scope=ScopeTemplates.LOBBY_SUB_SCOPE, wsFlags=ViewFlags.LOBBY_TOP_SUB_VIEW, ctx=kwargs), scope=EVENT_BUS_SCOPE.LOBBY)
+    return
+
+
+@async
+def showNeedRepairDialog(vehicle, startState=None, parent=None):
+    from gui.impl.dialogs import dialogs
+    result = yield await(dialogs.showSingleDialog(layoutID=R.views.lobby.tanksetup.dialogs.NeedRepair(), wrappedViewClass=NeedRepair, vehicle=vehicle, startState=startState, parent=parent))
+    raise AsyncReturn(result)
+
+
+@async
+def showTankSetupConfirmDialog(items, vehInvID=None, startState=None, parent=None):
+    from gui.impl.dialogs import dialogs
+    result = yield await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.tanksetup.dialogs.Confirm(), wrappedViewClass=TankSetupConfirmDialog, items=items, vehInvID=vehInvID, startState=startState, parent=parent))
+    raise AsyncReturn(result)
+
+
+@async
+def showTankSetupExitConfirmDialog(items, vehInvID=None, startState=None, fromSection=None, parent=None):
+    from gui.impl.dialogs import dialogs
+    result = yield await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.tanksetup.dialogs.Confirm(), wrappedViewClass=TankSetupExitConfirmDialog, items=items, vehInvID=vehInvID, startState=startState, fromSection=fromSection, parent=parent))
+    raise AsyncReturn(result)
+
+
+@async
+def showRefillShellsDialog(price, shells, startState=None, parent=None):
+    from gui.impl.dialogs import dialogs
+    result = yield await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.tanksetup.dialogs.RefillShells(), wrappedViewClass=RefillShells, price=price, shells=shells, startState=startState, parent=parent))
+    raise AsyncReturn(result)
+
+
+@async
+def showExitFromShellsDialog(price, shells, startState=None, parent=None):
+    from gui.impl.dialogs import dialogs
+    result = yield await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.tanksetup.dialogs.RefillShells(), wrappedViewClass=ExitFromShellsConfirm, price=price, shells=shells, startState=startState, parent=parent))
+    raise AsyncReturn(result)
+
+
+@async
+def showBattleAbilitiesConfirmDialog(items, withInstall=None, parent=None):
+    from gui.impl.dialogs import dialogs
+    result = yield await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.tanksetup.dialogs.Confirm(), wrappedViewClass=BattleAbilitiesSetupConfirm, items=items, withInstall=withInstall, parent=parent))
+    raise AsyncReturn(result)
+
+
+@async
+def showDemountIncompatibleOpDevDialog(deviceDescr, callback, forFitting=False):
+    from gui.impl.dialogs import dialogs
+    result = yield await(dialogs.showSingleDialogWithResultData(compDescr=deviceDescr, forFitting=forFitting, layoutID=R.views.lobby.demountkit.CommonWindow(), wrappedViewClass=DemountIncompatibleOpDevDialog))
+    if result.busy:
+        callback((False, {}))
+    else:
+        isOK, _ = result.result
+        callback((isOK, {}))

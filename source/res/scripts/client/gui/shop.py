@@ -61,6 +61,11 @@ class Source(object):
 
 class Origin(object):
     STORAGE = 'storage'
+    HERO_TANK = 'hero_tank'
+    ADVENT_CALENDAR = 'advent_calendar'
+    BATTLE_BOOSTERS = 'battle_boosters'
+    CONSUMABLES = 'consumables'
+    WITHOUT_NAME = 'without_name'
 
 
 def _getParams(reason, price, itemId=None):
@@ -103,24 +108,30 @@ def canBuyGoldForVehicleThroughWeb(vehicle, itemsCache=None, tradeIn=None):
     return False
 
 
-def showBuyPersonalReservesOverlay(itemId, source=None, origin=None):
-    _showBuyItemWebOverlay(helpers.getBuyPersonalReservesUrl(), itemId, source, origin)
+def showBuyCreditsBattleBoosterOverlay(itemId, source=None, origin=None, alias=VIEW_ALIAS.OVERLAY_WEB_STORE):
+    showBuyItemWebView(helpers.getBuyCreditsBattleBoostersUrl(), itemId, source, origin, alias)
 
 
-def showBuyCreditsBattleBoosterOverlay(itemId, source=None, origin=None):
-    _showBuyItemWebOverlay(helpers.getBuyCreditsBattleBoostersUrl(), itemId, source, origin)
+def showBuyBonBattleBoosterOverlay(itemId, source=None, origin=None, alias=VIEW_ALIAS.OVERLAY_WEB_STORE):
+    showBuyItemWebView(helpers.getBuyBonBattleBoostersUrl(), itemId, source, origin, alias)
 
 
-def showBuyBonBattleBoosterOverlay(itemId, source=None, origin=None):
-    _showBuyItemWebOverlay(helpers.getBuyBonBattleBoostersUrl(), itemId, source, origin)
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def showBattleBoosterOverlay(itemId, source=None, origin=None, alias=VIEW_ALIAS.OVERLAY_WEB_STORE, itemsCache=None):
+    item = itemsCache.items.getItemByCD(itemId)
+    if item.getBuyPrice().price.isCurrencyDefined(Currency.CRYSTAL):
+        showBuyMethod = showBuyCreditsBattleBoosterOverlay
+    else:
+        showBuyMethod = showBuyBonBattleBoosterOverlay
+    showBuyMethod(itemId, source, origin, alias)
 
 
-def showBuyEquipmentOverlay(itemId, source=None, origin=None):
-    _showBuyItemWebOverlay(helpers.getBuyEquipmentUrl(), itemId, source, origin)
+def showBuyEquipmentOverlay(itemId, source=None, origin=None, alias=VIEW_ALIAS.OVERLAY_WEB_STORE):
+    showBuyItemWebView(helpers.getBuyEquipmentUrl(), itemId, source, origin, alias)
 
 
-def showBuyOptionalDeviceOverlay(itemId, source=None, origin=None):
-    _showBuyItemWebOverlay(helpers.getBuyOptionalDevicesUrl(), itemId, source, origin)
+def showBuyOptionalDeviceOverlay(itemId, source=None, origin=None, alias=VIEW_ALIAS.OVERLAY_WEB_STORE):
+    showBuyItemWebView(helpers.getBuyOptionalDevicesUrl(), itemId, source, origin, alias)
 
 
 def showTradeOffOverlay(targetLevel):
@@ -181,7 +192,7 @@ def _showBlurredWebOverlay(url, params=None):
 
 
 @process
-def _showBuyItemWebOverlay(url, itemId, source=None, origin=None):
+def showBuyItemWebView(url, itemId, source=None, origin=None, alias=VIEW_ALIAS.OVERLAY_WEB_STORE):
     url = yield URLMacros().parse(url)
     params = {}
     if source:
@@ -189,7 +200,7 @@ def _showBuyItemWebOverlay(url, itemId, source=None, origin=None):
     if origin:
         params['origin'] = origin
     url = yield URLMacros().parse(url=_makeBuyItemUrl(url, itemId), params=params)
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.OVERLAY_WEB_STORE, ctx={'url': url}), EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadViewEvent(alias, ctx={'url': url}), EVENT_BUS_SCOPE.LOBBY)
 
 
 @process

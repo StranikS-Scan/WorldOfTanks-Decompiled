@@ -18,7 +18,7 @@ def isSituationalBonus(bonusName, bonusType=''):
     return bonusName in _SITUATIONAL_BONUSES
 
 
-_SITUATIONAL_BONUSES = ('camouflageNet', 'stereoscope')
+_SITUATIONAL_BONUSES = ('camouflageNet', 'stereoscope', 'removedRpmLimiter', 'gunner_rancorous')
 
 def _removeCamouflageModifier(vehicle, bonusID):
     if bonusID == EXTRAS_CAMOUFLAGE:
@@ -44,24 +44,24 @@ def _removeSkillModifier(vehicle, skillName):
 
 
 def _removeBattleBoosterModifier(vehicle, boosterName):
-    if vehicle.equipment.battleBoosterConsumables[0] is not None:
-        vehicle.equipment.battleBoosterConsumables[0] = None
+    if vehicle.battleBoosters.installed[0] is not None:
+        vehicle.battleBoosters.installed[0] = None
     return vehicle
 
 
 def _removeOptionalDeviceModifier(vehicle, optDevName):
-    for slotIdx, optDev in enumerate(vehicle.optDevices):
+    for slotIdx, optDev in enumerate(vehicle.optDevices.installed):
         if optDev and optDev.name == optDevName:
             vehicle.descriptor.removeOptionalDevice(slotIdx)
-            vehicle.optDevices[slotIdx] = None
+            vehicle.optDevices.installed[slotIdx] = None
 
     return vehicle
 
 
 def _removeEquipmentModifier(vehicle, eqName):
-    for slotIdx, equipment in enumerate(vehicle.equipment.regularConsumables):
+    for slotIdx, equipment in enumerate(vehicle.consumables.installed):
         if equipment and equipment.name == eqName:
-            vehicle.equipment.regularConsumables[slotIdx] = None
+            vehicle.consumables.installed[slotIdx] = None
 
     return vehicle
 
@@ -72,6 +72,8 @@ _VEHICLE_MODIFIERS = {BonusTypes.SKILL: _removeSkillModifier,
  BonusTypes.OPTIONAL_DEVICE: _removeOptionalDeviceModifier,
  BonusTypes.BATTLE_BOOSTER: _removeBattleBoosterModifier,
  BonusTypes.PERK: _removePlatoonPerkModifier}
+_NOT_STACK_BONUSES = {'circularVisionRadius': (('stereoscope_tier1', BonusTypes.OPTIONAL_DEVICE), ('stereoscope_tier2', BonusTypes.OPTIONAL_DEVICE), ('stereoscope_tier3', BonusTypes.OPTIONAL_DEVICE)),
+ 'invisibilityStillFactor': (('camouflageNet_tier2', BonusTypes.OPTIONAL_DEVICE), ('camouflageNet_tier3', BonusTypes.OPTIONAL_DEVICE))}
 
 class _BonusSorter(object):
 
@@ -80,7 +82,7 @@ class _BonusSorter(object):
 
     def sort(self, bonuses):
         sortedBonuses = self.__conditionsSorter(list(bonuses))
-        sortedBonuses = self.__opticsSorter(sortedBonuses)
+        sortedBonuses = self.__notStackSorter(sortedBonuses)
         return sortedBonuses
 
     def __conditionsSorter(self, bonuses):
@@ -91,12 +93,13 @@ class _BonusSorter(object):
                 bonuses.append(condition)
         return bonuses
 
-    def __opticsSorter(self, bonuses):
-        if self.__paramName == 'circularVisionRadius':
-            stereoscope = ('stereoscope', BonusTypes.OPTIONAL_DEVICE)
-            if stereoscope in bonuses:
-                bonuses.remove(stereoscope)
-                bonuses.insert(0, stereoscope)
+    def __notStackSorter(self, bonuses):
+        if self.__paramName in _NOT_STACK_BONUSES:
+            for notStackBonus in _NOT_STACK_BONUSES[self.__paramName]:
+                if notStackBonus in bonuses:
+                    bonuses.remove(notStackBonus)
+                    bonuses.insert(0, notStackBonus)
+
         return bonuses
 
 
@@ -104,7 +107,7 @@ class BonusExtractor(object):
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, vehicle, bonuses, paramName):
-        self.__vehicle = self.itemsCache.items.getVehicleCopy(vehicle)
+        self.__vehicle = self._getCopyVehicle(vehicle)
         self.__paramName = paramName
         self.__bonuses = _BonusSorter(self.__paramName).sort(bonuses)
         self.__removeCamouflage = False
@@ -125,8 +128,17 @@ class BonusExtractor(object):
         self.__updateCurrValue()
         return getParamExtendedData(self.__paramName, oldValue, self.__currValue)
 
+    def _getCopyVehicle(self, vehicle):
+        return self.itemsCache.items.getVehicleCopy(vehicle)
+
     def __updateCurrValue(self):
         self.__currValue = getattr(_CustomizedVehicleParams(self.__vehicle, self.__removeCamouflage), self.__paramName)
+
+
+class TankSetupBonusExtractor(BonusExtractor):
+
+    def _getCopyVehicle(self, vehicle):
+        return self.itemsCache.items.getLayoutsVehicleCopy(vehicle)
 
 
 class _CustomizedVehicleParams(VehicleParams):

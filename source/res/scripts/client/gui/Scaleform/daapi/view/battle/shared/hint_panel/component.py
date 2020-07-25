@@ -5,7 +5,7 @@ import SoundGroups
 from gui.Scaleform.daapi.view.battle.shared.hint_panel import plugins
 from gui.Scaleform.daapi.view.meta.BattleHintPanelMeta import BattleHintPanelMeta
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
-from gui.shared import EVENT_BUS_SCOPE
+from gui.shared import EVENT_BUS_SCOPE, events
 from gui.shared.events import GameEvent
 from gui.shared.utils.plugins import PluginsCollection
 from shared_utils import first
@@ -16,6 +16,8 @@ class BattleHintPanel(BattleHintPanelMeta, IAbstractPeriodView):
         super(BattleHintPanel, self).__init__()
         self.__hints = {}
         self.__plugins = None
+        self.__isBattleLoaded = False
+        self.__isHintActive = False
         return
 
     def setBtnHint(self, btnID, hintData):
@@ -42,20 +44,25 @@ class BattleHintPanel(BattleHintPanelMeta, IAbstractPeriodView):
     def onPlaySound(self, soundType):
         SoundGroups.g_instance.playSound2D(soundType)
 
+    def onHideComplete(self):
+        self.fireEvent(GameEvent(GameEvent.HIDE_BTN_HINT), scope=EVENT_BUS_SCOPE.GLOBAL)
+
     def _populate(self):
         super(BattleHintPanel, self)._populate()
+        self.addListener(events.GameEvent.BATTLE_LOADING, self.__handleBattleLoading, EVENT_BUS_SCOPE.BATTLE)
         self.__plugins = HintPluginsCollection(self)
         self.__plugins.addPlugins(plugins.createPlugins())
         self.__plugins.init()
         self.__plugins.start()
 
     def _dispose(self):
-        super(BattleHintPanel, self)._dispose()
         if self.__plugins is not None:
             self.__plugins.stop()
             self.__plugins.fini()
             self.__plugins = None
         self.__hints = None
+        self.removeListener(events.GameEvent.BATTLE_LOADING, self.__handleBattleLoading, scope=EVENT_BUS_SCOPE.BATTLE)
+        super(BattleHintPanel, self)._dispose()
         return
 
     def __getActiveHintData(self):
@@ -67,8 +74,14 @@ class BattleHintPanel(BattleHintPanelMeta, IAbstractPeriodView):
             btnID, hint = hintData
             self.as_setDataS(hint.key, hint.messageLeft, hint.messageRight, hint.offsetX, hint.offsetY)
             self.fireEvent(GameEvent(GameEvent.SHOW_BTN_HINT, ctx={'btnID': btnID}), scope=EVENT_BUS_SCOPE.GLOBAL)
-        else:
-            self.fireEvent(GameEvent(GameEvent.HIDE_BTN_HINT), scope=EVENT_BUS_SCOPE.GLOBAL)
+        self.__isHintActive = bool(hintData)
+        if self.__isBattleLoaded:
+            self.as_toggleS(self.__isHintActive)
+
+    def __handleBattleLoading(self, event):
+        self.__isBattleLoaded = not event.ctx['isShown']
+        if self.__isBattleLoaded and self.__isHintActive:
+            self.as_toggleS(True)
 
 
 class HintPluginsCollection(PluginsCollection):

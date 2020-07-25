@@ -9,6 +9,7 @@ from items import tankmen, vehicles
 from items.components.component_constants import EMPTY_STRING
 from items.components import skills_constants
 from helpers import dependency
+from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.login_manager import ILoginManager
 from gui.shared.gui_items import Tankman
@@ -147,7 +148,7 @@ class _BaseRecruitInfo(object):
         return '{} {}'.format(self.getFirstName(), self.getLastName())
 
     def getRankID(self):
-        return Tankman.calculateRankID(tankmen.MAX_SKILL_LEVEL, self._freeXP)
+        return Tankman.calculateRankID(tankmen.MAX_SKILL_LEVEL, self._freeXP, skills=self._getSkillsForDescr(), freeSkills=self._getFreeSkillsForDescr(), lastSkillLevel=self._lastSkillLevel)
 
     def getSourceID(self):
         return self._sourceID
@@ -384,6 +385,7 @@ def setNewRecruitsVisited():
 
 class NonRecruitNotifierSingleton(object):
     __loginManager = dependency.descriptor(ILoginManager)
+    __bootCampController = dependency.descriptor(IBootcampController)
     _instance = None
 
     @staticmethod
@@ -404,6 +406,8 @@ class NonRecruitNotifierSingleton(object):
         self._cachedRecruitCount = -1
 
     def notifyNonRecruitCount(self):
+        if self.__bootCampController.isInBootcamp():
+            return
         recruits = getAllRecruitsInfo(sortByExpireTime=True)
         recruitsCount = len(recruits)
         if recruitsCount == self._cachedRecruitCount:

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/battle_royale/timers_panel.py
+import logging
 import weakref
 import BigWorld
 from constants import LootAction, LOOT_TYPE, VEHICLE_MISC_STATUS
@@ -15,6 +16,7 @@ from gui.impl.gen import R
 _WARNING_TEXT_TIMER = 3
 _LEAVE_ZONE_DEFENDER_DELAY = 10
 _MAX_DISPLAYED_SECONDARY_STATUS_TIMERS = 4
+_logger = logging.getLogger(__name__)
 
 class _BattleRoyaleStackTimersCollection(_RegularStackTimersCollection):
 
@@ -50,6 +52,7 @@ class BattleRoyaleTimersPanel(TimersPanel):
         return data
 
     def _onVehicleStateUpdated(self, state, value):
+        _logger.info('Vehicle state updated state=%r, value %r', state, value)
         super(BattleRoyaleTimersPanel, self)._onVehicleStateUpdated(state, value)
         if state == VEHICLE_VIEW_STATE.LOOT:
             lootID, _, action, serverTime = value
@@ -102,6 +105,7 @@ class BattleRoyaleTimersPanel(TimersPanel):
 
     def __showLootTimer(self, lootID, pickupTime):
         loot = BigWorld.entity(lootID)
+        _logger.info('Show loot timer. lootID=%r, loot=%r, __loots=%r', lootID, loot, self.__loots)
         if loot is not None:
             if not self.__loots:
                 time = BigWorld.serverTime()
@@ -111,6 +115,7 @@ class BattleRoyaleTimersPanel(TimersPanel):
         return
 
     def __hideLootTimer(self, lootID):
+        _logger.info('Show loot timer. lootID=%r, __loots=%r', lootID, self.__loots)
         if lootID in self.__loots:
             del self.__loots[lootID]
         if not self.__loots:

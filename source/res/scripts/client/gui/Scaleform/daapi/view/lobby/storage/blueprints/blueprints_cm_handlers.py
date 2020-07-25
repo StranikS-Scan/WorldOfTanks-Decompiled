@@ -3,7 +3,7 @@
 from async import await, async
 from gui.impl.dialogs import dialogs
 from gui.Scaleform.daapi.view.lobby.storage.blueprints import blueprintExitEvent
-from gui.Scaleform.daapi.view.lobby.storage.cm_handlers import ContextMenu, option, CMLabel
+from gui.Scaleform.daapi.view.lobby.shared.cm_handlers import ContextMenu, option, CMLabel
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items.items_actions import factory
 from helpers import dependency

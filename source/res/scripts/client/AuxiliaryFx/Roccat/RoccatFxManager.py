@@ -122,7 +122,7 @@ class RoccatVehicleFx(IAuxiliaryVehicleFx):
     def __init__(self, vehicle, fxManager):
         IAuxiliaryVehicleFx.__init__(self, vehicle, fxManager)
         self.__prevHealth = vehicle.health
-        effect = self.__getHealthEffect(vehicle.health, vehicle.typeDescriptor.maxHealth)
+        effect = self.__getHealthEffect(vehicle.health, vehicle.maxHealth)
         self._fxManager.setMainColors(*effect)
 
     def destroy(self):
@@ -141,7 +141,7 @@ class RoccatVehicleFx(IAuxiliaryVehicleFx):
     def update(self, vehicle):
         health = vehicle.health
         if health != self.__prevHealth:
-            effect = self.__getHealthEffect(health, vehicle.typeDescriptor.maxHealth)
+            effect = self.__getHealthEffect(health, vehicle.maxHealth)
             self._fxManager.setMainColors(*effect)
         if health <= 0:
             self._fxManager.launchTempColors(*RoccatVehicleFx.DEATH_EFFECT)

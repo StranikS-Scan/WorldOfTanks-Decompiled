@@ -20,6 +20,7 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control.links import URLMacros
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
+from gui.impl.gen.view_models.constants.tutorial_hint_consts import TutorialHintConsts
 from gui.impl.auxiliary.crew_books_helper import crewBooksViewedCache
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.listener import IGlobalListener
@@ -27,10 +28,11 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.promo.hangar_teaser_widget import TeaserViewer
 from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import PrimeTimeStatus
-from gui.shared import event_dispatcher as shared_events
+from gui.shared import event_dispatcher as shared_events, g_eventBus
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showRankedPrimeTimeWindow, showTenYearsCountdownOnBoarding
-from gui.shared.events import LobbySimpleEvent
+from gui.shared.event_dispatcher import showAmmunitionSetupView
+from gui.shared.events import LobbySimpleEvent, AmmunitionSetupViewEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
@@ -58,12 +60,17 @@ from gui.impl import backport
 from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsBoxesCount
 
 def predicateNotEmptyWindow(window):
-    return window.content is not None and window.windowFlags != WindowFlags.TOOLTIP and window.content.viewFlags != ViewFlags.COMPONENT
+    return window.content is not None and window.windowFlags != WindowFlags.TOOLTIP and window.windowFlags != WindowFlags.CONTEXT_MENU and window.content.viewFlags != ViewFlags.COMPONENT
 
 
 class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     _SOUND_STATE_PLACE = 'STATE_hangar_place'
     _SOUND_STATE_PLACE_GARAGE = 'STATE_hangar_place_garage'
+    _ENABLED_GF_HINTS = frozenset([TutorialHintConsts.AMMUNITION_PANEL_HINT_MC,
+     TutorialHintConsts.BOOTCAMP_PANEL_EQUIPMENT_MC,
+     TutorialHintConsts.BOOTCAMP_PANEL_OPT_DEVICE_MC,
+     TutorialHintConsts.HANGAR_PANEL_OPT_DEVICE_MC,
+     TutorialHintConsts.HANGAR_PANEL_SHELLS_MC])
     __background_alpha__ = 0.0
     __SOUND_SETTINGS = CommonSoundSpaceSettings(name='hangar', entranceStates={_SOUND_STATE_PLACE: _SOUND_STATE_PLACE_GARAGE,
      StatesGroup.HANGAR_FILTERED: States.HANGAR_FILTERED_OFF}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
@@ -114,12 +121,13 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def showHelpLayout(self):
         containerManager = self.app.containerManager
+        topSubViewContainer = containerManager.getContainer(ViewTypes.LOBBY_TOP_SUB)
         dialogsContainer = containerManager.getContainer(ViewTypes.TOP_WINDOW)
         windowsContainer = containerManager.getContainer(ViewTypes.WINDOW)
         browserWindowContainer = containerManager.getContainer(ViewTypes.BROWSER)
         overlayContainer = containerManager.getContainer(ViewTypes.OVERLAY)
         unboundWindows = self.gui.windowsManager.findWindows(predicateNotEmptyWindow)
-        if not dialogsContainer.getViewCount() and not windowsContainer.getViewCount() and not browserWindowContainer.getViewCount() and not overlayContainer.getViewCount() and not unboundWindows:
+        if not dialogsContainer.getViewCount() and not windowsContainer.getViewCount() and not browserWindowContainer.getViewCount() and not overlayContainer.getViewCount() and not unboundWindows and not topSubViewContainer.getViewCount():
             containerManager.onViewAddedToContainer += self.__onViewAddedToContainer
             self.fireEvent(LobbySimpleEvent(LobbySimpleEvent.SHOW_HELPLAYOUT), scope=EVENT_BUS_SCOPE.LOBBY)
             self.as_showHelpLayoutS()
@@ -158,6 +166,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self._countdownController.onBlocksDataValidityChanged += self.__updateTenYearsCountdownEntryPointVisibility
         self._hangarLoadingController.onHangarLoadedAfterLogin += self.__onHangarLoadedAfterLogin
         self.startGlobalListening()
+        g_eventBus.addListener(AmmunitionSetupViewEvent.HINT_ZONE_ADD, self.__onHintZoneAdded, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(AmmunitionSetupViewEvent.HINT_ZONE_HIDE, self.__onHintZoneHide, EVENT_BUS_SCOPE.LOBBY)
         self.__updateAll()
         self.addListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -203,6 +213,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self._hangarLoadingController.onHangarLoadedAfterLogin -= self.__onHangarLoadedAfterLogin
         self.closeHelpLayout()
         self.stopGlobalListening()
+        g_eventBus.removeListener(AmmunitionSetupViewEvent.HINT_ZONE_ADD, self.__onHintZoneAdded, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(AmmunitionSetupViewEvent.HINT_ZONE_HIDE, self.__onHintZoneHide, EVENT_BUS_SCOPE.LOBBY)
         self._offersBannerController.hideBanners()
         LobbySelectableView._dispose(self)
         return
@@ -345,6 +357,18 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def _fade3DEntityAndHideTT(self, entity):
         self.as_hide3DSceneTooltipS()
+
+    def _onRegisterFlashComponent(self, viewPy, alias):
+        super(Hangar, self)._onRegisterFlashComponent(viewPy, alias)
+        if alias == HANGAR_ALIASES.AMMUNITION_PANEL_INJECT:
+            event = viewPy.getOnPanelSectionSelected()
+            event += self.__onOptDeviceClick
+
+    def _onUnregisterFlashComponent(self, viewPy, alias):
+        super(Hangar, self)._onUnregisterFlashComponent(viewPy, alias)
+        if alias == HANGAR_ALIASES.AMMUNITION_PANEL_INJECT and viewPy.getInjectView():
+            event = viewPy.getOnPanelSectionSelected()
+            event -= self.__onOptDeviceClick
 
     @property
     def ammoPanel(self):
@@ -583,3 +607,17 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         if isEnabled and isBlocksDataValid and not isOnBoardingCurrentBlockVisited(currentBlockNumber):
             setOnBoardingLastVisitedBlock(currentBlockNumber)
             showTenYearsCountdownOnBoarding(currentBlockNumber, self._countdownController.isCurrentBlockActive(), self._countdownController.getMonths(), self._countdownController.getBlocksCount())
+
+    def __onOptDeviceClick(self, **kwargs):
+        self.as_showSwitchToAmmunitionS()
+        showAmmunitionSetupView(**kwargs)
+
+    def __onHintZoneAdded(self, event):
+        ctx = event.ctx
+        if ctx.get('hintName') in self._ENABLED_GF_HINTS:
+            self.as_createHintAreaInComponentS(TutorialHintConsts.HANGAR_AMMUNITION_PANEL_COMPONENT, ctx.get('hintName'), ctx.get('posX'), ctx.get('posY'), ctx.get('width'), ctx.get('height'))
+
+    def __onHintZoneHide(self, event):
+        ctx = event.ctx
+        if ctx.get('hintName') in self._ENABLED_GF_HINTS:
+            self.as_removeHintAreaS(ctx.get('hintName'))

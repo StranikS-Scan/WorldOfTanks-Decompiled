@@ -6,7 +6,11 @@ __all__ = ('SoundPair', 'StatedSounds', 'HullAimingSound', 'SoundSiegeModeStateC
 SoundPair = namedtuple('SoundPair', ('PC', 'NPC'))
 StatedSounds = namedtuple('StatedSound', ('state', 'underLimitSounds', 'overLimitSounds'))
 HullAimingSound = namedtuple('HullAimingSound', ('lodDist', 'angleLimitValue', 'sounds'))
-SoundSiegeModeStateChange = namedtuple('SoundSiegeModeStateChange', ['on', 'off'])
+SoundSiegeModeStateChange = namedtuple('SoundSiegeModeStateChange', ['on',
+ 'off',
+ 'npcOn',
+ 'npcOff',
+ 'isEngine'])
 
 class WWTripleSoundConfig(object):
     __slots__ = ('__eventNames',)

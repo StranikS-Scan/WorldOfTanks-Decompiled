@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/game_control/battle_royale_controller.py
 import logging
 import typing
+import json
 import BigWorld
 import Event
 from shared_utils import nextTick
@@ -122,10 +123,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.__onEventNotification(self.__notificationsCtrl.getEventsNotifications())
         self.__updateMode()
         self.__wasInLobby = True
-        eventProgression = self.getModeSettings().eventProgression
-        if eventProgression:
-            self.__levelProgress = eventProgression['brPointsByTitle'] + (0,)
-            self.__playerMaxLevel = len(self.__levelProgress) - 1
+        self.__updateMaxLevelAndProgress()
         if not self.__hangarsSpace.spaceInited or self.__hangarsSpace.spaceLoading():
             self.__hangarsSpace.onSpaceCreate += self.__onSpaceCreate
         else:
@@ -140,7 +138,13 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
 
         for evNotification in added:
             if evNotification.eventType in (SERVER_CMD_CHANGE_HANGAR, SERVER_CMD_CHANGE_HANGAR_PREM):
-                self.__defaultHangars[evNotification.eventType == SERVER_CMD_CHANGE_HANGAR_PREM] = evNotification.data
+                try:
+                    data = json.loads(evNotification.data)
+                    path = data['hangar']
+                except Exception:
+                    path = evNotification.data
+
+                self.__defaultHangars[evNotification.eventType == SERVER_CMD_CHANGE_HANGAR_PREM] = path
 
         return
 
@@ -269,6 +273,8 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         return self.__playerMaxLevel
 
     def getPointsProgressForLevel(self, level):
+        if self.__playerMaxLevel == 0:
+            self.__updateMaxLevelAndProgress()
         return self.__levelProgress[level]
 
     def getStats(self):
@@ -277,15 +283,25 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
     def _createSeason(self, cycleInfo, seasonData):
         return BattleRoyaleSeason(cycleInfo, seasonData)
 
+    def __updateMaxLevelAndProgress(self):
+        eventProgression = self.getModeSettings().eventProgression
+        if eventProgression:
+            self.__levelProgress = eventProgression['brPointsByTitle'] + (0,)
+            self.__playerMaxLevel = len(self.__levelProgress) - 1
+
     def __onSpaceChanged(self):
         switchItems = self.__hangarSpacesSwitcher.itemsToSwitch
         if self.isBattleRoyaleMode() and self.__hangarSpacesSwitcher.currentItem != switchItems.BATTLE_ROYALE:
             self.selectRandomBattle()
 
     def __eventAvailabilityUpdate(self, *_):
-        battleRoyaleEnabled = self.__eventProgression.isSteelHunter and self.__eventProgression.isActive()
+        season = self.__eventProgression.getCurrentSeason()
+        isEnabled = self.__eventProgression.isSteelHunter and self.__eventProgression.modeIsEnabled()
+        isEnabledSeason = season is not None
+        battleRoyaleEnabled = isEnabled and isEnabledSeason
         if not battleRoyaleEnabled and self.isBattleRoyaleMode():
             self.selectRandomBattle()
+        return
 
     def __onSpaceCreate(self):
         nextTick(self.__updateSpace)()

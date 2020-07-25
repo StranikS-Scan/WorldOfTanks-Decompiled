@@ -7,11 +7,14 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.formatters import text_styles
+from gui.shared.gui_items import KPI, kpiFormatValue
 from gui.shared.items_parameters import RELATIVE_PARAMS
 from gui.shared.items_parameters.comparator import PARAM_STATE
 from gui.shared.items_parameters.params_helper import hasGroupPenalties, getCommonParam, PARAMS_GROUPS
-from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME
+from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_SWITCH_TIME
+from helpers.i18n import makeString
 from items import vehicles, artefacts, getTypeOfCompactDescr, ITEM_TYPES
 from web_stubs import i18n
 MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
@@ -33,6 +36,7 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'maxHealth': MENU.TANK_PARAMS_VAL,
  'flyDelayRange': MENU.TANK_PARAMS_S,
  'enginePower': MENU.TANK_PARAMS_P,
+ TURBOSHAFT_ENGINE_POWER: MENU.TANK_PARAMS_P,
  'enginePowerPerTon': MENU.TANK_PARAMS_PT,
  'explosionRadius': MENU.TANK_PARAMS_M,
  'gunYawLimits': MENU.TANK_PARAMS_GRADS,
@@ -61,17 +65,22 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'vehicleWeight': MENU.TANK_PARAMS_T,
  'weight': MENU.TANK_PARAMS_KG,
  'hullWeight': MENU.TANK_PARAMS_KG,
+ 'hullAndChassisWeight': MENU.TANK_PARAMS_KG,
  'caliber': MENU.TANK_PARAMS_MM,
  'damage': MENU.TANK_PARAMS_VAL,
  'turretRotationSpeed': MENU.TANK_PARAMS_GPS,
  'invisibilityStillFactor': MENU.TANK_PARAMS_PERCENT,
  'invisibilityMovingFactor': MENU.TANK_PARAMS_PERCENT,
+ TURBOSHAFT_INVISIBILITY_STILL_FACTOR: MENU.TANK_PARAMS_PERCENT,
+ TURBOSHAFT_INVISIBILITY_MOVING_FACTOR: MENU.TANK_PARAMS_PERCENT,
  'maxShotDistance': MENU.TANK_PARAMS_M,
  'switchOnTime': MENU.TANK_PARAMS_S,
  'switchOffTime': MENU.TANK_PARAMS_S,
  'switchTime': MENU.TANK_PARAMS_S,
+ TURBOSHAFT_SWITCH_TIME: MENU.TANK_PARAMS_S,
  'stunMaxDuration': MENU.TANK_PARAMS_S,
  'stunMinDuration': MENU.TANK_PARAMS_S,
+ 'stunDurationList': MENU.TANK_PARAMS_S,
  'stunMaxDurationList': MENU.TANK_PARAMS_S,
  'stunMinDurationList': MENU.TANK_PARAMS_S,
  'cooldownSeconds': MENU.TANK_PARAMS_S,
@@ -81,8 +90,13 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  WHEELED_SWITCH_OFF_TIME: MENU.TANK_PARAMS_S,
  WHEELED_SWITCH_TIME: MENU.TANK_PARAMS_S,
  WHEELED_SPEED_MODE_SPEED: MENU.TANK_PARAMS_MPH,
+ TURBOSHAFT_SPEED_MODE_SPEED: MENU.TANK_PARAMS_MPH,
  DUAL_GUN_CHARGE_TIME: MENU.TANK_PARAMS_S,
- DUAL_GUN_RATE_TIME: MENU.TANK_PARAMS_S}
+ DUAL_GUN_RATE_TIME: MENU.TANK_PARAMS_S,
+ 'shotSpeed': MENU.TANK_PARAMS_MPS}
+MEASURE_UNITS_NO_BRACKETS = {'weight': MENU.TANK_PARAMS_NO_BRACKETS_KG,
+ 'cooldownSeconds': MENU.TANK_PARAMS_NO_BRACKETS_S,
+ 'caliber': MENU.TANK_PARAMS_NO_BRACKETS_MM}
 COLORLESS_SCHEME = (text_styles.stats, text_styles.stats, text_styles.stats)
 NO_BONUS_SIMPLIFIED_SCHEME = (text_styles.warning, text_styles.warning, text_styles.warning)
 NO_BONUS_BASE_SCHEME = (text_styles.error, text_styles.stats, text_styles.stats)
@@ -96,12 +110,15 @@ ITEMS_PARAMS_LIST = {ITEM_TYPES.vehicleRadio: ('radioDistance', 'weight'),
                              'rotationSpeed',
                              'weight',
                              MAX_STEERING_LOCK_ANGLE),
- ITEM_TYPES.vehicleEngine: ('enginePower', 'fireStartingChance', 'weight'),
+ ITEM_TYPES.vehicleEngine: ('enginePower',
+                            TURBOSHAFT_ENGINE_POWER,
+                            'fireStartingChance',
+                            'weight'),
  ITEM_TYPES.vehicleTurret: ('armor', 'rotationSpeed', 'circularVisionRadius', 'weight'),
  ITEM_TYPES.vehicle: VEHICLE_PARAMS,
  ITEM_TYPES.equipment: {artefacts.RageArtillery: ('damage', 'piercingPower', 'caliber', 'shotsNumberRange', 'areaRadius', 'artDelayRange'),
                         artefacts.RageBomber: ('bombDamage', 'piercingPower', 'bombsNumberRange', 'areaSquare', 'flyDelayRange')},
- ITEM_TYPES.shell: ('caliber', 'avgPiercingPower', 'damage', 'stunMinDuration', 'stunMaxDuration', 'explosionRadius'),
+ ITEM_TYPES.shell: ('caliber', 'damage', 'avgPiercingPower', 'shotSpeed', 'explosionRadius', 'stunDurationList'),
  ITEM_TYPES.optionalDevice: ('weight',),
  ITEM_TYPES.vehicleGun: ('caliber',
                          'shellsCount',
@@ -120,6 +137,7 @@ ITEMS_PARAMS_LIST = {ITEM_TYPES.vehicleRadio: ('radioDistance', 'weight'),
                          'aimingTime',
                          'maxShotDistance',
                          'weight')}
+FORMAT_NAME_C_S_VALUE_S_UNITS = '{paramName} {paramValue} {paramUnits}'
 _COUNT_OF_AUTO_RELOAD_SLOTS_TIMES_TO_SHOW_IN_INFO = 5
 
 def measureUnitsForParameter(paramName):
@@ -147,9 +165,24 @@ def getParameterBigIconPath(parameter):
 
 
 def formatModuleParamName(paramName):
-    builder = text_styles.builder()
+    builder = text_styles.builder(delimiter=_NBSP)
     builder.addStyledText(text_styles.main, MENU.moduleinfo_params(paramName))
     builder.addStyledText(text_styles.standard, MEASURE_UNITS.get(paramName, ''))
+    return builder.render()
+
+
+def formatNameColonValue(nameStr, valueStr):
+    builder = text_styles.builder(delimiter=_NBSP)
+    builder.addStyledText(text_styles.main, '{}{}'.format(makeString(nameStr), _COLON))
+    builder.addStyledText(text_styles.expText, makeString(valueStr))
+    return builder.render()
+
+
+def formatParamNameColonValueUnits(paramName, paramValue):
+    builder = text_styles.builder(delimiter=_NBSP)
+    builder.addStyledText(text_styles.main, '{}{}'.format(makeString(MENU.moduleinfo_params(paramName)), _COLON))
+    builder.addStyledText(text_styles.expText, paramValue)
+    builder.addStyledText(text_styles.standard, MEASURE_UNITS_NO_BRACKETS.get(paramName, ''))
     return builder.render()
 
 
@@ -157,7 +190,7 @@ def formatVehicleParamName(paramName, showMeasureUnit=True):
     if isRelativeParameter(paramName):
         return text_styles.middleTitle(MENU.tank_params(paramName))
     else:
-        builder = text_styles.builder(delimiter='&nbsp;')
+        builder = text_styles.builder(delimiter=_NBSP)
         builder.addStyledText(text_styles.main, MENU.tank_params(paramName))
         if showMeasureUnit:
             builder.addStyledText(text_styles.standard, MEASURE_UNITS.get(paramName, ''))
@@ -169,13 +202,17 @@ def getRelativeDiffParams(comparator):
     return sorted(relativeParams, cmp=lambda a, b: cmp(RELATIVE_PARAMS.index(a.name), RELATIVE_PARAMS.index(b.name)))
 
 
+_NBSP = backport.text(R.strings.common.common.nbsp())
+_DASH = '-'
+_SLASH = '/'
+_COLON = ':'
 _niceFormat = {'rounder': backport.getNiceNumberFormat}
 _niceRangeFormat = {'rounder': backport.getNiceNumberFormat,
- 'separator': '-'}
+ 'separator': _DASH}
 _listFormat = {'rounder': lambda v: backport.getIntegralFormat(int(v)),
- 'separator': '/'}
+ 'separator': _SLASH}
 _niceListFormat = {'rounder': backport.getNiceNumberFormat,
- 'separator': '/'}
+ 'separator': _SLASH}
 _integralFormat = {'rounder': backport.getIntegralFormat}
 _percentFormat = {'rounder': lambda v: '%d%%' % v}
 
@@ -208,10 +245,10 @@ def _autoReloadPreprocessor(reloadTimes, rowStates):
                 if time == maxTime:
                     maxState = states[idx]
 
-            return ((min(times), max(times)), '-', (minState, maxState))
-        return ((min(times), max(times)), '-', None)
+            return ((min(times), max(times)), _DASH, (minState, maxState))
+        return ((min(times), max(times)), _DASH, None)
     else:
-        return (times, '/', states if states else None)
+        return (times, _SLASH, states if states else None)
 
 
 def _getRoundReload(value):
@@ -228,7 +265,7 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'gunYawLimits': _niceListFormat,
  'pitchLimits': _niceListFormat,
  'clipFireRate': _niceListFormat,
- 'aimingTime': _niceRangeFormat,
+ 'aimingTime': _niceListFormat,
  'shotDispersionAngle': _niceFormat,
  'avgDamagePerMinute': _niceFormat,
  'relativeArmor': _integralFormat,
@@ -240,7 +277,8 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'vehicleWeight': _niceListFormat,
  'weight': _niceRangeFormat,
  'enginePower': _integralFormat,
- 'enginePowerPerTon': _niceFormat,
+ TURBOSHAFT_ENGINE_POWER: _integralFormat,
+ 'enginePowerPerTon': _niceListFormat,
  'speedLimits': _niceListFormat,
  'chassisRotationSpeed': _niceFormat,
  'relativeVisibility': _integralFormat,
@@ -268,13 +306,17 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'dispertionRadius': _niceRangeFormat,
  'invisibilityStillFactor': _niceListFormat,
  'invisibilityMovingFactor': _niceListFormat,
+ TURBOSHAFT_INVISIBILITY_STILL_FACTOR: _niceListFormat,
+ TURBOSHAFT_INVISIBILITY_MOVING_FACTOR: _niceListFormat,
  'switchOnTime': _niceFormat,
  'switchOffTime': _niceFormat,
  'switchTime': _niceListFormat,
+ TURBOSHAFT_SWITCH_TIME: _niceFormat,
  'stunMaxDuration': _niceFormat,
  'stunMinDuration': _niceFormat,
  'stunMaxDurationList': _niceListFormat,
  'stunMinDurationList': _niceListFormat,
+ 'stunDurationList': _niceRangeFormat,
  'cooldownSeconds': _niceFormat,
  AUTO_RELOAD_PROP_NAME: {'preprocessor': _autoReloadPreprocessor,
                          'rounder': _getRoundReload},
@@ -284,7 +326,10 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  WHEELED_SWITCH_TIME: _niceListFormat,
  WHEELED_SPEED_MODE_SPEED: _niceListFormat,
  DUAL_GUN_CHARGE_TIME: _niceListFormat,
- DUAL_GUN_RATE_TIME: _niceListFormat}
+ DUAL_GUN_RATE_TIME: _niceListFormat,
+ 'shotSpeed': _integralFormat,
+ 'extraRepairSpeed': _percentFormat,
+ TURBOSHAFT_SPEED_MODE_SPEED: _niceListFormat}
 
 def _deltaWrapper(fn):
 
@@ -372,7 +417,9 @@ def formatParameter(parameterName, paramValue, parameterState=None, colorScheme=
     settings = formatSettings.get(parameterName, _listFormat)
     doSmartRound = allowSmartRound and parameterName in _SMART_ROUND_PARAMS
     preprocessor = settings.get('preprocessor')
-    if preprocessor:
+    if KPI.Name.hasValue(parameterName):
+        values, separator = kpiFormatValue(parameterName, paramValue), None
+    elif preprocessor:
         values, separator, parameterState = preprocessor(paramValue, parameterState)
     else:
         values = paramValue
@@ -422,11 +469,9 @@ def getFormattedParamsList(descriptor, parameters, excludeRelative=False):
     return params
 
 
-def getBonusIcon(bonusId, bonusType):
+def getBonusIcon(bonusId):
     if bonusId.find('Rammer') >= 0 and bonusId != 'deluxRammer' and bonusId.find('trophy') == -1:
         iconName = 'rammer'
-    elif bonusId.find('enhanced') >= 0 and bonusId not in ('enhancedAimDrives', 'enhancedAimDrivesBattleBooster'):
-        iconName = 'enhancedSuspension'
     else:
         iconName = bonusId.split('_class')[0]
     return RES_ICONS.getParamsTooltipIcon('bonuses', iconName)

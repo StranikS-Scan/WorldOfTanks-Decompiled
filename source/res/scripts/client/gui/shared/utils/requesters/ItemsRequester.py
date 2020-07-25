@@ -326,9 +326,10 @@ class REQ_CRITERIA(object):
         DESCRIPTOR_NAME = staticmethod(lambda descriptorName: RequestCriteria(PredicateCondition(lambda item: item.name == descriptorName)))
 
     class OPTIONAL_DEVICE(object):
-        SIMPLE = RequestCriteria(PredicateCondition(lambda item: not item.isDeluxe))
+        SIMPLE = RequestCriteria(PredicateCondition(lambda item: not item.isDeluxe and not item.isTrophy))
         DELUXE = RequestCriteria(PredicateCondition(lambda item: item.isDeluxe))
         TROPHY = RequestCriteria(PredicateCondition(lambda item: item.isTrophy))
+        HAS_ANY_FROM_CATEGORIES = staticmethod(lambda *categories: RequestCriteria(PredicateCondition(lambda item: not item.descriptor.categories.isdisjoint(categories))))
 
     class BADGE(object):
         SELECTED = RequestCriteria(PredicateCondition(lambda item: item.isSelected))
@@ -709,6 +710,9 @@ class ItemsRequester(IItemsRequester):
                     vehicleDiscount = vehicleDiscounts[goodieID]
                     invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleDiscount.target.targetValue)
 
+        vehicleSelectedAbilities = diff.get('epicMetaGame', {}).get('selectedAbilities', {}).keys()
+        if vehicleSelectedAbilities:
+            invalidate[GUI_ITEM_TYPE.VEHICLE].update(vehicleSelectedAbilities)
         for itemTypeID, uniqueIDs in invalidate.iteritems():
             self._invalidateItems(itemTypeID, uniqueIDs)
 
@@ -727,6 +731,14 @@ class ItemsRequester(IItemsRequester):
 
     def getVehicleCopy(self, vehicle):
         return self.itemsFactory.createVehicle(typeCompDescr=vehicle.intCD, strCompactDescr=vehicle.descriptor.makeCompactDescr(), inventoryID=vehicle.invID, proxy=self)
+
+    def getLayoutsVehicleCopy(self, vehicle):
+        copyVehicle = self.getVehicleCopy(vehicle)
+        copyVehicle.optDevices.setInstalled(*vehicle.optDevices.installed)
+        copyVehicle.shells.setInstalled(*vehicle.shells.installed)
+        copyVehicle.consumables.setInstalled(*vehicle.consumables.installed)
+        copyVehicle.battleBoosters.setInstalled(*vehicle.battleBoosters.installed)
+        return copyVehicle
 
     def getTankman(self, tmanInvID):
         tankman = None

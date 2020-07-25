@@ -19,7 +19,7 @@ from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from messenger.proto.events import g_messengerEvents
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
-from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.account_helpers.settings_core import ISettingsCore, ISettingsCache
 from skeletons.gui.battle_session import IBattleSessionProvider
 _logger = logging.getLogger(__name__)
 _CALLOUT_MESSAGES_BLOCK_DURATION = 15
@@ -34,13 +34,14 @@ _CALLOUT_COMMANDS_TO_REPLY_COMMANDS = {BATTLE_CHAT_COMMAND_NAMES.HELPME: BATTLE_
 class CalloutController(CallbackDelayer, IViewComponentsController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     __settingsCore = dependency.descriptor(ISettingsCore)
+    __settingsCache = dependency.descriptor(ISettingsCache)
     __slots__ = ('__isActive', '__isCalloutEnabled', '__isIBCEnabled', '__commandReceivedData', '__lastPersonalMsgTimestamp', '__lastCalloutTimestamp', '__ui', '__radialKeyDown', '__radialMenuIsOpen', '__previousForcedGuiControlModeFlags')
 
     def __init__(self, setup):
         super(CalloutController, self).__init__()
         self.__isActive = False
         self.__isCalloutEnabled = True
-        self.__isIBCEnabled = True
+        self.__isIBCEnabled = None
         self.__commandReceivedData = None
         self.__lastPersonalMsgTimestamp = -_PERSONAL_MESSAGE_MUTE_DURATION
         self.__lastCalloutTimestamp = -_CALLOUT_MESSAGES_BLOCK_DURATION
@@ -54,23 +55,22 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
         return BATTLE_CTRL_ID.CALLOUT
 
     def startControl(self):
-        self.__isCalloutEnabled = bool(self.__settingsCore.getSetting(BattleCommStorageKeys.SHOW_CALLOUT_MESSAGES))
-        self.__isIBCEnabled = bool(self.__settingsCore.getSetting(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION))
+        self.__settingsCore.onSettingsChanged += self.__onSettingsChanged
+        if self.__settingsCache:
+            if not self.__settingsCache.settings.isSynced():
+                self.__settingsCache.onSyncCompleted += self.__onSettingsReady
+            else:
+                self.__isCalloutEnabled = bool(self.__settingsCore.getSetting(BattleCommStorageKeys.SHOW_CALLOUT_MESSAGES))
+                self.__isIBCEnabled = bool(self.__settingsCore.getSetting(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION))
         if not self.__isIBCEnabled:
             return
-        self.__settingsCore.onSettingsChanged += self.__onSettingsChanged
-        g_messengerEvents.channels.onCommandReceived += self.__onCommandReceived
-        g_eventBus.addListener(GameEvent.RESPOND_TO_CALLOUT, self.__handleCalloutButtonEvent, scope=EVENT_BUS_SCOPE.BATTLE)
-        g_eventBus.addListener(GameEvent.HELP_DETAILED, self.__onToggleHelpDetailed, scope=EVENT_BUS_SCOPE.BATTLE)
-        BattleReplay.g_replayCtrl.onCommandReceived += self.__onCommandReceived
+        self.__activateListeners()
 
     def stopControl(self):
         CallbackDelayer.destroy(self)
-        g_messengerEvents.channels.onCommandReceived -= self.__onCommandReceived
         self.__settingsCore.onSettingsChanged -= self.__onSettingsChanged
-        g_eventBus.removeListener(GameEvent.RESPOND_TO_CALLOUT, self.__handleCalloutButtonEvent, scope=EVENT_BUS_SCOPE.BATTLE)
-        g_eventBus.removeListener(GameEvent.HELP_DETAILED, self.__onToggleHelpDetailed, scope=EVENT_BUS_SCOPE.BATTLE)
-        BattleReplay.g_replayCtrl.onCommandReceived -= self.__onCommandReceived
+        self.__settingsCache.onSyncCompleted -= self.__onSettingsReady
+        self.__deactivateListeners()
         self.__isActive = False
         self.__commandReceivedData = None
         self.__lastPersonalMsgTimestamp = -_PERSONAL_MESSAGE_MUTE_DURATION
@@ -80,8 +80,11 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
 
     def setViewComponents(self, component):
         self.__ui = component
+        self.__ui.onHidingFinished += self.__onCalloutHidingFinished
 
     def clearViewComponents(self):
+        if self.__ui:
+            self.__ui.onHidingFinished -= self.__onCalloutHidingFinished
         self.__ui = None
         return
 
@@ -113,6 +116,18 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
         else:
             return False
 
+    def __activateListeners(self):
+        g_messengerEvents.channels.onCommandReceived += self.__onCommandReceived
+        g_eventBus.addListener(GameEvent.RESPOND_TO_CALLOUT, self.__handleCalloutButtonEvent, scope=EVENT_BUS_SCOPE.BATTLE)
+        g_eventBus.addListener(GameEvent.HELP_DETAILED, self.__onToggleHelpDetailed, scope=EVENT_BUS_SCOPE.BATTLE)
+        BattleReplay.g_replayCtrl.onCommandReceived += self.__onCommandReceived
+
+    def __deactivateListeners(self):
+        g_messengerEvents.channels.onCommandReceived -= self.__onCommandReceived
+        g_eventBus.removeListener(GameEvent.RESPOND_TO_CALLOUT, self.__handleCalloutButtonEvent, scope=EVENT_BUS_SCOPE.BATTLE)
+        g_eventBus.removeListener(GameEvent.HELP_DETAILED, self.__onToggleHelpDetailed, scope=EVENT_BUS_SCOPE.BATTLE)
+        BattleReplay.g_replayCtrl.onCommandReceived -= self.__onCommandReceived
+
     def __resetRadialMenuData(self):
         isPlayerObserver = self.sessionProvider.getCtx().isPlayerObserver()
         if self.__radialKeyDown is not None and avatar_getter.isVehicleAlive() and not isPlayerObserver:
@@ -141,7 +156,7 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
         else:
             vehicleIDToAnswer = self.sessionProvider.getArenaDP().getVehIDBySessionID(cmd.getSenderID())
             commandName = _ACTIONS.battleChatCommandFromActionID(cmd.getID()).name
-            if self.__isActive is True and vehicleIDToAnswer == avatar_getter.getPlayerVehicleID() and self.__commandReceivedData.name is not None and commandName == _CALLOUT_COMMANDS_TO_REPLY_COMMANDS[self.__commandReceivedData.name]:
+            if self.__isActive is True and vehicleIDToAnswer == avatar_getter.getPlayerVehicleID() and self.__commandReceivedData is not None and self.__commandReceivedData.name is not None and commandName == _CALLOUT_COMMANDS_TO_REPLY_COMMANDS[self.__commandReceivedData.name]:
                 self.__executeHide(True, self.__commandReceivedData.name)
             if commandName not in _CALLOUT_COMMANDS_TO_REPLY_COMMANDS.keys():
                 return
@@ -177,7 +192,16 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
 
     def __onSettingsChanged(self, diff):
         self.__isCalloutEnabled = diff.get(BattleCommStorageKeys.SHOW_CALLOUT_MESSAGES, self.__isCalloutEnabled)
-        self.__isIBCEnabled = diff.get(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION, self.__isIBCEnabled)
+        isEnabled = diff.get(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION)
+        if isEnabled is None or self.__isIBCEnabled == isEnabled:
+            return
+        else:
+            if isEnabled:
+                self.__activateListeners()
+            else:
+                self.__deactivateListeners()
+            self.__isIBCEnabled = isEnabled
+            return
 
     def __onToggleHelpDetailed(self, event):
         self.__resetRadialMenuData()
@@ -196,10 +220,23 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
         if avatar_getter.isVehicleAlive() and not self.sessionProvider.getCtx().isPlayerObserver():
             gui_event_dispatcher.setRadialMenuCmd(self.__radialKeyDown, self.__radialMenuIsOpen)
 
+    def __onSettingsReady(self):
+        if self.__isIBCEnabled is None:
+            self.__isCalloutEnabled = bool(self.__settingsCore.getSetting(BattleCommStorageKeys.SHOW_CALLOUT_MESSAGES))
+            self.__isIBCEnabled = bool(self.__settingsCore.getSetting(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION))
+            if self.__isIBCEnabled:
+                self.__activateListeners()
+        self.__settingsCache.onSyncCompleted -= self.__onSettingsReady
+        return
+
     @staticmethod
     def fireCalloutDisplayEvent(isShown):
         g_eventBus.handleEvent(GameEvent(GameEvent.CALLOUT_DISPLAY_EVENT, _makeKeyCtx(key=CommandMapping.CMD_RADIAL_MENU_SHOW, isDown=isShown)), scope=EVENT_BUS_SCOPE.GLOBAL)
 
+    def __onCalloutHidingFinished(self):
+        self.__commandReceivedData = None
+        return
 
-def createCalloutContoller(setup):
+
+def createCalloutController(setup):
     return CalloutController(setup)

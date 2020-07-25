@@ -109,6 +109,9 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
     def as_initOnlineCounterS(self, visible):
         return self.flashObject.as_initOnlineCounter(visible) if self._isDAAPIInited() else None
 
+    def as_setServerNameS(self, value):
+        return self.flashObject.as_setServerName(value) if self._isDAAPIInited() else None
+
     def as_setHangarMenuDataS(self, data):
         return self.flashObject.as_setHangarMenuData(data) if self._isDAAPIInited() else None
 

@@ -122,6 +122,17 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         self.__vehicleTransform = None
         return
 
+    def _addEdgeDetect(self):
+        if self.__isHighlightable():
+            super(ClientSelectableCameraVehicle, self)._addEdgeDetect()
+
+    def _delEdgeDetect(self):
+        if self.__isHighlightable():
+            super(ClientSelectableCameraVehicle, self)._delEdgeDetect()
+
+    def __isHighlightable(self):
+        return self.__vAppearance is not None and not self.__vAppearance.isVehicleDestroyed
+
     def __createFakeShadow(self, model):
         if self.__fakeShadowModel is None:
             self.__fakeShadowModel = model

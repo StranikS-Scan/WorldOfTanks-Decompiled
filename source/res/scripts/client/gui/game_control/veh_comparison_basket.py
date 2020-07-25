@@ -14,7 +14,7 @@ from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from helpers.local_cache import FileLocalCache
-from items import getTypeOfCompactDescr, ITEM_TYPE_NAMES
+from items import getTypeOfCompactDescr, ITEM_TYPE_NAMES, vehicles, EQUIPMENT_TYPES, ITEM_TYPES
 from items.vehicles import VehicleDescr
 from nation_change_helpers.client_nation_change_helper import getValidVehicleCDForNationChange
 from skeletons.gui.game_control import IVehicleComparisonBasket, IBootcampController
@@ -23,7 +23,6 @@ from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 PARAMS_AFFECTED_TANKMEN_SKILLS = ('camouflage', 'brotherhood', 'commander_eagleEye', 'driver_virtuoso', 'driver_badRoadsKing', 'radioman_inventor', 'radioman_finder')
 MAX_VEHICLES_TO_COMPARE_COUNT = 20
-_NO_EQUIPMENT_LAYOUT = [None, None, None]
 _NO_CREW_SKILLS = set()
 _DEF_SHELL_INDEX = 0
 _ChangedData = namedtuple('_ChangedData', ('addedIDXs', 'addedCDs', 'removedIDXs', 'removedCDs', 'isFullChanged'))
@@ -74,7 +73,7 @@ def _removeVehicleCamouflages(vehicle):
 
 
 def _getVehicleEquipment(vehicle):
-    return vehicle.equipment.regularConsumables.getIntCDs(default=None)
+    return vehicle.consumables.installed.getIntCDs(default=None)
 
 
 def _getCrewSkills(vehicle):
@@ -132,7 +131,7 @@ class CONFIGURATION_TYPES(object):
 
 
 class _VehCmpCache(FileLocalCache):
-    VERSION = 2
+    VERSION = 3
 
     def __init__(self, databaseID, dataSetter, dataGetter):
         super(_VehCmpCache, self).__init__('veh_cmp_cache', ('basket_state', databaseID), async=True)
@@ -165,7 +164,6 @@ class _VehCmpCache(FileLocalCache):
 
 
 class _VehCompareData(object):
-    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, vehicleIntCD, vehicleStrCD, vehStockStrCD, isFromCache=False):
         super(_VehCompareData, self).__init__()
@@ -179,9 +177,9 @@ class _VehCompareData(object):
         self.__intCD = vehicleIntCD
         self.__strCD = vehicleStrCD
         self.__stockVehStrCD = vehStockStrCD
-        self.__equipment = _NO_EQUIPMENT_LAYOUT[:]
+        self.__equipment = self.getNoEquipmentLayout()
         self.__battleBooster = None
-        self.__invEquipment = _NO_EQUIPMENT_LAYOUT[:]
+        self.__invEquipment = self.getNoEquipmentLayout()
         self.__selectedShellIndex = _DEF_SHELL_INDEX
         self.__invHasCamouflage = False
         self.__hasCamouflage = False
@@ -258,7 +256,7 @@ class _VehCompareData(object):
         return _NO_CREW_SKILLS.copy()
 
     def getStockEquipment(self):
-        equipmentIDs = _NO_EQUIPMENT_LAYOUT[:]
+        equipmentIDs = self.getNoEquipmentLayout()
         self.__addBuiltInEquipment(equipmentIDs)
         return equipmentIDs
 
@@ -322,12 +320,21 @@ class _VehCompareData(object):
         dataClone.setSelectedShellIndex(self.getSelectedShellIndex())
         return dataClone
 
+    def getNoEquipmentLayout(self):
+        vehicleType = self.__getVehicleType()
+        eqCapacity = vehicleType.supplySlots.getAmountForType(ITEM_TYPES.equipment, EQUIPMENT_TYPES.regular)
+        return [None] * eqCapacity
+
     def __addBuiltInEquipment(self, equipmentIDs):
         if not self.__isInInventory:
-            vehicle = self.itemsCache.items.getItemByCD(self.getVehicleCD())
-            builtInEquipmentIDs = vehicle.getBuiltInEquipmentIDs()
+            vehicleType = self.__getVehicleType()
+            builtInEquipmentIDs = vehicles.getBuiltinEqsForVehicle(vehicleType)
             for slotId, eqID in enumerate(builtInEquipmentIDs):
                 equipmentIDs[slotId] = eqID
+
+    def __getVehicleType(self):
+        _, nationID, vehicleTypeID = vehicles.parseIntCompactDescr(self.__intCD)
+        return vehicles.g_cache.vehicle(nationID, vehicleTypeID)
 
 
 class VehComparisonBasket(IVehicleComparisonBasket):
@@ -402,10 +409,11 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         if vehCompareData.getVehicleStrCD() != newStrCD:
             isChanged = True
             vehCompareData.setVehicleStrCD(newStrCD)
-        newBattleBooster = vehicle.equipment.battleBoosterConsumables[0]
-        if vehCompareData.getBattleBooster() != newBattleBooster:
-            isChanged = True
-            vehCompareData.setBattleBooster(newBattleBooster)
+        if vehicle.battleBoosters.installed.getCapacity() > 0:
+            newBattleBooster = vehicle.battleBoosters.installed[0]
+            if vehCompareData.getBattleBooster() != newBattleBooster:
+                isChanged = True
+                vehCompareData.setBattleBooster(newBattleBooster)
         newEqs = _getVehicleEquipment(vehicle)
         if vehCompareData.getEquipment() != newEqs:
             isChanged = True
@@ -523,7 +531,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         return self.__vehicles[index]
 
     def writeCache(self):
-        if self.__cache and self.itemsCache and self.itemsCache.isSynced():
+        if self.__cache:
             self.__cache.write()
 
     def _createVehCompareData(self, intCD, initParameters=None):
@@ -558,15 +566,15 @@ class VehComparisonBasket(IVehicleComparisonBasket):
             elif vehicle.isInInventory:
                 vehCmpData.setEquipment(_getVehicleEquipment(vehicle))
             else:
-                vehCmpData.setEquipment(_NO_EQUIPMENT_LAYOUT[:])
+                vehCmpData.setEquipment(vehCmpData.getNoEquipmentLayout())
             if defHasCamouflage is not None:
                 vehCmpData.setHasCamouflage(defHasCamouflage)
             else:
                 vehCmpData.setHasCamouflage(hasCamouflage)
             if defBattleBooster is not None:
                 vehCmpData.setBattleBooster(defBattleBooster)
-            elif vehicle.isInInventory:
-                vehCmpData.setBattleBooster(vehicle.equipment.battleBoosterConsumables[0])
+            elif vehicle.isInInventory and vehicle.battleBoosters.installed.getCapacity() > 0:
+                vehCmpData.setBattleBooster(vehicle.battleBoosters.installed[0])
             else:
                 vehCmpData.setBattleBooster(None)
             if defShellIndex:
@@ -674,7 +682,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         if vehicle.isInInventory:
             vehCompareData.setInvEquipment(_getVehicleEquipment(vehicle))
         else:
-            vehCompareData.setInvEquipment(_NO_EQUIPMENT_LAYOUT[:])
+            vehCompareData.setInvEquipment(vehCompareData.getNoEquipmentLayout())
 
     @classmethod
     def __updateInventoryData(cls, vehCompareData, vehicle):

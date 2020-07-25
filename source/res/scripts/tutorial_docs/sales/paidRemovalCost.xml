@@ -10,7 +10,7 @@
         </show-hint>
       </runtime-effects>
       <gui-items>
-        <gui-item>	AmmunitionPanel	  <on-scene-effects>
+        <gui-item>	HangarPanelOptDevice	  <on-scene-effects>
             <activate>	AmmunitionPanelOnScene	</activate>
           </on-scene-effects>
           <not-on-scene-effects>
@@ -27,32 +27,33 @@
     </scene>
   </scenes>
   <has-id>
-    <hint>	AmmunitionPanelHint	  <item-id>	AmmunitionPanel	</item-id>
+    <hint>	AmmunitionPanelHint	  <item-id>	HangarPanelOptDevice	</item-id>
       <text>	#quests:action/chain/hint/removalCost	</text>
       <arrow>
         <direction>	T	</direction>
         <loop>	True	</loop>
       </arrow>
       <padding>
-        <left>	258	</left>
-        <top>	72	</top>
-        <right>	389	</right>
-        <bottom>	4	</bottom>
+        <left>	0	</left>
+        <top>	0	</top>
+        <right>	0	</right>
+        <bottom>	0	</bottom>
       </padding>
       <actions>
-        <click>	AmmunitionPanel	  <effects>
+        <click>	HangarPanelOptDevice	  <effects>
             <refuse-training></refuse-training>
           </effects>
         </click>
-        <click-outside>	AmmunitionPanel	  <effects>
+        <click-outside>	HangarPanelOptDevice	  <effects>
             <refuse-training></refuse-training>
           </effects>
         </click-outside>
-        <esc>	AmmunitionPanel	  <effects>
+        <esc>	HangarPanelOptDevice	  <effects>
             <refuse-training></refuse-training>
           </effects>
         </esc>
       </actions>
+      <hide-immediately>	True	</hide-immediately>
     </hint>
   </has-id>
   <triggers></triggers>

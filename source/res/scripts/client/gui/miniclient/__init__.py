@@ -96,17 +96,14 @@ def _enable_sandbox_platform_pointcuts(config):
     from .lobby.header.battle_type_selector.pointcuts import CommandBattle
     from .lobby.profile.pointcuts import MakeClanBtnUnavailable, MakeClubProfileButtonUnavailable
     from .lobby.tank_carousel import configure_pointcuts as _configure_carousel_pointcuts
-    from .lobby.hangar.pointcuts import DisableTankServiceButtons, MaintenanceButtonFlickering, DeviceButtonsFlickering, TankModelHangarVisibility, TankHangarStatus, EnableCrew
+    from .lobby.hangar.pointcuts import DisableTankServiceButtons, TankModelHangarVisibility, TankHangarStatus, EnableCrew
     DisableFightButtonPointcut(config)
     DisableTrainingFightButtonPointcut(config)
     DisableBattlesForHiddenVehicles(config)
     CommandBattle()
     MakeClanBtnUnavailable()
     MakeClubProfileButtonUnavailable()
-    _shop.OnShopItemWrapPointcut(config)
     DisableTankServiceButtons(config)
-    MaintenanceButtonFlickering(config)
-    DeviceButtonsFlickering(config)
     TankModelHangarVisibility(config)
     TankHangarStatus(config)
     _configure_carousel_pointcuts(config)

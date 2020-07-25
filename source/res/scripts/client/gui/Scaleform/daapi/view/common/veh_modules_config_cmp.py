@@ -166,10 +166,8 @@ class VehicleModulesConfiguratorCmp(VehModulesConfiguratorCmpMeta):
     def _isModuleSelected(self, item, vehicle):
         return item.isInstalled(vehicle)
 
-    def _mayInstallModule(self, mItem):
-        vehicle = self._vehicle
-        sucess, _ = mItem.mayInstall(vehicle)
-        return sucess
+    def _mayInstallModuleOnCurrentVehicle(self, mItem):
+        return False
 
     def _installModule(self, moduleItem):
         return False
@@ -217,7 +215,7 @@ class VehicleModulesConfiguratorCmp(VehModulesConfiguratorCmpMeta):
                 for mVO in columnVO['modules']:
                     if columnHighlighted:
                         moduleItem = self._getItem(mVO['intCD'])
-                        success = self._mayInstallModule(moduleItem)
+                        success = self._mayInstallModuleOnCurrentVehicle(moduleItem)
                         mVO['available'] = success
                     mVO['available'] = False
 

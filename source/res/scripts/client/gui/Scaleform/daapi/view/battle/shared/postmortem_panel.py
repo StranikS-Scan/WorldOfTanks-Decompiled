@@ -220,7 +220,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         self.__playerInfo = self.sessionProvider.getCtx().getPlayerFullNameParts(vID=vehicleID, showVehShortName=True)
 
     def __onVehicleControlling(self, vehicle):
-        self.__maxHealth = vehicle.typeDescriptor.maxHealth
+        self.__maxHealth = vehicle.maxHealth
         self._isPlayerVehicle = vehicle.isPlayerVehicle
         self.__setHealthPercent(vehicle.health)
         self._updateVehicleInfo()

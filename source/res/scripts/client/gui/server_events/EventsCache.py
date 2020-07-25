@@ -15,7 +15,7 @@ from debug_utils import LOG_DEBUG
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.server_events import caches as quests_caches
 from gui.server_events.event_items import EventBattles, createQuest, createAction, MotiveQuest, ServerEventAbstract, Quest
-from gui.server_events.events_helpers import isMarathon, isLinkedSet, isPremium, isRankedPlatform, isRankedDaily
+from gui.server_events.events_helpers import isMarathon, isLinkedSet, isPremium, isRankedPlatform, isRankedDaily, isDailyEpic
 from gui.server_events.events_helpers import getRerollTimeout, getEventsData
 from gui.server_events.formatters import getLinkedActionID
 from gui.server_events.modifiers import ACTION_SECTION_TYPE, ACTION_MODIFIER_TYPE, clearModifiersCache
@@ -29,7 +29,7 @@ from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from personal_missions import PERSONAL_MISSIONS_XML_PATH
 from quest_cache_helpers import readQuestsFromFile
 from shared_utils import first
-from skeletons.gui.game_control import IRankedBattlesController
+from skeletons.gui.game_control import IRankedBattlesController, IEventProgressionController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -77,6 +77,7 @@ class EventsCache(IEventsCache):
     rareAchievesCache = dependency.descriptor(IRaresCache)
     linkedSet = dependency.descriptor(ILinkedSetController)
     rankedController = dependency.descriptor(IRankedBattlesController)
+    __eventProgression = dependency.descriptor(IEventProgressionController)
 
     def __init__(self):
         self.__waitForSync = False
@@ -256,6 +257,10 @@ class EventsCache(IEventsCache):
                 return False
             if isPremium(q.getGroupID()) and not q.isAvailable().isValid:
                 return False
+            if self.__eventProgression.isActive() and isDailyEpic(q.getGroupID()):
+                activeQuests = self.__eventProgression.getActiveQuestIDs()
+                if q.getID() not in activeQuests:
+                    return False
             return False if isRankedSeasonOff and (isRankedDaily(q.getGroupID()) or isRankedPlatform(q.getGroupID())) else filterFunc(q)
 
         return self.getActiveQuests(userFilterFunc)

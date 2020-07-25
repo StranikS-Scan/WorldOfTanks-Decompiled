@@ -179,6 +179,11 @@ def LOG_ERROR_DEV(msg, *kargs, **kwargs):
     _doLog('ERROR', msg, kargs, kwargs)
 
 
+@_LogWrapper(LOG_LEVEL.DEV)
+def LOG_ACHTUNG(msg, *kargs, **kwargs):
+    _doLog('ACHTUNG', msg, kargs, kwargs)
+
+
 @_LogWrapper(LOG_LEVEL.RELEASE)
 def LOG_WARNING(msg, *kargs, **kwargs):
     _doLog('WARNING', msg, kargs, kwargs)

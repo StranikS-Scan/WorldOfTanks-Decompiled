@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/callout_panel.py
 import CommandMapping
+import Event
 from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES
 from gui.Scaleform.daapi.view.meta.CalloutPanelMeta import CalloutPanelMeta
 from gui.Scaleform.genConsts.BATTLEDAMAGELOG_IMAGES import BATTLEDAMAGELOG_IMAGES as _IMAGES
@@ -27,12 +28,14 @@ class CalloutPanel(CalloutPanelMeta):
     def __init__(self):
         super(CalloutPanel, self).__init__()
         self.__hidingInProgress = False
+        self.onHidingFinished = Event.Event()
 
     def onHideStart(self):
         self.__hidingInProgress = True
 
     def onHideCompleted(self):
         self.__reset()
+        self.onHidingFinished()
 
     def __reset(self):
         self.__hidingInProgress = False
@@ -59,3 +62,7 @@ class CalloutPanel(CalloutPanelMeta):
             answered = wasAnswered and cmdName is not None
             self.as_setHideDataS(answered, cmdName)
             return
+
+    def _dispose(self):
+        self.onHidingFinished.clear()
+        super(CalloutPanel, self)._dispose()

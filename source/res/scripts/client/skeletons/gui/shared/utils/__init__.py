@@ -85,6 +85,9 @@ class IItemsRequester(requesters.IRequester):
     def getVehicleCopy(self, vehicle):
         raise NotImplementedError
 
+    def getLayoutsVehicleCopy(self, vehicle):
+        raise NotImplementedError
+
     def getTankman(self, tmanInvID):
         raise NotImplementedError
 

@@ -758,6 +758,7 @@ DAILY_QUESTS_CONFIG = 'daily_quests_config'
 IS_LOOT_BOXES_ENABLED = 'isLootBoxesEnabled'
 SENIORITY_AWARDS_CONFIG = 'seniority_awards_config'
 MAGNETIC_AUTO_AIM_CONFIG = 'magnetic_auto_aim_config'
+META_GAME_SETTINGS = 'meta_game_settings'
 
 class Configs(Enum):
     BATTLE_ROYALE_CONFIG = 'battle_royale_config'
@@ -1443,6 +1444,7 @@ class REQUEST_COOLDOWN:
     RECEIVE_OFFER_GIFT = 1.0
     SET_OFFER_BANNER_SEEN = 0.3
     EQUIP_OPTDEV = 1.0
+    CMD_EQUIP_OPT_DEVS_SEQUENCE = 1.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -1758,7 +1760,8 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  97: 'BattlePass carouse filter 1',
  98: 'Battle Pass Storage',
  99: 'Battle Royale carousel filter 1',
- 100: 'Battle Royale carousel filter 2'}
+ 100: 'Battle Royale carousel filter 2',
+ 101: 'Once only hints'}
 
 class WG_GAMES:
     TANKS = 'wot'

@@ -10,6 +10,7 @@ from blueprints.FragmentTypes import getFragmentType
 from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
+from gui.Scaleform.daapi.view.lobby.tank_setup.ammunition_setup_vehicle import g_tankSetupVehicle
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -18,7 +19,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import getTankmanSkill, SabatonTankmanSkill, TankmanSkill, OffspringTankmanSkill
 from gui.shared.gui_items.dossier import factories, loadDossier
-from gui.shared.items_parameters import params_helper
+from gui.shared.items_parameters import params_helper, bonus_helper
 from gui.shared.items_parameters.formatters import NO_BONUS_SIMPLIFIED_SCHEME
 from gui.shared.tooltips import TOOLTIP_COMPONENT
 from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID
@@ -29,6 +30,7 @@ from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.shared.gui_items import IGuiItemsFactory
 
 def _getCmpVehicle():
     return cmp_helpers.getCmpConfiguratorMainView().getCurrentVehicle()
@@ -39,7 +41,7 @@ def _getCmpInitialVehicle():
 
 
 class StatsConfiguration(object):
-    __slots__ = ('vehicle', 'sellPrice', 'buyPrice', 'unlockPrice', 'inventoryCount', 'vehiclesCount', 'node', 'xp', 'dailyXP', 'minRentPrice', 'restorePrice', 'rentals', 'slotIdx', 'futureRentals', 'isAwardWindow', 'showBonus', 'showRankedBonusBattle')
+    __slots__ = ('vehicle', 'sellPrice', 'buyPrice', 'unlockPrice', 'inventoryCount', 'vehiclesCount', 'node', 'xp', 'dailyXP', 'minRentPrice', 'restorePrice', 'rentals', 'slotIdx', 'futureRentals', 'isAwardWindow', 'showBonus', 'showRankedBonusBattle', 'showCompatibles', 'withSlots', 'isStaticInfoOnly')
 
     def __init__(self):
         self.vehicle = None
@@ -59,11 +61,14 @@ class StatsConfiguration(object):
         self.slotIdx = 0
         self.isAwardWindow = False
         self.showBonus = True
+        self.showCompatibles = False
+        self.withSlots = False
+        self.isStaticInfoOnly = False
         return
 
 
 class StatusConfiguration(object):
-    __slots__ = ('vehicle', 'slotIdx', 'eqs', 'checkBuying', 'node', 'isAwardWindow', 'isResearchPage', 'checkNotSuitable', 'showCustomStates')
+    __slots__ = ('vehicle', 'slotIdx', 'eqs', 'checkBuying', 'node', 'isAwardWindow', 'isResearchPage', 'checkNotSuitable', 'showCustomStates', 'useWhiteBg', 'withSlots', 'isCompare')
 
     def __init__(self):
         self.vehicle = None
@@ -75,11 +80,14 @@ class StatusConfiguration(object):
         self.isAwardWindow = False
         self.checkNotSuitable = False
         self.showCustomStates = False
+        self.useWhiteBg = True
+        self.withSlots = False
+        self.isCompare = False
         return
 
 
 class ParamsConfiguration(object):
-    __slots__ = ('vehicle', 'params', 'crew', 'eqs', 'devices', 'dossier', 'dossierType', 'isCurrentUserDossier', 'historicalBattleID', 'checkAchievementExistence', 'simplifiedOnly', 'externalCrewParam', 'vehicleLevel', 'arenaType')
+    __slots__ = ('vehicle', 'params', 'crew', 'eqs', 'devices', 'dossier', 'dossierType', 'isCurrentUserDossier', 'historicalBattleID', 'checkAchievementExistence', 'simplifiedOnly', 'externalCrewParam', 'vehicleLevel', 'arenaType', 'colorless')
 
     def __init__(self):
         self.vehicle = None
@@ -93,6 +101,7 @@ class ParamsConfiguration(object):
         self.historicalBattleID = -1
         self.simplifiedOnly = False
         self.externalCrewParam = False
+        self.colorless = False
         self.vehicleLevel = 0
         self.arenaType = ARENA_GUI_TYPE.RANDOM
         self.checkAchievementExistence = True
@@ -126,6 +135,32 @@ class ToolTipContext(object):
 
     def getParams(self):
         return {}
+
+
+class EmptyOptDeviceSlotContext(ToolTipContext):
+
+    def __init__(self, fieldsToExclude=None):
+        super(EmptyOptDeviceSlotContext, self).__init__(TOOLTIP_COMPONENT.HANGAR, fieldsToExclude)
+        self._slotIdx = None
+        self._vehicle = None
+        return
+
+    def buildItem(self, slotIdx, vehicle=None):
+        self._slotIdx = int(slotIdx)
+        if vehicle is None:
+            self._vehicle = self.__getVehicle()
+        else:
+            self._vehicle = vehicle
+        return
+
+    def getStatusConfiguration(self, item):
+        value = super(EmptyOptDeviceSlotContext, self).getStatusConfiguration(item)
+        value.vehicle = self._vehicle
+        value.slotIdx = self._slotIdx
+        return value
+
+    def __getVehicle(self):
+        return g_currentVehicle.item
 
 
 class DefaultContext(ToolTipContext):
@@ -275,6 +310,52 @@ class InventoryContext(ToolTipContext):
         return value
 
 
+class ModuleInfoContext(ToolTipContext):
+    itemsCache = dependency.descriptor(IItemsCache)
+    itemsFactory = dependency.descriptor(IGuiItemsFactory)
+
+    def __init__(self, fieldsToExclude=None):
+        super(ModuleInfoContext, self).__init__(TOOLTIP_COMPONENT.MODULE_INFO, fieldsToExclude)
+        self.__vehDescr = None
+        return
+
+    def buildItem(self, intCD, vehDescr):
+        self.__vehDescr = vehDescr
+        return self.itemsCache.items.getItemByCD(int(intCD))
+
+    def getStatusConfiguration(self, item):
+        value = super(ModuleInfoContext, self).getStatusConfiguration(item)
+        value.useWhiteBg = False
+        return value
+
+    def getStatsConfiguration(self, item):
+        value = super(ModuleInfoContext, self).getStatsConfiguration(item)
+        value.vehicle = None
+        value.sellPrice = False
+        value.buyPrice = False
+        value.minRentPrice = False
+        value.restorePrice = False
+        value.rentals = False
+        value.futureRentals = False
+        value.unlockPrice = False
+        value.inventoryCount = False
+        value.vehiclesCount = False
+        value.node = None
+        value.xp = False
+        value.dailyXP = False
+        value.showCompatibles = True
+        value.isStaticInfoOnly = True
+        return value
+
+    def getParamsConfiguration(self, item):
+        value = super(ModuleInfoContext, self).getParamsConfiguration(item)
+        value.params = gui.GUI_SETTINGS.technicalInfo
+        if self.__vehDescr:
+            value.vehicle = self.itemsFactory.createVehicle(self.__vehDescr.makeCompactDescr())
+        value.colorless = True
+        return value
+
+
 class CarouselContext(InventoryContext):
     __rankedController = dependency.descriptor(IRankedBattlesController)
 
@@ -359,6 +440,9 @@ class BaseHangarParamContext(ToolTipContext):
     def buildItem(self, *args, **kwargs):
         return g_currentVehicle.item
 
+    def getBonusExtractor(self, vehicle, bonuses, paramName):
+        return bonus_helper.BonusExtractor(vehicle, bonuses, paramName)
+
 
 class HangarParamContext(BaseHangarParamContext):
 
@@ -390,6 +474,22 @@ class CmpParamContext(HangarParamContext):
         return params_helper.vehiclesComparator(_getCmpVehicle(), _getCmpInitialVehicle()[0])
 
 
+class TankSetupParamContext(HangarParamContext):
+
+    def __init__(self):
+        super(TankSetupParamContext, self).__init__()
+        self.formatters = NO_BONUS_SIMPLIFIED_SCHEME
+
+    def getComparator(self):
+        return params_helper.idealCrewComparator(g_tankSetupVehicle.item)
+
+    def buildItem(self, *args, **kwargs):
+        return g_tankSetupVehicle.item
+
+    def getBonusExtractor(self, vehicle, bonuses, paramName):
+        return bonus_helper.TankSetupBonusExtractor(vehicle, bonuses, paramName)
+
+
 class HangarContext(ToolTipContext):
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -403,9 +503,12 @@ class HangarContext(ToolTipContext):
     def getVehicle(self):
         return g_currentVehicle.item
 
-    def buildItem(self, intCD, slotIdx=0, historicalBattleID=-1):
+    def buildItem(self, intCD, slotIdx=0, historicalBattleID=-1, vehicle=None):
         self._slotIdx = int(slotIdx)
-        self._vehicle = self.getVehicle()
+        if vehicle is None:
+            self._vehicle = self.getVehicle()
+        else:
+            self._vehicle = vehicle
         self._historicalBattleID = historicalBattleID
         return self.itemsCache.items.getItemByCD(int(intCD))
 
@@ -423,7 +526,7 @@ class HangarContext(ToolTipContext):
         value.unlockPrice = not item.isUnlocked
         if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
             value.buyPrice = not item.isInInventory
-        elif item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER:
+        elif item.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS:
             value.buyPrice = True
         elif self._vehicle is not None:
             value.buyPrice = not item.isInstalled(self._vehicle, self._slotIdx)
@@ -438,6 +541,34 @@ class HangarContext(ToolTipContext):
         value.params = gui.GUI_SETTINGS.technicalInfo
         value.vehicle = self._vehicle
         value.historicalBattleID = self._historicalBattleID
+        return value
+
+
+class HangarCardContext(HangarContext):
+
+    def getStatusConfiguration(self, item):
+        value = super(HangarCardContext, self).getStatusConfiguration(item)
+        inventoryCheck = item.itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES
+        isInInventory = inventoryCheck and item.isInInventory
+        value.checkBuying = not isInInventory
+        return value
+
+    def getStatsConfiguration(self, item):
+        value = super(HangarCardContext, self).getStatsConfiguration(item)
+        value.buyPrice = True
+        return value
+
+
+class HangarSlotContext(HangarContext):
+
+    def getStatsConfiguration(self, item):
+        value = super(HangarSlotContext, self).getStatsConfiguration(item)
+        value.withSlots = True
+        return value
+
+    def getStatusConfiguration(self, item):
+        value = super(HangarSlotContext, self).getStatusConfiguration(item)
+        value.withSlots = True
         return value
 
 
@@ -458,6 +589,29 @@ class VehCmpConfigurationContext(HangarContext):
 
     def getVehicle(self):
         return _getCmpVehicle()
+
+    def getStatusConfiguration(self, item):
+        value = super(VehCmpConfigurationContext, self).getStatusConfiguration(item)
+        value.isCompare = True
+        return value
+
+    def getStatsConfiguration(self, item):
+        value = super(VehCmpConfigurationContext, self).getStatsConfiguration(item)
+        value.buyPrice = True
+        return value
+
+
+class VehCmpConfigurationSlotContext(VehCmpConfigurationContext):
+
+    def getStatsConfiguration(self, item):
+        value = super(VehCmpConfigurationSlotContext, self).getStatsConfiguration(item)
+        value.withSlots = True
+        return value
+
+    def getStatusConfiguration(self, item):
+        value = super(VehCmpConfigurationSlotContext, self).getStatusConfiguration(item)
+        value.withSlots = True
+        return value
 
 
 class TankmanHangarContext(HangarContext):

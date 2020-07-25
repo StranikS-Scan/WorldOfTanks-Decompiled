@@ -55,26 +55,30 @@ def getAutoRotationFlag(vDesc):
     return flag
 
 
-def isCoatedOpticsInstalled(avatar=None):
-    vehicleID = avatar_getter.getPlayerVehicleID(avatar=avatar)
-    if not vehicleID:
-        return False
+def getOptionalDevicesByVehID(vehicleID, avatar=None):
+    arena = avatar_getter.getArena(avatar=avatar)
+    if arena is None:
+        return []
+    elif vehicleID not in arena.vehicles:
+        return []
     else:
-        arena = avatar_getter.getArena(avatar=avatar)
-        if arena is None:
-            return False
-        if vehicleID not in arena.vehicles:
-            return False
         vehicleType = arena.vehicles[vehicleID].get('vehicleType')
-        if vehicleType is None:
-            return False
-        for device in vehicleType.optionalDevices:
-            if device is None:
-                continue
-            if _COATED_OPTICS_TAG in device.tags:
-                return True
+        return [] if vehicleType is None else vehicleType.optionalDevices
 
-        return False
+
+def getOptionalDevices(avatar=None):
+    vehicleID = avatar_getter.getPlayerVehicleID(avatar=avatar)
+    return [] if not vehicleID else getOptionalDevicesByVehID(vehicleID, avatar=avatar)
+
+
+def isCoatedOpticsInstalled(avatar=None):
+    for device in getOptionalDevices(avatar=avatar):
+        if device is None:
+            continue
+        if _COATED_OPTICS_TAG in device.tags:
+            return True
+
+    return False
 
 
 def getCrewMainRolesWoIndexes(crewRoles):

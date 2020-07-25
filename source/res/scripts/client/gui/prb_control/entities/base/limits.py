@@ -39,7 +39,7 @@ class VehicleIsValid(IVehicleLimit):
             return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED)
         vehicle = g_currentVehicle.item
         shellsList = []
-        for shell in vehicle.shells:
+        for shell in vehicle.shells.installed.getItems():
             shellsList.extend([shell.intCD, shell.count])
 
         return isVehicleValid(vehicle.descriptor, shellsList, teamLimits)

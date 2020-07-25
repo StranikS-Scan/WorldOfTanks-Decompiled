@@ -299,7 +299,6 @@ class OnceOnlyHints(CONST_CONTAINER):
     HOLD_SHEET_HINT = 'HoldSheetHint'
     HAVE_NEW_BADGE_HINT = 'HaveNewBadgeHint'
     EPIC_RESERVES_SLOT_HINT = 'EpicReservesSlotHint'
-    EPIC_RESERVES_BTN_HINT = 'EpicReservesBtnHint'
     PAUSE_HINT = 'PauseHint'
     HAVE_NEW_SUFFIX_BADGE_HINT = 'HaveNewSuffixBadgeHint'
     BADGE_PAGE_NEW_SUFFIX_BADGE_HINT = 'BadgePageNewSuffixBadgeHint'
@@ -324,6 +323,9 @@ class OnceOnlyHints(CONST_CONTAINER):
     CREW_OPERATION_BTN_HINT = 'CrewOperationBtnHint'
     SOUND_BUTTONEX_HINT = 'SoundButtonExHint'
     VEHICLE_PREVIEW_MODULES_BUTTON_HINT = 'VehiclePreviewModulesButtonHint'
+    AMMUNITION_PANEL_HINT = 'AmmunitionPanelHintZoneHint'
+    AMMUNITION_FILTER_HINT = 'FilterHintZoneHint'
+    OPT_DEV_DRAG_AND_DROP_HINT = 'OptDevDragAndDropHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):

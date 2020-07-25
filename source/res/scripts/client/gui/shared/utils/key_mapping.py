@@ -150,6 +150,13 @@ def getScaleformKey(bigworldKey):
     return BW_TO_SCALEFORM.get(bigworldKey, voidSymbol)
 
 
+class MappingType(object):
+    MAPVK_VK_TO_VSC = 0
+    MAPVK_VSC_TO_VK = 1
+    MAPVK_VK_TO_CHAR = 2
+    MAPVK_VSC_TO_VK_EX = 3
+
+
 def getKey(command):
     commandName = CommandMapping.g_instance.getName(command)
     return CommandMapping.g_instance.get(commandName)
@@ -162,7 +169,11 @@ def canGetVirtualKey(key):
 def getReadableKey(command):
     key = getKey(command)
     if canGetVirtualKey(key):
-        vk = BigWorld.mapVirtualKey(key, 1)
+        vk = BigWorld.mapVirtualKey(key, MappingType.MAPVK_VSC_TO_VK)
         if vk != 0:
-            key = SCALEFORM_TO_BW[vk]
+            if vk in SCALEFORM_TO_BW:
+                key = SCALEFORM_TO_BW[vk]
+            else:
+                key = BigWorld.mapVirtualKey(vk, MappingType.MAPVK_VK_TO_CHAR)
+                return makeString(unichr(key).upper())
     return makeString(READABLE_KEY_NAMES.key(BigWorld.keyToString(key)))

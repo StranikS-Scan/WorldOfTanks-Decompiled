@@ -14,6 +14,7 @@ from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 from skeletons.gui.battle_session import IBattleSessionProvider
 from svarog_script.script_game_object import ScriptGameObject
+from vehicle_systems.stricted_loading import makeCallbackWeak
 _logger = logging.getLogger(__name__)
 
 class BotAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
@@ -62,21 +63,23 @@ class BotAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
         trapPointEffects = config.getBotDeliveryMarker()
         effect3D = trapPointEffects.enemy if self.__teamID != BigWorld.player().team else trapPointEffects.ally
         if effect3D is not None:
-
-            def onResourceLoaded(effectP, position, resourceRefs):
-                if effectP in resourceRefs.failedIDs:
-                    return
-                clientVisuals = equipmentDescr.clientVisuals
-                sequenceComponent = markerArea.createComponent(SequenceComponent, resourceRefs[effectP])
-                sequenceComponent.createTerrainEffect(position + clientVisuals.markerPositionOffset, scale=clientVisuals.markerScale, loopCount=-1)
-                markerArea.activate()
-
             effectPath = effect3D.path
             markerTerrainPosition = self.__deliveryPosition - equipmentDescr.botSpawnPointOffset
-            BigWorld.loadResourceListBG((AnimationSequence.Loader(effectPath, self.__spaceID),), partial(onResourceLoaded, effectPath, markerTerrainPosition))
+            BigWorld.loadResourceListBG((AnimationSequence.Loader(effectPath, self.__spaceID),), makeCallbackWeak(self.__on3dEffectLoaded, equipmentDescr, effectPath, markerTerrainPosition))
             return markerArea
         else:
             _logger.error('Marker Effect is not defined!')
+            return
+
+    def __on3dEffectLoaded(self, equipmentDescr, effectP, position, resourceRefs):
+        markerArea = self.__markerArea
+        if effectP in resourceRefs.failedIDs or markerArea is None:
+            return
+        else:
+            clientVisuals = equipmentDescr.clientVisuals
+            sequenceComponent = markerArea.createComponent(SequenceComponent, resourceRefs[effectP])
+            sequenceComponent.createTerrainEffect(position + clientVisuals.markerPositionOffset, scale=clientVisuals.markerScale, loopCount=-1)
+            markerArea.activate()
             return
 
     def __createDeliveryEffect(self, config):
@@ -84,24 +87,23 @@ class BotAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
         effectDescr = config.getBotDeliveryEffect()
         effect = effectDescr.enemy if self.__teamID != BigWorld.player().team else effectDescr.ally
         if effect is not None:
-
-            def onResourceLoaded(effectP, position, resourceRefs):
-                if effectP in resourceRefs.failedIDs:
-                    _logger.error('Effect %s has not been loaded!', effectP)
-                    return
-                sequenceComponent = effectAnimation.createComponent(SequenceComponent, resourceRefs[effectP])
-                correctedPosition = position + Math.Vector3(0, self.ALTITUDE_CORRECTING, 0)
-                sequenceComponent.createTerrainEffect(correctedPosition, loopCount=1, rotation=(self.__yawAxis, 0, 0))
-                effectAnimation.activate()
-                self.__deliveryEffect = effectAnimation
-                self.delayCallback(self.__plannedAnimDuration, self.__removeDeliveryEffect)
-
             effectPath = effect.path
-            BigWorld.loadResourceListBG((AnimationSequence.Loader(effectPath, self.__spaceID),), partial(onResourceLoaded, effectPath, self.__deliveryPosition))
+            BigWorld.loadResourceListBG((AnimationSequence.Loader(effectPath, self.__spaceID),), makeCallbackWeak(self.__onDeliverEffectLoaded, effectAnimation, effectPath, self.__deliveryPosition))
             return
         else:
             _logger.error('Delivery Effect is not defined!')
             return
+
+    def __onDeliverEffectLoaded(self, effectAnimation, effectP, position, resourceRefs):
+        if effectP in resourceRefs.failedIDs:
+            _logger.error('Effect %s has not been loaded!', effectP)
+            return
+        sequenceComponent = effectAnimation.createComponent(SequenceComponent, resourceRefs[effectP])
+        correctedPosition = position + Math.Vector3(0, self.ALTITUDE_CORRECTING, 0)
+        sequenceComponent.createTerrainEffect(correctedPosition, loopCount=1, rotation=(self.__yawAxis, 0, 0))
+        effectAnimation.activate()
+        self.__deliveryEffect = effectAnimation
+        self.delayCallback(self.__plannedAnimDuration, self.__removeDeliveryEffect)
 
     def __removeMarkerArea(self):
         if self.__markerArea is not None:

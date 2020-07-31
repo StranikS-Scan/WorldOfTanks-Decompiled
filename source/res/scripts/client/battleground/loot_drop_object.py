@@ -60,6 +60,13 @@ class ParachuteCargo(ScriptGameObject, CallbackDelayer):
         self.landingAnimation.start()
         self.delayCallback(self.__descendTime + self.LANDING_ANIMATION_TRIGGER_OFFSET, self.__animateLanding)
 
+    def deactivate(self):
+        super(ParachuteCargo, self).deactivate()
+        if self.landingAnimation is not None:
+            self.landingAnimation.stop()
+            self.landingAnimation.unbind()
+        return
+
     def destroy(self):
         ScriptGameObject.destroy(self)
         CallbackDelayer.destroy(self)

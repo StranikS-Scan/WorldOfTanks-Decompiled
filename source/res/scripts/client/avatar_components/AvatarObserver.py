@@ -117,7 +117,7 @@ class AvatarObserver(CallbackDelayer):
             LOG_DEBUG_DEV('Vehicle ID is ' + str(self.vehicle.id) + ' and is ' + typeofveh)
         isInPostmortem = self.guiSessionProvider.shared.vehicleState.isInPostmortem
         isObserving = self.isObserver() or isInPostmortem
-        if isObserving and self.vehicle is not None and self.__observedVehicleID != self.vehicle.id:
+        if isObserving and self.vehicle is not None:
             self.__observedVehicleID = self.vehicle.id
             if not isInPostmortem:
                 self.guiSessionProvider.getArenaDP().switchCurrentTeam(self.vehicle.publicInfo['team'])

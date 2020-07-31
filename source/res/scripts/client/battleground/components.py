@@ -79,6 +79,11 @@ class SequenceComponent(Component):
                 self.__sequenceAnimator.bindTo(AnimationSequence.CompoundWrapperContainer(compound))
             return
 
+    def unbind(self):
+        if self.__sequenceAnimator is not None and self.__sequenceAnimator.isBound():
+            self.__sequenceAnimator.unbind()
+        return
+
     @property
     def sequenceAnimator(self):
         return self.__sequenceAnimator

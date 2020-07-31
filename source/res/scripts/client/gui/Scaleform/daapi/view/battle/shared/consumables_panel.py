@@ -603,10 +603,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         self._reset()
 
     def __onVehicleStateUpdated(self, state, value):
-        if state == VEHICLE_VIEW_STATE.SWITCHING:
-            self._reset()
-            return
-        elif state == VEHICLE_VIEW_STATE.DESTROYED:
+        if state == VEHICLE_VIEW_STATE.DESTROYED:
             self.__clearAllEquipmentGlow()
             return
         elif self._cds.count(None) == self._PANEL_MAX_LENGTH:

@@ -8,6 +8,7 @@ from messenger.proto import proto_getter
 from messenger.proto.xmpp.xmpp_constants import CONTACT_LIMIT
 from messenger.proto.xmpp.xmpp_string_utils import validateRosterItemGroup
 from messenger.storage import storage_getter
+from messenger.ext import passCensor
 
 class GroupManageView(BaseManageContactViewMeta):
 
@@ -54,7 +55,8 @@ class GroupManageView(BaseManageContactViewMeta):
 class GroupCreateView(GroupManageView):
 
     def onOk(self, data):
-        resultSuccess = self.proto.contacts.addGroup(data.currValue.strip())
+        name = passCensor(data.currValue.strip())
+        resultSuccess = self.proto.contacts.addGroup(name)
         if resultSuccess:
             self.as_closeViewS()
 
@@ -70,7 +72,8 @@ class GroupRenameView(GroupManageView):
         self.__isInited = False
 
     def onOk(self, data):
-        successResult = self.proto.contacts.renameGroup(data.defValue, data.currValue.strip())
+        name = passCensor(data.currValue.strip())
+        successResult = self.proto.contacts.renameGroup(data.defValue, name)
         if successResult:
             self.as_closeViewS()
 

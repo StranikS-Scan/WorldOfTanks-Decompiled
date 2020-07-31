@@ -18,7 +18,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.classic import minimap
     from gui.Scaleform.daapi.view.battle.classic import battle_end_warning_panel
     from gui.Scaleform.daapi.view.battle.shared import battle_timers
-    from gui.Scaleform.daapi.view.battle.shared import timers_panel
     from gui.Scaleform.daapi.view.battle.shared import consumables_panel
     from gui.Scaleform.daapi.view.battle.shared import ribbons_panel
     from gui.Scaleform.daapi.view.battle.shared import battle_loading
@@ -35,8 +34,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.event import event_objectives
     return (ViewSettings(VIEW_ALIAS.EVENT_BATTLE_PAGE, EventBattlePage, 'eventBattlePage.swf', ViewTypes.DEFAULT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, team_bases_panel.TeamBasesPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.DESTROY_TIMERS_PANEL, event_destroy_timers_panel.EventDestroyTimersPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.TIMERS_PANEL, timers_panel.TimersPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(BATTLE_VIEW_ALIASES.TIMERS_PANEL, event_destroy_timers_panel.EventDestroyTimersPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.BATTLE_TIMER, battle_timers.BattleTimer, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.BATTLE_END_WARNING_PANEL, battle_end_warning_panel.BattleEndWarningPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, consumables_panel.ConsumablesPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),

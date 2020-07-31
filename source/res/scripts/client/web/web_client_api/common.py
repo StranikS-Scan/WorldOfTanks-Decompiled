@@ -153,7 +153,7 @@ class CompensationType(CONST_CONTAINER):
 def sanitizeResPath(relPath):
     if relPath:
         if relPath.startswith('img://'):
-            relPath = relPath.strip('img://')
+            relPath = relPath.replace('img://', '')
         if relPath.startswith('..'):
             relPath = 'gui' + relPath[2:]
         return relPath

@@ -17,7 +17,6 @@ class BattleHintPanel(BattleHintPanelMeta, IAbstractPeriodView):
         self.__hints = {}
         self.__plugins = None
         self.__isBattleLoaded = False
-        self.__isHintActive = False
         return
 
     def setBtnHint(self, btnID, hintData):
@@ -70,18 +69,17 @@ class BattleHintPanel(BattleHintPanelMeta, IAbstractPeriodView):
 
     def __invalidateBtnHint(self):
         hintData = self.__getActiveHintData()
-        if hintData:
+        isHintActive = bool(hintData)
+        hintCanBeDisplayed = isHintActive and self.__isBattleLoaded
+        if hintCanBeDisplayed:
             btnID, hint = hintData
             self.as_setDataS(hint.key, hint.messageLeft, hint.messageRight, hint.offsetX, hint.offsetY)
             self.fireEvent(GameEvent(GameEvent.SHOW_BTN_HINT, ctx={'btnID': btnID}), scope=EVENT_BUS_SCOPE.GLOBAL)
-        self.__isHintActive = bool(hintData)
-        if self.__isBattleLoaded:
-            self.as_toggleS(self.__isHintActive)
+        self.as_toggleS(hintCanBeDisplayed)
 
     def __handleBattleLoading(self, event):
         self.__isBattleLoaded = not event.ctx['isShown']
-        if self.__isBattleLoaded and self.__isHintActive:
-            self.as_toggleS(True)
+        self.__invalidateBtnHint()
 
 
 class HintPluginsCollection(PluginsCollection):

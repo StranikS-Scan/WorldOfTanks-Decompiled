@@ -132,8 +132,6 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'rankedBattles': {},
  'referralProgram': {},
  'easterEgg': EasterEggProps(True, []),
- 'adventCalendar': {'popupIntervalInHours': 24,
-                    'baseURL': ''},
  'premiumInfo': {},
  'checkPromoFrequencyInBattles': 5,
  'vivoxLicense': ''}

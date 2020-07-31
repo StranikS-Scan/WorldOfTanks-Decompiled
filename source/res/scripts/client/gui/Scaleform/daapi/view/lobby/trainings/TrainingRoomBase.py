@@ -362,10 +362,7 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
             permissions = entity.getPermissions()
             arenaTypeID = settings['arenaTypeID']
             arenaType = ArenaType.g_cache.get(arenaTypeID)
-            if isCreator:
-                comment = settings['comment']
-            else:
-                comment = passCensor(settings['comment'])
+            comment = passCensor(settings['comment'])
             creatorFullName, creatorClan, creatorRegion, creatorIgrType = (None, None, None, 0)
             creator = self.__getCreatorFromRosters()
             badgeVO = {}

@@ -79,6 +79,13 @@ class LootObject(TerrainAreaGameObject, ILootObject):
             self.pickupEffect.disable()
         return
 
+    def deactivate(self):
+        super(LootObject, self).deactivate()
+        if self.markingSmoke is not None:
+            self.markingSmoke.stop()
+            self.markingSmoke.unbind()
+        return
+
     def processPickup(self, entityID):
         if self.pickupEffect is not None:
             self.pickupEffect.enable()

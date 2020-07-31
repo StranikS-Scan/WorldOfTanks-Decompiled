@@ -499,6 +499,20 @@ class _SeniorityAwardsConfig(namedtuple('_SeniorityAwardsConfig', ('enabled', 'a
         return self.hangarWidgetVisibility
 
 
+class _AdventCalendarConfig(namedtuple('_AdventCalendarConfig', ('calendarURL', 'popupIntervalInHours'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(calendarURL='', popupIntervalInHours=24)
+        defaults.update(kwargs)
+        return super(_AdventCalendarConfig, cls).__new__(cls, **defaults)
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+
 _crystalRewardInfo = namedtuple('_crystalRewardInfo', 'level, arenaType, winTop3, loseTop3, winTop10, loseTop10')
 
 class _crystalRewardConfigSection(namedtuple('_crystalRewardConfigSection', ('level', 'vehicle'))):
@@ -550,6 +564,7 @@ class ServerSettings(object):
         self.__rankedBattlesSettings = _RankedBattlesConfig.defaults()
         self.__epicMetaGameSettings = _EpicMetaGameConfig()
         self.__eventProgressionSettings = _EventProgressionConfig()
+        self.__adventCalendar = _AdventCalendarConfig()
         self.__epicGameSettings = _EpicGameConfig()
         self.__telecomConfig = _TelecomConfig.defaults()
         self.__squadPremiumBonus = _SquadPremiumBonus.defaults()
@@ -596,6 +611,8 @@ class ServerSettings(object):
             self.__rankedBattlesSettings = makeTupleByDict(_RankedBattlesConfig, self.__serverSettings['ranked_config'])
         if 'event_progression_config' in self.__serverSettings:
             self.__eventProgressionSettings = makeTupleByDict(_EventProgressionConfig, self.__serverSettings['event_progression_config'])
+        if 'advent_calendar_config' in self.__serverSettings:
+            self.__adventCalendar = makeTupleByDict(_AdventCalendarConfig, self.__serverSettings['advent_calendar_config'])
         if 'epic_config' in self.__serverSettings:
             LOG_DEBUG('epic_config', self.__serverSettings['epic_config'])
             self.__epicMetaGameSettings = makeTupleByDict(_EpicMetaGameConfig, self.__serverSettings['epic_config']['epicMetaGame'])
@@ -644,6 +661,9 @@ class ServerSettings(object):
         if 'event_progression_config' in serverSettingsDiff:
             self.__updateEventProgression(serverSettingsDiff)
             self.__serverSettings['event_progression_config'] = serverSettingsDiff['event_progression_config']
+        if 'advent_calendar_config' in serverSettingsDiff:
+            self.__updateAdventCalendar(serverSettingsDiff)
+            self.__serverSettings['advent_calendar_config'] = serverSettingsDiff['advent_calendar_config']
         if 'epic_config' in serverSettingsDiff:
             self.__updateEpic(serverSettingsDiff)
             self.__serverSettings['epic_config'] = serverSettingsDiff['epic_config']
@@ -745,6 +765,10 @@ class ServerSettings(object):
     @property
     def eventProgression(self):
         return self.__eventProgressionSettings
+
+    @property
+    def adventCalendar(self):
+        return self.__adventCalendar
 
     @property
     def epicMetaGame(self):
@@ -996,6 +1020,9 @@ class ServerSettings(object):
 
     def __updateEventProgression(self, targetSettings):
         self.__eventProgressionSettings = self.__eventProgressionSettings.replace(targetSettings['event_progression_config'])
+
+    def __updateAdventCalendar(self, targetSettings):
+        self.__adventCalendar = self.__adventCalendar.replace(targetSettings['advent_calendar_config'])
 
     def __updateRanked(self, targetSettings):
         self.__rankedBattlesSettings = self.__rankedBattlesSettings.replace(targetSettings['ranked_config'])

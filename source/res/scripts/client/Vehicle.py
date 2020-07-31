@@ -203,6 +203,8 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
                     if oldModule.id != newModule.id:
                         forceReloading = True
                         _logger.info('Battle royale force appearance reloading!')
+                        if moduleName == 'gun':
+                            BigWorld.player().gunRotator.switchActiveGun(0)
                         break
 
             else:

@@ -60,7 +60,7 @@
         <maxHealth>	1495	</maxHealth>
         <ammoBayHealth>
           <maxHealth>	200	</maxHealth>
-          <maxRegenHealth>	120	</maxRegenHealth>
+          <maxRegenHealth>	135	</maxRegenHealth>
           <repairCost>	0	</repairCost>
         </ammoBayHealth>
         <turretHardPoints>
@@ -203,7 +203,7 @@
     <maxHealth>	910	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	110	</maxRegenHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
       <repairCost>	0	</repairCost>
     </ammoBayHealth>
     <models>
@@ -2253,6 +2253,7 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <shotOffset>	-0.190436 0.000003 0.000000	</shotOffset>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -2423,6 +2424,7 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <shotOffset>	-0.190000 0.000000 0.000000	</shotOffset>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -2488,12 +2490,12 @@
         <gun>
           <gunNode>	G_L	</gunNode>
           <gunFire>	HP_gunFire_L	</gunFire>
-          <position>	-0.188 -0.013 0.094	</position>
+          <position>	-0.19 0.531 0.834	</position>
         </gun>
         <gun>
           <gunNode>	G_R	</gunNode>
           <gunFire>	HP_gunFire_R	</gunFire>
-          <position>	0.188 -0.013 0.094	</position>
+          <position>	0.191 0.531 0.834	</position>
         </gun>
       </multiGun>
     </Turret_1_T150_SH>
@@ -2715,6 +2717,7 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <shotOffset>	-0.184236 0.000003 0.000000	</shotOffset>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -2799,6 +2802,7 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <shotOffset>	-0.184000 0.000000 0.000000	</shotOffset>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -2963,12 +2967,12 @@
         <gun>
           <gunNode>	G_L	</gunNode>
           <gunFire>	HP_gunFire_L	</gunFire>
-          <position>	-0.178 -0.021 0.074	</position>
+          <position>	-0.183 0.363 1.218	</position>
         </gun>
         <gun>
           <gunNode>	G_R	</gunNode>
           <gunFire>	HP_gunFire_R	</gunFire>
-          <position>	0.178 -0.021 0.074	</position>
+          <position>	0.172 0.363 1.218	</position>
         </gun>
       </multiGun>
       <camouflage>
@@ -3149,6 +3153,7 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <shotOffset>	-0.143934 0.000002 0.000000	</shotOffset>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -3308,6 +3313,7 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <shotOffset>	-0.144000 0.000000 0.000000	</shotOffset>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -3373,12 +3379,12 @@
         <gun>
           <gunNode>	G_L	</gunNode>
           <gunFire>	HP_gunFire_L	</gunFire>
-          <position>	-0.139 0.01 0.182	</position>
+          <position>	-0.151 0.652 1.204	</position>
         </gun>
         <gun>
           <gunNode>	G_R	</gunNode>
           <gunFire>	HP_gunFire_R	</gunFire>
-          <position>	0.244 0.01 0.182	</position>
+          <position>	0.236 0.652 1.204	</position>
         </gun>
       </multiGun>
     </Turret_3_KV4_SH>

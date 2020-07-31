@@ -167,6 +167,7 @@ def _generateSettings():
      'hullAndChassisWeight': params_formatters._niceRangeFormat,
      'forwardMaxSpeed': params_formatters._niceFormat}
     s.update(FORMAT_SETTINGS)
+    s['reloadTimeSecs'] = s.get('reloadTimeSecs', {}).copy()
     s['reloadTimeSecs']['preprocessor'] = _reloadTimeSecsPreprocessor
     s[params_formatters.AUTO_RELOAD_PROP_NAME] = {'preprocessor': _autoReloadPreprocessor,
      'rounder': lambda v: getNiceNumberFormat(round(v, 1))}

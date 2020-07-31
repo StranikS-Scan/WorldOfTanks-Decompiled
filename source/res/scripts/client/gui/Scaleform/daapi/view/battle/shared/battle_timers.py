@@ -12,7 +12,7 @@ from gui.impl.gen import R
 from gui.battle_control.battle_constants import COUNTDOWN_STATE
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
 from gui.shared import events, EVENT_BUS_SCOPE
-from helpers import dependency
+from helpers import dependency, isPlayerAvatar
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.shared.utils.key_mapping import getReadableKey
 
@@ -156,7 +156,7 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
         if ctrl is not None:
             ctrl.onShowDeathScreen -= self.__onShowDeathScreen
         player = BigWorld.player()
-        if player is not None:
+        if isPlayerAvatar() and player.onVehicleLeaveWorld is not None:
             player.onVehicleLeaveWorld -= self.__onVehicleLeaveWorld
         super(BattleTimer, self)._dispose()
         return

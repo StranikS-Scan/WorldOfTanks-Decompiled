@@ -646,9 +646,9 @@ class VehicleGunRotator(object):
     def __onVehicleFeedbackReceived(self, eventID, vehicleID, value):
         if eventID == FEEDBACK_EVENT_ID.VEHICLE_ACTIVE_GUN_CHANGED:
             activeGun, switchDelay = value
-            self.__transitionCallbackID = BigWorld.callback(switchDelay, partial(self.__switchActiveGun, activeGun))
+            self.__transitionCallbackID = BigWorld.callback(switchDelay, partial(self.switchActiveGun, activeGun))
 
-    def __switchActiveGun(self, activeGun):
+    def switchActiveGun(self, activeGun):
         self.__transitionCallbackID = None
         avatar = self._avatar
         playerVehicle = avatar.getVehicleAttached()
@@ -658,7 +658,7 @@ class VehicleGunRotator(object):
         else:
             vehDescr = playerVehicle.typeDescriptor
             turret = vehDescr.turret
-            if turret.multiGun is not None:
+            if turret.multiGun is not None and vehDescr.isDualgunVehicle:
                 self.__gunPosition = turret.multiGun[activeGun].shotPosition
             else:
                 self.__gunPosition = vehDescr.activeGunShotPosition

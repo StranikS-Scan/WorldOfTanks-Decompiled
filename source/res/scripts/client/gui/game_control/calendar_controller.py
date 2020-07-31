@@ -7,7 +7,6 @@ from datetime import timedelta
 import BigWorld
 from account_helpers.AccountSettings import AccountSettings, LAST_CALENDAR_SHOW_TIMESTAMP
 from adisp import process
-from gui import GUI_SETTINGS
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
@@ -187,7 +186,8 @@ class CalendarController(GameWindowController, ICalendarController):
                     if duration:
                         stepDuration = min(stepDuration, duration) if stepDuration else duration
 
-                stepDuration = (stepDuration or GUI_SETTINGS.adventCalendar['popupIntervalInHours']) * ONE_HOUR
+                popupIntervalInHours = self.lobbyContext.getServerSettings().adventCalendar.popupIntervalInHours
+                stepDuration = (stepDuration or popupIntervalInHours) * ONE_HOUR
                 offerChangedTime = now - int(now - action.getStartTime()) % stepDuration
                 wasntVisibleAtAll = not lastShowTstamp or lastShowTstamp > now
                 wasntVisibleCurrentOffer = not wasntVisibleAtAll and lastShowTstamp < offerChangedTime
@@ -240,7 +240,7 @@ class CalendarController(GameWindowController, ICalendarController):
         self.__showOnSplash = len(self.eventsCache.getActions(calendarEnabledActionFilter)) > 0
 
     def _getUrl(self):
-        return GUI_SETTINGS.adventCalendar['baseURL']
+        return self.lobbyContext.getServerSettings().adventCalendar.calendarURL
 
     def __onBrowserDeleted(self, browserID):
         if browserID == self.__browserID:

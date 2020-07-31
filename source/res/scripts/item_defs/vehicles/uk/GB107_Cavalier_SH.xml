@@ -60,8 +60,8 @@
         <weight>	16300	</weight>
         <maxHealth>	1300	</maxHealth>
         <ammoBayHealth>
-          <maxHealth>	220	</maxHealth>
-          <maxRegenHealth>	150	</maxRegenHealth>
+          <maxHealth>	200	</maxHealth>
+          <maxRegenHealth>	135	</maxRegenHealth>
           <repairCost>	0	</repairCost>
         </ammoBayHealth>
         <models>
@@ -134,8 +134,8 @@
         <weight>	20800	</weight>
         <maxHealth>	1300	</maxHealth>
         <ammoBayHealth>
-          <maxHealth>	260	</maxHealth>
-          <maxRegenHealth>	180	</maxRegenHealth>
+          <maxHealth>	200	</maxHealth>
+          <maxRegenHealth>	135	</maxRegenHealth>
           <repairCost>	0	</repairCost>
         </ammoBayHealth>
         <models>
@@ -208,8 +208,8 @@
     <weight>	9800	</weight>
     <maxHealth>	780	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	120	</maxRegenHealth>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
       <repairCost>	0	</repairCost>
     </ammoBayHealth>
     <models>
@@ -2588,10 +2588,10 @@
           <reloadTime>	5	</reloadTime>
           <clip>
             <count>	3	</count>
-            <rate>	24	</rate>
+            <rate>	30	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	5 6 7	</reloadTime>
+            <reloadTime>	5.5 6 6.5	</reloadTime>
             <revertFraction>	1.0	</revertFraction>
           </autoreload>
           <shotDispersionFactors>
@@ -2661,7 +2661,7 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	4	</reloadTime>
+          <reloadTime>	3.5	</reloadTime>
           <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <shotDispersionFactors>
@@ -2825,10 +2825,10 @@
           <reloadTime>	5	</reloadTime>
           <clip>
             <count>	3	</count>
-            <rate>	24	</rate>
+            <rate>	30	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	5 6 7	</reloadTime>
+            <reloadTime>	5.5 6 6.5	</reloadTime>
             <revertFraction>	1.0	</revertFraction>
           </autoreload>
           <shotDispersionFactors>
@@ -2899,7 +2899,7 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	4	</reloadTime>
+          <reloadTime>	3.5	</reloadTime>
           <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <shotDispersionFactors>
@@ -2969,7 +2969,7 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	4	</reloadTime>
+          <reloadTime>	3.5	</reloadTime>
           <aimingTime>	1.8	</aimingTime>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionFactors>
@@ -3043,10 +3043,10 @@
           <reloadTime>	7	</reloadTime>
           <clip>
             <count>	4	</count>
-            <rate>	18	</rate>
+            <rate>	24	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	6 7 8	</reloadTime>
+            <reloadTime>	6 6.5 7	</reloadTime>
             <revertFraction>	1.0	</revertFraction>
           </autoreload>
           <shotDispersionFactors>
@@ -3196,10 +3196,10 @@
           <reloadTime>	5	</reloadTime>
           <clip>
             <count>	3	</count>
-            <rate>	24	</rate>
+            <rate>	30	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	5 6 7	</reloadTime>
+            <reloadTime>	5.5 6 6.5	</reloadTime>
             <revertFraction>	1.0	</revertFraction>
           </autoreload>
           <shotDispersionFactors>
@@ -3262,7 +3262,7 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	5	</reloadTime>
+          <reloadTime>	3.5	</reloadTime>
           <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <shotDispersionFactors>
@@ -3328,10 +3328,10 @@
           <reloadTime>	7	</reloadTime>
           <clip>
             <count>	4	</count>
-            <rate>	18	</rate>
+            <rate>	24	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	6 7 8	</reloadTime>
+            <reloadTime>	6 6.5 7	</reloadTime>
             <revertFraction>	1.0	</revertFraction>
           </autoreload>
           <shotDispersionFactors>
@@ -3388,7 +3388,7 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.152	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	7	</reloadTime>
+          <reloadTime>	6	</reloadTime>
           <aimingTime>	2.2	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>

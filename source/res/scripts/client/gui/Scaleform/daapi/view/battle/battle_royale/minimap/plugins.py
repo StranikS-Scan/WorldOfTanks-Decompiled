@@ -516,7 +516,8 @@ class BattleRoyaleVehiclePlugin(ArenaVehiclesPlugin):
     def _notifyVehicleAdded(self, vehicleID):
         super(BattleRoyaleVehiclePlugin, self)._notifyVehicleAdded(vehicleID)
         if self.__radarSpottedVehiclesPlugin:
-            self.__radarSpottedVehiclesPlugin.addVisibilitySysSpottedVeh(vehicleID)
+            if self._entries[vehicleID].isActive():
+                self.__radarSpottedVehiclesPlugin.addVisibilitySysSpottedVeh(vehicleID)
         else:
             _logger.warning("Couldn't update radar plugin. The reference is None!")
 

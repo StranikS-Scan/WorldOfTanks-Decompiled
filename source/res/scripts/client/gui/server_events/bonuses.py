@@ -566,6 +566,10 @@ class X5BattleTokensBonus(TokensBonus):
     def getUserName(self):
         return backport.text(R.strings.quests.bonusName.battle_bonus_x5())
 
+    def getIconBySize(self, size):
+        bonusBattleTaskRes = R.images.gui.maps.icons.quests.bonuses.dyn(size).dyn('bonus_battle_task')
+        return backport.image(bonusBattleTaskRes()) if bonusBattleTaskRes else None
+
 
 class EntitlementBonus(SimpleBonus):
     _ENTITLEMENT_RECORD = namedtuple('_ENTITLEMENT_RECORD', ['id', 'amount'])

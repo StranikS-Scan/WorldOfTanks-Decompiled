@@ -141,9 +141,11 @@ class AdvancedChatComponent(ClientArenaComponent):
     def __addEventListeners(self):
         g_messengerEvents.channels.onCommandReceived += self.__onCommandReceived
         g_messengerEvents.users.onBattleUserActionReceived += self.__me_onBattleUserActionReceived
-        arena = self._componentSystem().arena()
-        if arena is not None:
-            arena.onVehicleKilled += self.__onArenaVehicleKilled
+        componentSystem = self._componentSystem()
+        if componentSystem is not None:
+            arena = componentSystem.arena()
+            if arena is not None:
+                arena.onVehicleKilled += self.__onArenaVehicleKilled
         import BattleReplay
         BattleReplay.g_replayCtrl.onCommandReceived += self.__onCommandReceived
         g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
@@ -157,9 +159,11 @@ class AdvancedChatComponent(ClientArenaComponent):
         g_playerEvents.onArenaPeriodChange -= self.__onArenaPeriodChange
         g_playerEvents.onAvatarBecomePlayer -= self.__onAvatarBecomePlayer
         g_playerEvents.onAvatarBecomeNonPlayer -= self.__onAvatarBecomeNonPlayer
-        arena = self._componentSystem().arena()
-        if arena is not None:
-            arena.onVehicleKilled -= self.__onArenaVehicleKilled
+        componentSystem = self._componentSystem()
+        if componentSystem is not None:
+            arena = componentSystem.arena()
+            if arena is not None:
+                arena.onVehicleKilled -= self.__onArenaVehicleKilled
         import BattleReplay
         BattleReplay.g_replayCtrl.onCommandReceived -= self.__onCommandReceived
         self._chatCommands.clear()
@@ -228,10 +232,11 @@ class AdvancedChatComponent(ClientArenaComponent):
             self.__tryRemovingCommandFromMarker(cmdID, targetID, True)
 
     def __chatCommandsUpdated(self, cmdMarkerType, cmdTargetID, cmdID, senderVehID, typeOfUpdate):
-        arena = self._componentSystem().arena()
-        if arena is None:
+        componentSystem = self._componentSystem()
+        if componentSystem is None or componentSystem.arena() is None:
             return
         else:
+            arena = componentSystem.arena()
             commandData = self._chatCommands[cmdMarkerType][cmdTargetID][cmdID]
             playerVehID = avatar_getter.getPlayerVehicleID()
             chatStats = None

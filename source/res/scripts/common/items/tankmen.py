@@ -1037,21 +1037,32 @@ def validateCrewToLearnCrewBook(crew, vehTypeCompDescr):
      crewLists)
 
 
+def _getItemByCompactDescr(compactDescr):
+    itemTypeID, nationID, compTypeID = parseIntCompactDescr(compactDescr)
+    items = None
+    if itemTypeID == ITEM_TYPES.crewSkin:
+        items = g_cache.crewSkins().skins
+    elif itemTypeID == ITEM_TYPES.crewBook:
+        items = g_cache.crewBooks().books
+    return items[compTypeID]
+
+
 def getItemByCompactDescr(compactDescr):
     try:
-        itemTypeID, nationID, compTypeID = parseIntCompactDescr(compactDescr)
-        items = None
-        if itemTypeID == ITEM_TYPES.crewSkin:
-            items = g_cache.crewSkins().skins
-        elif itemTypeID == ITEM_TYPES.crewBook:
-            items = g_cache.crewBooks().books
-        return items[compTypeID]
+        return _getItemByCompactDescr(compactDescr)
     except Exception:
         LOG_CURRENT_EXCEPTION()
         LOG_ERROR('(compact description to XML mismatch?)', compactDescr)
         raise
 
-    return
+
+def isItemWithCompactDescrExist(compactDescr):
+    try:
+        return _getItemByCompactDescr(compactDescr) is not None
+    except Exception:
+        return False
+
+    return None
 
 
 class Cache(object):

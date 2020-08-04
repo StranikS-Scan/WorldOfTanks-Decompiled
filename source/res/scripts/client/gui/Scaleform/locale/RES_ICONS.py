@@ -6560,6 +6560,7 @@ class RES_ICONS(object):
     MAPS_ICONS_WINDOWS_REWARDWINDOW_TWITCH12_BACKGROUND = '../maps/icons/windows/rewardWindow/twitch12_background.png'
     MAPS_ICONS_WINDOWS_REWARDWINDOW_TWITCH13_BACKGROUND = '../maps/icons/windows/rewardWindow/twitch13_background.png'
     MAPS_ICONS_WINDOWS_REWARDWINDOW_TWITCH14_BACKGROUND = '../maps/icons/windows/rewardWindow/twitch14_background.png'
+    MAPS_ICONS_WINDOWS_REWARDWINDOW_TWITCH15_BACKGROUND = '../maps/icons/windows/rewardWindow/twitch15_background.png'
     MAPS_ICONS_WINDOWS_REWARDWINDOW_TWITCH1_BACKGROUND = '../maps/icons/windows/rewardWindow/twitch1_background.png'
     MAPS_ICONS_WINDOWS_REWARDWINDOW_TWITCH2_BACKGROUND = '../maps/icons/windows/rewardWindow/twitch2_background.png'
     MAPS_ICONS_WINDOWS_REWARDWINDOW_TWITCH3_BACKGROUND = '../maps/icons/windows/rewardWindow/twitch3_background.png'

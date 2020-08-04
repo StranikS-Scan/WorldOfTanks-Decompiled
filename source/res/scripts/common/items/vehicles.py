@@ -2409,7 +2409,7 @@ def isItemWithCompactDescrExist(compactDescr):
     try:
         itemTypeID, nationID, compTypeID = parseIntCompactDescr(compactDescr)
         return _itemGetters[itemTypeID](nationID, compTypeID) is not None
-    except KeyError:
+    except Exception:
         return False
 
     return None

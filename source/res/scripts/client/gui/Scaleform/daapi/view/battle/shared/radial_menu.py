@@ -225,7 +225,8 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
         return
 
     def _showInternal(self, radialState, diff, position):
-        self.as_showS(radialState, diff, position)
+        cursorX, cursorY = GUI.mcursor().position
+        self.as_showS(cursorX, cursorY, radialState, diff, position)
 
     def __setVisibility(self, newState):
         if newState == self.__isVisible:
@@ -405,7 +406,7 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
             self.__reshow(addedID, markerType, True)
 
     def __checkForValidLocationMarkerLoop(self):
-        if self.__crosshairData is None:
+        if self.__crosshairData is None or self.__isVisible is False:
             return
         else:
             chatCommands = self.sessionProvider.shared.chatCommands

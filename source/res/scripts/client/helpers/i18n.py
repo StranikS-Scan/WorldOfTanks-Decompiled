@@ -30,14 +30,14 @@ def makeString(key, *args, **kwargs):
     if args:
         try:
             return wulf.getTranslatedText(key, args)
-        except (TypeError, ValueError):
+        except (TypeError, ValueError, KeyError):
             _logger.warning("Arguments do not match string read by key '%r': %r", key, args)
             return key
 
     elif kwargs:
         try:
             return wulf.getTranslatedText(key, kwargs)
-        except (TypeError, ValueError):
+        except (TypeError, ValueError, KeyError):
             _logger.warning("Arguments do not match string read by key '%s': %s", key, kwargs)
             return key
 

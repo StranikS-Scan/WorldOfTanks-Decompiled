@@ -20,6 +20,14 @@ def getItemDescrByCompactDescr(compDescr):
     return descr
 
 
+def isItemWithCompactDescrExist(compDescr):
+    itemTypeID, _, _ = vehicles.parseIntCompactDescr(compDescr)
+    if itemTypeID in vehicles.VEHICLE_ITEM_TYPES:
+        return vehicles.isItemWithCompactDescrExist(compDescr)
+    else:
+        return tankmen.isItemWithCompactDescrExist(compDescr)
+
+
 def _makeDefaultVehicleFactors(sample):
     default = {}
     for key, value in sample.iteritems():

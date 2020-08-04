@@ -29,7 +29,7 @@ from shared_utils import findFirst
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.game_control import IQuestsController, IEventProgressionController, IRankedBattlesController
 from gui.impl.gen import R
-_MAX_AWARDS_PER_TOOLTIP = 5
+_MAX_AWARDS_PER_TOOLTIP = 7
 _MAX_QUESTS_PER_TOOLTIP = 4
 _MAX_BONUSES_PER_QUEST = 2
 _RENT_TYPES = ('rentDays', 'rentBattles', 'rentWins')

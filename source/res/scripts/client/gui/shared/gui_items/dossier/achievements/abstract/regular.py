@@ -115,9 +115,9 @@ class RegularAchievement(GUIItem):
         iconName = self._getIconName()
         if len(iconName) > 0 and iconName[0].isdigit():
             iconName = 'c_' + iconName
-        icon = R.images.gui.maps.icons.achievement.c_80x80.dyn(iconName)()
-        if icon:
-            return backport.image(icon)
+        iconRes = R.images.gui.maps.icons.achievement.c_80x80.dyn(iconName)
+        if iconRes.exists():
+            return backport.image(iconRes())
         else:
             return self.getSmallIcon()
 

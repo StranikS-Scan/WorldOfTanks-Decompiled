@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/ten_years_countdown/ten_years_countdown_entry_point.py
 import time
 from enum import Enum
+from constants import IS_CHINA
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl import backport
@@ -52,10 +53,12 @@ class TenYearsCountdownEntryPoint(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         super(TenYearsCountdownEntryPoint, self)._onLoading(*args, **kwargs)
         self.__tenYearsCountdown.onEventStateChanged += self.__reinitialize
+        self.__tenYearsCountdown.onBlocksDataValidityChanged += self.__reinitialize
         self.__initialize()
 
     def _finalize(self):
         self.__tenYearsCountdown.onEventStateChanged -= self.__reinitialize
+        self.__tenYearsCountdown.onBlocksDataValidityChanged -= self.__reinitialize
         self.__tenYearsCountdown.onEventDataUpdated -= self.__reinitializeAfterEventUpdated
         self.__clear()
         self.__updateAnimationMethod = None
@@ -63,7 +66,7 @@ class TenYearsCountdownEntryPoint(ViewImpl):
         return
 
     def __initialize(self):
-        if self.__tenYearsCountdown.isEnabled():
+        if self.__tenYearsCountdown.isEventInProgress() and self.__tenYearsCountdown.isBlocksDataValid():
             self.__addListeners()
             self.__initNotifier()
             self.__updateModel()
@@ -106,6 +109,7 @@ class TenYearsCountdownEntryPoint(ViewImpl):
             model.setCoinIcon(R.images.gui.maps.icons.library.EventCoinIconBig())
             self.__updateBalance(model=model)
             self.__updateTimer(model=model)
+            model.setIsChina(IS_CHINA)
 
     @replaceNoneKwargsModel
     def __updateBalance(self, value=None, model=None):
@@ -137,9 +141,11 @@ class TenYearsCountdownEntryPoint(ViewImpl):
                     timerText = backport.text(R.strings.ten_year_countdown.entry_point.event_finish_timer.text())
             model.setTimerText(timerText)
         else:
-            model.setIsBlockLast(True)
+            timerText = backport.text(R.strings.ten_year_countdown.entry_point.event_finish_timer.text())
+            model.setTimerText(timerText)
             timer = backport.text(R.strings.ten_year_countdown.entry_point.event_finish_timer.lessDay(), value=0)
             model.setTimer(timer)
+            model.setIsTimerPaused(True)
 
     def __resetPeriodicNotifier(self):
         if self.__periodicNotifier:

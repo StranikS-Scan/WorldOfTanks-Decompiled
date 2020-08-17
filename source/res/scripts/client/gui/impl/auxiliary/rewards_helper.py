@@ -4,6 +4,7 @@ import logging
 import types
 import itertools
 from collections import namedtuple
+from constants import IS_CHINA
 from blueprints.BlueprintTypes import BlueprintTypes
 from frameworks.wulf import ViewFlags
 from gui.battle_royale.constants import ROYALE_POSTBATTLE_REWARDS_COUNT
@@ -448,7 +449,7 @@ class TenYearsRewardCongratModelPresenter(LootRewardDefModelPresenter):
                 img = ''
         elif self._congratType == LootCongratsTypes.CONGRAT_TYPE_10YC_TOKEN:
             img = backport.image(R.images.gui.maps.icons.tenYearsCountdown.awards.big.token())
-        elif self._congratType == LootCongratsTypes.CONGRAT_TYPE_10YC_STYLE:
+        elif self._congratType in (LootCongratsTypes.CONGRAT_TYPE_10YC_STYLE, LootCongratsTypes.CONGRAT_TYPE_10YC_STYLE_CHINA):
             img = backport.image(R.images.gui.maps.icons.tenYearsCountdown.awards.big.style())
         else:
             img = ''
@@ -578,7 +579,7 @@ DEF_MODEL_PRESENTERS = {CrewBonusTypes.CREW_BOOK_BONUSES: CrewBookModelPresenter
 RANKED_MODEL_PRESENTERS = {'vehicles': LootVehicleRewardPresenter()}
 TEN_YEARS_MODEL_PRESENTER = {'dossier': TenYearsRewardCongratModelPresenter(congratType=LootCongratsTypes.CONGRAT_TYPE_10YC_BADGE),
  'tokens': TenYearsRewardCongratModelPresenter(congratType=LootCongratsTypes.CONGRAT_TYPE_10YC_TOKEN),
- 'customizations': TenYearsRewardCongratModelPresenter(congratType=LootCongratsTypes.CONGRAT_TYPE_10YC_STYLE)}
+ 'customizations': TenYearsRewardCongratModelPresenter(congratType=LootCongratsTypes.CONGRAT_TYPE_10YC_STYLE if not IS_CHINA else LootCongratsTypes.CONGRAT_TYPE_10YC_STYLE_CHINA)}
 
 def getRewardsBonuses(rewards, size='big', awardsCount=_DEFAULT_DISPLAYED_AWARDS_COUNT):
     formatter = BonusNameQuestsBonusComposer(awardsCount, getPackRentVehiclesAwardPacker())

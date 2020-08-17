@@ -4,12 +4,15 @@ import typing
 from enum import Enum
 import BigWorld
 import WWISE
+from constants import IS_CHINA
+from PlayerEvents import g_playerEvents
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.ten_years_countdown.onboarding_calendar_block_model import OnboardingCalendarBlockModel
 from gui.impl.gen.view_models.views.lobby.ten_years_countdown.onboarding_stage_info_block_model import OnboardingStageInfoBlockModel
 from gui.impl.gen.view_models.views.lobby.ten_years_countdown.ten_years_onboarding_view_model import TenYearsOnboardingViewModel
-from gui.impl.pub import ViewImpl, WindowImpl
+from gui.impl.pub import ViewImpl
+from gui.impl.pub.lobby_window import LobbyWindow
 from gui.server_events.bonuses import CustomizationsBonus
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
@@ -33,7 +36,7 @@ _STAGE_INFO_BLOCKS_COUNT = 3
 class TenYearsOnboardingView(ViewImpl):
     __eventsCache = dependency.descriptor(IEventsCache)
     __itemsCache = dependency.descriptor(IItemsCache)
-    __slots__ = ('__selectedPageId', '__pagesCount', '__currentStageNumber', '__isCurrentStageActive', '__stagesCount', '__months')
+    __slots__ = ('__selectedPageId', '__pagesCount', '__currentStageNumber', '__isCurrentStageActive', '__stagesCount', '__months', '__callback', '__isLogOff')
 
     def __init__(self, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.ten_years_countdown.TenYearsOnboardingView())
@@ -47,6 +50,9 @@ class TenYearsOnboardingView(ViewImpl):
         self.__currentStageNumber = 0
         self.__isCurrentStageActive = False
         self.__months = {}
+        self.__callback = None
+        self.__isLogOff = False
+        return
 
     @property
     def viewModel(self):
@@ -58,20 +64,28 @@ class TenYearsOnboardingView(ViewImpl):
         self.viewModel.onBackBtnClick += self.__onBackBtnClick
         WWISE.WW_eventGlobal(TenYearsEventSounds.EV_10Y_COUNTDOWN_WELCOME_SCREEN_OPEN)
         BigWorld.worldDrawEnabled(False)
+        g_playerEvents.onDisconnected += self.__onDisconnected
 
     def _finalize(self):
-        BigWorld.worldDrawEnabled(True)
+        g_playerEvents.onDisconnected += self.__onDisconnected
+        if not self.__isLogOff:
+            BigWorld.worldDrawEnabled(True)
         WWISE.WW_eventGlobal(TenYearsEventSounds.EV_10Y_COUNTDOWN_WELCOME_SCREEN_CLOSE)
         self.viewModel.onForwardBtnClick -= self.__onForwardBtnClick
         self.viewModel.onBackBtnClick -= self.__onBackBtnClick
         super(TenYearsOnboardingView, self)._finalize()
+        if self.__callback and callable(self.__callback):
+            self.__callback()
+            self.__callback = None
+        return
 
-    def _onLoading(self, currentStageNumber, isCurrentStageActive, months, blocksCount):
+    def _onLoading(self, currentStageNumber, isCurrentStageActive, months, blocksCount, callback):
         self.__currentStageNumber = currentStageNumber
         self.__isCurrentStageActive = isCurrentStageActive
         self.__months = months
         self.__stagesCount = blocksCount
-        self.__pagesCount = 3 if self.__isCurrentStageActive else 2
+        self.__callback = callback
+        self.__pagesCount = 3 if self.__isCurrentStageActive and not IS_CHINA else 2
         self.__updateContent()
 
     def __updateContent(self):
@@ -79,6 +93,7 @@ class TenYearsOnboardingView(ViewImpl):
             model.setChapterNumber(self.__currentStageNumber)
             model.setSelectedPageId(self.__selectedPageId)
             model.setPagesCount(self.__pagesCount)
+            model.setIsChina(IS_CHINA)
             if self.__selectedPageId == 0:
                 self.__setCalendarPage(model.calendar)
             elif self.__selectedPageId == 1:
@@ -191,9 +206,13 @@ class TenYearsOnboardingView(ViewImpl):
 
         return (isStyleInQuest, isStyleInInventory)
 
+    def __onDisconnected(self):
+        self.__isLogOff = True
 
-class TenYearsOnboardingWindow(WindowImpl):
+
+class TenYearsOnboardingWindow(LobbyWindow):
     __slots__ = ()
 
-    def __init__(self, currentStageNumber, isCurrentStageActive, months, blocksCount):
-        super(TenYearsOnboardingWindow, self).__init__(WindowFlags.OVERLAY, content=TenYearsOnboardingView(currentStageNumber, isCurrentStageActive, months, blocksCount))
+    def __init__(self, currentStageNumber, isCurrentStageActive, months, blocksCount, callback=None):
+        super(TenYearsOnboardingWindow, self).__init__(wndFlags=WindowFlags.OVERLAY, decorator=None, content=TenYearsOnboardingView(currentStageNumber, isCurrentStageActive, months, blocksCount, callback))
+        return

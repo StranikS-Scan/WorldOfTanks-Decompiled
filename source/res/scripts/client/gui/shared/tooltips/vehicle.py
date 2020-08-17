@@ -36,7 +36,7 @@ from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_TIME, WHEEL
 from helpers import i18n, time_utils, int2roman, dependency
 from helpers.i18n import makeString as _ms
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import ITradeInController, IBootcampController
+from skeletons.gui.game_control import ITradeInController, IBootcampController, ILowTierMMController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from items import perks
@@ -86,6 +86,7 @@ _SHORTEN_TOOLTIP_CASES = ('shopVehicle',)
 class VehicleInfoTooltipData(BlocksTooltipData):
     __itemsCache = dependency.descriptor(IItemsCache)
     __bootcamp = dependency.descriptor(IBootcampController)
+    __eventController = dependency.descriptor(ILowTierMMController)
 
     def __init__(self, context):
         super(VehicleInfoTooltipData, self).__init__(context, TOOLTIP_TYPE.VEHICLE)
@@ -142,6 +143,9 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         if priceBlock and not shouldBeCut:
             self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
             items.append(formatters.packBuildUpBlockData(priceBlock, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, gap=5, padding=formatters.packPadding(left=98), layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL))
+        if vehicle.isLowTierEvent and self.__eventController.isEnabled():
+            giveawayHangarBlock = GiveawayHangar(vehicle, statusConfig).construct()
+            items.append(formatters.packBuildUpBlockData(giveawayHangarBlock))
         if not vehicle.isRotationGroupLocked:
             statusBlock, operationError = StatusBlockConstructor(vehicle, statusConfig).construct()
             if statusBlock and not (operationError and shouldBeCut):
@@ -792,6 +796,14 @@ class CommonStatsBlockConstructor(VehicleTooltipBlockConstructor):
         if block:
             title = text_styles.middleTitle(TOOLTIPS.VEHICLEPARAMS_COMMON_TITLE)
             block.insert(0, formatters.packTextBlockData(title, padding=formatters.packPadding(bottom=8)))
+        return block
+
+
+class GiveawayHangar(VehicleTooltipBlockConstructor):
+
+    def construct(self):
+        block = []
+        block.append(formatters.packImageTextBlockData(title=text_styles.statusAttention(TOOLTIPS.GIVEAWAY_HEADER), desc=text_styles.neutral(TOOLTIPS.GIVEAWAY_BODY), img=RES_ICONS.MAPS_ICONS_TOOLTIP_GIVEAWAY, txtPadding=formatters.packPadding(left=10, top=10), imgPadding=formatters.packPadding(top=10), txtGap=-5, padding=formatters.packPadding(left=29, top=-5, bottom=-20)))
         return block
 
 

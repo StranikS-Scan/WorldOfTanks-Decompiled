@@ -5,7 +5,7 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_slot_model i
 class BattleBoosterSlotModel(BaseSlotModel):
     __slots__ = ()
 
-    def __init__(self, properties=15, commands=0):
+    def __init__(self, properties=16, commands=0):
         super(BattleBoosterSlotModel, self).__init__(properties=properties, commands=commands)
 
     def getDescription(self):
@@ -20,7 +20,14 @@ class BattleBoosterSlotModel(BaseSlotModel):
     def setIsBuyMoreDisabled(self, value):
         self._setBool(14, value)
 
+    def getIsCrewBooster(self):
+        return self._getBool(15)
+
+    def setIsCrewBooster(self, value):
+        self._setBool(15, value)
+
     def _initialize(self):
         super(BattleBoosterSlotModel, self)._initialize()
         self._addStringProperty('description', '')
         self._addBoolProperty('isBuyMoreDisabled', False)
+        self._addBoolProperty('isCrewBooster', False)

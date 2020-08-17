@@ -1,15 +1,15 @@
 <ussr_nonCN.xml>
-  <ussr:R159_SU_130PM5>	ussr	</ussr:R159_SU_130PM5>
-  <ussr:R158_LT_4328>	germany	</ussr:R158_LT_4328>
-  <ussr:R159_SU_130PM4>	usa	</ussr:R159_SU_130PM4>
-  <ussr:R158_LT_4325>	china	</ussr:R158_LT_4325>
-  <ussr:R158_LT_4327>	france	</ussr:R158_LT_4327>
-  <ussr:R159_SU_130PM3>	uk	</ussr:R159_SU_130PM3>
-  <ussr:R159_SU_130PM0>	japan	</ussr:R159_SU_130PM0>
-  <ussr:R158_LT_4326>	czech	</ussr:R158_LT_4326>
-  <ussr:R159_SU_130PM2>	sweden	</ussr:R159_SU_130PM2>
-  <ussr:R159_SU_130PM1>	poland	</ussr:R159_SU_130PM1>
-  <ussr:R158_LT_4329>	italy	</ussr:R158_LT_4329>
+  <ussr:R159_SU_130PM6>	ussr	</ussr:R159_SU_130PM6>
+  <ussr:R158_LT_4329>	germany	</ussr:R158_LT_4329>
+  <ussr:R159_SU_130PM5>	usa	</ussr:R159_SU_130PM5>
+  <ussr:R158_LT_4326>	china	</ussr:R158_LT_4326>
+  <ussr:R158_LT_4328>	france	</ussr:R158_LT_4328>
+  <ussr:R159_SU_130PM4>	uk	</ussr:R159_SU_130PM4>
+  <ussr:R159_SU_130PM1>	japan	</ussr:R159_SU_130PM1>
+  <ussr:R158_LT_4327>	czech	</ussr:R158_LT_4327>
+  <ussr:R159_SU_130PM3>	sweden	</ussr:R159_SU_130PM3>
+  <ussr:R159_SU_130PM2>	poland	</ussr:R159_SU_130PM2>
+  <ussr:R159_SU_130PM0>	italy	</ussr:R159_SU_130PM0>
   <itemGroup>
     <userString>	#vehicle_customization:camouflage/opaque	</userString>
     <season>	winter	</season>
@@ -993,6 +993,42 @@
         <ussr:R158_LT_4322>	1.54 1.54 0.000000 0.000000	</ussr:R158_LT_4322>
         <ussr:R158_LT_4323>	4.7 4.7 0.000000 0.000000	</ussr:R158_LT_4323>
         <ussr:R158_LT_4324>	1.54 1.54 0.000000 0.000000	</ussr:R158_LT_4324>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R61_Object252	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	116	</id>
+      <texture>	vehicles/russian/Camouflage/10years_grandfather.dds	</texture>
+      <description>	#vehicle_customization:camouflage/10years_grandfather/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/10years_grandfather/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.0205949	</HULL>
+        <TURRET>	0.0205949	</TURRET>
+        <GUN>	0.0205949	</GUN>
+      </rotation>
+      <tiling>
+        <ussr:R158_LT_4325>	5 5 -2.04 0.77	</ussr:R158_LT_4325>
       </tiling>
     </camouflage>
   </itemGroup>

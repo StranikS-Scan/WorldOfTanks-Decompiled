@@ -13,20 +13,31 @@ class HangarLoadingController(IHangarLoadingController):
         super(HangarLoadingController, self).__init__()
         self.onHangarLoadedAfterLogin = Event.Event()
         self.__isConnectedAsAccount = False
+        self.__wasInBootcamp = False
 
     def fini(self):
         self.__isConnectedAsAccount = False
+        self.__wasInBootcamp = False
         self.__hangarSpace.onSpaceCreate -= self.__hangarLoadedAfterLoginNotify
 
     def onAvatarBecomePlayer(self):
-        self.__isConnectedAsAccount = False
+        if not self.__bootcamp.isInBootcamp():
+            if self.__wasInBootcamp:
+                self.__isConnectedAsAccount = True
+                self.__wasInBootcamp = False
+            else:
+                self.__isConnectedAsAccount = False
+        else:
+            self.__wasInBootcamp = True
+
+    def getWasInBootcamp(self):
+        return self.__wasInBootcamp
+
+    def getConnectedAsACcount(self):
+        return self.__isConnectedAsAccount
 
     def onConnected(self):
         self.__isConnectedAsAccount = True
-
-    def onAccountBecomeNonPlayer(self):
-        self.__isConnectedAsAccount = False
-        self.__hangarSpace.onSpaceCreate -= self.__hangarLoadedAfterLoginNotify
 
     def onDisconnected(self):
         self.__isConnectedAsAccount = False

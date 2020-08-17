@@ -3,12 +3,18 @@
 import BattleReplay
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.options import BattleLoadingTipSetting
+from constants import ARENA_GUI_TYPE
+from gui.game_control.low_tier_mm_controller import isEnabledMMEvent
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 from helpers import dependency
 from helpers import tips
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.battle_control.arena_info.settings import SMALL_MAP_IMAGE_SF_PATH
 from gui.shared.formatters import text_styles
 from gui.Scaleform.daapi.view.meta.BaseBattleLoadingMeta import BaseBattleLoadingMeta
+from helpers.tips import _TipData
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.impl import IGuiLoader
@@ -75,16 +81,24 @@ class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
         arenaDP = self._battleCtx.getArenaDP()
         battlesCount = DEFAULT_BATTLES_COUNT
         if not isBattleLoadingShowed():
-            if self.lobbyContext.getBattlesCount() is not None:
-                battlesCount = self._getBattlesCount()
             criteria = tips.getTipsCriteria(self._arenaVisitor)
-            criteria.setBattleCount(battlesCount)
-            criteria.setVehicleType(arenaDP.getVehicleInfo().vehicleType)
-            translation = self.gui.resourceManager.getTranslatedText
-            tip = criteria.find()
-            self.as_setTipTitleS(self._formatTipTitle(translation(tip.status)))
-            self.as_setTipS(self._formatTipBody(translation(tip.body)))
-            self.as_setVisualTipInfoS(self._makeVisualTipVO(arenaDP, tip))
+            if VEHICLE_TAGS.LOW_TIER_EVENT in arenaDP.getVehicleInfo().vehicleType.tags and isEnabledMMEvent():
+                arenaGuiType = criteria.getArenaGuiType()
+                if arenaGuiType == ARENA_GUI_TYPE.RANDOM:
+                    tip = _TipData(backport.text(R.strings.tips.lowTierEventStatus()), backport.text(R.strings.tips.lowTierEventBody()), R.images.gui.maps.icons.battleLoading.tips.lowTierEvent())
+                    self.as_setTipTitleS(text_styles.highTitle(tip.status))
+                    self.as_setTipS(text_styles.playerOnline(tip.body))
+                    self.as_setVisualTipInfoS(self._makeVisualTipVO(arenaDP, tip))
+            else:
+                if self.lobbyContext.getBattlesCount() is not None:
+                    battlesCount = self._getBattlesCount()
+                criteria.setBattleCount(battlesCount)
+                criteria.setVehicleType(arenaDP.getVehicleInfo().vehicleType)
+                translation = self.gui.resourceManager.getTranslatedText
+                tip = criteria.find()
+                self.as_setTipTitleS(self._formatTipTitle(translation(tip.status)))
+                self.as_setTipS(self._formatTipBody(translation(tip.body)))
+                self.as_setVisualTipInfoS(self._makeVisualTipVO(arenaDP, tip))
             _setBattleLoading(True)
         return
 

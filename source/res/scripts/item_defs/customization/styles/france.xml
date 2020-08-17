@@ -857,4 +857,50 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 1750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F19_Lorraine40t	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	343	</id>
+      <texture>	gui/maps/vehicles/styles/10years_lorraine.png	</texture>
+      <description>	#vehicle_customization:special_style/10years_lorraine_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/10years_lorraine_desc/long	</longDescriptionSpecial>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/10years_lorraine	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	183	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	320	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </france.xml>

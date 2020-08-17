@@ -10,7 +10,6 @@ from adisp import process, async
 from client_request_lib.exceptions import ResponseCodes
 from debug_utils import LOG_DEBUG
 from gui import makeHtmlString
-from gui.impl.gen import R
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.event_boards.formaters import getClanTag
@@ -18,6 +17,7 @@ from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.meta.BattleQueueMeta import BattleQueueMeta
 from gui.Scaleform.daapi.view.meta.BattleStrongholdsQueueMeta import BattleStrongholdsQueueMeta
 from gui.Scaleform.framework import ViewTypes
+from gui.impl.gen import R
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -283,11 +283,11 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
             self.as_setTypeInfoS({'iconLabel': iconlabel,
              'title': title,
              'description': description,
-             'additional': additional,
              'tankLabel': text_styles.main(textLabel),
              'tankIcon': iconPath,
              'tankName': tankName,
-             'layoutStr': layoutStr})
+             'layoutStr': layoutStr,
+             'additional': additional})
             return
 
     def __stopUpdateScreen(self):

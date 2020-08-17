@@ -6,7 +6,7 @@ from frameworks.wulf import ViewModel
 class TenYearsCountdownEntryPointModel(ViewModel):
     __slots__ = ('onActionClick',)
 
-    def __init__(self, properties=6, commands=1):
+    def __init__(self, properties=7, commands=1):
         super(TenYearsCountdownEntryPointModel, self).__init__(properties=properties, commands=commands)
 
     def getBlockTitle(self):
@@ -45,6 +45,12 @@ class TenYearsCountdownEntryPointModel(ViewModel):
     def setTimerText(self, value):
         self._setString(5, value)
 
+    def getIsChina(self):
+        return self._getBool(6)
+
+    def setIsChina(self, value):
+        self._setBool(6, value)
+
     def _initialize(self):
         super(TenYearsCountdownEntryPointModel, self)._initialize()
         self._addStringProperty('blockTitle', '')
@@ -53,4 +59,5 @@ class TenYearsCountdownEntryPointModel(ViewModel):
         self._addStringProperty('balance', '')
         self._addResourceProperty('coinIcon', R.invalid())
         self._addStringProperty('timerText', '')
+        self._addBoolProperty('isChina', False)
         self.onActionClick = self._addCommand('onActionClick')

@@ -17,6 +17,7 @@ class LootCongratsTypes(ViewModel):
     CONGRAT_TYPE_10YC_TOKEN = 'TenYearCongratsToken'
     CONGRAT_TYPE_10YC_BADGE = 'TenYearCongratsBadge'
     CONGRAT_TYPE_10YC_STYLE = 'TenYearCongratsStyle'
+    CONGRAT_TYPE_10YC_STYLE_CHINA = 'TenYearCongratsStyleChina'
 
     def __init__(self, properties=0, commands=0):
         super(LootCongratsTypes, self).__init__(properties=properties, commands=commands)

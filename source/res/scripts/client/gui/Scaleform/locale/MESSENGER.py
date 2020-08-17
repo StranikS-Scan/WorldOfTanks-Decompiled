@@ -341,6 +341,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDPROGRESS = '#messenger:serviceChannelMessages/battleResults/rankedProgress'
     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDBONUSBATTLES = '#messenger:serviceChannelMessages/battleResults/rankedBonusBattles'
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS = '#messenger:serviceChannelMessages/battleResults/quests'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_LOWTIERREWARDSQUESTS = '#messenger:serviceChannelMessages/battleResults/lowTierRewardsQuests'
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_VEHICLESLOTS = '#messenger:serviceChannelMessages/battleResults/quests/vehicleSlots'
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_FREEXP = '#messenger:serviceChannelMessages/battleResults/quests/freeXP'
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_CREDITS = '#messenger:serviceChannelMessages/battleResults/quests/credits'

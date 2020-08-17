@@ -19,6 +19,7 @@ class BaseBattleBoosterProvider(VehicleBaseArrayProvider):
         model.setImageName(item.descriptor.iconName)
         isEnough = item.mayPurchaseWithExchange(self._itemsCache.items.stats.money, self._itemsCache.items.shop.exchangeRate)
         model.setIsBuyMoreDisabled(not isEnough)
+        model.setIsCrewBooster(item.isCrewBooster())
         self._fillHighlights(model, item)
         self._fillBuyPrice(model, item)
         return model

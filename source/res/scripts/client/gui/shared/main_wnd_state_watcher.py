@@ -37,3 +37,21 @@ class ClientMainWindowStateWatcher(object):
 
     def _onClientMainWindowStateChanged(self, isWindowVisible):
         pass
+
+
+class LowTierWindowWatcher(ClientMainWindowStateWatcher):
+
+    def __init__(self, callback):
+        self.__callback = callback
+        super(LowTierWindowWatcher, self).__init__()
+
+    def mainWindowWatcherDestroy(self):
+        self.__callback = None
+        super(LowTierWindowWatcher, self).mainWindowWatcherDestroy()
+        return
+
+    def _onClientMainWindowStateChanged(self, isWindowVisible):
+        if isWindowVisible and callable(self.__callback):
+            self.__callback()
+            self.__callback = None
+        return

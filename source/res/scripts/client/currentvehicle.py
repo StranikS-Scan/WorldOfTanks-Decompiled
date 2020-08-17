@@ -266,6 +266,9 @@ class _CurrentVehicle(_CachedVehicle):
     def isEvent(self):
         return self.isPresent() and self.item.isEvent
 
+    def isLowTierEvent(self):
+        return self.isPresent() and self.item.isLowTierEvent
+
     def isObserver(self):
         return self.isPresent() and self.item.isObserver
 

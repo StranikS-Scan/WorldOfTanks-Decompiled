@@ -144,6 +144,7 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     BATTLE_ROYALE = 'battle_royale'
     RENT_PROMOTION = 'rent_promotion'
     EARN_CRYSTALS = 'earn_crystals'
+    LOW_TIER_EVENT = 'lowTierEvent'
 
 
 EPIC_ACTION_VEHICLE_CDS = (44033, 63265)
@@ -1204,6 +1205,10 @@ class Vehicle(FittingItem):
     @property
     def isOnlyForEventBattles(self):
         return checkForTags(self.tags, VEHICLE_TAGS.EVENT)
+
+    @property
+    def isLowTierEvent(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.LOW_TIER_EVENT)
 
     @property
     def isOnlyForEpicBattles(self):

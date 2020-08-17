@@ -574,7 +574,8 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'dedicationMedal2',
  'dedicationMedal3',
  'dedicationMedal4',
- 'betaTester_cn']
+ 'betaTester_cn',
+ 'BigAnniversaryMedal_CN']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -685,7 +686,8 @@ _singleAchievementsPopUps = ['titleSniper',
  'BattlePassCommonPr_2',
  'TenYearsCountdownSPGEventMedal',
  'TenYearsCountdownBrawlMedal',
- 'betaTester_cn']
+ 'betaTester_cn',
+ 'BigAnniversaryMedal_CN']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, {}, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',

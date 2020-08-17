@@ -56,6 +56,8 @@ def getGameControllersConfig(manager):
     from gui.game_control.badges_controller import BadgesController as _Badges
     from gui.game_control.special_sound_ctrl import SpecialSoundCtrl as _SpecialSoundCtrl
     from gui.game_control.battle_pass_controller import BattlePassController
+    from gui.game_control.low_tier_rewards_controller import LowTierRewardsController
+    from gui.game_control.low_tier_mm_controller import LowTierMMController
     from gui.game_control.clan_notification_controller import ClanNotificationController as _ClanNotification
     from gui.game_control.craftmachine_controller import CraftmachineController
     tracker = GameStateTracker()
@@ -102,6 +104,8 @@ def getGameControllersConfig(manager):
     _config(_interface.IReferralProgramController, _ReferralController())
     _config(_interface.ISpecialSoundCtrl, _SpecialSoundCtrl())
     _config(_interface.IBattlePassController, BattlePassController())
+    _config(_interface.ILowTierRewardsController, LowTierRewardsController())
+    _config(_interface.ILowTierMMController, LowTierMMController())
     _config(_interface.IHangarLoadingController, _HangarLoading())
     _config(_interface.ITenYearsCountdownController, _TenYears())
     if constants.IS_CHINA:

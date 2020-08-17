@@ -30,7 +30,7 @@ from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import PrimeTimeStatus
 from gui.shared import event_dispatcher as shared_events, g_eventBus
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showRankedPrimeTimeWindow, showTenYearsCountdownOnBoarding
+from gui.shared.event_dispatcher import showRankedPrimeTimeWindow, showTenYearsCountdownOnBoarding, showLowTierRewardsOverlay
 from gui.shared.event_dispatcher import showAmmunitionSetupView
 from gui.shared.events import LobbySimpleEvent, AmmunitionSetupViewEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -44,7 +44,7 @@ from helpers.i18n import makeString as _ms
 from helpers.statistics import HANGAR_LOADING_STATE
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IIGRController
+from skeletons.gui.game_control import IIGRController, ILowTierRewardsController
 from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController, IBattlePassController, IHangarLoadingController, ITenYearsCountdownController, IBattleRoyaleController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
@@ -89,6 +89,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     _connectionMgr = dependency.descriptor(IConnectionManager)
     _offersBannerController = dependency.descriptor(IOffersBannerController)
     _countdownController = dependency.descriptor(ITenYearsCountdownController)
+    _lowTierController = dependency.descriptor(ILowTierRewardsController)
     _hangarLoadingController = dependency.descriptor(IHangarLoadingController)
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 
@@ -604,9 +605,15 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         isEnabled = self._countdownController.isEnabled()
         isBlocksDataValid = self._countdownController.isBlocksDataValid()
         currentBlockNumber = self._countdownController.getCurrentBlockNumber()
+        callbackLowTierRewardsOverlay = None
+        if self._lowTierController.isEnabled() and self._lowTierController.isRewardReady():
+            callbackLowTierRewardsOverlay = showLowTierRewardsOverlay
         if isEnabled and isBlocksDataValid and not isOnBoardingCurrentBlockVisited(currentBlockNumber):
             setOnBoardingLastVisitedBlock(currentBlockNumber)
-            showTenYearsCountdownOnBoarding(currentBlockNumber, self._countdownController.isCurrentBlockActive(), self._countdownController.getMonths(), self._countdownController.getBlocksCount())
+            showTenYearsCountdownOnBoarding(currentBlockNumber, self._countdownController.isCurrentBlockActive(), self._countdownController.getMonths(), self._countdownController.getBlocksCount(), callbackLowTierRewardsOverlay)
+        elif callbackLowTierRewardsOverlay:
+            callbackLowTierRewardsOverlay()
+        return
 
     def __onOptDeviceClick(self, **kwargs):
         self.as_showSwitchToAmmunitionS()

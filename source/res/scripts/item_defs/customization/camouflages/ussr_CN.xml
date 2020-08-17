@@ -1,0 +1,49 @@
+<ussr_CN.xml>
+  <xmlns:china1>	ussr	</xmlns:china1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:china0>	usa	</xmlns:china0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R61_Object252	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	116	</id>
+      <texture>	vehicles/russian/Camouflage/10years_grandfather.dds	</texture>
+      <description>	#vehicle_customization:camouflage/10years_grandfather/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/10years_grandfather/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.0205949	</HULL>
+        <TURRET>	0.0205949	</TURRET>
+        <GUN>	0.0205949	</GUN>
+      </rotation>
+      <tiling>
+        <ussr:R61_Object252>	5 5 -1.94 0.77	</ussr:R61_Object252>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+</ussr_CN.xml>

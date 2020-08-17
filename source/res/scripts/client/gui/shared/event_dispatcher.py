@@ -49,6 +49,7 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import getUserName
 from gui.shared.gui_items.processors.goodies import BoosterActivator
+from gui.shared.main_wnd_state_watcher import LowTierWindowWatcher
 from gui.shared.money import Currency
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.functions import getViewName, getUniqueViewName
@@ -63,7 +64,7 @@ from helpers.i18n import makeString as _ms
 from items import vehicles as vehicles_core
 from nations import NAMES
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IHeroTankController, IReferralProgramController, IEpicBattleMetaGameController, IClanNotificationController, ITenYearsCountdownController
+from skeletons.gui.game_control import IHeroTankController, IReferralProgramController, IEpicBattleMetaGameController, IClanNotificationController, ITenYearsCountdownController, ILowTierRewardsController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
@@ -713,6 +714,44 @@ def showTenYearsCountdownOverlay(url=None, path=None):
         return
 
 
+@adisp.process
+def showLowTierRewardsOverlay(url=None, path=None, callback=None):
+    import BigWorld
+    eventController = dependency.instance(ILowTierRewardsController)
+    if not eventController.isEnabled():
+        _logger.warning('Low tier rewards event is not enabled. Nothing will be shown.')
+        return
+    else:
+        if url:
+            url = yield URLMacros().parse(url)
+        else:
+            url = eventController.getEventBaseURL()
+        if path:
+            path = yield URLMacros().parse(path)
+        else:
+            path = ''
+        if url is None:
+            _logger.error('Low tier rewards events baseURL is missed')
+        url = '/'.join((node.strip('/') for node in (url, path)))
+        watcher = None
+
+        def loadOverlay():
+            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.OVERLAY_LOW_TIER_REWARDS, ctx={'url': url,
+             'allowRightClick': False,
+             'callbackOnDispose': callback}), EVENT_BUS_SCOPE.LOBBY)
+            if watcher is not None:
+                watcher.mainWindowWatcherDestroy()
+            return
+
+        if url:
+            if BigWorld.isWindowVisible():
+                loadOverlay()
+            else:
+                watcher = LowTierWindowWatcher(loadOverlay)
+                watcher.mainWindowWatcherInit()
+        return
+
+
 def showSeniorityRewardWindow():
     from gui.impl.lobby.seniority_awards.seniority_reward_view import SeniorityRewardWindow
     uiLoader = dependency.instance(IGuiLoader)
@@ -1044,9 +1083,9 @@ def showProgressiveItemsView(itemIntCD=None):
     return
 
 
-def showTenYearsCountdownOnBoarding(stageNumber, isStageActive, months, blocksCount):
+def showTenYearsCountdownOnBoarding(stageNumber, isStageActive, months, blocksCount, callback=None):
     from gui.impl.lobby.ten_years_countdown.ten_years_onboarding_view import TenYearsOnboardingWindow
-    window = TenYearsOnboardingWindow(stageNumber, isStageActive, months, blocksCount)
+    window = TenYearsOnboardingWindow(stageNumber, isStageActive, months, blocksCount, callback)
     window.load()
 
 

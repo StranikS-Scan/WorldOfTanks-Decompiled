@@ -5,6 +5,7 @@ import typing
 from collections import Container, namedtuple
 from sys import maxint
 from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
+from constants import IS_CHINA
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.locale.COMMON import COMMON
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
@@ -290,7 +291,8 @@ def getItemDescription(rawItem, item):
     elif rawItem.type == ItemPackType.CUSTOM_CRYSTAL:
         description = _ms(TOOLTIPS.AWARDITEM_CRYSTAL_BODY)
     elif rawItem.type in (ItemPackType.CUSTOM_EVENT_COIN, ItemPackType.CUSTOM_EVENT_COIN_EXTERNAL):
-        description = _ms(TOOLTIPS.AWARDITEM_EVENTCOIN_BODY)
+        eventCoinBody = TOOLTIPS.AWARDITEM_EVENTCOIN_BODY if not IS_CHINA else TOOLTIPS.AWARDITEM_EVENTCOIN_BODY_CN
+        description = _ms(eventCoinBody)
     elif rawItem.type == ItemPackType.CUSTOM_PREMIUM:
         description = backport.text(R.strings.tooltips.awardItem.premium.body())
     elif rawItem.type == ItemPackType.CUSTOM_PREMIUM_PLUS:

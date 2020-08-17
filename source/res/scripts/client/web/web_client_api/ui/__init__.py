@@ -3,6 +3,7 @@
 from web.web_client_api import w2capi
 from web.web_client_api.ui.calendar import OpenCalendarWindowWebApiMixin
 from web.web_client_api.ui.chat import ChatWebApiMixin
+from web.web_client_api.ui.low_tier_rewards import LowTierRewardsApiMixin
 from web.web_client_api.ui.shop import ShopWebApiMixin
 from web.web_client_api.ui.badges import BadgesWebApiMixin
 from web.web_client_api.ui.boosters import BoostersWindowWebApiMixin
@@ -36,7 +37,7 @@ from web.web_client_api.ui.ranked import OpenRankedPagesMixin
 from web.web_client_api.ui.ten_years_event import OpenTenYearsEventHubWebApiMixin
 
 @w2capi(name='open_window', key='window_id')
-class OpenWindowWebApi(OpenBrowserWindowWebApiMixin, ClanWindowWebApiMixin, ProfileWindowWebApiMixin, OpenExternalBrowserWebApiMixin, VehicleSellWebApiMixin, hangar.HangarWindowsWebApiMixin, BoostersWindowWebApiMixin, ManualPageWebApiMixin, ChatWebApiMixin, SquadWebApiMixin, OpenBrowserOverlayWebApiMixin, PremiumViewsWebApiMixin, OpenCalendarWindowWebApiMixin, OpenBuyGoldWebApiMixin, OpenTankmanWebApiMixin, DialogsWebApiMixin, OpenRankedPagesMixin, OpenTenYearsEventHubWebApiMixin):
+class OpenWindowWebApi(OpenBrowserWindowWebApiMixin, ClanWindowWebApiMixin, ProfileWindowWebApiMixin, OpenExternalBrowserWebApiMixin, VehicleSellWebApiMixin, hangar.HangarWindowsWebApiMixin, BoostersWindowWebApiMixin, ManualPageWebApiMixin, ChatWebApiMixin, SquadWebApiMixin, OpenBrowserOverlayWebApiMixin, PremiumViewsWebApiMixin, OpenCalendarWindowWebApiMixin, OpenBuyGoldWebApiMixin, OpenTankmanWebApiMixin, DialogsWebApiMixin, OpenRankedPagesMixin, OpenTenYearsEventHubWebApiMixin, LowTierRewardsApiMixin):
     pass
 
 

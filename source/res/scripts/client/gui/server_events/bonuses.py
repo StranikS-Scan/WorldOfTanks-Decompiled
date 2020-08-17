@@ -10,7 +10,7 @@ import BigWorld
 from adisp import process
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
-from constants import EVENT_TYPE as _ET, DOSSIER_TYPE, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, CURRENCY_TOKEN_PREFIX, RESOURCE_TOKEN_PREFIX
+from constants import EVENT_TYPE as _ET, DOSSIER_TYPE, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, CURRENCY_TOKEN_PREFIX, RESOURCE_TOKEN_PREFIX, IS_CHINA
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
@@ -292,13 +292,24 @@ class EventCoinBonus(IntegralBonus):
     def getList(self):
         return [{'value': self.formatValue(),
           'itemSource': backport.image(R.images.gui.maps.icons.library.EventCoinIconBig()),
-          'tooltip': TOOLTIPS.AWARDITEM_EVENTCOIN}]
+          'tooltip': self.__getTooltip()}]
 
     def hasIconFormat(self):
         return True
 
     def getIconLabel(self):
         return text_styles.eventCoin(self.getValue())
+
+    def getTooltip(self):
+        return self.__getTooltip()
+
+    @staticmethod
+    def __getTooltip():
+        if not IS_CHINA:
+            tooltip = TOOLTIPS.AWARDITEM_EVENTCOIN
+        else:
+            tooltip = makeTooltip(TOOLTIPS.AWARDITEM_EVENTCOIN_HEADER, TOOLTIPS.AWARDITEM_EVENTCOIN_BODY_CN)
+        return tooltip
 
 
 class FreeXpBonus(IntegralBonus):

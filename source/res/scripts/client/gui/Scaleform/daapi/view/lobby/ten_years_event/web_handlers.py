@@ -3,6 +3,7 @@
 import WWISE
 from gui.shared.event_dispatcher import showTenYearsCountdownOverlay, showHangar
 from web.web_client_api import webApiCollection
+from web.web_client_api.low_tier_rewards import LowTierRewardsWebApi
 from web.web_client_api.ten_years_event import TenYCEventWebApi
 from web.web_client_api.request import RequestWebApi
 from web.web_client_api.rewards import RewardsWebApi
@@ -27,6 +28,9 @@ class _OpenTabWebApi(OpenTabWebApi):
 
         return callback if backUrl is not None else None
 
+    def _getVehiclePreviewReturnCallback(self, cmd):
+        return self.__getReturnCallback(cmd.back_url)
+
 
 class _SoundWebApi(SoundWebApi):
     _ENTER_EXIT_SOUND_MAPPING = {'eb_ambient_progress_page_enter': 'eb_ambient_progress_page_exit',
@@ -43,4 +47,4 @@ class _SoundStateWebApi(SoundStateWebApi):
 
 
 def createTenYearsEventWebHandlers():
-    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, _SoundWebApi, _SoundStateWebApi, HangarSoundWebApi, UtilWebApi, QuestsWebApi, VehiclesWebApi, RewardsWebApi, SocialWebApi, TenYCEventWebApi)
+    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, _SoundWebApi, _SoundStateWebApi, HangarSoundWebApi, UtilWebApi, QuestsWebApi, VehiclesWebApi, RewardsWebApi, SocialWebApi, TenYCEventWebApi, LowTierRewardsWebApi)

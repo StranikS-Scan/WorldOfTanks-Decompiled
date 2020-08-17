@@ -48,6 +48,9 @@ class EventProgressionItem(SelectorExtraItem):
     def isSelected(self):
         return self.__dataProvider.isSelected()
 
+    def isDisabled(self):
+        return self.__dataProvider.isDisabled()
+
     def isSelectorBtnEnabled(self):
         return self.__dataProvider.isSelectorBtnEnabled()
 

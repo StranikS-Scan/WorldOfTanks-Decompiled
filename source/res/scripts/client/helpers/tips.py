@@ -62,11 +62,11 @@ class _TipsCriteria(object):
             foundTip = random.choice(suitableTips)
         return foundTip
 
-    def _getArenaGuiType(self):
+    def getArenaGuiType(self):
         return None
 
     def _suitableTipPredicate(self, tip):
-        return False if tip is None else tip.test(self._getArenaGuiType(), self._battlesCount, self._vehicleType)
+        return False if tip is None else tip.test(self.getArenaGuiType(), self._battlesCount, self._vehicleType)
 
     def _getTargetList(self):
         _logger.error('Method _getTargetList has to be overridden')
@@ -78,7 +78,7 @@ class _RandomTipsCriteria(_TipsCriteria):
     def _getTargetList(self):
         return _randomTips
 
-    def _getArenaGuiType(self):
+    def getArenaGuiType(self):
         return ARENA_GUI_TYPE.RANDOM
 
 
@@ -91,7 +91,7 @@ class _EpicBattleTipsCriteria(_TipsCriteria):
     def _getTargetList(self):
         return _epicBattleTips
 
-    def _getArenaGuiType(self):
+    def getArenaGuiType(self):
         return ARENA_GUI_TYPE.EPIC_BATTLE
 
 

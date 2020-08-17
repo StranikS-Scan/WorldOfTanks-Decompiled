@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/ten_years_countdown/ten_years_countdown_award_view.py
 import logging
 import WWISE
+from constants import IS_CHINA
 from frameworks.wulf import ViewSettings
 from frameworks.wulf import WindowFlags
 from gui.impl.auxiliary.rewards_helper import getRewardTooltipContent, getRewardRendererModelPresenter
@@ -82,6 +83,8 @@ class TenYearsCountdownAwardView(ViewImpl):
                 title = R.strings.ten_year_countdown.awardView.title.badge()
             elif self.__specialRewardType.startswith(EVENT_STYLE_MISSION_ID):
                 title = R.strings.ten_year_countdown.awardView.title.style()
+                if IS_CHINA:
+                    title = R.strings.ten_year_countdown.awardView.title_CN.style()
             elif self.__specialRewardType.startswith(TEN_YEAR_COUNTDOWN_QUEST_TOKEN_PREFIX) and self.__specialRewardType.endswith(TEN_YEAR_COUNTDOWN_QUEST_TOKEN_POSTFIX):
                 title = R.strings.ten_year_countdown.awardView.title.token()
             else:

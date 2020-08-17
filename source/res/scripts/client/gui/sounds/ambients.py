@@ -234,6 +234,11 @@ class LobbySpaceEnv(SoundEnv):
         self._music.onFinished -= self._onMusicFinished
         super(LobbySpaceEnv, self).stop()
 
+    def restart(self):
+        if self._music.isEmpty():
+            self._music = SoundEvent(_MC.MUSIC_EVENT_LOBBY, checkFinish=True)
+            self._music.onFinished += self._onMusicFinished
+
     def _onMusicFinished(self, isCompleted=False):
         if isCompleted:
             self._music.onFinished -= self._onMusicFinished
@@ -541,4 +546,6 @@ class GuiAmbientsCtrl(object):
     def __onSpaceChanged(self):
         _MC.g_musicController.stopAmbient(True)
         _MC.g_musicController.stopMusic()
+        if isinstance(self._spaceEnv, LobbySpaceEnv):
+            self._spaceEnv.restart()
         self._restartSounds()

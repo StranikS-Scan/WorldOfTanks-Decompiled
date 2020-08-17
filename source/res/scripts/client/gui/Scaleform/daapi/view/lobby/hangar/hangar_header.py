@@ -24,7 +24,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events import finders
 from gui.server_events.events_constants import RANKED_DAILY_GROUP_ID
 from gui.server_events.events_dispatcher import showPersonalMission, showMissionsElen, showMissionsMarathon, showPersonalMissionOperationsPage, showPersonalMissionsOperationsMap, showMissionsCategories, showMissionsBattlePassCommonProgression
-from gui.server_events.events_helpers import isPremium, isDailyQuest, isRankedDaily
+from gui.server_events.events_helpers import isPremium, isDailyQuest, isRankedDaily, isDailyEpic
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import icons
@@ -420,7 +420,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             self.update()
 
     def __getBattleQuestsVO(self, vehicle):
-        quests = [ q for q in self._questController.getQuestForVehicle(vehicle) if q.getID() not in self._eventProgression.getActiveQuestIDs() and not isDailyQuest(q.getID()) and not isPremium(q.getID()) and not isRankedQuestID(q.getID()) ]
+        quests = [ q for q in self._questController.getQuestForVehicle(vehicle) if not isDailyEpic(q.getGroupID()) and not isDailyQuest(q.getID()) and not isPremium(q.getID()) and not isRankedQuestID(q.getID()) ]
         totalCount = len(quests)
         completedQuests = len([ q for q in quests if q.isCompleted() ])
         festivityFlagData = self._festivityController.getHangarQuestsFlagData()

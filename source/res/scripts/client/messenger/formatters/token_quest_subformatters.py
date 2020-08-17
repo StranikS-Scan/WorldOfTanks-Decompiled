@@ -714,3 +714,41 @@ class RankedYearLeaderFormatter(RankedTokenQuestFormatter):
     def __formatShortMessage(self):
         return g_settings.msgTemplates.format('rankedLeaderNegativeQuest', ctx={'title': backport.text(R.strings.system_messages.ranked.notification.yearLB.negative.title()),
          'body': backport.text(R.strings.system_messages.ranked.notification.yearLB.negative.body())}, data={'savedData': {'ctx': {'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID}}})
+
+
+class LowTierRewardsFormatter(AsyncTokenQuestsSubFormatter):
+    __MESSAGE_TEMPLATE = 'LowTierRewardsMessage'
+    __TEMPLATE_NAME = 'giveaway10years'
+
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        messageDataList = []
+        if isSynced:
+            data = message.data or {}
+            completedQuestIDs = self.getQuestOfThisGroup(data.get('completedQuestIDs', set()))
+            for qID in completedQuestIDs:
+                messageData = self.__buildMessage(qID, message)
+                if messageData is not None:
+                    messageDataList.append(messageData)
+
+        if messageDataList:
+            callback(messageDataList)
+        callback([MessageData(None, None)])
+        return
+
+    def __buildMessage(self, questID, message):
+        rewards = getRewardsForQuests(message, set((questID,)))
+        fmt = self._achievesFormatter.formatQuestAchieves(rewards, asBattleFormatter=False, processCustomizations=True)
+        if fmt is not None:
+            templateParams = {'achieves': fmt}
+            settings = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE)
+            formatted = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, templateParams)
+            return MessageData(formatted, settings)
+        else:
+            return
+
+    @classmethod
+    def _isQuestOfThisGroup(cls, questID):
+        return cls.__TEMPLATE_NAME in questID

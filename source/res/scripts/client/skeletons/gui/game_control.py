@@ -1609,6 +1609,12 @@ class IBattlePassController(IGameController):
 class IHangarLoadingController(IGameController):
     onHangarLoadedAfterLogin = None
 
+    def getWasInBootcamp(self):
+        raise NotImplementedError
+
+    def getConnectedAsACcount(self):
+        raise NotImplementedError
+
 
 class ITenYearsCountdownController(IGameController):
     onEventStateChanged = None
@@ -1656,4 +1662,25 @@ class ITenYearsCountdownController(IGameController):
         raise NotImplementedError
 
     def isEventInProgress(self):
+        raise NotImplementedError
+
+
+class ILowTierRewardsController(IGameController):
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def getEventBaseURL(self):
+        raise NotImplementedError
+
+    def isRewardReady(self):
+        raise NotImplementedError
+
+
+class ILowTierMMController(IGameController):
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def getDateFinish(self):
         raise NotImplementedError

@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.ten_years_countdown.onboarding_stage_i
 class TenYearsOnboardingViewModel(ViewModel):
     __slots__ = ('onForwardBtnClick', 'onBackBtnClick')
 
-    def __init__(self, properties=6, commands=2):
+    def __init__(self, properties=7, commands=2):
         super(TenYearsOnboardingViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -41,6 +41,12 @@ class TenYearsOnboardingViewModel(ViewModel):
     def setPagesCount(self, value):
         self._setNumber(5, value)
 
+    def getIsChina(self):
+        return self._getBool(6)
+
+    def setIsChina(self, value):
+        self._setBool(6, value)
+
     def _initialize(self):
         super(TenYearsOnboardingViewModel, self)._initialize()
         self._addViewModelProperty('calendar', OnboardingCalendarPageModel())
@@ -49,5 +55,6 @@ class TenYearsOnboardingViewModel(ViewModel):
         self._addNumberProperty('chapterNumber', 0)
         self._addNumberProperty('selectedPageId', 0)
         self._addNumberProperty('pagesCount', 0)
+        self._addBoolProperty('isChina', False)
         self.onForwardBtnClick = self._addCommand('onForwardBtnClick')
         self.onBackBtnClick = self._addCommand('onBackBtnClick')

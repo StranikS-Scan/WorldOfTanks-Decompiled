@@ -11,7 +11,6 @@ from gui.Scaleform.daapi.view.meta.IntroPageMeta import IntroPageMeta
 from gui.doc_loaders.GuiDirReader import GuiDirReader
 from helpers import isIntroVideoSettingChanged, writeIntroVideoSetting, dependency, uniprof
 from skeletons.gameplay import IGameplayLogic, GUIEventID
-from constants import IS_CHINA
 _VideoSettings = namedtuple('_VideoSettings', ['canBeSkipped'])
 
 def _getCompalsoryVideoSettings(path):
@@ -71,7 +70,7 @@ class IntroPage(IntroPageMeta):
         settings = _getCompalsoryVideoSettings(self.__moviePath)
         if settings:
             self.__showMovie(self.__moviePath, settings.canBeSkipped)
-        elif isIntroVideoSettingChanged() and not IS_CHINA:
+        elif isIntroVideoSettingChanged():
             self.__showMovie(self.__moviePath, True)
             self.__writeSetting = True
         else:

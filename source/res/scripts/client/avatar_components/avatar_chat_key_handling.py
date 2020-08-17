@@ -296,7 +296,6 @@ class AvatarChatKeyHandling(object):
                 return
             soundObjectName = _SOUND_OBJECT_NAMES_BY_MARKER_TYPE.get(markerType, _DEFAULT_SOUND_OBJECT_NAME)
             soundObjectName += str(targetID)
-            matrixProvider = None
             if targetID == self.playerVehicleID:
                 matrixProvider = self.__customMatrixProviderGetter[markerType](None, replierID)
             else:
@@ -321,6 +320,13 @@ class AvatarChatKeyHandling(object):
     def __enableVoices(self, enabled, clearQueue=False):
         if self.soundNotifications:
             self.soundNotifications.enableVoices(enabled, clearQueue)
+
+    def __switchSoundFXTo(self, enabled):
+        prevValue = False
+        if self.soundNotifications:
+            prevValue = self.soundNotifications.isCategoryEnabled('fx')
+            self.soundNotifications.enableFX(enabled)
+        return prevValue
 
     def __getVehicleIDByCmd(self, cmd):
         vehicleID = None
@@ -401,6 +407,8 @@ class AvatarChatKeyHandling(object):
             categoryVoiceIsEnabled = self.soundNotifications.isCategoryEnabled('voice')
             if categoryVoiceIsEnabled and enableVoice is False:
                 self.__enableVoices(enableVoice)
+            playEffect = sndPos is not None or matrixProvider is not None or isSentByPlayer
+            prevFxState = self.__switchSoundFXTo(playEffect)
             if not isSentByPlayer:
                 notification += _IS_NON_PLAYER_NOTIFICATION
             elif _PLAY_PING_SOUNDS_FOR_PLAYER_USING_DIRECTION_ONLY:
@@ -408,6 +416,8 @@ class AvatarChatKeyHandling(object):
             self.soundNotifications.play(notification, None, None, sndPos, soundObjectName, matrixProvider)
             if categoryVoiceIsEnabled and enableVoice is False:
                 self.__enableVoices(True)
+            if prevFxState != playEffect:
+                self.__switchSoundFXTo(prevFxState)
             return
 
     def __onSettingsReady(self):

@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/crystals_promo/crystals_promo_view.py
-from constants import ARENA_BONUS_TYPE
+from constants import ARENA_BONUS_TYPE, IS_CHINA
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
 from gui.app_loader.settings import APP_NAME_SPACE
@@ -53,6 +53,7 @@ class CrystalsPromoView(ViewImpl):
             model.setEquipmentPrice(getIntegralFormat(3000))
             model.setInstructionPrice(getIntegralFormat(6))
             model.setVehiclePrice(getIntegralFormat(3000))
+            model.setIsChina(IS_CHINA)
             self.__updateCondition(model)
             model.goToShop += self.__goToShopHandler
 

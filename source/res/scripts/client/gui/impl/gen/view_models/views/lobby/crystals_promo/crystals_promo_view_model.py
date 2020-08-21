@@ -10,7 +10,7 @@ class CrystalsPromoViewModel(ViewModel):
     INSTRUCTIONS_TAB = 'instructionsTab'
     EQUIPMENT_TAB = 'equipmentTab'
 
-    def __init__(self, properties=6, commands=1):
+    def __init__(self, properties=7, commands=1):
         super(CrystalsPromoViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -47,6 +47,12 @@ class CrystalsPromoViewModel(ViewModel):
     def setSyncInitiator(self, value):
         self._setBool(5, value)
 
+    def getIsChina(self):
+        return self._getBool(6)
+
+    def setIsChina(self, value):
+        self._setBool(6, value)
+
     def _initialize(self):
         super(CrystalsPromoViewModel, self)._initialize()
         self._addViewModelProperty('battleTypes', UserListModel())
@@ -55,4 +61,5 @@ class CrystalsPromoViewModel(ViewModel):
         self._addStringProperty('vehiclePrice', '')
         self._addStringProperty('equipmentPrice', '')
         self._addBoolProperty('syncInitiator', False)
+        self._addBoolProperty('isChina', False)
         self.goToShop = self._addCommand('goToShop')

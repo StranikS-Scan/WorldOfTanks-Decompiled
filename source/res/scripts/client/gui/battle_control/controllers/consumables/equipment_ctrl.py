@@ -241,8 +241,8 @@ class _RefillEquipmentItem(object):
     _PRE_REFILL_TIME = 3
 
     def __init__(self, *args, **kwargs):
-        super(_RefillEquipmentItem, self).__init__(*args, **kwargs)
         self._preRefillCallback = None
+        super(_RefillEquipmentItem, self).__init__(*args, **kwargs)
         return
 
     def update(self, quantity, stage, timeRemaining, totalTime):

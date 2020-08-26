@@ -3691,6 +3691,7 @@ class RES_ICONS(object):
     MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_ITALY = '../maps/icons/library/hangarFlag/flag_italy.png'
     MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_KHACKI = '../maps/icons/library/hangarFlag/flag_khacki.png'
     MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_KURSK = '../maps/icons/library/hangarFlag/flag_kursk.png'
+    MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_POLAND = '../maps/icons/library/hangarFlag/flag_poland.png'
     MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_RANKED = '../maps/icons/library/hangarFlag/flag_ranked.png'
     MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_RED = '../maps/icons/library/hangarFlag/flag_red.png'
     MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_VINOUS = '../maps/icons/library/hangarFlag/flag_vinous.png'

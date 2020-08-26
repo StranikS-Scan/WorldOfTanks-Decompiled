@@ -133,6 +133,9 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
         self._width = width
         self._height = height
 
+    def markVisited(self):
+        pass
+
     @process
     def _onRegisterFlashComponent(self, viewPy, alias):
         if alias == VIEW_ALIAS.BROWSER and self._marathonEvent:

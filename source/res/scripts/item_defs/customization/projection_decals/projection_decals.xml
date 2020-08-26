@@ -2700,4 +2700,23 @@
     </projection_decal>
     <name>	Decals for High Amount of Battles	</name>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/animals	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals 110g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	poland:Pl19_CS_52_LIS	</vehicles>
+      </include>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	332	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/animals/projection_decal_34.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/animals/projection_decal_34	</userString>
+      <tags>	formfactor_rect1x2 direction_right_to_left hiddenInUI	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	CS_52_LIS Autumn Marathon	</name>
+  </itemGroup>
 </projection_decals.xml>

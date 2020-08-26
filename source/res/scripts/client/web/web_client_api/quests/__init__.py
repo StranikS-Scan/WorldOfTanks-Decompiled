@@ -89,6 +89,14 @@ class QuestsWebApi(W2CSchema):
         data = {qID:_questAsDict(quest) for qID, quest in self._eventsCache.getActiveQuests(filterFunc=filterFunc).iteritems()}
         return data
 
+    @w2c(_QuestsSchema, 'get_quests_old')
+    def handleGetQuestsOld(self, command):
+        quests = self._eventsCache.questsProgress.getQuestsData()
+        if hasattr(command, 'ids') and command.ids:
+            quests = {k:v for k, v in quests.iteritems() if k in command.ids}
+        return {'quest_list': quests,
+         'action': 'get_quests'}
+
     @w2c(_QuestSetTokenSchema, 'set_token')
     def setToken(self, command):
         tokenName = command.token

@@ -16,6 +16,7 @@ class MarathonVehiclePreview(VehiclePreview):
     def __init__(self, ctx=None):
         super(MarathonVehiclePreview, self).__init__(ctx)
         self.__marathonPrefix = ctx.get('marathonPrefix')
+        self.__marathon = self.__marathonCtrl.getMarathon(self.__marathonPrefix)
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         if alias == VEHPREVIEW_CONSTANTS.BUYING_PANEL_PY_ALIAS:
@@ -33,4 +34,4 @@ class MarathonVehiclePreview(VehiclePreview):
         showMissionsMarathon(self.__marathonPrefix)
 
     def _getBackBtnLabel(self):
-        return backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.winterMarathon())
+        return backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.marathon()) if self.__marathon is None else backport.text(self.__marathon.backBtnLabel)

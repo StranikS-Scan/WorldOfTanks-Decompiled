@@ -26,6 +26,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency, i18n
 from helpers.time_utils import ONE_DAY, getTimeStructInLocal, ONE_HOUR
+from items.vehicles import makeVehicleTypeCompDescrByName
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -40,6 +41,7 @@ _R_BUYING_PANEL = R.strings.marathon.vehiclePreview.buyingPanel
 _R_TITLE_TOOLTIP = R.strings.marathon.vehiclePreview.title.tooltip
 _BUYING_BUTTON_ICON_ALIGN = 'right'
 _TOKEN_COUNT_INDEX = 1
+_MISSION_TAB_FORMAT = 'MISSIONS_TAB_{}'
 
 class IMarathonEvent(object):
     onDataChanged = None
@@ -52,6 +54,7 @@ class IMarathonEvent(object):
 
 
 class MarathonEventDataProvider(object):
+    AWARD_TOKENS_POSTFIX = ('COMPLETE', 'PS_STOP')
 
     @property
     def prefix(self):
@@ -71,23 +74,25 @@ class MarathonEventDataProvider(object):
 
     @property
     def label(self):
-        return R.strings.quests.missions.tab.label.marathons()
+        label = R.strings.quests.missions.tab.label.dyn(self.prefix)
+        return label() if label.isValid() else R.strings.quests.missions.tab.label.marathons()
+
+    @property
+    def backBtnLabel(self):
+        label = R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(self.prefix)
+        return label() if label.isValid() else R.strings.vehicle_preview.header.backBtn.descrLabel.marathon()
 
     @property
     def tabTooltip(self):
-        return QUESTS.MISSIONS_TAB_MARATHONS
+        return getattr(QUESTS, _MISSION_TAB_FORMAT.format(self.prefix.upper()), QUESTS.MISSIONS_TAB_MARATHONS)
 
     @property
-    def tabTooltipDisabled(self):
-        return QUESTS.MISSIONS_TAB_MARATHONS
-
-    @property
-    def vehiclePrefix(self):
+    def vehicleName(self):
         pass
 
     @property
     def vehicleID(self):
-        pass
+        return 0 if not self.vehicleName else makeVehicleTypeCompDescrByName(self.vehicleName)
 
     @property
     def suspendPrefix(self):
@@ -99,7 +104,11 @@ class MarathonEventDataProvider(object):
 
     @property
     def awardTokens(self):
-        return tuple()
+        return tuple(('{}{}'.format(self.tokenPrefix, postfix) for postfix in self.AWARD_TOKENS_POSTFIX))
+
+    @property
+    def hangarFlags(self):
+        pass
 
     @property
     def questsInChain(self):
@@ -127,24 +136,54 @@ class MarathonEventDataProvider(object):
 
     @property
     def tooltips(self):
-        return MarathonEventTooltipData(header=R.strings.tooltips.marathon.header(), body=R.strings.tooltips.marathon.body(), bodyExtra=R.strings.tooltips.marathon.body.extra(), bodyExtraSmart=R.strings.tooltips.marathon.body.extra_smart(), errorBattleType=R.strings.tooltips.marathon.error.battle_type(), errorVehType=R.strings.tooltips.marathon.error.veh_type(), extraStateSteps=R.strings.tooltips.marathon.extra_state.steps(), extraStateDiscount=R.strings.tooltips.marathon.extra_state.discount(), extraStateCompleted=R.strings.tooltips.marathon.extra_state.completed(), stateStart=R.strings.tooltips.marathon.state.start(), stateEnd=R.strings.tooltips.marathon.state.end(), stateProgress=R.strings.tooltips.marathon.extra_state(), stateComplete=R.strings.tooltips.marathon.state.complete(), daysShort=R.strings.tooltips.template.days.short(), hoursShort=R.strings.tooltips.template.hours.short(), minutesShort=R.strings.tooltips.template.minutes.short(), previewAnnounce=R.strings.marathon.vehiclePreview.title.tooltip.body.announce(), previewInProgress=R.strings.marathon.vehiclePreview.title.tooltip.body.inprogress())
+        body = self.__getTooltipString('body')
+        error = self.__getTooltipString('error')
+        state = self.__getTooltipString('state')
+        extraState = self.__getTooltipString('extra_state')
+        return MarathonEventTooltipData(header=self.__getTooltipString('header')(), body=body(), bodyExtra=body.extra(), bodyExtraSmart=body.extra_smart(), errorBattleType=error.battle_type(), errorVehType=error.veh_type(), extraStateSteps=extraState.steps(), extraStateDiscount=extraState.discount(), extraStateCompleted=extraState.completed(), stateStart=state.start(), stateEnd=state.end(), stateProgress=extraState(), stateComplete=state.complete(), daysShort=R.strings.tooltips.template.days.short(), hoursShort=R.strings.tooltips.template.hours.short(), minutesShort=R.strings.tooltips.template.minutes.short(), previewAnnounce=self.__getVehiclePreviewBodyString('announce')(), previewInProgress=self.__getVehiclePreviewBodyString('inprogress')())
 
     @property
     def icons(self):
-        return MarathonEventIconsData(tooltipHeader=backport.image(R.images.gui.maps.icons.quests.marathonTooltipHeader()), libraryOkIcon=backport.image(R.images.gui.maps.icons.library.okIcon()), okIcon=backport.image(R.images.gui.maps.icons.library.marathon.ok_icon()), timeIcon=backport.image(R.images.gui.maps.icons.library.marathon.time_icon()), timeIconGlow=backport.image(R.images.gui.maps.icons.library.marathon.time_icon_glow()), alertIcon=backport.image(R.images.gui.maps.icons.library.marathon.alert_icon()), iconFlag=backport.image(R.images.gui.maps.icons.library.marathon.icon_flag()), libraryInProgress=backport.image(R.images.gui.maps.icons.library.inProgressIcon()), saleIcon=backport.image(R.images.gui.maps.icons.library.marathon.sale_icon()), mapFlagHeaderIcon={MARATHON_STATE.ENABLED_STATE: backport.image(R.images.gui.maps.icons.library.marathon.cup_icon()),
-         MARATHON_STATE.DISABLED_STATE: backport.image(R.images.gui.maps.icons.library.marathon.cup_disable_icon())})
+        return MarathonEventIconsData(tooltipHeader=backport.image(R.images.gui.maps.icons.quests.marathonTooltipHeader()), libraryOkIcon=backport.image(R.images.gui.maps.icons.library.okIcon()), okIcon=backport.image(self.__getIconsResource('ok_icon')()), timeIcon=backport.image(self.__getIconsResource('time_icon')()), timeIconGlow=backport.image(self.__getIconsResource('time_icon_glow')()), alertIcon=backport.image(self.__getIconsResource('alert_icon')()), iconFlag=backport.image(self.__getIconsResource('icon_flag')()), libraryInProgress=backport.image(R.images.gui.maps.icons.library.inProgressIcon()), saleIcon=backport.image(self.__getIconsResource('sale_icon')()), mapFlagHeaderIcon={MARATHON_STATE.ENABLED_STATE: backport.image(self.__getIconsResource('cup_icon')()),
+         MARATHON_STATE.DISABLED_STATE: backport.image(self.__getIconsResource('cup_disable_icon')())})
+
+    @property
+    def infoBody(self):
+        marathonBody = _R_TITLE_TOOLTIP.info.dyn(self.prefix)
+        return marathonBody.body if marathonBody.isValid() else _R_TITLE_TOOLTIP.info.body
+
+    @property
+    def bodyAddInfo(self):
+        return _R_TITLE_TOOLTIP.body.addInfo
 
     def doesShowInPostBattle(self):
         return True
 
     def doesShowRewardVideo(self):
-        return True
+        return False
 
     def doesShowRewardScreen(self):
-        return True
+        return False
 
     def doesShowMissionsTab(self):
         return True
+
+    def __getResouce(self, obj, attr):
+        resourceObj = obj.dyn(self.prefix)
+        if resourceObj.isValid():
+            string = resourceObj.dyn(attr)
+            if string.isValid():
+                return string
+        return obj.marathon.dyn(attr)
+
+    def __getTooltipString(self, attr):
+        return self.__getResouce(R.strings.tooltips, attr)
+
+    def __getVehiclePreviewBodyString(self, attr):
+        return self.__getResouce(R.strings.marathon.vehiclePreview.title.tooltip.body, attr)
+
+    def __getIconsResource(self, attr):
+        return self.__getResouce(R.images.gui.maps.icons.library, attr)
 
 
 class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
@@ -183,7 +222,7 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
         return self.isEnabled()
 
     def getHangarFlag(self, state=None):
-        return backport.image(R.images.gui.maps.icons.library.hangarFlag.flag_italy())
+        return backport.image(R.images.gui.maps.icons.library.hangarFlag.dyn(self.hangarFlags)())
 
     @prbEntityProperty
     def prbEntity(self):
@@ -383,16 +422,16 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
         finishSaleTime = self.__getDateTimeText(self.getFinishSaleTime())
         questStartTime, _ = self.__getQuestStartFinishTime()
         questStartTimeText = self.__getDateTimeText(questStartTime)
+        body = self.infoBody
+        addInfo = self.bodyAddInfo
         if self.__state == MARATHON_STATE.NOT_STARTED:
-            tooltipBody = _R_TITLE_TOOLTIP.info.body.announce()
-            addInfo = backport.text(_R_TITLE_TOOLTIP.body.addInfo.announce(), addInfo=backport.text(self.tooltips.previewAnnounce, marathonStartDate=text_styles.neutral(questStartTimeText)))
+            tooltipBody = body.announce()
+            addInfo = backport.text(addInfo.announce(), addInfo=backport.text(self.tooltips.previewAnnounce, marathonStartDate=text_styles.neutral(questStartTimeText)))
             return self.__getPreviewInfoTooltip(tooltipBody, addInfo)
         if self.__state in (MARATHON_STATE.IN_PROGRESS, MARATHON_STATE.FINISHED):
-            tooltipBody = _R_TITLE_TOOLTIP.info.body.progress()
-            if self.getMarathonDiscount():
-                tooltipBody = _R_TITLE_TOOLTIP.info.body.progress.withDiscount()
+            tooltipBody = body.progress.withDiscount() if self.getMarathonDiscount() else body.progress()
             endVehicleSellDate = text_styles.neutral(finishSaleTime)
-            addInfo = backport.text(_R_TITLE_TOOLTIP.body.addInfo.progress(), endVehicleSellDate=endVehicleSellDate, addInfo=backport.text(self.tooltips.previewInProgress))
+            addInfo = backport.text(addInfo.progress(), endVehicleSellDate=endVehicleSellDate, addInfo=backport.text(self.tooltips.previewInProgress))
             return self.__getPreviewInfoTooltip(tooltipBody, addInfo)
         return makeTooltip()
 

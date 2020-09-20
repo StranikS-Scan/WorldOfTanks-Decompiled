@@ -1720,6 +1720,8 @@ class KeyboardSettings(SettingsContainer):
        ('help', 'CMD_CHAT_SHORTCUT_HELPME'),
        ('reloading', 'CMD_CHAT_SHORTCUT_RELOAD'),
        ('fallBack', 'CMD_CHAT_SHORTCUT_BACKTOBASE'),
+       ('affirmative', 'CMD_CHAT_SHORTCUT_AFFIRMATIVE'),
+       ('negative', 'CMD_CHAT_SHORTCUT_NEGATIVE'),
        ('thankYou', 'CMD_CHAT_SHORTCUT_THANKYOU'))),
      ('camera', (('camera_up', 'CMD_CM_CAMERA_ROTATE_UP'),
        ('camera_down', 'CMD_CM_CAMERA_ROTATE_DOWN'),

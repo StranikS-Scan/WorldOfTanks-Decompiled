@@ -543,6 +543,27 @@ class _crystalRewardsConfig(namedtuple('_crystalRewardsConfig', ('limits', 'rewa
         return results
 
 
+class _BobConfig(namedtuple('_BobConfig', ('isEnabled', 'peripheryIDs', 'primeTimes', 'seasons', 'cycleTimes', 'levels', 'forbiddenClassTags', 'forbiddenVehTypes'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, peripheryIDs={}, primeTimes={}, seasons={}, cycleTimes={}, levels=set(), forbiddenClassTags=set(), forbiddenVehTypes=set())
+        defaults.update(kwargs)
+        return super(_BobConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -644,6 +665,11 @@ class ServerSettings(object):
             self.__battlePassConfig = BattlePassConfig({})
         if _crystalRewardsConfig.CONFIG_NAME in self.__serverSettings:
             self.__crystalRewardsConfig = makeTupleByDict(_crystalRewardsConfig, self.__serverSettings[_crystalRewardsConfig.CONFIG_NAME])
+        if 'bob_config' in self.__serverSettings:
+            LOG_DEBUG('bob_config', self.__serverSettings['bob_config'])
+            self.__bobSettings = makeTupleByDict(_BobConfig, self.__serverSettings['bob_config'])
+        else:
+            self.__bobSettings = _BobConfig.defaults()
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -669,6 +695,8 @@ class ServerSettings(object):
             self.__serverSettings['epic_config'] = serverSettingsDiff['epic_config']
         if Configs.BATTLE_ROYALE_CONFIG.value in serverSettingsDiff:
             self.__updateBattleRoyale(serverSettingsDiff)
+        if 'bob_config' in serverSettingsDiff:
+            self.__updateBob(serverSettingsDiff)
         if 'telecom_config' in serverSettingsDiff:
             self.__telecomConfig = _TelecomConfig(self.__serverSettings['telecom_config'])
         if 'disabledPMOperations' in serverSettingsDiff:
@@ -781,6 +809,10 @@ class ServerSettings(object):
     @property
     def battleRoyale(self):
         return self.__battleRoyaleSettings
+
+    @property
+    def bobConfig(self):
+        return self.__bobSettings
 
     @property
     def telecomConfig(self):
@@ -968,6 +1000,9 @@ class ServerSettings(object):
     def isPreferredMapsEnabled(self):
         return self.__getGlobalSetting('isPreferredMapsEnabled', False)
 
+    def isGlobalMapEnabled(self):
+        return self.__getGlobalSetting('isGlobalMapEnabled', False)
+
     def isBattleBoostersEnabled(self):
         return self.__getGlobalSetting('isBattleBoostersEnabled', False)
 
@@ -1030,6 +1065,9 @@ class ServerSettings(object):
     def __updateEpic(self, targetSettings):
         self.__epicMetaGameSettings = self.__epicMetaGameSettings.replace(targetSettings['epic_config'].get('epicMetaGame', {}))
         self.__epicGameSettings = self.__epicGameSettings.replace(targetSettings['epic_config'])
+
+    def __updateBob(self, targetSettings):
+        self.__bobSettings = self.__bobSettings.replace(targetSettings['bob_config'])
 
     def __updateSquadBonus(self, sourceSettings):
         self.__squadPremiumBonus = self.__squadPremiumBonus.replace(sourceSettings[PremiumConfigs.PREM_SQUAD])

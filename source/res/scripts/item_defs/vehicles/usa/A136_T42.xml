@@ -81,6 +81,13 @@
       <undamaged>	vehicles/american/A136_T42/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/american/A136_T42/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/american/A136_T42/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <A136_T42_3Dst>
+          <undamaged>	vehicles/american/A136_T42/_skins/A136_T42_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A136_T42/_skins/A136_T42_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A136_T42/_skins/A136_T42_3Dst/crash/lod0/Hull.model	</exploded>
+        </A136_T42_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -104,8 +111,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.0134503 0.289654 2.72914	</rayStart>
-        <rayEnd>	0.0134503 0.115363 2.63105	</rayEnd>
+        <rayStart>	0.573894 0.563824 1.91607	</rayStart>
+        <rayEnd>	0.561568 0.366978 1.88292	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.34	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
@@ -574,7 +581,6 @@
         <clipAngle>	0.234565	</clipAngle>
         <anchorPosition>	-1.36489 0.531722 -1.79427	</anchorPosition>
         <anchorDirection>	-0.0017447 0.999998 0.000055	</anchorDirection>
-        <verticalMirror>	true	</verticalMirror>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -630,7 +636,6 @@
         <clipAngle>	0.234565	</clipAngle>
         <anchorPosition>	1.36469 0.531698 -1.79429	</anchorPosition>
         <anchorDirection>	-0.00170655 0.999998 -0.000315341	</anchorDirection>
-        <verticalMirror>	true	</verticalMirror>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -1053,7 +1058,6 @@
         <clipAngle>	0.234565	</clipAngle>
         <anchorPosition>	-0.955182 0.611013 -1.60471	</anchorPosition>
         <anchorDirection>	-0.000010 0.999998 -0.00174275	</anchorDirection>
-        <verticalMirror>	true	</verticalMirror>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -1067,7 +1071,6 @@
         <clipAngle>	0.234565	</clipAngle>
         <anchorPosition>	0.955196 0.610997 -1.60471	</anchorPosition>
         <anchorDirection>	-0.000010 0.999998 -0.00174275	</anchorDirection>
-        <verticalMirror>	true	</verticalMirror>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -1151,6 +1154,7 @@
         <clipAngle>	0.234565	</clipAngle>
         <anchorPosition>	1.43814 0.309358 2.11625	</anchorPosition>
         <anchorDirection>	0.000578182 0.991122 0.132958	</anchorDirection>
+        <verticalMirror>	true	</verticalMirror>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -1222,6 +1226,13 @@
         <undamaged>	vehicles/american/A136_T42/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A136_T42/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/american/A136_T42/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <A136_T42_3Dst>
+            <undamaged>	vehicles/american/A136_T42/_skins/A136_T42_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A136_T42/_skins/A136_T42_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A136_T42/_skins/A136_T42_3Dst/crash/lod0/Chassis.model	</exploded>
+          </A136_T42_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1257,7 +1268,7 @@
         <group>
           <isLeft>	true	</isLeft>
           <template>	WD_L	</template>
-          <radius>	0.149215	</radius>
+          <radius>	0.161	</radius>
           <startIndex>	1	</startIndex>
           <count>	3	</count>
         </group>
@@ -1285,7 +1296,7 @@
         <group>
           <isLeft>	false	</isLeft>
           <template>	WD_R	</template>
-          <radius>	0.149215	</radius>
+          <radius>	0.161	</radius>
           <startIndex>	1	</startIndex>
           <count>	3	</count>
         </group>
@@ -1457,7 +1468,7 @@
             </backwardMovement>
             <forwardMovement>
               <back>	0.139666	</back>
-              <top>	0.137178	</top>
+              <top>	0.135789	</top>
               <front>	0.140014	</front>
               <bottom>	0.137138	</bottom>
             </forwardMovement>
@@ -1636,7 +1647,7 @@
             </backwardMovement>
             <forwardMovement>
               <back>	0.139666	</back>
-              <top>	0.137178	</top>
+              <top>	0.135789	</top>
               <front>	0.140014	</front>
               <bottom>	0.137138	</bottom>
             </forwardMovement>
@@ -1858,7 +1869,7 @@
         <maxRegenHealth>	70	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	380	</circularVisionRadius>
+      <circularVisionRadius>	400	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -1885,11 +1896,11 @@
             </armor_8>
             <gun>	35	</gun>
           </armor>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <shotDispersionRadius>	0.33	</shotDispersionRadius>
           <reloadTime>	9.1	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4	</afterShot>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2	</aimingTime>
@@ -1902,6 +1913,13 @@
             <undamaged>	vehicles/american/A136_T42/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A136_T42/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A136_T42/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <A136_T42_3Dst>
+                <undamaged>	vehicles/american/A136_T42/_skins/A136_T42_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A136_T42/_skins/A136_T42_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A136_T42/_skins/A136_T42_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </A136_T42_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A136_T42/collision/Gun_01.model	</collisionModelServer>
@@ -1980,6 +1998,13 @@
         <undamaged>	vehicles/american/A136_T42/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/american/A136_T42/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/american/A136_T42/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <A136_T42_3Dst>
+            <undamaged>	vehicles/american/A136_T42/_skins/A136_T42_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A136_T42/_skins/A136_T42_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A136_T42/_skins/A136_T42_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </A136_T42_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/american/A136_T42/collision/Turret_01.model	</collisionModelServer>
@@ -1988,7 +2013,7 @@
       <gunPosition>	0.010367 0.35613 1.20044	</gunPosition>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.210 -0.150 1.100 0.000 0.453 0.311 0.830 0.680 0.500 0.500 0.420 0.530 0.180 0.100 0.000	</physicsShape>
+      <physicsShape>	1.210 -0.150 1.100 0.000 0.487 0.294 0.830 0.680 0.500 0.500 0.420 0.530 0.180 0.100 0.000	</physicsShape>
       <customizationSlots>
         <slot>
           <slotType>	paint	</slotType>

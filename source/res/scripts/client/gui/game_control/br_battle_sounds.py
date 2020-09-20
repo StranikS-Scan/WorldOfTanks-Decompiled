@@ -328,7 +328,7 @@ class EnemiesAmountSoundPlayer(IVehicleCountListener):
 
     def setFrags(self, frags, isPlayerVehicle):
         if isPlayerVehicle:
-            if self.__frags is not None and self.__frags != frags:
+            if self.__frags is not None and self.__frags != frags and self.__enemiesCount > 1:
                 BREvents.playSound(BREvents.ENEMY_KILLED)
             self.__frags = frags
         return
@@ -608,6 +608,13 @@ class BerserkerSoundPlayer(_VehicleStateSoundPlayer):
                 BREvents.playSound(BREvents.BERSERKER_DEACTIVATION)
                 self.__delayer.stopCallback(self.__updateShowDotEffect)
                 self.__delayer = None
+        return
+
+    def destroy(self):
+        if self.__delayer is not None:
+            self.__delayer.stopCallback(self.__updateShowDotEffect)
+            self.__delayer = None
+        super(BerserkerSoundPlayer, self).destroy()
         return
 
     def __updateShowDotEffect(self, period):

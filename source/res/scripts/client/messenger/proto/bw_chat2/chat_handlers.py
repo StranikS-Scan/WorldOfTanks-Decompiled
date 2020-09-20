@@ -18,7 +18,7 @@ from messenger.proto.bw_chat2.unit_chat_cmd import UnitCommandFactory
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.interfaces import IBattleCommandFactory
 from messenger.storage import storage_getter
-from messenger_common_chat2 import BATTLE_CHAT_COMMANDS
+from messenger_common_chat2 import BATTLE_CHAT_COMMANDS, getCooldownGameModeDataForGameMode
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from messenger_common_chat2 import MESSENGER_LIMITS as _LIMITS
 from messenger_common_chat2 import UNIT_CHAT_COMMANDS
@@ -392,7 +392,8 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
             if success:
                 if decorator.isEnemyTarget():
                     self.__targetIDs.append(decorator.getTargetID())
-                provider.setActionCoolDown(command.id, command.cooldownPeriod, decorator.getTargetID())
+                cooldownConfig = getCooldownGameModeDataForGameMode(self.__sessionProvider.arenaVisitor.getArenaBonusType())
+                provider.setActionCoolDown(command.id, command.cooldownPeriod, decorator.getTargetID(), cooldownConfig)
         else:
             LOG_ERROR('Battle command is not found', decorator)
 

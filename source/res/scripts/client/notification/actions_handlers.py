@@ -6,6 +6,7 @@ from CurrentVehicle import g_currentVehicle
 from adisp import process
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import DialogsInterface, makeHtmlString, SystemMessages
+from gui.battle_pass.battle_pass_helpers import showOfferByBonusName
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
@@ -814,6 +815,24 @@ class _OpenBattlePassProgressionView(_NavigationDisabledActionHandler):
         showMissionsBattlePassCommonProgression()
 
 
+class _OpenSelectDevicesHandler(_NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        notification = model.getNotification(self.getNotType(), entityID)
+        savedData = notification.getSavedData()
+        if savedData is not None:
+            showOfferByBonusName(savedData.get('bonusName'))
+        return
+
+
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowTutorialBattleHistoryHandler,
  ShowFortBattleResultsHandler,
@@ -847,7 +866,8 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _LootBoxesAutoOpenHandler,
  _OpenProgressiveRewardView,
  ProlongStyleRent,
- _OpenBattlePassProgressionView)
+ _OpenBattlePassProgressionView,
+ _OpenSelectDevicesHandler)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

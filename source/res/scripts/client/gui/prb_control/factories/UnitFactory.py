@@ -14,6 +14,7 @@ from gui.prb_control.entities.event.squad.entity import EventBattleSquadEntity, 
 from gui.prb_control.entities.stronghold.unit.entity import StrongholdEntity, StrongholdEntryPoint, StrongholdBrowserEntryPoint, StrongholdBrowserEntity
 from gui.prb_control.entities.random.squad.entity import RandomSquadEntity, RandomSquadEntryPoint
 from gui.prb_control.entities.epic.squad.entity import EpicSquadEntity, EpicSquadEntryPoint
+from gui.prb_control.entities.bob.squad.entity import BobSquadEntity, BobSquadEntryPoint
 from gui.prb_control.items import PlayerDecorator, FunctionalState
 from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE
@@ -23,13 +24,15 @@ _SUPPORTED_ENTRY_BY_ACTION = {PREBATTLE_ACTION_NAME.SQUAD: RandomSquadEntryPoint
  PREBATTLE_ACTION_NAME.BATTLE_ROYALE_SQUAD: BattleRoyaleSquadEntryPoint,
  PREBATTLE_ACTION_NAME.E_SPORT: ESportIntroEntry,
  PREBATTLE_ACTION_NAME.PUBLICS_LIST: PublicBrowserEntryPoint,
- PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST: StrongholdBrowserEntryPoint}
+ PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST: StrongholdBrowserEntryPoint,
+ PREBATTLE_ACTION_NAME.BOB_SQUAD: BobSquadEntryPoint}
 _SUPPORTED_ENTRY_BY_TYPE = {PREBATTLE_TYPE.SQUAD: RandomSquadEntryPoint,
  PREBATTLE_TYPE.EVENT: EventBattleSquadEntryPoint,
  PREBATTLE_TYPE.EPIC: EpicSquadEntryPoint,
  PREBATTLE_TYPE.BATTLE_ROYALE: BattleRoyaleSquadEntryPoint,
  PREBATTLE_TYPE.UNIT: PublicEntryPoint,
- PREBATTLE_TYPE.STRONGHOLD: StrongholdEntryPoint}
+ PREBATTLE_TYPE.STRONGHOLD: StrongholdEntryPoint,
+ PREBATTLE_TYPE.BOB: BobSquadEntryPoint}
 _SUPPORTED_INTRO_BY_TYPE = {PREBATTLE_TYPE.E_SPORT_COMMON: ESportIntroEntity}
 _SUPPORTED_BROWSER_BY_TYPE = {PREBATTLE_TYPE.UNIT: PublicBrowserEntity,
  PREBATTLE_TYPE.STRONGHOLD: StrongholdBrowserEntity}
@@ -38,7 +41,8 @@ _SUPPORTED_UNIT_BY_TYPE = {PREBATTLE_TYPE.SQUAD: RandomSquadEntity,
  PREBATTLE_TYPE.EPIC: EpicSquadEntity,
  PREBATTLE_TYPE.BATTLE_ROYALE: BattleRoyaleSquadEntity,
  PREBATTLE_TYPE.UNIT: PublicEntity,
- PREBATTLE_TYPE.STRONGHOLD: StrongholdEntity}
+ PREBATTLE_TYPE.STRONGHOLD: StrongholdEntity,
+ PREBATTLE_TYPE.BOB: BobSquadEntity}
 
 class UnitFactory(ControlFactory):
 

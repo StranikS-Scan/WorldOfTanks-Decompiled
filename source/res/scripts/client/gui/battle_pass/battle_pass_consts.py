@@ -7,6 +7,7 @@ class BonusesLayoutConsts(object):
     VISIBILITY_KEY = 'isVisible'
     OVERRIDE_KEY = 'override'
     ID_KEY = 'id'
-    MAIN_KEYS = (PRIORITY_KEY, VISIBILITY_KEY)
+    BIG_ICON_KEY = 'bigIcon'
+    MAIN_KEYS = (PRIORITY_KEY, VISIBILITY_KEY, BIG_ICON_KEY)
     INT_VALUES = (PRIORITY_KEY,)
     BOOL_VALUES = (VISIBILITY_KEY,)

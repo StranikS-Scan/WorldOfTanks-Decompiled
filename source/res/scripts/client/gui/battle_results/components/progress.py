@@ -29,6 +29,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from battle_pass_common import BattlePassConsts
+from skeletons.gui.shared.hangar_spaces_switcher import IHangarSpacesSwitcher
 MIN_BATTLES_TO_SHOW_PROGRESS = 5
 _logger = logging.getLogger(__name__)
 
@@ -352,6 +353,7 @@ class ProgressiveRewardVO(base.StatsItem):
 
 class ProgressiveCustomizationVO(base.DirectStatsItem):
     _itemsCache = dependency.descriptor(IItemsCache)
+    __hangarSpacesSwitcher = dependency.descriptor(IHangarSpacesSwitcher)
     __slots__ = ()
 
     def getVO(self):
@@ -361,6 +363,10 @@ class ProgressiveCustomizationVO(base.DirectStatsItem):
             _, vehicleIntCD = parseEventID(questID)
             vehicle = self._itemsCache.items.getItemByCD(vehicleIntCD)
             linkBtnEnabled, linkBtnTooltip = getC11nProgressionLinkBtnParams(vehicle)
+            switchItems = self.__hangarSpacesSwitcher.itemsToSwitch
+            isBrSpace = self.__hangarSpacesSwitcher.currentItem == switchItems.BATTLE_ROYALE
+            if isBrSpace:
+                linkBtnEnabled = False
             self._value['linkBtnEnabled'] = linkBtnEnabled
             self._value['linkBtnTooltip'] = backport.text(linkBtnTooltip)
         return self._value

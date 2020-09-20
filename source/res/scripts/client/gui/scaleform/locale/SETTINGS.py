@@ -485,6 +485,8 @@ class SETTINGS(object):
     KEYBOARD_KEYSBLOCKS_COMMAND_HIGHLIGHTTARGET = '#settings:keyboard/keysBlocks/command/highlightTarget'
     KEYBOARD_KEYSBLOCKS_COMMAND_SHOWRADIALMENU = '#settings:keyboard/keysBlocks/command/showRadialMenu'
     KEYBOARD_KEYSBLOCKS_COMMAND_HELP = '#settings:keyboard/keysBlocks/command/help'
+    KEYBOARD_KEYSBLOCKS_COMMAND_AFFIRMATIVE = '#settings:keyboard/keysBlocks/command/affirmative'
+    KEYBOARD_KEYSBLOCKS_COMMAND_NEGATIVE = '#settings:keyboard/keysBlocks/command/negative'
     KEYBOARD_KEYSBLOCKS_COMMAND_RELOADING = '#settings:keyboard/keysBlocks/command/reloading'
     KEYBOARD_KEYSBLOCKS_COMMAND_FALLBACK = '#settings:keyboard/keysBlocks/command/fallBack'
     KEYBOARD_KEYSBLOCKS_COMMAND_THANKYOU = '#settings:keyboard/keysBlocks/command/thankYou'

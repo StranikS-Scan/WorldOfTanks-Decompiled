@@ -84,6 +84,7 @@ class SYSTEM_MESSAGES(object):
     PREBATTLE_VEHICLEINVALID_NO_READYVEHICLE = '#system_messages:prebattle/vehicleInvalid/no_readyVehicle'
     PREBATTLE_VEHICLEINVALID_VEHICLENOTSUPPORTED = '#system_messages:prebattle/vehicleInvalid/vehicleNotSupported'
     PREBATTLE_VEHICLEINVALID_EPICONLY = '#system_messages:prebattle/vehicleInvalid/epicOnly'
+    PREBATTLE_VEHICLEINVALID_BOBONLY = '#system_messages:prebattle/vehicleInvalid/bobOnly'
     PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS = '#system_messages:prebattle/vehicleInvalid/notSetReadyStatus'
     PREBATTLE_VEHICLEINVALID_FALLOUTONLY = '#system_messages:prebattle/vehicleInvalid/falloutOnly'
     PREBATTLE_VEHICLEINVALID_LIMITS_NATIONS = '#system_messages:prebattle/vehicleInvalid/limits/nations'
@@ -1370,6 +1371,7 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_VEHICLEINVALID_NO_READYVEHICLE,
      PREBATTLE_VEHICLEINVALID_VEHICLENOTSUPPORTED,
      PREBATTLE_VEHICLEINVALID_EPICONLY,
+     PREBATTLE_VEHICLEINVALID_BOBONLY,
      PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS,
      PREBATTLE_VEHICLEINVALID_FALLOUTONLY,
      PREBATTLE_VEHICLEINVALID_LIMITS_NATIONS,

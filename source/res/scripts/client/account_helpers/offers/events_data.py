@@ -64,6 +64,10 @@ class OfferEventData(object):
         return self._data.get('priority')
 
     @property
+    def multiChoiceAllowed(self):
+        return self._data.get('multiChoiceAllowed', False)
+
+    @property
     def cdnLocFilePath(self):
         _path = self._data.get(CDN_KEY, {}).get('localization')
         return _path % self._langCode if _path else ''
@@ -86,11 +90,16 @@ class OfferEventData(object):
         if received is None:
             return []
         else:
+            if self.multiChoiceAllowed:
+                received = set()
             return [ OfferGift(giftID, settings) for giftID, settings in self._data.get('gift', {}).iteritems() if giftID not in received ]
 
     def getGift(self, giftID):
         giftsData = self._data.get('gift')
         return OfferGift(giftID, self._data['gift'][giftID]) if giftsData and giftID in giftsData else None
+
+    def getAllGifts(self):
+        return [ OfferGift(giftID, settings) for giftID, settings in self._data.get('gift', {}).iteritems() ]
 
     @property
     def clicksCount(self):
@@ -103,6 +112,8 @@ class OfferEventData(object):
             return 0
         else:
             giftsCount = len(self._data.get('gift', {}))
+            if self.multiChoiceAllowed:
+                return giftsCount
             notReceived = giftsCount - len(received)
             return max(notReceived, 0)
 

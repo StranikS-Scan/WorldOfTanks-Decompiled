@@ -2,36 +2,35 @@
 # Embedded file name: scripts/client/gui/battle_pass/battle_pass_helpers.py
 import logging
 from collections import namedtuple
-from battle_pass_common import BattlePassConsts, BattlePassState, BattlePassInBattleProgress
+from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
+from battle_pass_common import BattlePassConsts, BattlePassState, BattlePassInBattleProgress, BattlePassRewardReason, BATTLE_PASS_TOKEN_TROPHY_OFFER, BATTLE_PASS_TOKEN_NEW_DEVICE_OFFER
 from gui import GUI_SETTINGS
+from gui.battle_pass.battle_pass_bonuses_helper import TROPHY_GIFT_TOKEN_BONUS_NAME, NEW_DEVICE_GIFT_TOKEN_BONUS_NAME
 from gui.battle_pass.sounds import AwardVideoSoundControl
 from gui.impl.gen import R
+from gui.shared.event_dispatcher import showOfferGiftsWindow, showBattlePassAwardsWindow
 from gui.shared.formatters import time_formatters
 from helpers import dependency, time_utils
 from helpers.http.url_formatters import addParamsToUrlQuery
+from shared_utils import first
 from skeletons.gui.game_control import IBattlePassController
+from skeletons.gui.offers import IOffersDataProvider
 _logger = logging.getLogger(__name__)
 
 class BattlePassProgressionSubTabs(object):
     BUY_TAB = 0
     BUY_TAB_FOR_SHOP = 1
     VOTING_TAB = 2
+    ONBOARDING_TAB = 3
 
 
 BattlePassSeasonHistory = namedtuple('BattlePassSeasonHistory', 'maxBaseLevel maxPostLevel rewardVehicles')
+TokenPositions = namedtuple('TokenPositions', ['free', 'paid'])
 
 class BackgroundPositions(object):
     LEFT = 0
     RIGHT = 1
-
-
-VEHICLES_BACKGROUND_POSITIONS = {22017: BackgroundPositions.LEFT,
- 15697: BackgroundPositions.RIGHT,
- 2417: BackgroundPositions.LEFT,
- 14113: BackgroundPositions.RIGHT}
-
-def getVehicleBackgroundPosition(vehCD):
-    return VEHICLES_BACKGROUND_POSITIONS.get(vehCD)
+    UNKNOWN = 2
 
 
 def isBattlePassActiveSeason():
@@ -63,6 +62,16 @@ def isSeasonEndingSoon():
 def isNeededToVote():
     battlePassController = dependency.instance(IBattlePassController)
     return not battlePassController.isPlayerVoted() and battlePassController.getState() != BattlePassState.BASE
+
+
+def isPlayerVoted(*_):
+    battlePassController = dependency.instance(IBattlePassController)
+    return battlePassController.isPlayerVoted()
+
+
+def isBattlePassBought():
+    battlePassController = dependency.instance(IBattlePassController)
+    return battlePassController.isBought()
 
 
 def isCurrentBattlePassStateBase():
@@ -128,10 +137,83 @@ def setInBattleProgress(section, basePoints, sumPoints, hasBattlePass):
         section[BattlePassConsts.PROGRESSION_INFO] = progressInfo
 
 
+def showOfferGiftsWindowByToken(token, overrideSuccessCallback=None):
+    offersProvider = dependency.instance(IOffersDataProvider)
+    offer = first(offersProvider.getAvailableOffersByToken(token))
+    if offer is None:
+        _logger.warning('Offer with token="%s" is not available.', token)
+        return
+    else:
+        showOfferGiftsWindow(offer.id, overrideSuccessCallback=overrideSuccessCallback)
+        return
+
+
+def showOfferTrophyDevices():
+
+    def successCallback(offerID, giftID, **kwargs):
+        battlePassController = dependency.instance(IBattlePassController)
+        battlePassController.getDeviceTokensContainer(TROPHY_GIFT_TOKEN_BONUS_NAME).saveChosenToken()
+        showSelectDeviceRewardWindow(offerID, giftID, **kwargs)
+
+    showOfferGiftsWindowByToken(BATTLE_PASS_TOKEN_TROPHY_OFFER, overrideSuccessCallback=successCallback)
+
+
+def showOfferNewDevices():
+
+    def successCallback(offerID, giftID, **kwargs):
+        battlePassController = dependency.instance(IBattlePassController)
+        battlePassController.getDeviceTokensContainer(NEW_DEVICE_GIFT_TOKEN_BONUS_NAME).saveChosenToken()
+        showSelectDeviceRewardWindow(offerID, giftID, **kwargs)
+
+    showOfferGiftsWindowByToken(BATTLE_PASS_TOKEN_NEW_DEVICE_OFFER, overrideSuccessCallback=successCallback)
+
+
+def showOfferByBonusName(bonusName):
+    if bonusName == TROPHY_GIFT_TOKEN_BONUS_NAME:
+        showOfferTrophyDevices()
+    elif bonusName == NEW_DEVICE_GIFT_TOKEN_BONUS_NAME:
+        showOfferNewDevices()
+
+
+def showSelectDeviceRewardWindow(offerID, giftID, **kwargs):
+    offersProvider = dependency.instance(IOffersDataProvider)
+    offer = offersProvider.getOffer(offerID)
+    if offer is None:
+        _logger.warning('Offer with offerID="%s" is not available.', offerID)
+        return
+    else:
+        gift = offer.getGift(giftID)
+        bonusData = gift.bonus.displayedBonusData if gift.bonus else {}
+        showBattlePassAwardsWindow([bonusData], {'reason': BattlePassRewardReason.SELECT_TROPHY_DEVICE})
+        return
+
+
 def showVideo(videoSource, onVideoClosed=None, isAutoClose=False):
     if not videoSource:
         _logger.error('videoSource is not specified!')
         return
-    from gui.impl.lobby.video.video_view import VideoViewWindow
-    window = VideoViewWindow(videoSource, onVideoClosed=onVideoClosed, isAutoClose=isAutoClose, soundControl=AwardVideoSoundControl(videoSource))
-    window.load()
+    else:
+        from gui.impl.lobby.video.video_view import VideoViewWindow
+        battlePassController = dependency.instance(IBattlePassController)
+        logic = battlePassController.getFinalRewardLogic()
+        if not videoSource.exists():
+            logic.postNextState()
+            return
+        if onVideoClosed is None:
+            onVideoClosed = logic.postNextState
+        videoSource = videoSource()
+        window = VideoViewWindow(videoSource, onVideoClosed=onVideoClosed, isAutoClose=isAutoClose, soundControl=AwardVideoSoundControl(videoSource))
+        window.load()
+        return
+
+
+def getStorageKey(bonusName):
+    if bonusName == TROPHY_GIFT_TOKEN_BONUS_NAME:
+        return BattlePassStorageKeys.CHOSEN_TROPHY_DEVICES
+    return BattlePassStorageKeys.CHOSEN_NEW_DEVICES if bonusName == NEW_DEVICE_GIFT_TOKEN_BONUS_NAME else ''
+
+
+def getNotificationStorageKey(bonusName):
+    if bonusName == TROPHY_GIFT_TOKEN_BONUS_NAME:
+        return BattlePassStorageKeys.TROPHY_NOTIFICATION_SHOWN
+    return BattlePassStorageKeys.NEW_DEVICE_NOTIFICATION_SHOWN if bonusName == NEW_DEVICE_GIFT_TOKEN_BONUS_NAME else ''

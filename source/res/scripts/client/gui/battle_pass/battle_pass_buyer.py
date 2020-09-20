@@ -8,12 +8,13 @@ from gui.shared.utils import decorators
 from gui.shared.money import Currency
 from gui.battle_pass.battle_pass_helpers import isCurrentBattlePassStateBase
 from helpers import dependency
-from skeletons.gui.game_control import IBattlePassController
+from skeletons.gui.game_control import IBattlePassController, ISoundEventChecker
 from skeletons.gui.shared import IItemsCache
 
 class BattlePassBuyer(object):
     __itemsCache = dependency.descriptor(IItemsCache)
     __battlePassController = dependency.descriptor(IBattlePassController)
+    __soundEventChecker = dependency.descriptor(ISoundEventChecker)
 
     @classmethod
     @decorators.process('buyBattlePass')
@@ -39,7 +40,9 @@ class BattlePassBuyer(object):
         if cls.__itemsCache.items.stats.actualGold < spendMoneyGold:
             showBuyGoldForBattlePassLevels(spendMoneyGold)
         else:
+            cls.__soundEventChecker.lockPlayingSounds()
             result = yield cls.__buyBattlePassLevels(seasonID, levels)
+            cls.__soundEventChecker.unlockPlayingSounds()
         if onBuyCallback:
             onBuyCallback(result)
 

@@ -5,7 +5,6 @@ from functools import partial
 import BigWorld
 from gui import SystemMessages
 from gui.Scaleform.Waiting import Waiting
-from gui.shared.event_dispatcher import showOfferRewardWindow
 from gui.shared.gui_items.processors import Processor, makeI18nError
 from gui.shared.gui_items.processors.plugins import MessageConfirmator
 from messenger.formatters.service_channel import QuestAchievesFormatter
@@ -13,12 +12,9 @@ _logger = logging.getLogger(__name__)
 
 class ReceiveOfferGiftProcessor(Processor):
 
-    def __init__(self, offerID, giftID, cdnTitle='', cdnDescription='', cdnIcon=''):
+    def __init__(self, offerID, giftID, cdnTitle=''):
         self.__offerID = offerID
         self.__giftID = giftID
-        self.__cdnTitle = cdnTitle
-        self.__cdnDescription = cdnDescription
-        self.__cdnIcon = cdnIcon
         plugins = [ReceiveGiftConfirmator(offerID, giftID, cdnTitle)]
         super(ReceiveOfferGiftProcessor, self).__init__(plugins)
 
@@ -29,7 +25,6 @@ class ReceiveOfferGiftProcessor(Processor):
 
     def _successHandler(self, code, ctx=None):
         Waiting.hide('loadContent')
-        showOfferRewardWindow(self.__offerID, self.__giftID, self.__cdnTitle, self.__cdnDescription, self.__cdnIcon)
         msg = QuestAchievesFormatter.formatQuestAchieves(ctx or {}, False)
         if msg is not None:
             SystemMessages.pushMessage(msg, type=SystemMessages.SM_TYPE.OfferGiftBonuses)

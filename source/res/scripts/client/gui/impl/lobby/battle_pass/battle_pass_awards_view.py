@@ -6,7 +6,7 @@ from frameworks.wulf import ViewSettings, Array, WindowFlags, ViewFlags
 from gui.battle_pass.battle_pass_award import BattlePassAwardsManager
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData, finalAwardsInjection
 from gui.battle_pass.sounds import BattlePassSounds
-from gui.battle_pass.battle_pass_helpers import BattlePassProgressionSubTabs
+from gui.battle_pass.battle_pass_helpers import BattlePassProgressionSubTabs, showOfferByBonusName
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_awards_view_model import BattlePassAwardsViewModel
@@ -18,9 +18,18 @@ from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
 from shared_utils import first
 from skeletons.gui.game_control import IBattlePassController
+MAP_REWARD_REASON = {BattlePassRewardReason.PURCHASE_BATTLE_PASS: BattlePassAwardsViewModel.BUY_BATTLE_PASS_REASON,
+ BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS: BattlePassAwardsViewModel.BUY_BATTLE_PASS_LEVELS_REASON,
+ BattlePassRewardReason.SELECT_TROPHY_DEVICE: BattlePassAwardsViewModel.SELECT_TROPHY_DEVICE_REASON}
+MAIN_REWARDS_LIMIT = 4
+STANDART_REWARD_SIZE = 1
+WIDE_REWARD_SIZE = 1.5
+REWARD_SIZES = {'Standard': STANDART_REWARD_SIZE,
+ 'Wide': WIDE_REWARD_SIZE,
+ 'None': 0}
 
 class BattlePassAwardsView(ViewImpl):
-    __slots__ = ('__tooltipItems', '__closeCallback')
+    __slots__ = ('__tooltipItems',)
     __battlePassController = dependency.descriptor(IBattlePassController)
 
     def __init__(self, layoutID, wsFlags, *args, **kwargs):
@@ -30,9 +39,7 @@ class BattlePassAwardsView(ViewImpl):
         settings.args = args
         settings.kwargs = kwargs
         self.__tooltipItems = {}
-        self.__closeCallback = None
         super(BattlePassAwardsView, self).__init__(settings)
-        return
 
     @property
     def viewModel(self):
@@ -58,35 +65,32 @@ class BattlePassAwardsView(ViewImpl):
         prevLevel = data.get('prevLevel', 0)
         newLevel = data.get('newLevel', 0)
         reason = data.get('reason', BattlePassRewardReason.DEFAULT)
-        callback = data.get('callback')
         isFinalReward = data.get('isFinalReward', False)
-        if callback is not None:
-            self.__closeCallback = callback
         if newLevel == 0 and newState == BattlePassState.POST:
             newLevel = self.__battlePassController.getMaxLevel()
         isPurchase = reason in (BattlePassRewardReason.PURCHASE_BATTLE_PASS, BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS)
         isPostProgression = BattlePassState.BASE != newState and not isFinalReward
-        if reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS:
-            reasonRewards = self.viewModel.BUY_BATTLE_PASS_REASON
-        elif reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS:
-            reasonRewards = self.viewModel.BUY_BATTLE_PASS_LEVELS_REASON
+        if reason in MAP_REWARD_REASON:
+            reasonRewards = MAP_REWARD_REASON[reason]
         else:
             reasonRewards = self.viewModel.DEFAULT_REASON
+        isBattlePassPurchased = self.__battlePassController.isBought() or isPurchase
         self.viewModel.setIsFinalReward(isFinalReward)
         self.viewModel.setIsPostProgression(isPostProgression)
         self.viewModel.setReason(reasonRewards)
-        self.viewModel.setIsBattlePassPurchased(self.__battlePassController.isBought() or isPurchase)
+        self.viewModel.setIsBattlePassPurchased(isBattlePassPurchased)
+        self.viewModel.setIsNeedToShowOffer(not isBattlePassPurchased and not self.__battlePassController.isPlayerNewcomer())
         self.viewModel.setPreviousLevel(prevLevel + 1)
         self.viewModel.setCurrentLevel(newLevel)
         self.viewModel.setMaxLevelBase(self.__battlePassController.getMaxLevel())
         self.viewModel.setMaxLevelPost(self.__battlePassController.getMaxLevel(False))
+        self.viewModel.setIsChooseDeviceEnabled(self.__battlePassController.isChooseDeviceEnabled())
         if isPostProgression:
             self.__addBadgeInfo()
-        self.__setAwards(bonuses, isPurchase, isFinalReward, isPostProgression)
+        self.__setAwards(bonuses, isFinalReward)
         self.__addListeners()
         switchHangarOverlaySoundFilter(on=True)
         SoundGroups.g_instance.playSound2D(BattlePassSounds.REWARD_SCREEN)
-        return
 
     def _onLoaded(self, data, *args, **kwargs):
         reason = data.get('reason', BattlePassRewardReason.DEFAULT)
@@ -99,9 +103,7 @@ class BattlePassAwardsView(ViewImpl):
         self.__removeListeners()
         self.__tooltipItems = None
         switchHangarOverlaySoundFilter(on=False)
-        if self.__closeCallback is not None:
-            self.__closeCallback()
-            self.__closeCallback = None
+        self.__battlePassController.getFinalRewardLogic().postEscape()
         g_eventBus.handleEvent(events.BattlePassEvent(events.BattlePassEvent.AWARD_VIEW_CLOSE), scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
@@ -109,7 +111,11 @@ class BattlePassAwardsView(ViewImpl):
         showMissionsBattlePassCommonProgression(BattlePassProgressionSubTabs.BUY_TAB)
         self.destroyWindow()
 
-    def __setAwards(self, bonuses, isPremiumPurchase, isFinalReward, isPostProgression):
+    def __onDeviceSelectClick(self, kwargs):
+        showOfferByBonusName(kwargs.get('rewardName'))
+        self.destroyWindow()
+
+    def __setAwards(self, bonuses, isFinalReward):
         rewards = BattlePassAwardsManager.composeBonuses(bonuses)
         if not rewards:
             return
@@ -127,16 +133,43 @@ class BattlePassAwardsView(ViewImpl):
                     packBonusModelAndTooltipData([rewards.pop(1)], self.viewModel.mainRewards, self.__tooltipItems)
                     packBonusModelAndTooltipData(rewards[:2], self.viewModel.mainRewards, self.__tooltipItems)
                 rewards = rewards[2:]
-        elif not isPremiumPurchase:
-            if not isPostProgression or rewards[0].getName() == 'customizations':
-                reward = rewards.pop(0)
-                value = reward.getValue()
-                if reward.getName() == 'customizations' and value[0]['custType'] == 'projection_decal':
+        else:
+            self.__extractBadgeReward(rewards)
+            mainRewards = self.__setMainRewards(rewards)
+            rewards = rewards[len(mainRewards):]
+        packBonusModelAndTooltipData(rewards, self.viewModel.additionalRewards, self.__tooltipItems)
+
+    def __setMainRewards(self, rewards):
+        limit = MAIN_REWARDS_LIMIT
+        mainRewards = []
+        for reward in rewards:
+            weight = self.__getRewardWeight(reward)
+            if limit >= weight > 0:
+                mainRewards.append(reward)
+                limit -= weight
+                if weight == WIDE_REWARD_SIZE:
+                    self.viewModel.getWideRewardsIDs().addNumber(len(mainRewards) - 1)
+            break
+
+        for reward in mainRewards:
+            value = reward.getValue()
+            if reward.getName() == 'customizations':
+                altVoteOption = self.__battlePassController.getAlternativeVoteOption()
+                if value[0]['custType'] == 'projection_decal':
                     with finalAwardsInjection(value[0]['id']):
+                        packBonusModelAndTooltipData([reward], self.viewModel.mainRewards, self.__tooltipItems)
+                elif value[0]['custType'] == 'style' and altVoteOption != 0:
+                    with finalAwardsInjection(altVoteOption):
                         packBonusModelAndTooltipData([reward], self.viewModel.mainRewards, self.__tooltipItems)
                 else:
                     packBonusModelAndTooltipData([reward], self.viewModel.mainRewards, self.__tooltipItems)
-        packBonusModelAndTooltipData(rewards, self.viewModel.additionalRewards, self.__tooltipItems)
+            packBonusModelAndTooltipData([reward], self.viewModel.mainRewards, self.__tooltipItems)
+
+        return mainRewards
+
+    @staticmethod
+    def __getRewardWeight(bonus):
+        return REWARD_SIZES.get(BattlePassAwardsManager.getBigIcon(bonus), 0)
 
     def __addBadgeInfo(self):
         badge = self.__battlePassController.getBadgeData()
@@ -151,10 +184,19 @@ class BattlePassAwardsView(ViewImpl):
     def __addListeners(self):
         model = self.viewModel
         model.onBuyClick += self._onBuyClick
+        model.onDeviceSelectClick += self.__onDeviceSelectClick
 
     def __removeListeners(self):
         model = self.viewModel
         model.onBuyClick -= self._onBuyClick
+        model.onDeviceSelectClick -= self.__onDeviceSelectClick
+
+    def __extractBadgeReward(self, rewards):
+        for bonus in rewards:
+            if bonus.getName() != 'dossier':
+                continue
+            if bonus.getBadges():
+                rewards.remove(bonus)
 
 
 class BattlePassAwardWindow(LobbyWindow):

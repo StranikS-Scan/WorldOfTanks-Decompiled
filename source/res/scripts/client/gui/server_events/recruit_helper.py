@@ -43,6 +43,7 @@ class RecruitSourceID(object):
     TWITCH_13 = 'twitch13'
     TWITCH_14 = 'twitch14'
     TWITCH_15 = 'twitch15'
+    TWITCH_16 = 'twitch16'
     BUFFON = 'buffon'
     LOOTBOX = 'lootbox'
     COMMANDER_MARINA = 'commander_marina'
@@ -64,7 +65,8 @@ class RecruitSourceID(object):
      TWITCH_12,
      TWITCH_13,
      TWITCH_14,
-     TWITCH_15)
+     TWITCH_15,
+     TWITCH_16)
 
 
 _NEW_SKILL = 'new_skill'
@@ -119,8 +121,14 @@ class _BaseRecruitInfo(object):
     def getRoleLevel(self):
         return self._roleLevel
 
-    def getLearntSkills(self):
-        return self._learntSkills + [_NEW_SKILL] if self._hasNewSkill else self._learntSkills
+    def getLearntSkills(self, multiplyNew=False):
+        if self._hasNewSkill:
+            if multiplyNew:
+                skillsCount, _ = self.getNewSkillCount(onlyFull=True)
+            else:
+                skillsCount = 1
+            return self._learntSkills + [_NEW_SKILL] * skillsCount
+        return self._learntSkills
 
     def getLastSkillLevel(self):
         return self._lastSkillLevel
@@ -147,7 +155,9 @@ class _BaseRecruitInfo(object):
         return self._nations
 
     def getFullUserName(self):
-        return '{} {}'.format(self.getFirstName(), self.getLastName())
+        firstName = self.getFirstName()
+        lastName = self.getLastName()
+        return lastName if not firstName else '{} {}'.format(firstName, lastName)
 
     def getRankID(self):
         return Tankman.calculateRankID(tankmen.MAX_SKILL_LEVEL, self._freeXP, skills=self._getSkillsForDescr(), freeSkills=self._getFreeSkillsForDescr(), lastSkillLevel=self._lastSkillLevel)
@@ -247,7 +257,7 @@ class _TokenRecruitInfo(_BaseRecruitInfo):
         if nationID is None:
             nationID = self._getDefaultNation()
         _, firstName, lastName, _, _ = self.__parseTankmanData(nationID)
-        return '{} {}'.format(firstName, lastName)
+        return lastName if not firstName else '{} {}'.format(firstName, lastName)
 
     def getIconByNation(self, nationID):
         _, _, _, icon, _ = self.__parseTankmanData(nationID)

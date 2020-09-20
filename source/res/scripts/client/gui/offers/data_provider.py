@@ -141,6 +141,15 @@ class OffersDataProvider(IOffersDataProvider):
         offerData = _getEventsOffersData().get(offerID)
         return self._makeOffer(offerID, offerData)
 
+    @_ifFeatureDisabled(None)
+    @_ifNotSynced(None)
+    def getOfferByToken(self, token):
+        for offer in self._ioffers():
+            if offer.token == token:
+                return offer
+
+        return None
+
     @_ifFeatureDisabled(())
     @_ifNotSynced(())
     def iAvailableOffers(self):
@@ -150,6 +159,9 @@ class OffersDataProvider(IOffersDataProvider):
 
     def getAvailableOffers(self):
         return list(self.iAvailableOffers())
+
+    def getAvailableOffersByToken(self, token):
+        return list(self.__iAvailableOffersByToken(token))
 
     def _onDisconnected(self):
         self.stop()
@@ -226,3 +238,10 @@ class OffersDataProvider(IOffersDataProvider):
                 SystemMessages.pushI18nMessage(msgKey, type=SM_TYPE.Warning, **kwargs)
         self._lastAvailableOffers = set((offer.id for offer in self.iAvailableOffers()))
         return
+
+    @_ifFeatureDisabled(())
+    @_ifNotSynced(())
+    def __iAvailableOffersByToken(self, token):
+        for offer in self._ioffers():
+            if offer.isOfferAvailable and offer.token == token:
+                yield offer

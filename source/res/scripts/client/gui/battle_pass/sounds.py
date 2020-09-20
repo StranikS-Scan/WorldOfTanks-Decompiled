@@ -13,11 +13,13 @@ class BattlePassSounds(CONST_CONTAINER):
     CONFIRM_BUY = 'bp_overlay_pay'
     REWARD_SCREEN = 'bp_reward_screen'
     TANK_POINTS_CAP = 'bp_tank_point_done'
-    VIDEO_BEFORE_VOTING = 'bp_s02_video_final_level_progression_start'
-    VIDEO_OPT1_FREE = 'bp_s02_video_not_purchased_tank_01_start'
-    VIDEO_OPT2_FREE = 'bp_s02_video_not_purchased_tank_02_start'
-    VIDEO_OPT1_PAID = 'bp_s02_video_purchased_character_01_start'
-    VIDEO_OPT2_PAID = 'bp_s02_video_purchased_character_02_start'
+    VIDEO_BEFORE_VOTING = 'bp_s03_video_final_level_progression_start'
+    VIDEO_BEFORE_VOTING_FREE = 'bp_s03_video_not_purchased_final_level_progression_start'
+    VIDEO_BEFORE_VOTING_PAID = 'bp_s03_video_purchased_final_level_progression_start'
+    VIDEO_OPT1_FREE = 'bp_s03_video_not_purchased_tank_01_start'
+    VIDEO_OPT2_FREE = 'bp_s03_video_not_purchased_tank_02_start'
+    VIDEO_OPT1_PAID = 'bp_s03_video_purchased_character_01_start'
+    VIDEO_OPT2_PAID = 'bp_s03_video_purchased_character_02_start'
     VIDEO_PAUSE = 'bp_video_pause'
     VIDEO_RESUME = 'bp_video_resume'
     VIDEO_STOP = 'bp_video_stop'
@@ -31,22 +33,26 @@ class BattlePassLanguageSwitch(CONST_CONTAINER):
     GROUP_NAME = 'SWITCH_ext_battle_pass_video_language'
     RU = 'SWITCH_ext_battle_pass_video_language_RU'
     EN = 'SWITCH_ext_battle_pass_video_language_EN'
+    CN = 'SWITCH_ext_battle_pass_video_language_CN'
 
 
 class AwardVideoSoundControl(IVideoSoundManager):
     __LANGUAGE_STATES = {'ru': BattlePassLanguageSwitch.RU,
-     'en': BattlePassLanguageSwitch.EN}
-    __VIDEO_TO_SOUND = {R.videos.battle_pass.before_voting(): BattlePassSounds.VIDEO_BEFORE_VOTING,
-     R.videos.battle_pass.c_2417_0(): BattlePassSounds.VIDEO_OPT1_FREE,
-     R.videos.battle_pass.c_2417_1(): BattlePassSounds.VIDEO_OPT1_PAID,
-     R.videos.battle_pass.c_14113_0(): BattlePassSounds.VIDEO_OPT2_FREE,
-     R.videos.battle_pass.c_14113_1(): BattlePassSounds.VIDEO_OPT2_PAID}
+     'en': BattlePassLanguageSwitch.EN,
+     'cn': BattlePassLanguageSwitch.CN}
+    __VIDEO_TO_SOUND = {'before_voting': BattlePassSounds.VIDEO_BEFORE_VOTING,
+     'before_voting_0': BattlePassSounds.VIDEO_BEFORE_VOTING_FREE,
+     'before_voting_1': BattlePassSounds.VIDEO_BEFORE_VOTING_PAID,
+     'c_10785_0': BattlePassSounds.VIDEO_OPT1_FREE,
+     'c_10785_1': BattlePassSounds.VIDEO_OPT1_PAID,
+     'c_6145_0': BattlePassSounds.VIDEO_OPT2_FREE,
+     'c_6145_1': BattlePassSounds.VIDEO_OPT2_PAID}
 
     def __init__(self, videoID):
         self.__videoID = videoID
 
     def start(self):
-        sound = self.__VIDEO_TO_SOUND.get(self.__videoID)
+        sound = self.__getMapping().get(self.__videoID)
         if sound:
             WWISE.WW_setSwitch(BattlePassLanguageSwitch.GROUP_NAME, self.__selectLanguageState())
             WWISE.WW_eventGlobal(sound)
@@ -67,3 +73,12 @@ class AwardVideoSoundControl(IVideoSoundManager):
         if language not in self.__LANGUAGE_STATES:
             language = 'en'
         return self.__LANGUAGE_STATES[language]
+
+    def __getMapping(self):
+        mapping = {}
+        for video, sound in self.__VIDEO_TO_SOUND.iteritems():
+            videoSource = R.videos.battle_pass.dyn(video)
+            if videoSource.exists():
+                mapping[videoSource()] = sound
+
+        return mapping

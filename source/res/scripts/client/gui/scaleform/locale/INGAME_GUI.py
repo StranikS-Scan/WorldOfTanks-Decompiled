@@ -76,7 +76,9 @@ class INGAME_GUI(object):
     PLAYER_MESSAGES_REPLAYCONTROLSHELP2 = '#ingame_gui:player_messages/replayControlsHelp2'
     PLAYER_MESSAGES_REPLAYCONTROLSHELP3 = '#ingame_gui:player_messages/replayControlsHelp3'
     PLAYER_MESSAGES_LOADER_INTUITION_WAS_USED = '#ingame_gui:player_messages/loader_intuition_was_used'
+    CHAT_SHORTCUTS_ATTENTION_TO_POSITION_GRIDINFO = '#ingame_gui:chat_shortcuts/attention_to_position_gridInfo'
     CHAT_SHORTCUTS_ATTENTION_TO_POSITION = '#ingame_gui:chat_shortcuts/attention_to_position'
+    CHAT_SHORTCUTS_GOING_THERE_GRIDINFO = '#ingame_gui:chat_shortcuts/going_there_gridInfo'
     CHAT_SHORTCUTS_GOING_THERE = '#ingame_gui:chat_shortcuts/going_there'
     CHAT_SHORTCUTS_HELP_ME = '#ingame_gui:chat_shortcuts/help_me'
     CHAT_SHORTCUTS_RELOADING_GUN = '#ingame_gui:chat_shortcuts/reloading_gun'
@@ -84,7 +86,9 @@ class INGAME_GUI(object):
     CHAT_SHORTCUTS_RELOADING_READY = '#ingame_gui:chat_shortcuts/reloading_ready'
     CHAT_SHORTCUTS_RELOADING_READY_CASSETTE = '#ingame_gui:chat_shortcuts/reloading_ready_cassette'
     CHAT_SHORTCUTS_RELOADING_UNAVAILABLE = '#ingame_gui:chat_shortcuts/reloading_unavailable'
+    CHAT_SHORTCUTS_SPG_AIM_AREA_GRIDINFO = '#ingame_gui:chat_shortcuts/spg_aim_area_gridInfo'
     CHAT_SHORTCUTS_SPG_AIM_AREA = '#ingame_gui:chat_shortcuts/spg_aim_area'
+    CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING_GRIDINFO = '#ingame_gui:chat_shortcuts/spg_aim_area_reloading_gridInfo'
     CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING = '#ingame_gui:chat_shortcuts/spg_aim_area_reloading'
     CHAT_SHORTCUTS_ATTACK_ENEMY = '#ingame_gui:chat_shortcuts/attack_enemy'
     CHAT_SHORTCUTS_ATTACKING_ENEMY = '#ingame_gui:chat_shortcuts/attacking_enemy'
@@ -103,6 +107,8 @@ class INGAME_GUI(object):
     CHAT_SHORTCUTS_TURN_BACK = '#ingame_gui:chat_shortcuts/turn_back'
     CHAT_SHORTCUTS_THANKS = '#ingame_gui:chat_shortcuts/thanks'
     CHAT_SHORTCUTS_POSITIVE = '#ingame_gui:chat_shortcuts/positive'
+    CHAT_SHORTCUTS_AFFIRMATIVE = '#ingame_gui:chat_shortcuts/affirmative'
+    CHAT_SHORTCUTS_NEGATIVE = '#ingame_gui:chat_shortcuts/negative'
     CHAT_SHORTCUTS_ATTENTION_TO_CELL = '#ingame_gui:chat_shortcuts/attention_to_cell'
     CHAT_SHORTCUTS_GLOBAL_MSG_ATK_SAVE_TANKS = '#ingame_gui:chat_shortcuts/global_msg/atk/save_tanks'
     CHAT_SHORTCUTS_GLOBAL_MSG_DEF_SAVE_TANKS = '#ingame_gui:chat_shortcuts/global_msg/def/save_tanks'
@@ -136,6 +142,8 @@ class INGAME_GUI(object):
     CHAT_EXAMPLE_HELP_ME = '#ingame_gui:chat_example/help_me'
     CHAT_EXAMPLE_HELP_ME_EX = '#ingame_gui:chat_example/help_me_ex'
     CHAT_EXAMPLE_POSITIVE = '#ingame_gui:chat_example/positive'
+    CHAT_EXAMPLE_AFFIRMATIVE = '#ingame_gui:chat_example/affirmative'
+    CHAT_EXAMPLE_NEGATIVE = '#ingame_gui:chat_example/negative'
     CHAT_EXAMPLE_THANKS = '#ingame_gui:chat_example/thanks'
     CHAT_EXAMPLE_ATTENTION_TO_CELL = '#ingame_gui:chat_example/attention_to_cell'
     CHAT_EXAMPLE_ATTACK_ENEMY_WITH_SPG = '#ingame_gui:chat_example/attack_enemy_with_SPG'
@@ -715,6 +723,10 @@ class INGAME_GUI(object):
     REWARDWINDOW_TWITCH15_SUBHEADERTEXT = '#ingame_gui:rewardWindow/twitch15/subHeaderText'
     REWARDWINDOW_TWITCH15_DESCTEXT = '#ingame_gui:rewardWindow/twitch15/descText'
     REWARDWINDOW_TWITCH15_BTNLABEL = '#ingame_gui:rewardWindow/twitch15/btnLabel'
+    REWARDWINDOW_TWITCH16_HEADERTEXT = '#ingame_gui:rewardWindow/twitch16/headerText'
+    REWARDWINDOW_TWITCH16_SUBHEADERTEXT = '#ingame_gui:rewardWindow/twitch16/subHeaderText'
+    REWARDWINDOW_TWITCH16_DESCTEXT = '#ingame_gui:rewardWindow/twitch16/descText'
+    REWARDWINDOW_TWITCH16_BTNLABEL = '#ingame_gui:rewardWindow/twitch16/btnLabel'
     REWARDWINDOW_LOOTBOX_WINHEADERTEXT = '#ingame_gui:rewardWindow/lootbox/winHeaderText'
     REWARDWINDOW_LOOTBOX_HEADERTEXT = '#ingame_gui:rewardWindow/lootbox/headerText'
     REWARDWINDOW_LOOTBOX_DESCTEXT = '#ingame_gui:rewardWindow/lootbox/descText'
@@ -805,7 +817,9 @@ class INGAME_GUI(object):
     OPTDEVICERESURRECTION_ENGINE = '#ingame_gui:optDeviceResurrection/engine'
     OPTDEVICERESURRECTION_FUELTANK = '#ingame_gui:optDeviceResurrection/fuelTank'
     OPTDEVICERESURRECTION_AMMOBAY = '#ingame_gui:optDeviceResurrection/ammoBay'
-    CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_ATTENTION_TO_POSITION,
+    CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_ATTENTION_TO_POSITION_GRIDINFO,
+     CHAT_SHORTCUTS_ATTENTION_TO_POSITION,
+     CHAT_SHORTCUTS_GOING_THERE_GRIDINFO,
      CHAT_SHORTCUTS_GOING_THERE,
      CHAT_SHORTCUTS_HELP_ME,
      CHAT_SHORTCUTS_RELOADING_GUN,
@@ -813,7 +827,9 @@ class INGAME_GUI(object):
      CHAT_SHORTCUTS_RELOADING_READY,
      CHAT_SHORTCUTS_RELOADING_READY_CASSETTE,
      CHAT_SHORTCUTS_RELOADING_UNAVAILABLE,
+     CHAT_SHORTCUTS_SPG_AIM_AREA_GRIDINFO,
      CHAT_SHORTCUTS_SPG_AIM_AREA,
+     CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING_GRIDINFO,
      CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING,
      CHAT_SHORTCUTS_ATTACK_ENEMY,
      CHAT_SHORTCUTS_ATTACKING_ENEMY,
@@ -832,6 +848,8 @@ class INGAME_GUI(object):
      CHAT_SHORTCUTS_TURN_BACK,
      CHAT_SHORTCUTS_THANKS,
      CHAT_SHORTCUTS_POSITIVE,
+     CHAT_SHORTCUTS_AFFIRMATIVE,
+     CHAT_SHORTCUTS_NEGATIVE,
      CHAT_SHORTCUTS_ATTENTION_TO_CELL,
      CHAT_SHORTCUTS_GLOBAL_MSG_ATK_SAVE_TANKS,
      CHAT_SHORTCUTS_GLOBAL_MSG_DEF_SAVE_TANKS,
@@ -864,6 +882,8 @@ class INGAME_GUI(object):
      CHAT_EXAMPLE_HELP_ME,
      CHAT_EXAMPLE_HELP_ME_EX,
      CHAT_EXAMPLE_POSITIVE,
+     CHAT_EXAMPLE_AFFIRMATIVE,
+     CHAT_EXAMPLE_NEGATIVE,
      CHAT_EXAMPLE_THANKS,
      CHAT_EXAMPLE_ATTENTION_TO_CELL,
      CHAT_EXAMPLE_ATTACK_ENEMY_WITH_SPG,
@@ -928,6 +948,7 @@ class INGAME_GUI(object):
      REWARDWINDOW_TWITCH13_HEADERTEXT,
      REWARDWINDOW_TWITCH14_HEADERTEXT,
      REWARDWINDOW_TWITCH15_HEADERTEXT,
+     REWARDWINDOW_TWITCH16_HEADERTEXT,
      REWARDWINDOW_LOOTBOX_HEADERTEXT,
      REWARDWINDOW_ANNIVERSARY_GA_HEADERTEXT,
      REWARDWINDOW_PIGGYBANK_HEADERTEXT,
@@ -952,6 +973,7 @@ class INGAME_GUI(object):
      REWARDWINDOW_TWITCH13_SUBHEADERTEXT,
      REWARDWINDOW_TWITCH14_SUBHEADERTEXT,
      REWARDWINDOW_TWITCH15_SUBHEADERTEXT,
+     REWARDWINDOW_TWITCH16_SUBHEADERTEXT,
      REWARDWINDOW_ANNIVERSARY_GA_SUBHEADERTEXT,
      REWARDWINDOW_PIGGYBANK_SUBHEADERTEXT,
      REWARDWINDOW_COMMANDER_MARINA_SUBHEADERTEXT,
@@ -975,6 +997,7 @@ class INGAME_GUI(object):
      REWARDWINDOW_TWITCH13_BTNLABEL,
      REWARDWINDOW_TWITCH14_BTNLABEL,
      REWARDWINDOW_TWITCH15_BTNLABEL,
+     REWARDWINDOW_TWITCH16_BTNLABEL,
      REWARDWINDOW_LOOTBOX_BTNLABEL,
      REWARDWINDOW_ANNIVERSARY_GA_BTNLABEL,
      REWARDWINDOW_PIGGYBANK_BTNLABEL,
@@ -998,6 +1021,7 @@ class INGAME_GUI(object):
      REWARDWINDOW_TWITCH13_DESCTEXT,
      REWARDWINDOW_TWITCH14_DESCTEXT,
      REWARDWINDOW_TWITCH15_DESCTEXT,
+     REWARDWINDOW_TWITCH16_DESCTEXT,
      REWARDWINDOW_LOOTBOX_DESCTEXT,
      REWARDWINDOW_ANNIVERSARY_GA_DESCTEXT,
      REWARDWINDOW_PIGGYBANK_DESCTEXT,

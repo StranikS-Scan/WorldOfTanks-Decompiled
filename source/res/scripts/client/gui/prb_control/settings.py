@@ -57,6 +57,7 @@ class FUNCTIONAL_FLAG(BitmaskHelper):
     TOURNAMENT = 8388608
     EPIC = 16777216
     BATTLE_ROYALE = 33554432
+    BOB = 33554432
     DEFAULT = 67108864
     LEGACY_BITMASK = LEGACY_INTRO | LEGACY
     UNIT_BITMASK = UNIT_INTRO | UNIT_BROWSER | UNIT
@@ -156,6 +157,9 @@ class PREBATTLE_ACTION_NAME(object):
     EPIC_FORCED = 'epicForced'
     EVENT_PROGRESSION = 'eventProgression'
     BATTLE_ROYALE = 'battleRoyaleQueue'
+    BOB = 'bob'
+    BOB_SQUAD = 'bobSquad'
+    BOB_FORCED = 'bobForced'
 
 
 class PREBATTLE_INIT_STEP(object):
@@ -172,6 +176,7 @@ class SELECTOR_BATTLE_TYPES(object):
     EPIC = 'epic'
     EVENT_PROGRESSION = 'eventProgression'
     BATTLE_ROYALE = 'battleRoyale'
+    BOB = 'bob'
 
 
 class REQUEST_TYPE(object):
@@ -241,6 +246,7 @@ class PREBATTLE_RESTRICTION(object):
     VEHICLE_IN_PREMIUM_IGR_ONLY = 'vehicle/inPremiumIgrOnly'
     VEHICLE_NOT_SUPPORTED = 'vehicle/not_supported'
     VEHICLE_EPIC_ONLY = 'vehicle/epic_only'
+    VEHICLE_BOB_ONLY = 'vehicle/bob_only'
     VEHICLE_ROTATION_GROUP_LOCKED = 'vehicle/rotationGroupLocked'
     UNSUITABLE_VEHICLE_FOR_BATTLE_ROYALE = 'vehicle/notForBattleRoyaleMode'
     CREW_NOT_FULL = 'crew/notFull'

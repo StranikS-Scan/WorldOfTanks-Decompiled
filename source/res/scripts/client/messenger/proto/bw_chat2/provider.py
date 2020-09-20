@@ -11,7 +11,8 @@ from gui.shared.rq_cooldown import RequestCooldownManager, REQUEST_SCOPE
 from ids_generators import SequenceIDGenerator
 from messenger.proto.bw_chat2.errors import createCoolDownError
 from messenger.proto.events import g_messengerEvents
-from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS, messageArgs, addCoolDowns, areSenderCooldownsActive
+from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
+from messenger_common_chat2 import messageArgs, addCoolDowns, areSenderCooldownsActive
 
 class _ChatCooldownManager(RequestCooldownManager):
 
@@ -103,13 +104,14 @@ class BWChatProvider(object):
     def filterOutMessage(self, text, limits):
         return self.__msgFilters.chainOut(text, limits)
 
-    def setActionCoolDown(self, actionID, coolDown, targetID=0):
+    def setActionCoolDown(self, actionID, coolDown, targetID=0, cooldownConfig=None):
         command = _ACTIONS.battleChatCommandFromActionID(actionID)
-        if command and command.name not in CHAT_COMMANDS_THAT_IGNORE_COOLDOWNS:
+        if command and cooldownConfig is not None and command.name not in CHAT_COMMANDS_THAT_IGNORE_COOLDOWNS:
             currTime = BigWorld.time()
-            addCoolDowns(currTime, self.__battleCmdCooldowns, command.id, command.name, command.cooldownPeriod, targetID)
+            addCoolDowns(currTime, self.__battleCmdCooldowns, command.id, command.name, command.cooldownPeriod, targetID, cooldownConfig)
         else:
             self.__coolDown.process(actionID, coolDown)
+        return
 
     def isActionInCoolDown(self, actionID):
         command = _ACTIONS.battleChatCommandFromActionID(actionID)

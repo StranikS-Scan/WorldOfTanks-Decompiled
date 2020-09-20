@@ -7,6 +7,7 @@ from constants import QUEUE_TYPE_NAMES as _Q_NAMES
 from gui.prb_control.settings import CTRL_ENTITY_TYPE as _C_TYPE
 from gui.prb_control.settings import CTRL_ENTITY_TYPE_NAMES as _C_NAMES
 from gui.prb_control.storages.battle_royale_storage import BattleRoyaleStorage
+from gui.prb_control.storages.bob_storage import BobStorage
 from gui.prb_control.storages.local_storage import LocalStorage
 from gui.prb_control.storages.prb_storage import TrainingStorage
 from gui.prb_control.storages.ranked_storage import RankedStorage
@@ -41,7 +42,8 @@ _PRB_STORAGE = {_makeLegacyName(_P_TYPE.TRAINING): TrainingStorage(),
  _makeQueueName(_Q_TYPE.STRONGHOLD_UNITS): StrongholdStorage(),
  _makeQueueName(_Q_TYPE.TOURNAMENT_UNITS): TournamentStorage(),
  _makeQueueName(_Q_TYPE.BATTLE_ROYALE): BattleRoyaleStorage(),
- _makeLegacyName(_P_TYPE.EPIC_TRAINING): TrainingStorage()}
+ _makeLegacyName(_P_TYPE.EPIC_TRAINING): TrainingStorage(),
+ _makeQueueName(_Q_TYPE.BOB): BobStorage()}
 
 class _storage_getter(object):
 

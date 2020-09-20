@@ -100,6 +100,23 @@ class ServerEventAbstract(object):
             return [ (l[0] * 3600 + l[1] * 60, h[0] * 3600 + h[1] * 60) for l, h in self._data['activeTimeIntervals'] ]
         return []
 
+    def getCollapsedActiveTimeIntervals(self):
+        intervals = self.getActiveTimeIntervals()
+        if not intervals:
+            return []
+        collapsed = []
+        current = first(intervals)
+        for following in intervals[1:]:
+            collapsable = current[1] == following[0] or current[1] == 86400 and following[0] == 0
+            if collapsable:
+                current = (current[0], following[1])
+            collapsed.append(current)
+            current = following
+
+        if not collapsed or current != collapsed[-1]:
+            collapsed.append(current)
+        return collapsed
+
     def getID(self):
         return self._id
 

@@ -1,7 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_pass/battle_pass_bonuses_helper.py
+import logging
+import weakref
 import typing
-from helpers import i18n
+from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
+from battle_pass_common import BattlePassConsts
+from helpers import i18n, dependency
 from gui import makeHtmlString
 from gui.server_events.bonuses import IntelligenceBlueprintBonus, NationalBlueprintBonus, DossierBonus
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -9,8 +13,13 @@ from items import vehicles
 from gui.shared.utils.requesters.blueprints_requester import getVehicleCDForIntelligence, getVehicleCDForNational
 from gui.battle_pass.battle_pass_consts import BonusesLayoutConsts
 from shared_utils import first
+from skeletons.account_helpers.settings_core import ISettingsCore
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import SimpleBonus, VehicleBlueprintBonus, CustomizationsBonus
+    from skeletons.gui.game_control import IBattlePassController
+_logger = logging.getLogger(__name__)
+TROPHY_GIFT_TOKEN_BONUS_NAME = 'battlePassTrophyGiftToken'
+NEW_DEVICE_GIFT_TOKEN_BONUS_NAME = 'battlePassNewDeviceGiftToken'
 
 class BonusesHelper(object):
 
@@ -264,3 +273,95 @@ class _HelperConsts(object):
     BADGE_TYPE = 'badge'
     OPTIONAL_DEVICE_TYPE = 'optionalDevice'
     EQUIPMENT_TYPE = 'equipment'
+
+
+class DeviceTokensContainer(object):
+
+    def __init__(self, battlePassController, bonusName):
+        self.__battlePassController = weakref.proxy(battlePassController)
+        self.__bonusName = bonusName
+        self.__freeTokenPositions = []
+        self.__paidTokenPositions = []
+
+    @property
+    def freeTokenPositions(self):
+        return self.__freeTokenPositions
+
+    @property
+    def paidTokenPositions(self):
+        return self.__paidTokenPositions
+
+    @property
+    def isEmpty(self):
+        return not bool(self.__freeTokenPositions or self.__paidTokenPositions)
+
+    def addFreeTokenPos(self, position):
+        self.__freeTokenPositions.append(position)
+
+    def addPaidTokenPos(self, position):
+        self.__paidTokenPositions.append(position)
+
+    def getFreeAvailableTokens(self):
+        currentLevel = self.__battlePassController.getCurrentLevel()
+        return [ 0 <= pos < currentLevel for pos in self.__freeTokenPositions ]
+
+    def getPaidAvailableTokens(self):
+        currentLevel = self.__battlePassController.getCurrentLevel()
+        if not self.__battlePassController.isBought():
+            return [False] * len(self.__paidTokenPositions)
+        return [ 0 <= pos < currentLevel for pos in self.__paidTokenPositions ]
+
+    def saveChosenToken(self):
+        settingsCore = dependency.instance(ISettingsCore)
+        freeAvailableTokens = self.getFreeAvailableTokens()
+        paidAvailableTokens = self.getPaidAvailableTokens()
+        savedUsedTokens = settingsCore.serverSettings.getBPStorage().get(_getStorageKey(self.__bonusName))
+        usedToken = 0
+        for offset, isTokenAvailable in enumerate(freeAvailableTokens + paidAvailableTokens):
+            if not isTokenAvailable:
+                continue
+            usedToken = 1 << offset
+            if savedUsedTokens & usedToken == 0:
+                if BattlePassStorageKeys.MASK_CHOSEN_DEVICES & usedToken == 0:
+                    _logger.error('[Battle Pass] Base reward config has more "%s" tokens than storage')
+                    return
+                break
+
+        settingsCore.serverSettings.saveInBPStorage({_getStorageKey(self.__bonusName): savedUsedTokens | usedToken})
+
+    def isTokenUsed(self, level, awardType):
+        settingsCore = dependency.instance(ISettingsCore)
+        savedUsedTokens = settingsCore.serverSettings.getBPStorage().get(_getStorageKey(self.__bonusName))
+        if awardType == BattlePassConsts.REWARD_PAID and level in self.__paidTokenPositions:
+            offset = self.__paidTokenPositions.index(level) + len(self.__freeTokenPositions)
+            return savedUsedTokens & 1 << offset > 0
+        if awardType == BattlePassConsts.REWARD_FREE and level in self.__freeTokenPositions:
+            offset = self.__freeTokenPositions.index(level)
+            return savedUsedTokens & 1 << offset > 0
+        _logger.warning('%s must not be in awardType=%s.', self.__bonusName, awardType)
+        return False
+
+    def getUnusedTokensCount(self):
+        settingsCore = dependency.instance(ISettingsCore)
+        freeAvailableTokens = self.getFreeAvailableTokens()
+        paidAvailableTokens = self.getPaidAvailableTokens()
+        savedUsedTokens = settingsCore.serverSettings.getBPStorage().get(_getStorageKey(self.__bonusName))
+        count = 0
+        for offset, isTokenAvailable in enumerate(freeAvailableTokens + paidAvailableTokens):
+            if not isTokenAvailable:
+                continue
+            usedToken = 1 << offset
+            if savedUsedTokens & usedToken == 0:
+                count += 1
+
+        return count
+
+    def clear(self):
+        self.__freeTokenPositions = []
+        self.__paidTokenPositions = []
+
+
+def _getStorageKey(bonusName):
+    if bonusName == TROPHY_GIFT_TOKEN_BONUS_NAME:
+        return BattlePassStorageKeys.CHOSEN_TROPHY_DEVICES
+    return BattlePassStorageKeys.CHOSEN_NEW_DEVICES if bonusName == NEW_DEVICE_GIFT_TOKEN_BONUS_NAME else ''

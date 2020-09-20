@@ -5,18 +5,17 @@ from functools import partial
 from operator import itemgetter
 from async import async, await
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
-from gui.battle_pass.battle_pass_award import awardsFactory
-from gui.battle_pass.battle_pass_helpers import isNeededToVote, BattlePassProgressionSubTabs
+from gui.battle_pass.battle_pass_award import awardsFactory, BattlePassAwardsManager
+from gui.battle_pass.battle_pass_helpers import isNeededToVote, BattlePassProgressionSubTabs, BackgroundPositions
 from gui.battle_pass.undefined_bonuses import getStyleInfo, getTankmanInfo, getRecruitNation
 from gui.impl import backport
 from gui.impl.dialogs import dialogs
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_voting_result_view_model import BattlePassVotingResultViewModel
-from gui.impl.gen.view_models.views.lobby.battle_pass.final_reward_item_model import FinalRewardItemModel
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.server_events.events_dispatcher import showMissionsBattlePassCommonProgression
-from gui.shared.event_dispatcher import showStylePreview, showBattleVotingResultWindow, hideVehiclePreview, showHangar, isViewLoaded
+from gui.shared.event_dispatcher import showStylePreview, hideVehiclePreview, showHangar, isViewLoaded
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.scheduled_notifications import SimpleNotifier
 from gui.sounds.filters import switchHangarOverlaySoundFilter
@@ -29,7 +28,7 @@ from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 
 class BattlePassVotingResultView(ViewImpl):
-    __slots__ = ('__isOverlay', '__isVoted', '__requestNotifier')
+    __slots__ = ('__isOverlay', '__isVoted', '__requestNotifier', '__previewOpened')
     __c11n = dependency.descriptor(ICustomizationService)
     __battlePassController = dependency.descriptor(IBattlePassController)
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -42,6 +41,7 @@ class BattlePassVotingResultView(ViewImpl):
         settings.kwargs = kwargs
         self.__isOverlay = False
         self.__isVoted = False
+        self.__previewOpened = False
         self.__requestNotifier = SimpleNotifier(self.__getTimeToRepeatRequest, self.__updateVotingResult)
         super(BattlePassVotingResultView, self).__init__(settings)
 
@@ -67,8 +67,9 @@ class BattlePassVotingResultView(ViewImpl):
         super(BattlePassVotingResultView, self)._finalize()
         self.__removeListeners()
         switchHangarOverlaySoundFilter(on=False)
-        if not self.__isVoted:
-            self.__battlePassController.getFinalFlowSM().continueFlow()
+        if not self.__previewOpened:
+            self.__battlePassController.getFinalRewardLogic().postEscape()
+        self.__previewOpened = False
         self.__requestNotifier.stopNotification()
 
     def __showLocked(self):
@@ -81,12 +82,11 @@ class BattlePassVotingResultView(ViewImpl):
         self.viewModel.setState(self.viewModel.RESULT_STATE)
 
     def __showStylePreview(self, args):
+        self.__previewOpened = True
         if self.__isOverlay:
             hideVehiclePreview(noCallback=True)
-            self.__battlePassController.getFinalFlowSM().pauseFlow()
+            self.__battlePassController.getFinalRewardLogic().postPreviewOpen()
             self.destroyWindow()
-        else:
-            self.__battlePassController.getFinalFlowSM().pauseFlow()
         vehicleCD = int(args.get('vehicleCD'))
         styleID = int(args.get('styleID'))
         style = self.__c11n.getItemByID(GUI_ITEM_TYPE.STYLE, styleID)
@@ -117,26 +117,29 @@ class BattlePassVotingResultView(ViewImpl):
             recruitInfo = self.__getRecruitInfoFromUniqueBonuses(uniqueBonuses)
             if not (style and recruitInfo and additionalStyle):
                 return
-            self.viewModel.finalRewards.addViewModel(self.__getRewardItem(vehCD, style, recruitInfo, additionalStyle))
+            vehiclePos = BattlePassAwardsManager.getVehicleBackgroundPosition(vehCD)
+            if vehiclePos == BackgroundPositions.LEFT:
+                self.__setFinalRewardItem(vehCD, style, recruitInfo, additionalStyle, self.viewModel.leftReward)
+            if vehiclePos == BackgroundPositions.RIGHT:
+                self.__setFinalRewardItem(vehCD, style, recruitInfo, additionalStyle, self.viewModel.rightReward)
 
         self.__updateVotingResult()
 
-    def __getRewardItem(self, vehCD, mainStyle, recruitInfo, additionalStyle):
+    def __setFinalRewardItem(self, vehCD, mainStyle, recruitInfo, additionalStyle, item):
         vehicle = self.__itemsCache.items.getItemByCD(vehCD)
-        item = FinalRewardItemModel()
-        item.setStyleID(mainStyle.id)
-        item.setVehicleCD(vehCD)
-        item.setVehicleUserName(vehicle.userName)
-        item.setStyleName(mainStyle.userName)
-        item.setRecruitName(recruitInfo.getFullUserNameByNation(getRecruitNation(recruitInfo)))
-        item.setSelected(self.__battlePassController.getVoteOption() == vehCD)
-        role, fullName = self.__getRecruitRoleAndUserName(recruitInfo)
-        if self.__battlePassController.isBought():
-            rewardsText = backport.text(R.strings.battle_pass_2020.battlePassVoting.options.rewardsBP(), mainStyleName=mainStyle.userName, additionalStyleName=additionalStyle.userName, role=role, recruitFullName=fullName)
-        else:
-            rewardsText = backport.text(R.strings.battle_pass_2020.battlePassVoting.options.rewards(), mainStyleName=mainStyle.userName, role=role, recruitFullName=fullName)
-        item.setRewards(rewardsText)
-        return item
+        with item.transaction() as tx:
+            tx.setStyleID(mainStyle.id)
+            tx.setVehicleCD(vehCD)
+            tx.setVehicleUserName(vehicle.userName)
+            tx.setStyleName(mainStyle.userName)
+            tx.setRecruitName(recruitInfo.getFullUserNameByNation(getRecruitNation(recruitInfo)))
+            tx.setSelected(self.__battlePassController.getVoteOption() == vehCD)
+            role, fullName = self.__getRecruitRoleAndUserName(recruitInfo)
+            if self.__battlePassController.isBought():
+                rewardsText = backport.text(R.strings.battle_pass_2020.battlePassVoting.options.rewardsBP(), mainStyleName=mainStyle.userName, additionalStyleName=additionalStyle.userName, role=role, recruitFullName=fullName)
+            else:
+                rewardsText = backport.text(R.strings.battle_pass_2020.battlePassVoting.options.rewards(), mainStyleName=mainStyle.userName, role=role, recruitFullName=fullName)
+            tx.setRewards(rewardsText)
 
     def __getAdditionalSharedBonuses(self, mainVehCD):
         finalAwards = self.__battlePassController.getFinalRewards()
@@ -147,16 +150,17 @@ class BattlePassVotingResultView(ViewImpl):
     def __onVoteClick(self, args):
         vehicleCD = int(args.get('vehicleCD'))
         data = {}
-        for reward in self.viewModel.finalRewards.getItems():
-            if reward.getVehicleCD() == vehicleCD:
-                data['finalReward'] = reward
-
+        vehiclePos = BattlePassAwardsManager.getVehicleBackgroundPosition(vehicleCD)
+        if vehiclePos == BackgroundPositions.LEFT:
+            data['finalReward'] = self.viewModel.leftReward
+        elif vehiclePos == BackgroundPositions.RIGHT:
+            data['finalReward'] = self.viewModel.rightReward
         if isViewLoaded(R.views.lobby.battle_pass.BattlePassVotingConfirmView()):
             return
         result = yield await(dialogs.chooseFinalRewardBattlePass(parent=self.getParentWindow(), data=data))
         if result:
             self.__isVoted = True
-            self.__battlePassController.getFinalFlowSM().continueFlow(voteOption=vehicleCD)
+            self.__battlePassController.getFinalRewardLogic().postNextState(voteOption=vehicleCD)
             self.__onBackClick()
 
     def __onBackClick(self):
@@ -166,17 +170,16 @@ class BattlePassVotingResultView(ViewImpl):
 
     def __updateVotingResult(self):
         votingRequester = self.__battlePassController.getVotingRequester()
-        success, votingResult = votingRequester.getVotingResult(self.__battlePassController.getSeasonID())
+        success, votingResult = votingRequester.startGettingResults(self.__battlePassController.getSeasonID())
         with self.viewModel.transaction() as tx:
             tx.setFailService(not success)
         if success:
             self.__requestNotifier.startNotification()
         selfVote = self.__battlePassController.getVoteOption()
-        for model in self.viewModel.finalRewards.getItems():
-            vehCD = model.getVehicleCD()
-            model.setVoicesNumber(votingResult.get(vehCD, 0) + (1 if selfVote == vehCD else 0))
-
-        self.viewModel.finalRewards.invalidate()
+        for rewardModel in (self.viewModel.rightReward, self.viewModel.leftReward):
+            with rewardModel.transaction() as tx:
+                vehCD = tx.getVehicleCD()
+                tx.setVoicesNumber(votingResult.get(vehCD, 0) + (1 if selfVote == vehCD else 0))
 
     def __onVotingResultsUpdated(self):
         self.__updateVotingResult()
@@ -201,7 +204,9 @@ class BattlePassVotingResultView(ViewImpl):
         model.showNeedVoting -= self.__showNeedVoting
         model.showResult -= self.__showResult
         self.__battlePassController.onBattlePassSettingsChange -= self.__onSettingsChange
-        self.__battlePassController.getVotingRequester().onVotingResultsUpdated -= self.__onVotingResultsUpdated
+        votingRequester = self.__battlePassController.getVotingRequester()
+        votingRequester.onVotingResultsUpdated -= self.__onVotingResultsUpdated
+        votingRequester.stopGetting()
 
     def __onSettingsChange(self, *_):
         if self.__battlePassController.isVisible() and not self.__battlePassController.isPaused():
@@ -241,10 +246,9 @@ class BattlePassVotingResultView(ViewImpl):
         return (role, fullName)
 
     def __previewCallback(self, isOverlay):
-        self.__battlePassController.getFinalFlowSM().unpauseFlow()
-        if isOverlay:
-            showBattleVotingResultWindow(isOverlay=isOverlay)
-        else:
+        self.__previewOpened = False
+        self.__battlePassController.getFinalRewardLogic().postClosePreview()
+        if not isOverlay:
             showMissionsBattlePassCommonProgression(BattlePassProgressionSubTabs.VOTING_TAB)
 
 

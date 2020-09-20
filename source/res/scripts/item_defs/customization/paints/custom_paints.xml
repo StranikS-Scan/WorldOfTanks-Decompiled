@@ -1303,7 +1303,7 @@
     </usages>
   </itemGroup>
   <itemGroup>
-    <name>	Twitch May 2020	</name>
+    <name>	Twitch	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
@@ -1320,6 +1320,15 @@
       <gloss>	0.346	</gloss>
       <metallic>	0.2	</metallic>
       <userString>	#vehicle_customization:repaint/twitch_may_2020	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	64	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_11.png	</texture>
+      <color>	198 198 198 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/twitch_september_2020	</userString>
       <tags>	hiddenInUI	</tags>
     </paint>
     <usages>
@@ -1356,7 +1365,7 @@
     </usages>
   </itemGroup>
   <itemGroup>
-    <name>	Battle Pass 2020	</name>
+    <name>	Battle Pass 2020 Historical	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
@@ -1515,6 +1524,40 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/apac_korean_flag	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	Battle Pass 2020 Non-Historical	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	59	</id>
+      <texture>	gui/maps/vehicles/repaints/ussr_color_05.png	</texture>
+      <color>	76 75 61 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/battlepass_2020_ussr	</userString>
+    </paint>
+    <paint>
+      <id>	60	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_29.png	</texture>
+      <color>	157 160 165 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/battlepass_2020_usa	</userString>
     </paint>
     <usages>
       <item>

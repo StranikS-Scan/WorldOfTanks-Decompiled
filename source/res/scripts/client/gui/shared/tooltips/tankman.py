@@ -239,7 +239,7 @@ class NotRecruitedTooltipData(BlocksTooltipData):
         if hasHowToGetStr:
             blocks.append(formatters.packTextBlockData(text_styles.middleTitle(backport.text(R.strings.tooltips.notrecruitedtankman.howToGet())), useHtml=True, padding=formatters.packPadding(top=17 if hasDescr else 18, bottom=5)))
             blocks.append(formatters.packTextBlockData(text_styles.main(howToGetStr), useHtml=True, padding=formatters.packPadding()))
-        skills = item.getLearntSkills()
+        skills = item.getLearntSkills(multiplyNew=True)
         if skills:
             blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.NOTRECRUITEDTANKMAN_SKILLSTITLE), useHtml=True, padding=formatters.packPadding(top=17 if hasDescr else 18, bottom=10)))
             blocks.append(formatters.packImageListParameterBlockData(listIconSrc=[ formatters.packImageListIconData(Tankman.getSkillIconPath(skillName=skillName, size='big')) for skillName in skills ], columnWidth=52, rowHeight=52, verticalGap=10, horizontalGap=10))

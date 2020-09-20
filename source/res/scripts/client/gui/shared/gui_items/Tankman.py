@@ -603,7 +603,9 @@ def getLastUserName(nationID, lastNameID):
 
 
 def getFullUserName(nationID, firstNameID, lastNameID):
-    return '%s %s' % (getFirstUserName(nationID, firstNameID), getLastUserName(nationID, lastNameID))
+    firstUserName = getFirstUserName(nationID, firstNameID)
+    lastUserName = getLastUserName(nationID, lastNameID)
+    return lastUserName if not firstUserName else '%s %s' % (firstUserName, lastUserName)
 
 
 def getRoleUserName(role):

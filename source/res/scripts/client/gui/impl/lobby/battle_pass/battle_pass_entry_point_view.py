@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/battle_pass_entry_point_view.py
+import random
 from PlayerEvents import g_playerEvents
 from battle_pass_common import BattlePassState
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.daapi.view.meta.BattlePassEntryPointMeta import BattlePassEntryPointMeta
-from gui.battle_pass import battle_pass_helpers
-from gui.battle_pass.final_reward_state_machine import FinalStates
+from gui.battle_pass.battle_pass_helpers import isNeededToVote
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_entry_point_view_model import BattlePassEntryPointViewModel
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_chose_winner_tooltip_view import BattlePassChoseWinnerTooltipView
@@ -15,8 +15,11 @@ from gui.impl.lobby.battle_pass.tooltips.battle_pass_not_started_tooltip_view im
 from gui.impl.pub import ViewImpl
 from gui.server_events.events_dispatcher import showMissionsBattlePassCommonProgression
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
+from skeletons.gui.shared import IItemsCache
 
 class BattlePassEntryPointStates(object):
 
@@ -42,6 +45,7 @@ class BattlePassEntryPointStates(object):
 
 
 g_BPEntryPointStates = BattlePassEntryPointStates()
+ATTENTION_TIMER_DELAY = 25
 
 class BattlePassEntryPointComponent(BattlePassEntryPointMeta):
     __slots__ = ('__view', '__isSmall')
@@ -62,21 +66,23 @@ class BattlePassEntryPointComponent(BattlePassEntryPointMeta):
         return
 
     def _makeInjectView(self):
-        self.__view = BattlePassEntryPointView(self.as_setIsMouseEnabledS, flags=ViewFlags.COMPONENT)
+        self.__view = BattlePassEntryPointView(flags=ViewFlags.COMPONENT)
         self.__view.setIsSmall(self.__isSmall)
         return self.__view
 
 
 class BattlePassEntryPointView(ViewImpl):
     __battlePassController = dependency.descriptor(IBattlePassController)
-    __slots__ = ('__setIsMouseEnabled', '__isSmall')
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __slots__ = ('__isSmall', '__notifications', '__isAttentionTimerStarted')
 
-    def __init__(self, setIsMouseEnabled, flags=ViewFlags.VIEW):
+    def __init__(self, flags=ViewFlags.VIEW):
         settings = ViewSettings(R.views.lobby.battle_pass.BattlePassEntryPointView())
         settings.flags = flags
         settings.model = BattlePassEntryPointViewModel()
-        self.__setIsMouseEnabled = setIsMouseEnabled
         self.__isSmall = False
+        self.__isAttentionTimerStarted = False
+        self.__notifications = Notifiable()
         super(BattlePassEntryPointView, self).__init__(settings)
 
     @property
@@ -96,14 +102,14 @@ class BattlePassEntryPointView(ViewImpl):
         if g_BPEntryPointStates.prevState == BattlePassState.POST and currentState == BattlePassState.COMPLETED:
             g_BPEntryPointStates.showPostProgressionCompleted = True
         g_BPEntryPointStates.prevState = currentState
+        self.__notifications.addNotificator(PeriodicNotifier(self.__attentionTickTime, self.__showAttentionAnimation))
         self.__addListeners()
         self.__updateViewModel()
 
     def _finalize(self):
         self.__removeListeners()
-        self.__setIsMouseEnabled = None
+        self.__notifications.clearNotification()
         super(BattlePassEntryPointView, self)._finalize()
-        return
 
     def __addListeners(self):
         self.__battlePassController.onPointsUpdated += self.__updateViewModel
@@ -112,6 +118,8 @@ class BattlePassEntryPointView(ViewImpl):
         self.__battlePassController.onVoted += self.__updateViewModel
         self.__battlePassController.onBattlePassSettingsChange += self.__onBattlePassSettingsChange
         self.__battlePassController.onFinalRewardStateChange += self.__onFinalRewardStateChange
+        self.__battlePassController.onDeviceSelectChange += self.__updateViewModel
+        self.__itemsCache.onSyncCompleted += self.__onSyncCompleted
         g_eventBus.addListener(events.BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
         self.viewModel.onClick += self.__onClick
 
@@ -122,6 +130,8 @@ class BattlePassEntryPointView(ViewImpl):
         self.__battlePassController.onVoted -= self.__updateViewModel
         self.__battlePassController.onBattlePassSettingsChange -= self.__onBattlePassSettingsChange
         self.__battlePassController.onFinalRewardStateChange -= self.__onFinalRewardStateChange
+        self.__battlePassController.onDeviceSelectChange -= self.__updateViewModel
+        self.__itemsCache.onSyncCompleted -= self.__onSyncCompleted
         g_eventBus.removeListener(events.BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
         self.viewModel.onClick -= self.__onClick
 
@@ -138,11 +148,15 @@ class BattlePassEntryPointView(ViewImpl):
     def __onBattlePassSettingsChange(self, *_):
         self.__updateViewModel()
 
-    def __onFinalRewardStateChange(self, state):
-        if state in (FinalStates.FINAL, FinalStates.STOP):
-            g_BPEntryPointStates.prevState = self.__battlePassController.getState()
-            g_BPEntryPointStates.showSwitchToPostProgression = True
-            self.__updateViewModel()
+    def __onSyncCompleted(self, _, diff):
+        if GUI_ITEM_TYPE.VEHICLE in diff:
+            with self.getViewModel().transaction() as model:
+                model.setShowWarning(not self.__battlePassController.canPlayerParticipate())
+
+    def __onFinalRewardStateChange(self):
+        g_BPEntryPointStates.prevState = self.__battlePassController.getState()
+        g_BPEntryPointStates.showSwitchToPostProgression = True
+        self.__updateViewModel()
 
     def __onAwardViewClose(self, _):
         currentState = self.__battlePassController.getState()
@@ -150,6 +164,23 @@ class BattlePassEntryPointView(ViewImpl):
             g_BPEntryPointStates.showPostProgressionCompleted = True
             g_BPEntryPointStates.prevState = currentState
             self.__updateViewModel()
+
+    def __showAttentionAnimation(self):
+        with self.getViewModel().transaction() as model:
+            model.setAnimState(BattlePassEntryPointViewModel.ANIM_STATE_SHOW_ATTENTION)
+            model.setAnimStateKey(random.randint(0, 1000))
+
+    def __attentionTickTime(self):
+        return ATTENTION_TIMER_DELAY
+
+    def __startAttentionTimer(self):
+        if not self.__isAttentionTimerStarted:
+            self.__notifications.startNotification()
+            self.__isAttentionTimerStarted = True
+
+    def __stopAttentionTimer(self):
+        self.__notifications.clearNotification()
+        self.__isAttentionTimerStarted = False
 
     def __updateViewModel(self):
         currentState = self.__battlePassController.getState()
@@ -164,14 +195,19 @@ class BattlePassEntryPointView(ViewImpl):
             state = BattlePassEntryPointViewModel.STATE_SEASON_WAITING
             tooltip = R.views.lobby.battle_pass.tooltips.BattlePassNotStartedTooltipView()
         else:
-            state = BattlePassEntryPointViewModel.STATE_NORMAL
-            if battle_pass_helpers.isNeededToVote():
+            hasDeviceTokens = self.__battlePassController.getTrophySelectTokensCount() > 0 or self.__battlePassController.getNewDeviceSelectTokensCount() > 0
+            showAttention = isNeededToVote() or hasDeviceTokens and self.__battlePassController.isChooseDeviceEnabled()
+            state = BattlePassEntryPointViewModel.STATE_ATTENTION if showAttention else BattlePassEntryPointViewModel.STATE_NORMAL
+            if showAttention:
+                self.__startAttentionTimer()
+            else:
+                self.__stopAttentionTimer()
+            if isNeededToVote():
                 tooltip = R.views.lobby.battle_pass.tooltips.BattlePassChoseWinnerTooltipView()
             elif currentState == BattlePassState.COMPLETED:
                 tooltip = R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView()
             else:
                 tooltip = R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView()
-        self.__setIsMouseEnabled(state == BattlePassEntryPointViewModel.STATE_NORMAL)
         with self.getViewModel().transaction() as model:
             curPoints, limitPoints = self.__battlePassController.getLevelProgression()
             hasBattlePass = self.__battlePassController.isBought()
@@ -183,33 +219,41 @@ class BattlePassEntryPointView(ViewImpl):
             model.setTooltipID(tooltip)
             model.setPrevLevel(g_BPEntryPointStates.curLevel)
             model.setLevel(currentLevel)
-            model.setMaxCommonLevel(self.__battlePassController.getMaxLevel())
             model.setPrevProgression(prevProgression)
             model.setProgression(progression)
-            model.setIsPostProgression(currentState != BattlePassState.BASE)
+            model.setBattlePassState(state)
+            if currentState == BattlePassState.POST:
+                progressionState = BattlePassEntryPointViewModel.PROGRESSION_POST
+            elif currentState == BattlePassState.BASE:
+                progressionState = BattlePassEntryPointViewModel.PROGRESSION_BASE
+            else:
+                progressionState = BattlePassEntryPointViewModel.PROGRESSION_COMPLETED
+            model.setProgressionState(progressionState)
             model.setHasBattlePass(hasBattlePass)
-            model.setIsPostProgressionCompleted(currentState == BattlePassState.COMPLETED)
-            model.setState(state)
-            model.setCanPlay(self.__battlePassController.canPlayerParticipate())
             isSameLevel = g_BPEntryPointStates.curLevel == currentLevel
             isSameState = g_BPEntryPointStates.prevState == currentState
             isValidLevel = g_BPEntryPointStates.curLevel != -1
             showNewLevel = isValidLevel and not isSameLevel or isSameLevel and not isSameState
             showBuyBP = not g_BPEntryPointStates.isBPBought and hasBattlePass and not g_BPEntryPointStates.isFirstShow
-            showAttention = currentState != BattlePassState.BASE and not self.__battlePassController.isPlayerVoted()
+            showProgressionChange = prevProgression != progression
             animState = BattlePassEntryPointViewModel.ANIM_STATE_NORMAL
             if g_BPEntryPointStates.showSwitchToPostProgression:
-                animState = BattlePassEntryPointViewModel.ANIM_STATE_SHOW_SWITCH_TO_POST_PROGRESSION
+                if showBuyBP:
+                    animState = BattlePassEntryPointViewModel.ANIM_STATE_SHOW_BUY_AND_SWITCH_TO_POST
+                else:
+                    animState = BattlePassEntryPointViewModel.ANIM_STATE_SHOW_SWITCH_TO_POST_PROGRESSION
             elif g_BPEntryPointStates.showPostProgressionCompleted:
                 animState = BattlePassEntryPointViewModel.ANIM_STATE_SHOW_POST_PROGRESSION_COMPLETED
             elif showNewLevel:
                 animState = BattlePassEntryPointViewModel.ANIM_STATE_SHOW_NEW_LEVEL
             elif showBuyBP:
                 animState = BattlePassEntryPointViewModel.ANIM_STATE_SHOW_BUY_BATTLEPASS
-            elif showAttention:
-                animState = BattlePassEntryPointViewModel.ANIM_STATE_SHOW_ATTENTION
+            elif showProgressionChange:
+                animState = BattlePassEntryPointViewModel.ANIM_STATE_CHANGE_PROGRESS
             model.setAnimState(animState)
+            model.setAnimStateKey(random.randint(0, 1000))
             model.setIsFirstShow(g_BPEntryPointStates.isFirstShow)
+            model.setShowWarning(not self.__battlePassController.canPlayerParticipate())
             g_BPEntryPointStates.curLevel = currentLevel
             g_BPEntryPointStates.isFirstShow = False
             g_BPEntryPointStates.isBPBought = hasBattlePass

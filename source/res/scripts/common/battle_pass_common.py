@@ -4,13 +4,19 @@ import bisect
 import time
 import typing
 import struct
-import constants
+from constants import MAX_VEHICLE_LEVEL, OFFER_TOKEN_PREFIX
 from collections import namedtuple
 from items import vehicles, parseIntCompactDescr
 BATTLE_PASS_TOKEN_PREFIX = 'battle_pass:'
 BATTLE_PASS_TOKEN_PASS = BATTLE_PASS_TOKEN_PREFIX + 'pass:'
 BATTLE_PASS_TOKEN_VOTE = 'vote:' + BATTLE_PASS_TOKEN_PREFIX
 BATTLE_PASS_TOKEN_DEFAULT_FINAL_REWARD = BATTLE_PASS_TOKEN_PREFIX + 'default_final:'
+BATTLE_PASS_TOKEN_ONBOARDING_OFFER = OFFER_TOKEN_PREFIX + BATTLE_PASS_TOKEN_PREFIX + 'onboarding:'
+BATTLE_PASS_TOKEN_ONBOARDING_GIFT_OFFER = OFFER_TOKEN_PREFIX + BATTLE_PASS_TOKEN_PREFIX + 'onboarding_gift:'
+BATTLE_PASS_TOKEN_TROPHY_OFFER = OFFER_TOKEN_PREFIX + BATTLE_PASS_TOKEN_PREFIX + 'trophy'
+BATTLE_PASS_TOKEN_TROPHY_GIFT_OFFER = OFFER_TOKEN_PREFIX + BATTLE_PASS_TOKEN_PREFIX + 'trophy_gift'
+BATTLE_PASS_TOKEN_NEW_DEVICE_OFFER = OFFER_TOKEN_PREFIX + BATTLE_PASS_TOKEN_PREFIX + 'new_device'
+BATTLE_PASS_TOKEN_NEW_DEVICE_GIFT_OFFER = OFFER_TOKEN_PREFIX + BATTLE_PASS_TOKEN_PREFIX + 'new_device_gift'
 BATTLE_PASS_CONFIG_NAME = 'battlePass_config'
 BATTLE_PASS_BADGE_ID = 90
 MAX_BADGE_LEVEL = 100
@@ -33,6 +39,7 @@ class BattlePassRewardReason(object):
     PURCHASE_BATTLE_PASS_LEVELS = 3
     INVOICE = 4
     VOTE = 5
+    SELECT_TROPHY_DEVICE = 6
 
 
 class BattlePassState(object):
@@ -58,6 +65,8 @@ class BattlePassConsts(object):
 MASK_TO_REWARD = {BattlePassConsts.FREE_MASK: BattlePassConsts.REWARD_FREE,
  BattlePassConsts.PAID_MASK: BattlePassConsts.REWARD_PAID,
  BattlePassConsts.POST_MASK: BattlePassConsts.REWARD_POST}
+GIFT_TO_MAIN_TOKEN = {BATTLE_PASS_TOKEN_TROPHY_GIFT_OFFER: BATTLE_PASS_TOKEN_TROPHY_OFFER,
+ BATTLE_PASS_TOKEN_NEW_DEVICE_GIFT_OFFER: BATTLE_PASS_TOKEN_NEW_DEVICE_OFFER}
 
 class BattlePassStatsCommon(object):
     _CNT_SEASONS_FORMAT = '<I'
@@ -157,6 +166,14 @@ def getBattlePassDefaultFinalRewardToken(seasonID, hadBattlePass):
     return BATTLE_PASS_TOKEN_DEFAULT_FINAL_REWARD + '{}_{}'.format(seasonID, 'paid' if hadBattlePass else 'free')
 
 
+def getBattlePassOnboardingToken(seasonID):
+    return BATTLE_PASS_TOKEN_ONBOARDING_OFFER + str(seasonID)
+
+
+def getBattlePassOnboardingGiftToken(seasonID):
+    return BATTLE_PASS_TOKEN_ONBOARDING_GIFT_OFFER + str(seasonID)
+
+
 def isBattlePassPassToken(token):
     return token.startswith(BATTLE_PASS_TOKEN_PASS)
 
@@ -240,6 +257,14 @@ class BattlePassConfig(object):
         return self._season.get('maxSoldLevelsBeforeUnlock', 0)
 
     @property
+    def maxLevelForNewbie(self):
+        return self._season.get('maxLevelForNewbie', 0)
+
+    @property
+    def maxPointsForNewbie(self):
+        return self.basePoints[self.maxLevelForNewbie - 1]
+
+    @property
     def sellAnyLevelsUnlockTime(self):
         return self._season.get('sellAnyLevelsUnlockTime', ENDLESS_TIME)
 
@@ -249,7 +274,7 @@ class BattlePassConfig(object):
 
     @property
     def vehLevelCaps(self):
-        return self._season.get('vehLevelCaps', [0] * constants.MAX_VEHICLE_LEVEL)
+        return self._season.get('vehLevelCaps', [0] * MAX_VEHICLE_LEVEL)
 
     @property
     def vehCDCaps(self):
@@ -307,6 +332,9 @@ class BattlePassConfig(object):
     def isDisabled(self):
         return self.mode == 'disabled'
 
+    def isOnboardingEnabled(self):
+        return self.maxLevelForNewbie > 0
+
     def isBuyingAllowed(self):
         return self.isActive(int(time.time()))
 
@@ -323,10 +351,10 @@ class BattlePassConfig(object):
         return vehTypeCompDescr in self.getSpecialVehicles()
 
     def capacityList(self):
-        return self._season.get('caps', [0] * constants.MAX_VEHICLE_LEVEL)
+        return self._season.get('caps', [0] * MAX_VEHICLE_LEVEL)
 
     def capBonusList(self):
-        return self._season.get('capBonuses', [0] * constants.MAX_VEHICLE_LEVEL)
+        return self._season.get('capBonuses', [0] * MAX_VEHICLE_LEVEL)
 
     def vehicleCapacity(self, vehTypeCompDescr):
         isSecret = 'secret' in vehicles.getVehicleType(vehTypeCompDescr).tags
@@ -337,6 +365,9 @@ class BattlePassConfig(object):
 
     def capBonusForVehTypeCompDescr(self, vehTypeCompDescr):
         return self.capBonusList()[getVehicleLevel(vehTypeCompDescr) - 1]
+
+    def vehicleContribution(self, vehTypeCompDescr):
+        return self.vehicleCapacity(vehTypeCompDescr) + self.capBonusForVehTypeCompDescr(vehTypeCompDescr)
 
     def alignedPointsFromSumPoints(self, sumPoints):
         if sumPoints >= self.maxBasePoints:

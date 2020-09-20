@@ -8,41 +8,41 @@ class BattlePassVotingConfirmViewModel(ViewModel):
     def __init__(self, properties=5, commands=1):
         super(BattlePassVotingConfirmViewModel, self).__init__(properties=properties, commands=commands)
 
-    def getVehicleCD(self):
-        return self._getNumber(0)
-
-    def setVehicleCD(self, value):
-        self._setNumber(0, value)
-
-    def getVehicleName(self):
-        return self._getString(1)
-
-    def setVehicleName(self, value):
-        self._setString(1, value)
-
     def getStyleName(self):
-        return self._getString(2)
+        return self._getString(0)
 
     def setStyleName(self, value):
-        self._setString(2, value)
+        self._setString(0, value)
 
     def getRecruitName(self):
-        return self._getString(3)
+        return self._getString(1)
 
     def setRecruitName(self, value):
-        self._setString(3, value)
+        self._setString(1, value)
 
     def getIsBattlePassBought(self):
-        return self._getBool(4)
+        return self._getBool(2)
 
     def setIsBattlePassBought(self, value):
+        self._setBool(2, value)
+
+    def getIsRight(self):
+        return self._getBool(3)
+
+    def setIsRight(self, value):
+        self._setBool(3, value)
+
+    def getIsLeft(self):
+        return self._getBool(4)
+
+    def setIsLeft(self, value):
         self._setBool(4, value)
 
     def _initialize(self):
         super(BattlePassVotingConfirmViewModel, self)._initialize()
-        self._addNumberProperty('vehicleCD', 0)
-        self._addStringProperty('vehicleName', '')
         self._addStringProperty('styleName', '')
         self._addStringProperty('recruitName', '')
         self._addBoolProperty('isBattlePassBought', False)
+        self._addBoolProperty('isRight', False)
+        self._addBoolProperty('isLeft', False)
         self.onVoteClick = self._addCommand('onVoteClick')

@@ -16,6 +16,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 _IMAGE_PATH_FORMATTER = 'img://{}'
 _logger = logging.getLogger(__name__)
+_DEFUALT_MINIMAP_DIMENSION = 10
 
 class IMinimapComponent(object):
 
@@ -197,6 +198,18 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
 
     def __logEntryError(self, entryID):
         _logger.error('Entry is not added by given ID = %d, available = %r', entryID, self.__ids)
+
+    def hasMinimapGrid(self):
+        return False
+
+    def getMinimapDimensions(self):
+        return _DEFUALT_MINIMAP_DIMENSION
+
+    def getCellIdFromPosition(self, position, boundingBox):
+        return None
+
+    def getCellName(self, cellId):
+        pass
 
 
 class MinimapPluginsCollection(PluginsCollection):

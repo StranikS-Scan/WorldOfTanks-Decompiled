@@ -60,6 +60,8 @@ def getGameControllersConfig(manager):
     from gui.game_control.low_tier_mm_controller import LowTierMMController
     from gui.game_control.clan_notification_controller import ClanNotificationController as _ClanNotification
     from gui.game_control.craftmachine_controller import CraftmachineController
+    from gui.game_control.bob_controller import BobController as _BobCtrl
+    from gui.game_control.bob_sound_controller import BobSoundController as _BobSoundCtrl
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -112,6 +114,8 @@ def getGameControllersConfig(manager):
         _config(_interface.IChinaController, _China())
     else:
         _config(_interface.IChinaController, _NoChina())
+    _config(_interface.IBobController, _BobCtrl())
+    _config(_interface.IBobSoundController, _BobSoundCtrl())
     _config(_interface.ISeasonsController, _Seasons())
     _config(_interface.IBadgesController, _Badges())
     _config(_interface.IAnonymizerController, _Anonymizer())

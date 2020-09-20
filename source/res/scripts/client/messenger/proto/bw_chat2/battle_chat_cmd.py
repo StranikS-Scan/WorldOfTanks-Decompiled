@@ -37,7 +37,6 @@ TARGETED_VEHICLE_CMD_NAMES = (BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY_WITH_SPG
  BATTLE_CHAT_COMMAND_NAMES.HELPME,
  BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY,
  BATTLE_CHAT_COMMAND_NAMES.THANKS,
- BATTLE_CHAT_COMMAND_NAMES.GOING_THERE,
  BATTLE_CHAT_COMMAND_NAMES.REPLY,
  BATTLE_CHAT_COMMAND_NAMES.CANCEL_REPLY,
  BATTLE_CHAT_COMMAND_NAMES.CLEAR_CHAT_COMMANDS,
@@ -92,7 +91,7 @@ _SHOW_MARKER_CMD_NAMES = (BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY_WITH_SPG,
  BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY,
  BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY)
 _ENEMY_TARGET_CMD_NAMES = (BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY_WITH_SPG, BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY, BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY)
-_MINIMAP_CMD_NAMES = ('ATTENTIONTOCELL', BATTLE_CHAT_COMMAND_NAMES.SPG_AIM_AREA)
+_MINIMAP_CMD_NAMES = ('ATTENTIONTOCELL',)
 _SPG_AIM_CMD_NAMES = (BATTLE_CHAT_COMMAND_NAMES.SPG_AIM_AREA, BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY_WITH_SPG)
 _VEHICLE_COMMAND_NAMES = (BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY,
  BATTLE_CHAT_COMMAND_NAMES.SOS,
@@ -255,6 +254,19 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
                     if strArg != '':
                         i18nArguments['strArg1'] = strArg
                         i18nKey += '_numbered'
+                elif self.isLocationRelatedCommand():
+                    if self.isSPGAimCommand():
+                        reloadTime = self._protoData['floatArg1']
+                        if reloadTime > 0:
+                            i18nArguments['reloadTime'] = reloadTime
+                            i18nKey += '_reloading'
+                    mapsCtrl = self.sessionProvider.dynamic.maps
+                    if mapsCtrl and mapsCtrl.hasMinimapGrid():
+                        cellId = mapsCtrl.getMinimapCellIdByPosition(self.getMarkedPosition())
+                        if cellId is None:
+                            cellId = self.getFirstTargetID()
+                        i18nKey += '_gridInfo'
+                        i18nArguments['gridId'] = mapsCtrl.getMinimapCellNameById(cellId)
                 else:
                     i18nArguments = self._protoData
                 text = i18n.makeString(i18nKey, **i18nArguments)

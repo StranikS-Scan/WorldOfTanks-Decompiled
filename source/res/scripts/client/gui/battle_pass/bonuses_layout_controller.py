@@ -2,7 +2,8 @@
 # Embedded file name: scripts/client/gui/battle_pass/bonuses_layout_controller.py
 import typing
 import ResMgr
-from items import _xml
+from items import _xml, vehicles
+from gui.battle_pass.battle_pass_helpers import BackgroundPositions
 from gui.battle_pass.battle_pass_bonuses_helper import BonusesHelper
 from gui.battle_pass.battle_pass_consts import BonusesLayoutConsts
 if typing.TYPE_CHECKING:
@@ -10,13 +11,16 @@ if typing.TYPE_CHECKING:
 _PRIORITY_CONFIG_FILE = 'gui/battle_pass_bonuses_layout.xml'
 _LEAST_PRIORITY_VALUE = 0
 _DEFAULT_VISIBILITY = True
+_DEFAULT_BIG_ICON = 'None'
 
 class BonusesLayoutController(object):
 
     def __init__(self):
         self.__storage = {}
+        self.__vehiclesBackgroundPositions = {}
         self.__defaultPriority = _LEAST_PRIORITY_VALUE
         self.__defaultVisibility = _DEFAULT_VISIBILITY
+        self.__defaultBigIcon = _DEFAULT_BIG_ICON
 
     def init(self):
         self.__loadLayout()
@@ -43,6 +47,20 @@ class BonusesLayoutController(object):
                     return value
             return self.__defaultVisibility
 
+    def getBigIcon(self, bonus=None):
+        if not bonus:
+            return self.__defaultBigIcon
+        else:
+            bonusType = bonus.getName()
+            if bonusType in self.__storage:
+                value = BonusesHelper.getParameter(bonus, self.__storage[bonusType], BonusesLayoutConsts.BIG_ICON_KEY)
+                if value is not None:
+                    return value
+            return self.__defaultBigIcon
+
+    def getVehiclePosition(self, vehCD):
+        return self.__vehiclesBackgroundPositions.get(vehCD, BackgroundPositions.UNKNOWN)
+
     def __loadLayout(self):
         if self.__storage:
             return
@@ -50,11 +68,15 @@ class BonusesLayoutController(object):
             section = ResMgr.openSection(_PRIORITY_CONFIG_FILE)
             if section is None:
                 _xml.raiseWrongXml(None, _PRIORITY_CONFIG_FILE, 'can not open or read')
-            for name, item in section.items():
-                self.__parseSection(self.__storage, name, item)
+            if section.has_key('bonuses'):
+                for name, item in section['bonuses'].items():
+                    self.__parseSection(self.__storage, name, item)
 
-            self.__defaultPriority = self.__storage.get('default', {}).get(BonusesLayoutConsts.PRIORITY_KEY, _LEAST_PRIORITY_VALUE)
-            self.__defaultVisibility = self.__storage.get('default', {}).get(BonusesLayoutConsts.VISIBILITY_KEY, _DEFAULT_VISIBILITY)
+                self.__defaultPriority = self.__storage.get('default', {}).get(BonusesLayoutConsts.PRIORITY_KEY, _LEAST_PRIORITY_VALUE)
+                self.__defaultVisibility = self.__storage.get('default', {}).get(BonusesLayoutConsts.VISIBILITY_KEY, _DEFAULT_VISIBILITY)
+                self.__defaultBigIcon = self.__storage.get('default', {}).get(BonusesLayoutConsts.BIG_ICON_KEY, _DEFAULT_BIG_ICON)
+            if section.has_key('vehicles'):
+                self.__readVehiclesPositions(section['vehicles'])
             ResMgr.purge(_PRIORITY_CONFIG_FILE, True)
             return
 
@@ -67,6 +89,8 @@ class BonusesLayoutController(object):
                     storage[name][sectionName] = item.asInt
                 elif sectionName in BonusesLayoutConsts.BOOL_VALUES:
                     storage[name][sectionName] = item.asBool
+                elif sectionName == BonusesLayoutConsts.BIG_ICON_KEY:
+                    storage[name][sectionName] = item.asString
             if sectionName == BonusesLayoutConsts.OVERRIDE_KEY:
                 cls.__parseOverride(storage[name], item)
             cls.__parseSection(storage[name], sectionName, item)
@@ -81,6 +105,8 @@ class BonusesLayoutController(object):
                     values[name] = item.asInt
                 elif name in BonusesLayoutConsts.BOOL_VALUES:
                     values[name] = item.asBool
+                elif name == BonusesLayoutConsts.BIG_ICON_KEY:
+                    values[name] = item.asString
             if name == BonusesLayoutConsts.ID_KEY:
                 ids = item.asString
 
@@ -89,3 +115,9 @@ class BonusesLayoutController(object):
             storage[name] = {}
             for key, value in values.iteritems():
                 storage[name][key] = value
+
+    def __readVehiclesPositions(self, section):
+        leftVehicles = section.readString('left', '').split()
+        self.__vehiclesBackgroundPositions.update({vehicles.makeVehicleTypeCompDescrByName(v):BackgroundPositions.LEFT for v in leftVehicles})
+        rightVehicles = section.readString('right', '').split()
+        self.__vehiclesBackgroundPositions.update({vehicles.makeVehicleTypeCompDescrByName(v):BackgroundPositions.RIGHT for v in rightVehicles})

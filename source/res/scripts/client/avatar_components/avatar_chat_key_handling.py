@@ -82,6 +82,8 @@ class AvatarChatKeyHandling(object):
         cmdMap = CommandMapping.g_instance
         if cmdMap.isFiredList((CommandMapping.CMD_CHAT_SHORTCUT_THANKYOU,
          CommandMapping.CMD_CHAT_SHORTCUT_BACKTOBASE,
+         CommandMapping.CMD_CHAT_SHORTCUT_AFFIRMATIVE,
+         CommandMapping.CMD_CHAT_SHORTCUT_NEGATIVE,
          CommandMapping.CMD_CHAT_SHORTCUT_HELPME,
          CommandMapping.CMD_CHAT_SHORTCUT_RELOAD), key) and self.isVehicleAlive and isDown:
             self.guiSessionProvider.handleContexChatCommand(key)

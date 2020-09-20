@@ -42,6 +42,9 @@ RANKED_CAROUSEL_FILTER_CLIENT_1 = 'RANKED_CAROUSEL_FILTER_CLIENT_1'
 EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
 EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
 EPICBATTLE_CAROUSEL_FILTER_CLIENT_1 = 'EPICBATTLE_CAROUSEL_FILTER_CLIENT_1'
+BOB_CAROUSEL_FILTER_1 = 'BOB_CAROUSEL_FILTER_1'
+BOB_CAROUSEL_FILTER_2 = 'BOB_CAROUSEL_FILTER_2'
+BOB_CAROUSEL_FILTER_CLIENT_1 = 'BOB_CAROUSEL_FILTER_CLIENT_1'
 STORAGE_VEHICLES_CAROUSEL_FILTER_1 = 'STORAGE_CAROUSEL_FILTER_1'
 BATTLEPASS_CAROUSEL_FILTER_1 = 'BATTLEPASS_CAROUSEL_FILTER_1'
 BATTLEPASS_CAROUSEL_FILTER_CLIENT_1 = 'BATTLEPASS_CAROUSEL_FILTER_CLIENT_1'
@@ -372,6 +375,42 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'crystals': False},
                EPICBATTLE_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                BATTLEPASS_CAROUSEL_FILTER_1: {'isCommonProgression': False},
+               BOB_CAROUSEL_FILTER_1: {'ussr': False,
+                                       'germany': False,
+                                       'usa': False,
+                                       'china': False,
+                                       'france': False,
+                                       'uk': False,
+                                       'japan': False,
+                                       'czech': False,
+                                       'sweden': False,
+                                       'poland': False,
+                                       'italy': False,
+                                       'lightTank': False,
+                                       'mediumTank': False,
+                                       'heavyTank': False,
+                                       'SPG': False,
+                                       'AT-SPG': False,
+                                       'level_1': False,
+                                       'level_2': False,
+                                       'level_3': False,
+                                       'level_4': False,
+                                       'level_5': False,
+                                       'level_6': False,
+                                       'level_7': False,
+                                       'level_8': False,
+                                       'level_9': False,
+                                       'level_10': True},
+               BOB_CAROUSEL_FILTER_2: {'premium': False,
+                                       'elite': False,
+                                       'igr': False,
+                                       'rented': True,
+                                       'event': True,
+                                       'gameMode': False,
+                                       'favorite': False,
+                                       'bonus': False,
+                                       'crystals': False},
+               BOB_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                MISSION_SELECTOR_FILTER: {'inventory': False},
                PM_SELECTOR_FILTER: {'inventory': False},
                BLUEPRINTS_STORAGE_FILTER: {'unlock_available': False,
@@ -627,7 +666,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                             'feedbackDamageIndicator': {'damageIndicatorAllies': True}},
                                        'ControlsSettings': {'highlightLocation': True,
                                                             'showQuestProgress': True,
-                                                            'chargeFire': True}},
+                                                            'chargeFire': True,
+                                                            'affirmative': True,
+                                                            'negative': True}},
                 SHOW_OPT_DEVICE_HINT: True,
                 SHOW_OPT_DEVICE_HINT_TROPHY: True,
                 'c11nHistoricallyAccurate': True,
@@ -791,7 +832,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 43
+    version = 44
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -1237,6 +1278,11 @@ class AccountSettings(object):
                 AccountSettings.checkAndResetFireKeyIfInUse(expectedCommand='CMD_CHAT_SHORTCUT_THANKYOU', expectedKey='KEY_F3')
                 AccountSettings.checkAndResetFireKeyIfInUse(expectedCommand='CMD_CHAT_SHORTCUT_CONTEXT_COMMIT', expectedKey='KEY_F2')
                 AccountSettings.removeOldCommandAndReuseFireKey(oldCommand='CMD_CHAT_SHORTCUT_ATTACK_MY_TARGET', newCommand='CMD_CHAT_SHORTCUT_CONTEXT_COMMAND')
+                CommandMapping.g_instance.restoreUserConfig()
+            if currVersion < 44:
+                AccountSettings.checkAndResetFireKeyIfInUse(expectedCommand='CMD_CHAT_SHORTCUT_AFFIRMATIVE', expectedKey='KEY_F5')
+                AccountSettings.checkAndResetFireKeyIfInUse(expectedCommand='CMD_CHAT_SHORTCUT_NEGATIVE', expectedKey='KEY_F6')
+                AccountSettings.removeOldCommandAndReuseFireKey(oldCommand='CMD_CHAT_SHORTCUT_POSITIVE', newCommand='CMD_CHAT_SHORTCUT_AFFIRMATIVE')
                 CommandMapping.g_instance.restoreUserConfig()
             ads.writeInt('version', AccountSettings.version)
         return

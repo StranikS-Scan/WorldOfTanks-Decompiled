@@ -3,6 +3,8 @@
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui import SystemMessages
+from gui.battle_pass.battle_pass_award import BattlePassAwardsManager as awardsManager
+from gui.battle_pass.battle_pass_helpers import BackgroundPositions
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_voting_confirm_view_model import BattlePassVotingConfirmViewModel
 from gui.impl.gen import R
 from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogView
@@ -12,19 +14,17 @@ from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattlePassController
-from skeletons.gui.shared import IItemsCache
 
 class BattlePassVotingConfirmView(FullScreenDialogView):
-    __slots__ = ('__data',)
+    __slots__ = ('__reward',)
     __battlePassController = dependency.descriptor(IBattlePassController)
     __settingsCore = dependency.descriptor(ISettingsCore)
-    __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, data):
         settings = ViewSettings(R.views.lobby.battle_pass.BattlePassVotingConfirmView())
         settings.flags = ViewFlags.OVERLAY_VIEW
         settings.model = BattlePassVotingConfirmViewModel()
-        self.__data = data
+        self.__reward = data.get('finalReward')
         super(BattlePassVotingConfirmView, self).__init__(settings)
 
     @property
@@ -32,13 +32,18 @@ class BattlePassVotingConfirmView(FullScreenDialogView):
         return self.getViewModel()
 
     def _setBaseParams(self, model):
-        reward = self.__data.get('finalReward')
-        vehicle = self.__itemsCache.items.getItemByCD(reward.getVehicleCD())
-        model.setVehicleName(vehicle.name.split(':')[1])
-        model.setVehicleCD(reward.getVehicleCD())
-        model.setStyleName(reward.getStyleName())
-        model.setRecruitName(reward.getRecruitName())
-        model.setIsBattlePassBought(self.__battlePassController.isBought())
+        if self.__reward is None:
+            return
+        else:
+            model.setStyleName(self.__reward.getStyleName())
+            model.setRecruitName(self.__reward.getRecruitName())
+            model.setIsBattlePassBought(self.__battlePassController.isBought())
+            vehiclePos = awardsManager.getVehicleBackgroundPosition(self.__reward.getVehicleCD())
+            if vehiclePos == BackgroundPositions.LEFT:
+                model.setIsLeft(True)
+            elif vehiclePos == BackgroundPositions.RIGHT:
+                model.setIsRight(True)
+            return
 
     def _initialize(self):
         super(BattlePassVotingConfirmView, self)._initialize()
@@ -59,9 +64,12 @@ class BattlePassVotingConfirmView(FullScreenDialogView):
     def _blurBackGround(self):
         pass
 
-    def __onVoteClick(self, args):
-        vehicleCD = int(args.get('vehicleCD'))
-        self.__chooseFinalReward(vehicleCD, self.__battlePassController.getSeasonID())
+    def __onVoteClick(self):
+        if self.__reward is None:
+            return
+        else:
+            self.__chooseFinalReward(self.__reward.getVehicleCD(), self.__battlePassController.getSeasonID())
+            return
 
     def __setVotedWithBoughtBP(self):
         self.__settingsCore.serverSettings.saveInBPStorage({BattlePassStorageKeys.VOTED_WITH_BOUGHT_BP: self.__battlePassController.isBought()})

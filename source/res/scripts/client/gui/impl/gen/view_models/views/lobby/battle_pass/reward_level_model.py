@@ -9,42 +9,36 @@ class RewardLevelModel(ViewModel):
     DISABLED = 0
     NOT_REACHED = 1
     REACHED = 2
+    NOT_CHOSEN = 3
 
-    def __init__(self, properties=5, commands=0):
+    def __init__(self, properties=4, commands=0):
         super(RewardLevelModel, self).__init__(properties=properties, commands=commands)
 
     @property
     def rewardItems(self):
         return self._getViewModel(0)
 
-    def getLevel(self):
+    def getLevelPoints(self):
         return self._getNumber(1)
 
-    def setLevel(self, value):
+    def setLevelPoints(self, value):
         self._setNumber(1, value)
 
-    def getLevelPoints(self):
-        return self._getNumber(2)
-
-    def setLevelPoints(self, value):
-        self._setNumber(2, value)
-
     def getIsRare(self):
-        return self._getBool(3)
+        return self._getBool(2)
 
     def setIsRare(self, value):
-        self._setBool(3, value)
+        self._setBool(2, value)
 
     def getState(self):
-        return self._getNumber(4)
+        return self._getNumber(3)
 
     def setState(self, value):
-        self._setNumber(4, value)
+        self._setNumber(3, value)
 
     def _initialize(self):
         super(RewardLevelModel, self)._initialize()
         self._addViewModelProperty('rewardItems', UserListModel())
-        self._addNumberProperty('level', 0)
         self._addNumberProperty('levelPoints', 0)
         self._addBoolProperty('isRare', False)
         self._addNumberProperty('state', -1)

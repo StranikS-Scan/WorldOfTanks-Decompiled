@@ -206,6 +206,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInRankedQueue = False
         self.isInEpicQueue = False
         self.isInBattleRoyaleQueue = False
+        self.isInBobQueue = False
         self.__onCmdResponse = {}
         self.__onStreamComplete = {}
         self.__objectsSelectionEnabled = True
@@ -421,6 +422,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.BATTLE_ROYALE:
             self.isInBattleRoyaleQueue = True
             events.onEnqueuedBattleRoyale()
+        elif queueType == QUEUE_TYPE.BOB:
+            self.isInBobQueue = True
+            events.onEnqueuedBob()
         events.onEnqueued(queueType)
 
     def onEnqueueFailure(self, queueType, errorCode, errorStr):
@@ -443,6 +447,8 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             events.onEnqueuedEpicFailure(errorCode, errorStr)
         elif queueType == QUEUE_TYPE.BATTLE_ROYALE:
             events.onEnqueuedBattleRoyaleFailure(errorCode, errorStr)
+        elif queueType == QUEUE_TYPE.BOB:
+            events.onEnqueuedBobFailure(errorCode, errorStr)
         events.onEnqueueFailure(queueType, errorCode, errorStr)
 
     def onDequeued(self, queueType):
@@ -474,6 +480,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.BATTLE_ROYALE:
             self.isInBattleRoyaleQueue = False
             events.onDequeuedBattleRoyale()
+        elif queueType == QUEUE_TYPE.BOB:
+            self.isInBobQueue = False
+            events.onDequeuedBob()
         events.onDequeued(queueType)
 
     def onTutorialEnqueued(self, number, queueLen, avgWaitingTime):
@@ -533,6 +542,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.BATTLE_ROYALE:
             self.isInBattleRoyaleQueue = False
             events.onKickedFromBattleRoyaleQueue()
+        elif queueType == QUEUE_TYPE.BOB:
+            self.isInBobQueue = False
+            events.onKickedFromBobQueue()
         events.onKickedFromQueue(queueType)
 
     def onArenaCreated(self):
@@ -553,6 +565,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInBootcampQueue = False
         self.isInEpicQueue = False
         self.isInBattleRoyaleQueue = False
+        self.isInBobQueue = False
         events.isPlayerEntityChanging = False
         events.onPlayerEntityChangeCanceled()
         events.onArenaJoinFailure(errorCode, errorStr)
@@ -879,6 +892,14 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def dequeueBattleRoyale(self):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_BATTLE_ROYALE, 0, 0, 0)
+
+    def enqueueBob(self, vehInvID):
+        if not events.isPlayerEntityChanging:
+            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_BOB, vehInvID, 0, 0)
+
+    def dequeueBob(self):
+        if not events.isPlayerEntityChanging:
+            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_BOB, 0, 0, 0)
 
     def forceEpicDevStart(self):
         if not events.isPlayerEntityChanging:

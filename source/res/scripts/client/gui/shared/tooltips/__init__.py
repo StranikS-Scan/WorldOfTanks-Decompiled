@@ -73,6 +73,9 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     TRADE_IN_STATE_NOT_AVAILABLE = 'tradeInStateNotAvailable'
     DEMOUNT_KIT = 'demountKit'
     VEHICLE_COLLECTOR = 'vehicleCollector'
+    BOB_SELECTOR_INFO = 'bobSelectorInfo'
+    BOB_CALENDAR_DAY = 'bobCalendarDay'
+    DEVICE_GIFT_TOKEN = 'deviceGiftToken'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -105,6 +108,7 @@ class TOOLTIP_COMPONENT(CONST_CONTAINER):
     TRADE_IN = 'tradeIn'
     DEMOUNT_KIT = 'demountKit'
     MODULE_INFO = 'moduleInfo'
+    BATTLE_PASS = 'battlePass'
 
 
 class ACTION_TOOLTIPS_TYPE(CONST_CONTAINER):

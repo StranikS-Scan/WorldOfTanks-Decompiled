@@ -24,6 +24,8 @@ from gui.wgnc.settings import WGNC_DEFAULT_ICON, WGNC_POP_UP_BUTTON_WIDTH
 from helpers import time_utils
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
+from skeletons.gui.shared.hangar_spaces_switcher import IHangarSpacesSwitcher
+from gui.shared.events import HangarSpacesSwitcherEvent
 
 def _makeShowTime():
     return BigWorld.time()
@@ -207,11 +209,13 @@ class MessageDecorator(_NotificationDecorator):
 
 class C11nMessageDecorator(MessageDecorator):
     itemsCache = dependency.descriptor(IItemsCache)
+    __hangarSpacesSwitcher = dependency.descriptor(IHangarSpacesSwitcher)
 
     def __init__(self, entityID, entity=None, settings=None, model=None):
         super(C11nMessageDecorator, self).__init__(entityID, entity, settings, model)
         g_eventBus.addListener(VIEW_ALIAS.HERO_VEHICLE_PREVIEW, self.__lockButtons, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(VIEW_ALIAS.BATTLE_QUEUE, self.__lockButtons, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(HangarSpacesSwitcherEvent.SWITCH_TO_HANGAR_SPACE, self.__updateButtons, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(VIEW_ALIAS.LOBBY_HANGAR, self.__updateButtons, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.addCallbacks({'inventory': self.__updateButtons})
         g_clientUpdateManager.addCallbacks({'cache.vehsLock': self.__updateButtons})
@@ -224,7 +228,7 @@ class C11nMessageDecorator(MessageDecorator):
         self.__updateButtonsState()
 
     def __updateButtonsState(self, lock=False):
-        if not self._entity.get('buttonsLayout'):
+        if self._entity is None or not self._entity.get('buttonsLayout'):
             return
         else:
             state = NOTIFICATION_BUTTON_STATE.VISIBLE
@@ -237,7 +241,8 @@ class C11nMessageDecorator(MessageDecorator):
             return
 
     def __updateButtons(self, event):
-        self.__updateButtonsState(lock=False)
+        isLocked = self.__hangarSpacesSwitcher.currentItem == self.__hangarSpacesSwitcher.itemsToSwitch.BATTLE_ROYALE
+        self.__updateButtonsState(lock=isLocked)
 
     def __lockButtons(self, event):
         self.__updateButtonsState(lock=True)

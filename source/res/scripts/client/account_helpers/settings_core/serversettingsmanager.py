@@ -35,6 +35,8 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
     EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
     BATTLEPASS_CAROUSEL_FILTER_1 = 'BATTLEPASS_CAROUSEL_FILTER_1'
+    BOB_CAROUSEL_FILTER_1 = 'BOB_CAROUSEL_FILTER_1'
+    BOB_CAROUSEL_FILTER_2 = 'BOB_CAROUSEL_FILTER_2'
     GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
     EULA_VERSION = 'EULA_VERSION'
     MARKS_ON_GUN = 'MARKS_ON_GUN'
@@ -87,6 +89,7 @@ class ServerSettingsManager(object):
     QUESTS_PROGRESS = settings_constants.QUESTS_PROGRESS
     SESSION_STATS = settings_constants.SESSION_STATS
     BATTLE_COMM = settings_constants.BattleCommStorageKeys
+    BATTLE_PASS = settings_constants.BattlePassStorageKeys
     SECTIONS = {SETTINGS_SECTIONS.GAME: Section(masks={GAME.ENABLE_OL_FILTER: 0,
                               GAME.ENABLE_SPAM_FILTER: 1,
                               GAME.INVITES_FROM_FRIENDS: 2,
@@ -274,6 +277,41 @@ class ServerSettingsManager(object):
                                                       'event': 7,
                                                       'crystals': 8}, offsets={}),
      SETTINGS_SECTIONS.BATTLEPASS_CAROUSEL_FILTER_1: Section(masks={'isCommonProgression': 0}, offsets={}),
+     SETTINGS_SECTIONS.BOB_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
+                                               'germany': 1,
+                                               'usa': 2,
+                                               'china': 3,
+                                               'france': 4,
+                                               'uk': 5,
+                                               'japan': 6,
+                                               'czech': 7,
+                                               'sweden': 8,
+                                               'poland': 9,
+                                               'italy': 10,
+                                               'lightTank': 15,
+                                               'mediumTank': 16,
+                                               'heavyTank': 17,
+                                               'SPG': 18,
+                                               'AT-SPG': 19,
+                                               'level_1': 20,
+                                               'level_2': 21,
+                                               'level_3': 22,
+                                               'level_4': 23,
+                                               'level_5': 24,
+                                               'level_6': 25,
+                                               'level_7': 26,
+                                               'level_8': 27,
+                                               'level_9': 28,
+                                               'level_10': 29}, offsets={}),
+     SETTINGS_SECTIONS.BOB_CAROUSEL_FILTER_2: Section(masks={'premium': 0,
+                                               'elite': 1,
+                                               'rented': 2,
+                                               'igr': 3,
+                                               'gameMode': 4,
+                                               'favorite': 5,
+                                               'bonus': 6,
+                                               'event': 7,
+                                               'crystals': 8}, offsets={}),
      SETTINGS_SECTIONS.GUI_START_BEHAVIOR: Section(masks={GuiSettingsBehavior.FREE_XP_INFO_DIALOG_SHOWED: 0,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED: 1,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_STARTED: 2,
@@ -403,12 +441,16 @@ class ServerSettingsManager(object):
                                        SESSION_STATS.SHOW_SURVIVED_RATE: 15,
                                        SESSION_STATS.SHOW_SPOTTED: 16,
                                        SESSION_STATS.ONLY_ONCE_HINT_SHOWN_FIELD: 17}, offsets={}),
-     SETTINGS_SECTIONS.BATTLE_PASS_STORAGE: Section(masks={BattlePassStorageKeys.INTRO_SHOWN: 16,
-                                             BattlePassStorageKeys.BUY_BUTTON_HINT_IS_SHOWN: 17,
-                                             BattlePassStorageKeys.VOTED_WITH_BOUGHT_BP: 18,
-                                             BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN: 19,
-                                             BattlePassStorageKeys.INTRO_VIDEO_SHOWN: 20}, offsets={BattlePassStorageKeys.SHOWN_VIDEOS_FLAGS: Offset(0, 65535),
-                                             BattlePassStorageKeys.FLAGS_VERSION: Offset(21, 266338304)}),
+     SETTINGS_SECTIONS.BATTLE_PASS_STORAGE: Section(masks={BATTLE_PASS.NEW_DEVICE_NOTIFICATION_SHOWN: 0,
+                                             BATTLE_PASS.TROPHY_NOTIFICATION_SHOWN: 1,
+                                             BATTLE_PASS.INTRO_SHOWN: 16,
+                                             BATTLE_PASS.BUY_BUTTON_HINT_IS_SHOWN: 17,
+                                             BATTLE_PASS.VOTED_WITH_BOUGHT_BP: 18,
+                                             BATTLE_PASS.BUY_ANIMATION_WAS_SHOWN: 19,
+                                             BATTLE_PASS.INTRO_VIDEO_SHOWN: 20}, offsets={BATTLE_PASS.CHOSEN_TROPHY_DEVICES: Offset(2, BATTLE_PASS.MASK_CHOSEN_DEVICES << 2),
+                                             BATTLE_PASS.CHOSEN_NEW_DEVICES: Offset(6, BATTLE_PASS.MASK_CHOSEN_DEVICES << 6),
+                                             BATTLE_PASS.SHOWN_VIDEOS_FLAGS: Offset(10, 64512),
+                                             BATTLE_PASS.FLAGS_VERSION: Offset(21, 132120576)}),
      SETTINGS_SECTIONS.BATTLE_COMM: Section(masks={BATTLE_COMM.ENABLE_BATTLE_COMMUNICATION: 0,
                                      BATTLE_COMM.SHOW_COM_IN_PLAYER_LIST: 1,
                                      BATTLE_COMM.SHOW_STICKY_MARKERS: 2,
@@ -879,5 +921,7 @@ def _updateBattlePassVersion(data):
         data[BattlePassStorageKeys.INTRO_VIDEO_SHOWN] = False
         data[BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN] = False
         data[BattlePassStorageKeys.BUY_BUTTON_HINT_IS_SHOWN] = False
+        data[BattlePassStorageKeys.CHOSEN_TROPHY_DEVICES] = 0
+        data[BattlePassStorageKeys.CHOSEN_NEW_DEVICES] = 0
         return True
     return False

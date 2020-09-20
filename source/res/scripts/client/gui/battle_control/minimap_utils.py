@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/minimap_utils.py
+import math
+import string
 import BigWorld
 import Math
 from constants import AOI
@@ -56,3 +58,22 @@ def metersToMinimapPixels(minSize, maxSize):
     mapWidthPx = int(abs(maxSize[0] - minSize[0]) * _METERS_TO_KILOMETERS * mmPixelsWidth)
     mapHeightPx = int(abs(maxSize[1] - minSize[1]) * _METERS_TO_KILOMETERS * mmPixelsHeight)
     return (mapWidthPx, mapHeightPx)
+
+
+def getCellIdFromPosition(desiredShotPoint, boundingBox, dimensions):
+    mapXLength = boundingBox[1][0] - boundingBox[0][0]
+    mapYLength = boundingBox[1][1] - boundingBox[0][1]
+    xOffset = -boundingBox[0][0]
+    yOffset = -boundingBox[0][1]
+    mapGridX = math.floor((xOffset + desiredShotPoint.x) / mapXLength * dimensions)
+    mapGridY = math.floor((yOffset - desiredShotPoint.z) / mapYLength * dimensions)
+    return mapGridX * dimensions + mapGridY
+
+
+def getCellName(cellId, dimensions):
+    column, row = divmod(int(cellId), int(dimensions))
+    if row < 8:
+        name = string.ascii_uppercase[row]
+    else:
+        name = string.ascii_uppercase[row + 1]
+    return '{}{}'.format(name, int((column + 1) % dimensions))

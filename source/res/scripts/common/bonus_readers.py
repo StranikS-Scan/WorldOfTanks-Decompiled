@@ -549,6 +549,8 @@ def __readBonus_rent(bonus, _name, section):
         credits = section['compensation'].readInt('credits', 0)
         gold = section['compensation'].readInt('gold', 0)
         rent['compensation'] = (credits, gold)
+    if section.has_key('battlePass'):
+        rent['battlePass'] = True
     __readBonus_seasonRent(rent, section)
     bonus['rent'] = rent
 

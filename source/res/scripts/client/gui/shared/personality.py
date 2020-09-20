@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/personality.py
+import logging
 import BigWorld
 import SoundGroups
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
@@ -44,6 +45,7 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.sounds import ISoundsController
 from skeletons.gui.event_boards_controllers import IEventBoardController
 from skeletons.helpers.statistics import IStatisticsCollector
+_logger = logging.getLogger(__name__)
 try:
     from gui import mods
     guiModsInit = mods.init
@@ -190,6 +192,7 @@ def onClientUpdate(diff, updateOnlyLobbyCtx):
             yield ServicesLocator.eventsCache.update(diff)
             yield g_clanCache.update(diff)
         ServicesLocator.lobbyContext.update(diff)
+        _logger.info('onClientUpdate: diff = %r', diff)
         g_clientUpdateManager.update(diff)
     ServicesLocator.offersProvider.update(diff)
 

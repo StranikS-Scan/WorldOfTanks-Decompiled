@@ -600,7 +600,15 @@
     <incompatibleTags>
       <installed>	improvedConfiguration	</installed>
     </incompatibleTags>
-    <script>	UpgradableImprovedConfiguration	  <weight>	50	</weight>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	UpgradableImprovedConfiguration	  <weight>	100	</weight>
       <upgradeInfo>
         <upgradedCompDescr>	27385	</upgradedCompDescr>
         <price>	3000000	</price>
@@ -668,7 +676,15 @@
     <incompatibleTags>
       <installed>	improvedConfiguration	</installed>
     </incompatibleTags>
-    <script>	UpgradedImprovedConfiguration	  <weight>	50	</weight>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	UpgradedImprovedConfiguration	  <weight>	100	</weight>
       <engineReduceFineFactor>	0.3 0.3	</engineReduceFineFactor>
       <ammoBayReduceFineFactor>	0.3 0.3	</ammoBayReduceFineFactor>
       <factors>
@@ -718,6 +734,120 @@
       </mul>
     </kpi>
   </trophyUpgradedImprovedConfiguration>
+  <trophyBasicImprovedRotationMechanism>
+    <id>	107	</id>
+    <userString>	#artefacts:trophyBasicImprovedRotationMechanism/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:improvedRotationMechanism/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:improvedRotationMechanism/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/improvedRotationMechanism.png 0 0	</icon>
+    <price>	100000	</price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <tags>	rotationMechanism trophyBasic	</tags>
+    <incompatibleTags>
+      <installed>	rotationMechanism	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	UpgradableRotationMechanisms	  <weight>	200	</weight>
+      <upgradeInfo>
+        <upgradedCompDescr>	27897	</upgradedCompDescr>
+        <price>	3000000	</price>
+      </upgradeInfo>
+      <trackRotateSpeedFactor>	1.1 1.1	</trackRotateSpeedFactor>
+      <wheelRotateSpeedFactor>	1.1 1.1	</wheelRotateSpeedFactor>
+      <wheelCenterRotationFwdSpeed>	1.1 1.1	</wheelCenterRotationFwdSpeed>
+      <trackMoveSpeedFactor>	1.1 1.1	</trackMoveSpeedFactor>
+      <wheelMoveSpeedFactor>	1.1 1.1	</wheelMoveSpeedFactor>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/turretRotationSpeed	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.1 1.1	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.9 0.9	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleTurretOrCuttingRotationSpeed	</name>
+        <value>	1.1	</value>
+      </mul>
+      <mul>
+        <name>	vehicleAllGroundRotationSpeed	</name>
+        <value>	1.1	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersion	</name>
+        <value>	0.9	</value>
+      </mul>
+    </kpi>
+  </trophyBasicImprovedRotationMechanism>
+  <trophyUpgradedImprovedRotationMechanism>
+    <id>	108	</id>
+    <userString>	#artefacts:trophyUpgradedImprovedRotationMechanism/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:improvedRotationMechanism/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:improvedRotationMechanism/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/improvedRotationMechanism.png 0 0	</icon>
+    <price>	100000	</price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <tags>	rotationMechanism trophyUpgraded	</tags>
+    <incompatibleTags>
+      <installed>	rotationMechanism	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	UpgradedRotationMechanisms	  <weight>	200	</weight>
+      <trackRotateSpeedFactor>	1.15 1.15	</trackRotateSpeedFactor>
+      <wheelRotateSpeedFactor>	1.15 1.15	</wheelRotateSpeedFactor>
+      <wheelCenterRotationFwdSpeed>	1.15 1.15	</wheelCenterRotationFwdSpeed>
+      <trackMoveSpeedFactor>	1.15 1.15	</trackMoveSpeedFactor>
+      <wheelMoveSpeedFactor>	1.15 1.15	</wheelMoveSpeedFactor>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/turretRotationSpeed	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.15 1.15	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.85 0.85	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleTurretOrCuttingRotationSpeed	</name>
+        <value>	1.15	</value>
+      </mul>
+      <mul>
+        <name>	vehicleAllGroundRotationSpeed	</name>
+        <value>	1.15	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersion	</name>
+        <value>	0.85	</value>
+      </mul>
+    </kpi>
+  </trophyUpgradedImprovedRotationMechanism>
   <improvedConfiguration_tier2>
     <id>	61	</id>
     <userString>	#artefacts:improvedConfiguration_tier2/name	</userString>

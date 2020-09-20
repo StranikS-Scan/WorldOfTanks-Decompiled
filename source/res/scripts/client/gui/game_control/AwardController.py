@@ -183,13 +183,11 @@ class AwardController(IAwardController, IGlobalListener):
 
     def init(self):
         g_eventBus.addListener(LobbySimpleEvent.LOCK_OVERLAY_SCREEN, self.__onLockOverlayScreen, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.addListener(LobbySimpleEvent.UNLOCK_OVERLAY_SCREEN, self.__onUnlockOverlayScreen, EVENT_BUS_SCOPE.LOBBY)
         for handler in self.__handlers:
             handler.init()
 
     def fini(self):
         g_eventBus.removeListener(LobbySimpleEvent.LOCK_OVERLAY_SCREEN, self.__onLockOverlayScreen, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.removeListener(LobbySimpleEvent.UNLOCK_OVERLAY_SCREEN, self.__onUnlockOverlayScreen, EVENT_BUS_SCOPE.LOBBY)
         for handler in self.__handlers:
             handler.fini()
 
@@ -203,6 +201,7 @@ class AwardController(IAwardController, IGlobalListener):
     def handlePostponed(self, *args):
         if self.canShow():
             removeIndexes = []
+            self.__delayedHandlers.sort(key=lambda handle: isinstance(handle, BattlePassRewardHandler), reverse=True)
             for index, (handler, ctx) in enumerate(self.__delayedHandlers):
                 if self.__isLocked():
                     break
@@ -261,15 +260,15 @@ class AwardController(IAwardController, IGlobalListener):
 
     def __onLockOverlayScreen(self, event):
         source = event.ctx.get('source')
-        if source and source not in self.__overlayLocks:
-            self.__overlayLocks.append(source)
-
-    def __onUnlockOverlayScreen(self, event):
-        source = event.ctx.get('source')
-        if source and source in self.__overlayLocks:
-            self.__overlayLocks.remove(source)
-        if not self.__overlayLocks:
-            self.handlePostponed()
+        lock = event.ctx.get('lock', False)
+        if lock:
+            if source and source not in self.__overlayLocks:
+                self.__overlayLocks.append(source)
+        else:
+            if source and source in self.__overlayLocks:
+                self.__overlayLocks.remove(source)
+            if not self.__overlayLocks:
+                self.handlePostponed()
 
     def __isLocked(self):
         return len(self.__overlayLocks) > 0
@@ -1536,7 +1535,7 @@ class BattlePassRewardHandler(ServiceChannelHandler):
         state = data['newState']
         if state == BattlePassState.POST and prevState == BattlePassState.BASE and reason != BattlePassRewardReason.PURCHASE_BATTLE_PASS:
             g_eventBus.handleEvent(events.BattlePassEvent(events.BattlePassEvent.BUYING_THINGS), scope=EVENT_BUS_SCOPE.LOBBY)
-            self.__battlePassController.getFinalFlowSM().startFlow([rewards], data)
+            self.__battlePassController.getFinalRewardLogic().startFinalFlow([rewards], data)
         elif isPremiumPurchase or self.__battlePassController.isRareLevel(level, isBase=BattlePassState.BASE == state):
             if rewards:
                 showBattlePassAwardsWindow([rewards], data)

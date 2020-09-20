@@ -43,10 +43,11 @@ class OfferGiftsWindow(ViewImpl):
     _offersProvider = dependency.descriptor(IOffersDataProvider)
     _offersNovelty = dependency.descriptor(IOffersNovelty)
 
-    def __init__(self, layoutID, offerID):
+    def __init__(self, layoutID, offerID, overrideSuccessCallback=None):
         settings = ViewSettings(layoutID=layoutID, flags=ViewFlags.LOBBY_SUB_VIEW, model=OfferModel())
         super(OfferGiftsWindow, self).__init__(settings)
         self._offerID = offerID
+        self.__overrideSuccessCallback = overrideSuccessCallback
 
     @property
     def _serverSettings(self):
@@ -170,12 +171,17 @@ class OfferGiftsWindow(ViewImpl):
                 onGiftConfirm()
             return
 
-    @staticmethod
     @process
-    def _onGiftConfirm(offerID, giftID, cdnTitle='', cdnDescription='', cdnIcon=''):
-        result = yield ReceiveOfferGiftProcessor(offerID, giftID, cdnTitle, cdnDescription, cdnIcon).request()
+    def _onGiftConfirm(self, offerID, giftID, cdnTitle='', cdnDescription='', cdnIcon=''):
+        result = yield ReceiveOfferGiftProcessor(offerID, giftID, cdnTitle).request()
+        if result.success:
+            if self.__overrideSuccessCallback is not None:
+                self.__overrideSuccessCallback(offerID, giftID, cdnTitle=cdnTitle, cdnDescription=cdnDescription, cdnIcon=cdnIcon)
+            else:
+                event_dispatcher.showOfferRewardWindow(offerID, giftID, cdnTitle, cdnDescription, cdnIcon)
         if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+        return
 
     def _onItemsCacheResync(self, *args, **kwargs):
         if self._offerItem is None:

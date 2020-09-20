@@ -26,7 +26,7 @@ class _SubtitlesLanguages(CONST_CONTAINER):
     LATAM = 9
     PL = 10
     ptBR = 11
-    RU = 12
+    ZHSG = 12
     TH = 13
     TR = 14
     ZHTW = 15
@@ -51,9 +51,7 @@ _SUBTITLE_TO_LOCALES_MAP = {_SubtitlesLanguages.CS: {'cs'},
                           'ro',
                           'sr',
                           'sv',
-                          'vi',
-                          'zh_cn',
-                          'zh_sg'},
+                          'vi'},
  _SubtitlesLanguages.ES: {'es'},
  _SubtitlesLanguages.FR: {'fr'},
  _SubtitlesLanguages.ITA: {'it'},
@@ -64,7 +62,8 @@ _SUBTITLE_TO_LOCALES_MAP = {_SubtitlesLanguages.CS: {'cs'},
  _SubtitlesLanguages.ptBR: {'pt_br'},
  _SubtitlesLanguages.TH: {'th'},
  _SubtitlesLanguages.TR: {'tr'},
- _SubtitlesLanguages.ZHTW: {'zh_tw'}}
+ _SubtitlesLanguages.ZHTW: {'zh_tw'},
+ _SubtitlesLanguages.ZHSG: {'zh_sg', 'zh_cn'}}
 _LOCALE_TO_SUBTITLE_MAP = {loc:subID for subID, locales in _SUBTITLE_TO_LOCALES_MAP.iteritems() for loc in locales}
 
 class VideoView(ViewImpl):

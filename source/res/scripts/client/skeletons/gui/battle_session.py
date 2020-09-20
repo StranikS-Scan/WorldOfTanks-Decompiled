@@ -539,6 +539,9 @@ class IBattleContext(object):
     def extractLastArenaWinStatus(self):
         raise NotImplementedError
 
+    def areQuestsEnabledForArena(self):
+        raise NotImplementedError
+
 
 class IBattleSessionProvider(object):
     __slots__ = ('onBattleSessionStart', 'onBattleSessionStop')

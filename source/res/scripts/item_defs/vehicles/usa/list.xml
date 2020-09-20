@@ -641,10 +641,10 @@
     <shortUserString>	#usa_vehicles:A136_T42_short	</shortUserString>
     <shortDescriptionSpecial>	#usa_vehicles:A136_T42_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#usa_vehicles:A136_T42_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
+    <price>	7000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank HD secret testTank improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </A136_T42>
   <A132_T77>
@@ -1243,4 +1243,14 @@
     <tags>	mediumTank lockOutfit HD battle_royale lockCrew lockCrewSkills cannot_be_sold lockDevices lockEquipment lockShells secret	</tags>
     <level>	1	</level>
   </A72_T25_2_SH>
+  <A69_T110E5_WB>
+    <id>	253	</id>
+    <userString>	#usa_vehicles:T110_WB	</userString>
+    <description>	#usa_vehicles:T110_descr	</description>
+    <price>	6100000	</price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	heavyTank HD secret bob cannot_be_sold improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	10	</level>
+  </A69_T110E5_WB>
 </list.xml>

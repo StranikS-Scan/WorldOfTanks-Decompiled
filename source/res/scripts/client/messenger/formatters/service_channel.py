@@ -13,8 +13,7 @@ import constants
 import nations
 import personal_missions
 from adisp import async, process
-from battle_pass_common import BATTLE_PASS_BADGE_ID
-from battle_pass_common import BattlePassRewardReason, BattlePassState
+from battle_pass_common import BattlePassRewardReason, BattlePassState, BATTLE_PASS_BADGE_ID, BATTLE_PASS_TOKEN_NEW_DEVICE_GIFT_OFFER, BATTLE_PASS_TOKEN_TROPHY_GIFT_OFFER
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from chat_shared import decompressSysMessage, SYS_MESSAGE_TYPE, MapRemovedFromBLReason
@@ -55,9 +54,10 @@ from helpers import dependency
 from helpers import i18n, html, getLocalizedData, int2roman
 from helpers import time_utils
 from items import getTypeInfoByIndex, getTypeInfoByName, vehicles as vehicles_core, tankmen, ITEM_TYPES as I_T
-from items.components.c11n_constants import UNBOUND_VEH_KEY
 from items.components.crew_books_constants import CREW_BOOK_RARITY
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
+from items.components.c11n_constants import UNBOUND_VEH_KEY
+from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from messenger import g_settings
 from messenger.ext import passCensor
 from messenger.formatters import TimeFormatter, NCContextItemFormatter
@@ -2672,12 +2672,18 @@ class BattlePassQuestAchievesFormatter(QuestAchievesFormatter):
 
     @classmethod
     def _processTokens(cls, data):
+        result = []
         for token, _ in data.get('tokens', {}).iteritems():
-            tankmanInfo = getRecruitInfo(token)
-            if tankmanInfo is not None:
-                return g_settings.htmlTemplates.format('battlePassTMan', {'name': tankmanInfo.getFullUserNameByNation()})
+            if token.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
+                tankmanInfo = getRecruitInfo(token)
+                if tankmanInfo is not None:
+                    result.append(g_settings.htmlTemplates.format('battlePassTMan', {'name': tankmanInfo.getFullUserNameByNation()}))
+            if token.startswith(BATTLE_PASS_TOKEN_TROPHY_GIFT_OFFER):
+                result.append(g_settings.htmlTemplates.format('battlePassTrophySelect'))
+            if token.startswith(BATTLE_PASS_TOKEN_NEW_DEVICE_GIFT_OFFER):
+                result.append(g_settings.htmlTemplates.format('battlePassNewDeviceToken'))
 
-        return ''
+        return '\n'.join(result)
 
     @classmethod
     def _extractAchievements(cls, data):

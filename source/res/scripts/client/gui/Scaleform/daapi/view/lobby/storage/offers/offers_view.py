@@ -3,6 +3,7 @@
 import ResMgr
 from account_helpers.offers.cache import CachePrefetchResult
 from adisp import process, async
+from gui.battle_pass.battle_pass_helpers import BATTLE_PASS_TOKEN_TROPHY_OFFER, showOfferTrophyDevices, BATTLE_PASS_TOKEN_NEW_DEVICE_OFFER, showOfferNewDevices
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import createStorageDefVO
 from gui.Scaleform.daapi.view.meta.StorageCategoryOffersViewMeta import StorageCategoryOffersViewMeta
 from gui.Scaleform.Waiting import Waiting
@@ -88,7 +89,16 @@ class StorageCategoryOffersView(StorageCategoryOffersViewMeta):
         pass
 
     def openOfferWindow(self, offerID):
-        showOfferGiftsWindow(offerID)
+        offer = self._offersProvider.getOffer(offerID)
+        if offer is not None and offer.token == BATTLE_PASS_TOKEN_TROPHY_OFFER:
+            showOfferTrophyDevices()
+            return
+        elif offer is not None and offer.token == BATTLE_PASS_TOKEN_NEW_DEVICE_OFFER:
+            showOfferNewDevices()
+            return
+        else:
+            showOfferGiftsWindow(offerID)
+            return
 
     def navigateToStore(self):
         showShop()

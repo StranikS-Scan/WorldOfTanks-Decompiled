@@ -28,6 +28,7 @@ from gui.Scaleform.genConsts.EVENTPROGRESSION_ALIASES import EVENTPROGRESSION_AL
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
+from gui.Scaleform.genConsts.BATTLE_OF_BLOGGERS_ALIASES import BATTLE_OF_BLOGGERS_ALIASES
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.game_control.links import URLMacros
 from gui.impl import backport
@@ -111,6 +112,10 @@ def showEpicBattlesPrimeTimeWindow():
 
 def showEventProgressionBuyConfirmView(ctx):
     g_eventBus.handleEvent(events.LoadViewEvent(alias=EVENTPROGRESSION_ALIASES.EVENT_PROGRESION_BUY_CONFIRM_VIEW_ALIAS, ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showBobPrimeTimeWindow():
+    g_eventBus.handleEvent(events.LoadViewEvent(alias=BATTLE_OF_BLOGGERS_ALIASES.BOB_PRIME_TIME_ALIAS, ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showEpicBattlesWelcomeBackWindow():
@@ -840,6 +845,12 @@ def isViewLoaded(layoutID):
         return view is not None
 
 
+def showBattlePassOnboardingWindow(parent=None):
+    from gui.impl.lobby.battle_pass.battle_pass_onboarding_view import BattlePassOnboardingWindow
+    window = BattlePassOnboardingWindow(parent)
+    window.load()
+
+
 def showStylePreview(vehCD, style, styleDescr, backCallback, backBtnDescrLabel=''):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.STYLE_PREVIEW, ctx={'itemCD': vehCD,
      'style': style,
@@ -1033,11 +1044,11 @@ def _killOldView(layoutID):
     return False
 
 
-def showOfferGiftsWindow(offerID):
+def showOfferGiftsWindow(offerID, overrideSuccessCallback=None):
     from gui.impl.lobby.offers.offer_gifts_window import OfferGiftsWindow
     layoutID = R.views.lobby.offers.OfferGiftsWindow()
     _killOldView(layoutID)
-    g_eventBus.handleEvent(events.LoadUnboundViewEvent(layoutID, OfferGiftsWindow, ScopeTemplates.LOBBY_SUB_SCOPE, offerID=offerID), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadUnboundViewEvent(layoutID, OfferGiftsWindow, ScopeTemplates.LOBBY_SUB_SCOPE, offerID=offerID, overrideSuccessCallback=overrideSuccessCallback), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 @async

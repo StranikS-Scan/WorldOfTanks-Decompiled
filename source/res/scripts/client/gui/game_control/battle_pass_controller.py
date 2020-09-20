@@ -7,19 +7,24 @@ from operator import itemgetter
 import typing
 import constants
 from Event import Event, EventManager
-from battle_pass_common import BattlePassConsts, BattlePassState, getBattlePassPassTokenName, getLevel, BATTLE_PASS_CONFIG_NAME, BattlePassConfig, BattlePassStatsCommon
+from battle_pass_common import BattlePassConsts, BattlePassState, getBattlePassPassTokenName, getBattlePassOnboardingGiftToken, getLevel, BATTLE_PASS_CONFIG_NAME, BattlePassConfig, BattlePassStatsCommon, BATTLE_PASS_TOKEN_TROPHY_GIFT_OFFER, BATTLE_PASS_TOKEN_NEW_DEVICE_GIFT_OFFER, getBattlePassOnboardingToken
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.battle_pass.battle_pass_award import awardsFactory, BattlePassAwardsManager
+from gui.battle_pass.battle_pass_bonuses_helper import TROPHY_GIFT_TOKEN_BONUS_NAME, NEW_DEVICE_GIFT_TOKEN_BONUS_NAME, DeviceTokensContainer
 from gui.battle_pass.battle_pass_helpers import getLevelProgression, getPointsInfoStringID
-from gui.battle_pass.final_reward_state_machine import FinalRewardStateMachine
+from gui.battle_pass.state_machine.delegator import FinalRewardLogic
+from gui.battle_pass.state_machine.machine import FinalRewardStateMachine
 from gui.battle_pass.undefined_bonuses import makeUndefinedBonus
 from gui.battle_pass.voting_requester import BattlePassVotingRequester
+from gui.battle_pass.non_selected_trophy_devices_notifier import NonSelectedTrophyDeviceNotifier
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.utils.scheduled_notifications import SimpleNotifier
 from helpers import dependency, time_utils
+from items import vehicles
 from shared_utils import findFirst, first
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import DossierBonus
@@ -30,6 +35,7 @@ PointsDifference = namedtuple('PointsDifference', ['bonus', 'top', 'textID'])
 class BattlePassController(IBattlePassController):
     __itemsCache = dependency.descriptor(IItemsCache)
     __lobbyContext = dependency.descriptor(ILobbyContext)
+    __offersProvider = dependency.descriptor(IOffersDataProvider)
 
     def __init__(self):
         self.__oldPoints = 0
@@ -37,6 +43,8 @@ class BattlePassController(IBattlePassController):
         self.__oldVoteOption = 0
         self.__badge = None
         self.__currentMode = None
+        self.__deviceGiftTokensContainers = {TROPHY_GIFT_TOKEN_BONUS_NAME: DeviceTokensContainer(self, TROPHY_GIFT_TOKEN_BONUS_NAME),
+         NEW_DEVICE_GIFT_TOKEN_BONUS_NAME: DeviceTokensContainer(self, NEW_DEVICE_GIFT_TOKEN_BONUS_NAME)}
         self.__eventsManager = EventManager()
         self.__seasonChangeNotifier = SimpleNotifier(self.__getTimeToNotifySeasonChange, self.__onNotifySeasonChange)
         self.__purchaseUnlockNotifier = SimpleNotifier(self.__getTimeToNotifyPurchaseUnlock, self.__onNotifyUnlock)
@@ -48,13 +56,18 @@ class BattlePassController(IBattlePassController):
         self.onUnlimitedPurchaseUnlocked = Event(self.__eventsManager)
         self.onBattlePassSettingsChange = Event(self.__eventsManager)
         self.onFinalRewardStateChange = Event(self.__eventsManager)
+        self.onOnboardingChange = Event(self.__eventsManager)
+        self.onDeviceSelectChange = Event(self.__eventsManager)
         self.__votingRequester = BattlePassVotingRequester(self)
-        self.__finalRewardStateMachine = FinalRewardStateMachine(self)
+        self.__nonSelectedTrophyDeviceNotifier = NonSelectedTrophyDeviceNotifier(self)
+        self.__finalRewardLogic = None
+        self.__onboardingVehicles = None
         return
 
     def init(self):
         super(BattlePassController, self).init()
         g_clientUpdateManager.addCallbacks({'tokens': self.__onTokensUpdate})
+        self.__finalRewardLogic = FinalRewardLogic(self, FinalRewardStateMachine())
         BattlePassAwardsManager.init()
 
     def onLobbyInited(self, event):
@@ -62,25 +75,27 @@ class BattlePassController(IBattlePassController):
         self.__itemsCache.onSyncCompleted += self.__onSyncCompleted
         self.__seasonChangeNotifier.startNotification()
         self.__purchaseUnlockNotifier.startNotification()
-        self.__finalRewardStateMachine.init()
+        self.__finalRewardLogic.start()
         if self.__currentMode is None:
             self.__currentMode = self.__getConfig().mode
         else:
             self.onBattlePassSettingsChange(self.__getConfig().mode, self.__currentMode)
             self.__currentMode = self.__getConfig().mode
         self.__votingRequester.start()
+        self.__nonSelectedTrophyDeviceNotifier.start()
         return
 
     def onAvatarBecomePlayer(self):
         self.__stop()
 
     def onDisconnected(self):
-        self.__finalRewardStateMachine.interruptFlow()
         self.__stop()
         self.__clearFields()
+        self.__finalRewardLogic.stop()
 
     def fini(self):
         self.__stop()
+        self.__finalRewardLogic.stop()
         self.__clearFields()
         self.__eventsManager.clear()
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -90,7 +105,17 @@ class BattlePassController(IBattlePassController):
         if seasonID is None:
             seasonID = self.getSeasonID()
         token = self.__itemsCache.items.tokens.getTokens().get(getBattlePassPassTokenName(seasonID))
-        return True if token else False
+        return token is not None
+
+    def isOnboardingActive(self):
+        if not self.__isOnboardingEnabled():
+            return False
+        else:
+            onboardingGiftToken = self.__itemsCache.items.tokens.getTokens().get(getBattlePassOnboardingGiftToken(self.getSeasonID()))
+            return onboardingGiftToken is not None
+
+    def isChooseDeviceEnabled(self):
+        return self.__lobbyContext.getServerSettings().isOffersEnabled()
 
     def isEnabled(self):
         return self.__getConfig().isEnabled()
@@ -134,11 +159,17 @@ class BattlePassController(IBattlePassController):
         tags = self.__getConfig().getTags(realLevel, rewardType)
         return BattlePassConsts.RARE_REWARD_TAG in tags
 
+    def getTrophySelectTokensCount(self):
+        return self.__itemsCache.items.tokens.getTokenCount(BATTLE_PASS_TOKEN_TROPHY_GIFT_OFFER)
+
+    def getNewDeviceSelectTokensCount(self):
+        return self.__itemsCache.items.tokens.getTokenCount(BATTLE_PASS_TOKEN_NEW_DEVICE_GIFT_OFFER)
+
     def getVotingRequester(self):
         return self.__votingRequester
 
-    def getFinalFlowSM(self):
-        return self.__finalRewardStateMachine
+    def getFinalRewardLogic(self):
+        return self.__finalRewardLogic
 
     def getSplitFinalAwards(self):
         freeReward = []
@@ -401,6 +432,26 @@ class BattlePassController(IBattlePassController):
         cap = self.__getConfig().vehicleCapacity(intCD)
         return cap > 0
 
+    def isPlayerNewcomer(self):
+        if self.isBought():
+            return False
+        config = self.__getConfig()
+        newbieLevel = config.maxLevelForNewbie
+        if self.getCurrentLevel() >= newbieLevel or newbieLevel == 0:
+            return False
+        allVehicles = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY)
+        totalCap = 0
+        newbiePoints = config.maxPointsForNewbie
+        for vehicle in allVehicles.itervalues():
+            intCD = vehicle.intCD
+            if vehicle.isRented and (vehicle.rentalIsOver or intCD in self.__getOnboardingVehicles()):
+                continue
+            totalCap += config.vehicleContribution(vehicle.intCD)
+            if totalCap >= newbiePoints:
+                return False
+
+        return True
+
     def canPlayerParticipate(self):
         criteria = REQ_CRITERIA.INVENTORY
         criteria |= ~REQ_CRITERIA.VEHICLE.EPIC_BATTLE
@@ -415,12 +466,18 @@ class BattlePassController(IBattlePassController):
     def getFinalOfferTime(self):
         return self.__getConfig().finalOfferTime
 
+    def getDeviceTokensContainer(self, bonusName):
+        if self.__deviceGiftTokensContainers[bonusName].isEmpty:
+            self.__extractTrophySelectTokensInfo()
+        return self.__deviceGiftTokensContainers[bonusName]
+
     def __stop(self):
         self.__seasonChangeNotifier.stopNotification()
         self.__purchaseUnlockNotifier.stopNotification()
         self.__itemsCache.onSyncCompleted -= self.__onSyncCompleted
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
         self.__votingRequester.stop()
+        self.__nonSelectedTrophyDeviceNotifier.stop()
 
     def __getFrontierStep(self):
         return self.__getConfig().postPoints
@@ -431,12 +488,16 @@ class BattlePassController(IBattlePassController):
     def __onTokensUpdate(self, diff):
         if getBattlePassPassTokenName(self.getSeasonID()) in diff:
             self.onBattlePassIsBought()
+        if getBattlePassOnboardingGiftToken(self.getSeasonID()) in diff:
+            self.onOnboardingChange()
+        if BATTLE_PASS_TOKEN_TROPHY_GIFT_OFFER in diff or BATTLE_PASS_TOKEN_NEW_DEVICE_GIFT_OFFER in diff:
+            self.onDeviceSelectChange()
 
     def __getTimeUntilStart(self):
         return max(0, self.__getConfig().seasonStart - time_utils.getServerUTCTime())
 
     def __getTimeToNotifySeasonChange(self):
-        if self.isEnabled() or self.isPaused():
+        if not self.isDisabled():
             if not self.isSeasonStarted():
                 return self.__getTimeUntilStart()
             if not self.isSeasonFinished():
@@ -446,7 +507,7 @@ class BattlePassController(IBattlePassController):
         self.onSeasonStateChange()
 
     def __getTimeToNotifyPurchaseUnlock(self):
-        return self.getSellAnyLevelsUnlockTimeLeft() if self.isEnabled() or self.isPaused() else 0
+        return self.getSellAnyLevelsUnlockTimeLeft() if not self.isDisabled() else 0
 
     def __onNotifyUnlock(self):
         self.onUnlimitedPurchaseUnlocked()
@@ -455,13 +516,19 @@ class BattlePassController(IBattlePassController):
         if BATTLE_PASS_CONFIG_NAME in diff:
             self.__seasonChangeNotifier.startNotification()
             self.__purchaseUnlockNotifier.startNotification()
+            self.__votingRequester.start()
             newMode = None
             oldMode = self.__currentMode
             if 'mode' in diff[BATTLE_PASS_CONFIG_NAME]:
                 newMode = diff[BATTLE_PASS_CONFIG_NAME]['mode']
                 self.__currentMode = newMode
             self.__extractBadgeInfo()
+            self.__extractTrophySelectTokensInfo()
             self.onBattlePassSettingsChange(newMode, oldMode)
+        if 'isOffersEnabled' in diff:
+            self.onOnboardingChange()
+            self.__onboardingVehicles = set()
+            self.onDeviceSelectChange()
         return
 
     def __onSyncCompleted(self, _, diff):
@@ -512,10 +579,55 @@ class BattlePassController(IBattlePassController):
 
         return False
 
+    def __extractTrophySelectTokensInfo(self):
+        config = self.__getConfig()
+        for bonusName in (TROPHY_GIFT_TOKEN_BONUS_NAME, NEW_DEVICE_GIFT_TOKEN_BONUS_NAME):
+            for level in range(1, self.getMaxLevel() + 1):
+                if self.__checkIfRewardIsToken(bonusName, config.getFreeReward(level)):
+                    self.__deviceGiftTokensContainers[bonusName].addFreeTokenPos(level)
+                if self.__checkIfRewardIsToken(bonusName, config.getPaidReward(level)):
+                    self.__deviceGiftTokensContainers[bonusName].addPaidTokenPos(level)
+
+    @staticmethod
+    def __checkIfRewardIsToken(bonusName, reward):
+        if 'tokens' not in reward:
+            return False
+        bonuses = BattlePassAwardsManager.composeBonuses([reward])
+        for bonus in bonuses:
+            if bonus.getName() == bonusName:
+                return True
+
+        return False
+
     def __clearFields(self):
         self.__oldPoints = 0
         self.__oldLevel = 0
         self.__oldVoteOption = 0
         self.__badge = None
         self.__currentMode = None
+        for container in self.__deviceGiftTokensContainers.values():
+            container.clear()
+
         return
+
+    def __isOnboardingEnabled(self):
+        if not self.__lobbyContext.getServerSettings().isOffersEnabled():
+            return False
+        return False if not self.__getConfig().isOnboardingEnabled() else True
+
+    def __getOnboardingVehicles(self):
+        if self.__onboardingVehicles is not None:
+            return self.__onboardingVehicles
+        else:
+            self.__onboardingVehicles = set()
+            if self.__isOnboardingEnabled():
+                onboardingToken = getBattlePassOnboardingToken(self.getSeasonID())
+                offer = self.__offersProvider.getOfferByToken(onboardingToken)
+                if offer is not None:
+                    for gift in offer.getAllGifts():
+                        intCD = gift.bonus.displayedItem.intCD
+                        itemTypeID, _, _ = vehicles.parseIntCompactDescr(intCD)
+                        if itemTypeID == vehicles.ITEM_TYPES.vehicle:
+                            self.__onboardingVehicles.add(intCD)
+
+            return self.__onboardingVehicles

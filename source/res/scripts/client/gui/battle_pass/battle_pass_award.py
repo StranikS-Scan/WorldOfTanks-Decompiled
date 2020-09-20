@@ -40,3 +40,11 @@ class BattlePassAwardsManager(object):
             bonuses = splitBonuses(bonuses)
         bonuses = list(filter(cls.__bonusesLayoutController.getIsVisible, bonuses))
         return bonuses
+
+    @classmethod
+    def getVehicleBackgroundPosition(cls, vehCD):
+        return cls.__bonusesLayoutController.getVehiclePosition(vehCD)
+
+    @classmethod
+    def getBigIcon(cls, bonus):
+        return cls.__bonusesLayoutController.getBigIcon(bonus)

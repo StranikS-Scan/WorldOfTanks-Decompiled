@@ -279,9 +279,16 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         return
 
     def _makeHeaderVO(self):
+        if self.prbDispatcher:
+            state = self.prbDispatcher.getFunctionalState()
+            isBob = state.isInPreQueue(constants.QUEUE_TYPE.BOB) or state.isInUnit(constants.PREBATTLE_TYPE.BOB)
+        else:
+            isBob = False
         emptyHeaderVO = {'isVisible': False,
          'quests': []}
         if not self.app.tutorialManager.hangarHeaderEnabled:
+            return emptyHeaderVO
+        if isBob:
             return emptyHeaderVO
         if self.__rankedController.isRankedPrbActive():
             return {'isVisible': True,

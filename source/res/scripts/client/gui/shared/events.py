@@ -300,7 +300,6 @@ class LobbySimpleEvent(HasCtxEvent):
     BATTLE_RESULTS_SHOW_QUEST = 'battleResultsWindowShowQuest'
     CHANGE_SOUND_ENVIRONMENT = 'changeSoundEnvironment'
     LOCK_OVERLAY_SCREEN = 'lockOverlayScreen'
-    UNLOCK_OVERLAY_SCREEN = 'unlockOverlayScreen'
     VEHICLE_PREVIEW_HIDDEN = 'vehiclePreviewHidden'
 
 

@@ -80,6 +80,7 @@ VEHICLE_CLASS_TAGS = frozenset(('lightTank',
  'SPG',
  'AT-SPG'))
 VEHICLE_LEVEL_EARN_CRYSTAL = 10
+MODES_WITHOUT_CRYSTAL_EARNINGS = set(('bob', 'fallout'))
 
 class VEHICLE_PHYSICS_TYPE():
     TANK = 0
@@ -2352,7 +2353,7 @@ class VehicleList(object):
             tags = _readTags(ctx, vsection, 'tags', 'vehicle')
             if 1 != len(tags & VEHICLE_CLASS_TAGS):
                 _xml.raiseWrongXml(ctx, 'tags', 'vehicle class tag is missing or is multiple')
-            if item.level == VEHICLE_LEVEL_EARN_CRYSTAL and 'earn_crystals' not in tags:
+            if item.level == VEHICLE_LEVEL_EARN_CRYSTAL and 'earn_crystals' not in tags and len(set(tags) & MODES_WITHOUT_CRYSTAL_EARNINGS) == 0:
                 _xml.raiseWrongXml(ctx, 'tags', 'vehicle %s with level %s does not have tag earn_crystals' % (vname, item.level))
             item.tags = tags
             res[innationID] = item

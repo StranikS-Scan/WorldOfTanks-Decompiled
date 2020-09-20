@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/dispatcher.py
+import logging
 import time
 import types
 from CurrentVehicle import g_currentVehicle
@@ -35,6 +36,7 @@ from skeletons.gui.game_control import IGameSessionController, IRentalsControlle
 from skeletons.gui.game_control import IIGRController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+_logger = logging.getLogger(__name__)
 
 class _PreBattleDispatcher(ListenersCollection):
     gameSession = dependency.descriptor(IGameSessionController)
@@ -598,6 +600,7 @@ class _PreBattleDispatcher(ListenersCollection):
             self.__prevEntity = self.__entity
             self.__entity = NotSupportedEntity()
             self.__requestCtx.stopProcessing(result=True)
+            _logger.info("__unsetEntity() entity '%r' was destroyed", self.__prevEntity)
 
     def __setEntity(self, ctx):
         created = self.__factories.createEntity(ctx)
@@ -610,6 +613,7 @@ class _PreBattleDispatcher(ListenersCollection):
             self.notifyPrbEntitySwitched()
             ctx.clearFlags()
             ctx.addFlags(flag | created.getFunctionalFlags())
+            _logger.info("__setEntity() new entity '%r' created", self.__entity)
         LOG_DEBUG('Entity have been updated', ctx.getFlagsToStrings())
         ctx.clear()
         currentCtx = self.__requestCtx

@@ -6,6 +6,3 @@ class BattlePassEntryPointMeta(InjectComponentAdaptor):
 
     def setIsSmall(self, value):
         self._printOverrideError('setIsSmall')
-
-    def as_setIsMouseEnabledS(self, value):
-        return self.flashObject.as_setIsMouseEnabled(value) if self._isDAAPIInited() else None

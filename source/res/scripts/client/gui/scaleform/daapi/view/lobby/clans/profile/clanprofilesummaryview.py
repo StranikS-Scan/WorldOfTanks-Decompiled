@@ -3,7 +3,7 @@
 from adisp import process
 from constants import IS_CHINA
 from gui.impl import backport
-from helpers import i18n
+from helpers import i18n, dependency
 from gui.clans.settings import CLIENT_CLAN_RESTRICTIONS as _RES
 from gui.clans.items import formatField, isValueAvailable, StrongholdStatisticsData
 from gui.clans.clan_helpers import isStrongholdsEnabled
@@ -17,6 +17,7 @@ from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.daapi.view.meta.ClanProfileSummaryViewMeta import ClanProfileSummaryViewMeta
 from gui.shared.image_helper import ImagesFetchCoordinator
+from skeletons.gui.lobby_context import ILobbyContext
 _DIVISIONS = (6, 8, 10)
 
 def _stateVO(showRequestBtn, mainStatus=None, tooltip='', enabledRequestBtn=False, addStatus=None, showPersonalBtn=False):
@@ -127,12 +128,15 @@ class StrongholdDataReceiver(object):
 
 
 class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
+    _lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         ClanProfileSummaryViewMeta.__init__(self)
         UsersInfoHelper.__init__(self)
         self.__stateMask = 0
         self.__strongholdStatsVOReceiver = None
+        self._isGlobalMapEnabled = self._lobbyContext.getServerSettings().isGlobalMapEnabled()
+        self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         return
 
     @process
@@ -158,13 +162,14 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
             description = text_styles.main(motto)
         else:
             description = text_styles.standard(CLANS.CLANPROFILE_SUMMARYVIEW_DEFAULTCLANDESCR)
-        hasGlobalMap = globalMapStats.hasGlobalMap()
+        hasGlobalMap = globalMapStats.hasGlobalMap() and self._isGlobalMapEnabled
         self.as_setDataS({'totalRating': ratingStrBuilder.render(),
          'totalRatingTooltip': CLANS.CLANPROFILE_SUMMARYVIEW_TOOLTIP_TOTALRATING,
          'clanDescription': description,
          'isShowFortBtn': True,
          'isShowClanNavBtn': hasGlobalMap,
-         'isShowUrlString': not hasGlobalMap})
+         'isShowUrlString': not hasGlobalMap,
+         'isDetailLinkEnabled': self._isGlobalMapEnabled})
         self.as_updateGeneralBlockS(self.__makeGeneralBlock(clanInfo, syncUserInfo=True))
         self.as_updateGlobalMapBlockS(self.__makeGlobalMapBlock(globalMapStats, ratings))
         self.__updateStatus()
@@ -222,8 +227,16 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
         if self.__strongholdStatsVOReceiver:
             self.__strongholdStatsVOReceiver.dispose()
             self.__strongholdStatsVOReceiver = None
+        self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         super(ClanProfileSummaryView, self)._dispose()
         return
+
+    def __onServerSettingChanged(self, diff):
+        ratings = yield self._clanDossier.requestClanRatings()
+        globalMapStats = yield self._clanDossier.requestGlobalMapStats()
+        if 'isGlobalMapEnabled' in diff or ('isGlobalMapEnabled', '_r') in diff:
+            self._isGlobalMapEnabled = self._lobbyContext.getServerSettings().isGlobalMapEnabled()
+            self.as_updateGlobalMapBlockS(self.__makeGlobalMapBlock(globalMapStats, ratings))
 
     def __updateStrongholdBlock(self, stats, leagues=None):
         if leagues:
@@ -254,7 +267,7 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
 
     def __makeGlobalMapBlock(self, globalMapStats, ratings):
         hasGlobalMap = globalMapStats.hasGlobalMap()
-        if hasGlobalMap:
+        if hasGlobalMap and self._isGlobalMapEnabled:
             notActual = ratings.getGlobalMapBattlesFor28Days() <= 0
             stats = [{'local': 'rageLevel10',
               'value': formatField(getter=ratings.getGlobalMapEloRating10, formatter=backport.getIntegralFormat),
@@ -278,10 +291,14 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
             emptyLbl = ''
         else:
             statsBlock = ()
-            if isValueAvailable(globalMapStats.hasGlobalMap):
-                emptyLbl = text_styles.standard(CLANS.CLANPROFILE_SUMMARYVIEW_BLOCKLBL_EMPTYGLOBALMAP)
+            if self._isGlobalMapEnabled:
+                if isValueAvailable(globalMapStats.hasGlobalMap):
+                    emptyLbl = text_styles.standard(CLANS.CLANPROFILE_SUMMARYVIEW_BLOCKLBL_EMPTYGLOBALMAP)
+                else:
+                    emptyLbl = '%s %s' % (icons.alert(), text_styles.standard(CLANS.CLANPROFILE_SUMMARYVIEW_NODATA))
             else:
-                emptyLbl = '%s %s' % (icons.alert(), text_styles.standard(CLANS.CLANPROFILE_SUMMARYVIEW_NODATA))
+                hasGlobalMap = False
+                emptyLbl = emptyLbl = '%s %s' % (icons.alert(), text_styles.standard(CLANS.GLOBALMAP_DISABLED))
         return {'isShowHeader': True,
          'header': text_styles.highTitle(CLANS.CLANPROFILE_MAINWINDOWTAB_GLOBALMAP),
          'statBlocks': statsBlock,

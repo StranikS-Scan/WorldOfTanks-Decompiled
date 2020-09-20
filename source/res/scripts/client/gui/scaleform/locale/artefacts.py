@@ -144,6 +144,8 @@ class ARTEFACTS(object):
     TROPHYBASICCOATEDOPTICS_NAME = '#artefacts:trophyBasicCoatedOptics/name'
     TROPHYUPGRADEDCOATEDOPTICS_NAME = '#artefacts:trophyUpgradedCoatedOptics/name'
     TROPHYOPTICS_NAME = '#artefacts:trophyOptics/name'
+    TROPHYBASICIMPROVEDROTATIONMECHANISM_NAME = '#artefacts:trophyBasicImprovedRotationMechanism/name'
+    TROPHYUPGRADEDIMPROVEDROTATIONMECHANISM_NAME = '#artefacts:trophyUpgradedImprovedRotationMechanism/name'
     EMPTY = '#artefacts:empty'
     HANDEXTINGUISHERS_NAME = '#artefacts:handExtinguishers/name'
     HANDEXTINGUISHERS_DESCR = '#artefacts:handExtinguishers/descr'

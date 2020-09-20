@@ -1590,6 +1590,14 @@ class UpgradedImprovedConfiguration(ImprovedConfiguration, UpgradedItem):
     pass
 
 
+class UpgradableRotationMechanisms(RotationMechanisms, UpgradableItem):
+    pass
+
+
+class UpgradedRotationMechanisms(RotationMechanisms, UpgradedItem):
+    pass
+
+
 class BRBomber(Equipment, TooltipConfigReader, CountableConsumableConfigReader, CooldownConsumableConfigReader, BomberConfigReader):
     __slots__ = TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + CountableConsumableConfigReader._CONSUMABLE_SLOTS + CooldownConsumableConfigReader._CONSUMABLE_SLOTS + BomberConfigReader._BOMBER_SLOTS + ('influenceZone',)
 

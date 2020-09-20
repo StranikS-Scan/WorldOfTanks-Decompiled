@@ -63,8 +63,14 @@ class IOffersDataProvider(object):
     def getOffer(self, offerID):
         raise NotImplementedError
 
+    def getOfferByToken(self, token):
+        raise NotImplementedError
+
     def iAvailableOffers(self):
         raise NotImplementedError
 
     def getAvailableOffers(self):
+        raise NotImplementedError
+
+    def getAvailableOffersByToken(self, token):
         raise NotImplementedError

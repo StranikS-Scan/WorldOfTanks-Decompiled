@@ -239,6 +239,8 @@ class TOOLTIPS_CONSTANTS(object):
     BLUEPRINT_FRAGMENT_INFO = 'blueprintFragmentInfo'
     BLUEPRINT_EMPTY_SLOT_INFO = 'blueprintEmptySlotInfo'
     BLUEPRINT_RANDOM_INFO = 'blueprintRandomInfo'
+    BOB_SELECTOR_INFO = 'bobSelectorInfo'
+    BOB_SERVER_PRIMETIME = 'bobServerPrimeTime'
     BLOCKS_DEFAULT_UI = 'ToolTipInblocksDefaultUI'
     TANKMEN_UI = 'ToolTipTankmenUI'
     TANKMEN_SKILL_UI = 'ToolTipSkillUI'
@@ -327,6 +329,10 @@ class TOOLTIPS_CONSTANTS(object):
     BADGES_SUFFIX_RANKED_ITEM_UI = 'ToolTipInblocksDefaultUI'
     EVENT_PROGRESSION_COMPLETED_QUESTS_INFO = 'EventProgressionQuestsTooltipData'
     BATTLE_OPT_DEVICE_UI = 'ToolTipInblocksDefaultUI'
+    DEVICE_GIFT_TOKEN = 'deviceGiftToken'
+    DEVICE_GIFT_TOKEN_UI = 'ToolTipInblocksDefaultUI'
+    TROPHY_GIFT_TOKEN = 'trophyGiftToken'
+    TROPHY_GIFT_TOKEN_UI = 'ToolTipInblocksDefaultUI'
     ACHIEVEMENTS_SET = [BATTLE_STATS_ACHIEVS,
      BATTLE_STATS_MARKS_ON_GUN_ACHIEVEMENT,
      ACHIEVEMENT,
@@ -544,3 +550,5 @@ class TOOLTIPS_CONSTANTS(object):
     OPTDEV_SLOT_STATE_EMPTY = 'empty'
     OPTDEV_SLOT_STATE_EMPTY_SELECTED = 'emptySelected'
     OPTDEV_SLOT_STATE_ACTIVE_SELECTED = 'activeSelected'
+    BOB_SET = [BOB_SELECTOR_INFO, BOB_SERVER_PRIMETIME]
+    BATTLE_PASS_SET = [DEVICE_GIFT_TOKEN]

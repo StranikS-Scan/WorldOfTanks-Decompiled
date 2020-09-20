@@ -2,8 +2,9 @@
 # Embedded file name: scripts/common/messenger_common_chat2.py
 from collections import namedtuple
 from string import Template
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES
-from constants import IS_CLIENT, IS_CHINA
+from constants import IS_CLIENT, IS_CHINA, ARENA_BONUS_TYPE
 _g_id = None
 
 def _makeID(start=None, range=None):
@@ -180,6 +181,8 @@ UNIT_CHAT_COMMANDS = (UnitChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._UNI
 UNIT_CHAT_COMMANDS_BY_NAMES = {v.name:v for v in UNIT_CHAT_COMMANDS}
 BATTLE_CHAT_COMMANDS = (BattleChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._BATTLE_CHAT_COMMAND_START_ID), name=BATTLE_CHAT_COMMAND_NAMES.SOS, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='help_me', vehMarker='help_me', senderVehMarker=None, soundNotification='ibc_ping_request', soundNotificationReply='ibc_ping_help_me_ex_reply'),
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.POSITIVE, cooldownPeriod=_SAME_PRIVATE_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='positive', vehMarker='positive', senderVehMarker=None, soundNotification='ibc_ping_affirmative', soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.NEGATIVE, cooldownPeriod=_SAME_PRIVATE_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='negative', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.AFFIRMATIVE, cooldownPeriod=_SAME_PRIVATE_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='affirmative', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
  BattleChatCommand(id=_makeID(), name='ATTENTIONTOCELL', cooldownPeriod=_SHORT_BATTLE_CHAT_COOLDOWN_DURATION + _COOLDOWN_OFFSET, msgText='attention_to_cell', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION, cooldownPeriod=_ATTENTION_TO_COMMAND_COOLDOWN_DURATION, msgText='attention_to_position', vehMarker='attention_to', senderVehMarker=None, soundNotification='ibc_ping_attention', soundNotificationReply='ibc_ping_reply'),
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.REPLY, cooldownPeriod=_REACTIONAL_CHAT_CMD_COOLDOWN_DURATION, msgText='reply_to_player', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
@@ -257,6 +260,16 @@ def canResolveMucRoomsOfService(service):
 
 
 ChatCommandBlockedData = namedtuple('ChatCommandBlockedData', ('cmdID', 'cooldownType', 'cooldownEnd', 'targetID'))
+BattleChatCmdGameModeCoolDownData = namedtuple('BattleChatCmdGameModeCoolDownData', ('teamChatCmdCooldown', 'sameChatCmdCooldown', 'sameTargetChatCmdCooldown', 'otherChatCmdCooldown', 'attentionToTeamLimit', 'attentionToTimeframeLimit'))
+SPAM_PROTECTION_SETTING = BattleChatCmdGameModeCoolDownData(teamChatCmdCooldown=_TEAM_BATTLE_CHAT_CMD_COOLDOWN_DURATION, sameChatCmdCooldown=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, sameTargetChatCmdCooldown=_SAME_TARGET_PERSONAL_BATTLE_CHAT_CMD_COOLDOWN_DURATION, otherChatCmdCooldown=_OTHER_BATTLE_CHAT_CMD_COOLDOWN_DURATION, attentionToTeamLimit=_MAX_ATTENTION_TO_PER_TEAM, attentionToTimeframeLimit=_MAX_ATTENTION_TO_CHAT_COMMANDS_WITHIN_TIMEFRAME)
+
+def getCooldownGameModeDataForGameMode(gameMode):
+    if ARENA_BONUS_TYPE_CAPS.checkAny(gameMode, ARENA_BONUS_TYPE_CAPS.SPAM_PROTECTION):
+        return SPAM_PROTECTION_SETTING
+    else:
+        return None
+        return None
+
 
 def areSenderCooldownsActive(currTime, listOfCoolDownTimeData, cmdIDToSend, targetIDToSend):
     if listOfCoolDownTimeData is None:
@@ -287,15 +300,15 @@ def areSenderCooldownsActive(currTime, listOfCoolDownTimeData, cmdIDToSend, targ
         return blockReasonData
 
 
-def addCoolDowns(currTime, listOfCoolDownTimeData, cmdID, cmdName, cmdCooldownTime, cmdTargetID):
+def addCoolDowns(currTime, listOfCoolDownTimeData, cmdID, cmdName, cmdCooldownTime, cmdTargetID, cooldownConf):
     listOfCoolDownTimeData.append(ChatCommandBlockedData(cmdID=cmdID, cooldownType=CHAT_COMMAND_COOLDOWN_TYPE_IDS.SAME_COMMAND_COOLDOWN, cooldownEnd=currTime + cmdCooldownTime, targetID=cmdTargetID))
-    listOfCoolDownTimeData.append(ChatCommandBlockedData(cmdID=cmdID, cooldownType=CHAT_COMMAND_COOLDOWN_TYPE_IDS.OTHER_COMMANDS_COOLDOWN, cooldownEnd=currTime + _OTHER_BATTLE_CHAT_CMD_COOLDOWN_DURATION, targetID=cmdTargetID))
+    listOfCoolDownTimeData.append(ChatCommandBlockedData(cmdID=cmdID, cooldownType=CHAT_COMMAND_COOLDOWN_TYPE_IDS.OTHER_COMMANDS_COOLDOWN, cooldownEnd=currTime + cooldownConf.otherChatCmdCooldown, targetID=cmdTargetID))
     if cmdName in (BATTLE_CHAT_COMMAND_NAMES.HELPME, BATTLE_CHAT_COMMAND_NAMES.THANKS, BATTLE_CHAT_COMMAND_NAMES.TURNBACK):
-        listOfCoolDownTimeData.append(ChatCommandBlockedData(cmdID=cmdID, cooldownType=CHAT_COMMAND_COOLDOWN_TYPE_IDS.PRIVATE_COMMANDS_COOLDOWN, cooldownEnd=currTime + _SAME_TARGET_PERSONAL_BATTLE_CHAT_CMD_COOLDOWN_DURATION, targetID=cmdTargetID))
+        listOfCoolDownTimeData.append(ChatCommandBlockedData(cmdID=cmdID, cooldownType=CHAT_COMMAND_COOLDOWN_TYPE_IDS.PRIVATE_COMMANDS_COOLDOWN, cooldownEnd=currTime + cooldownConf.sameTargetChatCmdCooldown, targetID=cmdTargetID))
     if cmdName == BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION:
         activeOldAttComands = [ blockData for blockData in listOfCoolDownTimeData if blockData[0] == cmdID and blockData[1] == CHAT_COMMAND_COOLDOWN_TYPE_IDS.TIMEFRAME_DATA_COOLDOWN ]
-        if activeOldAttComands and len(activeOldAttComands) >= _MAX_ATTENTION_TO_CHAT_COMMANDS_WITHIN_TIMEFRAME - 1:
-            data = ChatCommandBlockedData(cmdID=cmdID, cooldownType=CHAT_COMMAND_COOLDOWN_TYPE_IDS.ATTENTION_TO_BLOCKED_COOLDOWN, cooldownEnd=currTime + _SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, targetID=cmdTargetID)
+        if activeOldAttComands and len(activeOldAttComands) >= cooldownConf.attentionToTimeframeLimit - 1:
+            data = ChatCommandBlockedData(cmdID=cmdID, cooldownType=CHAT_COMMAND_COOLDOWN_TYPE_IDS.ATTENTION_TO_BLOCKED_COOLDOWN, cooldownEnd=currTime + cooldownConf.sameChatCmdCooldown, targetID=cmdTargetID)
         else:
             data = ChatCommandBlockedData(cmdID=cmdID, cooldownType=CHAT_COMMAND_COOLDOWN_TYPE_IDS.TIMEFRAME_DATA_COOLDOWN, cooldownEnd=currTime + _TIMEFRAME_FOR_ATTENTION_TO_STORAGE, targetID=cmdTargetID)
         listOfCoolDownTimeData.append(data)

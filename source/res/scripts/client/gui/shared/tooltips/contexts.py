@@ -5,6 +5,7 @@ import constants
 import gui
 import nations
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
+from battle_pass_common import GIFT_TO_MAIN_TOKEN
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE
@@ -26,8 +27,9 @@ from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID
 from helpers import dependency
 from helpers.i18n import makeString
 from shared_utils import findFirst
-from skeletons.gui.game_control import IRankedBattlesController
+from skeletons.gui.game_control import IRankedBattlesController, IBattlePassController
 from skeletons.gui.goodies import IGoodiesCache
+from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
@@ -1217,3 +1219,25 @@ class ShopBattleBoosterContext(AwardBattleBoosterContext):
         value.inventoryCount = True
         value.vehiclesCount = True
         return value
+
+
+class DeviceGiftTokenContext(ToolTipContext):
+    __offersProvider = dependency.descriptor(IOffersDataProvider)
+    __battlePassController = dependency.descriptor(IBattlePassController)
+
+    def __init__(self):
+        super(DeviceGiftTokenContext, self).__init__(TOOLTIP_COMPONENT.BATTLE_PASS)
+
+    def buildItem(self, tokenID, **kwargs):
+        result = []
+        offer = self.__offersProvider.getOfferByToken(GIFT_TO_MAIN_TOKEN.get(tokenID))
+        if offer is None:
+            return result
+        else:
+            for gift in offer.getAllGifts():
+                result.append(gift.title)
+
+            return result
+
+    def getParams(self):
+        return {'isChooseDeviceEnabled': self.__battlePassController.isChooseDeviceEnabled()}

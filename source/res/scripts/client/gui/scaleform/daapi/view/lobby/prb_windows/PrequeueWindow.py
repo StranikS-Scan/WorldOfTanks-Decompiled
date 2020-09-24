@@ -3,6 +3,7 @@
 from CurrentVehicle import g_currentVehicle
 from adisp import process
 from gui.Scaleform.daapi.view.meta.PrequeueWindowMeta import PrequeueWindowMeta
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
 from gui.Scaleform.managers.windows_stored_data import stored_window
 from gui.prb_control.entities.base.ctx import LeavePrbAction
@@ -30,7 +31,7 @@ class PrequeueWindow(PrequeueWindowMeta, IPreQueueListener):
         self._doLeave()
 
     def showFAQWindow(self):
-        self.fireEvent(events.LoadViewEvent(MESSENGER_VIEW_ALIAS.FAQ_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(MESSENGER_VIEW_ALIAS.FAQ_WINDOW)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def isEnqueueBtnEnabled(self):
         return g_currentVehicle.isReadyToPrebattle() and not self.prbEntity.isInQueue()

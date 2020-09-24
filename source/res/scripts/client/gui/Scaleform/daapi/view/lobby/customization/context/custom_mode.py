@@ -324,7 +324,7 @@ class CustomMode(CustomizationMode):
             modifiedSeasons = SeasonType.COMMON_SEASONS
         else:
             modifiedSeasons = tuple((season for season in SeasonType.COMMON_SEASONS if not modifiedOutfits[season].isEqual(self._originalOutfits[season])))
-        self._soundEventChacker.lockPlayingSounds()
+        self._soundEventChecker.lockPlayingSounds()
         for season in modifiedSeasons:
             emptyOutfit = self._service.getEmptyOutfit()
             yield OutfitApplier(g_currentVehicle.item, emptyOutfit, season).request()
@@ -337,7 +337,7 @@ class CustomMode(CustomizationMode):
             result = yield OutfitApplier(g_currentVehicle.item, outfit, season).request()
             results.append(result)
 
-        self._soundEventChacker.unlockPlayingSounds()
+        self._soundEventChecker.unlockPlayingSounds()
         if self.isInited:
             self._events.onItemsBought(purchaseItems, results)
         callback(self)
@@ -374,19 +374,20 @@ class CustomMode(CustomizationMode):
 
     def _getAnchorVOs(self):
         anchorVOs = []
-        for areaId in Area.ALL:
-            slot = self.currentOutfit.getContainer(areaId).slotFor(self.slotType)
-            for regionIdx, anchor in g_currentVehicle.item.getAnchors(self.slotType, areaId):
-                if anchor.hiddenForUser:
-                    continue
-                model = self.currentOutfit.modelsSet or SLOT_DEFAULT_ALLOWED_MODEL
-                if model not in anchor.compatibleModels:
-                    continue
-                slotId = C11nId(areaId, self.slotType, regionIdx)
-                intCD = slot.getItemCD(regionIdx)
-                uid = customizationSlotIdToUid(slotId)
-                anchorVO = CustomizationSlotUpdateVO(slotId=slotId._asdict(), itemIntCD=intCD, uid=uid)
-                anchorVOs.append(anchorVO._asdict())
+        if g_currentVehicle.isPresent():
+            for areaId in Area.ALL:
+                slot = self.currentOutfit.getContainer(areaId).slotFor(self.slotType)
+                for regionIdx, anchor in g_currentVehicle.item.getAnchors(self.slotType, areaId):
+                    if anchor.hiddenForUser:
+                        continue
+                    model = self.currentOutfit.modelsSet or SLOT_DEFAULT_ALLOWED_MODEL
+                    if model not in anchor.compatibleModels:
+                        continue
+                    slotId = C11nId(areaId, self.slotType, regionIdx)
+                    intCD = slot.getItemCD(regionIdx)
+                    uid = customizationSlotIdToUid(slotId)
+                    anchorVO = CustomizationSlotUpdateVO(slotId=slotId._asdict(), itemIntCD=intCD, uid=uid)
+                    anchorVOs.append(anchorVO._asdict())
 
         return anchorVOs
 

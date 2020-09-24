@@ -35,8 +35,6 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
     EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
     BATTLEPASS_CAROUSEL_FILTER_1 = 'BATTLEPASS_CAROUSEL_FILTER_1'
-    BOB_CAROUSEL_FILTER_1 = 'BOB_CAROUSEL_FILTER_1'
-    BOB_CAROUSEL_FILTER_2 = 'BOB_CAROUSEL_FILTER_2'
     GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
     EULA_VERSION = 'EULA_VERSION'
     MARKS_ON_GUN = 'MARKS_ON_GUN'
@@ -56,6 +54,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     SESSION_STATS = 'SESSION_STATS'
     BATTLE_PASS_STORAGE = 'BATTLE_PASS_STORAGE'
     BATTLE_COMM = 'BATTLE_COMM'
+    DOG_TAGS = 'DOG_TAGS'
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2)
 
 
@@ -277,41 +276,6 @@ class ServerSettingsManager(object):
                                                       'event': 7,
                                                       'crystals': 8}, offsets={}),
      SETTINGS_SECTIONS.BATTLEPASS_CAROUSEL_FILTER_1: Section(masks={'isCommonProgression': 0}, offsets={}),
-     SETTINGS_SECTIONS.BOB_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
-                                               'germany': 1,
-                                               'usa': 2,
-                                               'china': 3,
-                                               'france': 4,
-                                               'uk': 5,
-                                               'japan': 6,
-                                               'czech': 7,
-                                               'sweden': 8,
-                                               'poland': 9,
-                                               'italy': 10,
-                                               'lightTank': 15,
-                                               'mediumTank': 16,
-                                               'heavyTank': 17,
-                                               'SPG': 18,
-                                               'AT-SPG': 19,
-                                               'level_1': 20,
-                                               'level_2': 21,
-                                               'level_3': 22,
-                                               'level_4': 23,
-                                               'level_5': 24,
-                                               'level_6': 25,
-                                               'level_7': 26,
-                                               'level_8': 27,
-                                               'level_9': 28,
-                                               'level_10': 29}, offsets={}),
-     SETTINGS_SECTIONS.BOB_CAROUSEL_FILTER_2: Section(masks={'premium': 0,
-                                               'elite': 1,
-                                               'rented': 2,
-                                               'igr': 3,
-                                               'gameMode': 4,
-                                               'favorite': 5,
-                                               'bonus': 6,
-                                               'event': 7,
-                                               'crystals': 8}, offsets={}),
      SETTINGS_SECTIONS.GUI_START_BEHAVIOR: Section(masks={GuiSettingsBehavior.FREE_XP_INFO_DIALOG_SHOWED: 0,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED: 1,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_STARTED: 2,
@@ -368,7 +332,9 @@ class ServerSettingsManager(object):
                                          OnceOnlyHints.CRYSTAL_BTN_HINT: 30}, offsets={}),
      SETTINGS_SECTIONS.ONCE_ONLY_HINTS_2: Section(masks={OnceOnlyHints.AMMUNITION_PANEL_HINT: 0,
                                            OnceOnlyHints.AMMUNITION_FILTER_HINT: 1,
-                                           OnceOnlyHints.OPT_DEV_DRAG_AND_DROP_HINT: 2}, offsets={}),
+                                           OnceOnlyHints.OPT_DEV_DRAG_AND_DROP_HINT: 2,
+                                           OnceOnlyHints.DOGTAG_HANGAR_HINT: 3,
+                                           OnceOnlyHints.DOGTAG_PROFILE_HINT: 4}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESET_CRITS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -456,6 +422,8 @@ class ServerSettingsManager(object):
                                      BATTLE_COMM.SHOW_STICKY_MARKERS: 2,
                                      BATTLE_COMM.SHOW_CALLOUT_MESSAGES: 3,
                                      BATTLE_COMM.SHOW_BASE_MARKERS: 4}, offsets={}),
+     SETTINGS_SECTIONS.DOG_TAGS: Section(masks={GAME.SHOW_VICTIMS_DOGTAG: 0,
+                                  GAME.SHOW_DOGTAG_TO_KILLER: 1}, offsets={}),
      SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
                                                   'germany': 1,
                                                   'usa': 2,
@@ -812,6 +780,7 @@ class ServerSettingsManager(object):
          'epicCarouselFilter2': {},
          'sessionStats': {},
          'battleComm': {},
+         'dogTags': {},
          GUI_START_BEHAVIOR: {},
          'battlePassStorage': {},
          'clear': {},
@@ -888,6 +857,10 @@ class ServerSettingsManager(object):
         clearBattleComm = clear.get('battleComm', 0)
         if battleComm or clearBattleComm:
             settings[SETTINGS_SECTIONS.BATTLE_COMM] = self._buildSectionSettings(SETTINGS_SECTIONS.BATTLE_COMM, battleComm) ^ clearBattleComm
+        dogTags = data.get('dogTags', {})
+        clearDogTags = clear.get('dogTags', 0)
+        if dogTags or clearDogTags:
+            settings[SETTINGS_SECTIONS.DOG_TAGS] = self._buildSectionSettings(SETTINGS_SECTIONS.DOG_TAGS, dogTags) ^ clearDogTags
         guiStartBehavior = data.get(GUI_START_BEHAVIOR, {})
         clearGuiStartBehavior = clear.get(GUI_START_BEHAVIOR, 0)
         if guiStartBehavior or clearGuiStartBehavior:

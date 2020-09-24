@@ -9,7 +9,7 @@ from gui.impl.lobby.offers import getGfImagePath
 from gui.shared.event_dispatcher import showOfferGiftsWindow
 from gui.shared.utils.functions import stripAllTags
 from helpers import dependency
-from frameworks.wulf import ViewSettings, ViewFlags
+from frameworks.wulf import ViewSettings
 from gui.impl.gen.view_models.views.lobby.offers.offer_reward_model import OfferRewardModel
 from gui.impl.pub import ViewImpl
 from skeletons.gui.lobby_context import ILobbyContext
@@ -21,7 +21,7 @@ class OfferRewardWindow(ViewImpl):
     _offersProvider = dependency.descriptor(IOffersDataProvider)
 
     def __init__(self, layoutID, offerID, giftID, cdnTitle='', cdnDescription='', cdnIcon=''):
-        settings = ViewSettings(layoutID=layoutID, flags=ViewFlags.TOP_WINDOW_VIEW, model=OfferRewardModel())
+        settings = ViewSettings(layoutID=layoutID, model=OfferRewardModel())
         super(OfferRewardWindow, self).__init__(settings)
         self._offer = self._offersProvider.getOffer(offerID)
         self._gift = self._offer.getGift(giftID)
@@ -74,7 +74,7 @@ class OfferRewardWindow(ViewImpl):
                 formattedBonuses = getRewardsBonuses(bonusData)
                 formattedBonus = shared_utils.first(formattedBonuses)
                 if formattedBonus is not None:
-                    icon = getGfImagePath(formattedBonus.get('imgSource'))
+                    icon = getGfImagePath(formattedBonus.get('imgSource')) or ''
                     self._tooltipData = TooltipData(tooltip=formattedBonus.get('tooltip', None), isSpecial=formattedBonus.get('isSpecial', False), specialAlias=formattedBonus.get('specialAlias', ''), specialArgs=formattedBonus.get('specialArgs', None))
                 model.setCount(self._gift.giftCount)
                 model.setHightlightType(self._gift.highlight)

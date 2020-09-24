@@ -15,7 +15,7 @@ from PlayerEvents import g_playerEvents
 from account_helpers.settings_core.options import VehicleMarkerSetting
 from account_helpers.settings_core.settings_constants import MARKERS, GRAPHICS
 from battleground.location_point_manager import g_locationPointManager, COMMAND_NAME_TO_LOCATION_MARKER_SUBTYPE
-from chat_commands_consts import getUniqueTeamOrControlPointID, INVALID_MARKER_SUBTYPE, INVALID_MARKER_ID, LocationMarkerSubType, MarkerType, DefaultMarkerSubType
+from chat_commands_consts import getUniqueTeamOrControlPointID, INVALID_MARKER_SUBTYPE, INVALID_MARKER_ID, LocationMarkerSubType, MarkerType, DefaultMarkerSubType, INVALID_COMMAND_ID
 from gui.Scaleform.daapi.view.battle.shared.markers2d import markers
 from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
 from gui.Scaleform.daapi.view.battle.shared.markers2d.markers import LocationMarker, BaseMarker, Marker, ReplyStateForMarker
@@ -39,7 +39,7 @@ _LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME = {LocationMarkerSubType.SPG_AIM_AREA_SUB
  LocationMarkerSubType.GOING_TO_MARKER_SUBTYPE: settings.MARKER_SYMBOL_NAME.LOCATION_MARKER,
  LocationMarkerSubType.PREBATTLE_WAYPOINT_SUBTYPE: settings.MARKER_SYMBOL_NAME.LOCATION_MARKER,
  LocationMarkerSubType.ATTENTION_TO_MARKER_SUBTYPE: settings.MARKER_SYMBOL_NAME.ATTENTION_MARKER}
-_STATIC_MARKER_CULL_DISTANCE = 2000
+_STATIC_MARKER_CULL_DISTANCE = 1800
 _STATIC_MARKER_MIN_SCALE = 60.0
 _BASE_MARKER_MIN_SCALE = 100.0
 RANDOM_BATTLE_BASE_ID = 7
@@ -92,7 +92,7 @@ class MarkerPlugin(IPlugin):
     def getMarkerType(self):
         return MarkerType.INVALID_MARKER_TYPE
 
-    def getMarkerSubtype(self, markerID):
+    def getMarkerSubtype(self, targetID):
         return INVALID_MARKER_SUBTYPE
 
     def _createMarkerWithPosition(self, symbol, position, active=True):
@@ -222,13 +222,11 @@ class EventBusPlugin(MarkerPlugin):
         self._parentObj.setVisible(not self._parentObj.isVisible())
 
 
-class ChatCommunicationComponent(object):
+class ChatCommunicationComponent(IPlugin):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
-    def __init__(self, parentObj):
-        self._parentObj = parentObj
-
     def start(self):
+        super(ChatCommunicationComponent, self).start()
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onReplyFeedbackReceived += self._onReplyFeedbackReceived
@@ -238,6 +236,7 @@ class ChatCommunicationComponent(object):
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onReplyFeedbackReceived -= self._onReplyFeedbackReceived
+        super(ChatCommunicationComponent, self).stop()
         return
 
     def _getMarkerFromTargetID(self, targetID, markerType):
@@ -269,7 +268,7 @@ class ChatCommunicationComponent(object):
         oldState = marker.getState()
         if marker.getReplyCount() == 0:
             self._setMarkerReplied(marker, False)
-            if marker.getActiveCommandID() is not None and marker.getActiveCommandID() == -1:
+            if marker.getActiveCommandID() is not None and marker.getActiveCommandID() == INVALID_COMMAND_ID:
                 newState = ReplyStateForMarker.NO_ACTION
             else:
                 newState = ReplyStateForMarker.CREATE_STATE
@@ -376,6 +375,7 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
         feedback = self.sessionProvider.shared.feedback
         vProxy = feedback.getVehicleProxy(vehicleID)
         vInfo = self.__arenaDP.getVehicleInfo(vehicleID)
+        self._vehicleID = vehicleID
         if vehicleID in self._markers:
             marker = self._markers[vehicleID]
             if marker.setActive(True) and vProxy is not None:
@@ -389,22 +389,25 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
         return
 
     def _addMarker(self, vehicleID):
-        self._hideAllMarkers()
+        if self._vehicleID is not None:
+            self._hideAllMarkers()
         if vehicleID is not None:
             self._onVehicleMarkerAdded(vehicleID)
         return
 
-    def _hideAllMarkers(self, event=None):
+    def _hideAllMarkers(self, event=None, clearVehicleID=True):
         if event and not event.ctx.get('vehicle'):
             self._vehicleID = None
         for vehicleID in self._markers:
-            self._hideVehicleMarker(vehicleID)
+            self._hideVehicleMarker(vehicleID, clearVehicleID)
 
         return
 
-    def _hideVehicleMarker(self, vehicleID):
+    def _hideVehicleMarker(self, vehicleID, clearVehicleID=True):
         if vehicleID in self._markers:
             marker = self._markers[vehicleID]
+            if clearVehicleID:
+                self._vehicleID = None
             if marker.setActive(False):
                 markerID = marker.getMarkerID()
                 self._setMarkerActive(markerID, False)
@@ -448,7 +451,7 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
     def __ShowExtendedInfo(self, event):
         isDown = event.ctx['isDown']
         self._showExtendedInfo = isDown if isDown is not None else False
-        self._hideAllMarkers()
+        self._hideAllMarkers(clearVehicleID=False)
         if self._showExtendedInfo:
             if self.settingsCore.getSetting(MARKERS.ENEMY).get(self.__markerAltAimMarker2D):
                 self._addMarker(self._vehicleID)
@@ -469,14 +472,14 @@ class VehicleMarkerTargetPluginReplayPlaying(VehicleMarkerTargetPlugin):
 class VehicleMarkerTargetPluginReplayRecording(VehicleMarkerTargetPlugin):
 
     def _addMarker(self, vehicleID):
+        super(VehicleMarkerTargetPluginReplayRecording, self)._addMarker(vehicleID)
         if BattleReplay.g_replayCtrl.isRecording:
             BattleReplay.g_replayCtrl.serializeCallbackData(CallbackDataNames.SHOW_AUTO_AIM_MARKER, (vehicleID,))
-        super(VehicleMarkerTargetPluginReplayRecording, self)._addMarker(vehicleID)
 
-    def _hideVehicleMarker(self, vehicleID):
+    def _hideVehicleMarker(self, vehicleID, clearVehicleID=True):
         if BattleReplay.g_replayCtrl.isRecording:
-            BattleReplay.g_replayCtrl.serializeCallbackData(CallbackDataNames.HIDE_AUTO_AIM_MARKER, (vehicleID,))
-        super(VehicleMarkerTargetPluginReplayRecording, self)._hideVehicleMarker(vehicleID)
+            BattleReplay.g_replayCtrl.serializeCallbackData(CallbackDataNames.HIDE_AUTO_AIM_MARKER, (vehicleID, clearVehicleID))
+        super(VehicleMarkerTargetPluginReplayRecording, self)._hideVehicleMarker(vehicleID, clearVehicleID)
 
 
 _EQUIPMENT_DEFAULT_INTERVAL = 1.0
@@ -548,17 +551,15 @@ class AreaStaticMarkerPlugin(MarkerPlugin, ChatCommunicationComponent):
         self._markers = {}
         self.__defaultPostfix = 0
         self.__clazz = clazz
-        ChatCommunicationComponent.__init__(self, parentObj)
 
     def start(self):
         super(AreaStaticMarkerPlugin, self).start()
-        ChatCommunicationComponent.start(self)
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onStaticMarkerAdded += self.__onStaticMarkerAdded
             ctrl.onStaticMarkerRemoved += self.__onStaticMarkerRemoved
             ctrl.setInFocusForPlayer += self.__setInFocusForPlayer
-            g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
+        g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
         vStateCtrl = self.sessionProvider.shared.vehicleState
         if vStateCtrl is not None:
             vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
@@ -571,14 +572,15 @@ class AreaStaticMarkerPlugin(MarkerPlugin, ChatCommunicationComponent):
             ctrl.onStaticMarkerAdded -= self.__onStaticMarkerAdded
             ctrl.onStaticMarkerRemoved -= self.__onStaticMarkerRemoved
             ctrl.setInFocusForPlayer -= self.__setInFocusForPlayer
+        g_playerEvents.onArenaPeriodChange -= self.__onArenaPeriodChange
         vStateCtrl = self.sessionProvider.shared.vehicleState
         if vStateCtrl is not None:
             vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
         for markerKey in self._markers.iterkeys():
             self._destroyMarker(self._markers[markerKey].getMarkerID())
 
-        super(AreaStaticMarkerPlugin, self).stop()
-        ChatCommunicationComponent.stop(self)
+        self._markers.clear()
+        super(AreaStaticMarkerPlugin, self).fini()
         return
 
     def getMarkerType(self):
@@ -589,21 +591,16 @@ class AreaStaticMarkerPlugin(MarkerPlugin, ChatCommunicationComponent):
             if self._markers[targetID].getMarkerID() == markerID:
                 return targetID
 
-    def getMarkerSubtype(self, markerID):
-        if markerID not in self._markers:
+        return INVALID_MARKER_ID
+
+    def getMarkerSubtype(self, targetID):
+        if targetID not in self._markers:
             return INVALID_MARKER_SUBTYPE
-        markerSubtypeName = self._markers[markerID].getMarkerSubtype()
+        markerSubtypeName = self._markers[targetID].getMarkerSubtype()
         if markerSubtypeName not in COMMAND_NAME_TO_LOCATION_MARKER_SUBTYPE.values():
             _logger.warning("Marker subtype name '%s' is not supported.", markerSubtypeName)
             return INVALID_MARKER_SUBTYPE
         return markerSubtypeName
-
-    def _getMarkerFromMarkerID(self, markerID):
-        for marker in self._markers.itervalues():
-            if marker.getMarkerID() == markerID:
-                return marker
-
-        return None
 
     def _getMarkerFromTargetID(self, targetID, markerType):
         return None if targetID not in self._markers or markerType != self.getMarkerType() else self._markers[targetID]
@@ -709,11 +706,9 @@ class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
         self.__personalTeam = 0
         self.__clazz = clazz
         self._markers = {}
-        ChatCommunicationComponent.__init__(self, parentObj)
 
     def start(self):
         super(TeamsOrControlsPointsPlugin, self).start()
-        ChatCommunicationComponent.start(self)
         g_playerEvents.onTeamChanged += self.__onTeamChanged
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
@@ -738,7 +733,6 @@ class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
             vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
         self.__removeExistingMarkers()
         super(TeamsOrControlsPointsPlugin, self).stop()
-        ChatCommunicationComponent.stop(self)
         return
 
     def __removeExistingMarkers(self):
@@ -755,24 +749,14 @@ class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
             if markerID == marker.getMarkerID():
                 return baseID
 
-    def getMarkerSubtype(self, markerID):
-        foundMarker = None
-        for _, marker in self._markers.iteritems():
-            if markerID == marker.getMarkerID():
-                foundMarker = marker
-                break
+        return INVALID_MARKER_ID
 
+    def getMarkerSubtype(self, targetID):
+        foundMarker = self._markers.get(targetID, None)
         if foundMarker is None:
             return INVALID_MARKER_SUBTYPE
         else:
             return DefaultMarkerSubType.ALLY_MARKER_SUBTYPE if foundMarker.getOwningTeam() == 'ally' else DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE
-
-    def _getMarkerFromMarkerID(self, markerID):
-        for marker in self._markers.itervalues():
-            if marker.getMarkerID() == markerID:
-                return marker
-
-        return None
 
     def _restart(self):
         self.__personalTeam = self.sessionProvider.getArenaDP().getNumberOfTeam()
@@ -841,7 +825,7 @@ class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
         if markerType != MarkerType.BASE_MARKER_TYPE or removeID not in self._markers:
             return
         marker = self._markers[removeID]
-        marker.setActiveCommandID(-1)
+        marker.setActiveCommandID(INVALID_COMMAND_ID)
         if marker.getReplyCount() != 0:
             marker.setIsRepliedByPlayer(False)
             self._setMarkerReplied(marker, False)

@@ -12,6 +12,7 @@ from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from skeletons.gui.battle_session import IBattleSessionProvider
+from vehicle_systems.stricted_loading import makeCallbackWeak
 _logger = logging.getLogger(__name__)
 _EquipmentAdapter = namedtuple('_EquipmentAdapter', ['areaWidth',
  'areaLength',
@@ -81,7 +82,7 @@ class LocationPointManager(CallbackDelayer):
             if 'visual' in visualData:
                 prereqs.append(visualData['visual'])
 
-        BigWorld.loadResourceListBG(prereqs, self.__onPrereqsLoaded)
+        BigWorld.loadResourceListBG(prereqs, makeCallbackWeak(self.__onPrereqsLoaded))
 
     def addLocationPoint(self, position, targetID, creatorID, cmdID=None, activeTime=_DEFAULT_ACTIVE_COMMAND_TIME, markerText='', numberOfReplies=0, isTargetForPlayer=False):
         ctrl = self.sessionProvider.shared.feedback

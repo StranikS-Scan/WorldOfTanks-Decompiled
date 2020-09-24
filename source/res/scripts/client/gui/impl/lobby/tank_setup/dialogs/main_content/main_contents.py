@@ -48,13 +48,16 @@ class AmmunitionBuyMainContent(MultipleItemsContent):
 
 class NeedRepairMainContent(BaseSubModelView):
 
-    def __init__(self, viewModel, repairPercentage):
+    def __init__(self, viewModel, repairPercentage, vehicle):
         super(NeedRepairMainContent, self).__init__(viewModel)
         self.__repairPercentage = repairPercentage
+        self.__vehicle = vehicle
 
     def onLoading(self, *args, **kwargs):
         super(NeedRepairMainContent, self).onLoading(*args, **kwargs)
-        self.update()
+        with self._viewModel.transaction() as model:
+            model.setRepairPercentage(self.__repairPercentage)
+            model.setFreeAutoRepair(self.__vehicle.level == 1 and self.__vehicle.repairCost == 0)
 
     def update(self, repairPercentage=None):
         if repairPercentage is not None:

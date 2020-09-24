@@ -4,8 +4,8 @@ from collections import defaultdict
 import MusicControllerWWISE as _MC
 from Event import Event
 from constants import ARENA_PERIOD as _PERIOD
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.view.meta.WindowViewMeta import WindowViewMeta
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.app_loader import sf_lobby
 from gui.battle_control.arena_info.interfaces import IArenaPeriodController
@@ -432,11 +432,11 @@ class GuiAmbientsCtrl(object):
 
     def _restartSounds(self):
         result = []
-        for vt in (ViewTypes.TOP_WINDOW,
-         ViewTypes.WINDOW,
-         ViewTypes.LOBBY_TOP_SUB,
-         ViewTypes.LOBBY_SUB):
-            result.extend(self._customEnvs[vt].values())
+        for layer in (WindowLayer.TOP_WINDOW,
+         WindowLayer.WINDOW,
+         WindowLayer.SUB_VIEW,
+         WindowLayer.TOP_SUB_VIEW):
+            result.extend(self._customEnvs[layer].values())
 
         result.append(self._spaceEnv)
         music, ambient = EmptySound(), EmptySound()
@@ -490,9 +490,9 @@ class GuiAmbientsCtrl(object):
         SOUND_DEBUG('Leaving GUI space', spaceID, spaceID in self._spaces)
         if self.app is not None and self.app.containerManager is not None and spaceID in self._spaces:
             customViews = []
-            for vt in (ViewTypes.TOP_WINDOW, ViewTypes.WINDOW, ViewTypes.LOBBY_SUB):
-                container = self.app.containerManager.getContainer(vt)
-                for viewAlias in self._customEnvs[vt].iterkeys():
+            for layer in (WindowLayer.TOP_WINDOW, WindowLayer.WINDOW, WindowLayer.SUB_VIEW):
+                container = self.app.containerManager.getContainer(layer)
+                for viewAlias in self._customEnvs[layer].iterkeys():
                     view = container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: viewAlias})
                     if view is not None:
                         customViews.append(view)
@@ -510,7 +510,7 @@ class GuiAmbientsCtrl(object):
 
     def __onViewDisposed(self, view):
         uniqueName = view.getUniqueName()
-        if uniqueName in self._customEnvs[view.viewType]:
+        if uniqueName in self._customEnvs[view.layer]:
             self.__removeSoundEnv(view, uniqueName)
             view.onDispose -= self.__onViewDisposed
             self._restartSounds()
@@ -518,7 +518,7 @@ class GuiAmbientsCtrl(object):
     def __onEnvChangeRequested(self, event):
         view = event.ctx
         uniqueName = view.getUniqueName()
-        if uniqueName in self._customEnvs[view.viewType]:
+        if uniqueName in self._customEnvs[view.layer]:
             self.__removeSoundEnv(view, uniqueName)
         self.__registerSoundEnv(view)
         self._restartSounds()
@@ -528,16 +528,16 @@ class GuiAmbientsCtrl(object):
         if soundEnvClass is not None:
             alias = view.alias
             SOUND_DEBUG('Custom sound environ has been detected', alias, soundEnvClass)
-            self._customEnvs[view.viewType][view.getUniqueName()] = self._buildSoundEnv(soundEnvClass)
+            self._customEnvs[view.layer][view.getUniqueName()] = self._buildSoundEnv(soundEnvClass)
             view.onDispose += self.__onViewDisposed
         else:
             SOUND_DEBUG('Custom sound environ has not been detected', view)
         return
 
     def __removeSoundEnv(self, view, uniqueName):
-        env = self._clearSoundEnv(self._customEnvs[view.viewType][uniqueName], view)
+        env = self._clearSoundEnv(self._customEnvs[view.layer][uniqueName], view)
         SOUND_DEBUG('Custom sound environ has been stopped', view.alias, env)
-        del self._customEnvs[view.viewType][uniqueName]
+        del self._customEnvs[view.layer][uniqueName]
 
     def __onAmbientChanged(self, ambient):
         SOUND_DEBUG('Ambient has been changed', ambient)

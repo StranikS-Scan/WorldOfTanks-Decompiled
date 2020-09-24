@@ -2478,5 +2478,116 @@
         </item>
       </value>
     </badge>
+    <badge>
+      <name>	ranked_s9_gold	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	95	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	5.01	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	20	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	3	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	red	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+        <item>
+          <name>	realm	</name>
+          <type>	dict	</type>
+          <value>
+            <item>
+              <name>	include	</name>
+              <type>	list	</type>
+              <value>
+                <item>	CN	</item>
+              </value>
+            </item>
+          </value>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	ranked_s9_silver	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	96	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	5.02	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	20	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	2	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	red	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+        <item>
+          <name>	realm	</name>
+          <type>	dict	</type>
+          <value>
+            <item>
+              <name>	include	</name>
+              <type>	list	</type>
+              <value>
+                <item>	CN	</item>
+              </value>
+            </item>
+          </value>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	ranked_s9_bronze	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	97	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	5.03	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	20	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	red	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+        <item>
+          <name>	realm	</name>
+          <type>	dict	</type>
+          <value>
+            <item>
+              <name>	include	</name>
+              <type>	list	</type>
+              <value>
+                <item>	CN	</item>
+              </value>
+            </item>
+          </value>
+        </item>
+      </value>
+    </badge>
   </badges>
 </badges.xml>

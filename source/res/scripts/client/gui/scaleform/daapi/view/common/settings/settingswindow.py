@@ -10,6 +10,7 @@ from account_helpers.settings_core.settings_constants import SETTINGS_GROUP
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from account_helpers.counter_settings import getNewSettings, invalidateSettings
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SETTINGS import SETTINGS
 from Vibroeffects import VibroManager
@@ -28,6 +29,9 @@ from gui.shared.formatters import icons
 from gui import makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
+from uilogging.decorators import loggerTarget, loggerEntry, settingsLog
+from uilogging.ibc.constants import IBC_LOG_KEYS, IBC_SETTINGS_MAP
+from uilogging.ibc.loggers import IBCLogger
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IAnonymizerController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -59,6 +63,7 @@ def _delayCall(delay, function):
         BigWorld.callback(delay, function)
 
 
+@loggerTarget(logKey=IBC_LOG_KEYS.IBC_SETTINGS_PAGE, loggerCls=IBCLogger)
 class SettingsWindow(SettingsWindowMeta):
     anonymizerController = dependency.descriptor(IAnonymizerController)
     settingsCore = dependency.descriptor(ISettingsCore)
@@ -136,6 +141,7 @@ class SettingsWindow(SettingsWindowMeta):
         BigWorld.worldDrawEnabled(False)
         BigWorld.restartGame()
 
+    @loggerEntry
     def _populate(self):
         super(SettingsWindow, self)._populate()
         dataVO = [{'label': SETTINGS.FEEDBACK_TAB_DAMAGEINDICATOR,
@@ -204,6 +210,7 @@ class SettingsWindow(SettingsWindowMeta):
             newSettings = getNewSettings()
             self.as_setCountersDataS(newSettings)
 
+    @settingsLog(argsIndex=1, preProcessAction=lambda x: flashObject2Dict(x), argMap=IBC_SETTINGS_MAP)
     def onSettingsChange(self, settingName, settingValue):
         settingValue = flashObject2Dict(settingValue)
         LOG_DEBUG('onSettingsChange', settingName, settingValue)
@@ -327,12 +334,12 @@ class SettingsWindow(SettingsWindowMeta):
         return
 
     def openGammaWizard(self, x, y, size):
-        g_eventBus.handleEvent(events.LoadViewEvent(alias=VIEW_ALIAS.GAMMA_WIZARD, ctx={'x': x,
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.GAMMA_WIZARD), ctx={'x': x,
          'y': y,
          'size': size}), EVENT_BUS_SCOPE.DEFAULT)
 
     def openColorSettings(self):
-        g_eventBus.handleEvent(events.LoadViewEvent(alias=VIEW_ALIAS.COLOR_SETTING), EVENT_BUS_SCOPE.DEFAULT)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.COLOR_SETTING)), EVENT_BUS_SCOPE.DEFAULT)
 
     def __updateInterfaceScale(self):
         self.as_updateVideoSettingsS(self.params.getMonitorSettings())

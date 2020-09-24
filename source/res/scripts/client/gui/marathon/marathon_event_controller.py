@@ -1,16 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/marathon/marathon_event_controller.py
 import Event
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import ViewTypes
-from gui.marathon.autumn_marathon import AutumnMarathon
+from gui.marathon.marathon_event_dp import MarathonEvent
 from gui.app_loader.decorators import sf_lobby
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from helpers import dependency, isPlayerAccount
 from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-MARATHON_EVENTS = [AutumnMarathon()]
+MARATHON_EVENTS = [MarathonEvent()]
 DEFAULT_MARATHON_PREFIX = MARATHON_EVENTS[0].prefix if any(MARATHON_EVENTS) else None
 
 class MarathonEventsController(IMarathonEventsController, Notifiable):
@@ -114,7 +114,7 @@ class MarathonEventsController(IMarathonEventsController, Notifiable):
             if pyView.alias == VIEW_ALIAS.LOBBY_HANGAR:
                 self.__isInHangar = True
                 self.__tryShowRewardScreen()
-            elif pyView.viewType == ViewTypes.LOBBY_SUB:
+            elif pyView.layer == WindowLayer.SUB_VIEW:
                 self.__isInHangar = False
 
     def __onSyncCompleted(self, *args):

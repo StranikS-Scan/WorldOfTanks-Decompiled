@@ -75,7 +75,7 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         self.__positionOscillator = None
         self.__positionNoiseOscillator = None
         self.__dynamicCfg = CameraDynamicConfig()
-        self.__readCfg(dataSec)
+        self._readConfigs(dataSec)
         self.__cam = BigWorld.CursorCamera()
         self.__curSense = self._cfg['sensitivity']
         self.__onChangeControlMode = None
@@ -93,6 +93,10 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         self.__positionHysteresis = None
         self.__timeHysteresis = None
         return
+
+    @staticmethod
+    def _getConfigsKey():
+        return ArtyCamera.__name__
 
     def create(self, onChangeControlMode=None):
         super(ArtyCamera, self).create()
@@ -358,10 +362,16 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
             self.__positionNoiseOscillator.reset()
         self.__cam.target.a = math_utils.createTranslationMatrix(self.__positionOscillator.deviation + self.__positionNoiseOscillator.deviation)
 
-    def __readCfg(self, dataSec):
+    def _readConfigs(self, dataSec):
         if not dataSec:
             LOG_WARNING('Invalid section <artyMode/camera> in avatar_input_handler.xml')
-        self._baseCfg = dict()
+        super(ArtyCamera, self)._readConfigs(dataSec)
+        dynamicSection = dataSec['dynamics']
+        self.__dynamicCfg.readImpulsesConfig(dynamicSection)
+        self.__positionOscillator = createOscillatorFromSection(dynamicSection['oscillator'], False)
+        self.__positionNoiseOscillator = createOscillatorFromSection(dynamicSection['randomNoiseOscillatorFlat'])
+
+    def _readBaseCfg(self, dataSec):
         bcfg = self._baseCfg
         bcfg['keySensitivity'] = readFloat(dataSec, 'keySensitivity', 0.005, 10.0, 0.025)
         bcfg['sensitivity'] = readFloat(dataSec, 'sensitivity', 0.005, 10.0, 0.025)
@@ -374,18 +384,23 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         bcfg['highPitchThreshold'] = readFloat(dataSec, 'highPitchThreshold', 0.1, 10.0, 3.0)
         bcfg['hTimeThreshold'] = readFloat(dataSec, 'hysteresis/timeThreshold', 0.0, 10.0, 0.5)
         bcfg['hPositionThreshold'] = readFloat(dataSec, 'hysteresis/positionThreshold', 0.0, 100.0, 7.0)
-        ds = Settings.g_instance.userPrefs[Settings.KEY_CONTROL_MODE]
-        if ds is not None:
-            ds = ds['artyMode/camera']
-        self._userCfg = dict()
+
+    def _readUserCfg(self):
         ucfg = self._userCfg
+        dataSec = Settings.g_instance.userPrefs[Settings.KEY_CONTROL_MODE]
+        if dataSec is not None:
+            dataSec = dataSec['artyMode/camera']
         ucfg['horzInvert'] = False
         ucfg['vertInvert'] = False
-        ucfg['keySensitivity'] = readFloat(ds, 'keySensitivity', 0.0, 10.0, 1.0)
-        ucfg['sensitivity'] = readFloat(ds, 'sensitivity', 0.0, 10.0, 1.0)
-        ucfg['scrollSensitivity'] = readFloat(ds, 'scrollSensitivity', 0.0, 10.0, 1.0)
-        ucfg['camDist'] = readFloat(ds, 'camDist', 0.0, 60.0, 0.0)
-        self._cfg = dict()
+        ucfg['keySensitivity'] = readFloat(dataSec, 'keySensitivity', 0.0, 10.0, 1.0)
+        ucfg['sensitivity'] = readFloat(dataSec, 'sensitivity', 0.0, 10.0, 1.0)
+        ucfg['scrollSensitivity'] = readFloat(dataSec, 'scrollSensitivity', 0.0, 10.0, 1.0)
+        ucfg['camDist'] = readFloat(dataSec, 'camDist', 0.0, 60.0, 0.0)
+        return
+
+    def _makeCfg(self):
+        bcfg = self._baseCfg
+        ucfg = self._userCfg
         cfg = self._cfg
         cfg['keySensitivity'] = bcfg['keySensitivity']
         cfg['sensitivity'] = bcfg['sensitivity']
@@ -404,8 +419,3 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         cfg['camDist'] = ucfg['camDist']
         cfg['horzInvert'] = ucfg['horzInvert']
         cfg['vertInvert'] = ucfg['vertInvert']
-        dynamicSection = dataSec['dynamics']
-        self.__dynamicCfg.readImpulsesConfig(dynamicSection)
-        self.__positionOscillator = createOscillatorFromSection(dynamicSection['oscillator'], False)
-        self.__positionNoiseOscillator = createOscillatorFromSection(dynamicSection['randomNoiseOscillatorFlat'])
-        return

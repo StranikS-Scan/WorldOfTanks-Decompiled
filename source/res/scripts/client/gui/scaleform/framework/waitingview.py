@@ -33,8 +33,8 @@ class WaitingView(WaitingViewMeta, IWaitingWidget):
         self.__callback = None
         return
 
-    def showWaiting(self, messageID):
-        self.as_showWaitingS(backport.text(messageID))
+    def showWaiting(self, messageID, softStart=False):
+        self.as_showWaitingS(backport.text(messageID), softStart)
 
     def showAwards(self, value):
         self.as_showAwardsS(value)

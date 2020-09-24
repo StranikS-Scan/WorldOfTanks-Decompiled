@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/dialogs/exchange_with_items.py
 import logging
-from frameworks.wulf import ViewSettings, ViewFlags
+from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.common.buy_and_exchange_bottom_content_type import BuyAndExchangeBottomContentType
 from gui.impl.gen.view_models.views.lobby.exchange.exchange_with_items_model import ExchangeWithItemsModel
@@ -59,7 +59,7 @@ class ExchangeToBuyItems(ExchangeWithItems):
     __slots__ = ()
 
     def __init__(self, itemsCountMap):
-        settings = ViewSettings(layoutID=R.views.lobby.tanksetup.dialogs.ExchangeToBuyItems(), flags=ViewFlags.TOP_WINDOW_VIEW, model=ExchangeWithItemsModel())
+        settings = ViewSettings(layoutID=R.views.lobby.tanksetup.dialogs.ExchangeToBuyItems(), model=ExchangeWithItemsModel())
         itemsCountMap = itemsCountMap
         items = self._itemsCache.items.getItems(criteria=REQ_CRITERIA.CUSTOM(lambda i: i.intCD in itemsCountMap)).values()
         super(ExchangeToBuyItems, self).__init__(settings=settings, items=items, price=sum([ item.getBuyPrice().price * itemsCountMap[item.intCD] for item in items ], ZERO_MONEY))
@@ -71,5 +71,5 @@ class ExchangeToUpgradeDevice(ExchangeWithItems):
     def __init__(self, device):
         if not device.isUpgradable:
             _logger.warning("Device doesn't upgradable!")
-        settings = ViewSettings(layoutID=R.views.lobby.tanksetup.dialogs.ExchangeToUpgradeItems(), flags=ViewFlags.TOP_WINDOW_VIEW, model=ExchangeWithItemsModel())
+        settings = ViewSettings(layoutID=R.views.lobby.tanksetup.dialogs.ExchangeToUpgradeItems(), model=ExchangeWithItemsModel())
         super(ExchangeToUpgradeDevice, self).__init__(settings=settings, items=[device], price=device.getUpgradePrice(self._itemsCache.items).price if device.isUpgradable else ZERO_MONEY)

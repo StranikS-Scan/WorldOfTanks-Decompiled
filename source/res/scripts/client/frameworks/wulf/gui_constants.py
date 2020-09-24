@@ -17,52 +17,24 @@ class ViewFlags(CONST_CONTAINER):
     POP_OVER_DECORATOR = 4 | WINDOW_DECORATOR
     COMPONENT = 16
     OLD_STYLE_VIEW = 32
-    MARKER_VIEW = 256 | OLD_STYLE_VIEW
-    WINDOW_VIEW = 512 | OLD_STYLE_VIEW
-    BROWSER_VIEW = 768 | OLD_STYLE_VIEW
-    TOP_WINDOW_VIEW = 1024 | OLD_STYLE_VIEW
-    COMPONENT_VIEW = 1280 | OLD_STYLE_VIEW
-    OVERLAY_VIEW = 1536 | OLD_STYLE_VIEW
-    SERVICE_LAYOUT_VIEW = 1792 | OLD_STYLE_VIEW
-    WAITING_VIEW = 2048 | OLD_STYLE_VIEW
-    CURSOR_VIEW = 2304 | OLD_STYLE_VIEW
     LOBBY_SUB_VIEW = 4096 | OLD_STYLE_VIEW
     LOBBY_TOP_SUB_VIEW = 4352 | OLD_STYLE_VIEW
     VIEW_TYPE_MASK = 65520
 
     @classmethod
     def getViewType(cls, flags):
-        from gui.Scaleform.framework import ViewTypes
         flags = flags & ViewFlags.VIEW_TYPE_MASK
         if flags == ViewFlags.VIEW:
-            return ViewTypes.INVALID
+            return WindowLayer.UNDEFINED
         if flags == ViewFlags.WINDOW_DECORATOR:
-            return ViewTypes.INVALID
+            return WindowLayer.UNDEFINED
         if flags == ViewFlags.COMPONENT:
-            return ViewTypes.INVALID
-        if flags == ViewFlags.MARKER_VIEW:
-            return ViewTypes.MARKER
+            return WindowLayer.UNDEFINED
         if flags == ViewFlags.OLD_STYLE_VIEW:
-            return ViewTypes.VIEW
+            return WindowLayer.VIEW
         if flags == ViewFlags.LOBBY_SUB_VIEW:
-            return ViewTypes.LOBBY_SUB
-        if flags == ViewFlags.LOBBY_TOP_SUB_VIEW:
-            return ViewTypes.LOBBY_TOP_SUB
-        if flags == ViewFlags.WINDOW_VIEW:
-            return ViewTypes.WINDOW
-        if flags == ViewFlags.BROWSER_VIEW:
-            return ViewTypes.BROWSER
-        if flags == ViewFlags.TOP_WINDOW_VIEW:
-            return ViewTypes.TOP_WINDOW
-        if flags == ViewFlags.COMPONENT_VIEW:
-            return ViewTypes.COMPONENT
-        if flags == ViewFlags.SERVICE_LAYOUT_VIEW:
-            return ViewTypes.SERVICE_LAYOUT
-        if flags == ViewFlags.OVERLAY_VIEW:
-            return ViewTypes.OVERLAY
-        if flags == ViewFlags.WAITING_VIEW:
-            return ViewTypes.WAITING
-        return ViewTypes.CURSOR if flags == ViewFlags.CURSOR_VIEW else None
+            return WindowLayer.SUB_VIEW
+        return WindowLayer.TOP_SUB_VIEW if flags == ViewFlags.LOBBY_TOP_SUB_VIEW else None
 
 
 class ViewEventType(CONST_CONTAINER):
@@ -88,18 +60,16 @@ class WindowFlags(CONST_CONTAINER):
     GLOBAL_WINDOW = 2
     MAIN_WINDOW = 4 | GLOBAL_WINDOW
     DIALOG = 16 | WINDOW
-    BROWSER = 32 | WINDOW
-    POP_OVER = 48 | WINDOW
-    TOOLTIP = 64 | WINDOW
-    CONTEXT_MENU = 80 | WINDOW
-    DROP_DOWN = 96 | WINDOW
-    OVERLAY = 112 | WINDOW
-    SERVICE_WINDOW = 128 | GLOBAL_WINDOW
-    WAITING = 144 | GLOBAL_WINDOW
+    POP_OVER = 32 | WINDOW
+    TOOLTIP = 48 | WINDOW
+    CONTEXT_MENU = 64 | WINDOW
+    DROP_DOWN = 80 | WINDOW
+    SERVICE_WINDOW = 96 | GLOBAL_WINDOW
+    WAITING = 112 | GLOBAL_WINDOW
     WINDOW_TYPE_MASK = 255
     WINDOW_MINIMIZED = 256
     WINDOW_MAXIMIZED = 512
-    WINDOW_FULL_SCREEN = 768
+    WINDOW_FULLSCREEN = 1024
     WINDOW_STATE_MASK = 3840
     WINDOW_MODAL = 4096
     APP_MODAL = 8192
@@ -107,17 +77,22 @@ class WindowFlags(CONST_CONTAINER):
 
 
 class WindowLayer(CONST_CONTAINER):
-    ROOT = 0
-    MARKER = 1
-    VIEW = 2
-    WINDOW = 3
-    BROWSER = 4
-    TOP_WINDOW = 5
-    COMPONENT = 6
-    SERVICE_LAYOUT = 7
-    OVERLAY = 8
-    WAITING = 9
-    CURSOR = 10
+    UNDEFINED = 0
+    ROOT = 1
+    MARKER = 2
+    VIEW = 3
+    SUB_VIEW = 4
+    TOP_SUB_VIEW = 5
+    WINDOW = 6
+    FULLSCREEN_WINDOW = 7
+    SYSTEM_MESSAGE = 8
+    TOP_WINDOW = 9
+    OVERLAY = 10
+    IME = 11
+    SERVICE_LAYOUT = 12
+    TOOLTIP = 13
+    CURSOR = 14
+    WAITING = 15
 
 
 class PropertyType(CONST_CONTAINER):

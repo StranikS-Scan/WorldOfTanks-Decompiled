@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/tooltips/royale_lobby_builders.py
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.view.lobby.battle_royale.tooltips import VehicleTooltipData, BattleProgressionTooltipData, EquipmentsTooltipData
 from gui.Scaleform.daapi.view.lobby.battle_royale.tooltips.perf_attention_tooltip import PerfAttentionSimpleTooltip, PerfAttentionAdvancedTooltip
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.BATTLEROYALE_ALIASES import BATTLEROYALE_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -30,7 +30,7 @@ class _BattleRoyaleHangarVehInfoContext(contexts.HangarContext):
         return None
 
     def getVehicle(self):
-        hangarVehConfigurator = self.app.containerManager.getContainer(ViewTypes.LOBBY_SUB).getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: BATTLEROYALE_ALIASES.HANGAR_VEH_INFO_VIEW})
+        hangarVehConfigurator = self.app.containerManager.getContainer(WindowLayer.SUB_VIEW).getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: BATTLEROYALE_ALIASES.HANGAR_VEH_INFO_VIEW})
         return hangarVehConfigurator.getSelectedVehicle()
 
     def buildItem(self, intCD, slotIdx=0, historicalBattleID=-1):

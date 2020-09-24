@@ -173,7 +173,7 @@ def getTypeInfoByIndex(typeIndex):
 
 
 def getTypeOfCompactDescr(compactDescr):
-    cdType = type(compactDescr)
+    cdType = compactDescr.__class__
     if cdType is int or cdType is long:
         itemTypeID = int(compactDescr & 15)
         if itemTypeID == 0:
@@ -192,11 +192,8 @@ def getTypeOfCompactDescr(compactDescr):
 def makeIntCompactDescrByID(itemTypeName, nationID, itemID):
     itemTypeID = ITEM_TYPES[itemTypeName]
     if itemTypeID <= 15:
-        header = itemTypeID + (nationID << 4)
-        return (itemID << 8) + header
-    if itemTypeID <= 255:
-        header = 0 + (nationID << 4)
-        return (itemTypeID << 24) + (itemID << 8) + header
+        return (itemID << 8) + itemTypeID + (nationID << 4)
+    return (itemTypeID << 24) + (itemID << 8) + (nationID << 4) if itemTypeID <= 255 else None
 
 
 def parseIntCompactDescr(compactDescr):

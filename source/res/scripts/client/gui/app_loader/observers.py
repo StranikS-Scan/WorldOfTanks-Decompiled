@@ -7,7 +7,7 @@ from frameworks.state_machine import SingleStateObserver
 from frameworks.state_machine import BaseStateObserver
 from frameworks.state_machine import StateEvent
 from frameworks.state_machine import StateObserversContainer
-from gui.Scaleform.framework.ViewTypes import TOP_WINDOW
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.app_loader import spaces
 from helpers import dependency
@@ -209,7 +209,7 @@ class ReplayRewindObserver(AppLoaderObserver):
     def onEnterState(self, event=None):
         app = self._proxy.getDefBattleApp()
         if app is not None:
-            topWindowContainer = app.containerManager.getContainer(TOP_WINDOW)
+            topWindowContainer = app.containerManager.getContainer(WindowLayer.TOP_WINDOW)
             if topWindowContainer is not None:
                 pyView = topWindowContainer.getView({POP_UP_CRITERIA.VIEW_ALIAS: 'simpleDialog'}) or topWindowContainer.getView({POP_UP_CRITERIA.VIEW_ALIAS: 'bootcampSimpleDialog'})
                 if pyView is not None:

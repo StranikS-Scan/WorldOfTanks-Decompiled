@@ -1,9 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/events.py
+import logging
+import typing
 from collections import namedtuple
 from gui.shared.event_bus import SharedEvent
 from shared_utils import CONST_CONTAINER
-__all__ = ('ArgsEvent', 'LoadEvent', 'ComponentEvent', 'LoadViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginCreateEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'HasCtxEvent', 'AmmunitionSetupViewEvent')
+if typing.TYPE_CHECKING:
+    from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams
+    from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+__all__ = ('ArgsEvent', 'ComponentEvent', 'LoadViewEvent', 'LoadGuiImplViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'GameEvent', 'BootcampEvent', 'ViewEventType', 'OpenLinkEvent', 'ChannelManagementEvent', 'PreBattleChannelEvent', 'AmmunitionSetupViewEvent', 'HasCtxEvent', 'DogTagsEvent')
+_logger = logging.getLogger(__name__)
 
 class HasCtxEvent(SharedEvent):
 
@@ -32,8 +38,6 @@ class GameEvent(HasCtxEvent):
     SCREEN_SHOT_MADE = 'game/screenShotMade'
     SHOW_EXTENDED_INFO = 'game/showExtendedInfo'
     CHOICE_CONSUMABLE = 'game/choiceConsumable'
-    HELP = 'game/help'
-    HELP_DETAILED = 'game/helpWheeled'
     MINIMAP_CMD = 'game/minimapCmd'
     RADIAL_MENU_CMD = 'game/radialMenuCmd'
     TOGGLE_GUI = 'game/toggleGUI'
@@ -88,10 +92,6 @@ class ArgsEvent(HasCtxEvent):
         self.alias = alias
 
 
-class LoadEvent(HasCtxEvent):
-    EXIT_FROM_RESEARCH = 'exitFromResearch'
-
-
 class FocusEvent(HasCtxEvent):
     COMPONENT_FOCUSED = 'onComponentFocused'
 
@@ -107,21 +107,13 @@ class ComponentEvent(SharedEvent):
         self.alias = alias
 
 
-class LoadViewEvent(HasCtxEvent):
-
-    def __init__(self, alias=None, name=None, ctx=None):
-        super(LoadViewEvent, self).__init__(alias, ctx)
-        self.name = name if name is not None else alias
-        return
-
-
 class ViewEventType(CONST_CONTAINER):
     LOAD_VIEW = 'viewEventLoadView'
-    LOAD_UB_VIEW = 'ubViewEventLoadView'
+    LOAD_GUI_IMPL_VIEW = 'ubViewEventLoadView'
     LOAD_VIEWS_CHAIN = 'viewEventLoadViewChain'
     PRELOAD_VIEW = 'viewEventPreLoadView'
     DESTROY_VIEW = 'viewEventDestroyView'
-    DESTROY_UB_VIEW = 'ubViewEventDestroyView'
+    DESTROY_GUI_IMPL_VIEW = 'ubViewEventDestroyView'
 
 
 class _ViewEvent(HasCtxEvent):
@@ -132,14 +124,19 @@ class _ViewEvent(HasCtxEvent):
         self.name = name
 
 
-class DirectLoadViewEvent(_ViewEvent):
+class LoadViewEvent(_ViewEvent):
 
     def __init__(self, loadParams, *args, **kwargs):
-        super(DirectLoadViewEvent, self).__init__(ViewEventType.LOAD_VIEW, loadParams.viewKey.alias, loadParams.viewKey.name, ctx=kwargs.get('ctx', None))
+        if isinstance(loadParams, str):
+            _logger.error('Wrong loadParams type for "%s"! Replace it by SFViewLoadParams.', loadParams)
+        super(LoadViewEvent, self).__init__(ViewEventType.LOAD_VIEW, loadParams.viewKey.alias, loadParams.viewKey.name, ctx=kwargs.get('ctx', None))
         self.loadParams = loadParams
         self.args = args
         self.kwargs = kwargs
         return
+
+    def __repr__(self):
+        return 'LoadViewEvent[loadParams={}, ctx={}, args={}, kwargs={}]'.format(repr(self.loadParams), self.ctx, self.args, self.kwargs)
 
 
 class LoadViewsChainEvent(_ViewEvent):
@@ -162,20 +159,21 @@ class DestroyViewEvent(_ViewEvent):
         super(DestroyViewEvent, self).__init__(ViewEventType.DESTROY_VIEW, alias, name)
 
 
-class LoadUnboundViewEvent(_ViewEvent):
+class LoadGuiImplViewEvent(_ViewEvent):
 
-    def __init__(self, layoutID, viewClass, scope, *args, **kwargs):
-        super(LoadUnboundViewEvent, self).__init__(ViewEventType.LOAD_UB_VIEW, layoutID)
-        self.viewClass = viewClass
-        self.scope = scope
+    def __init__(self, loadParams, *args, **kwargs):
+        super(LoadGuiImplViewEvent, self).__init__(ViewEventType.LOAD_GUI_IMPL_VIEW, loadParams.viewKey.alias)
+        self.loadParams = loadParams
+        self.viewClass = loadParams.viewClass
+        self.scope = loadParams.scope
         self.args = args
         self.kwargs = kwargs
 
 
-class DestroyUnboundViewEvent(_ViewEvent):
+class DestroyGuiImplViewEvent(_ViewEvent):
 
     def __init__(self, layoutID):
-        super(DestroyUnboundViewEvent, self).__init__(ViewEventType.DESTROY_UB_VIEW, layoutID)
+        super(DestroyGuiImplViewEvent, self).__init__(ViewEventType.DESTROY_GUI_IMPL_VIEW, layoutID)
 
 
 class BrowserEvent(HasCtxEvent):
@@ -206,7 +204,8 @@ class ShowDialogEvent(SharedEvent):
     SHOW_CONFIRM_C11N_SELL_DIALOG = 'showConfirmC11nSellDialog'
 
     def __init__(self, meta, handler):
-        super(ShowDialogEvent, self).__init__(meta.getEventType())
+        super(ShowDialogEvent, self).__init__(ViewEventType.LOAD_VIEW)
+        self.alias = meta.getEventType()
         self.meta = meta
         self.handler = handler
 
@@ -221,19 +220,7 @@ class LoginEvent(SharedEvent):
         self.errorMsg = errorMsg
 
 
-class LoginCreateEvent(SharedEvent):
-    CREATE_ACC = 'createAnAccount'
-
-    def __init__(self, eventType, alias, title, message, submit):
-        super(LoginCreateEvent, self).__init__(eventType=eventType)
-        self.title = title
-        self.message = message
-        self.submit = submit
-
-
 class LoginEventEx(LoginEvent):
-    SET_AUTO_LOGIN = 'setAutoLogin'
-    SET_LOGIN_QUEUE = 'setLoginQueue'
     ON_LOGIN_QUEUE_CLOSED = 'onLoginQueueClosed'
     SWITCH_LOGIN_QUEUE_TO_AUTO = 'switchLoginQueueToAuto'
 
@@ -296,6 +283,7 @@ class LobbySimpleEvent(HasCtxEvent):
     PREMIUM_BOUGHT = 'premiumBought'
     PREMIUM_XP_BONUS_CHANGED = 'premiumXPBonusChanged'
     WAITING_SHOWN = 'waitingShown'
+    WAITING_HIDDEN = 'waitingHidden'
     BATTLE_RESULTS_POSTED = 'battleResultsPosted'
     BATTLE_RESULTS_SHOW_QUEST = 'battleResultsWindowShowQuest'
     CHANGE_SOUND_ENVIRONMENT = 'changeSoundEnvironment'
@@ -422,21 +410,8 @@ class TutorialEvent(SharedEvent):
 
 
 class BootcampEvent(SharedEvent):
-    HINT_SHOW = 'HintShow'
-    HINT_HIDE = 'HintHide'
-    HINT_COMPLETE = 'HintComplete'
-    HINT_CLOSE = 'HintClose'
     SHOW_SECONDARY_HINT = 'ShowSecondaryHint'
     HIDE_SECONDARY_HINT = 'HideSecondaryHint'
-    SHOW_NEW_ELEMENTS = 'showNewElements'
-    ADD_HIGHLIGHT = 'ShowHighlight'
-    REMOVE_HIGHLIGHT = 'RemoveHighlight'
-    REMOVE_ALL_HIGHLIGHTS = 'RemoveAllHighlights'
-    SET_BATTLE_SELECTOR = 'SetBattleSelector'
-    CLOSE_PREBATTLE = 'ClosePrebattle'
-    QUEUE_DIALOG_SHOW = 'QueueDialogShow'
-    QUEUE_DIALOG_CLOSE = 'QueueDialogClose'
-    QUEUE_DIALOG_CANCEL = 'QueueDialogCancel'
 
     def __init__(self, eventType, eventId=0, eventArg=0):
         super(BootcampEvent, self).__init__(eventType)
@@ -743,3 +718,7 @@ class RadialMenuEvent(SharedEvent):
 
 class HangarSpacesSwitcherEvent(HasCtxEvent):
     SWITCH_TO_HANGAR_SPACE = 'hangarSpacesSwitcherEvent/SwitchToHangarSpace'
+
+
+class DogTagsEvent(SharedEvent):
+    COUNTERS_UPDATED = 'onCountersUpdated'

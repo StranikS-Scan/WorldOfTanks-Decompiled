@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/consumables/ammo_ctrl.py
+import logging
 import weakref
 from collections import namedtuple
 from math import fabs
@@ -18,6 +19,7 @@ from items import vehicles
 __all__ = ('AmmoController', 'AmmoReplayPlayer')
 _ClipBurstSettings = namedtuple('_ClipBurstSettings', 'size interval')
 _HUNDRED_PERCENT = 100.0
+_logger = logging.getLogger(__name__)
 
 class _GunSettings(namedtuple('_GunSettings', 'clip burst shots reloadEffect autoReload')):
 
@@ -423,6 +425,13 @@ class AmmoController(MethodsRules, IBattleController):
 
     @MethodsRules.delayable('setGunSettings')
     def setShells(self, intCD, quantity, quantityInClip):
+        player = BigWorld.player()
+        observedVehicleData = player.observedVehicleData.get(player.observedVehicleID)
+        if observedVehicleData is not None:
+            ammoCDs = [ ammoData[0] for ammoData in observedVehicleData.orderedAmmo ]
+            if intCD not in ammoCDs:
+                _logger.debug('Skip ammo with cd=%d , current ammoCDs are %s', intCD, str(ammoCDs))
+                return
         result = SHELL_SET_RESULT.UNDEFINED
         if intCD in self.__ammo:
             prevAmmo = self.__ammo[intCD]

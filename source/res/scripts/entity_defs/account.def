@@ -31,11 +31,11 @@
     <Interface>	AvatarCreator	</Interface>
   </Implements>
   <Properties>
-    <requiredVersion_11000>
+    <requiredVersion_11010>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ru_1.10.0_6	</Default>
-    </requiredVersion_11000>
+      <Default>	ct_1.10.1	</Default>
+    </requiredVersion_11010>
     <name>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
@@ -502,7 +502,7 @@
     <makeDenunciation>
       <Exposed></Exposed>
       <Arg>	OBJECT_ID	</Arg>
-      <Arg>	INT32	</Arg>
+      <Arg>	INT64	</Arg>
       <Arg>	INT8	</Arg>
     </makeDenunciation>
     <banUnbanUser>
@@ -519,9 +519,6 @@
       <Exposed></Exposed>
     </requestToken>
     <banForTKill></banForTKill>
-    <isRequestCooldown>
-      <Arg>	STRING	</Arg>
-    </isRequestCooldown>
     <invitationSendInBattle>
       <Arg>	INT64	</Arg>
       <Arg>	ARRAY	  <of>	INT64	</of>

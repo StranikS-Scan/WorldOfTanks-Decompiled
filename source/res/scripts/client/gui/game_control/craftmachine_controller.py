@@ -5,6 +5,7 @@ from adisp import process
 from constants import EnhancementsConfig as config
 from helpers import dependency
 from gui.wgcg.craftmachine.contexts import CraftmachineModulesInfoCtx
+from gui.wgcg.states import WebControllerStates
 from skeletons.gui.game_control import ICraftmachineController
 from skeletons.gui.web import IWebController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -26,12 +27,10 @@ class CraftmachineController(ICraftmachineController):
     def onDisconnected(self):
         self.__lobbyCtx.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
 
-    def onLobbyInited(self, event):
-        self.__onServerSettingsChange(self.__lobbyCtx.getServerSettings().getSettings())
-
     def onAccountBecomePlayer(self):
-        if self.__enabled and self.__enabledSync:
-            self.__updateModulesInfo()
+        if self.__webController.getStateID() == WebControllerStates.STATE_NOT_DEFINED:
+            self.__webController.invalidate()
+        self.__onServerSettingsChange(self.__lobbyCtx.getServerSettings().getSettings())
 
     def getModuleName(self, module):
         return self.__modules.get(str(module), '')
@@ -40,10 +39,12 @@ class CraftmachineController(ICraftmachineController):
         clansDiff = diff.get(config.SECTION_NAME, {})
         if config.ENABLED in clansDiff:
             self.__enabled = clansDiff[config.ENABLED]
-            self.onAccountBecomePlayer()
+            self.__updateModulesInfo()
 
     @process
     def __updateModulesInfo(self):
+        if not (self.__enabled and self.__enabledSync):
+            return
         response = yield self.__webController.sendRequest(ctx=CraftmachineModulesInfoCtx())
         if response.isSuccess():
             self.__enabledSync = False

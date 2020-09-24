@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/messengerBar/__init__.py
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.messengerBar.VehicleCompareCartButton import VehicleCompareCartButton
 from gui.Scaleform.daapi.view.lobby.messengerBar.session_stats_button import SessionStatsButton
-from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ViewTypes, ScopeTemplates
+from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ScopeTemplates, ComponentSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.app_loader import settings as app_settings
@@ -22,14 +23,14 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.messengerBar.NotificationListButton import NotificationListButton
     from notification.NotificationListView import NotificationListView
     from notification.NotificationPopUpViewer import NotificationPopUpViewer
-    return (GroupedViewSettings(VIEW_ALIAS.NOTIFICATIONS_LIST, NotificationListView, 'notificationsList.swf', ViewTypes.WINDOW, 'notificationsList', VIEW_ALIAS.NOTIFICATIONS_LIST, ScopeTemplates.WINDOW_VIEWED_MULTISCOPE),
-     ViewSettings(VIEW_ALIAS.CHANNEL_CAROUSEL, ChannelCarousel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.CONTACTS_LIST_BUTTON, ContactsListButton, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.VEHICLE_COMPARE_CART_BUTTON, VehicleCompareCartButton, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.MESSENGER_BAR, MessengerBar, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.NOTIFICATION_LIST_BUTTON, NotificationListButton, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(SESSION_STATS_CONSTANTS.SESSION_STATS_BUTTON_ALIAS, SessionStatsButton, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.SYSTEM_MESSAGES, NotificationPopUpViewer, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
+    return (GroupedViewSettings(VIEW_ALIAS.NOTIFICATIONS_LIST, NotificationListView, 'notificationsList.swf', WindowLayer.WINDOW, 'notificationsList', VIEW_ALIAS.NOTIFICATIONS_LIST, ScopeTemplates.WINDOW_VIEWED_MULTISCOPE),
+     ComponentSettings(VIEW_ALIAS.CHANNEL_CAROUSEL, ChannelCarousel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(VIEW_ALIAS.CONTACTS_LIST_BUTTON, ContactsListButton, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(VIEW_ALIAS.VEHICLE_COMPARE_CART_BUTTON, VehicleCompareCartButton, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(VIEW_ALIAS.MESSENGER_BAR, MessengerBar, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(VIEW_ALIAS.NOTIFICATION_LIST_BUTTON, NotificationListButton, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(SESSION_STATS_CONSTANTS.SESSION_STATS_BUTTON_ALIAS, SessionStatsButton, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(VIEW_ALIAS.SYSTEM_MESSAGES, NotificationPopUpViewer, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

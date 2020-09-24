@@ -2,9 +2,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/trainings/Trainings.py
 from adisp import process
 from constants import PREBATTLE_TYPE
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.view.lobby.trainings.trainings_list_base import TrainingsListBase
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.BATTLE_TYPES import BATTLE_TYPES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.prb_control.events_dispatcher import g_eventDispatcher
@@ -27,7 +28,7 @@ class Trainings(TrainingsListBase):
 
     def _dispose(self):
         self.removeListener(events.TrainingSettingsEvent.UPDATE_TRAINING_SETTINGS, self._createTrainingRoom, scope=EVENT_BUS_SCOPE.LOBBY)
-        window = self.app.containerManager.getView(ViewTypes.WINDOW, criteria={POP_UP_CRITERIA.VIEW_ALIAS: PREBATTLE_ALIASES.TRAINING_SETTINGS_WINDOW_PY})
+        window = self.app.containerManager.getView(WindowLayer.WINDOW, criteria={POP_UP_CRITERIA.VIEW_ALIAS: PREBATTLE_ALIASES.TRAINING_SETTINGS_WINDOW_PY})
         if window is not None:
             window.destroy()
         super(Trainings, self)._dispose()
@@ -44,5 +45,5 @@ class Trainings(TrainingsListBase):
 
     def createTrainingRequest(self):
         settings = TrainingSettingsCtx()
-        self.fireEvent(events.LoadViewEvent(PREBATTLE_ALIASES.TRAINING_SETTINGS_WINDOW_PY, ctx={'isCreateRequest': True,
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(PREBATTLE_ALIASES.TRAINING_SETTINGS_WINDOW_PY), ctx={'isCreateRequest': True,
          'settings': settings}), scope=EVENT_BUS_SCOPE.LOBBY)

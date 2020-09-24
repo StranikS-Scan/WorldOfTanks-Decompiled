@@ -4,12 +4,16 @@ import logging
 import math
 import operator
 from collections import namedtuple
+import BigWorld
 import personal_missions
+from dog_tags_common.components_config import componentConfigAdapter as cca
+from gui.dog_tag_composer import dogTagComposer
 from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import getEventPostBattleInfo, getBattlePassQuestInfo
 from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import getProgressionPostBattleInfo, parseEventID, getC11nProgressionLinkBtnParams
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.genConsts.PROGRESSIVEREWARD_CONSTANTS import PROGRESSIVEREWARD_CONSTANTS as prConst
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
+from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsSteelHunter
 from gui.battle_results.components import base
 from gui.battle_results.settings import PROGRESS_ACTION
 from gui.impl import backport
@@ -29,7 +33,6 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from battle_pass_common import BattlePassConsts
-from skeletons.gui.shared.hangar_spaces_switcher import IHangarSpacesSwitcher
 MIN_BATTLES_TO_SHOW_PROGRESS = 5
 _logger = logging.getLogger(__name__)
 
@@ -329,6 +332,51 @@ class QuestsProgressBlock(base.StatsBlock):
         return cmp(aQuest.getID(), bQuest.getID())
 
 
+class DogTagsProgressBlock(base.StatsBlock):
+    eventsCache = dependency.descriptor(IEventsCache)
+    lobbyContext = dependency.descriptor(ILobbyContext)
+    __slots__ = ()
+
+    def getVO(self):
+        vo = super(DogTagsProgressBlock, self).getVO()
+        return vo
+
+    @staticmethod
+    def createDogTagInfo(componentId, dogTagType):
+        compGrade = BigWorld.player().dogTags.getComponentProgress(componentId).grade
+        return {'title': DogTagsProgressBlock.__getInfoTitle(componentId, compGrade, dogTagType),
+         'description': DogTagsProgressBlock.__getInfoDescription(componentId, dogTagType),
+         'dogTagType': dogTagType,
+         'componentId': componentId,
+         'imageSrc': dogTagComposer.getComponentImage(componentId, compGrade),
+         'unlockType': cca.getComponentById(componentId).viewType.value.lower()}
+
+    @staticmethod
+    def __getInfoTitle(componentId, grade, dogTagType):
+        compTitle = dogTagComposer.getComponentTitle(componentId)
+        viewType = cca.getComponentById(componentId).viewType.value.lower()
+        strSource = R.strings.dogtags.postbattle.dyn(dogTagType).dyn(viewType).title()
+        return backport.text(strSource).format(title=compTitle, level=grade + 1)
+
+    @staticmethod
+    def __getInfoDescription(componentId, dogTagType):
+        viewType = cca.getComponentById(componentId).viewType.value.lower()
+        strSource = R.strings.dogtags.postbattle.dyn(dogTagType).dyn(viewType).description()
+        return backport.text(strSource)
+
+    def setRecord(self, result, reusable):
+        if not self.lobbyContext.getServerSettings().isDogTagInPostBattleEnabled():
+            return
+        dogTags = reusable.personal.getDogTagsProgress()
+        for compId in dogTags.get('unlockedComps', []):
+            info = self.createDogTagInfo(compId, 'unlock')
+            self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', info))
+
+        for compId in dogTags.get('upgradedComps', []):
+            info = self.createDogTagInfo(compId, 'upgrade')
+            self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', info))
+
+
 class ProgressiveRewardVO(base.StatsItem):
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -353,7 +401,6 @@ class ProgressiveRewardVO(base.StatsItem):
 
 class ProgressiveCustomizationVO(base.DirectStatsItem):
     _itemsCache = dependency.descriptor(IItemsCache)
-    __hangarSpacesSwitcher = dependency.descriptor(IHangarSpacesSwitcher)
     __slots__ = ()
 
     def getVO(self):
@@ -363,9 +410,7 @@ class ProgressiveCustomizationVO(base.DirectStatsItem):
             _, vehicleIntCD = parseEventID(questID)
             vehicle = self._itemsCache.items.getItemByCD(vehicleIntCD)
             linkBtnEnabled, linkBtnTooltip = getC11nProgressionLinkBtnParams(vehicle)
-            switchItems = self.__hangarSpacesSwitcher.itemsToSwitch
-            isBrSpace = self.__hangarSpacesSwitcher.currentItem == switchItems.BATTLE_ROYALE
-            if isBrSpace:
+            if currentHangarIsSteelHunter():
                 linkBtnEnabled = False
             self._value['linkBtnEnabled'] = linkBtnEnabled
             self._value['linkBtnTooltip'] = backport.text(linkBtnTooltip)

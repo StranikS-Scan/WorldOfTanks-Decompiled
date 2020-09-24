@@ -212,6 +212,36 @@
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
     </hint>
+    <hint>	DogTagHangarHint	  <item-id>	AccountButton	</item-id>
+      <text>	#dogtags:tutorial/hangar/playerProfile	</text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	enabled	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <condition>
+        <global-active>	_DogTagsEnabled	</global-active>
+      </condition>
+    </hint>
+    <hint>	DogTagProfileHint	  <item-id>	DogTagsWidget	</item-id>
+      <text>	#dogtags:tutorial/playerProfile/dogtag	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <update-runtime>	True	</update-runtime>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <condition>
+        <global-active>	_DogTagsEnabled	</global-active>
+      </condition>
+    </hint>
     <hint>	BattleSessionUpButtonTournamentHint	  <item-id>	BattleSessionUpButtonTournament	</item-id>
       <text>	#prebattle:upButton/hint	</text>
       <arrow>
@@ -386,6 +416,12 @@
       </arrow>
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
+      <checked-ui-state>
+        <simple-state>
+          <state>	visible	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
       <condition>
         <global-active>	_CollectibleVehiclePreviewEnabled	</global-active>
       </condition>

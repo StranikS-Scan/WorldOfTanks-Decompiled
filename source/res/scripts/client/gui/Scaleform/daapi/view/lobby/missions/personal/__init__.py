@@ -1,12 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/personal/__init__.py
 from operator import methodcaller
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.missions.personal.personal_missions_first_entry_award_view import PersonalMissionFirstEntryAwardView
 from gui.Scaleform.daapi.view.lobby.missions.personal.personal_missions_first_entry_view import PersonalMissionFirstEntryView
 from gui.Scaleform.daapi.view.lobby.missions.personal.tank_girls_popover import TankgirlsPopover
-from gui.Scaleform.framework import ViewSettings, ViewTypes, ScopeTemplates, GroupedViewSettings
+from gui.Scaleform.framework import ViewSettings, ScopeTemplates, GroupedViewSettings, ComponentSettings
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.app_loader import settings as app_settings
@@ -32,18 +34,18 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.missions.personal.personal_missions_operations import PersonalMissionOperations
     from gui.Scaleform.daapi.view.lobby.missions.personal.personal_missions_quest_award_screen import PersonalMissionsQuestAwardScreen
     from gui.Scaleform.daapi.view.lobby.missions.personal.personal_missions_browser_view import PersonalMissionsBrowserView
-    return (ViewSettings(VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS, PersonalMissionOperations, 'personalMissionsOperations.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS, PersonalMissionsPage, 'personalMissionsPage.swf', ViewTypes.LOBBY_SUB, PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATION_AWARDS_SCREEN_ALIAS, PersonalMissionsOperationAwardsScreen, 'personalMissionAwardsScreen.swf', ViewTypes.OVERLAY, PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATION_AWARDS_SCREEN_ALIAS, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),
-     ViewSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_MAP_VIEW_ALIAS, PersonalMissionsMapView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
-     ViewSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS, PersonalMissionsAwardsView, 'personalMissionsAwardsView.swf', ViewTypes.LOBBY_SUB, PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_VIEW_ALIAS, PersonalMissionFirstEntryView, 'personalMissionFirstEntryView.swf', ViewTypes.LOBBY_SUB, PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_VIEW_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(VIEW_ALIAS.LOBBY_PERSONAL_MISSION_DETAILS, PersonalMissionDetailsContainerView, 'personalMissionDetails.swf', ViewTypes.LOBBY_TOP_SUB, VIEW_ALIAS.LOBBY_PERSONAL_MISSION_DETAILS, ScopeTemplates.LOBBY_SUB_SCOPE, True),
-     ViewSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_AWARD_VIEW_ALIAS, PersonalMissionFirstEntryAwardView, 'personalMissionFirstEntryAwardView.swf', ViewTypes.LOBBY_SUB, PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_AWARD_VIEW_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE),
-     GroupedViewSettings(PERSONAL_MISSIONS_ALIASES.FREE_SHEET_POPOVER, FreeSheetPopover, 'freeSheetPopoverView.swf', ViewTypes.WINDOW, PERSONAL_MISSIONS_ALIASES.FREE_SHEET_POPOVER, PERSONAL_MISSIONS_ALIASES.FREE_SHEET_POPOVER, ScopeTemplates.LOBBY_SUB_SCOPE),
-     GroupedViewSettings(PERSONAL_MISSIONS_ALIASES.TANK_GIRLS_POPOVER, TankgirlsPopover, 'tankgirlsPopoverView.swf', ViewTypes.WINDOW, PERSONAL_MISSIONS_ALIASES.TANK_GIRLS_POPOVER, PERSONAL_MISSIONS_ALIASES.TANK_GIRLS_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_QUEST_AWARD_SCREEN_ALIAS, PersonalMissionsQuestAwardScreen, 'personalMissionsQuestAwardScreen.swf', ViewTypes.OVERLAY, PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_QUEST_AWARD_SCREEN_ALIAS, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),
-     ViewSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_BROWSER_VIEW_ALIAS, PersonalMissionsBrowserView, 'browserScreen.swf', ViewTypes.LOBBY_SUB, PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_BROWSER_VIEW_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE, True))
+    return (ViewSettings(VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS, PersonalMissionOperations, 'personalMissionsOperations.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS, PersonalMissionsPage, 'personalMissionsPage.swf', WindowLayer.SUB_VIEW, PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATION_AWARDS_SCREEN_ALIAS, PersonalMissionsOperationAwardsScreen, 'personalMissionAwardsScreen.swf', WindowLayer.FULLSCREEN_WINDOW, PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATION_AWARDS_SCREEN_ALIAS, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),
+     ComponentSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_MAP_VIEW_ALIAS, PersonalMissionsMapView, ScopeTemplates.VIEW_SCOPE),
+     ViewSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS, PersonalMissionsAwardsView, 'personalMissionsAwardsView.swf', WindowLayer.SUB_VIEW, PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_VIEW_ALIAS, PersonalMissionFirstEntryView, 'personalMissionFirstEntryView.swf', WindowLayer.SUB_VIEW, PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_VIEW_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(VIEW_ALIAS.LOBBY_PERSONAL_MISSION_DETAILS, PersonalMissionDetailsContainerView, 'personalMissionDetails.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.LOBBY_PERSONAL_MISSION_DETAILS, ScopeTemplates.LOBBY_SUB_SCOPE, True),
+     ViewSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_AWARD_VIEW_ALIAS, PersonalMissionFirstEntryAwardView, 'personalMissionFirstEntryAwardView.swf', WindowLayer.SUB_VIEW, PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_AWARD_VIEW_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE),
+     GroupedViewSettings(PERSONAL_MISSIONS_ALIASES.FREE_SHEET_POPOVER, FreeSheetPopover, 'freeSheetPopoverView.swf', WindowLayer.WINDOW, PERSONAL_MISSIONS_ALIASES.FREE_SHEET_POPOVER, PERSONAL_MISSIONS_ALIASES.FREE_SHEET_POPOVER, ScopeTemplates.LOBBY_SUB_SCOPE),
+     GroupedViewSettings(PERSONAL_MISSIONS_ALIASES.TANK_GIRLS_POPOVER, TankgirlsPopover, 'tankgirlsPopoverView.swf', WindowLayer.WINDOW, PERSONAL_MISSIONS_ALIASES.TANK_GIRLS_POPOVER, PERSONAL_MISSIONS_ALIASES.TANK_GIRLS_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_QUEST_AWARD_SCREEN_ALIAS, PersonalMissionsQuestAwardScreen, 'personalMissionsQuestAwardScreen.swf', WindowLayer.FULLSCREEN_WINDOW, PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_QUEST_AWARD_SCREEN_ALIAS, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),
+     ViewSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_BROWSER_VIEW_ALIAS, PersonalMissionsBrowserView, 'browserScreen.swf', WindowLayer.SUB_VIEW, PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_BROWSER_VIEW_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE, True))
 
 
 def getBusinessHandlers():
@@ -72,7 +74,7 @@ class PersonalMissionsPackageBusinessHandler(PackageBusinessHandler):
         preloadOperationsPage = event.ctx.get('isBackEvent')
         if preloadOperationsPage:
             Waiting.show('loadPage')
-            self.loadViewByCtxEvent(LoadViewEvent(VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS, ctx=event.ctx))
+            self.loadViewByCtxEvent(LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS), ctx=event.ctx))
         self.loadViewByCtxEvent(event)
         if preloadOperationsPage:
             Waiting.hide('loadPage')
@@ -83,16 +85,16 @@ class PersonalMissionsPackageBusinessHandler(PackageBusinessHandler):
         uiStorage = settingsCore.serverSettings.getUIStorage()
         goByDefault = True
         if not uiStorage.get(PM_TUTOR_FIELDS.GREETING_SCREEN_SHOWN):
-            self.loadViewByCtxEvent(LoadViewEvent(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_VIEW_ALIAS, ctx=event.ctx))
+            self.loadViewByCtxEvent(LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_VIEW_ALIAS), ctx=event.ctx))
             goByDefault = False
         elif not uiStorage.get(PM_TUTOR_FIELDS.FIRST_ENTRY_AWARDS_SHOWN):
             if findFirst(methodcaller('isAwardAchieved'), eventsCache.getPersonalMissions().getAllOperations().values()):
-                self.loadViewByCtxEvent(LoadViewEvent(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_AWARD_VIEW_ALIAS, ctx=event.ctx))
+                self.loadViewByCtxEvent(LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_AWARD_VIEW_ALIAS), ctx=event.ctx))
                 goByDefault = False
             else:
                 settingsCore.serverSettings.saveInUIStorage({PM_TUTOR_FIELDS.FIRST_ENTRY_AWARDS_SHOWN: True})
         if goByDefault:
-            if event.eventType == VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS:
-                self.loadViewByCtxEvent(LoadViewEvent(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS, ctx=event.ctx))
+            if event.alias == VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS:
+                self.loadViewByCtxEvent(LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS), ctx=event.ctx))
             else:
                 self.loadViewByCtxEvent(event)

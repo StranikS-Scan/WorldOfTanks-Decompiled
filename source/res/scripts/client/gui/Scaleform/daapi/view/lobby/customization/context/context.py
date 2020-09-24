@@ -90,6 +90,7 @@ class CustomizationContext(object):
         self.__c11nCameraManager = C11nHangarCameraManager()
         self.__stylesDiffsCache = StyleDiffsCache()
         self.__carouselItems = None
+        self.__outfitIsApplying = False
         return
 
     @property
@@ -137,6 +138,10 @@ class CustomizationContext(object):
     @property
     def stylesDiffsCache(self):
         return self.__stylesDiffsCache
+
+    @property
+    def isOutfitApplying(self):
+        return self.__outfitIsApplying
 
     def setIsItemsOnAnotherVeh(self, value):
         self.__isItemsOnAnotherVeh = value
@@ -257,9 +262,11 @@ class CustomizationContext(object):
     @process('customizationApply')
     def applyItems(self, purchaseItems):
         self._itemsCache.onSyncCompleted -= self.__onCacheResync
+        self.__outfitIsApplying = True
         isModeChanged = self.modeId != self.__startMode
         yield self.mode.applyItems(purchaseItems, isModeChanged)
         self.__onCacheResync()
+        self.__outfitIsApplying = False
         self._itemsCache.onSyncCompleted += self.__onCacheResync
 
     def isOutfitsModified(self):

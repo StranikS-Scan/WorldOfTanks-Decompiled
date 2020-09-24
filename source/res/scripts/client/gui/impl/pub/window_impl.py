@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/pub/window_impl.py
 import logging
 import typing
-from frameworks.wulf import PositionAnchor
+from frameworks.wulf import PositionAnchor, WindowLayer
 from frameworks.wulf import Window, WindowSettings
 from frameworks.wulf import WindowsArea
 from gui.impl.gen import R
@@ -18,6 +18,7 @@ class WindowImpl(Window):
     def __init__(self, wndFlags, *args, **kwargs):
         settings = WindowSettings()
         settings.flags = wndFlags
+        settings.layer = kwargs.pop('layer', WindowLayer.UNDEFINED)
         settings.areaID = kwargs.pop('areaID', R.areas.default())
         settings.entryID = kwargs.pop('entryID', R.invalid())
         settings.decorator = kwargs.pop('decorator', None)

@@ -24,6 +24,7 @@ from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME
 from gui.prb_control.storages import legacy_storage_getter
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
+from gui.shared.events import ViewEventType
 from prebattle_shared import decodeRoster
 
 class EpicBattleTrainingEntryPoint(LegacyEntryPoint):
@@ -124,10 +125,7 @@ class EpicBattleTrainingEntity(LegacyEntity):
 
     def init(self, clientPrb=None, ctx=None):
         result = super(EpicBattleTrainingEntity, self).init(clientPrb=clientPrb)
-        add = g_eventBus.addListener
-        for event in self.__loadEvents:
-            add(event, self.__handleViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
-
+        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self.__handleViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
         if clientPrb is None:
             clientPrb = prb_getters.getClientPrebattle()
         if clientPrb is not None:
@@ -143,10 +141,7 @@ class EpicBattleTrainingEntity(LegacyEntity):
         clientPrb = prb_getters.getClientPrebattle()
         if clientPrb is not None:
             clientPrb.onPlayerGroupChanged -= self.__prb_onPlayerGroupChanged
-        remove = g_eventBus.removeListener
-        for event in self.__loadEvents:
-            remove(event, self.__handleViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
-
+        g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self.__handleViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
         if not woEvents:
             aliasToLoad = [PREBATTLE_ALIASES.EPICBATTLE_LIST_VIEW_PY, PREBATTLE_ALIASES.EPIC_TRAINING_ROOM_VIEW_PY]
             if not self.canSwitch(ctx) and g_eventDispatcher.needToLoadHangar(ctx, self.getModeFlags(), aliasToLoad):
@@ -414,7 +409,8 @@ class EpicBattleTrainingEntity(LegacyEntity):
             return
 
     def __handleViewLoad(self, event):
-        self.setPlayerState(SetPlayerStateCtx(False, waitingID='prebattle/player_not_ready'))
+        if event.alias in self.__loadEvents:
+            self.setPlayerState(SetPlayerStateCtx(False, waitingID='prebattle/player_not_ready'))
 
     def __prb_onPlayerGroupChanged(self, pID, prevRoster, roster, group, actorID):
         rosters = self.getRosters(keys=[prevRoster, roster])

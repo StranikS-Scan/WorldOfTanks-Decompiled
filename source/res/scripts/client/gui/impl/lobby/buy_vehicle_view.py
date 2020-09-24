@@ -4,8 +4,8 @@ import logging
 from collections import namedtuple
 import nations
 import constants
-from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.game_control.event_progression_controller import EventProgressionScreens
+from gui.impl.pub.lobby_window import LobbyWindow
 from items import UNDEFINED_ITEM_CD
 from rent_common import parseRentID
 from gui import SystemMessages
@@ -17,7 +17,6 @@ from gui.Scaleform.locale.STORE import STORE
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, DIALOG_BUTTON_ID
-from gui.Scaleform.framework.managers.loaders import ViewKey
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
@@ -31,7 +30,6 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import ShopEvent
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.gui_items.Tankman import CrewTypes
-from skeletons.gui.app_loader import IAppLoader
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import ZERO_MONEY
 from gui.shared.gui_items.Vehicle import getTypeUserName, getSmallIconPath, getLevelSmallIconPath, getTypeSmallIconPath
@@ -49,7 +47,7 @@ from helpers import i18n, dependency, int2roman, func_utils
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IRentalsController, ITradeInController, IRestoreController, IBootcampController, IWalletController, IEventProgressionController
 from skeletons.gui.shared import IItemsCache
-from frameworks.wulf import WindowFlags, ViewStatus, Window, WindowSettings, ViewSettings
+from frameworks.wulf import WindowFlags, ViewStatus, ViewSettings
 _logger = logging.getLogger(__name__)
 
 class VehicleBuyActionTypes(CONST_CONTAINER):
@@ -114,6 +112,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         self.__popoverIsAvailable = True
         self.__tradeInInProgress = False
         self.__purchaseInProgress = False
+        self.__usePreviousAlias = False
         return
 
     @property
@@ -134,7 +133,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             return super(BuyVehicleView, self).createToolTip(event)
 
     def showCongratulations(self):
-        self.__showHangar()
+        self.__usePreviousAlias = True
         if self.__isRenting():
             self.__onWindowClose()
         else:
@@ -142,7 +141,6 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
 
     def _initialize(self, *args, **kwargs):
         super(BuyVehicleView, self)._initialize()
-        self._blur = CachedBlur(enabled=True)
         self.__addListeners()
         isElite = self.__vehicle.isElite
         vehType = self.__vehicle.type.replace('-', '_')
@@ -185,7 +183,6 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             self.__updateTotalPrice()
 
     def _finalize(self):
-        self._blur.fini()
         self.__removeListeners()
         super(BuyVehicleView, self)._finalize()
 
@@ -279,7 +276,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             availableGold = self.__stats.money.gold
             requiredGold = totalPrice.gold
             if availableGold < requiredGold:
-                showBuyGoldForVehicleWebOverlay(requiredGold, self.__vehicle.intCD)
+                showBuyGoldForVehicleWebOverlay(requiredGold, self.__vehicle.intCD, self.getParentWindow())
                 return
         self.__requestForMoneyObtain()
 
@@ -312,7 +309,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         return
 
     def __onSelectTradeOffVehicle(self, _=None):
-        showTradeOffOverlay(self.__vehicle.level)
+        showTradeOffOverlay(self.__vehicle.level, self.getParentWindow())
 
     def __onWalletStatusChanged(self, *_):
         self.__isGoldAutoPurchaseEnabled &= self.__wallet.isAvailable
@@ -365,6 +362,8 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
 
     def __onWindowClose(self, *_):
         self.__destroyWindow()
+        if self.__usePreviousAlias:
+            self.__showHangar()
 
     def __destroyWindow(self):
         self.viewModel.congratulationAnim.setResetAnimTrgigger(True)
@@ -757,7 +756,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             commanderItemPrice = commanderCardsPrices[self.__selectedCardIdx]
             commanderItemPrice *= len(self.__vehicle.crew)
             price += commanderItemPrice.price
-        if self.viewModel.equipmentBlock.slot.getIsSelected():
+        if self.viewModel.equipmentBlock.slot.getIsSelected() and not (self.__selectedRentIdx >= 0 and self.__isRentVisible):
             vehSlots = self.__stats.vehicleSlots
             price += self.__shop.getVehicleSlotsItemPrice(vehSlots).price
         if self.viewModel.equipmentBlock.ammo.getIsSelected():
@@ -849,23 +848,12 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             event_dispatcher.runSalesChain(_COLLECTIBLE_VEHICLE_TUTORIAL)
 
 
-class BuyVehicleWindow(Window):
-    appLoader = dependency.descriptor(IAppLoader)
+class BuyVehicleWindow(LobbyWindow):
     __slots__ = ()
 
-    def __init__(self, *args, **kwargs):
-        app = self.appLoader.getApp()
-        view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY))
-        if view is not None:
-            parent = view.getParentWindow()
-        else:
-            parent = None
-        settings = WindowSettings()
-        settings.flags = WindowFlags.DIALOG
-        settings.content = BuyVehicleView(*args, **kwargs)
-        settings.parent = parent
-        super(BuyVehicleWindow, self).__init__(settings)
-        return
+    def __init__(self, **kwargs):
+        flags = WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN
+        super(BuyVehicleWindow, self).__init__(flags, content=BuyVehicleView(**kwargs))
 
     def showCongratulations(self):
         self.content.showCongratulations()

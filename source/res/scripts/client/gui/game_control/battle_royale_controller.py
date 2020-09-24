@@ -489,7 +489,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
 
         return
 
-    def __showBattleResults(self, reusableInfo, _):
+    def __showBattleResults(self, reusableInfo, _, resultsWindow):
         battleRoyaleArenaTypes = (ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD)
         if reusableInfo.common.arenaBonusType in battleRoyaleArenaTypes:
             batleRoyaleInfo = reusableInfo.personal.getBattleRoyaleInfo()
@@ -501,7 +501,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
             if arenaUniqueID not in self.__shownBattleResultsForArena:
                 self.__shownBattleResultsForArena.append(arenaUniqueID)
                 self.__shownBattleResultsForArena = self.__shownBattleResultsForArena[-self.MAX_STORED_ARENAS_RESULTS:]
-                event_dispatcher.showBattleRoyaleLevelUpWindow(reusableInfo)
+                event_dispatcher.showBattleRoyaleLevelUpWindow(reusableInfo, resultsWindow)
         return None
 
     def getPrimeTimesIter(self, primeTimes):

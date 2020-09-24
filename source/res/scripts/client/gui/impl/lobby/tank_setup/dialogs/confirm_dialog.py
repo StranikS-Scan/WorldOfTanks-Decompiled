@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/dialogs/confirm_dialog.py
 import logging
-from frameworks.wulf import ViewSettings, ViewFlags
+from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.constants.fitting_types import FittingTypes
 from gui.impl.gen.view_models.views.lobby.tank_setup.dialogs.ammunition_buy_model import AmmunitionBuyModel
@@ -24,7 +24,7 @@ class TankSetupConfirmDialog(BuyAndExchange):
     __slots__ = ('__items', '__vehicleInvID', '__totalPrice', '_mainContent', '_buyContent', '__startState', '_itemsType')
 
     def __init__(self, *args, **kwargs):
-        settings = ViewSettings(layoutID=R.views.lobby.tanksetup.dialogs.Confirm(), flags=ViewFlags.TOP_WINDOW_VIEW, model=AmmunitionBuyModel())
+        settings = ViewSettings(layoutID=R.views.lobby.tanksetup.dialogs.Confirm(), model=AmmunitionBuyModel())
         settings.args = args
         settings.kwargs = kwargs
         self.__items = kwargs.pop('items', tuple())

@@ -22,6 +22,7 @@ from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP, LOG_ERROR_BOOTCAMP
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IBootcampController
+from vehicle_systems.stricted_loading import makeCallbackWeak
 
 class _IMarker(object):
 
@@ -342,7 +343,7 @@ class _StaticObjectMarker3D(_IMarker):
         self.__destroyed = False
         if self.__path is not None:
             modelPosition = Math.Vector3(position[:]) + offset
-            BigWorld.loadResourceListBG((self.__path,), partial(self.__onModelLoaded, modelPosition))
+            BigWorld.loadResourceListBG((self.__path,), makeCallbackWeak(self.__onModelLoaded, modelPosition))
         return
 
     def addMarkerModel(self):

@@ -6,7 +6,7 @@ from frameworks.wulf import ViewModel
 class OfferBannerModel(ViewModel):
     __slots__ = ('onSelect', 'onClose')
 
-    def __init__(self, properties=3, commands=2):
+    def __init__(self, properties=4, commands=2):
         super(OfferBannerModel, self).__init__(properties=properties, commands=commands)
 
     def getTitle(self):
@@ -21,16 +21,23 @@ class OfferBannerModel(ViewModel):
     def setName(self, value):
         self._setString(1, value)
 
-    def getIcon(self):
+    def getDescription(self):
         return self._getString(2)
 
-    def setIcon(self, value):
+    def setDescription(self, value):
         self._setString(2, value)
+
+    def getIcon(self):
+        return self._getString(3)
+
+    def setIcon(self, value):
+        self._setString(3, value)
 
     def _initialize(self):
         super(OfferBannerModel, self)._initialize()
         self._addResourceProperty('title', R.invalid())
         self._addStringProperty('name', '')
+        self._addStringProperty('description', '')
         self._addStringProperty('icon', '')
         self.onSelect = self._addCommand('onSelect')
         self.onClose = self._addCommand('onClose')

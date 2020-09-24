@@ -5,10 +5,10 @@ from Event import Event
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import REFERRAL_COUNTER
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.referral_program.browser.web_handlers import createReferralWebHandlers
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL, isCurrentUserRecruit
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
@@ -65,7 +65,7 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
          'showWaiting': True,
          'showActionBtn': False,
          'allowRightClick': True}
-        g_eventBus.handleEvent(events.DirectLoadViewEvent(SFViewLoadParams(VIEW_ALIAS.REFERRAL_PROGRAM_WINDOW), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.REFERRAL_PROGRAM_WINDOW), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
         self.__resetBubbleCount()
         self.__setButtonCirclesShown()
 
@@ -83,7 +83,7 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
     def __getBrowserView(self):
         app = self.__appLoader.getApp()
         if app is not None and app.containerManager is not None:
-            browserView = app.containerManager.getView(ViewTypes.LOBBY_SUB, criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.REFERRAL_PROGRAM_WINDOW})
+            browserView = app.containerManager.getView(WindowLayer.SUB_VIEW, criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.REFERRAL_PROGRAM_WINDOW})
             return browserView
         else:
             return

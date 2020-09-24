@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/CyberSportUnitView.py
 from UnitBase import UNIT_OP
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.daapi.view.lobby.rally.action_button_state_vo import ActionButtonStateVO
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters, rally_dps
 from gui.Scaleform.daapi.view.meta.CyberSportUnitMeta import CyberSportUnitMeta
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.prb_control import settings
@@ -112,23 +113,23 @@ class CyberSportUnitView(CyberSportUnitMeta):
         self.requestToOpen(not self.prbEntity.getFlags().isOpened())
 
     def showSettingsRoster(self, slots):
-        container = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
+        container = self.app.containerManager.getContainer(WindowLayer.TOP_WINDOW)
         window = container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: CYBER_SPORT_ALIASES.ROSTER_SLOT_SETTINGS_WINDOW_PY})
         if window is not None:
             window.updateSlots(slots)
         else:
             levelsRange = self.prbEntity.getRosterSettings().getLevelsRange()
-            self.fireEvent(events.LoadViewEvent(CYBER_SPORT_ALIASES.ROSTER_SLOT_SETTINGS_WINDOW_PY, ctx={'settings': slots,
+            self.fireEvent(events.LoadViewEvent(SFViewLoadParams(CYBER_SPORT_ALIASES.ROSTER_SLOT_SETTINGS_WINDOW_PY), ctx={'settings': slots,
              'section': 'cs_unit_view_settings',
              'levelsRange': levelsRange}), scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
     def cancelRosterSlotsSettings(self):
-        self._destroyRelatedView(ViewTypes.TOP_WINDOW, CYBER_SPORT_ALIASES.ROSTER_SLOT_SETTINGS_WINDOW_PY)
+        self._destroyRelatedView(WindowLayer.TOP_WINDOW, CYBER_SPORT_ALIASES.ROSTER_SLOT_SETTINGS_WINDOW_PY)
 
     def resultRosterSlotsSettings(self, value):
         self.requestToUpdateRoster(value)
-        self._destroyRelatedView(ViewTypes.TOP_WINDOW, CYBER_SPORT_ALIASES.ROSTER_SLOT_SETTINGS_WINDOW_PY)
+        self._destroyRelatedView(WindowLayer.TOP_WINDOW, CYBER_SPORT_ALIASES.ROSTER_SLOT_SETTINGS_WINDOW_PY)
 
     def lockSlotRequest(self, slotIndex):
         self.requestToCloseSlot(slotIndex)
@@ -174,7 +175,7 @@ class CyberSportUnitView(CyberSportUnitMeta):
         self._updateVehiclesLabel(int2roman(rosterSettings.getMinLevel()), int2roman(rosterSettings.getMaxLevel()))
 
     def _dispose(self):
-        self._destroyRelatedView(ViewTypes.TOP_WINDOW, CYBER_SPORT_ALIASES.ROSTER_SLOT_SETTINGS_WINDOW_PY)
+        self._destroyRelatedView(WindowLayer.TOP_WINDOW, CYBER_SPORT_ALIASES.ROSTER_SLOT_SETTINGS_WINDOW_PY)
         self.removeListener(events.CSRosterSlotSettingsWindow.APPLY_SLOT_SETTINGS, self.__applyRosterSettings)
         super(CyberSportUnitView, self)._dispose()
 

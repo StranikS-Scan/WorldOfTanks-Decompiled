@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.offers.gift_model import GiftModel
 class OfferModel(ViewModel):
     __slots__ = ('onBack',)
 
-    def __init__(self, properties=7, commands=1):
+    def __init__(self, properties=8, commands=1):
         super(OfferModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -26,16 +26,16 @@ class OfferModel(ViewModel):
     def setName(self, value):
         self._setString(2, value)
 
-    def getClicksCount(self):
+    def getTokens(self):
         return self._getNumber(3)
 
-    def setClicksCount(self, value):
+    def setTokens(self, value):
         self._setNumber(3, value)
 
-    def getGiftsCount(self):
+    def getClicksCount(self):
         return self._getNumber(4)
 
-    def setGiftsCount(self, value):
+    def setClicksCount(self, value):
         self._setNumber(4, value)
 
     def getExpiration(self):
@@ -50,13 +50,20 @@ class OfferModel(ViewModel):
     def setBackground(self, value):
         self._setString(6, value)
 
+    def getKey(self):
+        return self._getNumber(7)
+
+    def setKey(self, value):
+        self._setNumber(7, value)
+
     def _initialize(self):
         super(OfferModel, self)._initialize()
         self._addViewModelProperty('gifts', ListModel())
         self._addNumberProperty('id', 0)
         self._addStringProperty('name', '')
+        self._addNumberProperty('tokens', 0)
         self._addNumberProperty('clicksCount', 0)
-        self._addNumberProperty('giftsCount', 0)
         self._addNumberProperty('expiration', 0)
         self._addStringProperty('background', '')
+        self._addNumberProperty('key', 0)
         self.onBack = self._addCommand('onBack')

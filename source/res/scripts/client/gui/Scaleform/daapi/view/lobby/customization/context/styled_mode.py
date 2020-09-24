@@ -218,7 +218,7 @@ class StyledMode(CustomizationMode):
         results = []
         style = self.__modifiedStyle
         vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
-        self._soundEventChacker.lockPlayingSounds()
+        self._soundEventChecker.lockPlayingSounds()
         outfit = self._modifiedOutfits[self.season]
         result = yield OutfitApplier(g_currentVehicle.item, outfit, SeasonType.ALL).request()
         results.append(result)
@@ -241,7 +241,7 @@ class StyledMode(CustomizationMode):
         if self.__autoRentEnabled != g_currentVehicle.item.isAutoRentStyle:
             yield VehicleAutoStyleEquipProcessor(g_currentVehicle.item, self.__autoRentEnabled, self.__autoRentChangeSource).request()
             self.__autoRentChangeSource = CLIENT_COMMAND_SOURCES.UNDEFINED
-        self._soundEventChacker.unlockPlayingSounds()
+        self._soundEventChecker.unlockPlayingSounds()
         if self.isInited:
             self._events.onItemsBought(purchaseItems, results)
         callback(self)

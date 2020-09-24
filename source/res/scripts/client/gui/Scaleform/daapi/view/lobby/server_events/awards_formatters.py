@@ -8,6 +8,7 @@ from gui.server_events import formatters
 from gui.server_events.awards_formatters import AWARDS_SIZES, AwardsPacker, QuestsBonusComposer, getPostBattleAwardsPacker
 from gui.server_events.bonuses import BlueprintsBonusSubtypes
 from gui.battle_pass.battle_pass_bonuses_helper import BonusesHelper
+from gui.shared.gui_items.crew_skin import localizedFullName as localizeSkinName
 SIMPLE_BONUSES_MAX_ITEMS = 5
 _DISPLAYED_AWARDS_COUNT = 2
 _END_LINE_SEPARATOR = ','
@@ -96,6 +97,28 @@ class CrewBookFormatter(OldStyleBonusFormatter):
         return backport.text(R.strings.quests.bonuses.items.name(), name=book.userName, count=count)
 
 
+class CrewSkinFormatter(OldStyleBonusFormatter):
+
+    @classmethod
+    def getOrder(cls):
+        pass
+
+    def accumulateBonuses(self, bonus):
+        result = []
+        for skin, count, _, _ in sorted(bonus.getItems()):
+            if skin is None or not count:
+                continue
+            result.append(self._formatCrewSkin(skin, count))
+
+        if result:
+            self._result.append(formatters.packSimpleBonusesBlock(result))
+        return
+
+    @classmethod
+    def _formatCrewSkin(cls, skin, count):
+        return backport.text(R.strings.quests.bonuses.items.name(), name=localizeSkinName(skin), count=count)
+
+
 class BlueprintsFormatter(OldStyleBonusFormatter):
 
     @classmethod
@@ -177,7 +200,8 @@ def getFormattersMap(event):
      'customizations': CustomizationsFormatter(),
      'vehicles': VehiclesFormatter(event),
      'crewBooks': CrewBookFormatter(),
-     'blueprints': BlueprintsFormatter()}
+     'blueprints': BlueprintsFormatter(),
+     'crewSkins': CrewSkinFormatter()}
 
 
 class OldStyleAwardsPacker(AwardsPacker):

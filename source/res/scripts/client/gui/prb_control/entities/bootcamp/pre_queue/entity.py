@@ -1,10 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/bootcamp/pre_queue/entity.py
+import typing
 from PlayerEvents import g_playerEvents
 from bootcamp.BootCampEvents import g_bootcampEvents
 from constants import QUEUE_TYPE, PREBATTLE_TYPE
 from debug_utils import LOG_DEBUG
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import rally_dialog_meta
+from gui.shared.events import ViewEventType
 from gui.prb_control import prb_getters, prbDispatcherProperty
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.base.ctx import LeavePrbAction
@@ -14,12 +17,13 @@ from gui.prb_control.entities.base.pre_queue.entity import PreQueueSubscriber, P
 from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import BootcampEvent
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.game_control import IBootcampController
 from adisp import process
 from gui.prb_control.entities.base.pre_queue.ctx import QueueCtx
+if typing.TYPE_CHECKING:
+    from gui.shared.events import LoadViewEvent
 
 class BootcampSubscriber(PreQueueSubscriber):
 
@@ -31,7 +35,7 @@ class BootcampSubscriber(PreQueueSubscriber):
         g_playerEvents.onKickedFromArena += entity.onKickedFromArena
         g_playerEvents.onArenaJoinFailure += entity.onArenaJoinFailure
         g_bootcampEvents.onBootcampBecomeNonPlayer += entity.onBootcampBecomeNonPlayer
-        g_eventBus.addListener(BootcampEvent.QUEUE_DIALOG_CANCEL, entity.onQueueCancel, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(ViewEventType.LOAD_VIEW, entity.onQueueCancel, EVENT_BUS_SCOPE.LOBBY)
 
     def unsubscribe(self, entity):
         g_playerEvents.onBootcampEnqueued -= entity.onEnqueued
@@ -41,7 +45,7 @@ class BootcampSubscriber(PreQueueSubscriber):
         g_playerEvents.onKickedFromArena -= entity.onKickedFromArena
         g_playerEvents.onArenaJoinFailure -= entity.onArenaJoinFailure
         g_bootcampEvents.onBootcampBecomeNonPlayer -= entity.onBootcampBecomeNonPlayer
-        g_eventBus.removeListener(BootcampEvent.QUEUE_DIALOG_CANCEL, entity.onQueueCancel, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(ViewEventType.LOAD_VIEW, entity.onQueueCancel, EVENT_BUS_SCOPE.LOBBY)
 
 
 class BootcampEntryPoint(PreQueueEntryPoint):
@@ -111,11 +115,12 @@ class BootcampEntity(PreQueueEntity):
         g_eventDispatcher.unloadBootcampQueue()
 
     @process
-    def onQueueCancel(self, _):
-        if self.isInQueue():
-            self.exitFromQueue()
-        elif self.prbDispatcher is not None:
-            yield self.prbDispatcher.doLeaveAction(LeavePrbAction())
+    def onQueueCancel(self, event):
+        if event.alias == VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG_CANCEL:
+            if self.isInQueue():
+                self.exitFromQueue()
+            elif self.prbDispatcher is not None:
+                yield self.prbDispatcher.doLeaveAction(LeavePrbAction())
         return
 
     def onBootcampBecomeNonPlayer(self):

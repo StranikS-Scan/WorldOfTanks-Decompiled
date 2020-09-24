@@ -4,13 +4,13 @@ import logging
 import CommandMapping
 from CurrentVehicle import g_currentVehicle
 from account_helpers.AccountSettings import AccountSettings, BATTLE_ROYALE_HANGAR_BOTTOM_PANEL_VIEWED
-from frameworks.wulf import ViewFlags, WindowFlags
+from frameworks.wulf import ViewFlags, WindowFlags, ViewSettings
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.common.battle_royale import br_helpers
 from gui.Scaleform.daapi.view.common.veh_modules_config_cmp import VehicleModulesConfiguratorCmp, getVehicleNationIcon
 from gui.Scaleform.daapi.view.lobby.battle_royale.battle_royale_sounds import BATTLE_ROYALE_VEHICLE_INFO_SOUND_SPACE
 from gui.Scaleform.daapi.view.meta.BattleRoyaleVehicleInfoMeta import BattleRoyaleVehicleInfoMeta
-from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.BATTLEROYALE_ALIASES import BATTLEROYALE_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl import backport
@@ -111,18 +111,15 @@ class HangarVehicleModulesConfigurator(VehicleModulesConfiguratorCmp):
 
 
 class _HangarVehicleInfoIntroView(ViewImpl):
-    __slots__ = ('__vehicle', '__firstView', '__blur')
+    __slots__ = ('__vehicle', '__firstView')
 
-    def __init__(self, layoutID, ctx=None, *args, **kwargs):
-        super(_HangarVehicleInfoIntroView, self).__init__(layoutID, ViewFlags.OVERLAY_VIEW, VehicleInfoIntroOverlayModel, *args, **kwargs)
+    def __init__(self, viewKey, viewModelClazz=VehicleInfoIntroOverlayModel, ctx=None, *args, **kwargs):
+        settings = ViewSettings(viewKey)
+        settings.flags = ViewFlags.VIEW
+        settings.model = viewModelClazz()
+        super(_HangarVehicleInfoIntroView, self).__init__(settings, *args, **kwargs)
         self.__vehicle = ctx.get('vehicle')
         self.__firstView = ctx.get('firstView', False)
-        self.__blur = CachedBlur(enabled=True, ownLayer=APP_CONTAINERS_NAMES.OVERLAY, layers=[APP_CONTAINERS_NAMES.VIEWS,
-         APP_CONTAINERS_NAMES.SUBVIEW,
-         APP_CONTAINERS_NAMES.TOP_SUB_VIEW,
-         APP_CONTAINERS_NAMES.WINDOWS,
-         APP_CONTAINERS_NAMES.BROWSER,
-         APP_CONTAINERS_NAMES.DIALOGS])
 
     def _initialize(self):
         super(_HangarVehicleInfoIntroView, self)._initialize()
@@ -136,8 +133,6 @@ class _HangarVehicleInfoIntroView(ViewImpl):
             AccountSettings.setSettings(BATTLE_ROYALE_HANGAR_BOTTOM_PANEL_VIEWED, True)
         self.getViewModel().onSubmitBtnClick -= self.__onSubmitClicked
         self.__vehicle = None
-        self.__blur.fini()
-        self.__blur = None
         super(_HangarVehicleInfoIntroView, self)._finalize()
         return
 
@@ -146,10 +141,17 @@ class _HangarVehicleInfoIntroView(ViewImpl):
 
 
 class _HangarVehicleInfoIntroWindow(LobbyWindow):
-    __slots__ = ()
+    __slots__ = ('__blur',)
 
     def __init__(self, *args, **kwargs):
-        super(_HangarVehicleInfoIntroWindow, self).__init__(wndFlags=WindowFlags.OVERLAY, decorator=None, content=_HangarVehicleInfoIntroView(R.views.lobby.battleRoyale.vehicle_info_intro_overlay.VehicleInfoIntroOverlay(), *args, **kwargs))
+        super(_HangarVehicleInfoIntroWindow, self).__init__(wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, decorator=None, content=_HangarVehicleInfoIntroView(R.views.lobby.battleRoyale.vehicle_info_intro_overlay.VehicleInfoIntroOverlay(), *args, **kwargs))
+        self.__blur = CachedBlur(enabled=True, ownLayer=self.layer)
+        return
+
+    def _finalize(self):
+        self.__blur.fini()
+        self.__blur = None
+        super(_HangarVehicleInfoIntroWindow, self)._finalize()
         return
 
 
@@ -171,7 +173,7 @@ class HangarVehicleInfo(BattleRoyaleVehicleInfoMeta, IGlobalListener):
         return self.__vehicle
 
     def onClose(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onShowIntro(self):
         self.__showIntroPage()

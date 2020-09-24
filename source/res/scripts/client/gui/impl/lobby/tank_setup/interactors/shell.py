@@ -92,10 +92,10 @@ class ShellInteractor(BaseInteractor):
 
         return result
 
-    def swapSlots(self, leftID, rightID):
+    def swapSlots(self, leftID, rightID, actionType=BaseSetupModel.SWAP_SLOTS_ACTION):
         shellLayout = self.getCurrentLayout()
         shellLayout[rightID], shellLayout[leftID] = shellLayout[leftID], shellLayout[rightID]
-        self.onSlotAction(actionType=BaseSetupModel.SWAP_SLOTS_ACTION, leftID=leftID, rightID=rightID, leftIntCD=shellLayout[leftID].intCD, rightIntCD=shellLayout[rightID].intCD)
+        self.onSlotAction(actionType=actionType, leftID=leftID, rightID=rightID, leftIntCD=shellLayout[leftID].intCD, rightIntCD=shellLayout[rightID].intCD)
         self.itemUpdated()
 
     def changeShell(self, intCD, count):
@@ -128,6 +128,8 @@ class ShellInteractor(BaseInteractor):
     def updateFrom(self, vehicle, onlyInstalled=True):
         self.getItem().shells.setInstalled(*vehicle.shells.installed)
         self._playerLayout = vehicle.shells.layout.copy()
+        if not onlyInstalled:
+            self.getItem().shells.setLayout(*vehicle.shells.layout)
 
     @async
     def showExitConfirmDialog(self):

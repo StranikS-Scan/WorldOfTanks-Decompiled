@@ -92,7 +92,7 @@ def await_deferred(d):
     return promise.get_future()
 
 
-def resignTickIfRequired(timeout=0.1):
+def resignTickIfRequired(timeout=0.101):
     if BigWorld.isNextTickPending():
         return delay(timeout)
     else:
@@ -102,34 +102,39 @@ def resignTickIfRequired(timeout=0.1):
 def delay(timeout):
     promise = _Promise()
 
-    def onTimer(*_):
+    def onDelayTimer(*_):
         promise.set_value(None)
         return
 
-    timerID = BigWorld.addTimer(onTimer, timeout)
+    timerID = BigWorld.addTimer(onDelayTimer, timeout)
     promise.set_cancel_handler(partial(BigWorld.delTimer, timerID))
     return promise.get_future()
 
 
+def _logReachedMaxTicksToDelay(logID, maxTicksToDelay):
+    LOG_DEBUG('delayWhileTickPending reached maxTicksToDelay', logID, maxTicksToDelay)
+
+
 @async
-def delayWhileTickPending(maxTicksToDelay=1, timeout=0.1, logID=None):
+def delayWhileTickPending(maxTicksToDelay=1, timeout=0.105, minTimeout=0.1, logID=None):
+    decay = max(0.0, (timeout - minTimeout) / max(maxTicksToDelay - 1, 1)) if minTimeout else 0.0
     for n in xrange(maxTicksToDelay):
         if not BigWorld.isNextTickPending():
             LOG_DEBUG_DEV('delayWhileTickPending', logID, n)
             break
-        yield await(delay(timeout))
+        yield await(delay(timeout - decay * n))
     else:
-        LOG_DEBUG('delayWhileTickPending reached maxTicksToDelay', logID, maxTicksToDelay)
+        _logReachedMaxTicksToDelay(logID, maxTicksToDelay)
 
 
-def delayable(maxTicksToDelay=1, timeout=0.1):
+def delayable(maxTicksToDelay=1, timeout=0.105, minTimeout=0.1):
 
     def decorator(func):
 
         @wraps(func)
         @async
         def wrapper(*args, **kwargs):
-            yield delayWhileTickPending(maxTicksToDelay, timeout, logID=func)
+            yield delayWhileTickPending(maxTicksToDelay, timeout, minTimeout, logID=func.__name__)
             func(*args, **kwargs)
 
         return wrapper
@@ -155,6 +160,10 @@ def distributeLoopOverTicks(loopIterator, minPerTick=None, maxPerTick=None, logI
     if logID is not None:
         LOG_DEBUG('distributeLoopOverTicks logID/numStatements/delayedCount', logID, numStatements, delayedCount)
     return
+
+
+def forwardAsFuture(value):
+    return value if type(value) is _Future else _AlwaysReadyFuture(_FulfilledPromiseResult(value, None))
 
 
 class TimeoutError(SoftException):

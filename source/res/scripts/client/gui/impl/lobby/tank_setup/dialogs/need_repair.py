@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/dialogs/need_repair.py
 import typing
-from frameworks.wulf import ViewSettings, ViewFlags
+from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.tank_setup.dialogs.need_repair_bottom_content_type import NeedRepairBottomContentType
 from gui.impl.gen.view_models.views.lobby.tank_setup.dialogs.need_repair_model import NeedRepairModel
@@ -19,7 +19,7 @@ class NeedRepair(BuyAndExchange):
 
     def __init__(self, *args, **kwargs):
         self.__vehicle = kwargs.pop('vehicle', None)
-        settings = ViewSettings(layoutID=R.views.lobby.tanksetup.dialogs.NeedRepair(), flags=ViewFlags.TOP_WINDOW_VIEW, model=NeedRepairModel())
+        settings = ViewSettings(layoutID=R.views.lobby.tanksetup.dialogs.NeedRepair(), model=NeedRepairModel())
         settings.args = args
         settings.kwargs = kwargs
         startState = kwargs.pop('startState', None)
@@ -36,7 +36,7 @@ class NeedRepair(BuyAndExchange):
         super(NeedRepair, self)._onLoading(*args, **kwargs)
         self._buyContent = NeedRepairBottomContent(viewModel=self.viewModel.dealPanel, vehicle=self.__vehicle)
         self._buyContent.onLoading()
-        self._mainContent = NeedRepairMainContent(viewModel=self.viewModel.needRepairContent, repairPercentage=self.__calculateRepairPercentage())
+        self._mainContent = NeedRepairMainContent(viewModel=self.viewModel.needRepairContent, repairPercentage=self.__calculateRepairPercentage(), vehicle=self.__vehicle)
         self._mainContent.onLoading()
 
     def _initialize(self, *args, **kwargs):

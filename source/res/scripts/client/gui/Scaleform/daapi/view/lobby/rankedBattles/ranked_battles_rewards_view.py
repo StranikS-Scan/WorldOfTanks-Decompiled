@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/ranked_battles_rewards_view.py
+import constants
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import RANKED_STYLED_VEHICLES_POOL
@@ -20,6 +21,7 @@ from gui.ranked_battles.ranked_helpers.sound_manager import AmbientType
 from gui.shared.event_dispatcher import showStylePreview
 from gui.shared.utils.scheduled_notifications import AcyclicNotifier
 from helpers import dependency, time_utils
+from items import parseIntCompactDescr
 from items.vehicles import VehicleDescriptor, getVehicleType
 from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
@@ -28,46 +30,61 @@ from skeletons.gui.shared import IItemsCache
 _REWARDS_COMPONENTS = (RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_RANKS_UI, RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_LEAGUES_UI, RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_YEAR_UI)
 
 class RankedBattlesRewardsView(RankedBattlesRewardsMeta, IResetablePage):
-    _rankedController = dependency.descriptor(IRankedBattlesController)
+    __rankedController = dependency.descriptor(IRankedBattlesController)
+
+    def __init__(self):
+        super(RankedBattlesRewardsView, self).__init__()
+        self._selectedViewID = None
+        return
 
     def onTabChanged(self, viewId):
-        self._updateSounds(viewId)
+        self._selectedViewID = viewId
+        self._updateSounds()
+        component = self.getComponent(viewId)
+        if component is not None:
+            component.reset()
+        return
 
     def setActiveTab(self, linkage=None):
         raise NotImplementedError
 
     def _populate(self):
         super(RankedBattlesRewardsView, self)._populate()
+        self.__rankedController.onUpdated += self._update
         self.setActiveTab()
 
-    def _updateSounds(self, selectedLinkage):
+    def _dispose(self):
+        self.__rankedController.onUpdated -= self._update
+        super(RankedBattlesRewardsView, self)._dispose()
+
+    def _update(self):
+        self.setActiveTab(self._selectedViewID)
+
+    def _updateSounds(self):
         raise NotImplementedError()
 
 
 class RankedRewardsSeasonOffView(RankedBattlesRewardsView):
+    __rankedController = dependency.descriptor(IRankedBattlesController)
 
     def reset(self):
-        self._updateSounds(None)
-        return
+        self._updateSounds()
 
     def setActiveTab(self, linkage=None):
-        tabs = rewards_vos.getSeasonOffTabs()
+        tabs = rewards_vos.getSeasonOffTabs(self.__rankedController.isYearRewardEnabled())
         self.as_setTabsDataS(tabs)
 
-    def _updateSounds(self, _):
-        soundManager = self._rankedController.getSoundManager()
+    def _update(self):
+        pass
+
+    def _updateSounds(self):
+        soundManager = self.__rankedController.getSoundManager()
         soundManager.setAmbient(AmbientType.HANGAR)
         soundManager.setProgressSound()
 
 
 class RankedRewardsSeasonOnView(RankedBattlesRewardsView):
-
-    def onTabChanged(self, viewId):
-        super(RankedRewardsSeasonOnView, self).onTabChanged(viewId)
-        component = self.getComponent(viewId)
-        if component is not None:
-            component.reset()
-        return
+    __rankedController = dependency.descriptor(IRankedBattlesController)
 
     def reset(self):
         self.setActiveTab()
@@ -79,23 +96,30 @@ class RankedRewardsSeasonOnView(RankedBattlesRewardsView):
         return
 
     def setActiveTab(self, linkage=None):
+        isYearRewardEnabled = self.__rankedController.isYearRewardEnabled()
+        if linkage == RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_YEAR_UI and not isYearRewardEnabled:
+            linkage = None
         if linkage not in _REWARDS_COMPONENTS:
-            if self._rankedController.isAccountMastered():
+            if self.__rankedController.isAccountMastered():
                 linkage = RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_LEAGUES_UI
             else:
                 linkage = RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_RANKS_UI
-        tabs = rewards_vos.getSeasonOnTabs(linkage)
+        tabs = rewards_vos.getSeasonOnTabs(linkage, isYearRewardEnabled)
         self.as_setTabsDataS(tabs)
+        return
 
-    def _updateSounds(self, linkage):
-        isMastered = self._rankedController.isAccountMastered()
-        soundManager = self._rankedController.getSoundManager()
-        if linkage == RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_YEAR_UI or isMastered:
+    def _updateSounds(self):
+        isMastered = self.__rankedController.isAccountMastered()
+        soundManager = self.__rankedController.getSoundManager()
+        if self._selectedViewID == RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_YEAR_UI:
             soundManager.setAmbient(AmbientType.HANGAR)
+            soundManager.setProgressSound()
+        elif isMastered:
+            soundManager.setAmbient()
             soundManager.setProgressSound()
         else:
             soundManager.setAmbient()
-            soundManager.setProgressSound(self._rankedController.getCurrentDivision().getUserID())
+            soundManager.setProgressSound(self.__rankedController.getCurrentDivision().getUserID())
 
 
 class RankedBattlesRewardsRanksView(RankedBattlesRewardsRanksMeta, IResetablePage):
@@ -206,8 +230,9 @@ class RankedBattlesRewardsLeaguesView(RankedBattlesRewardsLeaguesMeta, IResetabl
             if leagueID and styleBonus:
                 isCurrent = self.__rankedController.getWebSeasonProvider().seasonInfo.league == leagueID
                 styleCD = styleBonus.specialArgs[0]
+                _, _, styleID = parseIntCompactDescr(styleCD)
                 self.__styleDescriptions[styleCD] = backport.text(R.strings.ranked_battles.rewardsView.tabs.leagues.description.dyn('league%s' % leagueID)())
-                result.append(rewards_vos.getLeagueRewardVO(leagueID, styleBonus, isCurrent))
+                result.append(rewards_vos.getLeagueRewardVO(leagueID, styleID, styleBonus, isCurrent))
 
         return result
 
@@ -238,7 +263,10 @@ class RankedBattlesRewardsLeaguesView(RankedBattlesRewardsLeaguesMeta, IResetabl
                 vehiclesPool.append(vehicleName)
                 AccountSettings.setSettings(RANKED_STYLED_VEHICLES_POOL, vehiclesPool)
         styleDescr = self.__styleDescriptions.get(styleCD, '')
-        showStylePreview(styledVehicleCD, self.__itemsCache.items.getItemByCD(styleCD), styleDescr, self._backToLeaguesCallback)
+        style = self.__itemsCache.items.getItemByCD(styleCD)
+        if constants.IS_CHINA:
+            styleDescr = style.shortDescription if style else ''
+        showStylePreview(styledVehicleCD, style, styleDescr, self._backToLeaguesCallback)
         return
 
 

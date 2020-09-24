@@ -7,7 +7,7 @@ import BigWorld
 import Settings
 from adisp import async, process
 from debug_utils import LOG_DEBUG, LOG_ERROR
-from gui.Scaleform.framework import ViewTypes
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.app_loader import decorators as ap_decorators
 from gui.shared import event_dispatcher
@@ -113,7 +113,7 @@ class NotifyController(INotifyController):
 
     def __getSettingsWindow(self):
         from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-        windowContainer = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
+        windowContainer = self.app.containerManager.getContainer(WindowLayer.TOP_WINDOW)
         return windowContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.SETTINGS_WINDOW})
 
     def __closeSettingsWindow(self):

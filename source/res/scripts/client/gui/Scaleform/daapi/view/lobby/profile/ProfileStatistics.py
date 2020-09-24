@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileStatistics.py
 from collections import namedtuple
+import constants
 from debug_utils import LOG_ERROR
 from gui.impl import backport
 from gui.impl.gen import R
@@ -134,7 +135,9 @@ class ProfileStatistics(ProfileStatisticsMeta):
             for seasonID in seasonIds:
                 season = self.rankedController.getSeason(seasonID)
                 if season:
-                    seasonItems.append(self._dataProviderEntry(str(seasonID), backport.text(R.strings.profile.profile.ranked.seasonsdropdown.num(season.getNumber())())))
+                    seasonsDropdownRes = R.strings.profile.profile.ranked.seasonsdropdown
+                    seasonsdropdown = seasonsDropdownRes.dyn(constants.CURRENT_REALM, seasonsDropdownRes)
+                    seasonItems.append(self._dataProviderEntry(str(seasonID), backport.text(seasonsdropdown.num(season.getNumber())())))
 
             for i, seasonItem in enumerate(seasonItems):
                 if seasonItem['key'] == selectedLabel:

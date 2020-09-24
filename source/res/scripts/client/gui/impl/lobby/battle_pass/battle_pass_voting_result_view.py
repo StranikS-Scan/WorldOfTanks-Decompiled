@@ -13,7 +13,7 @@ from gui.impl.dialogs import dialogs
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_voting_result_view_model import BattlePassVotingResultViewModel
 from gui.impl.pub import ViewImpl
-from gui.impl.pub.lobby_window import LobbyWindow
+from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.server_events.events_dispatcher import showMissionsBattlePassCommonProgression
 from gui.shared.event_dispatcher import showStylePreview, hideVehiclePreview, showHangar, isViewLoaded
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -252,9 +252,8 @@ class BattlePassVotingResultView(ViewImpl):
             showMissionsBattlePassCommonProgression(BattlePassProgressionSubTabs.VOTING_TAB)
 
 
-class BattlePassVotingResultWindow(LobbyWindow):
+class BattlePassVotingResultWindow(LobbyNotificationWindow):
     __slots__ = ()
 
     def __init__(self, isOverlay, parent):
-        super(BattlePassVotingResultWindow, self).__init__(content=BattlePassVotingResultView(R.views.lobby.battle_pass.BattlePassVotingResultView(), wsFlags=ViewFlags.TOP_WINDOW_VIEW if isOverlay else ViewFlags.LOBBY_TOP_SUB_VIEW, isOverlay=isOverlay), wndFlags=WindowFlags.WINDOW, decorator=None, parent=parent)
-        return
+        super(BattlePassVotingResultWindow, self).__init__(content=BattlePassVotingResultView(R.views.lobby.battle_pass.BattlePassVotingResultView(), wsFlags=ViewFlags.VIEW if isOverlay else ViewFlags.LOBBY_TOP_SUB_VIEW, isOverlay=isOverlay), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, parent=parent)

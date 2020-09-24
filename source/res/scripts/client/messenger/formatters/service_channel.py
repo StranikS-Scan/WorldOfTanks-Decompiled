@@ -7,6 +7,7 @@ import types
 from Queue import Queue
 from collections import defaultdict
 import typing
+from typing import Tuple, List, Dict, Any
 import ArenaType
 import BigWorld
 import constants
@@ -16,8 +17,12 @@ from adisp import async, process
 from battle_pass_common import BattlePassRewardReason, BattlePassState, BATTLE_PASS_BADGE_ID, BATTLE_PASS_TOKEN_NEW_DEVICE_GIFT_OFFER, BATTLE_PASS_TOKEN_TROPHY_GIFT_OFFER
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
+from cache import cached_property
 from chat_shared import decompressSysMessage, SYS_MESSAGE_TYPE, MapRemovedFromBLReason
 from constants import INVOICE_ASSET, AUTO_MAINTENANCE_TYPE, AUTO_MAINTENANCE_RESULT, PREBATTLE_TYPE, FINISH_REASON, KICK_REASON_NAMES, KICK_REASON, NC_MESSAGE_TYPE, NC_MESSAGE_PRIORITY, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, ARENA_GUI_TYPE, SYS_MESSAGE_FORT_EVENT_NAMES, PREMIUM_ENTITLEMENTS, PREMIUM_TYPE
+from dog_tags_common.components_config import componentConfigAdapter
+from dog_tags_common.config.common import ComponentViewType
+from gui.dog_tag_composer import dogTagComposer
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
 from dossiers2.ui.layouts import IGNORED_BY_BATTLE_RESULTS
@@ -407,7 +412,7 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                 ctx['achieves'], ctx['badges'] = self.__makeAchievementsAndBadgesStrings(battleResults)
                 ctx['rankedProgress'] = self.__makeRankedFlowStrings(battleResults)
                 ctx['rankedBonusBattles'] = self.__makeRankedBonusString(battleResults)
-                ctx['battlePassProgress'] = self.__makeBattlePassProgressionString(battleResults.get('ext', {}))
+                ctx['battlePassProgress'] = self.__makeBattlePassProgressionString(battleResults)
                 ctx['BRPoints'] = self.__makeBRPointsString(battleResults)
                 ctx['BRLevel'] = self.__makeBRLevelString(battleResults)
                 ctx['lock'] = self.__makeVehicleLockString(vehicleNames, battleResults)
@@ -579,11 +584,10 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
             rankedBonusBattlesBlock = g_settings.htmlTemplates.format('battleResultRankedBonusBattles', {'rankedBonusBattles': bonusBattlesString})
         return rankedBonusBattlesBlock
 
-    def __makeBattlePassProgressionString(self, extBattleResults):
+    def __makeBattlePassProgressionString(self, battleResults):
         battlePassString = ''
-        battlePass = extBattleResults.get('battlePass', {})
-        if battlePass.get('basePointsDiff', 0) > 0:
-            battlePassString = backport.text(R.strings.messenger.serviceChannelMessages.battleResults.battlePass(), pointsDiff=text_styles.neutral(battlePass['basePointsDiff']))
+        if battleResults.get('basePointsDiff', 0) > 0:
+            battlePassString = backport.text(R.strings.messenger.serviceChannelMessages.battleResults.battlePass(), pointsDiff=text_styles.neutral(battleResults['basePointsDiff']))
         return '' if not battlePassString else g_settings.htmlTemplates.format('battlePass', ctx={'battlePassProgression': battlePassString})
 
     def __makePiggyBankString(self, credits_):
@@ -2742,11 +2746,6 @@ class GoodieEnabledFormatter(_GoodyFormatter):
 class TelecomStatusFormatter(WaitItemsSyncFormatter):
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
-    @classmethod
-    def __getVehicleNames(cls, vehTypeCompDescrs):
-        itemGetter = cls._itemsCache.items.getItemByCD
-        return ', '.join((itemGetter(vehicleCD).userName for vehicleCD in vehTypeCompDescrs))
-
     @async
     @process
     def format(self, message, callback):
@@ -2781,7 +2780,7 @@ class TelecomStatusFormatter(WaitItemsSyncFormatter):
         if provider:
             providerLocRes = R.strings.menu.internet_provider.dyn(provider)
             providerLocName = backport.text(providerLocRes.name()) if providerLocRes else ''
-        msgctx = {'vehicles': self.__getVehicleNames(vehTypeDescrs),
+        msgctx = {'vehicles': self.__getVehicleUserNames(vehTypeDescrs),
          'provider': providerLocName}
         ctx = {}
         resShortcut = R.strings.system_messages.telecom
@@ -2789,6 +2788,11 @@ class TelecomStatusFormatter(WaitItemsSyncFormatter):
             ctx[txtBlock] = backport.text(self.__addProviderToRes(resShortcut.notifications.dyn(key).dyn(txtBlock), provider)(), **msgctx)
 
         return ctx
+
+    @classmethod
+    def __getVehicleUserNames(cls, vehTypeCompDescrs):
+        itemGetter = cls._itemsCache.items.getItemByCD
+        return ', '.join((itemGetter(vehicleCD).userName for vehicleCD in vehTypeCompDescrs))
 
 
 class TelecomReceivedInvoiceFormatter(InvoiceReceivedFormatter):
@@ -2849,7 +2853,7 @@ class TelecomReceivedInvoiceFormatter(InvoiceReceivedFormatter):
         if not dataEx:
             return
         else:
-            vehicles = dataEx.get('vehicles', {})
+            vehicles = [dataEx.get('vehicles', {})]
             rentedVehNames = None
             if vehicles:
                 _, _, rentedVehNames = self._getVehicleNames(vehicles)
@@ -2897,7 +2901,7 @@ class TelecomRemovedInvoiceFormatter(TelecomReceivedInvoiceFormatter):
         if not dataEx:
             return
         else:
-            vehicles = dataEx.get('vehicles', {})
+            vehicles = [dataEx.get('vehicles', {})]
             removedVehNames = None
             if vehicles:
                 _, removedVehNames, _ = self._getVehicleNames(vehicles)
@@ -3573,6 +3577,84 @@ class CustomizationProgressFormatter(WaitItemsSyncFormatter):
         elif level > 1:
             text = backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.customizationProgress.itemUpdatedNotAutoBound(), level=level, itemName=itemName)
         return text
+
+
+class DogTagFormatter(ServiceChannelFormatter):
+
+    @cached_property
+    def serviceMessageSource(self):
+        return R.strings.messenger.serviceChannelMessages.dogTags
+
+    @cached_property
+    def viewTypes(self):
+        viewTypeSource = {ComponentViewType.ENGRAVING: self.serviceMessageSource.viewType.engraving(),
+         ComponentViewType.BACKGROUND: self.serviceMessageSource.viewType.background()}
+        return viewTypeSource
+
+    def getViewTypeText(self, viewType):
+        return backport.text(self.viewTypes[viewType])
+
+
+class DogTagComponentUnlockFormatter(DogTagFormatter):
+
+    def format(self, message, *args):
+        if not message:
+            return []
+        title = backport.text(self.serviceMessageSource.unlockMessage.title())
+        lines = []
+        composer = dogTagComposer
+        for data in message.data:
+            component = componentConfigAdapter.getComponentById(int(data))
+            viewTypeText = self.getViewTypeText(component.viewType)
+            name = composer.getComponentTitle(component.componentId) or 'No name'
+            lines.append('{} "{}"'.format(viewTypeText, name))
+
+        messageString = '<br/>'.join(lines)
+        ctx = {'title': title,
+         'message': messageString}
+        templateKey = 'DogTagComponentUnlockMessage'
+        formatted = g_settings.msgTemplates.format(templateKey, ctx=ctx)
+        return [MessageData(formatted, self._getGuiSettings(message))]
+
+
+class DogTagComponentGradingFormatter(DogTagFormatter):
+    grades = {0: 'I',
+     1: 'II',
+     2: 'III',
+     3: 'IV',
+     4: 'V',
+     5: 'VI',
+     6: 'VII',
+     7: 'VIII',
+     8: 'IX',
+     9: 'X',
+     10: 'XI',
+     11: 'XII',
+     12: 'XIII',
+     13: 'XIV',
+     14: 'XV'}
+
+    def format(self, message, *args):
+        if not message:
+            return []
+        title = backport.text(self.serviceMessageSource.gradingMessage.title())
+        lines = []
+        composer = dogTagComposer
+        for data in message.data:
+            compId, grade = data
+            component = componentConfigAdapter.getComponentById(int(compId))
+            viewTypeText = self.getViewTypeText(component.viewType)
+            name = composer.getComponentTitle(component.componentId) or 'No name'
+            levelUpToText = backport.text(self.serviceMessageSource.gradingMessage.levelUpToText())
+            gradingText = self.grades.get(int(grade), 'No Data')
+            lines.append('{viewTypeText} "{name}" {levelUpToText} {gradingText}'.format(viewTypeText=viewTypeText, name=name, levelUpToText=levelUpToText, gradingText=gradingText))
+
+        messageString = '<br/>'.join(lines)
+        ctx = {'title': title,
+         'message': messageString}
+        templateKey = 'DogTagComponentGradingMessage'
+        formatted = g_settings.msgTemplates.format(templateKey, ctx=ctx)
+        return [MessageData(formatted, self._getGuiSettings(message))]
 
 
 class DedicationRewardFormatter(ServiceChannelFormatter):

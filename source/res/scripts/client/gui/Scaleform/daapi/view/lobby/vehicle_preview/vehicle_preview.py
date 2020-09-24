@@ -18,6 +18,7 @@ from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.vehicle_preview_crew_ta
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import OFFER_CHANGED_EVENT
 from gui.Scaleform.daapi.view.meta.VehiclePreviewMeta import VehiclePreviewMeta
 from gui.Scaleform.framework import g_entitiesFactories
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
@@ -26,6 +27,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
+from gui.impl.lobby.buy_vehicle_view import BuyVehicleWindow
 from gui.shared import event_dispatcher, events, event_bus_handlers, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.event_dispatcher import showShop
 from gui.shared.formatters import text_styles
@@ -60,7 +62,6 @@ _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.EPIC_BATTLE_PAGE: 'frontline',
  VIEW_ALIAS.RANKED_BATTLE_PAGE: 'ranked',
  VIEW_ALIAS.ADVENT_CALENDAR: 'adventCalendar',
- VIEW_ALIAS.OVERLAY_TEN_YEARS_COUNTDOWN: 'overlayTenYearsCountdown',
  PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS: 'personalAwards'}
 _TABS_DATA = ({'id': VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE,
   'label': VEHICLE_PREVIEW.INFOPANEL_TAB_BROWSE_NAME,
@@ -374,7 +375,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         if self._previewBackCb:
             self._previewBackCb()
         elif self._backAlias == VIEW_ALIAS.LOBBY_RESEARCH and g_currentPreviewVehicle.isPresent():
-            event_dispatcher.showResearchView(self._vehicleCD, exitEvent=events.LoadViewEvent(VIEW_ALIAS.LOBBY_TECHTREE, ctx={'nation': g_currentPreviewVehicle.item.nationName}))
+            event_dispatcher.showResearchView(self._vehicleCD, exitEvent=events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_TECHTREE), ctx={'nation': g_currentPreviewVehicle.item.nationName}))
         elif self._backAlias == VIEW_ALIAS.VEHICLE_PREVIEW:
             entity = ctx.get('entity', None) if ctx else None
             if entity:
@@ -385,13 +386,13 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         elif self._backAlias == VIEW_ALIAS.LOBBY_STORE:
             showShop()
         else:
-            event = g_entitiesFactories.makeLoadEvent(self._backAlias, {'isBackEvent': True})
+            event = g_entitiesFactories.makeLoadEvent(SFViewLoadParams(self._backAlias), {'isBackEvent': True})
             self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
     def __onInventoryChanged(self, *_):
         g_currentPreviewVehicle.selectNoVehicle()
-        event_dispatcher.selectVehicleInHangar(self._vehicleCD)
+        event_dispatcher.selectVehicleInHangar(self._vehicleCD, not BuyVehicleWindow.getInstances())
 
     def __onOfferChanged(self, event):
         self.__currentOffer = event.ctx.get('offer')

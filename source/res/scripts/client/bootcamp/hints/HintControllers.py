@@ -9,8 +9,8 @@ import SoundGroups
 from bootcamp.BootcampConstants import HINT_TYPE
 from BattleReplay import CallbackDataNames
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import BootcampEvent
 from helpers import dependency
 from skeletons.gui.game_control import IBootcampController
 
@@ -51,7 +51,7 @@ class PrimaryHintController(object):
         return
 
     def show(self):
-        g_eventBus.handleEvent(events.LoadViewEvent(self._viewAlias, None, ctx={'id': self.typeId,
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(self._viewAlias), ctx={'id': self.typeId,
          'completed': self._completed,
          'message': self.message,
          'hideCallback': self.onHided}), self._scope)
@@ -67,11 +67,10 @@ class PrimaryHintController(object):
         else:
             self.playSound(self.SHOW_SOUND_ID)
         if self.typeId in PrimaryHintController.HINT_HIGHLIGHTS:
-            g_eventBus.handleEvent(events.LoadViewEvent(BootcampEvent.ADD_HIGHLIGHT, None, PrimaryHintController.HINT_HIGHLIGHTS[self.typeId]), EVENT_BUS_SCOPE.BATTLE)
+            g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_ADD_HIGHLIGHT), ctx=PrimaryHintController.HINT_HIGHLIGHTS[self.typeId]), EVENT_BUS_SCOPE.BATTLE)
         self._isOnScreen = True
         if self.voiceover and not self.muted:
             self._hintSystem.playVoiceover(self.voiceover)
-        return
 
     def hideWithTimeout(self):
         if self._hideCallbackId:
@@ -85,16 +84,16 @@ class PrimaryHintController(object):
         self._hideCallbackId = None
         if self.typeId not in self.HINT_IDS_TO_COMPLETE:
             self.playSound(self.HIDE_SOUND_ID)
-        g_eventBus.handleEvent(events.BootcampEvent(BootcampEvent.HINT_HIDE, self.typeId), self._scope)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_HINT_HIDE, self.typeId)), self._scope)
         if self.typeId in PrimaryHintController.HINT_HIGHLIGHTS:
-            g_eventBus.handleEvent(events.LoadViewEvent(BootcampEvent.REMOVE_HIGHLIGHT, None, PrimaryHintController.HINT_HIGHLIGHTS[self.typeId]), EVENT_BUS_SCOPE.BATTLE)
+            g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_REMOVE_HIGHLIGHT), ctx=PrimaryHintController.HINT_HIGHLIGHTS[self.typeId]), EVENT_BUS_SCOPE.BATTLE)
         return
 
     def complete(self):
         if not self._completed:
             self._completed = True
             if self._isOnScreen:
-                g_eventBus.handleEvent(events.BootcampEvent(BootcampEvent.HINT_COMPLETE, self.typeId), self._scope)
+                g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_HINT_COMPLETE, self.typeId)), self._scope)
                 self.hideWithTimeout()
                 if self.typeId in self.HINT_IDS_TO_COMPLETE:
                     self.playSound(self.TASK_DONE_SOUND_ID)
@@ -114,9 +113,9 @@ class PrimaryHintController(object):
         self._isOnScreen = False
 
     def close(self):
-        g_eventBus.handleEvent(events.BootcampEvent(BootcampEvent.HINT_CLOSE), self._scope)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_HINT_CLOSE)), self._scope)
         if self.typeId in PrimaryHintController.HINT_HIGHLIGHTS:
-            g_eventBus.handleEvent(events.LoadViewEvent(BootcampEvent.REMOVE_HIGHLIGHT, None, PrimaryHintController.HINT_HIGHLIGHTS[self.typeId]), EVENT_BUS_SCOPE.BATTLE)
+            g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_REMOVE_HIGHLIGHT), ctx=PrimaryHintController.HINT_HIGHLIGHTS[self.typeId]), EVENT_BUS_SCOPE.BATTLE)
         if self.voiceover and not self.muted:
             self._hintSystem.unscheduleVoiceover(self.voiceover)
         if self._hideCallbackId:
@@ -147,13 +146,12 @@ class SecondaryHintController(object):
             g_eventBus.handleEvent(events.BootcampEvent(events.BootcampEvent.SHOW_SECONDARY_HINT, self._typeId, self._message), EVENT_BUS_SCOPE.BATTLE)
             self._onScreen = True
             if self._typeId in SecondaryHintController.HINT_HIGHLIGHTS:
-                g_eventBus.handleEvent(events.LoadViewEvent(BootcampEvent.ADD_HIGHLIGHT, None, SecondaryHintController.HINT_HIGHLIGHTS[self._typeId]), EVENT_BUS_SCOPE.BATTLE)
-        return
+                g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_ADD_HIGHLIGHT), ctx=SecondaryHintController.HINT_HIGHLIGHTS[self._typeId]), EVENT_BUS_SCOPE.BATTLE)
 
     def hide(self):
         if self._onScreen:
             if self._typeId in SecondaryHintController.HINT_HIGHLIGHTS:
-                g_eventBus.handleEvent(events.LoadViewEvent(BootcampEvent.REMOVE_HIGHLIGHT, None, SecondaryHintController.HINT_HIGHLIGHTS[self._typeId]), EVENT_BUS_SCOPE.BATTLE)
+                g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_REMOVE_HIGHLIGHT), ctx=SecondaryHintController.HINT_HIGHLIGHTS[self._typeId]), EVENT_BUS_SCOPE.BATTLE)
             g_eventBus.handleEvent(events.BootcampEvent(events.BootcampEvent.HIDE_SECONDARY_HINT, None, None), EVENT_BUS_SCOPE.BATTLE)
             self._onScreen = False
         return

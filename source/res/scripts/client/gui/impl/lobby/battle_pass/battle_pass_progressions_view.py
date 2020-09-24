@@ -338,9 +338,7 @@ class BattlePassProgressionsView(ViewImpl):
         if toLevel >= maxPostLevel and state == BattlePassState.POST:
             toLevel = maxPostLevel - 1
         for level in range(fromLevel, toLevel + 1):
-            if level == 0:
-                continue
-            item = model.getItem(level - 1)
+            item = model.getItem(level)
             levelState = self.__getRewardLevelState(awardType, curLevel, level, curState, state, isBattlePassBought)
             item.setState(levelState)
 

@@ -183,7 +183,7 @@ class BrBattleResultsViewBase(ViewImpl):
     @staticmethod
     def __setUserName(model, info):
         model.setUserName(info.get('userName', ''))
-        model.setClanAbbrev(info.get('clanAbbrev', ''))
+        model.setClanAbbrev(info.get('clanAbbrev', info.get('userClanAbbrev', '')))
 
     @staticmethod
     def __getRowType(playerData):

@@ -76,7 +76,7 @@ class _BattleCommandCoolDownError(_BattleCommandError):
 
     def __init__(self, command, remainingTime=0.0):
         super(_BattleCommandCoolDownError, self).__init__(command)
-        self._coolDown = remainingTime if remainingTime > 0 else command.cooldownPeriod
+        self._coolDown = remainingTime if remainingTime > 0.01 else command.cooldownPeriod
 
     def getMessage(self):
         return i18n.makeString(I18N_MESSENGER.CLIENT_ERRORS_COMMANDINCOOLDOWN_SUSPENDEDTEXT, self._coolDown)

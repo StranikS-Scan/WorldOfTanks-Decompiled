@@ -633,7 +633,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
             return
         else:
             changedIDXs = set()
-            nationWasChanged = False
+            nationChangedIDxs = set()
             if diff is not None and GUI_ITEM_TYPE.VEHICLE in diff:
                 vehDiff = diff[GUI_ITEM_TYPE.VEHICLE]
                 diffKeys = diff.keys()
@@ -669,12 +669,12 @@ class VehComparisonBasket(IVehicleComparisonBasket):
                             if vehicleCompactDesr != changedVehCD:
                                 vehCmpData = self._createVehCompareData(vehicleCompactDesr)
                                 self.__vehicles[idx] = vehCmpData
-                                nationWasChanged = True
+                                nationChangedIDxs.add(idx)
 
             if changedIDXs:
                 self.onParametersChange(changedIDXs)
-            if nationWasChanged:
-                self.onNationChange()
+            if nationChangedIDxs:
+                self.onNationChange(nationChangedIDxs)
             return
 
     @classmethod

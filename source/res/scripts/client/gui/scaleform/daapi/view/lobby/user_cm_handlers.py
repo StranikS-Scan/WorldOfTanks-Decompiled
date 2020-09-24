@@ -24,11 +24,13 @@ from gui.wgcg.clan.contexts import CreateInviteCtx
 from helpers import i18n, dependency
 from helpers.i18n import makeString
 from messenger import g_settings
-from messenger.m_constants import PROTO_TYPE, USER_TAG
+from messenger.m_constants import PROTO_TYPE, USER_TAG, UserEntityScope
 from messenger.proto import proto_getter
+from messenger.proto.entities import SharedUserEntity
+from messenger.proto.entities import ClanInfo as UserClanInfo
 from messenger.storage import storage_getter
 from nation_change_helpers.client_nation_change_helper import getValidVehicleCDForNationChange
-from skeletons.gui.game_control import IVehicleComparisonBasket, IEventProgressionController, IBobController
+from skeletons.gui.game_control import IVehicleComparisonBasket, IEventProgressionController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -54,7 +56,6 @@ class USER(object):
     CREATE_SQUAD = 'createSquad'
     CREATE_EVENT_SQUAD = 'createEventSquad'
     CREATE_BATTLE_ROYALE_SQUAD = 'createBattleRoyaleSquad'
-    CREATE_BOB_SQUAD = 'createBobSquad'
     INVITE = 'invite'
     REQUEST_FRIENDSHIP = 'requestFriendship'
     VEHICLE_INFO = 'vehicleInfoEx'
@@ -70,7 +71,6 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     clanCtrl = dependency.descriptor(IWebController)
     lobbyContext = dependency.descriptor(ILobbyContext)
     __eventProgression = dependency.descriptor(IEventProgressionController)
-    bobCtrl = dependency.descriptor(IBobController)
 
     def __init__(self, cmProxy, ctx=None):
         super(BaseUserCMHandler, self).__init__(cmProxy, ctx, handlers=self._getHandlers())
@@ -125,7 +125,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
         userName = self.userName
         context = CreateInviteCtx(profile.getClanDbID(), [self.databaseID])
         result = yield self.clanCtrl.sendRequest(context, allowDelay=True)
-        showClanInviteSystemMsg(userName, result.isSuccess(), result.getCode())
+        showClanInviteSystemMsg(userName, result.isSuccess(), result.getCode(), result.data)
 
     def createPrivateChannel(self):
         self.proto.contacts.createPrivateChannel(self.databaseID, self.userName)
@@ -163,9 +163,6 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     def createBattleRoyaleSquad(self):
         self._doSelect(PREBATTLE_ACTION_NAME.BATTLE_ROYALE_SQUAD, (self.databaseID,))
 
-    def createBobSquad(self):
-        self._doSelect(PREBATTLE_ACTION_NAME.BOB_SQUAD, (self.databaseID,))
-
     def invite(self):
         user = self.usersStorage.getUser(self.databaseID)
         if self.prbEntity.getPermissions().canSendInvite():
@@ -186,7 +183,6 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
          USER.REMOVE_FROM_IGNORED: 'unsetIgnored',
          USER.COPY_TO_CLIPBOARD: 'copyToClipboard',
          USER.CREATE_SQUAD: 'createSquad',
-         USER.CREATE_BOB_SQUAD: 'createBobSquad',
          USER.CREATE_EVENT_SQUAD: 'createEventSquad',
          USER.CREATE_BATTLE_ROYALE_SQUAD: 'createBattleRoyaleSquad',
          USER.INVITE: 'invite',
@@ -201,6 +197,8 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
         self.userName = ctx.userName
         self.wasInBattle = getattr(ctx, 'wasInBattle', True)
         self.showClanProfile = getattr(ctx, 'showClanProfile', True)
+        self.clanAbbrev = getattr(ctx, 'clanAbbrev', None)
+        return
 
     def _clearFlashValues(self):
         self.databaseID = None
@@ -209,7 +207,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
         return
 
     def _getUseCmInfo(self):
-        return UserContextMenuInfo(self.databaseID, self.userName)
+        return UserContextMenuInfo(self.databaseID, self.userName, self.clanAbbrev)
 
     def _generateOptions(self, ctx=None):
         userCMInfo = self._getUseCmInfo()
@@ -267,12 +265,9 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
             if self.eventsCache.isEventEnabled():
                 options.append(self._makeItem(USER.CREATE_EVENT_SQUAD, MENU.contextmenu(USER.CREATE_EVENT_SQUAD), optInitData={'enabled': canCreate,
                  'textColor': 13347959}))
-            if self.__eventProgression.modeIsAvailable():
+            if self.__eventProgression.modeIsAvailable() and self.__eventProgression.isSteelHunter:
                 primeTimeStatus, _, _ = self.__eventProgression.getPrimeTimeStatus()
                 options.append(self._makeItem(USER.CREATE_BATTLE_ROYALE_SQUAD, MENU.contextmenu(USER.CREATE_BATTLE_ROYALE_SQUAD), optInitData={'enabled': canCreate and primeTimeStatus == PrimeTimeStatus.AVAILABLE,
-                 'textColor': 13347959}))
-            if self.bobCtrl.isModeActive():
-                options.append(self._makeItem(USER.CREATE_BOB_SQUAD, MENU.contextmenu(USER.CREATE_BOB_SQUAD), optInitData={'enabled': canCreate,
                  'textColor': 13347959}))
         return options
 
@@ -504,8 +499,8 @@ class CustomUserCMHandler(BaseUserCMHandler):
 class UserContextMenuInfo(object):
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, databaseID, userName):
-        self.user = self.usersStorage.getUser(databaseID)
+    def __init__(self, databaseID, userName, clanAbbrev):
+        self.user = self.__getUser(databaseID, userName, clanAbbrev)
         self.databaseID = databaseID
         self.isBot = databaseID <= 0
         self.canAddToIgnore = True
@@ -553,3 +548,10 @@ class UserContextMenuInfo(object):
 
     def getNote(self):
         return self.user.getNote() if self.user is not None else ''
+
+    def __getUser(self, dbId, username, clanAbbrev):
+        user = self.usersStorage.getUser(dbId)
+        if user is None:
+            user = SharedUserEntity(dbId, name=username, clanInfo=UserClanInfo(abbrev=clanAbbrev), scope=UserEntityScope.LOBBY, tags={USER_TAG.SEARCH, USER_TAG.TEMP})
+            self.usersStorage.addUser(user)
+        return user

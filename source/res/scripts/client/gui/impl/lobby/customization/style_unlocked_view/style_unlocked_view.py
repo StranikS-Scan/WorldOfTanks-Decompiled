@@ -3,25 +3,26 @@
 import BigWorld
 import WWISE
 from CurrentVehicle import g_currentVehicle
-from frameworks.wulf import ViewFlags, ViewSettings
+from frameworks.wulf import ViewSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS
 from gui.impl import backport
 from gui.impl.gen.view_models.views.lobby.customization.style_unlocked_view.style_unlocked_view_model import StyleUnlockedViewModel
 from gui.impl.lobby.customization.shared import goToC11nStyledMode
+from gui.impl.lobby.progressive_reward.progressive_award_sounds import ProgressiveRewardSoundEvents
 from gui.impl.pub import ViewImpl
-from gui.impl.pub.lobby_window import LobbyWindow
-from frameworks.wulf import WindowFlags
+from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.impl.gen import R
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS
+from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsSteelHunter
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
+from gui.shared.events import ViewEventType
 from helpers import dependency, int2roman
 from items.components.c11n_constants import UNBOUND_VEH_KEY
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
-from gui.impl.lobby.progressive_reward.progressive_award_sounds import ProgressiveRewardSoundEvents
 
 class StyleUnlockedView(ViewImpl):
     c11nService = dependency.descriptor(ICustomizationService)
@@ -29,7 +30,6 @@ class StyleUnlockedView(ViewImpl):
 
     def __init__(self, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.customization.style_unlocked_view.StyleUnlockedView())
-        settings.flags = ViewFlags.OVERLAY_VIEW
         settings.model = StyleUnlockedViewModel()
         settings.args = args
         settings.kwargs = kwargs
@@ -59,9 +59,6 @@ class StyleUnlockedView(ViewImpl):
             self.__updateC11nButton(model=model)
         return
 
-    def _lockC11nButton(self, *_):
-        self.__updateC11nButton(lock=True)
-
     def _updateC11nButton(self, *_):
         self.__updateC11nButton(lock=False)
 
@@ -69,9 +66,7 @@ class StyleUnlockedView(ViewImpl):
         self.viewModel.onOkClick += self.__onOkClick
         self.viewModel.onSecondaryClick += self.__onShowC11nClick
         self.viewModel.onAnimationSound += self.__onAnimationSound
-        g_eventBus.addListener(VIEW_ALIAS.HERO_VEHICLE_PREVIEW, self._lockC11nButton, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.addListener(VIEW_ALIAS.BATTLE_QUEUE, self._lockC11nButton, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.addListener(VIEW_ALIAS.LOBBY_HANGAR, self._updateC11nButton, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self.__loadViewHandler, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.addCallbacks({'inventory': self._updateC11nButton})
         g_clientUpdateManager.addCallbacks({'cache.vehsLock': self._updateC11nButton})
 
@@ -79,9 +74,7 @@ class StyleUnlockedView(ViewImpl):
         self.viewModel.onOkClick -= self.__onOkClick
         self.viewModel.onSecondaryClick -= self.__onShowC11nClick
         self.viewModel.onAnimationSound -= self.__onAnimationSound
-        g_eventBus.removeListener(VIEW_ALIAS.HERO_VEHICLE_PREVIEW, self._lockC11nButton, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.removeListener(VIEW_ALIAS.BATTLE_QUEUE, self._lockC11nButton, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.removeListener(VIEW_ALIAS.LOBBY_HANGAR, self._updateC11nButton, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self.__loadViewHandler, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.removeObjectCallbacks(self)
 
     def __setVehicleInfo(self, model):
@@ -89,15 +82,25 @@ class StyleUnlockedView(ViewImpl):
         model.setTankTypeIcon(self.__vehicle.typeBigIconResource())
         model.setTankLevel(int2roman(self.__vehicle.level))
 
+    def __loadViewHandler(self, event):
+        if event.alias == VIEW_ALIAS.LOBBY_HANGAR:
+            self._updateC11nButton()
+        elif event.alias in (VIEW_ALIAS.HERO_VEHICLE_PREVIEW, VIEW_ALIAS.BATTLE_QUEUE):
+            self.__updateC11nButton(lock=True)
+
     @replaceNoneKwargsModel
     def __updateC11nButton(self, lock=False, model=None):
-        isEnabled = not lock and self.__vehicle.isCustomizationEnabled()
+        isEnabled = not lock and not currentHangarIsSteelHunter() and self.__isCustEnabledForActiveVehicle()
         if isEnabled:
             tooltipText = ''
         else:
             tooltipText = backport.text(R.strings.vehicle_customization.progressiveItemReward.gotoCustomizationButton.disabled.tooltip())
         model.setSecondaryButtonTooltip(tooltipText)
         model.setSecondaryButtonEnabled(isEnabled)
+
+    def __isCustEnabledForActiveVehicle(self):
+        currentVehicle = g_currentVehicle.item
+        return currentVehicle.isCustomizationEnabled() if currentVehicle is not None and currentVehicle.intCD != self.__vehicle.intCD else self.__vehicle.isCustomizationEnabled()
 
     def __onOkClick(self):
         self.destroyWindow()
@@ -111,8 +114,7 @@ class StyleUnlockedView(ViewImpl):
         self.destroy()
 
 
-class StyleUnlockedWindow(LobbyWindow):
+class StyleUnlockedWindow(LobbyNotificationWindow):
 
     def __init__(self, vehicleCD):
-        super(StyleUnlockedWindow, self).__init__(content=StyleUnlockedView(vehicleCD), wndFlags=WindowFlags.OVERLAY, decorator=None)
-        return
+        super(StyleUnlockedWindow, self).__init__(content=StyleUnlockedView(vehicleCD))

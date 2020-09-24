@@ -18,7 +18,7 @@ from gui.shared.formatters import text_styles, icons
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from helpers import i18n, time_utils, dependency
 from gui.shared.utils.functions import makeTooltip
-from skeletons.gui.game_control import IRankedBattlesController, IEventProgressionController, IBobController
+from skeletons.gui.game_control import IRankedBattlesController, IEventProgressionController
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.clans.clan_helpers import isStrongholdsEnabled
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
@@ -100,7 +100,7 @@ class _SelectorItem(object):
         return False
 
     def isInSquad(self, state):
-        return state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInUnit(PREBATTLE_TYPE.EPIC) or state.isInUnit(PREBATTLE_TYPE.BOB)
+        return state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInUnit(PREBATTLE_TYPE.EPIC)
 
     def setLocked(self, value):
         self._isLocked = value
@@ -298,25 +298,6 @@ class _SandboxItem(_SelectorItem):
         self._isDisabled = state.hasLockedState
         self._isSelected = state.isQueueSelected(queueType=QUEUE_TYPE.SANDBOX)
         self._isVisible = self.lobbyContext.getServerSettings().isSandboxEnabled()
-
-
-class _BobItem(_SelectorItem):
-    bobController = dependency.descriptor(IBobController)
-
-    def isRandomBattle(self):
-        return True
-
-    def getSpecialBGIcon(self):
-        return backport.image(_R_ICONS.buttons.selectorRendererBGEvent()) if self.bobController.isModeActive() else ''
-
-    def select(self):
-        super(_BobItem, self).select()
-        selectorUtils.setBattleTypeAsKnown(self._selectorType)
-
-    def _update(self, state):
-        self._isSelected = state.isQueueSelected(QUEUE_TYPE.BOB)
-        self._isDisabled = state.hasLockedState
-        self._isVisible = self.bobController.isModeActive()
 
 
 class _BattleSelectorItems(object):
@@ -629,7 +610,6 @@ def _createItems(lobbyContext=None):
     isInRoaming = settings.roaming.isInRoaming()
     items = []
     _addRandomBattleType(items)
-    _addBobBattleType(items)
     _addRankedBattleType(items, settings)
     _addCommandBattleType(items, settings)
     _addStrongholdsBattleType(items, isInRoaming)
@@ -703,10 +683,6 @@ def _addTutorialBattleType(items, isInRoaming):
 
 def _addSandboxType(items):
     items.append(_SandboxItem(backport.text(_R_BATTLE_TYPES.battleTeaching()), PREBATTLE_ACTION_NAME.SANDBOX, 9))
-
-
-def _addBobBattleType(items):
-    items.append(_BobItem(MENU.HEADERBUTTONS_BATTLE_TYPES_BOB, PREBATTLE_ACTION_NAME.BOB, 1, SELECTOR_BATTLE_TYPES.BOB))
 
 
 def _addSimpleSquadType(items):

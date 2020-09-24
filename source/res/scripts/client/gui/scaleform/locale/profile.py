@@ -381,6 +381,7 @@ class PROFILE(object):
     PROFILE_SEASONSDROPDOWN_SPECIFIC = '#profile:profile/seasonsdropdown/specific'
     PROFILE_RANKED_SEASONSDROPDOWN_ARCHIVE = '#profile:profile/ranked/seasonsdropdown/archive'
     PROFILE_RANKED_SEASONSDROPDOWN_1 = '#profile:profile/ranked/seasonsdropdown/1'
+    PROFILE_RANKED_SEASONSDROPDOWN_CN_1 = '#profile:profile/ranked/seasonsdropdown/CN/1'
     PROFILE_RANKED_SEASONSDROPDOWN_2 = '#profile:profile/ranked/seasonsdropdown/2'
     PROFILE_RANKED_SEASONSDROPDOWN_3 = '#profile:profile/ranked/seasonsdropdown/3'
     PROFILE_PARAMS_TOOLTIP_RANKED_POINTS_HEADER = '#profile:profile/params/tooltip/ranked/points/header'
@@ -554,6 +555,7 @@ class PROFILE(object):
      PROFILE_DROPDOWN_LABELS_RANKED)
     PROFILE_RANKED_SEASONSDROPDOWN_ENUM = (PROFILE_RANKED_SEASONSDROPDOWN_ARCHIVE,
      PROFILE_RANKED_SEASONSDROPDOWN_1,
+     PROFILE_RANKED_SEASONSDROPDOWN_CN_1,
      PROFILE_RANKED_SEASONSDROPDOWN_2,
      PROFILE_RANKED_SEASONSDROPDOWN_3)
 

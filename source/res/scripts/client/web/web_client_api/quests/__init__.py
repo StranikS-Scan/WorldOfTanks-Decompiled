@@ -1,14 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/quests/__init__.py
 import itertools
-import os
 import sys
 import typing
 from gui.server_events.bonuses import HIDDEN_BONUSES
 from gui.Scaleform.daapi.view.lobby.missions.cards_formatters import CardBattleConditionsFormatters
 from gui.server_events.cond_formatters import CONDITION_SIZE
 from helpers import dependency, i18n
-import BigWorld
 from skeletons.gui.server_events import IEventsCache
 from web.web_client_api import w2c, w2capi, Field, W2CSchema
 from gui.server_events.event_items import Quest
@@ -16,10 +14,6 @@ from web.web_client_api.common import sanitizeResPath
 
 class _QuestsSchema(W2CSchema):
     ids = Field(type=list)
-
-
-class _QuestSetTokenSchema(W2CSchema):
-    token = Field(required=True, type=basestring, default='')
 
 
 class _RawQuestConditionsFormatters(CardBattleConditionsFormatters):
@@ -87,22 +81,4 @@ class QuestsWebApi(W2CSchema):
         else:
             filterFunc = None
         data = {qID:_questAsDict(quest) for qID, quest in self._eventsCache.getActiveQuests(filterFunc=filterFunc).iteritems()}
-        return data
-
-    @w2c(_QuestsSchema, 'get_quests_old')
-    def handleGetQuestsOld(self, command):
-        quests = self._eventsCache.questsProgress.getQuestsData()
-        if hasattr(command, 'ids') and command.ids:
-            quests = {k:v for k, v in quests.iteritems() if k in command.ids}
-        return {'quest_list': quests,
-         'action': 'get_quests'}
-
-    @w2c(_QuestSetTokenSchema, 'set_token')
-    def setToken(self, command):
-        tokenName = command.token
-        if isinstance(tokenName, unicode):
-            tokenName = str(tokenName)
-        if tokenName is not None:
-            BigWorld.player().requestSingleToken(tokenName)
-        data = {'token': tokenName}
         return data

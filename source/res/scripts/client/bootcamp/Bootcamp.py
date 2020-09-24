@@ -563,7 +563,7 @@ class Bootcamp(EventSystemEntity):
         return self.__nation
 
     def getNationData(self):
-        return self.__nationsData[self.__nation]
+        return self.__nationsData.get(self.__nation, {})
 
     def isReferralEnabled(self):
         return isReferralProgramEnabled() and self.__isRecruit

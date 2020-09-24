@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ui/browser.py
 from adisp import process
+from frameworks.wulf import WindowLayer
 from gui.shop import showBuyGoldWebOverlay
 from gui.shared.event_dispatcher import showBrowserOverlayView
 from helpers import dependency
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import ViewTypes
 from gui.shared.utils.functions import getViewName
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBrowserController, IExternalLinksController
@@ -69,17 +69,20 @@ class CloseBrowserWindowWebApiMixin(object):
             appLoader = dependency.instance(IAppLoader)
             app = appLoader.getApp()
             if app is not None and app.containerManager is not None:
-                supportedBrowserViewTypes = (ViewTypes.WINDOW, ViewTypes.OVERLAY, ViewTypes.LOBBY_TOP_SUB)
+                supportedBrowserLayers = (WindowLayer.WINDOW,
+                 WindowLayer.FULLSCREEN_WINDOW,
+                 WindowLayer.OVERLAY,
+                 WindowLayer.TOP_SUB_VIEW)
                 browserWindow = None
-                for viewType in supportedBrowserViewTypes:
-                    browserWindow = app.containerManager.getView(viewType, criteria={POP_UP_CRITERIA.UNIQUE_NAME: windowAlias})
+                for layer in supportedBrowserLayers:
+                    browserWindow = app.containerManager.getView(layer, criteria={POP_UP_CRITERIA.UNIQUE_NAME: windowAlias})
                     if browserWindow is not None:
                         break
 
                 if browserWindow is not None:
                     browserWindow.destroy()
                 else:
-                    raise WebCommandException('Browser window could not be found! May be alias "{}" is wrong or probably browser has unsupported viewType.'.format(windowAlias))
+                    raise WebCommandException('Browser window could not be found! May be alias "{}" is wrong or probably browser has unsupported layer.'.format(windowAlias))
         self._onBrowserClose()
         return
 
@@ -94,7 +97,7 @@ class CloseBrowserViewWebApiMixin(object):
         appLoader = dependency.instance(IAppLoader)
         app = appLoader.getApp()
         if app is not None and app.containerManager is not None:
-            browserView = app.containerManager.getView(ViewTypes.LOBBY_SUB, criteria={POP_UP_CRITERIA.VIEW_ALIAS: ctx.get('browser_alias')})
+            browserView = app.containerManager.getView(WindowLayer.SUB_VIEW, criteria={POP_UP_CRITERIA.VIEW_ALIAS: ctx.get('browser_alias')})
             if browserView is not None:
                 browserView.onCloseView()
                 return

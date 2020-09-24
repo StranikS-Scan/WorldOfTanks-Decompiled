@@ -1,11 +1,13 @@
 <shells.xml>
   <icons>
     <ap>	ARMOR_PIERCING.png 0 0	</ap>
-    <ap_he>	ARMOR_PIERCING_HE.png 0 0	</ap_he>
+    <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
     <ap_cr>	ARMOR_PIERCING_CR.png 0 0	</ap_cr>
+    <ap_cr_premium>	ARMOR_PIERCING_CR_PREMIUM.png 0 0	</ap_cr_premium>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
     <hc>	HOLLOW_CHARGE.png 0 0	</hc>
+    <hc_premium>	HOLLOW_CHARGE_PREMIUM.png 0 0	</hc_premium>
   </icons>
   <_37mm_AP_M74>
     <id>	43	</id>
@@ -24,7 +26,7 @@
   <_37mm_APC_M51>
     <id>	44	</id>
     <userString>	#china_vehicles:_37mm_APC_M51	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -68,7 +70,7 @@
   <_37cm_Pzgr40>
     <id>	16	</id>
     <userString>	#china_vehicles:_37cm_Pzgr40	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -127,7 +129,7 @@
   <_37mm_FrtPrf1935>
     <id>	11	</id>
     <userString>	#china_vehicles:_37mm_FrtPrf1935	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -171,7 +173,7 @@
   <_40mm_APCR>
     <id>	38	</id>
     <userString>	#china_vehicles:_40mm_APCR	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -215,7 +217,7 @@
   <_45mm_UBR-240PA>
     <id>	41	</id>
     <userString>	#china_vehicles:_45mm_UBR-240PA	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -259,7 +261,7 @@
   <_47mm_APCR>
     <id>	35	</id>
     <userString>	#china_vehicles:_47mm_APCR	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -303,7 +305,7 @@
   <_47mm_APCR_Type1>
     <id>	53	</id>
     <userString>	#china_vehicles:_47mm_APCR_Type1	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	1600	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -347,7 +349,7 @@
   <_57mm_HEAT_Type_97>
     <id>	50	</id>
     <userString>	#china_vehicles:_57mm_HEAT_Type_97	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	1200	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -393,7 +395,7 @@
   <_57mm_HEAT_Type_97_bootcamp>
     <id>	89	</id>
     <userString>	#china_vehicles:_57mm_HEAT_Type_97	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	1200	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -440,7 +442,7 @@
   <_57mm_APCR_Type_55_57>
     <id>	59	</id>
     <userString>	#china_vehicles:_57mm_APCR_Type_55_57	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -484,7 +486,7 @@
   <_76mm_APCR_type1>
     <id>	47	</id>
     <userString>	#china_vehicles:_76mm_APCR_type1	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -528,7 +530,7 @@
   <_76mm_UBR-354MP>
     <id>	56	</id>
     <userString>	#china_vehicles:_76mm_UBR-354MP	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -572,7 +574,7 @@
   <_76mm_HVAP_M93>
     <id>	73	</id>
     <userString>	#usa_vehicles:_76mm_HVAP_M93	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -616,7 +618,7 @@
   <_76mm_APFSDS_T_M464>
     <id>	95	</id>
     <userString>	#china_vehicles:_76mm_APFSDS_T_M464	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	3200	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -660,7 +662,7 @@
   <_85mm_Po_367>
     <id>	67	</id>
     <userString>	#china_vehicles:_85mm_Po_367	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4000	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -734,7 +736,7 @@
   <_85mm_HEAT>
     <id>	4	</id>
     <userString>	#china_vehicles:_85mm_HEAT	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -750,7 +752,7 @@
   <_85mm_367>
     <id>	9	</id>
     <userString>	#china_vehicles:_85mm_367	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -794,7 +796,7 @@
   <_90mm_HEAT_M348>
     <id>	76	</id>
     <userString>	#china_vehicles:_90mm_HEAT_M348	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4000	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -839,7 +841,7 @@
   <_100mm_UBR-412P>
     <id>	1	</id>
     <userString>	#china_vehicles:_100mm_UBR-412P	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -883,7 +885,7 @@
   <_100mm_TC-412G>
     <id>	19	</id>
     <userString>	#china_vehicles:_100mm_TC-412G	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4000	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -942,7 +944,7 @@
   <_105mm_HEAT_M456>
     <id>	80	</id>
     <userString>	#china_vehicles:_105mm_HEAT_M456	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -987,7 +989,7 @@
   <_122mm_Type_64>
     <id>	7	</id>
     <userString>	#china_vehicles:_122mm_Type_64	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	5600	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -1015,6 +1017,36 @@
       <devices>	165	</devices>
     </damage>
   </_122mm_Type_68>
+  <_122mm_Type_57_CJ>
+    <id>	100	</id>
+    <userString>	#china_vehicles:_122mm_Type_57_CJ	</userString>
+    <icon>	ap	</icon>
+    <price>	1025	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_122mm_Type_57_CJ>
+  <_122mm_Type_64_RH>
+    <id>	101	</id>
+    <userString>	#china_vehicles:_122mm_Type_64_RH	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	5600	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_122mm_Type_64_RH>
   <_122mm_CB-472>
     <id>	61	</id>
     <userString>	#china_vehicles:_122mm_CB-472	</userString>
@@ -1032,7 +1064,7 @@
   <_122mm_PO-122>
     <id>	62	</id>
     <userString>	#china_vehicles:_122mm_PO-122	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -1077,7 +1109,7 @@
   <_130mm_HEAT>
     <id>	32	</id>
     <userString>	#china_vehicles:_130mm_HEAT	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -1122,7 +1154,7 @@
   <_130mm_HEAT_QL>
     <id>	92	</id>
     <userString>	#china_vehicles:_130mm_HEAT_QL	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	5200	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -1167,7 +1199,7 @@
   <_130mm_Po_130G>
     <id>	86	</id>
     <userString>	#china_vehicles:_130mm_Po_130G	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	5200	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -1212,7 +1244,7 @@
   <_152mm_Po_152>
     <id>	83	</id>
     <userString>	#china_vehicles:_152mm_Po_152	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	6800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>

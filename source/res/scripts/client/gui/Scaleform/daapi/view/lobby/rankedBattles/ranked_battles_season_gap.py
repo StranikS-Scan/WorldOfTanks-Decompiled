@@ -119,7 +119,7 @@ class RankedBattlesSeasonGapView(RankedBattlesSeasonGapViewMeta, IResetablePage)
     def __updateData(self):
         achievedRankID = self.__dossier.getAchievedRank()
         achievedDivision = self.__rankedController.getDivision(achievedRankID)
-        self.as_setDataS(season_gap_vos.getDataVO(season_gap_vos.StateBlock(self.__resultState, achievedRankID, achievedDivision, self.__resultLeague, self.__isSprinter)))
+        self.as_setDataS(season_gap_vos.getDataVO(season_gap_vos.StateBlock(self.__resultState, achievedRankID, achievedDivision, self.__resultLeague, self.__isSprinter, self.__rankedController.isYearRewardEnabled())))
 
     def __updateEfficiency(self):
         self.as_setEfficiencyDataS(season_gap_vos.getEfficiencyVO(self.__dossier.getStepsEfficiency()))

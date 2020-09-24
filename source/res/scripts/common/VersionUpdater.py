@@ -39,12 +39,13 @@ class VersionUpdaterBase(object):
                 self.__buildUpdaters()
             return enumerate(self._updaters[startVersion - self._startVersion:], start=startVersion)
 
-    def _updateToLatestVersion(self, versionOrGetter, logID, *args):
+    def _updateToLatestVersion(self, versionOrGetter, checkerForCallback, logID, *args):
         isCallable = callable(versionOrGetter)
         currentVersion = versionOrGetter(*args) if isCallable else versionOrGetter
         for fromVer, updater in self.__getUpdaters(currentVersion):
             LOG_DEBUG('_updateToLatestVersion', logID, fromVer)
             result = updater(*args)
+            checkerForCallback(result, updater, *args)
             if isCallable:
                 resultVer = versionOrGetter(*args)
             else:

@@ -51,7 +51,7 @@ class BattleRoyalePlayerPlaceBlock(base.StatsItem):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def _convert(self, value, reusable):
-        playerRank = reusable.personal.avatar.extensionInfo.get('playerRank', {}).get('rank', 0)
+        playerRank = reusable.personal.avatar.extensionInfo.get('playerRank', 0)
         if self.__sessionProvider.getCtx().extractLastArenaWinStatus() is not None:
             winStatus = WinStatus.WIN if playerRank == _THE_BEST_RANK else WinStatus.LOSE
             self.__sessionProvider.getCtx().setLastArenaWinStatus(WinStatus(winStatus))
@@ -186,7 +186,7 @@ class PlaceParameter(BattleRoyaleStatsItemBlock):
     def _getValue(self, result, reusable):
         personalInfo = reusable.getPersonalVehiclesInfo(result['personal'])
         avatar = personalInfo.avatar
-        return avatar.extensionInfo.get('playerRank', {}).get('rank', 0)
+        return avatar.extensionInfo.get('playerRank', 0)
 
     def _getMaxValue(self, result, reusable):
         if _isSquadMode(reusable):
@@ -354,7 +354,7 @@ class BattleRoyalePlayerBlock(base.StatsBlock):
         self.clanAbbrev = player.clanAbbrev
         avatarInfo = reusable.avatars.getAvatarInfo(dbID)
         if avatarInfo is not None and avatarInfo.extensionInfo is not None:
-            self.place = avatarInfo.extensionInfo.get('playerRank', {}).get('rank', 0)
+            self.place = avatarInfo.extensionInfo.get('playerRank', 0)
         return
 
 

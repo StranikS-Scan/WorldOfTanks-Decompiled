@@ -5,8 +5,8 @@ from constants import ARENA_PERIOD
 from debug_utils import LOG_DEBUG
 from adisp import process
 from PlayerEvents import g_playerEvents
+from frameworks.wulf import WindowLayer
 from gui.shared import EVENT_BUS_SCOPE, events
-from gui.Scaleform.framework import ViewTypes
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.Scaleform.daapi.view.battle.shared import period_music_listener
@@ -16,6 +16,8 @@ from gui.Scaleform.daapi.view.battle.classic.page import ClassicPage
 from gui.Scaleform.daapi.view.battle.classic.page import DynamicAliases
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.battle.event.manager import EventMarkersManager
+from gui.shared.events import LoadViewEvent
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 EVENT_CONFIG = ComponentsConfig(config=((BATTLE_CTRL_ID.BATTLE_HINTS, (BATTLE_VIEW_ALIASES.BATTLE_HINT,)),
  (BATTLE_CTRL_ID.ARENA_PERIOD, (BATTLE_VIEW_ALIASES.BATTLE_TIMER,
    BATTLE_VIEW_ALIASES.PREBATTLE_TIMER,
@@ -71,7 +73,7 @@ class EventBattlePage(ClassicPage):
 
     def _toggleRadialMenu(self, isShown, allowAction=True):
         manager = self.app.containerManager
-        if not manager.isContainerShown(ViewTypes.DEFAULT):
+        if not manager.isContainerShown(WindowLayer.VIEW):
             return
         elif manager.isModalViewsIsExists():
             return
@@ -92,7 +94,7 @@ class EventBattlePage(ClassicPage):
 
     def _toggleEventStats(self, isShown):
         manager = self.app.containerManager
-        if not manager.isContainerShown(ViewTypes.DEFAULT):
+        if not manager.isContainerShown(WindowLayer.VIEW):
             return
         else:
             eventStats = self.getComponent(BATTLE_VIEW_ALIASES.EVENT_STATS)
@@ -114,7 +116,7 @@ class EventBattlePage(ClassicPage):
     def _onBattleLoadingStart(self):
         data = {'autoStart': False,
          'tutorialPages': _TUTORIAL_PAGES}
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.EVENT_LOADING, ctx=data), EVENT_BUS_SCOPE.BATTLE)
+        self.fireEvent(LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.EVENT_LOADING), ctx=data), EVENT_BUS_SCOPE.BATTLE)
         super(EventBattlePage, self)._onBattleLoadingStart()
 
     def _onBattleLoadingFinish(self):

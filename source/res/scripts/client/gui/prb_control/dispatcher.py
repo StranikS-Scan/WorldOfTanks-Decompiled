@@ -35,6 +35,7 @@ from helpers import dependency
 from skeletons.gui.game_control import IGameSessionController, IRentalsController
 from skeletons.gui.game_control import IIGRController
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.prb_control import IPrbControlLoader
 from skeletons.gui.server_events import IEventsCache
 _logger = logging.getLogger(__name__)
 
@@ -708,7 +709,7 @@ class _PrbPeripheriesHandler(object):
             yield lambda callback: callback(None)
 
 
-class _PrbControlLoader(object):
+class _PrbControlLoader(IPrbControlLoader):
     __slots__ = ('__prbDispatcher', '__invitesManager', '__autoNotifier', '__peripheriesHandler', '__storage', '__isEnabled')
 
     def __init__(self):

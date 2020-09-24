@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/ValueReplay.py
-from bit_coder import BitCoder
 import struct
+from bit_coder import BitCoder
 from soft_exception import SoftException
+from battle_results import g_config as battleResultsConfig
 
 def makeFactor10(factor):
     return int(round(factor * 10))
@@ -20,9 +21,12 @@ class ValueReplayConnector(object):
     __slots__ = ('_battleResultsStruct', '_battleResults')
     _bitCoder = BitCoder(10, 8, 10)
 
-    def __init__(self, battleResultsStruct, battleResults):
+    def __init__(self, battleResults, battleResultsStruct=None):
+        if battleResultsStruct is None:
+            battleResultsStruct = battleResultsConfig['allResults']
         self._battleResultsStruct = battleResultsStruct
         self._battleResults = battleResults
+        return
 
     @staticmethod
     def makeIndex(paramIndex, paramSubIndex, secondParamIndex):
@@ -82,8 +86,8 @@ class ValueReplayConnector(object):
 
     def indexToNames(self, idx):
         index, subIndex, secondIndex = ValueReplayConnector.parseIndex(idx)
-        subname1 = self._battleResultsStruct[index].name
-        secondName = self._battleResultsStruct[secondIndex].name
+        subname1 = self._battleResultsStruct.nameOf(index)
+        secondName = self._battleResultsStruct.nameOf(secondIndex)
         if subIndex > 0:
             subIndex -= 1
             subname2 = self.__getSecondValueByIndex(self._battleResults[subname1], subIndex)[0][1][0]

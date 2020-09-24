@@ -5,6 +5,7 @@ from PlayerEvents import g_playerEvents
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
@@ -51,10 +52,10 @@ class ShopView(LobbySubView, ShopBase):
         g_playerEvents.onShopResync += self.__onShopResync
 
     def onCloseBtnClick(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onEscapePress(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _dispose(self):
         g_playerEvents.onShopResync -= self.__onShopResync

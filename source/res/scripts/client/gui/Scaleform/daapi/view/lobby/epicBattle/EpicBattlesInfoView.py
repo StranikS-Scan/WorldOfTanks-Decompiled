@@ -11,6 +11,7 @@ from gui.Scaleform.daapi.view.lobby.epicBattle.epic_prestige_progress import get
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_cycle_helpers import getActiveCycleTimeFrameStrings
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import AWARDS_SIZES, CurtailingAwardsComposer
 from gui.Scaleform.daapi.view.meta.EpicBattlesInfoViewMeta import EpicBattlesInfoViewMeta
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -44,7 +45,7 @@ class EpicBattlesInfoView(LobbySubView, EpicBattlesInfoViewMeta):
         self.__close()
 
     def onManageAbilitiesBtnClick(self):
-        self.fireEvent(events.LoadViewEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_SKILL_ALIAS, ctx={'showBackButton': True,
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(EPICBATTLES_ALIASES.EPIC_BATTLES_SKILL_ALIAS), ctx={'showBackButton': True,
          'previousPage': EPICBATTLES_ALIASES.EPIC_BATTLES_INFO_ALIAS}), EVENT_BUS_SCOPE.LOBBY)
         self.destroy()
 
@@ -58,16 +59,16 @@ class EpicBattlesInfoView(LobbySubView, EpicBattlesInfoViewMeta):
         if self.__canClaimFinalReward():
             self.__claimReward()
         else:
-            self.fireEvent(events.LoadViewEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_PRESTIGE_ALIAS), EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(events.LoadViewEvent(SFViewLoadParams(EPICBATTLES_ALIASES.EPIC_BATTLES_PRESTIGE_ALIAS)), EVENT_BUS_SCOPE.LOBBY)
             self.destroy()
 
     def onInfoBtnClick(self):
         ctx = {'previousPage': EPICBATTLES_ALIASES.EPIC_BATTLES_INFO_ALIAS}
-        self.fireEvent(events.LoadViewEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_WELCOME_BACK_ALIAS, ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(EPICBATTLES_ALIASES.EPIC_BATTLES_WELCOME_BACK_ALIAS), ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
         self.destroy()
 
     def onGameRewardsBtnClick(self):
-        self.fireEvent(events.LoadViewEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_BROWSER_ALIAS, ctx={'urlID': 'gameRules',
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(EPICBATTLES_ALIASES.EPIC_BATTLES_BROWSER_ALIAS), ctx={'urlID': 'gameRules',
          'showBackBtn': True,
          'previousPage': EPICBATTLES_ALIASES.EPIC_BATTLES_INFO_ALIAS}), EVENT_BUS_SCOPE.LOBBY)
         self.destroy()
@@ -178,7 +179,7 @@ class EpicBattlesInfoView(LobbySubView, EpicBattlesInfoViewMeta):
         if maxRewardTokens > metaLevelComp.get('maxRewardTokens', -1):
             LOG_CODEPOINT_WARNING()
             LOG_ERROR('This line of code should never be reached!')
-            self.fireEvent(events.LoadViewEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_INFO_ALIAS), EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(events.LoadViewEvent(SFViewLoadParams(EPICBATTLES_ALIASES.EPIC_BATTLES_INFO_ALIAS)), EVENT_BUS_SCOPE.LOBBY)
             return []
         return getPrestigeLevelAwardsVOs(self.eventsCache.getAllQuests(), maxRewardTokens, size)
 
@@ -202,4 +203,4 @@ class EpicBattlesInfoView(LobbySubView, EpicBattlesInfoViewMeta):
         return pMetaLevel == maxMetaLevel and pPrestigeLevel + 1 == maxRewardTokens and not maxRewardClaimed
 
     def __close(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)

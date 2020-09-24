@@ -45,10 +45,12 @@ class VehiclePreviewTradeInBuyingPanel(VehiclePreviewTradeInBuyingPanelMeta):
             viewPy.setTradeInVehicle(self.__tradeInVehicle)
 
     def __updateData(self, _=None):
-        self.as_setDataS(self.__getVO())
+        self.__updateTradeVehicles()
+        if self.__tradeInVehicle is not None:
+            self.as_setDataS(self.__getVO())
+        return
 
     def __getVO(self):
-        self.__updateTradeVehicles()
         statusText, statusOk, tradeOffAvailable = self.__getStatus()
         return {'currentPrice': getItemPricesVO(self.__tradeIn.getTradeInPrice(self.__tradeInVehicle)),
          'selectedPrice': self.__getSelectedPrice(),

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/pub/context_menu_window.py
 import logging
 import typing
-from frameworks.wulf import View, ViewFlags, WindowFlags
+from frameworks.wulf import View, ViewFlags, WindowFlags, ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.ui_kit.context_menu_item_model import ContextMenuItemModel
 from gui.impl.gen.view_models.ui_kit.context_menu_sub_item_model import ContextMenuSubItemModel
@@ -13,8 +13,11 @@ _logger = logging.getLogger(__name__)
 
 class ContextMenuContent(View):
 
-    def __init__(self, layoutID=R.views.common.context_menu_window.context_menu_content.ContextMenuContent()):
-        super(ContextMenuContent, self).__init__(layoutID, ViewFlags.COMPONENT, ContextMenuContentModel)
+    def __init__(self, layoutID=R.views.common.context_menu_window.context_menu_content.ContextMenuContent(), *args, **kwargs):
+        settings = ViewSettings(layoutID, ViewFlags.COMPONENT, ContextMenuContentModel())
+        settings.args = args
+        settings.kwargs = kwargs
+        super(ContextMenuContent, self).__init__(settings)
 
     @property
     def isGameface(self):

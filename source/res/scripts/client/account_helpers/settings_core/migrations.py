@@ -509,6 +509,12 @@ def _migrateTo58(core, data, initialized):
     gameData[BattleCommStorageKeys.SHOW_BASE_MARKERS] = True
 
 
+def _migrateTo59(core, data, initialized):
+    dtData = data['dogTags']
+    dtData[GAME.SHOW_DOGTAG_TO_KILLER] = True
+    dtData[GAME.SHOW_VICTIMS_DOGTAG] = True
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -735,6 +741,10 @@ _versions = ((1,
   False),
  (58,
   _migrateTo58,
+  False,
+  False),
+ (59,
+  _migrateTo59,
   False,
   False))
 

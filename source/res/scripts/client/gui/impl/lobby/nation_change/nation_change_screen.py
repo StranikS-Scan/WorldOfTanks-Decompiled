@@ -4,7 +4,7 @@ import SoundGroups
 import WWISE
 from CurrentVehicle import g_currentVehicle
 from account_helpers.AccountSettings import NATION_CHANGE_VIEWED, AccountSettings
-from frameworks.wulf import ViewFlags, ViewSettings
+from frameworks.wulf import ViewSettings
 from frameworks.wulf import ViewStatus
 from gui import SystemMessages
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -42,7 +42,6 @@ class NationChangeScreen(ViewImpl):
 
     def __init__(self, viewKey, ctx=None):
         settings = ViewSettings(viewKey)
-        settings.flags = ViewFlags.WINDOW_VIEW
         settings.model = NationChangeScreenModel()
         super(NationChangeScreen, self).__init__(settings)
         vehicle = self.__itemsCache.items.getItemByCD(ctx.get('vehicleCD', None))
@@ -186,7 +185,7 @@ class NationChangeScreen(ViewImpl):
         for shell in guiVh.shells.installed.getItems():
             if shell.count > 0:
                 shellModel = NationChangeShellModel()
-                shellModel.setImage(self.__icons.shell.dyn(getIconResourceName(shell.descriptor.iconName))())
+                shellModel.setImage(self.__icons.shell.small.dyn(getIconResourceName(shell.descriptor.iconName))())
                 shellModel.setIntCD(shell.intCD)
                 slotVM.addViewModel(shellModel)
 

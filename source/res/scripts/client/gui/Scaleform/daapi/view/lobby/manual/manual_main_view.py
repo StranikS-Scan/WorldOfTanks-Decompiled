@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/manual/manual_main_view.py
 import logging
 from gui.Scaleform.daapi.view.meta.ManualMainViewMeta import ManualMainViewMeta
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared import events, EVENT_BUS_SCOPE, event_dispatcher as shared_events
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -14,7 +15,7 @@ class ManualMainView(ManualViewBase, ManualMainViewMeta):
     def closeView(self):
         self._close()
         self.manualController.clear()
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onChapterOpenedS(self, chapterIndex):
         _logger.debug('ManualMainView. Chapter selected: %s', chapterIndex)

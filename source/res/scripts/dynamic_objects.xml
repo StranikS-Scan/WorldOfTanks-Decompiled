@@ -12,14 +12,15 @@
   <stepRepairPoint>
     <flagModelName>	content/Environment/env_111_04_RepairFlag/normal/lod0/env_111_04_RepairFlag.model	</flagModelName>
     <radiusModel>	content/Interface/CheckPoint/CheckPoint_yellow_black.visual	</radiusModel>
-    <flagAnim>	RepairFlagAnimAction	</flagAnim>
+    <flagAnim>	content/Environment/env_111_04_RepairFlag/animations/env_111_04_RepairFlag.fbx	</flagAnim>
     <wwsound>	ambient_static_objects_flag_flapping	</wwsound>
   </stepRepairPoint>
   <sectorBase>
     <flagModelName>	content/MilitaryEnvironment/mle000_BaseFlagstaff/normal/lod0/flag.model	</flagModelName>
+    <flagNodeAliasName>	flag	</flagNodeAliasName>
     <flagstaffModelName>	content/MilitaryEnvironment/mle000_BaseFlagstaff/normal/lod0/mle000_BaseFlagstaff01.model	</flagstaffModelName>
     <radiusModel>	content/Interface/CheckPoint/CheckPoint.model	</radiusModel>
-    <flagAnim>	FlagAnimAction	</flagAnim>
+    <flagAnim>	content/MilitaryEnvironment/mle000_BaseFlagstaff/animations/flag.fbx	</flagAnim>
     <flagstaffFlagHP>	HP_UpFlag	</flagstaffFlagHP>
     <flagBackgroundTex>	content/MilitaryEnvironment/mle000_BaseFlagstaff/mle016_Flagstaff_flag	</flagBackgroundTex>
     <flagEmblemTex>	system/maps/wg_emblem.dds	</flagEmblemTex>

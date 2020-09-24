@@ -152,6 +152,8 @@ class SearchUsersProcessor(SearchProcessor, ClientEventsHandler):
         for userInfo in result:
             user = self.usersStorage.getUser(userInfo.dbId)
             if user:
+                if not user.hasValidName():
+                    user.update(name=userInfo.nickname, clanInfo=userInfo.clanInfo)
                 userInfo = user
             else:
                 userInfo = XMPPUserEntity(userInfo.dbId, name=userInfo.nickname, clanInfo=userInfo.clanInfo)

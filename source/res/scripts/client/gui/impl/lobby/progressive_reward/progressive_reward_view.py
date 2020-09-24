@@ -81,5 +81,5 @@ class ProgressiveRewardWindow(LobbyWindow):
     __slots__ = ()
 
     def __init__(self, contentResId, *args, **kwargs):
-        super(ProgressiveRewardWindow, self).__init__(wndFlags=WindowFlags.OVERLAY, decorator=None, content=ProgressiveRewardView(contentResId, *args, **kwargs), parent=None)
+        super(ProgressiveRewardWindow, self).__init__(wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, decorator=None, content=ProgressiveRewardView(contentResId, *args, **kwargs), parent=None)
         return

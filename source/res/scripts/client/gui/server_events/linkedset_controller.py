@@ -2,6 +2,9 @@
 # Embedded file name: scripts/client/gui/server_events/linkedset_controller.py
 import BigWorld
 from constants import EVENT_TYPE
+from frameworks.wulf import WindowLayer
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from gui.shared.events import ViewEventType
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.linkedset import ILinkedSetController
 from gui.shared import g_eventBus, events
@@ -23,7 +26,6 @@ from skeletons.gui.server_events import IEventsCache
 from helpers.i18n import makeString as _ms
 from skeletons.account_helpers.settings_core import ISettingsCore
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.server_events.events_helpers import hasAtLeastOneCompletedQuest, isAllQuestsCompleted
 from gui.shared.utils import isPopupsWindowsOpenDisabled
@@ -50,7 +52,7 @@ class LinkedSetController(ILinkedSetController):
         return
 
     def init(self):
-        g_eventBus.addListener(VIEW_ALIAS.BATTLE_RESULTS, self._onShowBattleResults, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self._onShowBattleResults, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.LobbySimpleEvent.BATTLE_RESULTS_POSTED, self._onBattleResultsPosted, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.LinkedSetEvent.VEHICLE_SELECTED, self._onLinkedSetVehicleSelected, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.MissionsEvent.ON_TAB_CHANGED, self._onMissionsTabEventsSelected, EVENT_BUS_SCOPE.LOBBY)
@@ -61,7 +63,7 @@ class LinkedSetController(ILinkedSetController):
 
     def fini(self):
         self._em.clear()
-        g_eventBus.removeListener(VIEW_ALIAS.BATTLE_RESULTS, self._onShowBattleResults, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self._onShowBattleResults, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.LobbySimpleEvent.BATTLE_RESULTS_POSTED, self._onBattleResultsPosted, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.LinkedSetEvent.VEHICLE_SELECTED, self._onLinkedSetVehicleSelected, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.MissionsEvent.ON_TAB_CHANGED, self._onMissionsTabEventsSelected, EVENT_BUS_SCOPE.LOBBY)
@@ -182,7 +184,7 @@ class LinkedSetController(ILinkedSetController):
     def _isLinkedSetViewOnScene(self):
         app = self.appLoader.getApp()
         if app is not None and app.containerManager is not None:
-            lobbySubContainer = app.containerManager.getContainer(ViewTypes.LOBBY_SUB)
+            lobbySubContainer = app.containerManager.getContainer(WindowLayer.SUB_VIEW)
             if lobbySubContainer is not None:
                 searchCriteria = {POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY_MISSIONS}
                 lobbyMissions = lobbySubContainer.getView(criteria=searchCriteria)
@@ -190,8 +192,9 @@ class LinkedSetController(ILinkedSetController):
                     return lobbyMissions.getCurrentTabAlias() == QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS
         return False
 
-    def _onShowBattleResults(self, _):
-        self.needToShowAward = True
+    def _onShowBattleResults(self, event):
+        if event.alias == VIEW_ALIAS.BATTLE_RESULTS:
+            self.needToShowAward = True
 
     def _onBattleResultsPosted(self, event):
         if self.needToShowAward:
@@ -223,7 +226,7 @@ class LinkedSetController(ILinkedSetController):
                  'buttonLabel': _ms(LINKEDSET.CONTINUE),
                  'back': 'red',
                  'soundID': _SNDID_ACHIEVEMENT}
-                g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LINKEDSET_HINTS, ctx={'messages': [message]}), scope=EVENT_BUS_SCOPE.LOBBY)
+                g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LINKEDSET_HINTS), ctx={'messages': [message]}), scope=EVENT_BUS_SCOPE.LOBBY)
                 message = _ms('#system_messages:%s' % 'vehicle_buy/success', vehName=vehicleShortUserName, price=0)
                 SystemMessages.pushI18nMessage(message, type=SM_TYPE.Information)
             else:
@@ -234,7 +237,7 @@ class LinkedSetController(ILinkedSetController):
         BigWorld.player().chooseQuestReward(EVENT_TYPE.TOKEN_QUEST, questID, str(vehicleCD), _callback)
 
     def _onMissionsTabEventsSelected(self, event):
-        if event.ctx.get('alias') == QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS:
+        if event.ctx == QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS:
             self._showNewCompletedQuests()
 
     def _showNewCompletedQuests(self):
@@ -258,7 +261,7 @@ class LinkedSetController(ILinkedSetController):
                 if hasHint:
                     self._appendMessageWithViewCallback(messages, self._getQuestHintMessage(quest), quest, True)
 
-            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LINKEDSET_HINTS, ctx={'messages': messages}), scope=EVENT_BUS_SCOPE.LOBBY)
+            g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LINKEDSET_HINTS), ctx={'messages': messages}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _appendMessageWithViewCallback(self, messages, message, quest, needQuestViewCallback):
         if needQuestViewCallback:

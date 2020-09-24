@@ -44,5 +44,17 @@
     <accountAvatar_setAvatarClient>
       <Arg>	PYTHON	</Arg>
     </accountAvatar_setAvatarClient>
+    <accountAvatar_logClientXMPPEvents>
+      <Arg>	ARRAY	  <of>	INT64	</of>
+      </Arg>
+      <Arg>	ARRAY	  <of>	STRING	</of>
+      </Arg>
+    </accountAvatar_logClientXMPPEvents>
+    <accountAvatar_logClientSessionStats>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	UINT32	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	UINT8	</Arg>
+    </accountAvatar_logClientSessionStats>
   </BaseMethods>
 </AccountAvatar.def>

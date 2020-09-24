@@ -20,7 +20,7 @@ IS_CELLAPP = BigWorld.component == 'cell'
 IS_BASEAPP = BigWorld.component in ('base', 'service')
 IS_WEB = BigWorld.component == 'web'
 IS_DYNAPDATER = False
-CURRENT_REALM = 'RU'
+CURRENT_REALM = 'CT'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -177,7 +177,6 @@ class ARENA_GUI_TYPE:
     EPIC_BATTLE = 21
     EPIC_TRAINING = 22
     BATTLE_ROYALE = 23
-    BOB = 24
     RANGE = (UNKNOWN,
      RANDOM,
      TRAINING,
@@ -197,8 +196,7 @@ class ARENA_GUI_TYPE:
      EPIC_RANDOM_TRAINING,
      EPIC_BATTLE,
      EPIC_TRAINING,
-     BATTLE_ROYALE,
-     BOB)
+     BATTLE_ROYALE)
     RANDOM_RANGE = (RANDOM, EPIC_RANDOM)
     SANDBOX_RANGE = (SANDBOX, RATED_SANDBOX)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
@@ -224,8 +222,7 @@ class ARENA_GUI_TYPE_LABEL:
      ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING: 'epic_random_training',
      ARENA_GUI_TYPE.EPIC_BATTLE: 'epicbattle',
      ARENA_GUI_TYPE.EPIC_TRAINING: 'epicbattle',
-     ARENA_GUI_TYPE.BATTLE_ROYALE: 'battle_royale',
-     ARENA_GUI_TYPE.BOB: 'bob'}
+     ARENA_GUI_TYPE.BATTLE_ROYALE: 'battle_royale'}
 
 
 class ARENA_BONUS_TYPE:
@@ -256,7 +253,6 @@ class ARENA_BONUS_TYPE:
     BATTLE_ROYALE_SOLO = 29
     BATTLE_ROYALE_SQUAD = 30
     TOURNAMENT_EVENT = 31
-    BOB = 32
     EVENT_RANDOM = 33
     RANGE = (UNKNOWN,
      REGULAR,
@@ -285,8 +281,7 @@ class ARENA_BONUS_TYPE:
      TOURNAMENT_EVENT,
      EVENT_RANDOM,
      BATTLE_ROYALE_SOLO,
-     BATTLE_ROYALE_SQUAD,
-     BOB)
+     BATTLE_ROYALE_SQUAD)
     RANDOM_RANGE = (REGULAR, EPIC_RANDOM)
     SANDBOX_RANGE = (RATED_SANDBOX, SANDBOX)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
@@ -446,7 +441,6 @@ class PREBATTLE_TYPE:
     EPIC = 15
     EPIC_TRAINING = 16
     BATTLE_ROYALE = 17
-    BOB = 18
     RANGE = (SQUAD,
      TRAINING,
      COMPANY,
@@ -460,8 +454,7 @@ class PREBATTLE_TYPE:
      E_SPORT_COMMON,
      EPIC,
      EPIC_TRAINING,
-     BATTLE_ROYALE,
-     BOB)
+     BATTLE_ROYALE)
     LEGACY_PREBATTLES = (TRAINING,
      TOURNAMENT,
      CLAN,
@@ -470,8 +463,7 @@ class PREBATTLE_TYPE:
      FALLOUT,
      EVENT,
      EPIC,
-     BATTLE_ROYALE,
-     BOB)
+     BATTLE_ROYALE)
     UNIT_MGR_PREBATTLES = (UNIT,
      SQUAD,
      CLAN,
@@ -480,15 +472,13 @@ class PREBATTLE_TYPE:
      STRONGHOLD,
      E_SPORT_COMMON,
      EPIC,
-     BATTLE_ROYALE,
-     BOB)
+     BATTLE_ROYALE)
     CREATE_FROM_CLIENT = (UNIT,
      SQUAD,
      EPIC,
      FALLOUT,
      EVENT,
-     BATTLE_ROYALE,
-     BOB)
+     BATTLE_ROYALE)
     CREATE_FROM_WEB = (UNIT, SQUAD, STRONGHOLD)
     TRAININGS = (TRAINING, EPIC_TRAINING)
     EXTERNAL_PREBATTLES = (STRONGHOLD, TOURNAMENT)
@@ -496,13 +486,9 @@ class PREBATTLE_TYPE:
      CLAN,
      EPIC,
      BATTLE_ROYALE,
-     EVENT,
-     BOB)
+     EVENT)
     CREATE_EX_FROM_WEB = (SQUAD, CLAN)
-    JOIN_EX = (SQUAD,
-     EPIC,
-     EVENT,
-     BOB)
+    JOIN_EX = (SQUAD, EPIC, EVENT)
     EPIC_PREBATTLES = (EPIC, EPIC_TRAINING)
     REMOVED = (COMPANY, CLUBS)
 
@@ -769,6 +755,7 @@ class PremiumConfigs(object):
 
 
 DAILY_QUESTS_CONFIG = 'daily_quests_config'
+DOG_TAGS_CONFIG = 'dog_tags_config'
 IS_LOOT_BOXES_ENABLED = 'isLootBoxesEnabled'
 SENIORITY_AWARDS_CONFIG = 'seniority_awards_config'
 MAGNETIC_AUTO_AIM_CONFIG = 'magnetic_auto_aim_config'
@@ -1237,7 +1224,6 @@ class QUEUE_TYPE:
     EPIC = 19
     TOURNAMENT_UNITS = 20
     BATTLE_ROYALE = 21
-    BOB = 22
     FALLOUT = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
     ALL = (RANDOMS,
      COMPANIES,
@@ -1256,8 +1242,7 @@ class QUEUE_TYPE:
      BOOTCAMP,
      EPIC,
      TOURNAMENT_UNITS,
-     BATTLE_ROYALE,
-     BOB)
+     BATTLE_ROYALE)
     REMOVED = (COMPANIES,)
 
 
@@ -1341,13 +1326,11 @@ class GameSeasonType(object):
     RANKED = 1
     EPIC = 2
     BATTLE_ROYALE = 3
-    BOB = 4
 
 
 SEASON_TYPE_BY_NAME = {'ranked': GameSeasonType.RANKED,
  'epic': GameSeasonType.EPIC,
- 'battle_royale': GameSeasonType.BATTLE_ROYALE,
- 'bob': GameSeasonType.BOB}
+ 'battle_royale': GameSeasonType.BATTLE_ROYALE}
 SEASON_NAME_BY_TYPE = {val:key for key, val in SEASON_TYPE_BY_NAME.iteritems()}
 CHANNEL_SEARCH_RESULTS_LIMIT = 50
 USER_SEARCH_RESULTS_LIMIT = 50
@@ -1669,6 +1652,7 @@ class USER_SERVER_SETTINGS:
     SNIPER_AIM_2 = 47
     SNIPER_AIM_3 = 48
     SNIPER_AIM_4 = 64
+    DOG_TAGS = 68
     BATTLE_COMM = 69
     LINKEDSET_QUESTS = 89
     QUESTS_PROGRESS = 90
@@ -1677,7 +1661,8 @@ class USER_SERVER_SETTINGS:
      EULA_VERSION,
      GAME_EXTENDED,
      LINKEDSET_QUESTS,
-     SESSION_STATS)
+     SESSION_STATS,
+     DOG_TAGS)
 
     @classmethod
     def isBattleInvitesForbidden(cls, settings):
@@ -1752,7 +1737,7 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  65: '[Free]',
  66: '[Free]',
  67: '[Free]',
- 68: '[Free]',
+ USER_SERVER_SETTINGS.DOG_TAGS: 'Dog tags',
  USER_SERVER_SETTINGS.BATTLE_COMM: 'Battle communication',
  70: 'Once only hints',
  71: 'Keyboard section settings',
@@ -1774,14 +1759,12 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.LINKEDSET_QUESTS: 'linkedset quests show reward info',
  USER_SERVER_SETTINGS.QUESTS_PROGRESS: 'feedback quests progress',
  91: 'Loot box last viewed count',
- 92: 'Battle of Bloggers carousel filter',
- 93: 'Battle of Bloggers carousel filter',
  USER_SERVER_SETTINGS.SESSION_STATS: 'sessiong statistics settings',
  97: 'BattlePass carouse filter 1',
  98: 'Battle Pass Storage',
- 99: 'Battle Royale carousel filter 1',
- 100: 'Battle Royale carousel filter 2',
- 101: 'Once only hints'}
+ 99: 'Once only hints',
+ 100: 'Battle Royale carousel filter 1',
+ 101: 'Battle Royale carousel filter 2'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -1984,12 +1967,10 @@ class INVITATION_TYPE:
     EPIC = PREBATTLE_TYPE.EPIC
     EVENT = PREBATTLE_TYPE.EVENT
     BATTLE_ROYALE = PREBATTLE_TYPE.BATTLE_ROYALE
-    BOB = PREBATTLE_TYPE.BOB
     RANGE = (SQUAD,
      EVENT,
      EPIC,
-     BATTLE_ROYALE,
-     BOB)
+     BATTLE_ROYALE)
 
 
 class REPAIR_FLAGS:

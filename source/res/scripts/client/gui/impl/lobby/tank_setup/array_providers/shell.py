@@ -38,22 +38,29 @@ class ShellProvider(VehicleBaseArrayProvider):
 
     def updateSlot(self, model, item, ctx):
         super(ShellProvider, self).updateSlot(model, item, ctx)
+        buyPrice = item.getBuyPrice()
         if model.getIntCD() != item.intCD:
             model.setType(item.type)
             model.setName(item.userName)
             model.setIntCD(item.intCD)
             model.setItemTypeID(item.itemTypeID)
-            model.setImageName(item.type)
+            model.setImageName(item.descriptor.iconName)
             BuyPriceModelBuilder.clearPriceModel(model.price)
-            BuyPriceModelBuilder.fillPriceModelByItemPrice(model.price, item.getBuyPrice())
+            BuyPriceModelBuilder.fillPriceModelByItemPrice(model.price, buyPrice)
             self._fillSpecification(model, item)
         inTankCount = 0
         for shell in self._getVehicle().shells.installed:
             if shell == item:
-                inTankCount += shell.count
+                inTankCount = shell.count
 
+        boughtCount = item.inventoryCount + inTankCount
+        buyCount = max(item.count - boughtCount, 0)
         model.setCount(item.count)
-        model.setItemsInStorage(item.inventoryCount + inTankCount)
+        model.setItemsInStorage(max(boughtCount - item.count, 0))
+        model.setBuyCount(buyCount)
+        BuyPriceModelBuilder.clearPriceModel(model.totalPrice)
+        if buyCount:
+            BuyPriceModelBuilder.fillPriceModelByItemPrice(model.totalPrice, buyPrice * buyCount)
 
     def _fillSpecification(self, model, item):
         specifications = model.getSpecifications()

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/vehicle_state_ctrl.py
+from functools import partial
 import weakref
 import BigWorld
 import BattleReplay
@@ -9,10 +10,10 @@ import nations
 from BattleReplay import CallbackDataNames
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.battle_control import avatar_getter
-from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, VEHICLE_WAINING_INTERVAL
-from gui.battle_control.battle_constants import VEHICLE_UPDATE_INTERVAL, BATTLE_CTRL_ID
+from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, VEHICLE_WAINING_INTERVAL, VEHICLE_UPDATE_INTERVAL, BATTLE_CTRL_ID, DEVICE_STATE_NORMAL
 from gui.battle_control.controllers.interfaces import IBattleController
 from gui.shared.utils.TimeInterval import TimeInterval
+from shared_utils import first
 
 class _StateHandler(object):
     __slots__ = ('__updater',)
@@ -198,6 +199,7 @@ class VehicleStateController(IBattleController):
         self.onPostMortemSwitched = Event.Event(self.__eManager)
         self.onRespawnBaseMoving = Event.Event(self.__eManager)
         self.__cachedStateValues = {}
+        self.__cachedRepairingCallbackID = None
         self.__waitingTI = TimeInterval(VEHICLE_WAINING_INTERVAL, self, '_waiting')
         self.__vehicleID = 0
         self.__updater = None
@@ -224,6 +226,8 @@ class VehicleStateController(IBattleController):
         self.__isInPostmortem = False
         self.__eManager.clear()
         self.__cachedStateValues.clear()
+        if self.__cachedRepairingCallbackID:
+            BigWorld.cancelCallback(self.__cachedRepairingCallbackID)
         return
 
     @property
@@ -247,14 +251,35 @@ class VehicleStateController(IBattleController):
 
     def notifyStateChanged(self, stateID, value):
         if stateID == VEHICLE_VIEW_STATE.DEVICES:
-            self.__cachedStateValues.setdefault(stateID, [])
-            self.__cachedStateValues[stateID].append(value)
+            self.__cachedStateValues.setdefault(stateID, {})
+            deviceName = value[0]
+            cachedRepairingDeviceName = first(self.__cachedStateValues.get(VEHICLE_VIEW_STATE.REPAIRING, ()))
+            if cachedRepairingDeviceName == deviceName and value[2] == DEVICE_STATE_NORMAL:
+                self.__cachedStateValues.pop(VEHICLE_VIEW_STATE.REPAIRING)
+            self.__cachedStateValues[stateID][deviceName] = value
         else:
+            if stateID == VEHICLE_VIEW_STATE.REPAIRING:
+                if self.__cachedRepairingCallbackID:
+                    BigWorld.cancelCallback(self.__cachedRepairingCallbackID)
+                BigWorld.callback(value[2], partial(self.__cachedRepairingCallback, value))
             self.__cachedStateValues[stateID] = value
         self.onVehicleStateUpdated(stateID, value)
 
+    def __cachedRepairingCallback(self, value):
+        self.__cachedRepairingCallbackID = None
+        if self.__cachedStateValues.get(VEHICLE_VIEW_STATE.REPAIRING) == value:
+            self.__cachedStateValues.pop(VEHICLE_VIEW_STATE.REPAIRING)
+        return
+
     def getStateValue(self, stateID):
-        return self.__cachedStateValues[stateID] if stateID in self.__cachedStateValues else None
+        if stateID in self.__cachedStateValues:
+            if stateID == VEHICLE_VIEW_STATE.DEVICES:
+                value = self.__cachedStateValues[stateID].values()
+            else:
+                value = self.__cachedStateValues[stateID]
+            return value
+        else:
+            return None
 
     def refreshVehicleStateValue(self, stateID):
         if stateID in self.__cachedStateValues:

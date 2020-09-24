@@ -1715,6 +1715,46 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 2500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R170_IS_2_II	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	352	</id>
+      <texture>	gui/maps/vehicles/styles/R170_IS_2_II_3Dst.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/R170_IS_2_II_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	R170_IS_2_II_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/R170_IS_2_II_3Dst	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
@@ -1731,6 +1771,46 @@
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/R90_IS_4M_3Dst_BP	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/R90_IS_4M_3Dst_BP_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 2500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R165_Object_703_II	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	357	</id>
+      <texture>	gui/maps/vehicles/styles/R165_Object_703_II_3Dst.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/R165_Object_703_II_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	R165_Object_703_II_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/R165_Object_703_II_3Dst	</userString>
       <tags>	progression_required addNationalEmblem	</tags>
       <outfits>
         <outfit>

@@ -19,6 +19,7 @@ class BattleRoyaleEquipmentController(equipment_ctrl.EquipmentsController):
     __lobbyCtx = dependency.descriptor(ILobbyContext)
 
     def startControl(self, *args, **kwargs):
+        super(BattleRoyaleEquipmentController, self).startControl()
         avatar = BigWorld.player()
         playerVehicle = avatar.vehicle
         if playerVehicle is not None:

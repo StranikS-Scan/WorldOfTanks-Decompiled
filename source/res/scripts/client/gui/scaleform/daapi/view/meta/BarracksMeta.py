@@ -45,3 +45,6 @@ class BarracksMeta(View):
 
     def as_setCountersDataS(self, countersData):
         return self.flashObject.as_setCountersData(countersData) if self._isDAAPIInited() else None
+
+    def as_getDataProviderS(self):
+        return self.flashObject.as_getDataProvider() if self._isDAAPIInited() else None

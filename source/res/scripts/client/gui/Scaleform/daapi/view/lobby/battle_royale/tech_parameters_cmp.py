@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/battle_royale/tech_parameters_cmp.py
-from frameworks.wulf import ViewFlags
+from frameworks.wulf import ViewFlags, ViewSettings
 from CurrentVehicle import g_currentVehicle
 from gui.doc_loaders.battle_royale_settings_loader import getVehicleProperties
 from gui.impl.gen import R
@@ -18,13 +18,16 @@ class _Properties(object):
 class TechParametersComponent(InjectComponentAdaptor):
 
     def _makeInjectView(self):
-        return TechParametersView()
+        return TechParametersView(R.views.lobby.battleRoyale.tech_parameters_cmp.TechParametersCmp())
 
 
 class TechParametersView(ViewImpl):
 
-    def __init__(self, *args, **kwargs):
-        super(TechParametersView, self).__init__(R.views.lobby.battleRoyale.tech_parameters_cmp.TechParametersCmp(), ViewFlags.COMPONENT, TechParametersCmpViewModel, *args, **kwargs)
+    def __init__(self, viewKey, viewModelClazz=TechParametersCmpViewModel):
+        settings = ViewSettings(viewKey)
+        settings.flags = ViewFlags.COMPONENT
+        settings.model = viewModelClazz()
+        super(TechParametersView, self).__init__(settings)
 
     @property
     def viewModel(self):

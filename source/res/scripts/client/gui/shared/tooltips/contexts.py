@@ -1221,6 +1221,12 @@ class ShopBattleBoosterContext(AwardBattleBoosterContext):
         return value
 
 
+class DogTagInfoContext(ToolTipContext):
+
+    def __init__(self, fieldsToExclude=None):
+        super(DogTagInfoContext, self).__init__(TOOLTIP_COMPONENT.FINAL_STATISTIC, fieldsToExclude)
+
+
 class DeviceGiftTokenContext(ToolTipContext):
     __offersProvider = dependency.descriptor(IOffersDataProvider)
     __battlePassController = dependency.descriptor(IBattlePassController)

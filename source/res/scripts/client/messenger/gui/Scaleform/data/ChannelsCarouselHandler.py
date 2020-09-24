@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/ChannelsCarouselHandler.py
 from debug_utils import LOG_ERROR
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.view.meta.ChannelCarouselMeta import ChannelCarouselMeta
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import ExternalCriteria
 from gui.Scaleform.genConsts.MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES import MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES
 from gui.app_loader import sf_lobby
@@ -95,7 +95,7 @@ class ChannelsCarouselHandler(object):
         else:
             order = channel_num_gen.genOrder4Channel(channel)
             openHandler = lambda : events_dispatcher.showLobbyChannelWindow(clientID)
-        self.__handlers[clientID] = (ChannelFindCriteria(clientID), openHandler, ViewTypes.WINDOW)
+        self.__handlers[clientID] = (ChannelFindCriteria(clientID), openHandler, WindowLayer.WINDOW)
         self.__channelsDP.addItem(clientID, {'label': channel.getFullName(),
          'canClose': not isSystem,
          'isNotified': isNotified,
@@ -107,11 +107,11 @@ class ChannelsCarouselHandler(object):
     def removeChannel(self, channel):
         clientID = channel.getClientID()
         if clientID in self.__handlers:
-            criteria, _, viewType = self.__handlers.pop(clientID)
+            criteria, _, layer = self.__handlers.pop(clientID)
             window = None
             app = self.app
             if app is not None and app.containerManager is not None:
-                window = app.containerManager.getView(viewType, criteria)
+                window = app.containerManager.getView(layer, criteria)
             if window is not None:
                 window.destroy()
         self.__channelsDP.removeItem(clientID)
@@ -174,13 +174,13 @@ class ChannelsCarouselHandler(object):
             if openHandler is None:
                 LOG_ERROR('Open handler is not defined', event.ctx)
                 return
-            viewType = ctx.get('viewType')
-            if viewType is None:
+            layer = ctx.get('layer')
+            if layer is None:
                 LOG_ERROR('View type is not defined', event.ctx)
                 return
             clientID = event.clientID
             if clientID not in self.__handlers:
-                self.__handlers[clientID] = (criteria, openHandler, viewType)
+                self.__handlers[clientID] = (criteria, openHandler, layer)
                 targetList.addItem(clientID, ctx)
             return
 
@@ -193,9 +193,9 @@ class ChannelsCarouselHandler(object):
     def __removeChannelFromList(self, event, targetList):
         clientID = event.clientID
         if clientID in self.__handlers:
-            criteria, _, viewType = self.__handlers.pop(clientID)
+            criteria, _, layer = self.__handlers.pop(clientID)
             if event.ctx.get('closeWindow', True) and self.app is not None:
-                window = self.app.containerManager.getView(viewType, criteria)
+                window = self.app.containerManager.getView(layer, criteria)
                 if window is not None:
                     window.destroy()
             targetList.removeItem(clientID)
@@ -220,8 +220,8 @@ class ChannelsCarouselHandler(object):
                 if isShow:
                     if clientID not in self.__handlers:
                         return
-                    criteria, _, viewType = self.__handlers[clientID]
-                    window = self.app.containerManager.getView(viewType, criteria)
+                    criteria, _, layer = self.__handlers[clientID]
+                    window = self.app.containerManager.getView(layer, criteria)
                     if window is None:
                         if not self.__setItemField(clientID, key, value):
                             self.__showByReqs.pop(clientID)
@@ -257,20 +257,20 @@ class ChannelsCarouselHandler(object):
         elif clientID not in self.__handlers:
             return
         else:
-            criteria, openHandler, viewType = self.__handlers[clientID]
+            criteria, openHandler, layer = self.__handlers[clientID]
             viewContainer = self.app.containerManager
-            if viewType == ViewTypes.WINDOW:
-                window = viewContainer.getView(viewType, criteria)
+            if layer == WindowLayer.WINDOW:
+                window = viewContainer.getView(layer, criteria)
                 if window is not None:
                     wName = window.uniqueName
-                    isOnTop = viewContainer.as_isOnTopS(ViewTypes.WINDOW, wName)
+                    isOnTop = viewContainer.as_isOnTopS(WindowLayer.WINDOW, wName)
                     if not isOnTop:
-                        viewContainer.as_bringToFrontS(ViewTypes.WINDOW, wName)
+                        viewContainer.as_bringToFrontS(WindowLayer.WINDOW, wName)
                     else:
                         window.onWindowMinimize()
                     return
-            elif viewType == ViewTypes.LOBBY_SUB:
-                view = viewContainer.getView(viewType, criteria)
+            elif layer == WindowLayer.SUB_VIEW:
+                view = viewContainer.getView(layer, criteria)
                 if hasattr(view, 'onWindowMinimize') and callable(getattr(view, 'onWindowMinimize')):
                     view.onWindowMinimize()
                     return
@@ -282,10 +282,10 @@ class ChannelsCarouselHandler(object):
             return
 
     def __handlerMinimizeAll(self, _):
-        for criteria, _, viewType in self.__handlers.itervalues():
+        for criteria, _, layer in self.__handlers.itervalues():
             viewContainer = self.app.containerManager
             if isinstance(criteria, ChannelFindCriteria):
-                window = viewContainer.getView(viewType, criteria)
+                window = viewContainer.getView(layer, criteria)
                 if window is not None:
                     window.onWindowMinimize()
 
@@ -334,9 +334,9 @@ class ChannelsCarouselHandler(object):
         else:
             self.__showByReqs.pop(clientID, None)
             viewContainer = self.app.containerManager
-            criteria, _, viewType = self.__handlers[clientID]
-            if viewType == ViewTypes.WINDOW:
-                window = viewContainer.getView(viewType, criteria)
+            criteria, _, layer = self.__handlers[clientID]
+            if layer == WindowLayer.WINDOW:
+                window = viewContainer.getView(layer, criteria)
                 if window is not None:
                     window.onWindowClose()
                     return

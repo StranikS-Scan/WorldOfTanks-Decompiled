@@ -12,7 +12,7 @@ from helpers.bots import preprocessBotName
 _logger = logging.getLogger(__name__)
 
 class CommonInfo(shared.UnpackedInfo):
-    __slots__ = ('__arenaTypeID', '__winnerTeam', '__finishReason', '__arenaVisitor', '__bots', '__extCommon')
+    __slots__ = ('__arenaTypeID', '__winnerTeam', '__finishReason', '__arenaVisitor', '__bots', '__numDefended')
 
     def __init__(self, arenaTypeID=0, guiType=ARENA_GUI_TYPE.UNKNOWN, bonusType=ARENA_BONUS_TYPE.UNKNOWN, winnerTeam=0, finishReason=FINISH_REASON.UNKNOWN, bots=None, **kwargs):
         super(CommonInfo, self).__init__()
@@ -20,7 +20,7 @@ class CommonInfo(shared.UnpackedInfo):
         self.__winnerTeam = winnerTeam
         self.__finishReason = finishReason
         self.__bots = defaultdict()
-        self.__extCommon = kwargs.get('extCommon', {})
+        self.__numDefended = kwargs.get('commonNumDefended', 0)
         if bots is not None:
             allActiveVehicles = kwargs.get('vehicles', {})
             for info in bots.iteritems():
@@ -77,8 +77,8 @@ class CommonInfo(shared.UnpackedInfo):
         return self.__arenaVisitor.gui.isMultiTeam()
 
     @property
-    def extCommon(self):
-        return self.__extCommon
+    def numDefended(self):
+        return self.__numDefended
 
     def isSquadSupported(self):
         return self.__arenaVisitor.bonus.isSquadSupported()

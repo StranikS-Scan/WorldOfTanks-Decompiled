@@ -9,7 +9,7 @@ from gui.impl.lobby.dialogs.contents.checkbox_content import CheckBoxDialogConte
 from gui.impl.pub.simple_dialog_window import SimpleDialogWindow
 from gui.impl.pub.pure_dialog_window import PureDialogWindow
 from gui.impl.gen import R
-from gui.impl.pub.dialog_window import DialogButtons, DialogLayer
+from gui.impl.pub.dialog_window import DialogButtons, DialogFlags
 from gui.impl.lobby.dialogs.contents.common_balance_content import CommonBalanceContent
 from gui.impl.gen.view_models.constants.dialog_presets import DialogPresets
 from gui.impl.gen_utils import DynAccessor
@@ -37,7 +37,7 @@ def _setupButtonsBasedOnRes(obj, message, buttons=R.strings.dialogs.common, focu
 
 class PureDialogBuilder(object):
     __appLoader = dependency.descriptor(IAppLoader)
-    __slots__ = ('_windowClass', '__title', '__formattedTitle', '__titleArgs', '__icon', '__backImg', '__preset', '__layer', '__buttons', '__showBalance', '__checkboxLabel', '__checkboxCheckedByDefault')
+    __slots__ = ('_windowClass', '__title', '__formattedTitle', '__titleArgs', '__icon', '__backImg', '__preset', '__flags', '__buttons', '__showBalance', '__checkboxLabel', '__checkboxCheckedByDefault')
 
     def __init__(self):
         super(PureDialogBuilder, self).__init__()
@@ -49,7 +49,7 @@ class PureDialogBuilder(object):
         self.__icon = R.invalid()
         self.__backImg = R.invalid()
         self.__preset = DialogPresets.DEFAULT
-        self.__layer = DialogLayer.TOP_WINDOW
+        self.__flags = DialogFlags.TOP_FULLSCREEN_WINDOW
         self.__showBalance = False
         self.__checkboxLabel = R.invalid
         self.__checkboxCheckedByDefault = False
@@ -62,7 +62,7 @@ class PureDialogBuilder(object):
             checkboxContent = None
             if self.__checkboxLabel.exists():
                 checkboxContent = CheckBoxDialogContent(self.__checkboxLabel(), self.__checkboxCheckedByDefault)
-            dialog = self._windowClass(parent=parent.getParentWindow() if parent else None, preset=self.__preset, bottomContent=checkboxContent, balanceContent=CommonBalanceContent() if self.__showBalance else None, layer=self.__layer)
+            dialog = self._windowClass(parent=parent.getParentWindow() if parent else None, preset=self.__preset, bottomContent=checkboxContent, balanceContent=CommonBalanceContent() if self.__showBalance else None, flags=self.__flags)
             for btn in self.__buttons:
                 dialog.addButton(btn.name, btn.label, btn.isFocused, soundDown=btn.soundDown, rawLabel=btn.rawLabel)
 
@@ -119,8 +119,8 @@ class PureDialogBuilder(object):
         self.__preset = preset
         return self
 
-    def setLayer(self, layer):
-        self.__layer = layer
+    def setFlags(self, flags):
+        self.__flags = flags
         return self
 
     def setShowBalance(self, showBalance):

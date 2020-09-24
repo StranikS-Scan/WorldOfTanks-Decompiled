@@ -1012,6 +1012,56 @@
       </effects>
     </variant1>
   </smallAmmoBayExplosion>
+  <smallInstantExplosion>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+            </stage>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Environment/scenarios/instant_explosion.eff	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <wwsoundPC>	expl_ammo_PC	</wwsoundPC>
+          <wwsoundNPC>	expl_ammo_NPC	</wwsoundNPC>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <wwsound>	burning_tank_medium	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </smallInstantExplosion>
   <smallAmmoBayBurnOff>
     <variant1>
       <timeline>
@@ -1438,6 +1488,56 @@
       </effects>
     </variant1>
   </mediumAmmoBayExplosion>
+  <mediumInstantExplosion>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+            </stage>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Environment/scenarios/instant_explosion.eff	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <wwsoundPC>	expl_ammo_PC	</wwsoundPC>
+          <wwsoundNPC>	expl_ammo_NPC	</wwsoundNPC>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <wwsound>	burning_tank_medium	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </mediumInstantExplosion>
   <mediumAmmoBayBurnOff>
     <variant1>
       <timeline>
@@ -1864,6 +1964,56 @@
       </effects>
     </variant1>
   </largeAmmoBayExplosion>
+  <largeInstantExplosion>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+            </stage>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Environment/scenarios/instant_explosion.eff	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <wwsoundPC>	expl_ammo_PC	</wwsoundPC>
+          <wwsoundNPC>	expl_ammo_NPC	</wwsoundNPC>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <wwsound>	burning_tank_medium	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </largeInstantExplosion>
   <largeAmmoBayBurnOff>
     <variant1>
       <timeline>
@@ -2175,6 +2325,27 @@
       </effects>
     </variant1>
   </emptyAmmoBayExplosion>
+  <emptyInstantExplosion>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/empty.eff	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+      </effects>
+    </variant1>
+  </emptyInstantExplosion>
   <emptyAmmoBayBurnOff>
     <variant1>
       <timeline>
@@ -2423,6 +2594,52 @@
       </effects>
     </variant1>
   </dominationLargeAmmoBayExplosion>
+  <dominationLargeInstantExplosion>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+            </stage>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Environment/scenarios/instant_explosion.eff	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <wwsoundPC>	expl_ammo_PC	</wwsoundPC>
+          <wwsoundNPC>	expl_ammo_NPC	</wwsoundNPC>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+      </effects>
+    </variant1>
+  </dominationLargeInstantExplosion>
   <dominationLargeAmmoBayBurnOff>
     <variant1>
       <timeline>

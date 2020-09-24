@@ -106,13 +106,14 @@ class TeamStateInfo(object):
 PlayersStateStats = namedtuple('PlayersStateStats', ('notReadyCount', 'haveInBattle', 'playersCount', 'limitMaxCount'))
 
 class PrbPropsInfo(object):
-    __slots__ = ('wins', 'battlesCount', 'createTime')
+    __slots__ = ('wins', 'battlesCount', 'createTime', 'teamsPositions')
 
-    def __init__(self, wins=None, battlesCount=0, createTime=None):
+    def __init__(self, wins=None, battlesCount=0, createTime=None, teamsPositions=None):
         super(PrbPropsInfo, self).__init__()
         self.wins = wins or [0, 0, 0]
         self.battlesCount = battlesCount
         self.createTime = createTime
+        self.teamsPositions = teamsPositions
 
     def getBattlesScore(self):
         return '%d:%d' % (self.wins[1], self.wins[2])

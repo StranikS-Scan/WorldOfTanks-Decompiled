@@ -8,7 +8,7 @@ import Math
 from account_helpers import AccountSettings
 from aih_constants import CTRL_MODE_NAME
 from arena_component_system.sector_base_arena_component import ID_TO_BASENAME
-from chat_commands_consts import MarkerType
+from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES, MarkerType, ReplyState
 from constants import IS_DEVELOPMENT
 from coordinate_system import AXIS_ALIGNED_DIRECTION as AAD
 from epic_constants import EPIC_BATTLE_TEAM_ID
@@ -17,9 +17,11 @@ from gui.Scaleform.daapi.view.battle.shared.minimap import settings, plugins, co
 from gui.Scaleform.daapi.view.battle.shared.minimap.common import SimplePlugin
 from gui.Scaleform.daapi.view.battle.shared.minimap.plugins import PersonalEntriesPlugin, ArenaVehiclesPlugin, _LOCATION_PING_RANGE, _EMinimapMouseKey
 from gui.Scaleform.daapi.view.meta.EpicMinimapMeta import EpicMinimapMeta
-from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
+from gui.Scaleform.genConsts.BATTLE_MINIMAP_CONSTS import BATTLE_MINIMAP_CONSTS
+from gui.Scaleform.genConsts.LAYER_NAMES import LAYER_NAMES
 from gui.battle_control import minimap_utils, avatar_getter
-from gui.battle_control.battle_constants import PROGRESS_CIRCLE_TYPE, SECTOR_STATE_ID
+from gui.battle_control.battle_constants import PROGRESS_CIRCLE_TYPE, SECTOR_STATE_ID, FEEDBACK_EVENT_ID
+from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 _C_NAME = settings.CONTAINER_NAME
 _S_NAME = settings.ENTRY_SYMBOL_NAME
 _EPIC_TEAM_POINTS = settings.CONTAINER_NAME.TEAM_POINTS
@@ -32,7 +34,7 @@ _RESPAWN_VISUALIZATION_ENTRY_2 = 1
 _RESPAWN_VISUALIZATION_ENTRY_3 = 2
 _IS_COORDINATOR = bool(os.getenv('WOT_COORDINATOR', False))
 _FRONT_LINE_DEV_VISUALIZATION_SUPPORTED = IS_DEVELOPMENT
-_MINI_MINIMAP_HIGHLIGHT_PATH = '_level0.root.{}.main.minimap.mapShortcutLabel.sectorOverview.mmapAreaHighlight'.format(APP_CONTAINERS_NAMES.VIEWS)
+_MINI_MINIMAP_HIGHLIGHT_PATH = '_level0.root.{}.main.minimap.mapShortcutLabel.sectorOverview.mmapAreaHighlight'.format(LAYER_NAMES.VIEWS)
 _MINI_MINIMAP_SIZE = 46
 _ZOOM_MODE_MIN = 1
 _ZOOM_MODE_STEP = 0.5
@@ -40,6 +42,12 @@ _ZOOM_MULTIPLIER_TEXT = 'x'
 _METERS_IN_1X_ZOOM = 1000
 EPIC_MINIMAP_HIT_AREA = 210
 _EPIC_BASE_PING_RANGE = 150
+_DOWN_SCALE = 0.35
+_UP_SCALE = 1.0
+_MIN_RANGE_SCALE = 1.0
+MIN_BASE_SCALE = 1.0
+MAX_BASE_SCALE = 2.0
+MAX_SIZE_INDEX = 5
 _logger = logging.getLogger(__name__)
 
 def makeMousePositionToEpicWorldPosition(clickedX, clickedY, bounds, hitArea=EPIC_MINIMAP_HIT_AREA):
@@ -83,7 +91,7 @@ class EpicMinimapComponent(EpicMinimapMeta):
     def changeMinimapZoom(self, mode):
         component = self.getComponent()
         if component is not None:
-            component.changeMinimapZoom(mode)
+            self.getComponent().changeMinimapZoom(mode)
         AccountSettings.setSettings('epicMinimapZoom', mode)
         return
 
@@ -102,7 +110,6 @@ class EpicMinimapComponent(EpicMinimapMeta):
             self.__mode = mode
             self.changeMinimapZoom(self.__mode)
             self.as_setZoomModeS(self.__mode, self.__zoomText())
-            self.__rangeScale = self.__calculateRangeScale(_ZOOM_MODE_MIN, self.__maxZoomMode, mode)
 
     def onZoomModeChanged(self, change):
         mode = self.__mode + change * _ZOOM_MODE_STEP
@@ -110,6 +117,7 @@ class EpicMinimapComponent(EpicMinimapMeta):
             mode = self.__maxZoomMode
         elif mode < _ZOOM_MODE_MIN:
             mode = _ZOOM_MODE_MIN
+        self.__rangeScale = self.__calculateRangeScale(_ZOOM_MODE_MIN, self.__maxZoomMode, mode)
         self.updateZoomMode(mode)
 
     def getZoomMode(self):
@@ -170,11 +178,9 @@ class EpicMinimapComponent(EpicMinimapMeta):
 
     def __calculateRangeScale(self, minScale, maxScale, current):
         if minScale == maxScale:
-            return 1.0
-        downScale = 0.35
-        upScale = 1.0
+            return _MIN_RANGE_SCALE
         p = (current - minScale) / (maxScale - minScale)
-        return (1 - p) * downScale + p * upScale
+        return (1 - p) * _DOWN_SCALE + p * _UP_SCALE
 
 
 class RecoveringVehiclesPlugin(ArenaVehiclesPlugin):
@@ -299,13 +305,15 @@ class CenteredPersonalEntriesPlugin(RespawningPersonalEntriesPlugin):
 
 
 class SectorBaseEntriesPlugin(common.EntriesPlugin):
-    __slots__ = ('__personalTeam', '__markerIDs', '_symbol')
+    __slots__ = ('__personalTeam', '__markerIDs', '__symbolAlly', '__symbolEnemy', '__hasActiveCommit')
 
-    def __init__(self, parentObj):
+    def __init__(self, parentObj, symbolAlly=_S_NAME.EPIC_SECTOR_ALLY_BASE, symbolEnemy=_S_NAME.EPIC_SECTOR_ENEMY_BASE):
         super(SectorBaseEntriesPlugin, self).__init__(parentObj)
         self.__markerIDs = {}
         self.__personalTeam = -1
-        self._symbol = _S_NAME.EPIC_SECTOR_BASE
+        self.__symbolAlly = symbolAlly
+        self.__symbolEnemy = symbolEnemy
+        self.__hasActiveCommit = False
 
     def start(self):
         super(SectorBaseEntriesPlugin, self).start()
@@ -322,7 +330,7 @@ class SectorBaseEntriesPlugin(common.EntriesPlugin):
 
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
-            ctrl.onActionAddedToMarkerReceived += self.__onActionAddedToMarkerReceived
+            ctrl.onActionAddedToMarkerReceived += self.__onActionAddedToObjectiveMarkerReceived
             ctrl.onReplyFeedbackReceived += self.__onReplyFeedbackReceived
             ctrl.onRemoveCommandReceived += self.__onRemoveCommandReceived
         else:
@@ -338,16 +346,20 @@ class SectorBaseEntriesPlugin(common.EntriesPlugin):
             sectorBaseComp.onSectorBasePointsUpdate -= self.__onSectorBasePointsUpdate
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
-            ctrl.onActionAddedToMarkerReceived -= self.__onActionAddedToMarkerReceived
+            ctrl.onActionAddedToMarkerReceived -= self.__onActionAddedToObjectiveMarkerReceived
             ctrl.onReplyFeedbackReceived -= self.__onReplyFeedbackReceived
             ctrl.onRemoveCommandReceived -= self.__onRemoveCommandReceived
         return
 
     def __onSectorBaseAdded(self, sectorBase):
-        model = self.__markerIDs[sectorBase.baseID] = self.__addPointEntry(self._symbol, sectorBase)
+        symbol = self.__symbolEnemy
+        if sectorBase.isPlayerTeam():
+            symbol = self.__symbolAlly
+        model = self.__markerIDs[sectorBase.baseID] = self.__addPointEntry(symbol, sectorBase)
         if model is not None:
             self._invoke(model.getID(), 'setOwningTeam', sectorBase.isPlayerTeam())
             self._invoke(model.getID(), 'setIdentifier', sectorBase.baseID)
+            self._invoke(model.getID(), BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_DEFAULT)
         return
 
     def __onSectorBaseCaptured(self, baseId, isPlayerTeam):
@@ -358,6 +370,7 @@ class SectorBaseEntriesPlugin(common.EntriesPlugin):
         else:
             self._invoke(model.getID(), 'setCapturePoints', 1)
             self._invoke(model.getID(), 'setOwningTeam', isPlayerTeam)
+            self._invoke(model.getID(), BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_DEFAULT)
             return
 
     def __onSectorBasePointsUpdate(self, baseId, isPlayerTeam, points, capturingStopped, invadersCount, expectedCaptureTime):
@@ -374,48 +387,39 @@ class SectorBaseEntriesPlugin(common.EntriesPlugin):
         matrix.setTranslate(sectorBase.position)
         return self._addEntryEx(sectorBase.baseID, symbol, _EPIC_TEAM_POINTS, matrix, True)
 
-    def __onActionAddedToMarkerReceived(self, senderID, commandID, markerType, objectID):
-        pass
+    def __onActionAddedToObjectiveMarkerReceived(self, senderID, commandID, markerType, objectID):
+        if markerType != MarkerType.BASE_MARKER_TYPE or objectID not in self.__markerIDs:
+            return
+        else:
+            model = self.__markerIDs[objectID]
+            if model is None:
+                return
+            if _ACTIONS.battleChatCommandFromActionID(commandID).name in (BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE, BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE):
+                self.__onReplyFeedbackReceived(objectID, senderID, MarkerType.BASE_MARKER_TYPE, 0, 1)
+                return
+            self._invoke(model.getID(), BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_ATTACK)
+            return
 
     def __onReplyFeedbackReceived(self, ucmdID, replierID, markerType, oldReplyCount, newReplyCount):
         if markerType != MarkerType.BASE_MARKER_TYPE or ucmdID not in self.__markerIDs:
             return
-        newReply = newReplyCount > oldReplyCount and replierID == avatar_getter.getPlayerVehicleID()
-        if newReply:
-            pass
-        if newReplyCount < oldReplyCount and replierID == avatar_getter.getPlayerVehicleID() or newReplyCount <= 0:
-            pass
+        playerHasReplied = replierID == avatar_getter.getPlayerVehicleID()
+        if newReplyCount > oldReplyCount:
+            if playerHasReplied:
+                self._invoke(self.__markerIDs[ucmdID].getID(), BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_REPLY)
+                self.__hasActiveCommit = True
+            elif not self.__hasActiveCommit:
+                self._invoke(self.__markerIDs[ucmdID].getID(), BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_IDLE)
+            return
+        if newReplyCount < oldReplyCount and playerHasReplied or newReplyCount <= 0:
+            self._invoke(self.__markerIDs[ucmdID].getID(), BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_IDLE)
+            if playerHasReplied:
+                self.__hasActiveCommit = False
 
-    def __onRemoveCommandReceived--- This code section failed: ---
-
- 445       0	LOAD_FAST         'self'
-           3	LOAD_ATTR         '__markerIDs'
-           6	UNARY_NOT         ''
-           7	POP_JUMP_IF_TRUE  '25'
-          10	LOAD_FAST         'markerType'
-          13	LOAD_GLOBAL       'MarkerType'
-          16	LOAD_ATTR         'BASE_MARKER_TYPE'
-          19	COMPARE_OP        '!='
-        22_0	COME_FROM         '7'
-          22	POP_JUMP_IF_FALSE '29'
-
- 446      25	LOAD_CONST        ''
-          28	JUMP_FORWARD      50
-
- 448      29	LOAD_FAST         'removeID'
-          32	LOAD_FAST         'self'
-          35	LOAD_ATTR         '__markerIDs'
-          38	COMPARE_OP        'in'
-          41	POP_JUMP_IF_FALSE '47'
-
- 451      44	JUMP_FORWARD      '47'
-        47_0	COME_FROM         '44'
-          47	LOAD_CONST        ''
-        50_0	COME_FROM         '28'
-          50	RETURN_VALUE      ''
-          -1	RETURN_LAST       ''
-
-Syntax error at or near 'COME_FROM' token at offset 47_0
+    def __onRemoveCommandReceived(self, removeID, markerType):
+        if not self.__markerIDs or markerType != MarkerType.BASE_MARKER_TYPE or removeID not in self.__markerIDs:
+            return
+        self._invoke(self.__markerIDs[removeID].getID(), BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_DEFAULT)
 
 
 class SectorStatusEntriesPlugin(SimplePlugin):
@@ -500,12 +504,14 @@ class SectorStatusEntriesPlugin(SimplePlugin):
 
 
 class HeadquartersStatusEntriesPlugin(SimplePlugin):
-    __slots__ = ('__hqsDict', '_symbol')
+    __slots__ = ('__hqsDict', '__symbolAlly', '__symbolEnemy', '__hasActiveCommit')
 
-    def __init__(self, parentObj):
+    def __init__(self, parentObj, symbolAlly=_S_NAME.EPIC_HQ_ALLY, symbolEnemy=_S_NAME.EPIC_HQ_ENEMY):
         super(HeadquartersStatusEntriesPlugin, self).__init__(parentObj)
         self.__hqsDict = {}
-        self._symbol = _S_NAME.EPIC_HQ
+        self.__symbolAlly = symbolAlly
+        self.__symbolEnemy = symbolEnemy
+        self.__hasActiveCommit = False
 
     def start(self):
         super(HeadquartersStatusEntriesPlugin, self).start()
@@ -519,6 +525,11 @@ class HeadquartersStatusEntriesPlugin(SimplePlugin):
 
         else:
             _logger.error('Expected DestructibleEntityComponent not present!')
+        ctrl = self.sessionProvider.shared.feedback
+        if ctrl is not None:
+            ctrl.onReplyFeedbackReceived += self.__onReplyFeedbackReceived
+            ctrl.onRemoveCommandReceived += self.__onRemoveCommandReceived
+            ctrl.onMinimapFeedbackReceived += self.__onMinimapFeedbackReceived
         return
 
     def fini(self):
@@ -527,15 +538,24 @@ class HeadquartersStatusEntriesPlugin(SimplePlugin):
         if destructibleComponent is not None:
             destructibleComponent.onDestructibleEntityAdded -= self.__onDestructibleEntityAdded
             destructibleComponent.onDestructibleEntityHealthChanged -= self.__onDestructibleEntityHealthChanged
+        ctrl = self.sessionProvider.shared.feedback
+        if ctrl is not None:
+            ctrl.onReplyFeedbackReceived -= self.__onReplyFeedbackReceived
+            ctrl.onRemoveCommandReceived -= self.__onRemoveCommandReceived
+            ctrl.onMinimapFeedbackReceived -= self.__onMinimapFeedbackReceived
         return
 
     def __onDestructibleEntityAdded(self, entity):
-        entryID = self.__hqsDict[entity.destructibleEntityID] = self.__addHQEntry(self._symbol, entity.position)
+        symbol = self.__symbolEnemy
+        if entity.isPlayerTeam:
+            symbol = self.__symbolAlly
+        entryID = self.__hqsDict[entity.destructibleEntityID] = self.__addHQEntry(symbol, entity.position)
         isDead = entity.health == 0
         if entryID is not None:
             self._invoke(entryID, 'setOwningTeam', entity.isPlayerTeam)
             self._invoke(entryID, 'setIdentifier', entity.destructibleEntityID)
             self._invoke(entryID, 'setDead', isDead)
+            self._invoke(entryID, BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_DEFAULT)
         return
 
     def __onDestructibleEntityHealthChanged(self, destructibleEntityID, newHealth, maxHealth, atkID, atkReason, hitFlags):
@@ -552,6 +572,41 @@ class HeadquartersStatusEntriesPlugin(SimplePlugin):
         matrix.setTranslate(position)
         entryID = self._addEntry(symbol, _EPIC_HQS, matrix=matrix, active=True)
         return entryID
+
+    def __onMinimapFeedbackReceived(self, eventID, entityID, value):
+        if eventID == FEEDBACK_EVENT_ID.MINIMAP_MARK_OBJECTIVE:
+            self.__onActionAddedToMarkerReceived(entityID, *value)
+
+    def __onActionAddedToMarkerReceived(self, senderID, hqId, duration, cmdName):
+        if hqId not in self.__hqsDict:
+            return
+        modelID = self.__hqsDict[hqId]
+        if modelID == 0:
+            return
+        if cmdName in (BATTLE_CHAT_COMMAND_NAMES.ATTACKING_OBJECTIVE, BATTLE_CHAT_COMMAND_NAMES.DEFENDING_OBJECTIVE):
+            self.__onReplyFeedbackReceived(hqId, senderID, MarkerType.HEADQUARTER_MARKER_TYPE, 0, 1)
+            return
+        self._invoke(modelID, BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_ATTACK)
+
+    def __onReplyFeedbackReceived(self, ucmdID, replierID, markerType, oldReplyCount, newReplyCount):
+        if markerType != MarkerType.HEADQUARTER_MARKER_TYPE or ucmdID not in self.__hqsDict:
+            return
+        playerHasReplied = replierID == avatar_getter.getPlayerVehicleID()
+        if newReplyCount > oldReplyCount:
+            if playerHasReplied:
+                self._invoke(self.__hqsDict[ucmdID], BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_REPLY)
+                self.__hasActiveCommit = True
+            elif not self.__hasActiveCommit:
+                self._invoke(self.__hqsDict[ucmdID], BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_IDLE)
+        elif newReplyCount < oldReplyCount and replierID == avatar_getter.getPlayerVehicleID() or newReplyCount <= 0:
+            self._invoke(self.__hqsDict[ucmdID], BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_IDLE)
+            if playerHasReplied:
+                self.__hasActiveCommit = False
+
+    def __onRemoveCommandReceived(self, removeID, markerType):
+        if not self.__hqsDict or markerType != MarkerType.HEADQUARTER_MARKER_TYPE or removeID not in self.__hqsDict:
+            return
+        self._invoke(self.__hqsDict[removeID], BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_DEFAULT)
 
 
 class DevelopmentRespawnEntriesPlugin(SimplePlugin):
@@ -651,7 +706,7 @@ class StepRepairPointEntriesPlugin(SimplePlugin):
         if type_ is not PROGRESS_CIRCLE_TYPE.RESUPPLY_CIRCLE:
             return
         entryID = self.__ptDict[pointId]
-        self._parentObj.invoke(entryID, 'setState', state)
+        self._parentObj.invoke(entryID, BATTLE_MINIMAP_CONSTS.SET_STATE, state)
 
     def __onStepRepairPointAdded(self, stepRepairPoint):
         symbol = _S_NAME.EPIC_REPAIR
@@ -780,35 +835,6 @@ class EpicMinimapPingPlugin(plugins.MinimapPingPlugin):
         self.__baseList = {}
         self._hitAreaSize = minimap_utils.EPIC_MINIMAP_HIT_AREA
 
-    def _getClickPosition(self, x, y):
-        return makeMousePositionToEpicWorldPosition(x, y, self._parentObj.getVisualBounds(), self._hitAreaSize)
-
-    def _getIdByBaseNumber(self, team, number):
-        return number
-
-    def _processCommandByPosition(self, commands, locationCommand, position, minimapScaleIndex):
-        minBaseScale = 1.0
-        maxBaseScale = 2.0
-        numberOfScaleModes = 5
-        p = minimapScaleIndex / numberOfScaleModes
-        minimapScaleOffset = (1 - p) * minBaseScale + maxBaseScale * p
-        scaledBaseRange = _EPIC_BASE_PING_RANGE / minimapScaleOffset * self.parentObj.getRangeScale()
-        hqIdx = self.__getNearestHQForPosition(position, scaledBaseRange)
-        if hqIdx:
-            commands.sendAttentionToObjective(hqIdx, self._arenaDP.getNumberOfTeam() == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER)
-            return
-        else:
-            baseIdx, baseName = self.__getNearestBaseForPosition(position, scaledBaseRange)
-            if baseIdx:
-                self._make3DPingBases(commands, (self._arenaDP.getNumberOfTeam(), 0, baseIdx), baseName)
-                return
-            locationID = self._getNearestLocationIDForPosition(position, _LOCATION_PING_RANGE)
-            if locationID is not None:
-                self._replyPing3DMarker(commands, locationID)
-                return
-            commands.sendAttentionToPosition3D(position, locationCommand)
-            return
-
     def start(self):
         super(EpicMinimapPingPlugin, self).start()
         destructibleComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'destructibleEntityComponent', None)
@@ -833,6 +859,46 @@ class EpicMinimapPingPlugin(plugins.MinimapPingPlugin):
             destructibleComponent.onDestructibleEntityAdded -= self.__onDestructibleEntityAdded
         return
 
+    def _getClickPosition(self, x, y):
+        return makeMousePositionToEpicWorldPosition(x, y, self._parentObj.getVisualBounds(), self._hitAreaSize)
+
+    def _getIdByBaseNumber(self, team, number):
+        return number
+
+    def _processCommandByPosition(self, commands, locationCommand, position, minimapScaleIndex):
+        p = minimapScaleIndex / MAX_SIZE_INDEX
+        minimapScaleOffset = (1 - p) * MIN_BASE_SCALE + MAX_BASE_SCALE * p
+        scaledBaseRange = _EPIC_BASE_PING_RANGE / minimapScaleOffset * self.parentObj.getRangeScale()
+        hqIdx, hqTeam = self.__getNearestHQForPosition(position, scaledBaseRange)
+        if hqIdx:
+            self.__make3DPingHQ(commands, (hqTeam, 0, hqIdx))
+            return
+        else:
+            baseIdx, baseTeam, baseName = self.__getNearestBaseForPosition(position, scaledBaseRange)
+            if baseIdx:
+                self._make3DPingBases(commands, (baseTeam, 0, baseIdx), baseName)
+                return
+            locationID = self._getNearestLocationIDForPosition(position, _LOCATION_PING_RANGE)
+            if locationID is not None:
+                self._replyPing3DMarker(commands, locationID)
+                return
+            commands.sendAttentionToPosition3D(position, locationCommand)
+            return
+
+    def __make3DPingHQ(self, commands, bases):
+        advChatCmp = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'advancedChatComponent', None)
+        if advChatCmp is None:
+            return
+        else:
+            team, _, number = bases
+            uniqueId = self._getIdByBaseNumber(team, number)
+            replyState, commandKey = advChatCmp.getReplyStateForTargetIDAndMarkerType(uniqueId, MarkerType.HEADQUARTER_MARKER_TYPE)
+            if replyState is ReplyState.NO_REPLY:
+                commands.sendAttentionToObjective(number, self._arenaDP.getNumberOfTeam() != team)
+                return
+            self._processReplyCommand(replyState, commands, uniqueId, commandKey)
+            return
+
     def __onDestructibleEntityAdded(self, destEntity):
         self.__hqsList[destEntity.destructibleEntityID] = destEntity.position
 
@@ -843,27 +909,27 @@ class EpicMinimapPingPlugin(plugins.MinimapPingPlugin):
         destructibleComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'destructibleEntityComponent', None)
         if destructibleComponent is None:
             _logger.error('Expected DestructibleEntityComponent not present!')
-            return
+            return (None, None)
         else:
             closestHqIdx, distance = destructibleComponent.getNearestDestructibleEntityID(clickPos)
             destEntity = destructibleComponent.getDestructibleEntity(closestHqIdx)
-            return closestHqIdx if distance <= range_ and destEntity.isActive else None
+            return (closestHqIdx, destEntity.team) if distance <= range_ and destEntity.isActive else (None, None)
 
     def __getNearestBaseForPosition(self, clickPos, range_):
         sectorBaseComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'sectorBaseComponent', None)
         if sectorBaseComponent is None:
             _logger.error('Expected SectorBaseComponent not present!')
-            return (None, None)
+            return (None, None, None)
         else:
             openBases = [ base for base in sectorBaseComponent.sectorBases if not base.isCaptured and base.active() ]
             if not openBases:
-                return (None, None)
+                return (None, None, None)
 
             def getDistance(entity):
                 return entity.position.flatDistTo(clickPos)
 
             closestBase = min(openBases, key=getDistance)
-            return (closestBase.baseID, ID_TO_BASENAME[closestBase.baseID]) if getDistance(closestBase) <= range_ else (None, None)
+            return (closestBase.baseID, closestBase.team, ID_TO_BASENAME[closestBase.baseID]) if getDistance(closestBase) <= range_ else (None, None, None)
 
 
 class EpicTeleportPlugin(EpicMinimapPingPlugin):

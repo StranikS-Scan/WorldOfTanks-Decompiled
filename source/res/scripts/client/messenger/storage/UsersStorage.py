@@ -258,7 +258,7 @@ class UsersStorage(RevCachedStorage):
         result = None
         emptyGroups = record.pop(0)
         if isinstance(emptyGroups, types.TupleType):
-            self.__emptyGroups = set([ group for group in emptyGroups if isinstance(group, types.StringTypes) ])
+            self.__emptyGroups = set([ group for group in emptyGroups if isinstance(group, types.StringType) ])
         contacts = record.pop(0)
         if isinstance(contacts, types.ListType):
 

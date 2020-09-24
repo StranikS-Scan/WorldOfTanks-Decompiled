@@ -9,6 +9,3 @@ class StorageCategoryOffersViewMeta(BaseCategoryView):
 
     def openOfferWindow(self, offerID):
         self._printOverrideError('openOfferWindow')
-
-    def as_setTotalClicksTextS(self, text):
-        return self.flashObject.as_setTotalClicksText(text) if self._isDAAPIInited() else None

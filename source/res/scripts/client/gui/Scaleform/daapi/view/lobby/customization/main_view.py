@@ -19,6 +19,7 @@ from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibili
 from gui.Scaleform.daapi.view.meta.CustomizationMainViewMeta import CustomizationMainViewMeta
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.entities.View import ViewKey, ViewKeyDynamic
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams, GuiImplViewLoadParams
 from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler, ViewLifecycleWatcher
 from gui.Scaleform.genConsts.CUSTOMIZATION_ALIASES import CUSTOMIZATION_ALIASES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -169,7 +170,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
     guiLoader = dependency.descriptor(IGuiLoader)
     settingsCore = dependency.descriptor(ISettingsCore)
 
-    def __init__(self, viewCtx=None):
+    def __init__(self, ctx=None):
         super(MainView, self).__init__()
         self.__viewLifecycleWatcher = ViewLifecycleWatcher()
         self.fadeAnchorsOut = False
@@ -178,7 +179,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__bottomPanel = None
         self._seasonSoundAnimation = None
         self.__ctx = None
-        self.__viewCtx = viewCtx or {}
+        self.__viewCtx = ctx or {}
         self.__renderEnv = None
         self.__initAnchorsPositionsCallback = None
         self.__setCollisionsCallback = None
@@ -226,7 +227,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             _logger.info('Gameface customization cart is opened')
             ctx = ctx or {}
             ctx.update(c11nView=self)
-            self.fireEvent(events.LoadUnboundViewEvent(R.views.lobby.customization.CustomizationCart(), CustomizationCartView, ScopeTemplates.LOBBY_SUB_SCOPE, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.customization.CustomizationCart(), CustomizationCartView, ScopeTemplates.LOBBY_SUB_SCOPE), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onProgressionEntryPointClick(self):
         showProgressiveItemsView()
@@ -794,7 +795,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         if not immediate:
             self.__ctx.mode.unselectItem()
             self.__ctx.mode.unselectSlot()
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __onCacheResync(self, *_):
         if not g_currentVehicle.isPresent():

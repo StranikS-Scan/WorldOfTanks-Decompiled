@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/battle_pass_voting_confirm_view.py
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
-from frameworks.wulf import ViewFlags, ViewSettings
+from frameworks.wulf import ViewSettings
 from gui import SystemMessages
 from gui.battle_pass.battle_pass_award import BattlePassAwardsManager as awardsManager
 from gui.battle_pass.battle_pass_helpers import BackgroundPositions
@@ -22,7 +22,6 @@ class BattlePassVotingConfirmView(FullScreenDialogView):
 
     def __init__(self, data):
         settings = ViewSettings(R.views.lobby.battle_pass.BattlePassVotingConfirmView())
-        settings.flags = ViewFlags.OVERLAY_VIEW
         settings.model = BattlePassVotingConfirmViewModel()
         self.__reward = data.get('finalReward')
         super(BattlePassVotingConfirmView, self).__init__(settings)

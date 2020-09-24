@@ -17,6 +17,7 @@ from ContactInfo import ContactInfo
 from OfflineMapCreator import g_offlineMapCreator
 from PlayerEvents import g_playerEvents as events
 from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, client_anonymizer, ClientBattleRoyale
+from account_helpers.dog_tags import DogTags
 from account_helpers.offers.sync_data import OffersSyncData
 from account_helpers import ClientInvitations, vehicle_rotation
 from account_helpers import client_ranked, ClientBadges
@@ -160,6 +161,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.dailyQuests = g_accountRepository.dailyQuests
         self.battlePass = g_accountRepository.battlePass
         self.offers = g_accountRepository.offers
+        self.dogTags = g_accountRepository.dogTags
         self.customFilesCache = g_accountRepository.customFilesCache
         self.syncData.setAccount(self)
         self.inventory.setAccount(self)
@@ -184,6 +186,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.spaFlags.setAccount(self)
         self.anonymizer.setAccount(self)
         self.offers.setAccount(self)
+        self.dogTags.setAccount(self)
         g_accountRepository.commandProxy.setGateway(self.__doCmd)
         self.isLongDisconnectedFromCenter = False
         self.prebattle = None
@@ -206,7 +209,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInRankedQueue = False
         self.isInEpicQueue = False
         self.isInBattleRoyaleQueue = False
-        self.isInBobQueue = False
         self.__onCmdResponse = {}
         self.__onStreamComplete = {}
         self.__objectsSelectionEnabled = True
@@ -238,6 +240,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.epicMetaGame.onAccountBecomePlayer()
         self.blueprints.onAccountBecomePlayer()
         self.festivities.onAccountBecomePlayer()
+        self.dogTags.onAccountBecomePlayer()
         self.sessionStats.onAccountBecomePlayer()
         self.spaFlags.onAccountBecomePlayer()
         self.anonymizer.onAccountBecomePlayer()
@@ -281,6 +284,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.anonymizer.onAccountBecomeNonPlayer()
         self.battlePass.onAccountBecomeNonPlayer()
         self.offers.onAccountBecomeNonPlayer()
+        self.dogTags.onAccountBecomeNonPlayer()
         self.__cancelCommands()
         self.syncData.setAccount(None)
         self.inventory.setAccount(None)
@@ -422,9 +426,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.BATTLE_ROYALE:
             self.isInBattleRoyaleQueue = True
             events.onEnqueuedBattleRoyale()
-        elif queueType == QUEUE_TYPE.BOB:
-            self.isInBobQueue = True
-            events.onEnqueuedBob()
         events.onEnqueued(queueType)
 
     def onEnqueueFailure(self, queueType, errorCode, errorStr):
@@ -447,8 +448,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             events.onEnqueuedEpicFailure(errorCode, errorStr)
         elif queueType == QUEUE_TYPE.BATTLE_ROYALE:
             events.onEnqueuedBattleRoyaleFailure(errorCode, errorStr)
-        elif queueType == QUEUE_TYPE.BOB:
-            events.onEnqueuedBobFailure(errorCode, errorStr)
         events.onEnqueueFailure(queueType, errorCode, errorStr)
 
     def onDequeued(self, queueType):
@@ -480,9 +479,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.BATTLE_ROYALE:
             self.isInBattleRoyaleQueue = False
             events.onDequeuedBattleRoyale()
-        elif queueType == QUEUE_TYPE.BOB:
-            self.isInBobQueue = False
-            events.onDequeuedBob()
         events.onDequeued(queueType)
 
     def onTutorialEnqueued(self, number, queueLen, avgWaitingTime):
@@ -542,9 +538,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.BATTLE_ROYALE:
             self.isInBattleRoyaleQueue = False
             events.onKickedFromBattleRoyaleQueue()
-        elif queueType == QUEUE_TYPE.BOB:
-            self.isInBobQueue = False
-            events.onKickedFromBobQueue()
         events.onKickedFromQueue(queueType)
 
     def onArenaCreated(self):
@@ -565,7 +558,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInBootcampQueue = False
         self.isInEpicQueue = False
         self.isInBattleRoyaleQueue = False
-        self.isInBobQueue = False
         events.isPlayerEntityChanging = False
         events.onPlayerEntityChangeCanceled()
         events.onArenaJoinFailure(errorCode, errorStr)
@@ -892,14 +884,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def dequeueBattleRoyale(self):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_BATTLE_ROYALE, 0, 0, 0)
-
-    def enqueueBob(self, vehInvID):
-        if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_BOB, vehInvID, 0, 0)
-
-    def dequeueBob(self):
-        if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_BOB, 0, 0, 0)
 
     def forceEpicDevStart(self):
         if not events.isPlayerEntityChanging:
@@ -1250,6 +1234,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.anonymizer.synchronize(isFullSync, diff)
             self.battlePass.synchronize(isFullSync, diff)
             self.offers.synchronize(isFullSync, diff)
+            self.dogTags.synchronize(isFullSync, diff)
             self.__synchronizeServerSettings(diff)
             self.__synchronizeDisabledPersonalMissions(diff)
             self.__synchronizeEventNotifications(diff)
@@ -1491,6 +1476,7 @@ class _AccountRepository(object):
         self.dailyQuests = {}
         self.battlePass = BattlePassManager(self.syncData, self.commandProxy)
         self.offers = OffersSyncData(self.syncData)
+        self.dogTags = DogTags(self.syncData)
         self.gMap = ClientGlobalMap()
         self.onTokenReceived = Event.Event()
         self.requestID = AccountCommands.REQUEST_ID_UNRESERVED_MIN

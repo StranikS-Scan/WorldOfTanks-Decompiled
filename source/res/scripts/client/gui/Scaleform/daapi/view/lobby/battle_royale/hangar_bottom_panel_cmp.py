@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/battle_royale/hangar_bottom_panel_cmp.py
 from collections import namedtuple
 from adisp import process
-from frameworks.wulf import ViewFlags
+from frameworks.wulf import ViewFlags, ViewSettings
 from account_helpers.AccountSettings import AccountSettings, BATTLE_ROYALE_HANGAR_BOTTOM_PANEL_VIEWED
 from CurrentVehicle import g_currentVehicle
 from gui import SystemMessages, DialogsInterface, makeHtmlString
@@ -38,15 +38,18 @@ _ArtefactData = namedtuple('_ArtefactData', ('intCD', 'quantity', 'icon', 'toolt
 class HangarBottomPanelComponent(InjectComponentAdaptor):
 
     def _makeInjectView(self):
-        return HangarBottomPanelView()
+        return HangarBottomPanelView(R.views.lobby.battleRoyale.hangar_bottom_panel_cmp.HangarBottomPanelCmp())
 
 
 class HangarBottomPanelView(ViewImpl, IGlobalListener):
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, *args, **kwargs):
-        super(HangarBottomPanelView, self).__init__(R.views.lobby.battleRoyale.hangar_bottom_panel_cmp.HangarBottomPanelCmp(), ViewFlags.COMPONENT, HangarBottomPanelViewModel, *args, **kwargs)
+    def __init__(self, viewKey, viewModelClazz=HangarBottomPanelViewModel):
+        settings = ViewSettings(viewKey)
+        settings.flags = ViewFlags.COMPONENT
+        settings.model = viewModelClazz()
+        super(HangarBottomPanelView, self).__init__(settings)
         self.__isModuleViewed = False
 
     @property

@@ -215,30 +215,47 @@ def get2DAngleFromCamera(vector):
 
 class FovExtended(object):
     __instance = None
-    __HOR_TO_VERT_RATIO = 60.0 / 95.0
-    __TO_HORIZONTAL_THRESHOLD = 3.0 / 2.0 + 0.001
-    __HOR_TO_BIG_HOR_RATIO = 2.0
-    __BIG_ASPECT_THRESHOLD = 11.0 / 3.0
+    arWide = 16.0 / 9.0
+    vFovNarrow = {70: 44.2105,
+     75: 47.3684,
+     80: 50.5263,
+     85: 53.6842,
+     90: 56.8421,
+     95: 60,
+     100: 63.1579,
+     105: 66.3158,
+     110: 69.4737,
+     115: 72.6316,
+     120: 75.7895}
+    vFovWide = {70: 39.375,
+     75: 42.1875,
+     80: 45,
+     85: 47.8125,
+     90: 50.625,
+     95: 53.4375,
+     100: 56.25,
+     105: 59.0625,
+     110: 61.875,
+     115: 64.6875,
+     120: 67.5}
+
+    @staticmethod
+    def lookupVerticalFov(horizontalFovValue):
+        lookupDict = FovExtended.vFovWide if BigWorld.getAspectRatio() > FovExtended.arWide else FovExtended.vFovNarrow
+        if horizontalFovValue not in lookupDict.keys():
+            horizontalFovValue = (int(horizontalFovValue / 5) + 1) * 5
+            horizontalFovValue = math_utils.clamp(lookupDict.keys()[0], lookupDict.keys()[-1], horizontalFovValue)
+        return math.radians(lookupDict[horizontalFovValue])
 
     @staticmethod
     def clampFov(fov):
         return math_utils.clamp(0.017, 3.12, fov)
 
     @staticmethod
-    def calcVerticalFov(horizontalFovValue):
-        return horizontalFovValue / getScreenAspectRatio()
-
-    @staticmethod
-    def calcHorizontalFov(verticalFovValue):
-        return verticalFovValue * getScreenAspectRatio()
-
-    @staticmethod
     def instance():
         if FovExtended.__instance is None:
             FovExtended.__instance = FovExtended()
         return FovExtended.__instance
-
-    isHorizontalFovFixed = property(lambda self: self.__isHorizontalFovFixed)
 
     def __setEnabled(self, value):
         self.__enabled = value
@@ -247,30 +264,24 @@ class FovExtended(object):
     enabled = property(lambda self: self.__enabled, __setEnabled)
 
     def __setHorizontalFov(self, value):
-        self.__defaultHorizontalFov = value
-        self.__defaultVerticalFov = value * FovExtended.__HOR_TO_VERT_RATIO
-        self.__defaultHorizontalFovBig = value * FovExtended.__HOR_TO_BIG_HOR_RATIO
+        self.__horizontalFov = value
+        self.__verticalFov = FovExtended.lookupVerticalFov(value)
+        BigWorld.addWatcher('Render/Fov(horizontal, deg)', lambda : self.__horizontalFov)
+        BigWorld.addWatcher('Render/Fov(vertical, deg)', lambda : math.degrees(self.__verticalFov))
         self.setFovByMultiplier(self.__multiplier)
 
-    defaultHorizontalFov = property(lambda self: self.__defaultHorizontalFov, __setHorizontalFov)
+    horizontalFov = property(lambda self: self.__horizontalFov, __setHorizontalFov)
 
     def __getActualDefaultVerticalFov(self):
-        verticalFov = self.__defaultVerticalFov
-        if self.__isHorizontalFovFixed:
-            horizontalFov = self.__defaultHorizontalFov
-            if getScreenAspectRatio() >= FovExtended.__BIG_ASPECT_THRESHOLD:
-                horizontalFov = self.__defaultHorizontalFovBig
-            verticalFov = FovExtended.calcVerticalFov(horizontalFov)
-        return verticalFov
+        return FovExtended.lookupVerticalFov(self.horizontalFov)
 
     actualDefaultVerticalFov = property(__getActualDefaultVerticalFov)
 
     def __init__(self):
-        self.__isHorizontalFovFixed = getScreenAspectRatio() > FovExtended.__TO_HORIZONTAL_THRESHOLD
         self.__multiplier = 1.0
         self.__enabled = True
-        initialVerticalFov = math.radians(60)
-        self.defaultHorizontalFov = initialVerticalFov * getScreenAspectRatio()
+        self.horizontalFov = 90
+        self.defaultVerticalFov = FovExtended.lookupVerticalFov(self.horizontalFov)
         from gui import g_guiResetters
         g_guiResetters.add(self.refreshFov)
 
@@ -282,8 +293,8 @@ class FovExtended(object):
         if not self.__enabled:
             return
         else:
-            defaultFov = self.actualDefaultVerticalFov
-            finalFov = FovExtended.clampFov(defaultFov * self.__multiplier)
+            verticalFov = self.actualDefaultVerticalFov
+            finalFov = FovExtended.clampFov(verticalFov * self.__multiplier)
             if rampTime is None:
                 BigWorld.projection().fov = finalFov
             else:
@@ -291,11 +302,11 @@ class FovExtended(object):
             return
 
     def setFovByAbsoluteValue(self, horizontalFov, rampTime=None):
-        multiplier = horizontalFov / self.defaultHorizontalFov
+        multiplier = horizontalFov / self.horizontalFov
         self.setFovByMultiplier(multiplier, rampTime)
 
     def refreshFov(self):
-        self.__isHorizontalFovFixed = getScreenAspectRatio() > FovExtended.__TO_HORIZONTAL_THRESHOLD
+        self.__verticalFov = self.actualDefaultVerticalFov
         self.setFovByMultiplier(self.__multiplier)
 
 

@@ -7,13 +7,14 @@ from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from bootcamp.BootCampEvents import g_bootcampEvents
-from bootcamp.statistic.decorators import loggerTarget, loggerEntry, logOnCondition, simpleLog
-from bootcamp.statistic.logging_constants import BC_LOG_ACTIONS, BC_LOG_KEYS
+from uilogging.decorators import loggerTarget, loggerEntry, simpleLog
+from uilogging.bootcamp.constants import BC_LOG_ACTIONS, BC_LOG_KEYS
+from uilogging.bootcamp.loggers import BootcampUILogger
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
 from gui.Scaleform.framework.entities.View import CommonSoundSpaceSettings
 _DEFAULT_VIDEO_BUFFERING_TIME = 0.0
 
-@loggerTarget(logKey=BC_LOG_KEYS.BC_INTRO_VIDEO)
+@loggerTarget(logKey=BC_LOG_KEYS.BC_INTRO_VIDEO, loggerCls=BootcampUILogger)
 class BCIntroVideoPage(BCIntroPage, IArenaVehiclesController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     _HANGAR_OVERLAY_STATE = 'STATE_video_overlay'
@@ -91,13 +92,12 @@ class BCIntroVideoPage(BCIntroPage, IArenaVehiclesController):
         if not self._videoPlayerVisible:
             self._showHighlight()
 
-    @logOnCondition(instanceMethod='_shouldHighlight', valueToCheck=INTRO_HIGHLIGHT_TYPE.START_BUTTON, action=BC_LOG_ACTIONS.MOUSE_CLICK)
     def _showHighlight(self):
         if self._shouldHighlight(INTRO_HIGHLIGHT_TYPE.START_BUTTON):
             self._setHighlighting(INTRO_HIGHLIGHT_TYPE.START_BUTTON, True)
         if self._isCurrentlyHighlighting(INTRO_HIGHLIGHT_TYPE.ARROWS):
             self._setHighlighting(INTRO_HIGHLIGHT_TYPE.ARROWS, False)
 
-    @simpleLog(action=BC_LOG_ACTIONS.CONTINUE_BUTTON_PRESSED)
+    @simpleLog(action=BC_LOG_ACTIONS.CONTINUE_BUTTON_PRESSED, logOnce=True, restrictions={'lesson_id': 0}, validate=False)
     def goToBattle(self):
         super(BCIntroVideoPage, self).goToBattle()

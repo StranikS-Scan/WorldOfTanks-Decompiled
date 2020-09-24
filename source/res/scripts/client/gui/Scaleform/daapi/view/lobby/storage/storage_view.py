@@ -9,6 +9,7 @@ from gui.Scaleform.daapi.view.lobby.storage import getSectionsList
 from gui.Scaleform.daapi.view.lobby.storage.sound_constants import STORAGE_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageShellsData
 from gui.Scaleform.daapi.view.meta.StorageViewMeta import StorageViewMeta
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.impl import backport
 from gui.impl.gen import R
@@ -44,7 +45,7 @@ class StorageView(LobbySubView, StorageViewMeta):
         return
 
     def onClose(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def navigateToHangar(self):
         showHangar()

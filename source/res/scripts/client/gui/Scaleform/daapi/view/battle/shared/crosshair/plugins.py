@@ -22,7 +22,7 @@ from gui.Scaleform.genConsts.DUAL_GUN_MARKER_STATE import DUAL_GUN_MARKER_STATE
 from gui.Scaleform.genConsts.GUN_MARKER_VIEW_CONSTANTS import GUN_MARKER_VIEW_CONSTANTS as _VIEW_CONSTANTS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control import avatar_getter
-from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, CROSSHAIR_VIEW_ID, SHELL_QUANTITY_UNKNOWN
+from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, CROSSHAIR_VIEW_ID, SHELL_QUANTITY_UNKNOWN, ENTITY_IN_FOCUS_TYPE
 from gui.battle_control.battle_constants import SHELL_SET_RESULT, VEHICLE_VIEW_STATE, NET_TYPE_OVERRIDE
 from gui.battle_control.controllers import crosshair_proxy
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
@@ -675,13 +675,15 @@ class TargetDistancePlugin(_DistancePlugin):
         self._parentObj.setDistance(int(avatar_getter.getDistanceToTarget(target)))
 
     def __onVehicleFeedbackReceived(self, eventID, vehicleID, value):
-        if eventID == FEEDBACK_EVENT_ID.VEHICLE_IN_FOCUS:
+        if eventID == FEEDBACK_EVENT_ID.ENTITY_IN_FOCUS:
             if self._parentObj.getViewID() not in (CROSSHAIR_VIEW_ID.ARCADE, CROSSHAIR_VIEW_ID.SNIPER):
                 return
-            if value:
-                self.__startTrack(vehicleID)
-            else:
-                self.__stopTrack()
+            isInFocus, entityType = value
+            if entityType == ENTITY_IN_FOCUS_TYPE.VEHICLE:
+                if isInFocus:
+                    self.__startTrack(vehicleID)
+                else:
+                    self.__stopTrack()
 
 
 class GunMarkerDistancePlugin(_DistancePlugin):

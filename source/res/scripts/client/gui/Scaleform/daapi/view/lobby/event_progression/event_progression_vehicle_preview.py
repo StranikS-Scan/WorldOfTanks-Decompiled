@@ -43,7 +43,12 @@ class EventProgressionVehiclePreview(VehiclePreview):
         formatMoney = text_styles.superPromoTitleEm if storedPoints > 0 else text_styles.superPromoTitleErr
         formatPrice = text_styles.superPromoTitleEm if haveEnoughPoints else text_styles.superPromoTitleErr
         tokensIcon = icons.makeImageTag(source=backport.image(R.images.gui.maps.icons.epicBattles.rewardPoints.c_32x32()), width=32, height=32, vSpace=-6, hSpace=3)
-        return {'title': text_styles.superPromoTitle(backport.text(R.strings.event_progression.vehicle_preview.title())),
+
+        def formatTitle(rID):
+            return text_styles.superPromoTitle(backport.text(rID()))
+
+        return {'title': formatTitle(R.strings.event_progression.vehicle_preview.title),
+         'shortTitle': formatTitle(R.strings.event_progression.vehicle_preview.title.short),
          'money': text_styles.concatStylesToSingleLine(formatMoney(str(storedPoints)), tokensIcon),
          'price': text_styles.concatStylesToSingleLine(formatPrice(str(vehiclePrice)), tokensIcon),
          'buyButtonEnabled': haveEnoughPoints and not buyButtonTooltip,

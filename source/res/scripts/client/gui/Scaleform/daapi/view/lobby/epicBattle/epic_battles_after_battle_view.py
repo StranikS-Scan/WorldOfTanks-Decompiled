@@ -42,13 +42,13 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
             SoundGroups.g_instance.playSound2D(EPIC_METAGAME_WWISE_SOUND_EVENTS.EB_LEVEL_REACHED_MAX)
 
     def onEscapePress(self):
-        self.__close()
+        self.destroy()
 
     def onCloseBtnClick(self):
-        self.__close()
+        self.destroy()
 
     def onWindowClose(self):
-        self.__close()
+        self.destroy()
 
     def onProgressBarStartAnim(self):
         if not self.__isProgressBarAnimating:
@@ -60,10 +60,13 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
             SoundGroups.g_instance.playSound2D(EPIC_METAGAME_WWISE_SOUND_EVENTS.EB_PROGRESS_BAR_STOP)
             self.__isProgressBarAnimating = False
 
+    def destroy(self):
+        self.onProgressBarCompleteAnim()
+        super(EpicBattlesAfterBattleView, self).destroy()
+
     def _populate(self):
         super(EpicBattlesAfterBattleView, self)._populate()
-        extInfo = self.__ctx['reusableInfo'].personal.avatar.extensionInfo
-        epicMetaGame = extInfo['epicMetaGame']
+        epicMetaGame = self.__ctx['reusableInfo'].personal.avatar.extensionInfo
         _, pMetaLevel, pFamePts = epicMetaGame.get('metaLevel', (None, None, None))
         _, prevPMetaLevel, prevPFamePts = epicMetaGame.get('prevMetaLevel', (None, None, None))
         boosterFLXP = epicMetaGame.get('boosterFlXP', 0)
@@ -75,7 +78,7 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         if season is not None:
             cycleNumber = self.__epicMetaGameCtrl.getCurrentOrNextActiveCycleNumber(season)
         famePointsReceived = sum(famePtsToProgress[prevPMetaLevel:pMetaLevel]) + pFamePts - prevPFamePts
-        achievedRank = max(extInfo['playerRank'].get('rank', 0), 1)
+        achievedRank = max(epicMetaGame.get('playerRank', 0), 1)
         rankNameId = R.strings.epic_battle.rank.dyn('rank' + str(achievedRank))
         rankName = toUpper(backport.text(rankNameId())) if rankNameId.exists() else ''
         awardsVO = self._awardsFormatter.getFormattedBonuses(self.__getBonuses(pMetaLevel), size=AWARDS_SIZES.BIG)
@@ -126,7 +129,3 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         else:
             cBoostedLevel = cLevel
         return (pLevel, cLevel, cBoostedLevel)
-
-    def __close(self):
-        self.onProgressBarCompleteAnim()
-        self.destroy()

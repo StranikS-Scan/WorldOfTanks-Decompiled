@@ -35,9 +35,9 @@ class BadgesSuffixRankedItem(BadgesSuffixItem):
 
     def _packBlocks(self, *args, **kwargs):
         items = super(BadgesSuffixRankedItem, self)._packBlocks(*args)
-        items.append(formatters.packBuildUpBlockData([formatters.packImageBlockData(img=backport.image(R.images.gui.maps.icons.library.badges.icon_star_yellow()), padding=formatters.packPadding(top=3)), formatters.packTextBlockData(text_styles.neutral(backport.text(R.strings.tooltips.badgepage.ranked.suffixItem.duration())))], padding=formatters.packPadding(top=-4), layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL))
+        items.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.badgepage.ranked.suffixItem.duration())))], padding=formatters.packPadding(top=-34), layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL))
         return items
 
     def packBody(self):
-        items = [formatters.packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.badgepage.ranked.suffixItem.position())), padding=formatters.packPadding(bottom=4)), formatters.packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.badgepage.ranked.suffixItem.confirmation())))]
+        items = [formatters.packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.badgepage.ranked.suffixItem.position())), padding=formatters.packPadding(bottom=4))]
         return formatters.packBuildUpBlockData(items)

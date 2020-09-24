@@ -20,7 +20,7 @@ def createEquipmentCtrl(setup):
         clazz = equipment_ctrl.EquipmentsReplayPlayer
     else:
         clazz = equipment_ctrl.EquipmentsController
-    return clazz()
+    return clazz(setup)
 
 
 def createOptDevicesCtrl(setup):

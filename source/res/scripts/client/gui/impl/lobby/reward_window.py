@@ -8,6 +8,7 @@ from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import PackRentVe
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyPremiumUrl
 from gui.Scaleform.framework.entities.View import ViewKey
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.impl.backport import TooltipData, BackportTooltipWindow
 from gui.impl.pub import ViewImpl, WindowImpl, WindowView
@@ -205,7 +206,7 @@ class TwitchRewardWindowContent(QuestRewardWindowContent):
                             offerID = offer.id
 
         if hasCommander:
-            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_BARRACKS, ctx={'location': BARRACKS_CONSTANTS.LOCATION_FILTER_NOT_RECRUITED}), scope=EVENT_BUS_SCOPE.LOBBY)
+            g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_BARRACKS), ctx={'location': BARRACKS_CONSTANTS.LOCATION_FILTER_NOT_RECRUITED}), scope=EVENT_BUS_SCOPE.LOBBY)
         elif offerID is not None:
             showOfferGiftsWindow(offerID)
         return

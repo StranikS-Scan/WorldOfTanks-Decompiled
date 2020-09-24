@@ -44,7 +44,7 @@ from skeletons.gui.game_control import IEventProgressionController, IRankedBattl
 from helpers.dependency import replace_none_kwargs
 CARD_AWARDS_COUNT = 6
 CARD_AWARDS_BIG_COUNT = 5
-CARD_AWARDS_EPIC_COUNT = 2
+CARD_AWARDS_EPIC_COUNT = 3
 LINKED_SET_CARD_AWARDS_COUNT = 8
 DETAILED_CARD_AWARDS_COUNT = 10
 _preBattleConditionFormatter = MissionsPreBattleConditionsFormatter()
@@ -466,18 +466,23 @@ class _EventProgressionDailyMissionInfo(_MissionInfo):
 
     def _getCompleteDailyStatus(self, completeKey):
         season = self.__eventProgression.getCurrentSeason() or self.__eventProgression.getNextSeason()
-        cycle = season.getCycleInfo()
-        dayTimeLeft = time_utils.getDayTimeLeft()
-        cycleTimeLeft = self.__eventProgression.getCurrentCycleTimeLeft()
-        if self.__eventProgression.isDailyQuestsRefreshAvailable():
-            timeLeftString = i18n.makeString(completeKey, time=self._getTillTimeString(dayTimeLeft))
+        if season is None:
+            return ''
         else:
-            if cycleTimeLeft < dayTimeLeft:
-                timeLeft = backport.text(R.strings.epic_battle.questsTooltip.epicBattle.lessThanDay())
+            cycle = season.getCycleInfo()
+            if cycle is None:
+                return ''
+            dayTimeLeft = time_utils.getDayTimeLeft()
+            cycleTimeLeft = self.__eventProgression.getCurrentCycleTimeLeft()
+            if self.__eventProgression.isDailyQuestsRefreshAvailable():
+                timeLeftString = i18n.makeString(completeKey, time=self._getTillTimeString(dayTimeLeft))
             else:
-                timeLeft = time_formatters.getTillTimeByResource(cycleTimeLeft, R.strings.menu.headerButtons.battle.types.ranked.availability, removeLeadingZeros=True)
-            timeLeftString = i18n.makeString(completeKey, cycle=int2roman(cycle.ordinalNumber), time=timeLeft)
-        return timeLeftString
+                if cycleTimeLeft < dayTimeLeft:
+                    timeLeft = backport.text(R.strings.epic_battle.questsTooltip.epicBattle.lessThanDay())
+                else:
+                    timeLeft = time_formatters.getTillTimeByResource(cycleTimeLeft, R.strings.menu.headerButtons.battle.types.ranked.availability, removeLeadingZeros=True)
+                timeLeftString = i18n.makeString(completeKey, cycle=int2roman(cycle.ordinalNumber), time=timeLeft)
+            return timeLeftString
 
     def _getCompleteStatusTooltipHeader(self):
         return QUESTS.MISSIONDETAILS_STATUS_NOTAVAILABLE if not self.__eventProgression.isDailyQuestsRefreshAvailable() else super(_EventProgressionDailyMissionInfo, self)._getCompleteStatusTooltipHeader()
@@ -703,7 +708,7 @@ class _DetailedMissionInfo(_MissionInfo):
 
     def _getUnavailableStatusFields(self, errorMsg):
         result = {'status': MISSIONS_STATES.NOT_AVAILABLE}
-        if errorMsg not in ('requirement', 'requirements'):
+        if errorMsg != 'requirement':
             timeLeft = self.event.getNearestActivityTimeLeft()
             if timeLeft is not None:
                 clockIcon = _getClockIconTag()

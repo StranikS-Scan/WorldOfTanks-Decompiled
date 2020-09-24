@@ -15,6 +15,7 @@ from gui.shared.formatters import text_styles
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
+from gui.impl.lobby.dialogs.contents.prices_content import DialogPricesContent
 _logger = logging.getLogger(__name__)
 RENT_VALUE_DESCR_BY_TYPE = {RentType.TIME_RENT: R.strings.offers.description.rentValue.days(),
  RentType.WINS_RENT: R.strings.offers.description.rentValue.wins(),
@@ -24,14 +25,16 @@ class OffersDialogWindowMixin(object):
     _lobbyContext = dependency.descriptor(ILobbyContext)
     _offersProvider = dependency.descriptor(IOffersDataProvider)
 
-    def __init__(self, offerID, *args, **kwargs):
+    def __init__(self, offerID, price, *args, **kwargs):
         super(OffersDialogWindowMixin, self).__init__(*args, **kwargs)
         self._offerID = offerID
+        self._price = price
 
     def _initialize(self):
         super(OffersDialogWindowMixin, self)._initialize()
         self._offersProvider.onOffersUpdated += self._onOffersUpdated
         self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
+        self.__updatePrice()
 
     def _finalize(self):
         super(OffersDialogWindowMixin, self)._finalize()
@@ -61,13 +64,33 @@ class OffersDialogWindowMixin(object):
             self.destroy()
         return
 
+    def __updatePrice(self):
+        offer = self._offersProvider.getOffer(self._offerID)
+        if offer.showPrice:
+            with self.bottomContentViewModel.transaction() as model:
+                model.valueMain.setValue(str(self._price))
+                model.valueMain.setIcon(R.images.gui.maps.icons.offers.token())
+
+    def _getResultData(self):
+        return None
+
 
 class OffersSimpleDialogWindow(OffersDialogWindowMixin, SimpleDialogWindow):
-    pass
+
+    def __init__(self, offerID, price, *args, **kwargs):
+        offer = self._offersProvider.getOffer(offerID)
+        if offer.showPrice:
+            kwargs['bottomContent'] = DialogPricesContent()
+        super(OffersSimpleDialogWindow, self).__init__(offerID, price, *args, **kwargs)
 
 
 class OffersPureDialogWindow(OffersDialogWindowMixin, PureDialogWindow):
-    pass
+
+    def __init__(self, offerID, price, *args, **kwargs):
+        offer = self._offersProvider.getOffer(offerID)
+        if offer.showPrice:
+            kwargs['bottomContent'] = DialogPricesContent()
+        super(OffersPureDialogWindow, self).__init__(offerID, price, *args, **kwargs)
 
 
 class _OffersSimpleDialogBuilder(SimpleDialogBuilder):
@@ -75,9 +98,9 @@ class _OffersSimpleDialogBuilder(SimpleDialogBuilder):
 
     def __init__(self, offerID, giftID):
         super(_OffersSimpleDialogBuilder, self).__init__()
-        self._windowClass = partial(OffersSimpleDialogWindow, offerID)
         self._offer = self._offersProvider.getOffer(offerID)
         self._gift = self._offer.getGift(giftID)
+        self._windowClass = partial(OffersSimpleDialogWindow, offerID, self._gift.price)
         self.setTitle(self.title)
         self.setFormattedMessage(self.description)
 
@@ -110,9 +133,9 @@ class _OffersPureDialogBuilder(PureDialogBuilder):
 
     def __init__(self, offerID, giftID, cdnTitle=''):
         super(_OffersPureDialogBuilder, self).__init__()
-        self._windowClass = partial(OffersPureDialogWindow, offerID)
         self._offer = self._offersProvider.getOffer(offerID)
         self._gift = self._offer.getGift(giftID)
+        self._windowClass = partial(OffersPureDialogWindow, offerID, self._gift.price)
         self._cdnTitle = cdnTitle
         self.setFormattedTitle(self.title)
 

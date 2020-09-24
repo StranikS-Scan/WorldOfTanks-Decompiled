@@ -4,6 +4,7 @@ from functools import partial
 import BigWorld
 from adisp import process
 from debug_utils import LOG_WARNING, LOG_ERROR
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl import backport
 from gui.impl.gen import R
 from helpers import dependency, i18n
@@ -154,7 +155,7 @@ class ProfileHof(ProfileHofMeta):
 
     def __openHofBrowserView(self, url):
         self._eventsCache.onProfileVisited()
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BROWSER_VIEW, ctx={'url': url,
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BROWSER_VIEW), ctx={'url': url,
          'returnAlias': VIEW_ALIAS.LOBBY_PROFILE,
          'allowRightClick': True,
          'webHandlers': createHofWebHandlers(),

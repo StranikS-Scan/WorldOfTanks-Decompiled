@@ -6,7 +6,6 @@ from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.battle.shared import SharedPage, finish_sound_player, drone_music_player, period_music_listener
 from gui.Scaleform.daapi.view.battle.shared.page import ComponentsConfig
 from gui.Scaleform.daapi.view.battle.shared.start_countdown_sound_player import StartCountdownSoundPlayer
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from shared_utils import CONST_CONTAINER
@@ -54,18 +53,13 @@ class ClassicPage(SharedPage):
         LOG_DEBUG('ClassicPage is deleted')
 
     def _toggleRadialMenu(self, isShown, allowAction=True):
-        manager = self.app.containerManager
-        if not manager.isContainerShown(ViewTypes.DEFAULT):
+        radialMenuLinkage = BATTLE_VIEW_ALIASES.RADIAL_MENU
+        radialMenu = self.getComponent(radialMenuLinkage)
+        if radialMenu is None:
             return
-        elif manager.isModalViewsIsExists():
+        elif self._fullStatsAlias and self.as_isComponentVisibleS(self._fullStatsAlias):
             return
         else:
-            radialMenuLinkage = BATTLE_VIEW_ALIASES.RADIAL_MENU
-            radialMenu = self.getComponent(radialMenuLinkage)
-            if radialMenu is None:
-                return
-            elif self._fullStatsAlias and self.as_isComponentVisibleS(self._fullStatsAlias):
-                return
             if isShown:
                 radialMenu.show()
                 self.app.enterGuiControlMode(radialMenuLinkage, cursorVisible=False, enableAiming=False)

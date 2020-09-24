@@ -1,25 +1,27 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/bootcamp/BCBattleResult.py
-import SoundGroups
-from bootcamp.BootCampEvents import g_bootcampEvents
-from bootcamp.statistic.decorators import loggerTarget, loggerEntry, simpleLog
-from bootcamp.statistic.logging_constants import BC_LOG_ACTIONS, BC_LOG_KEYS, BC_AWARDS_MAP
 from CurrentVehicle import g_currentVehicle
-from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
-from gui.app_loader import settings as app_settings
 from gui.Scaleform.daapi.view.meta.BCBattleResultMeta import BCBattleResultMeta
 from gui.Scaleform.genConsts.BOOTCAMP_BATTLE_RESULT_CONSTANTS import BOOTCAMP_BATTLE_RESULT_CONSTANTS as AWARD
 from gui.shared import event_bus_handlers, events, EVENT_BUS_SCOPE
-from gui.sounds.ambients import BattleResultsEnv
 from helpers import dependency
+from bootcamp.Bootcamp import g_bootcamp
+from gui.sounds.ambients import BattleResultsEnv
+import SoundGroups
+from bootcamp.BootCampEvents import g_bootcampEvents
+from gui.app_loader import settings as app_settings
+from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
 from PlayerEvents import g_playerEvents
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_results import IBattleResultsService
+from uilogging.decorators import loggerTarget, loggerEntry, simpleLog
+from uilogging.bootcamp.constants import BC_LOG_ACTIONS, BC_LOG_KEYS, BC_AWARDS_MAP
+from uilogging.bootcamp.loggers import BootcampUILogger
 _SNDID_ACHIEVEMENT = 'result_screen_achievements'
 _SNDID_BONUS = 'result_screen_bonus'
 _AMBIENT_SOUND = 'bc_result_screen_ambient'
 
-@loggerTarget(logKey=BC_LOG_KEYS.BC_RESULT_SCREEN)
+@loggerTarget(logKey=BC_LOG_KEYS.BC_RESULT_SCREEN, loggerCls=BootcampUILogger)
 class BCBattleResult(BCBattleResultMeta):
     battleResults = dependency.descriptor(IBattleResultsService)
     appLoader = dependency.descriptor(IAppLoader)
@@ -66,7 +68,7 @@ class BCBattleResult(BCBattleResultMeta):
         g_currentVehicle.selectVehicle(inventoryId)
         return g_currentVehicle.invID == inventoryId
 
-    @simpleLog(argKey='rendererId', resetTime=False, logOnce=True, argMap=BC_AWARDS_MAP)
+    @simpleLog(argsIndex=0, resetTime=False, logOnce=True, argMap=BC_AWARDS_MAP, argMapSection=lambda : g_bootcamp.getContext()['lessonNum'])
     def onToolTipShow(self, rendererId):
         pass
 

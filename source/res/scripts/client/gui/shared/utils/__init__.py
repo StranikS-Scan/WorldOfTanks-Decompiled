@@ -194,7 +194,7 @@ class SettingRootRecord(SettingRecord):
         try:
             return cls(**AccountSettings.getSettings(cls._getSettingName()))
         except Exception:
-            LOG_ERROR('There is error while unpacking quests settings', AccountSettings.getSettings('quests'))
+            LOG_ERROR('There is error while unpacking {} settings'.format(cls._getSettingName()), AccountSettings.getSettings(cls._getSettingName()))
             LOG_CURRENT_EXCEPTION()
             return None
 

@@ -14,6 +14,7 @@ from typing import Dict
 from soft_exception import SoftException
 from collections import defaultdict
 from data_structures import DictObj
+from visual_script.misc import ASPECT, VisualScriptTag
 from Math import Vector2
 if IS_CLIENT:
     from helpers import i18n
@@ -237,6 +238,7 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
     cfg['teamBasePositions'] = __readTeamBasePositions(section, maxTeamsInArena)
     cfg['teamSpawnPoints'] = __readTeamSpawnPoints(section, maxTeamsInArena)
     cfg['squadTeamNumbers'], cfg['soloTeamNumbers'] = __readTeamNumbers(section, maxTeamsInArena)
+    cfg[VisualScriptTag] = _readVisualScript(section)
     if raiseIfMissing or __hasKey('numPlayerGroups', section, defaultXml):
         cfg['numPlayerGroups'] = _readInt('numPlayerGroups', section, defaultXml, 0)
     if raiseIfMissing or __hasKey('playerGroupLimit', section, defaultXml):
@@ -461,6 +463,21 @@ def _readFloatArray(key, tag, xml, defaultXml, defaultValue=None):
     else:
         raise SoftException("missing key '%s'" % key)
         return
+
+
+def _readVisualScriptAspect(section, aspect, default):
+    if section.has_key(aspect):
+        return [ value.asString for name, value in section[aspect].items() if name == 'plan' ]
+    return default
+
+
+def _readVisualScript(section):
+    if section.has_key(VisualScriptTag):
+        vseSection = section[VisualScriptTag]
+        return {ASPECT.CLIENT: _readVisualScriptAspect(vseSection, ASPECT.CLIENT.lower(), []),
+         ASPECT.SERVER: _readVisualScriptAspect(vseSection, ASPECT.SERVER.lower(), [])}
+    return {ASPECT.CLIENT: [],
+     ASPECT.SERVER: []}
 
 
 def _readBoundingBox(section):

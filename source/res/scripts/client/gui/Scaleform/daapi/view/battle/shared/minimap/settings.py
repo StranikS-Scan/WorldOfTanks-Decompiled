@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/minimap/settings.py
 from account_helpers.settings_core.options import MinimapVehModelsSetting
-from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
+from gui.Scaleform.genConsts.LAYER_NAMES import LAYER_NAMES
 from shared_utils import BitmaskHelper
-MINIMAP_COMPONENT_PATH = '_level0.root.{}.main.minimap.entriesContainer'.format(APP_CONTAINERS_NAMES.VIEWS)
+MINIMAP_COMPONENT_PATH = '_level0.root.{}.main.minimap.entriesContainer'.format(LAYER_NAMES.VIEWS)
 MINIMAP_MIN_SIZE_INDEX = 0
 MINIMAP_MAX_SIZE_INDEX = 5
 MINIMAP_WAS_SPOTTED_RESET_DELAY = 5.0
@@ -49,15 +49,20 @@ class ENTRY_SYMBOL_NAME(object):
     ARTY_MARKER = 'ArtyMarkerMinimapEntry'
     LOCATION_MARKER = 'MarkGoingToPositionEntryUI'
     ATTENTION_MARKER = 'MarkAttentionEntryUI'
-    EPIC_SECTOR_BASE = 'SectorBaseEntry'
+    EPIC_SECTOR_ENEMY_BASE = 'SectorBaseEnemyEntry'
+    EPIC_SECTOR_ALLY_BASE = 'SectorBaseAllyEntry'
+    EPIC_HQ_ENEMY = 'HeadquarterEnemyEntry'
+    EPIC_HQ_ALLY = 'HeadquarterAllyEntry'
     EPIC_SECTOR = 'SectorEntry'
     EPIC_SECTOR_OVERLAY = 'SectorOverlayEntry'
     EPIC_HQ = 'HeadquarterEntry'
     EPIC_FLP = 'FrontLinePointEntry'
     EPIC_REPAIR = 'ResupplyEntry'
     EPIC_PROTECTION_ZONE = 'LandingZoneEntry'
-    EPIC_DEPLOY_SECTOR_BASE = 'SectorBaseEntryDeployment'
-    EPIC_DEPLOY_HQ = 'HeadquarterEntryDeployment'
+    EPIC_DEPLOY_SECTOR_BASE_ALLY = 'SectorBaseEntryDeploymentAlly'
+    EPIC_DEPLOY_SECTOR_BASE_ENEMY = 'SectorBaseEntryDeploymentEnemy'
+    EPIC_DEPLOY_HQ_ALLY = 'HeadquarterEntryDeploymentAlly'
+    EPIC_DEPLOY_HQ_ENEMY = 'HeadquarterEntryDeploymentEnemy'
     RADAR_ANIM = 'RadarUI'
     DISCOVERED_ITEM_MARKER = 'net.wg.gui.battle.views.minimap.components.entries.battleRoyale.DiscoveredItemMarker'
 

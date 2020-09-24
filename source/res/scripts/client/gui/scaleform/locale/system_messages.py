@@ -84,7 +84,6 @@ class SYSTEM_MESSAGES(object):
     PREBATTLE_VEHICLEINVALID_NO_READYVEHICLE = '#system_messages:prebattle/vehicleInvalid/no_readyVehicle'
     PREBATTLE_VEHICLEINVALID_VEHICLENOTSUPPORTED = '#system_messages:prebattle/vehicleInvalid/vehicleNotSupported'
     PREBATTLE_VEHICLEINVALID_EPICONLY = '#system_messages:prebattle/vehicleInvalid/epicOnly'
-    PREBATTLE_VEHICLEINVALID_BOBONLY = '#system_messages:prebattle/vehicleInvalid/bobOnly'
     PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS = '#system_messages:prebattle/vehicleInvalid/notSetReadyStatus'
     PREBATTLE_VEHICLEINVALID_FALLOUTONLY = '#system_messages:prebattle/vehicleInvalid/falloutOnly'
     PREBATTLE_VEHICLEINVALID_LIMITS_NATIONS = '#system_messages:prebattle/vehicleInvalid/limits/nations'
@@ -655,6 +654,7 @@ class SYSTEM_MESSAGES(object):
     OPTIONALDEVICES_APPLY_NOT_ENOUGH_MONEY = '#system_messages:optionalDevices_apply/not_enough_money'
     OPTIONALDEVICES_APPLY_WALLET_NOT_AVAILABLE = '#system_messages:optionalDevices_apply/wallet_not_available'
     OPTIONALDEVICES_REMOVE_ERROR = '#system_messages:optionalDevices_remove/error'
+    OPTIONALDEVICES_REMOVE_ERROR_TOO_HEAVY = '#system_messages:optionalDevices_remove/error_too_heavy'
     SHELLS_APPLY_SUCCESS_MONEY_SPENT = '#system_messages:shells_apply/success_money_spent'
     SHELLS_APPLY_ERROR = '#system_messages:shells_apply/error'
     SHELLS_APPLY_NOT_ENOUGH_MONEY = '#system_messages:shells_apply/not_enough_money'
@@ -758,6 +758,7 @@ class SYSTEM_MESSAGES(object):
     CLANS_NOTIFICATIONS_REQUESTS_WATCHREQUESTS = '#system_messages:clans/notifications/requests/watchRequests'
     CLANS_NOTIFICATIONS_REQUESTSENT = '#system_messages:clans/notifications/requestSent'
     CLANS_NOTIFICATIONS_INVITESENT = '#system_messages:clans/notifications/inviteSent'
+    CLANS_NOTIFICATIONS_ALREADYINVITESENT = '#system_messages:clans/notifications/alreadyInviteSent'
     CLANS_NOTIFICATIONS_INVITESSENT = '#system_messages:clans/notifications/invitesSent'
     CLANS_NOTIFICATIONS_INVITESENDERROR = '#system_messages:clans/notifications/inviteSendError'
     CLANS_NOTIFICATIONS_INVITESSENDERROR = '#system_messages:clans/notifications/invitesSendError'
@@ -1178,6 +1179,13 @@ class SYSTEM_MESSAGES(object):
     OFFERS_SWITCH_OFF_BODY = '#system_messages:offers/switch_off/body'
     OFFERS_UNAVAILABLE_ONE = '#system_messages:offers/unavailable_one'
     OFFERS_UNAVAILABLE_MANY = '#system_messages:offers/unavailable_many'
+    MISSINGEVENTS_BUTTON = '#system_messages:missingEvents/button'
+    MISSINGEVENTS_HEADER = '#system_messages:missingEvents/header'
+    MISSINGEVENTS_TEXT = '#system_messages:missingEvents/text'
+    DOG_TAGS_SWITCH_OFF_TITLE = '#system_messages:dog_tags/switch_off/title'
+    DOG_TAGS_SWITCH_OFF_BODY = '#system_messages:dog_tags/switch_off/body'
+    DOG_TAGS_SWITCH_ON_TITLE = '#system_messages:dog_tags/switch_on/title'
+    DOG_TAGS_SWITCH_ON_BODY = '#system_messages:dog_tags/switch_on/body'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1371,7 +1379,6 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_VEHICLEINVALID_NO_READYVEHICLE,
      PREBATTLE_VEHICLEINVALID_VEHICLENOTSUPPORTED,
      PREBATTLE_VEHICLEINVALID_EPICONLY,
-     PREBATTLE_VEHICLEINVALID_BOBONLY,
      PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS,
      PREBATTLE_VEHICLEINVALID_FALLOUTONLY,
      PREBATTLE_VEHICLEINVALID_LIMITS_NATIONS,
@@ -1942,6 +1949,7 @@ class SYSTEM_MESSAGES(object):
      OPTIONALDEVICES_APPLY_NOT_ENOUGH_MONEY,
      OPTIONALDEVICES_APPLY_WALLET_NOT_AVAILABLE,
      OPTIONALDEVICES_REMOVE_ERROR,
+     OPTIONALDEVICES_REMOVE_ERROR_TOO_HEAVY,
      SHELLS_APPLY_SUCCESS_MONEY_SPENT,
      SHELLS_APPLY_ERROR,
      SHELLS_APPLY_NOT_ENOUGH_MONEY,
@@ -2045,6 +2053,7 @@ class SYSTEM_MESSAGES(object):
      CLANS_NOTIFICATIONS_REQUESTS_WATCHREQUESTS,
      CLANS_NOTIFICATIONS_REQUESTSENT,
      CLANS_NOTIFICATIONS_INVITESENT,
+     CLANS_NOTIFICATIONS_ALREADYINVITESENT,
      CLANS_NOTIFICATIONS_INVITESSENT,
      CLANS_NOTIFICATIONS_INVITESENDERROR,
      CLANS_NOTIFICATIONS_INVITESSENDERROR,
@@ -2464,7 +2473,14 @@ class SYSTEM_MESSAGES(object):
      TECHTREE_ACTION_EXPIRETIME,
      OFFERS_SWITCH_OFF_BODY,
      OFFERS_UNAVAILABLE_ONE,
-     OFFERS_UNAVAILABLE_MANY)
+     OFFERS_UNAVAILABLE_MANY,
+     MISSINGEVENTS_BUTTON,
+     MISSINGEVENTS_HEADER,
+     MISSINGEVENTS_TEXT,
+     DOG_TAGS_SWITCH_OFF_TITLE,
+     DOG_TAGS_SWITCH_OFF_BODY,
+     DOG_TAGS_SWITCH_ON_TITLE,
+     DOG_TAGS_SWITCH_ON_BODY)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

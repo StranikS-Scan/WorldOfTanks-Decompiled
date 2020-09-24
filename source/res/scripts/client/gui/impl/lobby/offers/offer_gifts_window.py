@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/offers/offer_gifts_window.py
 import logging
+import random
 from functools import partial
 import ResMgr
 from account_helpers.offers.cache import CachePrefetchResult
@@ -90,6 +91,7 @@ class OfferGiftsWindow(ViewImpl):
                 return
             self._offersNovelty.saveAsSeen(self._offerID)
             with self._viewModel.transaction() as model:
+                model.setKey(random.randint(0, 1000))
                 model.setId(offerItem.id)
                 localization = ResMgr.openSection(self._offersProvider.getCdnResourcePath(offerItem.cdnLocFilePath, relative=False))
                 title = localization.readString('name') if localization else ''
@@ -109,7 +111,8 @@ class OfferGiftsWindow(ViewImpl):
 
     def _setDynamicInfo(self, offerModel):
         offerItem = self._offerItem
-        offerModel.setGiftsCount(offerItem.availableGiftsCount)
+        if offerItem.showPrice:
+            offerModel.setTokens(offerItem.availableTokens)
         offerModel.setClicksCount(offerItem.clicksCount)
         offerModel.setExpiration(offerItem.expiration)
 
@@ -120,22 +123,32 @@ class OfferGiftsWindow(ViewImpl):
         giftsContainer.reserve(len(sortedGifts))
         for gift in sortedGifts:
             giftModel = GiftModel()
-            title, description, icon, count = self._getGiftResources(gift)
+            title, description, icon, count, price = self._getGiftResources(gift)
             giftModel.setId(gift.id)
             giftModel.setRentType(RENT_TYPE_TO_MODEL_CONSTANT[gift.rentType])
             giftModel.setRentValue(gift.rentValue)
-            giftModel.setInventoryCount(gift.inventoryCount)
-            giftModel.setIsDisabled(gift.isDisabled)
+            giftModel.setInventoryCount(gift.isVehicle and gift.inventoryCount)
             giftModel.setCount(count)
             giftModel.setTitle(title)
             giftModel.setDescription(description)
             giftModel.setIcon(icon)
-            giftModel.setNationFlag(getGfImagePath(gift.nationFlag))
             giftModel.setHighlight(gift.highlight)
             giftModel.setButtonLabel(gift.buttonLabel)
+            if gift.nationFlag:
+                giftModel.setNationFlag(getGfImagePath(gift.nationFlag))
+            if self._offerItem.showPrice:
+                giftModel.setPrice(price)
+            notEnoughTokens = self._offerItem.availableTokens < price
+            giftModel.setIsNotEnoughMoney(notEnoughTokens)
+            giftCount = self._offerItem.getGiftAvailabelCount(gift.id)
+            giftDisabled = notEnoughTokens or gift.isDisabled or not giftCount
+            giftModel.setIsDisabled(giftDisabled)
+            if giftCount > 0:
+                giftModel.setAvailableCount(giftCount)
             giftsContainer.addViewModel(giftModel)
 
         model.gifts.onItemClicked += self._onGiftClicked
+        model.setKey(random.randint(0, 1000))
         giftsContainer.invalidate()
 
     def _getGiftResources(self, gift):
@@ -150,10 +163,13 @@ class OfferGiftsWindow(ViewImpl):
             description = gift.description
             icon = gift.icon
             count = gift.giftCount if gift.bonusType not in BONUSES_WITHOUT_COUNTER else 0
+        price = gift.price
+        imgPath = getGfImagePath(icon) or ''
         return (title,
          description,
-         getGfImagePath(icon),
-         count)
+         imgPath,
+         count,
+         price)
 
     def _onGiftClicked(self, args):
         giftID = args.get('index')
@@ -190,7 +206,11 @@ class OfferGiftsWindow(ViewImpl):
             with self._viewModel.transaction() as model:
                 for giftModel in model.gifts.getItems():
                     gift = self._offerItem.getGift(giftModel.getId())
-                    giftModel.setIsDisabled(gift.isDisabled)
+                    notEnoughTokens = self._offerItem.availableTokens < gift.price
+                    giftModel.setIsNotEnoughMoney(notEnoughTokens)
+                    giftCount = self._offerItem.getGiftAvailabelCount(gift.id)
+                    giftDisabled = notEnoughTokens or gift.isDisabled or not giftCount
+                    giftModel.setIsDisabled(giftDisabled)
 
             return
 

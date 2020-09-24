@@ -4,6 +4,7 @@ import logging
 from Event import Event
 from web.client_web_api.shop.stats import BalanceEventHandler
 from web.client_web_api.shop.trade import TradeEventHandler
+from web.client_web_api.reactive_comm import ReactiveCommunicationEventHandler
 from web.client_web_api.util.vehicle import VehicleCompareEventHandler, VehicleStateEventHandler
 _logger = logging.getLogger(__name__)
 
@@ -32,4 +33,5 @@ class WebEventSender(object):
         return (BalanceEventHandler(self),
          TradeEventHandler(self),
          VehicleCompareEventHandler(self),
-         VehicleStateEventHandler(self))
+         VehicleStateEventHandler(self),
+         ReactiveCommunicationEventHandler(self))

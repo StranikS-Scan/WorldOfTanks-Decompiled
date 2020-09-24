@@ -220,18 +220,6 @@ class LootBoxBonusComposer(BonusNameQuestsBonusComposer):
         return self._packBonuses(preformattedBonuses, size)
 
 
-class TransferGiveawayBonusComposer(BonusNameQuestsBonusComposer):
-
-    def __init__(self, displayedAwardsCount, awardsFormatter=None, preformattedBonusSortKey=None):
-        self.__sortKey = preformattedBonusSortKey
-        super(TransferGiveawayBonusComposer, self).__init__(displayedAwardsCount, awardsFormatter)
-
-    def getVisibleFormattedBonuses(self, bonuses, _, size=AWARDS_SIZES.SMALL):
-        preformattedBonuses = self.getPreformattedBonuses(bonuses)
-        preformattedBonuses.sort(key=self.__sortKey)
-        return self._packBonuses(preformattedBonuses, size)
-
-
 class NewStyleBonusComposer(LootBoxBonusComposer):
     pass
 

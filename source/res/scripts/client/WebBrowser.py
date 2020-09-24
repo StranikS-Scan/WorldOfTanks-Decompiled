@@ -50,11 +50,14 @@ class WebBrowser(object):
     isNavigationComplete = property(lambda self: self.__isNavigationComplete)
     isFocused = property(lambda self: self.__isFocused)
     isAudioPlaying = property(lambda self: self.__isAudioPlaying)
+    textureUrl = property(lambda self: self.__textureUrl)
     updateInterval = 0.01
     isSuccessfulLoad = property(lambda self: self.__successfulLoad)
     skipEscape = property(lambda self: self.__skipEscape)
     ignoreKeyEvents = property(lambda self: self.__ignoreKeyEvents)
     ignoreAltKey = property(lambda self: self.__ignoreAltKey)
+    ignoreCtrlClick = property(lambda self: self.__ignoreCtrlClick)
+    ignoreShiftClick = property(lambda self: self.__ignoreShiftClick)
     useSpecialKeys = property(lambda self: self.__useSpecialKeys)
     allowMiddleClick = property(lambda self: self.__allowMiddleClick)
     allowRightClick = property(lambda self: self.__allowRightClick)
@@ -74,6 +77,16 @@ class WebBrowser(object):
     def ignoreAltKey(self, value):
         _logger.debug('ignoreAltKey set %s (was: %s)', value, self.__ignoreAltKey)
         self.__ignoreAltKey = value
+
+    @ignoreCtrlClick.setter
+    def ignoreCtrlClick(self, value):
+        _logger.debug('ignoreCtrlClick set %s (was: %s)', value, self.__ignoreCtrlClick)
+        self.__ignoreCtrlClick = value
+
+    @ignoreShiftClick.setter
+    def ignoreShiftClick(self, value):
+        _logger.debug('ignoreShiftClick set %s (was: %s)', value, self.__ignoreShiftClick)
+        self.__ignoreShiftClick = value
 
     @useSpecialKeys.setter
     def useSpecialKeys(self, value):
@@ -95,12 +108,11 @@ class WebBrowser(object):
         _logger.debug('allowMouseWheel set %s (was: %s)', value, self.__allowMouseWheel)
         self.__allowMouseWheel = value
 
-    def __init__(self, browserID, uiObj, texName, size, url='about:blank', isFocused=False, handlers=None):
+    def __init__(self, browserID, uiObj, size, url='about:blank', isFocused=False, handlers=None):
         self.__browserID = browserID
         self.__cbID = None
         self.__baseUrl = url
         self.__uiObj = uiObj
-        self.__texName = texName
         self.__browserSize = size
         self.__startFocused = isFocused
         self.__browser = None
@@ -112,6 +124,8 @@ class WebBrowser(object):
         self.__skipEscape = True
         self.__ignoreKeyEvents = False
         self.__ignoreAltKey = False
+        self.__ignoreCtrlClick = True
+        self.__ignoreShiftClick = True
         self.__useSpecialKeys = True
         self.__allowMiddleClick = False
         self.__allowRightClick = False
@@ -119,6 +133,9 @@ class WebBrowser(object):
         self.__allowAutoLoadingScreenChange = True
         self.__isCloseTriggered = False
         self.__isAudioMutable = False
+        self.__ctrlDown = False
+        self.__shiftDown = False
+        self.__textureUrl = ''
         self.__eventMgr = EventManager()
         self.onLoadStart = Event(self.__eventMgr)
         self.onLoadEnd = Event(self.__eventMgr)
@@ -132,7 +149,7 @@ class WebBrowser(object):
         self.onCanCreateNewBrowser = Event(self.__eventMgr)
         self.onUserRequestToClose = Event(self.__eventMgr)
         self.onAudioStatusChanged = Event(self.__eventMgr)
-        _logger.info('INIT %s texture: %s, size %s, id: %s', self.__baseUrl, texName, size, self.__browserID)
+        _logger.info('INIT %s size %s, id: %s', self.__baseUrl, size, self.__browserID)
         return
 
     def create(self):
@@ -249,7 +266,8 @@ class WebBrowser(object):
         self.__isWaitingForUnfocus = False
         if success:
             browserSize = self.__browserSize
-            self.__browser.setScaleformRender(self.__uiObj.movie, self.__texName, browserSize[0], browserSize[1])
+            self.__textureUrl = self.__browser.setScaleformRender(str(self.__browserID), browserSize[0], browserSize[1])
+            _logger.info('READY scaleform texture url: %s', self.__textureUrl)
             self.__browser.activate(True)
             self.__browser.focus()
             self.__browser.loadURL(self.__baseUrl)
@@ -258,6 +276,7 @@ class WebBrowser(object):
             self.update()
             g_mgr.addBrowser(self)
             self.onReady(self.__browser.url, success)
+            self.onCanCreateNewBrowser()
         else:
             self.__isNavigationComplete = True
             _logger.error(' FAILED %s - %r', self.__baseUrl, self.__browserID)
@@ -281,7 +300,7 @@ class WebBrowser(object):
             self.__onAudioStatusChanged(isPlaying=False)
             self.__browser.script.clear()
             self.__browser.script = None
-            self.__browser.resetScaleformRender(self.__uiObj.movie, self.__texName)
+            self.__browser.resetScaleformRender()
             BigWorld.destroyWebView(self.__browserID)
             self.__browser = None
         if self.__cbID is not None:
@@ -382,6 +401,14 @@ class WebBrowser(object):
         toolTipMgr = self.__uiObj.getToolTipMgr()
         if toolTipMgr and toolTipMgr.isReadyToHandleKey(event):
             return False
+        if e.key in (Keys.KEY_LCONTROL, Keys.KEY_RCONTROL):
+            self.__ctrlDown = e.isKeyDown()
+        if self.__ignoreCtrlClick and self.__ctrlDown and e.key == Keys.KEY_LEFTMOUSE:
+            return False
+        if e.key in (Keys.KEY_LSHIFT, Keys.KEY_RSHIFT):
+            self.__shiftDown = e.isKeyDown()
+        if self.__ignoreShiftClick and self.__shiftDown and e.key == Keys.KEY_LEFTMOUSE:
+            return False
         if self.__ignoreAltKey and e.key in (Keys.KEY_LALT, Keys.KEY_RALT):
             return False
         if not (self.hasBrowser and self.enableUpdate):
@@ -398,7 +425,7 @@ class WebBrowser(object):
             return False
         if _BROWSER_KEY_LOGGING:
             _logger.debug('handleKeyEvent %s', keyState)
-        if self.ignoreKeyEvents and e.key not in (Keys.KEY_LEFTMOUSE, Keys.KEY_RIGHTMOUSE):
+        if self.ignoreKeyEvents and e.key not in (Keys.KEY_LEFTMOUSE, Keys.KEY_RIGHTMOUSE, Keys.KEY_MIDDLEMOUSE):
             return False
         if e.key in (Keys.KEY_ESCAPE, Keys.KEY_SYSRQ):
             return False
@@ -529,8 +556,6 @@ class WebBrowser(object):
         self.onLoadingStateChange(isLoading, self.__allowAutoLoadingScreenChange)
         if self.__isCloseTriggered:
             event_dispatcher.hideWebBrowser(self.__browserID)
-        elif not isLoading:
-            self.onCanCreateNewBrowser()
 
     def __onReadyToShowContent(self, url):
         if url == self.__browser.url:
@@ -568,7 +593,7 @@ class WebBrowser(object):
         self.ready(success)
 
     def __onDestroy(self):
-        _logger.error('Destroy Web View %s - %r', self.__baseUrl, self.__browserID)
+        _logger.info('Destroy Web View %s - %r', self.__baseUrl, self.__browserID)
         self.destroy()
 
     def __onJsHostQuery(self, command):

@@ -87,3 +87,11 @@ def getSeniorityAwardsBox(itemsCache=None):
             return item
 
     return None
+
+
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def getSenorityEntryPointIsActive(lobbyContext=None):
+    hasBoxes = getSeniorityAwardsBoxesCount() > 0
+    config = lobbyContext.getServerSettings().getSeniorityAwardsConfig()
+    seniorityAwardsWidgetVisibility = config.hangarWidgetIsVisible()
+    return config.isEnabled and hasBoxes and seniorityAwardsWidgetVisibility

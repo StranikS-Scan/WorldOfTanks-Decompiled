@@ -9,8 +9,9 @@ from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.Scaleform.genConsts.RESEARCH_ALIASES import RESEARCH_ALIASES
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
-from bootcamp.statistic.decorators import loggerTarget, loggerEntry, simpleLog
-from bootcamp.statistic.logging_constants import BC_LOG_ACTIONS, BC_LOG_KEYS
+from uilogging.decorators import loggerTarget, loggerEntry, simpleLog
+from uilogging.bootcamp.constants import BC_LOG_ACTIONS, BC_LOG_KEYS, LIMITS
+from uilogging.bootcamp.loggers import BootcampUILogger
 
 class BCResearchItemsData(ResearchItemsData):
 
@@ -69,7 +70,7 @@ class BCResearchItemsData(ResearchItemsData):
         return (oldCost, 0)
 
 
-@loggerTarget(logKey=BC_LOG_KEYS.BC_RESEARCH_VEHICLES)
+@loggerTarget(logKey=BC_LOG_KEYS.BC_HANGAR_HINTS, loggerCls=BootcampUILogger)
 class BCResearch(Research):
 
     def __init__(self, ctx=None):
@@ -81,14 +82,14 @@ class BCResearch(Research):
     def _populate(self):
         super(BCResearch, self)._populate()
 
-    @simpleLog(action=BC_LOG_ACTIONS.UNLOCK_ITEM)
+    @simpleLog(action=BC_LOG_ACTIONS.UNLOCK_ITEM, restrictions={'lesson_id': lambda x: x <= LIMITS.RESEARCH_MAX_LESSON}, logOnce=True)
     def request4Unlock(self, unlockCD, topLevel):
         super(BCResearch, self).request4Unlock(unlockCD, topLevel)
 
     def _doUnlockItemAction(self, itemCD, unlockProps):
         ItemsActionsFactory.doAction(ItemsActionsFactory.BC_UNLOCK_ITEM, itemCD, unlockProps, skipConfirm=self._skipConfirm)
 
-    @simpleLog(action=BC_LOG_ACTIONS.BUY_ITEM)
+    @simpleLog(action=BC_LOG_ACTIONS.BUY_ITEM, restrictions={'lesson_id': lambda x: x <= LIMITS.RESEARCH_MAX_LESSON}, logOnce=True)
     def request4Buy(self, itemCD):
         super(BCResearch, self).request4Buy(itemCD)
 

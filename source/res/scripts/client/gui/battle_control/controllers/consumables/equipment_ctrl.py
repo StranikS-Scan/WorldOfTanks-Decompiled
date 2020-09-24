@@ -770,9 +770,9 @@ def _getInitialTagsAndClass(descriptor, tagsToItems):
 
 
 class EquipmentsController(MethodsRules, IBattleController):
-    __slots__ = ('__eManager', '_order', '_equipments', '__preferredPosition', '__equipmentCount', 'onEquipmentAdded', 'onEquipmentUpdated', 'onEquipmentMarkerShown', 'onEquipmentCooldownInPercent', 'onEquipmentCooldownTime')
+    __slots__ = ('__eManager', '__arena', '_order', '_equipments', '__preferredPosition', '__equipmentCount', 'onEquipmentAdded', 'onEquipmentUpdated', 'onEquipmentMarkerShown', 'onEquipmentCooldownInPercent', 'onEquipmentCooldownTime', 'onCombatEquipmentUsed')
 
-    def __init__(self):
+    def __init__(self, setup):
         super(EquipmentsController, self).__init__()
         self.__eManager = Event.EventManager()
         self.onEquipmentAdded = Event.Event(self.__eManager)
@@ -780,10 +780,12 @@ class EquipmentsController(MethodsRules, IBattleController):
         self.onEquipmentMarkerShown = Event.Event(self.__eManager)
         self.onEquipmentCooldownInPercent = Event.Event(self.__eManager)
         self.onEquipmentCooldownTime = Event.Event(self.__eManager)
+        self.onCombatEquipmentUsed = Event.Event(self.__eManager)
         self._order = []
         self._equipments = {}
         self.__preferredPosition = None
         self.__equipmentCount = 0
+        self.__arena = setup.arenaEntity
         return
 
     def __repr__(self):
@@ -793,10 +795,13 @@ class EquipmentsController(MethodsRules, IBattleController):
         return BATTLE_CTRL_ID.EQUIPMENTS
 
     def startControl(self, *args):
-        pass
+        self.__arena.onCombatEquipmentUsed += self.onCombatEquipmentUsed
 
     def stopControl(self):
+        self.__arena.onCombatEquipmentUsed -= self.onCombatEquipmentUsed
+        self.__arena = None
         self.clear(leave=True)
+        return
 
     @classmethod
     def createItem(cls, descriptor, quantity, stage, timeRemaining, totalTime):
@@ -1196,8 +1201,8 @@ _REPLAY_EQUIPMENT_TAG_TO_ITEM = {('fuel',): _ReplayItem,
 class EquipmentsReplayPlayer(EquipmentsController):
     __slots__ = ('__callbackID', '__callbackTimeID', '__percentGetters', '__percents', '__timeGetters', '__times')
 
-    def __init__(self):
-        super(EquipmentsReplayPlayer, self).__init__()
+    def __init__(self, setup):
+        super(EquipmentsReplayPlayer, self).__init__(setup)
         self.__callbackID = None
         self.__callbackTimeID = None
         self.__percentGetters = {}

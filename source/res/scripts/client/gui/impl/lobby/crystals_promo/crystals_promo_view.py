@@ -62,11 +62,11 @@ class CrystalsPromoView(ViewImpl):
         model.battleTypes.clearItems()
         battleTypes = model.battleTypes.getItems()
         rewards = self.__getRewards(allRewards, ARENA_BONUS_TYPE.REGULAR, 10)
-        battleTypes.addViewModel(self.__getBattleType(R.strings.menu.crystals.info.tab.get.random(), R.images.gui.maps.icons.crystalsInfo.get.c_1_BLOCK(), [self.__getCondition(3, rewards.winTop3, rewards.winTop10), self.__getCondition(10, rewards.loseTop3, rewards.loseTop10)]))
+        battleTypes.addViewModel(self.__getBattleType(R.strings.menu.crystals.info.tab.get.random(), R.images.gui.maps.icons.crystalsInfo.get.c_1_BLOCK(), [self.__getCondition(3, rewards.winTop3, rewards.loseTop3), self.__getCondition(10, rewards.winTop10, rewards.loseTop10)]))
         rewards = self.__getRewards(allRewards, ARENA_BONUS_TYPE.EPIC_RANDOM, 10)
-        battleTypes.addViewModel(self.__getBattleType(R.strings.menu.crystals.info.tab.get.general(), R.images.gui.maps.icons.crystalsInfo.get.c_2_BLOCK(), [self.__getCondition(6, rewards.winTop3, rewards.winTop10), self.__getCondition(20, rewards.loseTop3, rewards.loseTop10)]))
+        battleTypes.addViewModel(self.__getBattleType(R.strings.menu.crystals.info.tab.get.general(), R.images.gui.maps.icons.crystalsInfo.get.c_2_BLOCK(), [self.__getCondition(6, rewards.winTop3, rewards.loseTop3), self.__getCondition(20, rewards.winTop10, rewards.loseTop10)]))
         rewards = self.__getRewards(allRewards, ARENA_BONUS_TYPE.RANKED, 10)
-        battleTypes.addViewModel(self.__getBattleType(R.strings.menu.crystals.info.tab.get.ranked(), R.images.gui.maps.icons.crystalsInfo.get.c_3_BLOCK(), [self.__getCondition(3, rewards.winTop3, rewards.winTop10), self.__getCondition(10, rewards.loseTop3, rewards.loseTop10)]))
+        battleTypes.addViewModel(self.__getBattleType(R.strings.menu.crystals.info.tab.get.ranked(), R.images.gui.maps.icons.crystalsInfo.get.c_3_BLOCK(), [self.__getCondition(3, rewards.winTop3, rewards.loseTop3), self.__getCondition(10, rewards.winTop10, rewards.loseTop10)]))
         battleTypes.invalidate()
 
     def __goToShopHandler(self, args=None):

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/filter.py
 import constants
+from frameworks.wulf import WindowLayer
 from helpers import dependency
 from helpers import int2roman
 from helpers.i18n import makeString as _ms
@@ -10,7 +11,6 @@ from gui.Scaleform import getNationsFilterAssetPath, getVehicleTypeAssetPath
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -40,7 +40,7 @@ class VehicleFilterTooltip(BlocksTooltipData):
         return
 
     def _packBlocks(self, *args):
-        container = self.app.containerManager.getContainer(ViewTypes.LOBBY_SUB)
+        container = self.app.containerManager.getContainer(WindowLayer.SUB_VIEW)
         view = container.getView()
         if view.alias == VIEW_ALIAS.LOBBY_HANGAR:
             tankCarousel = view.getComponent(HANGAR_ALIASES.TANK_CAROUSEL)

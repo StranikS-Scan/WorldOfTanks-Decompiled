@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic/__init__.py
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import ViewSettings, ViewTypes, ScopeTemplates, GroupedViewSettings
+from gui.Scaleform.framework import ViewSettings, ScopeTemplates, GroupedViewSettings, ComponentSettings
 from gui.app_loader.settings import APP_NAME_SPACE
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.shared import EVENT_BUS_SCOPE
@@ -41,30 +42,30 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.epic import ingame_rank_panel
     from gui.Scaleform.daapi.view.battle.classic import team_bases_panel
     from gui.Scaleform.daapi.view.battle.shared.hint_panel import component
-    return (ViewSettings(VIEW_ALIAS.EPIC_BATTLE_PAGE, page.EpicBattlePage, 'epicBattlePage.swf', ViewTypes.DEFAULT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, team_bases_panel.TeamBasesPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.BATTLE_LOADING, battle_loading.EpicBattleLoading, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.BATTLE_TANK_CAROUSEL, battle_carousel.BattleTankCarousel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     GroupedViewSettings(BATTLE_VIEW_ALIASES.BATTLE_TANK_CAROUSEL_FILTER_POPOVER, BattleTankCarouselFilterPopover, 'filtersPopoverView.swf', ViewTypes.TOP_WINDOW, BATTLE_VIEW_ALIASES.BATTLE_TANK_CAROUSEL_FILTER_POPOVER, BATTLE_VIEW_ALIASES.BATTLE_TANK_CAROUSEL_FILTER_POPOVER, SETTINGS_WINDOW_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.EPIC_REINFORCEMENT_PANEL, reinforcement_panel.EpicReinforcementPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.EPIC_SCORE_PANEL, score_panel.EpicScorePanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.EPIC_MISSIONS_PANEL, missions_panel.EpicMissionsPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.RIBBONS_PANEL, ribbons_panel.BattleRibbonsPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.BATTLE_TIMER, battle_timer.EpicBattleTimer, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.EPIC_RESPAWN_VIEW, respawn.EpicBattleRespawn, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.MINIMAP, minimap.EpicMinimapComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.EPIC_DEPLOYMENT_MAP, deployment_map.EpicDeploymentMapComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.EPIC_OVERVIEW_MAP_SCREEN, overviewmap_screen.OverviewMapScreen, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL, game_messages_panel.EpicMessagePanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.TIMERS_PANEL, timers_panel.EpicDestroyTimersPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.FULL_STATS, full_stats.EpicFullStatsComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.BATTLE_STATISTIC_DATA_CONTROLLER, stats_exchange.EpicStatisticsDataController, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.EPIC_SPECTATOR_VIEW, spectator_view.EpicSpectatorView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.RECOVERY_PANEL, recovery_panel.RecoveryPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.SUPER_PLATOON_PANEL, super_platoon_panel.SuperPlatoonPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, consumables_panel.ConsumablesPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.EPIC_INGAME_RANK, ingame_rank_panel.InGameRankPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.HINT_PANEL, component.BattleHintPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
+    return (ViewSettings(VIEW_ALIAS.EPIC_BATTLE_PAGE, page.EpicBattlePage, 'epicBattlePage.swf', WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, team_bases_panel.TeamBasesPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_LOADING, battle_loading.EpicBattleLoading, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_TANK_CAROUSEL, battle_carousel.BattleTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
+     GroupedViewSettings(BATTLE_VIEW_ALIASES.BATTLE_TANK_CAROUSEL_FILTER_POPOVER, BattleTankCarouselFilterPopover, 'filtersPopoverView.swf', WindowLayer.TOP_WINDOW, BATTLE_VIEW_ALIASES.BATTLE_TANK_CAROUSEL_FILTER_POPOVER, BATTLE_VIEW_ALIASES.BATTLE_TANK_CAROUSEL_FILTER_POPOVER, SETTINGS_WINDOW_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_REINFORCEMENT_PANEL, reinforcement_panel.EpicReinforcementPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_SCORE_PANEL, score_panel.EpicScorePanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_MISSIONS_PANEL, missions_panel.EpicMissionsPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.RIBBONS_PANEL, ribbons_panel.BattleRibbonsPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_TIMER, battle_timer.EpicBattleTimer, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_RESPAWN_VIEW, respawn.EpicBattleRespawn, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.MINIMAP, minimap.EpicMinimapComponent, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_DEPLOYMENT_MAP, deployment_map.EpicDeploymentMapComponent, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_OVERVIEW_MAP_SCREEN, overviewmap_screen.OverviewMapScreen, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL, game_messages_panel.EpicMessagePanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.TIMERS_PANEL, timers_panel.EpicDestroyTimersPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.FULL_STATS, full_stats.EpicFullStatsComponent, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_STATISTIC_DATA_CONTROLLER, stats_exchange.EpicStatisticsDataController, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_SPECTATOR_VIEW, spectator_view.EpicSpectatorView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.RECOVERY_PANEL, recovery_panel.RecoveryPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.SUPER_PLATOON_PANEL, super_platoon_panel.SuperPlatoonPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, consumables_panel.ConsumablesPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_INGAME_RANK, ingame_rank_panel.InGameRankPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.HINT_PANEL, component.BattleHintPanel, ScopeTemplates.DEFAULT_SCOPE))
 
 
 class EpicBattlePageBusinessHandler(BattlePageBusinessHandler):

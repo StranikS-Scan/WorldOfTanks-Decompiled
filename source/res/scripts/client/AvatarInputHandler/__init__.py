@@ -232,7 +232,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             self.siegeModeControl.onSiegeStateChanged += lambda *args: self.steadyVehicleMatrixCalculator.relinkSources()
             if not self.siegeModeSoundNotifications:
                 notifications = None
-                if typeDescr.hasHydraulicChassis:
+                if typeDescr.hasHydraulicChassis or typeDescr.isWheeledVehicle:
                     notifications = SiegeModeSoundNotifications()
                 elif typeDescr.hasTurboshaftEngine:
                     notifications = TurboshaftModeSoundNotifications()
@@ -570,7 +570,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             elif vehicle is not None and isReplayPlaying:
                 vehicleID = vehicle.id
             self.onCameraChanged(eMode, vehicleID)
-            if not isReplayPlaying and not vehicle.isUpgrading:
+            if not isReplayPlaying and vehicle is not None and not vehicle.isUpgrading:
                 self.__curCtrl.handleMouseEvent(0.0, 0.0, 0.0)
             return
 

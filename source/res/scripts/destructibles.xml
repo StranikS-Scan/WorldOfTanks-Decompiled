@@ -2033,6 +2033,16 @@
       <touchdownEffect>	none	</touchdownEffect>
     </entry>
     <entry>
+      <filename>	vegetation/Broadleaves/Shrubs/Bush_Wild_Fall/Bush_Wild_Fall_2m.srt	</filename>
+      <health>	3	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	none	</fractureEffect>
+      <touchdownEffect>	none	</touchdownEffect>
+    </entry>
+    <entry>
       <filename>	vegetation/Broadleaves/Shrubs/Bush_Wild_Fall/Bush_Wild_Fall_4m_Tall.srt	</filename>
       <health>	3	</health>
       <density>	0.5	</density>
@@ -2064,6 +2074,16 @@
     </entry>
     <entry>
       <filename>	vegetation/Broadleaves/Shrubs/Bush_Wild_Fall/Bush_Wild_Fall_7m.srt	</filename>
+      <health>	3	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	none	</fractureEffect>
+      <touchdownEffect>	none	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Broadleaves/Shrubs/Bush_Wild_Fall/Bush_Wild_Fall_10m_Bend.srt	</filename>
       <health>	3	</health>
       <density>	0.5	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
@@ -3640,6 +3660,16 @@
       <touchdownEffect>	tree_Olive_03_touchdown	</touchdownEffect>
     </entry>
     <entry>
+      <filename>	vegetation/Broadleaves/Live_Oak/Live_Oak_03.srt	</filename>
+      <health>	300	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Olive_03_fall	</fractureEffect>
+      <touchdownEffect>	tree_Olive_03_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
       <filename>	vegetation/palms_cacti/Palmetto_Palm/Palmetto_Palm_17m.srt	</filename>
       <health>	50	</health>
       <density>	0.50	</density>
@@ -3716,6 +3746,16 @@
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
       <fractureEffect>	none	</fractureEffect>
       <touchdownEffect>	none	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Broadleaves/Birch_Dry_Frost/Birch_Dry_Frost_bush_dry_02.srt	</filename>
+      <health>	3	</health>
+      <density>	0.25	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	inf_deadtree_fall	</fractureEffect>
+      <touchdownEffect>	inf_deadtree_touchdown	</touchdownEffect>
     </entry>
   </trees>
   <fallingAtoms>
@@ -4741,7 +4781,7 @@
     </entry>
     <entry>
       <filename>	content/MilitaryEnvironment/hd_mle_AF_004_Hurricane/normal/lod0/hd_mle_AF_004_Hurricane.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_mleAF_004_Hurricane	</effect>
       <effectHP>	HP_module0	</effectHP>
@@ -4905,7 +4945,7 @@
     </entry>
     <entry>
       <filename>	content/MilitaryEnvironment/mle_101_04_Dodge_WC54/normal/lod0/mle_101_04_Dodge_WC54_D.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_mle_101_04_Dodge_WC54_01	</effect>
       <hitEffect>	inf_mle_101_04_Dodge_WC54_01_hit	</hitEffect>
@@ -6424,7 +6464,7 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_env419_OldGTruck/normal/lod0/hd_env419_OldGTruck_3.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_envAM_011_Truck_03_03	</effect>
       <hitEffect>	inf_fuel_env418_OldGMercedes2_20_hit	</hitEffect>
@@ -6435,7 +6475,7 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_env419_OldGTruck/normal/lod0/hd_env419_OldGTruck_1.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_envAM_011_Truck_01_02	</effect>
       <hitEffect>	inf_fuel_env418_OldGMercedes2_21_hit	</hitEffect>
@@ -6446,7 +6486,7 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_env419_OldGTruck/normal/lod0/hd_env419_OldGTruck_2.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_envAM_011_Truck_01_03	</effect>
       <hitEffect>	inf_fuel_env418_OldGMercedes2_22_hit	</hitEffect>
@@ -6754,11 +6794,11 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_envEU_011_Bus/normal/lod0/hd_envEU_011_Bus.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_envEU_011_Bus	</effect>
       <hitEffect>	inf_fuel_env608_Sovbus	</hitEffect>
-      <effectHP>	HP_module_0	</effectHP>
+      <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_metal0	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
@@ -9254,7 +9294,7 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_SU_008_ArmyTech/normal/lod0/hd_env_SU_008_ArmyTech.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_envSU_008_ArmyTech01_Zis5_01	</effect>
       <effectHP>	HP_module0	</effectHP>
@@ -9896,7 +9936,7 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_AF_032_Truck/normal/lod0/hd_env_AF_032_Truck.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_envAF_008_Truck	</effect>
       <effectHP>	HP_module0	</effectHP>
@@ -10106,7 +10146,7 @@
     </entry>
     <entry>
       <filename>	content/MilitaryEnvironment/hd_mle_UNI_806_SdKfz251/normal/lod0/hd_mle_UNI_806_SdKfz251.model	</filename>
-      <health>	35	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_mle_UNI_806_SdKfz251_Ram	</effect>
       <effectHP>	HP_module0	</effectHP>
@@ -10404,7 +10444,7 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_UNI_608_Sovbus/normal/lod0/hd_env_UNI_608_Sovbus.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_env608_Sovbus	</effect>
       <effectHP>	HP_module0	</effectHP>
@@ -10658,7 +10698,7 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_SU_009_ZIS151/normal/lod0/hd_env_SU_009_ZIS151_01.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_mleSU_05_01_Zis3_02	</effect>
       <effectHP>	HP_module0	</effectHP>
@@ -10668,7 +10708,7 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_SU_009_ZIS151/normal/lod0/hd_env_SU_009_ZIS151_02.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_mleSU_05_01_Zis3_03	</effect>
       <effectHP>	HP_module0	</effectHP>
@@ -10689,7 +10729,7 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_AM_011_Truck/normal/lod0/hd_env_AM_011_Truck_01.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_envAM_011_Truck_01_04	</effect>
       <hitEffect>	inf_fuel_envAM_011_Truck_01	</hitEffect>
@@ -10700,7 +10740,7 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_AM_011_Truck/normal/lod0/hd_env_AM_011_Truck_02.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_envAM_011_Truck_02_01	</effect>
       <hitEffect>	inf_fuel_envAM_011_Truck_01	</hitEffect>
@@ -10711,7 +10751,7 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_AM_011_Truck/normal/lod0/hd_env_AM_011_Truck_03.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_envAM_011_Truck_03_04	</effect>
       <hitEffect>	inf_fuel_envAM_011_Truck_01	</hitEffect>
@@ -11913,7 +11953,7 @@
     </entry>
     <entry>
       <filename>	content/MilitaryEnvironment/hd_mle_SU_003_He111/normal/lod0/hd_mle_SU_003_He111_Rooftop_02.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_mleSU_92_02_HE111_1_02	</effect>
       <hitEffect>	inf_mleSU_92_02_HE111_1_02_hit	</hitEffect>
@@ -11945,7 +11985,7 @@
     </entry>
     <entry>
       <filename>	content/MilitaryEnvironment/hd_mle_UNI_820_EightyEight/normal/lod0/hd_mle_UNI_820_EightyEight_04.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_mle_UNI_820_EightyEight_03	</effect>
       <effectHP>	HP_module0	</effectHP>
@@ -11956,7 +11996,7 @@
     </entry>
     <entry>
       <filename>	content/MilitaryEnvironment/hd_mle_UNI_820_EightyEight/normal/lod0/hd_mle_UNI_820_EightyEight_03.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_mle_UNI_820_EightyEight_03_01	</effect>
       <effectHP>	HP_module0	</effectHP>
@@ -11967,7 +12007,7 @@
     </entry>
     <entry>
       <filename>	content/MilitaryEnvironment/hd_mle_UNI_820_EightyEight/normal/lod0/hd_mle_UNI_820_EightyEight_02.model	</filename>
-      <health>	50	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_mle_UNI_820_EightyEight_01	</effect>
       <effectHP>	HP_module0	</effectHP>
@@ -11977,7 +12017,7 @@
     </entry>
     <entry>
       <filename>	content/MilitaryEnvironment/hd_mle_UNI_820_EightyEight/normal/lod0/hd_mle_UNI_820_EightyEight_01.model	</filename>
-      <health>	50	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_mle_UNI_820_EightyEight_01_01	</effect>
       <effectHP>	HP_module0	</effectHP>
@@ -12293,7 +12333,7 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_SU_027_StalinistSixtyFive/normal/lod0/hd_env_SU_027_StalinistSixtyFive.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_env_SU_027_StalinistSixtyFive	</effect>
       <effectHP>	HP_module0	</effectHP>
@@ -12348,7 +12388,7 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_SU_019_SovietTram/normal/lod0/hd_env_SU_019_SovietTram.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_env_SU_019_SovietTram	</effect>
       <hitEffect>	inf_env_SU_019_SovietTram_hit	</hitEffect>
@@ -12359,7 +12399,7 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_AS_010_Agrimotor/normal/lod0/hd_env_AS_010_Agrimotor_01.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_envSU_008_ArmyTech01_Zis5_02	</effect>
       <effectHP>	HP_module0	</effectHP>
@@ -14018,7 +14058,7 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_SU_051_LAZ695B/normal/lod0/hd_env_SU_051_LAZ695B_01.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	hd_env_SU_051_LAZ695B	</effect>
       <hitEffect>	inf_fuel_env608_Sovbus	</hitEffect>
@@ -14040,7 +14080,7 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_SU_051_LAZ695B/normal/lod0/hd_env_SU_051_LAZ695B_02.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	hd_env_SU_051_LAZ695B	</effect>
       <hitEffect>	inf_fuel_env608_Sovbus	</hitEffect>
@@ -14051,7 +14091,7 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_SU_051_LAZ695B/normal/lod0/hd_env_SU_051_LAZ695B_03.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	hd_env_SU_051_LAZ695B	</effect>
       <hitEffect>	inf_fuel_env608_Sovbus	</hitEffect>
@@ -14172,7 +14212,7 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_SU_044_PAZ653/normal/lod0/hd_env_SU_044_PAZ653.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_envAM_010_Cars_03	</effect>
       <hitEffect>	hd_env_SU_044_PAZ653	</hitEffect>
@@ -14531,7 +14571,7 @@
     </entry>
     <entry>
       <filename>	content/MilitaryEnvironment/hd_mle_SU_005_Mi24A/normal/lod0/hd_mle_SU_005_Mi24A_02.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	hd_mle_SU_006_Mi4_Ram	</effect>
       <hitEffect>	hd_mle_SU_006_Mi4_Hit	</hitEffect>
@@ -14608,7 +14648,7 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_SU_041_ZIS150/normal/lod0/hd_env_SU_041_ZIS150_01.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	hd_env_SU_041_ZIS150_01	</effect>
       <hitEffect>	hd_env_SU_041_ZIS150_01	</hitEffect>
@@ -14619,7 +14659,7 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_SU_041_ZIS150/normal/lod0/hd_env_SU_041_ZIS150_02.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	hd_env_SU_041_ZIS150_02	</effect>
       <hitEffect>	hd_env_SU_041_ZIS150_02	</hitEffect>
@@ -14642,7 +14682,7 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_SU_042_ZIS155/normal/lod0/hd_env_SU_042_ZIS155.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	hd_env_SU_042_ZIS155_ram	</effect>
       <hitEffect>	hd_env_SU_042_ZIS155	</hitEffect>
@@ -15497,7 +15537,7 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_SU_084_RustedBus/normal/lod0/hd_env_SU_084_RustedBus.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	hd_env_SU_084_RustedBus	</effect>
       <hitEffect>	hd_env_SU_084_RustedBus	</hitEffect>
@@ -15662,7 +15702,7 @@
     </entry>
     <entry>
       <filename>	content/MilitaryEnvironment/hd_mle_UNI_005_BurningPlane/normal/lod0/hd_mle_UNI_005_BurningPlane_Wing.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	hd_mle_UNI_005_BurningPlane_Wing	</effect>
       <hitEffect>	hd_mle_UNI_005_BurningPlane_Wing	</hitEffect>
@@ -15673,7 +15713,7 @@
     </entry>
     <entry>
       <filename>	content/MilitaryEnvironment/hd_mle_UNI_005_BurningPlane/normal/lod0/hd_mle_UNI_005_BurningPlane_Tail.model	</filename>
-      <health>	20	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	hd_mle_UNI_005_BurningPlane_Tail	</effect>
       <hitEffect>	hd_mle_UNI_005_BurningPlane_Tail	</hitEffect>
@@ -17624,8 +17664,8 @@
           <decayEffect>	none	</decayEffect>
           <ramEffect>	hd_bld_AF_005_Barracks_02	</ramEffect>
           <hitEffect>	hd_bld_AF_005_Barracks_02_hit	</hitEffect>
-          <effectHP>	HP_module0	</effectHP>
-          <effectScale>	1	</effectScale>
+          <effectHP>	HP_module1	</effectHP>
+          <effectScale>	1.000000	</effectScale>
         </module>
         <module>
           <matName>	n_stone0_2	</matName>
@@ -17633,8 +17673,8 @@
           <decayEffect>	none	</decayEffect>
           <ramEffect>	hd_bld_AF_005_Barracks_02_01_ram	</ramEffect>
           <hitEffect>	hd_bld_AF_005_Barracks_02_01_hit	</hitEffect>
-          <effectHP>	HP_module1	</effectHP>
-          <effectScale>	1	</effectScale>
+          <effectHP>	HP_module2	</effectHP>
+          <effectScale>	1.000000	</effectScale>
         </module>
         <module>
           <matName>	n_stone0_3	</matName>
@@ -17642,8 +17682,8 @@
           <decayEffect>	none	</decayEffect>
           <ramEffect>	hd_bld_AF_005_Barracks_02_02_ram	</ramEffect>
           <hitEffect>	hd_bld_AF_005_Barracks_02_02_hit	</hitEffect>
-          <effectHP>	HP_module2	</effectHP>
-          <effectScale>	1	</effectScale>
+          <effectHP>	HP_module3	</effectHP>
+          <effectScale>	1.000000	</effectScale>
         </module>
         <module>
           <matName>	n_stone0_4	</matName>
@@ -17651,8 +17691,8 @@
           <decayEffect>	none	</decayEffect>
           <ramEffect>	hd_bld_AF_005_Barracks_02_03_ram	</ramEffect>
           <hitEffect>	hd_bld_AF_005_Barracks_02_03_hit	</hitEffect>
-          <effectHP>	HP_module3	</effectHP>
-          <effectScale>	1	</effectScale>
+          <effectHP>	HP_module0	</effectHP>
+          <effectScale>	1.000000	</effectScale>
         </module>
       </modules>
     </entry>
@@ -19301,7 +19341,7 @@
       <modules>
         <module>
           <matName>	n_metal0_1	</matName>
-          <health>	20	</health>
+          <health>	10	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	inf_mleSU_92_02_HE111_2_02_ram	</ramEffect>
           <hitEffect>	inf_mleSU_92_02_HE111_3_02_hit	</hitEffect>
@@ -19310,7 +19350,7 @@
         </module>
         <module>
           <matName>	n_metal0_2	</matName>
-          <health>	20	</health>
+          <health>	10	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	inf_mleSU_92_02_HE111_2_03_ram	</ramEffect>
           <hitEffect>	inf_mleSU_92_02_HE111_3_03_hit	</hitEffect>
@@ -21696,7 +21736,7 @@
       <modules>
         <module>
           <matName>	n_metal0_1_2	</matName>
-          <health>	20	</health>
+          <health>	10	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	hd_mle_UNI_005_BurningPlane_Hull_01	</ramEffect>
           <hitEffect>	hd_mle_UNI_005_BurningPlane_Hull_01	</hitEffect>
@@ -21705,7 +21745,7 @@
         </module>
         <module>
           <matName>	n_metal0_2	</matName>
-          <health>	20	</health>
+          <health>	10	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	hd_mle_UNI_005_BurningPlane_Hull_02	</ramEffect>
           <hitEffect>	hd_mle_UNI_005_BurningPlane_Hull_02	</hitEffect>

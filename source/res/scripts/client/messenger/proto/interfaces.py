@@ -65,7 +65,7 @@ class IBattleCommandFactory(object):
     def createByPosition(self, position, name, reloadTime=0.0):
         return None
 
-    def createByObjectiveIndex(self, idx, isAtk):
+    def createByObjectiveIndex(self, idx, isAtk, actionName):
         return None
 
     def createByBaseIndexAndName(self, pointID, commandName, baseName):

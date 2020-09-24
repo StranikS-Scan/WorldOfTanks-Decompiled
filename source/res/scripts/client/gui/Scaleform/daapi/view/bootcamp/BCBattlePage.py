@@ -4,7 +4,15 @@ import base64
 import cPickle as pickle
 import BigWorld
 import SoundGroups
+from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings, KEY_SETTINGS
+from bootcamp.BootCampEvents import g_bootcampEvents
+from bootcamp.Bootcamp import g_bootcamp
+from bootcamp.BootcampConstants import UI_STATE, CONSUMABLE_ERROR_MESSAGES, HINT_TYPE, HINT_NAMES
+from bootcamp.BootcampGUI import BootcampMarkersComponent
+from bootcamp.BootcampSettings import getBattleSettings
+from constants import ARENA_PERIOD
+from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP, LOG_ERROR_BOOTCAMP
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.battle.classic.minimap import ClassicMinimapComponent, GlobalSettingsPlugin
 from gui.Scaleform.daapi.view.battle.classic.page import DynamicAliases
@@ -16,16 +24,9 @@ from gui.Scaleform.daapi.view.battle.shared.page import ComponentsConfig
 from gui.Scaleform.daapi.view.battle.shared.start_countdown_sound_player import StartCountdownSoundPlayer
 from gui.Scaleform.daapi.view.bootcamp.battle.bc_finish_sound_player import BCFinishSoundPlayer
 from gui.Scaleform.daapi.view.meta.BCBattlePageMeta import BCBattlePageMeta
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.battle_control import avatar_getter, minimap_utils
-from constants import ARENA_PERIOD
-from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP, LOG_ERROR_BOOTCAMP
-from bootcamp.BootcampGUI import BootcampMarkersComponent
-from bootcamp.BootCampEvents import g_bootcampEvents
-from bootcamp.Bootcamp import g_bootcamp
-from bootcamp.BootcampConstants import UI_STATE, CONSUMABLE_ERROR_MESSAGES, HINT_TYPE, HINT_NAMES
-from bootcamp.BootcampSettings import getBattleSettings
-from PlayerEvents import g_playerEvents
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 _BOOTCAMP_EXTERNAL_COMPONENTS = (CrosshairPanelContainer, BootcampMarkersComponent)
@@ -140,10 +141,6 @@ class BCBattlePage(BCBattlePageMeta):
             if external.alias == alias:
                 return external
 
-    def showNewElements(self, newElements):
-        self._onAnimationsCompleteCallback = newElements['callback']
-        self.as_showAnimatedS(newElements)
-
     def onAnimationsComplete(self):
         LOG_DEBUG_DEV_BOOTCAMP('onAnimationsComplete')
         if self._onAnimationsCompleteCallback is not None:
@@ -172,9 +169,8 @@ class BCBattlePage(BCBattlePageMeta):
             self._blToggling = set(self.as_getComponentsVisibilityS())
         self._setComponentsVisibility(visible=set(), hidden=self._blToggling)
         introVideoData = g_bootcamp.getIntroVideoData()
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOTCAMP_INTRO_VIDEO, None, introVideoData), EVENT_BUS_SCOPE.BATTLE)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_INTRO_VIDEO), ctx=introVideoData), EVENT_BUS_SCOPE.BATTLE)
         SoundGroups.g_instance.restoreWWISEVolume()
-        return
 
     def _onBattleLoadingFinish(self):
         super(BCBattlePageMeta, self)._onBattleLoadingFinish()

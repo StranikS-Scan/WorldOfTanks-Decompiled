@@ -8,7 +8,7 @@ import varint
 import ResMgr
 from collections import namedtuple, OrderedDict, defaultdict
 from soft_exception import SoftException
-from items.components.c11n_constants import ApplyArea, SeasonType, Options, CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID, StyleFlags, MAX_USERS_PROJECTION_DECALS, CUSTOMIZATION_SLOTS_VEHICLE_PARTS, DEFAULT_SCALE_FACTOR_ID, EMPTY_ITEM_ID, DEFAULT_SCALE, DEFAULT_ROTATION, DEFAULT_POSITION, DOUBLE_SIDED_DECAL, DEFAULT_DECAL_TINT_COLOR
+from items.components.c11n_constants import ApplyArea, SeasonType, Options, CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID, StyleFlags, MAX_USERS_PROJECTION_DECALS, CUSTOMIZATION_SLOTS_VEHICLE_PARTS, DEFAULT_SCALE_FACTOR_ID, EMPTY_ITEM_ID, DEFAULT_SCALE, DEFAULT_ROTATION, DEFAULT_POSITION, DEFAULT_DECAL_TINT_COLOR
 from items.components import c11n_components as cn
 from constants import IS_CELLAPP, IS_BASEAPP, IS_EDITOR
 from items import decodeEnum, makeIntCompactDescrByID
@@ -468,13 +468,13 @@ class ProjectionDecalComponent(SerializableComponent):
      ('rotation', xmlOnlyFloatArrayField()),
      ('position', xmlOnlyFloatArrayField()),
      ('tintColor', intArrayField(flags=FieldFlags.NON_BIN if not IS_EDITOR else FieldFlags.NONE)),
-     ('doubleSided', xmlOnlyIntField(DOUBLE_SIDED_DECAL)),
+     ('doubleSided', xmlOnlyIntField(0)),
      ('tags', xmlOnlyTagsField(())),
      ('preview', xmlOnlyIntField(0)),
      ('progressionLevel', intField(0))))
     __slots__ = ('id', 'options', 'slotId', 'scaleFactorId', 'showOn', 'scale', 'rotation', 'position', 'tintColor', 'doubleSided', 'tags', 'preview', 'progressionLevel')
 
-    def __init__(self, id=0, options=Options.NONE, slotId=0, scaleFactorId=DEFAULT_SCALE_FACTOR_ID, showOn=ApplyArea.NONE, scale=DEFAULT_SCALE, rotation=DEFAULT_ROTATION, position=DEFAULT_POSITION, tintColor=DEFAULT_DECAL_TINT_COLOR, doubleSided=DOUBLE_SIDED_DECAL, tags=None, preview=False, progressionLevel=0):
+    def __init__(self, id=0, options=Options.NONE, slotId=0, scaleFactorId=DEFAULT_SCALE_FACTOR_ID, showOn=ApplyArea.NONE, scale=DEFAULT_SCALE, rotation=DEFAULT_ROTATION, position=DEFAULT_POSITION, tintColor=DEFAULT_DECAL_TINT_COLOR, doubleSided=0, tags=None, preview=False, progressionLevel=0):
         self.id = id
         self.options = options
         self.slotId = slotId

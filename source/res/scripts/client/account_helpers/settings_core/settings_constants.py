@@ -85,6 +85,8 @@ class GAME(CONST_CONTAINER):
     SHOW_VEHICLES_COUNTER = 'showVehiclesCounter'
     SHOW_MARKS_ON_GUN = 'showMarksOnGun'
     ANONYMIZER = 'anonymizer'
+    SHOW_VICTIMS_DOGTAG = 'showVictimsDogTag'
+    SHOW_DOGTAG_TO_KILLER = 'showDogTagToKiller'
     DYNAMIC_CAMERA = 'dynamicCamera'
     SNIPER_MODE_STABILIZATION = 'horStabilizationSnp'
     INCREASED_ZOOM = 'increasedZoom'
@@ -326,6 +328,8 @@ class OnceOnlyHints(CONST_CONTAINER):
     AMMUNITION_PANEL_HINT = 'AmmunitionPanelHintZoneHint'
     AMMUNITION_FILTER_HINT = 'FilterHintZoneHint'
     OPT_DEV_DRAG_AND_DROP_HINT = 'OptDevDragAndDropHint'
+    DOGTAG_HANGAR_HINT = 'DogTagHangarHint'
+    DOGTAG_PROFILE_HINT = 'DogTagProfileHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):

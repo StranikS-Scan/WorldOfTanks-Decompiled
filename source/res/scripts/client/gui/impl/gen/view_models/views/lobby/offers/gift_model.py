@@ -10,7 +10,7 @@ class GiftModel(ViewModel):
     RENT_TYPE_BATTLES = 'battles'
     RENT_TYPE_WINS = 'wins'
 
-    def __init__(self, properties=12, commands=0):
+    def __init__(self, properties=15, commands=0):
         super(GiftModel, self).__init__(properties=properties, commands=commands)
 
     def getId(self):
@@ -85,6 +85,24 @@ class GiftModel(ViewModel):
     def setButtonLabel(self, value):
         self._setResource(11, value)
 
+    def getPrice(self):
+        return self._getNumber(12)
+
+    def setPrice(self, value):
+        self._setNumber(12, value)
+
+    def getIsNotEnoughMoney(self):
+        return self._getBool(13)
+
+    def setIsNotEnoughMoney(self, value):
+        self._setBool(13, value)
+
+    def getAvailableCount(self):
+        return self._getNumber(14)
+
+    def setAvailableCount(self, value):
+        self._setNumber(14, value)
+
     def _initialize(self):
         super(GiftModel, self)._initialize()
         self._addNumberProperty('id', 0)
@@ -99,3 +117,6 @@ class GiftModel(ViewModel):
         self._addNumberProperty('inventoryCount', 0)
         self._addBoolProperty('isDisabled', False)
         self._addResourceProperty('buttonLabel', R.invalid())
+        self._addNumberProperty('price', 0)
+        self._addBoolProperty('isNotEnoughMoney', False)
+        self._addNumberProperty('availableCount', 0)

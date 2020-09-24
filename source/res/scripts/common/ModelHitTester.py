@@ -49,7 +49,7 @@ class ModelHitTester(object):
         return self.__bspModel is not None
 
     def loadBspModel(self):
-        if self.__bspModel is not None:
+        if self.__bspModel is not None or self.bspModelName is None:
             return
         else:
             bspModel = BigWorld.WGBspCollisionModel()

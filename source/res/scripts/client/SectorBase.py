@@ -8,6 +8,7 @@ from FlagModel import FlagSettings, FlagModel
 from Math import Vector4, Vector3, Vector2, Matrix
 from skeletons.account_helpers.settings_core import ISettingsCore
 from account_helpers.settings_core.settings_constants import GRAPHICS
+import AnimationSequence
 
 class _SectorBaseSettingsCache(object):
 
@@ -25,6 +26,7 @@ class _SectorBaseSettingsCache(object):
         self.flagEmblemTex = settings.readString('flagEmblemTex', '')
         self.flagEmblemTexCoords = settings.readVector4('flagEmblemTexCoords', Vector4())
         self.flagScale = settings.readVector3('flagScale', Vector3())
+        self.flagNodeAliasName = settings.readString('flagNodeAliasName', '')
 
 
 ENVIRONMENT_EFFECTS_CONFIG_FILE = 'scripts/dynamic_objects.xml'
@@ -56,7 +58,15 @@ class SectorBase(BigWorld.Entity):
         sectorBaseComponent = BigWorld.player().arena.componentSystem.sectorBaseComponent
         if sectorBaseComponent is not None:
             sectorBaseComponent.addSectorBase(self)
-        rv = [_g_sectorBaseSettings.flagModelName, _g_sectorBaseSettings.flagStaffModelName, _g_sectorBaseSettings.radiusModel]
+        assembler = BigWorld.CompoundAssembler(_g_sectorBaseSettings.flagStaffModelName, self.spaceID)
+        assembler.addRootPart(_g_sectorBaseSettings.flagStaffModelName, 'root')
+        scaleMatrix = Matrix()
+        scaleMatrix.setScale(_g_sectorBaseSettings.flagScale)
+        assembler.addPart(_g_sectorBaseSettings.flagModelName, _g_sectorBaseSettings.flagStaffFlagHP, _g_sectorBaseSettings.flagNodeAliasName, scaleMatrix)
+        rv = [assembler, _g_sectorBaseSettings.radiusModel]
+        if _g_sectorBaseSettings.flagAnim is not None:
+            loader = AnimationSequence.Loader(_g_sectorBaseSettings.flagAnim, self.spaceID)
+            rv.append(loader)
         mProv = Matrix()
         mProv.translation = self.position
         self.__baseCaptureSoundObject = SoundGroups.g_instance.WWgetSoundObject('base_' + str(self.baseID), mProv)
@@ -68,7 +78,7 @@ class SectorBase(BigWorld.Entity):
         if self.__isCapturedOnStart != self.isCaptured:
             self.set_isCaptured(self.__isCapturedOnStart)
         teamParams = self.__getTeamParams()
-        flagSettings = FlagSettings(prereqs[_g_sectorBaseSettings.flagStaffModelName], prereqs[_g_sectorBaseSettings.flagModelName], _g_sectorBaseSettings.flagStaffFlagHP, _g_sectorBaseSettings.flagAnim, _g_sectorBaseSettings.flagBackgroundTex, _g_sectorBaseSettings.flagEmblemTex, _g_sectorBaseSettings.flagEmblemTexCoords, _g_sectorBaseSettings.flagScale)
+        flagSettings = FlagSettings(prereqs[_g_sectorBaseSettings.flagStaffModelName], _g_sectorBaseSettings.flagNodeAliasName, prereqs[_g_sectorBaseSettings.flagAnim], _g_sectorBaseSettings.flagBackgroundTex, _g_sectorBaseSettings.flagEmblemTex, _g_sectorBaseSettings.flagEmblemTexCoords, self.spaceID)
         self.__flagModel.setupFlag(self.position, flagSettings, teamParams[0])
         self.__terrainSelectedArea = BigWorld.PyTerrainSelectedArea()
         self.__terrainSelectedArea.setup(_g_sectorBaseSettings.radiusModel, Vector2(self.radius * 2.0, self.radius * 2.0), self._OVER_TERRAIN_HEIGHT, teamParams[0])

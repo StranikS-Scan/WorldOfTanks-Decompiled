@@ -24,7 +24,7 @@ def _fetchRecord(results, recordName):
     if recordName in results:
         record = results[recordName]
         if record is None:
-            LOG_WARNING('Record is not valid in the results. Perhaps, client and server versions of file battle_results_shared.py are different.', recordName)
+            LOG_WARNING('Record is not valid in the results. Perhaps, client and server versions of battle_results.g_config are different.', recordName)
         return record
     else:
         LOG_WARNING('Record is not found in the results', recordName, results.keys())
@@ -73,7 +73,7 @@ def createReusableInfo(results):
     if not unpackedRecords:
         return _ReusableInfo(arenaUniqueID, commonInfo, personalInfo, playersInfo, vehiclesInfo, avatarsInfo)
     else:
-        LOG_WARNING('Records are not valid in the results. Perhaps, client and server versions of file battle_results_shared.py are different.', *[ (record, results[record]) for record in unpackedRecords ])
+        LOG_WARNING('Records are not valid in the results. Perhaps, client and server versions of battle_results.g_config are different.', *[ (record, results[record]) for record in unpackedRecords ])
         return
 
 

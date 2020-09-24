@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/demount_kit/optional_device_dialogs.py
-from frameworks.wulf import ViewSettings, ViewFlags
+from frameworks.wulf import ViewSettings
 from gui.goodies.goodie_items import DemountKit
 from gui.impl.gen.view_models.constants.item_highlight_types import ItemHighlightTypes
 from gui.impl.gen.view_models.views.lobby.demount_kit.optional_device_dialog_model import OptionalDeviceDialogModel
@@ -9,7 +9,7 @@ from gui.impl.lobby.demount_kit.item_price_dialog import ItemPriceDialog
 from gui.impl.lobby.dialogs.full_screen_dialog_view import DIALOG_TYPES
 from gui.shared import events
 from gui.shared.gui_items.fitting_item import SLOT_HIGHLIGHT_TO_ITEM_HIGHLIGHT_TYPES
-from gui.shared.gui_items.gui_item_economics import ItemPrice, ITEM_PRICE_ZERO
+from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.money import MONEY_UNDEFINED
 from helpers import dependency
 from skeletons.gui.goodies import IGoodiesCache
@@ -18,7 +18,7 @@ class OpDevBaseDialog(ItemPriceDialog):
     __slots__ = ()
 
     def __init__(self, compDescr):
-        settings = ViewSettings(layoutID=R.views.lobby.demountkit.CommonWindow(), flags=ViewFlags.TOP_WINDOW_VIEW, model=OptionalDeviceDialogModel())
+        settings = ViewSettings(layoutID=R.views.lobby.demountkit.CommonWindow(), model=OptionalDeviceDialogModel())
         super(OpDevBaseDialog, self).__init__(settings, compDescr)
 
     @property
@@ -131,25 +131,3 @@ class BuyAndStorageOpDevDialog(OpDevBaseDialog):
         model.setDescription(R.strings.dialogs.buyInstallConfirmation.notEnoughWeight())
         model.setPriceDescription(R.strings.dialogs.equipmentBuyInstall.price())
         model.setAcceptButtonText(R.strings.dialogs.buyConfirmation.submit())
-
-
-class DemountIncompatibleOpDevDialog(OpDevBaseDialog):
-    __slots__ = ('__forFitting',)
-
-    def __init__(self, compDescr, forFitting=False):
-        super(DemountIncompatibleOpDevDialog, self).__init__(compDescr)
-        self.__forFitting = forFitting
-
-    @property
-    def _price(self):
-        return ITEM_PRICE_ZERO
-
-    def _setBaseParams(self, model):
-        super(DemountIncompatibleOpDevDialog, self)._setBaseParams(model)
-        if self.__forFitting:
-            model.setTitleBody(R.strings.demount_kit.equipmentDemount.confirmationForFitting())
-        else:
-            model.setTitleBody(R.strings.demount_kit.equipmentDemount.confirmation())
-        model.setDescription(R.strings.demount_kit.equipmentDemount.confirmation.descriptionForInappropriateClass())
-        model.setAcceptButtonText(R.strings.demount_kit.demountConfirmation.submit())
-        model.setSpecialType(ItemHighlightTypes.INCOMPATIBLE_EQUIPMENT)

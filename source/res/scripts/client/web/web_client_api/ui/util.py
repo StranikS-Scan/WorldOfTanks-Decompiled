@@ -129,7 +129,7 @@ class UtilWebApiMixin(object):
     @w2c(_RunTriggerChainSchema, 'run_trigger_chain')
     def runTriggerChain(self, cmd):
         chainID = cmd.trigger_chain_id
-        runSalesChain(chainID)
+        runSalesChain(chainID, reloadIfRun=True, isStopForced=True)
 
     @w2c(_ShowToolTipSchema, 'show_tooltip')
     def showTooltip(self, cmd):
@@ -156,7 +156,7 @@ class UtilWebApiMixin(object):
              achievement.getBlock(),
              cmd.itemId,
              isRareAchievement(achievement)]
-        self.__getTooltipMgr().createTypedTooltipExt(tooltipType, args, 'INFO')
+        self.__getTooltipMgr().onCreateTypedTooltip(tooltipType, args, 'INFO')
 
     @w2c(_ShowItemTooltipSchema, 'show_item_tooltip')
     def showItemTooltip(self, cmd):

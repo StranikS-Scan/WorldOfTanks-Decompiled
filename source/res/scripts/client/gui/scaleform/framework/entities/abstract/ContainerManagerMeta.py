@@ -13,26 +13,26 @@ class ContainerManagerMeta(BaseDAAPIComponent):
     def as_showS(self, name, x=0, y=0):
         return self.flashObject.as_show(name, x, y) if self._isDAAPIInited() else None
 
-    def as_registerContainerS(self, containerType, name):
-        return self.flashObject.as_registerContainer(containerType, name) if self._isDAAPIInited() else None
+    def as_registerContainerS(self, layer, name):
+        return self.flashObject.as_registerContainer(layer, name) if self._isDAAPIInited() else None
 
-    def as_unregisterContainerS(self, containerType):
-        return self.flashObject.as_unregisterContainer(containerType) if self._isDAAPIInited() else None
+    def as_unregisterContainerS(self, layer):
+        return self.flashObject.as_unregisterContainer(layer) if self._isDAAPIInited() else None
 
     def as_closePopUpsS(self):
         return self.flashObject.as_closePopUps() if self._isDAAPIInited() else None
 
-    def as_isOnTopS(self, cType, vName):
-        return self.flashObject.as_isOnTop(cType, vName) if self._isDAAPIInited() else None
+    def as_isOnTopS(self, layer, windowName):
+        return self.flashObject.as_isOnTop(layer, windowName) if self._isDAAPIInited() else None
 
-    def as_bringToFrontS(self, cType, vName):
-        return self.flashObject.as_bringToFront(cType, vName) if self._isDAAPIInited() else None
+    def as_bringToFrontS(self, layer, windowName):
+        return self.flashObject.as_bringToFront(layer, windowName) if self._isDAAPIInited() else None
 
-    def as_showContainersS(self, viewTypes):
-        return self.flashObject.as_showContainers(viewTypes) if self._isDAAPIInited() else None
+    def as_showContainersS(self, layers):
+        return self.flashObject.as_showContainers(layers) if self._isDAAPIInited() else None
 
-    def as_hideContainersS(self, viewTypes):
-        return self.flashObject.as_hideContainers(viewTypes) if self._isDAAPIInited() else None
+    def as_hideContainersS(self, layers):
+        return self.flashObject.as_hideContainers(layers) if self._isDAAPIInited() else None
 
-    def as_isContainerShownS(self, viewType):
-        return self.flashObject.as_isContainerShown(viewType) if self._isDAAPIInited() else None
+    def as_isContainerShownS(self, layer):
+        return self.flashObject.as_isContainerShown(layer) if self._isDAAPIInited() else None

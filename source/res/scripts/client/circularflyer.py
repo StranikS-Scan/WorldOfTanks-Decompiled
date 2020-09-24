@@ -5,6 +5,7 @@ import BigWorld
 import AnimationSequence
 from Math import Matrix, Vector3
 from debug_utils import LOG_CURRENT_EXCEPTION
+from vehicle_systems.stricted_loading import makeCallbackWeak
 import SoundGroups
 
 class CircularFlyer(BigWorld.UserDataObject):
@@ -21,7 +22,7 @@ class CircularFlyer(BigWorld.UserDataObject):
         self.__modelMatrix = None
         self.__sound = None
         self.__animator = None
-        BigWorld.loadResourceListBG((self.modelName, self.pixieName), self.__onResourcesLoaded)
+        BigWorld.loadResourceListBG((self.modelName, self.pixieName), makeCallbackWeak(self.__onResourcesLoaded))
         return
 
     def __del__(self):

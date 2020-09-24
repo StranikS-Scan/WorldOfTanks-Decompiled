@@ -14,7 +14,8 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA, RequestCriteria
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from items.components.c11n_constants import SeasonType, ProjectionDecalFormTags, ItemTags
+from items.components.c11n_constants import SeasonType, ProjectionDecalFormTags, ItemTags, EMPTY_ITEM_ID
+from items import vehicles
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -146,8 +147,19 @@ class CarouselCache(object):
             if vehicleHasSlot(slotType):
                 itemTypes.extend(CustomizationTabs.ITEM_TYPES[tabId])
 
-        allItems = self.__itemsCache.items.getItems(tuple(itemTypes), requirement)
-        sortedItems = sorted(allItems.itervalues(), key=comparisonKey)
+        allItems = []
+        customizationCache = vehicles.g_cache.customization20().itemTypes
+        cTypes = set((C11N_ITEM_TYPE_MAP[iType] for iType in itemTypes if iType in C11N_ITEM_TYPE_MAP))
+        for cType in cTypes:
+            for itemID in customizationCache[cType]:
+                if itemID == EMPTY_ITEM_ID:
+                    continue
+                intCD = vehicles.makeIntCompactDescrByID('customizationItem', cType, itemID)
+                item = self.__service.getItemByCD(intCD)
+                if requirement(item):
+                    allItems.append(item)
+
+        sortedItems = sorted(allItems, key=comparisonKey)
         customModeTabs = CustomizationTabs.MODES[CustomizationModes.CUSTOM]
         for item in sortedItems:
             tabId = ITEM_TYPE_TO_TAB[item.itemTypeID]

@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/bootcamp/hints/HintsScenario.py
 import time
 import math
-from functools import partial
 import BattleReplay
 import BigWorld
 import Math
@@ -11,6 +10,7 @@ from bootcamp_shared import BOOTCAMP_BATTLE_ACTION
 from bootcamp.BootcampConstants import CONSUMABLE_ERROR_MESSAGES, HINT_TYPE
 from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP
 from debug_utils import LOG_ERROR
+from vehicle_systems.stricted_loading import makeCallbackWeak
 from HintsBase import HintBase, HINT_COMMAND
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -132,7 +132,7 @@ class HintAvoidAndDestroy(HintBase, TriggersManager.ITriggerListener):
             if vehicle.model is None:
                 continue
             attachNode = vehicle.model.node(TankPartNames.TURRET)
-            BigWorld.loadResourceListBG((self.__modelName,), partial(self.__onModelLoaded, attachNode, scaleMatrix, translationMatrix))
+            BigWorld.loadResourceListBG((self.__modelName,), makeCallbackWeak(self.__onModelLoaded, attachNode, scaleMatrix, translationMatrix))
 
         return
 

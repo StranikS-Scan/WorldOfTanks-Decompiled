@@ -9,6 +9,9 @@ class ISettingsCache(object):
     def init(self):
         raise NotImplementedError
 
+    def isSynced(self):
+        raise NotImplementedError
+
     def fini(self):
         raise NotImplementedError
 

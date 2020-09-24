@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic/stats_exchange.py
 import logging
+from gui.Scaleform.daapi.view.battle.classic.stats_exchange import DynamicVehicleStatsComponent
 from gui.Scaleform.daapi.view.meta.EpicBattleStatisticDataControllerMeta import EpicBattleStatisticDataControllerMeta
 from gui.Scaleform.daapi.view.battle.shared.stats_exchage import createExchangeBroker
 from gui.Scaleform.daapi.view.battle.shared.stats_exchage import broker
@@ -11,34 +12,31 @@ from gui.battle_control.arena_info.arena_vos import EPIC_BATTLE_KEYS
 from gui.battle_control import avatar_getter
 _logger = logging.getLogger(__name__)
 
-class EpicStatsComponent(vehicle.VehicleStatsComponent):
-    __slots__ = ('_rank', '_frags', '_lane', '_hasRespawns')
+class EpicStatsComponent(DynamicVehicleStatsComponent):
+    __slots__ = ('_rank', '_lane', '_hasRespawns')
 
     def __init__(self):
         super(EpicStatsComponent, self).__init__()
         self._rank = 0
-        self._frags = 0
         self._lane = 0
         self._hasRespawns = False
 
     def clear(self):
         self._rank = 0
-        self._frags = 0
         self._lane = 0
         self._hasRespawns = True
         super(EpicStatsComponent, self).clear()
 
     def get(self, forced=False):
         stats = {'rank': self._rank,
-         'frags': self._frags,
          'lane': self._lane,
          'hasRespawns': self._hasRespawns}
-        data = super(EpicStatsComponent, self).get()
+        data = super(EpicStatsComponent, self).get(forced=True)
         data.update(stats)
         return data
 
     def addStats(self, vStatsVO):
-        self._vehicleID = vStatsVO.vehicleID
+        super(EpicStatsComponent, self).addStats(vStatsVO)
         self._lane = vStatsVO.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.PLAYER_GROUP)
         self._rank = vStatsVO.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.RANK)
         self._hasRespawns = vStatsVO.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.HAS_RESPAWNS)
@@ -48,14 +46,13 @@ class EpicStatsComponent(vehicle.VehicleStatsComponent):
             self._lane = 0
         if self._hasRespawns is None:
             self._hasRespawns = True
-        self._frags = vStatsVO.frags
         return
 
 
 class EpicStatisticsDataController(EpicBattleStatisticDataControllerMeta):
 
-    def startControl(self, battleCtx, arenaVisitor):
-        super(EpicStatisticsDataController, self).startControl(battleCtx, arenaVisitor)
+    def startControl(self, ctx, arenaVisitor):
+        super(EpicStatisticsDataController, self).startControl(ctx, arenaVisitor)
         componentSystem = self._arenaVisitor.getComponentSystem()
         playerComp = getattr(componentSystem, 'playerDataComponent', None)
         if playerComp is not None:

@@ -12,7 +12,7 @@ from gui.ranked_battles.constants import SeasonGapStates, ZERO_RANK_ID, ZERO_DIV
 from gui.ranked_battles.ranked_helpers.web_season_provider import UNDEFINED_LEAGUE_ID
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 _logger = logging.getLogger(__name__)
-StateBlock = namedtuple('StateBlock', 'state, rankID, division, leagueID, isSprinter')
+StateBlock = namedtuple('StateBlock', 'state, rankID, division, leagueID, isSprinter, isYearRewardEnabled')
 
 def _buildWaitingVO(_):
     return _getDataVO(RANKEDBATTLES_ALIASES.SEASON_GAP_VIEW_LEAGUE_STATE, disabled=True, title=backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.waitingLeague.title()), descr=backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.waitingLeague.descr()))
@@ -33,14 +33,18 @@ def _buildDivisionVO(stateBlock):
         buttonLabel = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.division.ratingBtn())
         buttonVisible = True
     if stateBlock.state == SeasonGapStates.BANNED_IN_LEAGUES:
-        description = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.bannedLeague.descr())
+        bannedLeague = R.strings.ranked_battles.rankedBattleMainView.seasonGap.bannedLeague
+        description = bannedLeague.descr() if stateBlock.isYearRewardEnabled else bannedLeague.withoutPoints.descr()
+        description = backport.text(description)
         description = _addAlertIcon(description)
     elif stateBlock.state == SeasonGapStates.ROLLED_IN_LEAGUES:
         description = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.rolledLeague.descr())
         description = _addAlertIcon(description)
     elif stateBlock.state == SeasonGapStates.BANNED_IN_DIVISIONS:
-        description = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.bannedDivision.descr())
-        description = _addAlertIcon(description)
+        description = ''
+        if stateBlock.isYearRewardEnabled:
+            description = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.bannedDivision.descr())
+            description = _addAlertIcon(description)
     elif stateBlock.state == SeasonGapStates.ROLLED_IN_DIVISIONS:
         description = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.rolledDivision.descr())
         description = _addAlertIcon(description)
@@ -55,8 +59,10 @@ def _buildNotInSeasonVO(stateBlock):
         buttonLabel = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.division.ratingBtn())
         buttonVisible = True
     if stateBlock.state == SeasonGapStates.BANNED_NOT_IN_SEASON:
-        description = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.bannedNotInSeason.descr())
-        description = _addAlertIcon(description)
+        description = ''
+        if stateBlock.isYearRewardEnabled:
+            description = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.bannedNotInSeason.descr())
+            description = _addAlertIcon(description)
     elif stateBlock.state == SeasonGapStates.ROLLED_NOT_IN_SEASON:
         description = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.rolledNotInSeason.descr())
         description = _addAlertIcon(description)
@@ -71,8 +77,10 @@ def _buildQualificationVO(stateBlock):
         buttonLabel = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.division.ratingBtn())
         buttonVisible = True
     if stateBlock.state == SeasonGapStates.BANNED_NOT_IN_DIVISIONS:
-        description = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.bannedNotInDivisions.descr())
-        description = _addAlertIcon(description)
+        description = ''
+        if stateBlock.isYearRewardEnabled:
+            description = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.bannedNotInDivisions.descr())
+            description = _addAlertIcon(description)
     elif stateBlock.state == SeasonGapStates.ROLLED_NOT_IN_DIVISIONS:
         description = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.rolledNotInDivisions.descr())
         description = _addAlertIcon(description)

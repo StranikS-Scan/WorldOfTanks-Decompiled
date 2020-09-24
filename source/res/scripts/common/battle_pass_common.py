@@ -183,7 +183,7 @@ def isBattlePassVoteToken(token):
 
 
 def extendBaseAvatarResultsForBattlePass(results):
-    results.setdefault('ext', {}).setdefault('battlePass', {}).update({'basePointsDiff': 0,
+    results.update({'basePointsDiff': 0,
      'sumPoints': 0,
      'capBonus': 0})
 

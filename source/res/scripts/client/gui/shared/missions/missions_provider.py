@@ -5,6 +5,7 @@ from adisp import process
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui import DialogsInterface
 from gui.Scaleform.framework import g_entitiesFactories
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.prb_control.entities.listener import IGlobalListener
 from helpers import dependency
@@ -53,7 +54,7 @@ class ClientMissionsProvider(IGlobalListener):
     @process
     def __showElenPopupDlg(self):
         yield DialogsInterface.showI18nInfoDialog('elenDisabled')
-        g_eventBus.handleEvent(g_entitiesFactories.makeLoadEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(g_entitiesFactories.makeLoadEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __onMissionsActivate(self, _):
         self.__formActive = True
@@ -62,7 +63,7 @@ class ClientMissionsProvider(IGlobalListener):
         self.__formActive = False
 
     def __onMissionsTabChanged(self, event):
-        self.__elenActive = event.ctx.get('alias') == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS
+        self.__elenActive = event.ctx == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS
 
     def __startEventboardsTimer(self):
         if self.__elenTimerID is not None or self.__elenFlagTimerID is not None:

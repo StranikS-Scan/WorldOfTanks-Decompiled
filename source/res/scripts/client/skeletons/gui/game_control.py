@@ -19,7 +19,6 @@ if typing.TYPE_CHECKING:
     from skeletons.account_helpers.settings_core import ISettingsCache
     from gui.ranked_battles.ranked_models import BattleRankInfo
     from gui.server_events.bonuses import SimpleBonus
-    from gui.shared.gui_items import ItemsCollection
 
 class IGameController(object):
 
@@ -652,6 +651,9 @@ class IRankedBattlesController(ISpecialModeController, ISeasonProvider):
     def isYearLBEnabled(self):
         raise NotImplementedError
 
+    def isYearRewardEnabled(self):
+        raise NotImplementedError
+
     def hasAvailablePrimeTimeServers(self):
         raise NotImplementedError
 
@@ -665,6 +667,15 @@ class IRankedBattlesController(ISpecialModeController, ISeasonProvider):
         raise NotImplementedError
 
     def hasSuitableVehicles(self):
+        raise NotImplementedError
+
+    def suitableVehicleIsAvailable(self):
+        raise NotImplementedError
+
+    def vehicleIsAvailableForBuy(self):
+        raise NotImplementedError
+
+    def vehicleIsAvailableForRestore(self):
         raise NotImplementedError
 
     def hasVehicleRankedBonus(self, compactDescr):
@@ -820,8 +831,23 @@ class IRankedBattlesController(ISpecialModeController, ISeasonProvider):
     def updateClientValues(self):
         raise NotImplementedError
 
+    def doActionOnEntryPointClick(self):
+        raise NotImplementedError
+
 
 class IBootcampController(IGameController):
+
+    @property
+    def replayCtrl(self):
+        raise NotImplementedError
+
+    @property
+    def nationData(self):
+        raise NotImplementedError
+
+    @property
+    def nation(self):
+        raise NotImplementedError
 
     def isInBootcamp(self):
         raise NotImplementedError
@@ -830,14 +856,6 @@ class IBootcampController(IGameController):
         raise NotImplementedError
 
     def stopBootcamp(self, inBattle):
-        raise NotImplementedError
-
-    @property
-    def replayCtrl(self):
-        raise NotImplementedError
-
-    @property
-    def nationData(self):
         raise NotImplementedError
 
     def getContext(self):
@@ -870,6 +888,9 @@ class IBootcampController(IGameController):
     def getLessonNum(self):
         raise NotImplementedError
 
+    def getAwardVehicles(self):
+        raise NotImplementedError
+
     def getCheckpoint(self):
         raise NotImplementedError
 
@@ -877,10 +898,6 @@ class IBootcampController(IGameController):
         raise NotImplementedError
 
     def saveCheckpoint(self, checkpoint):
-        raise NotImplementedError
-
-    @property
-    def nation(self):
         raise NotImplementedError
 
     def changeNation(self, nationIndex):
@@ -1631,129 +1648,24 @@ class IBattlePassController(IGameController):
 class IHangarLoadingController(IGameController):
     onHangarLoadedAfterLogin = None
 
-    def getWasInBootcamp(self):
+
+class IReactiveCommunicationService(IGameController):
+    onChannelMessage = None
+    onChannelClosed = None
+    onSubscriptionClosed = None
+
+    @property
+    def isChannelSubscriptionAvailable(self):
         raise NotImplementedError
 
-    def getConnectedAsACcount(self):
+    def subscribeToChannel(self, subscription):
         raise NotImplementedError
 
-
-class ITenYearsCountdownController(IGameController):
-    onEventStateChanged = None
-    onEventBlockChanged = None
-    onEventMonthsChanged = None
-    onActivePhasesDatesChanged = None
-    onEventFinishChanged = None
-    onEventDataUpdated = None
-    onBlocksDataValidityChanged = None
-
-    def isEnabled(self):
+    def unsubscribeFromChannel(self, subscription):
         raise NotImplementedError
 
-    def getCurrentBlock(self):
+    def getChannelHistory(self, name):
         raise NotImplementedError
 
-    def isCurrentBlockActive(self):
+    def getChannelStatus(self, name):
         raise NotImplementedError
-
-    def getCurrentBlockNumber(self):
-        raise NotImplementedError
-
-    def getCurrentBlockState(self):
-        raise NotImplementedError
-
-    def getMonths(self):
-        raise NotImplementedError
-
-    def getMonth(self, blockNumber):
-        raise NotImplementedError
-
-    def getActivePhaseDates(self, blockNumber):
-        raise NotImplementedError
-
-    def getEventFinish(self):
-        raise NotImplementedError
-
-    def getBlocksCount(self):
-        raise NotImplementedError
-
-    def getEventBaseURL(self):
-        raise NotImplementedError
-
-    def isBlocksDataValid(self):
-        raise NotImplementedError
-
-    def isEventInProgress(self):
-        raise NotImplementedError
-
-
-class ILowTierRewardsController(IGameController):
-
-    def isEnabled(self):
-        raise NotImplementedError
-
-    def getEventBaseURL(self):
-        raise NotImplementedError
-
-    def isRewardReady(self):
-        raise NotImplementedError
-
-
-class ILowTierMMController(IGameController):
-
-    def isEnabled(self):
-        raise NotImplementedError
-
-    def getDateFinish(self):
-        raise NotImplementedError
-
-
-class IBobController(IGameController, ISeasonProvider):
-    onPrimeTimeStatusUpdated = None
-    onUpdated = None
-
-    def isEnabled(self):
-        raise NotImplementedError
-
-    def isModeActive(self):
-        raise NotImplementedError
-
-    def isAvailable(self):
-        raise NotImplementedError
-
-    def getConfig(self):
-        raise NotImplementedError
-
-    def getPrimeTimes(self):
-        raise NotImplementedError
-
-    def hasAvailablePrimeTimeServers(self):
-        raise NotImplementedError
-
-    def hasAnyPeripheryWithPrimeTime(self):
-        raise NotImplementedError
-
-    def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
-        raise NotImplementedError
-
-    def getPrimeTimeStatus(self, peripheryID=None):
-        raise NotImplementedError
-
-    def getSuitableVehicles(self):
-        raise NotImplementedError
-
-    def hasSuitableVehicles(self):
-        raise NotImplementedError
-
-    def isSuitableVehicle(self):
-        raise NotImplementedError
-
-    def isFrozen(self):
-        raise NotImplementedError
-
-    def getCurrentRealm(self):
-        raise NotImplementedError
-
-
-class IBobSoundController(IGameController):
-    pass

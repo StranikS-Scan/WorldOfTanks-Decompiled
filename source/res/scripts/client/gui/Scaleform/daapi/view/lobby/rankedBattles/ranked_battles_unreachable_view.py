@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/ranked_battles_unreachable_view.py
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.ranked_battles.ranked_helpers.sound_manager import RANKED_SUBVIEW_SOUND_SPACE
 from gui.ranked_battles.ranked_builders.unreachable_vos import getUnreachableVO
 from gui.Scaleform.daapi import LobbySubView
@@ -39,7 +40,7 @@ class RankedBattlesUnreachableView(LobbySubView, RankedBattlesUnreachableViewMet
         super(RankedBattlesUnreachableView, self)._dispose()
 
     def __close(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
         self.destroy()
 
     def __checkDestroy(self):
@@ -61,4 +62,4 @@ class RankedBattlesUnreachableView(LobbySubView, RankedBattlesUnreachableViewMet
 
     def __updateData(self):
         minLvl, maxLvl = self.__rankedController.getSuitableVehicleLevels()
-        self.as_setDataS(getUnreachableVO(self.__currentSeason, minLvl, maxLvl))
+        self.as_setDataS(getUnreachableVO(self.__currentSeason, minLvl, maxLvl, self.__rankedController.vehicleIsAvailableForBuy(), self.__rankedController.vehicleIsAvailableForRestore()))

@@ -584,9 +584,9 @@ class BattlePassController(IBattlePassController):
         for bonusName in (TROPHY_GIFT_TOKEN_BONUS_NAME, NEW_DEVICE_GIFT_TOKEN_BONUS_NAME):
             for level in range(1, self.getMaxLevel() + 1):
                 if self.__checkIfRewardIsToken(bonusName, config.getFreeReward(level)):
-                    self.__deviceGiftTokensContainers[bonusName].addFreeTokenPos(level)
+                    self.__deviceGiftTokensContainers[bonusName].addFreeTokenPos(level - 1)
                 if self.__checkIfRewardIsToken(bonusName, config.getPaidReward(level)):
-                    self.__deviceGiftTokensContainers[bonusName].addPaidTokenPos(level)
+                    self.__deviceGiftTokensContainers[bonusName].addPaidTokenPos(level - 1)
 
     @staticmethod
     def __checkIfRewardIsToken(bonusName, reward):

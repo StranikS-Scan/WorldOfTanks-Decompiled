@@ -441,7 +441,7 @@ class _AnimationEffectDesc(_EffectDesc):
             animator.bindTo(AnimationSequence.ModelWrapperContainer(model, spaceID))
             animator.start()
         else:
-            SoftException('EffectsList trying to play old animation <%s> on compoud model <%s>.' % (self._name, self.TYPE))
+            raise SoftException('EffectsList trying to play old animation <%s> on compoud model <%s>.' % (self._name, self.TYPE))
         effects.append({'typeDesc': self,
          'animator': animator})
         return
@@ -777,13 +777,13 @@ class _CollisionSoundEffectDesc(_BaseSoundEvent):
             position = Math.Matrix(node.actualNode)
             position.translation += local
             for soundName in soundNames:
-                WWISE.playSound(soundName, position, soundParams, soundSwitches)
+                WWISE.playSound(soundName, position, soundParams, (soundSwitches,))
 
             isPlayer, _ = self._isPlayer(args)
             if isPlayer:
                 damageFactor = args.get('damageFactor', 0.0)
                 if damageFactor >= 1.0:
-                    WWISE.playSound('collision_static_object_damage', position, [], soundSwitches)
+                    WWISE.playSound('collision_static_object_damage', position, [], (soundSwitches,))
             return
 
 
@@ -1466,8 +1466,8 @@ def effectsFromSection(section):
 
 class RespawnDestroyEffect(object):
 
-    @staticmethod
-    def play(vehicle_id):
+    @classmethod
+    def play(cls, vehicle_id):
         vehicle = BigWorld.entity(vehicle_id)
         if vehicle is None:
             return
@@ -1475,11 +1475,32 @@ class RespawnDestroyEffect(object):
             effects = vehicle.typeDescriptor.type.effects['fullDestruction']
             if not effects:
                 return
+            turret = None
+            from DetachedTurret import DetachedTurret
+            for vehTurret in DetachedTurret.allTurrets:
+                if vehTurret.vehicleID == vehicle_id:
+                    turret = vehTurret
+                    break
+
             vehicle.show(False)
-            if vehicle.model is not None:
-                fakeModel = helpers.newFakeModel()
-                BigWorld.player().addModel(fakeModel)
-                fakeModel.position = vehicle.model.position
-                effectsPlayer = EffectsListPlayer(effects[0][1], effects[0][0])
-                effectsPlayer.play(fakeModel, SpecialKeyPointNames.START, partial(BigWorld.player().delModel, fakeModel))
+            cls.__playDestroyEffect(vehicle, effects)
+            if turret:
+                turret.changeAppearanceVisibility(False)
+                cls.__playDestroyEffect(turret, effects)
+                turret.stopDetachmentEffects()
             return
+
+    @classmethod
+    def __playDestroyEffect(cls, entity, effects):
+        if entity.model is not None:
+            fakeModel = helpers.newFakeModel()
+            entity.addModel(fakeModel)
+            fakeModel.position = entity.model.position
+            effectsPlayer = EffectsListPlayer(effects[0][1], effects[0][0])
+            effectsPlayer.play(fakeModel, SpecialKeyPointNames.START, partial(cls.__safeDelModel, entity, fakeModel))
+        return
+
+    @classmethod
+    def __safeDelModel(cls, entity, model):
+        if not entity.isDestroyed:
+            entity.delModel(model)

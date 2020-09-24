@@ -82,14 +82,8 @@ class HangarMeta(GFTutorialViewMeta):
     def as_destroyDQWidgetS(self):
         return self.flashObject.as_destroyDQWidget() if self._isDAAPIInited() else None
 
-    def as_updateSeniorityAwardsEntryPointS(self, isVisible):
-        return self.flashObject.as_updateSeniorityAwardsEntryPoint(isVisible) if self._isDAAPIInited() else None
-
-    def as_updateEventEntryPointS(self, alias, isVisible):
-        return self.flashObject.as_updateEventEntryPoint(alias, isVisible) if self._isDAAPIInited() else None
+    def as_showSwitchToAmmunitionS(self):
+        return self.flashObject.as_showSwitchToAmmunition() if self._isDAAPIInited() else None
 
     def as_toggleBattleRoyaleS(self, isBattleRoyale):
         return self.flashObject.as_toggleBattleRoyale(isBattleRoyale) if self._isDAAPIInited() else None
-
-    def as_showSwitchToAmmunitionS(self):
-        return self.flashObject.as_showSwitchToAmmunition() if self._isDAAPIInited() else None

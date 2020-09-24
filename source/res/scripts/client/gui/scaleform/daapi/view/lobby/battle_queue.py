@@ -9,17 +9,18 @@ from PlayerEvents import g_playerEvents
 from adisp import process, async
 from client_request_lib.exceptions import ResponseCodes
 from debug_utils import LOG_DEBUG
+from frameworks.wulf import WindowLayer
 from gui import makeHtmlString
+from gui.impl.gen import R
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.event_boards.formaters import getClanTag
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.meta.BattleQueueMeta import BattleQueueMeta
 from gui.Scaleform.daapi.view.meta.BattleStrongholdsQueueMeta import BattleStrongholdsQueueMeta
-from gui.Scaleform.framework import ViewTypes
-from gui.impl.gen import R
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -195,16 +196,11 @@ class _BattleRoyaleQueueProvider(_RandomQueueProvider):
         pass
 
 
-class _BobQueueProvider(_RandomQueueProvider):
-    pass
-
-
 _PROVIDER_BY_QUEUE_TYPE = {constants.QUEUE_TYPE.RANDOMS: _RandomQueueProvider,
  constants.QUEUE_TYPE.EVENT_BATTLES: _EventQueueProvider,
  constants.QUEUE_TYPE.RANKED: _RankedQueueProvider,
  constants.QUEUE_TYPE.EPIC: _EpicQueueProvider,
- constants.QUEUE_TYPE.BATTLE_ROYALE: _BattleRoyaleQueueProvider,
- constants.QUEUE_TYPE.BOB: _BobQueueProvider}
+ constants.QUEUE_TYPE.BATTLE_ROYALE: _BattleRoyaleQueueProvider}
 
 def _providerFactory(proxy, qType):
     return _PROVIDER_BY_QUEUE_TYPE.get(qType, _QueueProvider)(proxy, qType)
@@ -226,9 +222,9 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         return None
 
     def onEscape(self):
-        dialogsContainer = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
+        dialogsContainer = self.app.containerManager.getContainer(WindowLayer.TOP_WINDOW)
         if not dialogsContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY_MENU}):
-            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MENU)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def startClick(self):
         if self.__provider is not None:
@@ -288,11 +284,11 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
             self.as_setTypeInfoS({'iconLabel': iconlabel,
              'title': title,
              'description': description,
+             'additional': additional,
              'tankLabel': text_styles.main(textLabel),
              'tankIcon': iconPath,
              'tankName': tankName,
-             'layoutStr': layoutStr,
-             'additional': additional})
+             'layoutStr': layoutStr})
             return
 
     def __stopUpdateScreen(self):
@@ -365,9 +361,9 @@ class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmble
         return
 
     def onEscape(self):
-        dialogsContainer = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
+        dialogsContainer = self.app.containerManager.getContainer(WindowLayer.TOP_WINDOW)
         if not dialogsContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY_MENU}):
-            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MENU)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onStartBattle(self):
         self.__stopUpdateScreen()

@@ -371,7 +371,7 @@ class _VehicleInfo(object):
 
 
 class VehicleDetailedInfo(_VehicleInfo):
-    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingEnemyHits', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directEnemyHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_isTeamKiller', '_isKilledByTeamKiller', '_rollouts', '_respawns', '_extPublic', '_deathCount', '_equipmentDamageDealt', '_equipmentDamageAssisted', '_xpForAttack', '_xpForAssist', '_xpOther', '_xpPenalty')
+    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingEnemyHits', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directEnemyHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_isTeamKiller', '_isKilledByTeamKiller', '_rollouts', '_respawns', '_deathCount', '_equipmentDamageDealt', '_equipmentDamageAssisted', '_xpForAttack', '_xpForAssist', '_xpOther', '_xpPenalty', '_numDefended', '_vehicleNumCaptured', '_numRecovered', '_destructiblesNumDestroyed', '_destructiblesDamageDealt')
 
     def __init__(self, vehicleID, vehicle, player, deathReason=DEATH_REASON_ALIVE):
         super(VehicleDetailedInfo, self).__init__(vehicleID, player, deathReason)
@@ -415,12 +415,16 @@ class VehicleDetailedInfo(_VehicleInfo):
         self._rollouts = 0
         self._respawns = 0
         self._deathCount = 0
-        self._extPublic = {}
         self._xpForAssist = 0
         self._xpForAttack = 0
         self._xpOther = 0
         self._xpPenalty = 0
         self._isKilledByTeamKiller = False
+        self._numRecovered = 0
+        self._vehicleNumCaptured = 0
+        self._destructiblesNumDestroyed = 0
+        self._destructiblesDamageDealt = 0
+        self._numDefended = 0
 
     @property
     def vehicle(self):
@@ -592,23 +596,23 @@ class VehicleDetailedInfo(_VehicleInfo):
 
     @property
     def numDefended(self):
-        return self._extPublic.get('defenderBonus', {}).get('numDefended', 0)
+        return self._numDefended
 
     @property
     def numRecovered(self):
-        return self._extPublic.get('recoveryMechanic', {}).get('numRecovered', 0)
+        return self._numRecovered
 
     @property
     def numCaptured(self):
-        return self._extPublic.get('sector', {}).get('numCaptured', 0)
+        return self._vehicleNumCaptured
 
     @property
     def numDestroyed(self):
-        return self._extPublic.get('destructibleEntity', {}).get('numDestroyed', 0)
+        return self._destructiblesNumDestroyed
 
     @property
     def destructiblesDamageDealt(self):
-        return self._extPublic.get('destructibleEntity', {}).get('damageDealt', 0)
+        return self._destructiblesDamageDealt
 
     @property
     def xpForAssist(self):
@@ -680,7 +684,11 @@ class VehicleDetailedInfo(_VehicleInfo):
         info._rollouts = vehicleRecords['rolloutsCount']
         info._respawns = vehicleRecords['rolloutsCount'] - 1 if vehicleRecords['rolloutsCount'] > 0 else 0
         info._deathCount = vehicleRecords['deathCount']
-        info._extPublic = vehicleRecords['extPublic']
+        info._numRecovered = vehicleRecords['numRecovered']
+        info._vehicleNumCaptured = vehicleRecords['vehicleNumCaptured']
+        info._destructiblesNumDestroyed = vehicleRecords['destructiblesNumDestroyed']
+        info._destructiblesDamageDealt = vehicleRecords['destructiblesDamageDealt']
+        info._numDefended = vehicleRecords['numDefended']
         info._equipmentDamageAssisted = vehicleRecords.get('damageAssistedInspire', 0) + vehicleRecords.get('damageAssistedSmoke', 0)
         cls._setSharedRecords(info, vehicleRecords)
         return info

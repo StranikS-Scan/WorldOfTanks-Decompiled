@@ -10,11 +10,13 @@ from functools import wraps
 from collections import defaultdict
 from warnings import warn_explicit
 from traceback import format_exception
-from constants import IS_CLIENT, IS_CELLAPP, IS_BASEAPP, CURRENT_REALM, IS_DEVELOPMENT
+from constants import IS_CLIENT, IS_CELLAPP, IS_BASEAPP, CURRENT_REALM, IS_DEVELOPMENT, IS_BOT
 from constants import LEAKS_DETECTOR_MAX_EXECUTION_TIME
 from contextlib import contextmanager
+from threading import RLock
 _src_file_trim_to = ('res/wot/scripts/', len('res/wot/scripts/'))
 _g_logMapping = {}
+_g_logLock = RLock()
 GCDUMP_CROWBAR_SWITCH = False
 
 class LOG_LEVEL:
@@ -67,17 +69,18 @@ def suppress(*exceptions):
 
 def init():
     global _g_logMapping
-    if not IS_CLIENT:
+    if not (IS_CLIENT or IS_BOT):
 
         def splitMessageIntoChunks(prefix, msg, func):
             if prefix not in ('EXCEPTION', 'CRITICAL'):
                 msg = msg[:8960]
             blockSize = 1792
-            for m in msg.splitlines(False)[:100]:
-                idx = 0
-                while idx < len(m):
-                    func(prefix, m[idx:idx + blockSize], None)
-                    idx += blockSize
+            with _g_logLock:
+                for m in msg.splitlines(False)[:100]:
+                    idx = 0
+                    while idx < len(m):
+                        func(prefix, m[idx:idx + blockSize], None)
+                        idx += blockSize
 
             return
 
@@ -129,10 +132,11 @@ def LOG_CURRENT_EXCEPTION(tags=None, frame=1):
     msg = _makeMsgHeader(sys._getframe(frame)) + '\n'
     etype, value, tb = sys.exc_info()
     msg += ''.join(format_exception(etype, value, tb, None))
-    BigWorld.logError('EXCEPTION', _addTagsToMsg(tags, msg), None)
-    extMsg = excepthook.extendedTracebackAsString(_src_file_trim_to, None, None, etype, value, tb)
-    if extMsg:
-        BigWorld.logError('EXCEPTION', _addTagsToMsg(tags, extMsg), None)
+    with _g_logLock:
+        BigWorld.logError('EXCEPTION', _addTagsToMsg(tags, msg), None)
+        extMsg = excepthook.extendedTracebackAsString(_src_file_trim_to, None, None, etype, value, tb)
+        if extMsg:
+            BigWorld.logError('EXCEPTION', _addTagsToMsg(tags, extMsg), None)
     return
 
 

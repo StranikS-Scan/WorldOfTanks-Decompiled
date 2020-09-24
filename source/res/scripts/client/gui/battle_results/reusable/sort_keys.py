@@ -88,4 +88,4 @@ class RankedVehicleXpSortKey(_VehicleSortKey):
 
 
 def placeSortKey(a):
-    return (a.avatar.extensionInfo.get('playerRank', {}).get('rank', 0), a.player.realName) if a.avatar is not None else (-1, 0)
+    return (a.avatar.extensionInfo.get('playerRank', 0), a.player.realName) if a.avatar is not None else (-1, 0)

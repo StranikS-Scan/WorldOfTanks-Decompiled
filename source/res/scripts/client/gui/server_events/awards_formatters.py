@@ -47,12 +47,6 @@ class AWARDS_SIZES(CONST_CONTAINER):
     BIG = 'big'
 
 
-class AWARDS_SIZES_EXT(CONST_CONTAINER):
-    SMALL = 'small'
-    BIG = 'big'
-    HUGE = 'huge'
-
-
 class COMPLETION_TOKENS_SIZES(CONST_CONTAINER):
     SMALL = 'small'
     BIG = 'big'
@@ -169,7 +163,9 @@ def getEpicFormattersMap():
     return {Currency.CRYSTAL: CrystalEpicBonusFormatter(),
      'goodies': GoodiesEpicBonusFormatter(),
      'crewBooks': CrewBooksEpicBonusFormatter(),
-     PREMIUM_ENTITLEMENTS.PLUS: PremiumDaysEpicBonusFormatter()}
+     PREMIUM_ENTITLEMENTS.PLUS: PremiumDaysEpicBonusFormatter(),
+     'items': ItemsEpicBonusFormatter(),
+     'blueprints': BlueprintGroupEpicBonusFormatter()}
 
 
 def getEventBoardsFormattersMap():
@@ -662,7 +658,7 @@ class TokenBonusFormatter(SimpleBonusFormatter):
             formatted = self._getFormattedBonus(tokenID, token, bonus)
             if formatted is not None:
                 result.append(formatted)
-            if self._eventProgressionController.isAvailable() and tokenID.startswith(self._eventProgressionController.getProgressionXPTokenID()):
+            if self._eventProgressionController.isAvailable() and self._eventProgressionController.getProgressionXPTokenID() and tokenID.startswith(self._eventProgressionController.getProgressionXPTokenID()):
                 formatted = self._formatProgressionXPToken(token, bonus)
                 if formatted is not None:
                     result.append(formatted)
@@ -791,7 +787,7 @@ class EpicTokensFormatter(TokenBonusFormatter):
                 formatted = self.__formatRewardPointToken(tokenID, token, bonus)
                 if formatted is not None:
                     result.append(formatted)
-            if self._eventProgressionController.isAvailable() and tokenID.startswith(self._eventProgressionController.getProgressionXPTokenID()):
+            if self._eventProgressionController.isAvailable() and self._eventProgressionController.getProgressionXPTokenID() and tokenID.startswith(self._eventProgressionController.getProgressionXPTokenID()):
                 formatted = self._formatProgressionXPToken(token, bonus)
                 if formatted is not None:
                     result.append(formatted)
@@ -1263,8 +1259,7 @@ class GoodiesBonusFormatter(SimpleBonusFormatter):
 
         for demountKit, count in bonus.getDemountKits().iteritems():
             if demountKit is not None:
-                result.append(PreformattedBonus(bonusName=bonus.getName(), images={AWARDS_SIZES.SMALL: demountKit.getIcon(ICONS_SIZES.X48),
-                 AWARDS_SIZES.BIG: demountKit.getIcon(ICONS_SIZES.X80)}, isSpecial=True, label=formatCountLabel(count), labelFormatter=self._getLabelFormatter(bonus), userName=demountKit.userName, specialAlias=TOOLTIPS_CONSTANTS.AWARD_DEMOUNT_KIT, specialArgs=[demountKit.intCD], align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus)))
+                result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getDemountKitImages(demountKit), isSpecial=True, label=formatCountLabel(count), labelFormatter=self._getLabelFormatter(bonus), userName=demountKit.userName, specialAlias=TOOLTIPS_CONSTANTS.AWARD_DEMOUNT_KIT, specialArgs=[demountKit.intCD], align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus)))
 
         return result
 
@@ -1275,6 +1270,11 @@ class GoodiesBonusFormatter(SimpleBonusFormatter):
             result[size] = RES_ICONS.getBonusIcon(size, booster.boosterGuiType)
 
         return result
+
+    @classmethod
+    def _getDemountKitImages(cls, demountKit):
+        return {AWARDS_SIZES.SMALL: demountKit.getIcon(ICONS_SIZES.X48),
+         AWARDS_SIZES.BIG: demountKit.getIcon(ICONS_SIZES.X80)}
 
     @classmethod
     def _getUserName(cls, booster):
@@ -1288,9 +1288,17 @@ class GoodiesEpicBonusFormatter(GoodiesBonusFormatter):
         return text_styles.textEpic
 
     @classmethod
-    def _getImages(cls, booster):
+    def _getIcon(cls, guiTypeName):
         size = EPIC_AWARD_SIZE
-        return {size: RES_ICONS.getBonusIcon(size, booster.boosterGuiType)}
+        return {size: RES_ICONS.getBonusIcon(size, guiTypeName)}
+
+    @classmethod
+    def _getImages(cls, booster):
+        return cls._getIcon(booster.boosterGuiType)
+
+    @classmethod
+    def _getDemountKitImages(cls, demountKit):
+        return cls._getIcon(demountKit.demountKitGuiType)
 
 
 class ItemsBonusFormatter(SimpleBonusFormatter):
@@ -1360,6 +1368,14 @@ class ItemsBonusFormatter(SimpleBonusFormatter):
                 result[size] = RES_ICONS.getBonusOverlay(size, item.getOverlayType())
 
         return result
+
+
+class ItemsEpicBonusFormatter(ItemsBonusFormatter):
+
+    @classmethod
+    def _getImages(cls, item):
+        size = EPIC_AWARD_SIZE
+        return {size: RES_ICONS.getBonusIcon(size, item.getGUIEmblemID())}
 
 
 class LinkedSetItemsBonusFormatter(ItemsBonusFormatter):
@@ -1443,14 +1459,25 @@ class BlueprintBonusFormatter(SimpleBonusFormatter):
 class BlueprintGroupBonusFormatter(SimpleBonusFormatter):
 
     def _format(self, bonuses):
-        return [PreformattedBonus(bonusName=bonuses.getBlueprintName(), label=formatCountLabel(bonuses.getCount()), userName=bonuses.getBlueprintTooltipName(), labelFormatter=self._getLabelFormatter(bonuses), images=self.__getIcons(bonuses), tooltip=bonuses.getTooltip(), align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonuses), specialArgs=[bonuses.getBlueprintSpecialArgs()], isSpecial=True, specialAlias=bonuses.getBlueprintSpecialAlias(), postProcessTags='blueprints')]
+        return [PreformattedBonus(bonusName=bonuses.getBlueprintName(), label=formatCountLabel(bonuses.getCount()), userName=bonuses.getBlueprintTooltipName(), labelFormatter=self._getLabelFormatter(bonuses), images=self._getIcons(bonuses), tooltip=bonuses.getTooltip(), align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonuses), specialArgs=[bonuses.getBlueprintSpecialArgs()], isSpecial=True, specialAlias=bonuses.getBlueprintSpecialAlias(), postProcessTags='blueprints')]
 
-    def __getIcons(self, bonus):
+    def _getIcons(self, bonus):
         res = {}
         for size in AWARDS_SIZES.ALL():
             res[size] = bonus.getImage(size if size != 'small' else 'medium')
 
         return res
+
+
+class BlueprintGroupEpicBonusFormatter(BlueprintGroupBonusFormatter):
+
+    @classmethod
+    def _getLabelFormatter(cls, bonus):
+        return text_styles.textEpic
+
+    def _getIcons(self, bonuses):
+        size = EPIC_AWARD_SIZE
+        return {size: RES_ICONS.getBonusIcon(size, bonuses.getImageCategory())}
 
 
 class CrewSkinsBonusFormatter(SimpleBonusFormatter):
@@ -1529,7 +1556,7 @@ class CrewBooksEpicBonusFormatter(CrewBooksBonusFormatter):
     def _getImages(cls, item):
         result = {}
         size = EPIC_AWARD_SIZE
-        sizePath = R.images.gui.maps.icons.crewBooks.books.dyn(size, None)
+        sizePath = R.images.gui.maps.icons.quests.bonuses.dyn(size, None)
         if sizePath is not None:
             img = sizePath.dyn(item.getBonusIconName())
             if img is not None and img.exists():

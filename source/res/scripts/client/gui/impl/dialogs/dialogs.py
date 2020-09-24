@@ -67,8 +67,8 @@ def mapsBlacklistConfirm(mapId, cooldownTime, disabledMaps=(), parent=None):
 
 
 @async
-def trophyDeviceUpgradeConfirm(trophyBasicModule, parent=None, enableBlur3D=True):
-    dialog = TrophyDeviceUpgradeConfirmView(trophyBasicModule=trophyBasicModule, parent=parent.getParentWindow() if parent is not None else None, enableBlur3D=enableBlur3D)
+def trophyDeviceUpgradeConfirm(trophyBasicModule, parent=None):
+    dialog = TrophyDeviceUpgradeConfirmView(trophyBasicModule=trophyBasicModule, parent=parent.getParentWindow() if parent is not None else None)
     result = yield await(show(dialog))
     raise AsyncReturn((result.result == DialogButtons.SUBMIT, result.data))
     return

@@ -81,6 +81,7 @@ def _makeReceiverVO(clientID, settings, isChatEnabled):
                 isByDefault = True
             recvLabelStr = settings.label % color
         else:
+            isByDefault = False
             recvLabelStr = makeHtmlString('html_templates:battle', 'battleChatIsLocked', {})
     else:
         recvLabelStr = _UNKNOWN_RECEIVER_LABEL

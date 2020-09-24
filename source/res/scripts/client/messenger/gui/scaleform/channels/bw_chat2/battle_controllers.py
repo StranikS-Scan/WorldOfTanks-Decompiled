@@ -87,6 +87,14 @@ class TeamChannelController(_ChannelController):
     def sendCommand(self, command):
         self.proto.battleCmd.send(command)
 
+    def filterMessage(self, cmd):
+        arenaDP = self.sessionProvider.getArenaDP()
+        if arenaDP is None:
+            return True
+        else:
+            senderVehicleID = arenaDP.getVehIDBySessionID(cmd.getSenderID())
+            return not arenaDP.isPlayerObserver() or senderVehicleID == BigWorld.player().playerVehicleID or arenaDP.isAlly(senderVehicleID)
+
     @_check_arena_in_waiting()
     def _broadcast(self, message):
         self.proto.arenaChat.broadcast(message, 0)
@@ -120,41 +128,6 @@ _NONCAPTURED_BASES_FOR_LANE_DICT = {1: {1: 4,
      2: 3}}
 
 class EpicTeamChannelController(TeamChannelController):
-
-    def filterMessage(self, cmd):
-        senderID = cmd.getSenderID()
-        sessionProvider = dependency.instance(IBattleSessionProvider)
-        mapsCtrl = sessionProvider.dynamic.maps
-        if mapsCtrl.overviewMapScreenVisible:
-            return True
-        respawnCtrl = sessionProvider.dynamic.respawn
-        if respawnCtrl and respawnCtrl.isRespawnVisible():
-            return True
-        senderVID = sessionProvider.getCtx().getVehIDBySessionID(senderID)
-
-        def validatePosition(position):
-            minimapCenter = mapsCtrl.getMinimapCenterPosition()
-            halfMinimapWidth = mapsCtrl.getMinimapZoomMode() * _EPIC_MINIMAP_ZOOM_MODE_SCALE
-            diff = position - minimapCenter
-            return False if abs(diff.x) > halfMinimapWidth or abs(diff.z) > halfMinimapWidth else True
-
-        senderInRange = True
-        targetInRange = False
-        if senderVID != BigWorld.player().playerVehicleID:
-            senderPos = mapsCtrl.getVehiclePosition(senderVID)
-            senderInRange = validatePosition(senderPos)
-        if cmd.hasTarget():
-            targetID = cmd.getFirstTargetID()
-            targetPos = mapsCtrl.getVehiclePosition(targetID)
-            targetInRange = validatePosition(targetPos)
-        elif cmd.isLocationRelatedCommand():
-            markingPos = cmd.getMarkedPosition()
-            targetInRange = validatePosition(markingPos)
-        elif cmd.isBaseRelatedCommand():
-            targetInRange = True
-        if cmd.isEpicGlobalMessage():
-            senderInRange = True
-        return senderInRange or targetInRange
 
     def __getNameSuffix(self, avatarSessionID):
         suffix = ''

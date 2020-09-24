@@ -178,6 +178,7 @@
     <_152mm_BL-10A>	227	</_152mm_BL-10A>
     <_130mm_2A50>	228	</_130mm_2A50>
     <_122-mm_D-25T_with_wedges_shutter_KV4>	229	</_122-mm_D-25T_with_wedges_shutter_KV4>
+    <_107mm_9S1>	230	</_107mm_9S1>
     <_152mm_BL-10_IGR>	60001	</_152mm_BL-10_IGR>
     <_100mm_LB-1_IGR>	60002	</_100mm_LB-1_IGR>
     <_122mm_BL-9_IGR>	60003	</_122mm_BL-9_IGR>
@@ -6606,6 +6607,64 @@
         </_107mm_UOF-420>
       </shots>
     </_107mm_ZiS-6M>
+    <_107mm_9S1>
+      <userString>	#ussr_vehicles:_107mm_9S1	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <notInShop>	true	</notInShop>
+      <price>	180000	</price>
+      <impulse>	0.44	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.6	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -24.0 1.0 -24.0	</minPitch>
+        <maxPitch>	0.0 7.0 1.0 7.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	8.8	</reloadTime>
+      <maxAmmo>	32	</maxAmmo>
+      <aimingTime>	2.85714285714286	</aimingTime>
+      <weight>	2250	</weight>
+      <maxHealth>	194	</maxHealth>
+      <maxRegenHealth>	97	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.422857142857143	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_107mm_UBR-420M>
+          <defaultPortion>	0.80	</defaultPortion>
+          <speed>	1043	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	227 204	</piercingPower>
+        </_107mm_UBR-420M>
+        <_107mm_UBR-420PM>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1304	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	289 251	</piercingPower>
+        </_107mm_UBR-420PM>
+        <_107mm_UOF-420M>
+          <defaultPortion>	0.20	</defaultPortion>
+          <speed>	1043	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	62 62	</piercingPower>
+        </_107mm_UOF-420M>
+      </shots>
+    </_107mm_9S1>
     <_122mm_cannon_M-30S>
       <userString>	#ussr_vehicles:_122mm_cannon_M-30S	</userString>
       <tags></tags>

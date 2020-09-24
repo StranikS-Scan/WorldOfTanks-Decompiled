@@ -17,7 +17,6 @@ from gui.impl.lobby.tank_setup.ammunition_setup.base import BaseAmmunitionSetupV
 from gui.impl.lobby.tank_setup.backports.context_menu import getContextMenuData
 from gui.impl.lobby.tank_setup.interactors.base import InteractingItem
 from gui.impl.lobby.tank_setup.backports.tooltips import getSlotTooltipData, getShellsPriceDiscountTooltipData
-from gui.impl.lobby.tank_setup.tooltips.shells_info import ShellsInfo
 from gui.impl.lobby.tank_setup.tank_setup_sounds import playEnterTankSetupView, playExitTankSetupView
 from gui.prb_control import prbDispatcherProperty
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
@@ -30,8 +29,8 @@ from skeletons.gui.lobby_context import ILobbyContext
 
 class TankSetupCloseConfirmatorsHelper(CloseConfirmatorsHelper):
 
-    def getRestrictedEvents(self):
-        result = super(TankSetupCloseConfirmatorsHelper, self).getRestrictedEvents()
+    def getRestrictedSfViews(self):
+        result = super(TankSetupCloseConfirmatorsHelper, self).getRestrictedSfViews()
         result.extend([VIEW_ALIAS.LOBBY_CUSTOMIZATION])
         return result
 
@@ -58,11 +57,7 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
         return None
 
     def createToolTipContent(self, event, contentID):
-        if event.contentID == R.views.lobby.tanksetup.tooltips.ShellsInfo():
-            isShellsSelected = self.viewModel.ammunitionPanel.getSelectedSection() != TankSetupConstants.SHELLS
-            return ShellsInfo(event.contentID, vehicle=self._vehItem.getItem(), isInstalled=isShellsSelected)
-        else:
-            return None
+        return None
 
     def sendSlotAction(self, args):
         if self._tankSetup is not None and self._tankSetup.getCurrentSubView() is not None:
@@ -179,9 +174,14 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
         self.__closeWindow()
 
     def __onDragDropSwap(self, args):
-        actionArgs = {'actionType': BaseSetupModel.DRAG_AND_DROP_SLOT_ACTION,
-         'installedSlotId': args['dragId'],
-         'currentSlotId': args['dropId']}
+        actionArgs = {'actionType': BaseSetupModel.DRAG_AND_DROP_SLOT_ACTION}
+        dragId = args['dragId']
+        dropId = args['dropId']
+        if self._tankSetup.getSelectedSetup() == TankSetupConstants.SHELLS:
+            actionArgs['leftID'], actionArgs['rightID'] = sorted((dragId, dropId))
+        else:
+            actionArgs['installedSlotId'] = dragId
+            actionArgs['currentSlotId'] = dropId
         self.sendSlotAction(actionArgs)
 
     def __onSyncCompleted(self, _, diff):

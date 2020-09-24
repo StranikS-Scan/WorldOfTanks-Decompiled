@@ -121,14 +121,8 @@ class _BaseRecruitInfo(object):
     def getRoleLevel(self):
         return self._roleLevel
 
-    def getLearntSkills(self, multiplyNew=False):
-        if self._hasNewSkill:
-            if multiplyNew:
-                skillsCount, _ = self.getNewSkillCount(onlyFull=True)
-            else:
-                skillsCount = 1
-            return self._learntSkills + [_NEW_SKILL] * skillsCount
-        return self._learntSkills
+    def getLearntSkills(self):
+        return self._learntSkills + [_NEW_SKILL] if self._hasNewSkill else self._learntSkills
 
     def getLastSkillLevel(self):
         return self._lastSkillLevel

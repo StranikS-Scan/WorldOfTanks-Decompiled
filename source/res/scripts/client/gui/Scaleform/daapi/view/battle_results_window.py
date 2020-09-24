@@ -78,6 +78,11 @@ class BattleResultsWindow(BattleResultsMeta):
         elif unlockType == PROGRESS_ACTION.NEW_SKILL_UNLOCK_TYPE:
             event_dispatcher.showPersonalCase(itemID, 2, EVENT_BUS_SCOPE.LOBBY)
 
+    def showDogTagWindow(self, itemID):
+        if self.__canNavigate():
+            event_dispatcher.showDogTags(itemID, False)
+            self.destroy()
+
     def showProgressiveRewardView(self):
         showProgressiveRewardWindow()
 

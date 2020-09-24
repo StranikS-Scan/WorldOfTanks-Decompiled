@@ -97,11 +97,15 @@ class INGAME_GUI(object):
     CHAT_SHORTCUTS_ATTENTION_TO_BASE_ATK = '#ingame_gui:chat_shortcuts/attention_to_base_atk'
     CHAT_SHORTCUTS_ATTENTION_TO_BASE_ATK_NUMBERED = '#ingame_gui:chat_shortcuts/attention_to_base_atk_numbered'
     CHAT_SHORTCUTS_ATTACKING_BASE = '#ingame_gui:chat_shortcuts/attacking_base'
+    CHAT_SHORTCUTS_ATTACKING_BASE_NUMBERED = '#ingame_gui:chat_shortcuts/attacking_base_numbered'
     CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_ATK = '#ingame_gui:chat_shortcuts/attention_to_objective_atk'
+    CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_ATK_AUTOCOMMIT = '#ingame_gui:chat_shortcuts/attention_to_objective_atk_autocommit'
     CHAT_SHORTCUTS_ATTENTION_TO_BASE_DEF = '#ingame_gui:chat_shortcuts/attention_to_base_def'
     CHAT_SHORTCUTS_ATTENTION_TO_BASE_DEF_NUMBERED = '#ingame_gui:chat_shortcuts/attention_to_base_def_numbered'
     CHAT_SHORTCUTS_DEFENDING_BASE = '#ingame_gui:chat_shortcuts/defending_base'
+    CHAT_SHORTCUTS_DEFENDING_BASE_NUMBERED = '#ingame_gui:chat_shortcuts/defending_base_numbered'
     CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_DEF = '#ingame_gui:chat_shortcuts/attention_to_objective_def'
+    CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_DEF_AUTOCOMMIT = '#ingame_gui:chat_shortcuts/attention_to_objective_def_autocommit'
     CHAT_SHORTCUTS_HELP_ME_EX = '#ingame_gui:chat_shortcuts/help_me_ex'
     CHAT_SHORTCUTS_SUPPORTING_ALLY = '#ingame_gui:chat_shortcuts/supporting_ally'
     CHAT_SHORTCUTS_TURN_BACK = '#ingame_gui:chat_shortcuts/turn_back'
@@ -149,7 +153,6 @@ class INGAME_GUI(object):
     CHAT_EXAMPLE_ATTACK_ENEMY_WITH_SPG = '#ingame_gui:chat_example/attack_enemy_with_SPG'
     CHAT_EXAMPLE_SPG_AIM_AREA = '#ingame_gui:chat_example/spg_aim_area'
     CHAT_EXAMPLE_ATTENTION_TO_POSITION = '#ingame_gui:chat_example/attention_to_position'
-    CHAT_EXAMPLE_REPLY_TO_PLAYER = '#ingame_gui:chat_example/reply_to_player'
     CHAT_EXAMPLE_SUPPORTING_ALLY = '#ingame_gui:chat_example/supporting_ally'
     STATISTICS_TAB_LINE_UP_HEADER = '#ingame_gui:statistics/tab/line_up/header'
     STATISTICS_TAB_LINE_UP_TITLE = '#ingame_gui:statistics/tab/line_up/title'
@@ -813,10 +816,10 @@ class INGAME_GUI(object):
     PREBATTLEMARKER_PREBATTLEMARKER_49 = '#ingame_gui:prebattlemarker/prebattlemarker_49'
     PREBATTLEMARKER_PREBATTLEMARKER_50 = '#ingame_gui:prebattlemarker/prebattlemarker_50'
     PREBATTLEMARKER_PREBATTLEMARKER_51 = '#ingame_gui:prebattlemarker/prebattlemarker_51'
-    LEVELPROGRESS_MAXLEVEL = '#ingame_gui:levelProgress/maxLevel'
     OPTDEVICERESURRECTION_ENGINE = '#ingame_gui:optDeviceResurrection/engine'
     OPTDEVICERESURRECTION_FUELTANK = '#ingame_gui:optDeviceResurrection/fuelTank'
     OPTDEVICERESURRECTION_AMMOBAY = '#ingame_gui:optDeviceResurrection/ammoBay'
+    LEVELPROGRESS_MAXLEVEL = '#ingame_gui:levelProgress/maxLevel'
     CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_ATTENTION_TO_POSITION_GRIDINFO,
      CHAT_SHORTCUTS_ATTENTION_TO_POSITION,
      CHAT_SHORTCUTS_GOING_THERE_GRIDINFO,
@@ -838,11 +841,15 @@ class INGAME_GUI(object):
      CHAT_SHORTCUTS_ATTENTION_TO_BASE_ATK,
      CHAT_SHORTCUTS_ATTENTION_TO_BASE_ATK_NUMBERED,
      CHAT_SHORTCUTS_ATTACKING_BASE,
+     CHAT_SHORTCUTS_ATTACKING_BASE_NUMBERED,
      CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_ATK,
+     CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_ATK_AUTOCOMMIT,
      CHAT_SHORTCUTS_ATTENTION_TO_BASE_DEF,
      CHAT_SHORTCUTS_ATTENTION_TO_BASE_DEF_NUMBERED,
      CHAT_SHORTCUTS_DEFENDING_BASE,
+     CHAT_SHORTCUTS_DEFENDING_BASE_NUMBERED,
      CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_DEF,
+     CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_DEF_AUTOCOMMIT,
      CHAT_SHORTCUTS_HELP_ME_EX,
      CHAT_SHORTCUTS_SUPPORTING_ALLY,
      CHAT_SHORTCUTS_TURN_BACK,
@@ -889,7 +896,6 @@ class INGAME_GUI(object):
      CHAT_EXAMPLE_ATTACK_ENEMY_WITH_SPG,
      CHAT_EXAMPLE_SPG_AIM_AREA,
      CHAT_EXAMPLE_ATTENTION_TO_POSITION,
-     CHAT_EXAMPLE_REPLY_TO_PLAYER,
      CHAT_EXAMPLE_SUPPORTING_ALLY)
     EFFICIENCYRIBBONS_ENUM = (EFFICIENCYRIBBONS_ARMOR,
      EFFICIENCYRIBBONS_CAPTURE,

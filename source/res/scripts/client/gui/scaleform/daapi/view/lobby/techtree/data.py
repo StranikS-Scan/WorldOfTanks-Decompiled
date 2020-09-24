@@ -163,6 +163,22 @@ class _ItemsData(object):
 
         return result
 
+    def invalidateBlueprints(self, blueprints):
+        result = []
+        allNodes = self._getNodesToInvalidate()
+        for node in allNodes:
+            nodeCD = node.getNodeCD()
+            if nodeCD not in blueprints:
+                continue
+            state = node.getState()
+            if blueprints[nodeCD]:
+                NODE_STATE.addIfNot(state, NODE_STATE_FLAGS.BLUEPRINT)
+            else:
+                NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.BLUEPRINT)
+            result.append((nodeCD, state))
+
+        return result
+
     def invalidatePrbState(self):
         nodes_ = self._getNodesToInvalidate()
         canChanged = self._isVehicleCanBeChanged()

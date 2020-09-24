@@ -55,7 +55,7 @@ class GroupManageView(BaseManageContactViewMeta):
 class GroupCreateView(GroupManageView):
 
     def onOk(self, data):
-        name = passCensor(data.currValue.strip())
+        name = passCensor(data.currValue.strip()).encode('utf-8')
         resultSuccess = self.proto.contacts.addGroup(name)
         if resultSuccess:
             self.as_closeViewS()
@@ -72,7 +72,7 @@ class GroupRenameView(GroupManageView):
         self.__isInited = False
 
     def onOk(self, data):
-        name = passCensor(data.currValue.strip())
+        name = passCensor(data.currValue.strip()).encode('utf-8')
         successResult = self.proto.contacts.renameGroup(data.defValue, name)
         if successResult:
             self.as_closeViewS()

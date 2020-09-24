@@ -2,9 +2,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/BasePrebattleRoomView.py
 from CurrentVehicle import g_currentVehicle
 from adisp import process
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.view.meta.BasePrebattleRoomViewMeta import BasePrebattleRoomViewMeta
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.prb_control.formatters import messages
 from gui.prb_control.entities.base.ctx import LeavePrbAction
@@ -63,7 +64,7 @@ class BasePrebattleRoomView(BasePrebattleRoomViewMeta, ILegacyListener):
 
     def showPrebattleSendInvitesWindow(self):
         if self.canSendInvite():
-            self.fireEvent(events.LoadViewEvent(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY, ctx={'prbName': self.__prbName,
+            self.fireEvent(events.LoadViewEvent(SFViewLoadParams(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY), ctx={'prbName': self.__prbName,
              'ctrlType': CTRL_ENTITY_TYPE.LEGACY}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def getClientID(self):
@@ -157,7 +158,7 @@ class BasePrebattleRoomView(BasePrebattleRoomViewMeta, ILegacyListener):
         super(BasePrebattleRoomView, self)._dispose()
 
     def _closeSendInvitesWindow(self):
-        container = self.app.containerManager.getContainer(ViewTypes.WINDOW)
+        container = self.app.containerManager.getContainer(WindowLayer.WINDOW)
         if container is not None:
             window = container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY})
             if window is not None:

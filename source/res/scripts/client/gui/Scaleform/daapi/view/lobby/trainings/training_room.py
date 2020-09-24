@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/trainings/training_room.py
 from constants import PREBATTLE_TYPE
 from gui.Scaleform.daapi.view.lobby.trainings.TrainingRoomBase import TrainingRoomBase
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.training.legacy.ctx import TrainingSettingsCtx
@@ -31,7 +32,7 @@ class TrainingRoom(TrainingRoomBase):
 
     def showTrainingSettings(self):
         settings = TrainingSettingsCtx()
-        self.fireEvent(events.LoadViewEvent(PREBATTLE_ALIASES.TRAINING_SETTINGS_WINDOW_PY, ctx={'isCreateRequest': False,
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(PREBATTLE_ALIASES.TRAINING_SETTINGS_WINDOW_PY), ctx={'isCreateRequest': False,
          'settings': settings}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onRostersChanged(self, entity, rosters, full):

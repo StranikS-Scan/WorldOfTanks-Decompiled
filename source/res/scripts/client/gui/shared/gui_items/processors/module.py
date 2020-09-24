@@ -198,10 +198,7 @@ class OptDeviceInstaller(ModuleInstallProcessor):
         item = self.item if self.install else None
         self.vehicle.optDevices.installed[self.slotIdx] = item
         useDemountKit = self.requestCtx.get('useDemountKit', False)
-        isAfterConversion = self.requestCtx.get('isAfterConversion', False)
-        if not self.install and not self.item.isRemovable and isAfterConversion and self.financeOperation:
-            return makeSuccess()
-        elif not self.install and not self.item.isRemovable and self.financeOperation:
+        if not self.install and not self.item.isRemovable and self.financeOperation:
             return OptDeviceRemoveProcessorMessage(self.item, removalPrice=self.removalPrice.price, useDemountKit=useDemountKit).makeSuccessMsg()
         else:
             return ItemDestroyProcessorMessage(self.item).makeSuccessMsg() if not self.install and not self.financeOperation else super(OptDeviceInstaller, self)._successHandler(code, ctx)
@@ -211,10 +208,9 @@ class OptDeviceInstaller(ModuleInstallProcessor):
         Waiting.show('applyModule')
         useDemountKit = self.requestCtx.get('useDemountKit', False)
         itemCD = self.item.intCD if self.install else 0
-        isAfterConversion = self.requestCtx.get('isAfterConversion', False)
         if not self.install and useDemountKit:
             g_eventBus.handleEvent(ItemRemovalByDemountKitEvent(ItemRemovalByDemountKitEvent.DECLARED, self.slotIdx), EVENT_BUS_SCOPE.LOBBY)
-        BigWorld.player().inventory.equipOptionalDevice(self.vehicle.invID, itemCD, self.slotIdx, self.financeOperation, lambda code, ext=None: self._response(code, callback, ctx=ext), useDemountKit and not isAfterConversion)
+        BigWorld.player().inventory.equipOptionalDevice(self.vehicle.invID, itemCD, self.slotIdx, self.financeOperation, lambda code, ext=None: self._response(code, callback, ctx=ext), useDemountKit)
         return
 
     def _response(self, code, callback, errStr='', ctx=None):

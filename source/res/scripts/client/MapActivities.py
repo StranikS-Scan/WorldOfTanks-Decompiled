@@ -12,6 +12,7 @@ from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from helpers.PixieBG import PixieBG
 from helpers import dependency
 from skeletons.map_activities import IMapActivities
+from vehicle_systems.stricted_loading import makeCallbackWeak
 
 class Timer(object):
     __timeMethod = None
@@ -282,7 +283,7 @@ class WarplaneActivity(BaseMapActivity):
         self.__modelName = self.__curve.getChannelProperty(0, 'modelName').asString
         ds = self.__curve.getChannelProperty(0, 'wwsoundName')
         self.__soundName = ds.asString if ds is not None else ''
-        BigWorld.loadResourceListBG((self.__modelName,), self.__onModelLoaded)
+        BigWorld.loadResourceListBG((self.__modelName,), makeCallbackWeak(self.__onModelLoaded))
         return True
 
     def isActive(self):
@@ -474,7 +475,7 @@ class ExplosionActivity(BaseMapActivity):
         self.clampStartTime()
         self.__firstLaunch = True
         self.__modelName = curveSettings.getChannelProperty(0, 'modelName').asString
-        BigWorld.loadResourceListBG((self.__modelName,), self.__onModelLoaded)
+        BigWorld.loadResourceListBG((self.__modelName,), makeCallbackWeak(self.__onModelLoaded))
         self.__isOver = True
         return True
 

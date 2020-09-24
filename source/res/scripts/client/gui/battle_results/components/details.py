@@ -587,18 +587,23 @@ class CrystalDetailsBlock(_EconomicsDetailsBlock):
 
     def setRecord(self, result, reusable):
         crystalTotal = 0
+        eventsCrystal = 0
         for details in result.earned:
             achievementName, value = details
             if achievementName == 'originalCrystal':
                 if value > 0:
                     crystalTotal += value
                     self._addRecord(backport.text(R.strings.battle_results.details.calculations.crystal.total()), value)
+            eventsCrystal += value
 
+        if eventsCrystal > 0:
+            self._addRecord(backport.text(R.strings.battle_results.details.calculations.crystal.events()), eventsCrystal)
+        crystalTotal += eventsCrystal
         autoBoosters = result.expenses
         if autoBoosters:
             self._addRecord(backport.text(R.strings.battle_results.details.calculations.autoBoosters()), autoBoosters)
             crystalTotal += autoBoosters
-        if crystalTotal > 0:
+        if result.earned or result.expenses:
             self.addNextComponent(style.EmptyStatRow())
             i18nText = backport.text(R.strings.battle_results.details.calculations.total())
             totalStr = makeHtmlString('html_templates:lobby/battle_results', 'lightText', {'value': i18nText})

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/__init__.py
-from gui.Scaleform.framework import ScopeTemplates
-from gui.Scaleform.framework import ViewSettings, ViewTypes
+from frameworks.wulf import WindowLayer
+from gui.Scaleform.framework import ScopeTemplates, ComponentSettings, ViewSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
@@ -28,33 +28,35 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_battles_browser_pages import RankedRatingPage, RankedBattlesInfoPage, RankedSeasonGapPage, RankedYearRatingPage, RankedYearLBLandingView, RankedShopPage, RankedShopLandingView, RankedWebOverlay
     from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_battles_progress import RankedBattlesProgress
     from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_battles_qualification import RankedBattlesQualification
-    return (ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_PAGE_ALIAS, RankedMainSeasonOnPage, 'rankedBattlesPage.swf', ViewTypes.LOBBY_SUB, RANKEDBATTLES_ALIASES.RANKED_BATTLES_PAGE_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_PAGE_SEASON_OFF_ALIAS, RankedMainSeasonOffPage, 'rankedBattlesPage.swf', ViewTypes.LOBBY_SUB, RANKEDBATTLES_ALIASES.RANKED_BATTLES_PAGE_SEASON_OFF_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_INTRO_ALIAS, RankedBattlesIntro, 'rankedBattlesIntro.swf', ViewTypes.LOBBY_SUB, RANKEDBATTLES_ALIASES.RANKED_BATTLES_INTRO_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_UI, RankedRewardsSeasonOnView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_SEASON_OFF_ALIAS, RankedRewardsSeasonOffView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_RANKS_UI, RankedBattlesRewardsRanksView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_LEAGUES_UI, RankedBattlesRewardsLeaguesView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_WEB_SEASON_GAP_ALIAS, RankedSeasonGapPage, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_SHOP_ALIAS, RankedShopPage, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_RAITING_ALIAS, RankedRatingPage, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_YEAR_RAITING_ALIAS, RankedYearRatingPage, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_INFO_ALIAS, RankedBattlesInfoPage, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_YEAR_UI, RankedBattlesRewardsYearView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_DIVISIONS_VIEW_UI, RankedBattlesDivisionsView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_DIVISIONS_PROGRESS_UI, RankedBattlesProgress, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_DIVISIONS_QUALIFICATION_UI, RankedBattlesQualification, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_LEAGUES_VIEW_UI, RankedBattlesLeaguesView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_SEASON_GAP_VIEW_UI, RankedBattlesSeasonGapView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_UNREACHABLE_VIEW_ALIAS, RankedBattlesUnreachableView, RANKEDBATTLES_ALIASES.RANKED_BATTLES_UNREACHABLE_VIEW_UI, ViewTypes.LOBBY_SUB, RANKEDBATTLES_ALIASES.RANKED_BATTLES_UNREACHABLE_VIEW_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE, True),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_BATTLE_RESULTS, RankedBattlesResults, RANKEDBATTLES_ALIASES.RANKED_BATTLES_BATTLE_RESULTS_UI, ViewTypes.OVERLAY, RANKEDBATTLES_ALIASES.RANKED_BATTLES_BATTLE_RESULTS, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_AWARD, PostbattleRankedAwardsView, RANKEDBATTLES_ALIASES.RANKED_BATTLES_AWARD_UI, ViewTypes.OVERLAY, RANKEDBATTLES_ALIASES.RANKED_BATTLES_AWARD, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_SEASON_COMPLETE, RankedBattlesSeasonCompleteView, RANKEDBATTLES_ALIASES.RANKED_BATTLES_SEASON_COMPLETE_UI, ViewTypes.OVERLAY, RANKEDBATTLES_ALIASES.RANKED_BATTLES_SEASON_COMPLETE, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLE_RESULTS_WIDGET, RankedBattleResultsWidget, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME, RankedBattlesPrimeTimeView, HANGAR_ALIASES.RANKED_PRIME_TIME, ViewTypes.LOBBY_SUB, RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLE_SHOP_LANDING, RankedShopLandingView, 'browserScreen.swf', ViewTypes.LOBBY_SUB, RANKEDBATTLES_ALIASES.RANKED_BATTLE_SHOP_LANDING, ScopeTemplates.LOBBY_SUB_SCOPE, True),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLE_YEAR_RATING_LANDING, RankedYearLBLandingView, 'browserScreen.swf', ViewTypes.LOBBY_SUB, RANKEDBATTLES_ALIASES.RANKED_BATTLE_YEAR_RATING_LANDING, ScopeTemplates.LOBBY_SUB_SCOPE, True),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_WEB_OVERLAY, RankedWebOverlay, 'browserScreen.swf', ViewTypes.OVERLAY, RANKEDBATTLES_ALIASES.RANKED_WEB_OVERLAY, ScopeTemplates.LOBBY_SUB_SCOPE))
+    from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_entry_point import RankedBattlesEntryPoint
+    return (ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_PAGE_ALIAS, RankedMainSeasonOnPage, 'rankedBattlesPage.swf', WindowLayer.SUB_VIEW, RANKEDBATTLES_ALIASES.RANKED_BATTLES_PAGE_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_PAGE_SEASON_OFF_ALIAS, RankedMainSeasonOffPage, 'rankedBattlesPage.swf', WindowLayer.SUB_VIEW, RANKEDBATTLES_ALIASES.RANKED_BATTLES_PAGE_SEASON_OFF_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_INTRO_ALIAS, RankedBattlesIntro, 'rankedBattlesIntro.swf', WindowLayer.SUB_VIEW, RANKEDBATTLES_ALIASES.RANKED_BATTLES_INTRO_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ComponentSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_UI, RankedRewardsSeasonOnView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_SEASON_OFF_ALIAS, RankedRewardsSeasonOffView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_RANKS_UI, RankedBattlesRewardsRanksView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_LEAGUES_UI, RankedBattlesRewardsLeaguesView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_WEB_SEASON_GAP_ALIAS, RankedSeasonGapPage, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_SHOP_ALIAS, RankedShopPage, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_RAITING_ALIAS, RankedRatingPage, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_YEAR_RAITING_ALIAS, RankedYearRatingPage, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_INFO_ALIAS, RankedBattlesInfoPage, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_YEAR_UI, RankedBattlesRewardsYearView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_DIVISIONS_VIEW_UI, RankedBattlesDivisionsView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_DIVISIONS_PROGRESS_UI, RankedBattlesProgress, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_DIVISIONS_QUALIFICATION_UI, RankedBattlesQualification, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_LEAGUES_VIEW_UI, RankedBattlesLeaguesView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_SEASON_GAP_VIEW_UI, RankedBattlesSeasonGapView, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_UNREACHABLE_VIEW_ALIAS, RankedBattlesUnreachableView, RANKEDBATTLES_ALIASES.RANKED_BATTLES_UNREACHABLE_VIEW_UI, WindowLayer.SUB_VIEW, RANKEDBATTLES_ALIASES.RANKED_BATTLES_UNREACHABLE_VIEW_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE, True),
+     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_BATTLE_RESULTS, RankedBattlesResults, RANKEDBATTLES_ALIASES.RANKED_BATTLES_BATTLE_RESULTS_UI, WindowLayer.FULLSCREEN_WINDOW, RANKEDBATTLES_ALIASES.RANKED_BATTLES_BATTLE_RESULTS, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),
+     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_AWARD, PostbattleRankedAwardsView, RANKEDBATTLES_ALIASES.RANKED_BATTLES_AWARD_UI, WindowLayer.FULLSCREEN_WINDOW, RANKEDBATTLES_ALIASES.RANKED_BATTLES_AWARD, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),
+     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_SEASON_COMPLETE, RankedBattlesSeasonCompleteView, RANKEDBATTLES_ALIASES.RANKED_BATTLES_SEASON_COMPLETE_UI, WindowLayer.FULLSCREEN_WINDOW, RANKEDBATTLES_ALIASES.RANKED_BATTLES_SEASON_COMPLETE, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),
+     ComponentSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLE_RESULTS_WIDGET, RankedBattleResultsWidget, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(RANKEDBATTLES_ALIASES.ENTRY_POINT, RankedBattlesEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME, RankedBattlesPrimeTimeView, HANGAR_ALIASES.RANKED_PRIME_TIME, WindowLayer.SUB_VIEW, RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),
+     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLE_SHOP_LANDING, RankedShopLandingView, 'browserScreen.swf', WindowLayer.SUB_VIEW, RANKEDBATTLES_ALIASES.RANKED_BATTLE_SHOP_LANDING, ScopeTemplates.LOBBY_SUB_SCOPE, True),
+     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLE_YEAR_RATING_LANDING, RankedYearLBLandingView, 'browserScreen.swf', WindowLayer.SUB_VIEW, RANKEDBATTLES_ALIASES.RANKED_BATTLE_YEAR_RATING_LANDING, ScopeTemplates.LOBBY_SUB_SCOPE, True),
+     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_WEB_OVERLAY, RankedWebOverlay, 'browserScreen.swf', WindowLayer.FULLSCREEN_WINDOW, RANKEDBATTLES_ALIASES.RANKED_WEB_OVERLAY, ScopeTemplates.LOBBY_SUB_SCOPE))
 
 
 def getBusinessHandlers():

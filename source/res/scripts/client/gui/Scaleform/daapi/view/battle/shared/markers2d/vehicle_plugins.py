@@ -16,15 +16,16 @@ from chat_commands_consts import INVALID_MARKER_SUBTYPE, MarkerType, DefaultMark
 from gui.Scaleform.daapi.view.battle.shared.markers2d import markers
 from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import MarkerPlugin, ChatCommunicationComponent, MAX_DISTANCE_TEMP_STICKY
 from gui.Scaleform.daapi.view.battle.shared.markers2d.timer import MarkerTimer
+from gui.Scaleform.genConsts.BATTLE_MARKER_STATES import BATTLE_MARKER_STATES
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.arena_vos import VehicleActions
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
-from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _EVENT_ID
+from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _EVENT_ID, ENTITY_IN_FOCUS_TYPE
 from gui.battle_control.battle_constants import MARKER_HIT_STATE, PLAYER_GUI_PROPS
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
+from gui.battle_control.controllers.feedback_adaptor import EntityInFocusData
 from gui.battle_royale.constants import SteelHunterEquipmentNames
-from gui.Scaleform.genConsts.BATTLE_MARKER_STATES import BATTLE_MARKER_STATES
 from helpers import dependency, i18n
 from items.battle_royale import isSpawnedBot
 from messenger.m_constants import PROTO_TYPE
@@ -63,7 +64,6 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         self.__targetedMarkerFromCppID = -1
         self.__followingIgnoredTank = 0
         self.__equipmentCtrl = None
-        ChatCommunicationComponent.__init__(self, parentObj)
         return
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
@@ -72,7 +72,6 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
 
     def start(self):
         super(VehicleMarkerPlugin, self).start()
-        ChatCommunicationComponent.start(self)
         self._playerVehicleID = self.sessionProvider.getArenaDP().getPlayerVehicleID()
         self.sessionProvider.addArenaCtrl(self)
         settingsDamageIcon = self.settingsCore.getSetting(GAME.SHOW_DAMAGE_ICON)
@@ -135,7 +134,6 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         g_playerEvents.onTeamChanged -= self.__onTeamChanged
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.__equipmentCtrl = None
-        ChatCommunicationComponent.stop(self)
         super(VehicleMarkerPlugin, self).stop()
         return
 
@@ -152,22 +150,30 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
                 continue
             if vehicleID not in self._markers:
                 marker = self.__addMarkerToPool(vehicleID, vInfo=vInfo, vProxy=feedback.getVehicleProxy(vehicleID))
+                if marker is None:
+                    continue
             else:
                 marker = self._markers[vehicleID]
             self.__setVehicleInfo(marker, vInfo, getProps(vehicleID, vInfo.team), getParts(vehicleID))
             self._setMarkerInitialState(marker, accountDBID=vInfo.player.accountDBID)
 
+        return
+
     def addVehicleInfo(self, vInfo, arenaDP):
         if vInfo.isObserver():
             return
-        vehicleID = vInfo.vehicleID
-        if vehicleID in self._markers:
+        else:
+            vehicleID = vInfo.vehicleID
+            if vehicleID in self._markers:
+                return
+            ctx = self.sessionProvider.getCtx()
+            feedback = self.sessionProvider.shared.feedback
+            marker = self.__addMarkerToPool(vehicleID, vInfo=vInfo, vProxy=feedback.getVehicleProxy(vehicleID))
+            if marker is None:
+                return
+            self.__setVehicleInfo(marker, vInfo, ctx.getPlayerGuiProps(vehicleID, vInfo.team), ctx.getPlayerFullNameParts(vehicleID))
+            self._setMarkerInitialState(marker, accountDBID=vInfo.player.accountDBID)
             return
-        ctx = self.sessionProvider.getCtx()
-        feedback = self.sessionProvider.shared.feedback
-        marker = self.__addMarkerToPool(vehicleID, vInfo=vInfo, vProxy=feedback.getVehicleProxy(vehicleID))
-        self.__setVehicleInfo(marker, vInfo, ctx.getPlayerGuiProps(vehicleID, vInfo.team), ctx.getPlayerFullNameParts(vehicleID))
-        self._setMarkerInitialState(marker, accountDBID=vInfo.player.accountDBID)
 
     def updateVehiclesInfo(self, updated, arenaDP):
         getProps = arenaDP.getPlayerGuiProps
@@ -192,11 +198,10 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
 
         return INVALID_MARKER_ID
 
-    def getMarkerSubtype(self, markerID):
-        vehicleID = self.getTargetIDFromMarkerID(markerID)
-        if vehicleID == INVALID_MARKER_ID:
+    def getMarkerSubtype(self, targetID):
+        if targetID == INVALID_MARKER_ID or targetID not in self._markers:
             return INVALID_MARKER_SUBTYPE
-        return DefaultMarkerSubType.ALLY_MARKER_SUBTYPE if self._markers[vehicleID].getIsPlayerTeam() else DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE
+        return DefaultMarkerSubType.ALLY_MARKER_SUBTYPE if self._markers[targetID].getIsPlayerTeam() else DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE
 
     def showMarkerTimer(self, vehicleID, handle, statusID, leftTime, animated):
         self._updateStatusMarkerState(vehicleID, leftTime > 0, handle, statusID, leftTime, animated, False)
@@ -206,13 +211,6 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
 
     def hideMarkerTimer(self, vehicleID, handle, statusID, currentlyActiveStatusID, animated):
         self._updateStatusMarkerState(vehicleID, False, handle, statusID, 0, animated, False)
-
-    def _getMarkerFromMarkerID(self, markerID):
-        for marker in self._markers.itervalues():
-            if marker.getMarkerID() == markerID:
-                return marker
-
-        return None
 
     def _setMarkerInitialState(self, marker, accountDBID=0):
         self.__setupDynamic(marker, accountDBID=accountDBID)
@@ -241,7 +239,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         return settings.MARKER_SYMBOL_NAME.VEHICLE_MARKER
 
     def _onVehicleFeedbackReceived(self, eventID, vehicleID, value):
-        if eventID == _EVENT_ID.VEHICLE_IN_FOCUS:
+        if eventID == _EVENT_ID.ENTITY_IN_FOCUS:
             self.__onVehicleInFocus(vehicleID, value)
         if vehicleID not in self._markers:
             return
@@ -455,13 +453,18 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             if vInfo.isObserver():
                 return
             marker = self.__addMarkerToPool(vehicleID, vInfo=vInfo, vProxy=vProxy)
+            if marker is None:
+                return
             self.__setVehicleInfo(marker, vInfo, guiProps, self.sessionProvider.getCtx().getPlayerFullNameParts(vehicleID))
             self._setMarkerInitialState(marker, accountDBID=accountDBID)
+        return
 
     def __onVehicleMarkerRemoved(self, vehicleID):
         self._hideVehicleMarker(vehicleID)
 
-    def __onVehicleInFocus(self, vehicleID, isInFocus):
+    def __onVehicleInFocus(self, vehicleID, entityInFocusData):
+        if entityInFocusData.entityTypeInFocus != ENTITY_IN_FOCUS_TYPE.VEHICLE:
+            return
         markerID = -1
         if vehicleID > 0:
             focusedMarker = self._markers.get(vehicleID)
@@ -469,7 +472,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
                 isVehicleValid = avatar_getter.isVehicleAlive() or not focusedMarker.getIsPlayerTeam() and not focusedMarker.getIsActionMarkerActive()
                 if isVehicleValid:
                     markerID = focusedMarker.getMarkerID()
-        self._setMarkerObjectInFocus(markerID, isInFocus)
+        self._setMarkerObjectInFocus(markerID, entityInFocusData.isInFocus)
 
     def __setInFocusForPlayer(self, oldTargetID, oldTargetType, newTargetID, newTargetType, isOneShot):
         if oldTargetType == self.getMarkerType() and oldTargetID in self._markers:

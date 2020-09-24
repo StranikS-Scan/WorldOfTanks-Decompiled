@@ -9,6 +9,7 @@ from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
 from gui.Scaleform.battle_entry import BattleEntry
 from gui.Scaleform.daapi.settings import config as sf_config
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.waiting_worker import WaitingWorker
 from gui.Scaleform.framework.package_layout import PackageImporter
 from gui.Scaleform.lobby_entry import LobbyEntry
@@ -217,12 +218,12 @@ class AS3_AppFactory(IAppFactory):
     def goToIntroVideo(self, appNS):
         if appNS != _SPACE.SF_LOBBY:
             return
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.INTRO_VIDEO), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.INTRO_VIDEO)), EVENT_BUS_SCOPE.LOBBY)
 
     def goToLogin(self, appNS):
         if appNS != _SPACE.SF_LOBBY:
             return
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOGIN), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOGIN)), EVENT_BUS_SCOPE.LOBBY)
 
     def goToLobby(self, appNS):
         if appNS != _SPACE.SF_LOBBY:
@@ -235,8 +236,8 @@ class AS3_AppFactory(IAppFactory):
         if self.bootcampCtrl.isInBootcamp():
             libs.extend(['BCGuiControlsLobbyBattle.swf', 'BCGuiControlsLobby.swf'])
         app.as_loadLibrariesS(libs)
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY), EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY)), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW)), EVENT_BUS_SCOPE.LOBBY)
 
     def loadBattlePage(self, appNS, arenaGuiType=ARENA_GUI_TYPE.UNKNOWN):
         if appNS != _SPACE.SF_BATTLE:
@@ -276,21 +277,21 @@ class AS3_AppFactory(IAppFactory):
     @staticmethod
     def _loadBattlePage(arenaGuiType):
         if arenaGuiType == ARENA_GUI_TYPE.TUTORIAL:
-            event = events.LoadViewEvent(VIEW_ALIAS.TUTORIAL_BATTLE_PAGE)
+            event = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.TUTORIAL_BATTLE_PAGE))
         elif arenaGuiType in (ARENA_GUI_TYPE.EPIC_RANDOM, ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING):
-            event = events.LoadViewEvent(VIEW_ALIAS.EPIC_RANDOM_PAGE)
+            event = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.EPIC_RANDOM_PAGE))
         elif arenaGuiType == ARENA_GUI_TYPE.RANKED:
-            event = events.LoadViewEvent(VIEW_ALIAS.RANKED_BATTLE_PAGE)
+            event = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.RANKED_BATTLE_PAGE))
         elif arenaGuiType == ARENA_GUI_TYPE.BATTLE_ROYALE:
-            event = events.LoadViewEvent(VIEW_ALIAS.BATTLE_ROYALE_PAGE)
+            event = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BATTLE_ROYALE_PAGE))
         elif arenaGuiType == ARENA_GUI_TYPE.BOOTCAMP:
-            event = events.LoadViewEvent(VIEW_ALIAS.BOOTCAMP_BATTLE_PAGE)
+            event = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_BATTLE_PAGE))
         elif arenaGuiType in ARENA_GUI_TYPE.EPIC_RANGE:
-            event = events.LoadViewEvent(VIEW_ALIAS.EPIC_BATTLE_PAGE)
+            event = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.EPIC_BATTLE_PAGE))
         elif arenaGuiType == ARENA_GUI_TYPE.EVENT_BATTLES:
-            event = events.LoadViewEvent(VIEW_ALIAS.EVENT_BATTLE_PAGE)
+            event = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.EVENT_BATTLE_PAGE))
         else:
-            event = events.LoadViewEvent(VIEW_ALIAS.CLASSIC_BATTLE_PAGE)
+            event = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.CLASSIC_BATTLE_PAGE))
         g_eventBus.handleEvent(event, EVENT_BUS_SCOPE.BATTLE)
 
     @staticmethod

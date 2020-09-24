@@ -16,6 +16,7 @@
     <Cannone_da_90_Rh>	13	</Cannone_da_90_Rh>
     <Cannone_da_105_Rh_V1>	14	</Cannone_da_105_Rh_V1>
     <Cannone_da_105_51_M68>	15	</Cannone_da_105_51_M68>
+    <_120mm_Cannone_da_120_67_T53>	24	</_120mm_Cannone_da_120_67_T53>
   </ids>
   <shared>
     <Mitragliera_Breda_cal_20_mod_35>
@@ -933,5 +934,63 @@
         </_105mm_c_g_105_51_HESH_M353>
       </shots>
     </Cannone_da_105_51_M68>
+    <_120mm_Cannone_da_120_67_T53>
+      <userString>	#italy_vehicles:_120mm_Cannone_da_120_67_T53	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	310000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	autoloader_reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	60	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	1900	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_120mm_c_p_APCBC_T14E>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	960	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	248 238	</piercingPower>
+        </_120mm_c_p_APCBC_T14E>
+        <_120mm_c_p_HVAP_T17E>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1219	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	320 290	</piercingPower>
+        </_120mm_c_p_HVAP_T17E>
+        <_120mm_a_e_T15HE>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	762	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	60 60	</piercingPower>
+        </_120mm_a_e_T15HE>
+      </shots>
+    </_120mm_Cannone_da_120_67_T53>
   </shared>
 </guns.xml>

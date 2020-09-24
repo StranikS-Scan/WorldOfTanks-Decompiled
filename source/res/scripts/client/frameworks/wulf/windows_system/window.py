@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/frameworks/wulf/windows_system/window.py
+import logging
 import typing
 import Event
 from soft_exception import SoftException
@@ -9,6 +10,7 @@ from ..py_object_wrappers import PyObjectWindow
 from ..view.view import View
 from ..view.view_model import ViewModel
 from ..gui_constants import WindowStatus, WindowFlags, ViewStatus
+_logger = logging.getLogger(__name__)
 
 class WindowSettings(object):
     __slots__ = ('__proxy',)
@@ -32,6 +34,14 @@ class WindowSettings(object):
     @flags.setter
     def flags(self, flags):
         self.__proxy.flags = flags
+
+    @property
+    def layer(self):
+        return self.__proxy.layer
+
+    @layer.setter
+    def layer(self, layer):
+        self.__proxy.layer = layer
 
     @property
     def entryID(self):
@@ -90,10 +100,11 @@ class Window(PyObjectEntity):
         super(Window, self).__init__(PyObjectWindow(settings.proxy))
         self.onStatusChanged = Event.Event()
         self.__windowStatus = WindowStatus.UNDEFINED if self.proxy is None else self.proxy.windowStatus
+        _logger.debug('Creating %r with %r', self, settings)
         return
 
     def __repr__(self):
-        return '{}(uniqueID={}, decorator={}, content={})'.format(self.__class__.__name__, self.uniqueID, self.decorator, self.content)
+        return '{}(uniqueID={}, layer={}, decorator={}, content={})'.format(self.__class__.__name__, self.uniqueID, self.layer, self.decorator, self.content)
 
     @property
     def decorator(self):
@@ -108,6 +119,10 @@ class Window(PyObjectEntity):
     @property
     def parent(self):
         return self.proxy.parent if self.proxy is not None else None
+
+    @property
+    def layer(self):
+        return self.proxy.layer if self.proxy is not None else -1
 
     @property
     def uniqueID(self):
@@ -131,9 +146,26 @@ class Window(PyObjectEntity):
         return self.proxy.windowPosition if proxy is not None else (0.0, 0.0)
 
     @property
+    def globalPosition(self):
+        proxy = self.proxy
+        return self.proxy.windowGlobalPosition if proxy is not None else (0.0, 0.0)
+
+    @property
     def size(self):
         proxy = self.proxy
         return self.proxy.windowSize if proxy is not None else (0.0, 0.0)
+
+    @property
+    def typeFlag(self):
+        return self.windowFlags & WindowFlags.WINDOW_TYPE_MASK
+
+    @property
+    def stateFlag(self):
+        return self.windowFlags & WindowFlags.WINDOW_STATE_MASK
+
+    @property
+    def modalityFlag(self):
+        return self.windowFlags & WindowFlags.WINDOW_MODALITY_MASK
 
     def checkWindowFlags(self, flags):
         return self.proxy.checkWindowFlags(flags)
@@ -151,13 +183,18 @@ class Window(PyObjectEntity):
         self.proxy.setContent(getProxy(content))
         self.__attachToContent()
 
+    def setParent(self, parent):
+        self.proxy.setParent(getProxy(parent))
+
     def load(self):
+        _logger.debug('Loading window: %r', self)
         self.proxy.load()
 
     def reload(self):
         self.proxy.reload()
 
     def destroy(self):
+        _logger.debug('Destroying window: %r', self)
         if self.proxy is not None:
             self.proxy.destroy()
         self.onStatusChanged.clear()
@@ -218,6 +255,7 @@ class Window(PyObjectEntity):
 
     def _cWindowStatusChanged(self, _, newStatus):
         self.__windowStatus = newStatus
+        _logger.debug('Status changed to %r for %r', newStatus, self)
         self.onStatusChanged(newStatus)
 
     def __attachToDecorator(self):

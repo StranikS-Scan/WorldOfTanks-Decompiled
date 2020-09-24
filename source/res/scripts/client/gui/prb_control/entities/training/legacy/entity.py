@@ -24,7 +24,7 @@ from gui.prb_control.settings import PREBATTLE_SETTING_NAME, PREBATTLE_RESTRICTI
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.prb_control.storages import legacy_storage_getter
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import ViewEventType
+from gui.shared.events import ViewEventType, LoadGuiImplViewEvent
 from prebattle_shared import decodeRoster
 from gui.prb_control.entities.training.pre_queue.vehicles_watcher import TrainingVehiclesWatcher
 
@@ -114,8 +114,7 @@ class TrainingEntity(LegacyEntity):
      VIEW_ALIAS.VEHICLE_COMPARE,
      VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS,
      VIEW_ALIAS.LOBBY_MISSIONS,
-     VIEW_ALIAS.LOBBY_STRONGHOLD,
-     ViewEventType.LOAD_UB_VIEW)
+     VIEW_ALIAS.LOBBY_STRONGHOLD)
 
     def __init__(self, settings):
         requests = {REQUEST_TYPE.ASSIGN: self.assign,
@@ -138,10 +137,8 @@ class TrainingEntity(LegacyEntity):
 
     def init(self, clientPrb=None, ctx=None):
         result = super(TrainingEntity, self).init(clientPrb=clientPrb, ctx=ctx)
-        add = g_eventBus.addListener
-        for event in self.__loadEvents:
-            add(event, self.__handleViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
-
+        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self.__handleViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(ViewEventType.LOAD_GUI_IMPL_VIEW, self.__handleViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
         self.__enterTrainingRoom(isInitial=ctx.getInitCtx() is None)
         g_eventDispatcher.addTrainingToCarousel(False)
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_WINDOW)
@@ -152,10 +149,8 @@ class TrainingEntity(LegacyEntity):
 
     def fini(self, clientPrb=None, ctx=None, woEvents=False):
         result = super(TrainingEntity, self).fini(clientPrb=clientPrb, ctx=ctx, woEvents=woEvents)
-        remove = g_eventBus.removeListener
-        for event in self.__loadEvents:
-            remove(event, self.__handleViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
-
+        g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self.__handleViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(ViewEventType.LOAD_GUI_IMPL_VIEW, self.__handleViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
         if not woEvents:
             aliasToLoad = [PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY, PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY]
             if not self.canSwitch(ctx) and g_eventDispatcher.needToLoadHangar(ctx, self.getModeFlags(), aliasToLoad):
@@ -362,4 +357,5 @@ class TrainingEntity(LegacyEntity):
             return
 
     def __handleViewLoad(self, event):
-        self.setPlayerState(SetPlayerStateCtx(False, waitingID='prebattle/player_not_ready'))
+        if isinstance(event, LoadGuiImplViewEvent) or event.alias in self.__loadEvents:
+            self.setPlayerState(SetPlayerStateCtx(False, waitingID='prebattle/player_not_ready'))

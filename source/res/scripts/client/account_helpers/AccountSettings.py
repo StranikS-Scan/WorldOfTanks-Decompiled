@@ -42,9 +42,6 @@ RANKED_CAROUSEL_FILTER_CLIENT_1 = 'RANKED_CAROUSEL_FILTER_CLIENT_1'
 EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
 EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
 EPICBATTLE_CAROUSEL_FILTER_CLIENT_1 = 'EPICBATTLE_CAROUSEL_FILTER_CLIENT_1'
-BOB_CAROUSEL_FILTER_1 = 'BOB_CAROUSEL_FILTER_1'
-BOB_CAROUSEL_FILTER_2 = 'BOB_CAROUSEL_FILTER_2'
-BOB_CAROUSEL_FILTER_CLIENT_1 = 'BOB_CAROUSEL_FILTER_CLIENT_1'
 STORAGE_VEHICLES_CAROUSEL_FILTER_1 = 'STORAGE_CAROUSEL_FILTER_1'
 BATTLEPASS_CAROUSEL_FILTER_1 = 'BATTLEPASS_CAROUSEL_FILTER_1'
 BATTLEPASS_CAROUSEL_FILTER_CLIENT_1 = 'BATTLEPASS_CAROUSEL_FILTER_CLIENT_1'
@@ -161,8 +158,7 @@ QUEST_DELTAS_COMPLETION = 'questCompletion'
 QUEST_DELTAS_PROGRESS = 'questProgress'
 QUEST_DELTAS_TOKENS_PROGRESS = 'tokensProgress'
 TOP_OF_TREE_CONFIG = 'topOfTree'
-TEN_YEARS_COUNTDOWN_ON_BOARDING_LAST_VISITED_BLOCK = 'tenYearsCountdownOnBoardingLastVisitedBlock'
-LOW_TIER_REWARDS_LAST_STATE = 'lowTierRewardsLastState'
+DOG_TAGS = 'dogTags'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
@@ -375,42 +371,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'crystals': False},
                EPICBATTLE_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                BATTLEPASS_CAROUSEL_FILTER_1: {'isCommonProgression': False},
-               BOB_CAROUSEL_FILTER_1: {'ussr': False,
-                                       'germany': False,
-                                       'usa': False,
-                                       'china': False,
-                                       'france': False,
-                                       'uk': False,
-                                       'japan': False,
-                                       'czech': False,
-                                       'sweden': False,
-                                       'poland': False,
-                                       'italy': False,
-                                       'lightTank': False,
-                                       'mediumTank': False,
-                                       'heavyTank': False,
-                                       'SPG': False,
-                                       'AT-SPG': False,
-                                       'level_1': False,
-                                       'level_2': False,
-                                       'level_3': False,
-                                       'level_4': False,
-                                       'level_5': False,
-                                       'level_6': False,
-                                       'level_7': False,
-                                       'level_8': False,
-                                       'level_9': False,
-                                       'level_10': True},
-               BOB_CAROUSEL_FILTER_2: {'premium': False,
-                                       'elite': False,
-                                       'igr': False,
-                                       'rented': True,
-                                       'event': True,
-                                       'gameMode': False,
-                                       'favorite': False,
-                                       'bonus': False,
-                                       'crystals': False},
-               BOB_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                MISSION_SELECTOR_FILTER: {'inventory': False},
                PM_SELECTOR_FILTER: {'inventory': False},
                BLUEPRINTS_STORAGE_FILTER: {'unlock_available': False,
@@ -615,6 +575,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                         QUEST_DELTAS_TOKENS_PROGRESS: dict()}},
                 'checkBoxConfirmator': {'questsConfirmDialogShow': True,
                                         'questsConfirmDialogShowPM2': True},
+                DOG_TAGS: {'lastVisitedDogTagsTabIdx': None,
+                           'onboardingEnabled': True,
+                           'seenComps': set()},
                 CUSTOMIZATION_SECTION: {CAROUSEL_ARROWS_HINT_SHOWN_FIELD: False,
                                         PROJECTION_DECAL_HINT_SHOWN_FIELD: False},
                 SESSION_STATS_SECTION: {BATTLE_EFFICIENCY_SECTION_EXPANDED_FIELD: False},
@@ -653,7 +616,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                         'hangarCamParallaxEnabled': True,
                                                         'hangarCamPeriod': True,
                                                         'showDamageIcon': True,
-                                                        ANONYMIZER: True},
+                                                        ANONYMIZER: True,
+                                                        GAME.SHOW_VICTIMS_DOGTAG: True},
                                        'GraphicSettings': {'ScreenSettings': {'gammaSetting': True,
                                                                               'colorFilter': True},
                                                            'AdvancedGraphicSettings': {'HAVOK_ENABLED': True,
@@ -723,9 +687,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 SUBTITLES: True,
                 RANKED_YEAR_POSITION: None,
                 TOP_OF_TREE_CONFIG: {},
-                NATION_CHANGE_VIEWED: False,
-                TEN_YEARS_COUNTDOWN_ON_BOARDING_LAST_VISITED_BLOCK: 0,
-                LOW_TIER_REWARDS_LAST_STATE: False},
+                NATION_CHANGE_VIEWED: False},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
@@ -1274,6 +1236,7 @@ class AccountSettings(object):
 
                         accSettings.write('preBattleHintSection', _pack(preBattleSection))
 
+            ads.writeInt('version', AccountSettings.version)
             if currVersion < 43:
                 AccountSettings.checkAndResetFireKeyIfInUse(expectedCommand='CMD_CHAT_SHORTCUT_THANKYOU', expectedKey='KEY_F3')
                 AccountSettings.checkAndResetFireKeyIfInUse(expectedCommand='CMD_CHAT_SHORTCUT_CONTEXT_COMMIT', expectedKey='KEY_F2')
@@ -1284,7 +1247,6 @@ class AccountSettings(object):
                 AccountSettings.checkAndResetFireKeyIfInUse(expectedCommand='CMD_CHAT_SHORTCUT_NEGATIVE', expectedKey='KEY_F6')
                 AccountSettings.removeOldCommandAndReuseFireKey(oldCommand='CMD_CHAT_SHORTCUT_POSITIVE', newCommand='CMD_CHAT_SHORTCUT_AFFIRMATIVE')
                 CommandMapping.g_instance.restoreUserConfig()
-            ads.writeInt('version', AccountSettings.version)
         return
 
     @staticmethod

@@ -144,7 +144,6 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             return
         else:
             self.__activated = False
-            self.highlighter.removeHighlight()
             super(CompoundAppearance, self).deactivate()
             if self.__inSpeedTreeCollision:
                 BigWorld.setSpeedTreeCollisionBody(None)
@@ -173,8 +172,6 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             self.highlighter.highlight(True)
         if self.peripheralsController is not None:
             self.peripheralsController.attachToVehicle(self._vehicle)
-        if self.detailedEngineState is not None:
-            self.detailedEngineState.onGearUpCbk = self.__onEngineStateGearUp
         self.delayCallback(_PERIODIC_TIME_DIRT[0][0], self.__onPeriodicTimerDirt)
         return
 
@@ -314,7 +311,9 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         _logger.warning('Component "%s" has not been found', name)
 
     def showStickers(self, show):
-        self.vehicleStickers.show = show
+        if self.vehicleStickers is not None:
+            self.vehicleStickers.show = show
+        return
 
     def showTerrainCircle(self, radius=None, terrainCircleSettings=None):
         if (radius is None) != (terrainCircleSettings is None):
@@ -390,10 +389,14 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         return
 
     def removeDamageSticker(self, code):
-        self.vehicleStickers.delDamageSticker(code)
+        if self.vehicleStickers is not None:
+            self.vehicleStickers.delDamageSticker(code)
+        return
 
     def addDamageSticker(self, code, componentIdx, stickerID, segStart, segEnd):
-        self.vehicleStickers.addDamageSticker(code, componentIdx, stickerID, segStart, segEnd, self.collisions)
+        if self.vehicleStickers is not None:
+            self.vehicleStickers.addDamageSticker(code, componentIdx, stickerID, segStart, segEnd, self.collisions)
+        return
 
     def receiveShotImpulse(self, direction, impulse):
         if BattleReplay.isPlaying() and BattleReplay.g_replayCtrl.isTimeWarpInProgress:
@@ -703,13 +706,6 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
                 self.tracks.sniperMode(True)
             else:
                 self.tracks.sniperMode(False)
-        return
-
-    def __onEngineStateGearUp(self):
-        if self.customEffectManager is not None:
-            self.customEffectManager.onGearUp()
-        if self.engineAudition is not None:
-            self.engineAudition.onEngineGearUp()
         return
 
     def __updateTransmissionScroll(self):

@@ -13,7 +13,6 @@ class RES_COMMON(object):
     MAPS_ICONS_BATTLEPASS2020_PROGRESSION_BG = '../maps/icons/battlePass2020/progression/bg.png'
     MAPS_ICONS_BATTLEPASS2020_VOTING_BG = '../maps/icons/battlePass2020/voting/bg.png'
     MAPS_ICONS_BATTLEROYALE_BATTLERESULT_BG = '../maps/icons/battleRoyale/battleResult/bg.png'
-    MAPS_ICONS_BOB_HANGAR_PRIMETIMEVIEW_BG = '../maps/icons/bob/hangar/primeTimeView/bg.png'
     MAPS_ICONS_CRYSTALSINFO_BG = '../maps/icons/crystalsInfo/bg.png'
     MAPS_ICONS_DEDICATION_BG = '../maps/icons/dedication/bg.png'
     MAPS_ICONS_DEMOUNTKIT_BG = '../maps/icons/demountKit/bg.png'
@@ -21,4 +20,3 @@ class RES_COMMON(object):
     MAPS_ICONS_TANKMEN_ICONS_SMALL_USSR_DOG_1 = '../maps/icons/tankmen/icons/small/ussr-dog-1.png'
     MAPS_ICONS_TANKMEN_ROLES_BIG_DOG = '../maps/icons/tankmen/roles/big/dog.png'
     MAPS_ICONS_TANKMEN_SKILLS_BIG_NEW_SKILL = '../maps/icons/tankmen/skills/big/new_skill.png'
-    MAPS_ICONS_TENYEARSCOUNTDOWN_ONBOARDING_BG = '../maps/icons/tenYearsCountdown/onBoarding/bg.png'

@@ -9,6 +9,7 @@ from constants import Configs
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.event_progression.after_battle_reward_view_helpers import getProgressionIconVODict
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.game_control.links import URLMacros
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -51,7 +52,7 @@ class EventProgressionScreens(Enum):
 def _showBrowserView(url):
     from gui.Scaleform.daapi.view.lobby.event_progression.web_handlers import createEventProgressionWebHandlers
     webHandlers = createEventProgressionWebHandlers()
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BROWSER_VIEW, ctx={'url': url,
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BROWSER_VIEW), ctx={'url': url,
      'webHandlers': webHandlers,
      'returnAlias': VIEW_ALIAS.LOBBY_HANGAR,
      'onServerSettingsChange': _serverSettingsChangeBrowserHandler}), EVENT_BUS_SCOPE.LOBBY)

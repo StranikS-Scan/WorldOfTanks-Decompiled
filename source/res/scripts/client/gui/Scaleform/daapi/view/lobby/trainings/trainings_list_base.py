@@ -3,9 +3,10 @@
 import ArenaType
 from adisp import process
 from constants import PREBATTLE_MAX_OBSERVERS_IN_TEAM, OBSERVERS_BONUS_TYPES
+from frameworks.wulf import WindowLayer
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.settings import ICONS_SIZES
 from helpers import dependency
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.lobby.trainings import formatters
 from gui.Scaleform.daapi.view.lobby.trainings.sound_constants import TRAININGS_SOUND_SPACE
@@ -42,9 +43,9 @@ class TrainingsListBase(LobbySubView, TrainingFormMeta, ILegacyListener):
         g_eventDispatcher.loadHangar()
 
     def onEscape(self):
-        dialogsContainer = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
+        dialogsContainer = self.app.containerManager.getContainer(WindowLayer.TOP_WINDOW)
         if not dialogsContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY_MENU}):
-            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MENU)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onLegacyListReceived(self, prebattles):
         if Waiting.isOpened('Flash'):

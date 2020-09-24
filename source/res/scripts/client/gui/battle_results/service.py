@@ -115,8 +115,8 @@ class BattleResultsService(IBattleResultsService):
             composerObj = composer.createComposer(reusableInfo)
             composerObj.setResults(result, reusableInfo)
             self.__composers[arenaUniqueID] = composerObj
-            self.onResultPosted(reusableInfo, composerObj)
-            self.__notifyBattleResultsPosted(arenaUniqueID, needToShowUI=needToShowUI)
+            resultsWindow = self.__notifyBattleResultsPosted(arenaUniqueID, needToShowUI=needToShowUI)
+            self.onResultPosted(reusableInfo, composerObj, resultsWindow)
             self.__postStatistics(reusableInfo, result)
             return True
 
@@ -273,9 +273,11 @@ class BattleResultsService(IBattleResultsService):
 
     def __notifyBattleResultsPosted(self, arenaUniqueID, needToShowUI=False):
         composerObj = self.__composers[arenaUniqueID]
+        window = None
         if needToShowUI:
-            composerObj.onShowResults(arenaUniqueID)
+            window = composerObj.onShowResults(arenaUniqueID)
         composerObj.onResultsPosted(arenaUniqueID)
+        return window
 
     def __handleLobbyViewLoaded(self, _):
         battleCtx = self.sessionProvider.getCtx()
@@ -318,7 +320,7 @@ class BattleResultsService(IBattleResultsService):
         reusableInfo.clientIndex = self.lobbyContext.getClientIDByArenaUniqueID(arenaUniqueID)
 
     def __updateBattlePassInfo(self, reusableInfo):
-        battlePass = reusableInfo.personal.avatar.extensionInfo.get('battlePass', {})
+        battlePass = reusableInfo.personal.avatar.extensionInfo
         basePoints = battlePass.get('basePointsDiff', 0)
         sumPoints = battlePass.get('sumPoints', 0)
         hasBattlePass = battlePass.get('hasBattlePass', False)

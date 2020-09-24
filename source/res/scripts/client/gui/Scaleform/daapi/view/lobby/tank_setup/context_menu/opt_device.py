@@ -94,4 +94,4 @@ class HangarOptDeviceSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
 
     def _upgradeEquipment(self):
         item = self._itemsCache.items.getItemByCD(self._intCD)
-        ActionsFactory.doAction(ActionsFactory.UPGRADE_OPT_DEVICE, module=item, vehicle=self._getVehicle(), slotIdx=self._installedSlotId, blurd3D=True)
+        ActionsFactory.doAction(ActionsFactory.UPGRADE_OPT_DEVICE, module=item, vehicle=self._getVehicle(), slotIdx=self._installedSlotId)

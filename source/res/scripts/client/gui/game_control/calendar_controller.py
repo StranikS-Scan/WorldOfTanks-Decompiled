@@ -7,9 +7,9 @@ from datetime import timedelta
 import BigWorld
 from account_helpers.AccountSettings import AccountSettings, LAST_CALENDAR_SHOW_TIMESTAMP
 from adisp import process
+from frameworks.wulf import WindowLayer
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.game_control import CalendarInvokeOrigin
@@ -204,7 +204,7 @@ class CalendarController(GameWindowController, ICalendarController):
         else:
             app = self.appLoader.getApp()
             if app is not None and app.containerManager is not None:
-                browserWindow = app.containerManager.getView(ViewTypes.WINDOW, criteria={POP_UP_CRITERIA.UNIQUE_NAME: VIEW_ALIAS.ADVENT_CALENDAR})
+                browserWindow = app.containerManager.getView(WindowLayer.WINDOW, criteria={POP_UP_CRITERIA.UNIQUE_NAME: VIEW_ALIAS.ADVENT_CALENDAR})
                 if browserWindow is not None:
                     browserWindow.destroy()
                     self.__browserID = None
@@ -261,7 +261,7 @@ class CalendarController(GameWindowController, ICalendarController):
     def __getBrowserView(self):
         app = self.appLoader.getApp()
         if app is not None and app.containerManager is not None:
-            browserView = app.containerManager.getView(ViewTypes.WINDOW, criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.ADVENT_CALENDAR})
+            browserView = app.containerManager.getView(WindowLayer.WINDOW, criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.ADVENT_CALENDAR})
             return browserView
         else:
             return
@@ -292,7 +292,7 @@ class CalendarController(GameWindowController, ICalendarController):
             browser.useSpecialKeys = False
             if invokedFrom == CalendarInvokeOrigin.HANGAR:
                 showHangar()
-            g_eventBus.handleEvent(events.DirectLoadViewEvent(SFViewLoadParams(VIEW_ALIAS.ADVENT_CALENDAR), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+            g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.ADVENT_CALENDAR), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
 
         title = i18n.makeString(MENU.ADVENTCALENDAR_WINDOW_TITLE)
         yield self.browserCtrl.load(url=url, browserID=browserID, browserSize=browserSize, isAsync=False, useBrowserWindow=False, showBrowserCallback=showBrowserWindow, showCreateWaiting=False, title=title)

@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/LobbyAutomation.py
 import BigWorld
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.app_loader import settings as app_settings
 from AccountCommands import CMD_PRB_TEAM_READY
@@ -83,7 +83,7 @@ def _detectCurrentScreen():
         if lobby is None or lobby.containerManager is None:
             BigWorld.callback(0.2, _detectCurrentScreen)
             return
-        dialogsContainer = lobby.containerManager.getContainer(ViewTypes.TOP_WINDOW)
+        dialogsContainer = lobby.containerManager.getContainer(WindowLayer.TOP_WINDOW)
         if dialogsContainer is not None:
             dialog = dialogsContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.EULA})
             if dialog is not None:
@@ -91,18 +91,18 @@ def _detectCurrentScreen():
             dialog = dialogsContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: 'tGreetingDialog'})
             if dialog is not None:
                 dialog.cancel()
-        view = lobby.containerManager.getView(ViewTypes.DEFAULT)
+        view = lobby.containerManager.getView(WindowLayer.VIEW)
         connectionMgr = dependency.instance(IConnectionManager)
         if view and view.alias == VIEW_ALIAS.LOGIN and view.isCreated() and connectionMgr.isDisconnected() and not _isConnecting:
             _isConnecting = True
             _connect()
             BigWorld.callback(0.2, _detectCurrentScreen)
             return
-        view = lobby.containerManager.getView(ViewTypes.DEFAULT)
+        view = lobby.containerManager.getView(WindowLayer.VIEW)
         if view is not None and view.alias == 'lobby':
             if _justLogin:
                 return
-            subView = lobby.containerManager.getView(ViewTypes.LOBBY_SUB)
+            subView = lobby.containerManager.getView(WindowLayer.SUB_VIEW)
             if subView.alias == 'hangar':
                 _leaveDevRoom()
                 BigWorld.callback(0.2, _detectCurrentScreen)

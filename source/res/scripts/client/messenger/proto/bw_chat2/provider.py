@@ -11,8 +11,7 @@ from gui.shared.rq_cooldown import RequestCooldownManager, REQUEST_SCOPE
 from ids_generators import SequenceIDGenerator
 from messenger.proto.bw_chat2.errors import createCoolDownError
 from messenger.proto.events import g_messengerEvents
-from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
-from messenger_common_chat2 import messageArgs, addCoolDowns, areSenderCooldownsActive
+from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS, messageArgs, addCoolDowns, areSenderCooldownsActive, CHAT_COMMAND_COOLDOWN_TYPE_IDS
 
 class _ChatCooldownManager(RequestCooldownManager):
 
@@ -60,7 +59,8 @@ class BWChatProvider(object):
     def doAction(self, actionID, args=None, response=False, skipCoolDown=False):
         success, reqID = False, 0
         if self.__isCooldownInProcess(actionID, args):
-            if not skipCoolDown:
+            shouldShowCooldownError = not skipCoolDown and self.__shouldShowErrorMessage(actionID, args)
+            if shouldShowCooldownError:
                 g_messengerEvents.onErrorReceived(createCoolDownError(actionID, self.__getCooldownTime(actionID, args)))
         else:
             if response:
@@ -104,13 +104,14 @@ class BWChatProvider(object):
     def filterOutMessage(self, text, limits):
         return self.__msgFilters.chainOut(text, limits)
 
-    def setActionCoolDown(self, actionID, coolDown, targetID=0, cooldownConfig=None):
+    def setActionCoolDown(self, actionID, coolDown):
+        self.__coolDown.process(actionID, coolDown)
+
+    def setBattleActionCoolDown(self, reqID, actionID, targetID=0, cooldownConfig=None):
         command = _ACTIONS.battleChatCommandFromActionID(actionID)
         if command and cooldownConfig is not None and command.name not in CHAT_COMMANDS_THAT_IGNORE_COOLDOWNS:
             currTime = BigWorld.time()
-            addCoolDowns(currTime, self.__battleCmdCooldowns, command.id, command.name, command.cooldownPeriod, targetID, cooldownConfig)
-        else:
-            self.__coolDown.process(actionID, coolDown)
+            addCoolDowns(currTime, self.__battleCmdCooldowns, command.id, command.name, command.cooldownPeriod, targetID, reqID, cooldownConfig)
         return
 
     def isActionInCoolDown(self, actionID):
@@ -126,15 +127,15 @@ class BWChatProvider(object):
         return []
 
     def clearActionCoolDown(self, actionID):
+        self.__coolDown.reset(actionID)
+
+    def clearBattleActionCoolDown(self, requestID, actionID):
         command = _ACTIONS.battleChatCommandFromActionID(actionID)
         if command:
-            removeList = [ cdData for cdData in self.__battleCmdCooldowns if cdData.cmdID == command.id ]
+            removeList = [ cdData for cdData in self.__battleCmdCooldowns if cdData.reqID == requestID and cdData.cmdID == command.id ]
             if removeList:
                 for dataForRemoval in removeList:
                     self.__battleCmdCooldowns.remove(dataForRemoval)
-
-        else:
-            self.__coolDown.reset(actionID)
 
     def registerHandler(self, actionID, handler):
         handlers = self.__handlers[actionID]
@@ -189,8 +190,7 @@ class BWChatProvider(object):
             currTime = BigWorld.time()
             targetID = args['int32Arg1']
             sndrBlockReason = areSenderCooldownsActive(currTime, self.__battleCmdCooldowns, actionID, targetID)
-            cdTime = sndrBlockReason.cooldownEnd - currTime if sndrBlockReason is not None else 0
-            return command.name not in CHAT_COMMANDS_THAT_IGNORE_COOLDOWNS and sndrBlockReason is not None and cdTime > 0
+            return command.name not in CHAT_COMMANDS_THAT_IGNORE_COOLDOWNS and sndrBlockReason is not None
         else:
             return self.__coolDown.isInProcess(actionID)
 
@@ -205,6 +205,16 @@ class BWChatProvider(object):
         else:
             self.__coolDown.getTime(actionID)
             return
+
+    def __shouldShowErrorMessage(self, actionID, args=None):
+        command = _ACTIONS.battleChatCommandFromActionID(actionID)
+        if command is None:
+            return False
+        else:
+            currTime = BigWorld.time()
+            targetID = args['int32Arg1']
+            sndrBlockReason = areSenderCooldownsActive(currTime, self.__battleCmdCooldowns, actionID, targetID)
+            return sndrBlockReason.cooldownType != CHAT_COMMAND_COOLDOWN_TYPE_IDS.TIMEFRAME_DATA_COOLDOWN if sndrBlockReason is not None else False
 
 
 class ActionsHandler(object):

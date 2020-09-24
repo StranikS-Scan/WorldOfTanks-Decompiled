@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/BattleTypeSelectPopover.py
 from adisp import process
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.Scaleform.daapi.view.meta.BattleTypeSelectPopoverMeta import BattleTypeSelectPopoverMeta
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
@@ -62,19 +63,16 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
             elif itemData == PREBATTLE_ACTION_NAME.BATTLE_ROYALE:
                 tooltip = TOOLTIPS_CONSTANTS.BATTLE_ROYALE_SELECTOR_INFO
                 isSpecial = True
-            elif itemData == PREBATTLE_ACTION_NAME.BOB or itemData == PREBATTLE_ACTION_NAME.BOB_SQUAD:
-                isSpecial = True
-                tooltip = TOOLTIPS_CONSTANTS.BOB_SELECTOR_INFO
             result = {'isSpecial': isSpecial,
              'tooltip': tooltip}
             return result
 
     def demoClick(self):
-        demonstratorWindow = self.app.containerManager.getView(ViewTypes.WINDOW, criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.DEMONSTRATOR_WINDOW})
+        demonstratorWindow = self.app.containerManager.getView(WindowLayer.WINDOW, criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.DEMONSTRATOR_WINDOW})
         if demonstratorWindow is not None:
             demonstratorWindow.onWindowClose()
         else:
-            self.fireEvent(LoadViewEvent(VIEW_ALIAS.DEMONSTRATOR_WINDOW), EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.DEMONSTRATOR_WINDOW)), EVENT_BUS_SCOPE.LOBBY)
         return
 
     def update(self):

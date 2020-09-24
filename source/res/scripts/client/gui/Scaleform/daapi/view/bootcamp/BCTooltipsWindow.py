@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/bootcamp/BCTooltipsWindow.py
 from gui.Scaleform.daapi.view.meta.BCTooltipsWindowMeta import BCTooltipsWindowMeta
-from bootcamp.statistic.decorators import loggerTarget, loggerEntry, logOnMatch
-from bootcamp.statistic.logging_constants import BC_LOG_KEYS, HANGAR_HINTS_TO_LOG_ON_COMPLETE
+from uilogging.decorators import loggerTarget, loggerEntry, logOnMatch
+from uilogging.bootcamp.constants import BC_LOG_KEYS, HANGAR_HINTS_TO_LOG_ON_COMPLETE
+from uilogging.bootcamp.loggers import BootcampUILogger
 
-@loggerTarget(logKey=BC_LOG_KEYS.BC_HANGAR_HINTS)
+@loggerTarget(logKey=BC_LOG_KEYS.BC_HANGAR_HINTS, loggerCls=BootcampUILogger)
 class BCTooltipsWindow(BCTooltipsWindowMeta):
 
     def __init__(self, settings):

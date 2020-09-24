@@ -1,10 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/postmortem_panel.py
+import logging
+import WWISE
+import BattleReplay
 from gui.Scaleform.daapi.view.battle.shared.formatters import normalizeHealthPercent
 from gui.Scaleform.settings import ICONS_SIZES
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 from gui.doc_loaders import messages_panel_reader
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
+from gui.impl.gen import R
+from gui.impl import backport
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.meta.PostmortemPanelMeta import PostmortemPanelMeta
 from gui.shared.badges import buildBadge
@@ -18,6 +23,9 @@ from helpers import int2roman
 from items import vehicles
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
+from gui.battle_control.dog_tag_composer import layoutComposer
+from dog_tags_common.player_dog_tag import PlayerDogTag, DisplayableDogTag
+_logger = logging.getLogger(__name__)
 _POSTMORTEM_PANEL_SETTINGS_PATH = 'gui/postmortem_panel.xml'
 _VEHICLE_SMALL_ICON_RES_PATH = '../maps/icons/vehicle/small/{0}.png'
 _ATTACK_REASON_CODE_TO_MSG = {ATTACK_REASON_INDICES['shot']: 'DEATH_FROM_SHOT',
@@ -197,6 +205,10 @@ class PostmortemPanel(_SummaryPostmortemPanel):
                 self.__setPlayerInfo(vehicle.id)
                 self.__onVehicleControlling(vehicle)
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
+        dogTagsCtrl = self.sessionProvider.dynamic.dogTags
+        if dogTagsCtrl is not None:
+            dogTagsCtrl.onKillerDogTagSet += self.__onKillerDogTagSet
+            dogTagsCtrl.onVictimDogTagSet += self.__onVictimDogTagSet
         return
 
     def _removeGameListeners(self):
@@ -208,6 +220,10 @@ class PostmortemPanel(_SummaryPostmortemPanel):
             ctrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         super(PostmortemPanel, self)._removeGameListeners()
+        dogTagsCtrl = self.sessionProvider.dynamic.dogTags
+        if dogTagsCtrl is not None:
+            dogTagsCtrl.onKillerDogTagSet -= self.__onKillerDogTagSet
+            dogTagsCtrl.onVictimDogTagSet -= self.__onVictimDogTagSet
         return
 
     def _deathInfoReceived(self):
@@ -268,7 +284,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
                     vehImg = _VEHICLE_SMALL_ICON_RES_PATH.format(vTypeInfoVO.iconName)
                     if not vTypeInfoVO.isOnlyForBattleRoyaleBattles:
                         vehLvl = int2roman(vTypeInfoVO.level)
-                        vehClass = Vehicle.getTypeBigIconPath(vTypeInfoVO.classTag)
+                        vehClass = Vehicle.getTypeVPanelIconPath(vTypeInfoVO.classTag)
                     else:
                         vehLvl = None
                         vehClass = None
@@ -333,3 +349,24 @@ class PostmortemPanel(_SummaryPostmortemPanel):
             self.__isColorBlind = diff[GRAPHICS.COLOR_BLIND]
             self._deathAlreadySet = False
             self._updateVehicleInfo()
+
+    def onDogTagKillerInPlaySound(self):
+        if not BattleReplay.isPlaying():
+            WWISE.WW_eventGlobal(backport.sound(R.sounds.dt_pc_destroyed()))
+
+    def onVictimDogTagInPlaySound(self):
+        WWISE.WW_eventGlobal(backport.sound(R.sounds.dt_enemy()))
+
+    @staticmethod
+    def _buildDogTag(dogTag):
+        return DisplayableDogTag(PlayerDogTag.fromDict(dogTag), dogTag['playerName'], dogTag['clanTag'])
+
+    def __onKillerDogTagSet(self, dogTagInfo):
+        dogTagModel = layoutComposer.getModel(self._buildDogTag(dogTagInfo['dogTag']))
+        _logger.info('PostmortemPanel.__onKillerDogTagSet: dogTagInfo %s, dogTagModel %s', str(dogTagInfo), str(dogTagModel))
+        self.as_showKillerDogTagS(dogTagModel)
+
+    def __onVictimDogTagSet(self, dogTagInfo):
+        dogTagModel = layoutComposer.getModel(self._buildDogTag(dogTagInfo['dogTag']))
+        _logger.info('PostmortemPanel.__onVictimDogTagSet: dogTagInfo %s, dogTagModel %s', str(dogTagInfo), str(dogTagModel))
+        self.as_showVictimDogTagS(dogTagModel)

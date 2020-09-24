@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bootcamp/aop/in_garage.py
+from frameworks.wulf import WindowLayer
 from helpers import aop, getClientLanguage
 from helpers.i18n import makeString
 from gui import makeHtmlString
 from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.header.battle_selector_item import SelectorItem
@@ -18,7 +18,7 @@ from constants import PREBATTLE_TYPE_NAMES
 from bootcamp.aop import common
 from soft_exception import SoftException
 _MS_IN_SEC = 1000
-_BC_MESSAGE_VIEW_TYPE = ViewTypes.TOP_WINDOW
+_BC_MESSAGE_VIEW_TYPE = WindowLayer.TOP_WINDOW
 
 def weave(weaver, stateInGarage):
     weaver.weave(pointcut=_PointcutBrowserControllerDisable)

@@ -3,7 +3,7 @@
 from CurrentVehicle import g_currentVehicle
 from gui import SystemMessages
 from gui.impl.gen import R
-from frameworks.wulf import ViewFlags, ViewSettings
+from frameworks.wulf import ViewSettings
 from gui.impl.gen.view_models.views.lobby.instructions.booster_buy_model import BoosterBuyModel
 from gui.impl.lobby.common.buy_sell_item_base_dialog import DialogBuySellItemBaseView
 from gui.shared.gui_items.processors.module import ModuleBuyer
@@ -15,7 +15,6 @@ class BoosterBuyWindowView(DialogBuySellItemBaseView):
 
     def __init__(self, typeCompDescr, layoutID=R.views.lobby.instructions.BuyWindow()):
         settings = ViewSettings(layoutID)
-        settings.flags = ViewFlags.TOP_WINDOW_VIEW
         settings.model = BoosterBuyModel()
         super(BoosterBuyWindowView, self).__init__(settings, typeCompDescr)
 

@@ -6,6 +6,7 @@ from gui.shared.tooltips import advanced
 from gui.shared.tooltips import common
 from gui.shared.tooltips import contexts
 from gui.shared.tooltips.builders import DataBuilder, DefaultFormatBuilder, AdvancedDataBuilder, TooltipWindowBuilder
+from gui.shared.tooltips.dog_tags import DogTagInfoTooltip
 from gui.shared.tooltips.filter import VehicleFilterTooltip
 __all__ = ('getTooltipBuilders',)
 
@@ -42,7 +43,8 @@ def getTooltipBuilders():
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_PASS_COMPLETED, None, common.BattlePassCompletedTooltipContentWindowData(contexts.ToolTipContext(None))),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_PASS_CHOSE_WINNER, None, common.BattlePassChoseWinnerTooltipContentWindowData(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.TECHTREE_DISCOUNT_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, common.TechTreeDiscountInfoTooltip(contexts.QuestContext())),
-     DataBuilder(TOOLTIPS_CONSTANTS.TECHTREE_NATION_DISCOUNT, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, common.TechTreeNationDiscountTooltip(contexts.TechTreeContext())))
+     DataBuilder(TOOLTIPS_CONSTANTS.TECHTREE_NATION_DISCOUNT, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, common.TechTreeNationDiscountTooltip(contexts.TechTreeContext())),
+     DataBuilder(TOOLTIPS_CONSTANTS.DOG_TAGS_INFO, TOOLTIPS_CONSTANTS.DOG_TAGS_INFO_UI, DogTagInfoTooltip(contexts.DogTagInfoContext())))
 
 
 class HeaderMoneyAndXpBuilder(DataBuilder):

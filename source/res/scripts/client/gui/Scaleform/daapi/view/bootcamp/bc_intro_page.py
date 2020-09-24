@@ -6,14 +6,15 @@ import BattleReplay
 import Windowing
 from PlayerEvents import g_playerEvents
 from constants import WOT_GAMEPLAY
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.BCIntroVideoPageMeta import BCIntroVideoPageMeta
 from gui.Scaleform.Waiting import Waiting
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.app_loader.settings import APP_NAME_SPACE
 from bootcamp.BootCampEvents import g_bootcampEvents
 from bootcamp.BootcampSettings import getBattleDefaults
 from debug_utils_bootcamp import LOG_ERROR_BOOTCAMP
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import BootcampEvent
 from gui.Scaleform.locale.BOOTCAMP import BOOTCAMP
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from helpers import dependency
@@ -161,12 +162,12 @@ class BCIntroPage(BCIntroVideoPageMeta):
         return self._highlightingMask & 1 << highlightType != 0
 
     def _setHighlighting(self, highlightType, doHighlight):
-        eventId = BootcampEvent.ADD_HIGHLIGHT if doHighlight else BootcampEvent.REMOVE_HIGHLIGHT
+        eventId = VIEW_ALIAS.BOOTCAMP_ADD_HIGHLIGHT if doHighlight else VIEW_ALIAS.BOOTCAMP_REMOVE_HIGHLIGHT
         if highlightType == INTRO_HIGHLIGHT_TYPE.START_BUTTON:
-            g_eventBus.handleEvent(events.LoadViewEvent(eventId, None, 'StartBattleButton'), EVENT_BUS_SCOPE.BATTLE)
+            g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(eventId), ctx='StartBattleButton'), EVENT_BUS_SCOPE.BATTLE)
         elif highlightType == INTRO_HIGHLIGHT_TYPE.ARROWS:
             for highlightName in ('LoadingRightButton', 'LoadingLeftButton'):
-                g_eventBus.handleEvent(events.LoadViewEvent(eventId, None, highlightName), EVENT_BUS_SCOPE.BATTLE)
+                g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(eventId), ctx=highlightName), EVENT_BUS_SCOPE.BATTLE)
 
         else:
             LOG_ERROR_BOOTCAMP('Unknown highlight type - {0}'.format(highlightType))
@@ -174,7 +175,6 @@ class BCIntroPage(BCIntroVideoPageMeta):
             self._highlightingMask |= 1 << highlightType
         else:
             self._highlightingMask &= ~(1 << highlightType)
-        return
 
     def _shouldHighlight(self, highlightType):
         if self._autoStart:

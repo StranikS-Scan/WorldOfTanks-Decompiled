@@ -87,6 +87,7 @@ class HangarConsumableSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
     @process
     def unload(self):
         copyVehicle = self._getCopyVehicle()
+        copyVehicle.consumables.setLayout(*copyVehicle.consumables.installed)
         copyVehicle.consumables.layout[self._installedSlotId] = None
         result = yield self._doPutOnAction(copyVehicle)
         if result:
@@ -99,6 +100,7 @@ class HangarConsumableSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
 
     def _putOnAction(self, onId):
         copyVehicle = self._getCopyVehicle()
+        copyVehicle.consumables.setLayout(*copyVehicle.consumables.installed)
         layout = copyVehicle.consumables.layout
         self._makePutOnAction(TankSetupConstants.CONSUMABLES, onId, copyVehicle, layout)
 

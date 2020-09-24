@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/battle_timers.py
+import logging
 import SoundGroups
-import BigWorld
 import CommandMapping
 from constants import ARENA_GUI_TYPE
+from PlayerEvents import g_playerEvents
 from gui.Scaleform.daapi.view.meta.BattleTimerMeta import BattleTimerMeta
 from gui.Scaleform.daapi.view.meta.PrebattleTimerMeta import PrebattleTimerMeta
 from gui.Scaleform.genConsts.PREBATTLE_TIMER import PREBATTLE_TIMER
@@ -12,7 +13,7 @@ from gui.impl.gen import R
 from gui.battle_control.battle_constants import COUNTDOWN_STATE
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
 from gui.shared import events, EVENT_BUS_SCOPE
-from helpers import dependency, isPlayerAvatar
+from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.shared.utils.key_mapping import getReadableKey
 
@@ -25,6 +26,7 @@ class _WWISE_EVENTS(object):
 
 
 _BATTLE_END_TIME = 0
+_logger = logging.getLogger(__name__)
 
 class PreBattleTimer(PrebattleTimerMeta):
 
@@ -146,18 +148,14 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
         ctrl = self.sessionProvider.dynamic.deathScreen
         if ctrl is not None:
             ctrl.onShowDeathScreen += self.__onShowDeathScreen
-        player = BigWorld.player()
-        if player is not None:
-            player.onVehicleLeaveWorld += self.__onVehicleLeaveWorld
+        g_playerEvents.onAvatarVehicleLeaveWorld += self.__onVehicleLeaveWorld
         return
 
     def _dispose(self):
         ctrl = self.sessionProvider.dynamic.deathScreen
         if ctrl is not None:
             ctrl.onShowDeathScreen -= self.__onShowDeathScreen
-        player = BigWorld.player()
-        if isPlayerAvatar() and player.onVehicleLeaveWorld is not None:
-            player.onVehicleLeaveWorld -= self.__onVehicleLeaveWorld
+        g_playerEvents.onAvatarVehicleLeaveWorld -= self.__onVehicleLeaveWorld
         super(BattleTimer, self)._dispose()
         return
 
@@ -195,6 +193,5 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
         self.__isDeathScreenShown = True
         self.__stopTicking()
 
-    def __onVehicleLeaveWorld(self, vehicle):
-        if BigWorld.player().playerVehicleID == vehicle.id:
-            self.__isDeathScreenShown = False
+    def __onVehicleLeaveWorld(self):
+        self.__isDeathScreenShown = False

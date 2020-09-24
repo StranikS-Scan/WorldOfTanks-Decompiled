@@ -7,6 +7,7 @@ from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_parameters import IVehCo
 from gui.Scaleform.daapi.view.meta.VehicleCompareViewMeta import VehicleCompareViewMeta
 from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.framework.entities.DAAPIDataProvider import ListDAAPIDataProvider
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.game_control.veh_comparison_basket import MAX_VEHICLES_TO_COMPARE_COUNT
@@ -44,7 +45,7 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
         tutorStorage = getTutorialGlobalStorage()
         if tutorStorage:
             tutorStorage.setValue(OnceOnlyHints.VEH_COMPARE_CONFIG_HINT, False)
-        event = g_entitiesFactories.makeLoadEvent(VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR, ctx={'index': int(index)})
+        event = g_entitiesFactories.makeLoadEvent(SFViewLoadParams(VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR), ctx={'index': int(index)})
         self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onRemoveAllVehicles(self):
@@ -76,7 +77,7 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
         self.__updateDifferenceAttention()
 
     def onBackClick(self):
-        event = g_entitiesFactories.makeLoadEvent(self.__backAlias)
+        event = g_entitiesFactories.makeLoadEvent(SFViewLoadParams(self.__backAlias))
         self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _populate(self):
@@ -87,7 +88,7 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
         self.comparisonBasket.onChange += self.__updateUI
         self.comparisonBasket.onSwitchChange += self.__onVehCmpBasketStateChanged
         self.comparisonBasket.onParametersChange += self.__onVehicleParamsChanged
-        self.comparisonBasket.onNationChange += self._setViewData
+        self.comparisonBasket.onNationChange += self.__onNationChange
 
     def _setViewData(self):
         self.__vehDP = VehiclesDataProvider()
@@ -101,7 +102,7 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
         self.comparisonBasket.onChange -= self.__updateUI
         self.comparisonBasket.onSwitchChange -= self.__onVehCmpBasketStateChanged
         self.comparisonBasket.onParametersChange -= self.__onVehicleParamsChanged
-        self.comparisonBasket.onNationChange -= self._setViewData
+        self.comparisonBasket.onNationChange -= self.__onNationChange
         self.__clearParamsCache()
         self.__vehDP.fini()
         self.__vehDP = None
@@ -142,6 +143,9 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
 
     def __onVehicleParamsChanged(self, _):
         self.__updateDifferenceAttention()
+
+    def __onNationChange(self, _):
+        self.__updateUI()
 
 
 class VehiclesDataProvider(ListDAAPIDataProvider, IVehCompareView):

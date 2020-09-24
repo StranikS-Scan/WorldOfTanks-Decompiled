@@ -124,7 +124,7 @@ class SelectorDesc(object):
     def fillTemplate(self, args, effects):
         pass
 
-    def getActiveEffects(self, effects, args=None):
+    def getActiveEffects(self, effects, args):
         pass
 
 
@@ -162,7 +162,7 @@ class DiscreteSelectorDesc(SelectorDesc):
 
         self._selectors = newSelectors
 
-    def getActiveEffects(self, effects, args=None):
+    def getActiveEffects(self, effects, args):
         keyValue = args[self._variable]
         if keyValue is None:
             return
@@ -225,7 +225,7 @@ class RangeSelectorDesc(SelectorDesc):
 
         self.__keys = tuple(newKeys)
 
-    def getActiveEffects(self, effects, args=None):
+    def getActiveEffects(self, effects, args):
         keyValue = args[self._variable]
         if keyValue is None:
             return
@@ -258,7 +258,7 @@ class UnionSelectorDesc(SelectorDesc):
         for selector in self._selectors:
             selector.fillTemplate(args, effects)
 
-    def getActiveEffects(self, effects, args=None):
+    def getActiveEffects(self, effects, args):
         isPc = args['isPC']
         for selector in self._selectors:
             if selector._isPC is None:
@@ -325,7 +325,7 @@ class EffectSelectorDesc(SelectorDesc):
             self.__makeId(effects)
         return
 
-    def getActiveEffects(self, effects, args=None):
+    def getActiveEffects(self, effects, args):
         effects.add(self._id)
 
     def __makeId(self, effects):
@@ -505,8 +505,14 @@ class MainSelectorBase(object):
             self._activeEffectId = set()
             return
 
+    def _isAllowed(self, args):
+        return True
+
     def update(self, args):
         if not self._enabled:
+            return
+        if not self._isAllowed(args):
+            self.stop()
             return
         activeEffects = set()
         self._effectSelector.getActiveEffects(activeEffects, args)
@@ -576,6 +582,11 @@ class ExhaustMainSelector(MainSelectorBase):
             except Exception:
                 LOG_ERROR('Node %s is not found' % nodeName)
                 continue
+
+    def _isAllowed(self, args):
+        isPC = bool(args['isPC'])
+        direction = bool(args['direction'])
+        return isPC or direction
 
     def enable(self, effectID, enable):
         for node in self._effectNodes.values():

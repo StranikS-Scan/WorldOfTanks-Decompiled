@@ -2,17 +2,18 @@
 # Embedded file name: scripts/client_common/ClientArena.py
 import cPickle
 import zlib
-import Math
-import BigWorld
 import ArenaType
-from items import vehicles
+import BigWorld
 import Event
-from constants import ARENA_PERIOD, ARENA_UPDATE, IS_CLIENT
-from PlayerEvents import g_playerEvents
-from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV, LOG_ERROR
+import Math
 import arena_component_system.client_arena_component_assembler as assembler
-if IS_CLIENT:
-    from helpers.bots import preprocessBotName
+from PlayerEvents import g_playerEvents
+from constants import ARENA_PERIOD, ARENA_UPDATE
+from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
+from helpers.bots import preprocessBotName
+from items import vehicles
+from visual_script.misc import ASPECT
+from visual_script.multi_plan_provider import MultiPlanProvider
 
 class ClientArena(object):
     __onUpdate = {ARENA_UPDATE.VEHICLE_LIST: '_ClientArena__onVehicleListUpdate',
@@ -77,9 +78,8 @@ class ClientArena(object):
         self.onChatCommandTriggered = Event.Event(em)
         self.onRadarInfoReceived = Event.Event(em)
         self.arenaUniqueID = arenaUniqueID
+        self._vsePlans = MultiPlanProvider(ASPECT.CLIENT)
         self.arenaType = ArenaType.g_cache.get(arenaTypeID, None)
-        if self.arenaType is None:
-            LOG_ERROR('Arena ID not found ', arenaTypeID)
         self.bonusType = arenaBonusType
         self.guiType = arenaGuiType
         self.extraData = arenaExtraData
@@ -104,6 +104,8 @@ class ClientArena(object):
     def destroy(self):
         self.__eventManager.clear()
         assembler.destroyComponentSystem(self.componentSystem)
+        self._vsePlans = None
+        return
 
     def update(self, updateType, argStr):
         delegateName = self.__onUpdate.get(updateType, None)
@@ -236,6 +238,9 @@ class ClientArena(object):
         if vehInfo is not None:
             vehInfo['isAvatarReady'] = True
             self.onAvatarReady(vehicleID)
+        if self.arenaType is not None and self._vsePlans is not None:
+            self._vsePlans.load(self.arenaType.visualScript[ASPECT.CLIENT])
+            self._vsePlans.start()
         return
 
     def __onBasePointsUpdate(self, argStr):
@@ -325,7 +330,7 @@ class ClientArena(object):
 
     @staticmethod
     def __preprocessVehicleInfo(info):
-        if IS_CLIENT and not info['avatarSessionID']:
+        if not info['avatarSessionID']:
             info['name'] = preprocessBotName(info['name'])
         return info
 

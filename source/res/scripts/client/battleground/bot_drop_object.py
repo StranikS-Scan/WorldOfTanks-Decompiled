@@ -83,21 +83,21 @@ class BotAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
             return
 
     def __createDeliveryEffect(self, config):
-        effectAnimation = Svarog.GameObject(self.__spaceID)
         effectDescr = config.getBotDeliveryEffect()
         effect = effectDescr.enemy if self.__teamID != BigWorld.player().team else effectDescr.ally
         if effect is not None:
             effectPath = effect.path
-            BigWorld.loadResourceListBG((AnimationSequence.Loader(effectPath, self.__spaceID),), makeCallbackWeak(self.__onDeliverEffectLoaded, effectAnimation, effectPath, self.__deliveryPosition))
+            BigWorld.loadResourceListBG((AnimationSequence.Loader(effectPath, self.__spaceID),), makeCallbackWeak(self.__onDeliverEffectLoaded, effectPath, self.__deliveryPosition))
             return
         else:
             _logger.error('Delivery Effect is not defined!')
             return
 
-    def __onDeliverEffectLoaded(self, effectAnimation, effectP, position, resourceRefs):
+    def __onDeliverEffectLoaded(self, effectP, position, resourceRefs):
         if effectP in resourceRefs.failedIDs:
             _logger.error('Effect %s has not been loaded!', effectP)
             return
+        effectAnimation = Svarog.GameObject(self.__spaceID)
         sequenceComponent = effectAnimation.createComponent(SequenceComponent, resourceRefs[effectP])
         correctedPosition = position + Math.Vector3(0, self.ALTITUDE_CORRECTING, 0)
         sequenceComponent.createTerrainEffect(correctedPosition, loopCount=1, rotation=(self.__yawAxis, 0, 0))

@@ -62,3 +62,6 @@ class Tokens(object):
             if callback is not None:
                 callback(resultID, self.__cache)
             return
+
+    def getToken(self, tokenID):
+        return self.__cache['tokens'].get(tokenID, None) if self.__cache and 'tokens' in self.__cache else None

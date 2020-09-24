@@ -4,17 +4,18 @@ from CurrentVehicle import g_currentVehicle
 from adisp import process
 from constants import MODULE_NAME_SEPARATOR
 from debug_utils import LOG_ERROR
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.view.meta.PrebattleWindowMeta import PrebattleWindowMeta
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from skeletons.gui.game_control import ICraftmachineController
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
 from gui.Scaleform.managers.windows_stored_data import stored_window
-from gui.prb_control.formatters import messages
 from gui.prb_control.entities.base.ctx import LeavePrbAction
 from gui.prb_control.entities.base.legacy.ctx import SetPlayerStateCtx
 from gui.prb_control.entities.base.legacy.listener import ILegacyListener
+from gui.prb_control.formatters import messages
 from gui.prb_control.items import prb_items
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, PREBATTLE_PLAYERS_COMPARATORS
 from gui.shared import events, EVENT_BUS_SCOPE
@@ -86,11 +87,11 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
 
     def showPrebattleSendInvitesWindow(self):
         if self.canSendInvite():
-            self.fireEvent(events.LoadViewEvent(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY, ctx={'prbName': self.__prbName,
+            self.fireEvent(events.LoadViewEvent(SFViewLoadParams(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY), ctx={'prbName': self.__prbName,
              'ctrlType': CTRL_ENTITY_TYPE.LEGACY}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def showFAQWindow(self):
-        self.fireEvent(events.LoadViewEvent(MESSENGER_VIEW_ALIAS.FAQ_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(MESSENGER_VIEW_ALIAS.FAQ_WINDOW)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def getClientID(self):
         return self.__clientID
@@ -190,7 +191,7 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
         self.stopListening()
 
     def _closeSendInvitesWindow(self):
-        container = self.app.containerManager.getContainer(ViewTypes.WINDOW)
+        container = self.app.containerManager.getContainer(WindowLayer.WINDOW)
         if container is not None:
             window = container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY})
             if window is not None:

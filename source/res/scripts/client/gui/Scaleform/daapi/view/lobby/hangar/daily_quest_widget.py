@@ -3,9 +3,8 @@
 import typing
 from constants import QUEUE_TYPE
 from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
-from gui.impl.lobby.missions import missions_helpers
 from gui.prb_control.entities.listener import IGlobalListener
-from gui.server_events.events_helpers import isDailyQuestsEnable, EventInfoModel
+from gui.server_events.events_helpers import isDailyQuestsEnable
 from gui.impl.lobby.missions.daily_quests_widget_view import DailyQuestsWidgetView
 from gui.Scaleform.daapi.view.meta.DailyQuestMeta import DailyQuestMeta
 from gui.Scaleform.managers import UtilsManager
@@ -31,18 +30,18 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
 
     def onPrbEntitySwitched(self):
         if not self._isRandomBattleSelected():
-            if self._injectView is not None:
-                self._injectView.setIsVisible(False)
+            self.__animateHide()
         else:
             self.__showOrHide()
-        return
 
     def _populate(self):
         super(DailyQuestWidget, self)._populate()
         self.__addListeners()
         self.__timer = CallbackDelayer()
         self.__showOrHide()
-        self.__updateHideCallback(EventInfoModel.getDailyProgressResetTimeDelta())
+
+    def _onPopulate(self):
+        pass
 
     def _dispose(self):
         self.__timer.clearCallbacks()
@@ -56,15 +55,21 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
         return self.prbDispatcher.getFunctionalState().isQueueSelected(QUEUE_TYPE.RANDOMS) if self.prbDispatcher is not None else False
 
     def __show(self):
-        self.as_showWidgetS()
+        if self._injectView is None:
+            self._createInjectView()
+        self._injectView.setVisible(True)
+        self._injectView.viewModel.onDisappear += self.__hide
+        return
+
+    def __animateHide(self):
         if self._injectView is not None:
-            self._injectView.setIsVisible(True)
+            self._injectView.setVisible(False)
         return
 
     def __hide(self):
-        self.as_hideWidgetS()
         if self._injectView is not None:
-            self._injectView.setIsVisible(False)
+            self._injectView.viewModel.onDisappear -= self.__hide
+        self._destroyInjected()
         return
 
     def __delayedShowOrHide(self):
@@ -74,13 +79,13 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
         if self.__shouldHide():
             self.__hide()
             return
-        if self.__hasUncompletedQuests() or self.__hasQuestStatusChanged():
+        if self.__hasIncompleteQuests() or self.__hasQuestStatusChanged():
             self.__show()
 
     def __shouldHide(self):
         return not isDailyQuestsEnable() or self.promoController.isTeaserOpen() or not self._isRandomBattleSelected()
 
-    def __hasUncompletedQuests(self):
+    def __hasIncompleteQuests(self):
         for quest in self.eventsCache.getDailyQuests().values():
             if not quest.isCompleted():
                 return True
@@ -107,19 +112,12 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
     def __onSyncCompleted(self):
         self.__showOrHide()
 
-    def __onNothingToDisplay(self):
-        if self.__shouldHide() or not self.__hasUncompletedQuests():
-            self.__hide()
-
     def __addListeners(self):
         self.startGlobalListening()
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
         self.eventsCache.onSyncCompleted += self.__onSyncCompleted
         self.promoController.onTeaserShown += self.__onTeaserShown
         self.promoController.onTeaserClosed += self.__onTeaserClosed
-        if self._injectView is not None:
-            self._injectView.viewModel.onNothingToDisplay += self.__onNothingToDisplay
-        return
 
     def __removeListeners(self):
         self.stopGlobalListening()
@@ -128,12 +126,5 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
         self.promoController.onTeaserShown -= self.__onTeaserShown
         self.promoController.onTeaserClosed -= self.__onTeaserClosed
         if self._injectView is not None:
-            self._injectView.viewModel.onNothingToDisplay -= self.__onNothingToDisplay
+            self._injectView.viewModel.onDisappear -= self.__hide
         return
-
-    def __updateHideCallback(self, countdownValue):
-        self.__timer.delayCallback(countdownValue, self.__hideWidgetOnTimeout)
-
-    def __hideWidgetOnTimeout(self):
-        if missions_helpers.areCommonQuestsCompleted(self.eventsCache.getDailyQuests().values()):
-            self._injectView.setIsVisible(False)

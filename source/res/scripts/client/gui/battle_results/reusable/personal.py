@@ -4,7 +4,6 @@ import itertools
 from collections import namedtuple
 import typing
 from ValueReplay import ValueReplay, ValueReplayConnector
-from battle_results_shared import VEH_FULL_RESULTS
 from constants import PREMIUM_TYPE
 from debug_utils import LOG_ERROR
 from dossiers2.custom.records import RECORD_DB_IDS
@@ -77,8 +76,7 @@ class _PersonalAvatarInfo(object):
         self.__fairplayViolations = shared.FairplayViolationsInfo(*(fairplayViolations or ()))
         self.__squadBonusInfo = _SquadBonusInfo(**(squadBonusInfo or {}))
         self.__winnerIfDraw = winnerIfDraw
-        self.__extInfo = kwargs.get('ext', None)
-        return
+        self.__extInfo = kwargs
 
     @property
     def accountDBID(self):
@@ -277,7 +275,7 @@ class _EconomicsRecordsChains(object):
         return self._premiumXP.getRecord('xp') - self._baseXP.getRecord('xp')
 
     def addResults(self, _, results):
-        connector = ValueReplayConnector(VEH_FULL_RESULTS, results)
+        connector = ValueReplayConnector(results)
         self._addMoneyResults(connector, results)
         self._addXPResults(connector, results)
         self._addCrystalResults(connector, results)
@@ -355,10 +353,14 @@ class _EconomicsRecordsChains(object):
         return
 
     def _addCrystalDetails(self, replay):
+        eventToken = 'eventCrystalList_'
         crystalDetails = []
         for _, (appliedName, appliedValue), (_, _) in replay:
             if appliedName == 'originalCrystal' and appliedValue:
                 crystalDetails.insert(0, (appliedName, appliedValue))
+            if appliedName.startswith(eventToken):
+                eventName = appliedName.split(eventToken)[1]
+                crystalDetails.append((eventName, appliedValue))
 
         autoBoosters = self._additionalRecords.getRecord('autoEquipCrystals', 0)
         self._crystalDetails = _createCrystalDetails(crystalDetails, autoBoosters)
@@ -404,7 +406,7 @@ class _EconomicsRecordsChains(object):
 
 
 class PersonalInfo(shared.UnpackedInfo):
-    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '_economicsRecords', '__questsProgress', '__PM2Progress', '__rankInfo', '__battleRoyale', '__isTeamKiller', '__progressiveReward', '__premiumMask', '__isAddXPBonusApplied', '__c11nProgress')
+    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '_economicsRecords', '__questsProgress', '__PM2Progress', '__rankInfo', '__battleRoyale', '__isTeamKiller', '__progressiveReward', '__premiumMask', '__isAddXPBonusApplied', '__c11nProgress', '__dogTags')
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, personal):
@@ -426,6 +428,7 @@ class PersonalInfo(shared.UnpackedInfo):
         self.__c11nProgress = {}
         self.__rankInfo = PostBattleRankInfo(0, 0, 0, 0, 0, 0, 0, 0, {}, {}, False, 0, 0)
         self.__battleRoyale = {}
+        self.__dogTags = {}
         if not self.hasUnpackedItems():
             self.__collectRequiredData(personal)
         return
@@ -502,6 +505,9 @@ class PersonalInfo(shared.UnpackedInfo):
     def getQuestsProgress(self):
         return self.__questsProgress
 
+    def getDogTagsProgress(self):
+        return self.__dogTags
+
     def getPM2Progress(self):
         return self.__PM2Progress
 
@@ -565,6 +571,7 @@ class PersonalInfo(shared.UnpackedInfo):
              'accBRTitle': infoAvatar.get('accBRTitle', (1, 0)),
              'prevBRTitle': infoAvatar.get('prevBRTitle', (1, 0)),
              'maxAchievedBRTitle': infoAvatar.get('maxAchievedBRTitle', (1, 0))}
+            self.__dogTags.update(infoAvatar.get('dogTags', {}))
         for item in items:
             intCD = item.intCD
             data = info[intCD]

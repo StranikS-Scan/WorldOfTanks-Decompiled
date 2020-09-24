@@ -365,4 +365,5 @@ REGULAR_TEAMS_STATS_BLOCK.addNextComponent(vehicles.RegularTeamStatsBlock(meta=b
 REGULAR_TEAMS_STATS_BLOCK.addNextComponent(vehicles.RegularTeamStatsBlock(meta=base.ListMeta(), field='team2'))
 VEHICLE_PROGRESS_STATS_BLOCK = progress.VehicleProgressBlock(base.ListMeta(), 'unlocks', _RECORD.PERSONAL)
 QUESTS_PROGRESS_STATS_BLOCK = progress.QuestsProgressBlock(base.ListMeta(), 'quests', _RECORD.PERSONAL)
+DOG_TAGS_PROGRESS_STATS_BLOCK = progress.DogTagsProgressBlock(base.ListMeta(), 'dog_tags', _RECORD.PERSONAL)
 PROGRESSIVE_REWARD_VO = progress.ProgressiveRewardVO('progressiveReward')

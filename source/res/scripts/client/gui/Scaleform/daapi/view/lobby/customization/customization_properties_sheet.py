@@ -6,12 +6,12 @@ import logging
 from CurrentVehicle import g_currentVehicle
 from async import await, async
 from constants import CLIENT_COMMAND_SOURCES
+from frameworks.wulf import WindowLayer
 from gui import makeHtmlString
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs, isSlotLocked
 from gui.Scaleform.daapi.view.lobby.customization.shared import SCALE_SIZE
 from gui.Scaleform.daapi.view.meta.CustomizationPropertiesSheetMeta import CustomizationPropertiesSheetMeta
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.genConsts.CUSTOMIZATION_ALIASES import CUSTOMIZATION_ALIASES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
@@ -358,7 +358,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         builder = WarningDialogBuilder()
         builder.setMessageArgs(fmtArgs=[FmtArgs(season, 'season', R.styles.AlertTextStyle()), FmtArgs(removed, 'removed', R.styles.AlertTextStyle()), FmtArgs(this, 'this')])
         builder.setMessagesAndButtons(message, focused=DialogButtons.CANCEL)
-        subview = self.app.containerManager.getContainer(ViewTypes.LOBBY_SUB).getView()
+        subview = self.app.containerManager.getContainer(WindowLayer.SUB_VIEW).getView()
         result = yield await(dialogs.showSimple(builder.build(parent=subview)))
         self.__installProjectionDecalToAllSeasonsDialogCallback(result)
 

@@ -57,4 +57,4 @@ class GoodieValue(object):
         if self.isAbsolute:
             return self.value
         else:
-            return int(float(x) * self.value + 0.99)
+            return int(round(float(x) * self.value))

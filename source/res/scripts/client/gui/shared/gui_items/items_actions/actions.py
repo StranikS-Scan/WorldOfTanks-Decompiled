@@ -623,7 +623,7 @@ class VehicleRepairAction(AsyncGUIItemAction):
     def _confirm(self, callback):
         if self.__vehicle.repairCost > 0:
             price = Money(credits=self.__vehicle.repairCost)
-            startState = BuyAndExchangeStateEnum.NEED_EXCHANGE if _needExchangeForBuy(price) else None
+            startState = BuyAndExchangeStateEnum.EXCHANGE_CONTENT if _needExchangeForBuy(price) else None
         else:
             startState = BuyAndExchangeStateEnum.BUY_NOT_REQUIRED
         result = yield future_async.await(shared_events.showNeedRepairDialog(vehicle=self.__vehicle, startState=startState))
@@ -701,10 +701,9 @@ class UseCrewBookAction(IGUIItemAction):
 class UpgradeOptDeviceAction(AsyncGUIItemAction):
     __itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, module, vehicle, slotIdx, blurd3D=False, parent=None):
+    def __init__(self, module, vehicle, slotIdx, parent=None):
         super(UpgradeOptDeviceAction, self).__init__()
         self.__parent = parent
-        self.__blur3D = blurd3D
         self.__module = module
         self.__vehicle = vehicle
         self.__slotIdx = slotIdx
@@ -719,7 +718,7 @@ class UpgradeOptDeviceAction(AsyncGUIItemAction):
     @future_async.async
     def _confirm(self, callback):
         from gui.impl.dialogs import dialogs
-        result, data = yield future_async.await(dialogs.trophyDeviceUpgradeConfirm(self.__module, parent=self.__parent, enableBlur3D=self.__blur3D))
+        result, data = yield future_async.await(dialogs.trophyDeviceUpgradeConfirm(self.__module, parent=self.__parent))
         if result and data.get('needCreditsExchange', False):
             exchangeResult = yield future_async.await(dialogs.showExchangeToUpgradeDeviceDialog(self.__module, parent=self.__parent))
             callback(not exchangeResult.busy and exchangeResult.result)
@@ -765,16 +764,12 @@ class RemoveOptionalDevice(AsyncGUIItemAction):
         else:
             demountKit = self.__goodiesCache.getDemountKit()
             isDkEnabled = demountKit and demountKit.enabled
-            isCompatibile, _ = self.__device.descriptor.checkCompatibilityWithVehicle(self.__vehicle.descriptor)
-            if not isCompatibile:
-                dialog = shared_events.showDemountIncompatibleOpDevDialog
-            elif self.__device.isDeluxe or not isDkEnabled:
+            if self.__device.isDeluxe or not isDkEnabled:
                 dialog = shared_events.showOptionalDeviceDemountSinglePrice
             else:
                 dialog = shared_events.showOptionalDeviceDemount
             isOk, data = yield future_async.await_callback(dialog)(self.__device.intCD, forFitting=self.__forFitting)
             self.__removeProcessor.requestCtx['useDemountKit'] = data.get('useDemountKit', False)
-            self.__removeProcessor.requestCtx['isAfterConversion'] = not isCompatibile
             callback(isOk)
 
     @async

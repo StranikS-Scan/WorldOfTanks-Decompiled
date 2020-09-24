@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/dialogs/refill_shells.py
 import typing
-from frameworks.wulf import ViewSettings, ViewFlags
+from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.constants.fitting_types import FittingTypes
 from gui.impl.gen.view_models.views.lobby.tank_setup.dialogs.confirm_bottom_content_type import ConfirmBottomContentType
@@ -20,7 +20,7 @@ class RefillShells(BuyAndExchange):
 
     def __init__(self, *args, **kwargs):
         self.__price = kwargs.pop('price', ITEM_PRICE_ZERO)
-        settings = ViewSettings(layoutID=R.views.lobby.tanksetup.dialogs.RefillShells(), flags=ViewFlags.TOP_WINDOW_VIEW, model=RefillShellsModel())
+        settings = ViewSettings(layoutID=R.views.lobby.tanksetup.dialogs.RefillShells(), model=RefillShellsModel())
         settings.args = args
         settings.kwargs = kwargs
         startState = kwargs.pop('startState', None)

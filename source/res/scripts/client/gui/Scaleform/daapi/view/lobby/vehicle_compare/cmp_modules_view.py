@@ -254,13 +254,13 @@ class VehicleModulesView(VehicleModulesViewMeta, VehicleCompareConfiguratorBaseV
         basketVehicle = self._container.getBasketVehCmpData()
         if basketVehicle.isInInventory():
             if self.__currentModulesType == _MODULES_TYPES.CUSTOM or self.__currentModulesType == _MODULES_TYPES.BASIC:
-                self.__initialize(basketVehicle.getInvVehStrCD(), _MODULES_TYPES.CURRENT)
+                self.__resetData(basketVehicle.getInvVehStrCD(), _MODULES_TYPES.CURRENT)
             elif self.__currentModulesType == _MODULES_TYPES.CURRENT:
                 __logModuleWarning()
             else:
                 __logModuleError()
         elif self.__currentModulesType == _MODULES_TYPES.CUSTOM:
-            self.__initialize(basketVehicle.getStockVehStrCD(), _MODULES_TYPES.BASIC)
+            self.__resetData(basketVehicle.getStockVehStrCD(), _MODULES_TYPES.BASIC)
         elif self.__currentModulesType == _MODULES_TYPES.BASIC:
             __logModuleWarning()
         else:
@@ -317,16 +317,11 @@ class VehicleModulesView(VehicleModulesViewMeta, VehicleCompareConfiguratorBaseV
         self.__updateModulesType(self.__detectModulesType(self.__vehicle))
 
     def __initialize(self, strCD, modulesType):
-        self.__vehicle = Vehicle(strCD)
-        if self.__nodeDataGenerator is not None:
-            self.__nodeDataGenerator.setVehicle(vehicle=self.__vehicle)
-        else:
-            self.__nodeDataGenerator = _PreviewItemsData(dumpers.ResearchBaseDumper(), self.__vehicle)
+        self.__createVehicleData(strCD)
         self.__updateModulesData()
         self.__initialModulesIDs = set(getInstalledModulesCDs(self.__vehicle))
         self.as_setItemS(AVAILABLE_NAMES[self.__vehicle.nationID], self.__nodes)
         self.__updateModulesType(modulesType)
-        return
 
     def __updateChangedSlots(self):
 
@@ -364,3 +359,16 @@ class VehicleModulesView(VehicleModulesViewMeta, VehicleCompareConfiguratorBaseV
                 return _MODULES_TYPES.CURRENT
             return _MODULES_TYPES.BASIC
         return _MODULES_TYPES.CUSTOM
+
+    def __createVehicleData(self, strCD):
+        self.__vehicle = Vehicle(strCD)
+        if self.__nodeDataGenerator is not None:
+            self.__nodeDataGenerator.setVehicle(vehicle=self.__vehicle)
+        else:
+            self.__nodeDataGenerator = _PreviewItemsData(dumpers.ResearchBaseDumper(), self.__vehicle)
+        return
+
+    def __resetData(self, strCD, modulesType):
+        self.__createVehicleData(strCD)
+        self.__updateChangedSlots()
+        self.__updateModulesType(modulesType)

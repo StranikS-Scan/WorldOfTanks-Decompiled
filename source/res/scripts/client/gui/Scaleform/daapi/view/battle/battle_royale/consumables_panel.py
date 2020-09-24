@@ -87,6 +87,9 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel):
     def _isAvatarEquipment(self, item):
         return False
 
+    def _addOptionalDeviceSlot(self, idx, intCD, descriptor, isActive):
+        pass
+
     def _updateShellSlot(self, idx, quantity):
         super(BattleRoyaleConsumablesPanel, self)._updateShellSlot(idx, quantity)
         prevQuantity = self.__quantityMap[idx]
@@ -111,7 +114,7 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel):
                 self.as_setGlowS(idx, CONSUMABLES_PANEL_SETTINGS.GLOW_ID_ORANGE)
             return
 
-    def _updateOptionalDeviceSlot(self, idx, optDeviceInBattle):
+    def _updateOptionalDeviceSlot(self, idx, isOn):
         pass
 
     def _showEquipmentGlow(self, equipmentIndex, glowType=CONSUMABLES_PANEL_SETTINGS.GLOW_ID_ORANGE):

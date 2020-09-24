@@ -3,6 +3,7 @@
 from debug_utils import LOG_ERROR
 from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.framework.entities.abstract.PopoverManagerMeta import PopoverManagerMeta
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared.events import HidePopoverEvent
 
 class PopoverManager(PopoverManagerMeta):
@@ -13,7 +14,7 @@ class PopoverManager(PopoverManagerMeta):
         self.addListener(HidePopoverEvent.POPOVER_DESTROYED, self.__handlerDestroyPopover)
 
     def requestShowPopover(self, alias, data):
-        event = g_entitiesFactories.makeShowPopoverEvent(alias, {'data': data})
+        event = g_entitiesFactories.makeShowPopoverEvent(SFViewLoadParams(alias), ctx={'data': data})
         if event is not None:
             self.fireEvent(event, scope=self.__scope)
         else:

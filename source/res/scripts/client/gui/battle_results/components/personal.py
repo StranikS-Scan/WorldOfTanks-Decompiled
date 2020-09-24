@@ -208,7 +208,7 @@ class PlayerRank(base.StatsItem):
 
     def _convert(self, value, reusable):
         avatarInfo = reusable.getAvatarInfo()
-        return avatarInfo.extensionInfo['playerRank']['rank'] if 'playerRank' in avatarInfo.extensionInfo else 0
+        return avatarInfo.extensionInfo['playerRank'] if 'playerRank' in avatarInfo.extensionInfo else 0
 
 
 class PersonalPlayerNameBlock(shared.PlayerNameBlock):
@@ -569,19 +569,19 @@ class TotalEfficiencyDetailsHeader(base.StatsBlock):
             self.kills = numbers.formatInt(value, _UNDEFINED_EFFICIENCY_VALUE)
             self.killsTooltip = self.__makeEfficiencyHeaderTooltip('summKill', value)
             value = info.damageDealt
-            self.damageDealt = numbers.makeStringWithThousandSymbol(value)
+            self.damageDealt = numbers.makeStringWithThousandSymbol(value, formatter=self.__formatter)
             self.damageDealtTooltip = self.__makeEfficiencyHeaderTooltip('summDamage', value)
             value = info.critsCount
             self.criticalDamages = numbers.formatInt(value, _UNDEFINED_EFFICIENCY_VALUE)
             self.criticalDamagesTooltip = self.__makeEfficiencyHeaderTooltip('summCrits', value)
             value = info.damageBlockedByArmor
-            self.damageBlockedByArmor = numbers.makeStringWithThousandSymbol(value)
+            self.damageBlockedByArmor = numbers.makeStringWithThousandSymbol(value, formatter=self.__formatter)
             self.damageBlockedTooltip = self.__makeEfficiencyHeaderTooltip('summArmor', value)
             value = info.damageAssisted
-            self.damageAssisted = numbers.makeStringWithThousandSymbol(value)
+            self.damageAssisted = numbers.makeStringWithThousandSymbol(value, formatter=self.__formatter)
             self.damageAssistedTooltip = self.__makeEfficiencyHeaderTooltip('summAssist', value)
             value = info.damageAssistedStun
-            self.damageAssistedStun = numbers.makeStringWithThousandSymbol(value)
+            self.damageAssistedStun = numbers.makeStringWithThousandSymbol(value, formatter=self.__formatter)
             self.damageAssistedStunTooltip = self.__makeEfficiencyHeaderTooltip('summStun', value)
             value = info.spotted
             self.spotted = numbers.formatInt(value, _UNDEFINED_EFFICIENCY_VALUE)
@@ -593,10 +593,14 @@ class TotalEfficiencyDetailsHeader(base.StatsBlock):
     def __makeEfficiencyHeaderTooltip(cls, key, value):
         if value > 0:
             header = TOOLTIPS.battleresults_efficiencyheader(key)
-            body = backport.getIntegralFormat(value)
+            body = cls.__formatter(value)
             return makeTooltip(header, body)
         else:
             return None
+
+    @classmethod
+    def __formatter(cls, value):
+        return '{:,}'.format(value).replace(',', ' ')
 
 
 class TotalEfficiencyDetailsBlock(base.StatsBlock):

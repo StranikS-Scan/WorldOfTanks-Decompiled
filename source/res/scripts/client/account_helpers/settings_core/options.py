@@ -6,7 +6,6 @@ import random
 import sys
 import fractions
 import itertools
-import math
 import weakref
 from collections import namedtuple
 from operator import itemgetter
@@ -1572,7 +1571,7 @@ class StaticFOVSetting(UserPrefsFloatSetting):
         super(StaticFOVSetting, self)._save(int(value))
 
     def getDefaultValue(self):
-        return round(math.degrees(FovExtended.instance().defaultHorizontalFov))
+        return FovExtended.instance().horizontalFov
 
 
 class DynamicFOVSetting(UserPrefsStringSetting):
@@ -2460,6 +2459,12 @@ class AnonymizerSetting(AccountDumpSetting):
 
     def _save(self, value):
         self.__ctrl.setAnonymized(value)
+
+
+class DogtagsSetting(StorageDumpSetting):
+
+    def getDefaultValue(self):
+        return True
 
 
 class ShowDamageIconSetting(StorageAccountSetting):

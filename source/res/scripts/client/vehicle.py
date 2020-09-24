@@ -159,6 +159,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.__wheelsScrollFilter = None
         self.__wheelsSteeringFilter = None
         self.isUpgrading = False
+        self.isForceReloading = False
         self.__activeGunIndex = None
         self.refreshNationalVoice()
         self.autoUpgradeOnChangeDescriptor = True
@@ -205,6 +206,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
                         _logger.info('Battle royale force appearance reloading!')
                         if moduleName == 'gun':
                             BigWorld.player().gunRotator.switchActiveGun(0)
+                        self.isForceReloading = True
                         break
 
             else:
@@ -266,6 +268,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             BigWorld.callback(0.0, lambda : Vehicle.respawnVehicle(self.id, self.respawnCompactDescr))
         elif self.prereqsCompDescr is not None and self.prereqsCompDescr != self.publicInfo.compDescr:
             BigWorld.callback(0.0, lambda : Vehicle.respawnVehicle(self.id, self.publicInfo.compDescr))
+        self.isForceReloading = False
         return
 
     def onLeaveWorld(self):
@@ -728,7 +731,8 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.appearance.setVehicle(self)
         self.appearance.activate()
         self.appearance.changeEngineMode(self.engineMode)
-        self.appearance.changeSiegeState(self.siegeState)
+        if self.isPlayerVehicle or self.typeDescriptor is None or not self.typeDescriptor.hasSiegeMode:
+            self.appearance.changeSiegeState(self.siegeState)
         self.appearance.onVehicleHealthChanged(self.isPlayerVehicle)
         if self.isPlayerVehicle:
             if self.isAlive():
@@ -755,6 +759,8 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         if self.isTurretMarkedForDetachment:
             self.confirmTurretDetachment()
         self.__startWGPhysics()
+        if not self.isPlayerVehicle and self.typeDescriptor is not None and self.typeDescriptor.hasSiegeMode:
+            self.onSiegeStateUpdated(self.siegeState, 0.0)
         self.__prereqs = None
         self.appearance.highlighter.setVehicleOwnership()
         progressionCtrl = self.guiSessionProvider.dynamic.progression

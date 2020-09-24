@@ -80,7 +80,10 @@ VEHICLE_CLASS_TAGS = frozenset(('lightTank',
  'SPG',
  'AT-SPG'))
 VEHICLE_LEVEL_EARN_CRYSTAL = 10
-MODES_WITHOUT_CRYSTAL_EARNINGS = set(('bob', 'fallout'))
+MODES_WITHOUT_CRYSTAL_EARNINGS = set(('bob',
+ 'fallout',
+ 'event_battles',
+ 'battle_royale'))
 
 class VEHICLE_PHYSICS_TYPE():
     TANK = 0
@@ -197,38 +200,41 @@ class EnhancementItem(object):
         return func(factor, self.value)
 
 
-VEHICLE_ATTRIBUTE_FACTORS = {'engine/power': 1.0,
- 'turret/rotationSpeed': 1.0,
- 'circularVisionRadius': 1.0,
- 'invisibility': [0.0, 1.0],
- 'radio/distance': 1.0,
- 'gun/rotationSpeed': 1.0,
- 'chassis/shotDispersionFactors/movement': 1.0,
- 'chassis/shotDispersionFactors/rotation': 1.0,
- 'gun/shotDispersionFactors/turretRotation': 1.0,
- 'gun/reloadTime': 1.0,
- 'gun/aimingTime': 1.0,
- 'gun/piercing': 1.0,
- 'gun/canShoot': True,
- 'engine/fireStartingChance': 1.0,
- 'healthBurnPerSecLossFraction': 1.0,
- 'repairSpeed': 1.0,
- 'additiveShotDispersionFactor': 1.0,
- 'brokenTrack': 0,
- 'vehicle/rotationSpeed': 1.0,
- 'vehicle/maxSpeed': 1.0,
- 'chassis/terrainResistance': [1.0, 1.0, 1.0],
- 'ramming': 1.0,
- 'crewLevelIncrease': 0.0,
- 'crewChanceToHitFactor': 1.0,
- 'crewRolesFactor': 1.0,
- 'stunResistanceEffect': 0.0,
- 'stunResistanceDuration': 0.0,
- 'repeatedStunDurationFactor': 1.0,
- 'healthFactor': 1.0,
- 'damageFactor': 1.0,
- 'enginePowerFactor': 1.0,
- 'deathZones/sensitivityFactor': 1.0}
+def vehicleAttributeFactors():
+    return {'engine/power': 1.0,
+     'turret/rotationSpeed': 1.0,
+     'circularVisionRadius': 1.0,
+     'invisibility': [0.0, 1.0],
+     'radio/distance': 1.0,
+     'gun/rotationSpeed': 1.0,
+     'chassis/shotDispersionFactors/movement': 1.0,
+     'chassis/shotDispersionFactors/rotation': 1.0,
+     'gun/shotDispersionFactors/turretRotation': 1.0,
+     'gun/reloadTime': 1.0,
+     'gun/aimingTime': 1.0,
+     'gun/piercing': 1.0,
+     'gun/canShoot': True,
+     'engine/fireStartingChance': 1.0,
+     'healthBurnPerSecLossFraction': 1.0,
+     'repairSpeed': 1.0,
+     'additiveShotDispersionFactor': 1.0,
+     'brokenTrack': 0,
+     'vehicle/rotationSpeed': 1.0,
+     'vehicle/maxSpeed': 1.0,
+     'chassis/terrainResistance': [1.0, 1.0, 1.0],
+     'ramming': 1.0,
+     'crewLevelIncrease': 0.0,
+     'crewChanceToHitFactor': 1.0,
+     'crewRolesFactor': 1.0,
+     'stunResistanceEffect': 0.0,
+     'stunResistanceDuration': 0.0,
+     'repeatedStunDurationFactor': 1.0,
+     'healthFactor': 1.0,
+     'damageFactor': 1.0,
+     'enginePowerFactor': 1.0,
+     'deathZones/sensitivityFactor': 1.0}
+
+
 WHEEL_SIZE_COEF = 2.2
 _g_prices = None
 
@@ -515,7 +521,7 @@ class VehicleDescriptor(object):
                 prevWeight = self.__computeWeight()
                 setter()
                 for device in self.optionalDevices:
-                    if device is not None and not device.checkCompatibilityWithComponents(self):
+                    if device is not None and not device.checkCompatibilityWithVehicle(self):
                         return (False, 'not for current vehicle')
 
                 if not _isWeightAllowedToChange(self.__computeWeight(), prevWeight):
@@ -602,7 +608,7 @@ class VehicleDescriptor(object):
                 prevWeight = self.__computeWeight()
                 setter()
                 for device in self.optionalDevices:
-                    if device is not None and not device.checkCompatibilityWithComponents(self):
+                    if device is not None and not device.checkCompatibilityWithVehicle(self):
                         return (False, 'not for current vehicle')
 
                 if not _isWeightAllowedToChange(self.__computeWeight(), prevWeight):
@@ -677,25 +683,23 @@ class VehicleDescriptor(object):
         else:
             prevDevices = self.optionalDevices
             optDevs = [ (getItemByCompactDescr(cd) if cd != 0 else None) for cd in optDevSequence ]
-            prevDevicesSet = set(prevDevices)
+            prevWeights = self.__computeWeight()
             try:
                 optDevsLen = len(optDevs)
                 for i in range(0, optDevsLen):
                     device = optDevs[i]
                     if device is None:
                         continue
-                    if device not in prevDevicesSet:
-                        result, errorStr = device.checkCompatibilityWithVehicle(self)
-                        if not result:
-                            return (False, errorStr)
+                    result, errorStr = device.checkCompatibilityWithVehicle(self)
+                    if not result:
+                        return (False, errorStr)
                     for j in range(i + 1, optDevsLen):
                         otherDevice = optDevs[j]
                         if otherDevice is not None and not device.checkCompatibilityWithOther(otherDevice):
                             return (False, 'Similar devices in sequence')
 
                 self.optionalDevices = optDevs
-                weight, maxWeight = self.__computeWeight()
-                if weight > maxWeight:
+                if not _isWeightAllowedToChange(self.__computeWeight(), prevWeights):
                     return (False, 'Devices are too heavy for vehicle')
             finally:
                 self.optionalDevices = prevDevices
@@ -1213,6 +1217,10 @@ class VehicleDescriptor(object):
 
         return (weight * (1.0 + vehWeightFraction) + vehWeightAddition, maxWeight)
 
+    def isWeightConsistent(self):
+        weight, maxWeight = self.__computeWeight()
+        return weight <= maxWeight
+
     def applyOptionalDevicesMiscAttrs(self):
         for optDev in self.optionalDevices:
             if optDev is not None:
@@ -1537,7 +1545,7 @@ class VehicleType(object):
             self.premiumVehicleXPFactor = _xml.readNonNegativeFloat(xmlCtx, section, 'premiumVehicleXPFactor')
         self.premiumVehicleXPFactor = max(self.premiumVehicleXPFactor, 0.0)
         supplySlotIDs = _xml.readTupleOfInts(xmlCtx, section, 'supplySlots')
-        self.supplySlots = SupplySlotsStorage(supplySlotIDs)
+        self.supplySlots = g_cache.supplySlotsStorage().getStorage(supplySlotIDs)
         if not IS_CLIENT and not IS_BOT:
             self.xpFactor = _xml.readNonNegativeFloat(xmlCtx, section, 'xpFactor')
             self.creditsFactor = _xml.readNonNegativeFloat(xmlCtx, section, 'creditsFactor')
@@ -1870,6 +1878,17 @@ class VehicleType(object):
         return tags | partTags
 
 
+class SupplySlotsStorageCache(object):
+
+    def __init__(self):
+        self.__cache = {}
+
+    def getStorage(self, slotIDs):
+        if slotIDs not in self.__cache:
+            self.__cache[slotIDs] = SupplySlotsStorage(slotIDs)
+        return self.__cache[slotIDs]
+
+
 class SupplySlotsStorage(object):
     ALL_IDS_KEY = -1
 
@@ -1933,7 +1952,7 @@ class SupplySlotsStorage(object):
 
 
 class Cache(object):
-    __slots__ = ('__vehicles', '__commonConfig', '__chassis', '__engines', '__fuelTanks', '__radios', '__turrets', '__guns', '__shells', '__optionalDevices', '__optionalDeviceIDs', '__equipments', '__equipmentIDs', '__chassisIDs', '__engineIDs', '__fuelTankIDs', '__radioIDs', '__turretIDs', '__gunIDs', '__shellIDs', '__customization', '__playerEmblems', '__shotEffects', '__shotEffectsIndexes', '__damageStickers', '__vehicleEffects', '__gunEffects', '__gunReloadEffects', '__gunRecoilEffects', '__turretDetachmentEffects', '__customEffects', '__requestOncePrereqs', '__customization20', '__rolesTags', '__actionsByGroups', '__rolesActionGroups', '__actionsByRoles', '__supplySlots')
+    __slots__ = ('__vehicles', '__commonConfig', '__chassis', '__engines', '__fuelTanks', '__radios', '__turrets', '__guns', '__shells', '__optionalDevices', '__optionalDeviceIDs', '__equipments', '__equipmentIDs', '__chassisIDs', '__engineIDs', '__fuelTankIDs', '__radioIDs', '__turretIDs', '__gunIDs', '__shellIDs', '__customization', '__playerEmblems', '__shotEffects', '__shotEffectsIndexes', '__damageStickers', '__vehicleEffects', '__gunEffects', '__gunReloadEffects', '__gunRecoilEffects', '__turretDetachmentEffects', '__customEffects', '__requestOncePrereqs', '__customization20', '__rolesTags', '__actionsByGroups', '__rolesActionGroups', '__actionsByRoles', '__supplySlots', '__supplySlotsStorages')
     NATION_COMPONENTS_SECTION = '/components/'
     NATION_ITEM_SOURCE = {ITEM_TYPES.vehicleChassis: 'chassis.xml',
      ITEM_TYPES.vehicleEngine: 'engines.xml',
@@ -1974,6 +1993,7 @@ class Cache(object):
         self.__actionsByGroups = None
         self.__actionsByRoles = None
         self.__supplySlots = None
+        self.__supplySlotsStorages = None
         if IS_CLIENT or IS_EDITOR:
             self.__vehicleEffects = None
             self.__gunEffects = None
@@ -2062,6 +2082,11 @@ class Cache(object):
         if self.__supplySlots is None:
             self.__supplySlots = SupplySlotsCache(_VEHICLE_TYPE_XML_PATH + 'common/supply_slot_types.xml')
         return self.__supplySlots
+
+    def supplySlotsStorage(self):
+        if self.__supplySlotsStorages is None:
+            self.__supplySlotsStorages = SupplySlotsStorageCache()
+        return self.__supplySlotsStorages
 
     def customization(self, nationID):
         descr = self.__customization[nationID]
@@ -3638,7 +3663,7 @@ def _readMultiGun(xmlCtx, section, subsection):
             _xml.raiseWrongXml(xmlCtx, 'multiGun/{}'.format(name), 'expected {}'.format(gun_tag_name))
         ctx = (xmlCtx, 'multiGun/{}'.format(gun_tag_name))
         gunPosition = _xml.readVector3(ctx, subsection, 'position')
-        gunShotOffset = _xml.readVector3(ctx, subsection, 'shotOffset', defaultValue=(0.0, 0.0, 0.0))
+        gunShotOffset = _xml.readVector3(ctx, subsection, 'shotOffset', defaultValue=Vector3(0.0, 0.0, 0.0))
         gunShotPosition = gunPosition + gunShotOffset
         if IS_CLIENT or IS_EDITOR:
             gunNode = _xml.readString(ctx, subsection, 'gunNode')
@@ -3683,7 +3708,7 @@ def _readGun(xmlCtx, section, item, unlocksDescrs=None, _=None):
     item.aimingTime = _xml.readPositiveFloat(xmlCtx, section, 'aimingTime')
     item.maxAmmo = _xml.readInt(xmlCtx, section, 'maxAmmo', 1)
     item.invisibilityFactorAtShot = _xml.readFraction(xmlCtx, section, 'invisibilityFactorAtShot')
-    item.shotOffset = _xml.readVector3(xmlCtx, section, 'shotOffset', defaultValue=(0.0, 0.0, 0.0))
+    item.shotOffset = _xml.readVector3(xmlCtx, section, 'shotOffset', defaultValue=Vector3(0.0, 0.0, 0.0))
     _readPriceForItem(xmlCtx, section, item.compactDescr)
     if IS_CLIENT or IS_WEB:
         item.i18n = shared_readers.readUserText(section)
@@ -4062,6 +4087,7 @@ def _writeGun(item, section, *args):
     _xml.rewriteFloat(section, 'invisibilityFactorAtShot', item.invisibilityFactorAtShot)
     _xml.rewriteFloat(section, 'impulse', item.impulse)
     _xml.rewriteBool(section, 'animateEmblemSlots', item.animateEmblemSlots)
+    _xml.rewriteVector3(section, 'shotOffset', item.shotOffset)
     _xml.rewriteVector2(section, 'turretYawLimits', item.editorTurretYawLimits)
     _writeGunEffectName(item.effects, section)
     _writeCamouflageSettings(section, 'camouflage', item.camouflage)
@@ -5653,7 +5679,8 @@ if IS_CLIENT or IS_EDITOR:
      'crewDeath',
      'rammingDestruction',
      'submersionDeath',
-     'flaming')
+     'flaming',
+     'instantExplosion')
 
 def _readClientAdjustmentFactors(xmlCtx, section):
     return {'power': section.readFloat('clientAdjustmentFactors/power', 1.0),
@@ -5954,8 +5981,12 @@ def _unpackIDAndDuration(cd):
 
 
 def _isWeightAllowedToChange(newWeights, prevWeights):
-    newReserve = newWeights[1] - newWeights[0]
-    return newReserve >= 0.0 or newReserve >= prevWeights[1] - prevWeights[0]
+    prevWeight, prevMaxWeight = prevWeights
+    newWeight, newMaxWeight = newWeights
+    if prevWeight > prevMaxWeight and newWeight <= prevWeight:
+        return True
+    newReserve = newMaxWeight - newWeight
+    return newReserve >= 0.0 or newReserve >= prevMaxWeight - prevWeight
 
 
 @_xml.cacheFloatTuples

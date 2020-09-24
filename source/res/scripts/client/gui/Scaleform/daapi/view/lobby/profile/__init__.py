@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/__init__.py
+from frameworks.wulf import WindowLayer
 from gui.app_loader import settings as app_settings
 from gui.shared import EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ViewTypes, ScopeTemplates
+from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ScopeTemplates, ComponentSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 
@@ -23,16 +24,16 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.profile.ProfileTechniqueWindow import ProfileTechniqueWindow
     from gui.Scaleform.daapi.view.lobby.profile.ProfileWindow import ProfileWindow
     from gui.Scaleform.daapi.view.lobby.profile.ProfileHof import ProfileHof
-    return (ViewSettings(VIEW_ALIAS.LOBBY_PROFILE, ProfilePage, 'profile.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_PROFILE, ScopeTemplates.LOBBY_SUB_SCOPE),
-     GroupedViewSettings(VIEW_ALIAS.PROFILE_WINDOW, ProfileWindow, 'profileWindow.swf', ViewTypes.WINDOW, 'profileWindow', None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.PROFILE_AWARDS, ProfileAwards, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.PROFILE_STATISTICS, ProfileStatistics, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.PROFILE_SUMMARY_PAGE, ProfileSummaryPage, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.PROFILE_SUMMARY_WINDOW, ProfileSummaryWindow, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.PROFILE_TAB_NAVIGATOR, ProfileTabNavigator, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE, ProfileTechniquePage, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.PROFILE_TECHNIQUE_WINDOW, ProfileTechniqueWindow, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.PROFILE_HOF, ProfileHof, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
+    return (ViewSettings(VIEW_ALIAS.LOBBY_PROFILE, ProfilePage, 'profile.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.LOBBY_PROFILE, ScopeTemplates.LOBBY_SUB_SCOPE),
+     GroupedViewSettings(VIEW_ALIAS.PROFILE_WINDOW, ProfileWindow, 'profileWindow.swf', WindowLayer.WINDOW, 'profileWindow', None, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(VIEW_ALIAS.PROFILE_AWARDS, ProfileAwards, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(VIEW_ALIAS.PROFILE_STATISTICS, ProfileStatistics, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(VIEW_ALIAS.PROFILE_SUMMARY_PAGE, ProfileSummaryPage, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(VIEW_ALIAS.PROFILE_SUMMARY_WINDOW, ProfileSummaryWindow, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(VIEW_ALIAS.PROFILE_TAB_NAVIGATOR, ProfileTabNavigator, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE, ProfileTechniquePage, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(VIEW_ALIAS.PROFILE_TECHNIQUE_WINDOW, ProfileTechniqueWindow, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(VIEW_ALIAS.PROFILE_HOF, ProfileHof, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

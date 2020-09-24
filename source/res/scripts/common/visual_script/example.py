@@ -28,6 +28,19 @@ class HelloFromPythonOverride(HelloFromPython):
         self._outSlot.setValue(res)
 
 
+class StringSelectorExample(Block, Example):
+
+    def __init__(self, *args, **kwargs):
+        super(StringSelectorExample, self).__init__(*args, **kwargs)
+        self._inSlot = self._makeDataInputSlot('in_slot', SLOT_TYPE.STR, EDITOR_TYPE.ENUM_SELECTOR)
+        self._inSlot.setEditorData(['my string 1', 'my string 2', 'my string 3'])
+        self._outSlot = self._makeDataOutputSlot('result', SLOT_TYPE.STR, self._execute)
+
+    def _execute(self):
+        res = ' '.join(('String', self._inSlot.getValue(), 'was selected'))
+        self._outSlot.setValue(res)
+
+
 class GetProjectName(Block, Example):
 
     def __init__(self, *args, **kwargs):

@@ -62,9 +62,9 @@ class FunctionalCurrentSceneCondition(FunctionalCondition):
 class FunctionalViewPresentCondition(FunctionalCondition):
 
     def isConditionOk(self, condition):
-        viewType = condition.getViewType()
+        layer = condition.getLayer()
         viewAlias = condition.getViewAlias()
-        result = self._gui.isViewPresent(viewType, criteria={POP_UP_CRITERIA.VIEW_ALIAS: viewAlias})
+        result = self._gui.isViewPresent(layer, criteria={POP_UP_CRITERIA.VIEW_ALIAS: viewAlias})
         return result if condition.isPositiveState() else not result
 
 
@@ -909,6 +909,6 @@ class FunctionalPlaySoundEffect(FunctionalEffect):
 class FunctionalCloseViewEffect(FunctionalEffect):
 
     def triggerEffect(self):
-        viewType, viewAlias = self._effect.getTargetID()
-        self._gui.closeView(viewType, criteria={POP_UP_CRITERIA.VIEW_ALIAS: viewAlias})
+        layer, viewAlias = self._effect.getTargetID()
+        self._gui.closeView(layer, criteria={POP_UP_CRITERIA.VIEW_ALIAS: viewAlias})
         return True

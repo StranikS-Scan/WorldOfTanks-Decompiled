@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/__init__.py
-from gui.Scaleform.framework import GroupedViewSettings, ViewTypes, ScopeTemplates, ViewSettings
+from frameworks.wulf import WindowLayer
+from gui.Scaleform.framework import GroupedViewSettings, ScopeTemplates, ComponentSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
@@ -29,22 +30,22 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.clans.invites.ClanRequestsView import ClanRequestsView
     from gui.Scaleform.daapi.view.lobby.clans.profile.ClanProfileSummaryView import ClanProfileSummaryView
     from gui.Scaleform.daapi.view.lobby.clans.profile.ClanProfileTableStatisticsView import ClanProfileTableStatisticsView
-    return (GroupedViewSettings(CLANS_ALIASES.CLAN_PROFILE_MAIN_WINDOW_PY, ClanProfileMainWindow, CLANS_ALIASES.CLAN_PROFILE_MAIN_WINDOW_UI, ViewTypes.WINDOW, '', CLANS_ALIASES.CLAN_PROFILE_MAIN_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE, True),
-     GroupedViewSettings(CLANS_ALIASES.CLAN_PROFILE_INVITES_WINDOW_PY, ClanInvitesWindow, 'clanInvitesWindow.swf', ViewTypes.WINDOW, CLANS_ALIASES.CLAN_PROFILE_INVITES_WINDOW_PY, None, ScopeTemplates.LOBBY_SUB_SCOPE),
-     GroupedViewSettings(CLANS_ALIASES.CLAN_PROFILE_SEND_INVITES_WINDOW_PY, ClanSendInvitesWindow, 'sendInvitesWindow.swf', ViewTypes.WINDOW, '', CLANS_ALIASES.CLAN_PROFILE_SEND_INVITES_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE),
-     GroupedViewSettings(CLANS_ALIASES.CLAN_PERSONAL_INVITES_WINDOW_PY, ClanPersonalInvitesWindow, CLANS_ALIASES.CLAN_PERSONAL_INVITES_WINDOW_UI, ViewTypes.WINDOW, CLANS_ALIASES.CLAN_PERSONAL_INVITES_WINDOW_PY, None, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(CLANS_ALIASES.CLAN_PROFILE_SUMMARY_VIEW_ALIAS, ClanProfileSummaryView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
-     ViewSettings(CLANS_ALIASES.CLAN_PROFILE_PERSONNEL_VIEW_ALIAS, ClanProfilePersonnelView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
-     ViewSettings(CLANS_ALIASES.CLAN_PROFILE_STRONGHOLDS_VIEW_ALIAS, ClanProfileStrongholdsView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
-     ViewSettings(CLANS_ALIASES.CLAN_PROFILE_GLOBALMAP_VIEW_ALIAS, ClanProfileGlobalMapView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
-     ViewSettings(CLANS_ALIASES.CLAN_PROFILE_GLOBALMAP_PROMO_VIEW_ALIAS, ClanProfileGlobalMapPromoView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
-     ViewSettings(CLANS_ALIASES.CLAN_PROFILE_GLOBALMAP_INFO_VIEW_ALIAS, ClanProfileGlobalMapInfoView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
-     ViewSettings(CLANS_ALIASES.CLAN_PROFILE_REQUESTS_VIEW_ALIAS, ClanRequestsView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(CLANS_ALIASES.CLAN_PROFILE_INVITES_VIEW_ALIAS, ClanInvitesView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(CLANS_ALIASES.CLAN_PROFILE_TABLE_STATISTICS_VIEW_ALIAS, ClanProfileTableStatisticsView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(CLANS_ALIASES.CLAN_PERSONAL_INVITES_VIEW_ALIAS, ClanPersonalInvitesView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     GroupedViewSettings(CLANS_ALIASES.CLAN_SEARCH_WINDOW_PY, ClanSearchWindow, 'clanSearchWindow.swf', ViewTypes.WINDOW, CLANS_ALIASES.CLAN_SEARCH_WINDOW_PY, None, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(CLANS_ALIASES.CLAN_SEARCH_INFO_PY, ClanSearchInfo, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
+    return (GroupedViewSettings(CLANS_ALIASES.CLAN_PROFILE_MAIN_WINDOW_PY, ClanProfileMainWindow, CLANS_ALIASES.CLAN_PROFILE_MAIN_WINDOW_UI, WindowLayer.WINDOW, '', CLANS_ALIASES.CLAN_PROFILE_MAIN_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE, True),
+     GroupedViewSettings(CLANS_ALIASES.CLAN_PROFILE_INVITES_WINDOW_PY, ClanInvitesWindow, 'clanInvitesWindow.swf', WindowLayer.WINDOW, CLANS_ALIASES.CLAN_PROFILE_INVITES_WINDOW_PY, None, ScopeTemplates.LOBBY_SUB_SCOPE),
+     GroupedViewSettings(CLANS_ALIASES.CLAN_PROFILE_SEND_INVITES_WINDOW_PY, ClanSendInvitesWindow, 'sendInvitesWindow.swf', WindowLayer.WINDOW, '', CLANS_ALIASES.CLAN_PROFILE_SEND_INVITES_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE),
+     GroupedViewSettings(CLANS_ALIASES.CLAN_PERSONAL_INVITES_WINDOW_PY, ClanPersonalInvitesWindow, CLANS_ALIASES.CLAN_PERSONAL_INVITES_WINDOW_UI, WindowLayer.WINDOW, CLANS_ALIASES.CLAN_PERSONAL_INVITES_WINDOW_PY, None, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ComponentSettings(CLANS_ALIASES.CLAN_PROFILE_SUMMARY_VIEW_ALIAS, ClanProfileSummaryView, ScopeTemplates.VIEW_SCOPE),
+     ComponentSettings(CLANS_ALIASES.CLAN_PROFILE_PERSONNEL_VIEW_ALIAS, ClanProfilePersonnelView, ScopeTemplates.VIEW_SCOPE),
+     ComponentSettings(CLANS_ALIASES.CLAN_PROFILE_STRONGHOLDS_VIEW_ALIAS, ClanProfileStrongholdsView, ScopeTemplates.VIEW_SCOPE),
+     ComponentSettings(CLANS_ALIASES.CLAN_PROFILE_GLOBALMAP_VIEW_ALIAS, ClanProfileGlobalMapView, ScopeTemplates.VIEW_SCOPE),
+     ComponentSettings(CLANS_ALIASES.CLAN_PROFILE_GLOBALMAP_PROMO_VIEW_ALIAS, ClanProfileGlobalMapPromoView, ScopeTemplates.VIEW_SCOPE),
+     ComponentSettings(CLANS_ALIASES.CLAN_PROFILE_GLOBALMAP_INFO_VIEW_ALIAS, ClanProfileGlobalMapInfoView, ScopeTemplates.VIEW_SCOPE),
+     ComponentSettings(CLANS_ALIASES.CLAN_PROFILE_REQUESTS_VIEW_ALIAS, ClanRequestsView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(CLANS_ALIASES.CLAN_PROFILE_INVITES_VIEW_ALIAS, ClanInvitesView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(CLANS_ALIASES.CLAN_PROFILE_TABLE_STATISTICS_VIEW_ALIAS, ClanProfileTableStatisticsView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(CLANS_ALIASES.CLAN_PERSONAL_INVITES_VIEW_ALIAS, ClanPersonalInvitesView, ScopeTemplates.DEFAULT_SCOPE),
+     GroupedViewSettings(CLANS_ALIASES.CLAN_SEARCH_WINDOW_PY, ClanSearchWindow, 'clanSearchWindow.swf', WindowLayer.WINDOW, CLANS_ALIASES.CLAN_SEARCH_WINDOW_PY, None, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ComponentSettings(CLANS_ALIASES.CLAN_SEARCH_INFO_PY, ClanSearchInfo, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

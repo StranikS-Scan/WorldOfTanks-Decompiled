@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_control/event_dispatcher.py
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.battle_control.avatar_getter import isVehicleAlive
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
@@ -41,13 +42,13 @@ def choiceConsumable(key):
 def toggleHelp():
     if _killHelpView():
         return
-    g_eventBus.handleEvent(GameEvent(GameEvent.HELP), scope=_SCOPE)
+    g_eventBus.handleEvent(LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.INGAME_HELP)), scope=_SCOPE)
 
 
 def toggleHelpDetailed(ctx):
     if _killHelpView():
         return
-    g_eventBus.handleEvent(GameEvent(GameEvent.HELP_DETAILED, ctx), scope=_SCOPE)
+    g_eventBus.handleEvent(LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.INGAME_DETAILS_HELP), ctx=ctx), scope=_SCOPE)
 
 
 def setMinimapCmd(key):
@@ -71,12 +72,12 @@ def setPlayingTimeOnArena(playingTime):
 
 
 def showIngameMenu():
-    g_eventBus.handleEvent(LoadViewEvent(VIEW_ALIAS.INGAME_MENU), scope=_SCOPE)
+    g_eventBus.handleEvent(LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.INGAME_MENU)), scope=_SCOPE)
 
 
 def showBattleVehicleConfigurator():
     if isVehicleAlive():
-        g_eventBus.handleEvent(LoadViewEvent(BATTLE_VIEW_ALIASES.BATTLE_VEHICLE_CONFIGURATOR), scope=_SCOPE)
+        g_eventBus.handleEvent(LoadViewEvent(SFViewLoadParams(BATTLE_VIEW_ALIASES.BATTLE_VEHICLE_CONFIGURATOR)), scope=_SCOPE)
 
 
 def hideBattleVehicleConfigurator():

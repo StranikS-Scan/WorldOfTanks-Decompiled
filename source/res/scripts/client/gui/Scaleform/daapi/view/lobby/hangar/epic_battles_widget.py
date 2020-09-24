@@ -158,7 +158,7 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
         status, timeLeft, _ = self.__eventProgression.getPrimeTimeStatus()
         showPrimeTimeAlert = status != PrimeTimeStatus.AVAILABLE
         hasAvailableServers = self.__eventProgression.hasAvailablePrimeTimeServers()
-        return CalendarStatusVO(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()) if showPrimeTimeAlert else None, buttonIcon='', buttonLabel=backport.text(R.strings.epic_battle.widgetAlertMessageBlock.button()), buttonVisible=showPrimeTimeAlert and hasAvailableServers, buttonTooltip=None, statusText=self.__getAlertStatusText(timeLeft, hasAvailableServers), popoverAlias=None, bgVisible=True, shadowFilterVisible=showPrimeTimeAlert, tooltip=None)
+        return CalendarStatusVO(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()) if showPrimeTimeAlert else None, buttonIcon='', buttonLabel=backport.text(R.strings.epic_battle.widgetAlertMessageBlock.button()), buttonVisible=showPrimeTimeAlert and hasAvailableServers, buttonTooltip=None, statusText=self.__getAlertStatusText(timeLeft, hasAvailableServers), popoverAlias=None, bgVisible=True, shadowFilterVisible=showPrimeTimeAlert, tooltip=None, isSimpleTooltip=False)
 
     def __getAlertStatusText(self, timeLeft, hasAvailableServers):
         rAlertMsgBlock = R.strings.epic_battle.widgetAlertMessageBlock

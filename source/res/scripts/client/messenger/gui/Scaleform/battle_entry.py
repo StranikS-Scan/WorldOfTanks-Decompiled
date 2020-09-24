@@ -202,11 +202,10 @@ class BattleEntry(IGUIEntry):
         if controller is None:
             LOG_ERROR('Controller not found', command)
             return
-        elif command.isInSilentMode():
+        elif command.isInSilentMode() or not controller.filterMessage(command):
             return
         else:
-            if controller.filterMessage(command):
-                controller.addCommand(command)
+            controller.addCommand(command)
             return
 
     def __me_onErrorReceived(self, error):

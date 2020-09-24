@@ -113,9 +113,6 @@ class ModuleBlockTooltipData(BlocksTooltipData):
 
             if compatibleBlocks:
                 items.append(formatters.packBuildUpBlockData(compatibleBlocks, padding=formatters.packPadding(left=leftPadding)))
-        incompatibleDeviceBlock = self.__packIncompatibleDeviceBlock(module, statusConfig)
-        if incompatibleDeviceBlock is not None:
-            items.append(incompatibleDeviceBlock)
         if itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and module.isTrophy:
             items.append(formatters.packBuildUpBlockData(self.__trophyDeviceBlocks(module, statusConfig), padding=formatters.packPadding(top=-4, bottom=-5, left=_DEFAULT_PADDING, right=_DEFAULT_PADDING), gap=4))
         statusBlock = StatusBlockConstructor(module, statusConfig, leftPadding, rightPadding).construct()
@@ -133,13 +130,6 @@ class ModuleBlockTooltipData(BlocksTooltipData):
                 lastItem['padding'] = {}
             lastItem['padding']['bottom'] = lastItem['padding'].get('bottom', 0) + 15
         return items
-
-    def __packIncompatibleDeviceBlock(self, device, config):
-        vehicle = config.vehicle
-        if vehicle is None or device.itemTypeID != GUI_ITEM_TYPE.OPTIONALDEVICE or not (vehicle.isInInventory or config.isCompare):
-            return
-        else:
-            return formatters.packItemTitleDescBlockData(img=backport.image(R.images.gui.maps.icons.tanksetup.tooltips.spec_change()), imgPadding=formatters.packPadding(left=5, right=-4, top=-3), title=text_styles.statusAttention(backport.text(R.strings.tooltips.deviceFits.incompatible_device.header())), desc=text_styles.main(backport.text(R.strings.tooltips.deviceFits.incompatible_device.text())), padding=formatters.packPadding(left=10, right=_DEFAULT_PADDING, top=-6, bottom=-4), descPadding=formatters.packPadding(left=6, right=_DEFAULT_PADDING, top=-1, bottom=0)) if device in vehicle.optDevices.installed and not device.descriptor.checkCompatibilityWithVehicle(vehicle.descriptor)[0] else None
 
     def __trophyDeviceBlocks(self, module, statusConfig):
         trophyBlocks = []
@@ -636,16 +626,17 @@ class OptDeviceEffectsBlockConstructor(ModuleTooltipBlockConstructor):
         isPanelTooltip = self.configuration.withSlots
         block = []
         isSpecMatch = False
+        slotCategories = set()
         if vehicle is not None:
-            optDeviceSlot = vehicle.optDevices.slots[slotIdx]
-            isSpec = bool(optDeviceSlot.categories & categories)
+            slotCategories = vehicle.optDevices.slots[slotIdx].categories
+            isSpec = bool(slotCategories & categories)
             if categories and isSpec:
                 isSpecMatch = True
         additionalDescr = R.strings.artefacts.dyn(module.descriptor.groupName).dyn('additional_descr')
         if additionalDescr:
             descr = backport.text(R.strings.tank_setup.effects.template(), icon=icons.makeImageTag(source=backport.image(R.images.gui.maps.icons.tanksetup.cards.effect()), width=10, height=16), title=text_styles.neutral(backport.text(R.strings.tank_setup.effects.name())), descr=backport.text(additionalDescr()))
             block.append(formatters.packTextBlockData(text_styles.standard(descr)))
-        if categories and isPanelTooltip:
+        if categories and isPanelTooltip and slotCategories:
             kpiTitle = backport.text(R.strings.tank_setup.tooltips.optDevice.bonusDesc(), match=self.__neutralFatTextStyle(backport.text(R.strings.tank_setup.tooltips.optDevice.bonusDesc.dyn(str(isSpecMatch))())))
         else:
             kpiTitle = backport.text(R.strings.tank_setup.tooltips.optDevice.bonusDesc.applied())
@@ -675,6 +666,9 @@ class OptDeviceEffectsBlockConstructor(ModuleTooltipBlockConstructor):
                 additionalText = backport.text(howToIncrease(), category=cats)
             else:
                 additionalText = backport.text(R.strings.tank_setup.tooltips.howToIncrease.increased())
+            block.append(formatters.packTextBlockData(text_styles.standard(additionalText), padding=formatters.packPadding(top=9)))
+        if module.isRegular and all((kpi.specValue is None for kpi in moduleKpi)):
+            additionalText = backport.text(R.strings.tank_setup.tooltips.howToIncrease.impossible())
             block.append(formatters.packTextBlockData(text_styles.standard(additionalText), padding=formatters.packPadding(top=9)))
         return block
 
@@ -825,7 +819,6 @@ class OptDeviceSlotsHeaderBlockConstructor(ModuleTooltipBlockConstructor):
             categories = slot.categories
             selectedSlot = idx == slotIdx
             moduleInSlot = vehicle.optDevices.installed[idx]
-            needShowUpArrow = self.__needShowUpArrow(vehicle, idx)
             hasModuleInSlot = moduleInSlot is not None
             if moduleInSlot:
                 moduleCategories = moduleInSlot.descriptor.categories
@@ -866,7 +859,7 @@ class OptDeviceSlotsHeaderBlockConstructor(ModuleTooltipBlockConstructor):
                 slotState = TOOLTIPS_CONSTANTS.OPTDEV_SLOT_STATE_EMPTY
             if categories:
                 hasSlotSpecs = True
-            slotsBlocks.append(formatters.packOptDeviceSlotBlockData(imagePath=backport.image(icon) if hasModuleInSlot else '', slotState=slotState, slotAlpha=1 if selectedSlot else 0.4, showUpArrow=needShowUpArrow, showSlotHighlight=isSpecMatch, overlayPath=overlayPath, overlayPadding=overlayPadding, slotSpecs=slotSpecs, deviceSpecs=deviceSpecs))
+            slotsBlocks.append(formatters.packOptDeviceSlotBlockData(imagePath=backport.image(icon) if hasModuleInSlot else '', slotState=slotState, slotAlpha=1 if selectedSlot else 0.4, showUpArrow=False, showSlotHighlight=isSpecMatch, overlayPath=overlayPath, overlayPadding=overlayPadding, slotSpecs=slotSpecs, deviceSpecs=deviceSpecs))
 
         block.append(formatters.packBuildUpBlockData(blocks=slotsBlocks, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, gap=5, padding=formatters.packPadding(bottom=0 if hasSlotSpecs else 20)))
         return block
@@ -896,15 +889,6 @@ class OptDeviceSlotsHeaderBlockConstructor(ModuleTooltipBlockConstructor):
         else:
             padding = None
         return (overlayPath, padding)
-
-    def __needShowUpArrow(self, vehicle, slotIdx):
-        if vehicle is not None and slotIdx < vehicle.optDevices.installed.getCapacity():
-            optDeviceInSlot = vehicle.optDevices.installed[slotIdx]
-            if optDeviceInSlot is not None:
-                isCompatible, _ = optDeviceInSlot.descriptor.checkCompatibilityWithVehicle(vehicle.descriptor)
-                if not isCompatible:
-                    return True
-        return False
 
 
 class OptDeviceEmptyBlockTooltipData(BlocksTooltipData):

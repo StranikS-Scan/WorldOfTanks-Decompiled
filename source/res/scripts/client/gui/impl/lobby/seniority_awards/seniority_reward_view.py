@@ -97,5 +97,5 @@ class SeniorityRewardWindow(LobbyWindow):
     __slots__ = ()
 
     def __init__(self, contentResId, *args, **kwargs):
-        super(SeniorityRewardWindow, self).__init__(wndFlags=WindowFlags.OVERLAY, decorator=None, content=SeniorityRewardView(contentResId, *args, **kwargs), parent=None)
+        super(SeniorityRewardWindow, self).__init__(wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, decorator=None, content=SeniorityRewardView(contentResId, *args, **kwargs), parent=None)
         return

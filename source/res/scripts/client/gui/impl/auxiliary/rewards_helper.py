@@ -4,7 +4,6 @@ import logging
 import types
 import itertools
 from collections import namedtuple
-from constants import IS_CHINA
 from blueprints.BlueprintTypes import BlueprintTypes
 from frameworks.wulf import ViewFlags
 from gui.battle_royale.constants import ROYALE_POSTBATTLE_REWARDS_COUNT
@@ -26,7 +25,6 @@ from gui.impl.gen.view_models.views.loot_box_view.crew_book_renderer_model impor
 from gui.impl.gen.view_models.views.loot_box_view.congrats_view_model import CongratsViewModel
 from gui.impl.gen.view_models.views.loot_box_view.loot_compensation_renderer_model import LootCompensationRendererModel
 from gui.impl.gen.view_models.views.loot_box_view.loot_congrats_types import LootCongratsTypes
-from gui.impl.gen.view_models.views.loot_box_view.loot_default_congrat_renderer_model import LootDefaultCongratRendererModel
 from gui.impl.gen.view_models.views.loot_box_view.loot_def_renderer_model import LootDefRendererModel
 from gui.impl.gen.view_models.views.loot_box_view.loot_animated_renderer_model import LootAnimatedRendererModel
 from gui.impl.gen.view_models.views.loot_box_view.loot_vehicle_compensation_renderer_model import LootVehicleCompensationRendererModel
@@ -37,7 +35,6 @@ from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, 
 from gui.server_events.bonuses import getNonQuestBonuses, BlueprintsBonusSubtypes
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import BonusNameQuestsBonusComposer
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import LootBoxBonusComposer
-from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import TransferGiveawayBonusComposer
 from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsEntryPointVO, getSeniorityAwardsBoxesCount
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
@@ -54,7 +51,6 @@ from helpers.func_utils import makeFlashPath
 from shared_utils import first
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
-from ten_year_countdown_config import EVENT_BADGE_NAME
 STYLES_TAGS = []
 VIDEO_TAGS = []
 _logger = logging.getLogger(__name__)
@@ -414,69 +410,6 @@ class LootVehicleRewardPresenter(LootRewardDefModelPresenter):
             tx.setShowCongrats(showCongrats)
 
 
-class TenYearsRewardCongratModelPresenter(LootRewardDefModelPresenter):
-    __itemsCache = dependency.descriptor(IItemsCache)
-
-    def __init__(self, congratType=LootCongratsTypes.INIT_CONGRAT_TYPE_USUAL):
-        super(TenYearsRewardCongratModelPresenter, self).__init__()
-        self._congratType = congratType
-
-    def _getRendererType(self):
-        return LootRendererTypes.TEN_YEARS_COUNTDOWN
-
-    def _createModel(self):
-        return LootDefaultCongratRendererModel()
-
-    def _formatModel(self, model, ttId, showCongrats):
-        super(TenYearsRewardCongratModelPresenter, self)._formatModel(model, ttId, showCongrats)
-        with model.congratsViewModel.transaction() as tx:
-            tx.setCongratsType(self._congratType)
-            tx.setShowCongrats(showCongrats)
-            img = self._getCongratsImage()
-            tx.setCongratsSourceId(img)
-
-    def _getCongratsImage(self):
-        if self._congratType == LootCongratsTypes.CONGRAT_TYPE_10YC_BADGE:
-
-            def criteria(badge):
-                return badge.getName() == EVENT_BADGE_NAME
-
-            badges = self.__itemsCache.items.getBadges(criteria)
-            if badges:
-                badgeName = 'badge_{}'.format(badges.values()[0].badgeID)
-                img = backport.image(R.images.gui.maps.icons.library.badges.c_220x220.dyn(badgeName)())
-            else:
-                img = ''
-        elif self._congratType == LootCongratsTypes.CONGRAT_TYPE_10YC_TOKEN:
-            img = backport.image(R.images.gui.maps.icons.tenYearsCountdown.awards.big.token())
-        elif self._congratType in (LootCongratsTypes.CONGRAT_TYPE_10YC_STYLE, LootCongratsTypes.CONGRAT_TYPE_10YC_STYLE_CHINA):
-            img = backport.image(R.images.gui.maps.icons.tenYearsCountdown.awards.big.style())
-        else:
-            img = ''
-        return img
-
-
-def getTokenAward():
-    headerText = backport.text(R.strings.ten_year_countdown.awardView.token.tooltip.head())
-    bodyText = backport.text(R.strings.ten_year_countdown.awardView.token.tooltip.body())
-    tooltipToken = makeTooltip(header=headerText, body=bodyText)
-    img = backport.image(R.images.gui.maps.icons.tenYearsCountdown.awards.small.token())
-    return {'bonusName': 'tokens',
-     'imgSource': img,
-     'overlayIcon': '',
-     'specialArgs': [],
-     'isSpecial': False,
-     'highlightType': '',
-     'highlightIcon': '',
-     'compensationReason': None,
-     'align': 'center',
-     'specialAlias': '',
-     'tooltip': tooltipToken,
-     'label': None,
-     'overlayType': '',
-     'hasCompensation': False}
-
-
 def getVehicleStrID(vehicleName):
     return vehicleName.split(':')[1]
 
@@ -577,9 +510,6 @@ DEF_MODEL_PRESENTERS = {CrewBonusTypes.CREW_BOOK_BONUSES: CrewBookModelPresenter
  BlueprintsBonusSubtypes.NATION_FRAGMENT: LootRewardConversionModelPresenter(R.images.gui.maps.icons.blueprints.fragment.big.vehicle(), R.sounds.gui_blueprint_fragment_convert()),
  BlueprintsBonusSubtypes.VEHICLE_FRAGMENT: BlueprintFragmentRewardPresenter()}
 RANKED_MODEL_PRESENTERS = {'vehicles': LootVehicleRewardPresenter()}
-TEN_YEARS_MODEL_PRESENTER = {'dossier': TenYearsRewardCongratModelPresenter(congratType=LootCongratsTypes.CONGRAT_TYPE_10YC_BADGE),
- 'tokens': TenYearsRewardCongratModelPresenter(congratType=LootCongratsTypes.CONGRAT_TYPE_10YC_TOKEN),
- 'customizations': TenYearsRewardCongratModelPresenter(congratType=LootCongratsTypes.CONGRAT_TYPE_10YC_STYLE if not IS_CHINA else LootCongratsTypes.CONGRAT_TYPE_10YC_STYLE_CHINA)}
 
 def getRewardsBonuses(rewards, size='big', awardsCount=_DEFAULT_DISPLAYED_AWARDS_COUNT):
     formatter = BonusNameQuestsBonusComposer(awardsCount, getPackRentVehiclesAwardPacker())
@@ -695,39 +625,6 @@ def getSeniorityAwardsRewardsAndBonuses(rewards, size='big', maxAwardCount=_DEFA
 
         bonuses.sort(key=_seniorityKeySortOrder)
     formattedBonuses = formatter.getVisibleFormattedBonuses(bonuses, alwaysVisibleBonuses, size)
-    orderedVehicles = []
-    for vehicleCD in vehicles:
-        vehicle = itemsCache.items.getItemByCD(vehicleCD)
-        orderedVehicles.append(VehicleAward(vehicleCD, vehicle.level, vehicle.name))
-
-    orderedVehicles.sort(key=lambda v: v.level)
-    return (formattedBonuses, orderedVehicles, countBoxes)
-
-
-@dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def getTransferGiveawayRewardsAndBonuses(rewards, size='big', maxAwardCount=_DEFAULT_DISPLAYED_AWARDS_COUNT, itemsCache=None, sortKey=None, hiddenBonuses=None):
-    preparationRewardsCurrency(rewards)
-    formatter = TransferGiveawayBonusComposer(maxAwardCount, getLootboxesAwardsPacker(), sortKey)
-    hiddenBonuses = hiddenBonuses or []
-    bonuses = []
-    vehicles = []
-    countBoxes = 0
-    if rewards:
-        for rewardType, rewardValue in rewards.iteritems():
-            if rewardType in hiddenBonuses:
-                continue
-            if rewardType == 'vehicles':
-                for vehicle in rewardValue:
-                    vehicles.extend(vehicle.keys())
-
-            if rewardType == 'premium' or rewardType == 'premium_plus':
-                splitDays = splitPremiumDays(rewardValue)
-                for day in splitDays:
-                    bonuses.extend(getNonQuestBonuses(rewardType, day))
-
-            bonuses.extend(getNonQuestBonuses(rewardType, rewardValue))
-
-    formattedBonuses = formatter.getVisibleFormattedBonuses(bonuses, None, size)
     orderedVehicles = []
     for vehicleCD in vehicles:
         vehicle = itemsCache.items.getItemByCD(vehicleCD)

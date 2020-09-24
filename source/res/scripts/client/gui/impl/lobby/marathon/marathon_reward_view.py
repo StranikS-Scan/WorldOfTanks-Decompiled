@@ -81,5 +81,5 @@ class MarathonRewardViewWindow(LobbyWindow):
     __slots__ = ()
 
     def __init__(self, *args, **kwargs):
-        super(MarathonRewardViewWindow, self).__init__(content=MarathonRewardView(*args, **kwargs), wndFlags=WindowFlags.OVERLAY, decorator=None)
+        super(MarathonRewardViewWindow, self).__init__(content=MarathonRewardView(*args, **kwargs), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, decorator=None)
         return

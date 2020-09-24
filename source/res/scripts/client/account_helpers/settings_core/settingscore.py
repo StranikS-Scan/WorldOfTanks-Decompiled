@@ -75,6 +75,7 @@ class SettingsCore(ISettingsCore):
         BATTLE_BORDER_MAP_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.BATTLE_BORDER_MAP)
         QUESTS_PROGRESS_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.QUESTS_PROGRESS)
         BATTLE_COMM_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.BATTLE_COMM)
+        DOG_TAGS_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.DOG_TAGS)
         MESSENGER_SETTINGS_STORAGE = settings_storages.MessengerSettingsStorage(GAME_SETTINGS_STORAGE)
         EXTENDED_MESSENGER_SETTINGS_STORAGE = settings_storages.MessengerSettingsStorage(EXTENDED_GAME_SETTINGS_STORAGE)
         self.__storages = {'game': GAME_SETTINGS_STORAGE,
@@ -96,7 +97,8 @@ class SettingsCore(ISettingsCore):
          'battleEvents': BATTLE_EVENTS_SETTINGS_STORAGE,
          'battleBorderMap': BATTLE_BORDER_MAP_SETTINGS_STORAGE,
          'questsProgress': QUESTS_PROGRESS_SETTINGS_STORAGE,
-         'battleComm': BATTLE_COMM_SETTINGS_STORAGE}
+         'battleComm': BATTLE_COMM_SETTINGS_STORAGE,
+         'dogTags': DOG_TAGS_SETTINGS_STORAGE}
         self.isDeviseRecreated = False
         self.isChangesConfirmed = True
         graphicSettings = tuple(((settingName, options.GraphicSetting(settingName, settingName == GRAPHICS.COLOR_GRADING_TECHNIQUE)) for settingName in BigWorld.generateGfxSettings()))
@@ -112,6 +114,8 @@ class SettingsCore(ISettingsCore):
          (GAME.BATTLE_LOADING_RANKED_INFO, options.BattleLoadingTipSetting(GAME.BATTLE_LOADING_RANKED_INFO, GAME.BATTLE_LOADING_RANKED_INFO)),
          (GAME.SHOW_MARKS_ON_GUN, options.ShowMarksOnGunSetting(GAME.SHOW_MARKS_ON_GUN, storage=MARK_ON_GUN_SETTINGS_STORAGE)),
          (GAME.ANONYMIZER, options.AnonymizerSetting(GAME.ANONYMIZER)),
+         (GAME.SHOW_VICTIMS_DOGTAG, options.DogtagsSetting(GAME.SHOW_VICTIMS_DOGTAG, storage=DOG_TAGS_SETTINGS_STORAGE)),
+         (GAME.SHOW_DOGTAG_TO_KILLER, options.DogtagsSetting(GAME.SHOW_DOGTAG_TO_KILLER, storage=DOG_TAGS_SETTINGS_STORAGE)),
          (GAME.DYNAMIC_CAMERA, options.DynamicCamera(GAME.DYNAMIC_CAMERA, storage=GAME_SETTINGS_STORAGE)),
          (GAME.INCREASED_ZOOM, options.IncreasedZoomSetting(GAME.INCREASED_ZOOM, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.SNIPER_MODE_BY_SHIFT, options.SniperModeByShiftSetting(GAME.SNIPER_MODE_BY_SHIFT, storage=EXTENDED_GAME_SETTINGS_STORAGE)),

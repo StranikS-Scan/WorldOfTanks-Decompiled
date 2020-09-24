@@ -134,12 +134,25 @@ class ShellTooltipBuilder(HangarModuleTooltipBuilder):
     itemsCache = dependency.descriptor(IItemsCache)
 
     @classmethod
-    def getPanelSlotTooltip(cls, *_):
-        return None
+    def _getSlotItem(cls, vehicle, slotID):
+        return vehicle.shells.installed[int(slotID)]
+
+    @classmethod
+    def _getInSlotTooltipAlias(cls):
+        return TOOLTIPS_CONSTANTS.TECH_MAIN_SHELL
 
     @classmethod
     def _getTooltipSpecialAlias(cls):
         return TOOLTIPS_CONSTANTS.TECH_MAIN_SHELL
+
+    @classmethod
+    def getVehicle(cls, vehicle, currentSection=None):
+        copyVehicle = super(ShellTooltipBuilder, cls).getVehicle(vehicle, currentSection)
+        if currentSection == TankSetupConstants.SHELLS:
+            copyVehicle.shells.setInstalled(*vehicle.shells.layout)
+        else:
+            copyVehicle.shells.setInstalled(*vehicle.shells.installed)
+        return copyVehicle
 
 
 class BattleAbilitiesToolitpBuilder(HangarModuleTooltipBuilder):

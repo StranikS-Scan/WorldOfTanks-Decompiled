@@ -7,6 +7,7 @@ import weakref
 from functools import partial
 from itertools import chain
 from types import FunctionType, BooleanType, TypeType
+import typing
 from Event import Event
 from helpers import uniprof
 from soft_exception import SoftException
@@ -183,7 +184,7 @@ def createCommandHandler(commandName, commandSchema, handlerFunc, finiHandlerFun
     return CommandHandler(commandName, commandSchema, handlerFunc, finiHandlerFunc)
 
 
-def createSubCommandsHandler(commandName, commandSchema, keyField, subCommands):
+def createSubCommandsHandler(commandName, commandSchema, keyField, subCommands, finiHandlerFunc=None):
 
     def handlerFunc(command, ctx):
         key = getattr(command, keyField)
@@ -197,11 +198,11 @@ def createSubCommandsHandler(commandName, commandSchema, keyField, subCommands):
         else:
             raise WebCommandException("Unsupported value for '%s': '%s'" % (keyField, key))
 
-    return createCommandHandler(commandName, commandSchema, handlerFunc)
+    return createCommandHandler(commandName, commandSchema, handlerFunc, finiHandlerFunc=finiHandlerFunc)
 
 
-def w2capi(name=None, key=None):
-    return _W2CApi(name, key)
+def w2capi(name=None, key=None, finiHandlerName=None):
+    return _W2CApi(name, key, finiHandlerName=finiHandlerName)
 
 
 def _makeOverriddenMeta(key):
@@ -223,10 +224,11 @@ def _makeOverriddenSchema(key):
 
 class _W2CApi(object):
 
-    def __init__(self, name, key):
+    def __init__(self, name, key, finiHandlerName=None):
         super(_W2CApi, self).__init__()
         self.__name = name
         self.__key = key
+        self.__finiHandlerName = finiHandlerName
 
     def __call__(self, clazz):
         clazz.w2c_name = self.__name
@@ -236,7 +238,7 @@ class _W2CApi(object):
 
                 def getter(api):
                     subcommands = {wrapper.w2c_name:SubCommand(wrapper.w2c_schema, partial(wrapper, api)) for _, wrapper in inspect.getmembers(clazz, inspect.ismethod) if getattr(wrapper, 'w2c_name', None)}
-                    return [createSubCommandsHandler(api.w2c_name or clazz.__name__.lower(), scheme, key, subcommands)]
+                    return [createSubCommandsHandler(api.w2c_name or clazz.__name__.lower(), scheme, key, subcommands, finiHandlerFunc=partial(getattr(clazz, self.__finiHandlerName), api) if self.__finiHandlerName else None)]
 
                 return getter
 

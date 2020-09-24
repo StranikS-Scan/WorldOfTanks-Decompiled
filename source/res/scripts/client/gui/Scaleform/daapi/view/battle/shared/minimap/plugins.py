@@ -16,7 +16,7 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import MINIMAP_IBC_HINT_SECTION, HINTS_LEFT
 from account_helpers.settings_core import settings_constants
 from battleground.location_point_manager import g_locationPointManager
-from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES, ReplyState, MarkerType, LocationMarkerSubType, ONE_SHOT_COMMANDS_TO_REPLIES
+from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES, ReplyState, MarkerType, LocationMarkerSubType, ONE_SHOT_COMMANDS_TO_REPLIES, INVALID_VEHICLE_POSITION
 from constants import VISIBILITY, AOI
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_DEBUG
 from gui import GUI_SETTINGS, InputHandler
@@ -670,9 +670,9 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
 
     def getVehiclePosition(self, vehicleID):
         if vehicleID not in self._entries:
-            return Math.Vector3(-99999.9, -99999.9, -99999.9)
+            return INVALID_VEHICLE_POSITION
         entry = self._entries[vehicleID]
-        return Math.Vector3(-99999.9, -99999.9, -99999.9) if not entry.isInAoI() else Math.Matrix(entry.getMatrix()).translation
+        return INVALID_VEHICLE_POSITION if not entry.isInAoI() else Math.Matrix(entry.getMatrix()).translation
 
     def updatePositions(self, iterator):
         handled = set()
@@ -784,8 +784,12 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             self.__setLocationAndMatrix(entry, location, matrix)
             self._setInAoI(entry, True)
             self.__setActive(entry, True)
+            isUpgrading = False
+            vehicle = BigWorld.entity(vehicleID)
+            if vehicle is not None:
+                isUpgrading = vehicle.isUpgrading or vehicle.isForceReloading
             animation = self.__getSpottedAnimation(entry, isSpotted)
-            if animation and self.__replayRegistrator.validateShowVehicle(vehicleID):
+            if animation and self.__replayRegistrator.validateShowVehicle(vehicleID) and not isUpgrading:
                 self.__playSpottedSound(entry)
                 self._invoke(entry.getID(), 'setAnimation', animation)
                 self.__replayRegistrator.registerShowVehicle(vehicleID)
@@ -1162,7 +1166,7 @@ class MinimapPingPlugin(SimpleMinimapPingPlugin):
                 commandKey = BATTLE_CHAT_COMMAND_NAMES.ATTACK_BASE if team != avatar_getter.getPlayerTeam() else BATTLE_CHAT_COMMAND_NAMES.DEFEND_BASE
                 commands.sendCommandToBase(uniqueId, commandKey, baseName)
                 return
-            self.__processReplyCommand(replyState, commands, uniqueId, commandKey)
+            self._processReplyCommand(replyState, commands, uniqueId, commandKey)
             return
 
     def _replyPing3DMarker(self, commands, uniqueId):
@@ -1174,7 +1178,7 @@ class MinimapPingPlugin(SimpleMinimapPingPlugin):
             if commandKey is None:
                 _logger.error('commandKey is None - this might be incorrect and should not happen!')
                 return
-            self.__processReplyCommand(replyState, commands, uniqueId, commandKey)
+            self._processReplyCommand(replyState, commands, uniqueId, commandKey)
             return
 
     def _getNearestLocationIDForPosition(self, position, pRange):
@@ -1214,9 +1218,10 @@ class MinimapPingPlugin(SimpleMinimapPingPlugin):
     def __haveHintsLeft(self, value):
         return value[HINTS_LEFT] > 0
 
-    def __processReplyCommand(self, replyState, commands, uniqueId, commandKey):
+    def _processReplyCommand(self, replyState, commands, uniqueId, commandKey):
         if replyState == ReplyState.CAN_CANCEL_REPLY:
             commands.sendCancelReplyChatCommand(uniqueId, commandKey)
+            return
         if replyState == ReplyState.CAN_CONFIRM:
             commands.sendCommand(ONE_SHOT_COMMANDS_TO_REPLIES[commandKey])
             return

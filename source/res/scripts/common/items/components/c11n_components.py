@@ -9,10 +9,13 @@ from items import vehicles
 from items.components import shared_components
 from soft_exception import SoftException
 from items.components.c11n_constants import ApplyArea, SeasonType, Options, ItemTags, CustomizationType, MAX_CAMOUFLAGE_PATTERN_SIZE, DecalType, HIDDEN_CAMOUFLAGE_ID, PROJECTION_DECALS_SCALE_ID_VALUES, MAX_USERS_PROJECTION_DECALS, CustomizationTypeNames, DecalTypeNames, ProjectionDecalFormTags, CUSTOMIZATION_SLOTS_VEHICLE_PARTS, CamouflageTilingType, HIDDEN_FOR_USER_TAG, SLOT_TYPE_NAMES, EMPTY_ITEM_ID, SLOT_DEFAULT_ALLOWED_MODEL
-from typing import List, Dict, Type, Tuple, Optional, TypeVar, FrozenSet
+from typing import List, Dict, Type, Tuple, Optional, TypeVar, FrozenSet, Set
 from string import lower, upper
-from constants import IS_EDITOR
+from copy import deepcopy
 from wrapped_reflection_framework import ReflectionMetaclass
+from constants import IS_EDITOR
+if IS_EDITOR:
+    from editor_copy import edCopy
 Item = TypeVar('TypeVar')
 
 class BaseCustomizationItem(object):
@@ -34,13 +37,30 @@ class BaseCustomizationItem(object):
         self.maxNumber = 0
         self.texture = ''
         self.progression = None
+        copyBaseValue = (lambda x: x) if not IS_EDITOR else edCopy
         if parentGroup and parentGroup.itemPrototype:
             for field in self.allSlots:
                 if hasattr(parentGroup.itemPrototype, field):
-                    setattr(self, field, getattr(parentGroup.itemPrototype, field))
+                    value = getattr(parentGroup.itemPrototype, field)
+                    setattr(self, field, copyBaseValue(value))
 
         self.parentGroup = parentGroup
         return
+
+    def _copy(self, newItem):
+        newItem.id = self.id
+        newItem.tags = deepcopy(self.tags)
+        newItem.filter = deepcopy(self.filter)
+        newItem.season = self.season
+        newItem.historical = self.historical
+        newItem.i18n = deepcopy(self.i18n)
+        newItem.priceGroup = deepcopy(self.priceGroup)
+        newItem.priceGroupTags = deepcopy(self.priceGroupTags)
+        newItem.requiredToken = deepcopy(self.requiredToken)
+        newItem.maxNumber = self.maxNumber
+        newItem.texture = deepcopy(self.texture)
+        newItem.progression = deepcopy(self.progression)
+        newItem.parentGroup = self.parentGroup
 
     def matchVehicleType(self, vehTypeDescr):
         return not self.filter or self.filter.matchVehicleType(vehTypeDescr)
@@ -163,11 +183,24 @@ class CamouflageItem(BaseCustomizationItem):
         self.rotation = {'hull': 0.0,
          'turret': 0.0,
          'gun': 0.0}
-        self.tiling = ()
+        self.tiling = {}
         self.tilingSettings = (CamouflageTilingType.LEGACY, None, None)
         self.scales = (1.2, 1, 0.7)
         super(CamouflageItem, self).__init__(parentGroup)
         return
+
+    def __deepcopy__(self, memodict={}):
+        newItem = type(self)()
+        newItem.compatibleParts = self.compatibleParts
+        newItem.componentsCovering = self.componentsCovering
+        newItem.palettes = deepcopy(self.palettes)
+        newItem.invisibilityFactor = self.invisibilityFactor
+        newItem.rotation = deepcopy(self.rotation)
+        newItem.tiling = deepcopy(self.tiling)
+        newItem.tilingSettings = deepcopy(self.tilingSettings)
+        newItem.scales = self.scales
+        super(CamouflageItem, self)._copy(newItem)
+        return newItem
 
 
 class PersonalNumberItem(BaseCustomizationItem):
@@ -311,6 +344,7 @@ class InsigniaItem(BaseCustomizationItem):
 
 
 class ItemGroup(object):
+    __metaclass__ = ReflectionMetaclass
     itemType = CustomizationType.ITEM_GROUP
     __slots__ = ('itemPrototype', 'name')
 
@@ -365,6 +399,20 @@ class Font(object):
         return items.makeIntCompactDescrByID('customizationItem', self.itemType, self.id)
 
 
+if IS_EDITOR:
+    CUSTOMIZATION_TYPES = {CustomizationType.MODIFICATION: ModificationItem,
+     CustomizationType.STYLE: StyleItem,
+     CustomizationType.DECAL: DecalItem,
+     CustomizationType.CAMOUFLAGE: CamouflageItem,
+     CustomizationType.PERSONAL_NUMBER: PersonalNumberItem,
+     CustomizationType.PAINT: PaintItem,
+     CustomizationType.PROJECTION_DECAL: ProjectionDecalItem,
+     CustomizationType.INSIGNIA: InsigniaItem,
+     CustomizationType.SEQUENCE: SequenceItem,
+     CustomizationType.FONT: Font,
+     CustomizationType.ATTACHMENT: AttachmentItem}
+    CUSTOMIZATION_CLASSES = {v:k for k, v in CUSTOMIZATION_TYPES.items()}
+
 class _Filter(object):
     __slots__ = ('include', 'exclude')
 
@@ -372,6 +420,12 @@ class _Filter(object):
         super(_Filter, self).__init__()
         self.include = []
         self.exclude = []
+
+    def __deepcopy__(self, memodict={}):
+        newItem = type(self)()
+        newItem.include = deepcopy(self.include)
+        newItem.exclude = deepcopy(self.exclude)
+        return newItem
 
     def __str__(self):
         includes = map(lambda x: str(x), self.include)
@@ -400,6 +454,14 @@ class VehicleFilter(_Filter):
             self.tags = None
             self.vehicles = None
             return
+
+        def __deepcopy__(self, memodict={}):
+            newItem = type(self)()
+            newItem.nations = deepcopy(self.nations)
+            newItem.levels = deepcopy(self.levels)
+            newItem.vehicles = deepcopy(self.vehicles)
+            newItem.tags = deepcopy(self.tags)
+            return newItem
 
         def __str__(self):
             result = []
@@ -436,6 +498,7 @@ class VehicleFilter(_Filter):
 
 
 class ItemsFilter(_Filter):
+    __metaclass__ = ReflectionMetaclass
 
     class FilterNode(object):
         __slots__ = ('ids', 'itemGroupNames', 'tags', 'types', 'historical')
@@ -480,18 +543,27 @@ class ItemsFilter(_Filter):
 
 
 class ProgressForCustomization(object):
-    __slots__ = ('autobound', 'levels', 'autoGrantCount')
+    __slots__ = ('autobound', 'levels', 'autoGrantCount', 'bonusTypes')
 
     def __init__(self):
         super(ProgressForCustomization, self).__init__()
         self.autobound = False
         self.levels = {}
         self.autoGrantCount = 0
+        self.bonusTypes = set()
+
+    def __deepcopy__(self, memodict={}):
+        newItem = type(self)()
+        newItem.autobound = self.autobound
+        newItem.levels = deepcopy(self.levels)
+        newItem.autoGrantCount = self.autoGrantCount
+        return newItem
 
     def __str__(self):
         result = {'autobound': self.autobound,
          'levels': self.levels,
-         'autoGrantCount': self.autoGrantCount}
+         'autoGrantCount': self.autoGrantCount,
+         'bonusTypes': self.bonusTypes}
         return str(result)
 
 
@@ -581,7 +653,9 @@ class CustomizationCache(object):
                     raise SoftException("Style {} can't contain extra items in outfit".format(outfit.styleId))
                 storage = getattr(self, componentsAttrName)
                 if usedStyle is not None:
-                    baseOutfit = usedStyle.outfits[season]
+                    baseOutfit = usedStyle.outfits.get(season)
+                    if not baseOutfit:
+                        raise SoftException("Style {} hasn't base outfit for season {}".format(outfit.styleId, season))
                     baseComponents = getattr(baseOutfit, componentsAttrName, None)
                 for component in components:
                     componentId = component.id if not isinstance(component, int) else component

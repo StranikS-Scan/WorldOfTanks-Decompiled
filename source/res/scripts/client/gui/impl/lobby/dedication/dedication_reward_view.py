@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/dedication/dedication_reward_view.py
-from frameworks.wulf import ViewSettings, WindowFlags, ViewFlags
+from frameworks.wulf import ViewSettings, WindowFlags
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.dedication.dedication_reward_view_model import DedicationRewardViewModel
@@ -15,7 +15,6 @@ class DedicationRewardView(ViewImpl):
 
     def __init__(self, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.dedication.DedicationRewardView())
-        settings.flags = ViewFlags.OVERLAY_VIEW
         settings.model = DedicationRewardViewModel()
         settings.args = args
         settings.kwargs = kwargs
@@ -81,5 +80,5 @@ class DedicationRewardWindow(LobbyWindow):
     __slots__ = ()
 
     def __init__(self, bonuses, data, closeCallback):
-        super(DedicationRewardWindow, self).__init__(content=DedicationRewardView(bonuses=bonuses, data=data, onClose=closeCallback), wndFlags=WindowFlags.OVERLAY, decorator=None)
+        super(DedicationRewardWindow, self).__init__(content=DedicationRewardView(bonuses=bonuses, data=data, onClose=closeCallback), wndFlags=WindowFlags.WINDOW_FULLSCREEN | WindowFlags.WINDOW, decorator=None)
         return

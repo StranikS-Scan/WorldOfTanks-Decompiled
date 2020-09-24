@@ -33,6 +33,7 @@ class MissionVehicleSelectorCarousel(VehicleSelectorCarouselMeta):
     def setCriteria(self, criteria, extraConditions):
         self._carouselDP.setCriteria(criteria, extraConditions)
         self.updateVehicles()
+        self._carouselDP.applyFilter(forceApply=True)
 
     def _populate(self):
         super(MissionVehicleSelectorCarousel, self)._populate()
@@ -142,7 +143,7 @@ class _MissionsCarouselDataProvider(CarouselDataProvider):
     def setCriteria(self, criteria, extraConditions):
         self._baseCriteria = criteria
         self.__extraConditions = extraConditions
-        self._filter.reset()
+        self._filter.reset(exceptions=('inventory',))
 
     def getSuitableVehicles(self):
         return self.__suitableVehiclesIDs

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ui/profile.py
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import events, g_eventBus, showProfileWindow, requestProfile
 from web.web_client_api import w2c, W2CSchema, Field
@@ -24,7 +25,7 @@ class ProfileTabWebApiMixin(object):
 
     @w2c(_OpenProfileTabSchema, 'profile')
     def profile(self, cmd):
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_PROFILE, ctx={'selectedAlias': _PROFILE_TAB_ALIASES[cmd.selected_id]} if cmd.selected_id else None), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PROFILE), ctx={'selectedAlias': _PROFILE_TAB_ALIASES[cmd.selected_id]} if cmd.selected_id else None), scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
 

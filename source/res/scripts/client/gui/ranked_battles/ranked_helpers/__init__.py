@@ -46,11 +46,23 @@ def getBonusBattlesIncome(resRoot, stepsCount, efficiencyCount, isStepsDaily):
 
 
 def getAlertStatusVO():
+    rankedController = dependency.instance(IRankedBattlesController)
     alertMessage = _getAlertMessage()
     buttonLabelResID = R.strings.ranked_battles.alertMessage.button.moreInfo()
     if alertMessage.alertType == AlertTypes.PRIME:
         buttonLabelResID = R.strings.ranked_battles.alertMessage.button.changeServer()
-    return CalendarStatusVO(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()) if alertMessage.alertType != AlertTypes.SEASON else None, buttonIcon='', buttonLabel=backport.text(buttonLabelResID), buttonVisible=alertMessage.buttonVisible, buttonTooltip=None, statusText=text_styles.vehicleStatusCriticalText(alertMessage.alertStr), popoverAlias=None, bgVisible=True, shadowFilterVisible=alertMessage.alertType != AlertTypes.SEASON, tooltip=TOOLTIPS_CONSTANTS.RANKED_CALENDAR_DAY_INFO if alertMessage.alertType != AlertTypes.VEHICLE else None)
+    if alertMessage.alertType == AlertTypes.VEHICLE:
+        minLvl, maxLvl = rankedController.getSuitableVehicleLevels()
+        if rankedController.vehicleIsAvailableForBuy():
+            reason = R.strings.ranked_battles.rankedBattlesUnreachableView.vehicleAvailableForBuy()
+        elif rankedController.vehicleIsAvailableForRestore():
+            reason = R.strings.ranked_battles.rankedBattlesUnreachableView.vehicleAvailableForRestore()
+        else:
+            reason = R.strings.ranked_battles.rankedBattlesUnreachableView.vehicleUnavailable()
+        tooltip = makeTooltip(body=backport.text(reason, levels=toRomanRangeString(range(minLvl, maxLvl + 1))))
+    else:
+        tooltip = TOOLTIPS_CONSTANTS.RANKED_CALENDAR_DAY_INFO
+    return CalendarStatusVO(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()) if alertMessage.alertType != AlertTypes.SEASON else None, buttonIcon='', buttonLabel=backport.text(buttonLabelResID), buttonVisible=alertMessage.buttonVisible, buttonTooltip=None, statusText=text_styles.vehicleStatusCriticalText(alertMessage.alertStr), popoverAlias=None, bgVisible=True, shadowFilterVisible=alertMessage.alertType != AlertTypes.SEASON, tooltip=tooltip, isSimpleTooltip=alertMessage.alertType == AlertTypes.VEHICLE)
 
 
 def _getAlertMessage():

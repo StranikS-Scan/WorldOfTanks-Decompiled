@@ -634,7 +634,7 @@ class _OptionalDeviceData(_VSDItemData):
 
     def __init__(self, optDevice, vehicle=None):
         super(_OptionalDeviceData, self).__init__(optDevice, FITTING_TYPES.OPTIONAL_DEVICE)
-        self._flashData['isRemovable'] = optDevice.isRemovable or self.__isAfterConversion(vehicle)
+        self._flashData['isRemovable'] = optDevice.isRemovable
         removalPrice = optDevice.getRemovalPrice(self.__itemsCache.items)
         if removalPrice.isActionPrice():
             self._flashData['removeActionPrice'] = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'paidRemovalCost', True, removalPrice.price, removalPrice.defPrice)
@@ -642,6 +642,3 @@ class _OptionalDeviceData(_VSDItemData):
         if isDemountKitApplicableTo(optDevice):
             self._itemRemovalPrice += _DEMOUNT_KIT_ONE
         self._flashData['removePrice'] = self._itemRemovalPrice.toDict()
-
-    def __isAfterConversion(self, vehicle):
-        return vehicle is not None and not self.guiItem.descriptor.checkCompatibilityWithVehicle(vehicle.descriptor)[0]

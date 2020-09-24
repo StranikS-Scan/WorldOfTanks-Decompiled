@@ -103,10 +103,10 @@ class EpicQuestProgressView(ViewImpl):
         return progress[0]['progressDiff'] if progress else ''
 
     def updateQuestsInfo(self, arenaUniqueID):
-        if self.__currentEpicLevel < self.__maxEpicLevel:
-            return
         self.__arenaUniqueID = arenaUniqueID
         battleResultsVO = self.__battleResults.getResultsVO(self.__arenaUniqueID)['quests']
+        if not battleResultsVO:
+            return
         progressionQuests = self.__eventProgression.getActiveQuestsAsDict().values()
         battleResultsVOSorted = []
         for br in battleResultsVO:

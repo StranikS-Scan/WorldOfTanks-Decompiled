@@ -60,7 +60,7 @@ class DynamicVehicleStatsComponent(vehicle.VehicleStatsComponent):
         super(DynamicVehicleStatsComponent, self).clear()
 
     def get(self, forced=False):
-        if forced or self._frags or self._chatCommand:
+        if forced or self._frags:
             data = super(DynamicVehicleStatsComponent, self).get()
             data['frags'] = self._frags
             data['chatCommand'] = self._chatCommand

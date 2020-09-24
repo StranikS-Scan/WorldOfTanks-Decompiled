@@ -9,6 +9,7 @@ from gui.Scaleform.daapi.view.lobby.prb_windows.squad_action_button_state_vo imp
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.daapi.view.meta.SquadViewMeta import SquadViewMeta
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -19,7 +20,6 @@ from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.game_control import IBattleRoyaleController
-from skeletons.gui.game_control import IBobController
 
 def _unitWithPremium(unitData):
     return any((slot.player.hasPremium for slot in unitData.slotsIterator if slot.player))
@@ -31,7 +31,7 @@ class SquadView(SquadViewMeta):
 
     def inviteFriendRequest(self):
         if self.__canSendInvite():
-            self.fireEvent(events.LoadViewEvent(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY, ctx={'prbName': 'squad',
+            self.fireEvent(events.LoadViewEvent(SFViewLoadParams(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY), ctx={'prbName': 'squad',
              'ctrlType': CTRL_ENTITY_TYPE.UNIT}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     @process
@@ -202,22 +202,6 @@ class BattleRoyaleSquadView(SquadView):
 
     def __battleRoyaleEnabledChanged(self):
         if not self.__battleRoyaleController.isEnabled():
-            self._doLeave()
-
-
-class BobSquadView(SquadView):
-    bobController = dependency.descriptor(IBobController)
-
-    def _populate(self):
-        super(BobSquadView, self)._populate()
-        self.bobController.onUpdated += self.__onUpdated
-
-    def _dispose(self):
-        self.bobController.onUpdated -= self.__onUpdated
-        super(BobSquadView, self)._dispose()
-
-    def __onUpdated(self):
-        if not self.bobController.isModeActive():
             self._doLeave()
 
 

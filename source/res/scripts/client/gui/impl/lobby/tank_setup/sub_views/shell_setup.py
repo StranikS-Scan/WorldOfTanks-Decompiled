@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/sub_views/shell_setup.py
+from functools import partial
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_setup_model import BaseSetupModel
 from gui.impl.lobby.tank_setup.configurations.shell import ShellTabsController, ShellDealPanel
 from gui.impl.lobby.tank_setup.sub_views.deal_base_setup import DealBaseSetupSubView
@@ -23,8 +24,9 @@ class ShellSetupSubView(DealBaseSetupSubView):
 
     def _addListeners(self):
         super(ShellSetupSubView, self)._addListeners()
-        self._addSlotAction(BaseSetupModel.SWAP_SLOTS_ACTION, self.__onSwapSlots)
         self._addSlotAction(BaseSetupModel.SHOW_INFO_SLOT_ACTION, self.__onShowItemInfo)
+        self._addSlotAction(BaseSetupModel.SWAP_SLOTS_ACTION, partial(self.__onSwapSlots, BaseSetupModel.SWAP_SLOTS_ACTION))
+        self._addSlotAction(BaseSetupModel.DRAG_AND_DROP_SLOT_ACTION, partial(self.__onSwapSlots, BaseSetupModel.DRAG_AND_DROP_SLOT_ACTION))
         self._viewModel.onShellUpdate += self.__onShellUpdate
 
     def _removeListeners(self):
@@ -36,10 +38,10 @@ class ShellSetupSubView(DealBaseSetupSubView):
         self._viewModel.setInstalledCount(sum((shell.count for shell in self._interactor.getCurrentLayout())))
         super(ShellSetupSubView, self)._updateSlots(fullUpdate)
 
-    def __onSwapSlots(self, args):
+    def __onSwapSlots(self, actionType, args):
         leftID = int(args.get('leftID'))
         rightID = int(args.get('rightID'))
-        self._interactor.swapSlots(leftID, rightID)
+        self._interactor.swapSlots(leftID, rightID, actionType)
         self.update()
 
     def __onShowItemInfo(self, args):

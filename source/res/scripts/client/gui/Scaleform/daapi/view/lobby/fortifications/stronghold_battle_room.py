@@ -4,6 +4,7 @@ import weakref
 from UnitBase import UNIT_OP
 from adisp import process
 from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_TYPE
+from frameworks.wulf import WindowLayer
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.MinimapGrid import MinimapGrid
@@ -15,8 +16,8 @@ from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.lobby.strongholds.sound_controller import g_strongholdSoundController
 from gui.Scaleform.daapi.view.lobby.strongholds.web_handlers import createStrongholdsWebHandlers
 from gui.Scaleform.daapi.view.meta.FortClanBattleRoomMeta import FortClanBattleRoomMeta
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -152,7 +153,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         self._candidatesDP.init(self.app, self.as_getCandidatesDPS(), self.prbEntity.getCandidates())
 
     def inviteFriendRequest(self):
-        self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.STRONGHOLD_SEND_INVITES_WINDOW_PY, ctx={'prbName': PREBATTLE_TYPE_NAMES[PREBATTLE_TYPE.STRONGHOLD],
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(FORTIFICATION_ALIASES.STRONGHOLD_SEND_INVITES_WINDOW_PY), ctx={'prbName': PREBATTLE_TYPE_NAMES[PREBATTLE_TYPE.STRONGHOLD],
          'ctrlType': CTRL_ENTITY_TYPE.UNIT,
          'showClanOnly': False}), scope=EVENT_BUS_SCOPE.LOBBY)
 
@@ -262,7 +263,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         return
 
     def _closeSendInvitesWindow(self):
-        self._destroyRelatedView(ViewTypes.WINDOW, FORTIFICATION_ALIASES.STRONGHOLD_SEND_INVITES_WINDOW_PY)
+        self._destroyRelatedView(WindowLayer.WINDOW, FORTIFICATION_ALIASES.STRONGHOLD_SEND_INVITES_WINDOW_PY)
 
     def _rebuildCandidatesDP(self):
         if self._candidatesDP:
@@ -568,7 +569,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
             app = self.appLoader.getApp()
             if app is not None and app.containerManager is not None:
                 windowAlias = getViewName(VIEW_ALIAS.BROWSER_WINDOW_MODAL, self.__changeModeBrowserId)
-                window = app.containerManager.getView(ViewTypes.WINDOW, criteria={POP_UP_CRITERIA.UNIQUE_NAME: windowAlias})
+                window = app.containerManager.getView(WindowLayer.WINDOW, criteria={POP_UP_CRITERIA.UNIQUE_NAME: windowAlias})
                 if window:
                     window.destroy()
         self.__changeModeBrowserId = 0

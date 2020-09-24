@@ -11,16 +11,16 @@ import BigWorld
 from adisp import process
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
-from constants import EVENT_TYPE as _ET, DOSSIER_TYPE, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, CURRENCY_TOKEN_PREFIX, RESOURCE_TOKEN_PREFIX, IS_CHINA
+from constants import EVENT_TYPE as _ET, DOSSIER_TYPE, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, CURRENCY_TOKEN_PREFIX, RESOURCE_TOKEN_PREFIX
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
+from frameworks.wulf import WindowLayer
 from gui import makeHtmlString
 from gui.app_loader.decorators import sf_lobby
 from gui.game_control.links import URLMacros
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -30,7 +30,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.Scaleform.settings import getBadgeIconPath, BADGES_ICONS, ICONS_SIZES
-from gui.server_events.awards_formatters import AWARDS_SIZES, AWARDS_SIZES_EXT
+from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.formatters import parseComplexToken
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
@@ -294,24 +294,13 @@ class EventCoinBonus(IntegralBonus):
     def getList(self):
         return [{'value': self.formatValue(),
           'itemSource': backport.image(R.images.gui.maps.icons.library.EventCoinIconBig()),
-          'tooltip': self.__getTooltip()}]
+          'tooltip': TOOLTIPS.AWARDITEM_EVENTCOIN}]
 
     def hasIconFormat(self):
         return True
 
     def getIconLabel(self):
         return text_styles.eventCoin(self.getValue())
-
-    def getTooltip(self):
-        return self.__getTooltip()
-
-    @staticmethod
-    def __getTooltip():
-        if not IS_CHINA:
-            tooltip = TOOLTIPS.AWARDITEM_EVENTCOIN
-        else:
-            tooltip = makeTooltip(TOOLTIPS.AWARDITEM_EVENTCOIN_HEADER, TOOLTIPS.AWARDITEM_EVENTCOIN_BODY_CN)
-        return tooltip
 
 
 class FreeXpBonus(IntegralBonus):
@@ -405,11 +394,11 @@ class MetaBonus(SimpleBonus):
             return
 
     def __isLobbyLoaded(self):
-        container = self.__app.containerManager.getContainer(ViewTypes.LOBBY_SUB)
+        container = self.__app.containerManager.getContainer(WindowLayer.SUB_VIEW)
         return container is not None
 
     def __onViewLoaded(self, pyView, _):
-        if pyView.viewType == ViewTypes.LOBBY_SUB:
+        if pyView.layer == WindowLayer.SUB_VIEW:
             for callback in self.__onLobbyLoadedCallbacks:
                 callback()
 
@@ -595,7 +584,7 @@ class X5BattleTokensBonus(TokensBonus):
 
 class EntitlementBonus(SimpleBonus):
     _ENTITLEMENT_RECORD = namedtuple('_ENTITLEMENT_RECORD', ['id', 'amount'])
-    _FORMATTED_AMOUNT = ('ranked_202007_access',)
+    _FORMATTED_AMOUNT = ('ranked_202010_access',)
 
     @staticmethod
     def hasConfiguredResources(entitlementID):
@@ -1206,12 +1195,12 @@ class DossierBonus(SimpleBonus):
     def getWrappedEpicBonusList(self):
         result = []
         for block, record in self.getRecords().iterkeys():
-            if block in ('singleAchievements', 'achievements'):
+            if block == 'singleAchievements':
                 blockID = RECORD_DB_IDS[block, record]
             else:
                 blockID = record
             icons = self.__getEpicBonusImages(block, record)
-            if not icons or not icons['small'] and not icons['big']:
+            if not icons['small'] and not icons['big']:
                 icons = self.__getAchievementImages(record)
             result.append({'id': blockID,
              'name': record,
@@ -1223,17 +1212,14 @@ class DossierBonus(SimpleBonus):
 
     def __getEpicBonusImages(self, block, record):
         if block == 'playerBadges':
-            return {AWARDS_SIZES_EXT.SMALL: getBadgeIconPath(BADGES_ICONS.X48, record),
-             AWARDS_SIZES_EXT.BIG: getBadgeIconPath(BADGES_ICONS.X80, record),
-             AWARDS_SIZES_EXT.HUGE: getBadgeIconPath(BADGES_ICONS.X110, record)}
+            return {AWARDS_SIZES.SMALL: getBadgeIconPath(BADGES_ICONS.X48, record),
+             AWARDS_SIZES.BIG: getBadgeIconPath(BADGES_ICONS.X80, record)}
         return {AWARDS_SIZES.SMALL: RES_ICONS.getEpicAchievementIcon(ICONS_SIZES.X48, record),
          AWARDS_SIZES.BIG: RES_ICONS.getEpicAchievementIcon(ICONS_SIZES.X80, record)} if block == 'singleAchievements' else {}
 
     def __getAchievementImages(self, record):
-        smallId = R.images.gui.maps.icons.achievement.num(ICONS_SIZES.X48).dyn(record)()
-        bigId = R.images.gui.maps.icons.achievement.num(ICONS_SIZES.X80).dyn(record)()
-        return {AWARDS_SIZES.SMALL: backport.image(smallId) if smallId > 0 else '',
-         AWARDS_SIZES.BIG: backport.image(bigId) if smallId > 0 else ''}
+        return {AWARDS_SIZES.SMALL: backport.image(R.images.gui.maps.icons.achievement.num(ICONS_SIZES.X48).dyn(record)()),
+         AWARDS_SIZES.BIG: backport.image(R.images.gui.maps.icons.achievement.num(ICONS_SIZES.X80).dyn(record)())}
 
     def __getCommonAwardsVOs(self, block, record, iconSize='small', withCounts=False):
         badgesIconSizes = {'big': BADGES_ICONS.X80,
@@ -1429,8 +1415,7 @@ class CustomizationsBonus(SimpleBonus):
              'icon': {AWARDS_SIZES.SMALL: smallIcon,
                       AWARDS_SIZES.BIG: bigIcon},
              'name': item.longUserName,
-             'description': item.longDescriptionSpecial,
-             'intCD': item.intCD})
+             'description': item.longDescriptionSpecial})
 
         return result
 

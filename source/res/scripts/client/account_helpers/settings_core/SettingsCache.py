@@ -15,6 +15,9 @@ class SettingsCache(ISettingsCache):
         self.onSyncStarted = Event()
         self.onSyncCompleted = Event()
 
+    def isSynced(self):
+        return not self.__waitForSync and self.settings.isSynced()
+
     def init(self):
         g_clientUpdateManager.addCallbacks({'intUserSettings': self._onResync})
 

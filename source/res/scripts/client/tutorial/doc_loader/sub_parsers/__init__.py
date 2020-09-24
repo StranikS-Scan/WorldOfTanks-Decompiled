@@ -5,6 +5,7 @@ from collections import namedtuple
 from functools import partial
 import nations
 import resource_helper
+from gui.Scaleform.genConsts.LAYER_NAMES import LAYER_NAMES
 from items import _xml, vehicles
 from helpers.html import translation
 from tutorial.data import chapter as tutorial_chapter
@@ -72,9 +73,9 @@ def _readCurrentSceneCondition(xmlCtx, section, state):
 
 
 def _readViewPresentCondition(xmlCtx, section, state):
-    viewType = _xml.readString(xmlCtx, section, 'type')
+    layer = LAYER_NAMES.LAYER_ORDER.index(_xml.readString(xmlCtx, section, 'type'))
     viewAlias = _xml.readString(xmlCtx, section, 'alias')
-    return tut_conditions.ViewPresentCondition(viewType, viewAlias, state=state)
+    return tut_conditions.ViewPresentCondition(layer, viewAlias, state=state)
 
 
 _GAME_ITEM_CONDITION_TAGS = {'selected': _COND_STATE.SELECTED,
@@ -467,9 +468,9 @@ def _readPlaySoundEffectSection(xmlCtx, section, flags, conditions):
 
 
 def _readCloseViewEffectSection(xmlCtx, section, flags, conditions):
-    viewType = _xml.readString(xmlCtx, section, 'type')
+    layer = LAYER_NAMES.LAYER_ORDER.index(_xml.readString(xmlCtx, section, 'type'))
     viewAlias = _xml.readString(xmlCtx, section, 'alias')
-    return effects.HasTargetEffect((viewType, viewAlias), effects.EFFECT_TYPE.CLOSE_VIEW, conditions=conditions)
+    return effects.HasTargetEffect((layer, viewAlias), effects.EFFECT_TYPE.CLOSE_VIEW, conditions=conditions)
 
 
 def makeSimpleEffectReader(effectType):

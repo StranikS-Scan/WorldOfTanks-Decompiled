@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/shared_components.py
 from collections import namedtuple
-from constants import IS_CLIENT, IS_WEB, IS_EDITOR
+from constants import IS_CLIENT, IS_WEB, IS_EDITOR, IS_BOT
 from items.components import component_constants, c11n_constants
 from items.components import path_builder
 from items.components.c11n_constants import ApplyArea
@@ -9,7 +9,7 @@ from soft_exception import SoftException
 from wrapped_reflection_framework import ReflectionMetaclass, reflectedNamedTuple
 if IS_CLIENT:
     from helpers import i18n
-elif IS_WEB:
+elif IS_WEB or IS_BOT:
     from web_stubs import i18n
 else:
 

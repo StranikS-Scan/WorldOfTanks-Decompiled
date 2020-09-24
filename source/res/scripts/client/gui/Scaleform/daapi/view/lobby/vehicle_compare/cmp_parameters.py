@@ -291,6 +291,7 @@ class VehCompareBasketParamsCache(object):
         self.__view = view
         self.comparisonBasket.onChange += self.__onVehCountChanged
         self.comparisonBasket.onParametersChange += self.__onVehParamsChanged
+        self.comparisonBasket.onNationChange += self.__onNationChange
         for vehInd in range(self.comparisonBasket.getVehiclesCount()):
             self.__addParamData(vehInd)
 
@@ -304,6 +305,7 @@ class VehCompareBasketParamsCache(object):
         self.__cache = None
         self.comparisonBasket.onChange -= self.__onVehCountChanged
         self.comparisonBasket.onParametersChange -= self.__onVehParamsChanged
+        self.comparisonBasket.onNationChange -= self.__onNationChange
         return
 
     def getParametersDelta(self, index, paramName):
@@ -360,3 +362,11 @@ class VehCompareBasketParamsCache(object):
             params = [ paramData.getFormattedParameters(bestParams) for paramData in self.__cache ]
             self.__view.updateItems(params)
         return
+
+    def __onNationChange(self, vehicleIDxs):
+        for i in vehicleIDxs:
+            self.__cache[i].dispose()
+            del self.__cache[i]
+            self.__addParamData(i)
+
+        self.__rebuildList()

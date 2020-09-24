@@ -3,7 +3,7 @@
 import logging
 import re
 from collections import defaultdict
-from frameworks.wulf import WindowFlags, ViewSettings
+from frameworks.wulf import ViewSettings
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.auxiliary.rewards_helper import getRewardRendererModelPresenter, getRewardTooltipContent
 from gui.impl.backport import TooltipData, BackportTooltipWindow, createTooltipData
@@ -13,7 +13,7 @@ from gui.impl.gen.view_models.views.lobby.blueprints.blueprint_screen_tooltips i
 from gui.impl.gen.view_models.views.lobby.seniority_awards.seniority_awards_vehicle_renderer_model import SeniorityAwardsVehicleRendererModel
 from gui.impl.gen.view_models.views.lobby.seniority_awards.seniority_reward_award_view_model import SeniorityRewardAwardViewModel
 from gui.impl.pub import ViewImpl
-from gui.impl.pub.lobby_window import LobbyWindow
+from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.shared.gui_items.Vehicle import getNationLessName, getIconResourceName
 from gui.impl.auxiliary.rewards_helper import getSeniorityAwardsRewardsAndBonuses
 from gui.impl.auxiliary.rewards_helper import DEF_MODEL_PRESENTERS
@@ -120,7 +120,7 @@ class SeniorityRewardAwardView(ViewImpl):
             for vehicle in self.__vehicles:
                 rendererModel = SeniorityAwardsVehicleRendererModel()
                 rendererModel.setVehicleCD(str(vehicle.vehicleCD))
-                rendererModel.setImgSource(self.__getVehImgResource(vehicle.name)())
+                rendererModel.setImgSource(self.__getVehImgResource(vehicle.name))
                 vehiclesList.addViewModel(rendererModel)
 
             vehiclesList.invalidate()
@@ -186,16 +186,14 @@ class SeniorityRewardAwardView(ViewImpl):
     def __getVehImgResource(vehicleName):
         resourceName = getIconResourceName(getNationLessName(vehicleName))
         if resourceName in R.images.gui.maps.icons.seniorityAwards.vehicles.c_390x245.keys():
-            return R.images.gui.maps.icons.seniorityAwards.vehicles.c_390x245.dyn(resourceName)
-        else:
-            _logger.error("Image %s doesn't exist", resourceName)
-            return None
+            return R.images.gui.maps.icons.seniorityAwards.vehicles.c_390x245.dyn(resourceName)()
+        _logger.error("Image %s doesn't exist", resourceName)
+        return R.invalid()
 
 
-class SeniorityRewardAwardWindow(LobbyWindow):
+class SeniorityRewardAwardWindow(LobbyNotificationWindow):
     __slots__ = ()
 
     def __init__(self, questID=None, data=None):
         seniorityAwardView = R.views.lobby.seniority_awards.seniority_reward_award.seniority_reward_award_view
-        super(SeniorityRewardAwardWindow, self).__init__(content=SeniorityRewardAwardView(seniorityAwardView.SeniorityRewardAwardView(), questID=questID, data=data), wndFlags=WindowFlags.OVERLAY, decorator=None)
-        return
+        super(SeniorityRewardAwardWindow, self).__init__(content=SeniorityRewardAwardView(seniorityAwardView.SeniorityRewardAwardView(), questID=questID, data=data))

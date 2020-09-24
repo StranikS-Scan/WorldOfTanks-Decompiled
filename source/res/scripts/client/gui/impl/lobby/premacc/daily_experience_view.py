@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/premacc/daily_experience_view.py
 from frameworks.wulf import ViewFlags, ViewSettings
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.premacc.daily_experience_view_model import DailyExperienceViewModel
 from gui.impl.lobby.premacc.daily_experience_base import DailyExperienceBaseView
@@ -20,7 +21,7 @@ class DailyExperienceView(DailyExperienceBaseView):
         settings.flags = ViewFlags.LOBBY_TOP_SUB_VIEW
         settings.model = DailyExperienceViewModel()
         super(DailyExperienceView, self).__init__(settings)
-        self.__exitEvent = ctx.get('exitEvent') if ctx is not None else events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR)
+        self.__exitEvent = ctx.get('exitEvent') if ctx is not None else events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR))
         return
 
     def _initialize(self, *args, **kwargs):

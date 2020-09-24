@@ -224,9 +224,6 @@ class _ParamsCache(object):
                     if item.equipmentType == EQUIPMENT_TYPES.battleBoosters:
                         itemTypeName = 'battleBooster'
                 compatibles.append((item.name, itemTypeName))
-            if item.itemTypeName == 'optionalDevice':
-                if item in vehicleDescr.optionalDevices:
-                    compatibles.append((item.name, item.itemTypeName))
 
         return compatibles
 

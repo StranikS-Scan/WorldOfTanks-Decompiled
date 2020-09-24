@@ -1,13 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/quest_xml_source.py
 import time
+import ArenaType
+import ResMgr
+import nations
 from soft_exception import SoftException
 from copy import deepcopy
 from pprint import pformat
-import ArenaType
-import ResMgr
-import battle_results_shared
-import nations
 from bonus_readers import readBonusSection, readUTC
 from constants import VEHICLE_CLASS_INDICES, ARENA_BONUS_TYPE, EVENT_TYPE, IGR_TYPE, ATTACK_REASONS, QUEST_RUN_FLAGS, DEFAULT_QUEST_START_TIME, DEFAULT_QUEST_FINISH_TIME, ACTIONS_GROUP_LABEL_TO_TYPE
 from debug_utils import LOG_WARNING
@@ -15,6 +14,7 @@ from dossiers2.custom.layouts import accountDossierLayout, vehicleDossierLayout,
 from dossiers2.custom.records import RECORD_DB_IDS
 from items import vehicles
 from optional_bonuses import StripVisitor
+from battle_results import getBattleResultsNames
 _WEEKDAYS = {'Mon': 1,
  'Tue': 2,
  'Wed': 3,
@@ -564,7 +564,7 @@ class Source(object):
             results = XMLNode('results')
             if name in ('meta', 'title', 'description'):
                 continue
-            if name not in battle_results_shared.VEH_FULL_RESULTS.names() and name not in battle_results_shared.VEH_BASE_RESULTS.names():
+            if name not in getBattleResultsNames():
                 raise SoftException("Unsupported misc variable '%s'" % name)
             key = XMLNode('key')
             key.addChild(name)
@@ -650,7 +650,7 @@ class Source(object):
 
     def __readCondition_keyResults(self, _, section, node):
         name = section.asString
-        if name not in battle_results_shared.VEH_BASE_RESULTS.names() and name not in battle_results_shared.COMMON_RESULTS.names() and name not in battle_results_shared.VEH_FULL_RESULTS.names() and name not in battle_results_shared.AVATAR_BASE_RESULTS.names() and name not in battle_results_shared.AVATAR_FULL_RESULTS.names() and name != 'addQuestCompleted':
+        if not (name in getBattleResultsNames() or name == 'addQuestCompleted'):
             raise SoftException("Unsupported battle result variable '%s'" % name)
         node.addChild(name)
 

@@ -6,7 +6,6 @@ from async import async, await, AsyncEvent, AsyncReturn, AsyncScope, BrokenPromi
 from frameworks.wulf import ViewFlags, WindowSettings, ViewSettings
 from frameworks.wulf import WindowFlags, Window
 from gui.shared.view_helpers.blur_manager import CachedBlur
-from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from gui.impl.gen import R
 from gui.impl.gen.view_models.ui_kit.dialog_button_model import DialogButtonModel
 from gui.impl.gen.view_models.windows.dialog_window_model import DialogWindowModel
@@ -29,10 +28,10 @@ class DialogButtons(CONST_CONTAINER):
     ACCEPT_BUTTONS = (SUBMIT, PURCHASE, RESEARCH)
 
 
-class DialogLayer(CONST_CONTAINER):
+class DialogFlags(CONST_CONTAINER):
     WINDOW = WindowFlags.WINDOW
     TOP_WINDOW = WindowFlags.DIALOG
-    OVERLAY = WindowFlags.OVERLAY
+    TOP_FULLSCREEN_WINDOW = WindowFlags.DIALOG | WindowFlags.WINDOW_FULLSCREEN
 
 
 class DialogContent(ViewImpl):
@@ -76,11 +75,11 @@ class DialogWindow(Window):
     gui = dependency.descriptor(IGuiLoader)
     __slots__ = ('__blur', '__scope', '__event', '__result')
 
-    def __init__(self, content=None, bottomContent=None, parent=None, balanceContent=None, enableBlur=True, enableBlur3D=True, layer=DialogLayer.TOP_WINDOW):
+    def __init__(self, content=None, bottomContent=None, parent=None, balanceContent=None, enableBlur=True, flags=DialogFlags.TOP_WINDOW):
         if content is not None:
             pass
         settings = WindowSettings()
-        settings.flags = layer
+        settings.flags = flags
         settings.decorator = DialogDecorator(balanceContent, bottomContent)
         settings.content = content
         settings.parent = parent
@@ -88,12 +87,7 @@ class DialogWindow(Window):
         self.__scope = AsyncScope()
         self.__event = AsyncEvent(scope=self.__scope)
         self.__result = DialogButtons.CANCEL
-        self.__blur = None
-        if enableBlur:
-            blurLayers = [APP_CONTAINERS_NAMES.VIEWS, APP_CONTAINERS_NAMES.SUBVIEW, APP_CONTAINERS_NAMES.BROWSER]
-            if layer > DialogLayer.WINDOW:
-                blurLayers.append(APP_CONTAINERS_NAMES.WINDOWS)
-            self.__blur = CachedBlur(enabled=True, ownLayer=APP_CONTAINERS_NAMES.DIALOGS, layers=blurLayers, blurAnimRepeatCount=4)
+        self.__blur = CachedBlur(enabled=enableBlur, ownLayer=self.layer, blurAnimRepeatCount=4)
         return
 
     @async
@@ -132,9 +126,7 @@ class DialogWindow(Window):
         self.viewModel.buttons.onUserItemClicked -= self._onButtonClick
         super(DialogWindow, self)._finalize()
         self.__scope.destroy()
-        if self.__blur is not None:
-            self.__blur.fini()
-        return
+        self.__blur.fini()
 
     def _onClosed(self, _=None):
         self.destroy()
@@ -184,7 +176,7 @@ class DialogWindow(Window):
     def _setPreset(self, value):
         self.viewModel.setPreset(value)
 
-    def _serShowSoundId(self, value):
+    def _setShowSoundId(self, value):
         self.viewModel.setShowSoundId(value)
 
     def _setButtonEnabled(self, buttonName, value):
@@ -195,3 +187,33 @@ class DialogWindow(Window):
 
     def _getResultData(self):
         return None
+
+
+class DialogViewMixin(object):
+    __slots__ = ('__scope', '__event', '__result')
+
+    def __init__(self, *args, **kwargs):
+        super(DialogViewMixin, self).__init__(*args, **kwargs)
+        self.__scope = AsyncScope()
+        self.__event = AsyncEvent(scope=self.__scope)
+        self.__result = DialogButtons.CANCEL
+
+    @async
+    def wait(self):
+        try:
+            yield await(self.__event.wait())
+        except BrokenPromiseError:
+            _logger.debug('%s has been destroyed without user decision', self)
+
+        raise AsyncReturn(DialogResult(self.__result, self._getAdditionalData()))
+
+    def _sendDialogResult(self, result):
+        self.__result = result
+        self.__event.set()
+
+    def _getAdditionalData(self):
+        return None
+
+    def _dispose(self):
+        super(DialogViewMixin, self)._dispose()
+        self.__scope.destroy()

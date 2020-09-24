@@ -77,36 +77,36 @@ class PersonalMissionsQuestAwardScreen(PersonalMissionsQuestAwardScreenMeta):
         return
 
     def closeView(self):
-        self.__fireOnClose()
-        self.destroy()
+        if not self.isDisposed():
+            self.destroy()
 
     def onContinueBtnClick(self):
-        self.__fireOnClose()
-        self.destroy()
+        if not self.isDisposed():
+            self.destroy()
 
     def onNextQuestLinkClick(self):
-        if self._addReward and self._nextQuest:
-            self._proxyEvent(missionID=self._nextQuest.getID())
-        elif self._addReward and not self._nextQuest:
-            self.__tryGetAward()
-        else:
-            self._proxyEvent(missionID=self._quest.getID())
-        self.__fireOnClose()
-        self.destroy()
+        if not self.isDisposed():
+            if self._addReward and self._nextQuest:
+                self._proxyEvent(missionID=self._nextQuest.getID())
+            elif self._addReward and not self._nextQuest:
+                self.__tryGetAward()
+            else:
+                self._proxyEvent(missionID=self._quest.getID())
+            self.destroy()
 
     def onOkBtnClick(self):
-        self.__fireOnClose()
-        self.destroy()
+        if not self.isDisposed():
+            self.destroy()
 
     def onRecruitBtnClick(self):
-        self.__tryGetAward()
-        self.__fireOnClose()
-        self.destroy()
+        if not self.isDisposed():
+            self.__tryGetAward()
+            self.destroy()
 
     def onNextQuestBtnClick(self):
-        self._processMission(self._nextQuest)
-        self.__fireOnClose()
-        self.destroy()
+        if not self.isDisposed():
+            self._processMission(self._nextQuest)
+            self.destroy()
 
     def _populate(self):
         super(PersonalMissionsQuestAwardScreen, self)._populate()
@@ -119,6 +119,7 @@ class PersonalMissionsQuestAwardScreen(PersonalMissionsQuestAwardScreenMeta):
             self.soundManager.playSound(SOUNDS.AWARD_WINDOW)
 
     def _dispose(self):
+        self.__fireOnClose()
         self._quest = None
         self._ctx = None
         self._proxyEvent = None

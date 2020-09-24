@@ -10,6 +10,7 @@ from gui.Scaleform.daapi.view.lobby.storage.inhangar import StorageCarouselDataP
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getVehicleName
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
@@ -25,7 +26,7 @@ from skeletons.gui.shared import IItemsCache
 from gui.shared import events
 
 def blueprintExitEvent():
-    return events.LoadViewEvent(VIEW_ALIAS.LOBBY_STORAGE, ctx={'defaultSection': STORAGE_CONSTANTS.BLUEPRINTS})
+    return events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_STORAGE), ctx={'defaultSection': STORAGE_CONSTANTS.BLUEPRINTS})
 
 
 class _BlueprintsCriteriesGroup(CriteriesGroup):

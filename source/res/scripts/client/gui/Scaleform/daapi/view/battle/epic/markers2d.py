@@ -4,30 +4,35 @@ import logging
 import BigWorld
 from Math import Vector3, Vector4, Matrix, WGTerrainMP, WGClampMP, Vector2
 from arena_component_system.epic_sector_warning_component import WARNING_TYPE
-from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES, INVALID_MARKER_ID, INVALID_MARKER_SUBTYPE, MarkerType, DefaultMarkerSubType
+from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES, INVALID_MARKER_ID, INVALID_MARKER_SUBTYPE, MarkerType, DefaultMarkerSubType, INVALID_TARGET_ID, INVALID_COMMAND_ID
 from constants import VEHICLE_HIT_FLAGS
 from debug_utils import LOG_ERROR
 from epic_constants import EPIC_BATTLE_TEAM_ID
 from gui.Scaleform.daapi.view.battle.shared.markers2d import MarkersManager, markers
 from gui.Scaleform.daapi.view.battle.shared.markers2d import plugins
 from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
+from gui.Scaleform.daapi.view.battle.shared.markers2d.markers import BaseMarker
 from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import ChatCommunicationComponent, ReplyStateForMarker
 from gui.Scaleform.genConsts.EPIC_CONSTS import EPIC_CONSTS
 from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.interfaces import IVehiclesAndPositionsController
-from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
+from gui.battle_control.battle_constants import ENTITY_IN_FOCUS_TYPE
+from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _EVENT_ID
 from gui.battle_control.battle_constants import PLAYER_GUI_PROPS
 from gui.battle_control.battle_constants import PROGRESS_CIRCLE_TYPE
+from gui.battle_control.controllers.feedback_adaptor import EntityInFocusData
 from gui.battle_control.controllers.game_notification_ctrl import EPIC_NOTIFICATION
 from helpers import dependency
 from helpers import time_utils
-from messenger.proto.bw_chat2.battle_chat_cmd import BASE_CMD_NAMES
+from messenger.proto.bw_chat2.battle_chat_cmd import BASE_CMD_NAMES, AUTOCOMMIT_COMMAND_NAMES
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
-from shared_utils import findFirst
 from skeletons.gui.battle_session import IBattleSessionProvider
-_STATIC_MARKER_BOUNDS_MIN_SCALE = Vector2(1.0, 0.8)
-_STATIC_MARKER_BOUNDS = Vector4(30, 30, 90, 10)
-_INNER_STATIC_MARKER_BOUNDS = Vector4(15, 15, 70, 1)
+_SECTOR_BASES_BOUNDS_MIN_SCALE = Vector2(1.0, 1.0)
+_SECTOR_BASES_BOUNDS = Vector4(30, 30, 30, 30)
+_INNER_SECTOR_BASES_BOUNDS = Vector4(17, 17, 18, 18)
+_HEADQUARTERS_BOUNDS_MIN_SCALE = Vector2(1.0, 0.8)
+_HEADQUARTERS_BOUNDS = Vector4(50, 50, 30, 65)
+_INNER_HEADQUARTERS_BOUNDS = Vector4(17, 17, 18, 25)
 _MEDIUM_MARKER_MIN_SCALE = 100
 _EMPTY_MARKER_BOUNDS = Vector4(0.0, 0.0, 0.0, 0.0)
 _EMPTY_MARKER_INNER_BOUNDS = Vector4(0.0, 0.0, 0.0, 0.0)
@@ -36,6 +41,7 @@ _SMALL_MARKER_MIN_SCALE = 40
 _NEAR_MARKER_CULL_DISTANCE = 300
 _EPIC_BASE = 'epic_base'
 _ALLY_OWNER = 'ally'
+_ENEMY_OWNER = 'enemy'
 _logger = logging.getLogger(__name__)
 
 class EpicMissionsPlugin(plugins.MarkerPlugin):
@@ -100,21 +106,32 @@ class EpicMissionsPlugin(plugins.MarkerPlugin):
     def _updateHighlight(self):
         pass
 
+    @staticmethod
+    def _getAnyMarkerRepliedByPlayer(markerList):
+        somethingRepliedByMe = False
+        for marker in markerList.itervalues():
+            if marker.getIsRepliedByPlayer():
+                somethingRepliedByMe = True
+                break
+
+        return somethingRepliedByMe
+
 
 class SectorBasesPlugin(EpicMissionsPlugin, ChatCommunicationComponent):
     _AUTO_COMMIT_STATE_TO_STATE = {BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE: BATTLE_CHAT_COMMAND_NAMES.DEFEND_BASE,
      BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE: BATTLE_CHAT_COMMAND_NAMES.ATTACK_BASE}
-    __slots__ = ('_markers', '__highlightedBaseID', '_isInFreeSpectatorMode', '__basesToBeActive', '__capturedBases', '__insideCircle', '_clazz')
+    __slots__ = ('_markers', '__highlightedBaseID', '_isInFreeSpectatorMode', '__basesToBeActive', '__capturedBases', '__insideCircle', '__clazz')
 
     def __init__(self, parentObj, clazz=markers.BaseMarker):
         super(SectorBasesPlugin, self).__init__(parentObj)
         self._markers = {}
-        self._clazz = clazz
-        self.__highlightedBaseID = -1
+        self.__clazz = clazz
+        self.__highlightedBaseID = INVALID_TARGET_ID
         self._isInFreeSpectatorMode = False
         self.__basesToBeActive = []
         self.__capturedBases = []
-        self.__insideCircle = -1
+        self.__insideCircle = INVALID_TARGET_ID
+        self.__firstSticky = True
         ChatCommunicationComponent.__init__(self, parentObj)
 
     def init(self):
@@ -191,48 +208,12 @@ class SectorBasesPlugin(EpicMissionsPlugin, ChatCommunicationComponent):
             if self._markers[targetID].getMarkerID() == markerID:
                 return targetID
 
-    def getMarkerSubtype(self, markerID):
-        targetID = self.getTargetIDFromMarkerID(markerID)
-        if targetID == -1:
+        return INVALID_TARGET_ID
+
+    def getMarkerSubtype(self, targetID):
+        if targetID == INVALID_TARGET_ID or targetID not in self._markers:
             return INVALID_MARKER_SUBTYPE
         return DefaultMarkerSubType.ALLY_MARKER_SUBTYPE if _ALLY_OWNER == self._markers[targetID].getOwningTeam() else DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE
-
-    def __onActionAddedToMarkerReceived(self, senderID, commandID, markerType, uniqueBaseID):
-        if markerType != self.getMarkerType() or uniqueBaseID not in self._markers or _ACTIONS.battleChatCommandFromActionID(commandID).name not in BASE_CMD_NAMES:
-            return
-        marker = self._markers[uniqueBaseID]
-        marker.setState(ReplyStateForMarker.CREATE_STATE)
-        marker.setActiveCommandID(commandID)
-        if _ACTIONS.battleChatCommandFromActionID(commandID).name in self._AUTO_COMMIT_STATE_TO_STATE:
-            marker.setIsSticky(True)
-            self._setMarkerRepliesAndCheckState(marker, 1, senderID == avatar_getter.getPlayerVehicleID())
-        self._setActiveState(marker, ReplyStateForMarker.CREATE_STATE)
-        if not avatar_getter.isVehicleAlive() and marker.getBoundCheckEnabled():
-            marker.setBoundCheckEnabled(False)
-            self._setMarkerBoundEnabled(marker.getMarkerID(), False)
-
-    def __setInFocusForPlayer(self, oldTargetID, oldTargetType, newTargetID, newTargetType, oneShot):
-        if oldTargetType == self.getMarkerType() and oldTargetID in self._markers:
-            self.__makeMarkerSticky(oldTargetID, False)
-        if newTargetType == self.getMarkerType() and newTargetID in self._markers:
-            self.__makeMarkerSticky(newTargetID, True)
-
-    def __makeMarkerSticky(self, targetID, setSticky):
-        marker = self._markers[targetID]
-        markerID = marker.getMarkerID()
-        self._setMarkerSticky(markerID, setSticky)
-        marker.setIsSticky(setSticky)
-        self._checkNextState(marker)
-
-    def __onRemoveCommandReceived(self, removeID, markerType):
-        if markerType != MarkerType.BASE_MARKER_TYPE or removeID not in self._markers:
-            return
-        marker = self._markers[removeID]
-        marker.setActiveCommandID(-1)
-        self._checkNextState(marker)
-        if marker.getState() == ReplyStateForMarker.NO_ACTION and not marker.getBoundCheckEnabled():
-            marker.setBoundCheckEnabled(True)
-            self._setMarkerBoundEnabled(marker.getMarkerID(), True)
 
     def _onPlayerMissionUpdated(self, mission, _):
         self.__resetBaseHighlight()
@@ -242,12 +223,13 @@ class SectorBasesPlugin(EpicMissionsPlugin, ChatCommunicationComponent):
                 markerID = self._markers[mission.id].getMarkerID()
             self.__highlightedBaseID = mission.id
             if markerID is not None and not self._isInFreeSpectatorMode:
-                self._setMarkerSticky(markerID, True)
+                if not EpicMissionsPlugin._getAnyMarkerRepliedByPlayer(self._markers):
+                    self._setMarkerSticky(markerID, True)
                 self._setMarkerActive(markerID, True)
                 self._invokeMarker(markerID, 'setActive', True)
             for baseId, isActive in self.__basesToBeActive:
                 markerID = None
-                if mission.id in self._markers:
+                if baseId in self._markers:
                     markerID = self._markers[baseId].getMarkerID()
                 if markerID is not None and baseId not in self.__capturedBases:
                     self.__checkPlayerInsideCircle(baseId)
@@ -268,14 +250,62 @@ class SectorBasesPlugin(EpicMissionsPlugin, ChatCommunicationComponent):
             self._invokeMarker(markerID, 'setActive', not self._isInFreeSpectatorMode)
         return
 
+    def _getMarkerFromTargetID(self, targetID, markerType):
+        return None if targetID not in self._markers or markerType != self.getMarkerType() else self._markers[targetID]
+
+    def __onActionAddedToMarkerReceived(self, senderID, commandID, markerType, uniqueBaseID):
+        if markerType != self.getMarkerType() or uniqueBaseID not in self._markers or _ACTIONS.battleChatCommandFromActionID(commandID).name not in BASE_CMD_NAMES:
+            return
+        marker = self._markers[uniqueBaseID]
+        marker.setState(ReplyStateForMarker.CREATE_STATE)
+        marker.setActiveCommandID(commandID)
+        if _ACTIONS.battleChatCommandFromActionID(commandID).name in self._AUTO_COMMIT_STATE_TO_STATE:
+            self._setMarkerRepliesAndCheckState(marker, 1, senderID == avatar_getter.getPlayerVehicleID())
+        else:
+            self._setActiveState(marker, ReplyStateForMarker.CREATE_STATE)
+        if not avatar_getter.isVehicleAlive() and marker.getBoundCheckEnabled():
+            marker.setBoundCheckEnabled(False)
+            self._setMarkerBoundEnabled(marker.getMarkerID(), False)
+
+    def __setInFocusForPlayer(self, oldTargetID, oldTargetType, newTargetID, newTargetType, oneShot):
+        if oldTargetType == self.getMarkerType() and oldTargetID in self._markers:
+            self.__makeMarkerSticky(oldTargetID, False)
+        if newTargetType == self.getMarkerType() and newTargetID in self._markers:
+            self.__makeMarkerSticky(newTargetID, True)
+        if oneShot:
+            return
+        if newTargetID == INVALID_TARGET_ID and self.__highlightedBaseID != INVALID_TARGET_ID:
+            self.__makeMarkerSticky(self.__highlightedBaseID, True)
+        elif newTargetID != INVALID_TARGET_ID and self.__highlightedBaseID != INVALID_TARGET_ID and newTargetID != self.__highlightedBaseID:
+            self.__makeMarkerSticky(self.__highlightedBaseID, False)
+
+    def __makeMarkerSticky(self, targetID, setSticky):
+        marker = self._markers[targetID]
+        markerID = marker.getMarkerID()
+        self._setMarkerSticky(markerID, setSticky)
+        marker.setIsSticky(setSticky)
+        self._checkNextState(marker)
+
+    def __onRemoveCommandReceived(self, removeID, markerType):
+        if markerType != MarkerType.BASE_MARKER_TYPE or removeID not in self._markers:
+            return
+        marker = self._markers[removeID]
+        marker.setActiveCommandID(INVALID_COMMAND_ID)
+        self._checkNextState(marker)
+        if marker.getState() == ReplyStateForMarker.NO_ACTION and not marker.getBoundCheckEnabled():
+            marker.setBoundCheckEnabled(True)
+            self._setMarkerBoundEnabled(marker.getMarkerID(), True)
+
     def __resetBaseHighlight(self):
-        markerID = None
+        marker = None
         if self.__highlightedBaseID in self._markers:
-            markerID = self._markers[self.__highlightedBaseID].getMarkerID()
-        if markerID is not None:
-            self._setMarkerSticky(markerID, False)
+            marker = self._markers[self.__highlightedBaseID]
+        if marker is not None:
+            markerID = marker.getMarkerID()
+            if not marker.getIsRepliedByPlayer():
+                self._setMarkerSticky(markerID, False)
             self._invokeMarker(markerID, 'setActive', False)
-            self.__highlightedBaseID = -1
+            self.__highlightedBaseID = INVALID_TARGET_ID
         return
 
     def __onVehicleEntered(self, type_, idx, state):
@@ -298,7 +328,7 @@ class SectorBasesPlugin(EpicMissionsPlugin, ChatCommunicationComponent):
             if idx in self._markers:
                 markerID = self._markers[idx].getMarkerID()
             if markerID is not None:
-                self.__insideCircle = -1
+                self.__insideCircle = INVALID_TARGET_ID
                 self._invokeMarker(markerID, 'notifyVehicleInCircle', False)
             return
 
@@ -309,16 +339,16 @@ class SectorBasesPlugin(EpicMissionsPlugin, ChatCommunicationComponent):
         else:
             self._setMarkerSticky(markerID, isInBase)
             self._setMarkerActive(markerID, sectorBase.active())
-            self._setMarkerRenderInfo(markerID, _MEDIUM_MARKER_MIN_SCALE, _STATIC_MARKER_BOUNDS, _INNER_STATIC_MARKER_BOUNDS, _MAX_CULL_DISTANCE, _STATIC_MARKER_BOUNDS_MIN_SCALE)
+            self._setMarkerRenderInfo(markerID, _MEDIUM_MARKER_MIN_SCALE, _SECTOR_BASES_BOUNDS, _INNER_SECTOR_BASES_BOUNDS, _MAX_CULL_DISTANCE, _SECTOR_BASES_BOUNDS_MIN_SCALE)
             if bool(sectorBase.isPlayerTeam()):
                 owner = _ALLY_OWNER
             else:
-                owner = 'enemy'
+                owner = _ENEMY_OWNER
             self._invokeMarker(markerID, 'setOwningTeam', owner)
             self._invokeMarker(markerID, 'setIdentifier', sectorBase.baseID)
             self._invokeMarker(markerID, 'setIsEpicMarker', True)
             self._invokeMarker(markerID, 'setActive', isInBase)
-            marker = self._clazz(markerID, owner=owner, active=True)
+            marker = self.__clazz(markerID, owner=owner, active=True)
             self._markers[sectorBase.baseID] = marker
             marker.setState(ReplyStateForMarker.NO_ACTION)
             self._setActiveState(marker, marker.getState())
@@ -341,7 +371,7 @@ class SectorBasesPlugin(EpicMissionsPlugin, ChatCommunicationComponent):
         if baseId == self.__highlightedBaseID:
             self._invokeMarker(markerID, 'setActive', False)
             self._setMarkerSticky(markerID, False)
-            self.__highlightedBaseID = -1
+            self.__highlightedBaseID = INVALID_TARGET_ID
         return
 
     def __getMarkerIDForBaseID(self, baseId):
@@ -381,47 +411,29 @@ class SectorBasesPlugin(EpicMissionsPlugin, ChatCommunicationComponent):
             self._invokeMarker(markerID, 'notifyVehicleInCircle', self.__insideCircle == baseId)
         return
 
-    def _getMarkerFromTargetID(self, targetID, markerType):
-        return None if targetID not in self._markers or markerType != self.getMarkerType() else self._markers[targetID]
 
+class HeadquartersPlugin(EpicMissionsPlugin, ChatCommunicationComponent):
+    __slots__ = ('_markers', '__isHQBattle', '__visibleHQ', '_isInFreeSpectatorMode', '__hqMissionActive', '__clazz')
 
-class HeadquartersPlugin(EpicMissionsPlugin):
-    __slots__ = ('__markers', '__isHQBattle', '__visibleHQ', '_isInFreeSpectatorMode', '__hqMissionActive')
-
-    def __init__(self, parentObj):
+    def __init__(self, parentObj, clazz=BaseMarker):
         super(HeadquartersPlugin, self).__init__(parentObj)
-        self.__markers = {}
+        self._markers = {}
         self.__isHQBattle = False
-        self.__visibleHQ = -1
+        self.__visibleHQ = INVALID_TARGET_ID
         self._isInFreeSpectatorMode = False
         self.__hqMissionActive = False
+        self.__clazz = clazz
+        ChatCommunicationComponent.__init__(self, parentObj)
 
-    def init(self):
-        super(HeadquartersPlugin, self).init()
+    def start(self):
+        super(HeadquartersPlugin, self).start()
+        ChatCommunicationComponent.start(self)
         destructibleComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'destructibleEntityComponent', None)
         if destructibleComponent is not None:
             destructibleComponent.onDestructibleEntityAdded += self.__onDestructibleEntityAdded
             destructibleComponent.onDestructibleEntityRemoved += self.__onDestructibleEntityRemoved
             destructibleComponent.onDestructibleEntityStateChanged += self.__onDestructibleEntityStateChanged
             destructibleComponent.onDestructibleEntityHealthChanged += self.__onDestructibleEntityHealthChanged
-        else:
-            LOG_ERROR('Expected DestructibleEntityComponent not present!')
-        return
-
-    def fini(self):
-        destructibleComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'destructibleEntityComponent', None)
-        if destructibleComponent is not None:
-            destructibleComponent.onDestructibleEntityAdded -= self.__onDestructibleEntityAdded
-            destructibleComponent.onDestructibleEntityRemoved -= self.__onDestructibleEntityRemoved
-            destructibleComponent.onDestructibleEntityStateChanged -= self.__onDestructibleEntityStateChanged
-            destructibleComponent.onDestructibleEntityHealthChanged -= self.__onDestructibleEntityHealthChanged
-        super(HeadquartersPlugin, self).fini()
-        return
-
-    def start(self):
-        super(HeadquartersPlugin, self).start()
-        destructibleComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'destructibleEntityComponent', None)
-        if destructibleComponent is not None:
             hqs = destructibleComponent.destructibleEntities
             for hq in hqs.itervalues():
                 self.__onDestructibleEntityAdded(hq)
@@ -431,41 +443,59 @@ class HeadquartersPlugin(EpicMissionsPlugin):
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onMinimapFeedbackReceived += self.__onMinimapFeedbackReceived
+            ctrl.onRemoveCommandReceived += self.__onRemoveCommandReceived
+            ctrl.setInFocusForPlayer += self.__setInFocusForPlayer
+            ctrl.onVehicleFeedbackReceived += self._onVehicleFeedbackReceived
         return
 
     def stop(self):
+        destructibleComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'destructibleEntityComponent', None)
+        if destructibleComponent is not None:
+            destructibleComponent.onDestructibleEntityAdded -= self.__onDestructibleEntityAdded
+            destructibleComponent.onDestructibleEntityRemoved -= self.__onDestructibleEntityRemoved
+            destructibleComponent.onDestructibleEntityStateChanged -= self.__onDestructibleEntityStateChanged
+            destructibleComponent.onDestructibleEntityHealthChanged -= self.__onDestructibleEntityHealthChanged
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onMinimapFeedbackReceived -= self.__onMinimapFeedbackReceived
-        for markerID in self.__markers.values():
-            self._destroyMarker(markerID)
+            ctrl.onRemoveCommandReceived -= self.__onRemoveCommandReceived
+            ctrl.setInFocusForPlayer -= self.__setInFocusForPlayer
+            ctrl.onVehicleFeedbackReceived -= self._onVehicleFeedbackReceived
+        for marker in self._markers:
+            self._destroyMarker(marker.getMarkerID())
 
-        self.__markers.clear()
+        self._markers.clear()
         super(HeadquartersPlugin, self).stop()
+        ChatCommunicationComponent.stop(self)
         return
 
     def resetHQHighlight(self):
-        handle = self.__markers.get(self.__visibleHQ, None)
-        if handle:
-            self._setMarkerSticky(handle, False)
-            self._invokeMarker(handle, 'setHighlight', False)
-            self.__visibleHQ = -1
-        return
+        marker = self._markers.get(self.__visibleHQ, None)
+        if marker is None:
+            return
+        else:
+            markerID = marker.getMarkerID()
+            if not marker.getIsRepliedByPlayer():
+                self._setMarkerSticky(markerID, False)
+            self._invokeMarker(markerID, 'setHighlight', False)
+            self.__visibleHQ = INVALID_TARGET_ID
+            return
 
     def getMarkerType(self):
         return MarkerType.HEADQUARTER_MARKER_TYPE
 
     def getTargetIDFromMarkerID(self, markerID):
-        targetID = findFirst(lambda baseID: self.__markers[baseID] == markerID, self.__markers)
-        return INVALID_MARKER_ID if targetID is None else targetID
+        for targetID, marker in self._markers.iteritems():
+            if marker.getMarkerID() == markerID:
+                return targetID
 
-    def getMarkerSubtype(self, baseID):
-        markerID = self.__markers.get(baseID, None)
-        if markerID is None:
+        return INVALID_MARKER_ID
+
+    def getMarkerSubtype(self, targetID):
+        if targetID == INVALID_MARKER_ID or targetID not in self._markers:
             return INVALID_MARKER_SUBTYPE
-        else:
-            isAttacker = avatar_getter.getPlayerTeam() == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER
-            return DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE if isAttacker else DefaultMarkerSubType.ALLY_MARKER_SUBTYPE
+        isAttacker = avatar_getter.getPlayerTeam() == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER
+        return DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE if isAttacker else DefaultMarkerSubType.ALLY_MARKER_SUBTYPE
 
     def _onPlayerMissionUpdated(self, mission, _):
         if not mission.isObjectivesMission():
@@ -485,18 +515,75 @@ class HeadquartersPlugin(EpicMissionsPlugin):
         if self.__hqMissionActive:
             self.resetHQHighlight()
             self.__visibleHQ = objID
-            handle = self.__markers.get(objID, None)
-            if handle and not self._isInFreeSpectatorMode:
-                self._setMarkerSticky(handle, True)
-                self._invokeMarker(handle, 'setHighlight', True)
+            marker = self._markers.get(objID, None)
+            if marker is None:
+                return
+            markerID = marker.getMarkerID()
+            if markerID and not self._isInFreeSpectatorMode:
+                if not EpicMissionsPlugin._getAnyMarkerRepliedByPlayer(self._markers):
+                    self._setMarkerSticky(markerID, True)
+                self._invokeMarker(markerID, 'setHighlight', True)
         return
 
     def _updateHighlight(self):
-        handle = self.__markers.get(self.__visibleHQ, None)
-        if handle:
-            self._setMarkerSticky(handle, not self._isInFreeSpectatorMode)
-            self._invokeMarker(handle, 'setHighlight', not self._isInFreeSpectatorMode)
-        return
+        marker = self._markers.get(self.__visibleHQ, None)
+        if marker is None:
+            return
+        else:
+            markerID = marker.getMarkerID()
+            self._setMarkerSticky(markerID, not self._isInFreeSpectatorMode)
+            self._invokeMarker(markerID, 'setHighlight', not self._isInFreeSpectatorMode)
+            return
+
+    def _getMarkerFromTargetID(self, targetID, markerType):
+        return None if targetID not in self._markers or markerType != self.getMarkerType() else self._markers[targetID]
+
+    def _onVehicleFeedbackReceived(self, eventID, vehicleID, value):
+        if eventID == _EVENT_ID.ENTITY_IN_FOCUS:
+            self.__onHQInFocus(vehicleID, value)
+
+    def __onHQInFocus(self, hqEntityID, entityInFocusData):
+        if entityInFocusData.entityTypeInFocus != ENTITY_IN_FOCUS_TYPE.DESTRUCTIBLE_ENTITY:
+            return
+        else:
+            markerID = INVALID_MARKER_ID
+            if hqEntityID <= 0:
+                self._setMarkerObjectInFocus(markerID, entityInFocusData.isInFocus)
+                return
+            destructibleComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'destructibleEntityComponent', None)
+            if destructibleComponent is None:
+                _logger.error('Expected DestructibleEntityComponent not present!')
+                self._setMarkerObjectInFocus(markerID, entityInFocusData.isInFocus)
+                return
+            hq, targetID = destructibleComponent.getDestructibleEntityAndDestructibleIDByEntityID(hqEntityID)
+            if hq is None:
+                _logger.error('Expected DestructibleEntity not present! Id: ' + str(hqEntityID))
+                self._setMarkerObjectInFocus(markerID, entityInFocusData.isInFocus)
+                return
+            focusedMarker = self._markers.get(targetID, None)
+            if hq.isAlive() and focusedMarker is not None and avatar_getter.isVehicleAlive():
+                markerID = focusedMarker.getMarkerID()
+            self._setMarkerObjectInFocus(markerID, entityInFocusData.isInFocus)
+            return
+
+    def __setInFocusForPlayer(self, oldTargetID, oldTargetType, newTargetID, newTargetType, oneShot):
+        if oldTargetType == self.getMarkerType() and oldTargetID in self._markers:
+            self.__makeMarkerSticky(oldTargetID, False)
+        if newTargetType == self.getMarkerType() and newTargetID in self._markers:
+            self.__makeMarkerSticky(newTargetID, True)
+        if oneShot:
+            return
+        if newTargetID == INVALID_TARGET_ID and self.__visibleHQ != INVALID_TARGET_ID:
+            self.__makeMarkerSticky(self.__visibleHQ, True)
+        elif newTargetID != INVALID_TARGET_ID and self.__visibleHQ != INVALID_TARGET_ID and newTargetID != self.__visibleHQ:
+            self.__makeMarkerSticky(self.__visibleHQ, False)
+
+    def __makeMarkerSticky(self, targetID, setSticky):
+        marker = self._markers[targetID]
+        markerID = marker.getMarkerID()
+        self._setMarkerSticky(markerID, setSticky)
+        marker.setIsSticky(setSticky)
+        self._checkNextState(marker)
 
     def __startHQBattle(self):
         if self.__isHQBattle:
@@ -529,31 +616,40 @@ class HeadquartersPlugin(EpicMissionsPlugin):
             if entity.health <= 0:
                 isDead = True
             self._setMarkerActive(handle, entity.isActive)
-            self._setMarkerRenderInfo(handle, _MEDIUM_MARKER_MIN_SCALE, _EMPTY_MARKER_BOUNDS, _EMPTY_MARKER_INNER_BOUNDS, _MAX_CULL_DISTANCE, _STATIC_MARKER_BOUNDS_MIN_SCALE)
+            self._setMarkerRenderInfo(handle, _MEDIUM_MARKER_MIN_SCALE, _HEADQUARTERS_BOUNDS, _INNER_HEADQUARTERS_BOUNDS, _MAX_CULL_DISTANCE, _HEADQUARTERS_BOUNDS_MIN_SCALE)
             self._invokeMarker(handle, 'setOwningTeam', entity.isPlayerTeam)
             self._invokeMarker(handle, 'setDead', isDead)
             self._invokeMarker(handle, 'setIdentifier', entity.destructibleEntityID)
             self._invokeMarker(handle, 'setMaxHealth', entity.maxHealth)
             self._invokeMarker(handle, 'setHealth', int(entity.health))
-            self.__markers[entity.destructibleEntityID] = handle
+            if bool(entity.isPlayerTeam):
+                owner = _ALLY_OWNER
+            else:
+                owner = 'enemy'
+            marker = self.__clazz(handle, True, owner)
+            self._markers[entity.destructibleEntityID] = marker
             if entity.destructibleEntityID == self.__visibleHQ:
                 self._onNearestObjectiveChanged(entity.destructibleEntityID, None)
             else:
                 self._setMarkerSticky(handle, False)
                 self._invokeMarker(handle, 'setHighlight', False)
+            marker.setState(ReplyStateForMarker.NO_ACTION)
+            self._setActiveState(marker, marker.getState())
+            if isDead:
+                self._setMarkerBoundEnabled(handle, False)
             return
 
     def __onDestructibleEntityRemoved(self, entityId):
-        handle = self.__markers.pop(entityId, None)
-        if handle:
-            self._destroyMarker(handle)
+        marker = self._markers.pop(entityId, None)
+        if marker is not None:
+            self._destroyMarker(marker.getMarkerID())
             if self.__visibleHQ == entityId:
-                self.__visibleHQ = -1
+                self.__visibleHQ = INVALID_TARGET_ID
         return
 
     def __onDestructibleEntityStateChanged(self, entityId):
-        handle = self.__markers.get(entityId, None)
-        if handle:
+        marker = self._markers.get(entityId, None)
+        if marker is not None:
             destructibleComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'destructibleEntityComponent', None)
             if destructibleComponent is None:
                 _logger.error('Expected DestructibleEntityComponent not present!')
@@ -562,11 +658,14 @@ class HeadquartersPlugin(EpicMissionsPlugin):
             if hq is None:
                 _logger.error('Expected DestructibleEntity not present! Id: ' + str(entityId))
                 return
-            self._setMarkerMatrix(handle, self.__getMarkerMatrix(hq))
+            markerID = marker.getMarkerID()
+            self._setMarkerMatrix(markerID, self.__getMarkerMatrix(hq))
             if not hq.isAlive():
-                self._invokeMarker(handle, 'setHealth', 0)
-                self._invokeMarker(handle, 'setDead', True)
-                self._setMarkerSticky(handle, False)
+                self._invokeMarker(markerID, 'setHealth', 0)
+                self._invokeMarker(markerID, 'setDead', True)
+                self._setMarkerSticky(markerID, False)
+                self._setMarkerBoundEnabled(markerID, False)
+                self.__onRemoveCommandReceived(entityId, self.getMarkerType())
         return
 
     def __getMarkerMatrix(self, destructibleEntity):
@@ -579,16 +678,19 @@ class HeadquartersPlugin(EpicMissionsPlugin):
             return m
 
     def __onDestructibleEntityHealthChanged(self, entityId, newHealth, maxHealth, attackerID, attackReason, hitFlags):
-        handle = self.__markers.get(entityId, None)
-        aInfo = self.sessionProvider.getArenaDP().getVehicleInfo(attackerID)
-        vehDmg = self.__getVehicleDamageType(aInfo)
-        self._invokeMarker(handle, 'setHealth', newHealth, vehDmg, hitFlags & VEHICLE_HIT_FLAGS.IS_ANY_PIERCING_MASK)
-        return
+        marker = self._markers.get(entityId, None)
+        if marker is None:
+            return
+        else:
+            aInfo = self.sessionProvider.getArenaDP().getVehicleInfo(attackerID)
+            vehDmg = self.__getVehicleDamageType(aInfo)
+            self._invokeMarker(marker.getMarkerID(), 'setHealth', newHealth, vehDmg, hitFlags & VEHICLE_HIT_FLAGS.IS_ANY_PIERCING_MASK)
+            return
 
     def __activateDestructibleMarker(self, entityId, isActive):
-        handle = self.__markers.get(entityId, None)
-        if handle is not None:
-            self._setMarkerActive(handle, isActive)
+        marker = self._markers.get(entityId, None)
+        if marker is not None:
+            self._setMarkerActive(marker.getMarkerID(), isActive)
         return
 
     def __getVehicleDamageType(self, attackerInfo):
@@ -605,14 +707,37 @@ class HeadquartersPlugin(EpicMissionsPlugin):
         return settings.DAMAGE_TYPE.FROM_ENEMY if entityName == PLAYER_GUI_PROPS.enemy else settings.DAMAGE_TYPE.FROM_UNKNOWN
 
     def __onMinimapFeedbackReceived(self, eventID, entityID, value):
-        if eventID == FEEDBACK_EVENT_ID.MINIMAP_MARK_OBJECTIVE:
-            self.__doAttentionToObjective(entityID, *value)
+        if eventID == _EVENT_ID.MINIMAP_MARK_OBJECTIVE:
+            self.__doAttentionToHQ(entityID, *value)
 
-    def __doAttentionToObjective(self, senderID, hqId, duration):
-        handle = self.__markers.get(hqId, None)
-        if handle:
-            self._invokeMarker(handle, 'setTarget')
-        return
+    def __doAttentionToHQ(self, senderID, hqId, duration, cmdName):
+        marker = self._markers.get(hqId, None)
+        if marker is None:
+            return
+        else:
+            marker.setState(ReplyStateForMarker.CREATE_STATE)
+            marker.setActiveCommandID(hqId)
+            if cmdName in AUTOCOMMIT_COMMAND_NAMES:
+                marker.setIsSticky(senderID == avatar_getter.getPlayerVehicleID())
+                self._setMarkerRepliesAndCheckState(marker, 1, senderID == avatar_getter.getPlayerVehicleID())
+            else:
+                self._setActiveState(marker, ReplyStateForMarker.CREATE_STATE)
+            self._checkNextState(marker)
+            if not avatar_getter.isVehicleAlive() and marker.getBoundCheckEnabled():
+                marker.setBoundCheckEnabled(False)
+                self._setMarkerBoundEnabled(marker.getMarkerID(), False)
+            return
+
+    def __onRemoveCommandReceived(self, removeID, markerType):
+        if markerType != MarkerType.HEADQUARTER_MARKER_TYPE or removeID not in self._markers:
+            return
+        marker = self._markers[removeID]
+        marker.setActiveCommandID(INVALID_COMMAND_ID)
+        if marker.getReplyCount() != 0:
+            marker.setIsRepliedByPlayer(False)
+            self._setMarkerReplied(marker, False)
+            self._setMarkerReplyCount(marker, 0)
+        self._checkNextState(marker)
 
 
 class StepRepairPointPlugin(plugins.MarkerPlugin):
@@ -712,7 +837,7 @@ class StepRepairPointPlugin(plugins.MarkerPlugin):
             return
         else:
             self._setMarkerActive(handle, stepRepairPoint.isActiveForPlayerTeam())
-            self._setMarkerRenderInfo(handle, _SMALL_MARKER_MIN_SCALE, _EMPTY_MARKER_BOUNDS, _EMPTY_MARKER_INNER_BOUNDS, _NEAR_MARKER_CULL_DISTANCE, _STATIC_MARKER_BOUNDS_MIN_SCALE)
+            self._setMarkerRenderInfo(handle, _SMALL_MARKER_MIN_SCALE, _EMPTY_MARKER_BOUNDS, _EMPTY_MARKER_INNER_BOUNDS, _NEAR_MARKER_CULL_DISTANCE, _SECTOR_BASES_BOUNDS_MIN_SCALE)
             self.__markers[stepRepairPoint.id] = handle
             return
 
@@ -827,7 +952,7 @@ class SectorWarningPlugin(plugins.MarkerPlugin):
                 marker.markerID = self._createMarkerWithMatrix(settings.MARKER_SYMBOL_NAME.SECTOR_WARNING_MARKER, marker.motor.signal)
                 self.__markers[edgeID] = marker
                 self._setMarkerSticky(marker.markerID, False)
-                self._setMarkerRenderInfo(marker.markerID, _SMALL_MARKER_MIN_SCALE, _EMPTY_MARKER_BOUNDS, _EMPTY_MARKER_INNER_BOUNDS, _NEAR_MARKER_CULL_DISTANCE, _STATIC_MARKER_BOUNDS_MIN_SCALE)
+                self._setMarkerRenderInfo(marker.markerID, _SMALL_MARKER_MIN_SCALE, _EMPTY_MARKER_BOUNDS, _EMPTY_MARKER_INNER_BOUNDS, _NEAR_MARKER_CULL_DISTANCE, _SECTOR_BASES_BOUNDS_MIN_SCALE)
             markerType = self.WARNING_ID_TO_MARKER_TYPE[warningID]
             self._invokeMarker(marker.markerID, 'showWarning', markerType)
             return
@@ -997,7 +1122,7 @@ class SectorWaypointsPlugin(plugins.MarkerPlugin, IVehiclesAndPositionsControlle
             self._setMarkerPosition(self.__marker, self.__currentWaypointPositon + settings.MARKER_POSITION_ADJUSTMENT)
             self._setMarkerActive(self.__marker, self.__markerActiveState)
             self._setMarkerSticky(self.__marker, True)
-            self._setMarkerRenderInfo(self.__marker, _MEDIUM_MARKER_MIN_SCALE, _EMPTY_MARKER_BOUNDS, _EMPTY_MARKER_INNER_BOUNDS, _MAX_CULL_DISTANCE, _STATIC_MARKER_BOUNDS_MIN_SCALE)
+            self._setMarkerRenderInfo(self.__marker, _MEDIUM_MARKER_MIN_SCALE, _EMPTY_MARKER_BOUNDS, _EMPTY_MARKER_INNER_BOUNDS, _MAX_CULL_DISTANCE, _SECTOR_BASES_BOUNDS_MIN_SCALE)
             return
 
     def __onTransitionTimerUpdated(self, sectorGroupID, seconds):

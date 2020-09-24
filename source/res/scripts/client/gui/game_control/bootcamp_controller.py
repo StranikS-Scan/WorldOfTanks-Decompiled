@@ -7,6 +7,7 @@ from async import async, await
 from adisp import process
 from account_helpers.AccountSettings import CURRENT_VEHICLE, AccountSettings
 from account_helpers import isLongDisconnectedFromCenter
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl import backport
 from gui.impl.gen import R
 from helpers import dependency
@@ -48,6 +49,18 @@ class BootcampController(IBootcampController):
         g_playerEvents.onBootcampStartChoice += self.__onBootcampStartChoice
         g_bootcampEvents.onGameplayChoice += self.__onGameplayChoice
 
+    @property
+    def replayCtrl(self):
+        return g_bootcamp.replayCtrl
+
+    @property
+    def nationData(self):
+        return g_bootcamp.getNationData()
+
+    @property
+    def nation(self):
+        return g_bootcamp.nation
+
     def startBootcamp(self, inBattle):
         if g_playerEvents.isPlayerEntityChanging:
             return
@@ -68,14 +81,6 @@ class BootcampController(IBootcampController):
             self.sessionProvider.exit()
         else:
             self.__doStopBootcamp()
-
-    @property
-    def replayCtrl(self):
-        return g_bootcamp.replayCtrl
-
-    @property
-    def nationData(self):
-        return g_bootcamp.getNationData()
 
     def isInBootcamp(self):
         return self.__inBootcamp
@@ -127,6 +132,9 @@ class BootcampController(IBootcampController):
     def getLessonNum(self):
         return g_bootcamp.getLessonNum()
 
+    def getAwardVehicles(self):
+        return [self.nationData['vehicle_first'], self.nationData['vehicle_second']] if self.nationData else []
+
     def isEnableDamageIcon(self):
         return g_bootcamp.isEnableDamageIcon()
 
@@ -135,10 +143,6 @@ class BootcampController(IBootcampController):
 
     def saveCheckpoint(self, checkpoint):
         g_bootcamp.saveCheckpoint(checkpoint)
-
-    @property
-    def nation(self):
-        return g_bootcamp.nation
 
     def changeNation(self, nationIndex):
         g_bootcamp.changeNation(nationIndex)
@@ -180,8 +184,7 @@ class BootcampController(IBootcampController):
         self.__inBootcampAccount = False
 
     def __onBootcampStartChoice(self):
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOTCAMP_INTRO, None, g_bootcamp.getIntroPageData(True)), EVENT_BUS_SCOPE.LOBBY)
-        return
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_INTRO), ctx=g_bootcamp.getIntroPageData(True)), EVENT_BUS_SCOPE.LOBBY)
 
     def __onGameplayChoice(self, gameplayType, gameplayChoice):
         BigWorld.player().base.doCmdIntStr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_GAMEPLAY_CHOICE, gameplayChoice, gameplayType)

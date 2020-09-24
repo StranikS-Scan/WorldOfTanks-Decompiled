@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/bootcamp/BCQueueDialog.py
 import BigWorld
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.locale.BOOTCAMP import BOOTCAMP
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
-from gui.shared.events import BootcampEvent
+from gui.shared.events import LoadViewEvent
 from gui.Scaleform.daapi.view.meta.BCQueueWindowMeta import BCQueueWindowMeta
 from helpers import dependency
 from skeletons.connection_mgr import IConnectionManager
@@ -48,7 +50,7 @@ class BCQueueDialog(BCQueueWindowMeta):
         self.cancel()
 
     def cancel(self):
-        g_eventBus.handleEvent(BootcampEvent(BootcampEvent.QUEUE_DIALOG_CANCEL), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG_CANCEL)), EVENT_BUS_SCOPE.LOBBY)
         self.destroy()
 
     def applyData(self):

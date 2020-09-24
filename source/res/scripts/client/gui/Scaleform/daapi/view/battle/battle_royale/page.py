@@ -120,6 +120,9 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
     def isFullStatsShown(self):
         return self.__isFullStatsShown
 
+    def _canShowPostmortemTips(self):
+        return not self.__isFullStatsShown and super(BattleRoyalePage, self)._canShowPostmortemTips()
+
     def _toggleFullStats(self, isShown, permanent=None, tabIndex=None):
         manager = self.app.containerManager
         if manager.isModalViewsIsExists():
@@ -171,9 +174,6 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
             return
         super(BattleRoyalePage, self)._toggleGuiVisible()
 
-    def _definePostmortemPanel(self):
-        self.as_useEventPostmortemPanelS(False)
-
     def _dispose(self):
         progressionWindowCtrl = self.__getProgressionWindowCtrl()
         if progressionWindowCtrl:
@@ -217,6 +217,8 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
             self.as_updateDamageScreenS(value.isCausingDamage and isAlive)
         elif state in (VEHICLE_VIEW_STATE.SWITCHING, VEHICLE_VIEW_STATE.DESTROYED, VEHICLE_VIEW_STATE.CREW_DEACTIVATED):
             self.as_updateDamageScreenS(False)
+        if state == VEHICLE_VIEW_STATE.DESTROYED:
+            self._setComponentsVisibility(hidden=[BATTLE_VIEW_ALIASES.BATTLE_LEVEL_PANEL])
         return
 
     def __onShowDeathScreen(self):

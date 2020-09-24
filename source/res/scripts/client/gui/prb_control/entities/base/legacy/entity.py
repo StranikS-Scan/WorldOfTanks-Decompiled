@@ -250,6 +250,7 @@ class LegacyEntity(_LegacyEntity):
             clientPrb = prb_getters.getClientPrebattle()
         if clientPrb is not None:
             clientPrb.onSettingUpdated += self.prb_onSettingUpdated
+            clientPrb.onPropertyUpdated += self.prb_onPropertyUpdated
             clientPrb.onRosterReceived += self.prb_onRosterReceived
             clientPrb.onTeamStatesReceived += self.prb_onTeamStatesReceived
             clientPrb.onPlayerStateChanged += self.prb_onPlayerStateChanged
@@ -272,6 +273,7 @@ class LegacyEntity(_LegacyEntity):
             clientPrb = prb_getters.getClientPrebattle()
         if clientPrb is not None:
             clientPrb.onSettingUpdated -= self.prb_onSettingUpdated
+            clientPrb.onPropertyUpdated -= self.prb_onPropertyUpdated
             clientPrb.onTeamStatesReceived -= self.prb_onTeamStatesReceived
             clientPrb.onPlayerStateChanged -= self.prb_onPlayerStateChanged
             clientPrb.onPlayerRosterChanged -= self.prb_onPlayerRosterChanged
@@ -543,6 +545,11 @@ class LegacyEntity(_LegacyEntity):
         settingValue = self._settings[settingName]
         LOG_DEBUG('prb_onSettingUpdated', settingName, settingValue)
         self._invokeListeners('onSettingUpdated', self, settingName, settingValue)
+
+    def prb_onPropertyUpdated(self, propertyName):
+        propertyValue = prb_getters.getClientPrebattle().properties[propertyName]
+        LOG_DEBUG('prb_onPropertyUpdated', propertyName, propertyValue)
+        self._invokeListeners('onPropertyUpdated', self, propertyName, propertyValue)
 
     def prb_onTeamStatesReceived(self):
         team1State = self.getTeamState(team=1)

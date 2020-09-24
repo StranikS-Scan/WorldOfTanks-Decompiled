@@ -17,6 +17,7 @@ from preview_selectable_logic import PreviewSelectableLogic
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.game_control import IHeroTankController
+from gui.prb_control.events_dispatcher import g_eventDispatcher
 _SHOW_CLOSE_BTN = False
 _SHOW_BACK_BTN = True
 _logger = logging.getLogger(__name__)
@@ -102,6 +103,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
 
     def __onHangarCreateOrRefresh(self):
         self.__handleWindowClose()
+        g_eventDispatcher.loadHangar()
 
     @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_VEHICLE_PREVIEW, EVENT_BUS_SCOPE.LOBBY)
     def __handleWindowClose(self, event=None):

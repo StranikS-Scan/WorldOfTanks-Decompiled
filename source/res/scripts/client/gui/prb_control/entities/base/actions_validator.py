@@ -47,6 +47,8 @@ class CurrentVehicleActionsValidator(BaseActionsValidator):
                 return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT)
             if g_currentVehicle.isInBattle() or g_currentVehicle.isDisabled():
                 return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_IN_BATTLE)
+            if g_currentVehicle.isTooHeavy():
+                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_TOO_HEAVY)
             if not g_currentVehicle.isCrewFull():
                 return ValidationResult(False, PREBATTLE_RESTRICTION.CREW_NOT_FULL)
             if g_currentVehicle.isBroken():

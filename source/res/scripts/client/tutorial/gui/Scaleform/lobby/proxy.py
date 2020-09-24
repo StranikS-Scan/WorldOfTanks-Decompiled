@@ -2,9 +2,10 @@
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/lobby/proxy.py
 import weakref
 from debug_utils import LOG_CURRENT_EXCEPTION
+from frameworks.wulf import WindowLayer
 from gui import SystemMessages
 from gui.Scaleform.Waiting import Waiting
-from gui.Scaleform.framework import g_entitiesFactories, ViewTypes
+from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.TUTORIAL_TRIGGER_TYPES import TUTORIAL_TRIGGER_TYPES
 from gui.app_loader.settings import APP_NAME_SPACE
@@ -110,7 +111,7 @@ class SfLobbyProxy(GUIProxy):
 
     def getSceneID(self):
         sceneID = None
-        container = self.app.containerManager.getContainer(ViewTypes.LOBBY_SUB)
+        container = self.app.containerManager.getContainer(WindowLayer.SUB_VIEW)
         if container is not None:
             pyView = container.getView()
             if pyView is not None:
@@ -121,13 +122,13 @@ class SfLobbyProxy(GUIProxy):
     def goToScene(self, sceneID):
         event = self.config.getSceneEvent(sceneID)
         if event:
-            g_eventBus.handleEvent(events.LoadViewEvent(event), scope=EVENT_BUS_SCOPE.LOBBY)
+            g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(event)), scope=EVENT_BUS_SCOPE.LOBBY)
 
-    def isViewPresent(self, viewType, criteria):
-        return self.__findView(viewType, criteria) is not None
+    def isViewPresent(self, layer, criteria):
+        return self.__findView(layer, criteria) is not None
 
-    def closeView(self, viewType, criteria):
-        view = self.__findView(viewType, criteria)
+    def closeView(self, layer, criteria):
+        view = self.__findView(layer, criteria)
         if view is not None:
             view.destroy()
         return
@@ -202,7 +203,7 @@ class SfLobbyProxy(GUIProxy):
         if app is None or app.containerManager is None:
             return False
         else:
-            container = app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
+            container = app.containerManager.getContainer(WindowLayer.TOP_WINDOW)
             result = False
             if container is not None:
                 dialogCount = container.getViewCount(isModal=True)
@@ -251,7 +252,7 @@ class SfLobbyProxy(GUIProxy):
             self.__load()
 
     def __onViewLoadInit(self, pyEntity):
-        if pyEntity.viewType is ViewTypes.LOBBY_SUB:
+        if pyEntity.layer == WindowLayer.SUB_VIEW:
             pageName = pyEntity.alias
             sceneID = self.config.getSceneID(pageName)
             prevSceneID = self.getSceneID()
@@ -266,7 +267,7 @@ class SfLobbyProxy(GUIProxy):
         return
 
     def __onViewLoaded(self, pyEntity, _):
-        if pyEntity.viewType is ViewTypes.LOBBY_SUB:
+        if pyEntity.layer == WindowLayer.SUB_VIEW:
             pageName = pyEntity.alias
             sceneID = self.config.getSceneID(pageName)
             LOG_DEBUG('GUI.onPageReady', sceneID)
@@ -332,10 +333,10 @@ class SfLobbyProxy(GUIProxy):
         componentID, animID = event.targetID, event.settingsID
         self.stopEffect(GUI_EFFECT_NAME.PLAY_ANIMATION, componentID, animID)
 
-    def __findView(self, viewType, criteria):
+    def __findView(self, layer, criteria):
         app = self.app
         if app is None or app.containerManager is None:
             return
         else:
-            container = app.containerManager.getContainer(viewType)
+            container = app.containerManager.getContainer(layer)
             return None if container is None else container.getView(criteria)

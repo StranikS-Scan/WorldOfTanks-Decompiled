@@ -2,9 +2,10 @@
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/battle_v2/proxy.py
 import weakref
 from debug_utils import LOG_CURRENT_EXCEPTION
+from frameworks.wulf import WindowLayer
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.battle.shared import indicators
-from gui.Scaleform.framework import g_entitiesFactories, ViewTypes
+from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.app_loader import sf_battle
 from gui.battle_control.arena_info import player_format
@@ -139,7 +140,7 @@ class SfBattleProxy(GUIProxy):
         if app is None or app.containerManager is None:
             return False
         else:
-            container = app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
+            container = app.containerManager.getContainer(WindowLayer.TOP_WINDOW)
             result = False
             if container is not None:
                 dialogCount = container.getViewCount(isModal=True)

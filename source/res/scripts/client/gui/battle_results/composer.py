@@ -38,6 +38,7 @@ class StatsComposer(IStatsComposer):
         self._block.addNextComponent(text)
         self._block.addNextComponent(templates.VEHICLE_PROGRESS_STATS_BLOCK.clone())
         self._block.addNextComponent(templates.QUESTS_PROGRESS_STATS_BLOCK.clone())
+        self._block.addNextComponent(templates.DOG_TAGS_PROGRESS_STATS_BLOCK.clone())
         self._block.addNextComponent(common)
         self._block.addNextComponent(personal)
         self._block.addNextComponent(teams)
@@ -69,7 +70,7 @@ class StatsComposer(IStatsComposer):
 
     @staticmethod
     def onShowResults(arenaUniqueID):
-        event_dispatcher.showBattleResultsWindow(arenaUniqueID)
+        return event_dispatcher.showBattleResultsWindow(arenaUniqueID)
 
     @staticmethod
     def onResultsPosted(arenaUniqueID):
@@ -173,7 +174,7 @@ class BattleRoyaleStatsComposer(IStatsComposer):
 
     @staticmethod
     def onShowResults(arenaUniqueID):
-        pass
+        return None
 
     @staticmethod
     def onResultsPosted(arenaUniqueID):
@@ -201,7 +202,7 @@ class BootcampStatsComposer(IStatsComposer):
 
     @staticmethod
     def onShowResults(arenaUniqueID):
-        event_dispatcher.showBattleResultsWindow(arenaUniqueID)
+        return event_dispatcher.showBattleResultsWindow(arenaUniqueID)
 
     @staticmethod
     def onResultsPosted(arenaUniqueID):

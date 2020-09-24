@@ -1,16 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/techtree_page.py
-from logging import getLogger
 import datetime
+from logging import getLogger
 import Keys
 import nations
-from account_helpers.settings_core.settings_constants import GuiSettingsBehavior
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import GUI_START_BEHAVIOR, TECHTREE_INTRO_BLUEPRINTS
-from helpers import time_utils
-from constants import IS_DEVELOPMENT
+from account_helpers.settings_core.settings_constants import GuiSettingsBehavior
 from blueprints.BlueprintTypes import BlueprintTypes
+from constants import IS_DEVELOPMENT
 from gui import GUI_SETTINGS
+from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.go_back_helper import BackButtonContextKeys
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getPremiumVehiclesUrl
@@ -20,21 +20,23 @@ from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation
 from gui.Scaleform.daapi.view.lobby.techtree.sound_constants import Sounds
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.meta.TechTreeMeta import TechTreeMeta
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
+from gui.Scaleform.genConsts.SESSION_STATS_CONSTANTS import SESSION_STATS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen.resources import R
-from gui.shop import canBuyGoldForVehicleThroughWeb
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
-from gui.shared.utils.vehicle_collector_helper import hasCollectibleVehicles
 from gui.shared.utils.requesters.blueprints_requester import getNationalFragmentCD
+from gui.shared.utils.vehicle_collector_helper import hasCollectibleVehicles
+from gui.shop import canBuyGoldForVehicleThroughWeb
 from helpers import dependency
-from skeletons.account_helpers.settings_core import ISettingsCore
+from helpers import time_utils
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
-from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
-from gui.Scaleform.genConsts.SESSION_STATS_CONSTANTS import SESSION_STATS_CONSTANTS
+from skeletons.account_helpers.settings_core import ISettingsCore
 _logger = getLogger(__name__)
 _VEHICLE_URL_FILTER_PARAM = 1
 
@@ -113,7 +115,7 @@ class TechTree(TechTreeMeta):
         ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, int(itemCD))
 
     def goToNextVehicle(self, vehCD):
-        loadEvent = events.LoadViewEvent(VIEW_ALIAS.LOBBY_RESEARCH, ctx={BackButtonContextKeys.ROOT_CD: vehCD,
+        loadEvent = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_RESEARCH), ctx={BackButtonContextKeys.ROOT_CD: vehCD,
          BackButtonContextKeys.EXIT: self.__exitEvent()})
         self.soundManager.playInstantSound(Sounds.RESET)
         self.__stopTopOfTheTreeSounds()
@@ -122,7 +124,7 @@ class TechTree(TechTreeMeta):
     def onCloseTechTree(self):
         if self._canBeClosed:
             self.__stopTopOfTheTreeSounds()
-            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onBlueprintModeSwitch(self, enabled):
         if self.__blueprintMode == enabled:
@@ -177,6 +179,16 @@ class TechTree(TechTreeMeta):
 
     def invalidateRestore(self, vehicles):
         if self._data.invalidateRestore(vehicles):
+            self.redraw()
+
+    def invalidateBlueprints(self, blueprints):
+        if not blueprints:
+            return
+        if self.__isBlueprintsDeleted(blueprints):
+            result = self._data.invalidateBlueprints(blueprints)
+            if result:
+                self.as_setNodesStatesS(NODE_STATE_FLAGS.BLUEPRINT, result)
+        else:
             self.redraw()
 
     def invalidateVehicleCollectorState(self):
@@ -248,7 +260,7 @@ class TechTree(TechTreeMeta):
         return
 
     def __exitEvent(self):
-        return events.LoadViewEvent(VIEW_ALIAS.LOBBY_TECHTREE, ctx={BackButtonContextKeys.NATION: SelectedNation.getName(),
+        return events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_TECHTREE), ctx={BackButtonContextKeys.NATION: SelectedNation.getName(),
          BackButtonContextKeys.BLUEPRINT_MODE: self.__blueprintMode})
 
     def __onClosePremiumPanel(self, _=None):
@@ -314,3 +326,7 @@ class TechTree(TechTreeMeta):
 
     def __stopTopOfTheTreeSounds(self):
         self.soundManager.playInstantSound(Sounds.TOP_OF_THE_TREE_ANIMATION_STOP_ANIMATION)
+
+    @staticmethod
+    def __isBlueprintsDeleted(blueprints):
+        return all((value is None for value in blueprints.values()))

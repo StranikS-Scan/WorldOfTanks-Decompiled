@@ -2,10 +2,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/bootcamp/BCOutroVideoPage.py
 from gui.Scaleform.daapi.view.bootcamp.BCVideoPage import BCVideoPage
 from tutorial.gui.Scaleform.pop_ups import TutorialDialog
-from bootcamp.statistic.decorators import loggerTarget, loggerEntry, simpleLog
-from bootcamp.statistic.logging_constants import BC_LOG_ACTIONS, BC_LOG_KEYS
+from uilogging.decorators import loggerTarget, loggerEntry, simpleLog
+from uilogging.bootcamp.constants import BC_LOG_ACTIONS, BC_LOG_KEYS
+from uilogging.bootcamp.loggers import BootcampUILogger
 
-@loggerTarget(logKey=BC_LOG_KEYS.BC_OUTRO_VIDEO)
+@loggerTarget(logKey=BC_LOG_KEYS.BC_OUTRO_VIDEO, loggerCls=BootcampUILogger)
 class BCOutroVideoPage(BCVideoPage, TutorialDialog):
     _DEFAULT_MASTER_VOLUME = 0.5
 

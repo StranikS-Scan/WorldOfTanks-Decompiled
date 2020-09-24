@@ -9,6 +9,7 @@ from account_helpers.settings_core.settings_constants import SESSION_STATS
 from adisp import process
 from async import async, await
 from constants import ARENA_BONUS_TYPE
+from frameworks.wulf import WindowLayer
 from gui import SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.hof.hof_helpers import getHofAchievementsStatisticUrl, getHofVehiclesStatisticUrl, isHofEnabled
@@ -16,8 +17,8 @@ from gui.Scaleform.daapi.view.lobby.session_stats.session_stats_settings_control
 from gui.Scaleform.daapi.view.lobby.session_stats.session_stats_views import SessionBattleStatsView, SessionVehicleStatsView
 from gui.Scaleform.daapi.view.lobby.session_stats.shared import toIntegral
 from gui.Scaleform.daapi.view.meta.SessionStatsOverviewMeta import SessionStatsOverviewMeta
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.SESSION_STATS_CONSTANTS import SESSION_STATS_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.game_control.links import URLMacros
@@ -101,11 +102,11 @@ class SessionStatsOverview(SessionStatsOverviewMeta):
     def _showHof(self):
         urlParser = URLMacros()
         url = yield urlParser.parse(url=_HOF_URL_BY_TAB_ALIAS[self._currentTabAlias]())
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_PROFILE, ctx={'hofPageUrl': url}), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PROFILE), ctx={'hofPageUrl': url}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     @async
     def _showStatsResetDialog(self):
-        container = self.app.containerManager.getContainer(ViewTypes.VIEW)
+        container = self.app.containerManager.getContainer(WindowLayer.VIEW)
         lobby = container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY})
         timeToClear = time.gmtime(time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay())
         manualResetEnabled = self.__settingsController.getSettings()[SESSION_STATS.IS_NOT_NEEDED_RESET_STATS_EVERY_DAY]

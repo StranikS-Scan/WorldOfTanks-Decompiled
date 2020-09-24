@@ -3,7 +3,9 @@
 import BigWorld
 import ArenaType
 from adisp import process
+from frameworks.wulf import WindowLayer
 from gui import SystemMessages, GUI_SETTINGS
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.BATTLE_TYPES import BATTLE_TYPES
 from gui.Scaleform.settings import ICONS_SIZES
 from helpers import dependency
@@ -12,7 +14,6 @@ from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.trainings import formatters
 from gui.Scaleform.daapi.view.meta.TrainingRoomBaseMeta import TrainingRoomBaseMeta
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -54,9 +55,9 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
         self.__currentPlayerIsOut = False
 
     def onEscape(self):
-        dialogsContainer = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
+        dialogsContainer = self.app.containerManager.getContainer(WindowLayer.TOP_WINDOW)
         if not dialogsContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY_MENU}):
-            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MENU)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onFocusIn(self, alias):
         super(TrainingRoomBase, self).onFocusIn(alias)
@@ -98,7 +99,7 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
         return self.prbEntity.getPlayerTeam(accID)
 
     def showPrebattleInvitationsForm(self):
-        self.fireEvent(events.LoadViewEvent(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY, ctx={'prbName': 'training',
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY), ctx={'prbName': 'training',
          'ctrlType': CTRL_ENTITY_TYPE.LEGACY}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def startTraining(self):
@@ -276,7 +277,7 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
         pass
 
     def _closeWindow(self, windowAlias):
-        window = self.app.containerManager.getView(ViewTypes.WINDOW, criteria={POP_UP_CRITERIA.VIEW_ALIAS: windowAlias})
+        window = self.app.containerManager.getView(WindowLayer.WINDOW, criteria={POP_UP_CRITERIA.VIEW_ALIAS: windowAlias})
         if window is not None:
             window.destroy()
         return

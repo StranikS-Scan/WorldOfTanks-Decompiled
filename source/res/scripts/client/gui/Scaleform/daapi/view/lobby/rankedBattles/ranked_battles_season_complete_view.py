@@ -26,7 +26,6 @@ class RankedBattlesSeasonCompleteView(RankedBattlesSeasonCompleteViewMeta):
         ctx = ctx or {}
         self._quest = ctx.get('quest')
         self._awards = ctx.get('awards')
-        self.__closeCallback = ctx.get('closeClb', lambda : None)
 
     def closeView(self):
         self.destroy()
@@ -51,7 +50,6 @@ class RankedBattlesSeasonCompleteView(RankedBattlesSeasonCompleteViewMeta):
     def _dispose(self):
         self.__rankedController.getWebSeasonProvider().onInfoUpdated -= self.__updatePosition
         self.__rankedController.getSoundManager().setOverlayStateOff()
-        self.__closeCallback()
         super(RankedBattlesSeasonCompleteView, self)._dispose()
 
     def __getPosition(self):

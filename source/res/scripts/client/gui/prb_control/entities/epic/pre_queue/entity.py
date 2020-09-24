@@ -15,6 +15,7 @@ from gui.prb_control.entities.base.pre_queue.entity import PreQueueSubscriber, P
 from gui.prb_control.entities.epic.pre_queue.actions_validator import EpicActionsValidator
 from gui.prb_control.entities.epic.pre_queue.ctx import EpicQueueCtx
 from gui.prb_control.entities.epic.pre_queue.vehicles_watcher import EpicVehiclesWatcher
+from gui.prb_control.entities.epic.pre_queue.permissions import EpicPermissions
 from gui.prb_control.entities.epic.pre_queue.scheduler import EpicMetaScheduler
 from gui.prb_control.entities.epic.squad.entity import EpicSquadEntryPoint
 from gui.prb_control.events_dispatcher import g_eventDispatcher
@@ -142,6 +143,9 @@ class EpicEntity(PreQueueEntity):
         if name in (PREBATTLE_ACTION_NAME.EPIC, PREBATTLE_ACTION_NAME.EPIC_FORCED):
             return SelectResult(True)
         return SelectResult(True, EpicSquadEntryPoint(accountsToInvite=action.accountsToInvite)) if name == PREBATTLE_ACTION_NAME.SQUAD else super(EpicEntity, self).doSelectAction(action)
+
+    def getPermissions(self, pID=None, **kwargs):
+        return EpicPermissions(self.isInQueue())
 
     def _createActionsValidator(self):
         return EpicActionsValidator(self)

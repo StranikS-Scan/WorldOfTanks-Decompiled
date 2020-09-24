@@ -4,7 +4,7 @@ import logging
 from BWUtil import AsyncReturn
 import async
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
-from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
+from frameworks.wulf import ViewSettings, WindowFlags
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.tank_setup.intro_ammunition_setup_view_model import IntroAmmunitionSetupViewModel
 from gui.impl.lobby.tank_setup.tank_setup_sounds import playEnterTankSetupView, playExitTankSetupView
@@ -22,7 +22,6 @@ class IntroAmmunitionSetupView(ViewImpl):
 
     def __init__(self, closeCallback):
         settings = ViewSettings(R.views.lobby.tanksetup.IntroScreen())
-        settings.flags = ViewFlags.OVERLAY_VIEW
         settings.model = IntroAmmunitionSetupViewModel()
         super(IntroAmmunitionSetupView, self).__init__(settings)
         self.__closeCallback = closeCallback
@@ -63,7 +62,7 @@ class IntroAmmunitionSetupView(ViewImpl):
 class IntroAmmunitionSetupWindow(LobbyWindow):
 
     def __init__(self, callback=None, parent=None):
-        super(IntroAmmunitionSetupWindow, self).__init__(wndFlags=WindowFlags.OVERLAY, decorator=None, content=IntroAmmunitionSetupView(callback), parent=parent)
+        super(IntroAmmunitionSetupWindow, self).__init__(wndFlags=WindowFlags.WINDOW_FULLSCREEN | WindowFlags.WINDOW, decorator=None, content=IntroAmmunitionSetupView(callback), parent=parent)
         return
 
 
@@ -76,7 +75,7 @@ def isIntroAmmunitionSetupShown(settingsCore=None):
 def showIntroAmmunitionSetupWindow():
 
     def _loadIntroAmmunitonSetupWindow(callback):
-        window = IntroAmmunitionSetupView(callback)
+        window = IntroAmmunitionSetupWindow(callback)
         window.load()
 
     yield async.await_callback(_loadIntroAmmunitonSetupWindow)()

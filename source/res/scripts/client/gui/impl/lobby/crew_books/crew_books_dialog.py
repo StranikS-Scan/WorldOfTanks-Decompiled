@@ -5,11 +5,10 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from async import async, await, AsyncEvent, AsyncReturn, AsyncScope, BrokenPromiseError
 from frameworks.wulf import Window, WindowStatus, WindowSettings, ViewSettings
 from gui.shared.view_helpers.blur_manager import CachedBlur
-from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from gui.impl.auxiliary.crew_books_helper import TankmanModelPresenterBase, TankmanSkillListPresenter
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew_books.crew_books_dialog_content_model import CrewBooksDialogContentModel
-from gui.impl.pub.dialog_window import DialogButtons, DialogLayer, DialogContent, DialogResult
+from gui.impl.pub.dialog_window import DialogButtons, DialogFlags, DialogContent, DialogResult
 from gui.impl.wrappers.user_format_string_arg_model import UserFormatStringArgModel
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.items_actions import factory
@@ -31,15 +30,11 @@ class CrewBooksDialog(Window):
         self.__tankman = self.__itemsCache.items.getTankman(int(tankmanInvId))
         self.__tankmanInvID = int(tankmanInvId)
         settings = WindowSettings()
-        settings.flags = DialogLayer.TOP_WINDOW
+        settings.flags = DialogFlags.TOP_FULLSCREEN_WINDOW
         settings.content = DialogContent(ViewSettings(R.views.lobby.crew_books.crew_books_dialog_content.CrewBooksDialogContent(), model=CrewBooksDialogContentModel()))
         settings.parent = parent
         super(CrewBooksDialog, self).__init__(settings)
-        blurLayers = [APP_CONTAINERS_NAMES.VIEWS,
-         APP_CONTAINERS_NAMES.SUBVIEW,
-         APP_CONTAINERS_NAMES.BROWSER,
-         APP_CONTAINERS_NAMES.WINDOWS]
-        self.__blur = CachedBlur(enabled=True, ownLayer=APP_CONTAINERS_NAMES.DIALOGS, layers=blurLayers)
+        self.__blur = CachedBlur(enabled=True, ownLayer=self.layer)
         self.__scope = AsyncScope()
         self.__event = AsyncEvent(scope=self.__scope)
         self.__result = None

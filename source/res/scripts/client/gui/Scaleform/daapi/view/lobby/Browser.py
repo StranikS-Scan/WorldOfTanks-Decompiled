@@ -111,6 +111,10 @@ class Browser(BrowserMeta):
             self.as_loadingStopS()
 
     def _dispose(self):
+        if self.__webCommandHandler:
+            self.__webCommandHandler.onCallback -= self.__onWebCommandCallback
+            self.__webCommandHandler.fini()
+            self.__webCommandHandler = None
         if self.__browser:
             self.__browser.onLoadStart -= self.__onLoadStart
             self.__browser.onLoadingStateChange -= self.__onLoadingStateChange
@@ -118,11 +122,8 @@ class Browser(BrowserMeta):
             self.__browser.onNavigate -= self.__onNavigate
             self.__browser.onJsHostQuery -= self.__onJsHostQuery
             self.__browser.onTitleChange -= self.__onTitleChange
+            self.__browser.onReady -= self.__onReady
             self.__browser = None
-        if self.__webCommandHandler:
-            self.__webCommandHandler.onCallback -= self.__onWebCommandCallback
-            self.__webCommandHandler.fini()
-            self.__webCommandHandler = None
         if self.__webEventSender:
             self.__webEventSender.onCallback -= self.__onWebEventCallback
             self.__webEventSender.fini()
@@ -140,6 +141,9 @@ class Browser(BrowserMeta):
         self.__httpStatusCode = httpStatusCode
         if not self.__checkIsPageLoaded():
             self.showDataUnavailableView()
+
+    def __onReady(self):
+        self.as_loadBitmapS(self.__browser.textureUrl)
 
     def __onLoadingStateChange(self, isLoading, manageLoadingScreen):
         if isLoading and manageLoadingScreen:
@@ -194,6 +198,10 @@ class Browser(BrowserMeta):
         self.__browser.onTitleChange += self.__onTitleChange
         if self.__size is not None:
             self.__browser.updateSize(self.__size)
+        if self.__browser.textureUrl:
+            self.as_loadBitmapS(self.__browser.textureUrl)
+        else:
+            self.__browser.onReady += self.__onReady
         if self.__browser.isNavigationComplete:
             self.as_loadingStopS()
         return

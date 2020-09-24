@@ -6,8 +6,8 @@ import weakref
 from abc import ABCMeta, abstractmethod
 from copy import deepcopy
 from itertools import ifilter
-import BigWorld
 import ArenaType
+import BigWorld
 import gui.awards.event_dispatcher as shared_events
 import personal_missions
 from PlayerEvents import g_playerEvents
@@ -30,6 +30,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18PunishmentDialogMeta
 from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsBox, autoOpenTimeExpired
 from gui.Scaleform.framework.entities.View import ViewKey
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler, ViewLifecycleWatcher
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.EVENT import EVENT
@@ -41,6 +42,7 @@ from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
 from gui.impl.auxiliary.rewards_helper import getProgressiveRewardBonuses
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.loot_box_view.loot_congrats_types import LootCongratsTypes
+from gui.impl.lobby.battle_pass.battle_pass_awards_view import BattlePassAwardWindow
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.ranked_battles import ranked_helpers
@@ -49,7 +51,7 @@ from gui.server_events.events_dispatcher import showLootboxesAward, showPiggyBan
 from gui.server_events.events_helpers import isDailyQuest
 from gui.server_events.finders import PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
-from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow, showSeniorityRewardAwardWindow, showRankedSeasonCompleteView, showRankedYeardAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showProgressiveItemsRewardWindow, showProgressionRequiredStyleUnlockedWindow, showRankedYearLBAwardWindow, showDedicationRewardWindow, showTransferGiveawayWindow
+from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow, showSeniorityRewardAwardWindow, showRankedSeasonCompleteView, showRankedYearAwardWindow, showBattlePassVehicleAwardWindow, showProgressiveItemsRewardWindow, showProgressionRequiredStyleUnlockedWindow, showRankedYearLBAwardWindow, showDedicationRewardWindow
 from gui.shared.events import PersonalMissionsEvent, LobbySimpleEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.utils import isPopupsWindowsOpenDisabled
@@ -69,17 +71,11 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IAwardController, IRankedBattlesController, IBootcampController, IBattlePassController
 from skeletons.gui.goodies import IGoodiesCache
-from skeletons.gui.impl import IGuiLoader
+from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.sounds import ISoundsController
-from ten_year_countdown_config import EVENT_BADGE_MISSION_ID
-from ten_year_countdown_config import EVENT_STYLE_MISSION_ID
-from ten_year_countdown_config import TEN_YEAR_COUNTDOWN_QUEST_TOKEN_PREFIX
-from ten_year_countdown_config import TEN_YEAR_COUNTDOWN_QUEST_TOKEN_POSTFIX
-from gui.shared.event_dispatcher import show10YCAwardWindow
-from gui.impl.auxiliary.rewards_helper import getTokenAward
 _logger = logging.getLogger(__name__)
 
 class QUEST_AWARD_POSTFIX(object):
@@ -88,7 +84,6 @@ class QUEST_AWARD_POSTFIX(object):
 
 
 SENIORITY_AWARDS_TOKEN_QUEST = 'SeniorityAwardsQuest'
-TRANSFER_GIVEAWAY_TOKEN_QUEST = 'TransferGiveaway2020'
 _POPUP_RECORDS = 'popUpRecords'
 
 class _NonOverlappingViewsLifecycleHandler(IViewLifecycleHandler):
@@ -163,7 +158,6 @@ class AwardController(IAwardController, IGlobalListener):
          ProgressiveRewardHandler(self),
          PiggyBankOpenHandler(self),
          SeniorityAwardsWindowHandler(self),
-         TransferGiveawayHandler(self),
          RankedQuestsHandler(self),
          BattlePassRewardHandler(self),
          BattlePassBuyEmptyHandler(self),
@@ -172,7 +166,6 @@ class AwardController(IAwardController, IGlobalListener):
          VehicleCollectorAchievementHandler(self),
          DynamicBonusHandler(self),
          ProgressiveItemsRewardHandler(self),
-         TenYearsCountdownHandler(self),
          DedicationReward(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
@@ -225,6 +218,9 @@ class AwardController(IAwardController, IGlobalListener):
 
     def onAvatarBecomePlayer(self):
         self.__isLobbyLoaded = False
+        for handler in self.__handlers:
+            handler.onAvatarBecomePlayer()
+
         self.stopGlobalListening()
 
     def onDisconnected(self):
@@ -300,6 +296,9 @@ class AwardHandler(object):
     def isShowCongrats(self, quest):
         return quest.getData().get('showCongrats', False) if quest else False
 
+    def onAvatarBecomePlayer(self):
+        pass
+
     @abstractmethod
     def _needToShowAward(self, ctx):
         pass
@@ -357,7 +356,7 @@ class EliteWindowHandler(AwardHandler):
     def _showAward(self, ctx):
         vehTypeCompDescrs = ctx
         for vehTypeCompDescr in vehTypeCompDescrs:
-            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.ELITE_WINDOW, getViewName(VIEW_ALIAS.ELITE_WINDOW, vehTypeCompDescr), ctx={'vehTypeCompDescr': vehTypeCompDescr}), scope=EVENT_BUS_SCOPE.LOBBY)
+            g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.ELITE_WINDOW, getViewName(VIEW_ALIAS.ELITE_WINDOW, vehTypeCompDescr)), ctx={'vehTypeCompDescr': vehTypeCompDescr}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 class PunishWindowHandler(ServiceChannelHandler):
@@ -461,7 +460,7 @@ class TokenQuestsWindowHandler(ServiceChannelHandler):
                     currentQuest = allQuests[qID]
                     blueprintDict = data.get('detailedRewards', {}).get(qID, {}).get('blueprints', {})
                     currentQuest = _getBlueprintActualBonus(blueprintDict, currentQuest)
-                    if SENIORITY_AWARDS_TOKEN_QUEST not in qID and TRANSFER_GIVEAWAY_TOKEN_QUEST not in qID:
+                    if SENIORITY_AWARDS_TOKEN_QUEST not in qID:
                         completedQuests[qID] = (currentQuest, windowCtx)
 
         for quest, context in completedQuests.itervalues():
@@ -475,7 +474,8 @@ class TokenQuestsWindowHandler(ServiceChannelHandler):
 
 
 class SeniorityAwardsWindowHandler(ServiceChannelHandler):
-    __itemsCache = dependency.descriptor(IItemsCache)
+    itemsCache = dependency.descriptor(IItemsCache)
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, awardCtrl):
         super(SeniorityAwardsWindowHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
@@ -489,10 +489,14 @@ class SeniorityAwardsWindowHandler(ServiceChannelHandler):
     def fini(self):
         self.__resetCallback()
         self._qID = None
-        self.__itemsCache.onSyncCompleted -= self.__onItemCacheSyncCompleted
+        self.itemsCache.onSyncCompleted -= self.__onItemCacheSyncCompleted
         self.eventsCache.onSyncCompleted -= self.__onEventCacheSyncCompleted
         super(SeniorityAwardsWindowHandler, self).fini()
         return
+
+    def onAvatarBecomePlayer(self):
+        self.__resetCallback()
+        super(SeniorityAwardsWindowHandler, self).onAvatarBecomePlayer()
 
     def _needToShowAward(self, ctx):
         _, message = ctx
@@ -527,7 +531,7 @@ class SeniorityAwardsWindowHandler(ServiceChannelHandler):
             if self.__isValidAutoOpenBoxData():
                 self.__mergedRewards.update(self.__autoOpenData.get('rewards', {}))
             else:
-                self.__itemsCache.onSyncCompleted += self.__onItemCacheSyncCompleted
+                self.itemsCache.onSyncCompleted += self.__onItemCacheSyncCompleted
                 return
             allQuests = self.eventsCache.getAllQuests()
             if self._qID in allQuests and self.isShowCongrats(allQuests[self._qID]):
@@ -535,7 +539,7 @@ class SeniorityAwardsWindowHandler(ServiceChannelHandler):
             else:
                 self.eventsCache.onSyncCompleted += self.__onEventCacheSyncCompleted
                 return
-            self.__itemsCache.onSyncCompleted -= self.__onItemCacheSyncCompleted
+            self.itemsCache.onSyncCompleted -= self.__onItemCacheSyncCompleted
             self.eventsCache.onSyncCompleted -= self.__onEventCacheSyncCompleted
             self._showAward()
         elif not autoOpenTimeExpired():
@@ -557,7 +561,7 @@ class SeniorityAwardsWindowHandler(ServiceChannelHandler):
         return
 
     def __onItemCacheSyncCompleted(self, *_):
-        self.__itemsCache.onSyncCompleted -= self.__onItemCacheSyncCompleted
+        self.itemsCache.onSyncCompleted -= self.__onItemCacheSyncCompleted
         self.__update()
 
     def __onEventCacheSyncCompleted(self, *_):
@@ -570,47 +574,6 @@ class SeniorityAwardsWindowHandler(ServiceChannelHandler):
         boxIDs = self.__autoOpenData.get('boxIDs', {})
         box = getSeniorityAwardsBox()
         return True if boxIDs and box and box.getID() in boxIDs else False
-
-
-class TransferGiveawayHandler(ServiceChannelHandler):
-
-    def __init__(self, awardCtrl):
-        super(TransferGiveawayHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
-        self._qID = None
-        self.__questData = None
-        return
-
-    def fini(self):
-        self._qID = None
-        self.eventsCache.onSyncCompleted -= self.__onEventCacheSyncCompleted
-        super(TransferGiveawayHandler, self).fini()
-        return
-
-    def _needToShowAward(self, ctx):
-        _, message = ctx
-        if not super(TransferGiveawayHandler, self)._needToShowAward(ctx):
-            return False
-        data = message.data
-        for qID in data.get('completedQuestIDs', set()):
-            if TRANSFER_GIVEAWAY_TOKEN_QUEST in qID:
-                self._qID = qID
-                self.__questData = data
-                return True
-
-        return False
-
-    def _showAward(self, ctx=None):
-        if self.__questData:
-            allQuests = self.eventsCache.getAllQuests()
-            if self._qID in allQuests and self.isShowCongrats(allQuests[self._qID]):
-                awardsData = self.__questData.get('detailedRewards', {}).get(self._qID, {})
-                showTransferGiveawayWindow(self._qID, awardsData)
-            else:
-                self.eventsCache.onSyncCompleted += self.__onEventCacheSyncCompleted
-
-    def __onEventCacheSyncCompleted(self, *_):
-        self.eventsCache.onSyncCompleted -= self.__onEventCacheSyncCompleted
-        self._showAward()
 
 
 class LootBoxByInvoiceHandler(ServiceChannelHandler):
@@ -1121,20 +1084,27 @@ class VehiclesResearchHandler(SpecialAchievement):
 
     def __init__(self, awardCtrl):
         super(VehiclesResearchHandler, self).__init__('vehicleResearchAward', awardCtrl, VehiclesResearchHandler.VEHICLE_AMOUNT)
+        self.__unlocks = set()
+        self.__achievementCounts = 0
 
     def init(self):
         g_clientUpdateManager.addCallbacks({'stats.unlocks': self.onUnlocksChanged})
 
     def fini(self):
+        self.__unlocks.clear()
         g_clientUpdateManager.removeObjectCallbacks(self)
 
     def getAchievementCount(self):
-        return len(self.itemsCache.items.getVehicles(criteria=REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.LEVELS([1]) | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR | ~REQ_CRITERIA.COLLECTIBLE))
+        self.__achievementCounts = len(self.itemsCache.items.getVehicles(criteria=REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.LEVELS([1]) | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR | ~REQ_CRITERIA.COLLECTIBLE))
+        return self.__achievementCounts
 
     def onUnlocksChanged(self, unlocks):
         isChanged = False
+        self.__unlocks.clear()
+        self.__achievementCounts = 0
         for unlock in list(unlocks):
             if getTypeOfCompactDescr(unlock) == ITEM_TYPE_INDICES['vehicle']:
+                self.__unlocks.add(unlock)
                 isChanged = True
 
         if isChanged:
@@ -1142,6 +1112,13 @@ class VehiclesResearchHandler(SpecialAchievement):
 
     def showAwardWindow(self, achievementCount, messageNumber):
         return shared_events.showResearchAward(achievementCount, messageNumber)
+
+    def _needToShowAward(self, ctx=None):
+        isNeededToShow = super(VehiclesResearchHandler, self)._needToShowAward()
+        if isNeededToShow:
+            bcVehicles = self.bootcampController.getAwardVehicles()
+            return not set(bcVehicles).issubset(self.__unlocks) and self.__achievementCounts in self._awardCntToMsg
+        return False
 
 
 class VictoryHandler(SpecialAchievement):
@@ -1240,7 +1217,7 @@ class GoldFishHandler(AwardHandler):
 
     def _showAward(self, ctx):
         if isGoldFishActionActive() and isTimeToShowGoldFishPromo():
-            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.GOLD_FISH_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
+            g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.GOLD_FISH_WINDOW)), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 class TelecomHandler(ServiceChannelHandler):
@@ -1268,8 +1245,6 @@ class RankedQuestsHandler(ServiceChannelHandler):
 
     def __init__(self, awardCtrl):
         super(RankedQuestsHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
-        self.__pending = []
-        self.__locked = False
 
     def _showAward(self, ctx):
         _, message = ctx
@@ -1293,31 +1268,26 @@ class RankedQuestsHandler(ServiceChannelHandler):
             self.__processQuests(finalLeaderQuestIDs, data, self.__showFinalLeaderAward)
 
     def __showSeasonAward(self, quest, data):
-        seasonID, _, _ = ranked_helpers.getDataFromSeasonTokenQuestID(quest.getID())
+        seasonID, league, _ = ranked_helpers.getDataFromSeasonTokenQuestID(quest.getID())
         season = self.__rankedController.getSeason(seasonID)
         if season is not None:
             showRankedSeasonCompleteView({'quest': quest,
-             'awards': data,
-             'closeClb': self.__unlock})
+             'awards': data}, True)
         else:
-            self.__unlock()
+            _logger.error('Try to show RankedBattlesSeasonCompleteView, but season is None. Params: %s %s', seasonID, league)
         return
 
     def __showFinalAward(self, quest, data):
         points = ranked_helpers.getDataFromFinalTokenQuestID(quest.getID())
         awardType = self.__rankedController.getAwardTypeByPoints(points)
         if awardType is not None:
-            showRankedYeardAwardWindow(data, points, closeCallback=self.__unlock)
-        else:
-            self.__unlock()
+            showRankedYearAwardWindow(data, points, True)
         return
 
     def __showFinalLeaderAward(self, _, data):
         yearPosition = AccountSettings.getSettings(RANKED_YEAR_POSITION)
         if yearPosition is not None and data:
-            showRankedYearLBAwardWindow(yearPosition, data, self.__unlock)
-        else:
-            self.__unlock()
+            showRankedYearLBAwardWindow(yearPosition, data, True)
         return
 
     def __processQuests(self, questIDs, data, handler):
@@ -1325,21 +1295,9 @@ class RankedQuestsHandler(ServiceChannelHandler):
         quest = self.eventsCache.getHiddenQuests().get(questID)
         if quest:
             questData = data.get('detailedRewards', {}).get(questID, {})
-            self.__processOrHold(handler, (quest, questData))
+            handler(quest, questData)
         if len(questIDs) > 1:
             _logger.error('There can not be 2 or more quests with the same meaning at the same time')
-
-    def __processOrHold(self, method, args):
-        if self.__locked:
-            self.__pending.append((method, args))
-        else:
-            self.__locked = True
-            method(*args)
-
-    def __unlock(self):
-        self.__locked = False
-        if self.__pending:
-            self.__processOrHold(*self.__pending.pop(0))
 
 
 class SoundDeviceHandler(AwardHandler):
@@ -1412,10 +1370,11 @@ class ProgressiveItemsRewardHandler(ServiceChannelHandler):
         for vehicleCD, items in self.__message.data.iteritems():
             newItemsCDs = items.keys()
             isFirst = checkIsFirstProgressionDecalOnVehicle(vehicleCD, newItemsCDs)
+            for itemCD, level in items.iteritems():
+                showProgressiveItemsRewardWindow(itemCD, vehicleCD, level, itemCD == newItemsCDs[-1] and not isFirst)
+
             if isFirst:
                 showProgressionRequiredStyleUnlockedWindow(vehicleCD)
-            for itemCD, level in items.iteritems():
-                showProgressiveItemsRewardWindow(itemCD, vehicleCD, level, itemCD == newItemsCDs[0] and not isFirst)
 
 
 class TechTreeIntroHandler(ServiceChannelHandler):
@@ -1508,6 +1467,7 @@ class VehicleCollectorAchievementHandler(ServiceChannelHandler):
 
 class BattlePassRewardHandler(ServiceChannelHandler):
     __battlePassController = dependency.descriptor(IBattlePassController)
+    __notificationMgr = dependency.descriptor(INotificationWindowController)
 
     def __init__(self, awardCtrl):
         super(BattlePassRewardHandler, self).__init__(SYS_MESSAGE_TYPE.battlePassReward.index(), awardCtrl)
@@ -1538,13 +1498,15 @@ class BattlePassRewardHandler(ServiceChannelHandler):
             self.__battlePassController.getFinalRewardLogic().startFinalFlow([rewards], data)
         elif isPremiumPurchase or self.__battlePassController.isRareLevel(level, isBase=BattlePassState.BASE == state):
             if rewards:
-                showBattlePassAwardsWindow([rewards], data)
+                window = BattlePassAwardWindow([rewards], data)
+                self.__notificationMgr.append(window)
             else:
                 _logger.error("Can't show empty or invalid reward!")
 
 
 class BattlePassBuyEmptyHandler(ServiceChannelHandler):
     __battlePassController = dependency.descriptor(IBattlePassController)
+    __notificationMgr = dependency.descriptor(INotificationWindowController)
 
     def __init__(self, awardCtrl):
         super(BattlePassBuyEmptyHandler, self).__init__(SYS_MESSAGE_TYPE.battlePassBought.index(), awardCtrl)
@@ -1557,7 +1519,8 @@ class BattlePassBuyEmptyHandler(ServiceChannelHandler):
         return False
 
     def _showAward(self, ctx):
-        showBattlePassAwardsWindow([], {'reason': BattlePassRewardReason.PURCHASE_BATTLE_PASS})
+        window = BattlePassAwardWindow([], {'reason': BattlePassRewardReason.PURCHASE_BATTLE_PASS})
+        self.__notificationMgr.append(window)
 
 
 class BattlePassCapHandler(ServiceChannelHandler):
@@ -1590,56 +1553,6 @@ class DynamicBonusHandler(ServiceChannelHandler):
             for tag in invoiceData['tags']:
                 if tag in self.AVAILABLE_TAGS:
                     showDynamicAward(tag.replace('.', '_'), invoiceData['data'])
-
-
-class TenYearsCountdownHandler(MultiTypeServiceChannelHandler):
-
-    def __init__(self, awardCtrl):
-        super(TenYearsCountdownHandler, self).__init__((SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index()), awardCtrl)
-        self.__pending = []
-        self.__locked = False
-
-    def __processOrHold(self, method, args):
-        if self.__locked:
-            self.__pending.append((method, args))
-        else:
-            self.__locked = True
-            method(*args)
-
-    def __unlock(self):
-        self.__locked = False
-        if self.__pending:
-            self.__processOrHold(*self.__pending.pop(0))
-
-    def __show10YCAward(self, questID, data):
-        if data is not None:
-            bonuses, _ = getProgressiveRewardBonuses(data['detailedRewards'][questID], ctx={'popUpRecords': data.get('popUpRecords', {})})
-            if questID.startswith(TEN_YEAR_COUNTDOWN_QUEST_TOKEN_PREFIX) and questID.endswith(TEN_YEAR_COUNTDOWN_QUEST_TOKEN_POSTFIX):
-                bonuses.append(getTokenAward())
-            show10YCAwardWindow(bonuses, questID, closeCallback=self.__unlock)
-        else:
-            self.__unlock()
-        return
-
-    def __sortAwardIDs(self, nameQuests):
-        quests = []
-        for questID in nameQuests:
-            if questID.startswith(TEN_YEAR_COUNTDOWN_QUEST_TOKEN_PREFIX) and questID.endswith(TEN_YEAR_COUNTDOWN_QUEST_TOKEN_POSTFIX):
-                quests.append(questID)
-
-        if EVENT_STYLE_MISSION_ID in nameQuests:
-            quests.append(EVENT_STYLE_MISSION_ID)
-        if EVENT_BADGE_MISSION_ID in nameQuests:
-            quests.append(EVENT_BADGE_MISSION_ID)
-        return quests
-
-    def _showAward(self, ctx):
-        _, message = ctx
-        data = message.data.copy()
-        nameQuests = data.get('completedQuestIDs', set())
-        quests10YC = self.__sortAwardIDs(nameQuests)
-        for questID in quests10YC:
-            self.__processOrHold(self.__show10YCAward, (questID, data))
 
 
 class DedicationReward(ServiceChannelHandler):

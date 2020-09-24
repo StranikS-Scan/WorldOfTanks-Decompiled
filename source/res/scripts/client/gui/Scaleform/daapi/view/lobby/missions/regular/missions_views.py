@@ -16,6 +16,7 @@ from gui.Scaleform.daapi.view.meta.CurrentVehicleMissionsViewMeta import Current
 from gui.Scaleform.daapi.view.meta.MissionsEventBoardsViewMeta import MissionsEventBoardsViewMeta
 from gui.Scaleform.daapi.view.meta.MissionsGroupedViewMeta import MissionsGroupedViewMeta
 from gui.Scaleform.daapi.view.meta.MissionsMarathonViewMeta import MissionsMarathonViewMeta
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.EVENTBOARDS_ALIASES import EVENTBOARDS_ALIASES
 from gui.Scaleform.genConsts.LINKEDSET_ALIASES import LINKEDSET_ALIASES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
@@ -46,7 +47,7 @@ from gui.impl.gen import R
 class _GroupedMissionsView(MissionsGroupedViewMeta):
 
     def clickActionBtn(self, actionID):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_STORE, ctx={'tabId': STORE_CONSTANTS.STORE_ACTIONS}), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_STORE), ctx={'tabId': STORE_CONSTANTS.STORE_ACTIONS}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def expand(self, gID, value):
         settings.expandGroup(gID, value)
@@ -102,7 +103,7 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
         return
 
     def closeView(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def getSuitableEvents(self):
         return []
@@ -132,9 +133,6 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
     def viewSize(self, width, height):
         self._width = width
         self._height = height
-
-    def markVisited(self):
-        pass
 
     @process
     def _onRegisterFlashComponent(self, viewPy, alias):
@@ -214,7 +212,7 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
 
         def doJoin():
             from gui.Scaleform.framework import g_entitiesFactories
-            g_eventBus.handleEvent(g_entitiesFactories.makeLoadEvent('missions'), scope=EVENT_BUS_SCOPE.LOBBY)
+            g_eventBus.handleEvent(g_entitiesFactories.makeLoadEvent(SFViewLoadParams('missions')), scope=EVENT_BUS_SCOPE.LOBBY)
 
         reloginCtrl = dependency.instance(IReloginController)
         success = yield DialogsInterface.showI18nConfirmDialog('changePeriphery')
@@ -291,7 +289,7 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
 
     @checkEventExist
     def __onFilterApply(self, eventID, leaderboardsID):
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_EVENT_BOARDS_TABLE, ctx={'eventID': eventID,
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_EVENT_BOARDS_TABLE), ctx={'eventID': eventID,
          'leaderboardID': int(leaderboardsID)}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __onViewLoaded(self, view, *args, **kwargs):
@@ -320,7 +318,7 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
         return
 
     def __openDetailsContainer(self, viewAlias, ctx=None):
-        g_eventBus.handleEvent(events.LoadViewEvent(viewAlias, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(viewAlias), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 class MissionsCategoriesView(_GroupedMissionsView):
@@ -343,7 +341,7 @@ class MissionsCategoriesView(_GroupedMissionsView):
 
     def openMissionDetailsView(self, eventID, blockID):
         if blockID == DEFAULTS_GROUPS.LINKEDSET_QUESTS:
-            g_eventBus.handleEvent(events.LoadViewEvent(LINKEDSET_ALIASES.LINKED_SET_DETAILS_CONTAINER_VIEW, ctx={'eventID': eventID}), scope=EVENT_BUS_SCOPE.LOBBY)
+            g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(LINKEDSET_ALIASES.LINKED_SET_DETAILS_CONTAINER_VIEW), ctx={'eventID': eventID}), scope=EVENT_BUS_SCOPE.LOBBY)
         else:
             super(MissionsCategoriesView, self).openMissionDetailsView(eventID, blockID)
 
@@ -352,7 +350,7 @@ class MissionsCategoriesView(_GroupedMissionsView):
 
     def useTokenClick(self, eventID):
         level = 6
-        g_eventBus.handleEvent(events.LoadViewEvent(LINKEDSET_ALIASES.LINKED_SET_VEHICLE_LIST_POPUP_PY, ctx={'infoText': _ms(LINKEDSET.VEHICLE_LIST_POPUP_INFO_TEXT, level=level),
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(LINKEDSET_ALIASES.LINKED_SET_VEHICLE_LIST_POPUP_PY), ctx={'infoText': _ms(LINKEDSET.VEHICLE_LIST_POPUP_INFO_TEXT, level=level),
          'levelsRange': [level],
          'section': 'linkedset_view_vehicle'}), scope=EVENT_BUS_SCOPE.LOBBY)
 

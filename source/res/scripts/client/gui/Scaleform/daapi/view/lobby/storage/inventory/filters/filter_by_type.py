@@ -14,9 +14,11 @@ from gui.Scaleform.daapi.view.meta.ItemsWithTypeFilterTabViewMeta import ItemsWi
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen_utils import DynAccessor
+from gui.shared.event_dispatcher import showBattleBoosterSellDialog
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from items import UNDEFINED_ITEM_CD
 if typing.TYPE_CHECKING:
     from typing import Dict, Union, Callable
 
@@ -41,7 +43,12 @@ class FiltrableInventoryCategoryByTypeTabView(ItemsWithTypeFilterTabViewMeta):
 
     @process
     def sellItem(self, itemId):
-        yield DialogsInterface.showDialog(SellModuleMeta(int(itemId)))
+        dataCompactId = int(itemId)
+        typeID = self._itemsCache.items.getItemByCD(dataCompactId).itemTypeID if dataCompactId else UNDEFINED_ITEM_CD
+        if typeID == GUI_ITEM_TYPE.BATTLE_BOOSTER:
+            showBattleBoosterSellDialog(dataCompactId)
+        else:
+            yield DialogsInterface.showDialog(SellModuleMeta(dataCompactId))
 
     def onFiltersChange(self, filterMask):
         self._filterMask = filterMask

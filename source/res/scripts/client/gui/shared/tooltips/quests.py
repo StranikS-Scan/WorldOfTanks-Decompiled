@@ -4,6 +4,7 @@ import constants
 from CurrentVehicle import g_currentVehicle
 from gui import makeHtmlString
 from gui.impl import backport
+from gui.impl.gen import R
 from gui.ranked_battles.ranked_helpers import isRankedQuestID
 from gui.Scaleform.daapi.view.lobby.missions import missions_helper
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
@@ -28,8 +29,7 @@ from helpers.i18n import makeString as _ms
 from shared_utils import findFirst
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.game_control import IQuestsController, IEventProgressionController, IRankedBattlesController
-from gui.impl.gen import R
-_MAX_AWARDS_PER_TOOLTIP = 7
+_MAX_AWARDS_PER_TOOLTIP = 5
 _MAX_QUESTS_PER_TOOLTIP = 4
 _MAX_BONUSES_PER_QUEST = 2
 _RENT_TYPES = ('rentDays', 'rentBattles', 'rentWins')
@@ -167,7 +167,7 @@ class ScheduleQuestTooltipData(BlocksTooltipData):
         if weekDays:
             days = [ _ms(MENU.datetime_weekdays_full(idx)) for idx in event.getWeekDays() ]
             items.append(self._getSubBlock(TOOLTIPS.QUESTS_SCHEDULE_WEEKDAYS, days))
-        intervals = event.getCollapsedActiveTimeIntervals()
+        intervals = event.getActiveTimeIntervals()
         if intervals:
             times = []
             for low, high in intervals:
@@ -194,11 +194,10 @@ class UnavailableQuestTooltipData(BlocksTooltipData):
         quest = source.get(args[0])
         items = super(UnavailableQuestTooltipData, self)._packBlocks()
         questID = quest.getID()
-        if questID in self.__eventProgressionController.questIDs:
-            eventProgressionOverrides = self.__getEventProgressionOverrides()
-            if eventProgressionOverrides is not None:
-                items.append(eventProgressionOverrides)
-                return items
+        if questID in self.__eventProgressionController.getActiveQuestIDs() and self.__eventProgressionController.isUnavailableQuestByID(questID):
+            msg = self.__eventProgressionController.getUnavailableQuestMessage(questID)
+            items.append(formatters.packAlignedTextBlockData(text=text_styles.main(msg), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=5)))
+            return items
         if isRankedQuestID(questID):
             rankedOverrides = self.__getRankedOverrides(quest)
             if rankedOverrides:
@@ -217,15 +216,6 @@ class UnavailableQuestTooltipData(BlocksTooltipData):
     def __getBootom(self, text):
         return formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'alignText', {'align': 'center',
          'message': text_styles.error('{0} {1}'.format(icons.notAvailable(), text))}))
-
-    def __getEventProgressionOverrides(self):
-        _, level, _ = self.__eventProgressionController.getPlayerLevelInfo()
-        maxLevel = self.__eventProgressionController.getMaxPlayerLevel()
-        if level < maxLevel:
-            msg = backport.text(R.strings.event_progression.questsTooltip.frontLine.notReachLevel(), level=maxLevel)
-            return formatters.packAlignedTextBlockData(text=text_styles.main(msg), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=5))
-        else:
-            return None
 
     def __getList(self, items):
         blocks = []
@@ -318,6 +308,8 @@ class RentVehicleAwardTooltipData(BlocksTooltipData):
         blocks = list()
         blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.QUESTS_AWARDS_VEHICLERENT_HEADER), padding=formatters.packPadding(top=8)))
         blocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.premiumVehicleName(TOOLTIPS.QUESTS_AWARDS_VEHICLERENT_EXPIRE), value='', icon=ICON_TEXT_FRAMES.RENTALS, padding=formatters.packPadding(left=-60), iconYOffset=3))
+        items.append(formatters.packBuildUpBlockData(blocks, padding=formatters.packPadding(bottom=-19)))
+        blocks = list()
         vehiclesCount = 0
         for rentVehicleData in args:
             rentVehicleData = flashObject2Dict(rentVehicleData)

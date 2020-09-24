@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/hint_panel/plugins.py
 from collections import namedtuple
 from datetime import datetime
+import logging
 import BigWorld
 import CommandMapping
 from account_helpers import AccountSettings
@@ -10,12 +11,13 @@ from account_helpers.settings_core.settings_constants import BattleCommStorageKe
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ARENA_PERIOD, ARENA_GUI_TYPE
 from debug_utils import LOG_DEBUG
 from gui import GUI_SETTINGS
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CROSSHAIR_VIEW_ID
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.battle_control.controllers.radar_ctrl import IRadarListener
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import GameEvent
+from gui.shared.events import GameEvent, ViewEventType, LoadViewEvent
 from gui.shared.utils.key_mapping import getReadableKey
 from gui.shared.utils.plugins import IPlugin
 from helpers import dependency, time_utils
@@ -25,6 +27,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
+_logger = logging.getLogger(__name__)
 HintData = namedtuple('HintData', ['key',
  'messageLeft',
  'messageRight',
@@ -507,9 +510,11 @@ class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
         return
 
     def radarActivated(self, _):
+        _logger.debug('Radar activated')
         self.__hideHint()
 
     def radarActivationFailed(self, code):
+        _logger.debug('Radar activation failed')
         self.__hideHint()
 
     def startTimeOut(self, timeLeft, duration):
@@ -528,6 +533,7 @@ class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
         return HintData(keyName, pressText, hintText, 0, 0, HintPriority.RADAR)
 
     def __showHint(self):
+        _logger.debug('Showing radar hint')
         self._parentObj.setBtnHint(CommandMapping.CMD_CM_VEHICLE_ACTIVATE_RADAR, self._getHint())
         self.__isHintShown = True
         self.__isInDisplayPeriod = False
@@ -535,13 +541,14 @@ class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
         self._updateCounterOnUsed(self.__settings)
 
     def __hideHint(self):
+        _logger.debug('Hiding radar hint isHintShown=%r', self.__isHintShown)
         if self.__isHintShown:
             self._parentObj.removeBtnHint(CommandMapping.CMD_CM_VEHICLE_ACTIVATE_RADAR)
             self.__isHintShown = False
             self.stopCallback(self.__onHintTimeOut)
 
     def __updateHint(self):
-        LOG_DEBUG('Updating radar hints')
+        _logger.debug('Updating radar hint. isInPostmortem=%r, isObserver=%r, isEnabled=%r', self.__isInPostmortem, self.__isObserver, self.__isEnabled)
         if self.__isInPostmortem or self.__isObserver or not self.__isEnabled:
             return
         if self.__isInDisplayPeriod and self._haveHintsLeft(self.__settings) and not self.__areOtherIndicatorsShown():
@@ -567,10 +574,12 @@ class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
             self.__updateHint()
 
     def __onPostMortemSwitched(self, *args):
+        _logger.debug('Is in postmortem')
         self.__isInPostmortem = True
         self.__isHintShown = False
 
     def __onHintTimeOut(self):
+        _logger.debug('Radar hint timed out')
         self._parentObj.removeBtnHint(CommandMapping.CMD_CM_VEHICLE_ACTIVATE_RADAR)
         self.__isHintShown = False
 
@@ -578,6 +587,7 @@ class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
         return self._isUnderFire or self._isInRecovery or self._isInProgressCircle
 
     def __clearRadarCooldown(self):
+        _logger.debug('Clearing radar cooldown')
         if self.__cbOnRadarCooldown is not None:
             BigWorld.cancelCallback(self.__cbOnRadarCooldown)
             self.__cbOnRadarCooldown = None
@@ -614,7 +624,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
         HintPanelPlugin._updateCounterOnStart(self.__questHintSettings, PRBSettings.HINT_DAY_COOLDOWN, PRBSettings.HINT_BATTLES_COOLDOWN)
         self.__isActive = True
         g_eventBus.addListener(GameEvent.SHOW_BTN_HINT, self.__handleShowBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
-        g_eventBus.addListener(GameEvent.HELP_DETAILED, self.__handlePressHelpBtn, scope=EVENT_BUS_SCOPE.BATTLE)
+        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self.__handleLoadView, scope=EVENT_BUS_SCOPE.BATTLE)
         g_eventBus.addListener(GameEvent.FULL_STATS_QUEST_PROGRESS, self.__handlePressQuestBtn, scope=EVENT_BUS_SCOPE.BATTLE)
         vStateCtrl = self.sessionProvider.shared.vehicleState
         if vStateCtrl is not None:
@@ -626,7 +636,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
             return
         else:
             g_eventBus.removeListener(GameEvent.SHOW_BTN_HINT, self.__handleShowBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
-            g_eventBus.removeListener(GameEvent.HELP_DETAILED, self.__handlePressHelpBtn, scope=EVENT_BUS_SCOPE.BATTLE)
+            g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self.__handleLoadView, scope=EVENT_BUS_SCOPE.BATTLE)
             g_eventBus.removeListener(GameEvent.FULL_STATS_QUEST_PROGRESS, self.__handlePressQuestBtn, scope=EVENT_BUS_SCOPE.BATTLE)
             vStateCtrl = self.sessionProvider.shared.vehicleState
             if vStateCtrl is not None:
@@ -750,16 +760,17 @@ class PreBattleHintPlugin(HintPanelPlugin):
         elif self.__callbackDelayer.hasDelayedCallback(self.__onHintTimeOut):
             self.__callbackDelayer.stopCallback(self.__onHintTimeOut)
 
-    def __handlePressHelpBtn(self, event):
-        if self.__hintInQueue == CommandMapping.CMD_SHOW_HELP:
-            self._parentObj.removeBtnHint(CommandMapping.CMD_SHOW_HELP)
-            self.__callbackDelayer.delayCallback(_HINT_COOLDOWN, self.__onHintTimeCooldown, self.__hintInQueue)
-            self.__hintInQueue = None
-        hintStats = self.__helpHintSettings[self.__vehicleId]
-        self.__helpHintSettings[self.__vehicleId] = self._updateCounterOnUsed(hintStats)
+    def __handleLoadView(self, event):
+        if event.alias == VIEW_ALIAS.INGAME_DETAILS_HELP:
+            if self.__hintInQueue == CommandMapping.CMD_SHOW_HELP:
+                self._parentObj.removeBtnHint(CommandMapping.CMD_SHOW_HELP)
+                self.__callbackDelayer.delayCallback(_HINT_COOLDOWN, self.__onHintTimeCooldown, self.__hintInQueue)
+                self.__hintInQueue = None
+            hintStats = self.__helpHintSettings[self.__vehicleId]
+            self.__helpHintSettings[self.__vehicleId] = self._updateCounterOnUsed(hintStats)
         return
 
-    def __handlePressQuestBtn(self, event):
+    def __handlePressQuestBtn(self, _):
         if self.__hintInQueue == CommandMapping.CMD_QUEST_PROGRESS_SHOW:
             self._parentObj.removeBtnHint(CommandMapping.CMD_QUEST_PROGRESS_SHOW)
             self.__hintInQueue = None

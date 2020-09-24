@@ -9,7 +9,19 @@ from debug_utils import *
 from items import tankmen
 from items import vehicles
 from items.tankmen import MAX_SKILL_LEVEL, MIN_ROLE_LEVEL
-from items.vehicles import VEHICLE_ATTRIBUTE_FACTORS, VehicleDescriptor
+from items.vehicles import vehicleAttributeFactors, VehicleDescriptor
+import ResMgr
+__defaultGlossTexture = None
+
+def getDefaultGlossTexture():
+    global __defaultGlossTexture
+    if __defaultGlossTexture is None:
+        section = ResMgr.openSection('resources.xml')
+        if section is None:
+            return
+        __defaultGlossTexture = section.readString('gameplay/projDecalDefaultGM', '')
+    return __defaultGlossTexture
+
 
 def getItemDescrByCompactDescr(compDescr):
     itemTypeID, _, _ = vehicles.parseIntCompactDescr(compDescr)
@@ -46,7 +58,7 @@ def _makeDefaultVehicleFactors(sample):
 
 
 def makeDefaultVehicleAttributeFactors():
-    return _makeDefaultVehicleFactors(VEHICLE_ATTRIBUTE_FACTORS)
+    return vehicleAttributeFactors()
 
 
 def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
@@ -153,7 +165,7 @@ def getInvisibility(vehicleDescr, factors, baseInvisibility, isMoving):
 if IS_CLIENT:
     CLIENT_VEHICLE_ATTRIBUTE_FACTORS = {'camouflage': 1.0,
      'shotDispersion': 1.0}
-    CLIENT_VEHICLE_ATTRIBUTE_FACTORS.update(VEHICLE_ATTRIBUTE_FACTORS)
+    CLIENT_VEHICLE_ATTRIBUTE_FACTORS.update(vehicleAttributeFactors())
 
     def makeDefaultClientVehicleAttributeFactors():
         return _makeDefaultVehicleFactors(CLIENT_VEHICLE_ATTRIBUTE_FACTORS)

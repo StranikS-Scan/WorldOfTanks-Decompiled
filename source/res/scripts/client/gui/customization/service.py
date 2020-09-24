@@ -7,6 +7,7 @@ import BigWorld
 import Windowing
 import Event
 from CurrentVehicle import g_currentVehicle
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from helpers import dependency
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.customization.context.context import CustomizationContext
@@ -427,7 +428,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         if callback is not None:
             ctx['callback'] = callback
             self.__customizationShownCallback = None
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_CUSTOMIZATION, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_CUSTOMIZATION), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
     def __loadCustomization(self, vehInvID=None, callback=None):

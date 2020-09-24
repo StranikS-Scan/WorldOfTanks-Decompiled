@@ -6,11 +6,16 @@ from gui.shared.formatters import text_styles
 from helpers import int2roman
 from main_page_vos import getRankedMainSeasonOnHeader
 
-def getUnreachableVO(season, minLevel, maxLevel):
+def getUnreachableVO(season, minLevel, maxLevel, isAvailableForBuy, isAvailableForRestore):
     levelsStr = __formatUnreachableLevels(minLevel, maxLevel)
+    centerText = R.strings.ranked_battles.rankedBattlesUnreachableView.vehicleUnavailable
+    if isAvailableForBuy:
+        centerText = R.strings.ranked_battles.rankedBattlesUnreachableView.vehicleAvailableForBuy
+    elif isAvailableForRestore:
+        centerText = R.strings.ranked_battles.rankedBattlesUnreachableView.vehicleAvailableForRestore
     return {'bottomRules': __formatBottomItems(),
      'header': getRankedMainSeasonOnHeader(season, None),
-     'centerText': text_styles.vehicleStatusCriticalText(backport.text(R.strings.ranked_battles.rankedBattlesUnreachableView.unreachableText(), levels=levelsStr)),
+     'centerText': text_styles.vehicleStatusCriticalText(backport.text(centerText(), levels=levelsStr)),
      'bottomText': text_styles.highTitle(backport.text(R.strings.ranked_battles.rankedBattlesUnreachableView.bottomText(), levels=levelsStr)),
      'closeBtnLabel': backport.text(R.strings.ranked_battles.rankedBattlesUnreachableView.closeBtnLabel()),
      'closeBtnTooltip': '',

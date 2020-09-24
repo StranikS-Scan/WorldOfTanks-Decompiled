@@ -77,7 +77,10 @@ class AvatarChatKeyHandling(object):
         self.__deactivateHandling()
 
     def handleKey(self, isDown, key, mods):
-        if not self.__isEnabled or self.guiSessionProvider.shared.calloutCtrl is None or BattleReplay.g_replayCtrl.isPlaying:
+        calloutCtrl = self.guiSessionProvider.shared.calloutCtrl
+        if not self.__isEnabled or calloutCtrl is None or BattleReplay.g_replayCtrl.isPlaying:
+            return False
+        elif self.__isEpicBattleOverviewMapScreenVisible():
             return False
         cmdMap = CommandMapping.g_instance
         if cmdMap.isFiredList((CommandMapping.CMD_CHAT_SHORTCUT_THANKYOU,
@@ -85,15 +88,15 @@ class AvatarChatKeyHandling(object):
          CommandMapping.CMD_CHAT_SHORTCUT_AFFIRMATIVE,
          CommandMapping.CMD_CHAT_SHORTCUT_NEGATIVE,
          CommandMapping.CMD_CHAT_SHORTCUT_HELPME,
-         CommandMapping.CMD_CHAT_SHORTCUT_RELOAD), key) and self.isVehicleAlive and isDown:
+         CommandMapping.CMD_CHAT_SHORTCUT_RELOAD), key) and self.isVehicleAlive and isDown and not calloutCtrl.isRadialMenuOpened():
             self.guiSessionProvider.handleContexChatCommand(key)
             return True
         isGuiControlOn = not self.getForcedGuiControlModeFlags() & GUI_CTRL_MODE_FLAG.CURSOR_VISIBLE
-        if cmdMap.isFired(CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMIT, key) and self.isVehicleAlive and isDown and isGuiControlOn:
+        if cmdMap.isFired(CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMIT, key) and self.isVehicleAlive and isDown and isGuiControlOn and not calloutCtrl.isRadialMenuOpened():
             self.guiSessionProvider.handleContexChatCommand(key)
             return True
         else:
-            return self.guiSessionProvider.shared.calloutCtrl.handleCalloutAndRadialMenuKeyPress(key, isDown)
+            return calloutCtrl.handleCalloutAndRadialMenuKeyPress(key, isDown)
 
     def __isBattleRoyale(self):
         return ARENA_BONUS_TYPE_CAPS.checkAny(self.arena.bonusType, ARENA_BONUS_TYPE_CAPS.BATTLEROYALE)
@@ -161,6 +164,8 @@ class AvatarChatKeyHandling(object):
         position = self.__getBasePosition(teamId, baseId)
         if position is None:
             position = self.__getControlPointPosition(objectID)
+        if position is None:
+            position = self.__getSectorBasePosition(objectID)
         return position
 
     def __getBasePosition(self, teamId, baseId):
@@ -169,6 +174,14 @@ class AvatarChatKeyHandling(object):
                 return position
 
         return None
+
+    def __getSectorBasePosition(self, baseID):
+        sectorBaseComp = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'sectorBaseComponent', None)
+        if sectorBaseComp:
+            sectorBase = sectorBaseComp.getSectorBaseById(baseID)
+            if sectorBase:
+                return sectorBase.position
+        return
 
     def __getControlPointPosition(self, objectID):
         for position, number in self.guiSessionProvider.arenaVisitor.type.getControlPointsIterator():
@@ -431,3 +444,9 @@ class AvatarChatKeyHandling(object):
                 return
             self.__activateHandling()
         return
+
+    def __isEpicBattleOverviewMapScreenVisible(self):
+        arenaVisitor = self.sessionProvider.arenaVisitor
+        isEpicBattle = arenaVisitor.gui.isEpicBattle()
+        ctrl = self.guiSessionProvider.dynamic.maps
+        return False if not ctrl else isEpicBattle and ctrl.overviewMapScreenVisible

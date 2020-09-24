@@ -4,8 +4,8 @@ from gui.Scaleform.framework.entities.View import View
 
 class WaitingViewMeta(View):
 
-    def as_showWaitingS(self, message):
-        return self.flashObject.as_showWaiting(message) if self._isDAAPIInited() else None
+    def as_showWaitingS(self, message, softStart):
+        return self.flashObject.as_showWaiting(message, softStart) if self._isDAAPIInited() else None
 
     def as_showBackgroundImgS(self, img):
         return self.flashObject.as_showBackgroundImg(img) if self._isDAAPIInited() else None

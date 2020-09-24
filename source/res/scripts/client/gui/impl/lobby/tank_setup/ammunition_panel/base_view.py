@@ -3,16 +3,15 @@
 import logging
 from CurrentVehicle import g_currentVehicle
 from Event import Event
-from frameworks.wulf import ViewFlags, ViewSettings
+from frameworks.wulf import ViewFlags, ViewSettings, ViewStatus
 from gui.impl.backport import BackportTooltipWindow
-from gui.impl.backport.backport_context_menu import BackportContextMenuContent
+from gui.impl.backport.backport_context_menu import BackportContextMenuWindow
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.tank_setup.ammunition_panel_view_model import AmmunitionPanelViewModel
 from gui.impl.lobby.tank_setup.ammunition_panel.hangar import HangarAmmunitionPanel
 from gui.impl.lobby.tank_setup.backports.context_menu import getHangarContextMenuData
 from gui.impl.lobby.tank_setup.backports.tooltips import getSlotTooltipData
 from gui.impl.lobby.tank_setup.tank_setup_helper import setLastSlotAction, clearLastSlotAction
-from gui.impl.lobby.tank_setup.tooltips.shells_info import ShellsInfo
 from gui.impl.pub import ViewImpl
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
@@ -40,14 +39,14 @@ class BaseAmmunitionPanelView(ViewImpl):
                 return window
         return super(BaseAmmunitionPanelView, self).createToolTip(event)
 
-    def createToolTipContent(self, event, contentID):
-        return ShellsInfo(event.contentID, g_currentVehicle.item) if event.contentID == R.views.lobby.tanksetup.tooltips.ShellsInfo() else super(BaseAmmunitionPanelView, self).createToolTipContent(event, contentID)
-
-    def createContextMenuContent(self, event):
-        if event.contentID != R.views.common.BackportContextMenu():
-            super(BaseAmmunitionPanelView, self).createContextMenuContent(event)
-        contextMenuData = getHangarContextMenuData(event, self.uniqueID)
-        return BackportContextMenuContent(contextMenuData) if contextMenuData is not None else super(BaseAmmunitionPanelView, self).createContextMenuContent(event)
+    def createContextMenu(self, event):
+        if event.contentID == R.views.common.BackportContextMenu():
+            contextMenuData = getHangarContextMenuData(event, self.uniqueID)
+            if contextMenuData is not None:
+                window = BackportContextMenuWindow(contextMenuData, self.getParentWindow())
+                window.load()
+                return window
+        return super(BaseAmmunitionPanelView, self).createContextMenu(event)
 
     def setHangarSwitchAnimState(self, isComplete):
         self.viewModel.setIsReady(isComplete)
@@ -121,8 +120,10 @@ class BaseAmmunitionPanelView(ViewImpl):
 
     def _currentVehicleChanged(self):
         self.update()
+        self.viewModel.setIsReady(self._getIsReady())
 
     def __onVehicleChangeStarted(self):
+        self.viewModel.setIsReady(False)
         self.viewModel.setIsMaintenanceEnabled(False)
         self.viewModel.setIsDisabled(True)
 
@@ -132,6 +133,9 @@ class BaseAmmunitionPanelView(ViewImpl):
     @staticmethod
     def _getIsDisabled():
         return not g_currentVehicle.isInHangar() or g_currentVehicle.isLocked() or g_currentVehicle.isBroken()
+
+    def _getIsReady(self):
+        return self.viewStatus == ViewStatus.LOADED
 
     def __onViewSizeInitialized(self, args=None):
         self.onSizeChanged(args.get('width', 0), args.get('height', 0), args.get('offsetY', 0))

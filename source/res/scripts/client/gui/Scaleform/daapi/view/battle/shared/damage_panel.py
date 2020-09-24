@@ -13,7 +13,7 @@ from gui.Scaleform.daapi.view.battle.shared.formatters import formatHealthProgre
 from gui.Scaleform.daapi.view.battle.shared.timers_common import PythonTimer
 from gui.Scaleform.daapi.view.meta.DamagePanelMeta import DamagePanelMeta
 from gui.Scaleform.flash_wrapper import InputKeyMode
-from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
+from gui.Scaleform.genConsts.LAYER_NAMES import LAYER_NAMES
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control import vehicle_getter
 from gui.battle_control.battle_constants import ALL_VEHICLE_GUI_ITEMS, AUTO_ROTATION_FLAG
@@ -110,7 +110,7 @@ class _PythonTimer(PythonTimer, _IStatusAnimPlayer):
 class _TankIndicatorCtrl(object):
 
     def __init__(self, app):
-        self.__component = GUI.WGTankIndicatorFlash(app.movie, '_level0.root.{}.main.damagePanel.tankIndicator'.format(APP_CONTAINERS_NAMES.VIEWS))
+        self.__component = GUI.WGTankIndicatorFlash(app.movie, '_level0.root.{}.main.damagePanel.tankIndicator'.format(LAYER_NAMES.VIEWS))
         self.__component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
         self.__app = app
         self.__vId = None

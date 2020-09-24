@@ -2,7 +2,7 @@
 # Embedded file name: scripts/common/items/writers/shared_writers.py
 import ResMgr
 from debug_utils import LOG_ERROR
-from items.components import shared_components, component_constants
+from items.components import shared_components, component_constants, c11n_constants
 from items.components.component_constants import ALLOWED_PROJECTION_DECALS_ANCHORS, ALLOWED_SLOTS_ANCHORS, ALLOWED_EMBLEM_SLOTS, ALLOWED_MISC_SLOTS
 from items import _xml
 import typing
@@ -13,7 +13,8 @@ def writeProjectionSlots(slotDS, slot):
     slotDS.write('rotation', slot.rotation)
     slotDS.write('scale', slot.scale)
     slotDS.write('showOn', slot.showOn)
-    slotDS.write('verticalMirror', slot.canBeMirroredVertically)
+    if slot.type != 'fixedProjectionDecal':
+        slotDS.write('verticalMirror', slot.canBeMirroredVertically)
     _xml.rewriteBool(slotDS, 'doubleSided', slot.doubleSided, False)
     _xml.rewriteFloat(slotDS, 'clipAngle', slot.clipAngle, 0.0)
     if slot.attachedParts is not None and len(slot.attachedParts) != 0:
@@ -102,12 +103,29 @@ def writeModelsSets(item, section):
     if item is None:
         return
     else:
-        defaultModelPaths = item['default']
-        if defaultModelPaths is None:
-            return
-        _xml.rewriteString(section, 'undamaged', defaultModelPaths.undamaged)
-        _xml.rewriteString(section, 'destroyed', defaultModelPaths.destroyed)
-        _xml.rewriteString(section, 'exploded', defaultModelPaths.exploded)
+        setsSection = section['sets'] if section.has_key('sets') else None
+        if setsSection is not None:
+            for setName in setsSection.keys():
+                if setName not in item.keys():
+                    setsSection.deleteSection(setName)
+
+        if len(item) > 1:
+            if not section.has_key('sets'):
+                setsSection = section.createSection('sets')
+            else:
+                setsSection = section['sets']
+        for key in item:
+            if key == 'default':
+                setSection = section
+            elif setsSection.has_key(key):
+                setSection = setsSection[key]
+            else:
+                setSection = setsSection.createSection(key)
+            if item[key] is not None:
+                _xml.rewriteString(setSection, 'undamaged', item[key].undamaged)
+                _xml.rewriteString(setSection, 'destroyed', item[key].destroyed)
+                _xml.rewriteString(setSection, 'exploded', item[key].exploded)
+
         return
 
 

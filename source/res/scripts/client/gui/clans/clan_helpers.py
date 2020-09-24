@@ -34,20 +34,27 @@ _RequestData = namedtuple('_RequestData', ['pattern',
  'count',
  'isReset',
  'isRecommended'])
+ACCOUNT_ALREADY_IN_CLAN = 'Account already invited'
 RATINGS_NOT_FOUND_ERROR = 404
+ACCOUNT_ALREADY_IN_CLAN_ERROR = 409
 
-def showClanInviteSystemMsg(userName, isSuccess, code):
+def showClanInviteSystemMsg(userName, isSuccess, code, data=None):
     if isSuccess:
         msg = formatters.getInvitesSentSysMsg((userName,))
         msgType = SystemMessages.SM_TYPE.Information
     else:
         error = None
-        if code == ResponseCodes.ACCOUNT_ALREADY_INVITED:
-            error = 'clans/request/errors/Account already invited'
-        if code == ResponseCodes.ACCOUNT_ALREADY_IN_CLAN:
-            error = 'clans/request/errors/user is in clan already'
-        msg = formatters.getInviteNotSentSysMsg(userName, error)
-        msgType = SystemMessages.SM_TYPE.Error
+        if data and code == ACCOUNT_ALREADY_IN_CLAN_ERROR and data.get('description') == ACCOUNT_ALREADY_IN_CLAN:
+            information = 'clans/notifications/alreadyInviteSent'
+            msg = formatters.getInviteNotSentSysMsg(userName, information)
+            msgType = SystemMessages.SM_TYPE.Information
+        else:
+            if code == ResponseCodes.ACCOUNT_ALREADY_INVITED:
+                error = 'clans/request/errors/Account already invited'
+            if code == ResponseCodes.ACCOUNT_ALREADY_IN_CLAN:
+                error = 'clans/request/errors/user is in clan already'
+            msg = formatters.getInviteNotSentSysMsg(userName, error)
+            msgType = SystemMessages.SM_TYPE.Error
     SystemMessages.pushMessage(msg, msgType)
     return
 

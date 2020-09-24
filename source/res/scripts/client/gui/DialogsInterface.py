@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/DialogsInterface.py
 from gui.Scaleform.Waiting import Waiting
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.utils import decorators
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -36,8 +37,7 @@ def showBCConfirmationDialog(meta, callback):
                    'message': meta.getMessage()}],
      'voiceovers': [],
      'callback': _DialogCallbackWrapper(callback)}
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOTCAMP_MESSAGE_WINDOW, None, effectData), EVENT_BUS_SCOPE.LOBBY)
-    return
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_MESSAGE_WINDOW), ctx=effectData), EVENT_BUS_SCOPE.LOBBY)
 
 
 @decorators.async

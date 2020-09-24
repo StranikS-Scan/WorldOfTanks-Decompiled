@@ -184,7 +184,7 @@ def fitOutfit(outfit, availableRegionsMap):
             availableRegions = set()
             isProjectionDecal = False
             slotItemTypes = slot.getTypes()
-            if {GUI_ITEM_TYPE.SEQUENCE, GUI_ITEM_TYPE.ATTACHMENT} & set(slotItemTypes):
+            if {GUI_ITEM_TYPE.SEQUENCE, GUI_ITEM_TYPE.ATTACHMENT, GUI_ITEM_TYPE.INSIGNIA} & set(slotItemTypes):
                 continue
             for itemType in slotItemTypes:
                 availableRegions.update(areaRegions.get(itemType, ()))

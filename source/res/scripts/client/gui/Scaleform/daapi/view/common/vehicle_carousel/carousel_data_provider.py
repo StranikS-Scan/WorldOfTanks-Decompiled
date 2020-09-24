@@ -13,10 +13,9 @@ from gui.shared.formatters.time_formatters import RentLeftFormatter
 from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES, getVehicleStateIcon, getVehicleStateAddIcon, getBattlesLeft, getSmallIconPath, getIconPath
 from gui.shared.gui_items.dossier.achievements import isMarkOfMasteryAchieved
 from gui.shared.utils.requesters import REQ_CRITERIA
-from helpers import dependency
 from helpers.i18n import makeString as ms
+from helpers import dependency
 from skeletons.gui.game_control import IBattleRoyaleController
-from skeletons.gui.game_control import ILowTierMMController
 
 def sortedIndices(seq, getter, reverse=False):
     return sorted(range(len(seq)), key=lambda idx: getter(seq[idx]), reverse=reverse)
@@ -37,7 +36,8 @@ def _isLockedBackground(vState, vStateLvl):
          Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT,
          Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE,
          Vehicle.VEHICLE_STATE.NOT_PRESENT,
-         Vehicle.VEHICLE_STATE.GROUP_IS_NOT_READY)
+         Vehicle.VEHICLE_STATE.GROUP_IS_NOT_READY,
+         Vehicle.VEHICLE_STATE.DISABLED)
     else:
         result = False
     return result
@@ -58,7 +58,6 @@ def getStatusStrings(vState, vStateLvl=Vehicle.VEHICLE_STATE_LEVEL.INFO, substit
 
 
 def getVehicleDataVO(vehicle):
-    lowTierMMController = dependency.instance(ILowTierMMController)
     rentInfoText = RentLeftFormatter(vehicle.rentInfo, vehicle.isPremiumIGR).getRentLeftStr()
     vState, vStateLvl = vehicle.getState()
     if vehicle.isRotationApplied():
@@ -102,7 +101,6 @@ def getVehicleDataVO(vehicle):
      'level': vehicle.level,
      'premium': vehicle.isPremium,
      'favorite': vehicle.isFavorite,
-     'giveaway': vehicle.isLowTierEvent and lowTierMMController.isEnabled(),
      'nation': vehicle.nationID,
      'xpImgSource': bonusImage,
      'tankType': tankType,
@@ -122,7 +120,6 @@ def getVehicleDataVO(vehicle):
 
 class CarouselDataProvider(SortableDAAPIDataProvider):
     _battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
-    lowTierMMController = dependency.descriptor(ILowTierMMController)
 
     def __init__(self, carouselFilter, itemsCache, currentVehicle):
         super(CarouselDataProvider, self).__init__()
@@ -138,7 +135,6 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         self._randomStats = None
         self._filter.load()
         self.__sortedIndices = []
-        self.lowTierMMController.onEventStateChanged += self.updateVehicles
         return
 
     def hasRentedVehicles(self):
@@ -186,7 +182,6 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         self._selectedIdx = -1
 
     def fini(self):
-        self.lowTierMMController.onEventStateChanged -= self.updateVehicles
         self.clear()
         self.destroy()
 

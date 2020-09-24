@@ -21,7 +21,9 @@ AUTOCOMMIT_COMMAND_NAMES = (BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY,
  BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY_WITH_SPG,
  BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE,
  BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE,
- BATTLE_CHAT_COMMAND_NAMES.GOING_THERE)
+ BATTLE_CHAT_COMMAND_NAMES.GOING_THERE,
+ BATTLE_CHAT_COMMAND_NAMES.DEFENDING_OBJECTIVE,
+ BATTLE_CHAT_COMMAND_NAMES.ATTACKING_OBJECTIVE)
 LOCATION_CMD_NAMES = (BATTLE_CHAT_COMMAND_NAMES.SPG_AIM_AREA, BATTLE_CHAT_COMMAND_NAMES.GOING_THERE, BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION)
 EPIC_GLOBAL_CMD_NAMES = (BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_SAVE_TANKS_ATK,
  BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_TIME_ATK,
@@ -54,6 +56,10 @@ BASE_CMD_NAMES = (BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE,
  BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE,
  BATTLE_CHAT_COMMAND_NAMES.DEFEND_BASE,
  BATTLE_CHAT_COMMAND_NAMES.ATTACK_BASE)
+OBJECTIVE_CMD_NAMES = (BATTLE_CHAT_COMMAND_NAMES.ATTACKING_OBJECTIVE,
+ BATTLE_CHAT_COMMAND_NAMES.DEFENDING_OBJECTIVE,
+ BATTLE_CHAT_COMMAND_NAMES.ATTACK_OBJECTIVE,
+ BATTLE_CHAT_COMMAND_NAMES.DEFEND_OBJECTIVE)
 _PUBLIC_CMD_NAMES = (BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY_WITH_SPG,
  BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY,
  BATTLE_CHAT_COMMAND_NAMES.CONFIRM,
@@ -100,16 +106,16 @@ _VEHICLE_COMMAND_NAMES = (BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY,
  BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY,
  BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY,
  BATTLE_CHAT_COMMAND_NAMES.RELOADINGGUN,
+ BATTLE_CHAT_COMMAND_NAMES.RELOADING_READY,
+ BATTLE_CHAT_COMMAND_NAMES.RELOADING_UNAVAILABLE,
+ BATTLE_CHAT_COMMAND_NAMES.RELOADINGGUN,
+ BATTLE_CHAT_COMMAND_NAMES.RELOADING_CASSETE,
+ BATTLE_CHAT_COMMAND_NAMES.RELOADING_READY_CASSETE,
  BATTLE_CHAT_COMMAND_NAMES.TURNBACK,
  BATTLE_CHAT_COMMAND_NAMES.THANKS,
  BATTLE_CHAT_COMMAND_NAMES.POSITIVE,
  BATTLE_CHAT_COMMAND_NAMES.CONFIRM)
 _MUTE_MESSAGE_NAMES = (BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION,)
-_NO_CHAT_MESSAGE_NAMES = (BATTLE_CHAT_COMMAND_NAMES.CLEAR_CHAT_COMMANDS,
- BATTLE_CHAT_COMMAND_NAMES.CANCEL_REPLY,
- BATTLE_CHAT_COMMAND_NAMES.REPLY,
- BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY,
- BATTLE_CHAT_COMMAND_NAMES.CONFIRM)
 _TEMPORARY_STICKY_NAMES = (BATTLE_CHAT_COMMAND_NAMES.DEFEND_BASE,
  BATTLE_CHAT_COMMAND_NAMES.ATTACK_BASE,
  BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION,
@@ -129,8 +135,8 @@ _SHOW_MARKER_CMD_IDS = []
 _ENEMY_TARGET_CMD_IDS = []
 _MINIMAP_CMD_IDS = []
 _SPG_AIM_CMD_IDS = []
-_MINIMAP_MARK_OBJECTIVE_IDS = []
-_MINIMAP_MARK_BASE_IDS = []
+_OBJECTIVE_CMD_IDS = []
+_BASE_CMD_IDS = []
 _GLOBAL_MESSAGE_IDS = []
 _REPLY_ID = 0
 _CANCEL_REPLY_ID = 0
@@ -141,7 +147,6 @@ _LOCATION_COMMAND_IDS = []
 _VEHICLE_COMMAND_IDS = []
 _AUTOCOMMIT_COMMAND_IDS = []
 _MUTED_MESSAGE_IDS = []
-_NO_CHAT_MESSAGE_IDS = []
 _TEMPORARY_STICKY_IDS = []
 for cmd in BATTLE_CHAT_COMMANDS:
     cmdID = cmd.id
@@ -170,8 +175,6 @@ for cmd in BATTLE_CHAT_COMMANDS:
         _AUTOCOMMIT_COMMAND_IDS.append(cmdID)
     if cmdName in _MUTE_MESSAGE_NAMES:
         _MUTED_MESSAGE_IDS.append(cmdID)
-    if cmdName in _NO_CHAT_MESSAGE_NAMES:
-        _NO_CHAT_MESSAGE_IDS.append(cmdID)
     if cmdName == BATTLE_CHAT_COMMAND_NAMES.REPLY:
         _REPLY_ID = cmdID
     if cmdName == BATTLE_CHAT_COMMAND_NAMES.CANCEL_REPLY:
@@ -180,10 +183,10 @@ for cmd in BATTLE_CHAT_COMMANDS:
         _CLEAR_CHAT_COMMANDS_ID = cmdID
     if cmdName == BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY:
         _SUPPORTING_ALLY_ID = cmdID
-    if cmdName in ('ATTENTIONTOOBJECTIVE_ATK', 'ATTENTIONTOOBJECTIVE_DEF'):
-        _MINIMAP_MARK_OBJECTIVE_IDS.append(cmdID)
+    if cmdName in OBJECTIVE_CMD_NAMES:
+        _OBJECTIVE_CMD_IDS.append(cmdID)
     if cmdName in BASE_CMD_NAMES:
-        _MINIMAP_MARK_BASE_IDS.append(cmdID)
+        _BASE_CMD_IDS.append(cmdID)
     if cmdName in EPIC_GLOBAL_CMD_NAMES:
         _GLOBAL_MESSAGE_IDS.append(cmdID)
     if cmdName in _TEMPORARY_STICKY_NAMES:
@@ -308,15 +311,6 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
     def isOnMinimap(self):
         return self._commandID in _MINIMAP_CMD_IDS
 
-    def isOnEpicBattleMinimap(self):
-        cmdArray = [_MINIMAP_MARK_OBJECTIVE_IDS[0],
-         _MINIMAP_MARK_OBJECTIVE_IDS[1],
-         _MINIMAP_MARK_BASE_IDS[0],
-         _MINIMAP_MARK_BASE_IDS[1],
-         _MINIMAP_MARK_BASE_IDS[2],
-         _MINIMAP_MARK_BASE_IDS[3]]
-        return self._commandID in cmdArray
-
     def isReply(self):
         return self._commandID == _REPLY_ID
 
@@ -327,7 +321,7 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
         return self._commandID == _CLEAR_CHAT_COMMANDS_ID
 
     def isMarkedObjective(self):
-        return self._commandID in _MINIMAP_MARK_OBJECTIVE_IDS
+        return self._commandID in _OBJECTIVE_CMD_IDS
 
     def isLocationRelatedCommand(self):
         return self._commandID in _LOCATION_COMMAND_IDS
@@ -339,13 +333,23 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
         return self._commandID in _VEHICLE_COMMAND_IDS
 
     def hasNoChatMessage(self):
-        return False if self._commandID == _SUPPORTING_ALLY_ID and (self.isSender() or self.isReceiver()) else self._commandID in _NO_CHAT_MESSAGE_IDS
+        if self._commandID == _SUPPORTING_ALLY_ID and (self.isSender() or self.isReceiver()):
+            return False
+        else:
+            command = _ACTIONS.battleChatCommandFromActionID(self._commandID)
+            if not command:
+                LOG_ERROR('Command is not found', self._commandID)
+                return False
+            return command.msgText is None or self._commandID == _SUPPORTING_ALLY_ID
 
     def isEpicGlobalMessage(self):
         return self._commandID in _GLOBAL_MESSAGE_IDS
 
     def hasTarget(self):
         return self._commandID in _TARGETED_CMD_IDS
+
+    def isAutoCommit(self):
+        return self._commandID in _AUTOCOMMIT_COMMAND_IDS
 
     def isPrivate(self):
         return self._commandID in _PRIVATE_CMD_IDS
@@ -453,11 +457,10 @@ class BattleCommandFactory(IBattleCommandFactory):
             decorator = _OutCmdDecorator(name, msgArgs)
         return decorator
 
-    def createByObjectiveIndex(self, idx, isAtk):
+    def createByObjectiveIndex(self, idx, isAtk, commandName):
         decorator = None
-        key = 'ATTENTIONTOOBJECTIVE_ATK' if isAtk else 'ATTENTIONTOOBJECTIVE_DEF'
-        if _MINIMAP_MARK_OBJECTIVE_IDS:
-            decorator = _OutCmdDecorator(key, messageArgs(int32Arg1=idx))
+        if _OBJECTIVE_CMD_IDS:
+            decorator = _OutCmdDecorator(commandName, messageArgs(int32Arg1=idx))
         return decorator
 
     def createByBaseIndexAndName(self, baseIdx, commandName, baseName):

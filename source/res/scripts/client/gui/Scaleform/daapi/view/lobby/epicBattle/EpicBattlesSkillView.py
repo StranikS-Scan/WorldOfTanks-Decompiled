@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattle/EpicBattlesSkillView.py
 from collections import namedtuple
 import SoundGroups
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from math_utils import clamp
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.meta.EpicBattlesSkillViewMeta import EpicBattlesSkillViewMeta
@@ -132,10 +133,10 @@ class EpicBattlesSkillView(LobbySubView, EpicBattlesSkillViewMeta):
         return text_styles.highlightText(EPIC_BATTLE.METAABILITYSCREEN_UNSPENT_POINTS) if showSkillPoint else text_styles.tutorial(EPIC_BATTLE.METAABILITYSCREEN_GET_SKILL_POINTS)
 
     def __close(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __back(self):
-        self.fireEvent(events.LoadViewEvent(self.__backPageAlias), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(self.__backPageAlias)), EVENT_BUS_SCOPE.LOBBY)
 
     def _packSkillInfo(self):
         return {'upgradeBtnLoc': i18n.makeString(EPIC_BATTLE.METAABILITYSCREEN_UPGRADE_SKILL),

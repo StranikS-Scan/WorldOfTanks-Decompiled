@@ -234,8 +234,6 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         quantity = item.getQuantity()
         currentTime = item.getTimeRemaining()
         maxTime = item.getTotalTime()
-        if maxTime == 0 and item.getStage() == EQUIPMENT_STAGES.COOLDOWN:
-            maxTime = item.getDescriptor().cooldownSeconds
         self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime, item.getAnimationType())
         bwKey, _ = self.__genKey(idx)
         if item.getQuantity() > 0 and bwKey not in self.__keys:
@@ -583,8 +581,9 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
             self.as_setCoolDownTimeSnapshotS(self._cds.index(intCD), timeLeft, isBaseTime, isFlash)
 
     def __onOptionalDeviceAdded(self, optDeviceInBattle):
-        idx = self.__genNextIdx(self.__optDeviceFullMask, self._OPT_DEVICE_START_IDX)
-        self._addOptionalDeviceSlot(idx, optDeviceInBattle)
+        if optDeviceInBattle.getIntCD() not in self._cds:
+            idx = self.__genNextIdx(self.__optDeviceFullMask, self._OPT_DEVICE_START_IDX)
+            self._addOptionalDeviceSlot(idx, optDeviceInBattle)
 
     def __onOptionalDeviceUpdated(self, optDeviceInBattle):
         intCD = optDeviceInBattle.getIntCD()
@@ -635,8 +634,8 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
                         return
                     item = ctrl.getEquipment(intCD)
                     if item and item.isEntityRequired():
-                        bwKey, _ = self.__genKey(idx)
-                        self.__extraKeys[idx] = self.__keys[bwKey] = partial(self.__handleEquipmentPressed, self._cds[idx], deviceName)
+                        self.__replaceEquipmentKeyHandler(self.__keys, self._cds[idx], deviceName)
+                        self.__replaceEquipmentKeyHandler(self.__extraKeys, self._cds[idx], deviceName)
             elif state == VEHICLE_VIEW_STATE.STUN:
                 if value.duration > 0:
                     for intCD, _ in ctrl.iterEquipmentsByTag('medkit', _isEquipmentAvailableToUse):
@@ -668,6 +667,12 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
                             self.__clearEquipmentGlow(self._cds.index(intCD))
 
             return
+
+    def __replaceEquipmentKeyHandler(self, keysContainer, intCD, deviceName):
+        tempDeviceName = VEHICLE_DEVICE_IN_COMPLEX_ITEM.get(deviceName, deviceName)
+        for key in keysContainer:
+            if tempDeviceName in keysContainer[key].args:
+                keysContainer[key] = partial(self.__handleEquipmentPressed, intCD, deviceName)
 
     def __canApplyingGlowEquipment(self, equipment):
         equipmentTags = equipment.getTags()

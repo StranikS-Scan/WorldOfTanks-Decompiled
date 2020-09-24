@@ -1,14 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/page.py
 import logging
+import typing
 import BattleReplay
 import aih_constants
 from AvatarInputHandler import aih_global_binding
+from frameworks.wulf import WindowLayer
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.battle.shared import crosshair
 from gui.Scaleform.daapi.view.battle.shared import indicators
 from gui.Scaleform.daapi.view.battle.shared import markers2d
 from gui.Scaleform.daapi.view.meta.BattlePageMeta import BattlePageMeta
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES as _ALIASES
 from gui.app_loader import settings as app_settings
@@ -18,6 +20,8 @@ from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import dependency, uniprof
 from skeletons.gameplay import IGameplayLogic, PlayerEventID
 from skeletons.gui.battle_session import IBattleSessionProvider
+if typing.TYPE_CHECKING:
+    from gui.shared.events import LoadViewEvent
 _logger = logging.getLogger(__name__)
 
 class IComponentsConfig(object):
@@ -115,8 +119,7 @@ class SharedPage(BattlePageMeta):
         self.addListener(events.GameEvent.SHOW_BTN_HINT, self.__handleShowBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.HIDE_BTN_HINT, self.__handleHideBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.CALLOUT_DISPLAY_EVENT, self.__handleCalloutDisplayEvent, scope=EVENT_BUS_SCOPE.GLOBAL)
-        self.addListener(events.GameEvent.HELP, self._handleHelpEvent, scope=EVENT_BUS_SCOPE.BATTLE)
-        self.addListener(events.GameEvent.HELP_DETAILED, self._handleHelpEvent, scope=EVENT_BUS_SCOPE.BATTLE)
+        self.addListener(events.ViewEventType.LOAD_VIEW, self.__handleLobbyEvent, scope=EVENT_BUS_SCOPE.BATTLE)
         self.gameplay.postStateEvent(PlayerEventID.AVATAR_SHOW_GUI)
 
     @uniprof.regionDecorator(label='avatar.show_gui', scope='exit')
@@ -137,17 +140,16 @@ class SharedPage(BattlePageMeta):
         self.removeListener(events.GameEvent.SHOW_BTN_HINT, self.__handleShowBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.HIDE_BTN_HINT, self.__handleHideBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.CALLOUT_DISPLAY_EVENT, self.__handleCalloutDisplayEvent, scope=EVENT_BUS_SCOPE.GLOBAL)
-        self.removeListener(events.GameEvent.HELP, self._handleHelpEvent, scope=EVENT_BUS_SCOPE.BATTLE)
-        self.removeListener(events.GameEvent.HELP_DETAILED, self._handleHelpEvent, scope=EVENT_BUS_SCOPE.BATTLE)
+        self.removeListener(events.ViewEventType.LOAD_VIEW, self.__handleLobbyEvent, scope=EVENT_BUS_SCOPE.BATTLE)
         self._stopBattleSession()
         super(SharedPage, self)._dispose()
 
     def _toggleGuiVisible(self):
         self._isVisible = not self._isVisible
         if self._isVisible:
-            self.app.containerManager.showContainers(ViewTypes.DEFAULT)
+            self.app.containerManager.showContainers(WindowLayer.VIEW)
         else:
-            self.app.containerManager.hideContainers(ViewTypes.DEFAULT)
+            self.app.containerManager.hideContainers(WindowLayer.VIEW)
         self.fireEvent(events.GameEvent(events.GameEvent.GUI_VISIBILITY, {'visible': self._isVisible}), scope=EVENT_BUS_SCOPE.BATTLE)
         avatar_getter.setComponentsVisibility(self._isVisible)
 
@@ -239,6 +241,10 @@ class SharedPage(BattlePageMeta):
         else:
             self._setComponentsVisibility(visible={_ALIASES.DAMAGE_PANEL})
 
+    def __handleLobbyEvent(self, event):
+        if event.alias in (VIEW_ALIAS.INGAME_HELP, VIEW_ALIAS.INGAME_DETAILS_HELP):
+            self._handleHelpEvent(event)
+
     def __handleBattleLoading(self, event):
         if event.ctx['isShown']:
             self._onBattleLoadingStart()
@@ -279,8 +285,11 @@ class SharedPage(BattlePageMeta):
         elif self.as_isComponentVisibleS(alias):
             self._setComponentsVisibility(hidden={alias})
 
+    def _canShowPostmortemTips(self):
+        return not self.sessionProvider.getCtx().isPlayerObserver() and not BattleReplay.g_replayCtrl.isPlaying
+
     def _onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
-        if not self.sessionProvider.getCtx().isPlayerObserver() and not BattleReplay.g_replayCtrl.isPlaying:
+        if self._canShowPostmortemTips():
             self.as_setPostmortemTipsVisibleS(True)
         if not self.sessionProvider.getCtx().isPlayerObserver():
             self._isInPostmortem = True
@@ -336,7 +345,7 @@ class BattlePageBusinessHandler(PackageBusinessHandler):
         super(BattlePageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_BATTLE, EVENT_BUS_SCOPE.BATTLE)
 
     def _loadPage(self, event):
-        page = self.findViewByAlias(ViewTypes.DEFAULT, event.name)
+        page = self.findViewByAlias(WindowLayer.VIEW, event.name)
         if page is not None:
             page.reload()
         else:

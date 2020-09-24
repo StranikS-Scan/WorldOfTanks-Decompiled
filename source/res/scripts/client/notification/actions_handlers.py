@@ -9,20 +9,25 @@ from gui import DialogsInterface, makeHtmlString, SystemMessages
 from gui.battle_pass.battle_pass_helpers import showOfferByBonusName
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.battle_results import RequestResultsContext
 from gui.clans.clan_helpers import showAcceptClanInviteDialog
 from gui.customization.constants import CustomizationModes, CustomizationModeSource
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
 from gui.ranked_battles import ranked_helpers
 from gui.server_events.events_dispatcher import showPersonalMission, showMissionsBattlePassCommonProgression
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events
-from gui.shared.event_dispatcher import showProgressiveRewardWindow, showRankedYeardAwardWindow
+from gui.shared.event_dispatcher import showProgressiveRewardWindow, showRankedYearAwardWindow
+from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import decorators
 from gui.wgcg.clan import contexts as clan_ctxs
 from gui.wgnc import g_wgncProvider
+from skeletons.gui.impl import INotificationWindowController
 from web.web_client_api import webApiCollection
 from web.web_client_api.sound import HangarSoundWebApi
 from helpers import dependency
@@ -92,7 +97,7 @@ class _OpenEventBoardsHandler(_ActionHandler):
 
     def handleAction(self, model, entityID, action):
         super(_OpenEventBoardsHandler, self).handleAction(model, entityID, action)
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MISSIONS, ctx={'tab': QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS}), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MISSIONS), ctx={'tab': QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 class _ShowArenaResultHandler(_ActionHandler):
@@ -145,7 +150,7 @@ class _ShowClanSettingsHandler(_ActionHandler):
     def handleAction(self, model, entityID, action):
         super(_ShowClanSettingsHandler, self).handleAction(model, entityID, action)
         LOG_DEBUG('_ShowClanSettingsHandler handleAction:')
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.SETTINGS_WINDOW, ctx={'redefinedKeyMode': False}), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.SETTINGS_WINDOW), ctx={'redefinedKeyMode': False}), EVENT_BUS_SCOPE.LOBBY)
 
 
 class _ShowClanSettingsFromAppsHandler(_ShowClanSettingsHandler):
@@ -361,7 +366,7 @@ class ShowRankedFinalYearHandler(_ActionHandler):
 
     def __showFinalAward(self, questID, data):
         points = ranked_helpers.getDataFromFinalTokenQuestID(questID)
-        showRankedYeardAwardWindow(data, points)
+        showRankedYearAwardWindow(data, points)
 
 
 class ShowRankedYearPositionHandler(_ActionHandler):
@@ -453,7 +458,7 @@ class ShowFortBattleResultsHandler(_ShowArenaResultHandler):
     def _showWindow(self, notification, data):
         if data:
             battleResultData = data.get('battleResult', None)
-            g_eventBus.handleEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_BATTLE_RESULTS_WINDOW_ALIAS, ctx={'data': battleResultData}), scope=EVENT_BUS_SCOPE.LOBBY)
+            g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(FORTIFICATION_ALIASES.FORT_BATTLE_RESULTS_WINDOW_ALIAS), ctx={'data': battleResultData}), scope=EVENT_BUS_SCOPE.LOBBY)
         else:
             self._updateNotification(notification)
         return
@@ -719,6 +724,29 @@ class ProlongStyleRent(_ActionHandler):
              'callback': prolongRentCallback}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+class _OpenMissingEventsHandler(_ActionHandler):
+    __notification = dependency.descriptor(INotificationWindowController)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MISSING_EVENTS
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        notification = self.__notification
+        if notification.isEnabled():
+            notification.releasePostponed()
+        else:
+            BigWorld.callback(0, self.__showErrorMessage)
+
+    @staticmethod
+    def __showErrorMessage():
+        SystemMessages.pushI18nMessage(backport.text(R.strings.system_messages.queue.isInQueue()), type=SystemMessages.SM_TYPE.Error, priority=NotificationPriorityLevel.HIGH)
+
+
 class _OpenNotrecruitedHandler(_NavigationDisabledActionHandler):
 
     @classmethod
@@ -730,7 +758,7 @@ class _OpenNotrecruitedHandler(_NavigationDisabledActionHandler):
         pass
 
     def doAction(self, model, entityID, action):
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_BARRACKS, ctx={'location': BARRACKS_CONSTANTS.LOCATION_FILTER_NOT_RECRUITED}), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_BARRACKS), ctx={'location': BARRACKS_CONSTANTS.LOCATION_FILTER_NOT_RECRUITED}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 class OpenPersonalMissionHandler(_ActionHandler):
@@ -867,7 +895,8 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenProgressiveRewardView,
  ProlongStyleRent,
  _OpenBattlePassProgressionView,
- _OpenSelectDevicesHandler)
+ _OpenSelectDevicesHandler,
+ _OpenMissingEventsHandler)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

@@ -9,7 +9,7 @@ from gui.customization.constants import CustomizationModes
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.money import Currency, ZERO_MONEY
-from items.components.c11n_constants import CustomizationType, C11N_MASK_REGION, MAX_USERS_PROJECTION_DECALS, ProjectionDecalFormTags, SeasonType, ApplyArea, C11N_GUN_APPLY_REGIONS, UNBOUND_VEH_KEY
+from items.components.c11n_constants import CustomizationType, C11N_MASK_REGION, MAX_USERS_PROJECTION_DECALS, ProjectionDecalFormTags, SeasonType, ApplyArea, C11N_GUN_APPLY_REGIONS, UNBOUND_VEH_KEY, EMPTY_ITEM_ID
 from shared_utils import CONST_CONTAINER, isEmpty
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -357,6 +357,8 @@ def isVehicleCanBeCustomized(vehicle, itemTypeID, itemsFilter=None):
         if itemsFilter is not None:
             requirement |= REQ_CRITERIA.CUSTOM(itemsFilter)
         for itemID in customizationCache[cType]:
+            if itemID == EMPTY_ITEM_ID:
+                continue
             item = customizationService.getItemByID(itemTypeID, itemID)
             if requirement(item):
                 return True

@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/exchange/__init__.py
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.app_loader import settings as app_settings
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import ShowDialogEvent
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import GroupedViewSettings, ViewTypes, ScopeTemplates
+from gui.Scaleform.framework import GroupedViewSettings, ScopeTemplates
 
 def getContextMenuHandlers():
     pass
@@ -16,11 +17,11 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.exchange.ExchangeWindow import ExchangeWindow
     from gui.Scaleform.daapi.view.lobby.exchange.ExchangeXPWindow import ExchangeXPWindow
     from gui.Scaleform.daapi.view.lobby.exchange.ExchangeFreeToTankmanXpWindow import ExchangeFreeToTankmanXpWindow
-    return (GroupedViewSettings(VIEW_ALIAS.CONFIRM_EXCHANGE_DIALOG, ConfirmExchangeDialog, 'confirmExchangeDialog.swf', ViewTypes.WINDOW, 'confirmExchangeDialog', None, ScopeTemplates.LOBBY_SUB_SCOPE),
-     GroupedViewSettings(VIEW_ALIAS.CONFIRM_EXCHANGE_DIALOG_MODAL, ConfirmExchangeDialog, 'confirmExchangeDialog.swf', ViewTypes.TOP_WINDOW, 'confirmExchangeDialog', None, ScopeTemplates.LOBBY_SUB_SCOPE, isModal=True),
-     GroupedViewSettings(VIEW_ALIAS.EXCHANGE_WINDOW, ExchangeWindow, 'exchangeWindow.swf', ViewTypes.WINDOW, 'exchangeWindow', None, ScopeTemplates.DEFAULT_SCOPE),
-     GroupedViewSettings(VIEW_ALIAS.EXCHANGE_XP_WINDOW, ExchangeXPWindow, 'exchangeXPWindow.swf', ViewTypes.WINDOW, 'exchangeXPWindow', None, ScopeTemplates.DEFAULT_SCOPE),
-     GroupedViewSettings(VIEW_ALIAS.EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW, ExchangeFreeToTankmanXpWindow, 'exchangeFreeToTankmanXpWindow.swf', ViewTypes.WINDOW, 'exchangeFreeToTankmanXpWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False))
+    return (GroupedViewSettings(VIEW_ALIAS.CONFIRM_EXCHANGE_DIALOG, ConfirmExchangeDialog, 'confirmExchangeDialog.swf', WindowLayer.WINDOW, 'confirmExchangeDialog', None, ScopeTemplates.LOBBY_SUB_SCOPE),
+     GroupedViewSettings(VIEW_ALIAS.CONFIRM_EXCHANGE_DIALOG_MODAL, ConfirmExchangeDialog, 'confirmExchangeDialog.swf', WindowLayer.TOP_WINDOW, 'confirmExchangeDialog', None, ScopeTemplates.LOBBY_SUB_SCOPE, isModal=True),
+     GroupedViewSettings(VIEW_ALIAS.EXCHANGE_WINDOW, ExchangeWindow, 'exchangeWindow.swf', WindowLayer.WINDOW, 'exchangeWindow', None, ScopeTemplates.DEFAULT_SCOPE),
+     GroupedViewSettings(VIEW_ALIAS.EXCHANGE_XP_WINDOW, ExchangeXPWindow, 'exchangeXPWindow.swf', WindowLayer.WINDOW, 'exchangeXPWindow', None, ScopeTemplates.DEFAULT_SCOPE),
+     GroupedViewSettings(VIEW_ALIAS.EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW, ExchangeFreeToTankmanXpWindow, 'exchangeFreeToTankmanXpWindow.swf', WindowLayer.WINDOW, 'exchangeFreeToTankmanXpWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False))
 
 
 def getBusinessHandlers():
@@ -38,7 +39,7 @@ class _ExchangeDialogBusinessHandler(PackageBusinessHandler):
         self.__loadOrUpdateDialog(name, VIEW_ALIAS.CONFIRM_EXCHANGE_DIALOG, event.meta, event.handler)
 
     def __loadOrUpdateDialog(self, name, alias, meta, handler):
-        window = self.findViewByName(ViewTypes.WINDOW, name)
+        window = self.findViewByName(WindowLayer.WINDOW, name)
         if window is not None:
             window.updateDialog(meta, handler)
             self.bringViewToFront(name)
@@ -58,7 +59,7 @@ class _ExchangeDialogModalBusinessHandler(PackageBusinessHandler):
         self.__loadOrUpdateDialog(name, VIEW_ALIAS.CONFIRM_EXCHANGE_DIALOG_MODAL, event.meta, event.handler)
 
     def __loadOrUpdateDialog(self, name, alias, meta, handler):
-        window = self.findViewByName(ViewTypes.TOP_WINDOW, name)
+        window = self.findViewByName(WindowLayer.TOP_WINDOW, name)
         if window is not None:
             window.updateDialog(meta, handler)
             self.bringViewToFront(name)

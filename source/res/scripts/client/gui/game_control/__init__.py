@@ -41,7 +41,6 @@ def getGameControllersConfig(manager):
     from gui.game_control.quests_controller import QuestsController as _Quests
     from gui.game_control.ranked_battles_controller import RankedBattlesController as _Ranked
     from gui.game_control.hangar_loading_controller import HangarLoadingController as _HangarLoading
-    from gui.game_control.ten_year_countdown_controller import TenYearsCountdownController as _TenYears
     from gui.game_control.battle_royale_controller import BattleRoyaleController as _BattleRoyale
     from gui.game_control.epic_mode_controller import EpicModeController as _Epic
     from gui.game_control.bootcamp_controller import BootcampController as _Bootcamp
@@ -56,12 +55,9 @@ def getGameControllersConfig(manager):
     from gui.game_control.badges_controller import BadgesController as _Badges
     from gui.game_control.special_sound_ctrl import SpecialSoundCtrl as _SpecialSoundCtrl
     from gui.game_control.battle_pass_controller import BattlePassController
-    from gui.game_control.low_tier_rewards_controller import LowTierRewardsController
-    from gui.game_control.low_tier_mm_controller import LowTierMMController
     from gui.game_control.clan_notification_controller import ClanNotificationController as _ClanNotification
     from gui.game_control.craftmachine_controller import CraftmachineController
-    from gui.game_control.bob_controller import BobController as _BobCtrl
-    from gui.game_control.bob_sound_controller import BobSoundController as _BobSoundCtrl
+    from gui.game_control.reactive_comm import ReactiveCommunicationService
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -106,19 +102,15 @@ def getGameControllersConfig(manager):
     _config(_interface.IReferralProgramController, _ReferralController())
     _config(_interface.ISpecialSoundCtrl, _SpecialSoundCtrl())
     _config(_interface.IBattlePassController, BattlePassController())
-    _config(_interface.ILowTierRewardsController, LowTierRewardsController())
-    _config(_interface.ILowTierMMController, LowTierMMController())
     _config(_interface.IHangarLoadingController, _HangarLoading())
-    _config(_interface.ITenYearsCountdownController, _TenYears())
     if constants.IS_CHINA:
         _config(_interface.IChinaController, _China())
     else:
         _config(_interface.IChinaController, _NoChina())
-    _config(_interface.IBobController, _BobCtrl())
-    _config(_interface.IBobSoundController, _BobSoundCtrl())
     _config(_interface.ISeasonsController, _Seasons())
     _config(_interface.IBadgesController, _Badges())
     _config(_interface.IAnonymizerController, _Anonymizer())
     _config(_interface.ICraftmachineController, CraftmachineController())
     _config(_interface.IClanNotificationController, _ClanNotification())
+    _config(_interface.IReactiveCommunicationService, ReactiveCommunicationService())
     _config(_interface.IEventProgressionController, _EventProgression())

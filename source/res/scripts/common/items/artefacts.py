@@ -70,8 +70,9 @@ class VehicleFactorsXmlReader(CommonXmlSectionReader):
     __readerImpl = None
 
     def __init__(self):
-        _vehicle_attribute_factor_tags = {name:name.replace('/', '-') for name in vehicles.VEHICLE_ATTRIBUTE_FACTORS.iterkeys()}
-        super(VehicleFactorsXmlReader, self).__init__(_vehicle_attribute_factor_tags, vehicles.VEHICLE_ATTRIBUTE_FACTORS)
+        attrFactor = vehicles.vehicleAttributeFactors()
+        _vehicle_attribute_factor_tags = {name:name.replace('/', '-') for name in attrFactor.iterkeys()}
+        super(VehicleFactorsXmlReader, self).__init__(_vehicle_attribute_factor_tags, attrFactor)
 
     @staticmethod
     def readFactors(xmlCtx, section, subsection_name):

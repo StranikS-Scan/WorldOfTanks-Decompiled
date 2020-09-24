@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/research_page.py
 from logging import getLogger
+from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
-from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.go_back_helper import BackButtonContextKeys, getBackBtnLabel
 from gui.Scaleform.daapi.view.lobby.techtree import dumpers
@@ -11,6 +11,7 @@ from gui.Scaleform.daapi.view.lobby.techtree.data import ResearchItemsData
 from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation, NODE_STATE
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveStateTooltip
 from gui.Scaleform.daapi.view.meta.ResearchMeta import ResearchMeta
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.RESEARCH_ALIASES import RESEARCH_ALIASES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
@@ -19,10 +20,10 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen.resources import R
 from gui.impl.lobby.buy_vehicle_view import VehicleBuyActionTypes
-from gui.shop import canBuyGoldForVehicleThroughWeb
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events
+from gui.shared.events import LoadViewEvent
 from gui.shared.formatters import text_styles, icons
 from gui.shared.formatters.time_formatters import getDueDateOrTimeStr, RentLeftFormatter
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -30,13 +31,14 @@ from gui.shared.gui_items.Vehicle import getTypeBigIconPath
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
+from gui.shop import canBuyGoldForVehicleThroughWeb
 from helpers import int2roman, dependency
+from helpers.i18n import makeString as _ms
 from items import getTypeOfCompactDescr
+from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
+from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.game_control import ITradeInController
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.game_control import IBootcampController
-from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
-from helpers.i18n import makeString as _ms
 _logger = getLogger(__name__)
 _BENEFIT_ITEMS_LIMIT = 3
 
@@ -201,7 +203,7 @@ class Research(ResearchMeta):
 
     def exitFromResearch(self):
         if self._canBeClosed:
-            self.fireEvent(events.LoadEvent(events.LoadEvent.EXIT_FROM_RESEARCH), scope=EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.EXIT_FROM_RESEARCH)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def invalidateVehCompare(self):
         super(Research, self).invalidateVehCompare()
@@ -239,6 +241,10 @@ class Research(ResearchMeta):
 
     def invalidateVehLocks(self, locks):
         if self._data.invalidateLocks(locks):
+            self.redraw()
+
+    def invalidateBlueprints(self, blueprints):
+        if blueprints:
             self.redraw()
 
     def invalidateWalletStatus(self, status):
@@ -293,8 +299,8 @@ class Research(ResearchMeta):
             viewPy.setTradeInVehicle(self._data.getRootItem())
 
     def _blueprintExitEvent(self, vehicleCD):
-        return events.LoadViewEvent(VIEW_ALIAS.LOBBY_RESEARCH, ctx={BackButtonContextKeys.ROOT_CD: vehicleCD,
-         BackButtonContextKeys.EXIT: self._exitEvent or events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR)})
+        return events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_RESEARCH), ctx={BackButtonContextKeys.ROOT_CD: vehicleCD,
+         BackButtonContextKeys.EXIT: self._exitEvent or events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR))})
 
     def _resolveLoadCtx(self, ctx=None):
         exitEvent = ctx[BackButtonContextKeys.EXIT] if ctx is not None and BackButtonContextKeys.EXIT in ctx else None

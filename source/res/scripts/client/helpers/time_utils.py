@@ -97,6 +97,11 @@ def getServerTimeCurrentDay():
     return ts.tm_hour * ONE_HOUR + ts.tm_min * ONE_MINUTE + ts.tm_sec
 
 
+def getTimestampByStrDate(dateStr):
+    timeFormat = '%d.%m.%Y %H:%M'
+    return calendar.timegm(time.strptime(dateStr, timeFormat))
+
+
 def getServerRegionalWeekDay():
     return datetime.datetime.utcfromtimestamp(_g_instance.serverRegionalTime).isoweekday()
 

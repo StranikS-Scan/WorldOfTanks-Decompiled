@@ -192,7 +192,7 @@ class EpicVehicleStatsBlock(RegularVehicleStatsBlock):
         avatar = reusable.avatars.getAvatarInfo(result.player.dbID)
         extensionInfo = avatar.extensionInfo
         if extensionInfo is not None and 'playerRank' in extensionInfo:
-            self.playerRank = extensionInfo['playerRank']['rank']
+            self.playerRank = extensionInfo['playerRank']
         self.respawns = result.respawns
         return
 
@@ -287,7 +287,7 @@ class EpicVehicleStatValuesBlock(base.StatsBlock):
         if self._team == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER:
             self.teamSpecificStat = '{0}/{1}'.format(result.numCaptured, result.numDestroyed)
         else:
-            numDestructiblesDefended = reusable.common.extCommon.get('destructibleEntity', {}).get('numDefended', 0)
+            numDestructiblesDefended = reusable.common.numDefended
             self.teamSpecificStat = '{0}/{1}'.format(result.numDefended, numDestructiblesDefended)
         self.__rawDamageAssistedStun = result.damageAssistedStun
         self.__rawStunNum = result.stunNum

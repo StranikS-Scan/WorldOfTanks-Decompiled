@@ -1,17 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/events_dispatcher.py
 from debug_utils import LOG_ERROR
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.utils.functions import getViewName
 from messenger.ext import channel_num_gen
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 
 def showLobbyChannelWindow(clientID):
-    g_eventBus.handleEvent(events.LoadViewEvent(MESSENGER_VIEW_ALIAS.LOBBY_CHANNEL_WINDOW, ctx={'clientID': clientID}), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(MESSENGER_VIEW_ALIAS.LOBBY_CHANNEL_WINDOW), ctx={'clientID': clientID}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showLazyChannelWindow(clientID):
-    g_eventBus.handleEvent(events.LoadViewEvent(MESSENGER_VIEW_ALIAS.LAZY_CHANNEL_WINDOW, ctx={'clientID': clientID}), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(MESSENGER_VIEW_ALIAS.LAZY_CHANNEL_WINDOW), ctx={'clientID': clientID}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def notifyCarousel(clientID, notify=True):
@@ -20,7 +21,7 @@ def notifyCarousel(clientID, notify=True):
 
 
 def showConnectToSecureChannelWindow(channel):
-    g_eventBus.handleEvent(events.LoadViewEvent(MESSENGER_VIEW_ALIAS.CONNECT_TO_SECURE_CHANNEL_WINDOW, getViewName(MESSENGER_VIEW_ALIAS.CONNECT_TO_SECURE_CHANNEL_WINDOW, channel.getClientID()), {'channel': channel}), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(MESSENGER_VIEW_ALIAS.CONNECT_TO_SECURE_CHANNEL_WINDOW, getViewName(MESSENGER_VIEW_ALIAS.CONNECT_TO_SECURE_CHANNEL_WINDOW, channel.getClientID())), ctx={'channel': channel}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def rqActivateChannel(clientID, component):

@@ -9,7 +9,7 @@ from gui.Scaleform.flash_wrapper import FlashComponentWrapper
 from gui.Scaleform.framework.view_events_listener import ViewEventsListener
 from gui.Scaleform.framework.entities.abstract.ApplicationMeta import ApplicationMeta
 from gui.impl.pub.main_window import MainWindow
-from gui.shared.events import AppLifeCycleEvent, GameEvent, DirectLoadViewEvent
+from gui.shared.events import AppLifeCycleEvent, GameEvent, LoadViewEvent
 from gui.shared import EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -286,7 +286,7 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
         if self._containerMgr:
             self._containerMgr.load(loadParams, *args, **kwargs)
         else:
-            self.__viewEventsListener.addWaitingEvent(DirectLoadViewEvent(loadParams, *args, **kwargs))
+            self.__viewEventsListener.addWaitingEvent(LoadViewEvent(loadParams, *args, **kwargs))
 
     def attachCursor(self, flags=GUI_CTRL_MODE_FLAG.GUI_ENABLED):
         if self.__guiCtrlModeFlags == flags:
@@ -419,8 +419,8 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
     def getBackgroundAlpha(self):
         return self.movie.backgroundAlpha
 
-    def blurBackgroundViews(self, ownLayer, layers, blurAnimRepeatCount):
-        self.as_blurBackgroundViewsS(ownLayer, layers, blurAnimRepeatCount)
+    def blurBackgroundViews(self, ownLayer, blurAnimRepeatCount):
+        self.as_blurBackgroundViewsS(ownLayer, blurAnimRepeatCount)
 
     def unblurBackgroundViews(self):
         self.as_unblurBackgroundViewsS()

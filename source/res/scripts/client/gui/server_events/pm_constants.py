@@ -28,7 +28,6 @@ class SOUNDS(CONST_CONTAINER):
     ONE_AWARD_LIST_RECEIVED = 'pm_greeting_order_form'
     ONE_AWARD_LIST_RECEIVED_CONFIRM = 'pm_greeting_order_form_confirm'
     FOUR_AWARD_LISTS_RECEIVED = 'pm_conversion_order_form'
-    FOUR_AWARD_LISTS_RECEIVED_CONFIRM = 'pm_conversion_order_form_confirm'
     RTCP_MISSION_BRANCH = {PM_BRANCH.REGULAR: 'RTPC_ext_mission_zoom_green',
      PM_BRANCH.PERSONAL_MISSION_2: 'RTPC_ext_mission_zoom_blue'}
     BRANCH_DEFAULT = 0

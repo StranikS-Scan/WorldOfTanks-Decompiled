@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/items_manager.py
-from gui.Scaleform.framework import ViewTypes
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.framework.managers.containers import ExternalCriteria
 from gui.app_loader import sf_lobby
 from tutorial.logger import LOG_WARNING
@@ -30,7 +30,7 @@ class ItemsManager(object):
 
     def findTargetByCriteria(self, targetPath, valuePath, value):
         result = None
-        if targetPath == ViewTypes.TOP_WINDOW:
+        if targetPath == WindowLayer.TOP_WINDOW:
             result = self.__findDialog(valuePath, value)
         else:
             LOG_WARNING('Dialogs supported only')
@@ -38,7 +38,7 @@ class ItemsManager(object):
 
     def __findDialog(self, path, value):
         result = None
-        view = self.app.containerManager.getView(ViewTypes.TOP_WINDOW, criteria=AttributeCriteria(path, value))
+        view = self.app.containerManager.getView(WindowLayer.TOP_WINDOW, criteria=AttributeCriteria(path, value))
         if view is not None:
-            result = (ViewTypes.TOP_WINDOW, view.uniqueName)
+            result = (WindowLayer.TOP_WINDOW, view.uniqueName)
         return result

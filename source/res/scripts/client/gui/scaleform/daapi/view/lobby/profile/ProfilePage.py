@@ -5,6 +5,7 @@ from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.hof.hof_helpers import getHofTabCounter, isHofButtonNew, showDisabledDialog
 from gui.Scaleform.daapi.view.meta.ProfileMeta import ProfileMeta
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.PROFILE_CONSTANTS import PROFILE_CONSTANTS
 from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.shared import events, g_eventBus
@@ -45,7 +46,7 @@ class ProfilePage(LobbySubView, ProfileMeta):
             self.__updateTabCounters()
 
     def onCloseProfile(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _populate(self):
         super(ProfilePage, self)._populate()
@@ -133,7 +134,7 @@ class ProfilePage(LobbySubView, ProfileMeta):
             self.__tabNavigator.as_setBtnTabCountersS([])
 
     def __loadHofUrl(self, url):
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BROWSER_VIEW, ctx={'url': url,
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BROWSER_VIEW), ctx={'url': url,
          'returnAlias': VIEW_ALIAS.LOBBY_PROFILE,
          'allowRightClick': True,
          'webHandlers': createHofWebHandlers(),

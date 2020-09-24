@@ -83,10 +83,10 @@ class ObjectivesReachedVO(base.StatsItem):
     __slots__ = ()
 
     def _convert(self, record, reusable):
-        if record and 'extCommon' in record:
+        if record:
             yes = backport.text(R.strings.battle_results.details.time.val_yes())
             no = backport.text(R.strings.battle_results.details.time.val_no())
-            reached = yes if record['extCommon']['destructibleEntity']['numStarted'] > 0 else no
+            reached = yes if record['commonNumStarted'] > 0 else no
         else:
             reached = ''
         return style.makeTimeStatsVO(self._field, reached)
@@ -96,8 +96,8 @@ class ObjectivesDestroyedVO(base.StatsItem):
     __slots__ = ()
 
     def _convert(self, record, reusable):
-        if record and 'extCommon' in record:
-            destroyed = str(record['extCommon']['destructibleEntity']['numDestroyed'])
+        if record:
+            destroyed = str(record['commonNumDestroyed'])
         else:
             destroyed = '0'
         return style.makeTimeStatsVO(self._field, destroyed)
@@ -107,8 +107,8 @@ class BasesCapturedVO(base.StatsItem):
     __slots__ = ()
 
     def _convert(self, record, reusable):
-        if record and 'extCommon' in record:
-            captured = str(record['extCommon']['sector']['numCaptured'])
+        if record:
+            captured = str(record['commonNumCaptured'])
         else:
             captured = '0'
         return style.makeTimeStatsVO(self._field, captured)

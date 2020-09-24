@@ -174,7 +174,7 @@ class CustomizationCartView(ViewImpl):
             if self.__isProlongStyleRent:
                 self.__c11nView.onCloseWindow(force=True)
             else:
-                if self.__ctx.modeId == CustomizationModes.EDITABLE_STYLE:
+                if self.__ctx.modeId == CustomizationModes.EDITABLE_STYLE and g_currentVehicle.item is not None:
                     self.__ctx.changeMode(CustomizationModes.STYLED)
                 self.__c11nView.changeVisible(True)
             self.__c11nView = None

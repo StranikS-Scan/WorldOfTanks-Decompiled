@@ -1,11 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/block.py
 from typing import List, Any
-
-class ASPECT(object):
-    SERVER = 'SERVER'
-    CLIENT = 'CLIENT'
-
+from misc import ASPECT
 
 class SLOT_TYPE(object):
     BOOL = 'Bool'
@@ -26,10 +22,34 @@ class SLOT_TYPE(object):
     VECTOR4_ARRAY = 'Vector4Array'
     MATRIX4_ARRAY = 'Matrix4Array'
     ANGLE_ARRAY = 'AngleArray'
+    ARENA = 'Arena'
+    ARENA_ARRAY = 'ArenaArray'
+    VEHICLE = 'Vehicle'
+    VEHICLE_ARRAY = 'VehicleArray'
+    PATROL_NODE = 'PatrolNode'
+    PATROL_NODE_ARRAY = 'PatrolNodeArray'
+    PVE_SPAWN_POINT = 'PVESpawnPoint'
+    PVE_SPAWN_POINT_ARRAY = 'PVESpawnPointArray'
+    SPAWN_POINT = 'SpawnPoint'
+    SPAWN_POINT_ARRAY = 'SpawnPointArray'
+    AI_ZONE_CENTER = 'AiZoneCenter'
+    AI_ZONE_CENTER_ARRAY = 'AiZoneCenterArray'
+    MARKER_POINT = 'MarkerPoint'
+    MARKER_POINT_ARRAY = 'MarkerPointArray'
+    AREA_TRIGGER = 'AreaTrigger'
+    AREA_TRIGGER_ARRAY = 'AreaTriggerArray'
+    VEHICLE_TRIGGER_AREA = 'VehicleTriggerArea'
+    VEHICLE_TRIGGER_AREA_ARRAY = 'VehicleTriggerAreaArray'
+    CONTROL_POINT = 'ControlPoint'
+    CONTROL_POINT_ARRAY = 'ControlPointArray'
+    E_MODULE_STATE = 'EModuleState'
+    E_VEHICLE_DEVICE = 'EVehicleDevice'
+    E_VEHICLE_TANKMAN = 'EVehicleTankman'
 
 
 class EDITOR_TYPE(object):
     STR_KEY_SELECTOR = 1
+    ENUM_SELECTOR = 2
 
 
 def buildStrKeysValue(*args):
@@ -49,6 +69,10 @@ class DataInputSlot(object):
 
     @staticmethod
     def getValue():
+        pass
+
+    @staticmethod
+    def setEditorData(editorData):
         pass
 
 

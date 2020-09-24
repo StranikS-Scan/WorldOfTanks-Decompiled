@@ -46,6 +46,7 @@ class ConsistentMatrices(object):
             self.notifyVehicleChanged(avatar)
         elif vehicle.id == avatar.playerVehicleID:
             self.__linkOwnVehicle(vehicle)
+            self.__setTarget(vehicle.matrix, False)
 
     def notifyPreBind(self, avatar):
         vehicle = avatar.getVehicleAttached()

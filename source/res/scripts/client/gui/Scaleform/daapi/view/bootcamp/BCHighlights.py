@@ -63,12 +63,6 @@ class BCHighlights(BCHighlightsMeta):
         self.__activeHints.discard(componentID)
         return
 
-    def hideAllHints(self):
-        LOG_DEBUG_DEV_BOOTCAMP('BCHighlights_hideAllHints')
-        hintsToHide = list(self.__activeHints)
-        for componentID in hintsToHide:
-            self.hideHint(componentID)
-
     def _populate(self):
         super(BCHighlights, self)._populate()
         self.setDescriptors(self.__descriptors)

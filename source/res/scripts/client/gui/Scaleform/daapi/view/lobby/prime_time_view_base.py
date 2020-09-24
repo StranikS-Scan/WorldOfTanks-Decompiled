@@ -8,6 +8,7 @@ from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.prime_time_servers_data_provider import PrimeTimesServersDataProvider
 from gui.Scaleform.daapi.view.meta.PrimeTimeMeta import PrimeTimeMeta
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control.entities.base.ctx import PrbAction
@@ -219,7 +220,7 @@ class PrimeTimeViewBase(LobbySubView, PrimeTimeMeta, Notifiable, IPreQueueListen
         return PrimeTimesServersDataProvider(primeTimesForDay=primeTimesForDay)
 
     def __close(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __buildServersList(self):
         hostsList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming(), withShortName=True)

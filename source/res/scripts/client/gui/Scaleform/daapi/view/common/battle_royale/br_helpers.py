@@ -9,6 +9,7 @@ from items import vehicles
 from helpers.i18n import makeString
 from gui.Scaleform.locale.READABLE_KEY_NAMES import READABLE_KEY_NAMES
 from skeletons.gui.game_control import IBattleRoyaleController
+from skeletons.gui.shared.hangar_spaces_switcher import IHangarSpacesSwitcher
 _logger = logging.getLogger(__name__)
 
 def getEquipmentById(equipmentId):
@@ -94,3 +95,8 @@ def canVehicleSpawnBot(vehicleName, brCtrl=None):
         spawnedBotID = vehicles.g_cache.equipmentIDs()['spawn_kamikaze']
         return spawnedBotID in equipmentIds
     return False
+
+
+@dependency.replace_none_kwargs(hangarSwitcher=IHangarSpacesSwitcher)
+def currentHangarIsSteelHunter(hangarSwitcher=None):
+    return hangarSwitcher.currentItem == hangarSwitcher.itemsToSwitch.BATTLE_ROYALE

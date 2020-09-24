@@ -4,6 +4,7 @@ import constants
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import parseEventID
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.marathon.marathon_event_controller import DEFAULT_MARATHON_PREFIX
@@ -44,11 +45,11 @@ _EVENTS_REWARD_WINDOW = {recruit_helper.RecruitSourceID.TWITCH_0: TwitchRewardWi
 _PIGGY_BANK_EVENT_NAME = 'piggyBank'
 
 def showPQSeasonAwardsWindow(questsType):
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.QUESTS_SEASON_AWARDS_WINDOW, ctx={'questsType': questsType}), EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.QUESTS_SEASON_AWARDS_WINDOW), ctx={'questsType': questsType}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showMissions(tab=None, missionID=None, groupID=None, marathonPrefix=None, anchor=None, showDetails=True, subTab=None):
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MISSIONS, ctx={'tab': tab,
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MISSIONS), ctx={'tab': tab,
      'subTab': subTab,
      'eventID': missionID,
      'groupID': groupID,
@@ -87,13 +88,13 @@ def canOpenPMPage(branchID=None, operationID=None, missionID=None):
 def showPersonalMission(missionID=None):
     if not canOpenPMPage(missionID=missionID):
         return
-    g_eventBus.handleEvent(events.LoadViewEvent(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS, ctx={'eventID': missionID}), EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS), ctx={'eventID': missionID}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showPersonalMissionsChain(operationID, chainID):
     if not canOpenPMPage(operationID=operationID):
         return
-    g_eventBus.handleEvent(events.LoadViewEvent(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS, ctx={'operationID': operationID,
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS), ctx={'operationID': operationID,
      'chainID': chainID}), EVENT_BUS_SCOPE.LOBBY)
 
 
@@ -101,12 +102,12 @@ def showPersonalMissionOperationsPage(branchID, operationID):
     if not canOpenPMPage(branchID, operationID):
         showPersonalMissionsOperationsMap()
         return
-    g_eventBus.handleEvent(events.LoadViewEvent(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS, ctx={'branch': branchID,
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS), ctx={'branch': branchID,
      'operationID': operationID}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showPersonalMissionsOperationsMap():
-    g_eventBus.handleEvent(events.LoadViewEvent(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS), EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS)), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showMissionsGrouped(missionID=None, groupID=None, anchor=None):
@@ -142,7 +143,7 @@ def showMissionsBattlePassCommonProgression(subTab=None):
 
 
 def showMissionDetails(missionID, groupID):
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MISSION_DETAILS, ctx={'eventID': missionID,
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MISSION_DETAILS), ctx={'eventID': missionID,
      'groupID': groupID}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
@@ -151,15 +152,15 @@ def hideMissionDetails():
 
 
 def showPersonalMissionDetails(missionID):
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_PERSONAL_MISSION_DETAILS, ctx={'eventID': missionID}), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PERSONAL_MISSION_DETAILS), ctx={'eventID': missionID}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showPersonalMissionAwards():
-    g_eventBus.handleEvent(events.LoadViewEvent(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS)), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showPersonalMissionStartPage():
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS)), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def hidePersonalMissionDetails():
@@ -167,11 +168,11 @@ def hidePersonalMissionDetails():
 
 
 def showPersonalMissionBrowserView(ctx):
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.PERSONAL_MISSIONS_BROWSER_VIEW, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.PERSONAL_MISSIONS_BROWSER_VIEW), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showProgressiveItemsBrowserView(ctx):
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.PROGRESSIVE_ITEMS_BROWSER_VIEW, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.PROGRESSIVE_ITEMS_BROWSER_VIEW), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showMission(eventID, eventType=None):
@@ -225,7 +226,7 @@ def showMotiveAward(quest):
 
 
 def showTankwomanAward(questID, tankmanData):
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.QUESTS_RECRUIT_WINDOW, ctx={'questID': questID,
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.QUESTS_RECRUIT_WINDOW), ctx={'questID': questID,
      'isPremium': tankmanData.isPremium,
      'fnGroup': tankmanData.fnGroupID,
      'lnGroup': tankmanData.lnGroupID,
@@ -242,7 +243,7 @@ def showRecruitWindow(recruitID, eventsCache=None):
         if needToGetTankman and bonus.tankman is not None:
             showTankwomanAward(quest.getID(), first(bonus.tankman.getTankmenData()))
     else:
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.TOKEN_RECRUIT_WINDOW, ctx={'tokenName': recruitID,
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.TOKEN_RECRUIT_WINDOW), ctx={'tokenName': recruitID,
          'tokenData': recruitData}), EVENT_BUS_SCOPE.LOBBY)
     return
 
@@ -290,7 +291,7 @@ def showOperationUnlockedAward(quest, ctx):
 
 def showPersonalMissionsOperationAwardsScreen(ctx):
     alias = PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATION_AWARDS_SCREEN_ALIAS
-    g_eventBus.handleEvent(events.LoadViewEvent(alias, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def updatePersonalMissionAward(context):
@@ -299,9 +300,9 @@ def updatePersonalMissionAward(context):
 
 def showPersonalMissionFirstEntryAwardView(ctx):
     alias = PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_AWARD_VIEW_ALIAS
-    g_eventBus.handleEvent(events.LoadViewEvent(alias, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showActions(tab=None, anchor=None):
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_STORE, ctx={'tab': tab,
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_STORE), ctx={'tab': tab,
      'anchor': anchor}), scope=EVENT_BUS_SCOPE.LOBBY)

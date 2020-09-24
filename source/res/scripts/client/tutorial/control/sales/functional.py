@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/sales/functional.py
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared import g_eventBus, events
 from tutorial.control.functional import FunctionalEffect
 
@@ -12,7 +13,7 @@ class LoadViewEffect(FunctionalEffect):
     def triggerEffect(self):
         viewData = self.getTarget()
         if viewData is not None:
-            g_eventBus.handleEvent(events.LoadViewEvent(viewData.getAlias(), ctx=viewData.getCtx()), scope=viewData.getScope())
+            g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(viewData.getAlias()), ctx=viewData.getCtx()), scope=viewData.getScope())
             return True
         else:
             return False

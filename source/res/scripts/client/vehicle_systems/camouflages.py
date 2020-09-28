@@ -63,9 +63,9 @@ ProjectionDecalGenericParams.__new__.__defaults__ = (Math.Vector4(0.0),
  False,
  False,
  True)
-ModelAnimatorParams = namedtuple('ModelAnimatorParams', ('transform', 'attachNode', 'animatorName'))
+ModelAnimatorParams = namedtuple('ModelAnimatorParams', ('transform', 'attachNode', 'animatorName', 'animatorLogic'))
 ModelAnimatorParams.__new__.__defaults__ = (math_utils.createIdentityMatrix(), '', '')
-LoadedModelAnimator = namedtuple('LoadedModelAnimator', ('animator', 'node', 'attachmentPartNode'))
+LoadedModelAnimator = namedtuple('LoadedModelAnimator', ('animator', 'node', 'attachmentPartNode', 'animatorLogic'))
 AttachmentParams = namedtuple('AttachmentParams', ('transform', 'attachNode', 'modelName', 'sequenceId', 'attachmentLogic', 'initialVisibility', 'partNodeAlias'))
 AttachmentParams.__new__.__defaults__ = (math_utils.createIdentityMatrix(),
  '',
@@ -410,9 +410,12 @@ def getModelAnimators(outfit, vehicleDescr, spaceId, loadedAnimators, compoundMo
             continue
         fakeModel = newFakeModel()
         node = compoundModel.node(param.attachNode)
+        if node is None:
+            _logger.error('Failed to attach sequence: "%s", node "%s" not found', param.animatorName, param.attachNode)
+            continue
         node.attach(fakeModel, param.transform)
         animWrapper = AnimationSequence.ModelWrapperContainer(fakeModel, spaceId)
-        animator = __prepareAnimator(loadedAnimators, param.animatorName, animWrapper, node)
+        animator = __prepareAnimator(loadedAnimators, param.animatorName, animWrapper, node, animatorLogic=param.animatorLogic)
         if animator is None:
             continue
         animators.append(animator)
@@ -420,7 +423,7 @@ def getModelAnimators(outfit, vehicleDescr, spaceId, loadedAnimators, compoundMo
     return animators
 
 
-def __prepareAnimator(loadedAnimators, animatorName, wrapperToBind, node, attachmentPartNode=None):
+def __prepareAnimator(loadedAnimators, animatorName, wrapperToBind, node, attachmentPartNode=None, animatorLogic=None):
     if animatorName in loadedAnimators.failedIDs:
         return None
     else:
@@ -428,7 +431,7 @@ def __prepareAnimator(loadedAnimators, animatorName, wrapperToBind, node, attach
         animator.bindTo(wrapperToBind)
         if hasattr(animator, 'setBoolParam'):
             animator.setBoolParam('isDeferred', _isDeferredRenderer)
-        return LoadedModelAnimator(animator, node, attachmentPartNode)
+        return LoadedModelAnimator(animator, node, attachmentPartNode, animatorLogic)
 
 
 def __getParams(outfit, vehicleDescr, slotTypeName, slotType, paramsConverter):
@@ -461,7 +464,7 @@ def __getModelAnimators(outfit, vehicleDescr):
 
     def getModelAnimatorParams(slotParams, slotData, _):
         item = getItemByCompactDescr(slotData.intCD)
-        return ModelAnimatorParams(transform=__createTransform(slotParams, slotData), attachNode=slotParams.attachNode, animatorName=item.sequenceName)
+        return ModelAnimatorParams(transform=__createTransform(slotParams, slotData), attachNode=slotParams.attachNode, animatorName=item.sequenceName, animatorLogic=item.sequenceLogic)
 
     return __getParams(outfit, vehicleDescr, 'sequence', GUI_ITEM_TYPE.SEQUENCE, getModelAnimatorParams)
 

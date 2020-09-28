@@ -1490,7 +1490,8 @@ class VehicleType(object):
      'hasTurboshaftEngine',
      'hasHydraulicChassis',
      'supplySlots',
-     'optDevsOverrides')
+     'optDevsOverrides',
+     'armorMaxHealth')
 
     def __init__(self, nationID, basicInfo, xmlPath, vehMode=VEHICLE_MODE.DEFAULT):
         self.name = basicInfo.name
@@ -1560,6 +1561,7 @@ class VehicleType(object):
             self.extrasDict = copyMethod(commonConfig['extrasDict'])
             self.devices = copyMethod(commonConfig['_devices'])
             self.tankmen = _selectCrewExtras(self.crewRoles, self.extrasDict)
+            self.armorMaxHealth = _xml.readIntOrNone(xmlCtx, section, 'armorMaxHealth')
         if IS_CLIENT or IS_WEB:
             self.i18nInfo = basicInfo.i18n
         if IS_CLIENT or IS_EDITOR:

@@ -684,6 +684,7 @@ class SETTINGS(object):
     COLORSETTINGS_VIEW_BEFORE = '#settings:colorSettings/view/before'
     COLORSETTINGS_VIEW_AFTER = '#settings:colorSettings/view/after'
     UNEQUIP_BUTTON = '#settings:unequip_button'
+    EVENTSETTINGDISABLED = '#settings:eventSettingDisabled'
     SOUNDS_ACOUSTICTYPE_ENUM = (SOUNDS_ACOUSTICTYPE_ACOUSTICS20,
      SOUNDS_ACOUSTICTYPE_ACOUSTICS51,
      SOUNDS_ACOUSTICTYPE_ACOUSTICS71,

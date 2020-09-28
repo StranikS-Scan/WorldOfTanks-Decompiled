@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/backport/backport_context_menu.py
 import logging
 from collections import namedtuple
-from frameworks.wulf import ViewSettings
+from frameworks.wulf import Window, ViewSettings, WindowSettings, WindowFlags
 from gui.impl.gen import R
 from gui.impl.gen.view_models.windows.context_menu_content_model import ContextMenuContentModel
 from gui.impl.pub.context_menu_window import ContextMenuContent
@@ -51,3 +51,14 @@ class BackportContextMenuContent(ContextMenuContent):
 
     def __contextMenuHideHandler(self):
         self.destroyWindow()
+
+
+class BackportContextMenuWindow(Window):
+    __slots__ = ()
+
+    def __init__(self, contextMenuData, parent):
+        settings = WindowSettings()
+        settings.flags = WindowFlags.CONTEXT_MENU
+        settings.content = BackportContextMenuContent(contextMenuData)
+        settings.parent = parent
+        super(BackportContextMenuWindow, self).__init__(settings)

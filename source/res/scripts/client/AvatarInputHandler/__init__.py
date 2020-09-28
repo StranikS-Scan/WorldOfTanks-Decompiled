@@ -570,7 +570,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             elif vehicle is not None and isReplayPlaying:
                 vehicleID = vehicle.id
             self.onCameraChanged(eMode, vehicleID)
-            if not isReplayPlaying and not vehicle.isUpgrading:
+            if not isReplayPlaying and vehicle is not None and not vehicle.isUpgrading:
                 self.__curCtrl.handleMouseEvent(0.0, 0.0, 0.0)
             return
 

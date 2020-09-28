@@ -19,6 +19,11 @@ _LootModel = namedtuple('_LootModel', ('name', 'border'))
 _Loot = namedtuple('_Loot', ('model', 'effect', 'pickupEffect'))
 _MinesEffects = namedtuple('_MinesEffects', ('plantEffect', 'idleEffect', 'destroyEffect'))
 _BerserkerEffects = namedtuple('_BerserkerEffects', ('turretEffect', 'hullEffect', 'transformPath'))
+_WtEnergyShield = namedtuple('_WtEnergyShield', ('bspModels', 'hitEffect', 'healthPercentage'))
+_WtESBspModels = namedtuple('_WtEnergyShieldPart', ('turret', 'hull'))
+_WtImpulseSettings = namedtuple('_WtImpulseSettings', ('onStart', 'onEnd'))
+_WtImpulsePart = namedtuple('_WtImpulsePart', ('stunEffect', 'damageEffect'))
+_WtEscapeEffect = namedtuple('_WtEscapeEffect', ('turret', 'hull'))
 MIN_OVER_TERRAIN_HEIGHT = 0
 MIN_UPDATE_INTERVAL = 0
 _TerrainCircleSettings = namedtuple('_TerrainCircleSettings', ('modelPath', 'color', 'enableAccurateCollision', 'maxUpdateInterval', 'overTerrainHeight'))
@@ -47,10 +52,12 @@ def _createAirDrop(section, prerequisites):
     return airDrop
 
 
-def _createLoots(dataSection, typeSection, prerequisites):
+def _createLoots(dataSection, typeSection, prerequisites, allowedLoot):
     loots = {}
     for lootType in typeSection.items():
         typeName = lootType[1]['name'].asString.strip()
+        if typeName not in allowedLoot:
+            continue
         typeID = lootType[1]['id'].asInt
         loot = dataSection[typeName]
         model = loot['model']
@@ -85,6 +92,40 @@ def _parseEffectSubsection(dataSection, sectionKey):
             effPathPropName = 'path' if isRendererPipelineDeferred() else 'path_fwd'
             return _createScenarioEffect(effectSection, effPathPropName)
     return
+
+
+def _readEffectDescr(section):
+    if section is not None:
+        path = section.readString('path')
+        pathFwd = section.readString('path_fwd')
+        return _LootEffect(path, pathFwd)
+    else:
+        return _LootEffect('', '')
+
+
+def _readEnergyShieldBspModels(section):
+    if section is not None:
+        turretBspModel = section.readString('turret')
+        hullBspModel = section.readString('hull')
+        return _WtESBspModels(turretBspModel, hullBspModel)
+    else:
+        return _WtESBspModels(str(), str())
+
+
+def _readEnergyShieldDescr(section):
+    return _WtEnergyShield(_readEnergyShieldBspModels(section['bspModels']), _readEffectDescr(section['hitEffect']), section.readFloat('healthPercentage', 0.5)) if section is not None else _WtEnergyShield(_readEnergyShieldBspModels(None), None, 0.5)
+
+
+def _readWtImpulsePart(section):
+    return _WtImpulsePart(_readEffectDescr(section['stunEffect']), _readEffectDescr(section['damageEffect'])) if section is not None else _WtImpulsePart(None, None)
+
+
+def _readWtImpulseDescr(section):
+    return _WtImpulseSettings(_readWtImpulsePart(section['onStart']), _readWtImpulsePart(section['onEnd'])) if section is not None else None
+
+
+def _readWtEscapeDescr(section):
+    return _WtEscapeEffect(_readEffectDescr(section['turret']), _readEffectDescr(section['hull'])) if section is not None else None
 
 
 class _SimpleEffect(object):
@@ -204,6 +245,7 @@ class _CommonForBattleRoyaleAndEpicBattleDynObjects(DynObjectsBase):
 
 
 class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
+    _ALLOWED_LOOT = ('lootBase', 'lootImproved', 'lootAir', 'lootCorpse')
 
     def __init__(self):
         super(_BattleRoyaleDynObjects, self).__init__()
@@ -234,7 +276,7 @@ class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
             prerequisites = set()
             self.__dropPlane = _createDropPlane(dataSection['dropPlane'], prerequisites)
             self.__airDrop = _createAirDrop(dataSection['airDrop'], prerequisites)
-            self.__loots = _createLoots(dataSection, dataSection['lootTypes'], prerequisites)
+            self.__loots = _createLoots(dataSection, dataSection['lootTypes'], prerequisites, self._ALLOWED_LOOT)
             BigWorld.loadResourceListBG(list(prerequisites), makeCallbackWeak(self.__onResourcesLoaded))
             super(_BattleRoyaleDynObjects, self).init(dataSection)
 
@@ -291,9 +333,52 @@ class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
         self.__resourcesCache = resourceRefs
 
 
+class _WtDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
+    _ALLOWED_LOOT = ('lootGroupdrop',)
+    botGroupAppearEffect = property(lambda self: self.__botGroupAppearEffect)
+    energyShieldEffect = property(lambda self: self.__energyShieldEffect)
+    impulseEffect = property(lambda self: self.__impulseEffect)
+    escapeEffect = property(lambda self: self.__escapeEffect)
+
+    def __init__(self):
+        super(_WtDynObjects, self).__init__()
+        self.__loots = {}
+        self.__energyShieldEffect = None
+        self.__botGroupAppearEffect = None
+        self.__impulseEffect = None
+        self.__escapeEffect = None
+        self.__resourcesCache = None
+        return
+
+    def init(self, dataSection):
+        if not self._initialized:
+            prerequisites = set()
+            self.__loots = _createLoots(dataSection, dataSection['lootTypes'], prerequisites, self._ALLOWED_LOOT)
+            self.__energyShieldEffect = _readEnergyShieldDescr(dataSection['wtEnergyShield'])
+            self.__botGroupAppearEffect = _readEffectDescr(dataSection['botGroupAppear'])
+            self.__impulseEffect = _readWtImpulseDescr(dataSection['ImpulseEffect'])
+            self.__escapeEffect = _readWtEscapeDescr(dataSection['EscapeEffect'])
+            BigWorld.loadResourceListBG(list(prerequisites), makeCallbackWeak(self.__onResourcesLoaded))
+            super(_WtDynObjects, self).init(dataSection)
+
+    def getLoots(self):
+        return self.__loots
+
+    def clear(self):
+        pass
+
+    def destroy(self):
+        self.__resourcesCache = None
+        return
+
+    def __onResourcesLoaded(self, resourceRefs):
+        self.__resourcesCache = resourceRefs
+
+
 _CONF_STORAGES = {ARENA_GUI_TYPE.BATTLE_ROYALE: _BattleRoyaleDynObjects,
  ARENA_GUI_TYPE.EPIC_BATTLE: _CommonForBattleRoyaleAndEpicBattleDynObjects,
- ARENA_GUI_TYPE.EPIC_TRAINING: _CommonForBattleRoyaleAndEpicBattleDynObjects}
+ ARENA_GUI_TYPE.EPIC_TRAINING: _CommonForBattleRoyaleAndEpicBattleDynObjects,
+ ARENA_GUI_TYPE.EVENT_BATTLES: _WtDynObjects}
 
 class BattleDynamicObjectsCache(IBattleDynamicObjectsCache):
 

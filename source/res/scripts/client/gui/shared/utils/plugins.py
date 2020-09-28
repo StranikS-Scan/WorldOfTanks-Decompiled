@@ -9,6 +9,7 @@ class IPlugin(object):
     __slots__ = ('_parentObj',)
 
     def __init__(self, parentObj):
+        super(IPlugin, self).__init__()
         self._parentObj = parentObj
 
     def init(self, *args):

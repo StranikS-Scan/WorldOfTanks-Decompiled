@@ -32,6 +32,9 @@ class EpicDeploymentMapComponent(EpicDeploymentMapMeta):
          maxSize[0],
          minSize[1])
 
+    def getRangeScale(self):
+        pass
+
     def setMinimapCenterEntry(self, entryID):
         pass
 
@@ -90,12 +93,10 @@ class EpicDeploymentMapComponent(EpicDeploymentMapMeta):
 class DeploymentSectorBaseEntriesPlugin(SectorBaseEntriesPlugin):
 
     def __init__(self, parentObj):
-        super(DeploymentSectorBaseEntriesPlugin, self).__init__(parentObj)
-        self._symbol = _S_NAME.EPIC_DEPLOY_SECTOR_BASE
+        super(DeploymentSectorBaseEntriesPlugin, self).__init__(parentObj, _S_NAME.EPIC_DEPLOY_SECTOR_BASE_ALLY, _S_NAME.EPIC_DEPLOY_SECTOR_BASE_ENEMY)
 
 
 class DeploymentHeadquartersStatusEntriesPlugin(HeadquartersStatusEntriesPlugin):
 
     def __init__(self, parentObj):
-        super(DeploymentHeadquartersStatusEntriesPlugin, self).__init__(parentObj)
-        self._symbol = _S_NAME.EPIC_DEPLOY_HQ
+        super(DeploymentHeadquartersStatusEntriesPlugin, self).__init__(parentObj, _S_NAME.EPIC_DEPLOY_HQ_ALLY, _S_NAME.EPIC_DEPLOY_HQ_ENEMY)

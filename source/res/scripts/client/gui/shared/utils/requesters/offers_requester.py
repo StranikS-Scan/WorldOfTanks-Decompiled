@@ -8,7 +8,7 @@ from skeletons.gui.shared.utils.requesters import IOffersRequester
 class OffersRequester(AbstractSyncDataRequester, IOffersRequester):
 
     def getReceivedGifts(self, offerID):
-        return self.__getOffer(offerID).get('gifts', set())
+        return self.__getOffer(offerID).get('gifts', dict())
 
     def isBannerSeen(self, offerID):
         return self.__getOffer(offerID).get('bannerSeen', False)

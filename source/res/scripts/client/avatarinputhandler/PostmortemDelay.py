@@ -141,7 +141,7 @@ class PostmortemDelay(object):
         self.__cbIDWait = None
         if self.__killerVehicleID is None:
             self.__killerVehicleID = BigWorld.player().inputHandler.getKillerVehicleID()
-        if not self.__enableKillerVision or not self.__killerVehicleID or self.__killerVehicleID and not BigWorld.entity(self.__killerVehicleID):
+        if not self.__enableKillerVision or not self.__killerVehicleID or self.__killerVehicleID and not BigWorld.entity(self.__killerVehicleID) or not self.__isEnabledForEventVehicles(self.__killerVehicleID):
             self.__mouseInputEnabled = True
             self.__cbIDWait = BigWorld.callback(self.KILLER_VISION_TIME, self.stop)
             return
@@ -186,3 +186,14 @@ class PostmortemDelay(object):
             BigWorld.cancelCallback(self.__cbIDWait)
             self.__cbIDWait = None
         return
+
+    def __isEnabledForEventVehicles(self, killerVehicleID):
+        killer = BigWorld.entities[killerVehicleID]
+        tags = killer.typeDescriptor.type.tags
+        if 'event_battles' in tags:
+            if 'event_boss' in tags:
+                return True
+            if 'event_hunter' in tags:
+                return True
+            return False
+        return True

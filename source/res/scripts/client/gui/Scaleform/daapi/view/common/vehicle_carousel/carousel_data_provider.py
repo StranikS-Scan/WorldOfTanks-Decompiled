@@ -10,7 +10,7 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.impl import backport
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.time_formatters import RentLeftFormatter
-from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES, getVehicleStateIcon, getVehicleStateAddIcon, getBattlesLeft, getSmallIconPath, getIconPath
+from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES, getVehicleStateIcon, getVehicleStateAddIcon, getBattlesLeft, getSmallIconPath, getIconPath, VEHICLE_EVENT_TYPE, VEHICLE_TAGS
 from gui.shared.gui_items.dossier.achievements import isMarkOfMasteryAchieved
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
@@ -86,6 +86,8 @@ def getVehicleDataVO(vehicle):
     tankType = '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type
     current, maximum = vehicle.getCrystalsEarnedInfo()
     isCrystalsLimitReached = current == maximum
+    isEarnCrystals = vehicle.isEarnCrystals if not vehicle.isEvent else False
+    isWulfTooltip = VEHICLE_TAGS.EVENT in vehicle.tags
     return {'id': vehicle.invID,
      'intCD': vehicle.intCD,
      'infoText': largeStatus,
@@ -114,10 +116,13 @@ def getVehicleDataVO(vehicle):
      'isCritInfo': vStateLvl == Vehicle.VEHICLE_STATE_LEVEL.CRITICAL,
      'isRentPromotion': vehicle.isRentPromotion and not vehicle.isRented,
      'isNationChangeAvailable': vehicle.hasNationGroup,
-     'isEarnCrystals': vehicle.isEarnCrystals,
+     'isEarnCrystals': isEarnCrystals,
      'isCrystalsLimitReached': isCrystalsLimitReached,
      'isUseRightBtn': True,
-     'tooltip': TOOLTIPS_CONSTANTS.CAROUSEL_VEHICLE}
+     'tooltip': TOOLTIPS_CONSTANTS.WULF_CAROUSEL_VEHICLE if isWulfTooltip else TOOLTIPS_CONSTANTS.CAROUSEL_VEHICLE,
+     'isEventVehicle': vehicle.isEvent,
+     'isEventVehicleSpecial': vehicle.isEvent and vehicle.eventType == VEHICLE_EVENT_TYPE.EVENT_SPECIAL_BOSS,
+     'isWulfTooltip': isWulfTooltip}
 
 
 class CarouselDataProvider(SortableDAAPIDataProvider):

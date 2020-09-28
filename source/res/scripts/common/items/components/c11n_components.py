@@ -197,11 +197,12 @@ class PersonalNumberItem(BaseCustomizationItem):
 
 class SequenceItem(BaseCustomizationItem):
     itemType = CustomizationType.SEQUENCE
-    __slots__ = ('sequenceName',)
+    __slots__ = ('sequenceName', 'sequenceLogic')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
 
     def __init__(self, parentGroup=None):
         self.sequenceName = None
+        self.sequenceLogic = None
         super(SequenceItem, self).__init__(parentGroup)
         return
 

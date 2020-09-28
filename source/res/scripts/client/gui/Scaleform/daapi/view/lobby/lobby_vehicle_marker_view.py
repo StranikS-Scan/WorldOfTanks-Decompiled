@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/lobby_vehicle_marker_view.py
+import BigWorld
 import GUI
 import Math
+from HeroTank import HeroTank
 from gui.Scaleform.daapi.view.meta.LobbyVehicleMarkerViewMeta import LobbyVehicleMarkerViewMeta
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared.gui_items.Vehicle import getVehicleClassTag
@@ -63,7 +65,8 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
 
     def __onHeroTankLoaded(self, event):
         vehicle = event.ctx['entity']
-        self.__beginCreateMarker(vehicle)
+        if not vehicle.isEvent:
+            self.__beginCreateMarker(vehicle)
 
     def __onHeroTankDestroy(self, *_):
         self.__destroyMarker()
@@ -75,7 +78,11 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
             state = event.ctx['state']
             if state == CameraMovementStates.FROM_OBJECT:
                 return
-            self.__vehicleMarker.markerSetActive(self.hangarSpace.space.vehicleEntityId == event.ctx['entityId'])
+            entity = BigWorld.entity(event.ctx.get('entityId'))
+            if isinstance(entity, HeroTank) and hasattr(entity, 'isEvent') and entity.isEvent:
+                self.__vehicleMarker.markerSetActive(True)
+            else:
+                self.__vehicleMarker.markerSetActive(self.hangarSpace.space.vehicleEntityId == event.ctx['entityId'])
             return
 
     def __onMarkerDisable(self, event):

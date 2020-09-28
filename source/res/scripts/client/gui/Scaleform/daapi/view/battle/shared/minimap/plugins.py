@@ -16,7 +16,7 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import MINIMAP_IBC_HINT_SECTION, HINTS_LEFT
 from account_helpers.settings_core import settings_constants
 from battleground.location_point_manager import g_locationPointManager
-from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES, ReplyState, MarkerType, LocationMarkerSubType, ONE_SHOT_COMMANDS_TO_REPLIES
+from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES, ReplyState, MarkerType, LocationMarkerSubType, ONE_SHOT_COMMANDS_TO_REPLIES, INVALID_VEHICLE_POSITION
 from constants import VISIBILITY, AOI
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_DEBUG
 from gui import GUI_SETTINGS, InputHandler
@@ -670,9 +670,9 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
 
     def getVehiclePosition(self, vehicleID):
         if vehicleID not in self._entries:
-            return Math.Vector3(-99999.9, -99999.9, -99999.9)
+            return INVALID_VEHICLE_POSITION
         entry = self._entries[vehicleID]
-        return Math.Vector3(-99999.9, -99999.9, -99999.9) if not entry.isInAoI() else Math.Matrix(entry.getMatrix()).translation
+        return INVALID_VEHICLE_POSITION if not entry.isInAoI() else Math.Matrix(entry.getMatrix()).translation
 
     def updatePositions(self, iterator):
         handled = set()
@@ -709,6 +709,32 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
     def _getPlayerVehicleID(self):
         return self.__playerVehicleID
 
+    def _setVehicleInfo(self, vehicleID, entry, vInfo, guiProps, isSpotted=False):
+        vehicleType = vInfo.vehicleType
+        classTag = vehicleType.classTag
+        name = vehicleType.shortNameWithPrefix
+        if classTag is not None:
+            entry.setVehicleInfo(not guiProps.isFriend, guiProps.name(), classTag, vInfo.isAlive())
+            animation = self._getSpottedAnimation(entry, isSpotted)
+            if animation:
+                self._playSpottedSound(entry)
+            self._invoke(entry.getID(), 'setVehicleInfo', vehicleID, classTag, name, guiProps.name(), animation)
+        return
+
+    def _getSpottedAnimation(self, entry, isSpotted):
+        if not self.__isObserver and isSpotted:
+            animation = entry.getSpottedAnimation(self._entries.itervalues())
+        else:
+            animation = ''
+        return animation
+
+    @staticmethod
+    def _playSpottedSound(entry):
+        nots = avatar_getter.getSoundNotifications()
+        if nots is not None:
+            nots.play('enemy_sighted_for_team', None, None, Math.Matrix(entry.getMatrix()).translation)
+        return
+
     def __addEntryToPool(self, vehicleID, location=VEHICLE_LOCATION.UNDEFINED, positions=None):
         if location != VEHICLE_LOCATION.UNDEFINED:
             matrix = matrix_factory.makeVehicleMPByLocation(vehicleID, location, positions or {})
@@ -721,18 +747,6 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         if model is not None:
             model.setLocation(location)
         return model
-
-    def _setVehicleInfo(self, vehicleID, entry, vInfo, guiProps, isSpotted=False):
-        vehicleType = vInfo.vehicleType
-        classTag = vehicleType.classTag
-        name = vehicleType.shortNameWithPrefix
-        if classTag is not None:
-            entry.setVehicleInfo(not guiProps.isFriend, guiProps.name(), classTag, vInfo.isAlive())
-            animation = self.__getSpottedAnimation(entry, isSpotted)
-            if animation:
-                self.__playSpottedSound(entry)
-            self._invoke(entry.getID(), 'setVehicleInfo', vehicleID, classTag, name, guiProps.name(), animation)
-        return
 
     def __setGUILabel(self, entry, guiLabel):
         if entry.setGUILabel(guiLabel):
@@ -784,9 +798,9 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             self.__setLocationAndMatrix(entry, location, matrix)
             self._setInAoI(entry, True)
             self.__setActive(entry, True)
-            animation = self.__getSpottedAnimation(entry, isSpotted)
+            animation = self._getSpottedAnimation(entry, isSpotted)
             if animation and self.__replayRegistrator.validateShowVehicle(vehicleID):
-                self.__playSpottedSound(entry)
+                self._playSpottedSound(entry)
                 self._invoke(entry.getID(), 'setAnimation', animation)
                 self.__replayRegistrator.registerShowVehicle(vehicleID)
             return
@@ -825,20 +839,6 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         for entry in self._entries.itervalues():
             if entry.wasSpotted() and entry.isAlive():
                 self.__setActive(entry, flag)
-
-    def __getSpottedAnimation(self, entry, isSpotted):
-        if not self.__isObserver and isSpotted:
-            animation = entry.getSpottedAnimation(self._entries.itervalues())
-        else:
-            animation = ''
-        return animation
-
-    @staticmethod
-    def __playSpottedSound(entry):
-        nots = avatar_getter.getSoundNotifications()
-        if nots is not None:
-            nots.play('enemy_sighted_for_team', None, None, Math.Matrix(entry.getMatrix()).translation)
-        return
 
     def __clearDestroyCallback(self, vehicleID):
         callbackID = self.__destroyCallbacksIDs.pop(vehicleID, None)
@@ -1162,7 +1162,7 @@ class MinimapPingPlugin(SimpleMinimapPingPlugin):
                 commandKey = BATTLE_CHAT_COMMAND_NAMES.ATTACK_BASE if team != avatar_getter.getPlayerTeam() else BATTLE_CHAT_COMMAND_NAMES.DEFEND_BASE
                 commands.sendCommandToBase(uniqueId, commandKey, baseName)
                 return
-            self.__processReplyCommand(replyState, commands, uniqueId, commandKey)
+            self._processReplyCommand(replyState, commands, uniqueId, commandKey)
             return
 
     def _replyPing3DMarker(self, commands, uniqueId):
@@ -1174,7 +1174,7 @@ class MinimapPingPlugin(SimpleMinimapPingPlugin):
             if commandKey is None:
                 _logger.error('commandKey is None - this might be incorrect and should not happen!')
                 return
-            self.__processReplyCommand(replyState, commands, uniqueId, commandKey)
+            self._processReplyCommand(replyState, commands, uniqueId, commandKey)
             return
 
     def _getNearestLocationIDForPosition(self, position, pRange):
@@ -1214,9 +1214,10 @@ class MinimapPingPlugin(SimpleMinimapPingPlugin):
     def __haveHintsLeft(self, value):
         return value[HINTS_LEFT] > 0
 
-    def __processReplyCommand(self, replyState, commands, uniqueId, commandKey):
+    def _processReplyCommand(self, replyState, commands, uniqueId, commandKey):
         if replyState == ReplyState.CAN_CANCEL_REPLY:
             commands.sendCancelReplyChatCommand(uniqueId, commandKey)
+            return
         if replyState == ReplyState.CAN_CONFIRM:
             commands.sendCommand(ONE_SHOT_COMMANDS_TO_REPLIES[commandKey])
             return

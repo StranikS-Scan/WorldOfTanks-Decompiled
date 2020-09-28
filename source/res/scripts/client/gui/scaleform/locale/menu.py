@@ -297,6 +297,7 @@ class MENU(object):
     TANKCAROUSEL_STATSSTATUS_UNAVAILABLE = '#menu:tankCarousel/statsStatus/unavailable'
     TANKCAROUSEL_VEHICLESTATES_UNSUITABLETOUNIT = '#menu:tankCarousel/vehicleStates/unsuitableToUnit'
     TANKCAROUSEL_VEHICLESTATES_DISABLED = '#menu:tankCarousel/vehicleStates/disabled'
+    TANKCAROUSEL_VEHICLESTATES_TICKETSSHORTAGE = '#menu:tankCarousel/vehicleStates/ticketsShortage'
     TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED = '#menu:tankCarousel/vehicleStates/xpMultReceived'
     TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED_NOT = '#menu:tankCarousel/vehicleStates/xpMultReceived/not'
     STORE_VEHICLESTATES_BATTLE = '#menu:store/vehicleStates/battle'
@@ -369,6 +370,7 @@ class MENU(object):
     CURRENTVEHICLESTATUS_DEALISOVER = '#menu:currentVehicleStatus/dealIsOver'
     CURRENTVEHICLESTATUS_UNSUITABLETOUNIT = '#menu:currentVehicleStatus/unsuitableToUnit'
     CURRENTVEHICLESTATUS_ROTATIONGROUPUNLOCKED = '#menu:currentVehicleStatus/rotationGroupUnlocked'
+    CURRENTVEHICLESTATUS_TICKETSSHORTAGE = '#menu:currentVehicleStatus/ticketsShortage'
     CURRENTVEHICLESTATUS_ROTATIONGROUPLOCKED = '#menu:currentVehicleStatus/rotationGroupLocked'
     REPAIR_REPAIRSTATUS = '#menu:repair/repairstatus'
     REPAIR_CURIENCY = '#menu:repair/curiency'
@@ -755,6 +757,8 @@ class MENU(object):
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_BOBONLY_BODY = '#menu:headerButtons/fightBtn/tooltip/bobOnly/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDDISABLED_HEADER = '#menu:headerButtons/fightBtn/tooltip/rankedDisabled/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDDISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/rankedDisabled/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_EVENTDISABLED_HEADER = '#menu:headerButtons/fightBtn/tooltip/eventDisabled/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_EVENTDISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/eventDisabled/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDNOTSET_HEADER = '#menu:headerButtons/fightBtn/tooltip/rankedNotSet/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDNOTSET_BODY = '#menu:headerButtons/fightBtn/tooltip/rankedNotSet/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_BATTLEROYALEDISABLED_HEADER = '#menu:headerButtons/fightBtn/tooltip/battleRoyaleDisabled/header'
@@ -1924,7 +1928,9 @@ class MENU(object):
     CONTEXTMENU_COPYCLANNAME = '#menu:contextMenu/copyClanName'
     INFINITYSYMBOL = '#menu:infinitySymbol'
     HEADERBUTTONS_BATTLE_TYPES_EVENTPROGRESSION = '#menu:headerButtons/battle/types/eventProgression'
+    HEADERBUTTONS_BATTLE_TYPES_EVENTPROGRESSION_CN = '#menu:headerButtons/battle/types/eventProgression_cn'
     HEADERBUTTONS_BATTLE_TYPES_EVENTPROGRESSION_ABOUT = '#menu:headerButtons/battle/types/eventProgression/about'
+    HEADERBUTTONS_BATTLE_TYPES_EVENTPROGRESSION_ABOUT_CN = '#menu:headerButtons/battle/types/eventProgression/about_cn'
     HEADERBUTTONS_BATTLE_TYPES_EPICBATTLE = '#menu:headerButtons/battle/types/epicBattle'
     HEADERBUTTONS_BATTLE_TYPES_EPICBATTLE_DESCR = '#menu:headerButtons/battle/types/epicBattle/descr'
     HEADERBUTTONS_BATTLE_TYPES_EPIC = '#menu:headerButtons/battle/types/epic'
@@ -1932,6 +1938,7 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_EPIC_EXTRA_STARTSAT = '#menu:headerButtons/battle/types/epic/extra/startsAt'
     HEADERBUTTONS_BATTLE_TYPES_EPIC_EXTRA_CURRENTCYCLE = '#menu:headerButtons/battle/types/epic/extra/currentCycle'
     HEADERBUTTONS_BATTLE_TYPES_EPIC_EXTRA_CURRENTSEASON = '#menu:headerButtons/battle/types/epic/extra/currentSeason'
+    HEADERBUTTONS_BATTLE_TYPES_EPIC_EXTRA_CURRENTSEASON_CN = '#menu:headerButtons/battle/types/epic/extra/currentSeason_cn'
     HEADERBUTTONS_BATTLE_TYPES_EPIC_EXTRA_FROZEN = '#menu:headerButtons/battle/types/epic/extra/frozen'
     RANGEDELIMITER = '#menu:rangeDelimiter'
     ONLINECOUNTER_TOTAL = '#menu:onlineCounter/total'
@@ -2282,6 +2289,7 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_DEALISOVER,
      TANKCAROUSEL_VEHICLESTATES_UNSUITABLETOUNIT,
      TANKCAROUSEL_VEHICLESTATES_DISABLED,
+     TANKCAROUSEL_VEHICLESTATES_TICKETSSHORTAGE,
      TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED,
      TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED_NOT,
      TANKCAROUSEL_VEHICLESTATES_ROTATIONGROUPUNLOCKED,

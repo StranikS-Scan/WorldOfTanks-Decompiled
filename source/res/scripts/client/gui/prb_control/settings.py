@@ -160,6 +160,7 @@ class PREBATTLE_ACTION_NAME(object):
     BOB = 'bob'
     BOB_SQUAD = 'bobSquad'
     BOB_FORCED = 'bobForced'
+    EVENT_BATTLE = 'eventBattle'
 
 
 class PREBATTLE_INIT_STEP(object):
@@ -177,6 +178,7 @@ class SELECTOR_BATTLE_TYPES(object):
     EVENT_PROGRESSION = 'eventProgression'
     BATTLE_ROYALE = 'battleRoyale'
     BOB = 'bob'
+    EVENT_BATTLE = 'eventBattle'
 
 
 class REQUEST_TYPE(object):
@@ -338,6 +340,8 @@ class UNIT_RESTRICTION(object):
     UNIT_IS_IN_PLAYERS_MATCHING = 42
     UNIT_NOT_FULL = 43
     UNSUITABLE_VEHICLE = 44
+    WHITE_TIGER_IS_FORBIDDEN = 45
+    EVENT_TICKETS_SHORTAGE = 46
 
 
 class PRE_QUEUE_RESTRICTION(object):

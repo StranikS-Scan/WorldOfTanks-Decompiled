@@ -14,6 +14,8 @@ from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS, VEHICLE_CLASS_NAME
 from helpers import dependency, i18n
 from skeletons.gui.server_events import IEventsCache
+from gui.impl import backport
+from gui.impl.gen import R
 _INVALIDATE_OP = settings.INVALIDATE_OP
 _VEHICLE_STATUS = settings.VEHICLE_STATUS
 _PLAYER_STATUS = settings.PLAYER_STATUS
@@ -256,6 +258,11 @@ class VehicleArenaInfoVO(object):
         super(VehicleArenaInfoVO, self).__init__()
         self.vehicleID = vehicleID
         self.team = team
+        arena = avatar_getter.getArena()
+        guiType = None if not arena else arena.guiType
+        if guiType and guiType == ARENA_GUI_TYPE.EVENT_BATTLES and kwargs:
+            if kwargs['accountDBID'] == 0:
+                kwargs['name'] = backport.text(R.strings.wt_event.botName())
         self.player = PlayerInfoVO(forbidInBattleInvitations=forbidInBattleInvitations, **kwargs)
         self.vehicleType = VehicleTypeInfoVO(**kwargs)
         self.prebattleID = prebattleID

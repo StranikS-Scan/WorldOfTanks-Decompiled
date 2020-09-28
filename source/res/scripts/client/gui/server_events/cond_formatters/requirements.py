@@ -175,6 +175,14 @@ class TQAccountRequirementsFormatter(AccountRequirementsFormatter):
         return self.getConditionFormatter(group.getName())
 
 
+class WtAccountRequirementsFormatter(AccountRequirementsFormatter):
+
+    def __init__(self):
+        super(WtAccountRequirementsFormatter, self).__init__({'and': WtRecursiveGroupFormatter(),
+         'or': WtRecursiveGroupFormatter(),
+         'single': SingleGroupFormatter()})
+
+
 class SingleGroupFormatter(ConditionsFormatter):
 
     def __init__(self):
@@ -352,6 +360,24 @@ class TQRecursiveGroupFormatter(RecursiveGroupFormatter):
          'vehiclesUnlocked': VehiclesRequirementFormatter(),
          'vehiclesOwned': VehiclesRequirementFormatter(),
          'hasReceivedMultipliedXP': HasReceivedMultipliedXPFormatter()})
+
+
+class WtRecursiveGroupFormatter(RecursiveGroupFormatter):
+
+    def __init__(self):
+        super(WtRecursiveGroupFormatter, self).__init__(formatters={'premiumAccount': PremiumAccountFormatter(),
+         'premiumPlusAccount': PremiumPlusAccountFormatter(),
+         'inClan': InClanRequirementFormatter(),
+         'igrType': IgrTypeRequirementFormatter(),
+         'GR': GlobalRatingRequirementFormatter(),
+         'accountDossier': AccountDossierRequirementFormatter(),
+         'vehiclesUnlocked': VehiclesRequirementFormatter(),
+         'hasReceivedMultipliedXP': HasReceivedMultipliedXPFormatter()})
+
+    def conclusion(self, group, event, requirements, passed, total):
+        if not group.isAvailable():
+            icon = (icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_MARKER_BLOCKED, width=14, height=14, vSpace=-1, hSpace=-2),)
+            return text_styles.concatStylesToSingleLine(icon, text_styles.error(backport.text(R.strings.quests.missionDetails.requirements.header.unavailable())), text_styles.main(backport.text(R.strings.wt_event.quests.error.no_ticket())))
 
 
 class PremiumAccountFormatter(ConditionFormatter):

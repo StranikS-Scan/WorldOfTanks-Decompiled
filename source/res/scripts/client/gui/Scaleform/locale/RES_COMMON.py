@@ -22,3 +22,5 @@ class RES_COMMON(object):
     MAPS_ICONS_TANKMEN_ROLES_BIG_DOG = '../maps/icons/tankmen/roles/big/dog.png'
     MAPS_ICONS_TANKMEN_SKILLS_BIG_NEW_SKILL = '../maps/icons/tankmen/skills/big/new_skill.png'
     MAPS_ICONS_TENYEARSCOUNTDOWN_ONBOARDING_BG = '../maps/icons/tenYearsCountdown/onBoarding/bg.png'
+    MAPS_ICONS_WTEVENT_CAROUSEL_BG = '../maps/icons/wtevent/carousel/bg.png'
+    MAPS_ICONS_WTEVENT_COLLECTION_BG = '../maps/icons/wtevent/collection/bg.png'

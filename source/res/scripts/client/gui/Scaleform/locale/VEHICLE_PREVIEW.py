@@ -15,6 +15,7 @@ class VEHICLE_PREVIEW(object):
     HEADER_BACKBTN_DESCRLABEL_VEHICLECOMPARE = '#vehicle_preview:header/backBtn/descrLabel/vehicleCompare'
     HEADER_BACKBTN_DESCRLABEL_REFERRALPROGRAM = '#vehicle_preview:header/backBtn/descrLabel/referralProgram'
     HEADER_BACKBTN_DESCRLABEL_FRONTLINE = '#vehicle_preview:header/backBtn/descrLabel/frontline'
+    HEADER_BACKBTN_DESCRLABEL_EVENTPROGRESSION = '#vehicle_preview:header/backBtn/descrLabel/eventProgression'
     HEADER_BACKBTN_DESCRLABEL_MARATHON = '#vehicle_preview:header/backBtn/descrLabel/marathon'
     HEADER_BACKBTN_DESCRLABEL_AUTUMN_MARATHON = '#vehicle_preview:header/backBtn/descrLabel/autumn_marathon'
     HEADER_BACKBTN_DESCRLABEL_RANKED = '#vehicle_preview:header/backBtn/descrLabel/ranked'
@@ -102,6 +103,7 @@ class VEHICLE_PREVIEW(object):
      HEADER_BACKBTN_DESCRLABEL_VEHICLECOMPARE,
      HEADER_BACKBTN_DESCRLABEL_REFERRALPROGRAM,
      HEADER_BACKBTN_DESCRLABEL_FRONTLINE,
+     HEADER_BACKBTN_DESCRLABEL_EVENTPROGRESSION,
      HEADER_BACKBTN_DESCRLABEL_MARATHON,
      HEADER_BACKBTN_DESCRLABEL_AUTUMN_MARATHON,
      HEADER_BACKBTN_DESCRLABEL_RANKED)

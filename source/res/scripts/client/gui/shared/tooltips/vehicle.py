@@ -5,6 +5,7 @@ import logging
 import constants
 from gui.impl.gen import R
 from gui.impl import backport
+from gui.impl.lobby.wt_event.tooltips.wt_event_carousel_vehicle_tooltip_view import WtEventCarouselVehicleTooltipView
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockProps
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
@@ -29,10 +30,11 @@ from gui.shared.items_parameters.comparator import PARAM_STATE
 from gui.shared.items_parameters.formatters import isRelativeParameter, SITUATIONAL_SCHEME, EXTRACTED_BONUS_SCHEME
 from gui.shared.items_parameters.params_helper import SimplifiedBarVO
 from gui.shared.money import Currency
-from gui.shared.tooltips import formatters, ToolTipBaseData
+from gui.shared.tooltips import formatters, ToolTipBaseData, WulfTooltipData
 from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makeCompoundPriceBlock, CURRENCY_SETTINGS
 from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_SPEED_MODE_SPEED
+from gui.wt_event.wt_event_helpers import getTooltipVehicleType
 from helpers import i18n, time_utils, int2roman, dependency
 from helpers.i18n import makeString as _ms
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -118,14 +120,14 @@ class VehicleInfoTooltipData(BlocksTooltipData):
             headerBlockItems.append(formatters.packBuildUpBlockData(telecomBlock, padding=leftRightPadding))
         self.__createStatusBlock(vehicle, headerBlockItems, statsConfig, paramsConfig, valueWidth)
         items.append(formatters.packBuildUpBlockData(headerBlockItems, gap=-4, padding=formatters.packPadding(bottom=-8)))
-        if vehicle.isEarnCrystals:
+        if vehicle.isEarnCrystals and not vehicle.isEvent:
             crystalBlock, linkage = CrystalBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct()
             if crystalBlock:
                 items.append(formatters.packBuildUpBlockData(crystalBlock, linkage=linkage, padding=leftRightPadding))
         simplifiedStatsBlock = SimplifiedStatsBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
         if simplifiedStatsBlock:
             items.append(formatters.packBuildUpBlockData(simplifiedStatsBlock, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=leftRightPadding))
-        if not vehicle.isRotationGroupLocked:
+        if not vehicle.isRotationGroupLocked and not vehicle.isEvent:
             commonStatsBlock = CommonStatsBlockConstructor(vehicle, paramsConfig, valueWidth, leftPadding, rightPadding).construct()
             if commonStatsBlock:
                 items.append(formatters.packBuildUpBlockData(commonStatsBlock, gap=textGap, padding=blockPadding))
@@ -139,7 +141,7 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         if statsBlockConstructor is not None:
             items.append(formatters.packBuildUpBlockData(statsBlockConstructor(vehicle, paramsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct(), gap=textGap, padding=blockPadding))
         priceBlock, invalidWidth = PriceBlockConstructor(vehicle, statsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct()
-        shouldBeCut = self.calledBy and self.calledBy in _SHORTEN_TOOLTIP_CASES or vehicle.isOnlyForEpicBattles
+        shouldBeCut = self.calledBy and self.calledBy in _SHORTEN_TOOLTIP_CASES or vehicle.isOnlyForEpicBattles or vehicle.isEvent
         if priceBlock and not shouldBeCut:
             self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
             items.append(formatters.packBuildUpBlockData(priceBlock, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, gap=5, padding=formatters.packPadding(left=98), layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL))
@@ -161,13 +163,16 @@ class VehicleInfoTooltipData(BlocksTooltipData):
     def _getCrewIconBlock(self):
         block = []
         vehicle = self.item
-        crewSorted = sorted(vehicle.crew, key=lambda tankman: tankman[1], reverse=True)
-        for _, tankman in crewSorted:
-            tImg = RES_ICONS.MAPS_ICONS_MESSENGER_ICONCONTACTS
-            tAlpha = 0.5 if tankman is not None else 0.25
-            block.append(formatters.packImageBlockData(img=tImg, alpha=tAlpha))
+        if vehicle.isEvent and vehicle.isEventBoss:
+            return [formatters.packImageBlockData(img=RES_ICONS.MAPS_ICONS_MESSENGER_ICONCONTACTS, alpha=0.5)]
+        else:
+            crewSorted = sorted(vehicle.crew, key=lambda tankman: tankman[1], reverse=True)
+            for _, tankman in crewSorted:
+                tImg = RES_ICONS.MAPS_ICONS_MESSENGER_ICONCONTACTS
+                tAlpha = 0.5 if tankman is not None else 0.25
+                block.append(formatters.packImageBlockData(img=tImg, alpha=tAlpha))
 
-        return block
+            return block
 
     def __createStatusBlock(self, vehicle, items, statsConfig, paramsConfig, valueWidth):
         ctxParams = self.context.getParams()
@@ -305,6 +310,13 @@ class VehicleAvgParameterTooltipData(BaseVehicleAdvancedParametersTooltipData):
         fmtValue = param_formatter.formatParameter(rangeParamName, value)
         blocks.append(formatters.packBuildUpBlockData([formatters.packTextParameterBlockData(text_styles.main(_ms(TOOLTIPS.getAvgParameterCommentKey(rangeParamName), units=_ms(param_formatter.MEASURE_UNITS.get(rangeParamName)))), text_styles.stats(fmtValue), valueWidth=80)]))
         return blocks
+
+
+class WtEventCarouselVehicleTooltipData(WulfTooltipData):
+
+    def getTooltipContent(self, intCD, *args, **kwargs):
+        vehicleType = getTooltipVehicleType(intCD)
+        return WtEventCarouselVehicleTooltipView(vehicleType)
 
 
 def _getBonusID(bnsType, bnsId):

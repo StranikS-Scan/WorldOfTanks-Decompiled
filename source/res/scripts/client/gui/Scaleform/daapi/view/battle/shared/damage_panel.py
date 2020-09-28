@@ -277,10 +277,15 @@ class DamagePanel(DamagePanelMeta):
             self.as_setAutoRotationS(isOn)
 
     def _switching(self, _):
-        self.as_resetS()
-        if self.__isWheeledTech:
-            self.__isWheeledTech = False
-        self.hideStatusImmediate()
+        respawn = self.sessionProvider.dynamic.respawn
+        if self.sessionProvider.arenaVisitor.gui.isEventBattle and self.sessionProvider.shared.vehicleState.isInPostmortem and respawn is not None and respawn.playerLives > 0:
+            return
+        else:
+            self.as_resetS()
+            if self.__isWheeledTech:
+                self.__isWheeledTech = False
+            self.hideStatusImmediate()
+            return
 
     def _updateStun(self, stunInfo):
         if STATUS_ID.STUN in self.__statusAnimPlayers:
@@ -360,10 +365,11 @@ class DamagePanel(DamagePanelMeta):
                 self.__isAutoRotationShown = True
         self.__isWheeledTech = vehicle.isWheeledTech
         self.__maxHealth = vehicle.maxHealth
+        isEventBoss = 'event_boss' in vType.tags
         health = vehicle.health
         healthStr = formatHealthProgress(health, self.__maxHealth)
         healthProgress = normalizeHealthPercent(health, self.__maxHealth)
-        self.as_setupS(healthStr, healthProgress, vehicle_getter.getVehicleIndicatorType(vTypeDesc), vehicle_getter.getCrewMainRolesWithIndexes(vType.crewRoles), inDegrees, vehicle_getter.hasTurretRotator(vTypeDesc), self.__isWheeledTech, self.__isAutoRotationOn)
+        self.as_setupS(healthStr, healthProgress, vehicle_getter.getVehicleIndicatorType(vTypeDesc), vehicle_getter.getCrewMainRolesWithIndexes(vType.crewRoles), inDegrees, vehicle_getter.hasTurretRotator(vTypeDesc), self.__isWheeledTech, self.__isAutoRotationOn, isEventBoss)
         if self.__isWheeledTech:
             self.as_setupWheeledS(vTypeDesc.chassis.generalWheelsAnimatorConfig.getNonTrackWheelsCount())
         self._updatePlayerInfo(vehicle.id)

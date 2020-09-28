@@ -14,7 +14,7 @@ _UNDEFINED_VEHICLE_TYPE = 'undefined'
 class RoyaleCarouselDataProvider(HangarCarouselDataProvider):
 
     def _setBaseCriteria(self):
-        self._baseCriteria = REQ_CRITERIA.INVENTORY
+        self._baseCriteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
 
     @classmethod
     def _vehicleComparisonKey(cls, vehicle):

@@ -3,8 +3,10 @@
 import random
 import weakref
 from functools import partial
+import AnimationSequence
 import BigWorld
 import Math
+import ResMgr
 import material_kinds
 from debug_utils import LOG_CODEPOINT_WARNING, LOG_CURRENT_EXCEPTION
 from items import vehicles
@@ -12,6 +14,11 @@ from helpers import i18n
 from helpers.EffectsList import EffectsListPlayer
 from helpers.EntityExtra import EntityExtra
 from constants import IS_EDITOR
+from vehicle_systems.stricted_loading import makeCallbackWeak
+from vehicle_systems.tankStructure import TankSoundObjectsIndexes
+from wt_event.wt_impulse_visual import ImpulseVisualObject
+from shared_utils import CONST_CONTAINER
+from gui.wt_event.wt_event_helpers import LOWER_LIMIT_OF_MEDIUM_LVL, LOWER_LIMIT_OF_HIGH_LVL
 if not IS_EDITOR:
     from vehicle_extras_battle_royale import AfterburningBattleRoyale
 
@@ -45,7 +52,7 @@ class ShowShooting(EntityExtra):
         data['_effectsListPlayer'] = EffectsListPlayer(effects, stages, **data)
         data['_burst'] = (burstCount, gunDescr.burst[1])
         data['_gunModel'] = vehicle.appearance.compoundModel
-        self.__doShot(data)
+        self._doShot(data)
 
     def _cleanup(self, data):
         if data.get('_effectsListPlayer') is not None:
@@ -56,7 +63,7 @@ class ShowShooting(EntityExtra):
             data['_timerID'] = None
         return
 
-    def __doShot(self, data):
+    def _doShot(self, data):
         data['_timerID'] = None
         try:
             vehicle = data['entity']
@@ -72,7 +79,7 @@ class ShowShooting(EntityExtra):
                 withShot = 1
             else:
                 data['_burst'] = (burstCount - 1, burstInterval)
-                data['_timerID'] = BigWorld.callback(burstInterval, partial(self.__doShot, data))
+                data['_timerID'] = BigWorld.callback(burstInterval, partial(self._doShot, data))
                 effPlayer.play(gunModel)
                 withShot = 2
             if not IS_EDITOR:
@@ -142,7 +149,7 @@ class ShowShootingMultiGun(ShowShooting):
         data['_effectsListPlayers'] = effectPlayers
         data['_burst'] = (burstCount, gunDescr.burst[1])
         data['_gunModel'] = vehicle.appearance.compoundModel
-        self.__doShot(data)
+        self._doShot(data)
 
     def _cleanup(self, data):
         effPlayers = data.get('_effectsListPlayers')
@@ -155,7 +162,7 @@ class ShowShootingMultiGun(ShowShooting):
 
             return
 
-    def __doShot(self, data):
+    def _doShot(self, data):
         try:
             vehicle = data['entity']
             if not vehicle.isAlive():
@@ -323,3 +330,107 @@ class Fire(EntityExtra):
         if not isVehicleUnderwater:
             self.__playEffect(data)
         return
+
+
+class AfterburningWT(EntityExtra):
+
+    def _start(self, extraData, activate=None):
+        vehicle = extraData['entity']
+        appearance = vehicle.appearance
+        if appearance is not None:
+            effectMgr = appearance.customEffectManager
+            if effectMgr is not None:
+                effectMgr.variables['Nitro'] = 2
+                soundObject = vehicle.appearance.engineAudition.getSoundObject(TankSoundObjectsIndexes.ENGINE)
+                if soundObject is not None:
+                    soundObject.play('ev_white_tiger_t55_nitro_start')
+        return
+
+    def _cleanup(self, extraData):
+        vehicle = extraData['entity']
+        appearance = vehicle.appearance
+        if appearance is not None:
+            effectMgr = appearance.customEffectManager
+            if effectMgr is not None:
+                effectMgr.variables['Nitro'] = 0
+                soundObject = vehicle.appearance.engineAudition.getSoundObject(TankSoundObjectsIndexes.ENGINE)
+                if soundObject is not None:
+                    soundObject.play('ev_white_tiger_t55_nitro_stop')
+        return
+
+
+class ImpulseWT(EntityExtra):
+
+    def _start(self, extraData, activate=None):
+        vehicle = extraData['entity']
+        worldID = vehicle.appearance.worldID
+        effectDescriptor = ImpulseVisualObject.wtImpulseDescriptor()
+        if effectDescriptor is not None:
+            BigWorld.loadResourceListBG((AnimationSequence.Loader(effectDescriptor.onStart.stunEffect.path, worldID), AnimationSequence.Loader(effectDescriptor.onEnd.stunEffect.path, worldID), AnimationSequence.Loader(effectDescriptor.onEnd.damageEffect.path, worldID)), makeCallbackWeak(self.__onResourceLoaded, extraData))
+        return
+
+    def __equipment(self):
+        cache = vehicles.g_cache
+        equipmentID = cache.equipmentIDs().get(self.name, None)
+        return cache.equipments()[equipmentID] if equipmentID is not None else None
+
+    def __onResourceLoaded(self, extraData, resRefs):
+        equipment = self.__equipment()
+        vehicle = extraData['entity']
+        appearance = vehicle.appearance
+        impulseObject = ImpulseVisualObject(appearance.worldID, vehicle.proxy, equipment, resRefs)
+        vehicle.appearance.addComponent(impulseObject)
+
+
+class InstantStunShootWT(EntityExtra):
+
+    def _start(self, extraData, activate=None):
+        vehicle = extraData['entity']
+        appearance = vehicle.appearance
+        appearance.recoil()
+        if vehicle.isPlayerVehicle:
+            appearance.executeShootingVibrations(vehicle.typeDescriptor.shot.shell.caliber)
+        self.stop(extraData)
+
+
+class ShowShootingHunterWT(ShowShooting):
+
+    class _EffectIndex(CONST_CONTAINER):
+        SMALL = 0
+        MEDIUM = 1
+        LARGE = 2
+
+    def _start(self, data, args):
+        burstCount, _ = args
+        vehicle = data['entity']
+        data['entity_id'] = vehicle.id
+        gunDescr = vehicle.typeDescriptor.gun
+        index = self.__getEffectIndex()
+        if index >= len(gunDescr.effects):
+            self.stop(data)
+            return
+        stages, effects, _ = gunDescr.effects[index]
+        data['_effectsListPlayer'] = EffectsListPlayer(effects, stages, **data)
+        data['_burst'] = (burstCount, gunDescr.burst[1])
+        data['_gunModel'] = vehicle.appearance.compoundModel
+        self._doShot(data)
+
+    def _cleanup(self, data):
+        effPlayers = data.get('_effectsListPlayers')
+        if effPlayers is None:
+            return
+        else:
+            for effPlayer in effPlayers.values():
+                if effPlayer is not None:
+                    effPlayer.stop()
+
+            return
+
+    def __getEffectIndex(self):
+        arenaInfo = BigWorld.player().arena.arenaInfo
+        if arenaInfo is not None:
+            if arenaInfo.powerPoints < LOWER_LIMIT_OF_MEDIUM_LVL:
+                return self._EffectIndex.SMALL
+            if arenaInfo.powerPoints < LOWER_LIMIT_OF_HIGH_LVL:
+                return self._EffectIndex.MEDIUM
+        return self._EffectIndex.LARGE

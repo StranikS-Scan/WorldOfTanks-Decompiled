@@ -49,10 +49,17 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.manual.manual_chapter_view import ManualChapterView
     from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import SeniorityAwardsHangarEntryPoint
     from gui.Scaleform.daapi.view.lobby.hangar.daily_quest_widget import DailyQuestWidget
+    from gui.Scaleform.daapi.view.lobby.hangar.lootboxes_widget import LootBoxWidget
     from gui.Scaleform.daapi.view.lobby.hangar.progressive_reward_widget import ProgressiveRewardWidget
     from gui.Scaleform.daapi.view.lobby.hangar.ammunition_panel_inject import AmmunitionPanelInject
     from gui.impl.lobby.battle_pass.battle_pass_entry_point_view import BattlePassEntryPointComponent
     from gui.Scaleform.daapi.view.lobby.hangar.ten_years_countdown_entry_point_inject import TenYearsCountdownEntryPointInject
+    from gui.impl.lobby.wt_event.wt_event_header_widget_view import WTEventHeaderWidgetComponent
+    from gui.impl.lobby.wt_event.wt_event_carousel_view import WTEventCarouselWidget
+    from gui.impl.lobby.wt_event.wt_event_crew_view import WTEventCrewWidget
+    from gui.impl.lobby.wt_event.wt_event_characteristics_panel_view import WTEventCharacteristicsPanelWidget
+    from gui.Scaleform.daapi.view.lobby.hangar.wt_event_countdown_entry_point import WTEventCountdownEntryPoint
+    from gui.Scaleform.daapi.view.lobby.event_battle.wt_event_prime_time_view import WtEventPrimeTimeView
     return (ConditionalViewSettings(VIEW_ALIAS.LOBBY_HANGAR, BootcampComponentOverride(Hangar, BCHangar), 'hangar.swf', ViewTypes.LOBBY_SUB, None, VIEW_ALIAS.LOBBY_HANGAR, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_STRONGHOLD, StrongholdView, 'StrongholdView.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_STRONGHOLD, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.BROWSER_VIEW, BrowserView, 'browserScreen.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True),
@@ -84,7 +91,14 @@ def getViewSettings():
      ViewSettings(HANGAR_ALIASES.BATTLEPASS_TANK_CAROUSEL, BattlePassTankCarousel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(HANGAR_ALIASES.BATTLE_PASSS_ENTRY_POINT, BattlePassEntryPointComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(HANGAR_ALIASES.TEN_YEARS_COUNTDOWN_ENTRY_POINT_INJECT, TenYearsCountdownEntryPointInject, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(HANGAR_ALIASES.AMMUNITION_PANEL_INJECT, AmmunitionPanelInject, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
+     ViewSettings(HANGAR_ALIASES.AMMUNITION_PANEL_INJECT, AmmunitionPanelInject, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(HANGAR_ALIASES.WHITE_TIGER_WIDGET, WTEventHeaderWidgetComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(HANGAR_ALIASES.WT_EVENT_CAROUSEL_WIDGET, WTEventCarouselWidget, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(HANGAR_ALIASES.WT_EVENT_CREW_WIDGET, WTEventCrewWidget, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(HANGAR_ALIASES.WT_EVENT_PARAMS_WIDGET, WTEventCharacteristicsPanelWidget, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(HANGAR_ALIASES.LOOTBOXES_WIDGET, LootBoxWidget, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(HANGAR_ALIASES.WT_EVENT_ENTRY_POINT, WTEventCountdownEntryPoint, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(HANGAR_ALIASES.WT_EVENT_PRIME_TIME_VIEW, WtEventPrimeTimeView, HANGAR_ALIASES.WT_EVENT_PRIME_TIME, ViewTypes.LOBBY_SUB, HANGAR_ALIASES.WT_EVENT_PRIME_TIME_VIEW, ScopeTemplates.LOBBY_TOP_SUB_SCOPE))
 
 
 def getBusinessHandlers():
@@ -104,5 +118,6 @@ class HangarPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.FITTING_SELECT_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLES_FILTER_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.WIKI_VIEW, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.MANUAL_CHAPTER_VIEW, self.loadViewByCtxEvent))
+         (VIEW_ALIAS.MANUAL_CHAPTER_VIEW, self.loadViewByCtxEvent),
+         (HANGAR_ALIASES.WT_EVENT_PRIME_TIME_VIEW, self.loadViewByCtxEvent))
         super(HangarPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)

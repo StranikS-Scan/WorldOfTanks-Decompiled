@@ -16,6 +16,7 @@ class TOOLTIPS_CONSTANTS(object):
     MARKS_ON_GUN_ACHIEVEMENT = 'marksOnGun'
     BATTLE_STATS_MARKS_ON_GUN_ACHIEVEMENT = 'battleStatsMarksOnGun'
     CAROUSEL_VEHICLE = 'carouselVehicle'
+    WULF_CAROUSEL_VEHICLE = 'wulfCarouselVehicle'
     INVENTORY_VEHICLE = 'inventoryVehicle'
     TECHTREE_VEHICLE = 'techtreeVehicle'
     TECHTREE_VEHICLE_ANNOUNCEMENT = 'techtreeVehicleAnnouncement'
@@ -79,6 +80,7 @@ class TOOLTIPS_CONSTANTS(object):
     TANKMAN_NEW_SKILL = 'tankmanNewSkill'
     PREVIEW_CREW_SKILL = 'previewCrewSkill'
     EFFICIENCY_PARAM = 'efficiencyParam'
+    TOTAL_EFFICIENCY_PARAM = 'totalEfficiencyParam'
     MAP = 'map'
     SETTINGS_CONTROL = 'control'
     SETTINGS_BUTTON = 'settingsButton'
@@ -111,6 +113,7 @@ class TOOLTIPS_CONSTANTS(object):
     EPIC_QUESTS_PREVIEW = 'epicQuestsPreview'
     EVENT_QUESTS_PREVIEW = 'EventQuestsPreview'
     PERSONAL_QUESTS_PREVIEW = 'presonalQuestsPreview'
+    WT_QUESTS_PREVIEW = 'WTQuestsPreview'
     SHEDULE_QUEST = 'scheduleQuest'
     MISSION_VEHICLE = 'missionVehicle'
     MISSION_VEHICLE_TYPE = 'missionVehicleType'
@@ -181,6 +184,12 @@ class TOOLTIPS_CONSTANTS(object):
     BADGE_LOYAL_SERVICE = 'badgeLoyalService'
     EVENT_BOARDS_BADGE = 'eventBoardsBadge'
     EVENT_BOARDS_BADGES_GROUP = 'eventBoardsBadgesGroup'
+    EVENT_SELECTOR_INFO = 'eventSelectorInfo'
+    WT_EVENT_BOSS_TICKET = 'eventBossTicket'
+    WT_EVENT_LOOT_BOX = 'eventLootBox'
+    WT_EVENT_SHELL_BATTLE = 'eventShellBattle'
+    WT_EVENT_LOOT_BOX_VEHICLES = 'eventLootBoxVehicles'
+    EVENT_UNAVAILABLE_UNFO = 'eventUnavailableInfo'
     OPERATION = 'operation'
     OPERATIONS_CHAIN_DETAILS = 'operationsChainDetails'
     PERSONAL_MISSIONS_MAP_REGION = 'personalMissionsMapRegion'
@@ -356,8 +365,7 @@ class TOOLTIPS_CONSTANTS(object):
      SHOP_BOOSTER,
      BOOSTERS_QUESTS,
      NATION_CHANGE_BATTLE_BOOSTER]
-    COMMON_SET = [EFFICIENCY_PARAM,
-     IGR_INFO,
+    COMMON_SET = [IGR_INFO,
      CONTACT,
      SORTIE_DIVISION,
      MAP,
@@ -491,7 +499,8 @@ class TOOLTIPS_CONSTANTS(object):
      VEHICLE_PREVIEW_CREW_MEMBER,
      TECHTREE_VEHICLE_ANNOUNCEMENT,
      TECHTREE_VEHICLE_STATUS,
-     VEHICLE_TANK_SETUP_PARAMETERS]
+     VEHICLE_TANK_SETUP_PARAMETERS,
+     WULF_CAROUSEL_VEHICLE]
     BLUEPRINTS_SET = [BLUEPRINT_INFO,
      BLUEPRINT_FRAGMENT_INFO,
      BLUEPRINT_EMPTY_SLOT_INFO,
@@ -552,3 +561,11 @@ class TOOLTIPS_CONSTANTS(object):
     OPTDEV_SLOT_STATE_ACTIVE_SELECTED = 'activeSelected'
     BOB_SET = [BOB_SELECTOR_INFO, BOB_SERVER_PRIMETIME]
     BATTLE_PASS_SET = [DEVICE_GIFT_TOKEN]
+    EVENT_SET = [EVENT_SELECTOR_INFO,
+     EVENT_UNAVAILABLE_UNFO,
+     WT_QUESTS_PREVIEW,
+     WT_EVENT_BOSS_TICKET,
+     WT_EVENT_LOOT_BOX,
+     WT_EVENT_LOOT_BOX_VEHICLES]
+    WT_BATTLE_SET = [WT_EVENT_SHELL_BATTLE]
+    EFFICIENCY_SET = [EFFICIENCY_PARAM, TOTAL_EFFICIENCY_PARAM]

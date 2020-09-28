@@ -18,8 +18,12 @@ class BCHangar(Hangar):
     def showHelpLayout(self):
         pass
 
-    def _updateBattleRoyaleMode(self):
+    def __updateHangarMode(self):
         pass
+
+    @property
+    def _isInBootCamp(self):
+        return True
 
     def __isViewOpenOrLoading(self, container, viewAlias):
         openView = container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: viewAlias})

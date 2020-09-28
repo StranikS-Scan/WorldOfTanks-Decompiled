@@ -16,6 +16,7 @@ from gui.impl.gen import R
 from gui.battle_control.controllers.radar_ctrl import IRadarListener
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
+from gui.shared.gui_items.Vehicle import VEHICLE_EVENT_TYPE
 from gui.shared.utils.key_mapping import getReadableKey
 from gui.shared.utils.plugins import IPlugin
 from helpers import dependency, time_utils
@@ -657,7 +658,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
         if self.__hintInQueue is CommandMapping.CMD_SHOW_HELP:
             keyName = getReadableKey(CommandMapping.CMD_SHOW_HELP)
             pressText = backport.text(R.strings.ingame_gui.helpScreen.hint.press())
-            hintText = backport.text(R.strings.ingame_gui.helpScreen.hint.description())
+            hintText = self.__getHelpScreenHintText()
             return HintData(keyName, pressText, hintText, 0, 0, HintPriority.HELP)
         if self.__hintInQueue is CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND:
             keyName = getReadableKey(CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND)
@@ -682,7 +683,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
             vehicleType = vTypeDesc.type.id
             self.__vehicleId = makeIntCompactDescrByID('vehicle', vehicleType[0], vehicleType[1])
             self.__haveReqLevel = vTypeDesc.level >= _HINT_MIN_VEHICLE_LEVEL
-            if vTypeDesc.isWheeledVehicle or vTypeDesc.type.isDualgunVehicleType or vTypeDesc.hasTurboshaftEngine:
+            if self.__isVehicleWithHelpScreen(vTypeDesc):
                 self.__updateHintCounterOnStart(self.__vehicleId, vehicle, self.__helpHintSettings)
             if self.__canDisplayHelpHint(vTypeDesc):
                 self.__displayHint(CommandMapping.CMD_SHOW_HELP)
@@ -719,7 +720,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
         return
 
     def __canDisplayHelpHint(self, typeDescriptor):
-        return (typeDescriptor.isWheeledVehicle or typeDescriptor.type.isDualgunVehicleType or typeDescriptor.hasTurboshaftEngine) and self.__isInDisplayPeriod and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])
+        return self.__isVehicleWithHelpScreen(typeDescriptor) and self.__isInDisplayPeriod and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])
 
     def __canDisplayBattleCommunicationHint(self):
         settingsCore = dependency.instance(ISettingsCore)
@@ -765,3 +766,12 @@ class PreBattleHintPlugin(HintPanelPlugin):
             self.__hintInQueue = None
         self.__questHintSettings = self._updateCounterOnUsed(self.__questHintSettings)
         return
+
+    def __getHelpScreenHintText(self):
+        vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
+        if VEHICLE_EVENT_TYPE.EVENT_HUNTER in vehicle.typeDescriptor.type.tags:
+            return backport.text(R.strings.wt_event.ingame_help.hint.hunter())
+        return backport.text(R.strings.wt_event.ingame_help.hint.boss()) if VEHICLE_EVENT_TYPE.EVENT_BOSS in vehicle.typeDescriptor.type.tags else backport.text(R.strings.ingame_gui.helpScreen.hint.description())
+
+    def __isVehicleWithHelpScreen(self, vTypeDesc):
+        return vTypeDesc.isWheeledVehicle or vTypeDesc.type.isDualgunVehicleType or vTypeDesc.hasTurboshaftEngine or VEHICLE_EVENT_TYPE.EVENT_HUNTER in vTypeDesc.type.tags or VEHICLE_EVENT_TYPE.EVENT_BOSS in vTypeDesc.type.tags

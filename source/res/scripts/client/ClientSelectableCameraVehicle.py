@@ -3,8 +3,15 @@
 from collections import namedtuple
 import Math
 import BigWorld
+from adisp import process
 from ClientSelectableCameraObject import ClientSelectableCameraObject
+from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
 from gui.hangar_vehicle_appearance import HangarVehicleAppearance
+from gui.prb_control.entities.base.ctx import PrbAction
+from gui.prb_control.dispatcher import g_prbLoader
+from gui.shared import events, EVENT_BUS_SCOPE, g_eventBus
+from helpers import dependency
+from skeletons.gui.game_control import IGameEventController
 from vehicle_systems.tankStructure import ModelStates
 from vehicle_systems.tankStructure import TankPartIndexes
 from gui.ClientHangarSpace import hangarCFG
@@ -12,6 +19,7 @@ _VehicleTransformParams = namedtuple('_VehicleTransformParams', ('targetPos', 'r
 
 class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
     appearance = property(lambda self: self.__vAppearance)
+    _gameEventController = dependency.descriptor(IGameEventController)
 
     def __init__(self):
         ClientSelectableCameraObject.__init__(self)
@@ -22,6 +30,7 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         self.__shadowModelFashion = None
         self.__isVehicleLoaded = False
         self.__vehicleTransform = None
+        self.__isActivated = self._gameEventController.isEventPrbActive()
         return
 
     def prerequisites(self):
@@ -30,6 +39,17 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
             modelNames = (cfg['shadow_model_name'],)
             return modelNames
 
+    def onMouseClick(self):
+        super(ClientSelectableCameraVehicle, self).onMouseClick()
+        self.fireOnMouseClickEvents()
+
+    @process
+    def __doSelectAction(self, actionName):
+        dispatcher = g_prbLoader.getDispatcher()
+        if dispatcher is not None:
+            yield dispatcher.doSelectAction(PrbAction(actionName))
+        return
+
     def onEnterWorld(self, prereqs):
         super(ClientSelectableCameraVehicle, self).onEnterWorld(prereqs)
         cfg = hangarCFG()
@@ -37,6 +57,7 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
             shadowName = cfg['shadow_model_name']
             if shadowName not in prereqs.failedIDs:
                 self.__createFakeShadow(prereqs[shadowName])
+        self.registerListeners()
 
     def onLeaveWorld(self):
         if self.__vAppearance:
@@ -48,6 +69,7 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
             BigWorld.delModel(self.__fakeShadowModel)
             self.__fakeShadowModel.fashion = None
             self.__fakeShadowModel = None
+        self.unRegisterListeners()
         super(ClientSelectableCameraVehicle, self).onLeaveWorld()
         return
 
@@ -173,4 +195,37 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
             return
         else:
             self._setVehicleModelTransform(self.__vehicleTransform.targetPos, self.__vehicleTransform.rotateYPR, self.__vehicleTransform.shadowModelYOffset)
+            return
+
+    def fireOnMouseClickEvents(self):
+        g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.WT_EVENT_VEHICLED_CLICKED, ctx={'data': {'isEvent': False,
+                  'vehCD': 0}}), EVENT_BUS_SCOPE.LOBBY)
+
+    def eventSelectedOff(self, event):
+        selectedEntity = self.hangarSpace.space.getVehicleEntity()
+        if selectedEntity.state != CameraMovementStates.MOVING_TO_OBJECT:
+            super(ClientSelectableCameraVehicle, self).onMouseClick()
+
+    def registerListeners(self):
+        g_eventBus.addListener(events.HangarVehicleEvent.WT_EVENT_SELECTED_OFF, self.eventSelectedOff, EVENT_BUS_SCOPE.LOBBY)
+
+    def unRegisterListeners(self):
+        g_eventBus.removeListener(events.HangarVehicleEvent.WT_EVENT_SELECTED_OFF, self.eventSelectedOff, EVENT_BUS_SCOPE.LOBBY)
+
+    def getVehicleAppearance(self):
+        return self.__vAppearance
+
+    def setCollisionsEnable(self, value):
+        if self.__vAppearance is None:
+            return
+        else:
+            collisions = self.__vAppearance.collisions
+            if collisions is None:
+                return
+            if value and not self.__isActivated:
+                collisions.activate()
+            elif not value and self.__isActivated:
+                collisions.deactivate()
+            self.__isActivated = value
+            self.setEnable(value)
             return

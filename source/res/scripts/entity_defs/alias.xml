@@ -333,6 +333,9 @@
       <players>
         <Type>	UINT32	</Type>
       </players>
+      <avgWaitTime>
+        <Type>	FLOAT32	</Type>
+      </avgWaitTime>
     </Properties>
   </EVENT_QUEUE_INFO>
   <RANKED_BATTLES_QUEUE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>

@@ -348,7 +348,9 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
         inventoryCount = self.configuration.inventoryCount
         vehiclesCount = self.configuration.vehiclesCount
         researchNode = self.configuration.node
-        if buyPrice and sellPrice:
+        if vehicle is not None and vehicle.isEvent:
+            return
+        elif buyPrice and sellPrice:
             _logger.error('You are not allowed to use buyPrice and sellPrice at the same time')
             return
         elif self.module.itemTypeID is GUI_ITEM_TYPE.EQUIPMENT and self.module.isBuiltIn:
@@ -692,11 +694,14 @@ class OptDeviceEffectsBlockConstructor(ModuleTooltipBlockConstructor):
 class StatusBlockConstructor(ModuleTooltipBlockConstructor):
 
     def construct(self):
-        if self.configuration.isResearchPage:
-            return self._getResearchPageStatus()
-        if self.configuration.isAwardWindow:
+        if self.configuration.vehicle is not None and self.configuration.vehicle.isEvent:
             return []
-        return [] if self.module.itemTypeID is GUI_ITEM_TYPE.EQUIPMENT and self.module.isBuiltIn else self._getStatus()
+        elif self.configuration.isResearchPage:
+            return self._getResearchPageStatus()
+        elif self.configuration.isAwardWindow:
+            return []
+        else:
+            return [] if self.module.itemTypeID is GUI_ITEM_TYPE.EQUIPMENT and self.module.isBuiltIn else self._getStatus()
 
     def _getStatus(self):
         block = []

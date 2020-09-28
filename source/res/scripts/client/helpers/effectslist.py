@@ -633,6 +633,11 @@ class _ShotSoundEffectDesc(_BaseSoundEvent):
             if soundObject is not None:
                 isPlayer, _ = self._isPlayer(args)
                 soundName = self._soundName[0 if isPlayer else 1]
+                if not isPlayer:
+                    if 'event_hunter' in vehicle.typeDescriptor.type.tags:
+                        soundName += ('ev_white_tiger_wpn_t55_npc',)
+                    elif 'event_boss' in vehicle.typeDescriptor.type.tags:
+                        soundName += ('ev_white_tiger_wpn_waffentrager_npc',)
                 if IS_EDITOR:
                     distance = vehicle.position.length
                 else:

@@ -528,6 +528,7 @@ class GuiAmbientsCtrl(object):
         if soundEnvClass is not None:
             alias = view.alias
             SOUND_DEBUG('Custom sound environ has been detected', alias, soundEnvClass)
+            SOUND_DEBUG(view.viewType)
             self._customEnvs[view.viewType][view.getUniqueName()] = self._buildSoundEnv(soundEnvClass)
             view.onDispose += self.__onViewDisposed
         else:

@@ -87,6 +87,7 @@ def makeVehicleBasicVO(vehicle, levelsRange=None, vehicleTypes=None):
         return
     else:
         isBattleRoyaleVehicle = vehicle.isOnlyForBattleRoyaleBattles
+        isEventVehicle = vehicle.isEvent
         enabled, tooltip = True, None
         if levelsRange is not None and vehicle.level not in levelsRange:
             enabled, tooltip = False, TOOLTIPS.VEHICLESELECTOR_OVERFLOWLEVEL
@@ -94,21 +95,24 @@ def makeVehicleBasicVO(vehicle, levelsRange=None, vehicleTypes=None):
             enabled, tooltip = False, TOOLTIPS.VEHICLESELECTOR_INCOMPATIBLETYPE
         elif isBattleRoyaleVehicle:
             enabled, tooltip = True, TOOLTIPS_CONSTANTS.BATTLE_ROYALE_VEHICLE
+        elif isEventVehicle:
+            enabled = False
         iconPath = backport.image(R.images.gui.maps.icons.vehicle.small.dyn(getIconResourceName(vehicle.name))())
         return {'intCD': vehicle.intCD,
          'nationID': vehicle.nationID,
          'name': vehicle.name,
          'userName': vehicle.userName,
          'shortUserName': vehicle.shortUserName,
-         'level': vehicle.level if not vehicle.isOnlyForBattleRoyaleBattles else 0,
-         'type': vehicle.type if not vehicle.isOnlyForBattleRoyaleBattles else '',
+         'level': vehicle.level,
+         'type': vehicle.type if not isBattleRoyaleVehicle else '',
          'typeIndex': VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED[vehicle.type],
          'smallIconPath': iconPath,
          'isReadyToFight': True,
          'enabled': enabled,
          'tooltip': tooltip,
          'state': '',
-         'isEventVehicle': isBattleRoyaleVehicle}
+         'isEventVehicle': isEventVehicle,
+         'isBattleRoyaleVehicle': isBattleRoyaleVehicle}
 
 
 def makeVehicleVO(vehicle, levelsRange=None, vehicleTypes=None, isCurrentPlayer=True):
@@ -353,14 +357,7 @@ def _getSlotsData(unitMgrID, fullData, levelsRange=None, checkForVehicles=True, 
             elif eventsCache.isSquadXpFactorsEnabled():
                 slot.update(_getXPFactorSlotInfo(unit, eventsCache, slotInfo))
         if unit.isEvent():
-            isVisibleAdtMsg = player and player.isCurrentPlayer() and not vehicle
-            additionMsg = ''
-            if isVisibleAdtMsg:
-                eventsCache = dependency.instance(IEventsCache)
-                vehiclesNames = [ veh.userName for veh in eventsCache.getEventVehicles() ]
-                additionMsg = text_styles.main(i18n.makeString(MESSENGER.DIALOGS_EVENTSQUAD_VEHICLE, vehName=', '.join(vehiclesNames)))
-            slot.update({'isVisibleAdtMsg': isVisibleAdtMsg,
-             'additionalMsg': additionMsg})
+            slot.update(_updateEventBattleSlotInfo(player, vehicle))
         elif unit.getPrebattleType() == PREBATTLE_TYPE.EPIC and squadPremBonusEnabled:
             slot.update(_updateEpicBattleSlotInfo(player, vehicle))
         elif unit.getPrebattleType() == PREBATTLE_TYPE.BATTLE_ROYALE:
@@ -386,6 +383,16 @@ def _updateSpecialBattleSlotInfo(player, vehicle, message):
         additionalMsg = text_styles.main(message)
         result = {'isVisibleAdtMsg': isVisibleAdtMsg,
          'additionalMsg': additionalMsg}
+    return result
+
+
+def _updateEventBattleSlotInfo(player, vehicle):
+    result = {}
+    if vehicle is None:
+        isVisibleAdtMsg = player and player.isCurrentPlayer()
+        additionMsg = text_styles.main(backport.text(R.strings.wt_event.squadWindow.vehicle.restriction()))
+        result = {'isVisibleAdtMsg': isVisibleAdtMsg,
+         'additionalMsg': additionMsg}
     return result
 
 

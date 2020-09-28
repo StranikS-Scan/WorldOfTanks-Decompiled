@@ -832,7 +832,7 @@ class BattleReplay(object):
             personals = modifiedResults.get('personal', None)
             if personals is not None:
                 for personal in personals.itervalues():
-                    for field in ('damageEventList', 'xpReplay', 'creditsReplay', 'tmenXPReplay', 'goldReplay', 'crystalReplay', 'eventCoinReplay', 'freeXPReplay', 'avatarDamageEventList'):
+                    for field in ('damageEventList', 'xpReplay', 'creditsReplay', 'tmenXPReplay', 'flXPReplay', 'goldReplay', 'crystalReplay', 'eventCoinReplay', 'freeXPReplay', 'avatarDamageEventList'):
                         personal[field] = None
 
                     extMeta = personal.get('ext', {}).get('epicMetaGame')
@@ -871,7 +871,8 @@ class BattleReplay(object):
             return
 
     def __onAvatarBecomePlayer(self):
-        if self.sessionProvider.arenaVisitor.getArenaBonusType() in constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
+        disableRange = constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE + (constants.ARENA_BONUS_TYPE.EVENT_BATTLES,)
+        if self.sessionProvider.arenaVisitor.getArenaBonusType() in disableRange:
             self.enableAutoRecordingBattles(False, True)
 
     def __onSettingsChanging(self, *_):

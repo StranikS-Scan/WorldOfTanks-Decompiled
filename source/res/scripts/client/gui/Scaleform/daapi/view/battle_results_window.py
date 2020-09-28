@@ -7,15 +7,14 @@ from constants import PremiumConfigs
 from gui import SystemMessages
 from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.battle_results import RequestEmblemContext, EmblemType, ProgressAction
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.battle_results.settings import PROGRESS_ACTION
-from gui.battle_results import RequestEmblemContext, EMBLEM_TYPE
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.server_events import events_dispatcher as quests_events
 from gui.Scaleform.daapi.view.meta.BattleResultsMeta import BattleResultsMeta
 from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS
-from gui.shared import event_bus_handlers, events, EVENT_BUS_SCOPE, g_eventBus
-from gui.shared import event_dispatcher
+from gui.shared import event_bus_handlers, events, EVENT_BUS_SCOPE, g_eventBus, event_dispatcher
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.event_dispatcher import showProgressiveRewardWindow, showTankPremiumAboutPage
 from gui.sounds.ambients import BattleResultsEnv
 from helpers import dependency
@@ -72,10 +71,10 @@ class BattleResultsWindow(BattleResultsMeta):
     def showUnlockWindow(self, itemID, unlockType):
         if not self.__canNavigate():
             return
-        if unlockType in (PROGRESS_ACTION.RESEARCH_UNLOCK_TYPE, PROGRESS_ACTION.PURCHASE_UNLOCK_TYPE):
+        if unlockType in (ProgressAction.RESEARCH_UNLOCK_TYPE, ProgressAction.PURCHASE_UNLOCK_TYPE):
             event_dispatcher.showResearchView(itemID)
             self.onWindowClose()
-        elif unlockType == PROGRESS_ACTION.NEW_SKILL_UNLOCK_TYPE:
+        elif unlockType == ProgressAction.NEW_SKILL_UNLOCK_TYPE:
             event_dispatcher.showPersonalCase(itemID, 2, EVENT_BUS_SCOPE.LOBBY)
 
     def showProgressiveRewardView(self):
@@ -90,13 +89,12 @@ class BattleResultsWindow(BattleResultsMeta):
 
     def _populate(self):
         super(BattleResultsWindow, self)._populate()
-        g_eventBus.addListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__updateVO)
+        g_eventBus.addListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__onUpdatePremiumBonus)
         g_eventBus.addListener(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, self.__onBattleResultWindowShowQuest)
         g_eventBus.addListener(VIEW_ALIAS.BATTLE_QUEUE, self._lockButtons, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(VIEW_ALIAS.LOBBY_HANGAR, self._unlockButtons, EVENT_BUS_SCOPE.LOBBY)
-        g_clientUpdateManager.addCallbacks({'account._additionalXPCache': self.__updateVO,
-         'inventory.1': self.__updateVO,
-         'inventory.8': self.__updateVO})
+        g_clientUpdateManager.addCallbacks({'account._additionalXPCache': self.__onUpdatePremiumBonus,
+         'inventory': self.__onInventoryUpdated})
         self.__gameSession.onPremiumTypeChanged += self.__onPremiumStateChanged
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
         if self.__battleResults.areResultsPosted(self.__arenaUniqueID):
@@ -109,7 +107,7 @@ class BattleResultsWindow(BattleResultsMeta):
         self.as_setIsInBattleQueueS(False)
 
     def _dispose(self):
-        g_eventBus.removeListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__updateVO)
+        g_eventBus.removeListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__onUpdatePremiumBonus)
         g_eventBus.removeListener(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, self.__onBattleResultWindowShowQuest)
         g_eventBus.removeListener(VIEW_ALIAS.BATTLE_QUEUE, self._lockButtons, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(VIEW_ALIAS.LOBBY_HANGAR, self._unlockButtons, EVENT_BUS_SCOPE.LOBBY)
@@ -119,7 +117,7 @@ class BattleResultsWindow(BattleResultsMeta):
 
     @process
     def __requestClanEmblem(self, textureID, clanDBID):
-        emblemID = yield self.__battleResults.requestEmblem(RequestEmblemContext(EMBLEM_TYPE.CLAN, clanDBID, textureID))
+        emblemID = yield self.__battleResults.requestEmblem(RequestEmblemContext(EmblemType.CLAN, clanDBID, textureID))
         if not self.isDisposed():
             self.as_setClanEmblemS(textureID, _wrapEmblemUrl(emblemID))
 
@@ -153,7 +151,11 @@ class BattleResultsWindow(BattleResultsMeta):
             return True
 
     def __onPremiumStateChanged(self, *_):
-        self.__updateVO()
+        self.__onUpdatePremiumBonus()
+
+    def __onInventoryUpdated(self, diff):
+        if GUI_ITEM_TYPE.TANKMAN in diff or GUI_ITEM_TYPE.VEHICLE in diff:
+            self.__onUpdatePremiumBonus()
 
     def __onBattleResultWindowShowQuest(self, event):
         ctx = event.ctx if event is not None else None
@@ -164,10 +166,10 @@ class BattleResultsWindow(BattleResultsMeta):
                 self.showEventsWindow(ctx['questId'], ctx['eventType'])
             return
 
-    def __updateVO(self, _=None):
+    def __onUpdatePremiumBonus(self, _=None):
         battleResultsVO = self.__battleResults.getResultsVO(self.__arenaUniqueID)
         self.as_setDataS(battleResultsVO)
 
     def __onServerSettingsChange(self, diff):
         if PremiumConfigs.DAILY_BONUS in diff:
-            self.__updateVO()
+            self.__onUpdatePremiumBonus()

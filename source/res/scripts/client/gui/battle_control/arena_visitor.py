@@ -373,6 +373,9 @@ class _ArenaBonusTypeVisitor(IArenaVisitor):
     def isFriendlyFireMode(self, enabledBonusTypes):
         return self._bonusType in enabledBonusTypes
 
+    def hasRoleExpSystem(self):
+        return _CAPS.checkAny(self._bonusType, _CAPS.ROLE_SYSTEM)
+
 
 class _ArenaExtraDataVisitor(IArenaVisitor):
     __slots__ = ('_extra',)

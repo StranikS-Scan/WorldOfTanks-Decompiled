@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/epic_maps_ctrl.py
 import Event
+from chat_commands_consts import INVALID_VEHICLE_POSITION
 import CommandMapping
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
 import Math
@@ -40,7 +41,7 @@ class EpicMapsController(DefaultMapsController):
         return self._miniMapUi.getCenterPosition() if self._miniMapUi is not None else Math.Vector3(0, 0, 0)
 
     def getVehiclePosition(self, vID):
-        return self._miniMapUi.getPositionOfEntry(vID) if self._miniMapUi is not None else Math.Vector3(-99999.9, -99999.9, -99999.9)
+        return self._miniMapUi.getPositionOfEntry(vID) if self._miniMapUi is not None else INVALID_VEHICLE_POSITION
 
     def overlayTriggered(self, isActive):
         self.__isOverlayActive = isActive

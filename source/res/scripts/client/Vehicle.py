@@ -22,7 +22,8 @@ from constants import SPT_MATKIND
 from constants import VEHICLE_HIT_EFFECT, VEHICLE_SIEGE_STATE
 from debug_utils import LOG_WARNING, LOG_DEBUG_DEV
 from gui.battle_control import vehicle_getter
-from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _GUI_EVENT_ID, VEHICLE_VIEW_STATE
+from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _GUI_EVENT_ID, VEHICLE_VIEW_STATE, BATTLE_CTRL_ID
+from gui.wt_event.wt_event_helpers import isBossByDescr
 from gun_rotation_shared import decodeGunAngles
 from helpers import dependency
 from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
@@ -312,6 +313,10 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
                 self.appearance.executeHitVibrations(maxHitEffectCode)
                 player = BigWorld.player()
                 player.inputHandler.onVehicleShaken(self, compMatrix.translation, firstHitDir, effectsDescr['caliber'], ShakeReason.HIT if hasPiercedHit else ShakeReason.HIT_NO_DAMAGE)
+                if self.isAlive() and isBossByDescr(self.typeDescriptor):
+                    eventSoundController = self.guiSessionProvider.dynamic.getController(BATTLE_CTRL_ID.EVENT_SOUND_CTRL)
+                    if eventSoundController is not None:
+                        eventSoundController.playHitOnBoss(self.appearance.engineAudition.getSoundObject(TankSoundObjectsIndexes.ENGINE))
             showFriendlyFlashBang = False
             sessionProvider = self.guiSessionProvider
             isAlly = sessionProvider.getArenaDP().isAlly(attackerID)
@@ -320,10 +325,13 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
                 isFriendlyFireMode = sessionProvider.arenaVisitor.bonus.isFriendlyFireMode(friendlyFireBonusTypes)
                 hasCustomAllyDamageEffect = sessionProvider.arenaVisitor.bonus.hasCustomAllyDamageEffect()
                 showFriendlyFlashBang = isFriendlyFireMode and hasCustomAllyDamageEffect
+            isShieldProcessed = False
             for shotPoint in decodedPoints:
-                showFullscreenEffs = self.isPlayerVehicle and self.isAlive()
+                isAlivePlayerVehicle = self.isPlayerVehicle and self.isAlive()
+                if self.appearance.wtEnergyShield is not None and not isShieldProcessed:
+                    isShieldProcessed = self.appearance.wtEnergyShield.processHit(shotPoint)
                 keyPoints, effects, _ = effectsDescr[shotPoint.hitEffectGroup]
-                self.appearance.boundEffects.addNewToNode(shotPoint.componentName, shotPoint.matrix, effects, keyPoints, isPlayerVehicle=self.isPlayerVehicle, showShockWave=showFullscreenEffs, showFlashBang=showFullscreenEffs and not showFriendlyFlashBang, showFriendlyFlashBang=showFullscreenEffs and showFriendlyFlashBang, entity_id=self.id, damageFactor=damageFactor, attackerID=attackerID, hitdir=firstHitDir)
+                self.appearance.boundEffects.addNewToNode(shotPoint.componentName, shotPoint.matrix, effects, keyPoints, isPlayerVehicle=self.isPlayerVehicle, showShockWave=isAlivePlayerVehicle, showFlashBang=isAlivePlayerVehicle and not showFriendlyFlashBang, showFriendlyFlashBang=isAlivePlayerVehicle and showFriendlyFlashBang, entity_id=self.id, damageFactor=damageFactor, attackerID=attackerID, hitdir=firstHitDir)
 
             if not self.isAlive():
                 return

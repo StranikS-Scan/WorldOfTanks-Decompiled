@@ -4,14 +4,16 @@ import weakref
 from collections import namedtuple
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.migrations import migrateToVersion
-from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints, BattlePassStorageKeys
+from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints, BattlePassStorageKeys, WTEventStorageKeys
 from adisp import process, async
 from constants import ROLES_COLLAPSE
 from debug_utils import LOG_ERROR, LOG_DEBUG
+from gui.battle_pass.battle_pass_bonuses_helper import TROPHY_GIFT_TOKEN_BONUS_NAME, NEW_DEVICE_GIFT_TOKEN_BONUS_NAME, getStorageKey
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
 from helpers import dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCache
+from skeletons.gui.game_control import IBattlePassController
 GUI_START_BEHAVIOR = 'guiStartBehavior'
 
 class SETTINGS_SECTIONS(CONST_CONTAINER):
@@ -56,6 +58,8 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     SESSION_STATS = 'SESSION_STATS'
     BATTLE_PASS_STORAGE = 'BATTLE_PASS_STORAGE'
     BATTLE_COMM = 'BATTLE_COMM'
+    EVENT_STORAGE = 'EVENT_STORAGE'
+    LOOT_BOX_VIEWED = 'LOOT_BOX_VIEWED'
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2)
 
 
@@ -491,7 +495,9 @@ class ServerSettingsManager(object):
                                                   'bonus': 6,
                                                   'event': 7,
                                                   'crystals': 8,
-                                                  'battleRoyale': 9}, offsets={})}
+                                                  'battleRoyale': 9}, offsets={}),
+     SETTINGS_SECTIONS.EVENT_STORAGE: Section(masks={WTEventStorageKeys.WT_INTRO_SHOWN: 0}, offsets={}),
+     SETTINGS_SECTIONS.LOOT_BOX_VIEWED: Section(masks={}, offsets={'count': Offset(0, 4294967295L)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -585,6 +591,13 @@ class ServerSettingsManager(object):
 
     def saveInBPStorage(self, settings):
         return self.setSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, settings)
+
+    def getEventStorage(self, defaults=None):
+        storageData = self.getSection(SETTINGS_SECTIONS.EVENT_STORAGE, defaults)
+        return storageData
+
+    def saveInEventStorage(self, settings):
+        return self.setSectionSettings(SETTINGS_SECTIONS.EVENT_STORAGE, settings)
 
     def checkAutoReloadHighlights(self, increase=False):
         return self.__checkUIHighlights(UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER, self._MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT, increase)
@@ -814,6 +827,7 @@ class ServerSettingsManager(object):
          'battleComm': {},
          GUI_START_BEHAVIOR: {},
          'battlePassStorage': {},
+         'eventStorage': {},
          'clear': {},
          'delete': []}
         yield migrateToVersion(currentVersion, self._core, data)
@@ -896,6 +910,10 @@ class ServerSettingsManager(object):
         clearBPStorage = clear.get('battlePassStorage', 0)
         if BPStorage or clearBPStorage:
             settings[SETTINGS_SECTIONS.BATTLE_PASS_STORAGE] = self._buildSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, BPStorage) ^ clearBPStorage
+        EventStorage = data.get('eventStorage', {})
+        clearEventStorage = clear.get('eventStorage', 0)
+        if EventStorage or clearEventStorage:
+            settings[SETTINGS_SECTIONS.EVENT_STORAGE] = self._buildSectionSettings(SETTINGS_SECTIONS.EVENT_STORAGE, EventStorage) ^ clearEventStorage
         version = data.get(VERSION)
         if version is not None:
             settings[VERSION] = version
@@ -914,14 +932,23 @@ class ServerSettingsManager(object):
 
 
 def _updateBattlePassVersion(data):
-    version = 2
+    version = 3
     if data[BattlePassStorageKeys.FLAGS_VERSION] < version:
         data[BattlePassStorageKeys.FLAGS_VERSION] = version
         data[BattlePassStorageKeys.SHOWN_VIDEOS_FLAGS] = 0
         data[BattlePassStorageKeys.INTRO_VIDEO_SHOWN] = False
         data[BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN] = False
         data[BattlePassStorageKeys.BUY_BUTTON_HINT_IS_SHOWN] = False
-        data[BattlePassStorageKeys.CHOSEN_TROPHY_DEVICES] = 0
-        data[BattlePassStorageKeys.CHOSEN_NEW_DEVICES] = 0
+        battlePassController = dependency.instance(IBattlePassController)
+        tokensCounts = {TROPHY_GIFT_TOKEN_BONUS_NAME: battlePassController.getTrophySelectTokensCount(),
+         NEW_DEVICE_GIFT_TOKEN_BONUS_NAME: battlePassController.getNewDeviceSelectTokensCount()}
+        for bonusName in (TROPHY_GIFT_TOKEN_BONUS_NAME, NEW_DEVICE_GIFT_TOKEN_BONUS_NAME):
+            container = battlePassController.getDeviceTokensContainer(bonusName)
+            usedTokens = container.getUsedTokens(tokensCounts[bonusName])
+            data[getStorageKey(bonusName)] = usedTokens
+
+        if version != 3:
+            data[BattlePassStorageKeys.CHOSEN_TROPHY_DEVICES] = 0
+            data[BattlePassStorageKeys.CHOSEN_NEW_DEVICES] = 0
         return True
     return False

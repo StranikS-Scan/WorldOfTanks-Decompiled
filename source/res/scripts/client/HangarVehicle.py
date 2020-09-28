@@ -63,3 +63,13 @@ class HangarVehicle(ClientSelectableCameraVehicle):
 
     def __resetVehicleModelTransform(self, event):
         self._resetVehicleModelTransform()
+
+    def onMouseClick(self):
+        if not self._gameEventController.isInWTEventSquad():
+            super(HangarVehicle, self).onMouseClick()
+        self.fireOnMouseClickEvents()
+
+    def fireOnMouseClickEvents(self):
+        g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.WT_EVENT_VEHICLED_CLICKED, ctx={'data': {'isEvent': False,
+                  'vehCD': 0,
+                  'hangarRandomVehicle': True}}), EVENT_BUS_SCOPE.LOBBY)

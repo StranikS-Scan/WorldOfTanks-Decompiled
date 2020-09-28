@@ -1,0 +1,102 @@
+<wt_equipments.xml>
+  <afterburning_wt>
+    <id>	900	</id>
+    <userString>	#wt_event:equipment/afterburning_wt/name	</userString>
+    <description>	#wt_event:equipment/afterburning_wt/descr	</description>
+    <shortDescriptionSpecial>	#wt_event:equipment/afterburning_wt/shortDescr	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#wt_event:equipment/afterburning_wt/longDescr	</longDescriptionSpecial>
+    <icon>	wt_ability_nitro 0 0	</icon>
+    <soundNotification>	nitro_combat_reserve	</soundNotification>
+    <price>	15000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <script>	AfterburningWT	  <cooldownSeconds>	30	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <deploySeconds>	0	</deploySeconds>
+      <rechargeSeconds>	0	</rechargeSeconds>
+      <consumeSeconds>	15	</consumeSeconds>
+      <enginePowerFactor>	1.3	</enginePowerFactor>
+      <maxSpeedFactor>	1.69	</maxSpeedFactor>
+      <vehicleRotationSpeed>	1.0	</vehicleRotationSpeed>
+    </script>
+  </afterburning_wt>
+  <instant_stun_shoot_wt>
+    <id>	901	</id>
+    <userString>	#wt_event:equipment/instant_stun_shoot_wt/name	</userString>
+    <description>	#wt_event:equipment/instant_stun_shoot_wt/descr	</description>
+    <icon>	wt_ability_stan 0 0	</icon>
+    <soundNotification>	br_ability	</soundNotification>
+    <price>	15000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale instant_shoot eventAltItem	</tags>
+    <script>	InstantStunShootWT	  <cooldownSeconds>	15	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <piercingPower>	1000 1000	</piercingPower>
+      <speed>	750	</speed>
+      <gravity>	9.81	</gravity>
+      <maxDistance>	720	</maxDistance>
+      <maxHeight>	100	</maxHeight>
+      <shellDescr>	102938	</shellDescr>
+    </script>
+  </instant_stun_shoot_wt>
+  <impulse_wt>
+    <id>	902	</id>
+    <userString>	#wt_event:equipment/impulse_wt/name	</userString>
+    <description>	#wt_event:equipment/impulse_wt/descr	</description>
+    <icon>	wt_ability_emi 0 0	</icon>
+    <soundNotification>	br_ability	</soundNotification>
+    <price>	15000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <script>	ImpulseWT	  <cooldownSeconds>	20	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <prepareSeconds>	3	</prepareSeconds>
+      <damageRadius>	15	</damageRadius>
+      <damageValue>	600	</damageValue>
+      <stunRadius>	50	</stunRadius>
+      <shellDescr>	102938	</shellDescr>
+      <cooldownBonus>
+        <bonus_0>
+          <affected>	2	</affected>
+          <bonus>	0.1	</bonus>
+        </bonus_0>
+        <bonus_1>
+          <affected>	3	</affected>
+          <bonus>	0.2	</bonus>
+        </bonus_1>
+        <bonus_2>
+          <affected>	4	</affected>
+          <bonus>	0.3	</bonus>
+        </bonus_2>
+        <bonus_3>
+          <affected>	5	</affected>
+          <bonus>	0.4	</bonus>
+        </bonus_3>
+      </cooldownBonus>
+    </script>
+  </impulse_wt>
+  <largeMedkit_wt>
+    <id>	903	</id>
+    <userString>	#artefacts:largeMedkit_wt/name	</userString>
+    <description>	#artefacts:largeMedkit_wt/stunDisabled/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:largeMedkit_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:largeMedkit_wt/long_special	</longDescriptionSpecial>
+    <icon>	largeMedkit 0 0	</icon>
+    <price>	20000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale medkit	</tags>
+    <script>	Repairkit	  <repairAll>	true	</repairAll>
+      <bonusValue>	0.30	</bonusValue>
+      <stunResistanceEffect>	0.0	</stunResistanceEffect>
+      <stunResistanceDuration>	0.0	</stunResistanceDuration>
+      <cooldownSeconds>	180	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+    </script>
+    <kpi>
+      <mul>
+        <name>	crewHitChance	</name>
+        <value>	1.15	</value>
+      </mul>
+    </kpi>
+  </largeMedkit_wt>
+</wt_equipments.xml>

@@ -433,3 +433,7 @@ class BattleCommStorageKeys(CONST_CONTAINER):
     SHOW_STICKY_MARKERS = 'showStickyMarkers'
     SHOW_CALLOUT_MESSAGES = 'showCalloutMessages'
     SHOW_BASE_MARKERS = 'showMarkers'
+
+
+class WTEventStorageKeys(CONST_CONTAINER):
+    WT_INTRO_SHOWN = 'wtIntroShown'

@@ -18,6 +18,7 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.impl.backport.backport_system_locale import getIntegralFormat
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBonsDevicesUrl, getBonsVehiclesUrl, getBonsInstructionsUrl
+from gui.Scaleform.Waiting import Waiting
 from gui.shared.event_dispatcher import showShop
 shopUrlsMap = {CrystalsPromoViewModel.TANKS_TAB: getBonsVehiclesUrl(),
  CrystalsPromoViewModel.EQUIPMENT_TAB: getBonsDevicesUrl(),
@@ -45,6 +46,7 @@ class CrystalsPromoView(ViewImpl):
         self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
 
     def _onLoading(self, *args, **kwargs):
+        Waiting.show('loadPage')
         isFirstOpen = not AccountSettings.getSettings(CRYSTALS_INFO_SHOWN)
         if isFirstOpen:
             AccountSettings.setSettings(CRYSTALS_INFO_SHOWN, True)
@@ -102,6 +104,7 @@ class CrystalsPromoView(ViewImpl):
         g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': True}), EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.NOTHING}), EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, self.__onToggleVisibilityMenu, scope=EVENT_BUS_SCOPE.LOBBY)
+        Waiting.hide('loadPage')
 
     def __onToggleVisibilityMenu(self, event):
         self.__visibility = event.ctx['state']

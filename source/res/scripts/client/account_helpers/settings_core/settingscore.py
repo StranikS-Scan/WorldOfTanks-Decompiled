@@ -35,6 +35,7 @@ class SettingsCore(ISettingsCore):
         self.__interfaceScale = None
         self.__storages = None
         self.__options = None
+        self.__eventDisabledStorages = set()
         self.__isReady = False
         return
 
@@ -305,6 +306,7 @@ class SettingsCore(ISettingsCore):
             self.__interfaceScale = None
         AccountSettings.onSettingsChanging -= self.__onAccountSettingsChanging
         AccountSettings.clearCache()
+        self.__eventDisabledStorages.clear()
         LOG_DEBUG('SettingsCore is destroyed')
         return
 
@@ -369,10 +371,11 @@ class SettingsCore(ISettingsCore):
     def isSettingChanged(self, name, value):
         return not self.__options.getSetting(name).isEqual(value)
 
-    def applyStorages(self, restartApproved):
+    def applyStorages(self, restartApproved, force=True):
         confirmators = []
-        for storage in self.__storages.values():
-            confirmators.append(storage.apply(restartApproved))
+        for storageName, storage in self.__storages.iteritems():
+            if storageName not in self.__eventDisabledStorages or force:
+                confirmators.append(storage.apply(restartApproved))
 
         return confirmators
 
@@ -388,12 +391,19 @@ class SettingsCore(ISettingsCore):
 
         return
 
-    def clearStorages(self):
-        for storage in self.__storages.values():
-            storage.clear()
+    def clearStorages(self, force=True):
+        for storageName, storage in self.__storages.iteritems():
+            if storageName not in self.__eventDisabledStorages or force:
+                storage.clear()
 
     def isReady(self):
         return self.__isReady
+
+    def setEventDisabledStorages(self, storagesName):
+        self.__eventDisabledStorages.update(storagesName)
+
+    def unsetEventDisabledStorages(self):
+        self.__eventDisabledStorages.clear()
 
     def __onAccountSettingsChanging(self, key, value):
         self.onSettingsChanged({key: value})

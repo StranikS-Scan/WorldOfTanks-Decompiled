@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/battle_selector_event_progression_providers.py
 import datetime
 from adisp import process
+from constants import IS_CHINA
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from helpers import time_utils, dependency, int2roman
@@ -24,7 +25,7 @@ class EventProgressionDefaultDataProvider(SelectorExtraItem):
     __slots__ = ('_isDisabled', '_isNew')
 
     def __init__(self):
-        super(EventProgressionDefaultDataProvider, self).__init__(label=backport.text(_R_BATTLE_TYPES.eventProgression.about(), year=datetime.datetime.now().year), data=PREBATTLE_ACTION_NAME.EPIC, order=0, selectorType=SELECTOR_BATTLE_TYPES.EVENT_PROGRESSION)
+        super(EventProgressionDefaultDataProvider, self).__init__(label=backport.text(_R_BATTLE_TYPES.eventProgression.about_cn() if IS_CHINA else _R_BATTLE_TYPES.eventProgression.about(), year=datetime.datetime.now().year), data=PREBATTLE_ACTION_NAME.EPIC, order=0, selectorType=SELECTOR_BATTLE_TYPES.EVENT_PROGRESSION)
         self._isDisabled = False
         self._isNew = False
 
@@ -47,10 +48,10 @@ class EventProgressionDefaultDataProvider(SelectorExtraItem):
         return text_styles.main(self._label)
 
     def getMainLabel(self):
-        return text_styles.highTitle(backport.text(_R_BATTLE_TYPES.eventProgression()))
+        return text_styles.highTitle(backport.text(_R_BATTLE_TYPES.eventProgression_cn() if IS_CHINA else _R_BATTLE_TYPES.eventProgression()))
 
     def getInfoLabel(self):
-        return '{} {}'.format(text_styles.highTitle(self.__eventProgression.actualRewardPoints), icons.makeImageTag(backport.image(_R_ICONS.epicBattles.rewardPoints.c_16x16()), vSpace=-1))
+        return '{} {}'.format(text_styles.highTitle(self.__eventProgression.actualRewardPoints), icons.makeImageTag(backport.image(_R_ICONS.epicBattles.prestigePoints.c_16x16() if IS_CHINA else _R_ICONS.epicBattles.rewardPoints.c_16x16()), vSpace=-1))
 
     def isVisible(self):
         return self.__eventProgression.isEnabled and not self.__bootcampController.isInBootcamp()
@@ -100,18 +101,48 @@ class EventProgressionDataProvider(SelectorExtraItem):
         return
 
     def getFormattedLabel(self):
-        battleTypeName = text_styles.middleTitle(self.getLabel())
-        availabilityStr = self._getPerformanceAlarmStr() or self._getScheduleStr()
-        return battleTypeName if availabilityStr is None else '{}\n{}'.format(battleTypeName, availabilityStr)
+        if IS_CHINA:
+            return self.getFormattedLabelCN()
+        else:
+            battleTypeName = self.getLabel()
+            availabilityStr = self._getPerformanceAlarmStr() or self._getScheduleStr()
+            return battleTypeName if availabilityStr is None else '{}\n{}'.format(text_styles.middleTitle(battleTypeName), availabilityStr)
+
+    def getFormattedLabelCN(self):
+        infoStrResID = R.invalid
+        currentSeason = self.__eventProgression.getCurrentSeason()
+        if currentSeason:
+            seasonResID = R.strings.epic_battle.season.num(currentSeason.getSeasonID())
+            seasonName = backport.text(seasonResID.name()) if seasonResID else None
+            if currentSeason.isSingleCycleSeason():
+                seasonsOverResID = R.strings.tooltips.eventProgression.allSeasonsAreOver.single()
+                infoStrResID = R.strings.menu.headerButtons.battle.types.epic.extra.currentSeason_cn
+            else:
+                seasonsOverResID = R.strings.tooltips.eventProgression.allSeasonsAreOver.multi()
+                infoStrResID = R.strings.menu.headerButtons.battle.types.epic.extra.currentCycle
+            if currentSeason.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp()):
+                cycleNumber = currentSeason.getCycleInfo().getEpicCycleNumber()
+            else:
+                cycle = currentSeason.getNextByTimeCycle(time_utils.getCurrentLocalServerTimestamp())
+                cycleNumber = cycle.ordinalNumber if cycle is not None else None
+        else:
+            seasonsOverResID = R.strings.tooltips.eventProgression.allSeasonsAreOver.multi()
+            seasonName = None
+            cycleNumber = None
+        middleLabel = backport.text(infoStrResID(), cycle=int2roman(cycleNumber), season=seasonName) if cycleNumber is not None else text_styles.main(backport.text(seasonsOverResID))
+        bottomLabel = self._getPerformanceAlarmStr() or self._getScheduleStr()
+        return middleLabel if bottomLabel is None else '{}\n{}'.format(text_styles.middleTitle(middleLabel), bottomLabel)
 
     def getSpecialBGIcon(self):
         return backport.image(_R_ICONS.buttons.selectorRendererExtraBGEvent()) if self.__eventProgression.isActive() else ''
 
     def getMainLabel(self):
-        return text_styles.highTitle(backport.text(_R_BATTLE_TYPES.eventProgression()))
+        label = _R_BATTLE_TYPES.epic() if IS_CHINA else _R_BATTLE_TYPES.eventProgression()
+        return text_styles.highTitle(backport.text(label))
 
     def getInfoLabel(self):
-        return '{} {}'.format(text_styles.highTitle(self.__eventProgression.actualRewardPoints), icons.makeImageTag(backport.image(_R_ICONS.epicBattles.rewardPoints.c_16x16()), vSpace=-2))
+        icon = _R_ICONS.epicBattles.prestigePoints if IS_CHINA else _R_ICONS.epicBattles.rewardPoints
+        return '{} {}'.format(text_styles.highTitle(self.__eventProgression.actualRewardPoints), icons.makeImageTag(backport.image(icon.c_16x16()), vSpace=-2))
 
     def getRibbonSrc(self):
         ribbonResId = self.__eventProgression.selectorRibbonResId
@@ -131,8 +162,15 @@ class EventProgressionDataProvider(SelectorExtraItem):
                 seasonResID = R.strings.epic_battle.season.num(currentSeason.getSeasonID())
                 seasonName = backport.text(seasonResID.name()) if seasonResID else None
                 if currentSeason.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp()):
-                    cycleNumber = currentSeason.getCycleInfo().getEpicCycleNumber()
-                    scheduleStr = backport.text(_R_BATTLE_TYPES.epic.extra.currentCycle(), cycle=int2roman(cycleNumber), season=seasonName)
+                    if IS_CHINA:
+                        return ''
+                    if currentSeason.isSingleCycleSeason():
+                        infoStrResID = R.strings.menu.headerButtons.battle.types.epic.extra.currentSeason()
+                        cycleNumber = 0
+                    else:
+                        infoStrResID = R.strings.menu.headerButtons.battle.types.epic.extra.currentCycle()
+                        cycleNumber = currentSeason.getCycleInfo().getEpicCycleNumber()
+                    scheduleStr = backport.text(infoStrResID, cycle=int2roman(cycleNumber), season=seasonName)
                 else:
                     nextCycle = currentSeason.getNextCycleInfo(time_utils.getCurrentLocalServerTimestamp())
                     if nextCycle is None:

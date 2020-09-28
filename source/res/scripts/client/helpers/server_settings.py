@@ -5,7 +5,7 @@ import types
 from collections import namedtuple
 import logging
 from Event import Event
-from constants import IS_TUTORIAL_ENABLED, PremiumConfigs, DAILY_QUESTS_CONFIG, ClansConfig, MAGNETIC_AUTO_AIM_CONFIG, Configs
+from constants import IS_TUTORIAL_ENABLED, PremiumConfigs, PREM_BONUS_TYPES, DAILY_QUESTS_CONFIG, PREMIUM_ENTITLEMENTS, ENTITLEMENT_TO_PREM_TYPE, ClansConfig, MAGNETIC_AUTO_AIM_CONFIG, Configs
 from collector_vehicle import CollectorVehicleConsts
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from battle_pass_common import BattlePassConfig, BATTLE_PASS_CONFIG_NAME
@@ -290,7 +290,7 @@ _ProgressiveReward.__new__.__defaults__ = (True,
  'pr:probability',
  0)
 
-class _EventProgressionConfig(namedtuple('_EventProgressionConfig', ('isEnabled', 'isFrontLine', 'isSteelHunter', 'url', 'questPrefix', 'exchange', 'rewardVehicles', 'rewardPointsTokenID', 'seasonPointsTokenID', 'maxRewardPoints'))):
+class _EventProgressionConfig(namedtuple('_EventProgressionConfig', ('isEnabled', 'isFrontLine', 'isSteelHunter', 'url', 'questPrefix', 'exchange', 'rewardVehicles', 'rewardStyles', 'rewardPointsTokenID', 'seasonPointsTokenID', 'maxRewardPoints'))):
 
     def __new__(cls, *args, **kwargs):
         defaults = {attr:copy.deepcopy(cls.__new__.__defaults__[i]) for i, attr in enumerate(cls._fields)}
@@ -312,6 +312,7 @@ _EventProgressionConfig.__new__.__defaults__ = (False,
  '',
  '',
  {},
+ [],
  [],
  '',
  '',
@@ -865,7 +866,7 @@ class ServerSettings(object):
         return self.__bwShop.isStorageEnabled
 
     def isLootBoxesEnabled(self):
-        return self.__getGlobalSetting('isLootBoxesEnabled')
+        return self.__getGlobalSetting('isLootBoxesEnabled', False)
 
     def isAnonymizerEnabled(self):
         return self.__getGlobalSetting('isAnonymizerEnabled', False)
@@ -933,6 +934,18 @@ class ServerSettings(object):
 
     def getPreferredMapsConfig(self):
         return self.__getGlobalSetting(PremiumConfigs.PREFERRED_MAPS, {})
+
+    def getPremiumPlusXPBonus(self):
+        battleBonuses = self.__getGlobalSetting('prem_battle_bonuses', {})
+        return battleBonuses.get(PREM_BONUS_TYPES.XP, {}).get(ENTITLEMENT_TO_PREM_TYPE[PREMIUM_ENTITLEMENTS.PLUS], 0)
+
+    def getPremiumPlusCreditsBonus(self):
+        battleBonuses = self.__getGlobalSetting('prem_battle_bonuses', {})
+        return battleBonuses.get(PREM_BONUS_TYPES.CREDITS, {}).get(ENTITLEMENT_TO_PREM_TYPE[PREMIUM_ENTITLEMENTS.PLUS], 0)
+
+    def getPremiumPlusTmenXPBonus(self):
+        battleBonuses = self.__getGlobalSetting('prem_battle_bonuses', {})
+        return battleBonuses.get(PREM_BONUS_TYPES.TMEN_XP, {}).get(ENTITLEMENT_TO_PREM_TYPE[PREMIUM_ENTITLEMENTS.PLUS], 0)
 
     def isEpicRandomEnabled(self):
         return self.__getGlobalSetting('isEpicRandomEnabled', False)

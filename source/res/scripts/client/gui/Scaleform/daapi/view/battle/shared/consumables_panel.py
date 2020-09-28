@@ -20,6 +20,7 @@ from gui.battle_control.battle_constants import VEHICLE_DEVICE_IN_COMPLEX_ITEM
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, DEVICE_STATE_DESTROYED
 from gui.battle_control.controllers.consumables.equipment_ctrl import IgnoreEntitySelection
 from gui.battle_control.controllers.consumables.equipment_ctrl import NeedEntitySelection, InCooldownError
+from gui.battle_control.controllers.consumables.equipment_ctrl import isWtEventItem
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
@@ -175,7 +176,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         self._cds[idx] = intCD
         keyCode, sfKeyCode = self.__genKey(idx)
         self.__extraKeys[idx] = self.__keys[keyCode] = partial(self.__handleAmmoPressed, intCD)
-        tooltipText = self.__makeShellTooltip(descriptor, int(gunSettings.getPiercingPower(intCD)), gunSettings.getShotSpeed(intCD))
+        tooltipText = self._makeShellTooltip(descriptor, int(gunSettings.getPiercingPower(intCD)), gunSettings.getShotSpeed(intCD))
         icon = descriptor.icon[0]
         shellIconPath = AMMO_ICON_PATH % icon
         noShellIconPath = NO_AMMO_ICON_PATH % icon
@@ -185,7 +186,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         self._cds[idx] = intCD
         if item is None:
             bwKey, sfKey = self.__genKey(idx)
-            self.as_addEquipmentSlotS(idx, bwKey, sfKey, 0, 0, 0, None, EMPTY_EQUIPMENT_TOOLTIP, ANIMATION_TYPES.NONE)
+            self.as_addEquipmentSlotS(idx, bwKey, sfKey, 0, 0, 0, None, EMPTY_EQUIPMENT_TOOLTIP, ANIMATION_TYPES.NONE, None, None)
             snap = self._cds[self._EQUIPMENT_START_IDX:self._EQUIPMENT_END_IDX + 1]
             if snap == self.__emptyEquipmentsSlice:
                 self.as_showEquipmentSlotsS(False)
@@ -205,20 +206,11 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
             quantity = item.getQuantity()
             timeRemaining = item.getTimeRemaining()
             reloadingTime = item.getTotalTime()
+            stage = item.getStage()
             iconPath = self._getEquipmentIconPath() % descriptor.icon[0]
             animationType = item.getAnimationType()
-            body = descriptor.description
-            if reloadingTime > 0:
-                tooltipStr = R.strings.ingame_gui.consumables_panel.equipment.cooldownSeconds()
-                if isinstance(descriptor, SharedCooldownConsumableConfigReader):
-                    cdSecVal = descriptor.cooldownTime
-                else:
-                    cdSecVal = descriptor.cooldownSeconds
-                cooldownSeconds = str(int(cdSecVal))
-                paramsString = backport.text(tooltipStr, cooldownSeconds=cooldownSeconds)
-                body = '\n\n'.join((body, paramsString))
-            toolTip = TOOLTIP_FORMAT.format(descriptor.userString, body)
-            self.as_addEquipmentSlotS(idx, bwKey, sfKey, quantity, timeRemaining, reloadingTime, iconPath, toolTip, animationType)
+            toolTip = self._makeEquipmentItemTooltip(item)
+            self.as_addEquipmentSlotS(idx, bwKey, sfKey, quantity, timeRemaining, reloadingTime, iconPath, toolTip, animationType, stage, tags)
         return
 
     def _addOptionalDeviceSlot(self, idx, optDeviceInBattle):
@@ -236,7 +228,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         maxTime = item.getTotalTime()
         if maxTime == 0 and item.getStage() == EQUIPMENT_STAGES.COOLDOWN:
             maxTime = item.getDescriptor().cooldownSeconds
-        self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime, item.getAnimationType())
+        self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime, item.getAnimationType(), item.getStage())
         bwKey, _ = self.__genKey(idx)
         if item.getQuantity() > 0 and bwKey not in self.__keys:
             if item.isEntityRequired():
@@ -248,7 +240,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
             glowType = CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN_SPECIAL if item.isAvatar() else CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN
             if self.__canApplyingGlowEquipment(item):
                 self._showEquipmentGlow(idx)
-            elif item.becomeReady:
+            elif item.becomeReady and not isWtEventItem(item):
                 self._showEquipmentGlow(idx, glowType)
             elif idx in self.__equipmentsGlowCallbacks:
                 self.__clearEquipmentGlow(idx)
@@ -275,6 +267,41 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         else:
             self.as_setGlowS(equipmentIndex, glowID=glowType)
         self.__equipmentsGlowCallbacks[equipmentIndex] = BigWorld.callback(_EQUIPMENT_GLOW_TIME, partial(self.__hideEquipmentGlowCallback, equipmentIndex))
+
+    def _makeEquipmentItemTooltip(self, item):
+        descriptor = item.getDescriptor()
+        body = descriptor.description
+        if item.getTotalTime() > 0:
+            tooltipStr = R.strings.ingame_gui.consumables_panel.equipment.cooldownSeconds()
+            if isinstance(descriptor, SharedCooldownConsumableConfigReader):
+                cdSecVal = descriptor.cooldownTime
+            else:
+                cdSecVal = descriptor.cooldownSeconds
+            cooldownSeconds = str(int(cdSecVal))
+            paramsString = backport.text(tooltipStr, cooldownSeconds=cooldownSeconds)
+            body = body + '\n\n' + paramsString
+        return TOOLTIP_FORMAT.format(descriptor.userString, body)
+
+    def _makeShellTooltip(self, descriptor, piercingPower, shotSpeed):
+        kind = descriptor.kind
+        projSpeedFactor = vehicles.g_cache.commonConfig['miscParams']['projectileSpeedFactor']
+        header = backport.text(R.strings.ingame_gui.shells_kinds.dyn(kind)(), caliber=backport.getNiceNumberFormat(descriptor.caliber), userString=descriptor.userString)
+        if GUI_SETTINGS.technicalInfo:
+            params = [backport.text(R.strings.ingame_gui.shells_kinds.params.damage(), value=backport.getNiceNumberFormat(descriptor.damage[0]))]
+            if piercingPower != 0:
+                params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.piercingPower(), value=backport.getNiceNumberFormat(piercingPower)))
+            params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.shotSpeed(), value=backport.getIntegralFormat(shotSpeed / projSpeedFactor)))
+            if kind == SHELL_TYPES.HIGH_EXPLOSIVE and descriptor.type.explosionRadius > 0.0:
+                params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.explosionRadius(), value=backport.getNiceNumberFormat(descriptor.type.explosionRadius)))
+            if descriptor.hasStun and self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
+                stun = descriptor.stun
+                params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.stunDuration(), minValue=backport.getNiceNumberFormat(stun.guaranteedStunDuration * stun.stunDuration), maxValue=backport.getNiceNumberFormat(stun.stunDuration)))
+            body = text_styles.concatStylesToMultiLine(*params)
+            fmt = TOOLTIP_FORMAT
+        else:
+            body = ''
+            fmt = TOOLTIP_NO_BODY_FORMAT
+        return fmt.format(header, body)
 
     def _onShellsAdded(self, intCD, descriptor, quantity, _, gunSettings):
         idx = self.__genNextIdx(self.__ammoFullMask, self._AMMO_START_IDX)
@@ -406,27 +433,6 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         if bwKey is not None:
             sfKey = getScaleformKey(bwKey)
         return (bwKey, sfKey)
-
-    def __makeShellTooltip(self, descriptor, piercingPower, shotSpeed):
-        kind = descriptor.kind
-        projSpeedFactor = vehicles.g_cache.commonConfig['miscParams']['projectileSpeedFactor']
-        header = backport.text(R.strings.ingame_gui.shells_kinds.dyn(kind)(), caliber=backport.getNiceNumberFormat(descriptor.caliber), userString=descriptor.userString)
-        if GUI_SETTINGS.technicalInfo:
-            params = [backport.text(R.strings.ingame_gui.shells_kinds.params.damage(), value=backport.getNiceNumberFormat(descriptor.damage[0]))]
-            if piercingPower != 0:
-                params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.piercingPower(), value=backport.getNiceNumberFormat(piercingPower)))
-            params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.shotSpeed(), value=backport.getIntegralFormat(shotSpeed / projSpeedFactor)))
-            if kind == SHELL_TYPES.HIGH_EXPLOSIVE and descriptor.type.explosionRadius > 0.0:
-                params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.explosionRadius(), value=backport.getNiceNumberFormat(descriptor.type.explosionRadius)))
-            if descriptor.hasStun and self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
-                stun = descriptor.stun
-                params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.stunDuration(), minValue=backport.getNiceNumberFormat(stun.guaranteedStunDuration * stun.stunDuration), maxValue=backport.getNiceNumberFormat(stun.stunDuration)))
-            body = text_styles.concatStylesToMultiLine(*params)
-            fmt = TOOLTIP_FORMAT
-        else:
-            body = ''
-            fmt = TOOLTIP_NO_BODY_FORMAT
-        return fmt.format(header, body)
 
     def __getKeysGenerator(self):
         hasEquipment = self.sessionProvider.shared.equipments.hasEquipment
@@ -674,7 +680,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         if 'extinguisher' in equipmentTags or 'regenerationKit' in equipmentTags:
             correction = True
             entityName = None
-        elif equipment.isAvatar():
+        elif equipment.isAvatar() or isWtEventItem(equipment):
             correction = False
             entityName = None
         else:

@@ -64,8 +64,8 @@ class OfferEventData(object):
         return self._data.get('priority')
 
     @property
-    def multiChoiceAllowed(self):
-        return self._data.get('multiChoiceAllowed', False)
+    def showPrice(self):
+        return self._data.get('showPrice', False)
 
     @property
     def cdnLocFilePath(self):
@@ -85,25 +85,45 @@ class OfferEventData(object):
         return self._data.get(CDN_KEY, {}).get('giftsBackground', '')
 
     @property
+    def cdnGiftsTokenImgPath(self):
+        return self._data.get(CDN_KEY, {}).get('giftTokenImg', '')
+
+    @property
     def availableGifts(self):
         received = self._receivedGifts
         if received is None:
             return []
         else:
-            if self.multiChoiceAllowed:
-                received = set()
-            return [ OfferGift(giftID, settings) for giftID, settings in self._data.get('gift', {}).iteritems() if giftID not in received ]
+            return [ OfferGift(giftID, settings) for giftID, settings in self._data.get('gift', {}).iteritems() if giftID not in received or not settings.get('limit', 1) or giftID in received and settings.get('limit', 1) and received[giftID] < settings.get('limit', 1) ]
 
     def getGift(self, giftID):
         giftsData = self._data.get('gift')
         return OfferGift(giftID, self._data['gift'][giftID]) if giftsData and giftID in giftsData else None
+
+    def getGiftAvailabelCount(self, giftID):
+        received = self._receivedGifts
+        if received is None:
+            return 0
+        else:
+            giftsData = self._data.get('gift')
+            if giftsData and giftID in giftsData:
+                limits = giftsData[giftID].get('limit', 1)
+                if limits > 0:
+                    if giftID not in received:
+                        return limits
+                    return limits - received[giftID]
+            return -1
 
     def getAllGifts(self):
         return [ OfferGift(giftID, settings) for giftID, settings in self._data.get('gift', {}).iteritems() ]
 
     @property
     def clicksCount(self):
-        return min(self._tokensCache.getTokenCount(self.giftToken), self.availableGiftsCount)
+        return min(self.availableTokens, self.availableGiftsCount)
+
+    @property
+    def availableTokens(self):
+        return self._tokensCache.getTokenCount(self.giftToken)
 
     @property
     def availableGiftsCount(self):
@@ -112,10 +132,23 @@ class OfferEventData(object):
             return 0
         else:
             giftsCount = len(self._data.get('gift', {}))
-            if self.multiChoiceAllowed:
-                return giftsCount
-            notReceived = giftsCount - len(received)
+            notReceived = giftsCount - len(self.isOutOfLimit)
             return max(notReceived, 0)
+
+    @property
+    def isOutOfLimit(self):
+        received = self._receivedGifts
+        if received is None:
+            return []
+        else:
+            outOfLimits = []
+            gifts = self._data.get('gift', {})
+            for giftID in received:
+                limit = gifts.get(giftID, {}).get('limit', 1)
+                if limit and received[giftID] >= limit:
+                    outOfLimits.append(giftID)
+
+            return outOfLimits
 
     @property
     def expiration(self):
@@ -204,6 +237,13 @@ class OfferGift(object):
     @property
     def icon(self):
         return getGfImagePath(self.bonus.getOfferIcon()) if not self.fromCdn and self.bonus else ''
+
+    @property
+    def price(self):
+        return self._data.get('price', 1)
+
+    def limit(self):
+        return self._data.get('limit', 1)
 
     @property
     def nationFlag(self):

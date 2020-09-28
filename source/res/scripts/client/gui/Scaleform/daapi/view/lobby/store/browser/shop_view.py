@@ -71,6 +71,13 @@ class ShopOverlay(_ShopOverlayBase):
             self.destroy()
 
 
+class WtEventShopOverlay(ShopOverlay):
+
+    def webHandlers(self):
+        from gui.Scaleform.daapi.view.lobby.shared.web_handlers import createWtEventWebHandlers
+        return createWtEventWebHandlers()
+
+
 class PremContentPageOverlay(WebView):
 
     def webHandlers(self):

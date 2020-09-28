@@ -214,6 +214,9 @@ CMD_CHANGE_BR_POINTS = 10060
 CMD_EQUIP_OPT_DEVS_SEQUENCE = 10061
 CMD_ENQUEUE_BOB = 10062
 CMD_DEQUEUE_BOB = 10063
+CMD_BUY_FL_REWARD_STYLE = 10064
+CMD_LOOTBOX_REROLL = 10065
+CMD_LOOTBOX_REROLL_RECORDS = 10066
 PLAYER_CMD_NAMES = dict([ (v, k) for k, v in globals().items() if k.startswith('CMD_') ])
 KEYS_ARE_UNIQUE = len(PLAYER_CMD_NAMES) == len(set((key for key in globals() if key.startswith('CMD_'))))
 

@@ -4,8 +4,10 @@ from collections import namedtuple
 import BigWorld
 import Event
 from constants import RESPAWN_TYPES
+from gui.battle_control import avatar_getter
 from gui.battle_control.avatar_getter import getSoundNotifications
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
+from gui.shared.gui_items.Vehicle import VEHICLE_EVENT_TYPE
 from items import vehicles
 from gui.battle_control.view_components import ViewComponentsController
 from PlayerEvents import g_playerEvents
@@ -39,10 +41,11 @@ class IRespawnView(object):
 _RESPAWN_SOUND_ID = 'start_battle'
 
 class RespawnsController(ViewComponentsController):
-    __slots__ = ('__weakref__', '__isUIInited', '__vehicles', '__cooldowns', '__respawnInfo', '__timerCallback', '__eManager', 'onRespawnVisibilityChanged', 'onVehicleDeployed', 'onRespawnInfoUpdated', 'onPlayerRespawnLivesUpdated', 'onTeamRespawnLivesRestored', 'onRespawnVehiclesUpdated', '__isUiShown', '__isShowUiAllowed', '__limits', '__playerRespawnLives', '__respawnSoundNotificationRequest', '__battleCtx')
+    __slots__ = ('__weakref__', '__isUIInited', '__vehicles', '__cooldowns', '__respawnInfo', '__timerCallback', '__eManager', 'onRespawnVisibilityChanged', 'onVehicleDeployed', 'onRespawnInfoUpdated', 'onPlayerRespawnLivesUpdated', 'onTeamRespawnLivesRestored', 'onRespawnVehiclesUpdated', 'onTeammatesRespawnLivesUpdated', '__isUiShown', '__isShowUiAllowed', '__limits', '__playerRespawnLives', '__respawnSoundNotificationRequest', '__battleCtx', '__teammatesRespawnLives')
     showUiAllowed = property(lambda self: self.__isShowUiAllowed, lambda self, value: self.__setShowUiAllowed(value))
     respawnInfo = property(lambda self: self.__respawnInfo)
     playerLives = property(lambda self: self.__playerRespawnLives)
+    teammatesLives = property(lambda self: self.__teammatesRespawnLives)
     vehicles = property(lambda self: self.__vehicles)
 
     def __init__(self, setup):
@@ -56,6 +59,7 @@ class RespawnsController(ViewComponentsController):
         self.__isUiShown = False
         self.__isShowUiAllowed = False
         self.__playerRespawnLives = -1
+        self.__teammatesRespawnLives = {}
         self.__respawnSoundNotificationRequest = False
         self.__battleCtx = setup.battleCtx
         self.__eManager = Event.EventManager()
@@ -65,6 +69,7 @@ class RespawnsController(ViewComponentsController):
         self.onPlayerRespawnLivesUpdated = Event.Event(self.__eManager)
         self.onTeamRespawnLivesRestored = Event.Event(self.__eManager)
         self.onRespawnVehiclesUpdated = Event.Event(self.__eManager)
+        self.onTeammatesRespawnLivesUpdated = Event.Event(self.__eManager)
         return
 
     def getControllerID(self):
@@ -142,6 +147,10 @@ class RespawnsController(ViewComponentsController):
         self.__playerRespawnLives = respawnLives
         self.onPlayerRespawnLivesUpdated(respawnLives)
 
+    def updateTeammateRespawnLives(self, lives):
+        self.__teammatesRespawnLives.update(lives)
+        self.onTeammatesRespawnLivesUpdated(lives)
+
     def restoredTeamRespawnLives(self, teams):
         self.onTeamRespawnLivesRestored(teams)
 
@@ -174,7 +183,10 @@ class RespawnsController(ViewComponentsController):
         self.__refresh()
 
     def __triggerRespawnSoundNotification(self):
-        getSoundNotifications().play(_RESPAWN_SOUND_ID)
+        vehicleDescr = avatar_getter.getVehicleTypeDescriptor()
+        if not (vehicleDescr is not None and VEHICLE_EVENT_TYPE.EVENT_HUNTER in vehicleDescr.type.tags):
+            getSoundNotifications().play(_RESPAWN_SOUND_ID)
+        return
 
     def __onRoundFinished(self, *args):
         self.__hide()

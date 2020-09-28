@@ -4,72 +4,47 @@ from collections import namedtuple
 from Math import Matrix
 import BigWorld
 import AnimationSequence
-from debug_utils import LOG_WARNING
-FlagSettings = namedtuple('FlagSettings', ['flagStaffModel',
- 'flagModel',
- 'flagStaffFlagHP',
+FlagSettings = namedtuple('FlagSettings', ['flagCompounModel',
+ 'flagAlias',
  'flagAnim',
  'flagBackgroundTex',
  'flagEmblemTex',
  'flagEmblemTexCoords',
- 'flagScale'])
+ 'spaceID'])
 
 class FlagModel(object):
-    model = property(lambda self: self.__flagStaffModel)
+    model = property(lambda self: self.__flagCompoundModel)
 
     def __init__(self):
-        self.__flagModel = None
-        self.__flagAnimator = None
-        self.__flagFashion = None
-        self.__flagScaleMatrix = Matrix()
-        self.__flagStaffModel = None
+        self.__flagCompoundModel = None
         self.__flagStaffFashion = None
+        self.__flagFashion = None
+        self.__flagAnimator = None
+        self.__spaceID = None
         return
 
     def setupFlag(self, position, flagSettings, color):
-        self.__setupFlagStaff(flagSettings, position)
-        self.__setupFlagModel(flagSettings, color)
+        self.__spaceID = flagSettings.spaceID
+        self.__flagCompoundModel = flagSettings.flagCompounModel
+        self.__flagCompoundModel.position = position
+        self.__flagStaffFashion = BigWorld.WGAlphaFadeCompoundFashion()
+        self.__flagFashion = BigWorld.WGFlagAlphaFadeFashion()
+        self.__flagFashion.setColor(color)
+        self.__flagFashion.setFlagBackgroundTexture(flagSettings.flagBackgroundTex)
+        self.__flagFashion.setEmblemTexture(flagSettings.flagEmblemTex, flagSettings.flagEmblemTexCoords)
+        translationMatrix = Matrix()
+        translationMatrix.setTranslate(position)
+        self.__flagFashion.overridePosition(translationMatrix)
+        self.__flagCompoundModel.setupFashions((self.__flagStaffFashion, self.__flagFashion))
+        self.__flagAnimator = flagSettings.flagAnim
+        if self.__flagAnimator is not None:
+            self.__flagAnimator.bindTo(AnimationSequence.PartWrapperContainer(self.__flagCompoundModel, self.__spaceID, flagSettings.flagAlias))
+        return
 
     def changeFlagColor(self, color):
         if self.__flagFashion:
             self.__flagFashion.setColor(color)
 
     def startFlagAnimation(self):
-        if self.__flagModel is not None:
-            try:
-                clipResource = self.__flagModel.deprecatedGetAnimationClipResource(self.__flagSettings.flagAnim)
-                if clipResource:
-                    spaceID = BigWorld.player().spaceID
-                    loader = AnimationSequence.Loader(clipResource, spaceID)
-                    self.__flagAnimator = loader.loadSync()
-                    self.__flagAnimator.bindTo(AnimationSequence.ModelWrapperContainer(self.__flagModel, spaceID))
-                    self.__flagAnimator.start()
-            except Exception:
-                LOG_WARNING('Unable to start "%s" animation action for model' % self.__flagSettings.flagAnim)
-
-        return
-
-    def __setupFlagStaff(self, flagSettings, position):
-        self.__flagStaffModel = flagSettings.flagStaffModel
-        self.__flagStaffModel.position = position
-        self.__flagStaffFashion = BigWorld.WGAlphaFadeFashion()
-        self.__flagStaffModel.fashion = self.__flagStaffFashion
-
-    def __setupFlagModel(self, flagSettings, color):
-        self.__flagSettings = flagSettings
-        self.__flagScaleMatrix = Matrix()
-        self.__flagScaleMatrix.setScale(flagSettings.flagScale)
-        flagNode = self.__flagStaffModel.node(flagSettings.flagStaffFlagHP, self.__flagScaleMatrix)
-        if self.__flagModel is not None:
-            flagNode.detach(self.__flagModel)
-            self.__flagModel = None
-        self.__flagModel = flagSettings.flagModel
-        self.__flagFashion = BigWorld.WGFlagAlphaFadeFashion()
-        self.__flagFashion.setColor(color)
-        self.__flagFashion.setFlagBackgroundTexture(flagSettings.flagBackgroundTex)
-        self.__flagFashion.setEmblemTexture(flagSettings.flagEmblemTex, flagSettings.flagEmblemTexCoords)
-        self.__flagModel.fashion = self.__flagFashion
-        if self.__flagModel is not None:
-            flagNode.attach(self.__flagModel)
-            self.__flagFashion.overridePosition(self.__flagStaffModel.matrix)
-        return
+        if self.__flagAnimator:
+            self.__flagAnimator.start()

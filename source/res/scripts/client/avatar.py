@@ -2,10 +2,9 @@
 # Embedded file name: scripts/client/Avatar.py
 import cPickle
 import math
-import typing
 import zlib
 from functools import partial
-from typing import List, Dict, Union
+from typing import List, Dict, Union, TYPE_CHECKING
 import BigWorld
 import Keys
 import Math
@@ -46,24 +45,28 @@ from TriggersManager import TRIGGER_TYPE
 from Vibroeffects.Controllers.ReloadController import ReloadController as VibroReloadController
 from account_helpers import BattleResultsCache, ClientInvitations
 from account_helpers.settings_core.settings_constants import SOUND
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
+from avatar_components.AppearanceCacheController import AppearanceCacheController
 from avatar_components.AvatarObserver import AvatarObserver
 from avatar_components.CombatEquipmentManager import CombatEquipmentManager
+from avatar_components.VehiclesSpawnListStorage import VehiclesSpawnListStorage
 from avatar_components.avatar_chat_key_handling import AvatarChatKeyHandling
 from avatar_components.avatar_epic_data import AvatarEpicData
 from avatar_components.avatar_recovery_mechanic import AvatarRecoveryMechanic
 from avatar_components.avatar_respawn_mechanic import AvatarRespawnMechanic
 from avatar_components.team_healthbar_mechanic import TeamHealthbarMechanic
+from avatar_components.vehicle_health_broadcast_listener_component import VehicleHealthBroadcastListenerComponent
+from avatar_components.vehicle_removal_controller import VehicleRemovalController
 from avatar_helpers import AvatarSyncData
 from battle_results_shared import AVATAR_PRIVATE_STATS, listToDict
 from bootcamp.Bootcamp import g_bootcamp
 from bootcamp_shared import BOOTCAMP_BATTLE_ACTION
 from constants import ARENA_PERIOD, AIMING_MODE, VEHICLE_SETTING, DEVELOPMENT_INFO, ARENA_GUI_TYPE
+from constants import DEFAULT_VECTOR_3
 from constants import DROWN_WARNING_LEVEL
 from constants import DUAL_GUN, DUALGUN_CHARGER_STATUS, DUALGUN_CHARGER_ACTION_TYPE
 from constants import TARGET_LOST_FLAGS
-from constants import VEHICLE_MISC_STATUS, VEHICLE_HIT_FLAGS
-from constants import VEHICLE_SIEGE_STATE
-from constants import DEFAULT_VECTOR_3
+from constants import VEHICLE_MISC_STATUS, VEHICLE_HIT_FLAGS, VEHICLE_SIEGE_STATE
 from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG_DEV, LOG_CODEPOINT_WARNING, LOG_NOTE
 from gui import GUI_CTRL_MODE_FLAG, IngameSoundNotifications, SystemMessages
 from gui.Scaleform.locale.MESSENGER import MESSENGER
@@ -71,8 +74,9 @@ from gui.Scaleform.locale.READABLE_KEY_NAMES import READABLE_KEY_NAMES
 from gui.app_loader import settings as app_settings
 from gui.battle_control import BattleSessionSetup
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
-from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CANT_SHOOT_ERROR, DestroyTimerViewState, DeathZoneTimerViewState, TIMER_VIEW_STATE
+from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CANT_SHOOT_ERROR, DestroyTimerViewState, DeathZoneTimerViewState, TIMER_VIEW_STATE, ENTITY_IN_FOCUS_TYPE
 from gui.prb_control.formatters import messages
+from gui.shared.gui_items.Vehicle import VEHICLE_EVENT_TYPE
 from gui.sounds.epic_sound_constants import EPIC_SOUND
 from gui.wgnc import g_wgncProvider
 from gun_rotation_shared import decodeGunAngles
@@ -85,8 +89,8 @@ from messenger import MessengerEntry, g_settings
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from physics_shared import computeBarrelLocalPoint
-from shared_utils.avatar_helpers import DualGun
 from shared_utils import nextTick
+from shared_utils.avatar_helpers import DualGun
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
@@ -96,13 +100,8 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.helpers.statistics import IStatisticsCollector
 from soft_exception import SoftException
 from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT_MIN, STREAM_ID_AVATAR_BATTLE_RESULS
-from avatar_components.AppearanceCacheController import AppearanceCacheController
-from avatar_components.VehiclesSpawnListStorage import VehiclesSpawnListStorage
-from avatar_components.vehicle_removal_controller import VehicleRemovalController
-from avatar_components.vehicle_health_broadcast_listener_component import VehicleHealthBroadcastListenerComponent
 from vehicle_systems import appearance_cache
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from items.vehicles import VehicleDescriptor
 
 class _CRUISE_CONTROL_MODE(object):
@@ -702,7 +701,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         else:
                             Cat.Tasks.ScreenInfo.ScreenInfoObject.setVisible(True)
                         return True
-                if cmdMap.isFired(CommandMapping.CMD_INCREMENT_CRUISE_MODE, key) and isDown and not isGuiEnabled:
+                if cmdMap.isFired(CommandMapping.CMD_INCREMENT_CRUISE_MODE, key) and isDown and not isGuiEnabled and self.__isVehicleAlive:
                     if self.__stopUntilFire:
                         self.__stopUntilFire = False
                         self.__cruiseControlMode = _CRUISE_CONTROL_MODE.NONE
@@ -717,7 +716,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                             self.moveVehicle(self.makeVehicleMovementCommandByKeys(), isDown)
                     self.__updateCruiseControlPanel()
                     return True
-                if cmdMap.isFired(CommandMapping.CMD_DECREMENT_CRUISE_MODE, key) and isDown and not isGuiEnabled:
+                if cmdMap.isFired(CommandMapping.CMD_DECREMENT_CRUISE_MODE, key) and isDown and not isGuiEnabled and self.__isVehicleAlive:
                     if self.__stopUntilFire:
                         self.__stopUntilFire = False
                         self.__cruiseControlMode = _CRUISE_CONTROL_MODE.NONE
@@ -792,6 +791,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         if self.arenaBonusType in constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
                             ctx = {'battleRoyale': True,
                              'mapGeometryName': self.arena.arenaType.geometryName}
+                        elif self.arenaBonusType in (constants.ARENA_BONUS_TYPE.EVENT_BATTLES,):
+                            ctx = {'isWTHunter': VEHICLE_EVENT_TYPE.EVENT_HUNTER in vTypeDesc.type.tags,
+                             'isWTBoss': VEHICLE_EVENT_TYPE.EVENT_BOSS in vTypeDesc.type.tags}
                         if ctx:
                             gui_event_dispatcher.toggleHelpDetailed(ctx)
                             return True
@@ -872,11 +874,12 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if not prevEntity:
             return
         else:
-            self.guiSessionProvider.shared.feedback.setTargetInFocus(0, False)
+            isVehicle = prevEntity.__class__.__name__ == 'Vehicle'
+            entityInFocusType = ENTITY_IN_FOCUS_TYPE.VEHICLE if isVehicle else ENTITY_IN_FOCUS_TYPE.DESTRUCTIBLE_ENTITY
+            self.guiSessionProvider.shared.feedback.setTargetInFocus(0, False, entityInFocusType)
             prevEntity.removeEdge()
             self.target = None
             TriggersManager.g_manager.deactivateTrigger(TRIGGER_TYPE.AIM_AT_VEHICLE)
-            isVehicle = prevEntity.__class__.__name__ == 'Vehicle'
             if isVehicle and self.__maySeeOtherVehicleDamagedDevices:
                 self.cell.monitorVehicleDamagedDevices(0)
                 self.guiSessionProvider.shared.feedback.hideVehicleDamagedDevices()
@@ -886,9 +889,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if not entity:
             return
         self.target = entity
-        self.guiSessionProvider.shared.feedback.setTargetInFocus(entity.id, True)
+        isVehicle = entity.__class__.__name__ == 'Vehicle'
+        entityInFocusType = ENTITY_IN_FOCUS_TYPE.VEHICLE if isVehicle else ENTITY_IN_FOCUS_TYPE.DESTRUCTIBLE_ENTITY
+        self.guiSessionProvider.shared.feedback.setTargetInFocus(entity.id, True, entityInFocusType)
         if (self.inputHandler.isGuiVisible or self.isInTutorial) and entity.isAlive():
-            isVehicle = entity.__class__.__name__ == 'Vehicle'
             TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.AIM_AT_VEHICLE, vehicleId=entity.id)
             entity.drawEdge()
             if isVehicle and self.__maySeeOtherVehicleDamagedDevices:
@@ -949,6 +953,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 self.__ownVehicleStabMProv.target = vehicle.matrix
             if self.__disableRespawnMode:
                 self.__disableRespawnMode = False
+                if self.vehicle is None and self.observedVehicleID:
+                    self.clearObservedVehicleID()
                 self.inputHandler.deactivatePostmortem()
                 self.__deviceStates = {}
                 self.gunRotator.stop()
@@ -1377,6 +1383,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         sound = 'enemy_hp_damaged_by_near_explosion_by_player'
                     elif flags & VHF.IS_ANY_PIERCING_MASK:
                         sound = 'enemy_no_hp_damage_by_near_explosion_by_player'
+                    elif flags & VHF.STUN_STARTED and 'event_boss' in self.vehicleTypeDescriptor.type.tags:
+                        sound = 'ev_wt_w_vo_ability_emp'
                 elif flags & VHF.MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_PROJECTILE:
                     if flags & (VHF.GUN_DAMAGED_BY_PROJECTILE | VHF.GUN_DAMAGED_BY_EXPLOSION):
                         sound = 'enemy_hp_damaged_by_projectile_and_gun_damaged_by_player'
@@ -1386,30 +1394,33 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         sound = 'enemy_hp_damaged_by_projectile_by_player'
                 elif flags & VHF.MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_EXPLOSION:
                     sound = 'enemy_hp_damaged_by_explosion_at_direct_hit_by_player'
-                elif flags & VHF.RICOCHET and not flags & VHF.DEVICE_PIERCED_BY_PROJECTILE:
-                    sound = 'enemy_ricochet_by_player'
-                    if len(enemies) == 1:
-                        TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_SHOT_RICOCHET, targetId=enemyVehID)
-                elif flags & VHF.MATERIAL_WITH_POSITIVE_DF_NOT_PIERCED_BY_PROJECTILE:
-                    if flags & (VHF.GUN_DAMAGED_BY_PROJECTILE | VHF.GUN_DAMAGED_BY_EXPLOSION):
-                        sound = 'enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player'
+                else:
+                    if flags & VHF.RICOCHET and not flags & VHF.DEVICE_PIERCED_BY_PROJECTILE:
+                        sound = 'enemy_ricochet_by_player'
+                        if len(enemies) == 1:
+                            TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_SHOT_RICOCHET, targetId=enemyVehID)
+                    elif flags & VHF.MATERIAL_WITH_POSITIVE_DF_NOT_PIERCED_BY_PROJECTILE:
+                        if flags & (VHF.GUN_DAMAGED_BY_PROJECTILE | VHF.GUN_DAMAGED_BY_EXPLOSION):
+                            sound = 'enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player'
+                        elif flags & (VHF.CHASSIS_DAMAGED_BY_PROJECTILE | VHF.CHASSIS_DAMAGED_BY_EXPLOSION):
+                            sound = 'enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player'
+                        else:
+                            sound = 'enemy_no_hp_damage_at_attempt_by_player'
+                            if len(enemies) == 1:
+                                TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_SHOT_NOT_PIERCED, targetId=enemyVehID)
+                    elif flags & (VHF.GUN_DAMAGED_BY_PROJECTILE | VHF.GUN_DAMAGED_BY_EXPLOSION):
+                        sound = 'enemy_no_hp_damage_at_no_attempt_and_gun_damaged_by_player'
                     elif flags & (VHF.CHASSIS_DAMAGED_BY_PROJECTILE | VHF.CHASSIS_DAMAGED_BY_EXPLOSION):
-                        sound = 'enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player'
+                        sound = 'enemy_no_hp_damage_at_no_attempt_and_chassis_damaged_by_player'
                     else:
-                        sound = 'enemy_no_hp_damage_at_attempt_by_player'
+                        if flags & VHF.IS_ANY_PIERCING_MASK:
+                            sound = 'enemy_no_hp_damage_at_no_attempt_by_player'
+                        else:
+                            sound = 'enemy_no_piercing_by_player'
                         if len(enemies) == 1:
                             TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_SHOT_NOT_PIERCED, targetId=enemyVehID)
-                elif flags & (VHF.GUN_DAMAGED_BY_PROJECTILE | VHF.GUN_DAMAGED_BY_EXPLOSION):
-                    sound = 'enemy_no_hp_damage_at_no_attempt_and_gun_damaged_by_player'
-                elif flags & (VHF.CHASSIS_DAMAGED_BY_PROJECTILE | VHF.CHASSIS_DAMAGED_BY_EXPLOSION):
-                    sound = 'enemy_no_hp_damage_at_no_attempt_and_chassis_damaged_by_player'
-                else:
-                    if flags & VHF.IS_ANY_PIERCING_MASK:
-                        sound = 'enemy_no_hp_damage_at_no_attempt_by_player'
-                    else:
-                        sound = 'enemy_no_piercing_by_player'
-                    if len(enemies) == 1:
-                        TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_SHOT_NOT_PIERCED, targetId=enemyVehID)
+                    if flags & VHF.STUN_STARTED and 'event_boss' in self.vehicleTypeDescriptor.type.tags:
+                        sound = 'ev_wt_w_vo_ability_stun_shell'
                 if sound is not None:
                     bestSound = _getBestShotResultSound(bestSound, sound, enemyVehID)
 
@@ -1799,6 +1810,12 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def shoot(self, isRepeat=False):
         if self.__tryShootCallbackId is None:
             self.__tryShootCallbackId = BigWorld.callback(0.0, self.__tryShootCallback)
+        if self.guiSessionProvider.arenaVisitor.gui.isEventBattle() and BigWorld.isKeyDown(Keys.KEY_LALT):
+            info = self.sessionProvider.getCtx().getVehicleInfo(BigWorld.player().playerVehicleID)
+            if VEHICLE_EVENT_TYPE.EVENT_BOSS in info.vehicleType.tags:
+                result, error = self.guiSessionProvider.shared.equipments.changeSettingByTag('eventAltItem')
+                if result:
+                    return
         if not self.__isOnArena:
             return
         else:
@@ -2663,8 +2680,13 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             return
 
     def __processVehicleAmmo(self, vehicleID, compactDescr, quantity, quantityInClip, _, __):
-        self.processObservedVehicleAmmo(vehicleID, compactDescr, quantity, quantityInClip)
-        self.guiSessionProvider.shared.ammo.setShells(compactDescr, quantity, quantityInClip)
+        vehicle = BigWorld.entities.get(vehicleID)
+        if vehicle is None or not vehicle.isAlive():
+            return
+        else:
+            self.processObservedVehicleAmmo(vehicleID, compactDescr, quantity, quantityInClip)
+            self.guiSessionProvider.shared.ammo.setShells(compactDescr, quantity, quantityInClip)
+            return
 
     def __processVehicleEquipments(self, vehicleID, compactDescr, quantity, stage, timeRemaining, totalTime):
         self.processObservedVehicleEquipments(vehicleID, compactDescr, quantity, stage, timeRemaining, totalTime)
@@ -2719,6 +2741,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def _doCmdStr(self, cmd, s, callback):
         self.__doCmd('doCmdStr', cmd, callback, s)
 
+    def _doCmdInt(self, cmd, int1, callback):
+        self.__doCmd('doCmdInt', cmd, callback, int1)
+
     def _doCmdInt2(self, cmd, int1, int2, callback):
         self.__doCmd('doCmdInt2', cmd, callback, int1, int2)
 
@@ -2769,7 +2794,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__physicsMode = newMode
 
     def __isPlayerInSquad(self, vehicleId):
-        return self.arena is not None and self.arena.guiType in (constants.ARENA_GUI_TYPE.RANDOM, constants.ARENA_GUI_TYPE.EPIC_RANDOM, constants.ARENA_GUI_TYPE.EPIC_BATTLE) and self.guiSessionProvider.getArenaDP().isSquadMan(vID=vehicleId)
+        return self.arena is not None and self.arena.guiType in (constants.ARENA_GUI_TYPE.RANDOM,
+         constants.ARENA_GUI_TYPE.EPIC_RANDOM,
+         constants.ARENA_GUI_TYPE.EPIC_BATTLE,
+         constants.ARENA_GUI_TYPE.EVENT_BATTLES) and self.guiSessionProvider.getArenaDP().isSquadMan(vID=vehicleId)
 
     def __getAdditiveShotDispersionFactor(self, descriptor):
         if self.__aimingBooster is not None:
@@ -2828,7 +2856,9 @@ _shotResultSoundPriorities = {'enemy_hp_damaged_by_projectile_and_gun_damaged_by
  'enemy_no_hp_damage_at_attempt_by_player': 3,
  'enemy_no_hp_damage_at_no_attempt_by_player': 2,
  'enemy_no_hp_damage_by_near_explosion_by_player': 1,
- 'enemy_ricochet_by_player': 0}
+ 'enemy_ricochet_by_player': 0,
+ 'ev_wt_w_vo_ability_stun_shell': -1,
+ 'ev_wt_w_vo_ability_emp': -2}
 
 class FilterLagEmulator(object):
 

@@ -17,7 +17,7 @@ from gui.shared.utils.requesters.ItemsRequester import RESEARCH_CRITERIA
 from helpers import i18n, dependency, getLocalizedData
 from items import vehicles
 from shared_utils import CONST_CONTAINER
-from skeletons.gui.game_control import IIGRController
+from skeletons.gui.game_control import IIGRController, IGameEventController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
@@ -1434,12 +1434,22 @@ class _CountOrTotalEventsCondition(_VehsListCondition):
 
 
 class VehicleDamage(_CountOrTotalEventsCondition):
+    __gameEventController = dependency.descriptor(IGameEventController)
 
     def __init__(self, path, data):
         super(VehicleDamage, self).__init__('vehicleDamage', dict(data), path)
 
     def __repr__(self):
         return 'VehicleDamage<%s=%d>' % (self._relation, self._relationValue)
+
+    def getFilterCriteria(self, data):
+        resultCriteria = super(VehicleDamage, self).getFilterCriteria(data)
+        types, _, _, _, _ = self._parseFilters(data)
+        if types:
+            specialBossIntCD = self.__gameEventController.getSpecialBoss().intCD
+            if specialBossIntCD in types:
+                resultCriteria ^= REQ_CRITERIA.VEHICLE.SPECIFIC_BY_CD([specialBossIntCD])
+        return resultCriteria
 
     def getVehiclesData(self):
         return _prepareVehData(self._getVehiclesList(self._data))

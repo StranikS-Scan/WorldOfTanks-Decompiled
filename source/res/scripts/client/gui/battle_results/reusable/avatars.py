@@ -8,7 +8,7 @@ from gui.shared.badges import buildBadge
 class AvatarInfo(shared.ItemInfo):
     __slots__ = ('__totalDamaged', '__avatarKills', '__avatarDamaged', '__avatarDamageDealt', '__badge', '__suffixBadge', '__fairplayViolations', '__accRank', '__prevAccRank', '__extInfo', '__badgesInfo', '__weakref__')
 
-    def __init__(self, totalDamaged=0, avatarKills=0, avatarDamaged=0, avatarDamageDealt=0, fairplayViolations=None, wasInBattle=True, accRank=None, prevAccRank=None, badges=(), ext=None, **kwargs):
+    def __init__(self, totalDamaged=0, avatarKills=0, avatarDamaged=0, avatarDamageDealt=0, fairplayViolations=None, wasInBattle=True, accRank=None, prevAccRank=None, badges=(), **kwargs):
         super(AvatarInfo, self).__init__(wasInBattle=wasInBattle)
         self.__totalDamaged = totalDamaged
         self.__avatarKills = avatarKills
@@ -22,7 +22,7 @@ class AvatarInfo(shared.ItemInfo):
             self.__badgesInfo = badges[1]
         else:
             self.__badge, self.__suffixBadge, self.__badgesInfo = (0, 0, None)
-        self.__extInfo = ext
+        self.__extInfo = kwargs
         return None
 
     @property

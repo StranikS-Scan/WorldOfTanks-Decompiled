@@ -211,6 +211,10 @@ class AvatarObserver(CallbackDelayer):
             vehicle = BigWorld.entity(self.__observedVehicleID if self.__observedVehicleID else self.playerVehicleID)
         return None if vehicle is None or not vehicle.inWorld or not vehicle.isStarted or vehicle.isDestroyed else vehicle
 
+    def clearObservedVehicleID(self):
+        self.__observedVehicleID = None
+        return
+
     def getVehicleDescriptor(self):
         descr = self.vehicleTypeDescriptor
         if self.isObserver() and self.getVehicleAttached() is not None:

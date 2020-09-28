@@ -94,7 +94,7 @@ def getAcceptNotAllowedText(prbType, peripheryID, isInviteActive=True, isAlready
 def getLeaveOrChangeText(funcState, invitePrbType, peripheryID, lobbyContext=None):
     isAnotherPeriphery = lobbyContext is not None and lobbyContext.isAnotherPeriphery(peripheryID)
     text = ''
-    if funcState.doLeaveToAcceptInvite(invitePrbType):
+    if funcState.doLeaveToAcceptInvite(invitePrbType) and not funcState.isSquadSelected(invitePrbType):
         if funcState.isInLegacy() or funcState.isInUnit():
             entityName = PREBATTLE_LEAVE_PREFIX + getPrbName(funcState.entityTypeID)
         elif funcState.isInPreQueue():

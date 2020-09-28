@@ -74,7 +74,7 @@ class OfferRewardWindow(ViewImpl):
                 formattedBonuses = getRewardsBonuses(bonusData)
                 formattedBonus = shared_utils.first(formattedBonuses)
                 if formattedBonus is not None:
-                    icon = getGfImagePath(formattedBonus.get('imgSource'))
+                    icon = getGfImagePath(formattedBonus.get('imgSource')) or ''
                     self._tooltipData = TooltipData(tooltip=formattedBonus.get('tooltip', None), isSpecial=formattedBonus.get('isSpecial', False), specialAlias=formattedBonus.get('specialAlias', ''), specialArgs=formattedBonus.get('specialArgs', None))
                 model.setCount(self._gift.giftCount)
                 model.setHightlightType(self._gift.highlight)

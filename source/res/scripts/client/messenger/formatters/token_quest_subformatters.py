@@ -21,14 +21,16 @@ from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.server_events.recruit_helper import getSourceIdFromQuest
 from gui.shared.formatters import text_styles
 from gui.shared.money import Currency
+from gui.shared.notifications import NotificationPriorityLevel
+from gui.wt_event.wt_event_helpers import isWtEventQuest
 from messenger import g_settings
 from messenger.formatters import TimeFormatter
-from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter, InvoiceReceivedFormatter
+from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter, InvoiceReceivedFormatter, WtEventQuestAchievesFormatter
 from messenger.formatters.service_channel_helpers import getRewardsForQuests, EOL, MessageData, getCustomizationItemData, getDefaultMessage, DEFAULT_MESSAGE
 from messenger.proto.bw.wrappers import ServiceChannelMessage
 from shared_utils import findFirst, first
 from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.game_control import IRankedBattlesController
+from skeletons.gui.game_control import IRankedBattlesController, IGameEventController
 from helpers import dependency
 from helpers import time_utils
 _logger = logging.getLogger(__name__)
@@ -682,6 +684,60 @@ class BattlePassDefaultAwardsFormatter(WaitItemsSyncFormatter, TokenQuestsSubFor
             return MessageData(formatted, settings)
         else:
             return
+
+
+class WtEventProgressionQuestFormatter(WaitItemsSyncFormatter, TokenQuestsSubFormatter):
+    __MESSAGE_TEMPLATE = 'WtEventProgressionQuest'
+    __gameEventController = dependency.descriptor(IGameEventController)
+
+    def __init__(self):
+        super(WtEventProgressionQuestFormatter, self).__init__()
+        self._achievesFormatter = WtEventQuestAchievesFormatter()
+
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        messageDataList = []
+        if isSynced:
+            data = message.data or {}
+            completedQuestIDs = self.getQuestOfThisGroup(data.get('completedQuestIDs', set()))
+            for qID in completedQuestIDs:
+                messageData = self.__buildMessage(qID, message)
+                if messageData is not None:
+                    messageDataList.append(messageData)
+
+        if messageDataList:
+            callback(messageDataList)
+        callback([MessageData(None, None)])
+        return
+
+    @classmethod
+    def _isQuestOfThisGroup(cls, questID):
+        return isWtEventQuest(questID)
+
+    def __buildMessage(self, questID, message):
+        config = [ (order, data) for order, data in self.__gameEventController.getProgressionConfig().iteritems() ]
+        configData = findFirst(lambda item: item[1].get('questName', '') == questID, config, None)
+        if configData is None:
+            return
+        else:
+            rProgression = R.strings.wt_event.notifications.progression
+            data = message.data or {}
+            rewards = data.get('detailedRewards', {}).get(questID, {})
+            fmt = self._achievesFormatter.formatQuestAchieves(rewards, asBattleFormatter=False)
+            header = backport.text(rProgression.header())
+            if configData[0] == len(config):
+                text = backport.text(rProgression.final(), rewards=fmt)
+                priorityLevel = NotificationPriorityLevel.HIGH
+            else:
+                text = backport.text(rProgression.stage(), stage=configData[0], rewards=fmt)
+                priorityLevel = NotificationPriorityLevel.MEDIUM
+            templateParams = {'text': text,
+             'header': header}
+            settings = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE, priorityLevel=priorityLevel)
+            formatted = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, templateParams)
+            return MessageData(formatted, settings)
 
 
 class RankedYearLeaderFormatter(RankedTokenQuestFormatter):

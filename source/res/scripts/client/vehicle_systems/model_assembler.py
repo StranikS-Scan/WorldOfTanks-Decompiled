@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/vehicle_systems/model_assembler.py
 import math
 from collections import namedtuple
+from functools import partial
 import Vehicular
 import DataLinks
 import WWISE
@@ -10,6 +11,7 @@ import Math
 import WoT
 import debug_utils
 import material_kinds
+import WtEffects
 from constants import IS_DEVELOPMENT, IS_EDITOR
 from soft_exception import SoftException
 import math_utils
@@ -18,6 +20,8 @@ from items.components import shared_components, component_constants
 from vehicle_systems.vehicle_damage_state import VehicleDamageState
 from vehicle_systems.tankStructure import getPartModelsFromDesc, getCollisionModelsFromDesc, TankNodeNames, TankPartNames, TankPartIndexes, RenderStates, TankCollisionPartNames
 from vehicle_systems.components.hull_aiming_controller import HullAimingController
+from wt_event import wt_energy_shield, wt_escape_visual
+from wt_event.wt_vehicle_effects import getSequenceComponent, getSequenceWrapper, BossShieldIndicator, WtVehicleEffectType
 DEFAULT_MAX_LOD_PRIORITY = None
 _INFINITY = 10000
 _PHYSICAL_TRACKS_MAX_DISTANCE = 60
@@ -739,11 +743,22 @@ def assembleBurnoutProcessor(appearance):
 
 
 def assembleCustomLogicComponents(appearance, attachments, modelAnimators):
-    assemblers = [('flagAnimation', __assembleAnimationFlagComponent)]
+    assemblers = [('flagAnimation', __assembleAnimationFlagComponent),
+     ('hunter_idle', partial(__assembleWtEffect, sequenceType=WtVehicleEffectType.HUNTER_IDLE)),
+     ('hunter_collector', partial(__assembleWtEffect, sequenceType=WtVehicleEffectType.HUNTER_COLLECTOR)),
+     ('hunter_progress', partial(__assembleWtEffect, sequenceType=WtVehicleEffectType.HUNTER_PROGRESS_BAR)),
+     ('boss_idle', partial(__assembleWtEffect, sequenceType=WtVehicleEffectType.BOSS_IDLE)),
+     ('boss_idle_special', partial(__assembleWtEffect, sequenceType=WtVehicleEffectType.BOSS_IDLE_SPECIAL)),
+     ('shield_indicator', __assembleShieldIndicatorComponent),
+     ('shield_indicator_special', partial(__assembleShieldIndicatorComponent, isSpecial=True))]
     for assemblerName, assembler in assemblers:
         for attachment in attachments:
             if attachment.attachmentLogic == assemblerName:
                 assembler(appearance, attachment, attachments, modelAnimators)
+
+        for animator in modelAnimators[:]:
+            if animator.animatorLogic == assemblerName:
+                assembler(appearance, animator, modelAnimators)
 
 
 def __assembleAnimationFlagComponent(appearance, attachment, attachments, modelAnimators):
@@ -762,3 +777,49 @@ def __assembleAnimationFlagComponent(appearance, attachment, attachments, modelA
             appearance.flagComponent.vehicleSpeedLink = DataLinks.createFloatLink(appearance.filter, 'averageSpeed')
             appearance.flagComponent.allowTransparency(True)
         return True
+
+
+def _changeAnimatorOwnership(animator, modelAnimators):
+    mainAnimator = None
+    for i, modelAnimator in enumerate(modelAnimators):
+        if modelAnimator.animator == animator.animator:
+            mainAnimator = modelAnimators.pop(i)
+            break
+
+    return mainAnimator
+
+
+def __assembleShieldIndicatorComponent(appearance, animator, modelAnimators, isSpecial=False):
+    modelAnimator = _changeAnimatorOwnership(animator, modelAnimators)
+    if modelAnimator is None:
+        return
+    else:
+        wrapper = appearance.createComponent(BossShieldIndicator, appearance.worldID, appearance.id, isSpecial)
+        if hasattr(appearance, 'typeDescriptor'):
+            shieldDescr = wt_energy_shield.WtEnergyShieldConfig.shieldDescriptor()
+            wrapper.animator = wrapper.createComponent(WtEffects.ShieldIndicatorComponent, modelAnimator.animator, lambda : appearance.health, appearance.typeDescriptor.maxHealth, shieldDescr.healthPercentage if shieldDescr is not None else 0.5)
+        else:
+            wrapper.animator = wrapper.createComponent(WtEffects.StateMachineComponent, modelAnimator.animator)
+        appearance.addCustomAnimator(wrapper)
+        return
+
+
+def __assembleWtEffect(appearance, animator, modelAnimators, sequenceType):
+    modelAnimator = _changeAnimatorOwnership(animator, modelAnimators)
+    if modelAnimator is None:
+        return
+    else:
+        wrapper = appearance.createComponent(getSequenceWrapper(sequenceType), appearance.worldID, appearance.id)
+        wrapper.animator = wrapper.createComponent(getSequenceComponent(sequenceType), modelAnimator.animator)
+        appearance.addCustomAnimator(wrapper)
+        return
+
+
+def assembleEnergyShield(appearance):
+    shieldComponent = wt_energy_shield.WtEnergyShield(appearance.worldID, appearance.id)
+    appearance.wtEnergyShield = shieldComponent
+
+
+def assembleEscapeComponent(appearance):
+    component = wt_escape_visual.WtEscapeComponent(appearance.worldID, appearance.id)
+    appearance.addComponent(component, 'wt_escape')

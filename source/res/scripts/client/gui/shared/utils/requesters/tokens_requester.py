@@ -131,7 +131,7 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
             lootBoxTokenID = LOOTBOX_TOKEN_PREFIX + str(lootBoxID)
             lootBoxTokensList.append(lootBoxTokenID)
             if lootBoxTokenID not in self.__lootBoxCache:
-                item = self.itemsFactory.createLootBox(lootBoxID, lootBoxData['type'], lootBoxData['category'], 0)
+                item = self.itemsFactory.createLootBox(lootBoxID, lootBoxData['type'], lootBoxData['category'], 0, reRoll=lootBoxData.get('reRoll', {}))
                 self.__lootBoxCache[lootBoxTokenID] = item
             self.__lootBoxCache[lootBoxTokenID].update(lootBoxData['type'], lootBoxData['category'])
 

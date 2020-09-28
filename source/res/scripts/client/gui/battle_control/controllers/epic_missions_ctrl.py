@@ -272,7 +272,9 @@ class EpicMissionsController(IViewComponentsController):
 
     def __onBeforeMissionInvalidation(self):
         if self.__currentMission.missionType == EPIC_CONSTS.PRIMARY_WAYPOINT_MISSION:
-            if self.__activeMissionData['lane'] == self.__currentLane:
+            vehicle = BigWorld.entities[BigWorld.player().playerVehicleID]
+            vehicleIsAlive = vehicle is not None and vehicle.isStarted and vehicle.isAlive()
+            if vehicleIsAlive and self.__activeMissionData['lane'] == self.__currentLane:
                 if not self.__isInRetreatArea() and self.__retreatMissionResults.get(self.__activeMissionData['sectorGroup'], None) is None:
                     self.__retreatMissionResults[self.__activeMissionData['sectorGroup']] = True
                     LOG_DEBUG('[MissionsCtrl] Retreat Successful!')
@@ -412,7 +414,9 @@ class EpicMissionsController(IViewComponentsController):
         sectorGroup = self.__activeMissionData['sectorGroup']
         nonCapturedBases = self.__activeMissionData['bases']
         endTime = self.__activeMissionData['endTime']
-        if not self.__isAttacker() and endTime - BigWorld.serverTime() > 0 and self.__isInRetreatArea() and self.__retreatMissionResults.get(sectorGroup, None) is None:
+        vehicle = BigWorld.entities[BigWorld.player().playerVehicleID]
+        vehicleIsAlive = vehicle is not None and vehicle.isStarted and vehicle.isAlive()
+        if vehicleIsAlive and not self.__isAttacker() and endTime - BigWorld.serverTime() > 0 and self.__isInRetreatArea() and self.__retreatMissionResults.get(sectorGroup, None) is None:
             mission.missionType = EPIC_CONSTS.PRIMARY_WAYPOINT_MISSION
             mission.missionText = EPIC_BATTLE.RETREAT_MISSION_TXT
             mission.subText = EPIC_BATTLE.MISSION_ZONE_CLOSING_DEF

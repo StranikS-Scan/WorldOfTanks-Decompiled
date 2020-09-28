@@ -47,6 +47,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
     wheelsState = property(lambda self: self._vehicle.wheelsState if self._vehicle is not None else 0)
     wheelsSteering = property(lambda self: self._vehicle.wheelsSteeringSmoothed if self._vehicle is not None else None)
     wheelsScroll = property(lambda self: self._vehicle.wheelsScrollSmoothed if self._vehicle is not None else None)
+    health = property(lambda self: self._vehicle.health if self._vehicle is not None else 0)
     burnoutLevel = property(lambda self: self._vehicle.burnoutLevel / 255.0 if self._vehicle is not None else 0.0)
     isConstructed = property(lambda self: self.__isConstructed)
     highlighter = ComponentDescriptor()
@@ -267,6 +268,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         if self.tessellationCollisionSensor is not None and not self.tessellationCollisionSensor.activePostmortem:
             self.tessellationCollisionSensor = None
         self.siegeEffects = None
+        self.wtEnergyShield = None
         self._destroySystems()
         return
 
@@ -316,13 +318,14 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
     def showStickers(self, show):
         self.vehicleStickers.show = show
 
-    def showTerrainCircle(self, radius=None, terrainCircleSettings=None):
+    def showTerrainCircle(self, radius=None, terrainCircleSettings=None, radiusProvider=None):
         if (radius is None) != (terrainCircleSettings is None):
             LOG_ERROR('showTerrainCircle: radius or terrainCircleSetting is not set. You need to set both or none of them.')
             return
         else:
             if radius is not None:
                 self.__terrainCircle.configure(radius, terrainCircleSettings)
+                self.__terrainCircle.setRadiusProvider(radiusProvider)
             if not self.__terrainCircle.isAttached():
                 self.__attachTerrainCircle()
             self.__terrainCircle.setVisible()
@@ -362,6 +365,8 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             if currentState.effect is not None and showEffects:
                 self.playEffect(currentState.effect)
             if vehicle.health <= 0:
+                if self.findComponent('wt_escape') is not None:
+                    return
                 BigWorld.player().inputHandler.onVehicleDeath(vehicle, currentState.state == 'ammoBayExplosion')
                 self.__requestModelsRefresh()
             elif not vehicle.isCrewActive:
@@ -369,20 +374,25 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         return
 
     def showAmmoBayEffect(self, mode, fireballVolume):
-        if mode == constants.AMMOBAY_DESTRUCTION_MODE.POWDER_BURN_OFF:
+        if self.findComponent('wt_escape') is not None:
+            self.playEffect('destruction')
+            return
+        elif mode == constants.AMMOBAY_DESTRUCTION_MODE.POWDER_BURN_OFF:
             self.playEffect('ammoBayBurnOff')
             return
-        volumes = items.vehicles.g_cache.commonConfig['miscParams']['explosionCandleVolumes']
-        candleIdx = 0
-        for idx, volume in enumerate(volumes):
-            if volume >= fireballVolume:
-                break
-            candleIdx = idx + 1
-
-        if candleIdx > 0:
-            self.playEffect('explosionCandle%d' % candleIdx)
         else:
-            self.playEffect('explosion')
+            volumes = items.vehicles.g_cache.commonConfig['miscParams']['explosionCandleVolumes']
+            candleIdx = 0
+            for idx, volume in enumerate(volumes):
+                if volume >= fireballVolume:
+                    break
+                candleIdx = idx + 1
+
+            if candleIdx > 0:
+                self.playEffect('explosionCandle%d' % candleIdx)
+            else:
+                self.playEffect('explosion')
+            return
 
     def stopSwinging(self):
         if self.swingingAnimator is not None:

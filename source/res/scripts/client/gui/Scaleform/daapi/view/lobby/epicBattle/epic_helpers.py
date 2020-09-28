@@ -11,7 +11,7 @@ from gui.shared.utils import decorators
 from helpers import dependency, i18n
 from items import vehicles
 from shared_utils import first
-from skeletons.gui.game_control import IEpicBattleMetaGameController, IEventProgressionController
+from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 FRONTLINE_HIDDEN_TAG = 'fr_hidden'
@@ -270,8 +270,3 @@ def triggerPrestige():
 @decorators.process('updating')
 def exchangePrestigePoints():
     yield EpicPrestigePointsExchange().request()
-
-
-def getFrontlineRewardVehPrice(intCD):
-    eventProgCtrl = dependency.instance(IEventProgressionController)
-    return {intCD:price for intCD, price in eventProgCtrl.rewardVehicles}.get(intCD, 0)

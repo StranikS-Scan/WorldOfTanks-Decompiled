@@ -7,7 +7,8 @@ from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.prb_control.settings import UNIT_RESTRICTION
+from gui.Scaleform.locale.MENU import MENU
+from gui.prb_control.settings import UNIT_RESTRICTION, PRE_QUEUE_RESTRICTION
 from gui.shared.formatters import text_styles, icons
 from helpers import i18n
 from shared_utils import BoundMethodWeakref
@@ -52,7 +53,7 @@ class ActionButtonStateVO(dict):
          UNIT_RESTRICTION.NOT_IN_SLOT: BoundMethodWeakref(self._notInSlotMessage),
          UNIT_RESTRICTION.VEHICLE_NOT_VALID_FOR_EVENT: (CYBERSPORT.WINDOW_UNIT_MESSAGE_VEHICLENOTVALID, {}),
          UNIT_RESTRICTION.CURFEW: (CYBERSPORT.WINDOW_UNIT_MESSAGE_CURFEW, {}),
-         UNIT_RESTRICTION.VEHICLE_WRONG_MODE: (CYBERSPORT.WINDOW_UNIT_MESSAGE_VEHICLEINNOTREADY_WRONGMODE, {}),
+         UNIT_RESTRICTION.VEHICLE_WRONG_MODE: BoundMethodWeakref(self._wrongModeMessage),
          UNIT_RESTRICTION.FORT_DISABLED: (CYBERSPORT.WINDOW_UNIT_MESSAGE_FORTIFICATIONNOTAVAILABLE, {}),
          UNIT_RESTRICTION.VEHICLE_INVALID_LEVEL: (self.__getNotAvailableIcon() + i18n.makeString(MESSENGER.DIALOGS_SQUAD_MESSAGE_INVALIDVEHICLELEVEL), {}),
          UNIT_RESTRICTION.SPG_IS_FORBIDDEN: (self.__getNotAvailableIcon() + i18n.makeString(MESSENGER.DIALOGS_SQUAD_MESSAGE_SPGFORBIDDEN), {}),
@@ -66,7 +67,10 @@ class ActionButtonStateVO(dict):
          UNIT_RESTRICTION.UNIT_MIN_CLAN_MEMBERS: BoundMethodWeakref(self._clanMembersNotEnoughMessage),
          UNIT_RESTRICTION.UNIT_IS_IN_PLAYERS_MATCHING: (CYBERSPORT.WINDOW_UNIT_MESSAGE_IN_PLAYERS_MATCHING, {}),
          UNIT_RESTRICTION.UNIT_NOT_FULL: ('', {}),
-         UNIT_RESTRICTION.UNSUITABLE_VEHICLE: (self.__getNotAvailableIcon() + backport.text(R.strings.system_messages.prebattle.vehicleInvalid.vehicleNotSupported()), {})}
+         UNIT_RESTRICTION.UNSUITABLE_VEHICLE: (self.__getNotAvailableIcon() + backport.text(R.strings.system_messages.prebattle.vehicleInvalid.vehicleNotSupported()), {}),
+         UNIT_RESTRICTION.WHITE_TIGER_IS_FORBIDDEN: (self.__getNotAvailableIcon() + i18n.makeString(MESSENGER.DIALOGS_SQUAD_MESSAGE_WHITETIGERFORBIDDEN), {}),
+         PRE_QUEUE_RESTRICTION.MODE_DISABLED: (MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDDISABLED_HEADER, {}),
+         PRE_QUEUE_RESTRICTION.MODE_NOT_SET: (MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDNOTSET_HEADER, {})}
         self.__WARNING_UNIT_MESSAGES = {UNIT_RESTRICTION.XP_PENALTY_VEHICLE_LEVELS: (MESSENGER.DIALOGS_SQUAD_MESSAGE_VEHICLES_DIFFERENTLEVELS, {})}
         self.__NEUTRAL_UNIT_MESSAGES = {UNIT_RESTRICTION.UNIT_WILL_SEARCH_PLAYERS: (FORTIFICATIONS.UNIT_WINDOW_WILLSEARCHPLAYERS, {})}
         stateKey, stateCtx = self.__getState()
@@ -105,6 +109,9 @@ class ActionButtonStateVO(dict):
 
     def _notInSlotMessage(self):
         return (CYBERSPORT.WINDOW_UNIT_MESSAGE_CANDIDATE, {}) if self.__canTakeSlot else (CYBERSPORT.WINDOW_UNIT_MESSAGE_UNITISFULL, {})
+
+    def _wrongModeMessage(self):
+        return (CYBERSPORT.WINDOW_UNIT_MESSAGE_VEHICLEINNOTREADY_WRONGMODE, {})
 
     def _getUnitReadyMessage(self):
         return (CYBERSPORT.WINDOW_UNIT_MESSAGE_GETREADY, {})

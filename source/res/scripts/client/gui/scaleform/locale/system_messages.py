@@ -1107,7 +1107,9 @@ class SYSTEM_MESSAGES(object):
     PROGRESSIVEREWARD_SWITCH_ON = '#system_messages:progressiveReward/switch_on'
     PROGRESSIVEREWARD_ERROR = '#system_messages:progressiveReward/error'
     EVENT_PROGRESSION_BUY_VEHICLE_SERVER_ERROR = '#system_messages:event_progression_buy_vehicle/server_error'
-    EVENT_PROGRESSION_BUY_VEHICLE_BUY = '#system_messages:event_progression_buy_vehicle/buy'
+    EVENT_PROGRESSION_BUY_VEHICLE_SUCCESS = '#system_messages:event_progression_buy_vehicle/success'
+    EVENT_PROGRESSION_BUY_STYLE_SERVER_ERROR = '#system_messages:event_progression_buy_style/server_error'
+    EVENT_PROGRESSION_BUY_STYLE_SUCCESS = '#system_messages:event_progression_buy_style/success'
     MAPS_BLACK_LIST_SELECT_SUCCESS = '#system_messages:maps_black_list/select/success'
     MAPS_BLACK_LIST_SELECT_SERVER_ERROR_COOLDOWN = '#system_messages:maps_black_list/select/server_error/COOLDOWN'
     MAPS_BLACK_LIST_SELECT_SERVER_ERROR = '#system_messages:maps_black_list/select/server_error'
@@ -1178,6 +1180,18 @@ class SYSTEM_MESSAGES(object):
     OFFERS_SWITCH_OFF_BODY = '#system_messages:offers/switch_off/body'
     OFFERS_UNAVAILABLE_ONE = '#system_messages:offers/unavailable_one'
     OFFERS_UNAVAILABLE_MANY = '#system_messages:offers/unavailable_many'
+    WT_EVENT_LOOTBOXES_HEADER = '#system_messages:wt_event/lootboxes/header'
+    WT_EVENT_LOOTBOXES_ENABLED = '#system_messages:wt_event/lootboxes/enabled'
+    WT_EVENT_LOOTBOXES_DISABLED = '#system_messages:wt_event/lootboxes/disabled'
+    WT_EVENT_LOOTBOXES_BUTTON = '#system_messages:wt_event/lootboxes/button'
+    WT_EVENT_EVENT_ENABLED = '#system_messages:wt_event/event/enabled'
+    WT_EVENT_EVENT_DISABLED = '#system_messages:wt_event/event/disabled'
+    WT_EVENT_DETAILS_BUTTON = '#system_messages:wt_event/details/button'
+    WT_EVENT_TICKET_OWNED = '#system_messages:wt_event/ticket/owned'
+    WT_EVENT_TICKET_FREE = '#system_messages:wt_event/ticket/free'
+    WT_EVENT_TICKET_TASKS = '#system_messages:wt_event/ticket/tasks'
+    WT_EVENT_TICKET_BUY = '#system_messages:wt_event/ticket/buy'
+    WT_EVENT_OPENED_BOX = '#system_messages:wt_event/opened_box'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -2394,7 +2408,9 @@ class SYSTEM_MESSAGES(object):
      PROGRESSIVEREWARD_SWITCH_ON,
      PROGRESSIVEREWARD_ERROR,
      EVENT_PROGRESSION_BUY_VEHICLE_SERVER_ERROR,
-     EVENT_PROGRESSION_BUY_VEHICLE_BUY,
+     EVENT_PROGRESSION_BUY_VEHICLE_SUCCESS,
+     EVENT_PROGRESSION_BUY_STYLE_SERVER_ERROR,
+     EVENT_PROGRESSION_BUY_STYLE_SUCCESS,
      MAPS_BLACK_LIST_SELECT_SUCCESS,
      MAPS_BLACK_LIST_SELECT_SERVER_ERROR_COOLDOWN,
      MAPS_BLACK_LIST_SELECT_SERVER_ERROR,
@@ -2464,7 +2480,19 @@ class SYSTEM_MESSAGES(object):
      TECHTREE_ACTION_EXPIRETIME,
      OFFERS_SWITCH_OFF_BODY,
      OFFERS_UNAVAILABLE_ONE,
-     OFFERS_UNAVAILABLE_MANY)
+     OFFERS_UNAVAILABLE_MANY,
+     WT_EVENT_LOOTBOXES_HEADER,
+     WT_EVENT_LOOTBOXES_ENABLED,
+     WT_EVENT_LOOTBOXES_DISABLED,
+     WT_EVENT_LOOTBOXES_BUTTON,
+     WT_EVENT_EVENT_ENABLED,
+     WT_EVENT_EVENT_DISABLED,
+     WT_EVENT_DETAILS_BUTTON,
+     WT_EVENT_TICKET_OWNED,
+     WT_EVENT_TICKET_FREE,
+     WT_EVENT_TICKET_TASKS,
+     WT_EVENT_TICKET_BUY,
+     WT_EVENT_OPENED_BOX)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

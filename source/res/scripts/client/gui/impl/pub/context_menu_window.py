@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/pub/context_menu_window.py
 import logging
 import typing
-from frameworks.wulf import View, ViewFlags, WindowFlags
+from frameworks.wulf import View, ViewFlags, WindowFlags, ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.ui_kit.context_menu_item_model import ContextMenuItemModel
 from gui.impl.gen.view_models.ui_kit.context_menu_sub_item_model import ContextMenuSubItemModel
@@ -13,8 +13,15 @@ _logger = logging.getLogger(__name__)
 
 class ContextMenuContent(View):
 
-    def __init__(self, layoutID=R.views.common.context_menu_window.context_menu_content.ContextMenuContent()):
-        super(ContextMenuContent, self).__init__(layoutID, ViewFlags.COMPONENT, ContextMenuContentModel)
+    def __init__(self, settings=R.views.common.context_menu_window.context_menu_content.ContextMenuContent(), *args, **kwargs):
+        if not isinstance(settings, ViewSettings):
+            _logger.warning('%r: Creation of context menu using statement ContextMenuContent(layoutID, *args, **kwargs) is deprecated and will be removed in next iteration. Please, use ContextMenuContent(ViewSettings(...))', self.__class__.__name__)
+            settings = ViewSettings(settings)
+            settings.flags = ViewFlags.COMPONENT
+            settings.model = ContextMenuContentModel()
+            settings.args = args
+            settings.kwargs = kwargs
+        super(ContextMenuContent, self).__init__(settings)
 
     @property
     def isGameface(self):

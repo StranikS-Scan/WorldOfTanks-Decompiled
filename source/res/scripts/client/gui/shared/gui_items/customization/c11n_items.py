@@ -826,6 +826,10 @@ class Sequence(Customization):
     def sequenceName(self):
         return self.descriptor.sequenceName
 
+    @property
+    def sequenceLogic(self):
+        return self.descriptor.sequenceLogic
+
 
 class Attachment(Customization):
     __slots__ = ()

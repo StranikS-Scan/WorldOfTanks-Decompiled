@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/constants.py
-from enum import Enum
+from enum import Enum, IntEnum
 from math import cos, radians
 from time import time as timestamp
 from collections import namedtuple
@@ -1434,6 +1434,7 @@ class REQUEST_COOLDOWN:
     RUN_QUEST = 1.0
     PAWN_FREE_AWARD_LIST = 1.0
     LOOTBOX = 1.0
+    LOOTBOX_RECORDS = 1.0
     BADGES = 2.0
     CREW_SKINS = 0.3
     BPF_COMMAND = 1.0
@@ -1781,7 +1782,8 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  98: 'Battle Pass Storage',
  99: 'Battle Royale carousel filter 1',
  100: 'Battle Royale carousel filter 2',
- 101: 'Once only hints'}
+ 101: 'Once only hints',
+ 102: 'Event Storage'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -2339,6 +2341,7 @@ class LOOT_TYPE(object):
     ADVANCED = 2
     AIRDROP = 3
     CORPSE = 4
+    GROUPDROP = 5
 
 
 class AirdropType(object):
@@ -2613,3 +2616,8 @@ class UpgradeProhibitionReason(object):
     DROWNING = 2
     OVERTURNED = 3
     SETTLING = 4
+
+
+class WtTeams(IntEnum):
+    BOSS = 1
+    HUNTERS = 2

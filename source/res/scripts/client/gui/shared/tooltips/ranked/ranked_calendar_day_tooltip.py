@@ -28,7 +28,7 @@ class RankedCalendarDayTooltip(BlocksTooltipData):
         if self.rankedController.getCurrentSeason():
             seasonEnd = self.rankedController.getCurrentSeason().getEndDate()
             seasonEnd = datetime.fromtimestamp(seasonEnd).date()
-        if datetime.fromtimestamp(selectedTime).date() > seasonEnd:
+        if seasonEnd is None or datetime.fromtimestamp(selectedTime).date() > seasonEnd:
             return items
         else:
             blocks = [self.__packHeaderBlock()]

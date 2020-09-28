@@ -3,7 +3,7 @@
 from collections import namedtuple
 from gui.shared.event_bus import SharedEvent
 from shared_utils import CONST_CONTAINER
-__all__ = ('ArgsEvent', 'LoadEvent', 'ComponentEvent', 'LoadViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginCreateEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'HasCtxEvent', 'AmmunitionSetupViewEvent')
+__all__ = ('ArgsEvent', 'LoadEvent', 'ComponentEvent', 'LoadViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginCreateEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'HasCtxEvent', 'AmmunitionSetupViewEvent', 'WtGameEvent')
 
 class HasCtxEvent(SharedEvent):
 
@@ -277,6 +277,7 @@ class HideWindowEvent(HasCtxEvent):
     HIDE_VEHICLE_PREVIEW = 'hideVehiclePreview'
     HIDE_OVERLAY_BROWSER_VIEW = 'hideOverlayBrowserView'
     HIDE_MISSIONS_PAGE_VIEW = 'hideMissionsPageView'
+    HIDE_VEHICLE_PREVIEW_EVENT = 'hideVehiclePreviewEvent'
 
 
 class HidePopoverEvent(HasCtxEvent):
@@ -627,6 +628,14 @@ class HangarVehicleEvent(HasCtxEvent):
     ON_HERO_TANK_LOADED = 'hangarVehicle/onHeroTankLoaded'
     ON_HERO_TANK_DESTROY = 'hangarVehicle/onHeroTankDestroy'
     HERO_TANK_MARKER = 'hangarVehicle/heroTankMarker'
+    WT_EVENT_SELECTED = 'hangarVehicle/wtEventSelected'
+    WT_EVENT_SELECTED_OFF = 'hangarVehicle/wtEventSelectedOff'
+    WT_EVENT_CAROUSEL_CLICKED = 'hangarVehicle/wtEventCarouselClicked'
+    WT_EVENT_VEHICLED_CLICKED = 'hangarVehicle/wtEventVehicleClicked'
+    WT_EVENT_PORTAL_CLICKED = 'hangarVehicle/wtEventPortalClicked'
+    WT_EVENT_NON_EVENT_VEHICLE_CHOSEN = 'hangarVehicle/wtEventNonEventVehicleChosen'
+    WT_EVENT_COLLECTION_VIEW_LOADED = 'hangarVehicle/wtEventCollectionViewLoaded'
+    WT_EVENT_HERO_TANK_LEAVE_WORLD = 'hangarVehicle/wtEventHeroTankLeaveWorld'
 
 
 class LinkedSetEvent(HasCtxEvent):
@@ -743,3 +752,9 @@ class RadialMenuEvent(SharedEvent):
 
 class HangarSpacesSwitcherEvent(HasCtxEvent):
     SWITCH_TO_HANGAR_SPACE = 'hangarSpacesSwitcherEvent/SwitchToHangarSpace'
+
+
+class WtGameEvent(HasCtxEvent):
+    WAVES_POSITIONS = 'wavesPositions'
+    GROUPDRPOP_POSITIONS = 'groupdropPositions'
+    TIMER_ADDED_ANIMATION = 'timerAddedAnimation'

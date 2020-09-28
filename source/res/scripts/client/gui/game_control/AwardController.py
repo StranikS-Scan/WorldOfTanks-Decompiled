@@ -49,13 +49,14 @@ from gui.server_events.events_dispatcher import showLootboxesAward, showPiggyBan
 from gui.server_events.events_helpers import isDailyQuest
 from gui.server_events.finders import PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
-from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow, showSeniorityRewardAwardWindow, showRankedSeasonCompleteView, showRankedYeardAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showProgressiveItemsRewardWindow, showProgressionRequiredStyleUnlockedWindow, showRankedYearLBAwardWindow, showDedicationRewardWindow, showTransferGiveawayWindow
+from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow, showSeniorityRewardAwardWindow, showRankedSeasonCompleteView, showRankedYeardAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showProgressiveItemsRewardWindow, showProgressionRequiredStyleUnlockedWindow, showRankedYearLBAwardWindow, showDedicationRewardWindow, showTransferGiveawayWindow, showWtEventAwardWindow
 from gui.shared.events import PersonalMissionsEvent, LobbySimpleEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.functions import getViewName
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.sounds.sound_constants import SPEAKERS_CONFIG
+from gui.wt_event.wt_event_helpers import hasWtEventQuest, isWtEventQuest
 from helpers import dependency
 from helpers import i18n
 from helpers import time_utils
@@ -173,7 +174,8 @@ class AwardController(IAwardController, IGlobalListener):
          DynamicBonusHandler(self),
          ProgressiveItemsRewardHandler(self),
          TenYearsCountdownHandler(self),
-         DedicationReward(self)]
+         DedicationReward(self),
+         WtEventQuestAwardHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -497,6 +499,8 @@ class SeniorityAwardsWindowHandler(ServiceChannelHandler):
     def _needToShowAward(self, ctx):
         _, message = ctx
         isLootBoxesAutoOpenType = SYS_MESSAGE_TYPE.lootBoxesAutoOpenReward.index() == message.type
+        if isLootBoxesAutoOpenType:
+            return False
         if not isLootBoxesAutoOpenType and not super(SeniorityAwardsWindowHandler, self)._needToShowAward(ctx):
             return False
         data = message.data
@@ -831,6 +835,25 @@ class QuestBoosterAwardHandler(ServiceChannelHandler):
 
     def _showAward(self, ctx):
         pass
+
+
+class WtEventQuestAwardHandler(ServiceChannelHandler):
+
+    def __init__(self, awardCtrl):
+        super(WtEventQuestAwardHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
+
+    def _needToShowAward(self, ctx):
+        _, message = ctx
+        if message is not None and message.data and isinstance(message.data, types.DictType):
+            if hasWtEventQuest(message.data.get('completedQuestIDs', set())):
+                return True
+        return False
+
+    def _showAward(self, ctx):
+        _, message = ctx
+        for questId in message.data.get('completedQuestIDs', set()):
+            if isWtEventQuest(questId):
+                showWtEventAwardWindow(questId)
 
 
 class BoosterAfterBattleAwardHandler(ServiceChannelHandler):

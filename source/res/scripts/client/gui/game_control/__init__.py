@@ -62,6 +62,9 @@ def getGameControllersConfig(manager):
     from gui.game_control.craftmachine_controller import CraftmachineController
     from gui.game_control.bob_controller import BobController as _BobCtrl
     from gui.game_control.bob_sound_controller import BobSoundController as _BobSoundCtrl
+    from gui.game_control.event_lootbox_controller import EventLootBoxController as _EventLootBoxController
+    from gui.game_control.game_event_controller import GameEventController as _GameEvents
+    from event_settings.event_settings_controller import EventSettingsController as _EventSettingsController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -122,3 +125,6 @@ def getGameControllersConfig(manager):
     _config(_interface.ICraftmachineController, CraftmachineController())
     _config(_interface.IClanNotificationController, _ClanNotification())
     _config(_interface.IEventProgressionController, _EventProgression())
+    _config(_interface.IEventLootBoxesController, _EventLootBoxController())
+    _config(_interface.IGameEventController, _GameEvents())
+    _config(_interface.IEventSettingsController, _EventSettingsController())

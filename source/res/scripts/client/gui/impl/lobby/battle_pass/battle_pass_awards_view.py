@@ -161,6 +161,9 @@ class BattlePassAwardsView(ViewImpl):
                 elif value[0]['custType'] == 'style' and altVoteOption != 0:
                     with finalAwardsInjection(altVoteOption):
                         packBonusModelAndTooltipData([reward], self.viewModel.mainRewards, self.__tooltipItems)
+                elif value[0]['custType'] == 'decal':
+                    with finalAwardsInjection(value[0]['id']):
+                        packBonusModelAndTooltipData([reward], self.viewModel.mainRewards, self.__tooltipItems)
                 else:
                     packBonusModelAndTooltipData([reward], self.viewModel.mainRewards, self.__tooltipItems)
             packBonusModelAndTooltipData([reward], self.viewModel.mainRewards, self.__tooltipItems)

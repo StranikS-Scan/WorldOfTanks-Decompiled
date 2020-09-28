@@ -6,6 +6,7 @@ from gui.impl.gen.resources import R
 from gui.prb_control import settings
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, REQUEST_TYPE
 from gui.Scaleform.daapi.view.lobby.prb_windows.squad_action_button_state_vo import SquadActionButtonStateVO
+from gui.Scaleform.daapi.view.lobby.prb_windows.event_squad_button_state_vo import EventSquadButtonStateVO
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.daapi.view.meta.SquadViewMeta import SquadViewMeta
@@ -66,7 +67,7 @@ class SquadView(SquadViewMeta):
             elif vehicleVO is None:
                 needToUpdateSlots = True
         if self._eventsCache.isSquadXpFactorsEnabled() or self._eventsCache.isBalancedSquadEnabled():
-            self.as_setActionButtonStateS(self.__getActionButtonStateVO())
+            self.as_setActionButtonStateS(self._getActionButtonStateVO())
         if needToUpdateSlots:
             self._updateMembersData()
         return
@@ -136,7 +137,7 @@ class SquadView(SquadViewMeta):
                     break
 
         self.as_updateInviteBtnStateS(enabled)
-        self.as_setActionButtonStateS(self.__getActionButtonStateVO())
+        self.as_setActionButtonStateS(self._getActionButtonStateVO())
 
     def _updateMembersData(self):
         entity = self.prbEntity
@@ -157,11 +158,11 @@ class SquadView(SquadViewMeta):
     def _isPremiumBonusEnabled(self):
         return self.__lobbyContext.getServerSettings().squadPremiumBonus.isEnabled
 
+    def _getActionButtonStateVO(self):
+        return SquadActionButtonStateVO(self.prbEntity)
+
     def __updateHeader(self):
         self.as_setSimpleTeamSectionDataS(self._getHeaderPresenter().getData())
-
-    def __getActionButtonStateVO(self):
-        return SquadActionButtonStateVO(self.prbEntity)
 
     def __canSendInvite(self):
         return self.prbEntity.getPermissions().canSendInvite()
@@ -176,8 +177,8 @@ class EventSquadView(SquadView):
     def _getHeaderPresenter(self):
         return _EventHeaderPresenter(self.prbEntity)
 
-    def _getLeaveBtnTooltip(self):
-        return TOOLTIPS.SQUADWINDOW_BUTTONS_LEAVEEVENTSQUAD
+    def _getActionButtonStateVO(self):
+        return EventSquadButtonStateVO(self.prbEntity)
 
 
 class EpicSquadView(SquadView):
@@ -315,19 +316,22 @@ class _EventHeaderPresenter(_HeaderPresenter):
 
     def __init__(self, prbEntity):
         super(_EventHeaderPresenter, self).__init__(prbEntity)
+        self._bgImage = backport.image(R.images.gui.maps.icons.squad.backgrounds.event_squad())
+        self._isArtVisible = True
         self._isVisibleHeaderIcon = False
-        self._bgImage = backport.image(R.images.gui.maps.icons.squad.backgrounds.event())
+
+    def _packBonuses(self):
+        return []
 
     def _getInfoIconTooltipParams(self):
-        vehiclesNames = [ veh.userName for veh in self._eventsCache.getEventVehicles() ]
-        tooltip = backport.text(R.strings.tooltips.squadWindow.eventVehicle(), tankName=', '.join(vehiclesNames))
-        return (makeTooltip(body=tooltip), TOOLTIPS_CONSTANTS.COMPLEX)
+        tooltip = makeTooltip(header=backport.text(R.strings.wt_event.squadWindow.tooltips.vehicle.header()), body=backport.text(R.strings.wt_event.squadWindow.tooltips.vehicle.body()))
+        return (tooltip, TOOLTIPS_CONSTANTS.COMPLEX)
 
     def _getMessageParams(self):
         iconSource = ''
         if self._isVisibleHeaderIcon:
             iconSource = backport.image(R.images.gui.maps.icons.squad.event())
-        messageText = text_styles.main(backport.text(R.strings.messenger.dialogs.squadChannel.headerMsg.eventFormationRestriction()))
+        messageText = text_styles.main(backport.text(R.strings.wt_event.squadWindow.header.squadFormationRestriction()))
         return (iconSource, messageText)
 
 

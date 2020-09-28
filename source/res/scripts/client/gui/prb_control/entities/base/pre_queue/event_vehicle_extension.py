@@ -91,7 +91,7 @@ class _EventVehicleEntityExtension(object):
 
     def _makeQueueCtxByAction(self, action=None):
         from gui.prb_control.entities.event.pre_queue.ctx import EventBattleQueueCtx
-        return EventBattleQueueCtx(vehInvIDs=[g_currentVehicle.item.invID], waitingID='prebattle/join')
+        return EventBattleQueueCtx(vehInvIDs=[1, g_currentVehicle.item.invID], waitingID='prebattle/join')
 
     def _onEventsCacheResync(self):
         if self.__isEventsEnabled != self.eventsCache.isEventEnabled():

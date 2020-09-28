@@ -14,6 +14,8 @@ class TOOLTIPS(object):
     TANKS_CAROUSEL_BUY_VEHICLE = '#tooltips:tanks_carousel/buy_vehicle'
     TANKS_CAROUSEL_BUY_VEHICLE_NEW = '#tooltips:tanks_carousel/buy_vehicle_new'
     TANKS_CAROUSEL_RESTORE_VEHICLE = '#tooltips:tanks_carousel/restore_vehicle'
+    VEHICLEPREVIEW_BUYINGPANEL_EVENTPROGRESSION_PRICE = '#tooltips:vehiclePreview/buyingPanel/eventProgression/price'
+    VEHICLEPREVIEW_BUYINGPANEL_EVENTPROGRESSION_STYLE_PRICE = '#tooltips:vehiclePreview/buyingPanel/eventProgression/style_price'
     VEHICLEPREVIEW_MODULSNOMODULES = '#tooltips:vehiclePreview/modulsnoModules'
     VEHICLEPREVIEW_MODULS = '#tooltips:vehiclePreview/moduls'
     PROGRESSIVEREWARD_WIDGET = '#tooltips:progressiveReward/widget'
@@ -2076,6 +2078,8 @@ class TOOLTIPS(object):
     VEHICLEPARAMS_SIMPLIFIED_TITLE = '#tooltips:vehicleParams/simplified/title'
     VEHICLEPREVIEW_BUYINGPANEL_EVENTPROGRESSION_PRICE_HEADER = '#tooltips:vehiclePreview/buyingPanel/eventProgression/price/header'
     VEHICLEPREVIEW_BUYINGPANEL_EVENTPROGRESSION_PRICE_BODY = '#tooltips:vehiclePreview/buyingPanel/eventProgression/price/body'
+    VEHICLEPREVIEW_BUYINGPANEL_EVENTPROGRESSION_STYLE_PRICE_HEADER = '#tooltips:vehiclePreview/buyingPanel/eventProgression/style_price/header'
+    VEHICLEPREVIEW_BUYINGPANEL_EVENTPROGRESSION_STYLE_PRICE_BODY = '#tooltips:vehiclePreview/buyingPanel/eventProgression/style_price/body'
     VEHICLEPREVIEW_CREW_COMMANDER = '#tooltips:vehiclePreview/crew/commander'
     VEHICLEPREVIEW_CREW_DRIVER = '#tooltips:vehiclePreview/crew/driver'
     VEHICLEPREVIEW_CREW_RADIOMAN = '#tooltips:vehiclePreview/crew/radioman'
@@ -2956,6 +2960,11 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_TANKMEN_BP2_2_LABEL = '#tooltips:notrecruitedtankman/tankmen_bp2_2/label'
     NOTRECRUITEDTANKMAN_TANKMEN_BP2_2_DESC = '#tooltips:notrecruitedtankman/tankmen_bp2_2/desc'
     NOTRECRUITEDTANKMAN_TANKMEN_BP2_2_HOWTOGETINFO = '#tooltips:notrecruitedtankman/tankmen_bp2_2/howToGetInfo'
+    NOTRECRUITEDTANKMAN_CH_COMPENSATION_LABEL = '#tooltips:notrecruitedtankman/ch_compensation/label'
+    NOTRECRUITEDTANKMAN_CH_COMPENSATION_DESC = '#tooltips:notrecruitedtankman/ch_compensation/desc'
+    NOTRECRUITEDTANKMAN_WT_RAIDBOSS_COMMANDER_LABEL = '#tooltips:notrecruitedtankman/wt_raidboss_commander/label'
+    NOTRECRUITEDTANKMAN_WT_RAIDBOSS_COMMANDER_DESC = '#tooltips:notrecruitedtankman/wt_raidboss_commander/desc'
+    NOTRECRUITEDTANKMAN_WT_RAIDBOSS_COMMANDER_HOWTOGETINFO = '#tooltips:notrecruitedtankman/wt_raidboss_commander/howToGetInfo'
     QUESTS_AWARDS_VEHICLERENT_HEADER = '#tooltips:quests/awards/vehicleRent/header'
     QUESTS_AWARDS_VEHICLERENT_EXPIRE = '#tooltips:quests/awards/vehicleRent/expire'
     QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTDAYS = '#tooltips:quests/awards/vehicleRent/rentLeft/rentDays'
@@ -3033,14 +3042,19 @@ class TOOLTIPS(object):
     EVENTPROGRESSION_HEADER = '#tooltips:eventProgression/header'
     EVENTPROGRESSION_CURRENCY = '#tooltips:eventProgression/currency'
     EVENTPROGRESSION_DESCRIPTION = '#tooltips:eventProgression/description'
+    EVENTPROGRESSION_DESCRIPTION_CN = '#tooltips:eventProgression/description_cn'
+    EVENTPROGRESSION_SEASON_CN = '#tooltips:eventProgression/season_cn'
     EVENTPROGRESSION_SEASON = '#tooltips:eventProgression/season'
     EVENTPROGRESSION_STEELHUNTER_SEASON = '#tooltips:eventProgression/steelHunter/season'
-    EVENTPROGRESSION_TIMETOSTART = '#tooltips:eventProgression/timeToStart'
-    EVENTPROGRESSION_TIMETOLEFT = '#tooltips:eventProgression/timeToLeft'
+    EVENTPROGRESSION_TIMETOSTART_SEASON = '#tooltips:eventProgression/timeToStart/season'
+    EVENTPROGRESSION_TIMETOLEFT_SEASON = '#tooltips:eventProgression/timeToLeft/season'
+    EVENTPROGRESSION_TIMETOSTART_CYCLE = '#tooltips:eventProgression/timeToStart/cycle'
+    EVENTPROGRESSION_TIMETOLEFT_CYCLE = '#tooltips:eventProgression/timeToLeft/cycle'
     EVENTPROGRESSION_DISABLED = '#tooltips:eventProgression/disabled'
     EVENTPROGRESSION_LEVEL = '#tooltips:eventProgression/level'
     EVENTPROGRESSION_UNLOCKEDDAILYMISSIONS = '#tooltips:eventProgression/unlockedDailyMissions'
-    EVENTPROGRESSION_ALLSEASONSAREOVER = '#tooltips:eventProgression/allSeasonsAreOver'
+    EVENTPROGRESSION_ALLSEASONSAREOVER_MULTI = '#tooltips:eventProgression/allSeasonsAreOver/multi'
+    EVENTPROGRESSION_ALLSEASONSAREOVER_SINGLE = '#tooltips:eventProgression/allSeasonsAreOver/single'
     EVENTPROGRESSION_FRONTLINE = '#tooltips:eventProgression/frontLine'
     VEHICLECRYSTAL_LIMITSTATUS_COMMON_TITLE = '#tooltips:vehicleCrystal/limitStatus/common/title'
     VEHICLECRYSTAL_LIMITSTATUS_COMMON_DESCRIPTION = '#tooltips:vehicleCrystal/limitStatus/common/description'
@@ -3097,6 +3111,8 @@ class TOOLTIPS(object):
     BATTLE_ROYALE_VIEWSTACK_INFO_BODY = '#tooltips:battle_royale/viewStack/info/body'
     BATTLE_ROYALE_VIEWSTACK_REWARDS_HEADER = '#tooltips:battle_royale/viewStack/rewards/header'
     BATTLE_ROYALE_VIEWSTACK_REWARDS_BODY = '#tooltips:battle_royale/viewStack/rewards/body'
+    SETTTINGSDISABLEDNOTIFICATION_HEADER = '#tooltips:setttingsDisabledNotification/header'
+    SETTTINGSDISABLEDNOTIFICATION_BODY = '#tooltips:setttingsDisabledNotification/body'
     ELEN_SUMMARY_RANK_ENUM = (ELEN_SUMMARY_RANK_1,
      ELEN_SUMMARY_RANK_2,
      ELEN_SUMMARY_RANK_3,
@@ -3671,7 +3687,9 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_BP_COMMANDER_1_1_LABEL,
      NOTRECRUITEDTANKMAN_BP_COMMANDER_1_2_LABEL,
      NOTRECRUITEDTANKMAN_TANKMEN_BP2_1_LABEL,
-     NOTRECRUITEDTANKMAN_TANKMEN_BP2_2_LABEL)
+     NOTRECRUITEDTANKMAN_TANKMEN_BP2_2_LABEL,
+     NOTRECRUITEDTANKMAN_CH_COMPENSATION_LABEL,
+     NOTRECRUITEDTANKMAN_WT_RAIDBOSS_COMMANDER_LABEL)
     NOTRECRUITEDTANKMAN_ALL_DESC_ENUM = (NOTRECRUITEDTANKMAN_BASE_DESC,
      NOTRECRUITEDTANKMAN_BUFFON_DESC,
      NOTRECRUITEDTANKMAN_TANKWOMAN_DESC,
@@ -3719,7 +3737,9 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_BP_COMMANDER_1_1_DESC,
      NOTRECRUITEDTANKMAN_BP_COMMANDER_1_2_DESC,
      NOTRECRUITEDTANKMAN_TANKMEN_BP2_1_DESC,
-     NOTRECRUITEDTANKMAN_TANKMEN_BP2_2_DESC)
+     NOTRECRUITEDTANKMAN_TANKMEN_BP2_2_DESC,
+     NOTRECRUITEDTANKMAN_CH_COMPENSATION_DESC,
+     NOTRECRUITEDTANKMAN_WT_RAIDBOSS_COMMANDER_DESC)
     NOTRECRUITEDTANKMAN_ALL_HOWTOGETINFO_ENUM = (NOTRECRUITEDTANKMAN_TANKMAN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERB_HOWTOGETINFO,
@@ -3732,7 +3752,8 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_BP_COMMANDER_1_1_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_BP_COMMANDER_1_2_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_BP2_1_HOWTOGETINFO,
-     NOTRECRUITEDTANKMAN_TANKMEN_BP2_2_HOWTOGETINFO)
+     NOTRECRUITEDTANKMAN_TANKMEN_BP2_2_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_WT_RAIDBOSS_COMMANDER_HOWTOGETINFO)
     QUESTS_AWARDS_VEHICLERENT_RENTLEFT_ENUM = (QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTDAYS, QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTBATTLES, QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTWINS)
     NOTRECRUITEDTANKMAN_ALL_HOWTOGETINFO_ENUM = (NOTRECRUITEDTANKMAN_TANKMAN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_HOWTOGETINFO,
@@ -3746,7 +3767,8 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_BP_COMMANDER_1_1_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_BP_COMMANDER_1_2_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_BP2_1_HOWTOGETINFO,
-     NOTRECRUITEDTANKMAN_TANKMEN_BP2_2_HOWTOGETINFO)
+     NOTRECRUITEDTANKMAN_TANKMEN_BP2_2_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_WT_RAIDBOSS_COMMANDER_HOWTOGETINFO)
 
     @classmethod
     def elen_summary_rank(cls, key0):

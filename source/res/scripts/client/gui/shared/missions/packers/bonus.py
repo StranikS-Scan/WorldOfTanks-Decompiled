@@ -138,8 +138,7 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
             tokenType = cls.__getTokenBonusType(tokenID, complexToken)
             tooltipPacker = tooltipPackers.get(tokenType)
             if tooltipPacker is None:
-                _logger.warning('There is not a tooltip creator for a token bonus')
-                return result
+                continue
             tooltip = tooltipPacker(complexToken)
             result.append(createTooltipData(tooltip))
 
@@ -450,6 +449,10 @@ class TankmenBonusUIPacker(BaseBonusUIPacker):
 class VehiclesBonusUIPacker(BaseBonusUIPacker):
 
     @classmethod
+    def _needToShowCompensationBonus(cls):
+        return True
+
+    @classmethod
     def _pack(cls, bonus):
         return cls._packVehicles(bonus, bonus.getVehicles())
 
@@ -462,12 +465,12 @@ class VehiclesBonusUIPacker(BaseBonusUIPacker):
         packedVehicles = []
         for vehicle, vehInfo in vehicles:
             compensation = bonus.compensation(vehicle, bonus)
-            if compensation:
+            if compensation and cls._needToShowCompensationBonus():
                 packer = SimpleBonusUIPacker()
                 for bonusComp in compensation:
                     packedVehicles.extend(packer.pack(bonusComp))
 
-            packedVehicles.append(cls._packVehicle(bonus, vehInfo))
+            packedVehicles.append(cls._packVehicle(bonus, vehicle, vehInfo))
 
         return packedVehicles
 
@@ -476,23 +479,22 @@ class VehiclesBonusUIPacker(BaseBonusUIPacker):
         packedTooltips = []
         for vehicle, vehInfo in vehicles:
             compensation = bonus.compensation(vehicle, bonus)
-            if compensation:
-                packer = SimpleBonusUIPacker()
+            if compensation and cls._needToShowCompensationBonus():
                 for bonusComp in compensation:
-                    packedTooltips.extend(packer.getToolTip(bonusComp))
+                    packedTooltips.extend(cls._packCompensationTooltip(bonusComp, vehicle))
 
             packedTooltips.append(cls._packTooltip(bonus, vehicle, vehInfo))
 
         return packedTooltips
 
     @classmethod
-    def _packVehicle(cls, bonus, vehInfo):
+    def _packVehicle(cls, bonus, vehicle, vehInfo):
         rentDays = bonus.getRentDays(vehInfo)
         rentBattles = bonus.getRentBattles(vehInfo)
         rentWins = bonus.getRentWins(vehInfo)
         rentSeason = bonus.getRentSeason(vehInfo)
         isRent = rentDays or rentBattles or rentWins or rentSeason
-        return cls._packVehicleBonusModel(bonus, isRent)
+        return cls._packVehicleBonusModel(bonus, vehicle, isRent)
 
     @classmethod
     def _packTooltip(cls, bonus, vehicle, vehInfo):
@@ -509,6 +511,10 @@ class VehiclesBonusUIPacker(BaseBonusUIPacker):
          rentWins,
          rentSeason])
 
+    @classmethod
+    def _packCompensationTooltip(cls, bonusComp, vehicle):
+        return SimpleBonusUIPacker().getToolTip(bonusComp)
+
     @staticmethod
     def _getRentExpiryTime(rentDays):
         if rentDays:
@@ -519,7 +525,7 @@ class VehiclesBonusUIPacker(BaseBonusUIPacker):
         return rentExpiryTime
 
     @staticmethod
-    def _packVehicleBonusModel(bonus, isRent):
+    def _packVehicleBonusModel(bonus, vehicle, isRent):
         model = BonusModel()
         model.setName(bonus.getName() + VEHICLE_RENT_ICON_POSTFIX if isRent else bonus.getName())
         model.setIsCompensation(bonus.isCompensation())

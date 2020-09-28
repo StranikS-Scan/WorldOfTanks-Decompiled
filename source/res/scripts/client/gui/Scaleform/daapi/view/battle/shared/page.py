@@ -74,10 +74,11 @@ class SharedPage(BattlePageMeta):
         if external is None:
             external = (crosshair.CrosshairPanelContainer, markers2d.MarkersManager)
         self._external = [ item() for item in external ]
-        if components is None:
-            components = _SHARED_COMPONENTS_CONFIG
-        else:
-            components += _SHARED_COMPONENTS_CONFIG
+        if not self.sessionProvider.arenaVisitor.gui.isEventBattle():
+            if components is None:
+                components = _SHARED_COMPONENTS_CONFIG
+            else:
+                components += _SHARED_COMPONENTS_CONFIG
         self.__componentsConfig = components
         return
 
@@ -290,6 +291,9 @@ class SharedPage(BattlePageMeta):
         if not self.sessionProvider.getCtx().isPlayerObserver() and not BattleReplay.g_replayCtrl.isPlaying:
             self.as_setPostmortemTipsVisibleS(False)
             self._isInPostmortem = False
+            if self.sessionProvider.arenaVisitor.gui.isEventBattle():
+                if self.sessionProvider.dynamic.respawn.playerLives == 1:
+                    self.as_showPostmortemNotificationS()
 
     def __onPostMortemReload(self):
         self._isInPostmortem = False

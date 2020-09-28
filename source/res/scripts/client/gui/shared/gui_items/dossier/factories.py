@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/factories.py
 import nations
-from dossiers2.ui.achievements import ACHIEVEMENT_TYPE, getType as getAchieveType, ACHIEVEMENT_BLOCK as _AB, WHITE_TIGER_RECORD, RARE_STORAGE_RECORD, HONORED_RANK_RECORD
+from dossiers2.ui.achievements import ACHIEVEMENT_TYPE, getType as getAchieveType, ACHIEVEMENT_BLOCK as _AB, WHITE_TIGER_RECORD, RARE_STORAGE_RECORD, HONORED_RANK_RECORD, MARK_OF_MASTERY, MARK_ON_GUN
 from gui.shared.gui_items.dossier import achievements as _as
 from gui.shared.gui_items.dossier.achievements import abstract as _abstract_achievements
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.gui_items.dossier.achievements.loyal_service import LoyalServiceAchievement
 
 class _AchieveFactory(object):
@@ -340,7 +341,10 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  WHITE_TIGER_RECORD: _CustomAchieveFactory.get(_as.regular.WhiteTigerAchievement),
  HONORED_RANK_RECORD: _CustomAchieveFactory.get(_as.regular.HonoredRankAchievement),
  (_AB.SINGLE, 'se2020Medal'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
- RARE_STORAGE_RECORD: _RareAchievesFactory.get()}
+ RARE_STORAGE_RECORD: _RareAchievesFactory.get(),
+ (_AB.UNIQUE, 'wtHunterWins'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.UNIQUE, 'wtBossWins'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.TOTAL, 'wtSpecBossDefeat'): _AchieveFactory.get(_abstract_achievements.QuestAchievement)}
 for _nID, _ in enumerate(nations.NAMES):
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'tankExpert%d' % _nID] = _NationAchieveFactory.get(_as.nation_specific.TankExpertAchievement, _nID)
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'mechanicEngineer%d' % _nID] = _NationAchieveFactory.get(_as.nation_specific.MechEngineerAchievement, _nID)
@@ -357,3 +361,9 @@ def getAchievementFactory(record, dossier=None):
     else:
         factoryMaker = _AchieveFactory.get(_abstract_achievements.RegularAchievement)
     return factoryMaker(record[1], record[0], dossier)
+
+
+def getAchievementTooltipType(achievementName):
+    if achievementName == MARK_OF_MASTERY:
+        return TOOLTIPS_CONSTANTS.MARK_OF_MASTERY
+    return TOOLTIPS_CONSTANTS.BATTLE_STATS_MARKS_ON_GUN_ACHIEVEMENT if achievementName == MARK_ON_GUN else TOOLTIPS_CONSTANTS.BATTLE_STATS_ACHIEVS

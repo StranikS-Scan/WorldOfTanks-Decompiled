@@ -65,7 +65,7 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
     settingsCore = dependency.descriptor(ISettingsCore)
     hangarSpace = dependency.descriptor(IHangarSpace)
     allCameraObjects = set()
-    P1_DELTA_X_Z = 10.0
+    P1_DELTA_X_Z = 1.0
 
     def __init__(self):
         ClientSelectableObject.__init__(self)

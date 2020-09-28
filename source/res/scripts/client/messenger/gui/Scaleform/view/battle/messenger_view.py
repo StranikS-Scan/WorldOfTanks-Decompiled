@@ -17,6 +17,7 @@ from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.battle_control.arena_info.interfaces import IContactsAndPersonalInvitationsController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.shared import EVENT_BUS_SCOPE
+from gui.shared.gui_items.Vehicle import VEHICLE_EVENT_TYPE
 from messenger.proto import proto_getter
 from messenger.storage import storage_getter
 from messenger import g_settings
@@ -185,7 +186,9 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
                     break
 
     def handleEnterPressed(self):
-        if not self.__isEnabled:
+        info = self.sessionProvider.getCtx().getVehicleInfo(BigWorld.player().playerVehicleID)
+        isBoss = VEHICLE_EVENT_TYPE.EVENT_BOSS in info.vehicleType.tags
+        if not self.__isEnabled or isBoss:
             return False
         if self.app.isModalViewShown() or self.app.hasGuiControlModeConsumers(*_CONSUMERS_LOCK_ENTER):
             return False

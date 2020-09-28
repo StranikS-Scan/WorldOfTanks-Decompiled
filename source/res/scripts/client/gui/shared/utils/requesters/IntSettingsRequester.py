@@ -67,11 +67,13 @@ class IntSettingsRequester(object):
      'BOB_CAROUSEL_FILTER_1': 92,
      'BOB_CAROUSEL_FILTER_2': 93,
      'SESSION_STATS': constants.USER_SERVER_SETTINGS.SESSION_STATS,
+     'LOOT_BOX_VIEWED': 91,
      'BATTLEPASS_CAROUSEL_FILTER_1': 97,
      'BATTLE_PASS_STORAGE': 98,
      'ROYALE_CAROUSEL_FILTER_1': 99,
      'ROYALE_CAROUSEL_FILTER_2': 100,
-     'ONCE_ONLY_HINTS_2': 101}
+     'ONCE_ONLY_HINTS_2': 101,
+     'EVENT_STORAGE': 102}
 
     def __init__(self):
         self.__isSynced = False

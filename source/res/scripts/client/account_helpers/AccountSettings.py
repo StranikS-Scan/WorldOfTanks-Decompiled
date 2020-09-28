@@ -55,6 +55,7 @@ BARRACKS_FILTER = 'barracks_filter'
 ORDERS_FILTER = 'ORDERS_FILTER'
 CURRENT_VEHICLE = 'current'
 ROYALE_VEHICLE = 'ROYALE_VEHICLE'
+EVENT_VEHICLE = 'eventVehicle'
 GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
 EULA_VERSION = 'EULA_VERSION'
 LINKEDSET_QUESTS = 'LINKEDSET_QUEST'
@@ -163,6 +164,8 @@ QUEST_DELTAS_TOKENS_PROGRESS = 'tokensProgress'
 TOP_OF_TREE_CONFIG = 'topOfTree'
 TEN_YEARS_COUNTDOWN_ON_BOARDING_LAST_VISITED_BLOCK = 'tenYearsCountdownOnBoardingLastVisitedBlock'
 LOW_TIER_REWARDS_LAST_STATE = 'lowTierRewardsLastState'
+WT_EVENT_LAST_COLLECTION_SEEN = 'wtEventLastCollectionSeen'
+WT_EVENT_LAST_ITEMS_SEEN = 'wtEventLastItemsSeen'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
@@ -477,6 +480,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                SPEAKERS_DEVICE: 0},
  KEY_FAVORITES: {CURRENT_VEHICLE: 0,
                  ROYALE_VEHICLE: 0,
+                 EVENT_VEHICLE: 0,
                  FALLOUT_VEHICLES: {}},
  KEY_SETTINGS: {'unitWindow': {SELECTED_INTRO_VEHICLES_FIELD: []},
                 'vehicleSellDialog': {'isOpened': False},
@@ -723,9 +727,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 SUBTITLES: True,
                 RANKED_YEAR_POSITION: None,
                 TOP_OF_TREE_CONFIG: {},
-                NATION_CHANGE_VIEWED: False,
                 TEN_YEARS_COUNTDOWN_ON_BOARDING_LAST_VISITED_BLOCK: 0,
-                LOW_TIER_REWARDS_LAST_STATE: False},
+                LOW_TIER_REWARDS_LAST_STATE: False,
+                WT_EVENT_LAST_COLLECTION_SEEN: 0,
+                WT_EVENT_LAST_ITEMS_SEEN: 0},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},

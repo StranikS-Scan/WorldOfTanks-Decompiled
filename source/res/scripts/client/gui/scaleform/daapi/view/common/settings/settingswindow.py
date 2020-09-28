@@ -29,7 +29,8 @@ from gui import makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IAnonymizerController
+from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.game_control import IAnonymizerController, IGameEventController
 from skeletons.gui.lobby_context import ILobbyContext
 _PAGES = (SETTINGS.GAMETITLE,
  SETTINGS.GRAFICTITLE,
@@ -63,6 +64,8 @@ class SettingsWindow(SettingsWindowMeta):
     anonymizerController = dependency.descriptor(IAnonymizerController)
     settingsCore = dependency.descriptor(ISettingsCore)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    __gameEventController = dependency.descriptor(IGameEventController)
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, ctx=None):
         super(SettingsWindow, self).__init__()
@@ -169,6 +172,7 @@ class SettingsWindow(SettingsWindowMeta):
         self.as_updateVideoSettingsS(self.params.getMonitorSettings())
         self.as_openTabS(_getLastTabIndex())
         self.__setColorGradingTechnique()
+        self.as_setTigerEventS(self.__isInEvent())
 
     def _dispose(self):
         if self.__redefinedKeyModeEnabled:
@@ -382,3 +386,6 @@ class SettingsWindow(SettingsWindowMeta):
                 image = RES_ICONS.MAPS_ICONS_SETTINGS_COLOR_GRADING_TECHNIQUE_NONE
         self.as_setColorGradingTechniqueS(image, label)
         return
+
+    def __isInEvent(self):
+        return self.__gameEventController.isEventPrbActive() or self.__sessionProvider.arenaVisitor.gui.isEventBattle()

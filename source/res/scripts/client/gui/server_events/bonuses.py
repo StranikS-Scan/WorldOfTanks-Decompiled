@@ -45,6 +45,7 @@ from gui.shared.utils.functions import makeTooltip, stripColorTagDescrTags
 from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID, getVehicleCDForNational
 from gui.shared.utils.requesters.blueprints_requester import getVehicleCDForIntelligence
 from gui.shared.utils.requesters.blueprints_requester import makeNationalCD, makeIntelligenceCD
+from gui.wt_event.wt_event_helpers import getTicketName
 from helpers import dependency
 from helpers import getLocalizedData, i18n
 from helpers import time_utils
@@ -112,6 +113,7 @@ class SimpleBonus(object):
         self._isCompensation = isCompensation
         self._ctx = ctx or {}
         self._compensationReason = compensationReason
+        self._defaultImageName = 'default'
 
     def getName(self):
         return self._name
@@ -195,8 +197,11 @@ class SimpleBonus(object):
     def getIconBySize(self, size):
         iconName = RES_ICONS.getBonusIcon(size, self.getName())
         if iconName is None:
-            iconName = RES_ICONS.getBonusIcon(size, 'default')
+            iconName = RES_ICONS.getBonusIcon(size, self._defaultImageName)
         return iconName
+
+    def getDefaultIconBySize(self, size):
+        return RES_ICONS.getBonusIcon(size, self._defaultImageName)
 
     def getIconLabel(self):
         return text_styles.hightlight('x{}'.format(self.getValue()))
@@ -330,11 +335,18 @@ class FreeXpBonus(IntegralBonus):
 
 class _PremiumDaysBonus(IntegralBonus):
 
+    def __init__(self, *args, **kwargs):
+        super(_PremiumDaysBonus, self).__init__(*args, **kwargs)
+        self._defaultImageName = 'premium_plus_universal'
+
     def hasIconFormat(self):
         return True
 
     def getIconBySize(self, size):
-        return RES_ICONS.getBonusIcon(size, '{}_{}'.format(self.getName(), self.getValue()))
+        iconName = RES_ICONS.getBonusIcon(size, '{}_{}'.format(self.getName(), self.getValue()))
+        if iconName is None:
+            iconName = RES_ICONS.getBonusIcon(size, self._defaultImageName)
+        return iconName
 
     def getIconLabel(self):
         pass
@@ -495,10 +507,11 @@ class BattleTokensBonus(TokensBonus):
         result = []
         for tokenID, value in self._value.iteritems():
             if tokenID == self.__eventProgression.rewardPointsTokenID:
+                rEpicPointsPath = R.images.gui.maps.icons.epicBattles.prestigePoints if IS_CHINA else R.images.gui.maps.icons.epicBattles.rewardPoints
                 result.append({'id': 0,
                  'value': value.get('count', 1),
-                 'icon': {AWARDS_SIZES.SMALL: backport.image(R.images.gui.maps.icons.epicBattles.rewardPoints.c_48x48()),
-                          AWARDS_SIZES.BIG: backport.image(R.images.gui.maps.icons.epicBattles.rewardPoints.c_80x80())},
+                 'icon': {AWARDS_SIZES.SMALL: backport.image(rEpicPointsPath.c_48x48()),
+                          AWARDS_SIZES.BIG: backport.image(rEpicPointsPath.c_80x80())},
                  'type': 'custom/reward_point'})
 
         return result
@@ -506,6 +519,24 @@ class BattleTokensBonus(TokensBonus):
     def _getUserName(self, styleID):
         webCache = self.eventsCache.prefetcher
         return i18n.makeString(webCache.getTokenInfo(styleID))
+
+
+class WtEventTicketTokensBonus(TokensBonus):
+
+    def __init__(self, name, value, isCompensation=False, ctx=None):
+        super(TokensBonus, self).__init__(name, value, isCompensation, ctx)
+        self._name = 'wtTicket'
+
+    def isShowInGUI(self):
+        return True
+
+    def formatValue(self):
+        ticketName = getTicketName()
+        amount = sum([ data.get('count', 0) for tokenID, data in self._value.iteritems() if tokenID == ticketName ])
+        return amount if bool(amount) else None
+
+    def getWrappedEpicBonusList(self):
+        return []
 
 
 class BattlePassTokensBonus(TokensBonus):
@@ -683,6 +714,7 @@ def createBonusFromTokens(result, prefix, bonusId, value):
 @dependency.replace_none_kwargs(eventProgressionController=IEventProgressionController)
 def tokensFactory(name, value, isCompensation=False, ctx=None, eventProgressionController=None):
     result = []
+    wtEventTicketName = getTicketName()
     for tID, tValue in value.iteritems():
         if tID.startswith(LOOTBOX_TOKEN_PREFIX):
             result.append(LootBoxTokensBonus({tID: tValue}, isCompensation, ctx))
@@ -702,6 +734,8 @@ def tokensFactory(name, value, isCompensation=False, ctx=None, eventProgressionC
             result.append(ResourceBonus(name, {tID: tValue}, RESOURCE_TOKEN_PREFIX, isCompensation, ctx))
         if eventProgressionController.isAvailable() and eventProgressionController.getProgressionXPTokenID() and tID.startswith(eventProgressionController.getProgressionXPTokenID()):
             result.append(ProgressionXPToken(name, {tID: tValue}, isCompensation, ctx))
+        if tID == wtEventTicketName:
+            result.append(WtEventTicketTokensBonus(name, {tID: tValue}, isCompensation, ctx))
         result.append(BattleTokensBonus(name, {tID: tValue}, isCompensation, ctx))
 
     return result
@@ -786,6 +820,14 @@ class ItemsBonus(SimpleBonus):
                  'tooltip': tooltip})
 
         return result
+
+    def getIconsList(self):
+        icons = []
+        for item in self.getItems():
+            if item is not None:
+                icons.append(item.getBonusIcon(AWARDS_SIZES.SMALL))
+
+        return icons
 
     def getWrappedEpicBonusList(self):
         result = []
@@ -886,6 +928,28 @@ class GoodiesBonus(SimpleBonus):
                  'tooltip': tooltip})
 
         return result
+
+    def getIconsList(self):
+        icons = []
+        for booster in self.getBoosters():
+            if booster is not None:
+                icon = booster.icon
+                if icon is not None:
+                    icons.append(icon)
+
+        for discount in self.getDiscounts():
+            if discount is not None:
+                icon = discount.icon
+                if icon is not None:
+                    icons.append(icon)
+
+        for demountKit in self.getDemountKits():
+            if demountKit is not None:
+                icon = demountKit.iconInfo
+                if icon is not None:
+                    icons.append(icon)
+
+        return icons
 
     def getWrappedEpicBonusList(self):
         result = []
@@ -1240,7 +1304,7 @@ class DossierBonus(SimpleBonus):
          'small': BADGES_ICONS.X48}
         if _isBadge(block):
             header = i18n.makeString(BADGE.badgeName(record))
-            body = i18n.makeString(BADGE.badgeDescriptor(record))
+            body = i18n.makeString(BADGE.badgeDescriptor_CN(record) or BADGE.badgeDescriptor(record) if IS_CHINA else BADGE.badgeDescriptor(record))
             note = i18n.makeString(BADGE.BADGE_NOTE)
             badgeVO = {'imgSource': getBadgeIconPath(badgesIconSizes[iconSize], record),
              'label': '',
@@ -1261,7 +1325,7 @@ class DossierBonus(SimpleBonus):
             badgeVO.update(_EPIC_AWARD_STATIC_VO_ENTRIES)
             if withDescription:
                 badgeVO['title'] = i18n.makeString(BADGE.badgeName(record))
-                badgeVO['description'] = i18n.makeString(BADGE.badgeDescriptor(record))
+                badgeVO['description'] = i18n.makeString(BADGE.badgeDescriptor_CN(record) or BADGE.badgeDescriptor(record) if IS_CHINA else BADGE.badgeDescriptor(record))
             result.append(badgeVO)
 
         return result
@@ -1546,6 +1610,21 @@ class BoxBonus(SimpleBonus):
         if self.__tooltipType is not None:
             name = '/'.join([name, self.__tooltipType])
         return _getItemTooltip(name)
+
+    def getOptionalBonuses(self):
+        result = []
+        if self._name == 'oneof':
+            bonusesList = self._value[1]
+            for _, _, bonus in bonusesList:
+                for key, value in bonus.iteritems():
+                    result.extend(getNonQuestBonuses(key, value))
+
+        elif self._name == 'allof':
+            bonuses = self._value[0][2]
+            for key, value in bonuses.iteritems():
+                result.extend(getNonQuestBonuses(key, value))
+
+        return result
 
 
 def randomBlueprintBonusFactory(name, value, isCompensation=False, ctx=None):
@@ -1898,6 +1977,13 @@ class CrewBooksBonus(SimpleBonus):
 
         return result
 
+    def getIconsList(self):
+        icons = []
+        for item, _ in self.getItems():
+            icons.append(item.getDefaultTypeIcon(AWARDS_SIZES.SMALL))
+
+        return icons
+
     def __getCommonAwardsVOs(self, item, count, iconSize='small', align=TEXT_ALIGN.RIGHT, withCounts=False):
         itemInfo = {'imgSource': item.getBonusIcon(iconSize),
          'label': text_styles.stats('x{}'.format(count)),
@@ -1979,6 +2065,7 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  'goodies': GoodiesBonus,
  'items': ItemsBonusFactory(),
  'oneof': BoxBonus,
+ 'allof': BoxBonus,
  'badgesGroup': BadgesGroupBonus,
  'blueprints': blueprintBonusFactory,
  'blueprintsAny': randomBlueprintBonusFactory,

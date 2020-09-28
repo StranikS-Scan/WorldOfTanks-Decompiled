@@ -48,6 +48,7 @@ class OfferBannerWindowView(ViewImpl):
             localization = ResMgr.openSection(self._offersProvider.getCdnResourcePath(offer.cdnLocFilePath, relative=False))
             with self.viewModel.transaction() as model:
                 model.setTitle(R.strings.offers.banner.title())
+                model.setDescription(localization.readString('bannerDescription', default=''))
                 model.setName(localization.readString('nameInBanner', default=''))
                 model.setIcon(getGfImagePath(self._offersProvider.getCdnResourcePath(offer.cdnBannerLogoPath, relative=True)))
             return

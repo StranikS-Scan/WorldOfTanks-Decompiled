@@ -69,10 +69,10 @@ class VehicleCongratulationModel(ViewModel):
     def setTitle(self, value):
         self._setResource(9, value)
 
-    def getResetAnimTrgigger(self):
+    def getResetAnimTrigger(self):
         return self._getBool(10)
 
-    def setResetAnimTrgigger(self, value):
+    def setResetAnimTrigger(self, value):
         self._setBool(10, value)
 
     def getNeedBackBtn(self):
@@ -93,5 +93,5 @@ class VehicleCongratulationModel(ViewModel):
         self._addResourceProperty('btnLbl', R.invalid())
         self._addResourceProperty('backBtnLbl', R.invalid())
         self._addResourceProperty('title', R.invalid())
-        self._addBoolProperty('resetAnimTrgigger', False)
+        self._addBoolProperty('resetAnimTrigger', False)
         self._addBoolProperty('needBackBtn', False)

@@ -1,0 +1,40 @@
+<h32_China_National_Day_2020.xml>
+  <name>	#arenas:h32_China_National_Day_2020/name	</name>
+  <description>	#arenas:h32_China_National_Day_2020/description	</description>
+  <geometry>	spaces/h32_China_National_Day_2020	</geometry>
+  <boundingBox>
+    <bottomLeft>	-300.000000 -300.000000	</bottomLeft>
+    <upperRight>	200.000000 200.000000	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/h32_China_National_Day_2020/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <wwmusic>	hangar_h32_silence	</wwmusic>
+  <wwambientSound>	hangar_h32_ambient	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	hangar_h32_CN_2020.bnk	</bank>
+      <bank>	ambient.bnk	</bank>
+      <bank>	env_Forest.bnk	</bank>
+    </loadBanks>
+    <unloadBanks>
+      <bank>	hangar_premium_2018.bnk	</bank>
+    </unloadBanks>
+  </soundRemapping>
+  <wwDefaultReverb>
+    <auxBus>	AUX_reverb_hangar_Forest_env	</auxBus>
+    <controlValue>	1.0	</controlValue>
+  </wwDefaultReverb>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf></ctf>
+  </gameplayTypes>
+  <mapActivities></mapActivities>
+</h32_China_National_Day_2020.xml>

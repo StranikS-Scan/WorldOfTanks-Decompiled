@@ -17,12 +17,16 @@ from gui.clans.clan_helpers import showAcceptClanInviteDialog
 from gui.customization.constants import CustomizationModes, CustomizationModeSource
 from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
 from gui.ranked_battles import ranked_helpers
-from gui.server_events.events_dispatcher import showPersonalMission, showMissionsBattlePassCommonProgression
+from gui.server_events.events_constants import WT_GROUP_PREFIX
+from gui.server_events.events_dispatcher import showPersonalMission, showMissionsBattlePassCommonProgression, showMissionsCategories
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events
-from gui.shared.event_dispatcher import showProgressiveRewardWindow, showRankedYeardAwardWindow
+from gui.shared.event_dispatcher import showProgressiveRewardWindow, showRankedYeardAwardWindow, showWtEventStorageBoxesWindow, showWtEventCollectionWindow, showBrowserOverlayView
 from gui.shared.utils import decorators
+from gui.shop import showLootBoxBuyWindow
 from gui.wgcg.clan import contexts as clan_ctxs
 from gui.wgnc import g_wgncProvider
+from gui.wt_event.wt_event_helpers import getInfoPageURL
+from gui.wt_event.wt_event_notification_helpers import pushReRollFailedNotification
 from web.web_client_api import webApiCollection
 from web.web_client_api.sound import HangarSoundWebApi
 from helpers import dependency
@@ -32,7 +36,7 @@ from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from notification.tutorial_helper import TutorialGlobalStorage, TUTORIAL_GLOBAL_VAR
 from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
-from skeletons.gui.game_control import IBrowserController, IRankedBattlesController, IBattleRoyaleController
+from skeletons.gui.game_control import IBrowserController, IRankedBattlesController, IBattleRoyaleController, IGameEventController
 from skeletons.gui.web import IWebController
 from soft_exception import SoftException
 from skeletons.gui.customization import ICustomizationService
@@ -833,6 +837,80 @@ class _OpenSelectDevicesHandler(_NavigationDisabledActionHandler):
         return
 
 
+class _OpenWtEventStorageBoxesView(_NavigationDisabledActionHandler):
+    __gameEventController = dependency.descriptor(IGameEventController)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        if self.__gameEventController.isActive():
+            showWtEventStorageBoxesWindow()
+        else:
+            pushReRollFailedNotification()
+
+
+class _OpenAboutWtEvent(_NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        showBrowserOverlayView(getInfoPageURL())
+
+
+class _WtEventOpenTasks(_NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        showMissionsCategories(groupID=WT_GROUP_PREFIX)
+
+
+class _WtEventOpenBuyTicket(_NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        showLootBoxBuyWindow()
+
+
+class _WtEventOpenCollectionView(_NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        showWtEventCollectionWindow()
+
+
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowTutorialBattleHistoryHandler,
  ShowFortBattleResultsHandler,
@@ -867,7 +945,12 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenProgressiveRewardView,
  ProlongStyleRent,
  _OpenBattlePassProgressionView,
- _OpenSelectDevicesHandler)
+ _OpenSelectDevicesHandler,
+ _OpenWtEventStorageBoxesView,
+ _OpenAboutWtEvent,
+ _WtEventOpenTasks,
+ _WtEventOpenBuyTicket,
+ _WtEventOpenCollectionView)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

@@ -37,11 +37,11 @@ def getBattlePassBonusPacker():
     return BonusUIPacker(mapping)
 
 
-def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None):
+def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, packerGetter=getBattlePassBonusPacker):
     bonusIndexTotal = 0
     if tooltipData is not None:
         bonusIndexTotal = len(tooltipData)
-    packer = getBattlePassBonusPacker()
+    packer = packerGetter()
     for bonus in bonuses:
         if bonus.isShowInGUI():
             bonusList = packer.pack(bonus)
@@ -51,7 +51,7 @@ def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None):
             for bonusIndex, item in enumerate(bonusList):
                 item.setIndex(bonusIndex)
                 bonusModelsList.addViewModel(item)
-                if tooltipData is not None and bonusTooltipList:
+                if tooltipData is not None and bonusTooltipList and bonusIndex < len(bonusTooltipList):
                     tooltipIdx = str(bonusIndexTotal)
                     item.setTooltipId(tooltipIdx)
                     tooltipData[tooltipIdx] = bonusTooltipList[bonusIndex]

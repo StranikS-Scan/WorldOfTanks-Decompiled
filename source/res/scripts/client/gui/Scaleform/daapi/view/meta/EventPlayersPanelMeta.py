@@ -4,11 +4,23 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class EventPlayersPanelMeta(BaseDAAPIComponent):
 
+    def acceptSquad(self, sessionID):
+        self._printOverrideError('acceptSquad')
+
+    def addToSquad(self, sessionID):
+        self._printOverrideError('addToSquad')
+
+    def as_setPlayersPanelDataS(self, data):
+        return self.flashObject.as_setPlayersPanelData(data) if self._isDAAPIInited() else None
+
     def as_setPlayerPanelInfoS(self, data):
         return self.flashObject.as_setPlayerPanelInfo(data) if self._isDAAPIInited() else None
 
-    def as_setPlayerPanelHpS(self, vehID, hpMax, hpCurrent):
-        return self.flashObject.as_setPlayerPanelHp(vehID, hpMax, hpCurrent) if self._isDAAPIInited() else None
+    def as_setPlayerPanelHpS(self, vehID, hpCurrent):
+        return self.flashObject.as_setPlayerPanelHp(vehID, hpCurrent) if self._isDAAPIInited() else None
+
+    def as_setPlayerLivesS(self, vehID, lives):
+        return self.flashObject.as_setPlayerLives(vehID, lives) if self._isDAAPIInited() else None
 
     def as_setPlayerDeadS(self, vehID):
         return self.flashObject.as_setPlayerDead(vehID) if self._isDAAPIInited() else None

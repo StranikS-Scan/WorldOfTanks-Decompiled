@@ -3,7 +3,7 @@
 import logging
 from CurrentVehicle import g_currentVehicle
 from Event import Event
-from frameworks.wulf import ViewFlags, ViewSettings
+from frameworks.wulf import ViewFlags, ViewSettings, ViewStatus
 from gui.impl.backport import BackportTooltipWindow
 from gui.impl.backport.backport_context_menu import BackportContextMenuContent
 from gui.impl.gen import R
@@ -15,12 +15,14 @@ from gui.impl.lobby.tank_setup.tank_setup_helper import setLastSlotAction, clear
 from gui.impl.lobby.tank_setup.tooltips.shells_info import ShellsInfo
 from gui.impl.pub import ViewImpl
 from helpers import dependency
+from skeletons.gui.game_control import IGameEventController
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 
 class BaseAmmunitionPanelView(ViewImpl):
     _itemsCache = dependency.descriptor(IItemsCache)
-    __slots__ = ('_ammunitionPanel', 'onSizeChanged', 'onPanelSectionSelected', 'onPanelSectionResized')
+    _gameEventController = dependency.descriptor(IGameEventController)
+    __slots__ = ('_ammunitionPanel', 'onSizeChanged', 'onPanelSectionSelected', 'onPanelSectionResized', 'onSlotsWidthChanged')
 
     def __init__(self, flags=ViewFlags.VIEW):
         settings = ViewSettings(R.views.lobby.tanksetup.AmmunitionPanel())
@@ -30,6 +32,7 @@ class BaseAmmunitionPanelView(ViewImpl):
         self.onSizeChanged = Event()
         self.onPanelSectionSelected = Event()
         self.onPanelSectionResized = Event()
+        self.onSlotsWidthChanged = Event()
 
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
@@ -59,6 +62,12 @@ class BaseAmmunitionPanelView(ViewImpl):
     def setLastSlotAction(self, *args, **kwargs):
         setLastSlotAction(self.viewModel, g_currentVehicle.item, *args, **kwargs)
 
+    def updateVisible(self):
+        if self._gameEventController.isEventPrbActive():
+            self.viewModel.setIsVisible(False)
+        else:
+            self.viewModel.setIsVisible(True)
+
     def update(self, fullUpdate=True):
         if fullUpdate:
             clearLastSlotAction(self.viewModel)
@@ -70,12 +79,14 @@ class BaseAmmunitionPanelView(ViewImpl):
         self.onSizeChanged.clear()
         self.onPanelSectionSelected.clear()
         self.onPanelSectionResized.clear()
+        self.onSlotsWidthChanged.clear()
         super(BaseAmmunitionPanelView, self).destroy()
 
     def _onLoading(self, *args, **kwargs):
         super(BaseAmmunitionPanelView, self)._onLoading(*args, **kwargs)
         self._ammunitionPanel = self._createAmmunitionPanel()
         self._ammunitionPanel.onLoading()
+        self.updateVisible()
 
     def _onLoaded(self, *args, **kwargs):
         super(BaseAmmunitionPanelView, self)._onLoaded(*args, **kwargs)
@@ -97,6 +108,7 @@ class BaseAmmunitionPanelView(ViewImpl):
 
     def _addListeners(self):
         self.viewModel.onViewSizeInitialized += self.__onViewSizeInitialized
+        self.viewModel.onSlotsWidthChanged += self.__onSlotWidthChanged
         self.viewModel.ammunitionPanel.onSectionSelect += self._onPanelSectionSelected
         self.viewModel.ammunitionPanel.onSectionResized += self._onPanelSectionResized
         g_currentVehicle.onChangeStarted += self.__onVehicleChangeStarted
@@ -105,6 +117,7 @@ class BaseAmmunitionPanelView(ViewImpl):
 
     def _removeListeners(self):
         self.viewModel.onViewSizeInitialized -= self.__onViewSizeInitialized
+        self.viewModel.onSlotsWidthChanged -= self.__onSlotWidthChanged
         self.viewModel.ammunitionPanel.onSectionSelect -= self._onPanelSectionSelected
         self.viewModel.ammunitionPanel.onSectionResized -= self._onPanelSectionResized
         g_currentVehicle.onChangeStarted -= self.__onVehicleChangeStarted
@@ -121,8 +134,10 @@ class BaseAmmunitionPanelView(ViewImpl):
 
     def _currentVehicleChanged(self):
         self.update()
+        self.viewModel.setIsReady(self._getIsReady())
 
     def __onVehicleChangeStarted(self):
+        self.viewModel.setIsReady(False)
         self.viewModel.setIsMaintenanceEnabled(False)
         self.viewModel.setIsDisabled(True)
 
@@ -133,5 +148,11 @@ class BaseAmmunitionPanelView(ViewImpl):
     def _getIsDisabled():
         return not g_currentVehicle.isInHangar() or g_currentVehicle.isLocked() or g_currentVehicle.isBroken()
 
+    def _getIsReady(self):
+        return self.viewStatus == ViewStatus.LOADED
+
     def __onViewSizeInitialized(self, args=None):
         self.onSizeChanged(args.get('width', 0), args.get('height', 0), args.get('offsetY', 0))
+
+    def __onSlotWidthChanged(self, args=None):
+        self.onSlotsWidthChanged(args.get('width', 0))

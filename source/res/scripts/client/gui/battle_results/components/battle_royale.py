@@ -6,7 +6,6 @@ from constants import DEATH_REASON_ALIVE, ARENA_BONUS_TYPE
 from gui.battle_control.battle_constants import WinStatus
 from gui.battle_results.components import base
 from gui.battle_results.components.personal import PersonalVehiclesBlock
-from gui.battle_results.components.progress import isQuestCompleted
 from gui.battle_results.reusable import sort_keys
 from gui.impl import backport
 from gui.impl.gen import R
@@ -22,6 +21,10 @@ _THE_BEST_RANK = 1
 
 def _isSquadMode(reusable):
     return reusable.common.arenaBonusType == ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD
+
+
+def _isQuestCompleted(_, pPrev, pCur):
+    return pCur.get('bonusCount', 0) - pPrev.get('bonusCount', 0) > 0
 
 
 class BattleRoyaleArenaNameBlock(base.StatsItem):
@@ -51,7 +54,7 @@ class BattleRoyalePlayerPlaceBlock(base.StatsItem):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def _convert(self, value, reusable):
-        playerRank = reusable.personal.avatar.extensionInfo.get('playerRank', {}).get('rank', 0)
+        playerRank = reusable.personal.avatar.extensionInfo.get('ext', {}).get('playerRank', {}).get('rank', 0)
         if self.__sessionProvider.getCtx().extractLastArenaWinStatus() is not None:
             winStatus = WinStatus.WIN if playerRank == _THE_BEST_RANK else WinStatus.LOSE
             self.__sessionProvider.getCtx().setLastArenaWinStatus(WinStatus(winStatus))
@@ -186,7 +189,7 @@ class PlaceParameter(BattleRoyaleStatsItemBlock):
     def _getValue(self, result, reusable):
         personalInfo = reusable.getPersonalVehiclesInfo(result['personal'])
         avatar = personalInfo.avatar
-        return avatar.extensionInfo.get('playerRank', {}).get('rank', 0)
+        return avatar.extensionInfo.get('ext', {}).get('playerRank', {}).get('rank', 0)
 
     def _getMaxValue(self, result, reusable):
         if _isSquadMode(reusable):
@@ -253,7 +256,7 @@ class BattleRoyaleRewardsBlock(base.StatsBlock):
         self.completedQuests = {}
 
     def setRecord(self, result, reusable):
-        questProgress = reusable.personal.getQuestsProgress()
+        questProgress = reusable.progress.getQuestsProgress()
         allQuests = self.__eventsCache.getAllQuests()
         self.achievements = self.__getAchievements(questProgress, allQuests)
         self.completedQuests = self.__getCompletedQuests(questProgress, self.__getDailyQuestsCondition)
@@ -276,7 +279,7 @@ class BattleRoyaleRewardsBlock(base.StatsBlock):
 
     @staticmethod
     def __getCompletedQuests(questProgress, condition):
-        return {qID:qProgress for qID, qProgress in questProgress.iteritems() if condition(qID) and isQuestCompleted(*qProgress)}
+        return {qID:qProgress for qID, qProgress in questProgress.iteritems() if condition(qID) and _isQuestCompleted(*qProgress)}
 
     @staticmethod
     def __getBonuses(allQuests, completedQuests):
@@ -354,7 +357,7 @@ class BattleRoyalePlayerBlock(base.StatsBlock):
         self.clanAbbrev = player.clanAbbrev
         avatarInfo = reusable.avatars.getAvatarInfo(dbID)
         if avatarInfo is not None and avatarInfo.extensionInfo is not None:
-            self.place = avatarInfo.extensionInfo.get('playerRank', {}).get('rank', 0)
+            self.place = avatarInfo.extensionInfo.get('ext', {}).get('playerRank', {}).get('rank', 0)
         return
 
 

@@ -28,24 +28,24 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.promo.hangar_teaser_widget import TeaserViewer
 from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import PrimeTimeStatus
-from gui.shared import event_dispatcher as shared_events, g_eventBus
-from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showRankedPrimeTimeWindow, showTenYearsCountdownOnBoarding, showLowTierRewardsOverlay
-from gui.shared.event_dispatcher import showAmmunitionSetupView
+from gui.shared import event_dispatcher as shared_events
+from gui.shared import events, EVENT_BUS_SCOPE, g_eventBus
+from gui.shared.event_dispatcher import showRankedPrimeTimeWindow, showTenYearsCountdownOnBoarding, showEventBattlesPrimeTimeWindow, showAmmunitionSetupView, showLowTierRewardsOverlay
 from gui.shared.events import LobbySimpleEvent, AmmunitionSetupViewEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.shared.utils.functions import makeTooltip
 from gui.sounds.filters import States, StatesGroup
+from gui.wt_event import wt_event_helpers
 from battle_pass_common import BATTLE_PASS_CONFIG_NAME
-from helpers import dependency
+from helpers import dependency, time_utils
 from helpers.i18n import makeString as _ms
 from helpers.statistics import HANGAR_LOADING_STATE
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IIGRController, ILowTierRewardsController, IBobController
-from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController, IBattlePassController, IHangarLoadingController, ITenYearsCountdownController, IBattleRoyaleController
+from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController, IBattlePassController, IHangarLoadingController, ITenYearsCountdownController, IBattleRoyaleController, IGameEventController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersBannerController
@@ -79,6 +79,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     epicController = dependency.descriptor(IEpicBattleMetaGameController)
     battlePassController = dependency.descriptor(IBattlePassController)
     battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
+    gameEventController = dependency.descriptor(IGameEventController)
     itemsCache = dependency.descriptor(IItemsCache)
     igrCtrl = dependency.descriptor(IIGRController)
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -140,6 +141,10 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.fireEvent(LobbySimpleEvent(LobbySimpleEvent.CLOSE_HELPLAYOUT), scope=EVENT_BUS_SCOPE.LOBBY)
         self.as_closeHelpLayoutS()
 
+    @property
+    def _isInBootCamp(self):
+        return False
+
     def _populate(self):
         LobbySelectableView._populate(self)
         self.__isSpaceReadyForC11n = self.hangarSpace.spaceInited
@@ -170,6 +175,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self._countdownController.onEventBlockChanged += self.__updateTenYearsCountdownEntryPointVisibility
         self._countdownController.onBlocksDataValidityChanged += self.__updateTenYearsCountdownEntryPointVisibility
         self._hangarLoadingController.onHangarLoadedAfterLogin += self.__onHangarLoadedAfterLogin
+        self.gameEventController.onEventUpdated += self.__onEventUpdated
         self.startGlobalListening()
         g_eventBus.addListener(AmmunitionSetupViewEvent.HINT_ZONE_ADD, self.__onHintZoneAdded, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(AmmunitionSetupViewEvent.HINT_ZONE_HIDE, self.__onHintZoneHide, EVENT_BUS_SCOPE.LOBBY)
@@ -185,6 +191,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateSenorityEntryPoint()
         self.__updateTenYearsCountdownEntryPointVisibility()
         self._offersBannerController.showBanners()
+        self.__updateWTCountdownEntryPointVisibility()
+        self.__updateLootBoxesState()
 
     def _dispose(self):
         self.removeListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
@@ -218,6 +226,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self._countdownController.onEventBlockChanged -= self.__updateTenYearsCountdownEntryPointVisibility
         self._countdownController.onBlocksDataValidityChanged -= self.__updateTenYearsCountdownEntryPointVisibility
         self._hangarLoadingController.onHangarLoadedAfterLogin -= self.__onHangarLoadedAfterLogin
+        self.gameEventController.onEventUpdated -= self.__onEventUpdated
         self.closeHelpLayout()
         self.stopGlobalListening()
         g_eventBus.removeListener(AmmunitionSetupViewEvent.HINT_ZONE_ADD, self.__onHintZoneAdded, EVENT_BUS_SCOPE.LOBBY)
@@ -226,8 +235,15 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         LobbySelectableView._dispose(self)
         return
 
-    def _updateBattleRoyaleMode(self):
-        self.as_toggleBattleRoyaleS(g_currentVehicle.isOnlyForBattleRoyaleBattles())
+    def __updateHangarMode(self):
+        isBattleRoyale = g_currentVehicle.isOnlyForBattleRoyaleBattles()
+        isEvent = self.prbDispatcher.getFunctionalState().isQueueSelected(QUEUE_TYPE.EVENT_BATTLES)
+        hangarMode = HANGAR_ALIASES.HANGAR_COMMON
+        if isBattleRoyale:
+            hangarMode = HANGAR_ALIASES.HANGAR_BATTLE_ROYALE
+        elif isEvent:
+            hangarMode = HANGAR_ALIASES.HANGAR_EVENT
+        self.as_setHangarModeS(hangarMode)
 
     def __updateSenorityEntryPoint(self):
         curStatus = self.__seniorityAwardsIsActive
@@ -246,21 +262,31 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         prevCarouselAlias = self.__currentCarouselAlias
         linkage = HANGAR_ALIASES.TANK_CAROUSEL_UI
         newCarouselAlias = HANGAR_ALIASES.TANK_CAROUSEL
+        newCarouselVisibility = True
         if self.prbDispatcher is not None:
+            hangarMode = HANGAR_ALIASES.HANGAR_COMMON
             if self.battlePassController.isVisible() and self.battlePassController.isValidBattleType(self.prbDispatcher.getEntity()):
                 newCarouselAlias = HANGAR_ALIASES.BATTLEPASS_TANK_CAROUSEL
+            elif self.prbDispatcher.getFunctionalState().isQueueSelected(QUEUE_TYPE.EVENT_BATTLES):
+                self.tankMenXpPanel.as_setTankmenXpPanelS(False, False)
+                newCarouselVisibility = False
+                hangarMode = HANGAR_ALIASES.HANGAR_EVENT
             elif self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
                 newCarouselAlias = HANGAR_ALIASES.RANKED_TANK_CAROUSEL
             elif self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.EPIC):
                 newCarouselAlias = HANGAR_ALIASES.EPICBATTLE_TANK_CAROUSEL
             elif self.battleRoyaleController.isBattleRoyaleMode():
                 newCarouselAlias = HANGAR_ALIASES.ROYALE_TANK_CAROUSEL
+                hangarMode = HANGAR_ALIASES.HANGAR_BATTLE_ROYALE
             elif self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.BOB) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.BOB):
                 linkage = HANGAR_ALIASES.TANK_CAROUSEL_UI
                 newCarouselAlias = HANGAR_ALIASES.BOB_TANK_CAROUSEL
+            self.as_setHangarModeS(hangarMode)
+            self.__updateWtWidgets()
         if prevCarouselAlias != newCarouselAlias or force:
             self.as_setCarouselS(linkage, newCarouselAlias)
             self.__currentCarouselAlias = newCarouselAlias
+        self.as_setCarouselVisibleS(newCarouselVisibility)
         return
 
     def __updateAmmoPanel(self):
@@ -288,6 +314,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
                     self.as_setHeaderTypeS(HANGAR_ALIASES.EPIC_WIDGET)
             elif not self.headerComponent:
                 self.as_setDefaultHeaderS()
+        self.as_setCloseBtnVisibleS(self.gameEventController.isEventPrbActive())
         return
 
     def __updateHeaderComponent(self):
@@ -305,6 +332,11 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             self.epicWidget.update()
         return
 
+    def __updateGameEventHeaderComponent(self):
+        if self.headerComponent is not None:
+            self.headerComponent.updateGameEventHeader()
+        return
+
     def __updateCrew(self):
         if self.crewPanel is not None:
             self.crewPanel.updateTankmen()
@@ -318,6 +350,9 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
                 return
             if state.isInPreQueue(QUEUE_TYPE.BOB):
                 self.__updateBobAlertMsg()
+                return
+            if state.isQueueSelected(QUEUE_TYPE.EVENT_BATTLES):
+                self.__updateEventBattleAlertMsg()
                 return
         self.as_setAlertMessageBlockVisibleS(False)
         return
@@ -336,6 +371,13 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         data = bob_helpers.getPrimeTimeStatusVO(status, self._bobController.hasAnyPeripheryWithPrimeTime())
         self.__updateAlertBlock(shared_events.showBobPrimeTimeWindow, data, visible)
 
+    def __updateEventBattleAlertMsg(self):
+        status, _, _ = self.gameEventController.getPrimeTimeStatus()
+        isBlockedStatus = status in (PrimeTimeStatus.NOT_AVAILABLE, PrimeTimeStatus.NOT_SET, PrimeTimeStatus.FROZEN)
+        buttonCallback = showEventBattlesPrimeTimeWindow
+        data = wt_event_helpers.getAlertStatusVO()
+        self.__updateAlertBlock(buttonCallback, data, isBlockedStatus)
+
     def __updateAlertBlock(self, callback, data, visible):
         self.as_setAlertMessageBlockVisibleS(visible)
         if visible and self.alertMessage is not None:
@@ -343,8 +385,30 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         return
 
     def __updateTenYearsCountdownEntryPointVisibility(self):
-        isVisible = self._countdownController.isEventInProgress() and self._countdownController.isBlocksDataValid()
+        isVisible = self._countdownController.isEventInProgress() and self._countdownController.isBlocksDataValid() and self.__isMoreThanThreeDaysAfterWtStart() and not self.prbDispatcher.getFunctionalState().isQueueSelected(QUEUE_TYPE.EVENT_BATTLES)
         self.as_updateEventEntryPointS(HANGAR_ALIASES.TEN_YEARS_COUNTDOWN_ENTRY_POINT_INJECT, isVisible)
+
+    def __updateWTCountdownEntryPointVisibility(self):
+        isVisible = self.gameEventController.isEnabled() and not self._isInBootCamp and not self.prbDispatcher.getFunctionalState().isQueueSelected(QUEUE_TYPE.EVENT_BATTLES)
+        self.as_updateEventEntryPointS(HANGAR_ALIASES.WT_EVENT_ENTRY_POINT, isVisible)
+
+    def __isMoreThanThreeDaysAfterWtStart(self):
+        currentWTSeason = self.gameEventController.getCurrentSeason()
+        isThreeDaysAfterStart = False
+        if currentWTSeason is not None:
+            currentTime = time_utils.getCurrentLocalServerTimestamp()
+            isThreeDaysAfterStart = currentTime - currentWTSeason.getStartDate() >= time_utils.ONE_DAY * 3
+        return isThreeDaysAfterStart
+
+    def __updateWtWidgets(self):
+        if self.gameEventController.isEventPrbActive():
+            self.as_createEventCrewWidgetS(g_currentVehicle.item.intCD != self.gameEventController.getHunter().intCD)
+            self.as_createEventParamsWidgetS()
+            self.as_createEventCarouselWidgetS()
+        else:
+            self.as_destroyEventCrewWidgetS()
+            self.as_destroyEventParamsWidgetS()
+            self.as_destroyEventCarouselWidgetS()
 
     def __onWaitingShown(self, _):
         self.closeHelpLayout()
@@ -356,10 +420,11 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         ctx = event.ctx
         if ctx['state'] != CameraMovementStates.FROM_OBJECT:
             entity = BigWorld.entities.get(ctx['entityId'], None)
-            if isinstance(entity, HeroTank):
-                descriptor = entity.typeDescriptor
-                if descriptor:
-                    shared_events.showHeroTankPreview(descriptor.type.compactDescr)
+            if isinstance(entity, HeroTank) and hasattr(entity, 'isEvent'):
+                if not entity.isEvent:
+                    descriptor = entity.typeDescriptor
+                    if descriptor:
+                        shared_events.showHeroTankPreview(descriptor.type.compactDescr)
         self.__checkVehicleCameraState()
         self.__updateState()
         return
@@ -418,6 +483,10 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     def epicWidget(self):
         return self.getComponent(HANGAR_ALIASES.EPIC_WIDGET)
 
+    @property
+    def tankMenXpPanel(self):
+        return self.getComponent(HANGAR_ALIASES.TMEN_XP_PANEL)
+
     def onCacheResync(self, reason, diff):
         if diff is not None and GUI_ITEM_TYPE.CREW_BOOKS in diff:
             self.as_setNotificationEnabledS(crewBooksViewedCache().haveNewCrewBooks())
@@ -447,6 +516,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def onPrbEntitySwitched(self):
         self.__onEntityChanged()
+        self.__updateLootBoxesState()
 
     def onEnqueued(self, queueType, *args):
         self.__onEntityChanged()
@@ -489,10 +559,13 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateHeaderComponent()
         self.__updateRankedHeaderComponent()
         self.__updateHeaderEpicWidget()
+        self.__updateGameEventHeaderComponent()
         self.__updateCrew()
         self.__updateAlertMessage()
         self.__updateBattleRoyaleComponents()
-        self._updateBattleRoyaleMode()
+        self.__updateWTCountdownEntryPointVisibility()
+        self.__updateHangarMode()
+        self.__updateWtWidgets()
         Waiting.hide('updateVehicle')
 
     def __onCurrentVehicleChanged(self):
@@ -506,8 +579,13 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateHeaderEpicWidget()
         self.__updateCrew()
         self.as_setNotificationEnabledS(crewBooksViewedCache().haveNewCrewBooks())
-        self._updateBattleRoyaleMode()
+        self.__updateHangarMode()
+        self.__updateWtWidgets()
+        if self.prbDispatcher is not None:
+            if self.prbDispatcher.getFunctionalState().isQueueSelected(QUEUE_TYPE.EVENT_BATTLES):
+                self.tankMenXpPanel.as_setTankmenXpPanelS(False, False)
         Waiting.hide('updateVehicle')
+        return
 
     def __onSpaceRefresh(self):
         self.__isSpaceReadyForC11n = False
@@ -590,8 +668,11 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateHeaderComponent()
         self.__updateRankedHeaderComponent()
         self.__updateHeaderEpicWidget()
+        self.__updateGameEventHeaderComponent()
         self.__switchCarousels()
         self.__updateBattleRoyaleComponents()
+        self.__updateWTCountdownEntryPointVisibility()
+        self.__updateTenYearsCountdownEntryPointVisibility()
 
     def __isSpecialMode(self):
         return self.prbDispatcher is not None and self.prbDispatcher.getFunctionalState().isInUnit() or self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED) or self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC)
@@ -645,6 +726,15 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     def __onOptDeviceClick(self, **kwargs):
         self.as_showSwitchToAmmunitionS()
         showAmmunitionSetupView(**kwargs)
+
+    def __updateLootBoxesState(self):
+        state = self.prbDispatcher.getFunctionalState()
+        isVisible = not self._isInBootCamp and self.gameEventController.isEnabled() and (state.isInPreQueue(QUEUE_TYPE.RANDOMS) or state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInLegacy(PREBATTLE_TYPE.TRAINING) or state.isInPreQueue(QUEUE_TYPE.EVENT_BATTLES) or state.isInUnit(PREBATTLE_TYPE.EVENT))
+        self.as_setLootboxesVisibleS(isVisible)
+
+    def __onEventUpdated(self):
+        self.__updateLootBoxesState()
+        self.__updateWTCountdownEntryPointVisibility()
 
     def __onHintZoneAdded(self, event):
         ctx = event.ctx

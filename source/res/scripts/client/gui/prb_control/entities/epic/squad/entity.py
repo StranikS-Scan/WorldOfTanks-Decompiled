@@ -89,16 +89,11 @@ class EpicSquadEntity(SquadEntity):
 
     def getCurrentSPGCount(self):
         enableSPGCount = 0
-        _, unit = self.getUnit(safe=True)
+        unitMgrId, unit = self.getUnit(safe=True)
         if unit is None:
             return enableSPGCount
         else:
-            unitVehicles = unit.getVehicles()
-            for _, vInfos in unitVehicles.iteritems():
-                for vInfo in vInfos:
-                    if vInfo.vehClassIdx == VEHICLE_CLASS_INDICES['SPG']:
-                        enableSPGCount += 1
-
+            enableSPGCount = sum((slot.player is not None and slot.player.isReady and slot.vehicle is not None and slot.vehicle.vehClassIdx == VEHICLE_CLASS_INDICES['SPG'] for slot in self.getSlotsIterator(unitMgrId, unit)))
             return enableSPGCount
 
     @prequeue_storage_getter(QUEUE_TYPE.EPIC)

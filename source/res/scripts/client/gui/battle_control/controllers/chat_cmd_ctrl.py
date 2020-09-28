@@ -43,15 +43,15 @@ TARGET_TYPE_TRANSLATION_MAPPING = {CONTEXTCOMMAND: {MarkerType.VEHICLE_MARKER_TY
                                                    DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY},
                   MarkerType.BASE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.DEFEND_BASE,
                                                 DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTACK_BASE},
-                  MarkerType.HEADQUARTER_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTENTIONTOOBJECTIVE_DEF,
-                                                       DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTENTIONTOOBJECTIVE_ATK},
+                  MarkerType.HEADQUARTER_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.DEFEND_OBJECTIVE,
+                                                       DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTACK_OBJECTIVE},
                   MarkerType.LOCATION_MARKER_TYPE: {INVALID_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION}},
  CONTEXTCOMMAND2: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY,
                                                     DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY},
                    MarkerType.BASE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE,
                                                  DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE},
-                   MarkerType.HEADQUARTER_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTENTIONTOOBJECTIVE_DEF,
-                                                        DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTENTIONTOOBJECTIVE_ATK},
+                   MarkerType.HEADQUARTER_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.DEFENDING_OBJECTIVE,
+                                                        DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTACKING_OBJECTIVE},
                    MarkerType.LOCATION_MARKER_TYPE: {INVALID_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.GOING_THERE}},
  BATTLE_CHAT_COMMAND_NAMES.TURNBACK: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.TURNBACK}},
  BATTLE_CHAT_COMMAND_NAMES.THANKS: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.THANKS}},
@@ -239,7 +239,7 @@ class ChatCommandsController(IBattleController):
         player = BigWorld.player()
         targetType = _COMMAND_NAME_TRANSFORM_MARKER_TYPE[action]
         if targetType == MarkerType.HEADQUARTER_MARKER_TYPE:
-            self.sendAttentionToObjective(targetID, player.team == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER)
+            self.sendAttentionToObjective(targetID, player.team == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER, action)
         elif targetType == MarkerType.BASE_MARKER_TYPE:
             self.sendCommandToBase(targetID, action)
         elif action in LOCATION_CMD_NAMES:
@@ -266,14 +266,20 @@ class ChatCommandsController(IBattleController):
         else:
             _logger.error('Minimap command for position (%d, %d, %d) not found', positionVec.x, positionVec.y, positionVec.z)
 
-    def sendAttentionToObjective(self, hqIdx, isAtk):
+    def sendAttentionToObjective(self, hqIdx, isAtk, action=None):
         if self.__isEnabled is False:
             return
-        command = self.proto.battleCmd.createByObjectiveIndex(hqIdx, isAtk)
-        if command:
-            self.__sendChatCommand(command)
         else:
-            _logger.error('Minimap command for objective with id: %d not found', hqIdx)
+            if action is None:
+                action = BATTLE_CHAT_COMMAND_NAMES.ATTACK_OBJECTIVE
+                if not isAtk:
+                    action = BATTLE_CHAT_COMMAND_NAMES.DEFEND_OBJECTIVE
+            command = self.proto.battleCmd.createByObjectiveIndex(hqIdx, isAtk, action)
+            if command:
+                self.__sendChatCommand(command)
+            else:
+                _logger.error('Minimap command for objective with id: %d not found', hqIdx)
+            return
 
     def sendCommandToBase(self, baseIdx, cmdName, baseName=''):
         if not avatar_getter.isVehicleAlive() and cmdName in PROHIBITED_IF_DEAD or self.sessionProvider.getCtx().isPlayerObserver() and cmdName in PROHIBITED_IF_SPECTATOR or self.__isEnabled is False:

@@ -98,6 +98,10 @@ class CrewBook(FittingItem):
         resId = R.images.gui.maps.icons.crewBooks.books.dyn(size).dyn(getIconResourceName(self.icon))()
         return func_utils.makeFlashPath(backport.image(resId)[6:])
 
+    def getDefaultTypeIcon(self, size='small'):
+        iconName = getIconResourceName(self.icon) if self.isPersonal() or self.hasNoNation() else 'brochure_ussr'
+        return backport.image(R.images.gui.maps.icons.crewBooks.books.dyn(size).dyn(iconName)())
+
     def formattedShortDescription(self, formatter):
         description = self.shortDescription
         return description.format(**formatter)

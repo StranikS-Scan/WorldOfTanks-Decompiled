@@ -43,6 +43,22 @@ class Tokens(object):
         self.__account._doCmdIntArr(AccountCommands.CMD_LOOTBOX_OPEN, (boxID, count), proxy)
         return
 
+    def reRollLootBox(self, boxID, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)
+        else:
+            proxy = None
+        self.__account._doCmdInt(AccountCommands.CMD_LOOTBOX_REROLL, boxID, proxy)
+        return
+
+    def getLootBoxReRollRecords(self, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)
+        else:
+            proxy = None
+        self.__account._doCmdInt(AccountCommands.CMD_LOOTBOX_REROLL_RECORDS, 0, proxy)
+        return
+
     def getInfoLootBox(self, boxIDs, fullInfo, callback):
         if callback is not None:
             proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)

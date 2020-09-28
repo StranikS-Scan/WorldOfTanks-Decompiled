@@ -35,9 +35,13 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.formatters import text_styles, icons
 
-class ITEM_SORT_RULE(CONST_CONTAINER):
+class ItemSortRule(CONST_CONTAINER):
     REGULAR = 'regular'
     FRONTLINE = 'frontline'
+
+
+class EventDataType(CONST_CONTAINER):
+    EVENT_PROGRESSION = 'eventProgression'
 
 
 OFFER_CHANGED_EVENT = 'offerChanged'
@@ -256,7 +260,9 @@ def getItemTitle(rawItem, item, forBox=False, additionalInfo=False):
     elif rawItem.type == ItemPackType.CUSTOM_SUPPLY_POINT:
         title = _ms(EPIC_BATTLE.EPICBATTLEITEM_SUPPLYPOINTS_HEADER)
     elif rawItem.type == ItemPackType.CUSTOM_REWARD_POINT:
-        title = _ms(EPIC_BATTLE.EPICBATTLEITEM_REWARDPOINTS_HEADER)
+        rEventProgressionPath = R.strings.tooltips.vehiclePreview.buyingPanel.eventProgression
+        resID = (rEventProgressionPath.style_price if IS_CHINA else rEventProgressionPath.price).header()
+        title = backport.text(resID)
     elif rawItem.type == ItemPackType.CUSTOM_PREMIUM:
         title = backport.text(R.strings.tooltips.premium.days.header(), rawItem.count)
     elif rawItem.type == ItemPackType.CUSTOM_PREMIUM_PLUS:
@@ -272,8 +278,6 @@ def getItemTitle(rawItem, item, forBox=False, additionalInfo=False):
              ItemPackType.CUSTOM_CREW_100: CrewTypes.SKILL_100}.get(rawItem.type))
         else:
             title = _ms(TOOLTIPS.CREW_HEADER)
-    elif rawItem.type == ItemPackType.CUSTOM_EVENT_PROGRESSION_REWARD_POINT:
-        title = backport.text(R.strings.tooltips.vehiclePreview.buyingPanel.eventProgression.price.header())
     else:
         title = rawItem.title or ''
     return title
@@ -302,7 +306,9 @@ def getItemDescription(rawItem, item):
     elif rawItem.type == ItemPackType.CUSTOM_SUPPLY_POINT:
         description = _ms(EPIC_BATTLE.EPICBATTLEITEM_SUPPLYPOINTS_DESCRIPTION)
     elif rawItem.type == ItemPackType.CUSTOM_REWARD_POINT:
-        description = _ms(EPIC_BATTLE.EPICBATTLEITEM_REWARDPOINTS_DESCRIPTION)
+        rEventProgressionPath = R.strings.tooltips.vehiclePreview.buyingPanel.eventProgression
+        resID = (rEventProgressionPath.style_price if IS_CHINA else rEventProgressionPath.price).body()
+        description = backport.text(resID)
     elif rawItem.type in ItemPackTypeGroup.CREW:
         if rawItem.type == ItemPackType.CREW_CUSTOM:
             description = _ms(TOOLTIPS.CREWCUSTOM_BODY)
@@ -311,8 +317,6 @@ def getItemDescription(rawItem, item):
              ItemPackType.CREW_75: CrewTypes.SKILL_75,
              ItemPackType.CREW_100: CrewTypes.SKILL_100,
              ItemPackType.CUSTOM_CREW_100: CrewTypes.SKILL_100}.get(rawItem.type))
-    elif rawItem.type == ItemPackType.CUSTOM_EVENT_PROGRESSION_REWARD_POINT:
-        description = backport.text(R.strings.tooltips.vehiclePreview.buyingPanel.eventProgression.price.body())
     else:
         description = rawItem.description or ''
     return description
@@ -657,7 +661,7 @@ class _CustomCrewSkillsNodeContainer(_NodeContainer):
 
 def getDataOneVehicle(itemsPack, vehicle, vehicleGroupId):
     rule = __getItemsSortRule(itemsPack)
-    if rule == ITEM_SORT_RULE.FRONTLINE:
+    if rule == ItemSortRule.FRONTLINE:
         root = __getFrontlinePackRule()
     else:
         root = __getDefaultPackRule()
@@ -690,7 +694,7 @@ def getCouponBonusesForItemPack(itemsPack):
 
 def getDataMultiVehicles(itemsPack, vehicle):
     rule = __getItemsSortRule(itemsPack)
-    return [] if rule == ITEM_SORT_RULE.FRONTLINE else _packDataMultiVehicles(itemsPack, vehicle)
+    return [] if rule == ItemSortRule.FRONTLINE else _packDataMultiVehicles(itemsPack, vehicle)
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -791,7 +795,7 @@ def _packDataMultiVehicles(itemsPack, vehicle):
 
 def __getItemsSortRule(itemsPack):
     frontlineOffer = getCouponDiscountForItemPack(itemsPack) != MONEY_ZERO_GOLD
-    return ITEM_SORT_RULE.FRONTLINE if frontlineOffer else ITEM_SORT_RULE.REGULAR
+    return ItemSortRule.FRONTLINE if frontlineOffer else ItemSortRule.REGULAR
 
 
 def __getDefaultPackRule():

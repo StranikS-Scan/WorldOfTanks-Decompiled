@@ -79,6 +79,8 @@ class AvatarChatKeyHandling(object):
     def handleKey(self, isDown, key, mods):
         if not self.__isEnabled or self.guiSessionProvider.shared.calloutCtrl is None or BattleReplay.g_replayCtrl.isPlaying:
             return False
+        elif self.__isEpicBattleOverviewMapScreenVisible():
+            return False
         cmdMap = CommandMapping.g_instance
         if cmdMap.isFiredList((CommandMapping.CMD_CHAT_SHORTCUT_THANKYOU,
          CommandMapping.CMD_CHAT_SHORTCUT_BACKTOBASE,
@@ -431,3 +433,9 @@ class AvatarChatKeyHandling(object):
                 return
             self.__activateHandling()
         return
+
+    def __isEpicBattleOverviewMapScreenVisible(self):
+        arenaVisitor = self.sessionProvider.arenaVisitor
+        isEpicBattle = arenaVisitor.gui.isEpicBattle()
+        ctrl = self.guiSessionProvider.dynamic.maps
+        return False if not ctrl else isEpicBattle and ctrl.overviewMapScreenVisible

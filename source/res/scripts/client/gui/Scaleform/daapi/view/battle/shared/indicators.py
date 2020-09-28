@@ -169,7 +169,7 @@ class _MarkerVOBuilder(object):
         pass
 
 
-class _StandardMarkerVOBuilder(_MarkerVOBuilder):
+class StandardMarkerVOBuilder(_MarkerVOBuilder):
 
     def _getBackground(self, markerData):
         return _STANDARD_BLIND_MARKER_TYPE_TO_BG[markerData.markerType] if markerData.isBlind else _STANDARD_MARKER_TYPE_TO_BG[markerData.markerType]
@@ -250,7 +250,7 @@ class _ExtendedCriticalMarkerVOBuilder(_ExtendedMarkerVOBuilder):
         return critType
 
 
-class _AbstractMarkerVOBuilderFactory(object):
+class AbstractMarkerVOBuilderFactory(object):
 
     def getVOBuilder(self, markerData):
         raise NotImplementedError
@@ -260,7 +260,7 @@ class _AbstractMarkerVOBuilderFactory(object):
         return builder.buildVO(markerData)
 
 
-class _ExtendedMarkerVOBuilderFactory(_AbstractMarkerVOBuilderFactory):
+class _ExtendedMarkerVOBuilderFactory(AbstractMarkerVOBuilderFactory):
 
     def __init__(self, isIndicatorSizeDynamic):
         super(_ExtendedMarkerVOBuilderFactory, self).__init__()
@@ -270,10 +270,10 @@ class _ExtendedMarkerVOBuilderFactory(_AbstractMarkerVOBuilderFactory):
         return _ExtendedCriticalMarkerVOBuilder(self.__isIndicatorSizeDynamic) if markerData.markerType == _MARKER_TYPE.CRITICAL_DAMAGE else _ExtendedMarkerVOBuilder(self.__isIndicatorSizeDynamic)
 
 
-class _StandardMarkerVOBuilderFactory(_AbstractMarkerVOBuilderFactory):
+class _StandardMarkerVOBuilderFactory(AbstractMarkerVOBuilderFactory):
 
     def getVOBuilder(self, markerData):
-        return _StandardMarkerVOBuilder()
+        return StandardMarkerVOBuilder()
 
 
 _DEFAULT_DAMAGE_INDICATOR_TYPE = DAMAGE_INDICATOR_TYPE.EXTENDED
@@ -324,15 +324,15 @@ class DamageIndicatorMeta(Flash):
         self._as_setPosition(posX, posY)
 
 
-class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
+class DamageIndicator(DamageIndicatorMeta, IHitIndicator):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, hitsCount):
         names = tuple((_DAMAGE_INDICATOR_MC_NAME.format(x) for x in xrange(hitsCount)))
-        super(_DamageIndicator, self).__init__(_DAMAGE_INDICATOR_SWF, _DAMAGE_INDICATOR_COMPONENT, (names,))
-        self.__voBuilderFactory = None
-        self.__updateMethod = None
+        super(DamageIndicator, self).__init__(_DAMAGE_INDICATOR_SWF, _DAMAGE_INDICATOR_COMPONENT, (names,))
+        self._voBuilderFactory = None
+        self._updateMethod = None
         self.component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
         self.component.position.z = DEPTH_OF_Aim
         self.movie.backgroundAlpha = 0.0
@@ -341,8 +341,8 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
         self.component.heightMode = 'PIXEL'
         self.component.widthMode = 'PIXEL'
         self.movie.scaleMode = 'NoScale'
-        self.__isBlind = bool(self.settingsCore.getSetting(GRAPHICS.COLOR_BLIND))
-        self.__setUpVOBuilderFactoryAndUpdateMethod(_DEFAULT_DAMAGE_INDICATOR_TYPE)
+        self._isBlind = bool(self.settingsCore.getSetting(GRAPHICS.COLOR_BLIND))
+        self._setUpVOBuilderFactoryAndUpdateMethod(_DEFAULT_DAMAGE_INDICATOR_TYPE)
         self.settingsCore.interfaceScale.onScaleChanged += self.__setMarkersScale
         ctrl = self.sessionProvider.shared.crosshair
         if ctrl is not None:
@@ -357,12 +357,12 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
         LOG_DEBUG('DamageIndicator is deleted')
 
     def destroy(self):
-        super(_DamageIndicator, self).destroy()
+        super(DamageIndicator, self).destroy()
         self.settingsCore.interfaceScale.onScaleChanged -= self.__setMarkersScale
         ctrl = self.sessionProvider.shared.crosshair
         if ctrl is not None:
             ctrl.onCrosshairOffsetChanged -= self.__onCrosshairPositionChanged
-        self.__updateMethod = None
+        self._updateMethod = None
         self.close()
         return
 
@@ -374,17 +374,17 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
 
     def invalidateSettings(self):
         getter = self.settingsCore.getSetting
-        self.__isBlind = bool(getter(GRAPHICS.COLOR_BLIND))
+        self._isBlind = bool(getter(GRAPHICS.COLOR_BLIND))
         indicatorType = getter(DAMAGE_INDICATOR.TYPE)
-        self.__setUpVOBuilderFactoryAndUpdateMethod(indicatorType)
+        self._setUpVOBuilderFactoryAndUpdateMethod(indicatorType)
         self.as_updateSettingsS(isStandard=indicatorType == DAMAGE_INDICATOR_TYPE.STANDARD, isWithTankInfo=bool(getter(DAMAGE_INDICATOR.VEHICLE_INFO)), isWithAnimation=bool(getter(DAMAGE_INDICATOR.ANIMATION)), isWithValue=bool(getter(DAMAGE_INDICATOR.DAMAGE_VALUE)))
 
     def showHitDirection(self, idx, hitData, timeLeft):
         self.as_setYawS(idx, hitData.getYaw())
-        markerData = _MarkerData(idx=idx, timeLeft=timeLeft, hitData=hitData, isBlind=self.__isBlind)
-        vo = self.__voBuilderFactory.buildMarkerVO(markerData)
+        markerData = _MarkerData(idx=idx, timeLeft=timeLeft, hitData=hitData, isBlind=self._isBlind)
+        vo = self._voBuilderFactory.buildMarkerVO(markerData)
         LOG_DEBUG_DEV('showHitDirection hit={}, vo={}'.format(hitData, vo))
-        self.__updateMethod(**vo)
+        self._updateMethod(**vo)
 
     def hideHitDirection(self, idx):
         self.as_hideS(idx)
@@ -392,14 +392,14 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
     def __onCrosshairPositionChanged(self, posX, posY):
         self.as_setPosition(posX, posY)
 
-    def __setUpVOBuilderFactoryAndUpdateMethod(self, indicatorType):
+    def _setUpVOBuilderFactoryAndUpdateMethod(self, indicatorType):
         if indicatorType == DAMAGE_INDICATOR_TYPE.EXTENDED:
             isIndicatorSizeDynamic = bool(self.settingsCore.getSetting(DAMAGE_INDICATOR.DYNAMIC_INDICATOR))
-            self.__voBuilderFactory = _ExtendedMarkerVOBuilderFactory(isIndicatorSizeDynamic)
-            self.__updateMethod = self.as_showExtendedS
+            self._voBuilderFactory = _ExtendedMarkerVOBuilderFactory(isIndicatorSizeDynamic)
+            self._updateMethod = self.as_showExtendedS
         else:
-            self.__voBuilderFactory = _StandardMarkerVOBuilderFactory()
-            self.__updateMethod = self.as_showStandardS
+            self._voBuilderFactory = _StandardMarkerVOBuilderFactory()
+            self._updateMethod = self.as_showStandardS
 
     def __setMarkersScale(self, scale=None):
         if scale is None:
@@ -772,7 +772,7 @@ def createDirectIndicator():
 
 
 def createDamageIndicator():
-    return _DamageIndicator(HIT_INDICATOR_MAX_ON_SCREEN)
+    return DamageIndicator(HIT_INDICATOR_MAX_ON_SCREEN)
 
 
 class _ArtyDirectionIndicator(Flash, IDirectionIndicator):

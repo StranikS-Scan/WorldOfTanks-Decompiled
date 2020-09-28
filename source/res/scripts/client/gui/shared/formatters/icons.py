@@ -181,6 +181,10 @@ def starYellow(vspace=-4):
     return _getIcon('starYellow', vspace=vspace)
 
 
+def clockSh(vspace=-6, hspace=-6):
+    return _getIcon('clockSh', vspace=vspace, hspace=hspace)
+
+
 def makeImageTag(source, width=16, height=16, vSpace=-4, hSpace=0):
     return _IMG_TAG_TPL.format(getAbsoluteUrl(source), width, height, vSpace, hSpace)
 

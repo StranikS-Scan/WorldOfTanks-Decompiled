@@ -53,6 +53,7 @@ class _GoldPurchaseReason(object):
     BUNDLE = 'bundle'
     BATTLE_PASS = 'battle_pass'
     BATTLE_PASS_LEVELS = 'battle_pass_levels'
+    LOOT_BOX_RE_ROLL = 'loot_box_re_roll'
 
 
 class Source(object):
@@ -178,6 +179,10 @@ def showBuyGoldForBattlePassLevels(fullPrice):
     showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.BATTLE_PASS_LEVELS, fullPrice))
 
 
+def showBuyGoldForLootBoxReRoll(fullPrice):
+    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.LOOT_BOX_RE_ROLL, fullPrice))
+
+
 def showBuyGoldForBundle(fullPrice, params=None):
     params = dict(params) or {}
     params.update(_getParams(_GoldPurchaseReason.BUNDLE, fullPrice))
@@ -218,6 +223,14 @@ def showBuyVehicleOverlay(params=None):
         url = yield URLMacros().parse(url, params=params)
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.OVERLAY_WEB_STORE, ctx={'url': url,
          'browserParams': makeBrowserParams(R.strings.waiting.buyItem(), True, True, 0.5)}), EVENT_BUS_SCOPE.LOBBY)
+
+
+@process
+def showLootBoxBuyWindow():
+    url = helpers.getBuyWtLootBoxesUrl()
+    if url:
+        url = yield URLMacros().parse(url)
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.OVERLAY_WT_EVENT_VIEW, ctx={'url': url}), EVENT_BUS_SCOPE.LOBBY)
 
 
 @async

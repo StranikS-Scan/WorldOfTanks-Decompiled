@@ -241,7 +241,10 @@ _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'rankedStayingCounter',
  'rankedStayingPower',
  'collectorVehicleStrg',
- 'TenYearsCountdownStageMedal']
+ 'TenYearsCountdownStageMedal',
+ 'wtHunterWins',
+ 'wtBossWins',
+ 'wtSpecBossDefeat']
 _achievements15x15PopUps = ['warrior',
  'invader',
  'sniper',
@@ -384,7 +387,10 @@ _achievements15x15PopUps = ['warrior',
  'collectorVehicle12',
  'collectorVehicle13',
  'collectorVehicle14',
- 'TenYearsCountdownStageMedal']
+ 'TenYearsCountdownStageMedal',
+ 'wtHunterWins',
+ 'wtBossWins',
+ 'wtSpecBossDefeat']
 _achievements15x15BlockBuilder = StaticSizeBlockBuilder('achievements', _ACHIEVEMENTS15X15_BLOCK_LAYOUT, ACHIEVEMENT15X15_DEPENDENCIES, _achievements15x15PopUps)
 ACHIEVEMENTS7X7_BLOCK_LAYOUT = ['wolfAmongSheep',
  'wolfAmongSheepMedal',

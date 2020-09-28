@@ -41,6 +41,12 @@
     <respawnController_updatePlayerLives>
       <Arg>	UINT8	</Arg>
     </respawnController_updatePlayerLives>
+    <respawnController_updateTeammateLives>
+      <Arg>	ARRAY	  <of>	TUPLE	  <of>	UINT32	</of>
+          <size>	2	</size>
+        </of>
+      </Arg>
+    </respawnController_updateTeammateLives>
     <respawnController_chooseRespawnZone>
       <Arg>	VECTOR3	</Arg>
       <Exposed></Exposed>
@@ -70,6 +76,12 @@
       <Arg>	ARRAY	  <of>	RESPAWN_LIMITED_VEHICLES	</of>
       </Arg>
     </updateVehicleLimits>
+    <updateTeammateLives>
+      <Arg>	ARRAY	  <of>	TUPLE	  <of>	UINT32	</of>
+          <size>	2	</size>
+        </of>
+      </Arg>
+    </updateTeammateLives>
     <updatePlayerLives>
       <Arg>	UINT8	</Arg>
     </updatePlayerLives>

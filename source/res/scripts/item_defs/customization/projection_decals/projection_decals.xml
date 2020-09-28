@@ -2773,4 +2773,84 @@
     </projection_decal>
     <name>	CS_52_LIS Autumn Marathon	</name>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals 110g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	340	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_153.dds	</texture>
+      <maxNumber>	3	</maxNumber>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_153	</userString>
+      <tags>	formfactor_square direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	341	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_154.dds	</texture>
+      <maxNumber>	3	</maxNumber>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_154	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	343	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_155.dds	</texture>
+      <maxNumber>	3	</maxNumber>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_155	</userString>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	344	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_156.dds	</texture>
+      <maxNumber>	3	</maxNumber>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_156	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	345	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_157.dds	</texture>
+      <maxNumber>	3	</maxNumber>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_157	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <name>	WT 2020	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/pin_up	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals 110g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	339	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/pin_up/projection_decal_16.dds	</texture>
+      <maxNumber>	3	</maxNumber>
+      <userString>	#vehicle_customization:projection_decals/pin_up/projection_decal_16	</userString>
+      <tags>	formfactor_square direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	342	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/pin_up/projection_decal_17.dds	</texture>
+      <maxNumber>	3	</maxNumber>
+      <userString>	#vehicle_customization:projection_decals/pin_up/projection_decal_17	</userString>
+      <tags>	formfactor_square direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	WT 2020 Pin-up	</name>
+  </itemGroup>
 </projection_decals.xml>

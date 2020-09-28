@@ -817,6 +817,9 @@ class ItemsRequester(IItemsRequester):
     def getVehicles(self, criteria=REQ_CRITERIA.EMPTY):
         return self.getItems(GUI_ITEM_TYPE.VEHICLE, criteria=criteria)
 
+    def getStyles(self, criteria=REQ_CRITERIA.EMPTY):
+        return self.getItems(GUI_ITEM_TYPE.STYLE, criteria=criteria)
+
     def getBadges(self, criteria=REQ_CRITERIA.EMPTY):
         result = ItemsCollection()
         for badgeID, badgeData in self.__badges.available.iteritems():

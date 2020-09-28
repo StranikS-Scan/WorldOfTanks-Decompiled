@@ -5,6 +5,7 @@ from CurrentVehicle import g_currentPreviewVehicle
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import getDataOneVehicle, addBuiltInEquipment
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview import VehiclePreview
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import text_styles, icons
 from helpers import dependency
 from skeletons.gui.game_control import IEventProgressionController
@@ -43,9 +44,15 @@ class EventProgressionVehiclePreview(VehiclePreview):
         formatMoney = text_styles.superPromoTitleEm if storedPoints > 0 else text_styles.superPromoTitleErr
         formatPrice = text_styles.superPromoTitleEm if haveEnoughPoints else text_styles.superPromoTitleErr
         tokensIcon = icons.makeImageTag(source=backport.image(R.images.gui.maps.icons.epicBattles.rewardPoints.c_32x32()), width=32, height=32, vSpace=-6, hSpace=3)
-        return {'title': text_styles.superPromoTitle(backport.text(R.strings.event_progression.vehicle_preview.title())),
+
+        def formatTitle(rID):
+            return text_styles.superPromoTitle(backport.text(rID()))
+
+        return {'title': formatTitle(R.strings.event_progression.vehicle_preview.title),
+         'shortTitle': formatTitle(R.strings.event_progression.vehicle_preview.title.short),
          'money': text_styles.concatStylesToSingleLine(formatMoney(str(storedPoints)), tokensIcon),
          'price': text_styles.concatStylesToSingleLine(formatPrice(str(vehiclePrice)), tokensIcon),
+         'priceTooltip': TOOLTIPS.VEHICLEPREVIEW_BUYINGPANEL_EVENTPROGRESSION_PRICE,
          'buyButtonEnabled': haveEnoughPoints and not buyButtonTooltip,
          'buyButtonLabel': backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.buy()),
          'buyButtonTooltip': buyButtonTooltip}

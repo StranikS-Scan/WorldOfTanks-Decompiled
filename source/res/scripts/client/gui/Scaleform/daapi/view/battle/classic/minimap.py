@@ -135,13 +135,14 @@ class GlobalSettingsPlugin(common.SimplePlugin):
 
 
 class TeamsOrControlsPointsPlugin(common.EntriesPlugin):
-    __slots__ = ('__personalTeam', '__entries', '__markerIDs')
+    __slots__ = ('__personalTeam', '__entries', '__markerIDs', '__hasActiveCommit')
 
     def __init__(self, parentObj):
         super(TeamsOrControlsPointsPlugin, self).__init__(parentObj)
         self.__personalTeam = 0
         self.__entries = []
         self.__markerIDs = {}
+        self.__hasActiveCommit = False
 
     def start(self):
         super(TeamsOrControlsPointsPlugin, self).start()
@@ -177,126 +178,144 @@ class TeamsOrControlsPointsPlugin(common.EntriesPlugin):
     def __onActionAddedToMarkerReceived(self, senderID, commandID, markerType, objectID):
         if _ACTIONS.battleChatCommandFromActionID(commandID).name not in BASE_CMD_NAMES:
             return
-        if objectID not in self.__markerIDs:
+        elif objectID not in self.__markerIDs:
             return
-        model = self.__markerIDs[objectID]
-        if model:
-            if _ACTIONS.battleChatCommandFromActionID(commandID).name in [BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE, BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE]:
-                self.__onReplyFeedbackReceived(objectID, senderID, MarkerType.BASE_MARKER_TYPE, 0, 1)
-            else:
-                self._invoke(model.getID(), BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_ATTACK)
+        else:
+            model = self.__markerIDs[objectID]
+            if model is not None:
+                if _ACTIONS.battleChatCommandFromActionID(commandID).name in [BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE, BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE]:
+                    self.__onReplyFeedbackReceived(objectID, senderID, MarkerType.BASE_MARKER_TYPE, 0, 1)
+                else:
+                    self._invoke(model.getID(), BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_ATTACK)
+            return
 
     def __onReplyFeedbackReceived--- This code section failed: ---
 
- 233       0	LOAD_FAST         'markerType'
+ 234       0	LOAD_FAST         'markerType'
            3	LOAD_GLOBAL       'MarkerType'
            6	LOAD_ATTR         'BASE_MARKER_TYPE'
            9	COMPARE_OP        '!='
           12	POP_JUMP_IF_FALSE '19'
 
- 234      15	LOAD_CONST        ''
+ 235      15	LOAD_CONST        ''
           18	RETURN_END_IF     ''
 
- 236      19	LOAD_FAST         'newReplyCount'
+ 237      19	LOAD_FAST         'newReplyCount'
           22	LOAD_FAST         'oldReplyCount'
           25	COMPARE_OP        '>'
           28	STORE_FAST        'newReply'
 
- 237      31	LOAD_FAST         'ucmdID'
-          34	LOAD_FAST         'self'
-          37	LOAD_ATTR         '__markerIDs'
-          40	COMPARE_OP        'in'
-          43	POP_JUMP_IF_FALSE '152'
-          46	LOAD_FAST         'newReply'
-        49_0	COME_FROM         '43'
-          49	POP_JUMP_IF_FALSE '152'
+ 238      31	LOAD_FAST         'replierID'
+          34	LOAD_GLOBAL       'avatar_getter'
+          37	LOAD_ATTR         'getPlayerVehicleID'
+          40	CALL_FUNCTION_0   ''
+          43	COMPARE_OP        '=='
+          46	STORE_FAST        'playerHasReply'
 
- 238      52	LOAD_FAST         'replierID'
-          55	LOAD_GLOBAL       'avatar_getter'
-          58	LOAD_ATTR         'getPlayerVehicleID'
-          61	CALL_FUNCTION_0   ''
-          64	COMPARE_OP        '=='
-          67	POP_JUMP_IF_FALSE '111'
+ 239      49	LOAD_FAST         'ucmdID'
+          52	LOAD_FAST         'self'
+          55	LOAD_ATTR         '__markerIDs'
+          58	COMPARE_OP        'in'
+          61	POP_JUMP_IF_FALSE '179'
+          64	LOAD_FAST         'newReply'
+        67_0	COME_FROM         '61'
+          67	POP_JUMP_IF_FALSE '179'
 
- 239      70	LOAD_FAST         'self'
-          73	LOAD_ATTR         '_invoke'
-          76	LOAD_FAST         'self'
-          79	LOAD_ATTR         '__markerIDs'
-          82	LOAD_FAST         'ucmdID'
-          85	BINARY_SUBSCR     ''
-          86	LOAD_ATTR         'getID'
-          89	CALL_FUNCTION_0   ''
-          92	LOAD_GLOBAL       'BATTLE_MINIMAP_CONSTS'
-          95	LOAD_ATTR         'SET_STATE'
+ 240      70	LOAD_FAST         'playerHasReply'
+          73	POP_JUMP_IF_FALSE '126'
 
- 240      98	LOAD_GLOBAL       'BATTLE_MINIMAP_CONSTS'
-         101	LOAD_ATTR         'STATE_REPLY'
-         104	CALL_FUNCTION_3   ''
-         107	POP_TOP           ''
-         108	JUMP_ABSOLUTE     '152'
+ 241      76	LOAD_FAST         'self'
+          79	LOAD_ATTR         '_invoke'
+          82	LOAD_FAST         'self'
+          85	LOAD_ATTR         '__markerIDs'
+          88	LOAD_FAST         'ucmdID'
+          91	BINARY_SUBSCR     ''
+          92	LOAD_ATTR         'getID'
+          95	CALL_FUNCTION_0   ''
+          98	LOAD_GLOBAL       'BATTLE_MINIMAP_CONSTS'
+         101	LOAD_ATTR         'SET_STATE'
 
- 242     111	LOAD_FAST         'self'
-         114	LOAD_ATTR         '_invoke'
+ 242     104	LOAD_GLOBAL       'BATTLE_MINIMAP_CONSTS'
+         107	LOAD_ATTR         'STATE_REPLY'
+         110	CALL_FUNCTION_3   ''
+         113	POP_TOP           ''
+
+ 243     114	LOAD_GLOBAL       'True'
          117	LOAD_FAST         'self'
-         120	LOAD_ATTR         '__markerIDs'
-         123	LOAD_FAST         'ucmdID'
-         126	BINARY_SUBSCR     ''
-         127	LOAD_ATTR         'getID'
-         130	CALL_FUNCTION_0   ''
-         133	LOAD_GLOBAL       'BATTLE_MINIMAP_CONSTS'
-         136	LOAD_ATTR         'SET_STATE'
+         120	STORE_ATTR        '__hasActiveCommit'
+         123	JUMP_ABSOLUTE     '179'
 
- 243     139	LOAD_GLOBAL       'BATTLE_MINIMAP_CONSTS'
-         142	LOAD_ATTR         'STATE_IDLE'
-         145	CALL_FUNCTION_3   ''
-         148	POP_TOP           ''
-         149	JUMP_FORWARD      '152'
-       152_0	COME_FROM         '149'
+ 244     126	LOAD_FAST         'self'
+         129	LOAD_ATTR         '__hasActiveCommit'
+         132	POP_JUMP_IF_TRUE  '179'
 
- 245     152	LOAD_FAST         'ucmdID'
-         155	LOAD_FAST         'self'
-         158	LOAD_ATTR         '__markerIDs'
-         161	COMPARE_OP        'in'
-         164	POP_JUMP_IF_FALSE '253'
+ 245     135	LOAD_FAST         'self'
+         138	LOAD_ATTR         '_invoke'
+         141	LOAD_FAST         'self'
+         144	LOAD_ATTR         '__markerIDs'
+         147	LOAD_FAST         'ucmdID'
+         150	BINARY_SUBSCR     ''
+         151	LOAD_ATTR         'getID'
+         154	CALL_FUNCTION_0   ''
+         157	LOAD_GLOBAL       'BATTLE_MINIMAP_CONSTS'
+         160	LOAD_ATTR         'SET_STATE'
 
- 246     167	LOAD_FAST         'newReplyCount'
-         170	LOAD_FAST         'oldReplyCount'
-         173	COMPARE_OP        '<'
-         176	POP_JUMP_IF_FALSE '197'
-         179	LOAD_FAST         'replierID'
-         182	LOAD_GLOBAL       'avatar_getter'
-         185	LOAD_ATTR         'getPlayerVehicleID'
-         188	CALL_FUNCTION_0   ''
-         191	COMPARE_OP        '=='
-       194_0	COME_FROM         '176'
-         194	POP_JUMP_IF_TRUE  '209'
-         197	LOAD_FAST         'newReplyCount'
-         200	LOAD_CONST        0
-         203	COMPARE_OP        '<='
-       206_0	COME_FROM         '164'
-       206_1	COME_FROM         '194'
-         206	POP_JUMP_IF_FALSE '253'
+ 246     163	LOAD_GLOBAL       'BATTLE_MINIMAP_CONSTS'
+         166	LOAD_ATTR         'STATE_IDLE'
+         169	CALL_FUNCTION_3   ''
+         172	POP_TOP           ''
+         173	JUMP_ABSOLUTE     '179'
+         176	JUMP_FORWARD      '179'
+       179_0	COME_FROM         '176'
 
- 247     209	LOAD_FAST         'self'
-         212	LOAD_ATTR         '_invoke'
-         215	LOAD_FAST         'self'
-         218	LOAD_ATTR         '__markerIDs'
-         221	LOAD_FAST         'ucmdID'
-         224	BINARY_SUBSCR     ''
-         225	LOAD_ATTR         'getID'
-         228	CALL_FUNCTION_0   ''
-         231	LOAD_GLOBAL       'BATTLE_MINIMAP_CONSTS'
-         234	LOAD_ATTR         'SET_STATE'
+ 248     179	LOAD_FAST         'ucmdID'
+         182	LOAD_FAST         'self'
+         185	LOAD_ATTR         '__markerIDs'
+         188	COMPARE_OP        'in'
+         191	POP_JUMP_IF_FALSE '286'
 
- 248     237	LOAD_GLOBAL       'BATTLE_MINIMAP_CONSTS'
-         240	LOAD_ATTR         'STATE_IDLE'
-         243	CALL_FUNCTION_3   ''
-         246	POP_TOP           ''
-         247	JUMP_ABSOLUTE     '253'
-         250	JUMP_FORWARD      '253'
-       253_0	COME_FROM         '250'
+ 249     194	LOAD_FAST         'newReplyCount'
+         197	LOAD_FAST         'oldReplyCount'
+         200	COMPARE_OP        '<'
+         203	POP_JUMP_IF_FALSE '212'
+         206	LOAD_FAST         'playerHasReply'
+       209_0	COME_FROM         '203'
+         209	POP_JUMP_IF_TRUE  '224'
+         212	LOAD_FAST         'newReplyCount'
+         215	LOAD_CONST        0
+         218	COMPARE_OP        '<='
+       221_0	COME_FROM         '191'
+       221_1	COME_FROM         '209'
+         221	POP_JUMP_IF_FALSE '286'
 
-Syntax error at or near 'JUMP_FORWARD' token at offset 250
+ 250     224	LOAD_FAST         'self'
+         227	LOAD_ATTR         '_invoke'
+         230	LOAD_FAST         'self'
+         233	LOAD_ATTR         '__markerIDs'
+         236	LOAD_FAST         'ucmdID'
+         239	BINARY_SUBSCR     ''
+         240	LOAD_ATTR         'getID'
+         243	CALL_FUNCTION_0   ''
+         246	LOAD_GLOBAL       'BATTLE_MINIMAP_CONSTS'
+         249	LOAD_ATTR         'SET_STATE'
+
+ 251     252	LOAD_GLOBAL       'BATTLE_MINIMAP_CONSTS'
+         255	LOAD_ATTR         'STATE_IDLE'
+         258	CALL_FUNCTION_3   ''
+         261	POP_TOP           ''
+
+ 252     262	LOAD_FAST         'playerHasReply'
+         265	POP_JUMP_IF_FALSE '283'
+
+ 253     268	LOAD_GLOBAL       'False'
+         271	LOAD_FAST         'self'
+         274	STORE_ATTR        '__hasActiveCommit'
+         277	JUMP_ABSOLUTE     '283'
+         280	JUMP_ABSOLUTE     '286'
+         283	JUMP_FORWARD      '286'
+       286_0	COME_FROM         '283'
+
+Syntax error at or near 'JUMP_FORWARD' token at offset 283
 
     def __onRemoveCommandReceived(self, removeID, markerType):
         if not self.__markerIDs or markerType != MarkerType.BASE_MARKER_TYPE:
@@ -313,11 +332,12 @@ Syntax error at or near 'JUMP_FORWARD' token at offset 250
         matrix = Math.Matrix()
         matrix.setTranslate(position)
         model = self._addEntryEx(uid, symbol, _C_NAME.TEAM_POINTS, matrix=matrix, active=True)
-        if model:
+        if model is not None:
             self.__markerIDs[uid] = model
             _, number = getBaseTeamAndIDFromUniqueID(uid)
             self._invoke(model.getID(), BATTLE_MINIMAP_CONSTS.SET_POINT_NUMBER, number)
             self._invoke(model.getID(), BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_DEFAULT)
+        return
 
     def __addPointEntry(self, symbol, position, number):
         matrix = Math.Matrix()

@@ -31,7 +31,7 @@ from season_provider import SeasonProvider
 from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_results import IBattleResultsService
-from skeletons.gui.game_control import IBattleRoyaleController, IEventProgressionController
+from skeletons.gui.game_control import IBattleRoyaleController, IEventProgressionController, IGameEventController
 from skeletons.gui.game_control import IEventsNotificationsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -40,6 +40,7 @@ from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.shared.utils import IHangarSpaceReloader
 from skeletons.gui.shared.hangar_spaces_switcher import IHangarSpacesSwitcher
 from gui.ClientHangarSpace import SERVER_CMD_CHANGE_HANGAR, SERVER_CMD_CHANGE_HANGAR_PREM
+from skeletons.gui.battle_session import IBattleSessionProvider
 _logger = logging.getLogger(__name__)
 
 class BATTLE_ROYALE_GAME_LIMIT_TYPE(object):
@@ -63,6 +64,8 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
     __hangarSpaceReloader = dependency.descriptor(IHangarSpaceReloader)
     __eventProgression = dependency.descriptor(IEventProgressionController)
     __notificationsCtrl = dependency.descriptor(IEventsNotificationsController)
+    __eventController = dependency.descriptor(IGameEventController)
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     TOKEN_QUEST_ID = 'token:br:title:'
     DAILY_QUEST_ID = 'steel_hunter'
     MODE_ALIAS = 'battleRoyale'
@@ -162,6 +165,10 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
     def onAvatarBecomePlayer(self):
         self.__clear()
         self.__battleResultsService.onResultPosted -= self.__showBattleResults
+        if self.__sessionProvider.arenaVisitor.getArenaBonusType() in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
+            self.__voControl.activate()
+        else:
+            self.__voControl.deactivate()
         self.__voControl.onAvatarBecomePlayer()
         super(BattleRoyaleController, self).onAvatarBecomePlayer()
 
@@ -345,7 +352,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
     def __disableRoyaleMode(self):
         storedVehInvID = AccountSettings.getFavorites(CURRENT_VEHICLE)
         if not storedVehInvID:
-            criteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.HAS_TAGS([VEHICLE_TAGS.BATTLE_ROYALE])
+            criteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.HAS_TAGS([VEHICLE_TAGS.BATTLE_ROYALE, VEHICLE_TAGS.EVENT])
             vehicle = first(self.__itemsCache.items.getVehicles(criteria=criteria).values())
             if vehicle:
                 storedVehInvID = vehicle.invID
@@ -354,6 +361,14 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         else:
             g_currentVehicle.selectNoVehicle()
         self.__voControl.deactivate()
+
+    def __isEventMode(self):
+        dispatcher = self.prbDispatcher
+        if dispatcher is not None:
+            state = dispatcher.getFunctionalState()
+            return state.isInPreQueue(queueType=QUEUE_TYPE.EVENT_BATTLES) or state.isInUnit(PREBATTLE_TYPE.EVENT)
+        else:
+            return False
 
     @process
     def __doSelectBattleRoyalePrb(self, dispatcher):

@@ -10,10 +10,12 @@ class DAMAGE_SOURCE_TYPES(object):
     SPG = 'SPG'
     ARTILLERY = 'artillery'
     AIRSTRIKE = 'airstrike'
+    EVENT_BOSS = 'event_boss'
     DAMAGE_SOURCES = [HEAVY_TANK,
      MEDIUM_TANK,
      LIGHT_TANK,
      AT_SPG,
      SPG,
      ARTILLERY,
-     AIRSTRIKE]
+     AIRSTRIKE,
+     EVENT_BOSS]

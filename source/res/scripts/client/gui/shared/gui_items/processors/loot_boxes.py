@@ -30,6 +30,38 @@ class LootBoxOpenProcessor(Processor):
         BigWorld.player().tokens.openLootBox(self.__lootBox.getID(), self.__count, lambda code, errStr, ext: self._response(code, callback, ctx=ext, errStr=errStr))
 
 
+class LootBoxRerollProcessor(Processor):
+
+    def __init__(self, lootBoxItem):
+        super(LootBoxRerollProcessor, self).__init__()
+        self.__lootBox = lootBoxItem
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        defaultKey = 'lootboxes/reroll/server_error'
+        return makeI18nError('/'.join((defaultKey, errStr)), defaultKey)
+
+    def _successHandler(self, code, ctx=None):
+        fmt = None
+        if fmt is not None:
+            SystemMessages.pushMessage(fmt, SystemMessages.SM_TYPE.LootBoxRewards)
+        return super(LootBoxRerollProcessor, self)._successHandler(code, ctx)
+
+    def _request(self, callback):
+        boxID = self.__lootBox.getID()
+        _logger.debug('Make server request to reroll lootbox by id: %r', boxID)
+        BigWorld.player().tokens.reRollLootBox(boxID, lambda code, errStr, ext: self._response(code, callback, ctx=ext, errStr=errStr))
+
+
+class LootBoxReRollRecordsProcessor(Processor):
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        defaultKey = 'lootboxes/rerollRecords/server_error'
+        return makeI18nError('/'.join((defaultKey, errStr)), defaultKey)
+
+    def _request(self, callback):
+        BigWorld.player().tokens.getLootBoxReRollRecords(lambda code, errStr, ext: self._response(code, callback, ctx=ext, errStr=errStr))
+
+
 class LootBoxGetInfoProcessor(Processor):
 
     def __init__(self, lootBoxes, fullInfo=True):

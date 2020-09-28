@@ -97,11 +97,15 @@ class INGAME_GUI(object):
     CHAT_SHORTCUTS_ATTENTION_TO_BASE_ATK = '#ingame_gui:chat_shortcuts/attention_to_base_atk'
     CHAT_SHORTCUTS_ATTENTION_TO_BASE_ATK_NUMBERED = '#ingame_gui:chat_shortcuts/attention_to_base_atk_numbered'
     CHAT_SHORTCUTS_ATTACKING_BASE = '#ingame_gui:chat_shortcuts/attacking_base'
+    CHAT_SHORTCUTS_ATTACKING_BASE_NUMBERED = '#ingame_gui:chat_shortcuts/attacking_base_numbered'
     CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_ATK = '#ingame_gui:chat_shortcuts/attention_to_objective_atk'
+    CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_ATK_AUTOCOMMIT = '#ingame_gui:chat_shortcuts/attention_to_objective_atk_autocommit'
     CHAT_SHORTCUTS_ATTENTION_TO_BASE_DEF = '#ingame_gui:chat_shortcuts/attention_to_base_def'
     CHAT_SHORTCUTS_ATTENTION_TO_BASE_DEF_NUMBERED = '#ingame_gui:chat_shortcuts/attention_to_base_def_numbered'
     CHAT_SHORTCUTS_DEFENDING_BASE = '#ingame_gui:chat_shortcuts/defending_base'
+    CHAT_SHORTCUTS_DEFENDING_BASE_NUMBERED = '#ingame_gui:chat_shortcuts/defending_base_numbered'
     CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_DEF = '#ingame_gui:chat_shortcuts/attention_to_objective_def'
+    CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_DEF_AUTOCOMMIT = '#ingame_gui:chat_shortcuts/attention_to_objective_def_autocommit'
     CHAT_SHORTCUTS_HELP_ME_EX = '#ingame_gui:chat_shortcuts/help_me_ex'
     CHAT_SHORTCUTS_SUPPORTING_ALLY = '#ingame_gui:chat_shortcuts/supporting_ally'
     CHAT_SHORTCUTS_TURN_BACK = '#ingame_gui:chat_shortcuts/turn_back'
@@ -838,11 +842,15 @@ class INGAME_GUI(object):
      CHAT_SHORTCUTS_ATTENTION_TO_BASE_ATK,
      CHAT_SHORTCUTS_ATTENTION_TO_BASE_ATK_NUMBERED,
      CHAT_SHORTCUTS_ATTACKING_BASE,
+     CHAT_SHORTCUTS_ATTACKING_BASE_NUMBERED,
      CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_ATK,
+     CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_ATK_AUTOCOMMIT,
      CHAT_SHORTCUTS_ATTENTION_TO_BASE_DEF,
      CHAT_SHORTCUTS_ATTENTION_TO_BASE_DEF_NUMBERED,
      CHAT_SHORTCUTS_DEFENDING_BASE,
+     CHAT_SHORTCUTS_DEFENDING_BASE_NUMBERED,
      CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_DEF,
+     CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_DEF_AUTOCOMMIT,
      CHAT_SHORTCUTS_HELP_ME_EX,
      CHAT_SHORTCUTS_SUPPORTING_ALLY,
      CHAT_SHORTCUTS_TURN_BACK,

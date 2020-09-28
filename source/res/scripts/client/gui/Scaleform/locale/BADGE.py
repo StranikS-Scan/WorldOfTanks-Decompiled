@@ -210,6 +210,7 @@ class BADGE(object):
     BADGE_90_DESCR = '#badge:badge_90_descr'
     BADGE_89 = '#badge:badge_89'
     BADGE_89_DESCR = '#badge:badge_89_descr'
+    BADGE_89_DESCR_CN = '#badge:badge_89_descr_cn'
     BADGE_91 = '#badge:badge_91'
     BADGE_91_DESCR = '#badge:badge_91_descr'
     BADGE_92 = '#badge:badge_92'
@@ -415,6 +416,7 @@ class BADGE(object):
      BADGE_90_DESCR,
      BADGE_89,
      BADGE_89_DESCR,
+     BADGE_89_DESCR_CN,
      BADGE_91,
      BADGE_91_DESCR,
      BADGE_92,
@@ -535,6 +537,7 @@ class BADGE(object):
      BADGE_92_DESCR,
      BADGE_93_DESCR,
      BADGE_94_DESCR)
+    BADGE_ALL_DESCR_CN_ENUM = (BADGE_89_DESCR_CN,)
 
     @classmethod
     def badgeName(cls, key0):
@@ -558,6 +561,15 @@ class BADGE(object):
     def badgeDescriptor(cls, key0):
         outcome = '#badge:badge_{}_descr'.format(key0)
         if outcome not in cls.BADGE_ALL_DESCR_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def badgeDescriptor_CN(cls, key0):
+        outcome = '#badge:badge_{}_descr_cn'.format(key0)
+        if outcome not in cls.BADGE_ALL_DESCR_CN_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

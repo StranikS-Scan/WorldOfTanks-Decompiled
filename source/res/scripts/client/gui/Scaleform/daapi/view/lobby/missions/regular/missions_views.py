@@ -36,7 +36,7 @@ from gui.shared.event_dispatcher import showTankPremiumAboutPage
 from gui.shared.formatters import text_styles, icons
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IReloginController, IMarathonEventsController, IBrowserController
+from skeletons.gui.game_control import IReloginController, IMarathonEventsController, IBrowserController, IGameEventController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from gui import makeHtmlString
@@ -326,6 +326,7 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
 class MissionsCategoriesView(_GroupedMissionsView):
     QUESTS_COUNT_LINKEDSET_BLOCK = 1
     _lobbyContext = dependency.descriptor(ILobbyContext)
+    _gameEventController = dependency.descriptor(IGameEventController)
     __showDQInMissionsTab = False
 
     @classmethod

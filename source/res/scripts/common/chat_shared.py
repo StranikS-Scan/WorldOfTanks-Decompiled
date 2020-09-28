@@ -10,10 +10,9 @@ from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES
 from constants import CHAT_LOG, RESTRICTION_TYPE
 from debug_utils import LOG_ERROR
 from enumerations import Enumeration, AttributeEnumItem
+from messenger_common_chat2 import BATTLE_CHAT_COMMANDS_BY_NAMES
 from soft_exception import SoftException
 from wotdecorators import noexcept
-from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
-from messenger_common_chat2 import BATTLE_CHAT_COMMANDS_BY_NAMES
 __all__ = ['CHAT_ACTIONS', 'SYS_MESSAGE_TYPE']
 NOTIFICATION_GROUP = Enumeration('Group of members for notification', ['All',
  'NONE',
@@ -310,8 +309,8 @@ CHAT_COMMANDS = Enumeration('chatCommands', [('initAck', {'chnlCmd': 0}),
  (BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION, {'battleCmd': 1}),
  (BATTLE_CHAT_COMMAND_NAMES.REPLY, {'battleCmd': 1}),
  (BATTLE_CHAT_COMMAND_NAMES.CANCEL_REPLY, {'battleCmd': 1}),
- (BATTLE_CHAT_COMMAND_NAMES.ATTENTIONTOOBJECTIVE_ATK, {'battleCmd': 1}),
- (BATTLE_CHAT_COMMAND_NAMES.ATTENTIONTOOBJECTIVE_DEF, {'battleCmd': 1}),
+ (BATTLE_CHAT_COMMAND_NAMES.ATTACK_OBJECTIVE, {'battleCmd': 1}),
+ (BATTLE_CHAT_COMMAND_NAMES.DEFEND_OBJECTIVE, {'battleCmd': 1}),
  (BATTLE_CHAT_COMMAND_NAMES.ATTACK_BASE, {'battleCmd': 1}),
  (BATTLE_CHAT_COMMAND_NAMES.DEFEND_BASE, {'battleCmd': 1}),
  (BATTLE_CHAT_COMMAND_NAMES.SPG_AIM_AREA, {'battleCmd': 1}),
@@ -355,7 +354,9 @@ CHAT_COMMANDS = Enumeration('chatCommands', [('initAck', {'chnlCmd': 0}),
  (BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE, {'battleCmd': 1}),
  (BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE, {'battleCmd': 1}),
  (BATTLE_CHAT_COMMAND_NAMES.PREBATTLE_WAYPOINT, {'battleCmd': 1}),
- (BATTLE_CHAT_COMMAND_NAMES.CONFIRM, {'battleCmd': 1})], instance=AttributeEnumItem)
+ (BATTLE_CHAT_COMMAND_NAMES.CONFIRM, {'battleCmd': 1}),
+ (BATTLE_CHAT_COMMAND_NAMES.ATTACKING_OBJECTIVE, {'battleCmd': 1}),
+ (BATTLE_CHAT_COMMAND_NAMES.DEFENDING_OBJECTIVE, {'battleCmd': 1})], instance=AttributeEnumItem)
 CHAT_MEMBER_STATUSES = Enumeration('chatMemberStatuses', ['available', 'inBattle'])
 CHAT_MEMBER_BAN_TYPE = Enumeration('chatMemberBanType', ['none', 'readonly', 'full'])
 CHAT_MEMBER_ROLE = Enumeration('chatMemberRole', ['member', 'visitor', 'moderator'])

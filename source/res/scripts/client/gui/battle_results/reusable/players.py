@@ -13,7 +13,7 @@ class PlayerInfo(shared.ItemInfo):
     __slots__ = ('__dbID', '__team', '__fakeName', '__realName', '__prebattleID', '__igrType', '__clanInfo', '__isTeamKiller', 'squadIndex', '__tags', '__weakref__')
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, dbID=0, team=0, name='', realName=style.getUnknownPlayerName(), prebattleID=0, igrType=0, clanAbbrev='', clanDBID=0, wasInBattle=True):
+    def __init__(self, dbID=0, team=0, name='', realName=style.getUnknownPlayerName(), prebattleID=0, igrType=0, clanAbbrev='', clanDBID=0, wasInBattle=True, **kwargs):
         super(PlayerInfo, self).__init__(wasInBattle=wasInBattle)
         self.__dbID = dbID
         self.__team = team
@@ -74,6 +74,9 @@ class PlayerInfo(shared.ItemInfo):
 
     def getRegionCode(self):
         return self.lobbyContext.getRegionCode(self.__dbID)
+
+    def isAnonymized(self):
+        return self.__realName != self.__fakeName
 
 
 class PlayersInfo(shared.UnpackedInfo):

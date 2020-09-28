@@ -70,7 +70,7 @@ class VehicleSelectPopover(VehicleSelectPopoverStorage, VehicleSelectorBase):
         self.updateData()
 
     def updateData(self):
-        criteria = REQ_CRITERIA.INVENTORY
+        criteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
         criteria |= REQ_CRITERIA.VEHICLE.NAME_VEHICLE(self._searchStr)
         allVehicles = self._itemsCache.items.getVehicles(criteria)
         vehicles = self._updateData(allVehicles)

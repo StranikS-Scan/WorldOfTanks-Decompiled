@@ -155,6 +155,12 @@ _MAX_RENT_MULTIPLIER = 2
 RentPackagesInfo = namedtuple('RentPackagesInfo', ('hasAvailableRentPackages', 'mainRentType', 'seasonType'))
 CrystalsEarnedInfo = namedtuple('CrystalsEarnedInfo', ('current', 'max'))
 
+class VEHICLE_EVENT_TYPE(CONST_CONTAINER):
+    EVENT_BOSS = 'event_boss'
+    EVENT_SPECIAL_BOSS = 'special_event_boss'
+    EVENT_HUNTER = 'event_hunter'
+
+
 class Vehicle(FittingItem):
     __slots__ = ('__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_rentPackagesInfo', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_tradeInAvailable', '_tradeOffAvailable', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_equipment', '_bonuses', '_crewIndices', '_slotsIds', '_crew', '_lastCrew', '_hasModulesToSelect', '_outfits', '_isStyleInstalled', '_slotsAnchors', '_unlockedBy', '_maxRentDuration', '_minRentDuration', '_slotsAnchorsById', '_hasNationGroup', '_extraSettings', '_perksController')
 
@@ -178,7 +184,8 @@ class Vehicle(FittingItem):
         UNAVAILABLE = 'unavailable'
         UNSUITABLE_TO_QUEUE = 'unsuitableToQueue'
         UNSUITABLE_TO_UNIT = 'unsuitableToUnit'
-        CUSTOM = (UNSUITABLE_TO_QUEUE, UNSUITABLE_TO_UNIT)
+        EVENT_TICKETS_SHORTAGE = 'ticketsShortage'
+        CUSTOM = (UNSUITABLE_TO_QUEUE, UNSUITABLE_TO_UNIT, EVENT_TICKETS_SHORTAGE)
         DEAL_IS_OVER = 'dealIsOver'
         ROTATION_GROUP_UNLOCKED = 'rotationGroupUnlocked'
         ROTATION_GROUP_LOCKED = 'rotationGroupLocked'
@@ -1040,7 +1047,8 @@ class Vehicle(FittingItem):
          Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE,
          Vehicle.VEHICLE_STATE.DEAL_IS_OVER,
          Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT,
-         Vehicle.VEHICLE_STATE.ROTATION_GROUP_LOCKED):
+         Vehicle.VEHICLE_STATE.ROTATION_GROUP_LOCKED,
+         Vehicle.VEHICLE_STATE.EVENT_TICKETS_SHORTAGE):
             return Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
         if state in (Vehicle.VEHICLE_STATE.UNDAMAGED, Vehicle.VEHICLE_STATE.ROTATION_GROUP_UNLOCKED):
             return Vehicle.VEHICLE_STATE_LEVEL.INFO
@@ -1077,6 +1085,16 @@ class Vehicle(FittingItem):
     @property
     def isEvent(self):
         return self.isOnlyForEventBattles and self in Vehicle.__getEventVehicles()
+
+    @property
+    def eventType(self):
+        if checkForTags(self.tags, VEHICLE_EVENT_TYPE.EVENT_SPECIAL_BOSS):
+            return VEHICLE_EVENT_TYPE.EVENT_SPECIAL_BOSS
+        return VEHICLE_EVENT_TYPE.EVENT_BOSS if checkForTags(self.tags, VEHICLE_EVENT_TYPE.EVENT_BOSS) else VEHICLE_EVENT_TYPE.EVENT_HUNTER
+
+    @property
+    def isEventBoss(self):
+        return checkForTags(self.tags, VEHICLE_EVENT_TYPE.EVENT_BOSS) or checkForTags(self.tags, VEHICLE_EVENT_TYPE.EVENT_SPECIAL_BOSS)
 
     @property
     def isDisabledInRoaming(self):
@@ -1709,6 +1727,10 @@ def getUserName(vehicleType, textPrefix=False):
 
 def getShortUserName(vehicleType, textPrefix=False):
     return _getActualName(vehicleType.shortUserString, vehicleType.tags, textPrefix)
+
+
+def getSimpleShortUserName(vehicleType):
+    return vehicleType.descriptor.type.shortUserString
 
 
 def _getActualName(name, tags, textPrefix=False):

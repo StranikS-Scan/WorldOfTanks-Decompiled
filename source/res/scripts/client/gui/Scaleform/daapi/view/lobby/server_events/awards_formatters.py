@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/awards_formatters.py
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import NewStyleBonusComposer
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.auxiliary.rewards_helper import NEW_STYLE_FORMATTED_BONUSES
@@ -123,6 +124,18 @@ class BlueprintsFormatter(OldStyleBonusFormatter):
         return ' '.join([blueprintString, str(count)])
 
 
+class WtEventTicketFormatter(OldStyleBonusFormatter):
+
+    @classmethod
+    def getOrder(cls):
+        pass
+
+    def accumulateBonuses(self, bonus):
+        formattedList = bonus.formattedList()
+        for label in formattedList:
+            self._result.append(formatters.packWulfTooltipBonusBlock(label, TOOLTIPS_CONSTANTS.WT_EVENT_BOSS_TICKET))
+
+
 class SimpleBonusFormatter(OldStyleBonusFormatter):
 
     def accumulateBonuses(self, bonus, event=None):
@@ -177,7 +190,8 @@ def getFormattersMap(event):
      'customizations': CustomizationsFormatter(),
      'vehicles': VehiclesFormatter(event),
      'crewBooks': CrewBookFormatter(),
-     'blueprints': BlueprintsFormatter()}
+     'blueprints': BlueprintsFormatter(),
+     'wtTicket': WtEventTicketFormatter()}
 
 
 class OldStyleAwardsPacker(AwardsPacker):

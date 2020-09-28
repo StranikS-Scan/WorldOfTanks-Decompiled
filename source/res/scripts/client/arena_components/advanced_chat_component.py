@@ -11,7 +11,7 @@ from account_helpers.settings_core.settings_constants import BattleCommStorageKe
 from arena_component_system.client_arena_component_system import ClientArenaComponent
 from battleground.location_point_manager import g_locationPointManager
 from chat_commands_consts import ReplyState, _COMMAND_NAME_TRANSFORM_MARKER_TYPE, BATTLE_CHAT_COMMAND_NAMES, _DEFAULT_ACTIVE_COMMAND_TIME, _DEFAULT_SPG_AREA_COMMAND_TIME, MarkerType, ONE_SHOT_COMMANDS_TO_REPLIES
-from constants import ARENA_PERIOD
+from constants import ARENA_PERIOD, ARENA_BONUS_TYPE
 from gui.battle_control import avatar_getter
 from helpers import dependency, i18n, CallbackDelayer
 from messenger import MessengerEntry
@@ -35,10 +35,10 @@ _CHAT_CMD_CREATE_IF_NO_ORIGINAL_COMMAND_VEHICLES = {BATTLE_CHAT_COMMAND_NAMES.SO
  BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY: BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY}
 _CHAT_CMD_CREATE_IF_NO_ORIGINAL_COMMAND_BASES = {BATTLE_CHAT_COMMAND_NAMES.DEFEND_BASE: BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE,
  BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE: BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE,
- BATTLE_CHAT_COMMAND_NAMES.ATTENTIONTOOBJECTIVE_DEF: BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE,
+ BATTLE_CHAT_COMMAND_NAMES.DEFEND_OBJECTIVE: BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE,
  BATTLE_CHAT_COMMAND_NAMES.ATTACK_BASE: BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE,
  BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE: BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE,
- BATTLE_CHAT_COMMAND_NAMES.ATTENTIONTOOBJECTIVE_ATK: BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE}
+ BATTLE_CHAT_COMMAND_NAMES.ATTACK_OBJECTIVE: BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE}
 _logger = logging.getLogger(__name__)
 
 class ChatCommandChange(Enum):
@@ -146,12 +146,26 @@ class AdvancedChatComponent(ClientArenaComponent):
             arena = componentSystem.arena()
             if arena is not None:
                 arena.onVehicleKilled += self.__onArenaVehicleKilled
+                if arena.bonusType == ARENA_BONUS_TYPE.EPIC_BATTLE:
+                    self.__addEpicBattleEventListeners()
         import BattleReplay
         BattleReplay.g_replayCtrl.onCommandReceived += self.__onCommandReceived
         g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
         g_playerEvents.onAvatarBecomePlayer += self.__onAvatarBecomePlayer
         g_playerEvents.onAvatarBecomeNonPlayer += self.__onAvatarBecomeNonPlayer
         return
+
+    def __addEpicBattleEventListeners(self):
+        if self._componentSystem() is None:
+            return
+        else:
+            sectorBaseComponent = self._componentSystem().sectorBaseComponent
+            if sectorBaseComponent is not None:
+                sectorBaseComponent.onSectorBaseCaptured += self.__onSectorBaseCaptured
+            destructibleComponent = self._componentSystem().destructibleEntityComponent
+            if destructibleComponent is not None:
+                destructibleComponent.onDestructibleEntityStateChanged += self.__onDestructibleEntityStateChanged
+            return
 
     def __removeEventListenersAndClear(self):
         g_messengerEvents.channels.onCommandReceived -= self.__onCommandReceived
@@ -164,6 +178,8 @@ class AdvancedChatComponent(ClientArenaComponent):
             arena = componentSystem.arena()
             if arena is not None:
                 arena.onVehicleKilled -= self.__onArenaVehicleKilled
+                if arena.bonusType == ARENA_BONUS_TYPE.EPIC_BATTLE:
+                    self.__removeEpicBattleEventsListeners()
         import BattleReplay
         BattleReplay.g_replayCtrl.onCommandReceived -= self.__onCommandReceived
         self._chatCommands.clear()
@@ -171,6 +187,18 @@ class AdvancedChatComponent(ClientArenaComponent):
         self.__temporaryStickyCommands.clear()
         self.__markerInFocus = None
         return
+
+    def __removeEpicBattleEventsListeners(self):
+        if self._componentSystem() is None:
+            return
+        else:
+            sectorBaseComponent = self._componentSystem().sectorBaseComponent
+            if sectorBaseComponent is not None:
+                sectorBaseComponent.onSectorBaseCaptured -= self.__onSectorBaseCaptured
+            destructibleComponent = self._componentSystem().destructibleEntityComponent
+            if destructibleComponent is not None:
+                destructibleComponent.onDestructibleEntityStateChanged -= self.__onDestructibleEntityStateChanged
+            return
 
     def __onArenaPeriodChange(self, period, endTime, *_):
         if period == ARENA_PERIOD.PREBATTLE:
@@ -273,20 +301,53 @@ class AdvancedChatComponent(ClientArenaComponent):
                     arena.onChatCommandTargetUpdate(True, chatStats)
             return
 
+    def __onDestructibleEntityStateChanged(self, entityID):
+        if self.__markerInFocus is None:
+            return
+        else:
+            destructibleComponent = self.sessionProvider.arenaVisitor.getComponentSystem().destructibleEntityComponent
+            if destructibleComponent is None:
+                _logger.error('Expected DestructibleEntityComponent not present!')
+                return
+            hq = destructibleComponent.getDestructibleEntity(entityID)
+            if hq is None:
+                _logger.error('Expected DestructibleEntity not present! Id: ' + str(entityID))
+                return
+            if not hq.isAlive():
+                playerVehID = avatar_getter.getPlayerVehicleID()
+                commands = self.sessionProvider.shared.chatCommands
+                self.__removeActualTargetIfDestroyed(commands, playerVehID, entityID, MarkerType.HEADQUARTER_MARKER_TYPE)
+            return
+
+    def __onSectorBaseCaptured(self, baseId, _):
+        sectorBaseComp = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'sectorBaseComponent', None)
+        if sectorBaseComp is not None:
+            playerVehID = avatar_getter.getPlayerVehicleID()
+            commands = self.sessionProvider.shared.chatCommands
+            self.__removeActualTargetIfDestroyed(commands, playerVehID, baseId, MarkerType.BASE_MARKER_TYPE)
+        return
+
     def __onArenaVehicleKilled(self, targetID, attackerID, equipmentID, reason):
         if self.__markerInFocus is None or not self.sessionProvider.shared.chatCommands:
             return
         else:
             playerVehID = avatar_getter.getPlayerVehicleID()
             commands = self.sessionProvider.shared.chatCommands
-            if self.__markerInFocus.isFocused(targetID, MarkerType.VEHICLE_MARKER_TYPE):
-                listOfCommands = self._chatCommands[MarkerType.VEHICLE_MARKER_TYPE][self.__markerInFocus.targetID]
-                for _, commandData in listOfCommands.iteritems():
-                    if playerVehID == commandData.commandCreatorVehID or playerVehID in commandData.owners:
-                        commands.sendClearChatCommandsFromTarget(targetID, MarkerType.VEHICLE_MARKER_TYPE.name)
-
+            self.__removeActualTargetIfDestroyed(commands, playerVehID, targetID, MarkerType.VEHICLE_MARKER_TYPE)
             if playerVehID == targetID:
                 commands.sendClearChatCommandsFromTarget(targetID, self.__markerInFocus.markerType.name)
+            return
+
+    def __removeActualTargetIfDestroyed(self, commands, playerVehID, targetID, markerType):
+        if self.__markerInFocus is None:
+            return
+        else:
+            if self.__markerInFocus.isFocused(targetID, markerType):
+                listOfCommands = self._chatCommands[markerType][self.__markerInFocus.targetID]
+                for _, commandData in listOfCommands.iteritems():
+                    if playerVehID == commandData.commandCreatorVehID or playerVehID in commandData.owners:
+                        commands.sendClearChatCommandsFromTarget(targetID, markerType.name)
+
             return
 
     def __onAvatarBecomePlayer(self):
@@ -507,7 +568,7 @@ class AdvancedChatComponent(ClientArenaComponent):
         elif cmd.isVehicleRelatedCommand():
             self.__handleVehicleCommand(cmdTargetID, cmdCreatorID, cmdID, cmd)
         if cmd.isMarkedObjective():
-            feedbackCtrl.markObjectiveOnMinimap(cmdCreatorID, cmd.getMarkedObjective())
+            feedbackCtrl.markObjectiveOnMinimap(cmdCreatorID, cmd.getMarkedObjective(), cmdName)
 
     def __addReplyToCommandList(self, replierVehicleID, targetID, repliedToCommandID):
         repliedToActionName = _ACTIONS.battleChatCommandFromActionID(repliedToCommandID).name

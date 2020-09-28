@@ -207,6 +207,7 @@ class SequenceXmlReader(BaseCustomizationItemXmlReader):
     def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
         super(SequenceXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section)
         target.sequenceName = ix.readStringOrNone(xmlCtx, section, 'sequenceName')
+        target.sequenceLogic = ix.readStringOrNone(xmlCtx, section, 'sequenceLogic')
 
 
 class AttachmentXmlReader(BaseCustomizationItemXmlReader):

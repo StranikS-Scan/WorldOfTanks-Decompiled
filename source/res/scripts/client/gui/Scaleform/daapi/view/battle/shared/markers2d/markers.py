@@ -95,6 +95,7 @@ class BaseMarker(Marker):
         self._activeCommandID = -1
         self._owningTeam = owner
         self._boundCheckEnabled = True
+        self._isHighlighted = False
 
     def getActiveCommandID(self):
         return self._activeCommandID

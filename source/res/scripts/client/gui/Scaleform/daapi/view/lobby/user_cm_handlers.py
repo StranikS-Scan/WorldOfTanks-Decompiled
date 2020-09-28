@@ -267,7 +267,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
             if self.eventsCache.isEventEnabled():
                 options.append(self._makeItem(USER.CREATE_EVENT_SQUAD, MENU.contextmenu(USER.CREATE_EVENT_SQUAD), optInitData={'enabled': canCreate,
                  'textColor': 13347959}))
-            if self.__eventProgression.modeIsAvailable():
+            if self.__eventProgression.modeIsAvailable() and self.__eventProgression.isSteelHunter:
                 primeTimeStatus, _, _ = self.__eventProgression.getPrimeTimeStatus()
                 options.append(self._makeItem(USER.CREATE_BATTLE_ROYALE_SQUAD, MENU.contextmenu(USER.CREATE_BATTLE_ROYALE_SQUAD), optInitData={'enabled': canCreate and primeTimeStatus == PrimeTimeStatus.AVAILABLE,
                  'textColor': 13347959}))

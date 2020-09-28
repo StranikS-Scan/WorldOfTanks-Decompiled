@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/arena_component_system/destructible_entity_component.py
-from client_arena_component_system import ClientArenaComponent
 import Event
+from client_arena_component_system import ClientArenaComponent
 
 class DestructibleEntitiesComponent(ClientArenaComponent):
     destructibleEntities = property(lambda self: self.__destructibleEntities)
@@ -72,6 +72,13 @@ class DestructibleEntitiesComponent(ClientArenaComponent):
 
     def getDestructibleEntity(self, destId):
         return self.__destructibleEntities.get(destId, None)
+
+    def getDestructibleEntityAndDestructibleIDByEntityID(self, entityID):
+        for destID, entity in self.__destructibleEntities.iteritems():
+            if entity.id == entityID:
+                return (entity, destID)
+
+        return (None, -1)
 
     def getNearestDestructibleEntityID(self, position):
 

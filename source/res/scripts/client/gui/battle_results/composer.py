@@ -20,7 +20,7 @@ class IStatsComposer(object):
         raise NotImplementedError
 
     @staticmethod
-    def onShowResults(arenaUniqueID):
+    def onShowResults(arenaUniqueID, isPostbattle20Enabled):
         raise NotImplementedError
 
     @staticmethod
@@ -68,8 +68,8 @@ class StatsComposer(IStatsComposer):
         return animation
 
     @staticmethod
-    def onShowResults(arenaUniqueID):
-        event_dispatcher.showBattleResultsWindow(arenaUniqueID)
+    def onShowResults(arenaUniqueID, isPostbattle20Enabled):
+        event_dispatcher.showBattleResultsWindow(arenaUniqueID, isPostbattle20Enabled)
 
     @staticmethod
     def onResultsPosted(arenaUniqueID):
@@ -172,7 +172,7 @@ class BattleRoyaleStatsComposer(IStatsComposer):
         pass
 
     @staticmethod
-    def onShowResults(arenaUniqueID):
+    def onShowResults(arenaUniqueID, isPostbattle20Enabled):
         pass
 
     @staticmethod

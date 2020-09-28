@@ -5,7 +5,7 @@ from enum import Enum, unique
 from itertools import chain
 import Event
 from adisp import process
-from constants import Configs
+from constants import Configs, IS_CHINA
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.event_progression.after_battle_reward_view_helpers import getProgressionIconVODict
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
@@ -17,6 +17,8 @@ from helpers import time_utils
 from gui.shared.formatters import text_styles, icons
 from helpers import dependency, int2roman
 from gui.impl import backport
+from items import makeIntCompactDescrByID
+from items.components.c11n_constants import CustomizationType
 from skeletons.gui.game_control import IEventProgressionController, IEpicBattleMetaGameController, IBattleRoyaleController, IQuestsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -81,12 +83,14 @@ def getTimeTo(timeStamp, textId):
     return backport.text(textId, value=text_styles.stats(timeLeft))
 
 
-def getTimeToLeftStr(timeStamp):
-    return getTimeTo(timeStamp, R.strings.tooltips.eventProgression.timeToLeft())
+@dependency.replace_none_kwargs(eventProgression=IEventProgressionController)
+def getTimeToLeftStr(timeStamp, eventProgression=None):
+    return getTimeTo(timeStamp, R.strings.tooltips.eventProgression.timeToLeft.season() if eventProgression.getCurrentSeason().isSingleCycleSeason() else R.strings.tooltips.eventProgression.timeToLeft.cycle())
 
 
-def getTimeToStartStr(timeStamp):
-    return getTimeTo(timeStamp, R.strings.tooltips.eventProgression.timeToStart())
+@dependency.replace_none_kwargs(eventProgression=IEventProgressionController)
+def getTimeToStartStr(timeStamp, eventProgression=None):
+    return getTimeTo(timeStamp, R.strings.tooltips.eventProgression.timeToStart.season() if (eventProgression.getCurrentSeason() or eventProgression.getNextSeason()).isSingleCycleSeason() else R.strings.tooltips.eventProgression.timeToStart.cycle())
 
 
 class EventProgressionController(IEventProgressionController):
@@ -109,6 +113,7 @@ class EventProgressionController(IEventProgressionController):
         self.__rewardPointsTokenID = ''
         self.__seasonPointsTokenID = ''
         self.__rewardVehicles = []
+        self.__rewardStyles = []
         self.__currentMode = None
         self.__questCardLevelTxtId = 0
         self.__progressionNameCycleTxtId = 0
@@ -176,6 +181,10 @@ class EventProgressionController(IEventProgressionController):
         return self.__rewardVehicles
 
     @property
+    def rewardStyles(self):
+        return self.__rewardStyles
+
+    @property
     def questCardLevelTxtId(self):
         return self.__questCardLevelTxtId
 
@@ -203,9 +212,9 @@ class EventProgressionController(IEventProgressionController):
     def aboutEventProgressionResId(self):
         if self.__currentMode:
             if self.__currentMode.getCurrentSeason() or self.__currentMode.getNextSeason():
-                self.__allCyclesWasEndedResId = R.strings.event_progression.selectorTooltip.eventProgression.waitNext()
+                self.__allCyclesWasEndedResId = R.strings.event_progression.selectorTooltip.eventProgression.waitNext_cn() if IS_CHINA else R.strings.event_progression.selectorTooltip.eventProgression.waitNext()
             else:
-                self.__allCyclesWasEndedResId = R.strings.event_progression.selectorTooltip.eventProgression.ended()
+                self.__allCyclesWasEndedResId = R.strings.event_progression.selectorTooltip.eventProgression.ended_cn() if IS_CHINA else R.strings.event_progression.selectorTooltip.eventProgression.ended()
         return self.__allCyclesWasEndedResId
 
     @property
@@ -307,6 +316,9 @@ class EventProgressionController(IEventProgressionController):
 
     def getRewardVehiclePrice(self, vehicleCD):
         return {intCD:price for intCD, price in self.__rewardVehicles}.get(vehicleCD, 0)
+
+    def getRewardStylePrice(self, styleID):
+        return {styleId:price for styleId, price in self.__rewardStyles}.get(styleID, 0)
 
     def getAllLevelAwards(self):
         awardsData = dict()
@@ -492,7 +504,7 @@ class EventProgressionController(IEventProgressionController):
         items = [self.__getTopBackgroundTooltipWithTextData()]
         bottom = -30
         if not self.isCurrentSeasonInPrimeTime() and not self.modeIsAvailable():
-            items.append(self.__getRewardVehiclesData())
+            items.append(self.__getRewardStylesData() if IS_CHINA else self.__getRewardVehiclesData())
             bottom = 0
         return formatters.packBuildUpBlockData(items, padding=formatters.packPadding(bottom=bottom))
 
@@ -500,6 +512,10 @@ class EventProgressionController(IEventProgressionController):
         season = self.getCurrentSeason() or self.getNextSeason()
         currentTime = time_utils.getCurrentLocalServerTimestamp()
         isPrimeTime = self.isCurrentSeasonInPrimeTime()
+        if season and season.isSingleCycleSeason():
+            seasonsOverResID = R.strings.tooltips.eventProgression.allSeasonsAreOver.single()
+        else:
+            seasonsOverResID = R.strings.tooltips.eventProgression.allSeasonsAreOver.multi()
         if isPrimeTime or self.modeIsAvailable():
             cycle = season.getCycleInfo()
             getDate = lambda c: c.endDate
@@ -509,18 +525,24 @@ class EventProgressionController(IEventProgressionController):
             getDate = lambda c: c.startDate
             getTimeToStr = getTimeToStartStr
         if cycle is not None:
-            cycleNumber = self.getCurrentOrNextActiveCycleNumber(season)
-            if self.modeIsEnabled():
-                title = backport.text(self.__progressionNameCycleTxtId, season=int2roman(cycleNumber))
+            if self.modeIsEnabled() or IS_CHINA:
+                if season.isSingleCycleSeason():
+                    infoStrResID = R.strings.menu.headerButtons.battle.types.epic.extra.currentSeason_cn() if IS_CHINA else R.strings.menu.headerButtons.battle.types.epic.extra.currentSeason()
+                    seasonResID = R.strings.epic_battle.season.num(season.getSeasonID())
+                    name = backport.text(seasonResID.name()) if seasonResID else None
+                else:
+                    infoStrResID = self.__progressionNameCycleTxtId
+                    name = self.getCurrentOrNextActiveCycleNumber(season)
+                title = backport.text(infoStrResID, season=name)
             else:
                 title = backport.text(self.__selectorLabelTxtId)
-            description = getTimeToStr(getDate(cycle) - currentTime) if self.modeIsEnabled() else backport.text(R.strings.tooltips.eventProgression.disabled())
+            description = getTimeToStr(getDate(cycle) - currentTime) if self.modeIsEnabled() else text_styles.error(backport.text(R.strings.tooltips.eventProgression.disabled()))
         else:
             title = ''
             description = ''
             if self.isFrontLine:
-                title = backport.text(R.strings.tooltips.eventProgression.allSeasonsAreOver())
-                description = backport.text(R.strings.tooltips.eventProgression.allSeasonsAreOver())
+                title = backport.text(R.strings.tooltips.eventProgression.frontLine())
+                description = backport.text(seasonsOverResID) if self.modeIsEnabled() else text_styles.error(backport.text(R.strings.tooltips.eventProgression.disabled()))
             elif self.isSteelHunter:
                 title = backport.text(self.__allCyclesWasEndedResId)
         return formatters.packBuildUpBlockData([formatters.packImageTextBlockData(title=text_styles.middleTitle(title), txtPadding=formatters.packPadding(top=8, left=94), desc=text_styles.main(description), descPadding=formatters.packPadding(top=8, left=94), txtOffset=1, txtGap=-1, img=backport.image(self.__progressionIconId), imgPadding=formatters.packPadding(top=1, left=18))])
@@ -533,8 +555,14 @@ class EventProgressionController(IEventProgressionController):
         season = self.__currentController.getCurrentSeason() or self.__currentController.getNextSeason()
         levelInfo = self.getPlayerLevelInfo()
         cycleNumber = self.getCurrentOrNextActiveCycleNumber(season)
-        seasonStr = backport.text(self.__progressionNameCycleTxtId, season=int2roman(cycleNumber))
-        seasonDescr = text_styles.middleTitle(seasonStr)
+        if season.isSingleCycleSeason():
+            infoStrResID = R.strings.menu.headerButtons.battle.types.epic.extra.currentSeason_cn() if IS_CHINA else R.strings.menu.headerButtons.battle.types.epic.extra.currentSeason()
+            seasonResID = R.strings.epic_battle.season.num(season.getSeasonID())
+            name = backport.text(seasonResID.name()) if seasonResID else None
+        else:
+            infoStrResID = self.__progressionNameCycleTxtId
+            name = int2roman(cycleNumber)
+        seasonDescr = text_styles.middleTitle(backport.text(infoStrResID, season=name))
         items.append(formatters.packTextBlockData(text=seasonDescr, useHtml=True, padding=formatters.packPadding(left=20, right=20)))
         currentCycle = season.getCycleInfo()
         tDiff = currentCycle.endDate - time_utils.getCurrentLocalServerTimestamp() if currentCycle is not None else 0
@@ -625,19 +653,31 @@ class EventProgressionController(IEventProgressionController):
         return formatters.packBuildUpBlockData(items, padding=formatters.packPadding(top=marginTop))
 
     def __getRewardVehiclesData(self):
-        getRewards = self.__getRewardVehicles
-        rewardVehiclesNames = [ text_styles.stats(v.shortUserName) for v in getRewards() ]
+        rewardVehiclesNames = [ text_styles.stats(v.shortUserName) for v in self.__getRewardVehicles() ]
         promo = R.strings.event_progression.selectorTooltip.eventProgression.promo
         text = backport.text(promo.multi() if len(rewardVehiclesNames) > 1 else promo.single(), vehicles=', '.join(rewardVehiclesNames[:-1]), vehicle=rewardVehiclesNames[-1])
         return formatters.packTextBlockData(text_styles.main(text), padding=formatters.packPadding(top=-10, left=20, right=25))
 
+    def __getRewardStylesData(self):
+        rewardStylesNames = [ text_styles.stats(s.userName) for s in self.__getRewardStyles() ]
+        promo = R.strings.event_progression.selectorTooltip.eventProgression.promo
+        text = backport.text(promo.multi_cn() if len(rewardStylesNames) > 1 else promo.single_cn(), styles=', '.join(rewardStylesNames[:-1]), style=rewardStylesNames[-1])
+        return formatters.packTextBlockData(text_styles.main(text), padding=formatters.packPadding(top=-10, left=20, right=25))
+
     def __getTopBackgroundTooltipWithTextData(self):
-        header = text_styles.bonusLocalText(backport.text(R.strings.tooltips.eventProgression.header()))
-        iconSrc = backport.image(R.images.gui.maps.icons.epicBattles.rewardPoints.c_16x16())
+        if IS_CHINA:
+            headerResId = R.strings.tooltips.eventProgression.frontLine
+            iconResId = R.images.gui.maps.icons.epicBattles.prestigePoints
+            background = R.images.gui.maps.icons.epicBattles.backgrounds.widget_tooltip_background_cn
+        else:
+            headerResId = R.strings.tooltips.eventProgression.header
+            iconResId = R.images.gui.maps.icons.epicBattles.rewardPoints
+            background = R.images.gui.maps.icons.epicBattles.backgrounds.widget_tooltip_background
+        header = text_styles.bonusLocalText(backport.text(headerResId()))
+        iconSrc = backport.image(iconResId.c_16x16())
         iconCurrency = icons.makeImageTag(source=iconSrc, width=16, height=16, vSpace=-3)
         currency = text_styles.concatStylesWithSpace(self.__getCurrencyCurrentStr(), iconCurrency)
-        background = R.images.gui.maps.icons.epicBattles.backgrounds.widget_tooltip_background()
-        return formatters.packImageTextBlockData(title=header, txtPadding=formatters.packPadding(top=16, left=20), desc=currency, descPadding=formatters.packPadding(top=6, left=20), txtOffset=1, txtGap=-1, img=backport.image(background))
+        return formatters.packImageTextBlockData(title=header, txtPadding=formatters.packPadding(top=16, left=20), desc=currency, descPadding=formatters.packPadding(top=6, left=20), txtOffset=1, txtGap=-1, img=backport.image(background()))
 
     def __getCurrencyCurrentStr(self):
         res = text_styles.main(backport.text(R.strings.tooltips.eventProgression.currency()) + ' ') + text_styles.stats(int(self.actualRewardPoints))
@@ -647,6 +687,11 @@ class EventProgressionController(IEventProgressionController):
         rewardVehiclesIds = [ intCD for intCD, _ in self.rewardVehicles ]
         rewardVehicles = self.__itemsCache.items.getVehicles(REQ_CRITERIA.IN_CD_LIST(rewardVehiclesIds))
         return [ rewardVehicles[intCD] for intCD in rewardVehiclesIds ]
+
+    def __getRewardStyles(self):
+        rewardStylesIds = [ makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, styleID) for styleID, _ in self.rewardStyles ]
+        rewardStyles = self.__itemsCache.items.getStyles(REQ_CRITERIA.IN_CD_LIST(rewardStylesIds))
+        return [ rewardStyles[intCD] for intCD in rewardStylesIds ]
 
     def __clear(self):
         self.__itemsCache.onSyncCompleted -= self.__updatePlayerData
@@ -671,6 +716,7 @@ class EventProgressionController(IEventProgressionController):
         self.__rewardPointsTokenID = s.rewardPointsTokenID
         self.__seasonPointsTokenID = s.seasonPointsTokenID
         self.__rewardVehicles = s.rewardVehicles
+        self.__rewardStyles = s.rewardStyles
         self.__questPrefix = s.questPrefix
         if self.isSteelHunter is True:
             self.__updateSteelHunterData()
@@ -686,7 +732,7 @@ class EventProgressionController(IEventProgressionController):
         self.__questTooltipHeaderIconId = R.images.gui.maps.icons.quests.epic_quests_infotip()
         self.__questTooltipHeaderTxtId = R.strings.epic_battle.questsTooltip.epicBattle.header()
         self.__questCardLevelTxtId = R.strings.event_progression.questsCard.frontLine.getLevel()
-        self.__progressionNameCycleTxtId = R.strings.tooltips.eventProgression.season()
+        self.__progressionNameCycleTxtId = (R.strings.tooltips.eventProgression.season_cn if IS_CHINA else R.strings.tooltips.eventProgression.season)()
         self.__progressionIconId = R.images.gui.maps.icons.battleTypes.c_64x64.frontline()
         self.__selectorLabelTxtId = R.strings.menu.headerButtons.battle.types.epic()
         self.__selectorRibbonResId = R.images.gui.maps.icons.epicBattles.ribbon_small()

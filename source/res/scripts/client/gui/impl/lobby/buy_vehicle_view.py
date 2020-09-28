@@ -367,7 +367,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         self.__destroyWindow()
 
     def __destroyWindow(self):
-        self.viewModel.congratulationAnim.setResetAnimTrgigger(True)
+        self.viewModel.congratulationAnim.setResetAnimTrigger(True)
         self.destroyWindow()
 
     def __showHangar(self):
@@ -853,17 +853,13 @@ class BuyVehicleWindow(Window):
     appLoader = dependency.descriptor(IAppLoader)
     __slots__ = ()
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         app = self.appLoader.getApp()
         view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY))
-        if view is not None:
-            parent = view.getParentWindow()
-        else:
-            parent = None
         settings = WindowSettings()
         settings.flags = WindowFlags.DIALOG
-        settings.content = BuyVehicleView(*args, **kwargs)
-        settings.parent = parent
+        settings.content = BuyVehicleView(**kwargs)
+        settings.parent = view.getParentWindow() if view is not None else None
         super(BuyVehicleWindow, self).__init__(settings)
         return
 

@@ -20,6 +20,9 @@ class _OpenTabWebApi(OpenTabWebApi):
     def _getVehiclePreviewReturnCallback(self, cmd):
         return self.__getReturnCallback(cmd.back_url)
 
+    def _getVehicleStylePreviewCallback(self, cmd):
+        return self.__getReturnCallback(cmd.back_url)
+
     def __getReturnCallback(self, backUrl):
         return (lambda : _goBack(backUrl)) if backUrl is not None else None
 

@@ -851,6 +851,14 @@ def getLastCongratsIndex(bonuses, rewardType):
     return lastIndex
 
 
+def getCurrentStepState(probability, hasCompleted):
+    if hasCompleted:
+        return prConst.STATE_RECEIVED
+    if probability < _MIN_PROBABILITY:
+        return prConst.STATE_PROB_MIN
+    return prConst.STATE_PROB_MAX if probability >= _MAX_PROBABILITY else prConst.STATE_PROB_MED
+
+
 def _getProgressiveSteps(currentStep, probability, maxSteps, hasCompleted=False):
     steps = []
     for step in xrange(maxSteps):
@@ -861,7 +869,7 @@ def _getProgressiveSteps(currentStep, probability, maxSteps, hasCompleted=False)
         if currentStep > step:
             steps.append((prConst.STATE_OPENED, rewardType))
         if currentStep == step:
-            pState = prConst.STATE_RECEIVED if hasCompleted else (prConst.STATE_PROB_MIN if probability < _MIN_PROBABILITY else (prConst.STATE_PROB_MAX if probability >= _MAX_PROBABILITY else prConst.STATE_PROB_MED))
+            pState = getCurrentStepState(probability, hasCompleted)
             steps.append((pState, rewardType))
         steps.append((prConst.STATE_NOT_RECEIVED, rewardType))
 
@@ -946,7 +954,11 @@ def _getCompensationMoney(bonuses):
     money = ZERO_MONEY
     for bonusName, bonusValue in bonuses.iteritems():
         if bonusName == 'vehicles':
-            vehicles = itertools.chain.from_iterable([ vehBonus.itervalues() for vehBonus in bonusValue ])
+            vehicles = []
+            if isinstance(bonusValue, list):
+                vehicles = itertools.chain.from_iterable([ vehBonus.itervalues() for vehBonus in bonusValue ])
+            elif isinstance(bonusValue, dict):
+                vehicles = bonusValue.itervalues()
             for vehData in vehicles:
                 if 'customCompensation' in vehData:
                     money += Money.makeFromMoneyTuple(vehData['customCompensation'])

@@ -22,9 +22,9 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events import finders
-from gui.server_events.events_constants import RANKED_DAILY_GROUP_ID
+from gui.server_events.events_constants import RANKED_DAILY_GROUP_ID, WT_GROUP_PREFIX
 from gui.server_events.events_dispatcher import showPersonalMission, showMissionsElen, showMissionsMarathon, showPersonalMissionOperationsPage, showPersonalMissionsOperationsMap, showMissionsCategories, showMissionsBattlePassCommonProgression
-from gui.server_events.events_helpers import isPremium, isDailyQuest, isRankedDaily, isDailyEpic
+from gui.server_events.events_helpers import isPremium, isDailyQuest, isRankedDaily, isWhiteTigerQuest, isDailyEpic
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import icons
@@ -35,7 +35,7 @@ from personal_missions import PM_BRANCH
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IBattlePassController, IBootcampController
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IMarathonEventsController, IFestivityController, IEventProgressionController, IRankedBattlesController, IQuestsController
+from skeletons.gui.game_control import IQuestsController, IMarathonEventsController, IFestivityController, IEventProgressionController, IRankedBattlesController, IGameEventController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -203,6 +203,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     __battlePassController = dependency.descriptor(IBattlePassController)
     __bootcampController = dependency.descriptor(IBootcampController)
     __rankedController = dependency.descriptor(IRankedBattlesController)
+    __gameEventController = dependency.descriptor(IGameEventController)
 
     def __init__(self):
         super(HangarHeader, self).__init__()
@@ -218,6 +219,8 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             showMissionsCategories(groupID=RANKED_DAILY_GROUP_ID)
         elif questType == HANGAR_HEADER_QUESTS.QUEST_TYPE_BATTLE_PASS:
             showMissionsBattlePassCommonProgression()
+        elif questType == HANGAR_HEADER_QUESTS.QUEST_GROUP_WT_EVENT:
+            showMissionsCategories(groupID=WT_GROUP_PREFIX)
         elif questType in QUEST_TYPE_BY_PM_BRANCH.itervalues():
             if questID:
                 showPersonalMission(missionID=int(questID))
@@ -238,9 +241,13 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         headerVO = self._makeHeaderVO()
         self.as_setDataS(headerVO)
         self.__updateBPWidget()
+        self.__updateWTWidget()
 
     def updateRankedHeader(self, *_):
         self.__updateRBWidget()
+
+    def updateGameEventHeader(self):
+        self.__updateWTWidget()
 
     def _populate(self):
         super(HangarHeader, self)._populate()
@@ -290,6 +297,9 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             return emptyHeaderVO
         if isBob:
             return emptyHeaderVO
+        if self.__gameEventController.isEventPrbActive():
+            return {'isVisible': True,
+             'quests': self.__getWTQuestsToHeaderVO(self._currentVehicle.item)}
         if self.__rankedController.isRankedPrbActive():
             return {'isVisible': True,
              'quests': self.__getRankedQuestsToHeaderVO()}
@@ -324,6 +334,13 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             quests.append(rankedBattleQuests)
         return quests
 
+    def __getWTQuestsToHeaderVO(self, vehicle):
+        quests = []
+        wtEventQuests = self.__getWTEventQuestVO(vehicle)
+        if wtEventQuests:
+            quests.append(wtEventQuests)
+        return quests
+
     def __updateBPWidget(self):
         isBPAvailable = not self.__battlePassController.isDisabled()
         isValidBattleType = self.prbDispatcher and self.prbDispatcher.getEntity() and self.__battlePassController.isValidBattleType(self.prbDispatcher.getEntity())
@@ -339,6 +356,12 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             self.getComponent(HANGAR_ALIASES.RANKED_WIDGET).update()
         else:
             self.as_removeRankedBattlesS()
+
+    def __updateWTWidget(self):
+        if self.__gameEventController.isEventPrbActive():
+            self.as_createWhiteTigerWidgetS()
+        else:
+            self.as_removeWhiteTigerWidgetS()
 
     def __showAvailablePMOperation(self, branch):
         for operationID in finders.BRANCH_TO_OPERATION_IDS[branch]:
@@ -549,6 +572,35 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
                 eventQuestsIcon = RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_CUP_DISABLE_ICON
             quests = [self._headerQuestFormaterVo(enable, eventQuestsIcon, eventQuestsLabel, HANGAR_HEADER_QUESTS.QUEST_TYPE_EVENT, questID=eventId, isReward=True, tooltip=eventQuestsTooltip, isTooltipSpecial=eventQuestsTooltipIsSpecial)]
             return self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_EVENTS, '', quests)
+
+    def __getWTEventQuestVO(self, vehicle):
+        rIcons = R.images.gui.maps.icons
+        quests = [ q for q in self._questController.getQuestForVehicle(vehicle) if isWhiteTigerQuest(q.getGroupID()) ]
+        totalCount = len(quests)
+        completedQuests = len([ q for q in quests if q.isCompleted() ])
+        icon = rIcons.library.outline.quests_disabled()
+        label = ''
+        stateIcon = None
+        flag = rIcons.library.hangarFlag.flag_gray()
+        isEnabled = False
+        if totalCount > 0:
+            diff = totalCount - completedQuests
+            isAnyPrimeTimeNow = self.__gameEventController.isInPrimeTime()
+            isAnyPrimeTimeLeft = self.__gameEventController.hasPrimeTimesLeft()
+            isLastSeasonDay = self.__gameEventController.isLastSeasonDay()
+            if isAnyPrimeTimeNow:
+                isEnabled = True
+                eventType = vehicle.eventType
+                icon = rIcons.wtevent.quests.vehicleTypes.dyn(eventType)()
+                flag = rIcons.wtevent.quests.hangarFlag.dyn(eventType)()
+                if diff > 0:
+                    label = backport.text(R.strings.menu.hangar_header.battle_quests_label.active(), total=diff)
+                elif isAnyPrimeTimeLeft and not isLastSeasonDay:
+                    stateIcon = backport.image(rIcons.library.clock_icon_s_32())
+                else:
+                    stateIcon = backport.image(rIcons.library.completed_32())
+        questsVO = [self._headerQuestFormaterVo(enable=isEnabled, icon=backport.image(icon), label=label, stateIcon=stateIcon, questType=HANGAR_HEADER_QUESTS.QUEST_GROUP_WT_EVENT, flag=backport.image(flag), tooltip=TOOLTIPS_CONSTANTS.WT_QUESTS_PREVIEW, isTooltipSpecial=True)]
+        return self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_WT_EVENT, '', questsVO)
 
     def _wrapQuestGroup(self, groupID, icon, quests, isRightSide=False):
         return {'groupID': groupID,

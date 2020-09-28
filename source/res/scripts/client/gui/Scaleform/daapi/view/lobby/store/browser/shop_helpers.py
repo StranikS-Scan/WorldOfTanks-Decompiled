@@ -108,3 +108,7 @@ def getPremiumVehiclesUrl():
 
 def getBuyCollectibleVehiclesUrl():
     return _getUrl('buyCollectibleVehicle')
+
+
+def getBuyWtLootBoxesUrl():
+    return _getUrl('buyWtLootBoxes')

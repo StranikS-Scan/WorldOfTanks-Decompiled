@@ -8,7 +8,7 @@ from gui.Scaleform.daapi.view.lobby.event_progression.after_battle_reward_view_h
 from gui.Scaleform.daapi.view.lobby.event_progression import after_battle_reward_view_helpers
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import EpicCurtailingAwardsComposer
 from gui.Scaleform.daapi.view.meta.EpicBattlesAfterBattleViewMeta import EpicBattlesAfterBattleViewMeta
-from gui.server_events.awards_formatters import AWARDS_SIZES, getEpicViewAwardPacker
+from gui.server_events.awards_formatters import getEpicViewAwardPacker
 from gui.server_events.bonuses import EpicAbilityPtsBonus
 from gui.shared.formatters import text_styles
 from gui.shared.utils import toUpper
@@ -62,8 +62,7 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
 
     def _populate(self):
         super(EpicBattlesAfterBattleView, self)._populate()
-        extInfo = self.__ctx['reusableInfo'].personal.avatar.extensionInfo
-        epicMetaGame = extInfo['epicMetaGame']
+        epicMetaGame = self.__ctx['reusableInfo'].personal.avatar.extensionInfo.get('ext', {}).get('epicMetaGame', {})
         _, pMetaLevel, pFamePts = epicMetaGame.get('metaLevel', (None, None, None))
         _, prevPMetaLevel, prevPFamePts = epicMetaGame.get('prevMetaLevel', (None, None, None))
         boosterFLXP = epicMetaGame.get('boosterFlXP', 0)
@@ -75,10 +74,10 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         if season is not None:
             cycleNumber = self.__epicMetaGameCtrl.getCurrentOrNextActiveCycleNumber(season)
         famePointsReceived = sum(famePtsToProgress[prevPMetaLevel:pMetaLevel]) + pFamePts - prevPFamePts
-        achievedRank = max(extInfo['playerRank'].get('rank', 0), 1)
+        achievedRank = max(self.__ctx['reusableInfo'].personal.avatar.extensionInfo.get('ext', {}).get('playerRank', {}).get('rank', 0), 1)
         rankNameId = R.strings.epic_battle.rank.dyn('rank' + str(achievedRank))
         rankName = toUpper(backport.text(rankNameId())) if rankNameId.exists() else ''
-        awardsVO = self._awardsFormatter.getFormattedBonuses(self.__getBonuses(pMetaLevel), size=AWARDS_SIZES.BIG)
+        awardsVO = self._awardsFormatter.getFormattedBonuses(self.__getBonuses(pMetaLevel))
         fameBarVisible = True
         if prevPMetaLevel >= maxMetaLevel or pMetaLevel >= maxMetaLevel:
             boosterFLXP = famePointsReceived - originalFlXP if famePointsReceived > originalFlXP else 0
@@ -104,7 +103,7 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         return
 
     def __getBonuses(self, level):
-        questsProgressData = self.__ctx['reusableInfo'].personal.getQuestsProgress()
+        questsProgressData = self.__ctx['reusableInfo'].progress.getQuestsProgress()
         bonuses = after_battle_reward_view_helpers.getQuestBonuses(questsProgressData, (EVENT_PROGRESSION_FINISH_TOKEN, self.__epicMetaGameCtrl.TOKEN_QUEST_ID), self.__epicMetaGameCtrl.TOKEN_QUEST_ID + str(level))
         bonuses.extend([self.__getAbilityPointsRewardBonus(level)])
         bonuses = after_battle_reward_view_helpers.formatBonuses(bonuses)

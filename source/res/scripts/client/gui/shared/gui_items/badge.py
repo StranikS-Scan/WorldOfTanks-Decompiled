@@ -3,6 +3,7 @@
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import LAST_BADGES_VISIT
 from battle_pass_common import MAX_BADGE_LEVEL, BattlePassState
+from constants import IS_CHINA
 from dossiers2.ui.achievements import BADGES_BLOCK
 from gui.Scaleform.locale.BADGE import BADGE
 from gui.Scaleform.settings import getBadgeIconPath, getAwardBadgeIconPath, getBadgeHighlightIconPath, BADGES_ICONS
@@ -123,8 +124,7 @@ class Badge(GUIItem):
         return self.getUserName() if key is None else i18n.makeString(key)
 
     def getUserDescription(self):
-        key = BADGE.badgeDescriptor(self.badgeID)
-        return i18n.makeString(key)
+        return i18n.makeString(BADGE.badgeDescriptor_CN(self.badgeID) or BADGE.badgeDescriptor(self.badgeID) if IS_CHINA else BADGE.badgeDescriptor(self.badgeID))
 
     def getHighlightIcon(self):
         highlight = self.data.get('highlight', '')

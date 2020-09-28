@@ -436,8 +436,7 @@ class BattlePassController(IBattlePassController):
         if self.isBought():
             return False
         config = self.__getConfig()
-        newbieLevel = config.maxLevelForNewbie
-        if self.getCurrentLevel() >= newbieLevel or newbieLevel == 0:
+        if self.getCurrentPoints() >= config.maxPointsForNewbie:
             return False
         allVehicles = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY)
         totalCap = 0

@@ -1,0 +1,51 @@
+<PowerArenaInfo.def>
+  <Properties>
+    <powerPoints>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+      <VariableLengthHeaderSize>	2	</VariableLengthHeaderSize>
+    </powerPoints>
+    <bossHealth>
+      <Type>	INT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+      <VariableLengthHeaderSize>	2	</VariableLengthHeaderSize>
+    </bossHealth>
+    <wavesPositions>
+      <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
+            <id>
+              <Type>	OBJECT_ID	</Type>
+            </id>
+            <position>
+              <Type>	VECTOR3	</Type>
+            </position>
+            <isUpcoming>
+              <Type>	BOOL	</Type>
+            </isUpcoming>
+          </Properties>
+        </of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </wavesPositions>
+    <groupdropPositions>
+      <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
+            <id>
+              <Type>	OBJECT_ID	</Type>
+            </id>
+            <position>
+              <Type>	VECTOR3	</Type>
+            </position>
+          </Properties>
+        </of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </groupdropPositions>
+    <wtConfig>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+      <VariableLengthHeaderSize>	2	</VariableLengthHeaderSize>
+    </wtConfig>
+  </Properties>
+</PowerArenaInfo.def>

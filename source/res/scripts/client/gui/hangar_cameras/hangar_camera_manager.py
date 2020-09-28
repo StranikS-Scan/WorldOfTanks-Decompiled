@@ -361,6 +361,7 @@ class HangarCameraManager(object):
             self.__updateCameraDistanceLimits()
             self.__cam.pivotMaxDist = self.__getCameraPivotDistance()
             self.__cam.forceUpdate()
+            g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.WT_EVENT_CAMERA_READY_TO_GO_PORTAL, ctx={}), scope=EVENT_BUS_SCOPE.DEFAULT)
 
     def __handleSettingsChange(self, diff):
         if 'fov' in diff:

@@ -79,10 +79,12 @@ class ARENAS(object):
     C_33_FJORD_DESCRIPTION = '#arenas:33_fjord/description'
     C_34_REDSHIRE_NAME = '#arenas:34_redshire/name'
     C_34_REDSHIRE_DESCRIPTION = '#arenas:34_redshire/description'
+    C_34_REDSHIRE_WT_NAME = '#arenas:34_redshire_wt/name'
     C_35_STEPPES_NAME = '#arenas:35_steppes/name'
     C_35_STEPPES_DESCRIPTION = '#arenas:35_steppes/description'
     C_36_FISHING_BAY_NAME = '#arenas:36_fishing_bay/name'
     C_36_FISHING_BAY_DESCRIPTION = '#arenas:36_fishing_bay/description'
+    C_36_FISHING_BAY_WT_NAME = '#arenas:36_fishing_bay_wt/name'
     C_37_CAUCASUS_NAME = '#arenas:37_caucasus/name'
     C_37_CAUCASUS_DESCRIPTION = '#arenas:37_caucasus/description'
     C_38_MANNERHEIM_LINE_NAME = '#arenas:38_mannerheim_line/name'
@@ -128,6 +130,7 @@ class ARENAS(object):
     C_114_CZECH_NAME = '#arenas:114_czech/name'
     C_99_POLAND_NAME = '#arenas:99_poland/name'
     C_99_POLAND_DESCRIPTION = '#arenas:99_poland/description'
+    C_99_POLAND_WT_NAME = '#arenas:99_poland_wt/name'
     C_222_ER_CLIME_NAME = '#arenas:222_er_clime/name'
     C_222_ER_CLIME_DESCRIPTION = '#arenas:222_er_clime/description'
     C_250_BR_BATTLE_CITY2_1_NAME = '#arenas:250_br_battle_city2-1/name'
@@ -219,10 +222,12 @@ class ARENAS(object):
      C_33_FJORD_DESCRIPTION,
      C_34_REDSHIRE_NAME,
      C_34_REDSHIRE_DESCRIPTION,
+     C_34_REDSHIRE_WT_NAME,
      C_35_STEPPES_NAME,
      C_35_STEPPES_DESCRIPTION,
      C_36_FISHING_BAY_NAME,
      C_36_FISHING_BAY_DESCRIPTION,
+     C_36_FISHING_BAY_WT_NAME,
      C_37_CAUCASUS_NAME,
      C_37_CAUCASUS_DESCRIPTION,
      C_38_MANNERHEIM_LINE_NAME,
@@ -268,6 +273,7 @@ class ARENAS(object):
      C_114_CZECH_NAME,
      C_99_POLAND_NAME,
      C_99_POLAND_DESCRIPTION,
+     C_99_POLAND_WT_NAME,
      C_222_ER_CLIME_NAME,
      C_222_ER_CLIME_DESCRIPTION,
      C_250_BR_BATTLE_CITY2_1_NAME,

@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/channels/bw_chat2/battle_controllers.py
 import functools
-import BigWorld
 from arena_component_system.sector_base_arena_component import ID_TO_BASENAME
 from debug_utils import LOG_ERROR
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
@@ -120,41 +119,6 @@ _NONCAPTURED_BASES_FOR_LANE_DICT = {1: {1: 4,
      2: 3}}
 
 class EpicTeamChannelController(TeamChannelController):
-
-    def filterMessage(self, cmd):
-        senderID = cmd.getSenderID()
-        sessionProvider = dependency.instance(IBattleSessionProvider)
-        mapsCtrl = sessionProvider.dynamic.maps
-        if mapsCtrl.overviewMapScreenVisible:
-            return True
-        respawnCtrl = sessionProvider.dynamic.respawn
-        if respawnCtrl and respawnCtrl.isRespawnVisible():
-            return True
-        senderVID = sessionProvider.getCtx().getVehIDBySessionID(senderID)
-
-        def validatePosition(position):
-            minimapCenter = mapsCtrl.getMinimapCenterPosition()
-            halfMinimapWidth = mapsCtrl.getMinimapZoomMode() * _EPIC_MINIMAP_ZOOM_MODE_SCALE
-            diff = position - minimapCenter
-            return False if abs(diff.x) > halfMinimapWidth or abs(diff.z) > halfMinimapWidth else True
-
-        senderInRange = True
-        targetInRange = False
-        if senderVID != BigWorld.player().playerVehicleID:
-            senderPos = mapsCtrl.getVehiclePosition(senderVID)
-            senderInRange = validatePosition(senderPos)
-        if cmd.hasTarget():
-            targetID = cmd.getFirstTargetID()
-            targetPos = mapsCtrl.getVehiclePosition(targetID)
-            targetInRange = validatePosition(targetPos)
-        elif cmd.isLocationRelatedCommand():
-            markingPos = cmd.getMarkedPosition()
-            targetInRange = validatePosition(markingPos)
-        elif cmd.isBaseRelatedCommand():
-            targetInRange = True
-        if cmd.isEpicGlobalMessage():
-            senderInRange = True
-        return senderInRange or targetInRange
 
     def __getNameSuffix(self, avatarSessionID):
         suffix = ''

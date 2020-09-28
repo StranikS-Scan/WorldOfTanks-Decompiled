@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/ribbons_panel.py
 import logging
 from account_helpers.settings_core.settings_constants import BATTLE_EVENTS, GRAPHICS
+from gui.Scaleform.genConsts.DAMAGE_SOURCE_TYPES import DAMAGE_SOURCE_TYPES
 from gui.battle_control.battle_constants import BonusRibbonLabel as _BRL
 from gui.impl import backport
 from gui.impl.gen import R
@@ -11,6 +12,7 @@ from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TY
 from gui.battle_control import avatar_getter
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
+from gui.shared.gui_items.Vehicle import VEHICLE_EVENT_TYPE
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -54,10 +56,13 @@ _BATTLE_EVENTS_SETTINGS_TO_BATTLE_EFFICIENCY_TYPES = {BATTLE_EVENTS.ENEMY_HP_DAM
 
 def _getVehicleData(arenaDP, vehArenaID):
     vTypeInfoVO = arenaDP.getVehicleInfo(vehArenaID).vehicleType
-    vehicleClassTag = vTypeInfoVO.classTag or ''
     vehicleName = vTypeInfoVO.shortNameWithPrefix
     if isBattleRoyale(vTypeInfoVO.tags) and isSpawnedBot(vTypeInfoVO.tags):
         vehicleClassTag = ''
+    elif VEHICLE_EVENT_TYPE.EVENT_BOSS in vTypeInfoVO.tags:
+        vehicleClassTag = DAMAGE_SOURCE_TYPES.EVENT_BOSS
+    else:
+        vehicleClassTag = vTypeInfoVO.classTag or ''
     return (vehicleName, vehicleClassTag)
 
 

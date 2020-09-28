@@ -349,6 +349,9 @@ class EventsCache(IEventsCache):
     def getAnnouncedActions(self):
         return self.__getAnnouncedActions()
 
+    def getWT(self):
+        return self.__getWT()
+
     def getEventBattles(self):
         battles = self.__getEventBattles()
         return EventBattles(battles.get('vehicleTags', set()), battles.get('vehicles', []), bool(battles.get('enabled', 0)), battles.get('arenaTypeID')) if battles else EventBattles(set(), [], 0, None)
@@ -525,6 +528,9 @@ class EventsCache(IEventsCache):
             currentStep = self.questsProgress.getTokenCount(progressiveConfig.levelTokenID)
             probability = self.questsProgress.getTokenCount(progressiveConfig.probabilityTokenID) / 100
             return _ProgressiveReward(currentStep, probability, maxSteps)
+
+    def getIngameEventsData(self):
+        return self.__getIngameEventsData()
 
     def _getDailyQuests(self, filterFunc=None):
         result = {}
@@ -785,6 +791,9 @@ class EventsCache(IEventsCache):
 
     def __getEventBattles(self):
         return self.__getIngameEventsData().get('eventBattles', {})
+
+    def __getWT(self):
+        return self.__getIngameEventsData().get('wt', {})
 
     def __getUnitRestrictions(self):
         return self.__getUnitData().get('restrictions', {})

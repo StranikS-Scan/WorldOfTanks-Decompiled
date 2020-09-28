@@ -693,6 +693,95 @@ class AfterburningBattleRoyale(Equipment):
         return i18n.makeString(localizeDescr, duration=self.consumeSeconds)
 
 
+class AfterburningWT(Equipment):
+    __slots__ = ('consumeSeconds', 'enginePowerFactor', 'maxSpeedFactor', 'vehicleRotationSpeed', 'deploySeconds', 'rechargeSeconds')
+
+    def __init__(self):
+        super(AfterburningWT, self).__init__()
+        self.consumeSeconds = component_constants.ZERO_INT
+        self.enginePowerFactor = component_constants.ZERO_FLOAT
+        self.maxSpeedFactor = component_constants.ZERO_FLOAT
+        self.vehicleRotationSpeed = component_constants.ZERO_FLOAT
+        self.deploySeconds = component_constants.ZERO_FLOAT
+        self.rechargeSeconds = component_constants.ZERO_FLOAT
+
+    def _readConfig(self, xmlCtx, section):
+        self.consumeSeconds = _xml.readInt(xmlCtx, section, 'consumeSeconds', 0)
+        self.enginePowerFactor = _xml.readPositiveFloat(xmlCtx, section, 'enginePowerFactor')
+        self.maxSpeedFactor = _xml.readPositiveFloat(xmlCtx, section, 'maxSpeedFactor')
+        self.vehicleRotationSpeed = _xml.readPositiveFloat(xmlCtx, section, 'vehicleRotationSpeed')
+
+    def updateVehicleAttrFactors(self, vehicleDescr, factors, aspect):
+        try:
+            factors['engine/power'] *= self.enginePowerFactor
+            factors['vehicle/maxSpeed'] *= self.maxSpeedFactor
+            factors['vehicle/rotationSpeed'] *= self.vehicleRotationSpeed
+        except:
+            pass
+
+    def _getDescription(self, descr):
+        localizeDescr = super(AfterburningWT, self)._getDescription(descr)
+        return i18n.makeString(localizeDescr, duration=self.consumeSeconds)
+
+
+class InstantStunShootWT(Equipment):
+    __slots__ = ('cooldownSeconds', 'maxUseCount', 'piercingPower', 'speed', 'gravity', 'maxDistance', 'maxHeight', 'shellDescr')
+
+    def __init__(self):
+        super(InstantStunShootWT, self).__init__()
+        self.cooldownSeconds = component_constants.ZERO_INT
+        self.maxUseCount = component_constants.ZERO_INT
+        self.piercingPower = component_constants.ZERO_INT
+        self.speed = component_constants.ZERO_FLOAT
+        self.gravity = component_constants.ZERO_FLOAT
+        self.maxDistance = component_constants.ZERO_FLOAT
+        self.maxHeight = component_constants.ZERO_FLOAT
+        self.shellDescr = component_constants.ZERO_INT
+
+    def _readConfig(self, xmlCtx, section):
+        self.cooldownSeconds = _xml.readInt(xmlCtx, section, 'cooldownSeconds', 0)
+        self.maxUseCount = section.readInt('maxUseCount', 0)
+        self.piercingPower = _xml.readTupleOfPositiveInts(xmlCtx, section, 'piercingPower', 2)
+        self.speed = section.readFloat('speed', 0)
+        self.gravity = section.readFloat('gravity', 0)
+        self.maxDistance = section.readFloat('maxDistance', 0)
+        self.maxHeight = section.readFloat('maxHeight', 0)
+        self.shellDescr = section.readInt('shellDescr', 0)
+
+
+class ImpulseWT(Equipment):
+    __slots__ = ('damageRadius', 'damageValue', 'stunRadius', 'maxUseCount', 'prepareSeconds', 'cooldownBonuses', 'shellDescr')
+
+    def __init__(self):
+        super(ImpulseWT, self).__init__()
+        self.damageRadius = component_constants.ZERO_FLOAT
+        self.damageValue = component_constants.ZERO_FLOAT
+        self.stunRadius = component_constants.ZERO_FLOAT
+        self.maxUseCount = component_constants.ZERO_INT
+        self.prepareSeconds = component_constants.ZERO_FLOAT
+        self.cooldownBonuses = component_constants.EMPTY_TUPLE
+        self.shellDescr = component_constants.ZERO_INT
+
+    def _readConfig(self, xmlCtx, section):
+        self.damageRadius = _xml.readFloat(xmlCtx, section, 'damageRadius', 0)
+        self.damageValue = _xml.readFloat(xmlCtx, section, 'damageValue', 0)
+        self.stunRadius = _xml.readFloat(xmlCtx, section, 'stunRadius', 0)
+        self.maxUseCount = section.readInt('maxUseCount', 0)
+        self.prepareSeconds = section.readFloat('prepareSeconds', 0)
+        self.cooldownBonuses = self._readCooldownBonus(section)
+        self.shellDescr = section.readInt('shellDescr', 0)
+
+    def _readCooldownBonus(self, section):
+        bonuses = []
+        for bonusSection in section['cooldownBonus'].values():
+            affected = bonusSection.readInt('affected', 1)
+            bonus = bonusSection.readFloat('bonus', 0)
+            bonuses.append((affected, bonus))
+
+        bonuses.sort(key=lambda (affectedVeh, _): affectedVeh)
+        return bonuses
+
+
 class InfluenceZone(object):
     __slots__ = ('radius', 'height', 'depth', 'timer', 'terrainResistance', 'debuffFactors', 'dotParams', 'hotParams', 'influenceType')
 

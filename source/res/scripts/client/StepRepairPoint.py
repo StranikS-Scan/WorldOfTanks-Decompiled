@@ -5,7 +5,6 @@ import AnimationSequence
 from Math import Vector2
 from Math import Matrix
 import ResMgr
-from debug_utils import LOG_WARNING
 import SoundGroups
 
 class _StepRepairPointSettingsCache(object):
@@ -41,7 +40,12 @@ class StepRepairPoint(BigWorld.Entity):
         stepRepairPointComponent = BigWorld.player().arena.componentSystem.stepRepairPointComponent
         if stepRepairPointComponent is not None:
             stepRepairPointComponent.addStepRepairPoint(self)
-        rv = [_g_stepRepairPointSettings.flagModel, _g_stepRepairPointSettings.radiusModel]
+        assembler = BigWorld.CompoundAssembler(_g_stepRepairPointSettings.flagModel, self.spaceID)
+        assembler.addRootPart(_g_stepRepairPointSettings.flagModel, 'root')
+        rv = [assembler, _g_stepRepairPointSettings.radiusModel]
+        if _g_stepRepairPointSettings.flagAnim is not None:
+            loader = AnimationSequence.Loader(_g_stepRepairPointSettings.flagAnim, self.spaceID)
+            rv.append(loader)
         mProv = Matrix()
         mProv.translation = self.position
         self.__stepRepairPointSoundObject = SoundGroups.g_instance.WWgetSoundObject('stepRepairPoint_' + str(self), mProv)
@@ -52,17 +56,9 @@ class StepRepairPoint(BigWorld.Entity):
         self.model = prereqs[_g_stepRepairPointSettings.flagModel]
         self.model.position = self.position
         if _g_stepRepairPointSettings.flagAnim is not None:
-            try:
-                clipResource = self.model.deprecatedGetAnimationClipResource(_g_stepRepairPointSettings.flagAnim)
-                if clipResource:
-                    spaceID = BigWorld.player().spaceID
-                    loader = AnimationSequence.Loader(clipResource, spaceID)
-                    self.__animator = loader.loadSync()
-                    self.__animator.bindTo(AnimationSequence.ModelWrapperContainer(self.model, spaceID))
-                    self.__animator.start()
-            except Exception:
-                LOG_WARNING('Unable to start "%s" animation action for model "%s"' % (_g_stepRepairPointSettings.flagAnim, _g_stepRepairPointSettings.flagModel))
-
+            self.__animator = prereqs[_g_stepRepairPointSettings.flagAnim]
+            self.__animator.bindTo(AnimationSequence.CompoundWrapperContainer(self.model))
+            self.__animator.start()
         self.__terrainSelectedArea = BigWorld.PyTerrainSelectedArea()
         self.__terrainSelectedArea.setup(_g_stepRepairPointSettings.radiusModel, Vector2(self.radius * 2.0, self.radius * 2.0), self._OVER_TERRAIN_HEIGHT, self._COLOR)
         self.model.root.attach(self.__terrainSelectedArea)

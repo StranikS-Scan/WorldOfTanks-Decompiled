@@ -26,6 +26,7 @@ from shared_utils import findFirst
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.game_control import IBattleRoyaleController
+from gui.wt_event.wt_event_helpers import getHunterFullUserName, getHunterDescr
 TANKMAN_DISMISSED = 'dismissed'
 _TIME_FORMAT_UNITS = [('days', time_utils.ONE_DAY), ('hours', time_utils.ONE_HOUR), ('minutes', time_utils.ONE_MINUTE)]
 
@@ -114,6 +115,12 @@ class TankmanSkillListField(ToolTipDataField):
                  'label': newSkillStr,
                  'level': skillLevel,
                  'enabled': False})
+
+
+class EventTankmanSkillListField(TankmanSkillListField):
+
+    def _addNewSkills(self, tankman, skillsList):
+        pass
 
 
 class BattleRoyaleTankmanSkillListField(TankmanSkillListField):
@@ -270,7 +277,10 @@ class TankmanTooltipDataBlock(BlocksTooltipData):
         nativeVehicle = self._itemsCache.items.getItemByCD(item.vehicleNativeDescr.type.compactDescr)
         if item.isInTank:
             vehicle = self._itemsCache.items.getVehicle(item.vehicleInvID)
-        fullUserName = self._getFullUserName(item)
+        if vehicle and vehicle.intCD == getHunterDescr():
+            fullUserName = getHunterFullUserName(item.role)
+        else:
+            fullUserName = self._getFullUserName(item)
         items.append(formatters.packImageTextBlockData(title=text_styles.highTitle(fullUserName), desc=text_styles.main(self._getTankmanDescription(item))))
         innerBlock = []
         if vehicle:
@@ -292,7 +302,7 @@ class TankmanTooltipDataBlock(BlocksTooltipData):
             addRoleLevels = ''
         vehicleName = self._getVehicleName(vehicle, nativeVehicle)
         commonStatsBlock.append(formatters.packTextParameterBlockData(text_styles.main(item.roleUserName + ' ') + vehicleName, text_styles.stats(str(item.roleLevel + penalty + addition) + '%' + addRoleLevels), valueWidth=90, padding=formatters.packPadding(left=0, right=0, top=5, bottom=0)))
-        field = self._getSkillList()
+        field = self._getSkillList(vehicle)
         _, value = field.buildData()
         skills = value or []
         maxPopUpBlocks = 14
@@ -303,7 +313,8 @@ class TankmanTooltipDataBlock(BlocksTooltipData):
             diff = str(len(skills) - maxPopUpBlocks)
             commonStatsBlock.append(formatters.packAlignedTextBlockData(text=text_styles.middleTitle(makeString(TOOLTIPS.HANGAR_CREW_MORESKILLS, skill_cnt=diff)), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
         items.append(formatters.packBuildUpBlockData(commonStatsBlock, gap=5))
-        self._createBlockForNewSkills(items)
+        if not (vehicle and vehicle.isOnlyForEventBattles):
+            self._createBlockForNewSkills(items)
         self._createMoreInfoBlock(items)
         return items
 
@@ -331,8 +342,8 @@ class TankmanTooltipDataBlock(BlocksTooltipData):
     def _getVehicleName(self, vehicle=None, nativeVehicle=None):
         return text_styles.main(nativeVehicle.shortUserName) if not vehicle or nativeVehicle.shortUserName == vehicle.shortUserName else text_styles.critical(nativeVehicle.shortUserName)
 
-    def _getSkillList(self):
-        return TankmanSkillListField(self, 'skills')
+    def _getSkillList(self, vehicle):
+        return EventTankmanSkillListField(self, 'skills') if vehicle and vehicle.isOnlyForEventBattles else TankmanSkillListField(self, 'skills')
 
     def _createLabel(self, innerBlock):
         innerBlock.append(formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'grayTitle', {'message': backport.text(R.strings.tooltips.hangar.crew.assignedTo())})))
@@ -364,7 +375,7 @@ class BattleRoyaleTankmanTooltipDataBlock(TankmanTooltipDataBlock):
     def _getTankmanDescription(self, _):
         return backport.text(R.strings.battle_royale.commanderInfo.commonRank())
 
-    def _getSkillList(self):
+    def _getSkillList(self, _):
         return BattleRoyaleTankmanSkillListField(self, 'skills')
 
     def _createVehicleBlock(self, innerBlock, vehicle):

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/feedback_adaptor.py
 import weakref
+from collections import namedtuple
 import BigWorld
 import Event
 import TriggersManager
@@ -10,6 +11,7 @@ from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _FET, BATTLE_CTRL_ID
 from gui.battle_control.controllers.interfaces import IBattleController
 FEEDBACK_TO_TRIGGER_ID = {_FET.VEHICLE_VISIBILITY_CHANGED: TriggersManager.TRIGGER_TYPE.PLAYER_DETECT_ENEMY}
+EntityInFocusData = namedtuple('EntityInFocusData', ['isInFocus', 'entityTypeInFocus'])
 _CELL_BLINKING_DURATION = 3.0
 
 class _DamagedDevicesExtraFetcher(object):
@@ -217,8 +219,8 @@ class BattleFeedbackAdaptor(IBattleController):
     def invalidateActiveGunChanges(self, vehicleID, data):
         self.onVehicleFeedbackReceived(_FET.VEHICLE_ACTIVE_GUN_CHANGED, vehicleID, data)
 
-    def markObjectiveOnMinimap(self, senderID, hqIdx):
-        self.onMinimapFeedbackReceived(_FET.MINIMAP_MARK_OBJECTIVE, senderID, (hqIdx, _CELL_BLINKING_DURATION))
+    def markObjectiveOnMinimap(self, senderID, hqIdx, cmdName):
+        self.onMinimapFeedbackReceived(_FET.MINIMAP_MARK_OBJECTIVE, senderID, (hqIdx, _CELL_BLINKING_DURATION, cmdName))
 
     def onActionAddedToMarker(self, senderID, commandID, markerType, markerID):
         self.onActionAddedToMarkerReceived(senderID, commandID, markerType, markerID)
@@ -253,8 +255,9 @@ class BattleFeedbackAdaptor(IBattleController):
     def getVehicleAttrs(self):
         return dict(self.__attrs)
 
-    def setTargetInFocus(self, vehicleID, isInFocus):
-        self.onVehicleFeedbackReceived(_FET.VEHICLE_IN_FOCUS, vehicleID, isInFocus)
+    def setTargetInFocus(self, vehicleID, isInFocus, entityTypeInFocus):
+        entityInFocusData = EntityInFocusData(isInFocus, entityTypeInFocus)
+        self.onVehicleFeedbackReceived(_FET.ENTITY_IN_FOCUS, vehicleID, entityInFocusData)
 
     def setVehicleHasAmmo(self, vehicleID, hasAmmo):
         self.onVehicleFeedbackReceived(_FET.VEHICLE_HAS_AMMO, vehicleID, hasAmmo)

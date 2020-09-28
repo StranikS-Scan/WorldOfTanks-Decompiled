@@ -60,7 +60,6 @@ class StorageCategoryOffersView(StorageCategoryOffersViewMeta):
         else:
             self.as_showDummyScreenS(False)
             self._offersNovelty.setAsSeen()
-            self.as_setTotalClicksTextS(self._getTotalClicksText())
             currentOffersVo = self._getVoList()
             self._currentOffersCount = len(currentOffersVo)
             self._dataProvider.buildList(currentOffersVo)
@@ -75,7 +74,7 @@ class StorageCategoryOffersView(StorageCategoryOffersViewMeta):
         return [ self._getVO(offer) for offer in sortedOffers ]
 
     def _getVO(self, offer):
-        gifts = backport.text(R.strings.storage.offers.giftAmount(), clicks=text_styles.neutral(offer.clicksCount), gifts=text_styles.neutral(offer.availableGiftsCount))
+        gifts = backport.text(R.strings.storage.offers.giftAmount(), gifts=text_styles.neutral(offer.availableGiftsCount))
         date = backport.getShortDateFormat(offer.expiration)
         time = backport.getShortTimeFormat(offer.expiration)
         expiration = backport.text(R.strings.storage.offers.expiration(), date=text_styles.neutral(date), time=text_styles.neutral(time))

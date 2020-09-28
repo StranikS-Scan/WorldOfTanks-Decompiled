@@ -26,7 +26,7 @@ class PreBattleTimerBase(PrebattleTimerBaseMeta, IAbstractPeriodView, IArenaVehi
         self._battleTypeStr = None
         self.__timeLeft = None
         self.__callbackID = None
-        self.__arenaPeriod = None
+        self._arenaPeriod = None
         super(PreBattleTimerBase, self).__init__()
         return
 
@@ -43,9 +43,9 @@ class PreBattleTimerBase(PrebattleTimerBaseMeta, IAbstractPeriodView, IArenaVehi
             self.as_setWinConditionTextS(battleCtx.getArenaWinString())
 
     def setPeriod(self, period):
-        if self.__arenaPeriod is None and period == ARENA_PERIOD.BATTLE:
+        if self._arenaPeriod is None and period == ARENA_PERIOD.BATTLE:
             self.as_hideAllS(False)
-        self.__arenaPeriod = period
+        self._arenaPeriod = period
         return
 
     def setCountdown(self, state, timeLeft):
@@ -60,9 +60,8 @@ class PreBattleTimerBase(PrebattleTimerBaseMeta, IAbstractPeriodView, IArenaVehi
             self.__setTimeShitCallback()
 
     def hideCountdown(self, state, speed):
-        self.as_setMessageS(backport.text(_STATE_TO_MESSAGE[state]))
+        self._hideCountdownSetMessage(state, speed)
         self.__clearTimeShiftCallback()
-        self.as_hideAllS(speed != 0)
 
     def _getMessage(self):
         if self._state == COUNTDOWN_STATE.WAIT:
@@ -79,6 +78,10 @@ class PreBattleTimerBase(PrebattleTimerBaseMeta, IAbstractPeriodView, IArenaVehi
         self.sessionProvider.removeArenaCtrl(self)
         self.__clearTimeShiftCallback()
         super(PreBattleTimerBase, self)._dispose()
+
+    def _hideCountdownSetMessage(self, state, speed):
+        self.as_setMessageS(backport.text(_STATE_TO_MESSAGE[state]))
+        self.as_hideAllS(speed != 0)
 
     def __setTimeShitCallback(self):
         self.__callbackID = BigWorld.callback(_TIMER_ANIMATION_SHIFT, self.__updateTimer)

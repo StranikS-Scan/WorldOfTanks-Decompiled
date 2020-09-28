@@ -341,6 +341,9 @@ class EventDispatcher(object):
                 res = True
         return res
 
+    def loadEventBattleQueue(self):
+        self.__fireLoadEvent(VIEW_ALIAS.WT_EVENT_QUEUE)
+
     def _showUnitProgress(self, prbType, show):
         clientID = channel_num_gen.getClientID4Prebattle(prbType)
         if not clientID:

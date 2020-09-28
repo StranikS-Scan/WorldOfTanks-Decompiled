@@ -14,7 +14,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.sound_constants import RESEARCH_PREVIEW_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveStateTooltip
-from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.vehicle_preview_crew_tab import getUniqueMembers
+from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.crew_tab import getUniqueMembers
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import OFFER_CHANGED_EVENT
 from gui.Scaleform.daapi.view.meta.VehiclePreviewMeta import VehiclePreviewMeta
 from gui.Scaleform.framework import g_entitiesFactories
@@ -166,6 +166,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         if not self._heroInteractive:
             self.__heroTanksControl.setInteractive(False)
         self.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.handleSelectedEntityUpdated)
+        g_eventBus.addListener(events.HangarVehicleEvent.WT_EVENT_VEHICLED_CLICKED, self.__handleVehiclePreviewCloseEvent, EVENT_BUS_SCOPE.LOBBY)
         specialData = getHeroTankPreviewParams() if self.__isHeroTank else None
         if specialData is not None and specialData.enterEvent:
             SoundGroups.g_instance.playSound2D(specialData.enterEvent)
@@ -199,6 +200,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         if self.__vehAppearanceChanged:
             g_currentPreviewVehicle.resetAppearance()
         g_eventBus.removeListener(OFFER_CHANGED_EVENT, self.__onOfferChanged)
+        g_eventBus.removeListener(events.HangarVehicleEvent.WT_EVENT_VEHICLED_CLICKED, self.__handleVehiclePreviewCloseEvent, EVENT_BUS_SCOPE.LOBBY)
         return
 
     def closeView(self):
@@ -217,11 +219,12 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         ctx = event.ctx
         entity = BigWorld.entities.get(ctx['entityId'], None)
         if ctx['state'] == CameraMovementStates.MOVING_TO_OBJECT:
-            if isinstance(entity, HeroTank):
-                descriptor = entity.typeDescriptor
-                if descriptor:
-                    self._needToResetAppearance = False
-                    event_dispatcher.showHeroTankPreview(descriptor.type.compactDescr, previewAlias=VIEW_ALIAS.VEHICLE_PREVIEW, previousBackAlias=self._backAlias)
+            if isinstance(entity, HeroTank) and hasattr(entity, 'isEvent'):
+                if not entity.isEvent:
+                    descriptor = entity.typeDescriptor
+                    if descriptor:
+                        self._needToResetAppearance = False
+                        event_dispatcher.showHeroTankPreview(descriptor.type.compactDescr, previewAlias=VIEW_ALIAS.VEHICLE_PREVIEW, previousBackAlias=self._backAlias)
             elif entity.id == self.hangarSpace.space.vehicleEntityId:
                 self._processBackClick({'entity': entity})
         return
@@ -366,9 +369,15 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.__handleWindowClose()
 
     @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_VEHICLE_PREVIEW, EVENT_BUS_SCOPE.LOBBY)
-    def __handleWindowClose(self):
+    def __handleWindowClose(self, event=None):
         self.onBackClick()
         self.destroy()
+
+    def __handleVehiclePreviewCloseEvent(self, event):
+        isEvent = event.ctx['data']['isEvent']
+        if isEvent:
+            self.onBackClick()
+            self.destroy()
 
     def _processBackClick(self, ctx=None):
         if self._previewBackCb:

@@ -57,13 +57,14 @@ class _CompareBasketListener(object):
         self.__clearCartPopover()
         return
 
-    def __onChanged(self, changedData):
+    def __onChanged(self, changedData, settings=None):
         if changedData.addedCDs:
             cMgr = self.__getContainerManager()
             if not cMgr.isViewAvailable(ViewTypes.LOBBY_SUB, {POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.VEHICLE_COMPARE}):
                 vehCmpData = self.comparisonBasket.getVehicleAt(changedData.addedIDXs[-1])
                 if not vehCmpData.isFromCache():
-                    if self.comparisonBasket.getVehiclesCount() == 1:
+                    hidePopover = settings.quiet if settings is not None else False
+                    if self.comparisonBasket.getVehiclesCount() == 1 and not hidePopover:
                         self.__view.as_openVehicleCompareCartPopoverS(True)
                     else:
                         vehicle = self.itemsCache.items.getItemByCD(vehCmpData.getVehicleCD())
@@ -73,6 +74,7 @@ class _CompareBasketListener(object):
                          'vehType': vehTypeIcon})
         if changedData.addedCDs or changedData.removedCDs:
             self.__updateBtnVisibility()
+        return
 
     def __updateBtnVisibility(self):
         isButtonVisible = self.__currentCartPopover is not None or self.comparisonBasket.getVehiclesCount() > 0

@@ -1,16 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/components/common.py
-from constants import ARENA_GUI_TYPE, FINISH_REASON
+from constants import ARENA_GUI_TYPE, FINISH_REASON, ARENA_BONUS_TYPE
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.battle_results.components import base
 from gui.battle_results.components import style
-from gui.battle_results.settings import PLAYER_TEAM_RESULT as _TEAM_RESULT, UI_VISIBILITY
+from gui.battle_results.br_constants import PlayerTeamResult as _TEAM_RESULT, UIVisibility
 from gui.shared.utils import toUpper
 from helpers import i18n, dependency
 from helpers.time_utils import ONE_MINUTE
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.battle_control.battle_constants import WinStatus
+from gui.Scaleform.locale.MENU import MENU
 _ARENA_TYPE_FORMAT = '#arenas:type/{0}/name'
 _ARENA_TYPE_EXT_FORMAT = '#menu:loading/battleTypes/{0}'
 _ARENA_FULL_NAME_FORMAT = '#battle_results:common/arena/fullName'
@@ -52,10 +53,13 @@ class RegularArenaFullNameItem(base.StatsItem):
     __slots__ = ()
 
     def _convert(self, record, reusable):
+        arenaBonusType = reusable.common.arenaBonusType
         arenaGuiType = reusable.common.arenaGuiType
         arenaType = reusable.common.arenaType
         if arenaGuiType in (ARENA_GUI_TYPE.RANDOM, ARENA_GUI_TYPE.EPIC_RANDOM):
             i18nKey = _ARENA_TYPE_FORMAT.format(arenaType.getGamePlayName())
+        elif arenaBonusType == ARENA_BONUS_TYPE.GLOBAL_MAP:
+            i18nKey = MENU.LOADING_BATTLETYPES_GLOBALMAP
         else:
             i18nKey = _ARENA_TYPE_EXT_FORMAT.format(arenaGuiType)
         return makeArenaFullName(arenaType.getName(), i18nKey)
@@ -83,10 +87,11 @@ class ObjectivesReachedVO(base.StatsItem):
     __slots__ = ()
 
     def _convert(self, record, reusable):
-        if record and 'extCommon' in record:
+        if record:
             yes = backport.text(R.strings.battle_results.details.time.val_yes())
             no = backport.text(R.strings.battle_results.details.time.val_no())
-            reached = yes if record['extCommon']['destructibleEntity']['numStarted'] > 0 else no
+            numStarted = record.get('extCommon', {}).get('destructibleEntity', {}).get('numStarted', 0)
+            reached = yes if numStarted > 0 else no
         else:
             reached = ''
         return style.makeTimeStatsVO(self._field, reached)
@@ -96,8 +101,8 @@ class ObjectivesDestroyedVO(base.StatsItem):
     __slots__ = ()
 
     def _convert(self, record, reusable):
-        if record and 'extCommon' in record:
-            destroyed = str(record['extCommon']['destructibleEntity']['numDestroyed'])
+        if record:
+            destroyed = str(record.get('extCommon', {}).get('destructibleEntity', {}).get('commonNumDestroyed', 0))
         else:
             destroyed = '0'
         return style.makeTimeStatsVO(self._field, destroyed)
@@ -107,8 +112,8 @@ class BasesCapturedVO(base.StatsItem):
     __slots__ = ()
 
     def _convert(self, record, reusable):
-        if record and 'extCommon' in record:
-            captured = str(record['extCommon']['sector']['numCaptured'])
+        if record:
+            captured = str(record.get('extCommon', {}).get('destructibleEntity', {}).get('commonNumCaptured', 0))
         else:
             captured = '0'
         return style.makeTimeStatsVO(self._field, captured)
@@ -262,7 +267,7 @@ class TeamsUiVisibility(base.StatsItem):
     def _convert(self, value, reusable):
         ui_visibility = 0
         if reusable.isSquadSupported:
-            ui_visibility |= UI_VISIBILITY.SHOW_SQUAD
+            ui_visibility |= UIVisibility.SHOW_SQUAD
         return ui_visibility
 
 
@@ -276,5 +281,5 @@ class SortieTeamsUiVisibility(TeamsUiVisibility):
 
     def _convert(self, value, reusable):
         ui_visibility = super(SortieTeamsUiVisibility, self)._convert(value, reusable)
-        ui_visibility |= UI_VISIBILITY.SHOW_RESOURCES
+        ui_visibility |= UIVisibility.SHOW_RESOURCES
         return ui_visibility

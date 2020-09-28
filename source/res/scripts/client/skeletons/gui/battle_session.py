@@ -141,6 +141,10 @@ class IDynamicControllersLocator(object):
     def vehicleCount(self):
         raise NotImplementedError
 
+    @property
+    def arenaInfo(self):
+        raise NotImplementedError
+
 
 class ISquadInvitationsHandler(object):
     __slots__ = ()
@@ -537,6 +541,9 @@ class IBattleContext(object):
         raise NotImplementedError
 
     def extractLastArenaWinStatus(self):
+        raise NotImplementedError
+
+    def getLastArenaWinStatus(self):
         raise NotImplementedError
 
     def areQuestsEnabledForArena(self):

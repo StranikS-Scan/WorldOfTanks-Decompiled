@@ -78,15 +78,18 @@ def _getStatus(reason):
 
 
 def _formatValuesString(valuesStr):
-    valuesBuilder = str_builder()
-    values = valuesStr.split('/')
-    length = len(values)
-    for idx, value in enumerate(values):
-        valuesBuilder.addStyledText(text_styles.stats, value)
-        if idx < length - 1:
-            valuesBuilder.addStyledText(text_styles.standard, '/')
+    if valuesStr is None:
+        return ''
+    else:
+        valuesBuilder = str_builder()
+        values = valuesStr.split('/')
+        length = len(values)
+        for idx, value in enumerate(values):
+            valuesBuilder.addStyledText(text_styles.stats, value)
+            if idx < length - 1:
+                valuesBuilder.addStyledText(text_styles.standard, '/')
 
-    return valuesBuilder.render()
+        return valuesBuilder.render()
 
 
 def _convertTarget(target, reason):

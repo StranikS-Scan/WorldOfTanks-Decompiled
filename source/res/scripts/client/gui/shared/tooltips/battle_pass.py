@@ -32,9 +32,9 @@ class DeviceGiftTokenTooltipData(BlocksTooltipData):
     @staticmethod
     def __packImageBlock(tokenID):
         if tokenID == BATTLE_PASS_TOKEN_TROPHY_GIFT_OFFER:
-            image = R.images.gui.maps.icons.modules.trophyOverlay()
+            image = R.images.gui.maps.icons.battlePass2020.tooltips.trophyDevices()
         else:
-            image = R.images.gui.maps.icons.modules.newDeviceOverlay()
+            image = R.images.gui.maps.icons.battlePass2020.tooltips.standardDevices()
         return formatters.packImageBlockData(img=backport.image(image), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=-28))
 
     @staticmethod

@@ -515,6 +515,16 @@ def _migrateTo59(core, data, initialized):
     dtData[GAME.SHOW_VICTIMS_DOGTAG] = True
 
 
+def _migrateTo60(core, data, initialized):
+    gameData = data['battleComm']
+    isIBCEnabled = bool(core.getSetting(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION))
+    if not isIBCEnabled:
+        gameData[BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION] = True
+        gameData[BattleCommStorageKeys.SHOW_LOCATION_MARKERS] = False
+    else:
+        gameData[BattleCommStorageKeys.SHOW_LOCATION_MARKERS] = True
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -745,6 +755,10 @@ _versions = ((1,
   False),
  (59,
   _migrateTo59,
+  False,
+  False),
+ (60,
+  _migrateTo60,
   False,
   False))
 

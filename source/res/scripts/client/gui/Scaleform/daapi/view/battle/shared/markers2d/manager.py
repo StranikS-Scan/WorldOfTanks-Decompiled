@@ -9,6 +9,7 @@ from chat_commands_consts import INVALID_MARKER_SUBTYPE, MarkerType, INVALID_MAR
 from gui import DEPTH_OF_VehicleMarker, GUI_SETTINGS
 from gui.Scaleform.daapi.view.battle.shared.markers2d import plugins, vehicle_plugins
 from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
+from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import MarkerPlugin
 from gui.Scaleform.daapi.view.external_components import ExternalFlashComponent
 from gui.Scaleform.daapi.view.external_components import ExternalFlashSettings
 from gui.Scaleform.daapi.view.meta.VehicleMarkersManagerMeta import VehicleMarkersManagerMeta
@@ -26,6 +27,8 @@ _STICKY_MARKER_RADIUS_SCALE = 0.7
 
 class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.IMarkersManager):
     settingsCore = dependency.descriptor(ISettingsCore)
+    setablePluginsDict = {'area': plugins.AreaStaticMarkerPlugin,
+     'teamAndControlPoints': plugins.TeamsOrControlsPointsPlugin}
 
     def __init__(self):
         super(MarkersManager, self).__init__(ExternalFlashSettings(BATTLE_VIEW_ALIASES.MARKERS_2D, settings.MARKERS_MANAGER_SWF, 'root.vehicleMarkersCanvas', ROOT_SWF_CONSTANTS.BATTLE_VEHICLE_MARKERS_REGISTER_CALLBACK))
@@ -35,6 +38,7 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         self.__isIBCEnabled = False
         self.__isStickyEnabled = False
         self.__showBaseMarkers = False
+        self.__showLocationMarkers = False
         return
 
     @property
@@ -85,8 +89,8 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
     def setMarkerRenderInfo(self, markerID, minScale, bounds, innerBounds, cullDistance, markerBoundsScale):
         self.__canvas.markerSetRenderInfo(markerID, minScale, bounds, innerBounds, cullDistance, markerBoundsScale)
 
-    def setMarkerLocationOffset(self, markerID, minYOffset, maxYOffset, distanceForMinYOffset):
-        self.__canvas.markerSetLocationOffset(markerID, minYOffset, maxYOffset, distanceForMinYOffset)
+    def setMarkerLocationOffset(self, markerID, minYOffset, maxYOffset, distanceForMinYOffset, maxBoost, boostStart):
+        self.__canvas.markerSetLocationOffset(markerID, minYOffset, maxYOffset, distanceForMinYOffset, maxBoost, boostStart)
 
     def setMarkerBoundCheckEnabled(self, markerID, enabled):
         self.__canvas.markerSetBoundCheckEnabled(markerID, enabled)
@@ -172,6 +176,7 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         self.__isIBCEnabled = bool(self.settingsCore.getSetting(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION))
         self.__isStickyEnabled = bool(self.settingsCore.getSetting(BattleCommStorageKeys.SHOW_STICKY_MARKERS))
         self.__showBaseMarkers = bool(self.settingsCore.getSetting(BattleCommStorageKeys.SHOW_BASE_MARKERS))
+        self.__showLocationMarkers = bool(self.settingsCore.getSetting(BattleCommStorageKeys.SHOW_LOCATION_MARKERS))
         self.settingsCore.onSettingsChanged += self.__onSettingsChange
         self.startPlugins()
 
@@ -187,10 +192,11 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         setup = {'eventBus': plugins.EventBusPlugin,
          'equipments': plugins.EquipmentsMarkerPlugin,
          'vehiclesTargets': plugins.VehicleMarkerTargetPlugin,
-         'controlMode': plugins.ControlModePlugin,
-         'area': plugins.AreaStaticMarkerPlugin}
+         'controlMode': plugins.ControlModePlugin}
         if self.__showBaseMarkers:
             setup['teamAndControlPoints'] = plugins.TeamsOrControlsPointsPlugin
+        if self.__showLocationMarkers:
+            setup['area'] = plugins.AreaStaticMarkerPlugin
         if BattleReplay.g_replayCtrl.isPlaying:
             setup['vehiclesTargets'] = plugins.VehicleMarkerTargetPluginReplayPlaying
         if BattleReplay.g_replayCtrl.isRecording:
@@ -239,7 +245,10 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
     def __onSettingsChange(self, diff):
         addSettings = {}
         for item in diff:
-            if item in (BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION, BattleCommStorageKeys.SHOW_STICKY_MARKERS, BattleCommStorageKeys.SHOW_BASE_MARKERS):
+            if item in (BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION,
+             BattleCommStorageKeys.SHOW_STICKY_MARKERS,
+             BattleCommStorageKeys.SHOW_BASE_MARKERS,
+             BattleCommStorageKeys.SHOW_LOCATION_MARKERS):
                 addSettings[item] = diff[item]
 
         if not addSettings:
@@ -247,6 +256,7 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         newIBCEnabled = bool(addSettings.get(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION, self.__isIBCEnabled))
         newShowBaseMarkers = bool(addSettings.get(BattleCommStorageKeys.SHOW_BASE_MARKERS, self.__showBaseMarkers))
         newIsSticky = bool(addSettings.get(BattleCommStorageKeys.SHOW_STICKY_MARKERS, self.__isStickyEnabled))
+        new3DMarkers = bool(addSettings.get(BattleCommStorageKeys.SHOW_LOCATION_MARKERS, self.__showLocationMarkers))
         if newIBCEnabled != self.__isIBCEnabled:
             self.__isIBCEnabled = newIBCEnabled
             self.__canvas.enableMarkerHovering = self.__isMarkerHoveringEnabled
@@ -255,17 +265,20 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
                 self.__canvas.markerSetSticky(markerId, False)
 
         if newShowBaseMarkers != self.__showBaseMarkers:
-            self.__setTeamOrControlPointsPlugin(addPlugin=newShowBaseMarkers)
+            self.__setPlugin(pluginName='teamAndControlPoints', startPlugin=newShowBaseMarkers)
             self.__showBaseMarkers = newShowBaseMarkers
+        if new3DMarkers != self.__showLocationMarkers:
+            self.__setPlugin(pluginName='area', startPlugin=new3DMarkers)
+            self.__showLocationMarkers = new3DMarkers
         self.__isStickyEnabled = newIsSticky
 
-    def __setTeamOrControlPointsPlugin(self, addPlugin):
-        tcPlugin = self.__plugins.getPlugin('teamAndControlPoints')
-        if not tcPlugin:
-            self.__plugins.addPlugins({'teamAndControlPoints': plugins.TeamsOrControlsPointsPlugin})
-            tcPlugin = self.__plugins.getPlugin('teamAndControlPoints')
-            tcPlugin.init()
-        if addPlugin:
-            tcPlugin.start()
-        else:
-            tcPlugin.stop()
+    def __setPlugin(self, pluginName, startPlugin):
+        plugin = self.__plugins.getPlugin(pluginName)
+        if not plugin and startPlugin:
+            self.__plugins.addPlugins({pluginName: self.setablePluginsDict[pluginName]})
+            plugin = self.__plugins.getPlugin(pluginName)
+            plugin.init()
+        if startPlugin:
+            plugin.start()
+        elif plugin:
+            plugin.stop()

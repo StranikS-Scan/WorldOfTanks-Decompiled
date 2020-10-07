@@ -100,9 +100,12 @@ def showRankedBattleResultsWindow(rankedResultsVO, rankInfo, questsProgress, par
      'questsProgress': questsProgress}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showRankedAwardWindow(awardsSequence, rankedInfo):
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(RANKEDBATTLES_ALIASES.RANKED_BATTLES_AWARD), ctx={'awardsSequence': awardsSequence,
-     'rankedInfo': rankedInfo}), EVENT_BUS_SCOPE.LOBBY)
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showRankedAwardWindow(awardsSequence, rankedInfo, notificationMgr=None):
+    alias = RANKEDBATTLES_ALIASES.RANKED_BATTLES_AWARD
+    window = SFWindow(SFViewLoadParams(alias, getUniqueViewName(alias)), ctx={'awardsSequence': awardsSequence,
+     'rankedInfo': rankedInfo}, scope=EVENT_BUS_SCOPE.LOBBY)
+    notificationMgr.append(window)
 
 
 def showRankedPrimeTimeWindow():

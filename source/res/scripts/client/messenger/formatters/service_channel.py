@@ -81,10 +81,12 @@ _RENT_TYPE_NAMES = {RentDurationKeys.DAYS: 'rentDays',
  RentDurationKeys.WINS: 'rentWins'}
 _PREMIUM_MESSAGES = {PREMIUM_TYPE.BASIC: {str(SYS_MESSAGE_TYPE.premiumBought): R.strings.messenger.serviceChannelMessages.premiumBought(),
                       str(SYS_MESSAGE_TYPE.premiumExtended): R.strings.messenger.serviceChannelMessages.premiumExtended(),
-                      str(SYS_MESSAGE_TYPE.premiumExpired): R.strings.messenger.serviceChannelMessages.premiumExpired()},
+                      str(SYS_MESSAGE_TYPE.premiumExpired): R.strings.messenger.serviceChannelMessages.premiumExpired(),
+                      str(SYS_MESSAGE_TYPE.premiumChanged): R.strings.messenger.serviceChannelMessages.premiumChanged()},
  PREMIUM_TYPE.PLUS: {str(SYS_MESSAGE_TYPE.premiumBought): R.strings.messenger.serviceChannelMessages.premiumPlusBought(),
                      str(SYS_MESSAGE_TYPE.premiumExtended): R.strings.messenger.serviceChannelMessages.premiumPlusExtended(),
-                     str(SYS_MESSAGE_TYPE.premiumExpired): R.strings.messenger.serviceChannelMessages.premiumPlusExpired()}}
+                     str(SYS_MESSAGE_TYPE.premiumExpired): R.strings.messenger.serviceChannelMessages.premiumPlusExpired(),
+                     str(SYS_MESSAGE_TYPE.premiumChanged): R.strings.messenger.serviceChannelMessages.premiumPlusChanged()}}
 _PREMIUM_TEMPLATES = {PREMIUM_ENTITLEMENTS.BASIC: 'battleQuestsPremium',
  PREMIUM_ENTITLEMENTS.PLUS: 'battleQuestsPremiumPlus'}
 _PROGRESSION_INVOICE_POSTFIX = ':progression'
@@ -1618,6 +1620,7 @@ class AccountTypeChangedFormatter(ServiceChannelFormatter):
 
 class _PremiumActionFormatter(ServiceChannelFormatter):
     _templateKey = None
+    _msgTemplateKey = None
 
     def _getMessage(self, isPremium, premiumType, expiryTime):
         return None
@@ -1632,12 +1635,13 @@ class _PremiumActionFormatter(ServiceChannelFormatter):
 
 class PremiumBoughtFormatter(_PremiumActionFormatter):
     _templateKey = str(SYS_MESSAGE_TYPE.premiumBought)
+    _msgTemplateKey = str(SYS_MESSAGE_TYPE.premiumChanged)
 
     def _getMessage(self, isPremium, premiumType, expiryTime):
         result = None
         if isPremium is True and expiryTime > 0:
             formattedText = backport.text(_PREMIUM_MESSAGES[premiumType][self._templateKey], expiryTime=text_styles.titleFont(TimeFormatter.getLongDatetimeFormat(expiryTime)))
-            result = g_settings.msgTemplates.format(self._templateKey, ctx={'text': formattedText})
+            result = g_settings.msgTemplates.format(self._msgTemplateKey, ctx={'text': formattedText})
         return result
 
 
@@ -1645,13 +1649,18 @@ class PremiumExtendedFormatter(PremiumBoughtFormatter):
     _templateKey = str(SYS_MESSAGE_TYPE.premiumExtended)
 
 
+class PremiumChangedFormatter(PremiumBoughtFormatter):
+    _templateKey = str(SYS_MESSAGE_TYPE.premiumChanged)
+
+
 class PremiumExpiredFormatter(_PremiumActionFormatter):
     _templateKey = str(SYS_MESSAGE_TYPE.premiumExpired)
+    _msgTemplateKey = str(SYS_MESSAGE_TYPE.premiumExpired)
 
     def _getMessage(self, isPremium, premiumType, expiryTime):
         result = None
         if isPremium is False:
-            result = g_settings.msgTemplates.format(self._templateKey, ctx={'text': backport.text(_PREMIUM_MESSAGES[premiumType][self._templateKey])})
+            result = g_settings.msgTemplates.format(self._msgTemplateKey, ctx={'text': backport.text(_PREMIUM_MESSAGES[premiumType][self._templateKey])})
         return result
 
 

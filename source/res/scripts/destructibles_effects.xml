@@ -2116,6 +2116,42 @@
         </effects>
       </variant1>
     </tree_Linden_High_Bald_Snow_16m_touchdown>
+    <dryTree_01_fall>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/Broadleaves/dryTree_01_fall.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_creak	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </dryTree_01_fall>
+    <dryTree_01_touchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/Broadleaves/dryTree_01_touchdown.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_down	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </dryTree_01_touchdown>
     <tree_Linden_Town_Dry_Snow_16m_fall>
       <variant1>
         <stages>

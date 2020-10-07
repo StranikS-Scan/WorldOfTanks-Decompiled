@@ -400,6 +400,8 @@ class SectorBasesPlugin(EpicMissionsPlugin, ChatCommunicationComponent):
                 LOG_ERROR('Expected PlayerDataComponent not present!')
             if isActive and baseLane == playerData.physicalLane:
                 self.__basesToBeActive.append((baseId, isActive))
+                if self._isInFreeSpectatorMode:
+                    self._setMarkerActive(markerID, isActive)
             else:
                 self.__checkPlayerInsideCircle(baseId)
                 self._setMarkerActive(markerID, isActive)

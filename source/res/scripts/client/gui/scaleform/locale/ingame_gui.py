@@ -658,10 +658,13 @@ class INGAME_GUI(object):
     REWARDWINDOW_WGCQ_CLAN_REWARD_SUBHEADERTEXT = '#ingame_gui:rewardWindow/wgcq_clan_reward/subHeaderText'
     REWARDWINDOW_WGCQ_CLAN_REWARD_DESCTEXT = '#ingame_gui:rewardWindow/wgcq_clan_reward/descText'
     REWARDWINDOW_WGCQ_CLAN_REWARD_BTNLABEL = '#ingame_gui:rewardWindow/wgcq_clan_reward/btnLabel'
+    REWARDWINDOW_WGCQ_CLAN_REWARD_SECONDBTNLABEL = '#ingame_gui:rewardWindow/wgcq_clan_reward/secondBtnLabel'
     REWARDWINDOW_WGCQ_PLAYER_REWARD_WINHEADERTEXT = '#ingame_gui:rewardWindow/wgcq_player_reward/winHeaderText'
     REWARDWINDOW_WGCQ_PLAYER_REWARD_HEADERTEXT = '#ingame_gui:rewardWindow/wgcq_player_reward/headerText'
     REWARDWINDOW_WGCQ_PLAYER_REWARD_SUBHEADERTEXT = '#ingame_gui:rewardWindow/wgcq_player_reward/subHeaderText'
+    REWARDWINDOW_WGCQ_PLAYER_REWARD_DESCTEXT = '#ingame_gui:rewardWindow/wgcq_player_reward/descText'
     REWARDWINDOW_WGCQ_PLAYER_REWARD_BTNLABEL = '#ingame_gui:rewardWindow/wgcq_player_reward/btnLabel'
+    REWARDWINDOW_WGCQ_PLAYER_REWARD_SECONDBTNLABEL = '#ingame_gui:rewardWindow/wgcq_player_reward/secondBtnLabel'
     REWARDWINDOW_TWITCH0_HEADERTEXT = '#ingame_gui:rewardWindow/twitch0/headerText'
     REWARDWINDOW_TWITCH0_SUBHEADERTEXT = '#ingame_gui:rewardWindow/twitch0/subHeaderText'
     REWARDWINDOW_TWITCH0_DESCTEXT = '#ingame_gui:rewardWindow/twitch0/descText'
@@ -1011,6 +1014,7 @@ class INGAME_GUI(object):
      REWARDWINDOW_COMMANDER_PATRICK_BTNLABEL)
     REWARDWINDOW_ALL_DESCTEXT_ENUM = (REWARDWINDOW_BASE_DESCTEXT,
      REWARDWINDOW_WGCQ_CLAN_REWARD_DESCTEXT,
+     REWARDWINDOW_WGCQ_PLAYER_REWARD_DESCTEXT,
      REWARDWINDOW_TWITCH0_DESCTEXT,
      REWARDWINDOW_TWITCH1_DESCTEXT,
      REWARDWINDOW_TWITCH2_DESCTEXT,

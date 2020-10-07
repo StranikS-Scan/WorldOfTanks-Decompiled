@@ -3,7 +3,6 @@
 import typing
 from frameworks.state_machine import SingleStateObserver, StateEvent, StateObserversContainer, StringEvent
 from gui.battle_pass.battle_pass_helpers import showVideo, isBattlePassBought
-from gui.battle_pass.state_machine import lockOverlays
 from gui.battle_pass.state_machine.states import FinalRewardStateID, FinalRewardEventID
 from gui.impl.gen import R
 from gui.shared.event_dispatcher import showBattleVotingResultWindow, showBattlePassAwardsWindow
@@ -11,18 +10,6 @@ from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 if typing.TYPE_CHECKING:
     from gui.battle_pass.state_machine.delegator import FinalRewardLogic
-
-class LobbyWaitingStateObserver(SingleStateObserver):
-
-    def onEnterState(self, event=None):
-        lockOverlays(False)
-
-
-class LobbyFinalStateObserver(SingleStateObserver):
-
-    def onEnterState(self, event=None):
-        lockOverlays(False)
-
 
 class VideoBeforeStateObserver(SingleStateObserver):
 
@@ -55,7 +42,6 @@ class VideoVotedStateObserver(SingleStateObserver):
         voteOption = 0
         if event is not None:
             voteOption = event.getArgument('voteOption')
-        lockOverlays(True)
         videoSource = self.__getVideoId(voteOption, isBattlePassBought())
         showVideo(videoSource, isAutoClose=True)
         return
@@ -130,4 +116,4 @@ class FinalStateMachineObserver(StateObserversContainer):
     __slots__ = ()
 
     def __init__(self):
-        super(FinalStateMachineObserver, self).__init__(LobbyWaitingStateObserver(FinalRewardStateID.LOBBY_WAIT), LobbyFinalStateObserver(FinalRewardStateID.LOBBY_FINAL), VideoBeforeStateObserver(FinalRewardStateID.VIDEO_BEFORE), VotingStateObserver(FinalRewardStateID.VOTING_SCREEN), VideoVotedStateObserver(FinalRewardStateID.VIDEO_VOTED), PartRewardScreenStateObserver(FinalRewardStateID.REWARD_PART), FinalRewardScreenStateObserver(FinalRewardStateID.REWARD_FINAL))
+        super(FinalStateMachineObserver, self).__init__(SingleStateObserver(FinalRewardStateID.LOBBY_WAIT), SingleStateObserver(FinalRewardStateID.LOBBY_FINAL), VideoBeforeStateObserver(FinalRewardStateID.VIDEO_BEFORE), VotingStateObserver(FinalRewardStateID.VOTING_SCREEN), VideoVotedStateObserver(FinalRewardStateID.VIDEO_VOTED), PartRewardScreenStateObserver(FinalRewardStateID.REWARD_PART), FinalRewardScreenStateObserver(FinalRewardStateID.REWARD_FINAL))

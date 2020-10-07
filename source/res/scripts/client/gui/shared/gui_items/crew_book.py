@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/crew_book.py
 import nations
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
 from gui.impl.gen import R
 from items import tankmen, parseIntCompactDescr
@@ -90,6 +91,9 @@ class CrewBook(FittingItem):
         if not self.hasNoNation():
             iconName += '_' + self.getNation()
         return iconName
+
+    def getShopIcon(self, size='large'):
+        return RES_ICONS.getCrewBookIcon(size, self.getBonusIconName())
 
     def getGUIEmblemID(self):
         return '{}_{}'.format(self.itemTypeName, self.getBookType())

@@ -1121,8 +1121,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             timeLeft = -1
         self.guiSessionProvider.shared.ammo.setGunReloadTime(timeLeft, baseTime)
 
-    def updateVehicleClipReloadTime(self, vehicleID, timeLeft, baseTime, stunned):
-        self.guiSessionProvider.shared.ammo.setGunAutoReloadTime(timeLeft, baseTime, stunned)
+    def updateVehicleClipReloadTime(self, vehicleID, timeLeft, baseTime, stunned, isBoostApplicable):
+        self.guiSessionProvider.shared.ammo.setGunAutoReloadTime(timeLeft, baseTime, stunned, isBoostApplicable)
 
     def updateDualGunState(self, vehicleID, activeGun, gunStates, cooldownTimes):
         vehicle = BigWorld.entity(vehicleID)

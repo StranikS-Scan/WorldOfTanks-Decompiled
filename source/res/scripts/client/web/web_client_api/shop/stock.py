@@ -55,6 +55,7 @@ _GUI_ITEMS_TYPE_MAP = {ShopItemType.VEHICLE: GUI_ITEM_TYPE.VEHICLE,
  ShopItemType.BATTLE_BOOSTER: GUI_ITEM_TYPE.BATTLE_BOOSTER,
  ShopItemType.MODULE: GUI_ITEM_TYPE.VEHICLE_MODULES,
  ShopItemType.SHELL: GUI_ITEM_TYPE.SHELL,
+ ShopItemType.CREW_BOOKS: GUI_ITEM_TYPE.CREW_BOOKS,
  ShopItemType.PAINT: GUI_ITEM_TYPE.PAINT,
  ShopItemType.CAMOUFLAGE: GUI_ITEM_TYPE.CAMOUFLAGE,
  ShopItemType.MODIFICATION: GUI_ITEM_TYPE.MODIFICATION,
@@ -103,6 +104,7 @@ _ITEMS_CRITERIA_MAP = {ShopItemType.VEHICLE: {'inventory': REQ_CRITERIA.INVENTOR
  ShopItemType.EMBLEM: {},
  ShopItemType.INSCRIPTION: {},
  ShopItemType.PROJECTION_DECAL: {},
+ ShopItemType.CREW_BOOKS: {},
  ShopItemType.ENHANCEMENT: {'inventory': REQ_CRITERIA.INVENTORY}}
 
 class IdInListCriteria(RequestCriteria):
@@ -190,6 +192,8 @@ class ItemsWebApiMixin(object):
                     fmt = formatters.makeInventoryEnhancementsFormatter()
                 else:
                     fmt = formatters.makeInstalledEnhancementsFormatter()
+            elif itemType in ShopItemType.CREW_BOOKS:
+                fmt = formatters.makeCrewBooksFormatter()
             self.__formattersMap[key] = fmt
             return fmt
 

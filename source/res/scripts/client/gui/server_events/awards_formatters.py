@@ -149,6 +149,7 @@ def getDefaultFormattersMap():
      'dossier': DossierBonusFormatter(),
      'progressionXPToken': tokenBonusFormatter,
      'blueprints': BlueprintBonusFormatter(),
+     'blueprintsAny': BlueprintBonusFormatter(),
      'finalBlueprints': BlueprintBonusFormatter(),
      'crewSkins': CrewSkinsBonusFormatter(),
      'crewBooks': CrewBooksBonusFormatter(),

@@ -182,6 +182,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         self.__showCustomizationCallbackId = None
         self._selectedRegion = ApplyArea.NONE
         self._isHighlighterActive = False
+        self.__showCustomizationKwargs = {}
         return
 
     def init(self):
@@ -205,24 +206,54 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         self.stopHighlighter()
         self._eventsManager.clear()
         self.__cleanupSuspendHighlighterCallback()
+        self.__showCustomizationKwargs = None
         if self.__showCustomizationCallbackId is not None:
             BigWorld.cancelCallback(self.__showCustomizationCallbackId)
             self.__showCustomizationCallbackId = None
         return
 
     def showCustomization(self, vehInvID=None, callback=None, season=None, modeId=None, tabId=None):
-        if not self.hangarSpace.spaceInited or not self.hangarSpace.isModelLoaded:
-            _logger.error('Space or vehicle is not presented, could not show customization view, return')
+        self.__showCustomizationKwargs = {'vehInvID': vehInvID,
+         'callback': callback,
+         'season': season,
+         'modeId': modeId,
+         'tabId': tabId}
+        shouldSelectVehicle = False
+        if vehInvID is not None:
+            vehGuiItem = self.itemsCache.items.getVehicle(vehInvID)
+            if vehGuiItem is not None:
+                if not vehGuiItem.isCustomizationEnabled():
+                    _logger.error("Can't show customization view for currently non-customizable vehicle '%s'", vehGuiItem.name)
+                    return
+                if g_currentVehicle.invID != vehInvID:
+                    shouldSelectVehicle = True
+        if not self.hangarSpace.spaceInited or not self.hangarSpace.isModelLoaded or shouldSelectVehicle:
+            self.hangarSpace.onVehicleChanged += self.__delayedShowCustomization
+            self.hangarSpace.onSpaceChanged += self.__delayedShowCustomization
+            if shouldSelectVehicle:
+                g_currentVehicle.selectVehicle(vehInvID=vehInvID)
+            _logger.info('Space or vehicle is not presented, customization view loading delayed')
             return
         else:
-            if self.hangarSpace.space is not None:
-                self.hangarSpace.space.turretAndGunAngles.set(gunPitch=self.__GUN_PITCH_ANGLE, turretYaw=self.__TURRET_YAW_ANGLE)
-            self.__createCtx(season, modeId, tabId)
-            loadCallback = lambda : self.__loadCustomization(vehInvID, callback)
-            if self.__showCustomizationCallbackId is None:
-                self.__moveHangarVehicleToCustomizationRoom()
-                self.__showCustomizationCallbackId = BigWorld.callback(0.0, lambda : self.__showCustomization(loadCallback))
+            self.__delayedShowCustomization()
             return
+
+    def __delayedShowCustomization(self):
+        self.hangarSpace.onVehicleChanged -= self.__delayedShowCustomization
+        self.hangarSpace.onSpaceChanged -= self.__delayedShowCustomization
+        season = self.__showCustomizationKwargs.get('season', None)
+        modeId = self.__showCustomizationKwargs.get('modeId', None)
+        tabId = self.__showCustomizationKwargs.get('tabId', None)
+        vehInvID = self.__showCustomizationKwargs.get('vehInvID', None)
+        callback = self.__showCustomizationKwargs.get('callback', None)
+        if self.hangarSpace.space is not None:
+            self.hangarSpace.space.turretAndGunAngles.set(gunPitch=self.__GUN_PITCH_ANGLE, turretYaw=self.__TURRET_YAW_ANGLE)
+        self.__createCtx(season, modeId, tabId)
+        loadCallback = lambda : self.__loadCustomization(vehInvID, callback)
+        if self.__showCustomizationCallbackId is None:
+            self.__moveHangarVehicleToCustomizationRoom()
+            self.__showCustomizationCallbackId = BigWorld.callback(0.0, lambda : self.__showCustomization(loadCallback))
+        return
 
     def closeCustomization(self):
         if self.hangarSpace.space is not None:

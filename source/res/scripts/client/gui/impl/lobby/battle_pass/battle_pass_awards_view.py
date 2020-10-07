@@ -73,10 +73,12 @@ class BattlePassAwardsView(ViewImpl):
             reasonRewards = MAP_REWARD_REASON[reason]
         else:
             reasonRewards = self.viewModel.DEFAULT_REASON
+        isBattlePassPurchased = self.__battlePassController.isBought() or isPurchase
         self.viewModel.setIsFinalReward(isFinalReward)
         self.viewModel.setIsPostProgression(isPostProgression)
         self.viewModel.setReason(reasonRewards)
-        self.viewModel.setIsBattlePassPurchased(self.__battlePassController.isBought() or isPurchase)
+        self.viewModel.setIsBattlePassPurchased(isBattlePassPurchased)
+        self.viewModel.setIsNeedToShowOffer(not isBattlePassPurchased and not self.__battlePassController.isPlayerNewcomer())
         self.viewModel.setPreviousLevel(prevLevel + 1)
         self.viewModel.setCurrentLevel(newLevel)
         self.viewModel.setMaxLevelBase(self.__battlePassController.getMaxLevel())
@@ -150,8 +152,18 @@ class BattlePassAwardsView(ViewImpl):
 
         for reward in mainRewards:
             value = reward.getValue()
-            if reward.getName() == 'customizations' and value[0]['custType'] == 'projection_decal':
-                with finalAwardsInjection(value[0]['id']):
+            if reward.getName() == 'customizations':
+                altVoteOption = self.__battlePassController.getAlternativeVoteOption()
+                if value[0]['custType'] == 'projection_decal':
+                    with finalAwardsInjection(value[0]['id']):
+                        packBonusModelAndTooltipData([reward], self.viewModel.mainRewards, self.__tooltipItems)
+                elif value[0]['custType'] == 'style' and altVoteOption != 0:
+                    with finalAwardsInjection(altVoteOption):
+                        packBonusModelAndTooltipData([reward], self.viewModel.mainRewards, self.__tooltipItems)
+                elif value[0]['custType'] == 'decal':
+                    with finalAwardsInjection(value[0]['id']):
+                        packBonusModelAndTooltipData([reward], self.viewModel.mainRewards, self.__tooltipItems)
+                else:
                     packBonusModelAndTooltipData([reward], self.viewModel.mainRewards, self.__tooltipItems)
             packBonusModelAndTooltipData([reward], self.viewModel.mainRewards, self.__tooltipItems)
 

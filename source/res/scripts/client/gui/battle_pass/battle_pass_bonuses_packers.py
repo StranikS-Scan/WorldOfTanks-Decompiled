@@ -4,7 +4,9 @@ import logging
 import typing
 from contextlib import contextmanager
 from gui.battle_pass.battle_pass_bonuses_helper import TROPHY_GIFT_TOKEN_BONUS_NAME, NEW_DEVICE_GIFT_TOKEN_BONUS_NAME
+from gui.impl import backport
 from gui.impl.backport import TooltipData
+from gui.impl.gen import R
 from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
 from gui.impl.gen.view_models.common.missions.bonuses.icon_bonus_model import IconBonusModel
 from gui.impl.gen.view_models.common.missions.bonuses.extended_icon_bonus_model import ExtendedIconBonusModel
@@ -12,8 +14,9 @@ from gui.impl.gen.view_models.common.missions.bonuses.extended_item_bonus_model 
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization import CustomizationTooltipContext
-from gui.shared.missions.packers.bonus import BonusUIPacker, getDefaultBonusPackersMap, BaseBonusUIPacker, DossierBonusUIPacker, ItemBonusUIPacker
+from gui.shared.missions.packers.bonus import BonusUIPacker, getDefaultBonusPackersMap, BaseBonusUIPacker, DossierBonusUIPacker, ItemBonusUIPacker, CrewBookBonusUIPacker
 from gui.server_events.recruit_helper import getRecruitInfo
+from gui.shared.money import Currency
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from shared_utils import first
 if typing.TYPE_CHECKING:
@@ -30,7 +33,9 @@ def getBattlePassBonusPacker():
      'dossier': BattlePassDossierBonusPacker(),
      TROPHY_GIFT_TOKEN_BONUS_NAME: DeviceSelectTokenBonusPacker(),
      NEW_DEVICE_GIFT_TOKEN_BONUS_NAME: DeviceSelectTokenBonusPacker(),
-     'items': ExtendedItemBonusUIPacker()})
+     'items': ExtendedItemBonusUIPacker(),
+     'crewBooks': ExtendedCrewBookBonusUIPacker(),
+     Currency.CREDITS: ExtendedCreditsBonusUIPascker()})
     return BonusUIPacker(mapping)
 
 
@@ -186,13 +191,15 @@ class BattlePassPremiumDaysPacker(BaseBonusUIPacker):
     @classmethod
     def _packSingleBonus(cls, bonus):
         days = bonus.getValue()
-        model = BonusModel()
+        model = ExtendedIconBonusModel()
         if days in cls._ICONS_AVAILABLE:
             model.setName(bonus.getName())
         else:
             model.setName('premium_universal')
+            model.setIcon('premium_universal')
         model.setIsCompensation(bonus.isCompensation())
         model.setValue(str(bonus.getValue()))
+        model.setUserName(backport.text(R.strings.tooltips.awardItem.premium_plus.header()))
         return model
 
 
@@ -257,13 +264,44 @@ class ExtendedItemBonusUIPacker(ItemBonusUIPacker):
     @classmethod
     def _packSingleBonus(cls, bonus, item, count):
         model = super(ExtendedItemBonusUIPacker, cls)._packSingleBonus(bonus, item, count)
-        if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and item.isTrophy:
+        if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
+            if item.isTrophy:
+                model.setItem(item.name)
             model.setUserName(item.userName)
         return model
 
     @classmethod
     def _getBonusModel(cls):
         return ExtendedItemBonusModel()
+
+
+class ExtendedCrewBookBonusUIPacker(CrewBookBonusUIPacker):
+
+    @classmethod
+    def _getBonusModel(cls):
+        return ExtendedIconBonusModel()
+
+    @classmethod
+    def _packSingleBonus(cls, bonus, item, count):
+        model = super(ExtendedCrewBookBonusUIPacker, cls)._packSingleBonus(bonus, item, count)
+        model.setUserName(item.userName)
+        return model
+
+
+class ExtendedCreditsBonusUIPascker(BaseBonusUIPacker):
+
+    @classmethod
+    def _pack(cls, bonus):
+        return [cls._packSingleBonus(bonus)]
+
+    @classmethod
+    def _packSingleBonus(cls, bonus):
+        model = ExtendedIconBonusModel()
+        cls._packCommon(bonus, model)
+        model.setIcon(bonus.getName())
+        model.setValue(str(bonus.getValue()))
+        model.setUserName(str(bonus.getValue()))
+        return model
 
 
 @contextmanager

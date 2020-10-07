@@ -779,12 +779,31 @@ class _CollisionSoundEffectDesc(_BaseSoundEvent):
             for soundName in soundNames:
                 WWISE.playSound(soundName, position, soundParams, (soundSwitches,))
 
-            isPlayer, _ = self._isPlayer(args)
-            if isPlayer:
-                damageFactor = args.get('damageFactor', 0.0)
-                if damageFactor >= 1.0:
-                    WWISE.playSound('collision_static_object_damage', position, [], (soundSwitches,))
             return
+
+
+class _CollisionDamageSoundEffectDesc(_BaseSoundEvent):
+
+    def __init__(self, dataSection):
+        super(_CollisionDamageSoundEffectDesc, self).__init__(dataSection)
+        self._soundName = (dataSection.readString('wwsoundPC'), dataSection.readString('wwsoundNPC'))
+
+    def create(self, model, effects, args):
+        soundEvent, _ = self._getName(args)
+        if not soundEvent:
+            return
+        damageFactor = args.get('damageFactor')
+        if not damageFactor:
+            return
+        if damageFactor < 17.0:
+            damageSize = 'SWITCH_ext_damage_size_small'
+        elif damageFactor < 35.0:
+            damageSize = 'SWITCH_ext_damage_size_medium'
+        else:
+            damageSize = 'SWITCH_ext_damage_size_large'
+        node, _ = _getHitPoint(model, self._nodeName, args)
+        position = Math.Matrix(node.actualNode)
+        WWISE.playSound(soundEvent, position, [], (('SWITCH_ext_damage_size', damageSize),))
 
 
 class _DestructionSoundEffectDesc(_BaseSoundEvent):
@@ -1233,6 +1252,7 @@ _effectDescFactory = {'pixie': _PixieEffectDesc,
  'sound': _SoundEffectDesc,
  'splashSound': _NodeSoundEffectDesc,
  'collisionSound': _CollisionSoundEffectDesc,
+ 'collisionDamageSound': _CollisionDamageSoundEffectDesc,
  'tracerSound': _TracerSoundEffectDesc,
  'shotSound': _ShotSoundEffectDesc,
  'visibility': _VisibilityEffectDesc,

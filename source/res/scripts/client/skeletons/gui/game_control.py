@@ -1644,6 +1644,9 @@ class IBattlePassController(IGameController):
     def getDeviceTokensContainer(self, bonusName):
         raise NotImplementedError
 
+    def getMaxLevelForNewbie(self):
+        raise NotImplementedError
+
 
 class IHangarLoadingController(IGameController):
     onHangarLoadedAfterLogin = None

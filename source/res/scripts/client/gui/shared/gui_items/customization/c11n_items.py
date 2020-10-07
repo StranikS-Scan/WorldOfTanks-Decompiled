@@ -227,7 +227,7 @@ class Customization(FittingItem):
         return
 
     def __cmp__(self, other):
-        return cmp(self.userName, other.userName)
+        return cmp(self.userName, other.userName) if isinstance(other, Customization) else -1
 
     def __repr__(self):
         return '{}<intCD:{}, id:{}>'.format(self.__class__.__name__, self.intCD, self.id)

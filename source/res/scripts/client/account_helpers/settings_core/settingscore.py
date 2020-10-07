@@ -289,7 +289,8 @@ class SettingsCore(ISettingsCore):
          (BATTLE_COMM.SHOW_BASE_MARKERS, options.SettingTrueByDefault(BATTLE_COMM.SHOW_BASE_MARKERS, storage=BATTLE_COMM_SETTINGS_STORAGE)),
          (BATTLE_COMM.SHOW_CALLOUT_MESSAGES, options.SettingTrueByDefault(BATTLE_COMM.SHOW_CALLOUT_MESSAGES, storage=BATTLE_COMM_SETTINGS_STORAGE)),
          (BATTLE_COMM.SHOW_COM_IN_PLAYER_LIST, options.SettingTrueByDefault(BATTLE_COMM.SHOW_COM_IN_PLAYER_LIST, storage=BATTLE_COMM_SETTINGS_STORAGE)),
-         (BATTLE_COMM.SHOW_STICKY_MARKERS, options.SettingTrueByDefault(BATTLE_COMM.SHOW_STICKY_MARKERS, storage=BATTLE_COMM_SETTINGS_STORAGE))))
+         (BATTLE_COMM.SHOW_STICKY_MARKERS, options.SettingTrueByDefault(BATTLE_COMM.SHOW_STICKY_MARKERS, storage=BATTLE_COMM_SETTINGS_STORAGE)),
+         (BATTLE_COMM.SHOW_LOCATION_MARKERS, options.SettingTrueByDefault(BATTLE_COMM.SHOW_LOCATION_MARKERS, storage=BATTLE_COMM_SETTINGS_STORAGE))))
         self.__options.init()
         AccountSettings.onSettingsChanging += self.__onAccountSettingsChanging
         self.interfaceScale.init()

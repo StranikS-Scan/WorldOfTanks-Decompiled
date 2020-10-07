@@ -933,6 +933,18 @@ class SettingsMinimapCircles(BlocksTooltipData):
         return tooltipBlocks
 
 
+class SettingsShowLocationMarkers(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(SettingsShowLocationMarkers, self).__init__(context, TOOLTIP_TYPE.CONTROL)
+        self._setWidth(width=400)
+
+    def _packBlocks(self, *args, **kwargs):
+        tooltipBlocks = super(SettingsShowLocationMarkers, self)._packBlocks()
+        tooltipBlocks.append(formatters.packBuildUpBlockData([formatters.packTitleDescBlock(text_styles.highTitle(TOOLTIPS.SETTINGS_SHOWLOCATIONMARKERS_HEADER), text_styles.main(TOOLTIPS.SETTINGS_SHOWLOCATIONMARKERS_BODY)), formatters.packTextBlockData(text_styles.neutral(TOOLTIPS.SETTINGS_SHOWLOCATIONMARKERS_BODYFOOTER), padding={'bottom': -15})]))
+        return tooltipBlocks
+
+
 class SquadRestrictionsInfo(BlocksTooltipData):
 
     def __init__(self, context):

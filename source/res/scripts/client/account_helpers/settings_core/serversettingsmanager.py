@@ -8,10 +8,12 @@ from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, 
 from adisp import process, async
 from constants import ROLES_COLLAPSE
 from debug_utils import LOG_ERROR, LOG_DEBUG
+from gui.battle_pass.battle_pass_bonuses_helper import TROPHY_GIFT_TOKEN_BONUS_NAME, NEW_DEVICE_GIFT_TOKEN_BONUS_NAME, getStorageKey
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
 from helpers import dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCache
+from skeletons.gui.game_control import IBattlePassController
 GUI_START_BEHAVIOR = 'guiStartBehavior'
 
 class SETTINGS_SECTIONS(CONST_CONTAINER):
@@ -421,7 +423,8 @@ class ServerSettingsManager(object):
                                      BATTLE_COMM.SHOW_COM_IN_PLAYER_LIST: 1,
                                      BATTLE_COMM.SHOW_STICKY_MARKERS: 2,
                                      BATTLE_COMM.SHOW_CALLOUT_MESSAGES: 3,
-                                     BATTLE_COMM.SHOW_BASE_MARKERS: 4}, offsets={}),
+                                     BATTLE_COMM.SHOW_BASE_MARKERS: 4,
+                                     BATTLE_COMM.SHOW_LOCATION_MARKERS: 5}, offsets={}),
      SETTINGS_SECTIONS.DOG_TAGS: Section(masks={GAME.SHOW_VICTIMS_DOGTAG: 0,
                                   GAME.SHOW_DOGTAG_TO_KILLER: 1}, offsets={}),
      SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
@@ -887,14 +890,23 @@ class ServerSettingsManager(object):
 
 
 def _updateBattlePassVersion(data):
-    version = 2
+    version = 3
     if data[BattlePassStorageKeys.FLAGS_VERSION] < version:
         data[BattlePassStorageKeys.FLAGS_VERSION] = version
         data[BattlePassStorageKeys.SHOWN_VIDEOS_FLAGS] = 0
         data[BattlePassStorageKeys.INTRO_VIDEO_SHOWN] = False
         data[BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN] = False
         data[BattlePassStorageKeys.BUY_BUTTON_HINT_IS_SHOWN] = False
-        data[BattlePassStorageKeys.CHOSEN_TROPHY_DEVICES] = 0
-        data[BattlePassStorageKeys.CHOSEN_NEW_DEVICES] = 0
+        battlePassController = dependency.instance(IBattlePassController)
+        tokensCounts = {TROPHY_GIFT_TOKEN_BONUS_NAME: battlePassController.getTrophySelectTokensCount(),
+         NEW_DEVICE_GIFT_TOKEN_BONUS_NAME: battlePassController.getNewDeviceSelectTokensCount()}
+        for bonusName in (TROPHY_GIFT_TOKEN_BONUS_NAME, NEW_DEVICE_GIFT_TOKEN_BONUS_NAME):
+            container = battlePassController.getDeviceTokensContainer(bonusName)
+            usedTokens = container.getUsedTokens(tokensCounts[bonusName])
+            data[getStorageKey(bonusName)] = usedTokens
+
+        if version != 3:
+            data[BattlePassStorageKeys.CHOSEN_TROPHY_DEVICES] = 0
+            data[BattlePassStorageKeys.CHOSEN_NEW_DEVICES] = 0
         return True
     return False

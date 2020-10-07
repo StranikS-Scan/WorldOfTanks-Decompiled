@@ -201,9 +201,12 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         if alias == QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS:
             viewPy.setProxy(weakref.proxy(self))
             viewPy.setDefaultTab(self.__subTab)
+            self.__subTab = None
         if alias == QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS:
             viewPy.setSubTab(self.__subTab)
+            self.__subTab = None
         self.__fireTabChangedEvent()
+        return
 
     def _initialize(self, ctx=None):
         ctx = ctx or {}

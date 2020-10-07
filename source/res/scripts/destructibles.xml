@@ -649,8 +649,8 @@
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	tree_Linden_Town_Dry_23m_fall	</fractureEffect>
-      <touchdownEffect>	tree_Linden_Town_Dry_23m_touchdown	</touchdownEffect>
+      <fractureEffect>	dryTree_01_fall	</fractureEffect>
+      <touchdownEffect>	dryTree_01_touchdown	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/Broadleaves/DryTree/DryTree_6m.srt	</filename>
@@ -16887,7 +16887,7 @@
       <filename>	content/Buildings/bld_19_02_Monastery/normal/lod0/bld_19_02_Monastery_07_WallRight.model	</filename>
       <modules>
         <module>
-          <matName>	n_stone1_0	</matName>
+          <matName>	n_stone0_1	</matName>
           <health>	35	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	bld_19_02_Monastery_07_WallRight_01	</ramEffect>
@@ -16896,7 +16896,7 @@
           <effectScale>	1	</effectScale>
         </module>
         <module>
-          <matName>	n_stone1_1	</matName>
+          <matName>	n_stone1_2	</matName>
           <health>	35	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	bld_19_02_Monastery_07_WallRight_01_01_ram	</ramEffect>
@@ -17131,15 +17131,6 @@
           <ramEffect>	bld_19_04_Amphitheatre_04	</ramEffect>
           <hitEffect>	bld_19_04_Amphitheatre_04	</hitEffect>
           <effectHP>	HP_module6	</effectHP>
-          <effectScale>	1	</effectScale>
-        </module>
-        <module>
-          <matName>	n_stone0_8	</matName>
-          <health>	50	</health>
-          <decayEffect>	none	</decayEffect>
-          <ramEffect>	bld_19_04_Amphitheatre_01	</ramEffect>
-          <hitEffect>	bld_19_04_Amphitheatre_01	</hitEffect>
-          <effectHP>	HP_module7	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
       </modules>

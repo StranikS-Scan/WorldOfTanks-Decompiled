@@ -104,7 +104,6 @@ class ModulesPanel(ModulesPanelMeta):
 
             self.__setHasCounter(devices)
             modulesEnabled = self.__hasCounter or vehicle.hasModulesToSelect
-            self.as_setModulesEnabledS(modulesEnabled)
             for item in devices:
                 item['isDisabledBgVisible'] = modulesEnabled
 

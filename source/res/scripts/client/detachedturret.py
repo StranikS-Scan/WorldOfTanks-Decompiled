@@ -114,7 +114,6 @@ class DetachedTurret(BigWorld.Entity, ScriptGameObject):
     def onLeaveWorld(self):
         LOG_DEBUG('onLeaveWorld')
         ScriptGameObject.deactivate(self)
-        ScriptGameObject.destroy(self)
         DetachedTurret.allTurrets.remove(self)
         self.__detachConfirmationTimer.cancel()
         self.__detachConfirmationTimer = None

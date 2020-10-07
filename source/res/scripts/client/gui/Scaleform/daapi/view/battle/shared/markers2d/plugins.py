@@ -43,8 +43,8 @@ _STATIC_MARKER_CULL_DISTANCE = 1800
 _STATIC_MARKER_MIN_SCALE = 60.0
 _BASE_MARKER_MIN_SCALE = 100.0
 RANDOM_BATTLE_BASE_ID = 7
-_STATIC_MARKER_BOUNDS = Math.Vector4(30, 30, 90, 10)
-_INNER_STATIC_MARKER_BOUNDS = Math.Vector4(15, 15, 70, 1)
+_STATIC_MARKER_BOUNDS = Math.Vector4(30, 30, 90, -15)
+_INNER_STATIC_MARKER_BOUNDS = Math.Vector4(15, 15, 70, -35)
 _STATIC_MARKER_BOUNDS_MIN_SCALE = Math.Vector2(1.0, 0.8)
 _BASE_MARKER_BOUNDS = Math.Vector4(30, 30, 30, 30)
 _INNER_BASE_MARKER_BOUNDS = Math.Vector4(17, 17, 18, 18)
@@ -65,7 +65,7 @@ class IMarkersManager(object):
     def setMarkerActive(self, markerID, active):
         raise NotImplementedError
 
-    def setMarkerLocationOffset(self, markerID, minY, maxY, distForMinY):
+    def setMarkerLocationOffset(self, markerID, minY, maxY, distForMinY, maxBoost, boostStart):
         raise NotImplementedError
 
     def setMarkerRenderInfo(self, markerID, minScale, offset, innerOffset, cullDistance, boundsMinScale):
@@ -126,8 +126,8 @@ class MarkerPlugin(IPlugin):
     def _setMarkerRenderInfo(self, markerID, minScale, offset, innerOffset, cullDistance, boundsMinScale):
         self._parentObj.setMarkerRenderInfo(markerID, minScale, offset, innerOffset, cullDistance, boundsMinScale)
 
-    def _setMarkerLocationOffset(self, markerID, minYOffset, maxYOffset, distanceForMinYOffset):
-        self._parentObj.setMarkerLocationOffset(markerID, minYOffset, maxYOffset, distanceForMinYOffset)
+    def _setMarkerLocationOffset(self, markerID, minYOffset, maxYOffset, distanceForMinYOffset, maxBoost, boostStart):
+        self._parentObj.setMarkerLocationOffset(markerID, minYOffset, maxYOffset, distanceForMinYOffset, maxBoost, boostStart)
 
     def _setMarkerBoundEnabled(self, markerID, isBoundEnabled):
         self._parentObj.setMarkerBoundCheckEnabled(markerID, isBoundEnabled)
@@ -541,9 +541,11 @@ class EquipmentsMarkerPlugin(MarkerPlugin):
 _AREA_STATIC_MARKER_DEFAULT_CREATED_TIME = 3.0
 
 class AreaStaticMarkerPlugin(MarkerPlugin, ChatCommunicationComponent):
-    _MIN_Y_OFFSET = 0.4
-    _MAX_Y_OFFSET = 1.2
+    _MIN_Y_OFFSET = 1.2
+    _MAX_Y_OFFSET = 3.0
     _DISTANCE_FOR_MIN_Y_OFFSET = 400
+    _MAX_Y_BOOST = 1.4
+    _BOOST_START = 120
     __slots__ = ('_markers', '__defaultPostfix', '__clazz')
 
     def __init__(self, parentObj, clazz=LocationMarker):
@@ -580,7 +582,7 @@ class AreaStaticMarkerPlugin(MarkerPlugin, ChatCommunicationComponent):
             self._destroyMarker(self._markers[markerKey].getMarkerID())
 
         self._markers.clear()
-        super(AreaStaticMarkerPlugin, self).fini()
+        super(AreaStaticMarkerPlugin, self).stop()
         return
 
     def getMarkerType(self):
@@ -631,7 +633,7 @@ class AreaStaticMarkerPlugin(MarkerPlugin, ChatCommunicationComponent):
         markerID = self._createMarkerWithPosition(_LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME[locationMarkerSubtype], position)
         marker = self.__clazz(markerID, position, True, locationMarkerSubtype)
         self._setMarkerRenderInfo(markerID, _STATIC_MARKER_MIN_SCALE, _STATIC_MARKER_BOUNDS, _INNER_STATIC_MARKER_BOUNDS, _STATIC_MARKER_CULL_DISTANCE, _STATIC_MARKER_BOUNDS_MIN_SCALE)
-        self._setMarkerLocationOffset(markerID, self._MIN_Y_OFFSET, self._MAX_Y_OFFSET, self._DISTANCE_FOR_MIN_Y_OFFSET)
+        self._setMarkerLocationOffset(markerID, self._MIN_Y_OFFSET, self._MAX_Y_OFFSET, self._DISTANCE_FOR_MIN_Y_OFFSET, self._MAX_Y_BOOST, self._BOOST_START)
         self._markers[areaID] = marker
         marker.setState(ReplyStateForMarker.CREATE_STATE)
         if locationMarkerSubtype == LocationMarkerSubType.PREBATTLE_WAYPOINT_SUBTYPE:

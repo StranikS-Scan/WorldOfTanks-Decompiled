@@ -436,4 +436,5 @@ class BattleCommStorageKeys(CONST_CONTAINER):
     SHOW_COM_IN_PLAYER_LIST = 'showCommInPlayerlist'
     SHOW_STICKY_MARKERS = 'showStickyMarkers'
     SHOW_CALLOUT_MESSAGES = 'showCalloutMessages'
+    SHOW_LOCATION_MARKERS = 'showLocationMarkers'
     SHOW_BASE_MARKERS = 'showMarkers'

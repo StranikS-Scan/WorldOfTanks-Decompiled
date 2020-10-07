@@ -299,11 +299,15 @@ class CrewBookBonusUIPacker(BaseBonusUIPacker):
 
     @classmethod
     def _packSingleBonus(cls, bonus, book, count):
-        model = IconBonusModel()
+        model = cls._getBonusModel()
         cls._packCommon(bonus, model)
         model.setValue(str(count))
         model.setIcon(book.getBonusIconName())
         return model
+
+    @classmethod
+    def _getBonusModel(cls):
+        return IconBonusModel()
 
     @classmethod
     def _getToolTip(cls, bonus):

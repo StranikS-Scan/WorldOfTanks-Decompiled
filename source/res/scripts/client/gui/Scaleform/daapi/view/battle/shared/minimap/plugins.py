@@ -45,6 +45,10 @@ _LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME = {LocationMarkerSubType.SPG_AIM_AREA_SUB
 _PING_FLASH_MINIMAP_SUBTYPES = {LocationMarkerSubType.GOING_TO_MARKER_SUBTYPE, LocationMarkerSubType.ATTENTION_TO_MARKER_SUBTYPE, LocationMarkerSubType.PREBATTLE_WAYPOINT_SUBTYPE}
 _BASE_PING_RANGE = 50
 _LOCATION_PING_RANGE = 30
+_MINIMAP_MIN_SCALE_INDEX = 0
+_MINIMAP_MAX_SCALE_INDEX = 5
+_MINIMAP_LOCATION_MARKER_MIN_SCALE = 1.0
+_MINIMAP_LOCATION_MARKER_MAX_SCALE = 0.72
 
 class PersonalEntriesPlugin(common.SimplePlugin):
     __slots__ = ('__isAlive', '__isObserver', '__playerVehicleID', '__viewPointID', '__animationID', '__deadPointID', '__cameraID', '__cameraIDs', '__yawLimits', '__circlesID', '__circlesVisibilityState', '__killerVehicleID', '__defaultViewRangeCircleSize')
@@ -975,6 +979,7 @@ class AreaStaticMarkerPlugin(common.EntriesPlugin):
     def __init__(self, parentObj):
         super(AreaStaticMarkerPlugin, self).__init__(parentObj)
         self._entries = {}
+        self._curScale = 1.0
 
     def start(self):
         super(AreaStaticMarkerPlugin, self).start()
@@ -983,6 +988,8 @@ class AreaStaticMarkerPlugin(common.EntriesPlugin):
             ctrl.onStaticMarkerAdded += self.__addStaticMarker
             ctrl.onStaticMarkerRemoved += self.__delStaticMarker
             ctrl.onReplyFeedbackReceived += self.__onReplyFeedbackReceived
+        minimapSize = settings.clampMinimapSizeIndex(AccountSettings.getSettings('minimapSize'))
+        self._curScale = self.__calculateMarkerScale(minimapSize)
         self.__checkMarkers()
         return
 
@@ -995,6 +1002,17 @@ class AreaStaticMarkerPlugin(common.EntriesPlugin):
         super(AreaStaticMarkerPlugin, self).stop()
         return
 
+    def applyNewSize(self, sizeIndex):
+        self._curScale = self.__calculateMarkerScale(sizeIndex)
+        for entryID in self._entries:
+            matrix = self._entries[entryID].getMatrix()
+            matrix = minimap_utils.makePositionAndScaleMatrix(matrix.applyToOrigin(), (self._curScale, 1.0, self._curScale))
+            self._setMatrix(self._entries[entryID].getID(), matrix)
+
+    def __calculateMarkerScale(self, minimapSizeIndex):
+        p = float(minimapSizeIndex - _MINIMAP_MIN_SCALE_INDEX) / float(_MINIMAP_MAX_SCALE_INDEX - _MINIMAP_MIN_SCALE_INDEX)
+        return (1 - p) * _MINIMAP_LOCATION_MARKER_MIN_SCALE + p * _MINIMAP_LOCATION_MARKER_MAX_SCALE
+
     def __checkMarkers(self):
         _logger.debug('minimap __checkMarkers')
         for key in g_locationPointManager.markedAreas:
@@ -1003,7 +1021,8 @@ class AreaStaticMarkerPlugin(common.EntriesPlugin):
             self.__addStaticMarker(locationPoint.targetID, locationPoint.creatorID, locationPoint.position, locationPoint.markerSubType, True, locationPoint.markerText, locationPoint.replyCount, False)
 
     def __addStaticMarker(self, areaID, creatorID, position, locationMarkerSubtype, show3DMarker=False, markerText='', numberOfReplies=0, isTargetForPlayer=False):
-        self._addEntryEx(areaID, _LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME[locationMarkerSubtype], _C_NAME.EQUIPMENTS, matrix=minimap_utils.makePositionMatrix(position), active=True)
+        matrix = minimap_utils.makePositionAndScaleMatrix(position, (self._curScale, 1.0, self._curScale))
+        self._addEntryEx(areaID, _LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME[locationMarkerSubtype], _C_NAME.EQUIPMENTS, matrix=matrix, active=True, transformProps=settings.TRANSFORM_FLAG.FULL)
         if locationMarkerSubtype in _PING_FLASH_MINIMAP_SUBTYPES and numberOfReplies > 0 and isTargetForPlayer:
             self._invoke(self._entries[areaID].getID(), 'setState', 'reply')
         elif locationMarkerSubtype in _PING_FLASH_MINIMAP_SUBTYPES and numberOfReplies > 0:

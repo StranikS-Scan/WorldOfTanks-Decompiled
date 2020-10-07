@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/video/video_view.py
 import logging
 import Windowing
-from frameworks.wulf import ViewSettings, WindowFlags
+from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.video.video_view_model import VideoViewModel
 from gui.impl.lobby.video.video_sound_manager import DummySoundManager
@@ -26,7 +26,7 @@ class _SubtitlesLanguages(CONST_CONTAINER):
     LATAM = 9
     PL = 10
     ptBR = 11
-    RU = 12
+    ZHSG = 12
     TH = 13
     TR = 14
     ZHTW = 15
@@ -51,9 +51,7 @@ _SUBTITLE_TO_LOCALES_MAP = {_SubtitlesLanguages.CS: {'cs'},
                           'ro',
                           'sr',
                           'sv',
-                          'vi',
-                          'zh_cn',
-                          'zh_sg'},
+                          'vi'},
  _SubtitlesLanguages.ES: {'es'},
  _SubtitlesLanguages.FR: {'fr'},
  _SubtitlesLanguages.ITA: {'it'},
@@ -64,7 +62,8 @@ _SUBTITLE_TO_LOCALES_MAP = {_SubtitlesLanguages.CS: {'cs'},
  _SubtitlesLanguages.ptBR: {'pt_br'},
  _SubtitlesLanguages.TH: {'th'},
  _SubtitlesLanguages.TR: {'tr'},
- _SubtitlesLanguages.ZHTW: {'zh_tw'}}
+ _SubtitlesLanguages.ZHTW: {'zh_tw'},
+ _SubtitlesLanguages.ZHSG: {'zh_sg', 'zh_cn'}}
 _LOCALE_TO_SUBTITLE_MAP = {loc:subID for subID, locales in _SUBTITLE_TO_LOCALES_MAP.iteritems() for loc in locales}
 
 class VideoView(ViewImpl):
@@ -152,5 +151,5 @@ class VideoViewWindow(LobbyWindow):
     __slots__ = ()
 
     def __init__(self, *args, **kwargs):
-        super(VideoViewWindow, self).__init__(content=VideoView(*args, **kwargs), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, decorator=None)
+        super(VideoViewWindow, self).__init__(content=VideoView(*args, **kwargs), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, layer=WindowLayer.OVERLAY, decorator=None)
         return

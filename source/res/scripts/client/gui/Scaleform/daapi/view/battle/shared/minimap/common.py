@@ -107,11 +107,11 @@ class EntriesPlugin(SimplePlugin):
 
         super(EntriesPlugin, self).stop()
 
-    def _addEntryEx(self, uniqueID, symbol, container, matrix=None, active=False):
+    def _addEntryEx(self, uniqueID, symbol, container, matrix=None, active=False, transformProps=settings.TRANSFORM_FLAG.DEFAULT):
         if uniqueID in self._entries:
             return self._entries[uniqueID]
         else:
-            entryID = self._addEntry(symbol, container, matrix=matrix, active=active)
+            entryID = self._addEntry(symbol, container, matrix=matrix, active=active, transformProps=transformProps)
             if entryID:
                 model = self._clazz(entryID, active, matrix)
                 self._entries[uniqueID] = model

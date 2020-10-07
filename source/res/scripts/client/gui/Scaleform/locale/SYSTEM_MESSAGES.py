@@ -651,6 +651,7 @@ class SYSTEM_MESSAGES(object):
     LAYOUT_APPLY_INVALID_VEHICLE = '#system_messages:layout_apply/invalid_vehicle'
     LAYOUT_APPLY_VEHICLE_LOCKED = '#system_messages:layout_apply/vehicle_locked'
     OPTIONALDEVICES_APPLY_ERROR = '#system_messages:optionalDevices_apply/error'
+    OPTIONALDEVICES_APPLY_ERROR_TOO_HEAVY = '#system_messages:optionalDevices_apply/error_too_heavy'
     OPTIONALDEVICES_APPLY_NOT_ENOUGH_MONEY = '#system_messages:optionalDevices_apply/not_enough_money'
     OPTIONALDEVICES_APPLY_WALLET_NOT_AVAILABLE = '#system_messages:optionalDevices_apply/wallet_not_available'
     OPTIONALDEVICES_REMOVE_ERROR = '#system_messages:optionalDevices_remove/error'
@@ -1946,6 +1947,7 @@ class SYSTEM_MESSAGES(object):
      LAYOUT_APPLY_INVALID_VEHICLE,
      LAYOUT_APPLY_VEHICLE_LOCKED,
      OPTIONALDEVICES_APPLY_ERROR,
+     OPTIONALDEVICES_APPLY_ERROR_TOO_HEAVY,
      OPTIONALDEVICES_APPLY_NOT_ENOUGH_MONEY,
      OPTIONALDEVICES_APPLY_WALLET_NOT_AVAILABLE,
      OPTIONALDEVICES_REMOVE_ERROR,

@@ -4217,8 +4217,11 @@ def _readGunClipAutoreload(xmlCtx, section):
     reloadTime = _xml.readTupleOfPositiveFloats(xmlCtx, section, 'autoreload/reloadTime')
     if not len(reloadTime):
         _xml.raiseWrongXml(xmlCtx, 'autoreload/reloadTime', "'reloadTime' must contain at least one value")
-    revertFraction = _xml.readFraction(xmlCtx, section, 'autoreload/revertFraction')
-    return component_constants.Autoreload(reloadTime=reloadTime, revertFraction=revertFraction)
+    boostStartTime = _xml.readNonNegativeFloat(xmlCtx, section, 'autoreload/boostStartTime', 0.0)
+    boostResidueTime = _xml.readNonNegativeFloat(xmlCtx, section, 'autoreload/boostResidueTime', 0.0)
+    fractionName = 'autoreload/boostFraction'
+    boostFraction = _xml.readFraction(xmlCtx, section, fractionName) if section.has_key(fractionName) else 1.0
+    return component_constants.Autoreload(reloadTime=reloadTime, boostStartTime=boostStartTime, boostResidueTime=boostResidueTime, boostFraction=boostFraction)
 
 
 def _readShells(xmlPath, nationID):
@@ -5671,7 +5674,8 @@ if IS_CLIENT or IS_EDITOR:
      'collisionVehicleHeavy2',
      'collisionVehicleHeavy3',
      'rammingCollisionLight',
-     'rammingCollisionHeavy'] + [ '%sCollisionLight' % name for name in EFFECT_MATERIALS ] + [ '%sCollisionHeavy' % name for name in EFFECT_MATERIALS ] + [ 'explosionCandle%d' % i for i in xrange(1, 5) ] + ['fullDestruction'] + ['dynamicCollision'])
+     'rammingCollisionHeavy',
+     'collisionDamage'] + [ '%sCollisionLight' % name for name in EFFECT_MATERIALS ] + [ '%sCollisionHeavy' % name for name in EFFECT_MATERIALS ] + [ 'explosionCandle%d' % i for i in xrange(1, 5) ] + ['fullDestruction'] + ['dynamicCollision'])
     _damagedStateGroupEffectKindNames = ('ammoBayExplosion',
      'ammoBayBurnOff',
      'fuelExplosion',

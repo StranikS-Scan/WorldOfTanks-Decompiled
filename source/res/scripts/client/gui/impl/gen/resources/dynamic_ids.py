@@ -7,45 +7,45 @@ class DynamicIds(DynAccessor):
 
     class _dialog_window(DynAccessor):
         __slots__ = ()
-        bottom_content = DynAccessor(43367)
-        balance_content = DynAccessor(43368)
+        bottom_content = DynAccessor(43470)
+        balance_content = DynAccessor(43471)
 
     dialog_window = _dialog_window()
 
     class _tooltip(DynAccessor):
         __slots__ = ()
-        normal_content = DynAccessor(43369)
-        advanced_content = DynAccessor(43370)
+        normal_content = DynAccessor(43472)
+        advanced_content = DynAccessor(43473)
 
     tooltip = _tooltip()
 
     class _blueprint_screen(DynAccessor):
         __slots__ = ()
-        balance_content = DynAccessor(43371)
+        balance_content = DynAccessor(43474)
 
     blueprint_screen = _blueprint_screen()
 
     class _crew_books_buy_dialog(DynAccessor):
         __slots__ = ()
-        balance_content = DynAccessor(43372)
+        balance_content = DynAccessor(43475)
 
     crew_books_buy_dialog = _crew_books_buy_dialog()
 
     class _prem_dashboard(DynAccessor):
         __slots__ = ()
-        header = DynAccessor(43373)
-        premium_card = DynAccessor(43374)
-        double_xp_card = DynAccessor(43375)
-        piggy_bank_card = DynAccessor(43376)
-        dog_tags_card = DynAccessor(43377)
-        premium_quests_card = DynAccessor(43378)
-        maps_black_list_card = DynAccessor(43379)
+        header = DynAccessor(43476)
+        premium_card = DynAccessor(43477)
+        double_xp_card = DynAccessor(43478)
+        piggy_bank_card = DynAccessor(43479)
+        dog_tags_card = DynAccessor(43480)
+        premium_quests_card = DynAccessor(43481)
+        maps_black_list_card = DynAccessor(43482)
 
     prem_dashboard = _prem_dashboard()
 
     class _demo_window(DynAccessor):
         __slots__ = ()
-        image_props = DynAccessor(43380)
-        bottom_panel = DynAccessor(43381)
+        image_props = DynAccessor(43483)
+        bottom_panel = DynAccessor(43484)
 
     demo_window = _demo_window()

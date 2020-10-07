@@ -436,8 +436,7 @@ class BattlePassController(IBattlePassController):
         if self.isBought():
             return False
         config = self.__getConfig()
-        newbieLevel = config.maxLevelForNewbie
-        if self.getCurrentLevel() >= newbieLevel or newbieLevel == 0:
+        if self.getCurrentPoints() >= config.maxPointsForNewbie:
             return False
         allVehicles = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY)
         totalCap = 0
@@ -470,6 +469,9 @@ class BattlePassController(IBattlePassController):
         if self.__deviceGiftTokensContainers[bonusName].isEmpty:
             self.__extractTrophySelectTokensInfo()
         return self.__deviceGiftTokensContainers[bonusName]
+
+    def getMaxLevelForNewbie(self):
+        return self.__getConfig().maxLevelForNewbie
 
     def __stop(self):
         self.__seasonChangeNotifier.stopNotification()
@@ -584,9 +586,9 @@ class BattlePassController(IBattlePassController):
         for bonusName in (TROPHY_GIFT_TOKEN_BONUS_NAME, NEW_DEVICE_GIFT_TOKEN_BONUS_NAME):
             for level in range(1, self.getMaxLevel() + 1):
                 if self.__checkIfRewardIsToken(bonusName, config.getFreeReward(level)):
-                    self.__deviceGiftTokensContainers[bonusName].addFreeTokenPos(level - 1)
+                    self.__deviceGiftTokensContainers[bonusName].addFreeTokenPos(level)
                 if self.__checkIfRewardIsToken(bonusName, config.getPaidReward(level)):
-                    self.__deviceGiftTokensContainers[bonusName].addPaidTokenPos(level - 1)
+                    self.__deviceGiftTokensContainers[bonusName].addPaidTokenPos(level)
 
     @staticmethod
     def __checkIfRewardIsToken(bonusName, reward):

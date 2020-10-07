@@ -526,6 +526,51 @@
       <devices>	150	</devices>
     </damage>
   </_105mm_c_g_105_51_HESH_M353>
+  <_105mm_c_p_105_55_AP_M352>
+    <id>	38	</id>
+    <userString>	#italy_vehicles:_105mm_c_p_105_55_AP_M352	</userString>
+    <icon>	ap	</icon>
+    <price>	930	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_c_p_105_55_AP_M352>
+  <_105mm_c_g_105_55_HEAT_M456>
+    <id>	39	</id>
+    <userString>	#italy_vehicles:_105mm_c_g_105_55_HEAT_M456	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_105mm_c_g_105_55_HEAT_M456>
+  <_105mm_c_g_105_55_HESH_M353>
+    <id>	40	</id>
+    <userString>	#italy_vehicles:_105mm_c_g_105_55_HESH_M353	</userString>
+    <icon>	he	</icon>
+    <price>	1120	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_c_g_105_55_HESH_M353>
   <_120mm_c_p_APCBC_T14E>
     <id>	53	</id>
     <userString>	#italy_vehicles:_120mm_c_p_APCBC_T14E	</userString>

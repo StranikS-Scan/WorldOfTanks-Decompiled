@@ -19,6 +19,19 @@
       </effects>
     </variant1>
   </groundCollisionLight>
+  <collisionDamage>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <collisionDamageSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_damage	</wwsoundPC>
+        </collisionDamageSound>
+      </effects>
+    </variant1>
+  </collisionDamage>
   <groundCollisionHeavy>
     <variant1>
       <timeline>

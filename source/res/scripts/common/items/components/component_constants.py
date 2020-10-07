@@ -2,7 +2,10 @@
 # Embedded file name: scripts/common/items/components/component_constants.py
 import collections
 from soft_exception import SoftException
-Autoreload = collections.namedtuple('Autoreload', 'reloadTime revertFraction')
+Autoreload = collections.namedtuple('Autoreload', ['reloadTime',
+ 'boostStartTime',
+ 'boostResidueTime',
+ 'boostFraction'])
 DualGun = collections.namedtuple('DualGun', ['chargeTime',
  'shootImpulse',
  'reloadLockTime',
@@ -34,7 +37,7 @@ EMPTY_DICT = _ReadOnlyDict()
 EMPTY_TAGS = frozenset()
 LEVEL = 1
 DEFAULT_ARMOR_HOMOGENIZATION = 1.0
-DEFAULT_GUN_AUTORELOAD = Autoreload(reloadTime=(0.0,), revertFraction=0.0)
+DEFAULT_GUN_AUTORELOAD = Autoreload(reloadTime=(0.0,), boostStartTime=0.0, boostResidueTime=0.0, boostFraction=1.0)
 DEFAULT_GUN_BURST = (1, 0.0)
 DEFAULT_GUN_CLIP = (1, 0.0)
 DEFAULT_GUN_DUALGUN = DualGun(chargeTime=4.0, shootImpulse=100.0, reloadLockTime=10.0, reloadTimes=(10, 8), rateTime=5, chargeThreshold=0.5, afterShotDelay=0.5, preChargeIndication=0.25, chargeCancelTime=0.18)

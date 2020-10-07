@@ -67,6 +67,7 @@ class BattlePassOnboardingView(ViewImpl):
         with self.viewModel.transaction() as model:
             model.setIsOffersEnabled(False)
             model.setIsAllReceived(not self.__battlePassController.isOnboardingActive())
+            model.setMaxLevelForNewbie(self.__battlePassController.getMaxLevelForNewbie())
             result = yield self.__syncOfferResources()
             model.setIsOffersEnabled(self.__lobbyContext.getServerSettings().isOffersEnabled() and result == CachePrefetchResult.SUCCESS)
 

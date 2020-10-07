@@ -239,9 +239,10 @@ class BattlePassProgressionsView(ViewImpl):
 
     def __showIntro(self):
         with self.viewModel.transaction() as tx:
-            self.__showIntroVideo(onStart=True)
+            videoIsOpening = self.__showIntroVideo(onStart=True)
             tx.setShowIntro(self.__isFirstShowView())
-            self.__setShowBuyAnimations(model=tx)
+            if not videoIsOpening:
+                self.__setShowBuyAnimations(model=tx)
 
     def __isFirstShowView(self):
         return not self.__settingsCore.serverSettings.getBPStorage().get(BattlePassStorageKeys.INTRO_SHOWN)
@@ -338,7 +339,9 @@ class BattlePassProgressionsView(ViewImpl):
         if toLevel >= maxPostLevel and state == BattlePassState.POST:
             toLevel = maxPostLevel - 1
         for level in range(fromLevel, toLevel + 1):
-            item = model.getItem(level)
+            if level == 0:
+                continue
+            item = model.getItem(level - 1)
             levelState = self.__getRewardLevelState(awardType, curLevel, level, curState, state, isBattlePassBought)
             item.setState(levelState)
 
@@ -767,9 +770,10 @@ class BattlePassProgressionsView(ViewImpl):
         settings = self.__settingsCore.serverSettings
         if onStart:
             if settings.getBPStorage().get(BattlePassStorageKeys.INTRO_VIDEO_SHOWN):
-                return
+                return False
             settings.saveInBPStorage({BattlePassStorageKeys.INTRO_VIDEO_SHOWN: True})
         showBrowserOverlayView(getIntroVideoURL(), VIEW_ALIAS.BROWSER_OVERLAY)
+        return True
 
     def __makeSeasonTimeText(self, timeStamp):
         day, month = self.__getDayMonth(timeStamp)

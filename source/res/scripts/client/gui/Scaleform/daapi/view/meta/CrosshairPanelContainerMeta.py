@@ -25,6 +25,9 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
     def as_setReloadingAsPercentS(self, percent, isReloading):
         return self.flashObject.as_setReloadingAsPercent(percent, isReloading) if self._isDAAPIInited() else None
 
+    def as_setBoostAsPercentS(self, percent, duration):
+        return self.flashObject.as_setBoostAsPercent(percent, duration) if self._isDAAPIInited() else None
+
     def as_setHealthS(self, percent):
         return self.flashObject.as_setHealth(percent) if self._isDAAPIInited() else None
 
@@ -72,6 +75,12 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
 
     def as_setAutoloaderReloadingS(self, duration, baseTime):
         return self.flashObject.as_setAutoloaderReloading(duration, baseTime) if self._isDAAPIInited() else None
+
+    def as_showBoostS(self, duration, baseTime):
+        return self.flashObject.as_showBoost(duration, baseTime) if self._isDAAPIInited() else None
+
+    def as_hideBoostS(self, showAnimation):
+        return self.flashObject.as_hideBoost(showAnimation) if self._isDAAPIInited() else None
 
     def as_showShotS(self):
         return self.flashObject.as_showShot() if self._isDAAPIInited() else None

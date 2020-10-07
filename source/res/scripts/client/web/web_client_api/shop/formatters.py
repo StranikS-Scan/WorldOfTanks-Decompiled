@@ -425,3 +425,13 @@ def makeInventoryEnhancementsFormatter():
 def makeInstalledEnhancementsFormatter():
     fields = [Field('vehicle_int_cd', lambda i: i.vehIntCD), Field('enhancements', lambda i: i.enhancements)]
     return Formatter(fields)
+
+
+def makeCrewBooksFormatter():
+    fields = [idField,
+     Field('images', lambda item: {'small': item.getShopIcon(size='small'),
+      'medium': item.getShopIcon(size='big'),
+      'large': item.getShopIcon(size='large')}),
+     Field('type', lambda book: book.getBookType()),
+     Field('nation', lambda book: book.getNation())]
+    return Formatter(fields)

@@ -12,6 +12,7 @@ from AvatarInputHandler import aih_global_binding
 from AvatarInputHandler.cameras import getWorldRayAndPoint
 from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from aih_constants import CTRL_MODE_NAME
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from arena_component_system.sector_base_arena_component import ID_TO_BASENAME
 from chat_commands_consts import MarkerType, DefaultMarkerSubType, ReplyState, BATTLE_CHAT_COMMAND_NAMES, INVALID_MARKER_SUBTYPE, _COMMAND_NAME_TRANSFORM_MARKER_TYPE, ONE_SHOT_COMMANDS_TO_REPLIES, COMMAND_RESPONDING_MAPPING
 from epic_constants import EPIC_BATTLE_TEAM_ID
@@ -256,7 +257,7 @@ class ChatCommandsController(IBattleController):
             self.sendCommand(action)
 
     def sendAttentionToPosition3D(self, position, name):
-        if not avatar_getter.isVehicleAlive() and name in PROHIBITED_IF_DEAD or self.sessionProvider.getCtx().isPlayerObserver() and name in PROHIBITED_IF_SPECTATOR or self.__isEnabled is False:
+        if self.__isProhibitedToSendIfDeadOrObserver(name) or self.__isEnabled is False:
             return
         positionVec = Math.Vector3(position[0], position[1], position[2])
         if name == BATTLE_CHAT_COMMAND_NAMES.SPG_AIM_AREA and self.__isSPG():
@@ -284,7 +285,7 @@ class ChatCommandsController(IBattleController):
             return
 
     def sendCommandToBase(self, baseIdx, cmdName, baseName=''):
-        if not avatar_getter.isVehicleAlive() and cmdName in PROHIBITED_IF_DEAD or self.sessionProvider.getCtx().isPlayerObserver() and cmdName in PROHIBITED_IF_SPECTATOR or self.__isEnabled is False:
+        if self.__isProhibitedToSendIfDeadOrObserver(cmdName) or self.__isEnabled is False:
             return
         if self.sessionProvider.arenaVisitor.gui.isInEpicRange():
             baseName = ID_TO_BASENAME[baseIdx]
@@ -295,7 +296,7 @@ class ChatCommandsController(IBattleController):
             _logger.error('Command not found: %s', cmdName)
 
     def sendCommand(self, cmdName):
-        if not avatar_getter.isVehicleAlive() and cmdName in PROHIBITED_IF_DEAD or self.sessionProvider.getCtx().isPlayerObserver() and cmdName in PROHIBITED_IF_SPECTATOR or self.__isEnabled is False:
+        if self.__isProhibitedToSendIfDeadOrObserver(cmdName) or self.__isEnabled is False:
             return
         command = self.proto.battleCmd.createByName(cmdName)
         if command:
@@ -304,7 +305,7 @@ class ChatCommandsController(IBattleController):
             _logger.error('Command not found: %s', cmdName)
 
     def sendEpicGlobalCommand(self, cmdName, baseName=''):
-        if not avatar_getter.isVehicleAlive() and cmdName in PROHIBITED_IF_DEAD or self.sessionProvider.getCtx().isPlayerObserver() and cmdName in PROHIBITED_IF_SPECTATOR or self.__isEnabled is False:
+        if self.__isProhibitedToSendIfDeadOrObserver(cmdName) or self.__isEnabled is False:
             return
         command = self.proto.battleCmd.createByGlobalMsgName(cmdName, baseName)
         if command:
@@ -313,7 +314,7 @@ class ChatCommandsController(IBattleController):
             _logger.error('Command not found: %s', cmdName)
 
     def sendTargetedCommand(self, cmdName, targetID, isInRadialMenu=False):
-        if not avatar_getter.isVehicleAlive() and cmdName in PROHIBITED_IF_DEAD or self.sessionProvider.getCtx().isPlayerObserver() and cmdName in PROHIBITED_IF_SPECTATOR or self.__isEnabled is False or not self.__arenaDP.getVehicleInfo(targetID).isAlive():
+        if self.__isProhibitedToSendIfDeadOrObserver(cmdName) or self.__isEnabled is False or not self.__arenaDP.getVehicleInfo(targetID).isAlive():
             return
         if self.__isSPG() and cmdName == BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY or self.__isSPGAndInStrategicOrArtyMode() and cmdName == BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY and isInRadialMenu is False:
             command = self.proto.battleCmd.createSPGAimTargetCommand(targetID, self.__getReloadTime())
@@ -333,6 +334,11 @@ class ChatCommandsController(IBattleController):
             self.__sendChatCommand(command)
         else:
             _logger.error('Can not create reloading command')
+
+    def __isProhibitedToSendIfDeadOrObserver(self, name):
+        bonusType = self.sessionProvider.arenaVisitor.getArenaBonusType()
+        isSpamProtectionEnabled = ARENA_BONUS_TYPE_CAPS.checkAny(bonusType, ARENA_BONUS_TYPE_CAPS.SPAM_PROTECTION)
+        return not avatar_getter.isVehicleAlive() and (name in PROHIBITED_IF_DEAD or isSpamProtectionEnabled) or self.sessionProvider.getCtx().isPlayerObserver() and name in PROHIBITED_IF_SPECTATOR
 
     def __isSPG(self):
         return self.sessionProvider.getArenaDP().getVehicleInfo().isSPG()

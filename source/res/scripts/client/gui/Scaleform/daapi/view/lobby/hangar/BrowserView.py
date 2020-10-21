@@ -113,6 +113,9 @@ class BrowserView(LobbySubView, BrowserScreenMeta):
         super(BrowserView, self)._dispose()
         return
 
+    def _getBrowserSkipEscape(self):
+        return not self.__hasFocus or self.__errorOccurred
+
     def __onError(self):
         self.__errorOccurred = True
         self.__updateSkipEscape()
@@ -142,7 +145,7 @@ class BrowserView(LobbySubView, BrowserScreenMeta):
 
     def __updateSkipEscape(self):
         if self.__browser is not None:
-            self.__browser.skipEscape = not self.__hasFocus or self.__errorOccurred
+            self.__browser.skipEscape = self._getBrowserSkipEscape()
         return
 
     def __onServerSettingChanged(self, diff):

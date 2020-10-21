@@ -1,0 +1,47 @@
+<h28_halloween.xml>
+  <wwmusic>	ev_halloween_2019_hangar_drone	</wwmusic>
+  <wwambientSound>	ev_halloween_2019_hangar_wind	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	ambient.bnk	</bank>
+      <bank>	ev_halloween_2020_hangar.bnk	</bank>
+      <bank>	ev_halloween_2020_hangar.pck	</bank>
+      <bank>	ev_halloween_2020_gameplay.bnk	</bank>
+      <bank>	ev_halloween_2020_gameplay.pck	</bank>
+    </loadBanks>
+    <unloadBanks>
+      <bank>	hangar_premium_2018.bnk	</bank>
+      <bank>	env_Forest.bnk	</bank>
+    </unloadBanks>
+    <events>
+      <event>
+        <name>	ambient_trees_yellow_soft_comb_small_01	</name>
+        <mod>	ev_halloween_2019_hangar_remapping	</mod>
+      </event>
+      <event>
+        <name>	ambient_trees_without_foliage_bush_big_01	</name>
+        <mod>	ev_halloween_2019_hangar_remapping	</mod>
+      </event>
+      <event>
+        <name>	ambient_trees_crack	</name>
+        <mod>	ev_halloween_2019_hangar_remapping	</mod>
+      </event>
+      <event>
+        <name>	ambient_bush_yellow_dry_small_01	</name>
+        <mod>	ev_halloween_2019_hangar_remapping	</mod>
+      </event>
+      <event>
+        <name>	ambient_trees_dry_comb_big_01	</name>
+        <mod>	ev_halloween_2019_hangar_remapping	</mod>
+      </event>
+      <event>
+        <name>	ambient_trees_yellow_soft_comb_small_01	</name>
+        <mod>	ev_halloween_2019_hangar_remapping	</mod>
+      </event>
+    </events>
+  </soundRemapping>
+  <boundingBox>
+    <bottomLeft>	-200.0 -500.0	</bottomLeft>
+    <upperRight>	200.0 -100.0	</upperRight>
+  </boundingBox>
+</h28_halloween.xml>

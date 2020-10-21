@@ -14,6 +14,8 @@ from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, VEHICLE_WAIN
 from gui.battle_control.controllers.interfaces import IBattleController
 from gui.shared.utils.TimeInterval import TimeInterval
 from shared_utils import first
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
 
 class _StateHandler(object):
     __slots__ = ('__updater',)
@@ -190,6 +192,7 @@ class _VehicleUpdater(object):
 
 
 class VehicleStateController(IBattleController):
+    guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(VehicleStateController, self).__init__()
@@ -198,6 +201,7 @@ class VehicleStateController(IBattleController):
         self.onVehicleControlling = Event.Event(self.__eManager)
         self.onPostMortemSwitched = Event.Event(self.__eManager)
         self.onRespawnBaseMoving = Event.Event(self.__eManager)
+        self.onUpdateScenarioTimer = Event.Event(self.__eManager)
         self.__cachedStateValues = {}
         self.__cachedRepairingCallbackID = None
         self.__waitingTI = TimeInterval(VEHICLE_WAINING_INTERVAL, self, '_waiting')
@@ -235,6 +239,10 @@ class VehicleStateController(IBattleController):
         return self.__isInPostmortem
 
     def setPlayerVehicle(self, vehicleID):
+        isEventBattle = self.guiSessionProvider.arenaVisitor.gui.isEventBattle()
+        if isEventBattle:
+            self.__cachedStateValues.clear()
+            self.notifyStateChanged(VEHICLE_VIEW_STATE.SWITCHING, 0)
         self.notifyStateChanged(VEHICLE_VIEW_STATE.PLAYER_INFO, vehicleID)
         self.__vehicleID = vehicleID
         self.__updater = _VehicleUpdater(self, self.__vehicleID)
@@ -334,6 +342,9 @@ class VehicleStateController(IBattleController):
         self.onRespawnBaseMoving()
         self.__cachedStateValues.clear()
 
+    def updateScenarioTimer(self, waitTime, alarmTime, visible):
+        self.onUpdateScenarioTimer(waitTime, alarmTime, visible)
+
     def _waiting(self):
         vehicle = BigWorld.entity(self.__vehicleID)
         if vehicle is not None and vehicle.isStarted:
@@ -347,7 +358,7 @@ class VehicleStateController(IBattleController):
         if self.__isRqToSwitch:
             nationID = vehicle.typeDescriptor.type.id[0]
             notifications = avatar_getter.getSoundNotifications()
-            if notifications is not None:
+            if notifications is not None and not self.guiSessionProvider.arenaVisitor.gui.isEventBattle():
                 notifications.clear()
             SoundGroups.g_instance.soundModes.setCurrentNation(nations.NAMES[nationID])
         self.onVehicleControlling(vehicle)

@@ -32,6 +32,8 @@ class BATTLE_EVENT_TYPE:
     MULTI_STUN = 21
     DETECTED = 22
     EQUIPMENT_TIMER_EXPIRED = 23
+    BUFF_APPLIED = 24
+    BUFF_EFFECT_APPLIED = 25
     HIDE_IF_TARGET_INVISIBLE = (CRIT,
      DAMAGE,
      TRACK_ASSIST,
@@ -58,6 +60,7 @@ class BATTLE_EVENT_TYPE:
      ENEMY_SECTOR_CAPTURED,
      DEFENDER_BONUS])
     EQUIPMENT_EVENTS = frozenset([EQUIPMENT_TIMER_EXPIRED])
+    BUFF_EVENTS = frozenset([BUFF_APPLIED, BUFF_EFFECT_APPLIED])
     ALL = frozenset([SPOTTED,
      RADIO_ASSIST,
      TRACK_ASSIST,
@@ -81,6 +84,8 @@ class BATTLE_EVENT_TYPE:
      BASE_CAPTURE_BLOCKED,
      MULTI_STUN,
      DETECTED,
+     BUFF_APPLIED,
+     BUFF_EFFECT_APPLIED,
      EQUIPMENT_TIMER_EXPIRED])
 
     @staticmethod
@@ -120,3 +125,11 @@ class BATTLE_EVENT_TYPE:
     @staticmethod
     def unpackVisibility(packedVisibility):
         return (packedVisibility & 1, packedVisibility & 2, packedVisibility & 4)
+
+    @staticmethod
+    def packBuffEffectApplied(effectValue, buffIndex, victimID):
+        return (int(victimID) & 65535) << 24 | (int(effectValue) & 4095) << 12 | buffIndex & 255
+
+    @staticmethod
+    def unpackBuffEffectApplied(packedEffect):
+        return (packedEffect >> 24 & 65535, packedEffect >> 12 & 4095, packedEffect & 255)

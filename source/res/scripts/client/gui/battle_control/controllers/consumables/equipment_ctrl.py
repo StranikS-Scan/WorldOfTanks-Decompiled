@@ -61,6 +61,8 @@ class EquipmentSound(object):
      1531: 'battle_equipment_1531',
      46331: 'battle_equipment_1531',
      1275: 'battle_equipment_1275'}
+    _hw19_ui_ability = {'press': 'ev_halloween_2019_ui_ability_button',
+     'not_ready': 'ev_halloween_2019_ui_ability_button_not_ready'}
 
     @staticmethod
     def getSounds():
@@ -68,7 +70,11 @@ class EquipmentSound(object):
 
     @staticmethod
     def playSound(ID):
-        soundName = EquipmentSound._soundMap.get(ID, None)
+        soundName = None
+        if ID in EquipmentSound._soundMap:
+            soundName = EquipmentSound._soundMap[ID]
+        elif ID in EquipmentSound._hw19_ui_ability:
+            soundName = EquipmentSound._hw19_ui_ability[ID]
         if soundName is not None:
             SoundGroups.g_instance.playSound2D(soundName)
         return
@@ -707,6 +713,91 @@ def _isBattleRoyaleBattle():
     return BigWorld.player().arena.bonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE if BigWorld.player() is not None else False
 
 
+class EventItem(_TriggerItem):
+
+    def update(self, quantity, stage, timeRemaining, totalTime):
+        super(EventItem, self).update(quantity, stage, timeRemaining, totalTime)
+        if stage in (EQUIPMENT_STAGES.COOLDOWN, EQUIPMENT_STAGES.READY):
+            self._totalTime = self._descriptor.cooldownSeconds
+        elif stage == EQUIPMENT_STAGES.ACTIVE:
+            self._totalTime = timeRemaining
+
+
+class _EventBuffItem(EventItem):
+    pass
+
+
+class _HpRepairAndCrewHeal(EventItem):
+
+    def canActivate(self, entityName=None, avatar=None):
+        avatar = avatar or BigWorld.player()
+        result, error = super(_HpRepairAndCrewHeal, self).canActivate(entityName, avatar)
+        if not result:
+            return (result, error)
+        elif avatar_getter.isVehicleInFire(avatar):
+            return (True, None)
+        else:
+            vehicle = BigWorld.entities.get(avatar.playerVehicleID)
+            if not vehicle:
+                return (False, _ActivationError('hpRepairAndCrewHeal', {'name': self._descriptor.userString}))
+            elif vehicle.maxHealth > vehicle.health:
+                return (True, None)
+            deviceStates = avatar_getter.getVehicleDeviceStates(avatar)
+            for item in self._getDevicesIterator():
+                if item[0] in deviceStates:
+                    isEntityNotRequired = not self.isEntityRequired()
+                    return (isEntityNotRequired, None if isEntityNotRequired else NeedEntitySelection('', None))
+
+            result, error = self._checkCrew(avatar)
+            return (result, error) if result else (False, _ActivationError('hpRepairAndCrewHeal', {'name': self._descriptor.userString}))
+
+    def _checkCrew(self, avatar):
+        result = False
+        error = None
+        deviceStates = avatar_getter.getVehicleDeviceStates(avatar)
+        for item in self._getCrewIterator():
+            if item[0] in deviceStates:
+                isEntityNotRequired = not self.isEntityRequired()
+                result = isEntityNotRequired
+                error = None if isEntityNotRequired else NeedEntitySelection('', None)
+                break
+
+        return (True, IgnoreEntitySelection('', None)) if not result and type(error) not in (NeedEntitySelection, NotApplyingError) and avatar_getter.isVehicleStunned() and self.isReusable else (False, None)
+
+    @staticmethod
+    def _getCrewIterator(avatar=None):
+        return vehicle_getter.TankmenStatesIterator(avatar_getter.getVehicleDeviceStates(avatar), avatar_getter.getVehicleTypeDescriptor(avatar))
+
+    @staticmethod
+    def _getDevicesIterator(avatar=None):
+        return vehicle_getter.VehicleDeviceStatesIterator(avatar_getter.getVehicleDeviceStates(avatar), avatar_getter.getVehicleTypeDescriptor(avatar))
+
+
+class _InstantReload(EventItem):
+    guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
+
+    def canActivate(self, entityName=None, avatar=None):
+        avatar = avatar or BigWorld.player()
+        result, error = super(_InstantReload, self).canActivate(entityName, avatar)
+        if not result:
+            return (result, error)
+        else:
+            ammoCtrl = self.guiSessionProvider.shared.ammo
+            quantity, quantityInClip = ammoCtrl.getCurrentShells()
+            if not quantity:
+                return (False, None)
+            isGunReload = ammoCtrl.isGunReloading()
+            if isGunReload:
+                return (True, None)
+            if ammoCtrl.getGunSettings().isCassetteClip():
+                clipCapacity = ammoCtrl.getClipCapacity()
+                if clipCapacity > quantity:
+                    return (False, None)
+                if clipCapacity > quantityInClip:
+                    return (True, None)
+            return (False, _ActivationError('instantReload', {'name': self._descriptor.userString}))
+
+
 def _triggerItemFactory(descriptor, quantity, stage, timeRemaining, totalTime, tags=None):
     if descriptor.name.startswith('arcade_artillery'):
         return _ArcadeArtileryItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
@@ -752,7 +843,12 @@ _EQUIPMENT_TAG_TO_ITEM = {('fuel',): _AutoItem,
  ('medkit',): _MedKitItem,
  ('repairkit',): _RepairKitItem,
  ('regenerationKit',): _RegenerationKitItem,
- ('medkit', 'repairkit'): _RepairCrewAndModules}
+ ('medkit', 'repairkit'): _RepairCrewAndModules,
+ ('resurrect',): _AutoItem,
+ ('eventItem',): EventItem,
+ ('eventBuff',): _EventBuffItem,
+ ('hpRepairAndCrewHeal',): _HpRepairAndCrewHeal,
+ ('instantReload',): _InstantReload}
 
 def _getInitialTagsAndClass(descriptor, tagsToItems):
     descrTags = descriptor.tags
@@ -940,6 +1036,9 @@ class EquipmentsController(MethodsRules, IBattleController):
 
     def __doChangeSetting(self, item, entityName=None, avatar=None):
         result, error = item.canActivate(entityName, avatar)
+        descriptor = item.getDescriptor()
+        if descriptor.activationWWSoundFeedback is not None:
+            EquipmentSound.playSound('press' if result else 'not_ready')
         if result and avatar_getter.isPlayerOnArena(avatar):
             if item.getStage() == EQUIPMENT_STAGES.PREPARING:
                 item.deactivate()
@@ -1196,7 +1295,12 @@ _REPLAY_EQUIPMENT_TAG_TO_ITEM = {('fuel',): _ReplayItem,
  ('medkit',): _ReplayMedKitItem,
  ('repairkit',): _ReplayRepairKitItem,
  ('regenerationKit',): _ReplayItem,
- ('medkit', 'repairkit'): _ReplayItem}
+ ('medkit', 'repairkit'): _ReplayItem,
+ ('resurrect',): _ReplayItem,
+ ('eventItem',): _ReplayItem,
+ ('eventBuff',): _ReplayItem,
+ ('hpRepairAndCrewHeal',): _ReplayItem,
+ ('instantReload',): _ReplayItem}
 
 class EquipmentsReplayPlayer(EquipmentsController):
     __slots__ = ('__callbackID', '__callbackTimeID', '__percentGetters', '__percents', '__timeGetters', '__times')

@@ -175,6 +175,8 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         self.onRegionHighlighted = Event.Event(self._eventsManager)
         self.onOutfitChanged = Event.Event(self._eventsManager)
         self.onCustomizationHelperRecreated = Event.Event(self._eventsManager)
+        self.onCustomizationOpened = Event.Event(self._eventsManager)
+        self.onCustomizationClosed = Event.Event(self._eventsManager)
         self.__customizationCtx = None
         self._suspendHighlighterCallbackID = None
         self._isDraggingInProcess = False
@@ -252,13 +254,16 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         loadCallback = lambda : self.__loadCustomization(vehInvID, callback)
         if self.__showCustomizationCallbackId is None:
             self.__moveHangarVehicleToCustomizationRoom()
+            self.__customizationCtx.c11nCameraManager.vEntity.appearance.rotateGunToDefault()
             self.__showCustomizationCallbackId = BigWorld.callback(0.0, lambda : self.__showCustomization(loadCallback))
+        self.onCustomizationOpened()
         return
 
     def closeCustomization(self):
         if self.hangarSpace.space is not None:
             self.hangarSpace.space.turretAndGunAngles.reset()
         self.__destroyCtx()
+        self.onCustomizationClosed()
         return
 
     def getCtx(self):

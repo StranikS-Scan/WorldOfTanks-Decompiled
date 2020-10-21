@@ -115,7 +115,8 @@ def getVehicleDataVO(vehicle):
      'isEarnCrystals': vehicle.isEarnCrystals,
      'isCrystalsLimitReached': isCrystalsLimitReached,
      'isUseRightBtn': True,
-     'tooltip': TOOLTIPS_CONSTANTS.CAROUSEL_VEHICLE}
+     'tooltip': TOOLTIPS_CONSTANTS.CAROUSEL_VEHICLE,
+     'isEvent': vehicle.isOnlyForEventBattles}
 
 
 class CarouselDataProvider(SortableDAAPIDataProvider):
@@ -151,6 +152,9 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
 
     def getRentPromotionVehiclesCount(self):
         return len(self._getFilteredVehicles(REQ_CRITERIA.VEHICLE.RENT_PROMOTION))
+
+    def getEventVehiclesCount(self):
+        return len(self._itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EVENT_BATTLE))
 
     def getCurrentVehiclesCount(self):
         return len(self._filteredIndices)

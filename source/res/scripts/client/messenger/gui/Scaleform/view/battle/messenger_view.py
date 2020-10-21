@@ -40,7 +40,7 @@ def _getToolTipText(arenaVisitor):
     if arenaVisitor is not None:
         if arenaVisitor.gui.isTrainingBattle():
             result = settings.toolTipText
-        elif arenaVisitor.gui.isRandomBattle() and g_settings.userPrefs.disableBattleChat:
+        elif g_settings.userPrefs.disableBattleChat and (arenaVisitor.gui.isRandomBattle() or arenaVisitor.gui.isEventBattle()):
             result = settings.chatIsLockedToolTipText
         else:
             result = settings.toolTipTextWithMuteInfo

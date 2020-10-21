@@ -9,6 +9,9 @@ from gui.shared import events, EVENT_BUS_SCOPE
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
+from HalloweenHangarTank import HalloweenHangarTank
+from gui.impl import backport
+from gui.impl.gen import R
 
 class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
     __loadEvents = (VIEW_ALIAS.LOBBY_STORE,
@@ -24,14 +27,17 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
 
     def __init__(self, ctx=None):
         super(LobbyVehicleMarkerView, self).__init__(ctx)
-        self.__vehicleMarker = None
-        self.__isMarkerDisabled = False
+        self.__vehicleMarkers = {}
+        self.__areMarkersDisabled = False
+        self.__selectedVehicleID = None
         return
 
     def _populate(self):
         super(LobbyVehicleMarkerView, self)._populate()
         self.addListener(events.HangarVehicleEvent.ON_HERO_TANK_LOADED, self.__onHeroTankLoaded, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, self.__onHeroTankDestroy, EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.HangarVehicleEvent.ON_HALLOWEEN_TANK_LOADED, self.__onHeroTankLoaded, EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.HangarVehicleEvent.ON_HALLOWEEN_TANK_DESTROY, self.__onHeroTankDestroy, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.HangarVehicleEvent.HERO_TANK_MARKER, self.__onMarkerDisable, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__onCameraEntityUpdated, EVENT_BUS_SCOPE.DEFAULT)
         self.hangarSpace.onSpaceDestroy += self.__onSpaceDestroy
@@ -39,58 +45,63 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         self.addListener(events.ViewEventType.LOAD_GUI_IMPL_VIEW, self.__handleGuiImplViewLoad, EVENT_BUS_SCOPE.LOBBY)
 
     def _dispose(self):
+        self.__destroyAllMarkers()
         super(LobbyVehicleMarkerView, self)._dispose()
         self.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__onCameraEntityUpdated, EVENT_BUS_SCOPE.DEFAULT)
         self.removeListener(events.HangarVehicleEvent.ON_HERO_TANK_LOADED, self.__onHeroTankLoaded, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, self.__onHeroTankDestroy, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.HangarVehicleEvent.ON_HALLOWEEN_TANK_LOADED, self.__onHeroTankLoaded, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.HangarVehicleEvent.ON_HALLOWEEN_TANK_DESTROY, self.__onHeroTankDestroy, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.HangarVehicleEvent.HERO_TANK_MARKER, self.__onMarkerDisable, EVENT_BUS_SCOPE.LOBBY)
         self.hangarSpace.onSpaceDestroy -= self.__onSpaceDestroy
-        self.__vehicleMarker = None
         self.removeListener(events.ViewEventType.LOAD_VIEW, self.__handleViewLoad, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.ViewEventType.LOAD_GUI_IMPL_VIEW, self.__handleGuiImplViewLoad, EVENT_BUS_SCOPE.LOBBY)
-        return
 
     def getIsMarkerDisabled(self):
         return self.__isMarkerDisabled
 
     def __onSpaceDestroy(self, _):
-        self.__destroyMarker()
+        self.__destroyAllMarkers()
 
     def __onHeroTankLoaded(self, event):
         vehicle = event.ctx['entity']
         self.__beginCreateMarker(vehicle)
 
-    def __onHeroTankDestroy(self, *_):
-        self.__destroyMarker()
+    def __onHeroTankDestroy(self, event):
+        vehicle = event.ctx['entity']
+        self.__destroyMarker(vehicle)
 
     def __onCameraEntityUpdated(self, event):
-        if self.__isMarkerDisabled or self.__vehicleMarker is None:
-            return
-        else:
-            state = event.ctx['state']
-            if state == CameraMovementStates.FROM_OBJECT:
-                return
-            self.__vehicleMarker.markerSetActive(self.hangarSpace.space.vehicleEntityId == event.ctx['entityId'])
-            return
+        state = event.ctx['state']
+        entityId = event.ctx['entityId']
+        alwaysShowMarker = event.ctx.get('alwaysShowMarker', False)
+        if state == CameraMovementStates.MOVING_TO_OBJECT:
+            self.__selectedVehicleID = entityId if not alwaysShowMarker else None
+        elif state == CameraMovementStates.FROM_OBJECT and self.__selectedVehicleID == entityId:
+            self.__selectedVehicleID = None
+        self.__updateMarkerVisibility()
+        return
 
     def __onMarkerDisable(self, event):
-        self.__isMarkerDisabled = event.ctx['isDisable']
+        self.__areMarkersDisabled = event.ctx['isDisable']
         self.__updateMarkerVisibility()
 
     def __updateMarkerVisibility(self):
-        if self.__vehicleMarker is None:
-            return
-        else:
-            self.__vehicleMarker.markerSetActive(not self.__isMarkerDisabled)
-            return
+        for vehicleID, marker in self.__vehicleMarkers.iteritems():
+            marker.markerSetActive(not self.__areMarkersDisabled and vehicleID != self.__selectedVehicleID)
 
     @staticmethod
     def __getVehicleInfo(vehicle):
+        isHalloween = isinstance(vehicle, HalloweenHangarTank)
         vehicleType = vehicle.typeDescriptor.type
-        vClass = getVehicleClassTag(vehicleType.tags)
-        vName = vehicleType.userString
-        vMatrix = LobbyVehicleMarkerView.__getCorrectedHPGuiMatrix(vehicle)
-        return (vClass, vName, vMatrix)
+        vClass = getVehicleClassTag(vehicleType.tags) if not isHalloween else ''
+        vName = vehicleType.userString if not isHalloween else backport.text(R.strings.event.tradeStyles.skinName(), name=vehicleType.shortUserString)
+        vMatrix = LobbyVehicleMarkerView.__getCorrectedHPGuiMatrix(vehicle) if not isHalloween else LobbyVehicleMarkerView.__getHWVehicleGuiMatrix(vehicle)
+        vMarkerStyleId = vehicle.markerStyleId
+        return (vClass,
+         vName,
+         vMatrix,
+         vMarkerStyleId)
 
     @staticmethod
     def __getCorrectedHPGuiMatrix(vehicle):
@@ -103,21 +114,40 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         mat.setTranslate(worldPosition)
         return mat
 
+    @staticmethod
+    def __getHWVehicleGuiMatrix(hwVehicle):
+        mat = Math.Matrix()
+        guiNode = hwVehicle.model.node('HP_gui')
+        localPosition = Math.Vector3(guiNode.initialLocalMatrix.translation)
+        localPosition.y *= hwVehicle.markerHeightFactor
+        vehicleMatrix = Math.Matrix(hwVehicle.matrix)
+        worldPosition = vehicleMatrix.applyPoint(localPosition)
+        mat.setTranslate(worldPosition)
+        return mat
+
     def __beginCreateMarker(self, vehicle):
-        self.__destroyMarker()
+        self.__destroyMarker(vehicle)
         self.__createMarker(vehicle)
 
     def __createMarker(self, vehicle):
-        vClass, vName, vMatrix = self.__getVehicleInfo(vehicle)
-        flashMarker = self.as_createMarkerS(vClass, vName)
-        self.__vehicleMarker = GUI.WGHangarVehicleMarker()
-        self.__vehicleMarker.setMarker(flashMarker, vMatrix)
+        vClass, vName, vMatrix, vMarkerStyleId = self.__getVehicleInfo(vehicle)
+        flashMarker = self.as_createMarkerS(vClass, vName, vehicle.id, vMarkerStyleId)
+        marker = GUI.WGHangarVehicleMarker()
+        marker.setMarker(flashMarker, vMatrix)
+        self.__vehicleMarkers[vehicle.id] = marker
         self.__updateMarkerVisibility()
 
-    def __destroyMarker(self):
-        self.as_removeMarkerS()
-        self.__vehicleMarker = None
-        return
+    def __destroyMarker(self, vehicle):
+        vehicleID = vehicle.id
+        if vehicleID in self.__vehicleMarkers:
+            self.as_removeMarkerS(vehicleID)
+            del self.__vehicleMarkers[vehicleID]
+
+    def __destroyAllMarkers(self):
+        for markerID in self.__vehicleMarkers:
+            self.as_removeMarkerS(markerID)
+
+        self.__vehicleMarkers.clear()
 
     def __handleViewLoad(self, event):
         if event.alias == VIEW_ALIAS.LOBBY_HANGAR:

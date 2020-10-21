@@ -9,7 +9,7 @@ from shared_utils import nextTick
 import season_common
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import ROYALE_VEHICLE, CURRENT_VEHICLE
+from account_helpers.AccountSettings import ROYALE_VEHICLE, CURRENT_VEHICLE, EVENT_CURRENT_VEHICLE
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from adisp import process
 from constants import QUEUE_TYPE, Configs, PREBATTLE_TYPE, ARENA_BONUS_TYPE
@@ -236,6 +236,14 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         else:
             return False
 
+    def isEventMode(self):
+        dispatcher = self.prbDispatcher
+        if dispatcher is not None:
+            state = dispatcher.getFunctionalState()
+            return state.isInPreQueue(queueType=QUEUE_TYPE.EVENT_BATTLES) or state.isInUnit(PREBATTLE_TYPE.EVENT)
+        else:
+            return False
+
     def isInBattleRoyaleSquad(self):
         dispatcher = self.prbDispatcher
         if dispatcher is not None:
@@ -343,14 +351,23 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         return
 
     def __disableRoyaleMode(self):
-        storedVehInvID = AccountSettings.getFavorites(CURRENT_VEHICLE)
+        isEventMode = self.isEventMode()
+        storedVehInvID = AccountSettings.getFavorites(CURRENT_VEHICLE) if not isEventMode else AccountSettings.getFavorites(EVENT_CURRENT_VEHICLE)
         if not storedVehInvID:
             criteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.HAS_TAGS([VEHICLE_TAGS.BATTLE_ROYALE])
-            vehicle = first(self.__itemsCache.items.getVehicles(criteria=criteria).values())
+            if isEventMode:
+                criteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EVENT_BATTLE
+                vehicle = first(sorted(self.__itemsCache.items.getVehicles(criteria=criteria).itervalues(), key=lambda veh: veh.intCD, reverse=True))
+            else:
+                criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
+                vehicle = first(self.__itemsCache.items.getVehicles(criteria=criteria).values())
             if vehicle:
                 storedVehInvID = vehicle.invID
         if storedVehInvID:
-            g_currentVehicle.selectVehicle(storedVehInvID)
+            if isEventMode:
+                g_currentVehicle.selectEventVehicle(storedVehInvID)
+            else:
+                g_currentVehicle.selectVehicle(storedVehInvID)
         else:
             g_currentVehicle.selectNoVehicle()
         self.__voControl.deactivate()

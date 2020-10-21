@@ -1,5 +1,13 @@
-<dynamic_objects.xml>
-  <models></models>
+<dynamic_objects.xml>	-	  <models></models>
+  <eventControlPoint>
+    <flagModelName>	content/Environment/env_111_04_RepairFlag/normal/lod0/env_111_04_RepairFlag.model	</flagModelName>
+    <radiusModel>	content/Interface/CheckPoint/CheckPoint_yellow_black.visual	</radiusModel>
+    <flagAnim>	RepairFlagAnimAction	</flagAnim>
+    <wwsound>	ambient_static_objects_flag_flapping	</wwsound>
+    <eventControlPointSSM>	content/Environment/events/event_control_point.ssm	</eventControlPointSSM>
+    <eventControlPointSSMModel>	content/Environment/events/event_control_point_model.ssm	</eventControlPointSSMModel>
+    <eventControlPointSSMBoolParam>	isActive	</eventControlPointSSMBoolParam>
+  </eventControlPoint>
   <stunAreaVisual>
     <radius>	15.0	</radius>
     <areasNum>	3	</areasNum>
@@ -187,6 +195,308 @@
       <overTerrainHeight>	0.5	</overTerrainHeight>
     </ally>
   </InspireAreaVisual>
+  <VehicleBotPreSpawnEffect>
+    <timeline>
+      <effectEnd>	10	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/interior/11_murovanka_fire_smoke_2.xml	</file>
+        <force>	1	</force>
+      </pixie>
+    </effects>
+  </VehicleBotPreSpawnEffect>
+  <ShieldIdle>
+    <path>	particles/Environment/event_halloween_2019/our_tank_demolitiy/tank_dem_deff_bubble.seq	</path>
+  </ShieldIdle>
+  <ShieldStart>
+    <path>	particles/Environment/event_halloween_2019/our_tank_demolitiy/tank_dem_deff_bubble_start.seq	</path>
+  </ShieldStart>
+  <ShieldEnd>
+    <path>	particles/Environment/event_halloween_2019/our_tank_demolitiy/tank_dem_deff_bubble_end.seq	</path>
+  </ShieldEnd>
+  <VolotStartVisual>
+    <path>	particles/Environment/event_halloween_2019/volot/volot_start.seq	</path>
+  </VolotStartVisual>
+  <VolotIdleVisual>
+    <path>	particles/Environment/event_halloween_2019/volot/volot_idle.seq	</path>
+  </VolotIdleVisual>
+  <VolotAuraStartVisual>
+    <path>	particles/Environment/event_halloween_2019/volot/volot_aura_start.seq	</path>
+  </VolotAuraStartVisual>
+  <VolotAuraIdleVisual>
+    <path>	particles/Environment/event_halloween_2019/volot/volot_aura_idle.seq	</path>
+  </VolotAuraIdleVisual>
+  <VolotFullStartVisual>
+    <path>	particles/Environment/event_halloween_2019/volot/volot_start_full.seq	</path>
+  </VolotFullStartVisual>
+  <VolotFullIdleVisual>
+    <path>	particles/Environment/event_halloween_2019/volot/volot_idle_full.seq	</path>
+  </VolotFullIdleVisual>
+  <VolotRingStartVisual>
+    <path>	particles/Environment/event_halloween_2019/volot/volot_energy_ring_start.seq	</path>
+  </VolotRingStartVisual>
+  <VolotRingIdleVisual>
+    <path>	particles/Environment/event_halloween_2019/volot/volot_energy_ring_idle.seq	</path>
+  </VolotRingIdleVisual>
+  <VolotCollectingStartVisual>
+    <path>	particles/Environment/event_halloween_2019/volot/collecting/collecting_start.seq	</path>
+  </VolotCollectingStartVisual>
+  <VolotCollectingIdleVisual>
+    <path>	particles/Environment/event_halloween_2019/volot/collecting/collecting_idle.seq	</path>
+  </VolotCollectingIdleVisual>
+  <VolotCollectingEndVisual>
+    <path>	particles/Environment/event_halloween_2019/volot/collecting/collecting_end.seq	</path>
+  </VolotCollectingEndVisual>
+  <VolotDisappearVisual>
+    <path>	particles/Environment/event_halloween_2019/volot/volot_disappear.seq	</path>
+  </VolotDisappearVisual>
+  <CreepSpawnVisual>
+    <path>	particles/Environment/event_halloween_2019/enemies/creeps_incame.seq	</path>
+  </CreepSpawnVisual>
+  <DemolitiyCatchBig>
+    <path>	particles/Environment/event_halloween_2019/our_tank_demolitiy/demolitiy_catch_big.seq	</path>
+  </DemolitiyCatchBig>
+  <DemolitiyCatchMedium>
+    <path>	particles/Environment/event_halloween_2019/our_tank_demolitiy/demolitiy_catch_medium.seq	</path>
+  </DemolitiyCatchMedium>
+  <DemolitiyCatchSmall>
+    <path>	particles/Environment/event_halloween_2019/our_tank_demolitiy/demolitiy_catch_small.seq	</path>
+  </DemolitiyCatchSmall>
+  <LoreCatch>
+    <path>	particles/Environment/event_halloween_2019/our_tank_demolitiy/lore_catch.seq	</path>
+  </LoreCatch>
+  <BuffCatch>
+    <path>	particles/Environment/event_halloween_2019/our_tank_demolitiy/buff_catch.seq	</path>
+  </BuffCatch>
+  <eventLootTypes>
+    <item>
+      <id>	1	</id>
+      <name>	default_container	</name>
+    </item>
+    <item>
+      <id>	2	</id>
+      <name>	spawn_container	</name>
+    </item>
+  </eventLootTypes>
+  <default_container>
+    <particle>
+      <name>	particles/Environment/event_halloween_2019/our_tank_demolitiy/demolitiy_medium.eff	</name>
+    </particle>
+    <pickupEffect>
+      <name>	collectingDemolitiyEffect	</name>
+    </pickupEffect>
+    <minimapPoint>
+      <name>	EventSoulEntryUI	</name>
+    </minimapPoint>
+    <sequence>
+      <name>	particles/Environment/event_halloween_2019/our_tank_demolitiy/demolitiy_medium.seq	</name>
+    </sequence>
+  </default_container>
+  <demolitiy_small>
+    <particle>
+      <name>	particles/Environment/event_halloween_2019/our_tank_demolitiy/demolitiy_small.eff	</name>
+    </particle>
+    <pickupEffect>
+      <name>	collectingDemolitiyEffect	</name>
+    </pickupEffect>
+    <minimapPoint>
+      <name>	EventSoulEntryUI	</name>
+    </minimapPoint>
+    <sequence>
+      <name>	particles/Environment/event_halloween_2019/our_tank_demolitiy/demolitiy_small.seq	</name>
+    </sequence>
+  </demolitiy_small>
+  <demolitiy_medium>
+    <particle>
+      <name>	particles/Environment/event_halloween_2019/our_tank_demolitiy/demolitiy_medium.eff	</name>
+    </particle>
+    <pickupEffect>
+      <name>	collectingDemolitiyEffect	</name>
+    </pickupEffect>
+    <minimapPoint>
+      <name>	EventSoulEntryUI	</name>
+    </minimapPoint>
+    <sequence>
+      <name>	particles/Environment/event_halloween_2019/our_tank_demolitiy/demolitiy_medium.seq	</name>
+    </sequence>
+  </demolitiy_medium>
+  <demolitiy_big>
+    <particle>
+      <name>	particles/Environment/event_halloween_2019/our_tank_demolitiy/demolitiy_big.eff	</name>
+    </particle>
+    <pickupEffect>
+      <name>	collectingDemolitiyEffect	</name>
+    </pickupEffect>
+    <minimapPoint>
+      <name>	EventSoulEntryUI	</name>
+    </minimapPoint>
+    <sequence>
+      <name>	particles/Environment/event_halloween_2019/our_tank_demolitiy/demolitiy_big.seq	</name>
+    </sequence>
+  </demolitiy_big>
+  <lore_item>
+    <particle>
+      <name>	particles/Environment/event_halloween_2019/our_tank_demolitiy/lore.eff	</name>
+    </particle>
+    <pickupEffect>
+      <name>	collectinLoreEffect	</name>
+    </pickupEffect>
+    <sequence>
+      <name>	particles/Environment/event_halloween_2019/our_tank_demolitiy/lore.seq	</name>
+    </sequence>
+    <minimapPoint>
+      <name>	EventSoulEntryUI	</name>
+    </minimapPoint>
+  </lore_item>
+  <buff_container>
+    <particle>
+      <name>	particles/Environment/event_halloween_2019/our_tank_demolitiy/buff.eff	</name>
+    </particle>
+    <pickupEffect>
+      <name>	collectingBuffEffect	</name>
+    </pickupEffect>
+    <minimapPoint>
+      <name>	EventSoulEntryUI	</name>
+    </minimapPoint>
+    <sequence>
+      <name>	particles/Environment/event_halloween_2019/our_tank_demolitiy/buff.seq	</name>
+    </sequence>
+  </buff_container>
+  <EventControlPointAnotherWorldEffect>
+    <timeline>
+      <effectEnd>	10	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/interior/07_lakeville_firesmoke.xml	</file>
+        <force>	1	</force>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lightingEnd	</endKey>
+        <innerRadius>	112.0	</innerRadius>
+        <outerRadius>	112.0	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <offset>	0.0 10.0 0.0	</offset>
+        <position>	0.0 0.0 0.0	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 218 10	</color>
+          <multiplier>	390000	</multiplier>
+          <lodShift>	1000	</lodShift>
+        </animation>
+        <animation>
+          <time>	0.1	</time>
+          <color>	255 218 10	</color>
+          <multiplier>	390000	</multiplier>
+          <lodShift>	1000	</lodShift>
+        </animation>
+        <animation>
+          <time>	0.15	</time>
+          <color>	255 137 40	</color>
+          <multiplier>	390000	</multiplier>
+          <lodShift>	1000	</lodShift>
+        </animation>
+        <animation>
+          <time>	0.2	</time>
+          <color>	255 218 10	</color>
+          <multiplier>	390000	</multiplier>
+          <lodShift>	1000	</lodShift>
+        </animation>
+        <animation>
+          <time>	0.25	</time>
+          <color>	255 218 10	</color>
+          <multiplier>	390000	</multiplier>
+          <lodShift>	1000	</lodShift>
+        </animation>
+        <animation>
+          <time>	0.3	</time>
+          <color>	255 218 10	</color>
+          <multiplier>	390000	</multiplier>
+          <lodShift>	1000	</lodShift>
+        </animation>
+        <animation>
+          <time>	0.35	</time>
+          <color>	255 218 10	</color>
+          <multiplier>	390000	</multiplier>
+          <lodShift>	1000	</lodShift>
+        </animation>
+        <animation>
+          <time>	0.40	</time>
+          <color>	255 218 10	</color>
+          <multiplier>	390000	</multiplier>
+          <lodShift>	1000	</lodShift>
+        </animation>
+        <animation>
+          <time>	0.45	</time>
+          <color>	255 218 10	</color>
+          <multiplier>	390000	</multiplier>
+          <lodShift>	1000	</lodShift>
+        </animation>
+        <animation>
+          <time>	0.55	</time>
+          <color>	255 218 10	</color>
+          <multiplier>	390000	</multiplier>
+          <lodShift>	1000	</lodShift>
+        </animation>
+        <animation>
+          <time>	0.6	</time>
+          <color>	255 218 10	</color>
+          <multiplier>	390000	</multiplier>
+          <lodShift>	1000	</lodShift>
+        </animation>
+        <animation>
+          <time>	0.7	</time>
+          <color>	255 218 10	</color>
+          <multiplier>	390000	</multiplier>
+          <lodShift>	1000	</lodShift>
+        </animation>
+        <animation>
+          <time>	0.8	</time>
+          <color>	255 218 10	</color>
+          <multiplier>	390000	</multiplier>
+          <lodShift>	1000	</lodShift>
+        </animation>
+        <animation>
+          <time>	0.9	</time>
+          <color>	255 218 10	</color>
+          <multiplier>	390000	</multiplier>
+          <lodShift>	1000	</lodShift>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	255 218 10	</color>
+          <multiplier>	390000	</multiplier>
+          <lodShift>	1000	</lodShift>
+        </animation>
+      </light>
+    </effects>
+  </EventControlPointAnotherWorldEffect>
+  <EventControlPointOriginalWorldEffect>
+    <timeline>
+      <effectEnd>	1	</effectEnd>
+    </timeline>
+    <effects>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lightingEnd	</endKey>
+        <innerRadius>	1.0	</innerRadius>
+        <outerRadius>	15.0	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <offset>	0.0 3.0 0.0	</offset>
+        <position>	0.0 0.0 0.0	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 137 40	</color>
+          <multiplier>	1	</multiplier>
+          <lodShift>	1	</lodShift>
+        </animation>
+      </light>
+    </effects>
+  </EventControlPointOriginalWorldEffect>
   <HealPointVisual>
     <ally>
       <visual>	content/Interface/TargetPoint/inspire.model	</visual>

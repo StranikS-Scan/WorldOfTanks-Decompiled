@@ -69,6 +69,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     SQUAD_BONUS = 'squadBonus'
     SESSION_STATS = 'sessionStats'
     TRADE_IN_INFO = 'tradeInInfo'
+    PERSONAL_TRADE_IN_INFO = 'personalTradeInInfo'
     TRADE_IN_INFO_NOT_AVAILABLE = 'tradeInInfoNotAvailable'
     TRADE_IN_STATE_NOT_AVAILABLE = 'tradeInStateNotAvailable'
     DEMOUNT_KIT = 'demountKit'

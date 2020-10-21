@@ -28,7 +28,7 @@ from gui.shared.money import Money, MONEY_UNDEFINED, Currency, ZERO_MONEY
 from helpers import time_utils, dependency
 from gui.shared.gui_items.gui_item_economics import ItemPrice, getVehicleBattleBoostersLayoutPrice, getVehicleConsumablesLayoutPrice, getVehicleOptionalDevicesLayoutPrice, getVehicleShellsLayoutPrice
 from helpers.i18n import makeString
-from skeletons.gui.game_control import IRestoreController, ITradeInController, IEpicBattleMetaGameController
+from skeletons.gui.game_control import IRestoreController, ITradeInController, IEpicBattleMetaGameController, IPersonalTradeInController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from rent_common import parseRentID
@@ -194,25 +194,25 @@ class VehicleRestoreProcessor(VehicleBuyer):
         BigWorld.player().shop.buyVehicle(self.item.nationID, self.item.innationID, self.buyShell, self.buyCrew, self.crewType, -1, lambda code: self._response(code, callback))
 
 
-class VehicleTradeInProcessor(VehicleBuyer):
-    __tradeIn = dependency.descriptor(ITradeInController)
+class VehicleTradeInProcessorBase(VehicleBuyer):
 
     def __init__(self, vehicleToBuy, vehicleToTradeOff, buySlot, buyShell=False, crewType=-1):
         self.itemToTradeOff = vehicleToTradeOff
-        super(VehicleTradeInProcessor, self).__init__(vehicleToBuy, buySlot, buyShell=buyShell, crewType=crewType)
+        super(VehicleTradeInProcessorBase, self).__init__(vehicleToBuy, buySlot, buyShell=buyShell, crewType=crewType)
 
     def _getPluginsList(self):
         nationGroupVehs = self.itemToTradeOff.getAllNationGroupVehs(self.itemsCache.items)
         barracksBerthsNeeded = getCrewCount(nationGroupVehs)
         return (proc_plugs.VehicleValidator(self.itemToTradeOff, setAll=True),
-         proc_plugs.VehicleTradeInValidator(self.item, self.itemToTradeOff),
          proc_plugs.VehicleSellValidator(self.itemToTradeOff),
          proc_plugs.MoneyValidator(self.price),
          proc_plugs.BarracksSlotsValidator(barracksBerthsNeeded))
 
-    def _getPrice(self):
-        price = self.__tradeIn.getTradeInPrice(self.item).price
-        return getCrewAndShellsSumPrice(price, self.item, self.crewType, self.buyShell)
+    def _successHandler(self, code, ctx=None):
+        return makeI18nSuccess(sysMsgKey='vehicle_trade_in/success', vehName=self.item.userName, tradeOffVehName=self.itemToTradeOff.userName, price=formatPrice(self.price), type=self._getSysMsgType())
+
+    def _getSysMsgType(self):
+        return CURRENCY_TO_SM_TYPE.get(self.item.buyPrices.itemPrice.getCurrency(byWeight=False), SM_TYPE.Information)
 
     def _errorHandler(self, code, errStr='', ctx=None, itemsCache=None):
         if not errStr:
@@ -221,15 +221,40 @@ class VehicleTradeInProcessor(VehicleBuyer):
             msg = 'vehicle_trade_in/{}'.format(errStr)
         return makeI18nError(sysMsgKey=msg, defaultSysMsgKey='vehicle_trade_in/server_error', vehName=self.item.userName, tradeOffVehName=self.itemToTradeOff.userName)
 
-    def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess(sysMsgKey='vehicle_trade_in/success', vehName=self.item.userName, tradeOffVehName=self.itemToTradeOff.userName, price=formatPrice(self.price), type=self._getSysMsgType())
-
-    def _getSysMsgType(self):
-        return CURRENCY_TO_SM_TYPE.get(self.item.buyPrices.itemPrice.getCurrency(byWeight=False), SM_TYPE.Information)
-
     def _request(self, callback):
         _logger.debug('Make request to trade-in vehicle: %s, %s, %s, %s, %s, %s', self.item, self.itemToTradeOff, self.buyShell, self.buyCrew, self.crewType, self.price)
-        BigWorld.player().shop.tradeInVehicle(self.itemToTradeOff.invID, self.item.nationID, self.item.innationID, self.buyShell, self.buyCrew, self.crewType, lambda code: self._response(code, callback))
+        self._getBuyingFunc()(self.itemToTradeOff.invID, self.item.nationID, self.item.innationID, self.buyShell, self.buyCrew, self.crewType, lambda code: self._response(code, callback))
+
+    def _getBuyingFunc(self):
+        raise NotImplementedError
+
+
+class VehicleTradeInProcessor(VehicleTradeInProcessorBase):
+    __tradeIn = dependency.descriptor(ITradeInController)
+
+    def _getPrice(self):
+        price = self.__tradeIn.getTradeInPrice(self.item).price
+        return getCrewAndShellsSumPrice(price, self.item, self.crewType, self.buyShell)
+
+    def _getBuyingFunc(self):
+        return BigWorld.player().shop.tradeInVehicle
+
+    def _getPluginsList(self):
+        return super(VehicleTradeInProcessor, self)._getPluginsList() + (proc_plugs.VehicleTradeInValidator(self.item, self.itemToTradeOff),)
+
+
+class VehiclePersonalTradeInProcessor(VehicleTradeInProcessorBase):
+    __personalTradeIn = dependency.descriptor(IPersonalTradeInController)
+
+    def _getPrice(self):
+        price = self.__personalTradeIn.getPersonalTradeInPrice(self.item).price
+        return getCrewAndShellsSumPrice(price, self.item, self.crewType, self.buyShell)
+
+    def _getBuyingFunc(self):
+        return BigWorld.player().shop.personalTradeInVehicle
+
+    def _getPluginsList(self):
+        return super(VehiclePersonalTradeInProcessor, self)._getPluginsList() + (proc_plugs.VehiclePersonalTradeInValidator(self.item, self.itemToTradeOff),)
 
 
 class VehicleSlotBuyer(Processor):

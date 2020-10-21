@@ -17,6 +17,16 @@ class NewYearCategories(CONST_CONTAINER):
     FAIRYTALE = 'Fairytale'
 
 
+class EventCategories(CONST_CONTAINER):
+    EVENT = 'Event'
+
+
+class EventLootBoxes(CONST_CONTAINER):
+    WT_HUNTER = 'wt_hunter'
+    WT_BOSS = 'wt_boss'
+    WT_SPECIAL = 'wt_special'
+
+
 SENIORITY_AWARDS_LOOT_BOXES_TYPE = 'seniorityAwards'
 GUI_ORDER = (NewYearLootBoxes.COMMON, NewYearLootBoxes.PREMIUM)
 CATEGORIES_GUI_ORDER = (NewYearCategories.NEWYEAR,

@@ -54,7 +54,7 @@ class DogTagComposerClient(object):
 
     @staticmethod
     def getDefaultBackgroundImageFullPath(size):
-        return backport.image(R.images.gui.maps.icons.dogtags.dyn(size.value.lower()).backgrounds.background_0_0())
+        return backport.image(R.images.gui.maps.icons.dogtags.dyn(size.value.lower()).backgrounds.background_66_0())
 
     @classmethod
     def getComponentTitle(cls, componentId):

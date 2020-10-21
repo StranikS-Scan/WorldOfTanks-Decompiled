@@ -16,7 +16,9 @@ from gui.battle_control.controllers.interfaces import IBattleController
 from gui.shared.utils.MethodsRules import MethodsRules
 from gui.shared.utils.decorators import ReprInjector
 from ReloadEffect import DualGunReload
+from helpers import dependency
 from items import vehicles
+from skeletons.gui.battle_session import IBattleSessionProvider
 __all__ = ('AmmoController', 'AmmoReplayPlayer')
 _ClipBurstSettings = namedtuple('_ClipBurstSettings', 'size interval')
 _HUNDRED_PERCENT = 100.0
@@ -549,11 +551,15 @@ class AmmoController(MethodsRules, IBattleController):
         else:
             return quantity
 
+    def getClipCapacity(self):
+        return self.__gunSettings.clip.size
+
     @MethodsRules.delayable('setGunSettings')
     def setShells(self, intCD, quantity, quantityInClip):
         player = BigWorld.player()
         observedVehicleData = player.observedVehicleData.get(player.observedVehicleID)
-        if observedVehicleData is not None:
+        guiSessionProvider = dependency.instance(IBattleSessionProvider)
+        if observedVehicleData is not None and not guiSessionProvider.arenaVisitor.gui.isEventBattle():
             ammoCDs = [ ammoData[0] for ammoData in observedVehicleData.orderedAmmo ]
             if intCD not in ammoCDs:
                 _logger.debug('Skip ammo with cd=%d , current ammoCDs are %s', intCD, str(ammoCDs))

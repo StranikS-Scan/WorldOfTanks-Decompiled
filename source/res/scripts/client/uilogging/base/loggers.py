@@ -38,6 +38,8 @@ def isUILoggingEnabled(feature):
         return False
     if BattleReplay.isPlaying():
         return False
+    if not loggingSettings.hostsDefined:
+        return False
     if feature == FEATURES.BOOTCAMP:
         return True
     tokenAvailable = isTokenAvailable(feature)
@@ -71,7 +73,9 @@ class BaseLogger(object):
 
     @property
     def ready(self):
-        return self._ready if loggingSettings.testMode else self._ready and self._enabled
+        if loggingSettings.testMode:
+            return self._ready
+        return False if not loggingSettings.host or not loggingSettings.apiHost else self._ready and self._enabled
 
     @property
     def feature(self):
@@ -82,6 +86,16 @@ class BaseLogger(object):
         if self._avatar:
             try:
                 return self._avatar.arena
+            except AttributeError:
+                return None
+
+        return None
+
+    @property
+    def peripheryID(self):
+        if self._avatar:
+            try:
+                return self._avatar.connectionMgr.peripheryID
             except AttributeError:
                 return None
 

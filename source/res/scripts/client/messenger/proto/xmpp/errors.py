@@ -110,7 +110,7 @@ class StanzaConditionError(IChatError):
         return self._condition
 
     def getMessage(self):
-        return i18n.makeString(I18N_MESSENGER.XMPP_ERROR_SIMPLE, strArg1=self.getCondition())
+        return i18n.makeString(I18N_MESSENGER.XMPP_ERROR_SIMPLE)
 
 
 class ServerActionError(StanzaConditionError):
@@ -124,7 +124,7 @@ class ServerActionError(StanzaConditionError):
         return self._actionID
 
     def getMessage(self):
-        return i18n.makeString(I18N_MESSENGER.XMPP_ERROR_ACTION, actionName=shared_errors.I18nActionID(self._actionID).getI18nName(), strArg1=self.getCondition())
+        return i18n.makeString(I18N_MESSENGER.XMPP_ERROR_ACTION, actionName=shared_errors.I18nActionID(self._actionID).getI18nName())
 
 
 class ServerUserRoomCreationError(IChatError):

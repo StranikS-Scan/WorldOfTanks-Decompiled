@@ -24,10 +24,18 @@ class VehiclePreviewTradeInBuyingPanel(VehiclePreviewTradeInBuyingPanelMeta):
         super(VehiclePreviewTradeInBuyingPanel, self).__init__()
         self.__tradeInVehicle = None
         self.__tradeOffVehicle = None
+        self.__backAlias = None
+        self.__backCallback = None
         return
 
     def onBuyClick(self):
-        event_dispatcher.showVehicleBuyDialog(g_currentPreviewVehicle.item, previousAlias=VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW)
+        event_dispatcher.showVehicleBuyDialog(g_currentPreviewVehicle.item, previousAlias=VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW, returnCallback=self.__backCallback, returnAlias=self.__backAlias)
+
+    def setBackAlias(self, backAlias):
+        self.__backAlias = backAlias
+
+    def setBackCallback(self, backCallback):
+        self.__backCallback = backCallback
 
     def _populate(self):
         super(VehiclePreviewTradeInBuyingPanel, self)._populate()

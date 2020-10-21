@@ -108,7 +108,10 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
 
     @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_VEHICLE_PREVIEW, EVENT_BUS_SCOPE.LOBBY)
     def __handleWindowClose(self, event=None):
-        if event is not None and not event.ctx.get('noCallback', False):
-            self.onBackClick()
+        if event is not None:
+            if event.ctx.get('back', True):
+                self.onBackClick()
+            elif event.ctx.get('close', False):
+                self.closeView()
         self.destroy()
         return

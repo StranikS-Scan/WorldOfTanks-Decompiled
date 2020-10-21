@@ -182,7 +182,7 @@ class SharedPage(BattlePageMeta):
                 self._onPostMortemSwitched(noRespawnPossible=False, respawnAvailable=False)
             self._isInPostmortem = ctrl.isInPostmortem
             ctrl.onPostMortemSwitched += self._onPostMortemSwitched
-            ctrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
+            ctrl.onRespawnBaseMoving += self._onRespawnBaseMoving
         aih_global_binding.subscribe(aih_global_binding.BINDING_ID.CTRL_MODE_NAME, self._onAvatarCtrlModeChanged)
         return
 
@@ -190,7 +190,7 @@ class SharedPage(BattlePageMeta):
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onPostMortemSwitched -= self._onPostMortemSwitched
-            ctrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
+            ctrl.onRespawnBaseMoving -= self._onRespawnBaseMoving
         aih_global_binding.unsubscribe(aih_global_binding.BINDING_ID.CTRL_MODE_NAME, self._onAvatarCtrlModeChanged)
         for alias, _ in self.__componentsConfig.getViewsConfig():
             self.sessionProvider.removeViewComponent(alias)
@@ -219,21 +219,27 @@ class SharedPage(BattlePageMeta):
         self._isBattleLoading = True
         if not self._blToggling:
             self._blToggling = set(self.as_getComponentsVisibilityS())
-        self._blToggling.difference_update([_ALIASES.BATTLE_LOADING])
+        battleLoadingVisibleAliases = self._getBattleLoadingVisibleAliases()
+        if battleLoadingVisibleAliases is not None:
+            self._blToggling.difference_update(battleLoadingVisibleAliases)
         self._blToggling.add(_ALIASES.BATTLE_MESSENGER)
         hintPanel = self.getComponent(_ALIASES.HINT_PANEL)
         if hintPanel and hintPanel.getActiveHint():
             self._blToggling.add(_ALIASES.HINT_PANEL)
-        self._setComponentsVisibility(visible={_ALIASES.BATTLE_LOADING}, hidden=self._blToggling)
+        self._setComponentsVisibility(visible=battleLoadingVisibleAliases, hidden=self._blToggling)
+        return
 
     def _onBattleLoadingFinish(self):
         self._isBattleLoading = False
-        self._setComponentsVisibility(visible=self._blToggling, hidden={_ALIASES.BATTLE_LOADING})
+        self._setComponentsVisibility(visible=self._blToggling, hidden=self._getBattleLoadingVisibleAliases())
         self._blToggling.clear()
         for component in self._external:
             component.active(True)
 
         self.sessionProvider.shared.hitDirection.setVisible(True)
+
+    def _getBattleLoadingVisibleAliases(self):
+        return {_ALIASES.BATTLE_LOADING}
 
     def _changeCtrlMode(self, ctrlMode):
         if ctrlMode == ctrlMode == aih_constants.CTRL_MODE_NAME.VIDEO:
@@ -295,7 +301,7 @@ class SharedPage(BattlePageMeta):
             self._isInPostmortem = True
             self._switchToPostmortem()
 
-    def __onRespawnBaseMoving(self):
+    def _onRespawnBaseMoving(self):
         if not self.sessionProvider.getCtx().isPlayerObserver() and not BattleReplay.g_replayCtrl.isPlaying:
             self.as_setPostmortemTipsVisibleS(False)
             self._isInPostmortem = False

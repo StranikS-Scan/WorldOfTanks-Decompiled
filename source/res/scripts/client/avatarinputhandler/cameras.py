@@ -266,8 +266,6 @@ class FovExtended(object):
     def __setHorizontalFov(self, value):
         self.__horizontalFov = value
         self.__verticalFov = FovExtended.lookupVerticalFov(value)
-        BigWorld.addWatcher('Render/Fov(horizontal, deg)', lambda : self.__horizontalFov)
-        BigWorld.addWatcher('Render/Fov(vertical, deg)', lambda : math.degrees(self.__verticalFov))
         self.setFovByMultiplier(self.__multiplier)
 
     horizontalFov = property(lambda self: self.__horizontalFov, __setHorizontalFov)
@@ -280,6 +278,8 @@ class FovExtended(object):
     def __init__(self):
         self.__multiplier = 1.0
         self.__enabled = True
+        BigWorld.addWatcher('Render/Fov(horizontal, deg)', lambda : self.__horizontalFov)
+        BigWorld.addWatcher('Render/Fov(vertical, deg)', lambda : math.degrees(self.__verticalFov))
         self.horizontalFov = 90
         self.defaultVerticalFov = FovExtended.lookupVerticalFov(self.horizontalFov)
         from gui import g_guiResetters

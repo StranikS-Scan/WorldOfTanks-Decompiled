@@ -6,6 +6,11 @@
     <Heavy>	204	</Heavy>
     <Large>	205	</Large>
     <Large_SH>	206	</Large_SH>
+    <Large_HELL>	0	</Large_HELL>
+    <Heavy_HALL>	1	</Heavy_HALL>
+    <Large_HALL>	2	</Large_HALL>
+    <Large_HALL__0>	3	</Large_HALL__0>
+    <Large_HELL__0>	4	</Large_HELL__0>
   </ids>
   <shared>
     <Small>
@@ -57,5 +62,50 @@
       <maxRegenHealth>	70	</maxRegenHealth>
       <repairCost>	0	</repairCost>
     </Large_SH>
+    <Large_HELL>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	300	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Large_HELL>
+    <Heavy_HALL>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	275	</weight>
+      <maxHealth>	175	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Heavy_HALL>
+    <Large_HALL>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	300	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Large_HALL>
+    <Large_HALL__0>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	300	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Large_HALL__0>
+    <Large_HELL__0>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	300	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Large_HELL__0>
   </shared>
 </fuelTanks.xml>

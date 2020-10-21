@@ -33,22 +33,26 @@ class Browser(BrowserMeta):
         return self.__browser
 
     def init(self, browserID, webHandlersMap=None, alias=''):
-        self.__browserID = browserID
-        self.__browser = self.browserCtrl.getBrowser(self.__browserID)
-        if self.__browser is None:
-            raise SoftException('Cannot find browser')
-        self.__webCommandHandler = WebCommandHandler(self.__browserID, alias, self)
-        if webHandlersMap is not None:
-            self.__webCommandHandler.addHandlers(webHandlersMap)
-        self.__webCommandHandler.onCallback += self.__onWebCommandCallback
-        self.__webEventSender = WebEventSender()
-        self.__webEventSender.onCallback += self.__onWebEventCallback
-        self.__webEventSender.init()
-        if not self.__browser.hasBrowser:
-            self.addListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
+        if self.__browserID == browserID:
+            return
         else:
-            self.__prepareBrowser()
-        return
+            self.__clean()
+            self.__browserID = browserID
+            self.__browser = self.browserCtrl.getBrowser(self.__browserID)
+            if self.__browser is None:
+                raise SoftException('Cannot find browser')
+            self.__webCommandHandler = WebCommandHandler(self.__browserID, alias, self)
+            if webHandlersMap is not None:
+                self.__webCommandHandler.addHandlers(webHandlersMap)
+            self.__webCommandHandler.onCallback += self.__onWebCommandCallback
+            self.__webEventSender = WebEventSender()
+            self.__webEventSender.onCallback += self.__onWebEventCallback
+            self.__webEventSender.init()
+            if not self.__browser.hasBrowser:
+                self.addListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
+            else:
+                self.__prepareBrowser()
+            return
 
     def onWindowClose(self):
         self.destroy()
@@ -111,10 +115,21 @@ class Browser(BrowserMeta):
             self.as_loadingStopS()
 
     def _dispose(self):
+        self.__clean()
         if self.__webCommandHandler:
-            self.__webCommandHandler.onCallback -= self.__onWebCommandCallback
             self.__webCommandHandler.fini()
             self.__webCommandHandler = None
+        if self.__webEventSender:
+            self.__webEventSender.fini()
+            self.__webEventSender = None
+        self.browserCtrl.delBrowser(self.__browserID)
+        self.__browser = None
+        super(Browser, self)._dispose()
+        return
+
+    def __clean(self):
+        if self.__webCommandHandler:
+            self.__webCommandHandler.onCallback -= self.__onWebCommandCallback
         if self.__browser:
             self.__browser.onLoadStart -= self.__onLoadStart
             self.__browser.onLoadingStateChange -= self.__onLoadingStateChange
@@ -123,15 +138,9 @@ class Browser(BrowserMeta):
             self.__browser.onJsHostQuery -= self.__onJsHostQuery
             self.__browser.onTitleChange -= self.__onTitleChange
             self.__browser.onReady -= self.__onReady
-            self.__browser = None
         if self.__webEventSender:
             self.__webEventSender.onCallback -= self.__onWebEventCallback
-            self.__webEventSender.fini()
-            self.__webEventSender = None
-        self.browserCtrl.delBrowser(self.__browserID)
         self.removeListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
-        super(Browser, self)._dispose()
-        return
 
     def __onLoadStart(self, url):
         pass
@@ -142,7 +151,8 @@ class Browser(BrowserMeta):
         if not self.__checkIsPageLoaded():
             self.showDataUnavailableView()
 
-    def __onReady(self):
+    def __onReady(self, *args):
+        self.__browser.onReady -= self.__onReady
         self.as_loadBitmapS(self.__browser.textureUrl)
 
     def __onLoadingStateChange(self, isLoading, manageLoadingScreen):

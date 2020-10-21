@@ -317,6 +317,30 @@ class Shop(object):
             self.__account._doCmdIntArr(AccountCommands.CMD_VEHICLE_TRADE_IN, arr, proxy)
             return
 
+    def personalTradeInVehicle(self, vehInvID, nationIdx, innationIdx, buyShells, recruitCrew, tmanCostTypeIdx, callback):
+        if self.__ignore:
+            if callable(callback):
+                callback(AccountCommands.RES_NON_PLAYER, {})
+            return
+        else:
+            typeCompDescr = vehicles.makeIntCompactDescrByID('vehicle', nationIdx, innationIdx)
+            flags = BUY_VEHICLE_FLAG.NONE
+            if buyShells:
+                flags |= BUY_VEHICLE_FLAG.SHELLS
+            if recruitCrew:
+                flags |= BUY_VEHICLE_FLAG.CREW
+            if callable(callback):
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            arr = [self.__getCacheRevision(),
+             vehInvID,
+             typeCompDescr,
+             flags,
+             tmanCostTypeIdx]
+            self.__account._doCmdIntArr(AccountCommands.CMD_VEHICLE_PERSONAL_TRADE_IN, arr, proxy)
+            return
+
     def buyTankman(self, nationIdx, innationIdx, role, tmanCostTypeIdx, callback):
         vehTypeCompDescr = vehicles.makeIntCompactDescrByID('vehicle', nationIdx, innationIdx)
         roleIdx = tankmen.SKILL_INDICES[role]

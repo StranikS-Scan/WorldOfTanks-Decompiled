@@ -174,6 +174,18 @@ class _SelectorExtraItem(_SelectorItem):
         raise NotImplementedError
 
 
+class _EventBattleItem(_SelectorItem):
+    eventsCache = dependency.descriptor(IEventsCache)
+
+    def getSpecialBGIcon(self):
+        return backport.image(_R_ICONS.buttons.selectorRendererBGEvent())
+
+    def _update(self, state):
+        self._isDisabled = state.hasLockedState
+        self._isSelected = state.isQueueSelected(QUEUE_TYPE.EVENT_BATTLES)
+        self._isVisible = self.eventsCache.isEventEnabled()
+
+
 class _DisabledSelectorItem(_SelectorItem):
 
     def update(self, state):
@@ -457,6 +469,10 @@ class _EventSquadItem(_SpecialSquadItem):
         self._isSpecialBgIcon = True
         self._isDescription = False
 
+    def _update(self, state):
+        super(_EventSquadItem, self)._update(state)
+        self._isVisible = self.__eventsCache.isEventEnabled()
+
 
 class _BattleRoyaleSquadItem(_SpecialSquadItem):
     __eventProgression = dependency.descriptor(IEventProgressionController)
@@ -617,6 +633,7 @@ def _createItems(lobbyContext=None):
     _addEpicTrainingBattleType(items, settings)
     if GUI_SETTINGS.specPrebatlesVisible:
         _addSpecialBattleType(items)
+    _addEventBattleType(items)
     if settings is not None and settings.isSandboxEnabled() and not isInRoaming:
         _addSandboxType(items)
     extraItems = []
@@ -683,6 +700,10 @@ def _addTutorialBattleType(items, isInRoaming):
 
 def _addSandboxType(items):
     items.append(_SandboxItem(backport.text(_R_BATTLE_TYPES.battleTeaching()), PREBATTLE_ACTION_NAME.SANDBOX, 9))
+
+
+def _addEventBattleType(items):
+    items.append(_EventBattleItem(text_styles.middleTitle(backport.text(_R_BATTLE_TYPES.eventBattle())), PREBATTLE_ACTION_NAME.EVENT_BATTLE, 10))
 
 
 def _addSimpleSquadType(items):

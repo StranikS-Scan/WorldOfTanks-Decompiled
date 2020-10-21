@@ -66,6 +66,11 @@
           <destroyed>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/crash/lod0/Hull.model	</exploded>
         </halloween>
+        <GB24_Centurion_Mk3_3Dst_HW20>
+          <undamaged>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/crash/lod0/Hull.model	</exploded>
+        </GB24_Centurion_Mk3_3Dst_HW20>
       </sets>
     </models>
     <swinging>
@@ -104,16 +109,6 @@
         <isUVProportional>	true	</isUVProportional>
       </slot>
       <slot>
-        <slotType>	inscription	</slotType>
-        <slotId>	14000	</slotId>
-        <rayStart>	-1.87833 0.0137289 2.53363	</rayStart>
-        <rayEnd>	-1.47835 0.0114767 2.53168	</rayEnd>
-        <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.88	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
-        <isUVProportional>	true	</isUVProportional>
-      </slot>
-      <slot>
         <slotType>	paint	</slotType>
         <slotId>	11000	</slotId>
         <anchorPosition>	0.000000 0.654898 -2.51195	</anchorPosition>
@@ -124,6 +119,16 @@
         <slotId>	12000	</slotId>
         <anchorPosition>	0.000000 0.654898 -2.51195	</anchorPosition>
         <anchorDirection>	0.000000 0.25228 -0.967654	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	14000	</slotId>
+        <rayStart>	-1.87833 0.0137289 2.53363	</rayStart>
+        <rayEnd>	-1.47835 0.0114767 2.53168	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.88	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -1317,6 +1322,104 @@
         <anchorDirection>	0.999605 -0.0131229 -0.0248499	</anchorDirection>
         <tags>	formfactor_square	</tags>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15090	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB24_Centurion_Mk3_3Dst_HW20	</compatibleModels>
+        <position>	1.3434 1.27411 3.15341	</position>
+        <rotation>	-0.000000 0.000000 3.14158	</rotation>
+        <scale>	0.626884 0.373555 0.626889	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	1.3434 0.313687 3.15341	</anchorPosition>
+        <anchorDirection>	0.000013 1 -0.000000	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15091	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB24_Centurion_Mk3_3Dst_HW20	</compatibleModels>
+        <position>	-1.73586 1.00139 2.40499	</position>
+        <rotation>	1.5681 -1.56786 3.13992	</rotation>
+        <scale>	0.848451 0.183962 0.848461	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.929742	</clipAngle>
+        <anchorPosition>	-1.73586 -0.147132 2.40499	</anchorPosition>
+        <anchorDirection>	-0.999986 0.00269657 0.00458652	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15092	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB24_Centurion_Mk3_3Dst_HW20	</compatibleModels>
+        <position>	1.73587 1.00135 2.405	</position>
+        <rotation>	1.56799 1.56664 3.14014	</rotation>
+        <scale>	0.842076 0.18258 0.842084	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.929742	</clipAngle>
+        <anchorPosition>	1.72182 -0.147209 2.40496	</anchorPosition>
+        <anchorDirection>	0.999993 0.00282592 0.00265738	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15093	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB24_Centurion_Mk3_3Dst_HW20	</compatibleModels>
+        <position>	-1.34338 1.27414 3.15341	</position>
+        <rotation>	0.000000 -0.000000 3.14158	</rotation>
+        <scale>	0.626884 0.373555 0.626889	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	-1.34338 0.313715 3.15341	</anchorPosition>
+        <anchorDirection>	0.000013 1 0.000000	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15094	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB24_Centurion_Mk3_3Dst_HW20	</compatibleModels>
+        <position>	-0.707914 1.40311 3.04403	</position>
+        <rotation>	0.481144 0.00651287 3.13951	</rotation>
+        <scale>	0.490815 0.198018 0.490814	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	-0.707608 0.307776 3.0718	</anchorPosition>
+        <anchorDirection>	0.00509678 0.886464 0.462769	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15095	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB24_Centurion_Mk3_3Dst_HW20	</compatibleModels>
+        <position>	-1.74368 1.0014 0.712322	</position>
+        <rotation>	1.56808 -1.56781 3.13995	</rotation>
+        <scale>	0.848451 0.183962 0.848461	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.929742	</clipAngle>
+        <anchorPosition>	-1.71368 -0.147205 0.712184	</anchorPosition>
+        <anchorDirection>	-0.999986 0.00269657 0.00461963	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15096	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB24_Centurion_Mk3_3Dst_HW20	</compatibleModels>
+        <position>	1.74369 1.00136 0.712322	</position>
+        <rotation>	1.56806 1.56777 3.13996	</rotation>
+        <scale>	0.848451 0.183962 0.848461	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.929742	</clipAngle>
+        <anchorPosition>	1.71369 -0.147242 0.71228	</anchorPosition>
+        <anchorDirection>	0.999995 0.00274038 0.00140291	</anchorDirection>
+      </slot>
     </customizationSlots>
     <camouflage>
       <tiling>	1.18 1.18 0.8 0.69	</tiling>
@@ -1362,6 +1465,11 @@
             <destroyed>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/crash/lod0/Chassis.model	</exploded>
           </halloween>
+          <GB24_Centurion_Mk3_3Dst_HW20>
+            <undamaged>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/crash/lod0/Chassis.model	</exploded>
+          </GB24_Centurion_Mk3_3Dst_HW20>
         </sets>
       </models>
       <splineDesc>
@@ -1474,6 +1582,9 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1000	</elasticity>
         <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -1500,43 +1611,43 @@
       <physicalTracks>
         <left>
           <segmentsCount>	95	</segmentsCount>
-          <segmentsOuterThickness>	0.0271689	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.0249835	</segmentsInnerThickness>
-          <segmentsPlaneOffset>	-1.31503	</segmentsPlaneOffset>
+          <segmentsOuterThickness>	0.0272323	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.0249297	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	-1.315	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.164895	</back>
-              <top>	0.142899	</top>
-              <front>	0.148774	</front>
-              <bottom>	0.13177	</bottom>
+              <back>	0.162929	</back>
+              <top>	0.151456	</top>
+              <front>	0.158476	</front>
+              <bottom>	0.131759	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.155279	</back>
-              <top>	0.160633	</top>
-              <front>	0.163862	</front>
-              <bottom>	0.13177	</bottom>
+              <back>	0.158241	</back>
+              <top>	0.160621	</top>
+              <front>	0.163164	</front>
+              <bottom>	0.131759	</bottom>
             </forwardMovement>
           </springsLength>
           <mainSegment>
             <model>	vehicles/british/GB24_Centurion_Mk3/track/segment.model	</model>
-            <length>	0.16519	</length>
+            <length>	0.165258	</length>
           </mainSegment>
           <collisionHull>
             <bottom>
               <part>
-                <xStart>	-2.9799	</xStart>
+                <xStart>	-2.97855	</xStart>
                 <xStep>	0.00999999	</xStep>
-                <ySamples>	0.43533 0.430099 0.425213 0.420659 0.416424 0.412499 0.408873	</ySamples>
+                <ySamples>	0.43554 0.430343 0.425491 0.420969 0.416767 0.412874 0.40928	</ySamples>
               </part>
               <part>
-                <xStart>	-2.9199	</xStart>
-                <xStep>	0.0825952	</xStep>
-                <ySamples>	0.408873 0.389486 0.387435 0.402448 0.43667	</ySamples>
+                <xStart>	-2.91855	</xStart>
+                <xStep>	0.478068	</xStep>
+                <ySamples>	0.40928 0.578982 1.12413 0.924704 0.991364 0.861751 0.861912 1.30504 0.931577 0.841764 0.888764 1.01017 1.094 0.568607 0.564055	</ySamples>
               </part>
               <part>
-                <xStart>	-2.58952	</xStart>
+                <xStart>	3.77441	</xStart>
                 <xStep>	0.00999999	</xStep>
-                <ySamples>	0.43667 0.442353 0.448418 0.454887 0.461783 0.469132 0.476967	</ySamples>
+                <ySamples>	0.564055 0.571264 0.578942 0.587125 0.595854 0.605176 0.615149	</ySamples>
               </part>
               <part>
                 <xStart>	2.88436	</xStart>
@@ -1571,9 +1682,9 @@
             </bottom>
             <top>
               <part>
-                <xStart>	-3.16769	</xStart>
-                <xStep>	0.0825952	</xStep>
-                <ySamples>	1.31125 1.32879 1.34634 1.36389 1.37264 1.37336 1.37407 1.37478 1.37549 1.37621 1.37692 1.37764 1.37837 1.37909 1.37982 1.38054 1.38126 1.38199 1.38271 1.38343 1.38416 1.38488 1.38561 1.38634 1.38716 1.38799 1.38882 1.38965 1.39048 1.39131 1.39213 1.39288 1.39359 1.3943 1.39501 1.39572 1.39613 1.3964 1.39654 1.39651 1.39647 1.39644 1.39641 1.39637 1.39634 1.39631 1.39627 1.39624 1.39621 1.39617 1.39614 1.39611 1.39607 1.39603 1.39599 1.39595 1.39591 1.39587 1.39611 1.39648 1.39686 1.39723 1.3976 1.39797 1.39834 1.39871 1.39909 1.39947 1.39986 1.39982 1.39599 1.39217 1.38835 1.38454 1.38078 1.37884 1.37705 1.37529 1.37354 1.37201 1.3715 1.36131 1.34709 1.33287 1.30965 1.20593 1.09915	</ySamples>
+                <xStart>	-3.16643	</xStart>
+                <xStep>	0.082629	</xStep>
+                <ySamples>	1.31151 1.32907 1.34662 1.36418 1.37266 1.37337 1.37408 1.37479 1.37551 1.37622 1.37693 1.37766 1.37838 1.37911 1.37983 1.38056 1.38128 1.38201 1.38273 1.38345 1.38418 1.3849 1.38562 1.38636 1.38719 1.38801 1.38884 1.38967 1.3905 1.39133 1.39216 1.3929 1.39361 1.39432 1.39503 1.39574 1.39613 1.39641 1.39654 1.3965 1.39647 1.39644 1.39641 1.39637 1.39634 1.39631 1.39627 1.39624 1.39621 1.39617 1.39614 1.39611 1.39607 1.39603 1.39599 1.39595 1.39591 1.39587 1.39613 1.3965 1.39687 1.39724 1.39761 1.39799 1.39836 1.39873 1.3991 1.39949 1.39987 1.39965 1.39583 1.392 1.38817 1.38437 1.38061 1.37875 1.37696 1.37521 1.37345 1.37198 1.37147 1.36062 1.34639 1.33217 1.3067 1.20059 1.09377	</ySamples>
               </part>
             </top>
           </collisionHull>
@@ -1591,32 +1702,32 @@
             <topFront>
               <wheelName>	WD_L0	</wheelName>
               <basePos>	3.53857 0.901783	</basePos>
-              <shiftVec>	0.341621 0.193106	</shiftVec>
+              <shiftVec>	0.341471 0.194705	</shiftVec>
               <jointIdx>	11	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_L7	</wheelName>
               <basePos>	-2.78594 0.793946	</basePos>
-              <shiftVec>	-0.309891 0.234843	</shiftVec>
+              <shiftVec>	-0.309815 0.23356	</shiftVec>
               <jointIdx>	55	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_L5	</wheelName>
-              <basePos>	-1.90963 0.452703	</basePos>
-              <shiftVec>	-0.036014 -0.448438	</shiftVec>
+              <basePos>	-1.90963 0.453439	</basePos>
+              <shiftVec>	-0.0335778 -0.448573	</shiftVec>
               <jointIdx>	66	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_L0	</wheelName>
-              <basePos>	2.62799 0.452726	</basePos>
-              <shiftVec>	0.0784268 -0.442993	</shiftVec>
+              <basePos>	2.62799 0.45346	</basePos>
+              <shiftVec>	0.0804586 -0.442574	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
           <radiusOverrides>
             <wheel>
               <name>	WD_L7	</name>
-              <radius>	0.387417	</radius>
+              <radius>	0.386579	</radius>
             </wheel>
             <wheel>
               <name>	WD_L6	</name>
@@ -1644,20 +1755,20 @@
             </wheel>
             <wheel>
               <name>	WD_L0	</name>
-              <radius>	0.391028	</radius>
+              <radius>	0.391689	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
             <syncWithMainModel>	true	</syncWithMainModel>
-            <segmentSyncPivotOffset>	-1.315	</segmentSyncPivotOffset>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L7	</name>
-              <startAngle>	-75.0067	</startAngle>
+              <startAngle>	-3.13714	</startAngle>
               <teethCount>	16	</teethCount>
             </sync>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	-78.1313	</startAngle>
+              <startAngle>	0.0206921	</startAngle>
               <teethCount>	16	</teethCount>
             </sync>
           </teethSyncs>
@@ -1785,43 +1896,43 @@
         </left>
         <right>
           <segmentsCount>	95	</segmentsCount>
-          <segmentsOuterThickness>	0.027191	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.0249816	</segmentsInnerThickness>
-          <segmentsPlaneOffset>	1.31503	</segmentsPlaneOffset>
+          <segmentsOuterThickness>	0.0272323	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.0249297	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	1.315	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.164895	</back>
-              <top>	0.142899	</top>
-              <front>	0.148774	</front>
-              <bottom>	0.13177	</bottom>
+              <back>	0.162929	</back>
+              <top>	0.151456	</top>
+              <front>	0.158476	</front>
+              <bottom>	0.131759	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.155279	</back>
-              <top>	0.160633	</top>
-              <front>	0.163862	</front>
-              <bottom>	0.13177	</bottom>
+              <back>	0.158241	</back>
+              <top>	0.160621	</top>
+              <front>	0.163164	</front>
+              <bottom>	0.131759	</bottom>
             </forwardMovement>
           </springsLength>
           <mainSegment>
             <model>	vehicles/british/GB24_Centurion_Mk3/track/segment.model	</model>
-            <length>	0.165192	</length>
+            <length>	0.165258	</length>
           </mainSegment>
           <collisionHull>
             <bottom>
               <part>
-                <xStart>	-2.97986	</xStart>
+                <xStart>	-2.97854	</xStart>
                 <xStep>	0.00999999	</xStep>
-                <ySamples>	0.435345 0.430114 0.42523 0.420677 0.416443 0.412519 0.408894	</ySamples>
+                <ySamples>	0.435536 0.43034 0.425488 0.420967 0.416765 0.412872 0.409278	</ySamples>
               </part>
               <part>
-                <xStart>	-2.91986	</xStart>
-                <xStep>	0.0825962	</xStep>
-                <ySamples>	0.408894 0.389514 0.387472 0.402496 0.436734	</ySamples>
+                <xStart>	-2.91854	</xStart>
+                <xStep>	0.41831	</xStep>
+                <ySamples>	0.409278 0.504251 1.12413 1.0721 0.991357 0.861966 0.861836 0.862034 1.30485 0.962131 0.862415 0.841781 0.88878 1.09019 0.957646 0.532471 0.564068	</ySamples>
               </part>
               <part>
-                <xStart>	-2.58947	</xStart>
+                <xStart>	3.77442	</xStart>
                 <xStep>	0.00999999	</xStep>
-                <ySamples>	0.436734 0.44242 0.448488 0.454959 0.461857 0.46921 0.477048	</ySamples>
+                <ySamples>	0.564068 0.571277 0.578956 0.58714 0.59587 0.605193 0.615167	</ySamples>
               </part>
               <part>
                 <xStart>	1.14996	</xStart>
@@ -1871,9 +1982,9 @@
             </bottom>
             <top>
               <part>
-                <xStart>	-3.16764	</xStart>
-                <xStep>	0.0825962	</xStep>
-                <ySamples>	1.31126 1.3288 1.34635 1.3639 1.37264 1.37336 1.37407 1.37478 1.37549 1.37621 1.37692 1.37764 1.37837 1.37909 1.37982 1.38054 1.38126 1.38199 1.38271 1.38343 1.38416 1.38488 1.38561 1.38634 1.38717 1.38799 1.38882 1.38965 1.39048 1.39131 1.39213 1.39288 1.39359 1.3943 1.39501 1.39572 1.39613 1.3964 1.39654 1.39651 1.39647 1.39644 1.39641 1.39637 1.39634 1.39631 1.39627 1.39624 1.39621 1.39617 1.39614 1.39611 1.39607 1.39603 1.39599 1.39595 1.39591 1.39587 1.39611 1.39649 1.39686 1.39723 1.3976 1.39797 1.39834 1.39872 1.39909 1.39947 1.39986 1.39981 1.39599 1.39216 1.38834 1.38454 1.38078 1.37883 1.37705 1.37529 1.37353 1.37201 1.3715 1.36129 1.34706 1.33284 1.30124 1.20047 1.0956	</ySamples>
+                <xStart>	-3.16643	</xStart>
+                <xStep>	0.0826292	</xStep>
+                <ySamples>	1.31152 1.32907 1.34662 1.36418 1.37266 1.37337 1.37408 1.37479 1.37551 1.37622 1.37693 1.37766 1.37838 1.37911 1.37983 1.38056 1.38128 1.38201 1.38273 1.38345 1.38418 1.3849 1.38562 1.38636 1.38719 1.38801 1.38884 1.38967 1.3905 1.39133 1.39216 1.3929 1.39361 1.39432 1.39503 1.39574 1.39613 1.39641 1.39654 1.3965 1.39647 1.39644 1.39641 1.39637 1.39634 1.39631 1.39627 1.39624 1.39621 1.39617 1.39614 1.39611 1.39607 1.39603 1.39599 1.39595 1.39591 1.39587 1.39613 1.3965 1.39687 1.39724 1.39761 1.39799 1.39836 1.39873 1.3991 1.39949 1.39987 1.39965 1.39583 1.392 1.38817 1.38437 1.38061 1.37875 1.37696 1.37521 1.37345 1.37198 1.37147 1.36062 1.34639 1.33216 1.29638 1.19557 1.09036	</ySamples>
               </part>
             </top>
           </collisionHull>
@@ -1891,32 +2002,32 @@
             <topFront>
               <wheelName>	WD_R0	</wheelName>
               <basePos>	3.53857 0.901783	</basePos>
-              <shiftVec>	0.341623 0.193145	</shiftVec>
+              <shiftVec>	0.341481 0.194687	</shiftVec>
               <jointIdx>	11	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_R7	</wheelName>
               <basePos>	-2.78594 0.793946	</basePos>
-              <shiftVec>	-0.309887 0.234792	</shiftVec>
+              <shiftVec>	-0.309815 0.233561	</shiftVec>
               <jointIdx>	55	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_R5	</wheelName>
-              <basePos>	-1.90963 0.452676	</basePos>
-              <shiftVec>	-0.0359384 -0.448442	</shiftVec>
+              <basePos>	-1.90963 0.453392	</basePos>
+              <shiftVec>	-0.0335962 -0.448571	</shiftVec>
               <jointIdx>	66	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_R0	</wheelName>
-              <basePos>	2.62799 0.452699	</basePos>
-              <shiftVec>	0.078501 -0.442978	</shiftVec>
+              <basePos>	2.62799 0.453412	</basePos>
+              <shiftVec>	0.0804582 -0.442574	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
           <radiusOverrides>
             <wheel>
               <name>	WD_R7	</name>
-              <radius>	0.387417	</radius>
+              <radius>	0.386579	</radius>
             </wheel>
             <wheel>
               <name>	WD_R6	</name>
@@ -1944,20 +2055,20 @@
             </wheel>
             <wheel>
               <name>	WD_R0	</name>
-              <radius>	0.391028	</radius>
+              <radius>	0.391688	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
             <syncWithMainModel>	true	</syncWithMainModel>
-            <segmentSyncPivotOffset>	1.315	</segmentSyncPivotOffset>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R7	</name>
-              <startAngle>	-75.0065	</startAngle>
+              <startAngle>	-3.13714	</startAngle>
               <teethCount>	16	</teethCount>
             </sync>
             <sync>
               <name>	WD_R0	</name>
-              <startAngle>	-78.1311	</startAngle>
+              <startAngle>	0.0207009	</startAngle>
               <teethCount>	16	</teethCount>
             </sync>
           </teethSyncs>
@@ -2164,6 +2275,11 @@
             <destroyed>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/crash/lod0/Chassis.model	</exploded>
           </halloween>
+          <GB24_Centurion_Mk3_3Dst_HW20>
+            <undamaged>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/crash/lod0/Chassis.model	</exploded>
+          </GB24_Centurion_Mk3_3Dst_HW20>
         </sets>
       </models>
       <splineDesc>
@@ -2276,6 +2392,9 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1000	</elasticity>
         <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -2302,43 +2421,43 @@
       <physicalTracks>
         <left>
           <segmentsCount>	95	</segmentsCount>
-          <segmentsOuterThickness>	0.0271689	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.0249835	</segmentsInnerThickness>
-          <segmentsPlaneOffset>	-1.31503	</segmentsPlaneOffset>
+          <segmentsOuterThickness>	0.0272323	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.0249297	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	-1.315	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.164895	</back>
-              <top>	0.142899	</top>
-              <front>	0.148774	</front>
-              <bottom>	0.13177	</bottom>
+              <back>	0.162929	</back>
+              <top>	0.151456	</top>
+              <front>	0.158476	</front>
+              <bottom>	0.131759	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.155279	</back>
-              <top>	0.160633	</top>
-              <front>	0.163862	</front>
-              <bottom>	0.13177	</bottom>
+              <back>	0.158241	</back>
+              <top>	0.160621	</top>
+              <front>	0.163164	</front>
+              <bottom>	0.131759	</bottom>
             </forwardMovement>
           </springsLength>
           <mainSegment>
             <model>	vehicles/british/GB24_Centurion_Mk3/track/segment.model	</model>
-            <length>	0.16519	</length>
+            <length>	0.163704	</length>
           </mainSegment>
           <collisionHull>
             <bottom>
               <part>
-                <xStart>	-2.9799	</xStart>
+                <xStart>	-3.00962	</xStart>
                 <xStep>	0.00999999	</xStep>
-                <ySamples>	0.43533 0.430099 0.425213 0.420659 0.416424 0.412499 0.408873	</ySamples>
+                <ySamples>	0.454065 0.44769 0.441715 0.436119 0.430884 0.425996 0.42144	</ySamples>
               </part>
               <part>
-                <xStart>	-2.9199	</xStart>
-                <xStep>	0.0825952	</xStep>
-                <ySamples>	0.408873 0.389486 0.387435 0.402448 0.43667	</ySamples>
+                <xStart>	-2.94962	</xStart>
+                <xStep>	0.447459	</xStep>
+                <ySamples>	0.42144 0.502361 1.11538 0.981963 1.02476 0.861558 0.861795 0.861954 1.30104 0.973041 0.834762 0.890593 1.08854 1.02212 0.555935 0.555893	</ySamples>
               </part>
               <part>
-                <xStart>	-2.58952	</xStart>
+                <xStart>	3.76226	</xStart>
                 <xStep>	0.00999999	</xStep>
-                <ySamples>	0.43667 0.442353 0.448418 0.454887 0.461783 0.469132 0.476967	</ySamples>
+                <ySamples>	0.555893 0.562569 0.56968 0.577255 0.585327 0.593935 0.603125	</ySamples>
               </part>
               <part>
                 <xStart>	2.88436	</xStart>
@@ -2373,9 +2492,9 @@
             </bottom>
             <top>
               <part>
-                <xStart>	-3.16769	</xStart>
-                <xStep>	0.0825952	</xStep>
-                <ySamples>	1.31125 1.32879 1.34634 1.36389 1.37264 1.37336 1.37407 1.37478 1.37549 1.37621 1.37692 1.37764 1.37837 1.37909 1.37982 1.38054 1.38126 1.38199 1.38271 1.38343 1.38416 1.38488 1.38561 1.38634 1.38716 1.38799 1.38882 1.38965 1.39048 1.39131 1.39213 1.39288 1.39359 1.3943 1.39501 1.39572 1.39613 1.3964 1.39654 1.39651 1.39647 1.39644 1.39641 1.39637 1.39634 1.39631 1.39627 1.39624 1.39621 1.39617 1.39614 1.39611 1.39607 1.39603 1.39599 1.39595 1.39591 1.39587 1.39611 1.39648 1.39686 1.39723 1.3976 1.39797 1.39834 1.39871 1.39909 1.39947 1.39986 1.39982 1.39599 1.39217 1.38835 1.38454 1.38078 1.37884 1.37705 1.37529 1.37354 1.37201 1.3715 1.36131 1.34709 1.33287 1.30965 1.20593 1.09915	</ySamples>
+                <xStart>	-3.19517	</xStart>
+                <xStep>	0.0818522	</xStep>
+                <ySamples>	1.30541 1.3228 1.34019 1.35757 1.37238 1.37309 1.37379 1.3745 1.37521 1.37591 1.37662 1.37733 1.37805 1.37877 1.37948 1.3802 1.38092 1.38163 1.38235 1.38307 1.38379 1.38451 1.38522 1.38594 1.38671 1.38753 1.38835 1.38917 1.38999 1.39081 1.39163 1.39245 1.39315 1.39385 1.39456 1.39526 1.39594 1.39622 1.39649 1.39653 1.3965 1.39646 1.39643 1.3964 1.39636 1.39633 1.3963 1.39627 1.39623 1.3962 1.39617 1.39613 1.3961 1.39607 1.39603 1.39599 1.39595 1.39591 1.39587 1.39616 1.39653 1.3969 1.39727 1.39764 1.39801 1.39837 1.39874 1.39911 1.39949 1.39987 1.39968 1.39589 1.3921 1.38831 1.38454 1.38081 1.37887 1.37709 1.37535 1.37361 1.37204 1.37153 1.36231 1.34822 1.33412 1.31545 1.21729 1.11147	</ySamples>
               </part>
             </top>
           </collisionHull>
@@ -2393,32 +2512,32 @@
             <topFront>
               <wheelName>	WD_L0	</wheelName>
               <basePos>	3.53857 0.901783	</basePos>
-              <shiftVec>	0.341621 0.193106	</shiftVec>
+              <shiftVec>	0.34144 0.194707	</shiftVec>
               <jointIdx>	11	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_L7	</wheelName>
               <basePos>	-2.78594 0.793946	</basePos>
-              <shiftVec>	-0.309891 0.234843	</shiftVec>
+              <shiftVec>	-0.3098 0.233536	</shiftVec>
               <jointIdx>	55	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_L5	</wheelName>
-              <basePos>	-1.90963 0.452703	</basePos>
-              <shiftVec>	-0.036014 -0.448438	</shiftVec>
+              <basePos>	-1.90963 0.453429	</basePos>
+              <shiftVec>	-0.0335441 -0.448575	</shiftVec>
               <jointIdx>	66	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_L0	</wheelName>
-              <basePos>	2.62799 0.452726	</basePos>
-              <shiftVec>	0.0784268 -0.442993	</shiftVec>
+              <basePos>	2.62799 0.45345	</basePos>
+              <shiftVec>	0.0804555 -0.442574	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
           <radiusOverrides>
             <wheel>
               <name>	WD_L7	</name>
-              <radius>	0.387417	</radius>
+              <radius>	0.386579	</radius>
             </wheel>
             <wheel>
               <name>	WD_L6	</name>
@@ -2446,20 +2565,20 @@
             </wheel>
             <wheel>
               <name>	WD_L0	</name>
-              <radius>	0.391028	</radius>
+              <radius>	0.391689	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
             <syncWithMainModel>	true	</syncWithMainModel>
-            <segmentSyncPivotOffset>	-1.315	</segmentSyncPivotOffset>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L7	</name>
-              <startAngle>	-75.0067	</startAngle>
+              <startAngle>	-3.13715	</startAngle>
               <teethCount>	16	</teethCount>
             </sync>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	-78.1313	</startAngle>
+              <startAngle>	0.020698	</startAngle>
               <teethCount>	16	</teethCount>
             </sync>
           </teethSyncs>
@@ -2587,43 +2706,43 @@
         </left>
         <right>
           <segmentsCount>	95	</segmentsCount>
-          <segmentsOuterThickness>	0.027191	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.0249816	</segmentsInnerThickness>
-          <segmentsPlaneOffset>	1.31503	</segmentsPlaneOffset>
+          <segmentsOuterThickness>	0.0272323	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.0249297	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	1.315	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.164895	</back>
-              <top>	0.142899	</top>
-              <front>	0.148774	</front>
-              <bottom>	0.13177	</bottom>
+              <back>	0.162929	</back>
+              <top>	0.151456	</top>
+              <front>	0.158476	</front>
+              <bottom>	0.131759	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.155279	</back>
-              <top>	0.160633	</top>
-              <front>	0.163862	</front>
-              <bottom>	0.13177	</bottom>
+              <back>	0.158241	</back>
+              <top>	0.160621	</top>
+              <front>	0.163164	</front>
+              <bottom>	0.131759	</bottom>
             </forwardMovement>
           </springsLength>
           <mainSegment>
             <model>	vehicles/british/GB24_Centurion_Mk3/track/segment.model	</model>
-            <length>	0.165192	</length>
+            <length>	0.163705	</length>
           </mainSegment>
           <collisionHull>
             <bottom>
               <part>
-                <xStart>	-2.97986	</xStart>
+                <xStart>	-3.0096	</xStart>
                 <xStep>	0.00999999	</xStep>
-                <ySamples>	0.435345 0.430114 0.42523 0.420677 0.416443 0.412519 0.408894	</ySamples>
+                <ySamples>	0.454052 0.447678 0.441704 0.436108 0.430875 0.425987 0.421431	</ySamples>
               </part>
               <part>
-                <xStart>	-2.91986	</xStart>
-                <xStep>	0.0825962	</xStep>
-                <ySamples>	0.408894 0.389514 0.387472 0.402496 0.436734	</ySamples>
+                <xStart>	-2.9496	</xStart>
+                <xStep>	0.447461	</xStep>
+                <ySamples>	0.421431 0.502382 1.11539 0.981935 1.02474 0.861776 0.862011 0.861886 1.3009 0.973081 0.862406 0.890539 1.08855 1.02203 0.5559 0.555931	</ySamples>
               </part>
               <part>
-                <xStart>	-2.58947	</xStart>
+                <xStart>	3.76232	</xStart>
                 <xStep>	0.00999999	</xStep>
-                <ySamples>	0.436734 0.44242 0.448488 0.454959 0.461857 0.46921 0.477048	</ySamples>
+                <ySamples>	0.555931 0.562609 0.569723 0.577301 0.585376 0.593987 0.603181	</ySamples>
               </part>
               <part>
                 <xStart>	1.14996	</xStart>
@@ -2673,9 +2792,9 @@
             </bottom>
             <top>
               <part>
-                <xStart>	-3.16764	</xStart>
-                <xStep>	0.0825962	</xStep>
-                <ySamples>	1.31126 1.3288 1.34635 1.3639 1.37264 1.37336 1.37407 1.37478 1.37549 1.37621 1.37692 1.37764 1.37837 1.37909 1.37982 1.38054 1.38126 1.38199 1.38271 1.38343 1.38416 1.38488 1.38561 1.38634 1.38717 1.38799 1.38882 1.38965 1.39048 1.39131 1.39213 1.39288 1.39359 1.3943 1.39501 1.39572 1.39613 1.3964 1.39654 1.39651 1.39647 1.39644 1.39641 1.39637 1.39634 1.39631 1.39627 1.39624 1.39621 1.39617 1.39614 1.39611 1.39607 1.39603 1.39599 1.39595 1.39591 1.39587 1.39611 1.39649 1.39686 1.39723 1.3976 1.39797 1.39834 1.39872 1.39909 1.39947 1.39986 1.39981 1.39599 1.39216 1.38834 1.38454 1.38078 1.37883 1.37705 1.37529 1.37353 1.37201 1.3715 1.36129 1.34706 1.33284 1.30124 1.20047 1.0956	</ySamples>
+                <xStart>	-3.19516	</xStart>
+                <xStep>	0.0818527	</xStep>
+                <ySamples>	1.30541 1.3228 1.34019 1.35758 1.37238 1.37309 1.37379 1.3745 1.37521 1.37591 1.37662 1.37733 1.37805 1.37877 1.37948 1.3802 1.38092 1.38163 1.38235 1.38307 1.38379 1.38451 1.38522 1.38594 1.38671 1.38753 1.38835 1.38917 1.38999 1.39081 1.39164 1.39245 1.39315 1.39385 1.39456 1.39526 1.39594 1.39622 1.39649 1.39653 1.3965 1.39646 1.39643 1.3964 1.39636 1.39633 1.3963 1.39627 1.39623 1.3962 1.39617 1.39613 1.3961 1.39607 1.39603 1.39599 1.39595 1.39591 1.39587 1.39616 1.39653 1.3969 1.39727 1.39764 1.39801 1.39837 1.39874 1.39911 1.39949 1.39987 1.39967 1.39588 1.39209 1.3883 1.38453 1.38081 1.37887 1.37709 1.37535 1.37361 1.37204 1.37153 1.3623 1.34821 1.33411 1.31115 1.21128 1.10803	</ySamples>
               </part>
             </top>
           </collisionHull>
@@ -2693,32 +2812,32 @@
             <topFront>
               <wheelName>	WD_R0	</wheelName>
               <basePos>	3.53857 0.901783	</basePos>
-              <shiftVec>	0.341623 0.193145	</shiftVec>
+              <shiftVec>	0.341447 0.194694	</shiftVec>
               <jointIdx>	11	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_R7	</wheelName>
               <basePos>	-2.78594 0.793946	</basePos>
-              <shiftVec>	-0.309887 0.234792	</shiftVec>
+              <shiftVec>	-0.3098 0.233536	</shiftVec>
               <jointIdx>	55	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_R5	</wheelName>
-              <basePos>	-1.90963 0.452676	</basePos>
-              <shiftVec>	-0.0359384 -0.448442	</shiftVec>
+              <basePos>	-1.90963 0.453402	</basePos>
+              <shiftVec>	-0.0335549 -0.448574	</shiftVec>
               <jointIdx>	66	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_R0	</wheelName>
-              <basePos>	2.62799 0.452699	</basePos>
-              <shiftVec>	0.078501 -0.442978	</shiftVec>
+              <basePos>	2.62799 0.453423	</basePos>
+              <shiftVec>	0.0804522 -0.442575	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
           <radiusOverrides>
             <wheel>
               <name>	WD_R7	</name>
-              <radius>	0.387417	</radius>
+              <radius>	0.386579	</radius>
             </wheel>
             <wheel>
               <name>	WD_R6	</name>
@@ -2746,20 +2865,20 @@
             </wheel>
             <wheel>
               <name>	WD_R0	</name>
-              <radius>	0.391028	</radius>
+              <radius>	0.391688	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
             <syncWithMainModel>	true	</syncWithMainModel>
-            <segmentSyncPivotOffset>	1.315	</segmentSyncPivotOffset>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R7	</name>
-              <startAngle>	-75.0065	</startAngle>
+              <startAngle>	-3.13713	</startAngle>
               <teethCount>	16	</teethCount>
             </sync>
             <sync>
               <name>	WD_R0	</name>
-              <startAngle>	-78.1311	</startAngle>
+              <startAngle>	0.0206982	</startAngle>
               <teethCount>	16	</teethCount>
             </sync>
           </teethSyncs>
@@ -3014,6 +3133,11 @@
                 <destroyed>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/crash/lod0/Gun_01.model	</exploded>
               </halloween>
+              <GB24_Centurion_Mk3_3Dst_HW20>
+                <undamaged>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/crash/lod0/Gun_01.model	</exploded>
+              </GB24_Centurion_Mk3_3Dst_HW20>
             </sets>
           </models>
           <hitTester>
@@ -3028,16 +3152,6 @@
             </customizableVehicleAreas>
           </customization>
           <customizationSlots>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.0708393 0.0182139 3.14903	</rayStart>
-              <rayEnd>	0.071098 -0.0373812 3.14805	</rayEnd>
-              <rayUp>	0.081 0.076 4	</rayUp>
-              <size>	0.634	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-              <isUVProportional>	true	</isUVProportional>
-            </slot>
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41000	</slotId>
@@ -3062,14 +3176,26 @@
             <slot>
               <slotType>	projectionDecal	</slotType>
               <slotId>	45000	</slotId>
+              <anchorPosition>	0.07342 0.315313 0.0850013	</anchorPosition>
+              <anchorDirection>	-0.0011944 0.743938 0.668247	</anchorDirection>
+              <applyTo>	4096	</applyTo>
               <position>	0.00368368 1.64913 1.3392	</position>
               <rotation>	0.731852 -0.00188106 3.14153	</rotation>
               <scale>	2.7422 1.99999 2.74217	</scale>
               <doubleSided>	false	</doubleSided>
               <showOn>	4368	</showOn>
               <clipAngle>	0.764171	</clipAngle>
-              <anchorPosition>	0.07342 0.315313 0.0850013	</anchorPosition>
-              <anchorDirection>	-0.0011944 0.743938 0.668247	</anchorDirection>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49000	</slotId>
+              <rayStart>	0.0708393 0.0182139 3.14903	</rayStart>
+              <rayEnd>	0.071098 -0.0373812 3.14805	</rayEnd>
+              <rayUp>	0.081 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.634	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
           <camouflage>
@@ -3121,6 +3247,11 @@
                 <destroyed>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/crash/lod0/Gun_02.model	</destroyed>
                 <exploded>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/crash/lod0/Gun_02.model	</exploded>
               </halloween>
+              <GB24_Centurion_Mk3_3Dst_HW20>
+                <undamaged>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/crash/lod0/Gun_02.model	</exploded>
+              </GB24_Centurion_Mk3_3Dst_HW20>
             </sets>
           </models>
           <hitTester>
@@ -3135,16 +3266,6 @@
             </customizableVehicleAreas>
           </customization>
           <customizationSlots>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.0708399 0.0182143 2.99296	</rayStart>
-              <rayEnd>	0.0659861 -0.0210624 2.99193	</rayEnd>
-              <rayUp>	0.082 0.077 4	</rayUp>
-              <size>	0.634	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-              <isUVProportional>	true	</isUVProportional>
-            </slot>
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41000	</slotId>
@@ -3169,6 +3290,9 @@
             <slot>
               <slotType>	projectionDecal	</slotType>
               <slotId>	45000	</slotId>
+              <anchorPosition>	0.0732977 0.259251 0.149762	</anchorPosition>
+              <anchorDirection>	-0.00120468 0.739274 0.673404	</anchorDirection>
+              <applyTo>	4096	</applyTo>
               <tags>	formfactor_square	</tags>
               <position>	0.00351514 1.63119 1.43031	</position>
               <rotation>	0.738805 -0.00188192 3.14153	</rotation>
@@ -3176,8 +3300,17 @@
               <doubleSided>	false	</doubleSided>
               <showOn>	4368	</showOn>
               <clipAngle>	0.764171	</clipAngle>
-              <anchorPosition>	0.0732977 0.259251 0.149762	</anchorPosition>
-              <anchorDirection>	-0.00120468 0.739274 0.673404	</anchorDirection>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49000	</slotId>
+              <rayStart>	0.0708399 0.0182143 2.99296	</rayStart>
+              <rayEnd>	0.0659861 -0.0210624 2.99193	</rayEnd>
+              <rayUp>	0.082 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.634	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
           <camouflage>
@@ -3197,6 +3330,11 @@
             <destroyed>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/crash/lod0/Turret_01.model	</exploded>
           </halloween>
+          <GB24_Centurion_Mk3_3Dst_HW20>
+            <undamaged>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/crash/lod0/Turret_01.model	</exploded>
+          </GB24_Centurion_Mk3_3Dst_HW20>
         </sets>
       </models>
       <hitTester>
@@ -3214,6 +3352,18 @@
         </customizableVehicleAreas>
       </customization>
       <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	31000	</slotId>
+          <anchorPosition>	0.000000 1.04025 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	32000	</slotId>
+          <anchorPosition>	0.000000 1.04025 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
         <slot>
           <slotType>	player	</slotType>
           <slotId>	33000	</slotId>
@@ -3233,18 +3383,6 @@
           <size>	0.68	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isUVProportional>	true	</isUVProportional>
-        </slot>
-        <slot>
-          <slotType>	paint	</slotType>
-          <slotId>	31000	</slotId>
-          <anchorPosition>	0.000000 1.04025 0.000000	</anchorPosition>
-          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
-        </slot>
-        <slot>
-          <slotType>	camouflage	</slotType>
-          <slotId>	32000	</slotId>
-          <anchorPosition>	0.000000 1.04025 0.000000	</anchorPosition>
-          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -3635,6 +3773,34 @@
           <anchorDirection>	0.983007 0.183214 0.011381	</anchorDirection>
           <tags>	formfactor_square	</tags>
         </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35029	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB24_Centurion_Mk3_3Dst_HW20	</compatibleModels>
+          <position>	-1.38126 2.31397 0.777017	</position>
+          <rotation>	2.89566 1.35702 -0.0704727	</rotation>
+          <scale>	0.433724 0.13449 0.433722	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.06559	</clipAngle>
+          <anchorPosition>	-1.39151 0.788311 -0.00915688	</anchorPosition>
+          <anchorDirection>	-0.252263 0.967504 0.0172894	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35030	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB24_Centurion_Mk3_3Dst_HW20	</compatibleModels>
+          <position>	1.38613 2.31257 0.749769	</position>
+          <rotation>	2.7251 -1.44548 -0.00241947	</rotation>
+          <scale>	0.476169 0.147651 0.476166	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.28949	</clipAngle>
+          <anchorPosition>	1.38039 0.734481 -0.0363496	</anchorPosition>
+          <anchorDirection>	0.401077 0.914512 -0.0529629	</anchorDirection>
+        </slot>
       </customizationSlots>
       <camouflage>
         <tiling>	0.715 0.715 0.48 0.63	</tiling>
@@ -3721,6 +3887,11 @@
                 <destroyed>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/crash/lod0/Gun_03.model	</destroyed>
                 <exploded>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/crash/lod0/Gun_03.model	</exploded>
               </halloween>
+              <GB24_Centurion_Mk3_3Dst_HW20>
+                <undamaged>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/crash/lod0/Gun_03.model	</exploded>
+              </GB24_Centurion_Mk3_3Dst_HW20>
             </sets>
           </models>
           <hitTester>
@@ -3735,16 +3906,6 @@
             </customizableVehicleAreas>
           </customization>
           <customizationSlots>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.0708393 0.0182139 3.2198	</rayStart>
-              <rayEnd>	0.0670883 0.0208441 3.21881	</rayEnd>
-              <rayUp>	0.08 0.076 4	</rayUp>
-              <size>	0.634	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-              <isUVProportional>	true	</isUVProportional>
-            </slot>
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41000	</slotId>
@@ -3769,6 +3930,9 @@
             <slot>
               <slotType>	projectionDecal	</slotType>
               <slotId>	45000	</slotId>
+              <anchorPosition>	0.0735249 0.337923 0.0248083	</anchorPosition>
+              <anchorDirection>	-0.00112976 0.776763 0.629791	</anchorDirection>
+              <applyTo>	4096	</applyTo>
               <tags>	formfactor_square	</tags>
               <position>	0.00380882 1.589 1.26987	</position>
               <rotation>	0.681286 -0.00187738 3.14154	</rotation>
@@ -3776,8 +3940,17 @@
               <doubleSided>	false	</doubleSided>
               <showOn>	4368	</showOn>
               <clipAngle>	0.764171	</clipAngle>
-              <anchorPosition>	0.0735249 0.337923 0.0248083	</anchorPosition>
-              <anchorDirection>	-0.00112976 0.776763 0.629791	</anchorDirection>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49000	</slotId>
+              <rayStart>	0.0708393 0.0182139 3.2198	</rayStart>
+              <rayEnd>	0.0670883 0.0208441 3.21881	</rayEnd>
+              <rayUp>	0.08 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.634	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
           <camouflage>
@@ -3825,6 +3998,11 @@
                 <destroyed>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/crash/lod0/Gun_04.model	</destroyed>
                 <exploded>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/crash/lod0/Gun_04.model	</exploded>
               </halloween>
+              <GB24_Centurion_Mk3_3Dst_HW20>
+                <undamaged>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/normal/lod0/Gun_04.model	</undamaged>
+                <destroyed>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/crash/lod0/Gun_04.model	</destroyed>
+                <exploded>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/crash/lod0/Gun_04.model	</exploded>
+              </GB24_Centurion_Mk3_3Dst_HW20>
             </sets>
           </models>
           <hitTester>
@@ -3839,16 +4017,6 @@
             </customizableVehicleAreas>
           </customization>
           <customizationSlots>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.0708399 0.0182143 2.91657	</rayStart>
-              <rayEnd>	0.0602322 -0.00175441 2.91555	</rayEnd>
-              <rayUp>	0.082 0.077 4	</rayUp>
-              <size>	0.634	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-              <isUVProportional>	true	</isUVProportional>
-            </slot>
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41000	</slotId>
@@ -3873,6 +4041,9 @@
             <slot>
               <slotType>	projectionDecal	</slotType>
               <slotId>	45000	</slotId>
+              <anchorPosition>	0.0733466 0.28388 0.120319	</anchorPosition>
+              <anchorDirection>	-0.00112461 0.778923 0.627119	</anchorDirection>
+              <applyTo>	4096	</applyTo>
               <tags>	formfactor_square	</tags>
               <position>	0.00364576 1.51893 1.35671	</position>
               <rotation>	0.67785 -0.00187717 3.14154	</rotation>
@@ -3880,8 +4051,17 @@
               <doubleSided>	false	</doubleSided>
               <showOn>	4368	</showOn>
               <clipAngle>	0.764171	</clipAngle>
-              <anchorPosition>	0.0733466 0.28388 0.120319	</anchorPosition>
-              <anchorDirection>	-0.00112461 0.778923 0.627119	</anchorDirection>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49000	</slotId>
+              <rayStart>	0.0708399 0.0182143 2.91657	</rayStart>
+              <rayEnd>	0.0602322 -0.00175441 2.91555	</rayEnd>
+              <rayUp>	0.082 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.634	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
           <camouflage>
@@ -3933,6 +4113,11 @@
                 <destroyed>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/crash/lod0/Gun_05.model	</destroyed>
                 <exploded>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/crash/lod0/Gun_05.model	</exploded>
               </halloween>
+              <GB24_Centurion_Mk3_3Dst_HW20>
+                <undamaged>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/normal/lod0/Gun_05.model	</undamaged>
+                <destroyed>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/crash/lod0/Gun_05.model	</destroyed>
+                <exploded>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/crash/lod0/Gun_05.model	</exploded>
+              </GB24_Centurion_Mk3_3Dst_HW20>
             </sets>
           </models>
           <hitTester>
@@ -3947,16 +4132,6 @@
             </customizableVehicleAreas>
           </customization>
           <customizationSlots>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.0708376 0.0182135 2.81825	</rayStart>
-              <rayEnd>	0.0553732 0.0281832 2.81709	</rayEnd>
-              <rayUp>	0.094 0.091 4	</rayUp>
-              <size>	0.634	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-              <isUVProportional>	true	</isUVProportional>
-            </slot>
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41000	</slotId>
@@ -3981,6 +4156,9 @@
             <slot>
               <slotType>	projectionDecal	</slotType>
               <slotId>	45000	</slotId>
+              <anchorPosition>	0.0734006 0.312978 0.0958905	</anchorPosition>
+              <anchorDirection>	-0.00117065 0.754675 0.656097	</anchorDirection>
+              <applyTo>	4096	</applyTo>
               <tags>	formfactor_square	</tags>
               <position>	0.00363995 1.63927 1.36268	</position>
               <rotation>	0.715637 -0.0018797 3.14153	</rotation>
@@ -3988,8 +4166,17 @@
               <doubleSided>	false	</doubleSided>
               <showOn>	4368	</showOn>
               <clipAngle>	0.764171	</clipAngle>
-              <anchorPosition>	0.0734006 0.312978 0.0958905	</anchorPosition>
-              <anchorDirection>	-0.00117065 0.754675 0.656097	</anchorDirection>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49000	</slotId>
+              <rayStart>	0.0708376 0.0182135 2.81825	</rayStart>
+              <rayEnd>	0.0553732 0.0281832 2.81709	</rayEnd>
+              <rayUp>	0.094 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.634	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
           <camouflage>
@@ -4009,6 +4196,11 @@
             <destroyed>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/crash/lod0/Turret_02.model	</destroyed>
             <exploded>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/crash/lod0/Turret_02.model	</exploded>
           </halloween>
+          <GB24_Centurion_Mk3_3Dst_HW20>
+            <undamaged>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/normal/lod0/Turret_02.model	</undamaged>
+            <destroyed>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/crash/lod0/Turret_02.model	</destroyed>
+            <exploded>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/crash/lod0/Turret_02.model	</exploded>
+          </GB24_Centurion_Mk3_3Dst_HW20>
         </sets>
       </models>
       <hitTester>
@@ -4026,6 +4218,18 @@
         </customizableVehicleAreas>
       </customization>
       <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	31000	</slotId>
+          <anchorPosition>	0.000000 1.04025 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	32000	</slotId>
+          <anchorPosition>	0.000000 1.04025 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
         <slot>
           <slotType>	player	</slotType>
           <slotId>	33000	</slotId>
@@ -4045,18 +4249,6 @@
           <size>	0.68	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isUVProportional>	true	</isUVProportional>
-        </slot>
-        <slot>
-          <slotType>	paint	</slotType>
-          <slotId>	31000	</slotId>
-          <anchorPosition>	0.000000 1.04025 0.000000	</anchorPosition>
-          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
-        </slot>
-        <slot>
-          <slotType>	camouflage	</slotType>
-          <slotId>	32000	</slotId>
-          <anchorPosition>	0.000000 1.04025 0.000000	</anchorPosition>
-          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -4460,6 +4652,34 @@
           <anchorPosition>	1.1612 0.622799 0.0472208	</anchorPosition>
           <anchorDirection>	0.960728 0.273045 -0.049481	</anchorDirection>
           <tags>	formfactor_square	</tags>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35030	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB24_Centurion_Mk3_3Dst_HW20	</compatibleModels>
+          <position>	-1.37342 2.31631 0.760436	</position>
+          <rotation>	2.89474 1.37088 -0.0670919	</rotation>
+          <scale>	0.438224 0.135886 0.438222	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.06559	</clipAngle>
+          <anchorPosition>	-1.37863 0.771301 -0.0260839	</anchorPosition>
+          <anchorDirection>	-0.252263 0.967504 0.0172893	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35031	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB24_Centurion_Mk3_3Dst_HW20	</compatibleModels>
+          <position>	1.39225 2.297 0.822644	</position>
+          <rotation>	2.75734 -1.43511 -0.00488615	</rotation>
+          <scale>	0.38026 0.117912 0.380258	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.06559	</clipAngle>
+          <anchorPosition>	1.38878 0.72335 0.0362866	</anchorPosition>
+          <anchorDirection>	0.370755 0.927068 -0.0555479	</anchorDirection>
         </slot>
       </customizationSlots>
       <camouflage>

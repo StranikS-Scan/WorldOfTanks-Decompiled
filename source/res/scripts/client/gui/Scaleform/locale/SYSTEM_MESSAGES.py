@@ -54,6 +54,7 @@ class SYSTEM_MESSAGES(object):
     ARENA_START_ERRORS_JOIN_WRONG_ACCOUNT_TYPE = '#system_messages:arena_start_errors/join/WRONG_ACCOUNT_TYPE'
     ARENA_START_ERRORS_JOIN_COOLDOWN = '#system_messages:arena_start_errors/join/COOLDOWN'
     ARENA_START_ERRORS_JOIN_NO_VEHICLE = '#system_messages:arena_start_errors/join/no_vehicle'
+    ARENA_START_ERRORS_JOIN_NOT_ENOUGH_ENERGY = '#system_messages:arena_start_errors/join/NOT_ENOUGH_ENERGY'
     ARENA_START_ERRORS_JOIN_NO_READYVEHICLE = '#system_messages:arena_start_errors/join/no_readyVehicle'
     ARENA_START_ERRORS_JOIN_WRONG_BATTLE_ID = '#system_messages:arena_start_errors/join/WRONG_BATTLE_ID'
     ARENA_START_ERRORS_JOIN_EVENT_DISABLED = '#system_messages:arena_start_errors/join/EVENT_DISABLED'
@@ -889,8 +890,12 @@ class SYSTEM_MESSAGES(object):
     UNIT_NOTIFICATION_PLAYEROFFLINE = '#system_messages:unit/notification/playerOffline'
     UNIT_NOTIFICATION_PLAYERONLINE = '#system_messages:unit/notification/playerOnline'
     UNIT_NOTIFICATION_PLAYERADDED = '#system_messages:unit/notification/playerAdded'
+    UNIT_NOTIFICATION_EVENTPLAYERADDED = '#system_messages:unit/notification/eventPlayerAdded'
     UNIT_NOTIFICATION_PLAYERREMOVED = '#system_messages:unit/notification/playerRemoved'
+    UNIT_NOTIFICATION_EVENTPLAYERREMOVED = '#system_messages:unit/notification/eventPlayerRemoved'
     UNIT_NOTIFICATION_GIVELEADERSHIP = '#system_messages:unit/notification/giveLeadership'
+    UNIT_NOTIFICATION_SELECTEDDIFFICULTYLEVEL = '#system_messages:unit/notification/selectedDifficultyLevel'
+    UNIT_NOTIFICATION_NOTREADYDIFFICULTYLEVEL = '#system_messages:unit/notification/notReadyDifficultyLevel'
     UNIT_NOTIFICATION_CHANGEDIVISION = '#system_messages:unit/notification/changeDivision'
     UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE = '#system_messages:unit/notification/divisionType/MIDDLE'
     UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION = '#system_messages:unit/notification/divisionType/CHAMPION'
@@ -909,6 +914,8 @@ class SYSTEM_MESSAGES(object):
     UNIT_ERRORS_SWITCH_SIZE_CONSTRAINTS = '#system_messages:unit/errors/SWITCH_SIZE_CONSTRAINTS'
     UNIT_ERRORS_BAD_VEHICLES_SET = '#system_messages:unit/errors/BAD_VEHICLES_SET'
     UNIT_ERRORS_WRONG_VEHICLE = '#system_messages:unit/errors/WRONG_VEHICLE'
+    UNIT_ERRORS_WRONG_DIFFICULTY_LEVEL = '#system_messages:unit/errors/WRONG_DIFFICULTY_LEVEL'
+    UNIT_ERRORS_MISSING_DIFFICULTY_LEVEL = '#system_messages:unit/errors/MISSING_DIFFICULTY_LEVEL'
     IGR_CUSTOMIZATION_BEGIN = '#system_messages:igr/customization/begin'
     IGR_CUSTOMIZATION_END = '#system_messages:igr/customization/end'
     INFO_NOAVAILABLE = '#system_messages:info/noAvailable'
@@ -1187,6 +1194,45 @@ class SYSTEM_MESSAGES(object):
     DOG_TAGS_SWITCH_OFF_BODY = '#system_messages:dog_tags/switch_off/body'
     DOG_TAGS_SWITCH_ON_TITLE = '#system_messages:dog_tags/switch_on/title'
     DOG_TAGS_SWITCH_ON_BODY = '#system_messages:dog_tags/switch_on/body'
+    HW19_SERVER_ERROR = '#system_messages:hw19/server_error'
+    HW19_VEHICLE_ALREADY_BOUGHT = '#system_messages:hw19_vehicle/already_bought'
+    HW19_VEHICLE_BUY_SUCCESS = '#system_messages:hw19_vehicle/buy_success'
+    HW19_BUY_ENERGY_SERVER_ERROR = '#system_messages:hw19_buy_energy/server_error'
+    HW19_BUY_ENERGY_VEHICLE_CAN_NOT_HAVE_ENERGY = '#system_messages:hw19_buy_energy/vehicle_can_not_have_energy'
+    HW19_BUY_ENERGY_VEHICLE_ALREADY_HAS_ENERGY = '#system_messages:hw19_buy_energy/vehicle_already_has_energy'
+    HW19_BUY_ENERGY_BOOSTER_ALREADY_ACTIVATED = '#system_messages:hw19_buy_energy/booster_already_activated'
+    HW19_BUY_ENERGY_VEHICLE_IN_BATTLE = '#system_messages:hw19_buy_energy/vehicle_in_battle'
+    HW19_BUY_ENERGY_SUCCESS = '#system_messages:hw19_buy_energy/success'
+    HW19_DRAW_ENERGY_SUCCESS = '#system_messages:hw19_draw_energy/success'
+    HW19_LOCK_ENERGY_SUCCESS = '#system_messages:hw19_lock_energy/success'
+    HW19_DRAW_ENERGY_SERVER_ERROR = '#system_messages:hw19_draw_energy/server_error'
+    HW19_LOCK_ENERGY_SERVER_ERROR = '#system_messages:hw19_lock_energy/server_error'
+    HW19_DRAW_ENERGY_VEHICLE_IN_BATTLE = '#system_messages:hw19_draw_energy/vehicle_in_battle'
+    HW19_LOCK_ENERGY_VEHICLE_IN_BATTLE = '#system_messages:hw19_lock_energy/vehicle_in_battle'
+    HW19_LOCK_ENERGY_BOOSTER_ALREADY_ACTIVATED = '#system_messages:hw19_lock_energy/booster_already_activated'
+    HW19_DRAW_ENERGY_VEHICLE_ALREADY_HAS_ENERGY = '#system_messages:hw19_draw_energy/vehicle_already_has_energy'
+    HW19_LOCK_ENERGY_ACCOUNT_DOES_NOT_HAVE_BOOSTER_ITEMS = '#system_messages:hw19_lock_energy/account_does_not_have_booster_items'
+    HW19_DRAW_ENERGY_ACCOUNT_DOES_NOT_HAVE_HEALING_ITEMS = '#system_messages:hw19_draw_energy/account_does_not_have_healing_items'
+    HW19_SHOP_BUY_COINS_SUCCESS = '#system_messages:hw19_shop/buy_coins_success'
+    HW19_SHOP_SELL_COINS_SUCCESS = '#system_messages:hw19_shop/sell_coins_success'
+    HW19_BESTDEAL_NO_GOLD = '#system_messages:hw19_bestdeal/NO_GOLD'
+    HW19_BESTDEAL_NO_CREDITS = '#system_messages:hw19_bestdeal/NO_CREDITS'
+    HW19_TOKEN_AWARD = '#system_messages:hw19_token/award'
+    EVENT_AFK_WARNING_HEADER = '#system_messages:event/afk/warning/header'
+    EVENT_AFK_WARNING_BODY = '#system_messages:event/afk/warning/body'
+    EVENT_AFK_BAN_HEADER = '#system_messages:event/afk/ban/header'
+    EVENT_AFK_BAN_BODY = '#system_messages:event/afk/ban/body'
+    EVENT_AFK_BUTTON = '#system_messages:event/afk/button'
+    EVENT_AFK_QUEST_HEADER = '#system_messages:event/afk/quest/header'
+    EVENT_AFK_QUEST_BODY = '#system_messages:event/afk/quest/body'
+    EVENT_AFK_QUEST_QUESTNAME = '#system_messages:event/afk/quest/questName'
+    EVENT_AFK_QUEST_BUTTON = '#system_messages:event/afk/quest/button'
+    EVENT_AFK_ERROR_HEADER = '#system_messages:event/afk/error/header'
+    EVENT_AFK_ERROR_BODY = '#system_messages:event/afk/error/body'
+    EVENT_AFK_UNBAN_HEADER = '#system_messages:event/afk/unban/header'
+    EVENT_AFK_UNBAN_BODY = '#system_messages:event/afk/unban/body'
+    EVENT_AFK_QUESTUNBAN_HEADER = '#system_messages:event/afk/questUnban/header'
+    EVENT_AFK_QUESTUNBAN_BODY = '#system_messages:event/afk/questUnban/body'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1241,7 +1287,9 @@ class SYSTEM_MESSAGES(object):
      UNIT_ERRORS_PREV_RATED_BATTLE_IN_PROGRESS,
      UNIT_ERRORS_SWITCH_SIZE_CONSTRAINTS,
      UNIT_ERRORS_BAD_VEHICLES_SET,
-     UNIT_ERRORS_WRONG_VEHICLE)
+     UNIT_ERRORS_WRONG_VEHICLE,
+     UNIT_ERRORS_WRONG_DIFFICULTY_LEVEL,
+     UNIT_ERRORS_MISSING_DIFFICULTY_LEVEL)
     UNIT_WARNINGS_ENUM = (UNIT_WARNINGS_NO_CLAN_MEMBERS,
      UNIT_WARNINGS_CANT_PICK_LEADER,
      UNIT_WARNINGS_EXTERNAL_LEGIONARIES_MATCHING_CANCELED,
@@ -1262,8 +1310,12 @@ class SYSTEM_MESSAGES(object):
      UNIT_NOTIFICATION_PLAYEROFFLINE,
      UNIT_NOTIFICATION_PLAYERONLINE,
      UNIT_NOTIFICATION_PLAYERADDED,
+     UNIT_NOTIFICATION_EVENTPLAYERADDED,
      UNIT_NOTIFICATION_PLAYERREMOVED,
+     UNIT_NOTIFICATION_EVENTPLAYERREMOVED,
      UNIT_NOTIFICATION_GIVELEADERSHIP,
+     UNIT_NOTIFICATION_SELECTEDDIFFICULTYLEVEL,
+     UNIT_NOTIFICATION_NOTREADYDIFFICULTYLEVEL,
      UNIT_NOTIFICATION_CHANGEDIVISION,
      UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE,
      UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION,
@@ -1350,6 +1402,7 @@ class SYSTEM_MESSAGES(object):
      ARENA_START_ERRORS_JOIN_WRONG_ACCOUNT_TYPE,
      ARENA_START_ERRORS_JOIN_COOLDOWN,
      ARENA_START_ERRORS_JOIN_NO_VEHICLE,
+     ARENA_START_ERRORS_JOIN_NOT_ENOUGH_ENERGY,
      ARENA_START_ERRORS_JOIN_NO_READYVEHICLE,
      ARENA_START_ERRORS_JOIN_WRONG_BATTLE_ID,
      ARENA_START_ERRORS_JOIN_EVENT_DISABLED,
@@ -2185,8 +2238,12 @@ class SYSTEM_MESSAGES(object):
      UNIT_NOTIFICATION_PLAYEROFFLINE,
      UNIT_NOTIFICATION_PLAYERONLINE,
      UNIT_NOTIFICATION_PLAYERADDED,
+     UNIT_NOTIFICATION_EVENTPLAYERADDED,
      UNIT_NOTIFICATION_PLAYERREMOVED,
+     UNIT_NOTIFICATION_EVENTPLAYERREMOVED,
      UNIT_NOTIFICATION_GIVELEADERSHIP,
+     UNIT_NOTIFICATION_SELECTEDDIFFICULTYLEVEL,
+     UNIT_NOTIFICATION_NOTREADYDIFFICULTYLEVEL,
      UNIT_NOTIFICATION_CHANGEDIVISION,
      UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE,
      UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION,
@@ -2205,6 +2262,8 @@ class SYSTEM_MESSAGES(object):
      UNIT_ERRORS_SWITCH_SIZE_CONSTRAINTS,
      UNIT_ERRORS_BAD_VEHICLES_SET,
      UNIT_ERRORS_WRONG_VEHICLE,
+     UNIT_ERRORS_WRONG_DIFFICULTY_LEVEL,
+     UNIT_ERRORS_MISSING_DIFFICULTY_LEVEL,
      IGR_CUSTOMIZATION_BEGIN,
      IGR_CUSTOMIZATION_END,
      INFO_NOAVAILABLE,
@@ -2482,7 +2541,46 @@ class SYSTEM_MESSAGES(object):
      DOG_TAGS_SWITCH_OFF_TITLE,
      DOG_TAGS_SWITCH_OFF_BODY,
      DOG_TAGS_SWITCH_ON_TITLE,
-     DOG_TAGS_SWITCH_ON_BODY)
+     DOG_TAGS_SWITCH_ON_BODY,
+     HW19_SERVER_ERROR,
+     HW19_VEHICLE_ALREADY_BOUGHT,
+     HW19_VEHICLE_BUY_SUCCESS,
+     HW19_BUY_ENERGY_SERVER_ERROR,
+     HW19_BUY_ENERGY_VEHICLE_CAN_NOT_HAVE_ENERGY,
+     HW19_BUY_ENERGY_VEHICLE_ALREADY_HAS_ENERGY,
+     HW19_BUY_ENERGY_BOOSTER_ALREADY_ACTIVATED,
+     HW19_BUY_ENERGY_VEHICLE_IN_BATTLE,
+     HW19_BUY_ENERGY_SUCCESS,
+     HW19_DRAW_ENERGY_SUCCESS,
+     HW19_LOCK_ENERGY_SUCCESS,
+     HW19_DRAW_ENERGY_SERVER_ERROR,
+     HW19_LOCK_ENERGY_SERVER_ERROR,
+     HW19_DRAW_ENERGY_VEHICLE_IN_BATTLE,
+     HW19_LOCK_ENERGY_VEHICLE_IN_BATTLE,
+     HW19_LOCK_ENERGY_BOOSTER_ALREADY_ACTIVATED,
+     HW19_DRAW_ENERGY_VEHICLE_ALREADY_HAS_ENERGY,
+     HW19_LOCK_ENERGY_ACCOUNT_DOES_NOT_HAVE_BOOSTER_ITEMS,
+     HW19_DRAW_ENERGY_ACCOUNT_DOES_NOT_HAVE_HEALING_ITEMS,
+     HW19_SHOP_BUY_COINS_SUCCESS,
+     HW19_SHOP_SELL_COINS_SUCCESS,
+     HW19_BESTDEAL_NO_GOLD,
+     HW19_BESTDEAL_NO_CREDITS,
+     HW19_TOKEN_AWARD,
+     EVENT_AFK_WARNING_HEADER,
+     EVENT_AFK_WARNING_BODY,
+     EVENT_AFK_BAN_HEADER,
+     EVENT_AFK_BAN_BODY,
+     EVENT_AFK_BUTTON,
+     EVENT_AFK_QUEST_HEADER,
+     EVENT_AFK_QUEST_BODY,
+     EVENT_AFK_QUEST_QUESTNAME,
+     EVENT_AFK_QUEST_BUTTON,
+     EVENT_AFK_ERROR_HEADER,
+     EVENT_AFK_ERROR_BODY,
+     EVENT_AFK_UNBAN_HEADER,
+     EVENT_AFK_UNBAN_BODY,
+     EVENT_AFK_QUESTUNBAN_HEADER,
+     EVENT_AFK_QUESTUNBAN_BODY)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

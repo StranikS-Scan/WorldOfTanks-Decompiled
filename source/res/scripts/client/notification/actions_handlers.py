@@ -27,6 +27,7 @@ from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import decorators
 from gui.wgcg.clan import contexts as clan_ctxs
 from gui.wgnc import g_wgncProvider
+from skeletons.gui.afk_controller import IAFKController
 from skeletons.gui.impl import INotificationWindowController
 from web.web_client_api import webApiCollection
 from web.web_client_api.sound import HangarSoundWebApi
@@ -843,7 +844,26 @@ class _OpenBattlePassProgressionView(_NavigationDisabledActionHandler):
         showMissionsBattlePassCommonProgression()
 
 
-class _OpenSelectDevicesHandler(_NavigationDisabledActionHandler):
+class _OpenSelectDevicesHandler(_ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.CHOOSING_DEVICES
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        super(_OpenSelectDevicesHandler, self).handleAction(model, entityID, action)
+        notification = model.getNotification(self.getNotType(), entityID)
+        savedData = notification.getSavedData()
+        if savedData is not None:
+            showOfferByBonusName(savedData.get('bonusName'))
+        return
+
+
+class _ShowEventWarningWindowHandler(_ActionHandler):
 
     @classmethod
     def getNotType(cls):
@@ -853,12 +873,39 @@ class _OpenSelectDevicesHandler(_NavigationDisabledActionHandler):
     def getActions(cls):
         pass
 
-    def doAction(self, model, entityID, action):
-        notification = model.getNotification(self.getNotType(), entityID)
-        savedData = notification.getSavedData()
-        if savedData is not None:
-            showOfferByBonusName(savedData.get('bonusName'))
-        return
+    def handleAction(self, model, entityID, action):
+        super(_ShowEventWarningWindowHandler, self).handleAction(model, entityID, action)
+        dependency.instance(IAFKController).showWarningWindow()
+
+
+class _ShowEventBanWindowHandler(_ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        super(_ShowEventBanWindowHandler, self).handleAction(model, entityID, action)
+        dependency.instance(IAFKController).showBanWindow()
+
+
+class _GotoEventRedeemQuestHandler(_ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        super(_GotoEventRedeemQuestHandler, self).handleAction(model, entityID, action)
+        dependency.instance(IAFKController).showQuest()
 
 
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
@@ -896,6 +943,9 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ProlongStyleRent,
  _OpenBattlePassProgressionView,
  _OpenSelectDevicesHandler,
+ _ShowEventBanWindowHandler,
+ _ShowEventWarningWindowHandler,
+ _GotoEventRedeemQuestHandler,
  _OpenMissingEventsHandler)
 
 class NotificationsActionsHandlers(object):

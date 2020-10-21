@@ -164,6 +164,11 @@ class RestartingMultiPlan(PCPlanHolder):
         self._scheduledPlans = defaultdict(list)
         self._onStartedCallback = callback
 
+    def destroy(self):
+        self._onStartedCallback = None
+        super(RestartingMultiPlan, self).destroy()
+        return
+
     def start(self):
         for plan in self._plans:
             plan.start()

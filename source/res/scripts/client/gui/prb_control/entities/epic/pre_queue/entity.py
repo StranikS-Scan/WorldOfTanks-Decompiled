@@ -23,7 +23,6 @@ from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG, PRE_QUEUE_JOIN_ERRORS
 from gui.prb_control.storages import prequeue_storage_getter
 from gui.ranked_battles.constants import PrimeTimeStatus
-from gui.shared import event_dispatcher
 from helpers import dependency, i18n
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
@@ -65,7 +64,7 @@ class EpicEntryPoint(PreQueueEntryPoint):
             g_prbCtrlEvents.onPreQueueJoinFailure(PRE_QUEUE_JOIN_ERRORS.DISABLED)
             return
         elif status in self._getFilterStates() and not constants.IS_CHINA and self.__isFrontlineAvailableOnDifferentPeriphery():
-            event_dispatcher.showEpicBattlesPrimeTimeWindow()
+            g_eventDispatcher.showEpicBattlesPrimeTimeWindow()
             if callback is not None:
                 callback(False)
             g_prbCtrlEvents.onPreQueueJoinFailure(PRE_QUEUE_JOIN_ERRORS.NOT_AVAILABLE)

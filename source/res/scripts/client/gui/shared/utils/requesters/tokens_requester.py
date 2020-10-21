@@ -94,6 +94,9 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
     def getLootBoxByTokenID(self, tokenID):
         return self.__lootBoxCache.get(tokenID)
 
+    def getLootBoxByID(self, boxID):
+        return self.__lootBoxCache.get(LOOTBOX_TOKEN_PREFIX + str(boxID))
+
     def getLastViewedProgress(self, tokenId):
         return self.__tokensProgressDelta.getPrevValue(tokenId)
 

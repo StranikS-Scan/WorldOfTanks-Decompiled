@@ -27,6 +27,7 @@ class DogTagsController(IBattleController):
         self.onArenaVehicleVictimDogTagUpdated = Event.Event(self.__eManager)
         self.onKillerDogTagSet = Event.Event(self.__eManager)
         self.onVictimDogTagSet = Event.Event(self.__eManager)
+        self.onKillerDogTagCheat = Event.Event(self.__eManager)
 
     def setKillerDogTag(self, killerDogTag):
         if not self.__isEnabled:

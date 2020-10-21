@@ -56,14 +56,13 @@ class DailyQuestsView(ViewImpl):
     gameSession = dependency.descriptor(IGameSessionController)
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
-    __slots__ = ('__tooltipData', '__proxyMissionsPage', 'isCloseEnabled')
+    __slots__ = ('__tooltipData', '__proxyMissionsPage')
 
     def __init__(self, layoutID=R.views.lobby.missions.Daily()):
         viewSettings = ViewSettings(layoutID, ViewFlags.COMPONENT, DailyQuestsViewModel())
         super(DailyQuestsView, self).__init__(viewSettings)
         self.__tooltipData = {}
         self.__proxyMissionsPage = None
-        self.isCloseEnabled = True
         return
 
     @property
@@ -346,9 +345,7 @@ class DailyQuestsView(ViewImpl):
             _logger.error('Attempted to reroll quest which does not exist, reroll cancelled.')
             return
         quest = quests[questId]
-        self.isCloseEnabled = False
         result = yield daily_quests.DailyQuestReroll(quest).request()
-        self.isCloseEnabled = True
         if result.success:
             with self.viewModel.transaction() as tx:
                 self._markVisited(tx.getCurrentTabIdx(), tx)

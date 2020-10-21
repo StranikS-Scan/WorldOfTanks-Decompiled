@@ -214,6 +214,18 @@ class MessageDecorator(_NotificationDecorator):
          'notify': self.isNotify()}
 
 
+class ChoosingDevicesMessageDecorator(MessageDecorator):
+
+    def getType(self):
+        return NOTIFICATION_TYPE.CHOOSING_DEVICES
+
+    def getGroup(self):
+        return NotificationGroup.OFFER
+
+    def getSavedData(self):
+        return self._vo['message'].get('savedData', {})
+
+
 class C11nMessageDecorator(MessageDecorator):
     itemsCache = dependency.descriptor(IItemsCache)
 

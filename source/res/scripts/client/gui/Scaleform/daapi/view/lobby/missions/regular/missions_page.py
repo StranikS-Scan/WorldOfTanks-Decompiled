@@ -127,8 +127,6 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         return self.__filterData
 
     def onClose(self):
-        if self.getCurrentTabAlias() == QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS and not self.currentTab.isCloseEnabled():
-            return
         self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def resetFilters(self):
@@ -304,7 +302,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         if self.__filterApplied():
             self.as_blinkFilterCounterS()
 
-    def __updateHeader(self):
+    def __updateHeader(self, tryToReload=False):
         data = []
         tabs = []
         for tabData in TABS_DATA_ORDERED:
@@ -314,12 +312,18 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
             tabs.append(headerTab)
             data.append(tab)
 
-        if self._curTabs is None or self._curTabs != tabs:
-            self.as_setTabsDataProviderS(tabs)
-            self._curTabs = tabs
-        self.as_setTabsCounterDataS(data)
-        self.__showFilter()
-        return
+        if not tabs and not tryToReload and self.currentTab is not None:
+            self.__updateFilterLabel()
+            self.__updateHeader(tryToReload=True)
+            self.__scrollToGroup()
+            return
+        else:
+            if self._curTabs is None or self._curTabs != tabs:
+                self.as_setTabsDataProviderS(tabs)
+                self._curTabs = tabs
+            self.as_setTabsCounterDataS(data)
+            self.__showFilter()
+            return
 
     def __getHeaderTabData(self, tabData):
         alias = tabData.alias

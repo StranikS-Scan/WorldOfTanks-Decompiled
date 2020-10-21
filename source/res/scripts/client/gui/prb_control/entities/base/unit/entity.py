@@ -473,7 +473,8 @@ class UnitEntity(_UnitEntity):
             if idle:
                 listener.onUnitFlagsChanged(flags, timeLeftInIdle)
 
-        g_eventDispatcher.loadHangar()
+        if not ctx.hasFlags(FUNCTIONAL_FLAG.LOAD_PAGE):
+            g_eventDispatcher.loadHangar()
         return initResult | FUNCTIONAL_FLAG.LOAD_WINDOW
 
     def fini(self, ctx=None, woEvents=False):

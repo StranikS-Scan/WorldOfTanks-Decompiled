@@ -126,9 +126,9 @@ class BattleRoyaleFinancialBlock(base.StatsBlock):
     def setRecord(self, result, reusable):
         brInfo = reusable.personal.getBattleRoyaleInfo()
         avatarInfo = result['personal']['avatar']
-        self.credits = avatarInfo['credits']
-        self.xp = avatarInfo['xp']
-        self.crystal = avatarInfo['crystal']
+        self.credits = avatarInfo['credits'] + avatarInfo['eventCredits']
+        self.xp = avatarInfo['xp'] + avatarInfo['eventXP']
+        self.crystal = avatarInfo['crystal'] + avatarInfo['eventCrystal']
         self.progression = brInfo.get('brPointsChanges', 0)
 
 

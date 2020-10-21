@@ -2,9 +2,10 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/ServerSettingsManager.py
 import weakref
 from collections import namedtuple
+from enum import Enum
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.migrations import migrateToVersion
-from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints, BattlePassStorageKeys
+from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints, BattlePassStorageKeys, Hw20StorageKeys
 from adisp import process, async
 from constants import ROLES_COLLAPSE
 from debug_utils import LOG_ERROR, LOG_DEBUG
@@ -57,6 +58,9 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     BATTLE_PASS_STORAGE = 'BATTLE_PASS_STORAGE'
     BATTLE_COMM = 'BATTLE_COMM'
     DOG_TAGS = 'DOG_TAGS'
+    GAME_EVENT = 'GAME_EVENT'
+    HW20_NARRATIVE = 'HW20_NARRATIVE'
+    HW20_NARRATIVE_ROASTER_MED_HIGH = 'HW20_NARRATIVE_ROASTER_MED_HIGH'
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2)
 
 
@@ -72,6 +76,12 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
     OPTIONAL_DEVICE_SETUP_INTRO_SHOWN = 'optional_device_setup_intro_shown'
     TURBOSHAFT_HIGHLIGHTS_COUNTER = 'turboshaft_highlights_count'
     TURBOSHAFT_MARK_IS_SHOWN = 'turboshaft_mark_shown'
+
+
+class UIGameEventKeys(Enum):
+    AFK_WARNING_SHOWN = 1
+    AFK_BAN_SHOWN = 2
+    DIFFICULTY_LEVEL_SHOWN = 3
 
 
 class ServerSettingsManager(object):
@@ -336,7 +346,8 @@ class ServerSettingsManager(object):
                                            OnceOnlyHints.AMMUNITION_FILTER_HINT: 1,
                                            OnceOnlyHints.OPT_DEV_DRAG_AND_DROP_HINT: 2,
                                            OnceOnlyHints.DOGTAG_HANGAR_HINT: 3,
-                                           OnceOnlyHints.DOGTAG_PROFILE_HINT: 4}, offsets={}),
+                                           OnceOnlyHints.DOGTAG_PROFILE_HINT: 4,
+                                           OnceOnlyHints.EVENT_CREW_HEALING_HINT: 5}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESET_CRITS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -425,6 +436,8 @@ class ServerSettingsManager(object):
                                      BATTLE_COMM.SHOW_CALLOUT_MESSAGES: 3,
                                      BATTLE_COMM.SHOW_BASE_MARKERS: 4,
                                      BATTLE_COMM.SHOW_LOCATION_MARKERS: 5}, offsets={}),
+     SETTINGS_SECTIONS.GAME_EVENT: Section(masks={UIGameEventKeys.AFK_WARNING_SHOWN: 0,
+                                    UIGameEventKeys.AFK_BAN_SHOWN: 1}, offsets={UIGameEventKeys.DIFFICULTY_LEVEL_SHOWN: Offset(5, 65504)}),
      SETTINGS_SECTIONS.DOG_TAGS: Section(masks={GAME.SHOW_VICTIMS_DOGTAG: 0,
                                   GAME.SHOW_DOGTAG_TO_KILLER: 1}, offsets={}),
      SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
@@ -462,7 +475,12 @@ class ServerSettingsManager(object):
                                                   'bonus': 6,
                                                   'event': 7,
                                                   'crystals': 8,
-                                                  'battleRoyale': 9}, offsets={})}
+                                                  'battleRoyale': 9}, offsets={}),
+     SETTINGS_SECTIONS.HW20_NARRATIVE: Section(masks={Hw20StorageKeys.HANGAR_HELLO_FIRST: 0}, offsets={Hw20StorageKeys.HANGAR_DAILY_HELLO: Offset(1, 126),
+                                        Hw20StorageKeys.HANGAR_LAST_HELLO_DATE: Offset(7, 3968),
+                                        Hw20StorageKeys.ROASTER_LOW: Offset(12, 2147479552)}),
+     SETTINGS_SECTIONS.HW20_NARRATIVE_ROASTER_MED_HIGH: Section(masks={}, offsets={Hw20StorageKeys.ROASTER_MED: Offset(0, 1023),
+                                                         Hw20StorageKeys.ROASTER_HIGH: Offset(10, 130048)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -586,6 +604,12 @@ class ServerSettingsManager(object):
         newValue = self.getSectionSettings(SETTINGS_SECTIONS.LINKEDSET_QUESTS, 'shown', 0) | mask
         return self.setSectionSettings(SETTINGS_SECTIONS.LINKEDSET_QUESTS, {'shown': newValue})
 
+    def getGameEventStorage(self, defaults=None):
+        return self.getSection(SETTINGS_SECTIONS.GAME_EVENT, defaults)
+
+    def saveInGameEventStorage(self, fields):
+        return self.setSections([SETTINGS_SECTIONS.GAME_EVENT], fields)
+
     def setQuestProgressSettings(self, settings):
         self.setSectionSettings(SETTINGS_SECTIONS.QUESTS_PROGRESS, settings)
 
@@ -649,6 +673,20 @@ class ServerSettingsManager(object):
         self.settingsCache.setSettings(storingValue)
         LOG_DEBUG('Applying MARKER server settings: ', settings)
         self._core.onSettingsChanged(settings)
+
+    def getHW20NarrativeSettings(self, key, default=None):
+        return self.getSectionSettings(SETTINGS_SECTIONS.HW20_NARRATIVE_ROASTER_MED_HIGH, key, default) if key in (Hw20StorageKeys.ROASTER_MED, Hw20StorageKeys.ROASTER_HIGH) else self.getSectionSettings(SETTINGS_SECTIONS.HW20_NARRATIVE, key, default)
+
+    def setHW20NarrativeSettings(self, fields):
+        medHighRoaster = {}
+        if Hw20StorageKeys.ROASTER_MED in fields:
+            medHighRoaster[Hw20StorageKeys.ROASTER_MED] = fields.pop(Hw20StorageKeys.ROASTER_MED)
+        if Hw20StorageKeys.ROASTER_HIGH in fields:
+            medHighRoaster[Hw20StorageKeys.ROASTER_HIGH] = fields.pop(Hw20StorageKeys.ROASTER_HIGH)
+        if medHighRoaster:
+            self.setSectionSettings(SETTINGS_SECTIONS.HW20_NARRATIVE_ROASTER_MED_HIGH, medHighRoaster)
+        if fields:
+            self.setSectionSettings(SETTINGS_SECTIONS.HW20_NARRATIVE, fields)
 
     def setSessionStatsSettings(self, settings):
         self.setSectionSettings(SETTINGS_SECTIONS.SESSION_STATS, settings)

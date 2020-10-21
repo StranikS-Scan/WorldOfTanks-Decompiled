@@ -160,6 +160,7 @@ class IHangarSpace(object):
     onSpaceChanged = None
     onNotifyCursorOver3dScene = None
     onSpaceChangedByAction = None
+    onObjectsSelectionEnabled = None
 
     @property
     def space(self):

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/__init__.py
+from gui.Scaleform.daapi.view.dialogs.event_afk_dialog import EventAFKDialog
 from frameworks.wulf import WindowLayer
 from gui.shared import EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -30,6 +31,7 @@ def getViewSettings():
      ViewSettings(VIEW_ALIAS.GAMMA_WIZARD, GammaWizardView, 'gammaWizard.swf', WindowLayer.FULLSCREEN_WINDOW, VIEW_ALIAS.GAMMA_WIZARD, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.COLOR_SETTING, ColorSettingsView, 'colorSettings.swf', WindowLayer.FULLSCREEN_WINDOW, VIEW_ALIAS.COLOR_SETTING, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BOOTCAMP_EXECUTION_CHOOSER, ExecutionChooserDialog, 'BCDialogWindow.swf', WindowLayer.TOP_WINDOW, None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True),
+     ViewSettings(VIEW_ALIAS.EVENT_AFK_DIALOG, EventAFKDialog, 'eventAFKDialog.swf', WindowLayer.TOP_WINDOW, None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True),
      GroupedViewSettings(VIEW_ALIAS.ACOUSTIC_POPOVER, AcousticPopover, 'acousticPopover.swf', WindowLayer.TOP_WINDOW, VIEW_ALIAS.ACOUSTIC_POPOVER, VIEW_ALIAS.ACOUSTIC_POPOVER, SETTINGS_WINDOW_SCOPE))
 
 
@@ -50,7 +52,7 @@ class CommonDialogsHandler(PackageBusinessHandler):
     bootcampCtrl = dependency.descriptor(IBootcampController)
 
     def __init__(self):
-        listeners = ((ShowDialogEvent.SHOW_SIMPLE_DLG, self.__loadSimpleDialog), (ShowDialogEvent.SHOW_EXECUTION_CHOOSER_DIALOG, self.__showBootcampExecutionChooser))
+        listeners = ((ShowDialogEvent.SHOW_SIMPLE_DLG, self.__loadSimpleDialog), (ShowDialogEvent.SHOW_EXECUTION_CHOOSER_DIALOG, self.__showBootcampExecutionChooser), (ShowDialogEvent.SHOW_EVENT_AFK_DIALOG, self.__showEventAFKDialog))
         super(CommonDialogsHandler, self).__init__(listeners, scope=EVENT_BUS_SCOPE.GLOBAL)
 
     def __loadSimpleDialog(self, event):
@@ -59,3 +61,6 @@ class CommonDialogsHandler(PackageBusinessHandler):
 
     def __showBootcampExecutionChooser(self, event):
         self.loadViewWithGenName(VIEW_ALIAS.BOOTCAMP_EXECUTION_CHOOSER, event.meta, event.handler)
+
+    def __showEventAFKDialog(self, event):
+        self.loadViewWithGenName(VIEW_ALIAS.EVENT_AFK_DIALOG, event.meta, event.handler)

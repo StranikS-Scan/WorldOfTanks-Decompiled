@@ -6,6 +6,7 @@ from WeakMethod import WeakMethodProxy
 from gui.Scaleform import MENU
 from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.money import Money
+from constants import EVENT_BATTLES_TAG
 from helpers import dependency, i18n
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA, RequestCriteria, PredicateCondition
@@ -129,6 +130,8 @@ def _parseCriteriaSpec(itemType, spec, idList=None):
     ids = sorted([ val.strip() for val in spec ] if spec else [])
     normalizedIds = [ i.replace('!', '') for i in ids ]
     compoundCriteria = REQ_CRITERIA.EMPTY | ID_IN_LIST(idList) if idList else REQ_CRITERIA.EMPTY
+    if itemType == ShopItemType.EQUIPMENT:
+        compoundCriteria |= ~REQ_CRITERIA.EQUIPMENT.HAS_TAGS([EVENT_BATTLES_TAG])
     for critId, normalizedCritId in zip(ids, normalizedIds):
         try:
             criteria = typeCriteria[normalizedCritId]

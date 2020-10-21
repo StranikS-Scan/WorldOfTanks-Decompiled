@@ -83,6 +83,13 @@
     <hangarShadowTexture>	vehicles/german/G73_E50_Ausf_M/E50_Ausf_M_HangarShadowMap.dds	</hangarShadowTexture>
     <customizationSlots>
       <slot>
+        <slotType>	sequence	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <attachNode>	HP_light2	</attachNode>
+      </slot>
+      <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
         <rayStart>	-1.01612 0.717079 2.42232	</rayStart>
@@ -970,7 +977,7 @@
         <slotType>	projectionDecal	</slotType>
         <slotId>	15065	</slotId>
         <compatibleModels>	Halloween_3Dst	</compatibleModels>
-        <position>	0.778868 1.67072 2.58338	</position>
+        <position>	0.778868 1.67072 2.59338	</position>
         <rotation>	0.371427 0.0193594 3.11842	</rotation>
         <scale>	0.76653 0.76653 0.766529	</scale>
         <doubleSided>	false	</doubleSided>
@@ -984,7 +991,7 @@
         <slotType>	projectionDecal	</slotType>
         <slotId>	15066	</slotId>
         <compatibleModels>	Halloween_3Dst	</compatibleModels>
-        <position>	-0.0300803 1.86216 -3.22366	</position>
+        <position>	-0.0300803 1.86216 -3.23366	</position>
         <rotation>	-3.13947 -0.000854969 -0.0043292	</rotation>
         <scale>	0.60827 0.608268 0.608268	</scale>
         <doubleSided>	false	</doubleSided>
@@ -2021,6 +2028,13 @@
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <customizationSlots>
         <slot>
+          <slotType>	sequence	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0 0 0	</position>
+          <rotation>	0 0 0	</rotation>
+          <attachNode>	HP_light1	</attachNode>
+        </slot>
+        <slot>
           <slotType>	paint	</slotType>
           <slotId>	31000	</slotId>
           <anchorPosition>	0.000000 0.938122 0.000000	</anchorPosition>
@@ -2488,7 +2502,7 @@
           <slotType>	projectionDecal	</slotType>
           <slotId>	35032	</slotId>
           <compatibleModels>	Halloween_3Dst	</compatibleModels>
-          <position>	-0.985302 2.34793 -0.727074	</position>
+          <position>	-0.985302 2.34793 -0.737074	</position>
           <rotation>	2.21995 1.228 -0.0657341	</rotation>
           <scale>	0.691525 0.691526 0.691525	</scale>
           <doubleSided>	false	</doubleSided>
@@ -2502,7 +2516,7 @@
           <slotType>	projectionDecal	</slotType>
           <slotId>	35033	</slotId>
           <compatibleModels>	Halloween_3Dst	</compatibleModels>
-          <position>	0.89739 2.34622 -1.00073	</position>
+          <position>	0.89739 2.34622 -1.01073	</position>
           <rotation>	2.02868 -1.32401 -0.0927613	</rotation>
           <scale>	0.691524 0.691524 0.691524	</scale>
           <doubleSided>	false	</doubleSided>
@@ -2516,7 +2530,7 @@
           <slotType>	projectionDecal	</slotType>
           <slotId>	35034	</slotId>
           <compatibleModels>	Halloween_3Dst	</compatibleModels>
-          <position>	-0.00929237 2.72398 -1.02567	</position>
+          <position>	-0.00929237 2.72398 -1.03567	</position>
           <rotation>	-3.13948 -0.000281334 -0.00433969	</rotation>
           <scale>	0.691523 0.691523 0.691523	</scale>
           <doubleSided>	false	</doubleSided>

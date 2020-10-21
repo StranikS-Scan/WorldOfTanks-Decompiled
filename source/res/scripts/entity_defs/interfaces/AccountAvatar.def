@@ -26,7 +26,7 @@
     </accountAvatar_removeBattleResultFromCache>
     <accountAvatar_setClientReady></accountAvatar_setClientReady>
     <accountAvatar_leaveArena></accountAvatar_leaveArena>
-    <accountAvatar_clearAvatarInfo></accountAvatar_clearAvatarInfo>
+    <accountAvatar_onAvatarRestore></accountAvatar_onAvatarRestore>
     <accountAvatar_updateUserRelationsOnArena>
       <Arg>	UINT64	</Arg>
       <Arg>	UINT64	</Arg>
@@ -44,6 +44,9 @@
     <accountAvatar_setAvatarClient>
       <Arg>	PYTHON	</Arg>
     </accountAvatar_setAvatarClient>
+    <accountAvatar_onAFKRulesViolation>
+      <Arg>	UINT64	</Arg>
+    </accountAvatar_onAFKRulesViolation>
     <accountAvatar_logClientXMPPEvents>
       <Arg>	ARRAY	  <of>	INT64	</of>
       </Arg>

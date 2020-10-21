@@ -1011,6 +1011,44 @@ class UpgradeTrophyDeviceListener(_NotificationListener):
                 SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.upgradeTrophyDevice.switch_off.body()), type=SystemMessages.SM_TYPE.ErrorSimple, priority=NotificationPriorityLevel.MEDIUM)
 
 
+class ChoosingDeviceslListener(_NotificationListener):
+
+    def start(self, model):
+        result = super(ChoosingDeviceslListener, self).start(model)
+        if result:
+            g_eventBus.addListener(events.ChoosingDevicesEvent.DEVICE_ADDED, self.__onDeviceAdded)
+            g_eventBus.addListener(events.ChoosingDevicesEvent.DEVICE_REMOVED, self.__onDeviceRemoved)
+        return result
+
+    def stop(self):
+        super(ChoosingDeviceslListener, self).stop()
+        g_eventBus.removeListener(events.ChoosingDevicesEvent.DEVICE_ADDED, self.__onDeviceAdded)
+        g_eventBus.removeListener(events.ChoosingDevicesEvent.DEVICE_REMOVED, self.__onDeviceRemoved)
+
+    def __onDeviceAdded(self, event):
+        model = self._model()
+        newNotification = event.ctx.get('notifacation')
+        if newNotification is None:
+            return
+        else:
+            if model:
+                prevNotifacation = model.getNotification(NOTIFICATION_TYPE.CHOOSING_DEVICES, newNotification.getID())
+                if prevNotifacation is None:
+                    model.addNotification(newNotification)
+                else:
+                    savedData = newNotification.getSavedData()
+                    prevSavedData = prevNotifacation.getSavedData()
+                    if prevSavedData.get('count') != savedData.get('count'):
+                        model.updateNotification(NOTIFICATION_TYPE.CHOOSING_DEVICES, newNotification.getID(), newNotification.getEntity(), False)
+            return
+
+    def __onDeviceRemoved(self, event):
+        entityID = event.ctx.get('entityID')
+        model = self._model()
+        if model:
+            model.removeNotification(NOTIFICATION_TYPE.CHOOSING_DEVICES, entityID)
+
+
 class NotificationsListeners(_NotificationListener):
 
     def __init__(self):
@@ -1025,7 +1063,8 @@ class NotificationsListeners(_NotificationListener):
          SwitcherListener(),
          TankPremiumListener(),
          BattlePassListener(),
-         UpgradeTrophyDeviceListener())
+         UpgradeTrophyDeviceListener(),
+         ChoosingDeviceslListener())
 
     def start(self, model):
         for listener in self.__listeners:

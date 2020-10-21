@@ -63,6 +63,11 @@
           <destroyed>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Hull.model	</exploded>
         </halloween>
+        <A100_T49_3Dst_HW20>
+          <undamaged>	vehicles/american/A100_T49/_skin/A100_T49_3Dst_HW20/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A100_T49/_skin/A100_T49_3Dst_HW20/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A100_T49/_skin/A100_T49_3Dst_HW20/crash/lod0/Hull.model	</exploded>
+        </A100_T49_3Dst_HW20>
       </sets>
     </models>
     <swinging>
@@ -1151,16 +1156,30 @@
       <slot>
         <slotType>	projectionDecal	</slotType>
         <slotId>	15077	</slotId>
-        <compatibleModels>	halloween	</compatibleModels>
-        <position>	0.0983841 1.57015 -2.17644	</position>
+        <compatibleModels>	halloween A100_T49_3Dst_HW20	</compatibleModels>
+        <position>	0.000013 1.57015 -2.17644	</position>
         <rotation>	2.98536 -0.00024271 -0.00322914	</rotation>
         <scale>	0.512277 0.512277 0.512277	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.899121	</clipAngle>
-        <anchorPosition>	0.0983841 0.578213 -2.17644	</anchorPosition>
+        <anchorPosition>	0.000013 0.578214 -2.17644	</anchorPosition>
         <anchorDirection>	-0.00319137 0.987815 -0.155598	</anchorDirection>
         <tags>	formfactor_square	</tags>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15078	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A100_T49_3Dst_HW20	</compatibleModels>
+        <position>	-0.743961 1.32102 2.10825	</position>
+        <rotation>	0.51651 -0.000407226 3.14137	</rotation>
+        <scale>	0.38798 0.0857778 0.387978	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.899121	</clipAngle>
+        <anchorPosition>	-0.743961 0.329083 2.10825	</anchorPosition>
+        <anchorDirection>	0.000021 0.869548 0.493848	</anchorDirection>
       </slot>
     </customizationSlots>
     <camouflage>
@@ -1207,6 +1226,11 @@
             <destroyed>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Chassis.model	</exploded>
           </halloween>
+          <A100_T49_3Dst_HW20>
+            <undamaged>	vehicles/american/A100_T49/_skin/A100_T49_3Dst_HW20/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A100_T49/_skin/A100_T49_3Dst_HW20/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A100_T49/_skin/A100_T49_3Dst_HW20/crash/lod0/Chassis.model	</exploded>
+          </A100_T49_3Dst_HW20>
         </sets>
       </models>
       <traces>
@@ -1919,6 +1943,11 @@
             <destroyed>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Chassis.model	</exploded>
           </halloween>
+          <A100_T49_3Dst_HW20>
+            <undamaged>	vehicles/american/A100_T49/_skin/A100_T49_3Dst_HW20/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A100_T49/_skin/A100_T49_3Dst_HW20/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A100_T49/_skin/A100_T49_3Dst_HW20/crash/lod0/Chassis.model	</exploded>
+          </A100_T49_3Dst_HW20>
         </sets>
       </models>
       <traces>
@@ -1940,12 +1969,14 @@
           <isLeading>	false	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.285361	</radius>
+          <syncAngle>	30	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
           <isLeading>	false	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.285361	</radius>
+          <syncAngle>	30	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -2116,31 +2147,6 @@
           <VTiles>	1	</VTiles>
         </atlas>
       </splineDesc>
-      <effects>
-        <lodDist>	MEDIUM	</lodDist>
-        <mud>	mediumTankMud	</mud>
-      </effects>
-      <wwsoundPC>	treads_type_pc	</wwsoundPC>
-      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.991937 0.000000	</hullPosition>
-      <hitTester>
-        <collisionModelServer>	vehicles/american/A100_T49/collision/Chassis.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/american/A100_T49/collision_client/Chassis.model	</collisionModelClient>
-      </hitTester>
-      <topRightCarryingPoint>	1.2626 1.5877	</topRightCarryingPoint>
-      <maxClimbAngle>	25	</maxClimbAngle>
-      <navmeshGirth>	6.0	</navmeshGirth>
-      <AODecals>
-        <decal>
-          <transform>
-            <row0>	4.292840 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.487910 0.000000	</row1>
-            <row2>	0.000000 0.000000 6.033260	</row2>
-            <row3>	0.000000 0.000000 0.000000	</row3>
-          </transform>
-        </decal>
-      </AODecals>
-      <trackThickness>	0.000000	</trackThickness>
       <physicalTracks>
         <left>
           <segmentsCount>	88	</segmentsCount>
@@ -2575,6 +2581,31 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.991937 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A100_T49/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A100_T49/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.2626 1.5877	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.292840 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.487910 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.033260	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <trackThickness>	0.000000	</trackThickness>
       <customization>
         <customizableVehicleAreas>
           <paint>	CHASSIS	</paint>
@@ -2669,6 +2700,11 @@
                 <destroyed>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Gun_01.model	</exploded>
               </halloween>
+              <A100_T49_3Dst_HW20>
+                <undamaged>	vehicles/american/A100_T49/_skin/A100_T49_3Dst_HW20/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A100_T49/_skin/A100_T49_3Dst_HW20/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A100_T49/_skin/A100_T49_3Dst_HW20/crash/lod0/Gun_01.model	</exploded>
+              </A100_T49_3Dst_HW20>
             </sets>
           </models>
           <hitTester>
@@ -2731,6 +2767,11 @@
             <destroyed>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Turret_01.model	</exploded>
           </halloween>
+          <A100_T49_3Dst_HW20>
+            <undamaged>	vehicles/american/A100_T49/_skin/A100_T49_3Dst_HW20/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A100_T49/_skin/A100_T49_3Dst_HW20/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A100_T49/_skin/A100_T49_3Dst_HW20/crash/lod0/Turret_01.model	</exploded>
+          </A100_T49_3Dst_HW20>
         </sets>
       </models>
       <hitTester>
@@ -2740,7 +2781,7 @@
       <gunPosition>	0.000000 0.295998 1.19232	</gunPosition>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <physicsShape>	0.982 -0.051 1.085 0.000 0.629 0.000 0.667 0.656 0.500 0.500 0.382 0.500 0.000 0.533 0.000	</physicsShape>
+      <physicsShape>	0.982 -0.051 1.085 0.000 0.510 0.164 0.667 0.656 0.500 0.500 0.382 0.500 0.000 0.533 0.000	</physicsShape>
       <customization>
         <customizableVehicleAreas>
           <paint>	TURRET	</paint>
@@ -3409,7 +3450,7 @@
         <slot>
           <slotType>	projectionDecal	</slotType>
           <slotId>	35046	</slotId>
-          <compatibleModels>	halloween	</compatibleModels>
+          <compatibleModels>	halloween A100_T49_3Dst_HW20	</compatibleModels>
           <position>	-0.662144 2.09887 -1.32931	</position>
           <rotation>	2.14434 1.44267 -0.04544	</rotation>
           <scale>	0.469644 0.469644 0.469645	</scale>
@@ -3433,6 +3474,34 @@
           <anchorPosition>	0.021909 0.788768 0.928195	</anchorPosition>
           <anchorDirection>	0.0166208 0.739023 0.673475	</anchorDirection>
           <tags>	formfactor_square	</tags>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35048	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A100_T49_3Dst_HW20	</compatibleModels>
+          <position>	0.960963 2.11737 -0.377424	</position>
+          <rotation>	2.00618 -1.39573 -0.0544288	</rotation>
+          <scale>	0.463999 0.3891 0.463999	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.34363	</clipAngle>
+          <anchorPosition>	0.938425 0.478535 -0.661624	</anchorPosition>
+          <anchorDirection>	0.88205 0.421135 -0.211265	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35049	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A100_T49_3Dst_HW20	</compatibleModels>
+          <position>	0.000089 2.21828 -1.90206	</position>
+          <rotation>	3.04317 -0.000007 -0.000004	</rotation>
+          <scale>	0.382861 0.131037 0.382863	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.61225	</clipAngle>
+          <anchorPosition>	0.000089 0.664292 -2.19898	</anchorPosition>
+          <anchorDirection>	-0.000003 0.99516 -0.0982631	</anchorDirection>
         </slot>
       </customizationSlots>
       <camouflage>
@@ -3512,6 +3581,11 @@
                 <destroyed>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Gun_03.model	</destroyed>
                 <exploded>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Gun_03.model	</exploded>
               </halloween>
+              <A100_T49_3Dst_HW20>
+                <undamaged>	vehicles/american/A100_T49/_skin/A100_T49_3Dst_HW20/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/american/A100_T49/_skin/A100_T49_3Dst_HW20/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/american/A100_T49/_skin/A100_T49_3Dst_HW20/crash/lod0/Gun_03.model	</exploded>
+              </A100_T49_3Dst_HW20>
             </sets>
           </models>
           <hitTester>
@@ -3617,6 +3691,11 @@
                 <destroyed>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Gun_05.model	</destroyed>
                 <exploded>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Gun_05.model	</exploded>
               </halloween>
+              <A100_T49_3Dst_HW20>
+                <undamaged>	vehicles/american/A100_T49/_skin/A100_T49_3Dst_HW20/normal/lod0/Gun_05.model	</undamaged>
+                <destroyed>	vehicles/american/A100_T49/_skin/A100_T49_3Dst_HW20/crash/lod0/Gun_05.model	</destroyed>
+                <exploded>	vehicles/american/A100_T49/_skin/A100_T49_3Dst_HW20/crash/lod0/Gun_05.model	</exploded>
+              </A100_T49_3Dst_HW20>
             </sets>
           </models>
           <hitTester>
@@ -3692,6 +3771,11 @@
             <destroyed>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Turret_02.model	</destroyed>
             <exploded>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Turret_02.model	</exploded>
           </halloween>
+          <A100_T49_3Dst_HW20>
+            <undamaged>	vehicles/american/A100_T49/_skin/A100_T49_3Dst_HW20/normal/lod0/Turret_02.model	</undamaged>
+            <destroyed>	vehicles/american/A100_T49/_skin/A100_T49_3Dst_HW20/crash/lod0/Turret_02.model	</destroyed>
+            <exploded>	vehicles/american/A100_T49/_skin/A100_T49_3Dst_HW20/crash/lod0/Turret_02.model	</exploded>
+          </A100_T49_3Dst_HW20>
         </sets>
       </models>
       <hitTester>
@@ -3701,7 +3785,7 @@
       <gunPosition>	0.000000 0.284607 0.992409	</gunPosition>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <physicsShape>	0.967 0.000 1.000 0.000 0.559 0.154 0.653 0.542 0.500 0.500 0.075 0.500 0.000 0.358 0.132	</physicsShape>
+      <physicsShape>	0.967 0.000 1.000 0.000 0.531 0.290 0.653 0.542 0.500 0.500 0.075 0.500 0.000 0.358 0.132	</physicsShape>
       <customization>
         <customizableVehicleAreas>
           <paint>	TURRET	</paint>
@@ -4252,6 +4336,48 @@
           <anchorPosition>	-0.207145 0.556469 -1.46512	</anchorPosition>
           <anchorDirection>	-0.145978 0.801115 -0.580435	</anchorDirection>
           <tags>	formfactor_square	</tags>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35037	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A100_T49_3Dst_HW20	</compatibleModels>
+          <position>	-0.989158 1.92573 0.298361	</position>
+          <rotation>	0.671992 -1.44073 -3.04779	</rotation>
+          <scale>	0.567803 0.289489 0.567805	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.887779	</clipAngle>
+          <anchorPosition>	-1.08793 0.420439 0.00679381	</anchorPosition>
+          <anchorDirection>	-0.626723 0.779142 -0.0124874	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35038	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A100_T49_3Dst_HW20	</compatibleModels>
+          <position>	1.14429 2.02604 0.411045	</position>
+          <rotation>	0.654602 1.27589 2.95759	</rotation>
+          <scale>	0.385815 0.2 0.385815	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.760343	</clipAngle>
+          <anchorPosition>	1.13945 0.391928 0.121455	</anchorPosition>
+          <anchorDirection>	0.625905 0.779899 -0.00109425	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35039	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A100_T49_3Dst_HW20	</compatibleModels>
+          <position>	0.516403 2.55929 -0.318071	</position>
+          <rotation>	-3.12679 -0.0114889 -0.0287642	</rotation>
+          <scale>	0.439001 0.439002 0.439	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.47403	</clipAngle>
+          <anchorPosition>	0.516403 0.931206 -0.60767	</anchorPosition>
+          <anchorDirection>	-0.0289284 0.999477 0.0144686	</anchorDirection>
         </slot>
       </customizationSlots>
       <camouflage>

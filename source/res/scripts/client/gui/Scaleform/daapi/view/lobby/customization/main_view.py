@@ -4,7 +4,7 @@ import logging
 from collections import namedtuple
 import BigWorld
 from BWUtil import AsyncReturn
-from CurrentVehicle import g_currentVehicle
+from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from Math import Matrix
 from account_helpers.AccountSettings import AccountSettings, CUSTOMIZATION_SECTION, CAROUSEL_ARROWS_HINT_SHOWN_FIELD
 from async import async, await
@@ -594,6 +594,8 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
 
     def _populate(self):
         super(MainView, self)._populate()
+        if g_currentPreviewVehicle.isPresent() and g_currentPreviewVehicle.item.isOnlyForEventBattles:
+            g_currentPreviewVehicle.selectNoVehicle()
         self.__ctx = self.service.getCtx()
         self.__selectFirstVisibleTab()
         self.__ctx.events.onSeasonChanged += self.__onSeasonChanged
@@ -676,9 +678,9 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': False}), scope=EVENT_BUS_SCOPE.LOBBY)
         if self.__ctx.c11nCameraManager is not None:
             self.__ctx.c11nCameraManager.locateCameraToStartState()
-            if self.__ctx.c11nCameraManager.vEntity is not None:
-                turretRotator = self.__ctx.c11nCameraManager.vEntity.appearance.turretRotator
-                turretRotator.onTurretRotated -= self.__onTurretAndGunRotated
+            vEntity = self.__ctx.c11nCameraManager.vEntity
+            if vEntity is not None and vEntity.appearance is not None and vEntity.appearance.turretRotator is not None:
+                vEntity.appearance.turretRotator.onTurretRotated -= self.__onTurretAndGunRotated
         if self.__styleInfo is not None:
             self.__styleInfo.disableBlur()
             self.__disableStyleInfoSound()

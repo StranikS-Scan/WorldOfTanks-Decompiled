@@ -4,7 +4,7 @@ import logging
 import weakref
 import typing
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
-from battle_pass_common import BattlePassConsts
+from battle_pass_common import BattlePassConsts, BattlePassState
 from helpers import i18n, dependency
 from gui import makeHtmlString
 from gui.server_events.bonuses import IntelligenceBlueprintBonus, NationalBlueprintBonus, DossierBonus
@@ -302,11 +302,11 @@ class DeviceTokensContainer(object):
         self.__paidTokenPositions.append(position)
 
     def getFreeAvailableTokens(self):
-        currentLevel = self.__battlePassController.getCurrentLevel()
+        currentLevel = self.__getBaseProgressionCurrentLevel()
         return [ 0 <= pos <= currentLevel for pos in self.__freeTokenPositions ]
 
     def getPaidAvailableTokens(self):
-        currentLevel = self.__battlePassController.getCurrentLevel()
+        currentLevel = self.__getBaseProgressionCurrentLevel()
         if not self.__battlePassController.isBought():
             return [False] * len(self.__paidTokenPositions)
         return [ 0 <= pos <= currentLevel for pos in self.__paidTokenPositions ]
@@ -377,6 +377,9 @@ class DeviceTokensContainer(object):
     def clear(self):
         self.__freeTokenPositions = []
         self.__paidTokenPositions = []
+
+    def __getBaseProgressionCurrentLevel(self):
+        return self.__battlePassController.getMaxLevel() if not self.__battlePassController.getState() == BattlePassState.BASE else self.__battlePassController.getCurrentLevel()
 
 
 def getStorageKey(bonusName):

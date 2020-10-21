@@ -403,9 +403,13 @@ class MENU(object):
     PREBATTLE_BATTLEROYALE_SOLO = '#menu:prebattle/battleRoyale/solo'
     PREBATTLE_BATTLEROYALE_SQUAD = '#menu:prebattle/battleRoyale/squad'
     PREBATTLE_TIMERLABEL = '#menu:prebattle/timerLabel'
+    PREBATTLE_TIMERLABEL_EVENT = '#menu:prebattle/timerLabel/event'
+    PREBATTLE_DIFFICULTYLABEL_EVENT = '#menu:prebattle/difficultyLabel/event'
+    PREBATTLE_TIPSLABEL_EVENT = '#menu:prebattle/tipsLabel/event'
     PREBATTLE_TANKLABEL = '#menu:prebattle/tankLabel'
     PREBATTLE_STARTINGTANKLABEL = '#menu:prebattle/startingTankLabel'
     PREBATTLE_EXITBUTTON = '#menu:prebattle/exitButton'
+    PREBATTLE_EXITBUTTON_EVENT = '#menu:prebattle/exitButton/event'
     PREBATTLE_STARTBUTTON = '#menu:prebattle/startButton'
     PREBATTLE_ALREADY_IN_AWAITING_BATTLE = '#menu:prebattle/already_in_awaiting_battle'
     PREBATTLE_TITLE = '#menu:prebattle/title'
@@ -661,8 +665,6 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_RANKEDLEAVE_DESCR = '#menu:headerButtons/battle/types/rankedLeave/descr'
     HEADERBUTTONS_BATTLE_TYPES_SQUAD = '#menu:headerButtons/battle/types/squad'
     HEADERBUTTONS_BATTLE_TYPES_SQUAD_DESCRIPTION = '#menu:headerButtons/battle/types/squad/description'
-    HEADERBUTTONS_BATTLE_TYPES_SIMPLESQUAD = '#menu:headerButtons/battle/types/simpleSquad'
-    HEADERBUTTONS_BATTLE_TYPES_EVENTSQUAD = '#menu:headerButtons/battle/types/eventSquad'
     HEADERBUTTONS_BATTLE_TYPES_BATTLEROYALE = '#menu:headerButtons/battle/types/battleRoyale'
     HEADERBUTTONS_BATTLE_TYPES_BATTLEROYALE_EXTRA_FROZEN = '#menu:headerButtons/battle/types/battleRoyale/extra/frozen'
     HEADERBUTTONS_BATTLE_TYPES_BATTLEROYALE_EXTRA_FINISHED = '#menu:headerButtons/battle/types/battleRoyale/extra/finished'
@@ -683,8 +685,11 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_EPICTRAINING_DESCR = '#menu:headerButtons/battle/types/epicTraining/descr'
     HEADERBUTTONS_BATTLE_TYPES_LEAVETRAINING_DESCR = '#menu:headerButtons/battle/types/leaveTraining/descr'
     HEADERBUTTONS_BATTLE_TYPES_TRAININGLEAVEOWNER = '#menu:headerButtons/battle/types/trainingLeaveOwner'
+    HEADERBUTTONS_BATTLE_TYPES_SIMPLESQUAD = '#menu:headerButtons/battle/types/simpleSquad'
+    HEADERBUTTONS_BATTLE_TYPES_EVENTSQUAD = '#menu:headerButtons/battle/types/eventSquad'
     HEADERBUTTONS_BATTLE_TYPES_TRAININGLEAVE = '#menu:headerButtons/battle/types/trainingLeave'
     HEADERBUTTONS_BATTLE_TYPES_BATTLETEACHING = '#menu:headerButtons/battle/types/battleTeaching'
+    HEADERBUTTONS_BATTLE_TYPES_EVENTBATTLE = '#menu:headerButtons/battle/types/eventBattle'
     HEADERBUTTONS_BATTLE_TYPES_SPEC = '#menu:headerButtons/battle/types/spec'
     HEADERBUTTONS_BATTLE_TYPES_SPEC_DESCR = '#menu:headerButtons/battle/types/spec/descr'
     HEADERBUTTONS_BATTLE_TYPES_LEAVESPEC_DESCR = '#menu:headerButtons/battle/types/leaveSpec/descr'
@@ -1444,6 +1449,7 @@ class MENU(object):
     HANGAR_AMMUNITIONPANEL_TUNINGBTN = '#menu:hangar/ammunitionPanel/tuningBtn'
     HANGAR_AMMUNITIONPANEL_NATIONCHANGEBTN = '#menu:hangar/ammunitionPanel/nationChangeBtn'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_TITLE = '#menu:hangar/ammunitionPanel/technicalMaitenance/title'
+    HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_EVENTINFO = '#menu:hangar/ammunitionPanel/technicalMaitenance/eventInfo'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_REPAIR_LABEL = '#menu:hangar/ammunitionPanel/technicalMaitenance/repair/label'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_REPAIR_CHECKBOXAUTO = '#menu:hangar/ammunitionPanel/technicalMaitenance/repair/checkboxAuto'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_AMMO_LABEL = '#menu:hangar/ammunitionPanel/technicalMaitenance/ammo/label'
@@ -1469,6 +1475,7 @@ class MENU(object):
     CUSTOMIZATION_TITLE = '#menu:customization/title'
     SCREENSHOT_SAVE = '#menu:screenshot/save'
     CONTEXTMENU_EXCHANGE = '#menu:contextMenu/exchange'
+    CONTEXTMENU_PERSONALTRADEEXCHANGE = '#menu:contextMenu/personalTradeExchange'
     CONTEXTMENU_VEHICLEINFO = '#menu:contextMenu/vehicleInfo'
     CONTEXTMENU_VEHICLEINFOEX = '#menu:contextMenu/vehicleInfoEx'
     CONTEXTMENU_GOTONATIONTREE = '#menu:contextMenu/goToNationTree'
@@ -1965,6 +1972,7 @@ class MENU(object):
     TECHTREE_INTRO_BTNYES = '#menu:techtree/intro/btnYes'
     CST_ITEM_CTX_MENU_BUY = '#menu:cst_item_ctx_menu/buy'
     CST_ITEM_CTX_MENU_EXCHANGE = '#menu:cst_item_ctx_menu/exchange'
+    CST_ITEM_CTX_MENU_PERSONALTRADEEXCHANGE = '#menu:cst_item_ctx_menu/personalTradeExchange'
     CST_ITEM_CTX_MENU_BUYMORE = '#menu:cst_item_ctx_menu/buyMore'
     CST_ITEM_CTX_MENU_SELL = '#menu:cst_item_ctx_menu/sell'
     CST_ITEM_CTX_MENU_NATIONCHANGE = '#menu:cst_item_ctx_menu/nationChange'
@@ -2122,6 +2130,7 @@ class MENU(object):
     CRYSTALS_INFO_TAB_SPEND_CARD_TOSHOP = '#menu:crystals/info/tab/spend/card/toShop'
     CRYSTALS_INFO_TAB_SPEND_CARD_PRICE = '#menu:crystals/info/tab/spend/card/price'
     CONTEXTMENU_ENUM = (CONTEXTMENU_EXCHANGE,
+     CONTEXTMENU_PERSONALTRADEEXCHANGE,
      CONTEXTMENU_VEHICLEINFO,
      CONTEXTMENU_VEHICLEINFOEX,
      CONTEXTMENU_GOTONATIONTREE,
@@ -2666,6 +2675,7 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_23)
     CST_ITEM_CTX_MENU_ENUM = (CST_ITEM_CTX_MENU_BUY,
      CST_ITEM_CTX_MENU_EXCHANGE,
+     CST_ITEM_CTX_MENU_PERSONALTRADEEXCHANGE,
      CST_ITEM_CTX_MENU_BUYMORE,
      CST_ITEM_CTX_MENU_SELL,
      CST_ITEM_CTX_MENU_NATIONCHANGE,

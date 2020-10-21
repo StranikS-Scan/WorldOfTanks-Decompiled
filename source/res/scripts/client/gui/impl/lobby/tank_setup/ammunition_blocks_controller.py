@@ -12,6 +12,7 @@ RANDOM_BATTLE_TABS = (TankSetupConstants.OPT_DEVICES,
  TankSetupConstants.CONSUMABLES,
  TankSetupConstants.BATTLE_BOOSTERS)
 FRONTLINE_TABS = RANDOM_BATTLE_TABS + (TankSetupConstants.BATTLE_ABILITIES,)
+EVENT_TABS = (TankSetupConstants.SHELLS, TankSetupConstants.CONSUMABLES)
 
 class BaseAmmunitionBlocksController(TabsController):
     __slots__ = ('_vehicle', '_currentSection')
@@ -40,7 +41,13 @@ class AmmunitionBlocksController(BaseAmmunitionBlocksController):
         if self._vehicle is None:
             return []
         else:
-            return FRONTLINE_TABS if self.prbDispatcher is not None and self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.EPIC) else RANDOM_BATTLE_TABS
+            if self.prbDispatcher is not None:
+                state = self.prbDispatcher.getFunctionalState()
+                if state.isInPreQueue(QUEUE_TYPE.EPIC) or state.isInUnit(PREBATTLE_TYPE.EPIC):
+                    return FRONTLINE_TABS
+                if state.isInPreQueue(QUEUE_TYPE.EVENT_BATTLES) or state.isInUnit(PREBATTLE_TYPE.EVENT):
+                    return EVENT_TABS
+            return RANDOM_BATTLE_TABS
 
     @tabUpdateFunc(TankSetupConstants.OPT_DEVICES)
     def _updateOptDevices(self, viewModel, isFirst=False):

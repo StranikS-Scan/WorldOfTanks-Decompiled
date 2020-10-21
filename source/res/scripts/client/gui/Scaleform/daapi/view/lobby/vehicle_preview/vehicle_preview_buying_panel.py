@@ -128,6 +128,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         self.__oldPrice = MONEY_UNDEFINED
         self.__buyParams = None
         self.__backAlias = None
+        self.__backCallback = None
         self.__timeCallbackID = None
         self.__timeLeftIcon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_TIME_ICON, 16, 16)
         self.__cachedVehiclesVOs = None
@@ -189,6 +190,9 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
 
     def setBackAlias(self, backAlias):
         self.__backAlias = backAlias
+
+    def setBackCallback(self, backCallback):
+        self.__backCallback = backCallback
 
     def setIsHeroTank(self, isHero):
         self.__isHeroTank = isHero
@@ -603,7 +607,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         return
 
     def __purchaseSingleVehicle(self, vehicle):
-        event_dispatcher.showVehicleBuyDialog(vehicle)
+        event_dispatcher.showVehicleBuyDialog(vehicle, returnAlias=self.__backAlias, returnCallback=self.__backCallback)
 
     def __purchaseHeroTank(self):
         if self._heroTanks.isAdventHero():
@@ -626,7 +630,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
             unlockProps = g_techTreeDP.getUnlockProps(self._vehicleCD, self._vehicleLevel)
             factory.doAction(factory.UNLOCK_ITEM, self._vehicleCD, unlockProps, skipConfirm=self._skipConfirm)
         else:
-            factory.doAction(factory.BUY_VEHICLE, self._vehicleCD, False, None, VIEW_ALIAS.VEHICLE_PREVIEW, skipConfirm=self._skipConfirm)
+            factory.doAction(factory.BUY_VEHICLE, self._vehicleCD, False, None, VIEW_ALIAS.VEHICLE_PREVIEW, self.__backAlias, self.__backCallback, skipConfirm=self._skipConfirm)
         return
 
     def __walletAvailableForCurrency(self, currency):

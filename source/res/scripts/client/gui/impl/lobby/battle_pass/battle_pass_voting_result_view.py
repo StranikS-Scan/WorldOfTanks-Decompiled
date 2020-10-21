@@ -84,7 +84,7 @@ class BattlePassVotingResultView(ViewImpl):
     def __showStylePreview(self, args):
         self.__previewOpened = True
         if self.__isOverlay:
-            hideVehiclePreview(noCallback=True)
+            hideVehiclePreview(back=False)
             self.__battlePassController.getFinalRewardLogic().postPreviewOpen()
             self.destroyWindow()
         vehicleCD = int(args.get('vehicleCD'))

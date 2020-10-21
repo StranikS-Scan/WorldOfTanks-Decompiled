@@ -56,6 +56,10 @@ def showShopVehiclesTradeIn():
     showShop(shop_helpers.getTradeInVehiclesUrl())
 
 
+def showShopVehiclesPersonalTradeIn():
+    showShop(shop_helpers.getPersonalTradeInVehiclesUrl())
+
+
 def configureShopForShells():
     AccountSettings.setFilter('shop_current', (-1, STORE_CONSTANTS.SHELL, True))
     shellsFilter = AccountSettings.getFilter('shop_shell')

@@ -16,7 +16,7 @@ from gui.Scaleform.daapi.view.meta.BattleResultsMeta import BattleResultsMeta
 from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS
 from gui.shared import event_bus_handlers, events, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared import event_dispatcher
-from gui.shared.event_dispatcher import showProgressiveRewardWindow, showTankPremiumAboutPage
+from gui.shared.events import ViewEventType
 from gui.sounds.ambients import BattleResultsEnv
 from helpers import dependency
 from skeletons.gui.battle_results import IBattleResultsService
@@ -84,21 +84,20 @@ class BattleResultsWindow(BattleResultsMeta):
             self.destroy()
 
     def showProgressiveRewardView(self):
-        showProgressiveRewardWindow()
+        event_dispatcher.showProgressiveRewardWindow()
 
     def onAppliedPremiumBonus(self):
         self.__battleResults.applyAdditionalBonus(self.__arenaUniqueID)
 
     def onShowDetailsPremium(self):
-        BigWorld.callback(0.0, showTankPremiumAboutPage)
+        BigWorld.callback(0.0, event_dispatcher.showTankPremiumAboutPage)
         self.destroy()
 
     def _populate(self):
         super(BattleResultsWindow, self)._populate()
         g_eventBus.addListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__updateVO)
         g_eventBus.addListener(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, self.__onBattleResultWindowShowQuest)
-        g_eventBus.addListener(VIEW_ALIAS.BATTLE_QUEUE, self._lockButtons, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.addListener(VIEW_ALIAS.LOBBY_HANGAR, self._unlockButtons, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self._onViewLoaded, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.addCallbacks({'account._additionalXPCache': self.__updateVO,
          'inventory.1': self.__updateVO,
          'inventory.8': self.__updateVO})
@@ -107,17 +106,22 @@ class BattleResultsWindow(BattleResultsMeta):
         if self.__battleResults.areResultsPosted(self.__arenaUniqueID):
             self.__setBattleResults()
 
-    def _lockButtons(self, *_):
+    def _onViewLoaded(self, event):
+        if event.alias == VIEW_ALIAS.BATTLE_QUEUE:
+            self._lockButtons()
+        elif event.alias == VIEW_ALIAS.LOBBY_HANGAR:
+            self._unlockButtons()
+
+    def _lockButtons(self):
         self.as_setIsInBattleQueueS(True)
 
-    def _unlockButtons(self, *_):
+    def _unlockButtons(self):
         self.as_setIsInBattleQueueS(False)
 
     def _dispose(self):
         g_eventBus.removeListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__updateVO)
         g_eventBus.removeListener(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, self.__onBattleResultWindowShowQuest)
-        g_eventBus.removeListener(VIEW_ALIAS.BATTLE_QUEUE, self._lockButtons, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.removeListener(VIEW_ALIAS.LOBBY_HANGAR, self._unlockButtons, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self._onViewLoaded, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__gameSession.onPremiumTypeChanged -= self.__onPremiumStateChanged
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange

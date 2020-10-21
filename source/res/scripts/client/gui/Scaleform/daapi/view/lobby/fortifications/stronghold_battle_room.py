@@ -248,6 +248,9 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         self.prbEntity.forceTimerEvent()
         self.__postMinimiseFilterUpdate()
         self.__validateNationGroup()
+        prbEntity = self.prbEntity
+        if self.isPlayerInSlot() and not self.isPlayerReady():
+            prbEntity.resetPlayerReadiness()
 
     def _dispose(self):
         self.__proxy = None

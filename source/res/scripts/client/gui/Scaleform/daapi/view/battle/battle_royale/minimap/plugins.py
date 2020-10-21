@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/battle_royale/minimap/plugins.py
 import logging
 from collections import namedtuple
+import typing
 import BigWorld
 import Math
 import Placement
@@ -515,15 +516,20 @@ class BattleRoyaleVehiclePlugin(ArenaVehiclesPlugin):
 
     def _notifyVehicleAdded(self, vehicleID):
         super(BattleRoyaleVehiclePlugin, self)._notifyVehicleAdded(vehicleID)
-        if self.__radarSpottedVehiclesPlugin:
+        if self.__radarSpottedVehiclesPlugin is not None:
             if self._entries[vehicleID].isActive():
                 self.__radarSpottedVehiclesPlugin.addVisibilitySysSpottedVeh(vehicleID)
         else:
             _logger.warning("Couldn't update radar plugin. The reference is None!")
+        return
 
     def _notifyVehicleRemoved(self, vehicleID):
         super(BattleRoyaleVehiclePlugin, self)._notifyVehicleRemoved(vehicleID)
-        self.__radarSpottedVehiclesPlugin.removeVisibilitySysSpottedVeh(vehicleID)
+        if self.__radarSpottedVehiclesPlugin is not None:
+            self.__radarSpottedVehiclesPlugin.removeVisibilitySysSpottedVeh(vehicleID)
+        else:
+            _logger.warning("Couldn't update radar plugin. The reference is None!")
+        return
 
     def _invoke(self, entryID, name, *args):
         pass

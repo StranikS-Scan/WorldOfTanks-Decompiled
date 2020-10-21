@@ -23,6 +23,10 @@ from messenger.proto.shared_errors import ClientError
 from messenger_common_chat2 import MESSENGER_LIMITS
 from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
+from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES
+from messenger_common_chat2 import BATTLE_CHAT_COMMANDS
+from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI as I18N_INGAME_GUI
+from messenger import g_settings
 
 class _check_arena_in_waiting(object):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -175,6 +179,41 @@ class EpicTeamChannelController(TeamChannelController):
         else:
             text = command.getCommandText()
         return (isCurrent, text)
+
+
+class EventTeamChannelController(TeamChannelController):
+    COMMAND_TEXT_OVERRIDE = {BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE: 'moving_to_camp',
+     BATTLE_CHAT_COMMAND_NAMES.ATTACK_BASE: 'moveto_camp',
+     BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE: 'moving_to_collector',
+     BATTLE_CHAT_COMMAND_NAMES.DEFEND_BASE: 'moveto_collector'}
+    _BASE_RELATED_COMMANDS_IDS_TO_TEXT = {}
+    for cmd in BATTLE_CHAT_COMMANDS:
+        cmdID = cmd.id
+        cmdName = cmd.name
+        if cmdName in COMMAND_TEXT_OVERRIDE:
+            _BASE_RELATED_COMMANDS_IDS_TO_TEXT[cmdID] = COMMAND_TEXT_OVERRIDE[cmdName]
+
+    def isEnabled(self):
+        return False if g_settings.userPrefs.disableBattleChat else super(EventTeamChannelController, self).isEnabled()
+
+    def _formatCommand(self, command):
+        isCurrent = False
+        if command.getCommandType() == MESSENGER_COMMAND_TYPE.BATTLE:
+            avatarSessionID = command.getSenderID()
+            isCurrent = command.isSender()
+            msgText = command.getCommandText()
+            if command.getID() in self._BASE_RELATED_COMMANDS_IDS_TO_TEXT:
+                msgText = self.__getCommandText(command.getID(), command.getProtoData())
+            text = self._mBuilder.setColors(avatarSessionID).setName(avatarSessionID).setText(msgText).build()
+        else:
+            text = command.getCommandText()
+        return (isCurrent, text)
+
+    def __getCommandText(self, commandID, protoData):
+        i18nKey = I18N_INGAME_GUI.chat_shortcuts(self._BASE_RELATED_COMMANDS_IDS_TO_TEXT[commandID])
+        i18nArguments = {}
+        text = i18n.makeString(i18nKey, **i18nArguments)
+        return unicode(text, 'utf-8', errors='ignore')
 
 
 class CommonChannelController(_ChannelController):

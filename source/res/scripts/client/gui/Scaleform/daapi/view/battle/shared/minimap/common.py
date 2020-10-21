@@ -52,6 +52,9 @@ class SimplePlugin(IPlugin):
     def applyNewSize(self, sizeIndex):
         pass
 
+    def invokeMarker(self, entryID, name, *args):
+        self._invoke(entryID, name, *args)
+
     def _addEntry(self, symbol, container, matrix=None, active=False, transformProps=settings.TRANSFORM_FLAG.DEFAULT):
         return self._parentObj.addEntry(symbol, container, matrix=matrix, active=active, transformProps=transformProps)
 

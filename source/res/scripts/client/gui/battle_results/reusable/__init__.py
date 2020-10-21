@@ -259,8 +259,10 @@ class _ReusableInfo(object):
             enemies = []
             for (vehicleID, _), data in details.iteritems():
                 vehicleInfo = getVehicleInfo(vehicleID)
-                if not vehicleInfo.intCD:
-                    intCD = vehicleID
+                intCD = None
+                if not vehicleInfo.intCD and not vehicleInfo.accountDBID:
+                    if getBotInfo(vehicleID) is not None:
+                        intCD = vehicleID
                 else:
                     intCD = vehicleInfo.intCD
                 if vehicleInfo.accountDBID == playerDBID or vehicleInfo.team == playerTeam:
@@ -271,7 +273,8 @@ class _ReusableInfo(object):
                     botInfo = getBotInfo(vehicleID)
                     botName = botInfo.realName if botInfo else ''
                     playerInfo = makePlayerInfo(realName=botName, fakeName=botName)
-                sortable = VehicleDetailedInfo.makeForEnemy(vehicleID, getItemByCD(intCD), playerInfo, data, vehicleInfo.deathReason, vehicleInfo.isTeamKiller)
+                vehicle = getItemByCD(intCD) if intCD else None
+                sortable = VehicleDetailedInfo.makeForEnemy(vehicleID, vehicle, playerInfo, data, vehicleInfo.deathReason, vehicleInfo.isTeamKiller)
                 if not sortable.haveInteractionDetails():
                     continue
                 if (vehicleID, intCD) not in totalSortable:
@@ -284,6 +287,7 @@ class _ReusableInfo(object):
             yield ((bases,), sorted(enemies, key=sort_keys.VehicleInfoSortKey))
 
         yield (totalBases, sorted(totalSortable.itervalues(), key=sort_keys.VehicleInfoSortKey))
+        return
 
     def getPersonalVehiclesInfo(self, result):
         player = weakref.proxy(self.getPlayerInfo())

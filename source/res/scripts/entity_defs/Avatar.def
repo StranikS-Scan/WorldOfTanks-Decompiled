@@ -17,6 +17,9 @@
     <Interface>	VehicleHealthBroadcastListenerComponent_Avatar	</Interface>
     <Interface>	AvatarLoot	</Interface>
     <Interface>	AvatarSpawnKeyPoints	</Interface>
+    <Interface>	WaveBotsSpawnController_Avatar	</Interface>
+    <Interface>	BattleHintsController_Avatar	</Interface>
+    <Interface>	WarningHintsController_Avatar	</Interface>
     <Interface>	AvatarEpic	</Interface>
   </Implements>
   <Volatile>
@@ -434,7 +437,7 @@
       </VariableLengthHeaderSize>
     </updateArena>
     <updatePositions>
-      <Arg>	ARRAY	  <of>	UINT8	</of>
+      <Arg>	ARRAY	  <of>	UINT16	</of>
       </Arg>
       <Arg>	ARRAY	  <of>	INT16	</of>
       </Arg>
@@ -497,6 +500,20 @@
       <Arg>	PYTHON	</Arg>
       <AllowUnsafeData>	true	</AllowUnsafeData>
     </updateQuestProgress>
+    <updateScenarioTimer>
+      <Arg>	PYTHON	</Arg>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </updateScenarioTimer>
+    <sendPlayerBattleLogNotification>
+      <Arg>	STRING	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </sendPlayerBattleLogNotification>
+    <sendEquipmentBattleLogNotification>
+      <Arg>	UINT16	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	BOOL	</Arg>
+    </sendEquipmentBattleLogNotification>
   </ClientMethods>
   <CellMethods>
     <autoAim>
@@ -802,6 +819,9 @@
       <Arg>	CLIENT_STATUS_STATISTICS	</Arg>
     </reportClientStats>
     <setAvatarClient></setAvatarClient>
+    <onAFKRulesViolation>
+      <Arg>	UINT64	</Arg>
+    </onAFKRulesViolation>
     <leaveArenaByAccount>
       <Arg>	BOOL	</Arg>
     </leaveArenaByAccount>

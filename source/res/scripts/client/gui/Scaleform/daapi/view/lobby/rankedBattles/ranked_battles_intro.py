@@ -13,6 +13,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.RankedBattlesIntroMeta import RankedBattlesIntroMeta
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.shared import event_dispatcher, events, EVENT_BUS_SCOPE
+from gui.shared.utils.functions import getUniqueViewName
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IRankedBattlesController
@@ -60,7 +61,8 @@ class RankedBattlesIntro(LobbySubView, RankedBattlesIntroMeta):
 
     def __showVideo(self):
         webHandlers = webApiCollection(ui_web_api.CloseViewWebApi, sound_web_api.SoundWebApi, sound_web_api.HangarSoundWebApi)
-        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BROWSER_VIEW), ctx={'url': getRankedBattlesIntroPageUrl(),
+        alias = VIEW_ALIAS.BROWSER_VIEW
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(alias, getUniqueViewName(alias)), ctx={'url': getRankedBattlesIntroPageUrl(),
          'webHandlers': webHandlers,
          'returnAlias': self.alias}), EVENT_BUS_SCOPE.LOBBY)
 

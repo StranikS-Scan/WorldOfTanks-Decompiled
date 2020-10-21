@@ -9,6 +9,7 @@ from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicCont
 from gui.battle_control.controllers import radar_ctrl
 from gui.battle_control.controllers import spawn_ctrl
 from gui.battle_control.controllers import vehicles_count_ctrl
+from gui.battle_control.controllers import battle_hints_ctrl
 
 class BattleSessionSetup(object):
     __slots__ = ('avatar', 'replayCtrl', 'gasAttackMgr', 'sessionProvider')
@@ -228,6 +229,18 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
     def dogTags(self):
         return self._repository.getController(BATTLE_CTRL_ID.DOG_TAGS)
 
+    @property
+    def battleHints(self):
+        return self._repository.getController(BATTLE_CTRL_ID.BATTLE_HINTS)
+
+    @property
+    def battleGoals(self):
+        return self._repository.getController(BATTLE_CTRL_ID.BATTLE_GOALS)
+
+    @property
+    def battleMarkers(self):
+        return self._repository.getController(BATTLE_CTRL_ID.WORLD_MARKERS)
+
 
 class _EmptyRepository(interfaces.IBattleControllersRepository):
     __slots__ = ()
@@ -394,4 +407,19 @@ class BattleRoyaleControllersRepository(_ControllersRepository):
         repository.addArenaController(death_ctrl.DeathScreenController(), setup)
         repository.addArenaViewController(vehicles_count_ctrl.VehicleCountController(), setup)
         repository.addViewController(default_maps_ctrl.DefaultMapsController(setup), setup)
+        return repository
+
+
+class EventControllersRepository(ClassicControllersRepository):
+    __slots__ = ()
+
+    @classmethod
+    def create(cls, setup):
+        from gui.battle_control.controllers import event_markers_ctrl, battle_goals_ctrl
+        repository = super(EventControllersRepository, cls).create(setup)
+        repository.addViewController(battle_hints_ctrl.createBattleHintsController(), setup)
+        repository.addViewController(radar_ctrl.RadarController(), setup)
+        repository.addViewController(game_messages_ctrl.createGameMessagesController(setup), setup)
+        repository.addArenaController(event_markers_ctrl.EventMarkersController(setup), setup)
+        repository.addArenaController(battle_goals_ctrl.BattleGoalsController(), setup)
         return repository

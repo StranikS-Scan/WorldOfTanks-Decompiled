@@ -144,7 +144,7 @@ class OfferGiftsWindow(ViewImpl):
             giftDisabled = notEnoughTokens or gift.isDisabled or not giftCount
             giftModel.setIsDisabled(giftDisabled)
             if giftCount > 0:
-                giftModel.setAvailableCount(giftCount)
+                giftModel.setAvailableCount(not gift.isVehicle and giftCount)
             giftsContainer.addViewModel(giftModel)
 
         model.gifts.onItemClicked += self._onGiftClicked

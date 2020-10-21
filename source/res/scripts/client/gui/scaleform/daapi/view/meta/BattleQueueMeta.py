@@ -1,20 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/BattleQueueMeta.py
-from gui.Scaleform.framework.entities.View import View
+from gui.Scaleform.daapi.view.meta.BaseBattleQueueMeta import BaseBattleQueueMeta
 
-class BattleQueueMeta(View):
+class BattleQueueMeta(BaseBattleQueueMeta):
 
     def startClick(self):
         self._printOverrideError('startClick')
-
-    def exitClick(self):
-        self._printOverrideError('exitClick')
-
-    def onEscape(self):
-        self._printOverrideError('onEscape')
-
-    def as_setTimerS(self, textLabel, timeLabel):
-        return self.flashObject.as_setTimer(textLabel, timeLabel) if self._isDAAPIInited() else None
 
     def as_setTypeInfoS(self, data):
         return self.flashObject.as_setTypeInfo(data) if self._isDAAPIInited() else None
@@ -27,6 +18,3 @@ class BattleQueueMeta(View):
 
     def as_showStartS(self, vis):
         return self.flashObject.as_showStart(vis) if self._isDAAPIInited() else None
-
-    def as_showExitS(self, vis):
-        return self.flashObject.as_showExit(vis) if self._isDAAPIInited() else None

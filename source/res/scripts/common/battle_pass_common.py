@@ -262,7 +262,7 @@ class BattlePassConfig(object):
 
     @property
     def maxPointsForNewbie(self):
-        return self.basePoints[self.maxLevelForNewbie - 1]
+        return self.basePoints[self.maxLevelForNewbie - 1] if self.isOnboardingEnabled() else 0
 
     @property
     def sellAnyLevelsUnlockTime(self):

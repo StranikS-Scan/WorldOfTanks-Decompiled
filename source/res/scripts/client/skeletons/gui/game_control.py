@@ -571,6 +571,38 @@ class ITradeInController(IGameController):
         raise NotImplementedError
 
 
+class IPersonalTradeInController(IGameController):
+    onActiveSaleVehicleChanged = None
+    onActiveBuyVehicleChanged = None
+
+    def getSaleVehicleCDs(self):
+        raise NotImplementedError
+
+    def getBuyVehicleCDs(self):
+        raise NotImplementedError
+
+    def getActiveTradeInSaleVehicleCD(self):
+        raise NotImplementedError
+
+    def getActiveTradeInSaleVehicle(self):
+        raise NotImplementedError
+
+    def setActiveTradeInSaleVehicleCD(self, value):
+        raise NotImplementedError
+
+    def getActiveTradeInBuyVehicleCD(self):
+        raise NotImplementedError
+
+    def setActiveTradeInBuyVehicleCD(self, value):
+        raise NotImplementedError
+
+    def getActiveTradeInBuyVehicle(self):
+        raise NotImplementedError
+
+    def getPersonalTradeInPrice(self, veh):
+        raise NotImplementedError
+
+
 class IQuestsController(IGameController):
 
     def getInventoryVehicles(self):
@@ -1305,6 +1337,9 @@ class IBattleRoyaleController(IGameController, ISeasonProvider):
     def isBattleRoyaleMode(self):
         raise NotImplementedError
 
+    def isEventMode(self):
+        raise NotImplementedError
+
     def isInBattleRoyaleSquad(self):
         raise NotImplementedError
 
@@ -1671,4 +1706,28 @@ class IReactiveCommunicationService(IGameController):
         raise NotImplementedError
 
     def getChannelStatus(self, name):
+        raise NotImplementedError
+
+
+class IEventTokenController(IGameController):
+    onNotesUpdated = None
+    onShopItemUpdated = None
+    onEventMoneyUpdated = None
+
+    def getNewNotesCount(self):
+        raise NotImplementedError
+
+    def getReadNotes(self):
+        raise NotImplementedError
+
+    def markNoteRead(self, note):
+        raise NotImplementedError
+
+
+class ITokensController(IGameController):
+
+    def addTokensListener(self, token, handler):
+        raise NotImplementedError
+
+    def removeTokensListener(self, token, handler):
         raise NotImplementedError

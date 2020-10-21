@@ -6,6 +6,8 @@ class ICustomizationService(object):
     onRegionHighlighted = None
     onOutfitChanged = None
     onCustomizationHelperRecreated = None
+    onCustomizationOpened = None
+    onCustomizationClosed = None
 
     @property
     def isOver3dScene(self):

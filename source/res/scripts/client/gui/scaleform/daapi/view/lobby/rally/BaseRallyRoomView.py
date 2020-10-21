@@ -157,9 +157,6 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta):
         usersEvents.onUsersListReceived += self._onUsersReceived
         usersEvents.onUserActionReceived += self._onUserActionReceived
         self.itemsCache.onSyncCompleted += self._onCacheResync
-        prbEntity = self.prbEntity
-        if self.isPlayerInSlot() and not self.isPlayerReady():
-            prbEntity.resetPlayerReadiness()
 
     def _dispose(self):
         usersEvents = g_messengerEvents.users

@@ -861,6 +861,12 @@
       <userExtraSettings>
         <Type>	USER_EXTRA_SETTINGS	</Type>
       </userExtraSettings>
+      <availableLorePoints>
+        <Type>	UINT8	</Type>
+      </availableLorePoints>
+      <eventSkillLevel>
+        <Type>	UINT8	</Type>
+      </eventSkillLevel>
     </Properties>
   </ARENA_ADDPLAYER_INFO>
   <AVATAR_VEHICLE_ROSTER>	FIXED_DICT	  <Properties>
@@ -1224,6 +1230,40 @@
       </vehPerks>
     </Properties>
   </RESPAWN_INFO_VEHICLE>
+  <EVENT_RESPAWN_INFO_VEHICLE>	FIXED_DICT	  <Properties>
+      <compDescr>
+        <Type>	STRING	</Type>
+      </compDescr>
+      <crewCompactDescrs>
+        <Type>	ARRAY	  <of>	STRING	</of>
+        </Type>
+      </crewCompactDescrs>
+      <commanderSkinID>
+        <Type>	UINT16	</Type>
+      </commanderSkinID>
+      <marksOnGun>
+        <Type>	UINT8	</Type>
+      </marksOnGun>
+      <index>
+        <Type>	UINT16	</Type>
+      </index>
+      <onRespawnSettings>
+        <Type>	PYTHON	</Type>
+      </onRespawnSettings>
+      <ammo>
+        <Type>	ARRAY	  <of>	INT32	</of>
+        </Type>
+      </ammo>
+      <positionList>	&gt;	  <Type>	PYTHON	</Type>
+      </positionList>
+      <outfit>
+        <Type>	STRING	</Type>
+      </outfit>
+      <vehPerks>
+        <Type>	PYTHON	</Type>
+      </vehPerks>
+    </Properties>
+  </EVENT_RESPAWN_INFO_VEHICLE>
   <BUFF_EFFECT>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <radius>

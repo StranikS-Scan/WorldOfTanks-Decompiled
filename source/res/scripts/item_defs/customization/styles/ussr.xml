@@ -1954,4 +1954,44 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R40_T-54	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	365	</id>
+      <texture>	gui/maps/vehicles/styles/R40_T-54_3Dst_HW20.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/R40_T-54_3Dst_HW20_desc/long	</longDescriptionSpecial>
+      <modelsSet>	R40_T-54_3Dst_HW20	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/R40_T-54_3Dst_HW20	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </ussr.xml>

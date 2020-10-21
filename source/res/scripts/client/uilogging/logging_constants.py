@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/uilogging/logging_constants.py
-__all__ = ('FEATURES',)
+__all__ = ('FEATURES', 'KAFKA_TOPICS', 'KEYS_MAPPING', 'REQUESTS_LIMIT', 'HTTP_OK_STATUS', 'STATUS_REQUESTED')
 
 class FEATURES:
     BOOTCAMP = 'bootcamp'
@@ -8,6 +8,12 @@ class FEATURES:
     ALL = [BOOTCAMP, IN_BATTLE_COMMUNICATION]
 
 
+def createTopicName(feature):
+    return 'feature:%s' % feature
+
+
+KAFKA_TOPICS = {FEATURES.BOOTCAMP: createTopicName(FEATURES.BOOTCAMP),
+ FEATURES.IN_BATTLE_COMMUNICATION: createTopicName(FEATURES.IN_BATTLE_COMMUNICATION)}
 KEYS_MAPPING = {0: 'Left Mouse Button',
  1: 'Right Mouse Button',
  2: 'Middle Mouse Button',

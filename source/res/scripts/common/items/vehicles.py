@@ -229,6 +229,8 @@ def vehicleAttributeFactors():
      'stunResistanceEffect': 0.0,
      'stunResistanceDuration': 0.0,
      'repeatedStunDurationFactor': 1.0,
+     'vehicle/canBeDamaged': True,
+     'vehicle/antifragmentationLiningFactor': 1.0,
      'healthFactor': 1.0,
      'damageFactor': 1.0,
      'enginePowerFactor': 1.0,
@@ -236,6 +238,7 @@ def vehicleAttributeFactors():
 
 
 WHEEL_SIZE_COEF = 2.2
+VEHICLE_ATTRIBUTE_FACTORS = vehicleAttributeFactors()
 _g_prices = None
 
 class CamouflageBonus():
@@ -1351,7 +1354,8 @@ class VehicleDescriptor(object):
         for attribute in self.enhancements:
             self.miscAttrs[attribute.name] = attribute.applyFactor(self.miscAttrs[attribute.name])
 
-        self._maxHealth = int(ceilTo(self._maxHealth * self.miscAttrs['healthFactor'], VEHICLE_HEALTH_DECIMALS))
+        if self.miscAttrs['healthFactor'] != 1.0:
+            self._maxHealth = int(ceilTo(self._maxHealth * self.miscAttrs['healthFactor'], VEHICLE_HEALTH_DECIMALS))
         return
 
 
@@ -2536,6 +2540,12 @@ def stripPrivateInfoFromVehicleCompactDescr(compactDescr):
     enhancements = ''
     compactDescr = _combineVehicleCompactDescr(type, components, optionalDevicesSlots, optionalDevices, enhancements, emblemSlots, emblems, inscriptions, camouflages)
     return compactDescr
+
+
+def getSuitableShellsForVehicle(compDescr):
+    _, nationID, vehTypeID = parseIntCompactDescr(compDescr)
+    vehType = g_cache.vehicle(nationID, vehTypeID)
+    return [ shot.shell.compactDescr for turrets in vehType.turrets for turret in turrets for gun in turret.guns for shot in gun.shots ]
 
 
 def isShellSuitableForGun(shellCompactDescr, gunDescr):
@@ -5675,7 +5685,7 @@ if IS_CLIENT or IS_EDITOR:
      'collisionVehicleHeavy3',
      'rammingCollisionLight',
      'rammingCollisionHeavy',
-     'collisionDamage'] + [ '%sCollisionLight' % name for name in EFFECT_MATERIALS ] + [ '%sCollisionHeavy' % name for name in EFFECT_MATERIALS ] + [ 'explosionCandle%d' % i for i in xrange(1, 5) ] + ['fullDestruction'] + ['dynamicCollision'])
+     'collisionDamage'] + [ '%sCollisionLight' % name for name in EFFECT_MATERIALS ] + [ '%sCollisionHeavy' % name for name in EFFECT_MATERIALS ] + [ 'explosionCandle%d' % i for i in xrange(1, 5) ] + ['fullDestruction', 'hw19fullDestruction'] + ['dynamicCollision'])
     _damagedStateGroupEffectKindNames = ('ammoBayExplosion',
      'ammoBayBurnOff',
      'fuelExplosion',

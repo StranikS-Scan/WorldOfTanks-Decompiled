@@ -404,6 +404,22 @@ def failedStatusText(text):
     return _formatText('failedStatusText', text)
 
 
+def coinsText(text):
+    return _formatText('coinsText', text)
+
+
+def purpleText(text):
+    return _formatText('purpleText', text)
+
+
+def eventPackBought(text):
+    return _formatText('eventPackBought', text)
+
+
+def eventNotEnoughtTokens(text):
+    return _formatText('eventNotEnoughtTokens', text)
+
+
 def getRawStyles(names):
     return dict(((name, _getStyle(name)) for name in names))
 

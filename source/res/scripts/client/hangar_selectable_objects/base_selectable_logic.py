@@ -26,6 +26,7 @@ class BaseSelectableLogic(ISelectableLogic):
         self._hangarSpace.onMouseDown += self._onMouseDown
         self._hangarSpace.onMouseUp += self._onMouseUp
         self._hangarSpace.onNotifyCursorOver3dScene += self._onNotifyCursorOver3dScene
+        self._hangarSpace.onObjectsSelectionEnabled += self._onObjectsSelectionEnabled
         return
 
     def fini(self):
@@ -35,9 +36,13 @@ class BaseSelectableLogic(ISelectableLogic):
         self._hangarSpace.onMouseDown -= self._onMouseDown
         self._hangarSpace.onMouseUp -= self._onMouseUp
         self._hangarSpace.onNotifyCursorOver3dScene -= self._onNotifyCursorOver3dScene
+        self._hangarSpace.onObjectsSelectionEnabled -= self._onObjectsSelectionEnabled
         return
 
     def _onNotifyCursorOver3dScene(self, isCursorOver3dScene):
+        pass
+
+    def _onObjectsSelectionEnabled(self, enabled):
         pass
 
     def _onMouseEnter(self, entity):

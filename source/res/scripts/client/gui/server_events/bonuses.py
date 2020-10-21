@@ -476,7 +476,10 @@ class BattleTokensBonus(TokensBonus):
             complexToken = parseComplexToken(tokenID)
             if complexToken.isDisplayable:
                 userName = self._getUserName(complexToken.styleID)
-                result.append(i18n.makeString(TOOLTIPS.MISSIONS_TOKEN_HEADER, name=userName))
+                header = i18n.makeString(TOOLTIPS.MISSIONS_TOKEN_HEADER, name=userName)
+                if TOOLTIPS.hasBonusesTokenHeader(complexToken.styleID):
+                    header = i18n.makeString(TOOLTIPS.getBonusesTokenHeader(complexToken.styleID))
+                result.append(header)
 
         return ', '.join(result) if result else None
 
@@ -1571,6 +1574,9 @@ class RandomBlueprintBonus(SimpleBonus):
 
     def getBlueprintName(self):
         return BlueprintsBonusSubtypes.RANDOM_FRAGMENT
+
+    def getBlueprintTooltipName(self):
+        return backport.text(R.strings.tooltips.blueprint.BlueprintFragmentTooltip.random.header())
 
     def getBlueprintSpecialAlias(self):
         return TOOLTIPS_CONSTANTS.BLUEPRINT_RANDOM_INFO

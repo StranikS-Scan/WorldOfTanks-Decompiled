@@ -17,7 +17,7 @@ from helpers import dependency
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
-from gui.impl.lobby.reward_window import TwitchRewardWindow, GiveAwayRewardWindow, PiggyBankRewardWindow
+from gui.impl.lobby.reward_window import TwitchRewardWindow, GiveAwayRewardWindow, PiggyBankRewardWindow, HE19TankmanRewardWindow
 from shared_utils import first
 from battle_pass_common import BattlePassConsts
 OPERATIONS = {PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_1_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS_PAGE_ALIAS,
@@ -39,8 +39,10 @@ _EVENTS_REWARD_WINDOW = {recruit_helper.RecruitSourceID.TWITCH_0: TwitchRewardWi
  recruit_helper.RecruitSourceID.TWITCH_14: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.TWITCH_15: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.TWITCH_16: TwitchRewardWindow,
+ recruit_helper.RecruitSourceID.TWITCH_17: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.COMMANDER_MARINA: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.COMMANDER_PATRICK: TwitchRewardWindow,
+ recruit_helper.RecruitSourceID.HW19_COMMANDERS: HE19TankmanRewardWindow,
  anniversary_helper.ANNIVERSARY_EVENT_PREFIX: GiveAwayRewardWindow}
 _PIGGY_BANK_EVENT_NAME = 'piggyBank'
 
@@ -120,6 +122,10 @@ def showMissionsMarathon(marathonPrefix=DEFAULT_MARATHON_PREFIX):
 
 def showMissionsCategories(missionID=None, groupID=None, anchor=None):
     showMissions(tab=QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS, missionID=missionID, groupID=groupID, anchor=anchor)
+
+
+def showMissionsHalloween(groupID=None):
+    showMissions(tab=QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS, groupID=groupID)
 
 
 def showMissionsForCurrentVehicle(missionID=None, groupID=None, anchor=None):
@@ -306,3 +312,29 @@ def showPersonalMissionFirstEntryAwardView(ctx):
 def showActions(tab=None, anchor=None):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_STORE), ctx={'tab': tab,
      'anchor': anchor}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showEventHangar():
+    showEventTab(VIEW_ALIAS.LOBBY_HANGAR)
+
+
+def showEventMissions(**kwargs):
+    showEventTab(VIEW_ALIAS.EVENT_QUESTS, **kwargs)
+
+
+def showEventShop(**kwargs):
+    showEventTab(VIEW_ALIAS.EVENT_SHOP, **kwargs)
+
+
+def showEventTab(alias, **kwargs):
+    ctx = {'alias': alias}
+    if kwargs:
+        ctx.update(kwargs)
+    g_eventBus.handleEvent(events.EventHeaderEvent(events.EventHeaderEvent.TAB_CHANGED, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showEventTankmanRewardWindow(quest):
+    ctx = {'quest': quest,
+     'eventName': recruit_helper.RecruitSourceID.HW19_COMMANDERS}
+    rewardWindow = HE19TankmanRewardWindow(ctx)
+    rewardWindow.load()

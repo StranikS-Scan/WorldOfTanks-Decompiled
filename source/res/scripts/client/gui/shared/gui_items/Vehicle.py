@@ -133,6 +133,8 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     OBSERVER = 'observer'
     DISABLED_IN_ROAMING = 'disabledInRoaming'
     EVENT = 'event_battles'
+    EVENT_PREMIUM_VEHICLE = 'event_premium_vehicle'
+    EVENT_NOT_ELITE_VEHICLE = 'event_not_elite_vehicle'
     EXCLUDED_FROM_SANDBOX = 'excluded_from_sandbox'
     TELECOM = 'telecom'
     UNRECOVERABLE = 'unrecoverable'
@@ -153,7 +155,7 @@ RentPackagesInfo = namedtuple('RentPackagesInfo', ('hasAvailableRentPackages', '
 CrystalsEarnedInfo = namedtuple('CrystalsEarnedInfo', ('current', 'max'))
 
 class Vehicle(FittingItem):
-    __slots__ = ('__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_rentPackagesInfo', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_tradeInAvailable', '_tradeOffAvailable', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_equipment', '_bonuses', '_crewIndices', '_slotsIds', '_crew', '_lastCrew', '_hasModulesToSelect', '_outfits', '_isStyleInstalled', '_slotsAnchors', '_unlockedBy', '_maxRentDuration', '_minRentDuration', '_slotsAnchorsById', '_hasNationGroup', '_extraSettings', '_perksController')
+    __slots__ = ('__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_rentPackagesInfo', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_tradeInAvailable', '_tradeOffAvailable', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_equipment', '_bonuses', '_crewIndices', '_slotsIds', '_crew', '_lastCrew', '_hasModulesToSelect', '_outfits', '_isStyleInstalled', '_slotsAnchors', '_unlockedBy', '_maxRentDuration', '_minRentDuration', '_slotsAnchorsById', '_hasNationGroup', '_extraSettings', '_perksController', '_personalTradeInAvailableSale', '_personalTradeInAvailableBuy', '_groupIDs')
 
     class VEHICLE_STATE(object):
         DAMAGED = 'damaged'
@@ -239,6 +241,9 @@ class Vehicle(FittingItem):
         self._tradeOffAvailable = False
         self._tradeOffPriceFactor = 0
         self._tradeOffPrice = MONEY_UNDEFINED
+        self._personalTradeInAvailableSale = False
+        self._personalTradeInAvailableBuy = False
+        self._groupIDs = set()
         self._rotationGroupNum = 0
         self._rotationBattlesLeft = 0
         self._isRotationGroupLocked = False
@@ -254,15 +259,18 @@ class Vehicle(FittingItem):
             self._searchableUserName = makeSearchableString(self.userName)
         invData = dict()
         tradeInData = None
+        personalTradeIn = None
         if proxy is not None and proxy.inventory.isSynced() and proxy.stats.isSynced() and proxy.shop.isSynced() and proxy.vehicleRotation.isSynced() and proxy.recycleBin.isSynced():
             invDataTmp = proxy.inventory.getItems(GUI_ITEM_TYPE.VEHICLE, inventoryID)
             if invDataTmp is not None:
                 invData = invDataTmp
             tradeInData = proxy.shop.tradeIn
+            personalTradeIn = proxy.shop.personalTradeIn
             self._xp = proxy.stats.vehiclesXPs.get(self.intCD, self._xp)
             if proxy.shop.winXPFactorMode == WIN_XP_FACTOR_MODE.ALWAYS or self.intCD not in proxy.stats.multipliedVehicles and not self.isOnlyForEventBattles:
                 self._dailyXPFactor = proxy.shop.dailyXPFactor
             self._isElite = not vehDescr.type.unlocksDescrs or self.intCD in proxy.stats.eliteVehicles
+            self._isElite = self._isElite and VEHICLE_TAGS.EVENT_NOT_ELITE_VEHICLE not in vehDescr.type.tags
             self._isFullyElite = self.isElite and not any((data[1] not in proxy.stats.unlocks for data in vehDescr.type.unlocksDescrs))
             clanDamageLock = proxy.stats.vehicleTypeLocks.get(self.intCD, {}).get(CLAN_LOCK, 0)
             clanNewbieLock = proxy.stats.globalVehicleLocks.get(CLAN_LOCK, 0)
@@ -307,6 +315,22 @@ class Vehicle(FittingItem):
                 self._tradeOffPrice = Money(gold=int(math.ceil(self.tradeOffPriceFactor * self.buyPrices.itemPrice.defPrice.gold)))
                 if self._tradeOffPrice.gold < tradeInData.minAcceptableSellPrice:
                     self._tradeOffAvailable = False
+        if personalTradeIn is not None:
+            groupIDs = (groupIDs for groupIDs in personalTradeIn['conversionRules'].iterkeys())
+            saleVehicleIntCDs = []
+            buyVehicleIntCDs = []
+            for saleGroupID, buyGroupID in groupIDs:
+                saleVehicleIntCDs.extend(personalTradeIn['vehicleGroups'][saleGroupID])
+                buyVehicleIntCDs.extend(personalTradeIn['vehicleGroups'][buyGroupID])
+
+            canPersonalTradeSell = self.intCD in saleVehicleIntCDs
+            canPersonalTradeBuy = self.intCD in buyVehicleIntCDs
+            self._personalTradeInAvailableSale = canPersonalTradeSell and self.isHidden and self.isUnlocked and not self.isRestorePossible() and not self.isRented
+            self._personalTradeInAvailableBuy = canPersonalTradeBuy and self.isHidden and self.isUnlocked and not self.isRestorePossible() and not self.isRented
+            for groupId, vehs in personalTradeIn['vehicleGroups'].iteritems():
+                if self.intCD in vehs:
+                    self._groupIDs.add(groupId)
+
         self._equipment = VehicleEquipment(proxy, vehDescr, invData)
         defaultCrew = [None] * len(vehDescr.type.crewRoles)
         crewList = invData.get('crew', defaultCrew)
@@ -637,12 +661,28 @@ class Vehicle(FittingItem):
         return self._tradeInAvailable and not self.isInInventory
 
     @property
+    def canPersonalTradeInBuy(self):
+        return self._personalTradeInAvailableBuy and not self.isInInventory
+
+    @property
     def isTradeOffAvailable(self):
         return self._tradeOffAvailable
 
     @property
     def canTradeOff(self):
         return self._tradeOffAvailable and not self.canNotBeSold
+
+    @property
+    def isReadyPersonalTradeInSale(self):
+        return self.canPersonalTradeInSale and self.getState()[0] not in self.TRADE_OFF_NOT_READY_STATES
+
+    @property
+    def canPersonalTradeInSale(self):
+        return self._personalTradeInAvailableSale and not self.canNotBeSold
+
+    @property
+    def groupIDs(self):
+        return self._groupIDs
 
     @property
     def tradeOffPriceFactor(self):

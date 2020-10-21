@@ -28,7 +28,7 @@ from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from constants import QUEUE_TYPE
 from web.web_client_api.common import ItemPackType
 from gui.server_events.awards_formatters import AWARDS_SIZES
-from gui.shared.utils.functions import getRelativeUrl
+from gui.shared.utils.functions import getRelativeUrl, getUniqueViewName
 from gui.shared.formatters import time_formatters
 from skeletons.connection_mgr import IConnectionManager
 from gui.ranked_battles.constants import PrimeTimeStatus
@@ -52,7 +52,8 @@ class EventProgressionScreens(Enum):
 def _showBrowserView(url):
     from gui.Scaleform.daapi.view.lobby.event_progression.web_handlers import createEventProgressionWebHandlers
     webHandlers = createEventProgressionWebHandlers()
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BROWSER_VIEW), ctx={'url': url,
+    alias = VIEW_ALIAS.BROWSER_VIEW
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias, getUniqueViewName(alias)), ctx={'url': url,
      'webHandlers': webHandlers,
      'returnAlias': VIEW_ALIAS.LOBBY_HANGAR,
      'onServerSettingsChange': _serverSettingsChangeBrowserHandler}), EVENT_BUS_SCOPE.LOBBY)

@@ -433,6 +433,8 @@ class BattlePassController(IBattlePassController):
         return cap > 0
 
     def isPlayerNewcomer(self):
+        if not self.__isOnboardingEnabled():
+            return False
         if self.isBought():
             return False
         config = self.__getConfig()

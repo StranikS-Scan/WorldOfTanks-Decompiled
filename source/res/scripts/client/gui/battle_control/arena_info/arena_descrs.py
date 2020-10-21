@@ -288,6 +288,13 @@ class EpicBattlesDescription(ArenaWithLabelDescription):
         return EPIC_BATTLE.TEAM1NAME if team == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER else EPIC_BATTLE.TEAM2NAME
 
 
+class EventBattlesDescription(ArenaWithLabelDescription):
+    __slots__ = ()
+
+    def getWinString(self, isInBattle=True):
+        pass
+
+
 def createDescription(arenaVisitor):
     guiVisitor = arenaVisitor.gui
     if guiVisitor.isRandomBattle() or guiVisitor.isTrainingBattle():
@@ -300,6 +307,8 @@ def createDescription(arenaVisitor):
         description = EpicBattlesDescription(arenaVisitor)
     elif guiVisitor.isBattleRoyale():
         description = BattleRoyaleDescription(arenaVisitor)
+    elif guiVisitor.isEventBattle():
+        description = EventBattlesDescription(arenaVisitor)
     elif guiVisitor.hasLabel():
         description = ArenaWithLabelDescription(arenaVisitor)
     else:

@@ -17,6 +17,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview_buying_panel import VehiclePreviewBuyingPanel
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.vehicle_preview_event_progression_buying_panel import VehiclePreviewEventProgressionBuyingPanel
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.vehicle_preview_trade_in_buying_panel import VehiclePreviewTradeInBuyingPanel
+    from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.vehicle_preview_personal_trade_in_buying_panel import VehiclePreviewPersonalTradeInBuyingPanel
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.vehicle_preview_browse_tab import VehiclePreviewBrowseTab
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.vehicle_preview_modules import VehiclePreviewModulesTab, ModulesPanel
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.vehicle_preview_crew_tab import VehiclePreviewCrewTab
@@ -28,6 +29,7 @@ def getViewSettings():
      ComponentSettings(VEHPREVIEW_CONSTANTS.BUYING_PANEL_PY_ALIAS, VehiclePreviewBuyingPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VEHPREVIEW_CONSTANTS.EVENT_PROGRESSION_BUYING_PANEL_PY_ALIAS, VehiclePreviewEventProgressionBuyingPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VEHPREVIEW_CONSTANTS.TRADE_IN_BUYING_PANEL_PY_ALIAS, VehiclePreviewTradeInBuyingPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(VEHPREVIEW_CONSTANTS.PERSONAL_TRADE_IN_BUYING_PANEL_PY_ALIAS, VehiclePreviewPersonalTradeInBuyingPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VEHPREVIEW_CONSTANTS.OFFER_GIFT_BUYING_PANEL_PY_ALIAS, VehiclePreviewOfferGiftBuyingPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE, VehiclePreviewBrowseTab, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VEHPREVIEW_CONSTANTS.MODULES_LINKAGE, VehiclePreviewModulesTab, ScopeTemplates.DEFAULT_SCOPE),

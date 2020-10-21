@@ -39,7 +39,7 @@ class IRespawnView(object):
 _RESPAWN_SOUND_ID = 'start_battle'
 
 class RespawnsController(ViewComponentsController):
-    __slots__ = ('__weakref__', '__isUIInited', '__vehicles', '__cooldowns', '__respawnInfo', '__timerCallback', '__eManager', 'onRespawnVisibilityChanged', 'onVehicleDeployed', 'onRespawnInfoUpdated', 'onPlayerRespawnLivesUpdated', 'onTeamRespawnLivesRestored', 'onRespawnVehiclesUpdated', '__isUiShown', '__isShowUiAllowed', '__limits', '__playerRespawnLives', '__respawnSoundNotificationRequest', '__battleCtx')
+    __slots__ = ('__weakref__', '__isUIInited', '__vehicles', '__cooldowns', '__respawnInfo', '__timerCallback', '__eManager', 'onRespawnVisibilityChanged', 'onVehicleDeployed', 'onRespawnInfoUpdated', 'onPlayerRespawnLivesUpdated', 'onTeamRespawnLivesRestored', 'onRespawnVehiclesUpdated', '__isUiShown', '__isShowUiAllowed', '__limits', '__playerRespawnLives', '__respawnSoundNotificationRequest', '__respawnSoundNotificationCallbackID', '__battleCtx')
     showUiAllowed = property(lambda self: self.__isShowUiAllowed, lambda self, value: self.__setShowUiAllowed(value))
     respawnInfo = property(lambda self: self.__respawnInfo)
     playerLives = property(lambda self: self.__playerRespawnLives)
@@ -56,6 +56,7 @@ class RespawnsController(ViewComponentsController):
         self.__isUiShown = False
         self.__isShowUiAllowed = False
         self.__playerRespawnLives = -1
+        self.__respawnSoundNotificationCallbackID = None
         self.__respawnSoundNotificationRequest = False
         self.__battleCtx = setup.battleCtx
         self.__eManager = Event.EventManager()
@@ -76,6 +77,7 @@ class RespawnsController(ViewComponentsController):
     def stopControl(self):
         g_playerEvents.onRoundFinished -= self.__onRoundFinished
         self.__stopTimer()
+        self.__clearRespawnSoundNotificationCallback()
         self.clearViewComponents()
         self.__vehicles = None
         self.__cooldowns = None
@@ -108,9 +110,7 @@ class RespawnsController(ViewComponentsController):
         if BigWorld.player().isVehicleAlive:
             self.__respawnInfo = None
             self.onVehicleDeployed()
-        if self.__respawnSoundNotificationRequest:
-            BigWorld.callback(1.0, self.__triggerRespawnSoundNotification)
-            self.__respawnSoundNotificationRequest = False
+        self.__setRespawnSoundNotificationCallback()
         self.__hide()
         return
 
@@ -173,8 +173,24 @@ class RespawnsController(ViewComponentsController):
         self.__isShowUiAllowed = value
         self.__refresh()
 
+    def __clearRespawnSoundNotificationCallback(self):
+        if self.__respawnSoundNotificationCallbackID is not None:
+            BigWorld.cancelCallback(self.__respawnSoundNotificationCallbackID)
+            self.__respawnSoundNotificationCallbackID = None
+        return
+
+    def __setRespawnSoundNotificationCallback(self):
+        self.__clearRespawnSoundNotificationCallback()
+        if self.__respawnSoundNotificationRequest:
+            self.__respawnSoundNotificationCallbackID = BigWorld.callback(1.0, self.__triggerRespawnSoundNotification)
+            self.__respawnSoundNotificationRequest = False
+
     def __triggerRespawnSoundNotification(self):
-        getSoundNotifications().play(_RESPAWN_SOUND_ID)
+        self.__respawnSoundNotificationCallbackID = None
+        notifications = getSoundNotifications()
+        if notifications is not None:
+            notifications.play(_RESPAWN_SOUND_ID)
+        return
 
     def __onRoundFinished(self, *args):
         self.__hide()

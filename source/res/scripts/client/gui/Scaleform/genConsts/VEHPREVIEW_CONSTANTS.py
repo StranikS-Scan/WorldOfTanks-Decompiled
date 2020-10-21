@@ -7,6 +7,7 @@ class VEHPREVIEW_CONSTANTS(object):
     BUYING_PANEL_LINKAGE = 'VehiclePreviewBuyingPanelUI'
     EVENT_PROGRESSION_BUYING_PANEL_LINKAGE = 'VehiclePreviewEventProgressionBuyingPanelUI'
     TRADE_IN_BUYING_PANEL_LINKAGE = 'VehiclePreviewTradeInBuyingPanelUI'
+    PERSONAL_TRADE_IN_BUYING_PANEL_LINKAGE = 'VehiclePreviewPersonalTradeInBuyingPanelUI'
     OFFER_GIFT_BUYING_PANEL_LINKAGE = 'VehiclePreviewOfferGiftBuyingPanelUI'
     FACT_SHEET_LINKAGE = 'VehPreviewFactSheetUI'
     ELITE_FACT_SHEET_LINKAGE = 'VehPreviewEliteFactSheetUI'
@@ -21,6 +22,7 @@ class VEHPREVIEW_CONSTANTS(object):
     BUYING_PANEL_PY_ALIAS = 'vehPreviewBuyingPanel'
     EVENT_PROGRESSION_BUYING_PANEL_PY_ALIAS = 'vehPreviewEventProgressionBuyingPanel'
     TRADE_IN_BUYING_PANEL_PY_ALIAS = 'vehPreviewTradeInBuyingPanel'
+    PERSONAL_TRADE_IN_BUYING_PANEL_PY_ALIAS = 'vehPreviewPersonalTradeInBuyingPanel'
     OFFER_GIFT_BUYING_PANEL_PY_ALIAS = 'vehPreviewOfferGiftBuyingPanel'
     TRADE_OFF_WIDGET_ALIAS = 'vehPreviewTradeOffWidget'
     CREW_BONUS = 0

@@ -86,13 +86,18 @@ class BattleColorSchemeManager(ColorSchemeManager, IArenaVehiclesController):
 
     def __set3DFlagsColors(self):
         arenaDP = self.sessionProvider.getArenaDP()
-        teamsOnArena = arenaDP.getTeamsOnArena()
-        group = self.getColorGroup()
-        allyColor = self.colors.getSubScheme('flag_team_green', group)['rgba']
-        enemyColor = self.colors.getSubScheme('flag_team_red', group)['rgba']
-        for teamIdx in teamsOnArena:
-            color = allyColor if arenaDP.isAllyTeam(teamIdx) else enemyColor
-            BigWorld.wg_setFlagColor(teamIdx, color / 255)
+        if arenaDP is None:
+            return
+        else:
+            teamsOnArena = arenaDP.getTeamsOnArena()
+            group = self.getColorGroup()
+            allyColor = self.colors.getSubScheme('flag_team_green', group)['rgba']
+            enemyColor = self.colors.getSubScheme('flag_team_red', group)['rgba']
+            for teamIdx in teamsOnArena:
+                color = allyColor if arenaDP.isAllyTeam(teamIdx) else enemyColor
+                BigWorld.wg_setFlagColor(teamIdx, color / 255)
+
+            return
 
     def __set3DFlagsEmblem(self):
         arenaDP = self.sessionProvider.getArenaDP()

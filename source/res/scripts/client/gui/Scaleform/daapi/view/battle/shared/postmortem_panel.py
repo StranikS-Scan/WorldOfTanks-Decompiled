@@ -1,8 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/postmortem_panel.py
 import logging
+import typing
 import WWISE
 import BattleReplay
+import BigWorld
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
+from dog_tags_common.components_config import componentConfigAdapter
+from dog_tags_common.components_packer import unpack_component, pack_component
 from gui.Scaleform.daapi.view.battle.shared.formatters import normalizeHealthPercent
 from gui.Scaleform.settings import ICONS_SIZES
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
@@ -25,6 +30,8 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.battle_control.dog_tag_composer import layoutComposer
 from dog_tags_common.player_dog_tag import PlayerDogTag, DisplayableDogTag
+if typing.TYPE_CHECKING:
+    from typing import Iterable, Optional
 _logger = logging.getLogger(__name__)
 _POSTMORTEM_PANEL_SETTINGS_PATH = 'gui/postmortem_panel.xml'
 _VEHICLE_SMALL_ICON_RES_PATH = '../maps/icons/vehicle/small/{0}.png'
@@ -41,7 +48,15 @@ _ATTACK_REASON_CODE_TO_MSG = {ATTACK_REASON_INDICES['shot']: 'DEATH_FROM_SHOT',
  ATTACK_REASON_INDICES['recovery']: 'DEATH_FROM_RECOVERY',
  ATTACK_REASON_INDICES['artillery_eq']: 'DEATH_FROM_SHOT',
  ATTACK_REASON_INDICES['bomber_eq']: 'DEATH_FROM_SHOT',
- ATTACK_REASON_INDICES[ATTACK_REASON.MINEFIELD_EQ]: 'DEATH_FROM_MINE_EXPLOSION'}
+ ATTACK_REASON_INDICES[ATTACK_REASON.MINEFIELD_EQ]: 'DEATH_FROM_MINE_EXPLOSION',
+ ATTACK_REASON_INDICES['event_death_on_phase_change']: 'EVENT_DEATH_ON_PHASE_CHANGE',
+ ATTACK_REASON_INDICES['event_death_on_phase_change_full_sc']: 'EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC',
+ ATTACK_REASON_INDICES['event_boss_aura']: 'EVENT_DEATH_FROM_BOSS_AURA'}
+_ATTACK_REASON_MSG_TO_EVENT = {'DEATH_FROM_SHOT': 'EVENT_DEATH_FROM_SHOT',
+ 'DEATH_FROM_DEATH_ZONE_SELF_SUICIDE': 'EVENT_DEATH_FROM_DEATH_ZONE',
+ 'DEATH_FROM_DEATH_ZONE_ENEMY_SELF': 'EVENT_DEATH_FROM_DEATH_ZONE',
+ 'DEATH_FROM_DEATH_ZONE_ALLY_SELF': 'EVENT_DEATH_FROM_DEATH_ZONE',
+ 'EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC_SELF_SUICIDE': 'EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC'}
 _ALLOWED_EQUIPMENT_DEATH_CODES = ['DEATH_FROM_MINE_EXPLOSION']
 
 class _ENTITIES_POSTFIX(object):
@@ -94,6 +109,7 @@ class _BasePostmortemPanel(PostmortemPanelMeta):
         pass
 
     def _prepareMessage(self, code, killerVehID, device=None):
+        code = code if not self.sessionProvider.arenaVisitor.gui.isEventBattle() else self.__mapToEventReasonCode(code)
         msgText, colors = self.__messages[code]
         context = self.sessionProvider.getCtx()
         if context.isTeamKiller(killerVehID):
@@ -124,6 +140,10 @@ class _BasePostmortemPanel(PostmortemPanelMeta):
         if code in self.__messages:
             self._prepareMessage(code, entityID, device)
         return
+
+    @staticmethod
+    def __mapToEventReasonCode(code):
+        return _ATTACK_REASON_MSG_TO_EVENT.get(code, code)
 
 
 class _SummaryPostmortemPanel(_BasePostmortemPanel):
@@ -189,7 +209,15 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         self._deathAlreadySet = False
         self.__isColorBlind = self.settingsCore.getSetting('isColorBlind')
         self.__userInfoHelper = UsersInfoHelper()
+        self.__arenaInfo = BigWorld.player().arena.arenaInfo
         return
+
+    def _populate(self):
+        super(PostmortemPanel, self)._populate()
+        if self._hasBonusCap(ARENA_BONUS_TYPE_CAPS.DOG_TAG) and self.__arenaInfo:
+            defaultComponents = [ pack_component(comp.componentId, 0) for comp in componentConfigAdapter.getDefaultDogTag().components ]
+            self._preloadDTImages(defaultComponents, False)
+            self._preloadDTImages(self.__arenaInfo.dogTagsInfo.usedDogTagsComponents)
 
     def _addGameListeners(self):
         super(PostmortemPanel, self)._addGameListeners()
@@ -209,6 +237,9 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         if dogTagsCtrl is not None:
             dogTagsCtrl.onKillerDogTagSet += self.__onKillerDogTagSet
             dogTagsCtrl.onVictimDogTagSet += self.__onVictimDogTagSet
+            dogTagsCtrl.onKillerDogTagCheat += self.__onKillerDogCheat
+        if self.__arenaInfo and self._hasBonusCap(ARENA_BONUS_TYPE_CAPS.DOG_TAG):
+            self.__arenaInfo.dogTagsInfo.onUsedComponentsUpdated += self.__onUsedComponentsUpdated
         return
 
     def _removeGameListeners(self):
@@ -229,6 +260,23 @@ class PostmortemPanel(_SummaryPostmortemPanel):
     def _deathInfoReceived(self):
         self._updateVehicleInfo()
 
+    def _preloadDTImages(self, usedDogTagsComponents, skipSameTeam=True):
+        componentImages = set()
+        for componentPacked in usedDogTagsComponents:
+            compId, grade, teamId = unpack_component(componentPacked)
+            if skipSameTeam and teamId == BigWorld.player().team:
+                continue
+            viewType = componentConfigAdapter.getComponentById(compId).viewType
+            componentImages.add('{}_{}_{}'.format(viewType.value.lower(), compId, grade))
+
+        if componentImages:
+            _logger.debug('PostmortemPanel preloading %s', str(componentImages))
+            self.as_preloadComponentsS(list(componentImages))
+
+    @staticmethod
+    def _hasBonusCap(cap):
+        return ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arenaBonusType, cap)
+
     def __setHealthPercent(self, health):
         self.__healthPercent = normalizeHealthPercent(health, self.__maxHealth)
 
@@ -241,6 +289,21 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         self.__setHealthPercent(vehicle.health)
         self._updateVehicleInfo()
 
+    def _prepareMessage(self, code, killerVehID, device=None):
+        super(PostmortemPanel, self)._prepareMessage(code, killerVehID, device)
+        self._eventShowHint(code == 'EVENT_DEATH_ON_PHASE_CHANGE')
+
+    def _eventShowHint(self, onPhaseChange=True):
+        if not self.sessionProvider.arenaVisitor.gui.isEventBattle() or not self.__isInPostmortem or onPhaseChange:
+            return
+        arenaDP = self.sessionProvider.getArenaDP()
+        for vInfo in arenaDP.getVehiclesInfoIterator():
+            if vInfo.player.accountDBID > 0 and vInfo.team == arenaDP.getAllyTeams()[0]:
+                vehicle = BigWorld.entity(vInfo.vehicleID)
+                if vehicle and vehicle.isAlive():
+                    self.as_showHintS()
+                    break
+
     def __onVehicleStateUpdated(self, state, value):
         if state == VEHICLE_VIEW_STATE.HEALTH:
             if self.__maxHealth != 0 and self.__maxHealth > value:
@@ -251,6 +314,8 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         elif state == VEHICLE_VIEW_STATE.SWITCHING:
             self.__maxHealth = 0
             self.__healthPercent = 0
+        elif state == VEHICLE_VIEW_STATE.DEATH_INFO:
+            self._eventShowHint(value.get('reason') == ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE)
 
     def __onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
         self.__isInPostmortem = True
@@ -258,7 +323,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
 
     def __onRespawnBaseMoving(self):
         self.__isInPostmortem = False
-        self.__deathAlreadySet = False
+        self._deathAlreadySet = False
         self.resetDeathInfo()
 
     def _updateVehicleInfo(self):
@@ -370,3 +435,9 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         dogTagModel = layoutComposer.getModel(self._buildDogTag(dogTagInfo['dogTag']))
         _logger.info('PostmortemPanel.__onVictimDogTagSet: dogTagInfo %s, dogTagModel %s', str(dogTagInfo), str(dogTagModel))
         self.as_showVictimDogTagS(dogTagModel)
+
+    def __onUsedComponentsUpdated(self, usedComponents):
+        self._preloadDTImages(usedComponents)
+
+    def __onKillerDogCheat(self, deadReasonInfo):
+        self.as_setDeadReasonInfoS(*deadReasonInfo)

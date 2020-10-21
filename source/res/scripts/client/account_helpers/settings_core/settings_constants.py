@@ -330,6 +330,7 @@ class OnceOnlyHints(CONST_CONTAINER):
     OPT_DEV_DRAG_AND_DROP_HINT = 'OptDevDragAndDropHint'
     DOGTAG_HANGAR_HINT = 'DogTagHangarHint'
     DOGTAG_PROFILE_HINT = 'DogTagProfileHint'
+    EVENT_CREW_HEALING_HINT = 'EventCrewHealingHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):
@@ -438,3 +439,12 @@ class BattleCommStorageKeys(CONST_CONTAINER):
     SHOW_CALLOUT_MESSAGES = 'showCalloutMessages'
     SHOW_LOCATION_MARKERS = 'showLocationMarkers'
     SHOW_BASE_MARKERS = 'showMarkers'
+
+
+class Hw20StorageKeys(CONST_CONTAINER):
+    HANGAR_HELLO_FIRST = 'hw20hangarHelloFirst'
+    HANGAR_DAILY_HELLO = 'hw20hangarHelloDaily'
+    HANGAR_LAST_HELLO_DATE = 'hw20hangarLastHelloDate'
+    ROASTER_LOW = 'hw20resultScreenLow'
+    ROASTER_MED = 'hw20resultScreenMedium'
+    ROASTER_HIGH = 'hw20resultScreenHigh'

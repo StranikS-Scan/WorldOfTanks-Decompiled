@@ -463,7 +463,7 @@ class HeadquartersPlugin(EpicMissionsPlugin, ChatCommunicationComponent):
             ctrl.onRemoveCommandReceived -= self.__onRemoveCommandReceived
             ctrl.setInFocusForPlayer -= self.__setInFocusForPlayer
             ctrl.onVehicleFeedbackReceived -= self._onVehicleFeedbackReceived
-        for marker in self._markers:
+        for marker in self._markers.itervalues():
             self._destroyMarker(marker.getMarkerID())
 
         self._markers.clear()

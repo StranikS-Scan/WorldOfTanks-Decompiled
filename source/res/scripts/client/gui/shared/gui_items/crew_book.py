@@ -127,7 +127,7 @@ class CrewBook(FittingItem):
 
     @property
     def shortDescription(self):
-        return backport.text(R.strings.crew_books.items.dyn(self.getBookSpread()).Descr(), exp=self.getXP())
+        return backport.text(R.strings.crew_books.items.dyn(self.getBookSpread()).Descr(), exp=backport.getIntegralFormat(self.getXP()))
 
     @property
     def icon(self):

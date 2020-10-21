@@ -42,6 +42,7 @@ class VEHICLE_PREVIEW(object):
     BUYINGPANEL_CUSTOMOFFER_BUY = '#vehicle_preview:buyingPanel/customOffer/buy'
     BUYINGPANEL_CUSTOMOFFER_RESEARCH = '#vehicle_preview:buyingPanel/customOffer/research'
     BUYINGPANEL_TRADEIN_TRADEOFFPRICETEXT = '#vehicle_preview:buyingPanel/tradeIn/tradeOffPriceText'
+    BUYINGPANEL_TRADEIN_PERSONALTRADEOFFPRICETEXT = '#vehicle_preview:buyingPanel/tradeIn/personaltradeOffPriceText'
     BUYINGPANEL_TRADEIN_AVAILABLELEVELS = '#vehicle_preview:buyingPanel/tradeIn/availableLevels'
     BUYINGPANEL_TRADEIN_NOTAVAILABLETRADEOFFVEHICLES = '#vehicle_preview:buyingPanel/tradeIn/notAvailableTradeOffVehicles'
     BUYINGPANEL_TRADEIN_EXPIRED = '#vehicle_preview:buyingPanel/tradeIn/expired'
@@ -91,6 +92,7 @@ class VEHICLE_PREVIEW(object):
     BUYINGPANEL_FRONTLINEPACK_TITLELABEL_INACTIVE_ADD_DISCOUNT = '#vehicle_preview:buyingPanel/frontlinePack/titleLabel/inactive_add_discount'
     BUYINGPANEL_FRONTLINEPACK_TITLELABEL_INACTIVE = '#vehicle_preview:buyingPanel/frontlinePack/titleLabel/inactive'
     BUYINGPANEL_FRONTLINEPACK_COUPONLABEL = '#vehicle_preview:buyingPanel/frontlinePack/couponLabel'
+    BUYINGPANEL_PERSONALTRADEIN_TITLE = '#vehicle_preview:buyingPanel/personalTradeIn/title'
     HEADER_BACKBTN_DESCRLABEL_ENUM = (HEADER_BACKBTN_DESCRLABEL_RESEARCHTREE,
      HEADER_BACKBTN_DESCRLABEL_PERSONALAWARDS,
      HEADER_BACKBTN_DESCRLABEL_SHOP,

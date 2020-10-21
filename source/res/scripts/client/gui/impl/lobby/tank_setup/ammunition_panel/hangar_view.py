@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/ammunition_panel/hangar_view.py
 import logging
-from CurrentVehicle import g_currentVehicle
+from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from async import async
 from frameworks.wulf import ViewStatus
@@ -38,13 +38,18 @@ class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
     @async
     def _onPanelSectionSelected(self, args):
         selectedSection = args['selectedSection']
-        if self.viewModel.hints.hasHintModel(TutorialHintConsts.AMMUNITION_PANEL_HINT_MC):
-            self.__hideHintModel()
-        if selectedSection == TankSetupConstants.OPT_DEVICES and not isIntroAmmunitionSetupShown():
-            yield showIntroAmmunitionSetupWindow()
-        if self.viewStatus != ViewStatus.LOADED:
+        currentVehicle = g_currentVehicle.item or g_currentPreviewVehicle.item
+        if currentVehicle is not None and currentVehicle.isOnlyForEventBattles and selectedSection == TankSetupConstants.SHELLS:
             return
-        super(HangarAmmunitionPanelView, self)._onPanelSectionSelected(args)
+        else:
+            if self.viewModel.hints.hasHintModel(TutorialHintConsts.AMMUNITION_PANEL_HINT_MC):
+                self.__hideHintModel()
+            if selectedSection == TankSetupConstants.OPT_DEVICES and not isIntroAmmunitionSetupShown():
+                yield showIntroAmmunitionSetupWindow()
+            if self.viewStatus != ViewStatus.LOADED:
+                return
+            super(HangarAmmunitionPanelView, self)._onPanelSectionSelected(args)
+            return
 
     @staticmethod
     def __hideHintModel():

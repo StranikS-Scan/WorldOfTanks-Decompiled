@@ -214,9 +214,9 @@ def chooseItemPriceVO(priceType, price):
 
 def formatPurchaseItems(purchaseItems):
     formattedItems = []
-    items = set((purchaseItem.item for purchaseItem in purchaseItems if not purchaseItem.isFromInventory))
+    items = set((purchaseItem.item for purchaseItem in purchaseItems if not purchaseItem.isFromInventory and purchaseItem.selected))
     for item in items:
-        count = sum((purchaseItem.item.intCD == item.intCD and not purchaseItem.isFromInventory for purchaseItem in purchaseItems))
+        count = sum((purchaseItem.item.intCD == item.intCD and not purchaseItem.isFromInventory and purchaseItem.selected for purchaseItem in purchaseItems))
         ctx = {'itemType': item.userType,
          'itemName': item.userName,
          'count': count}

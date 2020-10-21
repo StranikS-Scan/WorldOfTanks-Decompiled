@@ -40,7 +40,7 @@
       <Arg>	UINT16	</Arg>
       <Arg>	UINT16	</Arg>
       <Arg>	UINT8	</Arg>
-      <Arg>	INT16	</Arg>
+      <Arg>	FLOAT32	</Arg>
       <Arg>	INT16	</Arg>
     </avatarClientProxy_updateVehicleAmmo>
     <avatarClientProxy_updateDualGunState>
@@ -68,6 +68,18 @@
       <Arg>	UINT8	</Arg>
       <Arg>	INT32	</Arg>
     </avatarClientProxy_updateVehicleSetting>
+    <avatarClientProxy_updateScenarioTimer>
+      <Arg>	PYTHON	</Arg>
+    </avatarClientProxy_updateScenarioTimer>
+    <avatarClientProxy_sendPlayerBattleLogNotification>
+      <Arg>	STRING	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </avatarClientProxy_sendPlayerBattleLogNotification>
+    <avatarClientProxy_sendEquipmentBattleLogNotification>
+      <Arg>	UINT16	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	BOOL	</Arg>
+    </avatarClientProxy_sendEquipmentBattleLogNotification>
     <avatarClientProxy_updateTargetingInfo>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>

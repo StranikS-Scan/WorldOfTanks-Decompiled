@@ -1,15 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/event/squad/actions_handler.py
-from CurrentVehicle import g_currentVehicle
+from constants import SQUAD_SETTINGS
 from gui.prb_control.entities.base.squad.actions_handler import SquadActionsHandler
-from helpers import dependency
-from skeletons.gui.server_events import IEventsCache
+from gui.prb_control.events_dispatcher import g_eventDispatcher
 
 class EventBattleSquadActionsHandler(SquadActionsHandler):
-    eventsCache = dependency.descriptor(IEventsCache)
 
-    def _loadWindow(self, ctx):
-        super(EventBattleSquadActionsHandler, self)._loadWindow(ctx)
-        if not self._entity.getPlayerInfo().isReady:
-            eventVehicle = self.eventsCache.getEventVehicles()[0]
-            g_currentVehicle.selectVehicle(eventVehicle.invID)
+    def __init__(self, entity):
+        super(EventBattleSquadActionsHandler, self).__init__(entity)
+        self._minOccupiedSlotsCount = SQUAD_SETTINGS.EVENT_MIN_OCCUPIED_SLOTS_COUNT
+
+    def _showBattleQueueGUI(self):
+        g_eventDispatcher.loadEventBattleQueue()

@@ -1,0 +1,40 @@
+<loot_effects.xml>
+  <defaultPickup>
+    <timeline>
+      <effectEnd>	3	</effectEnd>
+    </timeline>
+    <effects>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <wwsound>	eb_ability_smoke_expl_02	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </defaultPickup>
+  <collectingDemolitiyEffect>
+    <timeline>
+      <effectEnd>	3	</effectEnd>
+    </timeline>
+    <effects></effects>
+  </collectingDemolitiyEffect>
+  <collectingBuffEffect>
+    <timeline>
+      <effectEnd>	3	</effectEnd>
+    </timeline>
+    <effects></effects>
+  </collectingBuffEffect>
+  <collectinLoreEffect>
+    <timeline>
+      <effectEnd>	3	</effectEnd>
+    </timeline>
+    <effects>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <wwsound>	ev_halloween_2019_gameplay_collect_message	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </collectinLoreEffect>
+</loot_effects.xml>

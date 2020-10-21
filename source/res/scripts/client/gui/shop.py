@@ -143,6 +143,10 @@ def showTradeOffOverlay(targetLevel, parent=None):
     _showBlurredWebOverlay(helpers.getTradeOffOverlayUrl(), _getTradeOffParams(targetLevel), parent)
 
 
+def showPersonalTradeOffOverlay(parent=None):
+    _showBlurredWebOverlay(helpers.getPersonalTradeOffOverlayUrl(), parent=parent)
+
+
 def showBuyGoldForVehicleWebOverlay(fullPrice, intCD, parent=None):
     showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.VEHICLE, fullPrice, intCD), parent)
 

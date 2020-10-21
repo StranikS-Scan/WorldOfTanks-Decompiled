@@ -177,6 +177,16 @@
     <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	9	</level>
   </GB24_Centurion_Mk3>
+  <GB24_Centurion_Mk3_Halloween_event>
+    <id>	64	</id>
+    <userString>	#gb_vehicles:GB24_Centurion_Mk3_Halloween_event	</userString>
+    <description>	#gb_vehicles:GB24_Centurion_Mk3_Halloween_event_descr	</description>
+    <shortUserString>	#gb_vehicles:GB24_Centurion_Mk3_Halloween_event_short	</shortUserString>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank improvedVentilation_class2_user secret event_battles cannot_be_sold HD lockOutfit lockCrew lockCrewSkills event_not_elite_vehicle event_overturn_recovery	</tags>
+    <level>	9	</level>
+  </GB24_Centurion_Mk3_Halloween_event>
   <GB23_Centurion>
     <id>	23	</id>
     <userString>	#gb_vehicles:GB23_Centurion	</userString>
@@ -970,4 +980,59 @@
     <tags>	mediumTank HD battle_royale lockOutfit lockCrew lockCrewSkills cannot_be_sold lockDevices lockEquipment lockShells secret	</tags>
     <level>	1	</level>
   </GB107_Cavalier_SH>
+  <GB81_FV4004_HELL>
+    <id>	7	</id>
+    <userString>	#gb_vehicles:GB81_FV4004_HELL	</userString>
+    <description>	#gb_vehicles:GB81_FV4004_descr	</description>
+    <shortUserString>	#gb_vehicles:GB81_FV4004_short_HELL	</shortUserString>
+    <price>	3440000	</price>
+    <tags>	AT-SPG heavyAT-SPG AT-SPG1 improvedVentilation_class3_user HD  event_battles secret cannot_be_sold lockCrew lockOutfit	</tags>
+    <level>	9	</level>
+    <clone_tags>	cloned	</clone_tags>
+    <notInShop>	True	</notInShop>
+  </GB81_FV4004_HELL>
+  <GB09_Churchill_VII_HALL>
+    <id>	10	</id>
+    <userString>	#gb_vehicles:GB09_Churchill_VII_HALL	</userString>
+    <shortUserString>	#gb_vehicles:GB09_Churchill_VII_short_HALL	</shortUserString>
+    <description>	#gb_vehicles:GB09_Churchill_VII_descr	</description>
+    <price>	900000	</price>
+    <tags>	heavyTank heavyTank1 improvedVentilation_class3_user HD  event_battles secret cannot_be_sold lockCrew lockOutfit	</tags>
+    <level>	6	</level>
+    <clone_tags>	cloned cloned_localization	</clone_tags>
+    <notInShop>	True	</notInShop>
+  </GB09_Churchill_VII_HALL>
+  <GB10_Black_Prince_HALL>
+    <id>	16	</id>
+    <userString>	#gb_vehicles:GB10_Black_Prince_HALL	</userString>
+    <description>	#gb_vehicles:GB10_Black_Prince_descr	</description>
+    <shortUserString>	#gb_vehicles:GB10_Black_Prince_short_HALL	</shortUserString>
+    <price>	1400000	</price>
+    <tags>	heavyTank heavyTank1 improvedVentilation_class3_user HD event_battles secret cannot_be_sold lockCrew lockOutfit	</tags>
+    <level>	7	</level>
+    <clone_tags>	cloned cloned_localization	</clone_tags>
+    <notInShop>	True	</notInShop>
+  </GB10_Black_Prince_HALL>
+  <GB11_Caernarvon_HALL>
+    <id>	26	</id>
+    <userString>	#gb_vehicles:GB11_Caernarvon_HALL	</userString>
+    <description>	#gb_vehicles:GB11_Caernarvon_descr	</description>
+    <shortUserString>	#gb_vehicles:GB11_Caernarvon_short_HALL	</shortUserString>
+    <price>	2520000	</price>
+    <tags>	heavyTank improvedVentilation_class3_user HD event_battles secret cannot_be_sold lockCrew lockOutfit	</tags>
+    <level>	8	</level>
+    <clone_tags>	cloned cloned_localization	</clone_tags>
+    <notInShop>	True	</notInShop>
+  </GB11_Caernarvon_HALL>
+  <GB83_FV4005_HELL>
+    <id>	40	</id>
+    <userString>	#gb_vehicles:GB83_FV4005_HELL	</userString>
+    <description>	#gb_vehicles:GB83_FV4005_descr	</description>
+    <shortUserString>	#gb_vehicles:GB83_FV4005_short_HELL	</shortUserString>
+    <price>	6100000	</price>
+    <tags>	AT-SPG heavyAT-SPG AT-SPG2 RE_ATSPG_3 improvedVentilation_class3_user HD  event_battles secret lockOutfit cannot_be_sold lockCrew earn_crystals	</tags>
+    <level>	10	</level>
+    <clone_tags>	cloned	</clone_tags>
+    <notInShop>	True	</notInShop>
+  </GB83_FV4005_HELL>
 </list.xml>

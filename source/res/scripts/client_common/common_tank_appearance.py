@@ -206,6 +206,9 @@ class CommonTankAppearance(ScriptGameObject):
 
         return prereqs
 
+    def setID(self, vID):
+        self.__vID = vID
+
     def construct(self, isPlayer, resourceRefs):
         self.collisions = resourceRefs['collisionAssembler']
         self.typeDescriptor.chassis.hitTester.bbox = self.collisions.getBoundingBox(TankPartNames.getIdx(TankPartNames.CHASSIS))
@@ -326,6 +329,7 @@ class CommonTankAppearance(ScriptGameObject):
             lodCalculator.setupPosition(DataLinks.linkMatrixTranslation(self.compoundModel.matrix))
 
         for modelAnimator in self.__modelAnimators:
+            modelAnimator.animator.setEnabled(True)
             modelAnimator.animator.start()
 
         if hasattr(self.filter, 'placingCompensationMatrix') and self.swingingAnimator is not None:
@@ -345,6 +349,7 @@ class CommonTankAppearance(ScriptGameObject):
     def deactivate(self):
         for modelAnimator in self.__modelAnimators:
             modelAnimator.animator.stop()
+            modelAnimator.animator.setEnabled(False)
 
         if self.damageState and self.damageState.isCurrentModelDamaged:
             self.__modelAnimators = []
@@ -643,6 +648,13 @@ class CommonTankAppearance(ScriptGameObject):
 
     def maxTurretRotationSpeed(self):
         pass
+
+    def _onCameraChanged(self, cameraName, currentVehicleId=None):
+        if self.id != BigWorld.player().playerVehicleID:
+            return
+        isEnabled = not cameraName == 'sniper'
+        for modelAnimator in self.__modelAnimators:
+            modelAnimator.animator.setEnabled(isEnabled)
 
     def __onEngineStateGearUp(self):
         if self.customEffectManager is not None:

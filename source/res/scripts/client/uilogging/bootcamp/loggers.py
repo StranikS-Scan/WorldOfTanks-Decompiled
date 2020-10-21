@@ -5,7 +5,7 @@ from collections import defaultdict
 import BigWorld
 from bootcamp.Bootcamp import g_bootcamp
 from uilogging.validators import TimeValidator
-from uilogging.logging_constants import FEATURES
+from uilogging.logging_constants import FEATURES, KAFKA_TOPICS
 from uilogging.base.loggers import BaseLogger
 from uilogging import loggingSettings
 from .constants import ACTIONS_HINTS_TO_LOG_ONCE, ACTION_SEQUENCES
@@ -88,7 +88,7 @@ class BootcampUILogger(BaseLogger):
              'action': action,
              'lesson_id': None,
              'realm': loggingSettings.realm,
-             'feature': self._feature,
+             'feature': KAFKA_TOPICS[self._feature],
              'time': int(time.time())}
             self._updateFromContext(data)
             if restrictions:

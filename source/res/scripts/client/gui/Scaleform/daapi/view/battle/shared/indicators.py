@@ -8,10 +8,10 @@ from account_helpers.settings_core.settings_constants import SOUND, DAMAGE_INDIC
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
 from gui import DEPTH_OF_Aim, GUI_SETTINGS
-from gui.Scaleform.flash_wrapper import Flash, InputKeyMode
 from gui.Scaleform.daapi.view.battle.shared.vehicles import siege_component
 from gui.Scaleform.daapi.view.meta.SiegeModeIndicatorMeta import SiegeModeIndicatorMeta
 from gui.Scaleform.daapi.view.meta.SixthSenseMeta import SixthSenseMeta
+from gui.Scaleform.flash_wrapper import Flash, InputKeyMode
 from gui.Scaleform.genConsts.DAMAGEINDICATOR import DAMAGEINDICATOR
 from gui.Scaleform.genConsts.SIEGE_MODE_CONSTS import SIEGE_MODE_CONSTS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
@@ -19,11 +19,11 @@ from gui.battle_control.battle_constants import DEVICE_STATES_RANGE, DEVICE_STAT
 from gui.battle_control.battle_constants import HIT_INDICATOR_MAX_ON_SCREEN
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CROSSHAIR_VIEW_ID
 from gui.battle_control.controllers.hit_direction_ctrl import IHitIndicator
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.crits_mask_parser import critsParserGenerator
 from helpers import dependency
 from helpers import i18n
-from gui.impl import backport
-from gui.impl.gen import R
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -183,11 +183,15 @@ class _ExtendedMarkerVOBuilder(_MarkerVOBuilder):
 
     def buildVO(self, markerData):
         vo = super(_ExtendedMarkerVOBuilder, self).buildVO(markerData)
+        vehicleID = markerData.hitData.getAttackerID()
+        player = BigWorld.player()
+        botRole = player.getBotRole(vehicleID)
         vo.update({'circleStr': self._getCircleBackground(markerData),
          'tankTypeStr': self._getTankType(markerData),
          'tankName': markerData.hitData.getAttackerVehicleName(),
          'damageValue': self._getDamageLabel(markerData),
-         'isFriendlyFire': markerData.hitData.isFriendlyFire()})
+         'isFriendlyFire': markerData.hitData.isFriendlyFire(),
+         'botRole': botRole})
         return vo
 
     def _getBackground(self, markerData):
@@ -308,8 +312,8 @@ class DamageIndicatorMeta(Flash):
     def as_showStandardS(self, itemIdx, bgStr, frame):
         return self._as_showStandard(itemIdx, bgStr, frame)
 
-    def as_showExtendedS(self, itemIdx, bgStr, circleStr, frame, tankName, tankTypeStr, damageValue, isFriendlyFire):
-        return self._as_showExtended(itemIdx, bgStr, circleStr, frame, tankName, tankTypeStr, damageValue, isFriendlyFire)
+    def as_showExtendedS(self, itemIdx, bgStr, circleStr, frame, tankName, tankTypeStr, damageValue, isFriendlyFire, botRole):
+        return self._as_showExtended(itemIdx, bgStr, circleStr, frame, tankName, tankTypeStr, damageValue, isFriendlyFire, botRole)
 
     def as_hideS(self, itemIdx):
         return self._as_hide(itemIdx)

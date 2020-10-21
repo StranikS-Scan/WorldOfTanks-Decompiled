@@ -7,7 +7,7 @@ from BWUtil import AsyncReturn
 import adisp
 from CurrentVehicle import HeroTankPreviewAppearance
 from async import async, await
-from constants import RentType, GameSeasonType
+from constants import RentType, GameSeasonType, QUEUE_TYPE
 from debug_utils import LOG_WARNING
 from frameworks.wulf import ViewFlags
 from frameworks.wulf import Window
@@ -46,7 +46,8 @@ from gui.impl.lobby.tank_setup.dialogs.need_repair import NeedRepair
 from gui.impl.lobby.tank_setup.dialogs.refill_shells import RefillShells, ExitFromShellsConfirm
 from gui.impl.lobby.techtree.techtree_intro_view import TechTreeIntroWindow
 from gui.impl.pub.lobby_window import LobbyWindow
-from gui.prb_control.settings import CTRL_ENTITY_TYPE
+from gui.prb_control.entities.base.ctx import PrbAction
+from gui.prb_control.settings import CTRL_ENTITY_TYPE, PREBATTLE_ACTION_NAME
 from gui.shared import events, g_eventBus, money
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
@@ -71,6 +72,7 @@ from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from gui.prb_control.dispatcher import g_prbLoader
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 
@@ -98,6 +100,10 @@ def showRankedBattleResultsWindow(rankedResultsVO, rankInfo, questsProgress, par
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(RANKEDBATTLES_ALIASES.RANKED_BATTLES_BATTLE_RESULTS, parent=parent), ctx={'rankedResultsVO': rankedResultsVO,
      'rankInfo': rankInfo,
      'questsProgress': questsProgress}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showHalloweenResults(arenaUniqueID):
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.EVENT_BATTLE_RESULTS, getViewName(VIEW_ALIAS.EVENT_BATTLE_RESULTS, str(arenaUniqueID))), ctx={'arenaUniqueID': arenaUniqueID}), EVENT_BUS_SCOPE.LOBBY)
 
 
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
@@ -241,7 +247,7 @@ def showVehicleSellDialog(vehInvID):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.VEHICLE_SELL_DIALOG), ctx={'vehInvID': int(vehInvID)}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showVehicleBuyDialog(vehicle, actionType=None, isTradeIn=False, previousAlias=None, showOnlyCongrats=False, ctx=None):
+def showVehicleBuyDialog(vehicle, actionType=None, isTradeIn=False, previousAlias=None, showOnlyCongrats=False, returnAlias=None, returnCallback=None, ctx=None):
     from gui.impl.lobby.buy_vehicle_view import BuyVehicleWindow
     ctx = ctx or {}
     ctx.update({'nationID': vehicle.nationID,
@@ -249,7 +255,9 @@ def showVehicleBuyDialog(vehicle, actionType=None, isTradeIn=False, previousAlia
      'actionType': actionType,
      'isTradeIn': isTradeIn,
      'previousAlias': previousAlias,
-     'showOnlyCongrats': showOnlyCongrats})
+     'showOnlyCongrats': showOnlyCongrats,
+     'returnAlias': returnAlias,
+     'returnCallback': returnCallback})
     window = BuyVehicleWindow(ctx=ctx)
     window.load()
     if showOnlyCongrats:
@@ -442,7 +450,9 @@ def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, v
         goToHeroTankOnScene(vehTypeCompDescr, previewAlias)
     else:
         vehicle = dependency.instance(IItemsCache).items.getItemByCD(vehTypeCompDescr)
-        if not (itemsPack or offers or vehParams) and vehicle.canTradeIn:
+        if not (itemsPack or offers or vehParams) and vehicle.canPersonalTradeInBuy:
+            viewAlias = VIEW_ALIAS.PERSONAL_TRADE_IN_VEHICLE_PREVIEW
+        elif not (itemsPack or offers or vehParams) and vehicle.canTradeIn:
             viewAlias = VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW
         else:
             viewAlias = VIEW_ALIAS.VEHICLE_PREVIEW
@@ -482,10 +492,16 @@ def showHeroTankPreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, 
      'previousBackAlias': previousBackAlias}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def hideVehiclePreview(noCallback=False):
-    ctx = {}
-    if noCallback:
-        ctx = {'noCallback': True}
+def showHalloweenTankPreview(vehTypeCompDescr):
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.EVENT_STYLES_PREVIEW), ctx={'itemCD': vehTypeCompDescr,
+     'previewAlias': VIEW_ALIAS.LOBBY_HANGAR,
+     'previewAppearance': HeroTankPreviewAppearance(),
+     'isHeroTank': True}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def hideVehiclePreview(back=True, close=False):
+    ctx = {'back': back,
+     'close': close}
     g_eventBus.handleEvent(events.HideWindowEvent(events.HideWindowEvent.HIDE_VEHICLE_PREVIEW, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
@@ -565,15 +581,27 @@ def showClanSendInviteWindow(clanDbID):
      'ctrlType': CTRL_ENTITY_TYPE.UNIT}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def selectVehicleInHangar(itemCD, loadHangar=True):
+@adisp.process
+def selectVehicleInHangar(itemCD, loadHangar=True, leaveEventMode=False):
     from CurrentVehicle import g_currentVehicle
     itemsCache = dependency.instance(IItemsCache)
     veh = itemsCache.items.getItemByCD(int(itemCD))
     if not veh.isInInventory:
         raise SoftException('Vehicle (itemCD={}) must be in inventory.'.format(itemCD))
     g_currentVehicle.selectVehicle(veh.invID)
+    if leaveEventMode:
+        dispatcher = g_prbLoader.getDispatcher()
+        if dispatcher:
+            entity = dispatcher.getEntity()
+            if entity is not None and entity.getQueueType() == QUEUE_TYPE.EVENT_BATTLES:
+                yield switchOutEventMode()
+                entity = dispatcher.getEntity()
+                if entity is not None and entity.getQueueType() == QUEUE_TYPE.EVENT_BATTLES:
+                    showHangar()
+                return
     if loadHangar:
         showHangar()
+    return
 
 
 def showPersonalCase(tankmanInvID, tabIndex, scope=EVENT_BUS_SCOPE.DEFAULT):
@@ -659,6 +687,12 @@ def showVehicleCompare():
 @pointcutable
 def showCrystalWindow(visibility):
     from gui.impl.lobby.crystals_promo.crystals_promo_view import CrystalsPromoView
+    from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
+    dispatcher = g_prbLoader.getDispatcher()
+    if dispatcher:
+        entity = dispatcher.getEntity()
+        if entity is not None and entity.getQueueType() == QUEUE_TYPE.EVENT_BATTLES:
+            visibility = HeaderMenuVisibilityState.NOTHING
     uiLoader = dependency.instance(IGuiLoader)
     contentResId = R.views.lobby.crystalsPromo.CrystalsPromoView()
     if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
@@ -1126,3 +1160,50 @@ def showBattleAbilitiesConfirmDialog(items, withInstall=None, parent=None):
     from gui.impl.dialogs import dialogs
     result = yield await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.tanksetup.dialogs.Confirm(), wrappedViewClass=BattleAbilitiesSetupConfirm, items=items, withInstall=withInstall, parent=parent))
     raise AsyncReturn(result)
+
+
+@adisp.async
+@adisp.process
+def switchOutEventMode(callback=None):
+    dispatcher = g_prbLoader.getDispatcher()
+    if dispatcher:
+        entity = dispatcher.getEntity()
+        if entity is not None and entity.getQueueType() == QUEUE_TYPE.EVENT_BATTLES:
+            yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.RANDOM))
+    if callable(callback):
+        callback(False)
+    return
+
+
+def showCongratulationWindow(packType):
+    from gui.impl.lobby.halloween.congratulation_view import CongratulationView
+    uiLoader = dependency.instance(IGuiLoader)
+    contentResId = R.views.lobby.halloween.CongratulationView()
+    if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
+        window = LobbyWindow(WindowFlags.SERVICE_WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=CongratulationView(contentResId, packType=packType))
+        window.load()
+    return
+
+
+@adisp.async
+@adisp.process
+def hideTopWindows(callback=None):
+    from gui.Scaleform.framework.entities.View import View
+    from frameworks.wulf import WindowLayer
+    lobbyContext = dependency.instance(ILobbyContext)
+    windowsManager = dependency.instance(IGuiLoader).windowsManager
+    yield lobbyContext.isHeaderNavigationPossible()
+
+    def predicateTopWindows(window):
+        content = window.content
+        return False if content is None else isinstance(content, View) and content.layer in (WindowLayer.TOP_WINDOW,)
+
+    for window in windowsManager.findWindows(predicateTopWindows):
+        if hasattr(window, 'destroyWindow'):
+            window.destroyWindow()
+        if hasattr(window, 'destroy'):
+            window.destroy()
+
+    if callback is not None:
+        callback(None)
+    return

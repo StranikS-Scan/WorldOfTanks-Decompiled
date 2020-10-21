@@ -26,7 +26,9 @@ _logger = logging.getLogger(__name__)
 _STATE_HANDLERS = {VEHICLE_VIEW_STATE.HEALTH: '_updateHealth',
  VEHICLE_VIEW_STATE.SPEED: 'as_updateSpeedS',
  VEHICLE_VIEW_STATE.CRUISE_MODE: 'as_setCruiseModeS',
- VEHICLE_VIEW_STATE.FIRE: 'as_setFireInVehicleS',
+ VEHICLE_VIEW_STATE.FIRE: '_updateVehicleFire',
+ VEHICLE_VIEW_STATE.FIRE_WITH_MESSAGE: '_updateVehicleAuraFire',
+ VEHICLE_VIEW_STATE.CAN_BE_DAMAGED: '_updateVehicleCanBeDamaged',
  VEHICLE_VIEW_STATE.AUTO_ROTATION: '_setAutoRotation',
  VEHICLE_VIEW_STATE.DESTROYED: '_updateDestroyed',
  VEHICLE_VIEW_STATE.CREW_DEACTIVATED: '_updateCrewDeactivated',
@@ -162,6 +164,9 @@ class DamagePanel(DamagePanelMeta):
         self.__statusAnimPlayers = {}
         self.__initialized = False
         self.__isWheeledTech = False
+        self.__isVehFire = False
+        self.__ifVehAuraFire = False
+        self.__isVehCanBeDamaged = True
         return
 
     def __del__(self):
@@ -313,6 +318,19 @@ class DamagePanel(DamagePanelMeta):
             _logger.warning('Animations times are not initialized, inspire status can be lost: %r', values)
         return
 
+    def _updateVehicleFire(self, isInFire):
+        self.__isVehFire = isInFire
+        self.as_setFireInVehicleS((isInFire or self.__ifVehAuraFire) and self.__isVehCanBeDamaged)
+
+    def _updateVehicleAuraFire(self, isInFire):
+        self.__ifVehAuraFire = isInFire
+        self.as_setFireInVehicleS((isInFire or self.__isVehFire) and self.__isVehCanBeDamaged)
+
+    def _updateVehicleCanBeDamaged(self, canBeDamaged):
+        self.__isVehCanBeDamaged = canBeDamaged
+        if self.__ifVehAuraFire or self.__isVehFire:
+            self.as_setFireInVehicleS((self.__ifVehAuraFire or self.__isVehFire) and self.__isVehCanBeDamaged)
+
     def __changeVehicleSetting(self, tag, entityName):
         ctrl = self.sessionProvider.shared.equipments
         if ctrl is None:
@@ -353,6 +371,9 @@ class DamagePanel(DamagePanelMeta):
             inDegrees = None
         self.__isAutoRotationOn = True
         self.__isAutoRotationShown = False
+        self.__isVehFire = False
+        self.__ifVehAuraFire = False
+        self.__isVehCanBeDamaged = True
         if vehicle.isPlayerVehicle or BigWorld.player().isObserver():
             flag = vehicle_getter.getAutoRotationFlag(vTypeDesc)
             if flag != AUTO_ROTATION_FLAG.IGNORE_IN_UI:

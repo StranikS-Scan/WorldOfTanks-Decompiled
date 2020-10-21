@@ -12,7 +12,6 @@ from AvatarInputHandler import aih_global_binding
 from AvatarInputHandler.cameras import getWorldRayAndPoint
 from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from aih_constants import CTRL_MODE_NAME
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from arena_component_system.sector_base_arena_component import ID_TO_BASENAME
 from chat_commands_consts import MarkerType, DefaultMarkerSubType, ReplyState, BATTLE_CHAT_COMMAND_NAMES, INVALID_MARKER_SUBTYPE, _COMMAND_NAME_TRANSFORM_MARKER_TYPE, ONE_SHOT_COMMANDS_TO_REPLIES, COMMAND_RESPONDING_MAPPING
 from epic_constants import EPIC_BATTLE_TEAM_ID
@@ -55,14 +54,7 @@ TARGET_TYPE_TRANSLATION_MAPPING = {CONTEXTCOMMAND: {MarkerType.VEHICLE_MARKER_TY
                                                         DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTACKING_OBJECTIVE},
                    MarkerType.LOCATION_MARKER_TYPE: {INVALID_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.GOING_THERE}},
  BATTLE_CHAT_COMMAND_NAMES.TURNBACK: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.TURNBACK}},
- BATTLE_CHAT_COMMAND_NAMES.THANKS: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.THANKS}},
- BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_1_EX: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_1}},
- BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_2_EX: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_2}},
- BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_3_EX: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_3}},
- BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_4_EX: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_4}},
- BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_5_EX: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_5}},
- BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_6_EX: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_6}},
- BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_7_EX: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_7}}}
+ BATTLE_CHAT_COMMAND_NAMES.THANKS: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.THANKS}}}
 DIRECT_ACTION_BATTLE_CHAT_COMMANDS = [BATTLE_CHAT_COMMAND_NAMES.SOS,
  BATTLE_CHAT_COMMAND_NAMES.RELOADINGGUN,
  BATTLE_CHAT_COMMAND_NAMES.AFFIRMATIVE,
@@ -85,6 +77,7 @@ PROHIBITED_IF_SPECTATOR = [BATTLE_CHAT_COMMAND_NAMES.GOING_THERE,
  BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE,
  BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE,
  BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY]
+EVENT_PROHIBITED_IF_DEAD = (BATTLE_CHAT_COMMAND_NAMES.ATTACK_BASE, BATTLE_CHAT_COMMAND_NAMES.DEFEND_BASE)
 
 def getAimedAtPositionWithinBorders(aimOffsetX, aimOffsetY):
     ray, _ = getWorldRayAndPoint(aimOffsetX, aimOffsetY)
@@ -287,7 +280,10 @@ class ChatCommandsController(IBattleController):
     def sendCommandToBase(self, baseIdx, cmdName, baseName=''):
         if self.__isProhibitedToSendIfDeadOrObserver(cmdName) or self.__isEnabled is False:
             return
-        if self.sessionProvider.arenaVisitor.gui.isInEpicRange():
+        gui = self.sessionProvider.arenaVisitor.gui
+        if gui.isEventBattle() and not avatar_getter.isVehicleAlive() and cmdName in EVENT_PROHIBITED_IF_DEAD:
+            return
+        if gui.isInEpicRange():
             baseName = ID_TO_BASENAME[baseIdx]
         command = self.proto.battleCmd.createByBaseIndexAndName(baseIdx, cmdName, baseName)
         if command:
@@ -336,9 +332,7 @@ class ChatCommandsController(IBattleController):
             _logger.error('Can not create reloading command')
 
     def __isProhibitedToSendIfDeadOrObserver(self, name):
-        bonusType = self.sessionProvider.arenaVisitor.getArenaBonusType()
-        isSpamProtectionEnabled = ARENA_BONUS_TYPE_CAPS.checkAny(bonusType, ARENA_BONUS_TYPE_CAPS.SPAM_PROTECTION)
-        return not avatar_getter.isVehicleAlive() and (name in PROHIBITED_IF_DEAD or isSpamProtectionEnabled) or self.sessionProvider.getCtx().isPlayerObserver() and name in PROHIBITED_IF_SPECTATOR
+        return not avatar_getter.isVehicleAlive() and name in PROHIBITED_IF_DEAD or self.sessionProvider.getCtx().isPlayerObserver() and name in PROHIBITED_IF_SPECTATOR
 
     def __isSPG(self):
         return self.sessionProvider.getArenaDP().getVehicleInfo().isSPG()

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/uilogging/ibc/loggers.py
 import time
 import BigWorld
-from uilogging.logging_constants import FEATURES
+from uilogging.logging_constants import FEATURES, KAFKA_TOPICS
 from uilogging.base.loggers import BaseLogger
 from uilogging.ibc.constants import IBC_LOG_KEYS
 from uilogging import loggingSettings
@@ -39,7 +39,8 @@ class IBCLogger(BaseLogger):
          'action': action,
          'action_value': actionValue,
          'realm': loggingSettings.realm,
-         'feature': self._feature,
+         'feature': KAFKA_TOPICS[self._feature],
+         'periphery_id': self.peripheryID,
          'arena_id': self.arenaID,
          'time_spent': timeDelta,
          'time': int(time.time())}

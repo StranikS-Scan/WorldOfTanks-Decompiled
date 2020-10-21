@@ -575,6 +575,11 @@ def __readBonus_customizations(bonus, _name, section, eventType):
          'id': subsection.readInt('id', -1)}
         if subsection.has_key('boundVehicle'):
             custData['vehTypeCompDescr'] = vehicles.makeIntCompactDescrByID('vehicle', *vehicles.g_list.getIDsByName(subsection.readString('boundVehicle', '')))
+        elif subsection.has_key('applyToVehicle'):
+            if custData['custType'] != 'style':
+                raise SoftException('applyToVehicle supports only style customization type')
+            custData['vehTypeCompDescr'] = vehicles.makeIntCompactDescrByID('vehicle', *vehicles.g_list.getIDsByName(subsection.readString('applyToVehicle', '')))
+            custData['applyToVehicle'] = True
         elif subsection.has_key('boundToCurrentVehicle'):
             if eventType in EVENT_TYPE.LIKE_TOKEN_QUESTS:
                 raise SoftException("Unsupported tag 'boundToCurrentVehicle' in 'like token' quests")

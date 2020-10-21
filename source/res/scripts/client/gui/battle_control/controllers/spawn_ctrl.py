@@ -54,7 +54,7 @@ class SpawnController(ViewComponentsController, ISpawnController):
         pass
 
     def stopControl(self):
-        if self._app:
+        if self._app and self._app.containerManager:
             self._app.containerManager.onViewAddedToContainer -= self.__onViewAddedToContainer
         self.__notifier.stopNotification()
         self.__notifier.clear()

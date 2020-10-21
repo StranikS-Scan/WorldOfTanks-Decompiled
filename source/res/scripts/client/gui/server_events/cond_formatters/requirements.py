@@ -10,6 +10,7 @@ from gui.impl.gen import R
 from gui.server_events.cond_formatters import packText, packTokenProgress, getSeparatorBlock
 from gui.server_events.cond_formatters.formatters import ConditionsFormatter, ConditionFormatter
 from gui.server_events.conditions import GROUP_TYPE, AndGroup
+from gui.server_events.events_helpers import getPreviousBattleQuest
 from gui.server_events.formatters import TOKEN_SIZES
 from gui.shared.formatters import text_styles, icons
 from helpers import int2roman, dependency
@@ -173,6 +174,17 @@ class TQAccountRequirementsFormatter(AccountRequirementsFormatter):
 
     def _getGroupFormatter(self, group):
         return self.getConditionFormatter(group.getName())
+
+
+class EventRequirementsFormatter(AccountRequirementsFormatter):
+
+    def __init__(self):
+        super(EventRequirementsFormatter, self).__init__({'and': EventRecursiveGroupFormatter(),
+         'or': EventRecursiveGroupFormatter(),
+         'single': SingleGroupFormatter()})
+
+    def _showDetailedRequirementsButton(self):
+        return False
 
 
 class SingleGroupFormatter(ConditionsFormatter):
@@ -352,6 +364,19 @@ class TQRecursiveGroupFormatter(RecursiveGroupFormatter):
          'vehiclesUnlocked': VehiclesRequirementFormatter(),
          'vehiclesOwned': VehiclesRequirementFormatter(),
          'hasReceivedMultipliedXP': HasReceivedMultipliedXPFormatter()})
+
+
+class EventRecursiveGroupFormatter(TQRecursiveGroupFormatter):
+
+    def conclusion(self, group, event, requirements, passed, total):
+        prevQuest = getPreviousBattleQuest(event)
+        if prevQuest is not None and not prevQuest.isCompleted():
+            rRequirements = R.strings.quests.missionDetails.requirements
+            icon = (icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.marker_blocked()), width=14, height=14, vSpace=-1, hSpace=-2),)
+            reason = backport.text(rRequirements.conclusion.previousIncomplete(), quest_name=prevQuest.getUserName())
+            return text_styles.concatStylesWithSpace(icon, text_styles.error(backport.text(rRequirements.header.unavailable())), text_styles.main(reason))
+        else:
+            return
 
 
 class PremiumAccountFormatter(ConditionFormatter):

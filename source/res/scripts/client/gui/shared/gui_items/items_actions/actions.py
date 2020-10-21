@@ -222,11 +222,13 @@ class ChangeVehicleNationAction(IGUIItemAction):
 
 class VehicleBuyAction(BuyAction):
 
-    def __init__(self, vehCD, isTradeIn=False, actionType=None, previousAlias=None):
+    def __init__(self, vehCD, isTradeIn=False, actionType=None, previousAlias=None, returnAlias=None, returnCallback=None):
         super(VehicleBuyAction, self).__init__()
         self.__vehCD = vehCD
         self.__isTradeIn = isTradeIn
         self.__previousAlias = previousAlias
+        self.__returnCallback = returnCallback
+        self.__returnAlias = returnAlias
         self.__actionType = actionType
 
     @process
@@ -255,7 +257,7 @@ class VehicleBuyAction(BuyAction):
                     else:
                         showShopMsg('common_rent_or_buy_error', item)
                 if self._mayObtainForMoney(item):
-                    shared_events.showVehicleBuyDialog(item, self.__actionType, self.__isTradeIn, self.__previousAlias)
+                    shared_events.showVehicleBuyDialog(item, self.__actionType, self.__isTradeIn, self.__previousAlias, returnAlias=self.__returnAlias, returnCallback=self.__returnCallback)
                 yield lambda callback=None: callback
             return
 

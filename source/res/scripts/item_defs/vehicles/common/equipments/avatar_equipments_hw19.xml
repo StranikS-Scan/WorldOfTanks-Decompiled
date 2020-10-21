@@ -1,0 +1,24 @@
+<avatar_equipments_hw19.xml>
+  <resurrect_equipment>
+    <id>	181	</id>
+    <userString>	#artefacts:resurrect_equipment/name	</userString>
+    <description>	#artefacts:resurrect_equipment/descr	</description>
+    <icon>	h_Resurrect 0 0	</icon>
+    <price>	42	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	resurrect event_battles	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventResurrectEquipment	  <shortDescription>	#artefacts:resurrect_equipment/descr	</shortDescription>
+      <longDescription>	#artefacts:resurrect_equipment/descr	</longDescription>
+    </script>
+  </resurrect_equipment>
+</avatar_equipments_hw19.xml>

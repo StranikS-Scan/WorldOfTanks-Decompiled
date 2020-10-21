@@ -21,7 +21,7 @@ from gui.impl.lobby.tank_setup.tank_setup_sounds import playEnterTankSetupView, 
 from gui.prb_control import prbDispatcherProperty
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.close_confiramtor_helper import CloseConfirmatorsHelper
-from gui.shared.events import AmmunitionSetupViewEvent, HangarVehicleEvent
+from gui.shared.events import AmmunitionSetupViewEvent, HangarVehicleEvent, PrbActionEvent
 from gui.shared.money import Money
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
@@ -32,6 +32,11 @@ class TankSetupCloseConfirmatorsHelper(CloseConfirmatorsHelper):
     def getRestrictedSfViews(self):
         result = super(TankSetupCloseConfirmatorsHelper, self).getRestrictedSfViews()
         result.extend([VIEW_ALIAS.LOBBY_CUSTOMIZATION])
+        return result
+
+    def getRestrictedEvents(self):
+        result = super(TankSetupCloseConfirmatorsHelper, self).getRestrictedEvents()
+        result.remove(PrbActionEvent.LEAVE)
         return result
 
 
@@ -96,6 +101,7 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
     def _onLoading(self, **kwargs):
         super(BaseHangarAmmunitionSetupView, self)._onLoading(**kwargs)
         fillVehicleInfo(self.viewModel.vehicleInfo, self._vehItem.getItem())
+        self.viewModel.setIsEvent(self._vehItem.getItem().isOnlyForEventBattles)
 
     def _initialize(self, *args, **kwargs):
         super(BaseHangarAmmunitionSetupView, self)._initialize()

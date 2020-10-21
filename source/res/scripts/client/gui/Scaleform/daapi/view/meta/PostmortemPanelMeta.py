@@ -21,3 +21,9 @@ class PostmortemPanelMeta(BasePostmortemPanelMeta):
 
     def as_showVictimDogTagS(self, data):
         return self.flashObject.as_showVictimDogTag(data) if self._isDAAPIInited() else None
+
+    def as_preloadComponentsS(self, components):
+        return self.flashObject.as_preloadComponents(components) if self._isDAAPIInited() else None
+
+    def as_showHintS(self):
+        return self.flashObject.as_showHint() if self._isDAAPIInited() else None

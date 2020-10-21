@@ -14,11 +14,13 @@ class RegularAchievement(GUIItem):
         IT_180X180 = '180x180'
         IT_67X71 = '67x71'
         IT_32X32 = '32x32'
+        IT_80X80 = '80x80'
 
     ICON_PATH_180X180 = '../maps/icons/achievement/big'
     ICON_PATH_67X71 = '../maps/icons/achievement'
     ICON_PATH_32X32 = '../maps/icons/achievement/32x32'
     ICON_PATH_95X85 = '../maps/icons/achievement/95x85'
+    ICON_PATH_80X80 = '../maps/icons/achievement/80x80'
     ICON_DEFAULT = '../maps/icons/achievement/noImage.png'
 
     def __init__(self, name, block, dossier, value=None):
@@ -104,7 +106,8 @@ class RegularAchievement(GUIItem):
         iconName = self._getIconName()
         return {self.ICON_TYPE.IT_180X180: '%s/%s.png' % (self.ICON_PATH_180X180, iconName),
          self.ICON_TYPE.IT_67X71: '%s/%s.png' % (self.ICON_PATH_67X71, iconName),
-         self.ICON_TYPE.IT_32X32: '%s/%s.png' % (self.ICON_PATH_32X32, iconName)}
+         self.ICON_TYPE.IT_32X32: '%s/%s.png' % (self.ICON_PATH_32X32, iconName),
+         self.ICON_TYPE.IT_80X80: '%s/%s.png' % (self.ICON_PATH_80X80, iconName)}
 
     def getHugeIcon(self):
         return self.getIcons()[self.ICON_TYPE.IT_180X180]
@@ -118,6 +121,9 @@ class RegularAchievement(GUIItem):
             return backport.image(iconRes())
         else:
             return self.getSmallIcon()
+
+    def getBig80x80Icon(self):
+        return self.getIcons()[self.ICON_TYPE.IT_80X80]
 
     def getSmallIcon(self):
         return self.getIcons()[self.ICON_TYPE.IT_67X71]

@@ -15,6 +15,3 @@ class EventTimerMeta(BaseDAAPIComponent):
 
     def as_updateTitleS(self, value):
         return self.flashObject.as_updateTitle(value) if self._isDAAPIInited() else None
-
-    def as_updateProgressBarS(self, value, vis):
-        return self.flashObject.as_updateProgressBar(value, vis) if self._isDAAPIInited() else None

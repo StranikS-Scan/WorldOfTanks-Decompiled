@@ -28,7 +28,7 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
     def __init__(self, ctx=None):
         super(LobbyVehicleMarkerView, self).__init__(ctx)
         self.__vehicleMarkers = {}
-        self.__areMarkersDisabled = False
+        self.__isMarkerDisabled = False
         self.__selectedVehicleID = None
         return
 
@@ -83,12 +83,12 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         return
 
     def __onMarkerDisable(self, event):
-        self.__areMarkersDisabled = event.ctx['isDisable']
+        self.__isMarkerDisabled = event.ctx['isDisable']
         self.__updateMarkerVisibility()
 
     def __updateMarkerVisibility(self):
         for vehicleID, marker in self.__vehicleMarkers.iteritems():
-            marker.markerSetActive(not self.__areMarkersDisabled and vehicleID != self.__selectedVehicleID)
+            marker.markerSetActive(not self.__isMarkerDisabled and vehicleID != self.__selectedVehicleID)
 
     @staticmethod
     def __getVehicleInfo(vehicle):
@@ -150,7 +150,7 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         self.__vehicleMarkers.clear()
 
     def __handleViewLoad(self, event):
-        if event.alias == VIEW_ALIAS.LOBBY_HANGAR:
+        if event.alias in (VIEW_ALIAS.LOBBY_HANGAR, VIEW_ALIAS.EVENT_STYLES_PREVIEW):
             self.__isMarkerDisabled = False
         elif event.alias in self.__loadEvents:
             self.__isMarkerDisabled = True

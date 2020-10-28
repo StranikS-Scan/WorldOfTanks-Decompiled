@@ -3,9 +3,9 @@
 from functools import partial
 import BigWorld
 from bootcamp.BootCampEvents import g_bootcampEvents
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.view.meta.BCMessageWindowMeta import BCMessageWindowMeta
 from gui.shared.view_helpers.blur_manager import CachedBlur
-from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from gui.Scaleform.genConsts.BOOTCAMP_MESSAGE_ALIASES import BOOTCAMP_MESSAGE_ALIASES
 import SoundGroups
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
@@ -21,6 +21,10 @@ class BCMessageWindow(BCMessageWindowMeta):
         super(BCMessageWindow, self).__init__(content)
         self.__blur = None
         return
+
+    def setParentWindow(self, window):
+        super(BCMessageWindow, self).setParentWindow(window)
+        self.__blur = CachedBlur(enabled=True, ownLayer=window.layer, blurAnimRepeatCount=1)
 
     def onMessageButtonClicked(self):
         self.onCustomButton(needStopEffect=True, needCloseWindow=False)
@@ -49,11 +53,13 @@ class BCMessageWindow(BCMessageWindowMeta):
             callback(True)
         return
 
+    def hideBlur(self):
+        self.__blur.disable()
+
     def _populate(self):
         super(BCMessageWindow, self)._populate()
         self.as_setMessageDataS(self._content['messages'])
-        self.__blur = CachedBlur(enabled=True, ownLayer=APP_CONTAINERS_NAMES.VIEWS, layers=(APP_CONTAINERS_NAMES.TOP_SUB_VIEW, APP_CONTAINERS_NAMES.SUBVIEW, APP_CONTAINERS_NAMES.WINDOWS), blurAnimRepeatCount=1)
-        self.as_blurOtherWindowsS(APP_CONTAINERS_NAMES.DIALOGS)
+        self.as_blurOtherWindowsS(WindowLayer.TOP_WINDOW)
         g_bootcampEvents.onRequestBootcampMessageWindowClose += self.onMessageRemoved
         if self._hangarSpace.spaceInited:
             self.__setCameraDisabled(True)
@@ -62,10 +68,12 @@ class BCMessageWindow(BCMessageWindowMeta):
 
     def _dispose(self):
         super(BCMessageWindow, self)._dispose()
-        self.__blur.fini()
+        if self.__blur is not None:
+            self.__blur.fini()
         g_bootcampEvents.onRequestBootcampMessageWindowClose -= self.onMessageRemoved
         self._hangarSpace.onSpaceCreate -= self.__onSpaceCreated
         self.__setCameraDisabled(False)
+        return
 
     def _stop(self, needCloseWindow=True):
         self._content.clear()

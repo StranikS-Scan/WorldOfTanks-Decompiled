@@ -24,6 +24,7 @@ class BattleFieldCtrl(IBattleFieldController, ViewComponentsController):
         super(BattleFieldCtrl, self).__init__()
         self.__isEnabled = True
         self.__battleCtx = None
+        self.__isEventBattle = False
         self._aliveAllies = {}
         self._aliveEnemies = {}
         self.__alliesHealth = 0
@@ -43,6 +44,7 @@ class BattleFieldCtrl(IBattleFieldController, ViewComponentsController):
     def startControl(self, battleCtx, arenaVisitor):
         self.__battleCtx = battleCtx
         self.__isEnabled = not arenaVisitor.isArenaFogOfWarEnabled()
+        self.__isEventBattle = arenaVisitor.gui.isEventBattle()
 
     def stopControl(self):
         super(BattleFieldCtrl, self).stopControl()
@@ -75,6 +77,9 @@ class BattleFieldCtrl(IBattleFieldController, ViewComponentsController):
         if self.__isEnabled:
             for _, vInfoVO in updated:
                 if vInfoVO.isAlive():
+                    if self.__isEventBattle and vInfoVO.vehicleID in self.__deadAllies:
+                        self.__deadAllies.remove(vInfoVO.vehicleID)
+                        self.addVehicleInfo(vInfoVO, arenaDP)
                     self.__changeMaxVehicleHealth(vInfoVO.vehicleID, vInfoVO.vehicleType.maxHealth)
 
     def invalidateFogOfWarEnabledFlag(self, flag):

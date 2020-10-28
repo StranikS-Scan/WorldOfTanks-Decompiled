@@ -98,8 +98,7 @@ class ResearchView(LobbySubView, ResearchViewMeta):
             self.as_setInventoryItemsS(result)
 
     def invalidateBlueprints(self, blueprints):
-        if blueprints:
-            self.redraw()
+        raise NotImplementedError('Must be overridden in subclass')
 
     def invalidatePrbState(self):
         result = self._data.invalidatePrbState()

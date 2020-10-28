@@ -48,7 +48,7 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         self.__activeDistRangeSettings = None
         self.__dynamicCfg = CameraDynamicConfig()
         self.__cameraYaw = 0.0
-        self.__readCfg(dataSec)
+        self._readConfigs(dataSec)
         self.__cam = BigWorld.CursorCamera()
         self.__cam.isHangar = False
         self.__curSense = self._cfg['sensitivity']
@@ -60,6 +60,10 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         self.__needReset = 0
         self.__smoothingPivotDelta = 0
         return
+
+    @staticmethod
+    def _getConfigsKey():
+        return StrategicCamera.__name__
 
     def create(self, onChangeControlMode=None):
         super(StrategicCamera, self).create()
@@ -287,30 +291,41 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         import ResMgr
         ResMgr.purge('gui/avatar_input_handler.xml')
         cameraSec = ResMgr.openSection('gui/avatar_input_handler.xml/strategicMode/camera/')
-        self.__readCfg(cameraSec)
+        self._reloadConfigs(cameraSec)
 
-    def __readCfg(self, dataSec):
+    def _readConfigs(self, dataSec):
         if not dataSec or dataSec['strategic']:
             LOG_WARNING('Invalid section <strategicMode/camera> in avatar_input_handler.xml')
-        self._baseCfg = dict()
+        super(StrategicCamera, self)._readConfigs(dataSec)
+        dynamicsSection = dataSec['dynamics']
+        self.__dynamicCfg.readImpulsesConfig(dynamicsSection)
+        self.__positionOscillator = createOscillatorFromSection(dynamicsSection['oscillator'], False)
+        self.__positionNoiseOscillator = createOscillatorFromSection(dynamicsSection['randomNoiseOscillatorFlat'], False)
+
+    def _readBaseCfg(self, dataSec):
         bcfg = self._baseCfg
         bcfg['keySensitivity'] = readFloat(dataSec, 'keySensitivity', 0.005, 10, 0.025)
         bcfg['sensitivity'] = readFloat(dataSec, 'sensitivity', 0.005, 10, 0.025)
         bcfg['scrollSensitivity'] = readFloat(dataSec, 'scrollSensitivity', 0.005, 10, 0.025)
         bcfg['distRange'] = readVec2(dataSec, 'distRange', (1, 1), (10000, 10000), (2, 30))
         bcfg['distRangeForArenaSize'] = self.__readDynamicDistRangeData(dataSec)
-        ds = Settings.g_instance.userPrefs[Settings.KEY_CONTROL_MODE]
-        if ds is not None:
-            ds = ds['strategicMode/camera']
-        self._userCfg = dict()
+
+    def _readUserCfg(self):
         ucfg = self._userCfg
+        dataSec = Settings.g_instance.userPrefs[Settings.KEY_CONTROL_MODE]
+        if dataSec is not None:
+            dataSec = dataSec['strategicMode/camera']
         ucfg['horzInvert'] = False
         ucfg['vertInvert'] = False
-        ucfg['keySensitivity'] = readFloat(ds, 'keySensitivity', 0.0, 10.0, 1.0)
-        ucfg['sensitivity'] = readFloat(ds, 'sensitivity', 0.0, 10.0, 1.0)
-        ucfg['scrollSensitivity'] = readFloat(ds, 'scrollSensitivity', 0.0, 10.0, 1.0)
-        ucfg['camDist'] = readFloat(ds, 'camDist', 0.0, 60.0, 0)
-        self._cfg = dict()
+        ucfg['keySensitivity'] = readFloat(dataSec, 'keySensitivity', 0.0, 10.0, 1.0)
+        ucfg['sensitivity'] = readFloat(dataSec, 'sensitivity', 0.0, 10.0, 1.0)
+        ucfg['scrollSensitivity'] = readFloat(dataSec, 'scrollSensitivity', 0.0, 10.0, 1.0)
+        ucfg['camDist'] = readFloat(dataSec, 'camDist', 0.0, 60.0, 0)
+        return
+
+    def _makeCfg(self):
+        bcfg = self._baseCfg
+        ucfg = self._userCfg
         cfg = self._cfg
         cfg['keySensitivity'] = bcfg['keySensitivity']
         cfg['sensitivity'] = bcfg['sensitivity']
@@ -323,11 +338,6 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         cfg['scrollSensitivity'] *= ucfg['scrollSensitivity']
         cfg['horzInvert'] = ucfg['horzInvert']
         cfg['vertInvert'] = ucfg['vertInvert']
-        dynamicsSection = dataSec['dynamics']
-        self.__dynamicCfg.readImpulsesConfig(dynamicsSection)
-        self.__positionOscillator = createOscillatorFromSection(dynamicsSection['oscillator'], False)
-        self.__positionNoiseOscillator = createOscillatorFromSection(dynamicsSection['randomNoiseOscillatorFlat'], False)
-        return
 
     def __readDynamicDistRangeData(self, dataSec):
         section = dataSec['dynamicDistRanges']

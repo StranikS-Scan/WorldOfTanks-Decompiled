@@ -4,6 +4,7 @@ from functools import partial
 from collections import namedtuple
 import BigWorld
 from adisp import process
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl import backport
 from helpers import dependency
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -93,7 +94,7 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
     def playerClick(self, playerID):
         for item in self.__leaderboardData.excelItems:
             if item.getSpaId() == playerID:
-                g_eventBus.handleEvent(events.LoadViewEvent(EVENTBOARDS_ALIASES.EVENTBOARDS_DETAILS_BATTLE_VIEW, ctx={'eventID': self.__eventID,
+                g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(EVENTBOARDS_ALIASES.EVENTBOARDS_DETAILS_BATTLE_VIEW), ctx={'eventID': self.__eventID,
                  'leaderboard': self.__leaderboard,
                  'excelItem': item}), scope=EVENT_BUS_SCOPE.LOBBY)
                 break

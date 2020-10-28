@@ -333,9 +333,6 @@
       <players>
         <Type>	UINT32	</Type>
       </players>
-      <avgWaitTime>
-        <Type>	FLOAT32	</Type>
-      </avgWaitTime>
     </Properties>
   </EVENT_QUEUE_INFO>
   <RANKED_BATTLES_QUEUE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -662,6 +659,55 @@
       </vehicleType>
     </Properties>
   </DISCLOSE_EVENT>
+  <DOG_TAG_COMPONENT>	FIXED_DICT	  <Properties>
+      <id>
+        <Type>	INT32	</Type>
+      </id>
+      <progress>
+        <Type>	FLOAT32	</Type>
+      </progress>
+      <grade>
+        <Type>	INT8	</Type>
+      </grade>
+    </Properties>
+  </DOG_TAG_COMPONENT>
+  <DOG_TAG>	FIXED_DICT	  <Properties>
+      <components>
+        <Type>	ARRAY	  <of>	DOG_TAG_COMPONENT	</of>
+        </Type>
+      </components>
+    </Properties>
+  </DOG_TAG>
+  <BATTLE_DOG_TAG>	FIXED_DICT	  <Properties>
+      <dogTag>
+        <Type>	DOG_TAG	</Type>
+      </dogTag>
+      <defaultDogTag>
+        <Type>	DOG_TAG	</Type>
+      </defaultDogTag>
+      <showDogTagToKiller>
+        <Type>	BOOL	</Type>
+      </showDogTagToKiller>
+    </Properties>
+  </BATTLE_DOG_TAG>
+  <VEHICLE_DOG_TAG>	FIXED_DICT	  <Properties>
+      <vehicleId>
+        <Type>	OBJECT_ID	</Type>
+      </vehicleId>
+      <dogTag>
+        <Type>	DOG_TAG	</Type>
+      </dogTag>
+    </Properties>
+  </VEHICLE_DOG_TAG>
+  <DOG_TAG_SETTINGS>	FIXED_DICT	  <Properties>
+      <showVictimsDogTag>
+        <Type>	BOOL	</Type>
+      </showVictimsDogTag>
+      <showDogTagToKiller>
+        <Type>	BOOL	</Type>
+      </showDogTagToKiller>
+    </Properties>
+  </DOG_TAG_SETTINGS>
   <ARENA_VEH_INFO>	FIXED_DICT	  <Properties>
       <vehInvID>
         <Type>	INT32	</Type>
@@ -711,6 +757,9 @@
       <hideNonHistoric>
         <Type>	BOOL	</Type>
       </hideNonHistoric>
+      <dogTagsUserSettings>
+        <Type>	DOG_TAG_SETTINGS	</Type>
+      </dogTagsUserSettings>
     </Properties>
   </USER_EXTRA_SETTINGS>
   <ARENA_ADDPLAYER_INFO>	FIXED_DICT	  <Properties>
@@ -806,9 +855,18 @@
       <overriddenBadge>
         <Type>	UINT8	</Type>
       </overriddenBadge>
+      <dogTag>
+        <Type>	BATTLE_DOG_TAG	</Type>
+      </dogTag>
       <userExtraSettings>
         <Type>	USER_EXTRA_SETTINGS	</Type>
       </userExtraSettings>
+      <availableLorePoints>
+        <Type>	UINT8	</Type>
+      </availableLorePoints>
+      <eventSkillLevel>
+        <Type>	UINT8	</Type>
+      </eventSkillLevel>
     </Properties>
   </ARENA_ADDPLAYER_INFO>
   <AVATAR_VEHICLE_ROSTER>	FIXED_DICT	  <Properties>
@@ -1172,6 +1230,40 @@
       </vehPerks>
     </Properties>
   </RESPAWN_INFO_VEHICLE>
+  <EVENT_RESPAWN_INFO_VEHICLE>	FIXED_DICT	  <Properties>
+      <compDescr>
+        <Type>	STRING	</Type>
+      </compDescr>
+      <crewCompactDescrs>
+        <Type>	ARRAY	  <of>	STRING	</of>
+        </Type>
+      </crewCompactDescrs>
+      <commanderSkinID>
+        <Type>	UINT16	</Type>
+      </commanderSkinID>
+      <marksOnGun>
+        <Type>	UINT8	</Type>
+      </marksOnGun>
+      <index>
+        <Type>	UINT16	</Type>
+      </index>
+      <onRespawnSettings>
+        <Type>	PYTHON	</Type>
+      </onRespawnSettings>
+      <ammo>
+        <Type>	ARRAY	  <of>	INT32	</of>
+        </Type>
+      </ammo>
+      <positionList>	&gt;	  <Type>	PYTHON	</Type>
+      </positionList>
+      <outfit>
+        <Type>	STRING	</Type>
+      </outfit>
+      <vehPerks>
+        <Type>	PYTHON	</Type>
+      </vehPerks>
+    </Properties>
+  </EVENT_RESPAWN_INFO_VEHICLE>
   <BUFF_EFFECT>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <radius>

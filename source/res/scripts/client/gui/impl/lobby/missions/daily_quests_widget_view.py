@@ -7,7 +7,7 @@ from frameworks.wulf import Array, ViewFlags, WindowFlags
 from frameworks.wulf.view.view import ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.missions.widget.daily_quests_widget_view_model import DailyQuestsWidgetViewModel
-from gui.impl.gen.view_models.views.lobby.missions.widget.widget_mission_model import WidgetMissionModel
+from gui.impl.gen.view_models.views.lobby.missions.widget.widget_quest_model import WidgetQuestModel
 from gui.impl.lobby.missions.missions_helpers import needToUpdateQuestsInModel
 from gui.impl.pub import ViewImpl
 from gui.impl.lobby.missions.daily_quests_view import DailyTabs
@@ -22,6 +22,7 @@ from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.impl import IGuiLoader
 if typing.TYPE_CHECKING:
+    from frameworks.wulf import Window
     from gui.server_events.event_items import ServerEventAbstract, DailyQuest
     from typing import Optional, Any
     from gui.impl.gen.view_models.common.missions.daily_quest_model import DailyQuestModel
@@ -33,7 +34,7 @@ MARK_VISITED_TIMEOUT = 1.0
 _logger = logging.getLogger(__name__)
 
 def predicateTooltipWindow(window):
-    return window.content is not None and window.windowFlags == WindowFlags.TOOLTIP
+    return window.content is not None and window.typeFlag == WindowFlags.TOOLTIP
 
 
 class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
@@ -77,17 +78,17 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
 
     def setLayout(self, value):
         self.__layout = value
-        if self.getViewModel().getIsVisible():
+        if self.getViewModel().getVisible():
             self._markVisited()
 
-    def setIsVisible(self, value):
-        if value == self.getViewModel().getIsVisible():
+    def setVisible(self, value):
+        if value == self.getViewModel().getVisible():
             return
         with self.getViewModel().transaction() as tx:
             if value:
                 quests = sorted(self.eventsCache.getDailyQuests().values(), key=dailyQuestsSortFunc)
-                self.__updateModelMissionCompletedVisitedArray(tx, quests, True)
-            tx.setIsVisible(value)
+                self.__updateQuestsToBeIndicatedCompleted(tx, quests, True)
+            tx.setVisible(value)
 
     def _onLoading(self, *args, **kwargs):
         self._updateViewModel()
@@ -112,18 +113,18 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
         _logger.debug('DailyQuests::UpdatingViewModel')
         newCountdownVal = EventInfoModel.getDailyProgressResetTimeDelta()
         quests = sorted(self.eventsCache.getDailyQuests().values(), key=dailyQuestsSortFunc)
-        if not needToUpdateQuestsInModel(quests, self.getViewModel().getMissions()):
+        if not needToUpdateQuestsInModel(quests, self.getViewModel().getQuests()):
             return
         else:
             with self.getViewModel().transaction() as tx:
-                tx.setCountDown(newCountdownVal)
-                modelMissionsArray = tx.getMissions()
-                modelMissionsArray.clear()
-                modelMissionsArray.reserve(len(quests))
+                tx.setCountdown(newCountdownVal)
+                modelQuests = tx.getQuests()
+                modelQuests.clear()
+                modelQuests.reserve(len(quests))
                 for quest in quests:
                     questUIPacker = getEventUIDataPacker(quest)
                     fullQuestModel = questUIPacker.pack()
-                    questModel = WidgetMissionModel()
+                    questModel = WidgetQuestModel()
                     preFormattedConditionModel = self._getFirstConditionModelFromQuestModel(fullQuestModel)
                     if preFormattedConditionModel is not None:
                         questModel.setCurrentProgress(preFormattedConditionModel.getCurrent())
@@ -132,12 +133,12 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
                         questModel.setDescription(preFormattedConditionModel.getDescrData())
                     questModel.setId(fullQuestModel.getId())
                     questModel.setIcon(fullQuestModel.getIcon())
-                    questModel.setIsCompleted(fullQuestModel.getStatus() == MISSIONS_STATES.COMPLETED)
-                    modelMissionsArray.addViewModel(questModel)
+                    questModel.setCompleted(fullQuestModel.getStatus() == MISSIONS_STATES.COMPLETED)
+                    modelQuests.addViewModel(questModel)
                     fullQuestModel.unbind()
 
-                modelMissionsArray.invalidate()
-                self.__updateModelMissionCompletedVisitedArray(tx, quests, self.viewModel.getIsVisible())
+                modelQuests.invalidate()
+                self.__updateQuestsToBeIndicatedCompleted(tx, quests, self.viewModel.getVisible())
             return
 
     def _markVisited(self):
@@ -162,9 +163,9 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
         if isWindowVisible:
             with self.viewModel.transaction() as tx:
                 newCountdownVal = EventInfoModel.getDailyProgressResetTimeDelta()
-                tx.setCountDown(newCountdownVal)
+                tx.setCountdown(newCountdownVal)
 
-    def __onMissionClick(self):
+    def __onQuestClick(self):
         showDailyQuests(subTab=DailyTabs.QUESTS)
 
     def __onHelpLayoutShow(self, _):
@@ -181,26 +182,26 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
         self._updateViewModel()
         self._markVisited()
 
-    def __updateModelMissionCompletedVisitedArray(self, viewModelTransaction, sortedQuests, markViewed):
-        modelMissionsCompletedVisitedArray = viewModelTransaction.getMissionsCompletedVisited()
-        modelMissionsCompletedVisitedArray.clear()
-        modelMissionsCompletedVisitedArray.reserve(len(sortedQuests))
+    def __updateQuestsToBeIndicatedCompleted(self, viewModelTransaction, sortedQuests, markViewed):
+        indicateCompleteQuests = viewModelTransaction.getIndicateCompleteQuests()
+        indicateCompleteQuests.clear()
+        indicateCompleteQuests.reserve(len(sortedQuests))
         for quest in sortedQuests:
             questCompletionChanged = self.eventsCache.questsProgress.getQuestCompletionChanged(quest.getID())
             if questCompletionChanged and markViewed:
                 self._scheduleMarkVisited(quest.getID())
-            modelMissionsCompletedVisitedArray.addBool(not questCompletionChanged)
+            indicateCompleteQuests.addBool(questCompletionChanged)
 
-        modelMissionsCompletedVisitedArray.invalidate()
+        indicateCompleteQuests.invalidate()
 
     def __addListeners(self):
         self.eventsCache.onSyncCompleted += self.__onSyncCompleted
-        self.viewModel.onMissionClick += self.__onMissionClick
+        self.viewModel.onQuestClick += self.__onQuestClick
         g_eventBus.addListener(LobbySimpleEvent.CLOSE_HELPLAYOUT, self.__onHelpLayoutHide, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(LobbySimpleEvent.SHOW_HELPLAYOUT, self.__onHelpLayoutShow, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __removeListeners(self):
         self.eventsCache.onSyncCompleted -= self.__onSyncCompleted
-        self.viewModel.onMissionClick -= self.__onMissionClick
+        self.viewModel.onQuestClick -= self.__onQuestClick
         g_eventBus.removeListener(LobbySimpleEvent.CLOSE_HELPLAYOUT, self.__onHelpLayoutHide, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(LobbySimpleEvent.SHOW_HELPLAYOUT, self.__onHelpLayoutShow, scope=EVENT_BUS_SCOPE.LOBBY)

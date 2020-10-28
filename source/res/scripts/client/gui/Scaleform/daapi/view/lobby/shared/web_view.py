@@ -7,7 +7,6 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import makeBrowserParams
 from gui.Scaleform.daapi.view.meta.BrowserScreenMeta import BrowserScreenMeta
 from gui.shared.view_helpers.blur_manager import CachedBlur
-from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from gui.shared import events, EVENT_BUS_SCOPE
 from skeletons.gui.game_control import IBrowserController
 from helpers import dependency
@@ -99,6 +98,8 @@ class WebView(BrowserScreenMeta):
                 self.__browser.allowRightClick = self.__getFromCtx('allowRightClick', True)
                 self.__browser.useSpecialKeys = self.__getFromCtx('useSpecialKeys', False)
                 self.__browser.ignoreAltKey = self.__getFromCtx('ignoreAltKey', True)
+                self.__browser.ignoreCtrlClick = self.__getFromCtx('ignoreCtrlClick', True)
+                self.__browser.ignoreShiftClick = self.__getFromCtx('ignoreShiftClick', True)
             self.__updateSkipEscape(not self.__hasFocus)
         else:
             _logger.error('ERROR: Browser could not be opened. Invalid URL!')
@@ -132,22 +133,15 @@ class WebViewTransparent(WebView):
         self.__blur = None
         return
 
+    def setParentWindow(self, window):
+        super(WebViewTransparent, self).setParentWindow(window)
+        self.__blur = CachedBlur(enabled=True, ownLayer=window.layer)
+
     def onEscapePress(self):
         self.destroy()
 
-    def _populate(self):
-        super(WebViewTransparent, self)._populate()
-        self.__blur = CachedBlur(enabled=True, ownLayer=APP_CONTAINERS_NAMES.TOP_SUB_VIEW, layers=(APP_CONTAINERS_NAMES.SUBVIEW,
-         APP_CONTAINERS_NAMES.WINDOWS,
-         APP_CONTAINERS_NAMES.DIALOGS,
-         APP_CONTAINERS_NAMES.IME,
-         APP_CONTAINERS_NAMES.SERVICE_LAYOUT,
-         APP_CONTAINERS_NAMES.MARKER,
-         APP_CONTAINERS_NAMES.VIEWS,
-         APP_CONTAINERS_NAMES.SYSTEM_MESSAGES))
-
     def _dispose(self):
-        super(WebViewTransparent, self)._dispose()
         if self.__blur is not None:
             self.__blur.fini()
+        super(WebViewTransparent, self)._dispose()
         return

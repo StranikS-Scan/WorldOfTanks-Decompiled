@@ -1,28 +1,29 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bootcamp/states/StateBattlePreparing.py
-import BigWorld
 import BattleReplay
-import SoundGroups
+import BigWorld
 import Settings
-from aih_constants import CTRL_MODE_NAME
+import SoundGroups
 from PlayerEvents import g_playerEvents
+from aih_constants import CTRL_MODE_NAME
 from bootcamp.BootCampEvents import g_bootcampEvents
 from bootcamp.BootcampConstants import CAMERA_START_DISTANCE
+from bootcamp.BootcampLobbyHintsConfig import g_bootcampHintsConfig
+from bootcamp.aop.battle_preparing import weave
 from bootcamp.states import STATE
 from bootcamp.states.AbstractState import AbstractState
-from bootcamp.aop.battle_preparing import weave
 from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP
+from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.bootcamp.BCBattleLoadingSpaceEnv import BCBattleLoadingSpaceEnv
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from gui.app_loader import settings as app_settings
 from gui.prb_control.events_dispatcher import g_eventDispatcher
+from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
+from gui.sounds.filters import WWISEFilteredBootcampArenaFilter as BCFilter
 from helpers import dependency, aop
 from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
 from skeletons.gui.sounds import ISoundsController
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
-from gui.sounds.filters import WWISEFilteredBootcampArenaFilter as BCFilter
-from bootcamp.BootcampLobbyHintsConfig import g_bootcampHintsConfig
-from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
-from gui.app_loader import settings as app_settings
-from gui.Scaleform.daapi.view.bootcamp.BCBattleLoadingSpaceEnv import BCBattleLoadingSpaceEnv
 from soft_exception import SoftException
 _INTRO_VIDEO_PATH = 'videos/_tutorialInitial.usm'
 _INTRO_VIDEO_LOOP_PATH = 'videos/_tutorialInitialLoop.usm'
@@ -110,12 +111,10 @@ class StateBattlePreparing(AbstractState):
 
     def onArenaLoadCompleted(self):
         g_bootcampEvents.onBattleLoaded(self.__lessonId)
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOTCAMP_INTRO_FADEOUT, None, {'duration': 1000}), EVENT_BUS_SCOPE.BATTLE)
-        return
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_INTRO_FADEOUT), ctx={'duration': 1000}), EVENT_BUS_SCOPE.BATTLE)
 
     def onBecomePlayer(self):
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOTCAMP_BATTLE_HIGHLIGHTS, None, {'descriptors': g_bootcampHintsConfig.getItems()}), EVENT_BUS_SCOPE.BATTLE)
-        return
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_BATTLE_HIGHLIGHTS), ctx={'descriptors': g_bootcampHintsConfig.getItems()}), EVENT_BUS_SCOPE.BATTLE)
 
     def getIntroVideoData(self):
         introVideoData = {'showSkipOption': False}

@@ -4112,104 +4112,299 @@
       </dotParams>
     </script>
   </arcade_smoke_battle_royale_with_damage>
-  <afterburning_wt>
-    <id>	900	</id>
-    <userString>	#wt_event:equipment/afterburning_wt/name	</userString>
-    <description>	#wt_event:equipment/afterburning_wt/descr	</description>
-    <shortDescriptionSpecial>	#wt_event:equipment/afterburning_wt/shortDescr	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#wt_event:equipment/afterburning_wt/longDescr	</longDescriptionSpecial>
-    <icon>	wt_ability_nitro 0 0	</icon>
-    <soundNotification>	nitro_combat_reserve	</soundNotification>
-    <price>	15000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	notForSale eventItem	</tags>
-    <script>	AfterburningWT	  <cooldownSeconds>	30	</cooldownSeconds>
+  <nitroRamDamage>
+    <id>	213	</id>
+    <userString>	#artefacts:nitroRamDamage/name	</userString>
+    <description>	#artefacts:nitroRamDamage/descr	</description>
+    <icon>	h_Nitro 0 0	</icon>
+    <soundNotification>	hw19_ui_ability_button_ready	</soundNotification>
+    <activationWWSoundFeedback>	ev_halloween_2019_ability_nitro_activation	</activationWWSoundFeedback>
+    <deactivationWWSoundFeedback>	ev_halloween_2019_ability_nitro_deactivation	</deactivationWWSoundFeedback>
+    <price>	3000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	eventBuff event_battles	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	event_battles	</tags>
+        </vehicle>
+        <vehicles>	uk:GB24_Centurion_Mk3_Halloween_event	</vehicles>
+      </include>
+    </vehicleFilter>
+    <script>	BuffEquipment	  <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <durationSeconds>	5	</durationSeconds>
+      <cooldownSeconds>	45	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
-      <deploySeconds>	0	</deploySeconds>
-      <rechargeSeconds>	0	</rechargeSeconds>
-      <consumeSeconds>	15	</consumeSeconds>
-      <enginePowerFactor>	1.3	</enginePowerFactor>
-      <maxSpeedFactor>	1.69	</maxSpeedFactor>
-      <vehicleRotationSpeed>	1.0	</vehicleRotationSpeed>
+      <buffs>	multiplyMaxSpeed_MK3 multiplyRamDamage	</buffs>
     </script>
-  </afterburning_wt>
-  <instant_stun_shoot_wt>
-    <id>	901	</id>
-    <userString>	#wt_event:equipment/instant_stun_shoot_wt/name	</userString>
-    <description>	#wt_event:equipment/instant_stun_shoot_wt/descr	</description>
-    <icon>	wt_ability_stan 0 0	</icon>
-    <soundNotification>	br_ability	</soundNotification>
-    <price>	15000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	notForSale instant_shoot eventAltItem	</tags>
-    <script>	InstantStunShootWT	  <cooldownSeconds>	15	</cooldownSeconds>
+  </nitroRamDamage>
+  <nitroRamDamage2>
+    <id>	202	</id>
+    <userString>	#artefacts:nitroRamDamage/name	</userString>
+    <description>	#artefacts:nitroRamDamage/descr	</description>
+    <icon>	h_Nitro 0 0	</icon>
+    <soundNotification>	hw19_ui_ability_button_ready	</soundNotification>
+    <activationWWSoundFeedback>	ev_halloween_2019_ability_nitro_activation	</activationWWSoundFeedback>
+    <deactivationWWSoundFeedback>	ev_halloween_2019_ability_nitro_deactivation	</deactivationWWSoundFeedback>
+    <price>	3000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	eventBuff event_battles	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	event_battles	</tags>
+        </vehicle>
+        <vehicles>	usa:A100_T49_Halloween_event	</vehicles>
+      </include>
+    </vehicleFilter>
+    <script>	BuffEquipment	  <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <durationSeconds>	5	</durationSeconds>
+      <cooldownSeconds>	45	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
-      <piercingPower>	1000 1000	</piercingPower>
-      <speed>	750	</speed>
-      <gravity>	9.81	</gravity>
-      <maxDistance>	720	</maxDistance>
-      <maxHeight>	100	</maxHeight>
-      <shellDescr>	102938	</shellDescr>
+      <buffs>	multiplyMaxSpeed_T49 multiplyRamDamage	</buffs>
     </script>
-  </instant_stun_shoot_wt>
-  <impulse_wt>
-    <id>	902	</id>
-    <userString>	#wt_event:equipment/impulse_wt/name	</userString>
-    <description>	#wt_event:equipment/impulse_wt/descr	</description>
-    <icon>	wt_ability_emi 0 0	</icon>
-    <soundNotification>	br_ability	</soundNotification>
-    <price>	15000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	notForSale eventItem	</tags>
-    <script>	ImpulseWT	  <cooldownSeconds>	20	</cooldownSeconds>
+  </nitroRamDamage2>
+  <nitroRamDamage3>
+    <id>	206	</id>
+    <userString>	#artefacts:nitroRamDamage/name	</userString>
+    <description>	#artefacts:nitroRamDamage/descr	</description>
+    <icon>	h_Nitro 0 0	</icon>
+    <soundNotification>	hw19_ui_ability_button_ready	</soundNotification>
+    <activationWWSoundFeedback>	ev_halloween_2019_ability_nitro_activation	</activationWWSoundFeedback>
+    <deactivationWWSoundFeedback>	ev_halloween_2019_ability_nitro_deactivation	</deactivationWWSoundFeedback>
+    <price>	3000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	eventBuff event_battles	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	event_battles	</tags>
+        </vehicle>
+        <vehicles>	usa:A66_M103_Halloween_event	</vehicles>
+      </include>
+    </vehicleFilter>
+    <script>	BuffEquipment	  <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <durationSeconds>	7	</durationSeconds>
+      <cooldownSeconds>	45	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
-      <prepareSeconds>	3	</prepareSeconds>
-      <damageRadius>	15	</damageRadius>
-      <damageValue>	600	</damageValue>
-      <stunRadius>	50	</stunRadius>
-      <shellDescr>	102938	</shellDescr>
-      <cooldownBonus>
-        <bonus_0>
-          <affected>	2	</affected>
-          <bonus>	0.1	</bonus>
-        </bonus_0>
-        <bonus_1>
-          <affected>	3	</affected>
-          <bonus>	0.2	</bonus>
-        </bonus_1>
-        <bonus_2>
-          <affected>	4	</affected>
-          <bonus>	0.3	</bonus>
-        </bonus_2>
-        <bonus_3>
-          <affected>	5	</affected>
-          <bonus>	0.4	</bonus>
-        </bonus_3>
-      </cooldownBonus>
+      <buffs>	multiplyMaxSpeed_M103 multiplyRamDamage	</buffs>
     </script>
-  </impulse_wt>
-  <largeMedkit_wt>
-    <id>	903	</id>
-    <userString>	#artefacts:largeMedkit_wt/name	</userString>
-    <description>	#artefacts:largeMedkit_wt/stunDisabled/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:largeMedkit_wt/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:largeMedkit_wt/long_special	</longDescriptionSpecial>
-    <icon>	largeMedkit 0 0	</icon>
+  </nitroRamDamage3>
+  <nitroRamDamage4>
+    <id>	207	</id>
+    <userString>	#artefacts:nitroRamDamage/name	</userString>
+    <description>	#artefacts:nitroRamDamage/descr	</description>
+    <icon>	h_Nitro 0 0	</icon>
+    <soundNotification>	hw19_ui_ability_button_ready	</soundNotification>
+    <activationWWSoundFeedback>	ev_halloween_2019_ability_nitro_activation	</activationWWSoundFeedback>
+    <deactivationWWSoundFeedback>	ev_halloween_2019_ability_nitro_deactivation	</deactivationWWSoundFeedback>
+    <price>	3000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	eventBuff event_battles	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	event_battles	</tags>
+        </vehicle>
+        <vehicles>	ussr:R40_T-54_Halloween_event	</vehicles>
+      </include>
+    </vehicleFilter>
+    <script>	BuffEquipment	  <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <durationSeconds>	5	</durationSeconds>
+      <cooldownSeconds>	45	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <buffs>	multiplyMaxSpeed_T54 multiplyRamDamage	</buffs>
+    </script>
+  </nitroRamDamage4>
+  <nitroRamDamage5>
+    <id>	208	</id>
+    <userString>	#artefacts:nitroRamDamage/name	</userString>
+    <description>	#artefacts:nitroRamDamage/descr	</description>
+    <icon>	h_Nitro 0 0	</icon>
+    <soundNotification>	hw19_ui_ability_button_ready	</soundNotification>
+    <activationWWSoundFeedback>	ev_halloween_2019_ability_nitro_activation	</activationWWSoundFeedback>
+    <deactivationWWSoundFeedback>	ev_halloween_2019_ability_nitro_deactivation	</deactivationWWSoundFeedback>
+    <price>	3000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	eventBuff event_battles	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	event_battles	</tags>
+        </vehicle>
+        <vehicles>	france:F17_AMX_13_90_Halloween_event	</vehicles>
+      </include>
+    </vehicleFilter>
+    <script>	BuffEquipment	  <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <durationSeconds>	5	</durationSeconds>
+      <cooldownSeconds>	45	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <buffs>	multiplyMaxSpeed_1390 multiplyRamDamage	</buffs>
+    </script>
+  </nitroRamDamage5>
+  <invulnerability>
+    <id>	214	</id>
+    <userString>	#artefacts:invulnerability/name	</userString>
+    <description>	#artefacts:invulnerability/descr	</description>
+    <icon>	h_Shield 0 0	</icon>
+    <soundNotification>	hw19_ui_ability_button_ready	</soundNotification>
+    <activationWWSoundFeedback>	ev_halloween_2019_ability_shield_activation	</activationWWSoundFeedback>
+    <deactivationWWSoundFeedback>	ev_halloween_2019_ability_shield_deactivation	</deactivationWWSoundFeedback>
     <price>	20000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	notForSale medkit	</tags>
-    <script>	Repairkit	  <repairAll>	true	</repairAll>
-      <bonusValue>	0.30	</bonusValue>
-      <stunResistanceEffect>	0.0	</stunResistanceEffect>
-      <stunResistanceDuration>	0.0	</stunResistanceDuration>
-      <cooldownSeconds>	180	</cooldownSeconds>
+    <notInShop>	false	</notInShop>
+    <tags>	eventBuff event_battles	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+          <tags>	event_battles	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	BuffEquipment	  <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <durationSeconds>	7	</durationSeconds>
+      <cooldownSeconds>	150	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <buffs>	invulnerabilityPlayer	</buffs>
+    </script>
+  </invulnerability>
+  <instantReload>
+    <id>	203	</id>
+    <userString>	#artefacts:instantReload/name	</userString>
+    <description>	#artefacts:instantReload/descr	</description>
+    <icon>	h_Instant_reload 0 0	</icon>
+    <soundNotification>	hw19_ui_ability_button_ready	</soundNotification>
+    <activationWWSoundFeedback>	ev_halloween_2019_ability_instant_reload	</activationWWSoundFeedback>
+    <price>	3000	</price>
+    <notInShop>	False	</notInShop>
+    <tags>	instantReload event_battles	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+          <tags>	event_battles	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventEquipment	  <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <cooldownSeconds>	120	</cooldownSeconds>
+      <durationSeconds>	0	</durationSeconds>
       <reuseCount>	-1	</reuseCount>
     </script>
-    <kpi>
-      <mul>
-        <name>	crewHitChance	</name>
-        <value>	1.15	</value>
-      </mul>
-    </kpi>
-  </largeMedkit_wt>
+  </instantReload>
+  <hpRepairAndCrewHeal>
+    <id>	205	</id>
+    <userString>	#artefacts:hpRepairAndCrewHeal/name	</userString>
+    <description>	#artefacts:hpRepairAndCrewHeal/descr	</description>
+    <icon>	h_HP_repair 0 0	</icon>
+    <soundNotification>	hw19_ui_ability_button_ready	</soundNotification>
+    <activationWWSoundFeedback>	ev_halloween_2019_ability_hp_repair	</activationWWSoundFeedback>
+    <price>	20000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	hpRepairAndCrewHeal event_battles	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+          <tags>	event_battles	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	HpRepairAndCrewHealEquipment	  <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <cooldownSeconds>	120	</cooldownSeconds>
+      <durationSeconds>	30	</durationSeconds>
+      <immediateHealAmount>	400	</immediateHealAmount>
+      <isInterruptable>	true	</isInterruptable>
+      <reuseCount>	-1	</reuseCount>
+      <buffs>	enlargeHealth	</buffs>
+    </script>
+  </hpRepairAndCrewHeal>
+  <teamResupply>
+    <id>	209	</id>
+    <userString>	#artefacts:teamResupply/name	</userString>
+    <description>	#artefacts:teamResupply/descr	</description>
+    <icon>	h_Resuply 0 0	</icon>
+    <soundNotification>	hw19_ui_ability_button_ready	</soundNotification>
+    <activationWWSoundFeedback>	ev_halloween_2019_ability_resuply_point	</activationWWSoundFeedback>
+    <price>	3000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	eventItem event_battles	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+          <tags>	event_battles	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	RadiusEquipment	  <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <cooldownSeconds>	180	</cooldownSeconds>
+      <durationSeconds>	1	</durationSeconds>
+      <radius>	50	</radius>
+      <reuseCount>	-1	</reuseCount>
+      <buffs>	teamHealing	</buffs>
+    </script>
+  </teamResupply>
+  <teamRepairKit>
+    <id>	212	</id>
+    <userString>	#artefacts:teamRepairKit/name	</userString>
+    <description>	#artefacts:teamRepairKit/descr	</description>
+    <icon>	h_Repair_kit 0 0	</icon>
+    <soundNotification>	hw19_ui_ability_button_ready	</soundNotification>
+    <activationWWSoundFeedback>	ev_halloween_2019_ability_repair_kit_extinguisher	</activationWWSoundFeedback>
+    <price>	3000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	eventItem event_battles	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+          <tags>	event_battles	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	RadiusEquipment	  <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <cooldownSeconds>	180	</cooldownSeconds>
+      <durationSeconds>	1	</durationSeconds>
+      <radius>	50	</radius>
+      <reuseCount>	-1	</reuseCount>
+    </script>
+  </teamRepairKit>
+  <resurrect_equipment>
+    <id>	181	</id>
+    <userString>	#artefacts:resurrect_equipment/name	</userString>
+    <description>	#artefacts:resurrect_equipment/descr	</description>
+    <icon>	h_Resurrect 0 0	</icon>
+    <price>	42	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	resurrect event_battles	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventResurrectEquipment	  <shortDescription>	#artefacts:resurrect_equipment/descr	</shortDescription>
+      <longDescription>	#artefacts:resurrect_equipment/descr	</longDescription>
+    </script>
+  </resurrect_equipment>
 </equipments.xml>

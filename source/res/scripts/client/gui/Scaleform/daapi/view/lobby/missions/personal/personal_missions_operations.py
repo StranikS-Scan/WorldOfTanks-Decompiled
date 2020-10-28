@@ -6,6 +6,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.missions import missions_helper
 from gui.Scaleform.daapi.view.meta.PersonalMissionOperationsMeta import PersonalMissionOperationsMeta
 from gui.Scaleform.framework import g_entitiesFactories
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -23,15 +24,15 @@ class PersonalMissionOperations(LobbySubView, PersonalMissionOperationsMeta, Per
         self.__backAlias = ctx.get('previewAlias', VIEW_ALIAS.LOBBY_HANGAR)
 
     def showInfo(self):
-        g_eventBus.handleEvent(events.LoadViewEvent(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_VIEW_ALIAS), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_VIEW_ALIAS)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onOperationClick(self, branch, operationID):
         self.setBranch(branch)
         self.setOperationID(operationID)
-        g_eventBus.handleEvent(events.LoadViewEvent(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS, ctx={'previewAlias': self.getAlias()}), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS), ctx={'previewAlias': self.getAlias()}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def closeView(self):
-        event = g_entitiesFactories.makeLoadEvent(VIEW_ALIAS.LOBBY_HANGAR)
+        event = g_entitiesFactories.makeLoadEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR))
         self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _populate(self):

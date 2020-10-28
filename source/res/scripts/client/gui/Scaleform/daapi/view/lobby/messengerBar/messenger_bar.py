@@ -2,15 +2,17 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/messengerBar/messenger_bar.py
 from account_helpers.settings_core.settings_constants import SESSION_STATS
 from adisp import process
-from constants import PREBATTLE_TYPE
+from constants import PREBATTLE_TYPE, QUEUE_TYPE
+from frameworks.wulf import WindowLayer
 from gui import makeHtmlString
 from gui import SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import isReferralProgramEnabled
 from gui.Scaleform.daapi.view.lobby.session_stats.session_stats_settings_controller import SessionStatsSettingsController
 from gui.Scaleform.daapi.view.meta.MessengerBarMeta import MessengerBarMeta
-from gui.Scaleform.framework import ViewTypes, g_entitiesFactories
+from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.VEHICLE_COMPARE_CONSTANTS import VEHICLE_COMPARE_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -57,14 +59,13 @@ class _CompareBasketListener(object):
         self.__clearCartPopover()
         return
 
-    def __onChanged(self, changedData, settings=None):
+    def __onChanged(self, changedData):
         if changedData.addedCDs:
             cMgr = self.__getContainerManager()
-            if not cMgr.isViewAvailable(ViewTypes.LOBBY_SUB, {POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.VEHICLE_COMPARE}):
+            if not cMgr.isViewAvailable(WindowLayer.SUB_VIEW, {POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.VEHICLE_COMPARE}):
                 vehCmpData = self.comparisonBasket.getVehicleAt(changedData.addedIDXs[-1])
                 if not vehCmpData.isFromCache():
-                    hidePopover = settings.quiet if settings is not None else False
-                    if self.comparisonBasket.getVehiclesCount() == 1 and not hidePopover:
+                    if self.comparisonBasket.getVehiclesCount() == 1:
                         self.__view.as_openVehicleCompareCartPopoverS(True)
                     else:
                         vehicle = self.itemsCache.items.getItemByCD(vehCmpData.getVehicleCD())
@@ -74,7 +75,6 @@ class _CompareBasketListener(object):
                          'vehType': vehTypeIcon})
         if changedData.addedCDs or changedData.removedCDs:
             self.__updateBtnVisibility()
-        return
 
     def __updateBtnVisibility(self):
         isButtonVisible = self.__currentCartPopover is not None or self.comparisonBasket.getVehiclesCount() > 0
@@ -85,7 +85,7 @@ class _CompareBasketListener(object):
         return self.__view.app.containerManager
 
     def __onViewAddedToContainer(self, _, pyEntity):
-        if pyEntity.viewType == ViewTypes.WINDOW and pyEntity.alias == VEHICLE_COMPARE_CONSTANTS.VEHICLE_COMPARE_CART_POPOVER:
+        if pyEntity.layer == WindowLayer.WINDOW and pyEntity.alias == VEHICLE_COMPARE_CONSTANTS.VEHICLE_COMPARE_CART_POPOVER:
             if self.__currentCartPopover is not None:
                 raise SoftException('Attempt to initialize object 2nd time!')
             self.__currentCartPopover = pyEntity
@@ -113,7 +113,7 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
 
     def channelButtonClick(self):
         if not self.__manageWindow(MESSENGER_VIEW_ALIAS.CHANNEL_MANAGEMENT_WINDOW):
-            self.fireEvent(events.LoadViewEvent(MESSENGER_VIEW_ALIAS.CHANNEL_MANAGEMENT_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(events.LoadViewEvent(SFViewLoadParams(MESSENGER_VIEW_ALIAS.CHANNEL_MANAGEMENT_WINDOW)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def referralButtonClick(self):
         self.fireEvent(events.ReferralProgramEvent(events.ReferralProgramEvent.SHOW_REFERRAL_PROGRAM_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -176,17 +176,18 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
 
     def __handleFightButtonUpdated(self, event):
         state = self.prbDispatcher.getFunctionalState()
-        self.as_setReferralButtonEnabledS(not state.isNavigationDisabled())
+        isInEvent = self.prbEntity.getQueueType() == QUEUE_TYPE.EVENT_BATTLES
+        self.as_setReferralButtonEnabledS(not state.isNavigationDisabled() and not isInEvent)
 
     def __manageWindow(self, eventType):
         manager = self.app.containerManager
-        window = manager.getView(ViewTypes.WINDOW, {POP_UP_CRITERIA.VIEW_ALIAS: g_entitiesFactories.getAliasByEvent(eventType)})
+        window = manager.getView(WindowLayer.WINDOW, {POP_UP_CRITERIA.VIEW_ALIAS: g_entitiesFactories.getAliasByEvent(eventType)})
         result = window is not None
         if result:
             name = window.uniqueName
-            isOnTop = manager.as_isOnTopS(ViewTypes.WINDOW, name)
+            isOnTop = manager.as_isOnTopS(WindowLayer.WINDOW, name)
             if not isOnTop:
-                manager.as_bringToFrontS(ViewTypes.WINDOW, name)
+                manager.as_bringToFrontS(WindowLayer.WINDOW, name)
             else:
                 window.onWindowClose()
         return result

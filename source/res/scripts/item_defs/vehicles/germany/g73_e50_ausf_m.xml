@@ -42,8 +42,6 @@
       <armor_6>	40	</armor_6>
       <armor_8>	0	</armor_8>
       <armor_9>	40	</armor_9>
-      <armor_16>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-      </armor_16>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	35000	</weight>
@@ -84,6 +82,13 @@
     </hitTester>
     <hangarShadowTexture>	vehicles/german/G73_E50_Ausf_M/E50_Ausf_M_HangarShadowMap.dds	</hangarShadowTexture>
     <customizationSlots>
+      <slot>
+        <slotType>	sequence	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <attachNode>	HP_light2	</attachNode>
+      </slot>
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
@@ -972,7 +977,7 @@
         <slotType>	projectionDecal	</slotType>
         <slotId>	15065	</slotId>
         <compatibleModels>	Halloween_3Dst	</compatibleModels>
-        <position>	0.778868 1.67072 2.58338	</position>
+        <position>	0.778868 1.67072 2.59338	</position>
         <rotation>	0.371427 0.0193594 3.11842	</rotation>
         <scale>	0.76653 0.76653 0.766529	</scale>
         <doubleSided>	false	</doubleSided>
@@ -986,7 +991,7 @@
         <slotType>	projectionDecal	</slotType>
         <slotId>	15066	</slotId>
         <compatibleModels>	Halloween_3Dst	</compatibleModels>
-        <position>	-0.0300803 1.86216 -3.22366	</position>
+        <position>	-0.0300803 1.86216 -3.23366	</position>
         <rotation>	-3.13947 -0.000854969 -0.0043292	</rotation>
         <scale>	0.60827 0.608268 0.608268	</scale>
         <doubleSided>	false	</doubleSided>
@@ -1848,17 +1853,33 @@
       <price>	66000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	185	</armor_1>
+        <armor_1>	250	</armor_1>
         <armor_2>	150	</armor_2>
         <armor_3>	80	</armor_3>
         <armor_4>	80	</armor_4>
         <armor_5>	40	</armor_5>
         <armor_6>	40	</armor_6>
-        <armor_7>	150	</armor_7>
+        <armor_7>	80	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	100	</armor_9>
-        <armor_16>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-        </armor_16>
+        <armor_9>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_9>
+        <armor_10>	150	</armor_10>
+        <armor_12>	60	</armor_12>
+        <armor_13>	240	</armor_13>
+        <armor_14>	200	</armor_14>
+        <armor_15>	120	</armor_15>
+        <armor_16>	120	</armor_16>
+        <armor_17>	100	</armor_17>
+        <armor_18>	60	</armor_18>
+        <armor_19>	150	</armor_19>
+        <armor_20>	60	</armor_20>
+        <armor_21>	100	</armor_21>
+        <armor_22>	80	</armor_22>
+        <armor_23>	100	</armor_23>
+        <armor_24>	100	</armor_24>
+        <armor_25>	100	</armor_25>
+        <armor_26>	100	</armor_26>
+        <armor_27>	180	</armor_27>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	14100	</weight>
@@ -1888,16 +1909,34 @@
             <maxPitch>	0 8 0.069444 8 0.083333 8 0.402778 8 0.416667 7 0.583333 7 0.597222 8 0.916667 8 0.930556 8 1 8	</maxPitch>
           </pitchLimits>
           <armor>
-            <armor_1>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	270	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_5>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_5>
+            <armor_6>	180	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_7>
+            <armor_8>	180	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <armor_9>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_9>
+            <armor_10>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_10>
+            <armor_11>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_11>
+            <armor_12>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_12>
+            <armor_13>	240	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_13>
+            <armor_14>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_14>
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.3	</shotDispersionRadius>
@@ -1988,6 +2027,13 @@
       <physicsShape>	0.948 -0.135 0.987 0.000 0.610 0.100 0.931 0.485 0.398 0.500 0.309 0.500 0.209 0.509 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <customizationSlots>
+        <slot>
+          <slotType>	sequence	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0 0 0	</position>
+          <rotation>	0 0 0	</rotation>
+          <attachNode>	HP_light1	</attachNode>
+        </slot>
         <slot>
           <slotType>	paint	</slotType>
           <slotId>	31000	</slotId>
@@ -2456,7 +2502,7 @@
           <slotType>	projectionDecal	</slotType>
           <slotId>	35032	</slotId>
           <compatibleModels>	Halloween_3Dst	</compatibleModels>
-          <position>	-0.985302 2.34793 -0.727074	</position>
+          <position>	-0.985302 2.34793 -0.737074	</position>
           <rotation>	2.21995 1.228 -0.0657341	</rotation>
           <scale>	0.691525 0.691526 0.691525	</scale>
           <doubleSided>	false	</doubleSided>
@@ -2470,7 +2516,7 @@
           <slotType>	projectionDecal	</slotType>
           <slotId>	35033	</slotId>
           <compatibleModels>	Halloween_3Dst	</compatibleModels>
-          <position>	0.89739 2.34622 -1.00073	</position>
+          <position>	0.89739 2.34622 -1.01073	</position>
           <rotation>	2.02868 -1.32401 -0.0927613	</rotation>
           <scale>	0.691524 0.691524 0.691524	</scale>
           <doubleSided>	false	</doubleSided>
@@ -2484,7 +2530,7 @@
           <slotType>	projectionDecal	</slotType>
           <slotId>	35034	</slotId>
           <compatibleModels>	Halloween_3Dst	</compatibleModels>
-          <position>	-0.00929237 2.72398 -1.02567	</position>
+          <position>	-0.00929237 2.72398 -1.03567	</position>
           <rotation>	-3.13948 -0.000281334 -0.00433969	</rotation>
           <scale>	0.691523 0.691523 0.691523	</scale>
           <doubleSided>	false	</doubleSided>

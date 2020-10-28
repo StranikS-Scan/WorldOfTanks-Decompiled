@@ -5,6 +5,7 @@ import logging
 from constants import PREMIUM_TYPE, PremiumConfigs, DAILY_QUESTS_CONFIG
 from frameworks.wulf import Array, ViewFlags, ViewSettings
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyPremiumUrl
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl.lobby.missions.missions_helpers import needToUpdateQuestsInModel
 from gui.shared.event_dispatcher import showShop
 from shared_utils import first
@@ -55,14 +56,13 @@ class DailyQuestsView(ViewImpl):
     gameSession = dependency.descriptor(IGameSessionController)
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
-    __slots__ = ('__tooltipData', '__proxyMissionsPage', 'isCloseEnabled')
+    __slots__ = ('__tooltipData', '__proxyMissionsPage')
 
     def __init__(self, layoutID=R.views.lobby.missions.Daily()):
         viewSettings = ViewSettings(layoutID, ViewFlags.COMPONENT, DailyQuestsViewModel())
         super(DailyQuestsView, self).__init__(viewSettings)
         self.__tooltipData = {}
         self.__proxyMissionsPage = None
-        self.isCloseEnabled = True
         return
 
     @property
@@ -324,7 +324,7 @@ class DailyQuestsView(ViewImpl):
             tx.setInfoVisible(not isVisible)
 
     def __onCloseView(self):
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), EVENT_BUS_SCOPE.LOBBY)
 
     def __setCurrentTab(self, tabIdx, model):
         model.setCurrentTabIdx(tabIdx)
@@ -345,9 +345,7 @@ class DailyQuestsView(ViewImpl):
             _logger.error('Attempted to reroll quest which does not exist, reroll cancelled.')
             return
         quest = quests[questId]
-        self.isCloseEnabled = False
         result = yield daily_quests.DailyQuestReroll(quest).request()
-        self.isCloseEnabled = True
         if result.success:
             with self.viewModel.transaction() as tx:
                 self._markVisited(tx.getCurrentTabIdx(), tx)

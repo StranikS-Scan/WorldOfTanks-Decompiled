@@ -8,6 +8,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.event_progression.after_battle_reward_view_helpers import getProgressionIconVODict
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_prestige_progress import getPrestigeLevelAwardsVOs
 from gui.Scaleform.daapi.view.meta.EpicBattlesPrestigeViewMeta import EpicBattlesPrestigeViewMeta
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -50,7 +51,7 @@ class EpicBattlesPrestigeView(LobbySubView, EpicBattlesPrestigeViewMeta):
         maxPrestigeLevel = metaLevel.get('maxPrestigeLevel', 0)
         if 0 <= maxPrestigeLevel <= pPrestigeLevel:
             _logger.error('This line of code should never be reached!')
-            self.fireEvent(events.LoadViewEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_INFO_ALIAS), EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(events.LoadViewEvent(SFViewLoadParams(EPICBATTLES_ALIASES.EPIC_BATTLES_INFO_ALIAS)), EVENT_BUS_SCOPE.LOBBY)
             return
         awardsVO = getPrestigeLevelAwardsVOs(self.eventsCache.getAllQuests(), nextPrestigeLevel, AWARDS_SIZES.BIG)
         prestigeLvlTxt = i18n.makeString(EPIC_BATTLE.EPICBATTLESPRESTIGEVIEW_PRESTIGELEVEL, level=int2roman(nextPrestigeLevel + 1))
@@ -76,7 +77,7 @@ class EpicBattlesPrestigeView(LobbySubView, EpicBattlesPrestigeViewMeta):
             self.as_showSuccessfullPrestigeS()
 
     def __close(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __back(self):
-        self.fireEvent(events.LoadViewEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_INFO_ALIAS), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(EPICBATTLES_ALIASES.EPIC_BATTLES_INFO_ALIAS)), EVENT_BUS_SCOPE.LOBBY)

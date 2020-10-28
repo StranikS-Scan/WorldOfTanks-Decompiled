@@ -10,7 +10,7 @@ from gui.impl.gen.view_models.views.buy_vehicle_view.additional_equipment_slot_m
 class EquipmentBlockModel(ViewModel):
     __slots__ = ('onSelectTradeOffVehicle', 'onCancelTradeOffVehicle')
 
-    def __init__(self, properties=22, commands=2):
+    def __init__(self, properties=24, commands=2):
         super(EquipmentBlockModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -133,6 +133,18 @@ class EquipmentBlockModel(ViewModel):
     def setIsRentVisible(self, value):
         self._setBool(21, value)
 
+    def getPersonalTradeInIsEnabled(self):
+        return self._getBool(22)
+
+    def setPersonalTradeInIsEnabled(self, value):
+        self._setBool(22, value)
+
+    def getTradeInTooltip(self):
+        return self._getString(23)
+
+    def setTradeInTooltip(self, value):
+        self._setString(23, value)
+
     def _initialize(self):
         super(EquipmentBlockModel, self)._initialize()
         self._addViewModelProperty('totalPrice', ListModel())
@@ -157,5 +169,7 @@ class EquipmentBlockModel(ViewModel):
         self._addNumberProperty('confirmGoldPrice', 0)
         self._addBoolProperty('popoverIsAvailable', False)
         self._addBoolProperty('isRentVisible', False)
+        self._addBoolProperty('personalTradeInIsEnabled', False)
+        self._addStringProperty('tradeInTooltip', '')
         self.onSelectTradeOffVehicle = self._addCommand('onSelectTradeOffVehicle')
         self.onCancelTradeOffVehicle = self._addCommand('onCancelTradeOffVehicle')

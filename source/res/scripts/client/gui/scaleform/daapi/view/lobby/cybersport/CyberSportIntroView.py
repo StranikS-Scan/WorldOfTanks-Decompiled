@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/CyberSportIntroView.py
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from helpers import dependency
@@ -61,7 +62,7 @@ class CyberSportIntroView(CyberSportIntroMeta):
     def showSelectorPopup(self):
         rosterSettings = self.prbEntity.getRosterSettings()
         self._currentVehCD = -1
-        self.fireEvent(events.LoadViewEvent(CYBER_SPORT_ALIASES.VEHICLE_SELECTOR_POPUP_PY, ctx={'isMultiSelect': False,
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(CYBER_SPORT_ALIASES.VEHICLE_SELECTOR_POPUP_PY), ctx={'isMultiSelect': False,
          'infoText': CYBERSPORT.WINDOW_VEHICLESELECTOR_INFO_INTRO,
          'titleText': CYBERSPORT.WINDOW_VEHICLESELECTOR_TITLE,
          'selectButton': CYBERSPORT.WINDOW_VEHICLESELECTOR_BUTTONS_SELECT,
@@ -141,7 +142,7 @@ class CyberSportIntroView(CyberSportIntroMeta):
             elif vehicle.type not in _ACCEPTED_VEH_TYPES:
                 isReadyVehicle = False
                 warnTooltip = TOOLTIPS.CYBERSPORT_INTRO_SELECTEDVEHICLEWARN_INCOMPATIBLETYPE
-            elif vehicle.isOnlyForEpicBattles or vehicle.isOnlyForBob:
+            elif vehicle.isOnlyForEpicBattles:
                 isReadyVehicle = False
                 warnTooltip = TOOLTIPS.CYBERSPORT_UNIT_FIGHTBTN_EVENTVEHICLEWRONGMODE
             else:

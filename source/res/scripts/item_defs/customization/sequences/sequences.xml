@@ -33,69 +33,48 @@
     </sequence>
     <sequence>
       <id>	4	</id>
-      <name>	wt_hunter_gun	</name>
-      <sequenceName>	particles/Environment/event_white_tiger/player_tank/tank_idle/wt_hunter_gun_idle.seq	</sequenceName>
-      <sequenceLogic>	hunter_idle	</sequenceLogic>
+      <name>	Game style. Do not use in event !	</name>
+      <sequenceName>	particles/Tank/customization/style_hlw_hull.ssm	</sequenceName>
     </sequence>
     <sequence>
       <id>	5	</id>
-      <name>	wt_hunter_turret	</name>
-      <sequenceName>	particles/Environment/event_white_tiger/player_tank/tank_idle/hunter_progressbar.ssm	</sequenceName>
-      <sequenceLogic>	hunter_progress	</sequenceLogic>
+      <name>	Game style. Do not use in event !	</name>
+      <sequenceName>	particles/Tank/customization/style_hlw_turret.ssm	</sequenceName>
     </sequence>
     <sequence>
       <id>	6	</id>
-      <name>	wt_hunter_turret_idle	</name>
-      <sequenceName>	particles/Environment/event_white_tiger/player_tank/tank_idle/wt_hunter_turret.ssm	</sequenceName>
-      <sequenceLogic>	hunter_collector	</sequenceLogic>
+      <name>	Halloween Event common	</name>
+      <sequenceName>	particles/Tank/customization/event_halloween_2019/hell_headlight.ssm	</sequenceName>
     </sequence>
     <sequence>
       <id>	7	</id>
-      <name>	wt_boss_shield_status	</name>
-      <sequenceName>	particles/Environment/event_white_tiger/enemies/Waffentrager_E100_idle/Waffentrager_E100_shield_indicator.ssm	</sequenceName>
-      <sequenceLogic>	shield_indicator	</sequenceLogic>
+      <name>	Halloween Event boss	</name>
+      <sequenceName>	particles/Tank/customization/event_halloween_2019/hellboss_headlight.ssm	</sequenceName>
     </sequence>
     <sequence>
       <id>	8	</id>
-      <name>	wt_boss_turret_idle	</name>
-      <sequenceName>	particles/Environment/event_white_tiger/enemies/Waffentrager_E100_idle/Waffentrager_E100_idle_turret.seq	</sequenceName>
-      <sequenceLogic>	boss_idle	</sequenceLogic>
+      <name>	Halloween Event minion hull	</name>
+      <sequenceName>	particles/Tank/customization/event_halloween_2019/hellminion_headlight_hull.ssm	</sequenceName>
     </sequence>
     <sequence>
       <id>	9	</id>
-      <name>	wt_boss_hull_idle	</name>
-      <sequenceName>	particles/Environment/event_white_tiger/enemies/Waffentrager_E100_idle/Waffentrager_E100_idle_hull.seq	</sequenceName>
-      <sequenceLogic>	boss_idle	</sequenceLogic>
+      <name>	Halloween Event minion turret	</name>
+      <sequenceName>	particles/Tank/customization/event_halloween_2019/hellminion_headlight_turret.ssm	</sequenceName>
     </sequence>
     <sequence>
       <id>	10	</id>
-      <name>	wt_boss_gun_idle	</name>
-      <sequenceName>	particles/Environment/event_white_tiger/enemies/Waffentrager_E100_idle/Waffentrager_E100_idle_gun.seq	</sequenceName>
-      <sequenceLogic>	boss_idle	</sequenceLogic>
+      <name>	Halloween Event minion turret base	</name>
+      <sequenceName>	particles/Tank/customization/event_halloween_2019/hellminion_turret_base.seq	</sequenceName>
     </sequence>
     <sequence>
       <id>	11	</id>
-      <name>	wt_boss_shield_status	</name>
-      <sequenceName>	particles/Environment/event_white_tiger/enemies/Waffentrager_E100_idle/Waffentrager_E100_shield_indicator.ssm	</sequenceName>
-      <sequenceLogic>	shield_indicator_special	</sequenceLogic>
+      <name>	Halloween Event enemy leader	</name>
+      <sequenceName>	particles/eff_sequence/hw_enemy_leader.seq	</sequenceName>
     </sequence>
     <sequence>
       <id>	12	</id>
-      <name>	wt_boss_turret_idle	</name>
-      <sequenceName>	particles/Environment/event_white_tiger/enemies/Waffentrager_E100_idle/Waffentrager_E100_idle_turret.seq	</sequenceName>
-      <sequenceLogic>	boss_idle_special	</sequenceLogic>
-    </sequence>
-    <sequence>
-      <id>	13	</id>
-      <name>	wt_boss_hull_idle	</name>
-      <sequenceName>	particles/Environment/event_white_tiger/enemies/Waffentrager_E100_idle/Waffentrager_E100_idle_hull.seq	</sequenceName>
-      <sequenceLogic>	boss_idle_special	</sequenceLogic>
-    </sequence>
-    <sequence>
-      <id>	14	</id>
-      <name>	wt_boss_gun_idle	</name>
-      <sequenceName>	particles/Environment/event_white_tiger/enemies/Waffentrager_E100_idle/Waffentrager_E100_idle_gun.seq	</sequenceName>
-      <sequenceLogic>	boss_idle_special	</sequenceLogic>
+      <name>	G89 Leopard1 Game style	</name>
+      <sequenceName>	particles/Tank/customization/style_hlw_turret_violet.ssm	</sequenceName>
     </sequence>
   </itemGroup>
 </sequences.xml>

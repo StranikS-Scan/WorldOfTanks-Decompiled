@@ -10,13 +10,12 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.impl import backport
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.time_formatters import RentLeftFormatter
-from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES, getVehicleStateIcon, getVehicleStateAddIcon, getBattlesLeft, getSmallIconPath, getIconPath, VEHICLE_EVENT_TYPE, VEHICLE_TAGS
+from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES, getVehicleStateIcon, getVehicleStateAddIcon, getBattlesLeft, getSmallIconPath, getIconPath
 from gui.shared.gui_items.dossier.achievements import isMarkOfMasteryAchieved
 from gui.shared.utils.requesters import REQ_CRITERIA
-from helpers import dependency
 from helpers.i18n import makeString as ms
+from helpers import dependency
 from skeletons.gui.game_control import IBattleRoyaleController
-from skeletons.gui.game_control import ILowTierMMController
 
 def sortedIndices(seq, getter, reverse=False):
     return sorted(range(len(seq)), key=lambda idx: getter(seq[idx]), reverse=reverse)
@@ -37,7 +36,8 @@ def _isLockedBackground(vState, vStateLvl):
          Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT,
          Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE,
          Vehicle.VEHICLE_STATE.NOT_PRESENT,
-         Vehicle.VEHICLE_STATE.GROUP_IS_NOT_READY)
+         Vehicle.VEHICLE_STATE.GROUP_IS_NOT_READY,
+         Vehicle.VEHICLE_STATE.DISABLED)
     else:
         result = False
     return result
@@ -58,7 +58,6 @@ def getStatusStrings(vState, vStateLvl=Vehicle.VEHICLE_STATE_LEVEL.INFO, substit
 
 
 def getVehicleDataVO(vehicle):
-    lowTierMMController = dependency.instance(ILowTierMMController)
     rentInfoText = RentLeftFormatter(vehicle.rentInfo, vehicle.isPremiumIGR).getRentLeftStr()
     vState, vStateLvl = vehicle.getState()
     if vehicle.isRotationApplied():
@@ -86,8 +85,6 @@ def getVehicleDataVO(vehicle):
     tankType = '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type
     current, maximum = vehicle.getCrystalsEarnedInfo()
     isCrystalsLimitReached = current == maximum
-    isEarnCrystals = vehicle.isEarnCrystals if not vehicle.isEvent else False
-    isWulfTooltip = VEHICLE_TAGS.EVENT in vehicle.tags
     return {'id': vehicle.invID,
      'intCD': vehicle.intCD,
      'infoText': largeStatus,
@@ -104,7 +101,6 @@ def getVehicleDataVO(vehicle):
      'level': vehicle.level,
      'premium': vehicle.isPremium,
      'favorite': vehicle.isFavorite,
-     'giveaway': vehicle.isLowTierEvent and lowTierMMController.isEnabled(),
      'nation': vehicle.nationID,
      'xpImgSource': bonusImage,
      'tankType': tankType,
@@ -116,18 +112,15 @@ def getVehicleDataVO(vehicle):
      'isCritInfo': vStateLvl == Vehicle.VEHICLE_STATE_LEVEL.CRITICAL,
      'isRentPromotion': vehicle.isRentPromotion and not vehicle.isRented,
      'isNationChangeAvailable': vehicle.hasNationGroup,
-     'isEarnCrystals': isEarnCrystals,
+     'isEarnCrystals': vehicle.isEarnCrystals,
      'isCrystalsLimitReached': isCrystalsLimitReached,
      'isUseRightBtn': True,
-     'tooltip': TOOLTIPS_CONSTANTS.WULF_CAROUSEL_VEHICLE if isWulfTooltip else TOOLTIPS_CONSTANTS.CAROUSEL_VEHICLE,
-     'isEventVehicle': vehicle.isEvent,
-     'isEventVehicleSpecial': vehicle.isEvent and vehicle.eventType == VEHICLE_EVENT_TYPE.EVENT_SPECIAL_BOSS,
-     'isWulfTooltip': isWulfTooltip}
+     'tooltip': TOOLTIPS_CONSTANTS.CAROUSEL_VEHICLE,
+     'isEvent': vehicle.isOnlyForEventBattles}
 
 
 class CarouselDataProvider(SortableDAAPIDataProvider):
     _battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
-    lowTierMMController = dependency.descriptor(ILowTierMMController)
 
     def __init__(self, carouselFilter, itemsCache, currentVehicle):
         super(CarouselDataProvider, self).__init__()
@@ -143,7 +136,6 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         self._randomStats = None
         self._filter.load()
         self.__sortedIndices = []
-        self.lowTierMMController.onEventStateChanged += self.updateVehicles
         return
 
     def hasRentedVehicles(self):
@@ -160,6 +152,9 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
 
     def getRentPromotionVehiclesCount(self):
         return len(self._getFilteredVehicles(REQ_CRITERIA.VEHICLE.RENT_PROMOTION))
+
+    def getEventVehiclesCount(self):
+        return len(self._itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EVENT_BATTLE))
 
     def getCurrentVehiclesCount(self):
         return len(self._filteredIndices)
@@ -191,7 +186,6 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         self._selectedIdx = -1
 
     def fini(self):
-        self.lowTierMMController.onEventStateChanged -= self.updateVehicles
         self.clear()
         self.destroy()
 

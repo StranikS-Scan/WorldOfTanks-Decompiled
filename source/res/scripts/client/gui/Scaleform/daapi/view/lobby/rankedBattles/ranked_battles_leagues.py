@@ -57,7 +57,7 @@ class RankedBattlesLeaguesView(RankedBattlesLeaguesViewMeta, IResetablePage):
         self.as_setEfficiencyDataS(leagues_vos.getEfficiencyVO(currentSeasonEfficiency, currentSeasonEfficiencyDiff))
 
     def __setEmptyLeagueAndPositionData(self):
-        self.as_setDataS(leagues_vos.getLeagueVO(UNDEFINED_LEAGUE_ID, False, False, 0))
+        self.as_setDataS(leagues_vos.getLeagueVO(UNDEFINED_LEAGUE_ID, False, False, 0, self.rankedController.isYearLBEnabled()))
         self.as_setRatingDataS(leagues_vos.getRatingVO(None))
         return
 
@@ -66,7 +66,7 @@ class RankedBattlesLeaguesView(RankedBattlesLeaguesViewMeta, IResetablePage):
         if webInfo.league == UNDEFINED_LEAGUE_ID:
             webInfo = self.rankedController.getClientSeasonInfo()
         if webInfo.league != UNDEFINED_LEAGUE_ID and webInfo.position is not None:
-            self.as_setDataS(leagues_vos.getLeagueVO(webInfo.league, webInfo.isSprinter, webInfo.isTop, self.rankedController.getYearLBSize()))
+            self.as_setDataS(leagues_vos.getLeagueVO(webInfo.league, webInfo.isSprinter, webInfo.isTop, self.rankedController.getYearLBSize(), self.rankedController.isYearLBEnabled()))
             self.as_setRatingDataS(leagues_vos.getRatingVO(webInfo.position))
         return
 

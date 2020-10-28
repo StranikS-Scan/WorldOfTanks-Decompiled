@@ -36,12 +36,22 @@
       <improvedVentilation_class2_user></improvedVentilation_class2_user>
       <improvedVentilation_class3_user></improvedVentilation_class3_user>
       <afterburning_user></afterburning_user>
-      <trappoint_user></trappoint_user>
       <antifragmentationLining_light_user></antifragmentationLining_light_user>
       <antifragmentationLining_medium_user></antifragmentationLining_medium_user>
       <antifragmentationLining_heavy_user></antifragmentationLining_heavy_user>
+      <trappoint_user></trappoint_user>
+      <lightTankArtefacts_User></lightTankArtefacts_User>
+      <enhancedVertical_springs_user></enhancedVertical_springs_user>
+      <enhancedHorizontal_springs_user></enhancedHorizontal_springs_user>
+      <enhancedSprings_class2_user></enhancedSprings_class2_user>
+      <enhancedSprings_class3_user></enhancedSprings_class3_user>
+      <enhancedHorizontal_springs_class2_user></enhancedHorizontal_springs_class2_user>
+      <enhancedHorizontal_springs_class3_user></enhancedHorizontal_springs_class3_user>
+      <enhancedVertical_springs_class2_user></enhancedVertical_springs_class2_user>
+      <enhancedVertical_springs_class3_user></enhancedVertical_springs_class3_user>
+      <enhancedVertical_elastic_elements_user></enhancedVertical_elastic_elements_user>
+      <enhancedHorizontal_elastic_elements_user></enhancedHorizontal_elastic_elements_user>
       <antifragmentationLining_superheavy_user></antifragmentationLining_superheavy_user>
-      <antifragmentationLining_megaheavy_user></antifragmentationLining_megaheavy_user>
       <tankRammer_class1_user></tankRammer_class1_user>
       <tankRammer_class2_user></tankRammer_class2_user>
       <aimingStabilizer_class1_user></aimingStabilizer_class1_user>
@@ -64,9 +74,9 @@
       <special></special>
       <disabledInRoaming></disabledInRoaming>
       <event_battles></event_battles>
-      <event_boss></event_boss>
-      <event_hunter></event_hunter>
-      <special_event_boss></special_event_boss>
+      <event_premium_vehicle></event_premium_vehicle>
+      <event_not_elite_vehicle></event_not_elite_vehicle>
+      <event_overturn_recovery></event_overturn_recovery>
       <fallout></fallout>
       <epic_battles></epic_battles>
       <bob></bob>
@@ -104,7 +114,6 @@
       <earn_crystals></earn_crystals>
       <lockOptionalDevices></lockOptionalDevices>
       <spawned></spawned>
-      <lowTierEvent></lowTierEvent>
     </tags>
   </vehicle>
   <vehicleChassis>
@@ -213,9 +222,12 @@
       <premium_equipment></premium_equipment>
       <builtin></builtin>
       <trophyUpgraded></trophyUpgraded>
-      <instant_shoot></instant_shoot>
       <eventItem></eventItem>
-      <eventAltItem></eventAltItem>
+      <eventBuff></eventBuff>
+      <event_battles></event_battles>
+      <hpRepairAndCrewHeal></hpRepairAndCrewHeal>
+      <resurrect></resurrect>
+      <instantReload></instantReload>
     </tags>
   </equipment>
   <customizationItem>
@@ -271,7 +283,7 @@
       <Kursk_battle></Kursk_battle>
       <Halloween></Halloween>
       <offspringArenaMusic></offspringArenaMusic>
-      <WTEvent></WTEvent>
+      <event_battles></event_battles>
     </tags>
   </customizationItem>
   <crewSkin>

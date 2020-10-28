@@ -81,6 +81,15 @@
   <pageFileMemoryLoadThreshold>	99.0	</pageFileMemoryLoadThreshold>
   <physicalMemoryLoadThreshold>	99.0	</physicalMemoryLoadThreshold>
   <scaleformMemoryLoadThreshold>	90.0	</scaleformMemoryLoadThreshold>
+  <scaleformGC>
+    <suspend>	false	</suspend>
+    <suspendDuringLoad>	true	</suspendDuringLoad>
+    <framesBetweenCollections>	0	</framesBetweenCollections>
+    <maxCollectionRoots>	1000	</maxCollectionRoots>
+    <runsToCollectOld>	10	</runsToCollectOld>
+    <runsToCollectYoung>	5	</runsToCollectYoung>
+    <runsToUpgradeGen>	5	</runsToUpgradeGen>
+  </scaleformGC>
   <debugKeys>
     <combination>
       <key>	APPS	</key>
@@ -193,16 +202,10 @@
     <WWISE_emergency_profile>	WWISE_low_profile	</WWISE_emergency_profile>
     <WWISE_adv_profile>
       <memoryManager>
-        <defaultPool>	13	</defaultPool>
-        <lowEnginePool>	10	</lowEnginePool>
-        <streamingPool>	2	</streamingPool>
         <IOPoolSize>	4	</IOPoolSize>
         <IOGranularity>	16	</IOGranularity>
       </memoryManager>
       <memoryManager_64bit>
-        <defaultPool>	24	</defaultPool>
-        <lowEnginePool>	10	</lowEnginePool>
-        <streamingPool>	2	</streamingPool>
         <IOPoolSize>	4	</IOPoolSize>
         <IOGranularity>	16	</IOGranularity>
       </memoryManager_64bit>
@@ -225,12 +228,6 @@
       <SFX_soundbanks_loadonce>
         <project>
           <name>	ambient.pck	</name>
-        </project>
-        <project>
-          <name>	ev_white_tiger_2020_voiceover.pck	</name>
-        </project>
-        <project>
-          <name>	ev_white_tiger_2020_voiceover.bnk	</name>
         </project>
         <project>
           <name>	ambient_2D.pck	</name>
@@ -302,16 +299,10 @@
           <name>	wheel_vehicle_GUI.pck	</name>
         </project>
         <project>
-          <name>	weekend_brawl.pck	</name>
-        </project>
-        <project>
           <name>	plugin_media.bnk	</name>
         </project>
         <project>
           <name>	impacts_full.pck	</name>
-        </project>
-        <project>
-          <name>	inbattle_communication_npc.bnk	</name>
         </project>
         <project>
           <name>	ev_battle_royale_2019_music.bnk	</name>
@@ -352,25 +343,13 @@
           <name>	researches.bnk	</name>
         </project>
         <project>
-          <name>	weekend_brawl.bnk	</name>
-        </project>
-        <project>
           <name>	tasks.bnk	</name>
-        </project>
-        <project>
-          <name>	ev_10y_countdown_hangar.bnk	</name>
-        </project>
-        <project>
-          <name>	ev_10y_countdown_hangar.pck	</name>
         </project>
         <project>
           <name>	cons_hangar.bnk	</name>
         </project>
         <project>
-          <name>	ev_white_tiger_2020_hangar.bnk	</name>
-        </project>
-        <project>
-          <name>	ev_white_tiger_2020_hangar.pck	</name>
+          <name>	dog_tags_hangar.bnk	</name>
         </project>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
@@ -445,6 +424,9 @@
         <project>
           <name>	consumables.bnk	</name>
         </project>
+        <project>
+          <name>	inbattle_communication_npc.bnk	</name>
+        </project>
       </SFX_soundbanks_arena>
       <SFX_soundbanks_editor>
         <project>
@@ -463,16 +445,10 @@
     </WWISE_adv_profile>
     <WWISE_low_profile>
       <memoryManager>
-        <defaultPool>	8	</defaultPool>
-        <lowEnginePool>	6	</lowEnginePool>
-        <streamingPool>	2	</streamingPool>
         <IOPoolSize>	4	</IOPoolSize>
         <IOGranularity>	16	</IOGranularity>
       </memoryManager>
       <memoryManager_64bit>
-        <defaultPool>	24	</defaultPool>
-        <lowEnginePool>	10	</lowEnginePool>
-        <streamingPool>	2	</streamingPool>
         <IOPoolSize>	4	</IOPoolSize>
         <IOGranularity>	16	</IOGranularity>
       </memoryManager_64bit>
@@ -597,6 +573,9 @@
         </project>
         <project>
           <name>	mechanisms.bnk	</name>
+        </project>
+        <project>
+          <name>	inbattle_communication_npc.bnk	</name>
         </project>
       </SFX_soundbanks_arena>
       <SFX_soundbanks_editor>

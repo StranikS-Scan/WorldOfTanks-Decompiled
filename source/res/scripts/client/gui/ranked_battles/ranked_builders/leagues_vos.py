@@ -14,7 +14,7 @@ def getEfficiencyVO(currentSeasonEfficiency, currentSeasonEfficiencyDiff):
     return resultVO
 
 
-def getLeagueVO(leagueID, isSprinter, isTop, yearLBsize):
+def getLeagueVO(leagueID, isSprinter, isTop, yearLBsize, isYearLBEnabled):
     resShortCut = R.strings.ranked_battles.rankedBattleMainView.leaguesView
     title = backport.text(resShortCut.unavailableTitle())
     desc = backport.text(resShortCut.unavailableDescr())
@@ -25,7 +25,9 @@ def getLeagueVO(leagueID, isSprinter, isTop, yearLBsize):
         descRes = resShortCut.topDescr() if isTop else resShortCut.descr()
         desc = backport.text(descRes, count=yearLBsize)
         sprinterImg = backport.image(R.images.gui.maps.icons.rankedBattles.sprinter_icon()) if isSprinter else ''
-        topText = backport.text(resShortCut.top(), count=yearLBsize) if isTop else ''
+        topText = backport.text(resShortCut.top(), count=yearLBsize) if isTop and isYearLBEnabled else ''
+    if not isYearLBEnabled:
+        desc = backport.text(resShortCut.yearLeaderboardDisabled())
     return {'title': title,
      'descr': desc,
      'league': leagueID,

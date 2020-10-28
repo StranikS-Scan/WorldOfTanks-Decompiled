@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/crew_book.py
 import nations
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
 from gui.impl.gen import R
 from items import tankmen, parseIntCompactDescr
@@ -91,16 +92,15 @@ class CrewBook(FittingItem):
             iconName += '_' + self.getNation()
         return iconName
 
+    def getShopIcon(self, size='large'):
+        return RES_ICONS.getCrewBookIcon(size, self.getBonusIconName())
+
     def getGUIEmblemID(self):
         return '{}_{}'.format(self.itemTypeName, self.getBookType())
 
     def getOldStyleIcon(self, size='large'):
         resId = R.images.gui.maps.icons.crewBooks.books.dyn(size).dyn(getIconResourceName(self.icon))()
         return func_utils.makeFlashPath(backport.image(resId)[6:])
-
-    def getDefaultTypeIcon(self, size='small'):
-        iconName = getIconResourceName(self.icon) if self.isPersonal() or self.hasNoNation() else 'brochure_ussr'
-        return backport.image(R.images.gui.maps.icons.crewBooks.books.dyn(size).dyn(iconName)())
 
     def formattedShortDescription(self, formatter):
         description = self.shortDescription
@@ -127,7 +127,7 @@ class CrewBook(FittingItem):
 
     @property
     def shortDescription(self):
-        return backport.text(R.strings.crew_books.items.dyn(self.getBookSpread()).Descr(), exp=self.getXP())
+        return backport.text(R.strings.crew_books.items.dyn(self.getBookSpread()).Descr(), exp=backport.getIntegralFormat(self.getXP()))
 
     @property
     def icon(self):

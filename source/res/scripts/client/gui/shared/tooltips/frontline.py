@@ -92,7 +92,7 @@ class FrontlineRankTooltipData(BlocksTooltipData):
         return formatters.packTextBlockData(text=_ms(text_styles.middleTitle(TOOLTIPS.FRONTLINERANK_HEADER), rank=_ms(EPIC_BATTLE.getRankLabel(max(self.__rank, 1)))))
 
     def _getBottom(self):
-        if self.__rank > 0:
+        if self.__rank > 1:
             rankSettings = self.__frontLine.getPlayerRanksInfo()
             exp, bonus = rankSettings.get(self.__rank, (0, 0))
             blocks = [formatters.packTextBlockData(text=_ms(text_styles.main(TOOLTIPS.FRONTLINERANK_EXP), exp=text_styles.gold(exp))), formatters.packTextBlockData(text=_ms(text_styles.main(TOOLTIPS.FRONTLINERANK_EXPBONUS), bonus=text_styles.gold('+%d%%' % bonus)))]

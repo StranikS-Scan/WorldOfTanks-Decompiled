@@ -5,6 +5,7 @@ import AnimationSequence
 from ClientSelectableObject import ClientSelectableObject
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared import g_eventBus, events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from helpers import dependency
@@ -56,7 +57,7 @@ class ClientSelectableEasterEgg(ClientSelectableObject):
 
     def onMouseClick(self):
         super(ClientSelectableEasterEgg, self).onMouseClick()
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.IMAGE_VIEW, ctx={'img': self.__getImageName()}), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.IMAGE_VIEW), ctx={'img': self.__getImageName()}), EVENT_BUS_SCOPE.LOBBY)
 
     def __getImageName(self):
         nameParts = [self.imageName]

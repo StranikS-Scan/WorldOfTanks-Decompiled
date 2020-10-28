@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/managers/voice_chat.py
+from frameworks.wulf import WindowLayer
 from messenger.proto.events import g_messengerEvents
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import ViewTypes
 from gui.shared.utils import getPlayerDatabaseID
 from gui import DialogsInterface
 from messenger.m_constants import PROTO_TYPE
@@ -67,7 +67,7 @@ class BaseVoiceChatManager(VoiceChatManagerMeta):
         self.as_onPlayerSpeakS(accountDBID, isSpeak, accountDBID == getPlayerDatabaseID())
 
     def __onViewAddedToContainer(self, _, pyView):
-        if pyView.viewType == ViewTypes.DEFAULT:
+        if pyView.layer == WindowLayer.VIEW:
             self._onViewAdded(pyView.alias)
 
 

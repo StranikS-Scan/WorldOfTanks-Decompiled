@@ -1248,14 +1248,6 @@
       <userString>	#vehicle_customization:repaint/10years_grandfather	</userString>
     </paint>
     <paint>
-      <id>	46	</id>
-      <texture>	gui/maps/vehicles/repaints/custom_color_17.png	</texture>
-      <color>	174 169 155 255	</color>
-      <gloss>	0.509	</gloss>
-      <metallic>	0.203	</metallic>
-      <userString>	#vehicle_customization:repaint/10years_m4a1	</userString>
-    </paint>
-    <paint>
       <id>	43	</id>
       <texture>	gui/maps/vehicles/repaints/germany_base_color.png	</texture>
       <color>	71 71 71 255	</color>
@@ -1270,6 +1262,14 @@
       <gloss>	0.67	</gloss>
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/10years_panzer58	</userString>
+    </paint>
+    <paint>
+      <id>	46	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_17.png	</texture>
+      <color>	174 169 155 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.203	</metallic>
+      <userString>	#vehicle_customization:repaint/10years_m4a1	</userString>
     </paint>
     <paint>
       <id>	51	</id>
@@ -1345,6 +1345,15 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/twitch_september_2020	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	65	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_22.png	</texture>
+      <color>	17 8 12 255	</color>
+      <gloss>	0.68	</gloss>
+      <metallic>	0.17	</metallic>
+      <userString>	#vehicle_customization:repaint/twitch_october_2020	</userString>
       <tags>	hiddenInUI	</tags>
     </paint>
     <usages>
@@ -1443,6 +1452,126 @@
     </usages>
   </itemGroup>
   <itemGroup>
+    <name>	Gamescom 2020	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	57	</id>
+      <texture>	gui/maps/vehicles/repaints/france_base_color.png	</texture>
+      <color>	58 71 84 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/gamescom_2020	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	The First Horseman	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	41	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_39.png	</texture>
+      <color>	163 181 198 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/the_first_horseman	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	White Tiger	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	61	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_base_color.png	</texture>
+      <color>	61 62 63 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.25	</metallic>
+      <userString>	#vehicle_customization:repaint/white_tiger_2020	</userString>
+    </paint>
+    <paint>
+      <id>	62	</id>
+      <texture>	gui/maps/vehicles/repaints/france_color_05.png	</texture>
+      <color>	73 57 55 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.095	</metallic>
+      <userString>	#vehicle_customization:repaint/white_tiger_2020_hounds	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	Battle Pass 2020 Non-Historical	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	59	</id>
+      <texture>	gui/maps/vehicles/repaints/ussr_color_05.png	</texture>
+      <color>	76 75 61 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/battlepass_2020_ussr	</userString>
+    </paint>
+    <paint>
+      <id>	60	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_29.png	</texture>
+      <color>	157 160 165 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/battlepass_2020_usa	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
     <name>	Steel Hunter 2020	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
@@ -1497,66 +1626,6 @@
     </usages>
   </itemGroup>
   <itemGroup>
-    <name>	Gamescom 2020	</name>
-    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
-    <season>	ALL	</season>
-    <historical>	false	</historical>
-    <priceGroup>	paints 20g notInShop	</priceGroup>
-    <vehicleFilter>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <paint>
-      <id>	57	</id>
-      <texture>	gui/maps/vehicles/repaints/france_base_color.png	</texture>
-      <color>	58 71 84 255	</color>
-      <gloss>	0.509	</gloss>
-      <metallic>	0.23	</metallic>
-      <userString>	#vehicle_customization:repaint/gamescom_2020	</userString>
-    </paint>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
-  </itemGroup>
-  <itemGroup>
-    <name>	Battle Pass 2020 Non-Historical	</name>
-    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
-    <season>	ALL	</season>
-    <historical>	false	</historical>
-    <priceGroup>	paints 20g notInShop	</priceGroup>
-    <vehicleFilter>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <paint>
-      <id>	59	</id>
-      <texture>	gui/maps/vehicles/repaints/ussr_color_05.png	</texture>
-      <color>	76 75 61 255	</color>
-      <gloss>	0.509	</gloss>
-      <metallic>	0.23	</metallic>
-      <userString>	#vehicle_customization:repaint/battlepass_2020_ussr	</userString>
-    </paint>
-    <paint>
-      <id>	60	</id>
-      <texture>	gui/maps/vehicles/repaints/custom_color_29.png	</texture>
-      <color>	157 160 165 255	</color>
-      <gloss>	0.509	</gloss>
-      <metallic>	0.23	</metallic>
-      <userString>	#vehicle_customization:repaint/battlepass_2020_usa	</userString>
-    </paint>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
-  </itemGroup>
-  <itemGroup>
     <name>	CS_52_LIS Autumn Marathon	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
@@ -1584,7 +1653,7 @@
     </usages>
   </itemGroup>
   <itemGroup>
-    <name>	White Tiger	</name>
+    <name>	Mexican Day of the Dead	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
@@ -1595,20 +1664,38 @@
       </exclude>
     </vehicleFilter>
     <paint>
-      <id>	61	</id>
-      <texture>	gui/maps/vehicles/repaints/germany_base_color.png	</texture>
-      <color>	61 62 63 255	</color>
-      <gloss>	0.509	</gloss>
-      <metallic>	0.25	</metallic>
-      <userString>	#vehicle_customization:repaint/white_tiger_2020	</userString>
+      <id>	74	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+      <color>	17 17 34 255	</color>
+      <gloss>	0.525	</gloss>
+      <metallic>	0.3	</metallic>
+      <userString>	#vehicle_customization:repaint/day_of_the_dead	</userString>
     </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	NA Disruptive Camouflage	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
     <paint>
-      <id>	62	</id>
-      <texture>	gui/maps/vehicles/repaints/france_color_05.png	</texture>
-      <color>	73 57 55 255	</color>
-      <gloss>	0.509	</gloss>
-      <metallic>	0.095	</metallic>
-      <userString>	#vehicle_customization:repaint/white_tiger_2020_hounds	</userString>
+      <id>	75	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_03.png	</texture>
+      <color>	49 50 79 255	</color>
+      <gloss>	0.346	</gloss>
+      <metallic>	0.2	</metallic>
+      <userString>	#vehicle_customization:repaint/disruptive	</userString>
     </paint>
     <usages>
       <item>

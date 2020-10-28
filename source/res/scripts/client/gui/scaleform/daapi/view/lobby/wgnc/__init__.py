@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/wgnc/__init__.py
 from debug_utils import LOG_WARNING
-from gui.Scaleform.framework import ScopeTemplates, ViewSettings, ViewTypes, GroupedViewSettings
+from frameworks.wulf import WindowLayer
+from gui.Scaleform.framework import ScopeTemplates, ViewSettings, GroupedViewSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.app_loader import settings as app_settings
 from gui.shared import EVENT_BUS_SCOPE, events
@@ -24,7 +25,7 @@ def getContextMenuHandlers():
 def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.wgnc.WGNCDialog import WGNCDialog
     from gui.Scaleform.daapi.view.lobby.wgnc.WGNCPollWindow import WGNCPollWindow
-    return (ViewSettings(WGNC_ALIASES.MODAL_BASIC_WINDOW, WGNCDialog, WGNC_ALIASES.SWF_DIALOG, ViewTypes.TOP_WINDOW, events.WGNCShowItemEvent.SHOW_BASIC_WINDOW, ScopeTemplates.DEFAULT_SCOPE, isModal=True), GroupedViewSettings(WGNC_ALIASES.NOT_MODAL_BASIC_WINDOW, WGNCDialog, WGNC_ALIASES.SWF_DIALOG, ViewTypes.WINDOW, WGNC_ALIASES.UI_DIALOG, events.WGNCShowItemEvent.SHOW_BASIC_WINDOW, ScopeTemplates.DEFAULT_SCOPE), GroupedViewSettings(WGNC_ALIASES.POLL_WINDOW, WGNCPollWindow, WGNC_ALIASES.SWF_POLL_WINDOW, ViewTypes.WINDOW, WGNC_ALIASES.UI_POLL_WINDOW, events.WGNCShowItemEvent.SHOW_POLL_WINDOW, ScopeTemplates.DEFAULT_SCOPE))
+    return (ViewSettings(WGNC_ALIASES.MODAL_BASIC_WINDOW, WGNCDialog, WGNC_ALIASES.SWF_DIALOG, WindowLayer.TOP_WINDOW, events.WGNCShowItemEvent.SHOW_BASIC_WINDOW, ScopeTemplates.DEFAULT_SCOPE, isModal=True), GroupedViewSettings(WGNC_ALIASES.NOT_MODAL_BASIC_WINDOW, WGNCDialog, WGNC_ALIASES.SWF_DIALOG, WindowLayer.WINDOW, WGNC_ALIASES.UI_DIALOG, events.WGNCShowItemEvent.SHOW_BASIC_WINDOW, ScopeTemplates.DEFAULT_SCOPE), GroupedViewSettings(WGNC_ALIASES.POLL_WINDOW, WGNCPollWindow, WGNC_ALIASES.SWF_POLL_WINDOW, WindowLayer.WINDOW, WGNC_ALIASES.UI_POLL_WINDOW, events.WGNCShowItemEvent.SHOW_POLL_WINDOW, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/__init__.py
 import math
+from collections import defaultdict
 import BigWorld
 import Math
 from Math import Vector3, Matrix
@@ -156,12 +157,21 @@ class AccelerationSmoother(object):
 
 class CameraWithSettings(ICamera):
     settingsCore = dependency.descriptor(ISettingsCore)
+    __baseConfigs = defaultdict(dict)
+    __userConfigs = defaultdict(dict)
+    __configs = defaultdict(dict)
 
-    def __init__(self):
-        super(CameraWithSettings, self).__init__()
-        self._userCfg = {}
-        self._cfg = {}
-        self._baseCfg = {}
+    @property
+    def _baseCfg(self):
+        return CameraWithSettings.__baseConfigs[self._getConfigsKey()]
+
+    @property
+    def _userCfg(self):
+        return CameraWithSettings.__userConfigs[self._getConfigsKey()]
+
+    @property
+    def _cfg(self):
+        return CameraWithSettings.__configs[self._getConfigsKey()]
 
     def create(self, **args):
         self._updateSettingsFromServer()
@@ -187,6 +197,10 @@ class CameraWithSettings(ICamera):
         else:
             self._cfg[name] = self._baseCfg[name] * self._userCfg[name]
 
+    @staticmethod
+    def _getConfigsKey():
+        raise NotImplementedError
+
     def _handleSettingsChange(self, diff):
         pass
 
@@ -198,3 +212,26 @@ class CameraWithSettings(ICamera):
             cfg = self._cfg
             cfg['horzInvert'] = ucfg['horzInvert']
             cfg['vertInvert'] = ucfg['vertInvert']
+
+    def _readConfigs(self, dataSection):
+        if not self._baseCfg:
+            self._readBaseCfg(dataSection)
+        if not self._userCfg:
+            self._readUserCfg()
+        if not self._cfg:
+            self._makeCfg()
+
+    def _readBaseCfg(self, dataSection):
+        pass
+
+    def _readUserCfg(self):
+        pass
+
+    def _makeCfg(self):
+        pass
+
+    def _reloadConfigs(self, dataSection):
+        self._baseCfg.clear()
+        self._userCfg.clear()
+        self._cfg.clear()
+        self._readConfigs(dataSection)

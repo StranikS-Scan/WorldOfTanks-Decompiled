@@ -180,13 +180,13 @@ class Bootcamp(EventSystemEntity):
 
     def setBattleResults(self, arenaUniqueID, resultType, resultReason):
         self.__arenaUniqueID = arenaUniqueID
-        from gui.battle_results.br_constants import PlayerTeamResult
+        from gui.battle_results.settings import PLAYER_TEAM_RESULT
         if not resultType:
-            teamResult = PlayerTeamResult.DRAW
+            teamResult = PLAYER_TEAM_RESULT.DRAW
         elif resultType == BOOTCAMP_BATTLE_RESULT_MESSAGE.VICTORY:
-            teamResult = PlayerTeamResult.WIN
+            teamResult = PLAYER_TEAM_RESULT.WIN
         else:
-            teamResult = PlayerTeamResult.DEFEAT
+            teamResult = PLAYER_TEAM_RESULT.DEFEAT
         self.__battleResults = _BattleResults(resultType, makeHtmlString('html_templates:bootcamp/battle_results', teamResult))
 
     def getBattleResults(self):
@@ -563,7 +563,7 @@ class Bootcamp(EventSystemEntity):
         return self.__nation
 
     def getNationData(self):
-        return self.__nationsData[self.__nation]
+        return self.__nationsData.get(self.__nation, {})
 
     def isReferralEnabled(self):
         return isReferralProgramEnabled() and self.__isRecruit

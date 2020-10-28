@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_control/controllers/feedback_events.py
 import logging
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE as _BET, NONE_SHELL_TYPE
+from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _FET
 from constants import ATTACK_REASON, ATTACK_REASONS, SHELL_TYPES_LIST
 _logger = logging.getLogger(__name__)
@@ -24,6 +25,10 @@ def _unpackVisibility(packedData):
 
 def _unpackMultiStun(packedData):
     return _MultiStunExtra(packedData, True)
+
+
+def _unpackBufEffectApplied(packedData):
+    return (0, 0, packedData) if isinstance(packedData, str) else _BET.unpackBuffEffectApplied(packedData)
 
 
 _BATTLE_EVENT_TO_PLAYER_FEEDBACK_EVENT = {_BET.KILL: _FET.PLAYER_KILLED_ENEMY,
@@ -49,7 +54,9 @@ _BATTLE_EVENT_TO_PLAYER_FEEDBACK_EVENT = {_BET.KILL: _FET.PLAYER_KILLED_ENEMY,
  _BET.SMOKE_ASSIST: _FET.SMOKE_ASSIST,
  _BET.INSPIRE_ASSIST: _FET.INSPIRE_ASSIST,
  _BET.MULTI_STUN: _FET.PLAYER_STUN_ENEMIES,
- _BET.EQUIPMENT_TIMER_EXPIRED: _FET.EQUIPMENT_TIMER_EXPIRED}
+ _BET.EQUIPMENT_TIMER_EXPIRED: _FET.EQUIPMENT_TIMER_EXPIRED,
+ _BET.BUFF_APPLIED: _FET.BUFF_APPLIED,
+ _BET.BUFF_EFFECT_APPLIED: _FET.BUFF_EFFECT_APPLIED}
 _PLAYER_FEEDBACK_EXTRA_DATA_CONVERTERS = {_FET.PLAYER_DAMAGED_HP_ENEMY: _unpackDamage,
  _FET.PLAYER_ASSIST_TO_KILL_ENEMY: _unpackDamage,
  _FET.PLAYER_CAPTURED_BASE: _unpackInteger,
@@ -67,7 +74,23 @@ _PLAYER_FEEDBACK_EXTRA_DATA_CONVERTERS = {_FET.PLAYER_DAMAGED_HP_ENEMY: _unpackD
  _FET.SMOKE_ASSIST: _unpackDamage,
  _FET.INSPIRE_ASSIST: _unpackDamage,
  _FET.PLAYER_SPOTTED_ENEMY: _unpackVisibility,
- _FET.PLAYER_STUN_ENEMIES: _unpackMultiStun}
+ _FET.PLAYER_STUN_ENEMIES: _unpackMultiStun,
+ _FET.BUFF_APPLIED: _unpackBufEffectApplied,
+ _FET.BUFF_EFFECT_APPLIED: _unpackBufEffectApplied}
+_BUFF_NAMES_TO_EFFICIENCY_TYPES = {'ration': BATTLE_EFFICIENCY_TYPES.BUFFS_RATION,
+ 'fuel': BATTLE_EFFICIENCY_TYPES.BUFFS_FUEL,
+ 'multiplyGunReloadTime': BATTLE_EFFICIENCY_TYPES.BUFFS_RATE_FIRE,
+ 'multiplyShotDispersion': BATTLE_EFFICIENCY_TYPES.BUFFS_CONVERSION_SPEED,
+ 'multiplyDamageBy10': BATTLE_EFFICIENCY_TYPES.BUFFS_INCREASED_MAXIMUM_DAMAGE,
+ 'damageOnceOnShot': BATTLE_EFFICIENCY_TYPES.BUFFS_DOUBLE_DAMAGE,
+ 'igniteOnShot': BATTLE_EFFICIENCY_TYPES.BUFFS_INCENDIARY_SHOT,
+ 'healOnceOnShot': BATTLE_EFFICIENCY_TYPES.BUFFS_VAMPIRIC_SHOT,
+ 'regenerationHP': BATTLE_EFFICIENCY_TYPES.BUFFS_CONSTANT_HP_REGENERATION,
+ 'armor': BATTLE_EFFICIENCY_TYPES.BUFFS_ARMOR}
+
+def getEffiencyTypeByBuffName(buffName):
+    return _BUFF_NAMES_TO_EFFICIENCY_TYPES.get(buffName, '')
+
 
 def _getShellType(shellTypeID):
     return None if shellTypeID == NONE_SHELL_TYPE else SHELL_TYPES_LIST[shellTypeID]
@@ -134,6 +157,9 @@ class _DamageExtra(object):
 
     def isBomberEq(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.BOMBER_EQ) if primary else self.isSecondaryAttackReason(ATTACK_REASON.BOMBER_EQ)
+
+    def isEventPhaseChange(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE) or self.isAttackReason(ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC) if primary else self.isSecondaryAttackReason(ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE) or self.isSecondaryAttackReason(ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC)
 
     def isBombers(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.BOMBERS) if primary else self.isSecondaryAttackReason(ATTACK_REASON.BOMBERS)
@@ -251,6 +277,9 @@ class _CritsExtra(object):
 
     def isBombers(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.BOMBERS) if primary else self.isSecondaryAttackReason(ATTACK_REASON.BOMBERS)
+
+    def isEventPhaseChange(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE) or self.isAttackReason(ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC) if primary else self.isSecondaryAttackReason(ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE) or self.isSecondaryAttackReason(ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC)
 
     def isSecondaryAttackReason(self, attackReason):
         return ATTACK_REASONS[self.__secondaryAttackReasonID] == attackReason

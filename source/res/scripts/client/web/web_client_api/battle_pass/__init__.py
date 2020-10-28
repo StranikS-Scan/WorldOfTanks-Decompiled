@@ -37,7 +37,8 @@ class BattlePassWebApi(W2CSchema):
         isActive = not self.__battlePassCtrl.isPaused() and self.__battlePassCtrl.isVisible()
         canBuyBP = not self.__battlePassCtrl.isBought()
         canBuyLevels = self.__battlePassCtrl.getBoughtLevels() == 0 or self.__battlePassCtrl.isSellAnyLevelsUnlocked()
-        isVisible = isActive and (canBuyBP or isBase and canBuyLevels)
+        isPlayerNewcomer = self.__battlePassCtrl.isPlayerNewcomer()
+        isVisible = isActive and (canBuyBP or isBase and canBuyLevels) and not isPlayerNewcomer
         data = {'isVisible': isVisible,
          'isSeasonLeftSoon': isSeasonEndingSoon()}
         return data

@@ -7,6 +7,7 @@ import async as future_async
 from adisp import process, async
 from account_helpers import isLongDisconnectedFromCenter
 from account_helpers.AccountSettings import AccountSettings
+from constants import HE19EnergyPurposes
 from gui.Scaleform.daapi.view import dialogs
 from gui.shared.gui_items.artefacts import OptionalDevice
 from gui.shared.gui_items.vehicle_equipment import EMPTY_ITEM
@@ -190,6 +191,19 @@ class VehicleTradeInValidator(SyncValidator):
         return makeError('vehicle_cannot_trade_off') if not self.vehicleToTradeOff.canTradeOff else makeSuccess()
 
 
+class VehiclePersonalTradeInValidator(SyncValidator):
+
+    def __init__(self, vehicleToBuy, vehicleToTradeOff, isEnabled=True):
+        super(VehiclePersonalTradeInValidator, self).__init__(isEnabled)
+        self.vehicleToBuy = vehicleToBuy
+        self.vehicleToTradeOff = vehicleToTradeOff
+
+    def _validate(self):
+        if not self.vehicleToBuy.canPersonalTradeInBuy:
+            return makeError('vehicle_cannot_trade_in')
+        return makeError('vehicle_cannot_trade_off') if not self.vehicleToTradeOff.canPersonalTradeInSale else makeSuccess()
+
+
 class VehicleLockValidator(SyncValidator):
 
     def __init__(self, vehicle, setAll=True, isEnabled=True):
@@ -247,7 +261,7 @@ class EliteVehiclesValidator(SyncValidator):
                 return makeError('invalid_vehicle')
             if item.itemTypeID is not GUI_ITEM_TYPE.VEHICLE:
                 return makeError('invalid_module_type')
-            if not item.isElite:
+            if not item.isElite and not item.isOnlyForEventBattles:
                 return makeError('vehicle_not_elite')
 
         return makeSuccess()
@@ -595,9 +609,7 @@ class DemountDeviceConfirmator(IconPriceMessageConfirmator):
         from gui.shared import event_dispatcher
         demountKit = self._goodiesCache.getDemountKit()
         isDkEnabled = demountKit and demountKit.enabled
-        if self.__vehicleToInstall is not None and not self.item.descriptor.checkCompatibilityWithVehicle(self.__vehicleToInstall.descriptor)[0]:
-            showDialog = partial(event_dispatcher.showDemountIncompatibleOpDevDialog, self.item.intCD)
-        elif self.item.isDeluxe or not isDkEnabled:
+        if self.item.isDeluxe or not isDkEnabled:
             showDialog = partial(event_dispatcher.showOptionalDeviceDemountSinglePrice, self.item.intCD)
         else:
             showDialog = partial(event_dispatcher.showOptionalDeviceDemount, self.item.intCD)
@@ -742,6 +754,17 @@ class PMFreeTokensValidator(_EventsCacheValidator):
 
     def _validate(self):
         return makeError('NOT_ENOUGH_FREE_TOKENS') if self.eventsCache.getPersonalMissions().getFreeTokensCount(self._branch) < self.quest.getPawnCost() else makeSuccess()
+
+
+class TokenValidator(_EventsCacheValidator):
+
+    def __init__(self, tokenID, amount, isEnabled=True):
+        super(TokenValidator, self).__init__(isEnabled)
+        self._tokenID = tokenID
+        self._amount = amount
+
+    def _validate(self):
+        return makeError('NOT_ENOUGH_TOKENS') if self.eventsCache.questsProgress.getTokenCount(self._tokenID) < self._amount else makeSuccess()
 
 
 class CheckBoxConfirmator(DialogAbstractConfirmator):
@@ -1065,3 +1088,51 @@ class BattleBoostersInstallValidator(LayoutInstallValidator):
 
     def _getItemType(self):
         return GUI_ITEM_TYPE.BATTLE_BOOSTER
+
+
+class CheckEnergy(SyncValidator):
+
+    def __init__(self, controller, purpose, vehTypeCompDescr, isEnabled=True):
+        super(CheckEnergy, self).__init__(isEnabled)
+        self.controller = controller
+        self.purpose = purpose
+        self.vehTypeCompDescr = vehTypeCompDescr
+
+    def _validate(self):
+        controller = self.controller
+        if not controller.isEventVehicleCanHaveEnergy(self.purpose, self.vehTypeCompDescr):
+            return makeError('vehicle_can_not_have_energy')
+        if self.purpose == HE19EnergyPurposes.healing.name and not controller.isEventVehicleHasToken(self.purpose, self.vehTypeCompDescr):
+            return makeError('vehicle_already_has_energy')
+        return makeError('booster_already_activated') if self.purpose == HE19EnergyPurposes.booster.name and controller.isEventVehicleHasToken(self.purpose, self.vehTypeCompDescr) else makeSuccess()
+
+
+class CheckEnergyItemsForExchange(SyncValidator):
+
+    def __init__(self, controller, purpose, isEnabled=True):
+        super(CheckEnergyItemsForExchange, self).__init__(isEnabled)
+        self.controller = controller
+        self.purpose = purpose
+
+    def _validate(self):
+        controller = self.controller
+        if self.purpose == HE19EnergyPurposes.healing.name and not controller.hasEnergyFor(self.purpose):
+            return makeError('account_does_not_have_healing_items')
+        return makeError('account_does_not_have_booster_items') if self.purpose == HE19EnergyPurposes.booster.name and not controller.hasEnergyFor(self.purpose) else makeSuccess()
+
+
+class RandomStylesSellingAvailable(SyncValidator):
+
+    def __init__(self, isAvailable, isEnabled=True):
+        super(RandomStylesSellingAvailable, self).__init__(isEnabled)
+        self.isAvailable = isAvailable
+
+    def _validate(self):
+        return makeError('sales_disabled') if not self.isAvailable else makeSuccess()
+
+
+class VehicleInBattle(SyncValidator):
+
+    def _validate(self):
+        from CurrentVehicle import g_currentVehicle
+        return makeError('vehicle_in_battle') if g_currentVehicle.isInBattle() else makeSuccess()

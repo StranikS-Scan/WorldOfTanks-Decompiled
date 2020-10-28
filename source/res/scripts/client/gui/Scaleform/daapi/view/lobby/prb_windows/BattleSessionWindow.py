@@ -15,7 +15,7 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.prb_control import formatters, prb_getters
 from gui.prb_control.entities.base.legacy.ctx import AssignLegacyCtx, KickPlayerCtx, SetPlayerStateCtx
-from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE, PREBATTLE_SETTING_NAME, PREBATTLE_PLAYERS_COMPARATORS
+from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE, PREBATTLE_SETTING_NAME, PREBATTLE_PROPERTY_NAME, PREBATTLE_PLAYERS_COMPARATORS
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.utils import functions
@@ -72,9 +72,13 @@ class BattleSessionWindow(BattleSessionWindowMeta):
         self.__updateCommonRequirements(entity.getTeamLimits(), rosters)
 
     def onSettingUpdated(self, entity, settingName, settingValue):
-        if settingName == 'arenaTypeID':
+        if settingName == PREBATTLE_SETTING_NAME.ARENA_TYPE_ID:
             self.__arenaName = functions.getArenaShortName(settingValue)
             self.as_setInfoS(self.__isTurnamentBattle, self.__battlesWinsString, self.__arenaName, self.__firstTeam, self.__secondTeam, self.prbEntity.getProps().getBattlesScore(), self.__eventName, self.__sessionName)
+
+    def onPropertyUpdated(self, entity, propertyName, propertyValue):
+        if propertyName == PREBATTLE_PROPERTY_NAME.TEAMS_POSITIONS:
+            self.__showAttackDirection()
 
     def canMoveToAssigned(self):
         return self.prbEntity.getPermissions().canAssignToTeam(self._getPlayerTeam())
@@ -87,6 +91,17 @@ class BattleSessionWindow(BattleSessionWindowMeta):
 
     def canSendInvite(self):
         return self.prbEntity.getPermissions().canSendInvite()
+
+    def __getWinnerIfDraw(self):
+        s = self.prbEntity.getSettings()
+        if s[PREBATTLE_SETTING_NAME.SWITCH_TEAMS]:
+            teamsPositions = self.prbEntity.getProps().teamsPositions
+            winnerIfDraw = teamsPositions[0]
+            if winnerIfDraw:
+                return teamsPositions[winnerIfDraw]
+
+    def __showAttackDirection(self):
+        self.as_setWinnerIfDrawS(self.__getWinnerIfDraw())
 
     def __checkObserversCondition(self):
         observerCount = 0
@@ -183,6 +198,7 @@ class BattleSessionWindow(BattleSessionWindowMeta):
         self.__updateCommonRequirements(teamLimits, rosters)
         self.as_setInfoS(self.__isTurnamentBattle, self.__battlesWinsString, self.__arenaName, self.__firstTeam, self.__secondTeam, self.prbEntity.getProps().getBattlesScore(), self.__eventName, self.__sessionName)
         self.__updateLimits(teamLimits, rosters)
+        self.__showAttackDirection()
 
     def _dispose(self):
         self.__team = None

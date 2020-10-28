@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/consumables/ammo_ctrl.py
+import logging
 import weakref
 from collections import namedtuple
 from math import fabs
@@ -7,6 +8,7 @@ import BigWorld
 import CommandMapping
 import Event
 from constants import VEHICLE_SETTING
+from shared_utils import CONST_CONTAINER
 from debug_utils import LOG_CODEPOINT_WARNING, LOG_ERROR
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import SHELL_SET_RESULT, CANT_SHOOT_ERROR, BATTLE_CTRL_ID, SHELL_QUANTITY_UNKNOWN
@@ -14,10 +16,13 @@ from gui.battle_control.controllers.interfaces import IBattleController
 from gui.shared.utils.MethodsRules import MethodsRules
 from gui.shared.utils.decorators import ReprInjector
 from ReloadEffect import DualGunReload
+from helpers import dependency
 from items import vehicles
+from skeletons.gui.battle_session import IBattleSessionProvider
 __all__ = ('AmmoController', 'AmmoReplayPlayer')
 _ClipBurstSettings = namedtuple('_ClipBurstSettings', 'size interval')
 _HUNDRED_PERCENT = 100.0
+_logger = logging.getLogger(__name__)
 
 class _GunSettings(namedtuple('_GunSettings', 'clip burst shots reloadEffect autoReload')):
 
@@ -102,7 +107,7 @@ class IGunReloadingState(IGunReloadingSnapshot):
         raise NotImplementedError
 
 
-@ReprInjector.simple(('_actualTime', 'actual'), ('_baseTime', 'base'), ('getTimePassed', 'timePassed'), ('isReloading', 'reloading'))
+@ReprInjector.simple(('_actualTime', 'actual'), ('_baseTime', 'base'), ('getTimePassed', 'timePassed'), ('getTimeLeft', 'timeLeft'), ('isReloading', 'reloading'), ('isReloadingFinished', 'reloadingFinished'))
 class ReloadingTimeSnapshot(IGunReloadingSnapshot):
     __slots__ = ('_actualTime', '_baseTime', '_startTime', '_updateTime', '_waitReloadingStartResponse')
 
@@ -227,8 +232,129 @@ class _AutoShootsCtrl(object):
         return
 
 
+class AutoReloadingBoostStates(CONST_CONTAINER):
+    UNAVAILABLE = 'unavailable'
+    INAPPLICABLE = 'inapplicable'
+    WAITING_FOR_START = 'waiting_for_start'
+    CHARGING = 'charging'
+    CHARGED = 'charged'
+    NOT_ACTIVE = (UNAVAILABLE, INAPPLICABLE, WAITING_FOR_START)
+
+
+class _AutoReloadingBoostStateCtrl(object):
+    __slots__ = ('__changeEventDispatcher', '__state', '__stateDuration', '__stateTotalTime', '__nextStateCallbackID', '__snapshot', '__prevSnapshot', '__gunSettings')
+    _SHOOT_MIN_TIME_TRASHOLD = 0.2
+
+    def __init__(self, changeEvtDispatcher):
+        super(_AutoReloadingBoostStateCtrl, self).__init__()
+        self.__changeEventDispatcher = changeEvtDispatcher
+        self.__state = None
+        self.__stateDuration = 0.0
+        self.__stateTotalTime = 0.0
+        self.__prevSnapshot = None
+        self.__snapshot = None
+        self.__nextStateCallbackID = None
+        self.__gunSettings = None
+        return
+
+    def destroy(self):
+        self.__changeEventDispatcher = None
+        self.__prevSnapshot = None
+        self.__snapshot = None
+        self.__gunSettings = None
+        self.__cancelCallback()
+        return
+
+    def setReloadingTimeSnapshot(self, snapshot, isBoostApplicable, gunSettings):
+        self.__prevSnapshot = self.__snapshot
+        self.__snapshot = snapshot
+        self.__gunSettings = gunSettings
+        newState, newStateDuration, totalTime, extraData = self.__getNewState(isBoostApplicable)
+        if newState != self.__state or newStateDuration != self.__stateDuration or totalTime != self.__stateTotalTime:
+            self.__cancelCallback()
+            self.__updateState(newState, newStateDuration, totalTime, extraData)
+            self.__scheduleNextState()
+
+    def __getNewState(self, isBoostApplicable):
+        autoReloadSetting = self.__gunSettings.autoReload
+        if autoReloadSetting is None:
+            return (AutoReloadingBoostStates.UNAVAILABLE,
+             0.0,
+             0.0,
+             {})
+        gunHasBoostAbility = autoReloadSetting.boostFraction < 1.0
+        if not gunHasBoostAbility:
+            return (AutoReloadingBoostStates.UNAVAILABLE,
+             0.0,
+             0.0,
+             {})
+        elif not isBoostApplicable:
+            shootHasBeenMade = False
+            previousState = self.__state
+            if previousState == AutoReloadingBoostStates.CHARGING:
+                shootHasBeenMade = True
+            elif previousState == AutoReloadingBoostStates.CHARGED:
+                if self.__prevSnapshot:
+                    if self.__prevSnapshot.getTimeLeft() > self._SHOOT_MIN_TIME_TRASHOLD:
+                        shootHasBeenMade = True
+            return (AutoReloadingBoostStates.INAPPLICABLE,
+             0.0,
+             0.0,
+             {'shootHasBeenMade': shootHasBeenMade})
+        else:
+            return self.__getCurrentBoostTimelineState()
+
+    def __getCurrentBoostTimelineState(self):
+        autoReloadSetting = self.__gunSettings.autoReload
+        if autoReloadSetting is None:
+            return (AutoReloadingBoostStates.UNAVAILABLE,
+             0.0,
+             0.0,
+             {})
+        else:
+            timePassed = self.__snapshot.getTimePassed()
+            fullReloadingTime = self.__snapshot.getBaseValue()
+            boostStartDelay = self.__gunSettings.clip[1] + autoReloadSetting.boostStartTime
+            if boostStartDelay > timePassed:
+                timeToStartBoostCharging = boostStartDelay - timePassed
+                return (AutoReloadingBoostStates.WAITING_FOR_START,
+                 timeToStartBoostCharging,
+                 boostStartDelay,
+                 {})
+            fullChargeTime = fullReloadingTime - autoReloadSetting.boostResidueTime
+            return (AutoReloadingBoostStates.CHARGED,
+             0.0,
+             0.0,
+             {}) if fullChargeTime < timePassed else (AutoReloadingBoostStates.CHARGING,
+             fullChargeTime - timePassed,
+             fullChargeTime - boostStartDelay,
+             {})
+
+    def __onTimeForStateHasCome(self):
+        self.__nextStateCallbackID = None
+        self.__updateState(*self.__getCurrentBoostTimelineState())
+        self.__scheduleNextState()
+        return
+
+    def __scheduleNextState(self):
+        if self.__stateDuration > 0.0:
+            self.__nextStateCallbackID = BigWorld.callback(self.__stateDuration, self.__onTimeForStateHasCome)
+
+    def __cancelCallback(self):
+        if self.__nextStateCallbackID is not None:
+            BigWorld.cancelCallback(self.__nextStateCallbackID)
+            self.__nextStateCallbackID = None
+        return
+
+    def __updateState(self, state, stateDuration, stateTotalTime, extraData):
+        self.__state = state
+        self.__stateDuration = stateDuration
+        self.__stateTotalTime = stateTotalTime
+        self.__changeEventDispatcher(state, stateDuration, stateTotalTime, extraData)
+
+
 class AmmoController(MethodsRules, IBattleController):
-    __slots__ = ('__eManager', 'onShellsAdded', 'onShellsUpdated', 'onNextShellChanged', 'onCurrentShellChanged', 'onGunSettingsSet', 'onGunReloadTimeSet', 'onGunAutoReloadTimeSet', '__ammo', '_order', '__currShellCD', '__nextShellCD', '__gunSettings', '_reloadingState', '_autoReloadingState', '__autoShoots', '__weakref__', 'onDebuffStarted')
+    __slots__ = ('__eManager', 'onShellsAdded', 'onShellsUpdated', 'onNextShellChanged', 'onCurrentShellChanged', 'onGunSettingsSet', 'onGunReloadTimeSet', 'onGunAutoReloadTimeSet', 'onGunAutoReloadBoostUpdated', '_autoReloadingBoostState', '__ammo', '_order', '__currShellCD', '__nextShellCD', '__gunSettings', '_reloadingState', '_autoReloadingState', '__autoShoots', '__weakref__', 'onDebuffStarted')
 
     def __init__(self, reloadingState=None):
         super(AmmoController, self).__init__()
@@ -241,10 +367,12 @@ class AmmoController(MethodsRules, IBattleController):
         self.onGunReloadTimeSet = Event.Event(self.__eManager)
         self.onDebuffStarted = Event.Event(self.__eManager)
         self.onGunAutoReloadTimeSet = Event.Event(self.__eManager)
+        self.onGunAutoReloadBoostUpdated = Event.Event(self.__eManager)
         self.__ammo = {}
         self._order = []
         self._reloadingState = reloadingState or ReloadingTimeState()
         self._autoReloadingState = ReloadingTimeState()
+        self._autoReloadingBoostState = _AutoReloadingBoostStateCtrl(self.onGunAutoReloadBoostUpdated)
         self.__currShellCD = None
         self.__nextShellCD = None
         self.__gunSettings = _GunSettings.default()
@@ -278,6 +406,7 @@ class AmmoController(MethodsRules, IBattleController):
         if leave:
             self._reloadingState.clear()
             self.__autoShoots.destroy()
+            self._autoReloadingBoostState.destroy()
         return
 
     def getGunSettings(self):
@@ -336,9 +465,10 @@ class AmmoController(MethodsRules, IBattleController):
         if not isIgnored:
             self.onGunReloadTimeSet(self.__currShellCD, self._reloadingState.getSnapshot())
 
-    def setGunAutoReloadTime(self, timeLeft, baseTime, isSlowed):
+    def setGunAutoReloadTime(self, timeLeft, baseTime, isSlowed, isBoostApplicable):
         self._autoReloadingState.setTimes(timeLeft, baseTime)
         self.__notifyAboutAutoReloadTimeChanges(isSlowed)
+        self._autoReloadingBoostState.setReloadingTimeSnapshot(self._autoReloadingState.getSnapshot(), isBoostApplicable, self.__gunSettings)
         if self.__gunSettings.reloadEffect is not None and self.__currShellCD in self.__ammo:
             shellCounts = self.__ammo[self.__currShellCD]
             shellsInClip = shellCounts[1]
@@ -421,8 +551,19 @@ class AmmoController(MethodsRules, IBattleController):
         else:
             return quantity
 
+    def getClipCapacity(self):
+        return self.__gunSettings.clip.size
+
     @MethodsRules.delayable('setGunSettings')
     def setShells(self, intCD, quantity, quantityInClip):
+        player = BigWorld.player()
+        observedVehicleData = player.observedVehicleData.get(player.observedVehicleID)
+        guiSessionProvider = dependency.instance(IBattleSessionProvider)
+        if observedVehicleData is not None and not guiSessionProvider.arenaVisitor.gui.isEventBattle():
+            ammoCDs = [ ammoData[0] for ammoData in observedVehicleData.orderedAmmo ]
+            if intCD not in ammoCDs:
+                _logger.debug('Skip ammo with cd=%d , current ammoCDs are %s', intCD, str(ammoCDs))
+                return
         result = SHELL_SET_RESULT.UNDEFINED
         if intCD in self.__ammo:
             prevAmmo = self.__ammo[intCD]

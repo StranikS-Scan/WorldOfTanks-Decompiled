@@ -40,6 +40,18 @@ def makePositionMatrix(position):
     return matrix
 
 
+def makeScaleMatrix(scale):
+    matrix = Math.Matrix()
+    matrix.setScale(scale)
+    return matrix
+
+
+def makePositionAndScaleMatrix(position, scale):
+    matrix = makePositionMatrix(position)
+    matrix.preMultiply(makeScaleMatrix(scale))
+    return matrix
+
+
 def makePointInBBoxMatrix(position, bottomLeft, upperRight):
     vector2 = (upperRight + bottomLeft) * 0.5
     matrix = Math.Matrix()

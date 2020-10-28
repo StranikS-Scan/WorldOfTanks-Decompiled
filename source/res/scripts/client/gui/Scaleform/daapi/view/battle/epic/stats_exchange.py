@@ -51,8 +51,8 @@ class EpicStatsComponent(DynamicVehicleStatsComponent):
 
 class EpicStatisticsDataController(EpicBattleStatisticDataControllerMeta):
 
-    def startControl(self, battleCtx, arenaVisitor):
-        super(EpicStatisticsDataController, self).startControl(battleCtx, arenaVisitor)
+    def startControl(self, ctx, arenaVisitor):
+        super(EpicStatisticsDataController, self).startControl(ctx, arenaVisitor)
         componentSystem = self._arenaVisitor.getComponentSystem()
         playerComp = getattr(componentSystem, 'playerDataComponent', None)
         if playerComp is not None:

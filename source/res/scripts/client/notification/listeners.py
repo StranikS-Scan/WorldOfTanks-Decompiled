@@ -8,7 +8,7 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED, SENIORITY_AWARDS_COUNTER
 from adisp import process
 from chat_shared import SYS_MESSAGE_TYPE
-from constants import AUTO_MAINTENANCE_RESULT, PremiumConfigs, DAILY_QUESTS_CONFIG
+from constants import AUTO_MAINTENANCE_RESULT, PremiumConfigs, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG
 from collector_vehicle import CollectorVehicleConsts
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import SystemMessages
@@ -37,9 +37,10 @@ from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from messenger.formatters import TimeFormatter
 from notification import tutorial_helper
-from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator
+from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator, MissingEventsDecorator
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
-from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController, IGameEventController
+from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController
+from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsBoxesCount
@@ -82,6 +83,10 @@ class _StateExtractor(object):
     def getCollectorVehicleState(cls):
         return cls.__lobbyContext.getServerSettings().isCollectorVehicleEnabled()
 
+    @classmethod
+    def getDogTagsUnlockingState(cls):
+        return cls.__lobbyContext.getServerSettings().isDogTagEnabled()
+
 
 _FEATURES_DATA = {PremiumConfigs.DAILY_BONUS: {_FeatureState.ON: (R.strings.system_messages.daily_xp_bonus.switch_on.title(), R.strings.system_messages.daily_xp_bonus.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
                               _FeatureState.OFF: (R.strings.system_messages.daily_xp_bonus.switch_off.title(), R.strings.system_messages.daily_xp_bonus.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
@@ -103,7 +108,10 @@ _FEATURES_DATA = {PremiumConfigs.DAILY_BONUS: {_FeatureState.ON: (R.strings.syst
                        _FUNCTION: _StateExtractor.getDailyQuestsState},
  CollectorVehicleConsts.CONFIG_NAME: {_FeatureState.ON: (R.strings.system_messages.collectorVehicle.switch_on.title(), R.strings.system_messages.collectorVehicle.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
                                       _FeatureState.OFF: (R.strings.system_messages.collectorVehicle.switch_off.title(), R.strings.system_messages.collectorVehicle.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
-                                      _FUNCTION: _StateExtractor.getCollectorVehicleState}}
+                                      _FUNCTION: _StateExtractor.getCollectorVehicleState},
+ DOG_TAGS_CONFIG: {_FeatureState.ON: (R.strings.system_messages.dog_tags.switch_on.title(), R.strings.system_messages.dog_tags.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
+                   _FeatureState.OFF: (R.strings.system_messages.dog_tags.switch_off.title(), R.strings.system_messages.dog_tags.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
+                   _FUNCTION: _StateExtractor.getDogTagsUnlockingState}}
 
 class _NotificationListener(object):
 
@@ -175,6 +183,27 @@ class ServiceChannelListener(_NotificationListener):
             if messageType == SYS_MESSAGE_TYPE.customizationProgress.index():
                 return C11nMessageDecorator
         return MessageDecorator
+
+
+class MissingEventsListener(_NotificationListener):
+    __notificationMgr = dependency.descriptor(INotificationWindowController)
+
+    def start(self, model):
+        result = super(MissingEventsListener, self).start(model)
+        self.__notificationMgr.onPostponedQueueUpdated += self.__onQueueUpdated
+        return result
+
+    def stop(self):
+        super(MissingEventsListener, self).stop()
+        self.__notificationMgr.onPostponedQueueUpdated -= self.__onQueueUpdated
+
+    def __onQueueUpdated(self, count, isInBootcamp):
+        model = self._model()
+        if model is not None:
+            model.removeNotification(NOTIFICATION_TYPE.MISSING_EVENTS, MissingEventsDecorator.ENTITY_ID)
+            if not isInBootcamp and count > 0:
+                model.addNotification(MissingEventsDecorator(count))
+        return
 
 
 class PrbInvitesListener(_NotificationListener, IGlobalListener):
@@ -982,77 +1011,42 @@ class UpgradeTrophyDeviceListener(_NotificationListener):
                 SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.upgradeTrophyDevice.switch_off.body()), type=SystemMessages.SM_TYPE.ErrorSimple, priority=NotificationPriorityLevel.MEDIUM)
 
 
-class WtEventListener(_NotificationListener):
-    __slots__ = ('__isEnabled', '__lootBoxesEnabled', '__ticketsCount')
-    __gameEventController = dependency.descriptor(IGameEventController)
-    __lobbyContext = dependency.descriptor(ILobbyContext)
-
-    def __init__(self):
-        super(WtEventListener, self).__init__()
-        self.__isEnabled = None
-        self.__ticketsCount = None
-        self.__lootBoxesEnabled = None
-        return
+class ChoosingDeviceslListener(_NotificationListener):
 
     def start(self, model):
-        super(WtEventListener, self).start(model)
-        self.__isEnabled = self.__gameEventController.isEnabled()
-        self.__ticketsCount = self.__gameEventController.getWtEventTokensCount()
-        self.__lootBoxesEnabled = self.__lobbyContext.getServerSettings().isLootBoxesEnabled()
-        g_clientUpdateManager.addCallbacks({'tokens': self.__onTokensUpdate})
-        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onSettingsChange
-        return True
+        result = super(ChoosingDeviceslListener, self).start(model)
+        if result:
+            g_eventBus.addListener(events.ChoosingDevicesEvent.DEVICE_ADDED, self.__onDeviceAdded)
+            g_eventBus.addListener(events.ChoosingDevicesEvent.DEVICE_REMOVED, self.__onDeviceRemoved)
+        return result
 
     def stop(self):
-        g_clientUpdateManager.removeObjectCallbacks(self)
-        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onSettingsChange
-        super(WtEventListener, self).stop()
+        super(ChoosingDeviceslListener, self).stop()
+        g_eventBus.removeListener(events.ChoosingDevicesEvent.DEVICE_ADDED, self.__onDeviceAdded)
+        g_eventBus.removeListener(events.ChoosingDevicesEvent.DEVICE_REMOVED, self.__onDeviceRemoved)
 
-    def __onSettingsChange(self, diff):
-        self.__checkAndNotify()
+    def __onDeviceAdded(self, event):
+        model = self._model()
+        newNotification = event.ctx.get('notifacation')
+        if newNotification is None:
+            return
+        else:
+            if model:
+                prevNotifacation = model.getNotification(NOTIFICATION_TYPE.CHOOSING_DEVICES, newNotification.getID())
+                if prevNotifacation is None:
+                    model.addNotification(newNotification)
+                else:
+                    savedData = newNotification.getSavedData()
+                    prevSavedData = prevNotifacation.getSavedData()
+                    if prevSavedData.get('count') != savedData.get('count'):
+                        model.updateNotification(NOTIFICATION_TYPE.CHOOSING_DEVICES, newNotification.getID(), newNotification.getEntity(), False)
+            return
 
-    def __onTokensUpdate(self, diff):
-        if self.__gameEventController.getWtEventTokenName() in diff:
-            ticketsCount = self.__gameEventController.getWtEventTokensCount()
-            if ticketsCount > self.__ticketsCount:
-                self.__pushTicketsEarned(ticketsCount)
-            self.__ticketsCount = ticketsCount
-
-    def __checkAndNotify(self):
-        isEnabled = self.__gameEventController.isEnabled()
-        lootBoxesEnabled = self.__lobbyContext.getServerSettings().isLootBoxesEnabled()
-        if self.__lootBoxesEnabled != lootBoxesEnabled:
-            if lootBoxesEnabled:
-                self.__pushLootBoxesEnabled()
-            else:
-                self.__pushLootBoxesDisabled()
-        if self.__isEnabled != isEnabled:
-            if isEnabled:
-                self.__pushStarted()
-            else:
-                self.__pushFinished()
-        self.__isEnabled = isEnabled
-        self.__lootBoxesEnabled = lootBoxesEnabled
-
-    @staticmethod
-    def __pushLootBoxesEnabled():
-        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.wt_event.lootboxes.enabled()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.LootBoxesEnabled, messageData={'header': backport.text(R.strings.system_messages.wt_event.lootboxes.header())})
-
-    @staticmethod
-    def __pushLootBoxesDisabled():
-        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.wt_event.lootboxes.disabled()), type=SystemMessages.SM_TYPE.WarningHeader, priority=NotificationPriorityLevel.HIGH, messageData={'header': backport.text(R.strings.system_messages.wt_event.lootboxes.header())})
-
-    @staticmethod
-    def __pushFinished():
-        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.wt_event.event.disabled()), priority=NotificationPriorityLevel.MEDIUM, type=SystemMessages.SM_TYPE.Information)
-
-    @staticmethod
-    def __pushStarted():
-        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.wt_event.event.enabled()), priority=NotificationPriorityLevel.MEDIUM, type=SystemMessages.SM_TYPE.EventStarted)
-
-    @staticmethod
-    def __pushTicketsEarned(ticketsCount):
-        SystemMessages.pushMessage(text=backport.text(R.strings.wt_event.notifications.tickets_earned.body(), count=ticketsCount), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.WarningHeader, messageData={'header': backport.text(R.strings.wt_event.notifications.tickets_earned.header())})
+    def __onDeviceRemoved(self, event):
+        entityID = event.ctx.get('entityID')
+        model = self._model()
+        if model:
+            model.removeNotification(NOTIFICATION_TYPE.CHOOSING_DEVICES, entityID)
 
 
 class NotificationsListeners(_NotificationListener):
@@ -1060,6 +1054,7 @@ class NotificationsListeners(_NotificationListener):
     def __init__(self):
         super(NotificationsListeners, self).__init__()
         self.__listeners = (ServiceChannelListener(),
+         MissingEventsListener(),
          PrbInvitesListener(),
          FriendshipRqsListener(),
          _WGNCListenersContainer(),
@@ -1069,7 +1064,7 @@ class NotificationsListeners(_NotificationListener):
          TankPremiumListener(),
          BattlePassListener(),
          UpgradeTrophyDeviceListener(),
-         WtEventListener())
+         ChoosingDeviceslListener())
 
     def start(self, model):
         for listener in self.__listeners:

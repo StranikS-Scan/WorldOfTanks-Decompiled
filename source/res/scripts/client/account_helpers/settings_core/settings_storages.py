@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/settings_storages.py
 import functools
 import weakref
-import math
 import BigWorld
 import BattleReplay
 from AvatarInputHandler.cameras import FovExtended
@@ -156,9 +155,9 @@ class VideoSettingsStorage(ISettingsStorage):
             exclusiveFullscreenMonitorIndex = g_monitorSettings.noRestartExclusiveFullscreenMonitorIndex
             restartNeeded = windowMode == BigWorld.WindowModeExclusiveFullscreen and monitor != exclusiveFullscreenMonitorIndex
             cVideoMode = g_monitorSettings.currentVideoMode
-            cAspectRation = float(cVideoMode.width) / cVideoMode.height
+            cAspectRatio = float(cVideoMode.width) / cVideoMode.height
             videoMode = self.videoModeForAdapterOutputIndex(monitor)
-            aspectRation = float(videoMode.width) / videoMode.height
+            aspectRatio = float(videoMode.width) / videoMode.height
             windowSizeChanged = cWindowSize is not None and windowSizeWidth is not None and windowSizeHeight is not None and (windowSizeWidth != cWindowSize.width or windowSizeHeight != cWindowSize.height)
             borderlessSizeChanged = cBorderlessSize is not None and borderlessSizeWidth is not None and borderlessSizeHeight is not None and (borderlessSizeWidth != cBorderlessSize.width or borderlessSizeHeight != cBorderlessSize.height)
             monitorChanged = monitor != cMonitor
@@ -180,12 +179,12 @@ class VideoSettingsStorage(ISettingsStorage):
             elif (not monitorChanged or restartApproved) and (videModeChanged or windowModeChanged):
                 deviseRecreated = True
                 BigWorld.changeVideoMode(videoMode.index, windowMode)
-            BigWorld.changeFullScreenAspectRatio(aspectRation)
+            BigWorld.changeFullScreenAspectRatio(aspectRatio)
             self.clear()
             self._core.isDeviseRecreated = deviseRecreated
             if deviseRecreated:
 
-                def wrapper(monitorChanged, windowSizeChanged, borderlessSizeChanged, cMonitor, cWindowSize, cVideoMode, cWindowMode, cAspectRation):
+                def wrapper(monitorChanged, windowSizeChanged, borderlessSizeChanged, cMonitor, cWindowSize, cVideoMode, cWindowMode, cAspectRatio):
 
                     def revert():
                         if monitorChanged:
@@ -196,7 +195,7 @@ class VideoSettingsStorage(ISettingsStorage):
                             g_monitorSettings.changeWindowSize(cWindowSize.width, cWindowSize.height)
                         elif not monitorChanged and (videModeChanged or windowModeChanged):
                             BigWorld.changeVideoMode(cVideoMode.index, cWindowMode)
-                        BigWorld.changeFullScreenAspectRatio(cAspectRation)
+                        BigWorld.changeFullScreenAspectRatio(cAspectRatio)
 
                     return revert
 
@@ -204,7 +203,7 @@ class VideoSettingsStorage(ISettingsStorage):
                 def confirmator(callback=None):
                     BigWorld.callback(0.0, lambda : DialogsInterface.showI18nConfirmDialog('graphicsChangeConfirmation', callback, meta=TimerConfirmDialogMeta('graphicsChangeConfirmation', timer=15)))
 
-                return (confirmator, wrapper(monitorChanged, windowSizeChanged, borderlessSizeChanged, cMonitor, cWindowSize, cVideoMode, cWindowMode, cAspectRation))
+                return (confirmator, wrapper(monitorChanged, windowSizeChanged, borderlessSizeChanged, cMonitor, cWindowSize, cVideoMode, cWindowMode, cAspectRatio))
         return super(VideoSettingsStorage, self).apply(restartApproved)
 
 
@@ -297,13 +296,13 @@ class FOVSettingsStorage(ISettingsStorage):
             def setFov(value, multiplier, dynamicFOVEnabled):
                 if not dynamicFOVEnabled:
                     FovExtended.instance().resetFov()
-                FovExtended.instance().defaultHorizontalFov = value
+                FovExtended.instance().horizontalFov = value
 
             if dynamicFOVEnabled:
                 multiplier = float(dynamicFOVLow) / dynamicFOVTop
-                defaultHorizontalFov = math.radians(dynamicFOVTop)
+                horizontalFov = dynamicFOVTop
             else:
                 multiplier = 1.0
-                defaultHorizontalFov = math.radians(staticFOV)
-            BigWorld.callback(0.0, functools.partial(setFov, defaultHorizontalFov, multiplier, dynamicFOVEnabled))
+                horizontalFov = staticFOV
+            BigWorld.callback(0.0, functools.partial(setFov, horizontalFov, multiplier, dynamicFOVEnabled))
         return super(FOVSettingsStorage, self).apply(restartApproved)

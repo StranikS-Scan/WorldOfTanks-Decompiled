@@ -255,7 +255,3 @@ def getImageResourceFromPath(path):
         resource = resource.dyn(pathItem)
 
     return resource
-
-
-def toPercents(value):
-    return int(value * 100)

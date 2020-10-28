@@ -322,8 +322,8 @@
       <physicalTracks>
         <left>
           <segmentsCount>	224	</segmentsCount>
-          <segmentsOuterThickness>	0.1	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.0295025	</segmentsInnerThickness>
+          <segmentsOuterThickness>	0.07	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.03	</segmentsInnerThickness>
           <segmentsPlaneOffset>	-1.47979	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
@@ -420,6 +420,38 @@
             <wheel>
               <name>	WD_L0	</name>
               <radius>	0.36316	</radius>
+            </wheel>
+            <wheel>
+              <name>	W_L0	</name>
+              <radius>	0.4	</radius>
+            </wheel>
+            <wheel>
+              <name>	W_L1	</name>
+              <radius>	0.4	</radius>
+            </wheel>
+            <wheel>
+              <name>	W_L2	</name>
+              <radius>	0.4	</radius>
+            </wheel>
+            <wheel>
+              <name>	W_L3	</name>
+              <radius>	0.4	</radius>
+            </wheel>
+            <wheel>
+              <name>	W_L4	</name>
+              <radius>	0.4	</radius>
+            </wheel>
+            <wheel>
+              <name>	W_L5	</name>
+              <radius>	0.4	</radius>
+            </wheel>
+            <wheel>
+              <name>	W_L6	</name>
+              <radius>	0.4	</radius>
+            </wheel>
+            <wheel>
+              <name>	W_L7	</name>
+              <radius>	0.4	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -654,8 +686,8 @@
         </left>
         <right>
           <segmentsCount>	224	</segmentsCount>
-          <segmentsOuterThickness>	0.1	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.0304383	</segmentsInnerThickness>
+          <segmentsOuterThickness>	0.07	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.03	</segmentsInnerThickness>
           <segmentsPlaneOffset>	1.47979	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
@@ -752,6 +784,38 @@
             <wheel>
               <name>	WD_R0	</name>
               <radius>	0.36316	</radius>
+            </wheel>
+            <wheel>
+              <name>	W_R0	</name>
+              <radius>	0.4	</radius>
+            </wheel>
+            <wheel>
+              <name>	W_R1	</name>
+              <radius>	0.4	</radius>
+            </wheel>
+            <wheel>
+              <name>	W_R2	</name>
+              <radius>	0.4	</radius>
+            </wheel>
+            <wheel>
+              <name>	W_R3	</name>
+              <radius>	0.4	</radius>
+            </wheel>
+            <wheel>
+              <name>	W_R4	</name>
+              <radius>	0.4	</radius>
+            </wheel>
+            <wheel>
+              <name>	W_R5	</name>
+              <radius>	0.4	</radius>
+            </wheel>
+            <wheel>
+              <name>	W_R6	</name>
+              <radius>	0.4	</radius>
+            </wheel>
+            <wheel>
+              <name>	W_R7	</name>
+              <radius>	0.4	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>

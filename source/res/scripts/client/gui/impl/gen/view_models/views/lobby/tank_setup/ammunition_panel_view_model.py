@@ -6,9 +6,9 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.common.ammunition_panel_mod
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_action_model import TankSetupActionModel
 
 class AmmunitionPanelViewModel(ViewModel):
-    __slots__ = ('onViewSizeInitialized', 'onSlotsWidthChanged')
+    __slots__ = ('onViewSizeInitialized',)
 
-    def __init__(self, properties=8, commands=2):
+    def __init__(self, properties=8, commands=1):
         super(AmmunitionPanelViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -47,10 +47,10 @@ class AmmunitionPanelViewModel(ViewModel):
     def setIsBootcamp(self, value):
         self._setBool(6, value)
 
-    def getIsVisible(self):
+    def getIsEvent(self):
         return self._getBool(7)
 
-    def setIsVisible(self, value):
+    def setIsEvent(self, value):
         self._setBool(7, value)
 
     def _initialize(self):
@@ -62,6 +62,5 @@ class AmmunitionPanelViewModel(ViewModel):
         self._addBoolProperty('isDisabled', False)
         self._addBoolProperty('isReady', False)
         self._addBoolProperty('isBootcamp', False)
-        self._addBoolProperty('isVisible', True)
+        self._addBoolProperty('isEvent', False)
         self.onViewSizeInitialized = self._addCommand('onViewSizeInitialized')
-        self.onSlotsWidthChanged = self._addCommand('onSlotsWidthChanged')

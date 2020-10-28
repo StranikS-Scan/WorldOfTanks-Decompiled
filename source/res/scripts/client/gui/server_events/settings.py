@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/server_events/settings.py
 import time
 from contextlib import contextmanager
+from account_helpers.AccountSettings import DOG_TAGS
 from gui.shared import utils
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
@@ -25,6 +26,25 @@ class _DQSettings(utils.SettingRecord):
 
     def onPremMissionsTabDiscovered(self):
         self.update(premMissionsTabDiscovered=True)
+
+
+class _DogTagsRootSettings(utils.SettingRootRecord):
+
+    def __init__(self, lastVisitedDogTagsTabIdx=None, onboardingEnabled=True, seenComps=None):
+        super(_DogTagsRootSettings, self).__init__(lastVisitedDogTagsTabIdx=lastVisitedDogTagsTabIdx, onboardingEnabled=onboardingEnabled, seenComps=seenComps or set())
+
+    def setLastVisitedDogTagsTab(self, lastVisitedDogTagsTabIdx):
+        self.update(lastVisitedDogTagsTabIdx=lastVisitedDogTagsTabIdx)
+
+    def setOnboardingEnabled(self, onboardingEnabled):
+        self.update(onboardingEnabled=onboardingEnabled)
+
+    def markComponentAsSeen(self, compId):
+        self.update(seenComps=self.seenComps | {compId})
+
+    @classmethod
+    def _getSettingName(cls):
+        return DOG_TAGS
 
 
 class _QuestSettings(utils.SettingRootRecord):
@@ -159,4 +179,15 @@ def getDQSettings():
 def dailyQuestSettings():
     s = get()
     yield s.dailyQuests
+    s.save()
+
+
+def getDogTagsSettings():
+    return _DogTagsRootSettings.load()
+
+
+@contextmanager
+def dogTagsSettings():
+    s = getDogTagsSettings()
+    yield s
     s.save()

@@ -26,9 +26,6 @@ class GameSeason(object):
         self.__cycles = None
         return
 
-    def isSingleCycleSeason(self):
-        return len(self.getAllCycles()) < 2
-
     def hasActiveCycle(self, now):
         return self.__cycleStartDate <= now < self.__cycleEndDate
 

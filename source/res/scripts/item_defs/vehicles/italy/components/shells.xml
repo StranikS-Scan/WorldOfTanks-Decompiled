@@ -1,11 +1,13 @@
 <shells.xml>
   <icons>
     <ap>	ARMOR_PIERCING.png 0 0	</ap>
-    <ap_he>	ARMOR_PIERCING_HE.png 0 0	</ap_he>
+    <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
     <ap_cr>	ARMOR_PIERCING_CR.png 0 0	</ap_cr>
+    <ap_cr_premium>	ARMOR_PIERCING_CR_PREMIUM.png 0 0	</ap_cr_premium>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
     <hc>	HOLLOW_CHARGE.png 0 0	</hc>
+    <hc_premium>	HOLLOW_CHARGE_PREMIUM.png 0 0	</hc_premium>
   </icons>
   <_20mm_c_p_20_mod_35>
     <id>	6	</id>
@@ -24,7 +26,7 @@
   <_20mm_c_p_20_138_B>
     <id>	7	</id>
     <userString>	#italy_vehicles:_20mm_c_p_20_138_B	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -53,7 +55,7 @@
   <_37mm_c_p_AZ_BT>
     <id>	23	</id>
     <userString>	#italy_vehicles:_37mm_c_p_AZ_BT	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -97,7 +99,7 @@
   <_37mm_c_g_p_37_40>
     <id>	4	</id>
     <userString>	#italy_vehicles:_37mm_c_g_p_37_40	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -141,7 +143,7 @@
   <_47mm_c_g_47_32_EPS>
     <id>	9	</id>
     <userString>	#italy_vehicles:_47mm_c_g_47_32_EPS	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	1600	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -201,7 +203,7 @@
   <_75mm_c_g_75_EPS_mod_42>
     <id>	12	</id>
     <userString>	#italy_vehicles:_75mm_c_g_75_EPS_mod_42	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	3200	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -275,7 +277,7 @@
   <_75mm_c_p_75_50>
     <id>	17	</id>
     <userString>	#italy_vehicles:_75mm_c_p_75_50	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -319,7 +321,7 @@
   <_90mm_c_p_90_42_mod_43>
     <id>	20	</id>
     <userString>	#italy_vehicles:_90mm_c_p_90_42_mod_43	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -363,7 +365,7 @@
   <_90mm_c_p_90_50_HVAP_T_M332_T67>
     <id>	1	</id>
     <userString>	#italy_vehicles:_90mm_c_p_90_50_HVAP_T_M332_T67	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -407,7 +409,7 @@
   <_90mm_c_p_90_APDS_Rh>
     <id>	27	</id>
     <userString>	#italy_vehicles:_90mm_c_p_90_APDS_Rh	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -451,7 +453,7 @@
   <_105mm_c_g_105_c_c_HEAT_Rh_V1>
     <id>	30	</id>
     <userString>	#italy_vehicles:_105mm_c_g_105_c_c_HEAT_Rh_V1	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -496,7 +498,7 @@
   <_105mm_c_g_105_51_HEAT_M456>
     <id>	33	</id>
     <userString>	#italy_vehicles:_105mm_c_g_105_51_HEAT_M456	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -524,6 +526,95 @@
       <devices>	150	</devices>
     </damage>
   </_105mm_c_g_105_51_HESH_M353>
+  <_105mm_c_p_105_55_AP_M352>
+    <id>	38	</id>
+    <userString>	#italy_vehicles:_105mm_c_p_105_55_AP_M352	</userString>
+    <icon>	ap	</icon>
+    <price>	930	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_c_p_105_55_AP_M352>
+  <_105mm_c_g_105_55_HEAT_M456>
+    <id>	39	</id>
+    <userString>	#italy_vehicles:_105mm_c_g_105_55_HEAT_M456	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_105mm_c_g_105_55_HEAT_M456>
+  <_105mm_c_g_105_55_HESH_M353>
+    <id>	40	</id>
+    <userString>	#italy_vehicles:_105mm_c_g_105_55_HESH_M353	</userString>
+    <icon>	he	</icon>
+    <price>	1120	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_c_g_105_55_HESH_M353>
+  <_120mm_c_p_APCBC_T14E>
+    <id>	53	</id>
+    <userString>	#italy_vehicles:_120mm_c_p_APCBC_T14E	</userString>
+    <icon>	ap	</icon>
+    <price>	930	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_c_p_APCBC_T14E>
+  <_120mm_c_p_HVAP_T17E>
+    <id>	54	</id>
+    <userString>	#italy_vehicles:_120mm_c_p_HVAP_T17E	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_c_p_HVAP_T17E>
+  <_120mm_a_e_T15HE>
+    <id>	55	</id>
+    <userString>	#italy_vehicles:_120mm_a_e_T15HE	</userString>
+    <icon>	he	</icon>
+    <price>	1120	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	120	</caliber>
+    <explosionRadius>	2.42	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	515	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_a_e_T15HE>
   <Development_Shell>
     <id>	65000	</id>
     <userString>	Development_Shell	</userString>
@@ -539,4 +630,49 @@
       <devices>	17	</devices>
     </damage>
   </Development_Shell>
+  <_75mm_c_p_75_50_Skoda_HELL>
+    <id>	35	</id>
+    <userString>	#italy_vehicles:_75mm_c_p_75_50_Skoda	</userString>
+    <icon>	ap	</icon>
+    <price>	88	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	100	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_75mm_c_p_75_50_Skoda_HELL>
+  <_90mm_c_p_90_53_mod_09_HELL>
+    <id>	36	</id>
+    <userString>	#italy_vehicles:_90mm_c_p_90_53_mod_09	</userString>
+    <icon>	ap	</icon>
+    <price>	435	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	150	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_90mm_c_p_90_53_mod_09_HELL>
+  <_90mm_c_p_90_53_mod_09_HELL__0>
+    <id>	37	</id>
+    <userString>	#italy_vehicles:_90mm_c_p_90_53_mod_09	</userString>
+    <icon>	ap	</icon>
+    <price>	435	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	150	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_90mm_c_p_90_53_mod_09_HELL__0>
 </shells.xml>

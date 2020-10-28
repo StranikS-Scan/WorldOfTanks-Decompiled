@@ -154,7 +154,7 @@ class VehicleInfoComponent(broker.ExchangeComponent):
 
 
 class VehicleStatusComponent(broker.ExchangeComponent):
-    __slots__ = ('_vehicleID', '_status', '_idsComposers', '_statsComposers')
+    __slots__ = ('_vehicleID', '_status', '_idsComposers', '_statsComposers', '_dogTag')
 
     def __init__(self, idsComposers=None, statsComposers=None):
         super(VehicleStatusComponent, self).__init__()
@@ -162,6 +162,8 @@ class VehicleStatusComponent(broker.ExchangeComponent):
         self._status = 0
         self._idsComposers = idsComposers or ()
         self._statsComposers = statsComposers or ()
+        self._dogTag = None
+        return
 
     def clear(self):
         self._vehicleID = 0
@@ -178,6 +180,8 @@ class VehicleStatusComponent(broker.ExchangeComponent):
         data = {'isEnemy': self._isEnemy,
          'vehicleID': self._vehicleID,
          'status': self._status}
+        if self._dogTag:
+            data['dogTag'] = self._dogTag
         for composer in self._idsComposers:
             composer.compose(data)
 
@@ -189,6 +193,7 @@ class VehicleStatusComponent(broker.ExchangeComponent):
     def addVehicleInfo(self, vInfoVO):
         self._vehicleID = vInfoVO.vehicleID
         self._status = vInfoVO.vehicleStatus
+        self._dogTag = vInfoVO.dogTag
 
     def addTotalStats(self, stats):
         for composer in self._statsComposers:

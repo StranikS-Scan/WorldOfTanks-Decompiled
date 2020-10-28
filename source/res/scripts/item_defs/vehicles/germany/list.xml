@@ -304,6 +304,16 @@
     <tags>	mediumTank HD beast improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </G64_Panther_II>
+  <G64_Panther_II_Hall_minion>
+    <id>	208	</id>
+    <userString>	#germany_vehicles:G64_Panther_II_Hall_minion	</userString>
+    <shortUserString>	#germany_vehicles:G64_Panther_II_Hall_minion_short	</shortUserString>
+    <description>	#germany_vehicles:Panther_II_descr	</description>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank improvedVentilation_class2_user beast event_battles secret lockOutfit HD cannot_be_sold lockCrew	</tags>
+    <level>	8	</level>
+  </G64_Panther_II_Hall_minion>
   <G45_G_Tiger>
     <id>	34	</id>
     <userString>	#germany_vehicles:G_Tiger	</userString>
@@ -816,6 +826,7 @@
     <userString>	#germany_vehicles:G98_Waffentrager_E100_P_cn	</userString>
     <description>	#germany_vehicles:G98_Waffentrager_E100_P_cn_descr	</description>
     <shortUserString>	#germany_vehicles:G98_Waffentrager_E100_P_cn_short	</shortUserString>
+    <shortDescriptionSpecial>	#germany_vehicles:G98_Waffentrager_E100_P_short_special	</shortDescriptionSpecial>
     <price>	30000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -852,6 +863,7 @@
     <userString>	#germany_vehicles:JagdTigerH_cn	</userString>
     <shortUserString>	#germany_vehicles:JagdTigerH_cn_short	</shortUserString>
     <description>	#germany_vehicles:JagdTigerH_cn_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:JagdTigerH_cn_short_special	</shortDescriptionSpecial>
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -1132,6 +1144,16 @@
     <tags>	mediumTank HD beast improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	7	</level>
   </G78_Panther_M10>
+  <G00_Bomber_Hell>
+    <id>	209	</id>
+    <userString>	#germany_vehicles:G00_Bomber_Hell	</userString>
+    <description>	#germany_vehicles:G00_Bomber_Hell_descr	</description>
+    <shortUserString>	#germany_vehicles:G00_Bomber_Hell_short	</shortUserString>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank event_battles secret HD cannot_be_sold lockCrew lockOutfit	</tags>
+    <level>	1	</level>
+  </G00_Bomber_Hell>
   <G10_PzIII_AusfJ_training>
     <id>	226	</id>
     <userString>	#germany_vehicles:PzIII_AusfJ	</userString>
@@ -1441,6 +1463,36 @@
     <tags>	heavyTank HD secret bob cannot_be_sold heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
     <level>	10	</level>
   </G134_PzKpfw_VII_bob>
+  <G54_E-50_Hall_minion>
+    <id>	218	</id>
+    <userString>	#germany_vehicles:G54_E-50_Hall_minion	</userString>
+    <shortUserString>	#germany_vehicles:G54_E-50_Hall_minion_short	</shortUserString>
+    <description>	#germany_vehicles:G54_E-50_Hall_minion_descr	</description>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank mediumTank3 improvedVentilation_class2_user lockOutfit HD secret event_battles cannot_be_sold lockCrew	</tags>
+    <level>	9	</level>
+  </G54_E-50_Hall_minion>
+  <G73_E50_Ausf_M_Hall_minion>
+    <id>	252	</id>
+    <userString>	#germany_vehicles:G73_E50_Ausf_M_Hall_minion	</userString>
+    <shortUserString>	#germany_vehicles:G73_E50_Ausf_M_Hall_minion_short	</shortUserString>
+    <description>	#germany_vehicles:E50_Ausf_M_Hall_minion_descr	</description>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank mediumTank3 improvedVentilation_class2_user HD secret event_battles cannot_be_sold lockCrew earn_crystals lockOutfit	</tags>
+    <level>	10	</level>
+  </G73_E50_Ausf_M_Hall_minion>
+  <G146_E100_Hell_Boss>
+    <id>	207	</id>
+    <userString>	#germany_vehicles:G146_E100_Hell_Boss	</userString>
+    <shortUserString>	#germany_vehicles:G146_E100_Hell_Boss_short	</shortUserString>
+    <description>	#germany_vehicles:G146_E100_Hell_Boss_descr	</description>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank heavyTank1 improvedVentilation_class3_user antifragmentationLining_superheavy_user lockOutfit HD secret event_battles cannot_be_sold lockCrew earn_crystals	</tags>
+    <level>	10	</level>
+  </G146_E100_Hell_Boss>
   <G65_JagdTiger_SdKfz_185_IGR>
     <id>	151	</id>
     <userString>	#igr_vehicles:JagdTiger_SdKfz_185_IGR	</userString>
@@ -1620,155 +1672,42 @@
     <tags>	lightTank event_battles secret HD spawned battle_royale unobservable	</tags>
     <level>	1	</level>
   </G00_Bomber_SH>
-  <G102_Pz_III_WT>
-    <id>	130	</id>
-    <userString>	#germany_vehicles:PzIII_A_WT	</userString>
-    <shortUserString>	#germany_vehicles:PzIII_A_WT_short	</shortUserString>
-    <description>	#germany_vehicles:PzIII_A_WT_descr	</description>
-    <price>	35000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank improvedVentilation_class1_user HD secret event_battles lockCrew lockOutfit cannot_be_sold	</tags>
-    <level>	3	</level>
-  </G102_Pz_III_WT>
-  <G25_PzII_Luchs_WT>
-    <id>	131	</id>
-    <userString>	#germany_vehicles:PzII_Luchs_WT	</userString>
-    <shortUserString>	#germany_vehicles:PzII_Luchs_WT_short	</shortUserString>
-    <description>	#germany_vehicles:PzII_Luchs_WT_descr	</description>
+  <G25_PzII_Luchs_HELL>
+    <id>	69	</id>
+    <userString>	#germany_vehicles:G25_PzII_Luchs_HELL	</userString>
+    <shortUserString>	#germany_vehicles:G25_PzII_Luchs_short_HELL	</shortUserString>
+    <description>	#germany_vehicles:PzII_Luchs_descr	</description>
     <price>	155000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank improvedVentilation_class1_user HD secret event_battles lockCrew lockOutfit cannot_be_sold	</tags>
+    <tags>	lightTank improvedVentilation_class1_user HD  event_battles secret cannot_be_sold lockCrew lockOutfit	</tags>
     <level>	4	</level>
-  </G25_PzII_Luchs_WT>
-  <G81_Pz_IV_AusfH_WT>
-    <id>	132	</id>
-    <userString>	#germany_vehicles:Pz_IV_AusfH_WT	</userString>
-    <shortUserString>	#germany_vehicles:Pz_IV_AusfH_WT_short	</shortUserString>
-    <description>	#germany_vehicles:Pz_IV_AusfH_WT_descr	</description>
-    <price>	373000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank improvedVentilation_class2_user HD secret event_battles lockCrew lockOutfit cannot_be_sold	</tags>
-    <level>	5	</level>
-  </G81_Pz_IV_AusfH_WT>
-  <G04_PzVI_Tiger_I_WT>
-    <id>	133	</id>
-    <userString>	#germany_vehicles:PzVI_WT	</userString>
-    <shortUserString>	#germany_vehicles:Tiger_WT_short	</shortUserString>
-    <description>	#germany_vehicles:PzVI_WT_descr	</description>
-    <price>	1390000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank improvedVentilation_class3_user beast HD secret event_battles lockCrew lockOutfit cannot_be_sold	</tags>
-    <level>	7	</level>
-  </G04_PzVI_Tiger_I_WT>
-  <G03_PzV_Panther_WT>
-    <id>	134	</id>
-    <userString>	#germany_vehicles:PzV_WT	</userString>
-    <shortUserString>	#germany_vehicles:PzV_WT_short	</shortUserString>
-    <description>	#germany_vehicles:PzV_WT_descr	</description>
-    <price>	1380000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank improvedVentilation_class2_user beast HD secret event_battles lockCrew lockOutfit cannot_be_sold	</tags>
-    <level>	7	</level>
-  </G03_PzV_Panther_WT>
-  <G16_PzVIB_Tiger_II_WT>
-    <id>	135	</id>
-    <userString>	#germany_vehicles:PzVIB_Tiger_II_WT	</userString>
-    <shortUserString>	#germany_vehicles:PzVIB_Tiger_II_WT_short	</shortUserString>
-    <description>	#germany_vehicles:PzVIB_Tiger_II_WT_descr	</description>
-    <price>	2450000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank improvedVentilation_class3_user beast HD secret event_battles lockCrew lockOutfit cannot_be_sold	</tags>
-    <level>	8	</level>
-  </G16_PzVIB_Tiger_II_WT>
-  <G56_E-100_WT>
-    <id>	137	</id>
-    <userString>	#germany_vehicles:E-100_WT	</userString>
-    <shortUserString>	#germany_vehicles:E-100_WT_short	</shortUserString>
-    <description>	#germany_vehicles:E-100_WT_descr	</description>
-    <price>	6100000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank heavyTank1 improvedVentilation_class3_user antifragmentationLining_superheavy_user HD earn_crystals secret event_battles lockCrew lockOutfit cannot_be_sold	</tags>
-    <level>	10	</level>
-  </G56_E-100_WT>
-  <G15_VK3601H_WT>
-    <id>	138	</id>
-    <userString>	#germany_vehicles:VK3601H_WT	</userString>
-    <shortUserString>	#germany_vehicles:VK3601H_WT_short	</shortUserString>
-    <description>	#germany_vehicles:VK3601H_WT_descr	</description>
-    <price>	935000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank improvedVentilation_class3_user HD secret event_battles lockCrew lockOutfit cannot_be_sold	</tags>
-    <level>	6	</level>
-  </G15_VK3601H_WT>
-  <G66_VK2801_WT>
-    <id>	139	</id>
-    <userString>	#germany_vehicles:VK2801_WT	</userString>
-    <shortUserString>	#germany_vehicles:VK2801_WT_short	</shortUserString>
-    <description>	#germany_vehicles:VK2801_WT_descr	</description>
-    <price>	945000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank improvedVentilation_class1_user scout HD secret event_battles lockCrew lockOutfit cannot_be_sold	</tags>
-    <level>	6	</level>
-  </G66_VK2801_WT>
-  <G55_E-75_WT>
-    <id>	140	</id>
-    <userString>	#germany_vehicles:E-75_WT	</userString>
-    <shortUserString>	#germany_vehicles:E-75_WT_short	</shortUserString>
-    <description>	#germany_vehicles:E-75_WT_descr	</description>
-    <price>	3480000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank heavyTank1 improvedVentilation_class3_user antifragmentationLining_superheavy_user HD secret event_battles lockCrew lockOutfit cannot_be_sold	</tags>
-    <level>	9	</level>
-  </G55_E-75_WT>
-  <G42_Maus_WT>
-    <id>	141	</id>
-    <userString>	#germany_vehicles:Maus_WT	</userString>
-    <shortUserString>	#germany_vehicles:Maus_WT_short	</shortUserString>
-    <description>	#germany_vehicles:Maus_WT_descr	</description>
-    <price>	6100000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank heavyTank1 improvedVentilation_class3_user antifragmentationLining_superheavy_user HD earn_crystals secret event_battles lockCrew lockOutfit cannot_be_sold	</tags>
-    <level>	10	</level>
-  </G42_Maus_WT>
-  <G134_PzKpfw_VII_WT>
-    <id>	142	</id>
-    <userString>	#germany_vehicles:G134_PzKpfw_VII_WT	</userString>
-    <shortUserString>	#germany_vehicles:G134_PzKpfw_VII_WT_short	</shortUserString>
-    <description>	#germany_vehicles:G134_PzKpfw_VII_WT_descr	</description>
-    <price>	6100000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank heavyTank1 improvedVentilation_class3_user antifragmentationLining_superheavy_user HD earn_crystals secret event_battles lockCrew lockOutfit cannot_be_sold	</tags>
-    <level>	10	</level>
-  </G134_PzKpfw_VII_WT>
-  <G105_T-55_NVA_DDR_EL>
-    <id>	143	</id>
-    <userString>	#germany_vehicles:G105_T-55_NVA_DDR_EL	</userString>
-    <shortUserString>	#germany_vehicles:G105_T-55_NVA_DDR_EL_short	</shortUserString>
-    <description>	#germany_vehicles:G105_T-55_NVA_DDR_EL_desc	</description>
-    <price>	100	  <gold></gold>
+    <clone_tags>	cloned	</clone_tags>
+    <notInShop>	True	</notInShop>
+  </G25_PzII_Luchs_HELL>
+  <G114_Rheinmetall_Skorpian_HELL>
+    <id>	81	</id>
+    <userString>	#germany_vehicles:G114_Rheinmetall_Skorpian_HELL	</userString>
+    <description>	#germany_vehicles:G114_Rheinmetall_Skorpian_descr	</description>
+    <shortUserString>	#germany_vehicles:G114_Rheinmetall_Skorpian_short_HELL	</shortUserString>
+    <shortDescriptionSpecial>	#germany_vehicles:G114_Rheinmetall_Skorpian_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:G114_Rheinmetall_Skorpian_long_special	</longDescriptionSpecial>
+    <price>	10900	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	event_battles mediumTank event_hunter special secret HD lockCrew lockCrewSkills lockOutfit lockShells lockEquipment lockDevices cannot_be_sold unrecoverable	</tags>
-    <level>	9	</level>
-  </G105_T-55_NVA_DDR_EL>
-  <G98_Waffentrager_E100_TL>
-    <id>	144	</id>
-    <userString>	#germany_vehicles:G98_Waffentrager_E100_TL	</userString>
-    <description>	#germany_vehicles:G98_Waffentrager_E100_TL_desc	</description>
-    <shortUserString>	#germany_vehicles:G98_Waffentrager_E100_TL_short	</shortUserString>
-    <price>	6100000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	event_battles event_boss AT-SPG antifragmentationLining_megaheavy_user HD special secret unrecoverable lockCrew lockCrewSkills lockOutfit lockShells lockEquipment lockDevices cannot_be_sold earn_crystals	</tags>
-    <level>	10	</level>
-  </G98_Waffentrager_E100_TL>
-  <G98_Waffentrager_E100_TL_S>
-    <id>	145	</id>
-    <userString>	#germany_vehicles:G98_Waffentrager_E100_TL_S	</userString>
-    <description>	#germany_vehicles:G98_Waffentrager_E100_TL_S_desc	</description>
-    <shortUserString>	#germany_vehicles:G98_Waffentrager_E100_TL_S_short	</shortUserString>
-    <price>	6100000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	event_battles event_boss special_event_boss AT-SPG antifragmentationLining_megaheavy_user HD special secret unrecoverable lockCrew lockCrewSkills lockOutfit lockShells lockEquipment lockDevices cannot_be_sold earn_crystals	</tags>
-    <level>	10	</level>
-  </G98_Waffentrager_E100_TL_S>
+    <tags>	AT-SPG mediumAT-SPG AT-SPG1 HD inGame  event_battles secret cannot_be_sold lockCrew lockOutfit	</tags>
+    <level>	8	</level>
+    <clone_tags>	cloned	</clone_tags>
+    <notInShop>	True	</notInShop>
+  </G114_Rheinmetall_Skorpian_HELL>
+  <G25_PzII_Luchs_HELL_HALL>
+    <id>	82	</id>
+    <userString>	#germany_vehicles:G25_PzII_Luchs_HELL	</userString>
+    <shortUserString>	#germany_vehicles:G25_PzII_Luchs_short_HELL	</shortUserString>
+    <description>	#germany_vehicles:PzII_Luchs_descr	</description>
+    <price>	155000	</price>
+    <tags>	lightTank improvedVentilation_class1_user HD  event_battles secret cannot_be_sold lockCrew lockOutfit	</tags>
+    <level>	4	</level>
+    <clone_tags>	cloned	</clone_tags>
+    <notInShop>	True	</notInShop>
+    <notInShop>	True	</notInShop>
+  </G25_PzII_Luchs_HELL_HALL>
 </list.xml>

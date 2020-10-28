@@ -3,7 +3,6 @@
 import weakref
 import typing
 from frameworks.state_machine import StringEvent
-from gui.battle_pass.state_machine import lockOverlays
 from gui.battle_pass.state_machine.observers import FinalStateMachineObserver
 from gui.battle_pass.state_machine.states import FinalRewardEventID
 if typing.TYPE_CHECKING:
@@ -38,7 +37,6 @@ class FinalRewardLogic(object):
 
     def startFinalFlow(self, rewards, data):
         self.__machine.saveRewards(rewards, data)
-        lockOverlays(True)
         self.postStateEvent(FinalRewardEventID.PROGRESSION_COMPLETE)
 
     def postVotingOpened(self, **kwargs):

@@ -7,12 +7,13 @@ from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from bootcamp.BootCampEvents import g_bootcampEvents
 from bootcamp.Bootcamp import g_bootcamp
-from bootcamp.statistic.decorators import loggerTarget, loggerEntry, simpleLog
-from bootcamp.statistic.logging_constants import BC_LOG_KEYS, BC_LOG_ACTIONS, HANGAR_MENU_ITEMS
+from uilogging.decorators import loggerTarget, loggerEntry, simpleLog
+from uilogging.bootcamp.constants import BC_LOG_KEYS, BC_LOG_ACTIONS, LIMITS
+from uilogging.bootcamp.loggers import BootcampUILogger
 from bootcamp.aop.in_garage import PointcutBattleSelectorHintText
 _ALLOWED_ENABLED_BUTTONS = [LobbyHeader.BUTTONS.SETTINGS, LobbyHeader.BUTTONS.BATTLE_SELECTOR]
 
-@loggerTarget(logKey=BC_LOG_KEYS.BC_HANGAR_MENU)
+@loggerTarget(logKey=BC_LOG_KEYS.BC_HANGAR_HINTS, loggerCls=BootcampUILogger)
 class BCLobbyHeader(LobbyHeader):
 
     def __init__(self):
@@ -77,6 +78,6 @@ class BCLobbyHeader(LobbyHeader):
             g_eventDispatcher.updateUI()
         return
 
-    @simpleLog(argKey='alias', argMap=HANGAR_MENU_ITEMS)
+    @simpleLog(argsIndex=0, logOnce=True, restrictions={'lesson_id': lambda x: x <= LIMITS.RESEARCH_MAX_LESSON})
     def menuItemClick(self, alias):
         super(BCLobbyHeader, self).menuItemClick(alias)

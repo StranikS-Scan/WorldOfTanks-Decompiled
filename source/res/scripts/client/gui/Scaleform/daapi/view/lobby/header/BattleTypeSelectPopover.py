@@ -1,25 +1,26 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/BattleTypeSelectPopover.py
 from adisp import process
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.Scaleform.daapi.view.meta.BattleTypeSelectPopoverMeta import BattleTypeSelectPopoverMeta
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import LoadViewEvent
+from skeletons.gui.game_control import IEpicBattleMetaGameController
 from helpers import dependency
-from skeletons.gui.game_control import IEpicBattleMetaGameController, IRankedBattlesController, IGameEventController
+from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
 
 class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
     __epicQueueController = dependency.descriptor(IEpicBattleMetaGameController)
     __rankedController = dependency.descriptor(IRankedBattlesController)
-    __gameEventController = dependency.descriptor(IGameEventController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __eventsCache = dependency.descriptor(IEventsCache)
 
@@ -63,20 +64,18 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
                 tooltip = TOOLTIPS_CONSTANTS.BATTLE_ROYALE_SELECTOR_INFO
                 isSpecial = True
             elif itemData == PREBATTLE_ACTION_NAME.EVENT_BATTLE:
-                tooltip, isSpecial = self.__getEventAvailabilityData()
-            elif itemData == PREBATTLE_ACTION_NAME.BOB or itemData == PREBATTLE_ACTION_NAME.BOB_SQUAD:
                 isSpecial = True
-                tooltip = TOOLTIPS_CONSTANTS.BOB_SELECTOR_INFO
+                tooltip = TOOLTIPS_CONSTANTS.EVENT_SELECTOR_INFO
             result = {'isSpecial': isSpecial,
              'tooltip': tooltip}
             return result
 
     def demoClick(self):
-        demonstratorWindow = self.app.containerManager.getView(ViewTypes.WINDOW, criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.DEMONSTRATOR_WINDOW})
+        demonstratorWindow = self.app.containerManager.getView(WindowLayer.WINDOW, criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.DEMONSTRATOR_WINDOW})
         if demonstratorWindow is not None:
             demonstratorWindow.onWindowClose()
         else:
-            self.fireEvent(LoadViewEvent(VIEW_ALIAS.DEMONSTRATOR_WINDOW), EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.DEMONSTRATOR_WINDOW)), EVENT_BUS_SCOPE.LOBBY)
         return
 
     def update(self):
@@ -99,6 +98,3 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
         if not navigationPossible:
             return
         battle_selector_items.getItems().select(actionName)
-
-    def __getEventAvailabilityData(self):
-        return (TOOLTIPS_CONSTANTS.EVENT_SELECTOR_INFO, True) if self.__gameEventController.isActive() else (TOOLTIPS_CONSTANTS.EVENT_UNAVAILABLE_UNFO, True)

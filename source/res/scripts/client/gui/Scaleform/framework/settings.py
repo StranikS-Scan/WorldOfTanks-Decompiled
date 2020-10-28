@@ -5,4 +5,4 @@
 class UIFrameworkImpl(object):
     UNDEFINED = 0
     SCALEFORM = 1
-    UNBOUND = 2
+    GUI_IMPL = 2

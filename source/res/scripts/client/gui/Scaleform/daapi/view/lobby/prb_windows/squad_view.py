@@ -6,10 +6,10 @@ from gui.impl.gen.resources import R
 from gui.prb_control import settings
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, REQUEST_TYPE
 from gui.Scaleform.daapi.view.lobby.prb_windows.squad_action_button_state_vo import SquadActionButtonStateVO
-from gui.Scaleform.daapi.view.lobby.prb_windows.event_squad_button_state_vo import EventSquadButtonStateVO
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.daapi.view.meta.SquadViewMeta import SquadViewMeta
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -20,7 +20,6 @@ from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.game_control import IBattleRoyaleController
-from skeletons.gui.game_control import IBobController
 
 def _unitWithPremium(unitData):
     return any((slot.player.hasPremium for slot in unitData.slotsIterator if slot.player))
@@ -32,7 +31,7 @@ class SquadView(SquadViewMeta):
 
     def inviteFriendRequest(self):
         if self.__canSendInvite():
-            self.fireEvent(events.LoadViewEvent(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY, ctx={'prbName': 'squad',
+            self.fireEvent(events.LoadViewEvent(SFViewLoadParams(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY), ctx={'prbName': 'squad',
              'ctrlType': CTRL_ENTITY_TYPE.UNIT}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     @process
@@ -67,7 +66,7 @@ class SquadView(SquadViewMeta):
             elif vehicleVO is None:
                 needToUpdateSlots = True
         if self._eventsCache.isSquadXpFactorsEnabled() or self._eventsCache.isBalancedSquadEnabled():
-            self.as_setActionButtonStateS(self._getActionButtonStateVO())
+            self.as_setActionButtonStateS(self.__getActionButtonStateVO())
         if needToUpdateSlots:
             self._updateMembersData()
         return
@@ -137,7 +136,7 @@ class SquadView(SquadViewMeta):
                     break
 
         self.as_updateInviteBtnStateS(enabled)
-        self.as_setActionButtonStateS(self._getActionButtonStateVO())
+        self.as_setActionButtonStateS(self.__getActionButtonStateVO())
 
     def _updateMembersData(self):
         entity = self.prbEntity
@@ -158,11 +157,11 @@ class SquadView(SquadViewMeta):
     def _isPremiumBonusEnabled(self):
         return self.__lobbyContext.getServerSettings().squadPremiumBonus.isEnabled
 
-    def _getActionButtonStateVO(self):
-        return SquadActionButtonStateVO(self.prbEntity)
-
     def __updateHeader(self):
         self.as_setSimpleTeamSectionDataS(self._getHeaderPresenter().getData())
+
+    def __getActionButtonStateVO(self):
+        return SquadActionButtonStateVO(self.prbEntity)
 
     def __canSendInvite(self):
         return self.prbEntity.getPermissions().canSendInvite()
@@ -170,15 +169,6 @@ class SquadView(SquadViewMeta):
     def __handleSetPrebattleCoolDown(self, event):
         if event.requestID is REQUEST_TYPE.SET_PLAYER_STATE:
             self.as_setCoolDownForReadyButtonS(event.coolDown)
-
-
-class EventSquadView(SquadView):
-
-    def _getHeaderPresenter(self):
-        return _EventHeaderPresenter(self.prbEntity)
-
-    def _getActionButtonStateVO(self):
-        return EventSquadButtonStateVO(self.prbEntity)
 
 
 class EpicSquadView(SquadView):
@@ -203,22 +193,6 @@ class BattleRoyaleSquadView(SquadView):
 
     def __battleRoyaleEnabledChanged(self):
         if not self.__battleRoyaleController.isEnabled():
-            self._doLeave()
-
-
-class BobSquadView(SquadView):
-    bobController = dependency.descriptor(IBobController)
-
-    def _populate(self):
-        super(BobSquadView, self)._populate()
-        self.bobController.onUpdated += self.__onUpdated
-
-    def _dispose(self):
-        self.bobController.onUpdated -= self.__onUpdated
-        super(BobSquadView, self)._dispose()
-
-    def __onUpdated(self):
-        if not self.bobController.isModeActive():
             self._doLeave()
 
 
@@ -310,29 +284,6 @@ class _EpicHeaderPresenter(_HeaderPresenter):
 
     def _packBonuses(self):
         return []
-
-
-class _EventHeaderPresenter(_HeaderPresenter):
-
-    def __init__(self, prbEntity):
-        super(_EventHeaderPresenter, self).__init__(prbEntity)
-        self._bgImage = backport.image(R.images.gui.maps.icons.squad.backgrounds.event_squad())
-        self._isArtVisible = True
-        self._isVisibleHeaderIcon = False
-
-    def _packBonuses(self):
-        return []
-
-    def _getInfoIconTooltipParams(self):
-        tooltip = makeTooltip(header=backport.text(R.strings.wt_event.squadWindow.tooltips.vehicle.header()), body=backport.text(R.strings.wt_event.squadWindow.tooltips.vehicle.body()))
-        return (tooltip, TOOLTIPS_CONSTANTS.COMPLEX)
-
-    def _getMessageParams(self):
-        iconSource = ''
-        if self._isVisibleHeaderIcon:
-            iconSource = backport.image(R.images.gui.maps.icons.squad.event())
-        messageText = text_styles.main(backport.text(R.strings.wt_event.squadWindow.header.squadFormationRestriction()))
-        return (iconSource, messageText)
 
 
 class _BattleRoyaleHeaderPresenter(_HeaderPresenter):

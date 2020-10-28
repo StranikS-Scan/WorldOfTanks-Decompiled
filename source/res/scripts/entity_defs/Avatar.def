@@ -17,6 +17,9 @@
     <Interface>	VehicleHealthBroadcastListenerComponent_Avatar	</Interface>
     <Interface>	AvatarLoot	</Interface>
     <Interface>	AvatarSpawnKeyPoints	</Interface>
+    <Interface>	WaveBotsSpawnController_Avatar	</Interface>
+    <Interface>	BattleHintsController_Avatar	</Interface>
+    <Interface>	WarningHintsController_Avatar	</Interface>
     <Interface>	AvatarEpic	</Interface>
   </Implements>
   <Volatile>
@@ -167,6 +170,10 @@
       <Type>	UINT32	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </heatmapLoggingFlags>
+    <gameParamsRev>
+      <Type>	UINT64	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </gameParamsRev>
     <accountDBIDOnCell>
       <Type>	DB_ID	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
@@ -259,6 +266,7 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
+      <Arg>	BOOL	</Arg>
       <Arg>	BOOL	</Arg>
     </updateVehicleClipReloadTime>
     <updateVehicleAmmo>
@@ -429,7 +437,7 @@
       </VariableLengthHeaderSize>
     </updateArena>
     <updatePositions>
-      <Arg>	ARRAY	  <of>	UINT8	</of>
+      <Arg>	ARRAY	  <of>	UINT16	</of>
       </Arg>
       <Arg>	ARRAY	  <of>	INT16	</of>
       </Arg>
@@ -492,6 +500,20 @@
       <Arg>	PYTHON	</Arg>
       <AllowUnsafeData>	true	</AllowUnsafeData>
     </updateQuestProgress>
+    <updateScenarioTimer>
+      <Arg>	PYTHON	</Arg>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </updateScenarioTimer>
+    <sendPlayerBattleLogNotification>
+      <Arg>	STRING	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </sendPlayerBattleLogNotification>
+    <sendEquipmentBattleLogNotification>
+      <Arg>	UINT16	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	BOOL	</Arg>
+    </sendEquipmentBattleLogNotification>
   </ClientMethods>
   <CellMethods>
     <autoAim>
@@ -590,7 +612,6 @@
       <Arg>	VECTOR3	</Arg>
       <Arg>	VECTOR2	</Arg>
     </setEquipmentApplicationPoint>
-    <sendFinalStats></sendFinalStats>
     <switchViewPointOrBindToVehicle>
       <Exposed>	OWN_CLIENT	</Exposed>
       <Arg>	BOOL	</Arg>
@@ -653,7 +674,7 @@
     <makeDenunciation>
       <Exposed></Exposed>
       <Arg>	OBJECT_ID	</Arg>
-      <Arg>	INT32	</Arg>
+      <Arg>	INT64	</Arg>
       <Arg>	INT8	</Arg>
     </makeDenunciation>
     <banUnbanUser>
@@ -739,9 +760,6 @@
     <vehicle_replenishAmmo>
       <Exposed></Exposed>
     </vehicle_replenishAmmo>
-    <createCellNearHere>
-      <Arg>	MAILBOX	</Arg>
-    </createCellNearHere>
     <onRemovedFromArena>
       <Arg>	UINT64	</Arg>
     </onRemovedFromArena>
@@ -786,7 +804,6 @@
       <Arg>	INT32	</Arg>
       <Exposed></Exposed>
     </logStreamCorruption>
-    <sendFinalStats></sendFinalStats>
     <releaseClientForLogin>
       <Arg>	BOOL	</Arg>
     </releaseClientForLogin>
@@ -802,6 +819,9 @@
       <Arg>	CLIENT_STATUS_STATISTICS	</Arg>
     </reportClientStats>
     <setAvatarClient></setAvatarClient>
+    <onAFKRulesViolation>
+      <Arg>	UINT64	</Arg>
+    </onAFKRulesViolation>
     <leaveArenaByAccount>
       <Arg>	BOOL	</Arg>
     </leaveArenaByAccount>

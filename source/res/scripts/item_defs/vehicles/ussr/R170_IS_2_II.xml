@@ -81,6 +81,13 @@
       <undamaged>	vehicles/russian/R170_IS_2_II/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/russian/R170_IS_2_II/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/russian/R170_IS_2_II/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <R170_IS_2_II_3Dst>
+          <undamaged>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/crash/lod0/Hull.model	</exploded>
+        </R170_IS_2_II_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -110,8 +117,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.402807 0.455796 3.03607	</rayStart>
-        <rayEnd>	0.402765 0.282573 2.93611	</rayEnd>
+        <rayStart>	0.395566 0.488366 2.97956	</rayStart>
+        <rayEnd>	0.395698 0.314918 2.87999	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.25	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
@@ -1122,6 +1129,34 @@
         <anchorDirection>	0.000422016 0.974762 -0.223245	</anchorDirection>
         <verticalMirror>	true	</verticalMirror>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15074	</slotId>
+        <tags>	formfactor_square direction_left_to_right	</tags>
+        <compatibleModels>	R170_IS_2_II_3Dst	</compatibleModels>
+        <position>	-0.491722 1.35827 2.94158	</position>
+        <rotation>	0.582501 -0.000070 3.1398	</rotation>
+        <scale>	0.583643 0.184189 0.583648	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.12558	</clipAngle>
+        <anchorPosition>	-0.491648 0.437065 2.96454	</anchorPosition>
+        <anchorDirection>	0.00175407 0.835088 0.550113	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15075	</slotId>
+        <tags>	formfactor_square direction_right_to_left	</tags>
+        <compatibleModels>	R170_IS_2_II_3Dst	</compatibleModels>
+        <position>	-1.27308 1.40214 0.871698	</position>
+        <rotation>	1.34671 -1.44282 -3.09224	</rotation>
+        <scale>	0.41344 0.217802 0.413444	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.288155	</clipAngle>
+        <anchorPosition>	-1.39949 0.474946 0.881496	</anchorPosition>
+        <anchorDirection>	-0.972144 0.221941 0.0753598	</anchorDirection>
+      </slot>
     </customizationSlots>
     <camouflage>
       <density>	106.462 106.222	</density>
@@ -1161,6 +1196,13 @@
         <undamaged>	vehicles/russian/R170_IS_2_II/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R170_IS_2_II/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R170_IS_2_II/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <R170_IS_2_II_3Dst>
+            <undamaged>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/crash/lod0/Chassis.model	</exploded>
+          </R170_IS_2_II_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1914,6 +1956,13 @@
         <undamaged>	vehicles/russian/R170_IS_2_II/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R170_IS_2_II/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R170_IS_2_II/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <R170_IS_2_II_3Dst>
+            <undamaged>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/crash/lod0/Chassis.model	</exploded>
+          </R170_IS_2_II_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -2748,6 +2797,13 @@
             <undamaged>	vehicles/russian/R170_IS_2_II/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R170_IS_2_II/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R170_IS_2_II/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <R170_IS_2_II_3Dst>
+                <undamaged>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </R170_IS_2_II_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R170_IS_2_II/collision/Gun_01.model	</collisionModelServer>
@@ -2862,6 +2918,13 @@
             <undamaged>	vehicles/russian/R170_IS_2_II/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/russian/R170_IS_2_II/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/russian/R170_IS_2_II/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <R170_IS_2_II_3Dst>
+                <undamaged>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/crash/lod0/Gun_02.model	</exploded>
+              </R170_IS_2_II_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R170_IS_2_II/collision/Gun_02.model	</collisionModelServer>
@@ -2930,6 +2993,13 @@
         <undamaged>	vehicles/russian/R170_IS_2_II/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/russian/R170_IS_2_II/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/russian/R170_IS_2_II/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <R170_IS_2_II_3Dst>
+            <undamaged>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </R170_IS_2_II_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R170_IS_2_II/collision/Turret_01.model	</collisionModelServer>
@@ -3684,6 +3754,78 @@
           <anchorPosition>	1.14017 0.43683 0.745779	</anchorPosition>
           <anchorDirection>	0.962291 0.107474 0.249892	</anchorDirection>
         </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35051	</slotId>
+          <tags>	formfactor_square direction_right_to_left	</tags>
+          <compatibleModels>	R170_IS_2_II_3Dst	</compatibleModels>
+          <position>	-1.05042 2.01911 1.49485	</position>
+          <rotation>	1.21464 -1.3071 3.13321	</rotation>
+          <scale>	0.468885 0.20995 0.468889	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.00503	</clipAngle>
+          <anchorPosition>	-1.13168 0.45581 0.673973	</anchorPosition>
+          <anchorDirection>	-0.90263 0.348662 0.252376	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35052	</slotId>
+          <tags>	formfactor_square direction_left_to_right	</tags>
+          <compatibleModels>	R170_IS_2_II_3Dst	</compatibleModels>
+          <position>	1.05045 2.01909 1.49485	</position>
+          <rotation>	1.21466 1.30707 3.13322	</rotation>
+          <scale>	0.468885 0.20995 0.468889	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.00503	</clipAngle>
+          <anchorPosition>	1.1321 0.455788 0.672517	</anchorPosition>
+          <anchorDirection>	0.906997 0.348643 0.236231	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35053	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R170_IS_2_II_3Dst	</compatibleModels>
+          <position>	-0.0785572 2.32956 1.55741	</position>
+          <rotation>	0.0865497 0.000784506 3.14008	</rotation>
+          <scale>	0.765624 0.169847 0.765624	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.24878	</clipAngle>
+          <anchorPosition>	-0.0784384 0.809786 0.720306	</anchorPosition>
+          <anchorDirection>	0.00158049 0.996256 0.0864403	</anchorDirection>
+          <verticalMirror>	true	</verticalMirror>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35054	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R170_IS_2_II_3Dst	</compatibleModels>
+          <position>	0.00110097 2.02013 -1.07506	</position>
+          <rotation>	2.14025 -0.00446486 -0.00526142	</rotation>
+          <scale>	0.37078 0.260796 0.37078	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.24878	</clipAngle>
+          <anchorPosition>	0.000927031 0.487912 -2.01625	</anchorPosition>
+          <anchorDirection>	-0.00150112 0.539165 -0.842199	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35055	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R170_IS_2_II_3Dst	</compatibleModels>
+          <position>	-0.000801542 2.40165 -0.648962	</position>
+          <rotation>	-3.1223 -0.000020 -0.0028367	</rotation>
+          <scale>	0.453118 0.10052 0.45312	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.0792	</clipAngle>
+          <anchorPosition>	-0.000991951 0.874061 -1.49127	</anchorPosition>
+          <anchorDirection>	-0.00283709 0.99981 0.0192914	</anchorDirection>
+          <verticalMirror>	true	</verticalMirror>
+        </slot>
       </customizationSlots>
       <camouflage>
         <density>	93.5363 93.3342	</density>
@@ -3805,6 +3947,13 @@
             <undamaged>	vehicles/russian/R170_IS_2_II/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/russian/R170_IS_2_II/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/russian/R170_IS_2_II/crash/lod0/Gun_03.model	</exploded>
+            <sets>
+              <R170_IS_2_II_3Dst>
+                <undamaged>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/crash/lod0/Gun_03.model	</exploded>
+              </R170_IS_2_II_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R170_IS_2_II/collision/Gun_03.model	</collisionModelServer>
@@ -3931,6 +4080,13 @@
             <undamaged>	vehicles/russian/R170_IS_2_II/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/russian/R170_IS_2_II/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/russian/R170_IS_2_II/crash/lod0/Gun_04.model	</exploded>
+            <sets>
+              <R170_IS_2_II_3Dst>
+                <undamaged>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/normal/lod0/Gun_04.model	</undamaged>
+                <destroyed>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/crash/lod0/Gun_04.model	</destroyed>
+                <exploded>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/crash/lod0/Gun_04.model	</exploded>
+              </R170_IS_2_II_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R170_IS_2_II/collision/Gun_04.model	</collisionModelServer>
@@ -3999,6 +4155,13 @@
         <undamaged>	vehicles/russian/R170_IS_2_II/normal/lod0/Turret_02.model	</undamaged>
         <destroyed>	vehicles/russian/R170_IS_2_II/crash/lod0/Turret_02.model	</destroyed>
         <exploded>	vehicles/russian/R170_IS_2_II/crash/lod0/Turret_02.model	</exploded>
+        <sets>
+          <R170_IS_2_II_3Dst>
+            <undamaged>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/normal/lod0/Turret_02.model	</undamaged>
+            <destroyed>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/crash/lod0/Turret_02.model	</destroyed>
+            <exploded>	vehicles/russian/R170_IS_2_II/_skins/R170_IS_2_II_3Dst/crash/lod0/Turret_02.model	</exploded>
+          </R170_IS_2_II_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R170_IS_2_II/collision/Turret_02.model	</collisionModelServer>
@@ -4739,6 +4902,64 @@
           <clipAngle>	0.816122	</clipAngle>
           <anchorPosition>	1.16027 0.474263 0.572468	</anchorPosition>
           <anchorDirection>	0.878386 0.413719 0.239323	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35050	</slotId>
+          <tags>	formfactor_square direction_right_to_left	</tags>
+          <compatibleModels>	R170_IS_2_II_3Dst	</compatibleModels>
+          <position>	-0.878917 1.97102 2.11806	</position>
+          <rotation>	0.979359 -0.948867 3.13678	</rotation>
+          <scale>	0.552684 0.429176 0.552689	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.00503	</clipAngle>
+          <anchorPosition>	-0.899092 0.393072 1.2891	</anchorPosition>
+          <anchorDirection>	-0.671888 0.557549 0.487552	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35051	</slotId>
+          <tags>	formfactor_square direction_left_to_right	</tags>
+          <compatibleModels>	R170_IS_2_II_3Dst	</compatibleModels>
+          <position>	0.878946 1.971 2.11806	</position>
+          <rotation>	0.978899 1.00046 -3.10369	</rotation>
+          <scale>	0.552683 0.429175 0.552689	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.00503	</clipAngle>
+          <anchorPosition>	0.899292 0.393054 1.28886	</anchorPosition>
+          <anchorDirection>	0.67757 0.557536 0.479637	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35052	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R170_IS_2_II_3Dst	</compatibleModels>
+          <position>	0.000316521 2.26066 1.83985	</position>
+          <rotation>	0.172757 0.000653786 3.14007	</rotation>
+          <scale>	0.491171 0.184098 0.491175	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.24878	</clipAngle>
+          <anchorPosition>	0.000479292 0.764139 1.01338	</anchorPosition>
+          <anchorDirection>	0.00163341 0.985114 0.171898	</anchorDirection>
+          <verticalMirror>	true	</verticalMirror>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35053	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R170_IS_2_II_3Dst	</compatibleModels>
+          <position>	-0.000549317 2.29475 -0.381904	</position>
+          <rotation>	-3.13985 -0.000030 -0.00284052	</rotation>
+          <scale>	0.710462 0.301815 0.710466	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.977427	</clipAngle>
+          <anchorPosition>	-0.00104077 0.873073 -1.2252	</anchorPosition>
+          <anchorDirection>	-0.00284057 0.999994 0.00174266	</anchorDirection>
+          <verticalMirror>	true	</verticalMirror>
         </slot>
       </customizationSlots>
       <camouflage>

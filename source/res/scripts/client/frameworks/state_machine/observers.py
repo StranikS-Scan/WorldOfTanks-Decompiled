@@ -39,6 +39,17 @@ class SingleStateObserver(BaseStateObserver):
         pass
 
 
+class MultipleStateObserver(SingleStateObserver):
+    __slots__ = ('_stateIDs',)
+
+    def __init__(self, stateIDs):
+        super(MultipleStateObserver, self).__init__('')
+        self._stateIDs = stateIDs
+
+    def getStateIDs(self):
+        return self._stateIDs[:]
+
+
 class StateObserversContainer(BaseStateObserver):
     __slots__ = ('_stateIDs', '_observers')
 

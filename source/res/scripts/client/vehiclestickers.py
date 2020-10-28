@@ -117,9 +117,13 @@ class ModelStickers(object):
         self.__isDamaged = isDamaged
         self.__stickerModel.setupSuperModel(self.__model, self.__toPartRootMatrix)
         self.__parentNode.attach(self.__stickerModel)
+        stickerPacks = set()
         for stickerPackTuple in self.__stickerPacks.itervalues():
             for stickerPack in stickerPackTuple:
-                stickerPack.attach(self.__componentIdx, self.__stickerModel, isDamaged)
+                stickerPacks.add(stickerPack)
+
+        for stickerPack in stickerPacks:
+            stickerPack.attach(self.__componentIdx, self.__stickerModel, isDamaged)
 
         return
 

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/helpers/trajectory_drawer.py
 import BigWorld
 import Svarog
+from debug_utils import LOG_CURRENT_EXCEPTION
 try:
     import BallisticsDebug
     isDebugDrawInited = True
@@ -43,6 +44,11 @@ class _TrajectoryDrawerImpl(object):
         return
 
     def destroy(self):
+        try:
+            BigWorld.delWatcher('Debug/Ballistics/Debug draw')
+        except ValueError:
+            LOG_CURRENT_EXCEPTION()
+
         self.__drawer = None
         if self.__gameObject is not None:
             self.__gameObject.destroy()

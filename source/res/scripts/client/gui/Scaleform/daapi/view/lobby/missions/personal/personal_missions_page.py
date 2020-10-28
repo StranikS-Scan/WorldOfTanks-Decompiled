@@ -12,6 +12,7 @@ from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getHtmlAward
 from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import getChainVehRequirements
 from gui.Scaleform.daapi.view.meta.PersonalMissionsPageMeta import PersonalMissionsPageMeta
 from gui.Scaleform.framework import g_entitiesFactories
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
@@ -23,7 +24,7 @@ from gui.server_events.events_helpers import AwardSheetPresenter
 from gui.server_events.personal_missions_navigation import PersonalMissionsNavigation
 from gui.server_events.pm_constants import SOUNDS, PERSONAL_MISSIONS_SOUND_SPACE, PM_TUTOR_FIELDS as _PTF
 from gui.shared import EVENT_BUS_SCOPE
-from gui.shared.events import LoadViewEvent, PersonalMissionsEvent
+from gui.shared.events import PersonalMissionsEvent, LoadViewEvent
 from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items.Vehicle import getTypeShortUserName
 from gui.shared.gui_items.processors import quests
@@ -79,13 +80,11 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
         return
 
     def closeView(self):
-        event = g_entitiesFactories.makeLoadEvent(VIEW_ALIAS.LOBBY_HANGAR)
+        event = g_entitiesFactories.makeLoadEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR))
         self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onTutorialAcceptBtnClicked(self):
-        if self.__lastTutorState in (_PTF.MULTIPLE_FAL_SHOWN, _PTF.PM2_MULTIPLE_FAL_SHOWN):
-            self.soundManager.playSound(SOUNDS.FOUR_AWARD_LISTS_RECEIVED_CONFIRM)
-        elif self.__lastTutorState in (_PTF.ONE_FAL_SHOWN, _PTF.PM2_ONE_FAL_SHOWN):
+        if self.__lastTutorState in (_PTF.ONE_FAL_SHOWN, _PTF.PM2_ONE_FAL_SHOWN):
             self.soundManager.playSound(SOUNDS.ONE_AWARD_LIST_RECEIVED_CONFIRM)
         self.__resetToIncomplete()
         if self.__lastTutorState in (_PTF.MULTIPLE_FAL_SHOWN, _PTF.PM2_MULTIPLE_FAL_SHOWN):
@@ -96,7 +95,7 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
 
     def onBackBtnClick(self):
         backAlias = self.__backAlias or PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS
-        self.fireEvent(LoadViewEvent(backAlias), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(LoadViewEvent(SFViewLoadParams(backAlias)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _populate(self):
         super(PersonalMissionsPage, self)._populate()
@@ -115,7 +114,6 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
     def _dispose(self):
         self.soundManager.stopSound(SOUNDS.ONE_AWARD_LIST_RECEIVED)
         self.soundManager.stopSound(SOUNDS.FOUR_AWARD_LISTS_RECEIVED)
-        self.soundManager.stopSound(SOUNDS.FOUR_AWARD_LISTS_RECEIVED_CONFIRM)
         self.soundManager.stopSound(SOUNDS.ONE_AWARD_LIST_RECEIVED_CONFIRM)
         if self.__callbackID is not None:
             BigWorld.cancelCallback(self.__callbackID)

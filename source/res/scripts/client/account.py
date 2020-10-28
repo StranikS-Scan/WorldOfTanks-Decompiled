@@ -17,6 +17,7 @@ from ContactInfo import ContactInfo
 from OfflineMapCreator import g_offlineMapCreator
 from PlayerEvents import g_playerEvents as events
 from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, client_anonymizer, ClientBattleRoyale
+from account_helpers.dog_tags import DogTags
 from account_helpers.offers.sync_data import OffersSyncData
 from account_helpers import ClientInvitations, vehicle_rotation
 from account_helpers import client_ranked, ClientBadges
@@ -32,6 +33,7 @@ from adisp import process
 from bootcamp.Bootcamp import g_bootcamp
 from constants import ARENA_BONUS_TYPE, QUEUE_TYPE, EVENT_CLIENT_DATA
 from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_TYPE
+from constants import HE19EnergyPurposes
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG_DEV, LOG_WARNING
 from gui.Scaleform.Waiting import Waiting
 from gui.shared.ClanCache import g_clanCache
@@ -39,6 +41,7 @@ from gui.wgnc import g_wgncProvider
 from helpers import dependency
 from helpers import uniprof
 from messenger import MessengerEntry
+from messenger.proto.events import g_messengerEvents
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
@@ -160,6 +163,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.dailyQuests = g_accountRepository.dailyQuests
         self.battlePass = g_accountRepository.battlePass
         self.offers = g_accountRepository.offers
+        self.dogTags = g_accountRepository.dogTags
         self.customFilesCache = g_accountRepository.customFilesCache
         self.syncData.setAccount(self)
         self.inventory.setAccount(self)
@@ -184,6 +188,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.spaFlags.setAccount(self)
         self.anonymizer.setAccount(self)
         self.offers.setAccount(self)
+        self.dogTags.setAccount(self)
         g_accountRepository.commandProxy.setGateway(self.__doCmd)
         self.isLongDisconnectedFromCenter = False
         self.prebattle = None
@@ -206,7 +211,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInRankedQueue = False
         self.isInEpicQueue = False
         self.isInBattleRoyaleQueue = False
-        self.isInBobQueue = False
         self.__onCmdResponse = {}
         self.__onStreamComplete = {}
         self.__objectsSelectionEnabled = True
@@ -238,6 +242,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.epicMetaGame.onAccountBecomePlayer()
         self.blueprints.onAccountBecomePlayer()
         self.festivities.onAccountBecomePlayer()
+        self.dogTags.onAccountBecomePlayer()
         self.sessionStats.onAccountBecomePlayer()
         self.spaFlags.onAccountBecomePlayer()
         self.anonymizer.onAccountBecomePlayer()
@@ -281,6 +286,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.anonymizer.onAccountBecomeNonPlayer()
         self.battlePass.onAccountBecomeNonPlayer()
         self.offers.onAccountBecomeNonPlayer()
+        self.dogTags.onAccountBecomeNonPlayer()
         self.__cancelCommands()
         self.syncData.setAccount(None)
         self.inventory.setAccount(None)
@@ -422,9 +428,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.BATTLE_ROYALE:
             self.isInBattleRoyaleQueue = True
             events.onEnqueuedBattleRoyale()
-        elif queueType == QUEUE_TYPE.BOB:
-            self.isInBobQueue = True
-            events.onEnqueuedBob()
         events.onEnqueued(queueType)
 
     def onEnqueueFailure(self, queueType, errorCode, errorStr):
@@ -447,8 +450,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             events.onEnqueuedEpicFailure(errorCode, errorStr)
         elif queueType == QUEUE_TYPE.BATTLE_ROYALE:
             events.onEnqueuedBattleRoyaleFailure(errorCode, errorStr)
-        elif queueType == QUEUE_TYPE.BOB:
-            events.onEnqueuedBobFailure(errorCode, errorStr)
         events.onEnqueueFailure(queueType, errorCode, errorStr)
 
     def onDequeued(self, queueType):
@@ -480,9 +481,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.BATTLE_ROYALE:
             self.isInBattleRoyaleQueue = False
             events.onDequeuedBattleRoyale()
-        elif queueType == QUEUE_TYPE.BOB:
-            self.isInBobQueue = False
-            events.onDequeuedBob()
         events.onDequeued(queueType)
 
     def onTutorialEnqueued(self, number, queueLen, avgWaitingTime):
@@ -505,6 +503,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def objectsSelectionEnabled(self, enabled):
         if not enabled and self.__selectedEntity is not None:
             self.targetBlur(self.__selectedEntity)
+        self.hangarSpace.onObjectsSelectionEnabled(enabled)
         self.__objectsSelectionEnabled = enabled
         return
 
@@ -542,9 +541,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.BATTLE_ROYALE:
             self.isInBattleRoyaleQueue = False
             events.onKickedFromBattleRoyaleQueue()
-        elif queueType == QUEUE_TYPE.BOB:
-            self.isInBobQueue = False
-            events.onKickedFromBobQueue()
         events.onKickedFromQueue(queueType)
 
     def onArenaCreated(self):
@@ -565,7 +561,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInBootcampQueue = False
         self.isInEpicQueue = False
         self.isInBattleRoyaleQueue = False
-        self.isInBobQueue = False
         events.isPlayerEntityChanging = False
         events.onPlayerEntityChangeCanceled()
         events.onArenaJoinFailure(errorCode, errorStr)
@@ -859,9 +854,10 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_UNIT_ASSEMBLER, 0, 0, 0)
 
-    def enqueueEventBattles(self, vehInvID):
+    def enqueueEventBattles(self, vehInvIDs, difficultyLevel):
         if not events.isPlayerEntityChanging:
-            self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_EVENT_BATTLES, vehInvID)
+            arr = [len(vehInvIDs)] + vehInvIDs + [difficultyLevel]
+            self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_EVENT_BATTLES, arr)
 
     def dequeueEventBattles(self):
         if not events.isPlayerEntityChanging:
@@ -891,14 +887,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def dequeueBattleRoyale(self):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_BATTLE_ROYALE, 0, 0, 0)
-
-    def enqueueBob(self, vehInvID):
-        if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_BOB, vehInvID, 0, 0)
-
-    def dequeueBob(self):
-        if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_BOB, 0, 0, 0)
 
     def forceEpicDevStart(self):
         if not events.isPlayerEntityChanging:
@@ -1108,6 +1096,104 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self._doCmdIntStrArr(AccountCommands.CMD_CHOOSE_QUEST_REWARD, eventType, strArr, proxy)
         return
 
+    def rentHalloweenVehicle(self, vehTypeCompDescr, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorCode, ext={}: callback(resultID, errorCode)
+        else:
+            proxy = None
+        self._doCmdIntArr(AccountCommands.CMD_RENT_HALLOWEEN_TANKS, [vehTypeCompDescr], proxy)
+        return
+
+    def buyHalloweenStyle(self, vehTypeCompDescr, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorCode, ext={}: callback(resultID, errorCode)
+        else:
+            proxy = None
+        self._doCmdInt(AccountCommands.CMD_BUY_HALLOWEEN_STYLE, vehTypeCompDescr, proxy)
+        return
+
+    def buyHalloweenStyleBundle(self, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorCode, ext={}: callback(resultID, errorCode)
+        else:
+            proxy = None
+        self._doCmdIntArr(AccountCommands.CMD_BUY_HALLOWEEN_STYLE_BUNDLE, [], proxy)
+        return
+
+    def buyHalloweenEnergy(self, vehTypeCompDescr, callback=None, purpose=''):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
+        else:
+            proxy = None
+        index = HE19EnergyPurposes[purpose].value
+        self._doCmdInt2(AccountCommands.CMD_BUY_HALLOWEEN_ENERGY, vehTypeCompDescr, index, proxy)
+        return
+
+    def exchangeToCommanderHealing(self, vehTypeCompDescr, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
+        else:
+            proxy = None
+        self._doCmdInt(AccountCommands.CMD_EXCHANGE_TO_HEALING, vehTypeCompDescr, proxy)
+        return
+
+    def exchangeToCommanderBooster(self, vehTypeCompDescr, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
+        else:
+            proxy = None
+        self._doCmdInt(AccountCommands.CMD_EXCHANGE_TO_BOOSTER, vehTypeCompDescr, proxy)
+        return
+
+    def buyHalloweenShopItem(self, count, itemID, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
+        else:
+            proxy = None
+        self._doCmdIntStr(AccountCommands.CMD_BUY_HALLOWEEN_SHOP_ITEM, count, itemID, proxy)
+        return
+
+    def unlockHalloweenVehicles(self, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
+        else:
+            proxy = None
+        self._doCmdIntArr(AccountCommands.CMD_UNLOCK_HALLOWEEN_TANKS, [], proxy)
+        return
+
+    def addDifficultyEventPoints(self, eventPoints, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
+        else:
+            proxy = None
+        self._doCmdInt(AccountCommands.CMD_ADD_DIFFICULTY_EVENT_POINTS, eventPoints, proxy)
+        return
+
+    def changeSelectedDifficultyLevel(self, difficultyLevel, force=False, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
+        else:
+            proxy = None
+        args = [difficultyLevel, int(force)]
+        self._doCmdIntArr(AccountCommands.CMD_CHANGE_SELECTED_DIFFICULTY_LEVEL, args, proxy)
+        return
+
+    def addHW19AFKPenalty(self, penaltyType):
+        self._doCmdStr(AccountCommands.CMD_HW19_AFK_ADD_PENALTY, penaltyType, None)
+        return
+
+    def drawHW19AFKPenalty(self, penaltyType):
+        self._doCmdStr(AccountCommands.CMD_HW19_AFK_DRAW_PENALTY, penaltyType, None)
+        return
+
+    def buyBestDealBandle(self, packID, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorCode, ext={}: callback(resultID, errorCode)
+        else:
+            proxy = None
+        self._doCmdIntArr(AccountCommands.CMD_BUY_BESTDEAL_BUNDLE, [packID], proxy)
+        return
+
     def logClientSystem(self, stats):
         self.base.logClientSystem(stats)
 
@@ -1155,6 +1241,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def requestSingleToken(self, tokenName, callback=None):
         self._doCmdStr(AccountCommands.CMD_GET_SINGLE_TOKEN, tokenName, callback)
+
+    def broadcastAFKWarning(self):
+        g_messengerEvents.onAFKWarningReceived()
 
     def messenger_onActionByServer_chat2(self, actionID, reqID, args):
         from messenger_common_chat2 import MESSENGER_ACTION_IDS as actions
@@ -1249,6 +1338,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.anonymizer.synchronize(isFullSync, diff)
             self.battlePass.synchronize(isFullSync, diff)
             self.offers.synchronize(isFullSync, diff)
+            self.dogTags.synchronize(isFullSync, diff)
             self.__synchronizeServerSettings(diff)
             self.__synchronizeDisabledPersonalMissions(diff)
             self.__synchronizeEventNotifications(diff)
@@ -1490,6 +1580,7 @@ class _AccountRepository(object):
         self.dailyQuests = {}
         self.battlePass = BattlePassManager(self.syncData, self.commandProxy)
         self.offers = OffersSyncData(self.syncData)
+        self.dogTags = DogTags(self.syncData)
         self.gMap = ClientGlobalMap()
         self.onTokenReceived = Event.Event()
         self.requestID = AccountCommands.REQUEST_ID_UNRESERVED_MIN

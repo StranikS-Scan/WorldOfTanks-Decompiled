@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/migrations.py
 import BigWorld
 import constants
-from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys, BattleCommStorageKeys, WTEventStorageKeys
+from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys, BattleCommStorageKeys
 from adisp import process, async
 from debug_utils import LOG_DEBUG
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
@@ -510,8 +510,19 @@ def _migrateTo58(core, data, initialized):
 
 
 def _migrateTo59(core, data, initialized):
-    data['eventStorage'][WTEventStorageKeys.WT_INTRO_SHOWN] = False
-    data['delete'].extend((91,))
+    dtData = data['dogTags']
+    dtData[GAME.SHOW_DOGTAG_TO_KILLER] = True
+    dtData[GAME.SHOW_VICTIMS_DOGTAG] = True
+
+
+def _migrateTo60(core, data, initialized):
+    gameData = data['battleComm']
+    isIBCEnabled = bool(core.getSetting(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION))
+    if not isIBCEnabled:
+        gameData[BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION] = True
+        gameData[BattleCommStorageKeys.SHOW_LOCATION_MARKERS] = False
+    else:
+        gameData[BattleCommStorageKeys.SHOW_LOCATION_MARKERS] = True
 
 
 _versions = ((1,
@@ -744,6 +755,10 @@ _versions = ((1,
   False),
  (59,
   _migrateTo59,
+  False,
+  False),
+ (60,
+  _migrateTo60,
   False,
   False))
 

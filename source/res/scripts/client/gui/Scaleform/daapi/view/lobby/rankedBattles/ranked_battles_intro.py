@@ -3,6 +3,7 @@
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import GUI_START_BEHAVIOR
 from account_helpers.settings_core.settings_constants import GuiSettingsBehavior
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.ranked_battles.ranked_helpers.sound_manager import RANKED_MAIN_PAGE_SOUND_SPACE
@@ -12,6 +13,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.RankedBattlesIntroMeta import RankedBattlesIntroMeta
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.shared import event_dispatcher, events, EVENT_BUS_SCOPE
+from gui.shared.utils.functions import getUniqueViewName
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IRankedBattlesController
@@ -41,23 +43,26 @@ class RankedBattlesIntro(LobbySubView, RankedBattlesIntroMeta):
     def _populate(self):
         super(RankedBattlesIntro, self)._populate()
         headerData = {'title': backport.text(R.strings.ranked_battles.rankedBattle.title()),
-         'leftSideText': backport.text(R.strings.ranked_battles.intoPage.description()),
+         'leftSideText': backport.text(R.strings.ranked_battles.introPage.description()),
          'rightSideText': None,
          'tooltip': None}
         data = []
         for index in range(BLOCKS_COUNT):
             index += 1
-            title = backport.text(R.strings.ranked_battles.intoPage.blocks.dyn('block{}'.format(index)).title())
-            descr = backport.text(R.strings.ranked_battles.intoPage.blocks.dyn('block{}'.format(index)).description())
+            title = backport.text(R.strings.ranked_battles.introPage.blocks.dyn('block{}'.format(index)).title())
+            descr = backport.text(R.strings.ranked_battles.introPage.blocks.dyn('block{}'.format(index)).description())
             data.append({'title': title,
              'description': descr})
 
+        if not self.__rankedController.isYearRewardEnabled():
+            data[-1]['description'] = backport.text(R.strings.ranked_battles.introPage.blocks.yearRewardDisabled())
         self.as_setDataS(headerData, data)
         return
 
     def __showVideo(self):
         webHandlers = webApiCollection(ui_web_api.CloseViewWebApi, sound_web_api.SoundWebApi, sound_web_api.HangarSoundWebApi)
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.BROWSER_VIEW, ctx={'url': getRankedBattlesIntroPageUrl(),
+        alias = VIEW_ALIAS.BROWSER_VIEW
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(alias, getUniqueViewName(alias)), ctx={'url': getRankedBattlesIntroPageUrl(),
          'webHandlers': webHandlers,
          'returnAlias': self.alias}), EVENT_BUS_SCOPE.LOBBY)
 

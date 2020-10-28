@@ -17,8 +17,8 @@ from gui.Scaleform.daapi.view.battle.shared.minimap import settings, plugins, co
 from gui.Scaleform.daapi.view.battle.shared.minimap.common import SimplePlugin
 from gui.Scaleform.daapi.view.battle.shared.minimap.plugins import PersonalEntriesPlugin, ArenaVehiclesPlugin, _LOCATION_PING_RANGE, _EMinimapMouseKey
 from gui.Scaleform.daapi.view.meta.EpicMinimapMeta import EpicMinimapMeta
-from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from gui.Scaleform.genConsts.BATTLE_MINIMAP_CONSTS import BATTLE_MINIMAP_CONSTS
+from gui.Scaleform.genConsts.LAYER_NAMES import LAYER_NAMES
 from gui.battle_control import minimap_utils, avatar_getter
 from gui.battle_control.battle_constants import PROGRESS_CIRCLE_TYPE, SECTOR_STATE_ID, FEEDBACK_EVENT_ID
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
@@ -34,7 +34,7 @@ _RESPAWN_VISUALIZATION_ENTRY_2 = 1
 _RESPAWN_VISUALIZATION_ENTRY_3 = 2
 _IS_COORDINATOR = bool(os.getenv('WOT_COORDINATOR', False))
 _FRONT_LINE_DEV_VISUALIZATION_SUPPORTED = IS_DEVELOPMENT
-_MINI_MINIMAP_HIGHLIGHT_PATH = '_level0.root.{}.main.minimap.mapShortcutLabel.sectorOverview.mmapAreaHighlight'.format(APP_CONTAINERS_NAMES.VIEWS)
+_MINI_MINIMAP_HIGHLIGHT_PATH = '_level0.root.{}.main.minimap.mapShortcutLabel.sectorOverview.mmapAreaHighlight'.format(LAYER_NAMES.VIEWS)
 _MINI_MINIMAP_SIZE = 46
 _ZOOM_MODE_MIN = 1
 _ZOOM_MODE_STEP = 0.5

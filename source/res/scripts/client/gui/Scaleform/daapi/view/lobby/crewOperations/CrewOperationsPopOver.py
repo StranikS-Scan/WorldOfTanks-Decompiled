@@ -6,6 +6,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.hangar.Crew import Crew
 from gui.Scaleform.daapi.view.meta.CrewOperationsPopOverMeta import CrewOperationsPopOverMeta
 from gui.Scaleform.framework import ScopeTemplates
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams, GuiImplViewLoadParams
 from gui.Scaleform.locale.CREW_OPERATIONS import CREW_OPERATIONS
 from gui.impl.gen import R
 from gui.impl.lobby.crew_books.crew_books_view import CrewBooksView, CrewBooksLackView
@@ -141,7 +142,7 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
 
     def invokeOperation(self, operationName):
         if operationName == OPERATION_RETRAIN:
-            self.fireEvent(LoadViewEvent(VIEW_ALIAS.RETRAIN_CREW), EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.RETRAIN_CREW)), EVENT_BUS_SCOPE.LOBBY)
         elif operationName == OPERATION_RETURN:
             self.__processReturnCrew()
         elif operationName == OPERATION_CREW_BOOKS:
@@ -160,10 +161,10 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def __openCrewBooksView(self):
-        g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.lobby.crew_books.crew_books_view.CrewBooksView(), CrewBooksView, ScopeTemplates.LOBBY_SUB_SCOPE), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.crew_books.crew_books_view.CrewBooksView(), CrewBooksView, ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __openCrewBooksLackView(self):
-        g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.lobby.crew_books.crew_books_lack_view.CrewBooksLackView(), CrewBooksLackView, ScopeTemplates.LOBBY_SUB_SCOPE), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.crew_books.crew_books_lack_view.CrewBooksLackView(), CrewBooksLackView, ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __getInitCrewOperationObject(self, operationId, errorId=None, warningId='', operationAvailable=False):
         context = '#crew_operations:%s'

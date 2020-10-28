@@ -2257,6 +2257,17 @@
       <mirror>	false	</mirror>
     </decal>
     <decal>
+      <id>	9350	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_517.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_517	</userString>
+      <vehicleFilter>
+        <include>
+          <vehicles>	france:F17_AMX_13_90_Halloween_event uk:GB24_Centurion_Mk3_Halloween_event usa:A100_T49_Halloween_event usa:A66_M103_Halloween_event ussr:R40_T-54_Halloween_event	</vehicles>
+        </include>
+      </vehicleFilter>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
       <id>	60	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_518.dds	</texture>
       <userString>	#vehicle_customization:emblem/special/sticker_518	</userString>
@@ -2788,6 +2799,12 @@
       <mirror>	false	</mirror>
     </decal>
     <decal>
+      <id>	277	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_610.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_610	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
       <id>	279	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_611.dds	</texture>
       <userString>	#vehicle_customization:emblem/special/sticker_611	</userString>
@@ -2833,12 +2850,6 @@
       <id>	299	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_604.dds	</texture>
       <userString>	#vehicle_customization:emblem/special/sticker_604	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	277	</id>
-      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_610.dds	</texture>
-      <userString>	#vehicle_customization:emblem/special/sticker_610	</userString>
       <mirror>	false	</mirror>
     </decal>
     <decal>
@@ -3064,20 +3075,6 @@
     <historical>	false	</historical>
     <priceGroup>	emblems 50g notInShop	</priceGroup>
     <decal>
-      <id>	2048	</id>
-      <texture>	gui/maps/vehicles/decals/battle_royale.dds	</texture>
-      <userString>	#vehicle_customization:emblem/group41/battle_royale	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <name>	Battle Royale	</name>
-    <type>	EMBLEM	</type>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:emblem/special	</userString>
-    <season>	ALL	</season>
-    <historical>	false	</historical>
-    <priceGroup>	emblems 50g notInShop	</priceGroup>
-    <decal>
       <id>	312	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_605.dds	</texture>
       <userString>	#vehicle_customization:emblem/special/sticker_605	</userString>
@@ -3089,21 +3086,13 @@
       <userString>	#vehicle_customization:emblem/special/sticker_642	</userString>
       <mirror>	true	</mirror>
     </decal>
-    <name>	APAC 2020	</name>
-    <type>	EMBLEM	</type>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:emblem/special	</userString>
-    <season>	ALL	</season>
-    <historical>	false	</historical>
-    <priceGroup>	emblems 50g notInShop	</priceGroup>
     <decal>
-      <id>	351	</id>
-      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_629.dds	</texture>
-      <userString>	#vehicle_customization:emblem/special/sticker_629	</userString>
-      <mirror>	false	</mirror>
+      <id>	374	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_643.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_643	</userString>
+      <mirror>	true	</mirror>
     </decal>
-    <name>	CN_FL_2020	</name>
+    <name>	APAC 2020	</name>
     <type>	EMBLEM	</type>
   </itemGroup>
   <itemGroup>
@@ -3175,6 +3164,20 @@
       <mirror>	false	</mirror>
     </decal>
     <name>	White Tiger 2020	</name>
+    <type>	EMBLEM	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <decal>
+      <id>	351	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_629.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_629	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	CN_FL_2020	</name>
     <type>	EMBLEM	</type>
   </itemGroup>
 </emblems_special.xml>

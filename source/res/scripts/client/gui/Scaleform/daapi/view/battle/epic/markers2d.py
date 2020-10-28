@@ -400,6 +400,8 @@ class SectorBasesPlugin(EpicMissionsPlugin, ChatCommunicationComponent):
                 LOG_ERROR('Expected PlayerDataComponent not present!')
             if isActive and baseLane == playerData.physicalLane:
                 self.__basesToBeActive.append((baseId, isActive))
+                if self._isInFreeSpectatorMode:
+                    self._setMarkerActive(markerID, isActive)
             else:
                 self.__checkPlayerInsideCircle(baseId)
                 self._setMarkerActive(markerID, isActive)
@@ -461,7 +463,7 @@ class HeadquartersPlugin(EpicMissionsPlugin, ChatCommunicationComponent):
             ctrl.onRemoveCommandReceived -= self.__onRemoveCommandReceived
             ctrl.setInFocusForPlayer -= self.__setInFocusForPlayer
             ctrl.onVehicleFeedbackReceived -= self._onVehicleFeedbackReceived
-        for marker in self._markers:
+        for marker in self._markers.itervalues():
             self._destroyMarker(marker.getMarkerID())
 
         self._markers.clear()

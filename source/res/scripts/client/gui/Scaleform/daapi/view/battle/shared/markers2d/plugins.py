@@ -43,8 +43,8 @@ _STATIC_MARKER_CULL_DISTANCE = 1800
 _STATIC_MARKER_MIN_SCALE = 60.0
 _BASE_MARKER_MIN_SCALE = 100.0
 RANDOM_BATTLE_BASE_ID = 7
-_STATIC_MARKER_BOUNDS = Math.Vector4(30, 30, 90, 10)
-_INNER_STATIC_MARKER_BOUNDS = Math.Vector4(15, 15, 70, 1)
+_STATIC_MARKER_BOUNDS = Math.Vector4(30, 30, 90, -15)
+_INNER_STATIC_MARKER_BOUNDS = Math.Vector4(15, 15, 70, -35)
 _STATIC_MARKER_BOUNDS_MIN_SCALE = Math.Vector2(1.0, 0.8)
 _BASE_MARKER_BOUNDS = Math.Vector4(30, 30, 30, 30)
 _INNER_BASE_MARKER_BOUNDS = Math.Vector4(17, 17, 18, 18)
@@ -65,7 +65,7 @@ class IMarkersManager(object):
     def setMarkerActive(self, markerID, active):
         raise NotImplementedError
 
-    def setMarkerLocationOffset(self, markerID, minY, maxY, distForMinY):
+    def setMarkerLocationOffset(self, markerID, minY, maxY, distForMinY, maxBoost, boostStart):
         raise NotImplementedError
 
     def setMarkerRenderInfo(self, markerID, minScale, offset, innerOffset, cullDistance, boundsMinScale):
@@ -123,11 +123,14 @@ class MarkerPlugin(IPlugin):
     def _setMarkerSticky(self, markerID, isSticky):
         self._parentObj.setMarkerSticky(markerID, isSticky)
 
+    def _markerSetCustomStickyRadiusScale(self, markerID, scale):
+        self._parentObj.markerSetCustomStickyRadiusScale(markerID, scale)
+
     def _setMarkerRenderInfo(self, markerID, minScale, offset, innerOffset, cullDistance, boundsMinScale):
         self._parentObj.setMarkerRenderInfo(markerID, minScale, offset, innerOffset, cullDistance, boundsMinScale)
 
-    def _setMarkerLocationOffset(self, markerID, minYOffset, maxYOffset, distanceForMinYOffset):
-        self._parentObj.setMarkerLocationOffset(markerID, minYOffset, maxYOffset, distanceForMinYOffset)
+    def _setMarkerLocationOffset(self, markerID, minYOffset, maxYOffset, distanceForMinYOffset, maxBoost, boostStart):
+        self._parentObj.setMarkerLocationOffset(markerID, minYOffset, maxYOffset, distanceForMinYOffset, maxBoost, boostStart)
 
     def _setMarkerBoundEnabled(self, markerID, isBoundEnabled):
         self._parentObj.setMarkerBoundCheckEnabled(markerID, isBoundEnabled)
@@ -375,6 +378,7 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
         feedback = self.sessionProvider.shared.feedback
         vProxy = feedback.getVehicleProxy(vehicleID)
         vInfo = self.__arenaDP.getVehicleInfo(vehicleID)
+        self._vehicleID = vehicleID
         if vehicleID in self._markers:
             marker = self._markers[vehicleID]
             if marker.setActive(True) and vProxy is not None:
@@ -388,22 +392,25 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
         return
 
     def _addMarker(self, vehicleID):
-        self._hideAllMarkers()
+        if self._vehicleID is not None:
+            self._hideAllMarkers()
         if vehicleID is not None:
             self._onVehicleMarkerAdded(vehicleID)
         return
 
-    def _hideAllMarkers(self, event=None):
+    def _hideAllMarkers(self, event=None, clearVehicleID=True):
         if event and not event.ctx.get('vehicle'):
             self._vehicleID = None
         for vehicleID in self._markers:
-            self._hideVehicleMarker(vehicleID)
+            self._hideVehicleMarker(vehicleID, clearVehicleID)
 
         return
 
-    def _hideVehicleMarker(self, vehicleID):
+    def _hideVehicleMarker(self, vehicleID, clearVehicleID=True):
         if vehicleID in self._markers:
             marker = self._markers[vehicleID]
+            if clearVehicleID:
+                self._vehicleID = None
             if marker.setActive(False):
                 markerID = marker.getMarkerID()
                 self._setMarkerActive(markerID, False)
@@ -447,7 +454,7 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
     def __ShowExtendedInfo(self, event):
         isDown = event.ctx['isDown']
         self._showExtendedInfo = isDown if isDown is not None else False
-        self._hideAllMarkers()
+        self._hideAllMarkers(clearVehicleID=False)
         if self._showExtendedInfo:
             if self.settingsCore.getSetting(MARKERS.ENEMY).get(self.__markerAltAimMarker2D):
                 self._addMarker(self._vehicleID)
@@ -468,14 +475,14 @@ class VehicleMarkerTargetPluginReplayPlaying(VehicleMarkerTargetPlugin):
 class VehicleMarkerTargetPluginReplayRecording(VehicleMarkerTargetPlugin):
 
     def _addMarker(self, vehicleID):
+        super(VehicleMarkerTargetPluginReplayRecording, self)._addMarker(vehicleID)
         if BattleReplay.g_replayCtrl.isRecording:
             BattleReplay.g_replayCtrl.serializeCallbackData(CallbackDataNames.SHOW_AUTO_AIM_MARKER, (vehicleID,))
-        super(VehicleMarkerTargetPluginReplayRecording, self)._addMarker(vehicleID)
 
-    def _hideVehicleMarker(self, vehicleID):
+    def _hideVehicleMarker(self, vehicleID, clearVehicleID=True):
         if BattleReplay.g_replayCtrl.isRecording:
-            BattleReplay.g_replayCtrl.serializeCallbackData(CallbackDataNames.HIDE_AUTO_AIM_MARKER, (vehicleID,))
-        super(VehicleMarkerTargetPluginReplayRecording, self)._hideVehicleMarker(vehicleID)
+            BattleReplay.g_replayCtrl.serializeCallbackData(CallbackDataNames.HIDE_AUTO_AIM_MARKER, (vehicleID, clearVehicleID))
+        super(VehicleMarkerTargetPluginReplayRecording, self)._hideVehicleMarker(vehicleID, clearVehicleID)
 
 
 _EQUIPMENT_DEFAULT_INTERVAL = 1.0
@@ -537,9 +544,11 @@ class EquipmentsMarkerPlugin(MarkerPlugin):
 _AREA_STATIC_MARKER_DEFAULT_CREATED_TIME = 3.0
 
 class AreaStaticMarkerPlugin(MarkerPlugin, ChatCommunicationComponent):
-    _MIN_Y_OFFSET = 0.4
-    _MAX_Y_OFFSET = 1.2
+    _MIN_Y_OFFSET = 1.2
+    _MAX_Y_OFFSET = 3.0
     _DISTANCE_FOR_MIN_Y_OFFSET = 400
+    _MAX_Y_BOOST = 1.4
+    _BOOST_START = 120
     __slots__ = ('_markers', '__defaultPostfix', '__clazz')
 
     def __init__(self, parentObj, clazz=LocationMarker):
@@ -576,7 +585,7 @@ class AreaStaticMarkerPlugin(MarkerPlugin, ChatCommunicationComponent):
             self._destroyMarker(self._markers[markerKey].getMarkerID())
 
         self._markers.clear()
-        super(AreaStaticMarkerPlugin, self).fini()
+        super(AreaStaticMarkerPlugin, self).stop()
         return
 
     def getMarkerType(self):
@@ -627,7 +636,7 @@ class AreaStaticMarkerPlugin(MarkerPlugin, ChatCommunicationComponent):
         markerID = self._createMarkerWithPosition(_LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME[locationMarkerSubtype], position)
         marker = self.__clazz(markerID, position, True, locationMarkerSubtype)
         self._setMarkerRenderInfo(markerID, _STATIC_MARKER_MIN_SCALE, _STATIC_MARKER_BOUNDS, _INNER_STATIC_MARKER_BOUNDS, _STATIC_MARKER_CULL_DISTANCE, _STATIC_MARKER_BOUNDS_MIN_SCALE)
-        self._setMarkerLocationOffset(markerID, self._MIN_Y_OFFSET, self._MAX_Y_OFFSET, self._DISTANCE_FOR_MIN_Y_OFFSET)
+        self._setMarkerLocationOffset(markerID, self._MIN_Y_OFFSET, self._MAX_Y_OFFSET, self._DISTANCE_FOR_MIN_Y_OFFSET, self._MAX_Y_BOOST, self._BOOST_START)
         self._markers[areaID] = marker
         marker.setState(ReplyStateForMarker.CREATE_STATE)
         if locationMarkerSubtype == LocationMarkerSubType.PREBATTLE_WAYPOINT_SUBTYPE:
@@ -695,12 +704,12 @@ class AreaStaticMarkerPlugin(MarkerPlugin, ChatCommunicationComponent):
 
 
 class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
-    __slots__ = ('__personalTeam', '_markers', '__clazz')
+    __slots__ = ('_personalTeam', '_markers', '_clazz')
 
     def __init__(self, parentObj, clazz=BaseMarker):
         super(TeamsOrControlsPointsPlugin, self).__init__(parentObj)
-        self.__personalTeam = 0
-        self.__clazz = clazz
+        self._personalTeam = 0
+        self._clazz = clazz
         self._markers = {}
 
     def start(self):
@@ -755,7 +764,7 @@ class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
             return DefaultMarkerSubType.ALLY_MARKER_SUBTYPE if foundMarker.getOwningTeam() == 'ally' else DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE
 
     def _restart(self):
-        self.__personalTeam = self.sessionProvider.getArenaDP().getNumberOfTeam()
+        self._personalTeam = self.sessionProvider.getArenaDP().getNumberOfTeam()
         self.__removeExistingMarkers()
         self.__addTeamBasePositions()
         self.__addControlPoints()
@@ -777,7 +786,7 @@ class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
         self._invokeMarker(markerID, 'setIdentifier', RANDOM_BATTLE_BASE_ID)
         self._invokeMarker(markerID, 'setActive', True)
         self._setMarkerRenderInfo(markerID, _BASE_MARKER_MIN_SCALE, _BASE_MARKER_BOUNDS, _INNER_BASE_MARKER_BOUNDS, _STATIC_MARKER_CULL_DISTANCE, _BASE_MARKER_BOUND_MIN_SCALE)
-        marker = self.__clazz(markerID, True, owner)
+        marker = self._clazz(markerID, True, owner)
         self._markers[baseOrControlPointID] = marker
         marker.setState(ReplyStateForMarker.NO_ACTION)
         self._setActiveState(marker, marker.getState())
@@ -786,7 +795,7 @@ class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
     def __addTeamBasePositions(self):
         positions = self.sessionProvider.arenaVisitor.type.getTeamBasePositionsIterator()
         for team, position, number in positions:
-            if team == self.__personalTeam:
+            if team == self._personalTeam:
                 owner = 'ally'
             else:
                 owner = 'enemy'

@@ -13,6 +13,7 @@ from account_helpers.AccountSettings import RANKED_WEB_INFO, RANKED_WEB_INFO_UPD
 from adisp import process
 from constants import ARENA_BONUS_TYPE, EVENT_TYPE
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.periodic_battles.models import PrimeTime
@@ -60,11 +61,11 @@ ZERO_RANK_COUNT = 1
 DEFAULT_RANK = RankData(0, 0)
 
 def _showRankedBattlePage(ctx):
-    g_eventBus.handleEvent(events.LoadViewEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_PAGE_ALIAS, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(RANKEDBATTLES_ALIASES.RANKED_BATTLES_PAGE_ALIAS), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def _showRankedBattlePageSeasonOff(ctx):
-    g_eventBus.handleEvent(events.LoadViewEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_PAGE_SEASON_OFF_ALIAS, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(RANKEDBATTLES_ALIASES.RANKED_BATTLES_PAGE_SEASON_OFF_ALIAS), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def _showSeparateWebView(url, alias):
@@ -180,7 +181,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         if not self.__yearPositionProvider.isStarted:
             self.__yearPositionProvider.start()
         self.__isRankedSoundMode = False
-        self.__updateSounds()
+        self.__updateSounds(self.isRankedPrbActive())
         g_clientUpdateManager.addCallbacks({'ranked': self.__onUpdateRanked,
          'ranked.accRank': self.__onUpdateLeagueSync,
          'tokens': self.__onTokensUpdate})
@@ -188,8 +189,15 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         self.startGlobalListening()
         return
 
+    def onPrbEntitySwitching(self):
+        switchedFromRanked = self.isRankedPrbActive()
+        if switchedFromRanked:
+            self.__updateSounds(False)
+
     def onPrbEntitySwitched(self):
-        self.__updateSounds()
+        isRankedSoundMode = self.isRankedPrbActive()
+        if isRankedSoundMode:
+            self.__updateSounds(True)
         if self.isRankedPrbActive():
             self.updateClientValues()
 
@@ -248,6 +256,9 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def isYearLBEnabled(self):
         return self.__rankedSettings.isYearLBEnabled
 
+    def isYearRewardEnabled(self):
+        return self.__rankedSettings.isYearRewardEnabled
+
     def hasAnySeason(self):
         return bool(self.__rankedSettings.seasons)
 
@@ -265,13 +276,22 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         return self.__hasPrimeTimesLeft(nextGameDay)
 
     def hasSuitableVehicles(self):
-        minLevel, maxLevel = self.getSuitableVehicleLevels()
-        vehLevels = range(minLevel, maxLevel + 1)
-        criteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(vehLevels)
-        criteria |= ~REQ_CRITERIA.VEHICLE.CLASSES(self.__rankedSettings.forbiddenClassTags)
-        criteria |= ~REQ_CRITERIA.VEHICLE.SPECIFIC_BY_CD(self.__rankedSettings.forbiddenVehTypes)
-        criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE | ~REQ_CRITERIA.VEHICLE.EPIC_BATTLE
+        criteria = self.__filterEnabledVehiclesCriteria(REQ_CRITERIA.INVENTORY)
         return len(self.__itemsCache.items.getVehicles(criteria)) > 0
+
+    def suitableVehicleIsAvailable(self):
+        return self.vehicleIsAvailableForBuy() or self.vehicleIsAvailableForRestore()
+
+    def vehicleIsAvailableForBuy(self):
+        criteria = self.__filterEnabledVehiclesCriteria(REQ_CRITERIA.UNLOCKED)
+        criteria |= ~REQ_CRITERIA.VEHICLE.SECRET | ~REQ_CRITERIA.HIDDEN
+        vUnlocked = self.__itemsCache.items.getVehicles(criteria)
+        return len(vUnlocked) > 0
+
+    def vehicleIsAvailableForRestore(self):
+        criteria = self.__filterEnabledVehiclesCriteria(REQ_CRITERIA.VEHICLE.IS_RESTORE_POSSIBLE)
+        vResorePossible = self.__itemsCache.items.getVehicles(criteria)
+        return len(vResorePossible) > 0
 
     def hasVehicleRankedBonus(self, compactDescr):
         bonusUsed = compactDescr in self.__itemsCache.items.stats.multipliedRankedVehicles
@@ -723,6 +743,22 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         self.__clientBonusBattlesCount = statsComposer.bonusBattlesCount
         return
 
+    def doActionOnEntryPointClick(self):
+        isEnabled = self.isEnabled()
+        isYearGap = self.isYearGap()
+        isYearLBEnabled = self.isYearLBEnabled()
+        hasCurSeason = self.getCurrentSeason() is not None
+        if isEnabled:
+            if hasCurSeason:
+                self.__switchForcedToRankedPrb()
+            elif isYearGap and isYearLBEnabled:
+                self.__showYearlyLeaders()
+            else:
+                self.__showBetweenSeason()
+        else:
+            self.__showYearlyLeaders()
+        return
+
     def _createSeason(self, cycleInfo, seasonData):
         return RankedSeason(cycleInfo, seasonData)
 
@@ -750,15 +786,15 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         self.__serverSettings.onServerSettingsChange += self.__onUpdateRankedSettings
         return
 
-    def __onShowBattleResults(self, reusableInfo, composer):
+    def __onShowBattleResults(self, reusableInfo, composer, resultsWindow):
         arenaBonusType = reusableInfo.common.arenaBonusType
         arenaUniqueID = reusableInfo.arenaUniqueID
         if arenaBonusType == ARENA_BONUS_TYPE.RANKED and arenaUniqueID not in self.__arenaBattleResultsWasShown:
             self.updateClientValues()
             rankInfo = reusableInfo.personal.getRankInfo()
-            questsProgress = reusableInfo.progress.getQuestsProgress()
+            questsProgress = reusableInfo.personal.getQuestsProgress()
             rankedResultsVO = composer.getResultsTeamsVO()
-            event_dispatcher.showRankedBattleResultsWindow(rankedResultsVO, rankInfo, questsProgress)
+            event_dispatcher.showRankedBattleResultsWindow(rankedResultsVO, rankInfo, questsProgress, resultsWindow)
             self.__arenaBattleResultsWasShown.add(reusableInfo.arenaUniqueID)
         else:
             _logger.debug('Ranked Overlay windows will not be shown, received arenaBonusType: %s', arenaBonusType)
@@ -804,10 +840,19 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         if selectedItemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID and not self.isYearLBEnabled():
             _logger.info("Can't open ranked battles page on year leaderboard tab.")
             return False
-        if selectedItemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_SHOP_ID and not self.isRankedShopEnabled():
+        elif selectedItemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_SHOP_ID and not self.isRankedShopEnabled():
             _logger.info("Can't open ranked battles page on ranked shop tab.")
             return False
-        return True
+        else:
+            if selectedItemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_REWARDS_ID and not self.isYearRewardEnabled():
+                rewardsSelectedTab = ctx.get('rewardsSelectedTab', '')
+                if rewardsSelectedTab == RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_YEAR_UI:
+                    _logger.info("Can't open ranked battles page on year reward tab without year rewards.")
+                    return False
+                if self.getCurrentSeason() is None:
+                    _logger.info("Can't open ranked battles page on rewards tab in season gap without year rewards.")
+                    return False
+            return True
 
     def __hasMatchMakerGroups(self, division, divisionLayout):
         matchMakerUnits = len(divisionLayout)
@@ -1129,8 +1174,24 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def __timerTick(self):
         self.onGameModeStatusTick()
 
-    def __updateSounds(self):
-        isRankedSoundMode = self.isRankedPrbActive()
+    def __updateSounds(self, isRankedSoundMode):
         if isRankedSoundMode != self.__isRankedSoundMode:
             self.__soundManager.onSoundModeChanged(isRankedSoundMode, Sounds.PROGRESSION_STATE_LEAGUES if self.isAccountMastered() else Sounds.PROGRESSION_STATE_DEFAULT)
             self.__isRankedSoundMode = isRankedSoundMode
+
+    def __filterEnabledVehiclesCriteria(self, criteria):
+        minLevel, maxLevel = self.getSuitableVehicleLevels()
+        vehLevels = range(minLevel, maxLevel + 1)
+        criteria = criteria | REQ_CRITERIA.VEHICLE.LEVELS(vehLevels)
+        criteria |= ~REQ_CRITERIA.VEHICLE.CLASSES(self.__rankedSettings.forbiddenClassTags)
+        criteria |= ~REQ_CRITERIA.VEHICLE.SPECIFIC_BY_CD(self.__rankedSettings.forbiddenVehTypes)
+        criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE | ~REQ_CRITERIA.VEHICLE.EPIC_BATTLE
+        return criteria
+
+    def __showBetweenSeason(self):
+        ctx = {'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_RANKS_ID}
+        self.showRankedBattlePage(ctx)
+
+    def __showYearlyLeaders(self):
+        ctx = {'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID}
+        self.showRankedBattlePage(ctx)

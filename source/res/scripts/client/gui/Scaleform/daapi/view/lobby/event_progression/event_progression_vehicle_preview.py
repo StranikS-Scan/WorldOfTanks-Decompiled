@@ -5,7 +5,6 @@ from CurrentVehicle import g_currentPreviewVehicle
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import getDataOneVehicle, addBuiltInEquipment
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview import VehiclePreview
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import text_styles, icons
 from helpers import dependency
 from skeletons.gui.game_control import IEventProgressionController
@@ -52,7 +51,6 @@ class EventProgressionVehiclePreview(VehiclePreview):
          'shortTitle': formatTitle(R.strings.event_progression.vehicle_preview.title.short),
          'money': text_styles.concatStylesToSingleLine(formatMoney(str(storedPoints)), tokensIcon),
          'price': text_styles.concatStylesToSingleLine(formatPrice(str(vehiclePrice)), tokensIcon),
-         'priceTooltip': TOOLTIPS.VEHICLEPREVIEW_BUYINGPANEL_EVENTPROGRESSION_PRICE,
          'buyButtonEnabled': haveEnoughPoints and not buyButtonTooltip,
          'buyButtonLabel': backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.buy()),
          'buyButtonTooltip': buyButtonTooltip}

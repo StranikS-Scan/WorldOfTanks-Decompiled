@@ -572,17 +572,24 @@ class ListRewriter(object):
     def __iter__(self):
         return self
 
-    def next(self, preferredPredicate=None):
-        if preferredPredicate is None:
+    def next(self, preferredPredicate=None, sectionPicker=None):
+        if preferredPredicate is not None and sectionPicker is not None:
+            raise SoftException('You must pass ony one parameter into ListRewriter.next()')
+        if sectionPicker is not None:
+            section = sectionPicker(self.__sections)
+            if section is not None:
+                self.__sections.remove(section)
+                return section
+        elif preferredPredicate is not None:
+            for i, s in enumerate(self.__sections):
+                if preferredPredicate(s):
+                    return self.__sections.pop(i)
+
+        else:
             try:
                 return self.__sections.pop(0)
             except IndexError:
                 pass
-
-        else:
-            for i, s in enumerate(self.__sections):
-                if preferredPredicate(s):
-                    return self.__sections.pop(i)
 
         self.__changed = True
         return self.__section.createSection(self.__path)

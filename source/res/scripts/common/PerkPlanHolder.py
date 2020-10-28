@@ -9,7 +9,7 @@ from VSPlanEvents import SetPlanInitData, PLATOON_VS_PLAN_SIMPLE_EVENT
 from constants import IS_CELLAPP
 from debug_utils import LOG_ERROR
 from items import perks
-from visual_script.block import ASPECT
+from visual_script.misc import ASPECT
 
 class VsePlan(object):
     _PLAN_PATH = 'vscript/plans/{}.xml'
@@ -163,6 +163,11 @@ class RestartingMultiPlan(PCPlanHolder):
         super(RestartingMultiPlan, self).__init__(scopedPerks)
         self._scheduledPlans = defaultdict(list)
         self._onStartedCallback = callback
+
+    def destroy(self):
+        self._onStartedCallback = None
+        super(RestartingMultiPlan, self).destroy()
+        return
 
     def start(self):
         for plan in self._plans:

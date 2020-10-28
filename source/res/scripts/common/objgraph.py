@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/objgraph.py
+from __future__ import print_function
 import codecs
+import collections
 import gc
 import re
 import inspect
@@ -12,15 +14,20 @@ import tempfile
 import sys
 import itertools
 try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
+
+try:
     from types import InstanceType
 except ImportError:
     InstanceType = None
 
 __author__ = 'Marius Gedminas (marius@gedmin.as)'
-__copyright__ = 'Copyright (c) 2008-2015 Marius Gedminas and contributors'
+__copyright__ = 'Copyright (c) 2008-2017 Marius Gedminas and contributors'
 __license__ = 'MIT'
-__version__ = '2.0.2.dev0'
-__date__ = '2015-07-28'
+__version__ = '3.4.2.dev0'
+__date__ = '2019-04-23'
 try:
     basestring
 except NameError:
@@ -30,6 +37,18 @@ try:
     iteritems = dict.iteritems
 except AttributeError:
     iteritems = dict.items
+
+IS_INTERACTIVE = False
+try:
+    import graphviz
+    if 'TerminalInteractiveShell' not in get_ipython().__class__.__name__:
+        IS_INTERACTIVE = True
+except (NameError, ImportError):
+    pass
+
+def _isinstance(object, classinfo):
+    return issubclass(type(object), classinfo)
+
 
 def count(typename, objects=None):
     if objects is None:
@@ -44,7 +63,7 @@ def count(typename, objects=None):
     return
 
 
-def typestats(objects=None, shortnames=True):
+def typestats(objects=None, shortnames=True, filter=None):
     if objects is None:
         objects = gc.get_objects()
     try:
@@ -54,6 +73,8 @@ def typestats(objects=None, shortnames=True):
             typename = _long_typename
         stats = {}
         for o in objects:
+            if filter and not filter(o):
+                continue
             n = typename(o)
             stats[n] = stats.get(n, 0) + 1
 
@@ -64,23 +85,27 @@ def typestats(objects=None, shortnames=True):
     return
 
 
-def most_common_types(limit=10, objects=None, shortnames=True):
-    stats = sorted(typestats(objects, shortnames=shortnames).items(), key=operator.itemgetter(1), reverse=True)
+def most_common_types(limit=10, objects=None, shortnames=True, filter=None):
+    stats = sorted(typestats(objects, shortnames=shortnames, filter=filter).items(), key=operator.itemgetter(1), reverse=True)
     if limit:
         stats = stats[:limit]
     return stats
 
 
-def show_most_common_types(limit=10, objects=None, shortnames=True):
-    stats = most_common_types(limit, objects, shortnames=shortnames)
+def show_most_common_types(limit=10, objects=None, shortnames=True, file=None, filter=None):
+    if file is None:
+        file = sys.stdout
+    stats = most_common_types(limit, objects, shortnames=shortnames, filter=filter)
     width = max((len(name) for name, count in stats))
     for name, count in stats:
-        print '%-*s %i' % (width, name, count)
+        file.write('%-*s %i\n' % (width, name, count))
+
+    return
 
 
-def show_growth(limit=10, peak_stats={}, shortnames=True):
+def growth(limit=10, peak_stats={}, shortnames=True, filter=None):
     gc.collect()
-    stats = typestats(shortnames=shortnames)
+    stats = typestats(shortnames=shortnames, filter=filter)
     deltas = {}
     for name, count in iteritems(stats):
         old_count = peak_stats.get(name, 0)
@@ -91,13 +116,119 @@ def show_growth(limit=10, peak_stats={}, shortnames=True):
     deltas = sorted(deltas.items(), key=operator.itemgetter(1), reverse=True)
     if limit:
         deltas = deltas[:limit]
-    if deltas:
-        width = max((len(name) for name, count in deltas))
-        for name, delta in deltas:
-            print '%-*s%9d %+9d' % (width,
+    return [ (name, stats[name], delta) for name, delta in deltas ]
+
+
+def show_growth(limit=10, peak_stats=None, shortnames=True, file=None, filter=None):
+    if peak_stats is None:
+        result = growth(limit, shortnames=shortnames, filter=filter)
+    else:
+        result = growth(limit, peak_stats, shortnames, filter)
+    if result:
+        if file is None:
+            file = sys.stdout
+        width = max((len(name) for name, _, _ in result))
+        for name, count, delta in result:
+            file.write('%-*s%9d %+9d\n' % (width,
              name,
-             stats[name],
-             delta)
+             count,
+             delta))
+
+    return
+
+
+def get_new_ids(skip_update=False, limit=10, sortby='deltas', shortnames=None, file=None, _state={}):
+    if not _state:
+        _state['old'] = collections.defaultdict(set)
+        _state['current'] = collections.defaultdict(set)
+        _state['new'] = collections.defaultdict(set)
+        _state['shortnames'] = True
+    new_ids = _state['new']
+    if skip_update:
+        return new_ids
+    else:
+        old_ids = _state['old']
+        current_ids = _state['current']
+        if shortnames is None:
+            shortnames = _state['shortnames']
+        else:
+            _state['shortnames'] = shortnames
+        gc.collect()
+        objects = gc.get_objects()
+        for class_name in old_ids:
+            old_ids[class_name].clear()
+
+        for class_name, ids_set in current_ids.items():
+            old_ids[class_name].update(ids_set)
+
+        for class_name in current_ids:
+            current_ids[class_name].clear()
+
+        for o in objects:
+            if shortnames:
+                class_name = _short_typename(o)
+            else:
+                class_name = _long_typename(o)
+            id_number = id(o)
+            current_ids[class_name].add(id_number)
+
+        for class_name in new_ids:
+            new_ids[class_name].clear()
+
+        rows = []
+        keys_to_remove = []
+        for class_name in current_ids:
+            num_old = len(old_ids[class_name])
+            num_current = len(current_ids[class_name])
+            if num_old == 0 and num_current == 0:
+                keys_to_remove.append(class_name)
+                continue
+            new_ids_set = current_ids[class_name] - old_ids[class_name]
+            new_ids[class_name].update(new_ids_set)
+            num_new = len(new_ids_set)
+            num_delta = num_current - num_old
+            row = (class_name,
+             num_old,
+             num_current,
+             num_new,
+             num_delta)
+            rows.append(row)
+
+        for key in keys_to_remove:
+            del old_ids[key]
+            del current_ids[key]
+            del new_ids[key]
+
+        index_by_sortby = {'old': 1,
+         'current': 2,
+         'new': 3,
+         'deltas': 4}
+        rows.sort(key=operator.itemgetter(index_by_sortby[sortby], 0), reverse=True)
+        if limit is not None:
+            rows = rows[:limit]
+        if not rows:
+            return new_ids
+        if file is None:
+            file = sys.stdout
+        width = max((len(row[0]) for row in rows))
+        print('=' * (width + 52), file=file)
+        print('%-*s%13s%13s%13s%13s' % (width,
+         'Type',
+         'Old_ids',
+         'Current_ids',
+         'New_ids',
+         'Count_Deltas'), file=file)
+        print('=' * (width + 52), file=file)
+        for row_class, old, current, new, delta in rows:
+            print('%-*s%13d%13d%+13d%+13d' % (width,
+             row_class,
+             old,
+             current,
+             new,
+             delta), file=file)
+
+        print('=' * (width + 52), file=file)
+        return new_ids
 
 
 def get_leaking_objects(objects=None):
@@ -138,6 +269,15 @@ def at(addr):
     return None
 
 
+def at_addrs(address_set):
+    res = []
+    for o in gc.get_objects():
+        if id(o) in address_set:
+            res.append(o)
+
+    return res
+
+
 def find_ref_chain(obj, predicate, max_depth=20, extra_ignore=()):
     return _find_chain(obj, predicate, gc.get_referents, max_depth=max_depth, extra_ignore=extra_ignore)[::-1]
 
@@ -146,12 +286,12 @@ def find_backref_chain(obj, predicate, max_depth=20, extra_ignore=()):
     return _find_chain(obj, predicate, gc.get_referrers, max_depth=max_depth, extra_ignore=extra_ignore)
 
 
-def show_backrefs(objs, max_depth=3, extra_ignore=(), filter=None, too_many=10, highlight=None, filename=None, extra_info=None, refcounts=False, shortnames=True, output=None):
-    _show_graph(objs, max_depth=max_depth, extra_ignore=extra_ignore, filter=filter, too_many=too_many, highlight=highlight, edge_func=gc.get_referrers, swap_source_target=False, filename=filename, output=output, extra_info=extra_info, refcounts=refcounts, shortnames=shortnames, cull_func=is_proper_module)
+def show_backrefs(objs, max_depth=3, extra_ignore=(), filter=None, too_many=10, highlight=None, filename=None, extra_info=None, refcounts=False, shortnames=True, output=None, extra_node_attrs=None):
+    return _show_graph(objs, max_depth=max_depth, extra_ignore=extra_ignore, filter=filter, too_many=too_many, highlight=highlight, edge_func=gc.get_referrers, swap_source_target=False, filename=filename, output=output, extra_info=extra_info, refcounts=refcounts, shortnames=shortnames, cull_func=is_proper_module, extra_node_attrs=extra_node_attrs)
 
 
-def show_refs(objs, max_depth=3, extra_ignore=(), filter=None, too_many=10, highlight=None, filename=None, extra_info=None, refcounts=False, shortnames=True, output=None):
-    _show_graph(objs, max_depth=max_depth, extra_ignore=extra_ignore, filter=filter, too_many=too_many, highlight=highlight, edge_func=gc.get_referents, swap_source_target=True, filename=filename, extra_info=extra_info, refcounts=refcounts, shortnames=shortnames, output=output)
+def show_refs(objs, max_depth=3, extra_ignore=(), filter=None, too_many=10, highlight=None, filename=None, extra_info=None, refcounts=False, shortnames=True, output=None, extra_node_attrs=None):
+    return _show_graph(objs, max_depth=max_depth, extra_ignore=extra_ignore, filter=filter, too_many=too_many, highlight=highlight, edge_func=gc.get_referents, swap_source_target=True, filename=filename, extra_info=extra_info, refcounts=refcounts, shortnames=shortnames, output=output, extra_node_attrs=extra_node_attrs)
 
 
 def show_chain(*chains, **kw):
@@ -209,9 +349,10 @@ def _find_chain(obj, predicate, edge_func, max_depth=20, extra_ignore=()):
     return [obj]
 
 
-def _show_graph(objs, edge_func, swap_source_target, max_depth=3, extra_ignore=(), filter=None, too_many=10, highlight=None, filename=None, extra_info=None, refcounts=False, shortnames=True, output=None, cull_func=None):
-    if not isinstance(objs, (list, tuple)):
+def _show_graph(objs, edge_func, swap_source_target, max_depth=3, extra_ignore=(), filter=None, too_many=10, highlight=None, filename=None, extra_info=None, refcounts=False, shortnames=True, output=None, cull_func=None, extra_node_attrs=None):
+    if not _isinstance(objs, (list, tuple)):
         objs = [objs]
+    is_interactive = False
     if filename and output:
         raise ValueError('Cannot specify both output and filename.')
     elif output:
@@ -219,6 +360,9 @@ def _show_graph(objs, edge_func, swap_source_target, max_depth=3, extra_ignore=(
     elif filename and filename.endswith('.dot'):
         f = codecs.open(filename, 'w', encoding='utf-8')
         dot_filename = filename
+    elif IS_INTERACTIVE and not filename:
+        is_interactive = True
+        f = StringIO()
     else:
         fd, dot_filename = tempfile.mkstemp(prefix='objgraph-', suffix='.dot', text=True)
         f = os.fdopen(fd, 'w')
@@ -250,7 +394,7 @@ def _show_graph(objs, edge_func, swap_source_target, max_depth=3, extra_ignore=(
         nodes += 1
         target = queue.pop(0)
         tdepth = depth[id(target)]
-        f.write('  %s[label="%s"];\n' % (_obj_node_id(target), _obj_label(target, extra_info, refcounts, shortnames)))
+        f.write('  %s[label="%s"%s];\n' % (_obj_node_id(target), _obj_label(target, extra_info, refcounts, shortnames), _obj_attrs(target, extra_node_attrs)))
         h, s, v = _gradient((0, 0, 1), (0, 0, 0.3), tdepth, max_depth)
         if inspect.ismodule(target):
             h = 0.3
@@ -265,13 +409,9 @@ def _show_graph(objs, edge_func, swap_source_target, max_depth=3, extra_ignore=(
          v))
         if v < 0.5:
             f.write('  %s[fontcolor=white];\n' % _obj_node_id(target))
-        try:
-            if hasattr(getattr(target, '__class__', None), '__del__'):
-                f.write('  %s->%s_has_a_del[color=red,style=dotted,len=0.25,weight=10];\n' % (_obj_node_id(target), _obj_node_id(target)))
-                f.write('  %s_has_a_del[label="__del__",shape=doublecircle,height=0.25,color=red,fillcolor="0,.5,1",fontsize=6];\n' % _obj_node_id(target))
-        except ReferenceError:
-            pass
-
+        if hasattr(getattr(target, '__class__', None), '__del__'):
+            f.write('  %s->%s_has_a_del[color=red,style=dotted,len=0.25,weight=10];\n' % (_obj_node_id(target), _obj_node_id(target)))
+            f.write('  %s_has_a_del[label="__del__",shape=doublecircle,height=0.25,color=red,fillcolor="0,.5,1",fontsize=6];\n' % _obj_node_id(target))
         if tdepth >= max_depth:
             continue
         if cull_func is not None and cull_func(target):
@@ -320,9 +460,11 @@ def _show_graph(objs, edge_func, swap_source_target, max_depth=3, extra_ignore=(
     f.write('}\n')
     if output:
         return
+    elif is_interactive:
+        return graphviz.Source(f.getvalue())
     else:
         f.close()
-        print 'Graph written to %s (%d nodes)' % (dot_filename, nodes)
+        print('Graph written to %s (%d nodes)' % (dot_filename, nodes))
         _present_graph(dot_filename, filename)
         return
 
@@ -331,11 +473,11 @@ def _present_graph(dot_filename, filename=None):
     if filename == dot_filename:
         return
     if not filename and _program_in_path('xdot'):
-        print 'Spawning graph viewer (xdot)'
+        print('Spawning graph viewer (xdot)')
         subprocess.Popen(['xdot', dot_filename], close_fds=True)
     elif _program_in_path('dot'):
         if not filename:
-            print 'Graph viewer (xdot) not found, generating a png instead'
+            print('Graph viewer (xdot) not found, generating a png instead')
             filename = dot_filename[:-4] + '.png'
         stem, ext = os.path.splitext(filename)
         cmd = ['dot',
@@ -345,17 +487,26 @@ def _present_graph(dot_filename, filename=None):
         dot = subprocess.Popen(cmd, close_fds=False)
         dot.wait()
         if dot.returncode != 0:
-            print 'dot failed (exit code %d) while executing "%s"' % (dot.returncode, ' '.join(cmd))
+            print('dot failed (exit code %d) while executing "%s"' % (dot.returncode, ' '.join(cmd)))
         else:
-            print 'Image generated as %s' % filename
+            print('Image generated as %s' % filename)
     elif not filename:
-        print 'Graph viewer (xdot) and image renderer (dot) not found, not doing anything else'
+        print('Graph viewer (xdot) and image renderer (dot) not found, not doing anything else')
     else:
-        print 'Image renderer (dot) not found, not doing anything else'
+        print('Image renderer (dot) not found, not doing anything else')
 
 
 def _obj_node_id(obj):
     return ('o%d' % id(obj)).replace('-', '_')
+
+
+def _obj_attrs(obj, extra_node_attrs):
+    if extra_node_attrs is not None:
+        attrs = extra_node_attrs(obj)
+        return ', ' + ', '.join(('%s="%s"' % (name, _quote(value)) for name, value in sorted(iteritems(attrs)) if value is not None))
+    else:
+        return ''
+        return
 
 
 def _obj_label(obj, extra_info=None, refcounts=False, shortnames=True):
@@ -377,7 +528,7 @@ def _quote(s):
 
 def _get_obj_type(obj):
     objtype = type(obj)
-    if isinstance(obj, InstanceType):
+    if type(obj) == InstanceType:
         objtype = obj.__class__
     return objtype
 
@@ -400,34 +551,42 @@ def _long_typename(obj):
 def _safe_repr(obj):
     try:
         return _short_repr(obj)
-    except:
+    except Exception:
         return '(unrepresentable)'
 
 
+def _name_or_repr(value):
+    try:
+        result = value.__name__
+    except AttributeError:
+        result = repr(value)[:40]
+
+    if _isinstance(result, basestring):
+        return result
+    else:
+        return repr(value)[:40]
+
+
 def _short_repr(obj):
-    if isinstance(obj, (type,
+    if _isinstance(obj, (type,
      types.ModuleType,
      types.BuiltinMethodType,
      types.BuiltinFunctionType)):
-        return obj.__name__
-    else:
-        if isinstance(obj, types.MethodType):
-            try:
-                if obj.__self__ is not None:
-                    return obj.__func__.__name__ + ' (bound)'
-                return obj.__func__.__name__
-            except AttributeError:
-                if obj.im_self is not None:
-                    return obj.im_func.__name__ + ' (bound)'
-                else:
-                    return obj.im_func.__name__
-
-        if isinstance(obj, types.FrameType):
-            return '%s:%s' % (obj.f_code.co_filename, obj.f_lineno)
-        return '%d items' % len(obj) if isinstance(obj, (tuple,
-         list,
-         dict,
-         set)) else repr(obj)[:40]
+        return _name_or_repr(obj)
+    if _isinstance(obj, types.MethodType):
+        name = _name_or_repr(obj.__func__)
+        if obj.__self__:
+            return name + ' (bound)'
+        else:
+            return name
+    if _isinstance(obj, types.LambdaType) and obj.__name__ == '<lambda>':
+        return 'lambda: %s:%s' % (os.path.basename(obj.__code__.co_filename), obj.__code__.co_firstlineno)
+    if _isinstance(obj, types.FrameType):
+        return '%s:%s' % (obj.f_code.co_filename, obj.f_lineno)
+    return '%d items' % len(obj) if _isinstance(obj, (tuple,
+     list,
+     dict,
+     set)) else repr(obj)[:40]
 
 
 def _gradient(start_color, end_color, depth, max_depth):
@@ -443,15 +602,15 @@ def _gradient(start_color, end_color, depth, max_depth):
 
 
 def _edge_label(source, target, shortnames=True):
-    if isinstance(target, dict) and target is getattr(source, '__dict__', None):
+    if _isinstance(target, dict) and target is getattr(source, '__dict__', None):
         return ' [label="__dict__",weight=10]'
     else:
-        if isinstance(source, types.FrameType):
+        if _isinstance(source, types.FrameType):
             if target is source.f_locals:
                 return ' [label="f_locals",weight=10]'
             if target is source.f_globals:
                 return ' [label="f_globals",weight=10]'
-        if isinstance(source, types.MethodType):
+        if _isinstance(source, types.MethodType):
             try:
                 if target is source.__self__:
                     return ' [label="__self__",weight=10]'
@@ -463,15 +622,15 @@ def _edge_label(source, target, shortnames=True):
                 if target is source.im_func:
                     return ' [label="im_func",weight=10]'
 
-        if isinstance(source, types.FunctionType):
+        if _isinstance(source, types.FunctionType):
             for k in dir(source):
                 if target is getattr(source, k):
                     return ' [label="%s",weight=10]' % _quote(k)
 
-        if isinstance(source, dict):
+        if _isinstance(source, dict):
             for k, v in iteritems(source):
                 if v is target:
-                    if isinstance(k, basestring) and _is_identifier(k):
+                    if _isinstance(k, basestring) and _is_identifier(k):
                         return ' [label="%s",weight=2]' % _quote(k)
                     else:
                         if shortnames:

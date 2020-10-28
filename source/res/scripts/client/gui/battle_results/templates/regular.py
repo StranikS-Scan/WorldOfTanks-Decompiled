@@ -14,7 +14,7 @@ from gui.battle_results.components import progress
 from gui.battle_results.components import shared
 from gui.battle_results.components import style
 from gui.battle_results.components import vehicles
-from gui.battle_results.br_constants import BattleResultsRecord as _RECORD
+from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD
 from gui.impl import backport
 from gui.impl.gen.resources import R
 from helpers import i18n
@@ -320,7 +320,7 @@ _BADGE_VO_META = base.PropertyMeta((('icon', '', 'icon'),
  ('isDynamic', False, 'isDynamic'),
  ('isAtlasSource', False, 'isAtlasSource')))
 _BADGE_VO_META.bind(vehicles.BadgeBlock)
-TEAM_ITEM_VO_META = base.PropertyMeta((('achievements', shared.AchievementsBlock(base.ListMeta(), 'achievements'), 'achievements'),
+TEAM_ITEM_VO_META_TUPLE = (('achievements', shared.AchievementsBlock(base.ListMeta(), 'achievements'), 'achievements'),
  ('medalsCount', 0, 'achievementsCount'),
  ('vehicleStateStr', '', 'vehicleState'),
  ('vehicleStatePrefixStr', '', 'vehicleStatePrefix'),
@@ -356,7 +356,8 @@ TEAM_ITEM_VO_META = base.PropertyMeta((('achievements', shared.AchievementsBlock
  ('playerRank', 0, 'playerRank'),
  ('respawns', 0, 'respawns'),
  ('suffixBadgeIcon', '', 'suffixBadgeIcon'),
- ('suffixBadgeStripIcon', '', 'suffixBadgeStripIcon')))
+ ('suffixBadgeStripIcon', '', 'suffixBadgeStripIcon'))
+TEAM_ITEM_VO_META = base.PropertyMeta(TEAM_ITEM_VO_META_TUPLE)
 TEAM_ITEM_VO_META.bind(vehicles.RegularVehicleStatsBlock)
 TEAMS_VO_META = base.DictMeta({'team1': [],
  'team2': []})
@@ -365,4 +366,5 @@ REGULAR_TEAMS_STATS_BLOCK.addNextComponent(vehicles.RegularTeamStatsBlock(meta=b
 REGULAR_TEAMS_STATS_BLOCK.addNextComponent(vehicles.RegularTeamStatsBlock(meta=base.ListMeta(), field='team2'))
 VEHICLE_PROGRESS_STATS_BLOCK = progress.VehicleProgressBlock(base.ListMeta(), 'unlocks', _RECORD.PERSONAL)
 QUESTS_PROGRESS_STATS_BLOCK = progress.QuestsProgressBlock(base.ListMeta(), 'quests', _RECORD.PERSONAL)
+DOG_TAGS_PROGRESS_STATS_BLOCK = progress.DogTagsProgressBlock(base.ListMeta(), 'dog_tags', _RECORD.PERSONAL)
 PROGRESSIVE_REWARD_VO = progress.ProgressiveRewardVO('progressiveReward')

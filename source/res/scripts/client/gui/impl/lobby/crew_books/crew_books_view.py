@@ -5,6 +5,7 @@ from async import async, await
 from frameworks.wulf import ViewFlags, ViewStatus, ViewSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.framework import ScopeTemplates
+from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams
 from gui.impl import backport
 from gui.impl.auxiliary.crew_books_helper import TankmanModelPresenter, TankmanSkillListPresenter, crewBooksViewedCache
 from gui.impl.backport import BackportTooltipWindow
@@ -202,7 +203,7 @@ class CrewBooksView(ViewImpl):
         return
 
     def __openLackView(self):
-        g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.lobby.crew_books.crew_books_lack_view.CrewBooksLackView(), CrewBooksLackView, ScopeTemplates.LOBBY_SUB_SCOPE), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.crew_books.crew_books_lack_view.CrewBooksLackView(), CrewBooksLackView, ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __updateTankmenListModelData(self, screenVM, diff):
         crewListVM = screenVM.crewBookTankmenList.getItems()
@@ -532,7 +533,7 @@ class CrewBooksLackView(ViewImpl):
             result = yield await(dialogs.buyCrewBook(parent=self, crewBookCD=int(crewBookCD)))
             self.viewModel.setIsDialogOpen(False)
             if result is True:
-                g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.lobby.crew_books.crew_books_view.CrewBooksView(), CrewBooksView, ScopeTemplates.LOBBY_SUB_SCOPE), scope=EVENT_BUS_SCOPE.LOBBY)
+                g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.crew_books.crew_books_view.CrewBooksView(), CrewBooksView, ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
             return
 
     def __onHangarBtnClick(self):

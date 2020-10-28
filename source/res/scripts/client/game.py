@@ -93,6 +93,8 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         nation_change.init()
         import items
         items.init(True, None if not constants.IS_DEVELOPMENT else {})
+        import battle_results
+        battle_results.init()
         import win_points
         win_points.init()
         import rage
@@ -122,6 +124,8 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         player_ranks.init()
         import destructible_entities
         destructible_entities.init()
+        from helpers.buffs import ClientBuffsRepository
+        ClientBuffsRepository.init()
         try:
             from LightFx import LightManager
             LightManager.g_instance = LightManager.LightManager()
@@ -221,10 +225,8 @@ def start():
                 ServiceLocator.gameplay.start()
             elif sys.argv[1] == 'botExecute':
                 ServiceLocator.gameplay.start()
-                botLoginName = sys.argv[3]
-                scenarioPath = sys.argv[2]
-                LOG_DEBUG('BOTNET: Start playing scenario {} with bot {}...'.format(scenarioPath, botLoginName))
-                initBotNet().initializeBots(loginName=botLoginName, scenarioPath=scenarioPath)
+                LOG_DEBUG('BOTNET: Start clientPlayer')
+                initBotNet().setRpycConection(sys.argv[2])
             else:
                 ServiceLocator.gameplay.start()
         else:
@@ -304,8 +306,6 @@ def fini():
         from predefined_hosts import g_preDefinedHosts
         if g_preDefinedHosts is not None:
             g_preDefinedHosts.fini()
-        from bootcamp.BootcampTransition import BootcampTransition
-        BootcampTransition.stop()
         SoundGroups.g_instance.stopListeningGUISpaceChanges()
         dependency.clear()
         if g_replayCtrl is not None:
@@ -317,8 +317,10 @@ def fini():
         SoundGroups.g_instance.destroy()
         Settings.g_instance.save()
         if g_scenario is not None:
-            g_scenario.destroy()
+            g_scenario.stopAllBots()
         g_onBeforeSendEvent = None
+        from helpers.buffs import ClientBuffsRepository
+        ClientBuffsRepository.fini()
         WebBrowser.destroyExternalCache()
         if constants.HAS_DEV_RESOURCES:
             import development
@@ -511,7 +513,11 @@ _PYTHON_MACROS = {'p': 'BigWorld.player()',
  'resetEpic': 'BigWorld.player().epicMetaGame.resetEpicMetaGame',
  'setHero': 'from HeroTank import debugReloadHero; debugReloadHero',
  'switchNation': 'import Account; Account.g_accountRepository.inventory.switchNation()',
- 'plugins': 'from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import Ping3DPositionPlugin'}
+ 'plugins': 'from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import Ping3DPositionPlugin',
+ 'switchEnv': 'from EnvironmentSwitcher import debugSwitchEnvironment; debugSwitchEnvironment',
+ 'rankedCtrl': 'from helpers import dependency; from skeletons.gui.game_control import IRankedBattlesController;rc = dependency.instance(IRankedBattlesController)',
+ 'eventsCache': 'from helpers import dependency; from skeletons.gui.server_events import IEventsCache;ec = dependency.instance(IEventsCache)',
+ 'items': 'from helpers import dependency; from skeletons.gui.shared import IItemsCache;items = dependency.instance(IItemsCache).items'}
 
 def expandMacros(line):
     import re
@@ -567,7 +573,11 @@ def onMemoryCritical():
 def initBotNet():
     global g_scenario
     if g_scenario is None:
-        sys.path.append('scripts/bot')
-        from client.ClientScenarioPlayer import g_scenarioPlayer
+        sys.path.append('test_libs')
+        from path_manager import g_pathManager
+        g_pathManager.setPathes()
+        from bigworld_reactor import installBWReactor
+        installBWReactor()
+        from scenario_player import g_scenarioPlayer
         g_scenario = g_scenarioPlayer
     return g_scenario

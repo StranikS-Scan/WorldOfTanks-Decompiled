@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/effects_player.py
 import logging
 from collections import defaultdict
-from gui.Scaleform.framework import ViewTypes
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.TUTORIAL_TRIGGER_TYPES import TUTORIAL_TRIGGER_TYPES
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
@@ -50,12 +50,12 @@ class ApplicationEffect(GUIEffect):
     def setApplication(self, app):
         self._app = app
 
-    def _getContainer(self, viewType):
+    def _getContainer(self, layer):
         if self._app is None:
             return
         else:
             manager = self._app.containerManager
-            return None if manager is None else manager.getContainer(viewType)
+            return None if manager is None else manager.getContainer(layer)
 
     def _getTutorialLayout(self):
         return None if self._app is None else self._app.tutorialManager
@@ -130,7 +130,7 @@ class ShowDialogEffect(ApplicationEffect):
         else:
             effectID = self._dialogID
             self._dialogID = None
-            container = self._getContainer(ViewTypes.TOP_WINDOW)
+            container = self._getContainer(WindowLayer.TOP_WINDOW)
             if container is not None:
                 dialog = container.getView(criteria={POP_UP_CRITERIA.UNIQUE_NAME: effectID})
                 if dialog is not None:
@@ -178,9 +178,9 @@ class ShowWindowEffect(ApplicationEffect):
             effectIDs = {effectID}
         else:
             effectIDs = self._windowIDs.copy()
-        container = self._getContainer(ViewTypes.WINDOW)
+        container = self._getContainer(WindowLayer.WINDOW)
         if container is None:
-            container = self._getContainer(ViewTypes.OVERLAY)
+            container = self._getContainer(WindowLayer.OVERLAY)
         if container is not None:
             getView = container.getView
             for eID in effectIDs:
@@ -291,12 +291,12 @@ class UpdateContentEffect(ApplicationEffect):
         effectData = effectData[0]
         result = False
         effectID = None
-        viewType = None
+        layer = None
         if 'dialogID' in effectData:
             effectID = effectData['dialogID']
-            viewType = ViewTypes.TOP_WINDOW
+            layer = WindowLayer.TOP_WINDOW
         if effectID is not None:
-            container = self._getContainer(viewType)
+            container = self._getContainer(layer)
             if container is not None:
                 view = container.getView(criteria={POP_UP_CRITERIA.UNIQUE_NAME: effectID})
                 if view is not None:

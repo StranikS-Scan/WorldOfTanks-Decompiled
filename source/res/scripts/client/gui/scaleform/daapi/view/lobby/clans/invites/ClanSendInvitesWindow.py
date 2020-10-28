@@ -42,7 +42,7 @@ class ClanSendInvitesWindow(SendInvitesWindow, UsersInfoHelper, ClanListener):
                 accountNames = [ self.getUserName(userDbID) for userDbID in failedAccounts ]
                 SystemMessages.pushMessage(clans_fmts.getInvitesNotSentSysMsg(accountNames), type=SystemMessages.SM_TYPE.Error)
         else:
-            showClanInviteSystemMsg(self.getUserName(accountsToInvite[0]), result.isSuccess(), result.getCode())
+            showClanInviteSystemMsg(self.getUserName(accountsToInvite[0]), result.isSuccess(), result.getCode(), result.data)
         self.as_hideWaitingS()
 
     def _populate(self):

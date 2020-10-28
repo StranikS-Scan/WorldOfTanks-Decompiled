@@ -27,7 +27,6 @@ class TerrainCircleComponent(CallbackDelayer):
         self.__model = None
         self.__vehicleID = None
         self.__isVisible = False
-        self.__radiusProvider = None
         return
 
     def configure(self, radius, terrainCircleSettings):
@@ -104,9 +103,6 @@ class TerrainCircleComponent(CallbackDelayer):
             self.__vehicleID = None
             return
 
-    def setRadiusProvider(self, radiusProvider):
-        self.__radiusProvider = radiusProvider
-
     def __attachAreaVisualToModel(self):
         node = self.__model.node('')
         if node is not None:
@@ -140,11 +136,7 @@ class TerrainCircleComponent(CallbackDelayer):
     def __update(self):
         if self.__isVisible:
             self.__areaVisual.updateHeights()
-            if self.__radiusProvider is not None:
-                radius = float(self.__radiusProvider)
-                self.__areaVisual.setSize(Vector2(radius + radius, radius + radius))
             self.delayCallback(self.__getUpdateInterval(), self.__update)
-        return
 
     def __getUpdateInterval(self):
         smoothFPS = BigWorld.getFPS()[1]

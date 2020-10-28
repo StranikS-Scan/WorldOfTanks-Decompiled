@@ -16,6 +16,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization import CustomizationTooltipContext
 from gui.shared.missions.packers.bonus import BonusUIPacker, getDefaultBonusPackersMap, BaseBonusUIPacker, DossierBonusUIPacker, ItemBonusUIPacker, CrewBookBonusUIPacker
 from gui.server_events.recruit_helper import getRecruitInfo
+from gui.shared.money import Currency
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from shared_utils import first
 if typing.TYPE_CHECKING:
@@ -33,15 +34,16 @@ def getBattlePassBonusPacker():
      TROPHY_GIFT_TOKEN_BONUS_NAME: DeviceSelectTokenBonusPacker(),
      NEW_DEVICE_GIFT_TOKEN_BONUS_NAME: DeviceSelectTokenBonusPacker(),
      'items': ExtendedItemBonusUIPacker(),
-     'crewBooks': ExtandedCrewBookBonusUIPacker()})
+     'crewBooks': ExtendedCrewBookBonusUIPacker(),
+     Currency.CREDITS: ExtendedCreditsBonusUIPascker()})
     return BonusUIPacker(mapping)
 
 
-def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, packerGetter=getBattlePassBonusPacker):
+def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None):
     bonusIndexTotal = 0
     if tooltipData is not None:
         bonusIndexTotal = len(tooltipData)
-    packer = packerGetter()
+    packer = getBattlePassBonusPacker()
     for bonus in bonuses:
         if bonus.isShowInGUI():
             bonusList = packer.pack(bonus)
@@ -51,7 +53,7 @@ def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, pac
             for bonusIndex, item in enumerate(bonusList):
                 item.setIndex(bonusIndex)
                 bonusModelsList.addViewModel(item)
-                if tooltipData is not None and bonusTooltipList and bonusIndex < len(bonusTooltipList):
+                if tooltipData is not None and bonusTooltipList:
                     tooltipIdx = str(bonusIndexTotal)
                     item.setTooltipId(tooltipIdx)
                     tooltipData[tooltipIdx] = bonusTooltipList[bonusIndex]
@@ -273,7 +275,7 @@ class ExtendedItemBonusUIPacker(ItemBonusUIPacker):
         return ExtendedItemBonusModel()
 
 
-class ExtandedCrewBookBonusUIPacker(CrewBookBonusUIPacker):
+class ExtendedCrewBookBonusUIPacker(CrewBookBonusUIPacker):
 
     @classmethod
     def _getBonusModel(cls):
@@ -281,8 +283,24 @@ class ExtandedCrewBookBonusUIPacker(CrewBookBonusUIPacker):
 
     @classmethod
     def _packSingleBonus(cls, bonus, item, count):
-        model = super(ExtandedCrewBookBonusUIPacker, cls)._packSingleBonus(bonus, item, count)
+        model = super(ExtendedCrewBookBonusUIPacker, cls)._packSingleBonus(bonus, item, count)
         model.setUserName(item.userName)
+        return model
+
+
+class ExtendedCreditsBonusUIPascker(BaseBonusUIPacker):
+
+    @classmethod
+    def _pack(cls, bonus):
+        return [cls._packSingleBonus(bonus)]
+
+    @classmethod
+    def _packSingleBonus(cls, bonus):
+        model = ExtendedIconBonusModel()
+        cls._packCommon(bonus, model)
+        model.setIcon(bonus.getName())
+        model.setValue(str(bonus.getValue()))
+        model.setUserName(str(bonus.getValue()))
         return model
 
 

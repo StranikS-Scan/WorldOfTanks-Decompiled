@@ -1,0 +1,32 @@
+<HalloweenHangarTank.def>
+  <Parent>	ClientSelectableCameraObject	</Parent>
+  <Properties>
+    <vehicleType>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </vehicleType>
+    <styleID>
+      <Type>	INT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </styleID>
+    <highlightTriggerName>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </highlightTriggerName>
+    <markerHeightFactor>
+      <Type>	FLOAT	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+      <Default>	1.0	</Default>
+    </markerHeightFactor>
+    <cameraStaticCollisions>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+      <Default>	1	</Default>
+    </cameraStaticCollisions>
+  </Properties>
+</HalloweenHangarTank.def>

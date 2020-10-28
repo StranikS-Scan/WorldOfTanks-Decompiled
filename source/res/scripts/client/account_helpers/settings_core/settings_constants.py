@@ -85,6 +85,8 @@ class GAME(CONST_CONTAINER):
     SHOW_VEHICLES_COUNTER = 'showVehiclesCounter'
     SHOW_MARKS_ON_GUN = 'showMarksOnGun'
     ANONYMIZER = 'anonymizer'
+    SHOW_VICTIMS_DOGTAG = 'showVictimsDogTag'
+    SHOW_DOGTAG_TO_KILLER = 'showDogTagToKiller'
     DYNAMIC_CAMERA = 'dynamicCamera'
     SNIPER_MODE_STABILIZATION = 'horStabilizationSnp'
     INCREASED_ZOOM = 'increasedZoom'
@@ -326,6 +328,9 @@ class OnceOnlyHints(CONST_CONTAINER):
     AMMUNITION_PANEL_HINT = 'AmmunitionPanelHintZoneHint'
     AMMUNITION_FILTER_HINT = 'FilterHintZoneHint'
     OPT_DEV_DRAG_AND_DROP_HINT = 'OptDevDragAndDropHint'
+    DOGTAG_HANGAR_HINT = 'DogTagHangarHint'
+    DOGTAG_PROFILE_HINT = 'DogTagProfileHint'
+    EVENT_CREW_HEALING_HINT = 'EventCrewHealingHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):
@@ -432,8 +437,14 @@ class BattleCommStorageKeys(CONST_CONTAINER):
     SHOW_COM_IN_PLAYER_LIST = 'showCommInPlayerlist'
     SHOW_STICKY_MARKERS = 'showStickyMarkers'
     SHOW_CALLOUT_MESSAGES = 'showCalloutMessages'
+    SHOW_LOCATION_MARKERS = 'showLocationMarkers'
     SHOW_BASE_MARKERS = 'showMarkers'
 
 
-class WTEventStorageKeys(CONST_CONTAINER):
-    WT_INTRO_SHOWN = 'wtIntroShown'
+class Hw20StorageKeys(CONST_CONTAINER):
+    HANGAR_HELLO_FIRST = 'hw20hangarHelloFirst'
+    HANGAR_DAILY_HELLO = 'hw20hangarHelloDaily'
+    HANGAR_LAST_HELLO_DATE = 'hw20hangarLastHelloDate'
+    ROASTER_LOW = 'hw20resultScreenLow'
+    ROASTER_MED = 'hw20resultScreenMedium'
+    ROASTER_HIGH = 'hw20resultScreenHigh'

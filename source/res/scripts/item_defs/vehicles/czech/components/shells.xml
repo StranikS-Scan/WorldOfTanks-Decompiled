@@ -1,11 +1,13 @@
 <shells.xml>
   <icons>
     <ap>	ARMOR_PIERCING.png 0 0	</ap>
-    <ap_he>	ARMOR_PIERCING_HE.png 0 0	</ap_he>
+    <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
     <ap_cr>	ARMOR_PIERCING_CR.png 0 0	</ap_cr>
+    <ap_cr_premium>	ARMOR_PIERCING_CR_PREMIUM.png 0 0	</ap_cr_premium>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
     <hc>	HOLLOW_CHARGE.png 0 0	</hc>
+    <hc_premium>	HOLLOW_CHARGE_PREMIUM.png 0 0	</hc_premium>
   </icons>
   <_37mm_Prurazny_vz_18>
     <id>	4	</id>
@@ -24,7 +26,7 @@
   <_37mm_Prurazny_vz_28>
     <id>	5	</id>
     <userString>	#czech_vehicles:_37mm_Prurazny_vz_28	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -96,7 +98,7 @@
   <_37mm_Prurazny_vz_40_s_oc_jadrem>
     <id>	8	</id>
     <userString>	#czech_vehicles:_37mm_Prurazny_vz_40_s_oc_jadrem	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -111,7 +113,7 @@
   <_37mm_Prurazny_vz_40_s_wolf_jadrem>
     <id>	10	</id>
     <userString>	#czech_vehicles:_37mm_Prurazny_vz_40_s_wolf_jadrem	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -126,7 +128,7 @@
   <_37mm_Prurazny_vz_47_s_wolf_jadrem>
     <id>	15	</id>
     <userString>	#czech_vehicles:_37mm_Prurazny_vz_47_s_wolf_jadrem	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	1200	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -185,7 +187,7 @@
   <_47mm_Prurazny_s_oc_jadrem>
     <id>	12	</id>
     <userString>	#czech_vehicles:_47mm_Prurazny_s_oc_jadrem	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -229,7 +231,7 @@
   <_47mm_Prurazny_vz_40_s_wolf_jadrem>
     <id>	19	</id>
     <userString>	#czech_vehicles:_47mm_Prurazny_vz_40_s_wolf_jadrem	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	1600	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -273,7 +275,7 @@
   <_75mm_Prurazny_vz_42_s_wolf_jadrem>
     <id>	22	</id>
     <userString>	#czech_vehicles:_75mm_Prurazny_vz_42_s_wolf_jadrem	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -317,7 +319,7 @@
   <_85mm_vz_44_Protipancerovy_jadrovy>
     <id>	25	</id>
     <userString>	#czech_vehicles:_85mm_vz_44_Protipancerovy_jadrovy	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -361,7 +363,7 @@
   <_88mm_HEAT_Vz_46_prupalny>
     <id>	2	</id>
     <userString>	#czech_vehicles:_88mm_HEAT_Vz_46_prupalny	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -406,7 +408,7 @@
   <_88mm_vz_42N_OPG>
     <id>	31	</id>
     <userString>	#czech_vehicles:_88mm_vz_42N_OPG	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -450,7 +452,7 @@
   <_100mm_JPrSv>
     <id>	28	</id>
     <userString>	#czech_vehicles:_100mm_JPrSv	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -495,7 +497,7 @@
   <_100mm_Prurazny_vz_49_s_oc_jadrem>
     <id>	37	</id>
     <userString>	#czech_vehicles:_100mm_Prurazny_vz_49_s_oc_jadrem	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -539,7 +541,7 @@
   <_100mm_Prupalny_vz_50>
     <id>	40	</id>
     <userString>	#czech_vehicles:_100mm_Prupalny_vz_50	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -584,7 +586,7 @@
   <_105mm_vz_42N_OPG>
     <id>	34	</id>
     <userString>	#czech_vehicles:_105mm_vz_42N_OPG	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>

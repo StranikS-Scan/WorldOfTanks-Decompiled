@@ -43,6 +43,8 @@ class UnitVehiclesValidator(BaseActionsValidator):
                     if not vehicle.isReadyToPrebattle(checkForRent=self._isCheckForRent()):
                         if vehicle.isBroken:
                             return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_BROKEN)
+                        if vehicle.isTooHeavy:
+                            return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_TOO_HEAVY)
                         if not vehicle.isCrewFull:
                             return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_CREW_NOT_FULL)
                         if vehicle.rentalIsOver:
@@ -57,7 +59,7 @@ class UnitVehiclesValidator(BaseActionsValidator):
             return super(UnitVehiclesValidator, self)._validate()
 
     def _isValidMode(self, vehicle):
-        return not vehicle.isEvent and not vehicle.isOnlyForEpicBattles and not vehicle.isOnlyForBob and not vehicle.isOnlyForBattleRoyaleBattles
+        return not vehicle.isEvent and not vehicle.isOnlyForEpicBattles and not vehicle.isOnlyForBattleRoyaleBattles
 
     def _isVehicleSuitableForMode(self, vehicle):
         return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_WRONG_MODE) if not self._isValidMode(vehicle) else None

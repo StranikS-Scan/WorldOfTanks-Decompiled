@@ -1,11 +1,13 @@
 <shells.xml>
   <icons>
     <ap>	ARMOR_PIERCING.png 0 0	</ap>
-    <ap_he>	ARMOR_PIERCING_HE.png 0 0	</ap_he>
+    <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
     <ap_cr>	ARMOR_PIERCING_CR.png 0 0	</ap_cr>
+    <ap_cr_premium>	ARMOR_PIERCING_CR_PREMIUM.png 0 0	</ap_cr_premium>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
     <hc>	HOLLOW_CHARGE.png 0 0	</hc>
+    <hc_premium>	HOLLOW_CHARGE_PREMIUM.png 0 0	</hc_premium>
   </icons>
   <_13.2mm_Balle_P.>
     <id>	15	</id>
@@ -24,7 +26,7 @@
   <_13.2mm_Balle_T.P.>
     <id>	16	</id>
     <userString>	#france_vehicles:_13.2mm_Balle_T.P.	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -53,7 +55,7 @@
   <_25mm_Balle_T.P._mle._1934P>
     <id>	11	</id>
     <userString>	#france_vehicles:_25mm_Balle_T.P._mle._1934P	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -82,7 +84,7 @@
   <_25mm_Balle_T.P._mle._1939P>
     <id>	61	</id>
     <userString>	#france_vehicles:_25mm_Balle_T.P._mle._1939P	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -140,7 +142,7 @@
   <_37mm_FrtPrf1935>
     <id>	13	</id>
     <userString>	#france_vehicles:_37mm_FrtPrf1935	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -170,7 +172,7 @@
   <_37mm_Odr_mle._1939>
     <id>	20	</id>
     <userString>	#france_vehicles:_37mm_Odr_mle._1939	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -229,7 +231,7 @@
   <_47mm_Odr_mle._1935>
     <id>	7	</id>
     <userString>	#france_vehicles:_47mm_Odr_mle._1935	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	1200	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -302,7 +304,7 @@
   <_47mm_Odr_mle_1935_b_bootcamp>
     <id>	119	</id>
     <userString>	#france_vehicles:_47mm_Odr_mle_1935_b	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -318,7 +320,7 @@
   <_47mm_Odr_mle_1935_b>
     <id>	65	</id>
     <userString>	#france_vehicles:_47mm_Odr_mle_1935_b	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -378,7 +380,7 @@
   <_6pdr_APCR_MK_1T>
     <id>	56	</id>
     <userString>	#france_vehicles:_6pdr_APCR_MK_1T	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -407,7 +409,7 @@
   <_57mm_L100_APCR>
     <id>	85	</id>
     <userString>	#france_vehicles:_57mm_L100_APCR	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -436,7 +438,7 @@
   <_75mm_Pzgr.40>
     <id>	29	</id>
     <userString>	#france_vehicles:_75mm_Pzgr.40	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -465,7 +467,7 @@
   <_75mm_FrtPrf1940>
     <id>	1	</id>
     <userString>	#france_vehicles:_75mm_FrtPrf1940	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -524,7 +526,7 @@
   <_75mm_FrtPrf1944>
     <id>	4	</id>
     <userString>	#france_vehicles:_75mm_FrtPrf1944	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -568,7 +570,7 @@
   <_75mm_FrtPrf1944A>
     <id>	115	</id>
     <userString>	#france_vehicles:_75mm_FrtPrf1944A	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	3200	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -642,7 +644,7 @@
   <_75mm_OCO_mle._1926>
     <id>	41	</id>
     <userString>	#france_vehicles:_75mm_OCO_mle._1926	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -672,7 +674,7 @@
   <_75mm_OCC_mle_54>
     <id>	134	</id>
     <userString>	#france_vehicles:_75mm_OCC_mle_54	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	3200	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -717,7 +719,7 @@
   <_75mm_PCOT_mle_51>
     <id>	149	</id>
     <userString>	#france_vehicles:_75mm_PCOT_mle_51	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -761,7 +763,7 @@
   <_75mm_M72>
     <id>	143	</id>
     <userString>	#france_vehicles:_75mm_M72	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -806,7 +808,7 @@
   <_76mm_OCO_mle._1941>
     <id>	18	</id>
     <userString>	#france_vehicles:_76mm_OCO_mle._1941	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -837,7 +839,7 @@
   <_76mm_HVAP_M93>
     <id>	32	</id>
     <userString>	#france_vehicles:_76mm_HVAP_M93	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -881,7 +883,7 @@
   <_76.2_mm_APCBC_Mk.8T>
     <id>	63	</id>
     <userString>	#france_vehicles:_76.2_mm_APCBC_Mk.8T	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -925,7 +927,7 @@
   <_75mm_Pzgr_40_42>
     <id>	152	</id>
     <userString>	#france_vehicles:_75mm_Pzgr_40_42	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -983,7 +985,7 @@
   <_90mm_FrtPrf1944>
     <id>	35	</id>
     <userString>	#france_vehicles:_90mm_FrtPrf1944	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -1010,6 +1012,52 @@
       <devices>	122	</devices>
     </damage>
   </_90mm_OE_mle_1924>
+  <_90mm_OFL_Halloween>
+    <id>	163	</id>
+    <userString>	#france_vehicles:_90mm_OFL_Halloween	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	0	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_90mm_OFL_Halloween>
+  <_90mm_FrtPrf1944_Halloween>
+    <id>	161	</id>
+    <userString>	#france_vehicles:_90mm_FrtPrf1944_Halloween	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	4800	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_90mm_FrtPrf1944_Halloween>
+  <_90mm_OE_mle_1924_Halloween>
+    <id>	162	</id>
+    <userString>	#france_vehicles:_90mm_OE_mle_1924_Halloween	</userString>
+    <icon>	he	</icon>
+    <price>	255	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	90	</caliber>
+    <explosionRadius>	1.46	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_90mm_OE_mle_1924_Halloween>
   <_90mm_AP_americaine>
     <id>	106	</id>
     <userString>	#france_vehicles:_90mm_AP_americaine	</userString>
@@ -1027,7 +1075,7 @@
   <_90mm_HEAT_americaine>
     <id>	107	</id>
     <userString>	#france_vehicles:_90mm_HEAT_americaine	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -1072,7 +1120,7 @@
   <_90mm_OFL_90_D_919>
     <id>	122	</id>
     <userString>	#france_vehicles:_90mm_OFL_90_D_919	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -1116,7 +1164,7 @@
   <_90mm_OCC_90>
     <id>	137	</id>
     <userString>	#france_vehicles:_90mm_OCC_90	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4000	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -1147,7 +1195,7 @@
   <_100mm_FrtPrf1945>
     <id>	43	</id>
     <userString>	#france_vehicles:_100mm_FrtPrf1945	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4000	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -1220,7 +1268,7 @@
   <_105mm_FrtPrf1943>
     <id>	38	</id>
     <userString>	#france_vehicles:_105mm_FrtPrf1943	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4000	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -1265,7 +1313,7 @@
   <_105mmGr39H1A>
     <id>	26	</id>
     <userString>	#france_vehicles:_105mmGr39H1A	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4000	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -1325,7 +1373,7 @@
   <_105mm_OCO_mle._1936>
     <id>	46	</id>
     <userString>	#france_vehicles:_105mm_OCO_mle._1936	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4000	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -1355,7 +1403,7 @@
   <_105mm_HEAT_OCC_F1>
     <id>	82	</id>
     <userString>	#france_vehicles:_105mm_HEAT_OCC_F1	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -1400,7 +1448,7 @@
   <_105mm_HEAT_OCC_105E3>
     <id>	155	</id>
     <userString>	#france_vehicles:_105mm_HEAT_OCC_105E3	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -1445,7 +1493,7 @@
   <_105mm_OCC_105_F1>
     <id>	89	</id>
     <userString>	#france_vehicles:_105mm_OCC_105_F1	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -1490,7 +1538,7 @@
   <_105mm_OCC_105_D1504_L51>
     <id>	96	</id>
     <userString>	#france_vehicles:_105mm_OCC_105_D1504_L51	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -1535,7 +1583,7 @@
   <_105mm_OCC_105_D1504>
     <id>	112	</id>
     <userString>	#france_vehicles:_105mm_OCC_105_D1504	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -1580,7 +1628,7 @@
   <_105mm_OCC_105_D_1504_EBR>
     <id>	140	</id>
     <userString>	#france_vehicles:_105mm_OCC_105_D_1504_EBR	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -1625,7 +1673,7 @@
   <_105mm_OFL2_105_D_1504_EBR_2>
     <id>	158	</id>
     <userString>	#france_vehicles:_105mm_OFL2_105_D_1504_EBR_2	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -1683,7 +1731,7 @@
   <_120mm_FrtPrf1945>
     <id>	48	</id>
     <userString>	#france_vehicles:_120mm_FrtPrf1945	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -1698,7 +1746,7 @@
   <_120mm_FrtPrf1945_fallout>
     <id>	93	</id>
     <userString>	#france_vehicles:_120mm_FrtPrf1945_fallout	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -1757,7 +1805,7 @@
   <_120mm_FrtPrf1951>
     <id>	131	</id>
     <userString>	#france_vehicles:_120mm_FrtPrf1951	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -1801,7 +1849,7 @@
   <_127mm_Capped_Common>
     <id>	125	</id>
     <userString>	#france_vehicles:_127mm_Capped_Common	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -1845,7 +1893,7 @@
   <_130mm_Capped_Common>
     <id>	128	</id>
     <userString>	#france_vehicles:_130mm_Capped_Common	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -1894,7 +1942,7 @@
   <_155mm_OCO_mle_1944>
     <id>	54	</id>
     <userString>	#france_vehicles:_155mm_OCO_mle_1944	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -1983,7 +2031,7 @@
   <_155mm_HEAT_T267>
     <id>	79	</id>
     <userString>	#france_vehicles:_155mm_HEAT_T267	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	6800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -2049,7 +2097,7 @@
   <_105mm_OCO_mle._1936_SH>
     <id>	265	</id>
     <userString>	#france_vehicles:_105mm_OCO_mle._1936_SH	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
     <improved>	true	</improved>
@@ -2066,7 +2114,7 @@
   <_105mm_APCR_OFL_SH>
     <id>	254	</id>
     <userString>	#france_vehicles:_105mm_APCR_OFL_SH	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
     <improved>	true	</improved>
@@ -2082,7 +2130,7 @@
   <_75mm_OCO_mle._1926_SH>
     <id>	266	</id>
     <userString>	#france_vehicles:_75mm_OCO_mle._1926_SH	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
     <improved>	true	</improved>
@@ -2099,7 +2147,7 @@
   <_75mm_FrtPrf1946_SH>
     <id>	256	</id>
     <userString>	#france_vehicles:_75mm_FrtPrf1946_SH	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
     <improved>	true	</improved>
@@ -2115,7 +2163,7 @@
   <_90mm_OCC_90_SH>
     <id>	267	</id>
     <userString>	#france_vehicles:_90mm_OCC_90_SH	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
     <improved>	true	</improved>
@@ -2132,7 +2180,7 @@
   <_90mm_FrtPrf1945_SH>
     <id>	258	</id>
     <userString>	#france_vehicles:_90mm_FrtPrf1945_SH	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
     <improved>	true	</improved>
@@ -2163,7 +2211,7 @@
   <_105mm_OFL_105_D1_SH>
     <id>	260	</id>
     <userString>	#france_vehicles:_105mm_OFL_105_D1_SH	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
     <improved>	true	</improved>
@@ -2179,7 +2227,7 @@
   <_90mm_HEAT_OCC_F1_SH>
     <id>	268	</id>
     <userString>	#france_vehicles:_90mm_HEAT_OCC_F1_SH	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
     <improved>	true	</improved>
@@ -2196,7 +2244,7 @@
   <_90mm_OFL_90_DS2_SH>
     <id>	262	</id>
     <userString>	#france_vehicles:_90mm_OFL_90_DS2_SH	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
     <improved>	true	</improved>
@@ -2228,7 +2276,7 @@
   <_127mm_OE_127_D_700_SH>
     <id>	264	</id>
     <userString>	#france_vehicles:_127mm_OE_127_D_700_SH	</userString>
-    <icon>	he	</icon>
+    <icon>	he_premium	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
     <improved>	true	</improved>

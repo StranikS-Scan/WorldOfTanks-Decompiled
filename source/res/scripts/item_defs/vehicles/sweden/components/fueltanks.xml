@@ -5,6 +5,9 @@
     <Average>	203	</Average>
     <Heavy>	204	</Heavy>
     <Large>	205	</Large>
+    <Large_HELL__0>	2	</Large_HELL__0>
+    <Heavy_HELL>	3	</Heavy_HELL>
+    <Average_HELL>	4	</Average_HELL>
   </ids>
   <shared>
     <Small>
@@ -47,5 +50,32 @@
       <maxRegenHealth>	80	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
     </Large>
+    <Large_HELL__0>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	300	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	80	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Large_HELL__0>
+    <Heavy_HELL>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	275	</weight>
+      <maxHealth>	175	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Heavy_HELL>
+    <Average_HELL>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Average_HELL>
   </shared>
 </fuelTanks.xml>

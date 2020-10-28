@@ -3,6 +3,7 @@
 from adisp import process
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui import DialogsInterface
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.wgnc.proxy_data import ShowInBrowserItem
 from gui.wgnc.actions import OpenInternalBrowser
 from gui.Scaleform.framework import g_entitiesFactories
@@ -51,7 +52,7 @@ class ClientStrongholdProvider(IGlobalListener):
             if not enabled:
                 if self.__tabActive or self.__entityActive:
                     if self.__tabActive:
-                        g_eventBus.handleEvent(g_entitiesFactories.makeLoadEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+                        g_eventBus.handleEvent(g_entitiesFactories.makeLoadEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
                     if not self.__unitActive:
                         self.__leave()
                         self.__showPopupDlg()

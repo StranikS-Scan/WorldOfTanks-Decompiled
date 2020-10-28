@@ -2,16 +2,15 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/ammunition_panel.py
 from adisp import process
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
-from constants import ROLE_TYPE
-from CurrentVehicle import g_currentVehicle
+from constants import ROLE_TYPE, QUEUE_TYPE, PREBATTLE_TYPE
+from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from gui import makeHtmlString
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.customization.shared import getEditableStylesExtraNotificationCounter, getItemTypesAvailableForVehicle
 from gui.Scaleform.daapi.view.meta.AmmunitionPanelMeta import AmmunitionPanelMeta
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import FUNCTIONAL_FLAG
+from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.formatters.icons import roleActionsGroup
 from gui.shared.formatters import text_styles
@@ -25,6 +24,10 @@ from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.shared import IItemsCache
 from gui.customization.shared import isVehicleCanBeCustomized
+from gui.impl.gen import R
+from gui.impl import backport
+RESURRECT = 'resurrect'
+RESURRECT_MODULE_LABEL = 'h_Resurrect'
 
 class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     __slots__ = ('__hangarMessage',)
@@ -85,6 +88,10 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
             if onlyMoneyUpdate and self.__hangarMessage == hangarMessage:
                 return
             vehicle = g_currentVehicle.item
+            state = g_prbLoader.getDispatcher().getFunctionalState()
+            isEvent = state.isInPreQueue(QUEUE_TYPE.EVENT_BATTLES) or state.isInUnit(PREBATTLE_TYPE.EVENT)
+            if isEvent:
+                vehicle = g_currentPreviewVehicle.item or g_currentVehicle.item
             self.__hangarMessage = hangarMessage
             statusId, msg, msgLvl = hangarMessage
             rentAvailable = False
@@ -100,13 +107,14 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
             roleID = ROLE_TYPE.NOT_DEFINED
             if msgLvl == Vehicle.VEHICLE_STATE_LEVEL.ACTIONS_GROUP:
                 roleID = vehicle.role
+            vehicleLevel = '{}'.format(int2roman(vehicle.level)) if not isEvent else ''
             self.__applyCustomizationNewCounter(vehicle)
             self.__updateDevices(vehicle)
             self.as_updateVehicleStatusS({'message': msgString,
              'rentAvailable': rentAvailable,
              'isElite': vehicle.isElite,
              'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
-             'vehicleLevel': '{}'.format(int2roman(vehicle.level)),
+             'vehicleLevel': vehicleLevel,
              'vehicleName': '{}'.format(vehicle.shortUserName),
              'actionGroupId': roleID})
 

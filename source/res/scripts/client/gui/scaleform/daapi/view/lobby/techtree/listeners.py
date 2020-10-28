@@ -169,7 +169,7 @@ class _ItemsCacheListener(_Listener):
     def __center_onIsLongDisconnected(self, _):
         self._page.redraw()
 
-    def __onVehCompareBasketChanged(self, changedData, _=None):
+    def __onVehCompareBasketChanged(self, changedData):
         if changedData.isFullChanged:
             self._page.invalidateVehCompare()
 

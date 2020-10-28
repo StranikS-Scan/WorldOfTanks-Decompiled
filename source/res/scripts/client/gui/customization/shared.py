@@ -9,7 +9,7 @@ from gui.customization.constants import CustomizationModes
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.money import Currency, ZERO_MONEY
-from items.components.c11n_constants import CustomizationType, C11N_MASK_REGION, MAX_USERS_PROJECTION_DECALS, ProjectionDecalFormTags, SeasonType, ApplyArea, C11N_GUN_APPLY_REGIONS, UNBOUND_VEH_KEY
+from items.components.c11n_constants import CustomizationType, C11N_MASK_REGION, MAX_USERS_PROJECTION_DECALS, ProjectionDecalFormTags, SeasonType, ApplyArea, C11N_GUN_APPLY_REGIONS, UNBOUND_VEH_KEY, EMPTY_ITEM_ID
 from shared_utils import CONST_CONTAINER, isEmpty
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -21,7 +21,7 @@ from vehicle_outfit.outfit import Area, SLOT_TYPE_TO_ANCHOR_TYPE_MAP, scaffold, 
 from gui.impl import backport
 from gui.impl.gen import R
 from helpers import dependency
-from items.vehicles import g_cache
+from items import vehicles
 _logger = logging.getLogger(__name__)
 C11nId = namedtuple('C11nId', ('areaId', 'slotType', 'regionIdx'))
 C11nId.__new__.__defaults__ = (-1, -1, -1)
@@ -341,7 +341,7 @@ def isVehicleCanBeCustomized(vehicle, itemTypeID, itemsFilter=None):
         return False
     else:
         cType = C11N_ITEM_TYPE_MAP[itemTypeID]
-        customizationCache = g_cache.customization20().itemTypes
+        customizationCache = vehicles.g_cache.customization20().itemTypes
         if cType not in customizationCache:
             _logger.error('Failed to get customization item from cache. Wrong cType: %s', cType)
             return False
@@ -357,6 +357,8 @@ def isVehicleCanBeCustomized(vehicle, itemTypeID, itemsFilter=None):
         if itemsFilter is not None:
             requirement |= REQ_CRITERIA.CUSTOM(itemsFilter)
         for itemID in customizationCache[cType]:
+            if itemID == EMPTY_ITEM_ID:
+                continue
             item = customizationService.getItemByID(itemTypeID, itemID)
             if requirement(item):
                 return True

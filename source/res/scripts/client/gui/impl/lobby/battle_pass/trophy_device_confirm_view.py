@@ -27,7 +27,7 @@ class TrophyDeviceUpgradeConfirmView(DialogWindow):
     __wallet = dependency.descriptor(IWalletController)
     __appLoader = dependency.descriptor(IAppLoader)
 
-    def __init__(self, trophyBasicModule, parent, enableBlur3D=True):
+    def __init__(self, trophyBasicModule, parent):
         if parent is None:
             app = self.__appLoader.getApp()
             view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY))
@@ -35,7 +35,7 @@ class TrophyDeviceUpgradeConfirmView(DialogWindow):
                 parent = view.getParentWindow()
             else:
                 parent = None
-        super(TrophyDeviceUpgradeConfirmView, self).__init__(content=TrophyDeviceUpgradeConfirmDialogContent(trophyBasicModule), balanceContent=CommonBalanceContent(currencies=(Currency.GOLD, Currency.CREDITS)), bottomContent=DialogPricesContent(), parent=parent, enableBlur3D=enableBlur3D)
+        super(TrophyDeviceUpgradeConfirmView, self).__init__(content=TrophyDeviceUpgradeConfirmDialogContent(trophyBasicModule), balanceContent=CommonBalanceContent(currencies=(Currency.GOLD, Currency.CREDITS)), bottomContent=DialogPricesContent(), parent=parent)
         self.__trophyBasicModule = trophyBasicModule
         self.__upgradePrice = trophyBasicModule.getUpgradePrice(self.__itemsCache.items).price
         self.__goldOperationsEnabled = self.__wallet.isAvailable

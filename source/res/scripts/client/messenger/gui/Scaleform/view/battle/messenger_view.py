@@ -17,7 +17,6 @@ from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.battle_control.arena_info.interfaces import IContactsAndPersonalInvitationsController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.shared import EVENT_BUS_SCOPE
-from gui.shared.gui_items.Vehicle import VEHICLE_EVENT_TYPE
 from messenger.proto import proto_getter
 from messenger.storage import storage_getter
 from messenger import g_settings
@@ -41,7 +40,7 @@ def _getToolTipText(arenaVisitor):
     if arenaVisitor is not None:
         if arenaVisitor.gui.isTrainingBattle():
             result = settings.toolTipText
-        elif arenaVisitor.gui.isRandomBattle() and g_settings.userPrefs.disableBattleChat:
+        elif g_settings.userPrefs.disableBattleChat and (arenaVisitor.gui.isRandomBattle() or arenaVisitor.gui.isEventBattle()):
             result = settings.chatIsLockedToolTipText
         else:
             result = settings.toolTipTextWithMuteInfo
@@ -82,6 +81,7 @@ def _makeReceiverVO(clientID, settings, isChatEnabled):
                 isByDefault = True
             recvLabelStr = settings.label % color
         else:
+            isByDefault = False
             recvLabelStr = makeHtmlString('html_templates:battle', 'battleChatIsLocked', {})
     else:
         recvLabelStr = _UNKNOWN_RECEIVER_LABEL
@@ -186,9 +186,7 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
                     break
 
     def handleEnterPressed(self):
-        info = self.sessionProvider.getCtx().getVehicleInfo(BigWorld.player().playerVehicleID)
-        isBoss = VEHICLE_EVENT_TYPE.EVENT_BOSS in info.vehicleType.tags
-        if not self.__isEnabled or isBoss:
+        if not self.__isEnabled:
             return False
         if self.app.isModalViewShown() or self.app.hasGuiControlModeConsumers(*_CONSUMERS_LOCK_ENTER):
             return False

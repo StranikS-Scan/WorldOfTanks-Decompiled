@@ -6,6 +6,7 @@ from gui.shared import EVENT_BUS_SCOPE
 from gui.shared import events
 from gui.shared import g_eventBus
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.server_events.events_helpers import isRankedPlatform
 from helpers import dependency
@@ -18,7 +19,7 @@ from web.web_client_api.quests import QuestsWebApi
 from web.web_client_api.request import RequestWebApi
 from web.web_client_api.sound import SoundWebApi, SoundStateWebApi, HangarSoundWebApi
 from web.web_client_api.shop import ShopWebApi
-from web.web_client_api.ui import NotificationWebApi, ContextMenuWebApi, OpenWindowWebApi, CloseWindowWebApi, OpenTabWebApi
+from web.web_client_api.ui import NotificationWebApi, ContextMenuWebApi, OpenWindowWebApi, CloseWindowWebApi, OpenTabWebApi, UtilWebApi
 from web.web_client_api.ui.ranked import OpenRankedPagesMixin
 
 def _packQuest(quest, rankModel):
@@ -37,7 +38,7 @@ class RankedBattlesWebApi(OpenRankedPagesMixin):
 
     @w2c(W2CSchema, name='close_browser')
     def closeBrowser(self, _):
-        g_eventBus.handleEvent(events.LoadViewEvent(alias=VIEW_ALIAS.LOBBY_HANGAR), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), EVENT_BUS_SCOPE.LOBBY)
 
     @w2c(W2CSchema, name='get_gamemode_state')
     def getGamemodeState(self, _):
@@ -103,4 +104,4 @@ class _SoundStateWebApi(SoundStateWebApi):
 
 
 def createRankedBattlesWebHandlers():
-    return webApiCollection(RequestWebApi, ContextMenuWebApi, _OpenTabWebApi, OpenWindowWebApi, CloseWindowWebApi, SoundWebApi, _SoundStateWebApi, HangarSoundWebApi, ClansWebApi, NotificationWebApi, RankedBattlesWebApi, QuestsWebApi, ShopWebApi)
+    return webApiCollection(RequestWebApi, ContextMenuWebApi, _OpenTabWebApi, OpenWindowWebApi, CloseWindowWebApi, SoundWebApi, _SoundStateWebApi, HangarSoundWebApi, ClansWebApi, NotificationWebApi, RankedBattlesWebApi, QuestsWebApi, ShopWebApi, UtilWebApi)

@@ -5,7 +5,6 @@ import typing
 from collections import Container, namedtuple
 from sys import maxint
 from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
-from constants import IS_CHINA
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.locale.COMMON import COMMON
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
@@ -35,13 +34,9 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.formatters import text_styles, icons
 
-class ItemSortRule(CONST_CONTAINER):
+class ITEM_SORT_RULE(CONST_CONTAINER):
     REGULAR = 'regular'
     FRONTLINE = 'frontline'
-
-
-class EventDataType(CONST_CONTAINER):
-    EVENT_PROGRESSION = 'eventProgression'
 
 
 OFFER_CHANGED_EVENT = 'offerChanged'
@@ -107,7 +102,17 @@ _TOOLTIP_TYPE = {ItemPackType.ITEM_DEVICE: TOOLTIPS_CONSTANTS.SHOP_MODULE,
  ItemPackType.REFERRAL_BADGE: TOOLTIPS_CONSTANTS.REFERRAL_BADGE,
  ItemPackType.PLAYER_BADGE: TOOLTIPS_CONSTANTS.SHOP_BADGE,
  ItemPackType.TRADE_IN_INFO: TOOLTIPS_CONSTANTS.TRADE_IN_INFO,
- ItemPackType.CREW_BUNDLE: TOOLTIPS_CONSTANTS.SHOP_CREW_BUNDLE}
+ ItemPackType.CREW_BUNDLE: TOOLTIPS_CONSTANTS.SHOP_CREW_BUNDLE,
+ ItemPackType.CREW_BOOK: TOOLTIPS_CONSTANTS.CREW_BOOK,
+ ItemPackType.CREW_BOOK_BROCHURE: TOOLTIPS_CONSTANTS.CREW_BOOK,
+ ItemPackType.CREW_BOOK_GUIDE: TOOLTIPS_CONSTANTS.CREW_BOOK,
+ ItemPackType.CREW_BOOK_CREW_BOOK: TOOLTIPS_CONSTANTS.CREW_BOOK,
+ ItemPackType.CREW_BOOK_PERSONAL_BOOK: TOOLTIPS_CONSTANTS.CREW_BOOK,
+ ItemPackType.CREW_BOOK_UNIVERSAL_BOOK: TOOLTIPS_CONSTANTS.CREW_BOOK,
+ ItemPackType.BLUEPRINT: TOOLTIPS_CONSTANTS.BLUEPRINT_FRAGMENT_INFO,
+ ItemPackType.BLUEPRINT_NATIONAL: TOOLTIPS_CONSTANTS.BLUEPRINT_FRAGMENT_INFO,
+ ItemPackType.BLUEPRINT_INTELEGENCE_DATA: TOOLTIPS_CONSTANTS.BLUEPRINT_FRAGMENT_INFO,
+ ItemPackType.BLUEPRINT_ANY: TOOLTIPS_CONSTANTS.BLUEPRINT_RANDOM_INFO}
 _ICONS = {ItemPackType.CAMOUFLAGE_ALL: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
  ItemPackType.CAMOUFLAGE_WINTER: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
  ItemPackType.CAMOUFLAGE_SUMMER: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
@@ -260,9 +265,7 @@ def getItemTitle(rawItem, item, forBox=False, additionalInfo=False):
     elif rawItem.type == ItemPackType.CUSTOM_SUPPLY_POINT:
         title = _ms(EPIC_BATTLE.EPICBATTLEITEM_SUPPLYPOINTS_HEADER)
     elif rawItem.type == ItemPackType.CUSTOM_REWARD_POINT:
-        rEventProgressionPath = R.strings.tooltips.vehiclePreview.buyingPanel.eventProgression
-        resID = (rEventProgressionPath.style_price if IS_CHINA else rEventProgressionPath.price).header()
-        title = backport.text(resID)
+        title = _ms(EPIC_BATTLE.EPICBATTLEITEM_REWARDPOINTS_HEADER)
     elif rawItem.type == ItemPackType.CUSTOM_PREMIUM:
         title = backport.text(R.strings.tooltips.premium.days.header(), rawItem.count)
     elif rawItem.type == ItemPackType.CUSTOM_PREMIUM_PLUS:
@@ -278,6 +281,8 @@ def getItemTitle(rawItem, item, forBox=False, additionalInfo=False):
              ItemPackType.CUSTOM_CREW_100: CrewTypes.SKILL_100}.get(rawItem.type))
         else:
             title = _ms(TOOLTIPS.CREW_HEADER)
+    elif rawItem.type == ItemPackType.CUSTOM_EVENT_PROGRESSION_REWARD_POINT:
+        title = backport.text(R.strings.tooltips.vehiclePreview.buyingPanel.eventProgression.price.header())
     else:
         title = rawItem.title or ''
     return title
@@ -295,8 +300,7 @@ def getItemDescription(rawItem, item):
     elif rawItem.type == ItemPackType.CUSTOM_CRYSTAL:
         description = _ms(TOOLTIPS.AWARDITEM_CRYSTAL_BODY)
     elif rawItem.type in (ItemPackType.CUSTOM_EVENT_COIN, ItemPackType.CUSTOM_EVENT_COIN_EXTERNAL):
-        eventCoinBody = TOOLTIPS.AWARDITEM_EVENTCOIN_BODY if not IS_CHINA else TOOLTIPS.AWARDITEM_EVENTCOIN_BODY_CN
-        description = _ms(eventCoinBody)
+        description = _ms(TOOLTIPS.AWARDITEM_EVENTCOIN_BODY)
     elif rawItem.type == ItemPackType.CUSTOM_PREMIUM:
         description = backport.text(R.strings.tooltips.awardItem.premium.body())
     elif rawItem.type == ItemPackType.CUSTOM_PREMIUM_PLUS:
@@ -306,9 +310,7 @@ def getItemDescription(rawItem, item):
     elif rawItem.type == ItemPackType.CUSTOM_SUPPLY_POINT:
         description = _ms(EPIC_BATTLE.EPICBATTLEITEM_SUPPLYPOINTS_DESCRIPTION)
     elif rawItem.type == ItemPackType.CUSTOM_REWARD_POINT:
-        rEventProgressionPath = R.strings.tooltips.vehiclePreview.buyingPanel.eventProgression
-        resID = (rEventProgressionPath.style_price if IS_CHINA else rEventProgressionPath.price).body()
-        description = backport.text(resID)
+        description = _ms(EPIC_BATTLE.EPICBATTLEITEM_REWARDPOINTS_DESCRIPTION)
     elif rawItem.type in ItemPackTypeGroup.CREW:
         if rawItem.type == ItemPackType.CREW_CUSTOM:
             description = _ms(TOOLTIPS.CREWCUSTOM_BODY)
@@ -317,6 +319,8 @@ def getItemDescription(rawItem, item):
              ItemPackType.CREW_75: CrewTypes.SKILL_75,
              ItemPackType.CREW_100: CrewTypes.SKILL_100,
              ItemPackType.CUSTOM_CREW_100: CrewTypes.SKILL_100}.get(rawItem.type))
+    elif rawItem.type == ItemPackType.CUSTOM_EVENT_PROGRESSION_REWARD_POINT:
+        description = backport.text(R.strings.tooltips.vehiclePreview.buyingPanel.eventProgression.price.body())
     else:
         description = rawItem.description or ''
     return description
@@ -661,7 +665,7 @@ class _CustomCrewSkillsNodeContainer(_NodeContainer):
 
 def getDataOneVehicle(itemsPack, vehicle, vehicleGroupId):
     rule = __getItemsSortRule(itemsPack)
-    if rule == ItemSortRule.FRONTLINE:
+    if rule == ITEM_SORT_RULE.FRONTLINE:
         root = __getFrontlinePackRule()
     else:
         root = __getDefaultPackRule()
@@ -694,7 +698,7 @@ def getCouponBonusesForItemPack(itemsPack):
 
 def getDataMultiVehicles(itemsPack, vehicle):
     rule = __getItemsSortRule(itemsPack)
-    return [] if rule == ItemSortRule.FRONTLINE else _packDataMultiVehicles(itemsPack, vehicle)
+    return [] if rule == ITEM_SORT_RULE.FRONTLINE else _packDataMultiVehicles(itemsPack, vehicle)
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -795,7 +799,7 @@ def _packDataMultiVehicles(itemsPack, vehicle):
 
 def __getItemsSortRule(itemsPack):
     frontlineOffer = getCouponDiscountForItemPack(itemsPack) != MONEY_ZERO_GOLD
-    return ItemSortRule.FRONTLINE if frontlineOffer else ItemSortRule.REGULAR
+    return ITEM_SORT_RULE.FRONTLINE if frontlineOffer else ITEM_SORT_RULE.REGULAR
 
 
 def __getDefaultPackRule():

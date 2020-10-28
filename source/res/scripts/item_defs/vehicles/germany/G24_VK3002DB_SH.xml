@@ -311,8 +311,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	34	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.25	</vehicleMovement>
-        <vehicleRotation>	0.25	</vehicleRotation>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	170	</maxHealth>
@@ -341,20 +341,20 @@
           <isLeft>	true	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
-          <radius>	0.475738	</radius>
+          <radius>	0.29	</radius>
           <syncAngle>	18.9474	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_L1	</name>
-          <radius>	0.3435	</radius>
+          <radius>	0.38	</radius>
           <syncAngle>	18.9474	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
           <template>	W_L	</template>
-          <radius>	0.447	</radius>
+          <radius>	0.438	</radius>
           <startIndex>	0	</startIndex>
           <count>	8	</count>
         </group>
@@ -362,20 +362,20 @@
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
-          <radius>	0.475738	</radius>
+          <radius>	0.29	</radius>
           <syncAngle>	18.9474	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_R1	</name>
-          <radius>	0.3435	</radius>
+          <radius>	0.38	</radius>
           <syncAngle>	18.9474	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
           <template>	W_R	</template>
-          <radius>	0.447	</radius>
+          <radius>	0.438	</radius>
           <startIndex>	0	</startIndex>
           <count>	8	</count>
         </group>
@@ -614,16 +614,16 @@
           <segmentsPlaneOffset>	-1.317	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.120312	</back>
-              <top>	0.119242	</top>
-              <front>	0.117429	</front>
-              <bottom>	0.0503052	</bottom>
+              <back>	0.120512	</back>
+              <top>	0.111918	</top>
+              <front>	0.110869	</front>
+              <bottom>	0.0503053	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.117784	</back>
-              <top>	0.119242	</top>
+              <back>	0.112839	</back>
+              <top>	0.119766	</top>
               <front>	0.122116	</front>
-              <bottom>	0.0503052	</bottom>
+              <bottom>	0.0519373	</bottom>
             </forwardMovement>
           </springsLength>
           <mainSegment>
@@ -815,16 +815,16 @@
           <segmentsPlaneOffset>	1.317	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.0818122	</back>
-              <top>	0.119242	</top>
-              <front>	0.117429	</front>
-              <bottom>	0.0503053	</bottom>
+              <back>	0.121197	</back>
+              <top>	0.111368	</top>
+              <front>	0.1125	</front>
+              <bottom>	0.0524776	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.120806	</back>
-              <top>	0.119242	</top>
-              <front>	0.122116	</front>
-              <bottom>	0.0503053	</bottom>
+              <back>	0.112671	</back>
+              <top>	0.120292	</top>
+              <front>	0.122109	</front>
+              <bottom>	0.0513911	</bottom>
             </forwardMovement>
           </springsLength>
           <mainSegment>
@@ -1034,8 +1034,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	38	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.2	</vehicleMovement>
-        <vehicleRotation>	0.2	</vehicleRotation>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
@@ -1320,16 +1320,16 @@
           <segmentsPlaneOffset>	-1.405	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.127005	</back>
-              <top>	0.125553	</top>
-              <front>	0.123489	</front>
-              <bottom>	0.111821	</bottom>
+              <back>	0.124442	</back>
+              <top>	0.112558	</top>
+              <front>	0.118186	</front>
+              <bottom>	0.107145	</bottom>
             </backwardMovement>
             <forwardMovement>
               <back>	0.122708	</back>
-              <top>	0.125553	</top>
-              <front>	0.127786	</front>
-              <bottom>	0.111821	</bottom>
+              <top>	0.128353	</top>
+              <front>	0.1268	</front>
+              <bottom>	0.111238	</bottom>
             </forwardMovement>
           </springsLength>
           <mainSegment>
@@ -1500,15 +1500,15 @@
           <segmentsPlaneOffset>	1.405	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.127005	</back>
-              <top>	0.125554	</top>
-              <front>	0.123489	</front>
+              <back>	0.123294	</back>
+              <top>	0.11269	</top>
+              <front>	0.120388	</front>
               <bottom>	0.111821	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.122708	</back>
-              <top>	0.125554	</top>
-              <front>	0.127786	</front>
+              <back>	0.118229	</back>
+              <top>	0.127955	</top>
+              <front>	0.125533	</front>
               <bottom>	0.111821	</bottom>
             </forwardMovement>
           </springsLength>
@@ -1692,8 +1692,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	34	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.28	</vehicleMovement>
-        <vehicleRotation>	0.28	</vehicleRotation>
+        <vehicleMovement>	0.23	</vehicleMovement>
+        <vehicleRotation>	0.23	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
@@ -2014,16 +2014,16 @@
           <segmentsPlaneOffset>	-1.392	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.114157	</back>
-              <top>	0.120114	</top>
-              <front>	0.119073	</front>
-              <bottom>	0.0675639	</bottom>
+              <back>	0.121852	</back>
+              <top>	0.120806	</top>
+              <front>	0.114379	</front>
+              <bottom>	0.0744383	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.122626	</back>
-              <top>	0.120114	</top>
-              <front>	0.122979	</front>
-              <bottom>	0.0675639	</bottom>
+              <back>	0.113885	</back>
+              <top>	0.108111	</top>
+              <front>	0.119803	</front>
+              <bottom>	0.0718701	</bottom>
             </forwardMovement>
           </springsLength>
           <mainSegment>
@@ -2226,15 +2226,15 @@
           <segmentsPlaneOffset>	1.392	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.11872	</back>
-              <top>	0.120114	</top>
-              <front>	0.119073	</front>
+              <back>	0.120347	</back>
+              <top>	0.121301	</top>
+              <front>	0.113662	</front>
               <bottom>	0.067564	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.121978	</back>
-              <top>	0.120114	</top>
-              <front>	0.116484	</front>
+              <back>	0.115376	</back>
+              <top>	0.111297	</top>
+              <front>	0.119189	</front>
               <bottom>	0.067564	</bottom>
             </forwardMovement>
           </springsLength>
@@ -2512,10 +2512,10 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.45	</shotDispersionRadius>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.08	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2591,14 +2591,14 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.353005 10 0.416667 5 0.583333 5 0.646995 10 1 10	</maxPitch>
           </pitchLimits>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2677,10 +2677,10 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <aimingTime>	3	</aimingTime>
+          <aimingTime>	2.8	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2848,14 +2848,14 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 9 0.353005 9 0.416667 7 0.583333 7 0.646995 7 1 9	</maxPitch>
           </pitchLimits>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2932,10 +2932,10 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <aimingTime>	3	</aimingTime>
+          <aimingTime>	2.8	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2985,7 +2985,7 @@
         <_105mm_KwK46_L70_SH>	shared	  <maxAmmo>	40	</maxAmmo>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	16	</reloadTime>
-          <aimingTime>	2.7	</aimingTime>
+          <aimingTime>	2.5	</aimingTime>
           <invisibilityFactorAtShot>	0.188	</invisibilityFactorAtShot>
           <clip>
             <count>	4	</count>
@@ -3019,7 +3019,7 @@
             <gun>	35	</gun>
           </armor>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3092,7 +3092,7 @@
             <gun>	60	</gun>
           </armor>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <invisibilityFactorAtShot>	0.162	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
@@ -3269,14 +3269,14 @@
             <gun>	35	</gun>
           </armor>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.353005 10 0.416667 5 0.583333 5 0.646995 10 1 10	</maxPitch>
           </pitchLimits>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3357,10 +3357,10 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <aimingTime>	3	</aimingTime>
+          <aimingTime>	2.8	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3437,7 +3437,7 @@
             <gun>	60	</gun>
           </armor>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <invisibilityFactorAtShot>	0.162	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
@@ -3445,7 +3445,7 @@
           </pitchLimits>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3493,7 +3493,7 @@
           </camouflage>
         </_128mm_KwK44_L55_SH>
         <_150mm_KwK44_L38_SH>	shared	  <maxAmmo>	40	</maxAmmo>
-          <aimingTime>	2.7	</aimingTime>
+          <aimingTime>	2.5	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 9 0.353005 9 0.416667 7 0.583333 7 0.646995 7 1 9	</maxPitch>
@@ -3529,7 +3529,7 @@
           <reloadTime>	12	</reloadTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>

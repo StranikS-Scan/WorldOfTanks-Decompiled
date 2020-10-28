@@ -22,14 +22,17 @@ class HangarMeta(GFTutorialViewMeta):
     def onTeaserClick(self):
         self._printOverrideError('onTeaserClick')
 
+    def onEventExitClick(self):
+        self._printOverrideError('onEventExitClick')
+
+    def onEventParamsToggle(self, visible):
+        self._printOverrideError('onEventParamsToggle')
+
     def as_setCrewEnabledS(self, value):
         return self.flashObject.as_setCrewEnabled(value) if self._isDAAPIInited() else None
 
     def as_setCarouselEnabledS(self, value):
         return self.flashObject.as_setCarouselEnabled(value) if self._isDAAPIInited() else None
-
-    def as_setCarouselVisibleS(self, value):
-        return self.flashObject.as_setCarouselVisible(value) if self._isDAAPIInited() else None
 
     def as_setupAmmunitionPanelS(self, data):
         return self.flashObject.as_setupAmmunitionPanel(data) if self._isDAAPIInited() else None
@@ -70,6 +73,9 @@ class HangarMeta(GFTutorialViewMeta):
     def as_showTeaserS(self, data):
         return self.flashObject.as_showTeaser(data) if self._isDAAPIInited() else None
 
+    def as_setEventCrewS(self, data):
+        return self.flashObject.as_setEventCrew(data) if self._isDAAPIInited() else None
+
     def as_setTeaserTimerS(self, timeLabel):
         return self.flashObject.as_setTeaserTimer(timeLabel) if self._isDAAPIInited() else None
 
@@ -85,38 +91,11 @@ class HangarMeta(GFTutorialViewMeta):
     def as_destroyDQWidgetS(self):
         return self.flashObject.as_destroyDQWidget() if self._isDAAPIInited() else None
 
-    def as_updateSeniorityAwardsEntryPointS(self, isVisible):
-        return self.flashObject.as_updateSeniorityAwardsEntryPoint(isVisible) if self._isDAAPIInited() else None
-
-    def as_updateEventEntryPointS(self, alias, isVisible):
-        return self.flashObject.as_updateEventEntryPoint(alias, isVisible) if self._isDAAPIInited() else None
-
     def as_showSwitchToAmmunitionS(self):
         return self.flashObject.as_showSwitchToAmmunition() if self._isDAAPIInited() else None
 
-    def as_setLootboxesVisibleS(self, value):
-        return self.flashObject.as_setLootboxesVisible(value) if self._isDAAPIInited() else None
+    def as_toggleBattleRoyaleS(self, isBattleRoyale):
+        return self.flashObject.as_toggleBattleRoyale(isBattleRoyale) if self._isDAAPIInited() else None
 
-    def as_createEventCarouselWidgetS(self):
-        return self.flashObject.as_createEventCarouselWidget() if self._isDAAPIInited() else None
-
-    def as_destroyEventCarouselWidgetS(self):
-        return self.flashObject.as_destroyEventCarouselWidget() if self._isDAAPIInited() else None
-
-    def as_createEventCrewWidgetS(self, isWaffle):
-        return self.flashObject.as_createEventCrewWidget(isWaffle) if self._isDAAPIInited() else None
-
-    def as_destroyEventCrewWidgetS(self):
-        return self.flashObject.as_destroyEventCrewWidget() if self._isDAAPIInited() else None
-
-    def as_createEventParamsWidgetS(self):
-        return self.flashObject.as_createEventParamsWidget() if self._isDAAPIInited() else None
-
-    def as_destroyEventParamsWidgetS(self):
-        return self.flashObject.as_destroyEventParamsWidget() if self._isDAAPIInited() else None
-
-    def as_setHangarModeS(self, value):
-        return self.flashObject.as_setHangarMode(value) if self._isDAAPIInited() else None
-
-    def as_setCloseBtnVisibleS(self, value):
-        return self.flashObject.as_setCloseBtnVisible(value) if self._isDAAPIInited() else None
+    def as_showEventHangarS(self, eventSelected, paramsEnabled):
+        return self.flashObject.as_showEventHangar(eventSelected, paramsEnabled) if self._isDAAPIInited() else None

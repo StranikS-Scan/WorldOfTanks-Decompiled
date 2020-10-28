@@ -4,27 +4,17 @@ import logging
 import weakref
 from collections import OrderedDict
 from Event import Event
+from frameworks.wulf import WindowLayer
+from gui.Scaleform.genConsts.LAYER_NAMES import LAYER_NAMES
 from shared_utils import CONST_CONTAINER
 from gui.Scaleform.framework.ScopeControllers import GlobalScopeController
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.entities.abstract.ContainerManagerMeta import ContainerManagerMeta
 from gui.Scaleform.framework.managers.loaders import ViewLoadMode, ViewKey
 from gui.Scaleform.framework.settings import UIFrameworkImpl
 from shared_utils import findFirst
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
-_POPUPS_CONTAINERS = (ViewTypes.TOP_WINDOW, ViewTypes.BROWSER, ViewTypes.WINDOW)
-_CONTAINERS_DESTROY_ORDER = (ViewTypes.MARKER,
- ViewTypes.DEFAULT,
- ViewTypes.LOBBY_SUB,
- ViewTypes.LOBBY_TOP_SUB,
- ViewTypes.WINDOW,
- ViewTypes.BROWSER,
- ViewTypes.TOP_WINDOW,
- ViewTypes.WAITING,
- ViewTypes.OVERLAY,
- ViewTypes.CURSOR,
- ViewTypes.SERVICE_LAYOUT)
+_POPUPS_CONTAINERS = (WindowLayer.TOP_WINDOW, WindowLayer.FULLSCREEN_WINDOW, WindowLayer.WINDOW)
 
 class POP_UP_CRITERIA(object):
     VIEW_ALIAS = 1
@@ -54,20 +44,20 @@ _VIEW_SEARCH_CRITERIA_HANDLERS = {VIEW_SEARCH_CRITERIA.VIEW_ALIAS: lambda view, 
  VIEW_SEARCH_CRITERIA.VIEW_UNIQUE_NAME: lambda view, value: view.uniqueName == value}
 
 class ViewContainer(object):
-    __slots__ = ('__viewType', '__child', '_views', '_loadingViews', '__containerManager', '__parentContainer')
+    __slots__ = ('__layer', '__child', '_views', '_loadingViews', '__containerManager', '__parentContainer')
 
-    def __init__(self, viewType, containerManager=None):
+    def __init__(self, layer, containerManager=None):
         super(ViewContainer, self).__init__()
         self._views = {}
         self._loadingViews = {}
         self.__child = {}
-        self.__viewType = viewType
+        self.__layer = layer
         self.__containerManager = containerManager
         self.__parentContainer = None
         return
 
     def __repr__(self):
-        return '{}[{}]=[viewType=[{}], views=[{}], loadingViews=[{}], child=[{}]]'.format(self.__class__.__name__, hex(id(self)), self.__viewType, self._views, self._loadingViews, self.__child)
+        return '{}[{}]=[layer=[{}], views=[{}], loadingViews=[{}], child=[{}]]'.format(self.__class__.__name__, hex(id(self)), self.__layer, self._views, self._loadingViews, self.__child)
 
     def destroy(self):
         while self.__child:
@@ -76,7 +66,7 @@ class ViewContainer(object):
 
         self.clear()
         if self.__parentContainer is not None:
-            self.__parentContainer.removeChildContainer(self.getViewType())
+            self.__parentContainer.removeChildContainer(self.getLayer())
             self.__parentContainer = None
         self.__containerManager = None
         return
@@ -85,45 +75,45 @@ class ViewContainer(object):
         self._removeLoadingViews()
         self._removeViews()
 
-    def getViewType(self):
-        return self.__viewType
+    def getLayer(self):
+        return self.__layer
 
     def getParentContainer(self):
         return self.__parentContainer
 
     def addChildContainer(self, container, name=None):
-        viewType = container.getViewType()
-        if viewType not in self.__child:
-            self.__child[container.getViewType()] = container
+        layer = container.getLayer()
+        if layer not in self.__child:
+            self.__child[layer] = container
             container.__containerManager = self.__containerManager
             container.__parentContainer = self
-            self._registerContainer(container.getViewType(), name)
+            self._registerContainer(layer, name)
             return True
         return False
 
-    def removeChildContainer(self, viewType):
-        if viewType in self.__child:
-            container = self.__child.pop(viewType)
+    def removeChildContainer(self, layer):
+        if layer in self.__child:
+            container = self.__child.pop(layer)
             container.__parentContainer = None
             container.destroy()
             container.__containerManager = None
-            self._unregisterContainer(viewType)
+            self._unregisterContainer(layer)
             return True
         else:
             return False
 
-    def getChildContainer(self, viewType):
-        return self.__child.get(viewType, None)
+    def getChildContainer(self, layer):
+        return self.__child.get(layer, None)
 
-    def findContainer(self, viewType):
-        if self.__viewType == viewType:
+    def findContainer(self, layer):
+        if self.__layer == layer:
             return self
         else:
-            child = self.getChildContainer(viewType)
+            child = self.getChildContainer(layer)
             if child is not None:
                 return child
             for c in self.__child.itervalues():
-                child = c.getChildContainer(viewType)
+                child = c.getChildContainer(layer)
                 if child is not None:
                     return child
 
@@ -147,10 +137,10 @@ class ViewContainer(object):
         return self._addView(pyView)
 
     def removeView(self, pyView):
-        viewType = pyView.viewType
-        container = self.findContainer(viewType)
+        layer = pyView.layer
+        container = self.findContainer(layer)
         if container is None:
-            _logger.warning('There is no container "%s" to remove view "%r"!', viewType, pyView)
+            _logger.warning('There is no container "%d" to remove view "%r"!', layer, pyView)
             return False
         else:
             return container._removeView(pyView) if pyView.key in container._views else False
@@ -162,10 +152,10 @@ class ViewContainer(object):
         return self._addLoadingView(pyView)
 
     def removeLoadingView(self, pyView):
-        viewType = pyView.viewType
-        container = self.findContainer(viewType)
+        layer = pyView.layer
+        container = self.findContainer(layer)
         if container is None:
-            _logger.warning('There is no container %s to remove loading view %r!', viewType, pyView)
+            _logger.warning('There is no container %d to remove loading view %r!', layer, pyView)
             return False
         else:
             return container._removeLoadingView(pyView) if pyView.key in container._loadingViews else False
@@ -208,16 +198,16 @@ class ViewContainer(object):
         return result
 
     def isViewCompatible(self, pyView):
-        return self.__viewType == pyView.viewType
+        return self.__layer == pyView.layer
 
-    def _registerContainer(self, viewType, name):
+    def _registerContainer(self, layer, name):
         if self.__containerManager is not None:
-            self.__containerManager.registerViewContainer(viewType, name)
+            self.__containerManager.registerViewContainer(layer, name)
         return
 
-    def _unregisterContainer(self, viewType):
+    def _unregisterContainer(self, layer):
         if self.__containerManager is not None:
-            self.__containerManager.unregisterViewContainer(viewType)
+            self.__containerManager.unregisterViewContainer(layer)
         return
 
     def _addViewEventListeners(self, pyView):
@@ -322,8 +312,8 @@ class ViewContainer(object):
 
 class SingleViewContainer(ViewContainer):
 
-    def __init__(self, viewType, manager=None):
-        super(SingleViewContainer, self).__init__(viewType, manager)
+    def __init__(self, layer, manager=None):
+        super(SingleViewContainer, self).__init__(layer, manager)
 
     def getView(self, criteria=None):
         view = None
@@ -378,10 +368,10 @@ class _GlobalViewContainer(ViewContainer):
         super(_GlobalViewContainer, self).__init__(None, containerManager)
         return
 
-    def _registerContainer(self, viewType, name):
+    def _registerContainer(self, layer, name):
         pass
 
-    def _unregisterContainer(self, viewType):
+    def _unregisterContainer(self, layer):
         pass
 
 
@@ -602,10 +592,10 @@ class _ChainManager(object):
 
 class IContainerManager(object):
 
-    def registerViewContainer(self, viewType, name):
+    def registerViewContainer(self, layer, name):
         raise NotImplementedError
 
-    def unregisterViewContainer(self, viewType):
+    def unregisterViewContainer(self, layer):
         raise NotImplementedError
 
 
@@ -635,10 +625,10 @@ class ContainerManager(ContainerManagerMeta, IContainerManager):
             self.__loader.onViewLoaded -= self.__onViewLoaded
             self.__loader.onViewLoadInit -= self.__onViewLoadInit
             self.__loader = None
-        for viewType in _CONTAINERS_DESTROY_ORDER:
-            container = self.__globalContainer.findContainer(viewType)
+        for layer, layerName in enumerate(LAYER_NAMES.LAYER_ORDER):
+            container = self.__globalContainer.findContainer(layer)
             if container is not None:
-                _logger.debug('Destroy container %s (%r)', viewType, container)
+                _logger.debug('Destroy container %s (%r)', layerName, container)
                 container.destroy()
 
         self.__globalContainer.destroy()
@@ -684,57 +674,61 @@ class ContainerManager(ContainerManagerMeta, IContainerManager):
 
     def load(self, loadParams, *args, **kwargs):
         viewKey = loadParams.viewKey
-        viewLoadingItem = self.__loader.getViewLoadingItem(viewKey)
-        if viewLoadingItem is not None:
-            _logger.debug('View with key %s is already loading. item=[%r]', viewKey, viewLoadingItem)
-            view = viewLoadingItem.pyEntity
-            if loadParams.loadMode == ViewLoadMode.DEFAULT:
-                loadingViewLoadMode = viewLoadingItem.loadParams.loadMode
-                if loadingViewLoadMode == ViewLoadMode.PRELOAD:
-                    viewLoadingItem.loadParams = loadParams
-                    self.__addLoadingView(view)
-            elif loadParams.loadMode == ViewLoadMode.PRELOAD:
-                pass
-            else:
-                _logger.warning('Unsupported load mode %r. View loading will be skipped.', loadParams)
-                view = None
+        if self.__loader is None:
+            _logger.warning('Loader destroyed. View loading will be skipped. %s', loadParams)
+            return
         else:
-            view = self.__globalContainer.findView(viewKey)
-            if view is None:
-                view = self.__viewCache.getView(viewKey)
-                if view is None:
-                    chain = self.__chainMng.getChainByViewKey(viewKey)
-                    if chain is not None:
-                        _logger.warning('View with loadParams=%r is in the loading chain %r. The request will be skipped.', loadParams, chain)
-                    else:
-                        _logger.debug('Load view with loadParams=%r. Loader=[%r]', loadParams, self.__loader)
-                        if loadParams.loadMode == ViewLoadMode.DEFAULT:
-                            view = self.__loader.loadView(loadParams, *args, **kwargs)
-                            self.__addLoadingView(view)
-                        elif loadParams.loadMode == ViewLoadMode.PRELOAD:
-                            view = self.__loader.loadView(loadParams, *args, **kwargs)
-                        else:
-                            _logger.warning('Unsupported load mode %r. View loading will be skipped.', loadParams)
+            viewLoadingItem = self.__loader.getViewLoadingItem(viewKey)
+            if viewLoadingItem is not None:
+                _logger.debug('View with key %s is already loading. item=[%r]', viewKey, viewLoadingItem)
+                view = viewLoadingItem.pyEntity
+                if loadParams.loadMode == ViewLoadMode.DEFAULT:
+                    loadingViewLoadMode = viewLoadingItem.loadParams.loadMode
+                    if loadingViewLoadMode == ViewLoadMode.PRELOAD:
+                        viewLoadingItem.loadParams = loadParams
+                        self.__addLoadingView(view)
                 elif loadParams.loadMode == ViewLoadMode.PRELOAD:
-                    _logger.debug('View with key %s (%r) is already pre-loaded.', viewKey, view)
-                elif loadParams.loadMode == ViewLoadMode.DEFAULT:
-                    _logger.debug('Load view with loadParams=%r from the cache. Cache=[%r]', loadParams, self.__viewCache)
-                    self.__viewCache.removeView(viewKey)
-                    self.__showAndInitializeView(view)
-                    view.validate(*args, **kwargs)
+                    pass
                 else:
                     _logger.warning('Unsupported load mode %r. View loading will be skipped.', loadParams)
                     view = None
             else:
-                _logger.debug('View with key %s (%r) is already loaded.', viewKey, view)
-                viewType = view.viewType
-                viewContainer = self.__globalContainer.findContainer(viewType)
-                viewContainer.addView(view)
-                view.validate(*args, **kwargs)
-        return view
+                view = self.__globalContainer.findView(viewKey)
+                if view is None:
+                    view = self.__viewCache.getView(viewKey)
+                    if view is None:
+                        chain = self.__chainMng.getChainByViewKey(viewKey)
+                        if chain is not None:
+                            _logger.warning('View with loadParams=%r is in the loading chain %r. The request will be skipped.', loadParams, chain)
+                        else:
+                            _logger.debug('Load view with loadParams=%r. Loader=[%r]', loadParams, self.__loader)
+                            if loadParams.loadMode == ViewLoadMode.DEFAULT:
+                                view = self.__loader.loadView(loadParams, *args, **kwargs)
+                                self.__addLoadingView(view)
+                            elif loadParams.loadMode == ViewLoadMode.PRELOAD:
+                                view = self.__loader.loadView(loadParams, *args, **kwargs)
+                            else:
+                                _logger.warning('Unsupported load mode %r. View loading will be skipped.', loadParams)
+                    elif loadParams.loadMode == ViewLoadMode.PRELOAD:
+                        _logger.debug('View with key %s (%r) is already pre-loaded.', viewKey, view)
+                    elif loadParams.loadMode == ViewLoadMode.DEFAULT:
+                        _logger.debug('Load view with loadParams=%r from the cache. Cache=[%r]', loadParams, self.__viewCache)
+                        self.__viewCache.removeView(viewKey)
+                        self.__showAndInitializeView(view)
+                        view.validate(*args, **kwargs)
+                    else:
+                        _logger.warning('Unsupported load mode %r. View loading will be skipped.', loadParams)
+                        view = None
+                else:
+                    _logger.debug('View with key %s (%r) is already loaded.', viewKey, view)
+                    layer = view.layer
+                    viewContainer = self.__globalContainer.findContainer(layer)
+                    viewContainer.addView(view)
+                    view.validate(*args, **kwargs)
+            return view
 
-    def getContainer(self, viewType):
-        return self.__globalContainer.findContainer(viewType)
+    def getContainer(self, layer):
+        return self.__globalContainer.findContainer(layer)
 
     def getViewByKey(self, viewKey):
         if self.__loader is not None:
@@ -756,37 +750,37 @@ class ContainerManager(ContainerManagerMeta, IContainerManager):
         return self.__viewCache.getView(viewKey) is not None
 
     def isModalViewsIsExists(self):
-        for viewType in _POPUPS_CONTAINERS:
-            container = self.__globalContainer.findContainer(viewType)
+        for layer in _POPUPS_CONTAINERS:
+            container = self.__globalContainer.findContainer(layer)
             if container is not None and container.getViewCount(isModal=True) or self.__loader.isModalViewLoading():
                 return True
 
         return False
 
-    def getView(self, viewType, criteria=None):
-        container = self.__globalContainer.findContainer(viewType)
+    def getView(self, layer, criteria=None):
+        container = self.__globalContainer.findContainer(layer)
         if container is not None:
             return container.getView(criteria=criteria)
         else:
-            _logger.warning('Could not found container %s.', viewType)
+            _logger.warning('Could not found container %s.', layer)
             return
 
-    def isViewAvailable(self, viewType, criteria=None):
-        container = self.__globalContainer.findContainer(viewType)
+    def isViewAvailable(self, layer, criteria=None):
+        container = self.__globalContainer.findContainer(layer)
         return container.getView(criteria=criteria) is not None if container is not None else False
 
-    def showContainers(self, *viewTypes):
-        self.as_showContainersS(viewTypes)
+    def showContainers(self, *layers):
+        self.as_showContainersS(layers)
 
-    def hideContainers(self, *viewTypes):
-        self.as_hideContainersS(viewTypes)
+    def hideContainers(self, *layers):
+        self.as_hideContainersS(layers)
 
-    def isContainerShown(self, viewType):
-        return self.as_isContainerShownS(viewType)
+    def isContainerShown(self, layer):
+        return self.as_isContainerShownS(layer)
 
     def clear(self):
-        for viewType in _POPUPS_CONTAINERS:
-            container = self.__globalContainer.findContainer(viewType)
+        for layer in _POPUPS_CONTAINERS:
+            container = self.__globalContainer.findContainer(layer)
             if container is not None:
                 container.clear()
 
@@ -795,35 +789,35 @@ class ContainerManager(ContainerManagerMeta, IContainerManager):
     def closePopUps(self):
         self.as_closePopUpsS()
 
-    def registerViewContainer(self, viewType, uniqueName):
-        self.as_registerContainerS(viewType, uniqueName)
-        _logger.debug('A new container [type=%s, name=%s] has been registered.', viewType, uniqueName)
+    def registerViewContainer(self, layer, uniqueName):
+        self.as_registerContainerS(layer, uniqueName)
+        _logger.debug('A new container [layer=%d, name=%s] has been registered.', layer, uniqueName)
 
-    def unregisterViewContainer(self, viewType):
-        self.as_unregisterContainerS(viewType)
-        _logger.debug('The container [type=%s] has been unregistered.', viewType)
+    def unregisterViewContainer(self, layer):
+        self.as_unregisterContainerS(layer)
+        _logger.debug('The container [layer=%d] has been unregistered.', layer)
 
     def __addLoadingView(self, pyView):
-        viewType = pyView.viewType
-        viewContainer = self.__globalContainer.findContainer(viewType)
+        layer = pyView.layer
+        viewContainer = self.__globalContainer.findContainer(layer)
         if viewContainer is not None:
             viewContainer.addLoadingView(pyView)
         else:
-            _logger.warning('Loading of view %r is requested but the container %s is still not exist!', pyView, viewType)
+            _logger.warning('Loading of view %r is requested but the container %d is still not exist!', pyView, layer)
         self.__scopeController.addLoadingView(pyView, False)
         return
 
     def __showAndInitializeView(self, pyView):
-        viewType = pyView.viewType
-        if viewType is None:
+        layer = pyView.layer
+        if layer is None:
             _logger.error('Type of view is not defined. View %r will be destroyed.', pyView)
             pyView.destroy()
             return False
         else:
             status = False
-            container = self.__globalContainer.findContainer(viewType)
+            container = self.__globalContainer.findContainer(layer)
             if container is not None:
-                if ViewTypes.DEFAULT == viewType:
+                if WindowLayer.VIEW == layer:
                     self.closePopUps()
                 if container.addView(pyView):
                     self.__scopeController.addView(pyView, False)
@@ -836,7 +830,7 @@ class ContainerManager(ContainerManagerMeta, IContainerManager):
                     _logger.error('%r view cannot be added to container %r and will be destroyed.', pyView, container)
                     pyView.destroy()
             else:
-                _logger.error('Type %s of view %r is not supported or container has not been properly created', viewType, pyView)
+                _logger.error('Layer %s of view %r is not supported or container has not been properly created', layer, pyView)
                 pyView.destroy()
             return status
 

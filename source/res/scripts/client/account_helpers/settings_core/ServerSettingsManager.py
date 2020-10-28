@@ -2,9 +2,10 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/ServerSettingsManager.py
 import weakref
 from collections import namedtuple
+from enum import Enum
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.migrations import migrateToVersion
-from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints, BattlePassStorageKeys, WTEventStorageKeys
+from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints, BattlePassStorageKeys, Hw20StorageKeys
 from adisp import process, async
 from constants import ROLES_COLLAPSE
 from debug_utils import LOG_ERROR, LOG_DEBUG
@@ -37,8 +38,6 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
     EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
     BATTLEPASS_CAROUSEL_FILTER_1 = 'BATTLEPASS_CAROUSEL_FILTER_1'
-    BOB_CAROUSEL_FILTER_1 = 'BOB_CAROUSEL_FILTER_1'
-    BOB_CAROUSEL_FILTER_2 = 'BOB_CAROUSEL_FILTER_2'
     GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
     EULA_VERSION = 'EULA_VERSION'
     MARKS_ON_GUN = 'MARKS_ON_GUN'
@@ -58,8 +57,10 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     SESSION_STATS = 'SESSION_STATS'
     BATTLE_PASS_STORAGE = 'BATTLE_PASS_STORAGE'
     BATTLE_COMM = 'BATTLE_COMM'
-    EVENT_STORAGE = 'EVENT_STORAGE'
-    LOOT_BOX_VIEWED = 'LOOT_BOX_VIEWED'
+    DOG_TAGS = 'DOG_TAGS'
+    GAME_EVENT = 'GAME_EVENT'
+    HW20_NARRATIVE = 'HW20_NARRATIVE'
+    HW20_NARRATIVE_ROASTER_MED_HIGH = 'HW20_NARRATIVE_ROASTER_MED_HIGH'
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2)
 
 
@@ -75,6 +76,12 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
     OPTIONAL_DEVICE_SETUP_INTRO_SHOWN = 'optional_device_setup_intro_shown'
     TURBOSHAFT_HIGHLIGHTS_COUNTER = 'turboshaft_highlights_count'
     TURBOSHAFT_MARK_IS_SHOWN = 'turboshaft_mark_shown'
+
+
+class UIGameEventKeys(Enum):
+    AFK_WARNING_SHOWN = 1
+    AFK_BAN_SHOWN = 2
+    DIFFICULTY_LEVEL_SHOWN = 3
 
 
 class ServerSettingsManager(object):
@@ -281,41 +288,6 @@ class ServerSettingsManager(object):
                                                       'event': 7,
                                                       'crystals': 8}, offsets={}),
      SETTINGS_SECTIONS.BATTLEPASS_CAROUSEL_FILTER_1: Section(masks={'isCommonProgression': 0}, offsets={}),
-     SETTINGS_SECTIONS.BOB_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
-                                               'germany': 1,
-                                               'usa': 2,
-                                               'china': 3,
-                                               'france': 4,
-                                               'uk': 5,
-                                               'japan': 6,
-                                               'czech': 7,
-                                               'sweden': 8,
-                                               'poland': 9,
-                                               'italy': 10,
-                                               'lightTank': 15,
-                                               'mediumTank': 16,
-                                               'heavyTank': 17,
-                                               'SPG': 18,
-                                               'AT-SPG': 19,
-                                               'level_1': 20,
-                                               'level_2': 21,
-                                               'level_3': 22,
-                                               'level_4': 23,
-                                               'level_5': 24,
-                                               'level_6': 25,
-                                               'level_7': 26,
-                                               'level_8': 27,
-                                               'level_9': 28,
-                                               'level_10': 29}, offsets={}),
-     SETTINGS_SECTIONS.BOB_CAROUSEL_FILTER_2: Section(masks={'premium': 0,
-                                               'elite': 1,
-                                               'rented': 2,
-                                               'igr': 3,
-                                               'gameMode': 4,
-                                               'favorite': 5,
-                                               'bonus': 6,
-                                               'event': 7,
-                                               'crystals': 8}, offsets={}),
      SETTINGS_SECTIONS.GUI_START_BEHAVIOR: Section(masks={GuiSettingsBehavior.FREE_XP_INFO_DIALOG_SHOWED: 0,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED: 1,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_STARTED: 2,
@@ -372,7 +344,10 @@ class ServerSettingsManager(object):
                                          OnceOnlyHints.CRYSTAL_BTN_HINT: 30}, offsets={}),
      SETTINGS_SECTIONS.ONCE_ONLY_HINTS_2: Section(masks={OnceOnlyHints.AMMUNITION_PANEL_HINT: 0,
                                            OnceOnlyHints.AMMUNITION_FILTER_HINT: 1,
-                                           OnceOnlyHints.OPT_DEV_DRAG_AND_DROP_HINT: 2}, offsets={}),
+                                           OnceOnlyHints.OPT_DEV_DRAG_AND_DROP_HINT: 2,
+                                           OnceOnlyHints.DOGTAG_HANGAR_HINT: 3,
+                                           OnceOnlyHints.DOGTAG_PROFILE_HINT: 4,
+                                           OnceOnlyHints.EVENT_CREW_HEALING_HINT: 5}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESET_CRITS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -459,7 +434,12 @@ class ServerSettingsManager(object):
                                      BATTLE_COMM.SHOW_COM_IN_PLAYER_LIST: 1,
                                      BATTLE_COMM.SHOW_STICKY_MARKERS: 2,
                                      BATTLE_COMM.SHOW_CALLOUT_MESSAGES: 3,
-                                     BATTLE_COMM.SHOW_BASE_MARKERS: 4}, offsets={}),
+                                     BATTLE_COMM.SHOW_BASE_MARKERS: 4,
+                                     BATTLE_COMM.SHOW_LOCATION_MARKERS: 5}, offsets={}),
+     SETTINGS_SECTIONS.GAME_EVENT: Section(masks={UIGameEventKeys.AFK_WARNING_SHOWN: 0,
+                                    UIGameEventKeys.AFK_BAN_SHOWN: 1}, offsets={UIGameEventKeys.DIFFICULTY_LEVEL_SHOWN: Offset(5, 65504)}),
+     SETTINGS_SECTIONS.DOG_TAGS: Section(masks={GAME.SHOW_VICTIMS_DOGTAG: 0,
+                                  GAME.SHOW_DOGTAG_TO_KILLER: 1}, offsets={}),
      SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
                                                   'germany': 1,
                                                   'usa': 2,
@@ -496,8 +476,11 @@ class ServerSettingsManager(object):
                                                   'event': 7,
                                                   'crystals': 8,
                                                   'battleRoyale': 9}, offsets={}),
-     SETTINGS_SECTIONS.EVENT_STORAGE: Section(masks={WTEventStorageKeys.WT_INTRO_SHOWN: 0}, offsets={}),
-     SETTINGS_SECTIONS.LOOT_BOX_VIEWED: Section(masks={}, offsets={'count': Offset(0, 4294967295L)})}
+     SETTINGS_SECTIONS.HW20_NARRATIVE: Section(masks={Hw20StorageKeys.HANGAR_HELLO_FIRST: 0}, offsets={Hw20StorageKeys.HANGAR_DAILY_HELLO: Offset(1, 126),
+                                        Hw20StorageKeys.HANGAR_LAST_HELLO_DATE: Offset(7, 3968),
+                                        Hw20StorageKeys.ROASTER_LOW: Offset(12, 2147479552)}),
+     SETTINGS_SECTIONS.HW20_NARRATIVE_ROASTER_MED_HIGH: Section(masks={}, offsets={Hw20StorageKeys.ROASTER_MED: Offset(0, 1023),
+                                                         Hw20StorageKeys.ROASTER_HIGH: Offset(10, 130048)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -592,13 +575,6 @@ class ServerSettingsManager(object):
     def saveInBPStorage(self, settings):
         return self.setSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, settings)
 
-    def getEventStorage(self, defaults=None):
-        storageData = self.getSection(SETTINGS_SECTIONS.EVENT_STORAGE, defaults)
-        return storageData
-
-    def saveInEventStorage(self, settings):
-        return self.setSectionSettings(SETTINGS_SECTIONS.EVENT_STORAGE, settings)
-
     def checkAutoReloadHighlights(self, increase=False):
         return self.__checkUIHighlights(UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER, self._MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT, increase)
 
@@ -627,6 +603,12 @@ class ServerSettingsManager(object):
         mask = self._getMaskForLinkedSetQuest(questID, missionID)
         newValue = self.getSectionSettings(SETTINGS_SECTIONS.LINKEDSET_QUESTS, 'shown', 0) | mask
         return self.setSectionSettings(SETTINGS_SECTIONS.LINKEDSET_QUESTS, {'shown': newValue})
+
+    def getGameEventStorage(self, defaults=None):
+        return self.getSection(SETTINGS_SECTIONS.GAME_EVENT, defaults)
+
+    def saveInGameEventStorage(self, fields):
+        return self.setSections([SETTINGS_SECTIONS.GAME_EVENT], fields)
 
     def setQuestProgressSettings(self, settings):
         self.setSectionSettings(SETTINGS_SECTIONS.QUESTS_PROGRESS, settings)
@@ -691,6 +673,20 @@ class ServerSettingsManager(object):
         self.settingsCache.setSettings(storingValue)
         LOG_DEBUG('Applying MARKER server settings: ', settings)
         self._core.onSettingsChanged(settings)
+
+    def getHW20NarrativeSettings(self, key, default=None):
+        return self.getSectionSettings(SETTINGS_SECTIONS.HW20_NARRATIVE_ROASTER_MED_HIGH, key, default) if key in (Hw20StorageKeys.ROASTER_MED, Hw20StorageKeys.ROASTER_HIGH) else self.getSectionSettings(SETTINGS_SECTIONS.HW20_NARRATIVE, key, default)
+
+    def setHW20NarrativeSettings(self, fields):
+        medHighRoaster = {}
+        if Hw20StorageKeys.ROASTER_MED in fields:
+            medHighRoaster[Hw20StorageKeys.ROASTER_MED] = fields.pop(Hw20StorageKeys.ROASTER_MED)
+        if Hw20StorageKeys.ROASTER_HIGH in fields:
+            medHighRoaster[Hw20StorageKeys.ROASTER_HIGH] = fields.pop(Hw20StorageKeys.ROASTER_HIGH)
+        if medHighRoaster:
+            self.setSectionSettings(SETTINGS_SECTIONS.HW20_NARRATIVE_ROASTER_MED_HIGH, medHighRoaster)
+        if fields:
+            self.setSectionSettings(SETTINGS_SECTIONS.HW20_NARRATIVE, fields)
 
     def setSessionStatsSettings(self, settings):
         self.setSectionSettings(SETTINGS_SECTIONS.SESSION_STATS, settings)
@@ -825,9 +821,9 @@ class ServerSettingsManager(object):
          'epicCarouselFilter2': {},
          'sessionStats': {},
          'battleComm': {},
+         'dogTags': {},
          GUI_START_BEHAVIOR: {},
          'battlePassStorage': {},
-         'eventStorage': {},
          'clear': {},
          'delete': []}
         yield migrateToVersion(currentVersion, self._core, data)
@@ -902,6 +898,10 @@ class ServerSettingsManager(object):
         clearBattleComm = clear.get('battleComm', 0)
         if battleComm or clearBattleComm:
             settings[SETTINGS_SECTIONS.BATTLE_COMM] = self._buildSectionSettings(SETTINGS_SECTIONS.BATTLE_COMM, battleComm) ^ clearBattleComm
+        dogTags = data.get('dogTags', {})
+        clearDogTags = clear.get('dogTags', 0)
+        if dogTags or clearDogTags:
+            settings[SETTINGS_SECTIONS.DOG_TAGS] = self._buildSectionSettings(SETTINGS_SECTIONS.DOG_TAGS, dogTags) ^ clearDogTags
         guiStartBehavior = data.get(GUI_START_BEHAVIOR, {})
         clearGuiStartBehavior = clear.get(GUI_START_BEHAVIOR, 0)
         if guiStartBehavior or clearGuiStartBehavior:
@@ -910,10 +910,6 @@ class ServerSettingsManager(object):
         clearBPStorage = clear.get('battlePassStorage', 0)
         if BPStorage or clearBPStorage:
             settings[SETTINGS_SECTIONS.BATTLE_PASS_STORAGE] = self._buildSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, BPStorage) ^ clearBPStorage
-        EventStorage = data.get('eventStorage', {})
-        clearEventStorage = clear.get('eventStorage', 0)
-        if EventStorage or clearEventStorage:
-            settings[SETTINGS_SECTIONS.EVENT_STORAGE] = self._buildSectionSettings(SETTINGS_SECTIONS.EVENT_STORAGE, EventStorage) ^ clearEventStorage
         version = data.get(VERSION)
         if version is not None:
             settings[VERSION] = version

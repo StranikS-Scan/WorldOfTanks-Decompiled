@@ -32,7 +32,7 @@ class BCUnlockItemConfirmator(UnlockItemConfirmator):
          'isBuy': False} if item.intCD == bcNationData['vehicle_second'] else None
 
     def __getVehicleComponentData(self, item):
-        return {'label': backport.text(R.strings.bootcamp.message.unlock.module.title()).format(item.userName),
+        return {'label': backport.text(R.strings.bootcamp.message.unlock.module.title()).format(item.longUserName),
          'labelExecute': backport.text(R.strings.bootcamp.message.unlock.module.buttonLabel()),
          'icon': BCUnlockItemConfirmator.getPath(item.itemTypeName),
          'costValue': self._costCtx['xpCost'],
@@ -41,7 +41,6 @@ class BCUnlockItemConfirmator(UnlockItemConfirmator):
     def _makeMeta(self):
         item = self.itemsCache.items.getItemByCD(self._unlockCtx.itemCD)
         bcNationData = g_bootcamp.getNationData()
-        dialogData = None
         if item.intCD == bcNationData['vehicle_second']:
             dialogData = self.__getVehicleData(bcNationData, item)
         else:

@@ -14,9 +14,7 @@ from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.game_control import IEventProgressionController
 from skeletons.gui.lobby_context import ILobbyContext
-_BONUSES = {'crystal': '%(crystals)',
- 'gold': '%(golds)',
- 'credits': '%(credits)'}
+_BONUS_CRYSTAL = 'crystal'
 _BONUS_GOODIES = 'goodies'
 
 class EpicQuestProgressInject(InjectComponentAdaptor):
@@ -85,9 +83,8 @@ class EpicQuestProgressView(ViewImpl):
         bonuses = quest.getBonuses()
         rewards = []
         for q in bonuses:
-            name = q.getName()
-            if name in _BONUSES:
-                val = str(q.getValue()) + _BONUSES[name]
+            if q.getName() == _BONUS_CRYSTAL:
+                val = str(q.getValue()) + '%(crystals)'
                 rewards.append(val)
             if q.getName() == _BONUS_GOODIES:
                 goodieDict = q.getValue()

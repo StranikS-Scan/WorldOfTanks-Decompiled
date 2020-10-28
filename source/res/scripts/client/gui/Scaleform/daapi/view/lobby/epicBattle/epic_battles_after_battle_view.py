@@ -8,7 +8,7 @@ from gui.Scaleform.daapi.view.lobby.event_progression.after_battle_reward_view_h
 from gui.Scaleform.daapi.view.lobby.event_progression import after_battle_reward_view_helpers
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import EpicCurtailingAwardsComposer
 from gui.Scaleform.daapi.view.meta.EpicBattlesAfterBattleViewMeta import EpicBattlesAfterBattleViewMeta
-from gui.server_events.awards_formatters import getEpicViewAwardPacker
+from gui.server_events.awards_formatters import AWARDS_SIZES, getEpicViewAwardPacker
 from gui.server_events.bonuses import EpicAbilityPtsBonus
 from gui.shared.formatters import text_styles
 from gui.shared.utils import toUpper
@@ -42,13 +42,13 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
             SoundGroups.g_instance.playSound2D(EPIC_METAGAME_WWISE_SOUND_EVENTS.EB_LEVEL_REACHED_MAX)
 
     def onEscapePress(self):
-        self.__close()
+        self.destroy()
 
     def onCloseBtnClick(self):
-        self.__close()
+        self.destroy()
 
     def onWindowClose(self):
-        self.__close()
+        self.destroy()
 
     def onProgressBarStartAnim(self):
         if not self.__isProgressBarAnimating:
@@ -60,9 +60,13 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
             SoundGroups.g_instance.playSound2D(EPIC_METAGAME_WWISE_SOUND_EVENTS.EB_PROGRESS_BAR_STOP)
             self.__isProgressBarAnimating = False
 
+    def destroy(self):
+        self.onProgressBarCompleteAnim()
+        super(EpicBattlesAfterBattleView, self).destroy()
+
     def _populate(self):
         super(EpicBattlesAfterBattleView, self)._populate()
-        epicMetaGame = self.__ctx['reusableInfo'].personal.avatar.extensionInfo.get('ext', {}).get('epicMetaGame', {})
+        epicMetaGame = self.__ctx['reusableInfo'].personal.avatar.extensionInfo
         _, pMetaLevel, pFamePts = epicMetaGame.get('metaLevel', (None, None, None))
         _, prevPMetaLevel, prevPFamePts = epicMetaGame.get('prevMetaLevel', (None, None, None))
         boosterFLXP = epicMetaGame.get('boosterFlXP', 0)
@@ -74,10 +78,10 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         if season is not None:
             cycleNumber = self.__epicMetaGameCtrl.getCurrentOrNextActiveCycleNumber(season)
         famePointsReceived = sum(famePtsToProgress[prevPMetaLevel:pMetaLevel]) + pFamePts - prevPFamePts
-        achievedRank = max(self.__ctx['reusableInfo'].personal.avatar.extensionInfo.get('ext', {}).get('playerRank', {}).get('rank', 0), 1)
+        achievedRank = max(epicMetaGame.get('playerRank', 0), 1)
         rankNameId = R.strings.epic_battle.rank.dyn('rank' + str(achievedRank))
         rankName = toUpper(backport.text(rankNameId())) if rankNameId.exists() else ''
-        awardsVO = self._awardsFormatter.getFormattedBonuses(self.__getBonuses(pMetaLevel))
+        awardsVO = self._awardsFormatter.getFormattedBonuses(self.__getBonuses(pMetaLevel), size=AWARDS_SIZES.BIG)
         fameBarVisible = True
         if prevPMetaLevel >= maxMetaLevel or pMetaLevel >= maxMetaLevel:
             boosterFLXP = famePointsReceived - originalFlXP if famePointsReceived > originalFlXP else 0
@@ -103,7 +107,7 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         return
 
     def __getBonuses(self, level):
-        questsProgressData = self.__ctx['reusableInfo'].progress.getQuestsProgress()
+        questsProgressData = self.__ctx['reusableInfo'].personal.getQuestsProgress()
         bonuses = after_battle_reward_view_helpers.getQuestBonuses(questsProgressData, (EVENT_PROGRESSION_FINISH_TOKEN, self.__epicMetaGameCtrl.TOKEN_QUEST_ID), self.__epicMetaGameCtrl.TOKEN_QUEST_ID + str(level))
         bonuses.extend([self.__getAbilityPointsRewardBonus(level)])
         bonuses = after_battle_reward_view_helpers.formatBonuses(bonuses)
@@ -125,7 +129,3 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         else:
             cBoostedLevel = cLevel
         return (pLevel, cLevel, cBoostedLevel)
-
-    def __close(self):
-        self.onProgressBarCompleteAnim()
-        self.destroy()

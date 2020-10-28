@@ -12,7 +12,6 @@ class AmmunitionPanelInject(AmmunitionPanelInjectMeta, IGlobalListener):
     __bootcampController = dependency.descriptor(IBootcampController)
 
     def onPrbEntitySwitched(self):
-        self.getInjectView().updateVisible()
         self.getInjectView().update()
 
     def getOnPanelSectionSelected(self):
@@ -33,20 +32,15 @@ class AmmunitionPanelInject(AmmunitionPanelInjectMeta, IGlobalListener):
         self.startGlobalListening()
         self.getInjectView().onSizeChanged += self.__onSizeChanged
         self.getInjectView().onPanelSectionResized += self.__onPanelSectionResized
-        self.getInjectView().onSlotsWidthChanged += self.__onSlotsWidthChanged
 
     def _removeInjectContentListeners(self):
         super(AmmunitionPanelInject, self)._removeInjectContentListeners()
         self.stopGlobalListening()
         self.getInjectView().onSizeChanged -= self.__onSizeChanged
         self.getInjectView().onPanelSectionResized -= self.__onPanelSectionResized
-        self.getInjectView().onSlotsWidthChanged -= self.__onSlotsWidthChanged
 
     def __onSizeChanged(self, width, height, offsetY):
         self.as_setPanelSizeS(width, height, offsetY)
-
-    def __onSlotsWidthChanged(self, width):
-        self.as_setSlotsWidthS(width)
 
     def __onPanelSectionResized(self, sectionType, offsetX, offsetY, width, height):
         self.as_setHelpLayoutS({'sectionType': sectionType,

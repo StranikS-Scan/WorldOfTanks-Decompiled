@@ -12,8 +12,8 @@ from bootcamp.BootcampConstants import HINT_TYPE
 from bootcamp_shared import BOOTCAMP_BATTLE_ACTION
 from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP
 from HintsBase import HINT_COMMAND, HintBase
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.entities.View import ViewKey
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -203,7 +203,7 @@ class HintAdvancedSniper(HintBase, TriggersManager.ITriggerListener):
         topHint = self.__topHintRef()
         if topHint is None and self._avatar is not None:
             app = self._avatar.appLoader.getApp()
-            bcPageContainer = app.containerManager.getContainer(ViewTypes.DEFAULT)
+            bcPageContainer = app.containerManager.getContainer(WindowLayer.VIEW)
             bcPage = bcPageContainer.findView(ViewKey(VIEW_ALIAS.BOOTCAMP_BATTLE_PAGE))
             topHint = bcPage.topHint
             self.__topHintRef = weakref.ref(topHint)

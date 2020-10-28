@@ -23,7 +23,7 @@ from gui.impl.gen.resources import R
 from gui import SystemMessages
 from gui.shared.notifications import NotificationPriorityLevel
 from shared_utils import first
-from .events_helpers import getTankmanRewardQuests
+from gui.server_events.events_helpers import getTankmanRewardQuests
 
 class RecruitSourceID(object):
     TANKWOMAN = 'tankwoman'
@@ -44,9 +44,11 @@ class RecruitSourceID(object):
     TWITCH_14 = 'twitch14'
     TWITCH_15 = 'twitch15'
     TWITCH_16 = 'twitch16'
+    TWITCH_17 = 'twitch17'
     BUFFON = 'buffon'
     LOOTBOX = 'lootbox'
     COMMANDER_MARINA = 'commander_marina'
+    HW19_COMMANDERS = 'hw19_commanders'
     COMMANDER_PATRICK = 'commander_patrick'
     EVENTS = (TWITCH_0,
      TWITCH_1,
@@ -66,10 +68,13 @@ class RecruitSourceID(object):
      TWITCH_13,
      TWITCH_14,
      TWITCH_15,
-     TWITCH_16)
+     TWITCH_16,
+     HW19_COMMANDERS,
+     TWITCH_17)
 
 
 _NEW_SKILL = 'new_skill'
+_COUNT_NEW_SKILL_HW19_COMMANDER = 3
 _BASE_NAME = 'base'
 _TANKWOMAN_ROLE_LEVEL = 100
 _TANKWOMAN_ICON = 'girl-empty.png'
@@ -123,7 +128,9 @@ class _BaseRecruitInfo(object):
 
     def getLearntSkills(self, multiplyNew=False):
         if self._hasNewSkill:
-            if multiplyNew:
+            if self.getSourceID() == RecruitSourceID.HW19_COMMANDERS:
+                skillsCount = _COUNT_NEW_SKILL_HW19_COMMANDER
+            elif multiplyNew:
                 skillsCount, _ = self.getNewSkillCount(onlyFull=True)
             else:
                 skillsCount = 1

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/rally_dialog_meta.py
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from debug_utils import LOG_DEBUG
-from gui.Scaleform.daapi.view.dialogs import I18nDialogMeta, I18nInfoDialogMeta, I18nConfirmDialogMeta, I18nConfirmDialogButtons
+from gui.Scaleform.daapi.view.dialogs import I18nDialogMeta, I18nInfoDialogMeta, I18nConfirmDialogMeta, I18nConfirmDialogButtons, I18nInfoDialogButtons, DIALOG_BUTTON_ID
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.prb_control.formatters.messages import makeEntityI18nKey
@@ -19,8 +19,7 @@ _VIEW_SCOPES = {(_C_TYPE.UNIT, _P_TYPE.SQUAD): SimpleScope(PREBATTLE_ALIASES.SQU
  (_C_TYPE.LEGACY, _P_TYPE.TOURNAMENT): SimpleScope(PREBATTLE_ALIASES.BATTLE_SESSION_ROOM_WINDOW_PY, WINDOW_SCOPE),
  (_C_TYPE.LEGACY, _P_TYPE.TRAINING): SimpleScope(PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY, VIEW_SCOPE),
  (_C_TYPE.LEGACY, _P_TYPE.EPIC): SimpleScope(PREBATTLE_ALIASES.EPIC_TRAINING_ROOM_VIEW_PY, VIEW_SCOPE),
- (_C_TYPE.UNIT, _P_TYPE.BATTLE_ROYALE): SimpleScope(PREBATTLE_ALIASES.EVENT_SQUAD_VIEW_PY, VIEW_SCOPE),
- (_C_TYPE.UNIT, _P_TYPE.BOB): SimpleScope(PREBATTLE_ALIASES.EVENT_SQUAD_VIEW_PY, VIEW_SCOPE)}
+ (_C_TYPE.UNIT, _P_TYPE.BATTLE_ROYALE): SimpleScope(PREBATTLE_ALIASES.EVENT_SQUAD_VIEW_PY, VIEW_SCOPE)}
 
 class _RallyInfoDialogMeta(I18nInfoDialogMeta):
 
@@ -38,6 +37,12 @@ class UnitConfirmDialogMeta(I18nConfirmDialogMeta):
 
     def __init__(self, prbType, prefix, titleCtx=None, messageCtx=None, focusedID=None):
         super(UnitConfirmDialogMeta, self).__init__(makeEntityI18nKey(_C_TYPE.UNIT, prbType, prefix), titleCtx=titleCtx, messageCtx=messageCtx, focusedID=focusedID)
+
+
+class LeaveInfoDialogMeta(I18nInfoDialogMeta):
+
+    def __init__(self, ctrlType, entityType, prefix):
+        super(LeaveInfoDialogMeta, self).__init__(makeEntityI18nKey(ctrlType, entityType, prefix))
 
 
 class StrongholdConfirmDialogMeta(I18nDialogMeta):
@@ -137,3 +142,8 @@ def createUnitLeaveMeta(unlockCtx, leftPrbType, isSwitching=False):
 
 def createLeavePreQueueMeta(unlockCtx, leftQueueType, isSwitching=False):
     return _createLeaveRallyMeta(unlockCtx, _C_TYPE.PREQUEUE, leftQueueType, isSwitching)
+
+
+def createLeaveInfoMeta(unlockCtx, prefix):
+    key = makeEntityI18nKey(unlockCtx.getCtrlType(), unlockCtx.getEntityType(), prefix)
+    return I18nDialogMeta(key, buttons=I18nInfoDialogButtons(key, buttonID=DIALOG_BUTTON_ID.SUBMIT))

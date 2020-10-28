@@ -16,12 +16,13 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.LoginPageMeta import LoginPageMeta
 from gui.Scaleform.daapi.view.servers_data_provider import ServersDataProvider
 from gui.Scaleform.framework.entities.View import View
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl import backport
 from gui.impl.dialogs import dialogs
 from gui.impl.gen import R
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.events import OpenLinkEvent, LoginEventEx, ArgsEvent, LoginEvent, BootcampEvent
+from gui.shared.events import OpenLinkEvent, LoginEventEx, ArgsEvent, LoginEvent, LoadViewEvent, ViewEventType
 from helpers import getFullClientVersion, dependency, uniprof
 from helpers.i18n import makeString as _ms
 from helpers.statistics import HANGAR_LOADING_STATE
@@ -81,7 +82,7 @@ class LoginView(LoginPageMeta):
         self._loginMode.resetToken()
 
     def showLegal(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LEGAL_INFO_WINDOW), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LEGAL_INFO_WINDOW)), EVENT_BUS_SCOPE.LOBBY)
 
     def isPwdInvalid(self, password):
         isInvalid = False
@@ -165,7 +166,7 @@ class LoginView(LoginPageMeta):
         g_playerEvents.onEntityCheckOutEnqueued -= self._onEntityCheckoutEnqueued
         g_playerEvents.onAccountBecomeNonPlayer -= self._onAccountBecomeNonPlayer
         if self._entityEnqueueCancelCallback:
-            g_eventBus.removeListener(BootcampEvent.QUEUE_DIALOG_CANCEL, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
+            g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
         self._serversDP.fini()
         self._serversDP = None
         self._entityEnqueueCancelCallback = None
@@ -214,7 +215,7 @@ class LoginView(LoginPageMeta):
         if not self.__loginQueueDialogShown:
             self._clearLoginView()
             self.__loginQueueDialogShown = True
-            self.fireEvent(LoginEventEx(LoginEventEx.SET_LOGIN_QUEUE, '', backport.msgid(R.strings.waiting.titles.queue()), message, cancelBtnLbl, showAutoSearchBtn), EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOGIN_QUEUE), title=backport.msgid(R.strings.waiting.titles.queue()), message=message, cancelLabel=cancelBtnLbl, showAutoLoginBtn=showAutoSearchBtn), EVENT_BUS_SCOPE.LOBBY)
             self.addListener(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, self._onLoginQueueClosed, EVENT_BUS_SCOPE.LOBBY)
             self.addListener(LoginEventEx.SWITCH_LOGIN_QUEUE_TO_AUTO, self._onLoginQueueSwitched, EVENT_BUS_SCOPE.LOBBY)
         else:
@@ -228,22 +229,23 @@ class LoginView(LoginPageMeta):
         self.__closeLoginQueueDialog()
 
     def _onEntityCheckoutEnqueued(self, cancelCallback):
-        g_eventBus.addListener(BootcampEvent.QUEUE_DIALOG_CANCEL, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.handleEvent(BootcampEvent(BootcampEvent.QUEUE_DIALOG_SHOW), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG_SHOW)), EVENT_BUS_SCOPE.LOBBY)
         self._entityEnqueueCancelCallback = cancelCallback
 
     def _onAccountBecomeNonPlayer(self):
         if self._entityEnqueueCancelCallback:
             self._entityEnqueueCancelCallback = None
-            g_eventBus.removeListener(BootcampEvent.QUEUE_DIALOG_CANCEL, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
+            g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
         return
 
-    def _onEntityCheckoutCanceled(self, _):
-        Waiting.show('login')
-        g_eventBus.removeListener(BootcampEvent.QUEUE_DIALOG_CANCEL, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
-        if self._entityEnqueueCancelCallback:
-            self._entityEnqueueCancelCallback()
-        self._entityEnqueueCancelCallback = None
+    def _onEntityCheckoutCanceled(self, event):
+        if event.alias == VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG_CANCEL:
+            Waiting.show('login')
+            g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
+            if self._entityEnqueueCancelCallback:
+                self._entityEnqueueCancelCallback()
+            self._entityEnqueueCancelCallback = None
         return
 
     def _onLoginQueueSwitched(self, event):
@@ -311,7 +313,7 @@ class LoginView(LoginPageMeta):
 
     def __showLoginRetryDialog(self, data):
         self._clearLoginView()
-        self.fireEvent(LoginEventEx(LoginEventEx.SET_AUTO_LOGIN, '', data['waitingOpen'], data['message'], data['waitingClose'], False), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOGIN_QUEUE), title=data['waitingOpen'], message=data['message'], cancelLabel=data['waitingClose'], showAutoLoginBtn=False), EVENT_BUS_SCOPE.LOBBY)
         self.addListener(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, self.__closeLoginRetryDialog, EVENT_BUS_SCOPE.LOBBY)
         self.__loginRetryDialogShown = True
 

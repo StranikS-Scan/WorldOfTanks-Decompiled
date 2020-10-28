@@ -12,6 +12,7 @@ import nations
 from gui import g_htmlTemplates, makeHtmlString, GUI_NATIONS
 from gui.Scaleform import getNationsFilterAssetPath
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import getReserveNameVO, getDirection
+from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
@@ -47,6 +48,7 @@ from gui.shared.formatters.time_formatters import getTimeLeftStr, getTillTimeByR
 from gui.shared.gui_items import GUI_ITEM_TYPE, ACTION_ENTITY_ITEM
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from gui.shared.tooltips import ToolTipBaseData, TOOLTIP_TYPE, ACTION_TOOLTIPS_TYPE, ToolTipParameterField
+from gui.shared.tooltips import efficiency
 from gui.shared.tooltips import formatters
 from gui.shared.view_helpers import UsersInfoHelper
 from helpers import dependency
@@ -229,6 +231,25 @@ class DynamicBlocksTooltipData(BlocksTooltipData):
         if self.isVisible() and self.app is not None:
             self.app.updateTooltip(self.buildToolTip(), self.getType())
         return
+
+
+class EfficiencyTooltipData(BlocksTooltipData):
+    _packers = {BATTLE_EFFICIENCY_TYPES.ARMOR: efficiency.ArmorItemPacker,
+     BATTLE_EFFICIENCY_TYPES.DAMAGE: efficiency.DamageItemPacker,
+     BATTLE_EFFICIENCY_TYPES.DESTRUCTION: efficiency.KillItemPacker,
+     BATTLE_EFFICIENCY_TYPES.DETECTION: efficiency.DetectionItemPacker,
+     BATTLE_EFFICIENCY_TYPES.ASSIST: efficiency.AssistItemPacker,
+     BATTLE_EFFICIENCY_TYPES.CRITS: efficiency.CritsItemPacker,
+     BATTLE_EFFICIENCY_TYPES.CAPTURE: efficiency.CaptureItemPacker,
+     BATTLE_EFFICIENCY_TYPES.DEFENCE: efficiency.DefenceItemPacker,
+     BATTLE_EFFICIENCY_TYPES.ASSIST_STUN: efficiency.StunItemPacker}
+
+    def __init__(self, context):
+        super(EfficiencyTooltipData, self).__init__(context, TOOLTIP_TYPE.EFFICIENCY)
+        self._setWidth(300)
+
+    def _packBlocks(self, data):
+        return self._packers[data.type]().pack(data.toDict()) if data is not None and data.type in self._packers else []
 
 
 _ENV_TOOLTIPS_PATH = '#environment_tooltips:%s'
@@ -909,6 +930,18 @@ class SettingsMinimapCircles(BlocksTooltipData):
         drawRangeBody = text_styles.main(TOOLTIPS.SETTINGS_MINIMAPCIRCLES_DRAWRANGE_BODY)
         textBlocks.extend(self.getTextBlocksForCircleDescr(drawRangeTitle, drawRangeBody))
         tooltipBlocks.append(formatters.packBuildUpBlockData(textBlocks, padding={'top': -1}))
+        return tooltipBlocks
+
+
+class SettingsShowLocationMarkers(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(SettingsShowLocationMarkers, self).__init__(context, TOOLTIP_TYPE.CONTROL)
+        self._setWidth(width=400)
+
+    def _packBlocks(self, *args, **kwargs):
+        tooltipBlocks = super(SettingsShowLocationMarkers, self)._packBlocks()
+        tooltipBlocks.append(formatters.packBuildUpBlockData([formatters.packTitleDescBlock(text_styles.highTitle(TOOLTIPS.SETTINGS_SHOWLOCATIONMARKERS_HEADER), text_styles.main(TOOLTIPS.SETTINGS_SHOWLOCATIONMARKERS_BODY)), formatters.packTextBlockData(text_styles.neutral(TOOLTIPS.SETTINGS_SHOWLOCATIONMARKERS_BODYFOOTER), padding={'bottom': -15})]))
         return tooltipBlocks
 
 

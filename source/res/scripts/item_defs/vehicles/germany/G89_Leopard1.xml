@@ -63,6 +63,13 @@
       <undamaged>	vehicles/german/G89_Leopard1/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/german/G89_Leopard1/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/german/G89_Leopard1/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <G89_Leopard1_3Dst_HW20>
+          <undamaged>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_3Dst_HW20/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_3Dst_HW20/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_3Dst_HW20/crash/lod0/Hull.model	</exploded>
+        </G89_Leopard1_3Dst_HW20>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -92,8 +99,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.659404 0.550962 2.66801	</rayStart>
-        <rayEnd>	0.659404 0.204556 2.46802	</rayEnd>
+        <rayStart>	0.668975 0.750095 1.99527	</rayStart>
+        <rayEnd>	0.668944 0.352761 1.94924	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
@@ -642,6 +649,104 @@
         <anchorDirection>	-0.7071 0.707113 0.00123739	</anchorDirection>
         <verticalMirror>	true	</verticalMirror>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15040	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G89_Leopard1_3Dst_HW20	</compatibleModels>
+        <position>	-0.95101 1.47564 1.98054	</position>
+        <rotation>	-0.00726957 0.000019 3.14154	</rotation>
+        <scale>	0.455852 0.455851 0.45586	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.0138298	</clipAngle>
+        <anchorPosition>	-0.951005 0.588844 1.97979	</anchorPosition>
+        <anchorDirection>	0.000052 0.999974 -0.00726951	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15041	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G89_Leopard1_3Dst_HW20	</compatibleModels>
+        <position>	0.902457 1.74198 -2.68075	</position>
+        <rotation>	3.14158 -0.000174761 -0.000057	</rotation>
+        <scale>	0.606194 0.02 0.606197	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.848635	</clipAngle>
+        <anchorPosition>	0.902455 0.774837 -2.68075	</anchorPosition>
+        <anchorDirection>	-0.000057 1 -0.000013	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15042	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G89_Leopard1_3Dst_HW20	</compatibleModels>
+        <position>	-0.902429 1.742 -2.68075	</position>
+        <rotation>	3.14158 -0.000174761 -0.000057	</rotation>
+        <scale>	0.606194 0.02 0.606197	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.848635	</clipAngle>
+        <anchorPosition>	-0.902431 0.774856 -2.68075	</anchorPosition>
+        <anchorDirection>	-0.000057 1 -0.000013	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15043	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G89_Leopard1_3Dst_HW20	</compatibleModels>
+        <position>	-1.33414 1.08184 3.32129	</position>
+        <rotation>	0.707619 -0.000019 3.14154	</rotation>
+        <scale>	0.52112 0.2 0.521125	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.0138298	</clipAngle>
+        <anchorPosition>	-1.33414 0.105467 3.33347	</anchorPosition>
+        <anchorDirection>	0.000044 0.759912 0.650026	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15044	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G89_Leopard1_3Dst_HW20	</compatibleModels>
+        <position>	1.33415 1.08181 3.32129	</position>
+        <rotation>	0.707619 -0.000019 3.14154	</rotation>
+        <scale>	0.52112 0.2 0.521125	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.0138298	</clipAngle>
+        <anchorPosition>	1.33415 0.105437 3.33347	</anchorPosition>
+        <anchorDirection>	0.000044 0.759912 0.650026	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15045	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G89_Leopard1_3Dst_HW20	</compatibleModels>
+        <position>	-1.50984 1.52278 -1.70688	</position>
+        <rotation>	2.26434 1.56948 -0.000870705	</rotation>
+        <scale>	0.377274 0.0560129 0.377276	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.848635	</clipAngle>
+        <anchorPosition>	-1.52787 0.547178 -1.70688	</anchorPosition>
+        <anchorDirection>	-0.768985 0.639267 -0.000140429	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15046	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G89_Leopard1_3Dst_HW20	</compatibleModels>
+        <position>	1.50817 1.52449 -1.70724	</position>
+        <rotation>	2.26431 -1.56929 -0.000893831	</rotation>
+        <scale>	0.377274 0.0560129 0.377276	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.848635	</clipAngle>
+        <anchorPosition>	1.52621 0.548885 -1.70729	</anchorPosition>
+        <anchorDirection>	0.769004 0.639241 -0.0020543	</anchorDirection>
+      </slot>
     </customizationSlots>
     <camouflage>
       <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
@@ -678,6 +783,13 @@
         <undamaged>	vehicles/german/G89_Leopard1/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G89_Leopard1/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G89_Leopard1/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <G89_Leopard1_3Dst_HW20>
+            <undamaged>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_3Dst_HW20/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_3Dst_HW20/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_3Dst_HW20/crash/lod0/Chassis.model	</exploded>
+          </G89_Leopard1_3Dst_HW20>
+        </sets>
       </models>
       <splineDesc>
         <segmentModelLeft>	vehicles/german/G89_Leopard1/track/segment1.model	</segmentModelLeft>
@@ -694,6 +806,14 @@
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
+        <modelSets>
+          <G89_Leopard1_3Dst_HW20>
+            <segmentModelLeft>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_3Dst_HW20/track/segment_a.model	</segmentModelLeft>
+            <segmentModelRight>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_3Dst_HW20/track/segment_a.model	</segmentModelRight>
+            <segment2ModelLeft>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_3Dst_HW20/track/segment_b.model	</segment2ModelLeft>
+            <segment2ModelRight>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_3Dst_HW20/track/segment_b.model	</segment2ModelRight>
+          </G89_Leopard1_3Dst_HW20>
+        </modelSets>
       </splineDesc>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -941,6 +1061,12 @@
             <model>	vehicles/german/G89_Leopard1/track/segment2.model	</model>
             <length>	0.0705657	</length>
           </secSegment>
+          <modelSets>
+            <G89_Leopard1_3Dst_HW20>
+              <mainSegmentModel>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_3Dst_HW20/track/segment_a.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_3Dst_HW20/track/segment_b.model	</secSegmentModel>
+            </G89_Leopard1_3Dst_HW20>
+          </modelSets>
           <collisionHull>
             <bottom>
               <part>
@@ -1273,6 +1399,12 @@
             <model>	vehicles/german/G89_Leopard1/track/segment2.model	</model>
             <length>	0.0710292	</length>
           </secSegment>
+          <modelSets>
+            <G89_Leopard1_3Dst_HW20>
+              <mainSegmentModel>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_3Dst_HW20/track/segment_a.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_3Dst_HW20/track/segment_b.model	</secSegmentModel>
+            </G89_Leopard1_3Dst_HW20>
+          </modelSets>
           <collisionHull>
             <bottom>
               <part>
@@ -1674,6 +1806,13 @@
             <undamaged>	vehicles/german/G89_Leopard1/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G89_Leopard1/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G89_Leopard1/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <G89_Leopard1_3Dst_HW20>
+                <undamaged>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_3Dst_HW20/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_3Dst_HW20/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_3Dst_HW20/crash/lod0/Gun_01.model	</exploded>
+              </G89_Leopard1_3Dst_HW20>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G89_Leopard1/collision/Gun_01.model	</collisionModelServer>
@@ -1724,9 +1863,9 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	-0.000001 -0.00542664 3.7647	</rayStart>
-              <rayEnd>	0.159083 -0.0310809 3.76003	</rayEnd>
-              <rayUp>	0.077 0.000000 0.000000	</rayUp>
+              <rayStart>	-0.000001 0.000000 3.34677	</rayStart>
+              <rayEnd>	-0.141098 -0.0260568 3.34184	</rayEnd>
+              <rayUp>	0.078329 0.000000 0.000000	</rayUp>
               <applyToFabric>	true	</applyToFabric>
               <size>	0.274	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
@@ -1744,6 +1883,13 @@
         <undamaged>	vehicles/german/G89_Leopard1/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/german/G89_Leopard1/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/german/G89_Leopard1/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <G89_Leopard1_3Dst_HW20>
+            <undamaged>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_3Dst_HW20/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_3Dst_HW20/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_3Dst_HW20/crash/lod0/Turret_01.model	</exploded>
+          </G89_Leopard1_3Dst_HW20>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G89_Leopard1/collision/Turret_01.model	</collisionModelServer>
@@ -1761,6 +1907,13 @@
       </customization>
       <customizationSlots>
         <slot>
+          <slotType>	sequence	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0 0 0	</position>
+          <rotation>	0 0 0	</rotation>
+          <attachNode>	HP_light1	</attachNode>
+        </slot>
+        <slot>
           <slotType>	paint	</slotType>
           <slotId>	31000	</slotId>
           <anchorPosition>	0.000000 0.924194 0.000000	</anchorPosition>
@@ -1775,21 +1928,21 @@
         <slot>
           <slotType>	player	</slotType>
           <slotId>	33000	</slotId>
-          <rayStart>	-1.3575 0.596352 -0.323078	</rayStart>
-          <rayEnd>	-1.01396 0.399898 -0.381205	</rayEnd>
+          <rayStart>	-1.27056 0.423157 -0.515216	</rayStart>
+          <rayEnd>	-1.23197 0.406684 -0.515548	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.26	</size>
+          <size>	0.2	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isUVProportional>	true	</isUVProportional>
         </slot>
         <slot>
           <slotType>	player	</slotType>
           <slotId>	33001	</slotId>
-          <rayStart>	1.3575 0.596352 -0.323078	</rayStart>
-          <rayEnd>	1.01396 0.399898 -0.381205	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <rayStart>	1.21283 0.449186 -0.353944	</rayStart>
+          <rayEnd>	1.17912 0.429899 -0.358894	</rayEnd>
+          <rayUp>	-0.0060727 0.998948 0.0454634	</rayUp>
           <isMirrored>	true	</isMirrored>
-          <size>	0.26	</size>
+          <size>	0.22	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isUVProportional>	true	</isUVProportional>
         </slot>
@@ -2129,6 +2282,20 @@
           <clipAngle>	0.767199	</clipAngle>
           <anchorPosition>	1.03236 0.401975 0.420313	</anchorPosition>
           <anchorDirection>	0.908582 0.33897 0.244088	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35024	</slotId>
+          <tags>	formfactor_square	</tags>
+          <position>	-0.0338767 2.41132 0.313597	</position>
+          <rotation>	0.00382723 -0.000001 3.14156	</rotation>
+          <scale>	0.509175 0.0177489 0.509172	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.986468	</clipAngle>
+          <anchorPosition>	-0.0338761 0.967761 -0.227136	</anchorPosition>
+          <anchorDirection>	0.000032 0.999993 0.00382722	</anchorDirection>
+          <compatibleModels>	G89_Leopard1_3Dst_HW20	</compatibleModels>
         </slot>
       </customizationSlots>
       <camouflage>

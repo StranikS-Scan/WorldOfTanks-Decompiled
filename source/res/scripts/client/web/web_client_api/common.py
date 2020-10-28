@@ -37,6 +37,7 @@ class ShopItemType(CONST_CONTAINER):
     INSCRIPTION = 'inscription'
     PROJECTION_DECAL = 'projectionDecal'
     ENHANCEMENT = 'enhancements'
+    CREW_BOOKS = 'crew_books'
 
 
 class ItemPackType(CONST_CONTAINER):
@@ -71,6 +72,7 @@ class ItemPackType(CONST_CONTAINER):
     CUSTOM_REFERRAL_CREW = 'custom/crew'
     CUSTOM_REWARD_POINT = 'custom/reward_point'
     CUSTOM_SUPPLY_POINT = 'custom/supply_point'
+    CUSTOM_EVENT_PROGRESSION_REWARD_POINT = 'custom/reward_point'
     TOKEN = 'token'
     PAINT_ALL = 'paint/all'
     PAINT_SUMMER = 'paint/summer'
@@ -93,6 +95,16 @@ class ItemPackType(CONST_CONTAINER):
     SINGLE_ACHIEVEMENTS = 'singleAchievements'
     FRONTLINE_TOKEN = 'frontline_token'
     TRADE_IN_INFO = 'tradeInInfo'
+    CREW_BOOK = 'crewBook'
+    CREW_BOOK_BROCHURE = 'crew_book/brochure'
+    CREW_BOOK_GUIDE = 'crew_book/guide'
+    CREW_BOOK_CREW_BOOK = 'crew_book/crewBook'
+    CREW_BOOK_PERSONAL_BOOK = 'crew_book/personalBook'
+    CREW_BOOK_UNIVERSAL_BOOK = 'crew_book/universalBook'
+    BLUEPRINT = 'blueprint'
+    BLUEPRINT_NATIONAL = 'blueprint/national'
+    BLUEPRINT_INTELEGENCE_DATA = 'blueprint/intelligence_data'
+    BLUEPRINT_ANY = 'blueprint/any'
 
 
 class ItemPackTypeGroup(CONST_CONTAINER):

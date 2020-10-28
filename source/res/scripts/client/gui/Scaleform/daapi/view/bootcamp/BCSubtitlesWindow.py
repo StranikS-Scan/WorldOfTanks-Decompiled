@@ -6,6 +6,10 @@ from gui.Scaleform.daapi.view.meta.SubtitlesWindowMeta import SubtitlesWindowMet
 
 class SubtitlesWindow(SubtitlesBase, SubtitlesWindowMeta, TutorialWindow):
 
+    def onWindowClose(self):
+        self._onMouseClicked('closeID')
+        self._stop()
+
     def _asShowSubtitle(self, subtitle):
         self.as_showSubtitleS(subtitle)
 
@@ -17,6 +21,7 @@ class SubtitlesWindow(SubtitlesBase, SubtitlesWindowMeta, TutorialWindow):
         if self._tutorial is not None:
             for _, effect in self._gui.effects.iterEffects():
                 if effect.isStillRunning(self.uniqueName):
-                    effect.stop(effectID=None)
+                    effect.stop()
 
+        self.destroy()
         return

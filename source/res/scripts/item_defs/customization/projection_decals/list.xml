@@ -1795,7 +1795,61 @@
       <tags>	formfactor_square	</tags>
       <mirror>	false	</mirror>
     </projection_decal>
-    <name>	APAC Korean	</name>
+    <projection_decal>
+      <id>	289	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_123.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_123	</userString>
+      <tags>	formfactor_square direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	355	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_162.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_162	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	356	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_161.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_161	</userString>
+      <tags>	formfactor_square direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	APAC 2020	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F17_AMX_13_90_Halloween_event uk:GB24_Centurion_Mk3_Halloween_event usa:A100_T49_Halloween_event usa:A66_M103_Halloween_event ussr:R40_T-54_Halloween_event	</vehicles>
+      </include>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	223	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_61.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_61	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	224	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_62.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_62	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	225	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_63.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_63	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	halloween 2019	</name>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:projection_decals/special	</userString>
@@ -2341,22 +2395,6 @@
       <mirror>	true	</mirror>
     </projection_decal>
     <projection_decal>
-      <id>	337	</id>
-      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_151.dds	</texture>
-      <description>	#vehicle_customization:projection_decals/special/projection_decal_151/description	</description>
-      <userString>	#vehicle_customization:projection_decals/special/projection_decal_151	</userString>
-      <tags>	formfactor_square direction_left_to_right	</tags>
-      <mirror>	true	</mirror>
-    </projection_decal>
-    <projection_decal>
-      <id>	338	</id>
-      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_152.dds	</texture>
-      <description>	#vehicle_customization:projection_decals/special/projection_decal_152/description	</description>
-      <userString>	#vehicle_customization:projection_decals/special/projection_decal_152	</userString>
-      <tags>	formfactor_rect1x2 direction_left_to_right	</tags>
-      <mirror>	true	</mirror>
-    </projection_decal>
-    <projection_decal>
       <id>	335	</id>
       <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_149.dds	</texture>
       <description>	#vehicle_customization:projection_decals/special/projection_decal_149/description	</description>
@@ -2370,6 +2408,22 @@
       <description>	#vehicle_customization:projection_decals/special/projection_decal_150/description	</description>
       <userString>	#vehicle_customization:projection_decals/special/projection_decal_150	</userString>
       <tags>	formfactor_square direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	337	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_151.dds	</texture>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_151/description	</description>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_151	</userString>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	338	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_152.dds	</texture>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_152/description	</description>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_152	</userString>
+      <tags>	formfactor_rect1x2 direction_left_to_right	</tags>
       <mirror>	true	</mirror>
     </projection_decal>
     <name>	10 Years Countdown	</name>
@@ -2518,6 +2572,22 @@
       <userString>	#vehicle_customization:projection_decals/progression/progression_decal_05	</userString>
       <tags>	formfactor_square vehicleBound disableVerticalMirror	</tags>
       <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	506	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/progression/progression_decal_06_AM_1.dds	</texture>
+      <glossTexture>	gui/maps/vehicles/decals/projection_decals/progression/progression_decal_06_GMM_1.dds	</glossTexture>
+      <userString>	#vehicle_customization:projection_decals/progression/progression_decal_06	</userString>
+      <tags>	formfactor_square vehicleBound disableVerticalMirror	</tags>
+      <mirror>	false	</mirror>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	usa:A95_T95_E6 usa:A92_M60 china:Ch25_121_mod_1971B france:F64_AMX_50Fosh_155 germany:G92_VK7201 uk:GB48_FV215b_183 uk:GB13_FV215b uk:GB98_T95_FV4201_Chieftain ussr:R95_Object_907 ussr:R110_Object_260 ussr:R120_T22SR_A22 ussr:R157_Object_279R germany:G98_Waffentrager_E100_P germany:G98_Waffentrager_E100 ussr:R126_Object_730_5 china:Ch22_113_Beijing_Opera china:Ch22_113P china:Ch41_WZ_111_QL uk:GB84_Chieftain_Mk6 uk:GB88_T95_Chieftain_turret ussr:R119_Object_777C ussr:R129_Object_257 ussr:R178_Object_780 usa:A106_M48A2_120 ussr:R95_Object_907A uk:GB70_FV4202_105 italy:It08_Progetto_M40_mod_65_bob ussr:R96_Object_430B germany:G134_PzKpfw_VII_bob ussr:R97_Object_140_bob ussr:R93_Object263B china:Ch41_WZ_111_5A_bob sweden:S28_UDES_15_16_bob italy:It20_Carro_Combattimento_45t	</vehicles>
+        </exclude>
+        <include>
+          <levels>	10	</levels>
+        </include>
+      </vehicleFilter>
     </projection_decal>
     <name>	Progression Decals	</name>
   </itemGroup>
@@ -2696,25 +2766,6 @@
     <userString>	#vehicle_customization:projection_decals/special	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
-    <priceGroup>	projection_decals 190g notInShop	</priceGroup>
-    <vehicleFilter>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <projection_decal>
-      <id>	289	</id>
-      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_123.dds	</texture>
-      <userString>	#vehicle_customization:projection_decals/special/projection_decal_123	</userString>
-      <tags>	formfactor_square direction_right_to_left	</tags>
-      <mirror>	true	</mirror>
-    </projection_decal>
-    <name>	APAC Chuseok	</name>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:projection_decals/special	</userString>
-    <season>	ALL	</season>
-    <historical>	false	</historical>
     <priceGroup>	projection_decals 50g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>
@@ -2754,25 +2805,6 @@
       <mirror>	false	</mirror>
     </projection_decal>
     <name>	Decals for High Amount of Battles	</name>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:projection_decals/animals	</userString>
-    <season>	ALL	</season>
-    <historical>	false	</historical>
-    <priceGroup>	projection_decals 110g notInShop	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <vehicles>	poland:Pl19_CS_52_LIS	</vehicles>
-      </include>
-    </vehicleFilter>
-    <projection_decal>
-      <id>	332	</id>
-      <texture>	gui/maps/vehicles/decals/projection_decals/animals/projection_decal_34.dds	</texture>
-      <userString>	#vehicle_customization:projection_decals/animals/projection_decal_34	</userString>
-      <tags>	formfactor_rect1x2 direction_right_to_left hiddenInUI	</tags>
-      <mirror>	true	</mirror>
-    </projection_decal>
-    <name>	CS_52_LIS Autumn Marathon	</name>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:projection_decals/special	</userString>
@@ -2853,6 +2885,72 @@
       <mirror>	true	</mirror>
     </projection_decal>
     <name>	WT 2020 Pin-up	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/animals	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals 110g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	poland:Pl19_CS_52_LIS	</vehicles>
+      </include>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	332	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/animals/projection_decal_34.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/animals/projection_decal_34	</userString>
+      <tags>	formfactor_rect1x2 direction_right_to_left hiddenInUI	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	CS_52_LIS Autumn Marathon	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/cool	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals 190g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	361	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_45.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_45	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	362	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_46.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_46	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	363	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_47.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_47	</userString>
+      <tags>	formfactor_rect1x2 direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	364	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_48.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_48	</userString>
+      <tags>	formfactor_rect1x2 direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	365	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_49.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_49	</userString>
+      <tags>	formfactor_rect1x2 direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	NA Animal Characteristics	</name>
   </itemGroup>
   <xmlns:ussr>	ussr	</xmlns:ussr>
   <xmlns:germany>	germany	</xmlns:germany>
@@ -3376,5 +3474,38 @@
       <mirror>	false	</mirror>
     </projection_decal>
     <name>	A-B Testers	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals 190g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	357	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_163.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_163	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	358	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_164.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_164	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	359	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_165.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_165	</userString>
+      <tags>	formfactor_square direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	Mexican Day of the Dead	</name>
   </itemGroup>
 </list.xml>

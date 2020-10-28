@@ -4,8 +4,8 @@ from gui.Scaleform.framework.entities.View import View
 
 class LobbyVehicleMarkerViewMeta(View):
 
-    def as_createMarkerS(self, vType, vName):
-        return self.flashObject.as_createMarker(vType, vName) if self._isDAAPIInited() else None
+    def as_createMarkerS(self, vType, vName, id, styleId=1):
+        return self.flashObject.as_createMarker(vType, vName, id, styleId) if self._isDAAPIInited() else None
 
-    def as_removeMarkerS(self):
-        return self.flashObject.as_removeMarker() if self._isDAAPIInited() else None
+    def as_removeMarkerS(self, id):
+        return self.flashObject.as_removeMarker(id) if self._isDAAPIInited() else None

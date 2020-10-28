@@ -31,6 +31,9 @@ class BrowserMeta(BaseDAAPIComponent):
     def setBrowserSize(self, width, height):
         self._printOverrideError('setBrowserSize')
 
+    def as_loadBitmapS(self, url):
+        return self.flashObject.as_loadBitmap(url) if self._isDAAPIInited() else None
+
     def as_loadingStartS(self, showContentUnderWaiting):
         return self.flashObject.as_loadingStart(showContentUnderWaiting) if self._isDAAPIInited() else None
 

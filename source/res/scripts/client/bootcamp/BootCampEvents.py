@@ -28,7 +28,6 @@ class _BootCampEvents(object):
         self.onRequestBootcampMessageWindowClose = self._createEvent()
         self.hideGUIForWinMessage = self._createEvent()
         self.onGameplayChoice = self._createEvent()
-        self.onHideSubtitle = self._createEvent()
         self.onHighlightAdded = self._createEvent()
         self.onInterludeVideoStarted = self._createEvent()
         self.onInterludeVideoFinished = self._createEvent()

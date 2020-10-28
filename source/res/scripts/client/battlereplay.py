@@ -23,6 +23,7 @@ from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
 from constants import ARENA_PERIOD
 from helpers import dependency
+from gui.app_loader import settings
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gameplay import IGameplayLogic, ReplayEventID
@@ -70,6 +71,7 @@ class CallbackDataNames(object):
     GUN_DAMAGE_SOUND = 'gunDamagedSound'
     SHOW_AUTO_AIM_MARKER = 'showAutoAimMarker'
     HIDE_AUTO_AIM_MARKER = 'hideAutoAimMarker'
+    SWITCH_ENVIRONMENT = 'switchEnvironment'
 
 
 class BattleReplay(object):
@@ -356,6 +358,7 @@ class BattleReplay(object):
         fastForwardStep = FAST_FORWARD_STEP * (2.0 if mods == 2 else 1.0)
         if (key == Keys.KEY_LEFTMOUSE or cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key)) and isDown and not isCursorVisible:
             if self.isControllingCamera:
+                self.appLoader.detachCursor(settings.APP_NAME_SPACE.SF_BATTLE)
                 controlMode = self.getControlMode()
                 self.onControlModeChanged('arcade')
                 self.__replayCtrl.isControllingCamera = False
@@ -586,7 +589,6 @@ class BattleReplay(object):
                 AreaDestructibles.g_destructiblesManager.onAfterReplayTimeWarp()
                 if isPlayerAvatar():
                     BigWorld.player().onVehicleEnterWorld += self.__onVehicleEnterWorld
-                from gui.app_loader import settings
                 self.appLoader.attachCursor(settings.APP_NAME_SPACE.SF_BATTLE, flags=GUI_CTRL_MODE_FLAG.CURSOR_ATTACHED)
             if self.isRecording:
                 player = BigWorld.player()
@@ -835,11 +837,6 @@ class BattleReplay(object):
                     for field in ('damageEventList', 'xpReplay', 'creditsReplay', 'tmenXPReplay', 'flXPReplay', 'goldReplay', 'crystalReplay', 'eventCoinReplay', 'freeXPReplay', 'avatarDamageEventList'):
                         personal[field] = None
 
-                    extMeta = personal.get('ext', {}).get('epicMetaGame')
-                    if extMeta is not None:
-                        for field in ('flXPReplay',):
-                            extMeta[field] = None
-
             common = modifiedResults.get('common', None)
             if common is not None:
                 common['accountCompDescr'] = None
@@ -871,8 +868,7 @@ class BattleReplay(object):
             return
 
     def __onAvatarBecomePlayer(self):
-        disableRange = constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE + (constants.ARENA_BONUS_TYPE.EVENT_BATTLES,)
-        if self.sessionProvider.arenaVisitor.getArenaBonusType() in disableRange:
+        if self.sessionProvider.arenaVisitor.getArenaBonusType() in constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
             self.enableAutoRecordingBattles(False, True)
 
     def __onSettingsChanging(self, *_):

@@ -58,6 +58,14 @@ def getRentEpicSeasonTimeLeft(timeLeft, timeStyle=None):
         return i18n.makeString('#tooltips:vehicle/rentLeft/epic/%s' % fmtKey, timeNum=timeNum)
 
 
+def getHWTimeLeftString(timeLeft):
+    if timeLeft > 0 and timeLeft != float('inf'):
+        hours = int(timeLeft / time_utils.ONE_HOUR)
+        minutes = int(timeLeft % time_utils.ONE_HOUR / time_utils.ONE_MINUTE)
+        seconds = int(timeLeft % time_utils.ONE_MINUTE)
+        return '{}:{}:{}'.format('%02d' % hours, '%02d' % minutes, '%02d' % seconds)
+
+
 def getTimeLeftStr(localization, timeLeft, timeStyle=None, ctx=None, formatter=None):
     if ctx is None:
         ctx = {}

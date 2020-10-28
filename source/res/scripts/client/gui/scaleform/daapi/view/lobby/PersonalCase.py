@@ -15,6 +15,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
 from gui.Scaleform.daapi.view.lobby.PersonalCaseConstants import TABS
 from gui.Scaleform.daapi.view.meta.PersonalCaseMeta import PersonalCaseMeta
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.CREW_SKINS import CREW_SKINS
 from gui.Scaleform.locale.NATIONS import NATIONS
@@ -169,7 +170,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
 
     def openChangeRoleWindow(self):
         ctx = {'tankmanID': self.tmanInvID}
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.ROLE_CHANGE, VIEW_ALIAS.ROLE_CHANGE, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.ROLE_CHANGE, VIEW_ALIAS.ROLE_CHANGE), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
 
     @decorators.process('updating')
     def dismissTankman(self, tmanInvID):
@@ -228,14 +229,14 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def openExchangeFreeToTankmanXpWindow(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW, getViewName(VIEW_ALIAS.EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW, self.tmanInvID), {'tankManId': self.tmanInvID}), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW, getViewName(VIEW_ALIAS.EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW, self.tmanInvID)), ctx={'tankManId': self.tmanInvID}), EVENT_BUS_SCOPE.LOBBY)
 
     def changeRetrainVehicle(self, intCD):
         self.vehicle = self.itemsCache.items.getItemByCD(intCD)
         self.__setRetrainingData()
 
     def dropSkills(self):
-        self.fireEvent(LoadViewEvent(VIEW_ALIAS.TANKMAN_SKILLS_DROP_WINDOW, getViewName(VIEW_ALIAS.TANKMAN_SKILLS_DROP_WINDOW, self.tmanInvID), {'tankmanID': self.tmanInvID}), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.TANKMAN_SKILLS_DROP_WINDOW, getViewName(VIEW_ALIAS.TANKMAN_SKILLS_DROP_WINDOW, self.tmanInvID)), ctx={'tankmanID': self.tmanInvID}), EVENT_BUS_SCOPE.LOBBY)
 
     def _populate(self):
         super(PersonalCase, self)._populate()
@@ -494,6 +495,7 @@ class PersonalCaseDataProvider(object):
             criteria |= ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
         if constants.IS_DEVELOPMENT:
             criteria |= ~REQ_CRITERIA.VEHICLE.IS_BOT
+        criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
         vData = items.getVehicles(criteria)
         tDescr = tankman.descriptor
         vehiclesData = vData.values()

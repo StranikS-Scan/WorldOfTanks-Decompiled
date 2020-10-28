@@ -57,7 +57,6 @@ class FUNCTIONAL_FLAG(BitmaskHelper):
     TOURNAMENT = 8388608
     EPIC = 16777216
     BATTLE_ROYALE = 33554432
-    BOB = 33554432
     DEFAULT = 67108864
     LEGACY_BITMASK = LEGACY_INTRO | LEGACY
     UNIT_BITMASK = UNIT_INTRO | UNIT_BROWSER | UNIT
@@ -130,8 +129,12 @@ class UNIT_NOTIFICATION_KEY(object):
     PLAYER_OFFLINE = 'playerOffline'
     PLAYER_ONLINE = 'playerOnline'
     PLAYER_ADDED = 'playerAdded'
+    EVENT_PLAYER_ADDED = 'eventPlayerAdded'
     PLAYER_REMOVED = 'playerRemoved'
+    EVENT_PLAYER_REMOVED = 'eventPlayerRemoved'
     GIVE_LEADERSHIP = 'giveLeadership'
+    SELECTED_DIFFICULTY_LEVEL = 'selectedDifficultyLevel'
+    NOT_READY_DIFFICULTY_LEVEL = 'notReadyDifficultyLevel'
 
 
 class PREBATTLE_ACTION_NAME(object):
@@ -157,9 +160,6 @@ class PREBATTLE_ACTION_NAME(object):
     EPIC_FORCED = 'epicForced'
     EVENT_PROGRESSION = 'eventProgression'
     BATTLE_ROYALE = 'battleRoyaleQueue'
-    BOB = 'bob'
-    BOB_SQUAD = 'bobSquad'
-    BOB_FORCED = 'bobForced'
     EVENT_BATTLE = 'eventBattle'
 
 
@@ -177,8 +177,6 @@ class SELECTOR_BATTLE_TYPES(object):
     EPIC = 'epic'
     EVENT_PROGRESSION = 'eventProgression'
     BATTLE_ROYALE = 'battleRoyale'
-    BOB = 'bob'
-    EVENT_BATTLE = 'eventBattle'
 
 
 class REQUEST_TYPE(object):
@@ -211,6 +209,12 @@ class PREBATTLE_SETTING_NAME(object):
     LIMITS = 'limits'
     DESTROY_IF_CREATOR_OUT = 'destroyIfCreatorOut'
     BATTLE_TYPE = 'type'
+    WINNER_IF_DRAW = 'winnerIfDraw'
+    SWITCH_TEAMS = 'switchBattleTeams'
+
+
+class PREBATTLE_PROPERTY_NAME(object):
+    TEAMS_POSITIONS = 'teamsPositions'
 
 
 class PREBATTLE_RESTRICTION(object):
@@ -248,12 +252,13 @@ class PREBATTLE_RESTRICTION(object):
     VEHICLE_IN_PREMIUM_IGR_ONLY = 'vehicle/inPremiumIgrOnly'
     VEHICLE_NOT_SUPPORTED = 'vehicle/not_supported'
     VEHICLE_EPIC_ONLY = 'vehicle/epic_only'
-    VEHICLE_BOB_ONLY = 'vehicle/bob_only'
     VEHICLE_ROTATION_GROUP_LOCKED = 'vehicle/rotationGroupLocked'
     UNSUITABLE_VEHICLE_FOR_BATTLE_ROYALE = 'vehicle/notForBattleRoyaleMode'
+    VEHICLE_TOO_HEAVY = 'vehicle/tooHeavy'
     CREW_NOT_FULL = 'crew/notFull'
     UNIT_NOT_FULL = 'squad/notFull'
     TUTORIAL_NOT_FINISHED = 'tutorial/notFinished'
+    EVENT_AFK_BAN = 'event/afk/ban'
     SERVER_LIMITS = (LIMIT_MIN_COUNT,
      LIMIT_MAX_COUNT,
      LIMIT_LEVEL,
@@ -280,7 +285,8 @@ class PREBATTLE_RESTRICTION(object):
      VEHICLE_IGR_RENTALS_IS_OVER,
      VEHICLE_IN_PREMIUM_IGR_ONLY,
      VEHICLE_NOT_SUPPORTED,
-     CREW_NOT_FULL)
+     CREW_NOT_FULL,
+     VEHICLE_TOO_HEAVY)
 
     @classmethod
     def getVehClassRestrictions(cls):
@@ -340,8 +346,11 @@ class UNIT_RESTRICTION(object):
     UNIT_IS_IN_PLAYERS_MATCHING = 42
     UNIT_NOT_FULL = 43
     UNSUITABLE_VEHICLE = 44
-    WHITE_TIGER_IS_FORBIDDEN = 45
-    EVENT_TICKETS_SHORTAGE = 46
+    VEHICLE_TOO_HEAVY = 45
+    EVENT_UNIT_DIFFICULTY_LEVEL_INACTIVE = 46
+    EVENT_UNIT_DIFFICULTY_LEVEL_NOT_VALID = 47
+    EVENT_UNIT_SQUAD_DIFFICULTY_LEVEL_NOT_ENABLE = 48
+    EVENT_AFK_BAN = 49
 
 
 class PRE_QUEUE_RESTRICTION(object):

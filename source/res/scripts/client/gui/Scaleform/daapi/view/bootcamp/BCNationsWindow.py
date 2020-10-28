@@ -3,15 +3,16 @@
 from constants import IS_CHINA
 from gui.Scaleform.daapi.view.meta.BCNationsWindowMeta import BCNationsWindowMeta
 from bootcamp.Bootcamp import g_bootcamp
-from bootcamp.statistic.decorators import loggerTarget, loggerEntry, simpleLog
-from bootcamp.statistic.logging_constants import BC_LOG_KEYS
+from uilogging.decorators import loggerTarget, loggerEntry, simpleLog
+from uilogging.bootcamp.constants import BC_LOG_KEYS
+from uilogging.bootcamp.loggers import BootcampUILogger
 from debug_utils import LOG_ERROR
 from gui.impl import backport
 from gui.impl.gen import R
 from nations import INDICES as NATIONS_INDICES, MAP as NATIONS_MAP
 from PlayerEvents import g_playerEvents
 
-@loggerTarget(logKey=BC_LOG_KEYS.BC_NATION_SELECT)
+@loggerTarget(logKey=BC_LOG_KEYS.BC_HANGAR_HINTS, loggerCls=BootcampUILogger)
 class BCNationsWindow(BCNationsWindowMeta):
 
     def onTryClosing(self):
@@ -20,7 +21,7 @@ class BCNationsWindow(BCNationsWindowMeta):
     def onNationShow(self, nationId):
         g_bootcamp.previewNation(NATIONS_INDICES[nationId])
 
-    @simpleLog(argKey='nationId', argMap=NATIONS_MAP)
+    @simpleLog(argsIndex=0, argMap=NATIONS_MAP)
     def onNationSelected(self, nationId):
         varID = self._content.get('resultVarID')
         if varID:

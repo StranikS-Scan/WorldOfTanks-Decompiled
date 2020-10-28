@@ -3,6 +3,7 @@
 import weakref
 import typing
 from account_helpers import getAccountDatabaseID
+from constants import ARENA_BONUS_TYPE
 from debug_utils import LOG_WARNING
 from gui.battle_control.arena_info import squad_finder
 from gui.battle_results.reusable import sort_keys
@@ -10,14 +11,11 @@ from gui.battle_results.reusable.avatars import AvatarsInfo
 from gui.battle_results.reusable.common import CommonInfo
 from gui.battle_results.reusable.personal import PersonalInfo
 from gui.battle_results.reusable.players import PlayersInfo
-from gui.battle_results.reusable.economics import EconomicsInfo
-from gui.battle_results.reusable.progress import ProgressInfo
 from gui.battle_results.reusable.shared import VehicleDetailedInfo, TeamBasesInfo
 from gui.battle_results.reusable.shared import VehicleSummarizeInfo
 from gui.battle_results.reusable.vehicles import VehiclesInfo
-from gui.battle_results.br_constants import BattleResultsRecord as _RECORD
-from gui.battle_results.br_constants import PlayerTeamResult as _TEAM_RESULT
-from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD, PREMIUM_STATE
+from gui.battle_results.settings import PLAYER_TEAM_RESULT as _TEAM_RESULT
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -55,8 +53,6 @@ def createReusableInfo(results):
     record = _fetchRecord(results, _RECORD.PERSONAL)
     if record is not None:
         personalInfo = _checkInfo(PersonalInfo(record), _RECORD.PERSONAL)
-        economicsInfo = _checkInfo(EconomicsInfo(record), _RECORD.PERSONAL)
-        progressInfo = _checkInfo(ProgressInfo(record), _RECORD.PERSONAL)
     else:
         return
     record = _fetchRecord(results, _RECORD.PLAYERS)
@@ -75,28 +71,29 @@ def createReusableInfo(results):
     else:
         return
     if not unpackedRecords:
-        return ReusableInfo(arenaUniqueID, commonInfo, personalInfo, playersInfo, vehiclesInfo, avatarsInfo, economicsInfo, progressInfo)
+        return _ReusableInfo(arenaUniqueID, commonInfo, personalInfo, playersInfo, vehiclesInfo, avatarsInfo)
     else:
         LOG_WARNING('Records are not valid in the results. Perhaps, client and server versions of battle_results.g_config are different.', *[ (record, results[record]) for record in unpackedRecords ])
         return
 
 
-class ReusableInfo(object):
-    __slots__ = ('__arenaUniqueID', '__clientIndex', '__squadFinder', '__economics', '__common', '__personal', '__players', '__vehicles', '__avatars', '__progress', '__battlePassProgress')
+class _ReusableInfo(object):
+    __slots__ = ('__arenaUniqueID', '__clientIndex', '__premiumState', '__common', '__personal', '__players', '__vehicles', '__avatars', '__squadFinder', '__premiumPlusState', '__isAddXPBonusApplied', '__battlePassProgress')
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, arenaUniqueID, common, personal, players, vehicles, avatars, econimics, progress):
-        super(ReusableInfo, self).__init__()
+    def __init__(self, arenaUniqueID, common, personal, players, vehicles, avatars):
+        super(_ReusableInfo, self).__init__()
         self.__arenaUniqueID = arenaUniqueID
         self.__clientIndex = 0
+        self.__premiumState = PREMIUM_STATE.NONE
+        self.__premiumPlusState = PREMIUM_STATE.NONE
+        self.__isAddXPBonusApplied = False
         self.__common = common
         self.__personal = personal
         self.__players = players
         self.__vehicles = vehicles
         self.__avatars = avatars
-        self.__economics = econimics
-        self.__progress = progress
         self.__squadFinder = squad_finder.createSquadFinder(self.__common.arenaVisitor)
         self.__findSquads()
         self.__battlePassProgress = {}
@@ -112,6 +109,58 @@ class ReusableInfo(object):
     @clientIndex.setter
     def clientIndex(self, index):
         self.__clientIndex = index
+
+    @property
+    def hasAnyPremiumInPostBattle(self):
+        return self.__personal.hasAnyPremium
+
+    @property
+    def premiumState(self):
+        return self.__premiumState
+
+    @premiumState.setter
+    def premiumState(self, state):
+        self.__premiumState = state
+
+    @property
+    def premiumPlusState(self):
+        return self.__premiumPlusState
+
+    @premiumPlusState.setter
+    def premiumPlusState(self, state):
+        self.__premiumPlusState = state
+
+    @property
+    def isPremiumBought(self):
+        return self.__premiumState & PREMIUM_STATE.BOUGHT > 0
+
+    @property
+    def isPremiumPlusBought(self):
+        return self.__premiumPlusState & PREMIUM_STATE.BOUGHT > 0
+
+    @property
+    def isPostBattlePremium(self):
+        return self.__personal.isPremium or self.isPremiumBought
+
+    @property
+    def isPostBattlePremiumPlus(self):
+        return self.__personal.isPremiumPlus or self.isPremiumPlusBought
+
+    @property
+    def isAddXPBonusApplied(self):
+        return self.__personal.isAddXPBonusApplied
+
+    @isAddXPBonusApplied.setter
+    def isAddXPBonusApplied(self, state):
+        self.__personal.isAddXPBonusApplied = state
+
+    @property
+    def canUpgradeToPremium(self):
+        return self.__premiumState & PREMIUM_STATE.BUY_ENABLED > 0 and self.__premiumState & PREMIUM_STATE.HAS_ALREADY == 0 and not self.isPostBattlePremium and self.__common.arenaBonusType in (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.EPIC_RANDOM, ARENA_BONUS_TYPE.EPIC_BATTLE)
+
+    @property
+    def canUpgradeToPremiumPlus(self):
+        return self.__premiumPlusState & PREMIUM_STATE.BUY_ENABLED > 0 and self.__premiumPlusState & PREMIUM_STATE.HAS_ALREADY == 0 and not self.isPostBattlePremiumPlus and self.__common.arenaBonusType in (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.EPIC_RANDOM, ARENA_BONUS_TYPE.EPIC_BATTLE)
 
     @property
     def canResourceBeFaded(self):
@@ -134,10 +183,6 @@ class ReusableInfo(object):
         return self.__personal
 
     @property
-    def economics(self):
-        return self.__economics
-
-    @property
     def players(self):
         return self.__players
 
@@ -148,10 +193,6 @@ class ReusableInfo(object):
     @property
     def avatars(self):
         return self.__avatars
-
-    @property
-    def progress(self):
-        return self.__progress
 
     @property
     def battlePassProgress(self):
@@ -168,9 +209,6 @@ class ReusableInfo(object):
 
     def isPersonalTeamWin(self):
         return self.__common.winnerTeam == self.__personal.avatar.team
-
-    def getWinnerTeam(self):
-        return self.__common.winnerTeam
 
     def getPersonalTeam(self):
         return self.__personal.avatar.team
@@ -221,8 +259,10 @@ class ReusableInfo(object):
             enemies = []
             for (vehicleID, _), data in details.iteritems():
                 vehicleInfo = getVehicleInfo(vehicleID)
-                if not vehicleInfo.intCD:
-                    intCD = vehicleID
+                intCD = None
+                if not vehicleInfo.intCD and not vehicleInfo.accountDBID:
+                    if getBotInfo(vehicleID) is not None:
+                        intCD = vehicleID
                 else:
                     intCD = vehicleInfo.intCD
                 if vehicleInfo.accountDBID == playerDBID or vehicleInfo.team == playerTeam:
@@ -233,7 +273,8 @@ class ReusableInfo(object):
                     botInfo = getBotInfo(vehicleID)
                     botName = botInfo.realName if botInfo else ''
                     playerInfo = makePlayerInfo(realName=botName, fakeName=botName)
-                sortable = VehicleDetailedInfo.makeForEnemy(vehicleID, getItemByCD(intCD), playerInfo, data, vehicleInfo.deathReason, vehicleInfo.isTeamKiller)
+                vehicle = getItemByCD(intCD) if intCD else None
+                sortable = VehicleDetailedInfo.makeForEnemy(vehicleID, vehicle, playerInfo, data, vehicleInfo.deathReason, vehicleInfo.isTeamKiller)
                 if not sortable.haveInteractionDetails():
                     continue
                 if (vehicleID, intCD) not in totalSortable:
@@ -246,6 +287,7 @@ class ReusableInfo(object):
             yield ((bases,), sorted(enemies, key=sort_keys.VehicleInfoSortKey))
 
         yield (totalBases, sorted(totalSortable.itervalues(), key=sort_keys.VehicleInfoSortKey))
+        return
 
     def getPersonalVehiclesInfo(self, result):
         player = weakref.proxy(self.getPlayerInfo())
@@ -315,21 +357,6 @@ class ReusableInfo(object):
                 yield enemy
 
         return (__allies(), __enemies())
-
-    def getTeamIterator(self, result, team, sortKey=sort_keys.TeamItemSortKey):
-        teammates = []
-        getAvatarInfo = self.__avatars.getAvatarInfo
-        for dbID, player in self.__players.getPlayerInfoIterator():
-            info = self.__vehicles.getVehicleSummarizeInfo(player, result)
-            info.addAvatarInfo(weakref.proxy(getAvatarInfo(dbID)))
-            if team == player.team:
-                teammates.append(info)
-
-        def __teammates():
-            for player in sorted(teammates, key=sortKey):
-                yield player
-
-        return __teammates()
 
     def getPersonalSquadFlags(self):
         playerInfo = self.getPlayerInfo()

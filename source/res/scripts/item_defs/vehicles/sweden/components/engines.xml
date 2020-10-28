@@ -45,6 +45,9 @@
     <Saab_Scania_DS14_Alt_3>	47	</Saab_Scania_DS14_Alt_3>
     <AVS_1195A>	48	</AVS_1195A>
     <Development_Engine>	65000	</Development_Engine>
+    <Saab_Scania_DSI_14B_HELL>	23	</Saab_Scania_DSI_14B_HELL>
+    <Saab_Scania_DS14_Alt_5B_HELL>	34	</Saab_Scania_DS14_Alt_5B_HELL>
+    <DB_605_HELL>	37	</DB_605_HELL>
   </ids>
   <shared>
     <Daimler_Benz_m_1910>
@@ -777,9 +780,59 @@
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	4	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <notInShop>	true	</notInShop>
       <rpm_min>	376	</rpm_min>
       <rpm_max>	2072	</rpm_max>
     </Development_Engine>
+    <Saab_Scania_DSI_14B_HELL>
+      <userString>	#sweden_vehicles:Saab_Scania_DSI_14B	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	80500	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	590	</power>
+      <weight>	1700	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	362	</rpm_min>
+      <rpm_max>	2112	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Saab_Scania_DSI_14B_HELL>
+    <Saab_Scania_DS14_Alt_5B_HELL>
+      <userString>	#sweden_vehicles:Saab_Scania_DS14_Alt_5B	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	43300	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	550	</power>
+      <weight>	1230	</weight>
+      <maxHealth>	285	</maxHealth>
+      <maxRegenHealth>	142	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	373	</rpm_min>
+      <rpm_max>	2080	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Saab_Scania_DS14_Alt_5B_HELL>
+    <DB_605_HELL>
+      <userString>	#sweden_vehicles:DB_605	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	35600	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	500	</power>
+      <weight>	756	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	312	</rpm_min>
+      <rpm_max>	2801	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </DB_605_HELL>
   </shared>
 </engines.xml>

@@ -6,6 +6,8 @@
     <Heavy>	204	</Heavy>
     <Large>	205	</Large>
     <Large_SH>	207	</Large_SH>
+    <Large_Halloween_event>	206	</Large_Halloween_event>
+    <Average_Halloween_event_turret_2>	208	</Average_Halloween_event_turret_2>
   </ids>
   <shared>
     <Small>
@@ -57,5 +59,22 @@
       <maxRegenHealth>	80	</maxRegenHealth>
       <repairCost>	0	</repairCost>
     </Large_SH>
+    <Large_Halloween_event>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	300	</weight>
+      <maxHealth>	300	</maxHealth>
+      <maxRegenHealth>	200	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </Large_Halloween_event>
+    <Average_Halloween_event_turret_2>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Average_Halloween_event_turret_2>
   </shared>
 </fuelTanks.xml>

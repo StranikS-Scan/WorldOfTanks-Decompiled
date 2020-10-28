@@ -2,11 +2,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/battle_entry.py
 import weakref
 import BigWorld
+from frameworks.wulf import WindowLayer
 from gui import DEPTH_OF_Battle
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
 from gui.Scaleform.daapi.settings.config import BATTLE_TOOLTIPS_BUILDERS_PATHS
 from gui.Scaleform.flash_wrapper import InputKeyMode
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.tooltip_mgr import ToolTip
 from gui.Scaleform.framework.application import AppEntry, DAAPIRootBridge
 from gui.Scaleform.framework.managers import LoaderManager, ContainerManager
@@ -26,6 +26,7 @@ from gui.Scaleform.managers.TweenSystem import TweenManager
 from gui.Scaleform.managers.UtilsManager import UtilsManager
 from gui.Scaleform.managers.battle_input import BattleGameInputMgr
 from gui.Scaleform.managers.voice_chat import BattleVoiceChatManager
+from gui.Scaleform.managers.fade_manager import FadeManager
 from gui.impl.gen import R
 from gui.shared import EVENT_BUS_SCOPE
 from helpers import uniprof
@@ -33,8 +34,8 @@ from skeletons.gui.app_loader import GuiGlobalSpaceID
 
 class TopWindowContainer(PopUpContainer):
 
-    def __init__(self, viewType, app, manager=None):
-        super(TopWindowContainer, self).__init__(viewType, manager)
+    def __init__(self, layer, app, manager=None):
+        super(TopWindowContainer, self).__init__(layer, manager)
         self.__app = app
 
     def clear(self):
@@ -109,7 +110,7 @@ class BattleEntry(AppEntry):
         return LoaderManager(weakref.proxy(self))
 
     def _createContainerManager(self):
-        return ContainerManager(self._loaderMgr, DefaultContainer(ViewTypes.DEFAULT), DefaultContainer(ViewTypes.CURSOR), PopUpContainer(ViewTypes.WINDOW), TopWindowContainer(ViewTypes.TOP_WINDOW, weakref.proxy(self)), DefaultContainer(ViewTypes.SERVICE_LAYOUT), PopUpContainer(ViewTypes.OVERLAY))
+        return ContainerManager(self._loaderMgr, DefaultContainer(WindowLayer.VIEW), DefaultContainer(WindowLayer.CURSOR), PopUpContainer(WindowLayer.WINDOW), PopUpContainer(WindowLayer.FULLSCREEN_WINDOW), TopWindowContainer(WindowLayer.TOP_WINDOW, weakref.proxy(self)), DefaultContainer(WindowLayer.SERVICE_LAYOUT), PopUpContainer(WindowLayer.OVERLAY))
 
     def _createToolTipManager(self):
         tooltip = ToolTip(BATTLE_TOOLTIPS_BUILDERS_PATHS, {}, GuiGlobalSpaceID.BATTLE_LOADING)
@@ -154,6 +155,9 @@ class BattleEntry(AppEntry):
     def _createGraphicsOptimizationManager(self):
         return GraphicsOptimizationManager(config=BATTLE_OPTIMIZATION_CONFIG)
 
+    def _createFadeManager(self):
+        return FadeManager()
+
     def _setup(self):
         self.component.wg_inputKeyMode = InputKeyMode.IGNORE_RESULT
         self.component.position.z = DEPTH_OF_Battle
@@ -168,4 +172,4 @@ class BattleEntry(AppEntry):
         pass
 
     def __getCursorFromContainer(self):
-        return self._containerMgr.getView(ViewTypes.CURSOR) if self._containerMgr is not None else None
+        return self._containerMgr.getView(WindowLayer.CURSOR) if self._containerMgr is not None else None

@@ -11,6 +11,7 @@ import math_utils
 _ENABLE_VALUE_TRACKER = False
 _ENABLE_VALUE_TRACKER_ENGINE = False
 _ENABLE_PIXIE_TRACKER = False
+_VEHICLE_DIRECTION_THRESHOLD = 0.1
 
 class CustomEffectManager(Component):
     _LEFT_TRACK = 0
@@ -127,9 +128,9 @@ class CustomEffectManager(Component):
         appearance = self.__appearance
         self.__variableArgs['speed'] = vehicleSpeed
         self.__variableArgs['isPC'] = self.__vehicle.isPlayerVehicle
-        if vehicleSpeed > 0.01:
+        if vehicleSpeed > _VEHICLE_DIRECTION_THRESHOLD:
             direction = 1
-        elif vehicleSpeed < -0.01:
+        elif vehicleSpeed < -_VEHICLE_DIRECTION_THRESHOLD:
             direction = -1
         else:
             direction = 0

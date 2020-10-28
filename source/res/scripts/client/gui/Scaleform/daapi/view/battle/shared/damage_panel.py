@@ -13,7 +13,7 @@ from gui.Scaleform.daapi.view.battle.shared.formatters import formatHealthProgre
 from gui.Scaleform.daapi.view.battle.shared.timers_common import PythonTimer
 from gui.Scaleform.daapi.view.meta.DamagePanelMeta import DamagePanelMeta
 from gui.Scaleform.flash_wrapper import InputKeyMode
-from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
+from gui.Scaleform.genConsts.LAYER_NAMES import LAYER_NAMES
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control import vehicle_getter
 from gui.battle_control.battle_constants import ALL_VEHICLE_GUI_ITEMS, AUTO_ROTATION_FLAG
@@ -26,7 +26,9 @@ _logger = logging.getLogger(__name__)
 _STATE_HANDLERS = {VEHICLE_VIEW_STATE.HEALTH: '_updateHealth',
  VEHICLE_VIEW_STATE.SPEED: 'as_updateSpeedS',
  VEHICLE_VIEW_STATE.CRUISE_MODE: 'as_setCruiseModeS',
- VEHICLE_VIEW_STATE.FIRE: 'as_setFireInVehicleS',
+ VEHICLE_VIEW_STATE.FIRE: '_updateVehicleFire',
+ VEHICLE_VIEW_STATE.FIRE_WITH_MESSAGE: '_updateVehicleAuraFire',
+ VEHICLE_VIEW_STATE.CAN_BE_DAMAGED: '_updateVehicleCanBeDamaged',
  VEHICLE_VIEW_STATE.AUTO_ROTATION: '_setAutoRotation',
  VEHICLE_VIEW_STATE.DESTROYED: '_updateDestroyed',
  VEHICLE_VIEW_STATE.CREW_DEACTIVATED: '_updateCrewDeactivated',
@@ -110,7 +112,7 @@ class _PythonTimer(PythonTimer, _IStatusAnimPlayer):
 class _TankIndicatorCtrl(object):
 
     def __init__(self, app):
-        self.__component = GUI.WGTankIndicatorFlash(app.movie, '_level0.root.{}.main.damagePanel.tankIndicator'.format(APP_CONTAINERS_NAMES.VIEWS))
+        self.__component = GUI.WGTankIndicatorFlash(app.movie, '_level0.root.{}.main.damagePanel.tankIndicator'.format(LAYER_NAMES.VIEWS))
         self.__component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
         self.__app = app
         self.__vId = None
@@ -162,6 +164,9 @@ class DamagePanel(DamagePanelMeta):
         self.__statusAnimPlayers = {}
         self.__initialized = False
         self.__isWheeledTech = False
+        self.__isVehFire = False
+        self.__ifVehAuraFire = False
+        self.__isVehCanBeDamaged = True
         return
 
     def __del__(self):
@@ -277,15 +282,10 @@ class DamagePanel(DamagePanelMeta):
             self.as_setAutoRotationS(isOn)
 
     def _switching(self, _):
-        respawn = self.sessionProvider.dynamic.respawn
-        if self.sessionProvider.arenaVisitor.gui.isEventBattle and self.sessionProvider.shared.vehicleState.isInPostmortem and respawn is not None and respawn.playerLives > 0:
-            return
-        else:
-            self.as_resetS()
-            if self.__isWheeledTech:
-                self.__isWheeledTech = False
-            self.hideStatusImmediate()
-            return
+        self.as_resetS()
+        if self.__isWheeledTech:
+            self.__isWheeledTech = False
+        self.hideStatusImmediate()
 
     def _updateStun(self, stunInfo):
         if STATUS_ID.STUN in self.__statusAnimPlayers:
@@ -317,6 +317,19 @@ class DamagePanel(DamagePanelMeta):
         else:
             _logger.warning('Animations times are not initialized, inspire status can be lost: %r', values)
         return
+
+    def _updateVehicleFire(self, isInFire):
+        self.__isVehFire = isInFire
+        self.as_setFireInVehicleS((isInFire or self.__ifVehAuraFire) and self.__isVehCanBeDamaged)
+
+    def _updateVehicleAuraFire(self, isInFire):
+        self.__ifVehAuraFire = isInFire
+        self.as_setFireInVehicleS((isInFire or self.__isVehFire) and self.__isVehCanBeDamaged)
+
+    def _updateVehicleCanBeDamaged(self, canBeDamaged):
+        self.__isVehCanBeDamaged = canBeDamaged
+        if self.__ifVehAuraFire or self.__isVehFire:
+            self.as_setFireInVehicleS((self.__ifVehAuraFire or self.__isVehFire) and self.__isVehCanBeDamaged)
 
     def __changeVehicleSetting(self, tag, entityName):
         ctrl = self.sessionProvider.shared.equipments
@@ -358,6 +371,9 @@ class DamagePanel(DamagePanelMeta):
             inDegrees = None
         self.__isAutoRotationOn = True
         self.__isAutoRotationShown = False
+        self.__isVehFire = False
+        self.__ifVehAuraFire = False
+        self.__isVehCanBeDamaged = True
         if vehicle.isPlayerVehicle or BigWorld.player().isObserver():
             flag = vehicle_getter.getAutoRotationFlag(vTypeDesc)
             if flag != AUTO_ROTATION_FLAG.IGNORE_IN_UI:
@@ -365,11 +381,10 @@ class DamagePanel(DamagePanelMeta):
                 self.__isAutoRotationShown = True
         self.__isWheeledTech = vehicle.isWheeledTech
         self.__maxHealth = vehicle.maxHealth
-        isEventBoss = 'event_boss' in vType.tags
         health = vehicle.health
         healthStr = formatHealthProgress(health, self.__maxHealth)
         healthProgress = normalizeHealthPercent(health, self.__maxHealth)
-        self.as_setupS(healthStr, healthProgress, vehicle_getter.getVehicleIndicatorType(vTypeDesc), vehicle_getter.getCrewMainRolesWithIndexes(vType.crewRoles), inDegrees, vehicle_getter.hasTurretRotator(vTypeDesc), self.__isWheeledTech, self.__isAutoRotationOn, isEventBoss)
+        self.as_setupS(healthStr, healthProgress, vehicle_getter.getVehicleIndicatorType(vTypeDesc), vehicle_getter.getCrewMainRolesWithIndexes(vType.crewRoles), inDegrees, vehicle_getter.hasTurretRotator(vTypeDesc), self.__isWheeledTech, self.__isAutoRotationOn)
         if self.__isWheeledTech:
             self.as_setupWheeledS(vTypeDesc.chassis.generalWheelsAnimatorConfig.getNonTrackWheelsCount())
         self._updatePlayerInfo(vehicle.id)

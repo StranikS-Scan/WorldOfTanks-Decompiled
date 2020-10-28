@@ -20,7 +20,7 @@ class IStatsComposer(object):
         raise NotImplementedError
 
     @staticmethod
-    def onShowResults(arenaUniqueID, isPostbattle20Enabled):
+    def onShowResults(arenaUniqueID):
         raise NotImplementedError
 
     @staticmethod
@@ -38,6 +38,7 @@ class StatsComposer(IStatsComposer):
         self._block.addNextComponent(text)
         self._block.addNextComponent(templates.VEHICLE_PROGRESS_STATS_BLOCK.clone())
         self._block.addNextComponent(templates.QUESTS_PROGRESS_STATS_BLOCK.clone())
+        self._block.addNextComponent(templates.DOG_TAGS_PROGRESS_STATS_BLOCK.clone())
         self._block.addNextComponent(common)
         self._block.addNextComponent(personal)
         self._block.addNextComponent(teams)
@@ -68,8 +69,8 @@ class StatsComposer(IStatsComposer):
         return animation
 
     @staticmethod
-    def onShowResults(arenaUniqueID, isPostbattle20Enabled):
-        event_dispatcher.showBattleResultsWindow(arenaUniqueID, isPostbattle20Enabled)
+    def onShowResults(arenaUniqueID):
+        return event_dispatcher.showBattleResultsWindow(arenaUniqueID)
 
     @staticmethod
     def onResultsPosted(arenaUniqueID):
@@ -172,8 +173,8 @@ class BattleRoyaleStatsComposer(IStatsComposer):
         pass
 
     @staticmethod
-    def onShowResults(arenaUniqueID, isPostbattle20Enabled):
-        pass
+    def onShowResults(arenaUniqueID):
+        return None
 
     @staticmethod
     def onResultsPosted(arenaUniqueID):
@@ -201,11 +202,39 @@ class BootcampStatsComposer(IStatsComposer):
 
     @staticmethod
     def onShowResults(arenaUniqueID):
-        event_dispatcher.showBattleResultsWindow(arenaUniqueID)
+        return event_dispatcher.showBattleResultsWindow(arenaUniqueID)
 
     @staticmethod
     def onResultsPosted(arenaUniqueID):
         event_dispatcher.notifyBattleResultsPosted(arenaUniqueID)
+
+
+class EventStatsComposer(IStatsComposer):
+    __slots__ = ('_block',)
+
+    def __init__(self, _):
+        super(EventStatsComposer, self).__init__()
+        self._block = templates.EVENT_TOTAL_RESULTS_BLOCK.clone()
+
+    def clear(self):
+        self._block.clear()
+
+    def setResults(self, results, reusable):
+        self._block.setRecord(results, reusable)
+
+    def getVO(self):
+        return self._block.getVO()
+
+    def popAnimation(self):
+        return None
+
+    @staticmethod
+    def onShowResults(arenaUniqueID):
+        pass
+
+    @staticmethod
+    def onResultsPosted(arenaUniqueID):
+        event_dispatcher.showHalloweenResults(arenaUniqueID)
 
 
 def createComposer(reusable):
@@ -226,6 +255,8 @@ def createComposer(reusable):
         composer = EpicStatsComposer(reusable)
     elif bonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
         composer = BattleRoyaleStatsComposer(reusable)
+    elif bonusType == ARENA_BONUS_TYPE.EVENT_BATTLES:
+        composer = EventStatsComposer(reusable)
     else:
         composer = RegularStatsComposer(reusable)
     return composer

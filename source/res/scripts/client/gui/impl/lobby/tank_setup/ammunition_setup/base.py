@@ -3,7 +3,7 @@
 from async import async, await
 from frameworks.wulf import ViewStatus
 from gui.impl.backport import BackportTooltipWindow
-from gui.impl.backport.backport_context_menu import BackportContextMenuContent
+from gui.impl.backport.backport_context_menu import BackportContextMenuWindow
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.tank_setup.ammunition_setup_view_model import AmmunitionSetupViewModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
@@ -37,11 +37,14 @@ class BaseAmmunitionSetupView(ViewImpl):
                 return window
         return super(BaseAmmunitionSetupView, self).createToolTip(event)
 
-    def createContextMenuContent(self, event):
-        if event.contentID != R.views.common.BackportContextMenu():
-            super(BaseAmmunitionSetupView, self).createContextMenuContent(event)
-        contextMenuData = self._getBackportContextMenuData(event)
-        return BackportContextMenuContent(contextMenuData) if contextMenuData is not None else super(BaseAmmunitionSetupView, self).createContextMenuContent(event)
+    def createContextMenu(self, event):
+        if event.contentID == R.views.common.BackportContextMenu():
+            contextMenuData = self._getBackportContextMenuData(event)
+            if contextMenuData is not None:
+                window = BackportContextMenuWindow(contextMenuData, self.getParentWindow())
+                window.load()
+                return window
+        return super(BaseAmmunitionSetupView, self).createContextMenuContent(event)
 
     def _onLoading(self, **kwargs):
         super(BaseAmmunitionSetupView, self)._onLoading(**kwargs)
@@ -97,6 +100,8 @@ class BaseAmmunitionSetupView(ViewImpl):
     @async
     def _onPanelSelected(self, args):
         sectionName, slotID = args.get('selectedSection'), int(args.get('selectedSlot'))
+        if self._vehItem.getItem().isOnlyForEventBattles and sectionName == TankSetupConstants.SHELLS:
+            return
         if sectionName:
             switch = yield await(self._tankSetup.switch(sectionName, slotID))
             if switch and self.viewStatus == ViewStatus.LOADED:

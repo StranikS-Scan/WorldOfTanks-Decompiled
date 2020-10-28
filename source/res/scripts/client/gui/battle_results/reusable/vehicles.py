@@ -29,8 +29,6 @@ def _getVehiclesGenerator(vehicles):
                 continue
             accountDBID = item.get('accountDBID', 0L)
             intCD = item['typeCompDescr']
-            if not intCD:
-                continue
             info = _VehicleShortInfo(intCD, item.get('team', 0), accountDBID, item.get('deathReason', DEATH_REASON_ALIVE), item.get('isTeamKiller', False))
             items.append(info)
 

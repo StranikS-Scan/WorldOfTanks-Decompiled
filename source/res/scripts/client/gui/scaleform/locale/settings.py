@@ -348,7 +348,10 @@ class SETTINGS(object):
     GAME_ENABLEDELAYPOSTEFFECT = '#settings:game/enableDelayPostEffect'
     GAME_SHOWVEHICLESCOUNTER = '#settings:game/showVehiclesCounter'
     GAME_SHOWMARKSONGUN = '#settings:game/showMarksOnGun'
+    GAME_SHOWDOGTAG = '#settings:game/showDogTag'
     GAME_ANONYMIZER = '#settings:game/anonymizer'
+    GAME_SHOWVICTIMSDOGTAG = '#settings:game/showVictimsDogTag'
+    GAME_SHOWDOGTAGTOKILLER = '#settings:game/showDogTagToKiller'
     GAME_FIELDSET_HEADERCHAT = '#settings:game/fieldset/headerChat'
     GAME_FIELDSET_HEADERBATTLECOMMUNICATION = '#settings:game/fieldset/headerBattleCommunication'
     GAME_FIELDSET_HEADERGAMEPLAY = '#settings:game/fieldset/headerGameplay'
@@ -370,10 +373,10 @@ class SETTINGS(object):
     GAME_PLAYERSPANELSTATE_SHORT = '#settings:game/playersPanelState/short'
     GAME_PLAYERSPANELSTATE_MEDIUM = '#settings:game/playersPanelState/medium'
     GAME_PLAYERSPANELSTATE_LARGE = '#settings:game/playersPanelState/large'
-    BATTLECOMM_ENABLEBATTLECOMM = '#settings:battlecomm/enableBattleComm'
     BATTLECOMM_SHOWCOMMINPLAYERLIST = '#settings:battlecomm/showCommInPlayerlist'
     BATTLECOMM_SHOWSTICKYMARKERS = '#settings:battlecomm/showStickyMarkers'
     BATTLECOMM_SHOWCALLOUTMESSAGES = '#settings:battlecomm/showCalloutMessages'
+    BATTLECOMM_SHOWLOCATIONMARKERS = '#settings:battlecomm/showLocationMarkers'
     BATTLECOMM_SHOWMARKERS = '#settings:battlecomm/showMarkers'
     CURSOR_ARCADETITLE = '#settings:cursor/ArcadeTitle'
     CURSOR_SNIPPERTITLE = '#settings:cursor/SnipperTitle'
@@ -684,7 +687,6 @@ class SETTINGS(object):
     COLORSETTINGS_VIEW_BEFORE = '#settings:colorSettings/view/before'
     COLORSETTINGS_VIEW_AFTER = '#settings:colorSettings/view/after'
     UNEQUIP_BUTTON = '#settings:unequip_button'
-    EVENTSETTINGDISABLED = '#settings:eventSettingDisabled'
     SOUNDS_ACOUSTICTYPE_ENUM = (SOUNDS_ACOUSTICTYPE_ACOUSTICS20,
      SOUNDS_ACOUSTICTYPE_ACOUSTICS51,
      SOUNDS_ACOUSTICTYPE_ACOUSTICS71,

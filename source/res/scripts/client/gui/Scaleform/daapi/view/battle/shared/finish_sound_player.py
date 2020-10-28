@@ -41,7 +41,6 @@ class FinishSoundPlayer(IBattleFieldListener, ITeamBasesListener, IAbstractPerio
 
     def setPeriod(self, period):
         self.__arenaPeriod = period
-        self.__checkTimeCondition()
 
     def setTotalTime(self, totalTime):
         self.__arenaTotalTime = totalTime

@@ -421,7 +421,6 @@ class DestructiblesManager(object):
             destrIndex, fallDirYaw, pitchConstr, fallSpeed = DestructiblesCache.decodeFallenTree(destData)
             _, collisionFlags = BigWorld.wg_getDestructibleFallPitchConstr(self.__spaceID, chunkID, destrIndex, fallDirYaw)
             self.__dropDestructible(chunkID, destrIndex, dmgType, fallDirYaw, pitchConstr, fallSpeed, isNeedAnimation, collisionFlags)
-            WWISE.WG_lightSoundRemove(self.__spaceID, chunkID, destrIndex)
         elif dmgType == DestructiblesCache.DESTR_TYPE_FRAGILE:
             destrIndex, isShotDamage = DestructiblesCache.decodeFragile(destData)
             self.__destroyFragile(chunkID, destrIndex, isNeedAnimation, isShotDamage)

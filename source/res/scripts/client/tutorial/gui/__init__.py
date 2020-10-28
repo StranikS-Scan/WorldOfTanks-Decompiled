@@ -61,10 +61,10 @@ class GUIProxy(object):
     def goToScene(self, sceneID):
         pass
 
-    def isViewPresent(self, viewType, criteria):
+    def isViewPresent(self, layer, criteria):
         return False
 
-    def closeView(self, viewType, criteria):
+    def closeView(self, layer, criteria):
         pass
 
     def playEffect(self, effectName, args):

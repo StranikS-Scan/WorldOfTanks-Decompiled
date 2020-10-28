@@ -2,13 +2,13 @@
 # Embedded file name: scripts/client/gui/impl/lobby/ranked/year_leaderboard_view.py
 from constants import CURRENT_REALM
 from dossiers2.ui.achievements import BADGES_BLOCK
-from frameworks.wulf import WindowFlags, ViewFlags, ViewSettings
+from frameworks.wulf import WindowFlags, ViewSettings
 from helpers import dependency
 from gui.impl.gen.view_models.views.lobby.ranked.year_leaderboard_view_model import YearLeaderboardViewModel
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.pub import ViewImpl
-from gui.impl.pub.lobby_window import LobbyWindow
+from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.shared.utils import getPlayerName
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from skeletons.gui.game_control import IRankedBattlesController
@@ -26,37 +26,30 @@ def _extractReward(rewardsData):
 
 
 class YearLeaderboardView(ViewImpl):
-    __slots__ = ('__closeCallback',)
+    __slots__ = ()
     __rankedController = dependency.descriptor(IRankedBattlesController)
     __itemsCache = dependency.descriptor(IItemsCache)
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, contentResID, *args):
-        self.__closeCallback = None
         settings = ViewSettings(contentResID)
         settings.model = YearLeaderboardViewModel()
-        settings.flags = ViewFlags.OVERLAY_VIEW
         settings.args = args
         super(YearLeaderboardView, self).__init__(settings)
-        return
 
     @property
     def viewModel(self):
         return super(YearLeaderboardView, self).getViewModel()
 
-    def _initialize(self, _, __, closeCallback, *args, **kwargs):
+    def _initialize(self, _, __, *args, **kwargs):
         super(YearLeaderboardView, self)._initialize(*args, **kwargs)
-        self.__closeCallback = closeCallback
         self.viewModel.onLeaderboardBtnClick += self.__onLeaderboardBtnClick
         self.__rankedController.getSoundManager().setOverlayStateOn()
 
     def _finalize(self):
         self.__rankedController.getSoundManager().setOverlayStateOff()
         self.viewModel.onLeaderboardBtnClick -= self.__onLeaderboardBtnClick
-        if self.__closeCallback is not None and callable(self.__closeCallback):
-            self.__closeCallback()
         super(YearLeaderboardView, self)._finalize()
-        return
 
     def _onLoading(self, playerPosition, rewardsData, *args, **kwargs):
         super(YearLeaderboardView, self)._onLoading(*args, **kwargs)
@@ -79,9 +72,12 @@ class YearLeaderboardView(ViewImpl):
         self.destroyWindow()
 
 
-class YearLeaderboardAwardWindow(LobbyWindow):
-    __slots__ = ()
+class YearLeaderboardAwardWindow(LobbyNotificationWindow):
+    __slots__ = ('__args',)
 
     def __init__(self, *args):
-        super(YearLeaderboardAwardWindow, self).__init__(content=YearLeaderboardView(R.views.lobby.ranked.YearLeaderboardView(), *args), wndFlags=WindowFlags.OVERLAY, decorator=None)
-        return
+        super(YearLeaderboardAwardWindow, self).__init__(content=YearLeaderboardView(R.views.lobby.ranked.YearLeaderboardView(), *args), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN)
+        self.__args = args
+
+    def isParamsEqual(self, *args):
+        return self.__args == args

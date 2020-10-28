@@ -28,7 +28,6 @@ OUTFIT_POOL_EMPTY_STUB = (None, None)
 DEFAULT_POSITION = (0, 0, 0)
 DEFAULT_ROTATION = (0, 0, 0)
 DEFAULT_SCALE = (1, 1, 1)
-DOUBLE_SIDED_DECAL = 0
 
 class CustomizationType(object):
     PAINT = 1
@@ -86,6 +85,11 @@ class ItemTags(object):
     PROGRESSION_REQUIRED = 'progression_required'
     ADD_NATIONAL_EMBLEM = 'addNationalEmblem'
     DISABLE_VERTICAL_MIRROR = 'disableVerticalMirror'
+
+
+class ProjectionDecalType(object):
+    POSITION = 0
+    TAGS = 1
 
 
 class ProjectionDecalDirectionTags(object):

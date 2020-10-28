@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/bootcamp/hints/HintsScenario.py
 import time
 import math
-from functools import partial
 import BattleReplay
 import BigWorld
 import Math
@@ -11,6 +10,7 @@ from bootcamp_shared import BOOTCAMP_BATTLE_ACTION
 from bootcamp.BootcampConstants import CONSUMABLE_ERROR_MESSAGES, HINT_TYPE
 from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP
 from debug_utils import LOG_ERROR
+from vehicle_systems.stricted_loading import makeCallbackWeak
 from HintsBase import HintBase, HINT_COMMAND
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -54,11 +54,17 @@ class HintAvoidAndDestroy(HintBase, TriggersManager.ITriggerListener):
         self.settingsCore.onSettingsChanged -= self.onSettingsChanged
         return
 
-    def __onModelLoaded(self, attachNode, scaleMatrix, translationMatrix, resourceRefs):
+    def __onModelLoaded(self, vehicleId, scaleMatrix, translationMatrix, resourceRefs):
+        from vehicle_systems.tankStructure import TankPartNames
         if self.__modelName not in resourceRefs.failedIDs:
             model = resourceRefs[self.__modelName]
             if not self.__active:
                 return
+            vehicle = BigWorld.entities.get(vehicleId)
+            if vehicle is None:
+                return
+            vehicle.appearance.onModelChanged += self.detachModels
+            attachNode = vehicle.model.node(TankPartNames.TURRET)
             if attachNode.isDangling or not self.__attaching:
                 return
             BigWorld.player().addModel(model)
@@ -78,9 +84,11 @@ class HintAvoidAndDestroy(HintBase, TriggersManager.ITriggerListener):
             servo = BigWorld.Servo(refinedMatrixProvider)
             model.addMotor(servo)
             self.__models.append({'model': model,
-             'servo': servo})
+             'servo': servo,
+             'vehicleId': vehicleId})
         else:
             LOG_ERROR('Could not load model %s' % self.__modelName)
+        return
 
     def update(self):
         resultCommand = None
@@ -118,7 +126,6 @@ class HintAvoidAndDestroy(HintBase, TriggersManager.ITriggerListener):
         self.detachModels()
 
     def attachModels(self):
-        from vehicle_systems.tankStructure import TankPartNames
         self.__attaching = True
         scale = Math.Vector3(4.0, 10.0, 10.0)
         offset = Math.Vector3(0.0, -6.5, 0.0)
@@ -131,8 +138,7 @@ class HintAvoidAndDestroy(HintBase, TriggersManager.ITriggerListener):
                 continue
             if vehicle.model is None:
                 continue
-            attachNode = vehicle.model.node(TankPartNames.TURRET)
-            BigWorld.loadResourceListBG((self.__modelName,), partial(self.__onModelLoaded, attachNode, scaleMatrix, translationMatrix))
+            BigWorld.loadResourceListBG((self.__modelName,), makeCallbackWeak(self.__onModelLoaded, vehicle.id, scaleMatrix, translationMatrix))
 
         return
 
@@ -141,8 +147,12 @@ class HintAvoidAndDestroy(HintBase, TriggersManager.ITriggerListener):
         for data in self.__models:
             data['model'].delMotor(data['servo'])
             BigWorld.player().delModel(data['model'])
+            vehicle = BigWorld.entities.get(data['vehicleId'])
+            if vehicle is not None:
+                vehicle.appearance.onModelChanged -= self.detachModels
 
         self.__models = []
+        return
 
     def onTriggerActivated(self, args):
         triggerType = args['type']

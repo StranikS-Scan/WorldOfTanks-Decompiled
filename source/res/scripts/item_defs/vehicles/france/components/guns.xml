@@ -96,6 +96,7 @@
     <_90mm_canon_DCA_45_AC_A_dualgun_SH>	10003	</_90mm_canon_DCA_45_AC_A_dualgun_SH>
     <_105mm_CN_105_57_SH>	10004	</_105mm_CN_105_57_SH>
     <_127mm_54_Model_1948_SH>	10005	</_127mm_54_Model_1948_SH>
+    <_90mm_F3M_Halloween>	111	</_90mm_F3M_Halloween>
     <_120mm_SA_46_AC_IGR>	60001	</_120mm_SA_46_AC_IGR>
     <_90mm_F3M_IGR>	60002	</_90mm_F3M_IGR>
     <_100mm_SA_47_IGR>	60003	</_100mm_SA_47_IGR>
@@ -2613,6 +2614,50 @@
         </_90mm_OE_mle_1924>
       </shots>
     </_90mm_F3M>
+    <_90mm_F3M_Halloween>
+      <userString>	#france_vehicles:_90mm_F3M_Halloween	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	190000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.46	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.38	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_main_mb	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -12.0 1.0 -12.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	8.0	</reloadTime>
+      <maxAmmo>	52	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	2200	</weight>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	80	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.377142857142857	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.12	</turretRotation>
+        <afterShot>	3.5	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_90mm_OFL_Halloween>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	1163	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	205 184	</piercingPower>
+        </_90mm_OFL_Halloween>
+      </shots>
+    </_90mm_F3M_Halloween>
     <_90mm_CN_90_F3>
       <userString>	#france_vehicles:_90mm_CN_90_F3	</userString>
       <tags></tags>

@@ -16,17 +16,9 @@ class CloseConfirmatorsHelper(object):
         return
 
     def getRestrictedEvents(self):
-        return [VIEW_ALIAS.VEHICLE_COMPARE,
-         VIEW_ALIAS.LOBBY_STORE,
-         VIEW_ALIAS.LOBBY_PROFILE,
-         VIEW_ALIAS.LOBBY_BARRACKS,
-         VIEW_ALIAS.LOBBY_MISSIONS,
-         VIEW_ALIAS.WIKI_VIEW,
-         VIEW_ALIAS.BROWSER_VIEW,
-         VIEW_ALIAS.VEHICLE_PREVIEW,
-         VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW,
+        return [events.ViewEventType.LOAD_VIEW,
+         events.ViewEventType.LOAD_GUI_IMPL_VIEW,
          events.ReferralProgramEvent.SHOW_REFERRAL_PROGRAM_WINDOW,
-         events.ViewEventType.LOAD_UB_VIEW,
          events.RallyWindowEvent.ON_CLOSE,
          events.PrbInvitesEvent.ACCEPT,
          events.PrbActionEvent.SELECT,
@@ -35,7 +27,18 @@ class CloseConfirmatorsHelper(object):
          events.TrainingEvent.SHOW_TRAINING_LIST,
          events.CustomizationEvent.SHOW]
 
-    def getRestrictedUbViews(self):
+    def getRestrictedSfViews(self):
+        return [VIEW_ALIAS.VEHICLE_COMPARE,
+         VIEW_ALIAS.LOBBY_STORE,
+         VIEW_ALIAS.LOBBY_PROFILE,
+         VIEW_ALIAS.LOBBY_BARRACKS,
+         VIEW_ALIAS.LOBBY_MISSIONS,
+         VIEW_ALIAS.WIKI_VIEW,
+         VIEW_ALIAS.BROWSER_VIEW,
+         VIEW_ALIAS.VEHICLE_PREVIEW,
+         VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW]
+
+    def getRestrictedGuiImplViews(self):
         pass
 
     def start(self, closeConfirmator):
@@ -55,8 +58,12 @@ class CloseConfirmatorsHelper(object):
     @adisp.async
     @async
     def __confirmEvent(self, event, callback):
-        if event.eventType == events.ViewEventType.LOAD_UB_VIEW:
-            if event.alias not in self.getRestrictedUbViews():
+        if event.eventType == events.ViewEventType.LOAD_VIEW:
+            if event.alias not in self.getRestrictedSfViews():
+                callback(True)
+                return
+        if event.eventType == events.ViewEventType.LOAD_GUI_IMPL_VIEW:
+            if event.alias not in self.getRestrictedGuiImplViews():
                 callback(True)
                 return
         result = yield await(self.__closeConfirmator())

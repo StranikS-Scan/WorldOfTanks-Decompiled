@@ -127,7 +127,7 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         self.__isNow = False
         self.__inEpicPrebattle = False
         self.__performanceGroup = None
-        self.__isFrSoundMode = False
+        self.__isEpicSoundMode = False
         self.__rankSettings = {}
         self.__showedResultsForArenas = []
         self.__eventEndedNotifier = None
@@ -159,15 +159,30 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         self.startNotification()
         if self.getPerformanceGroup() == EPIC_PERF_GROUP.HIGH_RISK:
             self.__lobbyContext.addFightButtonConfirmator(self.__confirmFightButtonPressEnabled)
-        self.__isFrSoundMode = False
-        self.__updateSounds()
+        self.__isEpicSoundMode = False
+        self.__updateSounds(bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.EPIC))
 
     def onDisconnected(self):
         self.__clear()
 
+    def onPrbEntitySwitching(self):
+        if self.prbEntity is None:
+            return
+        else:
+            switchedFromEpic = bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.EPIC)
+            if switchedFromEpic:
+                self.__updateSounds(False)
+            return
+
     def onPrbEntitySwitched(self):
         self.__invalidateBattleAbilities()
-        self.__updateSounds()
+        if self.prbEntity is None:
+            return
+        else:
+            isEpicSoundMode = bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.EPIC)
+            if isEpicSoundMode:
+                self.__updateSounds(True)
+            return
 
     def onAccountBecomePlayer(self):
         self.__battleResultsService.onResultPosted += self.__showBattleResults
@@ -379,13 +394,13 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         self.__eventEndedNotifier.stopNotification()
         self.__eventEndedNotifier.clear()
 
-    def __showBattleResults(self, reusableInfo, _):
+    def __showBattleResults(self, reusableInfo, _, resultsWindow):
         if reusableInfo.common.arenaBonusType == ARENA_BONUS_TYPE.EPIC_BATTLE:
             arenaUniqueID = reusableInfo.arenaUniqueID
             if arenaUniqueID not in self.__showedResultsForArenas:
                 self.__showedResultsForArenas.append(arenaUniqueID)
                 self.__showedResultsForArenas = self.__showedResultsForArenas[-self.MAX_STORED_ARENAS_RESULTS:]
-                event_dispatcher.showEpicBattlesAfterBattleWindow(reusableInfo)
+                event_dispatcher.showEpicBattlesAfterBattleWindow(reusableInfo, resultsWindow)
 
     def __isInValidPrebattle(self):
         if g_prbLoader and g_prbLoader.getDispatcher() and g_prbLoader.getDispatcher().getEntity():
@@ -396,13 +411,20 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
 
     def __invalidateBattleAbilityItems(self):
         data = self.__itemsCache.items.getItems(GUI_ITEM_TYPE.BATTLE_ABILITY, REQ_CRITERIA.EMPTY)
+        vehicle = g_currentVehicle.item
         for item in data.values():
             if self.__isInValidPrebattle():
                 newLevel = next((lvl.level for lvl in chain.from_iterable((skillInfo.levels.itervalues() for skillInfo in self.getAllSkillsInformation().itervalues())) if lvl.eqID == item.innationID), 0)
                 item.setLevel(newLevel)
                 item.isUnlocked = item.innationID in self.getUnlockedAbilityIds()
+                if vehicle is not None:
+                    mayInstall, _ = item.mayInstall(vehicle)
+                    if not mayInstall:
+                        item.isUnlocked = False
             item.setLevel(0)
             item.isUnlocked = False
+
+        return
 
     def __invalidateBattleAbilitiesForVehicle(self):
         vehicle = g_currentVehicle.item
@@ -453,15 +475,10 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         if GUI_ITEM_TYPE.VEHICLE or GUI_ITEM_TYPE.BATTLE_ABILITY or GUI_ITEM_TYPE.CUSTOMIZATION in invDiff:
             self.__invalidateBattleAbilities()
 
-    def __updateSounds(self):
-        if self.prbEntity is None:
-            return
-        else:
-            isFrSoundMode = bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.EPIC)
-            if isFrSoundMode != self.__isFrSoundMode:
-                _FrontLineSounds.onChange(isFrSoundMode)
-                self.__isFrSoundMode = isFrSoundMode
-            return
+    def __updateSounds(self, isEpicSoundMode):
+        if isEpicSoundMode != self.__isEpicSoundMode:
+            _FrontLineSounds.onChange(isEpicSoundMode)
+            self.__isEpicSoundMode = isEpicSoundMode
 
     def getPrimeTimesIter(self, primeTimes):
         for primeTime in primeTimes:

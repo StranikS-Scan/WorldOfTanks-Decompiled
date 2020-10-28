@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/Crew.py
 from CurrentVehicle import g_currentVehicle
 from gui import SystemMessages
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared import events, event_dispatcher as shared_events
 from gui.shared.events import LoadViewEvent
@@ -73,7 +74,7 @@ class Crew(CrewMeta):
                  'slot': slotIdx,
                  'vehicleType': vehicle.shortUserName,
                  'tankType': vehicle.type,
-                 'vehicleElite': vehicle.isPremium or vehicle.isPremiumIGR or vehicle.isOnlyForBob,
+                 'vehicleElite': vehicle.isPremium or vehicle.isPremiumIGR,
                  'roles': list(vehicle.descriptor.type.crewRoles[slotIdx])})
 
             tankmenData = []
@@ -145,12 +146,12 @@ class Crew(CrewMeta):
             tankmanData['lastName'] = makeString(skinItem.getLastName())
 
     def onShowRecruitWindowClick(self, rendererData, menuEnabled):
-        self.fireEvent(LoadViewEvent(VIEW_ALIAS.RECRUIT_WINDOW, ctx={'data': rendererData.clone(),
+        self.fireEvent(LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.RECRUIT_WINDOW), ctx={'data': rendererData.clone(),
          'menuEnabled': menuEnabled,
          'currentVehicleId': g_currentVehicle.invID}))
 
     def onCrewDogMoreInfoClick(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.CREW_ABOUT_DOG_WINDOW), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.CREW_ABOUT_DOG_WINDOW)), EVENT_BUS_SCOPE.LOBBY)
 
     def onCrewDogItemClick(self):
         self.__playSound(SoundEffectsId.RUDY_DOG)

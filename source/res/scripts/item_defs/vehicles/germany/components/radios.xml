@@ -41,8 +41,10 @@
     <FuG7_SH>	315	</FuG7_SH>
     <FuG12_SH>	316	</FuG12_SH>
     <G00_Bomber_SH_Radio>	318	</G00_Bomber_SH_Radio>
-    <R113_WT>	401	</R113_WT>
-    <FuG_WT>	402	</FuG_WT>
+    <FuG12_Hall_minion>	257	</FuG12_Hall_minion>
+    <_10WSc_Hall_minion>	258	</_10WSc_Hall_minion>
+    <_10WSc_Hell_Boss>	259	</_10WSc_Hell_Boss>
+    <G00_Bomber_Hell_Radio>	261	</G00_Bomber_Hell_Radio>
     <FuG7A_IGR>	60001	</FuG7A_IGR>
     <FuG12_IGR>	60002	</FuG12_IGR>
     <FuG7_IGR>	60003	</FuG7_IGR>
@@ -52,6 +54,9 @@
     <FuG37_bootcamp>	64003	</FuG37_bootcamp>
     <R_5a_bootcamp>	64004	</R_5a_bootcamp>
     <Development_Radio>	65535	</Development_Radio>
+    <FuG_Spr.1_HELL>	0	</FuG_Spr.1_HELL>
+    <FuG_FA_HELL>	19	</FuG_FA_HELL>
+    <FuG_Spr.1_HELL_HALL>	23	</FuG_Spr.1_HELL_HALL>
   </ids>
   <shared>
     <Die_Signalfahnen_bot>
@@ -66,6 +71,18 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	0	</repairCost>
     </Die_Signalfahnen_bot>
+    <G00_Bomber_Hell_Radio>
+      <userString>	#germany_vehicles:G00_Bomber_Hell_Radio	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	65	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </G00_Bomber_Hell_Radio>
     <FuG2>
       <userString>	#germany_vehicles:FuG2	</userString>
       <tags></tags>
@@ -299,6 +316,18 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </FuG12>
+    <FuG12_Hall_minion>
+      <userString>	#germany_vehicles:FuG12_Hall_minion	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	43200	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	150	</weight>
+      <distance>	65	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </FuG12_Hall_minion>
     <Radio_VK4502P>
       <userString>	#germany_vehicles:Radio_VK4502P	</userString>
       <tags></tags>
@@ -380,6 +409,30 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </_10WSc>
+    <_10WSc_Hell_Boss>
+      <userString>	#germany_vehicles:_10WSc_Hell_Boss	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	51600	</price>
+      <weight>	160	</weight>
+      <distance>	65	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </_10WSc_Hell_Boss>
+    <_10WSc_Hall_minion>
+      <userString>	#germany_vehicles:_10WSc_Hall_minion	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	51600	</price>
+      <weight>	160	</weight>
+      <distance>	65	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </_10WSc_Hall_minion>
     <_10WSc_WT>
       <userString>	#germany_vehicles:_10WSc_WT	</userString>
       <tags></tags>
@@ -416,18 +469,6 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </FuG12A>
-    <FuG_WT>
-      <userString>	#germany_vehicles:FuG_WT	</userString>
-      <notInShop>	true	</notInShop>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	7200	</price>
-      <weight>	150	</weight>
-      <distance>	710	</distance>
-      <maxHealth>	150	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </FuG_WT>
     <SEM25>
       <userString>	#germany_vehicles:SEM25	</userString>
       <tags></tags>
@@ -544,18 +585,6 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </R113>
-    <R113_WT>
-      <userString>	#germany_vehicles:R113	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	52200	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	80	</weight>
-      <distance>	730	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </R113_WT>
     <FuG7A_IGR>
       <userString>	#igr_vehicles:FuG7A_IGR	</userString>
       <tags></tags>
@@ -670,5 +699,41 @@
       <maxRegenHealth>	49	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
     </G00_Bomber_SH_Radio>
+    <FuG_Spr.1_HELL>
+      <userString>	#germany_vehicles:FuG_Spr.1	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	21600	</price>
+      <weight>	150	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+      <notInShop>	True	</notInShop>
+    </FuG_Spr.1_HELL>
+    <FuG_FA_HELL>
+      <userString>	#germany_vehicles:FuG_FA	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	10000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </FuG_FA_HELL>
+    <FuG_Spr.1_HELL_HALL>
+      <userString>	#germany_vehicles:FuG_Spr.1	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	21600	</price>
+      <weight>	150	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+      <notInShop>	True	</notInShop>
+    </FuG_Spr.1_HELL_HALL>
   </shared>
 </radios.xml>

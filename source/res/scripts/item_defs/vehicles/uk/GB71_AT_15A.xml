@@ -1812,7 +1812,7 @@
         <left>	vehicles/british/GB71_AT_15A/track/left.track	</left>
         <right>	vehicles/british/GB71_AT_15A/track/right.track	</right>
         <segmentLength>	0.223	</segmentLength>
-        <segmentOffset>	0.133	</segmentOffset>
+        <segmentOffset>	0.187	</segmentOffset>
         <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -1917,27 +1917,27 @@
       </trackNodes>
       <physicalTracks>
         <left>
-          <segmentsCount>	66	</segmentsCount>
-          <segmentsOuterThickness>	0.0522912	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.0191603	</segmentsInnerThickness>
-          <segmentsPlaneOffset>	-1.35112	</segmentsPlaneOffset>
+          <segmentsCount>	65	</segmentsCount>
+          <segmentsOuterThickness>	0.0759602	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.00450118	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	-1.35	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.221628	</back>
-              <top>	0.218358	</top>
-              <front>	0.199998	</front>
-              <bottom>	0.192542	</bottom>
+              <back>	0.23019	</back>
+              <top>	0.217102	</top>
+              <front>	0.214356	</front>
+              <bottom>	0.205089	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.205993	</back>
-              <top>	0.203476	</top>
-              <front>	0.222937	</front>
-              <bottom>	0.192542	</bottom>
+              <back>	0.217412	</back>
+              <top>	0.213605	</top>
+              <front>	0.221239	</front>
+              <bottom>	0.208733	</bottom>
             </forwardMovement>
           </springsLength>
           <mainSegment>
             <model>	vehicles/british/GB71_AT_15A/track/segment.model	</model>
-            <length>	0.222732	</length>
+            <length>	0.222048	</length>
           </mainSegment>
           <collisionHull>
             <bottom>
@@ -1982,50 +1982,50 @@
             <topFront>
               <wheelName>	WD_L0	</wheelName>
               <basePos>	3.03822 0.70381	</basePos>
-              <shiftVec>	0.240259 0.251323	</shiftVec>
-              <jointIdx>	7	</jointIdx>
+              <shiftVec>	0.255979 0.189646	</shiftVec>
+              <jointIdx>	6	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_L5	</wheelName>
               <basePos>	-2.94936 0.693899	</basePos>
-              <shiftVec>	-0.21171 0.28718	</shiftVec>
-              <jointIdx>	37	</jointIdx>
+              <shiftVec>	-0.212109 0.254521	</shiftVec>
+              <jointIdx>	36	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_L8	</wheelName>
-              <basePos>	-2.27326 0.278237	</basePos>
-              <shiftVec>	-0.0827248 -0.235423	</shiftVec>
-              <jointIdx>	44	</jointIdx>
+              <basePos>	-2.27326 0.278245	</basePos>
+              <shiftVec>	-0.00164914 -0.225867	</shiftVec>
+              <jointIdx>	43	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_L0	</wheelName>
-              <basePos>	2.27374 0.278238	</basePos>
-              <shiftVec>	0.108353 -0.225171	</shiftVec>
+              <basePos>	2.27374 0.278246	</basePos>
+              <shiftVec>	0.20122 -0.159917	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
           <radiusOverrides>
             <wheel>
               <name>	WD_L5	</name>
-              <radius>	0.35399	</radius>
+              <radius>	0.35	</radius>
             </wheel>
             <wheel>
               <name>	WD_L0	</name>
-              <radius>	0.344824	</radius>
+              <radius>	0.315466	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
             <syncWithMainModel>	true	</syncWithMainModel>
-            <segmentSyncPivotOffset>	-1.35112	</segmentSyncPivotOffset>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L5	</name>
-              <startAngle>	-127.009	</startAngle>
+              <startAngle>	0.32	</startAngle>
               <teethCount>	10	</teethCount>
             </sync>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	-130.312	</startAngle>
-              <teethCount>	10	</teethCount>
+              <startAngle>	0.32	</startAngle>
+              <teethCount>	19	</teethCount>
             </sync>
           </teethSyncs>
           <sourceCollisionHullPoints>
@@ -2115,27 +2115,27 @@
           </sourceCollisionHullPoints>
         </left>
         <right>
-          <segmentsCount>	66	</segmentsCount>
-          <segmentsOuterThickness>	0.0521967	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.0181944	</segmentsInnerThickness>
-          <segmentsPlaneOffset>	1.35112	</segmentsPlaneOffset>
+          <segmentsCount>	65	</segmentsCount>
+          <segmentsOuterThickness>	0.0759602	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.00557719	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	1.35074	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.221628	</back>
-              <top>	0.218358	</top>
-              <front>	0.199998	</front>
-              <bottom>	0.192542	</bottom>
+              <back>	0.23019	</back>
+              <top>	0.217102	</top>
+              <front>	0.214356	</front>
+              <bottom>	0.205089	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.205993	</back>
-              <top>	0.203476	</top>
-              <front>	0.222937	</front>
-              <bottom>	0.192542	</bottom>
+              <back>	0.217412	</back>
+              <top>	0.213605	</top>
+              <front>	0.221239	</front>
+              <bottom>	0.208733	</bottom>
             </forwardMovement>
           </springsLength>
           <mainSegment>
             <model>	vehicles/british/GB71_AT_15A/track/segment.model	</model>
-            <length>	0.224685	</length>
+            <length>	0.222048	</length>
           </mainSegment>
           <collisionHull>
             <bottom></bottom>
@@ -2164,50 +2164,50 @@
             <topFront>
               <wheelName>	WD_R0	</wheelName>
               <basePos>	3.03822 0.70381	</basePos>
-              <shiftVec>	0.250564 0.247512	</shiftVec>
-              <jointIdx>	7	</jointIdx>
+              <shiftVec>	0.256445 0.188859	</shiftVec>
+              <jointIdx>	6	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_R5	</wheelName>
               <basePos>	-2.94936 0.693899	</basePos>
-              <shiftVec>	-0.210497 0.293292	</shiftVec>
-              <jointIdx>	37	</jointIdx>
+              <shiftVec>	-0.211602 0.255057	</shiftVec>
+              <jointIdx>	36	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_R8	</wheelName>
-              <basePos>	-2.27326 0.277141	</basePos>
-              <shiftVec>	-0.0915465 -0.231096	</shiftVec>
-              <jointIdx>	44	</jointIdx>
+              <basePos>	-2.27326 0.277133	</basePos>
+              <shiftVec>	-0.00241041 -0.224784	</shiftVec>
+              <jointIdx>	43	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_R0	</wheelName>
-              <basePos>	2.27374 0.277142	</basePos>
-              <shiftVec>	0.105983 -0.225179	</shiftVec>
+              <basePos>	2.27374 0.277134	</basePos>
+              <shiftVec>	0.20036 -0.159107	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
           <radiusOverrides>
             <wheel>
               <name>	WD_R5	</name>
-              <radius>	0.358203	</radius>
+              <radius>	0.35	</radius>
             </wheel>
             <wheel>
               <name>	WD_R0	</name>
-              <radius>	0.349321	</radius>
+              <radius>	0.315466	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
             <syncWithMainModel>	true	</syncWithMainModel>
-            <segmentSyncPivotOffset>	1.35112	</segmentSyncPivotOffset>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R5	</name>
-              <startAngle>	-127.035	</startAngle>
+              <startAngle>	0.32	</startAngle>
               <teethCount>	10	</teethCount>
             </sync>
             <sync>
               <name>	WD_R0	</name>
-              <startAngle>	-129.713	</startAngle>
-              <teethCount>	10	</teethCount>
+              <startAngle>	0.32	</startAngle>
+              <teethCount>	19	</teethCount>
             </sync>
           </teethSyncs>
           <sourceCollisionHullPoints>

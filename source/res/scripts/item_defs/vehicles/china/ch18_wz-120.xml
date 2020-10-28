@@ -8,7 +8,7 @@
   </crew>
   <supplySlots>	2 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
-    <forward>	56	</forward>
+    <forward>	60	</forward>
     <backward>	20	</backward>
   </speedLimits>
   <invisibility>
@@ -47,7 +47,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	16453	</weight>
-    <maxHealth>	1240	</maxHealth>
+    <maxHealth>	1400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -2582,7 +2582,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8500	</weight>
-      <maxHealth>	310	</maxHealth>
+      <maxHealth>	250	</maxHealth>
       <rotationSpeed>	46	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -3479,7 +3479,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	9200	</weight>
-      <maxHealth>	410	</maxHealth>
+      <maxHealth>	350	</maxHealth>
       <rotationSpeed>	42	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -3811,9 +3811,9 @@
             <gun>	45	</gun>
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	12	</reloadTime>
+          <reloadTime>	11	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
+            <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -4510,15 +4510,15 @@
       <engines>
         <_12150L>
           <smplEnginePower>	549.7862	</smplEnginePower>
-          <smplFwMaxSpeed>	56	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </_12150L>
         <_12150LS>
           <smplEnginePower>	613.2231	</smplEnginePower>
-          <smplFwMaxSpeed>	56	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </_12150LS>
         <_12150LT>
           <smplEnginePower>	634.3687	</smplEnginePower>
-          <smplFwMaxSpeed>	56	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </_12150LT>
       </engines>
       <chassis>

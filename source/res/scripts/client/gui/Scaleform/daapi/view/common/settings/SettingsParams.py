@@ -72,17 +72,17 @@ class SettingsParams(object):
 
     def revert(self):
         self.settingsCore.revertSettings()
-        self.settingsCore.clearStorages(force=False)
+        self.settingsCore.clearStorages()
 
     def apply(self, diff, restartApproved):
         diff = self.__settingsDiffPreprocessing(diff)
         applyMethod = self.getApplyMethod(diff)
         self.settingsCore.applySettings(diff)
-        confirmators = self.settingsCore.applyStorages(restartApproved, force=False)
+        confirmators = self.settingsCore.applyStorages(restartApproved)
         self.settingsCore.confirmChanges(confirmators)
         if set(graphics.GRAPHICS_SETTINGS.ALL()) & set(diff.keys()):
             BigWorld.commitPendingGraphicsSettings()
-        self.settingsCore.clearStorages(force=False)
+        self.settingsCore.clearStorages()
         return applyMethod == options.APPLY_METHOD.RESTART
 
     def getApplyMethod(self, diff):

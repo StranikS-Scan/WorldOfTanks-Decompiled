@@ -9,12 +9,12 @@ from gui.shared.events import LoadViewEvent
 
 class EntityFactory(object):
 
-    def __init__(self, supportTypes):
+    def __init__(self, managedLayers):
         super(EntityFactory, self).__init__()
-        self.__supportTypes = supportTypes
+        self.__managedLayers = managedLayers
 
-    def getSupportTypes(self):
-        return self.__supportTypes
+    def getManagedLayers(self):
+        return self.__managedLayers
 
     def validate(self, settings):
         clazz = settings.clazz
@@ -89,7 +89,7 @@ class ViewFactory(DAAPIModuleFactory):
 
 
 class EntitiesFactories(object):
-    __slots__ = ('__settings', '__factories', '__eventToAlias', '__aliasToEvent', '__viewTypes')
+    __slots__ = ('__settings', '__factories', '__eventToAlias', '__aliasToEvent', '__layers')
 
     def __init__(self, factories):
         super(EntitiesFactories, self).__init__()
@@ -97,11 +97,11 @@ class EntitiesFactories(object):
         self.__factories = factories
         self.__eventToAlias = {}
         self.__aliasToEvent = {}
-        self.__viewTypes = {}
+        self.__layers = {}
         for idx, factory in enumerate(self.__factories):
-            types = factory.getSupportTypes()
-            for viewType in types:
-                self.__viewTypes[viewType] = idx
+            layers = factory.getManagedLayers()
+            for layer in layers:
+                self.__layers[layer] = idx
 
     def initSettings(self, settingsList):
         result = set()
@@ -117,10 +117,10 @@ class EntitiesFactories(object):
             remove(alias)
 
     def addSettings(self, settings):
-        viewType = settings.type
-        if viewType not in self.__viewTypes:
-            raise SoftException('Invalid type in settings {0}'.format(settings))
-        factory = self.__factories[self.__viewTypes[viewType]]
+        layer = settings.layer
+        if layer not in self.__layers:
+            raise SoftException('Invalid layer in settings {0}'.format(settings))
+        factory = self.__factories[self.__layers[layer]]
         factory.validate(settings)
         alias = settings.alias
         eventType = settings.event
@@ -152,16 +152,16 @@ class EntitiesFactories(object):
             alias = self.__eventToAlias[eventType]
         return alias
 
-    def makeLoadEvent(self, alias, ctx=None):
+    def makeLoadEvent(self, loadParams, ctx=None):
         event = None
-        if alias in self.__aliasToEvent:
-            event = LoadViewEvent(alias, ctx=ctx)
+        if loadParams.viewKey.alias in self.__aliasToEvent:
+            event = LoadViewEvent(loadParams, ctx=ctx)
         return event
 
-    def makeShowPopoverEvent(self, alias, ctx=None):
+    def makeShowPopoverEvent(self, loadParams, ctx=None):
         event = None
-        if alias in self.__aliasToEvent:
-            event = LoadViewEvent(alias, ctx=ctx)
+        if loadParams.viewKey.alias in self.__aliasToEvent:
+            event = LoadViewEvent(loadParams, ctx=ctx)
         return event
 
     def factory(self, alias, *args, **kwargs):
@@ -169,7 +169,7 @@ class EntitiesFactories(object):
         factoryIdx = -1
         if alias in self.__settings:
             settings = self.__settings[alias]
-            factoryIdx = self.__viewTypes[settings.type]
+            factoryIdx = self.__layers[settings.layer]
             factory = self.__factories[factoryIdx]
             entity = factory.create(settings, *args, **kwargs)
         else:

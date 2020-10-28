@@ -99,5 +99,5 @@ class NotificationsCollection(object):
         for typeID in typesRange:
             notifications.extend(self.__received[typeID])
 
-        for item in sorted(notifications):
+        for item in sorted(notifications, key=lambda x: (x.isPinned(), x.getOrder())):
             yield item

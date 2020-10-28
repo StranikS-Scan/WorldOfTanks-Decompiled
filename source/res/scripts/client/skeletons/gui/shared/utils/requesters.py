@@ -867,6 +867,9 @@ class ITokensRequester(IRequester):
     def getLootBoxByTokenID(self, tokenID):
         raise NotImplementedError
 
+    def getLootBoxByID(self, boxID):
+        raise NotImplementedError
+
     def getFreeLootBoxes(self):
         raise NotImplementedError
 

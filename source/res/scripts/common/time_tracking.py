@@ -4,6 +4,7 @@ from constants import SERVER_TICK_LENGTH, IS_CLIENT, IS_BOT
 from debug_utils import LOG_WARNING
 import sys
 from time import time
+from functools import wraps
 if not IS_CLIENT and not IS_BOT:
     from insights.common import incrTickOverspends
 DEFAULT_TIME_LIMIT = 0.02
@@ -77,3 +78,16 @@ def timetracked(func=None, context=None, timeLimit=DEFAULT_TIME_LIMIT, tickLengt
         return wrapper
 
     return decorator(func) if func is not None else decorator
+
+
+def logTimeTracker(func):
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        timeTracker = kwargs.get('timeTracker') or (getattr(args[1], 'timeTracker', None) if len(args) > 1 else None)
+        result = func(*args, **kwargs)
+        if timeTracker is not None:
+            timeTracker.checkpoint('{}.{}'.format(args[0].__class__.__name__, func.__name__))
+        return result
+
+    return wrapper

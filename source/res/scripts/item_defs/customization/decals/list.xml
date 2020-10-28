@@ -4320,6 +4320,17 @@
       <mirror>	false	</mirror>
     </decal>
     <decal>
+      <id>	9350	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_517.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_517	</userString>
+      <vehicleFilter>
+        <include>
+          <vehicles>	france:F17_AMX_13_90_Halloween_event uk:GB24_Centurion_Mk3_Halloween_event usa:A100_T49_Halloween_event usa:A66_M103_Halloween_event ussr:R40_T-54_Halloween_event	</vehicles>
+        </include>
+      </vehicleFilter>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
       <id>	60	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_518.dds	</texture>
       <userString>	#vehicle_customization:emblem/special/sticker_518	</userString>
@@ -4851,6 +4862,12 @@
       <mirror>	false	</mirror>
     </decal>
     <decal>
+      <id>	277	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_610.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_610	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
       <id>	279	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_611.dds	</texture>
       <userString>	#vehicle_customization:emblem/special/sticker_611	</userString>
@@ -4896,12 +4913,6 @@
       <id>	299	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_604.dds	</texture>
       <userString>	#vehicle_customization:emblem/special/sticker_604	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	277	</id>
-      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_610.dds	</texture>
-      <userString>	#vehicle_customization:emblem/special/sticker_610	</userString>
       <mirror>	false	</mirror>
     </decal>
     <decal>
@@ -5127,20 +5138,6 @@
     <historical>	false	</historical>
     <priceGroup>	emblems 50g notInShop	</priceGroup>
     <decal>
-      <id>	2048	</id>
-      <texture>	gui/maps/vehicles/decals/battle_royale.dds	</texture>
-      <userString>	#vehicle_customization:emblem/group41/battle_royale	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <name>	Battle Royale	</name>
-    <type>	EMBLEM	</type>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:emblem/special	</userString>
-    <season>	ALL	</season>
-    <historical>	false	</historical>
-    <priceGroup>	emblems 50g notInShop	</priceGroup>
-    <decal>
       <id>	312	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_605.dds	</texture>
       <userString>	#vehicle_customization:emblem/special/sticker_605	</userString>
@@ -5152,21 +5149,13 @@
       <userString>	#vehicle_customization:emblem/special/sticker_642	</userString>
       <mirror>	true	</mirror>
     </decal>
-    <name>	APAC 2020	</name>
-    <type>	EMBLEM	</type>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:emblem/special	</userString>
-    <season>	ALL	</season>
-    <historical>	false	</historical>
-    <priceGroup>	emblems 50g notInShop	</priceGroup>
     <decal>
-      <id>	351	</id>
-      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_629.dds	</texture>
-      <userString>	#vehicle_customization:emblem/special/sticker_629	</userString>
-      <mirror>	false	</mirror>
+      <id>	374	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_643.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_643	</userString>
+      <mirror>	true	</mirror>
     </decal>
-    <name>	CN_FL_2020	</name>
+    <name>	APAC 2020	</name>
     <type>	EMBLEM	</type>
   </itemGroup>
   <itemGroup>
@@ -5238,6 +5227,20 @@
       <mirror>	false	</mirror>
     </decal>
     <name>	White Tiger 2020	</name>
+    <type>	EMBLEM	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <decal>
+      <id>	351	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_629.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_629	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	CN_FL_2020	</name>
     <type>	EMBLEM	</type>
   </itemGroup>
   <xmlns:czech0>	ussr	</xmlns:czech0>
@@ -7054,6 +7057,12 @@
       <userString>	#vehicle_customization:inscription/clan_content/inscription_14	</userString>
       <mirror>	false	</mirror>
     </decal>
+    <decal>
+      <id>	15122	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/clan_content/inscription_24.dds	</texture>
+      <userString>	#vehicle_customization:inscription/clan_content/inscription_24	</userString>
+      <mirror>	false	</mirror>
+    </decal>
     <name>	Clan Content Japan	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
@@ -7133,25 +7142,6 @@
       <mirror>	false	</mirror>
     </decal>
     <name>	Japan nonCN	</name>
-    <type>	INSCRIPTION	</type>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:inscription/clan_content	</userString>
-    <season>	ALL	</season>
-    <historical>	false	</historical>
-    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <nations>	japan	</nations>
-      </include>
-    </vehicleFilter>
-    <decal>
-      <id>	15122	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/clan_content/inscription_24.dds	</texture>
-      <userString>	#vehicle_customization:inscription/clan_content/inscription_24	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <name>	Clan Content Japan	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
   <xmlns:czech0>	ussr	</xmlns:czech0>
@@ -9677,7 +9667,37 @@
       <userString>	#vehicle_customization:inscription/special/special_386	</userString>
       <mirror>	false	</mirror>
     </decal>
-    <name>	APAC Chuseok	</name>
+    <decal>
+      <id>	376	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_412.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_412	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	377	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_413.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_413	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	378	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_414.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_414	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	379	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_415.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_415	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	380	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_416.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_416	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	APAC 2020	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
   <itemGroup>
@@ -9686,12 +9706,12 @@
     <historical>	false	</historical>
     <priceGroup>	inscriptions 50g notInShop	</priceGroup>
     <decal>
-      <id>	352	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_403.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_403	</userString>
+      <id>	322	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_390.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_390	</userString>
       <mirror>	false	</mirror>
     </decal>
-    <name>	Twitch September 2020	</name>
+    <name>	The First Horseman	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
   <itemGroup>
@@ -9735,6 +9755,26 @@
       <mirror>	false	</mirror>
     </decal>
     <name>	White Tiger 2020	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <decal>
+      <id>	352	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_403.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_403	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	353	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_404.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_404	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Twitch	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
   <xmlns:czech0>	ussr	</xmlns:czech0>
@@ -9814,6 +9854,26 @@
       <mirror>	false	</mirror>
     </decal>
     <name>	IGR nonCN	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <decal>
+      <id>	381	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_417.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_417	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	382	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_418.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_418	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Mexican Day of the Dead	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
   <xmlns:czech0>	ussr	</xmlns:czech0>

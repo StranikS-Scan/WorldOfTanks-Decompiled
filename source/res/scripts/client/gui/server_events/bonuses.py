@@ -11,16 +11,16 @@ import BigWorld
 from adisp import process
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
-from constants import EVENT_TYPE as _ET, DOSSIER_TYPE, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, CURRENCY_TOKEN_PREFIX, RESOURCE_TOKEN_PREFIX, IS_CHINA
+from constants import EVENT_TYPE as _ET, DOSSIER_TYPE, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, CURRENCY_TOKEN_PREFIX, RESOURCE_TOKEN_PREFIX
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
+from frameworks.wulf import WindowLayer
 from gui import makeHtmlString
 from gui.app_loader.decorators import sf_lobby
 from gui.game_control.links import URLMacros
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -30,7 +30,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.Scaleform.settings import getBadgeIconPath, BADGES_ICONS, ICONS_SIZES
-from gui.server_events.awards_formatters import AWARDS_SIZES, AWARDS_SIZES_EXT
+from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.formatters import parseComplexToken
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
@@ -45,7 +45,6 @@ from gui.shared.utils.functions import makeTooltip, stripColorTagDescrTags
 from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID, getVehicleCDForNational
 from gui.shared.utils.requesters.blueprints_requester import getVehicleCDForIntelligence
 from gui.shared.utils.requesters.blueprints_requester import makeNationalCD, makeIntelligenceCD
-from gui.wt_event.wt_event_helpers import getTicketName
 from helpers import dependency
 from helpers import getLocalizedData, i18n
 from helpers import time_utils
@@ -113,7 +112,6 @@ class SimpleBonus(object):
         self._isCompensation = isCompensation
         self._ctx = ctx or {}
         self._compensationReason = compensationReason
-        self._defaultImageName = 'default'
 
     def getName(self):
         return self._name
@@ -197,11 +195,8 @@ class SimpleBonus(object):
     def getIconBySize(self, size):
         iconName = RES_ICONS.getBonusIcon(size, self.getName())
         if iconName is None:
-            iconName = RES_ICONS.getBonusIcon(size, self._defaultImageName)
+            iconName = RES_ICONS.getBonusIcon(size, 'default')
         return iconName
-
-    def getDefaultIconBySize(self, size):
-        return RES_ICONS.getBonusIcon(size, self._defaultImageName)
 
     def getIconLabel(self):
         return text_styles.hightlight('x{}'.format(self.getValue()))
@@ -299,24 +294,13 @@ class EventCoinBonus(IntegralBonus):
     def getList(self):
         return [{'value': self.formatValue(),
           'itemSource': backport.image(R.images.gui.maps.icons.library.EventCoinIconBig()),
-          'tooltip': self.__getTooltip()}]
+          'tooltip': TOOLTIPS.AWARDITEM_EVENTCOIN}]
 
     def hasIconFormat(self):
         return True
 
     def getIconLabel(self):
         return text_styles.eventCoin(self.getValue())
-
-    def getTooltip(self):
-        return self.__getTooltip()
-
-    @staticmethod
-    def __getTooltip():
-        if not IS_CHINA:
-            tooltip = TOOLTIPS.AWARDITEM_EVENTCOIN
-        else:
-            tooltip = makeTooltip(TOOLTIPS.AWARDITEM_EVENTCOIN_HEADER, TOOLTIPS.AWARDITEM_EVENTCOIN_BODY_CN)
-        return tooltip
 
 
 class FreeXpBonus(IntegralBonus):
@@ -335,18 +319,11 @@ class FreeXpBonus(IntegralBonus):
 
 class _PremiumDaysBonus(IntegralBonus):
 
-    def __init__(self, *args, **kwargs):
-        super(_PremiumDaysBonus, self).__init__(*args, **kwargs)
-        self._defaultImageName = 'premium_plus_universal'
-
     def hasIconFormat(self):
         return True
 
     def getIconBySize(self, size):
-        iconName = RES_ICONS.getBonusIcon(size, '{}_{}'.format(self.getName(), self.getValue()))
-        if iconName is None:
-            iconName = RES_ICONS.getBonusIcon(size, self._defaultImageName)
-        return iconName
+        return RES_ICONS.getBonusIcon(size, '{}_{}'.format(self.getName(), self.getValue()))
 
     def getIconLabel(self):
         pass
@@ -417,11 +394,11 @@ class MetaBonus(SimpleBonus):
             return
 
     def __isLobbyLoaded(self):
-        container = self.__app.containerManager.getContainer(ViewTypes.LOBBY_SUB)
+        container = self.__app.containerManager.getContainer(WindowLayer.SUB_VIEW)
         return container is not None
 
     def __onViewLoaded(self, pyView, _):
-        if pyView.viewType == ViewTypes.LOBBY_SUB:
+        if pyView.layer == WindowLayer.SUB_VIEW:
             for callback in self.__onLobbyLoadedCallbacks:
                 callback()
 
@@ -499,7 +476,10 @@ class BattleTokensBonus(TokensBonus):
             complexToken = parseComplexToken(tokenID)
             if complexToken.isDisplayable:
                 userName = self._getUserName(complexToken.styleID)
-                result.append(i18n.makeString(TOOLTIPS.MISSIONS_TOKEN_HEADER, name=userName))
+                header = i18n.makeString(TOOLTIPS.MISSIONS_TOKEN_HEADER, name=userName)
+                if TOOLTIPS.hasBonusesTokenHeader(complexToken.styleID):
+                    header = i18n.makeString(TOOLTIPS.getBonusesTokenHeader(complexToken.styleID))
+                result.append(header)
 
         return ', '.join(result) if result else None
 
@@ -507,11 +487,10 @@ class BattleTokensBonus(TokensBonus):
         result = []
         for tokenID, value in self._value.iteritems():
             if tokenID == self.__eventProgression.rewardPointsTokenID:
-                rEpicPointsPath = R.images.gui.maps.icons.epicBattles.prestigePoints if IS_CHINA else R.images.gui.maps.icons.epicBattles.rewardPoints
                 result.append({'id': 0,
                  'value': value.get('count', 1),
-                 'icon': {AWARDS_SIZES.SMALL: backport.image(rEpicPointsPath.c_48x48()),
-                          AWARDS_SIZES.BIG: backport.image(rEpicPointsPath.c_80x80())},
+                 'icon': {AWARDS_SIZES.SMALL: backport.image(R.images.gui.maps.icons.epicBattles.rewardPoints.c_48x48()),
+                          AWARDS_SIZES.BIG: backport.image(R.images.gui.maps.icons.epicBattles.rewardPoints.c_80x80())},
                  'type': 'custom/reward_point'})
 
         return result
@@ -519,24 +498,6 @@ class BattleTokensBonus(TokensBonus):
     def _getUserName(self, styleID):
         webCache = self.eventsCache.prefetcher
         return i18n.makeString(webCache.getTokenInfo(styleID))
-
-
-class WtEventTicketTokensBonus(TokensBonus):
-
-    def __init__(self, name, value, isCompensation=False, ctx=None):
-        super(TokensBonus, self).__init__(name, value, isCompensation, ctx)
-        self._name = 'wtTicket'
-
-    def isShowInGUI(self):
-        return True
-
-    def formatValue(self):
-        ticketName = getTicketName()
-        amount = sum([ data.get('count', 0) for tokenID, data in self._value.iteritems() if tokenID == ticketName ])
-        return amount if bool(amount) else None
-
-    def getWrappedEpicBonusList(self):
-        return []
 
 
 class BattlePassTokensBonus(TokensBonus):
@@ -626,7 +587,7 @@ class X5BattleTokensBonus(TokensBonus):
 
 class EntitlementBonus(SimpleBonus):
     _ENTITLEMENT_RECORD = namedtuple('_ENTITLEMENT_RECORD', ['id', 'amount'])
-    _FORMATTED_AMOUNT = ('ranked_202007_access',)
+    _FORMATTED_AMOUNT = ('ranked_202010_access',)
 
     @staticmethod
     def hasConfiguredResources(entitlementID):
@@ -714,7 +675,6 @@ def createBonusFromTokens(result, prefix, bonusId, value):
 @dependency.replace_none_kwargs(eventProgressionController=IEventProgressionController)
 def tokensFactory(name, value, isCompensation=False, ctx=None, eventProgressionController=None):
     result = []
-    wtEventTicketName = getTicketName()
     for tID, tValue in value.iteritems():
         if tID.startswith(LOOTBOX_TOKEN_PREFIX):
             result.append(LootBoxTokensBonus({tID: tValue}, isCompensation, ctx))
@@ -734,8 +694,6 @@ def tokensFactory(name, value, isCompensation=False, ctx=None, eventProgressionC
             result.append(ResourceBonus(name, {tID: tValue}, RESOURCE_TOKEN_PREFIX, isCompensation, ctx))
         if eventProgressionController.isAvailable() and eventProgressionController.getProgressionXPTokenID() and tID.startswith(eventProgressionController.getProgressionXPTokenID()):
             result.append(ProgressionXPToken(name, {tID: tValue}, isCompensation, ctx))
-        if tID == wtEventTicketName:
-            result.append(WtEventTicketTokensBonus(name, {tID: tValue}, isCompensation, ctx))
         result.append(BattleTokensBonus(name, {tID: tValue}, isCompensation, ctx))
 
     return result
@@ -820,14 +778,6 @@ class ItemsBonus(SimpleBonus):
                  'tooltip': tooltip})
 
         return result
-
-    def getIconsList(self):
-        icons = []
-        for item in self.getItems():
-            if item is not None:
-                icons.append(item.getBonusIcon(AWARDS_SIZES.SMALL))
-
-        return icons
 
     def getWrappedEpicBonusList(self):
         result = []
@@ -928,28 +878,6 @@ class GoodiesBonus(SimpleBonus):
                  'tooltip': tooltip})
 
         return result
-
-    def getIconsList(self):
-        icons = []
-        for booster in self.getBoosters():
-            if booster is not None:
-                icon = booster.icon
-                if icon is not None:
-                    icons.append(icon)
-
-        for discount in self.getDiscounts():
-            if discount is not None:
-                icon = discount.icon
-                if icon is not None:
-                    icons.append(icon)
-
-        for demountKit in self.getDemountKits():
-            if demountKit is not None:
-                icon = demountKit.iconInfo
-                if icon is not None:
-                    icons.append(icon)
-
-        return icons
 
     def getWrappedEpicBonusList(self):
         result = []
@@ -1270,12 +1198,12 @@ class DossierBonus(SimpleBonus):
     def getWrappedEpicBonusList(self):
         result = []
         for block, record in self.getRecords().iterkeys():
-            if block in ('singleAchievements', 'achievements'):
+            if block == 'singleAchievements':
                 blockID = RECORD_DB_IDS[block, record]
             else:
                 blockID = record
             icons = self.__getEpicBonusImages(block, record)
-            if not icons or not icons['small'] and not icons['big']:
+            if not icons['small'] and not icons['big']:
                 icons = self.__getAchievementImages(record)
             result.append({'id': blockID,
              'name': record,
@@ -1287,24 +1215,21 @@ class DossierBonus(SimpleBonus):
 
     def __getEpicBonusImages(self, block, record):
         if block == 'playerBadges':
-            return {AWARDS_SIZES_EXT.SMALL: getBadgeIconPath(BADGES_ICONS.X48, record),
-             AWARDS_SIZES_EXT.BIG: getBadgeIconPath(BADGES_ICONS.X80, record),
-             AWARDS_SIZES_EXT.HUGE: getBadgeIconPath(BADGES_ICONS.X110, record)}
+            return {AWARDS_SIZES.SMALL: getBadgeIconPath(BADGES_ICONS.X48, record),
+             AWARDS_SIZES.BIG: getBadgeIconPath(BADGES_ICONS.X80, record)}
         return {AWARDS_SIZES.SMALL: RES_ICONS.getEpicAchievementIcon(ICONS_SIZES.X48, record),
          AWARDS_SIZES.BIG: RES_ICONS.getEpicAchievementIcon(ICONS_SIZES.X80, record)} if block == 'singleAchievements' else {}
 
     def __getAchievementImages(self, record):
-        smallId = R.images.gui.maps.icons.achievement.num(ICONS_SIZES.X48).dyn(record)()
-        bigId = R.images.gui.maps.icons.achievement.num(ICONS_SIZES.X80).dyn(record)()
-        return {AWARDS_SIZES.SMALL: backport.image(smallId) if smallId > 0 else '',
-         AWARDS_SIZES.BIG: backport.image(bigId) if smallId > 0 else ''}
+        return {AWARDS_SIZES.SMALL: backport.image(R.images.gui.maps.icons.achievement.num(ICONS_SIZES.X48).dyn(record)()),
+         AWARDS_SIZES.BIG: backport.image(R.images.gui.maps.icons.achievement.num(ICONS_SIZES.X80).dyn(record)())}
 
     def __getCommonAwardsVOs(self, block, record, iconSize='small', withCounts=False):
         badgesIconSizes = {'big': BADGES_ICONS.X80,
          'small': BADGES_ICONS.X48}
         if _isBadge(block):
             header = i18n.makeString(BADGE.badgeName(record))
-            body = i18n.makeString(BADGE.badgeDescriptor_CN(record) or BADGE.badgeDescriptor(record) if IS_CHINA else BADGE.badgeDescriptor(record))
+            body = i18n.makeString(BADGE.badgeDescriptor(record))
             note = i18n.makeString(BADGE.BADGE_NOTE)
             badgeVO = {'imgSource': getBadgeIconPath(badgesIconSizes[iconSize], record),
              'label': '',
@@ -1325,7 +1250,7 @@ class DossierBonus(SimpleBonus):
             badgeVO.update(_EPIC_AWARD_STATIC_VO_ENTRIES)
             if withDescription:
                 badgeVO['title'] = i18n.makeString(BADGE.badgeName(record))
-                badgeVO['description'] = i18n.makeString(BADGE.badgeDescriptor_CN(record) or BADGE.badgeDescriptor(record) if IS_CHINA else BADGE.badgeDescriptor(record))
+                badgeVO['description'] = i18n.makeString(BADGE.badgeDescriptor(record))
             result.append(badgeVO)
 
         return result
@@ -1493,8 +1418,7 @@ class CustomizationsBonus(SimpleBonus):
              'icon': {AWARDS_SIZES.SMALL: smallIcon,
                       AWARDS_SIZES.BIG: bigIcon},
              'name': item.longUserName,
-             'description': item.longDescriptionSpecial,
-             'intCD': item.intCD})
+             'description': item.longDescriptionSpecial})
 
         return result
 
@@ -1611,21 +1535,6 @@ class BoxBonus(SimpleBonus):
             name = '/'.join([name, self.__tooltipType])
         return _getItemTooltip(name)
 
-    def getOptionalBonuses(self):
-        result = []
-        if self._name == 'oneof':
-            bonusesList = self._value[1]
-            for _, _, bonus in bonusesList:
-                for key, value in bonus.iteritems():
-                    result.extend(getNonQuestBonuses(key, value))
-
-        elif self._name == 'allof':
-            bonuses = self._value[0][2]
-            for key, value in bonuses.iteritems():
-                result.extend(getNonQuestBonuses(key, value))
-
-        return result
-
 
 def randomBlueprintBonusFactory(name, value, isCompensation=False, ctx=None):
     blueprintBonuses = []
@@ -1665,6 +1574,9 @@ class RandomBlueprintBonus(SimpleBonus):
 
     def getBlueprintName(self):
         return BlueprintsBonusSubtypes.RANDOM_FRAGMENT
+
+    def getBlueprintTooltipName(self):
+        return backport.text(R.strings.tooltips.blueprint.BlueprintFragmentTooltip.random.header())
 
     def getBlueprintSpecialAlias(self):
         return TOOLTIPS_CONSTANTS.BLUEPRINT_RANDOM_INFO
@@ -1977,13 +1889,6 @@ class CrewBooksBonus(SimpleBonus):
 
         return result
 
-    def getIconsList(self):
-        icons = []
-        for item, _ in self.getItems():
-            icons.append(item.getDefaultTypeIcon(AWARDS_SIZES.SMALL))
-
-        return icons
-
     def __getCommonAwardsVOs(self, item, count, iconSize='small', align=TEXT_ALIGN.RIGHT, withCounts=False):
         itemInfo = {'imgSource': item.getBonusIcon(iconSize),
          'label': text_styles.stats('x{}'.format(count)),
@@ -2065,7 +1970,6 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  'goodies': GoodiesBonus,
  'items': ItemsBonusFactory(),
  'oneof': BoxBonus,
- 'allof': BoxBonus,
  'badgesGroup': BadgesGroupBonus,
  'blueprints': blueprintBonusFactory,
  'blueprintsAny': randomBlueprintBonusFactory,

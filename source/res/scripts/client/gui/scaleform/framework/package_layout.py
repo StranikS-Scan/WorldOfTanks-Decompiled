@@ -2,8 +2,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/package_layout.py
 import importlib
 import logging
+from frameworks.wulf import WindowLayer
+from gui.shared.events import ViewEventType
 from soft_exception import SoftException
-from gui.Scaleform.framework import g_entitiesFactories, ViewTypes
+from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.framework.managers import context_menu
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
@@ -36,14 +38,11 @@ class PackageBusinessHandler(object):
         self._app = app
 
     def init(self):
-        for eventType, listener in self._listeners:
-            _addListener(eventType, listener, self._scope)
+        _addListener(ViewEventType.LOAD_VIEW, self.__loadViewHandler, self._scope)
 
     def fini(self):
         self._app = None
-        for eventType, listener in self._listeners:
-            _removeListener(eventType, listener, self._scope)
-
+        _removeListener(ViewEventType.LOAD_VIEW, self.__loadViewHandler, self._scope)
         self._listeners = ()
         return
 
@@ -54,17 +53,20 @@ class PackageBusinessHandler(object):
         self._app.loadView(SFViewLoadParams(alias, 'rw{0}'.format(self.__counter.next())), *args, **kwargs)
 
     def loadViewBySharedEvent(self, event):
-        self._app.loadView(SFViewLoadParams(event.eventType, event.name))
+        self._app.loadView(event.loadParams)
 
     def loadViewByCtxEvent(self, event):
-        self._app.loadView(SFViewLoadParams(event.eventType, event.name), event.ctx)
+        self._app.loadView(event.loadParams, event.ctx)
 
-    def findViewByAlias(self, viewType, alias):
-        container = self.__getContainer(viewType)
+    def loadView(self, event):
+        self._app.loadView(event.loadParams, *event.args, **event.kwargs)
+
+    def findViewByAlias(self, layer, alias):
+        container = self.__getContainer(layer)
         return None if not container else container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: alias})
 
-    def findViewByName(self, viewType, name):
-        container = self.__getContainer(viewType)
+    def findViewByName(self, layer, name):
+        container = self.__getContainer(layer)
         return None if not container else container.getView(criteria={POP_UP_CRITERIA.UNIQUE_NAME: name})
 
     def bringViewToFront(self, name):
@@ -72,17 +74,23 @@ class PackageBusinessHandler(object):
         if manager is None:
             return
         else:
-            isOnTop = manager.as_isOnTopS(ViewTypes.WINDOW, name)
+            isOnTop = manager.as_isOnTopS(WindowLayer.WINDOW, name)
             if not isOnTop:
-                manager.as_bringToFrontS(ViewTypes.WINDOW, name)
+                manager.as_bringToFrontS(WindowLayer.WINDOW, name)
             return
 
-    def __getContainer(self, viewType):
+    def __getContainer(self, layer):
         if not self._app:
             return None
         else:
             manager = self._app.containerManager
-            return None if not manager else manager.getContainer(viewType)
+            return None if not manager else manager.getContainer(layer)
+
+    def __loadViewHandler(self, event):
+        alias = event.alias
+        for viewAlias, listener in self._listeners:
+            if viewAlias == alias:
+                listener(event)
 
 
 class PackageImporter(object):

@@ -45,6 +45,10 @@ _LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME = {LocationMarkerSubType.SPG_AIM_AREA_SUB
 _PING_FLASH_MINIMAP_SUBTYPES = {LocationMarkerSubType.GOING_TO_MARKER_SUBTYPE, LocationMarkerSubType.ATTENTION_TO_MARKER_SUBTYPE, LocationMarkerSubType.PREBATTLE_WAYPOINT_SUBTYPE}
 _BASE_PING_RANGE = 50
 _LOCATION_PING_RANGE = 30
+_MINIMAP_MIN_SCALE_INDEX = 0
+_MINIMAP_MAX_SCALE_INDEX = 5
+_MINIMAP_LOCATION_MARKER_MIN_SCALE = 1.0
+_MINIMAP_LOCATION_MARKER_MAX_SCALE = 0.72
 
 class PersonalEntriesPlugin(common.SimplePlugin):
     __slots__ = ('__isAlive', '__isObserver', '__playerVehicleID', '__viewPointID', '__animationID', '__deadPointID', '__cameraID', '__cameraIDs', '__yawLimits', '__circlesID', '__circlesVisibilityState', '__killerVehicleID', '__defaultViewRangeCircleSize')
@@ -355,7 +359,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         return self.__isAlive
 
     def _onVehicleStateUpdated(self, state, value):
-        if state in (VEHICLE_VIEW_STATE.SWITCHING, VEHICLE_VIEW_STATE.RESPAWNING):
+        if state in (VEHICLE_VIEW_STATE.SWITCHING, VEHICLE_VIEW_STATE.RESPAWNING) and not (self.sessionProvider.arenaVisitor.gui.isEventBattle() and self.__isAlive):
             self._hideMarkup()
 
     def _hideMarkup(self):
@@ -709,31 +713,8 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
     def _getPlayerVehicleID(self):
         return self.__playerVehicleID
 
-    def _setVehicleInfo(self, vehicleID, entry, vInfo, guiProps, isSpotted=False):
-        vehicleType = vInfo.vehicleType
-        classTag = vehicleType.classTag
-        name = vehicleType.shortNameWithPrefix
-        if classTag is not None:
-            entry.setVehicleInfo(not guiProps.isFriend, guiProps.name(), classTag, vInfo.isAlive())
-            animation = self._getSpottedAnimation(entry, isSpotted)
-            if animation:
-                self._playSpottedSound(entry)
-            self._invoke(entry.getID(), 'setVehicleInfo', vehicleID, classTag, name, guiProps.name(), animation)
-        return
-
-    def _getSpottedAnimation(self, entry, isSpotted):
-        if not self.__isObserver and isSpotted:
-            animation = entry.getSpottedAnimation(self._entries.itervalues())
-        else:
-            animation = ''
-        return animation
-
-    @staticmethod
-    def _playSpottedSound(entry):
-        nots = avatar_getter.getSoundNotifications()
-        if nots is not None:
-            nots.play('enemy_sighted_for_team', None, None, Math.Matrix(entry.getMatrix()).translation)
-        return
+    def _getSymbolName(self, vehicleID):
+        return _S_NAME.VEHICLE
 
     def __addEntryToPool(self, vehicleID, location=VEHICLE_LOCATION.UNDEFINED, positions=None):
         if location != VEHICLE_LOCATION.UNDEFINED:
@@ -743,10 +724,26 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         else:
             matrix, location = matrix_factory.getVehicleMPAndLocation(vehicleID, positions or {})
         active = location != VEHICLE_LOCATION.UNDEFINED
-        model = self._addEntryEx(vehicleID, _S_NAME.VEHICLE, _C_NAME.ALIVE_VEHICLES, matrix=matrix, active=active)
+        symbolName = self._getSymbolName(vehicleID)
+        model = self._addEntryEx(vehicleID, symbolName, _C_NAME.ALIVE_VEHICLES, matrix=matrix, active=active)
         if model is not None:
             model.setLocation(location)
         return model
+
+    def _setVehicleInfo(self, vehicleID, entry, vInfo, guiProps, isSpotted=False):
+        vehicleType = vInfo.vehicleType
+        classTag = vehicleType.classTag
+        name = vehicleType.shortNameWithPrefix
+        if classTag is not None:
+            entry.setVehicleInfo(not guiProps.isFriend, guiProps.name(), classTag, vInfo.isAlive())
+            animation = self.__getSpottedAnimation(entry, isSpotted)
+            if animation:
+                self.__playSpottedSound(entry)
+            self._invoke(entry.getID(), 'setVehicleInfo', vehicleID, self._getClassTag(vInfo), name, guiProps.name(), animation)
+        return
+
+    def _getClassTag(self, vInfo):
+        return vInfo.vehicleType.classTag
 
     def __setGUILabel(self, entry, guiLabel):
         if entry.setGUILabel(guiLabel):
@@ -798,9 +795,13 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             self.__setLocationAndMatrix(entry, location, matrix)
             self._setInAoI(entry, True)
             self.__setActive(entry, True)
-            animation = self._getSpottedAnimation(entry, isSpotted)
-            if animation and self.__replayRegistrator.validateShowVehicle(vehicleID):
-                self._playSpottedSound(entry)
+            isUpgrading = False
+            vehicle = BigWorld.entity(vehicleID)
+            if vehicle is not None:
+                isUpgrading = vehicle.isUpgrading or vehicle.isForceReloading
+            animation = self.__getSpottedAnimation(entry, isSpotted)
+            if animation and self.__replayRegistrator.validateShowVehicle(vehicleID) and not isUpgrading:
+                self.__playSpottedSound(entry)
                 self._invoke(entry.getID(), 'setAnimation', animation)
                 self.__replayRegistrator.registerShowVehicle(vehicleID)
             return
@@ -834,11 +835,28 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         if self._ctrlVehicleID and self._ctrlVehicleID != self.__playerVehicleID and self._ctrlVehicleID in self._entries:
             self.__setActive(self._entries[self._ctrlVehicleID], False)
 
+    def eventSwitchToVehicle(self, prevCtrlID):
+        self.__switchToVehicle(prevCtrlID)
+
     def __showFeatures(self, flag):
         self._parentObj.as_showVehiclesNameS(flag)
         for entry in self._entries.itervalues():
             if entry.wasSpotted() and entry.isAlive():
                 self.__setActive(entry, flag)
+
+    def __getSpottedAnimation(self, entry, isSpotted):
+        if not self.__isObserver and isSpotted:
+            animation = entry.getSpottedAnimation(self._entries.itervalues())
+        else:
+            animation = ''
+        return animation
+
+    @staticmethod
+    def __playSpottedSound(entry):
+        nots = avatar_getter.getSoundNotifications()
+        if nots is not None:
+            nots.play('enemy_sighted_for_team', None, None, Math.Matrix(entry.getMatrix()).translation)
+        return
 
     def __clearDestroyCallback(self, vehicleID):
         callbackID = self.__destroyCallbacksIDs.pop(vehicleID, None)
@@ -971,6 +989,7 @@ class AreaStaticMarkerPlugin(common.EntriesPlugin):
     def __init__(self, parentObj):
         super(AreaStaticMarkerPlugin, self).__init__(parentObj)
         self._entries = {}
+        self._curScale = 1.0
 
     def start(self):
         super(AreaStaticMarkerPlugin, self).start()
@@ -979,6 +998,8 @@ class AreaStaticMarkerPlugin(common.EntriesPlugin):
             ctrl.onStaticMarkerAdded += self.__addStaticMarker
             ctrl.onStaticMarkerRemoved += self.__delStaticMarker
             ctrl.onReplyFeedbackReceived += self.__onReplyFeedbackReceived
+        minimapSize = settings.clampMinimapSizeIndex(AccountSettings.getSettings('minimapSize'))
+        self._curScale = self.__calculateMarkerScale(minimapSize)
         self.__checkMarkers()
         return
 
@@ -991,6 +1012,17 @@ class AreaStaticMarkerPlugin(common.EntriesPlugin):
         super(AreaStaticMarkerPlugin, self).stop()
         return
 
+    def applyNewSize(self, sizeIndex):
+        self._curScale = self.__calculateMarkerScale(sizeIndex)
+        for entryID in self._entries:
+            matrix = self._entries[entryID].getMatrix()
+            matrix = minimap_utils.makePositionAndScaleMatrix(matrix.applyToOrigin(), (self._curScale, 1.0, self._curScale))
+            self._setMatrix(self._entries[entryID].getID(), matrix)
+
+    def __calculateMarkerScale(self, minimapSizeIndex):
+        p = float(minimapSizeIndex - _MINIMAP_MIN_SCALE_INDEX) / float(_MINIMAP_MAX_SCALE_INDEX - _MINIMAP_MIN_SCALE_INDEX)
+        return (1 - p) * _MINIMAP_LOCATION_MARKER_MIN_SCALE + p * _MINIMAP_LOCATION_MARKER_MAX_SCALE
+
     def __checkMarkers(self):
         _logger.debug('minimap __checkMarkers')
         for key in g_locationPointManager.markedAreas:
@@ -999,7 +1031,8 @@ class AreaStaticMarkerPlugin(common.EntriesPlugin):
             self.__addStaticMarker(locationPoint.targetID, locationPoint.creatorID, locationPoint.position, locationPoint.markerSubType, True, locationPoint.markerText, locationPoint.replyCount, False)
 
     def __addStaticMarker(self, areaID, creatorID, position, locationMarkerSubtype, show3DMarker=False, markerText='', numberOfReplies=0, isTargetForPlayer=False):
-        self._addEntryEx(areaID, _LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME[locationMarkerSubtype], _C_NAME.EQUIPMENTS, matrix=minimap_utils.makePositionMatrix(position), active=True)
+        matrix = minimap_utils.makePositionAndScaleMatrix(position, (self._curScale, 1.0, self._curScale))
+        self._addEntryEx(areaID, _LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME[locationMarkerSubtype], _C_NAME.EQUIPMENTS, matrix=matrix, active=True, transformProps=settings.TRANSFORM_FLAG.FULL)
         if locationMarkerSubtype in _PING_FLASH_MINIMAP_SUBTYPES and numberOfReplies > 0 and isTargetForPlayer:
             self._invoke(self._entries[areaID].getID(), 'setState', 'reply')
         elif locationMarkerSubtype in _PING_FLASH_MINIMAP_SUBTYPES and numberOfReplies > 0:

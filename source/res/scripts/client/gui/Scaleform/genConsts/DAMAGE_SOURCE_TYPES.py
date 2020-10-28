@@ -10,7 +10,13 @@ class DAMAGE_SOURCE_TYPES(object):
     SPG = 'SPG'
     ARTILLERY = 'artillery'
     AIRSTRIKE = 'airstrike'
-    EVENT_BOSS = 'event_boss'
+    BOSS = 'eventBigBossBot'
+    BOMBER = 'eventBomberBot'
+    HUNTER = 'eventHunterBot'
+    RUNNER = 'eventRunnerBot'
+    SENTRY = 'eventSentryBot'
+    TURRET = 'eventTurretBot'
+    RUNNER_SHOOTER = 'eventRunnerShooterBot'
     DAMAGE_SOURCES = [HEAVY_TANK,
      MEDIUM_TANK,
      LIGHT_TANK,
@@ -18,4 +24,10 @@ class DAMAGE_SOURCE_TYPES(object):
      SPG,
      ARTILLERY,
      AIRSTRIKE,
-     EVENT_BOSS]
+     BOSS,
+     BOMBER,
+     HUNTER,
+     RUNNER,
+     SENTRY,
+     TURRET,
+     RUNNER_SHOOTER]

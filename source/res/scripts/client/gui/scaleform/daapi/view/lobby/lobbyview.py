@@ -8,6 +8,7 @@ from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.LobbyPageMeta import LobbyPageMeta
 from gui.Scaleform.framework.entities.View import View, ViewKey
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler, ViewLifecycleWatcher
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
@@ -17,16 +18,15 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.impl import backport
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
-from gui.shared.events import BootcampEvent
+from gui.shared.events import LoadViewEvent, ViewEventType
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from helpers import i18n, dependency, uniprof
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from skeletons.gui.app_loader import IWaitingWidget
-from skeletons.gui.game_control import IIGRController, ITenYearsCountdownController
+from skeletons.gui.game_control import IIGRController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from gui.Scaleform.daapi.view.lobby.ten_years_event.ten_years_event_sound_controller import TenYearsEventSounds
 
 class _LobbySubViewsLifecycleHandler(IViewLifecycleHandler):
     __WAITING_LBL = 'loadPage'
@@ -40,8 +40,8 @@ class _LobbySubViewsLifecycleHandler(IViewLifecycleHandler):
      VIEW_ALIAS.LOBBY_CUSTOMIZATION,
      VIEW_ALIAS.IMAGE_VIEW,
      VIEW_ALIAS.VEHICLE_PREVIEW,
+     VIEW_ALIAS.HALLOWEEN_VEHICLE_PREVIEW,
      VIEW_ALIAS.STYLE_PREVIEW,
-     VIEW_ALIAS.EVENT_PROGRESSION_STYLE_PREVIEW,
      VIEW_ALIAS.VEHICLE_COMPARE,
      VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS,
      PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS,
@@ -54,7 +54,6 @@ class _LobbySubViewsLifecycleHandler(IViewLifecycleHandler):
      VIEW_ALIAS.LOBBY_TECHTREE,
      VIEW_ALIAS.BATTLE_QUEUE,
      VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE,
-     VIEW_ALIAS.WT_EVENT_QUEUE,
      RANKEDBATTLES_ALIASES.RANKED_BATTLES_VIEW_ALIAS,
      EPICBATTLES_ALIASES.EPIC_BATTLES_SKILL_ALIAS)
 
@@ -96,7 +95,6 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
     itemsCache = dependency.descriptor(IItemsCache)
     igrCtrl = dependency.descriptor(IIGRController)
     lobbyContext = dependency.descriptor(ILobbyContext)
-    tenYearsEventController = dependency.descriptor(ITenYearsCountdownController)
 
     def __init__(self, ctx=None):
         super(LobbyView, self).__init__(ctx)
@@ -109,7 +107,7 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
     def bwProto(self):
         return None
 
-    def showWaiting(self, message):
+    def showWaiting(self, message, _=False):
         self.as_showWaitingS(backport.text(message))
 
     def hideWaiting(self):
@@ -147,8 +145,6 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         self.lobbyContext.updateBattlesCount(battlesCount, epicBattlesCount)
         self.fireEvent(events.GUICommonEvent(events.GUICommonEvent.LOBBY_VIEW_LOADED))
         self.bwProto.voipController.invalidateMicrophoneMute()
-        if self.tenYearsEventController.isEnabled():
-            self.soundManager.playInstantSound(TenYearsEventSounds.EV_10Y_COUNTDOWN_ENTRY_POINT)
 
     def _invalidate(self, *args, **kwargs):
         g_prbLoader.setEnabled(True)
@@ -162,7 +158,7 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         g_playerEvents.onAccountBecomeNonPlayer -= self._onAccountBecomeNonPlayer
         if self._entityEnqueueCancelCallback:
             self._entityEnqueueCancelCallback = None
-            g_eventBus.removeListener(BootcampEvent.QUEUE_DIALOG_CANCEL, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
+            g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.LobbySimpleEvent.SHOW_HELPLAYOUT, self.__showHelpLayout, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.LobbySimpleEvent.CLOSE_HELPLAYOUT, self.__closeHelpLayout, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade, EVENT_BUS_SCOPE.GLOBAL)
@@ -170,20 +166,21 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         return
 
     def _onEntityCheckoutEnqueued(self, cancelCallback):
-        g_eventBus.addListener(BootcampEvent.QUEUE_DIALOG_CANCEL, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.handleEvent(BootcampEvent(BootcampEvent.QUEUE_DIALOG_SHOW), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG_SHOW)), EVENT_BUS_SCOPE.LOBBY)
         self._entityEnqueueCancelCallback = cancelCallback
 
-    def _onEntityCheckoutCanceled(self, _):
-        g_eventBus.removeListener(BootcampEvent.QUEUE_DIALOG_CANCEL, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
-        if self._entityEnqueueCancelCallback:
-            self._entityEnqueueCancelCallback()
-        self._entityEnqueueCancelCallback = None
+    def _onEntityCheckoutCanceled(self, event):
+        if event.alias == VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG_CANCEL:
+            g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
+            if self._entityEnqueueCancelCallback:
+                self._entityEnqueueCancelCallback()
+            self._entityEnqueueCancelCallback = None
         return
 
     def _onAccountBecomeNonPlayer(self):
         self._entityEnqueueCancelCallback = None
-        g_eventBus.removeListener(BootcampEvent.QUEUE_DIALOG_CANCEL, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
         return
 
     def __showHelpLayout(self, _):

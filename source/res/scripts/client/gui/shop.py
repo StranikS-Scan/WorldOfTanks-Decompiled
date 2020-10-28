@@ -11,6 +11,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import makeBrowserParams
 from gui.Scaleform.daapi.view.lobby.store.browser import shop_helpers as helpers
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getLoginUrl, getProductsUrl
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.game_control.links import URLMacros
 from gui.impl.gen import R
 from gui.shared import events, g_eventBus
@@ -53,7 +54,6 @@ class _GoldPurchaseReason(object):
     BUNDLE = 'bundle'
     BATTLE_PASS = 'battle_pass'
     BATTLE_PASS_LEVELS = 'battle_pass_levels'
-    LOOT_BOX_RE_ROLL = 'loot_box_re_roll'
 
 
 class Source(object):
@@ -109,6 +109,10 @@ def canBuyGoldForVehicleThroughWeb(vehicle, itemsCache=None, tradeIn=None):
     return False
 
 
+def showBuyPersonalReservesOverlay(itemId, source=None, origin=None):
+    showBuyItemWebView(helpers.getBuyPersonalReservesUrl(), itemId, source, origin)
+
+
 def showBuyCreditsBattleBoosterOverlay(itemId, source=None, origin=None, alias=VIEW_ALIAS.OVERLAY_WEB_STORE):
     showBuyItemWebView(helpers.getBuyCreditsBattleBoostersUrl(), itemId, source, origin, alias)
 
@@ -135,12 +139,16 @@ def showBuyOptionalDeviceOverlay(itemId, source=None, origin=None, alias=VIEW_AL
     showBuyItemWebView(helpers.getBuyOptionalDevicesUrl(), itemId, source, origin, alias)
 
 
-def showTradeOffOverlay(targetLevel):
-    _showBlurredWebOverlay(helpers.getTradeOffOverlayUrl(), _getTradeOffParams(targetLevel))
+def showTradeOffOverlay(targetLevel, parent=None):
+    _showBlurredWebOverlay(helpers.getTradeOffOverlayUrl(), _getTradeOffParams(targetLevel), parent)
 
 
-def showBuyGoldForVehicleWebOverlay(fullPrice, intCD):
-    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.VEHICLE, fullPrice, intCD))
+def showPersonalTradeOffOverlay(parent=None):
+    _showBlurredWebOverlay(helpers.getPersonalTradeOffOverlayUrl(), parent=parent)
+
+
+def showBuyGoldForVehicleWebOverlay(fullPrice, intCD, parent=None):
+    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.VEHICLE, fullPrice, intCD), parent)
 
 
 def showBuyGoldForRentWebOverlay(fullPrice, intCD):
@@ -179,10 +187,6 @@ def showBuyGoldForBattlePassLevels(fullPrice):
     showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.BATTLE_PASS_LEVELS, fullPrice))
 
 
-def showBuyGoldForLootBoxReRoll(fullPrice):
-    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.LOOT_BOX_RE_ROLL, fullPrice))
-
-
 def showBuyGoldForBundle(fullPrice, params=None):
     params = dict(params) or {}
     params.update(_getParams(_GoldPurchaseReason.BUNDLE, fullPrice))
@@ -190,9 +194,9 @@ def showBuyGoldForBundle(fullPrice, params=None):
 
 
 @process
-def _showBlurredWebOverlay(url, params=None):
+def _showBlurredWebOverlay(url, params=None, parent=None):
     url = yield URLMacros().parse(url, params)
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.WEB_VIEW_TRANSPARENT, ctx={'url': url,
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.WEB_VIEW_TRANSPARENT, parent=parent), ctx={'url': url,
      'allowRightClick': False}), EVENT_BUS_SCOPE.LOBBY)
 
 
@@ -205,15 +209,15 @@ def showBuyItemWebView(url, itemId, source=None, origin=None, alias=VIEW_ALIAS.O
     if origin:
         params['origin'] = origin
     url = yield URLMacros().parse(url=_makeBuyItemUrl(url, itemId), params=params)
-    g_eventBus.handleEvent(events.LoadViewEvent(alias, ctx={'url': url}), EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias), ctx={'url': url}), EVENT_BUS_SCOPE.LOBBY)
 
 
 @process
-def showBuyGoldWebOverlay(params=None):
+def showBuyGoldWebOverlay(params=None, parent=None):
     url = helpers.getBuyMoreGoldUrl()
     if url:
         url = yield URLMacros().parse(url, params=params)
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.OVERLAY_WEB_STORE, ctx={'url': url}), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.OVERLAY_WEB_STORE, parent=parent), ctx={'url': url}), EVENT_BUS_SCOPE.LOBBY)
 
 
 @process
@@ -221,16 +225,8 @@ def showBuyVehicleOverlay(params=None):
     url = helpers.getVehicleUrl()
     if url:
         url = yield URLMacros().parse(url, params=params)
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.OVERLAY_WEB_STORE, ctx={'url': url,
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.OVERLAY_WEB_STORE), ctx={'url': url,
          'browserParams': makeBrowserParams(R.strings.waiting.buyItem(), True, True, 0.5)}), EVENT_BUS_SCOPE.LOBBY)
-
-
-@process
-def showLootBoxBuyWindow():
-    url = helpers.getBuyWtLootBoxesUrl()
-    if url:
-        url = yield URLMacros().parse(url)
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.OVERLAY_WT_EVENT_VIEW, ctx={'url': url}), EVENT_BUS_SCOPE.LOBBY)
 
 
 @async

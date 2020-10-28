@@ -227,9 +227,9 @@ class BattleLayout(IChannelController):
         return True
 
     def addCommand(self, command):
-        isCurrent, text = self._formatCommand(command)
         if command.hasNoChatMessage():
             return
+        isCurrent, text = self._formatCommand(command)
         if self._view:
             if isCurrent:
                 fillColor = FILL_COLORS.BROWN

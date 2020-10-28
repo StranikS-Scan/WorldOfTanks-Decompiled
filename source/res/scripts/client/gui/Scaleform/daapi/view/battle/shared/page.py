@@ -1,14 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/page.py
 import logging
+import typing
 import BattleReplay
 import aih_constants
 from AvatarInputHandler import aih_global_binding
+from frameworks.wulf import WindowLayer
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.battle.shared import crosshair
 from gui.Scaleform.daapi.view.battle.shared import indicators
 from gui.Scaleform.daapi.view.battle.shared import markers2d
 from gui.Scaleform.daapi.view.meta.BattlePageMeta import BattlePageMeta
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES as _ALIASES
 from gui.app_loader import settings as app_settings
@@ -18,6 +20,8 @@ from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import dependency, uniprof
 from skeletons.gameplay import IGameplayLogic, PlayerEventID
 from skeletons.gui.battle_session import IBattleSessionProvider
+if typing.TYPE_CHECKING:
+    from gui.shared.events import LoadViewEvent
 _logger = logging.getLogger(__name__)
 
 class IComponentsConfig(object):
@@ -74,11 +78,10 @@ class SharedPage(BattlePageMeta):
         if external is None:
             external = (crosshair.CrosshairPanelContainer, markers2d.MarkersManager)
         self._external = [ item() for item in external ]
-        if not self.sessionProvider.arenaVisitor.gui.isEventBattle():
-            if components is None:
-                components = _SHARED_COMPONENTS_CONFIG
-            else:
-                components += _SHARED_COMPONENTS_CONFIG
+        if components is None:
+            components = _SHARED_COMPONENTS_CONFIG
+        else:
+            components += _SHARED_COMPONENTS_CONFIG
         self.__componentsConfig = components
         return
 
@@ -116,8 +119,7 @@ class SharedPage(BattlePageMeta):
         self.addListener(events.GameEvent.SHOW_BTN_HINT, self.__handleShowBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.HIDE_BTN_HINT, self.__handleHideBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.CALLOUT_DISPLAY_EVENT, self.__handleCalloutDisplayEvent, scope=EVENT_BUS_SCOPE.GLOBAL)
-        self.addListener(events.GameEvent.HELP, self._handleHelpEvent, scope=EVENT_BUS_SCOPE.BATTLE)
-        self.addListener(events.GameEvent.HELP_DETAILED, self._handleHelpEvent, scope=EVENT_BUS_SCOPE.BATTLE)
+        self.addListener(events.ViewEventType.LOAD_VIEW, self.__handleLobbyEvent, scope=EVENT_BUS_SCOPE.BATTLE)
         self.gameplay.postStateEvent(PlayerEventID.AVATAR_SHOW_GUI)
 
     @uniprof.regionDecorator(label='avatar.show_gui', scope='exit')
@@ -138,17 +140,16 @@ class SharedPage(BattlePageMeta):
         self.removeListener(events.GameEvent.SHOW_BTN_HINT, self.__handleShowBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.HIDE_BTN_HINT, self.__handleHideBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.CALLOUT_DISPLAY_EVENT, self.__handleCalloutDisplayEvent, scope=EVENT_BUS_SCOPE.GLOBAL)
-        self.removeListener(events.GameEvent.HELP, self._handleHelpEvent, scope=EVENT_BUS_SCOPE.BATTLE)
-        self.removeListener(events.GameEvent.HELP_DETAILED, self._handleHelpEvent, scope=EVENT_BUS_SCOPE.BATTLE)
+        self.removeListener(events.ViewEventType.LOAD_VIEW, self.__handleLobbyEvent, scope=EVENT_BUS_SCOPE.BATTLE)
         self._stopBattleSession()
         super(SharedPage, self)._dispose()
 
     def _toggleGuiVisible(self):
         self._isVisible = not self._isVisible
         if self._isVisible:
-            self.app.containerManager.showContainers(ViewTypes.DEFAULT)
+            self.app.containerManager.showContainers(WindowLayer.VIEW)
         else:
-            self.app.containerManager.hideContainers(ViewTypes.DEFAULT)
+            self.app.containerManager.hideContainers(WindowLayer.VIEW)
         self.fireEvent(events.GameEvent(events.GameEvent.GUI_VISIBILITY, {'visible': self._isVisible}), scope=EVENT_BUS_SCOPE.BATTLE)
         avatar_getter.setComponentsVisibility(self._isVisible)
 
@@ -181,7 +182,7 @@ class SharedPage(BattlePageMeta):
                 self._onPostMortemSwitched(noRespawnPossible=False, respawnAvailable=False)
             self._isInPostmortem = ctrl.isInPostmortem
             ctrl.onPostMortemSwitched += self._onPostMortemSwitched
-            ctrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
+            ctrl.onRespawnBaseMoving += self._onRespawnBaseMoving
         aih_global_binding.subscribe(aih_global_binding.BINDING_ID.CTRL_MODE_NAME, self._onAvatarCtrlModeChanged)
         return
 
@@ -189,7 +190,7 @@ class SharedPage(BattlePageMeta):
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onPostMortemSwitched -= self._onPostMortemSwitched
-            ctrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
+            ctrl.onRespawnBaseMoving -= self._onRespawnBaseMoving
         aih_global_binding.unsubscribe(aih_global_binding.BINDING_ID.CTRL_MODE_NAME, self._onAvatarCtrlModeChanged)
         for alias, _ in self.__componentsConfig.getViewsConfig():
             self.sessionProvider.removeViewComponent(alias)
@@ -218,27 +219,37 @@ class SharedPage(BattlePageMeta):
         self._isBattleLoading = True
         if not self._blToggling:
             self._blToggling = set(self.as_getComponentsVisibilityS())
-        self._blToggling.difference_update([_ALIASES.BATTLE_LOADING])
+        battleLoadingVisibleAliases = self._getBattleLoadingVisibleAliases()
+        if battleLoadingVisibleAliases is not None:
+            self._blToggling.difference_update(battleLoadingVisibleAliases)
         self._blToggling.add(_ALIASES.BATTLE_MESSENGER)
         hintPanel = self.getComponent(_ALIASES.HINT_PANEL)
         if hintPanel and hintPanel.getActiveHint():
             self._blToggling.add(_ALIASES.HINT_PANEL)
-        self._setComponentsVisibility(visible={_ALIASES.BATTLE_LOADING}, hidden=self._blToggling)
+        self._setComponentsVisibility(visible=battleLoadingVisibleAliases, hidden=self._blToggling)
+        return
 
     def _onBattleLoadingFinish(self):
         self._isBattleLoading = False
-        self._setComponentsVisibility(visible=self._blToggling, hidden={_ALIASES.BATTLE_LOADING})
+        self._setComponentsVisibility(visible=self._blToggling, hidden=self._getBattleLoadingVisibleAliases())
         self._blToggling.clear()
         for component in self._external:
             component.active(True)
 
         self.sessionProvider.shared.hitDirection.setVisible(True)
 
+    def _getBattleLoadingVisibleAliases(self):
+        return {_ALIASES.BATTLE_LOADING}
+
     def _changeCtrlMode(self, ctrlMode):
         if ctrlMode == ctrlMode == aih_constants.CTRL_MODE_NAME.VIDEO:
             self._setComponentsVisibility(hidden={_ALIASES.DAMAGE_PANEL})
         else:
             self._setComponentsVisibility(visible={_ALIASES.DAMAGE_PANEL})
+
+    def __handleLobbyEvent(self, event):
+        if event.alias in (VIEW_ALIAS.INGAME_HELP, VIEW_ALIAS.INGAME_DETAILS_HELP):
+            self._handleHelpEvent(event)
 
     def __handleBattleLoading(self, event):
         if event.ctx['isShown']:
@@ -280,20 +291,20 @@ class SharedPage(BattlePageMeta):
         elif self.as_isComponentVisibleS(alias):
             self._setComponentsVisibility(hidden={alias})
 
+    def _canShowPostmortemTips(self):
+        return not self.sessionProvider.getCtx().isPlayerObserver() and not BattleReplay.g_replayCtrl.isPlaying
+
     def _onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
-        if not self.sessionProvider.getCtx().isPlayerObserver() and not BattleReplay.g_replayCtrl.isPlaying:
+        if self._canShowPostmortemTips():
             self.as_setPostmortemTipsVisibleS(True)
         if not self.sessionProvider.getCtx().isPlayerObserver():
             self._isInPostmortem = True
             self._switchToPostmortem()
 
-    def __onRespawnBaseMoving(self):
+    def _onRespawnBaseMoving(self):
         if not self.sessionProvider.getCtx().isPlayerObserver() and not BattleReplay.g_replayCtrl.isPlaying:
             self.as_setPostmortemTipsVisibleS(False)
             self._isInPostmortem = False
-            if self.sessionProvider.arenaVisitor.gui.isEventBattle():
-                if self.sessionProvider.dynamic.respawn.playerLives == 1:
-                    self.as_showPostmortemNotificationS()
 
     def __onPostMortemReload(self):
         self._isInPostmortem = False
@@ -340,7 +351,7 @@ class BattlePageBusinessHandler(PackageBusinessHandler):
         super(BattlePageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_BATTLE, EVENT_BUS_SCOPE.BATTLE)
 
     def _loadPage(self, event):
-        page = self.findViewByAlias(ViewTypes.DEFAULT, event.name)
+        page = self.findViewByAlias(WindowLayer.VIEW, event.name)
         if page is not None:
             page.reload()
         else:

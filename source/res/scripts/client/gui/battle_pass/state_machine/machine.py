@@ -5,7 +5,7 @@ from battle_pass_common import BattlePassRewardReason as RewardReason
 from frameworks.state_machine import ConditionTransition, StringEventTransition
 from frameworks.state_machine import State
 from frameworks.state_machine import StateMachine
-from gui.battle_pass.state_machine import states, lockOverlays
+from gui.battle_pass.state_machine import states
 from gui.battle_pass.state_machine.states import FinalRewardStateID, FinalRewardEventID
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
@@ -64,10 +64,6 @@ class FinalRewardStateMachine(StateMachine):
         self.addState(votingState)
         self.addState(votedVideoState)
         self.addState(rewardState)
-
-    def stop(self):
-        super(FinalRewardStateMachine, self).stop()
-        lockOverlays(False)
 
     def saveRewards(self, rewards, data):
         self.__rewards = rewards

@@ -8,8 +8,6 @@ from gui.Scaleform.genConsts.MISSIONS_ALIASES import MISSIONS_ALIASES
 from gui.Scaleform.locale.NATIONS import NATIONS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.server_events import formatters as events_fmts
 from gui.server_events.cond_formatters import FormattableField, FORMATTER_IDS, VEHICLE_TYPES, MAX_CONDITIONS_IN_OR_SECTION_SUPPORED, packSimpleTitle, packDescriptionField
 from personal_missions_constants import CONDITION_ICON
@@ -201,11 +199,7 @@ class MissionsVehicleListFormatter(MissionFormatter):
 
     @staticmethod
     def __makeVehicleVO(vehicle):
-        return {'nationIcon': '',
-         'typeIcon': backport.image(R.images.gui.maps.icons.wtevent.common.event_boss()),
-         'levelIcon': '',
-         'vehicleIcon': vehicle.iconSmall,
-         'vehicleName': text_styles.vehicleName(vehicle.shortUserName)} if vehicle.isEventBoss else {'nationIcon': '../maps/icons/filters/nations/%s.png' % vehicle.nationName,
+        return {'nationIcon': '../maps/icons/filters/nations/%s.png' % vehicle.nationName,
          'typeIcon': '../maps/icons/filters/tanks/%s.png' % vehicle.type,
          'levelIcon': '../maps/icons/filters/levels/level_%s.png' % vehicle.level,
          'vehicleIcon': vehicle.iconSmall,

@@ -65,7 +65,7 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
     settingsCore = dependency.descriptor(ISettingsCore)
     hangarSpace = dependency.descriptor(IHangarSpace)
     allCameraObjects = set()
-    P1_DELTA_X_Z = 1.0
+    P1_DELTA_X_Z = 10.0
 
     def __init__(self):
         ClientSelectableObject.__init__(self)
@@ -145,9 +145,10 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
             hangarCamera = self.hangarSpace.space.camera
             hangarCameraLocation = self.hangarSpace.space.getCameraLocation()
             self.__goalPosition = hangarCamera.position
-            self.cameraYaw = normalizeAngle(Math.Matrix(hangarCamera.source).yaw)
-            self.cameraPitch = -1.0 * Math.Matrix(hangarCamera.source).pitch
             self.__goalTarget = Math.Matrix(hangarCamera.target).translation
+            if self.rememberPreviousCamera:
+                self.cameraYaw = normalizeAngle(Math.Matrix(hangarCamera.source).yaw)
+                self.cameraPitch = -1.0 * Math.Matrix(hangarCamera.source).pitch
             self.__pitchLimits = hangarCameraLocation['camConstraints'][0]
             self.__goalDistance = hangarCameraLocation['pivotDist']
         self.setState(CameraMovementStates.FROM_OBJECT)
@@ -159,17 +160,24 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
 
     def setState(self, state):
         self.__state = state
-        g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, ctx={'state': self.__state,
-         'entityId': self.id}), scope=EVENT_BUS_SCOPE.DEFAULT)
+        g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, ctx=self._makeUpdateCtx()), scope=EVENT_BUS_SCOPE.DEFAULT)
 
     @property
     def state(self):
         return self.__state
 
+    @property
+    def rememberPreviousCamera(self):
+        return True
+
+    def _makeUpdateCtx(self):
+        return {'state': self.__state,
+         'entityId': self.id}
+
     def _setStartValues(self):
         size = self._getModelHeight() / (2.0 * self.cameraObjectAspect)
         self.__goalTarget = Math.Matrix(self.model.matrix).translation + self.cameraShift
-        if not self.__goalDistance:
+        if not self.__goalDistance or not self.rememberPreviousCamera:
             distConstr = self.hangarSpace.space.getCameraLocation()['camConstraints'][2]
             self.__goalDistance = math_utils.clamp(distConstr[0], distConstr[1], size / math.tan(BigWorld.projection().fov / 2.0))
 
@@ -221,8 +229,8 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
             relativeDist = (self.__goalDistance - distConstr[0]) / (distConstr[1] - distConstr[0])
         else:
             relativeDist = 1.0
-        self.__startFov = BigWorld.projection().fov
-        self.__goalFov = math_utils.lerp(math.radians(minFov), math.radians(maxFov), relativeDist)
+        self.__startFov = math.degrees(BigWorld.projection().fov)
+        self.__goalFov = math_utils.lerp(minFov, maxFov, relativeDist)
 
     def __teleportHangarSpaceCamera(self):
         yaw = self.cameraYaw
@@ -267,7 +275,8 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
     def _finishCameraMovement(self):
         self.setState(CameraMovementStates.ON_OBJECT)
         self.__camera.disable()
-        BigWorld.camera(self.hangarSpace.space.camera)
+        if isinstance(BigWorld.camera(), type(self.__camera.camera)):
+            BigWorld.camera(self.hangarSpace.space.camera)
         self.__startFov = None
         self.__goalFov = None
         self.__curTime = None

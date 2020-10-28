@@ -11,7 +11,7 @@ class ModelStates(object):
 
 ModelsSetParams = namedtuple('ModelsSetParams', ('skin', 'state', 'attachments'))
 
-class RenderStates(object):
+class TankRenderMode(object):
     NORMAL = 0
     CRASH = 1
     SERVER_COLLISION = 2
@@ -193,9 +193,9 @@ def getCollisionModelsFromDesc(vehicleDesc, state):
     paths = []
     for partName in TankPartNames.ALL:
         part = getattr(vehicleDesc, partName)
-        if state == RenderStates.CLIENT_COLLISION:
+        if state == TankRenderMode.CLIENT_COLLISION:
             paths.append(part.hitTester.edClientBspModel)
-        if state == RenderStates.SERVER_COLLISION:
+        if state in (TankRenderMode.SERVER_COLLISION, TankRenderMode.ARMOR_WIDTH_COLLISION):
             paths.append(part.hitTester.edServerBspModel)
 
     return VehiclePartsTuple(*paths)

@@ -1,18 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/decorators.py
+import typing
 import BigWorld
 from debug_utils import LOG_ERROR
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.locale.INVITES import INVITES
+from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsSteelHunter
 from gui.clans.formatters import ClanSingleNotificationHtmlTextFormatter, ClanMultiNotificationsHtmlTextFormatter, ClanAppActionHtmlTextFormatter
 from gui.clans.settings import CLAN_APPLICATION_STATES, CLAN_INVITE_STATES
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.formatters.invites import getPrbInviteHtmlFormatter
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
+from gui.shared.events import ViewEventType, HangarSpacesSwitcherEvent
 from gui.shared.notifications import NotificationPriorityLevel, NotificationGuiSettings, NotificationGroup
+from gui.wgnc.settings import WGNC_DEFAULT_ICON, WGNC_POP_UP_BUTTON_WIDTH
 from helpers import dependency
 from helpers import i18n
+from helpers import time_utils
 from messenger import g_settings
 from messenger.formatters.users_messages import makeFriendshipRequestText
 from messenger.m_constants import PROTO_TYPE
@@ -20,12 +25,10 @@ from messenger.proto import proto_getter
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from notification.settings import makePathToIcon
-from gui.wgnc.settings import WGNC_DEFAULT_ICON, WGNC_POP_UP_BUTTON_WIDTH
-from helpers import time_utils
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
-from skeletons.gui.shared.hangar_spaces_switcher import IHangarSpacesSwitcher
-from gui.shared.events import HangarSpacesSwitcherEvent
+if typing.TYPE_CHECKING:
+    from gui.shared.events import LoadViewEvent
 
 def _makeShowTime():
     return BigWorld.time()
@@ -74,6 +77,10 @@ class _NotificationDecorator(object):
 
     def getType(self):
         return NOTIFICATION_TYPE.UNDEFINED
+
+    @staticmethod
+    def isPinned():
+        return False
 
     def getGroup(self):
         return NotificationGroup.INFO
@@ -207,18 +214,27 @@ class MessageDecorator(_NotificationDecorator):
          'notify': self.isNotify()}
 
 
+class ChoosingDevicesMessageDecorator(MessageDecorator):
+
+    def getType(self):
+        return NOTIFICATION_TYPE.CHOOSING_DEVICES
+
+    def getGroup(self):
+        return NotificationGroup.OFFER
+
+    def getSavedData(self):
+        return self._vo['message'].get('savedData', {})
+
+
 class C11nMessageDecorator(MessageDecorator):
     itemsCache = dependency.descriptor(IItemsCache)
-    __hangarSpacesSwitcher = dependency.descriptor(IHangarSpacesSwitcher)
 
     def __init__(self, entityID, entity=None, settings=None, model=None):
         super(C11nMessageDecorator, self).__init__(entityID, entity, settings, model)
-        g_eventBus.addListener(VIEW_ALIAS.HERO_VEHICLE_PREVIEW, self.__lockButtons, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.addListener(VIEW_ALIAS.BATTLE_QUEUE, self.__lockButtons, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.addListener(HangarSpacesSwitcherEvent.SWITCH_TO_HANGAR_SPACE, self.__updateButtons, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.addListener(VIEW_ALIAS.LOBBY_HANGAR, self.__updateButtons, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self.__viewLoaded, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.addCallbacks({'inventory': self.__updateButtons})
         g_clientUpdateManager.addCallbacks({'cache.vehsLock': self.__updateButtons})
+        g_eventBus.addListener(HangarSpacesSwitcherEvent.SWITCH_TO_HANGAR_SPACE, self.__updateButtons, EVENT_BUS_SCOPE.LOBBY)
 
     def update(self, formatted):
         _NotificationDecorator.update(self, formatted)
@@ -240,12 +256,15 @@ class C11nMessageDecorator(MessageDecorator):
                 self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
             return
 
-    def __updateButtons(self, event):
-        isLocked = self.__hangarSpacesSwitcher.currentItem == self.__hangarSpacesSwitcher.itemsToSwitch.BATTLE_ROYALE
+    def __updateButtons(self, _):
+        isLocked = currentHangarIsSteelHunter()
         self.__updateButtonsState(lock=isLocked)
 
-    def __lockButtons(self, event):
-        self.__updateButtonsState(lock=True)
+    def __viewLoaded(self, event):
+        if event.alias in (VIEW_ALIAS.HERO_VEHICLE_PREVIEW, VIEW_ALIAS.BATTLE_QUEUE):
+            self.__updateButtonsState(lock=True)
+        elif VIEW_ALIAS.LOBBY_HANGAR == event.alias:
+            self.__updateButtons(event)
 
     @property
     def __vehicle(self):
@@ -260,9 +279,7 @@ class C11nMessageDecorator(MessageDecorator):
 
     def clear(self):
         super(C11nMessageDecorator, self).clear()
-        g_eventBus.removeListener(VIEW_ALIAS.HERO_VEHICLE_PREVIEW, self.__lockButtons, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.removeListener(VIEW_ALIAS.BATTLE_QUEUE, self.__lockButtons, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.removeListener(VIEW_ALIAS.LOBBY_HANGAR, self.__updateButtons, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self.__viewLoaded, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.removeObjectCallbacks(self)
 
 
@@ -746,6 +763,40 @@ class ProgressiveRewardDecorator(_NotificationDecorator):
     def _make(self, entity=None, settings=None):
         self._settings = NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.MEDIUM)
         message = g_settings.msgTemplates.format('ProgressiveRewardNotification', data={'icon': makePathToIcon('InformationIcon')})
+        self._vo = {'typeID': self.getType(),
+         'entityID': self.getID(),
+         'message': message,
+         'notify': self.isNotify(),
+         'auxData': []}
+
+
+class MissingEventsDecorator(_NotificationDecorator):
+    ENTITY_ID = 0
+
+    def __init__(self, count):
+        super(MissingEventsDecorator, self).__init__(self.ENTITY_ID, count)
+
+    def getType(self):
+        return NOTIFICATION_TYPE.MISSING_EVENTS
+
+    def getGroup(self):
+        return NotificationGroup.OFFER
+
+    @staticmethod
+    def isPinned():
+        return True
+
+    def update(self, entity):
+        super(MissingEventsDecorator, self).update(entity)
+        self._make(entity)
+
+    def decrementCounterOnHidden(self):
+        return False
+
+    def _make(self, entity=None, settings=None):
+        self._settings = NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.HIGH)
+        message = g_settings.msgTemplates.format('MissingEventsNotification', ctx={'count': entity})
+        message['icon'] = makePathToIcon(message['icon'])
         self._vo = {'typeID': self.getType(),
          'entityID': self.getID(),
          'message': message,

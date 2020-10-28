@@ -42,32 +42,63 @@ class _Money(__Money):
         return getattr(self, currency)
 
 
+_ALL = Currency.ALL
+_CREDITS = Currency.CREDITS
+_GOLD = Currency.GOLD
+_CRYSTAL = Currency.CRYSTAL
+_EVENT_COIN = Currency.EVENT_COIN
+
 class Money(object):
     __slots__ = ('__values',)
 
     def __init__(self, credits=None, gold=None, crystal=None, eventCoin=None, *args, **kwargs):
         super(Money, self).__init__()
-        self.__values = {}
-        self.__initValue(self.__values, Currency.CREDITS, credits)
-        self.__initValue(self.__values, Currency.GOLD, gold)
-        self.__initValue(self.__values, Currency.CRYSTAL, crystal)
-        self.__initValue(self.__values, Currency.EVENT_COIN, eventCoin)
+        values = self.__values = {}
+        if credits is not None:
+            values[_CREDITS] = credits
+        if gold is not None:
+            values[_GOLD] = gold
+        if crystal is not None:
+            values[_CRYSTAL] = crystal
+        if eventCoin is not None:
+            values[_EVENT_COIN] = eventCoin
+        return
 
     @property
     def credits(self):
-        return self.__values.get(Currency.CREDITS)
+        try:
+            return self.__values[_CREDITS]
+        except KeyError:
+            return None
+
+        return None
 
     @property
     def gold(self):
-        return self.__values.get(Currency.GOLD)
+        try:
+            return self.__values[_GOLD]
+        except KeyError:
+            return None
+
+        return None
 
     @property
     def crystal(self):
-        return self.__values.get(Currency.CRYSTAL)
+        try:
+            return self.__values[_CRYSTAL]
+        except KeyError:
+            return None
+
+        return None
 
     @property
     def eventCoin(self):
-        return self.__values.get(Currency.EVENT_COIN)
+        try:
+            return self.__values[_EVENT_COIN]
+        except KeyError:
+            return None
+
+        return None
 
     @classmethod
     def makeFrom(cls, currency, value):
@@ -75,7 +106,7 @@ class Money(object):
 
     @classmethod
     def hasMoney(cls, data):
-        for c in Currency.ALL:
+        for c in _ALL:
             if c in data:
                 return True
 
@@ -83,7 +114,7 @@ class Money(object):
 
     @classmethod
     def extractMoneyDict(cls, data):
-        return {c:data[c] for c in Currency.ALL if c in data}
+        return {c:data[c] for c in _ALL if c in data}
 
     def get(self, currency, default=None):
         return self.__values[currency] if currency in self.__values else default
@@ -138,7 +169,7 @@ class Money(object):
                 if currency is None:
                     currency = c
 
-        return currency or Currency.CREDITS
+        return currency or _CREDITS
 
     def toNonNegative(self):
         return self.apply(lambda v: max(0, v))
@@ -191,7 +222,7 @@ class Money(object):
 
     @classmethod
     def makeFromMoneyTuple(cls, moneyTuple):
-        setValues = {Currency.ALL[index]:v for index, v in enumerate(moneyTuple) if v != 0}
+        setValues = {_ALL[index]:v for index, v in enumerate(moneyTuple) if v != 0}
         return Money(**setValues)
 
     def toMoneyTuple(self):
@@ -206,10 +237,10 @@ class Money(object):
             yield (c, self.__values.get(c, 0))
 
     def __getitem__(self, index):
-        return self.get(Currency.ALL[index], 0)
+        return self.get(_ALL[index], 0)
 
     def __repr__(self):
-        return 'Money({})'.format(', '.join([ '{}'.format(self.get(c)) for c in Currency.ALL ]))
+        return 'Money({})'.format(', '.join([ '{}'.format(self.get(c)) for c in _ALL ]))
 
     def __iter__(self):
         for c in self.__getCurrenciesIterator(byWeight=False):
@@ -287,14 +318,14 @@ class Money(object):
         return True
 
     def __eq__(self, other):
-        for c in Currency.ALL:
+        for c in _ALL:
             if self.get(c) != other.get(c):
                 return False
 
         return True
 
     def __ne__(self, other):
-        for c in Currency.ALL:
+        for c in _ALL:
             if self.get(c) != other.get(c):
                 return True
 
@@ -315,16 +346,10 @@ class Money(object):
         return Money(**kwargs)
 
     def __getCurrenciesIterator(self, byWeight=True):
-        order = Currency.BY_WEIGHT if byWeight else Currency.ALL
+        order = Currency.BY_WEIGHT if byWeight else _ALL
         for c in order:
             if c in self.__values:
                 yield c
-
-    @classmethod
-    def __initValue(cls, values, currency, value):
-        if value is not None:
-            values[currency] = value
-        return
 
     @classmethod
     def __setValue(cls, values, currency, value):

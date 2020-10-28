@@ -3,9 +3,9 @@
 import collections
 import logging
 import constants
+from skeletons.gui.game_event_controller import IGameEventController
 from gui.impl.gen import R
 from gui.impl import backport
-from gui.impl.lobby.wt_event.tooltips.wt_event_carousel_vehicle_tooltip_view import WtEventCarouselVehicleTooltipView
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockProps
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
@@ -30,15 +30,14 @@ from gui.shared.items_parameters.comparator import PARAM_STATE
 from gui.shared.items_parameters.formatters import isRelativeParameter, SITUATIONAL_SCHEME, EXTRACTED_BONUS_SCHEME
 from gui.shared.items_parameters.params_helper import SimplifiedBarVO
 from gui.shared.money import Currency
-from gui.shared.tooltips import formatters, ToolTipBaseData, WulfTooltipData
+from gui.shared.tooltips import formatters, ToolTipBaseData
 from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makeCompoundPriceBlock, CURRENCY_SETTINGS
 from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_SPEED_MODE_SPEED
-from gui.wt_event.wt_event_helpers import getTooltipVehicleType
 from helpers import i18n, time_utils, int2roman, dependency
 from helpers.i18n import makeString as _ms
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import ITradeInController, IBootcampController, ILowTierMMController
+from skeletons.gui.game_control import ITradeInController, IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from items import perks
@@ -83,12 +82,12 @@ def _makeModuleFitTooltipError(reason):
     return '#tooltips:moduleFits/{}'.format(reason)
 
 
-_SHORTEN_TOOLTIP_CASES = ('shopVehicle',)
+_SHORTEN_TOOLTIP_CASES = ('shopVehicle', 'eventCarouselVehicle')
 
 class VehicleInfoTooltipData(BlocksTooltipData):
     __itemsCache = dependency.descriptor(IItemsCache)
     __bootcamp = dependency.descriptor(IBootcampController)
-    __eventController = dependency.descriptor(ILowTierMMController)
+    _gameEventController = dependency.descriptor(IGameEventController)
 
     def __init__(self, context):
         super(VehicleInfoTooltipData, self).__init__(context, TOOLTIP_TYPE.VEHICLE)
@@ -102,6 +101,8 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         self.item = self.context.buildItem(*args, **kwargs)
         items = super(VehicleInfoTooltipData, self)._packBlocks()
         vehicle = self.item
+        if self._gameEventController.needEventCrew(vehicle):
+            vehicle.crew = self._gameEventController.getEventCrew(vehicle)
         statsConfig = self.context.getStatsConfiguration(vehicle)
         paramsConfig = self.context.getParamsConfiguration(vehicle)
         statusConfig = self.context.getStatusConfiguration(vehicle)
@@ -113,21 +114,22 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         blockPadding = formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding)
         valueWidth = 75
         textGap = -2
-        headerItems = [formatters.packBuildUpBlockData(HeaderBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct(), padding=leftRightPadding, blockWidth=410), formatters.packBuildUpBlockData(self._getCrewIconBlock(), gap=2, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, padding=formatters.packPadding(top=34, right=0), blockWidth=20)]
+        headerBlockConstructorDescr = self._getHeaderBlockConstructorDescr()
+        headerItems = [formatters.packBuildUpBlockData(headerBlockConstructorDescr(vehicle, statsConfig, leftPadding, rightPadding).construct(), padding=leftRightPadding, blockWidth=410), formatters.packBuildUpBlockData(self._getCrewIconBlock(), gap=2, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, padding=formatters.packPadding(top=34, right=0), blockWidth=20)]
         headerBlockItems = [formatters.packBuildUpBlockData(headerItems, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, padding=formatters.packPadding(bottom=-16))]
         telecomBlock = TelecomBlockConstructor(vehicle, valueWidth, leftPadding, rightPadding).construct()
         if telecomBlock:
             headerBlockItems.append(formatters.packBuildUpBlockData(telecomBlock, padding=leftRightPadding))
         self.__createStatusBlock(vehicle, headerBlockItems, statsConfig, paramsConfig, valueWidth)
         items.append(formatters.packBuildUpBlockData(headerBlockItems, gap=-4, padding=formatters.packPadding(bottom=-8)))
-        if vehicle.isEarnCrystals and not vehicle.isEvent:
+        if vehicle.isEarnCrystals:
             crystalBlock, linkage = CrystalBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct()
             if crystalBlock:
                 items.append(formatters.packBuildUpBlockData(crystalBlock, linkage=linkage, padding=leftRightPadding))
         simplifiedStatsBlock = SimplifiedStatsBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
         if simplifiedStatsBlock:
             items.append(formatters.packBuildUpBlockData(simplifiedStatsBlock, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=leftRightPadding))
-        if not vehicle.isRotationGroupLocked and not vehicle.isEvent:
+        if not vehicle.isRotationGroupLocked:
             commonStatsBlock = CommonStatsBlockConstructor(vehicle, paramsConfig, valueWidth, leftPadding, rightPadding).construct()
             if commonStatsBlock:
                 items.append(formatters.packBuildUpBlockData(commonStatsBlock, gap=textGap, padding=blockPadding))
@@ -141,15 +143,12 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         if statsBlockConstructor is not None:
             items.append(formatters.packBuildUpBlockData(statsBlockConstructor(vehicle, paramsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct(), gap=textGap, padding=blockPadding))
         priceBlock, invalidWidth = PriceBlockConstructor(vehicle, statsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct()
-        shouldBeCut = self.calledBy and self.calledBy in _SHORTEN_TOOLTIP_CASES or vehicle.isOnlyForEpicBattles or vehicle.isEvent
+        shouldBeCut = self.calledBy and self.calledBy in _SHORTEN_TOOLTIP_CASES or vehicle.isOnlyForEpicBattles
         if priceBlock and not shouldBeCut:
             self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
             items.append(formatters.packBuildUpBlockData(priceBlock, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, gap=5, padding=formatters.packPadding(left=98), layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL))
-        if vehicle.isLowTierEvent and self.__eventController.isEnabled():
-            giveawayHangarBlock = GiveawayHangar(vehicle, statusConfig).construct()
-            items.append(formatters.packBuildUpBlockData(giveawayHangarBlock))
         if not vehicle.isRotationGroupLocked:
-            statusBlock, operationError = StatusBlockConstructor(vehicle, statusConfig).construct()
+            statusBlock, operationError = self._getStatusBlockConstructorDescr()(vehicle, statusConfig).construct()
             if statusBlock and not (operationError and shouldBeCut):
                 items.append(formatters.packBuildUpBlockData(statusBlock, padding=blockPadding, blockWidth=440))
             else:
@@ -163,16 +162,19 @@ class VehicleInfoTooltipData(BlocksTooltipData):
     def _getCrewIconBlock(self):
         block = []
         vehicle = self.item
-        if vehicle.isEvent and vehicle.isEventBoss:
-            return [formatters.packImageBlockData(img=RES_ICONS.MAPS_ICONS_MESSENGER_ICONCONTACTS, alpha=0.5)]
-        else:
-            crewSorted = sorted(vehicle.crew, key=lambda tankman: tankman[1], reverse=True)
-            for _, tankman in crewSorted:
-                tImg = RES_ICONS.MAPS_ICONS_MESSENGER_ICONCONTACTS
-                tAlpha = 0.5 if tankman is not None else 0.25
-                block.append(formatters.packImageBlockData(img=tImg, alpha=tAlpha))
+        crewSorted = sorted(vehicle.crew, key=lambda tankman: tankman[1], reverse=True)
+        for _, tankman in crewSorted:
+            tImg = RES_ICONS.MAPS_ICONS_MESSENGER_ICONCONTACTS
+            tAlpha = 0.5 if tankman is not None else 0.25
+            block.append(formatters.packImageBlockData(img=tImg, alpha=tAlpha))
 
-            return block
+        return block
+
+    def _getHeaderBlockConstructorDescr(self):
+        return HeaderBlockConstructor
+
+    def _getStatusBlockConstructorDescr(self):
+        return StatusBlockConstructor
 
     def __createStatusBlock(self, vehicle, items, statsConfig, paramsConfig, valueWidth):
         ctxParams = self.context.getParams()
@@ -312,13 +314,6 @@ class VehicleAvgParameterTooltipData(BaseVehicleAdvancedParametersTooltipData):
         return blocks
 
 
-class WtEventCarouselVehicleTooltipData(WulfTooltipData):
-
-    def getTooltipContent(self, intCD, *args, **kwargs):
-        vehicleType = getTooltipVehicleType(intCD)
-        return WtEventCarouselVehicleTooltipView(vehicleType)
-
-
 def _getBonusID(bnsType, bnsId):
     return bnsId.split('_tier')[0] if bnsType == _OPTION_DEVICE else bnsId
 
@@ -350,6 +345,7 @@ def _packBonusName(bnsType, bnsId, enabled=True, inactive=False):
 
 
 class VehicleAdvancedParametersTooltipData(BaseVehicleAdvancedParametersTooltipData):
+    _gameEventController = dependency.descriptor(IGameEventController)
 
     def __init__(self, context):
         super(VehicleAdvancedParametersTooltipData, self).__init__(context)
@@ -401,6 +397,9 @@ class VehicleAdvancedParametersTooltipData(BaseVehicleAdvancedParametersTooltipD
         else:
             bonuses = sorted(self._extendedData.bonuses, cmp=_bonusCmp)
             bonusExtractor = self.context.getBonusExtractor(item, bonuses, self._paramName)
+            if bonusExtractor.getVehicle() and self._gameEventController.needEventCrew(bonusExtractor.getVehicle()):
+                bonusExtractor.getVehicle().crew = self._gameEventController.getEventCrew(bonusExtractor.getVehicle())
+                bonusExtractor.reUpdateCurrValue()
             hasSituational = False
             for bnsType, bnsId, pInfo in bonusExtractor.getBonusInfo():
                 bnsId = _getBonusID(bnsType, bnsId)
@@ -752,11 +751,8 @@ class FrontlineRentBlockConstructor(VehicleTooltipBlockConstructor):
             else:
                 rentLeftKey = '#tooltips:vehicle/rentLeft/%s'
                 rentInfo = self.vehicle.rentInfo
-            if self.vehicle.isOnlyForEpicBattles or self.vehicle.isOnlyForBob:
-                nameId = backport.text(R.strings.tooltips.vehicle.deal.epic.main())
-                if self.vehicle.isOnlyForBob:
-                    nameId = backport.text(R.strings.tooltips.vehicle.deal.bob.main())
-                block.append(formatters.packTextParameterBlockData(name=text_styles.main(nameId), value='', valueWidth=self._valueWidth, padding=paddings))
+            if self.vehicle.isOnlyForEpicBattles:
+                block.append(formatters.packTextParameterBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_DEAL_EPIC_MAIN), value='', valueWidth=self._valueWidth, padding=paddings))
                 if rentInfo.getActiveSeasonRent() is not None:
                     rentFormatter = RentLeftFormatter(rentInfo)
                     rentLeftInfo = rentFormatter.getRentLeftStr(rentLeftKey)
@@ -811,14 +807,6 @@ class CommonStatsBlockConstructor(VehicleTooltipBlockConstructor):
         if block:
             title = text_styles.middleTitle(TOOLTIPS.VEHICLEPARAMS_COMMON_TITLE)
             block.insert(0, formatters.packTextBlockData(title, padding=formatters.packPadding(bottom=8)))
-        return block
-
-
-class GiveawayHangar(VehicleTooltipBlockConstructor):
-
-    def construct(self):
-        block = []
-        block.append(formatters.packImageTextBlockData(title=text_styles.statusAttention(TOOLTIPS.GIVEAWAY_HEADER), desc=text_styles.neutral(TOOLTIPS.GIVEAWAY_BODY), img=RES_ICONS.MAPS_ICONS_TOOLTIP_GIVEAWAY, txtPadding=formatters.packPadding(left=10, top=10), imgPadding=formatters.packPadding(top=10), txtGap=-5, padding=formatters.packPadding(left=29, top=-5, bottom=-20)))
         return block
 
 

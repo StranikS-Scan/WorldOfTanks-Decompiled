@@ -433,6 +433,8 @@ class BattlePassController(IBattlePassController):
         return cap > 0
 
     def isPlayerNewcomer(self):
+        if not self.__isOnboardingEnabled():
+            return False
         if self.isBought():
             return False
         config = self.__getConfig()
@@ -469,6 +471,9 @@ class BattlePassController(IBattlePassController):
         if self.__deviceGiftTokensContainers[bonusName].isEmpty:
             self.__extractTrophySelectTokensInfo()
         return self.__deviceGiftTokensContainers[bonusName]
+
+    def getMaxLevelForNewbie(self):
+        return self.__getConfig().maxLevelForNewbie
 
     def __stop(self):
         self.__seasonChangeNotifier.stopNotification()

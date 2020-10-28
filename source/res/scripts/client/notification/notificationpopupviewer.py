@@ -5,6 +5,7 @@ from gui.shared.notifications import NotificationPriorityLevel, NotificationGrou
 from helpers import dependency
 from messenger import g_settings
 from messenger.formatters import TimeFormatter
+from messenger.proto.events import g_messengerEvents
 from notification import NotificationMVC
 from notification.BaseNotificationView import BaseNotificationView
 from notification.settings import NOTIFICATION_STATE
@@ -20,6 +21,7 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
         self.__maxAvailableItemsCount = settings.stackLength
         self.__messagesPadding = settings.padding
         self.__noDisplayingPopups = True
+        self.__lockedNotificationPriority = []
         self.__pendingMessagesQueue = []
         super(NotificationPopUpViewer, self).__init__()
         self.setModel(mvc.getModel())
@@ -52,6 +54,8 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
         self._model.onDisplayStateChanged += self.__displayStateChangeHandler
         mvcInstance = NotificationMVC.g_instance
         mvcInstance.getAlertController().onAllAlertsClosed += self.__allAlertsMessageCloseHandler
+        g_messengerEvents.onLockPopUpMessages += self.__onLockPopUpMassages
+        g_messengerEvents.onUnlockPopUpMessages += self.__onUnlockPopUpMessages
         self.as_initInfoS(self.__maxAvailableItemsCount, self.__messagesPadding)
         self._model.setup()
 
@@ -63,6 +67,8 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
         self._model.onDisplayStateChanged -= self.__displayStateChangeHandler
         mvcInstance = NotificationMVC.g_instance
         mvcInstance.getAlertController().onAllAlertsClosed -= self.__allAlertsMessageCloseHandler
+        g_messengerEvents.onLockPopUpMessages -= self.__onLockPopUpMassages
+        g_messengerEvents.onUnlockPopUpMessages -= self.__onUnlockPopUpMessages
         self.cleanUp()
         mvcInstance.cleanUp(resetCounter=self.connectionMgr.isDisconnected())
         super(NotificationPopUpViewer, self)._dispose()
@@ -76,7 +82,7 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
                 self._model.incrementNotifiedMessagesCount(*notification.getCounterInfo())
             if NotificationMVC.g_instance.getAlertController().isAlertShowing():
                 self.__pendingMessagesQueue.append(notification)
-            elif self.__pendingMessagesQueue:
+            elif self.__pendingMessagesQueue or self.__isLocked(notification):
                 self.__pendingMessagesQueue.append(notification)
             elif notification.isAlert():
                 if self.__noDisplayingPopups:
@@ -106,6 +112,9 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
         NotificationMVC.g_instance.getAlertController().showAlertMessage(notification)
 
     def __allAlertsMessageCloseHandler(self):
+        self.__showMessagesFromQueue()
+
+    def __showMessagesFromQueue(self):
         if self.__pendingMessagesQueue:
             needToShowFromQueueMessages = []
             while self.__pendingMessagesQueue:
@@ -129,3 +138,15 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
     def __getPopUpVO(self, notificaton):
         flashId = self._getFlashID(notificaton.getID())
         return notificaton.getPopUpVO(flashId)
+
+    def __isLocked(self, notification):
+        return notification.getPriorityLevel() in self.__lockedNotificationPriority
+
+    def __onLockPopUpMassages(self, lockHigh=False):
+        self.__lockedNotificationPriority = [NotificationPriorityLevel.MEDIUM]
+        if lockHigh:
+            self.__lockedNotificationPriority.append(NotificationPriorityLevel.HIGH)
+
+    def __onUnlockPopUpMessages(self):
+        self.__lockedNotificationPriority = []
+        self.__showMessagesFromQueue()

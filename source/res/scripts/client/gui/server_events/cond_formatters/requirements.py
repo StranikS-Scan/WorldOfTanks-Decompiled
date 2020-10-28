@@ -10,6 +10,7 @@ from gui.impl.gen import R
 from gui.server_events.cond_formatters import packText, packTokenProgress, getSeparatorBlock
 from gui.server_events.cond_formatters.formatters import ConditionsFormatter, ConditionFormatter
 from gui.server_events.conditions import GROUP_TYPE, AndGroup
+from gui.server_events.events_helpers import getPreviousBattleQuest
 from gui.server_events.formatters import TOKEN_SIZES
 from gui.shared.formatters import text_styles, icons
 from helpers import int2roman, dependency
@@ -175,12 +176,15 @@ class TQAccountRequirementsFormatter(AccountRequirementsFormatter):
         return self.getConditionFormatter(group.getName())
 
 
-class WtAccountRequirementsFormatter(AccountRequirementsFormatter):
+class EventRequirementsFormatter(AccountRequirementsFormatter):
 
     def __init__(self):
-        super(WtAccountRequirementsFormatter, self).__init__({'and': WtRecursiveGroupFormatter(),
-         'or': WtRecursiveGroupFormatter(),
+        super(EventRequirementsFormatter, self).__init__({'and': EventRecursiveGroupFormatter(),
+         'or': EventRecursiveGroupFormatter(),
          'single': SingleGroupFormatter()})
+
+    def _showDetailedRequirementsButton(self):
+        return False
 
 
 class SingleGroupFormatter(ConditionsFormatter):
@@ -362,22 +366,17 @@ class TQRecursiveGroupFormatter(RecursiveGroupFormatter):
          'hasReceivedMultipliedXP': HasReceivedMultipliedXPFormatter()})
 
 
-class WtRecursiveGroupFormatter(RecursiveGroupFormatter):
-
-    def __init__(self):
-        super(WtRecursiveGroupFormatter, self).__init__(formatters={'premiumAccount': PremiumAccountFormatter(),
-         'premiumPlusAccount': PremiumPlusAccountFormatter(),
-         'inClan': InClanRequirementFormatter(),
-         'igrType': IgrTypeRequirementFormatter(),
-         'GR': GlobalRatingRequirementFormatter(),
-         'accountDossier': AccountDossierRequirementFormatter(),
-         'vehiclesUnlocked': VehiclesRequirementFormatter(),
-         'hasReceivedMultipliedXP': HasReceivedMultipliedXPFormatter()})
+class EventRecursiveGroupFormatter(TQRecursiveGroupFormatter):
 
     def conclusion(self, group, event, requirements, passed, total):
-        if not group.isAvailable():
-            icon = (icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_MARKER_BLOCKED, width=14, height=14, vSpace=-1, hSpace=-2),)
-            return text_styles.concatStylesToSingleLine(icon, text_styles.error(backport.text(R.strings.quests.missionDetails.requirements.header.unavailable())), text_styles.main(backport.text(R.strings.wt_event.quests.error.no_ticket())))
+        prevQuest = getPreviousBattleQuest(event)
+        if prevQuest is not None and not prevQuest.isCompleted():
+            rRequirements = R.strings.quests.missionDetails.requirements
+            icon = (icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.marker_blocked()), width=14, height=14, vSpace=-1, hSpace=-2),)
+            reason = backport.text(rRequirements.conclusion.previousIncomplete(), quest_name=prevQuest.getUserName())
+            return text_styles.concatStylesWithSpace(icon, text_styles.error(backport.text(rRequirements.header.unavailable())), text_styles.main(reason))
+        else:
+            return
 
 
 class PremiumAccountFormatter(ConditionFormatter):

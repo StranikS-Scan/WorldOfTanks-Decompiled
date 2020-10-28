@@ -6,8 +6,6 @@ from gui.impl import backport
 from gui.shared.gui_items.gui_item import GUIItem
 from dossiers2.custom.records import RECORD_MAX_VALUES
 from dossiers2.ui import achievements
-from gui.Scaleform.settings import ICONS_SIZES
-from gui.impl.gen import R
 
 class RegularAchievement(GUIItem):
     __slots__ = ('_name', '_block', '_value', '_lvlUpValue', '_lvlUpTotalValue', '_isDone', '_isInDossier', '_isValid')
@@ -16,11 +14,13 @@ class RegularAchievement(GUIItem):
         IT_180X180 = '180x180'
         IT_67X71 = '67x71'
         IT_32X32 = '32x32'
+        IT_80X80 = '80x80'
 
     ICON_PATH_180X180 = '../maps/icons/achievement/big'
     ICON_PATH_67X71 = '../maps/icons/achievement'
     ICON_PATH_32X32 = '../maps/icons/achievement/32x32'
     ICON_PATH_95X85 = '../maps/icons/achievement/95x85'
+    ICON_PATH_80X80 = '../maps/icons/achievement/80x80'
     ICON_DEFAULT = '../maps/icons/achievement/noImage.png'
 
     def __init__(self, name, block, dossier, value=None):
@@ -51,10 +51,10 @@ class RegularAchievement(GUIItem):
         return self._value
 
     def isApproachable(self):
-        return self.getIconName() in achievements.BATTLE_APPROACHABLE_ACHIEVES
+        return self._getIconName() in achievements.BATTLE_APPROACHABLE_ACHIEVES
 
     def hasRibbon(self):
-        return self.getIconName() in achievements.BATTLE_ACHIEVES_WITH_RIBBON
+        return self._getIconName() in achievements.BATTLE_ACHIEVES_WITH_RIBBON
 
     def getI18nValue(self):
         maxValue = RECORD_MAX_VALUES.get(self.getRecordName())
@@ -102,20 +102,18 @@ class RegularAchievement(GUIItem):
     def hasCounter(self):
         return bool(self._value)
 
-    def getIconName(self):
-        return self._getActualName()
-
     def getIcons(self):
-        iconName = self.getIconName()
+        iconName = self._getIconName()
         return {self.ICON_TYPE.IT_180X180: '%s/%s.png' % (self.ICON_PATH_180X180, iconName),
          self.ICON_TYPE.IT_67X71: '%s/%s.png' % (self.ICON_PATH_67X71, iconName),
-         self.ICON_TYPE.IT_32X32: '%s/%s.png' % (self.ICON_PATH_32X32, iconName)}
+         self.ICON_TYPE.IT_32X32: '%s/%s.png' % (self.ICON_PATH_32X32, iconName),
+         self.ICON_TYPE.IT_80X80: '%s/%s.png' % (self.ICON_PATH_80X80, iconName)}
 
     def getHugeIcon(self):
         return self.getIcons()[self.ICON_TYPE.IT_180X180]
 
     def getBigIcon(self):
-        iconName = self.getIconName()
+        iconName = self._getIconName()
         if len(iconName) > 0 and iconName[0].isdigit():
             iconName = 'c_' + iconName
         iconRes = R.images.gui.maps.icons.achievement.c_80x80.dyn(iconName)
@@ -124,26 +122,14 @@ class RegularAchievement(GUIItem):
         else:
             return self.getSmallIcon()
 
+    def getBig80x80Icon(self):
+        return self.getIcons()[self.ICON_TYPE.IT_80X80]
+
     def getSmallIcon(self):
         return self.getIcons()[self.ICON_TYPE.IT_67X71]
 
     def getIcon32x32(self):
         return self.getIcons()[self.ICON_TYPE.IT_32X32]
-
-    def getIcon48x48(self):
-        iconName = self.getIconName()
-        iconId = R.images.gui.maps.icons.achievement.num(ICONS_SIZES.X48).dyn(iconName)()
-        return backport.image(iconId) if iconId > 0 else ''
-
-    def getIcon80x80(self):
-        iconName = self.getIconName()
-        iconId = R.images.gui.maps.icons.achievement.num(ICONS_SIZES.X80).dyn(iconName)()
-        return backport.image(iconId) if iconId > 0 else ''
-
-    def getIcon110x110(self):
-        iconName = self.getIconName()
-        iconId = R.images.gui.maps.icons.achievement.num(ICONS_SIZES.X110).dyn(iconName)()
-        return backport.image(iconId) if iconId > 0 else ''
 
     def getUserName(self):
         return i18n.makeString('#achievements:%s' % self._getActualName())
@@ -195,6 +181,9 @@ class RegularAchievement(GUIItem):
 
     def _readLevelUpTotalValue(self, dossier):
         return None
+
+    def _getIconName(self):
+        return self._getActualName()
 
     def _getActualName(self):
         return self._name

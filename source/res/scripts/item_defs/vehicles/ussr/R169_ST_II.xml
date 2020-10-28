@@ -62,6 +62,13 @@
       <undamaged>	vehicles/russian/R169_ST_II/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/russian/R169_ST_II/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/russian/R169_ST_II/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <R169_ST_II_3Dst>
+          <undamaged>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst/crash/lod0/Hull.model	</exploded>
+        </R169_ST_II_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -91,8 +98,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.212098 0.278693 2.65441	</rayStart>
-        <rayEnd>	-0.212098 0.102107 2.56052	</rayEnd>
+        <rayStart>	0.478832 0.543487 2.1564	</rayStart>
+        <rayEnd>	0.478832 0.366904 2.06251	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.25	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
@@ -799,6 +806,34 @@
         <anchorDirection>	0.024708 0.957767 0.28648	</anchorDirection>
         <verticalMirror>	true	</verticalMirror>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15052	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R169_ST_II_3Dst	</compatibleModels>
+        <position>	-1.13367 0.998211 3.13992	</position>
+        <rotation>	0.444394 -0.000004 3.14158	</rotation>
+        <scale>	0.508703 0.15 0.508704	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.813157	</clipAngle>
+        <anchorPosition>	-1.13367 0.174273 3.1806	</anchorPosition>
+        <anchorDirection>	0.000012 0.902871 0.429911	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15053	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R169_ST_II_3Dst	</compatibleModels>
+        <position>	1.13368 0.998192 3.13992	</position>
+        <rotation>	0.444394 -0.000004 3.14158	</rotation>
+        <scale>	0.508703 0.15 0.508704	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.813157	</clipAngle>
+        <anchorPosition>	1.13368 0.174253 3.1806	</anchorPosition>
+        <anchorDirection>	0.000012 0.902871 0.429911	</anchorDirection>
+      </slot>
     </customizationSlots>
     <camouflage>
       <density>	106.81 107.96	</density>
@@ -834,6 +869,13 @@
         <undamaged>	vehicles/russian/R169_ST_II/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R169_ST_II/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R169_ST_II/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <R169_ST_II_3Dst>
+            <undamaged>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst/crash/lod0/Chassis.model	</exploded>
+          </R169_ST_II_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1789,6 +1831,13 @@
             <undamaged>	vehicles/russian/R169_ST_II/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R169_ST_II/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R169_ST_II/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <R169_ST_II_3Dst>
+                <undamaged>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </R169_ST_II_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R169_ST_II/collision/Gun_01.model	</collisionModelServer>
@@ -1858,6 +1907,13 @@
         <undamaged>	vehicles/russian/R169_ST_II/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/russian/R169_ST_II/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/russian/R169_ST_II/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <R169_ST_II_3Dst>
+            <undamaged>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </R169_ST_II_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R169_ST_II/collision/Turret_01.model	</collisionModelServer>
@@ -2663,6 +2719,76 @@
           <clipAngle>	1.11033	</clipAngle>
           <anchorPosition>	1.30203 0.477557 -0.38619	</anchorPosition>
           <anchorDirection>	0.999998 -0.00172633 -0.000777274	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35055	</slotId>
+          <tags>	formfactor_square	</tags>
+          <position>	-0.26396 2.34385 1.55057	</position>
+          <rotation>	0.179688 -0.000000 3.14158	</rotation>
+          <scale>	0.6199 0.12398 0.6199	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.0228602	</clipAngle>
+          <anchorPosition>	-0.263959 0.864164 0.895165	</anchorPosition>
+          <anchorDirection>	0.000012 0.983899 0.178723	</anchorDirection>
+          <compatibleModels>	R169_ST_II_3Dst	</compatibleModels>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35056	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R169_ST_II_3Dst	</compatibleModels>
+          <position>	0.000018 2.42942 -1.26251	</position>
+          <rotation>	3.14159 -0.000001 -0.000009	</rotation>
+          <scale>	0.580738 0.116148 0.580738	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.43464	</clipAngle>
+          <anchorPosition>	0.000018 0.93382 -1.92231	</anchorPosition>
+          <anchorDirection>	-0.000009 1 -0.000003	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35057	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R169_ST_II_3Dst	</compatibleModels>
+          <position>	0.965018 2.08243 -0.940626	</position>
+          <rotation>	1.84476 -1.38875 -0.00279737	</rotation>
+          <scale>	0.729566 0.520225 0.729567	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.11033	</clipAngle>
+          <anchorPosition>	0.98831 0.585194 -1.60478	</anchorPosition>
+          <anchorDirection>	0.946287 0.270549 -0.177043	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35058	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R169_ST_II_3Dst	</compatibleModels>
+          <position>	-0.964988 2.08245 -0.940626	</position>
+          <rotation>	1.84478 1.38876 -0.00279927	</rotation>
+          <scale>	0.729567 0.520226 0.729568	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.11033	</clipAngle>
+          <anchorPosition>	-0.988281 0.585211 -1.60478	</anchorPosition>
+          <anchorDirection>	-0.947297 0.270568 -0.171527	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35059	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R169_ST_II_3Dst	</compatibleModels>
+          <position>	0.000023 2.0059 -1.77348	</position>
+          <rotation>	1.91067 -0.000028 -0.000029	</rotation>
+          <scale>	0.396661 0.0793325 0.396661	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.43464	</clipAngle>
+          <anchorPosition>	0.000023 0.521431 -2.48825	</anchorPosition>
+          <anchorDirection>	-0.000002 0.333364 -0.942798	</anchorDirection>
         </slot>
       </customizationSlots>
       <camouflage>

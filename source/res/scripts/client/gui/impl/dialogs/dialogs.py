@@ -14,7 +14,6 @@ from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindo
 from gui.impl.lobby.dialogs.quit_game_dialog import QuitGameDialogWindow
 from gui.impl.lobby.premacc.maps_blacklist_confirm_view import MapsBlacklistConfirmView
 from gui.impl.lobby.battle_pass.battle_pass_voting_confirm_view import BattlePassVotingConfirmView
-from gui.impl.lobby.wt_event.wt_event_exchange_reroll_dialog import WTEventExchangeToReRoll
 from gui.impl.pub.dialog_window import DialogButtons, DialogWindow
 from connection_listener import ConnectionListener, ListenTo
 if typing.TYPE_CHECKING:
@@ -68,8 +67,8 @@ def mapsBlacklistConfirm(mapId, cooldownTime, disabledMaps=(), parent=None):
 
 
 @async
-def trophyDeviceUpgradeConfirm(trophyBasicModule, parent=None, enableBlur3D=True):
-    dialog = TrophyDeviceUpgradeConfirmView(trophyBasicModule=trophyBasicModule, parent=parent.getParentWindow() if parent is not None else None, enableBlur3D=enableBlur3D)
+def trophyDeviceUpgradeConfirm(trophyBasicModule, parent=None):
+    dialog = TrophyDeviceUpgradeConfirmView(trophyBasicModule=trophyBasicModule, parent=parent.getParentWindow() if parent is not None else None)
     result = yield await(show(dialog))
     raise AsyncReturn((result.result == DialogButtons.SUBMIT, result.data))
     return
@@ -125,10 +124,4 @@ def showSingleDialogWithResultData(wrappedViewClass, layoutID, parent=None, *arg
 @async
 def showExchangeToUpgradeDeviceDialog(device, parent=None):
     result = yield await(showSingleDialog(layoutID=R.views.lobby.tanksetup.dialogs.ExchangeToUpgradeItems(), parent=parent, wrappedViewClass=ExchangeToUpgradeDevice, device=device))
-    raise AsyncReturn(result)
-
-
-@async
-def showExchangeToRerollDialog(reRollPrice, boxType, parent=None):
-    result = yield await(showSingleDialog(layoutID=R.views.lobby.tanksetup.dialogs.ExchangeToUpgradeItems(), parent=parent, wrappedViewClass=WTEventExchangeToReRoll, reRollPrice=reRollPrice, boxType=boxType))
     raise AsyncReturn(result)

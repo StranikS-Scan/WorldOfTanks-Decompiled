@@ -469,6 +469,8 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__setNotificationCounters()
 
     def __onVehicleChanged(self):
+        if self.__ctx.isOutfitApplying:
+            return
         self._carouselDP.invalidateItems()
         self.__updateTabs()
         self.resetFilter()

@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/ranked/ranked_year_award_view.py
 import logging
-from frameworks.wulf import ViewSettings
-from frameworks.wulf import WindowFlags
+from frameworks.wulf import ViewSettings, WindowFlags
 from gui.impl.auxiliary.rewards_helper import getRewardTooltipContent, getRewardRendererModelPresenter, RANKED_MODEL_PRESENTERS
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.ranked.ranked_year_award_model import RankedYearAwardModel
@@ -10,7 +9,7 @@ from gui.ranked_battles.constants import YEAR_AWARDS_ORDER
 from gui.ranked_battles.ranked_formatters import getFormattedBonusesForYearAwardsWindow
 from gui.shared import event_dispatcher
 from gui.impl.pub import ViewImpl
-from gui.impl.pub.lobby_window import LobbyWindow
+from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.impl.backport import BackportTooltipWindow, TooltipData
 from gui.ranked_battles.ranked_helpers.sound_manager import RankedSoundManager
 from helpers import dependency
@@ -19,7 +18,7 @@ _logger = logging.getLogger(__name__)
 
 class RankedYearAwardView(ViewImpl):
     __rankedController = dependency.descriptor(IRankedBattlesController)
-    __slots__ = ('__items', '__bonuses', '__points', '__vehicleCD', '__closeCallback')
+    __slots__ = ('__items', '__bonuses', '__points', '__vehicleCD')
 
     def __init__(self, contentResId, *args, **kwargs):
         settings = ViewSettings(contentResId)
@@ -31,7 +30,6 @@ class RankedYearAwardView(ViewImpl):
         self.__bonuses = []
         self.__points = None
         self.__vehicleCD = None
-        self.__closeCallback = None
         return
 
     @property
@@ -52,11 +50,10 @@ class RankedYearAwardView(ViewImpl):
         tooltipData = self.__getBackportTooltipData(event)
         return getRewardTooltipContent(event, tooltipData)
 
-    def _initialize(self, rawAwards, points, closeCallback):
+    def _initialize(self, rawAwards, points):
         super(RankedYearAwardView, self)._initialize()
         self.viewModel.onDestroyEvent += self.__onDestroy
         self.viewModel.onActionBtnClick += self.__onActionButtonClick
-        self.__closeCallback = closeCallback
         RankedSoundManager().setOverlayStateOn()
 
     def _finalize(self):
@@ -65,12 +62,9 @@ class RankedYearAwardView(ViewImpl):
         del self.__bonuses[:]
         self.__items.clear()
         RankedSoundManager().setOverlayStateOff()
-        if self.__closeCallback is not None and callable(self.__closeCallback):
-            self.__closeCallback()
         super(RankedYearAwardView, self)._finalize()
-        return
 
-    def _onLoading(self, rawAwards, points, closeCallback):
+    def _onLoading(self, rawAwards, points):
         super(RankedYearAwardView, self)._onLoading()
         self.__bonuses = getFormattedBonusesForYearAwardsWindow(rawAwards)
         self.__points = points
@@ -134,9 +128,12 @@ class RankedYearAwardView(ViewImpl):
             return self.__items[tooltipId] if tooltipId in self.__items else None
 
 
-class RankedYearAwardWindow(LobbyWindow):
-    __slots__ = ()
+class RankedYearAwardWindow(LobbyNotificationWindow):
+    __slots__ = ('__args',)
 
-    def __init__(self, rawAwards, points, closeCallback):
-        super(RankedYearAwardWindow, self).__init__(content=RankedYearAwardView(R.views.lobby.ranked.ranked_year_award.RankedYearAward(), rawAwards, points, closeCallback), wndFlags=WindowFlags.OVERLAY, decorator=None)
-        return
+    def __init__(self, rawAwards, points):
+        super(RankedYearAwardWindow, self).__init__(content=RankedYearAwardView(R.views.lobby.ranked.ranked_year_award.RankedYearAward(), rawAwards, points), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN)
+        self.__args = (rawAwards, points)
+
+    def isParamsEqual(self, *args):
+        return self.__args == args

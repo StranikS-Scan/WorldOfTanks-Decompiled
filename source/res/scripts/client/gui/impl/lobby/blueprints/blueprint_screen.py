@@ -10,6 +10,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.go_back_helper import getBackBtnLabel
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.dialogs import dialogs
 from gui.impl.backport import createTooltipData, BackportTooltipWindow
@@ -167,7 +168,7 @@ class BlueprintScreen(ViewImpl):
         self.__accountSettings.add(self.__vehicle.intCD)
 
     def __onOpenVehicleViewBtnClicked(self):
-        event_dispatcher.showResearchView(self.__vehicle.intCD, exitEvent=events.LoadViewEvent(VIEW_ALIAS.LOBBY_TECHTREE, ctx={'nation': self.__vehicle.nationName}))
+        event_dispatcher.showResearchView(self.__vehicle.intCD, exitEvent=events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_TECHTREE), ctx={'nation': self.__vehicle.nationName}))
 
     @process
     def __onResearchVehicle(self, _=None):

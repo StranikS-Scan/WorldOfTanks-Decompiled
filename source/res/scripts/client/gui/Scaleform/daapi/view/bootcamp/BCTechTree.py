@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/bootcamp/BCTechTree.py
-from gui.Scaleform.daapi.view.lobby.techtree.techtree_page import TechTree
-from gui.shared import event_dispatcher as shared_events, events
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from nations import NAMES as NATION_NAMES
 from bootcamp.Bootcamp import g_bootcamp
-from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE
+from gui.Scaleform.daapi.view.lobby.techtree.techtree_page import TechTree
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
+from gui.shared import event_dispatcher as shared_events, events
+from nations import NAMES as NATION_NAMES
 
 class BCTechTree(TechTree):
 
@@ -14,7 +15,7 @@ class BCTechTree(TechTree):
         if not g_bootcamp.isResearchFreeLesson():
             nationData = g_bootcamp.getNationData()
             vehicle = self._itemsCache.items.getItemByCD(int(vehCD))
-            exitEvent = events.LoadViewEvent(VIEW_ALIAS.LOBBY_TECHTREE, ctx={'nation': vehicle.nationName})
+            exitEvent = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_TECHTREE), ctx={'nation': vehicle.nationName})
             if nationData['vehicle_second'] == vehCD:
                 if vehicle.isInInventory:
                     shared_events.showResearchView(vehCD, exitEvent=exitEvent)

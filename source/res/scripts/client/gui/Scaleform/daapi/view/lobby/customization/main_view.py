@@ -4,7 +4,7 @@ import logging
 from collections import namedtuple
 import BigWorld
 from BWUtil import AsyncReturn
-from CurrentVehicle import g_currentVehicle
+from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from Math import Matrix
 from account_helpers.AccountSettings import AccountSettings, CUSTOMIZATION_SECTION, CAROUSEL_ARROWS_HINT_SHOWN_FIELD
 from async import async, await
@@ -19,6 +19,7 @@ from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibili
 from gui.Scaleform.daapi.view.meta.CustomizationMainViewMeta import CustomizationMainViewMeta
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.entities.View import ViewKey, ViewKeyDynamic
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams, GuiImplViewLoadParams
 from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler, ViewLifecycleWatcher
 from gui.Scaleform.genConsts.CUSTOMIZATION_ALIASES import CUSTOMIZATION_ALIASES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -169,7 +170,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
     guiLoader = dependency.descriptor(IGuiLoader)
     settingsCore = dependency.descriptor(ISettingsCore)
 
-    def __init__(self, viewCtx=None):
+    def __init__(self, ctx=None):
         super(MainView, self).__init__()
         self.__viewLifecycleWatcher = ViewLifecycleWatcher()
         self.fadeAnchorsOut = False
@@ -178,7 +179,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__bottomPanel = None
         self._seasonSoundAnimation = None
         self.__ctx = None
-        self.__viewCtx = viewCtx or {}
+        self.__viewCtx = ctx or {}
         self.__renderEnv = None
         self.__initAnchorsPositionsCallback = None
         self.__setCollisionsCallback = None
@@ -226,7 +227,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             _logger.info('Gameface customization cart is opened')
             ctx = ctx or {}
             ctx.update(c11nView=self)
-            self.fireEvent(events.LoadUnboundViewEvent(R.views.lobby.customization.CustomizationCart(), CustomizationCartView, ScopeTemplates.LOBBY_SUB_SCOPE, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.customization.CustomizationCart(), CustomizationCartView, ScopeTemplates.LOBBY_SUB_SCOPE), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onProgressionEntryPointClick(self):
         showProgressiveItemsView()
@@ -593,6 +594,8 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
 
     def _populate(self):
         super(MainView, self)._populate()
+        if g_currentPreviewVehicle.isPresent() and g_currentPreviewVehicle.item.isOnlyForEventBattles:
+            g_currentPreviewVehicle.selectNoVehicle()
         self.__ctx = self.service.getCtx()
         self.__selectFirstVisibleTab()
         self.__ctx.events.onSeasonChanged += self.__onSeasonChanged
@@ -675,9 +678,9 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': False}), scope=EVENT_BUS_SCOPE.LOBBY)
         if self.__ctx.c11nCameraManager is not None:
             self.__ctx.c11nCameraManager.locateCameraToStartState()
-            if self.__ctx.c11nCameraManager.vEntity is not None:
-                turretRotator = self.__ctx.c11nCameraManager.vEntity.appearance.turretRotator
-                turretRotator.onTurretRotated -= self.__onTurretAndGunRotated
+            vEntity = self.__ctx.c11nCameraManager.vEntity
+            if vEntity is not None and vEntity.appearance is not None and vEntity.appearance.turretRotator is not None:
+                vEntity.appearance.turretRotator.onTurretRotated -= self.__onTurretAndGunRotated
         if self.__styleInfo is not None:
             self.__styleInfo.disableBlur()
             self.__disableStyleInfoSound()
@@ -794,7 +797,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         if not immediate:
             self.__ctx.mode.unselectItem()
             self.__ctx.mode.unselectSlot()
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __onCacheResync(self, *_):
         if not g_currentVehicle.isPresent():

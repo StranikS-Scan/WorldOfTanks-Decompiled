@@ -31,7 +31,7 @@ class CustomizationMode(object):
     _tabs = ()
     _itemsCache = dependency.descriptor(IItemsCache)
     _service = dependency.descriptor(ICustomizationService)
-    _soundEventChacker = dependency.descriptor(ISoundEventChecker)
+    _soundEventChecker = dependency.descriptor(ISoundEventChecker)
 
     def __init__(self, ctx):
         self._ctx = ctx

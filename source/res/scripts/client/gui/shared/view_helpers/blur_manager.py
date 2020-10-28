@@ -17,15 +17,14 @@ _logger = logging.getLogger(__name__)
 _idsGenerator = Int32IDGenerator()
 
 class CachedBlur(object):
-    __slots__ = ('_blurId', '_enabled', '_fadeTime', '_rectangles', '_ownLayer', '_layers', '_blurAnimRepeatCount', '__weakref__')
+    __slots__ = ('_blurId', '_enabled', '_fadeTime', '_rectangles', '_ownLayer', '_blurAnimRepeatCount', '__weakref__')
 
-    def __init__(self, enabled=False, fadeTime=0, ownLayer=None, layers=None, blurAnimRepeatCount=_DEFAULT_BLUR_ANIM_REPEAT_COUNT):
+    def __init__(self, enabled=False, fadeTime=0, ownLayer=None, blurAnimRepeatCount=_DEFAULT_BLUR_ANIM_REPEAT_COUNT):
         self._blurId = next(_idsGenerator)
         self._rectangles = {}
         self._enabled = enabled
         self._fadeTime = fadeTime
         self._ownLayer = ownLayer
-        self._layers = layers
         self._blurAnimRepeatCount = blurAnimRepeatCount
         _manager.registerBlur(self)
 
@@ -83,12 +82,8 @@ class CachedBlur(object):
         return self._ownLayer
 
     @property
-    def layers(self):
-        return self._layers
-
-    @property
     def isLayerBlur(self):
-        return bool(self._ownLayer and self._layers)
+        return bool(self._ownLayer)
 
     @property
     def blurAnimRepeatCount(self):
@@ -166,7 +161,7 @@ class _BlurManager(object):
 
     def _setLayerBlur(self, blur):
         if self._lobby is not None:
-            self._lobby.blurBackgroundViews(blur.ownLayer, blur.layers, blur.blurAnimRepeatCount)
+            self._lobby.blurBackgroundViews(blur.ownLayer, blur.blurAnimRepeatCount)
         elif self._battle is not None:
             self._battle.blurBackgroundViews()
         return

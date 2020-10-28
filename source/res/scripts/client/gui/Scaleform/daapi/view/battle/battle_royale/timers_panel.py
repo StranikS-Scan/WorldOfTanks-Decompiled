@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/battle_royale/timers_panel.py
+import logging
 import weakref
 import BigWorld
 from constants import LootAction, LOOT_TYPE, VEHICLE_MISC_STATUS
@@ -15,6 +16,7 @@ from gui.impl.gen import R
 _WARNING_TEXT_TIMER = 3
 _LEAVE_ZONE_DEFENDER_DELAY = 10
 _MAX_DISPLAYED_SECONDARY_STATUS_TIMERS = 4
+_logger = logging.getLogger(__name__)
 
 class _BattleRoyaleStackTimersCollection(_RegularStackTimersCollection):
 
@@ -61,6 +63,7 @@ class BattleRoyaleTimersPanel(TimersPanel):
             self.__updateDotEffectTimer(value)
 
     def _showDestroyTimer(self, value):
+        _logger.debug('Show destroy timer. zoneID=%r, isCausingDamage=%r, totalTime=%r, level=%r, finishTime=%r, entered=%r', value.zoneID, value.isCausingDamage, value.totalTime, value.level, value.finishTime, value.entered)
         if value.needToCloseAll():
             self._hideTimer(BATTLE_NOTIFICATIONS_TIMER_TYPES.HALF_OVERTURNED)
             for typeID in self._mapping.getDestroyTimersTypesIDs():
@@ -85,6 +88,7 @@ class BattleRoyaleTimersPanel(TimersPanel):
         return BATTLE_NOTIFICATIONS_TIMER_TYPES.HALF_OVERTURNED if value.code == VEHICLE_MISC_STATUS.VEHICLE_IS_OVERTURNED and getTimerViewTypeID(value.level) == BATTLE_NOTIFICATIONS_TIMER_TYPES.WARNING_VIEW else self._mapping.getTimerTypeIDByMiscCode(value.code)
 
     def _showDeathZoneTimer(self, value):
+        _logger.debug('Show death zone timer. zoneID=%r, isCausingDamage=%r, totalTime=%r, level=%r, finishTime=%r, entered=%r', value.zoneID, value.isCausingDamage, value.totalTime, value.level, value.finishTime, value.entered)
         self._hideTimer(BATTLE_NOTIFICATIONS_TIMER_TYPES.DEATH_ZONE)
         self._hideTimer(BATTLE_NOTIFICATIONS_TIMER_TYPES.ORANGE_ZONE)
         if value.needToShow():
@@ -102,6 +106,7 @@ class BattleRoyaleTimersPanel(TimersPanel):
 
     def __showLootTimer(self, lootID, pickupTime):
         loot = BigWorld.entity(lootID)
+        _logger.debug('Show loot timer. lootID=%r, loot=%r, __loots=%r', lootID, loot, self.__loots)
         if loot is not None:
             if not self.__loots:
                 time = BigWorld.serverTime()
@@ -111,12 +116,14 @@ class BattleRoyaleTimersPanel(TimersPanel):
         return
 
     def __hideLootTimer(self, lootID):
+        _logger.debug('Hide loot timer. lootID=%r, __loots=%r', lootID, self.__loots)
         if lootID in self.__loots:
             del self.__loots[lootID]
         if not self.__loots:
             self.as_hideSecondaryTimerS(BATTLE_NOTIFICATIONS_TIMER_TYPES.RECOVERY)
 
     def __updateTimer(self):
+        _logger.debug('Timer updated, loots=%r', self.__loots)
         time = BigWorld.serverTime()
         timeLeft = max((loot_time for _, loot_time in self.__loots.values())) - time
         timeText = backport.text(R.strings.battle_royale.timersPanel.lootPickup(), lootType=self.__getLootType())
@@ -137,6 +144,7 @@ class BattleRoyaleTimersPanel(TimersPanel):
         return backport.text(R.strings.battle_royale.loot.corpse()) if lootType == LOOT_TYPE.CORPSE else ''
 
     def __updateDotEffectTimer(self, dotInfo):
+        _logger.debug('Dot effect timer updated. dotInfo is not None=%r', dotInfo is not None)
         if dotInfo is not None:
             totalTime = dotInfo.endTime - BigWorld.serverTime()
             self._showTimer(_TIMER_STATES.BERSERKER, totalTime, _TIMER_STATES.WARNING_VIEW, dotInfo.endTime)

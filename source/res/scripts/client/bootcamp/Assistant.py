@@ -2,12 +2,12 @@
 # Embedded file name: scripts/client/bootcamp/Assistant.py
 import BigWorld
 from debug_utils_bootcamp import LOG_CURRENT_EXCEPTION_BOOTCAMP
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from hints.HintsSystem import HintSystem
 from BootCampEvents import g_bootcampEvents
 from BootcampSettings import getBattleSettings
 from BootcampConstants import UI_STATE
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import BootcampEvent
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 
@@ -112,7 +112,7 @@ class BattleAssistant(BaseAssistant):
 
     def __doHighlight(self):
         for name in self.__highlightedElements:
-            g_eventBus.handleEvent(events.LoadViewEvent(BootcampEvent.ADD_HIGHLIGHT, None, name), EVENT_BUS_SCOPE.BATTLE)
+            g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_ADD_HIGHLIGHT), ctx=name), EVENT_BUS_SCOPE.BATTLE)
             g_bootcampEvents.onHighlightAdded(self.HIGHLIGHTED_GUI_DICT[name])
 
         self.__idHighlight = None
@@ -124,11 +124,10 @@ class BattleAssistant(BaseAssistant):
             self.__idHighlight = BigWorld.callback(BattleAssistant.ASSISTANT_TIMEOUT_HIGHLIGHT, self.__doHighlight)
             prebattle = getBattleSettings(self.__lessonId).prebattle
             if prebattle.has_key('visible_hints'):
-                g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOTCAMP_PREBATTLE_HITNS, None, prebattle), EVENT_BUS_SCOPE.BATTLE)
+                g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_PREBATTLE_HITNS), ctx=prebattle), EVENT_BUS_SCOPE.BATTLE)
                 self.__idClosePrebattleTimer = BigWorld.callback(prebattle['timeout'], self.__onClosePrebattle)
         elif state == UI_STATE.STOP:
             self.stop()
-        return
 
     def _doStop(self):
         self._markerManager.stop()
@@ -143,7 +142,7 @@ class BattleAssistant(BaseAssistant):
         return
 
     def __onClosePrebattle(self):
-        g_eventBus.handleEvent(events.BootcampEvent(BootcampEvent.CLOSE_PREBATTLE, None, {}), EVENT_BUS_SCOPE.BATTLE)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_CLOSE_PREBATTLE)), EVENT_BUS_SCOPE.BATTLE)
         self.__idClosePrebattleTimer = None
         return
 

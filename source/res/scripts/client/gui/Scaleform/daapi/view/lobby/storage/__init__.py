@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/__init__.py
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.storage.customization.customization_cm_handlers import CustomizationCMHandler
 from gui.Scaleform.daapi.view.lobby.storage.customization.customization_view import StorageCategoryCustomizationView
@@ -31,7 +32,7 @@ from gui.Scaleform.daapi.view.lobby.storage.inventory.crew_books_tab import Crew
 from gui.Scaleform.daapi.view.lobby.storage.offers.offers_view import StorageCategoryOffersView
 from gui.Scaleform.daapi.view.lobby.storage.personalreserves.boosters_cm_handlers import PersonalReservesCMHandler
 from gui.Scaleform.daapi.view.lobby.storage.personalreserves.boosters_view import StorageCategoryPersonalReservesView
-from gui.Scaleform.framework import ViewSettings, ViewTypes, ScopeTemplates, GroupedViewSettings
+from gui.Scaleform.framework import ViewSettings, ScopeTemplates, GroupedViewSettings, ComponentSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
@@ -57,26 +58,26 @@ def getContextMenuHandlers():
 
 def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.storage.storage_view import StorageView
-    return (ViewSettings(VIEW_ALIAS.LOBBY_STORAGE, StorageView, 'storageView.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_STORAGE, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(STORAGE_CONSTANTS.FOR_SELL_VIEW, StorageCategoryForSellView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(STORAGE_CONSTANTS.IN_HANGAR_VIEW, StorageCategoryInHangarView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(STORAGE_CONSTANTS.IN_HANGAR_ALL_VEHICLES_TAB, AllVehiclesTabView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(STORAGE_CONSTANTS.IN_HANGAR_RESTORE_VEHICLES_TAB, RestoreVehiclesTabView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(STORAGE_CONSTANTS.IN_HANGAR_RENT_VEHICLES_TAB, RentVehiclesTabView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(STORAGE_CONSTANTS.STORAGE_VIEW, InventoryCategoryStorageView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(STORAGE_CONSTANTS.STORAGE_REGULAR_ITEMS_TAB, RegularItemsTabView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(STORAGE_CONSTANTS.STORAGE_CONSUMABLES_TAB, ConsumablesTabView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(STORAGE_CONSTANTS.STORAGE_MODULES_TAB, ModulesTabView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(STORAGE_CONSTANTS.STORAGE_SHELLS_TAB, ShellsTabView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(STORAGE_CONSTANTS.STORAGE_DEVICES_TAB, OptDevicesTabView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(STORAGE_CONSTANTS.STORAGE_CREW_BOOKS_TAB, CrewBooksTabView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(STORAGE_CONSTANTS.PERSONAL_RESERVES_VIEW, StorageCategoryPersonalReservesView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     GroupedViewSettings(VIEW_ALIAS.STORAGE_VEHICLES_FILTER_POPOVER, StorageVehicleFilterPopover, 'vehiclesFiltersPopoverView.swf', ViewTypes.WINDOW, VIEW_ALIAS.STORAGE_VEHICLES_FILTER_POPOVER, VIEW_ALIAS.STORAGE_VEHICLES_FILTER_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(STORAGE_CONSTANTS.BLUEPRINTS_VIEW, StorageCategoryBlueprintsView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     GroupedViewSettings(VIEW_ALIAS.STORAGE_BLUEPRINTS_FILTER_POPOVER, StorageBlueprintsFilterPopover, 'vehiclesFiltersPopoverView.swf', ViewTypes.WINDOW, VIEW_ALIAS.STORAGE_VEHICLES_FILTER_POPOVER, VIEW_ALIAS.STORAGE_BLUEPRINTS_FILTER_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
-     GroupedViewSettings(VIEW_ALIAS.STORAGE_VEHICLE_SELECTOR_POPOVER, VehicleSelectPopover, 'storageVehicleSelectorPopover.swf', ViewTypes.WINDOW, VIEW_ALIAS.STORAGE_VEHICLE_SELECTOR_POPOVER, VIEW_ALIAS.STORAGE_VEHICLE_SELECTOR_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(STORAGE_CONSTANTS.CUSTOMIZATION_VIEW, StorageCategoryCustomizationView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(STORAGE_CONSTANTS.OFFERS_VIEW, StorageCategoryOffersView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
+    return (ViewSettings(VIEW_ALIAS.LOBBY_STORAGE, StorageView, 'storageView.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.LOBBY_STORAGE, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ComponentSettings(STORAGE_CONSTANTS.FOR_SELL_VIEW, StorageCategoryForSellView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(STORAGE_CONSTANTS.IN_HANGAR_VIEW, StorageCategoryInHangarView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(STORAGE_CONSTANTS.IN_HANGAR_ALL_VEHICLES_TAB, AllVehiclesTabView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(STORAGE_CONSTANTS.IN_HANGAR_RESTORE_VEHICLES_TAB, RestoreVehiclesTabView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(STORAGE_CONSTANTS.IN_HANGAR_RENT_VEHICLES_TAB, RentVehiclesTabView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(STORAGE_CONSTANTS.STORAGE_VIEW, InventoryCategoryStorageView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(STORAGE_CONSTANTS.STORAGE_REGULAR_ITEMS_TAB, RegularItemsTabView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(STORAGE_CONSTANTS.STORAGE_CONSUMABLES_TAB, ConsumablesTabView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(STORAGE_CONSTANTS.STORAGE_MODULES_TAB, ModulesTabView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(STORAGE_CONSTANTS.STORAGE_SHELLS_TAB, ShellsTabView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(STORAGE_CONSTANTS.STORAGE_DEVICES_TAB, OptDevicesTabView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(STORAGE_CONSTANTS.STORAGE_CREW_BOOKS_TAB, CrewBooksTabView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(STORAGE_CONSTANTS.PERSONAL_RESERVES_VIEW, StorageCategoryPersonalReservesView, ScopeTemplates.DEFAULT_SCOPE),
+     GroupedViewSettings(VIEW_ALIAS.STORAGE_VEHICLES_FILTER_POPOVER, StorageVehicleFilterPopover, 'vehiclesFiltersPopoverView.swf', WindowLayer.WINDOW, VIEW_ALIAS.STORAGE_VEHICLES_FILTER_POPOVER, VIEW_ALIAS.STORAGE_VEHICLES_FILTER_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(STORAGE_CONSTANTS.BLUEPRINTS_VIEW, StorageCategoryBlueprintsView, ScopeTemplates.DEFAULT_SCOPE),
+     GroupedViewSettings(VIEW_ALIAS.STORAGE_BLUEPRINTS_FILTER_POPOVER, StorageBlueprintsFilterPopover, 'vehiclesFiltersPopoverView.swf', WindowLayer.WINDOW, VIEW_ALIAS.STORAGE_VEHICLES_FILTER_POPOVER, VIEW_ALIAS.STORAGE_BLUEPRINTS_FILTER_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
+     GroupedViewSettings(VIEW_ALIAS.STORAGE_VEHICLE_SELECTOR_POPOVER, VehicleSelectPopover, 'storageVehicleSelectorPopover.swf', WindowLayer.WINDOW, VIEW_ALIAS.STORAGE_VEHICLE_SELECTOR_POPOVER, VIEW_ALIAS.STORAGE_VEHICLE_SELECTOR_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(STORAGE_CONSTANTS.CUSTOMIZATION_VIEW, StorageCategoryCustomizationView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(STORAGE_CONSTANTS.OFFERS_VIEW, StorageCategoryOffersView, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getSectionsList():

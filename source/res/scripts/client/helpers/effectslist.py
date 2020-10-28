@@ -441,7 +441,7 @@ class _AnimationEffectDesc(_EffectDesc):
             animator.bindTo(AnimationSequence.ModelWrapperContainer(model, spaceID))
             animator.start()
         else:
-            SoftException('EffectsList trying to play old animation <%s> on compoud model <%s>.' % (self._name, self.TYPE))
+            raise SoftException('EffectsList trying to play old animation <%s> on compoud model <%s>.' % (self._name, self.TYPE))
         effects.append({'typeDesc': self,
          'animator': animator})
         return
@@ -633,11 +633,6 @@ class _ShotSoundEffectDesc(_BaseSoundEvent):
             if soundObject is not None:
                 isPlayer, _ = self._isPlayer(args)
                 soundName = self._soundName[0 if isPlayer else 1]
-                if not isPlayer:
-                    if 'event_hunter' in vehicle.typeDescriptor.type.tags:
-                        soundName += ('ev_white_tiger_wpn_t55_npc',)
-                    elif 'event_boss' in vehicle.typeDescriptor.type.tags:
-                        soundName += ('ev_white_tiger_wpn_waffentrager_npc',)
                 if IS_EDITOR:
                     distance = vehicle.position.length
                 else:
@@ -782,14 +777,33 @@ class _CollisionSoundEffectDesc(_BaseSoundEvent):
             position = Math.Matrix(node.actualNode)
             position.translation += local
             for soundName in soundNames:
-                WWISE.playSound(soundName, position, soundParams, soundSwitches)
+                WWISE.playSound(soundName, position, soundParams, (soundSwitches,))
 
-            isPlayer, _ = self._isPlayer(args)
-            if isPlayer:
-                damageFactor = args.get('damageFactor', 0.0)
-                if damageFactor >= 1.0:
-                    WWISE.playSound('collision_static_object_damage', position, [], soundSwitches)
             return
+
+
+class _CollisionDamageSoundEffectDesc(_BaseSoundEvent):
+
+    def __init__(self, dataSection):
+        super(_CollisionDamageSoundEffectDesc, self).__init__(dataSection)
+        self._soundName = (dataSection.readString('wwsoundPC'), dataSection.readString('wwsoundNPC'))
+
+    def create(self, model, effects, args):
+        soundEvent, _ = self._getName(args)
+        if not soundEvent:
+            return
+        damageFactor = args.get('damageFactor')
+        if not damageFactor:
+            return
+        if damageFactor < 17.0:
+            damageSize = 'SWITCH_ext_damage_size_small'
+        elif damageFactor < 35.0:
+            damageSize = 'SWITCH_ext_damage_size_medium'
+        else:
+            damageSize = 'SWITCH_ext_damage_size_large'
+        node, _ = _getHitPoint(model, self._nodeName, args)
+        position = Math.Matrix(node.actualNode)
+        WWISE.playSound(soundEvent, position, [], (('SWITCH_ext_damage_size', damageSize),))
 
 
 class _DestructionSoundEffectDesc(_BaseSoundEvent):
@@ -1238,6 +1252,7 @@ _effectDescFactory = {'pixie': _PixieEffectDesc,
  'sound': _SoundEffectDesc,
  'splashSound': _NodeSoundEffectDesc,
  'collisionSound': _CollisionSoundEffectDesc,
+ 'collisionDamageSound': _CollisionDamageSoundEffectDesc,
  'tracerSound': _TracerSoundEffectDesc,
  'shotSound': _ShotSoundEffectDesc,
  'visibility': _VisibilityEffectDesc,
@@ -1446,33 +1461,36 @@ def __keyPointsFromTimeLineSection(keyPointSection):
 
 
 def effectsFromSection(section):
-    keyPoints = None
-    stagesSection = section['stages']
-    if stagesSection is not None:
-        keyPoints = __keyPointsFromStagesSection(stagesSection)
-    timeLineSection = section['timeline']
-    if timeLineSection is not None:
+    if section is None:
+        return
+    else:
+        keyPoints = None
+        stagesSection = section['stages']
+        if stagesSection is not None:
+            keyPoints = __keyPointsFromStagesSection(stagesSection)
+        timeLineSection = section['timeline']
+        if timeLineSection is not None:
+            if keyPoints is None:
+                keyPoints = __keyPointsFromTimeLineSection(timeLineSection)
+            else:
+                raise SoftException('Both stages and timeline defined in effect %s' % section.name)
         if keyPoints is None:
-            keyPoints = __keyPointsFromTimeLineSection(timeLineSection)
-        else:
-            raise SoftException('Both stages and timeline defined in effect %s' % section.name)
-    if keyPoints is None:
-        raise SoftException('Neither stages nor timeline defined in effect %s' % section.name)
-    if isinstance(keyPoints, str):
-        raise SoftException('Duplicate keypoint %s in effect %s' % (keyPoints, section.name))
-    effectsSec = section['effects']
-    effectList = EffectsList(effectsSec)
-    if section['relatedEffects'] is not None:
-        for tagName, subSection in section['relatedEffects'].items():
-            effectList.relatedEffects[tagName] = effectsFromSection(subSection)
+            raise SoftException('Neither stages nor timeline defined in effect %s' % section.name)
+        if isinstance(keyPoints, str):
+            raise SoftException('Duplicate keypoint %s in effect %s' % (keyPoints, section.name))
+        effectsSec = section['effects']
+        effectList = EffectsList(effectsSec)
+        if section['relatedEffects'] is not None:
+            for tagName, subSection in section['relatedEffects'].items():
+                effectList.relatedEffects[tagName] = effectsFromSection(subSection)
 
-    return EffectsTimeLine(keyPoints, effectList)
+        return EffectsTimeLine(keyPoints, effectList)
 
 
 class RespawnDestroyEffect(object):
 
-    @staticmethod
-    def play(vehicle_id):
+    @classmethod
+    def play(cls, vehicle_id):
         vehicle = BigWorld.entity(vehicle_id)
         if vehicle is None:
             return
@@ -1480,11 +1498,32 @@ class RespawnDestroyEffect(object):
             effects = vehicle.typeDescriptor.type.effects['fullDestruction']
             if not effects:
                 return
+            turret = None
+            from DetachedTurret import DetachedTurret
+            for vehTurret in DetachedTurret.allTurrets:
+                if vehTurret.vehicleID == vehicle_id:
+                    turret = vehTurret
+                    break
+
             vehicle.show(False)
-            if vehicle.model is not None:
-                fakeModel = helpers.newFakeModel()
-                BigWorld.player().addModel(fakeModel)
-                fakeModel.position = vehicle.model.position
-                effectsPlayer = EffectsListPlayer(effects[0][1], effects[0][0])
-                effectsPlayer.play(fakeModel, SpecialKeyPointNames.START, partial(BigWorld.player().delModel, fakeModel))
+            cls.__playDestroyEffect(vehicle, effects)
+            if turret:
+                turret.changeAppearanceVisibility(False)
+                cls.__playDestroyEffect(turret, effects)
+                turret.stopDetachmentEffects()
             return
+
+    @classmethod
+    def __playDestroyEffect(cls, entity, effects):
+        if entity.model is not None:
+            fakeModel = helpers.newFakeModel()
+            entity.addModel(fakeModel)
+            fakeModel.position = entity.model.position
+            effectsPlayer = EffectsListPlayer(effects[0][1], effects[0][0])
+            effectsPlayer.play(fakeModel, SpecialKeyPointNames.START, partial(cls.__safeDelModel, entity, fakeModel))
+        return
+
+    @classmethod
+    def __safeDelModel(cls, entity, model):
+        if not entity.isDestroyed:
+            entity.delModel(model)

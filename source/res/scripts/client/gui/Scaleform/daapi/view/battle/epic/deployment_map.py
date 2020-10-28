@@ -5,13 +5,13 @@ from gui.Scaleform.daapi.view.battle.epic.minimap import _FRONT_LINE_DEV_VISUALI
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings
 from gui.Scaleform.daapi.view.battle.shared.minimap.component import _IMAGE_PATH_FORMATTER
 from gui.Scaleform.daapi.view.meta.EpicDeploymentMapMeta import EpicDeploymentMapMeta
-from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
+from gui.Scaleform.genConsts.LAYER_NAMES import LAYER_NAMES
 from gui.battle_control import minimap_utils
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 _S_NAME = settings.ENTRY_SYMBOL_NAME
 _C_NAME = settings.CONTAINER_NAME
-_DEPLOY_MAP_PATH = '_level0.root.{}.main.epicDeploymentMap.mapContainer.entriesContainer'.format(APP_CONTAINERS_NAMES.VIEWS)
+_DEPLOY_MAP_PATH = '_level0.root.{}.main.epicDeploymentMap.mapContainer.entriesContainer'.format(LAYER_NAMES.VIEWS)
 
 class EpicDeploymentMapComponent(EpicDeploymentMapMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)

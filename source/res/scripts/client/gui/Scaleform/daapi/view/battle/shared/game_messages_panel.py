@@ -18,6 +18,10 @@ class PlayerMessageData(namedtuple('playerMessageData', ('messageType', 'length'
 
 class GameMessagesPanel(GameMessagesPanelMeta):
 
+    def _dispose(self):
+        self.as_clearMessagesS()
+        super(GameMessagesPanel, self)._dispose()
+
     def _addMessage(self, msg):
         self.as_addMessageS(msg)
 

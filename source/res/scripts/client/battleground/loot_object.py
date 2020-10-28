@@ -69,10 +69,11 @@ class LootObject(TerrainAreaGameObject, ILootObject):
         super(LootObject, self).__init__(BigWorld.player().spaceID)
         self.radius = radius
         self.lootTypeID = lootTypeID
+        self.__collected = False
 
     def activate(self):
         super(LootObject, self).activate()
-        if self.markingSmoke is not None:
+        if not self.__collected and self.markingSmoke is not None:
             self.markingSmoke.bindToCompound(self.model.compoundModel)
             self.markingSmoke.start()
         if self.pickupEffect is not None:
@@ -87,6 +88,8 @@ class LootObject(TerrainAreaGameObject, ILootObject):
         return
 
     def processPickup(self, entityID):
+        self.__collected = True
+        self.stopSmoke()
         if self.pickupEffect is not None:
             self.pickupEffect.enable()
             self.pickupEffect.bindAsTerrainEffect(self.model.position, self._nativeSystem.worldID)

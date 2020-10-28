@@ -2,29 +2,21 @@
 # Embedded file name: scripts/client/gui/battle_results/reusable/sort_keys.py
 from gui.shared.gui_items import Vehicle
 from gui.shared.sort_key import SortKey
-from gui.shared.utils import makeSearchableString
-from dossiers2.ui.achievements import ACHIEVEMENT_SECTION
-_LEFT_ACHIEVEMENT_ORDER = (ACHIEVEMENT_SECTION.SPECIAL, ACHIEVEMENT_SECTION.MEMORIAL, ACHIEVEMENT_SECTION.CLASS)
-
-def leftAchievementSort(x):
-    section = x.achievement.getSection()
-    return _LEFT_ACHIEVEMENT_ORDER.index(section) if section in _LEFT_ACHIEVEMENT_ORDER else len(_LEFT_ACHIEVEMENT_ORDER)
-
 
 class AchievementSortKey(SortKey):
     __slots__ = ('achievement',)
 
-    def __init__(self, achievementInfo):
+    def __init__(self, achievement):
         super(AchievementSortKey, self).__init__()
-        self.achievement = achievementInfo.achievement
+        self.achievement = achievement
 
     def _cmp(self, other):
-        x = self.achievement
-        y = other.achievement
+        x = self.achievement[0]
+        y = other.achievement[0]
         result = cmp(y.hasRibbon(), x.hasRibbon())
         if result:
             return result
-        result = cmp(makeSearchableString(y.getUserName()), makeSearchableString(x.getUserName()))
+        result = cmp(y.getUserName(), x.getUserName())
         return result if result else None
 
 
@@ -96,4 +88,4 @@ class RankedVehicleXpSortKey(_VehicleSortKey):
 
 
 def placeSortKey(a):
-    return (a.avatar.extensionInfo.get('ext', {}).get('playerRank', {}).get('rank', 0), a.player.realName) if a.avatar is not None else (-1, 0)
+    return (a.avatar.extensionInfo.get('playerRank', 0), a.player.realName) if a.avatar is not None else (-1, 0)

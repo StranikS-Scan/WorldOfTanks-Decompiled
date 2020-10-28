@@ -18,14 +18,12 @@ class AppearanceCacheController(object):
         pass
 
     def onBecomePlayer(self):
-        if getattr(self, 'onSpawnListUpdated') is not None:
+        if getattr(self, 'onSpawnListUpdated'):
             self.onSpawnListUpdated += self.updateAppearanceCache
-        return
 
     def onBecomeNonPlayer(self):
-        if getattr(self, 'onSpawnListUpdated') is not None:
+        if getattr(self, 'onSpawnListUpdated'):
             self.onSpawnListUpdated -= self.updateAppearanceCache
-        return
 
     @uniprof.regionDecorator(label='AppearanceCacheController.updateAppearanceCache', scope='wrap')
     def updateAppearanceCache(self, spawnList):

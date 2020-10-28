@@ -1,17 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/managers/loaders.py
 import logging
+import typing
 import Event
 import constants
+from gui.Scaleform.framework import g_entitiesFactories, ViewSettings, ScopeTemplates
+from gui.Scaleform.framework.entities.View import View, ViewKey
+from gui.Scaleform.framework.entities.abstract.LoaderManagerMeta import LoaderManagerMeta
+from gui.Scaleform.framework.entities.sf_window import SFWindow
 from gui.Scaleform.framework.entities.view_impl_adaptor import ViewImplAdaptor
 from gui.Scaleform.framework.settings import UIFrameworkImpl
 from helpers import dependency
 from shared_utils import CONST_CONTAINER
-from gui.Scaleform.framework import g_entitiesFactories, ViewSettings, ScopeTemplates
-from gui.Scaleform.framework.entities.abstract.LoaderManagerMeta import LoaderManagerMeta
-from gui.Scaleform.framework.entities.View import View, ViewKey
 from skeletons.gui.impl import IGuiLoader
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from frameworks.wulf import Window
+    from gui.Scaleform.framework.ScopeTemplates import SimpleScope
 NO_IMPL_ALIAS = 'noImpl'
 NO_IMPL_URL = 'development/noImpl.swf'
 _logger = logging.getLogger(__name__)
@@ -47,15 +52,19 @@ class ViewLoadMode(CONST_CONTAINER):
 
 
 class ViewLoadParams(object):
-    __slots__ = ('__viewKey', '__loadMode')
+    __slots__ = ('__viewKey', '__loadMode', '__parent')
 
-    def __init__(self, viewKey, loadMode=ViewLoadMode.DEFAULT):
+    def __init__(self, viewKey, loadMode=ViewLoadMode.DEFAULT, parent=None):
         super(ViewLoadParams, self).__init__()
         self.__viewKey = viewKey
         self.__loadMode = loadMode
+        self.__parent = parent
 
     def __repr__(self):
-        return '{}[viewKey={}, loadMode={}]'.format(self.__class__.__name__, self.__viewKey, self.loadMode)
+        return '{}[viewKey={}, loadMode={}, parent={}]'.format(self.__class__.__name__, self.__viewKey, self.loadMode, str(self.__parent))
+
+    def __eq__(self, other):
+        return isinstance(other, ViewLoadParams) and self.__viewKey == other.viewKey and self.__loadMode == other.loadMode and self.__parent == other.parent
 
     @property
     def uiImpl(self):
@@ -69,30 +78,39 @@ class ViewLoadParams(object):
     def loadMode(self):
         return self.__loadMode
 
+    @property
+    def parent(self):
+        return self.__parent
+
 
 class SFViewLoadParams(ViewLoadParams):
-    __slots__ = ()
+    __slots__ = ('window',)
 
-    def __init__(self, alias, name=None, loadMode=ViewLoadMode.DEFAULT):
-        super(SFViewLoadParams, self).__init__(ViewKey(alias, name), loadMode=loadMode)
+    def __init__(self, alias, name=None, loadMode=ViewLoadMode.DEFAULT, parent=None):
+        super(SFViewLoadParams, self).__init__(ViewKey(alias, name), loadMode, parent)
+        self.window = None
+        return
 
     @property
     def uiImpl(self):
         return UIFrameworkImpl.SCALEFORM
 
 
-class UBViewLoadParams(ViewLoadParams):
+class GuiImplViewLoadParams(ViewLoadParams):
     __slots__ = ('__viewClass', '__scope')
 
-    def __init__(self, layoutID, viewClass, scope):
-        super(UBViewLoadParams, self).__init__(ViewKey(layoutID, None), loadMode=ViewLoadMode.DEFAULT)
+    def __init__(self, layoutID, viewClass, scope, parent=None):
+        super(GuiImplViewLoadParams, self).__init__(ViewKey(layoutID, None), ViewLoadMode.DEFAULT, parent)
         self.__viewClass = viewClass
         self.__scope = scope
         return
 
+    def __eq__(self, other):
+        return super(GuiImplViewLoadParams, self).__eq__(other) and self.__viewClass == other.viewClass and self.__scope == other.scope
+
     @property
     def uiImpl(self):
-        return UIFrameworkImpl.UNBOUND
+        return UIFrameworkImpl.GUI_IMPL
 
     @property
     def viewClass(self):
@@ -120,8 +138,8 @@ class LoaderManager(LoaderManagerMeta):
         return '{}[{}]=[loadingItems=[{}]]'.format(self.__class__.__name__, hex(id(self)), self.__loadingItems)
 
     def loadView(self, loadParams, *args, **kwargs):
-        if loadParams.uiImpl == UIFrameworkImpl.UNBOUND:
-            return self.__doLoadUBView(loadParams, *args, **kwargs)
+        if loadParams.uiImpl == UIFrameworkImpl.GUI_IMPL:
+            return self.__doLoadGuiImplView(loadParams, *args, **kwargs)
         if loadParams.uiImpl == UIFrameworkImpl.SCALEFORM:
             return self.__doLoadSFView(loadParams, *args, **kwargs)
         raise SoftException('View can not be loaded. UI implementation "{}" is not handled'.format(loadParams.uiImpl))
@@ -151,12 +169,13 @@ class LoaderManager(LoaderManagerMeta):
         viewKey = ViewKey(alias, name)
         if viewKey in self.__loadingItems:
             item = self.__loadingItems.pop(viewKey)
-            if item.isCancelled:
+            if item.isCancelled or item.pyEntity.isDisposed():
                 self.onViewLoadCanceled(viewKey, item)
             else:
                 pyEntity = g_entitiesFactories.initialize(item.pyEntity, gfxEntity, item.factoryIdx, extra={'name': item.name})
                 item.pyEntity.onDispose -= self.__handleViewDispose
                 if pyEntity is not None:
+                    pyEntity.getParentWindow().setViewLoaded()
                     self.onViewLoaded(pyEntity, item.loadParams)
                 else:
                     msg = 'An error occurred before view initialization. View {} will be destroyed.'.format(item.pyEntity)
@@ -187,7 +206,7 @@ class LoaderManager(LoaderManagerMeta):
                 if item is not None:
                     settings = item.pyEntity.settings
                     if constants.IS_DEVELOPMENT and settings.url != NO_IMPL_URL:
-                        g_entitiesFactories.addSettings(ViewSettings(NO_IMPL_ALIAS, View, NO_IMPL_URL, settings.type, None, ScopeTemplates.DEFAULT_SCOPE, False))
+                        g_entitiesFactories.addSettings(ViewSettings(NO_IMPL_ALIAS, View, NO_IMPL_URL, settings.layer, None, ScopeTemplates.DEFAULT_SCOPE, False))
                         _logger.warning('Try to load noImpl swf...')
                         self.__doLoadSFView(SFViewLoadParams(NO_IMPL_ALIAS, item.name))
         else:
@@ -240,6 +259,10 @@ class LoaderManager(LoaderManagerMeta):
     def __doLoadSFView(self, loadParams, *args, **kwargs):
         key = loadParams.viewKey
         viewTutorialID = self.__app.tutorialManager.getViewTutorialID(key.name)
+        window = loadParams.window
+        if window is None:
+            window = SFWindow(loadParams, fireEvent=False)
+            window.load()
         pyEntity = None
         if key in self.__loadingItems:
             item = self.__loadingItems[key]
@@ -248,6 +271,8 @@ class LoaderManager(LoaderManagerMeta):
                 pyEntity = item.pyEntity
         if pyEntity is not None:
             pyEntity.onDispose += self.__handleViewDispose
+            pyEntity.setParentWindow(window)
+            window.setContent(pyEntity)
             viewDict = {'config': pyEntity.settings.getDAAPIObject(),
              'alias': key.alias,
              'name': key.name,
@@ -259,6 +284,8 @@ class LoaderManager(LoaderManagerMeta):
                 pyEntity.setUniqueName(key.name)
                 pyEntity.setEnvironment(self.__app)
                 pyEntity.onDispose += self.__handleViewDispose
+                pyEntity.setParentWindow(window)
+                window.setContent(pyEntity)
                 config = pyEntity.settings.getDAAPIObject()
                 self.__loadingItems[key] = _LoadingItem(loadParams, pyEntity, factoryIdx, args, kwargs, config.get('isModal', False))
                 self.onViewLoadInit(pyEntity)
@@ -269,9 +296,10 @@ class LoaderManager(LoaderManagerMeta):
                 self.as_loadViewS(viewDict)
             else:
                 _logger.warning('PyEntity for alias %s is None', key.alias)
+                window.destroy()
         return pyEntity
 
-    def __doLoadUBView(self, loadParams, *args, **kwargs):
+    def __doLoadGuiImplView(self, loadParams, *args, **kwargs):
         key = loadParams.viewKey
         if key in self.__loadingItems:
             raise SoftException('This case in not implemented: {}'.format(loadParams))
@@ -279,11 +307,12 @@ class LoaderManager(LoaderManagerMeta):
         layoutID = loadParams.viewKey.alias
         viewClass = loadParams.viewClass
         scope = loadParams.scope
+        parent = loadParams.parent
         if manager.getViewByLayoutID(layoutID) is not None:
             raise SoftException('There is unexpected behavior,we have unbound view, but adaptor is not created: %r'.format(loadParams))
         ubView = viewClass(layoutID, *args, **kwargs)
         adaptor = ViewImplAdaptor()
-        adaptor.setView(ubView)
+        adaptor.setView(ubView, parent)
         adaptor.setCurrentScope(scope)
         if adaptor.isLoaded():
             raise SoftException('Synchronous loading does not supported: {}'.format(loadParams))

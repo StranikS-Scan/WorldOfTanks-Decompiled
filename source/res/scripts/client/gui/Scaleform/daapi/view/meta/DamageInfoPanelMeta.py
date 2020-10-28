@@ -64,6 +64,12 @@ class DamageInfoPanelMeta(BaseDAAPIComponent):
     def as_hideSurveyingDeviceS(self):
         return self.flashObject.as_hideSurveyingDevice() if self._isDAAPIInited() else None
 
+    def as_updateWheelS(self, stateId, isHit):
+        return self.flashObject.as_updateWheel(stateId, isHit) if self._isDAAPIInited() else None
+
+    def as_hideWheelS(self):
+        return self.flashObject.as_hideWheel() if self._isDAAPIInited() else None
+
     def as_updateCommanderS(self, stateId, isHit):
         return self.flashObject.as_updateCommander(stateId, isHit) if self._isDAAPIInited() else None
 

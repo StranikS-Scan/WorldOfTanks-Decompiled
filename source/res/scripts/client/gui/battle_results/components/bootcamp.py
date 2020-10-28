@@ -12,16 +12,16 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.battle_results.components import base
 from gui.battle_results.components.common import makeRegularFinishResultLabel
-from gui.battle_results.br_constants import PlayerTeamResult
+from gui.battle_results.settings import PLAYER_TEAM_RESULT
 from gui.Scaleform.locale.BOOTCAMP import BOOTCAMP
 from helpers.i18n import makeString
 from helpers import dependency
 from skeletons.gui.game_control import IBootcampController
 _logger = logging.getLogger(__name__)
 _BG_FOLDER_PATH = '../maps/icons/bootcamp/battle_result/background/'
-_BG_IMAGE_FORMATS = {PlayerTeamResult.WIN: 'bcVictoryBg_{0}.png',
- PlayerTeamResult.DEFEAT: 'bcDefeat.png',
- PlayerTeamResult.DRAW: 'bcDraw.png'}
+_BG_IMAGE_FORMATS = {PLAYER_TEAM_RESULT.WIN: 'bcVictoryBg_{0}.png',
+ PLAYER_TEAM_RESULT.DEFEAT: 'bcDefeat.png',
+ PLAYER_TEAM_RESULT.DRAW: 'bcDraw.png'}
 _STAT_ICON_PATH = '../maps/icons/bootcamp/battle_result/{0}.png'
 _STAT_ICON_TOOLTIP_PATH = '../maps/icons/bootcamp/battle_result/tooltip/{0}.png'
 _PREMIUM_RESOURCES = {PREMIUM_ENTITLEMENTS.BASIC: {'icon': backport.image(R.images.gui.maps.icons.bootcamp.rewards.bcPremium()),
@@ -48,7 +48,7 @@ class RewardsBlock(base.StatsBlock):
 
     def setRecord(self, result, reusable):
         teamResult = reusable.getPersonalTeamResult()
-        if teamResult != PlayerTeamResult.WIN:
+        if teamResult != PLAYER_TEAM_RESULT.WIN:
             return
         bootcampController = dependency.instance(IBootcampController)
         lessonNum = g_bootcamp.getLessonNum()
@@ -81,7 +81,7 @@ class HasUnlocksFlag(base.StatsItem):
 
     def _convert(self, record, reusable):
         teamResult = reusable.getPersonalTeamResult()
-        if teamResult != PlayerTeamResult.WIN:
+        if teamResult != PLAYER_TEAM_RESULT.WIN:
             return False
         bootcampController = dependency.instance(IBootcampController)
         lessonNum = g_bootcamp.getLessonNum()
@@ -98,7 +98,7 @@ class StatsBlock(base.StatsBlock):
     def setRecord(self, result, reusable):
         info = reusable.getPersonalVehiclesInfo(result['personal'])
         teamResult = reusable.getPersonalTeamResult()
-        if teamResult == PlayerTeamResult.WIN:
+        if teamResult == PLAYER_TEAM_RESULT.WIN:
             battleStats = g_bootcamp.getBattleStatsLessonWin()
         else:
             battleStats = g_bootcamp.getBattleStatsLessonDefeat()
@@ -142,8 +142,8 @@ class ShowRewardsFlag(base.StatsItem):
     __slots__ = ()
 
     def _convert(self, record, reusable):
-        credit = reusable.economics.getBaseCreditsRecords().getRecord('credits')
-        xp = reusable.economics.getBaseXPRecords().getRecord('xp')
+        credit = reusable.personal.getBaseCreditsRecords().getRecord('credits')
+        xp = reusable.personal.getBaseXPRecords().getRecord('xp')
         return credit != 0 or xp != 0
 
 
@@ -173,7 +173,7 @@ class VideoButtonItem(base.StatsItem):
         player = BigWorld.player()
         teamResult = reusable.getPersonalTeamResult()
         messageVO = g_bootcamp.getInterludeVideoPageData()
-        return None if player.spaFlags.getFlag(SPA_ATTRS.BOOTCAMP_VIDEO_DISABLED) or teamResult != PlayerTeamResult.WIN or not messageVO else {'label': backport.text(R.strings.bootcamp.battle.result.videoButton()),
+        return None if player.spaFlags.getFlag(SPA_ATTRS.BOOTCAMP_VIDEO_DISABLED) or teamResult != PLAYER_TEAM_RESULT.WIN or not messageVO else {'label': backport.text(R.strings.bootcamp.battle.result.videoButton()),
          'image': backport.image(R.images.gui.maps.icons.bootcamp.battle_result.videoButton())}
 
 
@@ -181,7 +181,7 @@ class CreditsBlock(base.StatsBlock):
     __slots__ = ()
 
     def setRecord(self, result, reusable):
-        intVal = reusable.economics.getBaseCreditsRecords().getRecord('credits')
+        intVal = reusable.personal.getBaseCreditsRecords().getRecord('credits')
         strVal = backport.getGoldFormat(intVal)
         self.addNextComponent(base.DirectStatsItem('value', intVal))
         self.addNextComponent(base.DirectStatsItem('str', strVal))
@@ -191,7 +191,7 @@ class XPBlock(base.StatsBlock):
     __slots__ = ()
 
     def setRecord(self, result, reusable):
-        intVal = reusable.economics.getBaseXPRecords().getRecord('xp')
+        intVal = reusable.personal.getBaseXPRecords().getRecord('xp')
         strVal = backport.getIntegralFormat(intVal)
         self.addNextComponent(base.DirectStatsItem('value', intVal))
         self.addNextComponent(base.DirectStatsItem('str', strVal))

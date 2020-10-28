@@ -25,5 +25,5 @@ class BCMessageWindowMeta(TutorialDialog):
     def as_setMessageDataS(self, value):
         return self.flashObject.as_setMessageData(value) if self._isDAAPIInited() else None
 
-    def as_blurOtherWindowsS(self, container):
-        return self.flashObject.as_blurOtherWindows(container) if self._isDAAPIInited() else None
+    def as_blurOtherWindowsS(self, layer):
+        return self.flashObject.as_blurOtherWindows(layer) if self._isDAAPIInited() else None

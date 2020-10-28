@@ -1,11 +1,13 @@
 <shells.xml>
   <icons>
     <ap>	ARMOR_PIERCING.png 0 0	</ap>
-    <ap_he>	ARMOR_PIERCING_HE.png 0 0	</ap_he>
+    <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
     <ap_cr>	ARMOR_PIERCING_CR.png 0 0	</ap_cr>
+    <ap_cr_premium>	ARMOR_PIERCING_CR_PREMIUM.png 0 0	</ap_cr_premium>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
     <hc>	HOLLOW_CHARGE.png 0 0	</hc>
+    <hc_premium>	HOLLOW_CHARGE_PREMIUM.png 0 0	</hc_premium>
   </icons>
   <_20mm_z_pociskiem_wybuchowo>
     <id>	0	</id>
@@ -24,7 +26,7 @@
   <_20mm_z_pociskiem_wybuchowo_ulepszony>
     <id>	1	</id>
     <userString>	#poland_vehicles:_20mm_z_pociskiem_wybuchowo_ulepszony	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -53,7 +55,7 @@
   <_20mm_z_pociskiem_wybuchowo_ulepszony_B>
     <id>	70	</id>
     <userString>	#poland_vehicles:_20mm_z_pociskiem_wybuchowo_ulepszony_B	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -82,7 +84,7 @@
   <_37mm_APCR_Bofors>
     <id>	49	</id>
     <userString>	#poland_vehicles:_37mm_APCR_Bofors	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -126,7 +128,7 @@
   <_40mm_APCR>
     <id>	58	</id>
     <userString>	#poland_vehicles:_40mm_APCR	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	1200	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -170,7 +172,7 @@
   <_40mm_pocisk_podkalibrowy>
     <id>	3	</id>
     <userString>	#poland_vehicles:_40mm_pocisk_podkalibrowy	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	1200	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -214,7 +216,7 @@
   <_47mm_APCR>
     <id>	46	</id>
     <userString>	#poland_vehicles:_47mm_APCR	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -258,7 +260,7 @@
   <_47mm_slpprj_m_39>
     <id>	55	</id>
     <userString>	#poland_vehicles:_47mm_slpprj_m_39	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	1600	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -302,7 +304,7 @@
   <_75mm_Pzgr.40L>
     <id>	25	</id>
     <userString>	#poland_vehicles:_75mm_Pzgr.40L	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -346,7 +348,7 @@
   <_75mm_Pzgr.40L_K>
     <id>	34	</id>
     <userString>	#poland_vehicles:_75mm_Pzgr.40L_K	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	3200	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -390,7 +392,7 @@
   <_Gr_38_HL_A_K>
     <id>	37	</id>
     <userString>	#poland_vehicles:_Gr_38_HL_A_K	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -435,7 +437,7 @@
   <_75mm_Pzgr.40_K>
     <id>	40	</id>
     <userString>	#poland_vehicles:_75mm_Pzgr.40_K	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -479,7 +481,7 @@
   <_85mm_UBR-365PBM>
     <id>	72	</id>
     <userString>	#poland_vehicles:_85mm_UBR-365PBM	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	3200	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -523,7 +525,7 @@
   <_90mm_APCR>
     <id>	43	</id>
     <userString>	#poland_vehicles:_90mm_APCR	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4000	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -568,7 +570,7 @@
   <_100mm_pocisk_przeciwpancerny>
     <id>	81	</id>
     <userString>	#poland_vehicles:_100mm_pocisk_przeciwpancerny	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	4000	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -597,7 +599,7 @@
   <_100mm_pocisk_kumulacyjny_w49>
     <id>	83	</id>
     <userString>	#poland_vehicles:_100mm_pocisk_kumulacyjny_w49	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4000	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -627,7 +629,7 @@
   <_100mm_pocisk_kumulacyjny_w53>
     <id>	85	</id>
     <userString>	#poland_vehicles:_100mm_pocisk_kumulacyjny_w53	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -657,7 +659,7 @@
   <_105mm_slpprj_fm_49>
     <id>	64	</id>
     <userString>	#poland_vehicles:_105mm_slpprj_fm_49	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -701,7 +703,7 @@
   <_105mm_slpprj_m_59>
     <id>	75	</id>
     <userString>	#poland_vehicles:_105mm_slpprj_m_59	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -745,7 +747,7 @@
   <_105mm_3PPod_21>
     <id>	78	</id>
     <userString>	#poland_vehicles:_105mm_3PPod_21	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -789,7 +791,7 @@
   <_122mm_UBR-471_PBP>
     <id>	6	</id>
     <userString>	#poland_vehicles:_122mm_UBR-471_PBP	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -833,7 +835,7 @@
   <_122mm_UBR-471P_PB>
     <id>	9	</id>
     <userString>	#poland_vehicles:_122mm_UBR-471P_PB	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -877,7 +879,7 @@
   <_122mm_BR-471_D>
     <id>	28	</id>
     <userString>	#poland_vehicles:_122mm_BR-471_D	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -921,7 +923,7 @@
   <_130mm_AZ_PB_46_A>
     <id>	12	</id>
     <userString>	#poland_vehicles:_130mm_AZ_PB_46_A	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	5200	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -965,7 +967,7 @@
   <_152mm_pocisk_kumulacyjny>
     <id>	31	</id>
     <userString>	#poland_vehicles:_152mm_pocisk_kumulacyjny	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	6400	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -1008,4 +1010,64 @@
       <devices>	17	</devices>
     </damage>
   </Development_Shell>
+  <_105mm_slpgr_m_43_1_HELL>
+    <id>	14	</id>
+    <userString>	#poland_vehicles:_105mm_slpgr_m_43_1	</userString>
+    <icon>	ap	</icon>
+    <price>	490	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	220	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_105mm_slpgr_m_43_1_HELL>
+  <_105mm_slpgr_m_43_1_HELL__0>
+    <id>	15	</id>
+    <userString>	#poland_vehicles:_105mm_slpgr_m_43_1	</userString>
+    <icon>	ap	</icon>
+    <price>	490	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	260	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_105mm_slpgr_m_43_1_HELL__0>
+  <_122mm_UBR-471P_P_HELL>
+    <id>	16	</id>
+    <userString>	#poland_vehicles:_122mm_UBR-471P_P	</userString>
+    <icon>	ap	</icon>
+    <price>	1030	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	280	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_122mm_UBR-471P_P_HELL>
+  <_90mm_AP_HELL>
+    <id>	17	</id>
+    <userString>	#poland_vehicles:_90mm_AP	</userString>
+    <icon>	ap	</icon>
+    <price>	290	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	180	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_90mm_AP_HELL>
 </shells.xml>

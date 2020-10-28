@@ -22,8 +22,8 @@
       <installed>	improvedConfiguration	</installed>
     </incompatibleTags>
     <script>	ImprovedConfiguration	  <weight>	50	</weight>
-      <engineReduceFineFactor>	0.35 0.35	</engineReduceFineFactor>
-      <ammoBayReduceFineFactor>	0.35 0.35	</ammoBayReduceFineFactor>
+      <engineReduceFineFactor>	0.3 0.3	</engineReduceFineFactor>
+      <ammoBayReduceFineFactor>	0.3 0.3	</ammoBayReduceFineFactor>
       <factors>
         <factor>
           <attribute>	miscAttrs/repairSpeedFactor	</attribute>
@@ -48,7 +48,7 @@
         <factor>
           <attribute>	miscAttrs/fireStartingChanceFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	0.35 0.35	</valueByLevel>
+          <valueByLevel>	0.3 0.3	</valueByLevel>
         </factor>
       </factors>
     </script>
@@ -63,11 +63,11 @@
       </mul>
       <mul>
         <name>	vehPenaltyForDamageEngineAndCombat	</name>
-        <value>	0.35	</value>
+        <value>	0.3	</value>
       </mul>
       <mul>
         <name>	vehicleFireChance	</name>
-        <value>	0.35	</value>
+        <value>	0.3	</value>
       </mul>
     </kpi>
   </deluxImprovedConfiguration>
@@ -239,6 +239,7 @@
   <trophyBasicAimDrives>
     <id>	50	</id>
     <userString>	#artefacts:trophyBasicAimDrives/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:trophyBasicAimDrives/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:enhancedAimDrives/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/enhancedAimDrives.png 0 0	</icon>
     <groupName>	enhancedAimDrives	</groupName>
@@ -272,6 +273,7 @@
   <trophyUpgradedAimDrives>
     <id>	51	</id>
     <userString>	#artefacts:trophyBasicAimDrives/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:trophyBasicAimDrives/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxEnhancedAimDrives/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/enhancedAimDrives.png 0 0	</icon>
     <groupName>	enhancedAimDrives	</groupName>
@@ -301,6 +303,7 @@
   <trophyBasicTankRammer>
     <id>	52	</id>
     <userString>	#artefacts:trophyBasicTankRammer/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:trophyBasicTankRammer/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:rammer/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/rammer.png 0 0	</icon>
     <groupName>	tankRammer	</groupName>
@@ -341,6 +344,7 @@
   <trophyUpgradedTankRammer>
     <id>	53	</id>
     <userString>	#artefacts:trophyBasicTankRammer/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:trophyBasicTankRammer/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxRammer/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/rammer.png 0 0	</icon>
     <groupName>	tankRammer	</groupName>
@@ -377,6 +381,7 @@
   <trophyBasicImprovedVentilation>
     <id>	54	</id>
     <userString>	#artefacts:trophyBasicImprovedVentilation/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:trophyBasicImprovedVentilation/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxImprovedVentilation/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/improvedVentilation.png 0 0	</icon>
     <groupName>	improvedVentilation	</groupName>
@@ -417,6 +422,7 @@
   <trophyUpgradedImprovedVentilation>
     <id>	55	</id>
     <userString>	#artefacts:trophyUpgradedImprovedVentilation/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:trophyBasicImprovedVentilation/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxImprovedVentilation/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/improvedVentilation.png 0 0	</icon>
     <groupName>	improvedVentilation	</groupName>
@@ -453,6 +459,7 @@
   <trophyBasicAimingStabilizer>
     <id>	56	</id>
     <userString>	#artefacts:trophyBasicAimingStabilizer/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:trophyBasicAimingStabilizer/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxAimingStabilizer/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/aimingStabilizer.png 0 0	</icon>
     <groupName>	aimingStabilizer	</groupName>
@@ -493,6 +500,7 @@
   <trophyUpgradedAimingStabilizer>
     <id>	57	</id>
     <userString>	#artefacts:trophyUpgradedAimingStabilizer/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:trophyBasicAimingStabilizer/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxAimingStabilizer/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/aimingStabilizer.png 0 0	</icon>
     <groupName>	aimingStabilizer	</groupName>
@@ -529,6 +537,7 @@
   <trophyBasicCoatedOptics>
     <id>	58	</id>
     <userString>	#artefacts:trophyBasicCoatedOptics/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:trophyBasicCoatedOptics/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxCoatedOptics/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/coatedOptics.png 0 0	</icon>
     <groupName>	coatedOptics	</groupName>
@@ -561,6 +570,7 @@
   <trophyUpgradedCoatedOptics>
     <id>	59	</id>
     <userString>	#artefacts:trophyUpgradedCoatedOptics/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:trophyBasicCoatedOptics/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxCoatedOptics/long_special	</longDescriptionSpecial>
     <icon>	../maps/icons/artefact/coatedOptics.png 0 0	</icon>
     <groupName>	coatedOptics	</groupName>
@@ -2909,74 +2919,4 @@
       </mul>
     </kpi>
   </improvedSights_tier1>
-  <antifragmentationLining_wt>
-    <id>	999	</id>
-    <userString>	#artefacts:antifragmentationLining_wt/name	</userString>
-    <shortDescriptionSpecial>	#artefacts:antifragmentationLining/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:antifragmentationLining/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/antifragmentationLining.png 0 0	</icon>
-    <price>	750000	</price>
-    <notInShop>	true	</notInShop>
-    <removable>	false	</removable>
-    <tags>	antifragmentationLining armor	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <tags>	antifragmentationLining_megaheavy_user	</tags>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	StaticOptionalDevice	  <weight>	1500	</weight>
-      <factors>
-        <factor>
-          <attribute>	miscAttrs/antifragmentationLiningFactor	</attribute>
-          <type>	mul	</type>
-          <valueByLevel>	1.5 1.6	</valueByLevel>
-        </factor>
-        <factor>
-          <attribute>	miscAttrs/crewChanceToHitFactor	</attribute>
-          <type>	mul	</type>
-          <valueByLevel>	0.5 0.4	</valueByLevel>
-        </factor>
-        <factor>
-          <attribute>	miscAttrs/stunResistanceDuration	</attribute>
-          <type>	add	</type>
-          <valueByLevel>	0.1 0.15	</valueByLevel>
-        </factor>
-        <factor>
-          <attribute>	miscAttrs/repeatedStunDurationFactor	</attribute>
-          <type>	mul	</type>
-          <valueByLevel>	0.8 0.75	</valueByLevel>
-        </factor>
-        <factor>
-          <attribute>	miscAttrs/vehicleByChassisDamageFactor	</attribute>
-          <type>	mul	</type>
-          <valueByLevel>	0.5 0.35	</valueByLevel>
-        </factor>
-        <factor>
-          <attribute>	miscAttrs/stunResistanceEffect	</attribute>
-          <type>	add	</type>
-          <valueByLevel>	1.0	</valueByLevel>
-        </factor>
-      </factors>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleRamOrExplosionDamageResistance	</name>
-        <value>	1.5	</value>
-      </mul>
-      <mul>
-        <name>	crewHitChance	</name>
-        <value>	1.5	</value>
-      </mul>
-      <mul>
-        <name>	crewStunDuration	</name>
-        <value>	0.9	</value>
-      </mul>
-      <mul>
-        <name>	crewRepeatedStunDuration	</name>
-        <value>	0.8	</value>
-      </mul>
-    </kpi>
-  </antifragmentationLining_wt>
 </optional_devices.xml>

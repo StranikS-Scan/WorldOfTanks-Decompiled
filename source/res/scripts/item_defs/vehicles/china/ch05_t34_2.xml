@@ -34,7 +34,7 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	70	</armor_1>
+      <armor_1>	100	</armor_1>
       <armor_2>	45	</armor_2>
       <armor_3>	45	</armor_3>
       <armor_4>	45	</armor_4>
@@ -48,7 +48,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	12085	</weight>
-    <maxHealth>	960	</maxHealth>
+    <maxHealth>	1120	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -816,8 +816,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	44	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.22	</vehicleMovement>
-        <vehicleRotation>	0.22	</vehicleRotation>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	180	</maxHealth>
@@ -1505,8 +1505,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	46	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.2	</vehicleMovement>
-        <vehicleRotation>	0.2	</vehicleRotation>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	200	</maxHealth>
@@ -2219,7 +2219,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	9300	</weight>
-      <maxHealth>	240	</maxHealth>
+      <maxHealth>	180	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -2899,7 +2899,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	10793	</weight>
-      <maxHealth>	340	</maxHealth>
+      <maxHealth>	280	</maxHealth>
       <rotationSpeed>	46	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -3126,7 +3126,7 @@
             <maxPitch>	0 5 0.394671 5 0.458333 3 0.541667 3 0.605329 5 1 5	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	_122-mm_37-122JT	  <cost>	19000	</cost>
+            <gun>	_122_mm_371_122JTX	  <cost>	19000	</cost>
             </gun>
             <gun>	_100mm_59-100T	  <cost>	18000	</cost>
             </gun>
@@ -3142,14 +3142,14 @@
             </armor_4>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <reloadTime>	9.1	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.9	</aimingTime>
+          <aimingTime>	2.7	</aimingTime>
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch05_T34_2/normal/lod0/Gun_05.model	</undamaged>
@@ -3226,7 +3226,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_100mm_44-100JT>
-        <_122-mm_37-122JT>	shared	  <maxAmmo>	40	</maxAmmo>
+        <_122_mm_371_122JTX>	shared	  <maxAmmo>	40	</maxAmmo>
           <armor>
             <armor_1>	180	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -3238,9 +3238,9 @@
             </armor_4>
             <gun>	45	</gun>
           </armor>
-          <shotDispersionRadius>	0.48	</shotDispersionRadius>
-          <reloadTime>	15	</reloadTime>
-          <aimingTime>	3.1	</aimingTime>
+          <shotDispersionRadius>	0.44	</shotDispersionRadius>
+          <reloadTime>	12	</reloadTime>
+          <aimingTime>	2.9	</aimingTime>
           <invisibilityFactorAtShot>	0.2	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
@@ -3326,7 +3326,7 @@
             <density>	113.741 113.726	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_122-mm_37-122JT>
+        </_122_mm_371_122JTX>
         <_100mm_59-100T>	shared	  <maxAmmo>	45	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -18 1 -18	</minPitch>
@@ -3928,9 +3928,9 @@
   </physics>
   <clientAdjustmentFactors>
     <guns>
-      <_122-mm_37-122JT>
+      <_122_mm_371_122JTX>
         <delta>	1.358823	</delta>
-      </_122-mm_37-122JT>
+      </_122_mm_371_122JTX>
     </guns>
     <armour>	1.194460383	</armour>
   </clientAdjustmentFactors>

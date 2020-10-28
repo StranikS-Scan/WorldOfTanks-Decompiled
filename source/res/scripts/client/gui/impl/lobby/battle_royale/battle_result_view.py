@@ -206,7 +206,7 @@ class BrBattleResultsViewInLobby(BrBattleResultsViewBase):
     def __getAchievementTooltipParameters(self, event):
         achievementName = event.getArgument('achievementName')
         if achievementName is None:
-            SoftException('There is no achievement info in tooltip arguments')
+            raise SoftException('There is no achievement info in tooltip arguments')
         return createTooltipData(isSpecial=True, specialAlias=TooltipConstantsModel.ACHIEVEMENT_TOOLTIP, specialArgs=[0,
          achievementName,
          False,

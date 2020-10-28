@@ -18,7 +18,6 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.impl.backport.backport_system_locale import getIntegralFormat
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBonsDevicesUrl, getBonsVehiclesUrl, getBonsInstructionsUrl
-from gui.Scaleform.Waiting import Waiting
 from gui.shared.event_dispatcher import showShop
 shopUrlsMap = {CrystalsPromoViewModel.TANKS_TAB: getBonsVehiclesUrl(),
  CrystalsPromoViewModel.EQUIPMENT_TAB: getBonsDevicesUrl(),
@@ -36,20 +35,19 @@ class CrystalsPromoView(ViewImpl):
         super(CrystalsPromoView, self).__init__(settings)
         self.__visibility = visibility
         self.__isMarkerDisabled = False
-        app = self._appLoader.getApp(APP_NAME_SPACE.SF_LOBBY)
-        if app and app.containerManager:
-            markerView = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW))
-            if markerView:
-                self.__isMarkerDisabled = markerView.getIsMarkerDisabled()
 
     def _initialize(self, *args, **kwargs):
         self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
 
     def _onLoading(self, *args, **kwargs):
-        Waiting.show('loadPage')
         isFirstOpen = not AccountSettings.getSettings(CRYSTALS_INFO_SHOWN)
         if isFirstOpen:
             AccountSettings.setSettings(CRYSTALS_INFO_SHOWN, True)
+        app = self._appLoader.getApp(APP_NAME_SPACE.SF_LOBBY)
+        if app and app.containerManager:
+            markerView = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW))
+            if markerView:
+                self.__isMarkerDisabled = markerView.getIsMarkerDisabled()
         with self.getViewModel().transaction() as model:
             model.setSelectedTab(1 if isFirstOpen else 0)
             model.setEquipmentPrice(getIntegralFormat(3000))
@@ -64,11 +62,11 @@ class CrystalsPromoView(ViewImpl):
         model.battleTypes.clearItems()
         battleTypes = model.battleTypes.getItems()
         rewards = self.__getRewards(allRewards, ARENA_BONUS_TYPE.REGULAR, 10)
-        battleTypes.addViewModel(self.__getBattleType(R.strings.menu.crystals.info.tab.get.random(), R.images.gui.maps.icons.crystalsInfo.get.c_1_BLOCK(), [self.__getCondition(3, rewards.winTop3, rewards.winTop10), self.__getCondition(10, rewards.loseTop3, rewards.loseTop10)]))
+        battleTypes.addViewModel(self.__getBattleType(R.strings.menu.crystals.info.tab.get.random(), R.images.gui.maps.icons.crystalsInfo.get.c_1_BLOCK(), [self.__getCondition(3, rewards.winTop3, rewards.loseTop3), self.__getCondition(10, rewards.winTop10, rewards.loseTop10)]))
         rewards = self.__getRewards(allRewards, ARENA_BONUS_TYPE.EPIC_RANDOM, 10)
-        battleTypes.addViewModel(self.__getBattleType(R.strings.menu.crystals.info.tab.get.general(), R.images.gui.maps.icons.crystalsInfo.get.c_2_BLOCK(), [self.__getCondition(6, rewards.winTop3, rewards.winTop10), self.__getCondition(20, rewards.loseTop3, rewards.loseTop10)]))
+        battleTypes.addViewModel(self.__getBattleType(R.strings.menu.crystals.info.tab.get.general(), R.images.gui.maps.icons.crystalsInfo.get.c_2_BLOCK(), [self.__getCondition(6, rewards.winTop3, rewards.loseTop3), self.__getCondition(20, rewards.winTop10, rewards.loseTop10)]))
         rewards = self.__getRewards(allRewards, ARENA_BONUS_TYPE.RANKED, 10)
-        battleTypes.addViewModel(self.__getBattleType(R.strings.menu.crystals.info.tab.get.ranked(), R.images.gui.maps.icons.crystalsInfo.get.c_3_BLOCK(), [self.__getCondition(3, rewards.winTop3, rewards.winTop10), self.__getCondition(10, rewards.loseTop3, rewards.loseTop10)]))
+        battleTypes.addViewModel(self.__getBattleType(R.strings.menu.crystals.info.tab.get.ranked(), R.images.gui.maps.icons.crystalsInfo.get.c_3_BLOCK(), [self.__getCondition(3, rewards.winTop3, rewards.loseTop3), self.__getCondition(10, rewards.winTop10, rewards.loseTop10)]))
         battleTypes.invalidate()
 
     def __goToShopHandler(self, args=None):
@@ -104,7 +102,6 @@ class CrystalsPromoView(ViewImpl):
         g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': True}), EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.NOTHING}), EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, self.__onToggleVisibilityMenu, scope=EVENT_BUS_SCOPE.LOBBY)
-        Waiting.hide('loadPage')
 
     def __onToggleVisibilityMenu(self, event):
         self.__visibility = event.ctx['state']

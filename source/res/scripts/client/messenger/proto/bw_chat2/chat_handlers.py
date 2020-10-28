@@ -18,12 +18,14 @@ from messenger.proto.bw_chat2.unit_chat_cmd import UnitCommandFactory
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.interfaces import IBattleCommandFactory
 from messenger.storage import storage_getter
-from messenger_common_chat2 import getCooldownGameModeDataForGameMode
-from messenger_common_chat2 import BATTLE_CHAT_COMMANDS, UNIT_CHAT_COMMANDS
+from messenger_common_chat2 import BATTLE_CHAT_COMMANDS, UNIT_CHAT_COMMANDS, getCooldownGameModeDataForGameMode
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from messenger_common_chat2 import MESSENGER_LIMITS as _LIMITS
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
+from uilogging.decorators import loggerTarget, loggerEntry, simpleLog
+from uilogging.ibc.constants import IBC_LOG_KEYS
+from uilogging.ibc.loggers import IBCLogger
 _ActionsCollection = namedtuple('_ActionsCollection', 'initID deInitID onBroadcastID broadcastID')
 _logger = logging.getLogger(__name__)
 
@@ -351,6 +353,7 @@ class UnitChatHandler(_EntityChatHandler):
 _MUTE_CHAT_COMMAND_AND_SENDER_DURATION = 15
 _EPIC_MINIMAP_ZOOM_MODE_SCALE = 500
 
+@loggerTarget(logKey=IBC_LOG_KEYS.IBC_CALLOUT_PANEL, loggerCls=IBCLogger)
 class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandFactory):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     __settingsCore = dependency.descriptor(ISettingsCore)
@@ -384,6 +387,7 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
                 self.__isEnabled = self.__settingsCore.getSetting(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION)
             return
 
+    @simpleLog(argsIndex=0, preProcessAction=lambda x: x.getCommand().name, resetTime=False)
     def send(self, decorator):
         command = decorator.getCommand()
         if command:
@@ -394,11 +398,15 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
             if success:
                 if decorator.isEnemyTarget():
                     self.__targetIDs.append(decorator.getTargetID())
-                cooldownConfig = getCooldownGameModeDataForGameMode(self.__sessionProvider.arenaVisitor.getArenaBonusType())
-                provider.setActionCoolDown(command.id, command.cooldownPeriod, decorator.getTargetID(), cooldownConfig)
+                if _ACTIONS.isBattleChatAction(command.id):
+                    cooldownConfig = getCooldownGameModeDataForGameMode(self.__sessionProvider.arenaVisitor.getArenaBonusType())
+                    provider.setBattleActionCoolDown(reqID, command.id, decorator.getTargetID(), cooldownConfig)
+                else:
+                    provider.setActionCoolDown(command.id, command.cooldownPeriod)
         else:
             _logger.error('Battle command is not found %r', decorator)
 
+    @loggerEntry
     def registerHandlers(self):
         register = self.provider().registerHandler
         for command in BATTLE_CHAT_COMMANDS:
@@ -451,7 +459,10 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
     def _onResponseFailure(self, ids, args):
         command = super(BattleChatCommandHandler, self)._onResponseFailure(ids, args)
         if command:
-            self.provider().clearActionCoolDown(command.id)
+            if _ACTIONS.isBattleChatAction(command.id):
+                self.provider().clearBattleActionCoolDown(ids, command.id)
+            else:
+                self.provider().clearActionCoolDown(command.id)
             error = errors.createBattleCommandError(args, command)
             if error:
                 g_messengerEvents.onErrorReceived(error)
@@ -526,18 +537,24 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
         cmd = self.__factory.createByAction(actionID, args)
         if self.__isEnabled is False:
             return
-        silentMode = self.__isSilentMode(cmd)
-        if not silentMode and self.__sessionProvider.arenaVisitor.getArenaBonusType() == ARENA_BONUS_TYPE.EPIC_BATTLE:
-            silentMode = self.__isSilentModeForEpicBattleMode(cmd)
-        if silentMode:
-            cmd.setSilentMode(silentMode)
-        if cmd.isIgnored():
-            g_mutedMessages[cmd.getFirstTargetID()] = cmd
-            _logger.debug("Chat command '%s' is ignored", cmd.getCommandText())
+        else:
+            silentMode = self.__isSilentMode(cmd)
+            if not silentMode and self.__sessionProvider.arenaVisitor.getArenaBonusType() == ARENA_BONUS_TYPE.EPIC_BATTLE:
+                silentMode = self.__isSilentModeForEpicBattleMode(cmd)
+            if silentMode:
+                cmd.setSilentMode(silentMode)
+            if cmd.isIgnored():
+                g_mutedMessages[cmd.getFirstTargetID()] = cmd
+                _logger.debug("Chat command '%s' is ignored", cmd.getCommandText())
+                return
+            if cmd.isPrivate() and not (cmd.isReceiver() or cmd.isSender()):
+                return
+            arenaDP = self.__sessionProvider.getArenaDP()
+            if arenaDP is not None:
+                if arenaDP.isObserver(arenaDP.getPlayerVehicleID()) and (cmd.isReply() or cmd.isCancelReply() or cmd.isAutoCommit()):
+                    return
+            g_messengerEvents.channels.onCommandReceived(cmd)
             return
-        if cmd.isPrivate() and not (cmd.isReceiver() or cmd.isSender()):
-            return
-        g_messengerEvents.channels.onCommandReceived(cmd)
 
     def __onVehicleKilled(self, victimID, *args):
         provider = self.provider()

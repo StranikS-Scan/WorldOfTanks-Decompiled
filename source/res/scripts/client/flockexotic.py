@@ -12,13 +12,6 @@ from helpers.CallbackDelayer import CallbackDelayer
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 _MATH_2PI = math.pi * 2.0
 
-def wrapPi(theta):
-    if abs(theta) > math.pi:
-        revolutions = math.floor((theta + math.pi) / _MATH_2PI)
-        theta -= revolutions * _MATH_2PI
-    return theta
-
-
 class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
 
     def __init__(self):
@@ -27,6 +20,10 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
         CallbackDelayer.__init__(self)
         self.flightAngleMin = math.radians(self.flightAngleMin)
         self.flightAngleMax = math.radians(self.flightAngleMax)
+        if self.flightAngleMax < self.flightAngleMin:
+            self.flightAngleMax, self.flightAngleMin = self.flightAngleMin, self.flightAngleMax
+        if self.flightAngleMax - self.flightAngleMin > _MATH_2PI:
+            LOG_ERROR('flightAngleMax or  flightAngleMin have incorrect values: arc greater than 2*pi')
         self.__isTriggered = False
         self.__models = []
 
@@ -103,8 +100,7 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
 
     def __getRandomTargetPos(self, startPos):
         randHeight = random.uniform(0, self.flightHeight)
-        arc = wrapPi(self.flightAngleMax - self.flightAngleMin)
-        randAngle = random.uniform(0.0, arc) + self.flightAngleMin
+        randAngle = random.uniform(self.flightAngleMin, self.flightAngleMax)
         direction = Math.Vector3(self.flightRadius * math.cos(randAngle), self.flightOffsetFromOrigin + randHeight, self.flightRadius * math.sin(randAngle)) + self.position
         direction = direction - startPos
         direction.normalise()

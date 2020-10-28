@@ -586,10 +586,10 @@ class EquipmentSoundPlayer(IVehicleCountListener, IViewComponentsCtrlListener):
 
 
 class BerserkerSoundPlayer(_VehicleStateSoundPlayer):
+    __slots__ = ('__effectIsWorking', '__delayer')
 
     def __init__(self):
         self.__effectIsWorking = False
-        self.__endTime = 0
         self.__delayer = None
         return
 
@@ -598,22 +598,23 @@ class BerserkerSoundPlayer(_VehicleStateSoundPlayer):
             if value is not None:
                 if value.attackReasonID == ATTACK_REASONS.index(ATTACK_REASON.BERSERKER):
                     self.__effectIsWorking = True
-                    self.__endTime = value.endTime
                     BREvents.playSound(BREvents.BERSERKER_ACTIVATION)
                     self.__delayer = CallbackDelayer()
                     self.__delayer.delayCallback(value.period, self.__updateShowDotEffect, value.period)
-            elif self.__effectIsWorking and BigWorld.serverTime() >= self.__endTime:
+            elif self.__effectIsWorking:
                 self.__effectIsWorking = False
-                self.__endTime = 0
-                BREvents.playSound(BREvents.BERSERKER_DEACTIVATION)
                 self.__delayer.stopCallback(self.__updateShowDotEffect)
                 self.__delayer = None
+                BREvents.playSound(BREvents.BERSERKER_DEACTIVATION)
         return
 
     def destroy(self):
         if self.__delayer is not None:
             self.__delayer.stopCallback(self.__updateShowDotEffect)
             self.__delayer = None
+        if self.__effectIsWorking:
+            BREvents.playSound(BREvents.BERSERKER_DEACTIVATION)
+            self.__effectIsWorking = False
         super(BerserkerSoundPlayer, self).destroy()
         return
 

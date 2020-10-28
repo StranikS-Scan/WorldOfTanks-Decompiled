@@ -135,7 +135,7 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
         self.__noiseOscillator = None
         self.__dynamicCfg = CameraDynamicConfig()
         self.__accelerationSmoother = None
-        self.__readCfg(dataSec)
+        self._readConfigs(dataSec)
         self.__onChangeControlMode = None
         self.__aimingSystem = None
         self.__curSense = 0
@@ -159,6 +159,10 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
             self.__cam = None
         self.__cameraTransition = BigWorld.TransitionCamera()
         return
+
+    @staticmethod
+    def _getConfigsKey():
+        return ArcadeCamera.__name__
 
     def create(self, pivotPos, onChangeControlMode=None, postmortemMode=False):
         super(ArcadeCamera, self).create()
@@ -622,7 +626,7 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
         import ResMgr
         ResMgr.purge('gui/avatar_input_handler.xml')
         cameraSec = ResMgr.openSection('gui/avatar_input_handler.xml/arcadeMode/camera/')
-        self.__readCfg(cameraSec)
+        self._reloadConfigs(cameraSec)
 
     def __calcAimMatrix(self):
         endMult = self.__inputInertia.endZoomMultiplier
@@ -630,56 +634,10 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
         offset = self.__defaultAimOffset
         return cameras.getAimMatrix(-offset[0], -offset[1], fov)
 
-    def __readCfg(self, dataSec):
+    def _readConfigs(self, dataSec):
         if dataSec is None:
             LOG_WARNING('Invalid section <arcadeMode/camera> in avatar_input_handler.xml')
-        self._baseCfg = dict()
-        bcfg = self._baseCfg
-        bcfg['keySensitivity'] = readFloat(dataSec, 'keySensitivity', 0, 10, 0.01)
-        bcfg['sensitivity'] = readFloat(dataSec, 'sensitivity', 0, 10, 0.01)
-        bcfg['scrollSensitivity'] = readFloat(dataSec, 'scrollSensitivity', 0, 10, 0.01)
-        bcfg['angleRange'] = readVec2(dataSec, 'angleRange', (0, 0), (180, 180), (10, 110))
-        distRangeVec = readVec2(dataSec, 'distRange', (1, 1), (100, 100), (2, 20))
-        bcfg['distRange'] = MinMax(distRangeVec.x, distRangeVec.y)
-        bcfg['minStartDist'] = readFloat(dataSec, 'minStartDist', bcfg['distRange'][0], bcfg['distRange'][1], bcfg['distRange'][0])
-        bcfg['optimalStartDist'] = readFloat(dataSec, 'optimalStartDist', bcfg['distRange'][0], bcfg['distRange'][1], bcfg['distRange'][0])
-        bcfg['angleRange'][0] = math.radians(bcfg['angleRange'][0]) - math.pi * 0.5
-        bcfg['angleRange'][1] = math.radians(bcfg['angleRange'][1]) - math.pi * 0.5
-        bcfg['fovMultMinMaxDist'] = MinMax(readFloat(dataSec, 'fovMultMinDist', 0.1, 100, 1.0), readFloat(dataSec, 'fovMultMaxDist', 0.1, 100, 1.0))
-        ds = Settings.g_instance.userPrefs[Settings.KEY_CONTROL_MODE]
-        if ds is not None:
-            ds = ds['arcadeMode/camera']
-        self._userCfg = dict()
-        ucfg = self._userCfg
-        ucfg['horzInvert'] = False
-        ucfg['vertInvert'] = False
-        ucfg['sniperModeByShift'] = False
-        ucfg['keySensitivity'] = readFloat(ds, 'keySensitivity', 0.0, 10.0, 1.0)
-        ucfg['sensitivity'] = readFloat(ds, 'sensitivity', 0.0, 10.0, 1.0)
-        ucfg['scrollSensitivity'] = readFloat(ds, 'scrollSensitivity', 0.0, 10.0, 1.0)
-        ucfg['startDist'] = readFloat(ds, 'startDist', bcfg['distRange'][0], 500, bcfg['optimalStartDist'])
-        if ucfg['startDist'] < bcfg['minStartDist']:
-            ucfg['startDist'] = bcfg['optimalStartDist']
-        ucfg['startAngle'] = readFloat(ds, 'startAngle', 5, 180, 60)
-        ucfg['startAngle'] = math.radians(ucfg['startAngle']) - math.pi * 0.5
-        ucfg['fovMultMinMaxDist'] = MinMax(readFloat(ds, 'fovMultMinDist', 0.1, 100, bcfg['fovMultMinMaxDist'].min), readFloat(ds, 'fovMultMaxDist', 0.1, 100, bcfg['fovMultMinMaxDist'].max))
-        self._cfg = dict()
-        cfg = self._cfg
-        cfg['keySensitivity'] = bcfg['keySensitivity']
-        cfg['sensitivity'] = bcfg['sensitivity']
-        cfg['scrollSensitivity'] = bcfg['scrollSensitivity']
-        cfg['angleRange'] = bcfg['angleRange']
-        cfg['distRange'] = bcfg['distRange']
-        cfg['minStartDist'] = bcfg['minStartDist']
-        cfg['horzInvert'] = ucfg['horzInvert']
-        cfg['vertInvert'] = ucfg['vertInvert']
-        cfg['keySensitivity'] *= ucfg['keySensitivity']
-        cfg['sensitivity'] *= ucfg['sensitivity']
-        cfg['scrollSensitivity'] *= ucfg['scrollSensitivity']
-        cfg['startDist'] = ucfg['startDist']
-        cfg['startAngle'] = ucfg['startAngle']
-        cfg['fovMultMinMaxDist'] = ucfg['fovMultMinMaxDist']
-        cfg['sniperModeByShift'] = ucfg['sniperModeByShift']
+        super(ArcadeCamera, self)._readConfigs(dataSec)
         enableShift = dataSec.readBool('shift', False)
         if enableShift:
             movementMappings = dict()
@@ -732,6 +690,60 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
 
         return
 
+    def _readBaseCfg(self, dataSec):
+        bcfg = self._baseCfg
+        bcfg['keySensitivity'] = readFloat(dataSec, 'keySensitivity', 0, 10, 0.01)
+        bcfg['sensitivity'] = readFloat(dataSec, 'sensitivity', 0, 10, 0.01)
+        bcfg['scrollSensitivity'] = readFloat(dataSec, 'scrollSensitivity', 0, 10, 0.01)
+        bcfg['angleRange'] = readVec2(dataSec, 'angleRange', (0, 0), (180, 180), (10, 110))
+        distRangeVec = readVec2(dataSec, 'distRange', (1, 1), (100, 100), (2, 20))
+        bcfg['distRange'] = MinMax(distRangeVec.x, distRangeVec.y)
+        bcfg['minStartDist'] = readFloat(dataSec, 'minStartDist', bcfg['distRange'][0], bcfg['distRange'][1], bcfg['distRange'][0])
+        bcfg['optimalStartDist'] = readFloat(dataSec, 'optimalStartDist', bcfg['distRange'][0], bcfg['distRange'][1], bcfg['distRange'][0])
+        bcfg['angleRange'][0] = math.radians(bcfg['angleRange'][0]) - math.pi * 0.5
+        bcfg['angleRange'][1] = math.radians(bcfg['angleRange'][1]) - math.pi * 0.5
+        bcfg['fovMultMinMaxDist'] = MinMax(readFloat(dataSec, 'fovMultMinDist', 0.1, 100, 1.0), readFloat(dataSec, 'fovMultMaxDist', 0.1, 100, 1.0))
+
+    def _readUserCfg(self):
+        bcfg = self._baseCfg
+        ucfg = self._userCfg
+        dataSec = Settings.g_instance.userPrefs[Settings.KEY_CONTROL_MODE]
+        if dataSec is not None:
+            dataSec = dataSec['arcadeMode/camera']
+        ucfg['horzInvert'] = False
+        ucfg['vertInvert'] = False
+        ucfg['sniperModeByShift'] = False
+        ucfg['keySensitivity'] = readFloat(dataSec, 'keySensitivity', 0.0, 10.0, 1.0)
+        ucfg['sensitivity'] = readFloat(dataSec, 'sensitivity', 0.0, 10.0, 1.0)
+        ucfg['scrollSensitivity'] = readFloat(dataSec, 'scrollSensitivity', 0.0, 10.0, 1.0)
+        ucfg['startDist'] = readFloat(dataSec, 'startDist', bcfg['distRange'][0], 500, bcfg['optimalStartDist'])
+        if ucfg['startDist'] < bcfg['minStartDist']:
+            ucfg['startDist'] = bcfg['optimalStartDist']
+        ucfg['startAngle'] = readFloat(dataSec, 'startAngle', 5, 180, 60)
+        ucfg['startAngle'] = math.radians(ucfg['startAngle']) - math.pi * 0.5
+        ucfg['fovMultMinMaxDist'] = MinMax(readFloat(dataSec, 'fovMultMinDist', 0.1, 100, bcfg['fovMultMinMaxDist'].min), readFloat(dataSec, 'fovMultMaxDist', 0.1, 100, bcfg['fovMultMinMaxDist'].max))
+        return
+
+    def _makeCfg(self):
+        bcfg = self._baseCfg
+        ucfg = self._userCfg
+        cfg = self._cfg
+        cfg['keySensitivity'] = bcfg['keySensitivity']
+        cfg['sensitivity'] = bcfg['sensitivity']
+        cfg['scrollSensitivity'] = bcfg['scrollSensitivity']
+        cfg['angleRange'] = bcfg['angleRange']
+        cfg['distRange'] = bcfg['distRange']
+        cfg['minStartDist'] = bcfg['minStartDist']
+        cfg['horzInvert'] = ucfg['horzInvert']
+        cfg['vertInvert'] = ucfg['vertInvert']
+        cfg['keySensitivity'] *= ucfg['keySensitivity']
+        cfg['sensitivity'] *= ucfg['sensitivity']
+        cfg['scrollSensitivity'] *= ucfg['scrollSensitivity']
+        cfg['startDist'] = ucfg['startDist']
+        cfg['startAngle'] = ucfg['startAngle']
+        cfg['fovMultMinMaxDist'] = ucfg['fovMultMinMaxDist']
+        cfg['sniperModeByShift'] = ucfg['sniperModeByShift']
+
     def writeUserPreferences(self):
         ds = Settings.g_instance.userPrefs
         if not ds.has_key(Settings.KEY_CONTROL_MODE):
@@ -746,8 +758,8 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
         ds.writeFloat('arcadeMode/camera/startDist', ucfg['startDist'])
         ds.writeFloat('arcadeMode/camera/fovMultMinDist', ucfg['fovMultMinMaxDist'].min)
         ds.writeFloat('arcadeMode/camera/fovMultMaxDist', ucfg['fovMultMinMaxDist'].max)
-        ucfg['startAngle'] = math.degrees(ucfg['startAngle'] + math.pi * 0.5)
-        ds.writeFloat('arcadeMode/camera/startAngle', ucfg['startAngle'])
+        startAngle = math.degrees(ucfg['startAngle'] + math.pi * 0.5)
+        ds.writeFloat('arcadeMode/camera/startAngle', startAngle)
 
     def __onRecreateDevice(self):
         self.__aimingSystem.aimMatrix = self.__calcAimMatrix()

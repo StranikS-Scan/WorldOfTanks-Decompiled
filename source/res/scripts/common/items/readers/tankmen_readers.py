@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/readers/tankmen_readers.py
 import ResMgr
-from constants import IS_CLIENT, IS_WEB
+from constants import IS_CLIENT, IS_WEB, IS_BOT
 from items import _xml
 from items.components import component_constants, skills_constants
 from items.components import shared_components
@@ -103,7 +103,7 @@ def _readGroupRoles(xmlCtx, section, subsectionName):
 
 
 def _readTankmenGroup(xmlCtx, groupName, subsection, firstNames, lastNames, icons):
-    if IS_CLIENT or IS_WEB:
+    if IS_CLIENT or IS_WEB or IS_BOT:
         parseName = _parseName
         parseIcon = _parseIcon
     else:
@@ -138,7 +138,7 @@ def _readNationConfigSection(xmlCtx, section):
 
     ranks = _readRanks((xmlCtx, 'ranks'), _xml.getChildren(xmlCtx, section, 'ranks'))
     config['roleRanks'] = _readRoleRanks((xmlCtx, 'roleRanks'), _xml.getSubsection(xmlCtx, section, 'roleRanks'), ranks)
-    if IS_CLIENT or IS_WEB:
+    if IS_CLIENT or IS_WEB or IS_BOT:
         config['firstNames'] = firstNames
         config['lastNames'] = lastNames
         config['icons'] = icons

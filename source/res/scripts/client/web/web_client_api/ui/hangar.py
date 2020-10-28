@@ -8,6 +8,7 @@ from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsW
 from gui.impl.dialogs.dialogs import showExchangeToBuyItemsDialog
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
+from skeletons.gui.game_control import IBrowserController
 from web.web_client_api import W2CSchema, w2c, Field
 from helpers import dependency
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -42,14 +43,16 @@ class HangarTabWebApiMixin(object):
 
 class HangarWindowsWebApiMixin(object):
     itemsCache = dependency.descriptor(IItemsCache)
+    __browserController = dependency.descriptor(IBrowserController)
 
     @w2c(_ExchangeWindowSchema, 'currency_exchange')
     def openCurrencyExchangeWindow(self, cmd):
         if cmd.id is not None:
             if not self.validateItems(cmd.id):
                 return
-            isOk = yield self.__showExchangeItemDialog(cmd.id, cmd.amount)
-            yield {'completed': isOk}
+            result = yield self.__showExchangeItemDialog(cmd.id, cmd.amount)
+            if not result.busy:
+                yield {'completed': result.result}
         elif cmd.type == _EXCHANGE_WINDOW_PLATFORM:
             isOk, _ = yield DialogsInterface.showDialog(ExchangeCreditsWebProductMeta(name=cmd.name, count=cmd.amount, price=cmd.price))
             yield {'completed': isOk}
@@ -80,5 +83,8 @@ class HangarWindowsWebApiMixin(object):
     @adisp.async
     @async
     def __showExchangeItemDialog(self, itemCD, count, callback):
+        for browser in self.__browserController.getAllBrowsers().values():
+            browser.unfocus()
+
         result = yield await(showExchangeToBuyItemsDialog(itemsCountMap={itemCD: count}))
-        callback(result.result if not result.busy else False)
+        callback(result)

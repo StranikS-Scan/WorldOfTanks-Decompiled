@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, NamedTuple, Set, Dict, Optional, Any, Tuple
 import items
 import nations
 from ResMgr import DataSection
-from constants import IS_CLIENT, IS_CELLAPP, IS_WEB, VEHICLE_TTC_ASPECTS, ATTACK_REASON, ATTACK_REASON_INDICES, SERVER_TICK_LENGTH
+from constants import IS_CLIENT, IS_CELLAPP, IS_WEB, VEHICLE_TTC_ASPECTS, ATTACK_REASON, ATTACK_REASON_INDICES, SERVER_TICK_LENGTH, EVENT_BATTLES_TAG
 from debug_utils import LOG_DEBUG_DEV
 from items import ITEM_OPERATION, PREDEFINED_HEAL_GROUPS
 from items import _xml, vehicles
@@ -70,8 +70,9 @@ class VehicleFactorsXmlReader(CommonXmlSectionReader):
     __readerImpl = None
 
     def __init__(self):
-        _vehicle_attribute_factor_tags = {name:name.replace('/', '-') for name in vehicles.VEHICLE_ATTRIBUTE_FACTORS.iterkeys()}
-        super(VehicleFactorsXmlReader, self).__init__(_vehicle_attribute_factor_tags, vehicles.VEHICLE_ATTRIBUTE_FACTORS)
+        attrFactor = vehicles.vehicleAttributeFactors()
+        _vehicle_attribute_factor_tags = {name:name.replace('/', '-') for name in attrFactor.iterkeys()}
+        super(VehicleFactorsXmlReader, self).__init__(_vehicle_attribute_factor_tags, attrFactor)
 
     @staticmethod
     def readFactors(xmlCtx, section, subsection_name):
@@ -140,6 +141,12 @@ class Artefact(BasicItem):
         return (self._vehWeightFraction, self._weight, 0.0)
 
     def checkCompatibilityWithVehicle(self, vehicleDescr):
+        vehType = vehicleDescr.type
+        if EVENT_BATTLES_TAG in vehType.tags:
+            if EVENT_BATTLES_TAG not in self.tags:
+                return (False, 'attempt to set up non-event equipment on event vehicle')
+        elif EVENT_BATTLES_TAG in self.tags:
+            return (False, 'attempt to set up event equipment on non-event vehicle')
         return (True, None) if self.__vehicleFilter is None else self.__vehicleFilter.checkCompatibility(vehicleDescr)
 
     def checkCompatibilityWithOther(self, other):
@@ -438,7 +445,7 @@ class ImprovedConfiguration(StaticOptionalDevice):
 
 
 class Equipment(Artefact):
-    __slots__ = ('equipmentType', 'reuseCount', 'cooldownSeconds', 'soundNotification', 'stunResistanceEffect', 'stunResistanceDuration', 'repeatedStunDurationFactor')
+    __slots__ = ('equipmentType', 'reuseCount', 'cooldownSeconds', 'soundNotification', 'stunResistanceEffect', 'stunResistanceDuration', 'repeatedStunDurationFactor', 'activationWWSoundFeedback', 'deactivationWWSoundFeedback')
 
     def __init__(self):
         super(Equipment, self).__init__(items.ITEM_TYPES.equipment, 0, '', 0)
@@ -449,12 +456,16 @@ class Equipment(Artefact):
         self.reuseCount = component_constants.ZERO_INT
         self.cooldownSeconds = component_constants.ZERO_INT
         self.soundNotification = None
+        self.activationWWSoundFeedback = None
+        self.deactivationWWSoundFeedback = None
         return
 
     def _readBasicConfig(self, xmlCtx, section):
         super(Equipment, self)._readBasicConfig(xmlCtx, section)
         self.equipmentType = items.EQUIPMENT_TYPES[section.readString('type', 'regular')]
         self.soundNotification = _xml.readStringOrNone(xmlCtx, section, 'soundNotification')
+        self.activationWWSoundFeedback = _xml.readStringOrNone(xmlCtx, section, 'activationWWSoundFeedback')
+        self.deactivationWWSoundFeedback = _xml.readStringOrNone(xmlCtx, section, 'deactivationWWSoundFeedback')
         scriptSection = section['script']
         self.stunResistanceEffect, self.stunResistanceDuration, self.repeatedStunDurationFactor = _readStun(xmlCtx, scriptSection)
         self.reuseCount, self.cooldownSeconds = _readReuseParams(xmlCtx, scriptSection)
@@ -691,95 +702,6 @@ class AfterburningBattleRoyale(Equipment):
     def _getDescription(self, descr):
         localizeDescr = super(AfterburningBattleRoyale, self)._getDescription(descr)
         return i18n.makeString(localizeDescr, duration=self.consumeSeconds)
-
-
-class AfterburningWT(Equipment):
-    __slots__ = ('consumeSeconds', 'enginePowerFactor', 'maxSpeedFactor', 'vehicleRotationSpeed', 'deploySeconds', 'rechargeSeconds')
-
-    def __init__(self):
-        super(AfterburningWT, self).__init__()
-        self.consumeSeconds = component_constants.ZERO_INT
-        self.enginePowerFactor = component_constants.ZERO_FLOAT
-        self.maxSpeedFactor = component_constants.ZERO_FLOAT
-        self.vehicleRotationSpeed = component_constants.ZERO_FLOAT
-        self.deploySeconds = component_constants.ZERO_FLOAT
-        self.rechargeSeconds = component_constants.ZERO_FLOAT
-
-    def _readConfig(self, xmlCtx, section):
-        self.consumeSeconds = _xml.readInt(xmlCtx, section, 'consumeSeconds', 0)
-        self.enginePowerFactor = _xml.readPositiveFloat(xmlCtx, section, 'enginePowerFactor')
-        self.maxSpeedFactor = _xml.readPositiveFloat(xmlCtx, section, 'maxSpeedFactor')
-        self.vehicleRotationSpeed = _xml.readPositiveFloat(xmlCtx, section, 'vehicleRotationSpeed')
-
-    def updateVehicleAttrFactors(self, vehicleDescr, factors, aspect):
-        try:
-            factors['engine/power'] *= self.enginePowerFactor
-            factors['vehicle/maxSpeed'] *= self.maxSpeedFactor
-            factors['vehicle/rotationSpeed'] *= self.vehicleRotationSpeed
-        except:
-            pass
-
-    def _getDescription(self, descr):
-        localizeDescr = super(AfterburningWT, self)._getDescription(descr)
-        return i18n.makeString(localizeDescr, duration=self.consumeSeconds)
-
-
-class InstantStunShootWT(Equipment):
-    __slots__ = ('cooldownSeconds', 'maxUseCount', 'piercingPower', 'speed', 'gravity', 'maxDistance', 'maxHeight', 'shellDescr')
-
-    def __init__(self):
-        super(InstantStunShootWT, self).__init__()
-        self.cooldownSeconds = component_constants.ZERO_INT
-        self.maxUseCount = component_constants.ZERO_INT
-        self.piercingPower = component_constants.ZERO_INT
-        self.speed = component_constants.ZERO_FLOAT
-        self.gravity = component_constants.ZERO_FLOAT
-        self.maxDistance = component_constants.ZERO_FLOAT
-        self.maxHeight = component_constants.ZERO_FLOAT
-        self.shellDescr = component_constants.ZERO_INT
-
-    def _readConfig(self, xmlCtx, section):
-        self.cooldownSeconds = _xml.readInt(xmlCtx, section, 'cooldownSeconds', 0)
-        self.maxUseCount = section.readInt('maxUseCount', 0)
-        self.piercingPower = _xml.readTupleOfPositiveInts(xmlCtx, section, 'piercingPower', 2)
-        self.speed = section.readFloat('speed', 0)
-        self.gravity = section.readFloat('gravity', 0)
-        self.maxDistance = section.readFloat('maxDistance', 0)
-        self.maxHeight = section.readFloat('maxHeight', 0)
-        self.shellDescr = section.readInt('shellDescr', 0)
-
-
-class ImpulseWT(Equipment):
-    __slots__ = ('damageRadius', 'damageValue', 'stunRadius', 'maxUseCount', 'prepareSeconds', 'cooldownBonuses', 'shellDescr')
-
-    def __init__(self):
-        super(ImpulseWT, self).__init__()
-        self.damageRadius = component_constants.ZERO_FLOAT
-        self.damageValue = component_constants.ZERO_FLOAT
-        self.stunRadius = component_constants.ZERO_FLOAT
-        self.maxUseCount = component_constants.ZERO_INT
-        self.prepareSeconds = component_constants.ZERO_FLOAT
-        self.cooldownBonuses = component_constants.EMPTY_TUPLE
-        self.shellDescr = component_constants.ZERO_INT
-
-    def _readConfig(self, xmlCtx, section):
-        self.damageRadius = _xml.readFloat(xmlCtx, section, 'damageRadius', 0)
-        self.damageValue = _xml.readFloat(xmlCtx, section, 'damageValue', 0)
-        self.stunRadius = _xml.readFloat(xmlCtx, section, 'stunRadius', 0)
-        self.maxUseCount = section.readInt('maxUseCount', 0)
-        self.prepareSeconds = section.readFloat('prepareSeconds', 0)
-        self.cooldownBonuses = self._readCooldownBonus(section)
-        self.shellDescr = section.readInt('shellDescr', 0)
-
-    def _readCooldownBonus(self, section):
-        bonuses = []
-        for bonusSection in section['cooldownBonus'].values():
-            affected = bonusSection.readInt('affected', 1)
-            bonus = bonusSection.readFloat('bonus', 0)
-            bonuses.append((affected, bonus))
-
-        bonuses.sort(key=lambda (affectedVeh, _): affectedVeh)
-        return bonuses
 
 
 class InfluenceZone(object):
@@ -1607,6 +1529,73 @@ class PassiveEngineering(Equipment, TooltipConfigReader):
         self.resupplyShellsFactor = _xml.readPositiveFloat(xmlCtx, scriptSection, 'resupplyShellsFactor')
 
 
+class EventEquipment(Equipment):
+    __slots__ = ('durationSeconds', 'cooldownSeconds', 'reuseCount')
+
+    def __init__(self):
+        super(EventEquipment, self).__init__()
+        self.durationSeconds = component_constants.ZERO_INT
+        self.cooldownSeconds = component_constants.ZERO_INT
+        self.reuseCount = component_constants.ZERO_INT
+
+    def _readConfig(self, xmlCtx, section):
+        super(EventEquipment, self)._readConfig(xmlCtx, section)
+        try:
+            self.durationSeconds = _xml.readInt(xmlCtx, section, 'durationSeconds')
+            self.cooldownSeconds = _xml.readInt(xmlCtx, section, 'cooldownSeconds')
+            self.reuseCount = _xml.readInt(xmlCtx, section, 'reuseCount')
+        except SoftException:
+            pass
+
+
+class BuffEquipment(EventEquipment):
+    __slots__ = 'buffNames'
+
+    def __init__(self):
+        super(BuffEquipment, self).__init__()
+        self.buffNames = None
+        return
+
+    def _readConfig(self, xmlCtx, section):
+        super(BuffEquipment, self)._readConfig(xmlCtx, section)
+        self.buffNames = self._readBuffs(xmlCtx, section, 'buffs')
+
+    @staticmethod
+    def _readBuffs(xmlCtx, section, subsectionName):
+        buffNames = _xml.readString(xmlCtx, section, subsectionName).split()
+        return frozenset({intern(name) for name in buffNames})
+
+
+class HpRepairAndCrewHealEquipment(BuffEquipment):
+    __slots__ = ('isInterruptable', 'immediateHealAmount')
+
+    def __init__(self):
+        super(HpRepairAndCrewHealEquipment, self).__init__()
+        self.isInterruptable = False
+        self.immediateHealAmount = component_constants.ZERO_INT
+
+    def _readConfig(self, xmlCtx, section):
+        super(HpRepairAndCrewHealEquipment, self)._readConfig(xmlCtx, section)
+        self.isInterruptable = _xml.readBool(xmlCtx, section, 'isInterruptable')
+        self.immediateHealAmount = _xml.readInt(xmlCtx, section, 'immediateHealAmount')
+
+
+class RadiusEquipment(EventEquipment):
+    __slots__ = ('radius',)
+
+    def __init__(self):
+        super(RadiusEquipment, self).__init__()
+        self.radius = component_constants.ZERO_INT
+
+    def _readConfig(self, xmlCtx, section):
+        super(RadiusEquipment, self)._readConfig(xmlCtx, section)
+        self.radius = _xml.readInt(xmlCtx, section, 'radius')
+
+
+class ResurrectEquipment(Equipment, TooltipConfigReader):
+    pass
+
+
 class EpicArtillery(ConsumableArtillery):
     pass
 
@@ -1991,6 +1980,10 @@ class ConsumableSpawnKamikaze(Equipment, TooltipConfigReader, CountableConsumabl
 
 
 class SpawnKamikaze(ConsumableSpawnKamikaze):
+    pass
+
+
+class EventResurrectEquipment(ResurrectEquipment):
     pass
 
 

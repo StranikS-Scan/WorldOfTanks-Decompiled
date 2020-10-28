@@ -53,7 +53,7 @@ class Highlighter(svarog_script.py_component.Component):
         pass
 
     def deactivate(self):
-        if self.isDisabled or self.__vehicle is None:
+        if self.isDisabled:
             return
         else:
             if self.isOn:

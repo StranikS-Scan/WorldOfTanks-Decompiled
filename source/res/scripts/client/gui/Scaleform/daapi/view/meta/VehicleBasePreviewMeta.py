@@ -24,6 +24,3 @@ class VehicleBasePreviewMeta(View):
 
     def as_hide3DSceneTooltipS(self):
         return self.flashObject.as_hide3DSceneTooltip() if self._isDAAPIInited() else None
-
-    def as_setBottomPanelS(self, linkage):
-        return self.flashObject.as_setBottomPanel(linkage) if self._isDAAPIInited() else None

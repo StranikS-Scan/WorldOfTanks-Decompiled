@@ -6,9 +6,10 @@ import BigWorld
 from Event import Event, EventManager
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from adisp import process, async
+from frameworks.wulf import WindowLayer
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import ViewTypes
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.app_loader import sf_lobby
 from gui.game_control import gc_constants
@@ -18,6 +19,7 @@ from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showBubbleTooltip
 from gui.shared.events import BrowserEvent
 from gui.shared.utils import isPopupsWindowsOpenDisabled
+from gui.shared.utils.functions import getUniqueViewName
 from gui.wgcg.promo_screens.contexts import PromoGetTeaserRequestCtx, PromoSendTeaserShownRequestCtx, PromoGetUnreadCountRequestCtx
 from helpers import i18n, isPlayerAccount, dependency
 from helpers.http import url_formatters
@@ -185,7 +187,8 @@ class PromoController(IPromoController):
 
     def __onPromoClosed(self, **kwargs):
         self.__isPromoOpen = False
-        self.__showBubbleTooltip()
+        if self.__isLobbyInited:
+            self.__showBubbleTooltip()
         if self.__externalCloseCallback:
             self.__externalCloseCallback()
         self.__requestPromoCount()
@@ -332,7 +335,7 @@ class PromoController(IPromoController):
                 self.__isInHangar = True
                 if self.__hasPendingTeaser:
                     self.__tryToShowTeaser()
-            elif pyView.viewType == ViewTypes.LOBBY_SUB:
+            elif pyView.layer == WindowLayer.SUB_VIEW:
                 self.__isInHangar = False
 
 
@@ -344,5 +347,6 @@ def _showBrowserView(url, returnClb, soundSpaceID=None):
      'returnAlias': VIEW_ALIAS.LOBBY_HANGAR}
     if soundSpaceID is not None:
         ctx['soundSpaceID'] = soundSpaceID
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BROWSER_VIEW, ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
+    alias = VIEW_ALIAS.BROWSER_VIEW
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias, getUniqueViewName(alias)), ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
     return

@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_helpers.py
 import operator
+from frameworks.wulf import WindowLayer
 from helpers import dependency
 from items import tankmen
 from shared_utils import first
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_top_modules import TopModulesChecker
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.game_control.veh_comparison_basket import PARAMS_AFFECTED_TANKMEN_SKILLS
 from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
@@ -95,7 +95,7 @@ def isEquipmentSame(equipment1, equipment2):
 
 @dependency.replace_none_kwargs(appLoader=IAppLoader)
 def getCmpConfiguratorMainView(appLoader=None):
-    cmpConfiguratorMain = appLoader.getApp().containerManager.getView(ViewTypes.LOBBY_SUB, {POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR})
+    cmpConfiguratorMain = appLoader.getApp().containerManager.getView(WindowLayer.SUB_VIEW, {POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR})
     return cmpConfiguratorMain
 
 

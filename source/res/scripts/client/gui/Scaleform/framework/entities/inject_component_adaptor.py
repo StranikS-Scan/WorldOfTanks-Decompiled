@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/inject_component_adaptor.py
 import logging
-from frameworks.wulf import WindowSettings, Window, WindowStatus
+from frameworks.wulf import WindowSettings, Window, WindowStatus, WindowLayer
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 _logger = logging.getLogger(__name__)
 
@@ -35,10 +35,13 @@ class InjectComponentAdaptor(BaseDAAPIComponent):
 
     def _populate(self):
         super(InjectComponentAdaptor, self)._populate()
-        self.__createInjectView()
+        self._onPopulate()
+
+    def _onPopulate(self):
+        self._createInjectView()
 
     def _dispose(self):
-        self.__destroyInjected()
+        self._destroyInjected()
         super(InjectComponentAdaptor, self)._dispose()
 
     def _makeInjectView(self):
@@ -50,7 +53,7 @@ class InjectComponentAdaptor(BaseDAAPIComponent):
     def _removeInjectContentListeners(self):
         pass
 
-    def __createInjectView(self):
+    def _createInjectView(self):
         if self.__injected is not None:
             _logger.error('Inject view %r is already created in component %s', self.__injected.content, self.getAlias())
             return
@@ -58,13 +61,13 @@ class InjectComponentAdaptor(BaseDAAPIComponent):
             view = self._makeInjectView()
             settings = WindowSettings()
             settings.content = view
-            self.__injected = Window(settings)
+            self.__injected = InjectWindow(settings)
             self.__injected.onStatusChanged += self.__onStatusChanged
             self.__injected.load()
             self._addInjectContentListeners()
             return
 
-    def __destroyInjected(self, wasAdded=True):
+    def _destroyInjected(self, wasAdded=True):
         if self.__injected is None:
             return
         else:
@@ -80,7 +83,7 @@ class InjectComponentAdaptor(BaseDAAPIComponent):
         if self.flashObject is not None:
             if not self.flashObject.addViewImpl(self.__injected.content.uniqueID):
                 _logger.error('Inject view can not be added to component %s', self.getAlias())
-                self.__destroyInjected(wasAdded=False)
+                self._destroyInjected(wasAdded=False)
         else:
             _logger.error('GFxValue is not created for %s', self.getAlias())
         return
@@ -89,4 +92,11 @@ class InjectComponentAdaptor(BaseDAAPIComponent):
         if state == WindowStatus.LOADED:
             self.__addInjectView()
         elif state == WindowStatus.DESTROYING:
-            self.__destroyInjected()
+            self._destroyInjected()
+
+
+class InjectWindow(Window):
+
+    @property
+    def layer(self):
+        return WindowLayer.UNDEFINED

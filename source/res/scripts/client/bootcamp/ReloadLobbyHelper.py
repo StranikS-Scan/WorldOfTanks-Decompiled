@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bootcamp/ReloadLobbyHelper.py
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
-from BootcampTransition import BootcampTransition
 from helpers import aop, dependency
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IGameStateTracker
@@ -29,7 +28,6 @@ class ReloadLobbyHelper(object):
     def cancel(self):
         if self.__isReloading:
             g_eventBus.removeListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__onLobbyViewLoaded, EVENT_BUS_SCOPE.DEFAULT)
-            BootcampTransition.stop()
         self.__isReloading = False
 
     def reload(self):
@@ -37,7 +35,6 @@ class ReloadLobbyHelper(object):
         g_eventBus.addListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__onLobbyViewLoaded, EVENT_BUS_SCOPE.DEFAULT)
         from gui.prb_control.dispatcher import g_prbLoader
         pc = _PointcutGameSessionControllerFix()
-        BootcampTransition.start()
         g_prbLoader.onAccountBecomeNonPlayer()
         self.gameState.onAvatarBecomePlayer()
         self.appLoader.switchAccountEntity()

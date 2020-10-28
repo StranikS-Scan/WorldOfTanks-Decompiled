@@ -152,7 +152,7 @@ class InventoryCategoryView(BaseCategoryView):
         raise NotImplementedError
 
     def _inventoryUpdatesCallback(self, *args):
-        self._invVehicles = self._itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()
+        self._invVehicles = self._itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY ^ REQ_CRITERIA.VEHICLE.EVENT_BATTLE).values()
         self._buildItems()
 
     def _update(self, *args):

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/Weather.py
 import random
 import traceback
-from functools import partial
+from vehicle_systems.stricted_loading import makeCallbackWeak
 import BigWorld
 import ResMgr
 from Listener import Listenable
@@ -41,7 +41,7 @@ class WeatherSystem(object):
             if callback:
                 callback()
         elif not immediate:
-            BigWorld.loadResourceListBG(self.skyBoxes, partial(self._onLoadSkyBoxes, callback))
+            BigWorld.loadResourceListBG(self.skyBoxes, makeCallbackWeak(self._onLoadSkyBoxes, callback))
         else:
             resourceRefs = {}
             for i in self.skyBoxes:
@@ -114,7 +114,7 @@ class WeatherSystem(object):
 
     def prepareResources(self, callback=None, immediate=False):
         if not self.loaded:
-            self._loadSkyBoxes(partial(self._loadFX, callback), immediate)
+            self._loadSkyBoxes(makeCallbackWeak(self._loadFX, callback), immediate)
         elif callback:
             callback()
 
@@ -268,7 +268,7 @@ class Weather(Listenable):
                     system = WeatherSystem(ds)
                     self.summoning = True
                     self.listeners.weather(system=system)
-                    system.prepareResources(partial(self._systemReadySummon, system, immediate, resummon), immediate)
+                    system.prepareResources(makeCallbackWeak(self._systemReadySummon, system, immediate, resummon), immediate)
 
             return
 

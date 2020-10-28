@@ -3,6 +3,7 @@
 import BigWorld
 from adisp import process
 from gui import GUI_SETTINGS
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from helpers import dependency
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.shared import events, EVENT_BUS_SCOPE
@@ -100,10 +101,10 @@ class EpicBattlesBrowserView(LobbySubView, EpicBattlesBrowserViewMeta):
         return
 
     def __close(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __back(self):
-        self.fireEvent(events.LoadViewEvent(self.__previousPage), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(self.__previousPage)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __updateSkipEscape(self, skipEscape):
         if self.__browser is not None:

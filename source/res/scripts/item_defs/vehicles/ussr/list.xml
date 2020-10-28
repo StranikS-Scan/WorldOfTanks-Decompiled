@@ -78,7 +78,7 @@
     <userString>	#ussr_vehicles:A-20	</userString>
     <description>	#ussr_vehicles:A-20_descr	</description>
     <price>	334000	</price>
-    <tags>	lightTank HD scout improvedVentilation_class3_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_light_user	</tags>
+    <tags>	lightTank HD scout improvedVentilation_class3_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_light_user aimingStabilizer_class2_user	</tags>
     <level>	5	</level>
   </R12_A-20>
   <R18_SU-152>
@@ -277,6 +277,15 @@
     <tags>	mediumTank HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	9	</level>
   </R40_T-54>
+  <R40_T-54_Halloween_event>
+    <id>	203	</id>
+    <userString>	#ussr_vehicles:T-54_Halloween_event	</userString>
+    <description>	#ussr_vehicles:T-54_Halloween_event_descr	</description>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank mediumTank3 improvedVentilation_class2_user secret event_battles cannot_be_sold HD lockOutfit lockCrew lockCrewSkills event_premium_vehicle event_overturn_recovery	</tags>
+    <level>	9	</level>
+  </R40_T-54_Halloween_event>
   <R53_Object_704>
     <id>	32	</id>
     <userString>	#ussr_vehicles:R53_Object_704	</userString>
@@ -1107,7 +1116,7 @@
     <price>	5	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user lowTierEvent	</tags>
+    <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	3	</level>
   </R105_BT_7A>
   <R119_Object_777C>
@@ -1115,6 +1124,7 @@
     <userString>	#ussr_vehicles:R119_Object_777C_cn	</userString>
     <description>	#ussr_vehicles:R119_Object_777C_cn_descr	</description>
     <shortUserString>	#ussr_vehicles:R119_Object_777C_cn_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R119_Object_777C_cn_short_special	</shortDescriptionSpecial>
     <price>	5	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -1223,7 +1233,7 @@
     <price>	750	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user lowTierEvent	</tags>
+    <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	2	</level>
   </R125_T_45>
   <R126_Object_730_5>
@@ -1242,6 +1252,7 @@
     <userString>	#ussr_vehicles:R129_Object_257_cn	</userString>
     <description>	#ussr_vehicles:R129_Object_257_cn_descr	</description>
     <shortUserString>	#ussr_vehicles:R129_Object_257_cn_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R129_Object_257_cn_short_special	</shortDescriptionSpecial>
     <price>	5	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -1342,7 +1353,7 @@
     <price>	5	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank HD improvedVentilation_class3_user extraHealthReserve_class3_user lowTierEvent	</tags>
+    <tags>	mediumTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	3	</level>
   </R143_T_29>
   <R146_STG>
@@ -1488,7 +1499,7 @@
     <price>	500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user lowTierEvent	</tags>
+    <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	3	</level>
   </R161_T_116>
   <R165_Object_703_II>
@@ -1581,6 +1592,19 @@
     <tags>	heavyTank HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special earn_crystals	</tags>
     <level>	10	</level>
   </R178_Object_780>
+  <R180_Object_274_A>
+    <id>	126	</id>
+    <userString>	#ussr_vehicles:R180_Object_274_A	</userString>
+    <description>	#ussr_vehicles:R180_Object_274_A_descr	</description>
+    <shortUserString>	#ussr_vehicles:R180_Object_274_A_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R180_Object_274_A_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R180_Object_274_A_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
+    <level>	8	</level>
+  </R180_Object_274_A>
   <R87_T62A_fallout>
     <id>	249	</id>
     <userString>	#ussr_vehicles:T62A_fallout	</userString>
@@ -1611,6 +1635,17 @@
     <tags>	mediumTank HD secret bob cannot_be_sold improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals	</tags>
     <level>	10	</level>
   </R97_Object_140_bob>
+  <R77_KV2_turret_2>
+    <id>	196	</id>
+    <userString>	#ussr_vehicles:R77_KV2_turret_2	</userString>
+    <shortUserString>	#ussr_vehicles:R77_KV2_turret_2_short	</shortUserString>
+    <description>	#ussr_vehicles:R77_KV2_turret_2_descr	</description>
+    <price>	920000	</price>
+    <tags>	heavyTank improvedVentilation_class3_user HD event_battles secret cannot_be_sold lockOutfit lockCrew	</tags>
+    <level>	6	</level>
+    <clone_tags>	cloned	</clone_tags>
+    <notInShop>	True	</notInShop>
+  </R77_KV2_turret_2>
   <R47_ISU-152_IGR>
     <id>	151	</id>
     <userString>	#igr_vehicles:ISU-152_IGR	</userString>

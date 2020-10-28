@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/stronghold_battles_list_view.py
 import BigWorld
 from adisp import process
+from frameworks.wulf import WindowLayer
 from helpers import dependency
 from skeletons.gui.game_control import IBrowserController
 from debug_utils import LOG_ERROR
@@ -9,7 +10,6 @@ from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.clans.clan_helpers import getStrongholdBattlesListUrl
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.daapi.view.lobby.strongholds.web_handlers import createStrongholdsWebHandlers
 from gui.Scaleform.daapi.view.meta.StrongholdBattlesListViewMeta import StrongholdBattlesListViewMeta
@@ -51,7 +51,7 @@ class StrongholdBattlesListView(StrongholdBattlesListViewMeta):
         for browserAlias in self.childBrowsers:
             app = self.app
             if app is not None and app.containerManager is not None:
-                browserWindow = app.containerManager.getView(ViewTypes.WINDOW, criteria={POP_UP_CRITERIA.UNIQUE_NAME: browserAlias})
+                browserWindow = app.containerManager.getView(WindowLayer.WINDOW, criteria={POP_UP_CRITERIA.UNIQUE_NAME: browserAlias})
                 if browserWindow is not None:
                     browserWindow.destroy()
 

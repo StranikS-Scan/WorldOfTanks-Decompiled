@@ -9,7 +9,7 @@ from gui.Scaleform.flash_wrapper import FlashComponentWrapper
 from gui.Scaleform.framework.view_events_listener import ViewEventsListener
 from gui.Scaleform.framework.entities.abstract.ApplicationMeta import ApplicationMeta
 from gui.impl.pub.main_window import MainWindow
-from gui.shared.events import AppLifeCycleEvent, GameEvent, DirectLoadViewEvent
+from gui.shared.events import AppLifeCycleEvent, GameEvent, LoadViewEvent
 from gui.shared import EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -82,6 +82,7 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
         self._imageManager = None
         self._graphicsOptimizationMgr = None
         self._cursorMgr = None
+        self._fadeMgr = None
         self.__initialized = False
         self.__ns = appNS
         self.__viewEventsListener = ViewEventsListener(weakref.proxy(self))
@@ -176,6 +177,10 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
     def ctrlModeFlags(self):
         return self.__guiCtrlModeFlags
 
+    @property
+    def fadeMgr(self):
+        return self._fadeMgr
+
     def isModalViewShown(self):
         manager = self._containerMgr
         if manager is not None:
@@ -206,9 +211,12 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
         self._addGameCallbacks()
         self.addListener(GameEvent.CHANGE_APP_RESOLUTION, self.__onAppResolutionChanged, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.updateScale()
+        if self._fadeMgr is not None:
+            self._fadeMgr.setup()
         self.__viewEventsListener.handleWaitingEvents()
         self._loadWaiting()
         self.connectionMgr.onDisconnected += self.__cm_onDisconnected
+        return
 
     def beforeDelete(self):
         _logger.debug('AppEntry.beforeDelete: %s', self.__ns)
@@ -272,6 +280,9 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
         if self._graphicsOptimizationMgr is not None:
             self._graphicsOptimizationMgr.destroy()
             self._graphicsOptimizationMgr = None
+        if self._fadeMgr is not None:
+            self._fadeMgr.destroy()
+            self._fadeMgr = None
         if self.__mainWnd is not None:
             self.__mainWnd.onStatusChanged -= self.__onMainWindowStatusChanged
             self.__mainWnd.destroy()
@@ -286,7 +297,7 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
         if self._containerMgr:
             self._containerMgr.load(loadParams, *args, **kwargs)
         else:
-            self.__viewEventsListener.addWaitingEvent(DirectLoadViewEvent(loadParams, *args, **kwargs))
+            self.__viewEventsListener.addWaitingEvent(LoadViewEvent(loadParams, *args, **kwargs))
 
     def attachCursor(self, flags=GUI_CTRL_MODE_FLAG.GUI_ENABLED):
         if self.__guiCtrlModeFlags == flags:
@@ -419,8 +430,8 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
     def getBackgroundAlpha(self):
         return self.movie.backgroundAlpha
 
-    def blurBackgroundViews(self, ownLayer, layers, blurAnimRepeatCount):
-        self.as_blurBackgroundViewsS(ownLayer, layers, blurAnimRepeatCount)
+    def blurBackgroundViews(self, ownLayer, blurAnimRepeatCount):
+        self.as_blurBackgroundViewsS(ownLayer, blurAnimRepeatCount)
 
     def unblurBackgroundViews(self):
         self.as_unblurBackgroundViewsS()
@@ -444,6 +455,7 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
         self._tutorialMgr = self._createTutorialManager()
         self._imageManager = self._createImageManager()
         self._graphicsOptimizationMgr = self._createGraphicsOptimizationManager()
+        self._fadeMgr = self._createFadeManager()
 
     def _addGameCallbacks(self):
         g_guiResetters.add(self.__onScreenResolutionChanged)
@@ -510,6 +522,9 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
         return None
 
     def _createGraphicsOptimizationManager(self):
+        return None
+
+    def _createFadeManager(self):
         return None
 
     def _setup(self):

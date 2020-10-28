@@ -1,186 +1,45 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/barracks/Barracks.py
 import logging
-from CurrentVehicle import g_currentVehicle
 from account_helpers.AccountSettings import AccountSettings, BARRACKS_FILTER, RECRUIT_NOTIFICATIONS
 from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.barracks.barracks_data_provider import BarracksDataProvider
 from gui.Scaleform.daapi.view.lobby.barracks.sound_constants import BARRACKS_SOUND_SPACE
 from gui.Scaleform.daapi.view.meta.BarracksMeta import BarracksMeta
 from gui.Scaleform.flash_wrapper import InputKeyMode
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.game_control.restore_contoller import getTankmenRestoreInfo
-from gui.impl import backport
-from gui.shop import showBuyGoldForBerth
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events import recruit_helper
 from gui.server_events.events_dispatcher import showRecruitWindow
 from gui.shared import events, event_dispatcher as shared_events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles, icons, moneyWithIcon
-from gui.shared.gui_items import Tankman, GUI_ITEM_TYPE
-from gui.shared.gui_items.Tankman import TankmenComparator, getCrewSkinIconSmallWithoutPath
-from gui.shared.gui_items.crew_skin import localizedFullName
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.Tankman import TankmenComparator
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from gui.shared.gui_items.processors.tankman import TankmanDismiss, TankmanUnload, TankmanRestore
-from gui.shared.money import Currency
-from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
-from gui.shared.tooltips.formatters import packActionTooltipData
-from gui.shared.tooltips.tankman import getRecoveryStatusText, formatRecoveryLeftValue
 from gui.shared.utils import decorators, flashObject2Dict
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shop import showBuyGoldForBerth
 from gui.sounds.ambients import LobbySubViewEnv
-from helpers import i18n, time_utils, dependency
+from helpers import time_utils, dependency
 from helpers.i18n import makeString as _ms
-from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from skeletons.gui.game_control import IRestoreController
-from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 _COUNTERS_MAP = {RECRUIT_NOTIFICATIONS: ('locationButtonBar', 5)}
 
-@dependency.replace_none_kwargs(itemsCache=IItemsCache, lobbyContext=ILobbyContext)
-def _packTankmanData(tankman, itemsCache=None, lobbyContext=None):
-    tankmanVehicle = itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
-    if tankman.isInTank:
-        vehicle = itemsCache.items.getVehicle(tankman.vehicleInvID)
-        if vehicle is None:
-            _logger.error('Cannot find vehicle for tankman: %r %r %r %r %r', tankman, tankman.descriptor.role, tankman.vehicle.name, tankman.firstname, tankman.lastname)
-            return
-        vehicleID = vehicle.invID
-        slot = tankman.vehicleSlotIdx
-        isLocked, msg = _getTankmanLockMessage(vehicle)
-        actionBtnEnabled = not isLocked
-        isInCurrentTank = g_currentVehicle.isPresent() and tankmanVehicle.invID == g_currentVehicle.invID
-        isInSelfVehicle = vehicle.shortUserName == tankmanVehicle.shortUserName
-        isInSelfVehicleType = vehicle.type == tankmanVehicle.type
-    else:
-        isLocked, msg = False, ''
-        actionBtnEnabled = True
-        isInCurrentTank = False
-        vehicleID = None
-        slot = None
-        isInSelfVehicle = True
-        isInSelfVehicleType = True
-    data = {'fullName': tankman.fullUserName,
-     'rank': tankman.rankUserName,
-     'specializationLevel': tankman.realRoleLevel[0],
-     'role': tankman.roleUserName,
-     'vehicleType': tankmanVehicle.shortUserName,
-     'iconFile': tankman.icon,
-     'rankIconFile': tankman.iconRank,
-     'roleIconFile': Tankman.getRoleBigIconPath(tankman.descriptor.role),
-     'contourIconFile': tankmanVehicle.iconContour,
-     'tankmanID': tankman.invID,
-     'nationID': tankman.nationID,
-     'typeID': tankmanVehicle.innationID,
-     'roleType': tankman.descriptor.role,
-     'tankType': tankmanVehicle.type,
-     'inTank': tankman.isInTank,
-     'compact': str(tankman.invID),
-     'lastSkillLevel': tankman.descriptor.lastSkillLevel,
-     'actionBtnEnabled': actionBtnEnabled,
-     'inCurrentTank': isInCurrentTank,
-     'vehicleID': vehicleID,
-     'slot': slot,
-     'locked': isLocked,
-     'lockMessage': msg,
-     'isInSelfVehicleClass': isInSelfVehicleType,
-     'isInSelfVehicleType': isInSelfVehicle,
-     'notRecruited': False}
-    if tankman.skinID != NO_CREW_SKIN_ID and lobbyContext.getServerSettings().isCrewSkinsEnabled():
-        skinItem = itemsCache.items.getCrewSkin(tankman.skinID)
-        iconFile = getCrewSkinIconSmallWithoutPath(skinItem.getIconID())
-        data['iconFile'] = iconFile
-        data['fullName'] = localizedFullName(skinItem)
-    return data
-
-
-def _packNotRecruitedTankman(recruitInfo):
-    expiryTime = recruitInfo.getExpiryTime()
-    recruitBeforeStr = _ms(MENU.BARRACKS_NOTRECRUITEDACTIVATEBEFORE, date=expiryTime) if expiryTime else ''
-    availableRoles = recruitInfo.getRoles()
-    roleType = availableRoles[0] if len(availableRoles) == 1 else ''
-    result = {'rank': recruitBeforeStr,
-     'specializationLevel': recruitInfo.getRoleLevel(),
-     'role': text_styles.counter(recruitInfo.getLabel()),
-     'vehicleType': '',
-     'iconFile': recruitInfo.getBarracksIcon(),
-     'roleIconFile': Tankman.getRoleBigIconPath(roleType) if roleType else '',
-     'rankIconFile': '',
-     'contourIconFile': '',
-     'tankmanID': -1,
-     'nationID': -1,
-     'typeID': -1,
-     'roleType': roleType,
-     'tankType': '',
-     'inTank': False,
-     'compact': '',
-     'lastSkillLevel': recruitInfo.getLastSkillLevel(),
-     'actionBtnEnabled': True,
-     'inCurrentTank': False,
-     'vehicleID': None,
-     'slot': None,
-     'locked': False,
-     'lockMessage': '',
-     'isInSelfVehicleClass': True,
-     'isInSelfVehicleType': True,
-     'notRecruited': True,
-     'isRankNameVisible': True,
-     'recoveryPeriodText': None,
-     'actionBtnLabel': MENU.BARRACKS_BTNRECRUITNOTRECRUITED,
-     'actionBtnTooltip': TOOLTIPS.BARRACKS_TANKMEN_RECRUIT,
-     'skills': [],
-     'isSkillsVisible': False,
-     'recruitID': str(recruitInfo.getRecruitID())}
-    return result
-
-
-def _getTankmanLockMessage(invVehicle):
-    if invVehicle.isInBattle:
-        return (True, i18n.makeString('#menu:tankmen/lockReason/inbattle'))
-    if invVehicle.isBroken:
-        return (False, i18n.makeString('#menu:tankmen/lockReason/broken'))
-    if invVehicle.invID == g_currentVehicle.invID and (g_currentVehicle.isInPrebattle() or g_currentVehicle.isInBattle()):
-        return (True, i18n.makeString('#menu:tankmen/lockReason/prebattle'))
-    return (True, i18n.makeString('#menu:tankmen/lockReason/disabled')) if invVehicle.isDisabled else (False, '')
-
-
 def _packCounterVO(componentId, count, selectedIdx=0):
     return {'componentId': componentId,
      'count': count,
      'selectedIdx': selectedIdx}
-
-
-@dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def _packBuyBerthsSlot(itemsCache=None):
-    berths = itemsCache.items.stats.tankmenBerthsCount
-    berthPrice, berthCount = itemsCache.items.shop.getTankmanBerthPrice(berths)
-    defaultBerthPrice, _ = itemsCache.items.shop.defaults.getTankmanBerthPrice(berths)
-    action = None
-    if berthPrice != defaultBerthPrice:
-        action = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'berthsPrices', True, berthPrice, defaultBerthPrice)
-    return {'buy': True,
-     'price': backport.getGoldFormat(berthPrice.getSignValue(Currency.GOLD)),
-     'actionPriceData': action,
-     'count': berthCount}
-
-
-def _makeRecoveryPeriodText(restoreInfo):
-    price, timeLeft = restoreInfo
-    timeStr = formatRecoveryLeftValue(timeLeft)
-    if not price.isDefined():
-        textStyle = text_styles.main
-    elif price.getCurrency() == Currency.GOLD:
-        textStyle = text_styles.gold
-    else:
-        textStyle = text_styles.credits
-    return textStyle(timeStr)
 
 
 class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
@@ -196,7 +55,12 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         self.__updateLocationFilter(ctx)
         self.__sortedCachedTankmen = None
         self.__notRecruitedTankmen = []
+        self.__dataProvider = BarracksDataProvider()
         return
+
+    @property
+    def dataProvider(self):
+        return self.__dataProvider
 
     def openPersonalCase(self, tankmanInvID, tabNumber):
         if self.filter['location'] == BARRACKS_CONSTANTS.LOCATION_FILTER_NOT_RECRUITED:
@@ -207,7 +71,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
             shared_events.showPersonalCase(tmanInvID, int(tabNumber), EVENT_BUS_SCOPE.LOBBY)
 
     def closeBarracks(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def invalidateTanksList(self):
         self.__updateTanksList()
@@ -216,7 +80,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         if rendererData is not None and rendererData.notRecruited:
             showRecruitWindow(rendererData.recruitID)
         else:
-            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.RECRUIT_WINDOW, ctx={'data': rendererData,
+            self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.RECRUIT_WINDOW), ctx={'data': rendererData,
              'menuEnabled': menuEnabled}))
         return
 
@@ -292,6 +156,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         self.itemsCache.onSyncCompleted += self.__updateCachedTankmenList
         self.eventsCache.onProgressUpdated += self.__updateNotRecruitedTankmen
         self.restore.onTankmenBufferUpdated += self.__updateDismissedTankmen
+        self.__dataProvider.setFlashObject(self.as_getDataProviderS())
         self.__updateNotRecruitedTankmen()
         self.setTankmenFilter()
 
@@ -307,6 +172,10 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         self.stopGlobalListening()
         self.__sortedCachedTankmen = None
         self.__notRecruitedTankmen = None
+        if self.__dataProvider is not None:
+            self.__dataProvider.clear()
+            self.__dataProvider.destroy()
+            self.__dataProvider = None
         super(LobbySubView, self)._dispose()
         return
 
@@ -335,127 +204,53 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         isNotRecruited = self.filter['location'] == BARRACKS_CONSTANTS.LOCATION_FILTER_NOT_RECRUITED
         self.__switchTankmanFiltersEnable(not isNotRecruited)
         if self.filter['location'] == BARRACKS_CONSTANTS.LOCATION_FILTER_DISMISSED:
-            self.__showDismissedTankmen(*self.__buildCriteria())
+            self.__showDismissedTankmen(self.__buildCriteria())
         elif isNotRecruited:
-            self.__updateNotRecruitedTankmenField()
             self.__showNotRecruitedTankmen()
         else:
-            self.__showActiveTankmen(*self.__buildCriteria())
+            self.__showActiveTankmen(self.__buildCriteria())
 
     def __updateCachedTankmenList(self, *args):
-        self.__sortedCachedTankmen = self.__getSortedTankmen()
         self.__updateTankmen()
 
     def __getSortedTankmen(self):
         return sorted(self.itemsCache.items.getTankmen().itervalues(), cmp=TankmenComparator(self.itemsCache.items.getVehicle))
 
-    def __getshownTankmens(self, vehicleCriteria):
-        if vehicleCriteria:
-            return self.itemsCache.items.removeUnsuitableTankmen(self.itemsCache.items.getTankmen().values(), vehicleCriteria)
-        else:
-            if self.__sortedCachedTankmen is None:
-                self.__sortedCachedTankmen = self.__getSortedTankmen()
-            return self.__sortedCachedTankmen
-
-    def __showActiveTankmen(self, criteria, vehicleCriteria=None):
-        allTankmen = self.__getshownTankmens(vehicleCriteria)
-        tankmenInBarracks = 0
-        tankmenList = [_packBuyBerthsSlot()]
-        for tankman in allTankmen:
-            if not tankman.isInTank:
-                tankmenInBarracks += 1
-            if not criteria(tankman):
-                continue
-            tankmanData = _packTankmanData(tankman)
-            if tankmanData is not None:
-                if tankman.isInTank:
-                    actionBtnLabel = MENU.BARRACKS_BTNUNLOAD
-                    actionBtnTooltip = TOOLTIPS.BARRACKS_TANKMEN_UNLOAD
-                else:
-                    actionBtnLabel = MENU.BARRACKS_BTNDISSMISS
-                    actionBtnTooltip = TOOLTIPS.BARRACKS_TANKMEN_DISMISS
-                tankmanData.update({'isRankNameVisible': True,
-                 'recoveryPeriodText': None,
-                 'actionBtnLabel': actionBtnLabel,
-                 'actionBtnTooltip': actionBtnTooltip,
-                 'skills': None,
-                 'isSkillsVisible': False})
-                tankmenList.append(tankmanData)
-
-        tankmenInSlots = len(tankmenList) - 1
-        slots = self.itemsCache.items.stats.tankmenBerthsCount
-        if tankmenInBarracks < slots:
-            tankmenList.insert(1, {'empty': True,
-             'freePlaces': slots - tankmenInBarracks})
-        self.as_setTankmenS({'tankmenCount': self.__getTankmenCountStr(tankmenInSlots, totalCount=len(allTankmen)),
-         'placesCount': self.__getPlaceCountStr(free=max(slots - tankmenInBarracks, 0), totalCount=slots),
+    def __showActiveTankmen(self, criteria):
+        self.__dataProvider.showActiveTankmen(criteria)
+        self.as_setTankmenS({'tankmenCount': self.__getTankmenCountStr(self.__dataProvider.filteredCount, totalCount=self.__dataProvider.totalCount),
+         'placesCount': self.__getPlaceCountStr(free=self.__dataProvider.placeCount, totalCount=self.itemsCache.items.stats.tankmenBerthsCount),
          'placesCountTooltip': None,
-         'tankmenData': tankmenList,
+         'tankmenData': self.__dataProvider.requestItemRangeHandler(0, self.__dataProvider.pyLength()),
          'hasNoInfoData': False})
         return
 
-    def __showDismissedTankmen(self, criteria, vehicleCriteria=None):
-        allTankmen = self.restore.getDismissedTankmen()
-        tankmenList = list()
-        for tankman in allTankmen:
-            if not criteria(tankman):
-                continue
-            skillsList = []
-            for skill in tankman.skills:
-                skillsList.append({'tankmanID': tankman.invID,
-                 'id': str(tankman.skills.index(skill)),
-                 'name': skill.userName,
-                 'desc': skill.description,
-                 'icon': skill.icon,
-                 'level': skill.level,
-                 'active': skill.isEnable and skill.isActive})
-
-            newSkillsCount, lastNewSkillLvl = tankman.newSkillCount
-            if newSkillsCount > 0:
-                skillsList.append({'buy': True,
-                 'buyCount': newSkillsCount - 1,
-                 'tankmanID': tankman.invID,
-                 'level': lastNewSkillLvl})
-            restoreInfo = getTankmenRestoreInfo(tankman)
-            actionBtnTooltip = makeTooltip(TOOLTIPS.BARRACKS_TANKMEN_RECOVERYBTN_HEADER, getRecoveryStatusText(restoreInfo))
-            tankmanData = _packTankmanData(tankman)
-            tankmanData.update({'isRankNameVisible': False,
-             'recoveryPeriodText': _makeRecoveryPeriodText(restoreInfo),
-             'actionBtnLabel': MENU.BARRACKS_BTNRECOVERY,
-             'actionBtnTooltip': actionBtnTooltip,
-             'skills': skillsList,
-             'isSkillsVisible': True})
-            tankmenList.append(tankmanData)
-
-        placeCount = self.restore.getMaxTankmenBufferLength()
-        hasNoInfoData, noInfoData = self.__getNoInfoData(totalCount=len(allTankmen), filteredCount=len(tankmenList))
-        self.as_setTankmenS({'tankmenCount': self.__getTankmenCountStr(tankmenInSlots=len(tankmenList), totalCount=len(allTankmen)),
+    def __showDismissedTankmen(self, criteria):
+        self.__dataProvider.showDismissedTankmen(criteria)
+        placeCount = self.__dataProvider.placeCount
+        filteredCount = self.__dataProvider.filteredCount
+        totalCount = self.__dataProvider.totalCount
+        hasNoInfoData, noInfoData = self.__getNoInfoData(totalCount=totalCount, filteredCount=filteredCount)
+        self.as_setTankmenS({'tankmenCount': self.__getTankmenCountStr(tankmenInSlots=filteredCount, totalCount=totalCount),
          'placesCount': self.__getPlaceCountStr(free=icons.info(), totalCount=placeCount),
          'placesCountTooltip': self.__getPlacesCountTooltip(placeCount=placeCount),
-         'tankmenData': tankmenList,
          'hasNoInfoData': hasNoInfoData,
          'noInfoData': noInfoData})
 
     def __updateNotRecruitedTankmen(self, *args):
-        self.__updateNotRecruitedTankmenField()
         if self.filter['location'] == BARRACKS_CONSTANTS.LOCATION_FILTER_NOT_RECRUITED:
             self.__updateTankmen()
             recruit_helper.setNewRecruitsVisited()
         else:
             self.__updateRecruitNotification()
 
-    def __updateNotRecruitedTankmenField(self):
-        self.__notRecruitedTankmen = []
-        for recruitInfo in recruit_helper.getAllRecruitsInfo(sortByExpireTime=True):
-            self.__notRecruitedTankmen.append(_packNotRecruitedTankman(recruitInfo))
-
     def __showNotRecruitedTankmen(self):
-        count = len(self.__notRecruitedTankmen)
+        self.__dataProvider.showNotRecruitedTankmen()
+        count = self.__dataProvider.totalCount
         hasNoInfoData, noInfoData = self.__getNoInfoData(totalCount=count, filteredCount=count)
         self.as_setTankmenS({'tankmenCount': self.__getTankmenCountStr(totalCount=count),
          'placesCount': '',
          'placesCountTooltip': None,
-         'tankmenData': self.__notRecruitedTankmen,
          'hasNoInfoData': hasNoInfoData,
          'noInfoData': noInfoData})
         return
@@ -514,12 +309,11 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         if self.filter['nationID'] is not None:
             vehicle = self.itemsCache.items.getItem(GUI_ITEM_TYPE.VEHICLE, int(self.filter['nationID']), int(self.filter['location']))
             criteria |= REQ_CRITERIA.TANKMAN.NATIVE_TANKS([vehicle.intCD])
-        vehicleCriteria = ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE | ~REQ_CRITERIA.VEHICLE.EVENT
-        return (criteria, vehicleCriteria)
+        return criteria
 
     def __updateDismissedTankmen(self):
         if self.filter['location'] == BARRACKS_CONSTANTS.LOCATION_FILTER_DISMISSED:
-            self.__showDismissedTankmen(*self.__buildCriteria())
+            self.__showDismissedTankmen(self.__buildCriteria())
 
     def __switchTankmanFiltersEnable(self, value):
         self.as_switchFilterEnableS(nationEnable=value, roleEnable=value, typeEnable=value)

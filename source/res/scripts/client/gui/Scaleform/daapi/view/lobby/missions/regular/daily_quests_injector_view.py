@@ -28,9 +28,5 @@ class DailyQuestsInjectorView(InjectComponentAdaptor, MissionsPremiumViewMeta):
             self._injectView.setProxy(proxy)
         return
 
-    def isCloseEnabled(self):
-        view = self._injectView
-        return view is None or view.isCloseEnabled
-
     def _makeInjectView(self):
         return DailyQuestsView()

@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/veh_comparison_basket.py
-import typing
 from collections import namedtuple
 from itertools import imap
 import BigWorld
@@ -26,8 +25,6 @@ PARAMS_AFFECTED_TANKMEN_SKILLS = ('camouflage', 'brotherhood', 'commander_eagleE
 MAX_VEHICLES_TO_COMPARE_COUNT = 20
 _NO_CREW_SKILLS = set()
 _DEF_SHELL_INDEX = 0
-ComparisonSettings = namedtuple('ComparisonSettings', ('quiet',))
-ComparisonSettings.__new__.__defaults__ = (False,)
 _ChangedData = namedtuple('_ChangedData', ('addedIDXs', 'addedCDs', 'removedIDXs', 'removedCDs', 'isFullChanged'))
 _COMPARE_INVALID_CRITERIA = ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE | ~REQ_CRITERIA.SECRET
 
@@ -435,15 +432,15 @@ class VehComparisonBasket(IVehicleComparisonBasket):
             LOG_DEBUG('Modules has not been applied because they are not different.')
 
     @_ErrorNotification
-    def addVehicle(self, vehicleCompactDesr, initParameters=None, settings=None):
-        if not isinstance(vehicleCompactDesr, (int, float, long)):
+    def addVehicle(self, vehicleCompactDesr, initParameters=None):
+        if not isinstance(vehicleCompactDesr, (int, float)):
             raise SoftException('Int-type compact descriptor is invalid: '.format(vehicleCompactDesr))
         if self.__canBeAdded():
             vehicleCompactDesr = getValidVehicleCDForNationChange(vehicleCompactDesr)
             vehCmpData = self._createVehCompareData(vehicleCompactDesr, initParameters)
             if vehCmpData:
                 self.__vehicles.append(vehCmpData)
-                self.__applyChanges(addedIDXs=[len(self.__vehicles) - 1], addedCDs=[vehicleCompactDesr], settings=settings)
+                self.__applyChanges(addedIDXs=[len(self.__vehicles) - 1], addedCDs=[vehicleCompactDesr])
                 return True
         return False
 
@@ -616,10 +613,10 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         for vehCmpData in self.__vehicles:
             yield vehCmpData
 
-    def __applyChanges(self, addedIDXs=None, addedCDs=None, removedIDXs=None, removedCDs=None, settings=None):
+    def __applyChanges(self, addedIDXs=None, addedCDs=None, removedIDXs=None, removedCDs=None):
         oldVal = self.__isFull
         self.__isFull = len(self.__vehicles) == MAX_VEHICLES_TO_COMPARE_COUNT
-        self.onChange(_ChangedData(addedIDXs, addedCDs, removedIDXs, removedCDs, self.__isFull != oldVal), settings)
+        self.onChange(_ChangedData(addedIDXs, addedCDs, removedIDXs, removedCDs, self.__isFull != oldVal))
 
     def __initHandlers(self):
         self.itemsCache.onSyncCompleted += self.__onCacheResync
@@ -636,7 +633,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
             return
         else:
             changedIDXs = set()
-            nationWasChanged = False
+            nationChangedIDxs = set()
             if diff is not None and GUI_ITEM_TYPE.VEHICLE in diff:
                 vehDiff = diff[GUI_ITEM_TYPE.VEHICLE]
                 diffKeys = diff.keys()
@@ -672,12 +669,12 @@ class VehComparisonBasket(IVehicleComparisonBasket):
                             if vehicleCompactDesr != changedVehCD:
                                 vehCmpData = self._createVehCompareData(vehicleCompactDesr)
                                 self.__vehicles[idx] = vehCmpData
-                                nationWasChanged = True
+                                nationChangedIDxs.add(idx)
 
             if changedIDXs:
                 self.onParametersChange(changedIDXs)
-            if nationWasChanged:
-                self.onNationChange()
+            if nationChangedIDxs:
+                self.onNationChange(nationChangedIDxs)
             return
 
     @classmethod

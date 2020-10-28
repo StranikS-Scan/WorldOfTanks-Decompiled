@@ -42,6 +42,9 @@
     <collisionVehicleHeavy3>	collisionHeavy3	</collisionVehicleHeavy3>
     <groundCollisionLight>	groundCollisionLight	</groundCollisionLight>
     <groundCollisionHeavy>	groundCollisionHeavy	</groundCollisionHeavy>
+    <collisionDamage>	collisionDamage	</collisionDamage>
+    <oilCollisionLight>	oilCollisionLight	</oilCollisionLight>
+    <oilCollisionHeavy>	oilCollisionHeavy	</oilCollisionHeavy>
     <sandCollisionLight>	sandCollisionLight	</sandCollisionLight>
     <sandCollisionHeavy>	sandCollisionHeavy	</sandCollisionHeavy>
     <snowCollisionLight>	snowCollisionLight	</snowCollisionLight>
@@ -72,6 +75,7 @@
     <flamingOnGround>	turret_flaming_medium	</flamingOnGround>
     <collision>
       <ground>	turret_touchdown_medium	</ground>
+      <oil>	turret_touchdown_medium	</oil>
       <sand>	turret_touchdown_medium	</sand>
       <snow>	turret_touchdown_medium	</snow>
       <stone>	turret_touchdown_medium_solid	</stone>
@@ -83,6 +87,7 @@
     </collision>
     <pull>
       <ground>	turret_pull_ground	</ground>
+      <oil>	turret_pull_oil	</oil>
       <sand>	turret_pull_sand	</sand>
       <snow>	turret_pull_snow	</snow>
       <stone>	turret_pull_stone	</stone>
@@ -160,14 +165,20 @@
         <visionRadius>	0.5	</visionRadius>
       </gameplayFactors>
     </overturn>
+    <overturn_event_battles>	NoneExtra : OverturnEventBattles	  <correctionDelay>	5.0	</correctionDelay>
+      <isOnboardShotAllowed>	true	</isOnboardShotAllowed>
+      <gameplayFactors>
+        <reloadTime>	2.0	</reloadTime>
+        <turretRotationSpeed>	0.5	</turretRotationSpeed>
+        <gunRotationSpeed>	0.5	</gunRotationSpeed>
+        <aimingTime>	2.0	</aimingTime>
+        <shotDispersion>	2.0	</shotDispersion>
+        <visionRadius>	0.5	</visionRadius>
+      </gameplayFactors>
+    </overturn_event_battles>
     <drowning>	NoneExtra : Drowning	</drowning>
     <burnout>	NoneExtra : Burnout	</burnout>
     <afterburning>	NoneExtra : Afterburning	</afterburning>
-    <afterburning_wt>	AfterburningWT : AfterburningWT	</afterburning_wt>
-    <instant_stun_shoot_wt>	InstantStunShootWT : InstantStunShootWT	</instant_stun_shoot_wt>
-    <impulse_wt>	ImpulseWT : ImpulseWT	</impulse_wt>
-    <power_wt>	NoneExtra : PowerWT	</power_wt>
-    <largeMedkit_wt>	NoneExtra : Repairkit	</largeMedkit_wt>
     <engineHealth>	DamageMarker : EngineHealth	  <sounds>
         <critical>	engine_damaged	</critical>
         <destroyed>	engine_destroyed	</destroyed>
@@ -299,6 +310,20 @@
     <builtinRepairkit>	NoneExtra : Repairkit	</builtinRepairkit>
     <dualShoot>	ShowShootingMultiGun : DualGunShoot	</dualShoot>
     <charger>	NoneExtra : DualGunCharger	</charger>
+    <visionDistanceTuner>	NoneExtra : VehicleVisionDistanceTuner	</visionDistanceTuner>
+    <radioDistanceTuner>	NoneExtra : VehicleRadioDistanceTuner	</radioDistanceTuner>
+    <deathPit>	NoneExtra : DeathPit	</deathPit>
+    <visibilityOverwrite>	NoneExtra: VisibilityOverwrite	</visibilityOverwrite>
+    <nitroRamDamage>	NoneExtra : BuffExtra	</nitroRamDamage>
+    <nitroRamDamage2>	NoneExtra : BuffExtra	</nitroRamDamage2>
+    <nitroRamDamage3>	NoneExtra : BuffExtra	</nitroRamDamage3>
+    <nitroRamDamage4>	NoneExtra : BuffExtra	</nitroRamDamage4>
+    <nitroRamDamage5>	NoneExtra : BuffExtra	</nitroRamDamage5>
+    <invulnerability>	NoneExtra : BuffExtra	</invulnerability>
+    <instantReload>	NoneExtra : InstantReloadExtra	</instantReload>
+    <hpRepairAndCrewHeal>	NoneExtra : HpRepairAndCrewHealExtra	</hpRepairAndCrewHeal>
+    <teamResupply>	NoneExtra : TeamResupplyExtra	</teamResupply>
+    <teamRepairKit>	NoneExtra : TeamRepairKitExtra	</teamRepairKit>
   </extras>
   <deviceExtras>
     <devices>

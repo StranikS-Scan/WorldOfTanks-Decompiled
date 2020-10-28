@@ -7,23 +7,24 @@ import items.components.c11n_components as cc
 import items.customizations as c11n
 import items.vehicles as iv
 import nations
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS, parseArenaBonusType
 from constants import IS_CLIENT, IS_EDITOR, IS_WEB
 from items.components import shared_components
-from items.components.c11n_constants import CustomizationType, ProjectionDecalFormTags, CustomizationNamesToTypes, EMPTY_ITEM_ID
-from items.components.c11n_constants import SeasonType, ApplyArea, DecalType, ModificationType, RENT_DEFAULT_BATTLES, ItemTags
+from items.components.c11n_constants import CustomizationType, ProjectionDecalFormTags, CustomizationNamesToTypes, EMPTY_ITEM_ID, SeasonType, ApplyArea, DecalType, ModificationType, RENT_DEFAULT_BATTLES, ItemTags, ProjectionDecalType
 from realm_utils import ResMgr
 from typing import Dict, Type, Tuple, Any, TypeVar
 from contextlib import contextmanager
 from soft_exception import SoftException
 if IS_EDITOR:
-    from reflection_framework import EditorSharedPropertiesInfo, EditorSharedPropertiesConnector
+    from reflection_framework.unintrusive_weakref import ref as UnintrusiveWeakRef
     from meta_objects.items.components.c11n_components_meta import I18nExposedComponentMeta
+    from items.components.c11n_components import CUSTOMIZATION_CLASSES
 
     @contextmanager
     def storeChangedProperties(obj, props):
 
-        def storeCallback(changedObject, propertyName, flags):
-            props.add(propertyName)
+        def storeCallback(event):
+            props.add(event.propertyName)
 
         obj.onChanged += storeCallback
         yield
@@ -58,7 +59,7 @@ class BaseCustomizationItemXmlReader(object):
                     ix.raiseWrongXml(xmlCtx, 'tags', 'wrong formfactor for prjection decal ID%i' % target.id)
         if section.has_key('vehicleFilter'):
             target.filter = self.readVehicleFilterFromXml((xmlCtx, 'vehicleFilter'), section['vehicleFilter'])
-        target.season = readEnum(xmlCtx, section, 'season', SeasonType, target.season)
+        target.season = readFlagEnum(xmlCtx, section, 'season', SeasonType, target.season)
         target.historical = section.readBool('historical', target.historical)
         if section.has_key('priceGroup'):
             target.priceGroup = section.readString('priceGroup')
@@ -68,10 +69,6 @@ class BaseCustomizationItemXmlReader(object):
             target.maxNumber = ix.readPositiveInt(xmlCtx, section, 'maxNumber')
             if target.maxNumber <= 0:
                 ix.raiseWrongXml(xmlCtx, 'maxNumber', 'should not be less then 1')
-        if IS_EDITOR:
-            refs = section.references
-            if len(refs) == 1:
-                target.editorData.reference = refs[0]
         if IS_CLIENT or IS_EDITOR or IS_WEB:
             self._readClientOnlyFromXml(target, xmlCtx, section, cache)
 
@@ -207,7 +204,6 @@ class SequenceXmlReader(BaseCustomizationItemXmlReader):
     def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
         super(SequenceXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section)
         target.sequenceName = ix.readStringOrNone(xmlCtx, section, 'sequenceName')
-        target.sequenceLogic = ix.readStringOrNone(xmlCtx, section, 'sequenceLogic')
 
 
 class AttachmentXmlReader(BaseCustomizationItemXmlReader):
@@ -301,31 +297,40 @@ class StyleXmlReader(BaseCustomizationItemXmlReader):
         prototype = True
         if section.has_key('modelsSet'):
             target.modelsSet = section.readString('modelsSet')
+            if IS_EDITOR:
+                target.editorData.modelsSet = target.modelsSet
         if section.has_key('itemFilters'):
             target.isEditable = True
-            target.itemsFilters = {}
+            itemsFilters = {}
             for sectionName, oSection in section['itemFilters'].items():
                 c11nType = CustomizationNamesToTypes[upper(sectionName)]
-                target.itemsFilters[c11nType] = self._readItemsFilterFromXml(c11nType, xmlCtx, oSection)
+                itemsFilters[c11nType] = self._readItemsFilterFromXml(c11nType, xmlCtx, oSection)
 
+            target.itemsFilters = itemsFilters
         if section.has_key('alternateItems'):
             target.isEditable = True
-            target.alternateItems = {}
+            alternateItems = {}
             for sectionName, oSection in section['alternateItems'].items():
                 c11nType = CustomizationNamesToTypes[upper(sectionName)]
                 if oSection.has_key('id'):
-                    target.alternateItems[c11nType] = ix.readTupleOfPositiveInts(xmlCtx, oSection, 'id')
+                    alternateItems[c11nType] = ix.readTupleOfPositiveInts(xmlCtx, oSection, 'id')
 
+            target.alternateItems = alternateItems
         if section.has_key('outfits'):
             prototype = False
             outfits = {}
             for i, (_, oSection) in enumerate(section['outfits'].items()):
                 oCtx = ((xmlCtx, 'outfits'), 'outfit {}'.format(i))
-                season = readEnum(oCtx, oSection, 'season', SeasonType)
+                season = readFlagEnum(oCtx, oSection, 'season', SeasonType)
                 outfit = self.__outfitDeserializer.decode(c11n.CustomizationOutfit.customType, oCtx, oSection)
                 for s in SeasonType.SEASONS:
                     if s & season:
                         outfits[s] = outfit
+
+                if IS_EDITOR:
+                    for projectionDecal in outfit.projection_decals:
+                        if projectionDecal.tags is not None and len(projectionDecal.tags) > 0:
+                            projectionDecal.editorData.decalType = ProjectionDecalType.TAGS
 
                 outfit.styleId = target.id
 
@@ -338,6 +343,7 @@ class StyleXmlReader(BaseCustomizationItemXmlReader):
         totalSeason = sum(target.outfits)
         if totalSeason != target.season and not prototype:
             ix.raiseWrongXml(xmlCtx, 'outfits', 'style season must correspond to declared outfits')
+        return
 
     @staticmethod
     def _readItemsFilterFromXml(itemType, xmlCtx, section):
@@ -368,7 +374,7 @@ class StyleXmlReader(BaseCustomizationItemXmlReader):
                 ix.raiseWrongXml(xmlCtx, 'type', 'unsupported type is used')
             fn.types = types
         if section.has_key('historical'):
-            fn.historical = section.readBool('historical', None)
+            fn.historical = ix.readBool(xmlCtx, section, 'historical', False)
         return fn
 
     def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
@@ -500,6 +506,9 @@ def __readProgress(xmlCtx, section):
             progress.levels[level] = __readProgressLevel((xmlCtx, 'level'), subSection)
         if sectionName == 'autoGrantCount':
             progress.autoGrantCount = ix.readPositiveInt(xmlCtx, subSection, '')
+        if sectionName == 'bonusType':
+            bonusTypes = ix.readStringOrEmpty(xmlCtx, subSection, '').split()
+            parseArenaBonusType(progress.bonusTypes, bonusTypes, ARENA_BONUS_TYPE_CAPS.CUSTOMIZATION_PROGRESSION)
 
     if len(progress.levels) < 2:
         ix.raiseWrongXml(xmlCtx, 'tags', 'wrong progression. Minimum count progression = 2. Current count progression %i' % len(progress.levels))
@@ -520,8 +529,12 @@ def _readProgression(xmlCtx, section, progression):
 
 def _readItems(cache, itemCls, xmlCtx, section, itemSectionName, storage, progression):
     reader = __xmlReaders[itemCls]
-    groupsDict = cache.priceGroups
-    itemToGroup = cache.itemToPriceGroup
+    priceGroupsDict = cache.priceGroups
+    itemToPriceGroup = cache.itemToPriceGroup
+    if IS_EDITOR:
+        itemType = CUSTOMIZATION_CLASSES[itemCls]
+        cache.editorData.groups[itemType] = []
+        sourceFiles = set()
     for i, (gname, gsection) in enumerate(section.items()):
         if gname != 'itemGroup' and 'xmlns:' not in gname:
             ix.raiseWrongSection(xmlCtx, gname)
@@ -548,11 +561,10 @@ def _readItems(cache, itemCls, xmlCtx, section, itemSectionName, storage, progre
             with storeChangedProperties(item, overrideProps):
                 reader._readFromXml(item, iCtx, isection, cache)
             if IS_EDITOR:
-                item.editorData.sharedPropertiesInfo = EditorSharedPropertiesInfo()
                 item.editorData.sharedPropertiesInfo.markAsOverride(*overrideProps)
             groupItems.append(item)
-            if item.compactDescr in itemToGroup:
-                ix.raiseWrongXml(iCtx, 'id', 'duplicate item. id: %s found in group %s' % (item.id, itemToGroup[item.compactDescr]))
+            if item.compactDescr in itemToPriceGroup:
+                ix.raiseWrongXml(iCtx, 'id', 'duplicate item. id: %s found in group %s' % (item.id, itemToPriceGroup[item.compactDescr]))
             storage[item.id] = item
             item.progression = progression.get(item.id, None)
             if item.progression is not None:
@@ -563,25 +575,29 @@ def _readItems(cache, itemCls, xmlCtx, section, itemSectionName, storage, progre
                 if item.priceGroup not in cache.priceGroupNames:
                     ix.raiseWrongXml(iCtx, 'priceGroup', 'unknown price group %s for item %s' % (item.priceGroup, item.id))
                 priceGroupId = cache.priceGroupNames[item.priceGroup]
-                item.priceGroupTags = groupsDict[priceGroupId].tags
-                itemToGroup[item.compactDescr] = groupsDict[priceGroupId].compactDescr
+                item.priceGroupTags = priceGroupsDict[priceGroupId].tags
+                itemToPriceGroup[item.compactDescr] = priceGroupsDict[priceGroupId].compactDescr
                 itemNotInShop = isection.readBool('notInShop', False)
-                iv._copyPriceForItem(groupsDict[priceGroupId].compactDescr, item.compactDescr, itemNotInShop)
+                iv._copyPriceForItem(priceGroupsDict[priceGroupId].compactDescr, item.compactDescr, itemNotInShop)
             ix.raiseWrongXml(iCtx, 'priceGroup', 'no price for item %s' % item.id)
 
         if IS_EDITOR:
-            if len(groupItems) > 1 and len(sharedProps) > 0:
-                for item in groupItems:
-                    for p in sharedProps:
-                        if not item.editorData.sharedPropertiesInfo.isOverriden(p):
-                            item.editorData.sharedPropertiesInfo.markAsShared(p)
+            refs = gsection.references
+            if len(refs) == 1:
+                group.editorData.sourceXml = refs[0]
+                sourceFiles.add(refs[0])
+            itemPrototype.edIsPrototype = True
+            group.editorData.itemRefs = [ UnintrusiveWeakRef(item) for item in groupItems ]
+            cache.editorData.groups[itemType].append(group)
 
-    _addEmptyItem(itemCls, storage)
+    if IS_EDITOR:
+        cache.editorData.sourceFiles[itemType] = list(sourceFiles)
+    _addEmptyItem(itemCls, storage, itemSectionName)
     return
 
 
-def _addEmptyItem(itemCls, storage):
-    if IS_EDITOR:
+def _addEmptyItem(itemCls, storage, itemSectionName):
+    if IS_EDITOR and itemSectionName != 'style':
         return
     item = itemCls()
     item.id = EMPTY_ITEM_ID
@@ -613,6 +629,9 @@ def _readPriceGroups(cache, xmlCtx, section, sectionName):
 
 
 def _readFonts(cache, xmlCtx, section, sectionName):
+    if IS_EDITOR:
+        itemType = CUSTOMIZATION_CLASSES[cc.Font]
+        sourceFiles = set()
     for tag, iSection in section.items():
         if tag != sectionName:
             continue
@@ -625,11 +644,15 @@ def _readFonts(cache, xmlCtx, section, sectionName):
         font.alphabet = ix.readString(xmlCtx, iSection, 'alphabet')
         if iSection.has_key('mask'):
             font.mask = ix.readString(xmlCtx, iSection, 'mask')
+        cache.fonts[font.id] = font
         if IS_EDITOR:
             refs = iSection.references
             if len(refs) == 1:
-                font.editorData.reference = refs[0]
-        cache.fonts[font.id] = font
+                font.editorData.sourceXml = refs[0]
+                sourceFiles.add(refs[0])
+
+    if IS_EDITOR:
+        cache.editorData.sourceFiles[itemType] = list(sourceFiles)
 
 
 def _readDefault(cache, xmlCtx, section, sectionName):
@@ -656,7 +679,7 @@ def readFlagEnum(xmlCtx, section, subsectionName, enumClass, defaultValue=None):
         return defaultValue
     else:
         for value in ix.readNonEmptyString(xmlCtx, section, subsectionName).split():
-            valueInt = getattr(enumClass, value, None)
+            valueInt = getattr(enumClass, value.upper(), None)
             if valueInt is None:
                 ix.raiseWrongSection(xmlCtx, subsectionName)
             result |= valueInt

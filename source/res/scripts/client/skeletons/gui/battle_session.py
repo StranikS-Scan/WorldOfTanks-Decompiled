@@ -142,7 +142,19 @@ class IDynamicControllersLocator(object):
         raise NotImplementedError
 
     @property
-    def arenaInfo(self):
+    def dogTags(self):
+        raise NotImplementedError
+
+    @property
+    def battleHints(self):
+        raise NotImplementedError
+
+    @property
+    def battleGoals(self):
+        raise NotImplementedError
+
+    @property
+    def battleMarkers(self):
         raise NotImplementedError
 
 
@@ -270,6 +282,9 @@ class IClientArenaVisitor(object):
         raise NotImplementedError
 
     def hasGameEndMessage(self):
+        raise NotImplementedError
+
+    def hasDogTag(self):
         raise NotImplementedError
 
 
@@ -543,12 +558,6 @@ class IBattleContext(object):
     def extractLastArenaWinStatus(self):
         raise NotImplementedError
 
-    def getLastArenaWinStatus(self):
-        raise NotImplementedError
-
-    def areQuestsEnabledForArena(self):
-        raise NotImplementedError
-
 
 class IBattleSessionProvider(object):
     __slots__ = ('onBattleSessionStart', 'onBattleSessionStop')
@@ -657,10 +666,4 @@ class IBattleSessionProvider(object):
         raise NotImplementedError
 
     def handleContexChatCommand(self, key):
-        raise NotImplementedError
-
-    def updateVehicleEffects(self):
-        raise NotImplementedError
-
-    def updateObservedVehicleData(self, vID, extraData):
         raise NotImplementedError

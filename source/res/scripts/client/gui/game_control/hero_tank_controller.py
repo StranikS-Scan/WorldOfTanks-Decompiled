@@ -111,6 +111,9 @@ class HeroTankController(IHeroTankController):
         else:
             if diff is not None and GUI_ITEM_TYPE.VEHICLE in diff:
                 vehDiff = diff[GUI_ITEM_TYPE.VEHICLE]
+                heroVehicles = self.lobbyContext.getServerSettings().getHeroVehicles()['vehicles']
+                if not vehDiff & set(heroVehicles.keys()):
+                    return
                 self.__fullUpdate()
                 self.__updateSettings()
                 for vehIntCD in vehDiff:

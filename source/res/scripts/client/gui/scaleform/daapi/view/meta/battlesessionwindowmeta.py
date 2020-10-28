@@ -25,6 +25,9 @@ class BattleSessionWindowMeta(PrebattleWindow):
     def as_setInfoS(self, isTurnamentBattle, wins, map, firstTeam, secondTeam, count, description, comment):
         return self.flashObject.as_setInfo(isTurnamentBattle, wins, map, firstTeam, secondTeam, count, description, comment) if self._isDAAPIInited() else None
 
+    def as_setWinnerIfDrawS(self, value=0):
+        return self.flashObject.as_setWinnerIfDraw(value) if self._isDAAPIInited() else None
+
     def as_setNationsLimitsS(self, nations):
         return self.flashObject.as_setNationsLimits(nations) if self._isDAAPIInited() else None
 

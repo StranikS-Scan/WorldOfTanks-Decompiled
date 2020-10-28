@@ -52,8 +52,6 @@ class BaseSetupSubView(BaseSubModelView):
             return
         else:
             with self._viewModel.transaction():
-                if fullUpdate and self._provider is not None:
-                    self._provider.updateItems()
                 self._updateTabs()
                 self._updateSlots(fullUpdate)
             return
@@ -114,6 +112,7 @@ class BaseSetupSubView(BaseSubModelView):
             return
         else:
             if fullUpdate:
+                self._provider.updateItems()
                 self._provider.fillArray(self._viewModel.getSlots(), self._getSectionContext())
                 self._updateItemByFilter()
             else:

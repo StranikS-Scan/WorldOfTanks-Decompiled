@@ -12,6 +12,3 @@ class AmmunitionPanelInjectMeta(InjectComponentAdaptor):
 
     def as_setHelpLayoutS(self, helpLayoutData):
         return self.flashObject.as_setHelpLayout(helpLayoutData) if self._isDAAPIInited() else None
-
-    def as_setSlotsWidthS(self, value):
-        return self.flashObject.as_setSlotsWidth(value) if self._isDAAPIInited() else None

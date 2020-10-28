@@ -284,7 +284,7 @@ class FormattedAward(AwardAbstract):
         self._formatters = {Currency.GOLD: self._SimpleFormatter(RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_GOLD, tooltip=TOOLTIPS.AWARDITEM_GOLD),
          Currency.CREDITS: self._SimpleFormatter(RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_CREDITS, tooltip=TOOLTIPS.AWARDITEM_CREDITS),
          Currency.CRYSTAL: self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_CRYSTALICONBIG_1, tooltip=TOOLTIPS.AWARDITEM_CRYSTAL),
-         Currency.EVENT_COIN: self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_EVENTCOINICONBIG_1, tooltip=self.__getEventCoinTooltip()),
+         Currency.EVENT_COIN: self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_EVENTCOINICONBIG_1, tooltip=TOOLTIPS.AWARDITEM_EVENTCOIN),
          'freeXP': self._SimpleFormatter(RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_FREEEXP, tooltip=TOOLTIPS.AWARDITEM_FREEXP),
          'premium': self._SimpleNoValueFormatter(RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_PREMIUM_1, tooltip=TOOLTIPS.AWARDITEM_PREMIUM),
          'items': self._ItemsFormatter(),
@@ -320,14 +320,6 @@ class FormattedAward(AwardAbstract):
         if strAwardsList:
             strAwards = ', '.join(strAwardsList)
         return (awards, strAwards)
-
-    @staticmethod
-    def __getEventCoinTooltip():
-        if not constants.IS_CHINA:
-            tooltip = TOOLTIPS.AWARDITEM_EVENTCOIN
-        else:
-            tooltip = makeTooltip(TOOLTIPS.AWARDITEM_EVENTCOIN_HEADER, TOOLTIPS.AWARDITEM_EVENTCOIN_BODY_CN)
-        return tooltip
 
 
 class MotiveQuestAward(FormattedAward):

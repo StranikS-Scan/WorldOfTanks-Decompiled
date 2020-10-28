@@ -381,13 +381,16 @@ class _ModuleChangeRequester(object):
 
     def __doRequest(self, intCD):
         try:
-            BigWorld.player().getVehicleAttached().inBattleUpgrades.upgradeVehicle(intCD)
+            vehicle = BigWorld.player().getVehicleAttached()
+            if vehicle is not None:
+                vehicle.inBattleUpgrades.upgradeVehicle(intCD)
+                self.__awaitingResponse.add(intCD)
+                return True
         except AttributeError as e:
             _logger.exception('Failed to send vehicle upgrade request. %s', str(e))
             return False
 
-        self.__awaitingResponse.add(intCD)
-        return True
+        return False
 
 
 class ProgressionController(IProgressionController, ViewComponentsController):
@@ -449,7 +452,8 @@ class ProgressionController(IProgressionController, ViewComponentsController):
         if pVehId != 0:
             vehicle = BigWorld.entities.get(pVehId)
             if vehicle:
-                self.updateLevel(*vehicle.battleXP.battleXpLvlData)
+                level, minXP, maxXP = vehicle.battleXP.battleXpLvlData
+                self.updateLevel(level, minXP, maxXP)
                 self.updateXP(vehicle.battleXP.battleXP)
                 self.__isStarted = True
                 return

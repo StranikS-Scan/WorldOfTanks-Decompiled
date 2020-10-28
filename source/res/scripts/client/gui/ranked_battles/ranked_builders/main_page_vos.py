@@ -40,15 +40,18 @@ def _getSeasonOffMain(isYearLBEnabled):
      'tooltip': makeTooltip(header=backport.text(R.strings.tooltips.rankedBattlesView.ranks.header()), body=backport.text(R.strings.tooltips.rankedBattlesView.ranks.body()))}
 
 
-def _getRewardsPage(isSeasonOff=False):
+def _getRewardsPage(isSeasonOff=False, isYearRewardEnabled=True):
+    enabled = True
     viewID = RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_UI
     if isSeasonOff:
+        enabled = isYearRewardEnabled
         viewID = RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_SEASON_OFF_ALIAS
     return {'id': RANKEDBATTLES_CONSTS.RANKED_BATTLES_REWARDS_ID,
      'viewId': viewID,
      'linkage': RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_UI,
      'background': backport.image(R.images.gui.maps.icons.rankedBattles.bg.main()),
-     'tooltip': makeTooltip(header=backport.text(R.strings.tooltips.rankedBattlesView.rewards.header()), body=backport.text(R.strings.tooltips.rankedBattlesView.rewards.body()))}
+     'tooltip': makeTooltip(header=backport.text(R.strings.tooltips.rankedBattlesView.rewards.header()), body=backport.text(R.strings.tooltips.rankedBattlesView.rewards.body() if enabled else R.strings.tooltips.rankedBattlesView.rewards.body.seasonOff())),
+     'enabled': enabled}
 
 
 def _getShopPage(isRankedShop):
@@ -87,21 +90,25 @@ def getBubbleLabel(counter):
     return '' if not bool(counter) else backport.text(R.strings.ranked_battles.rankedBattleMainView.emptyBubble())
 
 
-def getCountersData(awardsCounter, infoCounter, yearRatingCounter, shopCounter):
-    return [{'componentId': RANKEDBATTLES_CONSTS.RANKED_BATTLES_REWARDS_ID,
-      'count': awardsCounter},
-     {'componentId': RANKEDBATTLES_CONSTS.RANKED_BATTLES_INFO_ID,
-      'count': infoCounter},
-     {'componentId': RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID,
-      'count': yearRatingCounter},
-     {'componentId': RANKEDBATTLES_CONSTS.RANKED_BATTLES_SHOP_ID,
-      'count': shopCounter}]
+def getCountersData(rankedController, awardsCounter, infoCounter, yearRatingCounter, shopCounter):
+    result = [{'componentId': RANKEDBATTLES_CONSTS.RANKED_BATTLES_INFO_ID,
+      'count': infoCounter}]
+    if rankedController.isYearRewardEnabled():
+        result.append({'componentId': RANKEDBATTLES_CONSTS.RANKED_BATTLES_REWARDS_ID,
+         'count': awardsCounter})
+    if rankedController.isYearLBEnabled():
+        result.append({'componentId': RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID,
+         'count': yearRatingCounter})
+    if rankedController.isRankedShopEnabled():
+        result.append({'componentId': RANKEDBATTLES_CONSTS.RANKED_BATTLES_SHOP_ID,
+         'count': shopCounter})
+    return result
 
 
-def getRankedMainSeasonOnItems(isRankedShop, isYearLBEnabled, yearLBSize, isMastered):
+def getRankedMainSeasonOnItems(isRankedShop, isYearLBEnabled, isYearRewardEnabled, yearLBSize, isMastered):
     result = list()
     result.append(_getSeasonOnMain(isMastered))
-    result.append(_getRewardsPage())
+    result.append(_getRewardsPage(isYearRewardEnabled=isYearRewardEnabled))
     result.extend(_getShopPage(isRankedShop))
     result.append(_getRatingPage())
     result.extend(_getYearRatingPage(isYearLBEnabled, yearLBSize))
@@ -109,10 +116,10 @@ def getRankedMainSeasonOnItems(isRankedShop, isYearLBEnabled, yearLBSize, isMast
     return result
 
 
-def getRankedMainSeasonOffItems(isRankedShop, isYearLBEnabled, yearLBSize):
+def getRankedMainSeasonOffItems(isRankedShop, isYearLBEnabled, isYearRewardEnabled, yearLBSize):
     result = list()
     result.append(_getSeasonOffMain(isYearLBEnabled))
-    result.append(_getRewardsPage(True))
+    result.append(_getRewardsPage(True, isYearRewardEnabled))
     result.extend(_getShopPage(isRankedShop))
     result.append(_getRatingPage())
     result.extend(_getYearRatingPage(isYearLBEnabled, yearLBSize))

@@ -158,7 +158,7 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
         status, timeLeft, _ = self.__eventProgression.getPrimeTimeStatus()
         showPrimeTimeAlert = status != PrimeTimeStatus.AVAILABLE
         hasAvailableServers = self.__eventProgression.hasAvailablePrimeTimeServers()
-        return CalendarStatusVO(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()) if showPrimeTimeAlert else None, buttonIcon='', buttonLabel=backport.text(R.strings.epic_battle.widgetAlertMessageBlock.button()), buttonVisible=showPrimeTimeAlert and hasAvailableServers, buttonTooltip=None, statusText=self.__getAlertStatusText(timeLeft, hasAvailableServers), popoverAlias=None, bgVisible=True, shadowFilterVisible=showPrimeTimeAlert, tooltip=None)
+        return CalendarStatusVO(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()) if showPrimeTimeAlert else None, buttonIcon='', buttonLabel=backport.text(R.strings.epic_battle.widgetAlertMessageBlock.button()), buttonVisible=showPrimeTimeAlert and hasAvailableServers, buttonTooltip=None, statusText=self.__getAlertStatusText(timeLeft, hasAvailableServers), popoverAlias=None, bgVisible=True, shadowFilterVisible=showPrimeTimeAlert, tooltip=None, isSimpleTooltip=False)
 
     def __getAlertStatusText(self, timeLeft, hasAvailableServers):
         rAlertMsgBlock = R.strings.epic_battle.widgetAlertMessageBlock
@@ -184,12 +184,12 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
                     if nextCycle is not None:
                         cycleNumber = nextCycle.getEpicCycleNumber()
                         timeLeftStr = time_utils.getTillTimeString(nextCycle.startDate - currTime, EPIC_BATTLE.STATUS_TIMELEFT, removeLeadingZeros=True)
-                        alertStr = backport.text(rAlertMsgBlock.startIn.single() if nextSeason.isSingleCycleSeason() else rAlertMsgBlock.startIn.multi(), cycle=int2roman(cycleNumber), time=timeLeftStr)
+                        alertStr = backport.text(rAlertMsgBlock.startIn(), cycle=int2roman(cycleNumber), time=timeLeftStr)
                 if not alertStr:
                     prevSeason = currSeason or self.__eventProgression.getPreviousSeason()
                     if prevSeason is not None:
                         prevCycle = prevSeason.getLastActiveCycleInfo(currTime)
                         if prevCycle is not None:
                             cycleNumber = prevCycle.getEpicCycleNumber()
-                            alertStr = backport.text(rAlertMsgBlock.noCycleMessage.single() if prevSeason.isSingleCycleSeason() else rAlertMsgBlock.noCycleMessage.multi(), cycle=int2roman(cycleNumber))
+                            alertStr = backport.text(rAlertMsgBlock.noCycleMessage(), cycle=int2roman(cycleNumber))
         return text_styles.vehicleStatusCriticalText(alertStr)

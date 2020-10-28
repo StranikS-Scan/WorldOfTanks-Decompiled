@@ -5,10 +5,11 @@ from CurrentVehicle import g_currentVehicle
 from UnitBase import UNIT_SLOT
 from adisp import process
 from debug_utils import LOG_DEBUG
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.meta.BaseRallyRoomViewMeta import BaseRallyRoomViewMeta
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
@@ -193,7 +194,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta):
         vehicles = playerInfo.getSlotsToVehicles(True).get(slotIdx)
         if vehicles is not None:
             vehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.SPECIFIC_BY_CD(vehicles))
-        self.fireEvent(events.LoadViewEvent(CYBER_SPORT_ALIASES.VEHICLE_SELECTOR_POPUP_PY, ctx={'isMultiSelect': False,
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(CYBER_SPORT_ALIASES.VEHICLE_SELECTOR_POPUP_PY), ctx={'isMultiSelect': False,
          'vehicles': vehicles,
          'titleText': CYBERSPORT.WINDOW_VEHICLESELECTOR_TITLE,
          'selectButton': CYBERSPORT.WINDOW_VEHICLESELECTOR_BUTTONS_SELECT,
@@ -210,7 +211,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta):
         self._chooseVehicleRequest(levelsRange)
 
     def inviteFriendRequest(self):
-        self.fireEvent(events.LoadViewEvent(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY, ctx={'prbName': 'unit',
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY), ctx={'prbName': 'unit',
          'ctrlType': CTRL_ENTITY_TYPE.UNIT}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def toggleReadyStateRequest(self):
@@ -235,7 +236,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta):
         self.requestToChangeComment(description)
 
     def showFAQWindow(self):
-        self.fireEvent(events.LoadViewEvent(MESSENGER_VIEW_ALIAS.FAQ_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(MESSENGER_VIEW_ALIAS.FAQ_WINDOW)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __onVehicleSelectHandler(self, event):
         self._selectVehicles(event.ctx)
@@ -261,7 +262,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta):
         self.as_setVehiclesTitleS(vehicleLbl, {})
 
     def _closeSendInvitesWindow(self):
-        self._destroyRelatedView(ViewTypes.WINDOW, PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY)
+        self._destroyRelatedView(WindowLayer.WINDOW, PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY)
 
     def _destroyRelatedView(self, container, alias):
         container = self.app.containerManager.getContainer(container)
@@ -294,6 +295,10 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta):
     def isPlayerInSlot(self, databaseID=None):
         pInfo = self.prbEntity.getPlayerInfo(dbID=databaseID)
         return pInfo.isInSlot
+
+    def isPlayerReady(self, databaseID=None):
+        pInfo = self.prbEntity.getPlayerInfo(dbID=databaseID)
+        return pInfo.isReady
 
     def _getVehicleSelectorDescription(self):
         pass
@@ -336,6 +341,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta):
 
     def __handleCurrentVehicleChanged(self):
         self._setActionButtonState()
+        self._updateMembersData()
 
     def _onCacheResync(self, reason, diff):
         if reason != CACHE_SYNC_REASON.CLIENT_UPDATE:

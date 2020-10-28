@@ -3,6 +3,7 @@
 from adisp import process
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.trainings import formatters
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.settings import ICONS_SIZES
 from gui.prb_control.items.prb_items import getPlayersComparator
 from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE
@@ -27,7 +28,7 @@ class EpicBattleTrainingRoom(EpicBattleTrainingRoomMeta):
 
     def showTrainingSettings(self):
         settings = EpicTrainingSettingsCtx()
-        self.fireEvent(events.LoadViewEvent(PREBATTLE_ALIASES.EPIC_TRAINING_SETTINGS_WINDOW_PY, ctx={'isCreateRequest': False,
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(PREBATTLE_ALIASES.EPIC_TRAINING_SETTINGS_WINDOW_PY), ctx={'isCreateRequest': False,
          'settings': settings}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onRostersChanged(self, entity, rosters, full):

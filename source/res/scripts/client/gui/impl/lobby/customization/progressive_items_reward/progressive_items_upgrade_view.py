@@ -1,25 +1,25 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/customization/progressive_items_reward/progressive_items_upgrade_view.py
-import logging
 import BigWorld
 import WWISE
 from CurrentVehicle import g_currentVehicle
 from adisp import process
-from frameworks.wulf import ViewFlags, ViewSettings
-from frameworks.wulf import WindowFlags
+from frameworks.wulf import ViewSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.shared import getItemInstalledCount
 from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS
+from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsSteelHunter
 from gui.customization.shared import isVehicleCanBeCustomized
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.customization.progressive_items_reward.progressive_items_reward_view_model import ProgressiveItemsRewardViewModel
 from gui.impl.lobby.customization.shared import goToC11nStyledMode
 from gui.impl.pub import ViewImpl
-from gui.impl.pub.lobby_window import LobbyWindow
+from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
+from gui.shared.events import ViewEventType
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.common import OutfitApplier
 from gui.shared.image_helper import getTextureLinkByID
@@ -29,7 +29,6 @@ from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 from gui.impl.lobby.progressive_reward.progressive_award_sounds import ProgressiveRewardSoundEvents
-_logger = logging.getLogger(__name__)
 
 class ProgressiveItemsUpgradeView(ViewImpl):
     __slots__ = ('__item', '__vehicle', '__level', '__itemsInNeedToUpgrade')
@@ -39,7 +38,6 @@ class ProgressiveItemsUpgradeView(ViewImpl):
     def __init__(self, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.customization.progressive_items_reward.ProgressiveItemsUpgradeView())
         settings.model = ProgressiveItemsRewardViewModel()
-        settings.flags = ViewFlags.OVERLAY_VIEW
         settings.args = args
         settings.kwargs = kwargs
         super(ProgressiveItemsUpgradeView, self).__init__(settings)
@@ -89,28 +87,27 @@ class ProgressiveItemsUpgradeView(ViewImpl):
         WWISE.WW_setState(ProgressiveRewardSoundEvents.PROGRESSIVE_REWARD_VIEW_GROUP, ProgressiveRewardSoundEvents.PROGRESSIVE_REWARD_VIEW_ENTER)
         return
 
-    def _lockButtons(self, *_):
-        self.__updateButtons(lock=True)
-
     def _updateButtons(self, *_):
         self.__updateButtons(lock=False)
 
     def __addListeners(self):
         self.viewModel.onOkClick += self.__onOkClick
         self.viewModel.onSecondaryClick += self.__onShowC11nClick
-        g_eventBus.addListener(VIEW_ALIAS.HERO_VEHICLE_PREVIEW, self._lockButtons, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.addListener(VIEW_ALIAS.BATTLE_QUEUE, self._lockButtons, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.addListener(VIEW_ALIAS.LOBBY_HANGAR, self._updateButtons, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self.__loadViewHandler, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.addCallbacks({'inventory': self._updateButtons})
         g_clientUpdateManager.addCallbacks({'cache.vehsLock': self._updateButtons})
 
     def __removeListeners(self):
         self.viewModel.onOkClick -= self.__onOkClick
         self.viewModel.onSecondaryClick -= self.__onShowC11nClick
-        g_eventBus.removeListener(VIEW_ALIAS.HERO_VEHICLE_PREVIEW, self._lockButtons, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.removeListener(VIEW_ALIAS.BATTLE_QUEUE, self._lockButtons, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.removeListener(VIEW_ALIAS.LOBBY_HANGAR, self._updateButtons, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self.__loadViewHandler, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.removeObjectCallbacks(self)
+
+    def __loadViewHandler(self, event):
+        if event.alias == VIEW_ALIAS.LOBBY_HANGAR:
+            self._updateButtons()
+        elif event.alias in (VIEW_ALIAS.HERO_VEHICLE_PREVIEW, VIEW_ALIAS.BATTLE_QUEUE):
+            self.__updateButtons(lock=True)
 
     def __setVehicleInfo(self, model):
         model.setTankName(self.__vehicle.shortUserName)
@@ -148,7 +145,7 @@ class ProgressiveItemsUpgradeView(ViewImpl):
     @replaceNoneKwargsModel
     def __updateButtons(self, lock=False, model=None):
         okEnabled = True
-        c11nEnabled = not lock and self.__vehicle.isCustomizationEnabled()
+        c11nEnabled = not lock and self.__vehicle.isCustomizationEnabled() and not currentHangarIsSteelHunter()
         if self.__itemsInNeedToUpgrade:
             okEnabled = c11nEnabled
             if okEnabled:
@@ -217,9 +214,8 @@ class ProgressiveItemsUpgradeView(ViewImpl):
         self.destroy()
 
 
-class ProgressiveItemsUpgradeWindow(LobbyWindow):
+class ProgressiveItemsUpgradeWindow(LobbyNotificationWindow):
     __slots__ = ()
 
     def __init__(self, itemCD, vehicleCD, progressionLevel, showSecondButton):
-        super(ProgressiveItemsUpgradeWindow, self).__init__(content=ProgressiveItemsUpgradeView(itemCD, vehicleCD, progressionLevel, showSecondButton), wndFlags=WindowFlags.OVERLAY, decorator=None)
-        return
+        super(ProgressiveItemsUpgradeWindow, self).__init__(content=ProgressiveItemsUpgradeView(itemCD, vehicleCD, progressionLevel, showSecondButton))

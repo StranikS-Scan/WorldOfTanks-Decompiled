@@ -10,14 +10,12 @@ class VEHICLE_PREVIEW(object):
     HEADER_BACKBTN_DESCRLABEL_SHOP = '#vehicle_preview:header/backBtn/descrLabel/shop'
     HEADER_BACKBTN_DESCRLABEL_STORAGE = '#vehicle_preview:header/backBtn/descrLabel/storage'
     HEADER_BACKBTN_DESCRLABEL_ADVENTCALENDAR = '#vehicle_preview:header/backBtn/descrLabel/adventCalendar'
-    HEADER_BACKBTN_DESCRLABEL_OVERLAYTENYEARSCOUNTDOWN = '#vehicle_preview:header/backBtn/descrLabel/overlayTenYearsCountdown'
     HEADER_BACKBTN_DESCRLABEL_HANGAR = '#vehicle_preview:header/backBtn/descrLabel/hangar'
     HEADER_BACKBTN_DESCRLABEL_VEHICLECOMPARE = '#vehicle_preview:header/backBtn/descrLabel/vehicleCompare'
     HEADER_BACKBTN_DESCRLABEL_REFERRALPROGRAM = '#vehicle_preview:header/backBtn/descrLabel/referralProgram'
     HEADER_BACKBTN_DESCRLABEL_FRONTLINE = '#vehicle_preview:header/backBtn/descrLabel/frontline'
-    HEADER_BACKBTN_DESCRLABEL_EVENTPROGRESSION = '#vehicle_preview:header/backBtn/descrLabel/eventProgression'
     HEADER_BACKBTN_DESCRLABEL_MARATHON = '#vehicle_preview:header/backBtn/descrLabel/marathon'
-    HEADER_BACKBTN_DESCRLABEL_AUTUMN_MARATHON = '#vehicle_preview:header/backBtn/descrLabel/autumn_marathon'
+    HEADER_BACKBTN_DESCRLABEL_WINTERMARATHON = '#vehicle_preview:header/backBtn/descrLabel/winterMarathon'
     HEADER_BACKBTN_DESCRLABEL_RANKED = '#vehicle_preview:header/backBtn/descrLabel/ranked'
     HEADER_TITLE = '#vehicle_preview:header/title'
     HERO_HEADER_TITLE = '#vehicle_preview:hero/header/title'
@@ -44,6 +42,7 @@ class VEHICLE_PREVIEW(object):
     BUYINGPANEL_CUSTOMOFFER_BUY = '#vehicle_preview:buyingPanel/customOffer/buy'
     BUYINGPANEL_CUSTOMOFFER_RESEARCH = '#vehicle_preview:buyingPanel/customOffer/research'
     BUYINGPANEL_TRADEIN_TRADEOFFPRICETEXT = '#vehicle_preview:buyingPanel/tradeIn/tradeOffPriceText'
+    BUYINGPANEL_TRADEIN_PERSONALTRADEOFFPRICETEXT = '#vehicle_preview:buyingPanel/tradeIn/personaltradeOffPriceText'
     BUYINGPANEL_TRADEIN_AVAILABLELEVELS = '#vehicle_preview:buyingPanel/tradeIn/availableLevels'
     BUYINGPANEL_TRADEIN_NOTAVAILABLETRADEOFFVEHICLES = '#vehicle_preview:buyingPanel/tradeIn/notAvailableTradeOffVehicles'
     BUYINGPANEL_TRADEIN_EXPIRED = '#vehicle_preview:buyingPanel/tradeIn/expired'
@@ -93,19 +92,18 @@ class VEHICLE_PREVIEW(object):
     BUYINGPANEL_FRONTLINEPACK_TITLELABEL_INACTIVE_ADD_DISCOUNT = '#vehicle_preview:buyingPanel/frontlinePack/titleLabel/inactive_add_discount'
     BUYINGPANEL_FRONTLINEPACK_TITLELABEL_INACTIVE = '#vehicle_preview:buyingPanel/frontlinePack/titleLabel/inactive'
     BUYINGPANEL_FRONTLINEPACK_COUPONLABEL = '#vehicle_preview:buyingPanel/frontlinePack/couponLabel'
+    BUYINGPANEL_PERSONALTRADEIN_TITLE = '#vehicle_preview:buyingPanel/personalTradeIn/title'
     HEADER_BACKBTN_DESCRLABEL_ENUM = (HEADER_BACKBTN_DESCRLABEL_RESEARCHTREE,
      HEADER_BACKBTN_DESCRLABEL_PERSONALAWARDS,
      HEADER_BACKBTN_DESCRLABEL_SHOP,
      HEADER_BACKBTN_DESCRLABEL_STORAGE,
      HEADER_BACKBTN_DESCRLABEL_ADVENTCALENDAR,
-     HEADER_BACKBTN_DESCRLABEL_OVERLAYTENYEARSCOUNTDOWN,
      HEADER_BACKBTN_DESCRLABEL_HANGAR,
      HEADER_BACKBTN_DESCRLABEL_VEHICLECOMPARE,
      HEADER_BACKBTN_DESCRLABEL_REFERRALPROGRAM,
      HEADER_BACKBTN_DESCRLABEL_FRONTLINE,
-     HEADER_BACKBTN_DESCRLABEL_EVENTPROGRESSION,
      HEADER_BACKBTN_DESCRLABEL_MARATHON,
-     HEADER_BACKBTN_DESCRLABEL_AUTUMN_MARATHON,
+     HEADER_BACKBTN_DESCRLABEL_WINTERMARATHON,
      HEADER_BACKBTN_DESCRLABEL_RANKED)
     BUYINGPANEL_OFFER_RENT_NAME_ENUM = (BUYINGPANEL_OFFER_RENT_NAME_CYCLE, BUYINGPANEL_OFFER_RENT_NAME_CYCLES, BUYINGPANEL_OFFER_RENT_NAME_SEASON)
     BUYINGPANEL_OFFER_RENT_LABEL_ENUM = (BUYINGPANEL_OFFER_RENT_LABEL_CYCLE, BUYINGPANEL_OFFER_RENT_LABEL_CYCLES, BUYINGPANEL_OFFER_RENT_LABEL_SEASON)

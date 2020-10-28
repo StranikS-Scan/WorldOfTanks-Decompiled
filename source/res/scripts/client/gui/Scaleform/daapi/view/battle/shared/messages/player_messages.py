@@ -35,9 +35,7 @@ class PlayerMessages(fading_messages.FadingMessages):
         ctrl = self.sessionProvider.shared.equipments
         if ctrl is not None:
             ctrl.onEquipmentUpdated += self.__onCombatEquipmentUpdated
-        arena = avatar_getter.getArena()
-        if arena:
-            arena.onCombatEquipmentUsed += self.__onCombatEquipmentUsed
+            ctrl.onCombatEquipmentUsed += self.__onCombatEquipmentUsed
         return
 
     def _removeGameListeners(self):
@@ -49,9 +47,7 @@ class PlayerMessages(fading_messages.FadingMessages):
         ctrl = self.sessionProvider.shared.equipments
         if ctrl is not None:
             ctrl.onEquipmentUpdated -= self.__onCombatEquipmentUpdated
-        arena = avatar_getter.getArena()
-        if arena:
-            arena.onCombatEquipmentUsed -= self.__onCombatEquipmentUsed
+            ctrl.onCombatEquipmentUsed -= self.__onCombatEquipmentUsed
         super(PlayerMessages, self)._removeGameListeners()
         return
 

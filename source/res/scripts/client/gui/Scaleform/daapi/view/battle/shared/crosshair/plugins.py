@@ -17,6 +17,7 @@ from gui.Scaleform.daapi.view.battle.shared.crosshair.settings import SHOT_RESUL
 from gui.Scaleform.daapi.view.battle.shared.crosshair.settings import SHOT_RESULT_TO_DEFAULT_COLOR
 from gui.Scaleform.daapi.view.battle.shared.formatters import getHealthPercent
 from gui.Scaleform.daapi.view.battle.shared.timers_common import PythonTimer
+from gui.Scaleform.genConsts.AUTOLOADERBOOSTVIEWSTATES import AUTOLOADERBOOSTVIEWSTATES
 from gui.Scaleform.genConsts.CROSSHAIR_CONSTANTS import CROSSHAIR_CONSTANTS
 from gui.Scaleform.genConsts.DUAL_GUN_MARKER_STATE import DUAL_GUN_MARKER_STATE
 from gui.Scaleform.genConsts.GUN_MARKER_VIEW_CONSTANTS import GUN_MARKER_VIEW_CONSTANTS as _VIEW_CONSTANTS
@@ -25,6 +26,7 @@ from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, CROSSHAIR_VIEW_ID, SHELL_QUANTITY_UNKNOWN, ENTITY_IN_FOCUS_TYPE
 from gui.battle_control.battle_constants import SHELL_SET_RESULT, VEHICLE_VIEW_STATE, NET_TYPE_OVERRIDE
 from gui.battle_control.controllers import crosshair_proxy
+from gui.battle_control.controllers.consumables.ammo_ctrl import AutoReloadingBoostStates
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from gui.shared.utils.TimeInterval import TimeInterval
@@ -312,6 +314,25 @@ class _PythonReloadTicker(_PythonTicker):
         self._viewObject.as_setReloadingAsPercentS(100.0, False)
 
 
+class _PythonAutoloaderBoostTicker(_PythonTicker):
+
+    def hideAnimation(self, withAnimation):
+        self._viewObject.as_hideBoostS(withAnimation)
+        self._timeInterval.stop()
+
+    def _setViewSnapshot(self, timeLeft):
+        if self._totalTime > 0:
+            timeGone = self._totalTime - timeLeft
+            progressInPercents = round(float(timeGone) / self._totalTime * 100, 2)
+            _logger.debug('_PythonAutoloaderBoostTicker::_setViewSnapshot progressInPercents=%s, self._totalTime=%s', progressInPercents, self._totalTime)
+            self._viewObject.as_setBoostAsPercentS(progressInPercents, self._totalTime)
+
+    def _stopTick(self):
+        super(_PythonAutoloaderBoostTicker, self)._stopTick()
+        _logger.debug('_PythonAutoloaderBoostTicker::_stopTick progressInPercents=%s, self._totalTime=%s', 100.0, self._totalTime)
+        self._viewObject.as_setBoostAsPercentS(100.0, self._totalTime)
+
+
 class _ReloadingAnimationsProxy(object):
 
     def __init__(self, panel):
@@ -327,6 +348,12 @@ class _ReloadingAnimationsProxy(object):
     def setReloading(self, state):
         raise NotImplementedError
 
+    def showAutoLoadingBoost(self, timeLeft, stateTotalTime):
+        raise NotImplementedError
+
+    def hideAutoLoadingBoost(self, showAnimation):
+        raise NotImplementedError
+
 
 class _ASAutoReloadProxy(_ReloadingAnimationsProxy):
 
@@ -339,6 +366,12 @@ class _ASAutoReloadProxy(_ReloadingAnimationsProxy):
     def setReloading(self, state):
         self._panel.as_setReloadingS(state.getActualValue(), state.getBaseValue(), state.getTimePassed(), state.isReloading())
 
+    def showAutoLoadingBoost(self, timeLeft, stateTotalTime):
+        self._panel.as_showBoostS(timeLeft, stateTotalTime)
+
+    def hideAutoLoadingBoost(self, showAnimation):
+        self._panel.as_hideBoostS(showAnimation)
+
 
 class _PythonAutoReloadProxy(_ReloadingAnimationsProxy):
 
@@ -347,6 +380,7 @@ class _PythonAutoReloadProxy(_ReloadingAnimationsProxy):
         self.__shellTicker = _PythonShellInGunTicker(panel)
         self.__clipTicker = _PythonClipLoadingTicker(panel)
         self.__reloadTicker = _PythonReloadTicker(panel)
+        self.__boostTicker = _PythonAutoloaderBoostTicker(panel)
 
     def setShellLoading(self, actualTime, baseTime):
         self.__shellTicker.startAnimation(actualTime, baseTime)
@@ -358,6 +392,12 @@ class _PythonAutoReloadProxy(_ReloadingAnimationsProxy):
 
     def setReloading(self, state):
         self.__reloadTicker.startAnimation(state.getActualValue(), state.getBaseValue())
+
+    def showAutoLoadingBoost(self, timeLeft, totalTime):
+        self.__boostTicker.startAnimation(timeLeft, totalTime)
+
+    def hideAutoLoadingBoost(self, showAnimation):
+        self.__boostTicker.hideAnimation(showAnimation)
 
 
 class AmmoPlugin(CrosshairPlugin):
@@ -383,6 +423,7 @@ class AmmoPlugin(CrosshairPlugin):
         ctrl.onGunSettingsSet += self.__onGunSettingsSet
         ctrl.onGunReloadTimeSet += self.__onGunReloadTimeSet
         ctrl.onGunAutoReloadTimeSet += self.__onGunAutoReloadTimeSet
+        ctrl.onGunAutoReloadBoostUpdated += self.__onGunAutoReloadBoostUpd
         ctrl.onShellsUpdated += self.__onShellsUpdated
         ctrl.onCurrentShellChanged += self.__onCurrentShellChanged
         vehStateCtrl.onVehicleControlling += self.__onVehicleControlling
@@ -398,6 +439,7 @@ class AmmoPlugin(CrosshairPlugin):
         if ctrl is not None:
             ctrl.onGunSettingsSet -= self.__onGunSettingsSet
             ctrl.onGunAutoReloadTimeSet -= self.__onGunAutoReloadTimeSet
+            ctrl.onGunAutoReloadBoostUpdated -= self.__onGunAutoReloadBoostUpd
             ctrl.onGunReloadTimeSet -= self.__onGunReloadTimeSet
             ctrl.onShellsUpdated -= self.__onShellsUpdated
             ctrl.onCurrentShellChanged -= self.__onCurrentShellChanged
@@ -472,13 +514,27 @@ class AmmoPlugin(CrosshairPlugin):
         return
 
     def __onGunAutoReloadTimeSet(self, state, stunned):
-        if not self.__autoReloadCallbackID:
-            timeLeft = min(state.getTimeLeft(), state.getActualValue())
-            baseValue = state.getBaseValue()
-            if self.__shellsInClip == 0:
-                baseValue = self.__reCalcFirstShellAutoReload(baseValue)
-            self.__reloadAnimator.setClipAutoLoading(timeLeft, baseValue, isStun=stunned, isTimerOn=True, isRedText=self.__shellsInClip == 0)
+        if self.__autoReloadCallbackID:
+            BigWorld.cancelCallback(self.__autoReloadCallbackID)
+            self.__autoReloadCallbackID = None
+        timeLeft = min(state.getTimeLeft(), state.getActualValue())
+        baseValue = state.getBaseValue()
+        if self.__shellsInClip == 0:
+            baseValue = self.__reCalcFirstShellAutoReload(baseValue)
+        self.__reloadAnimator.setClipAutoLoading(timeLeft, baseValue, isStun=stunned, isTimerOn=True, isRedText=self.__shellsInClip == 0)
         self.__autoReloadSnapshot = state
+        return
+
+    def __onGunAutoReloadBoostUpd(self, state, stateDuration, stateTotalTime, extraData):
+        _logger.debug('Auto loader boost incoming state=%s, stateDuration=%s, stateTotalTime=%s, extraData=%s', state, stateDuration, stateTotalTime, extraData)
+        if state in AutoReloadingBoostStates.NOT_ACTIVE:
+            self.__reloadAnimator.hideAutoLoadingBoost(showAnimation=extraData.get('shootHasBeenMade', False))
+        else:
+            if state == AutoReloadingBoostStates.CHARGED:
+                timeLeft = AUTOLOADERBOOSTVIEWSTATES.CHARGED
+            else:
+                timeLeft = stateDuration
+            self.__reloadAnimator.showAutoLoadingBoost(timeLeft, stateTotalTime)
 
     def __reCalcFirstShellAutoReload(self, baseTime):
         if not self.__scaledInterval:

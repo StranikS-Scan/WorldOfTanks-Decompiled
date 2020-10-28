@@ -647,6 +647,19 @@
     <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </A136_T42>
+  <A134_M24E2_SuperChaffee>
+    <id>	199	</id>
+    <userString>	#usa_vehicles:A134_M24E2_SuperChaffee	</userString>
+    <description>	#usa_vehicles:A134_M24E2_SuperChaffee_descr	</description>
+    <shortUserString>	#usa_vehicles:A134_M24E2_SuperChaffee_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A134_M24E2_SuperChaffee_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A134_M24E2_SuperChaffee_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank HD scout secret testTank improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
+    <level>	6	</level>
+  </A134_M24E2_SuperChaffee>
   <A132_T77>
     <id>	200	</id>
     <userString>	#usa_vehicles:A132_T77	</userString>
@@ -1097,6 +1110,24 @@
     <tags>	heavyTank HD epic_battles improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </A12_T32_FL>
+  <A100_T49_Halloween_event>
+    <id>	248	</id>
+    <userString>	#usa_vehicles:T49_Halloween_event	</userString>
+    <description>	#usa_vehicles:T49_Halloween_event_descr	</description>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank improvedVentilation_class1_user scout secret event_battles cannot_be_sold lockOutfit HD lockCrew lockCrewSkills event_premium_vehicle event_overturn_recovery	</tags>
+    <level>	9	</level>
+  </A100_T49_Halloween_event>
+  <A66_M103_Halloween_event>
+    <id>	249	</id>
+    <userString>	#usa_vehicles:M103_Halloween_event	</userString>
+    <description>	#usa_vehicles:M103_Halloween_event_descr	</description>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank improvedVentilation_class3_user secret event_battles cannot_be_sold HD lockOutfit lockCrew lockCrewSkills event_not_elite_vehicle event_overturn_recovery	</tags>
+    <level>	9	</level>
+  </A66_M103_Halloween_event>
   <A103_T71E1_IGR>
     <id>	151	</id>
     <userString>	#igr_vehicles:T71_IGR	</userString>
@@ -1243,14 +1274,59 @@
     <tags>	mediumTank lockOutfit HD battle_royale lockCrew lockCrewSkills cannot_be_sold lockDevices lockEquipment lockShells secret	</tags>
     <level>	1	</level>
   </A72_T25_2_SH>
-  <A69_T110E5_WB>
-    <id>	253	</id>
-    <userString>	#usa_vehicles:T110_WB	</userString>
-    <description>	#usa_vehicles:T110_descr	</description>
-    <price>	6100000	</price>
-    <notInShop>	true	</notInShop>
-    <cannotBeBought>	true	</cannotBeBought>
-    <tags>	heavyTank HD secret bob cannot_be_sold improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	10	</level>
-  </A69_T110E5_WB>
+  <A36_Sherman_Jumbo_HELL>
+    <id>	26	</id>
+    <userString>	#usa_vehicles:A36_Sherman_Jumbo_HELL	</userString>
+    <description>	#usa_vehicles:Sherman_Jumbo_descr	</description>
+    <shortUserString>	#usa_vehicles:A36_Sherman_Jumbo_short_HELL	</shortUserString>
+    <price>	975000	</price>
+    <tags>	mediumTank improvedVentilation_class2_user HD event_battles secret cannot_be_sold lockCrew lockOutfit	</tags>
+    <level>	6	</level>
+    <clone_tags>	cloned	</clone_tags>
+    <notInShop>	True	</notInShop>
+  </A36_Sherman_Jumbo_HELL>
+  <A68_T28_Prototype_HELL>
+    <id>	47	</id>
+    <userString>	#usa_vehicles:A68_T28_Prototype_HELL	</userString>
+    <description>	#usa_vehicles:T28_Prototype_descr	</description>
+    <shortUserString>	#usa_vehicles:A68_T28_Prototype_short_HELL	</shortUserString>
+    <price>	2650000	</price>
+    <tags>	AT-SPG heavyAT-SPG improvedVentilation_class3_user HD event_battles secret cannot_be_sold lockCrew lockOutfit	</tags>
+    <level>	8	</level>
+    <clone_tags>	cloned	</clone_tags>
+    <notInShop>	True	</notInShop>
+  </A68_T28_Prototype_HELL>
+  <A35_Pershing_HELL>
+    <id>	48	</id>
+    <userString>	#usa_vehicles:A35_Pershing_HELL	</userString>
+    <description>	#usa_vehicles:Pershing_descr	</description>
+    <shortUserString>	#usa_vehicles:A35_Pershing_short_HELL	</shortUserString>
+    <price>	2403000	</price>
+    <tags>	mediumTank improvedVentilation_class2_user HD event_battles secret cannot_be_sold lockCrew lockOutfit	</tags>
+    <level>	8	</level>
+    <clone_tags>	cloned	</clone_tags>
+    <notInShop>	True	</notInShop>
+  </A35_Pershing_HELL>
+  <A63_M46_Patton_HALL>
+    <id>	50	</id>
+    <userString>	#usa_vehicles:A63_M46_Patton_HALL	</userString>
+    <description>	#usa_vehicles:M46_Patton_descr	</description>
+    <shortUserString>	#usa_vehicles:A63_M46_Patton_short_HELL	</shortUserString>
+    <price>	3450000	</price>
+    <tags>	mediumTank improvedVentilation_class2_user patton HD event_battles secret cannot_be_sold lockCrew lockOutfit	</tags>
+    <level>	9	</level>
+    <clone_tags>	cloned	</clone_tags>
+    <notInShop>	True	</notInShop>
+  </A63_M46_Patton_HALL>
+  <A14_T30_HELL>
+    <id>	53	</id>
+    <userString>	#usa_vehicles:A14_T30_HELL	</userString>
+    <description>	#usa_vehicles:T30_descr	</description>
+    <shortUserString>	#usa_vehicles:A14_T30_short_HELL	</shortUserString>
+    <price>	3550000	</price>
+    <tags>	AT-SPG heavyAT-SPG improvedVentilation_class3_user HD  event_battles secret cannot_be_sold lockCrew lockOutfit	</tags>
+    <level>	9	</level>
+    <clone_tags>	cloned	</clone_tags>
+    <notInShop>	True	</notInShop>
+  </A14_T30_HELL>
 </list.xml>

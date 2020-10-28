@@ -16,7 +16,8 @@ from helpers import dependency
 from preview_selectable_logic import PreviewSelectableLogic
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
-from skeletons.gui.game_control import IHeroTankController, IEventProgressionController
+from skeletons.gui.game_control import IHeroTankController
+from gui.prb_control.events_dispatcher import g_eventDispatcher
 _SHOW_CLOSE_BTN = False
 _SHOW_BACK_BTN = True
 _logger = logging.getLogger(__name__)
@@ -27,13 +28,12 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
     __itemsCache = dependency.descriptor(IItemsCache)
     __hangarSpace = dependency.descriptor(IHangarSpace)
     __heroTanksControl = dependency.descriptor(IHeroTankController)
-    __eventProgression = dependency.descriptor(IEventProgressionController)
     _COMMON_SOUND_SPACE = STYLE_PREVIEW_SOUND_SPACE
 
     def __init__(self, ctx=None):
         super(VehicleStylePreview, self).__init__(ctx)
-        self._style = ctx['style']
         self.__vehicleCD = ctx['itemCD']
+        self.__style = ctx['style']
         self.__styleDescr = ctx.get('styleDescr')
         self.__backCallback = ctx.get('backCallback', event_dispatcher.showHangar)
         self.__backBtnDescrLabel = ctx.get('backBtnDescrLabel', backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.personalAwards()))
@@ -51,7 +51,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         super(VehicleStylePreview, self)._populate()
         g_currentPreviewVehicle.selectVehicle(self.__vehicleCD)
         self.__selectedVehicleEntityId = g_currentPreviewVehicle.vehicleEntityID
-        if not g_currentPreviewVehicle.isPresent() or self._style is None:
+        if not g_currentPreviewVehicle.isPresent() or self.__style is None:
             event_dispatcher.showHangar()
         self.__hangarSpace.onSpaceCreate += self.__onHangarCreateOrRefresh
         self.addListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading, EVENT_BUS_SCOPE.DEFAULT)
@@ -61,8 +61,8 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
          'backBtnDescrLabel': self.__backBtnDescrLabel,
          'showCloseBtn': _SHOW_CLOSE_BTN,
          'showBackButton': _SHOW_BACK_BTN})
-        self.as_setAdditionalInfoS({'objectSubtitle': text_styles.main(backport.text(getGroupFullNameResourceID(self._style.groupID))),
-         'objectTitle': self._style.userName,
+        self.as_setAdditionalInfoS({'objectSubtitle': text_styles.main(backport.text(getGroupFullNameResourceID(self.__style.groupID))),
+         'objectTitle': self.__style.userName,
          'descriptionTitle': backport.text(R.strings.tooltips.vehiclePreview.historicalReference.title()),
          'descriptionText': self.__styleDescr})
         return
@@ -100,14 +100,18 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
             return
 
     def __onVehicleLoaded(self):
-        g_currentPreviewVehicle.previewStyle(self._style)
+        g_currentPreviewVehicle.previewStyle(self.__style)
 
     def __onHangarCreateOrRefresh(self):
         self.__handleWindowClose()
+        g_eventDispatcher.loadHangar()
 
     @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_VEHICLE_PREVIEW, EVENT_BUS_SCOPE.LOBBY)
     def __handleWindowClose(self, event=None):
-        if event is not None and not event.ctx.get('noCallback', False):
-            self.onBackClick()
+        if event is not None:
+            if event.ctx.get('back', True):
+                self.onBackClick()
+            elif event.ctx.get('close', False):
+                self.closeView()
         self.destroy()
         return

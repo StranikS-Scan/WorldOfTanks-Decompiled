@@ -275,7 +275,8 @@ RANKED_BLOCK_LAYOUT = ['xp',
  'damageBlockedByArmor',
  'battlesOnStunningVehicles',
  'stunNum',
- 'damageAssistedStun']
+ 'damageAssistedStun',
+ 'playedBonusBattles']
 A30X30_BLOCK_LAYOUT = ['xp',
  'battlesCount',
  'wins',

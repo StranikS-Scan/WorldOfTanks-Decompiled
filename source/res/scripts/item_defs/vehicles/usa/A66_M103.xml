@@ -76,6 +76,11 @@
           <destroyed>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Hull.model	</exploded>
         </Helloween_3Dst>
+        <A66_M103_3Dst_HW20>
+          <undamaged>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/crash/lod0/Hull.model	</exploded>
+        </A66_M103_3Dst_HW20>
       </sets>
     </models>
     <swinging>
@@ -106,10 +111,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.00822009 0.119081 3.22995	</rayStart>
-        <rayEnd>	-0.00195807 -0.0439413 3.11426	</rayEnd>
-        <rayUp>	0.000000 0.000000 -1	</rayUp>
-        <size>	0.24	</size>
+        <rayStart>	-0.719634 0.284312 2.55491	</rayStart>
+        <rayEnd>	-0.666741 0.0956861 2.51464	</rayEnd>
+        <rayUp>	-0.82003 -0.502103 0.27467	</rayUp>
+        <size>	0.315286	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
       </slot>
@@ -906,6 +911,34 @@
         <anchorDirection>	-0.00271811 0.944729 0.32784	</anchorDirection>
         <tags>	formfactor_square	</tags>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15058	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A66_M103_3Dst_HW20	</compatibleModels>
+        <position>	-1.44108 1.52192 2.96365	</position>
+        <rotation>	0.283743 0.000013 3.13302	</rotation>
+        <scale>	0.72038 0.466156 0.720371	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.37208	</clipAngle>
+        <anchorPosition>	-1.44119 0.23908 2.96006	</anchorPosition>
+        <anchorDirection>	0.00857626 0.959979 0.279941	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15059	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A66_M103_3Dst_HW20	</compatibleModels>
+        <position>	1.4411 1.5219 2.96365	</position>
+        <rotation>	0.283743 0.000013 3.13305	</rotation>
+        <scale>	0.720382 0.466157 0.720371	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.37208	</clipAngle>
+        <anchorPosition>	1.44121 0.239057 2.96006	</anchorPosition>
+        <anchorDirection>	0.00854622 0.959979 0.279941	</anchorDirection>
+      </slot>
     </customizationSlots>
     <camouflage>
       <tiling>	1.12 1.12 0.09 0.27	</tiling>
@@ -951,6 +984,11 @@
             <destroyed>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Chassis.model	</exploded>
           </Helloween_3Dst>
+          <A66_M103_3Dst_HW20>
+            <undamaged>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/crash/lod0/Chassis.model	</exploded>
+          </A66_M103_3Dst_HW20>
         </sets>
       </models>
       <traces>
@@ -1822,6 +1860,11 @@
             <destroyed>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Chassis.model	</exploded>
           </Helloween_3Dst>
+          <A66_M103_3Dst_HW20>
+            <undamaged>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/crash/lod0/Chassis.model	</exploded>
+          </A66_M103_3Dst_HW20>
         </sets>
       </models>
       <traces>
@@ -2742,6 +2785,11 @@
                 <destroyed>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Gun_01.model	</exploded>
               </Helloween_3Dst>
+              <A66_M103_3Dst_HW20>
+                <undamaged>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/crash/lod0/Gun_01.model	</exploded>
+              </A66_M103_3Dst_HW20>
             </sets>
           </models>
           <hitTester>
@@ -2790,6 +2838,8 @@
             <slot>
               <slotType>	projectionDecal	</slotType>
               <slotId>	45000	</slotId>
+              <anchorPosition>	0.000059 0.450697 0.182659	</anchorPosition>
+              <anchorDirection>	0.000361537 0.876152 0.482035	</anchorDirection>
               <tags>	formfactor_square	</tags>
               <position>	-0.000316127 1.62608 1.44876	</position>
               <rotation>	0.502976 -0.000126736 3.14117	</rotation>
@@ -2797,8 +2847,20 @@
               <doubleSided>	false	</doubleSided>
               <showOn>	4368	</showOn>
               <clipAngle>	0.160643	</clipAngle>
-              <anchorPosition>	0.000059 0.450697 0.182659	</anchorPosition>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45001	</slotId>
+              <tags>	formfactor_square	</tags>
+              <position>	0.000016 2.40722 2.00009	</position>
+              <rotation>	0.502976 -0.000126736 3.14117	</rotation>
+              <scale>	0.435631 0.253533 0.435638	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.160643	</clipAngle>
+              <anchorPosition>	0.000040 0.381538 0.266175	</anchorPosition>
               <anchorDirection>	0.000361537 0.876152 0.482035	</anchorDirection>
+              <compatibleModels>	A66_M103_3Dst_HW20	</compatibleModels>
             </slot>
           </customizationSlots>
           <camouflage>
@@ -2847,6 +2909,11 @@
                 <destroyed>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Gun_02.model	</destroyed>
                 <exploded>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Gun_02.model	</exploded>
               </Helloween_3Dst>
+              <A66_M103_3Dst_HW20>
+                <undamaged>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/crash/lod0/Gun_02.model	</exploded>
+              </A66_M103_3Dst_HW20>
             </sets>
           </models>
           <hitTester>
@@ -2923,6 +2990,11 @@
             <destroyed>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Turret_01.model	</exploded>
           </Helloween_3Dst>
+          <A66_M103_3Dst_HW20>
+            <undamaged>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/crash/lod0/Turret_01.model	</exploded>
+          </A66_M103_3Dst_HW20>
         </sets>
       </models>
       <hitTester>
@@ -2941,10 +3013,22 @@
       </customization>
       <customizationSlots>
         <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	31000	</slotId>
+          <anchorPosition>	0.000000 1.14304 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	32000	</slotId>
+          <anchorPosition>	0.000000 1.14304 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
           <slotType>	player	</slotType>
           <slotId>	33000	</slotId>
-          <rayStart>	-1.45737 0.713466 0.569913	</rayStart>
-          <rayEnd>	-0.605297 0.25479 0.317931	</rayEnd>
+          <rayStart>	-1.63698 0.632974 0.244553	</rayStart>
+          <rayEnd>	-0.799429 0.161661 -0.031615	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.32	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
@@ -2953,13 +3037,13 @@
         <slot>
           <slotType>	player	</slotType>
           <slotId>	33001	</slotId>
-          <rayStart>	1.47035 0.693136 0.563033	</rayStart>
-          <rayEnd>	0.618275 0.234459 0.31105	</rayEnd>
+          <rayStart>	1.62787 0.659127 0.25051	</rayStart>
+          <rayEnd>	0.789306 0.203279 -0.0476612	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.32	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
           <isUVProportional>	true	</isUVProportional>
+          <isMirrored>	true	</isMirrored>
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
@@ -2980,18 +3064,6 @@
           <size>	0.78	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isUVProportional>	true	</isUVProportional>
-        </slot>
-        <slot>
-          <slotType>	paint	</slotType>
-          <slotId>	31000	</slotId>
-          <anchorPosition>	0.000000 1.14304 0.000000	</anchorPosition>
-          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
-        </slot>
-        <slot>
-          <slotType>	camouflage	</slotType>
-          <slotId>	32000	</slotId>
-          <anchorPosition>	0.000000 1.14304 0.000000	</anchorPosition>
-          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -3670,6 +3742,62 @@
           <anchorDirection>	-0.755681 0.568479 0.325235	</anchorDirection>
           <tags>	formfactor_square	</tags>
         </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35051	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A66_M103_3Dst_HW20	</compatibleModels>
+          <position>	-1.2739 2.26015 -0.388761	</position>
+          <rotation>	0.952449 -1.56345 3.03221	</rotation>
+          <scale>	0.624192 0.2 0.624193	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.24029	</clipAngle>
+          <anchorPosition>	-1.33471 0.66455 -0.959525	</anchorPosition>
+          <anchorDirection>	-0.809144 0.576224 0.115115	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35052	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A66_M103_3Dst_HW20	</compatibleModels>
+          <position>	1.27393 2.26013 -0.38876	</position>
+          <rotation>	0.952464 1.56346 -3.03216	</rotation>
+          <scale>	0.624191 0.199999 0.624192	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.24029	</clipAngle>
+          <anchorPosition>	1.33474 0.664527 -0.959522	</anchorPosition>
+          <anchorDirection>	0.80915 0.576209 0.115149	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35053	</slotId>
+          <tags>	formfactor_square	</tags>
+          <position>	0.122274 2.69335 -2.6459	</position>
+          <rotation>	2.40231 -0.000016 -0.000018	</rotation>
+          <scale>	0.307084 0.353221 0.307096	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.0750646	</clipAngle>
+          <anchorPosition>	0.122274 1.0927 -3.26019	</anchorPosition>
+          <anchorDirection>	-0.000007 0.738954 -0.673756	</anchorDirection>
+          <compatibleModels>	A66_M103_3Dst_HW20	</compatibleModels>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35054	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A66_M103_3Dst_HW20	</compatibleModels>
+          <position>	-0.408117 2.87439 0.158377	</position>
+          <rotation>	0.0758544 0.000049 -3.01845	</rotation>
+          <scale>	0.71191 0.414325 0.711919	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.160643	</clipAngle>
+          <anchorPosition>	-0.403912 1.2016 -0.423613	</anchorPosition>
+          <anchorDirection>	-0.122826 0.989574 0.0752138	</anchorDirection>
+        </slot>
       </customizationSlots>
       <camouflage>
         <tiling>	0.61 0.5 0.000000 0.000000	</tiling>
@@ -3764,6 +3892,11 @@
                 <destroyed>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Gun_03.model	</destroyed>
                 <exploded>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Gun_03.model	</exploded>
               </Helloween_3Dst>
+              <A66_M103_3Dst_HW20>
+                <undamaged>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/crash/lod0/Gun_03.model	</exploded>
+              </A66_M103_3Dst_HW20>
             </sets>
           </models>
           <hitTester>
@@ -3858,6 +3991,11 @@
                 <destroyed>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Gun_04.model	</destroyed>
                 <exploded>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Gun_04.model	</exploded>
               </Helloween_3Dst>
+              <A66_M103_3Dst_HW20>
+                <undamaged>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/normal/lod0/Gun_04.model	</undamaged>
+                <destroyed>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/crash/lod0/Gun_04.model	</destroyed>
+                <exploded>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/crash/lod0/Gun_04.model	</exploded>
+              </A66_M103_3Dst_HW20>
             </sets>
           </models>
           <hitTester>
@@ -3952,6 +4090,11 @@
                 <destroyed>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Gun_05.model	</destroyed>
                 <exploded>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Gun_05.model	</exploded>
               </Helloween_3Dst>
+              <A66_M103_3Dst_HW20>
+                <undamaged>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/normal/lod0/Gun_05.model	</undamaged>
+                <destroyed>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/crash/lod0/Gun_05.model	</destroyed>
+                <exploded>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/crash/lod0/Gun_05.model	</exploded>
+              </A66_M103_3Dst_HW20>
             </sets>
           </models>
           <hitTester>
@@ -4022,6 +4165,11 @@
             <destroyed>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Turret_02.model	</destroyed>
             <exploded>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Turret_02.model	</exploded>
           </Helloween_3Dst>
+          <A66_M103_3Dst_HW20>
+            <undamaged>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/normal/lod0/Turret_02.model	</undamaged>
+            <destroyed>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/crash/lod0/Turret_02.model	</destroyed>
+            <exploded>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/crash/lod0/Turret_02.model	</exploded>
+          </A66_M103_3Dst_HW20>
         </sets>
       </models>
       <hitTester>
@@ -4040,6 +4188,18 @@
       </customization>
       <customizationSlots>
         <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	31000	</slotId>
+          <anchorPosition>	-0.000000 1.12742 -0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	32000	</slotId>
+          <anchorPosition>	-0.000000 1.12742 -0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+        <slot>
           <slotType>	player	</slotType>
           <slotId>	33000	</slotId>
           <rayStart>	-1.34825 0.713424 0.823404	</rayStart>
@@ -4047,6 +4207,17 @@
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.32	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	33001	</slotId>
+          <rayStart>	1.34825 0.713424 0.823404	</rayStart>
+          <rayEnd>	0.573003 0.271733 0.371956	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
           <isUVProportional>	true	</isUVProportional>
         </slot>
         <slot>
@@ -4068,29 +4239,6 @@
           <size>	0.78	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isUVProportional>	true	</isUVProportional>
-        </slot>
-        <slot>
-          <slotType>	player	</slotType>
-          <slotId>	33001	</slotId>
-          <rayStart>	1.34825 0.713424 0.823404	</rayStart>
-          <rayEnd>	0.573003 0.271733 0.371956	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.32	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
-          <isUVProportional>	true	</isUVProportional>
-        </slot>
-        <slot>
-          <slotType>	paint	</slotType>
-          <slotId>	31000	</slotId>
-          <anchorPosition>	-0.000000 1.12742 -0.000000	</anchorPosition>
-          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
-        </slot>
-        <slot>
-          <slotType>	camouflage	</slotType>
-          <slotId>	32000	</slotId>
-          <anchorPosition>	-0.000000 1.12742 -0.000000	</anchorPosition>
-          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -4677,6 +4825,62 @@
           <anchorPosition>	1.0367 0.556377 0.507674	</anchorPosition>
           <anchorDirection>	0.772431 0.482842 0.41257	</anchorDirection>
           <tags>	formfactor_square	</tags>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35044	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A66_M103_3Dst_HW20	</compatibleModels>
+          <position>	-0.319787 2.72184 0.157584	</position>
+          <rotation>	0.152835 0.000002 -3.06195	</rotation>
+          <scale>	0.706864 0.287872 0.706886	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.26677	</clipAngle>
+          <anchorPosition>	-0.329662 1.20521 -0.402996	</anchorPosition>
+          <anchorDirection>	-0.079562 0.98521 0.151758	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35045	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A66_M103_3Dst_HW20	</compatibleModels>
+          <position>	-1.41577 2.19893 -0.342209	</position>
+          <rotation>	1.0311 -1.53585 3.08378	</rotation>
+          <scale>	0.509247 0.291217 0.509259	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.26677	</clipAngle>
+          <anchorPosition>	-1.42781 0.567257 -0.920387	</anchorPosition>
+          <anchorDirection>	-0.853888 0.513021 0.0876632	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35046	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A66_M103_3Dst_HW20	</compatibleModels>
+          <position>	1.4158 2.19891 -0.342208	</position>
+          <rotation>	1.03111 1.53589 -3.08382	</rotation>
+          <scale>	0.509246 0.291217 0.509259	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.26677	</clipAngle>
+          <anchorPosition>	1.42784 0.567234 -0.920388	</anchorPosition>
+          <anchorDirection>	0.853902 0.513009 0.0875922	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35047	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A66_M103_3Dst_HW20	</compatibleModels>
+          <position>	0.122274 2.69335 -2.6459	</position>
+          <rotation>	2.40231 -0.000016 -0.000018	</rotation>
+          <scale>	0.307084 0.353221 0.307096	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.0750646	</clipAngle>
+          <anchorPosition>	0.122274 1.0927 -3.26019	</anchorPosition>
+          <anchorDirection>	-0.000007 0.738952 -0.673758	</anchorDirection>
         </slot>
       </customizationSlots>
       <camouflage>

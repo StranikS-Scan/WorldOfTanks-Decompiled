@@ -11,7 +11,7 @@ from gui.shared.tooltips import TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData
 from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
-_TOOLTIP_MIN_WIDTH = 412
+_TOOLTIP_MIN_WIDTH = 442
 _AWARD_STEP = 63
 _AWARDS_RIGHT_PADDING = 25
 

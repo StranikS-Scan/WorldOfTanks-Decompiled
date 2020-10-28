@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/event_progression.py
 from CurrentVehicle import g_currentVehicle
-from constants import IS_CHINA
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.impl import backport
 from gui.impl.backport import getTillTimeStringByRClass as getTimeStr
@@ -97,7 +96,7 @@ class EventProgressionQuestsTooltipData(BlocksTooltipData):
             return text_styles.concatStylesWithSpace(icon, description)
         else:
             getDate = lambda c: c.endDate
-            messageID = _R_EPIC_BATTLE.timeLeft_cn if IS_CHINA else _R_EPIC_BATTLE.timeLeft
+            messageID = _R_EPIC_BATTLE.timeLeft
             icon = icons.inProgress(vspace=-3)
             textStyle = text_styles.main
             valueStyle = text_styles.stats

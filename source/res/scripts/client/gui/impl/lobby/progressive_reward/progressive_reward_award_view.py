@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/impl/lobby/progressive_reward/progressive_reward_award_view.py
 import logging
 from frameworks.wulf import ViewSettings
-from frameworks.wulf import WindowFlags
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl.auxiliary.rewards_helper import getRewardTooltipContent, getRewardRendererModelPresenter, BLUEPRINTS_CONGRAT_TYPES, fillStepsModel, getLastCongratsIndex
 from gui.impl.gen import R
@@ -11,7 +10,7 @@ from gui.impl.gen.view_models.views.loot_box_view.loot_congrats_types import Loo
 from gui.impl.gen.view_models.views.lobby.blueprints.blueprint_screen_tooltips import BlueprintScreenTooltips
 from gui.impl.lobby.progressive_reward.progressive_award_sounds import setSoundState, ProgressiveRewardSoundEvents
 from gui.impl.pub import ViewImpl
-from gui.impl.pub.lobby_window import LobbyWindow
+from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.impl.backport import createTooltipData, BackportTooltipWindow, TooltipData
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -157,12 +156,11 @@ class ProgressiveRewardAwardView(ViewImpl):
         return self.__specialRewardType == LootCongratsTypes.INIT_CONGRAT_TYPE_EPIC_REWARDS
 
 
-class ProgressiveRewardAwardWindow(LobbyWindow):
+class ProgressiveRewardAwardWindow(LobbyNotificationWindow):
     __slots__ = ()
 
     def __init__(self, bonuses, specialRewardType, currentStep):
-        super(ProgressiveRewardAwardWindow, self).__init__(content=ProgressiveRewardAwardView(R.views.lobby.progressive_reward.progressive_reward_award.ProgressiveRewardAward(), bonuses, specialRewardType, currentStep), wndFlags=WindowFlags.OVERLAY, decorator=None)
-        return
+        super(ProgressiveRewardAwardWindow, self).__init__(content=ProgressiveRewardAwardView(R.views.lobby.progressive_reward.progressive_reward_award.ProgressiveRewardAward(), bonuses, specialRewardType, currentStep))
 
 
 def _getVehicleCD(value):

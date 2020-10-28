@@ -10,7 +10,7 @@ from svarog_script.auto_properties import AutoProperty
 from svarog_script.py_component import Component
 from vehicle_systems import model_assembler
 from vehicle_systems.tankStructure import getPartModelsFromDesc, TankPartNames, ModelsSetParams
-from vehicle_systems.stricted_loading import loadingPriority
+from vehicle_systems.stricted_loading import loadingPriority, makeCallbackWeak
 from constants import IS_EDITOR
 
 class CrashedTrackController(Component):
@@ -94,7 +94,7 @@ class CrashedTrackController(Component):
 
     def __loadModel(self, trackAssembler):
         if not IS_EDITOR:
-            BigWorld.loadResourceListBG((trackAssembler,), self.__onModelLoaded, loadingPriority(self.__entity.id))
+            BigWorld.loadResourceListBG((trackAssembler,), makeCallbackWeak(self.__onModelLoaded), loadingPriority(self.__entity.id))
             self.__loading = True
         else:
             self.__loading = True

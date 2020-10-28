@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/battle_royale/commander_cmp.py
-from frameworks.wulf import ViewFlags
+from frameworks.wulf import ViewFlags, ViewSettings
 from CurrentVehicle import g_currentVehicle
 from gui.impl.backport.backport_tooltip import createTooltipData, BackportTooltipWindow
 from gui.impl.gen import R
@@ -18,15 +18,18 @@ _R_SKILLS_ICONS = R.images.gui.maps.icons.tankmen.skills.big
 class CommanderComponent(InjectComponentAdaptor):
 
     def _makeInjectView(self):
-        return CommanderView()
+        return CommanderView(R.views.lobby.battleRoyale.commander_cmp.CommanderCmp())
 
 
 class CommanderView(ViewImpl):
     _RU_REALM_TAG = 'cis'
     __brControl = dependency.descriptor(IBattleRoyaleController)
 
-    def __init__(self, *args, **kwargs):
-        super(CommanderView, self).__init__(R.views.lobby.battleRoyale.commander_cmp.CommanderCmp(), ViewFlags.COMPONENT, CommanderCmpViewModel, *args, **kwargs)
+    def __init__(self, viewKey, viewModelClazz=CommanderCmpViewModel):
+        settings = ViewSettings(viewKey)
+        settings.flags = ViewFlags.COMPONENT
+        settings.model = viewModelClazz()
+        super(CommanderView, self).__init__(settings)
 
     @property
     def viewModel(self):

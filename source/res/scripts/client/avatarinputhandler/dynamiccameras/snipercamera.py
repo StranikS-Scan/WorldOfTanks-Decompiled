@@ -49,7 +49,7 @@ class SniperCamera(CameraWithSettings, CallbackDelayer):
         self.__noiseOscillator = None
         self.__dynamicCfg = CameraDynamicConfig()
         self.__accelerationSmoother = None
-        self._readCfg(dataSec)
+        self._readConfigs(dataSec)
         if binoculars is None:
             return
         else:
@@ -69,13 +69,14 @@ class SniperCamera(CameraWithSettings, CallbackDelayer):
                 BattleReplay.g_replayCtrl.setDataCallback(CallbackDataNames.APPLY_ZOOM, self.__applySerializedZoom)
             return
 
+    @staticmethod
+    def _getConfigsKey():
+        return SniperCamera.__name__
+
     def _handleSettingsChange(self, diff):
         if 'increasedZoom' in diff:
             self._cfg['increasedZoom'] = diff['increasedZoom']
-            if not self._cfg['increasedZoom']:
-                self._cfg['zoom'] = self.__zoom = self._cfg['zooms'][:3][-1]
-                if self.camera is BigWorld.camera():
-                    self.delayCallback(0.0, self.__applyZoom, self._cfg['zoom'])
+            self.__updateZoom()
         if ('fov' in diff or 'dynamicFov' in diff) and self.camera is BigWorld.camera():
             self.delayCallback(0.01, self.__applyZoom, self._cfg['zoom'])
 
@@ -220,6 +221,13 @@ class SniperCamera(CameraWithSettings, CallbackDelayer):
         if BattleReplay.g_replayCtrl.isPlaying:
             if BattleReplay.g_replayCtrl.isControllingCamera:
                 self.__applyZoom(zoomFactor)
+
+    def __updateZoom(self):
+        cfg = self._cfg
+        zooms = self.__getZooms()
+        self.__zoom = cfg['zoom'] = math_utils.clamp(zooms[0], zooms[-1], self.__zoom)
+        if self.camera is BigWorld.camera():
+            self.delayCallback(0.0, self.__applyZoom, self.__zoom)
 
     def __applyZoom(self, zoomFactor):
         self.__zoomFactor = zoomFactor
@@ -373,46 +381,12 @@ class SniperCamera(CameraWithSettings, CallbackDelayer):
         import ResMgr
         ResMgr.purge('gui/avatar_input_handler.xml')
         cameraSec = ResMgr.openSection('gui/avatar_input_handler.xml/sniperMode/camera/')
-        self._readCfg(cameraSec)
+        self._reloadConfigs(cameraSec)
 
-    def _readCfg(self, dataSec):
+    def _readConfigs(self, dataSec):
         if not dataSec:
             LOG_WARNING('Invalid section <sniperMode/camera> in avatar_input_handler.xml')
-        self._baseCfg = dict()
-        bcfg = self._baseCfg
-        bcfg['keySensitivity'] = readFloat(dataSec, 'keySensitivity', 0, 10, 0.005)
-        bcfg['sensitivity'] = readFloat(dataSec, 'sensitivity', 0, 10, 0.005)
-        bcfg['scrollSensitivity'] = readFloat(dataSec, 'scrollSensitivity', 0, 10, 0.005)
-        zooms = dataSec.readString('zooms', '2 4 8 16 25')
-        bcfg['zooms'] = [ float(x) for x in zooms.split() ]
-        ds = Settings.g_instance.userPrefs[Settings.KEY_CONTROL_MODE]
-        if ds is not None:
-            ds = ds['sniperMode/camera']
-        self._userCfg = dict()
-        ucfg = self._userCfg
-        ucfg['horzInvert'] = False
-        ucfg['vertInvert'] = False
-        ucfg['increasedZoom'] = False
-        ucfg['sniperModeByShift'] = False
-        maxZoom = bcfg['zooms'][-1] if ucfg['increasedZoom'] else bcfg['zooms'][:3][-1]
-        ucfg['zoom'] = readFloat(ds, 'zoom', 0.0, maxZoom, bcfg['zooms'][0])
-        ucfg['keySensitivity'] = readFloat(ds, 'keySensitivity', 0.0, 10.0, 1.0)
-        ucfg['sensitivity'] = readFloat(ds, 'sensitivity', 0.0, 10.0, 1.0)
-        ucfg['scrollSensitivity'] = readFloat(ds, 'scrollSensitivity', 0.0, 10.0, 1.0)
-        self._cfg = dict()
-        cfg = self._cfg
-        cfg['keySensitivity'] = bcfg['keySensitivity']
-        cfg['sensitivity'] = bcfg['sensitivity']
-        cfg['scrollSensitivity'] = bcfg['scrollSensitivity']
-        cfg['zooms'] = bcfg['zooms']
-        cfg['keySensitivity'] *= ucfg['keySensitivity']
-        cfg['sensitivity'] *= ucfg['sensitivity']
-        cfg['scrollSensitivity'] *= ucfg['scrollSensitivity']
-        cfg['horzInvert'] = ucfg['horzInvert']
-        cfg['vertInvert'] = ucfg['vertInvert']
-        cfg['zoom'] = ucfg['zoom']
-        cfg['increasedZoom'] = ucfg['increasedZoom']
-        cfg['sniperModeByShift'] = ucfg['sniperModeByShift']
+        super(SniperCamera, self)._readConfigs(dataSec)
         dynamicsSection = dataSec['dynamics']
         self.__impulseOscillator = createOscillatorFromSection(dynamicsSection['impulseOscillator'])
         self.__movementOscillator = createOscillatorFromSection(dynamicsSection['movementOscillator'])
@@ -432,7 +406,47 @@ class SniperCamera(CameraWithSettings, CallbackDelayer):
         accelerationFilter = math_utils.RangeFilter(self.__dynamicCfg['accelerationThreshold'], self.__dynamicCfg['accelerationMax'], 100, math_utils.SMAFilter(SniperCamera._FILTER_LENGTH))
         maxAccelerationDuration = readFloat(dynamicsSection, 'maxAccelerationDuration', 0.0, 10000.0, SniperCamera._DEFAULT_MAX_ACCELERATION_DURATION)
         self.__accelerationSmoother = AccelerationSmoother(accelerationFilter, maxAccelerationDuration)
+
+    def _readBaseCfg(self, dataSec):
+        bcfg = self._baseCfg
+        bcfg['keySensitivity'] = readFloat(dataSec, 'keySensitivity', 0, 10, 0.005)
+        bcfg['sensitivity'] = readFloat(dataSec, 'sensitivity', 0, 10, 0.005)
+        bcfg['scrollSensitivity'] = readFloat(dataSec, 'scrollSensitivity', 0, 10, 0.005)
+        zooms = dataSec.readString('zooms', '2 4 8 16 25')
+        bcfg['zooms'] = [ float(x) for x in zooms.split() ]
+
+    def _readUserCfg(self):
+        bcfg = self._baseCfg
+        ucfg = self._userCfg
+        dataSec = Settings.g_instance.userPrefs[Settings.KEY_CONTROL_MODE]
+        if dataSec is not None:
+            dataSec = dataSec['sniperMode/camera']
+        ucfg['horzInvert'] = False
+        ucfg['vertInvert'] = False
+        ucfg['increasedZoom'] = True
+        ucfg['sniperModeByShift'] = False
+        ucfg['zoom'] = readFloat(dataSec, 'zoom', bcfg['zooms'][0], bcfg['zooms'][-1], bcfg['zooms'][0])
+        ucfg['keySensitivity'] = readFloat(dataSec, 'keySensitivity', 0.0, 10.0, 1.0)
+        ucfg['sensitivity'] = readFloat(dataSec, 'sensitivity', 0.0, 10.0, 1.0)
+        ucfg['scrollSensitivity'] = readFloat(dataSec, 'scrollSensitivity', 0.0, 10.0, 1.0)
         return
+
+    def _makeCfg(self):
+        bcfg = self._baseCfg
+        ucfg = self._userCfg
+        cfg = self._cfg
+        cfg['keySensitivity'] = bcfg['keySensitivity']
+        cfg['sensitivity'] = bcfg['sensitivity']
+        cfg['scrollSensitivity'] = bcfg['scrollSensitivity']
+        cfg['zooms'] = bcfg['zooms']
+        cfg['keySensitivity'] *= ucfg['keySensitivity']
+        cfg['sensitivity'] *= ucfg['sensitivity']
+        cfg['scrollSensitivity'] *= ucfg['scrollSensitivity']
+        cfg['horzInvert'] = ucfg['horzInvert']
+        cfg['vertInvert'] = ucfg['vertInvert']
+        cfg['zoom'] = ucfg['zoom']
+        cfg['increasedZoom'] = ucfg['increasedZoom']
+        cfg['sniperModeByShift'] = ucfg['sniperModeByShift']
 
     def writeUserPreferences(self):
         ds = Settings.g_instance.userPrefs
@@ -456,5 +470,4 @@ class SniperCamera(CameraWithSettings, CallbackDelayer):
             cfg = self._cfg
             cfg['increasedZoom'] = ucfg['increasedZoom']
             cfg['sniperModeByShift'] = ucfg['sniperModeByShift']
-            if self.camera is BigWorld.camera():
-                self.delayCallback(0.0, self.__applyZoom, self._cfg['zoom'])
+            self.__updateZoom()

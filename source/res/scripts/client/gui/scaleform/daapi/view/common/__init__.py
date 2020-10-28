@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/__init__.py
+from gui.Scaleform.daapi.view.dialogs.event_afk_dialog import EventAFKDialog
+from frameworks.wulf import WindowLayer
 from gui.shared import EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ViewTypes, ScopeTemplates
+from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ScopeTemplates, ComponentSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.shared.events import ShowDialogEvent
 from helpers import dependency
@@ -22,14 +24,15 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.dialogs.bootcamp_dialogs import ExecutionChooserDialog
     from gui.Scaleform.framework.WaitingView import WaitingView
     SETTINGS_WINDOW_SCOPE = ScopeTemplates.SimpleScope(VIEW_ALIAS.SETTINGS_WINDOW, ScopeTemplates.DEFAULT_SCOPE)
-    return (ViewSettings(VIEW_ALIAS.WAITING, WaitingView, 'waiting.swf', ViewTypes.WAITING, None, ScopeTemplates.GLOBAL_SCOPE),
-     ViewSettings(VIEW_ALIAS.REPORT_BUG, ReportBugPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     GroupedViewSettings(VIEW_ALIAS.SIMPLE_DIALOG, SimpleDialog, 'simpleDialog.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True, canDrag=False),
-     GroupedViewSettings(VIEW_ALIAS.SETTINGS_WINDOW, SettingsWindow, 'settingsWindow.swf', ViewTypes.TOP_WINDOW, 'settingsWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
-     ViewSettings(VIEW_ALIAS.GAMMA_WIZARD, GammaWizardView, 'gammaWizard.swf', ViewTypes.OVERLAY, VIEW_ALIAS.GAMMA_WIZARD, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.COLOR_SETTING, ColorSettingsView, 'colorSettings.swf', ViewTypes.OVERLAY, VIEW_ALIAS.COLOR_SETTING, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.BOOTCAMP_EXECUTION_CHOOSER, ExecutionChooserDialog, 'BCDialogWindow.swf', ViewTypes.TOP_WINDOW, None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True),
-     GroupedViewSettings(VIEW_ALIAS.ACOUSTIC_POPOVER, AcousticPopover, 'acousticPopover.swf', ViewTypes.TOP_WINDOW, VIEW_ALIAS.ACOUSTIC_POPOVER, VIEW_ALIAS.ACOUSTIC_POPOVER, SETTINGS_WINDOW_SCOPE))
+    return (ViewSettings(VIEW_ALIAS.WAITING, WaitingView, 'waiting.swf', WindowLayer.WAITING, None, ScopeTemplates.GLOBAL_SCOPE),
+     ComponentSettings(VIEW_ALIAS.REPORT_BUG, ReportBugPanel, ScopeTemplates.DEFAULT_SCOPE),
+     GroupedViewSettings(VIEW_ALIAS.SIMPLE_DIALOG, SimpleDialog, 'simpleDialog.swf', WindowLayer.TOP_WINDOW, '', None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True, canDrag=False),
+     GroupedViewSettings(VIEW_ALIAS.SETTINGS_WINDOW, SettingsWindow, 'settingsWindow.swf', WindowLayer.TOP_WINDOW, 'settingsWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
+     ViewSettings(VIEW_ALIAS.GAMMA_WIZARD, GammaWizardView, 'gammaWizard.swf', WindowLayer.FULLSCREEN_WINDOW, VIEW_ALIAS.GAMMA_WIZARD, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(VIEW_ALIAS.COLOR_SETTING, ColorSettingsView, 'colorSettings.swf', WindowLayer.FULLSCREEN_WINDOW, VIEW_ALIAS.COLOR_SETTING, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(VIEW_ALIAS.BOOTCAMP_EXECUTION_CHOOSER, ExecutionChooserDialog, 'BCDialogWindow.swf', WindowLayer.TOP_WINDOW, None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True),
+     ViewSettings(VIEW_ALIAS.EVENT_AFK_DIALOG, EventAFKDialog, 'eventAFKDialog.swf', WindowLayer.TOP_WINDOW, None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True),
+     GroupedViewSettings(VIEW_ALIAS.ACOUSTIC_POPOVER, AcousticPopover, 'acousticPopover.swf', WindowLayer.TOP_WINDOW, VIEW_ALIAS.ACOUSTIC_POPOVER, VIEW_ALIAS.ACOUSTIC_POPOVER, SETTINGS_WINDOW_SCOPE))
 
 
 def getBusinessHandlers():
@@ -49,7 +52,7 @@ class CommonDialogsHandler(PackageBusinessHandler):
     bootcampCtrl = dependency.descriptor(IBootcampController)
 
     def __init__(self):
-        listeners = ((ShowDialogEvent.SHOW_SIMPLE_DLG, self.__loadSimpleDialog), (ShowDialogEvent.SHOW_EXECUTION_CHOOSER_DIALOG, self.__showBootcampExecutionChooser))
+        listeners = ((ShowDialogEvent.SHOW_SIMPLE_DLG, self.__loadSimpleDialog), (ShowDialogEvent.SHOW_EXECUTION_CHOOSER_DIALOG, self.__showBootcampExecutionChooser), (ShowDialogEvent.SHOW_EVENT_AFK_DIALOG, self.__showEventAFKDialog))
         super(CommonDialogsHandler, self).__init__(listeners, scope=EVENT_BUS_SCOPE.GLOBAL)
 
     def __loadSimpleDialog(self, event):
@@ -58,3 +61,6 @@ class CommonDialogsHandler(PackageBusinessHandler):
 
     def __showBootcampExecutionChooser(self, event):
         self.loadViewWithGenName(VIEW_ALIAS.BOOTCAMP_EXECUTION_CHOOSER, event.meta, event.handler)
+
+    def __showEventAFKDialog(self, event):
+        self.loadViewWithGenName(VIEW_ALIAS.EVENT_AFK_DIALOG, event.meta, event.handler)

@@ -3,6 +3,7 @@
 from adisp import process
 from gui.Scaleform.daapi.view.lobby.prb_windows.PrebattlesListWindow import PrebattlesListWindow
 from gui.Scaleform.daapi.view.meta.BattleSessionListMeta import BattleSessionListMeta
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
 from gui.Scaleform.managers.windows_stored_data import stored_window
@@ -27,7 +28,7 @@ class BattleSessionList(PrebattlesListWindow, BattleSessionListMeta):
     def requestToJoinTeam(self, prbID, prbType):
         item = self.__listRequester.getItem(prbID)
         if self.lobbyContext.isAnotherPeriphery(item.peripheryID):
-            self.fireEvent(events.LoadViewEvent(PREBATTLE_ALIASES.AUTO_INVITE_WINDOW_PY, ctx={'prbID': prbID}), scope=EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(events.LoadViewEvent(SFViewLoadParams(PREBATTLE_ALIASES.AUTO_INVITE_WINDOW_PY), ctx={'prbID': prbID}), scope=EVENT_BUS_SCOPE.LOBBY)
         else:
             self.__requestToJoin(prbID, prbType)
 

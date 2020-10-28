@@ -20,9 +20,12 @@ class EpicMapsController(DefaultMapsController):
         return
 
     def setViewComponents(self, *components):
-        self.__overviewMapUi = components[0]
-        self._miniMapUi = components[1]
-        self.__overviewMapUi.start()
+        if len(components) >= 2:
+            self.__overviewMapUi = components[0]
+            self._miniMapUi = components[1]
+            self.__overviewMapUi.start()
+        else:
+            self._miniMapUi = components[0]
 
     def stopControl(self):
         self._eManager.clear()

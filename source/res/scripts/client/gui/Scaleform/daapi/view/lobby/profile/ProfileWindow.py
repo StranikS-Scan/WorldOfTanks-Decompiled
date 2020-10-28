@@ -126,7 +126,7 @@ class ProfileWindow(ProfileWindowMeta, ClanListener):
         profile = self.webCtrl.getAccountProfile()
         context = CreateInviteCtx(profile.getClanDbID(), [self.__databaseID])
         result = yield self.webCtrl.sendRequest(context, allowDelay=True)
-        showClanInviteSystemMsg(self.__userName, result.isSuccess(), result.getCode())
+        showClanInviteSystemMsg(self.__userName, result.isSuccess(), result.getCode(), result.data)
         self.__updateAddToClanBtn()
         self.as_hideWaitingS()
 

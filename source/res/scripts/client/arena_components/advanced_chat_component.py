@@ -10,9 +10,10 @@ from PlayerEvents import g_playerEvents
 from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from arena_component_system.client_arena_component_system import ClientArenaComponent
 from battleground.location_point_manager import g_locationPointManager
-from chat_commands_consts import ReplyState, _COMMAND_NAME_TRANSFORM_MARKER_TYPE, BATTLE_CHAT_COMMAND_NAMES, _DEFAULT_ACTIVE_COMMAND_TIME, _DEFAULT_SPG_AREA_COMMAND_TIME, MarkerType, ONE_SHOT_COMMANDS_TO_REPLIES
+from chat_commands_consts import ReplyState, _COMMAND_NAME_TRANSFORM_MARKER_TYPE, BATTLE_CHAT_COMMAND_NAMES, _DEFAULT_ACTIVE_COMMAND_TIME, _DEFAULT_SPG_AREA_COMMAND_TIME, MarkerType, ONE_SHOT_COMMANDS_TO_REPLIES, COMMAND_RESPONDING_MAPPING
 from constants import ARENA_PERIOD, ARENA_BONUS_TYPE
 from gui.battle_control import avatar_getter
+from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from helpers import dependency, i18n, CallbackDelayer
 from messenger import MessengerEntry
 from messenger.m_constants import MESSENGER_COMMAND_TYPE, USER_ACTION_ID
@@ -115,7 +116,10 @@ class AdvancedChatComponent(ClientArenaComponent):
                     commandName = _ACTIONS.battleChatCommandFromActionID(commandID).name
                     if commandName not in BATTLE_CHAT_COMMANDS_BY_NAMES:
                         continue
-                    return (ReplyState.CAN_CONFIRM, commandName)
+                    if commandName in ONE_SHOT_COMMANDS_TO_REPLIES.keys():
+                        return (ReplyState.CAN_CONFIRM, commandName)
+                    if commandName in COMMAND_RESPONDING_MAPPING.keys():
+                        return (ReplyState.CAN_RESPOND, commandName)
 
         return (ReplyState.NO_REPLY, None)
 
@@ -153,6 +157,9 @@ class AdvancedChatComponent(ClientArenaComponent):
         g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
         g_playerEvents.onAvatarBecomePlayer += self.__onAvatarBecomePlayer
         g_playerEvents.onAvatarBecomeNonPlayer += self.__onAvatarBecomeNonPlayer
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
         return
 
     def __addEpicBattleEventListeners(self):
@@ -173,6 +180,9 @@ class AdvancedChatComponent(ClientArenaComponent):
         g_playerEvents.onArenaPeriodChange -= self.__onArenaPeriodChange
         g_playerEvents.onAvatarBecomePlayer -= self.__onAvatarBecomePlayer
         g_playerEvents.onAvatarBecomeNonPlayer -= self.__onAvatarBecomeNonPlayer
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
         componentSystem = self._componentSystem()
         if componentSystem is not None:
             arena = componentSystem.arena()
@@ -199,6 +209,10 @@ class AdvancedChatComponent(ClientArenaComponent):
             if destructibleComponent is not None:
                 destructibleComponent.onDestructibleEntityStateChanged -= self.__onDestructibleEntityStateChanged
             return
+
+    def __onVehicleStateUpdated(self, state, value):
+        if state == VEHICLE_VIEW_STATE.SWITCHING and avatar_getter.isObserver():
+            self.__removeActiveCommands()
 
     def __onArenaPeriodChange(self, period, endTime, *_):
         if period == ARENA_PERIOD.PREBATTLE:
@@ -356,12 +370,10 @@ class AdvancedChatComponent(ClientArenaComponent):
             feedbackCtrl.onVehicleMarkerRemoved += self.__onVehicleMarkerRemoved
         if self.settingsCore:
             self.settingsCore.onSettingsChanged += self.__onSettingsChanged
-
-    def __onAvatarReady(self):
-        arena = self.sessionProvider.arenaVisitor.getArenaSubscription()
-        if arena.period == ARENA_PERIOD.PREBATTLE:
-            self.__addPrebattleWaypoints(arena.periodEndTime - BigWorld.serverTime())
-        g_playerEvents.onAvatarReady -= self.__onAvatarReady
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+        return
 
     def __onAvatarBecomeNonPlayer(self):
         feedbackCtrl = self.sessionProvider.shared.feedback
@@ -369,6 +381,16 @@ class AdvancedChatComponent(ClientArenaComponent):
             feedbackCtrl.onVehicleMarkerRemoved -= self.__onVehicleMarkerRemoved
         if self.settingsCore:
             self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+        return
+
+    def __onAvatarReady(self):
+        arena = self.sessionProvider.arenaVisitor.getArenaSubscription()
+        if arena.period == ARENA_PERIOD.PREBATTLE:
+            self.__addPrebattleWaypoints(arena.periodEndTime - BigWorld.serverTime())
+        g_playerEvents.onAvatarReady -= self.__onAvatarReady
 
     def __onVehicleMarkerRemoved(self, vehicleID):
         if self.__markerInFocus is None or not self.sessionProvider.shared.chatCommands:

@@ -92,8 +92,8 @@ class View(PyObjectEntity):
         return self.proxy.uniqueID if self.proxy is not None else 0
 
     @property
-    def viewType(self):
-        return ViewFlags.getViewType(self.proxy.viewFlags) if self.proxy is not None else ''
+    def layer(self):
+        return ViewFlags.getViewType(self.proxy.viewFlags) if self.proxy is not None else 0
 
     @property
     def viewFlags(self):

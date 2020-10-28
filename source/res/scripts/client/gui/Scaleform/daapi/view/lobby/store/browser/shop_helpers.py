@@ -98,8 +98,16 @@ def getTradeInVehiclesUrl():
     return _getUrl('tradeIn')
 
 
+def getPersonalTradeInVehiclesUrl():
+    return _getUrl('trade_in_personal')
+
+
 def getTradeOffOverlayUrl():
     return _getUrl('tradeOffOverlay')
+
+
+def getPersonalTradeOffOverlayUrl():
+    return _getUrl('personalTradeOffOverlay')
 
 
 def getPremiumVehiclesUrl():
@@ -108,7 +116,3 @@ def getPremiumVehiclesUrl():
 
 def getBuyCollectibleVehiclesUrl():
     return _getUrl('buyCollectibleVehicle')
-
-
-def getBuyWtLootBoxesUrl():
-    return _getUrl('buyWtLootBoxes')

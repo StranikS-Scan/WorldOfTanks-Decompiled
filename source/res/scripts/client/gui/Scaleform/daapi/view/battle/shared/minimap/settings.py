@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/minimap/settings.py
 from account_helpers.settings_core.options import MinimapVehModelsSetting
-from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
+from gui.Scaleform.genConsts.LAYER_NAMES import LAYER_NAMES
 from shared_utils import BitmaskHelper
-MINIMAP_COMPONENT_PATH = '_level0.root.{}.main.minimap.entriesContainer'.format(APP_CONTAINERS_NAMES.VIEWS)
+MINIMAP_COMPONENT_PATH = '_level0.root.{}.main.minimap.entriesContainer'.format(LAYER_NAMES.VIEWS)
 MINIMAP_MIN_SIZE_INDEX = 0
 MINIMAP_MAX_SIZE_INDEX = 5
 MINIMAP_WAS_SPOTTED_RESET_DELAY = 5.0
@@ -65,11 +65,6 @@ class ENTRY_SYMBOL_NAME(object):
     EPIC_DEPLOY_HQ_ENEMY = 'HeadquarterEntryDeploymentEnemy'
     RADAR_ANIM = 'RadarUI'
     DISCOVERED_ITEM_MARKER = 'net.wg.gui.battle.views.minimap.components.entries.battleRoyale.DiscoveredItemMarker'
-    WT_BOT_NEXT_SPAWN_ENTRY = 'WTBotNextSpawnFlashEntry'
-    WT_ALLY_BOT_NEXT_SPAWN_ENTRY = 'WTAllyBotNextSpawnFlashEntry'
-    WT_ALLY_WAVE_SPAWN = 'WTAllyWaveSpawnMinimapEntry'
-    WT_ENEMY_WAVE_SPAWN = 'WTEnemyWaveSpawnMinimapEntry'
-    WT_ENERGY_ENTRY = 'WTEnergyMinimapEntry'
 
 
 class TRANSFORM_FLAG(object):

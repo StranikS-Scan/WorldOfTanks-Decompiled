@@ -14,7 +14,6 @@ class ExtensionsManager(object):
             if 'extension.xml' in files:
                 extension = self.__readExtension(root)
                 self.__extensions[extension.name] = extension
-                print extension
 
     def __readExtension(self, root):
         section = ResMgr.openSection(root + '/extension.xml')

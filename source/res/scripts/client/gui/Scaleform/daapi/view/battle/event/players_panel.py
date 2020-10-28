@@ -1,302 +1,197 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/event/players_panel.py
-from constants import ARENA_PERIOD, IGR_TYPE
-from gui.Scaleform.settings import ICONS_SIZES
-from gui.battle_control.arena_info import team_overrides
-from gui.battle_control.arena_info.settings import VEHICLE_STATUS
-from gui.battle_control.controllers.team_health_bar_ctrl import ITeamHealthBarListener
-from helpers import dependency
-from messenger.m_constants import UserEntityScope, USER_TAG
-from messenger.storage import storage_getter
-from skeletons.gui.battle_session import IBattleSessionProvider
+from constants import ARENA_PERIOD
 from gui.battle_control import avatar_getter
-from gui.battle_control.arena_info.interfaces import IBattleFieldController
-from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE as _SCOPE, INVALIDATE_OP
+from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
+from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE as _SCOPE
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
-from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.Scaleform.daapi.view.meta.EventPlayersPanelMeta import EventPlayersPanelMeta
-from gui.Scaleform.genConsts.EVENT_CONSTS import EVENT_CONSTS
-from gui.shared.badges import buildBadge
-from gui.shared.gui_items.Vehicle import VEHICLE_EVENT_TYPE
 from PlayerEvents import g_playerEvents
+from game_event_getter import GameEventGetterMixin
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.account_helpers.settings_core import ISettingsCore
+from gui.Scaleform.genConsts.BATTLE_MINIMAP_CONSTS import BATTLE_MINIMAP_CONSTS
+from arena_components.advanced_chat_component import TARGET_CHAT_CMD_FLAG, EMPTY_CHAT_CMD_FLAG, EMPTY_STATE
+from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
+from gui.Scaleform.daapi.view.battle.event.markers import EventBasePlayerPanelMarker
+from gui.Scaleform.daapi.view.battle.event.components import EventChatCommandTargetUpdateComponent
 
-class EventPlayersPanel(EventPlayersPanelMeta, IBattleFieldController, ITeamHealthBarListener):
+class EventPlayersPanel(EventPlayersPanelMeta, IArenaVehiclesController, GameEventGetterMixin, EventChatCommandTargetUpdateComponent):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    MAX_HUNTER_LIVES = 3
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(EventPlayersPanel, self).__init__()
-        self._battleCtx = None
-        self._arenaVisitor = None
-        self.__personalInfo = None
-        self.__playerFormatter = None
-        self.__bossVehID = None
-        self.__reusable = {}
+        GameEventGetterMixin.__init__(self)
+        self._markers = {}
+        self._chatCommands = {}
+        self.__isEnabled = True
         self.__arenaDP = self.sessionProvider.getArenaDP()
-        return
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.GUI
 
-    def startControl(self, battleCtx, arenaVisitor):
-        self.__personalInfo = team_overrides.PersonalInfo()
-        self._battleCtx = battleCtx
-        self._arenaVisitor = arenaVisitor
-        self.__playerFormatter = self._battleCtx.createPlayerFullNameFormatter(showVehShortName=False)
-
-    def stopControl(self):
-        self._battleCtx = None
-        self._arenaVisitor = None
-        self.__personalInfo = None
-        self.__playerFormatter = None
-        self.__bossVehID = None
-        return
-
     def getCtrlScope(self):
-        return _SCOPE.VEHICLES | _SCOPE.INVITATIONS
+        return _SCOPE.VEHICLES
 
-    def acceptSquad(self, sessionID):
-        self.sessionProvider.invitations.accept(sessionID)
-
-    def addToSquad(self, sessionID):
-        self.sessionProvider.invitations.send(sessionID)
-
-    def invalidateVehiclesInfo(self, arenaDP):
-        self.__updatePersonalPrebattleID(arenaDP)
-        self.__updateAllTeammates()
+    def invalidateVehiclesInfo(self, _):
+        self.__updtateAllTeammates()
 
     def invalidateArenaInfo(self):
-        self.__updateAllTeammates()
-
-    def invalidateVehicleStatus(self, flags, vInfo, arenaDP):
-        self.__updateAllTeammates()
+        self.invalidateVehiclesInfo(self.sessionProvider.getArenaDP())
 
     def addVehicleInfo(self, vInfo, _):
         self.__updateTeammate(vInfo)
 
     def updateVehiclesInfo(self, updated, arenaDP):
-        shared = INVALIDATE_OP.NONE
-        for f, _ in updated:
-            shared |= f
-
-        if shared & INVALIDATE_OP.PREBATTLE_CHANGED > 0:
-            self.__updatePersonalPrebattleID(arenaDP)
         for _, vInfo in updated:
             self.__updateTeammate(vInfo)
 
-    def updateVehiclesStats(self, updated, arenaDP):
-        for _, vStatsVO in updated:
-            vInfoVO = self.__arenaDP.getVehicleInfo(vStatsVO.vehicleID)
-            self.__updateTeammate(vInfoVO)
-
-    def updateTeamHealthPercent(self, allyPercentage, enemyPercentage):
-        if self.__bossVehID is not None:
-            vInfo = self.__arenaDP.getVehicleInfo(self.__bossVehID)
-            isEnemy = self.__arenaDP.isEnemyTeam(vInfo.team)
-            self.as_setPlayerPanelHpS(self.__bossVehID, enemyPercentage if isEnemy else allyPercentage)
-        return
-
-    def invalidatePlayerStatus(self, flags, vInfoVO, arenaDP):
-        self.__updateTeammate(vInfoVO)
-
-    def invalidateVehiclesStats(self, arenaDP):
-        self.__updateAllTeammates()
-
-    def invalidateUsersTags(self):
-        self.__updateAllTeammates()
-
-    def invalidateInvitationsStatuses(self, vInfoVOs, _):
-        for vInfoVO in vInfoVOs:
-            self.__updateTeammate(vInfoVO)
-
-    def invalidateUserTags(self, user):
-        vehicleID = self.__arenaDP.getVehIDBySessionID(user.getID())
-        self.__updateTeammate(self.__arenaDP.getVehicleInfo(vehicleID))
-
     def _populate(self):
         super(EventPlayersPanel, self)._populate()
-        self.sessionProvider.addArenaCtrl(self)
+        self.__isEnabled = bool(self.settingsCore.getSetting(BattleCommStorageKeys.SHOW_COM_IN_PLAYER_LIST))
+        EventChatCommandTargetUpdateComponent.start(self)
+        if self.teammateVehicleHealth is not None:
+            self.teammateVehicleHealth.onTeammateVehicleHealthUpdate += self.__onTeammateVehicleHealthUpdate
+        if self.souls is not None:
+            self.souls.onSoulsChanged += self.__onSoulsChanged
+        if self.soulCollector is not None:
+            self.soulCollector.onSoulsChanged += self.__onCollectorSoulsChanged
+        self.__onCollectorSoulsChanged()
         g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
-        vehicleCtrl = self.sessionProvider.shared.vehicleState
-        if vehicleCtrl is not None:
-            vehicleCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
-        respawnCtrl = self.sessionProvider.dynamic.respawn
-        if respawnCtrl is not None:
-            respawnCtrl.onTeammatesRespawnLivesUpdated += self.__onTeammatesRespawnLivesUpdated
-        self.__updateAllTeammates()
+        battleGoalsCtrl = self.sessionProvider.dynamic.battleGoals
+        if battleGoalsCtrl is not None:
+            battleGoalsCtrl.events.onGoalChanged += self.__onGoalChanged
+            self.as_setCollectorGoalS(int(battleGoalsCtrl.currentGoal))
+        self.settingsCore.onSettingsChanged += self.__onSettingsChange
+        self.environmentData.onEnvironmentEventIDUpdate += self.__onEnvironmentEventIDUpdate
+        self.__updtateAllTeammates()
         return
 
     def _dispose(self):
+        if self.teammateVehicleHealth is not None:
+            self.teammateVehicleHealth.onTeammateVehicleHealthUpdate -= self.__onTeammateVehicleHealthUpdate
+        if self.souls is not None:
+            self.souls.onSoulsChanged -= self.__onSoulsChanged
+        if self.soulCollector is not None:
+            self.soulCollector.onSoulsChanged -= self.__onCollectorSoulsChanged
         g_playerEvents.onArenaPeriodChange -= self.__onArenaPeriodChange
-        vehicleCtrl = self.sessionProvider.shared.vehicleState
-        if vehicleCtrl is not None:
-            vehicleCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
-        respawnCtrl = self.sessionProvider.dynamic.respawn
-        if respawnCtrl is not None:
-            respawnCtrl.onTeammatesRespawnLivesUpdated -= self.__onTeammatesRespawnLivesUpdated
-        self.sessionProvider.removeArenaCtrl(self)
-        self.__clearTeamOverrides()
+        battleGoalsCtrl = self.sessionProvider.dynamic.battleGoals
+        if battleGoalsCtrl is not None:
+            battleGoalsCtrl.events.onGoalChanged -= self.__onGoalChanged
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChange
+        self.environmentData.onEnvironmentEventIDUpdate -= self.__onEnvironmentEventIDUpdate
+        EventChatCommandTargetUpdateComponent.stop(self)
+        self._markers.clear()
+        self._chatCommands.clear()
         super(EventPlayersPanel, self)._dispose()
         return
 
-    def __onVehicleStateUpdated(self, state, value):
-        if state == VEHICLE_VIEW_STATE.PLAYER_INFO:
-            arenaDP = self._battleCtx.getArenaDP()
-            previousID = self.__personalInfo.changeSelected(value)
-            self.invalidatePlayerStatus(0, arenaDP.getVehicleInfo(previousID), arenaDP)
-            if value != previousID:
-                self.invalidatePlayerStatus(0, arenaDP.getVehicleInfo(value), arenaDP)
+    def _setChatCommand(self, vehicleID, chatCommandName, chatCommandFlags):
+        if not self.__isEnabled:
+            return
+        self.as_setChatCommandS(vehicleID, chatCommandName, chatCommandFlags)
 
-    def __onTeammatesRespawnLivesUpdated(self, lives):
-        for vehId, vehLives in lives.iteritems():
-            self.as_setPlayerLivesS(vehId, vehLives)
+    def _updateTriggeredChatCommands(self, updateList):
+        if not self.__isEnabled:
+            return
+        self.as_updateTriggeredChatCommandsS(updateList)
 
     def __onArenaPeriodChange(self, period, periodEndTime, periodLength, periodAdditionalInfo):
         if period == ARENA_PERIOD.BATTLE:
-            self.__updateAllTeammates()
+            self.__updtateAllTeammates()
 
-    def __updateAllTeammates(self):
-        leftTeam = []
-        leftDeads = []
-        rightTeam = []
-        rightDeads = []
+    def __updtateAllTeammates(self):
         for vInfo in self.__arenaDP.getVehiclesInfoIterator():
-            playerInfo = self.__makePlayerInfo(vInfo)
-            if playerInfo is not None:
-                if playerInfo['isEnemy']:
-                    if playerInfo['countLives'] > 0:
-                        rightTeam.append(playerInfo)
-                    else:
-                        rightDeads.append(playerInfo)
-                elif playerInfo['countLives'] > 0:
-                    leftTeam.append(playerInfo)
-                else:
-                    leftDeads.append(playerInfo)
-
-        leftTeam.extend(leftDeads)
-        rightTeam.extend(rightDeads)
-        self.as_setPlayersPanelDataS({'leftTeam': leftTeam,
-         'rightTeam': rightTeam})
-        return
+            self.__updateTeammate(vInfo)
 
     def __updateTeammate(self, vInfo):
-        playerInfo = self.__makePlayerInfo(vInfo)
-        if playerInfo is not None:
-            self.as_setPlayerPanelInfoS(playerInfo)
-        return
-
-    def __makePlayerInfo(self, vInfo):
-        if not {'event_boss', 'event_hunter'} & vInfo.vehicleType.tags:
+        if self.teammateVehicleHealth is None:
             return
         else:
-            playerVehicleID = avatar_getter.getPlayerVehicleID()
-            playerSquad = self.__arenaDP.getVehicleInfo(playerVehicleID).squadIndex
-            isSquad = False
-            if playerSquad > 0 and playerSquad == vInfo.squadIndex or playerSquad == 0 and vInfo.vehicleID == playerVehicleID:
-                isSquad = True
-            vStats = self.__arenaDP.getVehicleStats(vInfo.vehicleID)
-            frags = vStats.frags if vStats is not None else 0
-            countLives = self.MAX_HUNTER_LIVES
-            respawnCtrl = self.sessionProvider.dynamic.respawn
-            if respawnCtrl is not None:
-                countLives = respawnCtrl.teammatesLives.get(vInfo.vehicleID, 0)
-            isEnemy, overrides = self.__getTeamOverrides(vInfo)
-            playerVO = vInfo.player
-            sessionID = playerVO.avatarSessionID
-            isTeamKiller = playerVO.isTeamKiller or self._battleCtx.isTeamKiller(vInfo.vehicleID, sessionID) or overrides.isTeamKiller(vInfo)
-            parts = self.__getPlayerFullName(vInfo)
-            badge = buildBadge(vInfo.selectedBadge, vInfo.getBadgeExtraInfo())
-            badgeVO = badge.getBadgeVO(ICONS_SIZES.X24, {'isAtlasSource': True}, shortIconName=True) if badge else None
-            hpCurrent = 0
-            eventRole = 0
-            if VEHICLE_EVENT_TYPE.EVENT_BOSS in vInfo.vehicleType.tags:
-                eventRole |= EVENT_CONSTS.BOSS
-                if VEHICLE_EVENT_TYPE.EVENT_SPECIAL_BOSS in vInfo.vehicleType.tags:
-                    eventRole |= EVENT_CONSTS.SPECIAL_BOSS
-                self.__saveBossVehicleID(vInfo.vehicleID)
-                percentages = avatar_getter.getHealthPercentage()
-                if percentages is not None:
-                    allyPercentage = 0
-                    enemyPercentage = 0
-                    listLength = len(percentages)
-                    playerTeam = avatar_getter.getPlayerTeam()
-                    for i in range(0, listLength):
-                        if playerTeam == i + 1:
-                            allyPercentage = percentages[i]
-                        enemyPercentage += percentages[i]
+            if vInfo.player.accountDBID > 0 and vInfo.team == self.__arenaDP.getAllyTeams()[0]:
+                hpCurrent = self.teammateVehicleHealth.getTeammateHealth(vInfo.vehicleID)
+                playerVehicleID = avatar_getter.getPlayerVehicleID()
+                isSelf = vInfo.vehicleID == playerVehicleID
+                playerSquad = self.__arenaDP.getVehicleInfo(playerVehicleID).squadIndex
+                isSquad = playerSquad > 0 and playerSquad == vInfo.squadIndex or isSelf
+                badgeId = vInfo.selectedBadge
+                suffixBadgeId = vInfo.selectedSuffixBadge
+                self.as_setPlayerPanelInfoS({'vehID': vInfo.vehicleID,
+                 'name': vInfo.player.name,
+                 'typeVehicle': vInfo.vehicleType.classTag,
+                 'hpMax': vInfo.vehicleType.maxHealth,
+                 'hpCurrent': hpCurrent,
+                 'countSouls': self.__getSouls(vInfo.vehicleID),
+                 'isSelf': isSelf,
+                 'isSquad': isSquad,
+                 'badgeIcon': 'badge_{}'.format(badgeId) if badgeId else '',
+                 'suffixBadgeIcon': 'badge_{}'.format(suffixBadgeId) if suffixBadgeId else '',
+                 'suffixBadgeStripIcon': 'strip_{}'.format(suffixBadgeId) if suffixBadgeId else '',
+                 'squadIndex': vInfo.squadIndex})
+            return
 
-                    hpCurrent = enemyPercentage if isEnemy else allyPercentage
-            else:
-                eventRole |= EVENT_CONSTS.HUNTER
-            vehicleStatus = vInfo.vehicleStatus
-            if countLives > 0:
-                vehicleStatus |= VEHICLE_STATUS.IS_ALIVE
-            return {'vehID': vInfo.vehicleID,
-             'playerName': parts.playerName,
-             'playerFakeName': parts.playerFakeName,
-             'playerFullName': parts.playerFullName,
-             'playerStatus': overrides.getPlayerStatus(vInfo, isTeamKiller),
-             'clanAbbrev': playerVO.clanAbbrev,
-             'region': parts.regionCode,
-             'userTags': self.__getUserTags(sessionID, playerVO.igrType),
-             'hpCurrent': hpCurrent,
-             'isSquad': isSquad,
-             'squadIndex': vInfo.squadIndex,
-             'invitationStatus': overrides.getInvitationDeliveryStatus(vInfo),
-             'vehicleAction': overrides.getAction(vInfo),
-             'vehicleStatus': vehicleStatus,
-             'isObserver': vInfo.isObserver(),
-             'countLives': countLives,
-             'eventRole': eventRole,
-             'sessionID': sessionID,
-             'kills': frags,
-             'isPlayer': vInfo.vehicleID == playerVehicleID,
-             'isEnemy': isEnemy,
-             'badgeVO': badgeVO,
-             'suffixBadgeIcon': 'badge_{}'.format(vInfo.selectedSuffixBadge) if vInfo.selectedSuffixBadge else ''}
+    def __onTeammateVehicleHealthUpdate(self, diff):
+        for vehID, newHealth in diff.iteritems():
+            maxHealth = self.__arenaDP.getVehicleInfo(vehID).vehicleType.maxHealth
+            self.as_setPlayerPanelHpS(vehID, maxHealth, min(newHealth, maxHealth))
+            if newHealth <= 0:
+                self.as_setChatCommandS(vehID, EMPTY_STATE, EMPTY_CHAT_CMD_FLAG)
+                self.as_setPlayerDeadS(vehID)
 
-    def __getTeamOverrides(self, vo):
-        team = vo.team
-        if team in self.__reusable:
-            isEnemy, overrides = self.__reusable[team]
+    def __onSoulsChanged(self, diff):
+        for vehID, (souls, _) in diff.iteritems():
+            self.as_setPlayerPanelCountSoulsS(vehID, souls)
+
+    def __getSouls(self, vehID):
+        return self.souls.getSouls(vehID) if self.souls is not None else 0
+
+    def __onCollectorSoulsChanged(self, _=None):
+        battleGoals = self.sessionProvider.dynamic.battleGoals
+        if battleGoals:
+            souls, capacity = battleGoals.getCurrentCollectorSoulsInfo()
+            self.as_setCollectorNeedValueS(max(0, capacity - souls))
+
+    def __onGoalChanged(self, collectorID, relevantGoal):
+        if collectorID is None or relevantGoal is None:
+            return
         else:
-            isEnemy = self.__arenaDP.isEnemyTeam(team)
-            overrides = team_overrides.makeOverrides(isEnemy, team, self.__personalInfo, self._arenaVisitor, isReplayPlaying=self.sessionProvider.isReplayPlaying)
-            self.__reusable[team] = (isEnemy, overrides)
-        return (isEnemy, overrides)
+            self.as_setCollectorGoalS(int(relevantGoal))
+            self.__onCollectorSoulsChanged()
+            return
 
-    def __clearTeamOverrides(self):
-        while self.__reusable:
-            _, (_, overrides) = self.__reusable.popitem()
-            overrides.clear()
+    def _getMarkerFromTargetID(self, targetID, markerType):
+        return self._markers.get(targetID)
 
-    def __updatePersonalPrebattleID(self, arenaDP):
-        self.__personalInfo.prebattleID = arenaDP.getVehicleInfo().prebattleID
+    def _invokeMarker(self, markerID, function, *args):
+        if function == BATTLE_MINIMAP_CONSTS.SET_STATE:
+            isReply = bool(args[0] == BATTLE_MINIMAP_CONSTS.STATE_REPLY)
+            if isReply and not self.__isEnabled:
+                return
+            self.as_setChatCommandS(args[1], self._markers[markerID].getSymbol() if isReply else EMPTY_STATE, TARGET_CHAT_CMD_FLAG if isReply else EMPTY_CHAT_CMD_FLAG)
 
-    def __saveBossVehicleID(self, vehID):
-        if self.__bossVehID is None or self.__bossVehID != vehID:
-            self.__bossVehID = vehID
-        return
+    def _addCampOrControlPointMarker(self, symbol, position, ecpID):
+        minimapSymbol = EventBasePlayerPanelMarker.MARKER_SYMBOLS[symbol]
+        isVolot = minimapSymbol.startswith((EventBasePlayerPanelMarker.VOLOT_SYMBOL,))
+        marker = EventBasePlayerPanelMarker(ecpID, True, 'ally' if isVolot else 'enemy')
+        marker.setSymbol(minimapSymbol)
+        self._markers[ecpID] = marker
 
-    def __getPlayerFullName(self, vInfoVO):
-        return self.__playerFormatter.format(vInfoVO)
+    def __onSettingsChange(self, diff):
+        if BattleCommStorageKeys.SHOW_COM_IN_PLAYER_LIST in diff:
+            self.__isEnabled = bool(diff.get(BattleCommStorageKeys.SHOW_COM_IN_PLAYER_LIST, self.__isEnabled))
+            if not self.__isEnabled:
+                self.__clearChatCommandList()
 
-    @storage_getter('users')
-    def __usersStorage(self):
-        return None
+    def __onEnvironmentEventIDUpdate(self, eventEnvID):
+        if eventEnvID and self.__isEnabled:
+            self.__clearChatCommandList()
+            EventChatCommandTargetUpdateComponent._restart(self)
 
-    def __getUserTags(self, avatarSessionID, igrType):
-        contact = self.__usersStorage.getUser(avatarSessionID, scope=UserEntityScope.BATTLE)
-        if contact is not None:
-            userTags = contact.getTags()
-        else:
-            userTags = set()
-        return self.__addTagByIGRType(userTags, igrType)
-
-    @staticmethod
-    def __addTagByIGRType(userTags, igrType):
-        if igrType == IGR_TYPE.BASE:
-            userTags.add(USER_TAG.IGR_BASE)
-        elif igrType == IGR_TYPE.PREMIUM:
-            userTags.add(USER_TAG.IGR_PREMIUM)
-        return userTags
+    def __clearChatCommandList(self):
+        playerVehicleID = avatar_getter.getPlayerVehicleID()
+        self.as_setChatCommandS(playerVehicleID, EMPTY_STATE, EMPTY_CHAT_CMD_FLAG)
+        for vInfo in self.__arenaDP.getVehiclesInfoIterator():
+            if vInfo.player.accountDBID > 0 and vInfo.team == self.__arenaDP.getAllyTeams()[0]:
+                self.as_setChatCommandS(vInfo.vehicleID, EMPTY_STATE, EMPTY_CHAT_CMD_FLAG)

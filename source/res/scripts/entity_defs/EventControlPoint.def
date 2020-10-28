@@ -1,0 +1,46 @@
+<EventControlPoint.def>
+  <IsManualAoI>	true	</IsManualAoI>
+  <Parent>	TeamBase	</Parent>
+  <Properties>
+    <radius>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	25.0	</Default>
+      <Editable>	true	</Editable>
+    </radius>
+    <isActive>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isActive>
+    <ownerStopsCapturing>
+      <Type>	BOOL	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+      <Default>	0	</Default>
+      <Editable>	true	</Editable>
+    </ownerStopsCapturing>
+    <damageStopsCapturing>
+      <Type>	BOOL	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+      <Default>	1	</Default>
+      <Editable>	true	</Editable>
+    </damageStopsCapturing>
+    <filterByPlayerID>
+      <Type>	OBJECT_ID	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </filterByPlayerID>
+    <soulsPerSecond>
+      <Type>	INT32	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+      <Default>	0	</Default>
+      <Editable>	true	</Editable>
+    </soulsPerSecond>
+  </Properties>
+  <ClientMethods>
+    <onChangeState>
+      <IsReliable>	true	</IsReliable>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	STRING	</Arg>
+    </onChangeState>
+  </ClientMethods>
+</EventControlPoint.def>

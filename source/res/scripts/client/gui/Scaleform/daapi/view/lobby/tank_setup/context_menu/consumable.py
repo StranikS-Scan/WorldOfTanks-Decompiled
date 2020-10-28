@@ -52,6 +52,9 @@ class ConsumableItemContextMenu(BaseEquipmentItemContextMenu):
         super(ConsumableItemContextMenu, self)._initFlashValues(ctx)
         self._slotsCount = self._getVehicle().consumables.installed.getCapacity()
 
+    def _isVisible(self, label):
+        return False if label == CMLabel.BUY_MORE and self.isInEventMode else super(ConsumableItemContextMenu, self)._isVisible(label)
+
 
 @consumableDecorator
 class ConsumableSlotContextMenu(BaseEquipmentSlotContextMenu):
@@ -74,6 +77,9 @@ class ConsumableSlotContextMenu(BaseEquipmentSlotContextMenu):
         super(ConsumableSlotContextMenu, self)._initFlashValues(ctx)
         self._slotsCount = self._getVehicle().consumables.installed.getCapacity()
 
+    def _isVisible(self, label):
+        return False if label in (CMLabel.BUY_MORE, TankSetupCMLabel.UNLOAD) and self.isInEventMode else super(ConsumableSlotContextMenu, self)._isVisible(label)
+
 
 @consumableDecorator
 class HangarConsumableSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
@@ -87,6 +93,7 @@ class HangarConsumableSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
     @process
     def unload(self):
         copyVehicle = self._getCopyVehicle()
+        copyVehicle.consumables.setLayout(*copyVehicle.consumables.installed)
         copyVehicle.consumables.layout[self._installedSlotId] = None
         result = yield self._doPutOnAction(copyVehicle)
         if result:
@@ -99,6 +106,7 @@ class HangarConsumableSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
 
     def _putOnAction(self, onId):
         copyVehicle = self._getCopyVehicle()
+        copyVehicle.consumables.setLayout(*copyVehicle.consumables.installed)
         layout = copyVehicle.consumables.layout
         self._makePutOnAction(TankSetupConstants.CONSUMABLES, onId, copyVehicle, layout)
 
@@ -108,3 +116,6 @@ class HangarConsumableSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
         action = ActionsFactory.getAction(ActionsFactory.BUY_AND_INSTALL_CONSUMABLES, vehicle, confirmOnlyExchange=True)
         result = yield ActionsFactory.asyncDoAction(action)
         callback(result)
+
+    def _isVisible(self, label):
+        return False if label in (CMLabel.BUY_MORE, TankSetupCMLabel.UNLOAD) and self.isInEventMode else super(HangarConsumableSlotContextMenu, self)._isVisible(label)

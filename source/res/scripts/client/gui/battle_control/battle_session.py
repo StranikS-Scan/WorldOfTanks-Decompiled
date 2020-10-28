@@ -20,7 +20,6 @@ from gui.battle_control.battle_constants import VIEW_COMPONENT_RULE
 from gui.battle_control.battle_ctx import BattleContext
 from gui.battle_control.requests import AvatarRequestsController
 from gui.battle_control.view_components import createComponentsBridge
-from gui.shared.gui_items.Vehicle import VEHICLE_EVENT_TYPE
 from items.components.c11n_constants import SeasonType
 from skeletons.gui.battle_session import IBattleSessionProvider
 BattleExitResult = namedtuple('BattleExitResult', 'isDeserter playerInfo')
@@ -191,18 +190,14 @@ class BattleSessionProvider(IBattleSessionProvider):
         if not self.__isReplayPlaying and not self.__arenaVisitor.gui.isTrainingBattle():
             vInfo = self.__arenaDP.getVehicleInfo()
             vStats = self.__arenaDP.getVehicleStats()
-            if self.__arenaVisitor.hasRespawns() and VEHICLE_EVENT_TYPE.EVENT_BOSS not in vInfo.vehicleType.tags:
-                respawn = self.__dynamicRepo.respawn
-                if self.__arenaVisitor.gui.isEventBattle() and respawn is not None:
-                    isDeserter = respawn.playerLives > 0
-                else:
-                    isDeserter = not vStats.stopRespawn
+            if self.__arenaVisitor.hasRespawns():
+                isDeserter = not vStats.stopRespawn
             else:
                 isDeserter = avatar_getter.isVehicleAlive() and not avatar_getter.isVehicleOverturned()
             return BattleExitResult(isDeserter, vInfo.player)
         else:
             return BattleExitResult(False, None)
-            return
+            return None
 
     @staticmethod
     def exit():
@@ -376,6 +371,15 @@ class BattleSessionProvider(IBattleSessionProvider):
         else:
             ctrl.handleContexChatCommand(key)
             return
+
+    def updateScenarioTimer(self, waitTime, alarmTime, visible):
+        ctrl = self.__sharedRepo.vehicleState
+        if ctrl is not None:
+            ctrl.updateScenarioTimer(waitTime, alarmTime, visible)
+        return
+
+    def sendPlayerBattleLogNotification(self, messageKey, messageParams):
+        self.shared.messages.showPlayerMessageByKey(messageKey, messageParams)
 
     def __pe_onBattleResultsReceived(self, isActiveVehicle, _):
         if isActiveVehicle and not BattleReplay.g_replayCtrl.isPlaying:

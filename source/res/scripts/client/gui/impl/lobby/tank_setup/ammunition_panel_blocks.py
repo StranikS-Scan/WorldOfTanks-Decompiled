@@ -137,7 +137,6 @@ class OptDeviceBlock(BaseBlock):
         super(OptDeviceBlock, self)._updateSlotWithItem(model, idx, slotItem)
         model.setImageSource(R.images.gui.maps.icons.artefact.dyn(slotItem.descriptor.iconName)())
         model.setIsInstalled(slotItem in self._getInstalled())
-        model.setIsIncompatible(self.__isAfterConversion(slotItem))
         self._updateOverlayAspects(model, slotItem)
         self._updateSpecializations(model, slotItem, idx)
 
@@ -165,9 +164,6 @@ class OptDeviceBlock(BaseBlock):
     def _getSlotCategories(self, idx):
         return self._vehicle.optDevices.slots[idx].categories
 
-    def __isAfterConversion(self, slotItem):
-        return not slotItem.descriptor.checkCompatibilityWithVehicle(self._vehicle.descriptor)[0]
-
 
 class ShellsBlock(BaseBlock):
 
@@ -191,7 +187,7 @@ class ShellsBlock(BaseBlock):
         return self._vehicle.shells.layout
 
     def _updateSlotWithItem(self, model, idx, slotItem):
-        model.setImageSource(R.images.gui.maps.icons.shell.medium.dyn(slotItem.type)())
+        model.setImageSource(R.images.gui.maps.icons.shell.small.dyn(slotItem.descriptor.iconName)())
         model.setCount(slotItem.count)
         model.setIntCD(slotItem.intCD)
 

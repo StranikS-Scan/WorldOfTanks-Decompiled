@@ -70,6 +70,13 @@
       <undamaged>	vehicles/russian/R88_Object268/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/russian/R88_Object268/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/russian/R88_Object268/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <R88_Object268_3Dst>
+          <undamaged>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst/crash/lod0/Hull.model	</exploded>
+        </R88_Object268_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -93,9 +100,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.977817 0.557501 2.16655	</rayStart>
-        <rayEnd>	0.904833 0.394699 2.07617	</rayEnd>
-        <rayUp>	-0.623894 0.150297 -0.766921	</rayUp>
+        <rayStart>	0.959373 0.571253 2.15669	</rayStart>
+        <rayEnd>	0.886389 0.408451 2.0663	</rayEnd>
+        <rayUp>	-0.663848 0.149276 -0.732818	</rayUp>
         <size>	0.26	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
@@ -1398,6 +1405,118 @@
         <anchorPosition>	1.46659 1.07531 1.19606	</anchorPosition>
         <anchorDirection>	0.922821 0.162243 0.349397	</anchorDirection>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15095	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R88_Object268_3Dst	</compatibleModels>
+        <position>	0.956138 2.03222 2.01776	</position>
+        <rotation>	1.12323 0.731276 -3.08012	</rotation>
+        <scale>	0.745684 0.862933 0.745701	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.415464	</clipAngle>
+        <anchorPosition>	0.800189 1.00164 1.81811	</anchorPosition>
+        <anchorDirection>	0.555178 0.431955 0.710769	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15096	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R88_Object268_3Dst	</compatibleModels>
+        <position>	-0.864493 1.90444 1.70887	</position>
+        <rotation>	1.12322 -0.731309 -3.10214	</rotation>
+        <scale>	0.653703 0.2 0.653717	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.18251	</clipAngle>
+        <anchorPosition>	-0.899939 1.01949 1.74506	</anchorPosition>
+        <anchorDirection>	-0.630947 0.432445 0.644125	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15097	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R88_Object268_3Dst	</compatibleModels>
+        <position>	0.43025 2.37226 0.954181	</position>
+        <rotation>	0.16566 -0.000003 3.14158	</rotation>
+        <scale>	0.819418 0.35267 0.819444	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	4112	</showOn>
+        <clipAngle>	1.53911	</clipAngle>
+        <anchorPosition>	0.430251 1.54999 0.968723	</anchorPosition>
+        <anchorDirection>	0.000012 0.98631 0.164903	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15098	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R88_Object268_3Dst	</compatibleModels>
+        <position>	-0.102293 2.38229 -0.183436	</position>
+        <rotation>	3.11688 -0.000206709 -0.00277019	</rotation>
+        <scale>	0.484156 0.208376 0.484167	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	4112	</showOn>
+        <clipAngle>	0.916624	</clipAngle>
+        <anchorPosition>	-0.102595 1.58209 -0.186132	</anchorPosition>
+        <anchorDirection>	-0.00276508 0.999691 -0.0247107	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15099	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R88_Object268_3Dst	</compatibleModels>
+        <position>	-1.33771 1.21403 -2.93564	</position>
+        <rotation>	3.09505 -0.000001 -0.000009	</rotation>
+        <scale>	0.699772 0.28838 0.699776	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.49768	</clipAngle>
+        <anchorPosition>	-1.33771 0.342144 -2.93738	</anchorPosition>
+        <anchorDirection>	-0.000009 0.998917 -0.0465258	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15100	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R88_Object268_3Dst	</compatibleModels>
+        <position>	-1.67014 1.28779 0.85893	</position>
+        <rotation>	1.27673 -1.57057 3.13438	</rotation>
+        <scale>	0.480983 0.0955577 0.480986	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	-1.70217 0.38824 0.859178	</anchorPosition>
+        <anchorDirection>	-0.957048 0.289835 0.00743309	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15101	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R88_Object268_3Dst	</compatibleModels>
+        <position>	-1.44675 1.23083 2.64304	</position>
+        <rotation>	-0.0413921 -0.000004 3.14158	</rotation>
+        <scale>	0.482055 0.110014 0.482057	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.499513	</clipAngle>
+        <anchorPosition>	-1.44675 0.297925 2.64402	</anchorPosition>
+        <anchorDirection>	0.000010 0.999143 -0.0413802	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15102	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R88_Object268_3Dst	</compatibleModels>
+        <position>	1.44677 1.16248 2.64588	</position>
+        <rotation>	-0.041392 -0.000004 3.14158	</rotation>
+        <scale>	0.482055 0.08 0.482057	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.499513	</clipAngle>
+        <anchorPosition>	1.44677 0.309761 2.64353	</anchorPosition>
+        <anchorDirection>	0.000010 0.999143 -0.0413802	</anchorDirection>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1439,6 +1558,13 @@
         <undamaged>	vehicles/russian/R88_Object268/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R88_Object268/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R88_Object268/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <R88_Object268_3Dst>
+            <undamaged>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst/crash/lod0/Chassis.model	</exploded>
+          </R88_Object268_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -2159,6 +2285,13 @@
             <undamaged>	vehicles/russian/R88_Object268/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R88_Object268/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R88_Object268/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <R88_Object268_3Dst>
+                <undamaged>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </R88_Object268_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R88_Object268/collision/Gun_01.model	</collisionModelServer>
@@ -2243,6 +2376,13 @@
         <undamaged>	vehicles/russian/R88_Object268/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/russian/R88_Object268/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/russian/R88_Object268/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <R88_Object268_3Dst>
+            <undamaged>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </R88_Object268_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R88_Object268/collision/Turret_01.model	</collisionModelServer>

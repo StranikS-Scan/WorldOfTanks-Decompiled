@@ -73,8 +73,43 @@
             <checkpoint-not-reached>	VehicleBoughtCheckpoint	</checkpoint-not-reached>
           </condition>
         </request-exclusive-hint>
+        <effects-group>
+          <condition>
+            <checkpoint-not-reached>	VehicleBoughtCheckpoint	</checkpoint-not-reached>
+          </condition>
+          <effects>
+            <set-visible>	VehicleBuyCheckbox	  <val>	False	</val>
+            </set-visible>
+            <request-exclusive-hint>	VehicleBuyAcademy	</request-exclusive-hint>
+            <request-exclusive-hint>	VehicleBuyAccept	  <condition>
+                <active>	VehicleBuyAcademyClicked	</active>
+              </condition>
+            </request-exclusive-hint>
+          </effects>
+        </effects-group>
       </runtime-effects>
-      <gui-items></gui-items>
+      <gui-items>
+        <gui-item>	VehicleBuyAcademy	  <on-scene-effects>
+            <set-button-enabled>	VehicleBuyAmmo	  <val>	False	</val>
+            </set-button-enabled>
+            <set-button-enabled>	VehicleBuySlot	  <val>	False	</val>
+            </set-button-enabled>
+            <set-button-enabled>	VehicleBuyAccept	  <val>	False	</val>
+            </set-button-enabled>
+            <set-button-enabled>	VehicleBuyFreeCommanderBtn	  <val>	False	</val>
+            </set-button-enabled>
+            <set-button-enabled>	VehicleBuySchoolCommanderBtn	  <val>	False	</val>
+            </set-button-enabled>
+            <set-action>	VehicleBuyAcademyClick	</set-action>
+            <set-action>	VehicleBuyAcceptClick	</set-action>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <remove-action>	VehicleBuyAcademyClick	</remove-action>
+            <remove-action>	VehicleBuyAcceptClick	</remove-action>
+            <inactivate>	VehicleBuyAcademyClicked	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
     </scene>
     <scene>	Research	  <post-effects>
         <set-gui-item-criteria>	ResearchItemNodeCriteria	</set-gui-item-criteria>

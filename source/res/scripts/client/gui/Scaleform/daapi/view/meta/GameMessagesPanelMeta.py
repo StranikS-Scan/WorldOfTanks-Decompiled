@@ -15,3 +15,6 @@ class GameMessagesPanelMeta(BaseDAAPIComponent):
 
     def as_addMessageS(self, messageVO):
         return self.flashObject.as_addMessage(messageVO) if self._isDAAPIInited() else None
+
+    def as_clearMessagesS(self):
+        return self.flashObject.as_clearMessages() if self._isDAAPIInited() else None

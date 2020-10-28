@@ -1,11 +1,13 @@
 <shells.xml>
   <icons>
     <ap>	ARMOR_PIERCING.png 0 0	</ap>
-    <ap_he>	ARMOR_PIERCING_HE.png 0 0	</ap_he>
+    <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
     <ap_cr>	ARMOR_PIERCING_CR.png 0 0	</ap_cr>
+    <ap_cr_premium>	ARMOR_PIERCING_CR_PREMIUM.png 0 0	</ap_cr_premium>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
     <hc>	HOLLOW_CHARGE.png 0 0	</hc>
+    <hc_premium>	HOLLOW_CHARGE_PREMIUM.png 0 0	</hc_premium>
   </icons>
   <_13.2mm_AP>
     <id>	4	</id>
@@ -24,7 +26,7 @@
   <_13.2mm_Balle_T.P.>
     <id>	45	</id>
     <userString>	#japan_vehicles:_13.2mm_Balle_T.P.	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -54,7 +56,7 @@
   <_20mm_APCR>
     <id>	7	</id>
     <userString>	#japan_vehicles:_20mm_APCR	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	400	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -100,7 +102,7 @@
   <_37mm_FrtPrf1935>
     <id>	9	</id>
     <userString>	#japan_vehicles:_37mm_FrtPrf1935	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -132,7 +134,7 @@
   <_37mm_APHE_Ichi_Go>
     <id>	17	</id>
     <userString>	#japan_vehicles:_37mm_APHE_Ichi_Go	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -176,7 +178,7 @@
   <_37mm_APHE_Type1>
     <id>	15	</id>
     <userString>	#japan_vehicles:_37mm_APHE_Type1	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -221,7 +223,7 @@
   <_37mm_APHE_Type1_bootcamp>
     <id>	84	</id>
     <userString>	#japan_vehicles:_37mm_APHE_Type1	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -267,7 +269,7 @@
   <_37mm_AP_Type4>
     <id>	23	</id>
     <userString>	#japan_vehicles:_37mm_AP_Type4	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -311,7 +313,7 @@
   <_47mm_APHE_Type1_TK>
     <id>	20	</id>
     <userString>	#japan_vehicles:_47mm_APHE_Type1_TK	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	1600	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -355,7 +357,7 @@
   <_57mm_HEAT_Type97>
     <id>	12	</id>
     <userString>	#japan_vehicles:_57mm_HEAT_Type97	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	1200	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -400,7 +402,7 @@
   <_57mm_APHE_Type1_TK>
     <id>	29	</id>
     <userString>	#japan_vehicles:_57mm_APHE_Type1_TK	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	2000	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -444,7 +446,7 @@
   <_70mm_HEAT_Type3>
     <id>	54	</id>
     <userString>	#japan_vehicles:_70mm_HEAT_Type3	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -490,7 +492,7 @@
   <_70mm_HEAT_Type3_bootcamp>
     <id>	87	</id>
     <userString>	#japan_vehicles:_70mm_HEAT_Type3	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -537,7 +539,7 @@
   <_75mm_HEAT_Type2_185>
     <id>	26	</id>
     <userString>	#japan_vehicles:_75mm_HEAT_Type2_185	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	2400	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -582,7 +584,7 @@
   <_75mm_AP_Type_1_TK_424>
     <id>	32	</id>
     <userString>	#japan_vehicles:_75mm_AP_Type_1_TK_424	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -626,7 +628,7 @@
   <_75mm_AP_Type_1_SK_604>
     <id>	2	</id>
     <userString>	#japan_vehicles:_75mm_AP_Type_1_SK_604	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -670,7 +672,7 @@
   <_75mm_AP_Type_1_TO_604>
     <id>	35	</id>
     <userString>	#japan_vehicles:_75mm_AP_Type_1_TO_604	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	3200	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -714,7 +716,7 @@
   <_88mm_Pzgr.40>
     <id>	47	</id>
     <userString>	#japan_vehicles:_88mm_Pzgr.40	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	3200	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -758,7 +760,7 @@
   <_88mm_Edelweiss_APCR>
     <id>	81	</id>
     <userString>	#japan_vehicles:_88mm_Edelweiss_APCR	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -802,7 +804,7 @@
   <_88mm_Nameless_APCR>
     <id>	78	</id>
     <userString>	#japan_vehicles:_88mm_Nameless_APCR	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -846,7 +848,7 @@
   <_90mm_HVAP_M304>
     <id>	38	</id>
     <userString>	#japan_vehicles:_90mm_HVAP_M304	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -890,7 +892,7 @@
   <_90mm_HEAT_Type70>
     <id>	41	</id>
     <userString>	#japan_vehicles:_90mm_HEAT_Type70	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4400	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -920,7 +922,7 @@
   <_105mm_APHE_Type95_TK>
     <id>	64	</id>
     <userString>	#japan_vehicles:_105mm_APHE_Type95_TK	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	3600	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -980,7 +982,7 @@
   <_105mm_AP_Experimental_Type2_TK>
     <id>	68	</id>
     <userString>	#japan_vehicles:_105mm_AP_Experimental_Type2_TK	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	4400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -1009,7 +1011,7 @@
   <_105mm_AP_Experimental_Type2_TS>
     <id>	89	</id>
     <userString>	#japan_vehicles:_105mm_AP_Experimental_Type2_TS	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	4400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -1053,7 +1055,7 @@
   <_105mm_HEAT-T_T384E4>
     <id>	43	</id>
     <userString>	#japan_vehicles:_105mm_HEAT-T_T384E4	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -1098,7 +1100,7 @@
   <_120mm_HEAT_Type_88>
     <id>	56	</id>
     <userString>	#japan_vehicles:_120mm_HEAT_Type_88	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -1143,7 +1145,7 @@
   <_127mm_Capped_Common>
     <id>	73	</id>
     <userString>	#japan_vehicles:_127mm_Capped_Common	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -1187,7 +1189,7 @@
   <_140mm_Capped_Common_Semi_AP_Kai>
     <id>	74	</id>
     <userString>	#japan_vehicles:_140mm_Capped_Common_Semi_AP_Kai	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -1231,7 +1233,7 @@
   <_150mm_HEAT_Type3>
     <id>	67	</id>
     <userString>	#japan_vehicles:_150mm_HEAT_Type3	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -1277,7 +1279,7 @@
   <_150mm_Common_Type_0_HE_Kai>
     <id>	76	</id>
     <userString>	#japan_vehicles:_150mm_Common_Type_0_HE_Kai	</userString>
-    <icon>	he	</icon>
+    <icon>	he_premium	</icon>
     <price>	6400	</price>
     <improved>	true	</improved>
     <kind>	HIGH_EXPLOSIVE	</kind>

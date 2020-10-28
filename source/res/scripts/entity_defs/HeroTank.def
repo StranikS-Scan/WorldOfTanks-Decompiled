@@ -19,15 +19,11 @@
       <Editable>	true	</Editable>
       <Default>	0.0	</Default>
     </vehicleGunPitch>
-    <isBoss>
-      <Type>	BOOL	</Type>
+    <markerStyleId>
+      <Type>	UINT32	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
       <Editable>	true	</Editable>
-    </isBoss>
-    <isEvent>
-      <Type>	BOOL	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-      <Editable>	true	</Editable>
-    </isEvent>
+      <Default>	1	</Default>
+    </markerStyleId>
   </Properties>
 </HeroTank.def>

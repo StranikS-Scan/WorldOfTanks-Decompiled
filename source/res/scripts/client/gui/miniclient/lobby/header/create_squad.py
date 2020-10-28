@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/miniclient/lobby/header/create_squad.py
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from helpers import aop
 from gui.shared import events, g_eventBus
@@ -9,7 +10,7 @@ class _OnCreateSquadClickAspect(aop.Aspect):
 
     def atCall(self, cd):
         cd.avoid()
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.SQUAD_PROMO_WINDOW), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.SQUAD_PROMO_WINDOW)), EVENT_BUS_SCOPE.LOBBY)
 
 
 class OnCreateSquadClickPointcut(aop.Pointcut):

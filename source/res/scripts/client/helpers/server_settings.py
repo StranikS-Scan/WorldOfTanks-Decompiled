@@ -5,7 +5,7 @@ import types
 from collections import namedtuple
 import logging
 from Event import Event
-from constants import IS_TUTORIAL_ENABLED, PremiumConfigs, PREM_BONUS_TYPES, DAILY_QUESTS_CONFIG, PREMIUM_ENTITLEMENTS, ENTITLEMENT_TO_PREM_TYPE, ClansConfig, MAGNETIC_AUTO_AIM_CONFIG, Configs
+from constants import IS_TUTORIAL_ENABLED, PremiumConfigs, DAILY_QUESTS_CONFIG, ClansConfig, MAGNETIC_AUTO_AIM_CONFIG, Configs, DOG_TAGS_CONFIG
 from collector_vehicle import CollectorVehicleConsts
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from battle_pass_common import BattlePassConfig, BATTLE_PASS_CONFIG_NAME
@@ -256,11 +256,11 @@ class _BwShop(namedtuple('_BwShop', ('hostUrl', 'backendHostUrl', 'isStorageEnab
 
 _BwShop.__new__.__defaults__ = ('', '', False)
 
-class _RankedBattlesConfig(namedtuple('_RankedBattlesConfig', ('isEnabled', 'peripheryIDs', 'winnerRankChanges', 'loserRankChanges', 'minXP', 'unburnableRanks', 'unburnableStepRanks', 'minLevel', 'maxLevel', 'accRanks', 'accSteps', 'cycleFinishSeconds', 'primeTimes', 'seasons', 'cycleTimes', 'shields', 'divisions', 'bonusBattlesMultiplier', 'expectedSeasons', 'yearAwardsMarks', 'rankGroups', 'qualificationBattles', 'yearLBSize', 'leaguesBonusBattles', 'forbiddenClassTags', 'forbiddenVehTypes', 'isShopEnabled', 'isYearLBEnabled'))):
+class _RankedBattlesConfig(namedtuple('_RankedBattlesConfig', ('isEnabled', 'peripheryIDs', 'winnerRankChanges', 'loserRankChanges', 'minXP', 'unburnableRanks', 'unburnableStepRanks', 'minLevel', 'maxLevel', 'accRanks', 'accSteps', 'cycleFinishSeconds', 'primeTimes', 'seasons', 'cycleTimes', 'shields', 'divisions', 'bonusBattlesMultiplier', 'expectedSeasons', 'yearAwardsMarks', 'rankGroups', 'qualificationBattles', 'yearLBSize', 'leaguesBonusBattles', 'forbiddenClassTags', 'forbiddenVehTypes', 'isShopEnabled', 'isYearLBEnabled', 'isYearRewardEnabled'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, peripheryIDs={}, winnerRankChanges=(), loserRankChanges=(), minXP=0, unburnableRanks={}, unburnableStepRanks={}, minLevel=0, maxLevel=0, accRanks=0, accSteps=(), cycleFinishSeconds=0, primeTimes={}, seasons={}, cycleTimes=(), shields={}, divisions={}, bonusBattlesMultiplier=0, expectedSeasons=0, yearAwardsMarks=(), rankGroups=(), qualificationBattles=0, yearLBSize=0, leaguesBonusBattles=(), forbiddenClassTags=(), forbiddenVehTypes=(), isShopEnabled=False, isYearLBEnabled=False)
+        defaults = dict(isEnabled=False, peripheryIDs={}, winnerRankChanges=(), loserRankChanges=(), minXP=0, unburnableRanks={}, unburnableStepRanks={}, minLevel=0, maxLevel=0, accRanks=0, accSteps=(), cycleFinishSeconds=0, primeTimes={}, seasons={}, cycleTimes=(), shields={}, divisions={}, bonusBattlesMultiplier=0, expectedSeasons=0, yearAwardsMarks=(), rankGroups=(), qualificationBattles=0, yearLBSize=0, leaguesBonusBattles=(), forbiddenClassTags=(), forbiddenVehTypes=(), isShopEnabled=False, isYearLBEnabled=False, isYearRewardEnabled=True)
         defaults.update(kwargs)
         return super(_RankedBattlesConfig, cls).__new__(cls, **defaults)
 
@@ -290,7 +290,7 @@ _ProgressiveReward.__new__.__defaults__ = (True,
  'pr:probability',
  0)
 
-class _EventProgressionConfig(namedtuple('_EventProgressionConfig', ('isEnabled', 'isFrontLine', 'isSteelHunter', 'url', 'questPrefix', 'exchange', 'rewardVehicles', 'rewardStyles', 'rewardPointsTokenID', 'seasonPointsTokenID', 'maxRewardPoints'))):
+class _EventProgressionConfig(namedtuple('_EventProgressionConfig', ('isEnabled', 'isFrontLine', 'isSteelHunter', 'url', 'questPrefix', 'exchange', 'rewardVehicles', 'rewardPointsTokenID', 'seasonPointsTokenID', 'maxRewardPoints'))):
 
     def __new__(cls, *args, **kwargs):
         defaults = {attr:copy.deepcopy(cls.__new__.__defaults__[i]) for i, attr in enumerate(cls._fields)}
@@ -312,7 +312,6 @@ _EventProgressionConfig.__new__.__defaults__ = (False,
  '',
  '',
  {},
- [],
  [],
  '',
  '',
@@ -544,25 +543,24 @@ class _crystalRewardsConfig(namedtuple('_crystalRewardsConfig', ('limits', 'rewa
         return results
 
 
-class _BobConfig(namedtuple('_BobConfig', ('isEnabled', 'peripheryIDs', 'primeTimes', 'seasons', 'cycleTimes', 'levels', 'forbiddenClassTags', 'forbiddenVehTypes'))):
-    __slots__ = ()
+class _ReactiveCommunicationConfig(object):
+    __slots__ = ('__isEnabled', '__url')
 
-    def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, peripheryIDs={}, primeTimes={}, seasons={}, cycleTimes={}, levels=set(), forbiddenClassTags=set(), forbiddenVehTypes=set())
-        defaults.update(kwargs)
-        return super(_BobConfig, cls).__new__(cls, **defaults)
+    def __init__(self, **kwargs):
+        super(_ReactiveCommunicationConfig, self).__init__()
+        self.__isEnabled = kwargs.get('isEnabled', False)
+        self.__url = kwargs.get('url', '')
+        if self.__isEnabled and not self.__url:
+            _logger.error('Connection to web subscription service is enabled, but url is empty')
+            self.__isEnabled = False
 
-    def asDict(self):
-        return self._asdict()
+    @property
+    def isEnabled(self):
+        return self.__isEnabled
 
-    def replace(self, data):
-        allowedFields = self._fields
-        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
-        return self._replace(**dataToUpdate)
-
-    @classmethod
-    def defaults(cls):
-        return cls()
+    @property
+    def url(self):
+        return self.__url
 
 
 class ServerSettings(object):
@@ -592,6 +590,7 @@ class ServerSettings(object):
         self.__squadPremiumBonus = _SquadPremiumBonus.defaults()
         self.__battlePassConfig = BattlePassConfig({})
         self.__crystalRewardsConfig = _crystalRewardsConfig()
+        self.__reactiveCommunicationConfig = _ReactiveCommunicationConfig()
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -666,11 +665,7 @@ class ServerSettings(object):
             self.__battlePassConfig = BattlePassConfig({})
         if _crystalRewardsConfig.CONFIG_NAME in self.__serverSettings:
             self.__crystalRewardsConfig = makeTupleByDict(_crystalRewardsConfig, self.__serverSettings[_crystalRewardsConfig.CONFIG_NAME])
-        if 'bob_config' in self.__serverSettings:
-            LOG_DEBUG('bob_config', self.__serverSettings['bob_config'])
-            self.__bobSettings = makeTupleByDict(_BobConfig, self.__serverSettings['bob_config'])
-        else:
-            self.__bobSettings = _BobConfig.defaults()
+        self.__updateReactiveCommunicationConfig(self.__serverSettings)
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -696,8 +691,6 @@ class ServerSettings(object):
             self.__serverSettings['epic_config'] = serverSettingsDiff['epic_config']
         if Configs.BATTLE_ROYALE_CONFIG.value in serverSettingsDiff:
             self.__updateBattleRoyale(serverSettingsDiff)
-        if 'bob_config' in serverSettingsDiff:
-            self.__updateBob(serverSettingsDiff)
         if 'telecom_config' in serverSettingsDiff:
             self.__telecomConfig = _TelecomConfig(self.__serverSettings['telecom_config'])
         if 'disabledPMOperations' in serverSettingsDiff:
@@ -731,6 +724,7 @@ class ServerSettings(object):
             self.__serverSettings[CollectorVehicleConsts.CONFIG_NAME] = serverSettingsDiff[CollectorVehicleConsts.CONFIG_NAME]
         if _crystalRewardsConfig.CONFIG_NAME in serverSettingsDiff:
             self.__crystalRewardsConfig = makeTupleByDict(_crystalRewardsConfig, self.__serverSettings[_crystalRewardsConfig.CONFIG_NAME])
+        self.__updateReactiveCommunicationConfig(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -812,10 +806,6 @@ class ServerSettings(object):
         return self.__battleRoyaleSettings
 
     @property
-    def bobConfig(self):
-        return self.__bobSettings
-
-    @property
     def telecomConfig(self):
         return self.__telecomConfig
 
@@ -866,7 +856,7 @@ class ServerSettings(object):
         return self.__bwShop.isStorageEnabled
 
     def isLootBoxesEnabled(self):
-        return self.__getGlobalSetting('isLootBoxesEnabled', False)
+        return self.__getGlobalSetting('isLootBoxesEnabled')
 
     def isAnonymizerEnabled(self):
         return self.__getGlobalSetting('isAnonymizerEnabled', False)
@@ -929,23 +919,32 @@ class ServerSettings(object):
     def getDailyQuestConfig(self):
         return self.__getGlobalSetting(DAILY_QUESTS_CONFIG, {})
 
+    def getDogTagsConfig(self):
+        return self.__getGlobalSetting(DOG_TAGS_CONFIG, {})
+
+    def isDogTagEnabled(self):
+        return self.__getGlobalSetting(DOG_TAGS_CONFIG, {}).get('enabled', True)
+
+    def isDogTagCustomizationScreenEnabled(self):
+        return self.isDogTagEnabled() and self.__getGlobalSetting(DOG_TAGS_CONFIG, {}).get('enableDogTagsCustomizationScreen', True)
+
+    def isSkillComponentsEnabled(self):
+        return self.isDogTagEnabled() and self.__getGlobalSetting(DOG_TAGS_CONFIG, {}).get('enableSkillComponents', True)
+
+    def isDogTagInBattleEnabled(self):
+        return self.isDogTagEnabled() and self.__getGlobalSetting(DOG_TAGS_CONFIG, {}).get('enableDogTagsInBattle', True)
+
+    def isDogTagInPostBattleEnabled(self):
+        return self.isDogTagEnabled() and self.__getGlobalSetting(DOG_TAGS_CONFIG, {}).get('enableDogTagsInPostBattle', True)
+
+    def isDogTagComponentUnlockingEnabled(self):
+        return self.isDogTagEnabled() and self.__getGlobalSetting(DOG_TAGS_CONFIG, {}).get('enableComponentUnlocking', True)
+
     def getMagneticAutoAimConfig(self):
         return self.__getGlobalSetting(MAGNETIC_AUTO_AIM_CONFIG, {})
 
     def getPreferredMapsConfig(self):
         return self.__getGlobalSetting(PremiumConfigs.PREFERRED_MAPS, {})
-
-    def getPremiumPlusXPBonus(self):
-        battleBonuses = self.__getGlobalSetting('prem_battle_bonuses', {})
-        return battleBonuses.get(PREM_BONUS_TYPES.XP, {}).get(ENTITLEMENT_TO_PREM_TYPE[PREMIUM_ENTITLEMENTS.PLUS], 0)
-
-    def getPremiumPlusCreditsBonus(self):
-        battleBonuses = self.__getGlobalSetting('prem_battle_bonuses', {})
-        return battleBonuses.get(PREM_BONUS_TYPES.CREDITS, {}).get(ENTITLEMENT_TO_PREM_TYPE[PREMIUM_ENTITLEMENTS.PLUS], 0)
-
-    def getPremiumPlusTmenXPBonus(self):
-        battleBonuses = self.__getGlobalSetting('prem_battle_bonuses', {})
-        return battleBonuses.get(PREM_BONUS_TYPES.TMEN_XP, {}).get(ENTITLEMENT_TO_PREM_TYPE[PREMIUM_ENTITLEMENTS.PLUS], 0)
 
     def isEpicRandomEnabled(self):
         return self.__getGlobalSetting('isEpicRandomEnabled', False)
@@ -1055,6 +1054,9 @@ class ServerSettings(object):
     def getBattlePassConfig(self):
         return self.__battlePassConfig
 
+    def getReactiveCommunicationConfig(self):
+        return self.__reactiveCommunicationConfig
+
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)
 
@@ -1079,9 +1081,6 @@ class ServerSettings(object):
         self.__epicMetaGameSettings = self.__epicMetaGameSettings.replace(targetSettings['epic_config'].get('epicMetaGame', {}))
         self.__epicGameSettings = self.__epicGameSettings.replace(targetSettings['epic_config'])
 
-    def __updateBob(self, targetSettings):
-        self.__bobSettings = self.__bobSettings.replace(targetSettings['bob_config'])
-
     def __updateSquadBonus(self, sourceSettings):
         self.__squadPremiumBonus = self.__squadPremiumBonus.replace(sourceSettings[PremiumConfigs.PREM_SQUAD])
 
@@ -1104,3 +1103,15 @@ class ServerSettings(object):
 
     def __updateSeniorityAwards(self, targetSettings):
         self.__seniorityAwardsConfig = self.__seniorityAwardsConfig.replace(targetSettings['seniority_awards_config'])
+
+    def __updateReactiveCommunicationConfig(self, settings):
+        if 'reactiveCommunicationConfig' in settings:
+            config = settings['reactiveCommunicationConfig']
+            if config is None:
+                self.__reactiveCommunicationConfig = _ReactiveCommunicationConfig()
+            elif isinstance(config, dict):
+                self.__reactiveCommunicationConfig = _ReactiveCommunicationConfig(**config)
+            else:
+                _logger.error('Unexpected format of subscriptions service config: %r', config)
+                self.__reactiveCommunicationConfig = _ReactiveCommunicationConfig()
+        return

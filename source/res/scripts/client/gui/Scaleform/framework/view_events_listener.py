@@ -6,15 +6,14 @@ from gui.shared.events import ViewEventType
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.framework.managers.loaders import ViewLoadMode
-from gui.Scaleform.framework.managers.loaders import UBViewLoadParams
 from gui.Scaleform.framework.managers.containers import ChainItem
 
 def _loadViewEventHandler(containerManager, e):
     containerManager.load(e.loadParams, *e.args, **e.kwargs)
 
 
-def _loadUbViewEventHandler(containerManager, e):
-    containerManager.load(UBViewLoadParams(e.alias, e.viewClass, e.scope), *e.args, **e.kwargs)
+def _loadGuiImplViewEventHandler(containerManager, e):
+    containerManager.load(e.loadParams, *e.args, **e.kwargs)
 
 
 def _preLoadViewEventHandler(containerManager, e):
@@ -25,7 +24,7 @@ def _destroyViewEventHandler(containerManager, e):
     containerManager.destroyViews(e.alias, e.name)
 
 
-def _destroyUbViewEventHandler(containerManager, e):
+def _destroyGuiImplViewEventHandler(containerManager, e):
     containerManager.destroyViews(e.alias)
 
 
@@ -35,10 +34,10 @@ def _loadViewsChainEventHandler(containerManager, e):
 
 
 _EVENT_HANDLERS = {ViewEventType.LOAD_VIEW: _loadViewEventHandler,
- ViewEventType.LOAD_UB_VIEW: _loadUbViewEventHandler,
+ ViewEventType.LOAD_GUI_IMPL_VIEW: _loadGuiImplViewEventHandler,
  ViewEventType.PRELOAD_VIEW: _preLoadViewEventHandler,
  ViewEventType.DESTROY_VIEW: _destroyViewEventHandler,
- ViewEventType.DESTROY_UB_VIEW: _destroyUbViewEventHandler,
+ ViewEventType.DESTROY_GUI_IMPL_VIEW: _destroyGuiImplViewEventHandler,
  ViewEventType.LOAD_VIEWS_CHAIN: _loadViewsChainEventHandler}
 
 class ViewEventsListener(EventSystemEntity):
@@ -78,13 +77,15 @@ class ViewEventsListener(EventSystemEntity):
 
     def _addListeners(self):
         for eventType in _EVENT_HANDLERS:
-            for scope in EVENT_BUS_SCOPE.ALL:
-                self.addListener(eventType, self.handleEvent, scope=scope)
+            if eventType != ViewEventType.LOAD_VIEW:
+                for scope in EVENT_BUS_SCOPE.ALL:
+                    self.addListener(eventType, self.handleEvent, scope=scope)
 
     def _removeListeners(self):
         for eventType in _EVENT_HANDLERS:
-            for scope in EVENT_BUS_SCOPE.ALL:
-                self.removeListener(eventType, self.handleEvent, scope=scope)
+            if eventType != ViewEventType.LOAD_VIEW:
+                for scope in EVENT_BUS_SCOPE.ALL:
+                    self.removeListener(eventType, self.handleEvent, scope=scope)
 
     def _handleEvent(self, e):
         eventType = e.eventType

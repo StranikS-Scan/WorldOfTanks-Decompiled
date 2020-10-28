@@ -575,6 +575,11 @@ def __readBonus_customizations(bonus, _name, section, eventType):
          'id': subsection.readInt('id', -1)}
         if subsection.has_key('boundVehicle'):
             custData['vehTypeCompDescr'] = vehicles.makeIntCompactDescrByID('vehicle', *vehicles.g_list.getIDsByName(subsection.readString('boundVehicle', '')))
+        elif subsection.has_key('applyToVehicle'):
+            if custData['custType'] != 'style':
+                raise SoftException('applyToVehicle supports only style customization type')
+            custData['vehTypeCompDescr'] = vehicles.makeIntCompactDescrByID('vehicle', *vehicles.g_list.getIDsByName(subsection.readString('applyToVehicle', '')))
+            custData['applyToVehicle'] = True
         elif subsection.has_key('boundToCurrentVehicle'):
             if eventType in EVENT_TYPE.LIKE_TOKEN_QUESTS:
                 raise SoftException("Unsupported tag 'boundToCurrentVehicle' in 'like token' quests")
@@ -618,13 +623,11 @@ def __readBonus_tokens(bonus, _name, section, eventType):
 
 def __readBonus_goodies(bonus, _name, section, eventType):
     id = section['id'].asInt
-    goodie = bonus.setdefault('goodies', {})[id] = {}
-    if section.has_key('limit'):
-        goodie['limit'] = section['limit'].asInt
+    goodie = bonus.setdefault('goodies', {}).setdefault(id, {'count': 0})
     if section.has_key('count'):
-        goodie['count'] = __readIntWithTokenExpansion(section['count'])
+        goodie['count'] += __readIntWithTokenExpansion(section['count'])
     else:
-        goodie['count'] = 1
+        goodie['count'] += 1
 
 
 def __readBonus_enhancement(bonus, _name, section, eventType):
@@ -754,8 +757,6 @@ def __readBonus_optionalData(config, bonusReaders, section, eventType):
         properties['compensation'] = section['compensation'].asBool
     if section.has_key('shouldCompensated'):
         properties['shouldCompensated'] = section['shouldCompensated'].asBool
-    if section.has_key('priority'):
-        properties['priority'] = section['priority'].asInt
     if IS_DEVELOPMENT:
         if section.has_key('name'):
             properties['name'] = section['name'].asString
@@ -777,7 +778,7 @@ def __readBonus_optional(config, bonusReaders, bonus, section, eventType):
     if probability is None:
         raise SoftException("Missing probability attribute in 'optional'")
     properties = subBonus.get('properties', {})
-    for property in ('compensation', 'shouldCompensated', 'priority'):
+    for property in ('compensation', 'shouldCompensated'):
         if properties.get(property, None) is not None:
             raise SoftException("Property '{}' not allowed for standalone 'optional'".format(property))
 
@@ -884,8 +885,7 @@ _RESERVED_NAMES = frozenset(['config',
  'probability',
  'compensation',
  'name',
- 'shouldCompensated',
- 'priority'])
+ 'shouldCompensated'])
 SUPPORTED_BONUSES = frozenset(__BONUS_READERS.iterkeys())
 
 def __readBonusLimit(section):

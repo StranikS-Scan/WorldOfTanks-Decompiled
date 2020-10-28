@@ -183,7 +183,7 @@ def isBattlePassVoteToken(token):
 
 
 def extendBaseAvatarResultsForBattlePass(results):
-    results.setdefault('ext', {}).setdefault('battlePass', {}).update({'basePointsDiff': 0,
+    results.update({'basePointsDiff': 0,
      'sumPoints': 0,
      'capBonus': 0})
 
@@ -262,7 +262,7 @@ class BattlePassConfig(object):
 
     @property
     def maxPointsForNewbie(self):
-        return self.basePoints[self.maxLevelForNewbie - 1]
+        return self.basePoints[self.maxLevelForNewbie - 1] if self.isOnboardingEnabled() else 0
 
     @property
     def sellAnyLevelsUnlockTime(self):

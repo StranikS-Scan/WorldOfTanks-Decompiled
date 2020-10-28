@@ -13,14 +13,14 @@ from debug_utils import LOG_ERROR
 from gui import SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.configurable_vehicle_preview import OptionalBlocks
-from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import getCDFromId, canInstallStyle, EventDataType
+from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import getCDFromId, canInstallStyle
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import checkIfVehicleIsHidden
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.customization.constants import CustomizationModes
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared import event_dispatcher
-from gui.shared.event_dispatcher import showStylePreview, showEventProgressionStylePreview, showHangar, showEventProgressionPage
+from gui.shared.event_dispatcher import showStylePreview, showHangar
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -285,7 +285,6 @@ def _validateHiddenBlocks(hiddenBlocks):
 
 class _VehiclePreviewSchema(W2CSchema):
     vehicle_id = Field(required=True, type=int)
-    back_to_event_hub = Field(required=False, type=bool, default=False)
     back_url = Field(required=False, type=basestring)
     items = Field(required=False, type=list, validator=lambda value, _: _validateItemsPack(value))
     hidden_blocks = Field(required=False, type=list, default=None, validator=lambda hiddenBlocks, _: _validateHiddenBlocks(hiddenBlocks))
@@ -316,7 +315,6 @@ class _MarathonVehiclePackPreviewSchema(W2CSchema):
 class _VehicleStylePreviewSchema(W2CSchema):
     vehicle_cd = Field(required=False, type=int)
     style_id = Field(required=True, type=int)
-    event_data = Field(required=False, type=dict, validator=lambda value, _: EventDataType.hasValue(value.get('type')))
     back_btn_descr = Field(required=True, type=basestring)
     back_url = Field(required=False, type=basestring)
 
@@ -377,13 +375,9 @@ class VehiclePreviewWebApiMixin(object):
             showPreviewFunc = partial(event_dispatcher.showConfigurableVehiclePreview, hiddenBlocks=cmd.hidden_blocks, itemPack=_parseItemsPack(cmd.items))
         else:
             showPreviewFunc = event_dispatcher.showVehiclePreview
-        if cmd.back_to_event_hub:
-            previewAlias = VIEW_ALIAS.OVERLAY_TEN_YEARS_COUNTDOWN
-        else:
-            previewAlias = self._getVehiclePreviewReturnAlias(cmd)
         vehicleID = cmd.vehicle_id
         if self.__validVehiclePreview(vehicleID):
-            showPreviewFunc(vehTypeCompDescr=vehicleID, previewAlias=previewAlias, previewBackCb=self._getVehiclePreviewReturnCallback(cmd))
+            showPreviewFunc(vehTypeCompDescr=vehicleID, previewAlias=self._getVehiclePreviewReturnAlias(cmd), previewBackCb=self._getVehiclePreviewReturnCallback(cmd))
         else:
             _pushInvalidPreviewMessage()
         return
@@ -503,7 +497,7 @@ class VehiclePreviewWebApiMixin(object):
         return sorted(vehs, key=lambda item: item.level, reverse=True)
 
     def _getVehicleStylePreviewCallback(self, cmd):
-        return partial(showEventProgressionPage, cmd.back_url) if cmd.back_btn_descr == 'eventProgression' else showHangar
+        return showHangar
 
     def _getVehiclePreviewReturnCallback(self, cmd):
         return None
@@ -514,12 +508,8 @@ class VehiclePreviewWebApiMixin(object):
     def __showStylePreview(self, vehicleCD, cmd):
         style = self.c11n.getItemByID(GUI_ITEM_TYPE.STYLE, cmd.style_id)
         vehicle = self.itemsCache.items.getItemByCD(vehicleCD)
-        if vehicle is not None and style.mayInstall(vehicle):
-            if cmd.event_data and cmd.event_data.get('type') == EventDataType.EVENT_PROGRESSION:
-                showStyle = showEventProgressionStylePreview
-            else:
-                showStyle = showStylePreview
-            showStyle(vehicleCD, style, style.getDescription(), self._getVehicleStylePreviewCallback(cmd), backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(cmd.back_btn_descr, '')()))
+        if vehicle is not None and not vehicle.isOutfitLocked and style.mayInstall(vehicle):
+            showStylePreview(vehicleCD, style, style.getDescription(), self._getVehicleStylePreviewCallback(cmd), backBtnDescrLabel=backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(cmd.back_btn_descr)()))
             return True
         else:
             return False

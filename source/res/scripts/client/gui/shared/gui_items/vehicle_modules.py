@@ -110,8 +110,11 @@ class VehicleTurret(VehicleModule):
         return self.intCD == vehicle.turret.intCD
 
     def mayInstall(self, vehicle, slotIdx=None, gunCD=0):
-        installPossible, reason = vehicle.descriptor.mayInstallTurret(self.intCD, gunCD)
-        return (False, 'need gun') if not installPossible and reason == 'not for this vehicle type' else (installPossible, reason)
+        if vehicle is None:
+            return (False, 'not for current vehicle')
+        else:
+            installPossible, reason = vehicle.descriptor.mayInstallTurret(self.intCD, gunCD)
+            return (False, 'need gun') if not installPossible and reason == 'not for this vehicle type' else (installPossible, reason)
 
     def getInstalledVehicles(self, vehicles):
         result = set()

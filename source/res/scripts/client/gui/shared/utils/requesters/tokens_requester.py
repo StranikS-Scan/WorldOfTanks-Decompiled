@@ -94,6 +94,9 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
     def getLootBoxByTokenID(self, tokenID):
         return self.__lootBoxCache.get(tokenID)
 
+    def getLootBoxByID(self, boxID):
+        return self.__lootBoxCache.get(LOOTBOX_TOKEN_PREFIX + str(boxID))
+
     def getLastViewedProgress(self, tokenId):
         return self.__tokensProgressDelta.getPrevValue(tokenId)
 
@@ -131,7 +134,7 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
             lootBoxTokenID = LOOTBOX_TOKEN_PREFIX + str(lootBoxID)
             lootBoxTokensList.append(lootBoxTokenID)
             if lootBoxTokenID not in self.__lootBoxCache:
-                item = self.itemsFactory.createLootBox(lootBoxID, lootBoxData['type'], lootBoxData['category'], 0, reRoll=lootBoxData.get('reRoll', {}))
+                item = self.itemsFactory.createLootBox(lootBoxID, lootBoxData['type'], lootBoxData['category'], 0)
                 self.__lootBoxCache[lootBoxTokenID] = item
             self.__lootBoxCache[lootBoxTokenID].update(lootBoxData['type'], lootBoxData['category'])
 

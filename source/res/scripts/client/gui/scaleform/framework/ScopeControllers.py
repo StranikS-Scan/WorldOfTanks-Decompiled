@@ -57,10 +57,10 @@ class ScopeController(DisposableEntity):
 
         return views
 
-    def getLoadingViewsByType(self, viewType):
-        views = {v for v in self.__loadingViews if v.viewType == viewType}
+    def getLoadingViewsByType(self, layer):
+        views = {v for v in self.__loadingViews if v.layer == layer}
         for scopeController in self.__subControllers:
-            views.update(scopeController.getLoadingViewsByType(viewType))
+            views.update(scopeController.getLoadingViewsByType(layer))
 
         return views
 
@@ -270,8 +270,8 @@ class GlobalScopeController(ScopeController):
 
     def addView(self, pyView, addAsGlobal):
         if not addAsGlobal:
-            if pyView.viewType in ScopeTemplates.VIEW_TYPES_TO_SCOPES.keys():
-                mainScope = ScopeTemplates.VIEW_TYPES_TO_SCOPES[pyView.viewType]
+            if pyView.layer in ScopeTemplates.VIEW_TYPES_TO_SCOPES.keys():
+                mainScope = ScopeTemplates.VIEW_TYPES_TO_SCOPES[pyView.layer]
                 mainController = self._getScopeControllerForScope(mainScope)
                 mainController.switchMainView(pyView)
             customScope = self.getScopeControllerForScopeType(pyView.getAlias())
@@ -281,8 +281,8 @@ class GlobalScopeController(ScopeController):
         return
 
     def _handleViewDispose(self, pyView):
-        if pyView.viewType in ScopeTemplates.VIEW_TYPES_TO_SCOPES.keys():
-            mainScope = ScopeTemplates.VIEW_TYPES_TO_SCOPES[pyView.viewType]
+        if pyView.layer in ScopeTemplates.VIEW_TYPES_TO_SCOPES.keys():
+            mainScope = ScopeTemplates.VIEW_TYPES_TO_SCOPES[pyView.layer]
             mainController = self.getScopeControllerForScopeType(mainScope.getScopeType())
             if mainController is not None and mainController.mainView == pyView:
                 mainController.switchMainView(None)

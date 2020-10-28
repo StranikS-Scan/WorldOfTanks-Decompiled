@@ -107,7 +107,7 @@ class RevCachedStorage(SimpleCachedStorage):
         raise NotImplementedError
 
     def __getServerRev(self):
-        return self.settingsCache.getSetting(self._getServerRevKey(), None)
+        return self.settingsCache.getSetting(self._getServerRevKey(), None) if self.settingsCache.isSynced() else None
 
     def __setServerRev(self, rev):
         self.settingsCache.setSettings({self._getServerRevKey(): rev})

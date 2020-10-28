@@ -69,13 +69,6 @@ class AvatarRespawnMechanic(object):
             ctrl.updatePlayerRespawnLives(lives)
         return
 
-    def updateTeammateLives(self, lives):
-        LOG_DEBUG_DEV('updateTeammateLives', lives)
-        ctrl = self.guiSessionProvider.dynamic.respawn
-        if ctrl is not None:
-            ctrl.updateTeammateRespawnLives(dict(lives))
-        return
-
     def onTeamLivesRestored(self, teams):
         LOG_DEBUG_DEV('onTeamLivesRestored', teams)
         ctrl = self.guiSessionProvider.dynamic.respawn

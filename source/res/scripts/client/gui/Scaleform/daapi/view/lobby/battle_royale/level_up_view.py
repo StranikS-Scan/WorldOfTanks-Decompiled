@@ -80,7 +80,7 @@ class BattleRoyaleLevelUpView(BattleRoyaleLevelUpViewMeta):
         return
 
     def __getBonuses(self, level):
-        questsProgressData = self.__ctx['reusableInfo'].progress.getQuestsProgress()
+        questsProgressData = self.__ctx['reusableInfo'].personal.getQuestsProgress()
         bonuses = after_battle_reward_view_helpers.getQuestBonuses(questsProgressData, (self.__battleRoyaleController.TOKEN_QUEST_ID,), self.__battleRoyaleController.TOKEN_QUEST_ID + str(level))
         bonuses = after_battle_reward_view_helpers.formatBonuses(bonuses)
         return bonuses

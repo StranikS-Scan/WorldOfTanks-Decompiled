@@ -9,7 +9,6 @@ from web.web_client_api.social import SocialWebApi
 from web.web_client_api.sound import SoundWebApi, HangarSoundWebApi, SoundStateWebApi
 from web.web_client_api.ui import CloseWindowWebApi, UtilWebApi, OpenWindowWebApi, OpenTabWebApi, NotificationWebApi
 from web.web_client_api.vehicles import VehiclesWebApi
-from web.web_client_api.wt_event import WtEventWebApi
 _DEFAULT_WEB_API_COLLECTION = (CloseWindowWebApi,
  OpenWindowWebApi,
  NotificationWebApi,
@@ -31,7 +30,3 @@ def createBrowserOverlayWebHandlers():
 
 def createPremAccWebHandlers():
     return webApiCollection(*_DEFAULT_WEB_API_COLLECTION)
-
-
-def createWtEventWebHandlers():
-    return webApiCollection(WtEventWebApi, *_DEFAULT_WEB_API_COLLECTION)

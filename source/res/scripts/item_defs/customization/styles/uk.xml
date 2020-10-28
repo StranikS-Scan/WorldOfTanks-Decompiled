@@ -1050,4 +1050,44 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB24_Centurion_Mk3	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	362	</id>
+      <texture>	gui/maps/vehicles/styles/GB24_Centurion_Mk3_3Dst_HW20.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/GB24_Centurion_Mk3_3Dst_HW20_desc/long	</longDescriptionSpecial>
+      <modelsSet>	GB24_Centurion_Mk3_3Dst_HW20	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/GB24_Centurion_Mk3_3Dst_HW20	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </uk.xml>

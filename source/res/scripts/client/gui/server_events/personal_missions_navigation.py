@@ -4,6 +4,7 @@ from operator import methodcaller
 import WWISE
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.server_events.pm_constants import SOUNDS
 from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import dependency
@@ -88,7 +89,7 @@ class PersonalMissionsNavigation(EventSystemEntity):
         if 'disabledPMOperations' in diff and diff['disabledPMOperations']:
             disabledOp = self.getOperationID() in diff['disabledPMOperations'].keys()
         if 'isRegularQuestEnabled' in diff and not diff['isRegularQuestEnabled'] or 'isPM2QuestEnabled' in diff and not diff['isPM2QuestEnabled'] or disabledOp:
-            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __setWWISEGlobal(self):
         operation = self.getOperation()

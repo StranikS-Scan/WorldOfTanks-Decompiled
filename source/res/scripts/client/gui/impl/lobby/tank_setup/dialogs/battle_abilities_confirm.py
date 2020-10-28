@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/dialogs/battle_abilities_confirm.py
-from frameworks.wulf import ViewSettings, ViewFlags
+from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.constants.fitting_types import FittingTypes
 from gui.impl.gen.view_models.views.lobby.common.buy_and_exchange_bottom_content_type import BuyAndExchangeBottomContentType
@@ -13,7 +13,7 @@ class BattleAbilitiesSetupConfirm(FullScreenDialogView):
     __slots__ = ('__items', '_mainContent', '__rollBack', '__withInstall')
 
     def __init__(self, *args, **kwargs):
-        settings = ViewSettings(layoutID=R.views.lobby.tanksetup.dialogs.Confirm(), flags=ViewFlags.TOP_WINDOW_VIEW, model=AmmunitionBuyModel())
+        settings = ViewSettings(layoutID=R.views.lobby.tanksetup.dialogs.Confirm(), model=AmmunitionBuyModel())
         settings.args = args
         settings.kwargs = kwargs
         self.__items = kwargs.pop('items', tuple())

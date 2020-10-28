@@ -5,10 +5,10 @@ from constants import ClansConfig
 from Event import Event
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import CLAN_NOTIFICATION_COUNTERS
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.clans.clan_helpers import getClanQuestURL
 from gui.Scaleform.daapi.view.lobby.clans.browser.web_handlers import createNotificationWebHandlers
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
@@ -83,12 +83,12 @@ class ClanNotificationController(GameWindowController, IClanNotificationControll
          'showWaiting': True,
          'showActionBtn': False,
          'allowRightClick': True}
-        g_eventBus.handleEvent(events.DirectLoadViewEvent(SFViewLoadParams(VIEW_ALIAS.CLAN_NOTIFICATION_WINDOW), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.CLAN_NOTIFICATION_WINDOW), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __getBrowserView(self):
         app = self.__appLoader.getApp()
         if app is not None and app.containerManager is not None:
-            browserView = app.containerManager.getView(ViewTypes.LOBBY_SUB, criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.CLAN_NOTIFICATION_WINDOW})
+            browserView = app.containerManager.getView(WindowLayer.SUB_VIEW, criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.CLAN_NOTIFICATION_WINDOW})
             return browserView
         else:
             return

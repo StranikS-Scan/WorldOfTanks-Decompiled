@@ -58,6 +58,18 @@ class ArenaSyncObject(object):
 
             return cache
 
+    def hasData(self, key):
+        keyList = key.split(self.EVENT_TYPE_DELIMITER)
+        if not keyList:
+            return False
+        cache = self.__cache
+        for item in keyList:
+            if item not in cache:
+                return False
+            cache = cache.__getattr__(item)
+
+        return True
+
     def __processChangeList(self, changeList):
         for handler, diffpaths in self.__callbacks.iteritems():
             for diffpath in diffpaths:

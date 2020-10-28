@@ -13,12 +13,10 @@ from gui.shared.items_parameters.comparator import VehiclesComparator
 from gui.shared.tooltips import TOOLTIP_TYPE, ToolTipData, ToolTipAttrField, formatters
 from gui.shared.items_parameters import params_helper, MAX_RELATIVE_VALUE, formatters as params_formatters
 from gui.shared.tooltips.common import BlocksTooltipData
-from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items import tankmen
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui import makeHtmlString
-from skeletons.gui.shared import IItemsCache
 
 class SkillTooltipData(ToolTipData):
 
@@ -41,7 +39,6 @@ class BuySkillTooltipData(SkillTooltipData):
 
 
 class SkillTooltipDataBlock(BlocksTooltipData):
-    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, context):
         super(SkillTooltipDataBlock, self).__init__(context, TOOLTIP_TYPE.SKILL)
@@ -50,16 +47,11 @@ class SkillTooltipDataBlock(BlocksTooltipData):
     def _packBlocks(self, *args, **kwargs):
         items = super(SkillTooltipDataBlock, self)._packBlocks()
         item = self.context.buildItem(*args, **kwargs)
-        tankman = self.itemsCache.items.getTankman(int(args[1]))
-        vehicle = None
-        if tankman.isInTank:
-            vehicle = self.itemsCache.items.getVehicle(tankman.vehicleInvID)
         items.append(formatters.packTextBlockData(text=text_styles.highTitle(item.userName)))
         infoBlock = formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'mainTextSmall', {'message': item.description}))
         if infoBlock:
             items.append(formatters.packBuildUpBlockData([infoBlock], padding=formatters.packPadding(left=0, right=58, top=-5, bottom=0), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
-        if not (vehicle and vehicle.isOnlyForEventBattles):
-            items.append(formatters.packTextBlockData(text=text_styles.main(ITEM_TYPES.tankman_skills_type(item.type))))
+        items.append(formatters.packTextBlockData(text=text_styles.main(ITEM_TYPES.tankman_skills_type(item.type))))
         return items
 
 

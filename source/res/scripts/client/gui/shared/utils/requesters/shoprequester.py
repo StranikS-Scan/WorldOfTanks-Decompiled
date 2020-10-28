@@ -334,6 +334,10 @@ class ShopCommonStats(IShopCommonStats):
         tradeInData = self.getValue('tradeIn')
         return TradeInData(**tradeInData) if tradeInData is not None else TradeInData()
 
+    @property
+    def personalTradeIn(self):
+        return self.getValue('personalTradeIn')
+
     def __getRestoreConfig(self):
         return self.getValue('restore_config', {})
 

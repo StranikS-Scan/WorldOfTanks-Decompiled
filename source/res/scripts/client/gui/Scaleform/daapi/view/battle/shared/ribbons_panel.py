@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/ribbons_panel.py
 import logging
+import BigWorld
 from account_helpers.settings_core.settings_constants import BATTLE_EVENTS, GRAPHICS
-from gui.Scaleform.genConsts.DAMAGE_SOURCE_TYPES import DAMAGE_SOURCE_TYPES
 from gui.battle_control.battle_constants import BonusRibbonLabel as _BRL
 from gui.impl import backport
 from gui.impl.gen import R
@@ -12,7 +12,6 @@ from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TY
 from gui.battle_control import avatar_getter
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
-from gui.shared.gui_items.Vehicle import VEHICLE_EVENT_TYPE
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -49,20 +48,20 @@ _BATTLE_EVENTS_SETTINGS_TO_BATTLE_EFFICIENCY_TYPES = {BATTLE_EVENTS.ENEMY_HP_DAM
                                  _BET.BERSERKER,
                                  _BET.RECEIVED_DMG_BY_SPAWNED_BOT,
                                  _BET.RECEIVED_BY_MINEFIELD,
-                                 _BET.RECEIVED_BY_SMOKE),
+                                 _BET.RECEIVED_BY_SMOKE,
+                                 _BET.EVENT_DEATH_ON_PHASE_CHANGE),
  BATTLE_EVENTS.RECEIVED_CRITS: (_BET.RECEIVED_CRITS,),
  BATTLE_EVENTS.ENEMIES_STUN: (_BET.STUN,),
  BATTLE_EVENTS.ENEMY_ASSIST_STUN: (_BET.ASSIST_STUN,)}
 
 def _getVehicleData(arenaDP, vehArenaID):
+    player = BigWorld.player()
+    botRole = player.getBotRole(vehArenaID)
     vTypeInfoVO = arenaDP.getVehicleInfo(vehArenaID).vehicleType
+    vehicleClassTag = botRole or vTypeInfoVO.classTag or ''
     vehicleName = vTypeInfoVO.shortNameWithPrefix
     if isBattleRoyale(vTypeInfoVO.tags) and isSpawnedBot(vTypeInfoVO.tags):
         vehicleClassTag = ''
-    elif VEHICLE_EVENT_TYPE.EVENT_BOSS in vTypeInfoVO.tags:
-        vehicleClassTag = DAMAGE_SOURCE_TYPES.EVENT_BOSS
-    else:
-        vehicleClassTag = vTypeInfoVO.classTag or ''
     return (vehicleName, vehicleClassTag)
 
 
@@ -143,6 +142,19 @@ def _epicEventRibbonFormatter(ribbon, arenaDP, updater):
     updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), leftFieldStr=leftFieldStr)
 
 
+def _eventBuffEffectApplied(ribbon, arenaDP, updater):
+    if ribbon.hasEffectValue:
+        leftFieldStr = ''
+        if ribbon.effectValue > 0:
+            leftFieldStr = backport.text(R.strings.event.efficiencyRibbons.plus()) + backport.getIntegralFormat(ribbon.effectValue)
+        vehName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.victimID)
+    else:
+        leftFieldStr = backport.text(R.strings.event.efficiencyRibbons.got_buff())
+        vehName = backport.text(R.strings.event.efficiencyRibbons.dyn(ribbon.buffName).descr())
+        vehicleClassTag = ''
+    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), leftFieldStr=leftFieldStr, vehName=vehName, vehType=vehicleClassTag)
+
+
 _RIBBONS_FMTS = {_BET.CAPTURE: _baseRibbonFormatter,
  _BET.DEFENCE: _baseRibbonFormatter,
  _BET.DETECTION: _enemyDetectionRibbonFormatter,
@@ -161,6 +173,7 @@ _RIBBONS_FMTS = {_BET.CAPTURE: _baseRibbonFormatter,
  _BET.RECEIVED_RAM: _receivedRamRibbonFormatter,
  _BET.RECEIVED_BURN: _singleVehRibbonFormatter,
  _BET.RECEIVED_WORLD_COLLISION: _singleVehRibbonFormatter,
+ _BET.EVENT_DEATH_ON_PHASE_CHANGE: _singleVehRibbonFormatter,
  _BET.ASSIST_STUN: _singleVehRibbonFormatter,
  _BET.VEHICLE_RECOVERY: _epicEventRibbonFormatter,
  _BET.ENEMY_SECTOR_CAPTURED: _epicEventRibbonFormatter,
@@ -177,6 +190,17 @@ _RIBBONS_FMTS = {_BET.CAPTURE: _baseRibbonFormatter,
  _BET.DAMAGE_BY_MINEFIELD: _singleVehRibbonFormatter,
  _BET.RECEIVED_BY_MINEFIELD: _singleVehRibbonFormatter,
  _BET.RECEIVED_BY_SMOKE: _singleVehRibbonFormatter}
+_BUFF_RIBBONS_FMTS = {_BET.BUFFS_RATION: _eventBuffEffectApplied,
+ _BET.BUFFS_FUEL: _eventBuffEffectApplied,
+ _BET.BUFFS_RATE_FIRE: _eventBuffEffectApplied,
+ _BET.BUFFS_CONVERSION_SPEED: _eventBuffEffectApplied,
+ _BET.BUFFS_INCREASED_MAXIMUM_DAMAGE: _eventBuffEffectApplied,
+ _BET.BUFFS_DOUBLE_DAMAGE: _eventBuffEffectApplied,
+ _BET.BUFFS_INCENDIARY_SHOT: _eventBuffEffectApplied,
+ _BET.BUFFS_VAMPIRIC_SHOT: _eventBuffEffectApplied,
+ _BET.BUFFS_CONSTANT_HP_REGENERATION: _eventBuffEffectApplied,
+ _BET.BUFFS_ARMOR: _eventBuffEffectApplied}
+_RIBBONS_FMTS.update(_BUFF_RIBBONS_FMTS)
 
 class BattleRibbonsPanel(RibbonsPanelMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -220,9 +244,10 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
 
         self.__setupView()
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
+        isEventBattle = self.sessionProvider.arenaVisitor.gui.isEventBattle()
         g_eventBus.addListener(GameEvent.GUI_VISIBILITY, self.__onGUIVisibilityChanged, scope=EVENT_BUS_SCOPE.BATTLE)
         self.__ribbonsAggregator.start()
-        if not self.__enabled:
+        if not self.__enabled and not isEventBattle:
             self.__ribbonsAggregator.suspend()
         return
 
@@ -238,7 +263,10 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
         return
 
     def _shouldShowRibbon(self, ribbon):
-        return self.__checkUserPreferences(ribbon)
+        return self._checkUserPreferences(ribbon)
+
+    def _getRibbonsAggregator(self):
+        return self.__ribbonsAggregator
 
     def __playSound(self, eventName):
         if not self.__isVisible or not _RIBBON_SOUNDS_ENABLED:
@@ -260,12 +288,12 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
         self.as_updateBattleEfficiencyEventS(ribbonType, ribbonID, leftFieldStr, vehName, vehType, rightFieldStr, bonusRibbonLabelID)
 
     def __onRibbonAdded(self, ribbon):
-        self.__invalidateRibbon(ribbon, self._addRibbon)
+        self._invalidateRibbon(ribbon, self._addRibbon)
 
     def __onRibbonUpdated(self, ribbon):
-        self.__invalidateRibbon(ribbon, self._updateRibbon)
+        self._invalidateRibbon(ribbon, self._updateRibbon)
 
-    def __invalidateRibbon(self, ribbon, method):
+    def _invalidateRibbon(self, ribbon, method):
         if self._shouldShowRibbon(ribbon):
             if ribbon.getType() in _RIBBONS_FMTS:
                 updater = _RIBBONS_FMTS[ribbon.getType()]
@@ -302,14 +330,17 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
                     self.__ribbonsAggregator.resume()
                 else:
                     self.__ribbonsAggregator.suspend()
-            self.as_setSettingsS(self.__enabled, self.__isExtendedAnim, self.__isWithRibbonName, self.__isWithVehName)
+            self.as_setSettingsS(self.__isPanelEnabled(), self.__isExtendedAnim, self.__isWithRibbonName, self.__isWithVehName)
         return
 
-    def __checkUserPreferences(self, ribbon):
-        return self.__userPreferences.get(ribbon.getType(), True)
+    def _checkUserPreferences(self, ribbon):
+        return self.__userPreferences.get(ribbon.getType(), True) and self.__enabled
+
+    def __isPanelEnabled(self):
+        return self.sessionProvider.arenaVisitor.gui.isEventBattle() or self.__enabled
 
     def __setupView(self):
-        self.as_setupS([[_BET.ARMOR, backport.text(R.strings.ingame_gui.efficiencyRibbons.armor())],
+        ribbons = [[_BET.ARMOR, backport.text(R.strings.ingame_gui.efficiencyRibbons.armor())],
          [_BET.DEFENCE, backport.text(R.strings.ingame_gui.efficiencyRibbons.defence())],
          [_BET.DAMAGE, backport.text(R.strings.ingame_gui.efficiencyRibbons.damage())],
          [_BET.ASSIST_SPOT, backport.text(R.strings.ingame_gui.efficiencyRibbons.assistSpot())],
@@ -326,6 +357,7 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
          [_BET.RECEIVED_BURN, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedBurn())],
          [_BET.RECEIVED_RAM, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedRam())],
          [_BET.RECEIVED_WORLD_COLLISION, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedWorldCollision())],
+         [_BET.EVENT_DEATH_ON_PHASE_CHANGE, backport.text(R.strings.ingame_gui.efficiencyRibbons.eventDeathOnPhaseChange())],
          [_BET.STUN, backport.text(R.strings.ingame_gui.efficiencyRibbons.stun())],
          [_BET.ASSIST_STUN, backport.text(R.strings.ingame_gui.efficiencyRibbons.assistStun())],
          [_BET.VEHICLE_RECOVERY, backport.text(R.strings.ingame_gui.efficiencyRibbons.vehicleRecovery())],
@@ -342,4 +374,16 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
          [_BET.RECEIVED_DMG_BY_SPAWNED_BOT, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedDmgBySpawnedBot())],
          [_BET.DAMAGE_BY_MINEFIELD, backport.text(R.strings.ingame_gui.efficiencyRibbons.damageByMinefield())],
          [_BET.RECEIVED_BY_MINEFIELD, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedByMinefield())],
-         [_BET.RECEIVED_BY_SMOKE, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedBySmoke())]], self.__isExtendedAnim, self.__enabled, self.__isWithRibbonName, self.__isWithVehName, [backport.text(R.strings.ingame_gui.efficiencyRibbons.bonusRibbon())])
+         [_BET.RECEIVED_BY_SMOKE, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedBySmoke())]]
+        if self.sessionProvider.arenaVisitor.gui.isEventBattle():
+            ribbons.extend([[_BET.BUFFS_RATION, backport.text(R.strings.event.efficiencyRibbons.ration.title())],
+             [_BET.BUFFS_FUEL, backport.text(R.strings.event.efficiencyRibbons.fuel.title())],
+             [_BET.BUFFS_RATE_FIRE, backport.text(R.strings.event.efficiencyRibbons.multiplyGunReloadTime.title())],
+             [_BET.BUFFS_CONVERSION_SPEED, backport.text(R.strings.event.efficiencyRibbons.multiplyShotDispersion.title())],
+             [_BET.BUFFS_INCREASED_MAXIMUM_DAMAGE, backport.text(R.strings.event.efficiencyRibbons.multiplyDamageBy10.title())],
+             [_BET.BUFFS_DOUBLE_DAMAGE, backport.text(R.strings.event.efficiencyRibbons.damageOnceOnShot.title())],
+             [_BET.BUFFS_INCENDIARY_SHOT, backport.text(R.strings.event.efficiencyRibbons.igniteOnShot.title())],
+             [_BET.BUFFS_VAMPIRIC_SHOT, backport.text(R.strings.event.efficiencyRibbons.healOnceOnShot.title())],
+             [_BET.BUFFS_CONSTANT_HP_REGENERATION, backport.text(R.strings.event.efficiencyRibbons.regenerationHP.title())],
+             [_BET.BUFFS_ARMOR, backport.text(R.strings.event.efficiencyRibbons.armor.title())]])
+        self.as_setupS(ribbons, self.__isExtendedAnim, self.__isPanelEnabled(), self.__isWithRibbonName, self.__isWithVehName, [backport.text(R.strings.ingame_gui.efficiencyRibbons.bonusRibbon())])

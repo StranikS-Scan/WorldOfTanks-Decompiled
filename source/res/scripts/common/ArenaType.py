@@ -14,7 +14,9 @@ from typing import Dict
 from soft_exception import SoftException
 from collections import defaultdict
 from data_structures import DictObj
+from visual_script.misc import ASPECT, VisualScriptTag
 from Math import Vector2
+from Math import Vector3
 if IS_CLIENT:
     from helpers import i18n
     import WWISE
@@ -194,9 +196,6 @@ def __readGameplayCfg(gameplayName, section, defaultXml, geometryCfg):
 
         if gameplayName == 'nations':
             raise SoftException('national battles are disabled')
-        notificationsRemapping = __readNotificationsRemappingSection(section, defaultXml)
-        if notificationsRemapping is not None:
-            cfg['notificationsRemapping'] = notificationsRemapping
         cfg.update(__readCommonCfg(section, defaultXml, False, geometryCfg))
     except Exception as e:
         LOG_CURRENT_EXCEPTION()
@@ -237,6 +236,7 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
     cfg['teamBasePositions'] = __readTeamBasePositions(section, maxTeamsInArena)
     cfg['teamSpawnPoints'] = __readTeamSpawnPoints(section, maxTeamsInArena)
     cfg['squadTeamNumbers'], cfg['soloTeamNumbers'] = __readTeamNumbers(section, maxTeamsInArena)
+    cfg[VisualScriptTag] = _readVisualScript(section)
     if raiseIfMissing or __hasKey('numPlayerGroups', section, defaultXml):
         cfg['numPlayerGroups'] = _readInt('numPlayerGroups', section, defaultXml, 0)
     if raiseIfMissing or __hasKey('playerGroupLimit', section, defaultXml):
@@ -306,6 +306,11 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
             cfg['mapActivitiesSection'] = section['mapActivities']
         if section.has_key('soundRemapping'):
             cfg['soundRemapping'] = section['soundRemapping']
+        notificationsRemapping = __readNotificationsRemappingSection(section, defaultXml)
+        if notificationsRemapping is not None:
+            cfg['notificationsRemapping'] = notificationsRemapping
+        if __hasKey('envSwitcherSettings', section, defaultXml):
+            cfg['envSwitcherSettings'] = EnvSwitcherSettings(section['envSwitcherSettings'])
     if IS_CLIENT or IS_BOT:
         cfg['controlPoints'] = __readControlPoints(section)
         cfg['teamLowLevelSpawnPoints'] = __readTeamSpawnPoints(section, maxTeamsInArena, nodeNameTemplate='team%d_low', required=False)
@@ -461,6 +466,21 @@ def _readFloatArray(key, tag, xml, defaultXml, defaultValue=None):
     else:
         raise SoftException("missing key '%s'" % key)
         return
+
+
+def _readVisualScriptAspect(section, aspect, default):
+    if section.has_key(aspect):
+        return [ value.asString for name, value in section[aspect].items() if name == 'plan' ]
+    return default
+
+
+def _readVisualScript(section):
+    if section.has_key(VisualScriptTag):
+        vseSection = section[VisualScriptTag]
+        return {ASPECT.CLIENT: _readVisualScriptAspect(vseSection, ASPECT.CLIENT.lower(), []),
+         ASPECT.SERVER: _readVisualScriptAspect(vseSection, ASPECT.SERVER.lower(), [])}
+    return {ASPECT.CLIENT: [],
+     ASPECT.SERVER: []}
 
 
 def _readBoundingBox(section):
@@ -872,3 +892,102 @@ def __readGameplayPoints(section, geometryCfg):
 
 def __readWinPoints(section):
     return {'winPointsSettings': section.readString('winPoints', 'DEFAULT')}
+
+
+class EnvSwitcherSettings(object):
+
+    class EnvSwitcher(object):
+
+        def __init__(self, pEnvName, pSettings):
+            self.envName = pEnvName
+            self.settings = pSettings
+
+        @staticmethod
+        def readXml(section):
+            switchers = {}
+            for name, value in section.items():
+                if name == 'switcher':
+                    settings = None
+                    if value.has_key('settings'):
+                        settings = EnvSwitcherSettings.EnvSwitcher.readValues(value['settings'])
+                    switcher = EnvSwitcherSettings.EnvSwitcher(value.readString('envName'), settings)
+                    switchers[value.readInt('id')] = switcher
+
+            return switchers
+
+        @staticmethod
+        def readValues(section):
+            return [ value.asString for value in section.values() ]
+
+        def __str__(self):
+            return str(self.__class__) + ': ' + str(self.__dict__)
+
+    class EnvSetting(object):
+
+        def __init__(self, pFuncName, pSpeed, pTimeout, pDirection, pFader, pFaderPlayer):
+            self.funcName = pFuncName
+            self.speed = pSpeed
+            self.timeout = pTimeout
+            self.direction = pDirection
+            self.fader = pFader
+            self.faderPlayer = pFaderPlayer
+
+        @staticmethod
+        def readXml(section):
+            envSettings = {}
+            for name, value in section.items():
+                if name == 'envSetting':
+                    envSetting = EnvSwitcherSettings.EnvSetting(value.readString('functionName'), value.readFloat('speed'), value.readFloat('timeout'), value.readVector2('direction'), EnvSwitcherSettings.EnvSetting.readFader(value), EnvSwitcherSettings.EnvSetting.readFaderPlayer(value))
+                    envSettings[value.readString('id')] = envSetting
+
+            return envSettings
+
+        @staticmethod
+        def readFader(section):
+            fader = None
+            for name, value in section.items():
+                if name == 'fader':
+                    fader = {'duration': value.readFloat('duration'),
+                     'color': value.readVector3('color')}
+
+            return fader
+
+        @staticmethod
+        def readFaderPlayer(section):
+            faderPlayer = None
+            for name, value in section.items():
+                if name == 'faderPlayer':
+                    faderPlayer = value
+
+            return faderPlayer
+
+        def __str__(self):
+            return str(self.__class__) + ': ' + str(self.__dict__)
+
+    def __init__(self, section):
+        self.switchers, self.envSwitcherSettings = self._readXml(section)
+
+    def __str__(self):
+        return str(self.__class__) + ': ' + str(self.__dict__)
+
+    def _readXml(self, section):
+        envSettings = None
+        switchers = None
+        for name, value in section.items():
+            if name == 'envSettings':
+                envSettings = EnvSwitcherSettings.EnvSetting.readXml(value)
+            if name == 'switchers':
+                switchers = EnvSwitcherSettings.EnvSwitcher.readXml(value)
+
+        return (switchers, envSettings)
+
+    def getSwitcherByName(self, name):
+        for switcher in self.switchers:
+            if switcher.envName == name:
+                return switcher
+
+    def getSwitcherByID(self, id):
+        return self.switchers[id] if id in self.switchers else None
+
+    def getEnvSettingByID(self, name):
+        return self.envSwitcherSettings[name] if name in self.envSwitcherSettings else None

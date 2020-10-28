@@ -3,7 +3,6 @@
 from web.web_client_api import w2capi
 from web.web_client_api.ui.calendar import OpenCalendarWindowWebApiMixin
 from web.web_client_api.ui.chat import ChatWebApiMixin
-from web.web_client_api.ui.low_tier_rewards import LowTierRewardsApiMixin
 from web.web_client_api.ui.shop import ShopWebApiMixin
 from web.web_client_api.ui.badges import BadgesWebApiMixin
 from web.web_client_api.ui.boosters import BoostersWindowWebApiMixin
@@ -34,11 +33,9 @@ from web.web_client_api.ui.vehicle import VehiclePreviewWebApiMixin
 from web.web_client_api.ui.vehicle import VehicleComparisonBasketWebApiMixin
 from web.web_client_api.ui.waiting import WaitingWebApiMixin
 from web.web_client_api.ui.ranked import OpenRankedPagesMixin
-from web.web_client_api.ui.ten_years_event import OpenTenYearsEventHubWebApiMixin
-from web.web_client_api.ui.event import EventWebApiMixin
 
 @w2capi(name='open_window', key='window_id')
-class OpenWindowWebApi(OpenBrowserWindowWebApiMixin, ClanWindowWebApiMixin, ProfileWindowWebApiMixin, OpenExternalBrowserWebApiMixin, VehicleSellWebApiMixin, hangar.HangarWindowsWebApiMixin, BoostersWindowWebApiMixin, ManualPageWebApiMixin, ChatWebApiMixin, SquadWebApiMixin, OpenBrowserOverlayWebApiMixin, PremiumViewsWebApiMixin, OpenCalendarWindowWebApiMixin, OpenBuyGoldWebApiMixin, OpenTankmanWebApiMixin, DialogsWebApiMixin, OpenRankedPagesMixin, OpenTenYearsEventHubWebApiMixin, LowTierRewardsApiMixin):
+class OpenWindowWebApi(OpenBrowserWindowWebApiMixin, ClanWindowWebApiMixin, ProfileWindowWebApiMixin, OpenExternalBrowserWebApiMixin, VehicleSellWebApiMixin, hangar.HangarWindowsWebApiMixin, BoostersWindowWebApiMixin, ManualPageWebApiMixin, ChatWebApiMixin, SquadWebApiMixin, OpenBrowserOverlayWebApiMixin, PremiumViewsWebApiMixin, OpenCalendarWindowWebApiMixin, OpenBuyGoldWebApiMixin, OpenTankmanWebApiMixin, DialogsWebApiMixin, OpenRankedPagesMixin):
     pass
 
 
@@ -53,7 +50,7 @@ class CloseViewWebApi(CloseBrowserViewWebApiMixin):
 
 
 @w2capi(name='open_tab', key='tab_id')
-class OpenTabWebApi(hangar.HangarTabWebApiMixin, ProfileTabWebApiMixin, VehiclePreviewWebApiMixin, TechTreeTabWebApiMixin, VehicleComparisonBasketWebApiMixin, MissionsWebApiMixin, BarracksWebApiMixin, ShopWebApiMixin, StorageWebApiMixin, EventWebApiMixin, StrongholdsWebApiMixin, PersonalMissionsWebApiMixin, BadgesWebApiMixin):
+class OpenTabWebApi(hangar.HangarTabWebApiMixin, ProfileTabWebApiMixin, VehiclePreviewWebApiMixin, TechTreeTabWebApiMixin, VehicleComparisonBasketWebApiMixin, MissionsWebApiMixin, BarracksWebApiMixin, ShopWebApiMixin, StorageWebApiMixin, StrongholdsWebApiMixin, PersonalMissionsWebApiMixin, BadgesWebApiMixin):
     pass
 
 

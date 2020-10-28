@@ -64,7 +64,7 @@ class RankedBattlesStatsComposer(object):
 
     @property
     def dailyBonusBattlesIncome(self):
-        steps = self.divisionsStats.get(ZERO_DIVISION_ID, {}).get('rankChanges', 0)
+        steps = self.divisionsStats.get(ZERO_DIVISION_ID, {}).get('stepsCount', 0)
         settings = self.__settings.leaguesBonusBattles
         bonusBattles = {item['battlesCount']:item['steps'] for item in settings if item['steps'] <= steps}
         return max(bonusBattles or (0,))

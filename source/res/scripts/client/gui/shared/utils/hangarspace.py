@@ -171,6 +171,7 @@ class HangarSpace(IHangarSpace):
         self.onVehicleChangeStarted = Event.Event()
         self.onSpaceChangedByAction = Event.Event()
         self.onNotifyCursorOver3dScene = Event.Event()
+        self.onObjectsSelectionEnabled = Event.Event()
         self.__isCursorOver3DScene = False
         return
 

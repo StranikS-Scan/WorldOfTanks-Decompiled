@@ -21,8 +21,8 @@
       <installed>	improvedConfiguration	</installed>
     </incompatibleTags>
     <script>	ImprovedConfiguration	  <weight>	50	</weight>
-      <engineReduceFineFactor>	0.35 0.35	</engineReduceFineFactor>
-      <ammoBayReduceFineFactor>	0.35 0.35	</ammoBayReduceFineFactor>
+      <engineReduceFineFactor>	0.3 0.3	</engineReduceFineFactor>
+      <ammoBayReduceFineFactor>	0.3 0.3	</ammoBayReduceFineFactor>
       <factors>
         <factor>
           <attribute>	miscAttrs/repairSpeedFactor	</attribute>
@@ -47,7 +47,7 @@
         <factor>
           <attribute>	miscAttrs/fireStartingChanceFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	0.35 0.35	</valueByLevel>
+          <valueByLevel>	0.3 0.3	</valueByLevel>
         </factor>
       </factors>
     </script>
@@ -62,11 +62,11 @@
       </mul>
       <mul>
         <name>	vehPenaltyForDamageEngineAndCombat	</name>
-        <value>	0.35	</value>
+        <value>	0.3	</value>
       </mul>
       <mul>
         <name>	vehicleFireChance	</name>
-        <value>	0.35	</value>
+        <value>	0.3	</value>
       </mul>
     </kpi>
   </deluxImprovedConfiguration>

@@ -1,0 +1,500 @@
+<95_lost_city_ctf_h19.xml>
+  <name>	#arenas:95_lost_city_ctf_h19/name	</name>
+  <description>	#arenas:95_lost_city_ctf_h19/description	</description>
+  <geometry>	spaces/95_lost_city_ctf_h19	</geometry>
+  <runDelay>	15	</runDelay>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <estimatedLoad>	0.525	</estimatedLoad>
+  <roundLength>	1220	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-700.000000 -700.000000	</bottomLeft>
+    <upperRight>	700.000000 700.000000	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/95_lost_city_ctf_h19/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	desert	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <maxPlayersInTeam>	5	</maxPlayersInTeam>
+  <wwmusicSetup>
+    <wwmusicLoading>	ev_halloween_2019_music_loading_screen	</wwmusicLoading>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	ev_halloween_2019_music_win	</wwmusicResultWin>
+    <wwmusicResultDefeat>	ev_halloween_2019_music_defeat	</wwmusicResultDefeat>
+    <wwmusicVoResultDefeat>	ev_halloween_2019_vo_result_defeat_no_enough_matter	</wwmusicVoResultDefeat>
+    <helpers>	hw20BattleResultsStories	</helpers>
+  </wwmusicSetup>
+  <wwbattleCountdownTimerSound>	ev_halloween_2020_ui_timer	</wwbattleCountdownTimerSound>
+  <wwambientSound>	ev_halloween_2019_ambient_wind	</wwambientSound>
+  <notificationsRemapping>
+    <notification>
+      <name>	ibc_ping_thanks	</name>
+      <mod>	ibc_ping_reply	</mod>
+    </notification>
+    <notification>
+      <name>	ibc_ping_thanks_npc	</name>
+      <mod>	ibc_ping_reply_npc	</mod>
+    </notification>
+    <notification>
+      <name>	ibc_ping_affirmative	</name>
+      <mod>	ibc_ping_reply	</mod>
+    </notification>
+    <notification>
+      <name>	ibc_ping_affirmative_npc	</name>
+      <mod>	ibc_ping_reply_npc	</mod>
+    </notification>
+    <notification>
+      <name>	ibc_ping_help_me_ex	</name>
+      <mod>	ibc_ping_request	</mod>
+    </notification>
+    <notification>
+      <name>	ibc_ping_help_me_ex_npc	</name>
+      <mod>	ibc_ping_request_npc	</mod>
+    </notification>
+    <notification>
+      <name>	ibc_ping_retreat	</name>
+      <mod>	ibc_ping_request	</mod>
+    </notification>
+    <notification>
+      <name>	ibc_ping_retreat_npc	</name>
+      <mod>	ibc_ping_request_npc	</mod>
+    </notification>
+    <notification>
+      <name>	ibc_ping_help_me_ex_reply	</name>
+      <mod>	ibc_ping_action	</mod>
+    </notification>
+    <notification>
+      <name>	ibc_ping_help_me_ex_reply_npc	</name>
+      <mod>	ibc_ping_action_npc	</mod>
+    </notification>
+    <notification>
+      <name>	start_battle	</name>
+    </notification>
+    <notification>
+      <name>	vehicle_destroyed	</name>
+    </notification>
+    <notification>
+      <name>	enemy_hp_damaged_by_projectile_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_hp_damaged_by_projectile_and_gun_damaged_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_hp_damaged_by_explosion_at_direct_hit_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_no_piercing_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_no_hp_damage_at_no_attempt_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_no_hp_damage_at_attempt_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_no_hp_damage_at_no_attempt_and_chassis_damaged_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_no_hp_damage_at_no_attempt_and_gun_damaged_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_ricochet_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_no_hp_damage_by_near_explosion_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_hp_damaged_by_near_explosion_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_fire_started_by_player	</name>
+    </notification>
+    <notification>
+      <name>	damage_by_near_explosion_by_enemy	</name>
+    </notification>
+    <notification>
+      <name>	target_captured	</name>
+    </notification>
+    <notification>
+      <name>	target_lost	</name>
+    </notification>
+    <notification>
+      <name>	target_unlocked	</name>
+    </notification>
+    <notification>
+      <name>	crew_deactivated	</name>
+    </notification>
+    <notification>
+      <name>	engine_damaged	</name>
+    </notification>
+    <notification>
+      <name>	engine_destroyed	</name>
+    </notification>
+    <notification>
+      <name>	engine_functional	</name>
+    </notification>
+    <notification>
+      <name>	ammo_bay_damaged	</name>
+    </notification>
+    <notification>
+      <name>	fuel_tank_damaged	</name>
+    </notification>
+    <notification>
+      <name>	radio_damaged	</name>
+    </notification>
+    <notification>
+      <name>	track_damaged	</name>
+    </notification>
+    <notification>
+      <name>	track_destroyed	</name>
+    </notification>
+    <notification>
+      <name>	track_functional	</name>
+    </notification>
+    <notification>
+      <name>	track_functional_can_move	</name>
+    </notification>
+    <notification>
+      <name>	gun_damaged	</name>
+    </notification>
+    <notification>
+      <name>	gun_destroyed	</name>
+    </notification>
+    <notification>
+      <name>	gun_functional	</name>
+    </notification>
+    <notification>
+      <name>	turret_rotator_damaged	</name>
+    </notification>
+    <notification>
+      <name>	turret_rotator_destroyed	</name>
+    </notification>
+    <notification>
+      <name>	turret_rotator_functional	</name>
+    </notification>
+    <notification>
+      <name>	surveying_devices_damaged	</name>
+    </notification>
+    <notification>
+      <name>	surveying_devices_destroyed	</name>
+    </notification>
+    <notification>
+      <name>	surveying_devices_functional	</name>
+    </notification>
+    <notification>
+      <name>	commander_killed	</name>
+    </notification>
+    <notification>
+      <name>	driver_killed	</name>
+    </notification>
+    <notification>
+      <name>	radioman_killed	</name>
+    </notification>
+    <notification>
+      <name>	gunner_killed	</name>
+    </notification>
+    <notification>
+      <name>	loader_killed	</name>
+    </notification>
+    <notification>
+      <name>	fire_started	</name>
+    </notification>
+    <notification>
+      <name>	fire_stopped	</name>
+    </notification>
+    <notification>
+      <name>	enemy_killed_by_player	</name>
+    </notification>
+  </notificationsRemapping>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	ev_halloween_2020_gameplay.bnk	</bank>
+      <bank>	ev_halloween_2020_gameplay.pck	</bank>
+    </loadBanks>
+    <unloadBanks>
+      <bank>	combat_atmosphere.bnk	</bank>
+      <bank>	plane.bnk	</bank>
+      <bank>	ambient.bnk	</bank>
+    </unloadBanks>
+    <events>
+      <event>
+        <name>	ui_target_locked	</name>
+        <mod>	ev_halloween_2019_ui_target_locked	</mod>
+      </event>
+      <event>
+        <name>	ui_target_lost	</name>
+        <mod>	ev_halloween_2019_ui_target_unlocked	</mod>
+      </event>
+      <event>
+        <name>	ui_target_unlocked	</name>
+        <mod>	ev_halloween_2019_ui_target_unlocked	</mod>
+      </event>
+      <event>
+        <name>	enemy_sighted_for_team	</name>
+        <mod>	ev_halloween_2019_ability_unit_reveal	</mod>
+      </event>
+      <event>
+        <name>	minimap_attention	</name>
+        <mod>	ev_halloween_2019_ability_unit_reveal	</mod>
+      </event>
+      <event>
+        <name>	imp_medium_pierce_AP_NPC_PC	</name>
+        <mod>	imp_medium_pierce_AP_NPC_PC	</mod>
+        <modAUX>	ev_halloween_2019_gameplay_impact	</modAUX>
+      </event>
+      <event>
+        <name>	eng_ContinentalR_pc	</name>
+        <mod>	ev_halloween_2019_gameplay_engine_pc	</mod>
+      </event>
+      <event>
+        <name>	eng_v55_pc	</name>
+        <mod>	ev_halloween_2019_gameplay_engine_pc	</mod>
+      </event>
+      <event>
+        <name>	eng_Ford_GAA_pc	</name>
+        <mod>	ev_halloween_2019_gameplay_engine_pc	</mod>
+      </event>
+      <event>
+        <name>	wpn_huge_PC	</name>
+        <mod>	ev_halloween_2019_gameplay_wpn_huge_PC	</mod>
+      </event>
+      <event>
+        <name>	wpn_large_PC	</name>
+        <mod>	ev_halloween_2019_gameplay_wpn_large_PC	</mod>
+      </event>
+      <event>
+        <name>	wpn_main_PC	</name>
+        <mod>	ev_halloween_2019_gameplay_wpn_main_PC	</mod>
+      </event>
+      <event>
+        <name>	wpn_main_extra_PC	</name>
+        <mod>	ev_halloween_2019_gameplay_wpn_main_PC	</mod>
+      </event>
+      <event>
+        <name>	wpn_huge_NPC	</name>
+        <mod>	ev_halloween_2019_gameplay_wpn_huge_NPC	</mod>
+      </event>
+      <event>
+        <name>	wpn_large_NPC	</name>
+        <mod>	ev_halloween_2019_gameplay_wpn_large_NPC	</mod>
+      </event>
+      <event>
+        <name>	wpn_meduim_NPC	</name>
+        <mod>	ev_halloween_2019_gameplay_wpn_main_NPC	</mod>
+      </event>
+      <event>
+        <name>	wpn_main_NPC	</name>
+        <mod>	ev_halloween_2019_gameplay_wpn_main_NPC	</mod>
+      </event>
+      <event>
+        <name>	imp_surface_automatic_NPC	</name>
+        <mod>	imp_surface_automatic_NPC	</mod>
+        <modAUX>	ev_halloween_2019_gameplay_imp_surface_automatic_NPC	</modAUX>
+      </event>
+      <event>
+        <name>	imp_surface_huge_NPC	</name>
+        <mod>	imp_surface_huge_NPC	</mod>
+        <modAUX>	ev_halloween_2019_gameplay_imp_surface_huge_NPC	</modAUX>
+      </event>
+      <event>
+        <name>	imp_surface_large_NPC	</name>
+        <mod>	imp_surface_large_NPC	</mod>
+        <modAUX>	ev_halloween_2019_gameplay_imp_surface_large_NPC	</modAUX>
+      </event>
+      <event>
+        <name>	imp_surface_main_NPC	</name>
+        <mod>	imp_surface_main_NPC	</mod>
+        <modAUX>	ev_halloween_2019_gameplay_imp_surface_main_NPC	</modAUX>
+      </event>
+      <event>
+        <name>	imp_surface_medium_NPC	</name>
+        <mod>	imp_surface_medium_NPC	</mod>
+        <modAUX>	ev_halloween_2019_gameplay_imp_surface_medium_NPC	</modAUX>
+      </event>
+      <event>
+        <name>	imp_surface_small_NPC	</name>
+        <mod>	imp_surface_small_NPC	</mod>
+        <modAUX>	ev_halloween_2019_gameplay_imp_surface_small_NPC	</modAUX>
+      </event>
+      <event>
+        <name>	imp_surface_automatic_PC	</name>
+        <mod>	imp_surface_automatic_PC	</mod>
+        <modAUX>	ev_halloween_2019_gameplay_imp_surface_automatic_PC	</modAUX>
+      </event>
+      <event>
+        <name>	imp_surface_huge_PC	</name>
+        <mod>	imp_surface_huge_PC	</mod>
+        <modAUX>	ev_halloween_2019_gameplay_imp_surface_huge_PC	</modAUX>
+      </event>
+      <event>
+        <name>	imp_surface_large_PC	</name>
+        <mod>	imp_surface_large_PC	</mod>
+        <modAUX>	ev_halloween_2019_gameplay_imp_surface_large_PC	</modAUX>
+      </event>
+      <event>
+        <name>	imp_surface_main_PC	</name>
+        <mod>	imp_surface_main_PC	</mod>
+        <modAUX>	ev_halloween_2019_gameplay_imp_surface_main_PC	</modAUX>
+      </event>
+      <event>
+        <name>	imp_surface_medium_PC	</name>
+        <mod>	imp_surface_medium_PC	</mod>
+        <modAUX>	ev_halloween_2019_gameplay_imp_surface_medium_PC	</modAUX>
+      </event>
+      <event>
+        <name>	imp_surface_small_PC	</name>
+        <mod>	imp_surface_small_PC	</mod>
+        <modAUX>	ev_halloween_2019_gameplay_imp_surface_small_PC	</modAUX>
+      </event>
+      <event>
+        <name>	treads_type_pc	</name>
+        <mod>	treads_type_pc	</mod>
+        <modAUX>	ev_halloween_2019_surfaces_PC	</modAUX>
+      </event>
+      <event>
+        <name>	eng_Continental_R975_npc	</name>
+        <mod>	eng_Continental_R975_npc	</mod>
+        <modAUX>	ev_halloween_2019_gameplay_bunny_fire	</modAUX>
+      </event>
+      <event>
+        <name>	ambient_trees_crack	</name>
+        <mod></mod>
+      </event>
+      <event>
+        <name>	ambient_trees_dry_comb_big_01	</name>
+        <mod></mod>
+      </event>
+      <event>
+        <name>	ambient_static_objects_flag_flapping	</name>
+        <mod></mod>
+      </event>
+      <event>
+        <name>	ambient_bush_yellow_dry_small_01	</name>
+        <mod></mod>
+      </event>
+      <event>
+        <name>	ambient_trees_without_foliage_tree_big_02	</name>
+        <mod></mod>
+      </event>
+      <event>
+        <name>	ambient_trees_without_foliage_bush_big_01	</name>
+        <mod></mod>
+      </event>
+      <event>
+        <name>	ambient_trees_yellow_soft_comb_small_01	</name>
+        <mod></mod>
+      </event>
+      <event>
+        <name>	ambient_trees_green_bush_few_foliage_01	</name>
+        <mod></mod>
+      </event>
+      <event>
+        <name>	lightbulb	</name>
+        <mod>	ev_halloween_2019_ui_lightbulb	</mod>
+      </event>
+      <event>
+        <name>	lbe_appear	</name>
+        <mod>	ev_halloween_2019_ui_lbe_appear	</mod>
+      </event>
+      <event>
+        <name>	lbe_counter	</name>
+        <mod>	ev_halloween_2019_ui_lbe_counter	</mod>
+      </event>
+      <event>
+        <name>	lbe_disappear	</name>
+        <mod>	ev_halloween_2019_ui_lbe_disappear	</mod>
+      </event>
+    </events>
+  </soundRemapping>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <respawnType>	event_limited	</respawnType>
+      <numPlayerGroups>	20	</numPlayerGroups>
+      <playerGroupLimit>	150	</playerGroupLimit>
+      <battleEndWarningAppearTime>	0	</battleEndWarningAppearTime>
+      <battleEndWarningDuration>	0	</battleEndWarningDuration>
+      <battleEndingSoonTime>	0	</battleEndingSoonTime>
+    </ctf>
+  </gameplayTypes>
+  <envSwitcherSettings>
+    <switchers>
+      <switcher>
+        <id>	0	</id>
+        <envName>	start	</envName>
+      </switcher>
+      <switcher>
+        <id>	1	</id>
+        <envName>	layer_1	</envName>
+        <settings>
+          <settingID>	white_fader_player	</settingID>
+        </settings>
+      </switcher>
+      <switcher>
+        <id>	2	</id>
+        <envName>	layer_2	</envName>
+        <settings>
+          <settingID>	white_fader_player	</settingID>
+        </settings>
+      </switcher>
+      <switcher>
+        <id>	3	</id>
+        <envName>	layer_3	</envName>
+        <settings>
+          <settingID>	white_fader_player	</settingID>
+        </settings>
+      </switcher>
+      <switcher>
+        <id>	4	</id>
+        <envName>	start	</envName>
+        <settings>
+          <settingID>	white_fader_player	</settingID>
+        </settings>
+      </switcher>
+    </switchers>
+    <envSettings>
+      <envSetting>
+        <id>	white_fader	</id>
+        <fader>
+          <duration>	0.5	</duration>
+          <color>	255 255 255	</color>
+        </fader>
+      </envSetting>
+      <envSetting>
+        <id>	white_fader_player	</id>
+        <faderPlayer>
+          <timeline>
+            <effectEnd>	20	</effectEnd>
+          </timeline>
+          <effects>
+            <flashBang>
+              <startKey>	start	</startKey>
+              <stages>
+                <stage>	1	  <color>	1 1 1 1	</color>
+                </stage>
+                <stage>	2	  <color>	1 1 1 1	</color>
+                </stage>
+                <stage>	7	  <color>	0.79 0.87 0.87 0.5	</color>
+                </stage>
+                <stage>	13	  <color>	0 0 0 0	</color>
+                </stage>
+              </stages>
+            </flashBang>
+          </effects>
+        </faderPlayer>
+      </envSetting>
+    </envSettings>
+  </envSwitcherSettings>
+</95_lost_city_ctf_h19.xml>

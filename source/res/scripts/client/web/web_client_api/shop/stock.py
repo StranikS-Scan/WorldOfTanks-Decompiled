@@ -6,6 +6,7 @@ from WeakMethod import WeakMethodProxy
 from gui.Scaleform import MENU
 from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.money import Money
+from constants import EVENT_BATTLES_TAG
 from helpers import dependency, i18n
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA, RequestCriteria, PredicateCondition
@@ -55,6 +56,7 @@ _GUI_ITEMS_TYPE_MAP = {ShopItemType.VEHICLE: GUI_ITEM_TYPE.VEHICLE,
  ShopItemType.BATTLE_BOOSTER: GUI_ITEM_TYPE.BATTLE_BOOSTER,
  ShopItemType.MODULE: GUI_ITEM_TYPE.VEHICLE_MODULES,
  ShopItemType.SHELL: GUI_ITEM_TYPE.SHELL,
+ ShopItemType.CREW_BOOKS: GUI_ITEM_TYPE.CREW_BOOKS,
  ShopItemType.PAINT: GUI_ITEM_TYPE.PAINT,
  ShopItemType.CAMOUFLAGE: GUI_ITEM_TYPE.CAMOUFLAGE,
  ShopItemType.MODIFICATION: GUI_ITEM_TYPE.MODIFICATION,
@@ -103,6 +105,7 @@ _ITEMS_CRITERIA_MAP = {ShopItemType.VEHICLE: {'inventory': REQ_CRITERIA.INVENTOR
  ShopItemType.EMBLEM: {},
  ShopItemType.INSCRIPTION: {},
  ShopItemType.PROJECTION_DECAL: {},
+ ShopItemType.CREW_BOOKS: {},
  ShopItemType.ENHANCEMENT: {'inventory': REQ_CRITERIA.INVENTORY}}
 
 class IdInListCriteria(RequestCriteria):
@@ -127,6 +130,8 @@ def _parseCriteriaSpec(itemType, spec, idList=None):
     ids = sorted([ val.strip() for val in spec ] if spec else [])
     normalizedIds = [ i.replace('!', '') for i in ids ]
     compoundCriteria = REQ_CRITERIA.EMPTY | ID_IN_LIST(idList) if idList else REQ_CRITERIA.EMPTY
+    if itemType == ShopItemType.EQUIPMENT:
+        compoundCriteria |= ~REQ_CRITERIA.EQUIPMENT.HAS_TAGS([EVENT_BATTLES_TAG])
     for critId, normalizedCritId in zip(ids, normalizedIds):
         try:
             criteria = typeCriteria[normalizedCritId]
@@ -190,6 +195,8 @@ class ItemsWebApiMixin(object):
                     fmt = formatters.makeInventoryEnhancementsFormatter()
                 else:
                     fmt = formatters.makeInstalledEnhancementsFormatter()
+            elif itemType in ShopItemType.CREW_BOOKS:
+                fmt = formatters.makeCrewBooksFormatter()
             self.__formattersMap[key] = fmt
             return fmt
 

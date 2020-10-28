@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_control/controllers/radar_ctrl.py
 import logging
 import BigWorld
+import constants
 from constants import ARENA_PERIOD
 from gui.battle_control.view_components import ViewComponentsController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
@@ -55,11 +56,12 @@ class RadarController(ViewComponentsController, IRadarController):
         arena = avatar.arena
         if arena is not None:
             arena.onRadarInfoReceived += self.__onRadarInfoReceived
-        playerVehicle = avatar.vehicle
-        if playerVehicle is not None:
-            self.updateRadarReadinessTime(playerVehicle.radar.radarReadinessTime)
-        else:
-            avatar.onVehicleEnterWorld += self.__onVehicleEnterWorld
+        if not avatar.arenaBonusType == constants.ARENA_BONUS_TYPE.EVENT_BATTLES:
+            playerVehicle = avatar.vehicle
+            if playerVehicle is not None:
+                self.updateRadarReadinessTime(playerVehicle.radar.radarReadinessTime)
+            else:
+                avatar.onVehicleEnterWorld += self.__onVehicleEnterWorld
         return
 
     def stopControl(self):

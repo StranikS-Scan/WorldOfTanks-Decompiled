@@ -22,7 +22,7 @@ from vehicle_systems.tankStructure import VehiclePartsTuple
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.graphics import isRendererPipelineDeferred
-from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS, SeasonType, CustomizationType, DEFAULT_DECAL_CLIP_ANGLE, ApplyArea, MATCHING_TAGS_SUFFIX, MAX_PROJECTION_DECALS_PER_AREA, CamouflageTilingType, CustomizationTypeNames, SLOT_TYPE_NAMES, DEFAULT_DECAL_TINT_COLOR, Options, SLOT_DEFAULT_ALLOWED_MODEL, ItemTags
+from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS, SeasonType, CustomizationType, EMPTY_ITEM_ID, DEFAULT_DECAL_CLIP_ANGLE, ApplyArea, MATCHING_TAGS_SUFFIX, MAX_PROJECTION_DECALS_PER_AREA, CamouflageTilingType, CustomizationTypeNames, SLOT_TYPE_NAMES, DEFAULT_DECAL_TINT_COLOR, Options, SLOT_DEFAULT_ALLOWED_MODEL, ItemTags
 from gui.shared.gui_items.customization.c11n_items import Customization
 import math_utils
 from helpers import newFakeModel
@@ -63,9 +63,9 @@ ProjectionDecalGenericParams.__new__.__defaults__ = (Math.Vector4(0.0),
  False,
  False,
  True)
-ModelAnimatorParams = namedtuple('ModelAnimatorParams', ('transform', 'attachNode', 'animatorName', 'animatorLogic'))
+ModelAnimatorParams = namedtuple('ModelAnimatorParams', ('transform', 'attachNode', 'animatorName'))
 ModelAnimatorParams.__new__.__defaults__ = (math_utils.createIdentityMatrix(), '', '')
-LoadedModelAnimator = namedtuple('LoadedModelAnimator', ('animator', 'node', 'attachmentPartNode', 'animatorLogic'))
+LoadedModelAnimator = namedtuple('LoadedModelAnimator', ('animator', 'node', 'attachmentPartNode'))
 AttachmentParams = namedtuple('AttachmentParams', ('transform', 'attachNode', 'modelName', 'sequenceId', 'attachmentLogic', 'initialVisibility', 'partNodeAlias'))
 AttachmentParams.__new__.__defaults__ = (math_utils.createIdentityMatrix(),
  '',
@@ -126,13 +126,13 @@ def getOutfitComponent(outfitCD, vehicleDescriptor=None):
     if outfitCD:
         outfitComponent = parseOutfitDescr(outfitCD)
         season = _currentMapSeason()
-        if outfitComponent.styleId != 0 and season is not None:
+        if outfitComponent.styleId != 0 and outfitComponent.styleId != EMPTY_ITEM_ID and season is not None:
             intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, outfitComponent.styleId)
             styleDescr = getItemByCompactDescr(intCD)
             if IS_EDITOR:
                 if hasattr(outfitComponent, 'edSeasonsMask'):
-                    enyOutfit = styleDescr.outfits[season]
-                    season = enyOutfit.edSeasonsMask
+                    anyOutfit = styleDescr.outfits[season]
+                    season = anyOutfit.edSeasonsMask
             baseOutfitComponent = deepcopy(styleDescr.outfits[season])
             if vehicleDescriptor and ItemTags.ADD_NATIONAL_EMBLEM in styleDescr.tags:
                 emblems = createNationalEmblemComponents(vehicleDescriptor)
@@ -141,6 +141,31 @@ def getOutfitComponent(outfitCD, vehicleDescriptor=None):
                 outfitComponent = baseOutfitComponent.applyDiff(outfitComponent)
             else:
                 outfitComponent = baseOutfitComponent
+            if IS_EDITOR:
+
+                def setupAlternateItem(itemType, outfit, sourceOutfit, collectionName):
+                    alternateItem = outfit.editorData.alternateItems[itemType]
+                    if alternateItem != 0:
+                        sourceComponents = getattr(sourceOutfit, collectionName)
+                        if sourceComponents is not None:
+                            if itemType != CustomizationType.MODIFICATION:
+                                for componentItem in sourceComponents:
+                                    componentItem.id = alternateItem
+
+                            else:
+                                for index, _ in enumerate(sourceComponents):
+                                    sourceComponents[index] = alternateItem
+
+                                setattr(sourceOutfit, collectionName, sourceComponents)
+                    return
+
+                anyOutfit = styleDescr.outfits[season]
+                setupAlternateItem(CustomizationType.DECAL, anyOutfit, outfitComponent, 'decals')
+                setupAlternateItem(CustomizationType.PROJECTION_DECAL, anyOutfit, outfitComponent, 'projection_decals')
+                setupAlternateItem(CustomizationType.PAINT, anyOutfit, outfitComponent, 'paints')
+                setupAlternateItem(CustomizationType.CAMOUFLAGE, anyOutfit, outfitComponent, 'camouflages')
+                setupAlternateItem(CustomizationType.MODIFICATION, anyOutfit, outfitComponent, 'modifications')
+                setupAlternateItem(CustomizationType.PERSONAL_NUMBER, anyOutfit, outfitComponent, 'personal_numbers')
         return outfitComponent
     else:
         return CustomizationOutfit()
@@ -216,8 +241,11 @@ def getCamo(appearance, outfit, containerId, vDesc, descId, isDamaged, default=N
             vehPartCompDesc = getattr(vDesc, descId, None)
             if not vehPartCompDesc:
                 return result
-            area = vehPartCompDesc.customizableVehicleAreas.get(lower(CustomizationTypeNames[CustomizationType.CAMOUFLAGE]), (0, None))[0]
+            area = vehPartCompDesc.customizableVehicleAreas.get(lower(CustomizationTypeNames[CustomizationType.CAMOUFLAGE]), (0, None))
             if not area:
+                _logger.error('Error in customizableVehicleAreas ({}, {})').format(vDesc.name, descId)
+                return result
+            if not area[0]:
                 return result
             tiling, exclusionMap = processTiling(appearance, vDesc, descId, camouflage, component)
             camoAngle = camouflage.rotation[descId]
@@ -411,11 +439,10 @@ def getModelAnimators(outfit, vehicleDescr, spaceId, loadedAnimators, compoundMo
         fakeModel = newFakeModel()
         node = compoundModel.node(param.attachNode)
         if node is None:
-            _logger.error('Failed to attach sequence: "%s", node "%s" not found', param.animatorName, param.attachNode)
             continue
         node.attach(fakeModel, param.transform)
         animWrapper = AnimationSequence.ModelWrapperContainer(fakeModel, spaceId)
-        animator = __prepareAnimator(loadedAnimators, param.animatorName, animWrapper, node, animatorLogic=param.animatorLogic)
+        animator = __prepareAnimator(loadedAnimators, param.animatorName, animWrapper, node)
         if animator is None:
             continue
         animators.append(animator)
@@ -423,7 +450,7 @@ def getModelAnimators(outfit, vehicleDescr, spaceId, loadedAnimators, compoundMo
     return animators
 
 
-def __prepareAnimator(loadedAnimators, animatorName, wrapperToBind, node, attachmentPartNode=None, animatorLogic=None):
+def __prepareAnimator(loadedAnimators, animatorName, wrapperToBind, node, attachmentPartNode=None):
     if animatorName in loadedAnimators.failedIDs:
         return None
     else:
@@ -431,7 +458,7 @@ def __prepareAnimator(loadedAnimators, animatorName, wrapperToBind, node, attach
         animator.bindTo(wrapperToBind)
         if hasattr(animator, 'setBoolParam'):
             animator.setBoolParam('isDeferred', _isDeferredRenderer)
-        return LoadedModelAnimator(animator, node, attachmentPartNode, animatorLogic)
+        return LoadedModelAnimator(animator, node, attachmentPartNode)
 
 
 def __getParams(outfit, vehicleDescr, slotTypeName, slotType, paramsConverter):
@@ -464,7 +491,7 @@ def __getModelAnimators(outfit, vehicleDescr):
 
     def getModelAnimatorParams(slotParams, slotData, _):
         item = getItemByCompactDescr(slotData.intCD)
-        return ModelAnimatorParams(transform=__createTransform(slotParams, slotData), attachNode=slotParams.attachNode, animatorName=item.sequenceName, animatorLogic=item.sequenceLogic)
+        return ModelAnimatorParams(transform=__createTransform(slotParams, slotData), attachNode=slotParams.attachNode, animatorName=item.sequenceName)
 
     return __getParams(outfit, vehicleDescr, 'sequence', GUI_ITEM_TYPE.SEQUENCE, getModelAnimatorParams)
 

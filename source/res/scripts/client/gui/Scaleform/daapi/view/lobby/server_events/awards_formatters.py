@@ -1,14 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/awards_formatters.py
+from constants import HE19_AFK_PARDON_ORDER_TOKEN_ID
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import NewStyleBonusComposer
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.battle_pass.battle_pass_bonuses_helper import BonusesHelper
 from gui.impl import backport
-from gui.impl.gen import R
 from gui.impl.auxiliary.rewards_helper import NEW_STYLE_FORMATTED_BONUSES
+from gui.impl.gen import R
 from gui.server_events import formatters
 from gui.server_events.awards_formatters import AWARDS_SIZES, AwardsPacker, QuestsBonusComposer, getPostBattleAwardsPacker
 from gui.server_events.bonuses import BlueprintsBonusSubtypes
-from gui.battle_pass.battle_pass_bonuses_helper import BonusesHelper
+from gui.shared.utils.functions import makeTooltip
+from gui.shared.gui_items.crew_skin import localizedFullName as localizeSkinName
 SIMPLE_BONUSES_MAX_ITEMS = 5
 _DISPLAYED_AWARDS_COUNT = 2
 _END_LINE_SEPARATOR = ','
@@ -97,6 +99,28 @@ class CrewBookFormatter(OldStyleBonusFormatter):
         return backport.text(R.strings.quests.bonuses.items.name(), name=book.userName, count=count)
 
 
+class CrewSkinFormatter(OldStyleBonusFormatter):
+
+    @classmethod
+    def getOrder(cls):
+        pass
+
+    def accumulateBonuses(self, bonus):
+        result = []
+        for skin, count, _, _ in sorted(bonus.getItems()):
+            if skin is None or not count:
+                continue
+            result.append(self._formatCrewSkin(skin, count))
+
+        if result:
+            self._result.append(formatters.packSimpleBonusesBlock(result))
+        return
+
+    @classmethod
+    def _formatCrewSkin(cls, skin, count):
+        return backport.text(R.strings.quests.bonuses.items.name(), name=localizeSkinName(skin), count=count)
+
+
 class BlueprintsFormatter(OldStyleBonusFormatter):
 
     @classmethod
@@ -124,18 +148,6 @@ class BlueprintsFormatter(OldStyleBonusFormatter):
         return ' '.join([blueprintString, str(count)])
 
 
-class WtEventTicketFormatter(OldStyleBonusFormatter):
-
-    @classmethod
-    def getOrder(cls):
-        pass
-
-    def accumulateBonuses(self, bonus):
-        formattedList = bonus.formattedList()
-        for label in formattedList:
-            self._result.append(formatters.packWulfTooltipBonusBlock(label, TOOLTIPS_CONSTANTS.WT_EVENT_BOSS_TICKET))
-
-
 class SimpleBonusFormatter(OldStyleBonusFormatter):
 
     def accumulateBonuses(self, bonus, event=None):
@@ -148,6 +160,18 @@ class SimpleBonusFormatter(OldStyleBonusFormatter):
         result = []
         if simpleBonusesList:
             result.append(formatters.packSimpleBonusesBlock(simpleBonusesList, endlineSymbol=_END_LINE_SEPARATOR if addLineSeparator else _EMPTY_STRING))
+        return result
+
+
+class AFKPardonBonusFormatter(SimpleBonusFormatter):
+
+    def extractFormattedBonuses(self, addLineSeparator=False):
+        result = super(AFKPardonBonusFormatter, self).extractFormattedBonuses(addLineSeparator)
+        if result:
+            rToken = R.strings.tooltips.quests.bonuses.token
+            result[0].getDict().update({'tooltip': {'tooltip': makeTooltip(header=backport.text(rToken.header.he20_afk_pardon_order()), body=backport.text(rToken.body.he20_afk_pardon_order())),
+                         'isSpecial': False,
+                         'specialArgs': []}})
         return result
 
 
@@ -191,7 +215,7 @@ def getFormattersMap(event):
      'vehicles': VehiclesFormatter(event),
      'crewBooks': CrewBookFormatter(),
      'blueprints': BlueprintsFormatter(),
-     'wtTicket': WtEventTicketFormatter()}
+     'crewSkins': CrewSkinFormatter()}
 
 
 class OldStyleAwardsPacker(AwardsPacker):
@@ -200,19 +224,24 @@ class OldStyleAwardsPacker(AwardsPacker):
         super(OldStyleAwardsPacker, self).__init__(getFormattersMap(event))
         self.__defaultFormatter = SimpleBonusFormatter()
         self.__newStyleFormatter = NewStyleBonusFormatter()
+        self.__afkPardonFormatter = AFKPardonBonusFormatter()
 
     def format(self, bonuses, event=None):
         formattedBonuses = []
         isCustomizationBonusExist = False
         for b in bonuses:
             if b.isShowInGUI():
-                formatter = self._getBonusFormatter(b.getName())
+                name = b.getName()
+                if name == 'customizations':
+                    isCustomizationBonusExist = True
+                if name == 'battleToken' and HE19_AFK_PARDON_ORDER_TOKEN_ID in b.getValue():
+                    formatter = self.__afkPardonFormatter
+                else:
+                    formatter = self._getBonusFormatter(name)
                 if formatter:
                     formatter.accumulateBonuses(b)
-                if b.getName() == 'customizations':
-                    isCustomizationBonusExist = True
 
-        fmts = [self.__defaultFormatter, self.__newStyleFormatter]
+        fmts = [self.__defaultFormatter, self.__newStyleFormatter, self.__afkPardonFormatter]
         fmts.extend(sorted(self.getFormatters().itervalues(), key=lambda f: f.getOrder()))
         for formatter in fmts:
             formattedBonuses.extend(formatter.extractFormattedBonuses(isCustomizationBonusExist))

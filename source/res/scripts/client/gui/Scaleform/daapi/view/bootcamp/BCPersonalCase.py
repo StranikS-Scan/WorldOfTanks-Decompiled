@@ -6,8 +6,9 @@ from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.locale.MENU import MENU
 from bootcamp.Bootcamp import g_bootcamp
-from bootcamp.statistic.decorators import loggerTarget, loggerEntry, simpleLog
-from bootcamp.statistic.logging_constants import BC_LOG_ACTIONS, BC_LOG_KEYS
+from uilogging.decorators import loggerTarget, loggerEntry, simpleLog
+from uilogging.bootcamp.constants import BC_LOG_ACTIONS, BC_LOG_KEYS
+from uilogging.bootcamp.loggers import BootcampUILogger
 SKILLS_TAB_INDEX = 2
 PERSONAL_CASE_SKILLS = 'PersonalCaseSkills'
 
@@ -54,7 +55,7 @@ class BCPersonalCaseDataProvider(PersonalCaseDataProvider):
           'linkage': PERSONAL_CASE_SKILLS}]
 
 
-@loggerTarget(logKey=BC_LOG_KEYS.BC_PERSONAL_CASE)
+@loggerTarget(logKey=BC_LOG_KEYS.BC_HANGAR_HINTS, loggerCls=BootcampUILogger)
 class BCPersonalCase(PersonalCase):
 
     def __init__(self, ctx=None):
@@ -67,6 +68,6 @@ class BCPersonalCase(PersonalCase):
     def _populate(self):
         super(BCPersonalCase, self)._populate()
 
-    @simpleLog(action=BC_LOG_ACTIONS.CLOSE)
+    @simpleLog(action=BC_LOG_ACTIONS.CLOSE, logOnce=True, restrictions={'lesson_id': 3})
     def _dispose(self):
         super(BCPersonalCase, self)._dispose()

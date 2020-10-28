@@ -39,6 +39,7 @@ class MessengerEntry(object):
         self.__msgFiltersChain.init()
         self.__protoPlugins.init()
         self.__protoPlugins.setFilters(self.__msgFiltersChain)
+        g_playerEvents.onAccountShowGUI += self.__pe_onAccountShowGUI
         g_playerEvents.onGuiCacheSyncCompleted += self.__pe_onGuiCacheSyncCompleted
         g_playerEvents.onAccountBecomePlayer += self.__pe_onAccountBecomePlayer
         g_playerEvents.onAvatarBecomePlayer += self.__pe_onAvatarBecomePlayer
@@ -53,6 +54,7 @@ class MessengerEntry(object):
         self.__playerHelper.clear()
         self.__storage.clear()
         g_settings.fini()
+        g_playerEvents.onAccountShowGUI -= self.__pe_onAccountShowGUI
         g_playerEvents.onGuiCacheSyncCompleted -= self.__pe_onGuiCacheSyncCompleted
         g_playerEvents.onAccountBecomePlayer -= self.__pe_onAccountBecomePlayer
         g_playerEvents.onAvatarBecomePlayer -= self.__pe_onAvatarBecomePlayer
@@ -82,8 +84,10 @@ class MessengerEntry(object):
         if not BattleReplay.g_replayCtrl.isPlaying:
             self.__protoPlugins.view(MESSENGER_SCOPE.BATTLE)
 
-    def __pe_onGuiCacheSyncCompleted(self, _):
+    def __pe_onAccountShowGUI(self, _):
         self.onAccountShowGUI()
+
+    def __pe_onGuiCacheSyncCompleted(self, _):
         self.__playerHelper.initCachedData()
 
     def __pe_onAccountBecomePlayer(self):

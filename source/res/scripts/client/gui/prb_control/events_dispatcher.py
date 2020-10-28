@@ -4,9 +4,10 @@ import weakref
 from collections import namedtuple
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
@@ -30,19 +31,18 @@ TOOLTIP_PRB_DATA = namedtuple('TOOLTIP_PRB_DATA', ('tooltipId', 'label'))
 _SQUAD_TYPE_TO_ALIAS = {PREBATTLE_TYPE.EVENT: PREBATTLE_ALIASES.EVENT_SQUAD_WINDOW_PY,
  PREBATTLE_TYPE.SQUAD: PREBATTLE_ALIASES.SQUAD_WINDOW_PY,
  PREBATTLE_TYPE.EPIC: PREBATTLE_ALIASES.EPIC_SQUAD_WINDOW_PY,
- PREBATTLE_TYPE.BATTLE_ROYALE: PREBATTLE_ALIASES.BATTLE_ROYALE_SQUAD_WINDOW_PY,
- PREBATTLE_TYPE.BOB: PREBATTLE_ALIASES.BOB_SQUAD_WINDOW_PY}
+ PREBATTLE_TYPE.BATTLE_ROYALE: PREBATTLE_ALIASES.BATTLE_ROYALE_SQUAD_WINDOW_PY}
 _CarouselItemCtx = namedtuple('_CarouselItemCtx', ['label',
  'canClose',
  'isNotified',
  'icon',
  'order',
  'criteria',
- 'viewType',
+ 'layer',
  'openHandler',
  'readyData',
  'tooltipData'])
-_defCarouselItemCtx = _CarouselItemCtx(label=None, canClose=False, isNotified=False, icon=None, order=channel_num_gen.getOrder4Prebattle(), criteria=None, viewType=ViewTypes.WINDOW, openHandler=None, readyData=None, tooltipData=None)
+_defCarouselItemCtx = _CarouselItemCtx(label=None, canClose=False, isNotified=False, icon=None, order=channel_num_gen.getOrder4Prebattle(), criteria=None, layer=WindowLayer.WINDOW, openHandler=None, readyData=None, tooltipData=None)
 _LOCKED_SCREENS = (PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY, PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY)
 _EPIC_SCREENS = (PREBATTLE_ALIASES.EPIC_TRAINING_ROOM_VIEW_PY, PREBATTLE_ALIASES.EPICBATTLE_LIST_VIEW_PY)
 
@@ -94,6 +94,12 @@ class EventDispatcher(object):
 
     def loadBattleQueue(self):
         self.__fireLoadEvent(VIEW_ALIAS.BATTLE_QUEUE)
+
+    def loadEventBattleQueue(self):
+        self.__fireLoadEvent(VIEW_ALIAS.EVENT_BATTLE_QUEUE)
+
+    def loadDifficultyLevelUnlocked(self):
+        self.__fireLoadEvent(VIEW_ALIAS.EVENT_DIFFICULTY_UNLOCK)
 
     def loadTrainingList(self):
         self.addTrainingToCarousel()
@@ -152,10 +158,10 @@ class EventDispatcher(object):
         self.__fireHideEvent(events.HideWindowEvent.HIDE_SANDBOX_QUEUE_DIALOG)
 
     def loadBootcampQueue(self):
-        self.__fireEvent(events.BootcampEvent(events.BootcampEvent.QUEUE_DIALOG_SHOW))
+        self.__fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG_SHOW)))
 
     def unloadBootcampQueue(self):
-        self.__fireEvent(events.BootcampEvent(events.BootcampEvent.QUEUE_DIALOG_CLOSE))
+        self.__fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG_CLOSE)))
 
     def removeTrainingFromCarousel(self, isList=True, closeWindow=True):
         clientType = SPECIAL_CLIENT_WINDOWS.TRAINING_LIST if isList else SPECIAL_CLIENT_WINDOWS.TRAINING_ROOM
@@ -187,7 +193,7 @@ class EventDispatcher(object):
         if not clientID:
             LOG_ERROR('Client ID not found', 'addTrainingToCarousel')
             return
-        currCarouselItemCtx = _defCarouselItemCtx._replace(label=MENU.HEADERBUTTONS_BATTLE_TYPES_TRAINING, criteria={POP_UP_CRITERIA.VIEW_ALIAS: alias}, viewType=ViewTypes.LOBBY_SUB, openHandler=handler)
+        currCarouselItemCtx = _defCarouselItemCtx._replace(label=MENU.HEADERBUTTONS_BATTLE_TYPES_TRAINING, criteria={POP_UP_CRITERIA.VIEW_ALIAS: alias}, layer=WindowLayer.SUB_VIEW, openHandler=handler)
         self.__handleAddPreBattleRequest(clientID, currCarouselItemCtx._asdict())
 
     def addEpicTrainingToCarousel(self, isList=True):
@@ -205,7 +211,7 @@ class EventDispatcher(object):
             LOG_ERROR('Client ID not found', 'addEpicTrainingToCarousel')
             return
         label = '{} - {}'.format(backport.text(R.strings.menu.headerButtons.battle.types.epicTraining()), backport.text(R.strings.menu.headerButtons.battle.types.epicTraining.descr()))
-        currCarouselItemCtx = _defCarouselItemCtx._replace(label=label, criteria={POP_UP_CRITERIA.VIEW_ALIAS: alias}, viewType=ViewTypes.LOBBY_SUB, openHandler=handler)
+        currCarouselItemCtx = _defCarouselItemCtx._replace(label=label, criteria={POP_UP_CRITERIA.VIEW_ALIAS: alias}, layer=WindowLayer.SUB_VIEW, openHandler=handler)
         self.__handleAddPreBattleRequest(clientID, currCarouselItemCtx._asdict())
 
     def addSpecBattleToCarousel(self, prbType):
@@ -273,7 +279,7 @@ class EventDispatcher(object):
             alias = VIEW_ALIAS.SWITCH_PERIPHERY_WINDOW_MODAL
         else:
             alias = VIEW_ALIAS.SWITCH_PERIPHERY_WINDOW
-        g_eventBus.handleEvent(events.LoadViewEvent(alias, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def removeUnitFromCarousel(self, prbType, closeWindow=True):
         clientID = channel_num_gen.getClientID4Prebattle(prbType)
@@ -335,14 +341,17 @@ class EventDispatcher(object):
         res = False
         inView = None
         if self.__appLoader is not None and self.__appLoader.getApp() is not None and self.__appLoader.getApp().containerManager is not None:
-            inView = self.__appLoader.getApp().containerManager.getView(ViewTypes.LOBBY_SUB)
+            inView = self.__appLoader.getApp().containerManager.getView(WindowLayer.SUB_VIEW)
         if inView is not None:
             if inView.alias in aliasToLoad:
                 res = True
         return res
 
-    def loadEventBattleQueue(self):
-        self.__fireLoadEvent(VIEW_ALIAS.WT_EVENT_QUEUE)
+    def showEpicBattlesPrimeTimeWindow(self):
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(EPICBATTLES_ALIASES.EPIC_BATTLES_PRIME_TIME_ALIAS), ctx={}), EVENT_BUS_SCOPE.LOBBY)
+
+    def showRankedPrimeTimeWindow(self):
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME), ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
     def _showUnitProgress(self, prbType, show):
         clientID = channel_num_gen.getClientID4Prebattle(prbType)
@@ -374,9 +383,9 @@ class EventDispatcher(object):
 
     def __fireShowEvent(self, eventName, arg=None):
         if arg is None:
-            self.__fireEvent(events.LoadViewEvent(eventName))
+            self.__fireEvent(events.LoadViewEvent(SFViewLoadParams(eventName)))
         else:
-            self.__fireEvent(events.LoadViewEvent(eventName, ctx=arg))
+            self.__fireEvent(events.LoadViewEvent(SFViewLoadParams(eventName), ctx=arg))
         return
 
     def __fireLoadEvent(self, eventName, arg=None):
@@ -389,9 +398,9 @@ class EventDispatcher(object):
             else:
                 self.__loadingEvent = eventName
                 if arg is None:
-                    self.__fireEvent(events.LoadViewEvent(eventName))
+                    self.__fireEvent(events.LoadViewEvent(SFViewLoadParams(eventName)))
                 else:
-                    self.__fireEvent(events.LoadViewEvent(eventName, ctx=arg))
+                    self.__fireEvent(events.LoadViewEvent(SFViewLoadParams(eventName), ctx=arg))
             return
 
     def __handleRemoveRequest(self, clientID, closeWindow=True):
@@ -436,14 +445,14 @@ class EventDispatcher(object):
         settings = pyEntity.settings
         if settings is None or settings.event == self.__loadingEvent:
             self.__loadingEvent = None
-        if pyEntity.viewType == ViewTypes.LOBBY_SUB:
+        if pyEntity.layer == WindowLayer.SUB_VIEW:
             self.updateUI(pyEntity.alias)
         return
 
     def __getLoadedEvent(self):
         app = self.app
         if app and app.containerManager:
-            container = app.containerManager.getContainer(ViewTypes.LOBBY_SUB)
+            container = app.containerManager.getContainer(WindowLayer.SUB_VIEW)
             if container:
                 view = container.getView()
                 if view and view.settings is not None:
@@ -468,7 +477,7 @@ class EventDispatcher(object):
             LOG_ERROR('Client ID not found', 'addUnitToCarousel', clientID)
             return
         criteria = {POP_UP_CRITERIA.VIEW_ALIAS: viewAlias}
-        currCarouselItemCtx = _defCarouselItemCtx._replace(label=label, criteria=criteria, viewType=ViewTypes.WINDOW, openHandler=openHandler)
+        currCarouselItemCtx = _defCarouselItemCtx._replace(label=label, criteria=criteria, layer=WindowLayer.WINDOW, openHandler=openHandler)
         self.__handleAddPreBattleRequest(clientID, currCarouselItemCtx._asdict())
 
     def __addSquadToCarousel(self, prbType, isTeamReady=False):

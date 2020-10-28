@@ -127,7 +127,7 @@ class OptDeviceInteractor(BaseOptDeviceInteractor):
     def upgradeModule(self, itemIntCD, callback):
         optDevice = self._itemsCache.items.getItemByCD(int(itemIntCD))
         slotIdx = self.getInstalledLayout().index(optDevice)
-        action = ActionsFactory.getAction(ActionsFactory.UPGRADE_OPT_DEVICE, vehicle=self.getItem(), module=optDevice, slotIdx=slotIdx, blurd3D=False)
+        action = ActionsFactory.getAction(ActionsFactory.UPGRADE_OPT_DEVICE, vehicle=self.getItem(), module=optDevice, slotIdx=slotIdx)
         result = yield action.doAction() if action is not None else None
         if result:
             upgradedIntCD = optDevice.descriptor.upgradeInfo.upgradedCompDescr

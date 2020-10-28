@@ -39,7 +39,6 @@ class ToolTip(ToolTipMgrMeta):
 
     def hide(self):
         self.as_hideS()
-        self.__destroyTooltipWindow()
 
     def handleKeyEvent(self, event):
         if not self.isReadyToHandleKey(event):
@@ -60,9 +59,6 @@ class ToolTip(ToolTipMgrMeta):
         return self.__tooltipID is not None and altPressed
 
     def onCreateTypedTooltip(self, tooltipType, args, stateType):
-        self.createTypedTooltipExt(tooltipType, args, stateType)
-
-    def createTypedTooltipExt(self, tooltipType, args, stateType, item=None):
         if self._areTooltipsDisabled:
             return
         elif not self._isAllowedTypedTooltip:
@@ -70,10 +66,7 @@ class ToolTip(ToolTipMgrMeta):
         else:
             builder = self._builders.getBuilder(tooltipType)
             if builder is not None:
-                kwargs = {}
-                if item:
-                    kwargs['item'] = item
-                data = builder.build(self, stateType, self.__isAdvancedKeyPressed, *args, **kwargs)
+                data = builder.build(self, stateType, self.__isAdvancedKeyPressed, *args)
             else:
                 _logger.warning('Tooltip can not be displayed: type "%s" is not found', tooltipType)
                 return
@@ -84,7 +77,7 @@ class ToolTip(ToolTipMgrMeta):
                     self._dynamic[tooltipType] = data
             return
 
-    def onCreateWulfTooltip(self, tooltipType, args, x, y, parent=None):
+    def onCreateWulfTooltip(self, tooltipType, args, x, y):
         if not self._isAllowedTypedTooltip:
             return
         else:
@@ -94,7 +87,7 @@ class ToolTip(ToolTipMgrMeta):
             else:
                 _logger.warning('Tooltip can not be displayed: type "%s" is not found', tooltipType)
                 return
-            window = data.getDisplayableData(parent=parent, *args)
+            window = data.getDisplayableData(*args)
             window.load()
             window.move(x, y)
             self.__tooltipWindowId = window.uniqueID

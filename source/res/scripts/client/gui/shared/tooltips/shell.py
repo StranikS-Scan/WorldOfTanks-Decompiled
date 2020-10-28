@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/shell.py
 from debug_utils import LOG_ERROR
+from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -103,12 +104,12 @@ class HeaderBlockConstructor(ShellTooltipBlockConstructor):
 
     def construct(self):
         shell = self.shell
-        block = list()
         formattedParameters = params_formatters.getFormattedParamsList(shell.descriptor, self._params)
         paramName = ModuleTooltipBlockConstructor.CALIBER
         paramValue = dict(formattedParameters).get(paramName)
-        block.append(formatters.packImageTextBlockData(title=text_styles.highTitle(shell.userName), desc=text_styles.concatStylesToMultiLine(text_styles.main(backport.text(R.strings.item_types.shell.kinds.dyn(shell.type)())), params_formatters.formatParamNameColonValueUnits(paramName=paramName, paramValue=paramValue)), descPadding=formatters.packPadding(top=7), img=shell.getBonusIcon(size='big'), imgPadding=formatters.packPadding(left=-8, right=20), txtGap=-4))
-        return block
+        headerText = formatters.packTitleDescBlock(title=text_styles.highTitle(shell.userName), desc=text_styles.concatStylesToMultiLine(text_styles.main(backport.text(R.strings.item_types.shell.kinds.dyn(shell.type)())), params_formatters.formatParamNameColonValueUnits(paramName=paramName, paramValue=paramValue)), padding=formatters.packPadding(left=-15), descPadding=formatters.packPadding(top=4), gap=-4)
+        headerImage = formatters.packImageBlockData(img=shell.getBonusIcon(size='big'), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(right=30, top=-5, bottom=-5))
+        return [headerText, headerImage]
 
 
 class PriceBlockConstructor(ShellTooltipBlockConstructor):

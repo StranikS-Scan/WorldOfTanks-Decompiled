@@ -280,14 +280,6 @@ def packNewStyleBonusesBlock(bonusesList, endlineSymbol=''):
     return UiElement(data)
 
 
-def packWulfTooltipBonusBlock(label, dataType):
-    data = {'linkage': 'QuestIconElement_UI',
-     'label': label,
-     'dataType': dataType,
-     'isWulfTooltip': True}
-    return UiElement(data)
-
-
 def packVehiclesBonusBlock(label, questID):
     blockData = {'linkage': 'VehiclesBonusTextElement_UI',
      'label': label,

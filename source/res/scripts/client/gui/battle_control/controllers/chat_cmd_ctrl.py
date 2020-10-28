@@ -13,7 +13,7 @@ from AvatarInputHandler.cameras import getWorldRayAndPoint
 from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from aih_constants import CTRL_MODE_NAME
 from arena_component_system.sector_base_arena_component import ID_TO_BASENAME
-from chat_commands_consts import MarkerType, DefaultMarkerSubType, ReplyState, BATTLE_CHAT_COMMAND_NAMES, INVALID_MARKER_SUBTYPE, _COMMAND_NAME_TRANSFORM_MARKER_TYPE, ONE_SHOT_COMMANDS_TO_REPLIES
+from chat_commands_consts import MarkerType, DefaultMarkerSubType, ReplyState, BATTLE_CHAT_COMMAND_NAMES, INVALID_MARKER_SUBTYPE, _COMMAND_NAME_TRANSFORM_MARKER_TYPE, ONE_SHOT_COMMANDS_TO_REPLIES, COMMAND_RESPONDING_MAPPING
 from epic_constants import EPIC_BATTLE_TEAM_ID
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
@@ -54,14 +54,7 @@ TARGET_TYPE_TRANSLATION_MAPPING = {CONTEXTCOMMAND: {MarkerType.VEHICLE_MARKER_TY
                                                         DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTACKING_OBJECTIVE},
                    MarkerType.LOCATION_MARKER_TYPE: {INVALID_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.GOING_THERE}},
  BATTLE_CHAT_COMMAND_NAMES.TURNBACK: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.TURNBACK}},
- BATTLE_CHAT_COMMAND_NAMES.THANKS: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.THANKS}},
- BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_1_EX: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_1}},
- BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_2_EX: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_2}},
- BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_3_EX: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_3}},
- BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_4_EX: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_4}},
- BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_5_EX: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_5}},
- BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_6_EX: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_6}},
- BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_7_EX: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_7}}}
+ BATTLE_CHAT_COMMAND_NAMES.THANKS: {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.THANKS}}}
 DIRECT_ACTION_BATTLE_CHAT_COMMANDS = [BATTLE_CHAT_COMMAND_NAMES.SOS,
  BATTLE_CHAT_COMMAND_NAMES.RELOADINGGUN,
  BATTLE_CHAT_COMMAND_NAMES.AFFIRMATIVE,
@@ -84,6 +77,7 @@ PROHIBITED_IF_SPECTATOR = [BATTLE_CHAT_COMMAND_NAMES.GOING_THERE,
  BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE,
  BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE,
  BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY]
+EVENT_PROHIBITED_IF_DEAD = (BATTLE_CHAT_COMMAND_NAMES.ATTACK_BASE, BATTLE_CHAT_COMMAND_NAMES.DEFEND_BASE)
 
 def getAimedAtPositionWithinBorders(aimOffsetX, aimOffsetY):
     ray, _ = getWorldRayAndPoint(aimOffsetX, aimOffsetY)
@@ -197,6 +191,8 @@ class ChatCommandsController(IBattleController):
                                 self.sendReplyChatCommand(targetID, replyToAction)
                         elif replyState == ReplyState.CAN_CONFIRM and replyToAction in ONE_SHOT_COMMANDS_TO_REPLIES.keys():
                             self.handleChatCommand(ONE_SHOT_COMMANDS_TO_REPLIES[replyToAction], targetID=targetID)
+                        elif replyState == ReplyState.CAN_RESPOND and replyToAction in COMMAND_RESPONDING_MAPPING.keys():
+                            self.handleChatCommand(COMMAND_RESPONDING_MAPPING[replyToAction], targetID=targetID)
 
             return
 
@@ -254,7 +250,7 @@ class ChatCommandsController(IBattleController):
             self.sendCommand(action)
 
     def sendAttentionToPosition3D(self, position, name):
-        if not avatar_getter.isVehicleAlive() and name in PROHIBITED_IF_DEAD or self.sessionProvider.getCtx().isPlayerObserver() and name in PROHIBITED_IF_SPECTATOR or self.__isEnabled is False:
+        if self.__isProhibitedToSendIfDeadOrObserver(name) or self.__isEnabled is False:
             return
         positionVec = Math.Vector3(position[0], position[1], position[2])
         if name == BATTLE_CHAT_COMMAND_NAMES.SPG_AIM_AREA and self.__isSPG():
@@ -282,9 +278,12 @@ class ChatCommandsController(IBattleController):
             return
 
     def sendCommandToBase(self, baseIdx, cmdName, baseName=''):
-        if not avatar_getter.isVehicleAlive() and cmdName in PROHIBITED_IF_DEAD or self.sessionProvider.getCtx().isPlayerObserver() and cmdName in PROHIBITED_IF_SPECTATOR or self.__isEnabled is False:
+        if self.__isProhibitedToSendIfDeadOrObserver(cmdName) or self.__isEnabled is False:
             return
-        if self.sessionProvider.arenaVisitor.gui.isInEpicRange():
+        gui = self.sessionProvider.arenaVisitor.gui
+        if gui.isEventBattle() and not avatar_getter.isVehicleAlive() and cmdName in EVENT_PROHIBITED_IF_DEAD:
+            return
+        if gui.isInEpicRange():
             baseName = ID_TO_BASENAME[baseIdx]
         command = self.proto.battleCmd.createByBaseIndexAndName(baseIdx, cmdName, baseName)
         if command:
@@ -293,7 +292,7 @@ class ChatCommandsController(IBattleController):
             _logger.error('Command not found: %s', cmdName)
 
     def sendCommand(self, cmdName):
-        if not avatar_getter.isVehicleAlive() and cmdName in PROHIBITED_IF_DEAD or self.sessionProvider.getCtx().isPlayerObserver() and cmdName in PROHIBITED_IF_SPECTATOR or self.__isEnabled is False:
+        if self.__isProhibitedToSendIfDeadOrObserver(cmdName) or self.__isEnabled is False:
             return
         command = self.proto.battleCmd.createByName(cmdName)
         if command:
@@ -302,7 +301,7 @@ class ChatCommandsController(IBattleController):
             _logger.error('Command not found: %s', cmdName)
 
     def sendEpicGlobalCommand(self, cmdName, baseName=''):
-        if not avatar_getter.isVehicleAlive() and cmdName in PROHIBITED_IF_DEAD or self.sessionProvider.getCtx().isPlayerObserver() and cmdName in PROHIBITED_IF_SPECTATOR or self.__isEnabled is False:
+        if self.__isProhibitedToSendIfDeadOrObserver(cmdName) or self.__isEnabled is False:
             return
         command = self.proto.battleCmd.createByGlobalMsgName(cmdName, baseName)
         if command:
@@ -311,7 +310,7 @@ class ChatCommandsController(IBattleController):
             _logger.error('Command not found: %s', cmdName)
 
     def sendTargetedCommand(self, cmdName, targetID, isInRadialMenu=False):
-        if not avatar_getter.isVehicleAlive() and cmdName in PROHIBITED_IF_DEAD or self.sessionProvider.getCtx().isPlayerObserver() and cmdName in PROHIBITED_IF_SPECTATOR or self.__isEnabled is False or not self.__arenaDP.getVehicleInfo(targetID).isAlive():
+        if self.__isProhibitedToSendIfDeadOrObserver(cmdName) or self.__isEnabled is False or not self.__arenaDP.getVehicleInfo(targetID).isAlive():
             return
         if self.__isSPG() and cmdName == BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY or self.__isSPGAndInStrategicOrArtyMode() and cmdName == BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY and isInRadialMenu is False:
             command = self.proto.battleCmd.createSPGAimTargetCommand(targetID, self.__getReloadTime())
@@ -331,6 +330,9 @@ class ChatCommandsController(IBattleController):
             self.__sendChatCommand(command)
         else:
             _logger.error('Can not create reloading command')
+
+    def __isProhibitedToSendIfDeadOrObserver(self, name):
+        return not avatar_getter.isVehicleAlive() and name in PROHIBITED_IF_DEAD or self.sessionProvider.getCtx().isPlayerObserver() and name in PROHIBITED_IF_SPECTATOR
 
     def __isSPG(self):
         return self.sessionProvider.getArenaDP().getVehicleInfo().isSPG()

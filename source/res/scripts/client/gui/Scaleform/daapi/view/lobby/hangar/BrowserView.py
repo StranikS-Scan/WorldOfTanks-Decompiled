@@ -6,6 +6,7 @@ from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.BrowserScreenMeta import BrowserScreenMeta
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared import events, EVENT_BUS_SCOPE
@@ -60,7 +61,7 @@ class BrowserView(LobbySubView, BrowserScreenMeta):
 
     def onCloseView(self):
         returnAlias = self.__getFromCtx('returnAlias', VIEW_ALIAS.LOBBY_HANGAR)
-        self.fireEvent(events.LoadViewEvent(returnAlias, ctx=self.__ctx), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(returnAlias), ctx=self.__ctx), EVENT_BUS_SCOPE.LOBBY)
 
     def onEscapePress(self):
         if self.__browser and not self.__browser.skipEscape:
@@ -112,6 +113,9 @@ class BrowserView(LobbySubView, BrowserScreenMeta):
         super(BrowserView, self)._dispose()
         return
 
+    def _getBrowserSkipEscape(self):
+        return not self.__hasFocus or self.__errorOccurred
+
     def __onError(self):
         self.__errorOccurred = True
         self.__updateSkipEscape()
@@ -141,7 +145,7 @@ class BrowserView(LobbySubView, BrowserScreenMeta):
 
     def __updateSkipEscape(self):
         if self.__browser is not None:
-            self.__browser.skipEscape = not self.__hasFocus or self.__errorOccurred
+            self.__browser.skipEscape = self._getBrowserSkipEscape()
         return
 
     def __onServerSettingChanged(self, diff):

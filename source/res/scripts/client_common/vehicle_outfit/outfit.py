@@ -162,7 +162,7 @@ class Outfit(HasStrCD):
         return result
 
     def isEqual(self, other):
-        return self.diff(other).isEmpty() and other.diff(self).isEmpty()
+        return False if self.id != other.id else self.diff(other).isEmpty() and other.diff(self).isEmpty()
 
     def getContainer(self, areaID):
         return self._containers.get(areaID)
@@ -274,5 +274,5 @@ class Outfit(HasStrCD):
         self.__itemsCounter = Counter((slotData.intCD for slotData in self.slotsData() if not slotData.component.preview))
 
     def _validateVehicle(self, other):
-        if not self.vehicleCD or not other.vehicleCD or self.vehicleCD != other.vehicleCD:
+        if not self.vehicleCD or not other.vehicleCD or VehicleDescr(compactDescr=self.vehicleCD).type.compactDescr != VehicleDescr(compactDescr=other.vehicleCD).type.compactDescr:
             raise SoftException("Outfit's vehicleDescriptors are different")

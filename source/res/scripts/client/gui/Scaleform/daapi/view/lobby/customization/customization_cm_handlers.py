@@ -173,8 +173,7 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
             tooltipVO = None
         inventoryCount = self.__ctx.mode.getItemInventoryCount(item, excludeBase=True)
         if item.isProgressive:
-            installedCount = item.installedCount(g_currentVehicle.item.intCD)
-            fullCount = installedCount + inventoryCount
+            fullCount = item.fullCount(g_currentVehicle.item.intCD)
             availableToSellCount = fullCount - item.descriptor.progression.autoGrantCount
             availableToSellCount = max(0, availableToSellCount)
             availableToSellCount = min(inventoryCount, availableToSellCount)

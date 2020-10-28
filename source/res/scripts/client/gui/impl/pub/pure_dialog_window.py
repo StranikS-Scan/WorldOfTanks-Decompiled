@@ -4,12 +4,12 @@ import typing
 from frameworks.wulf import ViewModel, Array
 from gui.impl.gen.resources import R
 from gui.impl.gen.view_models.constants.dialog_presets import DialogPresets
-from gui.impl.pub.dialog_window import DialogWindow, DialogLayer
+from gui.impl.pub.dialog_window import DialogWindow, DialogFlags
 
 class PureDialogWindow(DialogWindow):
 
-    def __init__(self, content=None, bottomContent=None, parent=None, balanceContent=None, enableBlur=True, preset=DialogPresets.DEFAULT, layer=DialogLayer.TOP_WINDOW):
-        super(PureDialogWindow, self).__init__(bottomContent=bottomContent, parent=parent, balanceContent=balanceContent, enableBlur=enableBlur, content=content, layer=layer)
+    def __init__(self, content=None, bottomContent=None, parent=None, balanceContent=None, enableBlur=True, preset=DialogPresets.DEFAULT, flags=DialogFlags.TOP_FULLSCREEN_WINDOW):
+        super(PureDialogWindow, self).__init__(bottomContent=bottomContent, parent=parent, balanceContent=balanceContent, enableBlur=enableBlur, content=content, flags=flags)
         self._setPreset(preset)
 
     def setTitle(self, title=R.invalid(), args=None, fmtArgs=None, namedFmtArgs=True):

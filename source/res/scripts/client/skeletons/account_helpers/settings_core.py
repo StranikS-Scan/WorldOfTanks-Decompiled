@@ -9,6 +9,9 @@ class ISettingsCache(object):
     def init(self):
         raise NotImplementedError
 
+    def isSynced(self):
+        raise NotImplementedError
+
     def fini(self):
         raise NotImplementedError
 
@@ -108,17 +111,11 @@ class ISettingsCore(object):
     def isSettingChanged(self, name, value):
         raise NotImplementedError
 
-    def applyStorages(self, restartApproved, force=True):
+    def applyStorages(self, restartApproved):
         raise NotImplementedError
 
     def confirmChanges(self, confirmators):
         raise NotImplementedError
 
-    def clearStorages(self, force=True):
-        raise NotImplementedError
-
-    def setEventDisabledStorages(self, storagesName):
-        raise NotImplementedError
-
-    def unsetEventDisabledStorages(self):
+    def clearStorages(self):
         raise NotImplementedError

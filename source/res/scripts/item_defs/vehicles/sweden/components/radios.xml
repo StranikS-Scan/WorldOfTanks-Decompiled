@@ -14,6 +14,9 @@
     <Ra_146>	11	</Ra_146>
     <Ra_400_P>	12	</Ra_400_P>
     <Development_Radio>	65000	</Development_Radio>
+    <Ra_421_HELL>	16	</Ra_421_HELL>
+    <Ra_421_HELL__0>	17	</Ra_421_HELL__0>
+    <Ra_400_HELL>	18	</Ra_400_HELL>
   </ids>
   <shared>
     <_1_W_Sv>
@@ -176,5 +179,41 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	0	</repairCost>
     </Development_Radio>
+    <Ra_421_HELL>
+      <userString>	#sweden_vehicles:Ra_421	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	57200	</price>
+      <weight>	27	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Ra_421_HELL>
+    <Ra_421_HELL__0>
+      <userString>	#sweden_vehicles:Ra_421	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	57200	</price>
+      <weight>	27	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Ra_421_HELL__0>
+    <Ra_400_HELL>
+      <userString>	#sweden_vehicles:Ra_400	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	44200	</price>
+      <weight>	45	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Ra_400_HELL>
   </shared>
 </radios.xml>

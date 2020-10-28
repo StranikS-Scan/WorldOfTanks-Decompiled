@@ -46,7 +46,8 @@ _WGNC_ICON_TO_LOCAL = {'information': WGNC_DEFAULT_ICON,
  'handsOff': 'handsOff',
  'handsPlus': 'handsPlus',
  'box': 'referralCoin',
- 'craftmachine_resource': 'craftmachineResource'}
+ 'craftmachine_resource': 'craftmachineResource',
+ 'ClanQuestNotification': 'clanQuestNotification'}
 
 def convertToLocalIcon(icon):
     result = WGNC_DEFAULT_ICON
@@ -66,7 +67,8 @@ _WGNC_BG_TO_LOCAL = {'battle_defeat': ('BgBattleResultIconDefeat', (288, 167)),
  'offer': ('OfferIconBg', (288, 110)),
  'event': ('EventIconBg', (288, 110)),
  'referral': ('BgReferral', (288, 167)),
- 'craftmachine': ('CraftmachineBG', (288, 80))}
+ 'craftmachine': ('CraftmachineBG', (288, 80)),
+ 'ClanQuestNotification': ('BgclanQuestNotification', (288, 110))}
 
 def convertToLocalBG(icon):
     result = ('', (0, 0))

@@ -442,6 +442,7 @@ class AutoReload(_GunReload):
     def onFull(self):
         if BARREL_DEBUG_ENABLED:
             LOG_DEBUG('AutoReload::onFull')
+        self.stopCallback(self.__onAlmostComplete)
         playByName(self._desc.autoLoaderFull)
 
     def shotFail(self):

@@ -184,7 +184,7 @@ def fitOutfit(outfit, availableRegionsMap):
             availableRegions = set()
             isProjectionDecal = False
             slotItemTypes = slot.getTypes()
-            if {GUI_ITEM_TYPE.SEQUENCE, GUI_ITEM_TYPE.ATTACHMENT} & set(slotItemTypes):
+            if {GUI_ITEM_TYPE.SEQUENCE, GUI_ITEM_TYPE.ATTACHMENT, GUI_ITEM_TYPE.INSIGNIA} & set(slotItemTypes):
                 continue
             for itemType in slotItemTypes:
                 availableRegions.update(areaRegions.get(itemType, ()))
@@ -618,15 +618,18 @@ def __getItemInventoryCount(item, outfits=None):
 
 
 def __getStyleInventoryCount(item, outfits=None):
-    inventoryCount = item.fullInventoryCount(g_currentVehicle.item.intCD)
-    appliedCount = 0
-    if outfits is not None:
-        appliedCount = getItemAppliedCount(item, outfits)
-        inventoryCount -= appliedCount
-    if item.isRentable:
-        if getItemInstalledCount(item) + appliedCount:
-            inventoryCount += 1
-    return inventoryCount
+    if g_currentVehicle is None or g_currentVehicle.item is None:
+        return 0
+    else:
+        inventoryCount = item.fullInventoryCount(g_currentVehicle.item.intCD)
+        appliedCount = 0
+        if outfits is not None:
+            appliedCount = getItemAppliedCount(item, outfits)
+            inventoryCount -= appliedCount
+        if item.isRentable:
+            if getItemInstalledCount(item) + appliedCount:
+                inventoryCount += 1
+        return inventoryCount
 
 
 def __getItemAppliedCount(item, outfits):

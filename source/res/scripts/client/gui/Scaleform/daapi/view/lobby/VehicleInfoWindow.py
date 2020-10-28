@@ -147,7 +147,7 @@ class VehicleInfoWindow(VehicleInfoMeta):
          'label': MENU.VEHICLEINFO_COMPAREBTN_LABEL,
          'tooltip': tooltip})
 
-    def __onVehCompareBasketChanged(self, changedData, _=None):
+    def __onVehCompareBasketChanged(self, changedData):
         if changedData.isFullChanged:
             self.__updateCompareButtonState()
 

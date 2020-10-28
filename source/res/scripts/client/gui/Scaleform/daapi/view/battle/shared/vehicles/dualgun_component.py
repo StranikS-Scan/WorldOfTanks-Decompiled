@@ -388,7 +388,8 @@ class DualGunComponent(DualGunPanelMeta):
             return
 
     def __updateChargeTimerState(self, *args):
-        if self.__sessionProvider.shared.ammo.getShellsQuantityLeft() > 1 or not self.__isPlayerVehicle():
+        shellsQuantity = self.__sessionProvider.shared.ammo.getShellsQuantityLeft()
+        if shellsQuantity > 1 or shellsQuantity < 0 or not self.__isPlayerVehicle():
             self.as_setTimerVisibleS(True)
         else:
             self.as_setTimerVisibleS(False)

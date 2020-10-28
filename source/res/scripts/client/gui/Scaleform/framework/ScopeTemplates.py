@@ -1,34 +1,33 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/ScopeTemplates.py
+from frameworks.wulf import WindowLayer
 from soft_exception import SoftException
-from gui.Scaleform.framework import ViewTypes
 
 class SCOPE_TYPE(object):
     GLOBAL = 'global'
     DYNAMIC = 'dynamic'
-    VIEW = ViewTypes.VIEW
-    LOBBY_SUB = ViewTypes.LOBBY_SUB
-    LOBBY_TOP_SUB = ViewTypes.LOBBY_TOP_SUB
+    VIEW = WindowLayer.VIEW
+    LOBBY_SUB = WindowLayer.SUB_VIEW
+    LOBBY_TOP_SUB = WindowLayer.TOP_SUB_VIEW
     DEFAULT = VIEW
-    WINDOW = ViewTypes.WINDOW
-    TOP_WINDOW = ViewTypes.TOP_WINDOW
-    OVERLAY = ViewTypes.OVERLAY
-    WAITING = ViewTypes.WAITING
+    WINDOW = WindowLayer.WINDOW
+    TOP_WINDOW = WindowLayer.TOP_WINDOW
+    FULLSCREEN = WindowLayer.FULLSCREEN_WINDOW
+    WAITING = WindowLayer.WAITING
     WINDOW_VIEWED_MULTISCOPE = 'WindowViewed'
 
 
 class SimpleScope(object):
+    __slots__ = ('__scopeType', '__parentScope', '__dependencedScopes')
 
     def __init__(self, scopeType, parentScope):
         super(SimpleScope, self).__init__()
+        if scopeType is None:
+            raise SoftException('ScopeType cannot be None!')
         self.__scopeType = scopeType
         self.__parentScope = None
         self.__dependencedScopes = []
         self._setParentScope(parentScope)
-        if self.__scopeType is None:
-            raise SoftException('Scope for %s can not be None!' % str(self))
-        if self.__parentScope is not None:
-            self.__parentScope.addDependencedScope(self)
         return
 
     def __repr__(self):
@@ -109,14 +108,12 @@ DYNAMIC_SCOPE = GlobalScope(SCOPE_TYPE.DYNAMIC)
 VIEW_SCOPE = SimpleScope(SCOPE_TYPE.VIEW, GLOBAL_SCOPE)
 WINDOW_SCOPE = SimpleScope(SCOPE_TYPE.WINDOW, GLOBAL_SCOPE)
 TOP_WINDOW_SCOPE = SimpleScope(SCOPE_TYPE.TOP_WINDOW, GLOBAL_SCOPE)
-OVERLAY_SCOPE = SimpleScope(SCOPE_TYPE.OVERLAY, VIEW_SCOPE)
 DEFAULT_SCOPE = VIEW_SCOPE
 LOBBY_SUB_SCOPE = SimpleScope(SCOPE_TYPE.LOBBY_SUB, DEFAULT_SCOPE)
 LOBBY_TOP_SUB_SCOPE = SimpleScope(SCOPE_TYPE.LOBBY_TOP_SUB, DEFAULT_SCOPE)
 WINDOW_VIEWED_MULTISCOPE = MultipleScope(SCOPE_TYPE.WINDOW_VIEWED_MULTISCOPE, (WINDOW_SCOPE, LOBBY_SUB_SCOPE, LOBBY_TOP_SUB_SCOPE))
-VIEW_TYPES_TO_SCOPES = {ViewTypes.VIEW: VIEW_SCOPE,
- ViewTypes.WINDOW: WINDOW_SCOPE,
- ViewTypes.TOP_WINDOW: TOP_WINDOW_SCOPE,
- ViewTypes.OVERLAY: OVERLAY_SCOPE,
- ViewTypes.LOBBY_SUB: LOBBY_SUB_SCOPE,
- ViewTypes.LOBBY_TOP_SUB: LOBBY_TOP_SUB_SCOPE}
+VIEW_TYPES_TO_SCOPES = {WindowLayer.VIEW: VIEW_SCOPE,
+ WindowLayer.WINDOW: WINDOW_SCOPE,
+ WindowLayer.TOP_WINDOW: TOP_WINDOW_SCOPE,
+ WindowLayer.SUB_VIEW: LOBBY_SUB_SCOPE,
+ WindowLayer.TOP_SUB_VIEW: LOBBY_TOP_SUB_SCOPE}

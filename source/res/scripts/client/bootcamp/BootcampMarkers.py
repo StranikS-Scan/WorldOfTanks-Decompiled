@@ -22,6 +22,7 @@ from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP, LOG_ERROR_BOOTCAMP
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IBootcampController
+from vehicle_systems.stricted_loading import makeCallbackWeak
 
 class _IMarker(object):
 
@@ -153,7 +154,8 @@ class _AimMarker(object):
         self.__dIndicator.isSwitchedToHiddenMode = value
 
     def attachGUI(self, markers2D, minimap):
-        self.__marker2D.attachGUI(markers2D)
+        if self.__marker2D is not None:
+            self.__marker2D.attachGUI(markers2D)
         indicator = getDirectionIndicator()
         if indicator is not None:
             self.__dIndicator.attachGUI(indicator)
@@ -162,11 +164,15 @@ class _AimMarker(object):
         return
 
     def detachGUI(self):
-        self.__marker2D.detachGUI()
-        self.__dIndicator.detachGUI()
+        if self.__marker2D is not None:
+            self.__marker2D.detachGUI()
+        if self.__dIndicator is not None:
+            self.__dIndicator.detachGUI()
+        return
 
     def update(self, distance):
-        self.__marker2D.update(distance)
+        if self.__marker2D is not None:
+            self.__marker2D.update(distance)
         if self.__dIndicator is not None:
             self.__dIndicator.update(distance)
         return
@@ -184,9 +190,17 @@ class _AimMarker(object):
         return
 
     def setVisible(self, isVisible):
-        self.__marker3D.setVisible(isVisible)
-        self.__marker2D.setVisible(isVisible)
-        self.__dIndicator.setVisible(isVisible)
+        if self.__marker3D is not None:
+            self.__marker3D.setVisible(isVisible)
+        if self.__marker2D is not None:
+            self.__marker2D.setVisible(isVisible)
+        if self.__dIndicator is not None:
+            self.__dIndicator.setVisible(isVisible)
+        return
+
+    @property
+    def triggerID(self):
+        return self.__triggerID
 
 
 class _AreaMarker(_AimMarker):
@@ -209,11 +223,15 @@ class _AreaMarker(_AimMarker):
 
     def attachGUI(self, markers2D, minimap):
         super(_AreaMarker, self).attachGUI(markers2D, minimap)
-        self.__minimapMarker.attachGUI(minimap)
+        if self.__minimapMarker is not None:
+            self.__minimapMarker.attachGUI(minimap)
+        return
 
     def detachGUI(self):
         super(_AreaMarker, self).detachGUI()
-        self.__minimapMarker.detachGUI()
+        if self.__minimapMarker is not None:
+            self.__minimapMarker.detachGUI()
+        return
 
     def clear(self):
         if self.__groundMarker is not None:
@@ -231,8 +249,11 @@ class _AreaMarker(_AimMarker):
 
     def setVisible(self, isVisible):
         super(_AreaMarker, self).setVisible(isVisible)
-        self.__groundMarker.setVisible(isVisible)
-        self.__minimapMarker.setVisible(isVisible)
+        if self.__groundMarker is not None:
+            self.__groundMarker.setVisible(isVisible)
+        if self.__minimapMarker is not None:
+            self.__minimapMarker.setVisible(isVisible)
+        return
 
 
 class _StaticWorldMarker2D(_IMarker):
@@ -342,7 +363,7 @@ class _StaticObjectMarker3D(_IMarker):
         self.__destroyed = False
         if self.__path is not None:
             modelPosition = Math.Vector3(position[:]) + offset
-            BigWorld.loadResourceListBG((self.__path,), partial(self.__onModelLoaded, modelPosition))
+            BigWorld.loadResourceListBG((self.__path,), makeCallbackWeak(self.__onModelLoaded, modelPosition))
         return
 
     def addMarkerModel(self):

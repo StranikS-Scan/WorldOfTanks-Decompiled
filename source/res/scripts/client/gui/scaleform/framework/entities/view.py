@@ -3,8 +3,6 @@
 import logging
 import typing
 from collections import namedtuple
-from frameworks.wulf import Window
-from gui.Scaleform.framework.entities.window_impl_tracker import WindowImplTracker
 from gui.Scaleform.framework.settings import UIFrameworkImpl
 from gui.Scaleform.framework.entities.DisposableEntity import EntityState
 from gui.Scaleform.framework.entities.abstract.AbstractViewMeta import AbstractViewMeta
@@ -12,6 +10,8 @@ from gui.Scaleform.framework.entities.view_interface import ViewInterface
 from gui.doc_loaders import hints_layout
 from gui.shared.events import FocusEvent
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from frameworks.wulf import Window
 _logger = logging.getLogger(__name__)
 _ViewKey = namedtuple('_ViewKey', ['alias', 'name'])
 
@@ -51,7 +51,7 @@ class View(AbstractViewMeta, ViewInterface):
         self.__initSoundManager()
         from gui.Scaleform.framework import ScopeTemplates
         self.__scope = ScopeTemplates.DEFAULT_SCOPE
-        self.__windowImplTracker = None
+        self.__window = None
         return
 
     def __repr__(self):
@@ -69,8 +69,8 @@ class View(AbstractViewMeta, ViewInterface):
         return self.__settings
 
     @property
-    def viewType(self):
-        return self.__settings.type
+    def layer(self):
+        return self.__settings.layer
 
     @property
     def viewScope(self):
@@ -151,11 +151,11 @@ class View(AbstractViewMeta, ViewInterface):
     def onFocusIn(self, alias):
         self.fireEvent(FocusEvent(FocusEvent.COMPONENT_FOCUSED, ctx={'alias': alias}))
 
-    def getParentWindow(self, parent=None):
-        if self.__windowImplTracker is None:
-            self.__windowImplTracker = WindowImplTracker(self)
-            self.__windowImplTracker.create(parent=parent)
-        return self.__windowImplTracker.getParentWindow()
+    def getParentWindow(self):
+        return self.__window
+
+    def setParentWindow(self, window):
+        self.__window = window
 
     def isVisible(self):
         return self.getState() == EntityState.CREATED
@@ -165,9 +165,7 @@ class View(AbstractViewMeta, ViewInterface):
         self.soundManager.startSpace(self._COMMON_SOUND_SPACE)
 
     def _destroy(self):
-        if self.__windowImplTracker is not None:
-            self.__windowImplTracker.destroy()
-            self.__windowImplTracker = None
+        self.__window = None
         self.soundManager.unregister(id(self))
         self.soundManager.clear(requester=id(self))
         if not self.soundManager.isUsed:

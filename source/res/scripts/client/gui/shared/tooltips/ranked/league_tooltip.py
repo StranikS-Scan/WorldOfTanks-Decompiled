@@ -61,12 +61,15 @@ class LeagueTooltipData(BlocksTooltipData):
         items = super(LeagueTooltipData, self)._packBlocks()
         resShortCut = R.strings.ranked_battles.rankedBattleMainView.leaguesView
         webSeasonInfo = self.__rankedController.getClientSeasonInfo()
+        isYearLBEnabled = self.__rankedController.isYearLBEnabled()
         yearLBsize = self.__rankedController.getYearLBSize()
         if webSeasonInfo.league != UNDEFINED_LEAGUE_ID and webSeasonInfo.position is not None:
             title = backport.text(resShortCut.dyn('league{}'.format(webSeasonInfo.league))())
             description = backport.text(resShortCut.descr(), count=yearLBsize)
             if webSeasonInfo.isTop:
                 description = backport.text(resShortCut.topDescr(), count=yearLBsize)
+            if not isYearLBEnabled:
+                description = backport.text(resShortCut.yearLeaderboardDisabled())
         else:
             title = backport.text(resShortCut.unavailableTitle())
             description = backport.text(resShortCut.unavailableDescr())

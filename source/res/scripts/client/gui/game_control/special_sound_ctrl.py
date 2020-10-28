@@ -182,5 +182,4 @@ class SpecialSoundCtrl(ISpecialSoundCtrl):
             _logger.warning('Could not set special voice: %s', params.languageMode)
             return
         self.__currentMode = params
-        if params.genderSwitch != CREW_GENDER_SWITCHES.DEFAULT:
-            SoundGroups.g_instance.setSwitch(CREW_GENDER_SWITCHES.GROUP, params.genderSwitch)
+        SoundGroups.g_instance.setSwitch(CREW_GENDER_SWITCHES.GROUP, params.genderSwitch)

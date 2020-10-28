@@ -30,12 +30,12 @@ class ViewImplAdaptor(DisposableEntity, ViewInterface):
 
     @property
     def uiImpl(self):
-        return UIFrameworkImpl.UNBOUND
+        return UIFrameworkImpl.GUI_IMPL
 
     @property
-    def viewType(self):
-        viewType = self.view.viewType
-        return None if not viewType else viewType
+    def layer(self):
+        layer = self.view.layer
+        return None if not layer else layer
 
     @property
     def viewScope(self):
@@ -88,9 +88,10 @@ class ViewImplAdaptor(DisposableEntity, ViewInterface):
     def isLoaded(self):
         return False if self.__window is None else self.__window.windowStatus == WindowStatus.LOADED
 
-    def setView(self, view):
+    def setView(self, view, parent=None):
         settings = WindowSettings()
         settings.content = view
+        settings.parent = parent
         self.__key = ViewKey(view.layoutID, view.uniqueID)
         self.__window = Window(settings)
         self.__window.onStatusChanged += self.__onStatusChanged

@@ -2909,13 +2909,13 @@
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
           <models>
-            <undamaged>	vehicles/poland/Pl18_BUGI/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/poland/Pl18_BUGI/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/poland/Pl18_BUGI/crash/lod0/Gun_03.model	</exploded>
+            <undamaged>	vehicles/poland/Pl18_BUGI/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/poland/Pl18_BUGI/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/poland/Pl18_BUGI/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/poland/Pl18_BUGI/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/poland/Pl18_BUGI/collision_client/Gun_03.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/poland/Pl18_BUGI/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/poland/Pl18_BUGI/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <customization>
             <customizableVehicleAreas>
@@ -2955,11 +2955,11 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	-0.006 -0.002 1.23999	</rayStart>
-              <rayEnd>	-0.0189902 0.0511474 2.86609	</rayEnd>
-              <rayUp>	0.108569 0.000000 0.000000	</rayUp>
+              <rayStart>	0.000000 0.000000 2.36472	</rayStart>
+              <rayEnd>	0.716433 -0.123771 2.23988	</rayEnd>
+              <rayUp>	0.103785 0.000000 0.000000	</rayUp>
               <applyToFabric>	true	</applyToFabric>
-              <size>	0.7	</size>
+              <size>	0.773365	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>

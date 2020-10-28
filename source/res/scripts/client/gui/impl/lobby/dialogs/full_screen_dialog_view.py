@@ -6,10 +6,9 @@ from abc import abstractproperty
 from PlayerEvents import g_playerEvents
 from async import AsyncScope, AsyncEvent, await, async, BrokenPromiseError, AsyncReturn
 from gui.shared.view_helpers.blur_manager import CachedBlur
-from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from gui.impl.gen.view_models.windows.full_screen_dialog_window_model import FullScreenDialogWindowModel
 from gui.impl.pub import ViewImpl
-from gui.impl.pub.dialog_window import DialogResult, DialogButtons, DialogLayer
+from gui.impl.pub.dialog_window import DialogResult, DialogButtons, DialogFlags
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.shared.money import Currency
 from helpers import dependency
@@ -27,17 +26,15 @@ class DIALOG_TYPES(object):
 
 
 class FullScreenDialogView(ViewImpl):
-    __slots__ = ('__blur', '__scope', '__event', '__result', '_stats')
+    __slots__ = ('__scope', '__event', '__result', '_stats')
     _itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, settings):
         super(FullScreenDialogView, self).__init__(settings)
-        self.__blur = None
         self.__scope = AsyncScope()
         self.__event = AsyncEvent(scope=self.__scope)
         self.__result = DialogButtons.CANCEL
         self._stats = self._itemsCache.items.stats
-        return
 
     @abstractproperty
     def viewModel(self):
@@ -73,18 +70,11 @@ class FullScreenDialogView(ViewImpl):
 
     def _onLoaded(self, *args, **kwargs):
         super(FullScreenDialogView, self)._onLoaded()
-        blurLayers = [APP_CONTAINERS_NAMES.VIEWS,
-         APP_CONTAINERS_NAMES.SUBVIEW,
-         APP_CONTAINERS_NAMES.BROWSER,
-         APP_CONTAINERS_NAMES.WINDOWS,
-         APP_CONTAINERS_NAMES.MARKER]
-        self.__blur = CachedBlur(enabled=True, ownLayer=APP_CONTAINERS_NAMES.WINDOWS, layers=blurLayers, blurAnimRepeatCount=4)
 
     def _finalize(self):
         super(FullScreenDialogView, self)._finalize()
         self._removeListeners()
         self.__scope.destroy()
-        self.__blur.fini()
 
     def _addListeners(self):
         self.viewModel.onAcceptClicked += self._onAcceptClicked
@@ -125,13 +115,18 @@ class FullScreenDialogView(ViewImpl):
 
 
 class FullScreenDialogWindowWrapper(LobbyWindow):
-    __slots__ = ('__wrappedView',)
+    __slots__ = ('__wrappedView', '__blur')
     __gui = dependency.descriptor(IGuiLoader)
 
     def __init__(self, wrappedView, parent=None):
+        super(FullScreenDialogWindowWrapper, self).__init__(DialogFlags.TOP_FULLSCREEN_WINDOW, None, content=wrappedView, parent=parent)
         self.__wrappedView = wrappedView
-        super(FullScreenDialogWindowWrapper, self).__init__(DialogLayer.TOP_WINDOW, None, content=wrappedView, parent=parent)
+        self.__blur = None
         return
+
+    def _initialize(self):
+        super(FullScreenDialogWindowWrapper, self)._initialize()
+        self.__blur = CachedBlur(enabled=True, ownLayer=self.layer - 1)
 
     def wait(self):
         return self.__wrappedView.wait()
@@ -140,3 +135,7 @@ class FullScreenDialogWindowWrapper(LobbyWindow):
     def createIfNotExist(cls, layoutID, wrappedViewClass, parent=None, *args, **kwargs):
         currentView = cls.__gui.windowsManager.getViewByLayoutID(layoutID)
         return FullScreenDialogWindowWrapper(wrappedViewClass(*args, **kwargs), parent) if currentView is None else None
+
+    def _finalize(self):
+        self.__blur.fini()
+        super(FullScreenDialogWindowWrapper, self)._finalize()

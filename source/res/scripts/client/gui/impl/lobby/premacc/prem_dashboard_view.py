@@ -4,6 +4,7 @@ from gui.Scaleform.Waiting import Waiting
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.premacc.dashboard.prem_dashboard_view_model import PremDashboardViewModel
 from gui.impl.lobby.premacc.dashboard.dashboard_premium_card import DashboardPremiumCard
+from gui.impl.lobby.premacc.dashboard.prem_dashboard_dog_tags_card import PremDashboardDogTagsCard
 from gui.impl.lobby.premacc.dashboard.prem_dashboard_double_experience_card import PremDashboardDoubleExperienceCard
 from gui.impl.lobby.premacc.dashboard.prem_dashboard_header import PremDashboardHeader
 from gui.impl.lobby.premacc.dashboard.prem_dashboard_maps_blacklist_card import PremDashboardMapsBlacklistCard
@@ -39,6 +40,7 @@ class PremDashboardView(ViewImpl, SoundViewMixin):
         self.setChildView(R.dynamic_ids.prem_dashboard.piggy_bank_card(), PremDashboardPiggyBankCard())
         self.setChildView(R.dynamic_ids.prem_dashboard.premium_quests_card(), PremDashboardQuestsCard())
         self.setChildView(R.dynamic_ids.prem_dashboard.maps_black_list_card(), PremDashboardMapsBlacklistCard())
+        self.setChildView(R.dynamic_ids.prem_dashboard.dog_tags_card(), PremDashboardDogTagsCard())
 
     def _finalize(self):
         self.viewModel.onCloseAction -= self.__onCloseAction

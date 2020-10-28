@@ -4,14 +4,12 @@ from functools import partial
 import weakref
 import BigWorld
 from account_helpers.settings_core.settings_constants import DAMAGE_INDICATOR, GRAPHICS
-from gui.Scaleform.genConsts.DAMAGE_SOURCE_TYPES import DAMAGE_SOURCE_TYPES
 from gui.battle_control.battle_constants import HIT_INDICATOR_MAX_ON_SCREEN, BATTLE_CTRL_ID
 from gui.battle_control.view_components import IViewComponentsController
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from gui.battle_control.battle_constants import HIT_FLAGS
 from gui.battle_control import avatar_getter
-from gui.shared.gui_items.Vehicle import VEHICLE_EVENT_TYPE
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -227,10 +225,7 @@ class HitDirectionController(IViewComponentsController):
         atackerVehType = atackerVehInfo.vehicleType
         isAlly = self.__arenaDP.isAllyTeam(atackerVehInfo.team)
         playerVehType = self.__arenaDP.getVehicleInfo(damagedID).vehicleType
-        attackerVehClassTag = atackerVehType.classTag
-        if VEHICLE_EVENT_TYPE.EVENT_BOSS in atackerVehType.tags:
-            attackerVehClassTag = DAMAGE_SOURCE_TYPES.EVENT_BOSS
-        hitData = HitData(yaw=hitDirYaw, attackerID=attackerID, isAlly=isAlly, damage=damage, attackerVehName=atackerVehType.shortNameWithPrefix, isBlocked=isBlocked, attackerVehClassTag=attackerVehClassTag, critFlags=critFlags, playerVehMaxHP=playerVehType.maxHealth, isHighExplosive=isHighExplosive, attackReasonID=attackReasonID, friendlyFireMode=self.__isFriendlyFireMode())
+        hitData = HitData(yaw=hitDirYaw, attackerID=attackerID, isAlly=isAlly, damage=damage, attackerVehName=atackerVehType.shortNameWithPrefix, isBlocked=isBlocked, attackerVehClassTag=atackerVehType.classTag, critFlags=critFlags, playerVehMaxHP=playerVehType.maxHealth, isHighExplosive=isHighExplosive, attackReasonID=attackReasonID, friendlyFireMode=self.__isFriendlyFireMode())
         if not self._isValidHit(hitData):
             return
         else:

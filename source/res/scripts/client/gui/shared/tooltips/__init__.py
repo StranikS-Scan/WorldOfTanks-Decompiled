@@ -4,12 +4,10 @@ import sys
 import weakref
 import typing
 from debug_utils import LOG_CURRENT_EXCEPTION
-from frameworks.wulf import WindowFlags
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UNKNOWN_VEHICLE_LEVEL, UnlockProps
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.app_loader import sf_lobby
-from gui.impl.pub import WindowImpl
 from gui.shared.formatters import icons
 from helpers import dependency
 from helpers.i18n import makeString
@@ -18,7 +16,6 @@ from shared_utils import CONST_CONTAINER
 from skeletons.gui.shared import IItemsCache
 from gui.impl import backport
 from gui.impl.gen import R
-from soft_exception import SoftException
 
 class TOOLTIP_TYPE(CONST_CONTAINER):
     VEHICLE = 'vehicle'
@@ -72,15 +69,12 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     SQUAD_BONUS = 'squadBonus'
     SESSION_STATS = 'sessionStats'
     TRADE_IN_INFO = 'tradeInInfo'
+    PERSONAL_TRADE_IN_INFO = 'personalTradeInInfo'
     TRADE_IN_INFO_NOT_AVAILABLE = 'tradeInInfoNotAvailable'
     TRADE_IN_STATE_NOT_AVAILABLE = 'tradeInStateNotAvailable'
     DEMOUNT_KIT = 'demountKit'
     VEHICLE_COLLECTOR = 'vehicleCollector'
-    BOB_SELECTOR_INFO = 'bobSelectorInfo'
-    BOB_CALENDAR_DAY = 'bobCalendarDay'
     DEVICE_GIFT_TOKEN = 'deviceGiftToken'
-    EVENT_SELECTOR_INFO = 'eventSelectorInfo'
-    EVENT_UNAVAILABLE_INFO = 'eventUnavailableInfo'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -172,10 +166,7 @@ class ToolTipData(ToolTipBaseData):
         return
 
     def getDisplayableData(self, *args, **kwargs):
-        if 'item' in kwargs:
-            self.item = kwargs['item']
-        else:
-            self.item = self.context.buildItem(*args, **kwargs)
+        self.item = self.context.buildItem(*args, **kwargs)
         result = dict()
         for field in self.fields:
             key, value = field.buildData()
@@ -183,19 +174,6 @@ class ToolTipData(ToolTipBaseData):
                 result[key] = value
 
         return result
-
-
-class WulfTooltipData(ToolTipData):
-
-    def getDisplayableData(self, *args, **kwargs):
-        parent = kwargs.get('parent', None)
-        return WindowImpl(wndFlags=WindowFlags.SERVICE_WINDOW, content=self.getTooltipContent(*args, **kwargs), parent=parent, areaID=R.areas.specific())
-
-    def buildToolTip(self, *args, **kwargs):
-        return None
-
-    def getTooltipContent(self, *args, **kwargs):
-        raise SoftException('getTooltipContent should be overriden in {}'.format(self))
 
 
 class ToolTipDataField(object):

@@ -50,8 +50,10 @@ class ScriptGameObject(object):
 
     def removeComponent(self, component):
         self._nativeSystem.removeComponent(component)
-        if component in self._components:
+        try:
             self._components.remove(component)
+        except ValueError:
+            pass
 
     def destroy(self):
         self._components = []

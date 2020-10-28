@@ -1,11 +1,13 @@
 <shells.xml>
   <icons>
     <ap>	ARMOR_PIERCING.png 0 0	</ap>
-    <ap_he>	ARMOR_PIERCING_HE.png 0 0	</ap_he>
+    <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
     <ap_cr>	ARMOR_PIERCING_CR.png 0 0	</ap_cr>
+    <ap_cr_premium>	ARMOR_PIERCING_CR_PREMIUM.png 0 0	</ap_cr_premium>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
     <hc>	HOLLOW_CHARGE.png 0 0	</hc>
+    <hc_premium>	HOLLOW_CHARGE_PREMIUM.png 0 0	</hc_premium>
   </icons>
   <_12.7mm_AP_B32>
     <id>	117	</id>
@@ -38,7 +40,7 @@
   <_20mm_UBR-20>
     <id>	1	</id>
     <userString>	#ussr_vehicles:_20mm_UBR-20	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -68,7 +70,7 @@
   <_23mm_UBR-23>
     <id>	3	</id>
     <userString>	#ussr_vehicles:_23mm_UBR-23	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	400	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -98,7 +100,7 @@
   <_37mm_APC_M51_LL>
     <id>	74	</id>
     <userString>	#ussr_vehicles:_37mm_APC_M51_LL	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -172,7 +174,7 @@
   <_37mm_UBR-160P>
     <id>	5	</id>
     <userString>	#ussr_vehicles:_37mm_UBR-160P	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -202,7 +204,7 @@
   <_37mm_UBR-160P_bootcamp>
     <id>	195	</id>
     <userString>	#ussr_vehicles:_37mm_UBR-160P_bootcamp	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -248,7 +250,7 @@
   <_37mm_UBR160PA>
     <id>	8	</id>
     <userString>	#ussr_vehicles:_37mm_UBR160PA	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -292,7 +294,7 @@
   <_37mm_BPT1>
     <id>	11	</id>
     <userString>	#ussr_vehicles:_37mm_BPT1	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	400	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -352,7 +354,7 @@
   <_2pdr_APCNR_Mk.1>
     <id>	83	</id>
     <userString>	#ussr_vehicles:_2pdr_APCNR_Mk.1	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	1200	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -396,7 +398,7 @@
   <_45mm_UBR-240PA>
     <id>	14	</id>
     <userString>	#ussr_vehicles:_45mm_UBR-240PA	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -440,7 +442,7 @@
   <_45mm_UBR-243P>
     <id>	260	</id>
     <userString>	#ussr_vehicles:_45mm_UBR-243P	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -484,7 +486,7 @@
   <_45mm_UBR-243SPA>
     <id>	17	</id>
     <userString>	#ussr_vehicles:_45mm_UBR-243SPA	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	1200	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -529,7 +531,7 @@
   <_45mm_UBR-240PA_bootcamp>
     <id>	174	</id>
     <userString>	#ussr_vehicles:_45mm_UBR-240PA_bootcamp	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -575,7 +577,7 @@
   <_45mm_UBR-243SPAU>
     <id>	178	</id>
     <userString>	#ussr_vehicles:_45mm_UBR-243SPAU	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2000	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -619,7 +621,7 @@
   <_57mm_UBR-271NO>
     <id>	20	</id>
     <userString>	#ussr_vehicles:_57mm_UBR-271NO	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2000	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -663,7 +665,7 @@
   <_57mm_UBR-271N>
     <id>	23	</id>
     <userString>	#ussr_vehicles:_57mm_UBR-271N	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -707,7 +709,7 @@
   <_6pdr_APCR_MK_1T>
     <id>	26	</id>
     <userString>	#ussr_vehicles:_6pdr_APCR_MK_1T	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -782,7 +784,7 @@
   <_76mm_BP-354>
     <id>	29	</id>
     <userString>	#ussr_vehicles:_76mm_BP-354	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -842,7 +844,7 @@
   <_76mm_UBR-354MP>
     <id>	32	</id>
     <userString>	#ussr_vehicles:_76mm_UBR-354MP	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -871,7 +873,7 @@
   <_76mm_UBR_354P>
     <id>	231	</id>
     <userString>	#ussr_vehicles:_76mm_UBR_354P	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -886,7 +888,7 @@
   <_76mm_UBR-354MP_bootcamp>
     <id>	194	</id>
     <userString>	#ussr_vehicles:_76mm_UBR-354MP_bootcamp	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2400	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -947,7 +949,7 @@
   <_76mm_UBR-354KB>
     <id>	164	</id>
     <userString>	#ussr_vehicles:_76mm_UBR-354KB	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	2400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -992,7 +994,7 @@
   <_76mm_BP-354_bootcamp>
     <id>	191	</id>
     <userString>	#ussr_vehicles:_76mm_BP-354	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -1054,7 +1056,7 @@
   <_76mm_HVAP_M93>
     <id>	205	</id>
     <userString>	#ussr_vehicles:_76mm_HVAP_M93	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -1098,7 +1100,7 @@
   <_85mm_UBR-365P>
     <id>	37	</id>
     <userString>	#ussr_vehicles:_85mm_UBR-365P	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	2800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -1142,7 +1144,7 @@
   <_85mm_BR-365P-DG>
     <id>	248	</id>
     <userString>	#ussr_vehicles:_85mm_BR-365P-DG	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	3600	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -1186,7 +1188,7 @@
   <_85mm_UBR-365PBM>
     <id>	40	</id>
     <userString>	#ussr_vehicles:_85mm_UBR-365PBM	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	3200	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -1230,7 +1232,7 @@
   <_85mm_UBR-365PBM100>
     <id>	127	</id>
     <userString>	#ussr_vehicles:_85mm_UBR-365PBM100	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	3200	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -1274,7 +1276,7 @@
   <_85mm_UBR_372_432>
     <id>	233	</id>
     <userString>	#ussr_vehicles:_85mm_UBR_372_432	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	3200	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -1318,7 +1320,7 @@
   <_85mm_UBR-367P>
     <id>	123	</id>
     <userString>	#ussr_vehicles:_85mm_UBR-367P	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	3200	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -1362,7 +1364,7 @@
   <_100mm_UBR-412P>
     <id>	43	</id>
     <userString>	#ussr_vehicles:_100mm_UBR-412P	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -1493,7 +1495,7 @@
   <_100mm_3UBK4>
     <id>	99	</id>
     <userString>	#ussr_vehicles:_100mm_3UBK4	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -1509,7 +1511,7 @@
   <_100mm_3UBK4M>
     <id>	101	</id>
     <userString>	#ussr_vehicles:_100mm_3UBK4M	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -1525,7 +1527,7 @@
   <_100mm_3UBK4M_fallout>
     <id>	140	</id>
     <userString>	#ussr_vehicles:_100mm_3UBK4M_fallout	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -1569,7 +1571,7 @@
   <_100mm_3VBB>
     <id>	166	</id>
     <userString>	#ussr_vehicles:_100mm_3VBB	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	4400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -1614,7 +1616,7 @@
   <_100mm_UBR-412PBM>
     <id>	171	</id>
     <userString>	#ussr_vehicles:_100mm_UBR-412PBM	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4400	</price>
     <notInShop>	true	</notInShop>
     <improved>	true	</improved>
@@ -1660,7 +1662,7 @@
   <_100mm_3UBK_LM>
     <id>	228	</id>
     <userString>	#ussr_vehicles:_100mm_3UBK_LM	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -1705,7 +1707,7 @@
   <_100mm_3UBK_LMK>
     <id>	257	</id>
     <userString>	#ussr_vehicles:_100mm_3UBK_LMK	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -1750,7 +1752,7 @@
   <_100mm_UBR-412P-DG>
     <id>	239	</id>
     <userString>	#ussr_vehicles:_100mm_UBR-412P-DG	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -1777,6 +1779,53 @@
       <devices>	135	</devices>
     </damage>
   </_100mm_UOF-412-DG>
+  <_100mm_BR-412D_Halloween_event>
+    <id>	268	</id>
+    <userString>	#ussr_vehicles:_100mm_BR-412D_Halloween_event	</userString>
+    <icon>	ap	</icon>
+    <price>	0	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	135	</devices>
+    </damage>
+  </_100mm_BR-412D_Halloween_event>
+  <_100mm_3UBK4_Halloween_event>
+    <id>	225	</id>
+    <userString>	#ussr_vehicles:_100mm_3UBK4_Halloween_event	</userString>
+    <icon>	hc	</icon>
+    <price>	4800	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_100mm_3UBK4_Halloween_event>
+  <_100mm_UOF-412B_Halloween_event>
+    <id>	226	</id>
+    <userString>	#ussr_vehicles:_100mm_UOF-412B_Halloween_event	</userString>
+    <icon>	he	</icon>
+    <price>	1170	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	100	</caliber>
+    <explosionRadius>	1.76	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	135	</devices>
+    </damage>
+  </_100mm_UOF-412B_Halloween_event>
   <_107mm_UBR-420>
     <id>	45	</id>
     <userString>	#ussr_vehicles:_107mm_UBR-420	</userString>
@@ -1794,7 +1843,7 @@
   <_107mm_UBR-420P>
     <id>	46	</id>
     <userString>	#ussr_vehicles:_107mm_UBR-420P	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -1838,7 +1887,7 @@
   <_107mm_UBR-420PM>
     <id>	92	</id>
     <userString>	#ussr_vehicles:_107mm_UBR-420PM	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4000	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -1868,7 +1917,7 @@
   <_122mm_BP450S>
     <id>	49	</id>
     <userString>	#ussr_vehicles:_122mm_BP450S	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -1927,7 +1976,7 @@
   <_122mm_UBR-471P>
     <id>	52	</id>
     <userString>	#ussr_vehicles:_122mm_UBR-471P	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -1956,7 +2005,7 @@
   <_122mm_BR_471PM>
     <id>	198	</id>
     <userString>	#ussr_vehicles:_122mm_BR_471PM	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -2013,7 +2062,7 @@
   <_122mm_UBR-471PBMM>
     <id>	169	</id>
     <userString>	#ussr_vehicles:_122mm_UBR-471PBMM	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -2028,7 +2077,7 @@
   <_122mm_3VBK6>
     <id>	138	</id>
     <userString>	#ussr_vehicles:_122mm_3VBK6	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	5200	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -2044,7 +2093,7 @@
   <_122mm_UBP-471BM>
     <id>	130	</id>
     <userString>	#ussr_vehicles:_122mm_UBP-471BM	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	5200	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -2150,7 +2199,7 @@
   <_122mm_BP450SO>
     <id>	56	</id>
     <userString>	#ussr_vehicles:_122mm_BP450SO	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4400	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -2181,7 +2230,7 @@
   <_122mm_BM11>
     <id>	86	</id>
     <userString>	#ussr_vehicles:_122mm_BM11	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	5200	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -2227,7 +2276,7 @@
   <_122mm_BP-463>
     <id>	121	</id>
     <userString>	#ussr_vehicles:_122mm_BP-463	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	5200	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -2258,7 +2307,7 @@
   <_122mm_BK_9U>
     <id>	215	</id>
     <userString>	#ussr_vehicles:_122mm_BK_9U	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	5200	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -2303,7 +2352,7 @@
   <_122mm_53-VBR-471D>
     <id>	242	</id>
     <userString>	#ussr_vehicles:_122mm_53-VBR-471D	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -2347,7 +2396,7 @@
   <_122mm_UBR-471PM-DG>
     <id>	245	</id>
     <userString>	#ussr_vehicles:_122mm_UBR-471PM-DG	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -2391,7 +2440,7 @@
   <_122mm_BM11-DG>
     <id>	251	</id>
     <userString>	#ussr_vehicles:_122mm_BM11-DG	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	5200	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -2436,7 +2485,7 @@
   <_122mm_3BM11>
     <id>	254	</id>
     <userString>	#ussr_vehicles:_122mm_3BM11	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -2480,7 +2529,7 @@
   <_130mm_UBR-482P>
     <id>	58	</id>
     <userString>	#ussr_vehicles:_130mm_UBR-482P	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -2539,7 +2588,7 @@
   <_130mm_UBR-482P_fallout>
     <id>	143	</id>
     <userString>	#ussr_vehicles:_130mm_UBR-482P_fallout	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	400	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -2555,7 +2604,7 @@
   <_130mm_UBR-482P_fallout2>
     <id>	156	</id>
     <userString>	#ussr_vehicles:_130mm_UBR-482P_fallout	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -2615,7 +2664,7 @@
   <_130mm_PB-46A>
     <id>	115	</id>
     <userString>	#ussr_vehicles:_130mm_PB-46A	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	4000	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -2644,7 +2693,7 @@
   <_130mm_PB-46TA>
     <id>	183	</id>
     <userString>	#ussr_vehicles:_130mm_PB-46TA	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -2688,7 +2737,7 @@
   <_130mm_2-01743>
     <id>	132	</id>
     <userString>	#ussr_vehicles:_130mm_2-01743	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	4000	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -2732,7 +2781,7 @@
   <_130mm_UBR-482PM>
     <id>	106	</id>
     <userString>	#ussr_vehicles:_130mm_UBR-482PM	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -2776,7 +2825,7 @@
   <_130mm_3VBK>
     <id>	162	</id>
     <userString>	#ussr_vehicles:_130mm_3VBK	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	5200	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -2821,7 +2870,7 @@
   <_130mm_3VBKS>
     <id>	236	</id>
     <userString>	#ussr_vehicles:_130mm_3VBKS	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	5200	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -2866,7 +2915,7 @@
   <_130mm_3VBM_CH>
     <id>	263	</id>
     <userString>	#ussr_vehicles:_130mm_3VBM_CH	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	5200	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -2929,7 +2978,7 @@
   <_152mm_MPB_1915>
     <id>	118	</id>
     <userString>	#ussr_vehicles:_152mm_MPB_1915	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
@@ -2944,7 +2993,7 @@
   <_152mm_53BP540>
     <id>	63	</id>
     <userString>	#ussr_vehicles:_152mm_53BP540	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	6000	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -3063,7 +3112,7 @@
   <_152mm_53-G-551>
     <id>	67	</id>
     <userString>	#ussr_vehicles:_152mm_53-G-551	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -3107,7 +3156,7 @@
   <_152mm_UBK551M>
     <id>	103	</id>
     <userString>	#ussr_vehicles:_152mm_UBK551M	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	6800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -3152,7 +3201,7 @@
   <_152mm_UBK551M_K>
     <id>	222	</id>
     <userString>	#ussr_vehicles:_152mm_UBK551M_K	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	6800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -3198,7 +3247,7 @@
   <_152mm_UBK551M_fallout>
     <id>	149	</id>
     <userString>	#ussr_vehicles:_152mm_UBK551M_fallout	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	400	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -3231,7 +3280,7 @@
   <_152mm_UBR551P>
     <id>	69	</id>
     <userString>	#ussr_vehicles:_152mm_UBR551P	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
@@ -3260,7 +3309,7 @@
   <_152mm_UBK551O>
     <id>	218	</id>
     <userString>	#ussr_vehicles:_152mm_UBK551O	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	6000	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
@@ -3414,7 +3463,7 @@
   <_122mm_BP450SO_SH>
     <id>	277	</id>
     <userString>	#ussr_vehicles:_122mm_BP450SO_SH	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	0	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -3431,7 +3480,7 @@
   <_122mm_UBR_472PM_SH>
     <id>	275	</id>
     <userString>	#ussr_vehicles:_122mm_UBR_472PM_SH	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	0	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -3447,7 +3496,7 @@
   <_100mm_3UBK4M_SH>
     <id>	278	</id>
     <userString>	#ussr_vehicles:_100mm_3UBK4M_SH	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	0	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -3464,7 +3513,7 @@
   <_100mm_3VBM2_SH>
     <id>	267	</id>
     <userString>	#ussr_vehicles:_100mm_3VBM2_SH	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	0	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -3480,7 +3529,7 @@
   <_122mm_BP450S_SH>
     <id>	279	</id>
     <userString>	#ussr_vehicles:_122mm_BP450S_SH	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	0	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -3497,7 +3546,7 @@
   <_122mm_VBR472B_SH>
     <id>	282	</id>
     <userString>	#ussr_vehicles:_122mm_VBR472B_SH	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	0	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -3528,7 +3577,7 @@
   <_122mm_UBR-472PBM_SH>
     <id>	271	</id>
     <userString>	#ussr_vehicles:_122mm_UBR-472PBM_SH	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	0	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -3544,7 +3593,7 @@
   <_107mm_BP450M_SH>
     <id>	280	</id>
     <userString>	#ussr_vehicles:_107mm_BP450M_SH	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	0	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -3561,7 +3610,7 @@
   <_107mm_UBR-420PM_SH>
     <id>	273	</id>
     <userString>	#ussr_vehicles:_107mm_UBR-420PM_SH	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	0	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -3577,7 +3626,7 @@
   <_130mm_3VBK_SH>
     <id>	281	</id>
     <userString>	#ussr_vehicles:_130mm_3VBK_SH	</userString>
-    <icon>	hc	</icon>
+    <icon>	hc_premium	</icon>
     <price>	0	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -3594,7 +3643,7 @@
   <_130mm_3VBM_SH>
     <id>	269	</id>
     <userString>	#ussr_vehicles:_130mm_3VBM_SH	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	ap_cr_premium	</icon>
     <price>	0	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
@@ -3607,4 +3656,19 @@
       <devices>	80	</devices>
     </damage>
   </_130mm_3VBM_SH>
+  <_152mm_53-G-530_R77_KV2_turret_2>
+    <id>	266	</id>
+    <userString>	#ussr_vehicles:_152mm_53-G-530	</userString>
+    <icon>	ap	</icon>
+    <price>	725	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	152	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	203	</devices>
+    </damage>
+  </_152mm_53-G-530_R77_KV2_turret_2>
 </shells.xml>

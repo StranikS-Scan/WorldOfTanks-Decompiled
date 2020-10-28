@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/demount_kit/selector_dialog.py
 import constants
-from frameworks.wulf import ViewSettings, ViewFlags
+from frameworks.wulf import ViewSettings
 from goodies.goodie_constants import DEMOUNT_KIT_ID
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.game_control.wallet import WalletController
@@ -23,7 +23,7 @@ class DemountOpDevDialog(BaseItemDialog):
     _itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, compDescr, forFitting=False):
-        settings = ViewSettings(layoutID=R.views.lobby.demountkit.DemountWindow(), flags=ViewFlags.TOP_WINDOW_VIEW, model=SelectorDialogModel())
+        settings = ViewSettings(layoutID=R.views.lobby.demountkit.DemountWindow(), model=SelectorDialogModel())
         super(DemountOpDevDialog, self).__init__(settings, compDescr)
         self.removalPrice = self._item.getRemovalPrice(self._itemsCache.items)
         self.__forFitting = forFitting

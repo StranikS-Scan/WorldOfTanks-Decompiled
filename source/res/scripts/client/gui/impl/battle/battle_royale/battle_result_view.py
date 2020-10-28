@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/battle/battle_royale/battle_result_view.py
-from frameworks.wulf import ViewFlags, ViewSettings
+from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.auxiliary.battle_royale.battle_result_view_base import BrBattleResultsViewBase
 from gui.impl.gen.view_models.views.battle.battle_royale.battle_result_view_model import BattleResultViewModel
@@ -13,7 +13,6 @@ class BrBattleResultsViewInBattle(BrBattleResultsViewBase):
 
     def __init__(self, *args, **kwargs):
         settings = ViewSettings(R.views.battle.battle_royale.BattleResultView())
-        settings.flags = ViewFlags.OVERLAY_VIEW
         settings.model = BattleResultViewModel()
         settings.args = args
         settings.kwargs = kwargs

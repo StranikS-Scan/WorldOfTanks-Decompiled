@@ -16,7 +16,6 @@ from gui import g_tankActiveCamouflage
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.simple_turret_rotator import SimpleTurretRotator
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IGameEventController
 from vehicle_outfit.outfit import Area, ANCHOR_TYPE_TO_SLOT_TYPE_MAP, SLOT_TYPES
 from gui.shared.gui_items.customization.slots import SLOT_ASPECT_RATIO, BaseCustomizationSlot, EmblemSlot, getProgectionDecalAspect
 from gui.shared.items_cache import CACHE_SYNC_REASON
@@ -48,6 +47,8 @@ AnchorHelper = namedtuple('AnchorHelper', ['location',
  'partIdx',
  'attachedPartIdx'])
 AnchorParams = namedtuple('AnchorParams', ['location', 'descriptor', 'id'])
+_DEFAULT_TURRET_YAW_ANGLE = 0.0
+_DEFAULT_GUN_PITCH_ANGLE = 0.0
 _logger = logging.getLogger(__name__)
 
 class _LoadStateNotifier(object):
@@ -116,7 +117,7 @@ class HangarVehicleAppearance(ScriptGameObject):
 
     isVehicleDestroyed = property(lambda self: self.__isVehicleDestroyed)
 
-    def __init__(self, spaceId, vEntity, isEvent=False):
+    def __init__(self, spaceId, vEntity):
         ScriptGameObject.__init__(self, vEntity.spaceID)
         self.__loadState = _LoadStateNotifier()
         self.__curBuildInd = 0
@@ -134,7 +135,6 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__onLoadedAfterRefreshCallback = None
         self.__vehicleStickers = None
         self.__isVehicleDestroyed = False
-        self.__isEvent = isEvent
         self.__outfit = None
         self.__staticTurretYaw = 0.0
         self.__staticGunPitch = 0.0
@@ -142,7 +142,6 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__anchorsParams = None
         self.__attachments = []
         self.__modelAnimators = []
-        self.__customAnimators = []
         self.shadowManager = None
         cfg = hangarCFG()
         self.__currentEmblemsAlpha = cfg['emblems_alpha_undamaged']
@@ -250,6 +249,12 @@ class HangarVehicleAppearance(ScriptGameObject):
     def _getGunPitch(self):
         return self.turretAndGunAngles.getGunPitch()
 
+    def _getGunPitchLimits(self):
+        return self.__vDesc.gun.pitchLimits['absolute']
+
+    def _getTurretYawLimits(self):
+        return self.__vDesc.gun.turretYawLimits
+
     def __reload(self, vDesc, vState, outfit):
         self.__clearModelAnimators()
         self.__loadState.unload()
@@ -351,10 +356,6 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__applyAttachmentsVisibility()
         self.__fireResourcesLoadedEvent()
         super(HangarVehicleAppearance, self).activate()
-        if self.__isEvent:
-            gameEventCtrl = dependency.instance(IGameEventController)
-            if not gameEventCtrl.isEventPrbActive():
-                self.collisions.deactivate()
 
     def __fireResourcesLoadedEvent(self):
         compDescr = self.__vDesc.type.compactDescr if self.__vDesc is not None else None
@@ -451,7 +452,6 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.trackNodesAnimator = None
             self.dirtComponent = None
             self.flagComponent = None
-            self.clearCustomAnimators()
         self.__staticTurretYaw = self.__vDesc.gun.staticTurretYaw
         self.__staticGunPitch = self.__vDesc.gun.staticPitch
         if not ('AT-SPG' in self.__vDesc.type.tags or 'SPG' in self.__vDesc.type.tags):
@@ -623,35 +623,37 @@ class HangarVehicleAppearance(ScriptGameObject):
         return position
 
     def updateCustomization(self, outfit=None, callback=None):
-        if self.__isVehicleDestroyed:
+        if self.__isVehicleDestroyed or g_currentVehicle.item is None:
             return
-        vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
-        outfit = outfit or self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehicleCD)
-        if self.recreateRequired(outfit):
-            self.refresh(outfit, callback)
+        else:
+            vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
+            outfit = outfit or self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehicleCD)
+            if self.recreateRequired(outfit):
+                self.refresh(outfit, callback)
+                return
+            self.__updateCamouflage(outfit)
+            self.__updatePaint(outfit)
+            self.__updateDecals(outfit)
+            self.__updateProjectionDecals(outfit)
+            self.__updateSequences(outfit)
             return
-        self.__updateCamouflage(outfit)
-        self.__updatePaint(outfit)
-        self.__updateDecals(outfit)
-        self.__updateProjectionDecals(outfit)
-        self.__updateSequences(outfit)
 
-    def rotateTurretForAnchor(self, anchorId):
+    def rotateTurretForAnchor(self, anchorId, useStaticTurretYaw=False):
         if self.compoundModel is None or self.__vDesc is None:
             return False
         else:
-            defaultYaw = self._getTurretYaw()
+            defaultYaw = self.__staticTurretYaw if useStaticTurretYaw else self._getTurretYaw()
             turretYaw = self.__getTurretYawForAnchor(anchorId, defaultYaw)
             self.turretRotator.start(turretYaw, rotationTime=EASING_TRANSITION_DURATION)
             return
 
-    def rotateGunToDefault(self):
+    def rotateGunToDefault(self, useStaticGunPitch=False):
         if self.compoundModel is None:
             return False
         else:
             localGunMatrix = self.__getGunNode().local
             currentGunPitch = localGunMatrix.pitch
-            gunPitchAngle = self._getGunPitch()
+            gunPitchAngle = self.__staticGunPitch if useStaticGunPitch else self._getGunPitch()
             if abs(currentGunPitch - gunPitchAngle) < 0.0001:
                 return False
             gunPitchMatrix = math_utils.createRotationMatrix((0.0, gunPitchAngle, 0.0))
@@ -717,7 +719,6 @@ class HangarVehicleAppearance(ScriptGameObject):
 
     def __clearModelAnimators(self):
         self.flagComponent = None
-        self.clearCustomAnimators()
         for modelAnimator in self.__modelAnimators:
             modelAnimator.animator.stop()
 
@@ -899,13 +900,3 @@ class HangarVehicleAppearance(ScriptGameObject):
     def __setGunMatrix(self, gunMatrix):
         gunNode = self.__getGunNode()
         gunNode.local = gunMatrix
-
-    def addCustomAnimator(self, modelAnimator):
-        self.__customAnimators.append(modelAnimator)
-        self.registerComponent(modelAnimator)
-
-    def clearCustomAnimators(self):
-        for animator in self.__customAnimators:
-            self.removeComponent(animator)
-
-        self.__customAnimators = []

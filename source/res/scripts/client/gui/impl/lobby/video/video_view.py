@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/video/video_view.py
 import logging
 import Windowing
-from frameworks.wulf import ViewSettings, WindowFlags, ViewFlags
+from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.video.video_view_model import VideoViewModel
 from gui.impl.lobby.video.video_sound_manager import DummySoundManager
@@ -74,7 +74,6 @@ class VideoView(ViewImpl):
         settings.model = VideoViewModel()
         settings.args = args
         settings.kwargs = kwargs
-        settings.flags = ViewFlags.OVERLAY_VIEW
         super(VideoView, self).__init__(settings)
         self.__onVideoStartedHandle = kwargs.get('onVideoStarted')
         self.__onVideoStoppedHandle = kwargs.get('onVideoStopped')
@@ -152,5 +151,5 @@ class VideoViewWindow(LobbyWindow):
     __slots__ = ()
 
     def __init__(self, *args, **kwargs):
-        super(VideoViewWindow, self).__init__(content=VideoView(*args, **kwargs), wndFlags=WindowFlags.OVERLAY, decorator=None)
+        super(VideoViewWindow, self).__init__(content=VideoView(*args, **kwargs), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, layer=WindowLayer.OVERLAY, decorator=None)
         return

@@ -9,6 +9,11 @@
     <R300>	6	</R300>
     <RV_4>	7	</RV_4>
     <R_19>	8	</R_19>
+    <Selex_STR_633P>	10	</Selex_STR_633P>
+    <SEM_90>	15	</SEM_90>
+    <R_F_3_M_2_HELL>	11	</R_F_3_M_2_HELL>
+    <R_F_2_C_A_HELL>	12	</R_F_2_C_A_HELL>
+    <R_F_2_C_A_HELL__0>	13	</R_F_2_C_A_HELL__0>
     <Development_Radio>	65000	</Development_Radio>
   </ids>
   <shared>
@@ -57,6 +62,18 @@
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	1.5	</repairCost>
     </R_F_3_M_2>
+    <Selex_STR_633P>
+      <userString>	#italy_vehicles:Selex_STR_633P	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	23400	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	136	</weight>
+      <distance>	525	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </Selex_STR_633P>
     <R_F_4_M>
       <userString>	#italy_vehicles:R_F_4_M	</userString>
       <tags></tags>
@@ -68,6 +85,18 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </R_F_4_M>
+    <SEM_90>
+      <userString>	#italy_vehicles:SEM_90	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54500	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	28	</weight>
+      <distance>	745	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </SEM_90>
     <R528>
       <userString>	#italy_vehicles:R528	</userString>
       <tags></tags>
@@ -126,5 +155,41 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	0	</repairCost>
     </Development_Radio>
+    <R_F_3_M_2_HELL>
+      <userString>	#italy_vehicles:R_F_3_M_2	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	23400	</price>
+      <weight>	136	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+      <notInShop>	True	</notInShop>
+    </R_F_3_M_2_HELL>
+    <R_F_2_C_A_HELL>
+      <userString>	#italy_vehicles:R_F_2_C_A	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	8200	</price>
+      <weight>	35	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+      <notInShop>	True	</notInShop>
+    </R_F_2_C_A_HELL>
+    <R_F_2_C_A_HELL__0>
+      <userString>	#italy_vehicles:R_F_2_C_A	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	8200	</price>
+      <weight>	35	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+      <notInShop>	True	</notInShop>
+    </R_F_2_C_A_HELL__0>
   </shared>
 </radios.xml>

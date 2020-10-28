@@ -1,10 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/ingame_help/detailed_help_pages.py
 import logging
-import BigWorld
 import CommandMapping
-import Keys
-from gui.Scaleform.locale.READABLE_KEY_NAMES import READABLE_KEY_NAMES
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.utils.functions import replaceHyphenToUnderscore
@@ -14,10 +11,6 @@ _logger = logging.getLogger(__name__)
 
 def buildPagesData(ctx):
     datailedList = []
-    if ctx.get('isWTHunter'):
-        datailedList.extend(buildWTHunterPages())
-    elif ctx.get('isWTBoss'):
-        datailedList.extend(buildWTBossPages())
     if ctx.get('isWheeled') and ctx.get('hasSiegeMode'):
         datailedList.extend(buildSiegeModePages())
     if ctx.get('hasBurnout'):
@@ -95,22 +88,6 @@ def buildTurboshaftEnginePages():
     siegeKeyName = getReadableKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
     _addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.engineMode.engineModePage1.title()), backport.text(R.strings.ingame_help.detailsHelp.engineMode.engineModePage1()), [siegeKeyName], backport.image(R.images.gui.maps.icons.battleHelp.turboshaftEngineHelp.engine_mode_page_1()))
     _addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.engineMode.engineModePage2.title()), backport.text(R.strings.ingame_help.detailsHelp.engineMode.engineModePage2()), [], backport.image(R.images.gui.maps.icons.battleHelp.turboshaftEngineHelp.engine_mode_page_2()))
-    return pages
-
-
-def buildWTHunterPages():
-    pages = []
-    _addPage(pages, backport.text(R.strings.wt_event.ingame_help.hunter.page_1.title()), backport.text(R.strings.wt_event.ingame_help.hunter.page_1.body()), [], backport.image(R.images.gui.maps.icons.battleHelp.wtEventHelp.f1_hunter_01()))
-    _addPage(pages, backport.text(R.strings.wt_event.ingame_help.hunter.page_2.title()), backport.text(R.strings.wt_event.ingame_help.hunter.page_2.body()), [], backport.image(R.images.gui.maps.icons.battleHelp.wtEventHelp.f1_hunter_02()))
-    _addPage(pages, backport.text(R.strings.wt_event.ingame_help.hunter.page_3.title()), backport.text(R.strings.wt_event.ingame_help.hunter.page_3.body()), [], backport.image(R.images.gui.maps.icons.battleHelp.wtEventHelp.f1_hunter_03()))
-    return pages
-
-
-def buildWTBossPages():
-    pages = []
-    _addPage(pages, backport.text(R.strings.wt_event.ingame_help.boss.page_1.title()), backport.text(R.strings.wt_event.ingame_help.boss.page_1.body()), [], backport.image(R.images.gui.maps.icons.battleHelp.wtEventHelp.f1_boss_01()))
-    _addPage(pages, backport.text(R.strings.wt_event.ingame_help.boss.page_2.title()), backport.text(R.strings.wt_event.ingame_help.boss.page_2.body()), [READABLE_KEY_NAMES.key(BigWorld.keyToString(Keys.KEY_LALT)), getReadableKey(CommandMapping.CMD_CM_SHOOT)], backport.image(R.images.gui.maps.icons.battleHelp.wtEventHelp.f1_boss_02()))
-    _addPage(pages, backport.text(R.strings.wt_event.ingame_help.boss.page_3.title()), backport.text(R.strings.wt_event.ingame_help.boss.page_3.body()), [], backport.image(R.images.gui.maps.icons.battleHelp.wtEventHelp.f1_boss_03()))
     return pages
 
 

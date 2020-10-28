@@ -17,7 +17,7 @@ from gui.shared.utils.requesters.ItemsRequester import RESEARCH_CRITERIA
 from helpers import i18n, dependency, getLocalizedData
 from items import vehicles
 from shared_utils import CONST_CONTAINER
-from skeletons.gui.game_control import IIGRController, IGameEventController
+from skeletons.gui.game_control import IIGRController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
@@ -811,6 +811,9 @@ class VehicleDescr(_VehicleRequirement, _VehsListParser, _Updatable):
     def _isAvailable(self, vehicle):
         return vehicle.intCD in self._getVehiclesCache(self._data)
 
+    def getParsedConditions(self):
+        return self._parseFilters(self._data)
+
 
 class _DossierValue(_Requirement):
 
@@ -1434,22 +1437,12 @@ class _CountOrTotalEventsCondition(_VehsListCondition):
 
 
 class VehicleDamage(_CountOrTotalEventsCondition):
-    __gameEventController = dependency.descriptor(IGameEventController)
 
     def __init__(self, path, data):
         super(VehicleDamage, self).__init__('vehicleDamage', dict(data), path)
 
     def __repr__(self):
         return 'VehicleDamage<%s=%d>' % (self._relation, self._relationValue)
-
-    def getFilterCriteria(self, data):
-        resultCriteria = super(VehicleDamage, self).getFilterCriteria(data)
-        types, _, _, _, _ = self._parseFilters(data)
-        if types:
-            specialBossIntCD = self.__gameEventController.getSpecialBoss().intCD
-            if specialBossIntCD in types:
-                resultCriteria ^= REQ_CRITERIA.VEHICLE.SPECIFIC_BY_CD([specialBossIntCD])
-        return resultCriteria
 
     def getVehiclesData(self):
         return _prepareVehData(self._getVehiclesList(self._data))
@@ -1575,3 +1568,32 @@ def getProgressFromQuestWithSingleAccumulative(quest):
             currentProgress, totalProgress = item.getProgressPerGroup().get(None, [])[:2]
             return (currentProgress, totalProgress)
     return (None, None)
+
+
+def getTokenNeededCountInCondition(quest, tokenName, default=None):
+    return default if quest is None else _getTokenNeededCountInCondition(quest.accountReqs.getConditions().items, tokenName, default)
+
+
+def _getTokenNeededCountInCondition(items, tokenName, default=None):
+    item = _getTokenItemInCondition(items, tokenName)
+    return default if item is None else item.getNeededCount()
+
+
+def getTokenReceivedCountInCondition(quest, tokenName, default=None):
+    return default if quest is None else _getTokenReceivedCountInCondition(quest.accountReqs.getConditions().items, tokenName, default)
+
+
+def _getTokenReceivedCountInCondition(items, tokenName, default=None):
+    item = _getTokenItemInCondition(items, tokenName)
+    return default if item is None else item.getReceivedCount()
+
+
+def _getTokenItemInCondition(items, tokenName):
+    res = None
+    for item in items:
+        if isinstance(item, _ConditionsGroup):
+            res = _getTokenItemInCondition(item.items, tokenName)
+        if item.getName() == 'token' and item.getID() == tokenName:
+            return item
+
+    return res

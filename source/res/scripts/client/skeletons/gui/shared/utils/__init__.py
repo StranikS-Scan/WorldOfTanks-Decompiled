@@ -106,9 +106,6 @@ class IItemsRequester(requesters.IRequester):
     def getVehicles(self, criteria=None):
         raise NotImplementedError
 
-    def getStyles(self, criteria=None):
-        raise NotImplementedError
-
     def getBadges(self, criteria=None):
         raise NotImplementedError
 
@@ -163,6 +160,7 @@ class IHangarSpace(object):
     onSpaceChanged = None
     onNotifyCursorOver3dScene = None
     onSpaceChangedByAction = None
+    onObjectsSelectionEnabled = None
 
     @property
     def space(self):

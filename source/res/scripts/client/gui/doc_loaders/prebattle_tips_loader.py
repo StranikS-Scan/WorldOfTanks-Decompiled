@@ -20,8 +20,12 @@ def _readPreBattleTips():
          'levels': filterSection.readString('levels'),
          'vehicleClass': filterSection.readString('vehicleClass'),
          'tags': filterSection.readString('tags'),
+         'realms': filterSection.readString('realms'),
          'preceding': _readPrecedingData(filterSection),
-         'battlePassActiveCheck': filterSection.readBool('battlePassActiveCheck', False)}
+         'battlePassActiveCheck': filterSection.readBool('battlePassActiveCheck', False),
+         'rankedYearRewardCheck': filterSection.readBool('rankedYearRewardCheck', False),
+         'rankedLBCheck': filterSection.readBool('rankedLBCheck', False),
+         'rankedShopCheck': filterSection.readBool('rankedShopCheck', False)}
 
     for _, tipsSection in resource_helper.getIterator(ctx, root['tips']):
         filterId = tipsSection.readString('filter')

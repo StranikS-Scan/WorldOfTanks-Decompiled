@@ -9,7 +9,7 @@ class ViewInterface(object):
         raise NotImplementedError
 
     @property
-    def viewType(self):
+    def layer(self):
         raise NotImplementedError
 
     @property

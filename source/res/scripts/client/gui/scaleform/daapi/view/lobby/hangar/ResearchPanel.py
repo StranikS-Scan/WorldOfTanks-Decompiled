@@ -100,7 +100,7 @@ class ResearchPanel(ResearchPanelMeta):
             if vehCD in elite:
                 self.as_setEliteS(True)
 
-    def __onCompareBasketChanged(self, changedData, _=None):
+    def __onCompareBasketChanged(self, changedData):
         if changedData.isFullChanged:
             self.onCurrentVehicleChanged()
 

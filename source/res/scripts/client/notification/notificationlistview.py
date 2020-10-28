@@ -65,7 +65,7 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
         self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
         self.as_setInitDataS({'scrollStepFactor': LIST_SCROLL_STEP_FACTOR,
          'btnBarSelectedIdx': NotificationGroup.ALL.index(self.__currentGroup),
-         'tabsData': {'tabs': [self.__makeTabItemVO(NOTIFICATIONS_CONSTANTS.TAB_INFO, icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_INFORMATION_16X16, 16, 16, -4, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_INFO), self.__makeTabItemVO(NOTIFICATIONS_CONSTANTS.TAB_INVITES, icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_INVITATIONS_24X16, 24, 16, -5, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_INVITES), self.__makeTabItemVO(NOTIFICATIONS_CONSTANTS.TAB_OFFERS, icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_GIFT_16X16, 16, 16, -4, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_OFFERS)]}})
+         'tabsData': {'tabs': [self.__makeTabItemVO(NOTIFICATIONS_CONSTANTS.TAB_INFO, icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_INFORMATION_16X16, 16, 16, -4, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_INFO), self.__makeTabItemVO(NOTIFICATIONS_CONSTANTS.TAB_INVITES, icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_INVITATIONS_24X16, 24, 16, -5, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_INVITES), self.__makeTabItemVO(NOTIFICATIONS_CONSTANTS.TAB_OFFERS, icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ICON_BELL_24X16, 24, 16, -5, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_OFFERS)]}})
         if self._lobbyContext.getServerSettings().getProgressiveRewardConfig().isEnabled:
             self.as_setProgressiveRewardEnabledS(True)
 
@@ -101,7 +101,7 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
         if notification.isAlert():
             NotificationMVC.g_instance.getAlertController().showAlertMessage(notification)
         if notification.getGroup() == self.__currentGroup:
-            self.as_appendMessageS(self.__getListVO(notification))
+            self.__setNotificationList()
         elif notification.getGroup() == NotificationGroup.INVITE:
             self.__currentGroup = NotificationGroup.INVITE
             self.__setNotificationList()

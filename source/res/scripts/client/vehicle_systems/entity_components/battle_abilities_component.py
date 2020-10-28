@@ -15,6 +15,7 @@ class BattleAbilitiesComponent(VehicleComponent):
         self.set_healingEffect()
         self.set_healing()
         self.set_debuff()
+        self.set_healOverTime()
 
     def set_inspiringEffect(self, prev=None):
         if not self.isStarted or self.inspiringEffect == prev:

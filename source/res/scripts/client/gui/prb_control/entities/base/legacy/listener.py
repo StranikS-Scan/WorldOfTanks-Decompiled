@@ -16,6 +16,9 @@ class ILegacyListener(ILegacyIntroListener):
     def onSettingUpdated(self, entity, settingName, settingValue):
         pass
 
+    def onPropertyUpdated(self, entity, propertyName, propertyValue):
+        pass
+
     def onTeamStatesReceived(self, entity, team1State, team2State):
         pass
 

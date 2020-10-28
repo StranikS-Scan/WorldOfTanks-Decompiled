@@ -6,7 +6,7 @@ import nations
 from constants import CURRENT_REALM
 from gui.battle_control import avatar_getter
 from items import vehicles
-from helpers import dependency
+from helpers import dependency, isPlayerAvatar
 from skeletons.gui.game_control import IBootcampController
 _RU_REALMS = ('DEV', 'QA', 'RU')
 _SWITCH_RU = 'SWITCH_ext_BR_vo_language'
@@ -34,6 +34,8 @@ class BRVoiceOverController(object):
 
     def activate(self):
         self.__isActive = True
+        if isPlayerAvatar():
+            self.__updateBattleSwitches(BigWorld.player().getVehicleAttached())
 
     def deactivate(self):
         self.__isActive = False
@@ -43,7 +45,7 @@ class BRVoiceOverController(object):
             return
         else:
             avatar = BigWorld.player()
-            playerVehicle = avatar.vehicle
+            playerVehicle = avatar.getVehicleAttached()
             if playerVehicle is not None:
                 self.__updateBattleSwitches(playerVehicle)
             else:
@@ -51,15 +53,17 @@ class BRVoiceOverController(object):
             return
 
     def __onVehicleEnterWorld(self, vehicle):
-        if vehicle.id == avatar_getter.getPlayerVehicleID():
+        if vehicle.id == avatar_getter.getVehicleIDAttached():
             BigWorld.player().onVehicleEnterWorld -= self.__onVehicleEnterWorld
             self.__updateBattleSwitches(vehicle)
 
     def __updateBattleSwitches(self, vehicle):
         if self.__isActive:
-            compactDescr = vehicle.typeDescriptor.type.compactDescr
-            WWISE.WW_setSwitch(_SWITCH_CHAR, self.__compactDescrToSwitchValue(compactDescr))
+            if vehicle is not None:
+                compactDescr = vehicle.typeDescriptor.type.compactDescr
+                WWISE.WW_setSwitch(_SWITCH_CHAR, self.__compactDescrToSwitchValue(compactDescr))
             WWISE.WW_setSwitch(_SWITCH_RU, self.__switchRuValue)
+        return
 
     def __compactDescrToSwitchValue(self, descr):
         _, nationIdx, _ = vehicles.parseIntCompactDescr(descr)

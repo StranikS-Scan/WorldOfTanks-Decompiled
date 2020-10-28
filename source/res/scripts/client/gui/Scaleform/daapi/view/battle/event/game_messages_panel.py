@@ -19,11 +19,18 @@ class GameMessagesPanel(GameMessagesPanelMeta):
         pass
 
     def sendEndGameMessage(self, winningTeam, reason):
+        isCollectorFull = False
+        battleGoals = self.sessionProvider.dynamic.battleGoals
+        if battleGoals:
+            souls, capacity = battleGoals.getCurrentCollectorSoulsInfo()
+            isCollectorFull = True if souls >= capacity else False
         if winningTeam != EVENT.PLAYERS_TEAM:
             battleHints = self.sessionProvider.dynamic.battleHints
             if battleHints:
                 if reason == FINISH_REASON.TIMEOUT:
                     battleHints.showHint('timeOut')
+                elif reason == FINISH_REASON.EXTERMINATION and isCollectorFull:
+                    battleHints.showHint('failedRunIntoCollector')
                 else:
                     battleHints.showHint('failedActivateCollector')
 

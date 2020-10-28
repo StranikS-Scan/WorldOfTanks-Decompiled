@@ -35,6 +35,11 @@ class CrystalsPromoView(ViewImpl):
         super(CrystalsPromoView, self).__init__(settings)
         self.__visibility = visibility
         self.__isMarkerDisabled = False
+        app = self._appLoader.getApp(APP_NAME_SPACE.SF_LOBBY)
+        if app and app.containerManager:
+            markerView = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW))
+            if markerView:
+                self.__isMarkerDisabled = markerView.getIsMarkerDisabled()
 
     def _initialize(self, *args, **kwargs):
         self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
@@ -43,11 +48,6 @@ class CrystalsPromoView(ViewImpl):
         isFirstOpen = not AccountSettings.getSettings(CRYSTALS_INFO_SHOWN)
         if isFirstOpen:
             AccountSettings.setSettings(CRYSTALS_INFO_SHOWN, True)
-        app = self._appLoader.getApp(APP_NAME_SPACE.SF_LOBBY)
-        if app and app.containerManager:
-            markerView = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW))
-            if markerView:
-                self.__isMarkerDisabled = markerView.getIsMarkerDisabled()
         with self.getViewModel().transaction() as model:
             model.setSelectedTab(1 if isFirstOpen else 0)
             model.setEquipmentPrice(getIntegralFormat(3000))

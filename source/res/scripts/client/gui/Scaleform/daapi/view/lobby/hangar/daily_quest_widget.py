@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/daily_quest_widget.py
 import typing
-from constants import QUEUE_TYPE
+from constants import QUEUE_TYPE, PREBATTLE_TYPE
 from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events.events_helpers import isDailyQuestsEnable
@@ -29,7 +29,9 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
         return
 
     def onPrbEntitySwitched(self):
-        if not self._isRandomBattleSelected():
+        if self._isInEvent():
+            self.__hide()
+        elif not self._isRandomBattleSelected():
             self.__animateHide()
         else:
             self.__showOrHide()
@@ -53,6 +55,13 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
 
     def _isRandomBattleSelected(self):
         return self.prbDispatcher.getFunctionalState().isQueueSelected(QUEUE_TYPE.RANDOMS) if self.prbDispatcher is not None else False
+
+    def _isInEvent(self):
+        if self.prbDispatcher is not None:
+            state = self.prbDispatcher.getFunctionalState()
+            return state.isQueueSelected(QUEUE_TYPE.EVENT_BATTLES) or state.isInUnit(PREBATTLE_TYPE.EVENT)
+        else:
+            return False
 
     def __show(self):
         if self._injectView is None:

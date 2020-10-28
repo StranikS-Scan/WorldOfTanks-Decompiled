@@ -40,6 +40,7 @@ from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.shared.utils import IHangarSpaceReloader
 from skeletons.gui.shared.hangar_spaces_switcher import IHangarSpacesSwitcher
 from gui.ClientHangarSpace import SERVER_CMD_CHANGE_HANGAR, SERVER_CMD_CHANGE_HANGAR_PREM
+from skeletons.gui.battle_session import IBattleSessionProvider
 _logger = logging.getLogger(__name__)
 
 class BATTLE_ROYALE_GAME_LIMIT_TYPE(object):
@@ -63,6 +64,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
     __hangarSpaceReloader = dependency.descriptor(IHangarSpaceReloader)
     __eventProgression = dependency.descriptor(IEventProgressionController)
     __notificationsCtrl = dependency.descriptor(IEventsNotificationsController)
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     TOKEN_QUEST_ID = 'token:br:title:'
     DAILY_QUEST_ID = 'steel_hunter'
     MODE_ALIAS = 'battleRoyale'
@@ -162,6 +164,10 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
     def onAvatarBecomePlayer(self):
         self.__clear()
         self.__battleResultsService.onResultPosted -= self.__showBattleResults
+        if self.__sessionProvider.arenaVisitor.getArenaBonusType() in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
+            self.__voControl.activate()
+        else:
+            self.__voControl.deactivate()
         self.__voControl.onAvatarBecomePlayer()
         super(BattleRoyaleController, self).onAvatarBecomePlayer()
 

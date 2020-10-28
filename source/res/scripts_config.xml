@@ -88,6 +88,22 @@
       <public_key_path>	loginapp_wot.pubkey	</public_key_path>
       <periphery_id>	111	</periphery_id>
     </host>
+    <host>
+      <name>	WOT RU12	</name>
+      <short_name>	RU12	</short_name>
+      <url>	login.p12.worldoftanks.net:20014	</url>
+      <url_token>	login2.p12.worldoftanks.net:20014	</url_token>
+      <public_key_path>	loginapp_wot.pubkey	</public_key_path>
+      <periphery_id>	112	</periphery_id>
+    </host>
+    <host>
+      <name>	WOT RU13	</name>
+      <short_name>	RU13	</short_name>
+      <url>	login.p13.worldoftanks.net:20014	</url>
+      <url_token>	login2.p13.worldoftanks.net:20014	</url_token>
+      <public_key_path>	loginapp_wot.pubkey	</public_key_path>
+      <periphery_id>	113	</periphery_id>
+    </host>
   </login>
   <updateUrl>	http://worldoftanks.ru/update	</updateUrl>
   <csisUrl>	http://csis.worldoftanks.ru/csis/wotru/	</csisUrl>

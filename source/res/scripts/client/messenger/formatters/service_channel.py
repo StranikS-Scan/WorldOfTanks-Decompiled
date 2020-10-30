@@ -1206,9 +1206,14 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             tankmenFreeXP = dataEx.get('tankmenFreeXP', {})
             if tankmenFreeXP:
                 operations.append(self.__getTankmenFreeXPString(tankmenFreeXP))
-            tokensStr = self.__getTokensString(dataEx.get('tokens', {}))
-            if tokensStr:
-                operations.append(tokensStr)
+            tokens = dataEx.get('tokens', {})
+            if tokens:
+                tokensStr = self.__getTokensString(tokens)
+                if tokensStr:
+                    operations.append(tokensStr)
+                tokensStr = self.__getEnergyTokensString(tokens)
+                if tokensStr:
+                    operations.append(tokensStr)
             entitlementsStr = self.__getEntitlementsString(dataEx.get('entitlements', {}))
             if entitlementsStr:
                 operations.append(entitlementsStr)
@@ -1561,6 +1566,26 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         if count != 0:
             template = 'awardListAccruedInvoiceReceived' if count > 0 else 'awardListDebitedInvoiceReceived'
             return g_settings.htmlTemplates.format(template, {'count': count})
+
+    @staticmethod
+    def __getEnergyTokensString(data):
+        res = []
+        for tokenName, tokenData in data.iteritems():
+            count = tokenData.get('count', 0)
+            if not count:
+                continue
+            if tokenName == constants.HE19_ENERGY_FOR_USE_BOOSTER_TOKEN_ID:
+                name = backport.text(R.strings.quests.token.default.he19_energy_for_use_booster())
+            elif tokenName == constants.HE19_ENERGY_FOR_USE_HEALING_TOKEN_ID:
+                name = backport.text(R.strings.quests.token.default.he19_energy_for_use_healing())
+            else:
+                continue
+            res.append(backport.text(R.strings.messenger.serviceChannelMessages.battleResults.quests.items.name(), name=name, count=backport.getIntegralFormat(count)))
+
+        result = ''
+        if res:
+            result += g_settings.htmlTemplates.format('battleQuestsItems', ctx={'names': ', '.join(res)})
+        return result
 
     def __getEntitlementsString(self, data):
         accrued = []

@@ -360,7 +360,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent, BuffContainer):
                 return
             if attackerID == BigWorld.player().playerVehicleID:
                 if maxHitEffectCode is not None and not self.isPlayerVehicle:
-                    if not self.canBeDamaged:
+                    if not self.canBeDamaged and not sessionProvider.getArenaDP().isAlly(self.id):
                         eventID = _GUI_EVENT_ID.VEHICLE_INVULNERABLE
                     elif maxHitEffectCode in VEHICLE_HIT_EFFECT.RICOCHETS:
                         eventID = _GUI_EVENT_ID.VEHICLE_RICOCHET

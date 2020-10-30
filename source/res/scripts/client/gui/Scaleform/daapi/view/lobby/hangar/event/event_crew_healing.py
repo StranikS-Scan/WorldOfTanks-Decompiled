@@ -68,7 +68,7 @@ class FakeCrewHealing(EventManageCrewMeta):
             if success and self._ENERGY_ITEM_PURPOSE == FakeCrewHealing._ENERGY_ITEM_PURPOSE:
                 AccountSettings.setCounters(EVENT_COMMANDERS_READY_SEEN, True)
         else:
-            self._exchangeEnergy()
+            self._vehiclesController.applyCommanderEnergy(self._ENERGY_ITEM_PURPOSE, self._vehCD)
 
     @process
     def showTraining(self):
@@ -103,9 +103,6 @@ class FakeCrewHealing(EventManageCrewMeta):
 
     def _isEnabled(self):
         return self._vehiclesController.isEnabled()
-
-    def _exchangeEnergy(self):
-        self._vehiclesController.applyCommanderHealing(self._ENERGY_ITEM_PURPOSE, self._vehCD)
 
     def _hasUsedEnergy(self):
         return self._vehiclesController.hasEnergy(self._ENERGY_ITEM_PURPOSE, self._vehCD)

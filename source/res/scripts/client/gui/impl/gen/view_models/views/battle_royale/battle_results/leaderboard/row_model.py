@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.common.user_name_model import UserNameModel
 class RowModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=3, commands=0):
+    def __init__(self, properties=4, commands=0):
         super(RowModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -25,8 +25,15 @@ class RowModel(ViewModel):
     def setType(self, value):
         self._setString(2, value)
 
+    def getAnonymizerNick(self):
+        return self._getString(3)
+
+    def setAnonymizerNick(self, value):
+        self._setString(3, value)
+
     def _initialize(self):
         super(RowModel, self)._initialize()
         self._addViewModelProperty('user', UserNameModel())
         self._addStringProperty('place', '')
         self._addStringProperty('type', 'rowBrEnemy')
+        self._addStringProperty('anonymizerNick', '')

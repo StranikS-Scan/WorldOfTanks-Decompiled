@@ -44,7 +44,7 @@ _UNLIMITED_ITEMS_COUNT = -1
 _EXCLUDE_ITEMS = {v for v in ItemPackTypeGroup.CREW} | {ItemPackType.FRONTLINE_TOKEN}
 _ANY_ITEM_TYPE = {v for _, v in ItemPackType.getIterator()} - _EXCLUDE_ITEMS
 _FRONTLINE_GIFTS = {v for _, v in ItemPackType.getIterator()} - {ItemPackType.FRONTLINE_TOKEN}
-_NATIVE_ITEM_TYPE = set(itertools.chain(ItemPackTypeGroup.VEHICLE, ItemPackTypeGroup.ITEM))
+_NATIVE_ITEM_TYPE = set(itertools.chain(ItemPackTypeGroup.VEHICLE, ItemPackTypeGroup.ITEM, ItemPackTypeGroup.CREW_BOOK))
 _CUSTOMIZATION_ITEM_TYPE = set(itertools.chain(ItemPackTypeGroup.STYLE, ItemPackTypeGroup.CAMOUFLAGE, ItemPackTypeGroup.PAINT, ItemPackTypeGroup.DECAL, ItemPackTypeGroup.PROJECTION_DECAL, ItemPackTypeGroup.PERSONAL_NUMBER, ItemPackTypeGroup.MODIFICATION))
 _CUSTOMIZATION_TYPES_MAP = {ItemPackType.STYLE: CustomizationType.STYLE,
  ItemPackType.CAMOUFLAGE_ALL: CustomizationType.CAMOUFLAGE,
@@ -112,7 +112,9 @@ _TOOLTIP_TYPE = {ItemPackType.ITEM_DEVICE: TOOLTIPS_CONSTANTS.SHOP_MODULE,
  ItemPackType.BLUEPRINT: TOOLTIPS_CONSTANTS.BLUEPRINT_FRAGMENT_INFO,
  ItemPackType.BLUEPRINT_NATIONAL: TOOLTIPS_CONSTANTS.BLUEPRINT_FRAGMENT_INFO,
  ItemPackType.BLUEPRINT_INTELEGENCE_DATA: TOOLTIPS_CONSTANTS.BLUEPRINT_FRAGMENT_INFO,
- ItemPackType.BLUEPRINT_ANY: TOOLTIPS_CONSTANTS.BLUEPRINT_RANDOM_INFO}
+ ItemPackType.BLUEPRINT_ANY: TOOLTIPS_CONSTANTS.BLUEPRINT_RANDOM_INFO,
+ ItemPackType.BLUEPRINT_NATIONAL_ANY: TOOLTIPS_CONSTANTS.BLUEPRINT_RANDOM_NATIONAL_INFO,
+ ItemPackType.DEMOUNT_KITS: TOOLTIPS_CONSTANTS.AWARD_DEMOUNT_KIT}
 _ICONS = {ItemPackType.CAMOUFLAGE_ALL: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
  ItemPackType.CAMOUFLAGE_WINTER: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
  ItemPackType.CAMOUFLAGE_SUMMER: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
@@ -135,7 +137,13 @@ _ICONS = {ItemPackType.CAMOUFLAGE_ALL: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CA
  ItemPackType.CREW_50: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZECREW,
  ItemPackType.CREW_75: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZECREW,
  ItemPackType.CREW_100: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZECREW,
- ItemPackType.CUSTOM_CREW_100: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZECREW}
+ ItemPackType.CUSTOM_CREW_100: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZECREW,
+ ItemPackType.CREW_BUNDLE: TOOLTIPS_CONSTANTS.SHOP_CREW_BUNDLE,
+ ItemPackType.CREW_BOOK: TOOLTIPS_CONSTANTS.CREW_BOOK,
+ ItemPackType.CREW_BOOK_BROCHURE: TOOLTIPS_CONSTANTS.CREW_BOOK,
+ ItemPackType.CREW_BOOK_GUIDE: TOOLTIPS_CONSTANTS.CREW_BOOK,
+ ItemPackType.CREW_BOOK_CREW_BOOK: TOOLTIPS_CONSTANTS.CREW_BOOK,
+ ItemPackType.CREW_BOOK_PERSONAL_BOOK: TOOLTIPS_CONSTANTS.CREW_BOOK}
 _NOT_FOUND_ICONS = {ItemPackType.TOKEN: RES_ICONS.MAPS_ICONS_QUESTS_ICON_BATTLE_MISSIONS_PRIZE_TOKEN}
 _PREM_ICONS = {1: RES_SHOP.MAPS_SHOP_REWARDS_48X48_ICON_BATTLE_MISSIONS_PRIZE_1DAYPREM,
  2: RES_SHOP.MAPS_SHOP_REWARDS_48X48_ICON_BATTLE_MISSIONS_PRIZE_2DAYPREM,
@@ -233,7 +241,10 @@ def getItemIcon(rawItem, item):
     icon = rawItem.iconSource
     if not icon:
         if item is not None:
-            icon = _ICONS.get(rawItem.type, item.icon)
+            if rawItem.type not in ItemPackTypeGroup.CREW_BOOK:
+                icon = _ICONS.get(rawItem.type, item.icon)
+            else:
+                icon = item.getShopIcon('small')
         elif rawItem.type == ItemPackType.CUSTOM_PREMIUM:
             icon = _PREM_ICONS.get(rawItem.count, '')
         elif rawItem.type == ItemPackType.CUSTOM_PREMIUM_PLUS:
@@ -247,12 +258,12 @@ def getItemIcon(rawItem, item):
 def getItemTitle(rawItem, item, forBox=False, additionalInfo=False):
     if item is not None:
         title = item.userName
-        if forBox and item.itemTypeName != '':
+        if forBox and item.itemTypeName != '' and rawItem.type not in ItemPackTypeGroup.CREW_BOOK:
             tooltipKey = TOOLTIPS.getItemBoxTooltip(item.itemTypeName)
             if tooltipKey:
                 title = _ms(tooltipKey, group=item.userType, value=item.userName)
                 title = title.replace(_DOUBLE_OPEN_QUOTES, _OPEN_QUOTES).replace(_DOUBLE_CLOSE_QUOTES, _CLOSE_QUOTES)
-    elif rawItem.type == ItemPackType.CUSTOM_SLOT:
+    elif rawItem.type in (ItemPackType.CUSTOM_SLOT, ItemPackType.CUSTOM_SEVERAL_SLOTS):
         title = _ms(key=TOOLTIPS.AWARDITEM_SLOTS_HEADER)
     elif rawItem.type == ItemPackType.CUSTOM_GOLD:
         title = _ms(key=QUESTS.BONUSES_GOLD_DESCRIPTION, value=rawItem.count)
@@ -283,6 +294,10 @@ def getItemTitle(rawItem, item, forBox=False, additionalInfo=False):
             title = _ms(TOOLTIPS.CREW_HEADER)
     elif rawItem.type == ItemPackType.CUSTOM_EVENT_PROGRESSION_REWARD_POINT:
         title = backport.text(R.strings.tooltips.vehiclePreview.buyingPanel.eventProgression.price.header())
+    elif rawItem.type == ItemPackType.CUSTOM_X5_BATTLE_BONUS:
+        title = backport.text(R.strings.tooltips.quests.bonuses.token.battle_bonus_x5.header())
+    elif rawItem.type == ItemPackType.CREW_BOOK_RANDOM:
+        title = backport.text(R.strings.tooltips.awardItem.randomBooklet.header())
     else:
         title = rawItem.title or ''
     return title
@@ -291,7 +306,7 @@ def getItemTitle(rawItem, item, forBox=False, additionalInfo=False):
 def getItemDescription(rawItem, item):
     if item is not None:
         description = item.fullDescription
-    elif rawItem.type == ItemPackType.CUSTOM_SLOT:
+    elif rawItem.type in (ItemPackType.CUSTOM_SLOT, ItemPackType.CUSTOM_SEVERAL_SLOTS):
         description = _ms(TOOLTIPS.AWARDITEM_SLOTS_BODY)
     elif rawItem.type == ItemPackType.CUSTOM_GOLD:
         description = _ms(TOOLTIPS.AWARDITEM_GOLD_BODY)
@@ -321,6 +336,10 @@ def getItemDescription(rawItem, item):
              ItemPackType.CUSTOM_CREW_100: CrewTypes.SKILL_100}.get(rawItem.type))
     elif rawItem.type == ItemPackType.CUSTOM_EVENT_PROGRESSION_REWARD_POINT:
         description = backport.text(R.strings.tooltips.vehiclePreview.buyingPanel.eventProgression.price.body())
+    elif rawItem.type == ItemPackType.CUSTOM_X5_BATTLE_BONUS:
+        description = backport.text(R.strings.tooltips.quests.bonuses.token.battle_bonus_x5.body())
+    elif rawItem.type == ItemPackType.CREW_BOOK_RANDOM:
+        description = backport.text(R.strings.tooltips.awardItem.randomBooklet.body())
     else:
         description = rawItem.description or ''
     return description

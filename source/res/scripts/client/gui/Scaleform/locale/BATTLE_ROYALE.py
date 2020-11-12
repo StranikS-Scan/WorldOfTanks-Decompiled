@@ -169,6 +169,8 @@ class BATTLE_ROYALE(object):
     BATTLERESULT_STATS_DAMAGEBLOCKEDBYARMOR_TITLE = '#battle_royale:battleResult/stats/damageBlockedByArmor/title'
     BATTLERESULT_STATS_DAMAGEBLOCKEDBYARMOR_HEADER = '#battle_royale:battleResult/stats/damageBlockedByArmor/header'
     BATTLERESULT_STATS_DAMAGEBLOCKEDBYARMOR_BODY = '#battle_royale:battleResult/stats/damageBlockedByArmor/body'
+    BATTLERESULT_STATS_ANONYMIZER_HEADER = '#battle_royale:battleResult/stats/anonymizer/header'
+    BATTLERESULT_STATS_ANONYMIZER_BODY = '#battle_royale:battleResult/stats/anonymizer/body'
     BATTLERESULT_INBATTLE_REWARDWARNING = '#battle_royale:battleResult/inBattle/rewardWarning'
     BATTLERESULT_INBATTLE_SKIPANIM_TEXT = '#battle_royale:battleResult/inBattle/skipAnim/text'
     BATTLERESULT_INBATTLE_SKIPANIM_ESC = '#battle_royale:battleResult/inBattle/skipAnim/esc'

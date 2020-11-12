@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/tooltips/common_builders.py
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.cn_loot_boxes.cn_loot_box_bonus_tooltips import CNLootBoxVehicleBlueprintFragmentTooltipData
 from gui.shared.tooltips import advanced
 from gui.shared.tooltips import common
 from gui.shared.tooltips import contexts
@@ -44,7 +45,8 @@ def getTooltipBuilders():
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_PASS_CHOSE_WINNER, None, common.BattlePassChoseWinnerTooltipContentWindowData(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.TECHTREE_DISCOUNT_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, common.TechTreeDiscountInfoTooltip(contexts.QuestContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.TECHTREE_NATION_DISCOUNT, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, common.TechTreeNationDiscountTooltip(contexts.TechTreeContext())),
-     DataBuilder(TOOLTIPS_CONSTANTS.DOG_TAGS_INFO, TOOLTIPS_CONSTANTS.DOG_TAGS_INFO_UI, DogTagInfoTooltip(contexts.DogTagInfoContext())))
+     DataBuilder(TOOLTIPS_CONSTANTS.DOG_TAGS_INFO, TOOLTIPS_CONSTANTS.DOG_TAGS_INFO_UI, DogTagInfoTooltip(contexts.DogTagInfoContext())),
+     DataBuilder(TOOLTIPS_CONSTANTS.CN_LOOT_BOXES_VEHICLE_BLUEPRINT_FRAGMENT, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, CNLootBoxVehicleBlueprintFragmentTooltipData(contexts.ToolTipContext(None))))
 
 
 class HeaderMoneyAndXpBuilder(DataBuilder):

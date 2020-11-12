@@ -108,8 +108,14 @@ class BattleRoyaleVehicleStatusBlock(base.StatsBlock):
         killerVehicleID = result[vehicleInfo.intCD]['killerID']
         if killerVehicleID:
             killerInfo = reusable.getPlayerInfoByVehicleID(killerVehicleID)
-            self.killer = {'userName': killerInfo.realName,
-             'clanAbbrev': killerInfo.clanAbbrev}
+            isSelf = playerInfo.realName == killerInfo.realName
+            isSquad = playerInfo.squadIndex > 0 and playerInfo.squadIndex == killerInfo.squadIndex or isSelf
+            if killerInfo.realName == killerInfo.fakeName or isSquad:
+                self.killer = {'userName': killerInfo.realName,
+                 'clanAbbrev': killerInfo.clanAbbrev}
+            else:
+                self.killer = {'userName': killerInfo.fakeName,
+                 'clanAbbrev': ''}
             self.isSelfDestroyer = killerInfo.realName == playerInfo.realName
 
 
@@ -336,12 +342,13 @@ class BattleRoyaleEventProgressionBlock(base.StatsBlock):
 
 
 class BattleRoyalePlayerBlock(base.StatsBlock):
-    __slots__ = ('isPersonal', 'userName', 'clanAbbrev', 'place', 'isPersonalSquad', 'squadIdx')
+    __slots__ = ('isPersonal', 'userName', 'clanAbbrev', 'place', 'isPersonalSquad', 'squadIdx', 'hiddenName')
 
     def __init__(self, meta=None, field='', *path):
         super(BattleRoyalePlayerBlock, self).__init__(meta, field, *path)
         self.isPersonal = False
         self.userName = ''
+        self.hiddenName = ''
         self.clanAbbrev = ''
         self.place = 0
         self.squadIdx = 0
@@ -350,8 +357,16 @@ class BattleRoyalePlayerBlock(base.StatsBlock):
     def setRecord(self, vehicleSummarizeInfo, reusable):
         player = vehicleSummarizeInfo.player
         dbID = player.dbID
-        self.userName = player.realName
-        self.clanAbbrev = player.clanAbbrev
+        if player.realName == player.fakeName:
+            self.userName = player.realName
+            self.clanAbbrev = player.clanAbbrev
+        elif self.isPersonal or self.isPersonalSquad:
+            self.userName = player.realName
+            self.clanAbbrev = player.clanAbbrev
+            self.hiddenName = player.fakeName
+        else:
+            self.userName = player.fakeName
+            self.clanAbbrev = ''
         avatarInfo = reusable.avatars.getAvatarInfo(dbID)
         if avatarInfo is not None and avatarInfo.extensionInfo is not None:
             self.place = avatarInfo.extensionInfo.get('playerRank', 0)

@@ -14,6 +14,7 @@ from web.web_client_api.ui import CloseWindowWebApi, NotificationWebApi
 from web.web_client_api.sound import SoundWebApi
 from web.web_client_api.ui import ContextMenuWebApi, OpenWindowWebApi, VehiclePreviewWebApiMixin, UtilWebApi
 from web.web_client_api.ui.hangar import HangarTabWebApiMixin
+from web.web_client_api.ui.missions import MissionsWebApiMixin
 from web.web_client_api.ui.profile import ProfileTabWebApiMixin
 from web.web_client_api.vehicles import VehiclesWebApi
 _DEFAULT_MARATHON_WEB_API_COLLECTION = (SoundWebApi,
@@ -36,7 +37,7 @@ class _RequestWebApi(AccessTokenWebApiMixin, WgniTokenWebApiMixin, SpaIdWebApiMi
 
 
 @w2capi(name='open_tab', key='tab_id')
-class _OpenTabWebApi(HangarTabWebApiMixin, ProfileTabWebApiMixin, VehiclePreviewWebApiMixin):
+class _OpenTabWebApi(HangarTabWebApiMixin, ProfileTabWebApiMixin, VehiclePreviewWebApiMixin, MissionsWebApiMixin):
 
     def _getVehicleStylePreviewCallback(self, cmd):
         return showMissionsMarathon

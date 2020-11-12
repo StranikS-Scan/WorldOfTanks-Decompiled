@@ -54,6 +54,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import getUserName
 from gui.shared.gui_items.processors.goodies import BoosterActivator
 from gui.shared.money import Currency
+from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.functions import getViewName, getUniqueViewName
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -67,7 +68,7 @@ from helpers.i18n import makeString as _ms
 from items import vehicles as vehicles_core, parseIntCompactDescr, ITEM_TYPES
 from nations import NAMES
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IHeroTankController, IReferralProgramController, IEpicBattleMetaGameController, IClanNotificationController
+from skeletons.gui.game_control import IHeroTankController, IReferralProgramController, IEpicBattleMetaGameController, IClanNotificationController, ICNLootBoxesController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -1207,3 +1208,38 @@ def hideTopWindows(callback=None):
     if callback is not None:
         callback(None)
     return
+
+
+def showCNLootBoxesWelcomeScreen():
+    from skeletons.account_helpers.settings_core import ISettingsCore
+    from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
+    settingsCore = dependency.instance(ISettingsCore)
+    if settingsCore.serverSettings.getUIStorage().get(UI_STORAGE_KEYS.CN_LOOT_BOXES_WELCOME_SCREEN_WAS_SHOWN):
+        return
+    cnLootBoxesCtrl = dependency.instance(ICNLootBoxesController)
+    _, finish = cnLootBoxesCtrl.getEventActiveTime()
+    if cnLootBoxesCtrl.isActive() and cnLootBoxesCtrl.isLootBoxesAvailable():
+        from gui.impl.lobby.cn_loot_boxes.china_loot_boxes_welcome_screen import ChinaLootBoxesWelcomeScreenWindow
+        from helpers import time_utils
+        window = ChinaLootBoxesWelcomeScreenWindow(endDate=finish * time_utils.MS_IN_SECOND)
+        window.load()
+        settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.CN_LOOT_BOXES_WELCOME_SCREEN_WAS_SHOWN: True})
+
+
+def showCNLootBoxStorageWindow():
+    from gui.impl.lobby.cn_loot_boxes.china_loot_boxes_storage_screen import ChinaLootBoxesStorageScreenWindow
+    window = ChinaLootBoxesStorageScreenWindow()
+    window.load()
+
+
+def showCNLootBoxOpenWindow(boxType, rewards):
+    from gui.impl.lobby.cn_loot_boxes.china_loot_boxes_open_box_screen import ChinaLootBoxesOpenBoxScreenWindow
+    window = ChinaLootBoxesOpenBoxScreenWindow(boxType=boxType, rewards=rewards)
+    window.load()
+
+
+def showCNLootBoxOpenErrorWindow():
+    from gui.impl.lobby.cn_loot_boxes.china_loot_boxes_open_box_error_view import ChinaLootBoxesOpenBoxErrorWindow
+    window = ChinaLootBoxesOpenBoxErrorWindow()
+    window.load()
+    SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.lootboxes.open.server_error.DISABLED()), priority=NotificationPriorityLevel.MEDIUM, type=SystemMessages.SM_TYPE.Error)

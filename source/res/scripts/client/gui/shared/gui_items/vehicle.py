@@ -1531,7 +1531,7 @@ class Vehicle(FittingItem):
             if s == season:
                 self._outfits[s] = outfit
             if s in self._outfits and self._outfits[s].id:
-                self._outfits[s] = self.__getEmptyOutfitComponent()
+                self._outfits[s] = self.itemsFactory.createOutfit(component=self.__getEmptyOutfitComponent())
 
     def setOutfits(self, fromVehicle):
         for season in SeasonType.RANGE:

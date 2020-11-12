@@ -156,6 +156,10 @@ TECHTREE_INTRO_BLUEPRINTS = 'techTreeIntroBlueprints'
 MODULES_ANIMATION_SHOWN = 'collectibleVehiclesAnimWasShown'
 NEW_SHOP_TABS = 'newShopTabs'
 IS_COLLECTIBLE_VEHICLES_VISITED = 'isCollectibleVehiclesVisited'
+IS_CN_LOOT_BOXES_COUNTER_SHOWN = 'isCNLootBoxesCounterShown'
+LAST_SHOP_TAB_COUNTER = 'lastShopTabCounter'
+IS_CN_LOOT_BOXES_CATEGORY_VISITED = 'isCNLootBoxesCategoryVisited'
+IS_CN_LOOT_BOXES_COUNTER_RESET = 'isCNLootBoxesCounterReset'
 QUESTS = 'quests'
 QUEST_DELTAS = 'questDeltas'
 QUEST_DELTAS_COMPLETION = 'questCompletion'
@@ -164,6 +168,9 @@ QUEST_DELTAS_TOKENS_PROGRESS = 'tokensProgress'
 TOP_OF_TREE_CONFIG = 'topOfTree'
 DOG_TAGS = 'dogTags'
 HALLOWEEN_NOTES_SEEN = 'halloweenNotesSeen'
+CN_LOOT_BOXES_EVENT_START_WAS_SHOWN = 'cnLootBoxesEventStartWasShown'
+CN_VIEWED_BOXES_COUNT = 'cnViewedBoxesCount'
+OPEN_CN_LOOT_BOX_ANIMATION_STATE = 'openCNLootBoxAnimationState'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
@@ -694,7 +701,11 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 RANKED_YEAR_POSITION: None,
                 TOP_OF_TREE_CONFIG: {},
                 NATION_CHANGE_VIEWED: False,
-                HALLOWEEN_NOTES_SEEN: []},
+                HALLOWEEN_NOTES_SEEN: [],
+                CN_LOOT_BOXES_EVENT_START_WAS_SHOWN: False,
+                CN_VIEWED_BOXES_COUNT: 0,
+                OPEN_CN_LOOT_BOX_ANIMATION_STATE: True,
+                IS_CN_LOOT_BOXES_CATEGORY_VISITED: None},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
@@ -712,7 +723,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 NEW_SHOP_TABS: {IS_COLLECTIBLE_VEHICLES_VISITED: False},
                 EVENT_HEALING_SEEN: False,
                 EVENT_CURRENT_DIFFICULTY_LEVEL: 1,
-                EVENT_COMMANDERS_READY_SEEN: True},
+                EVENT_COMMANDERS_READY_SEEN: True,
+                LAST_SHOP_TAB_COUNTER: None,
+                IS_CN_LOOT_BOXES_COUNTER_RESET: None},
  KEY_NOTIFICATIONS: {ELEN_NOTIFICATIONS: {MISSIONS_CONSTANTS.ELEN_EVENT_STARTED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_FINISHED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_TAB_VISITED: set()},

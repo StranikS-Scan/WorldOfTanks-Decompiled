@@ -3,6 +3,8 @@
 import random
 import copy
 import time
+from collections import defaultdict
+from itertools import chain
 from account_shared import getCustomizationItem
 from soft_exception import SoftException
 from items import tankmen
@@ -457,15 +459,22 @@ class ProbabilityVisitor(NodeVisitor):
 
         isAcceptable = self.__nodeAcceptor.isAcceptable
         if not isAcceptable(selectedValue):
-            altList = list(enumerate(bonusNodes))
-            random.shuffle(altList)
-            for i, (_1, _2, bonusValue) in altList:
+            bonusesByPriority = defaultdict(list)
+            for i, (_1, _2, bonusValue) in list(enumerate(bonusNodes)):
                 if i != selectedIdx:
-                    isCompensation = bonusValue.get('properties', {}).get('compensation', False)
-                    if isCompensation and isAcceptable(bonusValue):
-                        selectedIdx = i
-                        selectedValue = bonusValue
-                        break
+                    priority = bonusValue.get('properties', {}).get('priority', 0)
+                    bonusesByPriority[priority].append((i, bonusValue))
+
+            for bonuses in bonusesByPriority.itervalues():
+                random.shuffle(bonuses)
+
+            bonuses = chain(*[ bonusesByPriority[p] for p in sorted(bonusesByPriority.keys()) ])
+            for i, bonusValue in bonuses:
+                isCompensation = bonusValue.get('properties', {}).get('compensation', False)
+                if isCompensation and isAcceptable(bonusValue):
+                    selectedIdx = i
+                    selectedValue = bonusValue
+                    break
             else:
                 shouldCompensated = selectedValue.get('properties', {}).get('shouldCompensated', False)
                 if not isAcceptable(selectedValue, False) or shouldCompensated:
@@ -513,26 +522,29 @@ class StripVisitor(NodeVisitor):
         def copyMerger(storage, name, value, isLeaf):
             storage[name] = value
 
-    def __init__(self):
+    def __init__(self, needProbabilitiesInfo=False):
+        self.__needProbabilitiesInfo = needProbabilitiesInfo
         super(StripVisitor, self).__init__(self.ValuesMerger(), tuple())
 
     def onOneOf(self, storage, values):
         strippedValues = []
         _, values = values
+        needProbabilitiesInfo = self.__needProbabilitiesInfo
         for probability, refGlobalID, bonusValue in values:
             stippedValue = {}
             self._walkSubsection(stippedValue, bonusValue)
-            strippedValues.append((-1, None, stippedValue))
+            strippedValues.append((probability if needProbabilitiesInfo else -1, None, stippedValue))
 
         storage['oneof'] = (None, strippedValues)
         return
 
     def onAllOf(self, storage, values):
         strippedValues = []
+        needProbabilitiesInfo = self.__needProbabilitiesInfo
         for probability, refGlobalID, bonusValue in values:
             stippedValue = {}
             self._walkSubsection(stippedValue, bonusValue)
-            strippedValues.append((-1, None, stippedValue))
+            strippedValues.append((probability if needProbabilitiesInfo else -1, None, stippedValue))
 
         storage['allof'] = strippedValues
         return

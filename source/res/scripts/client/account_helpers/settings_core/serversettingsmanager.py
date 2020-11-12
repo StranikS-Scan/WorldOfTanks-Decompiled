@@ -76,6 +76,7 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
     OPTIONAL_DEVICE_SETUP_INTRO_SHOWN = 'optional_device_setup_intro_shown'
     TURBOSHAFT_HIGHLIGHTS_COUNTER = 'turboshaft_highlights_count'
     TURBOSHAFT_MARK_IS_SHOWN = 'turboshaft_mark_shown'
+    CN_LOOT_BOXES_WELCOME_SCREEN_WAS_SHOWN = 'cn_loot_boxes_welcome_screen_was_shown'
 
 
 class UIGameEventKeys(Enum):
@@ -395,7 +396,8 @@ class ServerSettingsManager(object):
                                     UI_STORAGE_KEYS.DUAL_GUN_MARK_IS_SHOWN: 18,
                                     UI_STORAGE_KEYS.DISABLE_EDITABLE_STYLE_REWRITE_WARNING: 22,
                                     UI_STORAGE_KEYS.TURBOSHAFT_MARK_IS_SHOWN: 26,
-                                    UI_STORAGE_KEYS.OPTIONAL_DEVICE_SETUP_INTRO_SHOWN: 27}, offsets={PM_TUTOR_FIELDS.INITIAL_FAL_COUNT: Offset(2, 124),
+                                    UI_STORAGE_KEYS.OPTIONAL_DEVICE_SETUP_INTRO_SHOWN: 27,
+                                    UI_STORAGE_KEYS.CN_LOOT_BOXES_WELCOME_SCREEN_WAS_SHOWN: 28}, offsets={PM_TUTOR_FIELDS.INITIAL_FAL_COUNT: Offset(2, 124),
                                     UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER: Offset(10, 7168),
                                     UI_STORAGE_KEYS.DUAL_GUN_HIGHLIGHTS_COUNTER: Offset(19, 3670016),
                                     UI_STORAGE_KEYS.TURBOSHAFT_HIGHLIGHTS_COUNTER: Offset(23, 58720256)}),

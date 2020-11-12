@@ -599,5 +599,12 @@ class GatewayDataAccessor(base.BaseDataAccessor):
          'seasons': seasons}
         return self._request_data(callback, url, get_data=get_data, method='GET')
 
+    def get_inventory_entitlements(self, callback, entitlement_codes):
+        url = '/shop/inventory_entitlements/'
+        if entitlement_codes:
+            urlencoded_string = urllib.urlencode([ ('entitlement_codes', code) for code in entitlement_codes ])
+            url = '{}?{}'.format(url, urlencoded_string)
+        return self._request_data(callback, url, method='GET')
+
     def _get_formatted_language_code(self):
         return self.client_lang.replace('_', '-')

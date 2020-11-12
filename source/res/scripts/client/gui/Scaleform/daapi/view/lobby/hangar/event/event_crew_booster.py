@@ -19,9 +19,6 @@ class FakeCrewBooster(FakeCrewHealing):
     def _hasUsedEnergy(self):
         return not self._vehiclesController.hasEnergy(self._ENERGY_ITEM_PURPOSE, self._vehCD)
 
-    def _exchangeEnergy(self):
-        self._vehiclesController.applyCommanderBooster(self._ENERGY_ITEM_PURPOSE, self._vehCD)
-
     def _getConfirmData(self):
         currency, amount = self._getEnergyPrice()
         labelExecute = backport.text(R.strings.event.hangar.crew_booster.confirm_buy.labelExecute()) if self._getEnergyFor() else backport.text(R.strings.event.hangar.crew_booster.confirm_buy.labelBuy())

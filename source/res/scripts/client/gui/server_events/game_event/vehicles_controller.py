@@ -125,18 +125,17 @@ class VehiclesController(object):
             result = yield BuyEnergyProcessor(self, purpose, currency, amount, vehTypeCompDescr).request()
             if result.userMsg:
                 SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
+                if result.success:
+                    commanderProcessor = VehiclesController.getCommanderProcessor(purpose)
+                    applyMessage = commanderProcessor.makeSuccessMsg(commanderProcessor.MSG_KEY, vehTypeCompDescr, commanderProcessor.MSG_TYPE)
+                    SystemMessages.pushMessage(applyMessage.userMsg, type=applyMessage.sysMsgType)
             callback(result.success)
             return
 
     @decorators.process('updating')
-    def applyCommanderHealing(self, purpose, vehTypeCompDescr):
-        result = yield ExchangeToCommanderHealingProcessor(self, purpose, vehTypeCompDescr).request()
-        if result.userMsg:
-            SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
-
-    @decorators.process('updating')
-    def applyCommanderBooster(self, purpose, vehTypeCompDescr):
-        result = yield ExchangeToCommanderBoosterProcessor(self, purpose, vehTypeCompDescr).request()
+    def applyCommanderEnergy(self, purpose, vehTypeCompDescr):
+        commanderProcessor = VehiclesController.getCommanderProcessor(purpose)
+        result = yield commanderProcessor(self, purpose, vehTypeCompDescr).request()
         if result.userMsg:
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
 
@@ -217,6 +216,10 @@ class VehiclesController(object):
                     self.__updateCB = BigWorld.callback(_UPDATE_INTERVAL, self.__update)
             return
 
+    @staticmethod
+    def getCommanderProcessor(purpose):
+        return ExchangeToCommanderHealingProcessor if purpose == HE19EnergyPurposes.healing.name else ExchangeToCommanderBoosterProcessor
+
 
 class BuyEnergyProcessor(Processor):
     _SM_TYPE_FOR_PURPOSES = {HE19EnergyPurposes.healing.name: SM_TYPE.EventRepair,
@@ -241,33 +244,34 @@ class BuyEnergyProcessor(Processor):
 
 
 class ExchangeToCommanderHealingProcessor(Processor):
+    MSG_KEY = 'hw19_draw_energy/{}'
+    MSG_TYPE = SM_TYPE.EventRestore
+
+    @staticmethod
+    def makeSuccessMsg(msgKey, vehTypeCompDescr, msgType):
+        return makeI18nSuccess(msgKey.format('success'), vehicle=vehicles.getVehicleType(vehTypeCompDescr).shortUserString, type=msgType)
 
     def __init__(self, controller, purpose, vehTypeCompDescr):
         super(ExchangeToCommanderHealingProcessor, self).__init__(plugins=(plugins.CheckEnergy(controller, purpose, vehTypeCompDescr), plugins.CheckEnergyItemsForExchange(controller, purpose), plugins.VehicleInBattle()))
         self._controller = controller
         self._vehTypeCompDescr = vehTypeCompDescr
-        self._vehicleName = vehicles.getVehicleType(self._vehTypeCompDescr).shortUserString
 
     def _request(self, callback):
         BigWorld.player().exchangeToCommanderHealing(self._vehTypeCompDescr, lambda code, errorCode: self._response(code, callback, errorCode))
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('hw19_draw_energy/%s' % errStr, defaultSysMsgKey='hw19_draw_energy/server_error')
+        return makeI18nError(self.MSG_KEY.format(errStr), defaultSysMsgKey=self.MSG_KEY.format('server_error'))
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess('hw19_draw_energy/success', vehicle=self._vehicleName, type=SM_TYPE.EventRestore)
+        return ExchangeToCommanderHealingProcessor.makeSuccessMsg(self.MSG_KEY, vehTypeCompDescr=self._vehTypeCompDescr, msgType=self.MSG_TYPE)
 
 
 class ExchangeToCommanderBoosterProcessor(ExchangeToCommanderHealingProcessor):
+    MSG_KEY = 'hw19_lock_energy/{}'
+    MSG_TYPE = SM_TYPE.EventBoosterActivated
 
     def _request(self, callback):
         BigWorld.player().exchangeToCommanderBooster(self._vehTypeCompDescr, lambda code, errorCode: self._response(code, callback, errorCode))
-
-    def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('hw19_lock_energy/%s' % errStr, defaultSysMsgKey='hw19_lock_energy/server_error')
-
-    def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess('hw19_lock_energy/success', vehicle=self._vehicleName, type=SM_TYPE.EventBoosterActivated)
 
 
 class VehicleItemBuyer(Processor):

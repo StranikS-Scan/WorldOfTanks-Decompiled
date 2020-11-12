@@ -27,8 +27,14 @@ class EventLootBoxes(CONST_CONTAINER):
     WT_SPECIAL = 'wt_special'
 
 
+class ChinaLootBoxes(CONST_CONTAINER):
+    PREMIUM = 'china_premium'
+    COMMON = 'china_common'
+
+
+CHINA_LOOT_BOXES_CATEGORIES = 'chinaLootBoxes'
 SENIORITY_AWARDS_LOOT_BOXES_TYPE = 'seniorityAwards'
-GUI_ORDER = (NewYearLootBoxes.COMMON, NewYearLootBoxes.PREMIUM)
+GUI_ORDER = (ChinaLootBoxes.COMMON, ChinaLootBoxes.PREMIUM)
 CATEGORIES_GUI_ORDER = (NewYearCategories.NEWYEAR,
  NewYearCategories.CHRISTMAS,
  NewYearCategories.ORIENTAL,

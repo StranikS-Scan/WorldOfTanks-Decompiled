@@ -564,8 +564,9 @@ class SeniorityAwardsWindowHandler(ServiceChannelHandler):
             self.__mergedRewards.update(self.__questData.get('detailedRewards', {}).get(self._qID, {}))
             self._showAward()
         elif isCallback:
-            self.__mergedRewards = self.__autoOpenData.get('rewards', {})
-            self._showAward()
+            if self.__isValidAutoOpenBoxData():
+                self.__mergedRewards = self.__autoOpenData.get('rewards', {})
+                self._showAward()
 
     def __resetCallback(self):
         if self.__callback:

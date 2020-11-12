@@ -5,10 +5,10 @@ import collections
 import weakref
 from collections import defaultdict
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED, SENIORITY_AWARDS_COUNTER
+from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED, SENIORITY_AWARDS_COUNTER, CN_LOOT_BOXES_EVENT_START_WAS_SHOWN
 from adisp import process
 from chat_shared import SYS_MESSAGE_TYPE
-from constants import AUTO_MAINTENANCE_RESULT, PremiumConfigs, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG
+from constants import AUTO_MAINTENANCE_RESULT, PremiumConfigs, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, IS_CHINA
 from collector_vehicle import CollectorVehicleConsts
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import SystemMessages
@@ -39,7 +39,7 @@ from messenger.formatters import TimeFormatter
 from notification import tutorial_helper
 from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator, MissingEventsDecorator
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
-from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController
+from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController, ICNLootBoxesController
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -1011,6 +1011,68 @@ class UpgradeTrophyDeviceListener(_NotificationListener):
                 SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.upgradeTrophyDevice.switch_off.body()), type=SystemMessages.SM_TYPE.ErrorSimple, priority=NotificationPriorityLevel.MEDIUM)
 
 
+class ChinaLootBoxEventListener(_NotificationListener):
+    __slots__ = ('__isActive',)
+    __cnLootBoxesCtrl = dependency.descriptor(ICNLootBoxesController)
+
+    def __init__(self):
+        super(ChinaLootBoxEventListener, self).__init__()
+        self.__isActive = False
+
+    def start(self, model):
+        super(ChinaLootBoxEventListener, self).start(model)
+        self.__cnLootBoxesCtrl.onStatusChange += self.__onStatusChange
+        self.__cnLootBoxesCtrl.onAvailabilityChange += self.__onAvailabilityChange
+        self.__cnLootBoxesCtrl.onWelcomeScreenClosed += self.__onWelcomeScreenClosed
+        self.__isActive = self.__cnLootBoxesCtrl.isActive()
+        return True
+
+    def stop(self):
+        self.__cnLootBoxesCtrl.onAvailabilityChange -= self.__onAvailabilityChange
+        self.__cnLootBoxesCtrl.onStatusChange -= self.__onStatusChange
+        self.__cnLootBoxesCtrl.onWelcomeScreenClosed -= self.__onWelcomeScreenClosed
+        super(ChinaLootBoxEventListener, self).stop()
+
+    def __onStatusChange(self):
+        if IS_CHINA:
+            isActive = self.__cnLootBoxesCtrl.isActive()
+            welcomeWasShown = AccountSettings.getSettings(CN_LOOT_BOXES_EVENT_START_WAS_SHOWN)
+            if welcomeWasShown and not isActive:
+                self.__pushFinished()
+            self.__isActive = isActive
+
+    def __onAvailabilityChange(self, previous, current):
+        if previous is not None and previous != current and self.__isActive:
+            if current:
+                self.__pushLootBoxesEnabled()
+            else:
+                self.__pushLootBoxesDisabled()
+        return
+
+    def __pushFinished(self):
+        if self.__cnLootBoxesCtrl.getBoxesCount() > 0:
+            SystemMessages.pushMessage(text=backport.text(R.strings.cn_loot_boxes.notification.eventFinish.text()), priority=NotificationPriorityLevel.MEDIUM, type=SystemMessages.SM_TYPE.ChinaLootBoxEventFinish, messageData={'header': backport.text(R.strings.cn_loot_boxes.notification.eventFinish.title())})
+        else:
+            SystemMessages.pushMessage(text='', priority=NotificationPriorityLevel.MEDIUM, type=SystemMessages.SM_TYPE.ChinaLootBoxEventFinish, messageData={'header': backport.text(R.strings.cn_loot_boxes.notification.eventFinish.title())})
+
+    def __onWelcomeScreenClosed(self):
+        if self.__cnLootBoxesCtrl.isActive():
+            self.__pushStarted()
+
+    @staticmethod
+    def __pushStarted():
+        AccountSettings.setSettings(CN_LOOT_BOXES_EVENT_START_WAS_SHOWN, True)
+        SystemMessages.pushMessage(text=backport.text(R.strings.cn_loot_boxes.notification.eventStart.text()), priority=NotificationPriorityLevel.MEDIUM, type=SystemMessages.SM_TYPE.ChinaLootBoxEventStart, messageData={'header': backport.text(R.strings.cn_loot_boxes.notification.eventStart.title())})
+
+    @staticmethod
+    def __pushLootBoxesEnabled():
+        SystemMessages.pushMessage(text=backport.text(R.strings.cn_loot_boxes.notification.lootBoxesIsEnabled.text()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.LootBoxEnabled, messageData={'header': backport.text(R.strings.cn_loot_boxes.notification.lootBoxesIsEnabled.title())})
+
+    @staticmethod
+    def __pushLootBoxesDisabled():
+        SystemMessages.pushMessage(text=backport.text(R.strings.cn_loot_boxes.notification.lootBoxesIsDisabled.text()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.WarningHeader, messageData={'header': backport.text(R.strings.cn_loot_boxes.notification.lootBoxesIsDisabled.title())})
+
+
 class ChoosingDeviceslListener(_NotificationListener):
 
     def start(self, model):
@@ -1064,7 +1126,8 @@ class NotificationsListeners(_NotificationListener):
          TankPremiumListener(),
          BattlePassListener(),
          UpgradeTrophyDeviceListener(),
-         ChoosingDeviceslListener())
+         ChoosingDeviceslListener(),
+         ChinaLootBoxEventListener())
 
     def start(self, model):
         for listener in self.__listeners:

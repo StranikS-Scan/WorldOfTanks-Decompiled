@@ -72,6 +72,7 @@ TEAM_ITEM_VO_META = base.PropertyMeta((('isPersonal', False, 'isPersonal'),
  ('squadIdx', 0, 'squadIdx'),
  ('place', 0, 'place'),
  ('userName', '', 'userName'),
+ ('hiddenName', '', 'hiddenName'),
  ('clanAbbrev', '', 'clanAbbrev')))
 TEAM_ITEM_VO_META.bind(battle_royale.BattleRoyalePlayerBlock)
 BR_TEAM_STATS_BLOCK = battle_royale.BattleRoyaleTeamStatsBlock(base.ListMeta(), 'leaderboard', _RECORD.VEHICLES)

@@ -43,14 +43,12 @@ class Tokens(object):
         self.__account._doCmdIntArr(AccountCommands.CMD_LOOTBOX_OPEN, (boxID, count), proxy)
         return
 
-    def getInfoLootBox(self, boxIDs, fullInfo, callback):
+    def getInfoLootBox(self, boxIDs, callback):
         if callback is not None:
             proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)
         else:
             proxy = None
-        arr = [1 if fullInfo else 0]
-        arr.extend(boxIDs)
-        self.__account._doCmdIntArr(AccountCommands.CMD_LOOTBOX_GETINFO, arr, proxy)
+        self.__account._doCmdIntArr(AccountCommands.CMD_LOOTBOX_GETINFO, boxIDs, proxy)
         return
 
     def __onGetCacheResponse(self, callback, resultID):

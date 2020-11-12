@@ -8,7 +8,7 @@ import BigWorld
 import WWISE
 import constants
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
-from account_helpers.AccountSettings import AccountSettings, QUESTS, QUEST_DELTAS, QUEST_DELTAS_COMPLETION
+from account_helpers.AccountSettings import AccountSettings, QUESTS, QUEST_DELTAS, QUEST_DELTAS_COMPLETION, IS_CN_LOOT_BOXES_COUNTER_SHOWN, LAST_SHOP_TAB_COUNTER, IS_CN_LOOT_BOXES_CATEGORY_VISITED, IS_CN_LOOT_BOXES_COUNTER_RESET
 from account_helpers.AccountSettings import KNOWN_SELECTOR_BATTLES
 from account_helpers.AccountSettings import NEW_LOBBY_TAB_COUNTER, RECRUIT_NOTIFICATIONS, NEW_SHOP_TABS
 from adisp import process
@@ -69,7 +69,7 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.afk_controller import IAFKController
 from skeletons.gui.demount_kit import IDemountKitNovelty
 from skeletons.gui.offers import IOffersNovelty
-from skeletons.gui.game_control import IAnonymizerController, IBadgesController, IBoostersController, IBootcampController, IChinaController, IEpicBattleMetaGameController, IEventProgressionController, IGameSessionController, IIGRController, IRankedBattlesController, IServerStatsController, IWalletController, IClanNotificationController, IBattleRoyaleController
+from skeletons.gui.game_control import IAnonymizerController, IBadgesController, IBoostersController, IBootcampController, IChinaController, IEpicBattleMetaGameController, IEventProgressionController, IGameSessionController, IIGRController, IRankedBattlesController, IServerStatsController, IWalletController, IClanNotificationController, IBattleRoyaleController, ICNLootBoxesController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.server_events import IEventsCache
@@ -98,7 +98,7 @@ def _predicateLobbyTopSubViews(view):
 
 def _isActiveShopNewCounters():
     newTabCounters = AccountSettings.getCounters(NEW_SHOP_TABS)
-    return not any(newTabCounters.values())
+    return not all(newTabCounters.values())
 
 
 def _updateShopNewCounters():
@@ -228,6 +228,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     offersNovelty = dependency.descriptor(IOffersNovelty)
     gameEventController = dependency.descriptor(IGameEventController)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
+    __cnLootBoxesController = dependency.descriptor(ICNLootBoxesController)
 
     def __init__(self):
         super(LobbyHeader, self).__init__()
@@ -471,6 +472,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.demountKitNovelty.onUpdated += self.__updateStorageTabCounter
         self.offersNovelty.onUpdated += self.__updateStorageTabCounter
         AccountSettings.onSettingsChanging += self.__onAccountSettingsChanging
+        self.__cnLootBoxesController.onStatusChange += self.__updateShopTabCounter
 
     def _removeListeners(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -521,6 +523,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.demountKitNovelty.onUpdated -= self.__updateStorageTabCounter
         self.offersNovelty.onUpdated -= self.__updateStorageTabCounter
         AccountSettings.onSettingsChanging -= self.__onAccountSettingsChanging
+        self.__cnLootBoxesController.onStatusChange -= self.__updateShopTabCounter
 
     def __updateAccountAttrs(self):
         accAttrs = self.itemsCache.items.stats.attributes
@@ -1273,6 +1276,9 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self.__hideCounter(alias)
 
     def __updateShopTabCounter(self):
+        if constants.IS_CHINA:
+            self.__setLastShopCounter()
+            self.__updateCNLootBoxesShopTabCounter()
         self.__updateTabCounter(self.TABS.STORE)
 
     def __updateStorageTabCounter(self):
@@ -1289,7 +1295,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                 counters = AccountSettings.getCounters(NEW_LOBBY_TAB_COUNTER)
                 if alias not in counters or _isActiveShopNewCounters():
                     counters[alias] = backport.text(R.strings.menu.headerButtons.defaultCounter())
-                    _updateShopNewCounters()
+                    if alias == self.TABS.STORE:
+                        _updateShopNewCounters()
                 elif counter is not None:
                     counters[alias] = counter
                 AccountSettings.setCounters(NEW_LOBBY_TAB_COUNTER, counters)
@@ -1299,6 +1306,35 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             else:
                 self.__hideCounter(alias)
             return
+
+    def __setLastShopCounter(self):
+        isActive = self.__cnLootBoxesController.isActive()
+        if not isActive and AccountSettings.getCounters(LAST_SHOP_TAB_COUNTER) is None:
+            shopCounter = AccountSettings.getCounters(NEW_LOBBY_TAB_COUNTER).get(self.TABS.STORE, '')
+            AccountSettings.setCounters(LAST_SHOP_TAB_COUNTER, shopCounter)
+        return
+
+    def __updateCNLootBoxesShopTabCounter(self):
+        isActive = self.__cnLootBoxesController.isActive()
+        shopNewCounters = AccountSettings.getCounters(NEW_SHOP_TABS)
+        isCounterSet = IS_CN_LOOT_BOXES_COUNTER_SHOWN in shopNewCounters
+        if not isActive and isCounterSet and not AccountSettings.getCounters(IS_CN_LOOT_BOXES_COUNTER_RESET):
+            self.__resetShopCounter()
+        elif isActive and not isCounterSet:
+            shopNewCounters[IS_CN_LOOT_BOXES_COUNTER_SHOWN] = False
+            AccountSettings.setCounters(NEW_SHOP_TABS, shopNewCounters)
+
+    def __resetShopCounter(self):
+        counter = AccountSettings.getCounters(NEW_LOBBY_TAB_COUNTER).get(self.TABS.STORE, '')
+        previousCounter = AccountSettings.getCounters(LAST_SHOP_TAB_COUNTER)
+        if counter:
+            defaultCounter = backport.text(R.strings.menu.headerButtons.defaultCounter())
+            if counter != defaultCounter and (isinstance(counter, int) or counter.isdigit()) and not AccountSettings.getSettings(IS_CN_LOOT_BOXES_CATEGORY_VISITED):
+                counter = int(counter) - 1 if int(counter) > 1 else ''
+            elif counter == defaultCounter and counter != previousCounter:
+                counter = ''
+        self.__updateTabCounter(self.TABS.STORE, counter)
+        AccountSettings.setCounters(IS_CN_LOOT_BOXES_COUNTER_RESET, True)
 
     def __onUpdateGoodies(self, *_):
         self.__updateBoostersStatus()

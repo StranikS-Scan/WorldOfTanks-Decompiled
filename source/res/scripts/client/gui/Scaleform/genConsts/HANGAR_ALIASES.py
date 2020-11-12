@@ -42,3 +42,4 @@ class HANGAR_ALIASES(object):
     EVENT_BAN_INFO_COMPONENT = 'eventBanInfoComponent'
     EVENT_COINS_COMPONENT = 'eventCoinsComponent'
     HE20_EVENT_ENTRY_POINT = 'he20EventEntryPoint'
+    CHINA_LOOTBOXES_WIDGET = 'chinaLootboxesWidget'

@@ -309,6 +309,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
             headerTab, tab = self.__getHeaderTabData(tabData)
             if not headerTab or not tab:
                 continue
+            if headerTab in tabs:
+                continue
             tabs.append(headerTab)
             data.append(tab)
 

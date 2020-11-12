@@ -19,6 +19,7 @@ if typing.TYPE_CHECKING:
     from skeletons.account_helpers.settings_core import ISettingsCache
     from gui.ranked_battles.ranked_models import BattleRankInfo
     from gui.server_events.bonuses import SimpleBonus
+    from gui.entitlements.entitlement_model import AgateEntitlement
 
 class IGameController(object):
 
@@ -1730,4 +1731,83 @@ class ITokensController(IGameController):
         raise NotImplementedError
 
     def removeTokensListener(self, token, handler):
+        raise NotImplementedError
+
+
+class ICNLootBoxesController(IGameController):
+    onStatusChange = None
+    onAvailabilityChange = None
+    onBoxesCountChange = None
+    onWelcomeScreenClosed = None
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def isActive(self):
+        raise NotImplementedError
+
+    def isLootBoxesAvailable(self):
+        raise NotImplementedError
+
+    def isBuyAvailable(self):
+        raise NotImplementedError
+
+    def getDayLimit(self):
+        raise NotImplementedError
+
+    def getEventActiveTime(self):
+        raise NotImplementedError
+
+    def openShopPage(self):
+        raise NotImplementedError
+
+    def getDayInfoStatistics(self):
+        raise NotImplementedError
+
+    def getExpiresAtLootBoxBuyCounter(self):
+        raise NotImplementedError
+
+    def getTimeLeftToResetPurchase(self):
+        raise NotImplementedError
+
+    def getCommonBoxInfo(self):
+        raise NotImplementedError
+
+    def getPremiumBoxInfo(self):
+        raise NotImplementedError
+
+    def getStoreInfo(self):
+        raise NotImplementedError
+
+    def getBoxesIDs(self):
+        raise NotImplementedError
+
+    def getBoxesCount(self):
+        raise NotImplementedError
+
+    def getBoxesInfo(self):
+        raise NotImplementedError
+
+
+class IEntitlementsController(IGameController):
+
+    def updateCache(self, codes):
+        raise NotImplementedError
+
+    def forceUpdateCache(self, codes):
+        raise NotImplementedError
+
+    def getBalanceEntitlementFromCache(self, code):
+        raise NotImplementedError
+
+    def isCacheInited(self):
+        raise NotImplementedError
+
+    def getConsumedEntitlementFromCache(self, code):
+        raise NotImplementedError
+
+    def getGrantedEntitlementFromCache(self, code):
+        raise NotImplementedError
+
+    def isCodesWasFailedInLastRequest(self, codes):
         raise NotImplementedError

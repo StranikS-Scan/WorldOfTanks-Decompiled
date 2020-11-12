@@ -344,6 +344,12 @@ class BattlePassAccessor(BaseAccessor):
         return self._data_source.get_voting_data(callback, feature_id, seasons)
 
 
+class AgateAccessor(BaseAccessor):
+
+    def get_inventory_entitlements(self, callback, entitlement_codes):
+        return self._data_source.get_inventory_entitlements(callback, entitlement_codes)
+
+
 class Requester(object):
     available_data_sources = {'stagings': StagingDataAccessor,
      'fake': FakeDataAccessor,
@@ -363,6 +369,7 @@ class Requester(object):
     freya = RequestDescriptor(FreyaAccessor)
     battle_pass = RequestDescriptor(BattlePassAccessor)
     craftmachine = RequestDescriptor(CrafmachineAccessor)
+    agate = RequestDescriptor(AgateAccessor)
 
     @classmethod
     def create_requester(cls, url_fetcher, config, client_lang=None, user_agent=None):

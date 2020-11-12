@@ -97,5 +97,8 @@ class HangarMeta(GFTutorialViewMeta):
     def as_toggleBattleRoyaleS(self, isBattleRoyale):
         return self.flashObject.as_toggleBattleRoyale(isBattleRoyale) if self._isDAAPIInited() else None
 
+    def as_setChinaLootboxesVisibleS(self, value):
+        return self.flashObject.as_setChinaLootboxesVisible(value) if self._isDAAPIInited() else None
+
     def as_showEventHangarS(self, eventSelected, paramsEnabled):
         return self.flashObject.as_showEventHangar(eventSelected, paramsEnabled) if self._isDAAPIInited() else None

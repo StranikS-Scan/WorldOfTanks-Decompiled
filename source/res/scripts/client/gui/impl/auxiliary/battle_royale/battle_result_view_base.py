@@ -124,6 +124,7 @@ class BrBattleResultsViewBase(ViewImpl):
             playerModel.setPlace(str(place) if place > 0 else '')
             self.__setUserName(playerModel.user, player)
             playerModel.setType(self.__getRowType(player))
+            playerModel.setAnonymizerNick(player.get('hiddenName', ''))
             playerList.addViewModel(playerModel)
 
         playerList.invalidate()

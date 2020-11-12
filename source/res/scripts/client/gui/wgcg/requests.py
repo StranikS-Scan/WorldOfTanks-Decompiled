@@ -14,6 +14,7 @@ from gui.wgcg.base.handlers import BaseRequestHandlers
 from gui.wgcg.battle_pass.handlers import BattlePassRequestHandlers
 from gui.wgcg.clan.handlers import ClanRequestHandlers
 from gui.wgcg.elen.handlers import ElenRequestHandlers
+from gui.wgcg.agate.handlers import AgateRequestHandlers
 from gui.wgcg.utils.handlers import UtilsRequestHandlers
 from gui.wgcg.hof.handlers import HofRequestHandlers
 from gui.wgcg.promo_screens.handlers import PromoScreensRequestHandlers
@@ -102,6 +103,7 @@ class WgcgRequestsController(RequestsController):
         self.__handlers.update(PromoScreensRequestHandlers(requester).get())
         self.__handlers.update(UtilsRequestHandlers(requester).get())
         self.__handlers.update(CraftmachineRequestHandlers(requester).get())
+        self.__handlers.update(AgateRequestHandlers(requester).get())
 
     def fini(self):
         super(WgcgRequestsController, self).fini()

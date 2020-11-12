@@ -72,6 +72,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.event.event_pack_confirmation import EventItemPackConfirmation
     from gui.Scaleform.daapi.view.lobby.hangar.event_entry_points_container import EventEntryPointsContainer
     from gui.impl.lobby.halloween.he20_entry_point import HE20EntryPoint
+    from gui.Scaleform.daapi.view.lobby.hangar.china_loot_boxes_widget import ChinaLootBoxesWidget
     return (ConditionalViewSettings(VIEW_ALIAS.LOBBY_HANGAR, BootcampComponentOverride(Hangar, BCHangar), 'hangar.swf', WindowLayer.SUB_VIEW, None, VIEW_ALIAS.LOBBY_HANGAR, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_STRONGHOLD, StrongholdView, 'StrongholdView.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.LOBBY_STRONGHOLD, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.BROWSER_VIEW, BrowserView, 'browserScreen.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True),
@@ -121,7 +122,8 @@ def getViewSettings():
      ComponentSettings(HANGAR_ALIASES.EVENT_QUESTS_COMPONENT, EventQuestsPanelView, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.EVENT_BAN_INFO_COMPONENT, BanInfo, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.HE20_EVENT_ENTRY_POINT, HE20EntryPoint, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(HANGAR_ALIASES.EVENT_COINS_COMPONENT, EventCoinsCounter, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(HANGAR_ALIASES.EVENT_COINS_COMPONENT, EventCoinsCounter, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(HANGAR_ALIASES.CHINA_LOOTBOXES_WIDGET, ChinaLootBoxesWidget, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

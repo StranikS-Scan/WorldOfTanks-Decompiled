@@ -5,6 +5,7 @@ import BigWorld
 from gui import SystemMessages
 from gui.server_events.bonuses import getMergedBonusesFromDicts
 from gui.shared.gui_items.processors import Processor, makeI18nError
+from gui.shared.money import Currency, ZERO_MONEY, Money
 from messenger.formatters.service_channel import QuestAchievesFormatter
 _logger = logging.getLogger(__name__)
 
@@ -20,6 +21,7 @@ class LootBoxOpenProcessor(Processor):
         return makeI18nError('/'.join((defaultKey, errStr)), defaultKey)
 
     def _successHandler(self, code, ctx=None):
+        self.__preformatCompensationValue(ctx)
         fmt = QuestAchievesFormatter.formatQuestAchieves(getMergedBonusesFromDicts(ctx), False)
         if fmt is not None:
             SystemMessages.pushMessage(fmt, SystemMessages.SM_TYPE.LootBoxRewards)
@@ -29,15 +31,39 @@ class LootBoxOpenProcessor(Processor):
         _logger.debug('Make server request to open loot box by id: %r, count: %d', self.__lootBox, self.__count)
         BigWorld.player().tokens.openLootBox(self.__lootBox.getID(), self.__count, lambda code, errStr, ext: self._response(code, callback, ctx=ext, errStr=errStr))
 
+    def __preformatCompensationValue(self, rewardsList):
+        for rewards in rewardsList:
+            vehiclesList = rewards.get('vehicles', [])
+            compValue = self.__getCompensationValue(vehiclesList)
+            for currency in Currency.ALL:
+                if compValue.get(currency, 0) > 0:
+                    currencyValue = rewards.pop(currency, None)
+                    if currency is not None:
+                        newCurrencyValue = currencyValue - compValue.get(currency, 0)
+                        if newCurrencyValue:
+                            rewards[currency] = newCurrencyValue
+
+        return
+
+    def __getCompensationValue(self, vehicles):
+        comp = ZERO_MONEY
+        for vehicleDict in vehicles:
+            for _, vehData in vehicleDict.iteritems():
+                if 'rentCompensation' in vehData:
+                    comp += Money.makeFromMoneyTuple(vehData['rentCompensation'])
+                if 'customCompensation' in vehData:
+                    comp += Money.makeFromMoneyTuple(vehData['customCompensation'])
+
+        return comp
+
 
 class LootBoxGetInfoProcessor(Processor):
 
-    def __init__(self, lootBoxes, fullInfo=True):
+    def __init__(self, lootBoxes):
         super(LootBoxGetInfoProcessor, self).__init__()
         self.__lootBoxes = lootBoxes
-        self.__fullInfo = fullInfo
 
     def _request(self, callback):
         lootboxIDs = [ item.getID() for item in self.__lootBoxes ]
         _logger.debug('Make server request to get info about loot boxes by ids %r', lootboxIDs)
-        BigWorld.player().tokens.getInfoLootBox(lootboxIDs, self.__fullInfo, lambda code, errStr, ext: self._response(code, callback, ctx=ext, errStr=errStr))
+        BigWorld.player().tokens.getInfoLootBox(lootboxIDs, lambda code, errStr, ext: self._response(code, callback, ctx=ext, errStr=errStr))

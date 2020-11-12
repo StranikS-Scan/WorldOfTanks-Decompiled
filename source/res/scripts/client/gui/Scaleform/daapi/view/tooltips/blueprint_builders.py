@@ -11,4 +11,5 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.BLUEPRINT_FRAGMENT_INFO, TOOLTIPS_CONSTANTS.BLUEPRINT_FRAGMENT_UI, blueprint.BlueprintFragmentTooltipData(contexts.BlueprintContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.BLUEPRINT_EMPTY_SLOT_INFO, TOOLTIPS_CONSTANTS.BLUEPRINT_EMPTY_SLOT_UI, blueprint.BlueprintEmptySlotTooltipData(contexts.BlueprintContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.BLUEPRINT_CONVERT_INFO, TOOLTIPS_CONSTANTS.BLUEPRINT_EMPTY_SLOT_UI, blueprint.ConvertInfoBlueprintTooltipData(contexts.BlueprintContext())),
-     DataBuilder(TOOLTIPS_CONSTANTS.BLUEPRINT_RANDOM_INFO, TOOLTIPS_CONSTANTS.BLUEPRINT_FRAGMENT_UI, blueprint.BlueprintFragmentRandomTooltipData(contexts.BlueprintContext())))
+     DataBuilder(TOOLTIPS_CONSTANTS.BLUEPRINT_RANDOM_INFO, TOOLTIPS_CONSTANTS.BLUEPRINT_FRAGMENT_UI, blueprint.BlueprintFragmentRandomTooltipData(contexts.BlueprintContext())),
+     DataBuilder(TOOLTIPS_CONSTANTS.BLUEPRINT_RANDOM_NATIONAL_INFO, TOOLTIPS_CONSTANTS.BLUEPRINT_FRAGMENT_UI, blueprint.BlueprintNationalRandomTooltipData(contexts.BlueprintContext())))

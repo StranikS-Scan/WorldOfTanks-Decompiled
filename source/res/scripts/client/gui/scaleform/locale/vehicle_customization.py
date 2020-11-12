@@ -1722,6 +1722,7 @@ class VEHICLE_CUSTOMIZATION(object):
     EMBLEM_SPECIAL_STICKER_629 = '#vehicle_customization:emblem/special/sticker_629'
     EMBLEM_SPECIAL_STICKER_642 = '#vehicle_customization:emblem/special/sticker_642'
     EMBLEM_SPECIAL_STICKER_643 = '#vehicle_customization:emblem/special/sticker_643'
+    EMBLEM_SPECIAL_STICKER_645 = '#vehicle_customization:emblem/special/sticker_645'
     INSCRIPTION = '#vehicle_customization:inscription'
     INSCRIPTION_HISTORICAL = '#vehicle_customization:inscription/historical'
     INSCRIPTION_MOTTO = '#vehicle_customization:inscription/motto'

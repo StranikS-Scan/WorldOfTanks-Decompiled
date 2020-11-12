@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/shop/stats.py
 import logging
+import adisp
+from async import async, await
 from constants import PREM_TYPE_TO_ENTITLEMENT
 from gui.game_control.wallet import WalletController
 from gui.shared.money import Currency
@@ -8,12 +10,19 @@ from gui.shared.utils.vehicle_collector_helper import hasCollectibleVehicles
 from helpers import dependency
 from helpers import time_utils
 import nations
+from skeletons.gui.game_control import IEntitlementsController
 from skeletons.gui.shared import IItemsCache
-from web.web_client_api import W2CSchema, w2c
+from web.web_client_api import W2CSchema, w2c, Field
 _logger = logging.getLogger(__name__)
+
+class _GetInventoryEntitlementsSchema(W2CSchema):
+    force = Field(required=False, type=int, default=False)
+    codes = Field(required=True, type=list)
+
 
 class BalanceWebApiMixin(object):
     itemsCache = dependency.descriptor(IItemsCache)
+    __entitlementsController = dependency.descriptor(IEntitlementsController)
 
     @w2c(W2CSchema, 'get_balance')
     def getBalance(self, cmd):
@@ -69,3 +78,27 @@ class BalanceWebApiMixin(object):
     @w2c(W2CSchema, 'get_collection_nations')
     def getCollectionNations(self, cmd):
         return {nations.MAP[nationID]:self.itemsCache.items.stats.getMaxResearchedLevel(nationID) for nationID in nations.MAP if hasCollectibleVehicles(nationID)}
+
+    @w2c(_GetInventoryEntitlementsSchema, 'get_inventory_entitlements')
+    def getInventoryEntitlements(self, cmd):
+        result = True
+        if cmd.force:
+            result = yield self.__forceUpdateEntitlementsCache(cmd.codes)
+        entitlements = {}
+        for code in cmd.codes:
+            entitlement = self.__entitlementsController.getBalanceEntitlementFromCache(code)
+            granted = self.__entitlementsController.getGrantedEntitlementFromCache(code)
+            grantedAmount = granted.getAmount() if granted is not None else 0
+            if entitlement is not None:
+                entitlements[code] = {'amount': entitlement.getAmount() + grantedAmount,
+                 'expires_at': entitlement.getExpiresAtData()}
+
+        yield {'success': result and self.__entitlementsController.isCacheInited() and not self.__entitlementsController.isCodesWasFailedInLastRequest(cmd.codes),
+         'entitlements': entitlements}
+        return
+
+    @adisp.async
+    @async
+    def __forceUpdateEntitlementsCache(self, codes, callback):
+        result = yield await(self.__entitlementsController.forceUpdateCache(codes))
+        callback(result)

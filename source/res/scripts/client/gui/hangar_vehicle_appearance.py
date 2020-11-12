@@ -626,7 +626,11 @@ class HangarVehicleAppearance(ScriptGameObject):
         if self.__isVehicleDestroyed or g_currentVehicle.item is None:
             return
         else:
-            vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
+            try:
+                vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
+            except AttributeError:
+                vehicleCD = None
+
             outfit = outfit or self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehicleCD)
             if self.recreateRequired(outfit):
                 self.refresh(outfit, callback)

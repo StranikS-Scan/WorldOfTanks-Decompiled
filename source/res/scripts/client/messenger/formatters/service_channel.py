@@ -38,7 +38,7 @@ from gui.prb_control.formatters import getPrebattleFullDescription
 from gui.ranked_battles.constants import YEAR_POINTS_TOKEN
 from gui.ranked_battles.ranked_helpers import getBonusBattlesIncome
 from gui.ranked_battles.ranked_models import PostBattleRankInfo, RankChangeStates
-from gui.server_events.awards_formatters import CompletionTokensBonusFormatter, TokenBonusFormatter
+from gui.server_events.awards_formatters import CompletionTokensBonusFormatter, TokenBonusFormatter, BATTLE_BONUS_X5_TOKEN
 from gui.server_events.bonuses import VehiclesBonus, EntitlementBonus, DEFAULT_CREW_LVL, MetaBonus, getMergedBonusesFromDicts
 from gui.server_events.finders import PERSONAL_MISSION_TOKEN
 from gui.server_events.formatters import COMPLEX_TOKEN_TEMPLATE
@@ -76,7 +76,7 @@ from gui.server_events.game_event.difficulty_progress import DIFFICULTY_LEVEL_PR
 from messenger.formatters.service_channel_helpers import EOL, getCustomizationItemData, MessageData, getRewardsForQuests
 from nations import NAMES
 from shared_utils import BoundMethodWeakref, first
-from skeletons.gui.game_control import IRankedBattlesController, IEventProgressionController, IBattlePassController
+from skeletons.gui.game_control import IRankedBattlesController, IEventProgressionController, IBattlePassController, ICNLootBoxesController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -1206,12 +1206,20 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             tankmenFreeXP = dataEx.get('tankmenFreeXP', {})
             if tankmenFreeXP:
                 operations.append(self.__getTankmenFreeXPString(tankmenFreeXP))
-            tokensStr = self.__getTokensString(dataEx.get('tokens', {}))
-            if tokensStr:
-                operations.append(tokensStr)
+            tokens = dataEx.get('tokens', {})
+            if tokens:
+                tokensStr = self.__getTokensString(tokens)
+                if tokensStr:
+                    operations.append(tokensStr)
+                tokensStr = self.__getEnergyTokensString(tokens)
+                if tokensStr:
+                    operations.append(tokensStr)
             entitlementsStr = self.__getEntitlementsString(dataEx.get('entitlements', {}))
             if entitlementsStr:
                 operations.append(entitlementsStr)
+            lootBoxStr = self.__getLootBoxString(dataEx.get('tokens', {}))
+            if lootBoxStr:
+                operations.append(lootBoxStr)
             rankedDailyBattles = dataEx.get('rankedDailyBattles', 0)
             rankedPersistentBattles = dataEx.get('rankedBonusBattles', 0)
             rankedBonusBattlesStr = self.__getRankedBonusBattlesString(rankedPersistentBattles, rankedDailyBattles)
@@ -1561,6 +1569,36 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         if count != 0:
             template = 'awardListAccruedInvoiceReceived' if count > 0 else 'awardListDebitedInvoiceReceived'
             return g_settings.htmlTemplates.format(template, {'count': count})
+
+    @staticmethod
+    def __getEnergyTokensString(data):
+        res = []
+        for tokenName, tokenData in data.iteritems():
+            count = tokenData.get('count', 0)
+            if not count:
+                continue
+            if tokenName == constants.HE19_ENERGY_FOR_USE_BOOSTER_TOKEN_ID:
+                name = backport.text(R.strings.quests.token.default.he19_energy_for_use_booster())
+            elif tokenName == constants.HE19_ENERGY_FOR_USE_HEALING_TOKEN_ID:
+                name = backport.text(R.strings.quests.token.default.he19_energy_for_use_healing())
+            else:
+                continue
+            res.append(backport.text(R.strings.messenger.serviceChannelMessages.battleResults.quests.items.name(), name=name, count=backport.getIntegralFormat(count)))
+
+        result = ''
+        if res:
+            result += g_settings.htmlTemplates.format('battleQuestsItems', ctx={'names': ', '.join(res)})
+        return result
+
+    def __getLootBoxString(self, data):
+        boxesList = []
+        for tokenName, tokenData in data.iteritems():
+            if constants.LOOTBOX_TOKEN_PREFIX in tokenName:
+                lootBox = self._itemsCache.items.tokens.getLootBoxByTokenID(tokenName)
+                if lootBox is not None:
+                    boxesList.append(backport.text(R.strings.cn_loot_boxes.notification.lootBoxesAutoOpen.counter(), boxName=lootBox.getUserName(), count=tokenData.get('count', 0)))
+
+        return g_settings.htmlTemplates.format('lootBoxesInvoiceReceived', {'boxes': ', '.join(boxesList)}) if boxesList else ''
 
     def __getEntitlementsString(self, data):
         accrued = []
@@ -2297,7 +2335,7 @@ class QuestAchievesFormatter(object):
             result.append(msg)
         comptnStr = InvoiceReceivedFormatter.getVehiclesCompensationString(vehiclesList, htmlTplPostfix='QuestsReceived')
         if comptnStr:
-            result.append('<br/>' + comptnStr)
+            result.append('<br/>' + comptnStr if result else comptnStr)
         if not asBattleFormatter:
             creditsVal = data.get(Currency.CREDITS, 0)
             if creditsVal:
@@ -2356,6 +2394,8 @@ class QuestAchievesFormatter(object):
                     recruitName = getRecruitInfo(tokenID).getFullUserNameByNation()
                     name = backport.text(R.strings.quests.token.default.he20_recruit(), name=recruitName)
                     formattedName = backport.text(R.strings.messenger.serviceChannelMessages.battleResults.quests.items.singleName(), name=name)
+                if tokenID.startswith(BATTLE_BONUS_X5_TOKEN):
+                    itemsNames.append(backport.text(R.strings.messenger.serviceChannelMessages.battleResults.quests.items.name(), name=backport.text(R.strings.quests.bonusName.battle_bonus_x5()), count=count))
                 if formattedName is not None:
                     itemsNames.append(formattedName)
                 if name is not None:
@@ -3253,9 +3293,11 @@ class CustomizationChangedFormatter(WaitItemsSyncFormatter):
 
 class LootBoxAutoOpenFormatter(WaitItemsSyncFormatter):
     _itemsCache = dependency.descriptor(IItemsCache)
-    _template = 'LootBoxesAutoOpenMessage'
-    _eventTemplate = 'EventLootBoxesAutoOpenMessage'
-    _templateRewards = 'LootBoxRewardsSysMessage'
+    _TEMPLATE = 'LootBoxesAutoOpenMessage'
+    _EVENT_TEMPLATE = 'EventLootBoxesAutoOpenMessage'
+    _TEMPLATE_REWARDS = 'LootBoxRewardsSysMessage'
+    _CHINA_TEMPLATE = 'ChinaLootBoxesAutoOpenMessage'
+    __cnLootBoxes = dependency.descriptor(ICNLootBoxesController)
 
     @async
     @process
@@ -3264,10 +3306,13 @@ class LootBoxAutoOpenFormatter(WaitItemsSyncFormatter):
         if message.data and isSynced:
             data = message.data
             if 'boxIDs' in data and 'rewards' in data:
+                chinaLootBoxesIDs = self.__cnLootBoxes.getBoxesIDs()
                 boxes = self.__getBoxes(data)
                 hasSeniorityBoxes = any((box.getType() == SENIORITY_AWARDS_LOOT_BOXES_TYPE for box in boxes))
                 hasEventBoxes = any((box.getType() in EventLootBoxes.ALL() for box in boxes))
-                if hasEventBoxes:
+                if constants.IS_CHINA and not chinaLootBoxesIDs.isdisjoint(data['boxIDs']):
+                    callback(self.__formatCNLootBoxes(data, message))
+                elif hasEventBoxes:
                     callback([self.__formatEventBoxes(message, data)])
                 elif hasSeniorityBoxes:
                     callback([self.__formatBoxes(message, data)])
@@ -3319,16 +3364,30 @@ class LootBoxAutoOpenFormatter(WaitItemsSyncFormatter):
         return result
 
     def __formatNY(self, message, data):
-        formatted = g_settings.msgTemplates.format(self._template, ctx={'count': sum(data['boxIDs'].values())}, data={'savedData': {'rewards': data['rewards']}})
-        settings = self._getGuiSettings(message, self._template)
+        formatted = g_settings.msgTemplates.format(self._TEMPLATE, ctx={'count': sum(data['boxIDs'].values())}, data={'savedData': {'rewards': data['rewards']}})
+        settings = self._getGuiSettings(message, self._TEMPLATE)
         settings.groupID = NotificationGroup.OFFER
         settings.showAt = BigWorld.time()
         return MessageData(formatted, settings)
 
+    def __formatCNLootBoxes(self, data, message):
+        boxesList = []
+        for boxID, count in data['boxIDs'].iteritems():
+            lootBox = self._itemsCache.items.tokens.getLootBoxByTokenID(constants.LOOTBOX_TOKEN_PREFIX + str(boxID))
+            boxesList.append(backport.text(R.strings.cn_loot_boxes.notification.lootBoxesAutoOpen.counter(), boxName=lootBox.getUserName(), count=count))
+
+        fmt = self.formatAchieves(data)
+        rewards = backport.text(R.strings.cn_loot_boxes.notification.lootBoxesAutoOpen.rewards(), rewards=fmt)
+        boxes = backport.text(R.strings.cn_loot_boxes.notification.lootBoxesAutoOpen.boxes(), boxes=', '.join(boxesList))
+        formatted = g_settings.msgTemplates.format(self._CHINA_TEMPLATE, ctx={'text': '<br/>'.join((backport.text(R.strings.cn_loot_boxes.notification.lootBoxesAutoOpen.text()), boxes, rewards)),
+         'header': backport.text(R.strings.cn_loot_boxes.notification.lootBoxesAutoOpen.title())})
+        settings = self._getGuiSettings(message, self._CHINA_TEMPLATE)
+        return [MessageData(formatted, settings)]
+
     def __formatBoxes(self, message, data):
         fmt = self.formatAchieves(data)
-        formattedRewards = g_settings.msgTemplates.format(self._templateRewards, ctx={'text': fmt})
-        settingsRewards = self._getGuiSettings(message, self._templateRewards)
+        formattedRewards = g_settings.msgTemplates.format(self._TEMPLATE_REWARDS, ctx={'text': fmt})
+        settingsRewards = self._getGuiSettings(message, self._TEMPLATE_REWARDS)
         settingsRewards.showAt = BigWorld.time()
         return MessageData(formattedRewards, settingsRewards)
 
@@ -3343,9 +3402,9 @@ class LootBoxAutoOpenFormatter(WaitItemsSyncFormatter):
         fmt = self.formatAchieves(data)
         rewards = backport.text(rLootBoxes.rewards(), rewards=fmt)
         boxes = ', '.join(boxes)
-        formatted = g_settings.msgTemplates.format(self._eventTemplate, ctx={'boxes': boxes,
+        formatted = g_settings.msgTemplates.format(self._EVENT_TEMPLATE, ctx={'boxes': boxes,
          'rewards': rewards})
-        settings = self._getGuiSettings(message, self._eventTemplate)
+        settings = self._getGuiSettings(message, self._EVENT_TEMPLATE)
         return MessageData(formatted, settings)
 
 

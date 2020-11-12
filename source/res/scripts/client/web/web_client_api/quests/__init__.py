@@ -7,6 +7,7 @@ from gui.server_events.bonuses import HIDDEN_BONUSES
 from gui.Scaleform.daapi.view.lobby.missions.cards_formatters import CardBattleConditionsFormatters
 from gui.server_events.cond_formatters import CONDITION_SIZE
 from helpers import dependency, i18n
+from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.server_events import IEventsCache
 from web.web_client_api import w2c, w2capi, Field, W2CSchema
 from gui.server_events.event_items import Quest
@@ -62,6 +63,7 @@ def _questAsDict(quest):
 @w2capi(name='user_data', key='action')
 class QuestsWebApi(W2CSchema):
     _eventsCache = dependency.descriptor(IEventsCache)
+    _marathonsCtrl = dependency.descriptor(IMarathonEventsController)
 
     @w2c(_QuestsSchema, 'get_tokens')
     def handleGetTokens(self, command):
@@ -82,3 +84,21 @@ class QuestsWebApi(W2CSchema):
             filterFunc = None
         data = {qID:_questAsDict(quest) for qID, quest in self._eventsCache.getActiveQuests(filterFunc=filterFunc).iteritems()}
         return data
+
+    @w2c(_QuestsSchema, 'get_quests_old')
+    def handleGetQuestsOld(self, command):
+        quests = self._eventsCache.questsProgress.getQuestsData()
+        if hasattr(command, 'ids') and command.ids:
+            quests = {k:v for k, v in quests.iteritems() if k in command.ids}
+        return {'quest_list': quests,
+         'action': 'get_quests'}
+
+    @w2c(_QuestsSchema, 'get_step')
+    def handleGetStep(self, command):
+        if hasattr(command, 'custom_parameters') and 'prefix' in command.custom_parameters:
+            marathon = self._marathonsCtrl.getMarathon(command.custom_parameters['prefix'])
+            if marathon is not None:
+                currentStep, allSteps = marathon.getMarathonProgress()
+                return {'current_step': currentStep,
+                 'all_steps': allSteps}
+        return

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ui/vehicle.py
 import random
+from collections import Callable
 from functools import partial
 from itertools import groupby
 from types import NoneType
@@ -19,6 +20,7 @@ from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.customization.constants import CustomizationModes
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.server_events.events_dispatcher import showMissionsMarathon
 from gui.shared import event_dispatcher
 from gui.shared.event_dispatcher import showStylePreview, showHangar
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -319,6 +321,14 @@ class _VehicleStylePreviewSchema(W2CSchema):
     back_url = Field(required=False, type=basestring)
 
 
+class _VehicleMarathonStylePreviewSchema(W2CSchema):
+    vehicle_cd = Field(required=False, type=int)
+    style_id = Field(required=True, type=int)
+    back_btn_descr = Field(required=True, type=basestring)
+    back_url = Field(required=False, type=basestring)
+    marathon_prefix = Field(required=True, type=basestring)
+
+
 class _VehicleListStylePreviewSchema(W2CSchema):
     style_id = Field(required=True, type=int)
     vehicle_min_level = Field(required=False, type=int, default=10)
@@ -423,10 +433,12 @@ class VehiclePreviewWebApiMixin(object):
 
     @w2c(_VehicleStylePreviewSchema, 'vehicle_style_preview')
     def openVehicleStylePreview(self, cmd):
-        if cmd.vehicle_cd:
-            return self.__showStylePreview(cmd.vehicle_cd, cmd)
-        styledVehicleCD = self.__getStyledVehicleCD(cmd.style_id)
-        return False if not styledVehicleCD else self.__showStylePreview(styledVehicleCD, cmd)
+        return self._openVehicleStylePreview(cmd)
+
+    @w2c(_VehicleMarathonStylePreviewSchema, 'marathon_vehicle_style_preview')
+    def openMarathonVehicleStylePreview(self, cmd):
+        cmd.back_url = partial(showMissionsMarathon, cmd.marathon_prefix)
+        return self._openVehicleStylePreview(cmd)
 
     @w2c(_VehicleListStylePreviewSchema, 'vehicle_list_style_preview')
     def openVehicleListStylePreview(self, cmd):
@@ -467,6 +479,12 @@ class VehiclePreviewWebApiMixin(object):
 
         self.c11n.showCustomization(result.vehicle.invID, callback=styleCallback)
         return {'installed': result.canInstall}
+
+    def _openVehicleStylePreview(self, cmd):
+        if cmd.vehicle_cd:
+            return self.__showStylePreview(cmd.vehicle_cd, cmd)
+        styledVehicleCD = self.__getStyledVehicleCD(cmd.style_id)
+        return False if not styledVehicleCD else self.__showStylePreview(styledVehicleCD, cmd)
 
     def __getStyledVehicleCD(self, styleId):
         styledVehicleCD = None
@@ -509,7 +527,7 @@ class VehiclePreviewWebApiMixin(object):
         style = self.c11n.getItemByID(GUI_ITEM_TYPE.STYLE, cmd.style_id)
         vehicle = self.itemsCache.items.getItemByCD(vehicleCD)
         if vehicle is not None and not vehicle.isOutfitLocked and style.mayInstall(vehicle):
-            showStylePreview(vehicleCD, style, style.getDescription(), self._getVehicleStylePreviewCallback(cmd), backBtnDescrLabel=backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(cmd.back_btn_descr)()))
+            showStylePreview(vehicleCD, style, style.getDescription(), cmd.back_url if isinstance(cmd.back_url, Callable) else self._getVehicleStylePreviewCallback(cmd), backBtnDescrLabel=backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(cmd.back_btn_descr)()))
             return True
         else:
             return False

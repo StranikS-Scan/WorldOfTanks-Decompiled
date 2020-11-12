@@ -575,8 +575,9 @@ class WGNCShowItemEvent(SharedEvent):
     SHOW_POLL_WINDOW = 'wgnc/pollWindow/show'
     CLOSE_POLL_WINDOW = 'wgnc/pollWindow/close'
 
-    def __init__(self, notID, target, eventType=None):
-        super(WGNCShowItemEvent, self).__init__(eventType)
+    def __init__(self, notID, target, alias=None):
+        super(WGNCShowItemEvent, self).__init__(ViewEventType.LOAD_VIEW)
+        self.alias = alias
         self.__notID = notID
         self.__target = target
 

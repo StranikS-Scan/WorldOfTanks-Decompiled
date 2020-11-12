@@ -106,19 +106,31 @@ class IngameBattleRoyaleResultsViewDataFormatter(object):
             return {}
         else:
             player = self.__ctx.getPlayerFullNameParts(self.__playerVehicleID)
+            isSelfDestroyer = False
+            if player.playerFakeName and player.playerFakeName != player.playerName:
+                hiddenName = player.playerFakeName
+            else:
+                hiddenName = ''
             if self.__killerId is not None and self.__killerId != 0:
                 killer = self.__ctx.getPlayerFullNameParts(self.__killerId)
-                killerName = killer.playerName
-                killerClan = killer.clanAbbrev
+                isSelfDestroyer = killer.playerName == player.playerName
+                isSquad = isSelfDestroyer or self.__arenaDP.isAlly(self.__killerId)
+                if isSquad or killer.playerName == killer.playerFakeName:
+                    killerName = killer.playerName
+                    killerClan = killer.clanAbbrev
+                else:
+                    killerName = killer.playerFakeName
+                    killerClan = ''
             else:
                 killerName, killerClan = ('', '')
             return {'isSquadMode': self.isInSquad,
              'userName': player.playerName,
+             'hiddenName': hiddenName,
              'userClanAbbrev': player.clanAbbrev,
              'vehicleStatus': {'vehicleState': self.__killReason,
                                'killer': {'userName': killerName,
                                           'clanAbbrev': killerClan},
-                               'isSelfDestroyer': killerName and player.playerName == killerName}}
+                               'isSelfDestroyer': isSelfDestroyer}}
 
     def getLeaderboard(self):
         leaderboard = {'group_list': self.__getGroupLists()}
@@ -255,12 +267,20 @@ class IngameBattleRoyaleResultsViewDataFormatter(object):
     def __getPlayerInfo(self, vInfo):
         userPlace = self.__getPlayerPlace(vInfo.vehicleID)
         fullName = self.__ctx.getPlayerFullNameParts(vInfo.vehicleID)
-        info = createEmptyPlayerInfo(userPlace, fullName.clanAbbrev)
-        info['userName'] = fullName.playerName
+        info = createEmptyPlayerInfo(userPlace)
         if vInfo.vehicleID == self.__playerVehicleID:
             info['isPersonal'] = True
         elif self.__arenaDP.isAlly(vInfo.vehicleID):
             info['isPersonalSquad'] = True
+        if fullName.playerName == fullName.playerFakeName:
+            info['userName'] = fullName.playerName
+            info['clanAbbrev'] = fullName.clanAbbrev
+        elif info['isPersonal'] or info['isPersonalSquad']:
+            info['userName'] = fullName.playerName
+            info['clanAbbrev'] = fullName.clanAbbrev
+            info['hiddenName'] = fullName.playerFakeName
+        else:
+            info['userName'] = fullName.playerFakeName
         return info
 
     def __calculateProgression(self):

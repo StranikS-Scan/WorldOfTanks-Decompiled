@@ -44,7 +44,7 @@ class _DamagedDevicesExtraFetcher(object):
 
 
 class BattleFeedbackAdaptor(IBattleController):
-    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onRoundFinished', 'onDevelopmentInfoSet', 'onStaticMarkerAdded', 'onStaticMarkerRemoved', 'onReplyFeedbackReceived', 'onRemoveCommandReceived', 'setInFocusForPlayer', 'onMinimapFeedbackReceived', 'onVehicleDetected', 'onActionAddedToMarkerReceived', 'onBuffApplied', 'onShotDone', 'onAddCommandReceived', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache')
+    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onRoundFinished', 'onDevelopmentInfoSet', 'onStaticMarkerAdded', 'onStaticMarkerRemoved', 'onReplyFeedbackReceived', 'onRemoveCommandReceived', 'setInFocusForPlayer', 'onMinimapFeedbackReceived', 'onVehicleDetected', 'onActionAddedToMarkerReceived', 'onShotDone', 'onAddCommandReceived', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache', '__eManager')
 
     def __init__(self, setup):
         super(BattleFeedbackAdaptor, self).__init__()
@@ -55,27 +55,27 @@ class BattleFeedbackAdaptor(IBattleController):
         self.__attrs = {}
         self.__devInfo = {}
         self.__eventsCache = {}
-        self.onPlayerFeedbackReceived = Event.Event()
-        self.onPlayerSummaryFeedbackReceived = Event.Event()
-        self.onPostmortemSummaryReceived = Event.Event()
-        self.onVehicleMarkerAdded = Event.Event()
-        self.onVehicleMarkerRemoved = Event.Event()
-        self.onVehicleFeedbackReceived = Event.Event()
-        self.onMinimapVehicleAdded = Event.Event()
-        self.onMinimapVehicleRemoved = Event.Event()
-        self.onMinimapFeedbackReceived = Event.Event()
-        self.onVehicleDetected = Event.Event()
-        self.onDevelopmentInfoSet = Event.Event()
-        self.onStaticMarkerAdded = Event.Event()
-        self.onStaticMarkerRemoved = Event.Event()
-        self.onRoundFinished = Event.Event()
-        self.onShotDone = Event.Event()
-        self.onReplyFeedbackReceived = Event.Event()
-        self.onRemoveCommandReceived = Event.Event()
-        self.onAddCommandReceived = Event.Event()
-        self.setInFocusForPlayer = Event.Event()
-        self.onActionAddedToMarkerReceived = Event.Event()
-        self.onBuffApplied = Event.Event()
+        self.__eManager = Event.EventManager()
+        self.onPlayerFeedbackReceived = Event.Event(self.__eManager)
+        self.onPlayerSummaryFeedbackReceived = Event.Event(self.__eManager)
+        self.onPostmortemSummaryReceived = Event.Event(self.__eManager)
+        self.onVehicleMarkerAdded = Event.Event(self.__eManager)
+        self.onVehicleMarkerRemoved = Event.Event(self.__eManager)
+        self.onVehicleFeedbackReceived = Event.Event(self.__eManager)
+        self.onMinimapVehicleAdded = Event.Event(self.__eManager)
+        self.onMinimapVehicleRemoved = Event.Event(self.__eManager)
+        self.onMinimapFeedbackReceived = Event.Event(self.__eManager)
+        self.onVehicleDetected = Event.Event(self.__eManager)
+        self.onDevelopmentInfoSet = Event.Event(self.__eManager)
+        self.onStaticMarkerAdded = Event.Event(self.__eManager)
+        self.onStaticMarkerRemoved = Event.Event(self.__eManager)
+        self.onRoundFinished = Event.Event(self.__eManager)
+        self.onShotDone = Event.Event(self.__eManager)
+        self.onReplyFeedbackReceived = Event.Event(self.__eManager)
+        self.onRemoveCommandReceived = Event.Event(self.__eManager)
+        self.onAddCommandReceived = Event.Event(self.__eManager)
+        self.setInFocusForPlayer = Event.Event(self.__eManager)
+        self.onActionAddedToMarkerReceived = Event.Event(self.__eManager)
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.FEEDBACK
@@ -95,6 +95,7 @@ class BattleFeedbackAdaptor(IBattleController):
         self.__attrs = {}
         self.__devInfo.clear()
         self.__eventsCache.clear()
+        self.__eManager.clear()
         return
 
     def getCachedEvent(self, eventID):

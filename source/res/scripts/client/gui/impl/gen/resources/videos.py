@@ -4,45 +4,39 @@ from gui.impl.gen_utils import DynAccessor
 
 class Videos(DynAccessor):
     __slots__ = ()
-    _bootcampLesson2 = DynAccessor(45234)
-    _bootcampOutro = DynAccessor(45235)
-    _login = DynAccessor(45236)
-    _tutorialInitial = DynAccessor(45237)
-    _tutorialInitialLoop = DynAccessor(45238)
+    _bootcampLesson2 = DynAccessor(43850)
+    _bootcampOutro = DynAccessor(43851)
+    _login = DynAccessor(43852)
+    _tutorialInitial = DynAccessor(43853)
+    _tutorialInitialLoop = DynAccessor(43854)
 
     class _battle_pass(DynAccessor):
         __slots__ = ()
-        c_10785_0 = DynAccessor(45239)
-        c_10785_1 = DynAccessor(45240)
-        c_6145_0 = DynAccessor(45241)
-        c_6145_1 = DynAccessor(45242)
-        before_voting_0 = DynAccessor(45243)
-        before_voting_1 = DynAccessor(45244)
+        c_10785_0 = DynAccessor(43855)
+        c_10785_1 = DynAccessor(43856)
+        c_6145_0 = DynAccessor(43857)
+        c_6145_1 = DynAccessor(43858)
+        before_voting_0 = DynAccessor(43859)
+        before_voting_1 = DynAccessor(43860)
 
     battle_pass = _battle_pass()
 
-    class _cn_loot_boxes(DynAccessor):
-        __slots__ = ()
-        cn_lootbox_common = DynAccessor(45245)
-        cn_lootbox_prem = DynAccessor(45246)
-
-    cn_loot_boxes = _cn_loot_boxes()
-
     class _development(DynAccessor):
         __slots__ = ()
-        example = DynAccessor(45247)
-        example_2 = DynAccessor(45248)
+        example = DynAccessor(43861)
+        example_2 = DynAccessor(43862)
 
     development = _development()
 
     class _startup(DynAccessor):
         __slots__ = ()
-        Logo_All = DynAccessor(45249)
+        ESRB = DynAccessor(43863)
+        Logo_All = DynAccessor(43864)
 
     startup = _startup()
 
     class _vehicle(DynAccessor):
         __slots__ = ()
-        A122_TS_5 = DynAccessor(45250)
+        A122_TS_5 = DynAccessor(43865)
 
     vehicle = _vehicle()

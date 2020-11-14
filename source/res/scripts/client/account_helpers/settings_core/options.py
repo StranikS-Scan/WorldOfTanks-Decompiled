@@ -2338,13 +2338,7 @@ class InterfaceScaleSetting(UserPrefsFloatSetting):
 
     def __init__(self, sectionName=None, isPreview=False):
         super(InterfaceScaleSetting, self).__init__(sectionName, isPreview)
-        self.__interfaceScale = 0
-        self.connectionMgr.onDisconnected += self.onDisconnected
-        self.connectionMgr.onConnected += self.onConnected
-
-    def fini(self):
-        self.connectionMgr.onDisconnected -= self.onDisconnected
-        self.connectionMgr.onConnected -= self.onConnected
+        self.__interfaceScale = self._get()
 
     def get(self):
         if BattleReplay.isPlaying():
@@ -2361,12 +2355,6 @@ class InterfaceScaleSetting(UserPrefsFloatSetting):
         width, height = GUI.screenResolution()[:2]
         event_dispatcher.changeAppResolution(width, height, scale)
         g_monitorSettings.setGlyphCache(scale)
-
-    def onConnected(self):
-        self.setSystemValue(self._get())
-
-    def onDisconnected(self):
-        self.setSystemValue(0)
 
     def _getOptions(self):
         return [self.__getScales(graphics.getSuitableWindowSizes(), BigWorld.wg_getCurrentResolution(BigWorld.WindowModeWindowed)), self.__getScales(graphics.getSuitableVideoModes()), self.__getScales(graphics.getSuitableVideoModes())]

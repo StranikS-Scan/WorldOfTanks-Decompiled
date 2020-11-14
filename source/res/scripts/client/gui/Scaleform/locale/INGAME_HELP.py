@@ -127,6 +127,3 @@ class INGAME_HELP(object):
     RADIALMENU_REPLY_TO_PLAYER = '#ingame_help:radialMenu/reply_to_player'
     RADIALMENU_CANCEL_REPLY = '#ingame_help:radialMenu/cancel_reply'
     RADIALMENU_POSITIVE = '#ingame_help:radialMenu/positive'
-    EVENTRADIALMENU_CANCEL = '#ingame_help:eventRadialMenu/cancel'
-    EVENTRADIALMENU_CAMP = '#ingame_help:eventRadialMenu/camp'
-    EVENTRADIALMENU_COLLECTOR = '#ingame_help:eventRadialMenu/collector'

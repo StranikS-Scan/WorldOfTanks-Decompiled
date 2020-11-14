@@ -88,7 +88,7 @@ class CompatVehiclesCache(object):
     def __addCacheForVehicle(self, vehicle, collectItems):
         vehDescr = vehicle.descriptor
         for itemType, item in collectItems:
-            if item.descriptor.checkCompatibilityWithVehicle(vehDescr):
+            if item.descriptor.checkCompatibilityWithVehicle(vehDescr)[0]:
                 self.__compatCache[itemType][item.intCD].append(vehicle.intCD)
 
         self.__invVehicles.add(vehicle.intCD)

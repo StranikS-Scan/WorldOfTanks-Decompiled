@@ -35,10 +35,6 @@ class BadgesPage(BadgesPageMeta):
         self.__badgesCollector = BadgesCollector()
         self.__backViewName = ctx.get('backViewName', '') if ctx is not None else ''
         self.__tutorStorage = getTutorialGlobalStorage()
-        if self.__tutorStorage is not None:
-            hasNewBadges = self.__checkNewSuffixBadges()
-            if hasNewBadges:
-                self.__tutorStorage.setValue(GLOBAL_FLAG.BADGE_PAGE_HAS_NEW_SUFFIX_BADGE, True)
         return
 
     def onBackClick(self):
@@ -70,11 +66,18 @@ class BadgesPage(BadgesPageMeta):
                     'descrTf': text_styles.main(BADGE.BADGESPAGE_HEADER_DESCR),
                     'playerText': text_styles.grandTitle(self.lobbyContext.getPlayerFullName(userName))}})
         self.__updateBadges()
+        if self.__tutorStorage is not None:
+            hasNewBadges = self.__checkNewSuffixBadges()
+            if hasNewBadges:
+                self.__tutorStorage.setValue(GLOBAL_FLAG.BADGE_PAGE_HAS_NEW_SUFFIX_BADGE, True)
         self.badgesController.onUpdated += self.__updateBadges
+        return
 
     def _dispose(self):
         if self.__tutorStorage is not None:
-            self.__tutorStorage.setValue(GLOBAL_FLAG.BADGE_PAGE_HAS_NEW_SUFFIX_BADGE, False)
+            for flag in (GLOBAL_FLAG.BADGE_PAGE_HAS_NEW_SUFFIX_BADGE, GLOBAL_FLAG.HAVE_NEW_SUFFIX_BADGE, GLOBAL_FLAG.HAVE_NEW_BADGE):
+                self.__tutorStorage.setValue(flag, False)
+
         self.badgesController.onUpdated -= self.__updateBadges
         AccountSettings.setSettings(LAST_BADGES_VISIT, getServerUTCTime())
         super(BadgesPage, self)._dispose()
@@ -85,8 +88,8 @@ class BadgesPage(BadgesPageMeta):
         lastSelectedSuffixBadgeID = AccountSettings.getSettings(LAST_SELECTED_SUFFIX_BADGE_ID)
         selectedItemIdx = None
         lastSelectedItemIdx = None
-        if self.__badgesCollector.getSuffixAchivedBadges():
-            for i, badge in enumerate(self.__badgesCollector.getSuffixAchivedBadges()):
+        if self.__badgesCollector.getSuffixAchievedBadges():
+            for i, badge in enumerate(self.__badgesCollector.getSuffixAchievedBadges()):
                 self.__deselectNotSelectedBadge(badge)
                 suffixBadgesVO.append(makeSuffixBadgeVO(badge))
                 if badge.isSelected:
@@ -155,5 +158,4 @@ class BadgesPage(BadgesPageMeta):
         self.badgesController.select(badges)
 
     def __checkNewSuffixBadges(self):
-        suffix = self.badgesController.getSuffix()
-        return suffix is not None and suffix.isNew()
+        return any((suffix.isNew() for suffix in self.__badgesCollector.getSuffixAchievedBadges()))

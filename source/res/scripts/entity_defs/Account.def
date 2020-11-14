@@ -31,11 +31,11 @@
     <Interface>	AvatarCreator	</Interface>
   </Implements>
   <Properties>
-    <requiredVersion_11010>
+    <requiredVersion_11100>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ru_1.10.1_4	</Default>
-    </requiredVersion_11010>
+      <Default>	ct_1.11.0	</Default>
+    </requiredVersion_11100>
     <name>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
@@ -501,8 +501,8 @@
     <onGameSessionFinish></onGameSessionFinish>
     <makeDenunciation>
       <Exposed></Exposed>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	INT64	</Arg>
+      <Arg>	DB_ID	</Arg>
+      <Arg>	INT32	</Arg>
       <Arg>	INT8	</Arg>
     </makeDenunciation>
     <banUnbanUser>

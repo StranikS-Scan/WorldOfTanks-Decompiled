@@ -3,8 +3,6 @@
 import random
 import copy
 import time
-from collections import defaultdict
-from itertools import chain
 from account_shared import getCustomizationItem
 from soft_exception import SoftException
 from items import tankmen
@@ -154,6 +152,10 @@ def __mergeEnhancements(total, key, value, isLeaf=False, count=1, *args):
          'wipe': enhancementMerged.get('wipe', False) or enhancementData.get('wipe', False)})
 
 
+def __mergeDogTag(total, key, value, isLeaf=False, count=1, *args):
+    total[key] = value
+
+
 BONUS_MERGERS = {'credits': __mergeValue,
  'gold': __mergeValue,
  'xp': __mergeValue,
@@ -186,6 +188,7 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'entitlements': __mergeEntitlements,
  'rankedDailyBattles': __mergeValue,
  'rankedBonusBattles': __mergeValue,
+ 'dogTagComponents': __mergeDogTag,
  'meta': lambda *args, **kwargs: None}
 ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._inventory.getVehicleInvID(key) != 0,
  'customizations': lambda account, key: account._customizations20.getItems((key,), 0)[key] > 0,
@@ -459,22 +462,15 @@ class ProbabilityVisitor(NodeVisitor):
 
         isAcceptable = self.__nodeAcceptor.isAcceptable
         if not isAcceptable(selectedValue):
-            bonusesByPriority = defaultdict(list)
-            for i, (_1, _2, bonusValue) in list(enumerate(bonusNodes)):
+            altList = list(enumerate(bonusNodes))
+            random.shuffle(altList)
+            for i, (_1, _2, bonusValue) in altList:
                 if i != selectedIdx:
-                    priority = bonusValue.get('properties', {}).get('priority', 0)
-                    bonusesByPriority[priority].append((i, bonusValue))
-
-            for bonuses in bonusesByPriority.itervalues():
-                random.shuffle(bonuses)
-
-            bonuses = chain(*[ bonusesByPriority[p] for p in sorted(bonusesByPriority.keys()) ])
-            for i, bonusValue in bonuses:
-                isCompensation = bonusValue.get('properties', {}).get('compensation', False)
-                if isCompensation and isAcceptable(bonusValue):
-                    selectedIdx = i
-                    selectedValue = bonusValue
-                    break
+                    isCompensation = bonusValue.get('properties', {}).get('compensation', False)
+                    if isCompensation and isAcceptable(bonusValue):
+                        selectedIdx = i
+                        selectedValue = bonusValue
+                        break
             else:
                 shouldCompensated = selectedValue.get('properties', {}).get('shouldCompensated', False)
                 if not isAcceptable(selectedValue, False) or shouldCompensated:
@@ -522,29 +518,26 @@ class StripVisitor(NodeVisitor):
         def copyMerger(storage, name, value, isLeaf):
             storage[name] = value
 
-    def __init__(self, needProbabilitiesInfo=False):
-        self.__needProbabilitiesInfo = needProbabilitiesInfo
+    def __init__(self):
         super(StripVisitor, self).__init__(self.ValuesMerger(), tuple())
 
     def onOneOf(self, storage, values):
         strippedValues = []
         _, values = values
-        needProbabilitiesInfo = self.__needProbabilitiesInfo
         for probability, refGlobalID, bonusValue in values:
             stippedValue = {}
             self._walkSubsection(stippedValue, bonusValue)
-            strippedValues.append((probability if needProbabilitiesInfo else -1, None, stippedValue))
+            strippedValues.append((-1, None, stippedValue))
 
         storage['oneof'] = (None, strippedValues)
         return
 
     def onAllOf(self, storage, values):
         strippedValues = []
-        needProbabilitiesInfo = self.__needProbabilitiesInfo
         for probability, refGlobalID, bonusValue in values:
             stippedValue = {}
             self._walkSubsection(stippedValue, bonusValue)
-            strippedValues.append((probability if needProbabilitiesInfo else -1, None, stippedValue))
+            strippedValues.append((-1, None, stippedValue))
 
         storage['allof'] = strippedValues
         return

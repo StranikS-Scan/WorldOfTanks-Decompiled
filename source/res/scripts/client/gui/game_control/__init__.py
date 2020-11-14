@@ -59,8 +59,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.clan_notification_controller import ClanNotificationController as _ClanNotification
     from gui.game_control.craftmachine_controller import CraftmachineController
     from gui.game_control.reactive_comm import ReactiveCommunicationService
-    from gui.game_control.cn_lootbox_controller import CNLootBoxesController
-    from gui.entitlements.entitlements_controller import EntitlementsController
+    from gui.ui_spam.ui_spam_controller import UISpamController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -118,5 +117,4 @@ def getGameControllersConfig(manager):
     _config(_interface.IClanNotificationController, _ClanNotification())
     _config(_interface.IReactiveCommunicationService, ReactiveCommunicationService())
     _config(_interface.IEventProgressionController, _EventProgression())
-    _config(_interface.ICNLootBoxesController, CNLootBoxesController())
-    _config(_interface.IEntitlementsController, EntitlementsController())
+    _config(_interface.IUISpamController, UISpamController())

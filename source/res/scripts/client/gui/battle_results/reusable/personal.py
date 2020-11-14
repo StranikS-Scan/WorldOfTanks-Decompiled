@@ -230,9 +230,6 @@ class _EconomicsRecordsChains(object):
     def getBaseXPRecords(self):
         return self._baseXP
 
-    def getBaseFreeXPRecords(self):
-        return self._baseFreeXP
-
     def getPremiumXPRecords(self):
         return self._premiumXP
 
@@ -409,7 +406,7 @@ class _EconomicsRecordsChains(object):
 
 
 class PersonalInfo(shared.UnpackedInfo):
-    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '_economicsRecords', '__questsProgress', '__PM2Progress', '__rankInfo', '__battleRoyale', '__isTeamKiller', '__progressiveReward', '__premiumMask', '__isAddXPBonusApplied', '__c11nProgress', '__dogTags', '__difficultyLevel')
+    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '_economicsRecords', '__questsProgress', '__PM2Progress', '__rankInfo', '__battleRoyale', '__isTeamKiller', '__progressiveReward', '__premiumMask', '__isAddXPBonusApplied', '__c11nProgress', '__dogTags')
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, personal):
@@ -432,7 +429,6 @@ class PersonalInfo(shared.UnpackedInfo):
         self.__rankInfo = PostBattleRankInfo(0, 0, 0, 0, 0, 0, 0, 0, {}, {}, False, 0, 0)
         self.__battleRoyale = {}
         self.__dogTags = {}
-        self.__difficultyLevel = 0
         if not self.hasUnpackedItems():
             self.__collectRequiredData(personal)
         return
@@ -472,10 +468,6 @@ class PersonalInfo(shared.UnpackedInfo):
     @property
     def isTeamKiller(self):
         return self.__isTeamKiller
-
-    @property
-    def difficultyLevel(self):
-        return self.__difficultyLevel
 
     def getVehicleCDsIterator(self, result):
         for intCD in self.__vehicles:
@@ -552,9 +544,6 @@ class PersonalInfo(shared.UnpackedInfo):
     def getPremiumXPRecords(self):
         return self._economicsRecords.getPremiumXPRecords()
 
-    def getBaseFreeXPRecords(self):
-        return self._economicsRecords.getBaseFreeXPRecords()
-
     def getPremiumXPAddRecords(self):
         return self._economicsRecords.getPremiumXPAddRecords()
 
@@ -597,7 +586,6 @@ class PersonalInfo(shared.UnpackedInfo):
             lifeTime = data['lifeTime'] if 'lifeTime' in data else 0
             if killerID and lifeTime:
                 lifeTimes.append(lifeTime)
-            self.__difficultyLevel = data.get('difficultyLevel', 0)
             self.__isTeamKiller = data['isTeamKiller'] if 'isTeamKiller' in data else False
             self.__premiumMask = data.get('premMask', PREMIUM_TYPE.NONE)
             self.__questsProgress.update(data.get('questsProgress', {}))

@@ -6,6 +6,7 @@ import BigWorld
 import Event
 from AccountCommands import isCodeValid
 from CurrentVehicle import g_currentVehicle
+import adisp
 from gui import g_tankActiveCamouflage
 from gui.Scaleform.daapi.view.lobby.customization.context.custom_mode import CustomMode
 from gui.Scaleform.daapi.view.lobby.customization.context.editable_style_mode import EditableStyleMode
@@ -259,8 +260,9 @@ class CustomizationContext(object):
             g_tankActiveCamouflage[g_currentVehicle.item.intCD] = self.season
         return
 
+    @adisp.async
     @process('customizationApply')
-    def applyItems(self, purchaseItems):
+    def applyItems(self, purchaseItems, callback):
         self._itemsCache.onSyncCompleted -= self.__onCacheResync
         self.__outfitIsApplying = True
         isModeChanged = self.modeId != self.__startMode
@@ -268,6 +270,8 @@ class CustomizationContext(object):
         self.__onCacheResync()
         self.__outfitIsApplying = False
         self._itemsCache.onSyncCompleted += self.__onCacheResync
+        callback(None)
+        return
 
     def isOutfitsModified(self):
         if self.modeId != self.__startMode:

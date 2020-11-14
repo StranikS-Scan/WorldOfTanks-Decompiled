@@ -167,7 +167,7 @@ class DiscreteSelectorDesc(SelectorDesc):
         if keyValue is None:
             return
         else:
-            value = self._selectors.get(keyValue, self._selectors.get('default'))
+            value = self._selectors.get(keyValue, None)
             if value is not None:
                 value.getActiveEffects(effects, args)
             return
@@ -227,16 +227,16 @@ class RangeSelectorDesc(SelectorDesc):
 
     def getActiveEffects(self, effects, args):
         keyValue = args[self._variable]
-        if keyValue is None:
+        if not keyValue:
             return
-        else:
-            idx = -1
-            for leftBound in self.__keys:
-                if keyValue < leftBound:
-                    break
-                idx += 1
+        idx = -1
+        for leftBound in self.__keys:
+            if keyValue < leftBound:
+                break
+            idx += 1
 
-            return self._selectors[idx].getActiveEffects(effects, args) if -1 < idx < len(self._selectors) else None
+        if -1 < idx < len(self._selectors):
+            self._selectors[idx].getActiveEffects(effects, args)
 
 
 class UnionSelectorDesc(SelectorDesc):
@@ -427,7 +427,9 @@ class CustomEffectsDescriptor(EffectDescriptorBase):
         return MainCustomSelector(self, args) if self._selectorDesc is not None else None
 
     def getActiveEffects(self, effects, args):
-        return self._selectorDesc.getActiveEffects(effects, args) if self._selectorDesc is not None else None
+        if self._selectorDesc is not None:
+            self._selectorDesc.getActiveEffects(effects, args)
+        return
 
 
 class ExhaustEffectDescriptor(EffectDescriptorBase):
@@ -505,14 +507,8 @@ class MainSelectorBase(object):
             self._activeEffectId = set()
             return
 
-    def _isAllowed(self, args):
-        return True
-
     def update(self, args):
         if not self._enabled:
-            return
-        if not self._isAllowed(args):
-            self.stop()
             return
         activeEffects = set()
         self._effectSelector.getActiveEffects(activeEffects, args)
@@ -582,11 +578,6 @@ class ExhaustMainSelector(MainSelectorBase):
             except Exception:
                 LOG_ERROR('Node %s is not found' % nodeName)
                 continue
-
-    def _isAllowed(self, args):
-        isPC = bool(args['isPC'])
-        direction = bool(args['direction'])
-        return isPC or direction
 
     def enable(self, effectID, enable):
         for node in self._effectNodes.values():

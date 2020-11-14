@@ -26,13 +26,6 @@ def showDialog(meta, callback):
 
 
 @decorators.async
-def showEventMessageDialog(data, callback):
-    ctx = {'data': data,
-     'callback': _DialogCallbackWrapper(callback)}
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.EVENT_MESSAGE_WINDOW), ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
-
-
-@decorators.async
 def showBCConfirmationDialog(meta, callback):
     effectData = {'messages': [{'messagePreset': 'BCMessageGreenUI',
                    'label': meta.getLabel(),

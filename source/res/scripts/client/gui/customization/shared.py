@@ -21,7 +21,7 @@ from vehicle_outfit.outfit import Area, SLOT_TYPE_TO_ANCHOR_TYPE_MAP, scaffold, 
 from gui.impl import backport
 from gui.impl.gen import R
 from helpers import dependency
-from items import vehicles
+from items.vehicles import g_cache
 _logger = logging.getLogger(__name__)
 C11nId = namedtuple('C11nId', ('areaId', 'slotType', 'regionIdx'))
 C11nId.__new__.__defaults__ = (-1, -1, -1)
@@ -341,7 +341,7 @@ def isVehicleCanBeCustomized(vehicle, itemTypeID, itemsFilter=None):
         return False
     else:
         cType = C11N_ITEM_TYPE_MAP[itemTypeID]
-        customizationCache = vehicles.g_cache.customization20().itemTypes
+        customizationCache = g_cache.customization20().itemTypes
         if cType not in customizationCache:
             _logger.error('Failed to get customization item from cache. Wrong cType: %s', cType)
             return False

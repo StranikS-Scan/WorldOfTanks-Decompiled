@@ -976,34 +976,34 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	true	</linkBones>
-        <maxAmplitude>	0.0174888	</maxAmplitude>
-        <maxOffset>	0.0174888	</maxOffset>
+        <maxAmplitude>	0.00888158	</maxAmplitude>
+        <maxOffset>	0.00888158	</maxOffset>
         <gravity>	-9.8	</gravity>
         <elasticity>	1300	</elasticity>
         <damping>	2	</damping>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
-          <forwardElastK>	0.6	</forwardElastK>
+          <forwardElastK>	1.45	</forwardElastK>
           <backwardElastK>	1	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
-          <forwardElastK>	0.6	</forwardElastK>
+          <forwardElastK>	1.45	</forwardElastK>
           <backwardElastK>	1	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
           <forwardElastK>	2	</forwardElastK>
-          <backwardElastK>	0.55	</backwardElastK>
+          <backwardElastK>	1.42	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
           <forwardElastK>	2	</forwardElastK>
-          <backwardElastK>	0.55	</backwardElastK>
+          <backwardElastK>	1.42	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
@@ -1301,7 +1301,7 @@
               <back>	0.17	</back>
               <top>	0.152	</top>
               <front>	0.161035	</front>
-              <bottom>	0.147	</bottom>
+              <bottom>	0.148	</bottom>
             </backwardMovement>
             <forwardMovement>
               <back>	0.157491	</back>
@@ -1509,7 +1509,7 @@
             <backwardMovement>
               <back>	0.17	</back>
               <top>	0.152	</top>
-              <front>	0.161035	</front>
+              <front>	0.162	</front>
               <bottom>	0.147	</bottom>
             </backwardMovement>
             <forwardMovement>

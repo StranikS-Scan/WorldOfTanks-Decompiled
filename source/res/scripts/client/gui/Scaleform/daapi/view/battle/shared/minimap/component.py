@@ -5,6 +5,7 @@ import weakref
 import GUI
 import Math
 import SoundGroups
+import BigWorld
 from AvatarInputHandler import AvatarInputHandler
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings, plugins
 from gui.Scaleform.daapi.view.meta.MinimapMeta import MinimapMeta
@@ -14,6 +15,7 @@ from gui.shared.utils.plugins import PluginsCollection
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 _IMAGE_PATH_FORMATTER = 'img://{}'
 _logger = logging.getLogger(__name__)
 _DEFUALT_MINIMAP_DIMENSION = 10
@@ -144,7 +146,11 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
         setup = {'equipments': plugins.EquipmentsPlugin,
          'vehicles': plugins.ArenaVehiclesPlugin,
          'personal': plugins.PersonalEntriesPlugin,
-         'area': plugins.AreaStaticMarkerPlugin}
+         'area': plugins.AreaStaticMarkerPlugin,
+         'area_markers': plugins.AreaMarkerEntriesPlugin}
+        arenaBonusType = BigWorld.player().arenaBonusType
+        if arenaBonusType and BONUS_CAPS.checkAny(arenaBonusType, BONUS_CAPS.DEATHZONES):
+            setup['deathzones'] = plugins.DeathZonesMinimapPlugin
         return setup
 
     def _createFlashComponent(self):

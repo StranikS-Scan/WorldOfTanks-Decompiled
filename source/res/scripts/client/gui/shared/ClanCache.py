@@ -155,6 +155,10 @@ class _ClanCache(object):
     def isClanLeader(self):
         return self.clanRole == CLAN_MEMBER_FLAGS.LEADER
 
+    @property
+    def strongholdProvider(self):
+        return self.__strongholdProvider
+
     @async
     @process
     def getClanEmblemID(self, callback):

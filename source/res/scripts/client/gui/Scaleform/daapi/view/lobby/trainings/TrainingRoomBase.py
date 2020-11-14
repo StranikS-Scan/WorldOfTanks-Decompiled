@@ -442,4 +442,9 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
     @process
     def __currentPlayerEntered(self):
         if self.__currentPlayerIsOut:
-            yield self.prbDispatcher.sendPrbRequest(SetPlayerStateCtx(True, waitingID='prebattle/player_ready'))
+            if self.prbEntity.storage.isObserver:
+                yield self.prbDispatcher.sendPrbRequest(SetPlayerObserverStateCtx(isObserver=True, isReadyState=True, waitingID='prebattle/change_user_status'))
+            else:
+                yield self.prbDispatcher.sendPrbRequest(SetPlayerStateCtx(True, waitingID='prebattle/player_ready'))
+            self.as_setObserverS(self.prbEntity.storage.isObserver)
+            self.__currentPlayerIsOut = False

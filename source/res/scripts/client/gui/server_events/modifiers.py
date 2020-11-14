@@ -14,6 +14,7 @@ from gui.shared.money import Currency, MONEY_UNDEFINED
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from items import vehicles, ITEM_TYPE_NAMES
+from rent_common import makeRentID
 from shared_utils import BoundMethodWeakref as bwr, CONST_CONTAINER
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
@@ -916,7 +917,8 @@ class VehRentPriceSet(_VehicleRentPrice, _RentPriceSet):
                     paramName = self._getParamName(idx)
                     multName = self._getMultName(idx)
                     if paramName in self._params and multName in self._params:
-                        result[item, int(self._params.get(paramName, 0))] = int(self._params.get(multName, 0))
+                        rentID = makeRentID(constants.RentType.TIME_RENT, int(self._params.get(paramName, 0)))
+                        result[item, rentID] = int(self._params.get(multName, 0))
 
             return result
         else:

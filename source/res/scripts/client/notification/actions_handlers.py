@@ -22,12 +22,11 @@ from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
 from gui.ranked_battles import ranked_helpers
 from gui.server_events.events_dispatcher import showPersonalMission, showMissionsBattlePassCommonProgression
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events
-from gui.shared.event_dispatcher import showProgressiveRewardWindow, showRankedYearAwardWindow, showCNLootBoxStorageWindow
+from gui.shared.event_dispatcher import showProgressiveRewardWindow, showRankedYearAwardWindow
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import decorators
 from gui.wgcg.clan import contexts as clan_ctxs
 from gui.wgnc import g_wgncProvider
-from skeletons.gui.afk_controller import IAFKController
 from skeletons.gui.impl import INotificationWindowController
 from web.web_client_api import webApiCollection
 from web.web_client_api.sound import HangarSoundWebApi
@@ -38,7 +37,7 @@ from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from notification.tutorial_helper import TutorialGlobalStorage, TUTORIAL_GLOBAL_VAR
 from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
-from skeletons.gui.game_control import IBrowserController, IRankedBattlesController, IBattleRoyaleController, ICNLootBoxesController
+from skeletons.gui.game_control import IBrowserController, IRankedBattlesController, IBattleRoyaleController
 from skeletons.gui.web import IWebController
 from soft_exception import SoftException
 from skeletons.gui.customization import ICustomizationService
@@ -748,18 +747,25 @@ class _OpenMissingEventsHandler(_ActionHandler):
         SystemMessages.pushI18nMessage(backport.text(R.strings.system_messages.queue.isInQueue()), type=SystemMessages.SM_TYPE.Error, priority=NotificationPriorityLevel.HIGH)
 
 
-class _OpenNotrecruitedHandler(_NavigationDisabledActionHandler):
+class _OpenNotrecruitedHandler(_ActionHandler):
 
     @classmethod
     def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
+        return NOTIFICATION_TYPE.RECRUIT_REMINDER
 
     @classmethod
     def getActions(cls):
         pass
 
-    def doAction(self, model, entityID, action):
+    def handleAction(self, model, entityID, action):
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_BARRACKS), ctx={'location': BARRACKS_CONSTANTS.LOCATION_FILTER_NOT_RECRUITED}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+class _OpenNotrecruitedSysMessageHandler(_OpenNotrecruitedHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
 
 
 class OpenPersonalMissionHandler(_ActionHandler):
@@ -863,83 +869,6 @@ class _OpenSelectDevicesHandler(_ActionHandler):
         return
 
 
-class _ShowEventWarningWindowHandler(_ActionHandler):
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def handleAction(self, model, entityID, action):
-        super(_ShowEventWarningWindowHandler, self).handleAction(model, entityID, action)
-        dependency.instance(IAFKController).showWarningWindow()
-
-
-class _ShowEventBanWindowHandler(_ActionHandler):
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def handleAction(self, model, entityID, action):
-        super(_ShowEventBanWindowHandler, self).handleAction(model, entityID, action)
-        dependency.instance(IAFKController).showBanWindow()
-
-
-class _GotoEventRedeemQuestHandler(_ActionHandler):
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def handleAction(self, model, entityID, action):
-        super(_GotoEventRedeemQuestHandler, self).handleAction(model, entityID, action)
-        dependency.instance(IAFKController).showQuest()
-
-
-class _BuyCNLootBoxHandler(_NavigationDisabledActionHandler):
-    __cnLootBoxesCtrl = dependency.descriptor(ICNLootBoxesController)
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def doAction(self, model, entityID, action):
-        if self.__cnLootBoxesCtrl.isActive():
-            self.__cnLootBoxesCtrl.openShopPage()
-
-
-class _OpenCNLootBoxStorage(_NavigationDisabledActionHandler):
-    __cnLootBoxesCtrl = dependency.descriptor(ICNLootBoxesController)
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def doAction(self, model, entityID, action):
-        if self.__cnLootBoxesCtrl.isActive():
-            showCNLootBoxStorageWindow()
-
-
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowTutorialBattleHistoryHandler,
  ShowFortBattleResultsHandler,
@@ -975,12 +904,8 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ProlongStyleRent,
  _OpenBattlePassProgressionView,
  _OpenSelectDevicesHandler,
- _ShowEventBanWindowHandler,
- _ShowEventWarningWindowHandler,
- _GotoEventRedeemQuestHandler,
  _OpenMissingEventsHandler,
- _BuyCNLootBoxHandler,
- _OpenCNLootBoxStorage)
+ _OpenNotrecruitedSysMessageHandler)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

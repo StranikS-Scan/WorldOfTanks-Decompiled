@@ -57,7 +57,7 @@ from web.web_client_api.common import ItemPackTypeGroup, ItemPackEntry
 _ButtonState = namedtuple('_ButtonState', ('enabled', 'itemPrice', 'label', 'icon', 'iconAlign', 'isAction', 'actionTooltip', 'tooltip', 'title', 'isMoneyEnough', 'isUnlock', 'isPrevItemsUnlock', 'customOffer', 'isShowSpecial'))
 
 def _buildBuyButtonTooltip(key):
-    return makeTooltip(TOOLTIPS.vehiclepreview_buybutton_all(key, 'header'), TOOLTIPS.vehiclepreview_buybutton_all(key, 'body'))
+    return makeTooltip(backport.text(R.strings.tooltips.vehiclePreview.buyButton.dyn(key).header()), backport.text(R.strings.tooltips.vehiclePreview.buyButton.dyn(key).body()))
 
 
 def _getCollectibleWarningStr(mainString, vehicle):
@@ -387,16 +387,19 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
             return self.__getBtnDataUnlockedVehicle(vehicle) if vehicle.isUnlocked else self.__getBtnDataLockedVehicle(vehicle)
 
     def __getBtnDataPack(self):
-        tooltip = ''
+        buyButtonTooltip = ''
         actionTooltip = None
         customOffer = None
         price = self.__getPackPrice()
         currency = price.getCurrency()
-        if self._disableBuyButton:
-            tooltip = _buildBuyButtonTooltip('endTime')
-            enabled = False
+        walletAvailable = self.__walletAvailableForCurrency(currency)
+        enabled = False
+        if not walletAvailable:
+            buyButtonTooltip = _buildBuyButtonTooltip('walletUnavailable')
+        elif self._disableBuyButton:
+            buyButtonTooltip = _buildBuyButtonTooltip('endTime')
         elif self.__price.isSet(currency):
-            enabled = self.__walletAvailableForCurrency(currency) and (currency == Currency.GOLD or mayObtainForMoney(price) or mayObtainWithMoneyExchange(price))
+            enabled = currency == Currency.GOLD or mayObtainForMoney(price) or mayObtainWithMoneyExchange(price)
         else:
             enabled = True
         if self.__currentOffer and self.__currentOffer.bestOffer and self.__currentOffer.eventType:
@@ -416,7 +419,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
             enabled = buttonData['enabled']
             buttonIcon = buttonData['btnIcon']
             buttonIconAlign = buttonData['btnIconAlign']
-            tooltip = buttonData['btnTooltip']
+            buyButtonTooltip = buttonData['btnTooltip']
             customOffer = buttonData['customOffer']
         elif self.__items and self.__couponInfo is None:
             buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.buyItemPack())
@@ -426,7 +429,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         else:
             buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.buy())
         isAction = self.__oldPrice.isDefined() and self.__oldPrice != self.__price or actionTooltip is not None or self.__couponInfo and self.__couponInfo.selected
-        return _ButtonState(enabled=enabled, itemPrice=getItemPricesVO(itemPrices), label=buttonLabel, icon=buttonIcon, iconAlign=buttonIconAlign, isAction=isAction, actionTooltip=actionTooltip, tooltip=tooltip, title=self.__title, isMoneyEnough=True, isUnlock=False, isPrevItemsUnlock=True, customOffer=customOffer, isShowSpecial=False)
+        return _ButtonState(enabled=enabled, itemPrice=getItemPricesVO(itemPrices), label=buttonLabel, icon=buttonIcon, iconAlign=buttonIconAlign, isAction=isAction, actionTooltip=actionTooltip, tooltip=buyButtonTooltip, title=self.__title, isMoneyEnough=True, isUnlock=False, isPrevItemsUnlock=True, customOffer=customOffer, isShowSpecial=False)
 
     def __getPackPrice(self):
         if self.__couponInfo and self.__couponInfo.selected:
@@ -440,7 +443,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
     def __getBtnDataUnlockedVehicle(self, vehicle):
         money = self._itemsCache.items.stats.money
         money = self._tradeIn.addTradeInPriceIfNeeded(vehicle, money)
-        notEnoughMoneyTooltip = ''
+        buyButtonTooltip = ''
         actionTooltip = getActionPriceData(vehicle)
         exchangeRate = self._itemsCache.items.shop.exchangeRate
         priceType, price = getPriceTypeAndValue(vehicle, money, exchangeRate)
@@ -459,16 +462,18 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         mayObtain = self.__isHeroTank or walletAvailable and vehicle.mayObtainWithMoneyExchange(money, exchangeRate)
         isBuyingAvailable = not vehicle.isHidden or vehicle.isRentable or vehicle.isRestorePossible()
         isMoneyEnough = True
-        if walletAvailable and not mayObtain and isBuyingAvailable:
+        if not walletAvailable:
+            buyButtonTooltip = _buildBuyButtonTooltip('walletUnavailable')
+        elif not mayObtain and isBuyingAvailable:
             if currency == Currency.GOLD:
                 mayObtain = True
             else:
-                notEnoughMoneyTooltip = _buildBuyButtonTooltip('notEnoughCredits')
+                buyButtonTooltip = _buildBuyButtonTooltip('notEnoughCredits')
                 isMoneyEnough = False
         if self._disableBuyButton or self.__isHeroTank and self._vehicleCD != self._heroTanks.getCurrentTankCD():
             mayObtain = False
             isMoneyEnough = False
-        return _ButtonState(enabled=mayObtain, itemPrice=itemPrice, label=buttonLabel, icon=buttonIcon, iconAlign=buttonIconAlign, isAction=isAction, actionTooltip=actionTooltip, tooltip=notEnoughMoneyTooltip, title=self.__title, isMoneyEnough=isMoneyEnough, isUnlock=False, isPrevItemsUnlock=True, customOffer=None, isShowSpecial=False)
+        return _ButtonState(enabled=mayObtain, itemPrice=itemPrice, label=buttonLabel, icon=buttonIcon, iconAlign=buttonIconAlign, isAction=isAction, actionTooltip=actionTooltip, tooltip=buyButtonTooltip, title=self.__title, isMoneyEnough=isMoneyEnough, isUnlock=False, isPrevItemsUnlock=True, customOffer=None, isShowSpecial=False)
 
     def __getBtnDataCollectibleVehicle(self, vehicle):
         isVehicleCollectorEnabled = self._lobbyContext.getServerSettings().isCollectorVehicleEnabled()

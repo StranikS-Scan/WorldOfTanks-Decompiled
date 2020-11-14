@@ -105,21 +105,6 @@ class IEventsCache(object):
     def getEventVehicles(self, itemsCache=None):
         raise NotImplementedError
 
-    def getCommanders(self):
-        raise NotImplementedError
-
-    def getCommander(self, commanderId):
-        raise NotImplementedError
-
-    def getDifficultyParams(self):
-        raise NotImplementedError
-
-    def getDifficultyLevels(self):
-        raise NotImplementedError
-
-    def getVehiclesForRent(self):
-        raise NotImplementedError
-
     def getEvents(self, filterFunc=None):
         raise NotImplementedError
 
@@ -193,13 +178,4 @@ class IEventsCache(object):
         raise NotImplementedError
 
     def getProgressiveReward(self):
-        raise NotImplementedError
-
-    def getGameEventData(self):
-        raise NotImplementedError
-
-    def getEventFinishTime(self):
-        raise NotImplementedError
-
-    def getEventFinishTimeLeft(self):
         raise NotImplementedError

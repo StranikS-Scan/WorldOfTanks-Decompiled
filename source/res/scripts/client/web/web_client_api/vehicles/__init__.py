@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/web/web_client_api/vehicles/__init__.py
 import nations
 from gui.shared.gui_items.processors.vehicle import SetEnhancementProcessor, DismountEnhancementProcessor
+from gui.shared.items_parameters import params
 from helpers import dependency
 from items import vehicles
 from skeletons.gui.shared import IItemsCache
@@ -81,3 +82,43 @@ class VehiclesWebApi(W2CSchema, ItemsWebApiMixin):
         yield {'success': success,
          'error': error,
          'response': serverResponse}
+
+    @w2c(_VehicleInfoSchema, 'vehicle_params')
+    def vehicleParams(self, cmd):
+        if not vehicles.g_list.isVehicleExistingByCD(cmd.vehicle_id):
+            res = {'error': 'vehicle_id is invalid.'}
+        else:
+            stockVehicle = self.itemsCache.items.getStockVehicle(cmd.vehicle_id)
+            vehicle = self.itemsCache.items.getItemByCD(cmd.vehicle_id)
+            vehicleParams = params.VehicleParams(stockVehicle)
+            res = {'vehicle': {'vehicle_id': vehicle.compactDescr,
+                         'type_user_name': vehicle.typeUserName,
+                         'user_name': vehicle.userName,
+                         'nation': vehicle.nationName,
+                         'type': vehicle.type,
+                         'level': vehicle.level,
+                         'is_premium': vehicle.isPremium,
+                         'health': vehicleParams.maxHealth,
+                         'hull_armor': vehicleParams.hullArmor,
+                         'turret_armor': vehicleParams.turretArmor,
+                         'avg_damage': self.__getAvgDamageShells(vehicle.descriptor),
+                         'piercing_power': self.__getPiercingPowerShells(vehicle.descriptor),
+                         'reload_time': vehicleParams.reloadTime,
+                         'clip_fire_rate': vehicleParams.clipFireRate}}
+        return res
+
+    @staticmethod
+    def __getAvgDamageShells(vehDescr):
+        result = []
+        for gunShot in vehDescr.gun.shots:
+            result.append(gunShot.shell.damage[0])
+
+        return tuple(result)
+
+    @staticmethod
+    def __getPiercingPowerShells(vehDescr):
+        result = []
+        for gunShot in vehDescr.gun.shots:
+            result.append(gunShot.piercingPower.x)
+
+        return tuple(result)

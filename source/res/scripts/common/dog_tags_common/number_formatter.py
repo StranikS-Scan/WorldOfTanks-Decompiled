@@ -59,8 +59,8 @@ def _formatMillions(locale, value):
 
 _TRAILING_ZEROES_RE = re.compile('\\.?0+$')
 _millionDivider = defaultdict(lambda : 1000000)
-_TEN_THOUSAND_DIVIDER = 10000
-_millionDivider['ja'] = _TEN_THOUSAND_DIVIDER
-_millionDivider['zh_cn'] = _TEN_THOUSAND_DIVIDER
+for language in ['ja', 'zh_cn', 'ko']:
+    _millionDivider[language] = 10000
+
 _replacements = {'%': '[percentage]',
  '.': '[dot]'}

@@ -5,7 +5,6 @@ from constants import CustomizationInvData
 from Event import Event, EventManager
 from adisp import process
 from gui import g_tankActiveCamouflage
-from skeletons.gui.game_event_controller import IGameEventController
 from gui.shared.formatters.time_formatters import getTimeLeftStr
 from vehicle_outfit.outfit import Area
 from gui.shared.gui_items.processors.module import getPreviewInstallerProcessor
@@ -13,7 +12,7 @@ from gui.vehicle_view_states import createState4CurrentVehicle
 from helpers import dependency
 from items.vehicles import VehicleDescr
 from helpers import isPlayerAccount, i18n
-from account_helpers.AccountSettings import AccountSettings, CURRENT_VEHICLE, ROYALE_VEHICLE, EVENT_CURRENT_VEHICLE
+from account_helpers.AccountSettings import AccountSettings, BOOTCAMP_VEHICLE, CURRENT_VEHICLE, ROYALE_VEHICLE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.formatters import icons
@@ -29,7 +28,7 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.game_control import IBattleRoyaleController
-from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.game_control import IBootcampController
 _MODULES_NAMES = ('turret',
  'chassis',
  'engine',
@@ -82,6 +81,10 @@ class _CachedVehicle(object):
     def invID(self):
         raise NotImplementedError
 
+    @property
+    def intCD(self):
+        raise NotImplementedError
+
     def _addListeners(self):
         g_clientUpdateManager.addCallbacks({'inventory': self.onInventoryUpdate})
 
@@ -123,7 +126,7 @@ class _CurrentVehicle(_CachedVehicle):
     igrCtrl = dependency.descriptor(IIGRController)
     rentals = dependency.descriptor(IRentalsController)
     battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
-    eventsCache = dependency.descriptor(IEventsCache)
+    bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self):
         super(_CurrentVehicle, self).__init__()
@@ -132,7 +135,7 @@ class _CurrentVehicle(_CachedVehicle):
     def init(self):
         super(_CurrentVehicle, self).init()
         prbVehicle = self.__checkPrebattleLockedVehicle()
-        storedVehInvID = AccountSettings.getFavorites(CURRENT_VEHICLE)
+        storedVehInvID = AccountSettings.getFavorites(BOOTCAMP_VEHICLE if self.isInBootcamp() else CURRENT_VEHICLE)
         self.selectVehicle(prbVehicle or storedVehInvID)
         self.__updateBattleRoyaleData()
 
@@ -212,6 +215,10 @@ class _CurrentVehicle(_CachedVehicle):
     def item(self):
         return self.itemsCache.items.getVehicle(self.__vehInvID) if self.__vehInvID > 0 else None
 
+    @property
+    def intCD(self):
+        return self.item.intCD if self.isPresent() else None
+
     def isBroken(self):
         return self.isPresent() and self.item.isBroken
 
@@ -278,6 +285,9 @@ class _CurrentVehicle(_CachedVehicle):
     def isOnlyForBattleRoyaleBattles(self):
         return self.isPresent() and self.item.isOnlyForBattleRoyaleBattles
 
+    def isInBootcamp(self):
+        return bool(self.bootcampController.isInBootcamp())
+
     def isAlive(self):
         return self.isPresent() and self.item.isAlive
 
@@ -311,10 +321,8 @@ class _CurrentVehicle(_CachedVehicle):
     def selectVehicle(self, vehInvID=0, callback=None, waitingOverlapsUI=False):
         vehicle = self.itemsCache.items.getVehicle(vehInvID)
         vehicle = vehicle if self.__isVehicleSuitable(vehicle) else None
-        vehicle = vehicle if self.__isVehicleEventSuitable(vehicle) else None
         if vehicle is None:
             vehiclesCriteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
-            vehiclesCriteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
             invVehs = self.itemsCache.items.getVehicles(criteria=vehiclesCriteria)
 
             def notEvent(x, y):
@@ -331,36 +339,6 @@ class _CurrentVehicle(_CachedVehicle):
 
     def selectNoVehicle(self):
         self._selectVehicle(0)
-
-    def selectStoredVehicle(self):
-        if g_currentPreviewVehicle.isPresent():
-            g_currentPreviewVehicle.selectNoVehicle()
-        if self.battleRoyaleController.isBattleRoyaleMode():
-            self.selectVehicle(AccountSettings.getFavorites(ROYALE_VEHICLE))
-        else:
-            self.selectVehicle(AccountSettings.getFavorites(CURRENT_VEHICLE))
-
-    def selectEventVehicle(self, vehInvID=0):
-        if vehInvID == 0:
-            vehInvID = AccountSettings.getFavorites(EVENT_CURRENT_VEHICLE)
-        if vehInvID < 0:
-            AccountSettings.setFavorites(EVENT_CURRENT_VEHICLE, vehInvID)
-            g_currentPreviewVehicle.selectVehicle(-vehInvID)
-            return
-        else:
-            vehicle = self.itemsCache.items.getVehicle(vehInvID)
-            if vehicle is None:
-                vehiclesCriteria = REQ_CRITERIA.VEHICLE.EVENT
-                invVehs = self.itemsCache.items.getVehicles(criteria=vehiclesCriteria)
-                if invVehs:
-                    vehInvID = sorted(invVehs.itervalues(), key=lambda veh: veh.intCD, reverse=True)[0].invID
-                else:
-                    vehInvID = 0
-            AccountSettings.setFavorites(EVENT_CURRENT_VEHICLE, vehInvID)
-            if g_currentPreviewVehicle.isPresent():
-                g_currentPreviewVehicle.selectNoVehicle()
-            self._selectVehicle(vehInvID)
-            return
 
     def getDossier(self):
         return self.itemsCache.items.getVehicleDossier(self.item.intCD)
@@ -390,14 +368,12 @@ class _CurrentVehicle(_CachedVehicle):
         self.igrCtrl.onIgrTypeChanged += self.onIgrTypeChanged
         self.rentals.onRentChangeNotify += self.onRentChange
         self.battleRoyaleController.onUpdated += self.__updateBattleRoyaleData
-        self.eventsCache.onSyncCompleted += self.__updateEventVehicle
 
     def _removeListeners(self):
         super(_CurrentVehicle, self)._removeListeners()
         self.igrCtrl.onIgrTypeChanged -= self.onIgrTypeChanged
         self.rentals.onRentChangeNotify -= self.onRentChange
         self.battleRoyaleController.onUpdated -= self.__updateBattleRoyaleData
-        self.eventsCache.onSyncCompleted -= self.__updateEventVehicle
 
     def _selectVehicle(self, vehInvID, callback=None, waitingOverlapsUI=False):
         if vehInvID == self.__vehInvID:
@@ -409,16 +385,15 @@ class _CurrentVehicle(_CachedVehicle):
         self.__vehInvID = vehInvID
         if self.isOnlyForBattleRoyaleBattles():
             AccountSettings.setFavorites(ROYALE_VEHICLE, vehInvID)
-        elif not self.isOnlyForEventBattles():
+        elif self.isInBootcamp():
+            AccountSettings.setFavorites(BOOTCAMP_VEHICLE, vehInvID)
+        else:
             AccountSettings.setFavorites(CURRENT_VEHICLE, vehInvID)
         self.refreshModel()
         self._setChangeCallback(callback)
 
     def __isVehicleSuitable(self, vehicle):
         return False if vehicle is None else not REQ_CRITERIA.VEHICLE.BATTLE_ROYALE(vehicle) or self.battleRoyaleController.isBattleRoyaleMode()
-
-    def __isVehicleEventSuitable(self, vehicle):
-        return False if vehicle is None else not REQ_CRITERIA.VEHICLE.EVENT_BATTLE(vehicle) or self.battleRoyaleController.isEventMode()
 
     def __checkPrebattleLockedVehicle(self):
         from gui.prb_control import prb_getters
@@ -442,15 +417,6 @@ class _CurrentVehicle(_CachedVehicle):
             return
         else:
             if not self.battleRoyaleController.isEnabled() and vehicle.isOnlyForBattleRoyaleBattles:
-                self.selectVehicle()
-            return
-
-    def __updateEventVehicle(self):
-        vehicle = self.itemsCache.items.getVehicle(self.__vehInvID)
-        if vehicle is None:
-            return
-        else:
-            if not self.eventsCache.isEventEnabled() and vehicle.isOnlyForEventBattles:
                 self.selectVehicle()
             return
 
@@ -507,7 +473,6 @@ class HeroTankPreviewAppearance(PreviewAppearance):
 class _CurrentPreviewVehicle(_CachedVehicle):
     _itemsFactory = dependency.descriptor(IGuiItemsFactory)
     _c11nService = dependency.descriptor(ICustomizationService)
-    _gameEventController = dependency.descriptor(IGameEventController)
 
     def __init__(self):
         super(_CurrentPreviewVehicle, self).__init__()
@@ -536,20 +501,9 @@ class _CurrentPreviewVehicle(_CachedVehicle):
     def refreshModel(self):
         pass
 
-    def selectVehicle(self, vehicleCD=None, vehicleStrCD=None, waitingOverlapsUI=False):
+    def selectVehicle(self, vehicleCD=None, vehicleStrCD=None):
         self._selectVehicle(vehicleCD, vehicleStrCD)
         self.onSelected()
-
-    def selectStyledVehicle(self, vDescr, outfit):
-        vehicleEntity = self.hangarSpace.getVehicleEntity()
-        if vehicleEntity is None or vehicleEntity.appearance is None:
-            return
-        else:
-            self.__item = self.__getPreviewVehicle(vDescr.type.compactDescr)
-            self.onChangeStarted()
-            Waiting.show('updateCurrentVehicle', isSingle=True, overlapsUI=False)
-            vehicleEntity.appearance.recreate(vDescr, vState='undamaged', callback=self._changeDone, outfit=outfit.getOutfit(first(outfit.seasons)))
-            return
 
     def selectNoVehicle(self):
         self._selectVehicle(None)
@@ -579,6 +533,10 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         if self.isPresent():
             vehicle = self.itemsCache.items.getItemByCD(self.item.intCD)
             return vehicle.invID
+
+    @property
+    def intCD(self):
+        return self.item.intCD if self.isPresent() else None
 
     @property
     def vehicleEntityID(self):
@@ -680,9 +638,6 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         if vehicleCD is not None:
             vehicle = self.itemsCache.items.getStockVehicle(vehicleCD, useInventory=True)
             if vehicle:
-                if self._gameEventController is not None and self._gameEventController.needEventCrew(vehicle):
-                    vehicle.crew = self._gameEventController.getEventCrew(vehicle)
-                    return vehicle
                 vehicle.crew = vehicle.getPerfectCrew()
                 return vehicle
         return

@@ -206,9 +206,6 @@ class CommonTankAppearance(ScriptGameObject):
 
         return prereqs
 
-    def setID(self, vID):
-        self.__vID = vID
-
     def construct(self, isPlayer, resourceRefs):
         self.collisions = resourceRefs['collisionAssembler']
         self.typeDescriptor.chassis.hitTester.bbox = self.collisions.getBoundingBox(TankPartNames.getIdx(TankPartNames.CHASSIS))
@@ -580,6 +577,10 @@ class CommonTankAppearance(ScriptGameObject):
 
     def _stopEffects(self):
         self.boundEffects.stop()
+
+    def playEffectWithStopCallback(self, effects):
+        vehicle = self._vehicle
+        return self.boundEffects.addNew(None, effects[1], effects[0], isPlayerVehicle=vehicle.isPlayerVehicle, showShockWave=vehicle.isPlayerVehicle, showFlashBang=vehicle.isPlayerVehicle, entity_id=vehicle.id, isPlayer=vehicle.isPlayerVehicle, showDecal=True, start=vehicle.position + Math.Vector3(0.0, 1.0, 0.0), end=vehicle.position + Math.Vector3(0.0, -1.0, 0.0)).stop
 
     def playEffect(self, kind, *modifs):
         self._stopEffects()

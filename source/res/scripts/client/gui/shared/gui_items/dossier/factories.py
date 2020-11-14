@@ -341,7 +341,7 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  WHITE_TIGER_RECORD: _CustomAchieveFactory.get(_as.regular.WhiteTigerAchievement),
  HONORED_RANK_RECORD: _CustomAchieveFactory.get(_as.regular.HonoredRankAchievement),
  (_AB.SINGLE, 'se2020Medal'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
- (_AB.SINGLE, 'hw2019Medal'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.SINGLE, 'hw2019Medal'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'hw2019Medal1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'hw2019Medal2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'hw2019Medal3'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),

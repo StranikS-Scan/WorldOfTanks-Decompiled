@@ -71,11 +71,11 @@ class BlueprintTooltipData(BlocksTooltipData):
             nationText = text_styles.errCurrencyTextBig(str(nationRequired))
         else:
             nationText = text_styles.expTextBig(str(nationRequired))
-        countBlockInt = formatters.packImageTextBlockData(title=None, desc=intelText, img=RES_ICONS.MAPS_ICONS_BLUEPRINTS_FRAGMENT_MEDIUM_INTELLIGENCE, imgAtLeft=False, imgPadding=formatters.packPadding(top=0, right=5), txtPadding=formatters.packPadding(top=8, left=5), padding=formatters.packPadding(top=0))
-        countBlockNation = formatters.packImageTextBlockData(title=None, desc=nationText, img=RES_ICONS.getBlueprintFragment('medium', nationName), imgAtLeft=False, imgPadding=formatters.packPadding(top=0, right=5), txtPadding=formatters.packPadding(top=8, left=5), padding=formatters.packPadding(top=0))
+        countBlockInt = formatters.packImageTextBlockData(title=None, desc=intelText, img=RES_ICONS.MAPS_ICONS_BLUEPRINTS_FRAGMENT_SMALL_INTELLIGENCE, imgAtLeft=False, imgPadding=formatters.packPadding(top=0, right=5), txtPadding=formatters.packPadding(top=8, left=5), padding=formatters.packPadding(top=0))
+        countBlockNation = formatters.packImageTextBlockData(title=None, desc=nationText, img=RES_ICONS.getBlueprintFragment('small', nationName), imgAtLeft=False, imgPadding=formatters.packPadding(top=0, right=5), txtPadding=formatters.packPadding(top=8, left=5), padding=formatters.packPadding(top=0))
         countPlus = formatters.packImageBlockData(img=RES_ICONS.MAPS_ICONS_BLUEPRINTS_BLUEPRINTSCREEN_ICPLUS, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(left=10, right=0, top=12))
         countEqual = formatters.packImageBlockData(img=RES_ICONS.MAPS_ICONS_BLUEPRINTS_BLUEPRINTSCREEN_ICEQUAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(left=8, right=8, top=12))
-        countPrint = formatters.packImageTextBlockData(title=None, desc=text_styles.main(TOOLTIPS.BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_GATHERDESCRIPTION2), img=RES_ICONS.MAPS_ICONS_BLUEPRINTS_FRAGMENT_MEDIUM_VEHICLE, imgPadding=formatters.packPadding(top=0, right=5), txtPadding=formatters.packPadding(top=4, left=5), padding=formatters.packPadding(top=0))
+        countPrint = formatters.packImageTextBlockData(title=None, desc=text_styles.main(TOOLTIPS.BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_GATHERDESCRIPTION2), img=RES_ICONS.MAPS_ICONS_BLUEPRINTS_FRAGMENT_SMALL_VEHICLE, imgPadding=formatters.packPadding(top=0, right=5), txtPadding=formatters.packPadding(top=4, left=5), padding=formatters.packPadding(top=0))
         imageHowBlock = formatters.packBuildUpBlockData(blocks=[countBlockInt,
          countPlus,
          countBlockNation,
@@ -89,8 +89,8 @@ class BlueprintTooltipData(BlocksTooltipData):
         orTextObject = formatters.packAlignedTextBlockData(text=text_styles.main(TOOLTIPS.BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_OR), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER)
         orTextBlock = formatters.packBuildUpBlockData(blocks=[orTextObject], align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, blockWidth=140, padding=formatters.packPadding(top=43))
         vehicleBlock = self._getImageWithBottomTitleBlock(RES_ICONS.MAPS_ICONS_BLUEPRINTS_TOOLTIP_FRAGMENTRIBBON, vehicleName)
-        internBlock = self._getImageWithBottomTitleBlock(RES_ICONS.MAPS_ICONS_BLUEPRINTS_FRAGMENT_MEDIUM_INTELLIGENCE, TOOLTIPS.BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_INTERNATIONALS, formatters.packPadding(right=-70))
-        nationBlock = self._getImageWithBottomTitleBlock(RES_ICONS.getBlueprintFragment('medium', nationName), TOOLTIPS.BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_NATIONALS, formatters.packPadding(left=-70))
+        internBlock = self._getImageWithBottomTitleBlock(RES_ICONS.MAPS_ICONS_BLUEPRINTS_FRAGMENT_SMALL_INTELLIGENCE, TOOLTIPS.BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_INTERNATIONALS, formatters.packPadding(right=-70))
+        nationBlock = self._getImageWithBottomTitleBlock(RES_ICONS.getBlueprintFragment('small', nationName), TOOLTIPS.BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_NATIONALS, formatters.packPadding(left=-70))
         arrowLeft = formatters.packImageBlockData(img=RES_ICONS.MAPS_ICONS_BLUEPRINTS_TOOLTIP_ARROW_LEFT, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=20, right=-30))
         arrowRight = formatters.packImageBlockData(img=RES_ICONS.MAPS_ICONS_BLUEPRINTS_TOOLTIP_ARROW_RIGHT, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=20, left=-30))
         middleBlock = formatters.packBuildUpBlockData(blocks=[arrowLeft, vehicleBlock, arrowRight], gap=1, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER)
@@ -189,7 +189,7 @@ class VehicleBlueprintTooltipData(BlueprintTooltipData, DynamicBlocksTooltipData
         return formatters.packBlueprintBlockData(blueprintImg=self.__texture, schemeImg=layoutBg, layout=layout, numCols=numCols, numRows=numRows, width=354, height=274, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=-33, bottom=bottomPadding))
 
     def __packFragmentsInfoBlock(self):
-        countBlock = formatters.packImageTextBlockData(title=text_styles.main(TOOLTIPS.BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_FRAGMENTSACQUIRED), desc=text_styles.concatStylesWithSpace(text_styles.bonusLocalText(str(self.__blueprintData.filledCount)), text_styles.main(' '.join(('/', str(self.__blueprintData.totalCount))))), img=RES_ICONS.MAPS_ICONS_BLUEPRINTS_FRAGMENT_MEDIUM_VEHICLE, txtPadding=formatters.packPadding(left=11), txtGap=-6, padding=formatters.packPadding(top=4))
+        countBlock = formatters.packImageTextBlockData(title=text_styles.main(TOOLTIPS.BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_FRAGMENTSACQUIRED), desc=text_styles.concatStylesWithSpace(text_styles.bonusLocalText(str(self.__blueprintData.filledCount)), text_styles.main(' '.join(('/', str(self.__blueprintData.totalCount))))), img=RES_ICONS.MAPS_ICONS_BLUEPRINTS_FRAGMENT_SMALL_VEHICLE, txtPadding=formatters.packPadding(left=11), txtGap=-6, padding=formatters.packPadding(top=4))
         transitionBlock = formatters.packImageBlockData(img=RES_ICONS.MAPS_ICONS_BLUEPRINTS_TOOLTIP_POINTER, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=-3, left=24, right=24))
         if self.__blueprintData.filledCount != self.__blueprintData.totalCount:
             discountBlock = self.__packDiscountBlock()
@@ -221,7 +221,7 @@ class VehicleBlueprintTooltipData(BlueprintTooltipData, DynamicBlocksTooltipData
 
     @staticmethod
     def __packBlueprintDescrBlock():
-        fragmentInfo = formatters.packImageTextBlockData(desc=text_styles.main(TOOLTIPS.BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_DESCRIPTIONFIRST), img=RES_ICONS.MAPS_ICONS_BLUEPRINTS_FRAGMENT_MEDIUM_VEHICLE, txtPadding=formatters.packPadding(top=2, left=21))
+        fragmentInfo = formatters.packImageTextBlockData(desc=text_styles.main(TOOLTIPS.BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_DESCRIPTIONFIRST), img=RES_ICONS.MAPS_ICONS_BLUEPRINTS_FRAGMENT_SMALL_VEHICLE, txtPadding=formatters.packPadding(top=2, left=21))
         discountInfo = formatters.packImageTextBlockData(desc=text_styles.main(TOOLTIPS.BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_DESCRIPTIONSECOND), img=RES_ICONS.MAPS_ICONS_BLUEPRINTS_TOOLTIP_DISCOUNT, txtPadding=formatters.packPadding(top=4, left=21))
         return formatters.packBuildUpBlockData(blocks=[fragmentInfo, discountInfo], gap=5, padding=formatters.packPadding(top=8))
 
@@ -248,24 +248,9 @@ class BlueprintFragmentRandomTooltipData(BlueprintTooltipData):
         return formatters.packImageTextBlockData(desc=text_styles.main(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_RANDOM_DISCOUNT), img=RES_ICONS.MAPS_ICONS_BLUEPRINTS_TOOLTIP_DISCOUNT_SMALL, imgPadding=formatters.packPadding(top=2, right=5), padding=formatters.packPadding(left=40))
 
     def __packRandomFragmentBlocks(self):
-        self._items.append(formatters.packImageTextBlockData(title=text_styles.highTitle(self._getHeader()), img=RES_ICONS.getBlueprintFragment('medium', 'random'), imgPadding=formatters.packPadding(top=3), txtPadding=formatters.packPadding(left=21)))
-        descriptionBlock = formatters.packImageTextBlockData(desc=text_styles.main(self._getDescr()), img=RES_ICONS.MAPS_ICONS_BLUEPRINTS_PLUS, imgPadding=formatters.packPadding(top=0, right=5), padding=formatters.packPadding(left=40))
+        self._items.append(formatters.packImageTextBlockData(title=text_styles.highTitle(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_RANDOM_HEADER), img=RES_ICONS.getBlueprintFragment('small', 'random'), imgPadding=formatters.packPadding(top=3), txtPadding=formatters.packPadding(left=21)))
+        descriptionBlock = formatters.packImageTextBlockData(desc=text_styles.main(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_RANDOM_DESCRIPTION), img=RES_ICONS.MAPS_ICONS_BLUEPRINTS_PLUS, imgPadding=formatters.packPadding(top=0, right=5), padding=formatters.packPadding(left=40))
         self._items.append(formatters.packBuildUpBlockData(blocks=[descriptionBlock, self.__packDiscountBlock()], gap=5, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
-
-    def _getHeader(self):
-        return backport.text(R.strings.tooltips.blueprint.BlueprintFragmentTooltip.random.header())
-
-    def _getDescr(self):
-        return backport.text(R.strings.tooltips.blueprint.BlueprintFragmentTooltip.random.description())
-
-
-class BlueprintNationalRandomTooltipData(BlueprintFragmentRandomTooltipData):
-
-    def _getHeader(self):
-        return backport.text(R.strings.tooltips.blueprint.BlueprintFragmentTooltip.randomNational.header())
-
-    def _getDescr(self):
-        return backport.text(R.strings.tooltips.blueprint.BlueprintFragmentTooltip.randomNational.description())
 
 
 class BlueprintFragmentTooltipData(BlueprintTooltipData):
@@ -297,7 +282,7 @@ class BlueprintFragmentTooltipData(BlueprintTooltipData):
         return formatters.packImageTextBlockData(desc=text_styles.main(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_COMPENSATION), img=RES_ICONS.MAPS_ICONS_LIBRARY_INFORMATIONICON_1, imgPadding=formatters.packPadding(top=2, right=9, left=4), padding=formatters.packPadding(left=40))
 
     def __packIntelFragmentBlocks(self):
-        self._items.append(formatters.packImageTextBlockData(title=text_styles.highTitle(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_INTELFRAGMENT), img=RES_ICONS.getBlueprintFragment('medium', 'intelligence'), imgPadding=formatters.packPadding(top=3), txtPadding=formatters.packPadding(left=21)))
+        self._items.append(formatters.packImageTextBlockData(title=text_styles.highTitle(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_INTELFRAGMENT), img=RES_ICONS.getBlueprintFragment('small', 'intelligence'), imgPadding=formatters.packPadding(top=3), txtPadding=formatters.packPadding(left=21)))
         descriptionBlock = formatters.packImageTextBlockData(desc=text_styles.main(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_INTELDESCRIPTION), img=RES_ICONS.MAPS_ICONS_BLUEPRINTS_PLUS, imgPadding=formatters.packPadding(top=0, right=5), padding=formatters.packPadding(left=40))
         self._items.append(formatters.packBuildUpBlockData(blocks=[descriptionBlock, self.__packCompensationBlock()], gap=5, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
         fragmentsCount = self.context.getUniversalCount()
@@ -306,7 +291,7 @@ class BlueprintFragmentTooltipData(BlueprintTooltipData):
     def __packNationalFragmentBlocks(self):
         items = self._items
         self._setNationFlagCornerBg(self.__nationName)
-        items.append(formatters.packImageTextBlockData(title=text_styles.highTitle(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_NATIONALFRAGMENT), img=RES_ICONS.getBlueprintFragment('medium', self.__nationName), imgPadding=formatters.packPadding(top=3), txtPadding=formatters.packPadding(left=21)))
+        items.append(formatters.packImageTextBlockData(title=text_styles.highTitle(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_NATIONALFRAGMENT), img=RES_ICONS.getBlueprintFragment('small', self.__nationName), imgPadding=formatters.packPadding(top=3), txtPadding=formatters.packPadding(left=21)))
         self._items = [formatters.packBuildUpBlockData(blocks=items)]
         items = self._items
         nation = i18n.makeString(NATIONS.genetiveCase(self.__nationName))
@@ -322,7 +307,7 @@ class BlueprintFragmentTooltipData(BlueprintTooltipData):
         else:
             items = self._items
             self._setNationFlagCornerBg(vehicle.nationName)
-            items.append(formatters.packImageTextBlockData(title=text_styles.highTitle(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_FRAGMENTHEADER), desc=self._getVehicleDescrStr(vehicle), img=RES_ICONS.getBlueprintFragment('medium', 'vehicle'), imgPadding=formatters.packPadding(top=3), txtPadding=formatters.packPadding(left=21)))
+            items.append(formatters.packImageTextBlockData(title=text_styles.highTitle(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_FRAGMENTHEADER), desc=self._getVehicleDescrStr(vehicle), img=RES_ICONS.getBlueprintFragment('small', 'vehicle'), imgPadding=formatters.packPadding(top=3), txtPadding=formatters.packPadding(left=21)))
             self._items = [formatters.packBuildUpBlockData(blocks=items)]
             items = self._items
             percentDiscount, xpDiscount = self.context.getFragmentDiscounts(vehicle)
@@ -360,7 +345,7 @@ class BlueprintEmptySlotTooltipData(BlueprintTooltipData):
         return formatters.packTextBlockData(text=text_styles.highTitle(TOOLTIPS.BLUEPRINT_BLUEPRINTEMPTYSLOT_TITLE))
 
     def __packDiscountBlock(self):
-        fragmentBlock = formatters.packImageBlockData(img=RES_ICONS.getBlueprintFragment('medium', 'vehicle'), padding=formatters.packPadding(top=4, left=8))
+        fragmentBlock = formatters.packImageBlockData(img=RES_ICONS.getBlueprintFragment('small', 'vehicle'), padding=formatters.packPadding(top=4, left=8))
         percentDiscount, xpDiscount = self.context.getFragmentDiscounts(self.__vehicle)
         discountBlock = self._getUnlockDiscountBlock(percentDiscount, xpDiscount, TOOLTIPS.BLUEPRINT_VEHICLEBLUEPRINTEMPTYSLOTTOOLTIP_RESEARCHDISCOUNT, True)
         return formatters.packBuildUpBlockData(blocks=[fragmentBlock, discountBlock], gap=24, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, padding=formatters.packPadding(bottom=-10), blockWidth=370)

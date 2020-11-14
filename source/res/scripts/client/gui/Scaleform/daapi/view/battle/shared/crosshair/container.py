@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/crosshair/container.py
+import logging
+import WWISE
 from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR
 from gui import DEPTH_OF_Aim
 from gui.Scaleform.daapi.view.battle.shared.crosshair import gm_factory, plugins, settings
@@ -8,11 +10,29 @@ from gui.Scaleform.daapi.view.external_components import ExternalFlashSettings
 from gui.Scaleform.daapi.view.meta.CrosshairPanelContainerMeta import CrosshairPanelContainerMeta
 from gui.Scaleform.flash_wrapper import InputKeyMode
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
+from gui.Scaleform.genConsts.AUTOLOADERBOOSTVIEWSOUNDS import AUTOLOADERBOOSTVIEWSOUNDS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control.battle_constants import CROSSHAIR_VIEW_ID
 from gui.shared.utils.plugins import PluginsCollection
 from skeletons.gui.battle_session import IBattleSessionProvider
 from helpers import dependency, i18n
+_logger = _logger = logging.getLogger(__name__)
+
+class AutoloaderBoostSoundEvents(object):
+    __slots__ = ()
+    __EVENTS = {AUTOLOADERBOOSTVIEWSOUNDS.START: 'gun_rld_automat_reloading_boost_start',
+     AUTOLOADERBOOSTVIEWSOUNDS.PROGRESS: 'gun_rld_automat_reloading_boost_progress',
+     AUTOLOADERBOOSTVIEWSOUNDS.MAX: 'gun_rld_automat_reloading_boost_max'}
+
+    @staticmethod
+    def play(state):
+        eventName = AutoloaderBoostSoundEvents.__EVENTS.get(state, None)
+        if eventName:
+            WWISE.WW_eventGlobal(eventName)
+        else:
+            _logger.error("Autoloader boost events map do not have state '%r'", state)
+        return
+
 
 class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -130,6 +150,9 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
     def createExternalComponent(self):
         super(CrosshairPanelContainer, self).createExternalComponent()
         self.__configure()
+
+    def as_playSound(self, value):
+        AutoloaderBoostSoundEvents.play(value)
 
     def _populate(self):
         super(CrosshairPanelContainer, self)._populate()

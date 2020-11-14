@@ -3,15 +3,20 @@
 import cPickle
 import zlib
 import BigWorld
+from arena_info_components.vehicles_area_marker_info import VehiclesAreaMarkerInfo
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.events import AirDropEvent
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
+ARENA_INFO_COMPONENTS = {VehiclesAreaMarkerInfo}
 
-class ArenaInfo(BigWorld.Entity):
-    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
+class ArenaInfo(BigWorld.Entity, VehiclesAreaMarkerInfo):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
+        for comp in ARENA_INFO_COMPONENTS:
+            comp.__init__(self)
+
         self._bonusByQuestID = {}
         self.__setAverageLevel()
 
@@ -42,10 +47,16 @@ class ArenaInfo(BigWorld.Entity):
         self.__unpackBonusByQuestID()
 
     def onEnterWorld(self, prereqs):
+        for comp in ARENA_INFO_COMPONENTS:
+            comp.onEnterWorld(self)
+
         BigWorld.player().arena.registerArenaInfo(self)
         self.__unpackBonusByQuestID()
 
     def onLeaveWorld(self):
+        for comp in ARENA_INFO_COMPONENTS:
+            comp.onLeaveWorld(self)
+
         BigWorld.player().arena.unregisterArenaInfo(self)
         self._bonusByQuestID.clear()
 
@@ -57,7 +68,7 @@ class ArenaInfo(BigWorld.Entity):
             self._bonusByQuestID = cPickle.loads(zlib.decompress(self.bonusByQuestID))
 
     def __setAverageLevel(self):
-        progressionCtrl = self.__sessionProvider.dynamic.progression
+        progressionCtrl = self.sessionProvider.dynamic.progression
         if progressionCtrl is not None:
             progressionCtrl.setAverageBattleLevel(self.vehiclesAverageBattleLevel)
         return

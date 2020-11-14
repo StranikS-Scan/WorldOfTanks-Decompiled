@@ -4,8 +4,14 @@ from constants import IS_EDITOR
 from visual_script.misc import ASPECT
 from visual_script.registrar import VSBlockRegistrar
 import vehicle_blocks
+import scene_blocks
+import event_platform_blocks
+import triggers_blocks
 g_blockRegistrar = VSBlockRegistrar(ASPECT.CLIENT)
 if not IS_EDITOR:
     from visual_script_client import client_perk_blocks
     g_blockRegistrar.regBlocksFromModule(client_perk_blocks)
+g_blockRegistrar.regBlocksFromModule(event_platform_blocks)
 g_blockRegistrar.regBlocksFromModule(vehicle_blocks)
+g_blockRegistrar.regBlocksFromModule(scene_blocks)
+g_blockRegistrar.regBlocksFromModule(triggers_blocks)

@@ -48,7 +48,7 @@ class HeroTank(ClientSelectableCameraVehicle):
     _hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self):
-        self._heroTankCD = None
+        self.__heroTankCD = None
         ClientSelectableCameraVehicle.__init__(self)
         return
 
@@ -72,8 +72,8 @@ class HeroTank(ClientSelectableCameraVehicle):
     def recreateVehicle(self, typeDescriptor=None, state=ModelStates.UNDAMAGED, callback=None):
         if self.__isInPreview():
             return
-        if self._heroTankCD and not self.__isInPreview():
-            self.typeDescriptor = HeroTank.__getVehicleDescriptorByIntCD(self._heroTankCD)
+        if self.__heroTankCD and not self.__isInPreview():
+            self.typeDescriptor = HeroTank.__getVehicleDescriptorByIntCD(self.__heroTankCD)
         super(HeroTank, self).recreateVehicle(typeDescriptor, state, callback)
 
     def _createAppearance(self):
@@ -83,10 +83,10 @@ class HeroTank(ClientSelectableCameraVehicle):
 
     def _updateHeroTank(self):
         if g_currentPreviewVehicle.item is not None:
-            if g_currentPreviewVehicle.item.intCD == self._heroTankCD:
+            if g_currentPreviewVehicle.item.intCD == self.__heroTankCD:
                 return
-        self._heroTankCD = self._heroTankCtrl.getRandomTankCD()
-        if self._heroTankCD:
+        self.__heroTankCD = self._heroTankCtrl.getRandomTankCD()
+        if self.__heroTankCD:
             self.recreateVehicle()
         else:
             self.removeModelFromScene()

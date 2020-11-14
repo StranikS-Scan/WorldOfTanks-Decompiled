@@ -90,7 +90,7 @@ class BattlePassVotingResultView(ViewImpl):
         vehicleCD = int(args.get('vehicleCD'))
         styleID = int(args.get('styleID'))
         style = self.__c11n.getItemByID(GUI_ITEM_TYPE.STYLE, styleID)
-        showStylePreview(vehicleCD, style, style.getDescription(), partial(self.__previewCallback, self.__isOverlay), backBtnDescrLabel=backport.text(R.strings.battle_pass_2020.battlePassVoting.backBtnTextPreview()))
+        showStylePreview(vehicleCD, style, style.getDescription(), partial(self.__previewCallback, self.__isOverlay), backport.text(R.strings.battle_pass_2020.battlePassVoting.backBtnTextPreview()))
 
     def __updateViewState(self):
         if isNeededToVote():

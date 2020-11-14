@@ -24,7 +24,6 @@ from gui.Scaleform.Waiting import Waiting
 from Event import Event
 from PlayerEvents import g_playerEvents
 from connection_mgr import LOGIN_STATUS
-from gui.server_events.recruit_helper import NonRecruitNotifierSingleton
 _PERIPHERY_DEFAULT_LIFETIME = 15 * ONE_MINUTE
 _LIMIT_LOGIN_COUNT = 5
 _logger = logging.getLogger(__name__)
@@ -116,7 +115,6 @@ class Manager(ILoginManager):
         if self.wgcAvailable and self.__wgcManager.onLoggedOn(responseData):
             self._preferences.clear()
             self._preferences.writeLoginInfo()
-            NonRecruitNotifierSingleton().getInstance().resetFirstShowState()
             return
         loginCount = self._preferences.get('loginCount', 0)
         self._preferences['loginCount'] = 1 if loginCount >= _LIMIT_LOGIN_COUNT else loginCount + 1
@@ -140,7 +138,6 @@ class Manager(ILoginManager):
         self._preferences.writeLoginInfo()
         self.__dumpUserName(name)
         self._showSecurityMessage(responseData)
-        NonRecruitNotifierSingleton().getInstance().resetFirstShowState()
 
     def _showSecurityMessage(self, responseData):
         securityWarningType = responseData.get('security_msg')

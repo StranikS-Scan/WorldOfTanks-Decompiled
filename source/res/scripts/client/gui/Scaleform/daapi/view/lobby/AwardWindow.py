@@ -45,8 +45,8 @@ class MissionAwardWindow(MissionAwardWindowMeta):
     _COMMON_SOUND_SPACE = PERSONAL_MISSIONS_SILENT_SOUND_SPACE
 
     def onCurrentQuestClick(self):
-        self._award.handleNextButton()
-        self.onWindowClose()
+        if self._award.handleNextButton():
+            self.onWindowClose()
 
     def onNextQuestClick(self):
         self._award.handleCurrentButton()

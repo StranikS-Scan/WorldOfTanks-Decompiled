@@ -9,9 +9,7 @@ from items import tankmen, vehicles
 from items.components.component_constants import EMPTY_STRING
 from items.components import skills_constants
 from helpers import dependency
-from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.login_manager import ILoginManager
 from gui.shared.gui_items import Tankman
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
@@ -19,11 +17,8 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from helpers.i18n import makeString as _ms
 from account_helpers.AccountSettings import AccountSettings, RECRUIT_NOTIFICATIONS
 from soft_exception import SoftException
-from gui.impl.gen.resources import R
-from gui import SystemMessages
-from gui.shared.notifications import NotificationPriorityLevel
 from shared_utils import first
-from gui.server_events.events_helpers import getTankmanRewardQuests
+from .events_helpers import getTankmanRewardQuests
 
 class RecruitSourceID(object):
     TANKWOMAN = 'tankwoman'
@@ -48,7 +43,6 @@ class RecruitSourceID(object):
     BUFFON = 'buffon'
     LOOTBOX = 'lootbox'
     COMMANDER_MARINA = 'commander_marina'
-    HW19_COMMANDERS = 'hw19_commanders'
     COMMANDER_PATRICK = 'commander_patrick'
     EVENTS = (TWITCH_0,
      TWITCH_1,
@@ -69,12 +63,10 @@ class RecruitSourceID(object):
      TWITCH_14,
      TWITCH_15,
      TWITCH_16,
-     HW19_COMMANDERS,
      TWITCH_17)
 
 
 _NEW_SKILL = 'new_skill'
-_COUNT_NEW_SKILL_HW19_COMMANDER = 3
 _BASE_NAME = 'base'
 _TANKWOMAN_ROLE_LEVEL = 100
 _TANKWOMAN_ICON = 'girl-empty.png'
@@ -128,9 +120,7 @@ class _BaseRecruitInfo(object):
 
     def getLearntSkills(self, multiplyNew=False):
         if self._hasNewSkill:
-            if self.getSourceID() == RecruitSourceID.HW19_COMMANDERS:
-                skillsCount = _COUNT_NEW_SKILL_HW19_COMMANDER
-            elif multiplyNew:
+            if multiplyNew:
                 skillsCount, _ = self.getNewSkillCount(onlyFull=True)
             else:
                 skillsCount = 1
@@ -400,56 +390,3 @@ def getNewRecruitsCounter():
 
 def setNewRecruitsVisited():
     AccountSettings.setNotifications(RECRUIT_NOTIFICATIONS, _getRecruitUniqueIDs())
-
-
-class NonRecruitNotifierSingleton(object):
-    __loginManager = dependency.descriptor(ILoginManager)
-    __bootCampController = dependency.descriptor(IBootcampController)
-    _instance = None
-
-    @staticmethod
-    def getInstance():
-        if NonRecruitNotifierSingleton._instance is None:
-            NonRecruitNotifierSingleton()
-        return NonRecruitNotifierSingleton._instance
-
-    def __init__(self):
-        if NonRecruitNotifierSingleton._instance is None:
-            NonRecruitNotifierSingleton._instance = self
-            self._isFirstShow = True
-            self._cachedRecruitCount = -1
-        return
-
-    def resetFirstShowState(self):
-        self._isFirstShow = True
-        self._cachedRecruitCount = -1
-
-    def notifyNonRecruitCount(self):
-        if self.__bootCampController.isInBootcamp():
-            return
-        recruits = getAllRecruitsInfo(sortByExpireTime=True)
-        recruitsCount = len(recruits)
-        if recruitsCount == self._cachedRecruitCount:
-            return
-        self._cachedRecruitCount = recruitsCount
-        time = ''
-        message = ''
-        rMessage = R.strings.messenger.serviceChannelMessages
-        if recruitsCount <= 0:
-            if self._isFirstShow:
-                self._isFirstShow = False
-                return
-            message = rMessage.recruitReminderNotRemain.text()
-        else:
-            time = first(recruits).getExpiryTime()
-            if time:
-                message = rMessage.recruitReminder.text()
-            else:
-                message = rMessage.recruitReminderTermless.text()
-        msgPrLevel = NotificationPriorityLevel.LOW
-        lc = self.__loginManager.getPreference('loginCount')
-        if lc == _INCREASE_LIMIT_LOGIN:
-            msgPrLevel = NotificationPriorityLevel.MEDIUM
-        msgType = SystemMessages.SM_TYPE.RecruitReminder
-        SystemMessages.pushMessage(backport.text(message, count=recruitsCount, date=time), msgType, msgPrLevel)
-        self._isFirstShow = False

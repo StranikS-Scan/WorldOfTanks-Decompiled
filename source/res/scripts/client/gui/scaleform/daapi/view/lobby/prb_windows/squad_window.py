@@ -1,11 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/squad_window.py
 from constants import PREBATTLE_TYPE
-from gui.Scaleform.daapi.view.lobby.rally.vo_converters import getDifficultyStars
 from gui.Scaleform.daapi.view.meta.SquadWindowMeta import SquadWindowMeta
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
 from gui.Scaleform.managers.windows_stored_data import stored_window
 from gui.prb_control import settings
@@ -93,31 +91,6 @@ class EventSquadWindow(SquadWindow):
 
     def _getTitle(self):
         return ''.join((i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_SQUAD), i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_SQUAD_EVENT)))
-
-    def _addPlayerDifficultyLevelNotification(self, key, username, level):
-        chat = self.chat
-        if chat:
-            chat.as_addMessageS(i18n.makeString(SYSTEM_MESSAGES.unit_notification(key), userName=username, level=level))
-
-    def onUnitPlayerStateChanged(self, pInfo):
-        if not pInfo.isReady and not pInfo.isCommander():
-            self._addPlayerDifficultyLevelNotification(settings.UNIT_NOTIFICATION_KEY.NOT_READY_DIFFICULTY_LEVEL, pInfo.getFullName(), getDifficultyStars(pInfo.maxDifficultyLevel))
-
-    def onUnitPlayerInfoChanged(self, pInfo):
-        if pInfo.isCommander():
-            self._addPlayerDifficultyLevelNotification(settings.UNIT_NOTIFICATION_KEY.SELECTED_DIFFICULTY_LEVEL, pInfo.getFullName(), getDifficultyStars(pInfo.difficultyLevel))
-
-    def onUnitPlayerAdded(self, pInfo):
-        if not pInfo.isInvite():
-            chat = self.chat
-            if chat and not pInfo.isCurrentPlayer():
-                chat.as_addMessageS(messages.getUnitPlayerNotification(settings.UNIT_NOTIFICATION_KEY.EVENT_PLAYER_ADDED, pInfo))
-
-    def onUnitPlayerRemoved(self, pInfo):
-        if not pInfo.isInvite():
-            chat = self.chat
-            if chat and not pInfo.isCurrentPlayer():
-                chat.as_addMessageS(messages.getUnitPlayerNotification(settings.UNIT_NOTIFICATION_KEY.EVENT_PLAYER_REMOVED, pInfo))
 
     def _getSquadViewAlias(self):
         return PREBATTLE_ALIASES.EVENT_SQUAD_VIEW_PY

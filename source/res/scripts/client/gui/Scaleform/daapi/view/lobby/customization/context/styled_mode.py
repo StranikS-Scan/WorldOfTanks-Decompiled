@@ -66,7 +66,7 @@ class StyledMode(CustomizationMode):
         return OutfitInfo(self.__originalStyle, self.__modifiedStyle)
 
     def getPurchaseItems(self):
-        return getStylePurchaseItems(self.__modifiedStyle, self.getModifiedOutfits()) if self.__modifiedStyle is not None else []
+        return getStylePurchaseItems(self.__modifiedStyle, self.getModifiedOutfits(), prolongRent=self.__prolongRent) if self.__modifiedStyle is not None else []
 
     def removeStyle(self, intCD):
         if self.__modifiedStyle is not None and self.__modifiedStyle.intCD == intCD:
@@ -77,8 +77,8 @@ class StyledMode(CustomizationMode):
         if style is None:
             return
         else:
-            self.installItem(style.intCD, self.STYLE_SLOT)
             self.__prolongRent = True
+            self.installItem(style.intCD, self.STYLE_SLOT)
             self._events.onProlongStyleRent()
             return
 

@@ -17,9 +17,10 @@ from gui.prb_control import prbDispatcherProperty
 from gui.shared.economics import getGUIPrice
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.ui_spam.custom_aliases import TECH_TREE_EVENT
 from helpers import dependency
 from items import ITEM_TYPE_NAMES, getTypeOfCompactDescr as getTypeOfCD, vehicles as vehicles_core
-from skeletons.gui.game_control import ITradeInController, IBootcampController
+from skeletons.gui.game_control import ITradeInController, IBootcampController, IUISpamController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
@@ -38,6 +39,7 @@ def _checkCollectibleEnabled(state, lobbyContext=None):
 class _ItemsData(object):
     tradeIn = dependency.descriptor(ITradeInController)
     bootcamp = dependency.descriptor(IBootcampController)
+    uiSpamController = dependency.descriptor(IUISpamController)
 
     @dependency.replace_none_kwargs(itemsCache=IItemsCache)
     def __init__(self, dumper, itemsCache=None):
@@ -51,6 +53,7 @@ class _ItemsData(object):
         self._items = itemsCache.items
         self._stats = itemsCache.items.stats
         self._wereInBattle = self._getNodesWereInBattle()
+        self._hideTechTreeEvent = self.uiSpamController.shouldBeHidden(TECH_TREE_EVENT)
         return
 
     def __del__(self):
@@ -281,12 +284,15 @@ class _ItemsData(object):
         return state
 
     def _checkTechTreeEvents(self, state, guiItem, unlockProps):
-        if g_techTreeDP.techTreeEventsListener.hasActiveAction(guiItem.intCD) and guiItem.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
-            state |= NODE_STATE_FLAGS.HAS_TECH_TREE_EVENT
-            NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.ACTION)
-            noUnlockDiscount = not unlockProps or not unlockProps.discount
-            if noUnlockDiscount and guiItem.buyPrices.itemPrice.isActionPrice() and not guiItem.isRestorePossible():
-                NODE_STATE.add(state, NODE_STATE_FLAGS.ACTION)
+        if g_techTreeDP.techTreeEventsListener.hasActiveAction(guiItem.intCD):
+            if guiItem.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
+                if self._hideTechTreeEvent:
+                    state |= NODE_STATE_FLAGS.TECH_TREE_EVENT_DISCOUNT_ONLY
+                else:
+                    state |= NODE_STATE_FLAGS.HAS_TECH_TREE_EVENT
+                NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.ACTION)
+                noUnlockDiscount = not unlockProps or not unlockProps.discount
+                noUnlockDiscount and guiItem.buyPrices.itemPrice.isActionPrice() and not guiItem.isRestorePossible() and NODE_STATE.add(state, NODE_STATE_FLAGS.ACTION)
         return state
 
     def _addNode(self, nodeCD, node):

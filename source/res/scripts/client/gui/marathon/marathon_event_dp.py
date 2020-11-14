@@ -375,7 +375,12 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
                     self.__suspendFlag = True
                     break
 
-            self.__quest = sortedQuests[0]
+            currentStep, _ = self.getMarathonProgress()
+            try:
+                self.__quest = sortedQuests[currentStep * 2]
+            except IndexError:
+                self.__quest = sortedQuests[-1]
+
         else:
             self.__quest = None
         groups = self._eventsCache.getGroups(self.__marathonFilterFunc)

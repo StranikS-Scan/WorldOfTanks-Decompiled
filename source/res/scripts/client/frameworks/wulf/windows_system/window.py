@@ -299,3 +299,6 @@ class Window(PyObjectEntity):
             self._onContentReady()
         elif newStatus == ViewStatus.DESTROYED:
             self._onContentReleased()
+
+    def _onClientDisconnected(self):
+        pass

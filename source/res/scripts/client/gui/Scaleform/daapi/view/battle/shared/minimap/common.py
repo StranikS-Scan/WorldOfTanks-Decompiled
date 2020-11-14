@@ -52,9 +52,6 @@ class SimplePlugin(IPlugin):
     def applyNewSize(self, sizeIndex):
         pass
 
-    def invokeMarker(self, entryID, name, *args):
-        self._invoke(entryID, name, *args)
-
     def _addEntry(self, symbol, container, matrix=None, active=False, transformProps=settings.TRANSFORM_FLAG.DEFAULT):
         return self._parentObj.addEntry(symbol, container, matrix=matrix, active=active, transformProps=transformProps)
 
@@ -130,6 +127,12 @@ class EntriesPlugin(SimplePlugin):
         model.clear()
         return True
 
+    def _setMatrixEx(self, uniqueID, matrix):
+        model = self._entries.get(uniqueID, None)
+        if model:
+            self._setMatrix(model.getID(), matrix)
+        return
+
 
 class IntervalPlugin(EntriesPlugin):
     __slots__ = ('__callbackIDs',)
@@ -183,3 +186,20 @@ class IntervalPlugin(EntriesPlugin):
             del self.__callbackIDs[toKill[i]]
 
         return
+
+
+class BaseAreaMarkerEntriesPlugin(EntriesPlugin):
+    __slots__ = ()
+
+    def createMarker(self, uniqueID, symbol, container, matrix, active):
+        model = self._addEntryEx(uniqueID, symbol, container, matrix=matrix, active=active)
+        return True if model is not None else False
+
+    def deleteMarker(self, uniqueID):
+        self._delEntryEx(uniqueID)
+
+    def setMatrix(self, uniqueID, matrix):
+        self._setMatrixEx(uniqueID, matrix)
+
+    def update(self, *args, **kwargs):
+        super(BaseAreaMarkerEntriesPlugin, self).update()

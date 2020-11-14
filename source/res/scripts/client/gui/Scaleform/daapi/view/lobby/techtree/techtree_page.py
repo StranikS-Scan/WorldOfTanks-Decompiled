@@ -33,15 +33,19 @@ from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.utils.requesters.blueprints_requester import getNationalFragmentCD
 from gui.shared.utils.vehicle_collector_helper import hasCollectibleVehicles
 from gui.shop import canBuyGoldForVehicleThroughWeb
+from gui.ui_spam.custom_aliases import TECH_TREE_EVENT
 from helpers import dependency
 from helpers import time_utils
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.game_control import IUISpamController, IBootcampController
 _logger = getLogger(__name__)
 _VEHICLE_URL_FILTER_PARAM = 1
 
 class TechTree(TechTreeMeta):
     __settingsCore = dependency.descriptor(ISettingsCore)
+    __uiSpamController = dependency.descriptor(IUISpamController)
+    __bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self, ctx=None):
         super(TechTree, self).__init__(NationTreeData(dumpers.NationObjDumper()))
@@ -80,6 +84,8 @@ class TechTree(TechTreeMeta):
         self.__stopTopOfTheTreeSounds()
         nationIdx = nations.INDICES[nationName]
         SelectedNation.select(nationIdx)
+        if self.__uiSpamController.shouldBeHidden(TECH_TREE_EVENT):
+            g_techTreeDP.techTreeEventsListener.setNationViewed(nationIdx)
         self.__updateBlueprintBalance()
         self.__setVehicleCollectorState()
         self._data.load(nationIdx)
@@ -294,10 +300,10 @@ class TechTree(TechTreeMeta):
         selectedNation = SelectedNation.getIndex()
         nationalAmount = self.__nationalFragmentsData.get(selectedNation, 0)
         balanceStr = text_styles.main(backport.text(R.strings.blueprints.blueprintScreen.resourcesOnStorage()))
-        intFragmentVO = {'iconPath': backport.image(R.images.gui.maps.icons.blueprints.fragment.small.intelligence()),
+        intFragmentVO = {'iconPath': backport.image(R.images.gui.maps.icons.blueprints.fragment.special.intelligence()),
          'title': backport.getIntegralFormat(self.__intelligenceAmount),
          'fragmentCD': BlueprintTypes.INTELLIGENCE_DATA}
-        natFragmentVO = {'iconPath': backport.image(R.images.gui.maps.icons.blueprints.fragment.small.dyn(SelectedNation.getName())()),
+        natFragmentVO = {'iconPath': backport.image(R.images.gui.maps.icons.blueprints.fragment.special.dyn(SelectedNation.getName())()),
          'title': backport.getIntegralFormat(nationalAmount),
          'fragmentCD': getNationalFragmentCD(selectedNation)}
         balanceVO = {'balanceStr': balanceStr,
@@ -319,7 +325,7 @@ class TechTree(TechTreeMeta):
 
     def __setVehicleCollectorState(self):
         isVehicleCollectorEnabled = self._lobbyContext.getServerSettings().isCollectorVehicleEnabled()
-        self.as_setVehicleCollectorStateS(isVehicleCollectorEnabled and hasCollectibleVehicles(SelectedNation.getIndex()))
+        self.as_setVehicleCollectorStateS(isVehicleCollectorEnabled and hasCollectibleVehicles(SelectedNation.getIndex()) and not self.__bootcampController.isInBootcamp())
 
     def __onSettingsChanged(self):
         self.as_setAvailableNationsS(g_techTreeDP.getNationsMenuDataProvider())

@@ -47,8 +47,6 @@ AnchorHelper = namedtuple('AnchorHelper', ['location',
  'partIdx',
  'attachedPartIdx'])
 AnchorParams = namedtuple('AnchorParams', ['location', 'descriptor', 'id'])
-_DEFAULT_TURRET_YAW_ANGLE = 0.0
-_DEFAULT_GUN_PITCH_ANGLE = 0.0
 _logger = logging.getLogger(__name__)
 
 class _LoadStateNotifier(object):
@@ -143,6 +141,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__attachments = []
         self.__modelAnimators = []
         self.shadowManager = None
+        self.turretRotator = None
         cfg = hangarCFG()
         self.__currentEmblemsAlpha = cfg['emblems_alpha_undamaged']
         self.__showMarksOnGun = self.settingsCore.getSetting('showMarksOnGun')
@@ -249,12 +248,6 @@ class HangarVehicleAppearance(ScriptGameObject):
     def _getGunPitch(self):
         return self.turretAndGunAngles.getGunPitch()
 
-    def _getGunPitchLimits(self):
-        return self.__vDesc.gun.pitchLimits['absolute']
-
-    def _getTurretYawLimits(self):
-        return self.__vDesc.gun.turretYawLimits
-
     def __reload(self, vDesc, vState, outfit):
         self.__clearModelAnimators()
         self.__loadState.unload()
@@ -352,7 +345,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.collisions = resourceRefs['collisionAssembler']
         if succesLoaded:
             self.__setupModel(buildInd)
-        self.turretRotator = SimpleTurretRotator(self.compoundModel, easingCls=math_utils.Easing.squareEasing)
+        self.turretRotator = SimpleTurretRotator(self.compoundModel, self.__staticTurretYaw, self.__vDesc.hull.turretPositions[0], easingCls=math_utils.Easing.squareEasing)
         self.__applyAttachmentsVisibility()
         self.__fireResourcesLoadedEvent()
         super(HangarVehicleAppearance, self).activate()
@@ -469,8 +462,6 @@ class HangarVehicleAppearance(ScriptGameObject):
                 self.__staticTurretYaw = 0.0
             if self.__staticGunPitch is None:
                 self.__staticGunPitch = 0.0
-        turretYawMatrix = math_utils.createRotationMatrix((self.__staticTurretYaw, 0.0, 0.0))
-        self.__vEntity.model.node(TankPartNames.TURRET, turretYawMatrix)
         gunPitchMatrix = math_utils.createRotationMatrix((0.0, self.__staticGunPitch, 0.0))
         self.__setGunMatrix(gunPitchMatrix)
         return
@@ -623,41 +614,35 @@ class HangarVehicleAppearance(ScriptGameObject):
         return position
 
     def updateCustomization(self, outfit=None, callback=None):
-        if self.__isVehicleDestroyed or g_currentVehicle.item is None:
+        if self.__isVehicleDestroyed:
             return
-        else:
-            try:
-                vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
-            except AttributeError:
-                vehicleCD = None
-
-            outfit = outfit or self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehicleCD)
-            if self.recreateRequired(outfit):
-                self.refresh(outfit, callback)
-                return
-            self.__updateCamouflage(outfit)
-            self.__updatePaint(outfit)
-            self.__updateDecals(outfit)
-            self.__updateProjectionDecals(outfit)
-            self.__updateSequences(outfit)
+        vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
+        outfit = outfit or self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehicleCD)
+        if self.recreateRequired(outfit):
+            self.refresh(outfit, callback)
             return
+        self.__updateCamouflage(outfit)
+        self.__updatePaint(outfit)
+        self.__updateDecals(outfit)
+        self.__updateProjectionDecals(outfit)
+        self.__updateSequences(outfit)
 
-    def rotateTurretForAnchor(self, anchorId, useStaticTurretYaw=False):
+    def rotateTurretForAnchor(self, anchorId, duration=EASING_TRANSITION_DURATION):
         if self.compoundModel is None or self.__vDesc is None:
             return False
         else:
-            defaultYaw = self.__staticTurretYaw if useStaticTurretYaw else self._getTurretYaw()
+            defaultYaw = self._getTurretYaw()
             turretYaw = self.__getTurretYawForAnchor(anchorId, defaultYaw)
-            self.turretRotator.start(turretYaw, rotationTime=EASING_TRANSITION_DURATION)
+            self.turretRotator.start(turretYaw, rotationTime=duration)
             return
 
-    def rotateGunToDefault(self, useStaticGunPitch=False):
+    def rotateGunToDefault(self):
         if self.compoundModel is None:
             return False
         else:
             localGunMatrix = self.__getGunNode().local
             currentGunPitch = localGunMatrix.pitch
-            gunPitchAngle = self.__staticGunPitch if useStaticGunPitch else self._getGunPitch()
+            gunPitchAngle = self._getGunPitch()
             if abs(currentGunPitch - gunPitchAngle) < 0.0001:
                 return False
             gunPitchMatrix = math_utils.createRotationMatrix((0.0, gunPitchAngle, 0.0))

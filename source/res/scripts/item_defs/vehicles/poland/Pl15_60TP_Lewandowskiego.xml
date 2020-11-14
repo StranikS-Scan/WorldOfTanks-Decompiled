@@ -64,6 +64,13 @@
       <undamaged>	vehicles/poland/Pl15_60TP_Lewandowskiego/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/poland/Pl15_60TP_Lewandowskiego/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/poland/Pl15_60TP_Lewandowskiego/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <Pl15_60TP_Lewandowskiego_3Dst>
+          <undamaged>	vehicles/poland/Pl15_60TP_Lewandowskiego/_skins/Pl15_60TP_Lewandowskiego_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/poland/Pl15_60TP_Lewandowskiego/_skins/Pl15_60TP_Lewandowskiego_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/poland/Pl15_60TP_Lewandowskiego/_skins/Pl15_60TP_Lewandowskiego_3Dst/crash/lod0/Hull.model	</exploded>
+        </Pl15_60TP_Lewandowskiego_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -87,10 +94,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.601945 0.476595 2.52309	</rayStart>
-        <rayEnd>	-0.601941 0.288274 2.45574	</rayEnd>
+        <rayStart>	-0.682167 0.612389 2.23508	</rayStart>
+        <rayEnd>	-0.68213 0.42405 2.16778	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
-        <size>	0.25	</size>
+        <size>	0.23	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
       </slot>
@@ -897,6 +904,48 @@
         <anchorPosition>	1.97032 0.187968 0.433547	</anchorPosition>
         <anchorDirection>	0.833542 0.552389 -0.00861165	</anchorDirection>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15060	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Pl15_60TP_Lewandowskiego_3Dst	</compatibleModels>
+        <position>	-0.471752 1.17951 2.98529	</position>
+        <rotation>	0.540513 0.00709 3.1247	</rotation>
+        <scale>	0.62621 0.20798 0.626208	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	-0.470762 0.279056 3.01011	</anchorPosition>
+        <anchorDirection>	0.0205391 0.857323 0.514369	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15061	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Pl15_60TP_Lewandowskiego_3Dst	</compatibleModels>
+        <position>	-1.95035 0.946995 2.54773	</position>
+        <rotation>	1.56856 1.56914 -0.000105294	</rotation>
+        <scale>	0.442464 0.152468 0.442461	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.250463	</clipAngle>
+        <anchorPosition>	-1.98606 0.00510117 2.54768	</anchorPosition>
+        <anchorDirection>	-0.999996 -0.00226432 -0.0015268	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15062	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Pl15_60TP_Lewandowskiego_3Dst	</compatibleModels>
+        <position>	1.93701 0.946998 2.54775	</position>
+        <rotation>	1.56853 -1.56921 -0.000102989	</rotation>
+        <scale>	0.442464 0.152468 0.44246	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.250463	</clipAngle>
+        <anchorPosition>	1.97273 0.00510401 2.54769	</anchorPosition>
+        <anchorDirection>	0.999996 -0.00229738 -0.0016903	</anchorDirection>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -939,6 +988,13 @@
         <undamaged>	vehicles/poland/Pl15_60TP_Lewandowskiego/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/poland/Pl15_60TP_Lewandowskiego/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/poland/Pl15_60TP_Lewandowskiego/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <Pl15_60TP_Lewandowskiego_3Dst>
+            <undamaged>	vehicles/poland/Pl15_60TP_Lewandowskiego/_skins/Pl15_60TP_Lewandowskiego_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/poland/Pl15_60TP_Lewandowskiego/_skins/Pl15_60TP_Lewandowskiego_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/poland/Pl15_60TP_Lewandowskiego/_skins/Pl15_60TP_Lewandowskiego_3Dst/crash/lod0/Chassis.model	</exploded>
+          </Pl15_60TP_Lewandowskiego_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1743,6 +1799,13 @@
             <undamaged>	vehicles/poland/Pl15_60TP_Lewandowskiego/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/poland/Pl15_60TP_Lewandowskiego/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/poland/Pl15_60TP_Lewandowskiego/crash/lod0/Gun_03.model	</exploded>
+            <sets>
+              <Pl15_60TP_Lewandowskiego_3Dst>
+                <undamaged>	vehicles/poland/Pl15_60TP_Lewandowskiego/_skins/Pl15_60TP_Lewandowskiego_3Dst/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/poland/Pl15_60TP_Lewandowskiego/_skins/Pl15_60TP_Lewandowskiego_3Dst/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/poland/Pl15_60TP_Lewandowskiego/_skins/Pl15_60TP_Lewandowskiego_3Dst/crash/lod0/Gun_03.model	</exploded>
+              </Pl15_60TP_Lewandowskiego_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/poland/Pl15_60TP_Lewandowskiego/collision/Gun_03.model	</collisionModelServer>
@@ -1845,6 +1908,13 @@
         <undamaged>	vehicles/poland/Pl15_60TP_Lewandowskiego/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/poland/Pl15_60TP_Lewandowskiego/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/poland/Pl15_60TP_Lewandowskiego/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <Pl15_60TP_Lewandowskiego_3Dst>
+            <undamaged>	vehicles/poland/Pl15_60TP_Lewandowskiego/_skins/Pl15_60TP_Lewandowskiego_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/poland/Pl15_60TP_Lewandowskiego/_skins/Pl15_60TP_Lewandowskiego_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/poland/Pl15_60TP_Lewandowskiego/_skins/Pl15_60TP_Lewandowskiego_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </Pl15_60TP_Lewandowskiego_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/poland/Pl15_60TP_Lewandowskiego/collision/Turret_01.model	</collisionModelServer>
@@ -1870,8 +1940,8 @@
         <slot>
           <slotType>	player	</slotType>
           <slotId>	33000	</slotId>
-          <rayStart>	-0.890325 0.449258 1.47108	</rayStart>
-          <rayEnd>	-0.737596 0.336539 1.40808	</rayEnd>
+          <rayStart>	-0.860476 0.427228 1.45877	</rayStart>
+          <rayEnd>	-0.767445 0.358569 1.42039	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.296	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
@@ -1881,8 +1951,8 @@
           <slotType>	player	</slotType>
           <slotId>	33001	</slotId>
           <isMirrored>	true	</isMirrored>
-          <rayStart>	0.890325 0.449258 1.47108	</rayStart>
-          <rayEnd>	0.737596 0.336539 1.40808	</rayEnd>
+          <rayStart>	0.823274 0.399772 1.44342	</rayStart>
+          <rayEnd>	0.804648 0.386025 1.43574	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.296	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
@@ -2254,6 +2324,48 @@
           <clipAngle>	0.0126069	</clipAngle>
           <anchorPosition>	1.44104 0.580788 0.204297	</anchorPosition>
           <anchorDirection>	0.963307 0.267823 0.0176265	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35026	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Pl15_60TP_Lewandowskiego_3Dst	</compatibleModels>
+          <position>	-1.01277 2.11376 0.657414	</position>
+          <rotation>	0.863642 -0.98362 -3.07915	</rotation>
+          <scale>	0.694062 0.884225 0.694068	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.000535537	</clipAngle>
+          <anchorPosition>	-1.05962 0.577921 0.763517	</anchorPosition>
+          <anchorDirection>	-0.666223 0.648407 0.368397	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35027	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Pl15_60TP_Lewandowskiego_3Dst	</compatibleModels>
+          <position>	0.000014 2.38216 1.1374	</position>
+          <rotation>	0.0682403 -0.000001 3.11439	</rotation>
+          <scale>	0.98051 0.331 0.980557	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	4352	</showOn>
+          <clipAngle>	0.736768	</clipAngle>
+          <anchorPosition>	0.003639 0.933639 1.22668	</anchorPosition>
+          <anchorDirection>	0.0271994 0.997303 0.0681621	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35028	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Pl15_60TP_Lewandowskiego_3Dst	</compatibleModels>
+          <position>	1.15477 2.12487 0.381	</position>
+          <rotation>	0.864273 1.13088 -3.09205	</rotation>
+          <scale>	0.580953 0.740126 0.580958	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.000535537	</clipAngle>
+          <anchorPosition>	1.22161 0.608484 0.498149	</anchorPosition>
+          <anchorDirection>	0.666268 0.648396 0.368333	</anchorDirection>
         </slot>
       </customizationSlots>
       <customization>

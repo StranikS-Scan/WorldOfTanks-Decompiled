@@ -37,7 +37,6 @@ if typing.TYPE_CHECKING:
     from typing import Dict, Callable, Optional, Union
     from account_helpers.dog_tags import DogTags as DogTagsAccountHelper
     from frameworks.wulf import View, ViewEvent, ViewModel
-    from dog_tags_common.player_dog_tag import DisplayableDogTag
 _logger = logging.getLogger(__name__)
 DEFAULT_DOG_TAGS_TAB = ComponentViewType.ENGRAVING.getTabIdx()
 DOG_TAG_INFO_PAGE_KEY = 'infoPage'
@@ -68,11 +67,17 @@ class DogTags(ViewImpl):
         return
 
     def createToolTipContent(self, event, contentID):
-        if contentID in self._tooltipModelFactories:
-            model = self._tooltipModelFactories[contentID]()
+        compIdArgName = 'componentId'
+        if not event.hasArgument(compIdArgName):
+            _logger.error('DogTags view tried to create tooltip without specifying component ID')
+            return None
+        elif contentID not in self._tooltipModelFactories:
+            _logger.error('DogTags view tried creating invalid tooltip with contentID %d', contentID)
+            return None
+        else:
+            model = self._tooltipModelFactories[contentID](event.getArgument(compIdArgName))
             settings = ViewSettings(contentID, model=model)
             return ViewImpl(settings)
-        _logger.error('DogTags view tried creating invalid tooltip with contentID %d', contentID)
 
     @property
     def viewModel(self):
@@ -125,9 +130,8 @@ class DogTags(ViewImpl):
 
     def _gradesTooltipModelFactory(self, modelCtor):
 
-        def _inner():
-            dogTag = self._dogTagsHelper.getDisplayableDT()
-            engraving = dogTag.getComponentByType(ComponentViewType.ENGRAVING)
+        def _inner(engravingId):
+            engraving = self._dogTagsHelper.getDogTagComponentForAccount(engravingId)
             viewModel = modelCtor()
             with viewModel.transaction() as model:
                 model.setCurrentGrade(engraving.grade)
@@ -135,17 +139,16 @@ class DogTags(ViewImpl):
                 for grade in engraving.componentDefinition.grades:
                     gradesArray.addReal(grade)
 
-                model.setComponentTitle(self._composer.getComponentTitleRes(dogTag.getComponentByType(ComponentViewType.ENGRAVING).compId))
+                model.setComponentTitle(self._composer.getComponentTitleRes(engraving.compId))
                 model.setProgressNumberType(engraving.componentDefinition.numberType.value)
             return viewModel
 
         return _inner
 
-    def _threeMonthTooltipModelFactory(self):
-        dogTag = self._dogTagsHelper.getDisplayableDT()
+    def _threeMonthTooltipModelFactory(self, engravingId):
         viewModel = ThreeMonthsTooltipModel()
         with viewModel.transaction() as model:
-            engravingComponent = dogTag.getComponentByType(ComponentViewType.ENGRAVING)
+            engravingComponent = self._dogTagsHelper.getDogTagComponentForAccount(engravingId)
             engravingId = engravingComponent.compId
             skillRecords = sorted(self._dogTagsHelper.getSkillData(engravingId), key=lambda e: e.date)
             indexMax = -1

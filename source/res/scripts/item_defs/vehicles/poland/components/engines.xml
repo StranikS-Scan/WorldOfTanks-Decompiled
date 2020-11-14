@@ -35,10 +35,6 @@
     <SGT_3Cz_M>	34	</SGT_3Cz_M>
     <Rytla_Wernera_M>	35	</Rytla_Wernera_M>
     <Development_Engine>	65000	</Development_Engine>
-    <Rytla_Wernera_x2_HELL>	2	</Rytla_Wernera_x2_HELL>
-    <W_12_5_P_HELL>	19	</W_12_5_P_HELL>
-    <MT_50_T_HELL>	36	</MT_50_T_HELL>
-    <Maybach_HL_157_HELL>	37	</Maybach_HL_157_HELL>
   </ids>
   <shared>
     <PLInz425>
@@ -607,76 +603,9 @@
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	4	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
+      <notInShop>	true	</notInShop>
       <rpm_min>	376	</rpm_min>
       <rpm_max>	2072	</rpm_max>
     </Development_Engine>
-    <Rytla_Wernera_x2_HELL>
-      <userString>	#poland_vehicles:Rytla_Wernera_x2	</userString>
-      <tags>	diesel	</tags>
-      <level>	8	</level>
-      <price>	54800	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	750	</power>
-      <weight>	1400	</weight>
-      <maxHealth>	260	</maxHealth>
-      <maxRegenHealth>	129	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	320	</rpm_min>
-      <rpm_max>	2240	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </Rytla_Wernera_x2_HELL>
-    <W_12_5_P_HELL>
-      <userString>	#poland_vehicles:W_12_5_P	</userString>
-      <tags>	diesel	</tags>
-      <level>	9	</level>
-      <price>	83000	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	800	</power>
-      <weight>	1100	</weight>
-      <maxHealth>	360	</maxHealth>
-      <maxRegenHealth>	170	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	306	</rpm_min>
-      <rpm_max>	2280	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </W_12_5_P_HELL>
-    <MT_50_T_HELL>
-      <userString>	#poland_vehicles:MT_50_T	</userString>
-      <tags>	diesel	</tags>
-      <level>	10	</level>
-      <price>	125000	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	650	</power>
-      <weight>	2000	</weight>
-      <maxHealth>	370	</maxHealth>
-      <maxRegenHealth>	185	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	346	</rpm_min>
-      <rpm_max>	2160	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </MT_50_T_HELL>
-    <Maybach_HL_157_HELL>
-      <userString>	#poland_vehicles:Maybach_HL_157	</userString>
-      <tags>	gasoline	</tags>
-      <level>	7	</level>
-      <price>	34000	</price>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	450	</power>
-      <weight>	800	</weight>
-      <maxHealth>	260	</maxHealth>
-      <maxRegenHealth>	129	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	343	</rpm_min>
-      <rpm_max>	2701	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </Maybach_HL_157_HELL>
   </shared>
 </engines.xml>

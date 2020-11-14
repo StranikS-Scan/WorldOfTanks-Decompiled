@@ -18,6 +18,8 @@ from helpers import time_utils
 from gui.shared.formatters import text_styles, icons
 from helpers import dependency, int2roman
 from gui.impl import backport
+from items import makeIntCompactDescrByID
+from items.components.c11n_constants import CustomizationType
 from skeletons.gui.game_control import IEventProgressionController, IEpicBattleMetaGameController, IBattleRoyaleController, IQuestsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -83,12 +85,14 @@ def getTimeTo(timeStamp, textId):
     return backport.text(textId, value=text_styles.stats(timeLeft))
 
 
-def getTimeToLeftStr(timeStamp):
-    return getTimeTo(timeStamp, R.strings.tooltips.eventProgression.timeToLeft())
+@dependency.replace_none_kwargs(eventProgression=IEventProgressionController)
+def getTimeToLeftStr(timeStamp, eventProgression=None):
+    return getTimeTo(timeStamp, R.strings.tooltips.eventProgression.timeToLeft.season() if eventProgression.getCurrentSeason().isSingleCycleSeason() else R.strings.tooltips.eventProgression.timeToLeft.cycle())
 
 
-def getTimeToStartStr(timeStamp):
-    return getTimeTo(timeStamp, R.strings.tooltips.eventProgression.timeToStart())
+@dependency.replace_none_kwargs(eventProgression=IEventProgressionController)
+def getTimeToStartStr(timeStamp, eventProgression=None):
+    return getTimeTo(timeStamp, R.strings.tooltips.eventProgression.timeToStart.season() if (eventProgression.getCurrentSeason() or eventProgression.getNextSeason()).isSingleCycleSeason() else R.strings.tooltips.eventProgression.timeToStart.cycle())
 
 
 class EventProgressionController(IEventProgressionController):
@@ -111,6 +115,7 @@ class EventProgressionController(IEventProgressionController):
         self.__rewardPointsTokenID = ''
         self.__seasonPointsTokenID = ''
         self.__rewardVehicles = []
+        self.__rewardStyles = []
         self.__currentMode = None
         self.__questCardLevelTxtId = 0
         self.__progressionNameCycleTxtId = 0
@@ -176,6 +181,10 @@ class EventProgressionController(IEventProgressionController):
     @property
     def rewardVehicles(self):
         return self.__rewardVehicles
+
+    @property
+    def rewardStyles(self):
+        return self.__rewardStyles
 
     @property
     def questCardLevelTxtId(self):
@@ -309,6 +318,9 @@ class EventProgressionController(IEventProgressionController):
 
     def getRewardVehiclePrice(self, vehicleCD):
         return {intCD:price for intCD, price in self.__rewardVehicles}.get(vehicleCD, 0)
+
+    def getRewardStylePrice(self, styleID):
+        return {styleId:price for styleId, price in self.__rewardStyles}.get(styleID, 0)
 
     def getAllLevelAwards(self):
         awardsData = dict()
@@ -494,7 +506,7 @@ class EventProgressionController(IEventProgressionController):
         items = [self.__getTopBackgroundTooltipWithTextData()]
         bottom = -30
         if not self.isCurrentSeasonInPrimeTime() and not self.modeIsAvailable():
-            items.append(self.__getRewardVehiclesData())
+            items.append(self.__getRewardStylesData() if self.__rewardStyles else self.__getRewardVehiclesData())
             bottom = 0
         return formatters.packBuildUpBlockData(items, padding=formatters.packPadding(bottom=bottom))
 
@@ -502,6 +514,10 @@ class EventProgressionController(IEventProgressionController):
         season = self.getCurrentSeason() or self.getNextSeason()
         currentTime = time_utils.getCurrentLocalServerTimestamp()
         isPrimeTime = self.isCurrentSeasonInPrimeTime()
+        if season and season.isSingleCycleSeason():
+            seasonsOverResID = R.strings.tooltips.eventProgression.allSeasonsAreOver.single()
+        else:
+            seasonsOverResID = R.strings.tooltips.eventProgression.allSeasonsAreOver.multi()
         if isPrimeTime or self.modeIsAvailable():
             cycle = season.getCycleInfo()
             getDate = lambda c: c.endDate
@@ -511,18 +527,24 @@ class EventProgressionController(IEventProgressionController):
             getDate = lambda c: c.startDate
             getTimeToStr = getTimeToStartStr
         if cycle is not None:
-            cycleNumber = self.getCurrentOrNextActiveCycleNumber(season)
             if self.modeIsEnabled():
-                title = backport.text(self.__progressionNameCycleTxtId, season=int2roman(cycleNumber))
+                if season.isSingleCycleSeason():
+                    infoStrResID = R.strings.menu.headerButtons.battle.types.epic.extra.currentSeason()
+                    seasonResID = R.strings.epic_battle.season.num(season.getSeasonID())
+                    name = backport.text(seasonResID.name()) if seasonResID else None
+                else:
+                    infoStrResID = self.__progressionNameCycleTxtId
+                    name = self.getCurrentOrNextActiveCycleNumber(season)
+                title = backport.text(infoStrResID, season=name)
             else:
                 title = backport.text(self.__selectorLabelTxtId)
-            description = getTimeToStr(getDate(cycle) - currentTime) if self.modeIsEnabled() else backport.text(R.strings.tooltips.eventProgression.disabled())
+            description = getTimeToStr(getDate(cycle) - currentTime) if self.modeIsEnabled() else text_styles.error(backport.text(R.strings.tooltips.eventProgression.disabled()))
         else:
             title = ''
             description = ''
             if self.isFrontLine:
-                title = backport.text(R.strings.tooltips.eventProgression.allSeasonsAreOver())
-                description = backport.text(R.strings.tooltips.eventProgression.allSeasonsAreOver())
+                title = backport.text(R.strings.tooltips.eventProgression.frontLine())
+                description = backport.text(seasonsOverResID) if self.modeIsEnabled() else text_styles.error(backport.text(R.strings.tooltips.eventProgression.disabled()))
             elif self.isSteelHunter:
                 title = backport.text(self.__allCyclesWasEndedResId)
         return formatters.packBuildUpBlockData([formatters.packImageTextBlockData(title=text_styles.middleTitle(title), txtPadding=formatters.packPadding(top=8, left=94), desc=text_styles.main(description), descPadding=formatters.packPadding(top=8, left=94), txtOffset=1, txtGap=-1, img=backport.image(self.__progressionIconId), imgPadding=formatters.packPadding(top=1, left=18))])
@@ -535,8 +557,14 @@ class EventProgressionController(IEventProgressionController):
         season = self.__currentController.getCurrentSeason() or self.__currentController.getNextSeason()
         levelInfo = self.getPlayerLevelInfo()
         cycleNumber = self.getCurrentOrNextActiveCycleNumber(season)
-        seasonStr = backport.text(self.__progressionNameCycleTxtId, season=int2roman(cycleNumber))
-        seasonDescr = text_styles.middleTitle(seasonStr)
+        if season.isSingleCycleSeason():
+            infoStrResID = R.strings.menu.headerButtons.battle.types.epic.extra.currentSeason()
+            seasonResID = R.strings.epic_battle.season.num(season.getSeasonID())
+            name = backport.text(seasonResID.name()) if seasonResID else None
+        else:
+            infoStrResID = self.__progressionNameCycleTxtId
+            name = int2roman(cycleNumber)
+        seasonDescr = text_styles.middleTitle(backport.text(infoStrResID, season=name))
         items.append(formatters.packTextBlockData(text=seasonDescr, useHtml=True, padding=formatters.packPadding(left=20, right=20)))
         currentCycle = season.getCycleInfo()
         tDiff = currentCycle.endDate - time_utils.getCurrentLocalServerTimestamp() if currentCycle is not None else 0
@@ -627,10 +655,15 @@ class EventProgressionController(IEventProgressionController):
         return formatters.packBuildUpBlockData(items, padding=formatters.packPadding(top=marginTop))
 
     def __getRewardVehiclesData(self):
-        getRewards = self.__getRewardVehicles
-        rewardVehiclesNames = [ text_styles.stats(v.shortUserName) for v in getRewards() ]
+        rewardVehiclesNames = [ text_styles.stats(v.shortUserName) for v in self.__getRewardVehicles() ]
         promo = R.strings.event_progression.selectorTooltip.eventProgression.promo
         text = backport.text(promo.multi() if len(rewardVehiclesNames) > 1 else promo.single(), vehicles=', '.join(rewardVehiclesNames[:-1]), vehicle=rewardVehiclesNames[-1])
+        return formatters.packTextBlockData(text_styles.main(text), padding=formatters.packPadding(top=-10, left=20, right=25))
+
+    def __getRewardStylesData(self):
+        rewardStylesNames = [ text_styles.stats(s.userName) for s in self.__getRewardStyles() ]
+        promo = R.strings.event_progression.selectorTooltip.eventProgression.promo
+        text = backport.text(promo.multi() if len(rewardStylesNames) > 1 else promo.single(), styles=', '.join(rewardStylesNames[:-1]), style=rewardStylesNames[-1])
         return formatters.packTextBlockData(text_styles.main(text), padding=formatters.packPadding(top=-10, left=20, right=25))
 
     def __getTopBackgroundTooltipWithTextData(self):
@@ -649,6 +682,11 @@ class EventProgressionController(IEventProgressionController):
         rewardVehiclesIds = [ intCD for intCD, _ in self.rewardVehicles ]
         rewardVehicles = self.__itemsCache.items.getVehicles(REQ_CRITERIA.IN_CD_LIST(rewardVehiclesIds))
         return [ rewardVehicles[intCD] for intCD in rewardVehiclesIds ]
+
+    def __getRewardStyles(self):
+        rewardStylesIds = [ makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, styleID) for styleID, _ in self.rewardStyles ]
+        rewardStyles = self.__itemsCache.items.getStyles(REQ_CRITERIA.IN_CD_LIST(rewardStylesIds))
+        return [ rewardStyles[intCD] for intCD in rewardStylesIds ]
 
     def __clear(self):
         self.__itemsCache.onSyncCompleted -= self.__updatePlayerData
@@ -673,6 +711,7 @@ class EventProgressionController(IEventProgressionController):
         self.__rewardPointsTokenID = s.rewardPointsTokenID
         self.__seasonPointsTokenID = s.seasonPointsTokenID
         self.__rewardVehicles = s.rewardVehicles
+        self.__rewardStyles = s.rewardStyles
         self.__questPrefix = s.questPrefix
         if self.isSteelHunter is True:
             self.__updateSteelHunterData()

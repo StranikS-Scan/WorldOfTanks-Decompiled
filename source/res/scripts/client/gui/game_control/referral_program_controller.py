@@ -16,13 +16,14 @@ from gui.wgnc.custom_actions_keeper import CustomActionsKeeper
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IReferralProgramController
+from skeletons.gui.game_control import IReferralProgramController, IUISpamController
 from skeletons.gui.game_window_controller import GameWindowController
 _logger = logging.getLogger(__name__)
 
 class ReferralProgramController(GameWindowController, IReferralProgramController):
     __settingsCore = dependency.descriptor(ISettingsCore)
     __appLoader = dependency.descriptor(IAppLoader)
+    __uiSpamController = dependency.descriptor(IUISpamController)
 
     def __init__(self):
         super(ReferralProgramController, self).__init__()
@@ -44,7 +45,8 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
         return not self.__settingsCore.serverSettings.getUIStorage().get(UI_STORAGE_KEYS.REFERRAL_BUTTON_CIRCLES_SHOWN) and isCurrentUserRecruit()
 
     def getBubbleCount(self):
-        return AccountSettings.getCounters(REFERRAL_COUNTER)
+        count = AccountSettings.getCounters(REFERRAL_COUNTER)
+        return 0 if count and self.__uiSpamController.shouldBeHidden(REFERRAL_COUNTER) and not self.isFirstIndication() else count
 
     def updateBubble(self):
         browserView = self.__getBrowserView()
@@ -101,6 +103,7 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
 
     def __resetBubbleCount(self):
         AccountSettings.setCounters(REFERRAL_COUNTER, 0)
+        self.__uiSpamController.setVisited(REFERRAL_COUNTER)
         self.__updateBubbleEvent()
 
     def __updateBubbleEvent(self):

@@ -8,7 +8,7 @@ from gui.Scaleform.daapi.view.lobby.event_progression.after_battle_reward_view_h
 from gui.Scaleform.daapi.view.lobby.event_progression import after_battle_reward_view_helpers
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import EpicCurtailingAwardsComposer
 from gui.Scaleform.daapi.view.meta.EpicBattlesAfterBattleViewMeta import EpicBattlesAfterBattleViewMeta
-from gui.server_events.awards_formatters import AWARDS_SIZES, getEpicViewAwardPacker
+from gui.server_events.awards_formatters import getEpicViewAwardPacker
 from gui.server_events.bonuses import EpicAbilityPtsBonus
 from gui.shared.formatters import text_styles
 from gui.shared.utils import toUpper
@@ -81,7 +81,7 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         achievedRank = max(epicMetaGame.get('playerRank', 0), 1)
         rankNameId = R.strings.epic_battle.rank.dyn('rank' + str(achievedRank))
         rankName = toUpper(backport.text(rankNameId())) if rankNameId.exists() else ''
-        awardsVO = self._awardsFormatter.getFormattedBonuses(self.__getBonuses(pMetaLevel), size=AWARDS_SIZES.BIG)
+        awardsVO = self._awardsFormatter.getFormattedBonuses(self.__getBonuses(prevPMetaLevel, pMetaLevel))
         fameBarVisible = True
         if prevPMetaLevel >= maxMetaLevel or pMetaLevel >= maxMetaLevel:
             boosterFLXP = famePointsReceived - originalFlXP if famePointsReceived > originalFlXP else 0
@@ -106,10 +106,12 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         self.as_setDataS(data)
         return
 
-    def __getBonuses(self, level):
+    def __getBonuses(self, prevLevel, currentLevel):
         questsProgressData = self.__ctx['reusableInfo'].personal.getQuestsProgress()
-        bonuses = after_battle_reward_view_helpers.getQuestBonuses(questsProgressData, (EVENT_PROGRESSION_FINISH_TOKEN, self.__epicMetaGameCtrl.TOKEN_QUEST_ID), self.__epicMetaGameCtrl.TOKEN_QUEST_ID + str(level))
-        bonuses.extend([self.__getAbilityPointsRewardBonus(level)])
+        bonuses = after_battle_reward_view_helpers.getQuestBonuses(questsProgressData, (EVENT_PROGRESSION_FINISH_TOKEN, self.__epicMetaGameCtrl.TOKEN_QUEST_ID), self.__epicMetaGameCtrl.TOKEN_QUEST_ID + str(currentLevel))
+        for level in range(prevLevel, currentLevel + 1):
+            bonuses.extend([self.__getAbilityPointsRewardBonus(level)])
+
         bonuses = after_battle_reward_view_helpers.formatBonuses(bonuses)
         return bonuses
 

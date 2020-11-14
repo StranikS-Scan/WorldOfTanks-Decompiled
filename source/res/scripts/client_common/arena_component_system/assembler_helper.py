@@ -14,15 +14,10 @@ from arena_component_system.protection_zone_component import ProtectionZoneCompo
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from arena_components.death_zone_component import BRDeathZoneComponent
 from arena_components.player_data_component import PlayerDataComponent
-from arena_component_system.arena_game_event_component import GameEventComponent
-from arena_component_system.event_battle_component_assembler import EventBattleComponentAssembler
-from arena_components.loot import LootComponent
-from arena_components.event_control_point import EventControlPointComponent
 COMPONENT_ASSEMBLER = {ARENA_BONUS_TYPE.EPIC_RANDOM: EpicRandomBattleComponentAssembler,
  ARENA_BONUS_TYPE.EPIC_RANDOM_TRAINING: EpicRandomBattleComponentAssembler,
  ARENA_BONUS_TYPE.EPIC_BATTLE: EpicBattleComponentAssembler,
- ARENA_BONUS_TYPE.EPIC_BATTLE_TRAINING: EpicBattleComponentAssembler,
- ARENA_BONUS_TYPE.EVENT_BATTLES: EventBattleComponentAssembler}
+ ARENA_BONUS_TYPE.EPIC_BATTLE_TRAINING: EpicBattleComponentAssembler}
 ARENA_BONUS_TYPE_CAP_COMPONENTS = {'sectorBaseComponent': (ARENA_BONUS_TYPE_CAPS.SECTOR_MECHANICS, SectorBaseArenaComponent),
  'sectorComponent': (ARENA_BONUS_TYPE_CAPS.SECTOR_MECHANICS, SectorsArenaComponent),
  'destructibleEntityComponent': (ARENA_BONUS_TYPE_CAPS.DESTRUCTIBLE_ENTITIES, DestructibleEntitiesComponent),
@@ -32,7 +27,4 @@ ARENA_BONUS_TYPE_CAP_COMPONENTS = {'sectorBaseComponent': (ARENA_BONUS_TYPE_CAPS
  'airDropComponent': (ARENA_BONUS_TYPE_CAPS.LOOT_DROP, AirdropsComponent),
  'kamikazeActivatedComponent': (ARENA_BONUS_TYPE_CAPS.BATTLEROYALE, KamikazeActivationEffect),
  'playerRankComponent': (ARENA_BONUS_TYPE_CAPS.BATTLEROYALE, PlayerDataComponent),
- 'berserkerEffectComponent': (ARENA_BONUS_TYPE_CAPS.BATTLEROYALE, BerserkerEffectComponent),
- 'gameEventComponent': (ARENA_BONUS_TYPE_CAPS.EVENT_BATTLES, GameEventComponent),
- 'loot': (ARENA_BONUS_TYPE_CAPS.EVENT_BATTLES, LootComponent),
- 'ecp': (ARENA_BONUS_TYPE_CAPS.EVENT_BATTLES, EventControlPointComponent)}
+ 'berserkerEffectComponent': (ARENA_BONUS_TYPE_CAPS.BATTLEROYALE, BerserkerEffectComponent)}

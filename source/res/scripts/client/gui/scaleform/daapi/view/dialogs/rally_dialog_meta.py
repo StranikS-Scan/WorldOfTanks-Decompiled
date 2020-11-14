@@ -39,12 +39,6 @@ class UnitConfirmDialogMeta(I18nConfirmDialogMeta):
         super(UnitConfirmDialogMeta, self).__init__(makeEntityI18nKey(_C_TYPE.UNIT, prbType, prefix), titleCtx=titleCtx, messageCtx=messageCtx, focusedID=focusedID)
 
 
-class LeaveInfoDialogMeta(I18nInfoDialogMeta):
-
-    def __init__(self, ctrlType, entityType, prefix):
-        super(LeaveInfoDialogMeta, self).__init__(makeEntityI18nKey(ctrlType, entityType, prefix))
-
-
 class StrongholdConfirmDialogMeta(I18nDialogMeta):
 
     def __init__(self, key, subKey='', titleCtx=None, messageCtx=None, focusedID=None):

@@ -118,3 +118,4 @@ class BotDogTagStrategy(Enum):
 
 DEFAULT_BOT_STRATEGY = BotDogTagStrategy.DEFAULT
 DEFAULT_BOT_STRATEGY_DEVELOP = BotDogTagStrategy.RANDOM
+MAX_GRADE = 9

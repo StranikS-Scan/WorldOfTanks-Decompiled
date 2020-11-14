@@ -11,13 +11,14 @@ if typing.TYPE_CHECKING:
     from skeletons.gui.game_control import IBattlePassController
 
 class FinalRewardLogic(object):
-    __slots__ = ('__battlePassController', '__machine', '__observers')
+    __slots__ = ('__battlePassController', '__machine', '__observers', '__startAfterTurningOnMachine')
 
     def __init__(self, battlePassController, machine):
         super(FinalRewardLogic, self).__init__()
         self.__battlePassController = weakref.proxy(battlePassController)
         self.__machine = machine
         self.__observers = None
+        self.__startAfterTurningOnMachine = False
         return
 
     def start(self):
@@ -27,15 +28,21 @@ class FinalRewardLogic(object):
         self.__observers = FinalStateMachineObserver()
         self.addStateObserver(self.__observers)
         self.__machine.start()
+        if self.__startAfterTurningOnMachine:
+            self.postStateEvent(FinalRewardEventID.PROGRESSION_COMPLETE)
+            self.__startAfterTurningOnMachine = False
 
     def stop(self):
         self.__machine.stop()
         if self.__observers is not None:
             self.removeStateObserver(self.__observers)
         self.__observers = None
+        self.__startAfterTurningOnMachine = False
         return
 
     def startFinalFlow(self, rewards, data):
+        if not self.__machine.isRunning():
+            self.__startAfterTurningOnMachine = True
         self.__machine.saveRewards(rewards, data)
         self.postStateEvent(FinalRewardEventID.PROGRESSION_COMPLETE)
 

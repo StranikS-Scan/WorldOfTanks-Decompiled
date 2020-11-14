@@ -9,7 +9,7 @@ from Event import Event
 from account_helpers.AccountSyncData import AccountSyncData
 from dog_tags_common.components_config import componentConfigAdapter
 from dog_tags_common.dog_tags_storage import UnlockedComponentsStorage, PlayerDogTagStorage, ProgressStorage, ExtraDataStorage
-from dog_tags_common.player_dog_tag import DisplayableDogTag, PlayerDogTag
+from dog_tags_common.player_dog_tag import DisplayableDogTag, PlayerDogTag, DogTagComponent
 from dog_tags_common.settings_constants import Settings, DT_PDATA_KEY
 from gui.server_events import settings as userSettings
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
@@ -71,6 +71,9 @@ class DogTags(object):
     def getDisplayableDTForComponents(self, compIds, clanProfile=None):
         playerDT = PlayerDogTagStorage(self.__cache).buildPlayerDogTag(compIds)
         return self._makeDisplayableDT(clanProfile, playerDT)
+
+    def getDogTagComponentForAccount(self, compId):
+        return PlayerDogTagStorage(self.__cache).buildComponentForAccount(compId)
 
     def getUnlockedComps(self):
         allComps = set(componentConfigAdapter.getAllComponents())

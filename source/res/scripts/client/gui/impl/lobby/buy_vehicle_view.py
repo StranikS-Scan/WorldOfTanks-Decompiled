@@ -270,7 +270,8 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             return
 
     def __onInHangar(self, *_):
-        event_dispatcher.selectVehicleInHangar(self.__vehicle.intCD, leaveEventMode=True)
+        event_dispatcher.selectVehicleInHangar(self.__vehicle.intCD)
+        self.__startTutorial()
         self.__destroyWindow()
 
     def __onCheckboxWithoutCrewChanged(self, args):
@@ -394,7 +395,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             self.__returnCallback()
 
     def __destroyWindow(self):
-        self.viewModel.congratulationAnim.setResetAnimTrgigger(True)
+        self.viewModel.congratulationAnim.setResetAnimTrigger(True)
         self.destroyWindow()
 
     def __processReturnCallback(self):
@@ -509,7 +510,6 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
                 SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
             self.__purchaseInProgress = False
         if result and result.success and not self.isDisposed():
-            self.__startTutorial()
             self.showCongratulations()
         return
 

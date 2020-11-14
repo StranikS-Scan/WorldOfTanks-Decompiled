@@ -206,10 +206,10 @@ class BADGE(object):
     BADGE_87_DESCR = '#badge:badge_87_descr'
     BADGE_88 = '#badge:badge_88'
     BADGE_88_DESCR = '#badge:badge_88_descr'
-    BADGE_89 = '#badge:badge_89'
-    BADGE_89_DESCR = '#badge:badge_89_descr'
     BADGE_90 = '#badge:badge_90'
     BADGE_90_DESCR = '#badge:badge_90_descr'
+    BADGE_89 = '#badge:badge_89'
+    BADGE_89_DESCR = '#badge:badge_89_descr'
     BADGE_91 = '#badge:badge_91'
     BADGE_91_DESCR = '#badge:badge_91_descr'
     BADGE_92 = '#badge:badge_92'
@@ -421,10 +421,10 @@ class BADGE(object):
      BADGE_87_DESCR,
      BADGE_88,
      BADGE_88_DESCR,
-     BADGE_89,
-     BADGE_89_DESCR,
      BADGE_90,
      BADGE_90_DESCR,
+     BADGE_89,
+     BADGE_89_DESCR,
      BADGE_91,
      BADGE_91_DESCR,
      BADGE_92,
@@ -549,8 +549,8 @@ class BADGE(object):
      BADGE_86_DESCR,
      BADGE_87_DESCR,
      BADGE_88_DESCR,
-     BADGE_89_DESCR,
      BADGE_90_DESCR,
+     BADGE_89_DESCR,
      BADGE_91_DESCR,
      BADGE_92_DESCR,
      BADGE_93_DESCR,

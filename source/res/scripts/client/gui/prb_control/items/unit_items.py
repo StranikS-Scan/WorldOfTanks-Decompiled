@@ -18,7 +18,7 @@ from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 
 class PlayerUnitInfo(object):
-    __slots__ = ('dbID', 'unitMgrID', 'unit', 'name', 'rating', 'role', 'accID', 'vehDict', 'isReady', 'isInSlot', 'slotIdx', 'regionCode', 'clanDBID', 'clanAbbrev', 'timeJoin', 'igrType', 'badges', 'hasPremium', 'difficultyLevel', 'maxDifficultyLevel', 'afkIsBanned', 'afkExpireTime')
+    __slots__ = ('dbID', 'unitMgrID', 'unit', 'name', 'rating', 'role', 'accID', 'vehDict', 'isReady', 'isInSlot', 'slotIdx', 'regionCode', 'clanDBID', 'clanAbbrev', 'timeJoin', 'igrType', 'badges', 'hasPremium', 'extraData')
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
@@ -43,14 +43,11 @@ class PlayerUnitInfo(object):
         self.igrType = igrType
         self.badges = BadgesHelper(badges or ())
         self.hasPremium = kwargs.get('isPremium', False)
-        self.difficultyLevel = kwargs.get('difficultyLevel', 0)
-        self.maxDifficultyLevel = kwargs.get('maxDifficultyLevel', 0)
-        self.afkIsBanned = kwargs.get('afkIsBanned', False)
-        self.afkExpireTime = kwargs.get('afkExpireTime', 0)
+        self.extraData = kwargs.get('extraData', {})
         return
 
     def __repr__(self):
-        return 'PlayerUnitInfo(dbID = {0:n}, fullName = {1:>s}, unitMgrID = {2:n} rating = {3:n}, isCommander = {4!r:s}, role = {5:n}, accID = {6:n}, isReady={7!r:s}, isInSlot={8!r:s}, igrType = {9:n}, difficultyLevel = {10:n}, maxDifficultyLevel = {11:n})'.format(self.dbID, self.getFullName(), self.unitMgrID, self.rating, self.isCommander(), self.role, self.accID, self.isReady, self.isInSlot, self.igrType, self.difficultyLevel, self.maxDifficultyLevel)
+        return 'PlayerUnitInfo(dbID = {0:n}, fullName = {1:>s}, unitMgrID = {2:n} rating = {3:n}, isCommander = {4!r:s}, role = {5:n}, accID = {6:n}, isReady={7!r:s}, isInSlot={8!r:s}, igrType = {9:n})'.format(self.dbID, self.getFullName(), self.unitMgrID, self.rating, self.isCommander(), self.role, self.accID, self.isReady, self.isInSlot, self.igrType)
 
     def getFullName(self):
         return self.lobbyContext.getPlayerFullName(self.name, clanAbbrev=self.clanAbbrev, pDBID=self.dbID)

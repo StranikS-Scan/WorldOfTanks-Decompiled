@@ -6,7 +6,7 @@ import logging
 import BigWorld
 import CommandMapping
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import TRAJECTORY_VIEW_HINT_SECTION, PRE_BATTLE_HINT_SECTION, QUEST_PROGRESS_HINT_SECTION, HELP_SCREEN_HINT_SECTION, SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY, IBC_HINT_SECTION, RADAR_HINT_SECTION
+from account_helpers.AccountSettings import TRAJECTORY_VIEW_HINT_SECTION, PRE_BATTLE_HINT_SECTION, QUEST_PROGRESS_HINT_SECTION, HELP_SCREEN_HINT_SECTION, SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY, IBC_HINT_SECTION, RADAR_HINT_SECTION, TURBO_SHAFT_ENGINE_MODE_HINT_SECTION
 from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ARENA_PERIOD, ARENA_GUI_TYPE
 from debug_utils import LOG_DEBUG
@@ -77,18 +77,22 @@ class HintPanelPlugin(IPlugin):
 
     @staticmethod
     def _updateCounterOnUsed(settings):
-        settings[LAST_DISPLAY_DAY] = datetime.now().timetuple().tm_yday
-        settings[NUM_BATTLES] = 0
-        settings[HINTS_LEFT] = max(0, settings[HINTS_LEFT] - 1)
+        if settings:
+            settings[LAST_DISPLAY_DAY] = datetime.now().timetuple().tm_yday
+            settings[NUM_BATTLES] = 0
+            settings[HINTS_LEFT] = max(0, settings[HINTS_LEFT] - 1)
         return settings
 
     @staticmethod
     def _updateBattleCounterOnUsed(settings):
-        settings[HINTS_LEFT] = max(0, settings[HINTS_LEFT] - 1)
+        if settings:
+            settings[HINTS_LEFT] = max(0, settings[HINTS_LEFT] - 1)
         return settings
 
     @staticmethod
     def _updateCounterOnStart(setting, dayCoolDown, battleCoolDown):
+        if not setting:
+            return
         hintsLeft = setting[HINTS_LEFT]
         numBattles = setting[NUM_BATTLES]
         lastDayOfYear = setting[LAST_DISPLAY_DAY]
@@ -99,12 +103,12 @@ class HintPanelPlugin(IPlugin):
 
     @classmethod
     def _updateCounterOnBattle(cls, setting):
-        if not cls._haveHintsLeft(setting):
+        if setting and not cls._haveHintsLeft(setting):
             setting[NUM_BATTLES] = setting[NUM_BATTLES] + 1
 
     @staticmethod
     def _haveHintsLeft(setting):
-        return setting[HINTS_LEFT] > 0
+        return False if not setting else setting[HINTS_LEFT] > 0
 
 
 class HintPriority(object):
@@ -138,6 +142,7 @@ class TrajectoryViewHintPlugin(HintPanelPlugin):
         self.__settings = {}
         self.__wasDisplayed = False
         self.__callbackDelayer = CallbackDelayer()
+        self.__isSuitableVehicle = False
 
     @classmethod
     def isSuitable(cls):
@@ -148,6 +153,7 @@ class TrajectoryViewHintPlugin(HintPanelPlugin):
         if arenaDP is not None:
             vInfo = arenaDP.getVehicleInfo()
             self.__isObserver = vInfo.isObserver()
+            self.__isSuitableVehicle = vInfo.isSPG()
         crosshairCtrl = self.sessionProvider.shared.crosshair
         if crosshairCtrl is not None:
             crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
@@ -156,7 +162,8 @@ class TrajectoryViewHintPlugin(HintPanelPlugin):
         if vehicleCtrl is not None:
             vehicleCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
         self.__settings = AccountSettings.getSettings(TRAJECTORY_VIEW_HINT_SECTION)
-        self._updateCounterOnStart(self.__settings, self._HINT_DAY_COOLDOWN, self._HINT_BATTLES_COOLDOWN)
+        if self.__isSuitableVehicle:
+            self._updateCounterOnStart(self.__settings, self._HINT_DAY_COOLDOWN, self._HINT_BATTLES_COOLDOWN)
         if crosshairCtrl is not None and vehicleCtrl is not None:
             self.__setup(crosshairCtrl, vehicleCtrl)
         return
@@ -179,7 +186,7 @@ class TrajectoryViewHintPlugin(HintPanelPlugin):
             self.__addHint()
 
     def setPeriod(self, period):
-        if period is ARENA_PERIOD.BATTLE:
+        if period is ARENA_PERIOD.BATTLE and self.__isSuitableVehicle:
             self._updateCounterOnBattle(self.__settings)
 
     def __setup(self, crosshairCtrl, vehicleCtrl):
@@ -276,7 +283,7 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         super(SiegeIndicatorHintPlugin, self).__init__(parentObj)
         self.__isEnabled = False
         self.__siegeState = _SIEGE_STATE.DISABLED
-        self.__settings = [{}, {}]
+        self.__settings = {}
         self.__isHintShown = False
         self.__isInPostmortem = False
         self.__isObserver = False
@@ -285,6 +292,8 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         self._isUnderFire = False
         self.__isWheeledTech = False
         self.__hasTurboshaftEngine = False
+        self.__hasHydraulicChassis = False
+        self.__isSuitableVehicle = False
         self.__period = None
         self.__isInDisplayPeriod = False
         self.__callbackDelayer = CallbackDelayer()
@@ -297,9 +306,6 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
     def start(self):
         vStateCtrl = self.sessionProvider.shared.vehicleState
         arenaDP = self.sessionProvider.getArenaDP()
-        self.__settings = [AccountSettings.getSettings(SIEGE_HINT_SECTION), AccountSettings.getSettings(WHEELED_MODE_HINT_SECTION)]
-        self._updateCounterOnStart(self.__settings[0], self._HINT_DAY_COOLDOWN, self._HINT_BATTLES_COOLDOWN)
-        self._updateCounterOnStart(self.__settings[1], self._HINT_DAY_COOLDOWN, self._HINT_BATTLES_COOLDOWN)
         if arenaDP is not None:
             self.__isObserver = arenaDP.getVehicleInfo().isObserver()
         else:
@@ -312,6 +318,9 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
             vehicle = vStateCtrl.getControllingVehicle()
             if vehicle is not None:
                 self.__onVehicleControlling(vehicle)
+        self.__settings = {setting:AccountSettings.getSettings(setting) for setting in (SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, TURBO_SHAFT_ENGINE_MODE_HINT_SECTION)}
+        if self.__isSuitableVehicle:
+            self._updateCounterOnStart(self.__getSuitableSetting(), self._HINT_DAY_COOLDOWN, self._HINT_BATTLES_COOLDOWN)
         return
 
     def stop(self):
@@ -321,8 +330,9 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
             vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
             vStateCtrl.onPostMortemSwitched -= self.__onPostMortemSwitched
             vStateCtrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
-        AccountSettings.setSettings(SIEGE_HINT_SECTION, self.__settings[0])
-        AccountSettings.setSettings(WHEELED_MODE_HINT_SECTION, self.__settings[1])
+        for name, setting in self.__settings.iteritems():
+            AccountSettings.setSettings(name, setting)
+
         self.__callbackDelayer.destroy()
         return
 
@@ -334,14 +344,15 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
     def setPeriod(self, period):
         if period is ARENA_PERIOD.BATTLE:
             self.__isInDisplayPeriod = self.__period is not None
-            self._updateCounterOnBattle(self.__settings[self.__isWheeledTech])
+            if self.__isSuitableVehicle:
+                self._updateCounterOnBattle(self.__getSuitableSetting())
         self.__period = period
         if self.__isEnabled:
             self.__updateHint()
         return
 
     def __onHintUsed(self):
-        self._updateCounterOnUsed(self.__settings[self.__isWheeledTech])
+        self._updateCounterOnUsed(self.__getSuitableSetting())
 
     def __updateHint(self):
         LOG_DEBUG('Updating siege mode: hint')
@@ -355,7 +366,7 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
             self.__callbackDelayer.delayCallback(_HINT_TIMEOUT, self.__onHintTimeOut)
 
         isInSteadyMode = self.__siegeState not in _SIEGE_STATE.SWITCHING
-        haveHintsLeft = self._haveHintsLeft(self.__settings[self.__isWheeledTech])
+        haveHintsLeft = self._haveHintsLeft(self.__getSuitableSetting())
         if isInSteadyMode and self.__isInDisplayPeriod and haveHintsLeft and not self.__areOtherIndicatorsShown():
             _showHint()
         elif self.__isHintShown or self.__areOtherIndicatorsShown():
@@ -368,7 +379,9 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         vTypeDesc = vehicle.typeDescriptor
         self.__isWheeledTech = vTypeDesc.isWheeledVehicle
         self.__hasTurboshaftEngine = vTypeDesc.hasTurboshaftEngine
-        if vehicle.isAlive() and vTypeDesc.hasSiegeMode and not vTypeDesc.type.isDualgunVehicleType:
+        self.__hasHydraulicChassis = vTypeDesc.hasHydraulicChassis
+        self.__isSuitableVehicle = vTypeDesc.hasSiegeMode and not (vTypeDesc.type.isDualgunVehicleType or vTypeDesc.hasAutoSiegeMode)
+        if vehicle.isAlive() and self.__isSuitableVehicle:
             self.__isEnabled = True
             state = VEHICLE_VIEW_STATE.SIEGE_MODE
             value = vStateCtrl.getStateValue(state)
@@ -441,6 +454,13 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
 
     def __areOtherIndicatorsShown(self):
         return self._isUnderFire or self._isInRecovery or self._isInProgressCircle
+
+    def __getSuitableSetting(self):
+        if self.__isWheeledTech:
+            return self.__settings[WHEELED_MODE_HINT_SECTION]
+        if self.__hasHydraulicChassis:
+            return self.__settings[SIEGE_HINT_SECTION]
+        return self.__settings[TURBO_SHAFT_ENGINE_MODE_HINT_SECTION] if self.__hasTurboshaftEngine else {}
 
 
 class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
@@ -655,7 +675,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
 
     def setPeriod(self, period):
         self.__isInDisplayPeriod = period in (ARENA_PERIOD.PREBATTLE, ARENA_PERIOD.WAITING)
-        if period is ARENA_PERIOD.BATTLE:
+        if period is ARENA_PERIOD.BATTLE and self.__haveReqLevel:
             self._updateCounterOnBattle(self.__questHintSettings)
 
     def updateMapping(self):

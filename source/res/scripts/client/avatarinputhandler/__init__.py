@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/__init__.py
 import functools
+import logging
 import math
 from functools import partial
 import Keys
@@ -34,7 +35,7 @@ from AvatarInputHandler.commands.radar_control import RadarControl
 from AvatarInputHandler.commands.vehicle_upgrade_control import VehicleUpdateControl
 from AvatarInputHandler.commands.vehicle_upgrade_control import VehicleUpgradePanelControl
 from Event import Event
-from constants import ARENA_PERIOD, AIMING_MODE, ATTACK_REASONS, ATTACK_REASON
+from constants import ARENA_PERIOD, AIMING_MODE
 from control_modes import _ARCADE_CAM_PIVOT_POS
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui import g_guiResetters, GUI_CTRL_MODE_FLAG, GUI_SETTINGS
@@ -46,10 +47,10 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.battle_session import IBattleSessionProvider
 from svarog_script.script_game_object import ScriptGameObject, ComponentDescriptor
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 INPUT_HANDLER_CFG = 'gui/avatar_input_handler.xml'
+_logger = logging.getLogger(__name__)
 
 class _CTRL_TYPE(object):
     USUAL = 0
@@ -142,7 +143,6 @@ class DynamicCameraSettings(object):
 
 class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     bootcampCtrl = dependency.descriptor(IBootcampController)
-    guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
     ctrl = property(lambda self: self.__curCtrl)
     ctrls = property(lambda self: self.__ctrls)
     isSPG = property(lambda self: self.__isSPG)
@@ -226,36 +226,47 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
 
     def __constructComponents(self):
         player = BigWorld.player()
-        typeDescr = player.vehicleTypeDescriptor
-        if typeDescr.hasSiegeMode:
-            if not self.siegeModeControl:
-                self.siegeModeControl = SiegeModeControl()
-            self.__commands.append(self.siegeModeControl)
-            self.siegeModeControl.onSiegeStateChanged += lambda *args: self.steadyVehicleMatrixCalculator.relinkSources()
-            if not self.siegeModeSoundNotifications:
-                notifications = None
+        vehicle = player.getVehicleAttached()
+        if not vehicle:
+            _logger.debug('Attempt to construct components when vehicle is none')
+            return
+        else:
+            typeDescr = vehicle.typeDescriptor
+            notifications = None
+            if typeDescr.hasSiegeMode:
+                if not self.siegeModeControl:
+                    self.siegeModeControl = SiegeModeControl()
+                self.__commands.append(self.siegeModeControl)
+                self.siegeModeControl.onSiegeStateChanged += lambda *args: self.steadyVehicleMatrixCalculator.relinkSources()
                 if typeDescr.hasHydraulicChassis or typeDescr.isWheeledVehicle:
                     notifications = SiegeModeSoundNotifications()
                 elif typeDescr.hasTurboshaftEngine:
                     notifications = TurboshaftModeSoundNotifications()
+                self.siegeModeControl.onRequestFail += self.__onRequestFail
+                self.siegeModeControl.onSiegeStateChanged += SiegeModeCameraShaker.shake
+            if not (notifications and self.siegeModeSoundNotifications and notifications.getModeType() == self.siegeModeSoundNotifications.getModeType()):
+                modeChanged = False
+                if self.siegeModeSoundNotifications:
+                    modeChanged = True
+                    self.siegeModeControl.onSiegeStateChanged -= self.siegeModeSoundNotifications.onSiegeStateChanged
                 if notifications:
+                    modeChanged = True
+                    self.siegeModeControl.onSiegeStateChanged += notifications.onSiegeStateChanged
+                if modeChanged:
                     self.siegeModeSoundNotifications = notifications
-                    self.siegeModeControl.onSiegeStateChanged += self.siegeModeSoundNotifications.onSiegeStateChanged
-            self.siegeModeControl.onRequestFail += self.__onRequestFail
-            self.siegeModeControl.onSiegeStateChanged += SiegeModeCameraShaker.shake
-        if typeDescr.isDualgunVehicle and not self.dualGunControl:
-            self.dualGunControl = DualGunController(typeDescr)
-        elif not typeDescr.isDualgunVehicle:
-            self.dualGunControl = None
-        if self.bootcampCtrl.isInBootcamp() and constants.HAS_DEV_RESOURCES:
-            self.__commands.append(BootcampModeControl())
-        if ARENA_BONUS_TYPE_CAPS.checkAny(player.arena.bonusType, ARENA_BONUS_TYPE_CAPS.RADAR):
-            self.__commands.append(RadarControl())
-        if ARENA_BONUS_TYPE_CAPS.checkAny(player.arena.bonusType, ARENA_BONUS_TYPE_CAPS.BATTLEROYALE):
-            self.__commands.append(VehicleUpdateControl())
-            self.__commands.append(VehicleUpgradePanelControl())
-            self.__detachedCommands.append(VehicleUpgradePanelControl())
-        return
+            if typeDescr.isDualgunVehicle and not self.dualGunControl:
+                self.dualGunControl = DualGunController(typeDescr)
+            elif not typeDescr.isDualgunVehicle:
+                self.dualGunControl = None
+            if self.bootcampCtrl.isInBootcamp() and constants.HAS_DEV_RESOURCES:
+                self.__commands.append(BootcampModeControl())
+            if ARENA_BONUS_TYPE_CAPS.checkAny(player.arena.bonusType, ARENA_BONUS_TYPE_CAPS.RADAR):
+                self.__commands.append(RadarControl())
+            if ARENA_BONUS_TYPE_CAPS.checkAny(player.arena.bonusType, ARENA_BONUS_TYPE_CAPS.BATTLEROYALE):
+                self.__commands.append(VehicleUpdateControl())
+                self.__commands.append(VehicleUpgradePanelControl())
+                self.__detachedCommands.append(VehicleUpgradePanelControl())
+            return
 
     def prerequisites(self):
         out = []
@@ -377,8 +388,9 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     def switchAutorotation(self):
         self.setAutorotation(not self.__isAutorotation)
 
-    def activatePostmortem(self, isRespawn, deathReasonID=0):
+    def activatePostmortem(self, isRespawn):
         if self.siegeModeSoundNotifications is not None:
+            self.siegeModeControl.onSiegeStateChanged -= self.siegeModeSoundNotifications.onSiegeStateChanged
             self.siegeModeSoundNotifications = None
         BigWorld.player().autoAim(None)
         for ctlMode in self.__ctrls.itervalues():
@@ -390,15 +402,10 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             params = None
 
         onPostmortemActivation = getattr(self.__curCtrl, 'onPostmortemActivation', None)
-        bPostmortemDelay = True
-        isEventBattle = self.guiSessionProvider.arenaVisitor.gui.isEventBattle()
-        isKilledByPhaseChange = ATTACK_REASONS[deathReasonID] in (ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE, ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC)
-        if isEventBattle and isKilledByPhaseChange:
-            bPostmortemDelay = False
         if onPostmortemActivation is not None:
-            onPostmortemActivation(_CTRL_MODE.POSTMORTEM, postmortemParams=params, bPostmortemDelay=bPostmortemDelay, respawn=isRespawn)
+            onPostmortemActivation(_CTRL_MODE.POSTMORTEM, postmortemParams=params, bPostmortemDelay=True, respawn=isRespawn)
         else:
-            self.onControlModeChanged(_CTRL_MODE.POSTMORTEM, postmortemParams=params, bPostmortemDelay=bPostmortemDelay, respawn=isRespawn)
+            self.onControlModeChanged(_CTRL_MODE.POSTMORTEM, postmortemParams=params, bPostmortemDelay=True, respawn=isRespawn)
         return
 
     def deactivatePostmortem(self):
@@ -521,7 +528,9 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                     return
             if isObserverMode and self.__ctrlModeName == _CTRL_MODE.POSTMORTEM:
                 player = BigWorld.player()
-                self.__observerVehicle = player.vehicle.id if player.vehicle else None
+                self.__observerVehicle = None
+                if player.vehicle and player.vehicle.id != player.playerVehicleID:
+                    self.__observerVehicle = player.vehicle.id
                 self.__observerIsSwitching = False
             replayCtrl = BattleReplay.g_replayCtrl
             if replayCtrl.isRecording:

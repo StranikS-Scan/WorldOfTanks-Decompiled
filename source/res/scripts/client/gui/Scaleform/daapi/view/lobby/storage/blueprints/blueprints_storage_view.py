@@ -65,7 +65,7 @@ class StorageCategoryBlueprintsView(StorageCategoryBlueprintsViewMeta, StorageCa
         label = style(backport.getIntegralFormat(count))
         return {'hasFragments': count > 0,
          'label': label,
-         'iconSmall': RES_ICONS.getBlueprintFragment('medium', iconName),
+         'iconSmall': RES_ICONS.getBlueprintFragment('small', iconName),
          'iconBig': RES_ICONS.getBlueprintFragment('big', iconName),
          'tooltipData': tooltipData}
 

@@ -3,7 +3,8 @@
 import logging
 from collections import namedtuple
 from gui import makeHtmlString, GUI_SETTINGS
-from gui.Scaleform.locale.MENU import MENU
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.battle_royale.constants import ParamTypes
 from gui.doc_loaders.battle_royale_settings_loader import getTreeModuleSettings, getTreeVehicleParams
 from gui.impl.backport.backport_system_locale import getNiceNumberFormat
@@ -220,7 +221,9 @@ def _makeTxt(text, key):
 
 def _formatModuleParamName(paramName):
     builder = text_styles.builder()
-    builder.addStyledText(text_styles.main, MENU.moduleinfo_params(paramName))
+    resource = R.strings.menu.moduleInfo.params
+    paramMsgId = backport.msgid(resource.dyn(paramName)()) if resource.dyn(paramName) else None
+    builder.addStyledText(text_styles.main, paramMsgId)
     builder.addStyledText(_standardText, MEASURE_UNITS.get(paramName, ''))
     return builder.render()
 

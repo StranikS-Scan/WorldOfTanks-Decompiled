@@ -41,7 +41,6 @@
     <_71-TK-1_bot>	209	</_71-TK-1_bot>
     <R123_fallout>	208	</R123_fallout>
     <R113_FL>	210	</R113_FL>
-    <R113_Halloween_event>	211	</R113_Halloween_event>
     <_10RK_IGR>	60001	</_10RK_IGR>
     <_12RT_IGR>	60002	</_12RT_IGR>
     <R113_IGR>	60003	</R113_IGR>
@@ -56,7 +55,6 @@
     <_71-TK-3_bootcamp>	64003	</_71-TK-3_bootcamp>
     <_9R_bootcamp>	64004	</_9R_bootcamp>
     <Development_Radio>	65000	</Development_Radio>
-    <R77_KV2_turret_2_Radio>	212	</R77_KV2_turret_2_Radio>
   </ids>
   <shared>
     <Alarm_flags_bot>
@@ -386,18 +384,6 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </R113>
-    <R113_Halloween_event>
-      <userString>	#ussr_vehicles:R113_Halloween_event	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	52200	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	80	</weight>
-      <distance>	730	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </R113_Halloween_event>
     <R113_FL>
       <userString>	#ussr_vehicles:R113	</userString>
       <tags></tags>
@@ -726,17 +712,5 @@
       <radarRadius>	450	</radarRadius>
       <radarCooldown>	45	</radarCooldown>
     </R113_SH>
-    <R77_KV2_turret_2_Radio>
-      <userString>	#ussr_vehicles:_10RK	</userString>
-      <tags></tags>
-      <level>	7	</level>
-      <price>	18600	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	440	</distance>
-      <maxHealth>	150	</maxHealth>
-      <maxRegenHealth>	125	</maxRegenHealth>
-      <repairCost>	1.5	</repairCost>
-    </R77_KV2_turret_2_Radio>
   </shared>
 </radios.xml>

@@ -77,6 +77,18 @@ class ISharedControllersLocator(object):
     def calloutCtrl(self):
         raise NotImplementedError
 
+    @property
+    def areaMarker(self):
+        return NotImplementedError
+
+    @property
+    def arenaBorder(self):
+        raise NotImplementedError
+
+    @property
+    def deathzones(self):
+        raise NotImplementedError
+
 
 class IDynamicControllersLocator(object):
     __slots__ = ()
@@ -142,19 +154,11 @@ class IDynamicControllersLocator(object):
         raise NotImplementedError
 
     @property
-    def dogTags(self):
-        raise NotImplementedError
-
-    @property
     def battleHints(self):
         raise NotImplementedError
 
     @property
-    def battleGoals(self):
-        raise NotImplementedError
-
-    @property
-    def battleMarkers(self):
+    def dogTags(self):
         raise NotImplementedError
 
 
@@ -666,4 +670,10 @@ class IBattleSessionProvider(object):
         raise NotImplementedError
 
     def handleContexChatCommand(self, key):
+        raise NotImplementedError
+
+    def updateVehicleEffects(self):
+        raise NotImplementedError
+
+    def updateObservedVehicleData(self, vID, extraData):
         raise NotImplementedError

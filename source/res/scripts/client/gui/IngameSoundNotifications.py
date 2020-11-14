@@ -7,7 +7,6 @@ import ResMgr
 import BattleReplay
 import SoundGroups
 import WWISE
-from constants import ARENA_GUI_TYPE
 from debug_utils import LOG_WARNING
 from Math import Matrix
 
@@ -86,10 +85,6 @@ class IngameSoundNotifications(object):
                     if idToBind is None and soundDesc['shouldBindToPlayer']:
                         if BigWorld.player().vehicle is not None:
                             idToBind = BigWorld.player().vehicle.id
-                    arena = BigWorld.player().arena
-                    if arena is not None and arena.guiType == ARENA_GUI_TYPE.EVENT_BATTLES:
-                        if not soundDesc['shouldBindToPlayer']:
-                            idToBind = None
                     soundPath = soundDesc['sound']
                     minTimeBetweenEvents = soundDesc['minTimeBetweenEvents']
                     queueItem = IngameSoundNotifications.QueueItem(soundPath, time + soundDesc['timeout'], minTimeBetweenEvents, idToBind, checkFn, eventPos, soundObjectName, matrixProvider)

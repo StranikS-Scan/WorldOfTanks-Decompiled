@@ -98,8 +98,9 @@ class SpecialOLDictionary(ObsceneLanguageDictionary):
             if badWordsSection is not None:
                 for badWordSet in badWordsSection.values():
                     try:
-                        badWordC = re.compile(badWordSet.asWideString, re.M | re.S | re.U | re.I)
-                        obj.__badWordPatterns.append(badWordC)
+                        if not badWordSet.keys():
+                            badWordC = re.compile(badWordSet.asWideString, re.M | re.S | re.U | re.I)
+                            obj.__badWordPatterns.append(badWordC)
                     except sre_compile.error:
                         LOG_CURRENT_EXCEPTION()
 

@@ -172,8 +172,6 @@ class UNIT_ERROR:
     UNIT_CHANGED_LEADER = 100
     FAIL_EXT_UNIT_QUEUE_START = 101
     WRONG_VEHICLE = 102
-    WRONG_DIFFICULTY_LEVEL = 103
-    MISSING_DIFFICULTY_LEVEL = 104
 
 
 OK = UNIT_ERROR.OK
@@ -284,6 +282,7 @@ class UNIT_NOTIFY_CMD:
     UPD_VEHICLE_DESCRS = 14
     REMOVED_VEHICLE_MAX_SPG_EXCEED = 15
     REMOVED_VEHICLE_FROM_FILTER = 16
+    INCORRECT_EVENT_ENQUEUE_DATA = 17
 
 
 class CLIENT_UNIT_CMD:
@@ -610,7 +609,7 @@ class UnitBase(OpsUnpacker):
         return True
 
     _HEADER = '<HHHHHHBiii'
-    _PLAYER_DATA = '<qiIHBHHq?ii?I'
+    _PLAYER_DATA = '<qiIHBHHq?'
     _PLAYER_VEHICLES_LIST = '<qH'
     _PLAYER_VEHICLE_TUPLE = '<iH'
     _SLOT_PLAYERS = '<Bq'
@@ -691,9 +690,9 @@ class UnitBase(OpsUnpacker):
             unpacking = unpacking[self._SLOT_PLAYERS_SIZE:]
 
         for i in xrange(0, playerCount):
-            blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges, difficultyLevel, maxDifficultyLevel, afkIsBanned, afkExpireTime = self.__unpackPlayerData(unpacking)
+            blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges, eventEnqueueData = self.__unpackPlayerData(unpacking)
             unpacking = unpacking[blockLength:]
-            self._addPlayer(accountDBID, accountID=accountID, timeJoin=timeJoin, role=role, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType, clanDBID=clanDBID, badges=badges, isPremium=isPremium, difficultyLevel=difficultyLevel, maxDifficultyLevel=maxDifficultyLevel, afkIsBanned=afkIsBanned, afkExpireTime=afkExpireTime)
+            self._addPlayer(accountDBID, accountID=accountID, timeJoin=timeJoin, role=role, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType, clanDBID=clanDBID, badges=badges, isPremium=isPremium, extraData=dict(eventEnqueueData=eventEnqueueData))
 
         self._extras = self._extrasHandler.unpack(unpacking[:extrasLen])
         unpacking = unpacking[extrasLen:]
@@ -861,7 +860,7 @@ class UnitBase(OpsUnpacker):
                 self._storeNotification(accountDBID, UNIT_NOTIFY_CMD.SET_MEMBER_READY, [isReady])
             return OK
 
-    def _canUseVehicles(self, vehiclesList, isSet=False):
+    def _canUseVehicles(self, vehiclesList, isSet=False, isCommanderSet=False):
         return True
 
     def _setGameplaysMask(self, newGameplaysMask):
@@ -1054,8 +1053,8 @@ class UnitBase(OpsUnpacker):
         return packedOps[opLen:]
 
     def _unpackPlayer(self, packedOps):
-        blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges, difficultyLevel, maxDifficultyLevel, afkIsBanned, afkExpireTime = self.__unpackPlayerData(packedOps)
-        playerInfo = dict(accountID=accountID, role=role, timeJoin=timeJoin, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType, clanDBID=clanDBID, badges=badges, isPremium=isPremium, difficultyLevel=difficultyLevel, maxDifficultyLevel=maxDifficultyLevel, afkIsBanned=afkIsBanned, afkExpireTime=afkExpireTime)
+        blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges, eventEnqueueData = self.__unpackPlayerData(packedOps)
+        playerInfo = dict(accountID=accountID, role=role, timeJoin=timeJoin, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType, clanDBID=clanDBID, badges=badges, isPremium=isPremium, extraData=dict(eventEnqueueData=eventEnqueueData))
         self._addPlayer(accountDBID, **playerInfo)
         return packedOps[blockLength:]
 
@@ -1135,16 +1134,17 @@ class UnitBase(OpsUnpacker):
         return (True, None)
 
     def __packPlayerData(self, accountDBID, **kwargs):
-        packed = struct.pack(self._PLAYER_DATA, accountDBID, kwargs.get('accountID', 0), kwargs.get('timeJoin', 0), kwargs.get('role', 0), kwargs.get('igrType', 0), kwargs.get('rating', 0), kwargs.get('peripheryID', 0), kwargs.get('clanDBID', 0), kwargs.get('isPremium', False), kwargs.get('extraData', {}).get('eventEnqueueData', {}).get('difficultyLevel', 0), kwargs.get('extraData', {}).get('eventEnqueueData', {}).get('maxDifficultyLevel', 0), kwargs.get('afkIsBanned', False), kwargs.get('afkExpireTime', 0))
+        packed = struct.pack(self._PLAYER_DATA, accountDBID, kwargs.get('accountID', 0), kwargs.get('timeJoin', 0), kwargs.get('role', 0), kwargs.get('igrType', 0), kwargs.get('rating', 0), kwargs.get('peripheryID', 0), kwargs.get('clanDBID', 0), kwargs.get('isPremium', False))
         packed += packPascalString(kwargs.get('nickName', ''))
         packed += packPascalString(kwargs.get('clanAbbrev', ''))
         badges = kwargs.get('badges', BadgesCommon.selectedBadgesEmpty())
         packed += BadgesCommon.packPlayerBadges(badges)
+        packed += self.__packEventEnqueueContainerData(kwargs.get('extraData', {}).get('eventEnqueueData', {}))
         return packed
 
     def __unpackPlayerData(self, packedData):
         sz = self._PLAYER_DATA_SIZE
-        accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID, isPremium, difficultyLevel, maxDifficultyLevel, afkIsBanned, afkExpireTime = struct.unpack_from(self._PLAYER_DATA, packedData)
+        accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID, isPremium = struct.unpack_from(self._PLAYER_DATA, packedData)
         offset = sz
         nickName, lenNickBytes = unpackPascalString(packedData, offset)
         offset += lenNickBytes
@@ -1152,6 +1152,8 @@ class UnitBase(OpsUnpacker):
         offset += lenClanBytes
         badges, lenBadgesInfo = BadgesCommon.unpackPlayerBadges(packedData, offset)
         offset += lenBadgesInfo
+        eventEnqueueData, lenEventDataInfo = self.__unpackEventEnqueueContainerData(packedData, offset)
+        offset += lenEventDataInfo
         return (offset,
          accountDBID,
          accountID,
@@ -1165,7 +1167,33 @@ class UnitBase(OpsUnpacker):
          nickName,
          clanAbbrev,
          badges,
-         difficultyLevel,
-         maxDifficultyLevel,
-         afkIsBanned,
-         afkExpireTime)
+         eventEnqueueData)
+
+    @staticmethod
+    def __packEventEnqueueContainerData(packedData):
+        LOG_DEBUG_DEV('eventEnqueueData = ', packedData)
+        packed = struct.pack('<B', len(packedData))
+        for key, value in packedData.iteritems():
+            packed += packPascalString(key)
+            packed += struct.pack('<I', value)
+
+        return packed
+
+    @staticmethod
+    def __unpackEventEnqueueContainerData(packedData, offset):
+        return UnitBase.__unpackContainerDataWithFormat(packedData, offset, '<I')
+
+    @staticmethod
+    def __unpackContainerDataWithFormat(packedData, initialOffset, formatData):
+        offset = initialOffset
+        containerLength = struct.unpack_from('<B', packedData, offset)[0]
+        offset += struct.calcsize('<B')
+        container = dict()
+        for i in xrange(containerLength):
+            key, lenKeyBytes = unpackPascalString(packedData, offset)
+            offset += lenKeyBytes
+            value = struct.unpack_from(formatData, packedData, offset)[0]
+            offset += struct.calcsize(formatData)
+            container[key] = value
+
+        return (container, offset - initialOffset)

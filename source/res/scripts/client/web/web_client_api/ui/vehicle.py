@@ -14,7 +14,7 @@ from debug_utils import LOG_ERROR
 from gui import SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.configurable_vehicle_preview import OptionalBlocks
-from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import getCDFromId, canInstallStyle
+from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import getCDFromId, canInstallStyle, EventDataType
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import checkIfVehicleIsHidden
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.customization.constants import CustomizationModes
@@ -22,7 +22,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.server_events.events_dispatcher import showMissionsMarathon
 from gui.shared import event_dispatcher
-from gui.shared.event_dispatcher import showStylePreview, showHangar
+from gui.shared.event_dispatcher import showStylePreview, showEventProgressionStylePreview, showHangar, showEventProgressionPage
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -317,6 +317,7 @@ class _MarathonVehiclePackPreviewSchema(W2CSchema):
 class _VehicleStylePreviewSchema(W2CSchema):
     vehicle_cd = Field(required=False, type=int)
     style_id = Field(required=True, type=int)
+    event_data = Field(required=False, type=dict, validator=lambda value, _: EventDataType.hasValue(value.get('type')))
     back_btn_descr = Field(required=True, type=basestring)
     back_url = Field(required=False, type=basestring)
 
@@ -327,6 +328,7 @@ class _VehicleMarathonStylePreviewSchema(W2CSchema):
     back_btn_descr = Field(required=True, type=basestring)
     back_url = Field(required=False, type=basestring)
     marathon_prefix = Field(required=True, type=basestring)
+    event_data = Field(required=False, type=dict, validator=lambda value, _: EventDataType.hasValue(value.get('type')))
 
 
 class _VehicleListStylePreviewSchema(W2CSchema):
@@ -515,7 +517,7 @@ class VehiclePreviewWebApiMixin(object):
         return sorted(vehs, key=lambda item: item.level, reverse=True)
 
     def _getVehicleStylePreviewCallback(self, cmd):
-        return showHangar
+        return partial(showEventProgressionPage, cmd.back_url) if cmd.back_btn_descr == 'eventProgression' else showHangar
 
     def _getVehiclePreviewReturnCallback(self, cmd):
         return None
@@ -527,7 +529,11 @@ class VehiclePreviewWebApiMixin(object):
         style = self.c11n.getItemByID(GUI_ITEM_TYPE.STYLE, cmd.style_id)
         vehicle = self.itemsCache.items.getItemByCD(vehicleCD)
         if vehicle is not None and not vehicle.isOutfitLocked and style.mayInstall(vehicle):
-            showStylePreview(vehicleCD, style, style.getDescription(), cmd.back_url if isinstance(cmd.back_url, Callable) else self._getVehicleStylePreviewCallback(cmd), backBtnDescrLabel=backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(cmd.back_btn_descr)()))
+            if (cmd.event_data or {}).get('type') == EventDataType.EVENT_PROGRESSION:
+                showStyle = showEventProgressionStylePreview
+            else:
+                showStyle = showStylePreview
+            showStyle(vehicleCD, style, style.getDescription(), cmd.back_url if isinstance(cmd.back_url, Callable) else self._getVehicleStylePreviewCallback(cmd), backBtnDescrLabel=backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(cmd.back_btn_descr)()))
             return True
         else:
             return False

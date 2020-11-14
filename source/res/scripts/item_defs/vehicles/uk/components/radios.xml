@@ -24,7 +24,6 @@
     <C13_B47>	33	</C13_B47>
     <N22_LT>	34	</N22_LT>
     <N19_1>	35	</N19_1>
-    <C42_Halloween_event>	36	</C42_Halloween_event>
     <C42_IGR>	60001	</C42_IGR>
     <N19Mk3_IGR>	60002	</N19Mk3_IGR>
     <N22_IGR>	60003	</N22_IGR>
@@ -33,11 +32,6 @@
     <N19Mk1_SH>	10000	</N19Mk1_SH>
     <C45A_SH>	10001	</C45A_SH>
     <C42_B47_SH>	10002	</C42_B47_SH>
-    <C42_HELL>	0	</C42_HELL>
-    <N19Mk3_HALL>	3	</N19Mk3_HALL>
-    <N22_HALL>	5	</N22_HALL>
-    <C42_HALL>	6	</C42_HALL>
-    <C45_HELL>	7	</C45_HELL>
   </ids>
   <shared>
     <Alarm_flags_bot>
@@ -257,18 +251,6 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </C42>
-    <C42_Halloween_event>
-      <userString>	#gb_vehicles:C42_Halloween_event	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	40	</weight>
-      <distance>	750	</distance>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	108	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </C42_Halloween_event>
     <C42_VHF>
       <userString>	#gb_vehicles:C42_VHF	</userString>
       <tags></tags>
@@ -430,65 +412,5 @@
       <radarRadius>	520	</radarRadius>
       <radarCooldown>	45	</radarCooldown>
     </C42_B47_SH>
-    <C42_HELL>
-      <userString>	#gb_vehicles:C42	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <weight>	40	</weight>
-      <distance>	50	</distance>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	108	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-      <notInShop>	True	</notInShop>
-    </C42_HELL>
-    <N19Mk3_HALL>
-      <userString>	#gb_vehicles:N19Mk3_HALL	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	22000	</price>
-      <weight>	40	</weight>
-      <distance>	50	</distance>
-      <maxHealth>	140	</maxHealth>
-      <maxRegenHealth>	84	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-      <notInShop>	True	</notInShop>
-    </N19Mk3_HALL>
-    <N22_HALL>
-      <userString>	#gb_vehicles:N22_HALL__0	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	25000	</price>
-      <weight>	40	</weight>
-      <distance>	50	</distance>
-      <maxHealth>	140	</maxHealth>
-      <maxRegenHealth>	84	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <notInShop>	True	</notInShop>
-    </N22_HALL>
-    <C42_HALL>
-      <userString>	#gb_vehicles:C42_HALL__0	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <weight>	40	</weight>
-      <distance>	50	</distance>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	108	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-      <notInShop>	True	</notInShop>
-    </C42_HALL>
-    <C45_HELL>
-      <userString>	#gb_vehicles:C45	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	45600	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	40	</weight>
-      <distance>	50	</distance>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	108	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </C45_HELL>
   </shared>
 </radios.xml>

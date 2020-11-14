@@ -3,13 +3,13 @@
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_control.arena_info.interfaces import IArenaController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, REUSABLE_BATTLE_CTRL_IDS, getBattleCtrlName
-from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, bootcamp_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, team_health_bar_ctrl, vehicle_state_ctrl, view_points_ctrl, epic_respawn_ctrl, progress_circle_ctrl, epic_maps_ctrl, default_maps_ctrl, epic_spectator_ctrl, epic_missions_ctrl, game_notification_ctrl, epic_team_bases_ctrl, anonymizer_fakes_ctrl, korea_msgs_ctrl, callout_ctrl, progression_ctrl, death_ctrl, dog_tags_ctrl
+from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, bootcamp_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, team_health_bar_ctrl, vehicle_state_ctrl, view_points_ctrl, epic_respawn_ctrl, progress_circle_ctrl, epic_maps_ctrl, default_maps_ctrl, epic_spectator_ctrl, epic_missions_ctrl, game_notification_ctrl, epic_team_bases_ctrl, anonymizer_fakes_ctrl, korea_msgs_ctrl, callout_ctrl, deathzones_ctrl, progression_ctrl, death_ctrl, dog_tags_ctrl
 from gui.battle_control.controllers.quest_progress import quest_progress_ctrl
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
+from gui.battle_control.controllers import battle_hints_ctrl
 from gui.battle_control.controllers import radar_ctrl
 from gui.battle_control.controllers import spawn_ctrl
 from gui.battle_control.controllers import vehicles_count_ctrl
-from gui.battle_control.controllers import battle_hints_ctrl
 
 class BattleSessionSetup(object):
     __slots__ = ('avatar', 'replayCtrl', 'gasAttackMgr', 'sessionProvider')
@@ -149,6 +149,18 @@ class SharedControllersLocator(_ControllersLocator, ISharedControllersLocator):
     def calloutCtrl(self):
         return self._repository.getController(BATTLE_CTRL_ID.CALLOUT)
 
+    @property
+    def areaMarker(self):
+        return self._repository.getController(BATTLE_CTRL_ID.AREA_MARKER)
+
+    @property
+    def arenaBorder(self):
+        return self._repository.getController(BATTLE_CTRL_ID.ARENA_BORDER)
+
+    @property
+    def deathzones(self):
+        return self._repository.getController(BATTLE_CTRL_ID.DEATHZONES)
+
 
 class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator):
     __slots__ = ()
@@ -226,20 +238,12 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
         return self._repository.getController(BATTLE_CTRL_ID.VEHICLES_COUNT_CTRL)
 
     @property
-    def dogTags(self):
-        return self._repository.getController(BATTLE_CTRL_ID.DOG_TAGS)
-
-    @property
     def battleHints(self):
         return self._repository.getController(BATTLE_CTRL_ID.BATTLE_HINTS)
 
     @property
-    def battleGoals(self):
-        return self._repository.getController(BATTLE_CTRL_ID.BATTLE_GOALS)
-
-    @property
-    def battleMarkers(self):
-        return self._repository.getController(BATTLE_CTRL_ID.WORLD_MARKERS)
+    def dogTags(self):
+        return self._repository.getController(BATTLE_CTRL_ID.DOG_TAGS)
 
 
 class _EmptyRepository(interfaces.IBattleControllersRepository):
@@ -342,6 +346,9 @@ class SharedControllersRepository(_ControllersRepository):
         repository.addViewController(hit_direction_ctrl.createHitDirectionController(setup), setup)
         repository.addViewController(game_messages_ctrl.createGameMessagesController(setup), setup)
         repository.addViewController(callout_ctrl.createCalloutController(setup), setup)
+        from gui.battle_control.controllers import area_marker_ctrl
+        repository.addArenaController(area_marker_ctrl.AreaMarkersController(), setup)
+        repository.addArenaController(deathzones_ctrl.DeathZonesController(), setup)
         return repository
 
 
@@ -410,16 +417,11 @@ class BattleRoyaleControllersRepository(_ControllersRepository):
         return repository
 
 
-class EventControllersRepository(ClassicControllersRepository):
+class EventControllerRepository(ClassicControllersRepository):
     __slots__ = ()
 
     @classmethod
     def create(cls, setup):
-        from gui.battle_control.controllers import event_markers_ctrl, battle_goals_ctrl
-        repository = super(EventControllersRepository, cls).create(setup)
+        repository = super(EventControllerRepository, cls).create(setup)
         repository.addViewController(battle_hints_ctrl.createBattleHintsController(), setup)
-        repository.addViewController(radar_ctrl.RadarController(), setup)
-        repository.addViewController(game_messages_ctrl.createGameMessagesController(setup), setup)
-        repository.addArenaController(event_markers_ctrl.EventMarkersController(setup), setup)
-        repository.addArenaController(battle_goals_ctrl.BattleGoalsController(), setup)
         return repository

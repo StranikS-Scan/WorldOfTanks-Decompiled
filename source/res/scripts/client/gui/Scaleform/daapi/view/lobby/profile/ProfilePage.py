@@ -14,6 +14,7 @@ from gui.sounds.ambients import LobbySubViewEnv
 from gui.ClientUpdateManager import g_clientUpdateManager
 from helpers import dependency
 from helpers.i18n import makeString
+from skeletons.gui.game_control import IUISpamController
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.Scaleform.daapi.view.lobby.profile.sound_constants import ACHIEVEMENTS_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.hof.web_handlers import createHofWebHandlers
@@ -22,6 +23,7 @@ from gui.Scaleform.daapi.view.lobby.hof.hof_helpers import getHofDisabledKeys, o
 class ProfilePage(LobbySubView, ProfileMeta):
     __sound_env__ = LobbySubViewEnv
     lobbyContext = dependency.descriptor(ILobbyContext)
+    uiSpamController = dependency.descriptor(IUISpamController)
     _COMMON_SOUND_SPACE = ACHIEVEMENTS_SOUND_SPACE
 
     def __init__(self, ctx=None):
@@ -123,10 +125,10 @@ class ProfilePage(LobbySubView, ProfileMeta):
         if self.__isHofEnabled:
             counters = []
             hofCounter = getHofTabCounter()
-            if hofCounter:
+            if hofCounter and not self.uiSpamController.shouldBeHidden(VIEW_ALIAS.PROFILE_HOF):
                 counters.append({'componentId': VIEW_ALIAS.PROFILE_HOF,
                  'count': str(hofCounter)})
-            if isHofButtonNew(PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON):
+            if isHofButtonNew(PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON) and not self.uiSpamController.shouldBeHidden(VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE):
                 counters.append({'componentId': VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE,
                  'count': '1'})
             self.__tabNavigator.as_setBtnTabCountersS(counters)

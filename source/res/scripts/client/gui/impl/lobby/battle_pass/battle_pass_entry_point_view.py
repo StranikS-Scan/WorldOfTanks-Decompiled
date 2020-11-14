@@ -5,7 +5,7 @@ from PlayerEvents import g_playerEvents
 from battle_pass_common import BattlePassState
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.daapi.view.meta.BattlePassEntryPointMeta import BattlePassEntryPointMeta
-from gui.battle_pass.battle_pass_helpers import isNeededToVote
+from gui.battle_pass.battle_pass_helpers import isNeededToVote, getSeasonHistory, getLevelFromStats
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_entry_point_view_model import BattlePassEntryPointViewModel
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_chose_winner_tooltip_view import BattlePassChoseWinnerTooltipView
@@ -96,7 +96,7 @@ class BattlePassEntryPointView(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(BattlePassEntryPointView, self)._onLoading(*args, **kwargs)
-        currentState = self.__battlePassController.getState()
+        currentState, _ = self.__getCurrentLevel()
         if g_BPEntryPointStates.prevState == BattlePassState.BASE and currentState == BattlePassState.POST:
             g_BPEntryPointStates.showSwitchToPostProgression = True
         if g_BPEntryPointStates.prevState == BattlePassState.POST and currentState == BattlePassState.COMPLETED:
@@ -183,7 +183,8 @@ class BattlePassEntryPointView(ViewImpl):
         self.__isAttentionTimerStarted = False
 
     def __updateViewModel(self):
-        currentState = self.__battlePassController.getState()
+        currentState, currentLevel = self.__getCurrentLevel()
+        currentLevel = min(currentLevel + 1, self.__battlePassController.getMaxLevel(currentState == BattlePassState.BASE))
         if g_BPEntryPointStates.prevState == BattlePassState.BASE and currentState == BattlePassState.POST:
             return
         if g_BPEntryPointStates.prevState == BattlePassState.POST and currentState == BattlePassState.COMPLETED:
@@ -210,9 +211,7 @@ class BattlePassEntryPointView(ViewImpl):
                 tooltip = R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView()
         with self.getViewModel().transaction() as model:
             curPoints, limitPoints = self.__battlePassController.getLevelProgression()
-            hasBattlePass = self.__battlePassController.isBought()
-            currentLevel = self.__battlePassController.getCurrentLevel() + 1
-            currentLevel = min(currentLevel, self.__battlePassController.getMaxLevel(currentState == BattlePassState.BASE))
+            hasBattlePass = self.__isBought()
             progression = curPoints * 100 / limitPoints if limitPoints else 100
             prevProgression = model.getProgression() if model.getProgression() != -1 else progression
             model.setIsSmall(self.__isSmall)
@@ -260,3 +259,25 @@ class BattlePassEntryPointView(ViewImpl):
             g_BPEntryPointStates.showSwitchToPostProgression = False
             g_BPEntryPointStates.showPostProgressionCompleted = False
         g_BPEntryPointStates.prevState = currentState
+
+    def __getCurrentLevel(self):
+        if self.__battlePassController.isOffSeasonEnable():
+            prevSeasonStats = self.__battlePassController.getLastFinishedSeasonStats()
+            if prevSeasonStats is None:
+                return (BattlePassState.BASE, 0)
+            prevOtherStats = prevSeasonStats.otherStats
+            prevSeasonHistory = getSeasonHistory(prevSeasonStats.seasonID)
+            if prevSeasonHistory is None:
+                return (BattlePassState.BASE, 0)
+            state, currentLevel = getLevelFromStats(prevOtherStats, prevSeasonHistory)
+        else:
+            state = self.__battlePassController.getState()
+            currentLevel = self.__battlePassController.getCurrentLevel()
+        return (state, currentLevel)
+
+    def __isBought(self):
+        if self.__battlePassController.isOffSeasonEnable():
+            prevSeasonStats = self.__battlePassController.getLastFinishedSeasonStats()
+            if prevSeasonStats.seasonID is not None:
+                return self.__battlePassController.isBought(prevSeasonStats.seasonID)
+        return self.__battlePassController.isBought()

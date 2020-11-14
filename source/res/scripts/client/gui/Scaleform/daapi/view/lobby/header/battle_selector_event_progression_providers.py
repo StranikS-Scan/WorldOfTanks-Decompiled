@@ -131,8 +131,13 @@ class EventProgressionDataProvider(SelectorExtraItem):
                 seasonResID = R.strings.epic_battle.season.num(currentSeason.getSeasonID())
                 seasonName = backport.text(seasonResID.name()) if seasonResID else None
                 if currentSeason.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp()):
-                    cycleNumber = currentSeason.getCycleInfo().getEpicCycleNumber()
-                    scheduleStr = backport.text(_R_BATTLE_TYPES.epic.extra.currentCycle(), cycle=int2roman(cycleNumber), season=seasonName)
+                    if currentSeason.isSingleCycleSeason():
+                        infoStrResID = R.strings.menu.headerButtons.battle.types.epic.extra.currentSeason()
+                        cycleNumber = 0
+                    else:
+                        infoStrResID = R.strings.menu.headerButtons.battle.types.epic.extra.currentCycle()
+                        cycleNumber = currentSeason.getCycleInfo().getEpicCycleNumber()
+                    scheduleStr = backport.text(infoStrResID, cycle=int2roman(cycleNumber), season=seasonName)
                 else:
                     nextCycle = currentSeason.getNextCycleInfo(time_utils.getCurrentLocalServerTimestamp())
                     if nextCycle is None:

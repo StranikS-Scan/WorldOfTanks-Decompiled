@@ -112,8 +112,8 @@ class BlueprintsStorageCarouselDataProvider(StorageCarouselDataProvider):
     def _buildVehicle(self, item):
         bpRequester = self._itemsCache.items.blueprints
         name = getVehicleName(vehicle=item)
-        intelligenceIcon = RES_ICONS.getBlueprintFragment('small', 'intelligence')
-        nationalIcon = RES_ICONS.getBlueprintFragment('small', item.nationName)
+        intelligenceIcon = RES_ICONS.getBlueprintFragment('special', 'intelligence')
+        nationalIcon = RES_ICONS.getBlueprintFragment('special', item.nationName)
         current, total = bpRequester.getBlueprintCount(item.intCD, item.level)
         nationalCost, intelligenceCost = bpRequester.getRequiredIntelligenceAndNational(item.level)
         availableCount = bpRequester.getConvertibleFragmentCount(item.intCD, item.level)

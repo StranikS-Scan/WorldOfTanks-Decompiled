@@ -1012,52 +1012,6 @@
       <devices>	122	</devices>
     </damage>
   </_90mm_OE_mle_1924>
-  <_90mm_OFL_Halloween>
-    <id>	163	</id>
-    <userString>	#france_vehicles:_90mm_OFL_Halloween	</userString>
-    <icon>	ap_cr	</icon>
-    <price>	0	</price>
-    <kind>	ARMOR_PIERCING_CR	</kind>
-    <caliber>	90	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainAPCR	</effects>
-    <damage>
-      <armor>	240	</armor>
-      <devices>	122	</devices>
-    </damage>
-  </_90mm_OFL_Halloween>
-  <_90mm_FrtPrf1944_Halloween>
-    <id>	161	</id>
-    <userString>	#france_vehicles:_90mm_FrtPrf1944_Halloween	</userString>
-    <icon>	ap_cr	</icon>
-    <price>	4800	</price>
-    <notInShop>	true	</notInShop>
-    <improved>	true	</improved>
-    <kind>	ARMOR_PIERCING_CR	</kind>
-    <caliber>	90	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainAPCR	</effects>
-    <damage>
-      <armor>	240	</armor>
-      <devices>	122	</devices>
-    </damage>
-  </_90mm_FrtPrf1944_Halloween>
-  <_90mm_OE_mle_1924_Halloween>
-    <id>	162	</id>
-    <userString>	#france_vehicles:_90mm_OE_mle_1924_Halloween	</userString>
-    <icon>	he	</icon>
-    <price>	255	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	90	</caliber>
-    <explosionRadius>	1.46	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	mainHighExplosive	</effects>
-    <damage>
-      <armor>	320	</armor>
-      <devices>	122	</devices>
-    </damage>
-  </_90mm_OE_mle_1924_Halloween>
   <_90mm_AP_americaine>
     <id>	106	</id>
     <userString>	#france_vehicles:_90mm_AP_americaine	</userString>
@@ -2139,7 +2093,7 @@
     <isTracer>	true	</isTracer>
     <effects>	BRmainHollowCharge	</effects>
     <damage>
-      <armor>	250	</armor>
+      <armor>	220	</armor>
       <devices>	45	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
@@ -2156,7 +2110,7 @@
     <isTracer>	true	</isTracer>
     <effects>	BRlargeAPCR	</effects>
     <damage>
-      <armor>	170	</armor>
+      <armor>	150	</armor>
       <devices>	45	</devices>
     </damage>
   </_75mm_FrtPrf1946_SH>
@@ -2236,7 +2190,7 @@
     <isTracer>	true	</isTracer>
     <effects>	BRmainHollowCharge	</effects>
     <damage>
-      <armor>	350	</armor>
+      <armor>	290	</armor>
       <devices>	45	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
@@ -2253,7 +2207,7 @@
     <isTracer>	true	</isTracer>
     <effects>	BRlargeAPCR	</effects>
     <damage>
-      <armor>	250	</armor>
+      <armor>	210	</armor>
       <devices>	45	</devices>
     </damage>
   </_90mm_OFL_90_DS2_SH>

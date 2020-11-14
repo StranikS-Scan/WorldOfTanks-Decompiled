@@ -265,7 +265,6 @@ class REQ_CRITERIA(object):
         ELITE = RequestCriteria(PredicateCondition(lambda item: item.isElite))
         IS_BOT = RequestCriteria(PredicateCondition(lambda item: item.name.endswith('_bot')))
         IS_CREW_LOCKED = RequestCriteria(PredicateCondition(lambda item: item.isCrewLocked))
-        IS_OUTFIT_LOCKED = RequestCriteria(PredicateCondition(lambda item: item.isOutfitLocked))
         FULLY_ELITE = RequestCriteria(PredicateCondition(lambda item: item.isFullyElite))
         EVENT = RequestCriteria(PredicateCondition(lambda item: item.isEvent))
         EVENT_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEventBattles))
@@ -315,7 +314,6 @@ class REQ_CRITERIA(object):
 
     class EQUIPMENT(object):
         BUILTIN = staticmethod(RequestCriteria(PredicateCondition(lambda item: item.isBuiltIn)))
-        HAS_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: item.tags.issuperset(tags))))
 
     class BATTLE_BOOSTER(object):
         ALL = RequestCriteria(PredicateCondition(lambda item: item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER))
@@ -355,7 +353,6 @@ class REQ_CRITERIA(object):
         ONLY_IN_GROUP = staticmethod(lambda group: RequestCriteria(PredicateCondition(lambda item: item.groupUserName == group)))
         DISCLOSABLE = staticmethod(lambda vehicle: RequestCriteria(PredicateCondition(lambda item: item.fullInventoryCount(vehicle.intCD) or not item.isHidden)))
         IS_INSTALLED_ON_VEHICLE = staticmethod(lambda vehicle: RequestCriteria(PredicateCondition(lambda item: item.installedCount(vehicle.intCD) > 0)))
-        IS_INSTALLED_ON_ANY_VEHICLE = RequestCriteria(PredicateCondition(lambda item: len(item.getInstalledVehicles()) > 0))
         HAS_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: item.tags.issuperset(tags))))
         FULL_INVENTORY = RequestCriteria(PredicateCondition(lambda item: item.fullInventoryCount() > 0))
         ON_ACCOUNT = RequestCriteria(PredicateCondition(lambda item: item.fullCount() > 0))
@@ -823,6 +820,9 @@ class ItemsRequester(IItemsRequester):
 
     def getVehicles(self, criteria=REQ_CRITERIA.EMPTY):
         return self.getItems(GUI_ITEM_TYPE.VEHICLE, criteria=criteria)
+
+    def getStyles(self, criteria=REQ_CRITERIA.EMPTY):
+        return self.getItems(GUI_ITEM_TYPE.STYLE, criteria=criteria)
 
     def getBadges(self, criteria=REQ_CRITERIA.EMPTY):
         result = ItemsCollection()

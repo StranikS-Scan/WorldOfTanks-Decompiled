@@ -4,11 +4,8 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class BattleHintMeta(BaseDAAPIComponent):
 
-    def as_showHintS(self, type, data):
-        return self.flashObject.as_showHint(type, data) if self._isDAAPIInited() else None
+    def as_showHintS(self, data):
+        return self.flashObject.as_showHint(data) if self._isDAAPIInited() else None
 
     def as_hideHintS(self):
         return self.flashObject.as_hideHint() if self._isDAAPIInited() else None
-
-    def as_closeHintS(self):
-        return self.flashObject.as_closeHint() if self._isDAAPIInited() else None

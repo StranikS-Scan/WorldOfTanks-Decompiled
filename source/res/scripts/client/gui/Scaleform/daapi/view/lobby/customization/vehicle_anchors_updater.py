@@ -138,7 +138,7 @@ class VehicleAnchorsUpdater(object):
             else:
                 _logger.error('Collision component for current vehicle is missing.')
         else:
-            _logger.warning('Vehicle entity is not loaded/exist.')
+            _logger.error('Vehicle entity is not loaded/exist.')
         return
 
     def updateAnchorPositionAndNormal(self, slotId, position, normal):

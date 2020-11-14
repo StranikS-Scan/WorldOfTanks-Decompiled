@@ -22,3 +22,17 @@ class DualGunAimingSystemRemote(DualGunAimingSystem):
 
     def overrideZoom(self, zoom):
         return self.getZoom()
+
+    def enable(self, *args):
+        super(DualGunAimingSystemRemote, self).enable(*args)
+        vehicle = BigWorld.player().getVehicleAttached()
+        if vehicle is not None:
+            vehicle.filter.enableStabilisedMatrix(True)
+        return
+
+    def disable(self):
+        super(DualGunAimingSystemRemote, self).disable()
+        vehicle = BigWorld.player().getVehicleAttached()
+        if vehicle is not None:
+            vehicle.filter.enableStabilisedMatrix(False)
+        return

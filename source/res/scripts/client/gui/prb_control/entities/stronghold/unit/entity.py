@@ -10,6 +10,8 @@ from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import SystemMessages
 from gui.clans.clan_helpers import isStrongholdsEnabled, isLeaguesEnabled
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.prb_control import prb_getters
 from gui.prb_control import settings
 from gui.prb_control.entities.base.unit.entity import UnitEntity, UnitEntryPoint, UnitBrowserEntryPoint, UnitBrowserEntity
@@ -336,11 +338,7 @@ class StrongholdEntity(UnitEntity):
         super(StrongholdEntity, self).unit_onUnitPlayerRoleChanged(playerID, prevRoleFlags, nextRoleFlags)
         diff = prevRoleFlags ^ nextRoleFlags
         if diff & UNIT_ROLE.CREATOR > 0:
-            pInfo = self.getPlayerInfo(dbID=playerID)
-            if not pInfo.isCommander() and pInfo.isCurrentPlayer():
-                SystemMessages.pushMessage(i18n.makeString(I18N_SYSTEM_MESSAGES.UNIT_WARNINGS_ANOTHER_PLAYER_BECOME_COMMANDER), type=SM_TYPE.Warning)
-            elif pInfo.isCommander() and pInfo.isCurrentPlayer():
-                self.requestSlotVehicleFilters()
+            self.__onCommanderChanged(playerID)
         userNoLongerEquipmentCommander = prevRoleFlags & UNIT_ROLE.CAN_USE_EXTRA_EQUIPMENTS > 0 and not nextRoleFlags & UNIT_ROLE.CAN_USE_EXTRA_EQUIPMENTS > 0
         userBecomesEquipmentCommander = nextRoleFlags & UNIT_ROLE.CAN_USE_EXTRA_EQUIPMENTS > 0 and not prevRoleFlags & UNIT_ROLE.CAN_USE_EXTRA_EQUIPMENTS > 0
         if not userBecomesEquipmentCommander and not userNoLongerEquipmentCommander:
@@ -1018,3 +1016,25 @@ class StrongholdEntity(UnitEntity):
         if self.isCommander() and not inExternalLegionariesMatching:
             self.requestSlotVehicleFilters()
         return
+
+    def __onCommanderChanged(self, playerID):
+        pInfo = self.getPlayerInfo(dbID=playerID)
+        if pInfo.isCurrentPlayer():
+            unitWarningRes = R.strings.system_messages.unit.warnings
+            if not pInfo.isCommander():
+                if self.__isAnyPlayerEquipmentCommander():
+                    messageRes = unitWarningRes.ANOTHER_PLAYER_BECOME_COMMANDER()
+                else:
+                    messageRes = unitWarningRes.ANOTHER_PLAYER_BECOME_COMMANDER_WITH_EQUIPMENT_PERMISSION()
+                messageType = SM_TYPE.Information
+            else:
+                if self.__isAnyPlayerEquipmentCommander():
+                    messageRes = unitWarningRes.PLAYER_BECOME_COMMANDER()
+                else:
+                    messageRes = unitWarningRes.PLAYER_BECOME_COMMANDER_WITH_EQUIPMENT_PERMISSION()
+                messageType = SM_TYPE.Warning
+                self.requestSlotVehicleFilters()
+            SystemMessages.pushMessage(backport.text(messageRes), type=messageType)
+
+    def __isAnyPlayerEquipmentCommander(self):
+        return any((slot.player and slot.player.role & UNIT_ROLE.CAN_USE_EXTRA_EQUIPMENTS > 0 for slot in self.getSlotsIterator(*self.getUnit())))

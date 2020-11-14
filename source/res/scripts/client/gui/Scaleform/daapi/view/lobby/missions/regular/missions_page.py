@@ -41,7 +41,7 @@ from gui.sounds.ambients import LobbySubViewEnv, BattlePassSoundEnv
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IBattlePassController
+from skeletons.gui.game_control import IBattlePassController, IUISpamController
 from skeletons.gui.game_control import IMarathonEventsController, IGameSessionController, IRankedBattlesController
 from skeletons.gui.linkedset import ILinkedSetController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -80,10 +80,10 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
     eventsController = dependency.descriptor(IEventBoardController)
     marathonsCtrl = dependency.descriptor(IMarathonEventsController)
     battlePassCtrl = dependency.descriptor(IBattlePassController)
+    uiSpamController = dependency.descriptor(IUISpamController)
 
     def __init__(self, ctx):
         super(MissionsPage, self).__init__(ctx)
-        self._curTabs = None
         self.__filterData = AccountSettings.getFilter(MISSIONS_PAGE)
         self._eventID = None
         self._groupID = None
@@ -223,7 +223,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
                     self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS
                 elif self.marathonsCtrl.doesShowAnyMissionsTab():
                     enabledMarathon = self.marathonsCtrl.getFirstEnabledMarathon()
-                    if enabledMarathon is not None:
+                    if enabledMarathon is not None and not self.uiSpamController.shouldBeHidden(QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS):
                         self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS
                         self.__marathonPrefix = enabledMarathon.prefix
         self._eventID = ctx.get('eventID')
@@ -276,7 +276,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
 
     def __onEventsVisited(self, counters=None):
         if self.currentTab is not None:
-            self.__updateHeader()
+            self.__updateHeader(False)
         return
 
     def __updateFilterLabel(self):
@@ -302,7 +302,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         if self.__filterApplied():
             self.as_blinkFilterCounterS()
 
-    def __updateHeader(self, tryToReload=False):
+    def __updateHeader(self, updateTabsDataProvider=True):
         data = []
         tabs = []
         for tabData in TABS_DATA_ORDERED:
@@ -314,18 +314,10 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
             tabs.append(headerTab)
             data.append(tab)
 
-        if not tabs and not tryToReload and self.currentTab is not None:
-            self.__updateFilterLabel()
-            self.__updateHeader(tryToReload=True)
-            self.__scrollToGroup()
-            return
-        else:
-            if self._curTabs is None or self._curTabs != tabs:
-                self.as_setTabsDataProviderS(tabs)
-                self._curTabs = tabs
-            self.as_setTabsCounterDataS(data)
-            self.__showFilter()
-            return
+        if updateTabsDataProvider:
+            self.as_setTabsDataProviderS(tabs)
+        self.as_setTabsCounterDataS(data)
+        self.__showFilter()
 
     def __getHeaderTabData(self, tabData):
         alias = tabData.alias

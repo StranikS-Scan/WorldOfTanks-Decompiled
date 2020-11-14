@@ -640,12 +640,3 @@ class FakeDataAccessor(base.BaseDataAccessor):
     def get_unread_count(self, fields=None):
         url = '/unread/'
         return self._request_data(url, None)
-
-    @fake_method(example={'data': {'balance': [{'code': 'fake_code',
-                           'amount': 0,
-                           'expires_at': '1970-01-01T00:00:00Z'}],
-              'balance_version': 0,
-              'on_hold': {'granted': [],
-                          'consumed': []}}})
-    def get_inventory_entitlements(self, entitlement_codes):
-        return self._request_data('inventory_entitlements', None)

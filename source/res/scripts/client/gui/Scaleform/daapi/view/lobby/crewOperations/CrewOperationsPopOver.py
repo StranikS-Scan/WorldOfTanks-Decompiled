@@ -53,7 +53,10 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
         self.as_updateS(dataForUpdate)
 
     def __getCrewBooksOperationData(self, vehicle):
-        return self.__getInitCrewOperationObject(OPERATION_CREW_BOOKS, None, CREW_OPERATIONS.CREWBOOKS_WARNING_MEMBERSINBATTLE_TOOLTIP) if vehicle.isInBattle else self.__getInitCrewOperationObject(OPERATION_CREW_BOOKS)
+        if vehicle.isDisabled:
+            return self.__getInitCrewOperationObject(OPERATION_CREW_BOOKS, 'locked')
+        else:
+            return self.__getInitCrewOperationObject(OPERATION_CREW_BOOKS, None, CREW_OPERATIONS.CREWBOOKS_WARNING_MEMBERSINBATTLE_TOOLTIP) if vehicle.isInBattle else self.__getInitCrewOperationObject(OPERATION_CREW_BOOKS)
 
     def __getRetrainOperationData(self, vehicle):
         crew = vehicle.crew

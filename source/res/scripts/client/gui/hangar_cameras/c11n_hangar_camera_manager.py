@@ -218,8 +218,9 @@ class C11nHangarCameraManager(TimeDeltaMeter):
         return self.__currentMode == C11nCameraModes.STYLE_INFO
 
     def __rotateTurretAndGun(self, slotId=None):
-        if self.vEntity is not None:
+        if self.vEntity is not None and self.vEntity.isVehicleLoaded:
             self.vEntity.appearance.rotateTurretForAnchor(slotId)
+            self.vEntity.appearance.rotateGunToDefault()
         return
 
     def enableMovementByMouse(self, enableRotation=True, enableZoom=True):

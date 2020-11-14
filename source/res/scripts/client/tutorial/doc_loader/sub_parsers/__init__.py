@@ -144,25 +144,24 @@ def _readConnectedItemCondition(xmlCtx, section, _=None):
     return tut_conditions.ConnectedItemCondition(hintID, status)
 
 
-def _readComplexCondition(xmlCtx, section):
+def _readComplexCondition(xmlCtx, section, flags):
     items = []
-    item = None
     for name, subSection in section.items():
-        if name == 'condition-hint-showed':
-            item = _readConnectedItemCondition(xmlCtx, subSection)
-        else:
-            _xml.raiseWrongXml(xmlCtx, section, 'Tag %s are not found' % name)
-        items.append(item)
+        function = _conditions.tags.get(name)
+        if function is None:
+            LOG_ERROR('Condition is not supported: ', name)
+            continue
+        items.append(function(xmlCtx, subSection, flags))
 
     return items
 
 
-def _readComplexConditionAnd(xmlCtx, section, _):
-    return tut_conditions.ComplexConditionAnd(_readComplexCondition(xmlCtx, section))
+def _readComplexConditionAnd(xmlCtx, section, flags):
+    return tut_conditions.ComplexConditionAnd(_readComplexCondition(xmlCtx, section, flags))
 
 
-def _readComplexConditionOr(xmlCtx, section, _):
-    return tut_conditions.ComplexConditionOr(_readComplexCondition(xmlCtx, section))
+def _readComplexConditionOr(xmlCtx, section, flags):
+    return tut_conditions.ComplexConditionOr(_readComplexCondition(xmlCtx, section, flags))
 
 
 def _parseEffectTriggeredCondition(xmlCtx, section, state):
@@ -193,6 +192,19 @@ def _readBonusNotReceivedCondition(xmlCtx, section, _):
 
 def _readServiceCondition(xmlCtx, section, _):
     entityID = parseID(xmlCtx, section, 'Specify a entity ID')
+    serviceClass = _getClass(entityID, xmlCtx, section)
+    return tut_conditions.ServiceCondition(entityID, serviceClass)
+
+
+def _readClassCondition(xmlCtx, section, _):
+    entityID = parseID(xmlCtx, section, 'Specify a entity ID')
+    conditionClass = _getClass(entityID, xmlCtx, section)
+    tags = section.keys()
+    arguments = parseID(xmlCtx, section['arguments'], '') if 'arguments' in tags else ''
+    return tut_conditions.ClassCondition(entityID, conditionClass, arguments)
+
+
+def _getClass(entityID, xmlCtx, section):
     tags = section.keys()
     if 'path' in tags:
         path = parseID(xmlCtx, section['path'], 'Specify a path.')
@@ -200,14 +212,14 @@ def _readServiceCondition(xmlCtx, section, _):
         path = None
     try:
         if path is not None:
-            serviceClass = getattr(importlib.import_module(path), entityID)
+            resultClass = getattr(importlib.import_module(path), entityID)
         else:
-            serviceClass = importlib.import_module(entityID)
+            resultClass = importlib.import_module(entityID)
     except (ImportError, NameError):
-        _xml.raiseWrongXml(xmlCtx, section, 'Service %s not found!' % entityID)
+        _xml.raiseWrongXml(xmlCtx, section.name, 'Class %s not found!' % entityID)
         return
 
-    return tut_conditions.ServiceCondition(entityID, serviceClass)
+    return resultClass
 
 
 _BASE_CONDITION_TAGS = {'active': lambda xmlCtx, section, flags: _readFlagCondition(xmlCtx, section, _COND_STATE.ACTIVE, flags),
@@ -223,6 +235,7 @@ _BASE_CONDITION_TAGS = {'active': lambda xmlCtx, section, flags: _readFlagCondit
  'bonus-received': _readBonusReceivedCondition,
  'bonus-not-received': _readBonusNotReceivedCondition,
  'service': _readServiceCondition,
+ 'class-condition': _readClassCondition,
  'component-on-scene': lambda xmlCtx, section, flags: _readComponentOnSceneCondition(xmlCtx, section, _COND_STATE.ACTIVE),
  'component-not-on-scene': lambda xmlCtx, section, flags: _readComponentOnSceneCondition(xmlCtx, section, ~_COND_STATE.ACTIVE),
  'on-scene': lambda xmlCtx, section, flags: _readCurrentSceneCondition(xmlCtx, section, _COND_STATE.ACTIVE),

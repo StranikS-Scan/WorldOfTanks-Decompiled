@@ -64,7 +64,7 @@ def BWConfigWrapper(fn):
 
 
 @BWConfigWrapper
-def startDebug(isStartUp=False):
+def startDebug(isStartUp=False, host=None, port=None, ide=None):
     if not HAS_BW_CONFIG:
         return
     if isStartUp and not BWConfig.readBool('pydevd/autoConnect/%s' % BigWorld.component, False):
@@ -74,9 +74,9 @@ def startDebug(isStartUp=False):
             if sectName == 'replacePath':
                 REPLACE_PATHS.append((sect.readString('to'), sect.readString('from')))
 
-    ide = BWConfig.readString('pydevd/ide', 'pycharm')
-    host = BWConfig.readString('pydevd/host', 'localhost')
-    port = BWConfig.readInt('pydevd/port', 5678)
+    ide = ide or BWConfig.readString('pydevd/ide', 'pycharm')
+    host = host or BWConfig.readString('pydevd/host', 'localhost')
+    port = port or BWConfig.readInt('pydevd/port', 5678)
     suspend = BWConfig.readBool('pydevd/suspend', False)
     traceOnlyCurrentThread = BWConfig.readBool('pydevd/traceOnlyCurrentThread', False)
     startPyDevD(ide, host, port, suspend, traceOnlyCurrentThread)

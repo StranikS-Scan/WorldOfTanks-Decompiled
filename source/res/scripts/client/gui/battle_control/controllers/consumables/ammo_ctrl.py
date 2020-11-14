@@ -15,10 +15,9 @@ from gui.battle_control.battle_constants import SHELL_SET_RESULT, CANT_SHOOT_ERR
 from gui.battle_control.controllers.interfaces import IBattleController
 from gui.shared.utils.MethodsRules import MethodsRules
 from gui.shared.utils.decorators import ReprInjector
+from gui.Scaleform.genConsts.AUTOLOADERBOOSTVIEWSTATES import AUTOLOADERBOOSTVIEWSTATES
 from ReloadEffect import DualGunReload
-from helpers import dependency
 from items import vehicles
-from skeletons.gui.battle_session import IBattleSessionProvider
 __all__ = ('AmmoController', 'AmmoReplayPlayer')
 _ClipBurstSettings = namedtuple('_ClipBurstSettings', 'size interval')
 _HUNDRED_PERCENT = 100.0
@@ -238,7 +237,7 @@ class AutoReloadingBoostStates(CONST_CONTAINER):
     WAITING_FOR_START = 'waiting_for_start'
     CHARGING = 'charging'
     CHARGED = 'charged'
-    NOT_ACTIVE = (UNAVAILABLE, INAPPLICABLE, WAITING_FOR_START)
+    NOT_ACTIVE = (UNAVAILABLE, INAPPLICABLE)
 
 
 class _AutoReloadingBoostStateCtrl(object):
@@ -317,6 +316,8 @@ class _AutoReloadingBoostStateCtrl(object):
             boostStartDelay = self.__gunSettings.clip[1] + autoReloadSetting.boostStartTime
             if boostStartDelay > timePassed:
                 timeToStartBoostCharging = boostStartDelay - timePassed
+                if self.__state == AutoReloadingBoostStates.WAITING_FOR_START:
+                    self.__resetWaitingToStart()
                 return (AutoReloadingBoostStates.WAITING_FOR_START,
                  timeToStartBoostCharging,
                  boostStartDelay,
@@ -329,6 +330,9 @@ class _AutoReloadingBoostStateCtrl(object):
              fullChargeTime - timePassed,
              fullChargeTime - boostStartDelay,
              {})
+
+    def __resetWaitingToStart(self):
+        self.__changeEventDispatcher('', AUTOLOADERBOOSTVIEWSTATES.INVISIBLE, 0.0, {})
 
     def __onTimeForStateHasCome(self):
         self.__nextStateCallbackID = None
@@ -551,15 +555,11 @@ class AmmoController(MethodsRules, IBattleController):
         else:
             return quantity
 
-    def getClipCapacity(self):
-        return self.__gunSettings.clip.size
-
     @MethodsRules.delayable('setGunSettings')
     def setShells(self, intCD, quantity, quantityInClip):
         player = BigWorld.player()
         observedVehicleData = player.observedVehicleData.get(player.observedVehicleID)
-        guiSessionProvider = dependency.instance(IBattleSessionProvider)
-        if observedVehicleData is not None and not guiSessionProvider.arenaVisitor.gui.isEventBattle():
+        if observedVehicleData is not None:
             ammoCDs = [ ammoData[0] for ammoData in observedVehicleData.orderedAmmo ]
             if intCD not in ammoCDs:
                 _logger.debug('Skip ammo with cd=%d , current ammoCDs are %s', intCD, str(ammoCDs))

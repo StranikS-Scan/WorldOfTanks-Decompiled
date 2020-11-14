@@ -83,12 +83,8 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
             _logger.error('Marker %d is not added by given ID', markerID)
 
     def setMarkerSticky(self, markerID, isSticky):
-        if self.__isStickyEnabled:
+        if self.__isStickyEnabled and self.__isIBCEnabled:
             self.__canvas.markerSetSticky(markerID, isSticky)
-
-    def markerSetCustomStickyRadiusScale(self, markerID, scale):
-        if self.__isStickyEnabled:
-            self.__canvas.markerSetCustomStickyRadiusScale(markerID, scale)
 
     def setMarkerRenderInfo(self, markerID, minScale, bounds, innerBounds, cullDistance, markerBoundsScale):
         self.__canvas.markerSetRenderInfo(markerID, minScale, bounds, innerBounds, cullDistance, markerBoundsScale)
@@ -196,7 +192,8 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         setup = {'eventBus': plugins.EventBusPlugin,
          'equipments': plugins.EquipmentsMarkerPlugin,
          'vehiclesTargets': plugins.VehicleMarkerTargetPlugin,
-         'controlMode': plugins.ControlModePlugin}
+         'controlMode': plugins.ControlModePlugin,
+         'area_markers': plugins.AreaMarkerPlugin}
         if self.__showBaseMarkers:
             setup['teamAndControlPoints'] = plugins.TeamsOrControlsPointsPlugin
         if self.__showLocationMarkers:
@@ -247,8 +244,6 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         return
 
     def __onSettingsChange(self, diff):
-        sessionProvider = dependency.instance(IBattleSessionProvider)
-        isEventBattle = sessionProvider.arenaVisitor.gui.isEventBattle()
         addSettings = {}
         for item in diff:
             if item in (BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION,
@@ -260,8 +255,8 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         if not addSettings:
             return
         newIBCEnabled = bool(addSettings.get(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION, self.__isIBCEnabled))
-        newShowBaseMarkers = bool(addSettings.get(BattleCommStorageKeys.SHOW_BASE_MARKERS, self.__showBaseMarkers)) or isEventBattle
-        newIsSticky = bool(addSettings.get(BattleCommStorageKeys.SHOW_STICKY_MARKERS, self.__isStickyEnabled)) or isEventBattle
+        newShowBaseMarkers = bool(addSettings.get(BattleCommStorageKeys.SHOW_BASE_MARKERS, self.__showBaseMarkers))
+        newIsSticky = bool(addSettings.get(BattleCommStorageKeys.SHOW_STICKY_MARKERS, self.__isStickyEnabled))
         new3DMarkers = bool(addSettings.get(BattleCommStorageKeys.SHOW_LOCATION_MARKERS, self.__showLocationMarkers))
         if newIBCEnabled != self.__isIBCEnabled:
             self.__isIBCEnabled = newIBCEnabled
@@ -270,7 +265,7 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
             for markerId in self.__ids:
                 self.__canvas.markerSetSticky(markerId, False)
 
-        if newShowBaseMarkers != self.__showBaseMarkers or isEventBattle:
+        if newShowBaseMarkers != self.__showBaseMarkers:
             self.__setPlugin(pluginName='teamAndControlPoints', startPlugin=newShowBaseMarkers)
             self.__showBaseMarkers = newShowBaseMarkers
         if new3DMarkers != self.__showLocationMarkers:

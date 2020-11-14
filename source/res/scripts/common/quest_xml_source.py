@@ -195,7 +195,6 @@ class Source(object):
                 questClientData['conditions'] = mainNode.questClientConditions
             if mainNode.groupContent:
                 questClientData['groupContent'] = mainNode.groupContent
-                mainNode.info['groupContent'] = mainNode.groupContent
             self.__stripServerQuestData(questClientData)
             mainNode.info['questClientData'] = questClientData
             nodes.setdefault(eventType, []).append(mainNode)
@@ -490,7 +489,8 @@ class Source(object):
          'eventCoin',
          'entitlement',
          'rankedDailyBattles',
-         'rankedBonusBattles'}
+         'rankedBonusBattles',
+         'dogTagComponent'}
         if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST, EVENT_TYPE.NT_QUEST):
             bonusTypes.update(('xp', 'tankmenXP', 'xpFactor', 'creditsFactor', 'freeXPFactor', 'tankmenXPFactor'))
         if eventType in (EVENT_TYPE.NT_QUEST,):

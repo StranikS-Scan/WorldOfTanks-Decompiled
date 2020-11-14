@@ -2,29 +2,32 @@
 # Embedded file name: scripts/client/gui/simple_turret_rotator.py
 import logging
 import BigWorld
+import Math
 import Event
 import math_utils
-from vehicle_systems.tankStructure import TankPartNames
+from vehicle_systems.tankStructure import TankNodeNames
 from VehicleGunRotator import VehicleGunRotator, MatrixAnimator
 logger = logging.getLogger(__name__)
 
 class SimpleTurretRotator(object):
-    __slots__ = ('__isStarted', '__turretYaw', '__targetTurretYaw', '__rotationTime', '__timerID', '__turretMatrixAnimator', '__easingCls', '__easing', '_eventsManager', 'onTurretRotated', 'onTurretRotationStarted')
+    __slots__ = ('__isStarted', '__turretYaw', '__targetTurretYaw', '__rotationTime', '__timerID', '__turretMatrixAnimator', '__easingCls', '__easing', '_eventsManager', 'onTurretRotated', 'onTurretRotationStarted', '__turretTranslation')
     __ROTATION_TICK_LENGTH = 0.05
     turretMatrix = property(lambda self: self.__turretMatrixAnimator.matrix)
     turretYaw = property(lambda self: self.__turretYaw)
     isStarted = property(lambda self: self.__isStarted)
 
-    def __init__(self, compoundModel=None, currTurretYaw=0.0, easingCls=math_utils.Easing.linearEasing):
+    def __init__(self, compoundModel=None, currTurretYaw=0.0, turretTranslation=Math.Vector3(0.0, 0.0, 0.0), easingCls=math_utils.Easing.linearEasing):
         self.__isStarted = False
         self.__turretYaw = self.__targetTurretYaw = currTurretYaw
+        self.__turretTranslation = turretTranslation
         self.__rotationTime = 0.0
         self.__timerID = None
         self.__turretMatrixAnimator = MatrixAnimator()
         self.__easingCls = easingCls
         self.__easing = None
         if compoundModel is not None:
-            compoundModel.node(TankPartNames.TURRET, self.__turretMatrixAnimator.matrix)
+            self.__updateTurretMatrix(currTurretYaw, 0.0)
+            compoundModel.node(TankNodeNames.TURRET_JOINT).local = self.__turretMatrixAnimator.matrix
         else:
             logger.error('CompoundModel is not set!')
         self._eventsManager = Event.EventManager()
@@ -44,12 +47,15 @@ class SimpleTurretRotator(object):
             self.__targetTurretYaw = targetTurretYaw
             if rotationTime is not None:
                 self.__rotationTime = rotationTime
-            if self.__isStarted:
-                self.__easing.reset(self.__turretYaw, targetTurretYaw, self.__rotationTime)
+            if self.__rotationTime > 0.0:
+                if self.__isStarted:
+                    self.__easing.reset(self.__turretYaw, targetTurretYaw, self.__rotationTime)
+                else:
+                    self.__isStarted = True
+                    self.__timerID = BigWorld.callback(self.__ROTATION_TICK_LENGTH, self.__onTick)
+                    self.__easing = self.__easingCls(self.__turretYaw, targetTurretYaw, self.__rotationTime)
             else:
-                self.__isStarted = True
-                self.__timerID = BigWorld.callback(self.__ROTATION_TICK_LENGTH, self.__onTick)
-                self.__easing = self.__easingCls(self.__turretYaw, targetTurretYaw, self.__rotationTime)
+                self.__updateTurretMatrix(self.__targetTurretYaw, self.__rotationTime)
             self.onTurretRotationStarted()
             return
 
@@ -87,5 +93,5 @@ class SimpleTurretRotator(object):
         self.__updateTurretMatrix(self.__turretYaw, self.__ROTATION_TICK_LENGTH)
 
     def __updateTurretMatrix(self, yaw, time):
-        m = math_utils.createRotationMatrix((yaw, 0.0, 0.0))
+        m = math_utils.createRTMatrix((yaw, 0.0, 0.0), self.__turretTranslation)
         self.__turretMatrixAnimator.update(m, time)

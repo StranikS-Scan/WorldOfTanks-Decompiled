@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PerksParametersController.py
+import typing
 from collections import defaultdict
+from WeakMethod import WeakMethodProxy
 from BasePerksController import BasePerksController
 from PerkPlanHolder import RestartingMultiPlan
 
@@ -21,12 +23,23 @@ class PerksParametersController(BasePerksController):
     def __init__(self, ownerIntCD, scopedPerks):
         owner = PlanOwner(ownerIntCD)
         super(PerksParametersController, self).__init__(owner, scopedPerks)
+        self.__destroyed = False
         self._vehParams = None
         self._initialized = False
         self._isRunning = False
         self._ownerIntCD = ownerIntCD
         self._recalcType = RecalcType.INITIAL
         self._ignoredPerks = []
+        return
+
+    def __del__(self):
+        if not self.__destroyed:
+            self.destroy()
+
+    def destroy(self):
+        super(PerksParametersController, self).destroy()
+        self._vehParams = None
+        self.__destroyed = True
         return
 
     def recalc(self, vehParams=None):
@@ -57,7 +70,7 @@ class PerksParametersController(BasePerksController):
 
     def init(self, isAutoStart=False):
         self._modifiedFactors = defaultdict(lambda : defaultdict(list))
-        self._planHolder = RestartingMultiPlan(self._scopedPerks, self.rebuildParams)
+        self._planHolder = RestartingMultiPlan(self._scopedPerks, WeakMethodProxy(self.rebuildParams))
         self._planHolder.loadPlan(self._owner, isAutoStart)
         self._isRunning = True
 
@@ -87,8 +100,3 @@ class PerksParametersController(BasePerksController):
         self._isRunning = False
         if self._recalcType == RecalcType.INITIAL and self._vehParams:
             self._vehParams.rebuildParams()
-
-    def destroy(self):
-        super(PerksParametersController, self).destroy()
-        self._vehParams = None
-        return

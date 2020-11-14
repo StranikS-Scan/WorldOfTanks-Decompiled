@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/messengerBar/messenger_bar.py
 from account_helpers.settings_core.settings_constants import SESSION_STATS
 from adisp import process
-from constants import PREBATTLE_TYPE, QUEUE_TYPE
+from constants import PREBATTLE_TYPE
 from frameworks.wulf import WindowLayer
 from gui import makeHtmlString
 from gui import SystemMessages
@@ -24,9 +24,10 @@ from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.gui_items.processors.session_stats import ResetSessionStatsProcessor
+from gui.ui_spam.custom_aliases import SESSION_STATS_HINT
 from helpers import int2roman, dependency
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
-from skeletons.gui.game_control import IVehicleComparisonBasket, IReferralProgramController
+from skeletons.gui.game_control import IVehicleComparisonBasket, IReferralProgramController, IUISpamController
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 from skeletons.gui.lobby_context import ILobbyContext
@@ -106,6 +107,7 @@ class _CompareBasketListener(object):
 class MessengerBar(MessengerBarMeta, IGlobalListener):
     _referralCtrl = dependency.descriptor(IReferralProgramController)
     _lobbyContext = dependency.descriptor(ILobbyContext)
+    _uiSpamController = dependency.descriptor(IUISpamController)
 
     @prbDispatcherProperty
     def prbDispatcher(self):
@@ -176,8 +178,7 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
 
     def __handleFightButtonUpdated(self, event):
         state = self.prbDispatcher.getFunctionalState()
-        isInEvent = self.prbEntity.getQueueType() == QUEUE_TYPE.EVENT_BATTLES
-        self.as_setReferralButtonEnabledS(not state.isNavigationDisabled() and not isInEvent)
+        self.as_setReferralButtonEnabledS(not state.isNavigationDisabled())
 
     def __manageWindow(self, eventType):
         manager = self.app.containerManager
@@ -214,7 +215,7 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
                 SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         self.as_setSessionStatsButtonVisibleS(isSessionStatsEnabled)
         self.as_setSessionStatsButtonEnableS(isSessionStatsEnabled and isInSupportedMode, tooltip)
-        self.__updateSessionStatsHint(self.__sessionStatsBtnOnlyOnceHintShow and isSessionStatsEnabled and isInSupportedMode)
+        self.__updateSessionStatsHint(self.__sessionStatsBtnOnlyOnceHintShow and isSessionStatsEnabled and isInSupportedMode and not self._uiSpamController.shouldBeHidden(SESSION_STATS_HINT))
         return
 
     @staticmethod

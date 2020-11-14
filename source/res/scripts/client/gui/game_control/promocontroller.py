@@ -34,6 +34,8 @@ from web.web_client_api.promo import PromoWebApi
 from web.web_client_api.battle_pass import BattlePassWebApi
 from web.web_client_api.ranked_battles import RankedBattlesWebApi
 from web.web_client_api.request import RequestWebApi
+from web.web_client_api.shop import ShopWebApi
+from web.web_client_api.social import SocialWebApi
 from web.web_client_api.vehicles import VehiclesWebApi
 _PromoData = namedtuple('_PromoData', ['url', 'closeCallback', 'source'])
 _logger = logging.getLogger(__name__)
@@ -340,7 +342,7 @@ class PromoController(IPromoController):
 
 
 def _showBrowserView(url, returnClb, soundSpaceID=None):
-    webHandlers = webApiCollection(PromoWebApi, VehiclesWebApi, RequestWebApi, RankedBattlesWebApi, BattlePassWebApi, ui_web_api.OpenWindowWebApi, ui_web_api.CloseWindowWebApi, ui_web_api.OpenTabWebApi, ui_web_api.NotificationWebApi, ui_web_api.ContextMenuWebApi, ui_web_api.UtilWebApi, sound_web_api.SoundWebApi, sound_web_api.HangarSoundWebApi)
+    webHandlers = webApiCollection(PromoWebApi, VehiclesWebApi, RequestWebApi, RankedBattlesWebApi, BattlePassWebApi, ui_web_api.OpenWindowWebApi, ui_web_api.CloseWindowWebApi, ui_web_api.OpenTabWebApi, ui_web_api.NotificationWebApi, ui_web_api.ContextMenuWebApi, ui_web_api.UtilWebApi, sound_web_api.SoundWebApi, sound_web_api.HangarSoundWebApi, ShopWebApi, SocialWebApi)
     ctx = {'url': url,
      'returnClb': returnClb,
      'webHandlers': webHandlers,

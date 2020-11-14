@@ -114,6 +114,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         self.__clientBonusBattlesCount = None
         self.__ranksCache = []
         self.__divisions = None
+        self.__primeTimeStatus = None
         self.__statsComposer = None
         self.__webSeasonProvider = RankedWebSeasonProvider()
         self.__yearPositionProvider = RankedYearPositionProvider()
@@ -232,7 +233,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         restriction = None
         config = self.__getRankedSettings()
         state, _ = vehicle.getState()
-        if state == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE or vehicle.comactDescr in config.forbiddenVehTypes:
+        if state == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE or vehicle.compactDescr in config.forbiddenVehTypes:
             restriction = PRE_QUEUE_RESTRICTION.LIMIT_VEHICLE_TYPE
             ctx = {'forbiddenType': vehicle.shortUserName}
         if vehicle.type in config.forbiddenClassTags:
@@ -1169,7 +1170,9 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
 
     def __timerUpdate(self):
         status, _, _ = self.getPrimeTimeStatus()
-        self.onGameModeStatusUpdated(status)
+        if status != self.__primeTimeStatus:
+            self.__primeTimeStatus = status
+            self.onGameModeStatusUpdated(status)
 
     def __timerTick(self):
         self.onGameModeStatusTick()

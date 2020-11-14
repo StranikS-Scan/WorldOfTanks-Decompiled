@@ -4,9 +4,10 @@ import logging
 from collections import namedtuple
 import BigWorld
 from BWUtil import AsyncReturn
-from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
+from CurrentVehicle import g_currentVehicle
 from Math import Matrix
 from account_helpers.AccountSettings import AccountSettings, CUSTOMIZATION_SECTION, CAROUSEL_ARROWS_HINT_SHOWN_FIELD
+import adisp
 from async import async, await
 from gui import g_tankActiveCamouflage, SystemMessages
 from gui.Scaleform.Waiting import Waiting
@@ -217,7 +218,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
                 isOk = yield await(dialogs.showSimple(builder.build(self)))
                 self.onBuyConfirmed(isOk)
             else:
-                self.__ctx.applyItems(purchaseItems)
+                self.__applyItems(purchaseItems)
                 if self.__styleInfo.visible:
                     self.__styleInfo.disableBlur()
         else:
@@ -268,7 +269,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
 
     def __initAnchorsPositions(self):
         self.__initAnchorsPositionsCallback = None
-        if self.__ctx.c11nCameraManager.vEntity is not None:
+        if self.__ctx.c11nCameraManager.vEntity is not None and self.__ctx.c11nCameraManager.vEntity.isVehicleLoaded:
             self.__ctx.c11nCameraManager.vEntity.appearance.updateAnchorsParams()
         self.__setAnchorsInitData()
         self.__locateCameraToCustomizationPreview(updateTankCentralPoint=True)
@@ -287,7 +288,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         if isOk:
             self.soundManager.playInstantSound(SOUNDS.SELECT)
             purchaseItems = self.__ctx.mode.getPurchaseItems()
-            self.__ctx.applyItems(purchaseItems)
+            self.__applyItems(purchaseItems)
         else:
             self.changeVisible(True)
             self.__locateCameraToCustomizationPreview()
@@ -306,6 +307,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         if self.__propertiesSheet.handleEscBtn():
             return
         else:
+            progressiveView = self.__getProgressiveView()
             if self.__ctx.mode.selectedItem is not None:
                 self.__ctx.mode.unselectItem()
             elif self.__ctx.mode.selectedSlot is not None:
@@ -313,6 +315,8 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             elif self.__ctx.modeId == CustomizationModes.EDITABLE_STYLE:
                 self.__dontPlayTabChangeSound = True
                 self.__ctx.changeMode(CustomizationModes.STYLED)
+            elif progressiveView is not None:
+                progressiveView.destroyWindow()
             else:
                 self.onCloseWindow()
             return
@@ -593,9 +597,8 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         return
 
     def _populate(self):
+        self._invalidate(self.__viewCtx)
         super(MainView, self)._populate()
-        if g_currentPreviewVehicle.isPresent() and g_currentPreviewVehicle.item.isOnlyForEventBattles:
-            g_currentPreviewVehicle.selectNoVehicle()
         self.__ctx = self.service.getCtx()
         self.__selectFirstVisibleTab()
         self.__ctx.events.onSeasonChanged += self.__onSeasonChanged
@@ -645,7 +648,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__renderEnv.enable(True)
         if self.__ctx.vehicleAnchorsUpdater is not None:
             self.__ctx.vehicleAnchorsUpdater.setMainView(self.flashObject)
-        self._invalidate(self.__viewCtx)
         self.__ctx.vehicleAnchorsUpdater.setCollisions()
         entity = self.hangarSpace.getVehicleEntity()
         if entity and entity.appearance:
@@ -679,8 +681,9 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         if self.__ctx.c11nCameraManager is not None:
             self.__ctx.c11nCameraManager.locateCameraToStartState()
             vEntity = self.__ctx.c11nCameraManager.vEntity
-            if vEntity is not None and vEntity.appearance is not None and vEntity.appearance.turretRotator is not None:
-                vEntity.appearance.turretRotator.onTurretRotated -= self.__onTurretAndGunRotated
+            if vEntity is not None and vEntity.isVehicleLoaded:
+                turretRotator = vEntity.appearance.turretRotator
+                turretRotator.onTurretRotated -= self.__onTurretAndGunRotated
         if self.__styleInfo is not None:
             self.__styleInfo.disableBlur()
             self.__disableStyleInfoSound()
@@ -1082,6 +1085,9 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
     def __isGamefaceBuyViewOpened(self):
         return self.guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.customization.CustomizationCart())
 
+    def __getProgressiveView(self):
+        return self.guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.customization.progressive_items_view.ProgressiveItemsView())
+
     @async
     def __confirmClose(self):
         if self.__hasOpenedChildWindow() or self.__isGamefaceBuyViewOpened():
@@ -1101,3 +1107,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         if result:
             self.__onCloseWindow()
         raise AsyncReturn(result)
+
+    @adisp.process
+    def __applyItems(self, purchaseItems):
+        yield self.__ctx.applyItems(purchaseItems)

@@ -259,13 +259,12 @@ class Fire(EntityExtra):
     def _start(self, data, args):
         data['_isStarted'] = False
         vehicle = data['entity']
-        apperance = vehicle.appearance
-        if apperance is not None and not apperance.isUnderwater:
+        isUnderwater = vehicle.appearance.isUnderwater
+        if not isUnderwater:
             self.__playEffect(data)
         data['_isStarted'] = True
         data['_invokeTime'] = BigWorld.time()
-        apperance.switchFireVibrations(True)
-        return
+        vehicle.appearance.switchFireVibrations(True)
 
     def _update(self, data, args):
         if not data['_isStarted']:
@@ -314,21 +313,13 @@ class Fire(EntityExtra):
         data['_effectsPlayer'] = weakref.ref(effectListPlayer)
         return
 
-    def __stopEffect(self, data):
-        effectsListPlayer = self.__getEffectsListPlayer(data)
-        if effectsListPlayer is not None:
-            effectsListPlayer.stop(forceCallback=True)
-            del data['_effectsPlayer']
-        return
-
     def checkUnderwater(self, vehicle, isVehicleUnderwater):
         data = vehicle.extras[self.index]
         if isVehicleUnderwater:
-            self.__stopEffect(data)
+            effectsListPlayer = self.__getEffectsListPlayer(data)
+            if effectsListPlayer is not None:
+                effectsListPlayer.stop(forceCallback=True)
+                del data['_effectsPlayer']
         if not isVehicleUnderwater:
             self.__playEffect(data)
-
-    def canBeDamagedChanged(self, vehicle, canBeDamaged):
-        if not canBeDamaged:
-            data = vehicle.extras[self.index]
-            self.__stopEffect(data)
+        return

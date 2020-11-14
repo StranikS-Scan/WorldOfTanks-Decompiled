@@ -71,7 +71,6 @@ class CallbackDataNames(object):
     GUN_DAMAGE_SOUND = 'gunDamagedSound'
     SHOW_AUTO_AIM_MARKER = 'showAutoAimMarker'
     HIDE_AUTO_AIM_MARKER = 'hideAutoAimMarker'
-    SWITCH_ENVIRONMENT = 'switchEnvironment'
 
 
 class BattleReplay(object):

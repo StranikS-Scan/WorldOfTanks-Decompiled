@@ -133,8 +133,6 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     OBSERVER = 'observer'
     DISABLED_IN_ROAMING = 'disabledInRoaming'
     EVENT = 'event_battles'
-    EVENT_PREMIUM_VEHICLE = 'event_premium_vehicle'
-    EVENT_NOT_ELITE_VEHICLE = 'event_not_elite_vehicle'
     EXCLUDED_FROM_SANDBOX = 'excluded_from_sandbox'
     TELECOM = 'telecom'
     UNRECOVERABLE = 'unrecoverable'
@@ -270,7 +268,6 @@ class Vehicle(FittingItem):
             if proxy.shop.winXPFactorMode == WIN_XP_FACTOR_MODE.ALWAYS or self.intCD not in proxy.stats.multipliedVehicles and not self.isOnlyForEventBattles:
                 self._dailyXPFactor = proxy.shop.dailyXPFactor
             self._isElite = not vehDescr.type.unlocksDescrs or self.intCD in proxy.stats.eliteVehicles
-            self._isElite = self._isElite and VEHICLE_TAGS.EVENT_NOT_ELITE_VEHICLE not in vehDescr.type.tags
             self._isFullyElite = self.isElite and not any((data[1] not in proxy.stats.unlocks for data in vehDescr.type.unlocksDescrs))
             clanDamageLock = proxy.stats.vehicleTypeLocks.get(self.intCD, {}).get(CLAN_LOCK, 0)
             clanNewbieLock = proxy.stats.globalVehicleLocks.get(CLAN_LOCK, 0)
@@ -435,6 +432,10 @@ class Vehicle(FittingItem):
     @property
     def searchableShortUserName(self):
         return makeSearchableString(self.shortUserName)
+
+    @property
+    def outfits(self):
+        return self._outfits
 
     def getUnlockDescrByIntCD(self, intCD):
         for unlockIdx, data in enumerate(self.descriptor.type.unlocksDescrs):
@@ -1389,7 +1390,7 @@ class Vehicle(FittingItem):
             return [ constants.ACTION_TYPE_TO_LABEL.get(action) for action in actions ]
 
     @property
-    def comactDescr(self):
+    def compactDescr(self):
         return self._descriptor.type.compactDescr
 
     @prbDispatcherProperty

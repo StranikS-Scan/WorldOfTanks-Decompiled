@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/stronghold/stronghold_provider.py
+import logging
 from adisp import process
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui import DialogsInterface
@@ -13,24 +14,30 @@ from gui.prb_control.entities.base.ctx import LeavePrbAction
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.clans.clan_helpers import isStrongholdsEnabled
 from helpers import dependency
+from skeletons.gui.game_control import IBrowserController
 from skeletons.gui.lobby_context import ILobbyContext
+_logger = logging.getLogger(__name__)
 
 class ClientStrongholdProvider(IGlobalListener):
     lobbyContext = dependency.descriptor(ILobbyContext)
+    browserCtrl = dependency.descriptor(IBrowserController)
 
     def __init__(self):
         super(ClientStrongholdProvider, self).__init__()
         self.__tabActive = False
         self.__entityActive = False
         self.__unitActive = False
+        self.__browserID = None
         if self.prbEntity:
             self.__checkSwitch()
+        return
 
     def start(self):
         self.startGlobalListening()
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         g_eventBus.addListener(events.StrongholdEvent.STRONGHOLD_ACTIVATED, self.__onStrongholdsActivate, EVENT_BUS_SCOPE.STRONGHOLD)
         g_eventBus.addListener(events.StrongholdEvent.STRONGHOLD_DEACTIVATED, self.__onStrongholdsDeactivate, EVENT_BUS_SCOPE.STRONGHOLD)
+        g_eventBus.addListener(events.StrongholdEvent.STRONGHOLD_LOADED, self.__onStrogholdLoaded, EVENT_BUS_SCOPE.STRONGHOLD)
         from gui.Scaleform.daapi.view.lobby.strongholds.web_handlers import createStrongholdsWebHandlers
         ShowInBrowserItem.addWebHandler('stronghold', createStrongholdsWebHandlers())
         OpenInternalBrowser.addWebHandler('stronghold', createStrongholdsWebHandlers())
@@ -40,11 +47,23 @@ class ClientStrongholdProvider(IGlobalListener):
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         g_eventBus.removeListener(events.StrongholdEvent.STRONGHOLD_ACTIVATED, self.__onStrongholdsActivate, EVENT_BUS_SCOPE.STRONGHOLD)
         g_eventBus.removeListener(events.StrongholdEvent.STRONGHOLD_DEACTIVATED, self.__onStrongholdsDeactivate, EVENT_BUS_SCOPE.STRONGHOLD)
+        g_eventBus.removeListener(events.StrongholdEvent.STRONGHOLD_LOADED, self.__onStrogholdLoaded, EVENT_BUS_SCOPE.STRONGHOLD)
         ShowInBrowserItem.removeWebHandler('stronghold')
         OpenInternalBrowser.removeWebHandler('stronghold')
 
     def onPrbEntitySwitched(self):
         self.__checkSwitch()
+
+    def isTabActive(self):
+        return self.__tabActive
+
+    def loadUrl(self, url):
+        browser = self.browserCtrl.getBrowser(self.__browserID)
+        if browser is not None:
+            browser.navigate(url)
+        else:
+            _logger.info('BrowserController has not browser with id: %s', self.__browserID)
+        return
 
     def __onServerSettingChanged(self, diff):
         if 'strongholdSettings' in diff and 'isStrongholdsEnabled' in diff['strongholdSettings']:
@@ -79,6 +98,11 @@ class ClientStrongholdProvider(IGlobalListener):
 
     def __onStrongholdsDeactivate(self, _):
         self.__tabActive = False
+        self.__browserID = None
+        return
+
+    def __onStrogholdLoaded(self, event):
+        self.__browserID = event.ctx.get('browserID')
 
     @process
     def __showPopupDlg(self):

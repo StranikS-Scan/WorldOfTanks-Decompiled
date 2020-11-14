@@ -290,7 +290,7 @@ _ProgressiveReward.__new__.__defaults__ = (True,
  'pr:probability',
  0)
 
-class _EventProgressionConfig(namedtuple('_EventProgressionConfig', ('isEnabled', 'isFrontLine', 'isSteelHunter', 'url', 'questPrefix', 'exchange', 'rewardVehicles', 'rewardPointsTokenID', 'seasonPointsTokenID', 'maxRewardPoints'))):
+class _EventProgressionConfig(namedtuple('_EventProgressionConfig', ('isEnabled', 'isFrontLine', 'isSteelHunter', 'url', 'questPrefix', 'exchange', 'rewardVehicles', 'rewardStyles', 'rewardPointsTokenID', 'seasonPointsTokenID', 'maxRewardPoints'))):
 
     def __new__(cls, *args, **kwargs):
         defaults = {attr:copy.deepcopy(cls.__new__.__defaults__[i]) for i, attr in enumerate(cls._fields)}
@@ -312,6 +312,7 @@ _EventProgressionConfig.__new__.__defaults__ = (False,
  '',
  '',
  {},
+ [],
  [],
  '',
  '',
@@ -563,30 +564,6 @@ class _ReactiveCommunicationConfig(object):
         return self.__url
 
 
-CN_LOOT_BOXES_EVENT_CONFIG = 'cn_loot_boxes_event_config'
-
-class _CNLootBoxesEventConfig(object):
-    __slots__ = ('__isEnabled', '__startDateInUTC', '__finishDateInUTC', '__lootBoxBuyDayLimit')
-
-    def __init__(self, **kwargs):
-        super(_CNLootBoxesEventConfig, self).__init__()
-        self.__isEnabled = kwargs.get('enabled', False)
-        self.__startDateInUTC = kwargs.get('startDateInUTC', 0)
-        self.__finishDateInUTC = kwargs.get('finishDateInUTC', 0)
-        self.__lootBoxBuyDayLimit = kwargs.get('lootBoxBuyDayLimit', 0)
-
-    @property
-    def isEnabled(self):
-        return self.__isEnabled
-
-    @property
-    def lootBoxBuyDayLimit(self):
-        return self.__lootBoxBuyDayLimit
-
-    def getEventActiveTime(self):
-        return (self.__startDateInUTC, self.__finishDateInUTC)
-
-
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -615,7 +592,6 @@ class ServerSettings(object):
         self.__battlePassConfig = BattlePassConfig({})
         self.__crystalRewardsConfig = _crystalRewardsConfig()
         self.__reactiveCommunicationConfig = _ReactiveCommunicationConfig()
-        self.__cnLootBoxesEventConfig = _CNLootBoxesEventConfig()
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -691,7 +667,6 @@ class ServerSettings(object):
         if _crystalRewardsConfig.CONFIG_NAME in self.__serverSettings:
             self.__crystalRewardsConfig = makeTupleByDict(_crystalRewardsConfig, self.__serverSettings[_crystalRewardsConfig.CONFIG_NAME])
         self.__updateReactiveCommunicationConfig(self.__serverSettings)
-        self.__updateCNLootBoxesEventConfig(self.__serverSettings)
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -751,7 +726,6 @@ class ServerSettings(object):
         if _crystalRewardsConfig.CONFIG_NAME in serverSettingsDiff:
             self.__crystalRewardsConfig = makeTupleByDict(_crystalRewardsConfig, self.__serverSettings[_crystalRewardsConfig.CONFIG_NAME])
         self.__updateReactiveCommunicationConfig(serverSettingsDiff)
-        self.__updateCNLootBoxesEventConfig(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -1084,9 +1058,6 @@ class ServerSettings(object):
     def getReactiveCommunicationConfig(self):
         return self.__reactiveCommunicationConfig
 
-    def getCNLootBoxesEventConfig(self):
-        return self.__cnLootBoxesEventConfig
-
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)
 
@@ -1144,16 +1115,4 @@ class ServerSettings(object):
             else:
                 _logger.error('Unexpected format of subscriptions service config: %r', config)
                 self.__reactiveCommunicationConfig = _ReactiveCommunicationConfig()
-        return
-
-    def __updateCNLootBoxesEventConfig(self, settings):
-        if CN_LOOT_BOXES_EVENT_CONFIG in settings:
-            config = settings[CN_LOOT_BOXES_EVENT_CONFIG]
-            if config is None:
-                self.__cnLootBoxesEventConfig = _CNLootBoxesEventConfig()
-            elif isinstance(config, dict):
-                self.__cnLootBoxesEventConfig = _CNLootBoxesEventConfig(**config)
-            else:
-                _logger.error('Unexpected format of subscriptions service config: %r', config)
-                self.__cnLootBoxesEventConfig = _CNLootBoxesEventConfig()
         return

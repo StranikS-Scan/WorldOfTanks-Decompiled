@@ -38,13 +38,14 @@ class SLOT_TYPE(object):
     MARKER_POINT_ARRAY = 'MarkerPointArray'
     AREA_TRIGGER = 'AreaTrigger'
     AREA_TRIGGER_ARRAY = 'AreaTriggerArray'
-    VEHICLE_TRIGGER_AREA = 'VehicleTriggerArea'
-    VEHICLE_TRIGGER_AREA_ARRAY = 'VehicleTriggerAreaArray'
+    TRIGGER_VEHICLE_AREA = 'TriggerVehicleArea'
+    TRIGGER_VEHICLE_AREA_ARRAY = 'TriggerVehicleAreaArray'
     CONTROL_POINT = 'ControlPoint'
     CONTROL_POINT_ARRAY = 'ControlPointArray'
     E_MODULE_STATE = 'EModuleState'
     E_VEHICLE_DEVICE = 'EVehicleDevice'
     E_VEHICLE_TANKMAN = 'EVehicleTankman'
+    E_FINISH_REASON = 'EFinishReason'
 
 
 class EDITOR_TYPE(object):
@@ -129,7 +130,23 @@ class Block(Meta):
 
     def __init__(self, agent):
         self.__agent = agent
-        self._onFinishScriptCallRequired = False
+
+    def captionText(self):
+        pass
+
+    @classmethod
+    def isOnFinishScriptCallRequired(cls):
+        return cls.onFinishScript is not Block.onFinishScript
+
+    def onFinishScript(self):
+        pass
+
+    @classmethod
+    def isOnStartScriptCallRequired(cls):
+        return cls.onStartScript is not Block.onStartScript
+
+    def onStartScript(self):
+        pass
 
     def _getInitParams(self):
         return self.__agent.getInitParams()
@@ -148,9 +165,3 @@ class Block(Meta):
 
     def _writeLog(self, msg):
         self.__agent.writeLog(msg)
-
-    def captionText(self):
-        pass
-
-    def onFinishScript(self):
-        pass

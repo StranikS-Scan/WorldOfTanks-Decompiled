@@ -161,7 +161,7 @@ class ReceivedBattleChatCommand(_ChatCommand):
 
 
 class ChannelEntity(ChatEntity, ChannelEvents):
-    __slots__ = ('_data', '_history', '_members', '_isJoined', '_clientID')
+    __slots__ = ('_data', '_history', '_unreadMessages', '_members', '_isJoined', '_clientID')
 
     def __init__(self, data):
         super(ChannelEntity, self).__init__()
@@ -170,6 +170,7 @@ class ChannelEntity(ChatEntity, ChannelEvents):
         self._members = {}
         self._isJoined = False
         self._clientID = 0
+        self._unreadMessages = []
 
     def __repr__(self):
         return 'ChannelEntity(type={0:n}, isJoined={1!r:s}, data={2!r:s})'.format(self.getProtoType(), self._isJoined, self._data)
@@ -224,8 +225,17 @@ class ChannelEntity(ChatEntity, ChannelEvents):
             self.clearMembers()
         self.onConnectStateChanged(self)
 
-    def addMessage(self, message):
-        self._history.append(message)
+    def addMessage(self, text):
+        self._history.append(text)
+
+    def addUnreadMessage(self, message):
+        self._unreadMessages.append(message)
+
+    def getUnreadMessages(self):
+        return self._unreadMessages
+
+    def clearUnreadMessages(self):
+        self._unreadMessages[:] = []
 
     def getHistory(self):
         return list(self._history)

@@ -284,6 +284,7 @@ class _PythonClipLoadingTicker(_PythonTicker):
         super(_PythonClipLoadingTicker, self).__init__(viewObject)
         self.__isStunned = False
         self.__showTimer = True
+        self.__isTimerRed = False
 
     def setShowTimer(self, showTimer):
         self.__showTimer = showTimer
@@ -291,14 +292,17 @@ class _PythonClipLoadingTicker(_PythonTicker):
     def setStun(self, isStunned):
         self.__isStunned = isStunned
 
+    def setTimerRed(self, isTimerRed):
+        self.__isTimerRed = isTimerRed
+
     def _setViewSnapshot(self, timeLeft):
         if self._totalTime > 0:
             percent = round(float(timeLeft) / self._totalTime, 2)
-            self._viewObject.as_setAutoloaderPercentS(percent, timeLeft, self.__showTimer)
+            self._viewObject.as_setAutoloaderPercentS(percent, timeLeft, self.__showTimer, self.__isTimerRed)
 
     def _stopTick(self):
         super(_PythonClipLoadingTicker, self)._stopTick()
-        self._viewObject.as_setAutoloaderPercentS(1.0, self._totalTime, self.__showTimer)
+        self._viewObject.as_setAutoloaderPercentS(1.0, self._totalTime, self.__showTimer, self.__isTimerRed)
 
 
 class _PythonReloadTicker(_PythonTicker):
@@ -388,6 +392,7 @@ class _PythonAutoReloadProxy(_ReloadingAnimationsProxy):
     def setClipAutoLoading(self, timeLeft, baseTime, isStun=False, isTimerOn=False, isRedText=False):
         self.__clipTicker.setStun(isStun)
         self.__clipTicker.setShowTimer(isTimerOn)
+        self.__clipTicker.setTimerRed(isRedText)
         self.__clipTicker.startAnimation(timeLeft, baseTime)
 
     def setReloading(self, state):
@@ -509,21 +514,18 @@ class AmmoPlugin(CrosshairPlugin):
 
     def __autoReloadFirstShellCallback(self):
         timeLeft = min(self.__autoReloadSnapshot.getTimeLeft(), self.__autoReloadSnapshot.getActualValue())
-        self.__reloadAnimator.setClipAutoLoading(timeLeft, timeLeft, isTimerOn=True, isRedText=True)
+        self.__reloadAnimator.setClipAutoLoading(timeLeft, self.__autoReloadSnapshot.getActualValue(), isTimerOn=True, isRedText=self.__shellsInClip <= 0)
         self.__autoReloadCallbackID = None
         return
 
     def __onGunAutoReloadTimeSet(self, state, stunned):
-        if self.__autoReloadCallbackID:
-            BigWorld.cancelCallback(self.__autoReloadCallbackID)
-            self.__autoReloadCallbackID = None
-        timeLeft = min(state.getTimeLeft(), state.getActualValue())
-        baseValue = state.getBaseValue()
-        if self.__shellsInClip == 0:
-            baseValue = self.__reCalcFirstShellAutoReload(baseValue)
-        self.__reloadAnimator.setClipAutoLoading(timeLeft, baseValue, isStun=stunned, isTimerOn=True, isRedText=self.__shellsInClip == 0)
+        if not self.__autoReloadCallbackID:
+            timeLeft = min(state.getTimeLeft(), state.getActualValue())
+            baseValue = state.getBaseValue()
+            if self.__shellsInClip == 0:
+                baseValue = self.__reCalcFirstShellAutoReload(baseValue)
+            self.__reloadAnimator.setClipAutoLoading(timeLeft, baseValue, isStun=stunned, isTimerOn=True, isRedText=self.__shellsInClip == 0)
         self.__autoReloadSnapshot = state
-        return
 
     def __onGunAutoReloadBoostUpd(self, state, stateDuration, stateTotalTime, extraData):
         _logger.debug('Auto loader boost incoming state=%s, stateDuration=%s, stateTotalTime=%s, extraData=%s', state, stateDuration, stateTotalTime, extraData)
@@ -532,6 +534,8 @@ class AmmoPlugin(CrosshairPlugin):
         else:
             if state == AutoReloadingBoostStates.CHARGED:
                 timeLeft = AUTOLOADERBOOSTVIEWSTATES.CHARGED
+            elif state == AutoReloadingBoostStates.WAITING_FOR_START:
+                timeLeft = AUTOLOADERBOOSTVIEWSTATES.WAITING_TO_START
             else:
                 timeLeft = stateDuration
             self.__reloadAnimator.showAutoLoadingBoost(timeLeft, stateTotalTime)
@@ -545,11 +549,13 @@ class AmmoPlugin(CrosshairPlugin):
         return result
 
     def __onShellsUpdated(self, _, quantity, quantityInClip, result):
-        self.__shellsInClip = quantityInClip
         if not result & SHELL_SET_RESULT.CURRENT:
             return
+        self.__shellsInClip = quantityInClip
         isLow, state = self.__guiSettings.getState(quantity, quantityInClip)
         self._parentObj.as_setAmmoStockS(quantity, quantityInClip, isLow, state, result & SHELL_SET_RESULT.CASSETTE_RELOAD > 0)
+        if quantity + quantityInClip == 0:
+            self.__reloadAnimator.setClipAutoLoading(0, 0, isRedText=True)
 
     def __onCurrentShellChanged(self, _):
         ctrl = self.sessionProvider.shared.ammo

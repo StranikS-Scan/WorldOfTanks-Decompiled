@@ -18,7 +18,7 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
 from gui.battle_control.battle_constants import VEHICLE_DEVICE_IN_COMPLEX_ITEM
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, DEVICE_STATE_DESTROYED
-from gui.battle_control.controllers.consumables.equipment_ctrl import IgnoreEntitySelection, EventItem
+from gui.battle_control.controllers.consumables.equipment_ctrl import IgnoreEntitySelection
 from gui.battle_control.controllers.consumables.equipment_ctrl import NeedEntitySelection, InCooldownError
 from gui.impl import backport
 from gui.impl.gen import R
@@ -185,7 +185,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         self._cds[idx] = intCD
         if item is None:
             bwKey, sfKey = self.__genKey(idx)
-            self.as_addEquipmentSlotS(idx, bwKey, sfKey, 0, 0, 0, None, EMPTY_EQUIPMENT_TOOLTIP, ANIMATION_TYPES.NONE, None)
+            self.as_addEquipmentSlotS(idx, bwKey, sfKey, 0, 0, 0, None, EMPTY_EQUIPMENT_TOOLTIP, ANIMATION_TYPES.NONE)
             snap = self._cds[self._EQUIPMENT_START_IDX:self._EQUIPMENT_END_IDX + 1]
             if snap == self.__emptyEquipmentsSlice:
                 self.as_showEquipmentSlotsS(False)
@@ -207,7 +207,6 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
             reloadingTime = item.getTotalTime()
             iconPath = self._getEquipmentIconPath() % descriptor.icon[0]
             animationType = item.getAnimationType()
-            tag = tags[0] if tags else None
             body = descriptor.description
             if reloadingTime > 0:
                 tooltipStr = R.strings.ingame_gui.consumables_panel.equipment.cooldownSeconds()
@@ -219,7 +218,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
                 paramsString = backport.text(tooltipStr, cooldownSeconds=cooldownSeconds)
                 body = '\n\n'.join((body, paramsString))
             toolTip = TOOLTIP_FORMAT.format(descriptor.userString, body)
-            self.as_addEquipmentSlotS(idx, bwKey, sfKey, quantity, timeRemaining, reloadingTime, iconPath, toolTip, animationType, tag)
+            self.as_addEquipmentSlotS(idx, bwKey, sfKey, quantity, timeRemaining, reloadingTime, iconPath, toolTip, animationType)
         return
 
     def _addOptionalDeviceSlot(self, idx, optDeviceInBattle):
@@ -235,7 +234,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         quantity = item.getQuantity()
         currentTime = item.getTimeRemaining()
         maxTime = item.getTotalTime()
-        self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime, item.getAnimationType(), item.getStage())
+        self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime, item.getAnimationType())
         bwKey, _ = self.__genKey(idx)
         if item.getQuantity() > 0 and bwKey not in self.__keys:
             if item.isEntityRequired():
@@ -265,7 +264,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         self.as_setOptionalDeviceUsedS(idx, optDeviceInBattle.isUsed())
         if optDeviceInBattle.isNeedGlow():
             self.as_setGlowS(idx, CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN)
-        self.as_setCoolDownTimeS(self._cds.index(intCD), duration, duration, 0, False)
+        self.as_setCoolDownTimeS(self._cds.index(intCD), duration, duration, 0)
 
     def _showEquipmentGlow(self, equipmentIndex, glowType=CONSUMABLES_PANEL_SETTINGS.GLOW_ID_ORANGE):
         if equipmentIndex in self.__equipmentsGlowCallbacks:
@@ -493,8 +492,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         if ctrl is None:
             return
         else:
-            player = BigWorld.player()
-            result, error = ctrl.changeSetting(intCD, entityName=entityName, avatar=player)
+            result, error = ctrl.changeSetting(intCD, entityName=entityName, avatar=BigWorld.player())
             if not result and error:
                 ctrl = self.sessionProvider.shared.messages
                 if ctrl is not None:
@@ -556,7 +554,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
             if self.__delayedNextShellID is not None:
                 shellReload = self._cds.index(self.__delayedNextShellID)
                 self.__delayedNextShellID = None
-            self.as_setCoolDownTimeS(shellReload, leftTimeDelayed, baseTimeDelayed, 0, not state.isReloadingFinished())
+            self.as_setCoolDownTimeS(shellReload, leftTimeDelayed, baseTimeDelayed, 0)
         else:
             _logger.error('Incorrect delayed reload timings: %f, %f', leftTimeDelayed, baseTimeDelayed)
         self.delayedReload = None
@@ -566,7 +564,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         if self.__reloadTicker:
             self.__reloadTicker.startAnimation(shellIndex, state.getActualValue(), state.getBaseValue())
         else:
-            self.as_setCoolDownTimeS(shellIndex, state.getActualValue(), state.getBaseValue(), state.getTimePassed(), not state.isReloadingFinished())
+            self.as_setCoolDownTimeS(shellIndex, state.getActualValue(), state.getBaseValue(), state.getTimePassed())
 
     def __onEquipmentUpdated(self, intCD, item):
         if intCD in self._cds:
@@ -681,7 +679,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         if 'extinguisher' in equipmentTags or 'regenerationKit' in equipmentTags:
             correction = True
             entityName = None
-        elif equipment.isAvatar() or isinstance(equipment, EventItem):
+        elif equipment.isAvatar():
             correction = False
             entityName = None
         else:

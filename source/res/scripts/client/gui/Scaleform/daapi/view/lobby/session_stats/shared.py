@@ -59,7 +59,7 @@ _EFFICIENT_DATA = {SESSION_STATS_CONSTANTS.SESSION_STATS_PROPS_WTR: {'title': R.
                                                            'label': R.strings.session_stats.label.assist(),
                                                            'descr': R.strings.session_stats.propertyInfo.prop.descr.helpDamage(),
                                                            'icon': R.images.gui.maps.icons.statistic.assist24(),
-                                                           'totalValue': lambda stats: toNiceNumber(stats.getDamageAssistedEfficiency()),
+                                                           'totalValue': lambda stats: toNiceNumber(stats.getDamageAssistedEfficiencyWithStan()),
                                                            'currentValue': lambda data: toNiceNumber(data.helpDamage.value),
                                                            'delta': lambda data: data.helpDamage.delta,
                                                            'settings': SESSION_STATS.SHOW_HELP_DAMAGE},

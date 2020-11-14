@@ -346,7 +346,6 @@ Syntax error at or near 'JUMP_FORWARD' token at offset 283
         if entryID:
             self._invoke(entryID, BATTLE_MINIMAP_CONSTS.SET_POINT_NUMBER, number)
             self.__entries.append(entryID)
-            return entryID
 
     def __addTeamSpawnPoints(self):
         points = self._arenaVisitor.getTeamSpawnPointsIterator(self.__personalTeam)

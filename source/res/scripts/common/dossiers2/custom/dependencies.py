@@ -84,7 +84,8 @@ def _set_ACHIEVEMENT15X15_DEPENDENCIES():
      'EFC2016WinSeries': [_updateMaxEFC2016WinSeries],
      'rankedBattlesHeroProgress': [_updateRankedBattlesHeroProgress],
      'rankedStayingCounter': [_updateRankedStayingPower],
-     'rankedDivisionCounter': [_updateRankedDivisionFighter]})
+     'rankedDivisionCounter': [_updateRankedDivisionFighter],
+     'RP2018sergeantCounter': [_updateRP2018sergeant]})
 
 
 ACHIEVEMENT7X7_DEPENDENCIES = {}
@@ -895,6 +896,15 @@ def _updateWinnerLaurels(dossierDescr, dossierBlockDescr, key, value, prevValue)
     newMedalClass = __getNewMedalClass(medalName, value, medalClass)
     if newMedalClass is not None:
         dossierDescr['falloutAchievements'][medalName] = newMedalClass
+    return
+
+
+def _updateRP2018sergeant(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    medalName = 'RP2018sergeant'
+    medalClass = dossierDescr['achievements'][medalName]
+    newMedalClass = __getNewMedalClass(medalName, value, medalClass)
+    if newMedalClass is not None:
+        dossierDescr['achievements'][medalName] = newMedalClass
     return
 
 

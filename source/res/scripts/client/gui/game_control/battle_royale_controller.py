@@ -9,7 +9,7 @@ from shared_utils import nextTick
 import season_common
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import ROYALE_VEHICLE, CURRENT_VEHICLE, EVENT_CURRENT_VEHICLE
+from account_helpers.AccountSettings import ROYALE_VEHICLE, CURRENT_VEHICLE
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from adisp import process
 from constants import QUEUE_TYPE, Configs, PREBATTLE_TYPE, ARENA_BONUS_TYPE
@@ -41,6 +41,7 @@ from skeletons.gui.shared.utils import IHangarSpaceReloader
 from skeletons.gui.shared.hangar_spaces_switcher import IHangarSpacesSwitcher
 from gui.ClientHangarSpace import SERVER_CMD_CHANGE_HANGAR, SERVER_CMD_CHANGE_HANGAR_PREM
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.customization import ICustomizationService
 _logger = logging.getLogger(__name__)
 
 class BATTLE_ROYALE_GAME_LIMIT_TYPE(object):
@@ -65,6 +66,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
     __eventProgression = dependency.descriptor(IEventProgressionController)
     __notificationsCtrl = dependency.descriptor(IEventsNotificationsController)
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    __c11nService = dependency.descriptor(ICustomizationService)
     TOKEN_QUEST_ID = 'token:br:title:'
     DAILY_QUEST_ID = 'steel_hunter'
     MODE_ALIAS = 'battleRoyale'
@@ -90,6 +92,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.__levelProgress = tuple()
         self.__shownBattleResultsForArena = []
         self.__defaultHangars = {}
+        self.__c11nVisible = False
         return
 
     def init(self):
@@ -121,6 +124,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.startGlobalListening()
         self.__hangarsSpace.onSpaceChangedByAction += self.__onSpaceChanged
         self.__hangarsSpace.onSpaceChanged += self.__onSpaceChanged
+        self.__c11nService.onVisibilityChanged += self.__onC11nVisibilityChanged
         self.__notificationsCtrl.onEventNotificationsChanged += self.__onEventNotification
         self.__onEventNotification(self.__notificationsCtrl.getEventsNotifications())
         self.__updateMode()
@@ -242,14 +246,6 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         else:
             return False
 
-    def isEventMode(self):
-        dispatcher = self.prbDispatcher
-        if dispatcher is not None:
-            state = dispatcher.getFunctionalState()
-            return state.isInPreQueue(queueType=QUEUE_TYPE.EVENT_BATTLES) or state.isInUnit(PREBATTLE_TYPE.EVENT)
-        else:
-            return False
-
     def isInBattleRoyaleSquad(self):
         dispatcher = self.prbDispatcher
         if dispatcher is not None:
@@ -321,7 +317,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         nextTick(self.__updateSpace)()
 
     def __updateSpace(self):
-        if self.__hangarsSpace.spaceInited and not self.__hangarsSpace.spaceLoading():
+        if not self.__c11nVisible and self.__hangarsSpace.spaceInited and not self.__hangarsSpace.spaceLoading():
             switchItems = self.__hangarSpacesSwitcher.itemsToSwitch
             isBrSpace = self.__hangarSpacesSwitcher.currentItem == switchItems.BATTLE_ROYALE
             isBrMode = self.isBattleRoyaleMode()
@@ -357,23 +353,14 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         return
 
     def __disableRoyaleMode(self):
-        isEventMode = self.isEventMode()
-        storedVehInvID = AccountSettings.getFavorites(CURRENT_VEHICLE) if not isEventMode else AccountSettings.getFavorites(EVENT_CURRENT_VEHICLE)
+        storedVehInvID = AccountSettings.getFavorites(CURRENT_VEHICLE)
         if not storedVehInvID:
             criteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.HAS_TAGS([VEHICLE_TAGS.BATTLE_ROYALE])
-            if isEventMode:
-                criteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EVENT_BATTLE
-                vehicle = first(sorted(self.__itemsCache.items.getVehicles(criteria=criteria).itervalues(), key=lambda veh: veh.intCD, reverse=True))
-            else:
-                criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
-                vehicle = first(self.__itemsCache.items.getVehicles(criteria=criteria).values())
+            vehicle = first(self.__itemsCache.items.getVehicles(criteria=criteria).values())
             if vehicle:
                 storedVehInvID = vehicle.invID
         if storedVehInvID:
-            if isEventMode:
-                g_currentVehicle.selectEventVehicle(storedVehInvID)
-            else:
-                g_currentVehicle.selectVehicle(storedVehInvID)
+            g_currentVehicle.selectVehicle(storedVehInvID)
         else:
             g_currentVehicle.selectNoVehicle()
         self.__voControl.deactivate()
@@ -462,6 +449,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.__hangarsSpace.onSpaceCreate -= self.__onSpaceCreate
         self.__eventProgression.onUpdated -= self.__eventAvailabilityUpdate
         self.__notificationsCtrl.onEventNotificationsChanged -= self.__onEventNotification
+        self.__c11nService.onVisibilityChanged -= self.__onC11nVisibilityChanged
         self.__defaultHangars = {}
         g_clientUpdateManager.removeObjectCallbacks(self)
 
@@ -526,6 +514,10 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
                 self.__shownBattleResultsForArena = self.__shownBattleResultsForArena[-self.MAX_STORED_ARENAS_RESULTS:]
                 event_dispatcher.showBattleRoyaleLevelUpWindow(reusableInfo, resultsWindow)
         return None
+
+    def __onC11nVisibilityChanged(self, isVisible):
+        self.__c11nVisible = isVisible
+        self.__updateSpace()
 
     def getPrimeTimesIter(self, primeTimes):
         for primeTime in primeTimes.itervalues():

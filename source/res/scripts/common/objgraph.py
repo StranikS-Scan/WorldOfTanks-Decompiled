@@ -26,7 +26,7 @@ except ImportError:
 __author__ = 'Marius Gedminas (marius@gedmin.as)'
 __copyright__ = 'Copyright (c) 2008-2017 Marius Gedminas and contributors'
 __license__ = 'MIT'
-__version__ = '3.4.2.dev0'
+__version__ = '3.4.1'
 __date__ = '2019-04-23'
 try:
     basestring
@@ -41,7 +41,7 @@ except AttributeError:
 IS_INTERACTIVE = False
 try:
     import graphviz
-    if 'TerminalInteractiveShell' not in get_ipython().__class__.__name__:
+    if get_ipython().__class__.__name__ != 'TerminalInteractiveShell':
         IS_INTERACTIVE = True
 except (NameError, ImportError):
     pass
@@ -286,12 +286,12 @@ def find_backref_chain(obj, predicate, max_depth=20, extra_ignore=()):
     return _find_chain(obj, predicate, gc.get_referrers, max_depth=max_depth, extra_ignore=extra_ignore)
 
 
-def show_backrefs(objs, max_depth=3, extra_ignore=(), filter=None, too_many=10, highlight=None, filename=None, extra_info=None, refcounts=False, shortnames=True, output=None, extra_node_attrs=None):
-    return _show_graph(objs, max_depth=max_depth, extra_ignore=extra_ignore, filter=filter, too_many=too_many, highlight=highlight, edge_func=gc.get_referrers, swap_source_target=False, filename=filename, output=output, extra_info=extra_info, refcounts=refcounts, shortnames=shortnames, cull_func=is_proper_module, extra_node_attrs=extra_node_attrs)
+def show_backrefs(objs, max_depth=3, extra_ignore=(), filter=None, too_many=10, highlight=None, filename=None, extra_info=None, refcounts=False, shortnames=True, output=None):
+    return _show_graph(objs, max_depth=max_depth, extra_ignore=extra_ignore, filter=filter, too_many=too_many, highlight=highlight, edge_func=gc.get_referrers, swap_source_target=False, filename=filename, output=output, extra_info=extra_info, refcounts=refcounts, shortnames=shortnames, cull_func=is_proper_module)
 
 
-def show_refs(objs, max_depth=3, extra_ignore=(), filter=None, too_many=10, highlight=None, filename=None, extra_info=None, refcounts=False, shortnames=True, output=None, extra_node_attrs=None):
-    return _show_graph(objs, max_depth=max_depth, extra_ignore=extra_ignore, filter=filter, too_many=too_many, highlight=highlight, edge_func=gc.get_referents, swap_source_target=True, filename=filename, extra_info=extra_info, refcounts=refcounts, shortnames=shortnames, output=output, extra_node_attrs=extra_node_attrs)
+def show_refs(objs, max_depth=3, extra_ignore=(), filter=None, too_many=10, highlight=None, filename=None, extra_info=None, refcounts=False, shortnames=True, output=None):
+    return _show_graph(objs, max_depth=max_depth, extra_ignore=extra_ignore, filter=filter, too_many=too_many, highlight=highlight, edge_func=gc.get_referents, swap_source_target=True, filename=filename, extra_info=extra_info, refcounts=refcounts, shortnames=shortnames, output=output)
 
 
 def show_chain(*chains, **kw):
@@ -349,7 +349,7 @@ def _find_chain(obj, predicate, edge_func, max_depth=20, extra_ignore=()):
     return [obj]
 
 
-def _show_graph(objs, edge_func, swap_source_target, max_depth=3, extra_ignore=(), filter=None, too_many=10, highlight=None, filename=None, extra_info=None, refcounts=False, shortnames=True, output=None, cull_func=None, extra_node_attrs=None):
+def _show_graph(objs, edge_func, swap_source_target, max_depth=3, extra_ignore=(), filter=None, too_many=10, highlight=None, filename=None, extra_info=None, refcounts=False, shortnames=True, output=None, cull_func=None):
     if not _isinstance(objs, (list, tuple)):
         objs = [objs]
     is_interactive = False
@@ -360,7 +360,7 @@ def _show_graph(objs, edge_func, swap_source_target, max_depth=3, extra_ignore=(
     elif filename and filename.endswith('.dot'):
         f = codecs.open(filename, 'w', encoding='utf-8')
         dot_filename = filename
-    elif IS_INTERACTIVE and not filename:
+    elif IS_INTERACTIVE:
         is_interactive = True
         f = StringIO()
     else:
@@ -394,7 +394,7 @@ def _show_graph(objs, edge_func, swap_source_target, max_depth=3, extra_ignore=(
         nodes += 1
         target = queue.pop(0)
         tdepth = depth[id(target)]
-        f.write('  %s[label="%s"%s];\n' % (_obj_node_id(target), _obj_label(target, extra_info, refcounts, shortnames), _obj_attrs(target, extra_node_attrs)))
+        f.write('  %s[label="%s"];\n' % (_obj_node_id(target), _obj_label(target, extra_info, refcounts, shortnames)))
         h, s, v = _gradient((0, 0, 1), (0, 0, 0.3), tdepth, max_depth)
         if inspect.ismodule(target):
             h = 0.3
@@ -498,15 +498,6 @@ def _present_graph(dot_filename, filename=None):
 
 def _obj_node_id(obj):
     return ('o%d' % id(obj)).replace('-', '_')
-
-
-def _obj_attrs(obj, extra_node_attrs):
-    if extra_node_attrs is not None:
-        attrs = extra_node_attrs(obj)
-        return ', ' + ', '.join(('%s="%s"' % (name, _quote(value)) for name, value in sorted(iteritems(attrs)) if value is not None))
-    else:
-        return ''
-        return
 
 
 def _obj_label(obj, extra_info=None, refcounts=False, shortnames=True):

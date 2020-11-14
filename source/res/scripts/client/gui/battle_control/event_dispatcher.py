@@ -143,15 +143,3 @@ def controlModeChange(mode):
 def sniperCameraTransition(transitionTime, currentGunIndex):
     g_eventBus.handleEvent(GameEvent(GameEvent.SNIPER_CAMERA_TRANSITION, {'transitionTime': transitionTime,
      'currentGunIndex': currentGunIndex}), scope=_SCOPE)
-
-
-def toggleFadeOut(settings):
-    g_eventBus.handleEvent(GameEvent(GameEvent.FADE_OUT_AND_IN, {'settings': settings}), scope=_SCOPE)
-
-
-def onCollectorProgress(overlays):
-    g_eventBus.handleEvent(GameEvent(GameEvent.COLLECTOR_PROGRESS, {'overlays': overlays}), scope=_SCOPE)
-
-
-def onCollectorProgressStop():
-    g_eventBus.handleEvent(GameEvent(GameEvent.COLLECTOR_PROGRESS_STOP), scope=_SCOPE)

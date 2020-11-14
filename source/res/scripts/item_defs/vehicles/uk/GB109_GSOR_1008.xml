@@ -8,8 +8,8 @@
   </crew>
   <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
-    <forward>	60	</forward>
-    <backward>	17	</backward>
+    <forward>	55	</forward>
+    <backward>	12	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.187	</moving>
@@ -58,7 +58,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	20528	</weight>
-    <maxHealth>	1040	</maxHealth>
+    <maxHealth>	960	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
@@ -2062,14 +2062,14 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	10000	</weight>
-      <maxHealth>	260	</maxHealth>
+      <maxHealth>	240	</maxHealth>
       <rotationSpeed>	28	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	370	</circularVisionRadius>
+      <circularVisionRadius>	350	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -2100,14 +2100,14 @@
             <maxPitch>	0 11 0.3 11 0.344444 10 0.4 8 0.6 8 0.655556 10 0.7 11 1 11	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	37.41	</reloadTime>
+          <reloadTime>	45	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.5	</aimingTime>
           <clip>
             <count>	4	</count>
             <rate>	30	</rate>
@@ -2213,13 +2213,13 @@
               <slotType>	projectionDecal	</slotType>
               <slotId>	45003	</slotId>
               <tags>	formfactor_square	</tags>
-              <position>	0.000022 2.49897 -1.258	</position>
+              <position>	-0.00468371 2.48023 -0.784224	</position>
               <rotation>	-3.10207 -0.00993204 -0.00582266	</rotation>
               <scale>	1.05285 0.35 1.05285	</scale>
               <doubleSided>	false	</doubleSided>
               <showOn>	4096	</showOn>
               <clipAngle>	0.000000	</clipAngle>
-              <anchorPosition>	0.00209374 0.129035 -1.70425	</anchorPosition>
+              <anchorPosition>	-0.00559157 0.589355 -1.21155	</anchorPosition>
               <anchorDirection>	-0.00621481 0.999202 0.0394561	</anchorDirection>
               <verticalMirror>	true	</verticalMirror>
             </slot>
@@ -2637,7 +2637,7 @@
       <engines>
         <Rolls_Royce_Meteor_MkIV_B12>
           <smplEnginePower>	640	</smplEnginePower>
-          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
         </Rolls_Royce_Meteor_MkIV_B12>
       </engines>
       <chassis>

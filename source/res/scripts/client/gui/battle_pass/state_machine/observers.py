@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_pass/state_machine/observers.py
 import typing
 from frameworks.state_machine import SingleStateObserver, StateEvent, StateObserversContainer, StringEvent
+from gui.Scaleform.Waiting import Waiting
 from gui.battle_pass.battle_pass_helpers import showVideo, isBattlePassBought
 from gui.battle_pass.state_machine.states import FinalRewardStateID, FinalRewardEventID
 from gui.impl.gen import R
@@ -10,6 +11,14 @@ from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 if typing.TYPE_CHECKING:
     from gui.battle_pass.state_machine.delegator import FinalRewardLogic
+
+def showWaiting():
+    Waiting.show('draw_research_items')
+
+
+def stopWaiting():
+    Waiting.hide('draw_research_items')
+
 
 class VideoBeforeStateObserver(SingleStateObserver):
 
@@ -46,6 +55,9 @@ class VideoVotedStateObserver(SingleStateObserver):
         showVideo(videoSource, isAutoClose=True)
         return
 
+    def onExitState(self, event=None):
+        showWaiting()
+
     @staticmethod
     def __getVideoId(choise, isBought):
         return R.videos.battle_pass.dyn('c_{}_{}'.format(choise, 1 if isBought else 0))
@@ -73,7 +85,7 @@ class FinalRewardScreenStateObserver(SingleStateObserver):
         rewards, data = logic.getRewardsData()
         rewards, data = self.__addFinalRewardsData(rewards, data)
         data['isFinalReward'] = True
-        showBattlePassAwardsWindow(rewards, data)
+        showBattlePassAwardsWindow(rewards, data, callback=stopWaiting)
 
     def onExitState(self, event=None):
         logic = self.__battlePassController.getFinalRewardLogic()

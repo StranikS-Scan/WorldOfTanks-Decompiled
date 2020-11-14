@@ -26,7 +26,7 @@ _PROJECTION_DECAL_FORM_TO_IMAGE_SCALE = {ProjectionDecalFormTags.SQUARE: 0.725,
  ProjectionDecalFormTags.RECT1X6: 1}
 _DEFAULT_IMAGE_SCALE = 1
 
-def buildCustomizationItemDataVO(item, count=None, isApplied=False, isDarked=False, isUsedUp=False, autoRentEnabled=False, vehicle=None, progressionLevel=None, icon=None, showDetailItems=True, plainView=False, showEditableHint=False, showEditBtnHint=False, addExtraName=True):
+def buildCustomizationItemDataVO(item, count=None, isApplied=False, isDarked=False, isUsedUp=False, autoRentEnabled=False, vehicle=None, progressionLevel=None, icon=None, showDetailItems=True, plainView=False, showEditableHint=False, showEditBtnHint=False):
     if plainView:
         hasBonus = False
         locked = False
@@ -48,7 +48,7 @@ def buildCustomizationItemDataVO(item, count=None, isApplied=False, isDarked=Fal
         rentalInfoText = text_styles.main(backport.text(rentalInfoText, battlesNum=item.rentCount))
     else:
         rentalInfoText = ''
-    if addExtraName and item.itemTypeID in (GUI_ITEM_TYPE.MODIFICATION, GUI_ITEM_TYPE.STYLE):
+    if item.itemTypeID in (GUI_ITEM_TYPE.MODIFICATION, GUI_ITEM_TYPE.STYLE):
         extraNames = (text_styles.bonusLocalText(item.userName), text_styles.highTitle(item.userName))
     else:
         extraNames = None

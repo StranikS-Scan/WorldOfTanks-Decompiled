@@ -52,8 +52,7 @@ BARRACKS_FILTER = 'barracks_filter'
 ORDERS_FILTER = 'ORDERS_FILTER'
 CURRENT_VEHICLE = 'current'
 ROYALE_VEHICLE = 'ROYALE_VEHICLE'
-EVENT_CURRENT_VEHICLE = 'event_current'
-EVENT_CURRENT_DIFFICULTY_LEVEL = 'eventCurrentDifficultyLevel'
+BOOTCAMP_VEHICLE = 'BOOTCAMP_VEHICLE'
 GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
 EULA_VERSION = 'EULA_VERSION'
 LINKEDSET_QUESTS = 'LINKEDSET_QUEST'
@@ -92,8 +91,6 @@ ELEN_NOTIFICATIONS = 'elenNotifications'
 RECRUIT_NOTIFICATIONS = 'recruitNotifications'
 SPEAKERS_DEVICE = 'speakersDevice'
 SESSION_STATS_PREV_BATTLE_COUNT = 'sessionStatsPrevBattleCnt'
-EVENT_HEALING_SEEN = 'eventHealingSeen'
-EVENT_COMMANDERS_READY_SEEN = 'eventCommandersReadySeen'
 DEFAULT_QUEUE = 'defaultQueue'
 STORE_TAB = 'store_tab'
 STATS_REGULAR_SORTING = 'statsSorting'
@@ -124,6 +121,7 @@ BATTLE_EFFICIENCY_SECTION_EXPANDED_FIELD = 'battleEfficiencySectionExpanded'
 SIEGE_HINT_SECTION = 'siegeModeHint'
 WHEELED_MODE_HINT_SECTION = 'wheeledModeScreenHint'
 TRAJECTORY_VIEW_HINT_SECTION = 'trajectoryViewHint'
+TURBO_SHAFT_ENGINE_MODE_HINT_SECTION = 'turboShaftEngineModeHint'
 RADAR_HINT_SECTION = 'radarHint'
 PRE_BATTLE_HINT_SECTION = 'preBattleHintSection'
 QUEST_PROGRESS_HINT_SECTION = 'questProgressHint'
@@ -156,10 +154,6 @@ TECHTREE_INTRO_BLUEPRINTS = 'techTreeIntroBlueprints'
 MODULES_ANIMATION_SHOWN = 'collectibleVehiclesAnimWasShown'
 NEW_SHOP_TABS = 'newShopTabs'
 IS_COLLECTIBLE_VEHICLES_VISITED = 'isCollectibleVehiclesVisited'
-IS_CN_LOOT_BOXES_COUNTER_SHOWN = 'isCNLootBoxesCounterShown'
-LAST_SHOP_TAB_COUNTER = 'lastShopTabCounter'
-IS_CN_LOOT_BOXES_CATEGORY_VISITED = 'isCNLootBoxesCategoryVisited'
-IS_CN_LOOT_BOXES_COUNTER_RESET = 'isCNLootBoxesCounterReset'
 QUESTS = 'quests'
 QUEST_DELTAS = 'questDeltas'
 QUEST_DELTAS_COMPLETION = 'questCompletion'
@@ -167,10 +161,6 @@ QUEST_DELTAS_PROGRESS = 'questProgress'
 QUEST_DELTAS_TOKENS_PROGRESS = 'tokensProgress'
 TOP_OF_TREE_CONFIG = 'topOfTree'
 DOG_TAGS = 'dogTags'
-HALLOWEEN_NOTES_SEEN = 'halloweenNotesSeen'
-CN_LOOT_BOXES_EVENT_START_WAS_SHOWN = 'cnLootBoxesEventStartWasShown'
-CN_VIEWED_BOXES_COUNT = 'cnViewedBoxesCount'
-OPEN_CN_LOOT_BOX_ANIMATION_STATE = 'openCNLootBoxAnimationState'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
@@ -447,9 +437,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                PROFILE_TECHNIQUE_MEMBER: {'selectedColumn': 4,
                                           'selectedColumnSorting': 'descending'},
                SPEAKERS_DEVICE: 0},
- KEY_FAVORITES: {CURRENT_VEHICLE: 0,
+ KEY_FAVORITES: {BOOTCAMP_VEHICLE: 0,
+                 CURRENT_VEHICLE: 0,
                  ROYALE_VEHICLE: 0,
-                 EVENT_CURRENT_VEHICLE: 0,
                  FALLOUT_VEHICLES: {}},
  KEY_SETTINGS: {'unitWindow': {SELECTED_INTRO_VEHICLES_FIELD: []},
                 'vehicleSellDialog': {'isOpened': False},
@@ -674,6 +664,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 WHEELED_MODE_HINT_SECTION: {HINTS_LEFT: 3,
                                             LAST_DISPLAY_DAY: 0,
                                             NUM_BATTLES: 0},
+                TURBO_SHAFT_ENGINE_MODE_HINT_SECTION: {HINTS_LEFT: 3,
+                                                       LAST_DISPLAY_DAY: 0,
+                                                       NUM_BATTLES: 0},
                 RADAR_HINT_SECTION: {HINTS_LEFT: 3,
                                      LAST_DISPLAY_DAY: 0,
                                      NUM_BATTLES: 0},
@@ -700,12 +693,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 SUBTITLES: True,
                 RANKED_YEAR_POSITION: None,
                 TOP_OF_TREE_CONFIG: {},
-                NATION_CHANGE_VIEWED: False,
-                HALLOWEEN_NOTES_SEEN: [],
-                CN_LOOT_BOXES_EVENT_START_WAS_SHOWN: False,
-                CN_VIEWED_BOXES_COUNT: 0,
-                OPEN_CN_LOOT_BOX_ANIMATION_STATE: True,
-                IS_CN_LOOT_BOXES_CATEGORY_VISITED: None},
+                NATION_CHANGE_VIEWED: False},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
@@ -720,12 +708,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 BOOSTERS_FOR_CREDITS_SLOT_COUNTER: 1,
                 SENIORITY_AWARDS_COUNTER: 1,
                 DEMOUNT_KIT_SEEN: False,
-                NEW_SHOP_TABS: {IS_COLLECTIBLE_VEHICLES_VISITED: False},
-                EVENT_HEALING_SEEN: False,
-                EVENT_CURRENT_DIFFICULTY_LEVEL: 1,
-                EVENT_COMMANDERS_READY_SEEN: True,
-                LAST_SHOP_TAB_COUNTER: None,
-                IS_CN_LOOT_BOXES_COUNTER_RESET: None},
+                NEW_SHOP_TABS: {IS_COLLECTIBLE_VEHICLES_VISITED: False}},
  KEY_NOTIFICATIONS: {ELEN_NOTIFICATIONS: {MISSIONS_CONSTANTS.ELEN_EVENT_STARTED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_FINISHED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_TAB_VISITED: set()},

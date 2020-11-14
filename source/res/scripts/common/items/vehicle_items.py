@@ -231,7 +231,7 @@ class Turret(InstallableItem):
 @add_shallow_copy()
 class Gun(InstallableItem):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'reloadEffect', 'impulse', 'recoil', 'animateEmblemSlots', 'shotOffset', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'autoreload', 'drivenJoints', 'customizableVehicleAreas', 'dualGun')
+    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'reloadEffect', 'impulse', 'recoil', 'animateEmblemSlots', 'shotOffset', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'autoreload', 'autoreloadHasBoost', 'drivenJoints', 'customizableVehicleAreas', 'dualGun')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Gun, self).__init__(typeID, componentID, componentName, compactDescr, level)
@@ -248,6 +248,7 @@ class Gun(InstallableItem):
         self.shotDispersionAngle = component_constants.ZERO_FLOAT
         self.shotDispersionFactors = None
         self.autoreload = component_constants.DEFAULT_GUN_AUTORELOAD
+        self.autoreloadHasBoost = False
         self.burst = component_constants.DEFAULT_GUN_BURST
         self.clip = component_constants.DEFAULT_GUN_CLIP
         self.shots = component_constants.EMPTY_TUPLE

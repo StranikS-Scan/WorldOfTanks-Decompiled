@@ -2,32 +2,26 @@
 # Embedded file name: scripts/client/gui/server_events/events_helpers.py
 import operator
 import time
-import typing
 import BigWorld
 from constants import EVENT_TYPE
 from gui import makeHtmlString
-from gui.Scaleform.genConsts.HANGAR_HEADER_QUESTS import HANGAR_HEADER_QUESTS
 from gui.Scaleform.genConsts.MISSIONS_STATES import MISSIONS_STATES
-from gui.Scaleform.locale.LINKEDSET import LINKEDSET
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
 from gui.server_events import formatters
-from gui.server_events.conditions import getProgressFromQuestWithSingleAccumulative
-from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX, DAILY_QUEST_ID_PREFIX, EVENT_PROGRESSION_GROUPS_ID, RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID
 from gui.server_events.personal_missions_navigation import PersonalMissionsNavigation
-from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import time_utils, i18n, dependency, isPlayerAccount
-from helpers.i18n import makeString as _ms
 from shared_utils import CONST_CONTAINER, findFirst
 from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-if typing.TYPE_CHECKING:
-    from typing import Optional
-    from gui.server_events.event_items import Quest, Group
+from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX, DAILY_QUEST_ID_PREFIX, EVENT_PROGRESSION_GROUPS_ID, RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID
+from helpers.i18n import makeString as _ms
+from gui.Scaleform.locale.LINKEDSET import LINKEDSET
+from gui.server_events.conditions import getProgressFromQuestWithSingleAccumulative
 FINISH_TIME_LEFT_TO_SHOW = time_utils.ONE_DAY
 START_TIME_LIMIT = 5 * time_utils.ONE_DAY
 AWARDS_PER_PAGE = 3
@@ -198,7 +192,7 @@ def getMinutesRoundByTime(timeLeft):
 def missionsSortFunc(q):
     isAvailable, status = q.isAvailable()
     isCompleted = q.isCompleted()
-    return (isAvailable and not isCompleted or isHalloween(q.getGroupID()),
+    return (isAvailable and not isCompleted,
      q.getPriority(),
      status == 'requirement',
      bool(status),
@@ -292,19 +286,6 @@ def isDailyQuest(eventID):
 def isRegularQuest(eventID):
     idGameModeEvent = isDailyEpic(eventID) or isRankedDaily(eventID) or isRankedPlatform(eventID)
     return not (isMarathon(eventID) or isLinkedSet(eventID) or isPremium(eventID) or idGameModeEvent)
-
-
-def isHalloween(eventID):
-    return eventID.startswith(HANGAR_HEADER_QUESTS.QUEST_GROUP_HALLOWEEN) if eventID else False
-
-
-def isHalloweenAFK(eventID):
-    return eventID.startswith(HANGAR_HEADER_QUESTS.QUEST_GROUP_HALLOWEEN_AFK) if eventID else False
-
-
-def filterHalloweenAvailableQuest(quest):
-    groupID = quest.getGroupID()
-    return not isHalloween(groupID) and not isHalloweenAFK(groupID) or quest.isAvailable()[0]
 
 
 def getLocalizedMissionNameForLinkedSet(missionID):
@@ -422,13 +403,9 @@ def _getlocalizeLinkedSetQuestString(localizedKey, quest):
     curProgress, totalProgress = getProgressFromQuestWithSingleAccumulative(quest)
     kwargs = {}
     if curProgress is not None and totalProgress is not None:
-        kwargs.update({'cur_progress': _formatNumberInLinkedSetQuest(curProgress),
-         'total_progress': _formatNumberInLinkedSetQuest(totalProgress)})
+        kwargs.update({'cur_progress': backport.getIntegralFormat(curProgress),
+         'total_progress': backport.getIntegralFormat(totalProgress)})
     return _ms(localizedKey, **kwargs)
-
-
-def _formatNumberInLinkedSetQuest(number):
-    return number if number is None else '{0:,}'.format(number).replace(',', ' ')
 
 
 @dependency.replace_none_kwargs(eventsCache=IEventsCache)
@@ -482,26 +459,3 @@ def isEpicQuestEnabled(lobbyContext=None):
 
 def getEventsData(eventsTypeName):
     return BigWorld.player().getUnpackedEventsData(eventsTypeName) if isPlayerAccount() else {}
-
-
-def getPreviousBattleQuest(quest):
-    eventsCache = dependency.instance(IEventsCache)
-    group = eventsCache.getGroups().get(quest.getGroupID())
-    if group is not None:
-        questID = quest.getID()
-        quests = eventsCache.getQuests()
-        groupContent = group.getGroupContent(quests)
-        sortedQuests = sorted(groupContent, key=operator.methodcaller('getPriority'), reverse=True)
-        for idx, quest_ in enumerate(sortedQuests):
-            if quest_.getID() == questID:
-                if idx != 0:
-                    return sortedQuests[idx - 1]
-
-    return
-
-
-def isVehicleRequirementsOk(quest):
-    suitableVehicles = quest.vehicleReqs.getSuitableVehicles()
-    if isHalloween(quest.getGroupID()):
-        suitableVehicles = filter(~REQ_CRITERIA.VEHICLE.EVENT, suitableVehicles)
-    return quest.vehicleReqs.isAnyVehicleAcceptable() or suitableVehicles

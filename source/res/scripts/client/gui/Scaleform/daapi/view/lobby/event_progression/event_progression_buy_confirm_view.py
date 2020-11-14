@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/event_progression/event_progression_buy_confirm_view.py
 from gui.Scaleform.daapi.view.meta.EventProgressionBuyConfirmViewMeta import EventProgressionBuyConfirmViewMeta
 from gui.impl.pub.dialog_window import DialogButtons, DialogViewMixin
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.sounds.filters import switchHangarOverlaySoundFilter
 from gui.shared.formatters import text_styles, icons
@@ -12,6 +13,7 @@ class EventProgressionBuyConfirmView(DialogViewMixin, EventProgressionBuyConfirm
 
     def __init__(self, ctx=None):
         super(EventProgressionBuyConfirmView, self).__init__(ctx)
+        self.__item = ctx['item']
         self.__price = ctx.get('price')
         self.__blur = None
         return
@@ -52,4 +54,4 @@ class EventProgressionBuyConfirmView(DialogViewMixin, EventProgressionBuyConfirm
          'showIcon': False})
 
     def __formatTitle(self, style, iconResID, iconSize, vSpace):
-        return style(backport.text(R.strings.event_progression.buyConfirm.title(), price='{}{}'.format(self.__price, icons.makeImageTag(backport.image(iconResID), width=iconSize, height=iconSize, vSpace=vSpace))))
+        return style(backport.text(R.strings.event_progression.buyConfirm.style_title() if self.__item.itemTypeID == GUI_ITEM_TYPE.STYLE else R.strings.event_progression.buyConfirm.title(), price='{}{}'.format(self.__price, icons.makeImageTag(backport.image(iconResID), width=iconSize, height=iconSize, vSpace=vSpace))))

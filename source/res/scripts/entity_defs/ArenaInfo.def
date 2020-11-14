@@ -1,6 +1,7 @@
 <ArenaInfo.def>
   <AppealRadius>	3000	</AppealRadius>
   <Implements>
+    <Interface>	VehiclesAreaMarker	</Interface>
     <Interface>	BattleXPArenaInfo	</Interface>
     <Interface>	LootArenaInfo	</Interface>
   </Implements>

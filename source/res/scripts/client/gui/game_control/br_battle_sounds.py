@@ -232,6 +232,7 @@ class DeathzoneSoundPlayer(_VehicleStateSoundPlayer):
     def destroy(self):
         if self.__isInZone:
             BREvents.playSound(BREvents.DEATHZONE_EXIT[self.__isInZone])
+            BRStates.setState(BRStates.STATE_DEATHZONE[self.__isInZone], BRStates.STATE_DEATHZONE_OUT[self.__isInZone])
         super(DeathzoneSoundPlayer, self).destroy()
 
     def _onVehicleStateUpdated(self, state, value):

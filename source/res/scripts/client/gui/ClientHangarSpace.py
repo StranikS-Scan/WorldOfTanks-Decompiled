@@ -13,11 +13,13 @@ from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IIGRController
+from skeletons.gui.game_control import IIGRController, IEpicBattleMetaGameController
 from gui.hangar_cameras.hangar_camera_manager import HangarCameraManager
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.gui.turret_gun_angles import ITurretAndGunAngles
 from skeletons.map_activities import IMapActivities
+from visual_script.multi_plan_provider import MultiPlanProvider
+from visual_script.misc import ASPECT, VisualScriptTag
 from skeletons.gui.shared.utils import IHangarSpace
 _DEFAULT_SPACES_PATH = 'spaces'
 SERVER_CMD_CHANGE_HANGAR = 'cmd_change_hangar'
@@ -99,6 +101,7 @@ def _readHangarSettings():
         loadConfigValue('shadow_empty_texture_name', hangarsXml, hangarsXml.readString, cfg)
         loadConfigValue(_IGR_HANGAR_PATH_KEY, hangarsXml, hangarsXml.readString, cfg)
         loadConfig(cfg, settingsXml)
+        _loadVisualScript(cfg, settingsXml)
         if settingsXml.has_key(_CUSTOMIZATION_HANGAR_SETTINGS_SEC):
             customizationXmlSection = settingsXml[_CUSTOMIZATION_HANGAR_SETTINGS_SEC]
             customizationCfg = {}
@@ -209,6 +212,12 @@ def _loadSecondaryConfig(cfg, xml):
     loadConfigValue('shadow_deferred_y_offset', xml, xml.readFloat, cfg, defaultShadowOffsetsCfg)
 
 
+def _loadVisualScript(cfg, section):
+    if section.has_key(VisualScriptTag):
+        vseSection = section[VisualScriptTag]
+        cfg['vse_plans'] = [ value.asString for name, value in vseSection.items() if name == 'plan' ]
+
+
 def loadConfigValue(name, xml, fn, cfg, defaultCfg=None):
     if xml.has_key(name):
         cfg[name] = fn(name)
@@ -223,6 +232,7 @@ class ClientHangarSpace(object):
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
     mapActivities = dependency.descriptor(IMapActivities)
     turretAndGunAngles = dependency.descriptor(ITurretAndGunAngles)
+    epicController = dependency.descriptor(IEpicBattleMetaGameController)
 
     def __init__(self, onVehicleLoadedCallback):
         global _HANGAR_CFGS
@@ -239,6 +249,7 @@ class ClientHangarSpace(object):
         self.__onVehicleLoadedCallback = onVehicleLoadedCallback
         self.__spacePath = None
         self.__spaceVisibilityMask = None
+        self._vsePlans = MultiPlanProvider(ASPECT.CLIENT)
         _HANGAR_CFGS = _readHangarSettings()
         return
 
@@ -284,6 +295,10 @@ class ClientHangarSpace(object):
         BigWorld.wg_setGUIBackground(_LOGIN_BLACK_BG_IMG)
         self.mapActivities.generateOfflineActivities(spacePath)
         BigWorld.pauseDRRAutoscaling(True)
+        vsePlans = _CFG.get('vse_plans', None)
+        if vsePlans is not None:
+            self._vsePlans.load(vsePlans)
+            self._vsePlans.start()
         return
 
     def recreateVehicle(self, vDesc, vState, onVehicleLoadedCallback=None):
@@ -362,6 +377,7 @@ class ClientHangarSpace(object):
 
     def __destroy(self):
         LOG_DEBUG('Hangar successfully destroyed.')
+        self._vsePlans.reset()
         MusicControllerWWISE.unloadCustomSounds()
         if self.__cameraManager:
             self.__cameraManager.destroy()
@@ -403,6 +419,9 @@ class ClientHangarSpace(object):
 
     def __closeOptimizedRegion(self):
         BigWorld.wg_enableGUIBackground(False, True)
+
+    def getSpaceID(self):
+        return self.__spaceId
 
     def setCameraLocation(self, *args):
         self.__cameraManager.setCameraLocation(*args)

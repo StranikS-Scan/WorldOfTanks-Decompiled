@@ -371,7 +371,7 @@ class _VehicleInfo(object):
 
 
 class VehicleDetailedInfo(_VehicleInfo):
-    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingEnemyHits', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directEnemyHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_isTeamKiller', '_isKilledByTeamKiller', '_rollouts', '_respawns', '_deathCount', '_equipmentDamageDealt', '_equipmentDamageAssisted', '_xpForAttack', '_xpForAssist', '_xpOther', '_xpPenalty', '_numDefended', '_vehicleNumCaptured', '_numRecovered', '_destructiblesNumDestroyed', '_destructiblesDamageDealt', '_eventPoints', '_eventPointsTotal', '_eventPointsLeft', '_environmentID', '_commanderLevelReached', '_eventAFKViolator', '_boosterApplied', '_commanderTokenDelta', '_commanderPoints', '_eventAFKBanned', '_commanderCurrentLevel', '_commanderTokenCount', '_commanderQuestBonusCount')
+    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingEnemyHits', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directEnemyHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_isTeamKiller', '_isKilledByTeamKiller', '_rollouts', '_respawns', '_deathCount', '_equipmentDamageDealt', '_equipmentDamageAssisted', '_xpForAttack', '_xpForAssist', '_xpOther', '_xpPenalty', '_numDefended', '_vehicleNumCaptured', '_numRecovered', '_destructiblesNumDestroyed', '_destructiblesDamageDealt')
 
     def __init__(self, vehicleID, vehicle, player, deathReason=DEATH_REASON_ALIVE):
         super(VehicleDetailedInfo, self).__init__(vehicleID, player, deathReason)
@@ -425,19 +425,6 @@ class VehicleDetailedInfo(_VehicleInfo):
         self._destructiblesNumDestroyed = 0
         self._destructiblesDamageDealt = 0
         self._numDefended = 0
-        self._eventPoints = 0
-        self._eventPointsTotal = 0
-        self._eventPointsLeft = 0
-        self._environmentID = 0
-        self._commanderLevelReached = False
-        self._eventAFKViolator = False
-        self._boosterApplied = False
-        self._commanderTokenDelta = 0
-        self._commanderTokenCount = 0
-        self._commanderQuestBonusCount = 0
-        self._commanderCurrentLevel = 0
-        self._commanderPoints = 0
-        self._eventAFKBanned = False
 
     @property
     def vehicle(self):
@@ -643,58 +630,6 @@ class VehicleDetailedInfo(_VehicleInfo):
     def xpPenalty(self):
         return self._xpPenalty
 
-    @property
-    def eventPoints(self):
-        return self._eventPoints
-
-    @property
-    def eventPointsLeft(self):
-        return self._eventPointsLeft
-
-    @property
-    def eventPointsTotal(self):
-        return self._eventPointsTotal
-
-    @property
-    def environmentID(self):
-        return self._environmentID
-
-    @property
-    def commanderLevelReached(self):
-        return self._commanderLevelReached
-
-    @property
-    def eventAFKViolator(self):
-        return self._eventAFKViolator
-
-    @property
-    def boosterApplied(self):
-        return self._boosterApplied
-
-    @property
-    def commanderTokenDelta(self):
-        return self._commanderTokenDelta
-
-    @property
-    def commanderTokenCount(self):
-        return self._commanderTokenCount
-
-    @property
-    def commanderQuestBonusCount(self):
-        return self._commanderQuestBonusCount
-
-    @property
-    def commanderCurrentLevel(self):
-        return self._commanderCurrentLevel
-
-    @property
-    def commanderPoints(self):
-        return self._commanderPoints
-
-    @property
-    def eventAFKBanned(self):
-        return self._eventAFKBanned
-
     def haveInteractionDetails(self):
         return self._spotted != 0 or self._deathReason > DEATH_REASON_ALIVE or self._directHits != 0 or self._directEnemyHits != 0 or self._explosionHits != 0 or self._piercings != 0 or self._piercingEnemyHits != 0 or self._damageDealt != 0 or self.damageAssisted != 0 or self.damageAssistedStun != 0 or self.stunNum != 0 or self.critsCount != 0 or self._fire != 0 or self._targetKills != 0 or self.stunDuration != 0 or self._damageBlockedByArmor != 0
 
@@ -755,19 +690,6 @@ class VehicleDetailedInfo(_VehicleInfo):
         info._destructiblesDamageDealt = vehicleRecords['destructiblesDamageDealt']
         info._numDefended = vehicleRecords['numDefended']
         info._equipmentDamageAssisted = vehicleRecords.get('damageAssistedInspire', 0) + vehicleRecords.get('damageAssistedSmoke', 0)
-        info._eventPoints = vehicleRecords.get('eventPoints', info._eventPoints)
-        info._eventPointsTotal = vehicleRecords.get('eventPointsTotal', info._eventPointsTotal)
-        info._eventPointsLeft = vehicleRecords.get('eventPointsLeft', info._eventPointsLeft)
-        info._environmentID = vehicleRecords.get('environmentID', info._environmentID)
-        info._commanderLevelReached = vehicleRecords.get('commanderLevelReached', info._commanderLevelReached)
-        info._commanderPoints = vehicleRecords.get('commanderPoints', info._commanderPoints)
-        info._eventAFKViolator = vehicleRecords.get('eventAFKViolator', info._eventAFKViolator)
-        info._boosterApplied = vehicleRecords.get('boosterApplied', info._boosterApplied)
-        info._commanderTokenDelta = vehicleRecords.get('commanderTokenDelta', info._commanderTokenDelta)
-        info._commanderTokenCount = vehicleRecords.get('commanderTokenCount', info._commanderTokenCount)
-        info._commanderQuestBonusCount = vehicleRecords.get('commanderQuestBonusCount', info._commanderQuestBonusCount)
-        info._commanderCurrentLevel = vehicleRecords.get('commanderCurrentLevel', info._commanderCurrentLevel)
-        info._eventAFKBanned = vehicleRecords.get('eventAFKBanned', info._eventAFKBanned)
         cls._setSharedRecords(info, vehicleRecords)
         return info
 
@@ -1024,58 +946,6 @@ class VehicleSummarizeInfo(_VehicleInfo):
     @property
     def equipmentDamageAssisted(self):
         return self.__accumulate('equipmentDamageAssisted')
-
-    @property
-    def eventPoints(self):
-        return self.__findFirstNoZero('eventPoints')
-
-    @property
-    def eventPointsTotal(self):
-        return self.__findFirstNoZero('eventPointsTotal')
-
-    @property
-    def eventPointsLeft(self):
-        return self.__findFirstNoZero('eventPointsLeft')
-
-    @property
-    def environmentID(self):
-        return self.__findFirstNoZero('environmentID')
-
-    @property
-    def commanderLevelReached(self):
-        return self.__findFirstNoZero('commanderLevelReached')
-
-    @property
-    def eventAFKViolator(self):
-        return self.__findFirstNoZero('eventAFKViolator')
-
-    @property
-    def boosterApplied(self):
-        return self.__findFirstNoZero('boosterApplied')
-
-    @property
-    def commanderTokenDelta(self):
-        return self.__findFirstNoZero('commanderTokenDelta')
-
-    @property
-    def commanderTokenCount(self):
-        return self.__findFirstNoZero('commanderTokenCount')
-
-    @property
-    def commanderQuestBonusCount(self):
-        return self.__findFirstNoZero('commanderQuestBonusCount')
-
-    @property
-    def commanderCurrentLevel(self):
-        return self.__findFirstNoZero('commanderCurrentLevel')
-
-    @property
-    def commanderPoints(self):
-        return self.__findFirstNoZero('commanderPoints')
-
-    @property
-    def eventAFKBanned(self):
-        return self.__findFirstNoZero('eventAFKBanned')
 
     def addVehicleInfo(self, info):
         self.__vehicles.append(info)

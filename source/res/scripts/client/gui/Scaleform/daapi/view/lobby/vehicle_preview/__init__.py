@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_preview/__init__.py
 from frameworks.wulf import WindowLayer
-from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.vehicle_preview_offer_gift_buying_panel import VehiclePreviewOfferGiftBuyingPanel
 from gui.Scaleform.framework import ComponentSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.app_loader import settings as app_settings
@@ -15,19 +14,21 @@ def getViewSettings():
     from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
     from gui.Scaleform.daapi.view.lobby.hangar.VehicleParameters import VehiclePreviewParameters
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview_buying_panel import VehiclePreviewBuyingPanel
-    from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.vehicle_preview_event_progression_buying_panel import VehiclePreviewEventProgressionBuyingPanel
-    from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.vehicle_preview_trade_in_buying_panel import VehiclePreviewTradeInBuyingPanel
+    from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.event_progression_buying_panels import VehiclePreviewEventProgressionVehicleBuyingPanel, VehiclePreviewEventProgressionStyleBuyingPanel
+    from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.trade_in_buying_panel import VehiclePreviewTradeInBuyingPanel
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.vehicle_preview_personal_trade_in_buying_panel import VehiclePreviewPersonalTradeInBuyingPanel
-    from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.vehicle_preview_browse_tab import VehiclePreviewBrowseTab
-    from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.vehicle_preview_modules import VehiclePreviewModulesTab, ModulesPanel
-    from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.vehicle_preview_crew_tab import VehiclePreviewCrewTab
+    from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.offer_gift_buying_panel import VehiclePreviewOfferGiftBuyingPanel
+    from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.browse_tab import VehiclePreviewBrowseTab
+    from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.modules_tab import VehiclePreviewModulesTab, ModulesPanel
+    from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.crew_tab import VehiclePreviewCrewTab
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.pack_items_popover import PackItemsPopover
     from gui.Scaleform.daapi.view.lobby.trade_in.trade_off_widget import TradeOffWidget
     from gui.Scaleform.framework import ScopeTemplates, GroupedViewSettings
     from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
     return (ComponentSettings(VEHPREVIEW_CONSTANTS.PARAMETERS_PY_ALIAS, VehiclePreviewParameters, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VEHPREVIEW_CONSTANTS.BUYING_PANEL_PY_ALIAS, VehiclePreviewBuyingPanel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(VEHPREVIEW_CONSTANTS.EVENT_PROGRESSION_BUYING_PANEL_PY_ALIAS, VehiclePreviewEventProgressionBuyingPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(VEHPREVIEW_CONSTANTS.EVENT_PROGRESSION_VEHICLE_BUYING_PANEL_PY_ALIAS, VehiclePreviewEventProgressionVehicleBuyingPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(VEHPREVIEW_CONSTANTS.EVENT_PROGRESSION_STYLE_BUYING_PANEL_PY_ALIAS, VehiclePreviewEventProgressionStyleBuyingPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VEHPREVIEW_CONSTANTS.TRADE_IN_BUYING_PANEL_PY_ALIAS, VehiclePreviewTradeInBuyingPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VEHPREVIEW_CONSTANTS.PERSONAL_TRADE_IN_BUYING_PANEL_PY_ALIAS, VehiclePreviewPersonalTradeInBuyingPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VEHPREVIEW_CONSTANTS.OFFER_GIFT_BUYING_PANEL_PY_ALIAS, VehiclePreviewOfferGiftBuyingPanel, ScopeTemplates.DEFAULT_SCOPE),

@@ -34,6 +34,8 @@ class _BrowseActionParser(SectionParser):
             action = actions.OpenExternalBrowser(name, url)
         elif target == 'promo':
             action = actions.OpenPromoBrowser(name, url)
+        elif target == 'stronghold':
+            action = actions.OpenStrongholdBrowser(name, url)
         else:
             raise ParseError('The target of action "{0}" is not valid: {1}.'.format(self.getTagName(), target))
         return action

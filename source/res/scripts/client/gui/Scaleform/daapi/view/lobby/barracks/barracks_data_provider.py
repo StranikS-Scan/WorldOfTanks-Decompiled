@@ -261,8 +261,6 @@ class BarracksDataProvider(DAAPIDataProvider):
         tankmenInBarracks = 0
         tankmenList = [_packBuyBerthsSlot()]
         for tankman in allTankmen:
-            if tankman.vehicleInvID > 0 and self.itemsCache.items.getVehicle(tankman.vehicleInvID) is not None and self.itemsCache.items.getVehicle(tankman.vehicleInvID).isOnlyForEventBattles:
-                continue
             if not tankman.isInTank:
                 tankmenInBarracks += 1
             if criteria(tankman):
@@ -276,4 +274,3 @@ class BarracksDataProvider(DAAPIDataProvider):
         self.__placeCount = max(slots - tankmenInBarracks, 0)
         self.setItemWrapper(_packActiveTankman)
         self.buildList(tankmenList)
-        return

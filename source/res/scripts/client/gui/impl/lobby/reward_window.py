@@ -16,7 +16,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.ui_kit.reward_renderer_model import RewardRendererModel
 from gui.impl.gen.view_models.windows.piggy_bank_reward_window_content_model import PiggyBankRewardWindowContentModel
 from gui.impl.gen.view_models.windows.reward_window_content_model import RewardWindowContentModel
-from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, getAnniversaryPacker, getDefaultAwardFormatter, getEventRewardWindowAwardFormatter
+from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, getAnniversaryPacker, getDefaultAwardFormatter
 from gui.server_events.bonuses import getTutorialBonuses, CreditsBonus, getNonQuestBonuses
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
@@ -215,16 +215,6 @@ class TwitchRewardWindowContent(QuestRewardWindowContent):
         return
 
 
-class HE19TankmanRewardWindowContent(TwitchRewardWindowContent):
-    __slots__ = ()
-
-    def _getAwardComposer(self):
-        return PackRentVehiclesAwardComposer(_ADDITIONAL_AWARDS_COUNT, getEventRewardWindowAwardFormatter())
-
-    def _getBonuses(self):
-        return self._quest.getBonuses() if self._quest is not None else []
-
-
 class RewardWindowBase(WindowImpl):
     appLoader = dependency.descriptor(IAppLoader)
     __slots__ = ()
@@ -345,15 +335,6 @@ class DynamicRewardWindow(RewardWindowBase):
     def _initialize(self):
         super(DynamicRewardWindow, self)._initialize()
         self.windowModel.setTitle(getattr(R.strings.ingame_gui.rewardWindow, self._eventName).winHeaderText())
-
-
-class HE19TankmanRewardWindow(RewardWindowBase):
-    __slots__ = ()
-
-    def __init__(self, ctx=None, parent=None):
-        contentSettings = ViewSettings(R.views.lobby.reward_window.twitch_reward_window_content.TwitchRewardWindowContent())
-        contentSettings.model = RewardWindowContentModel()
-        super(HE19TankmanRewardWindow, self).__init__(parent=parent, content=HE19TankmanRewardWindowContent(contentSettings, ctx=ctx))
 
 
 class GiveAwayRewardWindowContent(QuestRewardWindowContent):

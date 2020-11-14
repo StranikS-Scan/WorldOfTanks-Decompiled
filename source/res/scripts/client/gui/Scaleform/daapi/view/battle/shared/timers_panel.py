@@ -38,7 +38,6 @@ _TIMERS_PRIORITY = {(_TIMER_STATES.STUN, _TIMER_STATES.WARNING_VIEW): 1,
  (_TIMER_STATES.DEATH_ZONE, _TIMER_STATES.WARNING_VIEW): 3,
  (_TIMER_STATES.ORANGE_ZONE, _TIMER_STATES.CRITICAL_VIEW): 1,
  (_TIMER_STATES.ORANGE_ZONE, _TIMER_STATES.WARNING_VIEW): 3,
- (_TIMER_STATES.LOSE_SOULS_IN_AURA, _TIMER_STATES.WARNING_VIEW): 1,
  (_TIMER_STATES.FIRE, _TIMER_STATES.WARNING_VIEW): 2,
  (_TIMER_STATES.DROWN, _TIMER_STATES.WARNING_VIEW): 3,
  (_TIMER_STATES.OVERTURNED, _TIMER_STATES.WARNING_VIEW): 4,
@@ -606,6 +605,12 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
             self.as_setSecondaryTimerTextS(state, backport.text(R.strings.battle_royale.equipment.repairPoint()))
         return
 
+    def __updateDeathZoneWarningNotification(self, visible, strikeTime, waveDuration):
+        if visible:
+            self._showTimer(_TIMER_STATES.DEATH_ZONE, waveDuration, 'critical', strikeTime)
+        else:
+            self._hideTimer(_TIMER_STATES.DEATH_ZONE)
+
     @MethodsRules.delayable()
     def __onVehicleControlling(self, vehicle):
         ctrl = self.sessionProvider.shared.vehicleState
@@ -666,6 +671,8 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
             self.__updateHealingTimer(**value)
         elif state == VEHICLE_VIEW_STATE.REPAIR_POINT:
             self.__updateRepairingTimer(**value)
+        elif state == VEHICLE_VIEW_STATE.DEATHZONE:
+            self.__updateDeathZoneWarningNotification(*value)
         elif state in (VEHICLE_VIEW_STATE.DESTROYED, VEHICLE_VIEW_STATE.CREW_DEACTIVATED):
             self.__hideAll()
 

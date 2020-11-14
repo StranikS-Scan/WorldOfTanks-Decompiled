@@ -67,6 +67,13 @@
       <undamaged>	vehicles/british/GB31_Conqueror_Gun/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/british/GB31_Conqueror_Gun/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/british/GB31_Conqueror_Gun/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <GB31_Conqueror_Gun_3Dst>
+          <undamaged>	vehicles/british/GB31_Conqueror_Gun/_skins/GB31_Conqueror_Gun_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/british/GB31_Conqueror_Gun/_skins/GB31_Conqueror_Gun_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/british/GB31_Conqueror_Gun/_skins/GB31_Conqueror_Gun_3Dst/crash/lod0/Hull.model	</exploded>
+        </GB31_Conqueror_Gun_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -1230,6 +1237,90 @@
         <anchorPosition>	-0.00683162 0.5896 2.31752	</anchorPosition>
         <anchorDirection>	0.00141074 0.92379 0.382897	</anchorDirection>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15082	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB31_Conqueror_Gun_3Dst	</compatibleModels>
+        <position>	-0.472656 1.71202 2.38509	</position>
+        <rotation>	0.0526149 0.00480637 3.1412	</rotation>
+        <scale>	0.85047 0.0494457 0.850469	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	-0.47263 0.592301 2.3872	</anchorPosition>
+        <anchorDirection>	0.000645352 0.998616 0.0525881	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15083	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB31_Conqueror_Gun_3Dst	</compatibleModels>
+        <position>	-0.648277 1.5482 2.98957	</position>
+        <rotation>	0.628132 0.00224793 3.14111	</rotation>
+        <scale>	0.4412 0.025651 0.441198	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	-0.648205 0.420903 3.01307	</anchorPosition>
+        <anchorDirection>	0.00179938 0.809126 0.587632	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15084	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB31_Conqueror_Gun_3Dst	</compatibleModels>
+        <position>	-1.44817 2.82299 -0.415443	</position>
+        <rotation>	2.13178 1.56976 -0.00198126	</rotation>
+        <scale>	0.578585 0.05 0.578583	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	-1.48204 1.6846 -0.415399	</anchorPosition>
+        <anchorDirection>	-0.846734 0.532015 0.00110691	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15085	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB31_Conqueror_Gun_3Dst	</compatibleModels>
+        <position>	1.63274 2.07685 -0.605945	</position>
+        <rotation>	1.57591 -0.0141356 1.54889	</rotation>
+        <scale>	0.712042 0.05 0.712039	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	1.67274 0.917189 -0.606255	</anchorPosition>
+        <anchorDirection>	0.99997 0.000111811 -0.00774765	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15086	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB31_Conqueror_Gun_3Dst	</compatibleModels>
+        <position>	-0.671389 0.648238 4.18615	</position>
+        <rotation>	1.29172 0.00117542 3.14018	</rotation>
+        <scale>	0.701044 0.158895 0.701041	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	-0.671338 -0.505923 4.20538	</anchorPosition>
+        <anchorDirection>	0.00254153 0.275463 0.961308	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15087	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB31_Conqueror_Gun_3Dst	</compatibleModels>
+        <position>	-0.661397 3.16807 -3.10769	</position>
+        <rotation>	3.13939 -0.00533104 -0.00214195	</rotation>
+        <scale>	0.602579 0.0423135 0.602578	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.41952	</clipAngle>
+        <anchorPosition>	-0.661482 2.0484 -3.10778	</anchorPosition>
+        <anchorDirection>	-0.00213018 0.999995 -0.00221428	</anchorDirection>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1272,6 +1363,13 @@
         <undamaged>	vehicles/british/GB31_Conqueror_Gun/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/british/GB31_Conqueror_Gun/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/british/GB31_Conqueror_Gun/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <GB31_Conqueror_Gun_3Dst>
+            <undamaged>	vehicles/british/GB31_Conqueror_Gun/_skins/GB31_Conqueror_Gun_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB31_Conqueror_Gun/_skins/GB31_Conqueror_Gun_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB31_Conqueror_Gun/_skins/GB31_Conqueror_Gun_3Dst/crash/lod0/Chassis.model	</exploded>
+          </GB31_Conqueror_Gun_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1410,6 +1508,76 @@
         <elasticity>	1100	</elasticity>
         <damping>	2	</damping>
         <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.105	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.105	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.0385878	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.105	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	1.54	</forwardElastK>
+          <backwardElastK>	1.54	</backwardElastK>
+          <offset>	0.00246305	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	1.5381	</forwardElastK>
+          <backwardElastK>	1.53333	</backwardElastK>
+          <offset>	-0.105	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.105	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.0582923	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.105	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	1.5381	</forwardElastK>
+          <backwardElastK>	1.53333	</backwardElastK>
+          <offset>	-0.000821017	</offset>
+        </node>
+        <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
           <forwardElastK>	1.5	</forwardElastK>
@@ -1432,76 +1600,6 @@
           <name>	Track_VD_R1	</name>
           <forwardElastK>	2	</forwardElastK>
           <backwardElastK>	1.5	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L0	</name>
-          <forwardElastK>	0.75	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
-          <offset>	-0.105	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L1	</name>
-          <forwardElastK>	1.3	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
-          <offset>	-0.105	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L2	</name>
-          <forwardElastK>	0.75	</forwardElastK>
-          <backwardElastK>	1.6	</backwardElastK>
-          <offset>	-0.105	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L3	</name>
-          <forwardElastK>	0.75	</forwardElastK>
-          <backwardElastK>	1.8	</backwardElastK>
-          <offset>	-0.105	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L4	</name>
-          <forwardElastK>	0.75	</forwardElastK>
-          <backwardElastK>	2	</backwardElastK>
-          <offset>	-0.105	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R0	</name>
-          <forwardElastK>	0.75	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
-          <offset>	-0.105	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R1	</name>
-          <forwardElastK>	1.3	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
-          <offset>	-0.105	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R2	</name>
-          <forwardElastK>	0.75	</forwardElastK>
-          <backwardElastK>	1.6	</backwardElastK>
-          <offset>	-0.105	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R3	</name>
-          <forwardElastK>	0.75	</forwardElastK>
-          <backwardElastK>	1.8	</backwardElastK>
-          <offset>	-0.105	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R4	</name>
-          <forwardElastK>	0.75	</forwardElastK>
-          <backwardElastK>	2	</backwardElastK>
-          <offset>	-0.105	</offset>
         </node>
       </trackNodes>
       <physicalTracks>
@@ -2138,6 +2236,13 @@
             <undamaged>	vehicles/british/GB31_Conqueror_Gun/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/british/GB31_Conqueror_Gun/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/british/GB31_Conqueror_Gun/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <GB31_Conqueror_Gun_3Dst>
+                <undamaged>	vehicles/british/GB31_Conqueror_Gun/_skins/GB31_Conqueror_Gun_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/british/GB31_Conqueror_Gun/_skins/GB31_Conqueror_Gun_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/british/GB31_Conqueror_Gun/_skins/GB31_Conqueror_Gun_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </GB31_Conqueror_Gun_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/british/GB31_Conqueror_Gun/collision/Gun_01.model	</collisionModelServer>
@@ -2208,6 +2313,13 @@
         <undamaged>	vehicles/british/GB31_Conqueror_Gun/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/british/GB31_Conqueror_Gun/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/british/GB31_Conqueror_Gun/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <GB31_Conqueror_Gun_3Dst>
+            <undamaged>	vehicles/british/GB31_Conqueror_Gun/_skins/GB31_Conqueror_Gun_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB31_Conqueror_Gun/_skins/GB31_Conqueror_Gun_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/british/GB31_Conqueror_Gun/_skins/GB31_Conqueror_Gun_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </GB31_Conqueror_Gun_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB31_Conqueror_Gun/collision/Turret_01.model	</collisionModelServer>
@@ -2261,6 +2373,20 @@
           <clipAngle>	0.000000	</clipAngle>
           <anchorPosition>	-0.000009 1.38635 -0.0834155	</anchorPosition>
           <anchorDirection>	-0.000018 0.999139 0.0414807	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35002	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB31_Conqueror_Gun_3Dst	</compatibleModels>
+          <position>	-0.00216064 3.19912 -1.05639	</position>
+          <rotation>	-0.00217598 0.00235555 3.13952	</rotation>
+          <scale>	0.92216 0.0647547 0.92216	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.41952	</clipAngle>
+          <anchorPosition>	-0.00207813 1.41385 -0.507103	</anchorPosition>
+          <anchorDirection>	0.00206258 0.999996 -0.00218084	</anchorDirection>
         </slot>
       </customizationSlots>
       <camouflage>

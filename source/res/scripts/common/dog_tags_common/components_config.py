@@ -8,7 +8,7 @@ from cache import cached_property
 from dog_tags_common.config.dog_tag_parser import readDogTags
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
-    from typing import List
+    from typing import List, Optional
     from dog_tags_common.config.dog_tag_framework import ComponentDefinition, StartingComponents
     from dog_tags_common.config.common import ComponentPurpose
 

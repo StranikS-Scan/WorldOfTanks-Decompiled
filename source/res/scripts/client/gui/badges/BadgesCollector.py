@@ -19,7 +19,7 @@ class BadgesCollector(object):
     def getNotReceivedPrefixBadges(self):
         return tuple(self.__notReceivedBadges)
 
-    def getSuffixAchivedBadges(self):
+    def getSuffixAchievedBadges(self):
         return tuple(self.__suffixBadges)
 
     def updateCollector(self, badges=None):

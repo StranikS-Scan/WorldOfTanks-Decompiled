@@ -123,6 +123,17 @@ class ChatSessionHistoryRequester(ClientHolder):
 
     def __setChannelHistory(self, jid):
         channel = self.channelsStorage.getChannel(entities.XMPPChatChannelEntity(jid))
+        for unreadMessage in channel.getUnreadMessages():
+            isExist = False
+            for historyMessage in self.__history:
+                isExist = unreadMessage.uuid == historyMessage.uuid
+                if isExist:
+                    break
+
+            if not isExist:
+                self.__history.append(unreadMessage)
+
+        channel.clearUnreadMessages()
         if channel:
             g_messengerEvents.channels.onHistoryReceived(sorted(self.__history, key=operator.attrgetter('sentAt')), channel)
 

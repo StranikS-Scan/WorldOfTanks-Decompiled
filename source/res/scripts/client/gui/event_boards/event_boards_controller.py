@@ -52,7 +52,10 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener):
         return self.__hangarFlagData
 
     def updateHangarFlag(self):
-        self._invokeListeners('onUpdateHangarFlag')
+        eventsSettings = self.getEventsSettingsData()
+        if eventsSettings is not None and eventsSettings.hasActiveEvents():
+            self._invokeListeners('onUpdateHangarFlag')
+        return
 
     def cleanEventsData(self):
         self.__isLoggedIn = False

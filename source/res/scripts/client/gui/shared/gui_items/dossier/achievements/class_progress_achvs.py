@@ -303,6 +303,9 @@ class ReferralProgramClassAchievement(ClassProgressAchievement):
     def _readProgressValue(self, dossier):
         return dossier.getRecordValue(_AB.TOTAL, 'RP2018sergeant')
 
+    def _readCurrentProgressValue(self, dossier):
+        return dossier.getRecordValue(_AB.TOTAL, 'RP2018sergeantCounter')
+
 
 class SoldierOfFortuneAchievement(Fortification, ClassProgressAchievement):
 

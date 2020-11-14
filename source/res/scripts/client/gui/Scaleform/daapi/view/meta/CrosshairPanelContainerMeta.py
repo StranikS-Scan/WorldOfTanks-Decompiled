@@ -4,6 +4,9 @@ from gui.Scaleform.daapi.view.meta.DAAPISimpleContainerMeta import DAAPISimpleCo
 
 class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
 
+    def as_playSound(self, value):
+        self._printOverrideError('as_playSound')
+
     def as_setSettingsS(self, data):
         return self.flashObject.as_setSettings(data) if self._isDAAPIInited() else None
 
@@ -88,8 +91,8 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
     def as_setAutoloaderReloadasPercentS(self, percent):
         return self.flashObject.as_setAutoloaderReloadasPercent(percent) if self._isDAAPIInited() else None
 
-    def as_setAutoloaderPercentS(self, percent, sec, isTimerOn):
-        return self.flashObject.as_setAutoloaderPercent(percent, sec, isTimerOn) if self._isDAAPIInited() else None
+    def as_setAutoloaderPercentS(self, percent, sec, isTimerOn, isTimerRed):
+        return self.flashObject.as_setAutoloaderPercent(percent, sec, isTimerOn, isTimerRed) if self._isDAAPIInited() else None
 
     def as_setSpeedModeS(self, value):
         return self.flashObject.as_setSpeedMode(value) if self._isDAAPIInited() else None

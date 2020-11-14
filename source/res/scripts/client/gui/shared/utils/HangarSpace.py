@@ -171,13 +171,16 @@ class HangarSpace(IHangarSpace):
         self.onVehicleChangeStarted = Event.Event()
         self.onSpaceChangedByAction = Event.Event()
         self.onNotifyCursorOver3dScene = Event.Event()
-        self.onObjectsSelectionEnabled = Event.Event()
         self.__isCursorOver3DScene = False
         return
 
     @property
     def space(self):
         return self.__space if self.spaceInited else None
+
+    @property
+    def spaceID(self):
+        return self.__space.getSpaceID() if self.__space else None
 
     @property
     def inited(self):

@@ -6,7 +6,7 @@ import typing
 import BigWorld
 import Windowing
 import Event
-from CurrentVehicle import g_currentVehicle
+from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from helpers import dependency
 from gui import SystemMessages
@@ -175,8 +175,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         self.onRegionHighlighted = Event.Event(self._eventsManager)
         self.onOutfitChanged = Event.Event(self._eventsManager)
         self.onCustomizationHelperRecreated = Event.Event(self._eventsManager)
-        self.onCustomizationOpened = Event.Event(self._eventsManager)
-        self.onCustomizationClosed = Event.Event(self._eventsManager)
+        self.onVisibilityChanged = Event.Event(self._eventsManager)
         self.__customizationCtx = None
         self._suspendHighlighterCallbackID = None
         self._isDraggingInProcess = False
@@ -221,6 +220,8 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
          'modeId': modeId,
          'tabId': tabId}
         shouldSelectVehicle = False
+        if self.hangarSpace.space is not None:
+            self.hangarSpace.space.turretAndGunAngles.set(gunPitch=self.__GUN_PITCH_ANGLE, turretYaw=self.__TURRET_YAW_ANGLE)
         if vehInvID is not None:
             vehGuiItem = self.itemsCache.items.getVehicle(vehInvID)
             if vehGuiItem is not None:
@@ -233,10 +234,17 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
             self.hangarSpace.onVehicleChanged += self.__delayedShowCustomization
             self.hangarSpace.onSpaceChanged += self.__delayedShowCustomization
             if shouldSelectVehicle:
+                if g_currentPreviewVehicle.isPresent():
+                    g_currentPreviewVehicle.selectNoVehicle()
                 g_currentVehicle.selectVehicle(vehInvID=vehInvID)
             _logger.info('Space or vehicle is not presented, customization view loading delayed')
             return
         else:
+            if not shouldSelectVehicle and self.hangarSpace.space is not None:
+                vEntity = self.hangarSpace.space.getVehicleEntity()
+                if vEntity is not None:
+                    vEntity.appearance.rotateTurretForAnchor(None, None)
+                    vEntity.appearance.rotateGunToDefault()
             self.__delayedShowCustomization()
             return
 
@@ -248,22 +256,18 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         tabId = self.__showCustomizationKwargs.get('tabId', None)
         vehInvID = self.__showCustomizationKwargs.get('vehInvID', None)
         callback = self.__showCustomizationKwargs.get('callback', None)
-        if self.hangarSpace.space is not None:
-            self.hangarSpace.space.turretAndGunAngles.set(gunPitch=self.__GUN_PITCH_ANGLE, turretYaw=self.__TURRET_YAW_ANGLE)
-        self.__createCtx(season, modeId, tabId)
-        loadCallback = lambda : self.__loadCustomization(vehInvID, callback)
+        loadCallback = lambda : self.__loadCustomization(vehInvID, callback, season, modeId, tabId)
         if self.__showCustomizationCallbackId is None:
             self.__moveHangarVehicleToCustomizationRoom()
-            self.__customizationCtx.c11nCameraManager.vEntity.appearance.rotateGunToDefault()
             self.__showCustomizationCallbackId = BigWorld.callback(0.0, lambda : self.__showCustomization(loadCallback))
-        self.onCustomizationOpened()
+        self.onVisibilityChanged(True)
         return
 
     def closeCustomization(self):
         if self.hangarSpace.space is not None:
             self.hangarSpace.space.turretAndGunAngles.reset()
         self.__destroyCtx()
-        self.onCustomizationClosed()
+        self.onVisibilityChanged(False)
         return
 
     def getCtx(self):
@@ -467,9 +471,10 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_CUSTOMIZATION), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
-    def __loadCustomization(self, vehInvID=None, callback=None):
+    def __loadCustomization(self, vehInvID=None, callback=None, season=None, modeId=None, tabId=None):
+        self.__createCtx(season, modeId, tabId)
         if vehInvID is not None and vehInvID != g_currentVehicle.item.invID:
-            return g_currentVehicle.selectVehicle(vehInvID, lambda : self.__loadCustomization(vehInvID, callback), True)
+            return g_currentVehicle.selectVehicle(vehInvID, lambda : self.__loadCustomization(vehInvID, callback, season, modeId, tabId), True)
         else:
             if callback is not None:
                 BigWorld.callback(0.0, callback)

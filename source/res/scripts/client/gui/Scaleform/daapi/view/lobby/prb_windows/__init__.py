@@ -23,7 +23,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.SendInvitesWindow import SendInvitesWindow
     from gui.Scaleform.daapi.view.lobby.prb_windows.SquadPromoWindow import SquadPromoWindow
     from gui.Scaleform.daapi.view.lobby.prb_windows.squad_view import SquadView
-    from gui.Scaleform.daapi.view.lobby.prb_windows.event_squad_view import EventSquadView
+    from gui.Scaleform.daapi.view.lobby.prb_windows.squad_view import EventSquadView
     from gui.Scaleform.daapi.view.lobby.prb_windows.squad_view import EpicSquadView
     from gui.Scaleform.daapi.view.lobby.prb_windows.squad_view import BattleRoyaleSquadView
     from gui.Scaleform.daapi.view.lobby.prb_windows.squad_window import SquadWindow, EventSquadWindow, EpicSquadWindow

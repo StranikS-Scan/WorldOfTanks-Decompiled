@@ -32,6 +32,3 @@ class BCHangar(Hangar):
                     return True
 
             return False
-
-    def _isBCHangar(self):
-        return True

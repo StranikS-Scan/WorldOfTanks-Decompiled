@@ -229,8 +229,6 @@ def vehicleAttributeFactors():
      'stunResistanceEffect': 0.0,
      'stunResistanceDuration': 0.0,
      'repeatedStunDurationFactor': 1.0,
-     'vehicle/canBeDamaged': True,
-     'vehicle/antifragmentationLiningFactor': 1.0,
      'healthFactor': 1.0,
      'damageFactor': 1.0,
      'enginePowerFactor': 1.0,
@@ -238,7 +236,6 @@ def vehicleAttributeFactors():
 
 
 WHEEL_SIZE_COEF = 2.2
-VEHICLE_ATTRIBUTE_FACTORS = vehicleAttributeFactors()
 _g_prices = None
 
 class CamouflageBonus():
@@ -1761,6 +1758,15 @@ class VehicleType(object):
         else:
             LOG_WARNING('Json vehicle reader is not found')
 
+    def getGuns(self):
+        res = []
+        for data in self.turrets:
+            for turret in data:
+                for gun in turret.guns:
+                    res.append(gun)
+
+        return res
+
     def __getRoleFromTags(self):
         rolesTags = g_cache.rolesTags()
         suitableRoles = []
@@ -2216,6 +2222,9 @@ class Cache(object):
     def getGunRecoilEffects(self, effectName):
         return self._gunRecoilEffects.get(effectName, None)
 
+    def getVehicleEffect(self, effectID):
+        return self._vehicleEffects.get(effectID)
+
     @property
     def _vehicleEffects(self):
         if self.__vehicleEffects is None:
@@ -2540,12 +2549,6 @@ def stripPrivateInfoFromVehicleCompactDescr(compactDescr):
     enhancements = ''
     compactDescr = _combineVehicleCompactDescr(type, components, optionalDevicesSlots, optionalDevices, enhancements, emblemSlots, emblems, inscriptions, camouflages)
     return compactDescr
-
-
-def getSuitableShellsForVehicle(compDescr):
-    _, nationID, vehTypeID = parseIntCompactDescr(compDescr)
-    vehType = g_cache.vehicle(nationID, vehTypeID)
-    return [ shot.shell.compactDescr for turrets in vehType.turrets for turret in turrets for gun in turret.guns for shot in gun.shots ]
 
 
 def isShellSuitableForGun(shellCompactDescr, gunDescr):
@@ -3778,7 +3781,7 @@ def _readGun(xmlCtx, section, item, unlocksDescrs=None, _=None):
     if not section.has_key('autoreload'):
         item.autoreload = component_constants.DEFAULT_GUN_AUTORELOAD
     else:
-        item.autoreload = _readGunClipAutoreload(xmlCtx, section)
+        item.autoreload, item.autoreloadHasBoost = _readGunClipAutoreload(xmlCtx, section)
     if not section.has_key('burst'):
         item.burst = component_constants.DEFAULT_GUN_BURST
     else:
@@ -3910,7 +3913,7 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
         autoreload = sharedItem.autoreload
     else:
         hasOverride = True
-        autoreload = _readGunClipAutoreload(xmlCtx, section)
+        autoreload, autoreloadHasBoost = _readGunClipAutoreload(xmlCtx, section)
     if not section.has_key('burst'):
         burst = sharedItem.burst
     else:
@@ -4057,6 +4060,7 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
             item.tags = tags
         if autoreload is not sharedItem.autoreload:
             item.autoreload = autoreload
+            item.autoreloadHasBoost = autoreloadHasBoost
             tags = item.tags
             if autoreload == component_constants.DEFAULT_GUN_AUTORELOAD:
                 tags = tags.difference(('autoreload',))
@@ -4231,7 +4235,8 @@ def _readGunClipAutoreload(xmlCtx, section):
     boostResidueTime = _xml.readNonNegativeFloat(xmlCtx, section, 'autoreload/boostResidueTime', 0.0)
     fractionName = 'autoreload/boostFraction'
     boostFraction = _xml.readFraction(xmlCtx, section, fractionName) if section.has_key(fractionName) else 1.0
-    return component_constants.Autoreload(reloadTime=reloadTime, boostStartTime=boostStartTime, boostResidueTime=boostResidueTime, boostFraction=boostFraction)
+    hasBoost = section.has_key('autoreload/boostStartTime') and section.has_key('autoreload/boostResidueTime') and section.has_key('autoreload/boostFraction')
+    return (component_constants.Autoreload(reloadTime=reloadTime, boostStartTime=boostStartTime, boostResidueTime=boostResidueTime, boostFraction=boostFraction), hasBoost)
 
 
 def _readShells(xmlPath, nationID):
@@ -5685,7 +5690,7 @@ if IS_CLIENT or IS_EDITOR:
      'collisionVehicleHeavy3',
      'rammingCollisionLight',
      'rammingCollisionHeavy',
-     'collisionDamage'] + [ '%sCollisionLight' % name for name in EFFECT_MATERIALS ] + [ '%sCollisionHeavy' % name for name in EFFECT_MATERIALS ] + [ 'explosionCandle%d' % i for i in xrange(1, 5) ] + ['fullDestruction', 'hw19fullDestruction'] + ['dynamicCollision'])
+     'collisionDamage'] + [ '%sCollisionLight' % name for name in EFFECT_MATERIALS ] + [ '%sCollisionHeavy' % name for name in EFFECT_MATERIALS ] + [ 'explosionCandle%d' % i for i in xrange(1, 5) ] + ['fullDestruction'] + ['dynamicCollision'])
     _damagedStateGroupEffectKindNames = ('ammoBayExplosion',
      'ammoBayBurnOff',
      'fuelExplosion',

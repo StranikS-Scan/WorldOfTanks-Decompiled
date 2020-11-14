@@ -71,6 +71,13 @@
       <undamaged>	vehicles/german/G42_Maus/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/german/G42_Maus/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/german/G42_Maus/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <G42_Maus_3Dst>
+          <undamaged>	vehicles/german/G42_Maus/_skins/G42_Maus_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G42_Maus/_skins/G42_Maus_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G42_Maus/_skins/G42_Maus_3Dst/crash/lod0/Hull.model	</exploded>
+        </G42_Maus_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -93,8 +100,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.938728 0.889875 3.86733	</rayStart>
-        <rayEnd>	-0.938728 0.563397 3.63622	</rayEnd>
+        <rayStart>	-0.936133 0.921376 3.82283	</rayStart>
+        <rayEnd>	-0.936133 0.594902 3.59172	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.34	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
@@ -931,6 +938,76 @@
         <anchorPosition>	-1.18088 -0.0763931 4.55491	</anchorPosition>
         <anchorDirection>	0.000238122 0.19441 0.98092	</anchorDirection>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15063	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G42_Maus_3Dst	</compatibleModels>
+        <position>	-1.4506 1.63856 4.19243	</position>
+        <rotation>	0.615228 -0.000003 3.14159	</rotation>
+        <scale>	0.522764 0.05 0.538594	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.55805	</clipAngle>
+        <anchorPosition>	-1.4506 0.455478 4.2059	</anchorPosition>
+        <anchorDirection>	0.000001 0.816642 0.577145	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15064	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G42_Maus_3Dst	</compatibleModels>
+        <position>	1.27581 1.98152 2.91119	</position>
+        <rotation>	0.000000 -0.000007 3.14159	</rotation>
+        <scale>	0.926048 0.56343 0.954091	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.917481	</clipAngle>
+        <anchorPosition>	1.27581 0.95592 2.91119	</anchorPosition>
+        <anchorDirection>	0.000006 1 0.000000	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15065	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G42_Maus_3Dst	</compatibleModels>
+        <position>	1.84847 1.31746 2.64934	</position>
+        <rotation>	1.56122 0.237019 1.79635	</rotation>
+        <scale>	0.94832 0.05 0.948326	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.19076	</clipAngle>
+        <anchorPosition>	1.9086 0.115441 2.64865	</anchorPosition>
+        <anchorDirection>	0.999932 0.0021413 -0.0114711	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15066	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G42_Maus_3Dst	</compatibleModels>
+        <position>	-1.27579 1.98153 2.91118	</position>
+        <rotation>	-0.000000 -0.000002 3.14158	</rotation>
+        <scale>	0.926048 0.56343 0.954091	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.917481	</clipAngle>
+        <anchorPosition>	-1.27579 0.955927 2.91118	</anchorPosition>
+        <anchorDirection>	0.000013 1 0.000000	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15067	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G42_Maus_3Dst	</compatibleModels>
+        <position>	-1.84846 1.31747 2.64934	</position>
+        <rotation>	1.56127 -0.23774 -1.79718	</rotation>
+        <scale>	0.94832 0.05 0.948326	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.19076	</clipAngle>
+        <anchorPosition>	-1.90859 0.115452 2.64866	</anchorPosition>
+        <anchorDirection>	-0.999933 0.00213938 -0.0113559	</anchorDirection>
+      </slot>
     </customizationSlots>
     <hangarShadowTexture>	vehicles/german/G42_Maus/Maus_HangarShadowMap.dds	</hangarShadowTexture>
     <customization>
@@ -974,6 +1051,13 @@
         <undamaged>	vehicles/german/G42_Maus/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G42_Maus/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G42_Maus/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <G42_Maus_3Dst>
+            <undamaged>	vehicles/german/G42_Maus/_skins/G42_Maus_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G42_Maus/_skins/G42_Maus_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G42_Maus/_skins/G42_Maus_3Dst/crash/lod0/Chassis.model	</exploded>
+          </G42_Maus_3Dst>
+        </sets>
       </models>
       <splineDesc>
         <segmentModelLeft>	vehicles/german/G42_Maus/track/segment1.model	</segmentModelLeft>
@@ -1978,6 +2062,13 @@
             <undamaged>	vehicles/german/G42_Maus/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G42_Maus/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G42_Maus/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <G42_Maus_3Dst>
+                <undamaged>	vehicles/german/G42_Maus/_skins/G42_Maus_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G42_Maus/_skins/G42_Maus_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G42_Maus/_skins/G42_Maus_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </G42_Maus_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G42_Maus/collision/Gun_01.model	</collisionModelServer>
@@ -2035,6 +2126,13 @@
         <undamaged>	vehicles/german/G42_Maus/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/german/G42_Maus/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/german/G42_Maus/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <G42_Maus_3Dst>
+            <undamaged>	vehicles/german/G42_Maus/_skins/G42_Maus_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G42_Maus/_skins/G42_Maus_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G42_Maus/_skins/G42_Maus_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </G42_Maus_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G42_Maus/collision/Turret_01.model	</collisionModelServer>
@@ -2504,6 +2602,34 @@
           <anchorPosition>	0.000066 1.30051 -0.09832	</anchorPosition>
           <anchorDirection>	-0.000032 1 0.000003	</anchorDirection>
           <verticalMirror>	true	</verticalMirror>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35031	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G42_Maus_3Dst	</compatibleModels>
+          <position>	-1.385 2.67229 0.147665	</position>
+          <rotation>	1.10679 -1.56364 3.121	</rotation>
+          <scale>	0.841387 0.666526 0.866244	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.931683	</clipAngle>
+          <anchorPosition>	-1.35151 0.54713 1.29135	</anchorPosition>
+          <anchorDirection>	-0.893907 0.447439 0.0269884	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35032	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G42_Maus_3Dst	</compatibleModels>
+          <position>	-0.000020 3.39266 0.00175904	</position>
+          <rotation>	-0.000001 -0.000003 3.14159	</rotation>
+          <scale>	0.680837 0.05 0.690859	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.4535	</clipAngle>
+          <anchorPosition>	-0.000020 1.331 1.14646	</anchorPosition>
+          <anchorDirection>	0.000005 1 -0.000001	</anchorDirection>
         </slot>
       </customizationSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>

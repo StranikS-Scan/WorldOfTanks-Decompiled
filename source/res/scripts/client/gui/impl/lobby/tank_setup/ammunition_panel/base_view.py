@@ -1,9 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/ammunition_panel/base_view.py
 import logging
-from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
+from CurrentVehicle import g_currentVehicle
 from Event import Event
-from constants import HE19EnergyPurposes
 from frameworks.wulf import ViewFlags, ViewSettings, ViewStatus
 from gui.impl.backport import BackportTooltipWindow
 from gui.impl.backport.backport_context_menu import BackportContextMenuWindow
@@ -15,13 +14,11 @@ from gui.impl.lobby.tank_setup.backports.tooltips import getSlotTooltipData
 from gui.impl.lobby.tank_setup.tank_setup_helper import setLastSlotAction, clearLastSlotAction
 from gui.impl.pub import ViewImpl
 from helpers import dependency
-from skeletons.gui.game_event_controller import IGameEventController
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 
 class BaseAmmunitionPanelView(ViewImpl):
     _itemsCache = dependency.descriptor(IItemsCache)
-    _gameEventController = dependency.descriptor(IGameEventController)
     __slots__ = ('_ammunitionPanel', 'onSizeChanged', 'onPanelSectionSelected', 'onPanelSectionResized')
 
     def __init__(self, flags=ViewFlags.VIEW):
@@ -55,11 +52,6 @@ class BaseAmmunitionPanelView(ViewImpl):
         self.viewModel.setIsReady(isComplete)
 
     @property
-    def isEvent(self):
-        currentVehicle = g_currentVehicle.item or g_currentPreviewVehicle.item
-        return currentVehicle is not None and currentVehicle.isOnlyForEventBattles
-
-    @property
     def viewModel(self):
         return super(BaseAmmunitionPanelView, self).getViewModel()
 
@@ -69,7 +61,6 @@ class BaseAmmunitionPanelView(ViewImpl):
     def update(self, fullUpdate=True):
         if fullUpdate:
             clearLastSlotAction(self.viewModel)
-        self.viewModel.setIsEvent(self.isEvent)
         self.viewModel.setIsMaintenanceEnabled(not g_currentVehicle.isLocked())
         self.viewModel.setIsDisabled(self._getIsDisabled())
         self._ammunitionPanel.update(g_currentVehicle.item, fullUpdate=fullUpdate)
@@ -139,13 +130,8 @@ class BaseAmmunitionPanelView(ViewImpl):
     def __itemCacheChanged(self, *_):
         self.update(fullUpdate=False)
 
-    def _getIsDisabled(self):
-        if self.isEvent:
-            vehiclesController = self._gameEventController.getVehiclesController()
-            currentVehicle = g_currentPreviewVehicle.item or g_currentVehicle.item
-            hasEnergy = currentVehicle and vehiclesController.hasEnergy(HE19EnergyPurposes.healing.name, currentVehicle.intCD)
-            if not hasEnergy:
-                return True
+    @staticmethod
+    def _getIsDisabled():
         return not g_currentVehicle.isInHangar() or g_currentVehicle.isLocked() or g_currentVehicle.isBroken()
 
     def _getIsReady(self):

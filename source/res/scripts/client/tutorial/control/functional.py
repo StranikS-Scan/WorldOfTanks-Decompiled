@@ -198,6 +198,22 @@ class FunctionalServiceCondition(FunctionalCondition):
             return result if condition.isPositiveState() else not result
 
 
+class FunctionalClassCondition(FunctionalCondition):
+
+    def isConditionOk(self, condition):
+        conditionClass = condition.getConditionClass()
+        if conditionClass is None:
+            LOG_ERROR('Condition cannot be loaded!', condition.getID(), condition.getPath())
+            return False
+        else:
+            conditionInstance = conditionClass()
+            if not hasattr(conditionInstance, 'check'):
+                LOG_ERROR('Condition does not implement check method!', conditionInstance)
+                return False
+            result = conditionInstance.check(condition.getArguments())
+            return result if condition.isPositiveState() else not result
+
+
 _SUPPORTED_CONDITIONS = {CONDITION_TYPE.FLAG: FunctionalFlagCondition,
  CONDITION_TYPE.GLOBAL_FLAG: FunctionalGlobalFlagCondition,
  CONDITION_TYPE.WINDOW_ON_SCENE: FunctionalWindowOnSceneCondition,
@@ -208,6 +224,7 @@ _SUPPORTED_CONDITIONS = {CONDITION_TYPE.FLAG: FunctionalFlagCondition,
  CONDITION_TYPE.GAME_ITEM_RELATE_STATE: FunctionalGameItemRelateStateCondition,
  CONDITION_TYPE.BONUS_RECEIVED: FunctionalBonusReceivedCondition,
  CONDITION_TYPE.SERVICE: FunctionalServiceCondition,
+ CONDITION_TYPE.CLASS_CONDITION: FunctionalClassCondition,
  CONDITION_TYPE.COMPONENT_ON_SCENE: FunctionalComponentOnSceneCondition,
  CONDITION_TYPE.CURRENT_SCENE: FunctionalCurrentSceneCondition,
  CONDITION_TYPE.VIEW_PRESENT: FunctionalViewPresentCondition,

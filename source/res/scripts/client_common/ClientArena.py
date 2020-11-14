@@ -41,7 +41,6 @@ class ClientArena(object):
 
     def __init__(self, arenaUniqueID, arenaTypeID, arenaBonusType, arenaGuiType, arenaExtraData):
         self.__vehicles = {}
-        self.__precachedVehicles = {}
         self.__vehicleIndexToId = {}
         self.__positions = {}
         self.__statistics = {}
@@ -76,7 +75,6 @@ class ClientArena(object):
         self.onFogOfWarHiddenVehiclesSet = Event.Event(em)
         self.onTeamHealthPercentUpdate = Event.Event(em)
         self.onChatCommandTargetUpdate = Event.Event(em)
-        self.onRadarInfoReceived = Event.Event(em)
         self.onChatCommandTriggered = Event.Event(em)
         self.onRadarInfoReceived = Event.Event(em)
         self.arenaUniqueID = arenaUniqueID
@@ -91,7 +89,6 @@ class ClientArena(object):
         return
 
     vehicles = property(lambda self: self.__vehicles)
-    precachedVehicles = property(lambda self: self.__precachedVehicles)
     positions = property(lambda self: self.__positions)
     statistics = property(lambda self: self.__statistics)
     period = property(lambda self: self.__periodInfo[0])
@@ -172,12 +169,9 @@ class ClientArena(object):
         LOG_DEBUG_DEV('__onVehicleListUpdate', vehiclesList)
         vehs = self.__vehicles
         vehs.clear()
-        self.__precachedVehicles.clear()
         for infoAsTuple in vehiclesList:
             vehID, info = self.__vehicleInfoAsDict(infoAsTuple)
-            if vehID >= 0:
-                vehs[vehID] = self.__preprocessVehicleInfo(info)
-            self.__precachedVehicles[vehID] = info
+            vehs[vehID] = self.__preprocessVehicleInfo(info)
 
         self.__rebuildIndexToId()
         self.onNewVehicleListReceived()

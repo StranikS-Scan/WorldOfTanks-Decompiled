@@ -10,6 +10,7 @@ from chat_commands_consts import _PERSONAL_MESSAGE_MUTE_DURATION, BATTLE_CHAT_CO
 from frameworks.wulf import WindowLayer
 from gui import GUI_CTRL_MODE_FLAG
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.battle_control import avatar_getter
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
@@ -29,6 +30,7 @@ _logger = logging.getLogger(__name__)
 _CALLOUT_MESSAGES_BLOCK_DURATION = 15
 _HINT_TIMEOUT = 10
 _DELAY_FOR_OPENING_RADIAL_MENU = 0.2
+_CONSUMERS_LOCKS = (BATTLE_VIEW_ALIASES.FULL_STATS,)
 CommandReceivedData = namedtuple('CommandReceivedData', ('name', 'targetIdToAnswer'))
 _CALLOUT_COMMANDS_TO_REPLY_COMMANDS = {BATTLE_CHAT_COMMAND_NAMES.HELPME: BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY,
  BATTLE_CHAT_COMMAND_NAMES.TURNBACK: BATTLE_CHAT_COMMAND_NAMES.POSITIVE,
@@ -102,7 +104,7 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
             containerManager = self.__appLoader.getApp().containerManager
             if not containerManager.isContainerShown(WindowLayer.VIEW):
                 return False
-            if containerManager.isModalViewsIsExists():
+            if containerManager.isModalViewsIsExists() or self.__appLoader.getApp().hasGuiControlModeConsumers(*_CONSUMERS_LOCKS):
                 return False
             isPlayerObserver = self.sessionProvider.getCtx().isPlayerObserver()
             if self.__radialKeyDown is None and isDown:
@@ -159,11 +161,9 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
             self.__previousForcedGuiControlModeFlags = avatar_getter.getForcedGuiControlModeFlags()
             avatar_getter.setForcedGuiControlMode(True, stopVehicle=False, enableAiming=False, cursorVisible=False)
         elif self.__previousForcedGuiControlModeFlags is not None:
-            value = self.__previousForcedGuiControlModeFlags & GUI_CTRL_MODE_FLAG.CURSOR_ATTACHED > 0
             stopVehicle = self.__previousForcedGuiControlModeFlags & GUI_CTRL_MODE_FLAG.MOVING_DISABLED > 0
             enableAiming = self.__previousForcedGuiControlModeFlags & GUI_CTRL_MODE_FLAG.AIMING_ENABLED > 0
-            cursorVisible = self.__previousForcedGuiControlModeFlags & GUI_CTRL_MODE_FLAG.CURSOR_VISIBLE > 0
-            avatar_getter.setForcedGuiControlMode(value, stopVehicle, enableAiming, cursorVisible)
+            avatar_getter.setForcedGuiControlMode(False, stopVehicle, enableAiming, False)
         return
 
     def __onCommandReceived(self, cmd):

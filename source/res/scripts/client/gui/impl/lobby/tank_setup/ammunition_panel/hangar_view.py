@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/ammunition_panel/hangar_view.py
 import logging
-from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
+from CurrentVehicle import g_currentVehicle
+from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from async import async
 from frameworks.wulf import ViewStatus
@@ -14,10 +15,12 @@ from gui.shared.events import AmmunitionSetupViewEvent
 from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.game_control import IUISpamController
 _logger = logging.getLogger(__name__)
 
 class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
     _settingsCore = dependency.descriptor(ISettingsCore)
+    _uiSpamController = dependency.descriptor(IUISpamController)
 
     def update(self, fullUpdate=True):
         with self.viewModel.transaction():
@@ -29,7 +32,13 @@ class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
     def _onLoading(self, *args, **kwargs):
         with self.viewModel.transaction():
             super(HangarAmmunitionPanelView, self)._onLoading(*args, **kwargs)
-            if not self._settingsCore.serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.AMMUNITION_PANEL_HINT, default=False):
+            serverSettings = self._settingsCore.serverSettings
+            showAmmunitionHint = not serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.AMMUNITION_PANEL_HINT, default=False)
+            if showAmmunitionHint and self._uiSpamController.shouldBeHidden(OnceOnlyHints.AMMUNITION_PANEL_HINT):
+                serverSettings.setOnceOnlyHintsSettings({OnceOnlyHints.AMMUNITION_PANEL_HINT: True})
+                serverSettings.saveInUIStorage({UI_STORAGE_KEYS.OPTIONAL_DEVICE_SETUP_INTRO_SHOWN: True})
+                showAmmunitionHint = False
+            if showAmmunitionHint:
                 self.viewModel.hints.addHintModel(TutorialHintConsts.AMMUNITION_PANEL_HINT_MC)
             else:
                 self.viewModel.hints.addHintModel(TutorialHintConsts.HANGAR_PANEL_OPT_DEVICE_MC)
@@ -38,18 +47,17 @@ class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
     @async
     def _onPanelSectionSelected(self, args):
         selectedSection = args['selectedSection']
-        currentVehicle = g_currentVehicle.item or g_currentPreviewVehicle.item
-        if currentVehicle is not None and currentVehicle.isOnlyForEventBattles and selectedSection == TankSetupConstants.SHELLS:
+        if self.viewModel.hints.hasHintModel(TutorialHintConsts.AMMUNITION_PANEL_HINT_MC):
+            self.__hideHintModel()
+        showIntro = selectedSection == TankSetupConstants.OPT_DEVICES and not isIntroAmmunitionSetupShown()
+        if showIntro and self._uiSpamController.shouldBeHidden(OnceOnlyHints.AMMUNITION_PANEL_HINT):
+            self._settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.OPTIONAL_DEVICE_SETUP_INTRO_SHOWN: True})
+            showIntro = False
+        if showIntro:
+            yield showIntroAmmunitionSetupWindow()
+        if self.viewStatus != ViewStatus.LOADED:
             return
-        else:
-            if self.viewModel.hints.hasHintModel(TutorialHintConsts.AMMUNITION_PANEL_HINT_MC):
-                self.__hideHintModel()
-            if selectedSection == TankSetupConstants.OPT_DEVICES and not isIntroAmmunitionSetupShown():
-                yield showIntroAmmunitionSetupWindow()
-            if self.viewStatus != ViewStatus.LOADED:
-                return
-            super(HangarAmmunitionPanelView, self)._onPanelSectionSelected(args)
-            return
+        super(HangarAmmunitionPanelView, self)._onPanelSectionSelected(args)
 
     @staticmethod
     def __hideHintModel():

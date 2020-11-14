@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/battle_royale/battle_upgrade_panel.py
 import logging
 import BigWorld
+from gui.battle_control import avatar_getter
 from helpers import dependency
 import BattleReplay
 import CommandMapping
@@ -82,7 +83,6 @@ class BattleUpgradePanel(BattleUpgradePanelMeta, IArenaVehiclesController, IProg
         self.__upgrades = []
         self.__localVisible = False
         self.__isEnabled = True
-        self.__vehicleIsAlive = True
         self.__textInited = False
 
     def onSelectItem(self, itemID):
@@ -171,7 +171,6 @@ class BattleUpgradePanel(BattleUpgradePanelMeta, IArenaVehiclesController, IProg
 
     def __onVehicleStateUpdated(self, stateID, _):
         if stateID == VEHICLE_VIEW_STATE.DEATH_INFO:
-            self.__vehicleIsAlive = False
             self.__upgrades = []
             self.__updateVisibility(False)
 
@@ -223,7 +222,7 @@ class BattleUpgradePanel(BattleUpgradePanelMeta, IArenaVehiclesController, IProg
                     data['isInitData'] = True
                     self.__textInited = True
                 self.as_setDataS(data)
-                self.__updateVisibility(hasTwoModules and self.__vehicleIsAlive)
+                self.__updateVisibility(hasTwoModules and avatar_getter.isVehicleAlive())
             else:
                 logger.warning('Unexpected modules count. Modules list: %s', str(upgrades))
         else:

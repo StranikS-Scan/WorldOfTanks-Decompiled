@@ -134,12 +134,6 @@ class BonusExtractor(object):
     def __updateCurrValue(self):
         self.__currValue = getattr(_CustomizedVehicleParams(self.__vehicle, self.__removeCamouflage), self.__paramName)
 
-    def getVehicle(self):
-        return self.__vehicle
-
-    def reUpdateCurrValue(self):
-        self.__updateCurrValue()
-
 
 class TankSetupBonusExtractor(BonusExtractor):
 

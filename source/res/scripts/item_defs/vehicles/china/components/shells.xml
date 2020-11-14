@@ -972,6 +972,51 @@
       <devices>	150	</devices>
     </damage>
   </_105mm_HEP_M393A1>
+  <_120mm_CB-472LY>
+    <id>	97	</id>
+    <userString>	#china_vehicles:_120mm_CB-472LY	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1065	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_CB-472LY>
+  <_120mm_PO-120LY>
+    <id>	98	</id>
+    <userString>	#china_vehicles:_120mm_PO-120LY	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_120mm_PO-120LY>
+  <_120mm_SB-472LY>
+    <id>	99	</id>
+    <userString>	#china_vehicles:_120mm_SB-472LY	</userString>
+    <icon>	he	</icon>
+    <price>	630	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	120	</caliber>
+    <explosionRadius>	2.49	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	515	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_SB-472LY>
   <_122mm_Type_57>
     <id>	6	</id>
     <userString>	#china_vehicles:_122mm_Type_57	</userString>

@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/vehicle.py
 import collections
 import logging
+from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 import constants
-from skeletons.gui.game_event_controller import IGameEventController
 from gui.impl.gen import R
 from gui.impl import backport
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockProps
@@ -82,12 +82,11 @@ def _makeModuleFitTooltipError(reason):
     return '#tooltips:moduleFits/{}'.format(reason)
 
 
-_SHORTEN_TOOLTIP_CASES = ('shopVehicle', 'eventCarouselVehicle')
+_SHORTEN_TOOLTIP_CASES = ('shopVehicle',)
 
 class VehicleInfoTooltipData(BlocksTooltipData):
     __itemsCache = dependency.descriptor(IItemsCache)
     __bootcamp = dependency.descriptor(IBootcampController)
-    _gameEventController = dependency.descriptor(IGameEventController)
 
     def __init__(self, context):
         super(VehicleInfoTooltipData, self).__init__(context, TOOLTIP_TYPE.VEHICLE)
@@ -101,8 +100,6 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         self.item = self.context.buildItem(*args, **kwargs)
         items = super(VehicleInfoTooltipData, self)._packBlocks()
         vehicle = self.item
-        if self._gameEventController.needEventCrew(vehicle):
-            vehicle.crew = self._gameEventController.getEventCrew(vehicle)
         statsConfig = self.context.getStatsConfiguration(vehicle)
         paramsConfig = self.context.getParamsConfiguration(vehicle)
         statusConfig = self.context.getStatusConfiguration(vehicle)
@@ -114,8 +111,7 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         blockPadding = formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding)
         valueWidth = 75
         textGap = -2
-        headerBlockConstructorDescr = self._getHeaderBlockConstructorDescr()
-        headerItems = [formatters.packBuildUpBlockData(headerBlockConstructorDescr(vehicle, statsConfig, leftPadding, rightPadding).construct(), padding=leftRightPadding, blockWidth=410), formatters.packBuildUpBlockData(self._getCrewIconBlock(), gap=2, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, padding=formatters.packPadding(top=34, right=0), blockWidth=20)]
+        headerItems = [formatters.packBuildUpBlockData(HeaderBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct(), padding=leftRightPadding, blockWidth=410), formatters.packBuildUpBlockData(self._getCrewIconBlock(), gap=2, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, padding=formatters.packPadding(top=34, right=0), blockWidth=20)]
         headerBlockItems = [formatters.packBuildUpBlockData(headerItems, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, padding=formatters.packPadding(bottom=-16))]
         telecomBlock = TelecomBlockConstructor(vehicle, valueWidth, leftPadding, rightPadding).construct()
         if telecomBlock:
@@ -148,7 +144,7 @@ class VehicleInfoTooltipData(BlocksTooltipData):
             self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
             items.append(formatters.packBuildUpBlockData(priceBlock, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, gap=5, padding=formatters.packPadding(left=98), layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL))
         if not vehicle.isRotationGroupLocked:
-            statusBlock, operationError = self._getStatusBlockConstructorDescr()(vehicle, statusConfig).construct()
+            statusBlock, operationError = StatusBlockConstructor(vehicle, statusConfig).construct()
             if statusBlock and not (operationError and shouldBeCut):
                 items.append(formatters.packBuildUpBlockData(statusBlock, padding=blockPadding, blockWidth=440))
             else:
@@ -169,12 +165,6 @@ class VehicleInfoTooltipData(BlocksTooltipData):
             block.append(formatters.packImageBlockData(img=tImg, alpha=tAlpha))
 
         return block
-
-    def _getHeaderBlockConstructorDescr(self):
-        return HeaderBlockConstructor
-
-    def _getStatusBlockConstructorDescr(self):
-        return StatusBlockConstructor
 
     def __createStatusBlock(self, vehicle, items, statsConfig, paramsConfig, valueWidth):
         ctxParams = self.context.getParams()
@@ -292,12 +282,29 @@ class BaseVehicleAdvancedParametersTooltipData(BaseVehicleParametersTooltipData)
             title = text_styles.highTitle(MENU.tank_params(paramName))
             title += '&nbsp;'
             title += text_styles.middleTitle(param_formatter.MEASURE_UNITS.get(paramName, ''))
-            desc = text_styles.main(_ms(TOOLTIPS.tank_params_desc(paramName)))
+            if paramName == 'autoReloadTime' and self._hasExtendedInfo():
+                descText = self._getAutoReloadTimeDescription()
+            else:
+                descText = backport.text(R.strings.tooltips.tank_params.desc.dyn(paramName)())
+            desc = text_styles.main(descText)
         if isRelativeParameter(paramName):
             blocks.append(formatters.packTitleDescBlock(title, desc))
         else:
             blocks.append(formatters.packImageTextBlockData(title, desc, img=param_formatter.getParameterBigIconPath(paramName), imgPadding=formatters.packPadding(top=10, left=1), txtPadding=formatters.packPadding(left=10)))
+        if paramName == 'autoReloadTime' and self._hasExtendedInfo():
+            img = backport.image(R.images.gui.maps.icons.modules.autoLoaderGunBoost())
+            descr = self._getAutoReloadTimeExtendedDescription()
+            blocks.append(formatters.packImageTextBlockData(title='', desc=text_styles.standard(descr), img=img, txtOffset=30, padding=formatters.packPadding(left=30, top=-5)))
         return blocks
+
+    def _hasExtendedInfo(self):
+        return True
+
+    def _getAutoReloadTimeDescription(self):
+        return backport.text(R.strings.tooltips.tank_params.desc.autoReloadTime())
+
+    def _getAutoReloadTimeExtendedDescription(self):
+        return backport.text(R.strings.tooltips.tank_params.desc.autoReloadTime.boost.shortDescription())
 
 
 class VehicleAvgParameterTooltipData(BaseVehicleAdvancedParametersTooltipData):
@@ -345,7 +352,6 @@ def _packBonusName(bnsType, bnsId, enabled=True, inactive=False):
 
 
 class VehicleAdvancedParametersTooltipData(BaseVehicleAdvancedParametersTooltipData):
-    _gameEventController = dependency.descriptor(IGameEventController)
 
     def __init__(self, context):
         super(VehicleAdvancedParametersTooltipData, self).__init__(context)
@@ -397,9 +403,6 @@ class VehicleAdvancedParametersTooltipData(BaseVehicleAdvancedParametersTooltipD
         else:
             bonuses = sorted(self._extendedData.bonuses, cmp=_bonusCmp)
             bonusExtractor = self.context.getBonusExtractor(item, bonuses, self._paramName)
-            if bonusExtractor.getVehicle() and self._gameEventController.needEventCrew(bonusExtractor.getVehicle()):
-                bonusExtractor.getVehicle().crew = self._gameEventController.getEventCrew(bonusExtractor.getVehicle())
-                bonusExtractor.reUpdateCurrValue()
             hasSituational = False
             for bnsType, bnsId, pInfo in bonusExtractor.getBonusInfo():
                 bnsId = _getBonusID(bnsType, bnsId)
@@ -433,6 +436,20 @@ class VehicleAdvancedParametersTooltipData(BaseVehicleAdvancedParametersTooltipD
 
     def __packBonusField(self, bonusID, name, value='', isDisabled=False, padding=None):
         return formatters.packTitleDescParameterWithIconBlockData(name, value=value, icon=param_formatter.getBonusIcon(bonusID), iconAlpha=self.__iconDisabledAlpha if isDisabled else 1, iconPadding=self.__iconPadding, titlePadding=padding or self.__titlePadding, padding=self.__listPadding)
+
+    def _getAutoReloadTimeDescription(self):
+        return backport.text(R.strings.tooltips.tank_params.desc.autoReloadTime.boost())
+
+    def _getAutoReloadTimeExtendedDescription(self):
+        return backport.text(R.strings.tooltips.tank_params.desc.autoReloadTime.boost.description())
+
+    def _hasExtendedInfo(self):
+        item = None
+        if g_currentPreviewVehicle.isPresent():
+            item = g_currentPreviewVehicle.item
+        else:
+            item = g_currentVehicle.item if g_currentVehicle else None
+        return item and item.descriptor.gun.autoreloadHasBoost or not item
 
 
 class VehicleListDescParameterTooltipData(BaseVehicleAdvancedParametersTooltipData):

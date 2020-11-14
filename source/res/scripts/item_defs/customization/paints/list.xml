@@ -1479,7 +1479,7 @@
     </usages>
   </itemGroup>
   <itemGroup>
-    <name>	The First Horseman	</name>
+    <name>	Horsemen of Apocalypse	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
@@ -1496,6 +1496,22 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/the_first_horseman	</userString>
+    </paint>
+    <paint>
+      <id>	79	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+      <color>	39 48 44 255	</color>
+      <gloss>	0.7	</gloss>
+      <metallic>	0.17	</metallic>
+      <userString>	#vehicle_customization:repaint/the_3rd_horseman	</userString>
+    </paint>
+    <paint>
+      <id>	80	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+      <color>	17 8 12 255	</color>
+      <gloss>	0.68	</gloss>
+      <metallic>	0.17	</metallic>
+      <userString>	#vehicle_customization:repaint/the_4th_horseman	</userString>
     </paint>
     <usages>
       <item>
@@ -1680,7 +1696,7 @@
     </usages>
   </itemGroup>
   <itemGroup>
-    <name>	NA Disruptive Camouflage	</name>
+    <name>	NA 2020	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
@@ -1697,6 +1713,48 @@
       <gloss>	0.346	</gloss>
       <metallic>	0.2	</metallic>
       <userString>	#vehicle_customization:repaint/disruptive	</userString>
+    </paint>
+    <paint>
+      <id>	78	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_13.png	</texture>
+      <color>	101 96 76 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/derelict	</userString>
+    </paint>
+    <paint>
+      <id>	81	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_17.png	</texture>
+      <color>	142 133 124 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/chile_2020	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	EU Community 2020	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	77	</id>
+      <texture>	gui/maps/vehicles/repaints/italy_color_07.png	</texture>
+      <color>	86 19 19 255	</color>
+      <gloss>	0.2	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/eu_community_2020	</userString>
     </paint>
     <usages>
       <item>

@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, NamedTuple, Set, Dict, Optional, Any, Tuple
 import items
 import nations
 from ResMgr import DataSection
-from constants import IS_CLIENT, IS_CELLAPP, IS_WEB, VEHICLE_TTC_ASPECTS, ATTACK_REASON, ATTACK_REASON_INDICES, SERVER_TICK_LENGTH, EVENT_BATTLES_TAG
+from constants import IS_CLIENT, IS_CELLAPP, IS_WEB, VEHICLE_TTC_ASPECTS, ATTACK_REASON, ATTACK_REASON_INDICES, SERVER_TICK_LENGTH
 from debug_utils import LOG_DEBUG_DEV
 from items import ITEM_OPERATION, PREDEFINED_HEAL_GROUPS
 from items import _xml, vehicles
@@ -141,12 +141,6 @@ class Artefact(BasicItem):
         return (self._vehWeightFraction, self._weight, 0.0)
 
     def checkCompatibilityWithVehicle(self, vehicleDescr):
-        vehType = vehicleDescr.type
-        if EVENT_BATTLES_TAG in vehType.tags:
-            if EVENT_BATTLES_TAG not in self.tags:
-                return (False, 'attempt to set up non-event equipment on event vehicle')
-        elif EVENT_BATTLES_TAG in self.tags:
-            return (False, 'attempt to set up event equipment on non-event vehicle')
         return (True, None) if self.__vehicleFilter is None else self.__vehicleFilter.checkCompatibility(vehicleDescr)
 
     def checkCompatibilityWithOther(self, other):
@@ -445,7 +439,7 @@ class ImprovedConfiguration(StaticOptionalDevice):
 
 
 class Equipment(Artefact):
-    __slots__ = ('equipmentType', 'reuseCount', 'cooldownSeconds', 'soundNotification', 'stunResistanceEffect', 'stunResistanceDuration', 'repeatedStunDurationFactor', 'activationWWSoundFeedback', 'deactivationWWSoundFeedback')
+    __slots__ = ('equipmentType', 'reuseCount', 'cooldownSeconds', 'soundNotification', 'stunResistanceEffect', 'stunResistanceDuration', 'repeatedStunDurationFactor')
 
     def __init__(self):
         super(Equipment, self).__init__(items.ITEM_TYPES.equipment, 0, '', 0)
@@ -456,16 +450,12 @@ class Equipment(Artefact):
         self.reuseCount = component_constants.ZERO_INT
         self.cooldownSeconds = component_constants.ZERO_INT
         self.soundNotification = None
-        self.activationWWSoundFeedback = None
-        self.deactivationWWSoundFeedback = None
         return
 
     def _readBasicConfig(self, xmlCtx, section):
         super(Equipment, self)._readBasicConfig(xmlCtx, section)
         self.equipmentType = items.EQUIPMENT_TYPES[section.readString('type', 'regular')]
         self.soundNotification = _xml.readStringOrNone(xmlCtx, section, 'soundNotification')
-        self.activationWWSoundFeedback = _xml.readStringOrNone(xmlCtx, section, 'activationWWSoundFeedback')
-        self.deactivationWWSoundFeedback = _xml.readStringOrNone(xmlCtx, section, 'deactivationWWSoundFeedback')
         scriptSection = section['script']
         self.stunResistanceEffect, self.stunResistanceDuration, self.repeatedStunDurationFactor = _readStun(xmlCtx, scriptSection)
         self.reuseCount, self.cooldownSeconds = _readReuseParams(xmlCtx, scriptSection)
@@ -1529,73 +1519,6 @@ class PassiveEngineering(Equipment, TooltipConfigReader):
         self.resupplyShellsFactor = _xml.readPositiveFloat(xmlCtx, scriptSection, 'resupplyShellsFactor')
 
 
-class EventEquipment(Equipment):
-    __slots__ = ('durationSeconds', 'cooldownSeconds', 'reuseCount')
-
-    def __init__(self):
-        super(EventEquipment, self).__init__()
-        self.durationSeconds = component_constants.ZERO_INT
-        self.cooldownSeconds = component_constants.ZERO_INT
-        self.reuseCount = component_constants.ZERO_INT
-
-    def _readConfig(self, xmlCtx, section):
-        super(EventEquipment, self)._readConfig(xmlCtx, section)
-        try:
-            self.durationSeconds = _xml.readInt(xmlCtx, section, 'durationSeconds')
-            self.cooldownSeconds = _xml.readInt(xmlCtx, section, 'cooldownSeconds')
-            self.reuseCount = _xml.readInt(xmlCtx, section, 'reuseCount')
-        except SoftException:
-            pass
-
-
-class BuffEquipment(EventEquipment):
-    __slots__ = 'buffNames'
-
-    def __init__(self):
-        super(BuffEquipment, self).__init__()
-        self.buffNames = None
-        return
-
-    def _readConfig(self, xmlCtx, section):
-        super(BuffEquipment, self)._readConfig(xmlCtx, section)
-        self.buffNames = self._readBuffs(xmlCtx, section, 'buffs')
-
-    @staticmethod
-    def _readBuffs(xmlCtx, section, subsectionName):
-        buffNames = _xml.readString(xmlCtx, section, subsectionName).split()
-        return frozenset({intern(name) for name in buffNames})
-
-
-class HpRepairAndCrewHealEquipment(BuffEquipment):
-    __slots__ = ('isInterruptable', 'immediateHealAmount')
-
-    def __init__(self):
-        super(HpRepairAndCrewHealEquipment, self).__init__()
-        self.isInterruptable = False
-        self.immediateHealAmount = component_constants.ZERO_INT
-
-    def _readConfig(self, xmlCtx, section):
-        super(HpRepairAndCrewHealEquipment, self)._readConfig(xmlCtx, section)
-        self.isInterruptable = _xml.readBool(xmlCtx, section, 'isInterruptable')
-        self.immediateHealAmount = _xml.readInt(xmlCtx, section, 'immediateHealAmount')
-
-
-class RadiusEquipment(EventEquipment):
-    __slots__ = ('radius',)
-
-    def __init__(self):
-        super(RadiusEquipment, self).__init__()
-        self.radius = component_constants.ZERO_INT
-
-    def _readConfig(self, xmlCtx, section):
-        super(RadiusEquipment, self)._readConfig(xmlCtx, section)
-        self.radius = _xml.readInt(xmlCtx, section, 'radius')
-
-
-class ResurrectEquipment(Equipment, TooltipConfigReader):
-    pass
-
-
 class EpicArtillery(ConsumableArtillery):
     pass
 
@@ -1980,10 +1903,6 @@ class ConsumableSpawnKamikaze(Equipment, TooltipConfigReader, CountableConsumabl
 
 
 class SpawnKamikaze(ConsumableSpawnKamikaze):
-    pass
-
-
-class EventResurrectEquipment(ResurrectEquipment):
     pass
 
 

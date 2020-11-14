@@ -5,7 +5,7 @@ from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import checkIfVehicl
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import checkEpicRewardVehAlreadyBought
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import getFrontLineSkills
 from helpers import dependency
-from shared_utils import first
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from skeletons.gui.game_control import IEpicBattleMetaGameController, IEventProgressionController
 from skeletons.gui.server_events import IEventsCache
 from web.web_client_api import w2c, w2capi, W2CSchema, Field
@@ -56,6 +56,23 @@ class FrontLineWebApi(W2CSchema):
                      'show_ttc': not checkIfVehicleIsHidden(intCD)})
 
                 rewardsData['vehicles'] = sorted(vehicleInfo, key=lambda v: v['price'])
+                return rewardsData
+            if cmd.category == 'styles':
+                rewardsData = {}
+                styleInfo = []
+                styles = self.__itemsCache.items.getItems(GUI_ITEM_TYPE.STYLE)
+                for styleID, price in self.__eventProgression.rewardStyles:
+                    for styleIntCD, style in styles.iteritems():
+                        if style.id == styleID:
+                            styleInfo.append({'styleIntCD': styleIntCD,
+                             'styleId': styleID,
+                             'price': price,
+                             'name': style.userName,
+                             'icon': style.icon,
+                             'count': style.fullCount()})
+                            continue
+
+                rewardsData['styles'] = sorted(styleInfo, key=lambda s: s['price'])
                 return rewardsData
         return None
 

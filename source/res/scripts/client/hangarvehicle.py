@@ -6,11 +6,9 @@ from ClientSelectableCameraVehicle import ClientSelectableCameraVehicle
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
-from skeletons.gui.game_event_controller import IGameEventController
 
 class HangarVehicle(ClientSelectableCameraVehicle):
     hangarSpace = dependency.descriptor(IHangarSpace)
-    gameEventController = dependency.descriptor(IGameEventController)
 
     def __init__(self):
         self.selectionId = ''
@@ -20,7 +18,7 @@ class HangarVehicle(ClientSelectableCameraVehicle):
         self.edgeMode = 0
         self.modelName = ''
         self.cameraShift = Math.Vector3(0.0, 0.0, 0.0)
-        self.cameraPivot = Math.Vector3(0.0, 0.0, 0.0)
+        self.cameraPivot = Math.Vector3(0.0, 1.0, 0.0)
         self.cameraYaw = 0.0
         self.cameraPitch = 0.0
         self.cameraObjectAspect = 1.0
@@ -31,8 +29,6 @@ class HangarVehicle(ClientSelectableCameraVehicle):
         self.movementYDelta = 0.0
         self.cameraBackwardDuration = 10.0
         self.cameraUpcomingDuration = 10.0
-        self.markerHeightFactor = 1.0
-        self.markerStyleId = 1
         super(HangarVehicle, self).__init__()
         return
 
@@ -49,11 +45,6 @@ class HangarVehicle(ClientSelectableCameraVehicle):
         g_eventBus.removeListener(events.HangarCustomizationEvent.CHANGE_VEHICLE_MODEL_TRANSFORM, self.__changeVehicleModelTransform, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM, self.__resetVehicleModelTransform, scope=EVENT_BUS_SCOPE.LOBBY)
         super(HangarVehicle, self).onLeaveWorld()
-
-    def _makeUpdateCtx(self):
-        ctx = super(HangarVehicle, self)._makeUpdateCtx()
-        ctx['alwaysShowMarker'] = True
-        return ctx
 
     def __onSpaceCreated(self):
         self.setEnable(False)
@@ -72,6 +63,3 @@ class HangarVehicle(ClientSelectableCameraVehicle):
 
     def __resetVehicleModelTransform(self, event):
         self._resetVehicleModelTransform()
-
-    def __getEventVehicleSettings(self):
-        return self.gameEventController.getVehicleSettings()

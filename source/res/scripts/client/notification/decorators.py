@@ -226,6 +226,23 @@ class ChoosingDevicesMessageDecorator(MessageDecorator):
         return self._vo['message'].get('savedData', {})
 
 
+class RecruitReminderMessageDecorator(MessageDecorator):
+
+    def __init__(self, entityID, message, savedData, msgPrLevel=NotificationPriorityLevel.LOW):
+        entity = g_settings.msgTemplates.format('RecruitReminder', ctx={'text': message}, data={'savedData': savedData})
+        settings = NotificationGuiSettings(isNotify=True, priorityLevel=msgPrLevel)
+        super(RecruitReminderMessageDecorator, self).__init__(entityID, entity, settings)
+
+    def getType(self):
+        return NOTIFICATION_TYPE.RECRUIT_REMINDER
+
+    def getGroup(self):
+        return NotificationGroup.OFFER
+
+    def getSavedData(self):
+        return self._vo['message'].get('savedData', {})
+
+
 class C11nMessageDecorator(MessageDecorator):
     itemsCache = dependency.descriptor(IItemsCache)
 

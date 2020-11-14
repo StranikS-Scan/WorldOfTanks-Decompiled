@@ -96,6 +96,8 @@ class BattlePassAwardsView(ViewImpl):
         isPurchase = reason in (BattlePassRewardReason.PURCHASE_BATTLE_PASS, BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS)
         if isPurchase:
             g_eventBus.handleEvent(events.BattlePassEvent(events.BattlePassEvent.BUYING_THINGS), scope=EVENT_BUS_SCOPE.LOBBY)
+        if callable(kwargs.get('callback')):
+            kwargs.get('callback')()
 
     def _finalize(self):
         super(BattlePassAwardsView, self)._finalize()
@@ -204,5 +206,8 @@ class BattlePassAwardsView(ViewImpl):
 class BattlePassAwardWindow(LobbyNotificationWindow):
     __slots__ = ()
 
-    def __init__(self, bonuses, data, wndFlags=WindowFlags.SERVICE_WINDOW | WindowFlags.WINDOW_FULLSCREEN):
-        super(BattlePassAwardWindow, self).__init__(content=BattlePassAwardsView(R.views.lobby.battle_pass.BattlePassAwardsView(), bonuses=bonuses, data=data), wndFlags=wndFlags)
+    def __init__(self, bonuses, data, callback=None, wndFlags=None):
+        if wndFlags is None:
+            wndFlags = WindowFlags.SERVICE_WINDOW | WindowFlags.WINDOW_FULLSCREEN
+        super(BattlePassAwardWindow, self).__init__(content=BattlePassAwardsView(R.views.lobby.battle_pass.BattlePassAwardsView(), bonuses=bonuses, data=data, callback=callback), wndFlags=wndFlags)
+        return

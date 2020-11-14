@@ -78,9 +78,9 @@ class BlueprintsConversionView(DialogWindow):
         with self.bottomContentViewModel.transaction() as model:
             model.setHasAdditionalCost(hasAdditionalCost)
             model.valueMain.setValue(valueMainCost)
-            model.valueMain.setIcon(R.images.gui.maps.icons.blueprints.fragment.small.intelligence())
+            model.valueMain.setIcon(R.images.gui.maps.icons.blueprints.fragment.special.intelligence())
             model.valueAdditional.setValue(valueAdditionalCost)
-            model.valueAdditional.setIcon(R.images.gui.maps.icons.blueprints.fragment.small.dyn(self.__vehicle.nationName)())
+            model.valueAdditional.setIcon(R.images.gui.maps.icons.blueprints.fragment.special.dyn(self.__vehicle.nationName)())
 
     def __updateUniversalFragmentsBlock(self):
         nationValue, intelligenceValue = self.__itemsCache.items.blueprints.getRequiredIntelligenceAndNational(self.__vehicle.level)

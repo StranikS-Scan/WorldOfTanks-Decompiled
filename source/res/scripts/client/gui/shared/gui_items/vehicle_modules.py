@@ -196,11 +196,16 @@ class VehicleGun(VehicleModule):
 
     def getExtraIconInfo(self, vehDescr=None):
         if self.isClipGun(vehDescr):
-            return RES_ICONS.MAPS_ICONS_MODULES_MAGAZINEGUNICON
+            return backport.image(R.images.gui.maps.icons.modules.magazineGunIcon())
         elif self.isAutoReloadable(vehDescr):
-            return RES_ICONS.MAPS_ICONS_MODULES_AUTOLOADERGUN
+            if vehDescr:
+                for gun in vehDescr.type.getGuns():
+                    if gun.compactDescr == self.intCD and gun.autoreloadHasBoost:
+                        return backport.image(R.images.gui.maps.icons.modules.autoLoaderGunBoost())
+
+            return backport.image(R.images.gui.maps.icons.modules.autoLoaderGun())
         else:
-            return RES_ICONS.MAPS_ICONS_MODULES_DUALGUN if self.isDualGun(vehDescr) else None
+            return backport.image(R.images.gui.maps.icons.modules.dualGun()) if self.isDualGun(vehDescr) else None
 
     def getGUIEmblemID(self):
         return FITTING_TYPES.VEHICLE_DUAL_GUN if self.isDualGun() else super(VehicleGun, self).getGUIEmblemID()

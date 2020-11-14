@@ -7,13 +7,12 @@ from hangar_selectable_objects import ISelectableObject
 from .base_selectable_logic import BaseSelectableLogic
 
 class HangarSelectableLogic(BaseSelectableLogic):
-    __slots__ = ('__selected3DEntity', '__selected3DEntityUnderMouseDown', '__objectsSelectionEnabled')
+    __slots__ = ('__selected3DEntity', '__selected3DEntityUnderMouseDown')
 
     def __init__(self):
         super(HangarSelectableLogic, self).__init__()
         self.__selected3DEntity = None
         self.__selected3DEntityUnderMouseDown = None
-        self.__objectsSelectionEnabled = True
         return
 
     def fini(self):
@@ -79,14 +78,7 @@ class HangarSelectableLogic(BaseSelectableLogic):
         self.__selected3DEntityUnderMouseDown = None
         return
 
-    def _onObjectsSelectionEnabled(self, enabled):
-        self.__objectsSelectionEnabled = enabled
-        if not enabled and self.__selected3DEntity:
-            self._onMouseExit(self.__selected3DEntity)
-
     def __onMouseEnter(self, entity):
-        if not self.__objectsSelectionEnabled:
-            return False
         if Waiting.isVisible():
             return False
         if not self._filterEntity(entity):

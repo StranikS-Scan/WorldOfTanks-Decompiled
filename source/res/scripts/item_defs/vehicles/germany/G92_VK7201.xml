@@ -65,6 +65,13 @@
       <undamaged>	vehicles/german/G92_VK7201/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/german/G92_VK7201/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/german/G92_VK7201/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <G92_VK7201_3Dst>
+          <undamaged>	vehicles/german/G92_VK7201/_skins/G92_VK7201_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G92_VK7201/_skins/G92_VK7201_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G92_VK7201/_skins/G92_VK7201_3Dst/crash/lod0/Hull.model	</exploded>
+        </G92_VK7201_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -88,10 +95,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.647766 0.557788 2.61265	</rayStart>
-        <rayEnd>	-0.647767 0.3937 2.4983	</rayEnd>
+        <rayStart>	-0.585113 0.510973 2.67983	</rayStart>
+        <rayEnd>	-0.585114 0.346884 2.56548	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
-        <size>	0.32	</size>
+        <size>	0.25	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
       </slot>
@@ -754,6 +761,48 @@
         <anchorPosition>	1.40812 0.465377 -1.42113	</anchorPosition>
         <anchorDirection>	0.967886 0.134139 0.212612	</anchorDirection>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15049	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G92_VK7201_3Dst	</compatibleModels>
+        <position>	0.0675556 1.67074 2.65046	</position>
+        <rotation>	0.587706 -0.000020 3.14152	</rotation>
+        <scale>	0.502855 0.286063 0.502859	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.719449	</clipAngle>
+        <anchorPosition>	0.0675548 0.449599 2.64327	</anchorPosition>
+        <anchorDirection>	0.000062 0.832215 0.554453	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15050	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G92_VK7201_3Dst	</compatibleModels>
+        <position>	-0.545925 2.00795 1.59572	</position>
+        <rotation>	-0.000000 0.000017 3.14153	</rotation>
+        <scale>	0.438797 0.249622 0.438803	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	-0.545927 0.77464 1.59572	</anchorPosition>
+        <anchorDirection>	0.000063 1 -0.000000	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15051	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G92_VK7201_3Dst	</compatibleModels>
+        <position>	0.545665 2.00794 1.59581	</position>
+        <rotation>	-0.000000 0.000017 3.14153	</rotation>
+        <scale>	0.438797 0.249622 0.438803	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	0.545663 0.774634 1.59581	</anchorPosition>
+        <anchorDirection>	0.000063 1 -0.000000	</anchorDirection>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -796,6 +845,13 @@
         <undamaged>	vehicles/german/G92_VK7201/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G92_VK7201/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G92_VK7201/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <G92_VK7201_3Dst>
+            <undamaged>	vehicles/german/G92_VK7201/_skins/G92_VK7201_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G92_VK7201/_skins/G92_VK7201_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G92_VK7201/_skins/G92_VK7201_3Dst/crash/lod0/Chassis.model	</exploded>
+          </G92_VK7201_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1604,6 +1660,13 @@
             <undamaged>	vehicles/german/G92_VK7201/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G92_VK7201/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G92_VK7201/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <G92_VK7201_3Dst>
+                <undamaged>	vehicles/german/G92_VK7201/_skins/G92_VK7201_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G92_VK7201/_skins/G92_VK7201_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G92_VK7201/_skins/G92_VK7201_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </G92_VK7201_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G92_VK7201/collision/Gun_01.model	</collisionModelServer>
@@ -1662,6 +1725,13 @@
         <undamaged>	vehicles/german/G92_VK7201/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/german/G92_VK7201/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/german/G92_VK7201/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <G92_VK7201_3Dst>
+            <undamaged>	vehicles/german/G92_VK7201/_skins/G92_VK7201_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G92_VK7201/_skins/G92_VK7201_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G92_VK7201/_skins/G92_VK7201_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </G92_VK7201_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G92_VK7201/collision/Turret_01.model	</collisionModelServer>
@@ -2042,6 +2112,48 @@
           <clipAngle>	1.13604	</clipAngle>
           <anchorPosition>	-0.997753 0.62848 0.911833	</anchorPosition>
           <anchorDirection>	-0.901474 0.00204551 0.432829	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35024	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G92_VK7201_3Dst	</compatibleModels>
+          <position>	-0.0343374 2.61392 -1.5077	</position>
+          <rotation>	0.00612231 0.00707607 3.14137	</rotation>
+          <scale>	0.689723 0.873865 0.689727	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.532044	</clipAngle>
+          <anchorPosition>	-0.0340833 1.13318 0.582622	</anchorPosition>
+          <anchorDirection>	0.000265911 0.999981 0.00612054	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35025	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G92_VK7201_3Dst	</compatibleModels>
+          <position>	-1.74002 2.50099 -2.13777	</position>
+          <rotation>	1.62661 1.47217 -0.0727308	</rotation>
+          <scale>	0.49483 0.190719 0.494836	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.34505	</clipAngle>
+          <anchorPosition>	-1.77811 0.630686 -0.0508329	</anchorPosition>
+          <anchorDirection>	-0.998119 0.0556393 -0.0257415	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35026	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G92_VK7201_3Dst	</compatibleModels>
+          <position>	0.0204495 2.30119 -3.4938	</position>
+          <rotation>	1.67224 -0.0469642 -0.0706141	</rotation>
+          <scale>	0.358607 0.625078 0.358608	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	272	</showOn>
+          <clipAngle>	0.000000	</clipAngle>
+          <anchorPosition>	0.0193465 0.434046 -1.45804	</anchorPosition>
+          <anchorDirection>	-0.0238885 0.101013 -0.994598	</anchorDirection>
         </slot>
       </customizationSlots>
       <customization>

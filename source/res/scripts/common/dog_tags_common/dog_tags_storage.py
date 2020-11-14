@@ -104,8 +104,8 @@ class PlayerDogTagStorage(Storage):
         return self._section
 
     def buildPlayerDogTag(self, compIds):
-        return PlayerDogTag((self._buildComponentForAccount(compId) for compId in compIds))
+        return PlayerDogTag((self.buildComponentForAccount(compId) for compId in compIds))
 
-    def _buildComponentForAccount(self, compId):
+    def buildComponentForAccount(self, compId):
         value, grade = self._progressStorage.get(compId) or EMPTY_PROGRESS_RECORD
         return DogTagComponent(compId, value, grade)

@@ -127,7 +127,7 @@ class CustomEffectManager(Component):
         vehicleSpeed = speedInfo[2]
         appearance = self.__appearance
         self.__variableArgs['speed'] = vehicleSpeed
-        self.__variableArgs['isPC'] = self.__vehicle.isPlayerVehicle
+        self.__variableArgs['isPC'] = isPC = self.__vehicle.isPlayerVehicle
         if vehicleSpeed > _VEHICLE_DIRECTION_THRESHOLD:
             direction = 1
         elif vehicleSpeed < -_VEHICLE_DIRECTION_THRESHOLD:
@@ -154,11 +154,14 @@ class CustomEffectManager(Component):
         self.__variableArgs['isUnderWater'] = 1 if appearance.isUnderwater else 0
         self.__correctWaterNodes()
         self.__variableArgs['gearUp'] = self.__gearUP
-        self.__variableArgs['RPM'] = self.__engineState.relativeRPM
+        self.__variableArgs['RPM'] = rpm = self.__engineState.relativeRPM
         self.__gearUP = False
         self.__variableArgs['engineLoad'] = self.__engineState.mode
         self.__variableArgs['engineState'] = self.__engineState.engineState
-        self.__variableArgs['engineStart'] = self.__engineState.starting
+        engineStart = self.__engineState.starting
+        self.__variableArgs['engineStart'] = engineStart and not self.__variableArgs.get('__engineStarted', False)
+        if engineStart or not isPC and rpm:
+            self.__variableArgs['__engineStarted'] = True
         self.__variableArgs['physicLoad'] = self.__engineState.physicLoad
         if self.__wheelsData is not None:
             for wheelIndex in xrange(0, len(self.__wheelsData)):

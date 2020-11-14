@@ -5,6 +5,7 @@ from collections import namedtuple
 from data_structures import OrderedSet
 from gui.server_events.bonuses import CreditsBonus, CrystalBonus, GoldBonus, ItemsBonus, GoodiesBonus, BasicPremiumDaysBonus, PlusPremiumDaysBonus, EpicAbilityPtsBonus, X5BattleTokensBonus
 from helpers import dependency, int2roman
+from skeletons.gui.game_control import IEventProgressionController
 from skeletons.gui.server_events import IEventsCache
 _logger = logging.getLogger(__name__)
 _BACKGROUND_LEVEL_IMAGE = ((0,),
@@ -99,9 +100,11 @@ def getQuestBonuses(questsProgressData, questIDs, currentLevelQuestID, eventsCac
     return bonuses
 
 
-def getProgressionIconVO(cycleNumber, playerLevel):
+@dependency.replace_none_kwargs(eventProgression=IEventProgressionController)
+def getProgressionIconVO(cycleNumber, playerLevel, eventProgression=None):
     playerLevelStr = str(playerLevel) if playerLevel is not None else None
-    return ProgressionLevelIconVO(int2roman(cycleNumber), playerLevelStr, _getProgressionIconBackgroundId(playerLevel))
+    season = eventProgression.getCurrentSeason() or eventProgression.getNextSeason()
+    return ProgressionLevelIconVO('' if season and season.isSingleCycleSeason() else int2roman(cycleNumber), playerLevelStr, _getProgressionIconBackgroundId(playerLevel))
 
 
 def getProgressionIconVODict(cycleNumber, playerLevel):

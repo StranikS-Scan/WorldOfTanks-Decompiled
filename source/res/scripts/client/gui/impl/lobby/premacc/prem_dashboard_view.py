@@ -34,13 +34,16 @@ class PremDashboardView(ViewImpl, SoundViewMixin):
         self._addSoundEvent()
         self.viewModel.onCloseAction += self.__onCloseAction
         self.viewModel.onInitialized += self.__onInitialized
-        self.setChildView(R.dynamic_ids.prem_dashboard.header(), PremDashboardHeader())
         self.setChildView(R.dynamic_ids.prem_dashboard.premium_card(), DashboardPremiumCard())
         self.setChildView(R.dynamic_ids.prem_dashboard.double_xp_card(), PremDashboardDoubleExperienceCard())
         self.setChildView(R.dynamic_ids.prem_dashboard.piggy_bank_card(), PremDashboardPiggyBankCard())
         self.setChildView(R.dynamic_ids.prem_dashboard.premium_quests_card(), PremDashboardQuestsCard())
         self.setChildView(R.dynamic_ids.prem_dashboard.maps_black_list_card(), PremDashboardMapsBlacklistCard())
         self.setChildView(R.dynamic_ids.prem_dashboard.dog_tags_card(), PremDashboardDogTagsCard())
+
+    def _onLoaded(self, *args, **kwargs):
+        super(PremDashboardView, self)._onLoaded(*args, **kwargs)
+        self.setChildView(R.dynamic_ids.prem_dashboard.header(), PremDashboardHeader())
 
     def _finalize(self):
         self.viewModel.onCloseAction -= self.__onCloseAction

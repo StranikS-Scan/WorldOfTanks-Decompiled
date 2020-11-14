@@ -27,7 +27,7 @@ class BasePerksController(object):
         self._planHolder.start()
 
     def destroy(self):
-        self._clearPlanHolder()
+        self._destroyPlanHolder()
         self._owner = None
         return
 
@@ -87,7 +87,7 @@ class BasePerksController(object):
     def _collectModifiersAddScopes(self, scopes):
         return reduce(add, (reduce(lambda acc, v: acc + v[1], mods, 0) for mods in scopes.itervalues()), 0)
 
-    def _clearPlanHolder(self):
+    def _destroyPlanHolder(self):
         if self._planHolder is not None:
             self._planHolder.destroy()
             self._planHolder = None

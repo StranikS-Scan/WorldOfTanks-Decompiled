@@ -9,7 +9,7 @@ from account_helpers.offers.cache import CachePrefetchResult
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from adisp import process, async
 from battle_pass_common import BattlePassConsts, BattlePassState, getBattlePassVoteToken
-from frameworks.wulf import ViewSettings, ViewFlags
+from frameworks.wulf import ViewSettings, ViewFlags, ViewStatus
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
@@ -21,7 +21,7 @@ from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.battle_pass.battle_pass_bonuses_helper import TROPHY_GIFT_TOKEN_BONUS_NAME, NEW_DEVICE_GIFT_TOKEN_BONUS_NAME
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData, changeBonusTooltipData
-from gui.battle_pass.battle_pass_helpers import getExtrasVideoPageURL, getFormattedTimeLeft, isSeasonEndingSoon, isCurrentBattlePassStateBase, isNeededToVote, getInfoPageURL, getIntroVideoURL, BattlePassProgressionSubTabs, getSeasonHistory, BackgroundPositions, showOfferTrophyDevices, showOfferNewDevices
+from gui.battle_pass.battle_pass_helpers import getExtrasVideoPageURL, getFormattedTimeLeft, isSeasonEndingSoon, isCurrentBattlePassStateBase, isNeededToVote, getInfoPageURL, getIntroVideoURL, BattlePassProgressionSubTabs, getSeasonHistory, BackgroundPositions, showOfferTrophyDevices, showOfferNewDevices, getLevelFromStats
 from gui.battle_pass.battle_pass_award import BattlePassAwardsManager
 from gui.battle_pass.undefined_bonuses import isUndefinedBonusTooltipData, createUndefinedBonusTooltipWindow
 from gui.impl import backport
@@ -440,14 +440,7 @@ class BattlePassProgressionsView(ViewImpl):
                 _logger.warning('There is not previous season %r history', prevSeasonStats.seasonID)
                 return
             sumPoints = sum(prevSeasonStats.vehPoints)
-            if prevOtherStats.maxBase == prevSeasonHistory.maxBaseLevel:
-                currentLevel = prevOtherStats.maxPost
-                state = BattlePassState.POST
-            else:
-                currentLevel = prevOtherStats.maxBase
-                state = BattlePassState.BASE
-            if prevOtherStats.maxPost >= prevSeasonHistory.maxPostLevel:
-                state = BattlePassState.COMPLETED
+            state, currentLevel = getLevelFromStats(prevOtherStats, prevSeasonHistory)
             with self.viewModel.transaction() as tx:
                 tx.setShowOffSeason(True)
                 offSeason = tx.offSeason
@@ -563,7 +556,8 @@ class BattlePassProgressionsView(ViewImpl):
         model.setIsChooseDeviceEnabled(False)
         if any((newDeviceTokensCount, trophyTokensCount)):
             result = yield self.__syncOfferResources()
-            model.setIsChooseDeviceEnabled(self.__battlePassController.isChooseDeviceEnabled() and result == CachePrefetchResult.SUCCESS)
+            if self.viewStatus not in (ViewStatus.DESTROYED, ViewStatus.DESTROYING):
+                model.setIsChooseDeviceEnabled(self.__battlePassController.isChooseDeviceEnabled() and result == CachePrefetchResult.SUCCESS)
 
     @async
     @process
@@ -660,6 +654,7 @@ class BattlePassProgressionsView(ViewImpl):
     def __onBattlePassSettingsChange(self, *_):
         if not self.__battlePassController.isEnabled():
             showHangar()
+            return
         self.__updateProgressData()
         self.__updateBuyButtonState()
 

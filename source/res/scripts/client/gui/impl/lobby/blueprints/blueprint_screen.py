@@ -103,8 +103,8 @@ class BlueprintScreen(ViewImpl):
             self.__updateLayout(model, layout)
             model.setShowUnavailableConfirm(not isAvailableForUnlock and not isSchemeFullCompleted and vehicle.intCD not in self.__accountSettings)
             conversionMaxCost = model.conversionMaxCost
-            conversionMaxCost.valueMain.setIcon(R.images.gui.maps.icons.blueprints.fragment.small.intelligence())
-            conversionMaxCost.valueAdditional.setIcon(R.images.gui.maps.icons.blueprints.fragment.small.dyn(self.__vehicle.nationName)())
+            conversionMaxCost.valueMain.setIcon(R.images.gui.maps.icons.blueprints.fragment.special.intelligence())
+            conversionMaxCost.valueAdditional.setIcon(R.images.gui.maps.icons.blueprints.fragment.special.dyn(self.__vehicle.nationName)())
             self.__updateConversionData(conversionMaxCost)
             model.setBackBtnLabel(getBackBtnLabel(self.__exitEvent, self.__exitEvent.name, vehicle.shortUserName))
             model.setCurrentStateView(BlueprintScreenModel.INIT)

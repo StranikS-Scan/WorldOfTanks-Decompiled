@@ -502,7 +502,7 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                         paramInfo = comparator.getExtendedData(paramName)
                         fmtValue = params_formatters.colorizedFormatParameter(paramInfo, self.__colorScheme)
                         if fmtValue is not None:
-                            block.append(formatters.packTextParameterBlockData(name=params_formatters.formatModuleParamName(paramName), value=fmtValue, valueWidth=self._valueWidth, gap=19, highlight=highlightPossible and paramName in (AUTO_RELOAD_PROP_NAME,
+                            block.append(formatters.packTextParameterBlockData(name=params_formatters.formatModuleParamName(paramName, vDescr), value=fmtValue, valueWidth=self._valueWidth, gap=19, highlight=highlightPossible and paramName in (AUTO_RELOAD_PROP_NAME,
                              RELOAD_TIME_SECS_PROP_NAME,
                              DUAL_GUN_CHARGE_TIME,
                              DUAL_GUN_RATE_TIME,
@@ -524,7 +524,13 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                         if module.isClipGun(vDescr):
                             title = R.strings.menu.moduleInfo.clipGunLabel()
                         elif module.isAutoReloadable(vDescr):
-                            title = R.strings.menu.moduleInfo.autoReloadGunLabel()
+                            hasBoost = False
+                            for gun in vDescr.type.getGuns():
+                                if gun.compactDescr == module.intCD:
+                                    hasBoost = gun.autoreloadHasBoost
+
+                            resource = R.strings.menu.moduleInfo.autoReloadGunLabel
+                            title = resource.dyn('boost')() if hasBoost and resource.dyn('boost') else resource()
                         elif module.isDualGun(vDescr):
                             title = R.strings.menu.moduleInfo.dualGunLabel()
                 elif module.itemTypeID == GUI_ITEM_TYPE.CHASSIS:

@@ -8,7 +8,6 @@ from copy import deepcopy
 from itertools import ifilter
 import ArenaType
 import BigWorld
-import constants
 import gui.awards.event_dispatcher as shared_events
 import personal_missions
 from PlayerEvents import g_playerEvents
@@ -78,23 +77,6 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.sounds import ISoundsController
 _logger = logging.getLogger(__name__)
-EVENT_TOKEN_MESSAGES_MAP = {constants.HE19_MONEY_TOKEN_ID: SYSTEM_MESSAGES.HW19_TOKEN_AWARD,
- constants.HE19_AFK_PARDON_ORDER_TOKEN_ID: None,
- constants.HE19_A100_T49_TOKEN_ID: None,
- constants.HE19_R40_T_54_TOKEN_ID: None,
- constants.HE19_TANKS_RANK_1_TOKEN_ID: None,
- constants.HE19_TANKS_RANK_2_TOKEN_ID: None,
- constants.HE19_TANKS_RANK_3_TOKEN_ID: None,
- constants.HE19_ENERGY_FOR_USE_HEALING_TOKEN_ID: None,
- constants.HE19_ENERGY_FOR_USE_BOOSTER_TOKEN_ID: None,
- constants.HE19_MISSION_ITEM_2_2_UNLOCK_TOKEN_ID: None,
- constants.HE19_MISSION_ITEM_2_3_UNLOCK_TOKEN_ID: None,
- constants.HE19_MISSION_ITEM_2_4_UNLOCK_TOKEN_ID: None,
- constants.HE19_MISSION_ITEM_2_5_UNLOCK_TOKEN_ID: None,
- constants.HE19_MISSION_ITEM_3_2_UNLOCK_TOKEN_ID: None,
- constants.HE19_MISSION_ITEM_3_3_UNLOCK_TOKEN_ID: None,
- constants.HE19_MISSION_ITEM_3_4_UNLOCK_TOKEN_ID: None,
- constants.HE19_MISSION_ITEM_3_5_UNLOCK_TOKEN_ID: None}
 
 class QUEST_AWARD_POSTFIX(object):
     CREW_SKINS = 'awardcrewskin'
@@ -118,7 +100,7 @@ class _NonOverlappingViewsLifecycleHandler(IViewLifecycleHandler):
         self.__openedViews.add(view.key)
 
     def onViewDestroyed(self, view):
-        self.__openedViews.remove(view.key)
+        self.__openedViews.discard(view.key)
         if not self.__openedViews:
             self.__postponeAwardsCallback(False)
             self.__handlePostponedCallback()
@@ -564,9 +546,8 @@ class SeniorityAwardsWindowHandler(ServiceChannelHandler):
             self.__mergedRewards.update(self.__questData.get('detailedRewards', {}).get(self._qID, {}))
             self._showAward()
         elif isCallback:
-            if self.__isValidAutoOpenBoxData():
-                self.__mergedRewards = self.__autoOpenData.get('rewards', {})
-                self._showAward()
+            self.__mergedRewards = self.__autoOpenData.get('rewards', {})
+            self._showAward()
 
     def __resetCallback(self):
         if self.__callback:
@@ -665,71 +646,46 @@ class MarkByInvoiceHandler(ServiceChannelHandler):
     def _showAward(self, ctx):
         invoiceData = ctx[1].data
         totalCount = 0
-        eventTokensList = {}
         if invoiceData.get('assetType') == INVOICE_ASSET.DATA:
             if 'data' in invoiceData:
                 data = invoiceData['data']
                 if 'tokens' in data:
                     tokensDict = data['tokens']
                     for tokenName, tokenData in tokensDict.iteritems():
-                        if tokenName in EVENT_TOKEN_MESSAGES_MAP:
-                            count = eventTokensList.get(tokenName, 0) + tokenData.get('count', 0)
-                            eventTokensList[tokenName] = count
-                            continue
                         if tokenName.startswith('img:'):
                             totalCount += tokenData.get('count', 0)
 
         if totalCount:
-            self._showMessage(totalCount, SYSTEM_MESSAGES.TOKENS_NOTIFICATION_MARK_ACQUIRED)
-        for token in eventTokensList:
-            if eventTokensList[token] and EVENT_TOKEN_MESSAGES_MAP.get(token):
-                self._showMessage(eventTokensList[token], EVENT_TOKEN_MESSAGES_MAP.get(token))
+            self._showMessage(totalCount)
 
     @staticmethod
-    def _showMessage(tokenCount, sysMsg):
-        SystemMessages.pushI18nMessage(sysMsg, count=tokenCount, type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
+    def _showMessage(tokenCount):
+        SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.TOKENS_NOTIFICATION_MARK_ACQUIRED, count=tokenCount, type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
 
 
 class MarkByQuestHandler(MultiTypeServiceChannelHandler):
 
     def __init__(self, awardCtrl):
         super(MarkByQuestHandler, self).__init__((SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index()), awardCtrl)
-        self.__tokenCount = 0
-        self.__eventTokensList = {}
-
-    def _needToShowAward(self, ctx):
-        if not super(MarkByQuestHandler, self)._needToShowAward(ctx):
-            return False
-        _, message = ctx
-        self.__tokenCount, self.__eventTokensList = self.__extractCount(message)
-        return bool(self.__tokenCount) or len(self.__eventTokensList) > 0
 
     def _showAward(self, ctx):
-        self.__showMessage(ctx)
-
-    def __showMessage(self, ctx):
         _, message = ctx
-        if self.__tokenCount:
-            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.TOKENS_NOTIFICATION_MARK_ACQUIRED, count=self.__tokenCount, type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
-        for token in self.__eventTokensList:
-            tokenMsg = EVENT_TOKEN_MESSAGES_MAP.get(token)
-            if self.__eventTokensList[token] and tokenMsg and message.type != SYS_MESSAGE_TYPE.battleResults.index():
-                SystemMessages.pushI18nMessage(tokenMsg, count=self.__eventTokensList[token], type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
+        tokenCount = self.__extractCount(message)
+        if tokenCount > 0:
+            self.__showMessage(tokenCount)
+
+    def __showMessage(self, tokenCount):
+        SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.TOKENS_NOTIFICATION_MARK_ACQUIRED, count=tokenCount, type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
 
     @staticmethod
     def __extractCount(message):
         totalCounts = 0
-        eventTokensList = {}
         tokensDict = message.data.get('tokens', {})
         for tokenName, tokenData in tokensDict.iteritems():
-            if tokenName in EVENT_TOKEN_MESSAGES_MAP:
-                count = eventTokensList.get(tokenName, 0) + tokenData.get('count', 0)
-                eventTokensList[tokenName] = count
-                continue
             if tokenName.startswith('img:'):
                 totalCounts += tokenData.get('count', 0)
 
-        return (totalCounts, eventTokensList)
+        return totalCounts
 
 
 class CrewSkinsQuestHandler(MultiTypeServiceChannelHandler):
@@ -787,7 +743,10 @@ class RecruitHandler(ServiceChannelHandler):
 
     def __init__(self, awardCtrl):
         super(RecruitHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
-        self.__questTypes = [SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index(), SYS_MESSAGE_TYPE.invoiceReceived.index()]
+        self.__questTypes = [SYS_MESSAGE_TYPE.battleResults.index(),
+         SYS_MESSAGE_TYPE.tokenQuests.index(),
+         SYS_MESSAGE_TYPE.invoiceReceived.index(),
+         SYS_MESSAGE_TYPE.converter.index()]
 
     def _needToShowAward(self, ctx):
         _, message = ctx

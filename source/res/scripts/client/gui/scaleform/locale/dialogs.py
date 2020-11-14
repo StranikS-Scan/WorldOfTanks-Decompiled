@@ -1002,34 +1002,11 @@ class DIALOGS(object):
     DAILYQUESTS_DIALOGWARNINGCONFIRMREROLL_MESSAGE = '#dialogs:dailyQuests/dialogWarningConfirmReroll/message'
     DAILYQUESTS_DIALOGWARNINGCONFIRMREROLL_SUBMIT = '#dialogs:dailyQuests/dialogWarningConfirmReroll/submit'
     DAILYQUESTS_DIALOGWARNINGCONFIRMREROLL_WARNING = '#dialogs:dailyQuests/dialogWarningConfirmReroll/warning'
-    DEDICATION_HEADLINE = '#dialogs:dedication/headline'
-    DEDICATION_SUB_HEADLINE = '#dialogs:dedication/sub-headline'
-    HW19REPAIRVEHICLE_TITLE = '#dialogs:hw19RepairVehicle/title'
-    HW19REPAIRVEHICLE_MESSAGE = '#dialogs:hw19RepairVehicle/message'
-    HW19REPAIRVEHICLE_SUBMIT = '#dialogs:hw19RepairVehicle/submit'
-    HW19REPAIRVEHICLE_CANCEL = '#dialogs:hw19RepairVehicle/cancel'
     SQUAD_EVENTDISABLED_TITLE = '#dialogs:squad/eventDisabled/title'
     SQUAD_EVENTDISABLED_MESSAGE = '#dialogs:squad/eventDisabled/message'
     SQUAD_EVENTDISABLED_CANCEL = '#dialogs:squad/eventDisabled/cancel'
-    EVENT_AFK_BATTLE_TITLE = '#dialogs:event/afk/battle/title'
-    EVENT_AFK_BATTLE_MESSAGE = '#dialogs:event/afk/battle/message'
-    EVENT_AFK_BATTLE_SUBMIT = '#dialogs:event/afk/battle/submit'
-    EVENT_AFK_BATTLE_CANCEL = '#dialogs:event/afk/battle/cancel'
-    EVENT_AFK_AFTERBATTLE_TITLE = '#dialogs:event/afk/afterBattle/title'
-    EVENT_AFK_AFTERBATTLE_MESSAGE = '#dialogs:event/afk/afterBattle/message'
-    EVENT_AFK_AFTERBATTLE_CANCEL = '#dialogs:event/afk/afterBattle/cancel'
-    EVENT_AFK_BAN_TITLE = '#dialogs:event/afk/ban/title'
-    EVENT_AFK_BAN_MESSAGE = '#dialogs:event/afk/ban/message'
-    EVENT_AFK_BAN_SUBMIT = '#dialogs:event/afk/ban/submit'
-    EVENT_AFK_BAN_CANCEL = '#dialogs:event/afk/ban/cancel'
-    BUYPLAYERPACKCONFIRMATION_TITLE = '#dialogs:buyPlayerPackConfirmation/title'
-    BUYPLAYERPACKCONFIRMATION_MESSAGE = '#dialogs:buyPlayerPackConfirmation/message'
-    BUYPLAYERPACKCONFIRMATION_SUBMIT = '#dialogs:buyPlayerPackConfirmation/submit'
-    BUYPLAYERPACKCONFIRMATION_CANCEL = '#dialogs:buyPlayerPackConfirmation/cancel'
-    BUYITEMPACKCONFIRMATION_TITLE = '#dialogs:buyItemPackConfirmation/title'
-    BUYITEMPACKCONFIRMATION_MESSAGE = '#dialogs:buyItemPackConfirmation/message'
-    BUYITEMPACKCONFIRMATION_SUBMIT = '#dialogs:buyItemPackConfirmation/submit'
-    BUYITEMPACKCONFIRMATION_CANCEL = '#dialogs:buyItemPackConfirmation/cancel'
+    DEDICATION_HEADLINE = '#dialogs:dedication/headline'
+    DEDICATION_SUB_HEADLINE = '#dialogs:dedication/sub-headline'
     RECRUITWINDOW_VEHICLECLASSDROPDOWN_ENUM = (RECRUITWINDOW_VEHICLECLASSDROPDOWN_ALL,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_LIGHTTANK,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_MEDIUMTANK,
@@ -2027,34 +2004,11 @@ class DIALOGS(object):
      DAILYQUESTS_DIALOGWARNINGCONFIRMREROLL_MESSAGE,
      DAILYQUESTS_DIALOGWARNINGCONFIRMREROLL_SUBMIT,
      DAILYQUESTS_DIALOGWARNINGCONFIRMREROLL_WARNING,
-     DEDICATION_HEADLINE,
-     DEDICATION_SUB_HEADLINE,
-     HW19REPAIRVEHICLE_TITLE,
-     HW19REPAIRVEHICLE_MESSAGE,
-     HW19REPAIRVEHICLE_SUBMIT,
-     HW19REPAIRVEHICLE_CANCEL,
      SQUAD_EVENTDISABLED_TITLE,
      SQUAD_EVENTDISABLED_MESSAGE,
      SQUAD_EVENTDISABLED_CANCEL,
-     EVENT_AFK_BATTLE_TITLE,
-     EVENT_AFK_BATTLE_MESSAGE,
-     EVENT_AFK_BATTLE_SUBMIT,
-     EVENT_AFK_BATTLE_CANCEL,
-     EVENT_AFK_AFTERBATTLE_TITLE,
-     EVENT_AFK_AFTERBATTLE_MESSAGE,
-     EVENT_AFK_AFTERBATTLE_CANCEL,
-     EVENT_AFK_BAN_TITLE,
-     EVENT_AFK_BAN_MESSAGE,
-     EVENT_AFK_BAN_SUBMIT,
-     EVENT_AFK_BAN_CANCEL,
-     BUYPLAYERPACKCONFIRMATION_TITLE,
-     BUYPLAYERPACKCONFIRMATION_MESSAGE,
-     BUYPLAYERPACKCONFIRMATION_SUBMIT,
-     BUYPLAYERPACKCONFIRMATION_CANCEL,
-     BUYITEMPACKCONFIRMATION_TITLE,
-     BUYITEMPACKCONFIRMATION_MESSAGE,
-     BUYITEMPACKCONFIRMATION_SUBMIT,
-     BUYITEMPACKCONFIRMATION_CANCEL)
+     DEDICATION_HEADLINE,
+     DEDICATION_SUB_HEADLINE)
 
     @classmethod
     def recruitwindow_vehicleclassdropdown(cls, key0):

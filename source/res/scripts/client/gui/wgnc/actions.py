@@ -4,6 +4,7 @@ import BigWorld
 from adisp import process
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_WARNING, LOG_DEBUG
 from gui.promo.promo_logger import PromoLogSourceType
+from gui.shared.event_dispatcher import showStrongholds
 from gui.shared.utils.decorators import ReprInjector
 from gui.wgnc.custom_actions_keeper import CustomActionsKeeper
 from gui.wgnc.events import g_wgncEvents
@@ -109,6 +110,14 @@ class OpenPromoBrowser(OpenInternalBrowser):
 
     def _doInvoke(self, _):
         self.promoCtrl.showPromo(self._url, source=PromoLogSourceType.PRMP)
+
+
+@ReprInjector.withParent()
+class OpenStrongholdBrowser(OpenInternalBrowser):
+    __slots__ = ()
+
+    def _doInvoke(self, _):
+        showStrongholds(self._url)
 
 
 @ReprInjector.withParent()

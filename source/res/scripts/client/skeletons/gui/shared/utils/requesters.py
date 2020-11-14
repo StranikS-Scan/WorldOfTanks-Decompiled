@@ -843,6 +843,9 @@ class IBlueprintsRequester(IRequester):
     def isBlueprintsAvailable(self):
         raise NotImplementedError
 
+    def hasBlueprintsOrFragments(self):
+        raise NotImplementedError
+
 
 class ITokensRequester(IRequester):
 

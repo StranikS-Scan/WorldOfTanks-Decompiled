@@ -15,7 +15,6 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 class RespawnDeathMode(IControlMode):
     curVehicleID = property(lambda self: self.__curVehicleID)
     aimingMode = property(lambda self: self._aimingMode)
-    camera = property(lambda self: self.__cam)
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
     __aimOffset = aih_global_binding.bindRO(aih_global_binding.BINDING_ID.AIM_OFFSET)
 

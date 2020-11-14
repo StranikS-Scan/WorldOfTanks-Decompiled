@@ -359,7 +359,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         return self.__isAlive
 
     def _onVehicleStateUpdated(self, state, value):
-        if state in (VEHICLE_VIEW_STATE.SWITCHING, VEHICLE_VIEW_STATE.RESPAWNING) and not (self.sessionProvider.arenaVisitor.gui.isEventBattle() and self.__isAlive):
+        if state in (VEHICLE_VIEW_STATE.SWITCHING, VEHICLE_VIEW_STATE.RESPAWNING):
             self._hideMarkup()
 
     def _hideMarkup(self):
@@ -713,9 +713,6 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
     def _getPlayerVehicleID(self):
         return self.__playerVehicleID
 
-    def _getSymbolName(self, vehicleID):
-        return _S_NAME.VEHICLE
-
     def __addEntryToPool(self, vehicleID, location=VEHICLE_LOCATION.UNDEFINED, positions=None):
         if location != VEHICLE_LOCATION.UNDEFINED:
             matrix = matrix_factory.makeVehicleMPByLocation(vehicleID, location, positions or {})
@@ -724,8 +721,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         else:
             matrix, location = matrix_factory.getVehicleMPAndLocation(vehicleID, positions or {})
         active = location != VEHICLE_LOCATION.UNDEFINED
-        symbolName = self._getSymbolName(vehicleID)
-        model = self._addEntryEx(vehicleID, symbolName, _C_NAME.ALIVE_VEHICLES, matrix=matrix, active=active)
+        model = self._addEntryEx(vehicleID, _S_NAME.VEHICLE, _C_NAME.ALIVE_VEHICLES, matrix=matrix, active=active)
         if model is not None:
             model.setLocation(location)
         return model
@@ -739,11 +735,8 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             animation = self.__getSpottedAnimation(entry, isSpotted)
             if animation:
                 self.__playSpottedSound(entry)
-            self._invoke(entry.getID(), 'setVehicleInfo', vehicleID, self._getClassTag(vInfo), name, guiProps.name(), animation)
+            self._invoke(entry.getID(), 'setVehicleInfo', vehicleID, classTag, name, guiProps.name(), animation)
         return
-
-    def _getClassTag(self, vInfo):
-        return vInfo.vehicleType.classTag
 
     def __setGUILabel(self, entry, guiLabel):
         if entry.setGUILabel(guiLabel):
@@ -834,9 +827,6 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
                 self.__setActive(entry, True)
         if self._ctrlVehicleID and self._ctrlVehicleID != self.__playerVehicleID and self._ctrlVehicleID in self._entries:
             self.__setActive(self._entries[self._ctrlVehicleID], False)
-
-    def eventSwitchToVehicle(self, prevCtrlID):
-        self.__switchToVehicle(prevCtrlID)
 
     def __showFeatures(self, flag):
         self._parentObj.as_showVehiclesNameS(flag)
@@ -1401,3 +1391,49 @@ class RadarPlugin(common.SimplePlugin, IRadarListener):
         matrix = Math.Matrix()
         matrix.translation = Math.Vector3(xzPosition[0], 0, xzPosition[1])
         return matrix
+
+
+class AreaMarkerEntriesPlugin(common.BaseAreaMarkerEntriesPlugin):
+    pass
+
+
+class DeathZonesMinimapPlugin(common.EntriesPlugin):
+    __slots__ = ('_activeDeathZones', '_scaleCoefX', '_scaleCoefY')
+    _SYMBOL_NAME = 'EventDeathZoneMinimapEntryUI'
+    _MINIMAP_1M_IN_PX = 0.21
+
+    def __init__(self, parentObj):
+        super(DeathZonesMinimapPlugin, self).__init__(parentObj)
+        self._activeDeathZones = {}
+        self._updateScaleCoefs()
+
+    def start(self):
+        super(DeathZonesMinimapPlugin, self).start()
+        g_playerEvents.onStaticDeathZoneActivated += self._onStaticDeathZoneActivated
+        g_playerEvents.onStaticDeathZoneDeactivated += self._onStaticDeathZoneDeactivated
+
+    def fini(self):
+        g_playerEvents.onStaticDeathZoneActivated -= self._onStaticDeathZoneActivated
+        g_playerEvents.onStaticDeathZoneDeactivated -= self._onStaticDeathZoneDeactivated
+        super(DeathZonesMinimapPlugin, self).fini()
+
+    def _onStaticDeathZoneActivated(self, zone):
+        zoneId = zone.zoneId
+        topLeft, bottomRight = zone.getCorners()
+        if zoneId in self._activeDeathZones:
+            return
+        matrix = minimap_utils.makePositionMatrix(topLeft)
+        entryID = self._addEntry(self._SYMBOL_NAME, _C_NAME.ICONS, matrix=matrix, active=True)
+        self._activeDeathZones[zoneId] = entryID
+        self._invoke(entryID, 'setZoneSize', abs(bottomRight[0] - topLeft[0]) * self._scaleCoefX, abs(bottomRight[2] - topLeft[2]) * self._scaleCoefY)
+
+    def _onStaticDeathZoneDeactivated(self, zoneId):
+        entryID = self._activeDeathZones.pop(zoneId, None)
+        if entryID:
+            self._delEntry(entryID)
+        return
+
+    def _updateScaleCoefs(self):
+        arenaSize = BigWorld.player().arena.arenaType.boundingBox[1]
+        self._scaleCoefX = minimap_utils.MINIMAP_SIZE[0] / arenaSize[0]
+        self._scaleCoefY = minimap_utils.MINIMAP_SIZE[1] / arenaSize[1]

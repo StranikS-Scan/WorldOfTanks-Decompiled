@@ -43,7 +43,6 @@ from skeletons.gui.server_events import IEventsCache
 from gui import makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
-from skeletons.gui.afk_controller import IAFKController
 
 class _GroupedMissionsView(MissionsGroupedViewMeta):
 
@@ -336,8 +335,7 @@ class MissionsCategoriesView(_GroupedMissionsView):
 
     @staticmethod
     def getViewQuestFilter():
-        afkController = dependency.instance(IAFKController)
-        return lambda q: not (isMarathon(q.getGroupID()) or isPremium(q.getGroupID()) or isDailyQuest(q.getID())) and afkController.questFilter(q)
+        return lambda q: not (isMarathon(q.getGroupID()) or isPremium(q.getGroupID()) or isDailyQuest(q.getID()))
 
     @staticmethod
     def getViewQuestFilterIncludingDailyQuests():

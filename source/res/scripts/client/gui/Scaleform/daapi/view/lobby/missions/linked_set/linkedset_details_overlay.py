@@ -5,6 +5,7 @@ from gui.Scaleform.daapi.view.meta.LinkedSetDetailsOverlayMeta import LinkedSetD
 from gui.Scaleform.daapi.view.lobby.event_boards.formaters import formatErrorTextWithIcon, formatOkTextWithIcon
 from gui.Scaleform.locale.LINKEDSET import LINKEDSET
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.impl import backport
 from helpers.i18n import makeString as _ms
 from gui.prb_control import prbDispatcherProperty
 from gui.prb_control.entities.base.ctx import PrbAction
@@ -246,8 +247,8 @@ class LinkedSetDetailsOverlay(LinkedSetDetailsOverlayMeta):
             progressValue = None
             curProgress, maxProgress = getProgressFromQuestWithSingleAccumulative(selectedQuest)
             if curProgress is not None and maxProgress:
-                cardStatus = makeHtmlString('html_templates:lobby/quests/linkedSet', 'questProgressTemplate', {'curValue': curProgress,
-                 'maxValue': maxProgress})
+                cardStatus = makeHtmlString('html_templates:lobby/quests/linkedSet', 'questProgressTemplate', {'curValue': backport.getIntegralFormat(curProgress),
+                 'maxValue': backport.getIntegralFormat(maxProgress)})
                 progressValue = curProgress * 100 // maxProgress
             return self._getViewData(title=cardTitle, status=cardStatus, description=getLocalizedQuestDescForLinkedSetQuest(selectedQuest), isBackOverlay=isCompleted, isMovie=isMovie, back=back, awards=self.getAwardsFromQuest(selectedQuest), btnStartLabel=btnStartLabel, progressValue=progressValue)
         else:

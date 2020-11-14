@@ -24,7 +24,7 @@ SingleDialogResult = namedtuple('SingleDialogResult', ('busy', 'result'))
 @async
 def show(dialog):
     dialog.load()
-    ConnectionListener.instance.attachListener(dialog, ListenTo.onDisconnected, once=True, warningText='[Dialog]: no handler for event onDisconnected in type {}'.format(type(dialog)))
+    ConnectionListener.instance.attachListener(dialog, ListenTo.onDisconnected, once=True, warningText='[Dialog]: no handler for event _onClientDisconnected in type {}'.format(type(dialog)))
     result = yield await(dialog.wait())
     ConnectionListener.instance.detachListener(dialog)
     dialog.destroy()

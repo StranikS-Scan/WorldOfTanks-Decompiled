@@ -58,7 +58,3 @@ class ModuleInfoWindow(ModuleInfoMeta):
 
     def _updateModuleInfo(self, data):
         self.as_setModuleInfoS(data)
-
-    @staticmethod
-    def _filterEmptyText(text):
-        return text if text != '?empty?' else ''

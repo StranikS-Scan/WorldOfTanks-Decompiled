@@ -87,3 +87,4 @@ class StrongholdView(LobbySubView, StrongholdViewMeta):
 
     def __showBrowser(self):
         BigWorld.callback(0.01, self.as_loadBrowserS)
+        self.fireEvent(events.StrongholdEvent(events.StrongholdEvent.STRONGHOLD_LOADED, {'browserID': self.__browserId}), scope=EVENT_BUS_SCOPE.STRONGHOLD)

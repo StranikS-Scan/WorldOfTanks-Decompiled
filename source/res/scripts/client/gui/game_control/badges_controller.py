@@ -7,10 +7,12 @@ from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.gui_items.processors.common import BadgesSelector
 from gui.shared.items_cache import CACHE_SYNC_REASON
+from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.shared.utils.scheduled_notifications import Notifiable, AcyclicNotifier
 from helpers import dependency
 from skeletons.gui.game_control import IBadgesController
 from skeletons.gui.shared import IItemsCache
+from tutorial.control.context import GLOBAL_FLAG
 
 class BadgesController(IBadgesController, Notifiable):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -21,6 +23,7 @@ class BadgesController(IBadgesController, Notifiable):
         self.__currentSelectedPrefix = None
         self.__currentSelectedSuffix = None
         self.__pendingBadges = None
+        self.__tutorStorage = getTutorialGlobalStorage()
         return
 
     def init(self):
@@ -40,6 +43,7 @@ class BadgesController(IBadgesController, Notifiable):
 
     def onLobbyStarted(self, ctx):
         self.__initCurrentBadges()
+        self.__checkNewBadges()
         g_clientUpdateManager.addCallbacks({'badges': self.__updateBadges})
         self.itemsCache.onSyncCompleted += self.__onSyncCompleted
 
@@ -66,6 +70,7 @@ class BadgesController(IBadgesController, Notifiable):
             return
         else:
             self.__initCurrentBadges()
+            self.__checkNewBadges()
             self.onUpdated()
             return
 
@@ -121,4 +126,14 @@ class BadgesController(IBadgesController, Notifiable):
             self.__initCurrentBadges()
         self.__pendingBadges = None
         self.onUpdated()
+        return
+
+    def __checkNewBadges(self):
+        for badge in self.itemsCache.items.getBadges().itervalues():
+            if self.__tutorStorage is not None and badge.isNew() and badge.isAchieved:
+                if badge.isPrefixLayout():
+                    self.__tutorStorage.setValue(GLOBAL_FLAG.HAVE_NEW_BADGE, True)
+                elif badge.isSuffixLayout():
+                    self.__tutorStorage.setValue(GLOBAL_FLAG.HAVE_NEW_SUFFIX_BADGE, True)
+
         return

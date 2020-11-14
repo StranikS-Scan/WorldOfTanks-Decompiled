@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/server_events/EventsCache.py
 import math
 import sys
-import time
 from collections import defaultdict, namedtuple
 import typing
 import BigWorld
@@ -371,18 +370,6 @@ class EventsCache(IEventsCache):
 
             return sorted(result)
 
-    def getCommanders(self):
-        return self.getGameEventData().get('vehicles', {})
-
-    def getCommander(self, commanderId):
-        return self.getCommanders().get(commanderId)
-
-    def getDifficultyParams(self):
-        return self.getGameEventData().get('difficulty', {})
-
-    def getDifficultyLevels(self):
-        return self.getDifficultyParams().get('levels', {})
-
     def getEvents(self, filterFunc=None):
         svrEvents = self.getQuests(filterFunc)
         svrEvents.update(self.getActions(filterFunc))
@@ -540,14 +527,6 @@ class EventsCache(IEventsCache):
             probability = self.questsProgress.getTokenCount(progressiveConfig.probabilityTokenID) / 100
             return _ProgressiveReward(currentStep, probability, maxSteps)
 
-    def getEventFinishTime(self):
-        data = self.getGameEventData()
-        return time_utils.makeLocalServerTime(data['endDate']) if data and 'endDate' in data else time.time()
-
-    def getEventFinishTimeLeft(self):
-        finishTime = self.getEventFinishTime()
-        return time_utils.getTimeDeltaFromNowInLocal(finishTime) if finishTime is not None else 0
-
     def _getDailyQuests(self, filterFunc=None):
         result = {}
         filterFunc = filterFunc or (lambda a: True)
@@ -556,9 +535,6 @@ class EventsCache(IEventsCache):
                 result[qID] = q
 
         return result
-
-    def getGameEventData(self):
-        return self.__getIngameEventsData().get('hw19', {})
 
     def _getQuests(self, filterFunc=None, includePersonalMissions=False):
         result = {}

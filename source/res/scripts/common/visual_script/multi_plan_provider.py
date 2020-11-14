@@ -2,7 +2,7 @@
 # Embedded file name: scripts/common/visual_script/multi_plan_provider.py
 import VSE
 from misc import preloadPlanXml
-from typing import Iterable
+from typing import Iterable, Any
 from debug_utils import LOG_ERROR
 
 class PlanHolder(object):

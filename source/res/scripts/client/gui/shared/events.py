@@ -71,12 +71,10 @@ class GameEvent(HasCtxEvent):
     PRE_CHARGE = 'game/preCharge'
     CONTROL_MODE_CHANGE = 'game/controlModeChange'
     SNIPER_CAMERA_TRANSITION = 'game/sniperCameraTransition'
-    WORLD_MARKERS_COMPONENT_LIFETIME = 'game/worldMarkersComponentLifetime'
     FADE_OUT_AND_IN = 'game/fadeOutIn'
     CALLOUT_DISPLAY_EVENT = 'game/calloutDisplayEvent'
     RESPOND_TO_CALLOUT = 'game/respondToCallout'
-    COLLECTOR_PROGRESS = 'game/collectorProgress'
-    COLLECTOR_PROGRESS_STOP = 'game/collectorProgressStop'
+    ARENA_BORDER_TYPE_CHANGED = 'game/arenaBorderTypeChanged'
 
 
 class GUICommonEvent(SharedEvent):
@@ -205,7 +203,6 @@ class ShowDialogEvent(SharedEvent):
     SHOW_USE_AWARD_SHEET_DIALOG = 'useAwardSheetDialog'
     SHOW_CONFIRM_C11N_BUY_DIALOG = 'showConfirmC11nBuyDialog'
     SHOW_CONFIRM_C11N_SELL_DIALOG = 'showConfirmC11nSellDialog'
-    SHOW_EVENT_AFK_DIALOG = 'showEventAFKDialog'
 
     def __init__(self, meta, handler):
         super(ShowDialogEvent, self).__init__(ViewEventType.LOAD_VIEW)
@@ -500,6 +497,7 @@ class StrongholdEvent(HasCtxEvent):
     STRONGHOLD_DATA_UNAVAILABLE = 'strongholdDataUnavailable'
     STRONGHOLD_ON_TIMER = 'strongholdOnTimer'
     STRONGHOLD_VEHICLES_SELECTED = 'strongholdVehicleSelected'
+    STRONGHOLD_LOADED = 'strongholdLoaded'
 
 
 class ShopEvent(HasCtxEvent):
@@ -607,8 +605,6 @@ class HangarVehicleEvent(HasCtxEvent):
     ON_HERO_TANK_LOADED = 'hangarVehicle/onHeroTankLoaded'
     ON_HERO_TANK_DESTROY = 'hangarVehicle/onHeroTankDestroy'
     HERO_TANK_MARKER = 'hangarVehicle/heroTankMarker'
-    ON_HALLOWEEN_TANK_LOADED = 'hangarVehicle/onHalloweenTankLoaded'
-    ON_HALLOWEEN_TANK_DESTROY = 'hangarVehicle/onHalloweenTankDestroy'
 
 
 class LinkedSetEvent(HasCtxEvent):
@@ -633,20 +629,6 @@ class HangarCustomizationEvent(HasCtxEvent):
 class SeniorityAwardsEvent(HasCtxEvent):
     ON_REWARD_VIEW_CLOSED = 'seniorityAwards/onRewardViewClosed'
     ON_ENTRY_VIEW_LOADED = 'seniorityAwards/onEntryViewLoaded'
-
-
-class PickUpEvent(HasCtxEvent):
-    ON_PICKUP = 'PickUpEvent/onPickup'
-
-
-class BuffUiEvent(HasCtxEvent):
-    ON_APPLY = 'BuffUiEvent/onApply'
-    ON_UNAPPLY = 'BuffUiEvent/onUnapply'
-
-
-class BattleHintEvent(HasCtxEvent):
-    ON_SHOW = 'BattleHintEvent/onShow'
-    ON_HIDE = 'BattleHintEvent/onHide'
 
 
 class ReferralProgramEvent(HasCtxEvent):
@@ -748,7 +730,3 @@ class HangarSpacesSwitcherEvent(HasCtxEvent):
 
 class DogTagsEvent(SharedEvent):
     COUNTERS_UPDATED = 'onCountersUpdated'
-
-
-class EventHeaderEvent(HasCtxEvent):
-    TAB_CHANGED = 'eventHeader/tabChanged'

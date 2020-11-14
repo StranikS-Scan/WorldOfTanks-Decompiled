@@ -118,6 +118,8 @@ class PCPlanHolder(object):
 
     def destroy(self):
         self._clean()
+        self._scopedPerks = None
+        return
 
     def loadPlan(self, owner, isAutoStart=False):
         for scopeId in range(len(self._scopedPerks)):

@@ -12,6 +12,9 @@ class DogTagsInfo(BigWorld.DynamicScriptComponent):
         self.__eManager = Event.EventManager()
         self.onUsedComponentsUpdated = Event.Event(self.__eManager)
 
+    def onLeaveWorld(self, *args):
+        self.__eManager.clear()
+
     def setSlice_usedDogTagsComponents(self, changePath, oldValue):
         begin, end = changePath[0]
         newComponents = self.usedDogTagsComponents[begin:end]

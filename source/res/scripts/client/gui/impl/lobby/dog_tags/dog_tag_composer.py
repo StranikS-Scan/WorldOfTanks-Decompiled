@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/gui/impl/lobby/dog_tags/dog_tag_composer.py
 from collections import defaultdict
 from enum import Enum
+import logging
 import typing
-from debug_utils import LOG_DEBUG_DEV
 from dog_tags_common.number_formatter import formatComponentValue, customRound
 from dog_tags_common.config.common import ComponentViewType, ComponentPurpose, NO_PROGRESS
 from gui.dog_tag_composer import DogTagComposerClient
@@ -22,6 +22,7 @@ if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.views.lobby.dog_tags.dt_dog_tag import DtDogTag
     from gui.impl.gen.view_models.views.lobby.dog_tags.dog_tags_view_model import DogTagsViewModel
     from gui.impl.gen.view_models.views.lobby.premacc.dashboard.prem_dashboard_dog_tags_card_model import PremDashboardDogTagsCardModel
+logger = logging.getLogger(__name__)
 
 class PurposeGroup(Enum):
     TRIUMPH = 'TRIUMPH'
@@ -32,6 +33,8 @@ class PurposeGroup(Enum):
 PURPOSE_TO_PURPOSE_GROUP_MAP = {ComponentPurpose.SKILL: PurposeGroup.SEASON,
  ComponentPurpose.TRIUMPH: PurposeGroup.TRIUMPH,
  ComponentPurpose.DEDICATION: PurposeGroup.DEDICATION}
+SECTION_ORDER_MAP = {ComponentViewType.BACKGROUND: [ComponentPurpose.TRIUMPH_MEDAL],
+ ComponentViewType.ENGRAVING: [ComponentPurpose.DEDICATION, ComponentPurpose.SKILL, ComponentPurpose.TRIUMPH]}
 
 class DogTagComposerLobby(DogTagComposerClient):
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -41,7 +44,7 @@ class DogTagComposerLobby(DogTagComposerClient):
         self.serverSettings = self.lobbyContext.getServerSettings
 
     def fillModel(self, model, dogtag):
-        model.setPlayerName(self._formatName(dogtag.getNickName()))
+        model.setPlayerName(dogtag.getNickName())
         model.setClanTag(dogtag.getClanTag())
         engravingId = dogtag.getComponentByType(ComponentViewType.ENGRAVING).compId
         backgroundId = dogtag.getComponentByType(ComponentViewType.BACKGROUND).compId
@@ -58,7 +61,12 @@ class DogTagComposerLobby(DogTagComposerClient):
         model.setEngraving(engravingImage)
         model.setBackground(bgImage)
         model.Counter.setValue(len(self._dtHelper.getUnseenComps()))
-        LOG_DEBUG_DEV('Dashboard dogtag images - engraving: {}, background: {}'.format(engravingImage, bgImage))
+        grades = engraving.componentDefinition.grades
+        if engraving and grades and engraving.grade == len(grades) - 1:
+            model.setIsMaxLevel(True)
+        else:
+            model.setIsMaxLevel(False)
+        logger.debug('Dashboard dogtag images - engraving: %s, background: %s', engravingImage, bgImage)
 
     def fillGrid(self, viewModel):
         unlockedComponents = self._dtHelper.getUnlockedComps()
@@ -110,7 +118,7 @@ class DogTagComposerLobby(DogTagComposerClient):
                     purpose = ComponentPurpose.TRIUMPH_MEDAL
                 sectionComponents[purpose][compId] = comp
 
-        for purpose in sectionComponents.keys():
+        for purpose in SECTION_ORDER_MAP[componentType]:
             if not sectionComponents[purpose]:
                 continue
             gridSection = self._createSection(sectionComponents[purpose], unlockedComponents, self.getPurposeRes(purpose))

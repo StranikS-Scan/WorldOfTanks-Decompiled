@@ -244,7 +244,8 @@ _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'TenYearsCountdownStageMedal',
  'wtHunterWins',
  'wtBossWins',
- 'wtSpecBossDefeat']
+ 'wtSpecBossDefeat',
+ 'RP2018sergeantCounter']
 _achievements15x15PopUps = ['warrior',
  'invader',
  'sniper',

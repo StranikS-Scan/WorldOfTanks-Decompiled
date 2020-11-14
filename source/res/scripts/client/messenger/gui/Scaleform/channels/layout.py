@@ -107,6 +107,8 @@ class LobbyLayout(IChannelController):
             for view in self._views:
                 view.as_addMessageS(text)
 
+        else:
+            self._channel.addUnreadMessage(message)
         self._channel.addMessage(text)
         return self._activated
 

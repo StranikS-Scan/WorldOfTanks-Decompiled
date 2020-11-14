@@ -1,22 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/battle_timers.py
 import logging
-import CommandMapping
 import SoundGroups
+import CommandMapping
 from constants import ARENA_GUI_TYPE
 from PlayerEvents import g_playerEvents
-from gui import makeHtmlString
 from gui.Scaleform.daapi.view.meta.BattleTimerMeta import BattleTimerMeta
 from gui.Scaleform.daapi.view.meta.PrebattleTimerMeta import PrebattleTimerMeta
 from gui.Scaleform.genConsts.PREBATTLE_TIMER import PREBATTLE_TIMER
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.battle_control.battle_constants import COUNTDOWN_STATE
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
 from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import dependency
-from gui.impl import backport
-from gui.impl.gen import R
-from gui.shared.utils.key_mapping import getReadableKey
 from skeletons.gui.battle_session import IBattleSessionProvider
+from gui.shared.utils.key_mapping import getReadableKey
 
 class _WWISE_EVENTS(object):
     BATTLE_ENDING_SOON = 'time_buzzer_02'
@@ -34,7 +33,6 @@ class PreBattleTimer(PrebattleTimerMeta):
     def __init__(self):
         self.__isPMBattleProgressEnabled = False
         self.__isRankedBattle = False
-        self.__isEventBattle = False
         self.__sounds = dict()
         super(PreBattleTimer, self).__init__()
 
@@ -42,7 +40,6 @@ class PreBattleTimer(PrebattleTimerMeta):
         super(PreBattleTimer, self)._populate()
         self.addListener(events.GameEvent.BATTLE_LOADING, self.__handleBattleLoading, EVENT_BUS_SCOPE.BATTLE)
         self.__isRankedBattle = self.sessionProvider.arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.RANKED
-        self.__isEventBattle = self.sessionProvider.arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.EVENT_BATTLES
         if not self.__isRankedBattle:
             self.__isPMBattleProgressEnabled = self.lobbyContext.getServerSettings().isPMBattleProgressEnabled()
             qProgressCtrl = self.sessionProvider.shared.questProgress
@@ -54,13 +51,6 @@ class PreBattleTimer(PrebattleTimerMeta):
         CommandMapping.g_instance.onMappingChanged += self.__onMappingChanged
         self.__onMappingChanged()
         return
-
-    def _getMessage(self):
-        if self.__isEventBattle:
-            if self._state == COUNTDOWN_STATE.WAIT:
-                return makeHtmlString('html_templates:battleTimer', 'waitingForOtherPlayers')
-            return makeHtmlString('html_templates:battleTimer', 'arenaDescription')
-        return super(PreBattleTimer, self)._getMessage()
 
     def onShowInfo(self):
         self.__callWWISE(_WWISE_EVENTS.FLAG_APPEAR)

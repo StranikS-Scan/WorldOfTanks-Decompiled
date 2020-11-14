@@ -575,11 +575,6 @@ def __readBonus_customizations(bonus, _name, section, eventType):
          'id': subsection.readInt('id', -1)}
         if subsection.has_key('boundVehicle'):
             custData['vehTypeCompDescr'] = vehicles.makeIntCompactDescrByID('vehicle', *vehicles.g_list.getIDsByName(subsection.readString('boundVehicle', '')))
-        elif subsection.has_key('applyToVehicle'):
-            if custData['custType'] != 'style':
-                raise SoftException('applyToVehicle supports only style customization type')
-            custData['vehTypeCompDescr'] = vehicles.makeIntCompactDescrByID('vehicle', *vehicles.g_list.getIDsByName(subsection.readString('applyToVehicle', '')))
-            custData['applyToVehicle'] = True
         elif subsection.has_key('boundToCurrentVehicle'):
             if eventType in EVENT_TYPE.LIKE_TOKEN_QUESTS:
                 raise SoftException("Unsupported tag 'boundToCurrentVehicle' in 'like token' quests")
@@ -624,6 +619,8 @@ def __readBonus_tokens(bonus, _name, section, eventType):
 def __readBonus_goodies(bonus, _name, section, eventType):
     id = section['id'].asInt
     goodie = bonus.setdefault('goodies', {}).setdefault(id, {'count': 0})
+    if section.has_key('limit'):
+        goodie['limit'] = max(goodie.get('limit', 0), section['limit'].asInt)
     if section.has_key('count'):
         goodie['count'] += __readIntWithTokenExpansion(section['count'])
     else:
@@ -757,8 +754,6 @@ def __readBonus_optionalData(config, bonusReaders, section, eventType):
         properties['compensation'] = section['compensation'].asBool
     if section.has_key('shouldCompensated'):
         properties['shouldCompensated'] = section['shouldCompensated'].asBool
-    if section.has_key('priority'):
-        properties['priority'] = section['priority'].asInt
     if IS_DEVELOPMENT:
         if section.has_key('name'):
             properties['name'] = section['name'].asString
@@ -780,7 +775,7 @@ def __readBonus_optional(config, bonusReaders, bonus, section, eventType):
     if probability is None:
         raise SoftException("Missing probability attribute in 'optional'")
     properties = subBonus.get('properties', {})
-    for property in ('compensation', 'shouldCompensated', 'priority'):
+    for property in ('compensation', 'shouldCompensated'):
         if properties.get(property, None) is not None:
             raise SoftException("Property '{}' not allowed for standalone 'optional'".format(property))
 
@@ -826,6 +821,22 @@ def __readBonus_oneof(config, bonusReaders, bonus, section, eventType):
         raise SoftException('Sum of probabilities != 100', maximumProbability)
     bonus.setdefault('groups', []).append({'oneof': (resultLimitIDs if resultLimitIDs else None, oneOfTemp)})
     return resultLimitIDs
+
+
+def __readBonus_dogTag(bonus, _name, section, eventType):
+    componentId = section['id'].asInt
+    data = {'id': componentId}
+    value = section.readFloat('value', None)
+    grade = section.readInt('grade', None)
+    unlock = section.readBool('unlock', None)
+    if value is not None:
+        data['value'] = value
+    if grade is not None:
+        data['grade'] = grade
+    if unlock is not None:
+        data['unlock'] = unlock
+    bonus.setdefault('dogTagComponents', []).append(data)
+    return
 
 
 def __readBonus_group(config, bonusReaders, bonus, section, eventType):
@@ -875,6 +886,7 @@ __BONUS_READERS = {'meta': __readMetaSection,
  'entitlement': __readBonus_entitlement,
  'rankedDailyBattles': __readBonus_int,
  'rankedBonusBattles': __readBonus_int,
+ 'dogTagComponent': __readBonus_dogTag,
  'vehicleChoice': __readBonus_vehicleChoice,
  'blueprint': __readBonus_blueprint,
  'blueprintAny': __readBonus_blueprintAny}
@@ -887,8 +899,7 @@ _RESERVED_NAMES = frozenset(['config',
  'probability',
  'compensation',
  'name',
- 'shouldCompensated',
- 'priority'])
+ 'shouldCompensated'])
 SUPPORTED_BONUSES = frozenset(__BONUS_READERS.iterkeys())
 
 def __readBonusLimit(section):
@@ -925,10 +936,6 @@ def __readBonusConfig(section):
         if name == 'needsBonusExpansion':
             config.setdefault('needsBonusExpansion', False)
             config['needsBonusExpansion'] = data.asBool
-        if name == 'showBonusInfo':
-            config['showBonusInfo'] = data.asBool
-        if name == 'showProbabilitiesInfo':
-            config['showProbabilitiesInfo'] = data.asBool
         raise SoftException('Unknown config section: {}'.format(name))
 
     return config

@@ -372,15 +372,6 @@ class BattleSessionProvider(IBattleSessionProvider):
             ctrl.handleContexChatCommand(key)
             return
 
-    def updateScenarioTimer(self, waitTime, alarmTime, visible):
-        ctrl = self.__sharedRepo.vehicleState
-        if ctrl is not None:
-            ctrl.updateScenarioTimer(waitTime, alarmTime, visible)
-        return
-
-    def sendPlayerBattleLogNotification(self, messageKey, messageParams):
-        self.shared.messages.showPlayerMessageByKey(messageKey, messageParams)
-
     def __pe_onBattleResultsReceived(self, isActiveVehicle, _):
         if isActiveVehicle and not BattleReplay.g_replayCtrl.isPlaying:
             arenaUniqueID = self.__arenaVisitor.getArenaUniqueID()

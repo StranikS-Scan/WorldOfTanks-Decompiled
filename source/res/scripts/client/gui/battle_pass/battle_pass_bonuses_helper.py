@@ -315,7 +315,7 @@ class DeviceTokensContainer(object):
         settingsCore = dependency.instance(ISettingsCore)
         freeAvailableTokens = self.getFreeAvailableTokens()
         paidAvailableTokens = self.getPaidAvailableTokens()
-        savedUsedTokens = settingsCore.serverSettings.getBPStorage().get(getStorageKey(self.__bonusName))
+        savedUsedTokens = settingsCore.serverSettings.getBPStorage().get(_getStorageKey(self.__bonusName))
         usedToken = 0
         for offset, isTokenAvailable in enumerate(freeAvailableTokens + paidAvailableTokens):
             if not isTokenAvailable:
@@ -327,11 +327,11 @@ class DeviceTokensContainer(object):
                     return
                 break
 
-        settingsCore.serverSettings.saveInBPStorage({getStorageKey(self.__bonusName): savedUsedTokens | usedToken})
+        settingsCore.serverSettings.saveInBPStorage({_getStorageKey(self.__bonusName): savedUsedTokens | usedToken})
 
     def isTokenUsed(self, level, awardType):
         settingsCore = dependency.instance(ISettingsCore)
-        savedUsedTokens = settingsCore.serverSettings.getBPStorage().get(getStorageKey(self.__bonusName))
+        savedUsedTokens = settingsCore.serverSettings.getBPStorage().get(_getStorageKey(self.__bonusName))
         if awardType == BattlePassConsts.REWARD_PAID and level in self.__paidTokenPositions:
             offset = self.__paidTokenPositions.index(level) + len(self.__freeTokenPositions)
             return savedUsedTokens & 1 << offset > 0
@@ -345,7 +345,7 @@ class DeviceTokensContainer(object):
         settingsCore = dependency.instance(ISettingsCore)
         freeAvailableTokens = self.getFreeAvailableTokens()
         paidAvailableTokens = self.getPaidAvailableTokens()
-        savedUsedTokens = settingsCore.serverSettings.getBPStorage().get(getStorageKey(self.__bonusName))
+        savedUsedTokens = settingsCore.serverSettings.getBPStorage().get(_getStorageKey(self.__bonusName))
         count = 0
         for offset, isTokenAvailable in enumerate(freeAvailableTokens + paidAvailableTokens):
             if not isTokenAvailable:
@@ -356,24 +356,6 @@ class DeviceTokensContainer(object):
 
         return count
 
-    def getUsedTokens(self, unusedTokensCount):
-        freeAvailableTokens = self.getFreeAvailableTokens()
-        paidAvailableTokens = self.getPaidAvailableTokens()
-        allTokens = freeAvailableTokens + paidAvailableTokens
-        savedUsedTokens = 0
-        allAvailableTokensCount = allTokens.count(True)
-        usedTokensCount = max(allAvailableTokensCount - unusedTokensCount, 0)
-        for offset, isTokenAvailable in enumerate(freeAvailableTokens + paidAvailableTokens):
-            if usedTokensCount == 0:
-                break
-            if not isTokenAvailable:
-                continue
-            usedTokensCount -= 1
-            usedToken = 1 << offset
-            savedUsedTokens |= usedToken
-
-        return savedUsedTokens
-
     def clear(self):
         self.__freeTokenPositions = []
         self.__paidTokenPositions = []
@@ -382,7 +364,7 @@ class DeviceTokensContainer(object):
         return self.__battlePassController.getMaxLevel() if not self.__battlePassController.getState() == BattlePassState.BASE else self.__battlePassController.getCurrentLevel()
 
 
-def getStorageKey(bonusName):
+def _getStorageKey(bonusName):
     if bonusName == TROPHY_GIFT_TOKEN_BONUS_NAME:
         return BattlePassStorageKeys.CHOSEN_TROPHY_DEVICES
     return BattlePassStorageKeys.CHOSEN_NEW_DEVICES if bonusName == NEW_DEVICE_GIFT_TOKEN_BONUS_NAME else ''

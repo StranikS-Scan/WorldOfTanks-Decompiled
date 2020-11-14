@@ -33,7 +33,6 @@ from adisp import process
 from bootcamp.Bootcamp import g_bootcamp
 from constants import ARENA_BONUS_TYPE, QUEUE_TYPE, EVENT_CLIENT_DATA
 from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_TYPE
-from constants import HE19EnergyPurposes
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG_DEV, LOG_WARNING
 from gui.Scaleform.Waiting import Waiting
 from gui.shared.ClanCache import g_clanCache
@@ -41,7 +40,6 @@ from gui.wgnc import g_wgncProvider
 from helpers import dependency
 from helpers import uniprof
 from messenger import MessengerEntry
-from messenger.proto.events import g_messengerEvents
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
@@ -503,7 +501,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def objectsSelectionEnabled(self, enabled):
         if not enabled and self.__selectedEntity is not None:
             self.targetBlur(self.__selectedEntity)
-        self.hangarSpace.onObjectsSelectionEnabled(enabled)
         self.__objectsSelectionEnabled = enabled
         return
 
@@ -854,9 +851,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_UNIT_ASSEMBLER, 0, 0, 0)
 
-    def enqueueEventBattles(self, vehInvIDs, difficultyLevel):
+    def enqueueEventBattles(self, vehInvIDs):
         if not events.isPlayerEntityChanging:
-            arr = [len(vehInvIDs)] + vehInvIDs + [difficultyLevel]
+            arr = [len(vehInvIDs)] + vehInvIDs
             self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_EVENT_BATTLES, arr)
 
     def dequeueEventBattles(self):
@@ -1096,102 +1093,14 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self._doCmdIntStrArr(AccountCommands.CMD_CHOOSE_QUEST_REWARD, eventType, strArr, proxy)
         return
 
-    def rentHalloweenVehicle(self, vehTypeCompDescr, callback=None):
-        if callback is not None:
-            proxy = lambda requestID, resultID, errorCode, ext={}: callback(resultID, errorCode)
-        else:
-            proxy = None
-        self._doCmdIntArr(AccountCommands.CMD_RENT_HALLOWEEN_TANKS, [vehTypeCompDescr], proxy)
-        return
-
-    def buyHalloweenStyle(self, vehTypeCompDescr, callback=None):
-        if callback is not None:
-            proxy = lambda requestID, resultID, errorCode, ext={}: callback(resultID, errorCode)
-        else:
-            proxy = None
-        self._doCmdInt(AccountCommands.CMD_BUY_HALLOWEEN_STYLE, vehTypeCompDescr, proxy)
-        return
-
-    def buyHalloweenStyleBundle(self, callback=None):
-        if callback is not None:
-            proxy = lambda requestID, resultID, errorCode, ext={}: callback(resultID, errorCode)
-        else:
-            proxy = None
-        self._doCmdIntArr(AccountCommands.CMD_BUY_HALLOWEEN_STYLE_BUNDLE, [], proxy)
-        return
-
-    def buyHalloweenEnergy(self, vehTypeCompDescr, callback=None, purpose=''):
+    def changeEventEnqueueData(self, data, callback=None):
         if callback is not None:
             proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
         else:
             proxy = None
-        index = HE19EnergyPurposes[purpose].value
-        self._doCmdInt2(AccountCommands.CMD_BUY_HALLOWEEN_ENERGY, vehTypeCompDescr, index, proxy)
-        return
-
-    def exchangeToCommanderHealing(self, vehTypeCompDescr, callback=None):
-        if callback is not None:
-            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
-        else:
-            proxy = None
-        self._doCmdInt(AccountCommands.CMD_EXCHANGE_TO_HEALING, vehTypeCompDescr, proxy)
-        return
-
-    def exchangeToCommanderBooster(self, vehTypeCompDescr, callback=None):
-        if callback is not None:
-            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
-        else:
-            proxy = None
-        self._doCmdInt(AccountCommands.CMD_EXCHANGE_TO_BOOSTER, vehTypeCompDescr, proxy)
-        return
-
-    def buyHalloweenShopItem(self, count, itemID, callback=None):
-        if callback is not None:
-            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
-        else:
-            proxy = None
-        self._doCmdIntStr(AccountCommands.CMD_BUY_HALLOWEEN_SHOP_ITEM, count, itemID, proxy)
-        return
-
-    def unlockHalloweenVehicles(self, callback=None):
-        if callback is not None:
-            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
-        else:
-            proxy = None
-        self._doCmdIntArr(AccountCommands.CMD_UNLOCK_HALLOWEEN_TANKS, [], proxy)
-        return
-
-    def addDifficultyEventPoints(self, eventPoints, callback=None):
-        if callback is not None:
-            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
-        else:
-            proxy = None
-        self._doCmdInt(AccountCommands.CMD_ADD_DIFFICULTY_EVENT_POINTS, eventPoints, proxy)
-        return
-
-    def changeSelectedDifficultyLevel(self, difficultyLevel, force=False, callback=None):
-        if callback is not None:
-            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
-        else:
-            proxy = None
-        args = [difficultyLevel, int(force)]
-        self._doCmdIntArr(AccountCommands.CMD_CHANGE_SELECTED_DIFFICULTY_LEVEL, args, proxy)
-        return
-
-    def addHW19AFKPenalty(self, penaltyType):
-        self._doCmdStr(AccountCommands.CMD_HW19_AFK_ADD_PENALTY, penaltyType, None)
-        return
-
-    def drawHW19AFKPenalty(self, penaltyType):
-        self._doCmdStr(AccountCommands.CMD_HW19_AFK_DRAW_PENALTY, penaltyType, None)
-        return
-
-    def buyBestDealBandle(self, packID, callback=None):
-        if callback is not None:
-            proxy = lambda requestID, resultID, errorCode, ext={}: callback(resultID, errorCode)
-        else:
-            proxy = None
-        self._doCmdIntArr(AccountCommands.CMD_BUY_BESTDEAL_BUNDLE, [packID], proxy)
+        strArr = [ key.encode('utf8') for key in data.iterkeys() ]
+        intArr = data.values()
+        self._doCmdIntArrStrArr(AccountCommands.CMD_CHANGE_EVENT_ENQUEUE_DATA, intArr, strArr, proxy)
         return
 
     def logClientSystem(self, stats):
@@ -1241,9 +1150,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def requestSingleToken(self, tokenName, callback=None):
         self._doCmdStr(AccountCommands.CMD_GET_SINGLE_TOKEN, tokenName, callback)
-
-    def broadcastAFKWarning(self):
-        g_messengerEvents.onAFKWarningReceived()
 
     def messenger_onActionByServer_chat2(self, actionID, reqID, args):
         from messenger_common_chat2 import MESSENGER_ACTION_IDS as actions

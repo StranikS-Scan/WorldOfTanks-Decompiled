@@ -164,9 +164,12 @@ def getParameterBigIconPath(parameter):
     return RES_ICONS.MAPS_ICONS_VEHPARAMS_BIG + '/%s.png' % parameter
 
 
-def formatModuleParamName(paramName):
+def formatModuleParamName(paramName, vDescr=None):
     builder = text_styles.builder(delimiter=_NBSP)
-    builder.addStyledText(text_styles.main, MENU.moduleinfo_params(paramName))
+    hasBoost = vDescr and vDescr.gun.autoreloadHasBoost
+    resource = R.strings.menu.moduleInfo.params.dyn(paramName)
+    paramMsgId = backport.msgid(resource.dyn('boost')() if hasBoost and resource.dyn('boost') else resource())
+    builder.addStyledText(text_styles.main, paramMsgId)
     builder.addStyledText(text_styles.standard, MEASURE_UNITS.get(paramName, ''))
     return builder.render()
 
@@ -180,7 +183,9 @@ def formatNameColonValue(nameStr, valueStr):
 
 def formatParamNameColonValueUnits(paramName, paramValue):
     builder = text_styles.builder(delimiter=_NBSP)
-    builder.addStyledText(text_styles.main, '{}{}'.format(makeString(MENU.moduleinfo_params(paramName)), _COLON))
+    resource = R.strings.menu.moduleInfo.params
+    paramMsgId = backport.msgid(resource.dyn(paramName)()) if resource.dyn(paramName) else None
+    builder.addStyledText(text_styles.main, '{}{}'.format(makeString(paramMsgId), _COLON))
     builder.addStyledText(text_styles.expText, paramValue)
     builder.addStyledText(text_styles.standard, MEASURE_UNITS_NO_BRACKETS.get(paramName, ''))
     return builder.render()
@@ -464,6 +469,8 @@ def getFormattedParamsList(descriptor, parameters, excludeRelative=False):
         if paramValue:
             fmtValue = formatParameter(paramName, paramValue)
             if fmtValue:
+                if paramName == 'autoReloadTime' and descriptor.gun.autoreloadHasBoost:
+                    paramName = 'autoReloadTimeBoost'
                 params.append((paramName, fmtValue))
 
     return params

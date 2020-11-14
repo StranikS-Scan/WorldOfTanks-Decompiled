@@ -3,7 +3,6 @@
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.bootcamp.component_override import BootcampComponentOverride
-from gui.Scaleform.daapi.view.lobby.hangar.event.event_coins_counter import EventCoinsCounter
 from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ScopeTemplates, ConditionalViewSettings, ComponentSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
@@ -25,9 +24,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.CrewAboutDogWindow import CrewAboutDogWindow
     from gui.Scaleform.daapi.view.lobby.hangar.Hangar import Hangar
     from gui.Scaleform.daapi.view.lobby.hangar.ResearchPanel import ResearchPanel
-    from gui.Scaleform.daapi.view.lobby.hangar.event.event_crew_healing import FakeCrewHealing
-    from gui.Scaleform.daapi.view.lobby.hangar.event.event_crew_booster import FakeCrewBooster
-    from gui.Scaleform.daapi.view.lobby.hangar.event.event_tank_rent import EventTankRent
     from gui.Scaleform.daapi.view.lobby.hangar.SwitchModePanel import SwitchModePanel
     from gui.Scaleform.daapi.view.lobby.hangar.TmenXpPanel import TmenXpPanel
     from gui.Scaleform.daapi.view.lobby.hangar.VehicleParameters import VehicleParameters
@@ -37,7 +33,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.carousels import EpicBattleTankCarousel
     from gui.Scaleform.daapi.view.lobby.hangar.carousels import BattlePassTankCarousel
     from gui.Scaleform.daapi.view.lobby.hangar.carousels import RoyaleTankCarousel
-    from gui.Scaleform.daapi.view.lobby.hangar.carousels import EventTankCarousel
     from gui.Scaleform.daapi.view.lobby.hangar.StrongholdView import StrongholdView
     from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import BrowserView
     from gui.Scaleform.daapi.view.lobby.hangar.hangar_header import HangarHeader
@@ -56,38 +51,14 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.daily_quest_widget import DailyQuestWidget
     from gui.Scaleform.daapi.view.lobby.hangar.progressive_reward_widget import ProgressiveRewardWidget
     from gui.Scaleform.daapi.view.lobby.hangar.ammunition_panel_inject import AmmunitionPanelInject
-    from gui.Scaleform.daapi.view.lobby.hangar.event.event_header import EventHeader
-    from gui.Scaleform.daapi.view.lobby.hangar.event.event_quests_progress_view import EventQuestsProgressView
-    from gui.Scaleform.daapi.view.lobby.hangar.event.event_shop import EventShopTab
-    from gui.Scaleform.daapi.view.lobby.hangar.event.event_simple_item_confirmation import EventSimpleItemTab
-    from gui.Scaleform.daapi.view.lobby.hangar.event.event_simple_item_congratulation import EventSimpleItemCongratulationTab
-    from gui.Scaleform.daapi.view.lobby.hangar.event.event_about import EventAboutTab
-    from gui.Scaleform.daapi.view.lobby.hangar.event.event_notes import EventNotesTab
-    from gui.Scaleform.daapi.view.lobby.hangar.event.event_quests_panel import EventQuestsPanelView
-    from gui.Scaleform.daapi.view.lobby.hangar.event.event_difficulty_view import EventDifficultyView
-    from gui.Scaleform.daapi.view.lobby.hangar.event.event_ban_info import BanInfo
-    from gui.Scaleform.daapi.view.lobby.hangar.event.event_items_for_tokens_adaptor import EventItemsForTokensAdaptor
     from gui.impl.lobby.battle_pass.battle_pass_entry_point_view import BattlePassEntryPointComponent
-    from gui.Scaleform.daapi.view.lobby.hangar.event.event_pack_confirmation import EventPlayerPackConfirmation
-    from gui.Scaleform.daapi.view.lobby.hangar.event.event_pack_confirmation import EventItemPackConfirmation
     from gui.Scaleform.daapi.view.lobby.hangar.event_entry_points_container import EventEntryPointsContainer
-    from gui.impl.lobby.halloween.he20_entry_point import HE20EntryPoint
-    from gui.Scaleform.daapi.view.lobby.hangar.china_loot_boxes_widget import ChinaLootBoxesWidget
+    from gui.Scaleform.daapi.view.lobby.hangar.craftmachine_entry_point import CraftMachineEntryPoint
     return (ConditionalViewSettings(VIEW_ALIAS.LOBBY_HANGAR, BootcampComponentOverride(Hangar, BCHangar), 'hangar.swf', WindowLayer.SUB_VIEW, None, VIEW_ALIAS.LOBBY_HANGAR, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_STRONGHOLD, StrongholdView, 'StrongholdView.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.LOBBY_STRONGHOLD, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.BROWSER_VIEW, BrowserView, 'browserScreen.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True),
      ViewSettings(VIEW_ALIAS.WIKI_VIEW, ManualMainView, 'manual.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.WIKI_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.MANUAL_CHAPTER_VIEW, ManualChapterView, 'manualChapterView.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.MANUAL_CHAPTER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True),
-     ViewSettings(VIEW_ALIAS.EVENT_QUESTS, EventQuestsProgressView, 'eventQuestsView.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.EVENT_QUESTS, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(VIEW_ALIAS.EVENT_SHOP, EventShopTab, 'eventShopTab.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.EVENT_SHOP, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(VIEW_ALIAS.EVENT_ABOUT, EventAboutTab, 'eventBrowserScreen.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.EVENT_ABOUT, ScopeTemplates.LOBBY_SUB_SCOPE, True),
-     ViewSettings(VIEW_ALIAS.EVENT_NOTES, EventNotesTab, 'eventBrowserScreen.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.EVENT_NOTES, ScopeTemplates.LOBBY_SUB_SCOPE, True),
-     ViewSettings(VIEW_ALIAS.EVENT_SIMPLE_ITEM_CONFIRMATION, EventSimpleItemTab, 'eventItemsTradePage.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.EVENT_SIMPLE_ITEM_CONFIRMATION, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(VIEW_ALIAS.EVENT_SIMPLE_ITEM_CONGRATULATION, EventSimpleItemCongratulationTab, 'eventItemsTradeCongratulationPage.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.EVENT_SIMPLE_ITEM_CONGRATULATION, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(VIEW_ALIAS.EVENT_PLAYER_PACK_CONFIRMATION, EventPlayerPackConfirmation, 'eventPlayerPackTradePage.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.EVENT_PLAYER_PACK_CONFIRMATION, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(VIEW_ALIAS.EVENT_ITEM_PACK_CONFIRMATION, EventItemPackConfirmation, 'eventItemPackTradePage.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.EVENT_ITEM_PACK_CONFIRMATION, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(VIEW_ALIAS.EVENT_DIFFICULTY, EventDifficultyView, 'eventDifficultyView.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.EVENT_DIFFICULTY, ScopeTemplates.LOBBY_SUB_SCOPE, True),
-     ViewSettings(VIEW_ALIAS.EVENT_ITEMS_FOR_TOKENS, EventItemsForTokensAdaptor, 'eventItemsForTokens.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.EVENT_ITEMS_FOR_TOKENS, ScopeTemplates.LOBBY_SUB_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.CREW_ABOUT_DOG_WINDOW, CrewAboutDogWindow, 'simpleWindow.swf', WindowLayer.WINDOW, 'aboutDogWindow', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.TANK_CAROUSEL_FILTER_POPOVER, TankCarouselFilterPopover, 'filtersPopoverView.swf', WindowLayer.WINDOW, VIEW_ALIAS.TANK_CAROUSEL_FILTER_POPOVER, VIEW_ALIAS.TANK_CAROUSEL_FILTER_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.BATTLEPASS_CAROUSEL_FILTER_POPOVER, BattlePassCarouselFilterPopover, 'filtersPopoverView.swf', WindowLayer.WINDOW, VIEW_ALIAS.BATTLEPASS_CAROUSEL_FILTER_POPOVER, VIEW_ALIAS.BATTLEPASS_CAROUSEL_FILTER_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
@@ -101,7 +72,6 @@ def getViewSettings():
      ComponentSettings(HANGAR_ALIASES.RANKED_TANK_CAROUSEL, RankedTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.EPICBATTLE_TANK_CAROUSEL, EpicBattleTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.ROYALE_TANK_CAROUSEL, RoyaleTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(HANGAR_ALIASES.EVENT_TANK_CAROUSEL, EventTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.TMEN_XP_PANEL, TmenXpPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.VEHICLE_PARAMETERS, VehicleParameters, ScopeTemplates.DEFAULT_SCOPE),
      ConditionalViewSettings(HANGAR_ALIASES.CREW, BootcampComponentOverride(Crew, BCCrew), None, WindowLayer.UNDEFINED, None, None, ScopeTemplates.DEFAULT_SCOPE),
@@ -115,15 +85,7 @@ def getViewSettings():
      ComponentSettings(HANGAR_ALIASES.BATTLE_PASSS_ENTRY_POINT, BattlePassEntryPointComponent, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.AMMUNITION_PANEL_INJECT, AmmunitionPanelInject, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.ENTRIES_CONTAINER, EventEntryPointsContainer, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(HANGAR_ALIASES.EVENT_CREW_HEALING_COMPONENT, FakeCrewHealing, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(HANGAR_ALIASES.EVENT_CREW_BOOSTER_COMPONENT, FakeCrewBooster, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(HANGAR_ALIASES.EVENT_TANK_RENT_COMPONENT, EventTankRent, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(VIEW_ALIAS.EVENT_HEADER, EventHeader, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(HANGAR_ALIASES.EVENT_QUESTS_COMPONENT, EventQuestsPanelView, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(HANGAR_ALIASES.EVENT_BAN_INFO_COMPONENT, BanInfo, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(HANGAR_ALIASES.HE20_EVENT_ENTRY_POINT, HE20EntryPoint, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(HANGAR_ALIASES.EVENT_COINS_COMPONENT, EventCoinsCounter, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(HANGAR_ALIASES.CHINA_LOOTBOXES_WIDGET, ChinaLootBoxesWidget, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(HANGAR_ALIASES.CRAFT_MACHINE_ENTRY_POINT, CraftMachineEntryPoint, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():
@@ -143,14 +105,5 @@ class HangarPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.FITTING_SELECT_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLES_FILTER_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.WIKI_VIEW, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.MANUAL_CHAPTER_VIEW, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.EVENT_QUESTS, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.EVENT_SHOP, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.EVENT_ABOUT, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.EVENT_NOTES, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.EVENT_DIFFICULTY, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.EVENT_SIMPLE_ITEM_CONFIRMATION, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.EVENT_SIMPLE_ITEM_CONGRATULATION, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.EVENT_PLAYER_PACK_CONFIRMATION, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.EVENT_ITEM_PACK_CONFIRMATION, self.loadViewByCtxEvent))
+         (VIEW_ALIAS.MANUAL_CHAPTER_VIEW, self.loadViewByCtxEvent))
         super(HangarPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)

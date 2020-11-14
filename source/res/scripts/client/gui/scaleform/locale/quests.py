@@ -731,8 +731,6 @@ class QUESTS(object):
     DETAILS_CONDITIONS_CUMULATIVE_AGGREGATED = '#quests:details/conditions/cumulative/aggregated'
     DETAILS_CONDITIONS_CUMULATIVE_RANKCHANGE = '#quests:details/conditions/cumulative/rankChange'
     DETAILS_CONDITIONS_CUMULATIVE_XP_OTHER = '#quests:details/conditions/cumulative/xp/other'
-    DETAILS_CONDITIONS_CUMULATIVE_EVENTPOINTS = '#quests:details/conditions/cumulative/eventPoints'
-    DETAILS_CONDITIONS_CUMULATIVE_ENVIRONMENTID = '#quests:details/conditions/cumulative/environmentID'
     DETAILS_DOSSIER_SNIPERSERIES = '#quests:details/dossier/sniperSeries'
     DETAILS_DOSSIER_MAXSNIPERSERIES = '#quests:details/dossier/maxSniperSeries'
     DETAILS_DOSSIER_INVINCIBLESERIES = '#quests:details/dossier/invincibleSeries'
@@ -1017,14 +1015,10 @@ class QUESTS(object):
     MISSIONS_AWARDS_MERGED = '#quests:missions/awards/merged'
     MISSIONS_TAB_LABEL_KURSK = '#quests:missions/tab/label/kursk'
     MISSIONS_TAB_LABEL_MARATHONS = '#quests:missions/tab/label/marathons'
-    MISSIONS_TAB_LABEL_EVENT_MARATHON = '#quests:missions/tab/label/event_marathon'
     MISSIONS_TAB_KURSK_HEADER = '#quests:missions/tab/kursk/header'
     MISSIONS_TAB_KURSK_BODY = '#quests:missions/tab/kursk/body'
     MISSIONS_TAB_MARATHONS_HEADER = '#quests:missions/tab/marathons/header'
     MISSIONS_TAB_MARATHONS_BODY = '#quests:missions/tab/marathons/body'
-    MISSIONS_TAB_EVENT_MARATHON = '#quests:missions/tab/event_marathon'
-    MISSIONS_TAB_EVENT_MARATHON_HEADER = '#quests:missions/tab/event_marathon/header'
-    MISSIONS_TAB_EVENT_MARATHON_BODY = '#quests:missions/tab/event_marathon/body'
     MISSIONS_TAB_MISSIONS_HEADER = '#quests:missions/tab/missions/header'
     MISSIONS_TAB_MISSIONS_BODY = '#quests:missions/tab/missions/body'
     MISSIONS_TAB_LABEL_MISSIONS = '#quests:missions/tab/label/missions'
@@ -1081,9 +1075,6 @@ class QUESTS(object):
     MISSIONDETAILS_VEHICLE_CONDITIONS_LEVEL_ALL = '#quests:missionDetails/vehicle/conditions/level/all'
     MISSIONDETAILS_STATUS_COMPLETED_DAILY = '#quests:missionDetails/status/completed/daily'
     MISSIONDETAILS_STATUS_COMPLETED_WEEKLY = '#quests:missionDetails/status/completed/weekly'
-    MISSIONDETAILS_STATUS_COMPLETED_EVENT = '#quests:missionDetails/status/completed/event'
-    MISSIONDETAILS_STATUS_COMPLETE = '#quests:missionDetails/status/complete'
-    MISSIONDETAILS_STATUS_INPROGRESS = '#quests:missionDetails/status/inProgress'
     MISSIONDETAILS_STATUS_NOTAVAILABLE = '#quests:missionDetails/status/notAvailable'
     MISSIONDETAILS_STATUS_WRONGVEHICLE = '#quests:missionDetails/status/wrongVehicle'
     MISSIONDETAILS_STATUS_DISABLED = '#quests:missionDetails/status/disabled'
@@ -1129,7 +1120,6 @@ class QUESTS(object):
     MISSIONDETAILS_REQUIREMENTS_HEADER_AVAILABLE = '#quests:missionDetails/requirements/header/available'
     MISSIONDETAILS_REQUIREMENTS_CONCLUSION_AVAILABLE = '#quests:missionDetails/requirements/conclusion/available'
     MISSIONDETAILS_REQUIREMENTS_CONCLUSION_UNAVAILABLE = '#quests:missionDetails/requirements/conclusion/unavailable'
-    MISSIONDETAILS_REQUIREMENTS_CONCLUSION_PREVIOUSINCOMPLETE = '#quests:missionDetails/requirements/conclusion/previousIncomplete'
     MISSIONDETAILS_VEHICLESSELECT = '#quests:missionDetails/vehiclesSelect'
     MISSIONDETAILS_VEHICLESAVAILABLE = '#quests:missionDetails/vehiclesAvailable'
     MISSIONDETAILS_BOTTOMSTATUSCOMPLETE = '#quests:missionDetails/bottomStatusComplete'
@@ -1181,16 +1171,6 @@ class QUESTS(object):
     TOKEN_DEFAULT_WHEEL = '#quests:token/default/wheel'
     TOKEN_DEFAULT_BOX = '#quests:token/default/box'
     TOKEN_DEFAULT_TANKREWARDS = '#quests:token/default/tankrewards'
-    TOKEN_DEFAULT_HE19_MONEY = '#quests:token/default/he19_money'
-    TOKEN_DEFAULT_HE19_R40_T_54_HALLOWEEN = '#quests:token/default/he19_R40_T_54_Halloween'
-    TOKEN_DEFAULT_HE19_A100_T49_HALLOWEEN = '#quests:token/default/he19_A100_T49_Halloween'
-    TOKEN_DEFAULT_HE19_TANKSRANK1 = '#quests:token/default/he19_tanksRank1'
-    TOKEN_DEFAULT_HE19_TANKSRANK2 = '#quests:token/default/he19_tanksRank2'
-    TOKEN_DEFAULT_HE19_TANKSRANK3 = '#quests:token/default/he19_tanksRank3'
-    TOKEN_DEFAULT_HE19_ENERGY_FOR_USE_HEALING = '#quests:token/default/he19_energy_for_use_healing'
-    TOKEN_DEFAULT_HE19_ENERGY_FOR_USE_BOOSTER = '#quests:token/default/he19_energy_for_use_booster'
-    TOKEN_DEFAULT_HE20_AFK_PARDON_ORDER = '#quests:token/default/he20_afk_pardon_order'
-    TOKEN_DEFAULT_HE20_RECRUIT = '#quests:token/default/he20_recruit'
     BONUSNAME_CREDITS = '#quests:bonusName/credits'
     BONUSNAME_GOLD = '#quests:bonusName/gold'
     BONUSNAME_CRYSTAL = '#quests:bonusName/crystal'
@@ -1717,17 +1697,7 @@ class QUESTS(object):
      TOKEN_DEFAULT_LEAFLET,
      TOKEN_DEFAULT_WHEEL,
      TOKEN_DEFAULT_BOX,
-     TOKEN_DEFAULT_TANKREWARDS,
-     TOKEN_DEFAULT_HE19_MONEY,
-     TOKEN_DEFAULT_HE19_R40_T_54_HALLOWEEN,
-     TOKEN_DEFAULT_HE19_A100_T49_HALLOWEEN,
-     TOKEN_DEFAULT_HE19_TANKSRANK1,
-     TOKEN_DEFAULT_HE19_TANKSRANK2,
-     TOKEN_DEFAULT_HE19_TANKSRANK3,
-     TOKEN_DEFAULT_HE19_ENERGY_FOR_USE_HEALING,
-     TOKEN_DEFAULT_HE19_ENERGY_FOR_USE_BOOSTER,
-     TOKEN_DEFAULT_HE20_AFK_PARDON_ORDER,
-     TOKEN_DEFAULT_HE20_RECRUIT)
+     TOKEN_DEFAULT_TANKREWARDS)
     BONUSNAME_ENUM = (BONUSNAME_BLUEPRINTS_ANY,
      BONUSNAME_BLUEPRINTS_VEHICLE,
      BONUSNAME_BLUEPRINTS_VEHICLE_ANY,

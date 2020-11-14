@@ -32,7 +32,8 @@ class SiegeModeControl(InputHandlerCommand):
             return True
 
     def notifySiegeModeChanged(self, vehicle, newState, timeToNextMode):
-        if not vehicle.isPlayerVehicle:
+        avatar = BigWorld.player()
+        if not (vehicle.isPlayerVehicle or vehicle.id == avatar.observedVehicleID):
             return
         LOG_DEBUG('SiegeMode: new state received: {}'.format((newState, timeToNextMode)))
         self.onSiegeStateChanged(newState, timeToNextMode)

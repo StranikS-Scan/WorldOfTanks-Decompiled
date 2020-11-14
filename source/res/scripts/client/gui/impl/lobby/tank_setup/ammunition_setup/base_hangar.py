@@ -101,7 +101,6 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
     def _onLoading(self, **kwargs):
         super(BaseHangarAmmunitionSetupView, self)._onLoading(**kwargs)
         fillVehicleInfo(self.viewModel.vehicleInfo, self._vehItem.getItem())
-        self.viewModel.setIsEvent(self._vehItem.getItem().isOnlyForEventBattles)
 
     def _initialize(self, *args, **kwargs):
         super(BaseHangarAmmunitionSetupView, self)._initialize()
@@ -204,10 +203,14 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
 
     def __closeWindow(self):
         if not self.__isClosed:
+            if self.__blur is not None:
+                self.__blur.fini()
+                self.__blur = None
             self.__isClosed = True
             self.onClose()
             self.viewModel.setShow(False)
             playExitTankSetupView()
+        return
 
     @async
     def __closeConfirmator(self):

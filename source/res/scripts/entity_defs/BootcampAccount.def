@@ -32,7 +32,9 @@
     <setParent>
       <Arg>	MAILBOX	</Arg>
     </setParent>
-    <resetBootcamp></resetBootcamp>
+    <resetBootcamp>
+      <ReturnValues></ReturnValues>
+    </resetBootcamp>
     <setToken>
       <Arg>	INT64	</Arg>
       <Arg>	INT32	</Arg>

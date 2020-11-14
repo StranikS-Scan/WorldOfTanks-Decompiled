@@ -50,3 +50,4 @@ class CREW_OPERATIONS(object):
     CREWBOOKS_TUTORIAL_READBOOK = '#crew_operations:crewBooks/tutorial/readBook'
     CREWBOOKS_WARNING_MEMBERSINBATTLE_TOOLTIP_HEADER = '#crew_operations:crewBooks/warning/membersInBattle/tooltip/header'
     CREWBOOKS_WARNING_MEMBERSINBATTLE_TOOLTIP_BODY = '#crew_operations:crewBooks/warning/membersInBattle/tooltip/body'
+    CREWBOOKS_ERROR_LOCKED = '#crew_operations:crewBooks/error/locked'

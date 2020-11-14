@@ -9,7 +9,6 @@ MARKERS_COLOR_SCHEME_PREFIX = 'vm_'
 
 class MARKER_SYMBOL_NAME(object):
     VEHICLE_MARKER = 'VehicleMarker'
-    EVENT_VEHICLE_MARKER = 'EventVehicleMarker'
     TARGET_MARKER = 'TargetMarker'
     EQUIPMENT_MARKER = 'FortConsumablesMarker'
     LOCATION_MARKER = 'LocationMarkerUI'
@@ -22,7 +21,6 @@ class MARKER_SYMBOL_NAME(object):
     STEP_REPAIR_MARKER_TYPE = 'ResupplyMarkerUI'
     WAYPOINT_MARKER = 'SectorWaypointMarkerUI'
     SECTOR_WARNING_MARKER = 'SectorWarningMarkerUI'
-    EVENT_VOLOT_MARKER = 'EventVolotMarkerUI'
 
 
 class DAMAGE_TYPE(object):

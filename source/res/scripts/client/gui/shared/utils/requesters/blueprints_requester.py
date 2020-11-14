@@ -193,6 +193,9 @@ class BlueprintsRequester(AbstractSyncDataRequester, IBlueprintsRequester):
     def isBlueprintsAvailable(self):
         return self.__lobbyContext.getServerSettings().blueprintsConfig.isBlueprintsAvailable()
 
+    def hasBlueprintsOrFragments(self):
+        return bool(self.__vehicleFragments) or self.hasUniversalFragments()
+
     @async
     def _requestCache(self, callback):
         BigWorld.player().blueprints.getCache(lambda resID, value: self._response(resID, value, callback))

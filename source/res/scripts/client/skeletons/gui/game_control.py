@@ -19,7 +19,6 @@ if typing.TYPE_CHECKING:
     from skeletons.account_helpers.settings_core import ISettingsCache
     from gui.ranked_battles.ranked_models import BattleRankInfo
     from gui.server_events.bonuses import SimpleBonus
-    from gui.entitlements.entitlement_model import AgateEntitlement
 
 class IGameController(object):
 
@@ -1034,6 +1033,10 @@ class IEventProgressionController(IGameController):
         raise NotImplementedError
 
     @property
+    def rewardStyles(self):
+        raise NotImplementedError
+
+    @property
     def questCardLevelTxtId(self):
         raise NotImplementedError
 
@@ -1116,6 +1119,9 @@ class IEventProgressionController(IGameController):
         raise NotImplementedError
 
     def getRewardVehiclePrice(self, vehicleCD):
+        raise NotImplementedError
+
+    def getRewardStylePrice(self, styleID):
         raise NotImplementedError
 
     def getAllLevelAwards(self):
@@ -1336,9 +1342,6 @@ class IBattleRoyaleController(IGameController, ISeasonProvider):
         raise NotImplementedError
 
     def isBattleRoyaleMode(self):
-        raise NotImplementedError
-
-    def isEventMode(self):
         raise NotImplementedError
 
     def isInBattleRoyaleSquad(self):
@@ -1710,104 +1713,13 @@ class IReactiveCommunicationService(IGameController):
         raise NotImplementedError
 
 
-class IEventTokenController(IGameController):
-    onNotesUpdated = None
-    onShopItemUpdated = None
-    onEventMoneyUpdated = None
+class IUISpamController(IGameController):
 
-    def getNewNotesCount(self):
+    def checkRule(self, ruleId):
         raise NotImplementedError
 
-    def getReadNotes(self):
+    def shouldBeHidden(self, aliasId):
         raise NotImplementedError
 
-    def markNoteRead(self, note):
-        raise NotImplementedError
-
-
-class ITokensController(IGameController):
-
-    def addTokensListener(self, token, handler):
-        raise NotImplementedError
-
-    def removeTokensListener(self, token, handler):
-        raise NotImplementedError
-
-
-class ICNLootBoxesController(IGameController):
-    onStatusChange = None
-    onAvailabilityChange = None
-    onBoxesCountChange = None
-    onWelcomeScreenClosed = None
-
-    def isEnabled(self):
-        raise NotImplementedError
-
-    def isActive(self):
-        raise NotImplementedError
-
-    def isLootBoxesAvailable(self):
-        raise NotImplementedError
-
-    def isBuyAvailable(self):
-        raise NotImplementedError
-
-    def getDayLimit(self):
-        raise NotImplementedError
-
-    def getEventActiveTime(self):
-        raise NotImplementedError
-
-    def openShopPage(self):
-        raise NotImplementedError
-
-    def getDayInfoStatistics(self):
-        raise NotImplementedError
-
-    def getExpiresAtLootBoxBuyCounter(self):
-        raise NotImplementedError
-
-    def getTimeLeftToResetPurchase(self):
-        raise NotImplementedError
-
-    def getCommonBoxInfo(self):
-        raise NotImplementedError
-
-    def getPremiumBoxInfo(self):
-        raise NotImplementedError
-
-    def getStoreInfo(self):
-        raise NotImplementedError
-
-    def getBoxesIDs(self):
-        raise NotImplementedError
-
-    def getBoxesCount(self):
-        raise NotImplementedError
-
-    def getBoxesInfo(self):
-        raise NotImplementedError
-
-
-class IEntitlementsController(IGameController):
-
-    def updateCache(self, codes):
-        raise NotImplementedError
-
-    def forceUpdateCache(self, codes):
-        raise NotImplementedError
-
-    def getBalanceEntitlementFromCache(self, code):
-        raise NotImplementedError
-
-    def isCacheInited(self):
-        raise NotImplementedError
-
-    def getConsumedEntitlementFromCache(self, code):
-        raise NotImplementedError
-
-    def getGrantedEntitlementFromCache(self, code):
-        raise NotImplementedError
-
-    def isCodesWasFailedInLastRequest(self, codes):
+    def setVisited(self, aliasId):
         raise NotImplementedError

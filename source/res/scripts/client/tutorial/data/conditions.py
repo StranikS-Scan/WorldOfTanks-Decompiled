@@ -21,6 +21,7 @@ class CONDITION_TYPE(object):
     CONNECTED_ITEM = 14
     CONDITION_AND = 15
     CONDITION_OR = 16
+    CLASS_CONDITION = 17
     FIRST_CUSTOM = 100
     BASE_RANGE = (FLAG,
      GLOBAL_FLAG,
@@ -37,7 +38,8 @@ class CONDITION_TYPE(object):
      VIEW_PRESENT,
      CONNECTED_ITEM,
      CONDITION_AND,
-     CONDITION_OR)
+     CONDITION_OR,
+     CLASS_CONDITION)
 
 
 @functools.total_ordering
@@ -249,6 +251,20 @@ class ServiceCondition(ActiveCondition):
 
     def getServiceClass(self):
         return self.__serviceClass
+
+
+class ClassCondition(ActiveCondition):
+
+    def __init__(self, entityID, conditionClass, arguments, state=CONDITION_STATE.ACTIVE):
+        super(ClassCondition, self).__init__(entityID, CONDITION_TYPE.CLASS_CONDITION, state)
+        self.__conditionClass = conditionClass
+        self.__arguments = arguments
+
+    def getConditionClass(self):
+        return self.__conditionClass
+
+    def getArguments(self):
+        return self.__arguments
 
 
 class ConnectedItemCondition(Condition):

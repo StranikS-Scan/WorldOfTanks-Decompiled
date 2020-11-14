@@ -1,24 +1,27 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle_results_window.py
 import BigWorld
-from adisp import process
 import constants
+from adisp import process
 from constants import PremiumConfigs
 from gui import SystemMessages
 from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.battle_results.settings import PROGRESS_ACTION
+from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS
+from gui.Scaleform.daapi.view.meta.BattleResultsMeta import BattleResultsMeta
+from gui.Scaleform.framework.entities.View import ViewKey
 from gui.battle_results import RequestEmblemContext, EMBLEM_TYPE
+from gui.battle_results.settings import PROGRESS_ACTION
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.server_events import events_dispatcher as quests_events
-from gui.Scaleform.daapi.view.meta.BattleResultsMeta import BattleResultsMeta
-from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS
 from gui.shared import event_bus_handlers, events, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared import event_dispatcher
+from gui.shared.event_dispatcher import showProgressiveRewardWindow, showTankPremiumAboutPage
 from gui.shared.events import ViewEventType
 from gui.sounds.ambients import BattleResultsEnv
 from helpers import dependency
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.game_control import IGameSessionController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -32,6 +35,7 @@ class BattleResultsWindow(BattleResultsMeta):
     __battleResults = dependency.descriptor(IBattleResultsService)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __gameSession = dependency.descriptor(IGameSessionController)
+    __appLoader = dependency.descriptor(IAppLoader)
     __sound_env__ = BattleResultsEnv
     __metaclass__ = event_bus_handlers.EventBusListener
 
@@ -50,12 +54,20 @@ class BattleResultsWindow(BattleResultsMeta):
     def onWindowClose(self):
         self.destroy()
 
+    @process
     def showEventsWindow(self, eID, eventType):
         if self.__canNavigate():
             if eventType == constants.EVENT_TYPE.C11N_PROGRESSION:
+                app = self.__appLoader.getApp()
+                view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY_CUSTOMIZATION))
+                if view is None:
+                    lobbyHeaderNavigationPossible = yield self.__lobbyContext.isHeaderNavigationPossible()
+                    if not lobbyHeaderNavigationPossible:
+                        return
                 self.soundManager.playInstantSound(SOUNDS.SELECT)
             quests_events.showMission(eID, eventType)
             self.destroy()
+        return
 
     def saveSorting(self, iconType, sortDirection, bonusType):
         self.__battleResults.saveStatsSorting(bonusType, iconType, sortDirection)
@@ -84,20 +96,20 @@ class BattleResultsWindow(BattleResultsMeta):
             self.destroy()
 
     def showProgressiveRewardView(self):
-        event_dispatcher.showProgressiveRewardWindow()
+        showProgressiveRewardWindow()
 
     def onAppliedPremiumBonus(self):
         self.__battleResults.applyAdditionalBonus(self.__arenaUniqueID)
 
     def onShowDetailsPremium(self):
-        BigWorld.callback(0.0, event_dispatcher.showTankPremiumAboutPage)
+        BigWorld.callback(0.0, showTankPremiumAboutPage)
         self.destroy()
 
     def _populate(self):
         super(BattleResultsWindow, self)._populate()
         g_eventBus.addListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__updateVO)
         g_eventBus.addListener(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, self.__onBattleResultWindowShowQuest)
-        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self._onViewLoaded, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self.__loadViewHandler, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.addCallbacks({'account._additionalXPCache': self.__updateVO,
          'inventory.1': self.__updateVO,
          'inventory.8': self.__updateVO})
@@ -106,25 +118,19 @@ class BattleResultsWindow(BattleResultsMeta):
         if self.__battleResults.areResultsPosted(self.__arenaUniqueID):
             self.__setBattleResults()
 
-    def _onViewLoaded(self, event):
-        if event.alias == VIEW_ALIAS.BATTLE_QUEUE:
-            self._lockButtons()
-        elif event.alias == VIEW_ALIAS.LOBBY_HANGAR:
-            self._unlockButtons()
-
-    def _lockButtons(self):
-        self.as_setIsInBattleQueueS(True)
-
-    def _unlockButtons(self):
-        self.as_setIsInBattleQueueS(False)
-
     def _dispose(self):
         g_eventBus.removeListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__updateVO)
         g_eventBus.removeListener(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, self.__onBattleResultWindowShowQuest)
-        g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self._onViewLoaded, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self.__loadViewHandler, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__gameSession.onPremiumTypeChanged -= self.__onPremiumStateChanged
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
+
+    def __loadViewHandler(self, event):
+        if event.alias == VIEW_ALIAS.BATTLE_QUEUE:
+            self.as_setIsInBattleQueueS(True)
+        elif event.alias == VIEW_ALIAS.LOBBY_HANGAR:
+            self.as_setIsInBattleQueueS(False)
 
     @process
     def __requestClanEmblem(self, textureID, clanDBID):

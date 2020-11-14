@@ -192,6 +192,18 @@ def vehiclesComparator(comparableVehicle, vehicle):
     return VehiclesComparator(params.VehicleParams(comparableVehicle).getParamsDict(), params.VehicleParams(vehicle).getParamsDict(), suitableArtefacts=g_paramsCache.getCompatibleArtefacts(vehicle.descriptor))
 
 
+def tankSetupVehiclesComparator(comparableVehicle, vehicle):
+    idealCrewVehicle = copy.copy(vehicle)
+    perfectCrew = vehicle.getPerfectCrew()
+    changedCrew = []
+    for idx, tmanData in enumerate(vehicle.crew):
+        _, tman = tmanData
+        changedCrew.append(tmanData if tman and tman.isMaxRoleLevel else perfectCrew[idx])
+
+    idealCrewVehicle.crew = changedCrew
+    return VehiclesComparator(params.VehicleParams(comparableVehicle).getParamsDict(), params.VehicleParams(idealCrewVehicle).getParamsDict(), suitableArtefacts=g_paramsCache.getCompatibleArtefacts(vehicle.descriptor))
+
+
 def itemsComparator(currentItem, otherItem, vehicleDescr=None):
     return ItemsComparator(getParameters(currentItem, vehicleDescr), getParameters(otherItem, vehicleDescr))
 

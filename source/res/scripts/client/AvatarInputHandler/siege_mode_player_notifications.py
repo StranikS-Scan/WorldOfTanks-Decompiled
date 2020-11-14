@@ -19,7 +19,15 @@ class SOUND_NOTIFICATIONS(object):
     UI_TURBINE_MODE_OFF = 'ui_turbine_polish_siege_mode_off'
 
 
-class TurboshaftModeSoundNotifications(Component):
+class SiegeModeNotificationsBase(Component):
+    _MODE_TYPE = ''
+
+    def getModeType(self):
+        return self._MODE_TYPE
+
+
+class TurboshaftModeSoundNotifications(SiegeModeNotificationsBase):
+    _MODE_TYPE = 'turboshaft'
 
     def __init__(self):
         self.__sounds = {VEHICLE_SIEGE_STATE.SWITCHING_ON: SoundGroups.g_instance.getSound2D(SOUND_NOTIFICATIONS.UI_TURBINE_MODE_ON),
@@ -36,21 +44,27 @@ class TurboshaftModeSoundNotifications(Component):
     def __updateNotifications(self, newState):
         if newState not in self.__sounds:
             return
-        if not BigWorld.player().isVehicleAlive:
+        else:
+            avatar = BigWorld.player()
+            vehicle = BigWorld.entities[avatar.observedVehicleID] if avatar.observedVehicleID else avatar.vehicle
+            if not vehicle.isAlive():
+                return
+            isEngineDestroyed = BigWorld.player().deviceStates.get('engine') == 'destroyed'
+            if isEngineDestroyed != self.__engineWasDestroyed:
+                if isEngineDestroyed:
+                    SoundGroups.g_instance.playSound2D(SOUND_NOTIFICATIONS.MOVEMENT_LIMITED_ON)
+                else:
+                    SoundGroups.g_instance.playSound2D(SOUND_NOTIFICATIONS.MOVEMENT_LIMITED_OFF)
+                self.__engineWasDestroyed = isEngineDestroyed
+            if self.__lastState == newState:
+                return
+            isValidTransition = self.__lastState is not None and (self.__lastState + 1) % (VEHICLE_SIEGE_STATE.SWITCHING_OFF + 1) == newState
+            if self.__lastState:
+                self.__sounds[self.__lastState].stop()
+            if isValidTransition:
+                self.__sounds[newState].play()
+            self.__lastState = newState
             return
-        isEngineDestroyed = BigWorld.player().deviceStates.get('engine') == 'destroyed'
-        if isEngineDestroyed != self.__engineWasDestroyed:
-            if isEngineDestroyed:
-                SoundGroups.g_instance.playSound2D(SOUND_NOTIFICATIONS.MOVEMENT_LIMITED_ON)
-            else:
-                SoundGroups.g_instance.playSound2D(SOUND_NOTIFICATIONS.MOVEMENT_LIMITED_OFF)
-            self.__engineWasDestroyed = isEngineDestroyed
-        if self.__lastState == newState:
-            return
-        if self.__lastState:
-            self.__sounds[self.__lastState].stop()
-        self.__lastState = newState
-        self.__sounds[newState].play()
 
     def destroy(self):
         if self.__lastState:
@@ -59,7 +73,8 @@ class TurboshaftModeSoundNotifications(Component):
             SoundGroups.g_instance.playSound2D(SOUND_NOTIFICATIONS.MOVEMENT_LIMITED_OFF)
 
 
-class SiegeModeSoundNotifications(Component):
+class SiegeModeSoundNotifications(SiegeModeNotificationsBase):
+    _MODE_TYPE = 'siege'
 
     def __init__(self):
         self.__sounds = {SOUND_NOTIFICATIONS.START_TO_SIEGE_MODE: SoundGroups.g_instance.getSound2D(SOUND_NOTIFICATIONS.START_TO_SIEGE_MODE),

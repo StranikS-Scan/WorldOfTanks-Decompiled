@@ -423,7 +423,7 @@ class MissionAward(MissionAwardAbstract):
         return getAwardsWindowBonuses(bonuses)
 
     def handleNextButton(self):
-        self._proxyEvent()
+        return self._proxyEvent()
 
     def __getMissionsCount(self):
         return len(self._eventsCache.getQuests(lambda q: q.isAvailable()[0] and q.getType() not in constants.EVENT_TYPE.SHARED_QUESTS and not q.isCompleted()))

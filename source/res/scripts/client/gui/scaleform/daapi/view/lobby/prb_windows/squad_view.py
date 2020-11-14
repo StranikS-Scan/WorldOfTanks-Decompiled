@@ -171,6 +171,15 @@ class SquadView(SquadViewMeta):
             self.as_setCoolDownForReadyButtonS(event.coolDown)
 
 
+class EventSquadView(SquadView):
+
+    def _getHeaderPresenter(self):
+        return _EventHeaderPresenter(self.prbEntity)
+
+    def _getLeaveBtnTooltip(self):
+        return TOOLTIPS.SQUADWINDOW_BUTTONS_LEAVEEVENTSQUAD
+
+
 class EpicSquadView(SquadView):
 
     def _getHeaderPresenter(self):
@@ -284,6 +293,26 @@ class _EpicHeaderPresenter(_HeaderPresenter):
 
     def _packBonuses(self):
         return []
+
+
+class _EventHeaderPresenter(_HeaderPresenter):
+
+    def __init__(self, prbEntity):
+        super(_EventHeaderPresenter, self).__init__(prbEntity)
+        self._isVisibleHeaderIcon = False
+        self._bgImage = backport.image(R.images.gui.maps.icons.squad.backgrounds.event())
+
+    def _getInfoIconTooltipParams(self):
+        vehiclesNames = [ veh.userName for veh in self._eventsCache.getEventVehicles() ]
+        tooltip = backport.text(R.strings.tooltips.squadWindow.eventVehicle(), tankName=', '.join(vehiclesNames))
+        return (makeTooltip(body=tooltip), TOOLTIPS_CONSTANTS.COMPLEX)
+
+    def _getMessageParams(self):
+        iconSource = ''
+        if self._isVisibleHeaderIcon:
+            iconSource = backport.image(R.images.gui.maps.icons.squad.event())
+        messageText = text_styles.main(backport.text(R.strings.messenger.dialogs.squadChannel.headerMsg.eventFormationRestriction()))
+        return (iconSource, messageText)
 
 
 class _BattleRoyaleHeaderPresenter(_HeaderPresenter):

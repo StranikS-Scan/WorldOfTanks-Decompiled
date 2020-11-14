@@ -7,6 +7,9 @@ class PostmortemPanelMeta(BasePostmortemPanelMeta):
     def onDogTagKillerInPlaySound(self):
         self._printOverrideError('onDogTagKillerInPlaySound')
 
+    def onDogTagKillerOutPlaySound(self):
+        self._printOverrideError('onDogTagKillerOutPlaySound')
+
     def onVictimDogTagInPlaySound(self):
         self._printOverrideError('onVictimDogTagInPlaySound')
 
@@ -24,6 +27,3 @@ class PostmortemPanelMeta(BasePostmortemPanelMeta):
 
     def as_preloadComponentsS(self, components):
         return self.flashObject.as_preloadComponents(components) if self._isDAAPIInited() else None
-
-    def as_showHintS(self):
-        return self.flashObject.as_showHint() if self._isDAAPIInited() else None

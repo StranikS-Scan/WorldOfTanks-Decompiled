@@ -371,8 +371,6 @@ class AvailableState(_WebState):
         gateUrl = self.getGateUrl()
         if self.connectionMgr.isConnected() and state is None and gateUrl is not None and gateUrl != self._webCtrl.getRequesterConfig().getGateUrl():
             state = AvailableState(self._webCtrl)
-        if state is None:
-            self.__loginState = LOGIN_STATE.LOGGED_OFF
         return state
 
     @async

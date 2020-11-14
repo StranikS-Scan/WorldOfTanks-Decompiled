@@ -81,7 +81,7 @@ class VehicleParameters(VehicleParametersMeta):
             self.rebuildParams()
 
     def _getVehicleCache(self):
-        return g_currentPreviewVehicle if g_currentPreviewVehicle.isPresent() and g_currentPreviewVehicle.item.isOnlyForEventBattles else g_currentVehicle
+        return g_currentVehicle
 
 
 class VehiclePreviewParameters(VehicleParameters):
@@ -284,3 +284,9 @@ class VehPreviewParamsDataProvider(_VehParamsDataProvider):
 
     def _getComparator(self):
         return params_helper.vehiclesComparator(self._cache.item, self._cache.defaultItem)
+
+
+class TankSetupParamsDataProvider(VehPreviewParamsDataProvider):
+
+    def _getComparator(self):
+        return params_helper.tankSetupVehiclesComparator(self._cache.item, self._cache.defaultItem)

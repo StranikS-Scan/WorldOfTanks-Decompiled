@@ -188,7 +188,8 @@ class CustomizationMode(object):
     def applyItems(self, purchaseItems, isModeChanged, callback):
         purchaseItems = copy(purchaseItems)
         yield self._applyItems(purchaseItems, isModeChanged)
-        callback(self)
+        callback(None)
+        return
 
     def sellItem(self, intCD, count, _):
         if not count:

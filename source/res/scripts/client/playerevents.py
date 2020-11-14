@@ -105,6 +105,8 @@ class _PlayerEvents(object):
         self.onShowDevelopmentInfo = Event.Event()
         self.onEntityCheckOutEnqueued = Event.Event()
         self.onRoundFinished = Event.Event()
+        self.onStaticDeathZoneActivated = Event.Event()
+        self.onStaticDeathZoneDeactivated = Event.Event()
 
 
 g_playerEvents = _PlayerEvents()

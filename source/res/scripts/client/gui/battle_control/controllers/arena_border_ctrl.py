@@ -60,6 +60,9 @@ class ArenaBorderController(IArenaLoadController):
     def getControllerID(self):
         return BATTLE_CTRL_ID.ARENA_BORDER
 
+    def getDrawType(self):
+        return self.__drawType
+
     def _applySetting(self, showMode, drawType, color):
         if not self.__spaceID:
             return
@@ -68,6 +71,7 @@ class ArenaBorderController(IArenaLoadController):
         self.__color = color
         BigWorld.ArenaBorderHelper.setArenaBorderVisible(self.__spaceID, self.__drawType != _DISPLAY_MODE.TYPE_HIDE)
         BigWorld.ArenaBorderHelper.setArenaBorderDrawType(self.__spaceID, self.__drawType)
+        g_eventBus.handleEvent(GameEvent(GameEvent.ARENA_BORDER_TYPE_CHANGED, {'drawType': drawType}), scope=EVENT_BUS_SCOPE.BATTLE)
         distanceFaderMode = 0
         if self.__showMode == _SHOW_MODE.HIDE:
             distanceFaderMode = 1

@@ -34,8 +34,6 @@
     <FuG_7_Ausf_F>	72	</FuG_7_Ausf_F>
     <AN_GRC_8E>	73	</AN_GRC_8E>
     <SCR_528_FL>	74	</SCR_528_FL>
-    <AN-ARC-27_Halloween_event>	75	</AN-ARC-27_Halloween_event>
-    <AN-ARC-27_Halloween_event_02>	76	</AN-ARC-27_Halloween_event_02>
     <T23radio>	1000	</T23radio>
     <AN-ARC-27_IGR>	60001	</AN-ARC-27_IGR>
     <SCR_619_IGR>	60002	</SCR_619_IGR>
@@ -49,11 +47,6 @@
     <SCR_200_bootcamp>	64001	</SCR_200_bootcamp>
     <SCR_508_bootcamp>	64002	</SCR_508_bootcamp>
     <Development_Radio>	65535	</Development_Radio>
-    <SCR_506_HELL>	3	</SCR_506_HELL>
-    <SCR_528_HELL>	5	</SCR_528_HELL>
-    <SCR_528_HELL__0>	6	</SCR_528_HELL__0>
-    <SCR_528_HALL>	20	</SCR_528_HALL>
-    <SCR_528_HELL__1>	22	</SCR_528_HELL__1>
   </ids>
   <shared>
     <Alarm_flags_bot>
@@ -381,30 +374,6 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </AN-ARC-27>
-    <AN-ARC-27_Halloween_event>
-      <userString>	#usa_vehicles:AN-ARC-27_Halloween_event	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	120	</weight>
-      <distance>	745	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </AN-ARC-27_Halloween_event>
-    <AN-ARC-27_Halloween_event_02>
-      <userString>	#usa_vehicles:AN-ARC-27_Halloween_event_02	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	120	</weight>
-      <distance>	745	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </AN-ARC-27_Halloween_event_02>
     <AN-VRC-7>
       <userString>	#usa_vehicles:AN-VRC-7	</userString>
       <tags></tags>
@@ -637,65 +606,5 @@
       <radarRadius>	500	</radarRadius>
       <radarCooldown>	45	</radarCooldown>
     </AN-VRC-7_SH>
-    <SCR_506_HELL>
-      <userString>	#usa_vehicles:SCR_506	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	33600	</price>
-      <weight>	110	</weight>
-      <distance>	65	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <notInShop>	True	</notInShop>
-    </SCR_506_HELL>
-    <SCR_528_HELL>
-      <userString>	#usa_vehicles:SCR_528	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <weight>	65	</weight>
-      <distance>	50	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <notInShop>	True	</notInShop>
-    </SCR_528_HELL>
-    <SCR_528_HELL__0>
-      <userString>	#usa_vehicles:SCR_528	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <weight>	65	</weight>
-      <distance>	50	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <notInShop>	True	</notInShop>
-    </SCR_528_HELL__0>
-    <SCR_528_HALL>
-      <userString>	#usa_vehicles:SCR_528	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <weight>	65	</weight>
-      <distance>	50	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <notInShop>	True	</notInShop>
-    </SCR_528_HALL>
-    <SCR_528_HELL__1>
-      <userString>	#usa_vehicles:SCR_528	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <weight>	80	</weight>
-      <distance>	50	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <notInShop>	True	</notInShop>
-    </SCR_528_HELL__1>
   </shared>
 </radios.xml>

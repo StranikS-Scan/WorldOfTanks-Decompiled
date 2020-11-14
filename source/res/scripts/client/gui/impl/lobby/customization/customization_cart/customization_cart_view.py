@@ -322,9 +322,10 @@ class CustomizationCartView(ViewImpl):
     def __onTutorialClose(self):
         self.__settingsCore.serverSettings.setOnceOnlyHintsSettings({OnceOnlyHints.C11N_AUTOPROLONGATION_HINT: HINT_SHOWN_STATUS})
 
+    @adisp_process
     def __onBuyConfirmed(self, isOk):
         if isOk:
-            self.__ctx.applyItems(self.__purchaseItems)
+            yield self.__ctx.applyItems(self.__purchaseItems)
             self.destroyWindow()
 
     def __onSelectAutoRent(self, _=None):

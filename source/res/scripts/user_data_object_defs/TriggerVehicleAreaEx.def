@@ -1,0 +1,34 @@
+<TriggerVehicleAreaEx.def>
+  <Parent>	TriggerVehicleArea	</Parent>
+  <Properties>
+    <EventID>
+      <Type>	STRING	</Type>
+      <Editable>	True	</Editable>
+    </EventID>
+    <ReactOn>
+      <Type>	STRING	</Type>
+      <Editable>	True	</Editable>
+      <Default>	EnterAndLeave	</Default>
+    </ReactOn>
+    <ReactOnTeam>
+      <Type>	STRING	</Type>
+      <Editable>	true	</Editable>
+      <Default>	1 2	</Default>
+    </ReactOnTeam>
+    <ReactOnDeadVehicles>
+      <Type>	STRING	</Type>
+      <Editable>	true	</Editable>
+      <Default>	true	</Default>
+    </ReactOnDeadVehicles>
+    <ActivationsCount>
+      <Type>	UINT8	</Type>
+      <Editable>	True	</Editable>
+      <Default>	0	</Default>
+    </ActivationsCount>
+    <Cooldown>
+      <Type>	FLOAT	</Type>
+      <Editable>	True	</Editable>
+      <Default>	0	</Default>
+    </Cooldown>
+  </Properties>
+</TriggerVehicleAreaEx.def>

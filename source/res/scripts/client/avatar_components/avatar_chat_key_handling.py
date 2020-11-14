@@ -3,7 +3,7 @@
 import logging
 from collections import namedtuple
 import BigWorld
-from Math import Matrix
+from Math import Matrix, Vector3
 import BattleReplay
 import CommandMapping
 import Flock
@@ -16,6 +16,7 @@ from gui import GUI_CTRL_MODE_FLAG
 from gui.sounds.epic_sound_constants import EPIC_SOUND
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
+from math_utils import createTranslationMatrix
 from messenger.proto.events import g_messengerEvents
 from messenger_common_chat2 import BATTLE_CHAT_COMMANDS_BY_NAMES
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
@@ -157,7 +158,22 @@ class AvatarChatKeyHandling(object):
         if vehicleID is None:
             vehicleID = self.__getVehicleIDByCmd(cmd)
         vehicle = BigWorld.entities.get(vehicleID)
-        return None if vehicle is None else vehicle.matrix
+        if vehicle is None:
+            position = BigWorld.player().arena.positions.get(vehicleID)
+            if position is not None:
+                playerVehicle = BigWorld.player().vehicle
+                if playerVehicle is None:
+                    return
+                maxDistance = 600.0
+                playerVehiclePosition = playerVehicle.position
+                if Vector3(position).distSqrTo(playerVehiclePosition) > maxDistance * maxDistance:
+                    direction = position - playerVehiclePosition
+                    direction.normalise()
+                    return createTranslationMatrix(playerVehiclePosition + direction * maxDistance)
+                return createTranslationMatrix(position)
+            return
+        else:
+            return vehicle.matrix
 
     def __getObjectivePosition(self, objectID):
         teamId, baseId = getBaseTeamAndIDFromUniqueID(objectID)

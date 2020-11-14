@@ -75,25 +75,3 @@ class HangarSoundWebApi(object):
 
     def _hangarSoundFini(self):
         SoundGroups.g_instance.playSound2D('ue_master_unmute')
-
-
-@w2capi()
-class EventHangarSoundWebApi(object):
-    _OVERLAY_STATE = 'STATE_video_overlay'
-    _OVERLAY_STATE_ON = 'STATE_video_overlay_on'
-    _OVERLAY_STATE_OFF = 'STATE_video_overlay_off'
-    _MUTE_EVENT = 'ue_master_mute'
-    _UNMUTE_EVENT = 'ue_master_unmute'
-
-    @w2c(_HangarSoundSchema, 'hangar_sound', finiHandlerName='_hangarSoundFini')
-    def hangarSound(self, cmd):
-        if cmd.mute:
-            WWISE.WW_setState(self._OVERLAY_STATE, self._OVERLAY_STATE_ON)
-            SoundGroups.g_instance.playSound2D(self._MUTE_EVENT)
-        else:
-            WWISE.WW_setState(self._OVERLAY_STATE, self._OVERLAY_STATE_OFF)
-            SoundGroups.g_instance.playSound2D(self._UNMUTE_EVENT)
-
-    def _hangarSoundFini(self):
-        WWISE.WW_setState(self._OVERLAY_STATE, self._OVERLAY_STATE_OFF)
-        SoundGroups.g_instance.playSound2D(self._UNMUTE_EVENT)

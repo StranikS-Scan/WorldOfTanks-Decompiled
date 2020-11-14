@@ -90,6 +90,18 @@ def getSeasonHistory(seasonID):
     return None if prevSeasonHistory is None else BattlePassSeasonHistory(prevSeasonHistory.get('maxBaseLevel'), prevSeasonHistory.get('maxPostLevel'), prevSeasonHistory.get('rewardVehicles'))
 
 
+def getLevelFromStats(seasonStats, seasonHistory):
+    if seasonStats.maxBase == seasonHistory.maxBaseLevel:
+        level = seasonStats.maxPost
+        state = BattlePassState.POST
+    else:
+        level = seasonStats.maxBase
+        state = BattlePassState.BASE
+    if seasonStats.maxPost >= seasonHistory.maxPostLevel:
+        state = BattlePassState.COMPLETED
+    return (state, level)
+
+
 def getExtrasVideoPageURL():
     battlePassController = dependency.instance(IBattlePassController)
     url = GUI_SETTINGS.battlePass.get('extrasVideoPage').replace('$SEASON_ID', str(battlePassController.getSeasonID()))

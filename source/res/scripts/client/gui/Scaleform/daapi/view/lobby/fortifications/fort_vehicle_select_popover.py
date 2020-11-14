@@ -29,7 +29,7 @@ def convertState(vState):
 
 
 def getVehicleCriteria(levelsRange, inHangar=False):
-    req = REQ_CRITERIA.VEHICLE.LEVELS(levelsRange) | ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.VEHICLE.EVENT
+    req = REQ_CRITERIA.VEHICLE.LEVELS(levelsRange) | ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
     if inHangar:
         req |= REQ_CRITERIA.INVENTORY
     return req

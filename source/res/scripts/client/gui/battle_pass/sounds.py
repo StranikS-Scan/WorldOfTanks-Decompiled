@@ -3,7 +3,7 @@
 import WWISE
 from constants import DEFAULT_LANGUAGE
 from gui.impl.gen import R
-from gui.impl.lobby.video.video_sound_manager import IVideoSoundManager
+from gui.impl.lobby.video.video_sound_manager import IVideoSoundManager, SoundManagerStates
 from helpers import getClientLanguage
 from math_utils import clamp
 from shared_utils import CONST_CONTAINER
@@ -50,21 +50,28 @@ class AwardVideoSoundControl(IVideoSoundManager):
 
     def __init__(self, videoID):
         self.__videoID = videoID
+        self.__state = None
+        return
 
     def start(self):
         sound = self.__getMapping().get(self.__videoID)
         if sound:
             WWISE.WW_setSwitch(BattlePassLanguageSwitch.GROUP_NAME, self.__selectLanguageState())
             WWISE.WW_eventGlobal(sound)
+            self.__state = SoundManagerStates.PLAYING
 
     def stop(self):
-        WWISE.WW_eventGlobal(BattlePassSounds.VIDEO_STOP)
+        if self.__state != SoundManagerStates.STOPPED:
+            WWISE.WW_eventGlobal(BattlePassSounds.VIDEO_STOP)
+            self.__state = SoundManagerStates.STOPPED
 
     def pause(self):
         WWISE.WW_eventGlobal(BattlePassSounds.VIDEO_PAUSE)
+        self.__state = SoundManagerStates.PAUSE
 
     def unpause(self):
         WWISE.WW_eventGlobal(BattlePassSounds.VIDEO_RESUME)
+        self.__state = SoundManagerStates.PLAYING
 
     def __selectLanguageState(self):
         language = getClientLanguage()

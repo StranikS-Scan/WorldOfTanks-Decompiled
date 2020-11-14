@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_cart_popover.py
-from constants import QUEUE_TYPE
 from debug_utils import LOG_ERROR
 from gui.Scaleform import getNationsFilterAssetPath
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import packHeaderColumnData
@@ -80,11 +79,9 @@ class VehicleCompareCartPopover(VehicleCompareCartPopoverMeta):
             addBtnTT = VEH_COMPARE.CARTPOPOVER_OPENCMPBTN_TOOLTIP
             addBtnIcon = None
         isNavigationEnabled = not g_prbLoader.getDispatcher().getFunctionalState().isNavigationDisabled()
-        entity = g_prbLoader.getDispatcher().getEntity()
-        isInEvent = entity is not None and entity.getQueueType() == QUEUE_TYPE.EVENT_BATTLES
         self.as_updateToCmpBtnPropsS({'btnLabel': _ms(VEH_COMPARE.CARTPOPOVER_GOTOCOMPAREBTN_LABEL, value=count),
          'btnTooltip': addBtnTT,
-         'btnEnabled': buttonsEnabled and isNavigationEnabled and not isInEvent,
+         'btnEnabled': buttonsEnabled and isNavigationEnabled,
          'btnIcon': addBtnIcon})
         isBasketLocked = self.comparisonBasket.isLocked
         self.as_updateClearBtnPropsS({'btnLabel': VEH_COMPARE.CARTPOPOVER_REMOVEALLBTN_LABEL,

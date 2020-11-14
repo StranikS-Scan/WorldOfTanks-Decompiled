@@ -69,12 +69,10 @@ class ItemPackType(CONST_CONTAINER):
     CUSTOM_EVENT_COIN = 'custom/eventCoin'
     CUSTOM_EVENT_COIN_EXTERNAL = 'custom/event_coin'
     CUSTOM_SLOT = 'custom/slot'
-    CUSTOM_SEVERAL_SLOTS = 'custom/slots'
     CUSTOM_REFERRAL_CREW = 'custom/crew'
     CUSTOM_REWARD_POINT = 'custom/reward_point'
     CUSTOM_SUPPLY_POINT = 'custom/supply_point'
     CUSTOM_EVENT_PROGRESSION_REWARD_POINT = 'custom/reward_point'
-    CUSTOM_X5_BATTLE_BONUS = 'custom/X5_battle'
     TOKEN = 'token'
     PAINT_ALL = 'paint/all'
     PAINT_SUMMER = 'paint/summer'
@@ -103,13 +101,10 @@ class ItemPackType(CONST_CONTAINER):
     CREW_BOOK_CREW_BOOK = 'crew_book/crewBook'
     CREW_BOOK_PERSONAL_BOOK = 'crew_book/personalBook'
     CREW_BOOK_UNIVERSAL_BOOK = 'crew_book/universalBook'
-    CREW_BOOK_RANDOM = 'crew_book/random'
     BLUEPRINT = 'blueprint'
     BLUEPRINT_NATIONAL = 'blueprint/national'
     BLUEPRINT_INTELEGENCE_DATA = 'blueprint/intelligence_data'
     BLUEPRINT_ANY = 'blueprint/any'
-    BLUEPRINT_NATIONAL_ANY = 'blueprint/nationalAny'
-    DEMOUNT_KITS = 'demountKit/common'
 
 
 class ItemPackTypeGroup(CONST_CONTAINER):
@@ -158,12 +153,6 @@ class ItemPackTypeGroup(CONST_CONTAINER):
     TOKEN = (ItemPackType.TOKEN,)
     DISCOUNT = (ItemPackType.FRONTLINE_TOKEN,)
     TRADE_IN = (ItemPackType.TRADE_IN_INFO,)
-    CREW_BOOK = (ItemPackType.CREW_BOOK,
-     ItemPackType.CREW_BOOK_BROCHURE,
-     ItemPackType.CREW_BOOK_GUIDE,
-     ItemPackType.CREW_BOOK_CREW_BOOK,
-     ItemPackType.CREW_BOOK_PERSONAL_BOOK,
-     ItemPackType.CREW_BOOK_UNIVERSAL_BOOK)
 
 
 CompensationSpec = namedtuple('CompensationSpec', ('type', 'value', 'count'))

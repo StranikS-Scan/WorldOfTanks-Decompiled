@@ -241,11 +241,8 @@ def getCamo(appearance, outfit, containerId, vDesc, descId, isDamaged, default=N
             vehPartCompDesc = getattr(vDesc, descId, None)
             if not vehPartCompDesc:
                 return result
-            area = vehPartCompDesc.customizableVehicleAreas.get(lower(CustomizationTypeNames[CustomizationType.CAMOUFLAGE]), (0, None))
+            area = vehPartCompDesc.customizableVehicleAreas.get(lower(CustomizationTypeNames[CustomizationType.CAMOUFLAGE]), (0, None))[0]
             if not area:
-                _logger.error('Error in customizableVehicleAreas ({}, {})').format(vDesc.name, descId)
-                return result
-            if not area[0]:
                 return result
             tiling, exclusionMap = processTiling(appearance, vDesc, descId, camouflage, component)
             camoAngle = camouflage.rotation[descId]
@@ -438,8 +435,6 @@ def getModelAnimators(outfit, vehicleDescr, spaceId, loadedAnimators, compoundMo
             continue
         fakeModel = newFakeModel()
         node = compoundModel.node(param.attachNode)
-        if node is None:
-            continue
         node.attach(fakeModel, param.transform)
         animWrapper = AnimationSequence.ModelWrapperContainer(fakeModel, spaceId)
         animator = __prepareAnimator(loadedAnimators, param.animatorName, animWrapper, node)

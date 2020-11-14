@@ -34,6 +34,8 @@ from messenger.proto.bw_chat2.battle_chat_cmd import AUTOCOMMIT_COMMAND_NAMES
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
+from gui.impl import backport
+from gui.impl.gen import R
 _logger = logging.getLogger(__name__)
 _LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME = {LocationMarkerSubType.SPG_AIM_AREA_SUBTYPE: settings.MARKER_SYMBOL_NAME.STATIC_ARTY_MARKER,
  LocationMarkerSubType.GOING_TO_MARKER_SUBTYPE: settings.MARKER_SYMBOL_NAME.LOCATION_MARKER,
@@ -122,9 +124,6 @@ class MarkerPlugin(IPlugin):
 
     def _setMarkerSticky(self, markerID, isSticky):
         self._parentObj.setMarkerSticky(markerID, isSticky)
-
-    def _markerSetCustomStickyRadiusScale(self, markerID, scale):
-        self._parentObj.markerSetCustomStickyRadiusScale(markerID, scale)
 
     def _setMarkerRenderInfo(self, markerID, minScale, offset, innerOffset, cullDistance, boundsMinScale):
         self._parentObj.setMarkerRenderInfo(markerID, minScale, offset, innerOffset, cullDistance, boundsMinScale)
@@ -704,12 +703,12 @@ class AreaStaticMarkerPlugin(MarkerPlugin, ChatCommunicationComponent):
 
 
 class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
-    __slots__ = ('_personalTeam', '_markers', '_clazz')
+    __slots__ = ('__personalTeam', '_markers', '__clazz')
 
     def __init__(self, parentObj, clazz=BaseMarker):
         super(TeamsOrControlsPointsPlugin, self).__init__(parentObj)
-        self._personalTeam = 0
-        self._clazz = clazz
+        self.__personalTeam = 0
+        self.__clazz = clazz
         self._markers = {}
 
     def start(self):
@@ -764,7 +763,7 @@ class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
             return DefaultMarkerSubType.ALLY_MARKER_SUBTYPE if foundMarker.getOwningTeam() == 'ally' else DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE
 
     def _restart(self):
-        self._personalTeam = self.sessionProvider.getArenaDP().getNumberOfTeam()
+        self.__personalTeam = self.sessionProvider.getArenaDP().getNumberOfTeam()
         self.__removeExistingMarkers()
         self.__addTeamBasePositions()
         self.__addControlPoints()
@@ -786,7 +785,7 @@ class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
         self._invokeMarker(markerID, 'setIdentifier', RANDOM_BATTLE_BASE_ID)
         self._invokeMarker(markerID, 'setActive', True)
         self._setMarkerRenderInfo(markerID, _BASE_MARKER_MIN_SCALE, _BASE_MARKER_BOUNDS, _INNER_BASE_MARKER_BOUNDS, _STATIC_MARKER_CULL_DISTANCE, _BASE_MARKER_BOUND_MIN_SCALE)
-        marker = self._clazz(markerID, True, owner)
+        marker = self.__clazz(markerID, True, owner)
         self._markers[baseOrControlPointID] = marker
         marker.setState(ReplyStateForMarker.NO_ACTION)
         self._setActiveState(marker, marker.getState())
@@ -795,7 +794,7 @@ class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
     def __addTeamBasePositions(self):
         positions = self.sessionProvider.arenaVisitor.type.getTeamBasePositionsIterator()
         for team, position, number in positions:
-            if team == self._personalTeam:
+            if team == self.__personalTeam:
                 owner = 'ally'
             else:
                 owner = 'enemy'
@@ -864,3 +863,56 @@ class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
         self._setMarkerSticky(markerID, setSticky)
         marker.setIsSticky(setSticky)
         self._checkNextState(marker)
+
+
+class BaseAreaMarkerPlugin(MarkerPlugin):
+    __slots__ = ('__markers',)
+
+    def __init__(self, parentObj):
+        super(BaseAreaMarkerPlugin, self).__init__(parentObj)
+        self.__markers = {}
+
+    def start(self):
+        self.__markers = {}
+        super(BaseAreaMarkerPlugin, self).start()
+
+    def stop(self):
+        self.__markers = {}
+        super(BaseAreaMarkerPlugin, self).stop()
+
+    def createMarker(self, uniqueID, matrixProvider, active):
+        if uniqueID in self.__markers:
+            return False
+        markerID = self._createMarkerWithMatrix(settings.MARKER_SYMBOL_NAME.STATIC_OBJECT_MARKER, matrixProvider, active=active)
+        self.__markers[uniqueID] = markerID
+        return True
+
+    def deleteMarker(self, uniqueID):
+        markerID = self.__markers.pop(uniqueID, None)
+        if markerID is not None:
+            self._destroyMarker(markerID)
+            return True
+        else:
+            return False
+
+    def setupMarker(self, uniqueID, shape, minDistance, maxDistance, distance, distanceFieldColor):
+        if uniqueID not in self.__markers:
+            return
+        self._invokeMarker(self.__markers[uniqueID], 'init', shape, minDistance, maxDistance, distance, backport.text(R.strings.ingame_gui.marker.meters()), distanceFieldColor)
+
+    def markerSetDistance(self, uniqueID, distance):
+        if uniqueID not in self.__markers:
+            return
+        self._invokeMarker(self.__markers[uniqueID], 'setDistance', distance)
+
+    def setMarkerMatrix(self, uniqueID, matrix):
+        markerID = self.__markers.pop(uniqueID, None)
+        if markerID is None:
+            return
+        else:
+            self._parentObj.setMarkerMatrix(markerID, matrix)
+            return
+
+
+class AreaMarkerPlugin(BaseAreaMarkerPlugin):
+    pass

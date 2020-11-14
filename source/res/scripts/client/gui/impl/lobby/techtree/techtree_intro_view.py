@@ -105,7 +105,7 @@ class TechTreeIntroView(ViewImpl):
         item = FragmentItemModel()
         item.setFragmentCD(getNationalFragmentCD(nations.INDICES[nationName]))
         item.setValue(backport_system_locale.getIntegralFormat(value))
-        item.setIcon(R.images.gui.maps.icons.blueprints.fragment.medium.dyn(nationName)())
+        item.setIcon(R.images.gui.maps.icons.blueprints.fragment.small.dyn(nationName)())
         item.setSpecialIcon(R.images.gui.maps.icons.blueprints.fragment.big.dyn(nationName)())
         return item
 
@@ -113,7 +113,7 @@ class TechTreeIntroView(ViewImpl):
         item = FragmentItemModel()
         item.setFragmentCD(BlueprintTypes.INTELLIGENCE_DATA)
         item.setValue(backport_system_locale.getIntegralFormat(value))
-        item.setIcon(R.images.gui.maps.icons.blueprints.fragment.medium.intelligence())
+        item.setIcon(R.images.gui.maps.icons.blueprints.fragment.small.intelligence())
         item.setSpecialIcon(R.images.gui.maps.icons.blueprints.fragment.big.intelligence())
         return item
 

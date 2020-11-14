@@ -1,0 +1,33 @@
+<extension.xml>
+  <FeatureName>	BattleRoyale	</FeatureName>
+  <Components>
+    <StaticComponents>
+      <BattleRoyaleComponent></BattleRoyaleComponent>
+    </StaticComponents>
+    <DynamicComponents>
+      <ArenaLootComponent></ArenaLootComponent>
+      <ArenaMinesComponent></ArenaMinesComponent>
+      <SpawnKeyPointController></SpawnKeyPointController>
+      <BattleXP></BattleXP>
+      <ConeVisibility></ConeVisibility>
+      <Radar></Radar>
+      <InBattleUpgradeReadiness></InBattleUpgradeReadiness>
+      <InBattleUpgrades></InBattleUpgrades>
+      <VehicleLoot></VehicleLoot>
+      <VehicleDeathZoneEffect></VehicleDeathZoneEffect>
+      <InBattleUpgradesAvatar></InBattleUpgradesAvatar>
+    </DynamicComponents>
+  </Components>
+  <IsEnabled>	True	</IsEnabled>
+  <Entities>
+    <ClientServerEntities>
+      <Mine></Mine>
+      <Loot></Loot>
+      <Placement></Placement>
+      <InfluenceZone></InfluenceZone>
+      <BattleRoyaleRadio></BattleRoyaleRadio>
+    </ClientServerEntities>
+    <ServerOnlyEntities></ServerOnlyEntities>
+  </Entities>
+  <ExternalComponents></ExternalComponents>
+</extension.xml>

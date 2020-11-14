@@ -1,0 +1,17 @@
+<InfluenceZone.def>
+  <Properties>
+    <equipmentID>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </equipmentID>
+    <team>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </team>
+    <zonesPosition>
+      <Type>	ARRAY	  <of>	VECTOR3	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </zonesPosition>
+  </Properties>
+</InfluenceZone.def>

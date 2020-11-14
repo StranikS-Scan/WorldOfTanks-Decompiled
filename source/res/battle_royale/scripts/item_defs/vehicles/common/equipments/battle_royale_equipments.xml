@@ -1,0 +1,574 @@
+<battle_royale_equipments.xml>
+  <regenerationKit>
+    <id>	179	</id>
+    <userString>	#artefacts:brRegenerationKit/name	</userString>
+    <description>	#artefacts:brRegenerationKit/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:brRegenerationKit/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:brRegenerationKit/long_special	</longDescriptionSpecial>
+    <icon>	regenerationKit 0 0	</icon>
+    <soundNotification>	br_ability	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale regenerationKit	</tags>
+    <script>	RegenerationKit	  <healthRegenPerTick>	0.05	</healthRegenPerTick>
+      <initialHeal>	0	</initialHeal>
+      <healTime>	7	</healTime>
+      <cooldownSeconds>	30	</cooldownSeconds>
+      <healGroup>	1	</healGroup>
+      <tickInterval>	1	</tickInterval>
+    </script>
+  </regenerationKit>
+  <large_repairkit_battle_royale>
+    <id>	183	</id>
+    <userString>	#artefacts:brRepairkit/name	</userString>
+    <description>	#artefacts:brRepairkit/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:brRepairkit/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:brRepairkit/long_special	</longDescriptionSpecial>
+    <icon>	largeRepairkit 0 0	</icon>
+    <soundNotification>	br_ability	</soundNotification>
+    <price>	20000	</price>
+    <improved>	true	</improved>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale medkit repairkit	</tags>
+    <script>	RepairkitBattleRoyale	  <repairAll>	true	</repairAll>
+      <bonusValue>	0	</bonusValue>
+      <cooldownSeconds>	30	</cooldownSeconds>
+    </script>
+  </large_repairkit_battle_royale>
+  <selfBuff>
+    <id>	184	</id>
+    <userString>	#artefacts:selfBuff/name	</userString>
+    <description>	#artefacts:selfBuff/descr	</description>
+    <icon>	selfBuff 0 0	</icon>
+    <soundNotification>	br_ability	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	BRSelfBuff	  <shortDescription>	#artefacts:selfBuff/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:selfBuff/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime minDelay totalDuration	</tooltips>
+      <consumeAmmo>	true	</consumeAmmo>
+      <deployTime>	0.0	</deployTime>
+      <cooldownTime>	45.0	</cooldownTime>
+      <duration>	0.1	</duration>
+      <inactivationDelay>	20	</inactivationDelay>
+      <radius>	0.0	</radius>
+      <increaseFactors>
+        <turret-rotationSpeed>	1.5	</turret-rotationSpeed>
+        <gun-rotationSpeed>	1.5	</gun-rotationSpeed>
+        <chassis-shotDispersionFactors-movement>	0.5	</chassis-shotDispersionFactors-movement>
+        <chassis-shotDispersionFactors-rotation>	0.5	</chassis-shotDispersionFactors-rotation>
+        <gun-shotDispersionFactors-turretRotation>	0.5	</gun-shotDispersionFactors-turretRotation>
+        <gun-reloadTime>	0.7	</gun-reloadTime>
+        <gun-aimingTime>	0.7	</gun-aimingTime>
+      </increaseFactors>
+    </script>
+  </selfBuff>
+  <healPoint>
+    <id>	185	</id>
+    <userString>	#artefacts:healPoint/name	</userString>
+    <description>	#artefacts:healPoint/descr	</description>
+    <icon>	healPoint 0 0	</icon>
+    <soundNotification>	br_ability	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	BRHealPoint	  <shortDescription>	#artefacts:healPoint/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:healPoint/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime minDelay totalDuration	</tooltips>
+      <consumeAmmo>	true	</consumeAmmo>
+      <deployTime>	0.0	</deployTime>
+      <cooldownTime>	90.0	</cooldownTime>
+      <duration>	7	</duration>
+      <inactivationDelay>	0.0	</inactivationDelay>
+      <radius>	18	</radius>
+      <expireByDamageReceived>	false	</expireByDamageReceived>
+      <healPerTick>	0.05	</healPerTick>
+      <healGroup>	1	</healGroup>
+      <tickInterval>	1	</tickInterval>
+    </script>
+  </healPoint>
+  <afterburning_battle_royale>
+    <id>	186	</id>
+    <userString>	#artefacts:nitro/name	</userString>
+    <description>	#artefacts:nitro/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:nitro/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:nitro/long_special	</longDescriptionSpecial>
+    <icon>	afterburning 0 0	</icon>
+    <soundNotification>	br_ability	</soundNotification>
+    <price>	15000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale trigger	</tags>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr germany	</nations>
+        <vehicle>
+          <tags>	afterburning_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	AfterburningBattleRoyale	  <cooldownSeconds>	45	</cooldownSeconds>
+      <consumeSeconds>	15	</consumeSeconds>
+      <enginePowerFactor>	1.5	</enginePowerFactor>
+      <maxSpeedFactor>	2.25	</maxSpeedFactor>
+      <vehicleRotationSpeed>	1.15	</vehicleRotationSpeed>
+    </script>
+  </afterburning_battle_royale>
+  <trappoint>
+    <id>	187	</id>
+    <userString>	#artefacts:trappoint/name	</userString>
+    <description>	#artefacts:trappoint/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:trappoint/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:trappoint/long_special	</longDescriptionSpecial>
+    <icon>	trappoint 0 0	</icon>
+    <soundNotification>	br_ability	</soundNotification>
+    <price>	15000	</price>
+    <tags>	trigger	</tags>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr germany usa	</nations>
+        <vehicle>
+          <tags>	trappoint_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	TrapPoint	  <cooldownSeconds>	90	</cooldownSeconds>
+      <influenceZone>
+        <radius>	35.0	</radius>
+        <height>	5.0	</height>
+        <depth>	5.0	</depth>
+        <timer>	20.0	</timer>
+        <terrainResistance>	2.5	</terrainResistance>
+        <influenceType>	2	</influenceType>
+        <debuffFactors>
+          <turret-rotationSpeed>	0.6	</turret-rotationSpeed>
+          <chassis-shotDispersionFactors-movement>	1.8	</chassis-shotDispersionFactors-movement>
+          <chassis-shotDispersionFactors-rotation>	1.8	</chassis-shotDispersionFactors-rotation>
+          <gun-shotDispersionFactors-turretRotation>	1.8	</gun-shotDispersionFactors-turretRotation>
+          <gun-rotationSpeed>	0.6	</gun-rotationSpeed>
+          <gun-reloadTime>	1.8	</gun-reloadTime>
+          <gun-aimingTime>	1.8	</gun-aimingTime>
+          <vehicle-rotationSpeed>	0.5	</vehicle-rotationSpeed>
+          <vehicle-maxSpeed>	0.4	</vehicle-maxSpeed>
+          <engine-power>	0.5	</engine-power>
+        </debuffFactors>
+      </influenceZone>
+    </script>
+  </trappoint>
+  <berserker>
+    <id>	190	</id>
+    <userString>	#artefacts:berserker/name	</userString>
+    <description>	#artefacts:berserker/descr	</description>
+    <icon>	berserker 0 0	</icon>
+    <soundNotification>	br_ability	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	BRBerserker	  <shortDescription>	#artefacts:berserker/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:berserker/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime minDelay totalDuration	</tooltips>
+      <consumeAmmo>	true	</consumeAmmo>
+      <deployTime>	0.0	</deployTime>
+      <cooldownTime>	90.0	</cooldownTime>
+      <duration>	0.1	</duration>
+      <inactivationDelay>	20	</inactivationDelay>
+      <radius>	0.0	</radius>
+      <increaseFactors>
+        <turret-rotationSpeed>	1.5	</turret-rotationSpeed>
+        <gun-rotationSpeed>	1.5	</gun-rotationSpeed>
+        <gun-piercing>	2.0	</gun-piercing>
+        <chassis-shotDispersionFactors-movement>	0.5	</chassis-shotDispersionFactors-movement>
+        <chassis-shotDispersionFactors-rotation>	0.5	</chassis-shotDispersionFactors-rotation>
+        <gun-shotDispersionFactors-turretRotation>	0.5	</gun-shotDispersionFactors-turretRotation>
+        <gun-reloadTime>	0.5	</gun-reloadTime>
+        <gun-aimingTime>	0.5	</gun-aimingTime>
+      </increaseFactors>
+      <dotParams>
+        <tickInterval>	2	</tickInterval>
+        <damagePerTick>	0.015	</damagePerTick>
+        <restoreHealth>	False	</restoreHealth>
+        <canDie>	False	</canDie>
+        <groupID>	0	</groupID>
+      </dotParams>
+    </script>
+  </berserker>
+  <spawn_kamikaze>
+    <id>	195	</id>
+    <userString>	#artefacts:spawn_kamikaze/name	</userString>
+    <description>	#artefacts:spawn_kamikaze/descr	</description>
+    <icon>	spawn_kamikaze 0 0	</icon>
+    <soundNotification>	eb_ability_smoke_screen	</soundNotification>
+    <instantAiming>	true	</instantAiming>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	SpawnKamikaze	  <shortDescription>	#artefacts:spawn_kamikaze/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:spawn_kamikaze/longDescr	</longDescription>
+      <tooltips>	cooldownTime minDelay areaLength_areaWidth-targetedArea projectilesNumber totalDuration	</tooltips>
+      <deployTime>	0.0	</deployTime>
+      <cooldownTime>	90.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <delay>	3.0	</delay>
+      <areaRadius>	15	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_dot_cross.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <insetRadius>	5	</insetRadius>
+        <areaSwitch>	content/Interface/TargetPoint/circle_dot_cross.visual	</areaSwitch>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <botType>	battleRoyaleBomberBot	</botType>
+      <botVehCompDescr>	germany:G00_Bomber_SH	</botVehCompDescr>
+      <clientVisuals>
+        <markerScale>	1 1 1	</markerScale>
+        <markerPositionOffset>	0 5 0	</markerPositionOffset>
+        <deliveringAnimationDuration>	2.0	</deliveringAnimationDuration>
+        <deliveringAnimationStartDelay>	1.0	</deliveringAnimationStartDelay>
+        <highlightDelay>	1.1	</highlightDelay>
+      </clientVisuals>
+      <botSpawnPointOffset>	0 5 0	</botSpawnPointOffset>
+      <botLifeTime>	30.0	</botLifeTime>
+      <explosionRadius>	15.0	</explosionRadius>
+      <explosionDamage>	500.0	</explosionDamage>
+      <explosionByShoot>	false	</explosionByShoot>
+      <damageReductionRate>	10	</damageReductionRate>
+      <botXRayFactor>	2	</botXRayFactor>
+      <vehicleRemoveDelay>	0	</vehicleRemoveDelay>
+      <clientRemovalNotificationDelay>	0	</clientRemovalNotificationDelay>
+    </script>
+  </spawn_kamikaze>
+  <repairpoint>
+    <id>	196	</id>
+    <userString>	#artefacts:repairpoint/name	</userString>
+    <description>	#artefacts:repairpoint/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:repairpoint/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:repairpoint/long_special	</longDescriptionSpecial>
+    <icon>	repairpoint 0 0	</icon>
+    <soundNotification>	br_ability	</soundNotification>
+    <price>	15000	</price>
+    <tags>	trigger	</tags>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr germany usa	</nations>
+        <vehicle>
+          <tags>	trappoint_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	TrapPoint	  <cooldownSeconds>	90	</cooldownSeconds>
+      <influenceZone>
+        <radius>	18.0	</radius>
+        <height>	5.0	</height>
+        <depth>	5.0	</depth>
+        <timer>	14.0	</timer>
+        <influenceType>	1	</influenceType>
+        <hotParams>
+          <healPerTick>	0.025	</healPerTick>
+          <healCrew>	True	</healCrew>
+          <healDevices>	True	</healDevices>
+          <healGroup>	1	</healGroup>
+          <tickInterval>	1	</tickInterval>
+        </hotParams>
+      </influenceZone>
+    </script>
+  </repairpoint>
+  <arcade_bomber_battle_royale>
+    <id>	198	</id>
+    <userString>	#artefacts:br_bomber/name	</userString>
+    <description>	#artefacts:br_bomber/descr	</description>
+    <icon>	bomber 0 0	</icon>
+    <soundNotification>	br_ability	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	BRBomberArcade	  <shortDescription>	#artefacts:br_bomber/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:br_bomber/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
+      <deployTime>	0.0	</deployTime>
+      <cooldownTime>	45.0	</cooldownTime>
+      <consumeAmmo>	true	</consumeAmmo>
+      <delay>	2.0	</delay>
+      <heights>	100 60	</heights>
+      <speed>	50	</speed>
+      <gravity>	10000000	</gravity>
+      <areaLength>	25	</areaLength>
+      <areaWidth>	25	</areaWidth>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <antepositions>	0	</antepositions>
+      <lateropositions>	0	</lateropositions>
+      <bombingMask>	1	</bombingMask>
+      <waveFraction>	1	</waveFraction>
+      <bombsNumber>	30	</bombsNumber>
+      <shellCompactDescr>	67866	</shellCompactDescr>
+      <tracerKind>	1	</tracerKind>
+      <piercingPower>	70 70	</piercingPower>
+      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
+      <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
+      <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
+      <areaVisual>	content/Interface/TargetPoint/circle_dot_cross.visual	</areaVisual>
+      <areaColor>	4278255360	</areaColor>
+      <noOwner>	false	</noOwner>
+    </script>
+  </arcade_bomber_battle_royale>
+  <arcade_minefield_battle_royale>
+    <id>	199	</id>
+    <userString>	#artefacts:br_minefield/name	</userString>
+    <description>	#artefacts:br_minefield/descr	</description>
+    <icon>	arcade_minefield 0 0	</icon>
+    <soundNotification>	hb1_equipment_minefield_ready	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_minefield_activated	</activationSoundNotification>
+    <activationWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button	</activationWWSoundFeedback>
+    <targetConfirmWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button_radio	</targetConfirmWWSoundFeedback>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	BattleRoyaleMinefield	  <shortDescription>	#artefacts:br_minefield/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:br_minefield/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <deployTime>	0	</deployTime>
+      <consumeAmmo>	true	</consumeAmmo>
+      <cooldownTime>	45.0	</cooldownTime>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <bombsPattern>	-10 -10
+				-10 0
+				-10 10
+				-5 -5
+				-5 5
+				0 -10
+				0 0
+				0 10
+				5 -5
+				5 5
+				10 -10
+				10 0
+				10 10	</bombsPattern>
+      <mineParams>
+        <triggerRadius>	6	</triggerRadius>
+        <triggerHeight>	5	</triggerHeight>
+        <triggerDepth>	1	</triggerDepth>
+        <influenceType>	2	</influenceType>
+        <lifetime>	20	</lifetime>
+        <damage>	0	</damage>
+        <shellCompactDescr>	83994	</shellCompactDescr>
+      </mineParams>
+      <noOwner>	false	</noOwner>
+      <areaVisual>	content/Interface/TargetPoint/circle_dot_cross.visual	</areaVisual>
+      <areaLength>	35	</areaLength>
+      <areaWidth>	35	</areaWidth>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <minApplyRadius>	15	</minApplyRadius>
+      <maxApplyRadius>	35	</maxApplyRadius>
+      <cameraPivotPosMin>	0 5 3	</cameraPivotPosMin>
+      <cameraPivotPosMax>	0 5 3	</cameraPivotPosMax>
+    </script>
+  </arcade_minefield_battle_royale>
+  <arcade_smoke_battle_royale>
+    <id>	200	</id>
+    <userString>	#artefacts:br_smoke/name	</userString>
+    <description>	#artefacts:br_smoke/descr	</description>
+    <icon>	smoke 0 0	</icon>
+    <soundNotification>	br_ability	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	BRSmokeArcade	  <shortDescription>	#artefacts:br_smoke/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:br_smoke/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime minDelay areaLength_areaWidth-targetedArea projectilesNumber totalDuration	</tooltips>
+      <deployTime>	0.0	</deployTime>
+      <cooldownTime>	45.0	</cooldownTime>
+      <consumeAmmo>	true	</consumeAmmo>
+      <minDelay>	1.0	</minDelay>
+      <deltaDelayRange>	0.1 0.3	</deltaDelayRange>
+      <smokeModelName>	objects/misc/server_smoke/cylinder1.model	</smokeModelName>
+      <smokeEffectName>	SmokeScreenEffect_gray	</smokeEffectName>
+      <startRadius>	5.	</startRadius>
+      <expandedRadius>	25.	</expandedRadius>
+      <startHeight>	10.	</startHeight>
+      <expandedHeight>	40.	</expandedHeight>
+      <heightUpFraction>	0.7	</heightUpFraction>
+      <expansionDuration>	3.	</expansionDuration>
+      <dispersionRadius>	1.	</dispersionRadius>
+      <totalDuration>	20.	</totalDuration>
+      <randomizeDuration>	0	</randomizeDuration>
+      <smokeOpacity>	10.	</smokeOpacity>
+      <visionRadiusFactor>	0.66	</visionRadiusFactor>
+      <areaVisual>	content/Interface/TargetPoint/circle_dot_cross.visual	</areaVisual>
+      <areaLength>	50	</areaLength>
+      <areaWidth>	50	</areaWidth>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	100	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <projectilesNumber>	3	</projectilesNumber>
+      <shellCompactDescr>	64538	</shellCompactDescr>
+      <areaColor>	4278255360	</areaColor>
+      <noOwner>	false	</noOwner>
+      <shotSoundPreDelay>	2	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_smoke_firing	</wwsoundShot>
+      <vignetteColor>	200 200 200	</vignetteColor>
+      <vignetteIntensity>	0.08	</vignetteIntensity>
+    </script>
+  </arcade_smoke_battle_royale>
+  <arcade_smoke_battle_royale_with_damage>
+    <id>	201	</id>
+    <userString>	#artefacts:br_smoke_with_damage/name	</userString>
+    <description>	#artefacts:br_smoke_with_damage/descr	</description>
+    <icon>	smoke_with_damage 0 0	</icon>
+    <soundNotification>	br_ability	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	BRSmokeArcade	  <shortDescription>	#artefacts:br_smoke_with_damage/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:br_smoke_with_damage/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime minDelay areaLength_areaWidth-targetedArea projectilesNumber totalDuration	</tooltips>
+      <deployTime>	0.0	</deployTime>
+      <cooldownTime>	45.0	</cooldownTime>
+      <consumeAmmo>	true	</consumeAmmo>
+      <minDelay>	1.0	</minDelay>
+      <deltaDelayRange>	0.1 0.3	</deltaDelayRange>
+      <smokeModelName>	objects/misc/server_smoke/cylinder1.model	</smokeModelName>
+      <smokeEffectName>	SmokeScreenEffect_red	</smokeEffectName>
+      <startRadius>	5.	</startRadius>
+      <expandedRadius>	25.	</expandedRadius>
+      <startHeight>	10.	</startHeight>
+      <expandedHeight>	20.	</expandedHeight>
+      <heightUpFraction>	0.7	</heightUpFraction>
+      <expansionDuration>	3.	</expansionDuration>
+      <dispersionRadius>	1.	</dispersionRadius>
+      <totalDuration>	20.	</totalDuration>
+      <randomizeDuration>	0	</randomizeDuration>
+      <smokeOpacity>	10.	</smokeOpacity>
+      <visionRadiusFactor>	0.66	</visionRadiusFactor>
+      <areaVisual>	content/Interface/TargetPoint/circle_dot_cross.visual	</areaVisual>
+      <areaLength>	50	</areaLength>
+      <areaWidth>	50	</areaWidth>
+      <minApplyRadius>	30	</minApplyRadius>
+      <maxApplyRadius>	200	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <projectilesNumber>	3	</projectilesNumber>
+      <shellCompactDescr>	64538	</shellCompactDescr>
+      <areaColor>	4278255360	</areaColor>
+      <noOwner>	false	</noOwner>
+      <shotSoundPreDelay>	2	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_smoke_firing	</wwsoundShot>
+      <vignetteColor>	2.1 0.4 0.3	</vignetteColor>
+      <vignetteIntensity>	0.5	</vignetteIntensity>
+      <dotParams>
+        <tickInterval>	1.0	</tickInterval>
+        <damagePerTick>	0.025	</damagePerTick>
+        <restoreHealth>	False	</restoreHealth>
+        <canDie>	False	</canDie>
+        <groupID>	1	</groupID>
+      </dotParams>
+    </script>
+  </arcade_smoke_battle_royale_with_damage>
+</battle_royale_equipments.xml>

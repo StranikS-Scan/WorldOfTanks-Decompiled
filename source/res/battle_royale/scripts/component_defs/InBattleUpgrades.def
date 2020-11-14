@@ -1,0 +1,25 @@
+<InBattleUpgrades.def>
+  <Properties>
+    <upgradeReadinessTime>
+      <Type>	TIME_WITH_REASON	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </upgradeReadinessTime>
+  </Properties>
+  <CellMethods>
+    <upgradeVehicle>
+      <Exposed></Exposed>
+      <Arg>	INT32	</Arg>
+    </upgradeVehicle>
+  </CellMethods>
+  <ClientMethods>
+    <onVehicleUpgraded>
+      <Arg>	STRING	</Arg>
+      <Arg>	STRING	</Arg>
+    </onVehicleUpgraded>
+  </ClientMethods>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	inBattleUpgrades	</DefaultKeyName>
+</InBattleUpgrades.def>

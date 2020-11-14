@@ -1,0 +1,49 @@
+<Loot.def>
+  <AppealRadius>	3000	</AppealRadius>
+  <Properties>
+    <pickupRange>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </pickupRange>
+    <pickupHeight>
+      <Type>	FLOAT32	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </pickupHeight>
+    <pickupDepth>
+      <Type>	FLOAT32	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </pickupDepth>
+    <pickupOffset>
+      <Type>	FLOAT32	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </pickupOffset>
+    <pickupTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </pickupTime>
+    <content>
+      <Type>	PYTHON	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </content>
+    <pickedUpBy>
+      <Type>	OBJECT_ID	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </pickedUpBy>
+    <typeID>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </typeID>
+  </Properties>
+  <ClientMethods></ClientMethods>
+  <BaseMethods></BaseMethods>
+  <TempProperties>
+    <_controllerID></_controllerID>
+    <_captures></_captures>
+    <_occupation></_occupation>
+    <_ProximityManager__data></_ProximityManager__data>
+    <arenaCell></arenaCell>
+    <directVisibility></directVisibility>
+    <events></events>
+  </TempProperties>
+  <shouldBackup>	false	</shouldBackup>
+</Loot.def>

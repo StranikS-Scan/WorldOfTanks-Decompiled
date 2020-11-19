@@ -643,7 +643,7 @@ class CustomizationCache(object):
             projectionDecalsCount = len(outfit.projection_decals)
             if projectionDecalsCount > MAX_USERS_PROJECTION_DECALS:
                 raise SoftException('projection decals quantity {} greater than acceptable'.format(projectionDecalsCount))
-            for itemType in CustomizationType.RANGE:
+            for itemType in CustomizationType.FULL_RANGE:
                 typeName = lower(CustomizationTypeNames[itemType])
                 componentsAttrName = '{}s'.format(typeName)
                 components = getattr(outfit, componentsAttrName, None)
@@ -651,6 +651,8 @@ class CustomizationCache(object):
                     continue
                 elif usedStyle is not None and not usedStyle.isEditable:
                     raise SoftException("Style {} can't contain extra items in outfit".format(outfit.styleId))
+                if itemType in CustomizationType.STYLE_ONLY_RANGE and components:
+                    raise SoftException("Outfit can't contain style-only items: {}".format(components))
                 storage = getattr(self, componentsAttrName)
                 if usedStyle is not None:
                     baseOutfit = usedStyle.outfits.get(season)

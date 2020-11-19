@@ -15,7 +15,6 @@ from gui.impl.lobby.dialogs.quit_game_dialog import QuitGameDialogWindow
 from gui.impl.lobby.premacc.maps_blacklist_confirm_view import MapsBlacklistConfirmView
 from gui.impl.lobby.battle_pass.battle_pass_voting_confirm_view import BattlePassVotingConfirmView
 from gui.impl.pub.dialog_window import DialogButtons, DialogWindow
-from connection_listener import ConnectionListener, ListenTo
 if typing.TYPE_CHECKING:
     from typing import Any, Optional, Iterable, Union
     from frameworks.wulf import View, Window
@@ -24,9 +23,7 @@ SingleDialogResult = namedtuple('SingleDialogResult', ('busy', 'result'))
 @async
 def show(dialog):
     dialog.load()
-    ConnectionListener.instance.attachListener(dialog, ListenTo.onDisconnected, once=True, warningText='[Dialog]: no handler for event _onClientDisconnected in type {}'.format(type(dialog)))
     result = yield await(dialog.wait())
-    ConnectionListener.instance.detachListener(dialog)
     dialog.destroy()
     raise AsyncReturn(result)
 

@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/common.py
 import logging
+from string import lower
 import BigWorld
 from constants import EMPTY_GEOMETRY_ID
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from items import makeIntCompactDescrByID
-from items.components.c11n_constants import CustomizationType, SeasonType
+from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, SeasonType
 from skeletons.gui.shared import IItemsCache
 from gui import SystemMessages
 from gui.impl.gen import R
@@ -166,7 +167,20 @@ class OutfitApplier(Processor):
             style = self.itemsCache.items.getItemByCD(intCD)
             baseComponent = style.getOutfit(self.season, self.vehicle.descriptor.makeCompactDescr())
             component = component.getDiff(baseComponent.pack())
+        self.__validateOutfitComponent(component)
         BigWorld.player().shop.buyAndEquipOutfit(self.vehicle.invID, self.season, component.makeCompDescr(), lambda code: self._response(code, callback))
+
+    def __validateOutfitComponent(self, outfitComponent):
+        for itemType in CustomizationType.STYLE_ONLY_RANGE:
+            typeName = lower(CustomizationTypeNames[itemType])
+            componentsAttrName = '{}s'.format(typeName)
+            itemsComponents = getattr(outfitComponent, componentsAttrName, None)
+            if itemsComponents:
+                _logger.error('StyleOnly items cannot be installed manually: itemType=[%s]; components=[%s].Forbidden components removed.', typeName, itemsComponents)
+                itemsComponents = []
+            setattr(outfitComponent, componentsAttrName, itemsComponents)
+
+        return
 
 
 class CustomizationsBuyer(Processor):

@@ -2,10 +2,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/classic/stats_exchange.py
 from collections import defaultdict
 from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
-from gui.Scaleform.daapi.view.battle.shared.stats_exchage import BattleStatisticsDataController
-from gui.Scaleform.daapi.view.battle.shared.stats_exchage import createExchangeBroker
-from gui.Scaleform.daapi.view.battle.shared.stats_exchage import broker
-from gui.Scaleform.daapi.view.battle.shared.stats_exchage import vehicle
+from gui.Scaleform.daapi.view.battle.shared.stats_exchange import BattleStatisticsDataController
+from gui.Scaleform.daapi.view.battle.shared.stats_exchange import createExchangeBroker
+from gui.Scaleform.daapi.view.battle.shared.stats_exchange import broker
+from gui.Scaleform.daapi.view.battle.shared.stats_exchange import vehicle
 from gui.battle_control.arena_info.arena_vos import ChatCommandVO
 from skeletons.account_helpers.settings_core import ISettingsCore
 from helpers import dependency

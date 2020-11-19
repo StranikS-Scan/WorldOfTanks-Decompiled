@@ -1085,10 +1085,11 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def __epicEventEnded(self, *_):
         if not self.prbDispatcher:
             return
-        state = self.prbDispatcher.getFunctionalState()
-        if state.isQueueSelected(constants.QUEUE_TYPE.EPIC):
-            self.__doSelect(PREBATTLE_ACTION_NAME.RANDOM)
-            self._updatePrebattleControls()
+        if self.prbDispatcher:
+            state = self.prbDispatcher.getFunctionalState()
+            if state.isQueueSelected(constants.QUEUE_TYPE.EPIC):
+                self.__doSelect(PREBATTLE_ACTION_NAME.RANDOM)
+                self._updatePrebattleControls()
 
     def __updateeventProgressionController(self, *_):
         self._updatePrebattleControls()

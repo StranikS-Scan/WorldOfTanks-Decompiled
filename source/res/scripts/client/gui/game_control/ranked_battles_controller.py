@@ -114,7 +114,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         self.__clientBonusBattlesCount = None
         self.__ranksCache = []
         self.__divisions = None
-        self.__primeTimeStatus = None
         self.__statsComposer = None
         self.__webSeasonProvider = RankedWebSeasonProvider()
         self.__yearPositionProvider = RankedYearPositionProvider()
@@ -618,7 +617,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         currTime = time_utils.getCurrentLocalServerTimestamp()
         if seasonsChangeTime and (currTime + timeLeft > seasonsChangeTime or timeLeft == 0):
             timeLeft = seasonsChangeTime - currTime
-        return timeLeft + 1 if timeLeft > 0 else time_utils.ONE_MINUTE
+        return timeLeft + 1 if timeLeft > 0 else 0
 
     def getTotalQualificationBattles(self):
         return self.__rankedSettings.qualificationBattles
@@ -1170,9 +1169,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
 
     def __timerUpdate(self):
         status, _, _ = self.getPrimeTimeStatus()
-        if status != self.__primeTimeStatus:
-            self.__primeTimeStatus = status
-            self.onGameModeStatusUpdated(status)
+        self.onGameModeStatusUpdated(status)
 
     def __timerTick(self):
         self.onGameModeStatusTick()

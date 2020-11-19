@@ -674,4 +674,54 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 5000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	sweden:S28_UDES_15_16	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	434	</id>
+      <texture>	gui/maps/vehicles/styles/S28_UDES_15_16_3Dst.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/S28_UDES_15_16_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	S28_UDES_15_16_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/S28_UDES_15_16_3Dst	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <sequences>
+            <item>
+              <id>	6	</id>
+              <slotId>	18000	</slotId>
+            </item>
+            <item>
+              <id>	7	</id>
+              <slotId>	38000	</slotId>
+            </item>
+          </sequences>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </sweden.xml>

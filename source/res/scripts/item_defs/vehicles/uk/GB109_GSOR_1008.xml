@@ -8,8 +8,8 @@
   </crew>
   <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
-    <forward>	55	</forward>
-    <backward>	12	</backward>
+    <forward>	60	</forward>
+    <backward>	17	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.187	</moving>
@@ -2069,7 +2069,7 @@
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	350	</circularVisionRadius>
+      <circularVisionRadius>	370	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -2107,7 +2107,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <clip>
             <count>	4	</count>
             <rate>	30	</rate>
@@ -2128,6 +2128,7 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <shotOffset>	0.000002 0.170134 0.000000	</shotOffset>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -2637,7 +2638,7 @@
       <engines>
         <Rolls_Royce_Meteor_MkIV_B12>
           <smplEnginePower>	640	</smplEnginePower>
-          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </Rolls_Royce_Meteor_MkIV_B12>
       </engines>
       <chassis>

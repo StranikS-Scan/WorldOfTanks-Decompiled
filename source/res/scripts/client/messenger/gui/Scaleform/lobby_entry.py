@@ -120,8 +120,13 @@ class LobbyEntry(IGUIEntry):
         if channel:
             clientID = channel.getClientID()
             controller = self.__channelsCtrl.getController(clientID)
-            if controller and not controller.addMessage(message):
-                self.__carouselHandler.notifyChannel(channel)
+            if controller:
+                isNotShown = not channel.isMessageShown(message)
+                if not controller.addMessage(message):
+                    if isNotShown:
+                        self.__carouselHandler.notifyChannel(channel, message)
+                elif isNotShown:
+                    channel.setMessageShown(message)
 
     def __me_onHistoryReceived(self, history, channel):
         if channel:

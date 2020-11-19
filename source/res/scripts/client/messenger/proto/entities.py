@@ -302,6 +302,12 @@ class ChannelEntity(ChatEntity, ChannelEvents):
         self.clearMembers()
         return
 
+    def setMessageShown(self, message):
+        pass
+
+    def isMessageShown(self, message):
+        return False
+
     def _onMemberStatusChanged(self, member):
         self.onMemberStatusChanged(member)
 

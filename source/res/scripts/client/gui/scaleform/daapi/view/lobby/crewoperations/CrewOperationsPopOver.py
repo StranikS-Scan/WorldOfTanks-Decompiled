@@ -125,7 +125,7 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
     def __isTopCrewForCurrentVehicle(self, crew, vehicle):
         for _, tman in crew:
             if tman is not None:
-                if tman.efficiencyRoleLevel < tankmen.MAX_SKILL_LEVEL or tman.vehicleNativeDescr.type.compactDescr != vehicle.intCD and not vehicle.isPremium:
+                if tman.efficiencyRoleLevel < tankmen.MAX_SKILL_LEVEL or tman.vehicleNativeDescr.type.compactDescr != vehicle.intCD:
                     return False
 
         return True

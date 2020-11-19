@@ -69,6 +69,13 @@
       <undamaged>	vehicles/sweden/S28_UDES_15_16/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/sweden/S28_UDES_15_16/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/sweden/S28_UDES_15_16/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <S28_UDES_15_16_3Dst>
+          <undamaged>	vehicles/sweden/S28_UDES_15_16/_skins/S28_UDES_15_16_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/sweden/S28_UDES_15_16/_skins/S28_UDES_15_16_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/sweden/S28_UDES_15_16/_skins/S28_UDES_15_16_3Dst/crash/lod0/Hull.model	</exploded>
+        </S28_UDES_15_16_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -98,10 +105,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.850935 0.324498 2.79893	</rayStart>
-        <rayEnd>	0.850855 0.143722 2.71337	</rayEnd>
+        <rayStart>	-0.8569 0.239748 2.75689	</rayStart>
+        <rayEnd>	-0.8569 0.230716 2.75259	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
-        <size>	0.3	</size>
+        <size>	0.266	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
       </slot>
@@ -899,6 +906,43 @@
         <anchorPosition>	-0.000056 0.478732 1.609	</anchorPosition>
         <anchorDirection>	0.000013 1 0.000000	</anchorDirection>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15058	</slotId>
+        <position>	0.697713 1.27842 1.19222	</position>
+        <rotation>	-0.000000 -0.000048 3.14159	</rotation>
+        <attachNode>	HP_sequence	</attachNode>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	S28_UDES_15_16_3Dst	</compatibleModels>
+        <scale>	0.534999 0.171647 0.534999	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.581967	</clipAngle>
+        <anchorPosition>	0.697713 0.507095 1.19222	</anchorPosition>
+        <anchorDirection>	0.000003 1 0.000000	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15059	</slotId>
+        <compatibleModels>	S28_UDES_15_16_3Dst	</compatibleModels>
+        <position>	0.566965 1.21644 -3.86043	</position>
+        <rotation>	3.14162 -0.000047 -0.000030	</rotation>
+        <scale>	0.4798 0.153935 0.4798	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.828902	</clipAngle>
+        <anchorPosition>	0.566964 0.407233 -3.86043	</anchorPosition>
+        <anchorDirection>	-0.000030 1 0.000027	</anchorDirection>
+        <attachNode>	HP_sequence	</attachNode>
+        <tags>	formfactor_square	</tags>
+      </slot>
+      <slot>
+        <slotType>	sequence	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0.000000 0.000000 0.000000	</position>
+        <rotation>	0.000000 0.000000 0.000000	</rotation>
+        <attachNode>	V	</attachNode>
+      </slot>
     </customizationSlots>
     <camouflage>
       <tiling>	1.65 1.65 0.000000 0.000000	</tiling>
@@ -935,6 +979,13 @@
         <undamaged>	vehicles/sweden/S28_UDES_15_16/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/sweden/S28_UDES_15_16/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/sweden/S28_UDES_15_16/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <S28_UDES_15_16_3Dst>
+            <undamaged>	vehicles/sweden/S28_UDES_15_16/_skins/S28_UDES_15_16_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/sweden/S28_UDES_15_16/_skins/S28_UDES_15_16_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/sweden/S28_UDES_15_16/_skins/S28_UDES_15_16_3Dst/crash/lod0/Chassis.model	</exploded>
+          </S28_UDES_15_16_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1256,6 +1307,13 @@
             <undamaged>	vehicles/sweden/S28_UDES_15_16/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/sweden/S28_UDES_15_16/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/sweden/S28_UDES_15_16/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <S28_UDES_15_16_3Dst>
+                <undamaged>	vehicles/sweden/S28_UDES_15_16/_skins/S28_UDES_15_16_3Dst/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/sweden/S28_UDES_15_16/_skins/S28_UDES_15_16_3Dst/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/sweden/S28_UDES_15_16/_skins/S28_UDES_15_16_3Dst/crash/lod0/Gun_02.model	</exploded>
+              </S28_UDES_15_16_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/sweden/S28_UDES_15_16/collision/Gun_02.model	</collisionModelServer>
@@ -1381,6 +1439,13 @@
         <undamaged>	vehicles/sweden/S28_UDES_15_16/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/sweden/S28_UDES_15_16/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/sweden/S28_UDES_15_16/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <S28_UDES_15_16_3Dst>
+            <undamaged>	vehicles/sweden/S28_UDES_15_16/_skins/S28_UDES_15_16_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/sweden/S28_UDES_15_16/_skins/S28_UDES_15_16_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/sweden/S28_UDES_15_16/_skins/S28_UDES_15_16_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </S28_UDES_15_16_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/sweden/S28_UDES_15_16/collision/Turret_01.model	</collisionModelServer>
@@ -1888,6 +1953,69 @@
           <clipAngle>	1.43156	</clipAngle>
           <anchorPosition>	-1.34176 0.44299 -1.05577	</anchorPosition>
           <anchorDirection>	-0.944808 0.312599 -0.0980773	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35035	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	S28_UDES_15_16_3Dst	</compatibleModels>
+          <position>	1.25508 1.67201 -0.994423	</position>
+          <rotation>	2.19606 -1.53267 -0.0010283	</rotation>
+          <scale>	0.449015 0.407816 0.44902	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.24095	</clipAngle>
+          <anchorPosition>	1.20482 0.344943 -0.206187	</anchorPosition>
+          <anchorDirection>	0.810178 0.585314 -0.0319313	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35036	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	S28_UDES_15_16_3Dst	</compatibleModels>
+          <position>	-1.29213 1.62294 -0.950879	</position>
+          <rotation>	2.19608 1.53275 -0.0352359	</rotation>
+          <scale>	0.38498 0.349656 0.384983	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.24095	</clipAngle>
+          <anchorPosition>	-1.28747 0.336841 -0.164839	</anchorPosition>
+          <anchorDirection>	-0.811047 0.584965 0.00437886	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35037	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	S28_UDES_15_16_3Dst	</compatibleModels>
+          <position>	-0.630785 1.48859 0.17267	</position>
+          <rotation>	0.337236 -0.000002 3.13984	</rotation>
+          <scale>	0.556442 0.241966 0.556443	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.279891	</clipAngle>
+          <anchorPosition>	-0.624998 0.326091 1.00227	</anchorPosition>
+          <anchorDirection>	0.00175292 0.943671 0.33088	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35038	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	S28_UDES_15_16_3Dst	</compatibleModels>
+          <position>	-0.555036 1.90914 -2.86667	</position>
+          <rotation>	3.14162 -0.000047 -0.000030	</rotation>
+          <scale>	0.480477 0.154153 0.480477	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.828902	</clipAngle>
+          <anchorPosition>	-0.549482 0.663684 -2.08064	</anchorPosition>
+          <anchorDirection>	-0.000030 1 0.000027	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	sequence	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	-0.007 -0.461 -0.443	</position>
+          <rotation>	0.000000 0.000000 0.000000	</rotation>
+          <attachNode>	HP_gunJoint	</attachNode>
         </slot>
       </customizationSlots>
       <camouflage>

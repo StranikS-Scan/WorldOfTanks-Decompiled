@@ -31,7 +31,7 @@ class _RemoveShowInvitesFlagAspect(aop.Aspect):
 class RemoveShowInvitesFlagPointcut(aop.Pointcut):
 
     def __init__(self):
-        super(RemoveShowInvitesFlagPointcut, self).__init__('gui.Scaleform.daapi.view.battle.shared.stats_exchage', 'BattleStatisticsDataController', 'as_setPersonalStatusS', aspects=(_RemoveShowInvitesFlagAspect(),))
+        super(RemoveShowInvitesFlagPointcut, self).__init__('gui.Scaleform.daapi.view.battle.shared.stats_exchange', 'BattleStatisticsDataController', 'as_setPersonalStatusS', aspects=(_RemoveShowInvitesFlagAspect(),))
 
 
 class _DisableGameSettingAspect(aop.Aspect):

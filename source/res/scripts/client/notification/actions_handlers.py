@@ -747,7 +747,7 @@ class _OpenMissingEventsHandler(_ActionHandler):
         SystemMessages.pushI18nMessage(backport.text(R.strings.system_messages.queue.isInQueue()), type=SystemMessages.SM_TYPE.Error, priority=NotificationPriorityLevel.HIGH)
 
 
-class _OpenNotrecruitedHandler(_ActionHandler):
+class _OpenNotrecruitedHandler(_NavigationDisabledActionHandler):
 
     @classmethod
     def getNotType(cls):
@@ -757,7 +757,7 @@ class _OpenNotrecruitedHandler(_ActionHandler):
     def getActions(cls):
         pass
 
-    def handleAction(self, model, entityID, action):
+    def doAction(self, model, entityID, action):
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_BARRACKS), ctx={'location': BARRACKS_CONSTANTS.LOCATION_FILTER_NOT_RECRUITED}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
@@ -850,7 +850,7 @@ class _OpenBattlePassProgressionView(_NavigationDisabledActionHandler):
         showMissionsBattlePassCommonProgression()
 
 
-class _OpenSelectDevicesHandler(_ActionHandler):
+class _OpenSelectDevicesHandler(_NavigationDisabledActionHandler):
 
     @classmethod
     def getNotType(cls):
@@ -860,8 +860,7 @@ class _OpenSelectDevicesHandler(_ActionHandler):
     def getActions(cls):
         pass
 
-    def handleAction(self, model, entityID, action):
-        super(_OpenSelectDevicesHandler, self).handleAction(model, entityID, action)
+    def doAction(self, model, entityID, action):
         notification = model.getNotification(self.getNotType(), entityID)
         savedData = notification.getSavedData()
         if savedData is not None:

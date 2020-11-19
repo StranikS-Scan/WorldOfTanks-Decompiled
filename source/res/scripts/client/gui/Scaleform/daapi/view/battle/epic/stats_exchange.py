@@ -3,9 +3,9 @@
 import logging
 from gui.Scaleform.daapi.view.battle.classic.stats_exchange import DynamicVehicleStatsComponent
 from gui.Scaleform.daapi.view.meta.EpicBattleStatisticDataControllerMeta import EpicBattleStatisticDataControllerMeta
-from gui.Scaleform.daapi.view.battle.shared.stats_exchage import createExchangeBroker
-from gui.Scaleform.daapi.view.battle.shared.stats_exchage import broker
-from gui.Scaleform.daapi.view.battle.shared.stats_exchage import vehicle
+from gui.Scaleform.daapi.view.battle.shared.stats_exchange import createExchangeBroker
+from gui.Scaleform.daapi.view.battle.shared.stats_exchange import broker
+from gui.Scaleform.daapi.view.battle.shared.stats_exchange import vehicle
 from gui.battle_control.arena_info import vos_collections
 from epic_constants import EPIC_BATTLE_TEAM_ID
 from gui.battle_control.arena_info.arena_vos import EPIC_BATTLE_KEYS

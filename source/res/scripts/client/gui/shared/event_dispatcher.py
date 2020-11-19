@@ -1072,7 +1072,9 @@ def showOfferGiftsWindow(offerID, overrideSuccessCallback=None):
 @async
 def showOfferGiftDialog(offerID, giftID, cdnTitle='', callback=None):
     dialogBuilder = makeOfferGiftDialog(offerID, giftID, cdnTitle)
-    yield showDialog(dialogBuilder.build(), callback)
+    app = dependency.instance(IAppLoader).getApp()
+    view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY))
+    yield showDialog(dialogBuilder.build(parent=view), callback)
 
 
 def showOfferGiftVehiclePreview(offerID, giftID, confirmCallback=None):

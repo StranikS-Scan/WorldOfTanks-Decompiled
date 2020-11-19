@@ -71,10 +71,11 @@ class EpicBattleTrainingRoom(EpicBattleTrainingRoomMeta):
             self._showActionErrorMessage()
 
     def _populate(self):
-        funcState = self.prbDispatcher.getFunctionalState()
-        if not funcState.isInLegacy(PREBATTLE_TYPE.EPIC_TRAINING):
-            g_eventDispatcher.removeEpicTrainingFromCarousel(False)
-            return
+        if self.prbDispatcher:
+            funcState = self.prbDispatcher.getFunctionalState()
+            if not funcState.isInLegacy(PREBATTLE_TYPE.EPIC_TRAINING):
+                g_eventDispatcher.removeEpicTrainingFromCarousel(False)
+                return
         super(EpicBattleTrainingRoom, self)._populate()
 
     def _addListeners(self):

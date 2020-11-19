@@ -65,6 +65,13 @@
       <undamaged>	vehicles/german/G134_PzKpfw_VII/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/german/G134_PzKpfw_VII/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/german/G134_PzKpfw_VII/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <G134_PzKpfw_VII_3Dst>
+          <undamaged>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/crash/lod0/Hull.model	</exploded>
+        </G134_PzKpfw_VII_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -868,6 +875,55 @@
         <anchorPosition>	0.00438325 0.949834 0.585333	</anchorPosition>
         <anchorDirection>	-0.000010 0.992335 0.123574	</anchorDirection>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15057	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G134_PzKpfw_VII_3Dst	</compatibleModels>
+        <position>	-1.48504 1.2427 2.74875	</position>
+        <rotation>	-0.00786291 0.000015 3.14158	</rotation>
+        <scale>	0.691113 0.605735 0.691122	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.772987	</clipAngle>
+        <anchorPosition>	-1.48504 0.35784 2.74619	</anchorPosition>
+        <anchorDirection>	0.000011 0.999969 -0.00786283	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15058	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G134_PzKpfw_VII_3Dst	</compatibleModels>
+        <position>	1.48505 1.24268 2.74875	</position>
+        <rotation>	-0.00786291 0.000015 3.14158	</rotation>
+        <scale>	0.691113 0.605735 0.691122	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.772987	</clipAngle>
+        <anchorPosition>	1.48505 0.357827 2.74619	</anchorPosition>
+        <anchorDirection>	0.000011 0.999969 -0.00786283	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15059	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G134_PzKpfw_VII_3Dst	</compatibleModels>
+        <position>	-0.115278 1.78381 2.97404	</position>
+        <rotation>	0.759978 -0.000175691 3.14158	</rotation>
+        <scale>	0.932854 0.817607 0.93286	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.426267	</clipAngle>
+        <anchorPosition>	-0.115248 0.378334 2.78859	</anchorPosition>
+        <anchorDirection>	-0.000109678 0.724851 0.688906	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	sequence	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0.000000 0.000000 0.000000	</position>
+        <rotation>	0.000000 0.000000 0.000000	</rotation>
+        <attachNode>	V	</attachNode>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -910,6 +966,13 @@
         <undamaged>	vehicles/german/G134_PzKpfw_VII/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G134_PzKpfw_VII/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G134_PzKpfw_VII/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <G134_PzKpfw_VII_3Dst>
+            <undamaged>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/crash/lod0/Chassis.model	</exploded>
+          </G134_PzKpfw_VII_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1716,6 +1779,13 @@
             <undamaged>	vehicles/german/G134_PzKpfw_VII/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/german/G134_PzKpfw_VII/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/german/G134_PzKpfw_VII/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <G134_PzKpfw_VII_3Dst>
+                <undamaged>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/crash/lod0/Gun_02.model	</exploded>
+              </G134_PzKpfw_VII_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G134_PzKpfw_VII/collision/Gun_02.model	</collisionModelServer>
@@ -1755,6 +1825,13 @@
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>
+            <slot>
+              <slotType>	sequence	</slotType>
+              <slotId>	48000	</slotId>
+              <position>	0.000000 0.000000 -3.000000	</position>
+              <rotation>	0.000000 0.000000 0.000000	</rotation>
+              <attachNode>	G	</attachNode>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -1773,6 +1850,13 @@
         <undamaged>	vehicles/german/G134_PzKpfw_VII/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/german/G134_PzKpfw_VII/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/german/G134_PzKpfw_VII/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <G134_PzKpfw_VII_3Dst>
+            <undamaged>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </G134_PzKpfw_VII_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G134_PzKpfw_VII/collision/Turret_01.model	</collisionModelServer>
@@ -2283,6 +2367,83 @@
           <clipAngle>	0.54952	</clipAngle>
           <anchorPosition>	-0.872981 0.587972 -1.02069	</anchorPosition>
           <anchorDirection>	-0.616517 0.288859 -0.732439	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35034	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G134_PzKpfw_VII_3Dst	</compatibleModels>
+          <position>	-0.655751 2.4605 -0.86759	</position>
+          <rotation>	1.31803 -1.05737 -2.91463	</rotation>
+          <scale>	0.509377 0.509382 0.509382	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.499418	</clipAngle>
+          <anchorPosition>	-0.877188 0.645978 1.28388	</anchorPosition>
+          <anchorDirection>	-0.932281 0.243671 0.267349	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35035	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G134_PzKpfw_VII_3Dst	</compatibleModels>
+          <position>	0.658155 2.46004 -0.875482	</position>
+          <rotation>	1.31804 1.05731 2.91469	</rotation>
+          <scale>	0.509377 0.509382 0.509382	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.499418	</clipAngle>
+          <anchorPosition>	0.879884 0.645512 1.27601	</anchorPosition>
+          <anchorDirection>	0.932248 0.243668 0.267467	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35036	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G134_PzKpfw_VII_3Dst	</compatibleModels>
+          <position>	-0.000039 2.35836 -3.40184	</position>
+          <rotation>	1.77277 -0.000415087 -0.000427961	</rotation>
+          <scale>	0.507431 0.230316 0.507441	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.0027002	</clipAngle>
+          <anchorPosition>	0.000107713 0.517268 -1.467	</anchorPosition>
+          <anchorDirection>	-0.000021 0.200605 -0.979672	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35037	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G134_PzKpfw_VII_3Dst	</compatibleModels>
+          <position>	-1.79618 2.48256 -2.12272	</position>
+          <rotation>	1.5667 -0.719969 -2.26557	</rotation>
+          <scale>	0.491559 0.2 0.491561	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.0879118	</clipAngle>
+          <anchorPosition>	-1.7937 0.610113 -0.0347367	</anchorPosition>
+          <anchorDirection>	-0.999679 0.00262475 -0.0252015	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35038	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G134_PzKpfw_VII_3Dst	</compatibleModels>
+          <position>	-0.057352 2.95359 -1.47085	</position>
+          <rotation>	0.00186989 -0.000000 3.12323	</rotation>
+          <scale>	0.720384 0.05 0.720393	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.86723	</clipAngle>
+          <anchorPosition>	-0.0553974 1.17927 0.617233	</anchorPosition>
+          <anchorDirection>	0.018389 0.99983 0.00159778	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	sequence	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0.000000 -0.626 -1.231	</position>
+          <rotation>	0.000000 0.000000 0.000000	</rotation>
+          <attachNode>	HP_gunJoint	</attachNode>
         </slot>
       </customizationSlots>
       <customization>

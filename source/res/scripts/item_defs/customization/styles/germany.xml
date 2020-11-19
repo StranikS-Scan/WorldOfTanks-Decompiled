@@ -1247,7 +1247,7 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <userString>	#vehicle_customization:styles/unique_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
     <priceGroup>	styles 5000g notInShop	</priceGroup>
@@ -1259,10 +1259,10 @@
     <style>
       <id>	429	</id>
       <texture>	gui/maps/vehicles/styles/G42_Maus_3Dst.png	</texture>
-      <longDescriptionSpecial>	#vehicle_customization:special_style/G42_Maus_3Dst_desc/long	</longDescriptionSpecial>
+      <longDescriptionSpecial>	#vehicle_customization:unique_style/G42_Maus_3Dst_desc/long	</longDescriptionSpecial>
       <modelsSet>	G42_Maus_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:special_style/G42_Maus_3Dst	</userString>
+      <userString>	#vehicle_customization:unique_style/G42_Maus_3Dst	</userString>
       <tags>	progression_required	</tags>
       <outfits>
         <outfit>
@@ -1315,6 +1315,60 @@
               <palette>	0	</palette>
             </item>
           </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 5000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G134_PzKpfw_VII	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	109	</id>
+      <texture>	gui/maps/vehicles/styles/G134_PzKpfw_VII_3Dst.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/G134_PzKpfw_VII_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	G134_PzKpfw_VII_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/G134_PzKpfw_VII_3Dst	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <sequences>
+            <item>
+              <id>	8	</id>
+              <slotId>	18000	</slotId>
+            </item>
+            <item>
+              <id>	9	</id>
+              <slotId>	38000	</slotId>
+            </item>
+            <item>
+              <id>	10	</id>
+              <slotId>	48000	</slotId>
+            </item>
+          </sequences>
         </outfit>
       </outfits>
       <itemFilters>

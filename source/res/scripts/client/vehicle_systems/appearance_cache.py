@@ -5,13 +5,12 @@ from collections import namedtuple
 import BigWorld
 from constants import ARENA_GUI_TYPE
 from debug_utils import LOG_DEBUG, LOG_WARNING
+from items import vehicles
+from gui.shared.utils.MethodsRules import MethodsRules
 from vehicle_systems.CompoundAppearance import CompoundAppearance
 from vehicle_systems.stricted_loading import loadingPriority, makeCallbackWeak
-from items import vehicles
 _ENABLE_CACHE_TRACKER = False
 _ENABLE_PRECACHE = True
-_g_cache = None
-d_cacheInfo = None
 _VehicleInfo = namedtuple('_VehicleInfo', ['typeDescr',
  'health',
  'isCrewActive',
@@ -19,45 +18,63 @@ _VehicleInfo = namedtuple('_VehicleInfo', ['typeDescr',
  'outfitCD'])
 _AssemblerData = namedtuple('_AssemblerData', ['appearance', 'info', 'prereqsNames'])
 
-class _AppearanceCache(object):
-    __slots__ = ('__arena', '__appearanceCache', '__assemblersCache', '__spaceLoaded', '__wholeVehResources')
+class _AppearanceCache(MethodsRules):
+    __slots__ = ('__arena', '__appearanceCache', '__assemblersCache', '__spaceLoaded', '__wholeVehResources', '__dCacheInfo')
 
     @property
     def cache(self):
         return self.__appearanceCache
 
-    def __init__(self, arena):
-        global d_cacheInfo
-        self.__arena = weakref.proxy(arena)
-        self.__appearanceCache = dict()
-        self.__assemblersCache = dict()
+    @property
+    def dCacheInfo(self):
+        return self.__dCacheInfo
+
+    def __init__(self):
+        super(_AppearanceCache, self).__init__()
+        self.__arena = None
+        self.__appearanceCache = {}
+        self.__assemblersCache = {}
+        self.__dCacheInfo = {}
         self.__spaceLoaded = False
+        self.__wholeVehResources = None
+        return
+
+    def isArenaSet(self):
+        return self.__arena is not None
+
+    @MethodsRules.delayable()
+    def setArena(self, arena):
+        self.__arena = weakref.proxy(arena)
         self.__arena.onNewVehicleListReceived += self.onVehicleListReceived
         self.__arena.onVehicleAdded += self.onVehicleAddedUpdate
         self.__arena.onVehicleUpdated += self.onVehicleAddedUpdate
         if getattr(self.__arena.componentSystem, 'playerDataComponent', None):
             self.__arena.componentSystem.playerDataComponent.onPlayerGroupsUpdated += self.__onPlayerGroupsUpdated
-        if _ENABLE_CACHE_TRACKER:
-            d_cacheInfo = dict()
-        self.__wholeVehResources = None
         return
 
-    def destroy(self):
-        global d_cacheInfo
-        self.__arena.onVehicleAdded -= self.onVehicleAddedUpdate
-        self.__arena.onVehicleUpdated -= self.onVehicleAddedUpdate
-        self.__arena.onNewVehicleListReceived -= self.onVehicleListReceived
-        if getattr(self.__arena.componentSystem, 'playerDataComponent', None):
-            self.__arena.componentSystem.playerDataComponent.onPlayerGroupsUpdated -= self.__onPlayerGroupsUpdated
+    def delArena(self):
+        if not self.isArenaSet():
+            return
+        else:
+            if getattr(self.__arena.componentSystem, 'playerDataComponent', None):
+                self.__arena.componentSystem.playerDataComponent.onPlayerGroupsUpdated -= self.__onPlayerGroupsUpdated
+            self.__arena.onVehicleAdded -= self.onVehicleAddedUpdate
+            self.__arena.onVehicleUpdated -= self.onVehicleAddedUpdate
+            self.__arena.onNewVehicleListReceived -= self.onVehicleListReceived
+            self.__arena = None
+            return
+
+    def clear(self):
+        super(_AppearanceCache, self).clear()
+        self.delArena()
         for _, appearance in self.__appearanceCache.iteritems():
             appearance[0].destroy()
 
-        self.__arena = None
-        self.__appearanceCache = None
-        self.__assemblersCache = None
+        self.__dCacheInfo.clear()
+        self.__appearanceCache.clear()
+        self.__assemblersCache.clear()
         self.__wholeVehResources = None
-        if _ENABLE_CACHE_TRACKER:
-            d_cacheInfo = None
+        self.__spaceLoaded = False
         return
 
     def onVehicleListReceived(self):
@@ -70,6 +87,7 @@ class _AppearanceCache(object):
             vInfo = self.__arena.vehicles[vId]
             self.__precacheVehicle({vId: vInfo})
 
+    @MethodsRules.delayable('setArena')
     def onSpaceLoaded(self):
         self.__spaceLoaded = True
         if _ENABLE_PRECACHE:
@@ -191,7 +209,7 @@ class _AppearanceCache(object):
                 apperanceOwner.startVisual()
             del self.__assemblersCache[vId]
             if _ENABLE_CACHE_TRACKER:
-                d_cacheInfo[vId] = BigWorld.time()
+                self.__dCacheInfo[vId] = BigWorld.time()
             return appearance
 
     def __cacheApperance(self, vId, info):
@@ -228,7 +246,7 @@ class _AppearanceCache(object):
             if playerVehicleId in vIds:
                 vehicleInfos = self.__arena.vehicles
             else:
-                vehicleInfos = dict(((vId, self.__arena.vehicles[vId]) for vId in vIds))
+                vehicleInfos = {vId:self.__arena.vehicles[vId] for vId in vIds}
                 groupIDs = vIds
             self.__precacheVehicle(vehicleInfos, groupIDs)
             return
@@ -247,38 +265,29 @@ class _AppearanceCache(object):
         return
 
 
-def _resourceLoaded(resNames, vId, resourceRefs):
-    global _g_cache
-    if _g_cache is None:
-        return
-    else:
-        failedRefs = resourceRefs.failedIDs
-        for resName in resNames:
-            if resName in failedRefs:
-                LOG_WARNING('Resource is not found', resName)
+_g_cache = _AppearanceCache()
 
-        _g_cache.constructAppearance(vId, resourceRefs)
+def _resourceLoaded(resNames, vId, resourceRefs):
+    if not _g_cache.isArenaSet():
         return
+    failedRefs = resourceRefs.failedIDs
+    for resName in resNames:
+        if resName in failedRefs:
+            LOG_WARNING('Resource is not found', resName)
+
+    _g_cache.constructAppearance(vId, resourceRefs)
 
 
 def _wholeVehicleResourcesLoaded(resNames, resourceRefs):
-    if _g_cache is None:
-        return
-    else:
-        _g_cache.saveWholeVehicleResources(resourceRefs)
-        return
+    _g_cache.saveWholeVehicleResources(resourceRefs)
 
 
 def init(clientArena):
-    global _g_cache
-    _g_cache = _AppearanceCache(clientArena)
+    _g_cache.setArena(clientArena)
 
 
 def destroy():
-    global _g_cache
-    _g_cache.destroy()
-    _g_cache = None
-    return
+    _g_cache.clear()
 
 
 def onSpaceLoaded():
@@ -307,7 +316,7 @@ def dCacheStatus():
         cache = _g_cache.cache
         LOG_DEBUG('VehicleID cachedTime   Activated  VehicleType')
         for vId, appearance in cache.iteritems():
-            cachedTime = d_cacheInfo.get(vId, None)
+            cachedTime = _g_cache.dCacheInfo.get(vId, None)
             LOG_DEBUG('{0}     {1}    {2}   {3}'.format(vId, cachedTime, appearance[0].activated, appearance[0].typeDescriptor.type.name))
 
     return

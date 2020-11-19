@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/SniperCamera.py
+import math
 import BigWorld
 import GUI
 from Math import Vector2, Vector3, Matrix
@@ -36,6 +37,8 @@ class SniperCamera(CameraWithSettings, CallbackDelayer):
     _FILTER_LENGTH = 5
     _DEFAULT_MAX_ACCELERATION_DURATION = 1.5
     _MIN_REL_SPEED_ACC_SMOOTHING = 0.7
+    _DEFAULT_FOV = math.pi / 3
+    _DEFAULT_CLIP_PLANE_SCALE = math.tan(_DEFAULT_FOV / 2)
     camera = property(lambda self: self.__cam)
     aimingSystem = property(lambda self: self.__aimingSystem)
     __aimOffset = aih_global_binding.bindRW(aih_global_binding.BINDING_ID.AIM_OFFSET)
@@ -62,7 +65,8 @@ class SniperCamera(CameraWithSettings, CallbackDelayer):
             self.__aimingSystem = None
             self.__binoculars = binoculars
             self.__defaultAimOffset = defaultOffset or Vector2()
-            self.__crosshairMatrix = createCrosshairMatrix(offsetFromNearPlane=self.__dynamicCfg['aimMarkerDistance'])
+            self.__aimMarkerDistance = self.__dynamicCfg['aimMarkerDistance']
+            self.__crosshairMatrix = createCrosshairMatrix(offsetFromNearPlane=self.__aimMarkerDistance)
             self.__prevTime = BigWorld.time()
             self.__autoUpdateDxDyDz = Vector3(0, 0, 0)
             if BattleReplay.g_replayCtrl.isPlaying:
@@ -234,6 +238,13 @@ class SniperCamera(CameraWithSettings, CallbackDelayer):
         if BattleReplay.g_replayCtrl.isRecording:
             BattleReplay.g_replayCtrl.serializeCallbackData(CallbackDataNames.APPLY_ZOOM, (zoomFactor,))
         FovExtended.instance().setFovByMultiplier(1 / zoomFactor)
+        self.__updateCrosshairMatrix()
+
+    def __updateCrosshairMatrix(self):
+        currentFov = BigWorld.projection().fov
+        curClipPlaneScale = math.tan(currentFov / 2)
+        aimMarkerDistance = self.__aimMarkerDistance * self._DEFAULT_CLIP_PLANE_SCALE / curClipPlaneScale
+        self.__crosshairMatrix = createCrosshairMatrix(offsetFromNearPlane=aimMarkerDistance)
 
     def __getZooms(self):
         zooms = self._cfg['zooms']

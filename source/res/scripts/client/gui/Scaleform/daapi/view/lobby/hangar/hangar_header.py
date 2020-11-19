@@ -513,11 +513,13 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
                 eventQuestsTooltipIsSpecial = True
                 battleType = currentEvent.getBattleType()
                 wrongBattleType = self.prbEntity.getEntityType() != battleType
-                inSquadState = self.prbDispatcher.getFunctionalState().isInUnit(constants.PREBATTLE_TYPE.SQUAD)
-                if inSquadState:
-                    unit = prb_getters.getUnit(safe=True)
-                    if len(unit.getMembers()) == 1:
-                        inSquadState = False
+                inSquadState = False
+                if self.prbDispatcher is not None:
+                    inSquadState = self.prbDispatcher.getFunctionalState().isInUnit(constants.PREBATTLE_TYPE.SQUAD)
+                    if inSquadState:
+                        unit = prb_getters.getUnit(safe=True)
+                        if len(unit.getMembers()) == 1:
+                            inSquadState = False
                 wrongSquadState = inSquadState and not currentEvent.getIsSquadAllowed()
                 noserver = not currentEvent.isAvailableServer(self._connectionMgr.peripheryID)
                 hasWarning = wrongBattleType or noserver or wrongSquadState

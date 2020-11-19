@@ -3,12 +3,14 @@
 from messenger import error
 from helpers.ro_property import ROPropertyMeta
 from messenger.storage.ChannelsStorage import ChannelsStorage
+from messenger.storage.shown_messages_storage import ShownMessagesStorage
 from messenger.storage.local_cache import StorageLocalCache, SimpleCachedStorage
 from messenger.storage.PlayerCtxStorage import PlayerCtxStorage
 from messenger.storage.UsersStorage import UsersStorage
 _STORAGE = {'channels': ChannelsStorage(),
  'users': UsersStorage(),
- 'playerCtx': PlayerCtxStorage()}
+ 'playerCtx': PlayerCtxStorage(),
+ 'shownMessages': ShownMessagesStorage()}
 _DYN_STORAGE = {}
 
 class storage_getter(object):

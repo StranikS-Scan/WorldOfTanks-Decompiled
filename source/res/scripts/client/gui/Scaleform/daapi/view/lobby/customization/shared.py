@@ -124,7 +124,10 @@ def getCustomPurchaseItems(season, modifiedOutfits, c11nService=None):
         for intCD, component, idx, container, _ in modifiedOutfits[s].itemsFull():
             item = c11nService.getItemByCD(intCD)
             isFromInventory = inventoryCounts[intCD] > 0
-            slotType = ITEM_TYPE_TO_SLOT_TYPE[item.itemTypeID]
+            slotType = ITEM_TYPE_TO_SLOT_TYPE.get(item.itemTypeID)
+            if slotType is None:
+                _logger.error('Failed to get slotType for purchaseItem: [%s]', item)
+                continue
             purchaseItems.append(PurchaseItem(item, price=item.getBuyPrice(), areaID=container.getAreaID(), slotType=slotType, regionIdx=idx, selected=True, group=s, isFromInventory=isFromInventory, isDismantling=False, component=component))
             inventoryCounts[intCD] -= 1
 

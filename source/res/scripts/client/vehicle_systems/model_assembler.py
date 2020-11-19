@@ -453,7 +453,7 @@ def assembleVehicleAudition(isPlayer, appearance):
     vehicleAudition.setTracksInfo(lambda : appearance.transmissionScroll, lambda : appearance.transmissionSlip, lambda : appearance.getWheelsSteeringMax(), DataLinks.createBoolLink(appearance.flyingInfoProvider, 'isFlying'))
     if typeDescriptor.type.siegeModeParams is not None:
         soundStateChange = typeDescriptor.type.siegeModeParams['soundStateChange']
-        vehicleAudition.setSiegeSoundEvents(soundStateChange.isEngine, soundStateChange.on if isPlayer or not soundStateChange.npcOn else soundStateChange.npcOn, soundStateChange.off if isPlayer or not soundStateChange.npcOff else soundStateChange.npcOff)
+        vehicleAudition.setSiegeSoundEvents(soundStateChange.isEngine, soundStateChange.on if isPlayer else soundStateChange.npcOn, soundStateChange.off if isPlayer else soundStateChange.npcOff)
     vehicleAudition.setDetailedEngineState(appearance.detailedEngineState)
     vehicleAudition.setUpdatePeriod(PLAYER_UPDATE_PERIOD if isPlayer else NPC_UPDATE_PERIOD)
     appearance.engineAudition = vehicleAudition

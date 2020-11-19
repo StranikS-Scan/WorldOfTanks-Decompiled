@@ -21,47 +21,47 @@ class CraftmachineEntryPointViewModel(ViewModel):
     def setSubTitle(self, value):
         self._setString(1, value)
 
+    def getStatusDate(self):
+        return self._getString(2)
+
+    def setStatusDate(self, value):
+        self._setString(2, value)
+
     def getIconSmall(self):
-        return self._getResource(2)
-
-    def setIconSmall(self, value):
-        self._setResource(2, value)
-
-    def getIconBig(self):
         return self._getResource(3)
 
-    def setIconBig(self, value):
+    def setIconSmall(self, value):
         self._setResource(3, value)
 
-    def getBgSmallThin(self):
+    def getIconBig(self):
         return self._getResource(4)
 
-    def setBgSmallThin(self, value):
+    def setIconBig(self, value):
         self._setResource(4, value)
 
-    def getBgSmallWide(self):
+    def getBgSmallThin(self):
         return self._getResource(5)
 
-    def setBgSmallWide(self, value):
+    def setBgSmallThin(self, value):
         self._setResource(5, value)
 
-    def getBgBigThin(self):
+    def getBgSmallWide(self):
         return self._getResource(6)
 
-    def setBgBigThin(self, value):
+    def setBgSmallWide(self, value):
         self._setResource(6, value)
 
-    def getBgBigWide(self):
+    def getBgBigThin(self):
         return self._getResource(7)
 
-    def setBgBigWide(self, value):
+    def setBgBigThin(self, value):
         self._setResource(7, value)
 
-    def getStartDate(self):
-        return self._getNumber(8)
+    def getBgBigWide(self):
+        return self._getResource(8)
 
-    def setStartDate(self, value):
-        self._setNumber(8, value)
+    def setBgBigWide(self, value):
+        self._setResource(8, value)
 
     def getEndDate(self):
         return self._getNumber(9)
@@ -73,12 +73,12 @@ class CraftmachineEntryPointViewModel(ViewModel):
         super(CraftmachineEntryPointViewModel, self)._initialize()
         self._addStringProperty('title', '')
         self._addStringProperty('subTitle', '')
+        self._addStringProperty('statusDate', '')
         self._addResourceProperty('iconSmall', R.invalid())
         self._addResourceProperty('iconBig', R.invalid())
         self._addResourceProperty('bgSmallThin', R.invalid())
         self._addResourceProperty('bgSmallWide', R.invalid())
         self._addResourceProperty('bgBigThin', R.invalid())
         self._addResourceProperty('bgBigWide', R.invalid())
-        self._addNumberProperty('startDate', -1)
         self._addNumberProperty('endDate', -1)
         self.onActionClick = self._addCommand('onActionClick')

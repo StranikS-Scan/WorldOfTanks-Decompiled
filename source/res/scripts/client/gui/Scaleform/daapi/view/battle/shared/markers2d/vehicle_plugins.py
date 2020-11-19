@@ -102,6 +102,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         return
 
     def stop(self):
+        self.__removeMarkerCallbacks()
         while self._markers:
             _, marker = self._markers.popitem()
             marker.destroy()
@@ -539,6 +540,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         return
 
     def __handleCallback(self, markerID, targetID):
+        self.__removeMarkerCallback(markerID)
         marker = self._markers[targetID]
         if marker.getReplyCount() > 0:
             self._setMarkerReplied(marker, True)
@@ -548,11 +550,10 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             self.__stopActionMarker(markerID, targetID)
         if marker.getIsSticky():
             self._setMarkerSticky(markerID, True)
-        self.__removeMarkerCallback(markerID)
 
     def __stopActionMarker(self, markerID, vehicleID):
-        self._invokeMarker(markerID, 'stopActionMarker')
         self.__removeMarkerCallback(markerID)
+        self._invokeMarker(markerID, 'stopActionMarker')
         marker = self._markers[vehicleID]
         marker.setIsActionMarkerActive(False)
         if marker and not avatar_getter.isVehicleAlive() and not marker.getIsPlayerTeam():
@@ -574,13 +575,15 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             return
 
     def __removeMarkerCallback(self, markerID):
-        if markerID not in self.__callbackIDs:
-            return
-        else:
-            BigWorld.cancelCallback(self.__callbackIDs[markerID])
-            self.__callbackIDs[markerID] = None
-            self.__callbackIDs.pop(markerID, None)
-            return
+        callbackID = self.__callbackIDs.pop(markerID, None)
+        if callbackID is not None:
+            BigWorld.cancelCallback(callbackID)
+        return
+
+    def __removeMarkerCallbacks(self):
+        while self.__callbackIDs:
+            _, callbackID = self.__callbackIDs.popitem()
+            BigWorld.cancelCallback(callbackID)
 
     def __updateStunMarker(self, vehicleID, handle, value):
         self.__updateMarkerTimer(vehicleID, handle, value.duration, BATTLE_MARKER_STATES.STUN_STATE, True)

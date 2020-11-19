@@ -697,7 +697,7 @@ class CustomizationOutfit(SerializableComponent):
 
     def getDiff(self, outfit):
         resultOutfit = self.copy()
-        for itemType in CustomizationType.RANGE:
+        for itemType in CustomizationType.FULL_RANGE:
             typeName = lower(CustomizationTypeNames[itemType])
             componentsAttrName = '{}s'.format(typeName)
             if componentsAttrName not in self.__slots__:

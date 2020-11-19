@@ -187,8 +187,6 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
         self.__isVisible = True
         self.__arenaDP = self.sessionProvider.getCtx().getArenaDP()
         self.__ribbonsAggregator = ribbons_aggregator.createRibbonsAggregator()
-        self.__ribbonsAggregator.onRibbonAdded += self.__onRibbonAdded
-        self.__ribbonsAggregator.onRibbonUpdated += self.__onRibbonUpdated
 
     def onShow(self):
         self.__playSound(_SHOW_RIBBON_SOUND_NAME)
@@ -216,6 +214,8 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
         self.__setupView()
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         g_eventBus.addListener(GameEvent.GUI_VISIBILITY, self.__onGUIVisibilityChanged, scope=EVENT_BUS_SCOPE.BATTLE)
+        self.__ribbonsAggregator.onRibbonAdded += self.__onRibbonAdded
+        self.__ribbonsAggregator.onRibbonUpdated += self.__onRibbonUpdated
         self.__ribbonsAggregator.start()
         if not self.__enabled:
             self.__ribbonsAggregator.suspend()

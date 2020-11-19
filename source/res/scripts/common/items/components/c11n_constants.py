@@ -51,6 +51,8 @@ class CustomizationType(object):
      PROJECTION_DECAL,
      PERSONAL_NUMBER,
      FONT}
+    STYLE_ONLY_RANGE = {ATTACHMENT, SEQUENCE}
+    FULL_RANGE = RANGE | STYLE_ONLY_RANGE
     APPLIED_TO_TYPES = (PAINT,
      CAMOUFLAGE,
      DECAL,
@@ -69,7 +71,7 @@ class CustomizationType(object):
      PROJECTION_DECAL)
 
 
-CustomizationTypeNames = {getattr(CustomizationType, k):k for k in dir(CustomizationType) if not k.startswith('_') and k != 'RANGE'}
+CustomizationTypeNames = {getattr(CustomizationType, k):k for k in dir(CustomizationType) if isinstance(getattr(CustomizationType, k), int)}
 CustomizationNamesToTypes = {v:k for k, v in CustomizationTypeNames.iteritems()}
 
 class ItemTags(object):

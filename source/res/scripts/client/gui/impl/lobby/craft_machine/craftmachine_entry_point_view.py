@@ -5,6 +5,7 @@ import logging
 import time
 from datetime import datetime
 from frameworks.wulf import ViewFlags, ViewSettings
+from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.impl import backport
 from gui.impl.gen.view_models.views.lobby.craft_machine.craftmachine_entry_point_view_model import CraftmachineEntryPointViewModel
 from gui.Scaleform.daapi.view.lobby.clans.clan_helpers import getCraftMachineURL
@@ -19,14 +20,13 @@ _TIME_FORMAT = '%d.%m.%Y'
 
 class CraftmachineEntryPointView(ViewImpl):
     __notificationsCtrl = dependency.descriptor(IEventsNotificationsController)
-    __slots__ = ('__additionalUrl', '__startDateUI', '__endDateUI')
+    __slots__ = ('__additionalUrl', '__endDateUI')
 
     def __init__(self, flags=ViewFlags.VIEW):
         settings = ViewSettings(R.views.lobby.craft_machine.CraftmachineEntryPointView())
         settings.flags = flags
         settings.model = CraftmachineEntryPointViewModel()
         self.__additionalUrl = ''
-        self.__startDateUI = ''
         self.__endDateUI = ''
         super(CraftmachineEntryPointView, self).__init__(settings)
 
@@ -53,11 +53,11 @@ class CraftmachineEntryPointView(ViewImpl):
         else:
             notificationEntries = json.loads(item.data)
             for entryData in notificationEntries:
-                additionalUrl = entryData.get('craftMachineAdditionalUrl')
-                if additionalUrl is not None:
-                    self.__additionalUrl = str(additionalUrl)
-                self.__startDateUI = entryData.get('startDateUI')
-                self.__endDateUI = entryData.get('endDateUI')
+                if str(entryData.get('id')) == HANGAR_ALIASES.CRAFT_MACHINE_ENTRY_POINT:
+                    additionalUrl = entryData.get('craftMachineAdditionalUrl')
+                    if additionalUrl is not None:
+                        self.__additionalUrl = str(additionalUrl)
+                    self.__endDateUI = entryData.get('endDateUI')
 
             return
 
@@ -88,11 +88,8 @@ class CraftmachineEntryPointView(ViewImpl):
         with self.viewModel.transaction() as tx:
             tx.setTitle(backport.text(R.strings.event.craftMachine.title()))
             tx.setSubTitle(backport.text(R.strings.event.craftMachine.subTitle()))
-            tx.setStartDate(0)
+            tx.setStatusDate(backport.text(R.strings.event.craftMachine.statusDate()))
             tx.setEndDate(0)
-            if self.__startDateUI:
-                startDateUI = time.mktime(datetime.strptime(self.__startDateUI, _TIME_FORMAT).timetuple())
-                tx.setStartDate(startDateUI)
             if self.__endDateUI:
                 endDateUI = time.mktime(datetime.strptime(self.__endDateUI, _TIME_FORMAT).timetuple())
                 tx.setEndDate(endDateUI)

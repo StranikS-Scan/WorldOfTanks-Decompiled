@@ -10,6 +10,9 @@ from gui.battle_royale.constants import ROYALE_POSTBATTLE_REWARDS_COUNT
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.genConsts.PROGRESSIVEREWARD_CONSTANTS import PROGRESSIVEREWARD_CONSTANTS as prConst
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import BonusNameQuestsBonusComposer
+from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import LootBoxBonusComposer
+from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsEntryPointVO, getSeniorityAwardsBoxesCount
 from gui.impl import backport
 from gui.impl.auxiliary.tooltips.compensation_tooltip import CompensationTooltipContent
 from gui.impl.auxiliary.tooltips.compensation_tooltip import CrewSkinsCompensationTooltipContent
@@ -31,15 +34,11 @@ from gui.impl.gen.view_models.views.loot_box_view.loot_vehicle_compensation_rend
 from gui.impl.gen.view_models.views.loot_box_view.loot_conversion_renderer_model import LootConversionRendererModel
 from gui.impl.gen.view_models.views.loot_box_view.loot_renderer_types import LootRendererTypes
 from gui.impl.gen.view_models.views.loot_box_view.loot_vehicle_renderer_model import LootVehicleRendererModel
-from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, getLootboxesAwardsPacker, getRoyaleAwardsPacker
+from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, getLootboxesAwardsPacker, getRoyaleAwardsPacker, getSeniorityAwardsPacker, AWARDS_SIZES
 from gui.server_events.bonuses import getNonQuestBonuses, BlueprintsBonusSubtypes
-from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import BonusNameQuestsBonusComposer
-from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import LootBoxBonusComposer
-from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsEntryPointVO, getSeniorityAwardsBoxesCount
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import Vehicle, GUI_ITEM_TYPE
-from gui.shared.gui_items.loot_box import SENIORITY_AWARDS_LOOT_BOXES_TYPE
 from gui.shared.gui_items.Tankman import getCrewSkinIconBig
 from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.money import ZERO_MONEY, Money, Currency
@@ -92,7 +91,6 @@ _BONUSES_ORDER = (Currency.CREDITS,
  CrewBonusTypes.CREW_BOOK_BONUSES,
  'finalBlueprints',
  Currency.EVENT_COIN)
-_SENIORITY_BONUSES = ('customizations', 'crewBooks', 'dossier', 'battleToken', 'goodies', 'tokens')
 BLUEPRINTS_CONGRAT_TYPES = (LootCongratsTypes.CONGRAT_TYPE_BLUEPRINT, LootCongratsTypes.CONGRAT_TYPE_BLUEPRINT_PART)
 _COMPENSATION_TOOLTIP_CONTENT_RES_IDS = (R.views.common.tooltip_window.loot_box_compensation_tooltip.LootBoxCompensationTooltipContent(), R.views.common.tooltip_window.loot_box_compensation_tooltip.CrewSkinsCompensationTooltipContent(), R.views.common.tooltip_window.loot_box_compensation_tooltip.LootBoxVehicleCompensationTooltipContent())
 _COMPENSATION_TOOLTIP_CONTENT_CLASSES = {LootBoxCompensationTooltipTypes.CREW_SKINS: CrewSkinsCompensationTooltipContent,
@@ -588,50 +586,27 @@ def getRewardTooltipContent(event, storedTooltipData=None, itemsCache=None):
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def getSeniorityAwardsRewardsAndBonuses(rewards, size='big', maxAwardCount=_DEFAULT_DISPLAYED_AWARDS_COUNT, itemsCache=None):
+def getSeniorityAwardsRewardsAndBonuses(rewards, size=AWARDS_SIZES.BIG, maxAwardCount=_DEFAULT_DISPLAYED_AWARDS_COUNT, excluded=(), sortKey=None, itemsCache=None):
     preparationRewardsCurrency(rewards)
-    formatter = LootBoxBonusComposer(maxAwardCount, getLootboxesAwardsPacker())
+    formatter = LootBoxBonusComposer(maxAwardCount, getSeniorityAwardsPacker())
     alwaysVisibleBonuses = []
     bonuses = []
     vehicles = []
-    countBoxes = 0
     if rewards:
         for rewardType, rewardValue in rewards.iteritems():
-            if rewardType == 'tokens':
-                seniorityAwardsLootbox = None
-                for key, item in rewardValue.iteritems():
-                    if 'lootBox' in key:
-                        lootBox = itemsCache.items.tokens.getLootBoxByTokenID(key)
-                        if lootBox and lootBox.getType() == SENIORITY_AWARDS_LOOT_BOXES_TYPE:
-                            countBoxes = item.get('count', -1)
-                            if seniorityAwardsLootbox is None:
-                                seniorityAwardsLootbox = key
-                            else:
-                                _logger.error('Duplicate lootBox with id %s', key)
-
-                if seniorityAwardsLootbox is not None:
-                    rewardValue.pop(seniorityAwardsLootbox)
-                bonuses.extend(getNonQuestBonuses(rewardType, rewardValue))
+            if rewardType in excluded:
+                continue
             if rewardType == 'vehicles':
-                for vehicle in rewardValue:
-                    vehicles.extend(vehicle.iterkeys())
-
-            if rewardType == 'premium' or rewardType == 'premium_plus':
-                splitDays = splitPremiumDays(rewardValue)
-                for day in splitDays:
-                    bonuses.extend(getNonQuestBonuses(rewardType, day))
-
+                vehicles = [ vehCD for vehiclesDict in rewardValue for vehCD in vehiclesDict if vehiclesDict[vehCD].get('compensatedNumber', 0) < 1 ]
             bonuses.extend(getNonQuestBonuses(rewardType, rewardValue))
 
-        bonuses.sort(key=_seniorityKeySortOrder)
-    formattedBonuses = formatter.getVisibleFormattedBonuses(bonuses, alwaysVisibleBonuses, size)
+    formattedBonuses = formatter.getVisibleFormattedBonuses(bonuses, alwaysVisibleBonuses, size, sortKey=sortKey)
     orderedVehicles = []
     for vehicleCD in vehicles:
         vehicle = itemsCache.items.getItemByCD(vehicleCD)
         orderedVehicles.append(VehicleAward(vehicleCD, vehicle.level, vehicle.name))
 
-    orderedVehicles.sort(key=lambda v: v.level)
-    return (formattedBonuses, orderedVehicles, countBoxes)
+    return (formattedBonuses, orderedVehicles)
 
 
 def getProgressiveRewardBonuses(rewards, size='big', maxAwardCount=_DEFAULT_DISPLAYED_AWARDS_COUNT, packBlueprints=False, ctx=None):
@@ -853,10 +828,6 @@ def _getCompensationMoney(bonuses):
 
 def _keySortOrder(bonus):
     return _BONUSES_ORDER.index(bonus.getName()) if bonus.getName() in _BONUSES_ORDER else len(_BONUSES_ORDER)
-
-
-def _seniorityKeySortOrder(bonus):
-    return _SENIORITY_BONUSES.index(bonus.getName()) if bonus.getName() in _SENIORITY_BONUSES else len(_SENIORITY_BONUSES)
 
 
 def _getVehicleFromReward(reward):

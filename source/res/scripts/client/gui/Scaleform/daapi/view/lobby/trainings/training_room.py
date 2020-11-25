@@ -16,10 +16,11 @@ class TrainingRoom(TrainingRoomBase):
         super(TrainingRoom, self).__init__()
 
     def _populate(self):
-        funcState = self.prbDispatcher.getFunctionalState()
-        if not funcState.isInLegacy(PREBATTLE_TYPE.TRAINING):
-            g_eventDispatcher.removeTrainingFromCarousel(False)
-            return
+        if self.prbDispatcher:
+            funcState = self.prbDispatcher.getFunctionalState()
+            if not funcState.isInLegacy(PREBATTLE_TYPE.TRAINING):
+                g_eventDispatcher.removeTrainingFromCarousel(False)
+                return
         super(TrainingRoom, self)._populate()
 
     def _addListeners(self):

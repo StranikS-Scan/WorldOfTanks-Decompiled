@@ -140,16 +140,16 @@ class MarathonEventDataProvider(object):
 
     @property
     def tooltips(self):
-        body = self.__getTooltipString('body')
-        error = self.__getTooltipString('error')
-        state = self.__getTooltipString('state')
-        extraState = self.__getTooltipString('extra_state')
-        return MarathonEventTooltipData(header=self.__getTooltipString('header')(), body=body(), bodyExtra=body.extra(), bodyExtraSmart=body.extra_smart(), errorBattleType=error.battle_type(), errorVehType=error.veh_type(), extraStateSteps=extraState.steps(), extraStateDiscount=extraState.discount(), extraStateCompleted=extraState.completed(), stateStart=state.start(), stateEnd=state.end(), stateProgress=extraState(), stateComplete=state.complete(), daysShort=R.strings.tooltips.template.days.short(), hoursShort=R.strings.tooltips.template.hours.short(), minutesShort=R.strings.tooltips.template.minutes.short(), previewAnnounce=self.__getVehiclePreviewBodyString('announce')(), previewInProgress=self.__getVehiclePreviewBodyString('inprogress')())
+        body = self._getTooltipString('body')
+        error = self._getTooltipString('error')
+        state = self._getTooltipString('state')
+        extraState = self._getTooltipString('extra_state')
+        return MarathonEventTooltipData(header=self._getTooltipString('header')(), body=body(), bodyExtra=body.extra(), bodyExtraSmart=body.extra_smart(), errorBattleType=error.battle_type(), errorVehType=error.veh_type(), extraStateSteps=extraState.steps(), extraStateDiscount=extraState.discount(), extraStateCompleted=extraState.completed(), stateStart=state.start(), stateEnd=state.end(), stateProgress=extraState(), stateComplete=state.complete(), daysShort=R.strings.tooltips.template.days.short(), hoursShort=R.strings.tooltips.template.hours.short(), minutesShort=R.strings.tooltips.template.minutes.short(), previewAnnounce=self._getVehiclePreviewBodyString('announce')(), previewInProgress=self._getVehiclePreviewBodyString('inprogress')())
 
     @property
     def icons(self):
-        return MarathonEventIconsData(tooltipHeader=backport.image(R.images.gui.maps.icons.quests.dyn(self.marathonTooltipHeader)()), libraryOkIcon=backport.image(R.images.gui.maps.icons.library.okIcon()), okIcon=backport.image(self.__getIconsResource('ok_icon')()), timeIcon=backport.image(self.__getIconsResource('time_icon')()), timeIconGlow=backport.image(self.__getIconsResource('time_icon_glow')()), alertIcon=backport.image(self.__getIconsResource('alert_icon')()), iconFlag=backport.image(self.__getIconsResource('icon_flag')()), libraryInProgress=backport.image(R.images.gui.maps.icons.library.inProgressIcon()), saleIcon=backport.image(self.__getIconsResource('sale_icon')()), mapFlagHeaderIcon={MARATHON_STATE.ENABLED_STATE: backport.image(self.__getIconsResource('cup_icon')()),
-         MARATHON_STATE.DISABLED_STATE: backport.image(self.__getIconsResource('cup_disable_icon')())})
+        return MarathonEventIconsData(tooltipHeader=backport.image(R.images.gui.maps.icons.quests.dyn(self.marathonTooltipHeader)()), libraryOkIcon=backport.image(R.images.gui.maps.icons.library.okIcon()), okIcon=backport.image(self._getIconsResource('ok_icon')()), timeIcon=backport.image(self._getIconsResource('time_icon')()), timeIconGlow=backport.image(self._getIconsResource('time_icon_glow')()), alertIcon=backport.image(self._getIconsResource('alert_icon')()), iconFlag=backport.image(self._getIconsResource('icon_flag')()), libraryInProgress=backport.image(R.images.gui.maps.icons.library.inProgressIcon()), saleIcon=backport.image(self._getIconsResource('sale_icon')()), mapFlagHeaderIcon={MARATHON_STATE.ENABLED_STATE: backport.image(self._getIconsResource('cup_icon')()),
+         MARATHON_STATE.DISABLED_STATE: backport.image(self._getIconsResource('cup_disable_icon')())})
 
     @property
     def infoBody(self):
@@ -172,7 +172,7 @@ class MarathonEventDataProvider(object):
     def doesShowMissionsTab(self):
         return True
 
-    def __getResouce(self, obj, attr):
+    def _getResouce(self, obj, attr):
         resourceObj = obj.dyn(self.prefix)
         if resourceObj.isValid():
             string = resourceObj.dyn(attr)
@@ -180,14 +180,14 @@ class MarathonEventDataProvider(object):
                 return string
         return obj.marathon.dyn(attr)
 
-    def __getTooltipString(self, attr):
-        return self.__getResouce(R.strings.tooltips, attr)
+    def _getTooltipString(self, attr):
+        return self._getResouce(R.strings.tooltips, attr)
 
-    def __getVehiclePreviewBodyString(self, attr):
-        return self.__getResouce(R.strings.marathon.vehiclePreview.title.tooltip.body, attr)
+    def _getVehiclePreviewBodyString(self, attr):
+        return self._getResouce(R.strings.marathon.vehiclePreview.title.tooltip.body, attr)
 
-    def __getIconsResource(self, attr):
-        return self.__getResouce(R.images.gui.maps.icons.library, attr)
+    def _getIconsResource(self, attr):
+        return self._getResouce(R.images.gui.maps.icons.library, attr)
 
 
 class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
@@ -447,7 +447,7 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
         questStartTimeText = self.__getDateTimeText(questStartTime)
         customOffer = None
         addInfo = backport.text(self.tooltips.previewAnnounce, marathonStartDate=text_styles.neutral(questStartTimeText))
-        tooltip = makeTooltip(header=backport.text(_R_BUYING_PANEL.buyBtn.tooltip.inactive.header()), body=backport.text(_R_BUYING_PANEL.buyBtn.tooltip.inactive.body(), addInfo=addInfo))
+        tooltip = makeTooltip(header=backport.text(_R_BUYING_PANEL.buyBtn.tooltip.inactive.header()), body=backport.text(_R_BUYING_PANEL.buyBtn.tooltip.inactive.body(), addInfo=addInfo, event_name=backport.text(self.label)))
         if self.__state == MARATHON_STATE.IN_PROGRESS or self.__state == MARATHON_STATE.FINISHED:
             enabled = True
             tooltip = makeTooltip(body=backport.text(_R_BUYING_PANEL.buyBtn.tooltip.active.body()))
@@ -476,7 +476,8 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
         return self.__noWrapTextFormat(dateTimeText)
 
     def __getPreviewInfoTooltip(self, tooltipBody, addInfo):
-        return makeTooltip(header=backport.text(R.strings.marathon.vehiclePreview.title.tooltip.header()), body=backport.text(tooltipBody, addInfo=addInfo))
+        label = backport.text(self.label)
+        return makeTooltip(header=backport.text(R.strings.marathon.vehiclePreview.title.tooltip.header(), event_name=label), body=backport.text(tooltipBody, event_name=label, addInfo=addInfo))
 
     def __getRewardShownMarkKey(self, key):
         return '_'.join([key, self.tokenPrefix])

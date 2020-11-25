@@ -8,9 +8,12 @@ from frameworks.wulf import WindowLayer, WindowStatus
 from helpers import dependency
 from skeletons.gameplay import GameplayStateID, IGameplayLogic
 from skeletons.gui.impl import IGuiLoader, IFullscreenManager, INotificationWindowController
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.entities.sf_window import SFWindow
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Window
 _logger = logging.getLogger(__name__)
+_LOW_PRIORITY_WINDOWS = (VIEW_ALIAS.AWARD_WINDOW, VIEW_ALIAS.AWARD_WINDOW_MODAL, VIEW_ALIAS.ADVENT_CALENDAR)
 
 class FullscreenManager(IFullscreenManager):
     __slots__ = ('__gui', '__notificationMgr', '__isEnabled', '__weakref__', '__observer', '__gameplay')
@@ -51,10 +54,10 @@ class FullscreenManager(IFullscreenManager):
         windows = self.__gui.windowsManager.findWindows(self.__fullscreenPredicate)
         windowsToClose = []
         for window in windows:
-            if window != newWindow and (window.layer > layer or window.layer == layer) and not self.__isParent(window, newWindow):
+            if window != newWindow and (window.layer > layer or window.layer == layer) and not self.__isParent(window, newWindow) and self.__isAllowed(newWindow):
                 windowsToClose.append(window)
 
-        if (not windows or windowsToClose) and not self.__notificationMgr.hasWindow(newWindow):
+        if (not windows or windowsToClose) and not self.__notificationMgr.hasWindow(newWindow) and self.__isAllowed(newWindow):
             _logger.info('Notification queue postpones by opening window %r', newWindow)
             self.__notificationMgr.postponeActive()
         for window in windowsToClose:
@@ -71,6 +74,16 @@ class FullscreenManager(IFullscreenManager):
     @staticmethod
     def __fullscreenPredicate(window):
         return window.layer == WindowLayer.FULLSCREEN_WINDOW and window.windowStatus in (WindowStatus.LOADING, WindowStatus.LOADED)
+
+    @staticmethod
+    def __isAllowed(window):
+        if isinstance(window, SFWindow):
+            alias = window.loadParams.viewKey.alias
+            for priority in _LOW_PRIORITY_WINDOWS:
+                if alias.startswith(priority):
+                    return False
+
+        return True
 
 
 class _LobbyStateObserver(SingleStateObserver):

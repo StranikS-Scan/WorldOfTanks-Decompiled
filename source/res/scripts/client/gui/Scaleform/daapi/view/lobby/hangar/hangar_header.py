@@ -28,6 +28,7 @@ from gui.server_events.events_helpers import isPremium, isDailyQuest, isRankedDa
 from gui.server_events.events_helpers import isHalloween, isHalloweenAFK
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showSeniorityInfoWindow
 from gui.shared.formatters import icons
 from gui.shared.personality import ServicesLocator
 from helpers import dependency
@@ -239,6 +240,8 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             if self._afkController.isBanned:
                 groupID = HANGAR_HEADER_QUESTS.QUEST_GROUP_HALLOWEEN_AFK
             showMissionsHalloween(groupID)
+        elif questType == HANGAR_HEADER_QUESTS.QUEST_TYPE_SENIORITY:
+            showSeniorityInfoWindow()
 
     def onUpdateHangarFlag(self):
         self.update()
@@ -323,6 +326,9 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         eventQuests = self.__getElenQuestsVO(vehicle)
         if eventQuests:
             quests.append(eventQuests)
+        seniorityQuest = self.__getSeniorityQuestsVO()
+        if seniorityQuest:
+            quests.append(seniorityQuest)
         return quests
 
     def __getRankedQuestsToHeaderVO(self):
@@ -514,11 +520,20 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
                         wrappedGroup = self._wrapQuestGroup(''.join((HANGAR_HEADER_QUESTS.QUEST_GROUP_MARATHON, str(index))), '', [quest])
                     result.append(quest if isGroupped else wrappedGroup)
 
-            if isGroupped:
-                return self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_MARATHON, RES_ICONS.MAPS_ICONS_QUESTS_HEADERFLAGICONS_MARATHONS, result)
-            return result
+            if result:
+                if isGroupped:
+                    return self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_MARATHON, RES_ICONS.MAPS_ICONS_QUESTS_HEADERFLAGICONS_MARATHONS, result)
+                return result
+        return None
+
+    def __getSeniorityQuestsVO(self):
+        config = self._lobbyContext.getServerSettings().getSeniorityAwardsConfig()
+        hasToken = self._itemsCache.items.tokens.getToken(config.getSecretBoxToken())
+        if config.isEnabled() and hasToken and config.hangarWidgetIsVisible():
+            quests = [self._headerQuestFormaterVo(True, None, None, HANGAR_HEADER_QUESTS.QUEST_TYPE_SENIORITY, flag=backport.image(R.images.gui.maps.icons.library.hangarFlag.flag_seniority_awards()), isReward=False, tooltip=TOOLTIPS_CONSTANTS.SENIORITY_FLAG, isTooltipSpecial=True)]
+            return self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_SENIORITY, backport.image(R.images.gui.maps.icons.library.seniorityAwards.reward()), quests)
         else:
-            return None
+            return
 
     def __getElenQuestsVO(self, vehicle):
         eventsData = self._eventsController.getEventsSettingsData()
@@ -552,11 +567,13 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
                 eventQuestsTooltipIsSpecial = True
                 battleType = currentEvent.getBattleType()
                 wrongBattleType = self.prbEntity.getEntityType() != battleType
-                inSquadState = self.prbDispatcher.getFunctionalState().isInUnit(constants.PREBATTLE_TYPE.SQUAD)
-                if inSquadState:
-                    unit = prb_getters.getUnit(safe=True)
-                    if len(unit.getMembers()) == 1:
-                        inSquadState = False
+                inSquadState = False
+                if self.prbDispatcher is not None:
+                    inSquadState = self.prbDispatcher.getFunctionalState().isInUnit(constants.PREBATTLE_TYPE.SQUAD)
+                    if inSquadState:
+                        unit = prb_getters.getUnit(safe=True)
+                        if len(unit.getMembers()) == 1:
+                            inSquadState = False
                 wrongSquadState = inSquadState and not currentEvent.getIsSquadAllowed()
                 noserver = not currentEvent.isAvailableServer(self._connectionMgr.peripheryID)
                 hasWarning = wrongBattleType or noserver or wrongSquadState

@@ -72,6 +72,10 @@ def stripAllTags(descr):
     return re.sub('{\\w+Open}|{\\w+Close}', '', descr)
 
 
+def stripHTMLTags(descr):
+    return re.sub('<(.*?)>', '', descr)
+
+
 def makeTooltip(header=None, body=None, note=None, attention=None):
     res_str = ''
     if header is not None:

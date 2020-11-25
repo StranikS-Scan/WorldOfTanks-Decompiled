@@ -2386,6 +2386,8 @@ class QuestAchievesFormatter(object):
                 formattedName = None
                 if tokenID == cls.__eventProgression.rewardPointsTokenID:
                     name = backport.text(R.strings.messenger.serviceChannelMessages.battleResults.epicRewardPoints())
+                elif tokenID == BATTLE_BONUS_X5_TOKEN:
+                    name = backport.text(R.strings.quests.bonusName.battle_bonus_x5())
                 if tokenID in constants.HE19_TOKEN_BONUSES:
                     match = re.match(COMPLEX_TOKEN_TEMPLATE, tokenID)
                     styleID = match.group('styleID')
@@ -2394,8 +2396,6 @@ class QuestAchievesFormatter(object):
                     recruitName = getRecruitInfo(tokenID).getFullUserNameByNation()
                     name = backport.text(R.strings.quests.token.default.he20_recruit(), name=recruitName)
                     formattedName = backport.text(R.strings.messenger.serviceChannelMessages.battleResults.quests.items.singleName(), name=name)
-                if tokenID.startswith(BATTLE_BONUS_X5_TOKEN):
-                    itemsNames.append(backport.text(R.strings.messenger.serviceChannelMessages.battleResults.quests.items.name(), name=backport.text(R.strings.quests.bonusName.battle_bonus_x5()), count=count))
                 if formattedName is not None:
                     itemsNames.append(formattedName)
                 if name is not None:

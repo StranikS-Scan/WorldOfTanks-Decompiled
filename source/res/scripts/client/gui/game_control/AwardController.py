@@ -29,7 +29,6 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.DialogsInterface import showDialog
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18PunishmentDialogMeta
-from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsBox, autoOpenTimeExpired
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler, ViewLifecycleWatcher
@@ -61,7 +60,6 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.sounds.sound_constants import SPEAKERS_CONFIG
 from helpers import dependency
 from helpers import i18n
-from helpers import time_utils
 from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles as vehicles_core
 from items.components.crew_books_constants import CREW_BOOK_DISPLAYED_AWARDS_COUNT
 from messenger.formatters import TimeFormatter
@@ -500,99 +498,55 @@ class SeniorityAwardsWindowHandler(ServiceChannelHandler):
         self._qID = None
         self.__mergedRewards = {}
         self.__questData = None
-        self.__autoOpenData = None
         self.__callback = None
         return
 
     def fini(self):
-        self.__resetCallback()
         self._qID = None
-        self.itemsCache.onSyncCompleted -= self.__onItemCacheSyncCompleted
         self.eventsCache.onSyncCompleted -= self.__onEventCacheSyncCompleted
         super(SeniorityAwardsWindowHandler, self).fini()
         return
 
-    def onAvatarBecomePlayer(self):
-        self.__resetCallback()
-        super(SeniorityAwardsWindowHandler, self).onAvatarBecomePlayer()
-
     def _needToShowAward(self, ctx):
-        _, message = ctx
-        isLootBoxesAutoOpenType = SYS_MESSAGE_TYPE.lootBoxesAutoOpenReward.index() == message.type
-        if not isLootBoxesAutoOpenType and not super(SeniorityAwardsWindowHandler, self)._needToShowAward(ctx):
-            return False
-        data = message.data
-        if isLootBoxesAutoOpenType:
-            self.__autoOpenData = data
-            self.__callback = BigWorld.callback(time_utils.ONE_MINUTE, self.__onShowAutoOpenRewards)
-            self.__update()
+        if ctx == (None,):
+            return self.__update()
         else:
+            _, message = ctx
+            if not super(SeniorityAwardsWindowHandler, self)._needToShowAward(ctx):
+                return False
+            data = message.data
             for qID in data.get('completedQuestIDs', set()):
                 if SENIORITY_AWARDS_TOKEN_QUEST in qID:
                     self._qID = qID
                     self.__questData = data
-                    self.__update()
+                    return self.__update()
 
-        return False
+            return False
 
     def _showAward(self, ctx=None):
-        self.__resetCallback()
-        if self.__mergedRewards and self.__isValidAutoOpenBoxData():
+        if self.__mergedRewards:
             showSeniorityRewardAwardWindow(self._qID, self.__mergedRewards)
             self.__mergedRewards = {}
-            self.__autoOpenData = None
             self.__questData = None
         return
 
-    def __update(self, isCallback=False):
-        if self.__questData and self.__autoOpenData:
-            if self.__isValidAutoOpenBoxData():
-                self.__mergedRewards.update(self.__autoOpenData.get('rewards', {}))
-            else:
-                self.itemsCache.onSyncCompleted += self.__onItemCacheSyncCompleted
-                return
+    def __update(self):
+        if self.__questData:
             allQuests = self.eventsCache.getAllQuests()
             if self._qID in allQuests and self.isShowCongrats(allQuests[self._qID]):
                 self.__mergedRewards.update(self.__questData.get('detailedRewards', {}).get(self._qID, {}))
             else:
                 self.eventsCache.onSyncCompleted += self.__onEventCacheSyncCompleted
-                return
-            self.itemsCache.onSyncCompleted -= self.__onItemCacheSyncCompleted
-            self.eventsCache.onSyncCompleted -= self.__onEventCacheSyncCompleted
-            self._showAward()
-        elif not autoOpenTimeExpired():
-            self.__mergedRewards.update(self.__questData.get('detailedRewards', {}).get(self._qID, {}))
-            self._showAward()
-        elif isCallback:
-            if self.__isValidAutoOpenBoxData():
-                self.__mergedRewards = self.__autoOpenData.get('rewards', {})
-                self._showAward()
-
-    def __resetCallback(self):
-        if self.__callback:
-            BigWorld.cancelCallback(self.__callback)
-            self.__callback = None
-        return
-
-    def __onShowAutoOpenRewards(self):
-        self.__callback = None
-        self.__update(True)
-        return
-
-    def __onItemCacheSyncCompleted(self, *_):
-        self.itemsCache.onSyncCompleted -= self.__onItemCacheSyncCompleted
-        self.__update()
+                return False
+            return True
+        return False
 
     def __onEventCacheSyncCompleted(self, *_):
         self.eventsCache.onSyncCompleted -= self.__onEventCacheSyncCompleted
         allQuests = self.eventsCache.getAllQuests()
         if self._qID in allQuests:
-            self.__update()
-
-    def __isValidAutoOpenBoxData(self):
-        boxIDs = self.__autoOpenData.get('boxIDs', {})
-        box = getSeniorityAwardsBox()
-        return True if boxIDs and box and box.getID() in boxIDs else False
+            self.handle(None)
+        return
 
 
 class LootBoxByInvoiceHandler(ServiceChannelHandler):

@@ -20,10 +20,11 @@ class Trainings(TrainingsListBase):
 
     def _populate(self):
         super(Trainings, self)._populate()
-        funcState = self.prbDispatcher.getFunctionalState()
-        if not funcState.isInLegacy(PREBATTLE_TYPE.TRAINING):
-            g_eventDispatcher.removeTrainingFromCarousel()
-            return
+        if self.prbDispatcher:
+            funcState = self.prbDispatcher.getFunctionalState()
+            if not funcState.isInLegacy(PREBATTLE_TYPE.TRAINING):
+                g_eventDispatcher.removeTrainingFromCarousel()
+                return
         self.addListener(events.TrainingSettingsEvent.UPDATE_TRAINING_SETTINGS, self._createTrainingRoom, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _dispose(self):

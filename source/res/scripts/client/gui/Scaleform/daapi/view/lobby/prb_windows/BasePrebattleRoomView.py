@@ -37,9 +37,10 @@ class BasePrebattleRoomView(BasePrebattleRoomViewMeta, ILegacyListener):
         self.__clientID = channel_num_gen.getClientID4Prebattle(self.prbEntity.getEntityType())
 
     def onSourceLoaded(self):
-        state = self.prbDispatcher.getFunctionalState()
-        if not state.isInLegacy():
-            self.destroy()
+        if self.prbDispatcher:
+            state = self.prbDispatcher.getFunctionalState()
+            if not state.isInLegacy():
+                self.destroy()
 
     @storage_getter('users')
     def usersStorage(self):

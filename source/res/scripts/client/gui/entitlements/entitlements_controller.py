@@ -11,7 +11,6 @@ from helpers import dependency
 from skeletons.gui.game_control import IEntitlementsController
 from skeletons.gui.web import IWebController
 _logger = logging.getLogger(__name__)
-_INIT_ENTITLEMENTS = ('loot_box_counter',)
 
 class EntitlementsController(IEntitlementsController):
     __slots__ = ('__cache', '__cacheWaitSync', '__lastFailedEntitlements')
@@ -30,17 +29,9 @@ class EntitlementsController(IEntitlementsController):
         self.__lastFailedEntitlements.clear()
         return
 
-    def onAvatarBecomePlayer(self):
-        self.__cache = None
-        self.__cacheWaitSync = False
-        self.__lastFailedEntitlements.clear()
-        return
-
     def onLobbyInited(self, event):
-        self.__lastFailedEntitlements.clear()
         if self.__webController.getStateID() == WebControllerStates.STATE_NOT_DEFINED:
             self.__webController.invalidate()
-        self.__sendRequest(_INIT_ENTITLEMENTS, lambda *args: True)
 
     def isCacheInited(self):
         return self.__cache is not None

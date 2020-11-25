@@ -30,7 +30,8 @@ class EventsNotificationsController(IEventsNotificationsController):
         self.__stop()
 
     def getEventsNotifications(self, filterFunc=None):
-        return filter(filterFunc or (lambda a: True), map(EventNotification.make, BigWorld.player().eventNotifications))
+        player = BigWorld.player()
+        return filter(filterFunc or (lambda a: True), map(EventNotification.make, player.eventNotifications)) if player else ()
 
     def __stop(self):
         self.__eventMgr.clear()

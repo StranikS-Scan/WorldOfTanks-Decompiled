@@ -765,6 +765,16 @@ def showSeniorityRewardWindow():
     return
 
 
+def showSeniorityInfoWindow():
+    from gui.impl.lobby.seniority_awards.seniority_info_view import SeniorityInfoViewWindow
+    uiLoader = dependency.instance(IGuiLoader)
+    contentResId = R.views.lobby.seniority_awards.SeniorityInfoView()
+    if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
+        window = SeniorityInfoViewWindow(contentResId)
+        window.load()
+    return
+
+
 def showProgressiveRewardWindow():
     lobbyContext = dependency.instance(ILobbyContext)
     if not lobbyContext.getServerSettings().getProgressiveRewardConfig().isEnabled:
@@ -790,7 +800,7 @@ def showProgressiveRewardAwardWindow(bonuses, specialRewardType, currentStep, no
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
 def showSeniorityRewardAwardWindow(qID, data, notificationMgr=None):
     from gui.impl.lobby.seniority_awards.seniority_reward_award_view import SeniorityRewardAwardWindow
-    window = SeniorityRewardAwardWindow(qID, data)
+    window = SeniorityRewardAwardWindow(qID, data, R.views.lobby.seniority_awards.SeniorityAwardsView())
     notificationMgr.append(window)
 
 

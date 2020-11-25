@@ -560,7 +560,7 @@ class PersonalMissionsFormatter(PersonalMissionsTokenQuestsFormatter):
 
 
 class SeniorityAwardsFormatter(AsyncTokenQuestsSubFormatter):
-    __MESSAGE_TEMPLATE = 'tokenQuests'
+    __MESSAGE_TEMPLATE = 'SeniorityAwardsQuest'
     __SENIORITY_AWARDS_TOKEN_QUEST_PATTERN = 'SeniorityAwardsQuest'
 
     @async

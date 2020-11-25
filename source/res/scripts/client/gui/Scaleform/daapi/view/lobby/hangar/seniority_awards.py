@@ -12,6 +12,10 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.shared.utils.requesters.tokens_requester import TOTAL_KEY
 from helpers.time_utils import getServerUTCTime
+from gui.shared.tooltips.common import BlocksTooltipData
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.shared.formatters import text_styles
+from gui.shared.tooltips import formatters
 _logger = logging.getLogger(__name__)
 
 class SeniorityAwardsHangarEntryPoint(SeniorityAwardsEntryPointMeta):
@@ -34,6 +38,18 @@ class SeniorityAwardsHangarEntryPoint(SeniorityAwardsEntryPointMeta):
 
     def playSound(self, soundID):
         WWISE.WW_eventGlobal(soundID)
+
+
+class SeniorityAwardsFlagTooltip(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(SeniorityAwardsFlagTooltip, self).__init__(context, TOOLTIPS_CONSTANTS.SENIORITY_FLAG)
+        self._setContentMargin(top=1, left=1, right=1)
+        self._setMargins(afterBlock=0)
+        self._setWidth(301)
+
+    def _packBlocks(self, *args):
+        return [formatters.packImageTextBlockData(title=text_styles.highTitle(backport.text(R.strings.seniority_awards.hangar.flagTooltip.header())), img=backport.image(R.images.gui.maps.icons.seniorityAwards.flag_tooltip_bg()), txtPadding=formatters.packPadding(top=25), desc=text_styles.main(backport.text(R.strings.seniority_awards.hangar.flagTooltip.body())), txtGap=50, txtOffset=22, padding=formatters.packPadding(right=20))]
 
 
 def getSeniorityAwardsEntryPointVO():
@@ -91,7 +107,4 @@ def getSeniorityAwardsBox(itemsCache=None):
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def getSenorityEntryPointIsActive(lobbyContext=None):
-    hasBoxes = getSeniorityAwardsBoxesCount() > 0
-    config = lobbyContext.getServerSettings().getSeniorityAwardsConfig()
-    seniorityAwardsWidgetVisibility = config.hangarWidgetIsVisible()
-    return config.isEnabled and hasBoxes and seniorityAwardsWidgetVisibility
+    return False

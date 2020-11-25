@@ -679,9 +679,10 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         showAmmunitionSetupView(**kwargs)
 
     def __updateLootBoxesState(self):
-        state = self.prbDispatcher.getFunctionalState()
-        isVisible = not self._isInBootCamp and self.__cnLootBoxesCtrl.isActive() and (state.isInPreQueue(QUEUE_TYPE.RANDOMS) or state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInLegacy(PREBATTLE_TYPE.TRAINING) or state.isInPreQueue(QUEUE_TYPE.EVENT_BATTLES) or state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInPreQueue(QUEUE_TYPE.RANKED))
-        self.as_setChinaLootboxesVisibleS(isVisible)
+        if self.prbDispatcher:
+            state = self.prbDispatcher.getFunctionalState()
+            isVisible = not self._isInBootCamp and self.__cnLootBoxesCtrl.isActive() and (state.isInPreQueue(QUEUE_TYPE.RANDOMS) or state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInLegacy(PREBATTLE_TYPE.TRAINING) or state.isInPreQueue(QUEUE_TYPE.EVENT_BATTLES) or state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInPreQueue(QUEUE_TYPE.RANKED))
+            self.as_setChinaLootboxesVisibleS(isVisible)
 
     def __onHintZoneAdded(self, event):
         ctx = event.ctx

@@ -175,9 +175,10 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
         self.as_setReferralBtnCounterS(self._referralCtrl.getBubbleCount())
 
     def __handleFightButtonUpdated(self, event):
-        state = self.prbDispatcher.getFunctionalState()
-        isInEvent = self.prbEntity.getQueueType() == QUEUE_TYPE.EVENT_BATTLES
-        self.as_setReferralButtonEnabledS(not state.isNavigationDisabled() and not isInEvent)
+        if self.prbDispatcher:
+            state = self.prbDispatcher.getFunctionalState()
+            isInEvent = self.prbEntity.getQueueType() == QUEUE_TYPE.EVENT_BATTLES
+            self.as_setReferralButtonEnabledS(not state.isNavigationDisabled() and not isInEvent)
 
     def __manageWindow(self, eventType):
         manager = self.app.containerManager

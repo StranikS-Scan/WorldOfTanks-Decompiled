@@ -1,11 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/social/__init__.py
+import BigWorld
+from gui.shared.ClanCache import g_clanCache
 from gui.shared.view_helpers import UsersInfoHelper
+from helpers import isPlayerAccount
 from messenger.m_constants import USER_TAG
 from messenger.proto.shared_find_criteria import MutualFriendsFindCriteria
 from messenger.storage import storage_getter
 from web.web_client_api import w2capi, w2c, W2CSchema, Field
 from web.web_client_api.common import SPA_ID_TYPES
+from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
 
 class _OnlineStatus(object):
     OFFLINE = 0
@@ -34,6 +39,7 @@ class _PlayerStatusSchema(W2CSchema):
 
 @w2capi(name='social', key='action')
 class SocialWebApi(object):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(SocialWebApi, self).__init__()
@@ -68,3 +74,17 @@ class SocialWebApi(object):
             self.__usersInfoHelper.syncUsersInfo()
         else:
             return isAvailable()
+
+    @w2c(W2CSchema, name='get_player_info')
+    def getPlayerInfo(self, _):
+        if not isPlayerAccount():
+            return {}
+        name = BigWorld.player().name
+        clanInfo = g_clanCache.clanInfo
+        if clanInfo and len(clanInfo) > 1:
+            clanAbbrev = clanInfo[1]
+        else:
+            clanAbbrev = ''
+        return {'fullName': self.lobbyContext.getPlayerFullName(name, clanInfo=clanInfo),
+         'userName': name,
+         'clanAbbrev': clanAbbrev}

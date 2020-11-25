@@ -31,8 +31,11 @@ class BaseTankSetupContextMenu(ContextMenu):
 
     @property
     def isInEventMode(self):
-        state = g_prbLoader.getDispatcher().getFunctionalState()
-        return state.isInPreQueue(QUEUE_TYPE.EVENT_BATTLES) or state.isInUnit(PREBATTLE_TYPE.EVENT)
+        prbDispatcher = g_prbLoader.getDispatcher()
+        if prbDispatcher:
+            state = prbDispatcher.getFunctionalState()
+            return state.isInPreQueue(QUEUE_TYPE.EVENT_BATTLES) or state.isInUnit(PREBATTLE_TYPE.EVENT)
+        return False
 
     def _sendSlotAction(self, actionType, **kwargs):
         view = self._getEmitterView()

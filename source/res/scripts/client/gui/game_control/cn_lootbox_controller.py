@@ -48,9 +48,11 @@ class CNLootBoxesController(ICNLootBoxesController):
         g_clientUpdateManager.addCallbacks({'tokens': self.__onTokensUpdate})
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
         self.__statusChangeNotifier.startNotification()
+        isActive = self.isActive()
+        if not self.__entitlementsController.isCacheInited() and isActive:
+            self.__entitlementsController.updateCache([_LOOT_BOX_COUNTER_ENTITLEMENT])
         self.__boxesCount = self.__getBoxesCount()
         self.__updateBoxInfo()
-        isActive = self.isActive()
         if self.__wasInBattle and isActive != self.__isActive:
             self.onStatusChange()
         self.onAvailabilityChange(self.__isLootBoxesAvailable, self.isLootBoxesAvailable())

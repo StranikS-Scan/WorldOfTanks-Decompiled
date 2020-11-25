@@ -235,7 +235,7 @@ class RewardWindowBase(WindowImpl):
             view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY))
             if view is not None:
                 parent = view.getParentWindow()
-        super(RewardWindowBase, self).__init__(WindowFlags.DIALOG, decorator=WindowView(), parent=parent, content=content, areaID=R.areas.default())
+        super(RewardWindowBase, self).__init__(WindowFlags.WINDOW, decorator=WindowView(), parent=parent, content=content, areaID=R.areas.default())
         return
 
     def _initialize(self):

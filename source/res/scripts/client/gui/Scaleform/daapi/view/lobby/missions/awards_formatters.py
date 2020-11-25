@@ -204,7 +204,7 @@ class BonusNameQuestsBonusComposer(PackRentVehiclesAwardComposer):
 
 class LootBoxBonusComposer(BonusNameQuestsBonusComposer):
 
-    def getVisibleFormattedBonuses(self, bonuses, alwaysVisibleBonuses, size=AWARDS_SIZES.SMALL):
+    def getVisibleFormattedBonuses(self, bonuses, alwaysVisibleBonuses, size=AWARDS_SIZES.SMALL, sortKey=None):
         preformattedBonuses = self.getPreformattedBonuses(bonuses)
         alwaysPreformatedBonuses = self.getPreformattedBonuses(alwaysVisibleBonuses)
         alwaysVisibleCount = len(alwaysPreformatedBonuses)
@@ -217,6 +217,8 @@ class LootBoxBonusComposer(BonusNameQuestsBonusComposer):
                 preformattedBonuses[insertPos:insertPos] = alwaysPreformatedBonuses
             else:
                 preformattedBonuses.extend(alwaysPreformatedBonuses)
+        if sortKey is not None:
+            preformattedBonuses = sorted(preformattedBonuses, key=sortKey)
         return self._packBonuses(preformattedBonuses, size)
 
 

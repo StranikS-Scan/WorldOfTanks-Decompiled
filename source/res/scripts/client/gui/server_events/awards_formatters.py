@@ -230,6 +230,14 @@ def getLootboxesFormatterMap():
     return mapping
 
 
+def getSeniorityFormatterMap():
+    mapping = getLootboxesFormatterMap()
+    mapping.update({PREMIUM_ENTITLEMENTS.BASIC: SeniorityPremiumDaysBonusFormatter(),
+     PREMIUM_ENTITLEMENTS.PLUS: SeniorityPremiumDaysBonusFormatter(),
+     'customizations': SeniorityCustomizationsBonusFormatter()})
+    return mapping
+
+
 def getPostBattleFormatterMap():
     mapping = getLootboxesFormatterMap()
     mapping.update({'blueprints': BlueprintGroupBonusFormatter(),
@@ -403,6 +411,10 @@ def getPackRentVehiclesAwardPacker():
 
 def getLootboxesAwardsPacker():
     return AwardsPacker(getLootboxesFormatterMap())
+
+
+def getSeniorityAwardsPacker():
+    return AwardsPacker(getSeniorityFormatterMap())
 
 
 def getPostBattleAwardsPacker():
@@ -789,6 +801,14 @@ class LinkedSetPremiumDaysBonusFormatter(PremiumDaysBonusFormatter):
     @classmethod
     def _getLabel(cls, bonus):
         return formatTimeLabel(bonus.getValue() * time_utils.HOURS_IN_DAY)
+
+
+class SeniorityPremiumDaysBonusFormatter(LinkedSetPremiumDaysBonusFormatter):
+    __PREMIUM_DAYS_ICONS = (1, 2, 3, 7, 14, 30, 90, 180, 360)
+
+    @classmethod
+    def _getLabel(cls, bonus):
+        return formatTimeLabel(bonus.getValue() * time_utils.HOURS_IN_DAY) if bonus.getValue() not in cls.__PREMIUM_DAYS_ICONS else None
 
 
 class TokenBonusFormatter(SimpleBonusFormatter):
@@ -1481,6 +1501,13 @@ class CustomizationsBonusFormatter(SimpleBonusFormatter):
     @classmethod
     def _getUserName(cls, c11nItem):
         return i18n.makeString(QUESTS.getBonusName(c11nItem.itemTypeName))
+
+
+class SeniorityCustomizationsBonusFormatter(CustomizationsBonusFormatter):
+
+    @classmethod
+    def _getUserName(cls, c11nItem):
+        return i18n.makeString(c11nItem.userName)
 
 
 class LinkedSetCustomizationsBonusFormatter(CustomizationsBonusFormatter):

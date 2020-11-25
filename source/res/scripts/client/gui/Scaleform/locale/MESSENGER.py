@@ -360,6 +360,8 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_RANKEDBONUSBATTLES = '#messenger:serviceChannelMessages/battleResults/quests/rankedBonusBattles'
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_RANKEDBONUSBATTLES_PERSISTENT = '#messenger:serviceChannelMessages/battleResults/quests/rankedBonusBattles/persistent'
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_RANKEDBONUSBATTLES_DAILY = '#messenger:serviceChannelMessages/battleResults/quests/rankedBonusBattles/daily'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_SENIORITYREWARDHEADER = '#messenger:serviceChannelMessages/battleResults/seniorityRewardHeader'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_SENIORITYREWARDBODY = '#messenger:serviceChannelMessages/battleResults/seniorityRewardBody'
     SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS = '#messenger:serviceChannelMessages/battleResults/personalMissions'
     SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_1 = '#messenger:serviceChannelMessages/battleResults/personalMissions/1'
     SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_2 = '#messenger:serviceChannelMessages/battleResults/personalMissions/2'

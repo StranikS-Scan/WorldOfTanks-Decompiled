@@ -604,6 +604,14 @@ class Views(DynAccessor):
                 seniority_reward_award_view = _seniority_reward_award_view()
 
             seniority_reward_award = _seniority_reward_award()
+            SeniorityAwardsView = DynAccessor(174)
+            SeniorityInfoView = DynAccessor(175)
+
+            class _sharedComponents(DynAccessor):
+                __slots__ = ()
+                RewardBox = DynAccessor(176)
+
+            sharedComponents = _sharedComponents()
 
         seniority_awards = _seniority_awards()
 
@@ -734,51 +742,51 @@ class Views(DynAccessor):
 
         class _tanksetup(DynAccessor):
             __slots__ = ()
-            AmmunitionPanel = DynAccessor(174)
+            AmmunitionPanel = DynAccessor(177)
 
             class _common(DynAccessor):
                 __slots__ = ()
-                Action = DynAccessor(175)
-                CtaButtons = DynAccessor(176)
-                DealPanel = DynAccessor(177)
-                ExtraImage = DynAccessor(178)
-                FormatColorTagText = DynAccessor(179)
-                Hint = DynAccessor(180)
-                Price = DynAccessor(181)
-                SetupApp = DynAccessor(182)
-                ShortenedText = DynAccessor(183)
-                Slider = DynAccessor(184)
-                Specializations = DynAccessor(185)
-                Storage = DynAccessor(186)
+                Action = DynAccessor(178)
+                CtaButtons = DynAccessor(179)
+                DealPanel = DynAccessor(180)
+                ExtraImage = DynAccessor(181)
+                FormatColorTagText = DynAccessor(182)
+                Hint = DynAccessor(183)
+                Price = DynAccessor(184)
+                SetupApp = DynAccessor(185)
+                ShortenedText = DynAccessor(186)
+                Slider = DynAccessor(187)
+                Specializations = DynAccessor(188)
+                Storage = DynAccessor(189)
 
                 class _Transitions(DynAccessor):
                     __slots__ = ()
-                    SlotTransitions = DynAccessor(187)
+                    SlotTransitions = DynAccessor(190)
 
                 Transitions = _Transitions()
-                WeaponOccupancy = DynAccessor(188)
+                WeaponOccupancy = DynAccessor(191)
 
             common = _common()
 
             class _dialogs(DynAccessor):
                 __slots__ = ()
-                Confirm = DynAccessor(189)
-                ExchangeToBuyItems = DynAccessor(190)
-                ExchangeToUpgradeItems = DynAccessor(191)
-                NeedRepair = DynAccessor(192)
-                RefillShells = DynAccessor(193)
+                Confirm = DynAccessor(192)
+                ExchangeToBuyItems = DynAccessor(193)
+                ExchangeToUpgradeItems = DynAccessor(194)
+                NeedRepair = DynAccessor(195)
+                RefillShells = DynAccessor(196)
 
             dialogs = _dialogs()
-            HangarAmmunitionSetup = DynAccessor(194)
-            IntroScreen = DynAccessor(195)
-            VehicleCompareAmmunitionPanel = DynAccessor(196)
-            VehicleCompareAmmunitionSetup = DynAccessor(197)
+            HangarAmmunitionSetup = DynAccessor(197)
+            IntroScreen = DynAccessor(198)
+            VehicleCompareAmmunitionPanel = DynAccessor(199)
+            VehicleCompareAmmunitionSetup = DynAccessor(200)
 
         tanksetup = _tanksetup()
 
         class _techtree(DynAccessor):
             __slots__ = ()
-            TechTreeIntro = DynAccessor(198)
+            TechTreeIntro = DynAccessor(201)
 
         techtree = _techtree()
 
@@ -1005,36 +1013,36 @@ class Views(DynAccessor):
         views = _views()
 
     wtypes_view = _wtypes_view()
-    Anchor = DynAccessor(199)
-    ComponentsDemo = DynAccessor(200)
-    DataTrackerDemo = DynAccessor(201)
-    DemoContextMenu = DynAccessor(202)
-    Easings = DynAccessor(203)
-    GFComponents = DynAccessor(204)
-    GFDemoPopover = DynAccessor(205)
-    GFDemoRichTooltipWindow = DynAccessor(206)
-    GFDemoWindow = DynAccessor(207)
-    GFHooksDemo = DynAccessor(208)
-    GFInjectView = DynAccessor(209)
-    GFSimpleTooltipWindow = DynAccessor(210)
-    GFWebSubDemoWindow = DynAccessor(211)
-    LocaleDemo = DynAccessor(212)
-    MixBlendMode = DynAccessor(213)
-    MixBlendModeAnimation = DynAccessor(214)
-    PropsSupportDemo = DynAccessor(215)
-    StructuralDataBindDemo = DynAccessor(216)
+    Anchor = DynAccessor(202)
+    ComponentsDemo = DynAccessor(203)
+    DataTrackerDemo = DynAccessor(204)
+    DemoContextMenu = DynAccessor(205)
+    Easings = DynAccessor(206)
+    GFComponents = DynAccessor(207)
+    GFDemoPopover = DynAccessor(208)
+    GFDemoRichTooltipWindow = DynAccessor(209)
+    GFDemoWindow = DynAccessor(210)
+    GFHooksDemo = DynAccessor(211)
+    GFInjectView = DynAccessor(212)
+    GFSimpleTooltipWindow = DynAccessor(213)
+    GFWebSubDemoWindow = DynAccessor(214)
+    LocaleDemo = DynAccessor(215)
+    MixBlendMode = DynAccessor(216)
+    MixBlendModeAnimation = DynAccessor(217)
+    PropsSupportDemo = DynAccessor(218)
+    StructuralDataBindDemo = DynAccessor(219)
 
     class _sub_views_demo(DynAccessor):
         __slots__ = ()
-        GFSubViewsDemo = DynAccessor(217)
+        GFSubViewsDemo = DynAccessor(220)
 
         class _sub_views(DynAccessor):
             __slots__ = ()
-            CustomizationCartProxy = DynAccessor(218)
-            DailyProxy = DynAccessor(219)
-            ProgressiveItemsViewProxy = DynAccessor(220)
+            CustomizationCartProxy = DynAccessor(221)
+            DailyProxy = DynAccessor(222)
+            ProgressiveItemsViewProxy = DynAccessor(223)
 
         sub_views = _sub_views()
 
     sub_views_demo = _sub_views_demo()
-    VideoSupportView = DynAccessor(221)
+    VideoSupportView = DynAccessor(224)

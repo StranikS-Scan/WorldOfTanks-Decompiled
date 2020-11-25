@@ -160,6 +160,9 @@ class View(AbstractViewMeta, ViewInterface):
     def isVisible(self):
         return self.getState() == EntityState.CREATED
 
+    def canBeClosed(self):
+        return True
+
     def _populate(self):
         super(View, self)._populate()
         self.soundManager.startSpace(self._COMMON_SOUND_SPACE)

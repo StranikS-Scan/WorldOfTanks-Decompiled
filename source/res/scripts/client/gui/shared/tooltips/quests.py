@@ -300,8 +300,8 @@ class AdditionalAwardTooltipData(BlocksTooltipData):
                 padding = formatters.packPadding(top=-35, bottom=-30)
             else:
                 rendererType = 'AwardItemExUI'
-                padding = formatters.packPadding(top=-15, bottom=-10)
-            items.append(formatters.packRendererTextBlockData(rendererType=rendererType, dataType='net.wg.gui.data.AwardItemVO', title=text_styles.main(bonusName), rendererData=rendererData, padding=padding, txtPadding=formatters.packPadding(top=15, left=10), titleAtMiddle=True))
+                padding = formatters.packPadding(top=-7, bottom=-12)
+            items.append(formatters.packRendererTextBlockData(rendererType=rendererType, dataType='net.wg.gui.data.AwardItemVO', title=text_styles.main(bonusName), rendererData=rendererData, padding=padding, txtPadding=formatters.packPadding(top=15, left=15), titleAtMiddle=True))
             if len(items) > _MAX_AWARDS_PER_TOOLTIP:
                 count = len(args) - len(items) + 1
                 if count > 0:

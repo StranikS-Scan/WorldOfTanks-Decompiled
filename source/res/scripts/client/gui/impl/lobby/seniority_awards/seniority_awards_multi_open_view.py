@@ -18,6 +18,7 @@ from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.gui_items.processors.loot_boxes import LootBoxOpenProcessor
 from gui.shared.utils import decorators
 from helpers import dependency
+from messenger.proto.events import g_messengerEvents
 from skeletons.gui.game_control import IFestivityController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -64,6 +65,7 @@ class SeniorityAwardsMultiOpenView(ViewImpl):
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         self.viewModel.setLimitToOpen(MAX_BOXES_TO_OPEN)
         self.viewModel.setIsOpenBoxBtnEnabled(self.lobbyContext.getServerSettings().isLootBoxesEnabled())
+        g_messengerEvents.onLockPopUpMessages(lockHigh=False)
         self.__openBoxes()
 
     def _finalize(self):
@@ -71,6 +73,7 @@ class SeniorityAwardsMultiOpenView(ViewImpl):
         self.viewModel.onOpenBoxBtnClick -= self.__onOpenNextBoxesBtnClick
         self.itemsCache.onSyncCompleted -= self.__onCacheResync
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
+        g_messengerEvents.onUnlockPopUpMessages()
         super(SeniorityAwardsMultiOpenView, self)._finalize()
 
     def __getSeniorityLootBox(self):

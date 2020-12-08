@@ -76,6 +76,9 @@ class HangarMeta(GFTutorialViewMeta):
     def as_setNotificationEnabledS(self, value):
         return self.flashObject.as_setNotificationEnabled(value) if self._isDAAPIInited() else None
 
+    def as_setLootboxesVisibleS(self, value):
+        return self.flashObject.as_setLootboxesVisible(value) if self._isDAAPIInited() else None
+
     def as_createDQWidgetS(self):
         return self.flashObject.as_createDQWidget() if self._isDAAPIInited() else None
 

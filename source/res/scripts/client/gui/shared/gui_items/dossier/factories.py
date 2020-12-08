@@ -348,7 +348,9 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  RARE_STORAGE_RECORD: _RareAchievesFactory.get(),
  (_AB.TOTAL, 'wtHunterWins'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.TOTAL, 'wtBossWins'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
- (_AB.TOTAL, 'wtSpecBossDefeat'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement)}
+ (_AB.TOTAL, 'wtSpecBossDefeat'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'NY21_AtmsphrLevel'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'NY21_CelebChallenge'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement)}
 for _nID, _ in enumerate(nations.NAMES):
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'tankExpert%d' % _nID] = _NationAchieveFactory.get(_as.nation_specific.TankExpertAchievement, _nID)
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'mechanicEngineer%d' % _nID] = _NationAchieveFactory.get(_as.nation_specific.MechEngineerAchievement, _nID)

@@ -1,15 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/bonus_readers.py
+import calendar
 import time
+from functools import partial
 from typing import Union, TYPE_CHECKING
 import items
-import calendar
 from account_shared import validateCustomizationItem
+from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE
 from invoices_helpers import checkAccountDossierOperation
-from items import vehicles, tankmen, utils
+from items import vehicles, tankmen, utils, new_year, collectibles
 from items.components.c11n_constants import SeasonType
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
-from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE
+from items.components.ny_constants import YEARS_INFO, TOY_TYPE_IDS_BY_NAME, CurrentNYConstants, YEARS
 from soft_exception import SoftException
 if TYPE_CHECKING:
     from ResMgr import DataSection
@@ -741,14 +743,78 @@ def __readMetaSection(bonus, _name, section, eventType):
         return
 
 
+def __readBonus_ny18Toy(bonus, _name, section, eventType):
+    if section.has_key('id'):
+        tid = section['id'].asInt
+        count = section['count'].asInt if section.has_key('count') else 0
+        ny18Toys = bonus.setdefault('ny18Toys', {})
+        ny18Toys[tid] = ny18Toys.get(tid, 0) + count
+
+
+def __readBonus_nyToy(bonus, _name, section, eventType, year):
+    if section.has_key('id'):
+        tid = section['id'].asInt
+        if year == YEARS_INFO.CURRENT_YEAR:
+            cache = new_year.g_cache.toys
+        else:
+            cache = collectibles.g_cache[YEARS.getYearStrFromYearNum(year)].toys
+        if tid not in cache:
+            raise SoftException('Unknown NY{} toyID: {}'.format(year, tid))
+        count = section['count'].asInt if section.has_key('count') else 0
+        toysCollectionKey = YEARS_INFO.getCollectionKeyForYear(year)
+        nyToys = bonus.setdefault(toysCollectionKey, {})
+        nyToys[tid] = nyToys.get(tid, 0) + count
+
+
+def __readBonus_nyToyFragments(bonus, _name, section, eventType):
+    count = section.asInt
+    bonus[CurrentNYConstants.TOY_FRAGMENTS] = bonus.get(CurrentNYConstants.TOY_FRAGMENTS, 0) + count
+
+
+def __readBonus_nyAnyOf(bonus, _name, section, eventType):
+    if section.has_key('setting'):
+        settingID = YEARS_INFO.CURRENT_SETTING_IDS_BY_NAME[section.readString('setting')]
+    else:
+        settingID = -1
+    if section.has_key('type'):
+        typeID = TOY_TYPE_IDS_BY_NAME[section.readString('type')]
+    else:
+        typeID = -1
+    if section.has_key('rank'):
+        rank = section['rank'].asInt
+    else:
+        rank = -1
+    bonus.setdefault(CurrentNYConstants.ANY_OF, []).append((typeID, settingID, rank))
+
+
+def __readBonus_nyFillers(bonus, _name, section, eventType):
+    count = section.asInt
+    bonus[CurrentNYConstants.FILLERS] = bonus.get(CurrentNYConstants.FILLERS, 0) + count
+
+
 def __readBonus_optionalData(config, bonusReaders, section, eventType):
     limitIDs, bonus = __readBonusSubSection(config, bonusReaders, section, eventType)
-    probability = section['probability']
-    if probability is not None:
-        probability = probability.asFloat
-        if not 0 <= probability <= 100:
-            raise SoftException('Probability is out of range: {}'.format(probability))
-        probability = probability / 100.0
+    probabilityStageCount = config.get('probabilityStageCount', 1)
+    probabilitiesList = None
+    if section.has_key('probability'):
+        probabilities = map(float, section.readString('probability', '').split())
+        probabilitiesLen = len(probabilities)
+        if probabilitiesLen > probabilityStageCount or probabilitiesLen == 0:
+            raise SoftException('Expected {} probabilities, received {}'.format(probabilityStageCount, probabilitiesLen))
+        for probability in probabilities:
+            if not 0 <= probability <= 100:
+                raise SoftException('Probability is out of range: {}'.format(probability))
+
+        probabilitiesList = map(lambda probability: probability / 100.0, probabilities)
+        probabilitiesList.extend([probabilitiesList[-1]] * (probabilityStageCount - probabilitiesLen))
+    bonusProbability = None
+    if section.has_key('bonusProbability'):
+        if not config.get('useBonusProbability', False):
+            raise SoftException('Redundant option useBonusProbability')
+        bonusProbability = section['bonusProbability'].asFloat
+        if not 0 <= bonusProbability <= 100:
+            raise SoftException('Bonus probability is out of range: {}'.format(bonusProbability))
+        bonusProbability /= 100.0
     properties = {}
     if section.has_key('compensation'):
         properties['compensation'] = section['compensation'].asBool
@@ -765,37 +831,58 @@ def __readBonus_optionalData(config, bonusReaders, section, eventType):
         properties['limitID'] = limitID
         if 'guaranteedFrequency' in limitConfig:
             limitIDs.add(limitID)
+    if section.has_key('probabilityStageDependence'):
+        properties['probabilityStageDependence'] = section['probabilityStageDependence'].asBool
     if properties:
         bonus['properties'] = properties
-    return (limitIDs, probability, bonus)
+    return (limitIDs,
+     probabilitiesList,
+     bonusProbability,
+     bonus)
 
 
 def __readBonus_optional(config, bonusReaders, bonus, section, eventType):
-    limitIDs, probability, subBonus = __readBonus_optionalData(config, bonusReaders, section, eventType)
-    if probability is None:
+    limitIDs, probabilitiesList, bonusProbability, subBonus = __readBonus_optionalData(config, bonusReaders, section, eventType)
+    if probabilitiesList is None:
         raise SoftException("Missing probability attribute in 'optional'")
+    if config.get('useBonusProbability', False) and bonusProbability is None:
+        raise SoftException("Missing bonusProbability attribute in 'optional'")
     properties = subBonus.get('properties', {})
     for property in ('compensation', 'shouldCompensated'):
         if properties.get(property, None) is not None:
             raise SoftException("Property '{}' not allowed for standalone 'optional'".format(property))
 
-    bonus.setdefault('allof', []).append((probability, limitIDs if limitIDs else None, subBonus))
+    bonus.setdefault('allof', []).append((probabilitiesList,
+     bonusProbability,
+     limitIDs if limitIDs else None,
+     subBonus))
     return limitIDs
 
 
 def __readBonus_oneof(config, bonusReaders, bonus, section, eventType):
     equalProbabilityCount = 0
-    equalProbabilityValue = 0
+    equalBonusProbabilityCount = 0
     oneOfBonus = []
     resultLimitIDs = set()
+    useBonusProbability = config.get('useBonusProbability', False)
+    probabilityStageCount = config.get('probabilityStageCount', 1)
+    equalProbabilityValues = [0.0] * probabilityStageCount
+    equalBonusProbabilityValue = 0.0
     for name, subsection in section.items():
         if name != 'optional':
             raise SoftException("Unexpected section (or property) inside 'oneof': {}".format(name))
-        limitIDs, probability, subBonus = __readBonus_optionalData(config, bonusReaders, subsection, eventType)
-        if probability is None:
+        limitIDs, probabilitiesList, bonusProbability, subBonus = __readBonus_optionalData(config, bonusReaders, subsection, eventType)
+        if probabilitiesList is None:
             equalProbabilityCount += 1
         else:
-            equalProbabilityValue += probability
+            for i in xrange(probabilityStageCount):
+                equalProbabilityValues[i] += probabilitiesList[i]
+
+        if useBonusProbability:
+            if bonusProbability is None:
+                equalBonusProbabilityCount += 1
+            else:
+                equalBonusProbabilityValue += bonusProbability
         if limitIDs:
             if resultLimitIDs:
                 raise SoftException('Guaranteed limits conflict', resultLimitIDs, limitIDs)
@@ -803,22 +890,44 @@ def __readBonus_oneof(config, bonusReaders, bonus, section, eventType):
             if limitID and 'guaranteedFrequency' not in config['limits'][limitID]:
                 raise SoftException('Limits conflict', limitID, limitIDs)
             resultLimitIDs.update(limitIDs)
-        oneOfBonus.append((probability, limitIDs if limitIDs else None, subBonus))
+        oneOfBonus.append((probabilitiesList,
+         bonusProbability,
+         limitIDs if limitIDs else None,
+         subBonus))
 
     if equalProbabilityCount:
-        equalProbabilityValue = (1.0 - equalProbabilityValue) / equalProbabilityCount
+        equalProbabilityValues = [ (1.0 - equalProbabilityValue) / equalProbabilityCount for equalProbabilityValue in equalProbabilityValues ]
+    if equalBonusProbabilityCount:
+        equalBonusProbabilityValue = (1.0 - equalBonusProbabilityValue) / equalBonusProbabilityCount
     oneOfTemp = []
-    maximumProbability = 0
-    for probability, limitIDs, subBonus in oneOfBonus:
-        if probability is None:
-            maximumProbability += equalProbabilityValue
+    maximumProbabilities = [0.0] * probabilityStageCount
+    maximumBonusProbability = 0.0
+    for probabilities, bonusProbability, limitIDs, subBonus in oneOfBonus:
+        if probabilities is None:
+            probabilitiesList = equalProbabilityValues
         else:
-            maximumProbability += probability
-        value = maximumProbability if probability != 0.0 else probability
-        oneOfTemp.append((min(1.0, value), limitIDs, subBonus))
+            probabilitiesList = probabilities
+        for i in xrange(probabilityStageCount):
+            maximumProbabilities[i] += probabilitiesList[i]
 
-    if abs(1.0 - maximumProbability) >= 1e-06:
-        raise SoftException('Sum of probabilities != 100', maximumProbability)
+        if useBonusProbability:
+            if bonusProbability is None:
+                maximumBonusProbability += equalBonusProbabilityValue
+            else:
+                maximumBonusProbability += bonusProbability
+        values = maximumProbabilities if probabilities != [0.0] * probabilityStageCount else probabilities
+        bonusValue = maximumBonusProbability if bonusProbability != 0.0 and useBonusProbability else bonusProbability
+        oneOfTemp.append(([ min(1.0, value) for value in values ],
+         min(1.0, bonusValue),
+         limitIDs,
+         subBonus))
+
+    for maximumProbability in maximumProbabilities:
+        if abs(1.0 - maximumProbability) >= 1e-06:
+            raise SoftException('Sum of probabilities != 100', maximumProbability)
+
+    if useBonusProbability and abs(1.0 - maximumBonusProbability) >= 1e-06:
+        raise SoftException('Sum of bonus probabilities != 100', maximumBonusProbability)
     bonus.setdefault('groups', []).append({'oneof': (resultLimitIDs if resultLimitIDs else None, oneOfTemp)})
     return resultLimitIDs
 
@@ -889,7 +998,14 @@ __BONUS_READERS = {'meta': __readMetaSection,
  'dogTagComponent': __readBonus_dogTag,
  'vehicleChoice': __readBonus_vehicleChoice,
  'blueprint': __readBonus_blueprint,
- 'blueprintAny': __readBonus_blueprintAny}
+ 'blueprintAny': __readBonus_blueprintAny,
+ 'ny18Toy': __readBonus_ny18Toy,
+ 'ny19Toy': partial(__readBonus_nyToy, year=YEARS.YEAR19),
+ 'ny20Toy': partial(__readBonus_nyToy, year=YEARS.YEAR20),
+ CurrentNYConstants.TOY_BONUS: partial(__readBonus_nyToy, year=YEARS_INFO.CURRENT_YEAR),
+ CurrentNYConstants.TOY_FRAGMENTS: __readBonus_nyToyFragments,
+ CurrentNYConstants.ANY_OF: __readBonus_nyAnyOf,
+ CurrentNYConstants.FILLERS: __readBonus_nyFillers}
 __PROBABILITY_READERS = {'optional': __readBonus_optional,
  'oneof': __readBonus_oneof,
  'group': __readBonus_group}
@@ -899,7 +1015,9 @@ _RESERVED_NAMES = frozenset(['config',
  'probability',
  'compensation',
  'name',
- 'shouldCompensated'])
+ 'shouldCompensated',
+ 'probabilityStageDependence',
+ 'bonusProbability'])
 SUPPORTED_BONUSES = frozenset(__BONUS_READERS.iterkeys())
 
 def __readBonusLimit(section):
@@ -907,19 +1025,19 @@ def __readBonusLimit(section):
     name = section.readString('name', '')
     if not name:
         raise SoftException('Limit name missing')
-    for property in ('maxFrequency', 'guaranteedFrequency', 'bonusLimit'):
+    for property in ('maxFrequency', 'guaranteedFrequency', 'bonusLimit', 'useBonusProbabilityAfter'):
         value = section[property]
         if value is not None:
             properties[property] = value.asInt
 
-    for property in ('countDuplicates',):
+    for property in ('countDuplicates', 'isForPlayers'):
         value = section[property]
         if value is not None:
             properties[property] = value.asBool
 
     if not properties:
         raise SoftException('Empty limit section: {}'.format(name))
-    if sum((True for property in properties if property in ('maxFrequency', 'guaranteedFrequency', 'bonusLimit'))) > 1:
+    if sum((True for property in properties if property in ('maxFrequency', 'guaranteedFrequency', 'bonusLimit', 'useBonusProbabilityAfter'))) > 1:
         raise SoftException('Too many limits: {}'.format(name))
     return (name, properties)
 
@@ -936,8 +1054,20 @@ def __readBonusConfig(section):
         if name == 'needsBonusExpansion':
             config.setdefault('needsBonusExpansion', False)
             config['needsBonusExpansion'] = data.asBool
+        if name == 'probabilityStageCount':
+            config.setdefault('probabilityStageCount', 1)
+            probabilityStageCount = data.asInt
+            if probabilityStageCount < 1:
+                raise SoftException('Invalid probabilityStageCount value {}, expected greater or equal 1'.format(probabilityStageCount))
+            config['probabilityStageCount'] = probabilityStageCount
+        if name == 'useBonusProbability':
+            config.setdefault('useBonusProbability', False)
+            config['useBonusProbability'] = data.asBool
         raise SoftException('Unknown config section: {}'.format(name))
 
+    limitIDsLen = sum([ len(limitID) for limitID in config.get('limits', {}) ])
+    if limitIDsLen > 200:
+        raise SoftException('Limit IDs (len = {}) might not fit to token len ({}) for logging purposes'.format(limitIDsLen, 256))
     return config
 
 

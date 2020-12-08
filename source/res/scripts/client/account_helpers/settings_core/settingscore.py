@@ -156,6 +156,7 @@ class SettingsCore(ISettingsCore):
          (GAME.C11N_HISTORICALLY_ACCURATE, options.C11nHistoricallyAccurateSetting(GAME.C11N_HISTORICALLY_ACCURATE, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.LOGIN_SERVER_SELECTION, options.LoginServerSelectionSetting(GAME.LOGIN_SERVER_SELECTION)),
          (GAME.MINIMAP_ALPHA_ENABLED, options.StorageAccountSetting(GAME.MINIMAP_ALPHA_ENABLED, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
+         (GAME.LOOT_BOX_VIDEO_OFF, options.StorageAccountSetting(GAME.LOOT_BOX_VIDEO_OFF, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GRAPHICS.MONITOR, options.MonitorSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.WINDOW_SIZE, options.WindowSizeSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.RESOLUTION, options.ResolutionSetting(storage=VIDEO_SETTINGS_STORAGE)),
@@ -349,6 +350,8 @@ class SettingsCore(ISettingsCore):
             from account_helpers.settings_core import settings_constants
             if key in settings_constants.GRAPHICS.ALL():
                 LOG_DEBUG('Apply graphic settings: ', {key: value})
+                self.onSettingsChanged({key: value})
+            if key in settings_constants.GAME.LOOT_BOX_VIDEO_OFF:
                 self.onSettingsChanged({key: value})
             return result
         else:

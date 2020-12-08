@@ -893,7 +893,7 @@
       </armor>
       <weight>	11670	</weight>
       <maxLoad>	46400	</maxLoad>
-      <terrainResistance>	0.9 1.2 2.3	</terrainResistance>
+      <terrainResistance>	0.8 0.9 1.8	</terrainResistance>
       <brakeForce>	40000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	43	</rotationSpeed>
@@ -1770,7 +1770,7 @@
           </shotDispersionFactors>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 8 0.375 9 0.44 5 0.56 5 0.625 8 1 8	</maxPitch>
+            <maxPitch>	0 9 0.375 9 0.44 5 0.56 5 0.625 9 1 9	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	15.4	</reloadTime>
@@ -2517,7 +2517,7 @@
     <detailed>
       <engines>
         <MB_822_Ka_500>
-          <smplEnginePower>	720	</smplEnginePower>
+          <smplEnginePower>	800	</smplEnginePower>
           <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
         </MB_822_Ka_500>
       </engines>
@@ -2526,13 +2526,13 @@
           <axleCount>	5	</axleCount>
           <grounds>
             <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
+              <rollingFriction>	0.1449	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.0724	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.07245	</rollingFriction>
+              <rollingFriction>	0.0644	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_It20_Carro_Combattimento_45t>

@@ -95,8 +95,8 @@ class GuiItemFactory(IGuiItemsFactory):
             _logger.error('Wrong name of custom badge class %r', className)
         return badges.Badge(badgeData, proxy=proxy)
 
-    def createLootBox(self, lootBoxID, lootBoxType, lootBoxCategory, count):
-        return LootBox(lootBoxID, lootBoxType, lootBoxCategory, count)
+    def createLootBox(self, lootBoxID, lootBoxConfig, count):
+        return LootBox(lootBoxID, lootBoxConfig, count)
 
     def createCustomization(self, intCompactDescr, proxy=None):
         descriptor = vehicles.getItemByCompactDescr(intCompactDescr)

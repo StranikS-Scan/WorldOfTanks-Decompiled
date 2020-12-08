@@ -10,9 +10,16 @@ from collector_vehicle import CollectorVehicleConsts
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from battle_pass_common import BattlePassConfig, BATTLE_PASS_CONFIG_NAME
 from gui import GUI_SETTINGS, SystemMessages
-from gui.SystemMessages import SM_TYPE
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.SystemMessages import SM_TYPE
 from gui.shared.utils.decorators import ReprInjector
+from ny_common.CraftCost import CraftCostConfig
+from ny_common.GeneralConfig import GeneralConfig
+from ny_common.SettingBonus import SettingBonusConfig
+from ny_common.CelebrityConfig import CelebrityConfig
+from ny_common.SnowGirlConfig import SnowGirlConfig
+from ny_common.ToyDecayCost import ToyDecayCostConfig
+from ny_common.settings import SettingBonusConsts, NYVehBranchConsts, NYLootBoxConsts, NYGeneralConsts, CraftCostConsts, ToyDecayCostConsts, NY_CONFIG_NAME, CelebrityConsts, SnowGirlConsts
 from personal_missions import PM_BRANCH
 from shared_utils import makeTupleByDict, updateDict
 _logger = logging.getLogger(__name__)
@@ -474,11 +481,11 @@ class _BlueprintsConfig(namedtuple('_BlueprintsConfig', ('allowBlueprintsConvers
         return 'isEnabled' in diff or 'useBlueprintsForUnlock' in diff
 
 
-class _SeniorityAwardsConfig(namedtuple('_SeniorityAwardsConfig', ('enabled', 'autoOpenTime', 'hangarWidgetVisibility'))):
+class _SeniorityAwardsConfig(namedtuple('_SeniorityAwardsConfig', ('enabled', 'autoOpenTime', 'hangarWidgetVisibility', 'secretBoxToken', 'rewardViewEnabled'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(enabled=False, autoOpenTime=0, hangarWidgetVisibility=False)
+        defaults = dict(enabled=False, autoOpenTime=0, hangarWidgetVisibility=False, secretBoxToken='', rewardViewEnabled=True)
         defaults.update(kwargs)
         return super(_SeniorityAwardsConfig, cls).__new__(cls, **defaults)
 
@@ -498,6 +505,12 @@ class _SeniorityAwardsConfig(namedtuple('_SeniorityAwardsConfig', ('enabled', 'a
 
     def hangarWidgetIsVisible(self):
         return self.hangarWidgetVisibility
+
+    def getSecretBoxToken(self):
+        return self.secretBoxToken
+
+    def isRewardViewEnabled(self):
+        return self.rewardViewEnabled
 
 
 class _AdventCalendarConfig(namedtuple('_AdventCalendarConfig', ('calendarURL', 'popupIntervalInHours'))):
@@ -859,6 +872,9 @@ class ServerSettings(object):
     def isLootBoxesEnabled(self):
         return self.__getGlobalSetting('isLootBoxesEnabled')
 
+    def isLootBoxEnabled(self, boxId):
+        return self.__getGlobalSetting('lootBoxes_config', {}).get(boxId, {}).get('enabled', False)
+
     def isAnonymizerEnabled(self):
         return self.__getGlobalSetting('isAnonymizerEnabled', False)
 
@@ -1057,6 +1073,33 @@ class ServerSettings(object):
 
     def getReactiveCommunicationConfig(self):
         return self.__reactiveCommunicationConfig
+
+    def getNewYearBonusConfig(self):
+        return SettingBonusConfig(self.__getNYConfig(SettingBonusConsts.CONFIG_NAME))
+
+    def getNewYearToyDecayCostConfig(self):
+        return ToyDecayCostConfig(self.__getNYConfig(ToyDecayCostConsts.CONFIG_NAME))
+
+    def getNewYearCraftCostConfig(self):
+        return CraftCostConfig(self.__getNYConfig(CraftCostConsts.CONFIG_NAME))
+
+    def getNewYearTalismansConfig(self):
+        return SnowGirlConfig(self.__getNYConfig(SnowGirlConsts.CONFIG_NAME))
+
+    def getLootBoxShop(self):
+        return self.__getNYConfig(NYLootBoxConsts.CONFIG_NAME)
+
+    def getNewYearVehBranchConfig(self):
+        return self.__getNYConfig(NYVehBranchConsts.CONFIG_NAME)
+
+    def getNewYearCelebrityConfig(self):
+        return CelebrityConfig(self.__getNYConfig(CelebrityConsts.CONFIG_NAME))
+
+    def getNewYearGeneralConfig(self):
+        return GeneralConfig(self.__getNYConfig(NYGeneralConsts.CONFIG_NAME))
+
+    def __getNYConfig(self, configName):
+        return self.__getGlobalSetting(NY_CONFIG_NAME, {}).get(configName, {})
 
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)

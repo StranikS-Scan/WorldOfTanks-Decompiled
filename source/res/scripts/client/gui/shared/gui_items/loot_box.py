@@ -35,14 +35,13 @@ CATEGORIES_GUI_ORDER = (NewYearCategories.NEWYEAR,
  NewYearCategories.FAIRYTALE)
 
 class LootBox(GUIItem):
-    __slots__ = ('__id', '__invCount', '__type', '__category')
+    __slots__ = ('__id', '__invCount', '__type', '__category', '__historyName', '__guaranteedFrequency', '__guaranteedFrequencyName')
 
-    def __init__(self, lootBoxID, lootBoxType, lootBoxCategory, invCount):
+    def __init__(self, lootBoxID, lootBoxConfig, invCount):
         super(LootBox, self).__init__()
         self.__id = lootBoxID
         self.__invCount = invCount
-        self.__type = lootBoxType
-        self.__category = lootBoxCategory
+        self.__updateByConfig(lootBoxConfig)
 
     def __repr__(self):
         return 'LootBox(id=%d, type=%s, category=%s, count=%d)' % (self.getID(),
@@ -56,9 +55,8 @@ class LootBox(GUIItem):
     def updateCount(self, invCount):
         self.__invCount = invCount
 
-    def update(self, lootBoxType, lootBoxCategory):
-        self.__type = lootBoxType
-        self.__category = lootBoxCategory
+    def update(self, lootBoxConfig):
+        self.__updateByConfig(lootBoxConfig)
 
     def getInventoryCount(self):
         return self.__invCount
@@ -77,3 +75,26 @@ class LootBox(GUIItem):
 
     def isFree(self):
         return self.__type == NewYearLootBoxes.COMMON
+
+    def getGuaranteedFrequency(self):
+        return self.__guaranteedFrequency
+
+    def getGuaranteedFrequencyName(self):
+        return self.__guaranteedFrequencyName
+
+    def getHistoryName(self):
+        return self.__historyName
+
+    def __updateByConfig(self, lootBoxConfig):
+        self.__type = lootBoxConfig.get('type')
+        self.__category = lootBoxConfig.get('category')
+        self.__historyName = lootBoxConfig.get('historyName')
+        self.__guaranteedFrequencyName, self.__guaranteedFrequency = self.__readLimits(lootBoxConfig.get('limits', {}))
+
+    @staticmethod
+    def __readLimits(limitsCfg):
+        for limitName, limit in limitsCfg.iteritems():
+            if 'useBonusProbabilityAfter' in limit:
+                return (limitName, limit['useBonusProbabilityAfter'] + 1)
+
+        return (None, 0)

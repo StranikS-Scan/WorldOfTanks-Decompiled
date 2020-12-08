@@ -3,7 +3,10 @@
 import logging
 import typing
 import constants
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.impl import backport
 from gui.impl.backport import TooltipData, createTooltipData
+from gui.impl.gen import R
 from gui.impl.gen.view_models.common.missions.bonuses.blueprint_bonus_model import BlueprintBonusModel
 from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
 from gui.impl.gen.view_models.common.missions.bonuses.icon_bonus_model import IconBonusModel
@@ -17,8 +20,10 @@ from gui.shared.utils.functions import makeTooltip
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from helpers import i18n, dependency
+from items.components.ny_constants import TOKEN_TALISMAN_BONUS
 from skeletons.gui.server_events import IEventsCache
 from helpers import time_utils
+from skeletons.gui.shared import IItemsCache
 DOSSIER_BADGE_ICON_PREFIX = 'badge_'
 DOSSIER_ACHIEVEMENT_POSTFIX = '_achievement'
 DOSSIER_BADGE_POSTFIX = '_badge'
@@ -110,6 +115,7 @@ class SimpleBonusUIPacker(BaseBonusUIPacker):
 
 class TokenBonusUIPacker(BaseBonusUIPacker):
     _eventsCache = dependency.descriptor(IEventsCache)
+    _itemsCache = dependency.descriptor(IItemsCache)
 
     @classmethod
     def _pack(cls, bonus):
@@ -138,9 +144,8 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
             tokenType = cls.__getTokenBonusType(tokenID, complexToken)
             tooltipPacker = tooltipPackers.get(tokenType)
             if tooltipPacker is None:
-                _logger.warning('There is not a tooltip creator for a token bonus')
-                return result
-            tooltip = tooltipPacker(complexToken)
+                continue
+            tooltip = tooltipPacker(tokenID, complexToken)
             result.append(createTooltipData(tooltip))
 
         return result
@@ -149,17 +154,25 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
     def __getTokenBonusType(cls, tokenID, complexToken):
         if complexToken.isDisplayable:
             return COMPLEX_TOKEN
-        return BATTLE_BONUS_X5_TOKEN if tokenID.startswith(BATTLE_BONUS_X5_TOKEN) else ''
+        if tokenID.startswith(BATTLE_BONUS_X5_TOKEN):
+            return BATTLE_BONUS_X5_TOKEN
+        if tokenID.startswith(constants.LOOTBOX_TOKEN_PREFIX):
+            return constants.LOOTBOX_TOKEN_PREFIX
+        return TOKEN_TALISMAN_BONUS if tokenID.startswith(TOKEN_TALISMAN_BONUS) else ''
 
     @classmethod
     def __getTokenBonusPackers(cls):
         return {BATTLE_BONUS_X5_TOKEN: cls.__packBattleBonusX5Token,
-         COMPLEX_TOKEN: cls.__packComplexToken}
+         COMPLEX_TOKEN: cls.__packComplexToken,
+         constants.LOOTBOX_TOKEN_PREFIX: cls.__packNYLootboxToken,
+         TOKEN_TALISMAN_BONUS: cls.__packTalismanBonusToken}
 
     @classmethod
     def __getTooltipsPackers(cls):
         return {BATTLE_BONUS_X5_TOKEN: TokenBonusFormatter.getBattleBonusX5Tooltip,
-         COMPLEX_TOKEN: cls.__getComplexToolTip}
+         COMPLEX_TOKEN: cls.__getComplexToolTip,
+         constants.LOOTBOX_TOKEN_PREFIX: cls.__packNYLootboxToolTip,
+         TOKEN_TALISMAN_BONUS: cls.__packTalismanBonusToolTip}
 
     @classmethod
     def __packToken(cls, bonusPacker, bonus, *args):
@@ -177,16 +190,51 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
         return model
 
     @classmethod
+    def __packNYLootboxToken(cls, model, bonus, complexToken, token):
+        count = bonus.getCount()
+        if count < 0:
+            return
+        else:
+            lootbox = cls._itemsCache.items.tokens.getLootBoxByTokenID(token.id)
+            if lootbox is None:
+                return
+            lootboxType = lootbox.getType()
+            model.setUserName(lootbox.getUserName())
+            model.setIconSmall(RES_ICONS.getLootBoxBonusIcon('small', lootboxType))
+            model.setIconBig(RES_ICONS.getLootBoxBonusIcon('big', lootboxType))
+            model.setValue(str(count))
+            return model
+
+    @classmethod
+    def __packTalismanBonusToken(cls, model, bonus, complexToken, token):
+        count = bonus.getCount()
+        if count < 0:
+            return None
+        else:
+            model.setUserName(TOKEN_TALISMAN_BONUS)
+            model.setValue(str(count))
+            return model
+
+    @classmethod
     def __packBattleBonusX5Token(cls, model, bonus, *args):
         model.setValue(str(bonus.getCount()))
         return model
 
     @classmethod
-    def __getComplexToolTip(cls, complexToken):
+    def __getComplexToolTip(cls, _, complexToken, *args):
         webCache = cls._eventsCache.prefetcher
         userName = i18n.makeString(webCache.getTokenInfo(complexToken.styleID))
         tooltip = makeTooltip(i18n.makeString(TOOLTIPS.QUESTS_BONUSES_TOKEN_HEADER, userName=userName), i18n.makeString(TOOLTIPS.QUESTS_BONUSES_TOKEN_BODY))
         return tooltip
+
+    @classmethod
+    def __packNYLootboxToolTip(cls, tokenId, *args):
+        lootbox = cls._itemsCache.items.tokens.getLootBoxByTokenID(tokenId)
+        return makeTooltip(header=lootbox.getUserName(), body=TOOLTIPS.QUESTS_BONUSES_LOOTBOXTOKEN_BODY)
+
+    @classmethod
+    def __packTalismanBonusToolTip(cls, tokenId, *args):
+        return makeTooltip(header=backport.text(R.strings.tooltips.quests.bonuses.talismanBonusToken.header()), body=backport.text(R.strings.tooltips.quests.bonuses.talismanBonusToken.body()))
 
 
 class ItemBonusUIPacker(BaseBonusUIPacker):
@@ -467,7 +515,7 @@ class VehiclesBonusUIPacker(BaseBonusUIPacker):
                 for bonusComp in compensation:
                     packedVehicles.extend(packer.pack(bonusComp))
 
-            packedVehicles.append(cls._packVehicle(bonus, vehInfo))
+            packedVehicles.append(cls._packVehicle(bonus, vehicle, vehInfo))
 
         return packedVehicles
 
@@ -477,22 +525,21 @@ class VehiclesBonusUIPacker(BaseBonusUIPacker):
         for vehicle, vehInfo in vehicles:
             compensation = bonus.compensation(vehicle, bonus)
             if compensation:
-                packer = SimpleBonusUIPacker()
                 for bonusComp in compensation:
-                    packedTooltips.extend(packer.getToolTip(bonusComp))
+                    packedTooltips.extend(cls._packCompensationTooltip(bonusComp, vehicle))
 
             packedTooltips.append(cls._packTooltip(bonus, vehicle, vehInfo))
 
         return packedTooltips
 
     @classmethod
-    def _packVehicle(cls, bonus, vehInfo):
+    def _packVehicle(cls, bonus, vehicle, vehInfo):
         rentDays = bonus.getRentDays(vehInfo)
         rentBattles = bonus.getRentBattles(vehInfo)
         rentWins = bonus.getRentWins(vehInfo)
         rentSeason = bonus.getRentSeason(vehInfo)
         isRent = rentDays or rentBattles or rentWins or rentSeason
-        return cls._packVehicleBonusModel(bonus, isRent)
+        return cls._packVehicleBonusModel(bonus, vehicle, isRent)
 
     @classmethod
     def _packTooltip(cls, bonus, vehicle, vehInfo):
@@ -509,6 +556,10 @@ class VehiclesBonusUIPacker(BaseBonusUIPacker):
          rentWins,
          rentSeason])
 
+    @classmethod
+    def _packCompensationTooltip(cls, bonusComp, vehicle):
+        return SimpleBonusUIPacker().getToolTip(bonusComp)
+
     @staticmethod
     def _getRentExpiryTime(rentDays):
         if rentDays:
@@ -519,7 +570,7 @@ class VehiclesBonusUIPacker(BaseBonusUIPacker):
         return rentExpiryTime
 
     @staticmethod
-    def _packVehicleBonusModel(bonus, isRent):
+    def _packVehicleBonusModel(bonus, vehicle, isRent):
         model = BonusModel()
         model.setName(bonus.getName() + VEHICLE_RENT_ICON_POSTFIX if isRent else bonus.getName())
         model.setIsCompensation(bonus.isCompensation())

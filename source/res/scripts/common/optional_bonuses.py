@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/optional_bonuses.py
-import random
 import copy
+import random
 import time
+from typing import Optional, Dict
 from account_shared import getCustomizationItem
+from items.components.ny_constants import CurrentNYConstants, PREV_NY_TOYS_COLLECTIONS, YEARS_INFO
 from soft_exception import SoftException
-from items import tankmen
-from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 
 def _packTrack(track):
     result = []
@@ -89,6 +89,11 @@ def __mergeTokens(total, key, value, isLeaf=False, count=1, *args):
             total['expires'] = tokenData['expires']
         if 'limit' in tokenData:
             total['limit'] = tokenData['limit'] if total['limit'] == 0 else max(total['limit'], tokenData['limit'])
+        extItems = tokenData.get('extItems', None)
+        if extItems:
+            __mergeList(total, 'extItems', extItems, 1)
+
+    return
 
 
 def __mergeGoodies(total, key, value, isLeaf=False, count=1, *args):
@@ -156,6 +161,17 @@ def __mergeDogTag(total, key, value, isLeaf=False, count=1, *args):
     total[key] = value
 
 
+def __mergeNYToys(total, key, value, isLeaf=False, count=1, *args):
+    result = total.setdefault(key, {})
+    for toyID, toysCount in value.iteritems():
+        result[toyID] = result.get(toyID, 0) + count * toysCount
+
+
+def __mergeNYAnyOf(total, key, value, isLeaf=False, count=1, *args):
+    result = total.setdefault(key, [])
+    result.extend(value if isinstance(value, list) else [value])
+
+
 BONUS_MERGERS = {'credits': __mergeValue,
  'gold': __mergeValue,
  'xp': __mergeValue,
@@ -189,10 +205,16 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'rankedDailyBattles': __mergeValue,
  'rankedBonusBattles': __mergeValue,
  'dogTagComponents': __mergeDogTag,
- 'meta': lambda *args, **kwargs: None}
+ 'meta': lambda *args, **kwargs: None,
+ CurrentNYConstants.TOYS: __mergeNYToys,
+ CurrentNYConstants.TOY_FRAGMENTS: __mergeValue,
+ CurrentNYConstants.ANY_OF: __mergeNYAnyOf,
+ CurrentNYConstants.FILLERS: __mergeValue}
+BONUS_MERGERS.update({k:__mergeNYToys for k in PREV_NY_TOYS_COLLECTIONS})
 ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._inventory.getVehicleInvID(key) != 0,
  'customizations': lambda account, key: account._customizations20.getItems((key,), 0)[key] > 0,
- 'tokens': lambda account, key: account._quests.hasToken(key)}
+ 'tokens': lambda account, key: account._quests.hasToken(key),
+ CurrentNYConstants.TOYS: lambda account, key: account._newYear.isToyPresentInCollection(key, YEARS_INFO.CURRENT_YEAR_STR)}
 
 class BonusItemsCache(object):
 
@@ -246,14 +268,24 @@ class BonusItemsCache(object):
 
 class BonusNodeAcceptor(object):
 
-    def __init__(self, account, bonusConfig=None, counters=None, bonusCache=None):
+    def __init__(self, account, bonusConfig=None, counters=None, bonusCache=None, probabilityStage=0, logTracker=None, shouldResetUsedLimits=True):
         self.__account = account
         self.__limitsConfig = bonusConfig.get('limits', None) if bonusConfig else None
+        self.__maxStage = bonusConfig.get('probabilityStageCount', 1) - 1 if bonusConfig else 0
+        self.__useBonusProbability = bonusConfig.get('useBonusProbability', False) if bonusConfig else False
         self.__locals = None
         self.__cooldowns = None
         self.__uses = None
         self.__shouldVisitNodes = None
         self.__bonusCache = bonusCache or BonusItemsCache(account)
+        probabilityStage = min(probabilityStage, self.__maxStage)
+        self.__probabilitiesStage = [probabilityStage, probabilityStage]
+        self.__bonusProbabilityUses = None
+        self.__shouldUseBonusProbability = False
+        self.__isMaxStageReached = self.__maxStage <= probabilityStage
+        self.__logTracker = logTracker
+        self.__usedLimits = set()
+        self.__shouldResetUsedLimits = shouldResetUsedLimits
         self.__initCounters(counters or {})
         return
 
@@ -262,9 +294,10 @@ class BonusNodeAcceptor(object):
             self.__uses = uses = {}
             self.__cooldowns = cooldowns = {}
             self.__locals = {}
+            self.__bonusProbabilityUses = bonusProbabilityUses = {}
             for limitID, config in self.__limitsConfig.iteritems():
-                if 'guaranteedFrequency' in config or 'maxFrequency' in config:
-                    cooldowns[limitID], uses[limitID] = counters.get(limitID, (0, 0))
+                if 'guaranteedFrequency' in config or 'maxFrequency' in config or 'useBonusProbabilityAfter' in config:
+                    cooldowns[limitID], uses[limitID], bonusProbabilityUses[limitID] = counters.get(limitID, (0, 0, 0))
 
     def getCounters(self):
         if not self.__limitsConfig:
@@ -273,9 +306,10 @@ class BonusNodeAcceptor(object):
             result = {}
             cooldowns = self.__cooldowns
             uses = self.__uses
+            bonusProbabilityUses = self.__bonusProbabilityUses
             for limitID, config in self.__limitsConfig.iteritems():
-                if 'guaranteedFrequency' in config or 'maxFrequency' in config:
-                    result[limitID] = (cooldowns[limitID], uses[limitID])
+                if 'guaranteedFrequency' in config or 'maxFrequency' in config or 'useBonusProbabilityAfter' in config:
+                    result[limitID] = (cooldowns[limitID], uses[limitID], bonusProbabilityUses[limitID])
 
             return result or None
 
@@ -303,7 +337,7 @@ class BonusNodeAcceptor(object):
 
     def updateBonusCache(self, bonusNode):
         cache = self.__bonusCache
-        for itemType in ('vehicles', 'tokens'):
+        for itemType in ('vehicles', 'tokens', CurrentNYConstants.TOYS):
             if itemType in bonusNode:
                 for itemID in bonusNode[itemType].iterkeys():
                     cache.onItemAccepted(itemType, itemID)
@@ -315,7 +349,7 @@ class BonusNodeAcceptor(object):
 
     def isBonusExists(self, bonusNode):
         cache = self.__bonusCache
-        for itemType in ('vehicles', 'tokens'):
+        for itemType in ('vehicles', 'tokens', CurrentNYConstants.TOYS):
             if itemType in bonusNode:
                 for itemID in bonusNode[itemType].iterkeys():
                     if cache.isItemExists(itemType, itemID):
@@ -329,7 +363,44 @@ class BonusNodeAcceptor(object):
 
         return False
 
+    def getProbabilityStages(self):
+        return self.__probabilitiesStage
+
+    def getCurrentProbabilityStage(self):
+        return self.__probabilitiesStage[0]
+
+    def __increaseProbabilityStage(self):
+        if self.__probabilitiesStage[1] < self.__maxStage:
+            self.__probabilitiesStage[1] += 1
+
+    def __updateProbabilityStages(self):
+        self.__probabilitiesStage[0] = self.__probabilitiesStage[1]
+
+    def __resetFlags(self):
+        if not self.__isMaxStageReached or self.__shouldUseBonusProbability:
+            self.__isMaxStageReached = self.__probabilitiesStage[1] >= self.__maxStage
+            self.__shouldUseBonusProbability = False
+
+    def getUseBonusProbability(self):
+        return self.__shouldUseBonusProbability
+
+    def getStagesInfo(self):
+        return tuple(self.getProbabilityStages() + [self.__maxStage + 1])
+
+    def getUsedLimits(self):
+        return self.__usedLimits
+
+    def getLoggingInfo(self):
+        if self.__logTracker is None:
+            return
+        else:
+            beginStage, endStage, stagesCount = self.getStagesInfo()
+            usedLimits = self.getUsedLimits()
+            return self.__logTracker.generateInfo(beginStage, endStage, stagesCount, usedLimits)
+
     def accept(self, bonusNode):
+        if bonusNode.get('properties', {}).get('probabilityStageDependence', False):
+            self.__increaseProbabilityStage()
         limitID = bonusNode.get('properties', {}).get('limitID', None)
         if limitID:
             limitConfig = self.__limitsConfig[limitID]
@@ -341,10 +412,14 @@ class BonusNodeAcceptor(object):
                 self.__cooldowns[limitID] = limitConfig.get('maxFrequency', 0)
             if limitID in self.__uses:
                 self.__uses[limitID] = 0
+            if limitID in self.__bonusProbabilityUses and not self.__isMaxStageReached:
+                self.__bonusProbabilityUses[limitID] = 0
         self.updateBonusCache(bonusNode)
         return
 
     def reuse(self):
+        self.__updateProbabilityStages()
+        self.__resetFlags()
         if not self.__limitsConfig:
             return
         else:
@@ -352,6 +427,9 @@ class BonusNodeAcceptor(object):
             cooldowns = self.__cooldowns
             uses = self.__uses
             self.__shouldVisitNodes = set([])
+            bonusProbabilityUses = self.__bonusProbabilityUses
+            if self.__shouldResetUsedLimits:
+                self.__usedLimits = set()
             for limitID, limitConfig in self.__limitsConfig.iteritems():
                 bonusLimit = limitConfig.get('bonusLimit', None)
                 if bonusLimit is not None:
@@ -364,6 +442,13 @@ class BonusNodeAcceptor(object):
                     uses[limitID] += 1
                     if uses[limitID] >= guaranteedFrequency:
                         self.__shouldVisitNodes.add(limitID)
+                        self.__usedLimits.add(limitID)
+                bonusProbabilityAfter = limitConfig.get('useBonusProbabilityAfter', None)
+                if bonusProbabilityAfter is not None and not self.__isMaxStageReached and self.__useBonusProbability:
+                    bonusProbabilityUses[limitID] += 1
+                    if bonusProbabilityUses[limitID] > bonusProbabilityAfter:
+                        self.__shouldUseBonusProbability = True
+                        self.__usedLimits.add(limitID)
 
             return
 
@@ -419,13 +504,13 @@ class TrackVisitor(NodeVisitor):
         self.__track = _trackIterator(track)
 
     def onOneOf(self, storage, values):
-        for probability, limitIDs, bonusValue in values[1]:
+        for probability, bonusProbability, limitIDs, bonusValue in values[1]:
             if next(self.__track):
                 self._walkSubsection(storage, bonusValue)
                 return
 
     def onAllOf(self, storage, values):
-        for probability, refGlobalID, bonusValue in values:
+        for probability, bonusProbability, refGlobalID, bonusValue in values:
             if next(self.__track):
                 self._walkSubsection(storage, bonusValue)
 
@@ -447,24 +532,28 @@ class ProbabilityVisitor(NodeVisitor):
     def onOneOf(self, storage, values):
         rand = random.random()
         limitIDs, bonusNodes = values
-        shouldVisitNodes = self.__nodeAcceptor.getNodesForVisit(limitIDs)
+        acceptor = self.__nodeAcceptor
+        shouldVisitNodes = acceptor.getNodesForVisit(limitIDs)
+        probablitiesStage = acceptor.getCurrentProbabilityStage()
+        useBonusProbability = acceptor.getUseBonusProbability()
         if shouldVisitNodes:
             check = lambda _, nodeLimitIDs: nodeLimitIDs and nodeLimitIDs.intersection(shouldVisitNodes)
         else:
             check = lambda probability, _: probability > rand
-        for i, (probability, nodeLimitIDs, bonusValue) in enumerate(bonusNodes):
-            if check(probability, nodeLimitIDs):
+        for i, (probabilities, bonusProbability, nodeLimitIDs, bonusValue) in enumerate(bonusNodes):
+            probability = probabilities[probablitiesStage]
+            if check(bonusProbability if useBonusProbability else probability, nodeLimitIDs):
                 selectedIdx = i
                 selectedValue = bonusValue
                 break
         else:
             raise SoftException('Unreachable code, oneof probability bug %s' % bonusNodes)
 
-        isAcceptable = self.__nodeAcceptor.isAcceptable
+        isAcceptable = acceptor.isAcceptable
         if not isAcceptable(selectedValue):
             altList = list(enumerate(bonusNodes))
             random.shuffle(altList)
-            for i, (_1, _2, bonusValue) in altList:
+            for i, (_1, _2, _3, bonusValue) in altList:
                 if i != selectedIdx:
                     isCompensation = bonusValue.get('properties', {}).get('compensation', False)
                     if isCompensation and isAcceptable(bonusValue):
@@ -483,12 +572,15 @@ class ProbabilityVisitor(NodeVisitor):
             self.__trackChoice(False)
 
         self.__trackChoice(True)
-        self.__nodeAcceptor.accept(selectedValue)
+        acceptor.accept(selectedValue)
         self._walkSubsection(storage, selectedValue)
 
     def onAllOf(self, storage, values):
         acceptor = self.__nodeAcceptor
-        for probability, nodeLimitIDs, bonusValue in values:
+        probabilityStage = acceptor.getCurrentProbabilityStage()
+        useBonusProbability = acceptor.getUseBonusProbability()
+        for probabilities, bonusProbability, nodeLimitIDs, bonusValue in values:
+            probability = bonusProbability if useBonusProbability else probabilities[probabilityStage]
             shouldVisitNodes = acceptor.getNodesForVisit(nodeLimitIDs)
             if shouldVisitNodes or probability > random.random() and acceptor.isAcceptable(bonusValue, False):
                 self.__trackChoice(True)
@@ -501,7 +593,8 @@ class ProbabilityVisitor(NodeVisitor):
             self._walkSubsection(storage, bonusValue)
 
     def beforeWalk(self, storage, bonusSection):
-        self.__nodeAcceptor.reuse()
+        acceptor = self.__nodeAcceptor
+        acceptor.reuse()
 
     def __trackChoice(self, choice):
         self.__bonusTrack.append(choice)
@@ -524,20 +617,26 @@ class StripVisitor(NodeVisitor):
     def onOneOf(self, storage, values):
         strippedValues = []
         _, values = values
-        for probability, refGlobalID, bonusValue in values:
+        for probability, bonusProbability, refGlobalID, bonusValue in values:
             stippedValue = {}
             self._walkSubsection(stippedValue, bonusValue)
-            strippedValues.append((-1, None, stippedValue))
+            strippedValues.append(([-1],
+             -1,
+             None,
+             stippedValue))
 
         storage['oneof'] = (None, strippedValues)
         return
 
     def onAllOf(self, storage, values):
         strippedValues = []
-        for probability, refGlobalID, bonusValue in values:
+        for probability, bonusProbability, refGlobalID, bonusValue in values:
             stippedValue = {}
             self._walkSubsection(stippedValue, bonusValue)
-            strippedValues.append((-1, None, stippedValue))
+            strippedValues.append(([-1],
+             -1,
+             None,
+             stippedValue))
 
         storage['allof'] = strippedValues
         return

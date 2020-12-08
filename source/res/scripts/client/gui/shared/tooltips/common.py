@@ -36,6 +36,8 @@ from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view im
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_not_started_tooltip_view import BattlePassNotStartedTooltipView
 from gui.impl.lobby.battle_pass.tooltips.vehicle_points_tooltip_view import VehiclePointsTooltipView
 from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent
+from gui.impl.new_year.tooltips.new_year_total_bonus_tooltip import NewYearTotalBonusTooltip
+from gui.impl.new_year.tooltips.new_year_vehicles_bonus_tooltip import NewYearVehiclesBonusTooltip
 from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.server_events.events_helpers import missionsSortFunc
@@ -1404,6 +1406,39 @@ class SquadBonusTooltipWindowData(ToolTipBaseData):
 
     def getDisplayableData(self, *args, **kwargs):
         return DecoratedTooltipWindow(SquadBonusTooltipContent())
+
+
+class NYCreditBonusTooltipWindowData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(NYCreditBonusTooltipWindowData, self).__init__(context, TOOLTIP_TYPE.NY_CREDIT_BONUS)
+
+    def getDisplayableData(self, *args, **kwargs):
+        return DecoratedTooltipWindow(NewYearTotalBonusTooltip())
+
+
+class NYVehicleBonusTooltipWindowData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(NYVehicleBonusTooltipWindowData, self).__init__(context, TOOLTIP_TYPE.NY_VEHICLE_BONUS)
+
+    def getDisplayableData(self, *args, **kwargs):
+        return DecoratedTooltipWindow(NewYearVehiclesBonusTooltip())
+
+
+class NewYearFillers(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(NewYearFillers, self).__init__(context, None)
+        self._setWidth(365)
+        self._setContentMargin(0, 0, 0, 0)
+        return
+
+    def _packBlocks(self, *args, **kwargs):
+        items = super(NewYearFillers, self)._packBlocks(*args, **kwargs)
+        blocks = [formatters.packImageBlockData(backport.image(R.images.gui.maps.icons.new_year.infotype.icon_filler())), formatters.packTextBlockData(text_styles.highTitle(backport.text(R.strings.ny.fillersTooltip.header())), padding=formatters.packPadding(-364, 30, 0, 30)), formatters.packTextBlockData(text_styles.mainBig(backport.text(R.strings.ny.fillersTooltip.description())), padding=formatters.packPadding(240, 30, 30, 30))]
+        items.append(formatters.packBuildUpBlockData(blocks=blocks))
+        return items
 
 
 class VehiclePointsTooltipContentWindowData(ToolTipBaseData):

@@ -1,0 +1,35 @@
+<tableful_slots.xml>
+  <slot>
+    <id>	10	</id>
+    <type>	table	</type>
+    <object>	Tableful	</object>
+    <nodes>	HP_table	</nodes>
+    <defaultToy>	2	</defaultToy>
+    <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_table.seq	</hoverEffect>
+  </slot>
+  <slot>
+    <id>	11	</id>
+    <type>	kitchen	</type>
+    <object>	Tableful	</object>
+    <nodes>	HP_kitchen	</nodes>
+    <selectable>	false	</selectable>
+    <defaultToy>	3	</defaultToy>
+    <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_kitchen.seq	</hoverEffect>
+  </slot>
+  <slot>
+    <id>	12	</id>
+    <type>	tent	</type>
+    <object>	Tableful	</object>
+    <nodes>	HP_tent	</nodes>
+    <defaultToy>	5	</defaultToy>
+    <selectable>	true	</selectable>
+    <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_tent.seq	</hoverEffect>
+  </slot>
+  <slot>
+    <id>	13	</id>
+    <type>	mega_tableful	</type>
+    <object>	Tableful	</object>
+    <nodes>	HP_mega_tableful HP_mega_tableful2 HP_mega_tableful3 HP_mega_tableful4 HP_mega_tableful5 HP_mega_tableful6 HP_mega_tableful7 HP_mega_tableful8 HP_mega_tableful9 HP_mega_tableful10 HP_mega_tableful11 HP_mega_tableful12	</nodes>
+    <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_megatablefull.seq	</hoverEffect>
+  </slot>
+</tableful_slots.xml>

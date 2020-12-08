@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/constants.py
 import enum
+import calendar
+import time
 from math import cos, radians
 from time import time as timestamp
 from collections import namedtuple
@@ -20,7 +22,7 @@ IS_CELLAPP = BigWorld.component == 'cell'
 IS_BASEAPP = BigWorld.component in ('base', 'service')
 IS_WEB = BigWorld.component == 'web'
 IS_DYNAPDATER = False
-CURRENT_REALM = 'CT'
+CURRENT_REALM = 'RU'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -1160,14 +1162,15 @@ PERSONAL_MISSION_PAWN_COST = 1
 PERSONAL_MISSION_FINAL_PAWN_COST = 4
 PERSONAL_MISSION_2_FINAL_PAWN_COST = 3
 PERSONAL_MISSION_FREE_TOKENS_LIMIT = 21
-ENDLESS_TOKEN_TIME = 4104777660L
-LOOTBOX_TOKEN_PREFIX = 'lootBox:'
-TWITCH_TOKEN_PREFIX = 'token:twitch'
 RESOURCE_TOKEN_PREFIX = 'resource:'
 CURRENCY_TOKEN_PREFIX = 'currency:'
 PREMIUM_TOKEN_PREFIX = 'prem_acc'
 EPIC_ABILITY_PTS_NAME = 'abilityPts'
 OFFER_TOKEN_PREFIX = 'offer:'
+ENDLESS_TOKEN_TIME_STRING = '28.01.2100 00:01'
+ENDLESS_TOKEN_TIME = int(calendar.timegm(time.strptime(ENDLESS_TOKEN_TIME_STRING, '%d.%m.%Y %H:%M')))
+LOOTBOX_TOKEN_PREFIX = 'lootBox:'
+TWITCH_TOKEN_PREFIX = 'token:twitch'
 
 def personalMissionFreeTokenName(branch):
     return PERSONAL_MISSION_FREE_TOKEN_NAME if branch <= 1 else '_'.join([PERSONAL_MISSION_FREE_TOKEN_NAME, str(branch)])
@@ -1418,7 +1421,7 @@ class REQUEST_COOLDOWN:
     SEND_INVITATION_COOLDOWN = 1.0
     RUN_QUEST = 1.0
     PAWN_FREE_AWARD_LIST = 1.0
-    LOOTBOX = 1.0
+    LOOTBOX = 0.5
     BADGES = 2.0
     CREW_SKINS = 0.3
     BPF_COMMAND = 1.0
@@ -1435,6 +1438,24 @@ class REQUEST_COOLDOWN:
     ANONYMIZER = 1.0
     UPDATE_IN_BATTLE_PLAYER_RELATIONS = 1.0
     FLUSH_RELATIONS = 1.0
+    NEW_YEAR_SLOT_FILL = 0.4
+    NEW_YEAR_CRAFT = 0.5
+    NEW_YEAR_CRAFT_OLD_TOYS = 0.5
+    NEW_YEAR_BREAK_TOYS = 1.0
+    NEW_YEAR_SEE_INVENTORY_TOYS = 0.5
+    NEW_YEAR_SEE_COLLECTION_TOYS = 0.5
+    NEW_YEAR_SELECT_DISCOUNT = 1.0
+    NEW_YEAR_VIEW_ALBUM = 0.5
+    NEW_YEAR_CONVERT_FILLERS = 1.0
+    NEW_YEAR_GET_TALISMAN_TOY = 1.0
+    NEW_YEAR_ADD_TALISMAN = 0.5
+    NEW_YEAR_FILL_OLD_COLLECTION = 0.5
+    NEW_YEAR_SET_NY_VEHICLE = 0.5
+    NEW_YEAR_SET_CAMOUFLAGE = 0.75
+    NEW_YEAR_SIMPLIFY_CELEBRITY_QUEST = 1.0
+    NEW_YEAR_TAKE_TALISMAN_BONUS = 0.5
+    NEW_YEAR_CHANGE_TALISMAN_BONUS_STAGE = 0.5
+    NEW_YEAR_CHOOSE_SLOT_BONUS = 0.5
     EQUIP_ENHANCEMENT = 1.0
     DISMOUNT_ENHANCEMENT = 1.0
     BUY_BATTLE_PASS = 1.0
@@ -1762,12 +1783,18 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.LINKEDSET_QUESTS: 'linkedset quests show reward info',
  USER_SERVER_SETTINGS.QUESTS_PROGRESS: 'feedback quests progress',
  91: 'Loot box last viewed count',
+ 92: 'Oriental loot box last viewed count',
+ 93: 'New year loot box last viewed count',
+ 94: 'Fairytale loot box last viewed count',
+ 95: 'Christmas loot box last viewed count',
  USER_SERVER_SETTINGS.SESSION_STATS: 'sessiong statistics settings',
  97: 'BattlePass carouse filter 1',
  98: 'Battle Pass Storage',
  99: 'Once only hints',
  100: 'Battle Royale carousel filter 1',
- 101: 'Battle Royale carousel filter 2'}
+ 101: 'Battle Royale carousel filter 2',
+ 102: 'New Year settings storage',
+ 103: 'Common loot box last viewed count'}
 
 class WG_GAMES:
     TANKS = 'wot'

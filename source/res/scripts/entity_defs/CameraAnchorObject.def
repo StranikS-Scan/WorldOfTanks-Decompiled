@@ -1,0 +1,63 @@
+<CameraAnchorObject.def>
+  <Volatile>
+    <position></position>
+    <yaw></yaw>
+  </Volatile>
+  <Properties>
+    <anchorName>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </anchorName>
+    <yawConstraints>
+      <Type>	VECTOR2	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	True	</Editable>
+      <Default>	-180.0 180.0	</Default>
+    </yawConstraints>
+    <pitchConstraints>
+      <Type>	VECTOR2	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	True	</Editable>
+      <Default>	-180.0 180.0	</Default>
+    </pitchConstraints>
+    <distanceConstraints>
+      <Type>	VECTOR2	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	True	</Editable>
+      <Default>	6.5 12.0	</Default>
+    </distanceConstraints>
+    <fov>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	True	</Editable>
+      <Default>	95	</Default>
+    </fov>
+    <dofEnabled>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	True	</Editable>
+      <Default>	0	</Default>
+    </dofEnabled>
+    <nearStart>
+      <Type>	FLOAT	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	True	</Editable>
+    </nearStart>
+    <nearDist>
+      <Type>	FLOAT	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	True	</Editable>
+    </nearDist>
+    <farStart>
+      <Type>	FLOAT	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	True	</Editable>
+    </farStart>
+    <farDist>
+      <Type>	FLOAT	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	True	</Editable>
+    </farDist>
+  </Properties>
+</CameraAnchorObject.def>

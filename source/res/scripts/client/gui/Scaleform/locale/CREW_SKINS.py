@@ -196,3 +196,6 @@ class CREW_SKINS(object):
     GRADOVSKIY_NAME = '#crew_skins:gradovskiy/Name'
     GRADOVSKIY_LASTNAME = '#crew_skins:gradovskiy/LastName'
     GRADOVSKIY_DESCR = '#crew_skins:gradovskiy/Descr'
+    KADETTKNABE_NAME = '#crew_skins:kadettKnabe/Name'
+    KADETTKNABE_LASTNAME = '#crew_skins:kadettKnabe/LastName'
+    KADETTKNABE_DESCR = '#crew_skins:kadettKnabe/Descr'

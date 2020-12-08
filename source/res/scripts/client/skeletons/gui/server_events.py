@@ -13,6 +13,7 @@ class IEventsCache(object):
     onEventsVisited = None
     onProfileVisited = None
     onPersonalQuestsVisited = None
+    onQuestConditionUpdated = None
 
     def init(self):
         raise NotImplementedError
@@ -78,6 +79,9 @@ class IEventsCache(object):
     def getGroups(self, filterFunc=None):
         raise NotImplementedError
 
+    def getCelebrityQuests(self, filterFunc=None):
+        raise NotImplementedError
+
     def getHiddenQuests(self, filterFunc=None):
         raise NotImplementedError
 
@@ -97,6 +101,12 @@ class IEventsCache(object):
         raise NotImplementedError
 
     def getEventBattles(self):
+        raise NotImplementedError
+
+    def getQuestByID(self, qID):
+        raise NotImplementedError
+
+    def getQuestsByIDs(self, qIDs):
         raise NotImplementedError
 
     def isEventEnabled(self):

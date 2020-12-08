@@ -1,0 +1,58 @@
+<h30_newyear_2021.xml>
+  <name>	#arenas:h30_newyear_2021/name	</name>
+  <description>	#arenas:h30_newyear_2021/description	</description>
+  <geometry>	spaces/h30_newyear_2021	</geometry>
+  <boundingBox>
+    <bottomLeft>	-100.000000 -100.000000	</bottomLeft>
+    <upperRight>	100.000000 100.000000	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/h30_newyear_2021/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <wwmusic>	hangar_newyear_silence	</wwmusic>
+  <wwambientSound>	hangar_newyear_ambient_main	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	env_Forest.bnk	</bank>
+      <bank>	hangar_h30_newyear_2021.bnk	</bank>
+      <bank>	hangar_h30_newyear_2021.pck	</bank>
+    </loadBanks>
+    <unloadBanks>
+      <bank>	hangar_premium_2018.bnk	</bank>
+    </unloadBanks>
+    <events>
+      <event>
+        <name>	ambient_bush_yellow_dry_big_01	</name>
+        <mod>	hangar_newyear_silence	</mod>
+      </event>
+      <event>
+        <name>	ambient_trees_dry_comb_big_01	</name>
+        <mod>	hangar_newyear_silence	</mod>
+      </event>
+      <event>
+        <name>	ambient_bush_yellow_dry_small_01	</name>
+        <mod>	hangar_newyear_silence	</mod>
+      </event>
+      <event>
+        <name>	ambient_trees_without_foliage_tree_big_01	</name>
+        <mod>	hangar_newyear_silence	</mod>
+      </event>
+      <event>
+        <name>	ambient_trees_coniferous_01	</name>
+        <mod>	hangar_newyear_silence	</mod>
+      </event>
+    </events>
+  </soundRemapping>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf></ctf>
+  </gameplayTypes>
+  <mapActivities></mapActivities>
+</h30_newyear_2021.xml>

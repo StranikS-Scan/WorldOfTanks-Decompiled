@@ -169,6 +169,10 @@ class EffectsListPlayer(object):
         self.__data = dict()
         return
 
+    @property
+    def isStarted(self):
+        return self.__isStarted
+
     def play(self, model, startKeyPoint=None, callbackFunc=None, waitForKeyOff=False):
         needPlay, newKey = self.__isNeedToPlay(waitForKeyOff)
         if not needPlay:

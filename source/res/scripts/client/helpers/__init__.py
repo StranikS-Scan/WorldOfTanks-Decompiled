@@ -202,3 +202,7 @@ class ClanQuestButtonHandler(object):
         url = value.get('action_url', '') if isinstance(value, dict) else ''
         showClanQuestWindow(getClanQuestURL() + url)
         return
+
+
+def isMemoryRiskySystem():
+    return BigWorld.totalVirtualMemory() < 3145728

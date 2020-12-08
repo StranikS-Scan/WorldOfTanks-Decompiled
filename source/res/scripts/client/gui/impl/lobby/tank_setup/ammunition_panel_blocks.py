@@ -1,17 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/ammunition_panel_blocks.py
 import itertools
+import typing
 from account_helpers.settings_core.options import KeyboardSetting
 from frameworks.wulf import Array
 from gui.impl.gen import R
 from gui.impl.gen.view_models.constants.item_highlight_types import ItemHighlightTypes
 from gui.impl.gen.view_models.views.lobby.tank_setup.common.base_ammunition_slot import BaseAmmunitionSlot
 from gui.impl.gen.view_models.views.lobby.tank_setup.common.battle_ability_ammunition_slot import BattleAbilityAmmunitionSlot
+from gui.impl.gen.view_models.views.lobby.tank_setup.common.ny_style_ammunition_slot import NyStyleAmmunitionSlot
 from gui.impl.gen.view_models.views.lobby.tank_setup.common.opt_device_ammunition_slot import OptDeviceAmmunitionSlot
 from gui.impl.gen.view_models.views.lobby.tank_setup.common.shell_ammunition_slot import ShellAmmunitionSlot
 from gui.impl.gen.view_models.views.lobby.tank_setup.common.specialization_model import SpecializationModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
 from gui.impl.lobby.tank_setup.tank_setup_helper import getCategoriesMask, NONE_ID
+if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.Vehicle import Vehicle
 EMPTY_NAME = 'empty'
 
 class BaseBlock(object):
@@ -284,3 +288,43 @@ class BattleAbilitiesBlock(BaseBlock):
         super(BattleAbilitiesBlock, self)._updateSlotWithItem(model, idx, slotItem)
         model.setImageSource(R.images.gui.maps.icons.artefact.dyn(slotItem.descriptor.iconName)())
         model.setLevel(slotItem.level)
+
+
+class NewYearStyleBlock(BaseBlock):
+    _index = 0
+
+    def createBlock(self, viewModel):
+        super(NewYearStyleBlock, self).createBlock(viewModel)
+        viewModel.setType(self._getSectionName())
+
+    def updateBlock(self, viewModel):
+        if not viewModel.getSlots():
+            viewModel.setSlots(self._createSlots())
+        else:
+            slot = viewModel.getSlots()[self._index]
+            self._updateSlot(slot)
+
+    def _createSlots(self):
+        array = Array()
+        slot = self._createAmmunitionSlot(self._index)
+        self._updateSlot(slot)
+        array.addViewModel(slot)
+        return array
+
+    def _getSectionName(self):
+        return TankSetupConstants.TOGGLE_NY_STYLE
+
+    def _getAmmunitionSlotModel(self):
+        return NyStyleAmmunitionSlot()
+
+    def _updateSlot(self, slot):
+        vehicle = self._vehicle
+        slot.setIsSelected(vehicle.isNewYearOutfitSet())
+        slot.setIsLocked(vehicle.isNewYearOutfitChangesLocked())
+        slot.setIsOutfitLocked(vehicle.isOutfitLocked)
+
+    def _getLayout(self):
+        return None
+
+    def _getInstalled(self):
+        return None

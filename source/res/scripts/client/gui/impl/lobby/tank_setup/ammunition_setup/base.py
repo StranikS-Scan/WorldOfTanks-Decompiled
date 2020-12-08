@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/ammunition_setup/base.py
 from async import async, await
 from frameworks.wulf import ViewStatus
+from gui import SystemMessages
 from gui.impl.backport import BackportTooltipWindow
 from gui.impl.backport.backport_context_menu import BackportContextMenuWindow
 from gui.impl.gen import R
@@ -10,7 +11,9 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import
 from gui.impl.lobby.tank_setup.tank_setup_helper import setLastSlotAction
 from gui.impl.lobby.tank_setup.tank_setup_sounds import playOptDeviceSlotEnter
 from gui.impl.pub import ViewImpl
+from gui.shared.utils import decorators
 from helpers import dependency
+from new_year.vehicle_branch import ApplyVehicleBranchStyleProcessor
 from skeletons.gui.shared import IItemsCache
 
 class BaseAmmunitionSetupView(ViewImpl):
@@ -100,13 +103,21 @@ class BaseAmmunitionSetupView(ViewImpl):
     @async
     def _onPanelSelected(self, args):
         sectionName, slotID = args.get('selectedSection'), int(args.get('selectedSlot'))
-        if sectionName:
+        if sectionName == TankSetupConstants.TOGGLE_NY_STYLE:
+            self._setNewYearStyle()
+        else:
             switch = yield await(self._tankSetup.switch(sectionName, slotID))
             if switch and self.viewStatus == ViewStatus.LOADED:
                 if sectionName == TankSetupConstants.OPT_DEVICES:
                     playOptDeviceSlotEnter(self._vehItem.getItem(), slotID)
                 self._ammunitionPanel.changeSelectedSection(sectionName, slotID)
                 self._updateAmmunitionPanel()
+
+    @decorators.process('newYear/setNewYearStyle')
+    def _setNewYearStyle(self):
+        result = yield ApplyVehicleBranchStyleProcessor(self._vehItem.getItem().invID).request()
+        if result.userMsg:
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def _onPanelSlotClear(self, args):
         slotID = int(args.get('slotId'))

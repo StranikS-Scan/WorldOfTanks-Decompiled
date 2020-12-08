@@ -333,7 +333,7 @@
       <modelsSet>	NYst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/Grille_15_L63_NYst	</userString>
-      <tags>	NY2019_style progression_required	</tags>
+      <tags>	NY_style progression_required	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -931,7 +931,7 @@
       <modelsSet>	G56_E-100_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:unique_style/G56_E-100_3Dst	</userString>
-      <tags>	NY2020_style progression_required	</tags>
+      <tags>	NY_style progression_required	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -981,7 +981,7 @@
       <modelsSet>	G72_JagdPz_E100_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:unique_style/G72_JagdPz_E100_3Dst	</userString>
-      <tags>	NY2020_style progression_required addNationalEmblem	</tags>
+      <tags>	NY_style progression_required addNationalEmblem	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -1247,22 +1247,22 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/unique_styles	</userString>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	styles 5000g notInShop	</priceGroup>
+    <priceGroup>	styles 4000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <vehicles>	germany:G42_Maus	</vehicles>
+        <vehicles>	germany:G92_VK7201	</vehicles>
       </include>
     </vehicleFilter>
     <style>
-      <id>	429	</id>
-      <texture>	gui/maps/vehicles/styles/G42_Maus_3Dst.png	</texture>
-      <longDescriptionSpecial>	#vehicle_customization:unique_style/G42_Maus_3Dst_desc/long	</longDescriptionSpecial>
-      <modelsSet>	G42_Maus_3Dst	</modelsSet>
+      <id>	430	</id>
+      <texture>	gui/maps/vehicles/styles/G92_VK7201_3Dst.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/G92_VK7201_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	G92_VK7201_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:unique_style/G42_Maus_3Dst	</userString>
+      <userString>	#vehicle_customization:main_style/G92_VK7201_3Dst	</userString>
       <tags>	progression_required	</tags>
       <outfits>
         <outfit>
@@ -1287,23 +1287,23 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <userString>	#vehicle_customization:styles/unique_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	styles 4000g notInShop	</priceGroup>
+    <priceGroup>	styles 5000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <vehicles>	germany:G92_VK7201	</vehicles>
+        <vehicles>	germany:G42_Maus	</vehicles>
       </include>
     </vehicleFilter>
     <style>
-      <id>	430	</id>
-      <texture>	gui/maps/vehicles/styles/G92_VK7201_3Dst.png	</texture>
-      <longDescriptionSpecial>	#vehicle_customization:main_style/G92_VK7201_3Dst_desc/long	</longDescriptionSpecial>
-      <modelsSet>	G92_VK7201_3Dst	</modelsSet>
+      <id>	429	</id>
+      <texture>	gui/maps/vehicles/styles/G42_Maus_3Dst.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:unique_style/G42_Maus_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	G42_Maus_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:main_style/G92_VK7201_3Dst	</userString>
-      <tags>	progression_required	</tags>
+      <userString>	#vehicle_customization:unique_style/G42_Maus_3Dst	</userString>
+      <tags>	progression_required  NY_style	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>

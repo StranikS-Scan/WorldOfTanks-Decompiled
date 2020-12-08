@@ -1152,6 +1152,28 @@ class SYSTEM_MESSAGES(object):
     NATION_CHANGE_FAILED = '#system_messages:nation_change/FAILED'
     NATION_CHANGE_WRONG_ARG_VALUE = '#system_messages:nation_change/WRONG_ARG_VALUE'
     NATION_CHANGE_ERROR = '#system_messages:nation_change/error'
+    NEWYEAR_CRAFTTOY_SERVER_ERROR = '#system_messages:newYear/craftToy/server_error'
+    NEWYEAR_BUYTOY_SERVER_ERROR = '#system_messages:newYear/buyToy/server_error'
+    NEWYEAR_BUYMEGATOY_SERVER_ERROR = '#system_messages:newYear/buyMegaToy/server_error'
+    NEWYEAR_APPLYVEHICLEDISCOUNT_SUCCESS = '#system_messages:newYear/applyVehicleDiscount/success'
+    NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR = '#system_messages:newYear/applyVehicleDiscount/server_error'
+    NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_NODISCOUNTS = '#system_messages:newYear/applyVehicleDiscount/server_error/noDiscounts'
+    NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_ALREADYACTIVE = '#system_messages:newYear/applyVehicleDiscount/server_error/alreadyActive'
+    NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_ALREADYBOUGHT = '#system_messages:newYear/applyVehicleDiscount/server_error/alreadyBought'
+    NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_NODISCOUNTFORVEHICLE = '#system_messages:newYear/applyVehicleDiscount/server_error/noDiscountForVehicle'
+    NEWYEAR_HANGTOY_SERVER_ERROR = '#system_messages:newYear/hangToy/server_error'
+    NEWYEAR_BREAKTOYS_SERVER_ERROR = '#system_messages:newYear/breakToys/server_error'
+    NEWYEAR_SETVEHICLEBRANCH_SERVER_ERROR = '#system_messages:newYear/setVehicleBranch/server_error'
+    NEWYEAR_ADDTALISMAN_SERVER_ERROR = '#system_messages:newYear/addTalisman/server_error'
+    NEWYEAR_GETTALISMANTOY_SERVER_ERROR = '#system_messages:newYear/getTalismanToy/server_error'
+    NEWYEAR_BUYCOLLECTION_SERVER_ERROR = '#system_messages:newYear/buyCollection/server_error'
+    NEWYEAR_SETVEHICLEBRANCHSLOTBONUS_SERVER_ERROR = '#system_messages:newYear/setVehicleBranchSlotBonus/server_error'
+    NEWYEAR_CHANGETALISMANBONUSSTAGE_SERVER_ERROR = '#system_messages:newYear/changeTalismanBonusStage/server_error'
+    NEWYEAR_CELEBRITYCHALLENGE_CONGRATULATIONS = '#system_messages:newYear/celebrityChallenge/congratulations'
+    NEWYEAR_CELEBRITYCHALLENGE_SIMPLIFICATION_TITLE = '#system_messages:newYear/celebrityChallenge/simplification/title'
+    NEWYEAR_CELEBRITYCHALLENGE_SIMPLIFICATION_MESSAGE = '#system_messages:newYear/celebrityChallenge/simplification/message'
+    NEWYEAR_CELEBRITYCHALLENGE_PROGRESSREWARD = '#system_messages:newYear/celebrityChallenge/progressReward'
+    NEWYEAR_CELEBRITYCHALLENGE_QUESTREWARD = '#system_messages:newYear/celebrityChallenge/questReward'
     DEMOUNTKIT_RESTORED_SWITCHEDON = '#system_messages:demountKit_restored/switchedOn'
     DEMOUNTKIT_FAILED_SWITCHEDOFF = '#system_messages:demountKit_failed/switchedOff'
     DAILY_QUESTS_SWITCH_OFF_TITLE = '#system_messages:daily_quests/switch_off/title'
@@ -1186,6 +1208,7 @@ class SYSTEM_MESSAGES(object):
     OFFERS_SWITCH_OFF_BODY = '#system_messages:offers/switch_off/body'
     OFFERS_UNAVAILABLE_ONE = '#system_messages:offers/unavailable_one'
     OFFERS_UNAVAILABLE_MANY = '#system_messages:offers/unavailable_many'
+    OFFERS_SERVER_ERROR = '#system_messages:offers/server_error'
     MISSINGEVENTS_BUTTON = '#system_messages:missingEvents/button'
     MISSINGEVENTS_HEADER = '#system_messages:missingEvents/header'
     MISSINGEVENTS_TEXT = '#system_messages:missingEvents/text'
@@ -2457,6 +2480,28 @@ class SYSTEM_MESSAGES(object):
      NATION_CHANGE_FAILED,
      NATION_CHANGE_WRONG_ARG_VALUE,
      NATION_CHANGE_ERROR,
+     NEWYEAR_CRAFTTOY_SERVER_ERROR,
+     NEWYEAR_BUYTOY_SERVER_ERROR,
+     NEWYEAR_BUYMEGATOY_SERVER_ERROR,
+     NEWYEAR_APPLYVEHICLEDISCOUNT_SUCCESS,
+     NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR,
+     NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_NODISCOUNTS,
+     NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_ALREADYACTIVE,
+     NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_ALREADYBOUGHT,
+     NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_NODISCOUNTFORVEHICLE,
+     NEWYEAR_HANGTOY_SERVER_ERROR,
+     NEWYEAR_BREAKTOYS_SERVER_ERROR,
+     NEWYEAR_SETVEHICLEBRANCH_SERVER_ERROR,
+     NEWYEAR_ADDTALISMAN_SERVER_ERROR,
+     NEWYEAR_GETTALISMANTOY_SERVER_ERROR,
+     NEWYEAR_BUYCOLLECTION_SERVER_ERROR,
+     NEWYEAR_SETVEHICLEBRANCHSLOTBONUS_SERVER_ERROR,
+     NEWYEAR_CHANGETALISMANBONUSSTAGE_SERVER_ERROR,
+     NEWYEAR_CELEBRITYCHALLENGE_CONGRATULATIONS,
+     NEWYEAR_CELEBRITYCHALLENGE_SIMPLIFICATION_TITLE,
+     NEWYEAR_CELEBRITYCHALLENGE_SIMPLIFICATION_MESSAGE,
+     NEWYEAR_CELEBRITYCHALLENGE_PROGRESSREWARD,
+     NEWYEAR_CELEBRITYCHALLENGE_QUESTREWARD,
      DEMOUNTKIT_RESTORED_SWITCHEDON,
      DEMOUNTKIT_FAILED_SWITCHEDOFF,
      DAILY_QUESTS_SWITCH_OFF_TITLE,
@@ -2491,6 +2536,7 @@ class SYSTEM_MESSAGES(object):
      OFFERS_SWITCH_OFF_BODY,
      OFFERS_UNAVAILABLE_ONE,
      OFFERS_UNAVAILABLE_MANY,
+     OFFERS_SERVER_ERROR,
      MISSINGEVENTS_BUTTON,
      MISSINGEVENTS_HEADER,
      MISSINGEVENTS_TEXT,

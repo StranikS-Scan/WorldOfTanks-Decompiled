@@ -21,6 +21,7 @@ from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from helpers import dependency
 from items.components.crew_books_constants import CREW_BOOK_RARITY
+from items.components.ny_constants import YEARS
 from skeletons.account_helpers.settings_core import ISettingsCore
 from soft_exception import SoftException
 KEY_FILTERS = 'filters'
@@ -66,6 +67,8 @@ GOLD_FISH_LAST_SHOW_TIME = 'goldFishWindowShowCooldown'
 BOOSTERS_FILTER = 'boostersFilter'
 LAST_PROMO_PATCH_VERSION = 'lastPromoPatchVersion'
 LAST_CALENDAR_SHOW_TIMESTAMP = 'lastCalendarShowTimestamp'
+LAST_HEROTANK_SHOW_TIMESTAMP = 'lastHerotankShowTimestamp'
+LAST_HEROTANK_SHOW_ID = 'lastHerotankShowId'
 LAST_STORAGE_VISITED_TIMESTAMP = 'lastStorageVisitedTimestamp'
 LAST_RESTORE_NOTIFICATION = 'lastRestoreNotification'
 PREVIEW_INFO_PANEL_IDX = 'previewInfoPanelIdx'
@@ -161,6 +164,19 @@ QUEST_DELTAS_PROGRESS = 'questProgress'
 QUEST_DELTAS_TOKENS_PROGRESS = 'tokensProgress'
 TOP_OF_TREE_CONFIG = 'topOfTree'
 DOG_TAGS = 'dogTags'
+NEW_YEAR_POPOVER_VIEWED = 'newYearPopoverViewed'
+NEW_YEAR_POPOVER_BREAKED = 'newYearPopoverBreaker'
+NY_OLD_COLLECTIONS_VISITED = 'NYOldCollectionsVisited'
+NY_DAILY_QUESTS_VISITED = 'NYDailyQuestsVisited'
+NY_BONUS_DAILY_QUEST_VISITED = 'NYBonusDailyQuestVisited'
+NY_CELEBRITY_CHALLENGE_VISITED = 'NYCelebrityChallengeVisited'
+NY_CELEBRITY_WELCOME_VIEWED = 'NYCelebrityChallengeWelcomeViewed'
+NY_CELEBRITY_QUESTS_COMPLETED_MASK = 'NYCelebrityQuestsCompletedMask'
+NY_CELEBRITY_QUESTS_VISITED_MASK = 'NYCelebrityQuestsVisitedMask'
+NY_EXTRA_SLOT_LAST_LEVEL_SHOWN = 'NYExtraSlotLastLevelShown'
+NY_TALISMAN_GIFT_LAST_SHOWN_STAGE = 'NYTalismanGiftLastShownStage'
+NY_CELEBRITY_COMPLETED_QUESTS_ANIMATION_SHOWN_MASK = 'NYCelebrityCompletedQuestsAnimationShownMask'
+NY_OLD_COLLECTIONS_BY_YEAR_VISITED = 'NYOldCollectionsByYearVisited'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
@@ -247,7 +263,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                    'event': True,
                                    'favorite': False,
                                    'bonus': False,
-                                   'crystals': False},
+                                   'crystals': False,
+                                   'newYear': False},
                CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                BATTLEPASS_CAROUSEL_FILTER_CLIENT_1: {'battlePassSeason': 0},
                RANKED_CAROUSEL_FILTER_1: {'ussr': False,
@@ -283,6 +300,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'event': True,
                                           'gameMode': False,
                                           'favorite': False,
+                                          'newYear': False,
                                           'bonus': False,
                                           'crystals': False,
                                           constants.ROLES_COLLAPSE: False,
@@ -370,7 +388,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'gameMode': False,
                                               'favorite': False,
                                               'bonus': False,
-                                              'crystals': False},
+                                              'crystals': False,
+                                              'newYear': False},
                EPICBATTLE_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                BATTLEPASS_CAROUSEL_FILTER_1: {'isCommonProgression': False},
                MISSION_SELECTOR_FILTER: {'inventory': False},
@@ -601,6 +620,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'isEpicPerformanceWarningClicked': False,
                 LAST_PROMO_PATCH_VERSION: '',
                 LAST_CALENDAR_SHOW_TIMESTAMP: '',
+                LAST_HEROTANK_SHOW_TIMESTAMP: '',
+                LAST_HEROTANK_SHOW_ID: '',
                 LAST_RESTORE_NOTIFICATION: None,
                 'dynamicRange': 0,
                 'soundDevice': 0,
@@ -613,6 +634,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'doubleCarouselType': 0,
                 'vehicleCarouselStats': True,
                 WHEELED_DEATH_DELAY_COUNT: 10,
+                'lootBoxVideoOff': False,
                 NEW_SETTINGS_COUNTER: {'GameSettings': {'gameplay_epicStandard': True,
                                                         BattleCommStorageKeys.SHOW_LOCATION_MARKERS: True,
                                                         'c11nHistoricallyAccurate': True,
@@ -685,7 +707,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 RANKED_WEB_INFO: None,
                 RANKED_WEB_INFO_UPDATE: None,
                 RANKED_AWARDS_BUBBLE_YEAR_REACHED: False,
-                NATION_CHANGE_VIEWED: False,
                 LAST_BATTLE_PASS_POINTS_SEEN: 0,
                 BATTLE_PASS_VIDEOS_CONFIG: {},
                 TECHTREE_INTRO_BLUEPRINTS: {},
@@ -765,7 +786,21 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                 'vehicleCD': None},
                         LAST_STORAGE_VISITED_TIMESTAMP: -1,
                         SESSION_STATS_PREV_BATTLE_COUNT: 0},
- KEY_UI_FLAGS: {}}
+ KEY_UI_FLAGS: {NEW_YEAR_POPOVER_BREAKED: False,
+                NEW_YEAR_POPOVER_VIEWED: False,
+                NY_OLD_COLLECTIONS_VISITED: False,
+                NY_DAILY_QUESTS_VISITED: False,
+                NY_BONUS_DAILY_QUEST_VISITED: False,
+                NY_CELEBRITY_CHALLENGE_VISITED: False,
+                NY_CELEBRITY_WELCOME_VIEWED: False,
+                NY_CELEBRITY_QUESTS_COMPLETED_MASK: 0,
+                NY_CELEBRITY_QUESTS_VISITED_MASK: 0,
+                NY_CELEBRITY_COMPLETED_QUESTS_ANIMATION_SHOWN_MASK: 0,
+                NY_EXTRA_SLOT_LAST_LEVEL_SHOWN: 5,
+                NY_TALISMAN_GIFT_LAST_SHOWN_STAGE: 0,
+                NY_OLD_COLLECTIONS_BY_YEAR_VISITED: {YEARS.YEAR18: False,
+                                                     YEARS.YEAR19: False,
+                                                     YEARS.YEAR20: False}}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:

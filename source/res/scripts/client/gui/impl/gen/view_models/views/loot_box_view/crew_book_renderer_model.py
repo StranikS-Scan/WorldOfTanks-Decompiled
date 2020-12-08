@@ -6,12 +6,12 @@ from gui.impl.gen.view_models.views.loot_box_view.loot_animated_renderer_model i
 class CrewBookRendererModel(LootAnimatedRendererModel):
     __slots__ = ()
 
-    def __init__(self, properties=15, commands=0):
+    def __init__(self, properties=16, commands=0):
         super(CrewBookRendererModel, self).__init__(properties=properties, commands=commands)
 
     @property
     def congratsViewModel(self):
-        return self._getViewModel(14)
+        return self._getViewModel(15)
 
     def _initialize(self):
         super(CrewBookRendererModel, self)._initialize()

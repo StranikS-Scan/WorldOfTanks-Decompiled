@@ -99,6 +99,9 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
         elif self.__prevStyle != self.__ctx.mode.modifiedStyle:
             self.__installStyle(self.__prevStyle)
         self.__prevStyle = None
+        exitCallback = self.__ctx.getExitCallback()
+        if exitCallback is not None:
+            exitCallback.close()
         return
 
     def onApply(self):
@@ -108,6 +111,9 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
             self.__blurRectId = None
         self.service.setDOFenabled(False)
         self.__visible = False
+        exitCallback = self.__ctx.getExitCallback()
+        if exitCallback is not None:
+            exitCallback.apply()
         return
 
     def hide(self):

@@ -15,6 +15,7 @@ from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.battle_results import RequestResultsContext
 from gui.clans.clan_helpers import showAcceptClanInviteDialog
+from gui.impl.new_year.navigation import ViewAliases
 from gui.customization.constants import CustomizationModes, CustomizationModeSource
 from gui.impl import backport
 from gui.impl.gen import R
@@ -22,12 +23,17 @@ from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
 from gui.ranked_battles import ranked_helpers
 from gui.server_events.events_dispatcher import showPersonalMission, showMissionsBattlePassCommonProgression
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events
-from gui.shared.event_dispatcher import showProgressiveRewardWindow, showRankedYearAwardWindow
+from gui.shared.event_dispatcher import showProgressiveRewardWindow, showRankedYearAwardWindow, showNewYearVehiclesView
+from gui.shared.event_dispatcher import showLootBoxAutoOpenWindow
+from gui.shared.gui_items.loot_box import NewYearLootBoxes
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import decorators
 from gui.wgcg.clan import contexts as clan_ctxs
 from gui.wgnc import g_wgncProvider
+from new_year.ny_navigation_helper import switchNewYearView, showLootBox
 from skeletons.gui.impl import INotificationWindowController
+from new_year.ny_constants import AnchorNames
+from skeletons.new_year import INewYearController, ITalismanSceneController
 from web.web_client_api import webApiCollection
 from web.web_client_api.sound import HangarSoundWebApi
 from helpers import dependency
@@ -800,7 +806,7 @@ class _OpenLootBoxesHandler(_NavigationDisabledActionHandler):
         notification = model.getNotification(self.getNotType(), entityID)
         savedData = notification.getSavedData()
         if savedData is not None:
-            pass
+            shared_events.showLootBoxEntry(lootBoxType=savedData)
         return
 
 
@@ -817,8 +823,8 @@ class _LootBoxesAutoOpenHandler(_NavigationDisabledActionHandler):
     def doAction(self, model, entityID, action):
         notification = model.getNotification(self.getNotType(), entityID)
         savedData = notification.getSavedData()
-        if savedData is not None and 'rewards' in savedData:
-            pass
+        if savedData is not None and 'rewards' in savedData and 'boxIDs' in savedData:
+            showLootBoxAutoOpenWindow(savedData['rewards'], savedData['boxIDs'])
         return
 
 
@@ -868,6 +874,128 @@ class _OpenSelectDevicesHandler(_NavigationDisabledActionHandler):
         return
 
 
+class _LootBoxesGiftHandler(_ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        super(_LootBoxesGiftHandler, self).handleAction(model, entityID, action)
+        shared_events.showLootBoxGiftWindow()
+
+
+class _NewYearOpenRewardsScreenHandler(_NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        switchNewYearView(AnchorNames.TREE, ViewAliases.REWARDS_VIEW)
+
+
+class _NewYearOpenGiftTalismanHandler(_NavigationDisabledActionHandler):
+    _nyController = dependency.descriptor(INewYearController)
+    _talismanController = dependency.descriptor(ITalismanSceneController)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        if not self._nyController.isEnabled():
+            BigWorld.callback(0.0, self.__showDisabledEventMessage)
+            return
+        if not self._talismanController.hasTalismanGiftBubble():
+            BigWorld.callback(0.0, self.__showCanDoActionMessage)
+            return
+        switchNewYearView(AnchorNames.MASCOT)
+
+    @staticmethod
+    def __showDisabledEventMessage():
+        SystemMessages.pushI18nMessage(backport.text(R.strings.ny.notification.suspend()), type=SystemMessages.SM_TYPE.Information, priority='medium')
+
+    @staticmethod
+    def __showCanDoActionMessage():
+        SystemMessages.pushI18nMessage(backport.text(R.strings.ny.notification.disabledGiftTalisman()), type=SystemMessages.SM_TYPE.Information, priority='medium')
+
+
+class _NewYearOpenFreeTalismanHandler(_NavigationDisabledActionHandler):
+    _nyController = dependency.descriptor(INewYearController)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        if not self._nyController.isEnabled():
+            BigWorld.callback(0.0, self.__showDisabledEventMessage)
+            return
+        if not self._nyController.getFreeTalisman():
+            BigWorld.callback(0.0, self.__showCanDoActionMessage)
+            return
+        switchNewYearView(AnchorNames.MASCOT)
+
+    @staticmethod
+    def __showDisabledEventMessage():
+        SystemMessages.pushI18nMessage(backport.text(R.strings.ny.notification.suspend()), type=SystemMessages.SM_TYPE.Information, priority='medium')
+
+    @staticmethod
+    def __showCanDoActionMessage():
+        SystemMessages.pushI18nMessage(backport.text(R.strings.ny.notification.disabledFreeTalisman()), type=SystemMessages.SM_TYPE.Information, priority='medium')
+
+
+class _NewYearOpenLootBoxesViewHandler(_ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        notification = model.getNotification(self.getNotType(), entityID)
+        savedData = notification.getSavedData()
+        category = '' if savedData is None else savedData.get('category', '')
+        lootBoxType = NewYearLootBoxes.PREMIUM if category else NewYearLootBoxes.COMMON
+        showLootBox(lootBoxType=lootBoxType, category=category)
+        return
+
+
+class _OpenNewYearVehiclesViewHandler(_ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        super(_OpenNewYearVehiclesViewHandler, self).handleAction(model, entityID, action)
+        showNewYearVehiclesView()
+
+
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowTutorialBattleHistoryHandler,
  ShowFortBattleResultsHandler,
@@ -901,10 +1029,17 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _LootBoxesAutoOpenHandler,
  _OpenProgressiveRewardView,
  ProlongStyleRent,
+ _LootBoxesGiftHandler,
+ _NewYearOpenRewardsScreenHandler,
+ _NewYearOpenGiftTalismanHandler,
+ _NewYearOpenFreeTalismanHandler,
  _OpenBattlePassProgressionView,
  _OpenSelectDevicesHandler,
  _OpenMissingEventsHandler,
- _OpenNotrecruitedSysMessageHandler)
+ _OpenNotrecruitedSysMessageHandler,
+ _OpenMissingEventsHandler,
+ _NewYearOpenLootBoxesViewHandler,
+ _OpenNewYearVehiclesViewHandler)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

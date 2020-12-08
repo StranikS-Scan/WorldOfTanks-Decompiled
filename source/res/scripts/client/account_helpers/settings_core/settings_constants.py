@@ -118,6 +118,9 @@ class GAME(CONST_CONTAINER):
     MINIMAP_ALPHA_ENABLED = 'minimapAlphaEnabled'
     C11N_HISTORICALLY_ACCURATE = 'c11nHistoricallyAccurate'
     LOGIN_SERVER_SELECTION = 'loginServerSelection'
+    LOOT_BOX_VIDEO_OFF = 'lootBoxVideoOff'
+    NY_VEHICLES_PROGRESS_ENTRY = 'nyVehiclesProgressEntry'
+    NY_VEHICLES_POST_EVENT_ENTRY = 'nyVehiclesPostEventEntry'
 
 
 class TUTORIAL(CONST_CONTAINER):
@@ -330,6 +333,7 @@ class OnceOnlyHints(CONST_CONTAINER):
     OPT_DEV_DRAG_AND_DROP_HINT = 'OptDevDragAndDropHint'
     DOGTAG_HANGAR_HINT = 'DogTagHangarHint'
     DOGTAG_PROFILE_HINT = 'DogTagProfileHint'
+    NY_VEHICLES_EXTRA_SLOT_BONUS_HINT = 'NyVehiclesExtraSlotBonusHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):
@@ -438,3 +442,14 @@ class BattleCommStorageKeys(CONST_CONTAINER):
     SHOW_CALLOUT_MESSAGES = 'showCalloutMessages'
     SHOW_LOCATION_MARKERS = 'showLocationMarkers'
     SHOW_BASE_MARKERS = 'showMarkers'
+
+
+class NYLootBoxesStorageKeys(CONST_CONTAINER):
+    NEW_COUNT = 'newCount'
+    DELIVERED_COUNT = 'deliveredCount'
+
+
+class NewYearStorageKeys(CONST_CONTAINER):
+    IS_ICICLES_COMPLETED = 'isIciclesCompleted'
+    IS_TALISMAN_PROGRESS_HOVERED = 'isTalismanProgressHovered'
+    IS_TALISMAN_INTRO_SHOWED = 'isTalismanIntroShowed'

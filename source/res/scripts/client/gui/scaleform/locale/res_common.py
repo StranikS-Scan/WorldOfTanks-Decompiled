@@ -16,6 +16,8 @@ class RES_COMMON(object):
     MAPS_ICONS_CRYSTALSINFO_BG = '../maps/icons/crystalsInfo/bg.png'
     MAPS_ICONS_DEDICATION_BG = '../maps/icons/dedication/bg.png'
     MAPS_ICONS_DEMOUNTKIT_BG = '../maps/icons/demountKit/bg.png'
+    MAPS_ICONS_NEW_YEAR_LEVELS_REWARDS_LEVELS_BG = '../maps/icons/new_year/levels_rewards/levels/bg.png'
+    MAPS_ICONS_NEW_YEAR_TOOLTIPS_DISCOUNT_REWARD_TOOLTIP_BG = '../maps/icons/new_year/tooltips/discount_reward_tooltip/bg.png'
     MAPS_ICONS_PREMACC_DASHBOARD_HEADER_BADGESLOT_BG = '../maps/icons/premacc/dashboard/header/badgeSlot/bg.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_USSR_DOG_1 = '../maps/icons/tankmen/icons/small/ussr-dog-1.png'
     MAPS_ICONS_TANKMEN_ROLES_BIG_DOG = '../maps/icons/tankmen/roles/big/dog.png'

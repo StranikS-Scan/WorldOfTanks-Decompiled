@@ -60,6 +60,8 @@ class ScriptGameObject(object):
         self._nativeSystem.destroy()
 
     def __getattr__(self, item):
+        if item == '_nativeSystem':
+            raise AttributeError('Missing nativeSystem.')
         return getattr(self._nativeSystem, item)
 
     def registerComponent(self, component):

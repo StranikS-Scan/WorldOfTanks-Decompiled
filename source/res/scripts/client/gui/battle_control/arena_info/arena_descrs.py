@@ -10,7 +10,8 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.battle_control.arena_info import settings
 from gui.prb_control.formatters import getPrebattleFullDescription
 from gui.shared.utils import toUpper, functions
-from helpers import i18n
+from helpers import i18n, dependency
+from skeletons.gui.game_control import IFestivityController
 
 def _getDefaultTeamName(isAlly):
     return i18n.makeString(MENU.LOADING_TEAMS_ALLIES) if isAlly else i18n.makeString(MENU.LOADING_TEAMS_ENEMIES)
@@ -111,7 +112,8 @@ class DefaultArenaGuiDescription(IArenaGuiDescription):
         return i18n.makeString('#menu:loading/battleTypes/{}'.format(self._visitor.getArenaGuiType()))
 
     def getWinString(self, isInBattle=True):
-        return functions.getBattleSubTypeWinText(self._visitor.type.getID(), 1 if self.isBaseExists() else 2)
+        festivityCtrl = dependency.instance(IFestivityController)
+        return functions.getBattleSubTypeWinText(self._visitor.type.getID(), 1 if self.isBaseExists() else 2, festivityCtrl.isEnabled())
 
     def getFrameLabel(self):
         pass

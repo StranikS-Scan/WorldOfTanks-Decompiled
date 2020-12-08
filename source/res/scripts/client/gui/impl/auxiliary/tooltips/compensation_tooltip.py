@@ -46,3 +46,4 @@ class VehicleCompensationTooltipContent(CompensationTooltipContent):
             tx.setVehicleType(kwargs.get('vehicleType', ''))
             tx.setIsElite(kwargs.get('isElite', True))
             tx.setVehicleLvl(kwargs.get('vehicleLvl', ''))
+            tx.setTooltipType(LootBoxCompensationTooltipTypes.VEHICLE)

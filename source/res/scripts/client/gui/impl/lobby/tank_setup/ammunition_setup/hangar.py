@@ -9,9 +9,11 @@ from gui.impl.lobby.tank_setup.main_tank_setup.hangar import HangarMainTankSetup
 from gui.impl.lobby.tank_setup.tank_setup_builder import HangarTankSetupBuilder, FrontlineTankSetupBuilder
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.new_year import INewYearController
 
 class HangarAmmunitionSetupView(BaseHangarAmmunitionSetupView):
     _settingsCore = dependency.descriptor(ISettingsCore)
+    _nyController = dependency.descriptor(INewYearController)
 
     def _onLoading(self, **kwargs):
         with self.viewModel.transaction():
@@ -25,5 +27,16 @@ class HangarAmmunitionSetupView(BaseHangarAmmunitionSetupView):
     def _createAmmunitionPanel(self):
         return HangarAmmunitionPanel(self.viewModel.ammunitionPanel, self._vehItem.getItem())
 
+    def _addListeners(self):
+        super(HangarAmmunitionSetupView, self)._addListeners()
+        self._nyController.onStateChanged += self.__onStateChanged
+
+    def _removeListeners(self):
+        super(HangarAmmunitionSetupView, self)._removeListeners()
+        self._nyController.onStateChanged -= self.__onStateChanged
+
     def __getTankSetupBuilder(self):
         return FrontlineTankSetupBuilder if self.prbDispatcher is not None and self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.EPIC) else HangarTankSetupBuilder
+
+    def __onStateChanged(self):
+        self._ammunitionPanel.update(self._vehItem.getItem(), fullUpdate=True)

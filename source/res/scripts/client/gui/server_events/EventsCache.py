@@ -15,7 +15,7 @@ from debug_utils import LOG_DEBUG
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.server_events import caches as quests_caches
 from gui.server_events.event_items import EventBattles, createQuest, createAction, MotiveQuest, ServerEventAbstract, Quest
-from gui.server_events.events_helpers import isMarathon, isLinkedSet, isPremium, isRankedPlatform, isRankedDaily, isDailyEpic
+from gui.server_events.events_helpers import isMarathon, isLinkedSet, isPremium, isRankedPlatform, isRankedDaily, isDailyEpic, isCelebrityQuest
 from gui.server_events.events_helpers import getRerollTimeout, getEventsData
 from gui.server_events.formatters import getLinkedActionID
 from gui.server_events.modifiers import ACTION_SECTION_TYPE, ACTION_MODIFIER_TYPE, clearModifiersCache
@@ -25,7 +25,9 @@ from gui.shared.gui_items import GUI_ITEM_TYPE, ACTION_ENTITY_ITEM as aei
 from gui.shared.utils.requesters.QuestsProgressRequester import QuestsProgressRequester
 from helpers import dependency, time_utils
 from items import getTypeOfCompactDescr
+from items.components.ny_constants import TOKEN_FREE_TALISMANS, TOKEN_TALISMAN_BONUS, CelebrityQuestTokenParts
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
+from new_year.ny_constants import NY_LEVEL_PREFIX
 from personal_missions import PERSONAL_MISSIONS_XML_PATH
 from quest_cache_helpers import readQuestsFromFile
 from shared_utils import first
@@ -41,7 +43,11 @@ if typing.TYPE_CHECKING:
 NOT_FOR_PERSONAL_MISSIONS_TOKENS = (LOOTBOX_TOKEN_PREFIX,
  RECRUIT_TMAN_TOKEN_PREFIX,
  TWITCH_TOKEN_PREFIX,
- OFFER_TOKEN_PREFIX)
+ OFFER_TOKEN_PREFIX,
+ NY_LEVEL_PREFIX,
+ TOKEN_FREE_TALISMANS,
+ TOKEN_TALISMAN_BONUS)
+UPDATABLE_CONDITION_TOKEN_TO_VALIDATOR = {CelebrityQuestTokenParts.PREFIX: CelebrityQuestTokenParts.sameQuestValidator}
 _ProgressiveReward = namedtuple('_ProgressiveReward', ('currentStep', 'probability', 'maxSteps'))
 
 class _DailyQuestsData(object):
@@ -97,6 +103,7 @@ class EventsCache(IEventsCache):
         self.onSyncCompleted = Event(self.__em)
         self.onProgressUpdated = Event(self.__em)
         self.onMissionVisited = Event(self.__em)
+        self.onQuestConditionUpdated = Event(self.__em)
         self.onEventsVisited = Event(self.__em)
         self.onProfileVisited = Event(self.__em)
         self.onPersonalQuestsVisited = Event(self.__em)
@@ -192,14 +199,25 @@ class EventsCache(IEventsCache):
             isNeedToInvalidate = True
             isNeedToClearItemsCaches = False
             isQPUpdated = False
+            isQuestConditionUpdated = False
 
             def _cbWrapper(*args):
                 callback(*args)
                 self.__personalMissions.update(self, diff)
 
             if diff is not None:
+                tokenIDs = sorted(diff.get('tokens', {}).keys())
+                if len(tokenIDs) % 2 == 0:
+                    if tokenIDs:
+                        isQuestConditionUpdated = True
+                        for idx, tokenID in enumerate(tokenIDs[::2]):
+                            validator = first([ validator for prefix, validator in UPDATABLE_CONDITION_TOKEN_TO_VALIDATOR.items() if tokenID.startswith(prefix) ])
+                            if not validator or not validator(tokenID, tokenIDs[idx * 2 + 1]):
+                                isQuestConditionUpdated = False
+                                break
+
                 isQPUpdated = 'quests' in diff or 'potapovQuests' in diff or 'pm2_progress' in diff
-                if not isQPUpdated and 'tokens' in diff:
+                if not isQPUpdated and 'tokens' in diff and not isQuestConditionUpdated:
                     for tokenID in diff['tokens'].iterkeys():
                         if all((not tokenID.startswith(t) for t in NOT_FOR_PERSONAL_MISSIONS_TOKENS)):
                             isQPUpdated = True
@@ -219,6 +237,8 @@ class EventsCache(IEventsCache):
             else:
                 if isNeedToClearItemsCaches:
                     self.__clearQuestsItemsCache()
+                if isQuestConditionUpdated:
+                    self.onQuestConditionUpdated()
                 if isQPUpdated:
                     _cbWrapper(True)
                 else:
@@ -312,6 +332,14 @@ class EventsCache(IEventsCache):
 
         return self.getQuests(userFilterFunc)
 
+    def getCelebrityQuests(self, filterFunc=None):
+        filterFunc = filterFunc or (lambda a: True)
+
+        def userFilterFunc(q):
+            return isCelebrityQuest(q.getID()) and filterFunc(q)
+
+        return self.getAllQuests(userFilterFunc, includeCelebrityQuests=True)
+
     def getGroups(self, filterFunc=None):
         svrGroups = self._getQuestsGroups(filterFunc)
         svrGroups.update(self._getActionsGroups(filterFunc))
@@ -333,8 +361,8 @@ class EventsCache(IEventsCache):
 
         return self._getQuests(rankedFilterFunc)
 
-    def getAllQuests(self, filterFunc=None, includePersonalMissions=False):
-        return self._getQuests(filterFunc, includePersonalMissions)
+    def getAllQuests(self, filterFunc=None, includePersonalMissions=False, includeCelebrityQuests=False):
+        return self._getQuests(filterFunc, includePersonalMissions, includeCelebrityQuests)
 
     def getActions(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
@@ -353,6 +381,33 @@ class EventsCache(IEventsCache):
     def getEventBattles(self):
         battles = self.__getEventBattles()
         return EventBattles(battles.get('vehicleTags', set()), battles.get('vehicles', []), bool(battles.get('enabled', 0)), battles.get('arenaTypeID')) if battles else EventBattles(set(), [], 0, None)
+
+    def getQuestByID(self, qID):
+        quest = self._getCachedQuest(qID)
+        if quest is not None:
+            return quest
+        else:
+            questsData = self.__getQuestsData()
+            questsData.update(self.__getPersonalQuestsData())
+            questsData.update(self.__getPersonalMissionsHiddenQuests())
+            return self._makeQuest(qID, questsData[qID]) if qID in questsData else None
+
+    def getQuestsByIDs(self, qIDs):
+        result = {}
+        data = {}
+        for qID in qIDs:
+            quest = self._getCachedQuest(qID)
+            if quest is not None:
+                result[qID] = quest
+            if not data:
+                data = self.__getQuestsData()
+                data.update(self.__getPersonalQuestsData())
+                data.update(self.__getPersonalMissionsHiddenQuests())
+            if qID in data:
+                result[qID] = self._makeQuest(qID, data[qID])
+            result[qID] = None
+
+        return result
 
     def isEventEnabled(self):
         return self.getEventBattles().enabled
@@ -536,11 +591,13 @@ class EventsCache(IEventsCache):
 
         return result
 
-    def _getQuests(self, filterFunc=None, includePersonalMissions=False):
+    def _getQuests(self, filterFunc=None, includePersonalMissions=False, includeCelebrityQuests=False):
         result = {}
         groups = {}
         filterFunc = filterFunc or (lambda a: True)
         for qID, q in self.__getCommonQuestsIterator():
+            if not includeCelebrityQuests and isCelebrityQuest(qID):
+                continue
             if qID in self.__quests2actions:
                 q.linkedActions = self.__quests2actions[qID]
             if q.getType() == EVENT_TYPE.GROUP:
@@ -624,6 +681,10 @@ class EventsCache(IEventsCache):
                 result[a.getID()] = a
 
         return result
+
+    def _getCachedQuest(self, qID):
+        storage = self.__cache['quests']
+        return storage[qID] if qID in storage else None
 
     def _makeQuest(self, qID, qData, maker=_defaultQuestMaker, **kwargs):
         storage = self.__cache['quests']

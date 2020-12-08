@@ -97,6 +97,17 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
     def getLootBoxByID(self, boxID):
         return self.__lootBoxCache.get(LOOTBOX_TOKEN_PREFIX + str(boxID))
 
+    def getAttemptsAfterGuaranteedRewards(self, box):
+        boxesHistory = self.getCacheValue('lootBoxes', {}).get('history', {})
+        historyName, guaranteedFrequencyName = box.getHistoryName(), box.getGuaranteedFrequencyName()
+        if historyName not in boxesHistory:
+            return 0
+        _, limits, _ = boxesHistory[historyName]
+        if guaranteedFrequencyName not in limits:
+            return 0
+        _, _, attempts = limits[guaranteedFrequencyName]
+        return attempts
+
     def getLastViewedProgress(self, tokenId):
         return self.__tokensProgressDelta.getPrevValue(tokenId)
 
@@ -134,9 +145,9 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
             lootBoxTokenID = LOOTBOX_TOKEN_PREFIX + str(lootBoxID)
             lootBoxTokensList.append(lootBoxTokenID)
             if lootBoxTokenID not in self.__lootBoxCache:
-                item = self.itemsFactory.createLootBox(lootBoxID, lootBoxData['type'], lootBoxData['category'], 0)
+                item = self.itemsFactory.createLootBox(lootBoxID, lootBoxData, 0)
                 self.__lootBoxCache[lootBoxTokenID] = item
-            self.__lootBoxCache[lootBoxTokenID].update(lootBoxData['type'], lootBoxData['category'])
+            self.__lootBoxCache[lootBoxTokenID].update(lootBoxData)
 
         return lootBoxTokensList
 

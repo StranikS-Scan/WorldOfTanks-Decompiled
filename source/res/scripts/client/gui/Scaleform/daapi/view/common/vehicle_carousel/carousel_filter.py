@@ -9,8 +9,11 @@ from gui.prb_control.settings import VEHICLE_LEVELS
 from gui.shared.utils import makeSearchableString
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
+from new_year.ny_constants import NY_FILTER
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattleRoyaleController
+from skeletons.gui.shared import IItemsCache
+from skeletons.new_year import INewYearController
 
 def _filterDict(dictionary, keys):
     return {key:value for key, value in dictionary.iteritems() if key in keys}
@@ -115,6 +118,7 @@ class CriteriesGroup(object):
 
 
 class CarouselFilter(_CarouselFilter):
+    _nyController = dependency.descriptor(INewYearController)
     settingsCore = dependency.descriptor(ISettingsCore)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
 
@@ -141,9 +145,14 @@ class CarouselFilter(_CarouselFilter):
             savedFilters[key] = type(value)(savedFilters[key])
 
         self.update(savedFilters, save=False)
+        self.newYearReset()
 
     def _setCriteriaGroups(self):
         self._criteriesGroups = (EventCriteriesGroup(), BasicCriteriesGroup())
+
+    def newYearReset(self):
+        if not self._nyController.isVehicleBranchEnabled() and NY_FILTER in self._filters:
+            self.reset([NY_FILTER], save=False)
 
 
 class SessionCarouselFilter(_CarouselFilter):
@@ -196,6 +205,7 @@ class SessionCarouselFilter(_CarouselFilter):
 
 
 class BasicCriteriesGroup(CriteriesGroup):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     @staticmethod
     def isApplicableFor(vehicle):
@@ -242,6 +252,8 @@ class BasicCriteriesGroup(CriteriesGroup):
             self._criteria |= REQ_CRITERIA.VEHICLE.EARN_CRYSTALS
         if filters['searchNameVehicle']:
             self._criteria |= REQ_CRITERIA.VEHICLE.NAME_VEHICLE(makeSearchableString(filters['searchNameVehicle']))
+        if NY_FILTER in filters and filters[NY_FILTER]:
+            self._criteria |= REQ_CRITERIA.VEHICLE.SPECIFIC_BY_INV_ID(set(self.itemsCache.items.festivity.getVehicleBranch()))
 
 
 class EventCriteriesGroup(CriteriesGroup):

@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/seniority_awards/seniority_awards_vehicle_renderer_model.py
-from gui.impl.gen import R
 from frameworks.wulf import ViewModel
 
 class SeniorityAwardsVehicleRendererModel(ViewModel):
@@ -17,12 +16,12 @@ class SeniorityAwardsVehicleRendererModel(ViewModel):
         self._setString(0, value)
 
     def getImgSource(self):
-        return self._getResource(1)
+        return self._getString(1)
 
     def setImgSource(self, value):
-        self._setResource(1, value)
+        self._setString(1, value)
 
     def _initialize(self):
         super(SeniorityAwardsVehicleRendererModel, self)._initialize()
         self._addStringProperty('vehicleCD', '')
-        self._addResourceProperty('imgSource', R.invalid())
+        self._addStringProperty('imgSource', '')

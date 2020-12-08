@@ -11,6 +11,16 @@
       <bank>	ambient.bnk	</bank>
       <bank>	env_Forest.bnk	</bank>
     </loadBanks>
+    <unloadBanks>
+      <bank>	hangar_h30_newyear_2021.bnk	</bank>
+      <bank>	hangar_h30_newyear_2021.pck	</bank>
+    </unloadBanks>
+    <events>
+      <event>
+        <name>	hangar_newyear_tanks_set	</name>
+        <mod>	minimize	</mod>
+      </event>
+    </events>
   </soundRemapping>
   <boundingBox>
     <bottomLeft>	-100.000000 -100.000000	</bottomLeft>

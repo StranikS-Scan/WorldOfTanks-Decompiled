@@ -2267,8 +2267,12 @@
             <gun>	10	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
-          <reloadTime>	2.3	</reloadTime>
-          <aimingTime>	1.5	</aimingTime>
+          <reloadTime>	10	</reloadTime>
+          <clip>
+            <count>	3	</count>
+            <rate>	30	</rate>
+          </clip>
+          <aimingTime>	2	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	3	</afterShot>

@@ -39,7 +39,7 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
     def setListClear(self):
         self.__noDisplayingPopups = True
         if self._model is not None and self._model.getDisplayState() == NOTIFICATION_STATE.POPUPS:
-            if self.__pendingMessagesQueue:
+            if self.__pendingMessagesQueue and self.__pendingMessagesQueue[0].isAlert():
                 self.__showAlertMessage(self.__pendingMessagesQueue.pop(0))
         return
 

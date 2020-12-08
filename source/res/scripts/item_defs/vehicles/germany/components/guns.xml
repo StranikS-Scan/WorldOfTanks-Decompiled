@@ -136,6 +136,7 @@
     <_105mm_KwK46_L68_N>	261	</_105mm_KwK46_L68_N>
     <_88mm_KwK_43_L71_mod_Vlt>	262	</_88mm_KwK_43_L71_mod_Vlt>
     <_50mm_KwK_39_L60L1>	264	</_50mm_KwK_39_L60L1>
+    <_75mm_KwK41_L58U_conic>	265	</_75mm_KwK41_L58U_conic>
     <_105mm_StuH42_L28Pz_SH>	338	</_105mm_StuH42_L28Pz_SH>
     <_105mm_KwK45_L52_SH>	339	</_105mm_KwK45_L52_SH>
     <_128mm_L50_SH>	340	</_128mm_L50_SH>
@@ -2058,7 +2059,7 @@
         <recoilEffect>	medium	</recoilEffect>
       </recoil>
       <effects>	shot_medium_mb	</effects>
-      <reloadEffect>	reload50_75	</reloadEffect>
+      <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
         <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
@@ -3851,6 +3852,57 @@
         </APCNR>
       </shots>
     </_75mm_KwK41_L58_conic>
+    <_75mm_KwK41_L58U_conic>
+      <userString>	#germany_vehicles:_75mm_KwK41_L58U_conic	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	18300	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.38	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.48	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -16.0 1.0 -16.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	5.14285714285714	</reloadTime>
+      <maxAmmo>	68	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	720	</weight>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	7.5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.342857142857143	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.14	</turretRotation>
+        <afterShot>	3.5	</afterShot>
+        <whileGunDamaged>	3.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <APCNR.erzu>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	1170	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	157 137	</piercingPower>
+        </APCNR.erzu>
+        <APCNR_U>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	1260	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	205 172	</piercingPower>
+        </APCNR_U>
+      </shots>
+    </_75mm_KwK41_L58U_conic>
     <_75mm_Waffe0725_1944>
       <userString>	#germany_vehicles:_75mm_Waffe0725_1944	</userString>
       <tags></tags>

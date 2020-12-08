@@ -1,0 +1,67 @@
+<ny21.xml>
+  <quests>
+    <NTQuest>
+      <id>	ny21battle	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle></preBattle>
+        <postBattle></postBattle>
+      </conditions>
+      <scripts>	
+QUEST_EVENT_TYPE = globals().get('QUEST_EVENT_TYPE')
+ARENA_BONUS_TYPE = globals().get('ARENA_BONUS_TYPE')
+
+def onInit(eventType, eventData, quest, processor):
+    LOG('QUEST EVENT:onInit', eventType, quest.id)
+    for event in events.iterkeys():
+        processor.subscribe(event, quest)
+    return True
+
+def onFinishBattle(eventType, eventData, quest, processor):
+    from soft_exception import SoftException
+    from debug_utils import LOG_CURRENT_EXCEPTION
+    LOG('QUEST EVENT:onFinishBattle', eventType, quest.id)
+
+    try:
+        account = eventData.get('account')
+        if account is None:
+            return
+
+        bonusType = eventData.get('avatarResults', {}).get('bonusType', None)
+        if bonusType not in ARENA_BONUS_TYPE.RANDOM_RANGE:
+            LOG('QUEST EVENT:onFinishBattle, quest.id = {}: unsuitable bonusType = {}'.format(quest.id, bonusType))
+            return
+
+        gameParamsRev = eventData.get('gameParamsRev', None)
+
+        ny = account._newYear
+        vehTypeCompDescr = eventData.get('vehCompDescrs', [None])[0]
+        bonusData = ny.getQuestBonusDataForTag('ny21', vehTypeCompDescr, gameParamsRev)
+
+        eventData['results'][quest.id] = {
+            'bonusCnt': 1,
+            'progress': {'bonusCount': -1}
+        }
+
+        eventData['results'][quest.id].update({
+            'bonus': bonusData,
+        })
+        LOG('QUEST EVENT:onFinishBattle, quest.id = {}: bonusData = {}'.format(quest.id, bonusData))
+    except SoftException as err:
+        LOG_CURRENT_EXCEPTION()
+        return
+        
+events = {
+    QUEST_EVENT_TYPE.INIT: onInit,
+    QUEST_EVENT_TYPE.FINISH_BATTLE_NT_QUEST: onFinishBattle,
+}
+
+def quest(eventType, eventData, quest, processor):
+    LOG('QUEST EVENT:quest', eventType, quest.id)
+    return events.get(eventType, lambda *args: False)(eventType, eventData, quest, processor)
+         	</scripts>
+      <bonus></bonus>
+    </NTQuest>
+  </quests>
+</ny21.xml>

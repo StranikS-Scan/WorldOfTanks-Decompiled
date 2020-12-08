@@ -60,6 +60,12 @@ def getGameControllersConfig(manager):
     from gui.game_control.craftmachine_controller import CraftmachineController
     from gui.game_control.reactive_comm import ReactiveCommunicationService
     from gui.ui_spam.ui_spam_controller import UISpamController
+    from skeletons import new_year as _NYInterface
+    from new_year.ny_piano_controller import PianoController as _PianoController
+    from new_year.talisman_scene_ctrl import TalismanSceneController as _TalismanSceneController
+    from new_year.celebrity.celebrity_scene_ctrl import CelebritySceneController as _CelebritySceneController
+    from new_year.craft_machine_controller import NewYearCraftMachineController as _NewYearCraftMachineController
+    from new_year.ny_icicle_controller import IcicleController as _IcicleController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -118,3 +124,8 @@ def getGameControllersConfig(manager):
     _config(_interface.IReactiveCommunicationService, ReactiveCommunicationService())
     _config(_interface.IEventProgressionController, _EventProgression())
     _config(_interface.IUISpamController, UISpamController())
+    _config(_NYInterface.IPianoController, _PianoController())
+    _config(_NYInterface.ITalismanSceneController, _TalismanSceneController())
+    _config(_NYInterface.ICelebritySceneController, _CelebritySceneController())
+    _config(_NYInterface.INewYearCraftMachineController, _NewYearCraftMachineController())
+    _config(_NYInterface.IIcicleController, _IcicleController())

@@ -11,15 +11,18 @@ from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.marathon.marathon_event_controller import DEFAULT_MARATHON_PREFIX
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.server_events import awards, events_helpers, recruit_helper, anniversary_helper
-from gui.server_events.events_helpers import getLootboxesFromBonuses
+from gui.server_events.events_helpers import getLootboxesFromBonuses, isCelebrityQuest
 from gui.shared import g_eventBus, events, event_dispatcher as shared_events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showProgressiveItemsView
 from gui.shared.events import PersonalMissionsEvent
+from gui.shared.gui_items.loot_box import NewYearLootBoxes
 from helpers import dependency
+from new_year.ny_constants import AnchorNames
+from new_year.ny_navigation_helper import switchNewYearView
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
-from gui.impl.lobby.reward_window import TwitchRewardWindow, GiveAwayRewardWindow, PiggyBankRewardWindow
+from gui.impl.lobby.reward_window import TwitchRewardWindow, GiveAwayRewardWindow, PiggyBankRewardWindow, LootBoxRewardWindow
 from shared_utils import first
 from battle_pass_common import BattlePassConsts
 OPERATIONS = {PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_1_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS_PAGE_ALIAS,
@@ -186,6 +189,9 @@ def showMission(eventID, eventType=None):
         vehicle = service.getItemByCD(vehicleIntCD)
         service.showCustomization(vehicle.invID, lambda : showProgressiveItemsView(itemIntCD))
         return
+    elif isCelebrityQuest(eventID):
+        switchNewYearView(AnchorNames.CELEBRITY)
+        return
     else:
         eventsCache = dependency.instance(IEventsCache)
         quests = eventsCache.getQuests()
@@ -274,6 +280,8 @@ def showMissionAward(quest, ctx):
             lootboxes = getLootboxesFromBonuses(bonuses)
             if lootboxes:
                 for lootboxId, lootboxInfo in lootboxes.iteritems():
+                    if lootboxId in NewYearLootBoxes.ALL():
+                        continue
                     showLootboxesAward(lootboxId=lootboxId, lootboxCount=lootboxInfo['count'], isFree=lootboxInfo['isFree'])
 
             else:
@@ -283,7 +291,12 @@ def showMissionAward(quest, ctx):
 
 
 def showLootboxesAward(lootboxId, lootboxCount, isFree):
-    pass
+    ctx = {'eventName': recruit_helper.RecruitSourceID.LOOTBOX,
+     'lootboxType': lootboxId,
+     'lootboxesCount': lootboxCount,
+     'isFree': isFree}
+    rewardWindow = LootBoxRewardWindow(ctx)
+    rewardWindow.load()
 
 
 def showPiggyBankRewardWindow(creditsValue, isPremActive):

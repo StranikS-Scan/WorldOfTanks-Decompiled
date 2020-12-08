@@ -46,6 +46,7 @@ class StyleUnlockedView(ViewImpl):
         self._addListeners()
 
     def _finalize(self):
+        WWISE.WW_setState(ProgressiveRewardSoundEvents.PROGRESSIVE_REWARD_VIEW_GROUP, ProgressiveRewardSoundEvents.PROGRESSIVE_REWARD_VIEW_EXIT)
         self._removeListeners()
         super(StyleUnlockedView, self)._finalize()
 
@@ -93,6 +94,8 @@ class StyleUnlockedView(ViewImpl):
         isEnabled = not lock and not currentHangarIsSteelHunter() and self.__isCustEnabledForActiveVehicle()
         if isEnabled:
             tooltipText = ''
+        elif self.__vehicle.isNewYearOutfitSet():
+            tooltipText = backport.text(R.strings.vehicle_customization.progressiveItemReward.gotoCustomizationButton.hasNyStyle.tooltip())
         else:
             tooltipText = backport.text(R.strings.vehicle_customization.progressiveItemReward.gotoCustomizationButton.disabled.tooltip())
         model.setSecondaryButtonTooltip(tooltipText)

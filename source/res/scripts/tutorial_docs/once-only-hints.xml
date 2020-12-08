@@ -515,5 +515,16 @@
       <hide-immediately>	True	</hide-immediately>
       <ignore-outside-click>	True	</ignore-outside-click>
     </hint>
+    <hint>	NyVehiclesExtraSlotBonusHint	  <item-id>	NyVehiclesExtraSlotBonusDD	</item-id>
+      <text>	_(#tutorial:newYear/vehicles/extraSlotBonus)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <update-runtime>	True	</update-runtime>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <hide-immediately>	True	</hide-immediately>
+      <equal-actions>	True	</equal-actions>
+    </hint>
   </hints>
 </once-only-hints.xml>

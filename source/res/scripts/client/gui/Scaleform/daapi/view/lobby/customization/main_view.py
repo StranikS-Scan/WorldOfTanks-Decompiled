@@ -272,7 +272,8 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         if self.__ctx.c11nCameraManager.vEntity is not None and self.__ctx.c11nCameraManager.vEntity.isVehicleLoaded:
             self.__ctx.c11nCameraManager.vEntity.appearance.updateAnchorsParams()
         self.__setAnchorsInitData()
-        self.__locateCameraToCustomizationPreview(updateTankCentralPoint=True)
+        if not self.__styleInfo.visible:
+            self.__locateCameraToCustomizationPreview(updateTankCentralPoint=True)
         return
 
     def __wrapSetCollisions(self):
@@ -620,6 +621,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__ctx.events.onHideStyleInfo += self.__onHideStyleInfo
         self.__ctx.events.onEditModeEnabled += self.__onEditModeEnabled
         self.__ctx.events.onGetItemBackToHand += self.__onGetItemBackToHand
+        self.__ctx.events.onCloseWindow += self.onCloseWindow
         self.__ctx.events.onSlotSelected += self.__onSlotSelected
         self.__ctx.events.onSlotUnselected += self.__onSlotUnselected
         self.__ctx.events.onAnchorsStateChanged += self.__onAnchorsStateChanged
@@ -723,6 +725,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__ctx.events.onHideStyleInfo -= self.__onHideStyleInfo
         self.__ctx.events.onEditModeEnabled -= self.__onEditModeEnabled
         self.__ctx.events.onGetItemBackToHand -= self.__onGetItemBackToHand
+        self.__ctx.events.onCloseWindow -= self.onCloseWindow
         self.__ctx.events.onAnchorsStateChanged -= self.__onAnchorsStateChanged
         g_currentVehicle.onChangeStarted -= self.__onVehicleChangeStarted
         g_currentVehicle.onChanged -= self.__onVehicleChanged
@@ -733,6 +736,9 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         if self.__setCollisionsCallback is not None:
             BigWorld.cancelCallback(self.__setCollisionsCallback)
             self.__setCollisionsCallback = None
+        exitCallback = self.__ctx.getExitCallback()
+        if exitCallback is not None:
+            exitCallback.destroy()
         super(MainView, self)._dispose()
         self.__ctx = None
         self.service.closeCustomization()

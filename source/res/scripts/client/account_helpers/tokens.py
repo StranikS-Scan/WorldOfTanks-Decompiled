@@ -25,7 +25,7 @@ class Tokens(object):
     def synchronize(self, isFullSync, diff):
         if isFullSync:
             self.__cache.clear()
-        for item in ('tokens',):
+        for item in ('tokens', 'lootBoxes'):
             itemDiff = diff.get(item, None)
             if itemDiff is not None:
                 synchronizeDicts(itemDiff, self.__cache.setdefault(item, {}))
@@ -40,7 +40,7 @@ class Tokens(object):
             proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)
         else:
             proxy = None
-        self.__account._doCmdIntArr(AccountCommands.CMD_LOOTBOX_OPEN, (boxID, count), proxy)
+        self.__account._doCmdInt2(AccountCommands.CMD_LOOTBOX_OPEN, boxID, count, proxy)
         return
 
     def getInfoLootBox(self, boxIDs, fullInfo, callback):

@@ -45,16 +45,22 @@ class UserListModel(ListModel):
             self.addSelectedIndex(self.getItemsLength() - 1)
 
     def getItem(self, index):
-        try:
-            return self.getItems()[index]
-        except IndexError:
-            _logger.error('Index %d is out of range', index)
+        if index == 4294967295L:
             return None
+        else:
+            try:
+                return self.getItems()[index]
+            except IndexError:
+                _logger.error('Index %d is out of range', index)
+                return None
 
-        return None
+            return None
 
     def findItems(self, predicate):
         return [ item for item in self.getItems() if predicate(item) ]
+
+    def findIndices(self, predicate):
+        return [ index for index, item in enumerate(self.getItems()) if predicate(item) ]
 
     def clearItems(self):
         self.getItems().clear()
@@ -74,8 +80,11 @@ class UserListModel(ListModel):
 
         return result
 
-    def addSelectedIndex(self, index):
-        self.getSelectedIndices().addNumber(index)
+    def addSelectedIndex(self, index, invalidate=False):
+        indices = self.getSelectedIndices()
+        indices.addNumber(index)
+        if invalidate:
+            indices.invalidate()
 
     def removeItemByIndex(self, index):
         self.getItems().remove(index)
@@ -93,8 +102,14 @@ class UserListModel(ListModel):
     def invalidate(self):
         self.getItems().invalidate()
 
+    def invalidateSelectedIndices(self):
+        self.getSelectedIndices().invalidate()
+
     def reserve(self, capacity):
         self.getItems().reserve(capacity)
+
+    def clear(self):
+        return self.getItems().clear()
 
     def _initialize(self):
         super(UserListModel, self)._initialize()

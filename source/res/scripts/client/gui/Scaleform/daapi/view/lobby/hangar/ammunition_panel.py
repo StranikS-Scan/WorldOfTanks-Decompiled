@@ -10,6 +10,7 @@ from gui.impl.gen import R
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.customization.shared import getEditableStylesExtraNotificationCounter, getItemTypesAvailableForVehicle
 from gui.Scaleform.daapi.view.meta.AmmunitionPanelMeta import AmmunitionPanelMeta
+from gui.impl.new_year.new_year_helper import BONUS_ICONS
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.shared import event_dispatcher as shared_events
@@ -19,13 +20,22 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.gui_items.items_actions.actions import VehicleRepairAction
+from gui.shared.utils.functions import makeTooltip
 from helpers import i18n, dependency, int2roman
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IBootcampController, IUISpamController
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.new_year import INewYearController
 from gui.customization.shared import isVehicleCanBeCustomized
+from new_year.ny_constants import SyncDataKeys, PERCENT
+from ny_common.settings import NY_CONFIG_NAME, NYVehBranchConsts
+from uilogging.decorators import simpleLog, loggerTarget, loggerEntry
+from uilogging.ny.constants import NY_LOG_KEYS, NY_LOG_ACTIONS
+from uilogging.ny.loggers import NYLogger
 
+@loggerTarget(loggerCls=NYLogger, logKey=NY_LOG_KEYS.NY_AMMUNITION_PANEL)
 class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     __slots__ = ('__hangarMessage',)
     bootcampCtrl = dependency.descriptor(IBootcampController)
@@ -33,10 +43,14 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     service = dependency.descriptor(ICustomizationService)
     settingsCore = dependency.descriptor(ISettingsCore)
     uiSpamController = dependency.descriptor(IUISpamController)
+    _nyController = dependency.descriptor(INewYearController)
+    _lobbyContext = dependency.descriptor(ILobbyContext)
+    _keysForUpdate = (SyncDataKeys.VEHICLE_BRANCH, SyncDataKeys.VEHICLE_BONUS_CHOICES)
 
     def __init__(self):
         super(AmmunitionPanel, self).__init__()
         self.__hangarMessage = None
+        g_currentVehicle.onChanged += self.__updateTankName
         return
 
     def update(self):
@@ -67,16 +81,34 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
             shared_events.showModuleInfo(itemCD, g_currentVehicle.item.descriptor)
         return
 
+    @simpleLog(action=NY_LOG_ACTIONS.NY_TANKSLOTS_FROM_AMMUNITION_PANEL_CLICK)
+    def onNYBonusPanelClicked(self):
+        shared_events.showNewYearVehiclesView()
+
+    @staticmethod
+    def _getVehicleIcon(vehicleType):
+        vehTypeStr = vehicleType.replace('-', '_') + '_widget'
+        backPortImage = backport.image(R.images.gui.maps.icons.new_year.vehicles_view.icons.dyn(vehTypeStr)())
+        return "<img src='{0}' vspace='-3'/>".format(backPortImage.replace('../', 'img://gui/'))
+
+    @loggerEntry
     def _populate(self):
         super(AmmunitionPanel, self)._populate()
         self.startGlobalListening()
         g_clientUpdateManager.addMoneyCallback(self.__moneyUpdateCallback)
         g_clientUpdateManager.addCallbacks({'inventory': self.__inventoryUpdateCallBack})
+        self._nyController.onDataUpdated += self.__onNewYearDataUpdated
+        self._nyController.onStateChanged += self.__onNewYearStateUpdated
+        self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsUpdate
 
     def _dispose(self):
         self.stopGlobalListening()
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__hangarMessage = None
+        self._nyController.onDataUpdated -= self.__onNewYearDataUpdated
+        self._nyController.onStateChanged -= self.__onNewYearStateUpdated
+        self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsUpdate
+        g_currentVehicle.onChanged -= self.__updateTankName
         super(AmmunitionPanel, self)._dispose()
         return
 
@@ -110,8 +142,38 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
              'vehicleLevel': '{}'.format(int2roman(vehicle.level)),
              'vehicleName': '{}'.format(vehicle.shortUserName),
              'actionGroupId': roleID})
+            isNYWidgetVisible = self._nyController.isEnabled()
+            nySlot = self._nyController.getVehicleBranch().getSlotForVehicle(vehicle.invID)
+            isNewYearVehicle = self._nyController.isVehicleBranchEnabled() and nySlot is not None
+            if not isNYWidgetVisible and self._nyController.isPostEvent() and isNewYearVehicle:
+                creditBonus = self._nyController.getActiveSettingBonusValue()
+            else:
+                creditBonus = 0
+            nyCreditBonus = ''
+            shouldShowCreditsBonus = creditBonus > 0
+            if shouldShowCreditsBonus:
+                nyCreditBonus = backport.text(R.strings.ny.totalBonusWidget.pbBonus()).format(100 * creditBonus)
+            if isNewYearVehicle:
+                bonusType, bonusValue = nySlot.getSlotBonus()
+                bonusFormatted = backport.text(R.strings.ny.vehiclesView.bonusFormat(), bonus=int(bonusValue * PERCENT))
+                icon = backport.image(BONUS_ICONS[bonusType])
+                labelTextSource = R.strings.ny.vehicleBonusPanel.dyn(bonusType)()
+                if shouldShowCreditsBonus:
+                    labelTextSource = R.strings.ny.vehicleBonusPanel.post.dyn(bonusType)()
+                label = backport.text(labelTextSource, level=int2roman(vehicle.level), vehicle=self._getVehicleIcon(vehicle.type) + '&nbsp;' + vehicle.shortUserName)
+                tooltip = makeTooltip(header=backport.text(R.strings.tooltips.tankCarusel.newYearSlot.header()), body=backport.text(R.strings.tooltips.tankCarusel.newYearSlot.body()))
+            else:
+                bonusFormatted = ''
+                icon = ''
+                label = backport.text(R.strings.ny.vehicleBonusPanel.credits(), level=int2roman(vehicle.level), vehicle=self._getVehicleIcon(vehicle.type) + '&nbsp;' + vehicle.shortUserName) if shouldShowCreditsBonus else ''
+                tooltip = ''
+            self.as_setNeyYearVehicleBonusS(isNewYearVehicle, icon, bonusFormatted, label, nyCreditBonus, shouldShowCreditsBonus, tooltip)
+        return
 
     def __inventoryUpdateCallBack(self, *args):
+        self.update()
+
+    def __updateTankName(self):
         self.update()
 
     def __applyCustomizationNewCounter(self, vehicle):
@@ -157,3 +219,14 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
             msg = text_styles.concatStylesToSingleLine(backport.text(R.strings.menu.roleExp.currentVehicleStatus()), ' ', roleActionsGroup(actionsGroupLabel), backport.text(R.strings.menu.roleExp.actionsGroup.dyn(actionsGroupLabel)()))
             msgLvl = Vehicle.VEHICLE_STATE_LEVEL.ACTIONS_GROUP
         return (msg, msgLvl)
+
+    def __onNewYearDataUpdated(self, keys):
+        if any((key in keys for key in self._keysForUpdate)):
+            self._update()
+
+    def __onNewYearStateUpdated(self):
+        self._update()
+
+    def __onServerSettingsUpdate(self, diff):
+        if NY_CONFIG_NAME in diff and NYVehBranchConsts.CONFIG_NAME in diff[NY_CONFIG_NAME]:
+            self._update()

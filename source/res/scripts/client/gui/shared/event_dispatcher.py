@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/event_dispatcher.py
 import logging
+from collections import namedtuple
 from operator import attrgetter
 import typing
 from BWUtil import AsyncReturn
@@ -9,7 +10,7 @@ from CurrentVehicle import HeroTankPreviewAppearance
 from async import async, await
 from constants import RentType, GameSeasonType
 from debug_utils import LOG_WARNING
-from frameworks.wulf import ViewFlags
+from frameworks.wulf import ViewFlags, ViewStatus
 from frameworks.wulf import Window
 from frameworks.wulf import WindowFlags, WindowStatus
 from gui import SystemMessages, DialogsInterface, GUI_SETTINGS
@@ -52,6 +53,7 @@ from gui.shared import events, g_eventBus, money
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
+from gui.shared.gui_items.loot_box import NewYearLootBoxes
 from gui.shared.gui_items.Vehicle import getUserName
 from gui.shared.gui_items.processors.goodies import BoosterActivator
 from gui.shared.money import Currency
@@ -66,6 +68,7 @@ from helpers import dependency
 from helpers.aop import pointcutable
 from helpers.i18n import makeString as _ms
 from items import vehicles as vehicles_core, parseIntCompactDescr, ITEM_TYPES
+from ny_common.settings import NYLootBoxConsts
 from nations import NAMES
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IHeroTankController, IReferralProgramController, IEpicBattleMetaGameController, IClanNotificationController, IEventProgressionController, IBrowserController
@@ -73,6 +76,7 @@ from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from skeletons.new_year import INewYearController
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 
@@ -706,6 +710,116 @@ def showBubbleTooltip(msg):
     g_eventBus.handleEvent(events.BubbleTooltipEvent(events.BubbleTooltipEvent.SHOW, msg), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+@dependency.replace_none_kwargs(lobbyCtx=ILobbyContext, nyCtrl=INewYearController)
+def showLootBoxEntry(lootBoxType=NewYearLootBoxes.PREMIUM, category='', lobbyCtx=None, nyCtrl=None):
+    enabled = lobbyCtx.getServerSettings().isLootBoxesEnabled() and nyCtrl.isEnabled()
+    if not enabled:
+        from gui.impl.lobby.loot_box.loot_box_helper import showRestrictedSysMessage
+        showRestrictedSysMessage()
+        return
+    else:
+        uiLoader = dependency.instance(IGuiLoader)
+        contentResId = R.views.lobby.loot_box.views.loot_box_entry_view.LootBoxEntryView()
+        lootBoxEntryView = uiLoader.windowsManager.getViewByLayoutID(contentResId)
+        if lootBoxEntryView is not None:
+            lootBoxEntryView.destroyWindow()
+        from gui.impl.lobby.loot_box.loot_box_entry_view import LootBoxEntryWindow
+        window = LootBoxEntryWindow(lootBoxType, category)
+        window.load()
+        return
+
+
+@adisp.process
+@dependency.replace_none_kwargs(lobbyCtx=ILobbyContext)
+def showLootBoxBuyWindow(category='', lobbyCtx=None):
+    if not lobbyCtx.getServerSettings().isLootBoxesEnabled():
+        _logger.error('LootBoxes are disabled on server. Nothing will be shown!')
+        return
+    shopConfig = lobbyCtx.getServerSettings().getLootBoxShop()
+    rawUrl = shopConfig.get(NYLootBoxConsts.URL, '')
+    if not rawUrl:
+        _logger.error('No Loot Box Shop URL is specified. Nothing will be shown!')
+        return
+    source = shopConfig.get(NYLootBoxConsts.SOURCE, NYLootBoxConsts.IGB)
+    url = yield URLMacros().parse(rawUrl)
+    if source == NYLootBoxConsts.IGB:
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOOT_BOX_SHOP_OVERLAY), ctx={'url': url,
+         'category': category}), EVENT_BUS_SCOPE.LOBBY)
+    elif source == NYLootBoxConsts.EXTERNAL:
+        g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.SPECIFIED, url))
+    else:
+        _logger.error('Invalid source is specified. Can not open loot box buy window!')
+
+
+def showLootBoxGuaranteedRewardsInfo():
+    showLootBoxExternalLink(linkName=NYLootBoxConsts.GUARANTEED_REWARD_INFO_URL)
+
+
+def showLootBoxOpeningStream():
+    showLootBoxExternalLink(linkName=NYLootBoxConsts.LOOT_BOX_OPENING_STREAM_URL)
+
+
+@adisp.process
+@dependency.replace_none_kwargs(lobbyCtx=ILobbyContext)
+def showLootBoxExternalLink(linkName, lobbyCtx=None):
+    shopConfig = lobbyCtx.getServerSettings().getLootBoxShop()
+    rawUrl = shopConfig.get(linkName, '')
+    if not rawUrl:
+        _logger.error('No %s URL is specified. Nothing will be shown!', linkName)
+        return
+    url = yield URLMacros().parse(rawUrl)
+    g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.SPECIFIED, url))
+
+
+def showLootBoxGiftWindow():
+    g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.LOOT_BOX_GIFT_URL))
+
+
+def showLootBoxAutoOpenWindow(rewards, boxes):
+    from gui.impl.lobby.loot_box.loot_box_auto_open_view import LootBoxAutoOpenWindow
+    window = LootBoxAutoOpenWindow(rewards, boxes)
+    window.load()
+
+
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showNYLevelUpWindow(context, useNWC=False, notificationMgr=None):
+    from gui.impl.new_year.views.new_year_level_up_view import NewYearLevelUpWindow, NewYearLevelUpWindowNWC
+    uiLoader = dependency.instance(IGuiLoader)
+    contentResId = R.views.lobby.new_year.views.new_year_level_up_view.NewYearLevelUpView()
+    levelUpView = uiLoader.windowsManager.getViewByLayoutID(contentResId)
+    if levelUpView is not None and levelUpView.viewStatus == ViewStatus.LOADED:
+        levelUpView.appendRewards(context)
+        return
+    else:
+        if useNWC:
+            window = NewYearLevelUpWindowNWC(context)
+            notificationMgr.append(window)
+        else:
+            window = NewYearLevelUpWindow(context)
+            window.load()
+        return
+
+
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showNyCollectionCongratsWindow(context, notificationMgr=None):
+    from gui.impl.new_year.views.new_year_style_reward_view import NewYearStyleRewardWindow
+    uiLoader = dependency.instance(IGuiLoader)
+    contentResId = R.views.lobby.loot_box.views.loot_box_special_reward_view.LootBoxSpecialRewardView()
+    specialVideoResID = uiLoader.windowsManager.getViewByLayoutID(contentResId)
+    if specialVideoResID is not None:
+        return
+    else:
+        window = NewYearStyleRewardWindow(context)
+        notificationMgr.append(window)
+        return
+
+
+def showVideoView(videoResID, onVideoStarted=None, onVideoStopped=None, onVideoClosed=None, isAutoClose=False, soundControl=None):
+    from gui.impl.lobby.video.video_view import VideoViewWindow
+    window = VideoViewWindow(videoResID, onVideoStarted=onVideoStarted, onVideoStopped=onVideoStopped, onVideoClosed=onVideoClosed, isAutoClose=isAutoClose, soundControl=soundControl)
+    window.load()
+
+
 def showReferralProgramWindow(url=None):
     referralController = dependency.instance(IReferralProgramController)
     if url is None:
@@ -751,6 +865,16 @@ def showSeniorityRewardWindow():
     return
 
 
+def showSeniorityInfoWindow():
+    from gui.impl.lobby.seniority_awards.seniority_info_view import SeniorityInfoViewWindow
+    uiLoader = dependency.instance(IGuiLoader)
+    contentResId = R.views.lobby.seniority_awards.SeniorityInfoView()
+    if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
+        window = SeniorityInfoViewWindow(contentResId)
+        window.load()
+    return
+
+
 def showProgressiveRewardWindow():
     lobbyContext = dependency.instance(ILobbyContext)
     if not lobbyContext.getServerSettings().getProgressiveRewardConfig().isEnabled:
@@ -776,7 +900,7 @@ def showProgressiveRewardAwardWindow(bonuses, specialRewardType, currentStep, no
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
 def showSeniorityRewardAwardWindow(qID, data, notificationMgr=None):
     from gui.impl.lobby.seniority_awards.seniority_reward_award_view import SeniorityRewardAwardWindow
-    window = SeniorityRewardAwardWindow(qID, data)
+    window = SeniorityRewardAwardWindow(qID, data, R.views.lobby.seniority_awards.SeniorityAwardsView())
     notificationMgr.append(window)
 
 
@@ -825,11 +949,12 @@ def showEventProgressionStylePreview(vehCD, style, styleDescr, backCallback, bac
     showStylePreview(vehCD, style, styleDescr, backCallback, backBtnDescrLabel, VIEW_ALIAS.EVENT_PROGRESSION_STYLE_PREVIEW)
 
 
-def showStylePreview(vehCD, style, styleDescr, backCallback, backBtnDescrLabel='', alias=VIEW_ALIAS.STYLE_PREVIEW):
+def showStylePreview(vehCD, style, styleDescr, backCallback, destoryCallback=None, backBtnDescrLabel='', alias=VIEW_ALIAS.STYLE_PREVIEW):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias), ctx={'itemCD': vehCD,
      'style': style,
      'styleDescr': styleDescr,
      'backCallback': backCallback,
+     'destroyCallback': destoryCallback,
      'backBtnDescrLabel': backBtnDescrLabel}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
@@ -979,6 +1104,39 @@ def showFrontlineExchangePrestigePoints(ctx):
     result = yield await(dialogs.showSimple(builder.build()))
     if result:
         exchangePrestigePoints()
+
+
+NYViewCtx = namedtuple('NYViewCtx', ('viewParams', 'tabName', 'args', 'kwargs'))
+NYTabCtx = namedtuple('NYTabCtx', ('tabName', 'menuName'))
+
+def showNewYearMainView(viewParams, tabName=None, *args, **kwargs):
+    appLoader = dependency.instance(IAppLoader)
+    app = appLoader.getApp()
+    if not app or not app.containerManager:
+        return
+    else:
+        ctx = NYViewCtx(viewParams=viewParams, tabName=tabName, args=args, kwargs=kwargs)
+        newYearView = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.NY_MAIN_VIEW))
+        if newYearView is not None:
+            event = events.NewYearEvent(events.NewYearEvent.ON_PRE_SWITCH_VIEW, ctx=ctx)
+        else:
+            event = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.NY_MAIN_VIEW), ctx=ctx)
+        g_eventBus.handleEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
+        return
+
+
+def showNewYearVehiclesView(**kwargs):
+    from gui.impl.new_year.views.new_year_vehicles_view import NewYearVehiclesWindow
+    window = NewYearVehiclesWindow(**kwargs)
+    window.load()
+
+
+def showNewYearInfoPage():
+    url = GUI_SETTINGS.newYearInfo.get('baseURL')
+    if url is None:
+        _logger.error('newYearInfo.baseURL is missed')
+    showBrowserOverlayView(url, alias=VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW)
+    return
 
 
 @async
@@ -1170,3 +1328,16 @@ def showBattleAbilitiesConfirmDialog(items, withInstall=None, parent=None):
     from gui.impl.dialogs import dialogs
     result = yield await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.tanksetup.dialogs.Confirm(), wrappedViewClass=BattleAbilitiesSetupConfirm, items=items, withInstall=withInstall, parent=parent))
     raise AsyncReturn(result)
+
+
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showCelebrityChallengeReward(questID, notificationMgr=None):
+    from gui.impl.lobby.new_year.challenge_reward_view import ChallengeRewardViewWindow
+    window = ChallengeRewardViewWindow(questID)
+    notificationMgr.append(window)
+
+
+def showTalismanIntro():
+    from gui.impl.lobby.new_year.snow_maidens_intro_view import SnowMaidensIntroWindow
+    window = SnowMaidensIntroWindow()
+    window.load()

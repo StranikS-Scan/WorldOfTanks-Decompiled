@@ -18,14 +18,19 @@ from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import RankedDossierKeys, YEAR_POINTS_TOKEN
 from gui.ranked_battles.ranked_helpers.web_season_provider import UNDEFINED_LEAGUE_ID, TOP_LEAGUE_ID
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
+from gui.server_events.events_constants import CELEBRITY_MARATHON_PREFIX, CELEBRITY_GROUP_PREFIX
 from gui.server_events.recruit_helper import getSourceIdFromQuest
 from gui.shared.formatters import text_styles
 from gui.shared.money import Currency
+from gui.shared.notifications import NotificationPriorityLevel
+from items.components.ny_constants import VEH_BRANCH_EXTRA_SLOT_TOKEN
 from messenger import g_settings
 from messenger.formatters import TimeFormatter
-from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter, InvoiceReceivedFormatter
+from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter, InvoiceReceivedFormatter, _EOL, BattleResultsFormatter
 from messenger.formatters.service_channel_helpers import getRewardsForQuests, EOL, MessageData, getCustomizationItemData, getDefaultMessage, DEFAULT_MESSAGE
 from messenger.proto.bw.wrappers import ServiceChannelMessage
+from new_year.ny_bonuses import getBonusConfig
+from new_year.ny_constants import NY_COLLECTION_PREFIXES, NY_LEVEL_PREFIX
 from shared_utils import findFirst, first
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.game_control import IRankedBattlesController
@@ -560,7 +565,7 @@ class PersonalMissionsFormatter(PersonalMissionsTokenQuestsFormatter):
 
 
 class SeniorityAwardsFormatter(AsyncTokenQuestsSubFormatter):
-    __MESSAGE_TEMPLATE = 'tokenQuests'
+    __MESSAGE_TEMPLATE = 'SeniorityAwardsQuest'
     __SENIORITY_AWARDS_TOKEN_QUEST_PATTERN = 'SeniorityAwardsQuest'
 
     @async
@@ -716,3 +721,144 @@ class RankedYearLeaderFormatter(RankedTokenQuestFormatter):
     def __formatShortMessage(self):
         return g_settings.msgTemplates.format('rankedLeaderNegativeQuest', ctx={'title': backport.text(R.strings.system_messages.ranked.notification.yearLB.negative.title()),
          'body': backport.text(R.strings.system_messages.ranked.notification.yearLB.negative.body())}, data={'savedData': {'ctx': {'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID}}})
+
+
+class NewYearLevelUpRewardFormatter(AsyncTokenQuestsSubFormatter):
+    _eventsCache = dependency.descriptor(IEventsCache)
+
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        if isSynced:
+            messages = []
+            data = message.data or {}
+            bonusConfig = getBonusConfig()
+            questIDs = filter(self._isQuestOfThisGroup, data.get('completedQuestIDs', set()))
+            levelSettings = self._getGuiSettings(message, 'InformationHeaderSysMessage', priorityLevel=NotificationPriorityLevel.LOW)
+            rewardsSettings = self._getGuiSettings(message, self._getTemplateName())
+            header = backport.text(R.strings.ny.notification.levelUp.congrats.header())
+            for questID in questIDs:
+                level = int(questID.split(':')[-1])
+                factor = bonusConfig.getAtmosphereMultiplierForLevel(level)
+                text = backport.text(R.strings.ny.notification.levelUp.congrats.body(), level=level, factor=factor)
+                formatted = g_settings.msgTemplates.format('InformationHeaderSysMessage', ctx={'header': header,
+                 'text': text})
+                messages.append(MessageData(formatted, levelSettings))
+                fmt = BattlePassQuestAchievesFormatter.formatQuestAchieves(data.get('detailedRewards', {}).get(questID, {}), asBattleFormatter=False)
+                if fmt is not None:
+                    formatted = g_settings.msgTemplates.format(self._getTemplateName(), ctx={'text': fmt})
+                    messages.append(MessageData(formatted, rewardsSettings))
+
+            callback(messages)
+        else:
+            callback([MessageData(None, None)])
+        return
+
+    def _getTemplateName(self):
+        pass
+
+    @classmethod
+    def _deleteColorAndFontAccentuation(cls, text):
+        regex = re.compile("(color='#.*?'|<b>|</b>)")
+        cleanText = re.sub(regex, '', text)
+        return cleanText
+
+    @classmethod
+    def _isQuestOfThisGroup(cls, questID):
+        return questID.startswith(NY_LEVEL_PREFIX)
+
+
+class NewYearCollectionRewardFormatter(AsyncTokenQuestsSubFormatter):
+    _eventsCache = dependency.descriptor(IEventsCache)
+
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        formatted, settings = (None, None)
+        if isSynced:
+            data = message.data or {}
+            questID = findFirst(self._isQuestOfThisGroup, data.get('completedQuestIDs', set()))
+            yearId, _, collectionKey, _ = questID.split(':')
+            year = backport.text(R.strings.ny.systemMessage.dyn(yearId)())
+            collectionName = backport.text(R.strings.ny.notification.collectionComplete.name.dyn(collectionKey)())
+            rows = [backport.text(R.strings.ny.notification.collectionComplete(), setting=collectionName, year=year)]
+            rewards = {}
+            for customizationItem in data.get('customizations', []):
+                custType = customizationItem['custType']
+                guiItemType, itemName = getCustomizationItemData(customizationItem['id'], custType)
+                rewards.setdefault(guiItemType, []).append(itemName)
+
+            for guiItemType, names in rewards.iteritems():
+                custName = backport.text(R.strings.ny.notification.collectionComplete.dyn(guiItemType)())
+                rows.append(' '.join((custName, ', '.join(names))))
+
+            settings = self._getGuiSettings(message, self._getTemplateName())
+            formatted = g_settings.msgTemplates.format(self._getTemplateName(), ctx={'text': _EOL.join(rows)})
+        callback([MessageData(formatted, settings)])
+        return None
+
+    def _getTemplateName(self):
+        pass
+
+    @classmethod
+    def _isQuestOfThisGroup(cls, questID):
+        return questID.startswith(NY_COLLECTION_PREFIXES)
+
+
+class NewYearCelebrityMarathonRewardFormatter(AsyncTokenQuestsSubFormatter):
+    _eventsCache = dependency.descriptor(IEventsCache)
+    _TEMPLATE_NAME = 'nyCelebrityReward'
+    _TEMPLATE_BUTTON_NAME = 'nyCelebrityRewardWithButton'
+
+    @async
+    @process
+    def format(self, message, callback):
+        from new_year.celebrity.celebrity_quests_helpers import marathonTokenCountExtractor
+        isSynced = yield self._waitForSyncItems()
+        if isSynced:
+            templateName = self._TEMPLATE_NAME
+            data = message.data or {}
+            completedQuestIDs = data.get('completedQuestIDs', set())
+            quests = self._eventsCache.getAllQuests(lambda q: q.getID() in completedQuestIDs)
+            completedCount = 0
+            for quest in quests.values():
+                bonuses = quest.getBonuses()
+                extraSlotBonus = findFirst(lambda b: b.getName() == 'battleToken' and VEH_BRANCH_EXTRA_SLOT_TOKEN in b.getTokens(), bonuses)
+                if extraSlotBonus:
+                    templateName = self._TEMPLATE_BUTTON_NAME
+                completedCount = max(completedCount, marathonTokenCountExtractor(quest))
+
+            fmt = QuestAchievesFormatter.formatQuestAchieves(data, asBattleFormatter=False)
+            text = backport.text(R.strings.system_messages.newYear.celebrityChallenge.progressReward(), value=completedCount)
+            formatted = g_settings.msgTemplates.format(templateName, ctx={'text': text,
+             'rewards': fmt})
+            settings = self._getGuiSettings(message, templateName)
+            callback([MessageData(formatted, settings)])
+        else:
+            callback([MessageData(None, None)])
+        return
+
+    @classmethod
+    def _isQuestOfThisGroup(cls, questID):
+        return questID.startswith(CELEBRITY_MARATHON_PREFIX)
+
+
+class NewYearCelebrityQuestRewardFormatter(AsyncTokenQuestsSubFormatter):
+    _eventsCache = dependency.descriptor(IEventsCache)
+
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        if isSynced:
+            messages = BattleResultsFormatter().getCelebrityQuestsMessages(message)
+            callback(messages)
+        else:
+            callback([MessageData(None, None)])
+        return
+
+    @classmethod
+    def _isQuestOfThisGroup(cls, questID):
+        return questID.startswith(CELEBRITY_GROUP_PREFIX) and questID.endswith('bonus')

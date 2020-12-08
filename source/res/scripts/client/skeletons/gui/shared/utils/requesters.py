@@ -864,6 +864,9 @@ class ITokensRequester(IRequester):
     def isTokenAvailable(self, tokenID):
         raise NotImplementedError
 
+    def getAttemptsAfterGuaranteedRewards(self, box):
+        raise NotImplementedError
+
     def getLootBoxes(self):
         raise NotImplementedError
 

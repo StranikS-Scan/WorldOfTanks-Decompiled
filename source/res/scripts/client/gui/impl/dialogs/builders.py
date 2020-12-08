@@ -189,10 +189,14 @@ class FormattedSimpleDialogBuilder(SimpleDialogBuilder):
 class ResSimpleDialogBuilder(SimpleDialogBuilder):
 
     def setMessagesAndButtons(self, message, buttons=R.strings.dialogs.common, focused=DialogButtons.SUBMIT, btnDownSounds=None):
-        self.setMessage(message.dyn('message')())
+        messageSection = self._getMessageSectionName()
+        self.setMessage(message.dyn(messageSection)())
         self.setTitle(message.dyn('title')())
         self.setCheckboxLabel(message.dyn('checkboxLabel'))
         _setupButtonsBasedOnRes(self, message, buttons, focused, btnDownSounds)
+
+    def _getMessageSectionName(self):
+        pass
 
 
 class ResPureDialogBuilder(PureDialogBuilder):
@@ -222,3 +226,13 @@ class ErrorDialogBuilder(ResSimpleDialogBuilder):
     def __init__(self):
         super(ErrorDialogBuilder, self).__init__()
         self.setPreset(DialogPresets.ERROR)
+
+
+class InfoDialogBuilderEx(InfoDialogBuilder):
+
+    def __init__(self, customMessageSection=''):
+        super(InfoDialogBuilderEx, self).__init__()
+        self.__customMessageSection = customMessageSection
+
+    def _getMessageSectionName(self):
+        return self.__customMessageSection if self.__customMessageSection else super(InfoDialogBuilderEx, self)._getMessageSectionName()

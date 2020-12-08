@@ -9,6 +9,11 @@ class LootBoxViewEvents(CONST_CONTAINER):
     BENGAL_FIRE_OFF = 'gui_lootbox_logistic_center_bengal_fire_off'
 
 
+class SeniorityInfoViewEvents(CONST_CONTAINER):
+    ENTRY_VIEW_ENTER = 'gui_hangar_award_info_page_enter'
+    ENTRY_VIEW_EXIT = 'gui_hangar_award_info_page_exit'
+
+
 def playSound(eventName):
     if eventName:
         WWISE.WW_eventGlobal(eventName)

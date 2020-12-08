@@ -5091,11 +5091,40 @@
       </exclude>
     </vehicleFilter>
     <style>
+      <id>	103	</id>
+      <texture>	gui/maps/vehicles/styles/NY2020_regular.png	</texture>
+      <description>	#vehicle_customization:special_style/NY2020_regular_desc	</description>
+      <userString>	#vehicle_customization:special_style/NY2020_regular	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	59	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
       <id>	104	</id>
       <texture>	gui/maps/vehicles/styles/NY2020_magic.png	</texture>
-      <description>	#vehicle_customization:special_style/NY2020_magic_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/NY2020_magic_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:special_style/NY2020_magic	</userString>
-      <tags>	progression_required	</tags>
+      <tags>	NY2020_style progression_required	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -5136,9 +5165,9 @@
     <style>
       <id>	105	</id>
       <texture>	gui/maps/vehicles/styles/NY2020_east.png	</texture>
-      <description>	#vehicle_customization:special_style/NY2020_east_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/NY2020_east_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:special_style/NY2020_east	</userString>
-      <tags>	progression_required	</tags>
+      <tags>	NY2020_style progression_required	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -5179,9 +5208,9 @@
     <style>
       <id>	106	</id>
       <texture>	gui/maps/vehicles/styles/NY2020_new_year.png	</texture>
-      <description>	#vehicle_customization:special_style/NY2020_new_year_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/NY2020_new_year_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:special_style/NY2020_new_year	</userString>
-      <tags>	progression_required	</tags>
+      <tags>	NY2020_style progression_required	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -5222,9 +5251,9 @@
     <style>
       <id>	107	</id>
       <texture>	gui/maps/vehicles/styles/NY2020_christmas.png	</texture>
-      <description>	#vehicle_customization:special_style/NY2020_christmas_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/NY2020_christmas_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:special_style/NY2020_christmas	</userString>
-      <tags>	progression_required	</tags>
+      <tags>	NY2020_style progression_required	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -5265,9 +5294,9 @@
     <style>
       <id>	117	</id>
       <texture>	gui/maps/vehicles/styles/NY2020_regular.png	</texture>
-      <description>	#vehicle_customization:special_style/NY2020_regular_clone_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/NY2020_regular_clone_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:special_style/NY2020_regular_clone	</userString>
-      <tags>	progression_required	</tags>
+      <tags>	NY2020_style progression_required	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -9137,6 +9166,311 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
+    <priceGroup>	styles 100g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	372	</id>
+      <texture>	gui/maps/vehicles/styles/seniority_awards_2020.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/seniority_awards_2020_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/seniority_awards_2020	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	202	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	71	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	354	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	373	</id>
+      <texture>	gui/maps/vehicles/styles/seniority_awards_2020.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/seniority_awards_2020_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/seniority_awards_2020	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	202	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	71	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	355	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	374	</id>
+      <texture>	gui/maps/vehicles/styles/seniority_awards_2020.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/seniority_awards_2020_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/seniority_awards_2020	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	202	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	71	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	356	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	375	</id>
+      <texture>	gui/maps/vehicles/styles/seniority_awards_2020.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/seniority_awards_2020_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/seniority_awards_2020	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	202	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	71	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	357	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	376	</id>
+      <texture>	gui/maps/vehicles/styles/seniority_awards_2020.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/seniority_awards_2020_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/seniority_awards_2020	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	202	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	71	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	358	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	377	</id>
+      <texture>	gui/maps/vehicles/styles/seniority_awards_2020.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/seniority_awards_2020_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/seniority_awards_2020	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	202	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	71	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	359	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	378	</id>
+      <texture>	gui/maps/vehicles/styles/seniority_awards_2020.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/seniority_awards_2020_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/seniority_awards_2020	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	202	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	71	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	360	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
     <priceGroup>	styles 1250g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>
@@ -9359,6 +9693,260 @@
               <appliedTo>	52416	</appliedTo>
             </item>
           </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	367	</id>
+      <texture>	gui/maps/vehicles/styles/ny_2021_magic.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/ny_2021_magic_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/ny_2021_magic	</userString>
+      <tags>	NY2021_style progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	198	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	68	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	368	</id>
+      <texture>	gui/maps/vehicles/styles/ny_2021_nutcracker.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/ny_2021_nutcracker_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/ny_2021_nutcracker	</userString>
+      <tags>	NY2021_style progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	199	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	69	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	369	</id>
+      <texture>	gui/maps/vehicles/styles/ny_2021_train.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/ny_2021_train_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/ny_2021_train	</userString>
+      <tags>	NY2021_style progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	200	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	370	</id>
+      <texture>	gui/maps/vehicles/styles/ny_2021_train.png	</texture>
+      <description>	#vehicle_customization:special_style/ny_2021_train_copy_desc	</description>
+      <userString>	#vehicle_customization:special_style/ny_2021_train_copy	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	200	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	371	</id>
+      <texture>	gui/maps/vehicles/styles/ny_2021_panda.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/ny_2021_panda_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/ny_2021_panda	</userString>
+      <tags>	NY2021_style progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	201	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	70	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	379	</id>
+      <texture>	gui/maps/vehicles/styles/ny_2021_newyear.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/ny_2021_newyear_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/ny_2021_newyear	</userString>
+      <tags>	NY2021_style progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	203	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	72	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	431	</id>
+      <texture>	gui/maps/vehicles/styles/ny_2021_chuck.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/ny_2021_chuck_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/ny_2021_chuck	</userString>
+      <tags>	NY2021_style progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	209	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals></decals>
+          <insignias>
+            <item>
+              <id>	13	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <paints>
+            <item>
+              <id>	76	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
         </outfit>
       </outfits>
       <itemFilters>
@@ -10173,7 +10761,7 @@
       <modelsSet>	Ch41_WZ_111_5A_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:unique_style/Ch41_WZ_111_5A_3Dst	</userString>
-      <tags>	progression_required	</tags>
+      <tags>	progression_required NY_style	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -11439,7 +12027,7 @@
       <modelsSet>	NYst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/Bat_Chatillon25t_NYst	</userString>
-      <tags>	NY2019_style progression_required	</tags>
+      <tags>	NY_style progression_required	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -11747,7 +12335,7 @@
       <modelsSet>	F88_AMX_13_105_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:unique_style/F88_AMX_13_105_3Dst	</userString>
-      <tags>	NY2020_style progression_required addNationalEmblem	</tags>
+      <tags>	NY_style progression_required addNationalEmblem	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -12473,7 +13061,7 @@
       <modelsSet>	NYst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/Grille_15_L63_NYst	</userString>
-      <tags>	NY2019_style progression_required	</tags>
+      <tags>	NY_style progression_required	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -13071,7 +13659,7 @@
       <modelsSet>	G56_E-100_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:unique_style/G56_E-100_3Dst	</userString>
-      <tags>	NY2020_style progression_required	</tags>
+      <tags>	NY_style progression_required	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -13121,7 +13709,7 @@
       <modelsSet>	G72_JagdPz_E100_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:unique_style/G72_JagdPz_E100_3Dst	</userString>
-      <tags>	NY2020_style progression_required addNationalEmblem	</tags>
+      <tags>	NY_style progression_required addNationalEmblem	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -13387,22 +13975,22 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/unique_styles	</userString>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	styles 5000g notInShop	</priceGroup>
+    <priceGroup>	styles 4000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <vehicles>	germany:G42_Maus	</vehicles>
+        <vehicles>	germany:G92_VK7201	</vehicles>
       </include>
     </vehicleFilter>
     <style>
-      <id>	429	</id>
-      <texture>	gui/maps/vehicles/styles/G42_Maus_3Dst.png	</texture>
-      <longDescriptionSpecial>	#vehicle_customization:unique_style/G42_Maus_3Dst_desc/long	</longDescriptionSpecial>
-      <modelsSet>	G42_Maus_3Dst	</modelsSet>
+      <id>	430	</id>
+      <texture>	gui/maps/vehicles/styles/G92_VK7201_3Dst.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/G92_VK7201_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	G92_VK7201_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:unique_style/G42_Maus_3Dst	</userString>
+      <userString>	#vehicle_customization:main_style/G92_VK7201_3Dst	</userString>
       <tags>	progression_required	</tags>
       <outfits>
         <outfit>
@@ -13427,23 +14015,23 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <userString>	#vehicle_customization:styles/unique_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	styles 4000g notInShop	</priceGroup>
+    <priceGroup>	styles 5000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <vehicles>	germany:G92_VK7201	</vehicles>
+        <vehicles>	germany:G42_Maus	</vehicles>
       </include>
     </vehicleFilter>
     <style>
-      <id>	430	</id>
-      <texture>	gui/maps/vehicles/styles/G92_VK7201_3Dst.png	</texture>
-      <longDescriptionSpecial>	#vehicle_customization:main_style/G92_VK7201_3Dst_desc/long	</longDescriptionSpecial>
-      <modelsSet>	G92_VK7201_3Dst	</modelsSet>
+      <id>	429	</id>
+      <texture>	gui/maps/vehicles/styles/G42_Maus_3Dst.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:unique_style/G42_Maus_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	G42_Maus_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:main_style/G92_VK7201_3Dst	</userString>
-      <tags>	progression_required	</tags>
+      <userString>	#vehicle_customization:unique_style/G42_Maus_3Dst	</userString>
+      <tags>	progression_required  NY_style	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -14054,7 +14642,7 @@
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:unique_style/J16_ST_B1_3Dst	</userString>
       <longDescriptionSpecial>	#vehicle_customization:unique_style/J16_ST_B1_3Dst_desc/long	</longDescriptionSpecial>
-      <tags>	progression_required	</tags>
+      <tags>	NY_style progression_required	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -16018,22 +16606,22 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/unique_styles	</userString>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
-    <historical>	true	</historical>
-    <priceGroup>	styles 5000g notInShop	</priceGroup>
+    <historical>	false	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <vehicles>	uk:GB31_Conqueror_Gun	</vehicles>
+        <vehicles>	uk:GB24_Centurion_Mk3	</vehicles>
       </include>
     </vehicleFilter>
     <style>
-      <id>	350	</id>
-      <texture>	gui/maps/vehicles/styles/GB31_Conqueror_Gun_3Dst.png	</texture>
-      <longDescriptionSpecial>	#vehicle_customization:unique_style/GB31_Conqueror_Gun_3Dst_desc/long	</longDescriptionSpecial>
-      <modelsSet>	GB31_Conqueror_Gun_3Dst	</modelsSet>
+      <id>	362	</id>
+      <texture>	gui/maps/vehicles/styles/GB24_Centurion_Mk3_3Dst_HW20.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/GB24_Centurion_Mk3_3Dst_HW20_desc/long	</longDescriptionSpecial>
+      <modelsSet>	GB24_Centurion_Mk3_3Dst_HW20	</modelsSet>
       <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:unique_style/GB31_Conqueror_Gun_3Dst	</userString>
+      <userString>	#vehicle_customization:special_style/GB24_Centurion_Mk3_3Dst_HW20	</userString>
       <tags>	progression_required	</tags>
       <itemFilters>
         <projection_decal>
@@ -16058,23 +16646,23 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <userString>	#vehicle_customization:styles/unique_styles	</userString>
     <season>	ALL	</season>
-    <historical>	false	</historical>
-    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <historical>	true	</historical>
+    <priceGroup>	styles 6000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <vehicles>	uk:GB24_Centurion_Mk3	</vehicles>
+        <vehicles>	uk:GB31_Conqueror_Gun	</vehicles>
       </include>
     </vehicleFilter>
     <style>
-      <id>	362	</id>
-      <texture>	gui/maps/vehicles/styles/GB24_Centurion_Mk3_3Dst_HW20.png	</texture>
-      <longDescriptionSpecial>	#vehicle_customization:special_style/GB24_Centurion_Mk3_3Dst_HW20_desc/long	</longDescriptionSpecial>
-      <modelsSet>	GB24_Centurion_Mk3_3Dst_HW20	</modelsSet>
+      <id>	350	</id>
+      <texture>	gui/maps/vehicles/styles/GB31_Conqueror_Gun_3Dst.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:unique_style/GB31_Conqueror_Gun_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	GB31_Conqueror_Gun_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:special_style/GB24_Centurion_Mk3_3Dst_HW20	</userString>
-      <tags>	progression_required	</tags>
+      <userString>	#vehicle_customization:unique_style/GB31_Conqueror_Gun_3Dst	</userString>
+      <tags>	progression_required NY_style	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -16503,7 +17091,7 @@
       <modelsSet>	NYst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/T57_NYst	</userString>
-      <tags>	NY2019_style progression_required	</tags>
+      <tags>	NY_style progression_required	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -17184,7 +17772,7 @@
       <modelsSet>	NY_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:unique_style/T110E4_NYst	</userString>
-      <tags>	NY2020_style progression_required	</tags>
+      <tags>	NY_style progression_required	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -18215,7 +18803,7 @@
       <modelsSet>	NYst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/IS7_NYst	</userString>
-      <tags>	NY2019_style progression_required	</tags>
+      <tags>	NY_style progression_required	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -18766,7 +19354,7 @@
       <modelsSet>	R97_Object_140_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:unique_style/R97_Object_140_3Dst	</userString>
-      <tags>	NY2020_style progression_required addNationalEmblem	</tags>
+      <tags>	NY_style progression_required addNationalEmblem	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -18806,7 +19394,7 @@
       <modelsSet>	R148_Object_430_U_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:unique_style/R148_Object_430_U_3Dst	</userString>
-      <tags>	NY2020_style progression_required	</tags>
+      <tags>	NY_style progression_required	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -19712,46 +20300,6 @@
       <modelsSet>	R169_ST_II_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:main_style/R169_ST_II_3Dst	</userString>
-      <tags>	progression_required	</tags>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	1	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-        </outfit>
-      </outfits>
-      <itemFilters>
-        <projection_decal>
-          <include>
-            <itemGroupName>	Progression Decals	</itemGroupName>
-          </include>
-        </projection_decal>
-      </itemFilters>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/unique_styles	</userString>
-    <season>	ALL	</season>
-    <historical>	true	</historical>
-    <priceGroup>	styles 5000g notInShop	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <vehicles>	ussr:R149_Object_268_4	</vehicles>
-      </include>
-    </vehicleFilter>
-    <style>
-      <id>	442	</id>
-      <texture>	gui/maps/vehicles/styles/R149_Object_268_4_3Dst.png	</texture>
-      <longDescriptionSpecial>	#vehicle_customization:unique_style/R149_Object_268_4_3Dst_desc/long	</longDescriptionSpecial>
-      <modelsSet>	R149_Object_268_4_3Dst	</modelsSet>
-      <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:unique_style/R149_Object_268_4_3Dst	</userString>
       <tags>	progression_required	</tags>
       <outfits>
         <outfit>
@@ -21002,7 +21550,7 @@
       <maxNumber>	1	</maxNumber>
       <longDescriptionSpecial>	#vehicle_customization:unique_style/Pl15_60TP_Lewandowskiego_3Dst_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:unique_style/Pl15_60TP_Lewandowskiego_3Dst	</userString>
-      <tags>	progression_required addNationalEmblem	</tags>
+      <tags>	NY_style progression_required addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>

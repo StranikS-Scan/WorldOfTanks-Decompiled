@@ -58,7 +58,7 @@ class IGuiItemsFactory(object):
     def createBadge(self, descriptor, proxy=None, extraData=None):
         raise NotImplementedError
 
-    def createLootBox(self, lootBoxID, lootBoxType, lootBoxCategory, count):
+    def createLootBox(self, lootBoxID, lootBoxConfig, count):
         raise NotImplementedError
 
     def createCustomization(self, intCompactDescr, proxy=None):

@@ -72,6 +72,10 @@ def stripAllTags(descr):
     return re.sub('{\\w+Open}|{\\w+Close}', '', descr)
 
 
+def stripHTMLTags(descr):
+    return re.sub('<(.*?)>', '', descr)
+
+
 def makeTooltip(header=None, body=None, note=None, attention=None):
     res_str = ''
     if header is not None:
@@ -163,8 +167,15 @@ def getArenaFullName(arenaTypeID):
     return arenaName
 
 
-def getBattleSubTypeWinText(arenaTypeID, teamID):
+def getBattleSubTypeWinText(arenaTypeID, teamID, isNewYear=False):
     root = R.strings.arenas.type.dyn(ArenaType.g_cache[arenaTypeID].gameplayName)
+    if isNewYear and random.random() <= 1.0 / 3.0:
+        nyDescription = root.dyn('descriptionNewYear')
+        if nyDescription.exists():
+            return backport.text(nyDescription())
+        nyDescription = root.dyn('descriptionNewYear{}'.format(teamID))
+        if nyDescription.exists():
+            return backport.text(nyDescription())
     description = root.dyn('description')
     if not description:
         description = root.dyn('description{}'.format(teamID))

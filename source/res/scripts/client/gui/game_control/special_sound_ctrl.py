@@ -10,7 +10,7 @@ from account_helpers.settings_core.options import AltVoicesSetting
 from helpers import dependency
 from SoundGroups import CREW_GENDER_SWITCHES
 from items import tankmen
-from constants import ITEM_DEFS_PATH
+from constants import ITEM_DEFS_PATH, CURRENT_REALM
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID, NO_CREW_SKIN_SOUND_SET
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.lobby_context import ILobbyContext
@@ -123,7 +123,8 @@ class SpecialSoundCtrl(ISpecialSoundCtrl):
             if voiceoverSection is not None:
                 for source, paramSection in voiceoverSection.items():
                     tag = paramSection.readString('tag')
-                    mode = paramSection.readString('languageMode')
+                    languageMode = paramSection['languageMode']
+                    mode = languageMode.readString(CURRENT_REALM) or languageMode.asString
                     onlyInNational = paramSection.readBool('onlyInNational')
                     genderStr = paramSection.readString('gender')
                     gender = _genderStrToSwitch.get(genderStr, CREW_GENDER_SWITCHES.DEFAULT)

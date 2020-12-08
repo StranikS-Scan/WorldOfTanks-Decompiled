@@ -164,6 +164,7 @@ class _VehCmpCache(FileLocalCache):
 
 
 class _VehCompareData(object):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, vehicleIntCD, vehicleStrCD, vehStockStrCD, isFromCache=False):
         super(_VehCompareData, self).__init__()
@@ -326,7 +327,7 @@ class _VehCompareData(object):
         return [None] * eqCapacity
 
     def __addBuiltInEquipment(self, equipmentIDs):
-        if not self.__isInInventory:
+        if not self.__isInInventory and self.itemsCache.isSynced():
             vehicleType = self.__getVehicleType()
             builtInEquipmentIDs = vehicles.getBuiltinEqsForVehicle(vehicleType)
             for slotId, eqID in enumerate(builtInEquipmentIDs):

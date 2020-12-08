@@ -4,6 +4,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.tank_carousel import TankCarousel
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.royale.carousel_data_provider import RoyaleCarouselDataProvider
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.royale.carousel_filter import RoyaleCarouselFilter
+from new_year.ny_constants import NY_FILTER
 
 class RoyaleTankCarousel(TankCarousel):
 
@@ -27,7 +28,7 @@ class RoyaleTankCarousel(TankCarousel):
 
     def _getFilters(self):
         isBattleRoyaleEnabled = self.battleRoyaleController.isEnabled()
-        parentFilters = super(RoyaleTankCarousel, self)._getFilters()
+        parentFilters = tuple((filterName for filterName in super(RoyaleTankCarousel, self)._getFilters() if filterName != NY_FILTER))
         return parentFilters + ('battleRoyale',) if isBattleRoyaleEnabled else parentFilters
 
     def __onViewLoaded(self, view, *args, **kwargs):

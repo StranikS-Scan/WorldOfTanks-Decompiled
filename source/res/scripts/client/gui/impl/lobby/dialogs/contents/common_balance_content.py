@@ -75,6 +75,8 @@ class CommonBalanceContent(ViewImpl):
             self.__addCurrency(currency, self.__getCurrencyFormat(currency, self.__stats.actualMoney.get(currency)))
             self.__onCurrencyUpdated(currency, self.__stats.actualMoney.get(currency))
 
+        self.__updateMoneyStatus()
+
     def _finalize(self):
         super(CommonBalanceContent, self)._finalize()
         self.__wallet.onWalletStatusChanged -= self.__onWalletChanged
@@ -112,7 +114,11 @@ class CommonBalanceContent(ViewImpl):
             self.viewModel.currency.getItem(index).setValue(self.__getCurrencyFormat(currency, value) if value is not None and self.__isGoldAutoPurhaseEnabled else '')
         return
 
-    def __onWalletChanged(self, status):
+    def __onWalletChanged(self, *_):
+        self.__updateMoneyStatus()
+
+    def __updateMoneyStatus(self):
+        status = self.__wallet.componentsStatuses
         self.__isGoldAutoPurhaseEnabled &= self.__wallet.isAvailable
         for currency in Currency.GUI_ALL:
             self.__onCurrencyUpdated(currency, self.__stats.actualMoney.get(currency) if status[currency] == CurrencyStatus.AVAILABLE else None)

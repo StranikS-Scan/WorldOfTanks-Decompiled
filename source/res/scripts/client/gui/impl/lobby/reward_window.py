@@ -31,7 +31,7 @@ from skeletons.gui.app_loader import IAppLoader
 from constants import OFFER_TOKEN_PREFIX
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.game_control import IFestivityController
-from gui.shared.event_dispatcher import showOfferGiftsWindow
+from gui.shared.event_dispatcher import showOfferGiftsWindow, showClanQuestWindow
 _logger = logging.getLogger(__name__)
 BASE_EVENT_NAME = 'base'
 _ADDITIONAL_AWARDS_COUNT = 5
@@ -66,6 +66,9 @@ class BaseRewardWindowContent(ViewImpl):
         return
 
     def handleNextButton(self):
+        pass
+
+    def handleGoToButton(self):
         pass
 
     def createToolTip(self, event):
@@ -233,17 +236,29 @@ class RewardWindowBase(WindowImpl):
     def _initialize(self):
         super(RewardWindowBase, self)._initialize()
         self.content.getViewModel().onConfirmBtnClicked += self._onConfirmBtnClicked
+        self.content.getViewModel().onSecondBtnClicked += self._onSecondBtnClicked
         with self.windowModel.transaction() as tx:
             tx.setTitle(R.strings.ingame_gui.rewardWindow.winHeaderText())
-        self.center()
 
     def _finalize(self):
         super(RewardWindowBase, self)._finalize()
         self.content.getViewModel().onConfirmBtnClicked -= self._onConfirmBtnClicked
+        self.content.getViewModel().onSecondBtnClicked -= self._onSecondBtnClicked
 
     def _onConfirmBtnClicked(self, _=None):
         self.content.handleNextButton()
         self._onClosed()
+
+    def _onDecoratorReady(self):
+        super(RewardWindowBase, self)._onDecoratorReady()
+        if self.area is not None and self.area.getPreviousNeighbor(self) is not None:
+            self.cascade()
+        else:
+            self.center()
+        return
+
+    def _onSecondBtnClicked(self, _=None):
+        self.content.handleGoToButton()
 
 
 class RewardWindow(RewardWindowBase):
@@ -266,13 +281,19 @@ class TwitchRewardWindow(RewardWindowBase):
 
 class DynamicRewardWindowContent(BaseRewardWindowContent):
     __slots__ = ('__bonuses', '_eventName')
-    _BONUSES_ORDER = ('customizations',
-     Currency.GOLD,
+    _BONUSES_ORDER = (Currency.GOLD,
      'vehicles',
      'premium_plus',
      'dossier',
-     'crewBooks',
+     'customizations',
+     'slots',
+     'goodies',
+     'blueprints',
+     'blueprintsAny',
      'items',
+     Currency.CRYSTAL,
+     Currency.CREDITS,
+     'freeXP',
      'tokens')
 
     def __init__(self, settings, ctx=None):
@@ -283,6 +304,10 @@ class DynamicRewardWindowContent(BaseRewardWindowContent):
         return
 
     def handleNextButton(self):
+        self.destroyWindow()
+
+    def handleGoToButton(self):
+        showClanQuestWindow()
         self.destroyWindow()
 
     def _getBonuses(self):

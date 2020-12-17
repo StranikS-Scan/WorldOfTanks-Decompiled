@@ -708,7 +708,7 @@ class _DetailedMissionInfo(_MissionInfo):
 
     def _getUnavailableStatusFields(self, errorMsg):
         result = {'status': MISSIONS_STATES.NOT_AVAILABLE}
-        if errorMsg != 'requirement':
+        if errorMsg != 'requirements':
             timeLeft = self.event.getNearestActivityTimeLeft()
             if timeLeft is not None:
                 clockIcon = _getClockIconTag()

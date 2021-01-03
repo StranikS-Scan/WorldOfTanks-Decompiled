@@ -30,7 +30,7 @@ from gui.shared.utils import decorators
 from helpers import dependency, time_utils
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.game_control import IGameSessionController
+from skeletons.gui.game_control import IGameSessionController, IFestivityController
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import Optional, List
@@ -58,6 +58,7 @@ class DailyQuestsView(ViewImpl):
     gameSession = dependency.descriptor(IGameSessionController)
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    __festivityController = dependency.descriptor(IFestivityController)
     __slots__ = ('__tooltipData', '__proxyMissionsPage')
 
     def __init__(self, layoutID=R.views.lobby.missions.Daily()):
@@ -129,7 +130,7 @@ class DailyQuestsView(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         _logger.info('DailyQuestsView::_onLoading')
         with self.viewModel.transaction() as tx:
-            if not AccountSettings.getUIFlag(NY_DAILY_QUESTS_VISITED):
+            if not AccountSettings.getUIFlag(NY_DAILY_QUESTS_VISITED) and not self.__festivityController.isPostEvent():
                 self._updateLootboxesIntro(tx)
             self._updateQuestsTitles(tx)
             self._updateModel(tx)

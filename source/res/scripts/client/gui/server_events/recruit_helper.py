@@ -41,6 +41,7 @@ class RecruitSourceID(object):
     TWITCH_15 = 'twitch15'
     TWITCH_16 = 'twitch16'
     TWITCH_17 = 'twitch17'
+    TWITCH_18 = 'twitch18'
     BUFFON = 'buffon'
     LOOTBOX = 'lootbox'
     COMMANDER_MARINA = 'commander_marina'
@@ -64,7 +65,8 @@ class RecruitSourceID(object):
      TWITCH_14,
      TWITCH_15,
      TWITCH_16,
-     TWITCH_17)
+     TWITCH_17,
+     TWITCH_18)
 
 
 DEFAULT_NY_GIRL = 'tman_template::true:ny21_girl_1:210063:::brotherhood:100:ny21defaultGirl:'

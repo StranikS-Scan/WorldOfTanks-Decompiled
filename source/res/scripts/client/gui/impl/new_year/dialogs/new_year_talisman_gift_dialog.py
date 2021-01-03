@@ -102,6 +102,7 @@ class NewYearTalismanGiftDialogView(WaitViewImpl):
                 rewardsList.clear()
                 packBonusModelAndTooltipData(rewards, rewardsList, getLootBoxBonusPacker(isExtra=True), self._tooltips)
                 rewardsList.invalidate()
+                model.setIsLastDay(self.__newYearController.isLastDayOfEvent())
 
     @staticmethod
     def __convertGiftToBonuses(rawData):

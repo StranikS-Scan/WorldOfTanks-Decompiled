@@ -6,7 +6,7 @@ from frameworks.wulf import ViewModel
 class SnowMaidensGiftViewModel(ViewModel):
     __slots__ = ('onClose', 'onBackToTree', 'onTakeGift')
 
-    def __init__(self, properties=6, commands=3):
+    def __init__(self, properties=7, commands=3):
         super(SnowMaidensGiftViewModel, self).__init__(properties=properties, commands=commands)
 
     def getDialogType(self):
@@ -45,6 +45,12 @@ class SnowMaidensGiftViewModel(ViewModel):
     def setProgressLevel(self, value):
         self._setNumber(5, value)
 
+    def getIsLastDay(self):
+        return self._getBool(6)
+
+    def setIsLastDay(self, value):
+        self._setBool(6, value)
+
     def _initialize(self):
         super(SnowMaidensGiftViewModel, self)._initialize()
         self._addStringProperty('dialogType', '')
@@ -53,6 +59,7 @@ class SnowMaidensGiftViewModel(ViewModel):
         self._addArrayProperty('rewards', Array())
         self._addNumberProperty('cooldown', -1)
         self._addNumberProperty('progressLevel', 0)
+        self._addBoolProperty('isLastDay', False)
         self.onClose = self._addCommand('onClose')
         self.onBackToTree = self._addCommand('onBackToTree')
         self.onTakeGift = self._addCommand('onTakeGift')

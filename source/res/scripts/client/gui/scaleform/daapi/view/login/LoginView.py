@@ -9,6 +9,7 @@ from adisp import process
 from async import async, await
 from connection_mgr import LOGIN_STATUS
 from external_strings_utils import isAccountLoginValid, isPasswordValid
+from frameworks.wulf import WindowFlags, WindowStatus
 from gui import DialogsInterface, GUI_SETTINGS
 from gui import makeHtmlString
 from gui.Scaleform.Waiting import Waiting
@@ -19,6 +20,8 @@ from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl import backport
 from gui.impl.dialogs import dialogs
+from gui.impl.dialogs.builders import ResSimpleDialogBuilder
+from gui.impl.dialogs.dialogs import showSimple
 from gui.impl.gen import R
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -32,6 +35,7 @@ from login_modes.base_mode import INVALID_FIELDS
 from predefined_hosts import AUTO_LOGIN_QUERY_URL, AUTO_LOGIN_QUERY_ENABLED, g_preDefinedHosts
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.login_manager import ILoginManager
 from skeletons.helpers.statistics import IStatisticsCollector
 _STATUS_TO_INVALID_FIELDS_MAPPING = defaultdict(lambda : INVALID_FIELDS.ALL_VALID, {LOGIN_STATUS.LOGIN_REJECTED_INVALID_PASSWORD: INVALID_FIELDS.PWD_INVALID,
@@ -39,11 +43,16 @@ _STATUS_TO_INVALID_FIELDS_MAPPING = defaultdict(lambda : INVALID_FIELDS.ALL_VALI
  LOGIN_STATUS.LOGIN_REJECTED_SERVER_NOT_READY: INVALID_FIELDS.SERVER_INVALID,
  LOGIN_STATUS.SESSION_END: INVALID_FIELDS.PWD_INVALID})
 
+def DialogPredicate(window):
+    return window.windowStatus in (WindowStatus.LOADING, WindowStatus.LOADED) and window.windowFlags & WindowFlags.DIALOG
+
+
 class LoginView(LoginPageMeta):
     loginManager = dependency.descriptor(ILoginManager)
     connectionMgr = dependency.descriptor(IConnectionManager)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     statsCollector = dependency.descriptor(IStatisticsCollector)
+    __gui = dependency.descriptor(IGuiLoader)
 
     def __init__(self, ctx=None):
         LoginPageMeta.__init__(self, ctx=ctx)
@@ -67,7 +76,15 @@ class LoginView(LoginPageMeta):
     def onSetRememberPassword(self, rememberUser):
         self._loginMode.setRememberPassword(rememberUser)
 
+    @async
     def onLogin(self, userName, password, serverName, isSocialToken2Login):
+        if self._loginMode.showRememberServerWarning:
+            builder = ResSimpleDialogBuilder()
+            builder.setFlags(WindowFlags.DIALOG | WindowFlags.WINDOW_FULLSCREEN)
+            builder.setMessagesAndButtons(R.strings.dialogs.dyn('loginToPeripheryAndRemember'))
+            success = yield await(showSimple(builder.build(self)))
+            if not success:
+                return
         self._loginMode.doLogin(userName, password, serverName, isSocialToken2Login)
 
     def _onLoggedOn(self, *args):
@@ -103,6 +120,7 @@ class LoginView(LoginPageMeta):
         return self._loginMode.isToken2()
 
     def onEscape(self):
+        self.__closeOpenedDialogs()
         self.__showExitDialog()
 
     def changeAccount(self):
@@ -348,6 +366,10 @@ class LoginView(LoginPageMeta):
         if not self.__isListInitialized and self._servers.serverList:
             self.__isListInitialized = True
             self.as_setSelectedServerIndexS(self._servers.selectedServerIdx)
+
+    def __closeOpenedDialogs(self):
+        for window in self.__gui.windowsManager.findWindows(DialogPredicate):
+            window.destroy()
 
     @async
     def __showExitDialog(self):

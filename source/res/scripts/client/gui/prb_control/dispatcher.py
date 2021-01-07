@@ -8,7 +8,7 @@ from PlayerEvents import g_playerEvents
 from adisp import async, process
 from constants import IGR_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
-from gui import SystemMessages, DialogsInterface, GUI_SETTINGS
+from gui import SystemMessages, GUI_SETTINGS
 from gui.prb_control import prb_getters
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities import initDevFunctional, finiDevFunctional
@@ -160,7 +160,6 @@ class _PreBattleDispatcher(ListenersCollection):
             return
 
     @async
-    @process
     def leave(self, ctx, callback=None):
         if ctx.getRequestType() != _RQ_TYPE.LEAVE:
             LOG_ERROR('Invalid context to leave prebattle/unit', ctx)
@@ -176,15 +175,27 @@ class _PreBattleDispatcher(ListenersCollection):
             entity = self.__entity
             meta = entity.getConfirmDialogMeta(ctx)
             if meta:
-                result = yield DialogsInterface.showDialog(meta)
-                if not result:
-                    if callback is not None:
-                        callback(False)
-                    return
-            if not entity.isActive():
-                if callback is not None:
-                    callback(False)
+                entity.showDialog(meta, lambda result: self.__leaveCallback(result, ctx, callback))
                 return
+            self.__leaveLogic(ctx, callback)
+            return
+
+    def __leaveCallback(self, result, ctx, callback=None):
+        if not result:
+            if callback is not None:
+                callback(False)
+            return
+        else:
+            self.__leaveLogic(ctx, callback)
+            return
+
+    def __leaveLogic(self, ctx, callback):
+        entity = self.__entity
+        if not entity.isActive():
+            if callback is not None:
+                callback(False)
+            return
+        else:
             ctrlType = ctx.getCtrlType()
             if entity.hasLockedState():
                 entityType = entity.getEntityType()
@@ -671,7 +682,7 @@ class _PrbPeripheriesHandler(object):
                     return
             else:
                 actionsList = []
-            actionsList.extend([actions.DisconnectFromPeriphery(), actions.ConnectToPeriphery(peripheryID), self.__enableAction])
+            actionsList.extend([actions.DisconnectFromPeriphery(loginViewPreselectedPeriphery=peripheryID), actions.ConnectToPeriphery(peripheryID), self.__enableAction])
             if finishActions:
                 if isinstance(finishActions, types.ListType):
                     actionsList.extend(finishActions)

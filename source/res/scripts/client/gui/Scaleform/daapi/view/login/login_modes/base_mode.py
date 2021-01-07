@@ -55,6 +55,10 @@ class BaseMode(object):
     def rememberPassVisible(self):
         return False
 
+    @property
+    def showRememberServerWarning(self):
+        return False
+
     def setRememberPassword(self, *args):
         pass
 

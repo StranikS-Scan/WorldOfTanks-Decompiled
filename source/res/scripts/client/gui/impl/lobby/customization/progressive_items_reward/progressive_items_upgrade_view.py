@@ -156,8 +156,6 @@ class ProgressiveItemsUpgradeView(ViewImpl):
         model.setIsOkButtonEnabled(okEnabled)
         if c11nEnabled:
             tooltipText = ''
-        elif self.__vehicle.isNewYearOutfitSet():
-            tooltipText = backport.text(R.strings.vehicle_customization.progressiveItemReward.gotoCustomizationButton.hasNyStyle.tooltip())
         else:
             tooltipText = backport.text(R.strings.vehicle_customization.progressiveItemReward.gotoCustomizationButton.disabled.tooltip())
         model.setIsSecondaryButtonEnabled(c11nEnabled)

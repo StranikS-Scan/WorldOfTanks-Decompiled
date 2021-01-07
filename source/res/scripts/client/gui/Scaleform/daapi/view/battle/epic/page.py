@@ -85,7 +85,8 @@ _GAME_UI = {BATTLE_VIEW_ALIASES.VEHICLE_ERROR_MESSAGES,
  BATTLE_VIEW_ALIASES.SUPER_PLATOON_PANEL,
  BATTLE_VIEW_ALIASES.EPIC_INGAME_RANK,
  BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL,
- BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL}
+ BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL,
+ BATTLE_VIEW_ALIASES.CALLOUT_PANEL}
 _SPECTATOR_UI = {BATTLE_VIEW_ALIASES.EPIC_SPECTATOR_VIEW,
  BATTLE_VIEW_ALIASES.DEBUG_PANEL,
  BATTLE_VIEW_ALIASES.PLAYER_MESSAGES,
@@ -251,14 +252,14 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
 
         self.sessionProvider.shared.hitDirection.setVisible(True)
 
-    def _toggleRadialMenu(self, isShown):
+    def _toggleRadialMenu(self, isShown, allowAction=True):
         radialMenu = self.getComponent(BATTLE_VIEW_ALIASES.RADIAL_MENU)
         if radialMenu is None:
             return
         else:
             if not isShown and self.__topState == PageStates.RADIAL:
                 self.__topState = PageStates.NONE
-                radialMenu.hide()
+                radialMenu.hide(allowAction)
             elif isShown and self.__topState == PageStates.NONE and self.__pageState != PageStates.RESPAWN:
                 self.__topState = PageStates.RADIAL
                 radialMenu.show()

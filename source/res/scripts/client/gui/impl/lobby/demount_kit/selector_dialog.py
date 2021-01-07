@@ -146,6 +146,7 @@ class DemountOpDevDialog(BaseItemDialog):
         dkEnought = dk.inventoryCount > 0
         if not goldEnought and not dkEnought:
             showBuyGoldForEquipment(self.removalPrice.price.gold)
+            super(DemountOpDevDialog, self)._onCancel()
         else:
             super(DemountOpDevDialog, self)._onAcceptClicked()
 

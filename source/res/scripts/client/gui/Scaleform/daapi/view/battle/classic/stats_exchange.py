@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/classic/stats_exchange.py
 from collections import defaultdict
-from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from gui.Scaleform.daapi.view.battle.shared.stats_exchange import BattleStatisticsDataController
 from gui.Scaleform.daapi.view.battle.shared.stats_exchange import createExchangeBroker
 from gui.Scaleform.daapi.view.battle.shared.stats_exchange import broker
@@ -72,7 +71,7 @@ class DynamicVehicleStatsComponent(vehicle.VehicleStatsComponent):
         self._vehicleID = vStatsVO.vehicleID
         self._frags = vStatsVO.frags
         chatCmdState = vStatsVO.chatCommandState
-        if chatCmdState and bool(self.settingsCore.getSetting(BattleCommStorageKeys.SHOW_COM_IN_PLAYER_LIST)) is True:
+        if chatCmdState:
             self._chatCommand = chatCmdState.activeChatCommand
             self._chatCommandFlags = chatCmdState.chatCommandFlags
 

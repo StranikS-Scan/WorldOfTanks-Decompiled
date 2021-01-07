@@ -71,7 +71,7 @@ class VehicleItem(BasicItem):
 
 @add_shallow_copy('unlocks')
 class InstallableItem(VehicleItem):
-    __slots__ = ('weight', 'modelsSets', 'models', 'materials', 'hitTester', 'unlocks', 'armorHomogenization', 'camouflage', 'healthParams', 'sounds', 'emblemSlots', 'slotsAnchors')
+    __slots__ = ('weight', 'modelsSets', 'models', 'materials', 'hitTesterManager', 'unlocks', 'armorHomogenization', 'camouflage', 'healthParams', 'sounds', 'emblemSlots', 'slotsAnchors')
     __metaclass__ = ReflectionMetaclass
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
@@ -81,7 +81,7 @@ class InstallableItem(VehicleItem):
         self.healthParams = shared_components.DEFAULT_DEVICE_HEALTH
         self.armorHomogenization = component_constants.DEFAULT_ARMOR_HOMOGENIZATION
         self.materials = None
-        self.hitTester = None
+        self.hitTesterManager = None
         self.modelsSets = None
         self.models = None
         self.camouflage = shared_components.DEFAULT_CAMOUFLAGE
@@ -89,6 +89,10 @@ class InstallableItem(VehicleItem):
         self.emblemSlots = component_constants.EMPTY_TUPLE
         self.slotsAnchors = component_constants.EMPTY_TUPLE
         return
+
+    @property
+    def hitTester(self):
+        return self.hitTesterManager.activeHitTester
 
     @property
     def maxHealth(self):
@@ -200,11 +204,12 @@ class Radio(InstallableItem):
 @add_shallow_copy()
 class Turret(InstallableItem):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('gunPosition', 'rotationSpeed', 'turretRotatorHealth', 'surveyingDeviceHealth', 'invisibilityFactor', 'primaryArmor', 'ceilless', 'showEmblemsOnGun', 'guns', 'turretRotatorSoundManual', 'turretRotatorSoundGear', 'AODecals', 'turretDetachmentEffects', 'physicsShape', 'circularVisionRadius', 'customizableVehicleAreas', 'multiGun')
+    __slots__ = ('gunPosition', 'gunJointPitch', 'rotationSpeed', 'turretRotatorHealth', 'surveyingDeviceHealth', 'invisibilityFactor', 'primaryArmor', 'ceilless', 'showEmblemsOnGun', 'guns', 'turretRotatorSoundManual', 'turretRotatorSoundGear', 'AODecals', 'turretDetachmentEffects', 'physicsShape', 'circularVisionRadius', 'customizableVehicleAreas', 'multiGun')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Turret, self).__init__(typeID, componentID, componentName, compactDescr, level)
         self.gunPosition = None
+        self.gunJointPitch = None
         self.rotationSpeed = component_constants.ZERO_FLOAT
         self.turretRotatorHealth = None
         self.surveyingDeviceHealth = None
@@ -228,10 +233,10 @@ class Turret(InstallableItem):
         return 'gunCarriage' in self.tags
 
 
-@add_shallow_copy()
+@add_shallow_copy('__weakref__')
 class Gun(InstallableItem):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'reloadEffect', 'impulse', 'recoil', 'animateEmblemSlots', 'shotOffset', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'autoreload', 'autoreloadHasBoost', 'drivenJoints', 'customizableVehicleAreas', 'dualGun')
+    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'reloadEffect', 'impulse', 'recoil', 'animateEmblemSlots', 'shotOffset', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'autoreload', 'autoreloadHasBoost', 'drivenJoints', 'customizableVehicleAreas', 'dualGun', '__weakref__')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Gun, self).__init__(typeID, componentID, componentName, compactDescr, level)
@@ -266,17 +271,18 @@ class Gun(InstallableItem):
 @add_shallow_copy('variantName')
 class Hull(BasicItem):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('variantName', 'hitTester', 'materials', 'weight', 'maxHealth', 'ammoBayHealth', 'armorHomogenization', 'turretPositions', 'turretHardPoints', 'variantMatch', 'fakeTurrets', 'emblemSlots', 'slotsAnchors', 'modelsSets', 'models', 'swinging', 'customEffects', 'AODecals', 'camouflage', 'hangarShadowTexture', 'primaryArmor', 'customizableVehicleAreas', 'burnoutAnimation')
+    __slots__ = ('variantName', 'hitTesterManager', 'materials', 'weight', 'maxHealth', 'ammoBayHealth', 'armorHomogenization', 'turretPositions', 'turretPitches', 'turretHardPoints', 'variantMatch', 'fakeTurrets', 'emblemSlots', 'slotsAnchors', 'modelsSets', 'models', 'swinging', 'customEffects', 'AODecals', 'camouflage', 'hangarShadowTexture', 'primaryArmor', 'customizableVehicleAreas', 'burnoutAnimation')
 
     def __init__(self):
         super(Hull, self).__init__(component_constants.UNDEFINED_ITEM_TYPE_ID, component_constants.ZERO_INT, component_constants.EMPTY_STRING, component_constants.ZERO_INT)
         self.variantName = component_constants.EMPTY_STRING
-        self.hitTester = None
+        self.hitTesterManager = None
         self.materials = None
         self.weight = component_constants.ZERO_FLOAT
         self.maxHealth = component_constants.ZERO_INT
         self.ammoBayHealth = None
         self.turretPositions = component_constants.EMPTY_TUPLE
+        self.turretPitches = component_constants.EMPTY_TUPLE
         self.variantMatch = component_constants.DEFAULT_HULL_VARIANT_MATCH
         self.fakeTurrets = component_constants.DEFAULT_FAKE_TURRETS
         self.armorHomogenization = component_constants.DEFAULT_ARMOR_HOMOGENIZATION
@@ -294,6 +300,10 @@ class Hull(BasicItem):
         self.customizableVehicleAreas = None
         self.burnoutAnimation = None
         return
+
+    @property
+    def hitTester(self):
+        return self.hitTesterManager.activeHitTester
 
     def copy(self):
         return Hull()

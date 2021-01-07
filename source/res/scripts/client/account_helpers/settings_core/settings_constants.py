@@ -92,6 +92,7 @@ class GAME(CONST_CONTAINER):
     INCREASED_ZOOM = 'increasedZoom'
     SNIPER_MODE_BY_SHIFT = 'sniperModeByShift'
     ENABLE_SPEEDOMETER = 'enableSpeedometer'
+    ENABLE_REPAIR_TIMER = 'enableRepairTimer'
     HANGAR_CAM_PERIOD = 'hangarCamPeriod'
     HANGAR_CAM_PARALLAX_ENABLED = 'hangarCamParallaxEnabled'
     PLAYERS_PANELS_SHOW_LEVELS = 'ppShowLevels'
@@ -111,16 +112,16 @@ class GAME(CONST_CONTAINER):
     MINIMAP_VIEW_RANGE = 'minimapViewRange'
     MINIMAP_MAX_VIEW_RANGE = 'minimapMaxViewRange'
     MINIMAP_DRAW_RANGE = 'minimapDrawRange'
+    MINIMAP_MIN_SPOTTING_RANGE = 'minimapMinSpottingRange'
     SNIPER_MODE_SWINGING_ENABLED = 'SNIPER_MODE_SWINGING_ENABLED'
     CAROUSEL_TYPE = 'carouselType'
     DOUBLE_CAROUSEL_TYPE = 'doubleCarouselType'
     VEHICLE_CAROUSEL_STATS = 'vehicleCarouselStats'
     MINIMAP_ALPHA_ENABLED = 'minimapAlphaEnabled'
     C11N_HISTORICALLY_ACCURATE = 'c11nHistoricallyAccurate'
+    DISPLAY_PLATOON_MEMBERS = 'displayPlatoonMembers'
     LOGIN_SERVER_SELECTION = 'loginServerSelection'
-    LOOT_BOX_VIDEO_OFF = 'lootBoxVideoOff'
-    NY_VEHICLES_PROGRESS_ENTRY = 'nyVehiclesProgressEntry'
-    NY_VEHICLES_POST_EVENT_ENTRY = 'nyVehiclesPostEventEntry'
+    UNIT_FILTER = 'unitFilter'
 
 
 class TUTORIAL(CONST_CONTAINER):
@@ -164,6 +165,7 @@ class SOUND(CONST_CONTAINER):
     DETECTION_ALERT_SOUND = 'bulbVoices'
     CAPTURE_DEVICES = 'captureDevice'
     VOIP_ENABLE = 'enableVoIP'
+    VOIP_ENABLE_CHANNEL = 'enableVoIPChannel'
     VOIP_MASTER = 'masterVivoxVolume'
     VOIP_MIC = 'micVivoxVolume'
     VOIP_MASTER_FADE = 'masterFadeVivoxVolume'
@@ -294,6 +296,7 @@ class GuiSettingsBehavior(CONST_CONTAINER):
     LAST_SHOWN_EPIC_WELCOME_SCREEN = 'lastShownEpicWelcomeScreen'
     TECHTREE_INTRO_BLUEPRINTS_RECEIVED = 'techTreeIntroBlueprintsReceived'
     TECHTREE_INTRO_SHOWED = 'techTreeIntroShowed'
+    DISPLAY_PLATOON_MEMBER_CLICKED = 'isDisplayPlatoonMembersClicked'
 
 
 class OnceOnlyHints(CONST_CONTAINER):
@@ -329,11 +332,11 @@ class OnceOnlyHints(CONST_CONTAINER):
     SOUND_BUTTONEX_HINT = 'SoundButtonExHint'
     VEHICLE_PREVIEW_MODULES_BUTTON_HINT = 'VehiclePreviewModulesButtonHint'
     AMMUNITION_PANEL_HINT = 'AmmunitionPanelHintZoneHint'
+    PLATOON_BTN_HINT = 'PlatoonBtnHint'
     AMMUNITION_FILTER_HINT = 'FilterHintZoneHint'
     OPT_DEV_DRAG_AND_DROP_HINT = 'OptDevDragAndDropHint'
     DOGTAG_HANGAR_HINT = 'DogTagHangarHint'
     DOGTAG_PROFILE_HINT = 'DogTagProfileHint'
-    NY_VEHICLES_EXTRA_SLOT_BONUS_HINT = 'NyVehiclesExtraSlotBonusHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):
@@ -442,14 +445,3 @@ class BattleCommStorageKeys(CONST_CONTAINER):
     SHOW_CALLOUT_MESSAGES = 'showCalloutMessages'
     SHOW_LOCATION_MARKERS = 'showLocationMarkers'
     SHOW_BASE_MARKERS = 'showMarkers'
-
-
-class NYLootBoxesStorageKeys(CONST_CONTAINER):
-    NEW_COUNT = 'newCount'
-    DELIVERED_COUNT = 'deliveredCount'
-
-
-class NewYearStorageKeys(CONST_CONTAINER):
-    IS_ICICLES_COMPLETED = 'isIciclesCompleted'
-    IS_TALISMAN_PROGRESS_HOVERED = 'isTalismanProgressHovered'
-    IS_TALISMAN_INTRO_SHOWED = 'isTalismanIntroShowed'

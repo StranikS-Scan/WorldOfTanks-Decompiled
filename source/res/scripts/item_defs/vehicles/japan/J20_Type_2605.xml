@@ -33,6 +33,7 @@
     <priceFactor>	2.0	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
     <exclusionMask></exclusionMask>
+    <density>	1.35 1.35	</density>
   </camouflage>
   <hull>
     <armor>
@@ -66,6 +67,13 @@
       <undamaged>	vehicles/japan/J20_Type_2605/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/japan/J20_Type_2605/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/japan/J20_Type_2605/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <J20_Type_2605_3Dst>
+          <undamaged>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_3Dst/crash/lod0/Hull.model	</exploded>
+        </J20_Type_2605_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -89,9 +97,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.203457 0.428935 3.46	</rayStart>
-        <rayEnd>	0.203457 0.313015 3.42898	</rayEnd>
-        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <rayStart>	1.11901 0.813392 2.55121	</rayStart>
+        <rayEnd>	1.11901 0.779387 2.43613	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
@@ -1035,6 +1043,48 @@
         <anchorPosition>	-2.18334 -0.0836764 -0.00778727	</anchorPosition>
         <anchorDirection>	-0.998329 0.0144039 -0.0559565	</anchorDirection>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15070	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	J20_Type_2605_3Dst	</compatibleModels>
+        <position>	-1.86367 1.27667 2.66439	</position>
+        <rotation>	1.55583 -1.53255 -3.10692	</rotation>
+        <scale>	1.07907 0.715373 1.07908	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.391561	</clipAngle>
+        <anchorPosition>	-2.18536 -0.0541517 2.66554	</anchorPosition>
+        <anchorDirection>	-0.999882 0.014957 0.00357026	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15071	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	J20_Type_2605_3Dst	</compatibleModels>
+        <position>	1.86368 1.27665 2.66439	</position>
+        <rotation>	1.55584 1.53256 3.10686	</rotation>
+        <scale>	1.07907 0.715373 1.07908	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.391561	</clipAngle>
+        <anchorPosition>	2.18537 -0.0541668 2.66551	</anchorPosition>
+        <anchorDirection>	0.999882 0.014953 0.00349179	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15072	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	J20_Type_2605_3Dst	</compatibleModels>
+        <position>	0.000030 1.53726 3.14435	</position>
+        <rotation>	0.331274 -0.000007 3.14155	</rotation>
+        <scale>	0.982049 0.715828 0.982044	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.940341	</clipAngle>
+        <anchorPosition>	0.000041 0.465793 3.23521	</anchorPosition>
+        <anchorDirection>	0.000040 0.945629 0.325248	</anchorDirection>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1076,6 +1126,13 @@
         <undamaged>	vehicles/japan/J20_Type_2605/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/japan/J20_Type_2605/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/japan/J20_Type_2605/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <J20_Type_2605_3Dst>
+            <undamaged>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_3Dst/crash/lod0/Chassis.model	</exploded>
+          </J20_Type_2605_3Dst>
+        </sets>
       </models>
       <splineDesc>
         <segmentModelLeft>	vehicles/japan/J20_Type_2605/track/segment.model	</segmentModelLeft>
@@ -1083,7 +1140,7 @@
         <left>	vehicles/japan/J20_Type_2605/track/left.track	</left>
         <right>	vehicles/japan/J20_Type_2605/track/right.track	</right>
         <segmentLength>	0.157	</segmentLength>
-        <segmentOffset>	0.207	</segmentOffset>
+        <segmentOffset>	0.2375	</segmentOffset>
         <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -1894,6 +1951,13 @@
             <undamaged>	vehicles/japan/J20_Type_2605/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/japan/J20_Type_2605/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/japan/J20_Type_2605/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <J20_Type_2605_3Dst>
+                <undamaged>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_3Dst/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_3Dst/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_3Dst/crash/lod0/Gun_02.model	</exploded>
+              </J20_Type_2605_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/japan/J20_Type_2605/collision/Gun_02.model	</collisionModelServer>
@@ -1980,6 +2044,13 @@
             <undamaged>	vehicles/japan/J20_Type_2605/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/japan/J20_Type_2605/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/japan/J20_Type_2605/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <J20_Type_2605_3Dst>
+                <undamaged>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </J20_Type_2605_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/japan/J20_Type_2605/collision/Gun_01.model	</collisionModelServer>
@@ -2051,6 +2122,13 @@
         <undamaged>	vehicles/japan/J20_Type_2605/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/japan/J20_Type_2605/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/japan/J20_Type_2605/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <J20_Type_2605_3Dst>
+            <undamaged>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </J20_Type_2605_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/japan/J20_Type_2605/collision/Turret_01.model	</collisionModelServer>
@@ -2510,6 +2588,62 @@
           <clipAngle>	0.362391	</clipAngle>
           <anchorPosition>	1.51735 0.520089 -0.355525	</anchorPosition>
           <anchorDirection>	0.999134 0.0144398 -0.0390272	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35030	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	J20_Type_2605_3Dst	</compatibleModels>
+          <position>	-0.00637953 3.49132 1.01145	</position>
+          <rotation>	0.197077 -0.000008 3.14155	</rotation>
+          <scale>	0.872749 0.1 0.872736	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	4352	</showOn>
+          <clipAngle>	1.06337	</clipAngle>
+          <anchorPosition>	-0.00637893 1.14875 1.04914	</anchorPosition>
+          <anchorDirection>	0.000041 0.980643 0.195803	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35031	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	J20_Type_2605_3Dst	</compatibleModels>
+          <position>	-1.14651 2.80929 1.17567	</position>
+          <rotation>	1.33334 -1.24841 3.11847	</rotation>
+          <scale>	0.781847 0.05 0.781847	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.10467	</clipAngle>
+          <anchorPosition>	-1.19118 0.463927 1.22662	</anchorPosition>
+          <anchorDirection>	-0.914294 0.235167 0.329792	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35032	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	J20_Type_2605_3Dst	</compatibleModels>
+          <position>	1.14661 2.80928 1.17559	</position>
+          <rotation>	1.33335 1.24854 -3.11849	</rotation>
+          <scale>	0.781847 0.05 0.781847	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.10467	</clipAngle>
+          <anchorPosition>	1.19129 0.463918 1.22653	</anchorPosition>
+          <anchorDirection>	0.914346 0.23516 0.329652	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35033	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	J20_Type_2605_3Dst	</compatibleModels>
+          <position>	0.66607 3.31825 -0.215057	</position>
+          <rotation>	-3.07129 -0.000001 -0.000033	</rotation>
+          <scale>	1.00773 0.734537 1.00771	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.728393	</clipAngle>
+          <anchorPosition>	0.666059 1.28092 -0.157716	</anchorPosition>
+          <anchorDirection>	-0.000033 0.99753 0.0702448	</anchorDirection>
         </slot>
       </customizationSlots>
       <customization>

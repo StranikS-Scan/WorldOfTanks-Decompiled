@@ -29,15 +29,14 @@ class ProcessorSelector(object):
         self.__processors.update(processors)
 
     def process(self, items):
-        itemsToProcess = self.__preprocess(items)
-        itemsType = self.__getItemsType(itemsToProcess)
+        itemsType = self.__getItemsType(items)
         if itemsType not in self.__processors:
             _logger.error("Can't find processor by type %d", itemsType)
             return None
         else:
             processor = self.__processors[itemsType]
-            descriptors = processor.process(itemsToProcess)
-            return ProcessResult(itemsToProcess, descriptors, itemsType)
+            descriptors = processor.process(items)
+            return ProcessResult(items, descriptors, itemsType)
 
     def __getItemsType(self, items):
         if not items:
@@ -48,9 +47,6 @@ class ProcessorSelector(object):
                 return ItemsType.STYLE
             return ItemsType.EDITABLE_STYLE
         return ItemsType.DEFAULT
-
-    def __preprocess(self, items):
-        return [ item for item in items if not item.isDismantling ]
 
 
 class BasePurchaseDescription(object):

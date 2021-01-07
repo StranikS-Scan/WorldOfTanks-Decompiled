@@ -95,10 +95,5 @@ class DogTagComposerClient(object):
     def getPurposeTooltipRes(purposeGroup):
         return R.strings.dogtags.component.purposeTooltip.dyn(purposeGroup.lower())()
 
-    @classmethod
-    def _formatName(cls, name):
-        unicodeName = unicode(name, 'utf-8')
-        return '{}...'.format(unicodeName[:cls.MAX_NAME_LENGTH]) if len(unicodeName) > cls.MAX_NAME_LENGTH else unicodeName.encode('utf-8')
-
 
 dogTagComposer = DogTagComposerClient()

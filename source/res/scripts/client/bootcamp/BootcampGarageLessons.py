@@ -64,7 +64,7 @@ def _readSubItemSectionSequence(section, key, fields):
 
 
 def _readVideoSection(section):
-    messagesFields = ('video-path', 'event-start', 'event-stop', 'event-pause', 'event-resume', 'event-loop')
+    messagesFields = ('video-path', 'event-start', 'event-stop', 'event-pause', 'event-resume', 'event-loop', 'icon', 'video-fit-to-screen')
     subtitlesFields = ('subtitle', 'voiceover', 'keypoint')
     messageSec = section['message']
     content = {'messages': _readSequenceItem(messageSec, messagesFields),
@@ -107,9 +107,9 @@ class GarageLessons:
                 self.readBattleResultsData(medals, section['medals'])
                 self.readBattleResultsData(ribbons, section['ribbons'])
                 self.readBattleResultsData(unlocks, section['unlocks'])
-                currentBattle['video'] = {}
-                videoSection = section['video']
-                if videoSection is not None:
-                    currentBattle['video'] = _readVideoSection(videoSection)
+                currentBattle['videos'] = []
+                videosSection = section['videos']
+                if videosSection is not None:
+                    currentBattle['videos'] = tuple((_readVideoSection(videoSection) for videoSection in videosSection.values()))
 
         return

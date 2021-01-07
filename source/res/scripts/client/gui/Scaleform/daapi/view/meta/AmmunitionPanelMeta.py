@@ -16,9 +16,6 @@ class AmmunitionPanelMeta(BaseDAAPIComponent):
     def showChangeNation(self):
         self._printOverrideError('showChangeNation')
 
-    def onNYBonusPanelClicked(self):
-        self._printOverrideError('onNYBonusPanelClicked')
-
     def as_setWarningStateS(self, stateWarning):
         return self.flashObject.as_setWarningState(stateWarning) if self._isDAAPIInited() else None
 
@@ -27,6 +24,3 @@ class AmmunitionPanelMeta(BaseDAAPIComponent):
 
     def as_setCustomizationBtnCounterS(self, value):
         return self.flashObject.as_setCustomizationBtnCounter(value) if self._isDAAPIInited() else None
-
-    def as_setNeyYearVehicleBonusS(self, isNYVehicle, bonusIcon, bonusValue, label, creditsAmount, isPostEvent, nyBranchTooltip):
-        return self.flashObject.as_setNeyYearVehicleBonus(isNYVehicle, bonusIcon, bonusValue, label, creditsAmount, isPostEvent, nyBranchTooltip) if self._isDAAPIInited() else None

@@ -282,6 +282,10 @@ class BattleFeedbackAdaptor(IBattleController):
         self.onVehicleFeedbackReceived(_FET.VEHICLE_RECOVERY_CANCELED, vehicleID, None)
         return
 
+    def setVehicleRecoveryKeyPressed(self, vehicleID):
+        self.onVehicleFeedbackReceived(_FET.VEHICLE_RECOVERY_KEY_PRESSED, vehicleID, None)
+        return
+
     def _setVehicleHealthChanged(self, vehicleID, newHealth, attackerID, attackReasonID):
         if attackerID:
             aInfo = self.__arenaDP.getVehicleInfo(attackerID)

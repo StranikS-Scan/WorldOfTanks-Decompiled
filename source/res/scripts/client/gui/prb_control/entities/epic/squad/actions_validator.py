@@ -8,6 +8,7 @@ from gui.prb_control.settings import UNIT_RESTRICTION
 from gui.prb_control.entities.base.unit.actions_validator import UnitStateValidator
 from helpers import time_utils, dependency
 from skeletons.gui.game_control import IEpicBattleMetaGameController
+from gui.prb_control.entities.base.unit.actions_validator import CommanderValidator
 
 class _EpicVehiclesValidator(SquadVehiclesValidator):
 
@@ -33,3 +34,15 @@ class EpicSquadActionsValidator(SquadActionsValidator):
 
     def _createStateValidator(self, entity):
         return _EpicStateValidator(entity)
+
+    def _createSlotsValidator(self, entity):
+        baseValidator = super(EpicSquadActionsValidator, self)._createSlotsValidator(entity)
+        return ActionsValidatorComposite(entity, validators=[baseValidator, EpicSquadSlotsValidator(entity)])
+
+
+class EpicSquadSlotsValidator(CommanderValidator):
+
+    def _validate(self):
+        stats = self._entity.getStats()
+        pInfo = self._entity.getPlayerInfo()
+        return ValidationResult(False, UNIT_RESTRICTION.COMMANDER_VEHICLE_NOT_SELECTED) if stats.occupiedSlotsCount > 1 and not pInfo.isReady else None

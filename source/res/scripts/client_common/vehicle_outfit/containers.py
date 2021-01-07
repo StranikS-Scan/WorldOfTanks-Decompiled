@@ -174,6 +174,12 @@ class OutfitContainer(object):
             for packer in packersList:
                 packer.invalidate(slot)
 
+    def removePreview(self):
+        for slot in self.slots():
+            packersList = packers.pickPackers(slot.getTypes())
+            for packer in packersList:
+                packer.removePreview(slot)
+
 
 class MultiSlot(object):
     __slots__ = ('_regions', '_slotTypes', '_items', '_locks')

@@ -43,7 +43,7 @@ class HintLobbyRotate(HintBase):
             if self._state == HintBase.STATE_HINT:
                 if self.__curAngle > self.__neededAngle:
                     self._state = HintBase.STATE_COMPLETE
-                    resultCommand = HINT_COMMAND.SHOW_COMPLETED_WITH_HINT
+                    resultCommand = HINT_COMMAND.SHOW_COMPLETED
             elif self._state == HintBase.STATE_DEFAULT:
                 if time.time() - self._timeStart > self._timeout:
                     self._state = HintBase.STATE_HINT

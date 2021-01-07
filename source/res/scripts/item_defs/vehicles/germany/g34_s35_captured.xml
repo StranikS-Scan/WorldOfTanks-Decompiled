@@ -32,6 +32,7 @@
     <priceFactor>	0.6	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
     <exclusionMask></exclusionMask>
+    <density>	0.90 0.90	</density>
   </camouflage>
   <hull>
     <armor>
@@ -86,6 +87,7 @@
         <camouflage>	HULL	</camouflage>
       </customizableVehicleAreas>
     </customization>
+    <shotOffset>	0.155810 -0.000186 0.000000	</shotOffset>
     <customizationSlots>
       <slot>
         <slotType>	clan	</slotType>
@@ -2238,6 +2240,7 @@
             <collisionModelServer>	vehicles/german/G34_S35_captured/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G34_S35_captured/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <shotOffset>	0.146105 -0.000003 0.000000	</shotOffset>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

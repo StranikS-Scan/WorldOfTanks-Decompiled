@@ -279,7 +279,8 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
 
     def _populate(self):
         super(BattleStatisticsDataController, self)._populate()
-        g_messengerEvents.voip.onStateToggled += self.__onVOIPStateToggled
+        g_messengerEvents.voip.onChannelEntered += self.__onVOIPChannelStateToggled
+        g_messengerEvents.voip.onChannelLeft += self.__onVOIPChannelStateToggled
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         self.sessionProvider.addArenaCtrl(self)
         ctrl = self.sessionProvider.shared.vehicleState
@@ -303,7 +304,8 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         return
 
     def _dispose(self):
-        g_messengerEvents.voip.onStateToggled -= self.__onVOIPStateToggled
+        g_messengerEvents.voip.onChannelEntered -= self.__onVOIPChannelStateToggled
+        g_messengerEvents.voip.onChannelLeft -= self.__onVOIPChannelStateToggled
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
@@ -407,7 +409,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             if value != previousID:
                 self.invalidatePlayerStatus(0, arenaDP.getVehicleInfo(value), arenaDP)
 
-    def __onVOIPStateToggled(self, _):
+    def __onVOIPChannelStateToggled(self, *args):
         arenaDP = self._battleCtx.getArenaDP()
         self.invalidatePlayerStatus(INVALIDATE_OP.PLAYER_STATUS, arenaDP.getVehicleInfo(), arenaDP)
 

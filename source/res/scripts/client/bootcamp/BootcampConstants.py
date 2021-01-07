@@ -80,10 +80,6 @@ class HINT_TYPE:
      HINT_B3_CAPTURE_RESET,
      HINT_B3_CAPTURE_TOGETHER)
     HINTS_B3_DETECTED = (HINT_B3_YOU_ARE_DETECTED,)
-    HINTS_ON_DETECT = (HINT_MESSAGE_AVOID,
-     HINT_MESSAGE_SNEAK,
-     HINT_MESSAGE_ENEMY_CAN_HIDE,
-     HINT_MESSAGE_RESET_PROGRESS)
     BATTLE_HINTS = (HINT_MOVE,
      HINT_MOVE_TURRET,
      HINT_SHOOT,
@@ -102,7 +98,6 @@ class HINT_TYPE:
      HINT_HEAL_CREW,
      HINT_AIM,
      HINT_EXIT_GAME_AREA,
-     HINT_START_NARRATIVE,
      HINT_SECTOR_CLEAR,
      HINT_PLAYER_DETECT_ENEMIES,
      HINT_SNIPER_ON_DISTANCE,
@@ -127,8 +122,6 @@ class HINT_TYPE:
      HINT_B3_FOLIAGE2,
      HINT_B3_FLANK,
      HINT_B3_CAPTURE_TOGETHER)
-    LOBBY_HINTS = (HINT_ROTATE_LOBBY,)
-    HINTS_ON_START = (HINT_START_NARRATIVE,)
     SECONDARY_HINTS = (HINT_WAIT_RELOAD,
      HINT_EXIT_GAME_AREA,
      HINT_AIM,
@@ -142,7 +135,7 @@ class HINT_TYPE:
      HINT_UNLOCK_TARGET)
 
 
-HINT_NAMES = ('hintMove', 'hintMoveTurret', 'hintShoot', 'hintAdvancedSniper', 'hintAim', 'hintSniper', 'hintWeakPoints', 'hintMessageAvoid', 'hintPlayerSpotted', 'hintSectorClear', 'hintStartNarrative', 'hintCaptureTheBase', 'hintResetProgress', 'hintRepairTrack', 'hintHealCrew', 'hintUseExtinguisher', 'hintAllyShoot', 'hintPlayerDetectEnemies', 'hintExitGameArea', 'hintEnemyCanHide', 'hintSneak', 'hintSniperOnDistance', 'hintRotateLobby', 'hintTargetLock', 'hintWaitReload', 'hintNoMove', 'hintNoMoveTurret', 'hintShootWhileMoving', 'hintMoveToMarker', 'hintSecondarySniper', 'hintUselessConsumable', 'hintLowHP', 'hintTargetUnLock', 'hintB3PlayerDetected', 'hintB3FallBack', 'hintB3Foliage', 'hintB3DoCapture', 'hintB3CaptureInProgress', 'hintB3EnemiesHidden', 'hintB3CaptureReset', 'hintB3Foliage2', 'hintB3Flank', 'hintB3CaptureTogether', 'hintSniperLevel0')
+HINT_NAMES = ('hintMove', 'hintMoveTurret', 'hintShoot', 'hintAdvancedSniper', 'hintAim', 'hintSniper', 'hintWeakPoints', 'hintMessageAvoid', 'hintPlayerSpotted', 'hintSectorClear', 'hintStartNarrative', 'hintCaptureTheBase', 'hintResetProgress', 'hintRepairTrack', 'hintHealCrew', 'hintUseExtinguisher', 'hintAllyShoot', 'hintPlayerDetectEnemies', 'hintExitGameArea', 'hintEnemyCanHide', 'hintSneak', 'hintSniperOnDistance', 'hintRotateLobby', 'hintTargetLock', 'hintWaitReload', 'hintNoMove', 'hintNoMoveTurret', 'hintShootWhileMoving', 'hintMoveToMarker', 'hintSecondarySniper', 'hintUselessConsumable', 'hintLowHP', 'hintTargetUnLock', 'hintB3PlayerDetected', 'hintB3FallBack', 'hintB3Foliage', 'hintB3DoCapture', 'hintB3CaptureInProgress', 'hintB3EnemiesHidden', 'hintB3CaptureReset', 'hintB3Foliage2', 'hintB3Flank', 'hintB3CaptureTogether', 'hintSniperLevel0', 'hintCustom')
 
 class BOOTCAMP_BATTLE_RESULT_MESSAGE:
     DRAW = 0

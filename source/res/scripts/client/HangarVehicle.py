@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/HangarVehicle.py
 import Math
-from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
+from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraDistanceStates
 from ClientSelectableCameraVehicle import ClientSelectableCameraVehicle
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
@@ -30,6 +30,7 @@ class HangarVehicle(ClientSelectableCameraVehicle):
         self.cameraBackwardDuration = 10.0
         self.cameraUpcomingDuration = 10.0
         super(HangarVehicle, self).__init__()
+        self.camDistState = CameraDistanceStates.CUSTOM
         return
 
     def onEnterWorld(self, prereqs):

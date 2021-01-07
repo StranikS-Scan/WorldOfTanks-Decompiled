@@ -8,7 +8,6 @@ from skeletons.festivity_factory import IFestivityFactory
 class DummyFactory(IFestivityFactory):
 
     def __init__(self):
-        super(DummyFactory, self).__init__()
         self.__requester = DummyRequester()
         self.__processor = DummyCommandsProcessor()
         self.__controller = DummyController()
@@ -21,6 +20,3 @@ class DummyFactory(IFestivityFactory):
 
     def getController(self):
         return self.__controller
-
-    def getDataSyncKey(self):
-        pass

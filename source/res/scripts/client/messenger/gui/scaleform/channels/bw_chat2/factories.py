@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/channels/bw_chat2/factories.py
 from constants import PREBATTLE_TYPE
+from messenger.gui.gameface.channels.GFChannelController import GFChannelController
 from messenger.gui.Scaleform.channels.bw_chat2 import battle_controllers
 from messenger.gui.Scaleform.channels.bw_chat2 import lobby_controllers
 from messenger.gui.interfaces import IControllerFactory
@@ -30,12 +31,15 @@ class LobbyControllersFactory(IControllerFactory):
     def factory(self, channel):
         controller = None
         chatType = channel.getProtoData().chatType
+        settings = channel.getProtoData().settings
         if chatType == CHAT_TYPE.UNIT:
             prbType = channel.getPrebattleType()
             if prbType:
                 if prbType in PREBATTLE_TYPE.TRAININGS:
                     controller = lobby_controllers.TrainingChannelController(channel)
-                else:
+                elif settings == BATTLE_CHANNEL.SQUAD:
+                    controller = GFChannelController(channel)
+                elif settings != BATTLE_CHANNEL.SQUAD:
                     controller = lobby_controllers.UnitChannelController(channel)
         return controller
 

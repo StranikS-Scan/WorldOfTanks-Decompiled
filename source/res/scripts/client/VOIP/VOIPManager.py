@@ -9,7 +9,7 @@ import VOIPCommon
 from VOIP.voip_constants import VOIP_SUPPORTED_API
 from VOIPFsm import VOIPFsm, VOIP_FSM_STATE as STATE
 from VOIPHandler import VOIPHandler
-from constants import CLIENT_INACTIVITY_TIMEOUT
+from constants import CLIENT_INACTIVITY_TIMEOUT, ARENA_GUI_TYPE
 from gui.shared.utils import backoff
 from messenger.m_constants import PROTO_TYPE
 from messenger.m_constants import USER_ACTION_ID, USER_TAG
@@ -17,6 +17,9 @@ from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.shared_find_criteria import MutedFindCriteria
 from messenger.storage import storage_getter
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
+from account_helpers.settings_core.settings_constants import SOUND
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 _BACK_OFF_MIN_DELAY = 1
@@ -25,18 +28,21 @@ _BACK_OFF_MODIFIER = 1
 _BACK_OFF_EXP_RANDOM_FACTOR = 0.5
 
 class VOIPManager(VOIPHandler):
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         _logger.debug('VOIPManager.Create')
         super(VOIPManager, self).__init__()
         self.__initialized = False
         self.__enabled = False
+        self.__enabledChannelID = None
         self.__voipServer = ''
         self.__voipDomain = ''
         self.__testDomain = ''
         self.__user = ['', '']
         self.__channel = ['', '']
         self.__currentChannel = ''
+        self.__isChannelRejoin = False
         self.__inTesting = False
         self.__loggedIn = False
         self.__needLogginAfterInit = False
@@ -52,7 +58,6 @@ class VOIPManager(VOIPHandler):
         self.onCaptureDevicesUpdated = Event.Event()
         self.onPlayerSpeaking = Event.Event()
         self.onInitialized = Event.Event()
-        self.onStateToggled = Event.Event()
         self.onFailedToConnect = Event.Event()
         self.onJoinedChannel = Event.Event()
         self.onLeftChannel = Event.Event()
@@ -65,6 +70,10 @@ class VOIPManager(VOIPHandler):
 
     @storage_getter('users')
     def usersStorage(self):
+        return None
+
+    @proto_getter(PROTO_TYPE.MIGRATION)
+    def proto(self):
         return None
 
     def destroy(self):
@@ -91,14 +100,29 @@ class VOIPManager(VOIPHandler):
     def getCurrentChannel(self):
         return self.__currentChannel
 
+    def isVoiceSupported(self):
+        return self.getVOIPDomain() != '' and self.isInitialized()
+
+    def isChannelAvailable(self):
+        return True if self.bwProto.voipProvider.getChannelParams()[0] else False
+
     def hasDesiredChannel(self):
-        return self.__channel[0] != ''
+        channelUrl = self.__channel[0]
+        if channelUrl == self.__testDomain:
+            return True
+        currentChannelID = hash(channelUrl)
+        return self.__enabledChannelID == currentChannelID
 
     def getUser(self):
         return self.__user[0]
 
     def isInDesiredChannel(self):
-        return self.__channel[0] == self.__currentChannel
+        if not self.__channel[0] == self.__currentChannel:
+            return False
+        if self.__currentChannel == self.__testDomain:
+            return True
+        currentChannelID = hash(self.__currentChannel)
+        return self.__enabledChannelID == currentChannelID
 
     def getCaptureDevices(self):
         return self.__captureDevices
@@ -119,8 +143,8 @@ class VOIPManager(VOIPHandler):
         _logger.debug('VOIPManager.Subscribe')
         self.__loginAttemptsRemained = 2
         voipEvents = g_messengerEvents.voip
-        voipEvents.onChannelEntered += self.__me_onChannelEntered
-        voipEvents.onChannelLeft += self.__me_onChannelLeft
+        voipEvents.onChannelAvailable += self.__me_onChannelAvailable
+        voipEvents.onChannelLost += self.__me_onChannelLost
         voipEvents.onCredentialReceived += self.__me_onCredentialReceived
         usersEvents = g_messengerEvents.users
         usersEvents.onUsersListReceived += self.__me_onUsersListReceived
@@ -129,17 +153,16 @@ class VOIPManager(VOIPHandler):
     def onDisconnected(self):
         _logger.debug('VOIPManager.Unsubscribe')
         voipEvents = g_messengerEvents.voip
-        voipEvents.onChannelEntered -= self.__me_onChannelEntered
-        voipEvents.onChannelLeft -= self.__me_onChannelLeft
+        voipEvents.onChannelAvailable -= self.__me_onChannelAvailable
+        voipEvents.onChannelLost -= self.__me_onChannelLost
         voipEvents.onCredentialReceived -= self.__me_onCredentialReceived
         usersEvents = g_messengerEvents.users
         usersEvents.onUsersListReceived -= self.__me_onUsersListReceived
         usersEvents.onUserActionReceived -= self.__me_onUserActionReceived
 
-    def enable(self, enabled):
+    def enable(self, enabled, isInitFromPrefs=False):
         if enabled:
-            self.__enable()
-            self.onStateToggled(True, set())
+            self.__enable(isInitFromPrefs)
         else:
             dbIDs = set()
             for dbID, data in self.__channelUsers.iteritems():
@@ -147,14 +170,42 @@ class VOIPManager(VOIPHandler):
                     dbIDs.add(dbID)
 
             self.__disable()
-            self.onStateToggled(False, dbIDs)
         self.__fsm.update(self)
 
-    def __enable(self):
+    def applyChannelSetting(self, isEnabled, channelID):
+        self.__enabledChannelID = channelID if isEnabled else None
+        self.__fsm.update(self)
+        return
+
+    def enableCurrentChannel(self, isEnabled=True, autoEnableVOIP=True):
+        needsEnableVOIP = isEnabled and not self.settingsCore.getSetting(SOUND.VOIP_ENABLE)
+        if autoEnableVOIP and needsEnableVOIP:
+            self.settingsCore.applySetting(SOUND.VOIP_ENABLE, True)
+        params = self.bwProto.voipProvider.getChannelParams()
+        channelUrl = params[0]
+        if channelUrl:
+            _logger.debug("VOIPManager.%s '%s'", 'EnableCurrentChannel' if isEnabled else 'DisabledCurrentChannel', channelUrl)
+            channelID = hash(channelUrl)
+            self.settingsCore.applySetting(SOUND.VOIP_ENABLE_CHANNEL, (isEnabled, channelID))
+        else:
+            _logger.error('VOIPManager.EnableCurrentChannel: Failed to enable channel. No channel available!')
+
+    def isCurrentChannelEnabled(self):
+        params = self.bwProto.voipProvider.getChannelParams()
+        channelUrl = params[0]
+        if channelUrl:
+            channelID = hash(channelUrl)
+            return self.__enabledChannelID == channelID
+        return False
+
+    def __enable(self, isInitFromPrefs):
         _logger.debug('VOIPManager.Enable')
         self.__enabled = True
-        if self.__channel[0] != '' and not self.__user[0]:
-            self.__requestCredentials()
+        if self.__channel[0]:
+            if not self.__user[0]:
+                self.__requestCredentials()
+            if not isInitFromPrefs:
+                self.enableCurrentChannel(True)
 
     def __disable(self):
         _logger.debug('VOIPManager.Disable')
@@ -227,19 +278,26 @@ class VOIPManager(VOIPHandler):
         self.__clearDesiredChannel()
         self.__fsm.update(self)
 
-    def __enterChannel(self, channel, password):
+    def __setAvailableChannel(self, channel, password):
         if not self.__initialized and self.__fsm.inNoneState():
-            _logger.debug('VOIPManager.__enterChannel and initialize')
             self.initialize(self.__voipDomain, self.__voipServer)
         if not self.__user[0] and self.isEnabled():
-            _logger.debug('VOIPManager.__enterChannel and requestCreds')
             self.__requestCredentials()
-        _logger.debug('VOIPManager.EnterChannel: %s', channel)
+        _logger.debug('VOIPManager.ReceivedAvailableChannel: %s', channel)
         self.__channel = [channel, password]
         self.__fsm.update(self)
+        self.__evaluateAutoJoinChannel(channel)
+
+    def __evaluateAutoJoinChannel(self, newChannel):
+        if newChannel == self.__testDomain:
+            return
+        _, channelID = self.settingsCore.getSetting(SOUND.VOIP_ENABLE_CHANNEL)
+        newChannelID = hash(newChannel)
+        if channelID != newChannelID:
+            self.enableCurrentChannel(self.__isAutoJoinChannel(), autoEnableVOIP=False)
 
     def __joinChannel(self, channel, password):
-        _logger.debug("Joining channel '%s'", channel)
+        _logger.debug("VOIPManager.JoinChannel '%s'", channel)
         BigWorld.VOIP.joinChannel(channel, password)
 
     def __leaveChannel(self):
@@ -254,7 +312,7 @@ class VOIPManager(VOIPHandler):
             return
         _logger.debug('VOIPManager.EnterTestChannel: %s', self.__testDomain)
         self.__inTesting = True
-        self.__enterChannel(self.__testDomain, '')
+        self.__setAvailableChannel(self.__testDomain, '')
 
     def leaveTestChannel(self):
         if not self.__inTesting:
@@ -263,7 +321,7 @@ class VOIPManager(VOIPHandler):
         self.__inTesting = False
         params = self.bwProto.voipProvider.getChannelParams()
         if params[0]:
-            self.__enterChannel(*params)
+            self.__setAvailableChannel(*params)
         else:
             self.__leaveChannel()
 
@@ -483,10 +541,11 @@ class VOIPManager(VOIPHandler):
         if int(data[VOIPCommon.KEY_RETURN_CODE]) != VOIPCommon.CODE_SUCCESS:
             _logger.error('Session is not added: %r', data)
             return
-        self.__currentChannel = data[VOIPCommon.KEY_URI]
+        currentChannel = self.__currentChannel = data[VOIPCommon.KEY_URI]
         self.__setVolume()
         self.__fsm.update(self)
-        self.onJoinedChannel(data)
+        isTestChannel = currentChannel == self.__testDomain
+        self.onJoinedChannel(currentChannel, isTestChannel, self.__isChannelRejoin and not isTestChannel)
 
     def onSessionRemoved(self, data):
         if int(data[VOIPCommon.KEY_RETURN_CODE]) != VOIPCommon.CODE_SUCCESS:
@@ -497,9 +556,11 @@ class VOIPManager(VOIPHandler):
 
         self.__channelUsers.clear()
         self.__restoreMasterVolume()
+        leftChannel = self.__currentChannel
+        wasTest = leftChannel == self.__testDomain
         self.__currentChannel = ''
         self.__fsm.update(self)
-        self.onLeftChannel(data)
+        self.onLeftChannel(leftChannel, wasTest)
 
     def onNetworkTest(self, data):
         returnCode = int(data[VOIPCommon.KEY_RETURN_CODE])
@@ -555,13 +616,23 @@ class VOIPManager(VOIPHandler):
                     self.__restoreMasterVolume()
         self.onPlayerSpeaking(dbid, talking)
 
-    def __me_onChannelEntered(self, uri, pwd, isRejoin):
-        if not self.__inTesting:
-            self.__enterChannel(uri, pwd)
+    @staticmethod
+    def __isAutoJoinChannel():
+        if hasattr(BigWorld.player(), 'arena'):
+            arena = BigWorld.player().arena
+            return not (arena is not None and arena.guiType in (ARENA_GUI_TYPE.RANDOM, ARENA_GUI_TYPE.EPIC_RANDOM, ARENA_GUI_TYPE.EPIC_BATTLE))
+        else:
+            return True
 
-    def __me_onChannelLeft(self):
+    def __me_onChannelAvailable(self, uri, pwd, isRejoin):
+        self.__isChannelRejoin = isRejoin
+        if not self.__inTesting:
+            self.__setAvailableChannel(uri, pwd)
+
+    def __me_onChannelLost(self):
         if not self.__inTesting:
             self.__leaveChannel()
+            self.settingsCore.applySetting(SOUND.VOIP_ENABLE_CHANNEL, (False, 0))
 
     def __me_onCredentialReceived(self, name, pwd):
         _logger.debug('VOIPManager.OnUserCredentials: %s', name)

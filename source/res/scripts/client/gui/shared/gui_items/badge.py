@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/badge.py
+import re
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import LAST_BADGES_VISIT
 from battle_pass_common import MAX_BADGE_LEVEL, BattlePassState
@@ -152,6 +153,11 @@ class Badge(GUIItem):
 
     def getIconPostfix(self):
         return str(self.badgeID)
+
+    @staticmethod
+    def getBadgeIDFromIconPath(iconPath):
+        m = re.search('badge_([0-9]+)*', iconPath)
+        return m.group(1) if m else ''
 
     def __getIconPath(self, size, shortIconName=False):
         iconPostfix = self.getIconPostfix()

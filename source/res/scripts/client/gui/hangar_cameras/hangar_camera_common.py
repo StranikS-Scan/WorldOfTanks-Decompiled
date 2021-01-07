@@ -8,6 +8,11 @@ class CameraMovementStates(object):
     FROM_OBJECT = 2
 
 
+class CameraDistanceStates(object):
+    DEFAULT = 0
+    CUSTOM = 1
+
+
 class CameraRelatedEvents(HasCtxEvent):
     CAMERA_ENTITY_UPDATED = 'CameraEntityUpdate'
     IDLE_CAMERA = 'IdleCamera'
@@ -15,4 +20,3 @@ class CameraRelatedEvents(HasCtxEvent):
     LOBBY_VIEW_MOUSE_MOVE = 'MouseMove'
     FORCE_DISABLE_IDLE_PARALAX_MOVEMENT = 'cameraRelatedEvents/forceDisableIdleParalaxMovement'
     FORCE_DISABLE_CAMERA_MOVEMENT = 'cameraRelatedEvents/forceDisableCameraMovement'
-    CUSTOMIZATION_CAMERA_ACTIVATED = 'cameraRelatedEvents/customizationCameraActivated'

@@ -115,19 +115,18 @@ class FullScreenDialogView(ViewImpl):
 
 
 class FullScreenDialogWindowWrapper(LobbyWindow):
-    __slots__ = ('__wrappedView', '__blur', '__enableBlur')
+    __slots__ = ('__wrappedView', '__blur')
     __gui = dependency.descriptor(IGuiLoader)
 
-    def __init__(self, wrappedView, parent=None, enableBlur=True):
+    def __init__(self, wrappedView, parent=None):
         super(FullScreenDialogWindowWrapper, self).__init__(DialogFlags.TOP_FULLSCREEN_WINDOW, None, content=wrappedView, parent=parent)
         self.__wrappedView = wrappedView
-        self.__enableBlur = enableBlur
         self.__blur = None
         return
 
     def _initialize(self):
         super(FullScreenDialogWindowWrapper, self)._initialize()
-        self.__blur = CachedBlur(enabled=self.__enableBlur, ownLayer=self.layer - 1)
+        self.__blur = CachedBlur(enabled=True, ownLayer=self.layer - 1)
 
     def wait(self):
         return self.__wrappedView.wait()

@@ -10,6 +10,8 @@ from gui.prb_control.entities.base.unit.entity import UnitEntryPoint, UnitEntity
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.impl.gen.resources import R
+from async import async, await
 
 class SquadEntryPoint(UnitEntryPoint):
 
@@ -27,7 +29,7 @@ class SquadEntity(UnitEntity):
 
     def init(self, ctx=None):
         self.invalidateVehicleStates()
-        return super(SquadEntity, self).init(ctx)
+        return super(SquadEntity, self).init(ctx, False)
 
     def fini(self, ctx=None, woEvents=False):
         self.__clearCustomVehicleStates()
@@ -71,6 +73,9 @@ class SquadEntity(UnitEntity):
     def getSquadLevelBounds(self):
         pass
 
+    def showDialog(self, meta, callback):
+        self.__showDefaultDialog(meta, callback)
+
     def _buildPermissions(self, roles, flags, isCurrentPlayer=False, isPlayerReady=False, hasLockedState=False):
         return SquadPermissions(roles, flags, isCurrentPlayer, isPlayerReady)
 
@@ -103,3 +108,27 @@ class SquadEntity(UnitEntity):
 
         if updatedVehicles:
             g_prbCtrlEvents.onVehicleClientStateChanged(updatedVehicles)
+
+    def __resourceSplitter(self, resourceStr):
+        resourceList = resourceStr.split('/')
+        if not resourceList:
+            return None
+        else:
+            current = R.strings.dialogs.dyn(resourceList[0])
+            i = 1
+            while i < len(resourceList):
+                current = current.dyn(resourceList[i])
+                i += 1
+
+            return current
+
+    @async
+    def __showDefaultDialog(self, meta, callback):
+        from gui.shared.event_dispatcher import showDynamicButtonInfoDialogBuilder
+        key = meta.getKey()
+        res = self.__resourceSplitter(key)
+        if res:
+            result = yield await(showDynamicButtonInfoDialogBuilder(res, None, ''))
+            if result:
+                callback(result)
+        return

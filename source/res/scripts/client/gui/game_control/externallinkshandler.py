@@ -27,8 +27,7 @@ _LISTENERS = {OpenLinkEvent.SPECIFIED: '_handleSpecifiedURL',
  OpenLinkEvent.PREM_SHOP: '_handleOpenPremShopURL',
  OpenLinkEvent.FRONTLINE_CHANGES: '_handleFrontlineChangesURL',
  OpenLinkEvent.TOKEN_SHOP: '_handleTokenShopURL',
- OpenLinkEvent.TECHTREE_UPDATE_NEWS: '_handleTechTreeNewsURL',
- OpenLinkEvent.LOOT_BOX_GIFT_URL: '_handleLootBoxGiftURL'}
+ OpenLinkEvent.TECHTREE_UPDATE_NEWS: '_handleTechTreeNewsURL'}
 
 class ExternalLinksHandler(IExternalLinksController):
 
@@ -146,9 +145,6 @@ class ExternalLinksHandler(IExternalLinksController):
 
     def _handleTokenShopURL(self, event):
         self.__openParsedUrl('tokenShopURL', event.params)
-
-    def _handleLootBoxGiftURL(self, _):
-        self.__openParsedUrl('lootBoxGiftURL')
 
     def _handleTechTreeNewsURL(self, event):
         self.__openParsedUrl('techTreeUpdateNewsURL', event.params)

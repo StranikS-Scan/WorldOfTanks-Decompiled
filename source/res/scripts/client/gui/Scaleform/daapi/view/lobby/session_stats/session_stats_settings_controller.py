@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/session_stats/session_stats_settings_controller.py
 import copy
 import logging
+import Event
 from account_helpers.settings_core.settings_constants import SESSION_STATS
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from helpers import dependency
@@ -33,6 +34,7 @@ class SessionStatsSettingsController(object):
 
     def __init__(self):
         self.__cacheSettings = self.settingsCore.serverSettings.getSessionStatsSettings()
+        self.onSettingsUpdated = Event.Event()
 
     def start(self):
         self.itemsCache.onSyncCompleted += self.__updateSettingsCache
@@ -69,3 +71,4 @@ class SessionStatsSettingsController(object):
     def __updateSettingsCache(self, reason, diff):
         if reason == CACHE_SYNC_REASON.CLIENT_UPDATE:
             self.__cacheSettings = self.settingsCore.serverSettings.getSessionStatsSettings()
+            self.onSettingsUpdated()

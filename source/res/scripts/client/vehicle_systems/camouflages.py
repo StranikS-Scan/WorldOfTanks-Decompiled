@@ -31,6 +31,7 @@ from skeletons.gui.shared.gui_items import IGuiItemsFactory
 if typing.TYPE_CHECKING:
     from items.components.shared_components import ProjectionDecalSlotDescription
     from vehicle_outfit.containers import MultiSlot
+    from items.vehicles import VehicleDescrType
 _logger = logging.getLogger(__name__)
 RepaintParams = namedtuple('PaintParams', ('enabled', 'baseColor', 'color', 'metallic', 'gloss', 'fading', 'strength'))
 RepaintParams.__new__.__defaults__ = (False,
@@ -122,18 +123,19 @@ def _currentMapSeason():
         return
 
 
-def getOutfitComponent(outfitCD, vehicleDescriptor=None):
+def getOutfitComponent(outfitCD, vehicleDescriptor=None, seasonType=None):
     if outfitCD:
         outfitComponent = parseOutfitDescr(outfitCD)
-        season = _currentMapSeason()
-        if outfitComponent.styleId != 0 and outfitComponent.styleId != EMPTY_ITEM_ID and season is not None:
+        if seasonType is None:
+            seasonType = _currentMapSeason()
+        if outfitComponent.styleId != 0 and outfitComponent.styleId != EMPTY_ITEM_ID and seasonType is not None:
             intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, outfitComponent.styleId)
             styleDescr = getItemByCompactDescr(intCD)
             if IS_EDITOR:
                 if hasattr(outfitComponent, 'edSeasonsMask'):
-                    anyOutfit = styleDescr.outfits[season]
-                    season = anyOutfit.edSeasonsMask
-            baseOutfitComponent = deepcopy(styleDescr.outfits[season])
+                    anyOutfit = styleDescr.outfits[seasonType]
+                    seasonType = anyOutfit.edSeasonsMask
+            baseOutfitComponent = deepcopy(styleDescr.outfits[seasonType])
             if vehicleDescriptor and ItemTags.ADD_NATIONAL_EMBLEM in styleDescr.tags:
                 emblems = createNationalEmblemComponents(vehicleDescriptor)
                 baseOutfitComponent.decals.extend(emblems)
@@ -159,7 +161,7 @@ def getOutfitComponent(outfitCD, vehicleDescriptor=None):
                                 setattr(sourceOutfit, collectionName, sourceComponents)
                     return
 
-                anyOutfit = styleDescr.outfits[season]
+                anyOutfit = styleDescr.outfits[seasonType]
                 setupAlternateItem(CustomizationType.DECAL, anyOutfit, outfitComponent, 'decals')
                 setupAlternateItem(CustomizationType.PROJECTION_DECAL, anyOutfit, outfitComponent, 'projection_decals')
                 setupAlternateItem(CustomizationType.PAINT, anyOutfit, outfitComponent, 'paints')
@@ -599,6 +601,8 @@ def getGenericProjectionDecals(outfit, vehDesc):
     model = style.modelsSet if style is not None and style.modelsSet else SLOT_DEFAULT_ALLOWED_MODEL
     for slotParams in __vehicleSlotsByType(vehDesc, SLOT_TYPE_NAMES.FIXED_PROJECTION_DECAL):
         if model in slotParams.compatibleModels:
+            if IS_EDITOR and (slotParams.edResourceId <= 0 or not slotParams.slotWrapper.canDraw):
+                continue
             fixedDecalParams = __getFixedProjectionDecalParams(slotParams)
             decalsParams.append(fixedDecalParams)
 

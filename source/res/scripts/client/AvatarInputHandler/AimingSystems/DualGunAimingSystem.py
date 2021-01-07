@@ -267,7 +267,7 @@ class DualGunAimingSystem(IAimingSystem):
             self._matrix.set(self.__activeAim.matrix)
 
     def onActiveGunChanged(self, newState, switchDelay):
-        if self.__pendingGunIndex != newState:
+        if self.__pendingGunIndex != newState and self.__activeGun != newState:
             if self.__transitionCallbackID is not None:
                 BigWorld.cancelCallback(self.__transitionCallbackID)
                 self.__transitionCallbackID = None

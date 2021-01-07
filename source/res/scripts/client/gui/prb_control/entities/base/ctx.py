@@ -88,10 +88,11 @@ class PrbAction(object):
 
 @ReprInjector.simple('isExit')
 class LeavePrbAction(object):
-    __slots__ = ('isExit',)
+    __slots__ = ('isExit', 'ignoreConfirmation')
 
-    def __init__(self, isExit=True):
+    def __init__(self, isExit=True, ignoreConfirmation=False):
         self.isExit = isExit
+        self.ignoreConfirmation = ignoreConfirmation
 
 
 @ReprInjector.withParent(('getDatabaseIDs', 'databaseIDs'), ('getComment', 'comment'))

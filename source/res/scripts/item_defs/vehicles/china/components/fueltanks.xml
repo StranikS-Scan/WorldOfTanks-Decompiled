@@ -5,6 +5,7 @@
     <Average>	203	</Average>
     <Heavy>	204	</Heavy>
     <Large>	205	</Large>
+    <Average_bootcamp>	0	</Average_bootcamp>
   </ids>
   <shared>
     <Small>
@@ -47,5 +48,14 @@
       <maxRegenHealth>	80	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
     </Large>
+    <Average_bootcamp>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Average_bootcamp>
   </shared>
 </fuelTanks.xml>

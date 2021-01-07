@@ -22,7 +22,7 @@ IS_CELLAPP = BigWorld.component == 'cell'
 IS_BASEAPP = BigWorld.component in ('base', 'service')
 IS_WEB = BigWorld.component == 'web'
 IS_DYNAPDATER = False
-CURRENT_REALM = 'RU'
+CURRENT_REALM = 'CT'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -326,6 +326,8 @@ class ARENA_PERIOD:
     AFTERBATTLE = 4
 
 
+ARENA_PERIOD_NAMES = dict([ (v, k) for k, v in ARENA_PERIOD.__dict__.iteritems() if not k.startswith('_') ])
+
 class ARENA_UPDATE:
     VEHICLE_LIST = 1
     VEHICLE_ADDED = 2
@@ -498,12 +500,6 @@ class PREBATTLE_TYPE:
 
 
 PREBATTLE_TYPE_NAMES = dict([ (v, k) for k, v in PREBATTLE_TYPE.__dict__.iteritems() if not k.startswith('_') ])
-
-class ASSEMBLED_PREBATTLE_TYPE:
-    NONE = 0
-    ASSEMBLED = 1
-    DYN_FALLOUT = 2
-
 
 class PREBATTLE_START_TYPE:
     DIRECT = 1
@@ -1251,21 +1247,6 @@ class QUEUE_TYPE:
     REMOVED = (COMPANIES,)
 
 
-class UNIT_ASSEMBLER_FLAG:
-    IGNORE_RATING = 1
-    ONLY_NEW_TEAM = 2
-    KICK_AFTER_BATTLE = 4
-    ASSEMBLE_NEW_UNITS = 8
-    ALL = (IGNORE_RATING,
-     ONLY_NEW_TEAM,
-     KICK_AFTER_BATTLE,
-     ASSEMBLE_NEW_UNITS)
-
-    @staticmethod
-    def isFlagSet(flag):
-        return bool(BigWorld.baseAppData.get('unitAssemblerFlags', 0) & flag)
-
-
 QUEUE_TYPE_NAMES = dict([ (v, k) for k, v in QUEUE_TYPE.__dict__.iteritems() if not k.startswith('_') ])
 USER_ACTIVE_CHANNELS_LIMIT = 100
 
@@ -1421,7 +1402,7 @@ class REQUEST_COOLDOWN:
     SEND_INVITATION_COOLDOWN = 1.0
     RUN_QUEST = 1.0
     PAWN_FREE_AWARD_LIST = 1.0
-    LOOTBOX = 0.5
+    LOOTBOX = 1.0
     BADGES = 2.0
     CREW_SKINS = 0.3
     BPF_COMMAND = 1.0
@@ -1438,24 +1419,6 @@ class REQUEST_COOLDOWN:
     ANONYMIZER = 1.0
     UPDATE_IN_BATTLE_PLAYER_RELATIONS = 1.0
     FLUSH_RELATIONS = 1.0
-    NEW_YEAR_SLOT_FILL = 0.4
-    NEW_YEAR_CRAFT = 0.5
-    NEW_YEAR_CRAFT_OLD_TOYS = 0.5
-    NEW_YEAR_BREAK_TOYS = 1.0
-    NEW_YEAR_SEE_INVENTORY_TOYS = 0.5
-    NEW_YEAR_SEE_COLLECTION_TOYS = 0.5
-    NEW_YEAR_SELECT_DISCOUNT = 1.0
-    NEW_YEAR_VIEW_ALBUM = 0.5
-    NEW_YEAR_CONVERT_FILLERS = 1.0
-    NEW_YEAR_GET_TALISMAN_TOY = 1.0
-    NEW_YEAR_ADD_TALISMAN = 0.5
-    NEW_YEAR_FILL_OLD_COLLECTION = 0.5
-    NEW_YEAR_SET_NY_VEHICLE = 0.5
-    NEW_YEAR_SET_CAMOUFLAGE = 0.75
-    NEW_YEAR_SIMPLIFY_CELEBRITY_QUEST = 1.0
-    NEW_YEAR_TAKE_TALISMAN_BONUS = 0.5
-    NEW_YEAR_CHANGE_TALISMAN_BONUS_STAGE = 0.5
-    NEW_YEAR_CHOOSE_SLOT_BONUS = 0.5
     EQUIP_ENHANCEMENT = 1.0
     DISMOUNT_ENHANCEMENT = 1.0
     BUY_BATTLE_PASS = 1.0
@@ -1769,7 +1732,7 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  74: 'Carousel filter',
  75: '[Free]',
  76: '[Free]',
- 77: '[Free]',
+ 77: 'Unit filter',
  78: '[Free]',
  79: '[Free]',
  80: 'Ranked carousel filter',
@@ -1783,18 +1746,12 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.LINKEDSET_QUESTS: 'linkedset quests show reward info',
  USER_SERVER_SETTINGS.QUESTS_PROGRESS: 'feedback quests progress',
  91: 'Loot box last viewed count',
- 92: 'Oriental loot box last viewed count',
- 93: 'New year loot box last viewed count',
- 94: 'Fairytale loot box last viewed count',
- 95: 'Christmas loot box last viewed count',
  USER_SERVER_SETTINGS.SESSION_STATS: 'sessiong statistics settings',
  97: 'BattlePass carouse filter 1',
  98: 'Battle Pass Storage',
  99: 'Once only hints',
  100: 'Battle Royale carousel filter 1',
- 101: 'Battle Royale carousel filter 2',
- 102: 'New Year settings storage',
- 103: 'Common loot box last viewed count'}
+ 101: 'Battle Royale carousel filter 2'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -2641,3 +2598,9 @@ class UpgradeProhibitionReason(object):
 class AreaTriggerActionType(enum.IntEnum):
     ENTER = 0
     LEAVE = 1
+
+
+class EPlatoonButtonState(enum.Enum):
+    SEARCHING_STATE = 'SEARCHING'
+    IN_PLATOON_STATE = 'IN_PLATOON'
+    CREATE_STATE = 'CREATE'

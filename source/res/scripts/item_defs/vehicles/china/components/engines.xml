@@ -60,6 +60,7 @@
     <_12150L7_IGR>	60003	</_12150L7_IGR>
     <_Type97_bootcamp>	64001	</_Type97_bootcamp>
     <Development_Engine>	65000	</Development_Engine>
+    <_12150L_bootcamp>	3	</_12150L_bootcamp>
   </ids>
   <shared>
     <NORINCO_12150L7>
@@ -1050,5 +1051,22 @@
       <rpm_min>	376	</rpm_min>
       <rpm_max>	2072	</rpm_max>
     </Development_Engine>
+    <_12150L_bootcamp>
+      <userString>	#china_vehicles:_12150L	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	48000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	520	</power>
+      <weight>	750	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	381	</rpm_min>
+      <rpm_max>	2056	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </_12150L_bootcamp>
   </shared>
 </engines.xml>

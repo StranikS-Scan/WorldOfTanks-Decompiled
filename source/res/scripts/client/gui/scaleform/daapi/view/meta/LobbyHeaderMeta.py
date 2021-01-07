@@ -31,7 +31,10 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
     def onPayment(self):
         self._printOverrideError('onPayment')
 
-    def showSquad(self):
+    def movePlatoonPopover(self, popoverCenterX):
+        self._printOverrideError('movePlatoonPopover')
+
+    def showSquad(self, popoverCenterX):
         self._printOverrideError('showSquad')
 
     def fightClick(self, mapID, actionName):
@@ -55,8 +58,8 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
     def as_setGoldFishEnabledS(self, isEnabled, playAnimation, tooltip, tooltipType):
         return self.flashObject.as_setGoldFishEnabled(isEnabled, playAnimation, tooltip, tooltipType) if self._isDAAPIInited() else None
 
-    def as_updateSquadS(self, isInSquad, tooltip, tooltipType, isEvent, icon):
-        return self.flashObject.as_updateSquad(isInSquad, tooltip, tooltipType, isEvent, icon) if self._isDAAPIInited() else None
+    def as_updateSquadS(self, isInSquad, tooltip, tooltipType, isEvent, icon, hasSearchSupport, data):
+        return self.flashObject.as_updateSquad(isInSquad, tooltip, tooltipType, isEvent, icon, hasSearchSupport, data) if self._isDAAPIInited() else None
 
     def as_nameResponseS(self, data):
         return self.flashObject.as_nameResponse(data) if self._isDAAPIInited() else None
@@ -130,5 +133,5 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
     def as_toggleVisibilityMenuS(self, state):
         return self.flashObject.as_toggleVisibilityMenu(state) if self._isDAAPIInited() else None
 
-    def as_updateNYVisibilityS(self, isShowBattleBtnGlow, isShowMainMenuGlow, nyWidgetVisible):
-        return self.flashObject.as_updateNYVisibility(isShowBattleBtnGlow, isShowMainMenuGlow, nyWidgetVisible) if self._isDAAPIInited() else None
+    def as_setIsPlatoonDropdownShowingS(self, visible):
+        return self.flashObject.as_setIsPlatoonDropdownShowing(visible) if self._isDAAPIInited() else None

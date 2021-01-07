@@ -156,7 +156,6 @@ class CustomMode(CustomizationMode):
             multiSlot = self.currentOutfit.getContainer(slotId.areaId).slotFor(slotId.slotType)
             component = multiSlot.getComponent(slotId.regionIdx)
             if component is None:
-                _logger.warning('Item is not previewed in slotId: %s', slotId)
                 return
             if not component.preview:
                 return
@@ -313,6 +312,7 @@ class CustomMode(CustomizationMode):
     @process
     def _applyItems(self, purchaseItems, isModeChanged, callback):
         modifiedOutfits = {season:outfit.copy() for season, outfit in self._modifiedOutfits.iteritems()}
+        originalOutfits = {season:outfit.copy() for season, outfit in self._originalOutfits.iteritems()}
         for pItem in purchaseItems:
             if not pItem.selected:
                 if pItem.slotType:
@@ -339,7 +339,7 @@ class CustomMode(CustomizationMode):
 
         self._soundEventChecker.unlockPlayingSounds()
         if self.isInited:
-            self._events.onItemsBought(purchaseItems, results)
+            self._events.onItemsBought(originalOutfits, purchaseItems, results)
         callback(self)
 
     @wrappedProcess('sellItem')

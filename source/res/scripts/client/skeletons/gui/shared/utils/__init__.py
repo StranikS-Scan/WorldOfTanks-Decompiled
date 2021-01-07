@@ -64,10 +64,6 @@ class IItemsRequester(requesters.IRequester):
     def battlePass(self):
         raise NotImplementedError
 
-    @property
-    def festivity(self):
-        raise NotImplementedError
-
     def requestUserDossier(self, databaseID, callback):
         raise NotImplementedError
 
@@ -138,6 +134,9 @@ class IItemsRequester(requesters.IRequester):
         raise NotImplementedError
 
     def getClanInfo(self, databaseID=None):
+        raise NotImplementedError
+
+    def getDogTag(self, databaseID=None):
         raise NotImplementedError
 
     def getPreviousItem(self, itemTypeID, invDataIdx):

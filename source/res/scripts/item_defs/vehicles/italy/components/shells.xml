@@ -304,6 +304,50 @@
       <devices>	100	</devices>
     </damage>
   </_75mm_c_g_75_50_mod_37_Skoda>
+  <_88mm_c_p_88_47_mod_09>
+    <id>	41	</id>
+    <userString>	#italy_vehicles:_88mm_c_p_88_47_mod_09	</userString>
+    <icon>	ap	</icon>
+    <price>	305	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	88	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_88mm_c_p_88_47_mod_09>
+  <_88mm_c_p_88_47_mod_43>
+    <id>	42	</id>
+    <userString>	#italy_vehicles:_88mm_c_p_88_47_mod_43	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	3600	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	88	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_88mm_c_p_88_47_mod_43>
+  <_88mm_c_g_88_47_53>
+    <id>	43	</id>
+    <userString>	#italy_vehicles:_88mm_c_g_88_47_53	</userString>
+    <icon>	he	</icon>
+    <price>	220	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	88	</caliber>
+    <explosionRadius>	1.46	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_88mm_c_g_88_47_53>
   <_90mm_c_p_90_53_mod_09>
     <id>	19	</id>
     <userString>	#italy_vehicles:_90mm_c_p_90_53_mod_09	</userString>
@@ -571,6 +615,139 @@
       <devices>	150	</devices>
     </damage>
   </_105mm_c_g_105_55_HESH_M353>
+  <_105mm_AP_T_M181>
+    <id>	44	</id>
+    <userString>	#italy_vehicles:_105mm_AP_T_M181	</userString>
+    <icon>	ap	</icon>
+    <price>	765	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_AP_T_M181>
+  <_105mm_HVAPDS_T_M279>
+    <id>	45	</id>
+    <userString>	#italy_vehicles:_105mm_HVAPDS_T_M279	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_HVAPDS_T_M279>
+  <_105mm_HE_M393>
+    <id>	46	</id>
+    <userString>	#italy_vehicles:_105mm_HE_M393	</userString>
+    <icon>	he	</icon>
+    <price>	815	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_HE_M393>
+  <_105mm_AP_T_M131>
+    <id>	50	</id>
+    <userString>	#italy_vehicles:_105mm_AP_T_M131	</userString>
+    <icon>	ap	</icon>
+    <price>	550	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_AP_T_M131>
+  <_105mm_HVAPDS_T_M139>
+    <id>	51	</id>
+    <userString>	#italy_vehicles:_105mm_HVAPDS_T_M139	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_HVAPDS_T_M139>
+  <_105mm_HE_M113>
+    <id>	52	</id>
+    <userString>	#italy_vehicles:_105mm_HE_M113	</userString>
+    <icon>	he	</icon>
+    <price>	750	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_HE_M113>
+  <_120mm_AP_T_M365>
+    <id>	47	</id>
+    <userString>	#italy_vehicles:_120mm_AP_T_M365	</userString>
+    <icon>	ap	</icon>
+    <price>	970	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_AP_T_M365>
+  <_120mm_HEAT_T_M469>
+    <id>	48	</id>
+    <userString>	#italy_vehicles:_120mm_HEAT_T_M469	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_120mm_HEAT_T_M469>
+  <_120mm_HE_M356>
+    <id>	49	</id>
+    <userString>	#italy_vehicles:_120mm_HE_M356	</userString>
+    <icon>	he	</icon>
+    <price>	1240	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	120	</caliber>
+    <explosionRadius>	2.42	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	515	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_HE_M356>
   <_120mm_c_p_APCBC_T14E>
     <id>	53	</id>
     <userString>	#italy_vehicles:_120mm_c_p_APCBC_T14E	</userString>
@@ -615,6 +792,51 @@
       <devices>	165	</devices>
     </damage>
   </_120mm_a_e_T15HE>
+  <_127mm_APDS_127_54>
+    <id>	35	</id>
+    <userString>	#italy_vehicles:_127mm_APDS_127_54	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1310	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	127	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	490	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_127mm_APDS_127_54>
+  <_127mm_HEAT_127_54>
+    <id>	36	</id>
+    <userString>	#italy_vehicles:_127mm_HEAT_127_54	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	5600	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	127	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	490	</armor>
+      <devices>	180	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_127mm_HEAT_127_54>
+  <_127mm_Mark_116>
+    <id>	37	</id>
+    <userString>	#italy_vehicles:_127mm_Mark_116	</userString>
+    <icon>	he	</icon>
+    <price>	1620	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	127	</caliber>
+    <explosionRadius>	2.67	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	640	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_127mm_Mark_116>
   <Development_Shell>
     <id>	65000	</id>
     <userString>	Development_Shell	</userString>

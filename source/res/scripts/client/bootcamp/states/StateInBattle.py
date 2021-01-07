@@ -6,7 +6,6 @@ from AbstractState import AbstractState
 from bootcamp.aop.in_battle import weave
 from bootcamp.Assistant import BattleAssistant
 from bootcamp.BootCampEvents import g_bootcampEvents
-from bootcamp.scenery.Scenery import Scenery
 from bootcamp.states import STATE
 from bootcamp.BootcampConstants import UI_STATE, BOOTCAMP_BATTLE_RESULT_MESSAGE
 from gui.Scaleform.daapi.view.bootcamp.BCBattleSpaceEnv import BCBattleSpaceEnv
@@ -19,13 +18,9 @@ from bootcamp.Bootcamp import g_bootcamp
 class StateInBattle(AbstractState):
     soundController = dependency.descriptor(ISoundsController)
 
-    def __init__(self, lessonId, avatar, entities, bootcampGui, soundAssistant):
+    def __init__(self, lessonId, avatar):
         super(StateInBattle, self).__init__(STATE.IN_BATTLE)
-        self.__assistant = BattleAssistant(avatar, lessonId, entities, bootcampGui, soundAssistant)
-        self.__soundAssistant = soundAssistant
-        self.__lessonId = lessonId
-        self.__avatar = avatar
-        self.__scenery = Scenery(lessonId, self.__assistant)
+        self.__assistant = BattleAssistant(avatar, lessonId)
         self.__oldSpaceEnv = None
         self.__weaver = aop.Weaver()
         return
@@ -41,22 +36,12 @@ class StateInBattle(AbstractState):
     def onBattleAction(self, actionId, actionParams):
         self.__assistant.onAction(actionId, actionParams)
 
-    def stopScenery(self):
-        if self.__scenery is not None:
-            self.__scenery.stop()
-            self.__scenery.destroy()
-            self.__scenery = None
-        return
-
     def _doActivate(self):
         weave(self.__weaver)
-        g_bootcampEvents.onUIStateChanged += self._onUIStateChanged
         g_playerEvents.onKickedFromArena += self.onKickedFromArena
         g_playerEvents.onRoundFinished += self.__onRoundFinished
         g_playerEvents.onAvatarBecomeNonPlayer += self.__onAvatarBecomeNonPlayer
         self.__assistant.start()
-        self.__scenery.start()
-        self.__assistant.getMarkers().afterScenery()
         self.__oldSpaceEnv = self.soundController.setEnvForSpace(GuiGlobalSpaceID.BATTLE, BCBattleSpaceEnv)
         self.__finishAnimationCompleted = True
         player = BigWorld.player()
@@ -64,18 +49,12 @@ class StateInBattle(AbstractState):
             player.inputHandler.onCameraChanged += self.__onCameraChanged
         return
 
-    def _onUIStateChanged(self, state):
-        if state == UI_STATE.STOP:
-            self.stopScenery()
-
     def _doDeactivate(self):
         if self.__oldSpaceEnv is not None:
             self.soundController.setEnvForSpace(GuiGlobalSpaceID.BATTLE, self.__oldSpaceEnv)
-        g_bootcampEvents.onUIStateChanged -= self._onUIStateChanged
         g_playerEvents.onKickedFromArena -= self.onKickedFromArena
         g_playerEvents.onRoundFinished -= self.__onRoundFinished
         g_playerEvents.onAvatarBecomeNonPlayer -= self.__onAvatarBecomeNonPlayer
-        self._onUIStateChanged(UI_STATE.STOP)
         self.onAvatarBecomeNonPlayer()
         if self.__assistant is not None:
             self.__assistant = None
@@ -102,18 +81,10 @@ class StateInBattle(AbstractState):
         elif winnerTeam == 0:
             asBattleResultType = BOOTCAMP_BATTLE_RESULT_MESSAGE.DRAW
         g_bootcamp.setBattleResults(BigWorld.player().arenaUniqueID, asBattleResultType, reason)
-        if asBattleResultType == BOOTCAMP_BATTLE_RESULT_MESSAGE.VICTORY:
-            self.__soundAssistant.playSound2D('vo_bc_victory')
-        elif asBattleResultType == BOOTCAMP_BATTLE_RESULT_MESSAGE.DEFEAT:
-            self.__soundAssistant.playSound2D('vo_bc_defeat')
-        elif asBattleResultType == BOOTCAMP_BATTLE_RESULT_MESSAGE.DRAW:
-            self.__soundAssistant.playSound2D('vo_bc_draw')
 
     def __onAvatarBecomeNonPlayer(self):
         player = BigWorld.player()
         if player is not None and player.inputHandler is not None:
             player.inputHandler.onCameraChanged -= self.__onCameraChanged
         g_bootcampEvents.onUIStateChanged(UI_STATE.STOP)
-        self.__avatar = None
-        self.stopScenery()
         return

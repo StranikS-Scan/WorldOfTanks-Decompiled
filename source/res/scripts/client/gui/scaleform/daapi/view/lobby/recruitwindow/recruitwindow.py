@@ -144,7 +144,7 @@ class RecruitWindow(RecruitWindowMeta):
     def __getClassesCriteria(self, nationID):
         maxResearchedLevel = self.itemsCache.items.stats.getMaxResearchedLevel(nationID)
         criteria = self.__getNationsCriteria() | REQ_CRITERIA.NATIONS([nationID])
-        criteria |= ~(REQ_CRITERIA.COLLECTIBLE | ~REQ_CRITERIA.VEHICLE.LEVELS(range(1, maxResearchedLevel + 1)))
+        criteria |= ~(REQ_CRITERIA.COLLECTIBLE | ~REQ_CRITERIA.VEHICLE.LEVELS(range(1, maxResearchedLevel + 1)) | ~REQ_CRITERIA.INVENTORY)
         return criteria
 
     def updateVehicleClassDropdown(self, nationID):

@@ -14,15 +14,7 @@ from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindo
 from gui.impl.lobby.dialogs.quit_game_dialog import QuitGameDialogWindow
 from gui.impl.lobby.premacc.maps_blacklist_confirm_view import MapsBlacklistConfirmView
 from gui.impl.lobby.battle_pass.battle_pass_voting_confirm_view import BattlePassVotingConfirmView
-from gui.impl.new_year.dialogs.buy_collection_item_dialog import BuyCollectionItemDialogWindow
-from gui.impl.new_year.dialogs.buy_full_collection_dialog import BuyFullCollectionDialogWindow
-from gui.impl.new_year.dialogs.new_year_buy_gift_upgrade_dialog_view import NewYearBuyGiftUpgradeDialogView
-from gui.impl.new_year.dialogs.set_vehicle_branch_dialog import SetVehicleBranchDialogWindow
-from gui.impl.new_year.dialogs.new_year_talisman_select_confirm_dialog import NewYearTalismanSelectConfirmDialog
-from gui.impl.new_year.dialogs.new_year_talisman_gift_dialog import NewYearTalismanGiftDialogView
 from gui.impl.pub.dialog_window import DialogButtons, DialogWindow
-from gui.impl.pub.wait_view_impl import WaitWindowWrapper
-from frameworks.wulf import WindowLayer
 if typing.TYPE_CHECKING:
     from typing import Any, Optional, Iterable, Union
     from frameworks.wulf import View, Window
@@ -129,50 +121,4 @@ def showSingleDialogWithResultData(wrappedViewClass, layoutID, parent=None, *arg
 @async
 def showExchangeToUpgradeDeviceDialog(device, parent=None):
     result = yield await(showSingleDialog(layoutID=R.views.lobby.tanksetup.dialogs.ExchangeToUpgradeItems(), parent=parent, wrappedViewClass=ExchangeToUpgradeDevice, device=device))
-    raise AsyncReturn(result)
-
-
-@async
-def newYearCollectionBuyItem(toy, parent=None):
-    dialog = BuyCollectionItemDialogWindow(toy, parent)
-    dialog.load()
-    result = yield await(dialog.wait())
-    dialog.destroy()
-    raise AsyncReturn(result.result == DialogButtons.PURCHASE)
-
-
-@async
-def newYearBuyCollection(collectionID, parent=None):
-    dialog = BuyFullCollectionDialogWindow(collectionID, parent)
-    dialog.load()
-    result = yield await(dialog.wait())
-    dialog.destroy()
-    raise AsyncReturn(result.result == DialogButtons.PURCHASE)
-
-
-@async
-def showNYTalismanSelectConfirm(talismanType):
-    dialog = NewYearTalismanSelectConfirmDialog(talismanType)
-    result = yield await(showSimple(dialog, DialogButtons.PURCHASE))
-    raise AsyncReturn(result)
-
-
-@async
-def showNYTalismanGiftDialog(talismanType):
-    dialog = WaitWindowWrapper(NewYearTalismanGiftDialogView(talismanType), layer=WindowLayer.OVERLAY)
-    result = yield await(show(dialog))
-    raise AsyncReturn(result)
-
-
-@async
-def showSetVehicleBranchConfirm(invID, slotID):
-    dialog = SetVehicleBranchDialogWindow(invID, slotID)
-    result = yield await(showSimple(dialog, DialogButtons.PURCHASE))
-    raise AsyncReturn(result)
-
-
-@async
-def showNYGiftUpgradeDialog(parent, level, cost, shortage, tokensCount):
-    dialog = FullScreenDialogWindowWrapper(NewYearBuyGiftUpgradeDialogView(level, cost, shortage, tokensCount), parent)
-    result = yield await(showSimple(dialog))
     raise AsyncReturn(result)

@@ -196,7 +196,7 @@ class CustomizationCartView(ViewImpl):
         validTransaction = isTransactionValid(self.__moneyState, price)
         money = self.__itemsCache.items.stats.money
         shortage = money.getShortage(price)
-        isAnySelected = cart.numSelected > 0
+        isAnySelected = cart.selectedCount > 0
         rent = model.rent
         if self.__mode in (ItemsType.STYLE, ItemsType.EDITABLE_STYLE):
             item = self.__purchaseItems[0].item
@@ -207,7 +207,7 @@ class CustomizationCartView(ViewImpl):
         purchase.totalPrice.assign(cart.totalPrice)
         purchase.setIsEnoughMoney(validTransaction)
         purchase.setIsGoldPrice(Currency.GOLD in shortage.getCurrency())
-        purchase.setPurchasedCount(cart.numBought)
+        purchase.setPurchasedCount(cart.boughtCount)
         model.setIsAnySelected(isAnySelected)
         model.setIsRendererPipelineDeferred(isRendererPipelineDeferred())
 

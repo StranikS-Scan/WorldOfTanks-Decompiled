@@ -178,6 +178,9 @@ class I18nDialogMeta(SimpleDialogMeta):
             result = self._meta.getTimer()
         return result
 
+    def getKey(self):
+        return self._meta.getKey() if self._meta else self._key
+
     def _makeString(self, key, ctx):
         return i18n.makeString(_getDialogStr(key), **ctx)
 

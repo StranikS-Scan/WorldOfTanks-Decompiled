@@ -32,10 +32,9 @@ class AvatarRecoveryMechanic(object):
         if isFired and self.isVehicleAlive and not self.isObserver():
             if isDown and not self.isForcedGuiControlMode():
                 if self.__currentRevcoveryState() in (None, RM_STATE.NOT_RECOVERING):
-                    ownVehicle = BigWorld.entity(self.playerVehicleID)
-                    ownVehicle.cell.recoveryMechanic_startRecovering()
                     if not self.__keyCheckCallback:
-                        self.__keyCheckCallback = BigWorld.callback(0.1, partial(self.__checkKey, key))
+                        self.guiSessionProvider.shared.feedback.setVehicleRecoveryKeyPressed(self.playerVehicleID)
+                        self.__keyCheckCallback = BigWorld.callback(0.1, partial(self.__checkKey, key, True))
                 if self.__currentRevcoveryState() == RM_STATE.TEMPORARILY_BLOCKED_FROM_RECOVERING:
                     activated, _, timerDuration, endOfTimer = self.__lastRecoveryArgs
                     self.guiSessionProvider.shared.feedback.setVehicleRecoveryState(self.playerVehicleID, activated, RM_STATE.TEMPORARILY_BLOCKED_RECOVER_TRY, timerDuration, endOfTimer)
@@ -91,14 +90,18 @@ class AvatarRecoveryMechanic(object):
     def __currentRevcoveryState(self):
         return None if self.__lastRecoveryArgs is None else self.__lastRecoveryArgs[1]
 
-    def __checkKey(self, key):
+    def __checkKey(self, key, isFirstCheck=False):
         if not self.__keyCheckCallback:
             return
         else:
             if BigWorld.isKeyDown(key):
+                if isFirstCheck:
+                    ownVehicle = BigWorld.entity(self.playerVehicleID)
+                    ownVehicle.cell.recoveryMechanic_startRecovering()
                 self.__keyCheckCallback = BigWorld.callback(1, partial(self.__checkKey, key))
             else:
                 self.__keyCheckCallback = None
-                ownVehicle = BigWorld.entity(self.playerVehicleID)
-                ownVehicle.cell.recoveryMechanic_stopRecovering()
+                if not isFirstCheck:
+                    ownVehicle = BigWorld.entity(self.playerVehicleID)
+                    ownVehicle.cell.recoveryMechanic_stopRecovering()
             return

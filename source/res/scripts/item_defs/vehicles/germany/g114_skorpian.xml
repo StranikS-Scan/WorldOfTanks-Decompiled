@@ -32,6 +32,7 @@
     <priceFactor>	1.6	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
     <exclusionMask></exclusionMask>
+    <density>	1.05 1.05	</density>
   </camouflage>
   <hull>
     <fakeTurrets>
@@ -1609,6 +1610,7 @@
           </hitTester>
           <effects>	shot_largeext_mb	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <shotOffset>	-0.000056 0.246870 0.000000	</shotOffset>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>

@@ -55,10 +55,7 @@ class FullscreenManager(IFullscreenManager):
         windowsToClose = []
         for window in windows:
             if window != newWindow and (window.layer > layer or window.layer == layer) and not self.__isParent(window, newWindow) and self.__isAllowed(newWindow):
-                if window.canBeClosed():
-                    windowsToClose.append(window)
-                else:
-                    _logger.info("Window %r hasn't been destroyed by opening window %r", window, newWindow)
+                windowsToClose.append(window)
 
         if (not windows or windowsToClose) and not self.__notificationMgr.hasWindow(newWindow) and self.__isAllowed(newWindow):
             _logger.info('Notification queue postpones by opening window %r', newWindow)

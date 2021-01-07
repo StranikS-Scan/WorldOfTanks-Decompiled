@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/visual_script_client/triggers_blocks.py
 import BigWorld
 from visual_script.block import Block, Meta
-from visual_script.block import SLOT_TYPE
+from visual_script.slot_types import SLOT_TYPE
 from visual_script.misc import ASPECT
 from constants import IS_EDITOR
 
@@ -14,6 +14,10 @@ class TriggerMeta(Meta):
 
     @classmethod
     def blockCategory(cls):
+        pass
+
+    @classmethod
+    def blockIcon(cls):
         pass
 
     @classmethod
@@ -32,11 +36,13 @@ class TriggerExternal(Block, TriggerMeta):
         self._outSlot = self._makeEventOutputSlot('out')
         self._active = False
 
+    def validate(self):
+        return 'EventID value is required' if not self._eventIDSlot.hasValue() else super(TriggerExternal, self).validate()
+
     def onStartScript(self):
-        isActive = self._isActiveInputSlot.getValue()
-        if isActive is None or isActive:
+        isActive = self._isActiveInputSlot.getValue() if self._isActiveInputSlot.hasValue() else True
+        if isActive:
             self.setActive(True)
-        return
 
     def onFinishScript(self):
         if self.isActive():

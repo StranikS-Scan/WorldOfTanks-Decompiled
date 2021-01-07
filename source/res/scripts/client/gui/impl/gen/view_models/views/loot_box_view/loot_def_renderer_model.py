@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class LootDefRendererModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=12, commands=0):
+    def __init__(self, properties=11, commands=0):
         super(LootDefRendererModel, self).__init__(properties=properties, commands=commands)
 
     def getLabelStr(self):
@@ -14,76 +14,69 @@ class LootDefRendererModel(ViewModel):
     def setLabelStr(self, value):
         self._setString(0, value)
 
-    def getBonusName(self):
+    def getIcon(self):
         return self._getString(1)
 
-    def setBonusName(self, value):
+    def setIcon(self, value):
         self._setString(1, value)
 
-    def getIcon(self):
-        return self._getString(2)
-
-    def setIcon(self, value):
-        self._setString(2, value)
-
     def getTooltipId(self):
-        return self._getNumber(3)
+        return self._getNumber(2)
 
     def setTooltipId(self, value):
-        self._setNumber(3, value)
+        self._setNumber(2, value)
 
     def getRendererType(self):
-        return self._getString(4)
+        return self._getString(3)
 
     def setRendererType(self, value):
-        self._setString(4, value)
+        self._setString(3, value)
 
     def getIsSmall(self):
-        return self._getBool(5)
+        return self._getBool(4)
 
     def setIsSmall(self, value):
-        self._setBool(5, value)
+        self._setBool(4, value)
 
     def getIsEpic(self):
-        return self._getBool(6)
+        return self._getBool(5)
 
     def setIsEpic(self, value):
-        self._setBool(6, value)
+        self._setBool(5, value)
 
     def getHasCompensation(self):
-        return self._getBool(7)
+        return self._getBool(6)
 
     def setHasCompensation(self, value):
-        self._setBool(7, value)
+        self._setBool(6, value)
 
     def getLabelAlign(self):
-        return self._getString(8)
+        return self._getString(7)
 
     def setLabelAlign(self, value):
-        self._setString(8, value)
+        self._setString(7, value)
 
     def getHighlightType(self):
-        return self._getString(9)
+        return self._getString(8)
 
     def setHighlightType(self, value):
-        self._setString(9, value)
+        self._setString(8, value)
 
     def getOverlayType(self):
-        return self._getString(10)
+        return self._getString(9)
 
     def setOverlayType(self, value):
-        self._setString(10, value)
+        self._setString(9, value)
 
     def getIsEnabled(self):
-        return self._getBool(11)
+        return self._getBool(10)
 
     def setIsEnabled(self, value):
-        self._setBool(11, value)
+        self._setBool(10, value)
 
     def _initialize(self):
         super(LootDefRendererModel, self)._initialize()
         self._addStringProperty('labelStr', '')
-        self._addStringProperty('bonusName', '')
         self._addStringProperty('icon', '')
         self._addNumberProperty('tooltipId', 0)
         self._addStringProperty('rendererType', '')

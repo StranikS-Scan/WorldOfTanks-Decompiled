@@ -34,7 +34,8 @@ class BootcampConsumableSetupSubView(ConsumableSetupSubView):
         items = self._provider.getItemsList()
         for item in items:
             if item.isInInventory:
-                self._onSelectItem({'intCD': item.intCD})
+                self._onSelectItem({'intCD': item.intCD,
+                 'isAutoSelect': True})
                 break
 
     def finalize(self):

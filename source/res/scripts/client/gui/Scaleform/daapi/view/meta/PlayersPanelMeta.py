@@ -12,3 +12,6 @@ class PlayersPanelMeta(StatsBase):
 
     def as_setPanelModeS(self, value):
         return self.flashObject.as_setPanelMode(value) if self._isDAAPIInited() else None
+
+    def as_setChatCommandsVisibilityS(self, value):
+        return self.flashObject.as_setChatCommandsVisibility(value) if self._isDAAPIInited() else None

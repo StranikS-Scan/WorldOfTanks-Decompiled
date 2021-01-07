@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/services_config.py
+import festivity
 __all__ = ('getClientServicesConfig',)
 
 def getClientServicesConfig(manager):
@@ -10,7 +11,6 @@ def getClientServicesConfig(manager):
     import gui
     import gameplay
     import helpers
-    import festivity
     from skeletons.connection_mgr import IConnectionManager
     from skeletons.map_activities import IMapActivities
     from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache

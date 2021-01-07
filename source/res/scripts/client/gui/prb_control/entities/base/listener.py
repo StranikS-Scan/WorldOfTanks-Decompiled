@@ -13,7 +13,7 @@ class IPrbListener(object):
         return None
 
     def startPrbListening(self):
-        if self.prbEntity is not None:
+        if self.prbEntity is not None and hasattr(self.prbEntity, 'addListener'):
             self.prbEntity.addListener(self)
         return
 

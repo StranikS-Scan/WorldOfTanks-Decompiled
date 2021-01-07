@@ -6,8 +6,10 @@ import typing
 import BigWorld
 import Windowing
 import Event
+import adisp
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from gui.shared.event_dispatcher import hideVehiclePreview
 from helpers import dependency
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.customization.context.context import CustomizationContext
@@ -16,6 +18,7 @@ from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.gui_items import GUI_ITEM_TYPE, ItemsCollection
 from gui.shared.gui_items.customization.c11n_items import Customization
 from items.customizations import CustomizationOutfit, createNationalEmblemComponents
+from skeletons.gui.lobby_context import ILobbyContext
 from vehicle_outfit.outfit import Outfit
 from gui.shared.gui_items.processors.common import OutfitApplier, CustomizationsBuyer, CustomizationsSeller
 from gui.shared.gui_items.Vehicle import Vehicle
@@ -153,6 +156,7 @@ class _ServiceHelpersMixin(object):
 
 class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomizationService):
     hangarSpace = dependency.descriptor(IHangarSpace)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
     __FADE_OUT_DELAY = 0.15
     __TURRET_YAW_ANGLE = 0.0
     __GUN_PITCH_ANGLE = 0.0
@@ -213,7 +217,12 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
             self.__showCustomizationCallbackId = None
         return
 
+    @adisp.process
     def showCustomization(self, vehInvID=None, callback=None, season=None, modeId=None, tabId=None):
+        if self.__customizationCtx is None:
+            lobbyHeaderNavigationPossible = yield self.__lobbyContext.isHeaderNavigationPossible()
+            if not lobbyHeaderNavigationPossible:
+                return
         self.__showCustomizationKwargs = {'vehInvID': vehInvID,
          'callback': callback,
          'season': season,
@@ -231,13 +240,14 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
                 if g_currentVehicle.invID != vehInvID:
                     shouldSelectVehicle = True
         if not self.hangarSpace.spaceInited or not self.hangarSpace.isModelLoaded or shouldSelectVehicle:
-            self.hangarSpace.onVehicleChanged += self.__delayedShowCustomization
-            self.hangarSpace.onSpaceChanged += self.__delayedShowCustomization
             if shouldSelectVehicle:
                 if g_currentPreviewVehicle.isPresent():
+                    hideVehiclePreview(back=False, close=True)
                     g_currentPreviewVehicle.selectNoVehicle()
-                g_currentVehicle.selectVehicle(vehInvID=vehInvID)
+                BigWorld.callback(0.0, makeCallbackWeak(g_currentVehicle.selectVehicle, vehInvID=vehInvID))
             _logger.info('Space or vehicle is not presented, customization view loading delayed')
+            self.hangarSpace.onVehicleChanged += self.__delayedShowCustomization
+            self.hangarSpace.onSpaceChanged += self.__delayedShowCustomization
             return
         else:
             if not shouldSelectVehicle and self.hangarSpace.space is not None:

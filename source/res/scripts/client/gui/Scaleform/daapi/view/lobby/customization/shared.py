@@ -128,7 +128,7 @@ def getCustomPurchaseItems(season, modifiedOutfits, c11nService=None):
             if slotType is None:
                 _logger.error('Failed to get slotType for purchaseItem: [%s]', item)
                 continue
-            purchaseItems.append(PurchaseItem(item, price=item.getBuyPrice(), areaID=container.getAreaID(), slotType=slotType, regionIdx=idx, selected=True, group=s, isFromInventory=isFromInventory, isDismantling=False, component=component))
+            purchaseItems.append(PurchaseItem(item, price=item.getBuyPrice(), areaID=container.getAreaID(), slotType=slotType, regionIdx=idx, selected=True, group=s, isFromInventory=isFromInventory, component=component))
             inventoryCounts[intCD] -= 1
 
     return purchaseItems
@@ -143,7 +143,7 @@ def getStylePurchaseItems(style, modifiedOutfits, c11nService=None, prolongRent=
     inventoryCounts = __getInventoryCounts(modifiedOutfits, vehicleCD)
     styleCount = style.fullInventoryCount(vehicle.intCD)
     isFromInventory = not prolongRent and (styleCount > 0 or isStyleInstalled)
-    purchaseItem = PurchaseItem(style, style.getBuyPrice(), areaID=None, slotType=None, regionIdx=None, selected=True, group=AdditionalPurchaseGroups.STYLES_GROUP_ID, isFromInventory=isFromInventory, isDismantling=False, locked=True)
+    purchaseItem = PurchaseItem(style, style.getBuyPrice(), areaID=None, slotType=None, regionIdx=None, selected=True, group=AdditionalPurchaseGroups.STYLES_GROUP_ID, isFromInventory=isFromInventory, locked=True)
     purchaseItems.append(purchaseItem)
     for season in SeasonType.COMMON_SEASONS:
         modifiedOutfit = modifiedOutfits[season]

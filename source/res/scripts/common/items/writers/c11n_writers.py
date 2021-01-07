@@ -162,28 +162,31 @@ def writeFontType(writer, cache, folder, itemName):
         return
 
     sourceFiles = cache.editorData.sourceFiles[CUSTOMIZATION_ITEMS_NAME_TO_TYPE[itemName]]
-    if sourceFiles is None:
-        raise SoftException('Item {} has no sourceXml, data format has changed?'.format(itemName + str(id)))
-    items = cache.fonts
-    changedRefs = set()
-    refSections, fontsSections = parseSourceSection(sourceFiles, items, changedRefs)
-    for id, item in items.items():
-        sourceFile = item.editorData.sourceXml
-        if sourceFile not in refSections.keys():
-            raise SoftException("writeFontType: Couldn't find file {} ".format(sourceFile))
-        sourceRef = refSections[sourceFile]
-        if id not in fontsSections.keys():
-            fontsSections[id] = sourceRef.createSection(itemName)
-            _xml.rewriteInt(fontsSections[id], 'id', id)
-        isection = fontsSections[id]
-        changed = writer.write(item, isection)
-        if changed:
-            changedRefs.add(sourceRef)
+    if len(sourceFiles) == 0:
+        return
+    else:
+        if sourceFiles is None:
+            raise SoftException('Item {} has no sourceXml, data format has changed?'.format(itemName + str(id)))
+        items = cache.fonts
+        changedRefs = set()
+        refSections, fontsSections = parseSourceSection(sourceFiles, items, changedRefs)
+        for id, item in items.items():
+            sourceFile = item.editorData.sourceXml
+            if sourceFile not in refSections.keys():
+                raise SoftException("writeFontType: Couldn't find file {} ".format(sourceFile))
+            sourceRef = refSections[sourceFile]
+            if id not in fontsSections.keys():
+                fontsSections[id] = sourceRef.createSection(itemName)
+                _xml.rewriteInt(fontsSections[id], 'id', id)
+            isection = fontsSections[id]
+            changed = writer.write(item, isection)
+            if changed:
+                changedRefs.add(sourceRef)
 
-    for refsection in changedRefs:
-        refsection.save()
+        for refsection in changedRefs:
+            refsection.save()
 
-    return
+        return
 
 
 def _natkey(s):
@@ -876,6 +879,11 @@ def rewriteCamouflageTiling(section, camouflageItem):
             correctedTankName = correctTankNameByCurrentSectionName(tilingSection, tankName)
             tilingRes = Math.Vector4(value[0], value[1], value[2], value[3])
             changed |= _xml.rewriteVector4(tilingSection, correctedTankName, tilingRes)
+
+        for iname, isection in tilingSection.items():
+            if iname not in camouflageItem.editorData.tilingName.values():
+                tilingSection.deleteSection(iname)
+                changed = True
 
         return changed
 

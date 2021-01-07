@@ -22,7 +22,7 @@ from gui.impl.auxiliary.rewards_helper import LootRewardDefModelPresenter
 from gui.shared.event_dispatcher import showSeniorityInfoWindow
 from gui.shared.utils.functions import getAbsoluteUrl, stripHTMLTags
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.game_control import IFestivityController
+from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 REG_EXP_QUEST_SUBTYPE = ':([Y, y]\\d*)|:([A,a,B,b][T,t])'
 _BONUSES_COUNT = 9
@@ -67,8 +67,8 @@ def _vehiclesSortOrder(vehicle):
 
 class SeniorityRewardAwardView(ViewImpl):
     __slots__ = ('__bonuses', '__vehicles', '__tooltipData')
+    __itemsCache = dependency.descriptor(IItemsCache)
     __lobbyContext = dependency.descriptor(ILobbyContext)
-    __NYController = dependency.descriptor(IFestivityController)
 
     def __init__(self, contentResId, *args, **kwargs):
         settings = ViewSettings(contentResId)
@@ -99,8 +99,6 @@ class SeniorityRewardAwardView(ViewImpl):
         super(SeniorityRewardAwardView, self)._initialize()
         self.viewModel.onCloseAction += self.__onWindowClose
         self.viewModel.onOpenBtnClick += self.__onOpenBtnClick
-
-    def _onLoading(self, questID, data):
         questYearsType = None
         seniorityLvlSearch = re.search(REG_EXP_QUEST_SUBTYPE, questID) if questID else None
         if seniorityLvlSearch is not None:
@@ -112,8 +110,8 @@ class SeniorityRewardAwardView(ViewImpl):
         if questYearsType is not None:
             self.viewModel.setCategory(questYearsType.upper())
         config = self.__lobbyContext.getServerSettings().getSeniorityAwardsConfig()
-        hasToken = config.getSecretBoxToken() in data.get('tokens', {})
-        self.viewModel.setSecretBoxAvailable(hasToken or self.__NYController.isEnabled())
+        hasToken = self.__itemsCache.items.tokens.getToken(config.getSecretBoxToken()) is not None
+        self.viewModel.setSecretBoxAvailable(hasToken)
         return
 
     def _finalize(self):
@@ -189,11 +187,9 @@ class SeniorityRewardAwardView(ViewImpl):
     def __getVehImgResource(vehicleName):
         return getIconResourceName(getNationLessName(vehicleName))
 
-    def __onOpenBtnClick(self):
-        if self.__NYController.isEnabled() or self.__NYController.isPostEvent():
-            self.destroyWindow()
-        else:
-            showSeniorityInfoWindow()
+    @staticmethod
+    def __onOpenBtnClick():
+        showSeniorityInfoWindow()
 
 
 class SeniorityRewardAwardWindow(LobbyNotificationWindow):

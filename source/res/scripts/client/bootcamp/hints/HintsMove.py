@@ -1,102 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bootcamp/hints/HintsMove.py
-import math
 import time
-import BigWorld
 from bootcamp.BootCampEvents import g_bootcampEvents
 from bootcamp.BootcampConstants import HINT_TYPE
 from bootcamp_shared import BOOTCAMP_BATTLE_ACTION
 from HintsBase import HintBase, HINT_COMMAND
-from bootcamp.Bootcamp import g_bootcamp
-
-class HintMove(HintBase):
-
-    def __init__(self, avatar, params):
-        super(HintMove, self).__init__(avatar, HINT_TYPE.HINT_MOVE, params['timeout'])
-        self._avatar = BigWorld.player()
-        self.__distance = params['distance']
-        self.__curDistance = 0.0
-        self.__prevPoint = None
-        return
-
-    def start(self):
-        self._timeStart = time.time()
-        self._state = HintBase.STATE_DEFAULT
-
-    def stop(self):
-        self._state = HintBase.STATE_INACTIVE
-
-    def update(self):
-        if self._state == HintBase.STATE_COMPLETE or self._state == HintBase.STATE_INACTIVE:
-            return
-        elif self.__prevPoint is None:
-            self.__prevPoint = self._avatar.position
-            return
-        else:
-            self.__curDistance += self._avatar.position.distTo(self.__prevPoint)
-            self.__prevPoint = self._avatar.position
-            resultCommand = None
-            if self._state == HintBase.STATE_DEFAULT:
-                if self._timeout is not None and self._timeout < time.time() - self._timeStart:
-                    self._state = HintBase.STATE_HINT
-                    resultCommand = HINT_COMMAND.SHOW
-                elif self.__curDistance > self.__distance:
-                    self._state = HintBase.STATE_COMPLETE
-                    resultCommand = HINT_COMMAND.SHOW_COMPLETED
-            elif self._state == HintBase.STATE_HINT:
-                if self.__curDistance > self.__distance:
-                    self._state = HintBase.STATE_COMPLETE
-                    resultCommand = HINT_COMMAND.SHOW_COMPLETED_WITH_HINT
-            return resultCommand
-
-
-class HintMoveTurret(HintBase):
-
-    def __init__(self, avatar, params):
-        super(HintMoveTurret, self).__init__(avatar, HINT_TYPE.HINT_MOVE_TURRET, params['timeout'])
-        self.__angle = math.radians(params['angle'])
-        self.__curAngle = 0.0
-        self.__lastShotVector = None
-        return
-
-    def start(self):
-        self._timeStart = time.time()
-        self._state = HintBase.STATE_DEFAULT
-
-    def stop(self):
-        self._state = HintBase.STATE_INACTIVE
-
-    def update(self):
-        if self._state == HintBase.STATE_COMPLETE or self._state == HintBase.STATE_INACTIVE:
-            return
-        elif self.__lastShotVector is None:
-            _, self.__lastShotVector = self._avatar.gunRotator.getCurShotPosition()
-            self.__lastShotVector.normalise()
-            return
-        else:
-            _, shotVector = self._avatar.gunRotator.getCurShotPosition()
-            shotVector.normalise()
-            cosAngle = shotVector.dot(self.__lastShotVector)
-            self.__lastShotVector = shotVector
-            if cosAngle > 1.0:
-                cosAngle = 1.0
-            elif cosAngle < -1.0:
-                cosAngle = -1.0
-            self.__curAngle += abs(math.acos(cosAngle))
-            resultCommand = None
-            if self._state == HintBase.STATE_DEFAULT:
-                if self._timeout is not None and self._timeout < time.time() - self._timeStart:
-                    self._state = HintBase.STATE_HINT
-                    resultCommand = HINT_COMMAND.SHOW
-                elif self.__curAngle > self.__angle:
-                    self._state = HintBase.STATE_COMPLETE
-                    resultCommand = HINT_COMMAND.SHOW_COMPLETED
-            elif self._state == HintBase.STATE_HINT:
-                if self.__curAngle > self.__angle:
-                    self._state = HintBase.STATE_COMPLETE
-                    resultCommand = HINT_COMMAND.SHOW_COMPLETED_WITH_HINT
-            return resultCommand
-
 
 class HintNoMove(HintBase):
 
@@ -196,13 +104,7 @@ class HintMoveToMarker(HintBase):
 
     def start(self):
         self._timeStart = time.time()
-        self._state = HintBase.STATE_DEFAULT
-        gui = g_bootcamp.getUI()
-        if gui is not None:
-            self.__markers = gui.getMarkers()
-        else:
-            self._state = HintBase.STATE_INACTIVE
-        return
+        self._state = HintBase.STATE_INACTIVE
 
     def stop(self):
         self._state = HintBase.STATE_INACTIVE

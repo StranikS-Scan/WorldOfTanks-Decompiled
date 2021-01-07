@@ -34,7 +34,7 @@ class BCNationsWindow(BCNationsWindowMeta):
     def _populate(self):
         g_playerEvents.onDisconnected += self._onDisconnected
         if IS_CHINA:
-            nationsOrder = ['ussr', 'usa', 'germany']
+            nationsOrder = ['china', 'usa', 'germany']
         else:
             nationsOrder = ['ussr', 'germany', 'usa']
         voList = [ self._getVO(nationId) for nationId in nationsOrder ]

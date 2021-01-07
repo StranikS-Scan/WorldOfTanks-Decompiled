@@ -261,23 +261,12 @@ def packTextBlock(label, value=None, relation=None, questID=None, isAvailable=Tr
     return UiElement(blockData, 'label')
 
 
-def packSimpleBonusesBlock(bonusesList, endlineSymbol='', complexTooltip=''):
+def packSimpleBonusesBlock(bonusesList, endlineSymbol=''):
     data = {'linkage': 'QuestTextAwardBlockUI',
      'items': bonusesList,
      'separator': ', ',
      'ellipsis': '..',
-     'endline': endlineSymbol,
-     'complexTooltip': complexTooltip}
-    return UiElement(data)
-
-
-def packSingleLineBonusesBlock(bonusesList, endlineSymbol='', complexTooltip=''):
-    data = {'linkage': 'QuestSingleLineTextAwardBlockUI',
-     'items': bonusesList,
-     'separator': ', ',
-     'ellipsis': '..',
-     'endline': endlineSymbol,
-     'complexTooltip': complexTooltip}
+     'endline': endlineSymbol}
     return UiElement(data)
 
 
@@ -321,7 +310,7 @@ def packProgressData(rendererLinkage, progressList):
     return ProgressData(rendererLinkage, progressList)
 
 
-PreFormattedCondition = namedtuple('PreFormattedCondition', 'titleData, descrData, iconKey, current, total, earned, progressData, conditionData,progressType, sortKey, progressID')
+PreFormattedCondition = namedtuple('PreForamttedCondition', 'titleData, descrData, iconKey, current, total, earned, progressData, conditionData,progressType, sortKey, progressID')
 
 def packMissionIconCondition(titleData, progressType, descrData, iconKey, current=None, total=None, earned=None, progressData=None, conditionData=None, sortKey='', progressID=None):
     return PreFormattedCondition(titleData, descrData, iconKey, current, total, earned, progressData, conditionData, progressType, sortKey, progressID)

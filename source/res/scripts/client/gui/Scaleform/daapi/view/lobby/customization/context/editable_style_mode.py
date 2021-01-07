@@ -235,6 +235,7 @@ class EditableStyleMode(CustomMode):
         results = []
         vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
         modifiedOutfits = {season:outfit.copy() for season, outfit in self._modifiedOutfits.iteritems()}
+        originalOutfits = {season:outfit.copy() for season, outfit in self._originalOutfits.iteritems()}
         removeUnselectedItemsFromEditableStyle(modifiedOutfits, self.__baseOutfits, purchaseItems)
         self._soundEventChecker.lockPlayingSounds()
         outfit = self._modifiedOutfits[self.season]
@@ -251,7 +252,7 @@ class EditableStyleMode(CustomMode):
 
         self._soundEventChecker.unlockPlayingSounds()
         if self.isInited:
-            self._events.onItemsBought(purchaseItems, results)
+            self._events.onItemsBought(originalOutfits, purchaseItems, results)
         callback(self)
 
     def _fillOutfits(self):

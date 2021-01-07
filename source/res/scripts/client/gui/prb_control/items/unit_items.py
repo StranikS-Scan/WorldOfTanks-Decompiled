@@ -18,11 +18,11 @@ from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 
 class PlayerUnitInfo(object):
-    __slots__ = ('dbID', 'unitMgrID', 'unit', 'name', 'rating', 'role', 'accID', 'vehDict', 'isReady', 'isInSlot', 'slotIdx', 'regionCode', 'clanDBID', 'clanAbbrev', 'timeJoin', 'igrType', 'badges', 'hasPremium', 'extraData')
+    __slots__ = ('dbID', 'unitMgrID', 'unit', 'name', 'rating', 'accountWTR', 'role', 'accID', 'vehDict', 'isReady', 'isInSlot', 'slotIdx', 'regionCode', 'clanDBID', 'clanAbbrev', 'timeJoin', 'igrType', 'badges', 'hasPremium', 'extraData')
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, dbID, unitMgrID, unit, nickName='', rating=0, role=0, accountID=0, vehDict=None, isReady=False, isInSlot=False, slotIdx=-1, clanAbbrev=None, timeJoin=0, igrType=0, clanDBID=None, badges=None, **kwargs):
+    def __init__(self, dbID, unitMgrID, unit, nickName='', rating=0, accountWTR=0, role=0, accountID=0, vehDict=None, isReady=False, isInSlot=False, slotIdx=-1, clanAbbrev=None, timeJoin=0, igrType=0, clanDBID=None, badges=None, **kwargs):
         self.dbID = dbID
         self.unitMgrID = unitMgrID
         if unit is not None:
@@ -31,6 +31,7 @@ class PlayerUnitInfo(object):
             self.unit = None
         self.name = nickName
         self.rating = rating
+        self.accountWTR = accountWTR
         self.role = role
         self.accID = accountID
         self.vehDict = vehDict or {}
@@ -47,7 +48,7 @@ class PlayerUnitInfo(object):
         return
 
     def __repr__(self):
-        return 'PlayerUnitInfo(dbID = {0:n}, fullName = {1:>s}, unitMgrID = {2:n} rating = {3:n}, isCommander = {4!r:s}, role = {5:n}, accID = {6:n}, isReady={7!r:s}, isInSlot={8!r:s}, igrType = {9:n})'.format(self.dbID, self.getFullName(), self.unitMgrID, self.rating, self.isCommander(), self.role, self.accID, self.isReady, self.isInSlot, self.igrType)
+        return 'PlayerUnitInfo(dbID = {0:n}, fullName = {1:>s}, unitMgrID = {2:n} rating = {3:n}, isCommander = {4!r:s}, role = {5:n}, accID = {6:n}, isReady={7!r:s}, isInSlot={8!r:s}, igrType = {9:n}, accountWTR = {10:n})'.format(self.dbID, self.getFullName(), self.unitMgrID, self.rating, self.isCommander(), self.role, self.accID, self.isReady, self.isInSlot, self.igrType, self.accountWTR)
 
     def getFullName(self):
         return self.lobbyContext.getPlayerFullName(self.name, clanAbbrev=self.clanAbbrev, pDBID=self.dbID)
@@ -69,6 +70,9 @@ class PlayerUnitInfo(object):
 
     def isInSearch(self):
         return self.unit.getFlags() & UNIT_FLAGS.IN_SEARCH > 0 if self.unit is not None else False
+
+    def isFinishAssembling(self):
+        return self.unit.getFlags() & UNIT_FLAGS.FINISH_ASSEMBLING > 0 if self.unit is not None else False
 
     def isInQueue(self):
         return self.unit.getFlags() & UNIT_FLAGS.IN_QUEUE > 0 if self.unit is not None else False
@@ -177,17 +181,18 @@ class SlotState(object):
 
 
 class SlotInfo(object):
-    __slots__ = ('index', 'state', 'player', 'vehicle')
+    __slots__ = ('index', 'state', 'player', 'vehicle', 'profileVehicle')
 
-    def __init__(self, index, state, player=None, vehicle=None):
+    def __init__(self, index, state, player=None, vehicle=None, profile=None):
         super(SlotInfo, self).__init__()
         self.index = index
         self.state = state
         self.player = player
         self.vehicle = vehicle
+        self.profileVehicle = profile
 
     def __repr__(self):
-        return 'SlotInfo(index = {0:n}, state = {1!r:s}, player = {2!r:s}, vehicle = {3!r:s})'.format(self.index, self.state, self.player, self.vehicle)
+        return 'SlotInfo(index = {0:n}, state = {1!r:s}, player = {2!r:s}, vehicle = {3!r:s}, profileVehicle = {4!r:s})'.format(self.index, self.state, self.player, self.vehicle, self.profileVehicle)
 
 
 class UnitFlags(object):
@@ -215,6 +220,12 @@ class UnitFlags(object):
     def isLockedStateChanged(self):
         return self.__flagsDiff & UNIT_FLAGS.LOCKED > 0
 
+    def isSearchStateChanged(self):
+        return self.__flagsDiff & UNIT_FLAGS.IN_SEARCH > 0
+
+    def isFinishAssemblingStateChanged(self):
+        return self.__flagsDiff & UNIT_FLAGS.FINISH_ASSEMBLING > 0
+
     def isExternalLockedStateChanged(self):
         return self.__flagsDiff & UNIT_FLAGS.IS_EXTERNAL_LOCK > 0
 
@@ -229,6 +240,9 @@ class UnitFlags(object):
 
     def isInSearch(self):
         return self.__flags & UNIT_FLAGS.IN_SEARCH > 0 or self.__flags & UNIT_FLAGS.PRE_SEARCH > 0
+
+    def isFinishAssembling(self):
+        return self.__flags & UNIT_FLAGS.FINISH_ASSEMBLING > 0
 
     def isInQueue(self):
         return self.__flags & UNIT_FLAGS.IN_QUEUE > 0 or self.__flags & UNIT_FLAGS.PRE_QUEUE > 0

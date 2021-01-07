@@ -5,32 +5,102 @@ import math
 import BigWorld
 from Math import Vector2, Matrix
 from constants import IS_DEVELOPMENT, IS_CLIENT, IS_BOT
-from debug_utils import LOG_DEBUG
 from soft_exception import SoftException
 from constants import IS_EDITOR
 from wrapped_reflection_framework import ReflectionMetaclass
+from items import _xml
+
+class HitTesterManager(object):
+    __metaclass__ = ReflectionMetaclass
+    NORMAL_MODEL_TAG = 'normal'
+    CRASHED_MODEL_TAG = 'crashed'
+    CLIENT_MODEL_TAG = 'collisionModelClient'
+    SERVER_MODEL_TAG = 'collisionModelServer'
+
+    class ModelStatus:
+        NORMAL = 0
+        CRASHED = 1
+
+    def __init__(self, dataSection=None):
+        self.__hitTesters = {self.ModelStatus.NORMAL: None,
+         self.ModelStatus.CRASHED: None}
+        self.__status = self.ModelStatus.NORMAL
+        if dataSection:
+            self.initHitTesters(dataSection)
+        return
+
+    @property
+    def modelHitTester(self):
+        return self.__hitTesters[self.ModelStatus.NORMAL]
+
+    @modelHitTester.setter
+    def modelHitTester(self, hitTester):
+        self.__hitTesters[self.ModelStatus.NORMAL] = hitTester
+
+    @property
+    def crashedModelHitTester(self):
+        return self.__hitTesters[self.ModelStatus.CRASHED]
+
+    @crashedModelHitTester.setter
+    def crashedModelHitTester(self, hitTester):
+        self.__hitTesters[self.ModelStatus.CRASHED] = hitTester
+
+    @property
+    def activeHitTester(self):
+        return self.__hitTesters[self.__status]
+
+    def initHitTesters(self, dataSection):
+        if dataSection.has_key(self.CRASHED_MODEL_TAG):
+            self.__hitTesters[self.ModelStatus.CRASHED] = self.__createHitTester(dataSection, self.CRASHED_MODEL_TAG)
+        normalModelSection = dataSection
+        if dataSection.has_key(self.NORMAL_MODEL_TAG):
+            normalModelSection = _xml.getSubsection(None, dataSection, self.NORMAL_MODEL_TAG)
+        modelHitTester = self.__createHitTester(normalModelSection)
+        self.__hitTesters[self.ModelStatus.NORMAL] = modelHitTester
+        return
+
+    def setStatus(self, modelStatus):
+        if self.__hitTesters[modelStatus]:
+            self.__status = modelStatus
+
+    def loadHitTesters(self):
+        for _, hitTester in self.__hitTesters.iteritems():
+            if hitTester:
+                hitTester.loadBspModel()
+
+    def save(self, section):
+        if IS_EDITOR:
+            section.writeString(self.CLIENT_MODEL_TAG, self.edClientBspModel)
+            section.writeString(self.SERVER_MODEL_TAG, self.edServerBspModel)
+            if self.edCrashBspModel is not '':
+                section.writeString(self.CRASHED_MODEL_TAG, self.edCrashBspModel)
+            elif section.has_key(self.CRASHED_MODEL_TAG):
+                section.deleteSection(self.CRASHED_MODEL_TAG)
+
+    def __createHitTester(self, section, modelTag=None):
+        if modelTag is None:
+            modelTag = self.CLIENT_MODEL_TAG if IS_CLIENT or IS_EDITOR or IS_BOT else self.SERVER_MODEL_TAG
+        bspModelName = section.readString(modelTag)
+        if not bspModelName:
+            raise SoftException('<%s> is missing or wrong' % modelTag)
+        modelTagDown = modelTag + 'Down'
+        bspModelNameDown = section.readString(modelTagDown)
+        modelTagUp = modelTag + 'Up'
+        bspModelNameUp = section.readString(modelTagUp)
+        return ModelHitTester(bspModelName, bspModelNameDown, bspModelNameUp)
+
 
 class ModelHitTester(object):
     __slots__ = ('__bspModel', '__bspModelName', '__bspModelDown', '__bspModelNameDown', '__bspModelUp', '__bspModelNameUp', 'bbox', 'bboxDown', 'bboxUp')
-    __metaclass__ = ReflectionMetaclass
 
-    def __init__(self, dataSection=None):
+    def __init__(self, bspModelName=None, bspModelNameDown=None, bspModelNameUp=None):
         self.bbox = None
         self.__bspModel = None
-        self.__bspModelName = None
+        self.__bspModelName = bspModelName
         self.__bspModelDown = None
-        self.__bspModelNameDown = None
+        self.__bspModelNameDown = bspModelNameDown
         self.__bspModelUp = None
-        self.__bspModelNameUp = None
-        if dataSection is not None:
-            modelTag = 'collisionModelClient' if IS_CLIENT or IS_EDITOR or IS_BOT else 'collisionModelServer'
-            self.__bspModelName = dataSection.readString(modelTag)
-            if not self.__bspModelName:
-                raise SoftException('<%s> is missing or wrong' % modelTag)
-            modelTagDown = modelTag + 'Down'
-            self.__bspModelNameDown = dataSection.readString(modelTagDown)
-            modelTagUp = modelTag + 'Up'
-            self.__bspModelNameUp = dataSection.readString(modelTagUp)
+        self.__bspModelNameUp = bspModelNameUp
         return
 
     @property
@@ -128,11 +198,6 @@ class ModelHitTester(object):
 
     def getModel(self, value):
         return self.__getBspModel(value)
-
-    def save(self, section):
-        if IS_EDITOR:
-            section.writeString('collisionModelClient', self.edClientBspModel)
-            section.writeString('collisionModelServer', self.edServerBspModel)
 
 
 def segmentMayHitVolume(boundingRadius, center, segmentStart, segmentEnd):

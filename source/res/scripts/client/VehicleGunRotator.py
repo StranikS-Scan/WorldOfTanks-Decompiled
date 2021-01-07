@@ -378,7 +378,8 @@ class VehicleGunRotator(object):
     def __rotate(self, shotPoint, timeDiff):
         self.__turretRotationSpeed = 0.0
         targetPoint = shotPoint if shotPoint is not None else self.__prevSentShotPoint
-        if targetPoint is None or self.__isLocked:
+        replayCtrl = BattleReplay.g_replayCtrl
+        if targetPoint is None or self.__isLocked and not replayCtrl.isUpdateGunOnTimeWarp:
             self.__dispersionAngles = self._avatar.getOwnVehicleShotDispersionAngle(0.0)
             return
         else:
@@ -387,7 +388,6 @@ class VehicleGunRotator(object):
             turretYawLimits = self.__getTurretYawLimits()
             maxTurretRotationSpeed = self.__maxTurretRotationSpeed
             prevTurretYaw = self.__turretYaw
-            replayCtrl = BattleReplay.g_replayCtrl
             vehicleMatrix = self.getAvatarOwnVehicleStabilisedMatrix()
             shotTurretYaw, shotGunPitch = getShotAngles(descr, vehicleMatrix, (prevTurretYaw, self.__gunPitch), targetPoint, overrideGunPosition=self.__gunPosition)
             estimatedTurretYaw = self.getNextTurretYaw(prevTurretYaw, shotTurretYaw, maxTurretRotationSpeed * timeDiff, turretYawLimits)
@@ -402,8 +402,8 @@ class VehicleGunRotator(object):
             gunPitchLimits = calcPitchLimitsFromDesc(turretYaw, self.__getGunPitchLimits())
             self.__gunPitch = self.getNextGunPitch(self.__gunPitch, shotGunPitch, timeDiff, gunPitchLimits)
             if replayCtrl.isPlaying and replayCtrl.isUpdateGunOnTimeWarp:
-                self.__updateTurretMatrix(turretYaw, 0.001)
-                self.__updateGunMatrix(self.__gunPitch, 0.001)
+                self.__updateTurretMatrix(turretYaw, 0.0)
+                self.__updateGunMatrix(self.__gunPitch, 0.0)
             else:
                 self.__updateTurretMatrix(turretYaw, self.__ROTATION_TICK_LENGTH)
                 self.__updateGunMatrix(self.__gunPitch, self.__ROTATION_TICK_LENGTH)

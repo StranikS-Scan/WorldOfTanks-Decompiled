@@ -5,8 +5,8 @@ __all__ = ('FEATURES', 'KAFKA_TOPICS', 'KEYS_MAPPING', 'REQUESTS_LIMIT', 'HTTP_O
 class FEATURES:
     BOOTCAMP = 'bootcamp'
     IN_BATTLE_COMMUNICATION = 'ibc'
-    NEW_YEAR = 'ny'
-    ALL = [BOOTCAMP, IN_BATTLE_COMMUNICATION, NEW_YEAR]
+    MODE_SELECTOR = 'mode_selector'
+    ALL = [BOOTCAMP, IN_BATTLE_COMMUNICATION, MODE_SELECTOR]
 
 
 def createTopicName(feature):
@@ -15,7 +15,7 @@ def createTopicName(feature):
 
 KAFKA_TOPICS = {FEATURES.BOOTCAMP: createTopicName(FEATURES.BOOTCAMP),
  FEATURES.IN_BATTLE_COMMUNICATION: createTopicName(FEATURES.IN_BATTLE_COMMUNICATION),
- FEATURES.NEW_YEAR: createTopicName(FEATURES.NEW_YEAR)}
+ FEATURES.MODE_SELECTOR: createTopicName(FEATURES.MODE_SELECTOR)}
 KEYS_MAPPING = {0: 'Left Mouse Button',
  1: 'Right Mouse Button',
  2: 'Middle Mouse Button',

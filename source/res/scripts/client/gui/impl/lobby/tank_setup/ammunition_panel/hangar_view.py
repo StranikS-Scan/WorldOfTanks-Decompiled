@@ -14,16 +14,13 @@ from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import AmmunitionSetupViewEvent
 from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import dependency
-from new_year.ny_constants import SyncDataKeys
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IUISpamController
-from skeletons.new_year import INewYearController
 _logger = logging.getLogger(__name__)
 
 class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
     _settingsCore = dependency.descriptor(ISettingsCore)
     _uiSpamController = dependency.descriptor(IUISpamController)
-    _nyController = dependency.descriptor(INewYearController)
 
     def update(self, fullUpdate=True):
         with self.viewModel.transaction():
@@ -47,16 +44,6 @@ class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
                 self.viewModel.hints.addHintModel(TutorialHintConsts.HANGAR_PANEL_OPT_DEVICE_MC)
             self.viewModel.hints.addHintModel(TutorialHintConsts.HANGAR_PANEL_SHELLS_MC)
 
-    def _addListeners(self):
-        super(HangarAmmunitionPanelView, self)._addListeners()
-        self._nyController.onDataUpdated += self.__onDataUpdated
-        self._nyController.onStateChanged += self.__onStateChanged
-
-    def _removeListeners(self):
-        super(HangarAmmunitionPanelView, self)._removeListeners()
-        self._nyController.onDataUpdated -= self.__onDataUpdated
-        self._nyController.onStateChanged -= self.__onStateChanged
-
     @async
     def _onPanelSectionSelected(self, args):
         selectedSection = args['selectedSection']
@@ -75,11 +62,3 @@ class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
     @staticmethod
     def __hideHintModel():
         g_eventBus.handleEvent(AmmunitionSetupViewEvent(AmmunitionSetupViewEvent.HINT_ZONE_HIDE, ctx={'hintName': TutorialHintConsts.AMMUNITION_PANEL_HINT_MC}), EVENT_BUS_SCOPE.LOBBY)
-
-    def __onDataUpdated(self, keys):
-        vehicleBranchChanged = SyncDataKeys.VEHICLE_BRANCH in keys
-        if vehicleBranchChanged:
-            self.update(fullUpdate=True)
-
-    def __onStateChanged(self):
-        self.update(fullUpdate=True)

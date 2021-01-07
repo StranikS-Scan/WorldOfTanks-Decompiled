@@ -36,8 +36,6 @@ from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view im
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_not_started_tooltip_view import BattlePassNotStartedTooltipView
 from gui.impl.lobby.battle_pass.tooltips.vehicle_points_tooltip_view import VehiclePointsTooltipView
 from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent
-from gui.impl.new_year.tooltips.new_year_total_bonus_tooltip import NewYearTotalBonusTooltip
-from gui.impl.new_year.tooltips.new_year_vehicles_bonus_tooltip import NewYearVehiclesBonusTooltip
 from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.server_events.events_helpers import missionsSortFunc
@@ -920,6 +918,10 @@ class SettingsMinimapCircles(BlocksTooltipData):
         tooltipBlocks.append(formatters.packBuildUpBlockData([headerBlock, imgBlock], padding={'bottom': -20}))
         textBlocks = []
         templateName = 'html_templates:lobby/tooltips/settings_minimap_circles'
+        minSpottingRangeHtml = makeHtmlString(templateName, 'min_spotting_range_title') + lineBreak
+        minSpottingRangeTitle = minSpottingRangeHtml % i18n.makeString(TOOLTIPS.SETTINGS_MINIMAPCIRCLES_MINIMUMSPOTTINGRANGE_TITLE)
+        minSpottingRangeBody = text_styles.main(TOOLTIPS.SETTINGS_MINIMAPCIRCLES_MINIMUMSPOTTINGRANGE_BODY)
+        textBlocks.extend(self.getTextBlocksForCircleDescr(minSpottingRangeTitle, minSpottingRangeBody))
         viewRangeTitle = text_styles.bonusAppliedText(TOOLTIPS.SETTINGS_MINIMAPCIRCLES_VIEWRANGE_TITLE)
         viewRangeBody = text_styles.main(TOOLTIPS.SETTINGS_MINIMAPCIRCLES_VIEWRANGE_BODY)
         textBlocks.extend(self.getTextBlocksForCircleDescr(viewRangeTitle, viewRangeBody))
@@ -944,23 +946,6 @@ class SettingsShowLocationMarkers(BlocksTooltipData):
     def _packBlocks(self, *args, **kwargs):
         tooltipBlocks = super(SettingsShowLocationMarkers, self)._packBlocks()
         tooltipBlocks.append(formatters.packBuildUpBlockData([formatters.packTitleDescBlock(text_styles.highTitle(TOOLTIPS.SETTINGS_SHOWLOCATIONMARKERS_HEADER), text_styles.main(TOOLTIPS.SETTINGS_SHOWLOCATIONMARKERS_BODY)), formatters.packTextBlockData(text_styles.neutral(TOOLTIPS.SETTINGS_SHOWLOCATIONMARKERS_BODYFOOTER), padding={'bottom': -15})]))
-        return tooltipBlocks
-
-
-class SquadRestrictionsInfo(BlocksTooltipData):
-
-    def __init__(self, context):
-        super(SquadRestrictionsInfo, self).__init__(context, TOOLTIP_TYPE.CONTROL)
-        self._setContentMargin(top=15, left=19, bottom=6, right=20)
-        self._setMargins(afterBlock=14)
-        self._setWidth(364)
-
-    def _packBlocks(self, *args):
-        tooltipBlocks = super(SquadRestrictionsInfo, self)._packBlocks()
-        tooltipBlocks.append(formatters.packTitleDescBlock(text_styles.highTitle(TOOLTIPS.SQUADWINDOW_INFOICON_TECHRESTRICTIONS_HEADER)))
-        tooltipBlocks.append(formatters.packImageTextBlockData(text_styles.stats(TOOLTIPS.SQUADWINDOW_INFOICON_TECHRESTRICTIONS_TITLE0), text_styles.standard(TOOLTIPS.SQUADWINDOW_INFOICON_TECHRESTRICTIONS_BODY0), RES_ICONS.MAPS_ICONS_LIBRARY_DONE, imgPadding=formatters.packPadding(left=-21, right=10), padding=formatters.packPadding(-22, 20)))
-        tooltipBlocks.append(formatters.packImageTextBlockData(text_styles.stats(TOOLTIPS.SQUADWINDOW_INFOICON_TECHRESTRICTIONS_TITLE1), text_styles.standard(TOOLTIPS.SQUADWINDOW_INFOICON_TECHRESTRICTIONS_BODY1), RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICONFILLEDBIG, imgPadding=formatters.packPadding(left=-21, right=12), padding=formatters.packPadding(-22, 20, 1)))
-        tooltipBlocks.append(formatters.packImageTextBlockData(text_styles.stats(TOOLTIPS.SQUADWINDOW_INFOICON_TECHRESTRICTIONS_TITLE2), text_styles.standard(TOOLTIPS.SQUADWINDOW_INFOICON_TECHRESTRICTIONS_BODY2), RES_ICONS.MAPS_ICONS_LIBRARY_ICON_ALERT_32X32, imgPadding=formatters.packPadding(left=-21, right=10), padding=formatters.packPadding(-22, 20, 11)))
         return tooltipBlocks
 
 
@@ -1406,39 +1391,6 @@ class SquadBonusTooltipWindowData(ToolTipBaseData):
 
     def getDisplayableData(self, *args, **kwargs):
         return DecoratedTooltipWindow(SquadBonusTooltipContent())
-
-
-class NYCreditBonusTooltipWindowData(ToolTipBaseData):
-
-    def __init__(self, context):
-        super(NYCreditBonusTooltipWindowData, self).__init__(context, TOOLTIP_TYPE.NY_CREDIT_BONUS)
-
-    def getDisplayableData(self, *args, **kwargs):
-        return DecoratedTooltipWindow(NewYearTotalBonusTooltip())
-
-
-class NYVehicleBonusTooltipWindowData(ToolTipBaseData):
-
-    def __init__(self, context):
-        super(NYVehicleBonusTooltipWindowData, self).__init__(context, TOOLTIP_TYPE.NY_VEHICLE_BONUS)
-
-    def getDisplayableData(self, *args, **kwargs):
-        return DecoratedTooltipWindow(NewYearVehiclesBonusTooltip())
-
-
-class NewYearFillers(BlocksTooltipData):
-
-    def __init__(self, context):
-        super(NewYearFillers, self).__init__(context, None)
-        self._setWidth(365)
-        self._setContentMargin(0, 0, 0, 0)
-        return
-
-    def _packBlocks(self, *args, **kwargs):
-        items = super(NewYearFillers, self)._packBlocks(*args, **kwargs)
-        blocks = [formatters.packImageBlockData(backport.image(R.images.gui.maps.icons.new_year.infotype.icon_filler())), formatters.packTextBlockData(text_styles.highTitle(backport.text(R.strings.ny.fillersTooltip.header())), padding=formatters.packPadding(-364, 30, 0, 30)), formatters.packTextBlockData(text_styles.mainBig(backport.text(R.strings.ny.fillersTooltip.description())), padding=formatters.packPadding(240, 30, 30, 30))]
-        items.append(formatters.packBuildUpBlockData(blocks=blocks))
-        return items
 
 
 class VehiclePointsTooltipContentWindowData(ToolTipBaseData):

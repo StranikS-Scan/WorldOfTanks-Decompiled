@@ -11,7 +11,7 @@ import DataLinks
 import Vehicular
 import NetworkFilters
 import material_kinds
-from constants import IS_EDITOR
+from constants import IS_EDITOR, VEHICLE_SIEGE_STATE
 from CustomEffectManager import CustomEffectManager, EffectSettings
 from helpers.EffectMaterialCalculation import calcEffectMaterialIndex
 from VehicleStickers import VehicleStickers
@@ -29,6 +29,7 @@ from helpers import bound_effects, gEffectsDisabled
 from vehicle_outfit.outfit import Outfit
 from items.battle_royale import isSpawnedBot
 from helpers import isPlayerAvatar
+from ModelHitTester import HitTesterManager
 _logger = logging.getLogger(__name__)
 DEFAULT_STICKERS_ALPHA = 1.0
 MATKIND_COUNT = 3
@@ -166,6 +167,7 @@ class CommonTankAppearance(ScriptGameObject):
         self.__typeDesc = typeDescriptor
         self.__vID = vID
         self._isTurretDetached = isTurretDetached
+        self.__updateModelStatus()
         self.__outfit = self._prepareOutfit(outfitCD)
         if self.damageState.isCurrentModelUndamaged:
             self.__attachments = camouflages.getAttachments(self.outfit, self.typeDescriptor)
@@ -190,14 +192,7 @@ class CommonTankAppearance(ScriptGameObject):
         prereqs.append(compoundAssembler)
         if renderMode == TankRenderMode.OVERLAY_COLLISION:
             self.damageState.update(0, isCrewActive, False)
-        if not isTurretDetached:
-            bspModels = ((TankPartNames.getIdx(TankPartNames.CHASSIS), typeDescriptor.chassis.hitTester.bspModelName),
-             (TankPartNames.getIdx(TankPartNames.HULL), typeDescriptor.hull.hitTester.bspModelName),
-             (TankPartNames.getIdx(TankPartNames.TURRET), typeDescriptor.turret.hitTester.bspModelName),
-             (TankPartNames.getIdx(TankPartNames.GUN), typeDescriptor.gun.hitTester.bspModelName))
-        else:
-            bspModels = ((TankPartNames.getIdx(TankPartNames.CHASSIS), typeDescriptor.chassis.hitTester.bspModelName), (TankPartNames.getIdx(TankPartNames.HULL), typeDescriptor.hull.hitTester.bspModelName))
-        collisionAssembler = BigWorld.CollisionAssembler(bspModels, self.worldID)
+        collisionAssembler = model_assembler.prepareCollisionAssembler(self.typeDescriptor, self.isTurretDetached, self.worldID)
         prereqs.append(collisionAssembler)
         physicalTracksBuilders = self.typeDescriptor.chassis.physicalTracks
         for name, builders in physicalTracksBuilders.iteritems():
@@ -207,11 +202,6 @@ class CommonTankAppearance(ScriptGameObject):
         return prereqs
 
     def construct(self, isPlayer, resourceRefs):
-        self.collisions = resourceRefs['collisionAssembler']
-        self.typeDescriptor.chassis.hitTester.bbox = self.collisions.getBoundingBox(TankPartNames.getIdx(TankPartNames.CHASSIS))
-        self.typeDescriptor.hull.hitTester.bbox = self.collisions.getBoundingBox(TankPartNames.getIdx(TankPartNames.HULL))
-        self.typeDescriptor.turret.hitTester.bbox = self.collisions.getBoundingBox(TankPartNames.getIdx(TankPartNames.TURRET))
-        self.typeDescriptor.gun.hitTester.bbox = self.collisions.getBoundingBox(TankPartNames.getIdx(TankPartNames.GUN))
         self.__isObserver = 'observer' in self.typeDescriptor.type.tags
         self._compoundModel = resourceRefs[self.typeDescriptor.name]
         self.__boundEffects = bound_effects.ModelBoundEffects(self.compoundModel)
@@ -219,6 +209,8 @@ class CommonTankAppearance(ScriptGameObject):
         fashions = camouflages.prepareFashions(isCurrentModelDamaged)
         if not isCurrentModelDamaged:
             model_assembler.setupTracksFashion(self.typeDescriptor, fashions.chassis)
+        self.collisions = resourceRefs['collisionAssembler']
+        model_assembler.setupCollisions(self.typeDescriptor, self.collisions)
         self._setFashions(fashions, self.isTurretDetached)
         self._setupModels()
         if not isCurrentModelDamaged:
@@ -310,6 +302,10 @@ class CommonTankAppearance(ScriptGameObject):
         if self.collisions is not None and self.isTurretDetached:
             self.collisions.removeAttachment(TankPartNames.getIdx(TankPartNames.TURRET))
             self.collisions.removeAttachment(TankPartNames.getIdx(TankPartNames.GUN))
+        typeDescr = self.typeDescriptor
+        wheelConfig = typeDescr.chassis.generalWheelsAnimatorConfig
+        if self.wheelsAnimator is not None and wheelConfig is not None:
+            self.wheelsAnimator.createCollision(wheelConfig, self.collisions)
         super(CommonTankAppearance, self).activate()
         if not self.isObserver:
             self._chassisDecal.attach()
@@ -369,6 +365,31 @@ class CommonTankAppearance(ScriptGameObject):
             if self.crashedTracksController is not None:
                 self.crashedTracksController.receiveShotImpulse(direction, impulse)
         return
+
+    def recoil(self):
+        self._initiateRecoil(TankNodeNames.GUN_INCLINATION, 'HP_gunFire', self.gunRecoil)
+
+    def multiGunRecoil(self, indexes):
+        if self.gunAnimators is None:
+            return
+        else:
+            for index in indexes:
+                typeDescr = self.typeDescriptor
+                gun = typeDescr.turret.multiGun[index]
+                gunNodeName = gun.node
+                gunFireNodeName = gun.gunFire
+                gunAnimator = self.gunAnimators[index]
+                self._initiateRecoil(gunNodeName, gunFireNodeName, gunAnimator)
+
+            return
+
+    def _initiateRecoil(self, gunNodeName, gunFireNodeName, gunAnimator):
+        gunNode = self.compoundModel.node(gunNodeName)
+        impulseDir = Math.Matrix(gunNode).applyVector(Math.Vector3(0, 0, -1))
+        impulseValue = self.typeDescriptor.gun.impulse
+        self.receiveShotImpulse(impulseDir, impulseValue)
+        gunAnimator.recoil()
+        return impulseDir
 
     def computeVehicleHeight(self):
         gunLength = 0.0
@@ -466,7 +487,16 @@ class CommonTankAppearance(ScriptGameObject):
 
     def _onRequestModelsRefresh(self):
         self.flagComponent = None
+        self.__updateModelStatus()
         return
+
+    def __updateModelStatus(self):
+        if self.damageState.isCurrentModelUndamaged:
+            modelStatus = HitTesterManager.ModelStatus.NORMAL
+        else:
+            modelStatus = HitTesterManager.ModelStatus.CRASHED
+        for htManager in self.typeDescriptor.getHitTesterManagers():
+            htManager.setStatus(modelStatus)
 
     def _onEngineStart(self):
         if self.engineAudition is not None:
@@ -579,6 +609,7 @@ class CommonTankAppearance(ScriptGameObject):
         self.boundEffects.stop()
 
     def playEffectWithStopCallback(self, effects):
+        self._stopEffects()
         vehicle = self._vehicle
         return self.boundEffects.addNew(None, effects[1], effects[0], isPlayerVehicle=vehicle.isPlayerVehicle, showShockWave=vehicle.isPlayerVehicle, showFlashBang=vehicle.isPlayerVehicle, entity_id=vehicle.id, isPlayer=vehicle.isPlayerVehicle, showDecal=True, start=vehicle.position + Math.Vector3(0.0, 1.0, 0.0), end=vehicle.position + Math.Vector3(0.0, -1.0, 0.0)).stop
 
@@ -631,6 +662,24 @@ class CommonTankAppearance(ScriptGameObject):
             if self.vehicleTraces is not None:
                 self.vehicleTraces.setCurrTerrainMatKinds(self.terrainMatKind[0], self.terrainMatKind[1])
             return
+
+    def onSiegeStateChanged(self, newState, timeToNextMode):
+        if self.engineAudition is not None:
+            self.engineAudition.onSiegeStateChanged(newState)
+        if self.hullAimingController is not None:
+            self.hullAimingController.onSiegeStateChanged(newState)
+        if self.suspensionSound is not None:
+            self.suspensionSound.vehicleState = newState
+        if self.siegeEffects is not None:
+            self.siegeEffects.onSiegeStateChanged(newState, timeToNextMode)
+        enabled = newState == VEHICLE_SIEGE_STATE.ENABLED or newState == VEHICLE_SIEGE_STATE.SWITCHING_ON
+        if self.suspension is not None:
+            self.suspension.setLiftMode(enabled)
+        if self.leveredSuspension is not None:
+            self.leveredSuspension.setLiftMode(enabled)
+        if self.vehicleTraces is not None:
+            self.vehicleTraces.setLiftMode(enabled)
+        return
 
     def changeEngineMode(self, mode, forceSwinging=False):
         if self.detailedEngineState is not None:

@@ -147,7 +147,7 @@ class CustomPopoverDataProvider(SortableDAAPIDataProvider):
     def __getModifiedItemsData(self):
         itemData = {}
         purchaseItems = self.__ctx.mode.getPurchaseItems()
-        purchaseItems = ifilter(lambda i: not i.isDismantling and i.group == self.__ctx.season, purchaseItems)
+        purchaseItems = ifilter(lambda i: i.group == self.__ctx.season, purchaseItems)
         modifiedOutfit = self.__ctx.mode.getModifiedOutfit()
         originalOutfit = self.__ctx.mode.getOriginalOutfit()
         for pItem in purchaseItems:

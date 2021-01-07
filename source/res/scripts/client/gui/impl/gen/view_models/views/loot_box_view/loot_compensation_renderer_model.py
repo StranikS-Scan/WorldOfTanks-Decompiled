@@ -9,39 +9,45 @@ class LootCompensationRendererModel(LootAnimatedRendererModel):
         super(LootCompensationRendererModel, self).__init__(properties=properties, commands=commands)
 
     def getIconFrom(self):
-        return self._getString(15)
+        return self._getString(14)
 
     def setIconFrom(self, value):
-        self._setString(15, value)
+        self._setString(14, value)
 
     def getLabelBeforeStr(self):
-        return self._getString(16)
+        return self._getString(15)
 
     def setLabelBeforeStr(self, value):
-        self._setString(16, value)
+        self._setString(15, value)
 
     def getIconBefore(self):
-        return self._getString(17)
+        return self._getString(16)
 
     def setIconBefore(self, value):
-        self._setString(17, value)
+        self._setString(16, value)
 
     def getIconAfter(self):
-        return self._getString(18)
+        return self._getString(17)
 
     def setIconAfter(self, value):
-        self._setString(18, value)
+        self._setString(17, value)
 
     def getLabelBefore(self):
-        return self._getString(19)
+        return self._getString(18)
 
     def setLabelBefore(self, value):
-        self._setString(19, value)
+        self._setString(18, value)
 
     def getLabelAfter(self):
-        return self._getString(20)
+        return self._getString(19)
 
     def setLabelAfter(self, value):
+        self._setString(19, value)
+
+    def getBonusName(self):
+        return self._getString(20)
+
+    def setBonusName(self, value):
         self._setString(20, value)
 
     def getCountBefore(self):
@@ -64,5 +70,6 @@ class LootCompensationRendererModel(LootAnimatedRendererModel):
         self._addStringProperty('iconAfter', '')
         self._addStringProperty('labelBefore', '')
         self._addStringProperty('labelAfter', '')
+        self._addStringProperty('bonusName', '')
         self._addNumberProperty('countBefore', 1)
         self._addStringProperty('labelAlignAfter', 'center')

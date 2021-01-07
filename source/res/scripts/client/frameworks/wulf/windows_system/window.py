@@ -221,9 +221,6 @@ class Window(PyObjectEntity):
     def isHidden(self):
         return self.proxy.isHidden()
 
-    def canBeClosed(self):
-        return self.content.canBeClosed() if self.content is not None else True
-
     def _getDecoratorViewModel(self):
         decorator = self.decorator
         return decorator.getViewModel() if decorator is not None else None
@@ -302,6 +299,3 @@ class Window(PyObjectEntity):
             self._onContentReady()
         elif newStatus == ViewStatus.DESTROYED:
             self._onContentReleased()
-
-    def _onClientDisconnected(self):
-        pass

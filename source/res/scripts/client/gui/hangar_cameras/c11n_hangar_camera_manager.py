@@ -10,7 +10,7 @@ from gui import g_guiResetters
 from gui.hangar_cameras.hangar_camera_manager import IMMEDIATE_CAMERA_MOVEMENT_MODE
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.utils.graphics import isRendererPipelineDeferred
-from items.components.c11n_constants import EASING_TRANSITION_DURATION
+from items.components.c11n_constants import EASING_TRANSITION_DURATION, IMMEDIATE_TRANSITION_DURATION
 from helpers import dependency
 from helpers.CallbackDelayer import TimeDeltaMeter
 from skeletons.gui.shared.utils import IHangarSpace
@@ -127,7 +127,9 @@ class C11nHangarCameraManager(TimeDeltaMeter):
             from gui.ClientHangarSpace import hangarCFG
             cfg = hangarCFG()
             if needToSetCameraLocation:
-                self.__hangarCameraManager.setCameraLocation(targetPos=cfg['cam_start_target_pos'], pivotPos=cfg['cam_pivot_pos'], yaw=math.radians(cfg['cam_start_angles'][0]), pitch=math.radians(cfg['cam_start_angles'][1]), dist=cfg['cam_start_dist'], camConstraints=[cfg['cam_pitch_constr'], cfg['cam_yaw_constr'], cfg['cam_dist_constr']])
+                dist = cfg['cam_start_dist']
+                self.__hangarCameraManager.setCameraLocation(targetPos=cfg['cam_start_target_pos'], pivotPos=cfg['cam_pivot_pos'], yaw=math.radians(cfg['cam_start_angles'][0]), pitch=math.radians(cfg['cam_start_angles'][1]), dist=dist, camConstraints=[cfg['cam_pitch_constr'], cfg['cam_yaw_constr'], cfg['cam_dist_constr']])
+                self.__hangarCameraManager.updateDynamicFov(dist=dist, rampTime=IMMEDIATE_TRANSITION_DURATION)
             self.__currentMode = C11nCameraModes.START_STATE
             self.enableMovementByMouse()
             return
@@ -233,13 +235,15 @@ class C11nHangarCameraManager(TimeDeltaMeter):
             return
         else:
             hangarCamera = self.__hangarCameraManager.camera
+            transitionDuration = IMMEDIATE_TRANSITION_DURATION if forceLocate else EASING_TRANSITION_DURATION
             if self.__c11nCamera is not None and hangarCamera is not None:
                 currentTarget = hangarCamera.target.translation
                 if targetPos != currentTarget or forceRotate:
-                    self.__c11nCamera.moveTo(targetPos, 0.0 if forceLocate else EASING_TRANSITION_DURATION)
+                    self.__c11nCamera.moveTo(targetPos, transitionDuration)
                 else:
                     return
             self.__hangarCameraManager.setCameraLocation(targetPos=targetPos, pivotPos=pivotPos, yaw=yaw, pitch=pitch, dist=dist, camConstraints=camConstraints, ignoreConstraints=ignoreConstraints, movementMode=IMMEDIATE_CAMERA_MOVEMENT_MODE)
+            self.__hangarCameraManager.updateDynamicFov(dist=dist, rampTime=transitionDuration)
             return
 
     def __getDistConstraints(self, position, commonConstraints=None, startingPoint=None):

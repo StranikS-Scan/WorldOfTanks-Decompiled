@@ -235,6 +235,7 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
     def __openRadialMenu(self):
         self.__radialMenuIsOpen = True
         if avatar_getter.isVehicleAlive() and not self.sessionProvider.getCtx().isPlayerObserver():
+            self.__executeHide()
             gui_event_dispatcher.setRadialMenuCmd(self.__radialKeyDown, self.__radialMenuIsOpen)
 
     def __onSettingsReady(self):

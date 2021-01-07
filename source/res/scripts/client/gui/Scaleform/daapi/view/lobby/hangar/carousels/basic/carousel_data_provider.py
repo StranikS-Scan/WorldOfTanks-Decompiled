@@ -4,20 +4,14 @@ from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider imp
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider import getStatusStrings
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.impl.gen import R
-from gui.impl import backport
-from gui.impl.new_year.new_year_helper import hasNewExtraSlotLevel
-from gui.impl.new_year.views.new_year_vehicles_view import VehicleCooldownNotifier
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.money import Money
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
-from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.new_year import INewYearController
 
 class _SUPPLY_ITEMS(object):
     BUY_TANK = 0
@@ -26,30 +20,21 @@ class _SUPPLY_ITEMS(object):
     ALL = (BUY_TANK, RESTORE_TANK, BUY_SLOT)
 
 
-class _BEFORE_SUPPLY_ITEMS(object):
-    NY_SLOT = 0
-    ALL = (NY_SLOT,)
-
-
 class HangarCarouselDataProvider(CarouselDataProvider):
-    _nyController = dependency.descriptor(INewYearController)
 
     def __init__(self, carouselFilter, itemsCache, currentVehicle):
         super(HangarCarouselDataProvider, self).__init__(carouselFilter, itemsCache, currentVehicle)
         self._setBaseCriteria()
-        self._vehicleBranch = []
         self._supplyItems = []
         self._emptySlotsCount = 0
         self._restorableVehiclesCount = 0
-        self.vehicleCooldownNotifier = None
-        return
 
     @property
     def collection(self):
-        return self._vehicleItems + self._supplyItems + self._vehicleBranch
+        return self._vehicleItems + self._supplyItems
 
     def getCurrentVehiclesCount(self):
-        return len(self._filteredIndices) - len(self._getAdditionalItemsIndexes()) - len(self._getBeforeAdditionalItemsIndexes())
+        return len(self._filteredIndices) - len(self._getAdditionalItemsIndexes())
 
     def updateSupplies(self):
         self._supplyItems = []
@@ -57,16 +42,9 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         self.flashObject.invalidateItems(self.__getSupplyIndices(), self._supplyItems)
         self.applyFilter()
 
-    def updateVehicleBranch(self):
-        self._vehicleBranch = []
-        self._buildVehicleBranch()
-        self.flashObject.invalidateItems(self.__getVehicleBranchIndices(), self._vehicleBranch)
-        self.applyFilter()
-
     def clear(self):
         super(HangarCarouselDataProvider, self).clear()
         self._supplyItems = []
-        self._verifySlotNotifier()
 
     def _setBaseCriteria(self):
         self._baseCriteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
@@ -79,7 +57,6 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         super(HangarCarouselDataProvider, self)._buildVehicleItems()
         self._buildRentPromitionVehicleItems()
         self._buildSupplyItems()
-        self._buildVehicleBranch()
 
     def _getAdditionalItemsIndexes(self):
         supplyIndices = self.__getSupplyIndices()
@@ -92,9 +69,6 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         if self._restorableVehiclesCount == 0 or not restoreEnabled or not storageEnabled:
             pruneIndices.add(_SUPPLY_ITEMS.RESTORE_TANK)
         return [ suppIdx for suppIdx in supplyIndices if supplyIndices.index(suppIdx) not in pruneIndices ]
-
-    def _getBeforeAdditionalItemsIndexes(self):
-        return [] if not self._nyController.isVehicleBranchEnabled() else self.__getVehicleBranchIndices()
 
     def _buildSupplyItems(self):
         self._supplyItems = []
@@ -113,8 +87,8 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         smallBuySlotString, buySlotString = getStatusStrings('buySlot')
         smallBuyTankString, buyTankString = getStatusStrings('buyTank')
         smallRestoreTankString, restoreTankString = getStatusStrings('restoreTank')
-        smallRestoreTankCountString, restoreTankCountString = getStatusStrings('restoreTankCount', style=text_styles.main, styleLarge=text_styles.main, ctx={'count': self._restorableVehiclesCount})
-        smallEmptySlotsString, emptySlotsString = getStatusStrings('buyTankEmptyCount', style=text_styles.main, styleLarge=text_styles.main, ctx={'count': self._emptySlotsCount})
+        smallRestoreTankCountString, restoreTankCountString = getStatusStrings('restoreTankCount', style=text_styles.main, ctx={'count': self._restorableVehiclesCount})
+        smallEmptySlotsString, emptySlotsString = getStatusStrings('buyTankEmptyCount', style=text_styles.main, ctx={'count': self._emptySlotsCount})
         self._supplyItems.append({'buyTank': True,
          'smallInfoText': text_styles.concatStylesToMultiLine(smallBuyTankString, smallEmptySlotsString),
          'infoText': text_styles.concatStylesToMultiLine(buyTankString, emptySlotsString),
@@ -141,49 +115,8 @@ class HangarCarouselDataProvider(CarouselDataProvider):
     def _isSuitableForQueue(vehicle):
         return vehicle.getCustomState() != Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE
 
-    def _buildVehicleBranch(self):
-        self._verifySlotNotifier()
-        self._startSlotNotifier()
-        self._vehicleBranch = []
-        freeSlotsCount = len(self._nyController.getVehicleBranch().getFreeVehicleSlots())
-        tankTreeAvailable = self._nyController.getVehicleBranch().hasAvailableSlots()
-        smallNyTankString, nyTankString = getStatusStrings('nyTank', style=text_styles.nyVehicleSmallTitle, styleLarge=text_styles.nyVehicleTitle)
-        if freeSlotsCount == 0 and tankTreeAvailable:
-            smallNyStatusSlotsString, nyStatusSlotsString = getStatusStrings('nyTankSlotsFull', style=text_styles.nyVehicleSmallMain, styleLarge=text_styles.nyVehicleMain)
-        else:
-            smallNyStatusSlotsString, nyStatusSlotsString = getStatusStrings('nyTankEmptyCount', style=text_styles.nyVehicleSmallMain, styleLarge=text_styles.nyVehicleMain, ctx={'count': freeSlotsCount})
-        infoText = text_styles.concatStylesToMultiLine(nyTankString, nyStatusSlotsString)
-        self._vehicleBranch.append({'nySlot': True,
-         'smallInfoText': text_styles.concatStylesToMultiLine(smallNyTankString, smallNyStatusSlotsString),
-         'infoText': infoText,
-         'infoHoverText': infoText,
-         'icon': backport.image(R.images.gui.maps.icons.new_year.vehicles_view.ny_slot()),
-         'iconSmall': backport.image(R.images.gui.maps.icons.new_year.vehicles_view.ny_slot_small()),
-         'tooltip': makeTooltip(header=backport.text(R.strings.tooltips.tankCarusel.newYearSlot.header()), body=backport.text(R.strings.tooltips.tankCarusel.newYearSlot.body())),
-         'nyBlinkEnabled': freeSlotsCount > 0,
-         'showBubble': hasNewExtraSlotLevel(),
-         'iconHover': backport.image(R.images.gui.maps.icons.new_year.vehicles_view.ny_slot_hover()),
-         'iconHoverSmall': backport.image(R.images.gui.maps.icons.new_year.vehicles_view.ny_slot_small_hover()),
-         'additionalImgSrc': '',
-         'clickEnabled': True})
-
-    def _startSlotNotifier(self):
-        if self._nyController.isVehicleBranchEnabled():
-            self.vehicleCooldownNotifier = VehicleCooldownNotifier(self.updateVehicleBranch, self._nyController.getVehicleBranch().getVehicleSlots())
-            self.vehicleCooldownNotifier.startNotification()
-
-    def _verifySlotNotifier(self):
-        if self.vehicleCooldownNotifier is not None:
-            self.vehicleCooldownNotifier.stopNotification()
-            self.vehicleCooldownNotifier.clear()
-            self.vehicleCooldownNotifier = None
-        return
-
     def __getSupplyIndices(self):
         return [ len(self._vehicles) + idx for idx in _SUPPLY_ITEMS.ALL ]
-
-    def __getVehicleBranchIndices(self):
-        return [ len(self._vehicles) + len(_SUPPLY_ITEMS.ALL) + idx for idx in _BEFORE_SUPPLY_ITEMS.ALL ]
 
 
 class BCCarouselDataProvider(CarouselDataProvider):

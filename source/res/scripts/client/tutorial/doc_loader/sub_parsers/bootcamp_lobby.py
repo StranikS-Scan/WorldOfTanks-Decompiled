@@ -57,7 +57,7 @@ def _readSubtitleWindowSection(xmlCtx, section, _, windowID, windowType, content
 
 
 def _readVideoWindowSection(xmlCtx, section, _, windowID, windowType, content):
-    fields = ('subtitle', 'video-path', 'event-start', 'event-stop', 'event-pause', 'event-resume', 'event-loop')
+    fields = ('subtitle', 'video-path', 'event-start', 'event-stop', 'event-pause', 'event-resume', 'event-loop', 'video-fit-to-screen')
     content['sequence'] = [ _readSequenceItem(xmlCtx, messageSec, fields) for _, messageSec in _xml.getChildren(xmlCtx, section, 'sequence') ]
     return chapter.PopUp(windowID, windowType, content, varRef=None, forcedQuery=True)
 

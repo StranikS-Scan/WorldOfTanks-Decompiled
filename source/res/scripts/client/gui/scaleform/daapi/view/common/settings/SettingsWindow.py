@@ -95,17 +95,8 @@ class SettingsWindow(SettingsWindowMeta):
 
     def __getSettings(self):
         settings = self.__getSettingsParam()
-        reformatted_settings = {}
-        for key, value in settings.iteritems():
-            reformatted_keys = []
-            reformatted_values = []
-            reformatted_settings[key] = {'keys': reformatted_keys,
-             'values': reformatted_values}
-            for settingName, settingValue in value.iteritems():
-                reformatted_keys.append(settingName)
-                reformatted_values.append(settingValue)
-
-        return reformatted_settings
+        return {key:{'keys': value.keys(),
+         'values': value.values()} for key, value in settings.iteritems()}
 
     def __commitSettings(self, settings=None, restartApproved=False, isCloseWnd=False):
         if settings is None:

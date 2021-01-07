@@ -1,6 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/example.py
-from block import Block, Meta, InitParam, SLOT_TYPE, EDITOR_TYPE, buildStrKeysValue
+import BigWorld
+from block import Block, Meta, InitParam, EDITOR_TYPE, buildStrKeysValue
+from slot_types import SLOT_TYPE, arrayOf
+from visual_script.misc import ASPECT
+from tunable_event_block import TunableEventBlock
+import weakref
 
 class Example(Meta):
 
@@ -69,8 +74,8 @@ class MulArray(Block, Example):
     def __init__(self, *args, **kwargs):
         super(MulArray, self).__init__(*args, **kwargs)
         self._mulValue = self._makeDataInputSlot('mulVal', SLOT_TYPE.INT)
-        self._arrayIn = self._makeDataInputSlot('array', SLOT_TYPE.INT_ARRAY)
-        self._arrayOut = self._makeDataOutputSlot('res_array', SLOT_TYPE.INT_ARRAY, MulArray._execute)
+        self._arrayIn = self._makeDataInputSlot('array', arrayOf(SLOT_TYPE.INT))
+        self._arrayOut = self._makeDataOutputSlot('res_array', arrayOf(SLOT_TYPE.INT), MulArray._execute)
 
     def _execute(self):
         array = self._arrayIn.getValue()
@@ -83,7 +88,7 @@ class SumArray(Block, Example):
 
     def __init__(self, *args, **kwargs):
         super(SumArray, self).__init__(*args, **kwargs)
-        self._inArray = self._makeDataInputSlot('array', SLOT_TYPE.FLOAT_ARRAY)
+        self._inArray = self._makeDataInputSlot('array', arrayOf(SLOT_TYPE.FLOAT))
         self._out = self._makeDataOutputSlot('res', SLOT_TYPE.FLOAT, SumArray._execute)
 
     def _execute(self):
@@ -128,3 +133,35 @@ class SelectProjectID(Block, Example):
 
     def captionText(self):
         return ' : '.join((self.__class__.__name__, self._name))
+
+
+class TestTunableEvent(TunableEventBlock, Example):
+
+    def __init__(self, *args, **kwargs):
+        super(TestTunableEvent, self).__init__(*args, **kwargs)
+        self._t = self._makeDataInputSlot('time', SLOT_TYPE.FLOAT)
+        self._a = self._makeDataInputSlot('value', SLOT_TYPE.FLOAT)
+        self._res = self._makeDataOutputSlot('sqr value', SLOT_TYPE.FLOAT, None)
+        self._cbID = None
+        return
+
+    def onStartScript(self):
+        from constants import IS_EDITOR
+        if not IS_EDITOR:
+            self._cbID = BigWorld.callback(self._t.getValue(), self._exec)
+
+    def onFinishScript(self):
+        if self._cbID is not None:
+            BigWorld.cancelCallback(self._cbID)
+            self._cbID = None
+        return
+
+    @TunableEventBlock.eventProcessor
+    def _exec(self):
+        a = self._a.getValue()
+        self._res.setValue(a * a)
+        self._cbID = BigWorld.callback(self._t.getValue(), self._exec)
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]

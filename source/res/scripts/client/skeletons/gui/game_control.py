@@ -318,8 +318,6 @@ class ISoundEventChecker(IGameController):
 class IHeroTankController(IGameController):
     onUpdated = None
     onInteractive = None
-    onHeroTankChanged = None
-    onHeroTankBought = None
 
     def hasAdventHero(self):
         raise NotImplementedError
@@ -349,6 +347,131 @@ class IHeroTankController(IGameController):
         raise NotImplementedError
 
     def getCurrentShopUrl(self):
+        raise NotImplementedError
+
+
+class IPlatoonController(IGameController):
+    onFilterUpdate = None
+    onMembersUpdate = None
+    onPlatoonTankUpdated = None
+    onPlatoonTankVisualizationChanged = None
+    onChannelControllerChanged = None
+
+    def buildExtendedSquadInfoVo(self):
+        raise NotImplementedError
+
+    def getUnitFilter(self):
+        raise NotImplementedError
+
+    def saveUnitFilter(self, value):
+        raise NotImplementedError
+
+    def resetUnitTierFilter(self):
+        raise NotImplementedError
+
+    def evaluateVisibility(self, xPopoverOffset=0, toggleUI=False):
+        raise NotImplementedError
+
+    def createPlatoon(self, startAutoSearchOnUnitJoin=False):
+        raise NotImplementedError
+
+    def leavePlatoon(self, isExit=True, ignoreConfirmation=False):
+        raise NotImplementedError
+
+    def isAnyPlatoonUIShown(self):
+        raise NotImplementedError
+
+    def isInSearch(self):
+        raise NotImplementedError
+
+    def isInQueue(self):
+        raise NotImplementedError
+
+    def isInPlatoon(self):
+        raise NotImplementedError
+
+    def isSearchingForPlayersEnabled(self):
+        raise NotImplementedError
+
+    def isTankLevelPreferenceEnabled(self):
+        raise NotImplementedError
+
+    def getAllowedTankLevels(self, prebattleType):
+        raise NotImplementedError
+
+    def isVOIPEnabled(self):
+        raise NotImplementedError
+
+    def canStartSearch(self):
+        raise NotImplementedError
+
+    def getPrbEntity(self):
+        raise NotImplementedError
+
+    def getQueueType(self):
+        raise NotImplementedError
+
+    def hide(self):
+        raise NotImplementedError
+
+    def setNewTierFilter(self, newTierFilter, isExpanded):
+        raise NotImplementedError
+
+    def setPlatoonPopoverPosition(self, xPopoverOffset):
+        raise NotImplementedError
+
+    def togglePlayerReadyAction(self, callback):
+        raise NotImplementedError
+
+    def getChannelController(self):
+        raise NotImplementedError
+
+    def requestPlayerQueueInfo(self):
+        raise NotImplementedError
+
+    def hasSearchSupport(self):
+        raise NotImplementedError
+
+    def hasWelcomeWindow(self):
+        raise NotImplementedError
+
+    def getPlatoonSlotsData(self):
+        raise NotImplementedError
+
+    def hasFreeSlot(self):
+        raise NotImplementedError
+
+    def getMaxSlotCount(self):
+        raise NotImplementedError
+
+    def getPlayerInfo(self):
+        raise NotImplementedError
+
+    def cancelSearch(self):
+        raise NotImplementedError
+
+    def startSearch(self):
+        raise NotImplementedError
+
+    def registerPlatoonTank(self, platoonTank):
+        raise NotImplementedError
+
+    def getPermissions(self):
+        raise NotImplementedError
+
+    def getPrbEntityType(self):
+        raise NotImplementedError
+
+    def isUnitWithPremium(self):
+        raise NotImplementedError
+
+    def getFunctionalState(self):
+        raise NotImplementedError
+
+    def hasVehiclesForSearch(self, tierLevel=None):
+        raise NotImplementedError
+
+    def processPlatoonActions(self, mapID, entity, currentVehicle, callback):
         raise NotImplementedError
 
 
@@ -1401,9 +1524,6 @@ class ICraftmachineController(IGameController):
 
 class ICalendarController(IGameController):
 
-    def mustShow(self):
-        raise NotImplementedError
-
     def updateHeroAdventActionInfo(self):
         raise NotImplementedError
 
@@ -1450,16 +1570,7 @@ class IFestivityController(IGameController):
     def isEnabled(self):
         raise NotImplementedError
 
-    def isPostEvent(self):
-        raise NotImplementedError
-
     def getHangarQuestsFlagData(self):
-        raise NotImplementedError
-
-    def getHangarWidgetLinkage(self):
-        raise NotImplementedError
-
-    def getHangarEdgeColor(self):
         raise NotImplementedError
 
 

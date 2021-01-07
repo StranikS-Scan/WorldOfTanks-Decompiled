@@ -2,8 +2,6 @@
 # Embedded file name: scripts/client/gui/impl/lobby/missions/daily_quests_view.py
 import typing
 import logging
-from account_helpers import AccountSettings
-from account_helpers.AccountSettings import NY_DAILY_QUESTS_VISITED, NY_BONUS_DAILY_QUEST_VISITED
 from constants import PREMIUM_TYPE, PremiumConfigs, DAILY_QUESTS_CONFIG
 from frameworks.wulf import Array, ViewFlags, ViewSettings
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyPremiumUrl
@@ -30,7 +28,7 @@ from gui.shared.utils import decorators
 from helpers import dependency, time_utils
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.game_control import IGameSessionController, IFestivityController
+from skeletons.gui.game_control import IGameSessionController
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import Optional, List
@@ -58,7 +56,6 @@ class DailyQuestsView(ViewImpl):
     gameSession = dependency.descriptor(IGameSessionController)
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
-    __festivityController = dependency.descriptor(IFestivityController)
     __slots__ = ('__tooltipData', '__proxyMissionsPage')
 
     def __init__(self, layoutID=R.views.lobby.missions.Daily()):
@@ -130,16 +127,10 @@ class DailyQuestsView(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         _logger.info('DailyQuestsView::_onLoading')
         with self.viewModel.transaction() as tx:
-            if not AccountSettings.getUIFlag(NY_DAILY_QUESTS_VISITED) and not self.__festivityController.isPostEvent():
-                self._updateLootboxesIntro(tx)
             self._updateQuestsTitles(tx)
             self._updateModel(tx)
             self._updateCountDowns(tx)
             tx.setPremMissionsTabDiscovered(settings.getDQSettings().premMissionsTabDiscovered)
-
-    @staticmethod
-    def _updateLootboxesIntro(model):
-        model.setIsLootboxesIntroVisible(True)
 
     def _initialize(self, *args, **kwargs):
         super(DailyQuestsView, self)._initialize()
@@ -171,13 +162,6 @@ class DailyQuestsView(ViewImpl):
             self.__updateQuestsInModel(tx.getQuests(), quests)
             self.__updateMissionVisitedArray(tx.getMissionsCompletedVisited(), quests)
             tx.setBonusMissionVisited(not newBonusQuests)
-            if not AccountSettings.getUIFlag(NY_DAILY_QUESTS_VISITED):
-                tx.setPlayNYQuestLootboxAnimation(True)
-                AccountSettings.setUIFlag(NY_DAILY_QUESTS_VISITED, True)
-            if not AccountSettings.getUIFlag(NY_BONUS_DAILY_QUEST_VISITED) and tx.getBonusMissionVisited():
-                tx.setPlayNYBonusQuestLootboxAnimation(True)
-                AccountSettings.setUIFlag(NY_DAILY_QUESTS_VISITED, True)
-                AccountSettings.setUIFlag(NY_BONUS_DAILY_QUEST_VISITED, True)
 
     def _updateEpicQuestModel(self, model, fullUpdate=False):
         _logger.debug('DailyQuestsView::_updateEpicQuestModel')
@@ -375,9 +359,6 @@ class DailyQuestsView(ViewImpl):
     def __onRerollEnabled(self):
         self.viewModel.dailyQuests.setRerollCountDown(0)
 
-    def __onLootboxesIntroClosed(self):
-        self.viewModel.setIsLootboxesIntroVisible(False)
-
     def __addListeners(self):
         self.viewModel.onBuyPremiumBtnClick += self.__onBuyPremiumBtn
         self.viewModel.onTabClick += self.__onTabClick
@@ -385,7 +366,6 @@ class DailyQuestsView(ViewImpl):
         self.viewModel.onClose += self.__onCloseView
         self.viewModel.onReroll += self.__onReRoll
         self.viewModel.onRerollEnabled += self.__onRerollEnabled
-        self.viewModel.onLootboxesIntroClosed += self.__onLootboxesIntroClosed
         self.eventsCache.onSyncCompleted += self._onSyncCompleted
         self.gameSession.onPremiumTypeChanged += self._onPremiumTypeChanged
         self.lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingsChanged
@@ -397,7 +377,6 @@ class DailyQuestsView(ViewImpl):
         self.viewModel.onClose -= self.__onCloseView
         self.viewModel.onReroll -= self.__onReRoll
         self.viewModel.onRerollEnabled -= self.__onRerollEnabled
-        self.viewModel.onLootboxesIntroClosed -= self.__onLootboxesIntroClosed
         self.eventsCache.onSyncCompleted -= self._onSyncCompleted
         self.gameSession.onPremiumTypeChanged -= self._onPremiumTypeChanged
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self._onServerSettingsChanged

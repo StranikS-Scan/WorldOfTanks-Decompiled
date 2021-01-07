@@ -13,11 +13,13 @@ class DogTagComposerInBattle(DogTagComposerClient):
         engraving = dt.getComponentByType(ComponentViewType.ENGRAVING)
         background = dt.getComponentByType(ComponentViewType.BACKGROUND)
         isMaxLevel = engraving.grade + STARTING_GRADE_OFFSET == len(engraving.componentDefinition.grades)
-        return {'background': {'imageStr': self.getComponentImage(background.compId, 0)},
-         'engraving': {'imageStr': self.getComponentImage(engraving.compId, engraving.grade),
+        return {'background': {'componentID': background.compId,
+                        'imageStr': self.getComponentImage(background.compId, 0)},
+         'engraving': {'componentID': engraving.compId,
+                       'imageStr': self.getComponentImage(engraving.compId, engraving.grade),
                        'name': self.getComponentTitle(engraving.compId),
                        'value': formatComponentValue(getLanguageCode(), engraving.value, engraving.componentDefinition.numberType)},
-         'playerName': self._formatName(dt.getNickName()),
+         'playerName': dt.getNickName(),
          'clanTag': dt.getClanTag(),
          'isEngravingMaxLevel': isMaxLevel}
 

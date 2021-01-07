@@ -160,7 +160,10 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         if self.getPerformanceGroup() == EPIC_PERF_GROUP.HIGH_RISK:
             self.__lobbyContext.addFightButtonConfirmator(self.__confirmFightButtonPressEnabled)
         self.__isEpicSoundMode = False
-        self.__updateSounds(bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.EPIC))
+        if self.prbEntity is not None:
+            enableSound = bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.EPIC)
+            self.__updateSounds(enableSound)
+        return
 
     def onDisconnected(self):
         self.__clear()

@@ -54,6 +54,13 @@ class Servers(object):
         if startListen:
             g_preDefinedHosts.requestPing(True)
 
+    def setServerPreselection(self, peripheryId):
+        hostItem = g_preDefinedHosts.periphery(peripheryId)
+        if hostItem is not None:
+            self._loginPreferences['server_name'] = hostItem.url
+            self.updateServerList()
+        return
+
     @property
     def serverList(self):
         return self._serverList

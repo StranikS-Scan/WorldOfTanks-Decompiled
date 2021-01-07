@@ -7,30 +7,25 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import PackRentVehiclesAwardComposer, AnniversaryAwardComposer, CurtailingAwardsComposer, RawLabelBonusComposer
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyPremiumUrl
-from gui.Scaleform.framework import WindowLayer
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
-from gui.app_loader import sf_lobby
 from gui.impl.backport import TooltipData, BackportTooltipWindow
-from gui.impl.gen.view_models.windows.loot_box_reward_window_content_model import LootBoxRewardWindowContentModel
 from gui.impl.pub import ViewImpl, WindowImpl, WindowView
 from gui.impl.gen import R
 from gui.impl.gen.view_models.ui_kit.reward_renderer_model import RewardRendererModel
 from gui.impl.gen.view_models.windows.piggy_bank_reward_window_content_model import PiggyBankRewardWindowContentModel
 from gui.impl.gen.view_models.windows.reward_window_content_model import RewardWindowContentModel
-from gui.prb_control import prbDispatcherProperty
 from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, getAnniversaryPacker, getDefaultAwardFormatter
 from gui.server_events.bonuses import getTutorialBonuses, CreditsBonus, getNonQuestBonuses
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showShop, showLootBoxEntry
+from gui.shared.event_dispatcher import showShop
 from gui.shared.money import Currency
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from constants import OFFER_TOKEN_PREFIX
 from skeletons.gui.offers import IOffersDataProvider
-from skeletons.gui.game_control import IFestivityController
 from gui.shared.event_dispatcher import showOfferGiftsWindow, showClanQuestWindow
 _logger = logging.getLogger(__name__)
 BASE_EVENT_NAME = 'base'
@@ -340,85 +335,6 @@ class DynamicRewardWindow(RewardWindowBase):
     def _initialize(self):
         super(DynamicRewardWindow, self)._initialize()
         self.windowModel.setTitle(getattr(R.strings.ingame_gui.rewardWindow, self._eventName).winHeaderText())
-
-
-class LootBoxRewardWindowContent(BaseRewardWindowContent):
-    _festivityController = dependency.descriptor(IFestivityController)
-    __slots__ = ('_lootboxType', '_lootboxesCount', '_isFree')
-
-    def __init__(self, settings, ctx):
-        super(LootBoxRewardWindowContent, self).__init__(settings, ctx)
-        if ctx is not None:
-            self._lootboxType = ctx.get('lootboxType', '')
-            self._lootboxesCount = ctx.get('lootboxesCount', 0)
-            self._isFree = ctx.get('isFree', False)
-        else:
-            self._lootboxType = ''
-            self._lootboxesCount = 0
-            self._isFree = False
-        return
-
-    def handleNextButton(self):
-        showLootBoxEntry(self._lootboxType)
-
-    @prbDispatcherProperty
-    def prbDispatcher(self):
-        pass
-
-    @sf_lobby
-    def app(self):
-        pass
-
-    def _initialize(self, *args, **kwargs):
-        super(LootBoxRewardWindowContent, self)._initialize(*args, **kwargs)
-        g_eventBus.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.addListener(events.LootboxesEvent.ON_ENTRY_VIEW_LOADED, self.__onEntryViewLoaded, scope=EVENT_BUS_SCOPE.LOBBY)
-        self._festivityController.onStateChanged += self.__onStateChanged
-        self.app.containerManager.onViewLoaded += self.__onViewLoaded
-        with self.getViewModel().transaction() as tx:
-            tx.setRewardsCount(self._lootboxesCount)
-            tx.setLootboxType(self._lootboxType)
-            tx.setIsFree(self._isFree)
-
-    def _finalize(self):
-        self._festivityController.onStateChanged -= self.__onStateChanged
-        self.app.containerManager.onViewLoaded -= self.__onViewLoaded
-        g_eventBus.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.removeListener(events.LootboxesEvent.ON_ENTRY_VIEW_LOADED, self.__onEntryViewLoaded, scope=EVENT_BUS_SCOPE.LOBBY)
-        super(LootBoxRewardWindowContent, self)._finalize()
-
-    def _initRewardsList(self):
-        pass
-
-    def __onStateChanged(self):
-        if not self._festivityController.isEnabled():
-            self.destroyWindow()
-
-    def __handleFightButtonUpdated(self, _):
-        prbDispatcher = self.prbDispatcher
-        if prbDispatcher is not None and prbDispatcher.getFunctionalState().isNavigationDisabled():
-            self.destroyWindow()
-        return
-
-    def __onViewLoaded(self, pyView):
-        if pyView.alias != VIEW_ALIAS.LOBBY_HANGAR and pyView.layer == WindowLayer.SUB_VIEW:
-            self.destroyWindow()
-
-    def __onEntryViewLoaded(self, _):
-        self.destroyWindow()
-
-
-class LootBoxRewardWindow(RewardWindowBase):
-    __slots__ = ()
-
-    def __init__(self, ctx=None, parent=None):
-        contentSettings = ViewSettings(R.views.lobby.reward_window.loot_box_reward_window_content.LootBoxRewardWindowContent())
-        contentSettings.model = LootBoxRewardWindowContentModel()
-        super(LootBoxRewardWindow, self).__init__(parent=parent, content=LootBoxRewardWindowContent(contentSettings, ctx=ctx))
-
-    def _initialize(self):
-        super(LootBoxRewardWindow, self)._initialize()
-        self.windowModel.setTitle(R.strings.ingame_gui.rewardWindow.lootbox.winHeaderText())
 
 
 class GiveAwayRewardWindowContent(QuestRewardWindowContent):

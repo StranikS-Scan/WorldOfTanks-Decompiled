@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/customization/shared.py
-from collections import namedtuple, Counter
+from collections import namedtuple, Counter, defaultdict
 import logging
+import typing
 import Math
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import InfoItemBase
 from gui.Scaleform.genConsts.SEASONS_CONSTANTS import SEASONS_CONSTANTS
@@ -53,9 +54,9 @@ EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES = {GUI_ITEM_TYPE.PAINT: C11nId(Area.HULL
  GUI_ITEM_TYPE.CAMOUFLAGE: C11nId(Area.HULL, GUI_ITEM_TYPE.CAMOUFLAGE, 0)}
 
 class PurchaseItem(object):
-    __slots__ = ('item', 'price', 'areaID', 'slotType', 'regionIdx', 'selected', 'group', 'isFromInventory', 'isDismantling', 'component', 'locked', 'isEdited')
+    __slots__ = ('item', 'price', 'areaID', 'slotType', 'regionIdx', 'selected', 'group', 'isFromInventory', 'component', 'locked', 'isEdited')
 
-    def __init__(self, item, price, areaID, slotType, regionIdx, selected, group, isFromInventory=False, isDismantling=False, component=None, locked=False, isEdited=False):
+    def __init__(self, item, price, areaID, slotType, regionIdx, selected, group, isFromInventory=False, component=None, locked=False, isEdited=False):
         self.item = item
         self.price = price
         self.areaID = areaID
@@ -64,7 +65,6 @@ class PurchaseItem(object):
         self.selected = selected
         self.group = group
         self.isFromInventory = isFromInventory
-        self.isDismantling = isDismantling
         self.component = component
         self.locked = locked
         self.isEdited = isEdited
@@ -117,7 +117,14 @@ SEASON_TYPE_TO_IDX = {SeasonType.SUMMER: SEASONS_CONSTANTS.SUMMER_INDEX,
  SeasonType.WINTER: SEASONS_CONSTANTS.WINTER_INDEX,
  SeasonType.DESERT: SEASONS_CONSTANTS.DESERT_INDEX}
 SEASONS_ORDER = (SeasonType.SUMMER, SeasonType.WINTER, SeasonType.DESERT)
-CartInfo = namedtuple('CartInfo', 'totalPrice numSelected numApplying numBought numTotal isAtLeastOneItemFromInventory isAtLeastOneItemDismantled')
+CartInfo = namedtuple('CartInfo', ('totalPrice', 'selectedCount', 'boughtCount'))
+
+class _PurchaseItemRecord(object):
+
+    def __init__(self):
+        self.boughtCount = 0
+        self.totalPrice = ITEM_PRICE_EMPTY
+
 
 class MoneyForPurchase(object):
     NOT_ENOUGH = 0
@@ -264,44 +271,34 @@ def getVehiclePartByIdx(vehicleDescriptor, partIdx):
 
 
 def getTotalPurchaseInfo(purchaseItems):
-    numSelectedItems = 0
-    numApplyingItems = 0
-    isAtLeastOneItemFromInventory = False
-    isAtLeastOneItemDismantled = False
-    itemCartInfo = {}
+    itemCartInfo = defaultdict(_PurchaseItemRecord)
+    selectedCount = 0
     for purchaseItem in purchaseItems:
-        if purchaseItem.item is not None:
-            itemCD = purchaseItem.item.intCD
-            if itemCD not in itemCartInfo.keys():
-                itemCartInfo.update({itemCD: {'totalPrice': ITEM_PRICE_EMPTY,
-                          'quantity': 0}})
-            if not purchaseItem.isDismantling:
-                numApplyingItems += 1
-                if purchaseItem.selected:
-                    numSelectedItems += 1
-                    itemCartInfo[itemCD]['totalPrice'] += purchaseItem.price
-                    itemCartInfo[itemCD]['quantity'] += 1
-                    if purchaseItem.isFromInventory:
-                        isAtLeastOneItemFromInventory = True
-                if purchaseItem.isFromInventory:
-                    itemCartInfo[itemCD]['totalPrice'] -= purchaseItem.price
-                    itemCartInfo[itemCD]['quantity'] -= 1
-            else:
-                isAtLeastOneItemDismantled = True
+        if purchaseItem.item is None:
+            continue
+        itemCD = purchaseItem.item.intCD
+        if purchaseItem.selected:
+            selectedCount += 1
+            if not purchaseItem.isFromInventory:
+                itemCartInfo[itemCD].boughtCount += 1
+                itemCartInfo[itemCD].totalPrice += purchaseItem.price
 
-    totalPrice = sum([ item['totalPrice'] for item in itemCartInfo.itervalues() if item['totalPrice'].price > ZERO_MONEY ], ITEM_PRICE_EMPTY)
-    numBoughtItems = sum((item['quantity'] for item in itemCartInfo.itervalues() if item['quantity'] > 0))
-    return CartInfo(totalPrice, numSelectedItems, numApplyingItems, numBoughtItems, len(purchaseItems), isAtLeastOneItemFromInventory, isAtLeastOneItemDismantled)
+    totalPrice = sum((item.totalPrice for item in itemCartInfo.itervalues() if item.totalPrice.price > ZERO_MONEY), ITEM_PRICE_EMPTY)
+    boughtCount = sum((item.boughtCount for item in itemCartInfo.itervalues() if item.boughtCount > 0))
+    return CartInfo(totalPrice=totalPrice, selectedCount=selectedCount, boughtCount=boughtCount)
 
 
 def containsVehicleBound(purchaseItems):
     fromInventoryCounter = Counter()
     vehCD = g_currentVehicle.item.intCD
     for purchaseItem in purchaseItems:
-        if purchaseItem.item and purchaseItem.item.isVehicleBound and not purchaseItem.item.isProgressionAutoBound and not purchaseItem.isDismantling and not purchaseItem.item.isRentable:
+        item = purchaseItem.item
+        if item is None:
+            continue
+        if item.isVehicleBound and not item.isProgressionAutoBound and not item.isRentable:
             if not purchaseItem.isFromInventory:
                 return True
-            fromInventoryCounter[purchaseItem.item] += 1
+            fromInventoryCounter[item] += 1
 
     for item in fromInventoryCounter:
         fromInventoryCounter[item] -= item.installedCount(vehCD)

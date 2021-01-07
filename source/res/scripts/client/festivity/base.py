@@ -41,6 +41,6 @@ class BaseFestivityProcessor(object):
     def setCommandProxy(self, account):
         self.__commandProxy = account
 
-    def _perform(self, command, argsList, callback=None):
-        cmdArgs = argsList + (_getProxy(callback) if callback else _defaultLogger,)
+    def _perform(self, command, callback=None, *args):
+        cmdArgs = list(args) + [_getProxy(callback)]
         self.__commandProxy.perform(command, *cmdArgs)

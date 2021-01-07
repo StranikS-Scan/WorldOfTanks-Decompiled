@@ -1029,7 +1029,7 @@
     </usages>
   </itemGroup>
   <itemGroup>
-    <name>	APAC 2020	</name>
+    <name>	APAC	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
@@ -1040,21 +1040,21 @@
       </exclude>
     </vehicleFilter>
     <paint>
-      <id>	28	</id>
-      <texture>	gui/maps/vehicles/repaints/czech_color_04.png	</texture>
-      <color>	32 36 38 255	</color>
-      <gloss>	0.509	</gloss>
-      <metallic>	0.23	</metallic>
-      <userString>	#vehicle_customization:repaint/waitangi_day	</userString>
-      <tags>	hiddenInUI	</tags>
-    </paint>
-    <paint>
       <id>	27	</id>
       <texture>	gui/maps/vehicles/repaints/custom_color_22.png	</texture>
       <color>	3 16 45 255	</color>
       <gloss>	0.556	</gloss>
       <metallic>	0.193	</metallic>
       <userString>	#vehicle_customization:repaint/lava_ocean	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	28	</id>
+      <texture>	gui/maps/vehicles/repaints/czech_color_04.png	</texture>
+      <color>	32 36 38 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/waitangi_day	</userString>
       <tags>	hiddenInUI	</tags>
     </paint>
     <paint>
@@ -1072,6 +1072,14 @@
       <gloss>	0.63	</gloss>
       <metallic>	0.235	</metallic>
       <userString>	#vehicle_customization:repaint/apac_mid_autumn	</userString>
+    </paint>
+    <paint>
+      <id>	84	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_19.png	</texture>
+      <color>	30 69 117 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.203	</metallic>
+      <userString>	#vehicle_customization:repaint/roaring_waves	</userString>
     </paint>
     <usages>
       <item>
@@ -1669,6 +1677,69 @@
     </usages>
   </itemGroup>
   <itemGroup>
+    <name>	NY 2021	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	68	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+      <color>	36 41 50 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/ny_2021_magic	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	69	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_10.png	</texture>
+      <color>	140 153 165 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.203	</metallic>
+      <userString>	#vehicle_customization:repaint/ny_2021_nutcracker	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	70	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_18.png	</texture>
+      <color>	104 23 23 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/ny_2021_panda	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	72	</id>
+      <texture>	gui/maps/vehicles/repaints/uk_color_02.png	</texture>
+      <color>	25 8 8 255	</color>
+      <gloss>	0.56	</gloss>
+      <metallic>	0.3	</metallic>
+      <userString>	#vehicle_customization:repaint/ny_2021_newyear	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	76	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <color>	17 17 20 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <userString>	#vehicle_customization:repaint/ny_2021_chuck	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
     <name>	Seniority Awards	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
@@ -1789,7 +1860,7 @@
     </usages>
   </itemGroup>
   <itemGroup>
-    <name>	NY 2021	</name>
+    <name>	CIS 2021	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
@@ -1800,49 +1871,28 @@
       </exclude>
     </vehicleFilter>
     <paint>
-      <id>	68	</id>
+      <id>	82	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_17.png	</texture>
+      <color>	152 152 152 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/maslenitsa	</userString>
+    </paint>
+    <paint>
+      <id>	83	</id>
+      <texture>	gui/maps/vehicles/repaints/italy_color_06.png	</texture>
+      <color>	142 158 147 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/defender_day_2021	</userString>
+    </paint>
+    <paint>
+      <id>	85	</id>
       <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
-      <color>	36 41 50 255	</color>
-      <gloss>	0.509	</gloss>
-      <metallic>	0.23	</metallic>
-      <userString>	#vehicle_customization:repaint/ny_2021_magic	</userString>
-      <tags>	hiddenInUI	</tags>
-    </paint>
-    <paint>
-      <id>	69	</id>
-      <texture>	gui/maps/vehicles/repaints/custom_color_10.png	</texture>
-      <color>	140 153 165 255	</color>
-      <gloss>	0.509	</gloss>
-      <metallic>	0.203	</metallic>
-      <userString>	#vehicle_customization:repaint/ny_2021_nutcracker	</userString>
-      <tags>	hiddenInUI	</tags>
-    </paint>
-    <paint>
-      <id>	70	</id>
-      <texture>	gui/maps/vehicles/repaints/custom_color_18.png	</texture>
-      <color>	104 23 23 255	</color>
-      <gloss>	0.509	</gloss>
-      <metallic>	0.23	</metallic>
-      <userString>	#vehicle_customization:repaint/ny_2021_panda	</userString>
-      <tags>	hiddenInUI	</tags>
-    </paint>
-    <paint>
-      <id>	72	</id>
-      <texture>	gui/maps/vehicles/repaints/uk_color_02.png	</texture>
-      <color>	25 8 8 255	</color>
-      <gloss>	0.56	</gloss>
+      <color>	15 12 9 255	</color>
+      <gloss>	0.7	</gloss>
       <metallic>	0.3	</metallic>
-      <userString>	#vehicle_customization:repaint/ny_2021_newyear	</userString>
-      <tags>	hiddenInUI	</tags>
-    </paint>
-    <paint>
-      <id>	76	</id>
-      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
-      <color>	17 17 20 255	</color>
-      <gloss>	0.63	</gloss>
-      <metallic>	0.235	</metallic>
-      <userString>	#vehicle_customization:repaint/ny_2021_chuck	</userString>
-      <tags>	hiddenInUI	</tags>
+      <userString>	#vehicle_customization:repaint/valentines_day	</userString>
     </paint>
     <usages>
       <item>

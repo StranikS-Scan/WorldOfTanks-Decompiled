@@ -7,13 +7,13 @@ from CurrentVehicle import g_currentVehicle
 from cache import cached_property
 from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs, TYPES_ORDER, isItemLimitReached, isItemUsedUp, vehicleHasSlot, ITEM_TYPE_TO_TAB
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
-from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.customization.constants import CustomizationModes
 from gui.customization.shared import getBaseStyleItems, createCustomizationBaseRequestCriteria, C11N_ITEM_TYPE_MAP
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA, RequestCriteria
 from helpers import dependency
-from helpers.i18n import makeString as _ms
 from items.components.c11n_constants import SeasonType, ProjectionDecalFormTags, ItemTags, EMPTY_ITEM_ID
 from items import vehicles
 from skeletons.gui.customization import ICustomizationService
@@ -328,11 +328,17 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
 
     def getFilterData(self):
         itemsData = self.__carouselCache.getItemsData()
-        groups = itemsData.groups.values() + [_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_FILTER_ALLGROUPS)]
-        groupCount = len(groups)
-        selectedGroup = self.__getSelectedGroupIdx()
-        if selectedGroup is None:
-            selectedGroup = groupCount - 1
+        groups = itemsData.groups.values()
+        if len(groups) > 1:
+            groups.append(backport.text(R.strings.vehicle_customization.customization.filter.allGroups()))
+            groupCount = len(groups)
+            selectedGroup = self.__getSelectedGroupIdx()
+            if selectedGroup is None:
+                selectedGroup = groupCount - 1
+        else:
+            groups = []
+            groupCount = 0
+            selectedGroup = 0
         formfactors = []
         if self.__ctx.mode.tabId == CustomizationTabs.PROJECTION_DECALS:
             formfactorsFilter = self.__carouselFilters[FilterTypes.FORMFACTORS]

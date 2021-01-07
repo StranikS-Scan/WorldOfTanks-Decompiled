@@ -3,14 +3,14 @@
 import json
 import BigWorld
 import BattleReplay
-from async import async, await, AsyncReturn
 from debug_utils_bootcamp import LOG_STATISTIC
 from gui.shared.utils import getPlayerDatabaseID
 import constants
+from wotdecorators import noexcept
 from uilogging.logging_constants import FEATURES, STATUS_REQUESTED
 from uilogging.helpers import featuresCache
 from uilogging import loggingSettings
-__all__ = ('isSPAAttributeExists', 'isUILoggingEnabled')
+__all__ = ('BaseLogger', 'isSPAAttributeExists', 'isUILoggingEnabled')
 
 def isSPAAttributeExists():
     if loggingSettings.testMode:
@@ -124,16 +124,14 @@ class BaseLogger(object):
     def logStatistic(self, **kwargs):
         raise NotImplementedError
 
-    @async
     def _sendIntoKafka(self, data):
         BigWorld.fetchURL(url=loggingSettings.host, callback=lambda x: x, headers=loggingSettings.headers, timeout=loggingSettings.requestTimeout, method=loggingSettings.httpMethod, postdata=json.dumps(data))
-        raise AsyncReturn(True)
 
     def _sendIntoClientLog(self, data):
         LOG_STATISTIC(str(data))
 
-    @async
+    @noexcept
     def sendLogData(self, data):
         if loggingSettings.testMode:
             self._sendIntoClientLog(data)
-        yield await(self._sendIntoKafka(data))
+        self._sendIntoKafka(data)

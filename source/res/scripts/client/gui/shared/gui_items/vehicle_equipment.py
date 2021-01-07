@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/vehicle_equipment.py
+import logging
 import weakref
 from account_shared import LayoutIterator
 from shared_utils import first
@@ -9,6 +10,7 @@ from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from soft_exception import SoftException
+_logger = logging.getLogger(__name__)
 ZERO_COMP_DESCR = 0
 EMPTY_INVENTORY_DATA = [ZERO_COMP_DESCR]
 LAYOUT_ITEM_SIZE = 2
@@ -45,8 +47,12 @@ class _Equipment(object):
         return
 
     def __getitem__(self, slotIdx):
-        data = self._storage[slotIdx]
-        return self._createItem(data) if data is not None else EMPTY_ITEM
+        if slotIdx >= len(self._storage):
+            _logger.error('Wrong slotIdx=[%d] for Equipment=[%s]', slotIdx, self)
+            return EMPTY_ITEM
+        else:
+            data = self._storage[slotIdx]
+            return self._createItem(data) if data is not None else EMPTY_ITEM
 
     def __contains__(self, item):
         return item.intCD in self.getIntCDs()

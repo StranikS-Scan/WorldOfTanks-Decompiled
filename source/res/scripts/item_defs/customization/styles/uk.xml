@@ -1051,23 +1051,23 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <userString>	#vehicle_customization:styles/unique_styles	</userString>
     <season>	ALL	</season>
-    <historical>	false	</historical>
-    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <historical>	true	</historical>
+    <priceGroup>	styles 5000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <vehicles>	uk:GB24_Centurion_Mk3	</vehicles>
+        <vehicles>	uk:GB31_Conqueror_Gun	</vehicles>
       </include>
     </vehicleFilter>
     <style>
-      <id>	362	</id>
-      <texture>	gui/maps/vehicles/styles/GB24_Centurion_Mk3_3Dst_HW20.png	</texture>
-      <longDescriptionSpecial>	#vehicle_customization:special_style/GB24_Centurion_Mk3_3Dst_HW20_desc/long	</longDescriptionSpecial>
-      <modelsSet>	GB24_Centurion_Mk3_3Dst_HW20	</modelsSet>
+      <id>	350	</id>
+      <texture>	gui/maps/vehicles/styles/GB31_Conqueror_Gun_3Dst.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:unique_style/GB31_Conqueror_Gun_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	GB31_Conqueror_Gun_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:special_style/GB24_Centurion_Mk3_3Dst_HW20	</userString>
-      <tags>	progression_required	</tags>
+      <userString>	#vehicle_customization:unique_style/GB31_Conqueror_Gun_3Dst	</userString>
+      <tags>	NY_style progression_required	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -1091,23 +1091,23 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/unique_styles	</userString>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
-    <historical>	true	</historical>
-    <priceGroup>	styles 6000g notInShop	</priceGroup>
+    <historical>	false	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <vehicles>	uk:GB31_Conqueror_Gun	</vehicles>
+        <vehicles>	uk:GB24_Centurion_Mk3	</vehicles>
       </include>
     </vehicleFilter>
     <style>
-      <id>	350	</id>
-      <texture>	gui/maps/vehicles/styles/GB31_Conqueror_Gun_3Dst.png	</texture>
-      <longDescriptionSpecial>	#vehicle_customization:unique_style/GB31_Conqueror_Gun_3Dst_desc/long	</longDescriptionSpecial>
-      <modelsSet>	GB31_Conqueror_Gun_3Dst	</modelsSet>
+      <id>	362	</id>
+      <texture>	gui/maps/vehicles/styles/GB24_Centurion_Mk3_3Dst_HW20.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/GB24_Centurion_Mk3_3Dst_HW20_desc/long	</longDescriptionSpecial>
+      <modelsSet>	GB24_Centurion_Mk3_3Dst_HW20	</modelsSet>
       <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:unique_style/GB31_Conqueror_Gun_3Dst	</userString>
-      <tags>	progression_required NY_style	</tags>
+      <userString>	#vehicle_customization:special_style/GB24_Centurion_Mk3_3Dst_HW20	</userString>
+      <tags>	progression_required	</tags>
       <itemFilters>
         <projection_decal>
           <include>

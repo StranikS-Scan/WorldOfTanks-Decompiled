@@ -6,7 +6,6 @@ import Event
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
 from UnitBase import UNIT_SLOT, UNIT_BROWSER_CMD, UNIT_BROWSER_TYPE, UNIT_ERROR, CMD_NAMES
 from unit_roster_config import UnitRosterSlot
-import AccountCommands
 from AccountUnitAPI import UnitClientAPI
 
 class ClientUnitMgr(UnitClientAPI):
@@ -145,7 +144,6 @@ class ClientUnitBrowser(object):
         self.__eManager = Event.EventManager()
         self.onResultsReceived = Event.Event(self.__eManager)
         self.onResultsUpdated = Event.Event(self.__eManager)
-        self.onSearchSuccessReceived = Event.Event(self.__eManager)
         self.onErrorReceived = Event.Event(self.__eManager)
         self.results = {}
         self._acceptUnitMgrID = 0
@@ -224,36 +222,3 @@ class ClientUnitBrowser(object):
 
         self.onResultsUpdated(res)
         return
-
-    def startSearch(self, vehTypes=None, useOtherLocations=False):
-        self.__account.enqueueUnitAssembler(vehTypes or [])
-
-    def _search(self, vehInvIDs=None):
-        from helpers import dependency
-        from skeletons.gui.shared import IItemsCache
-        itemsCache = dependency.instance(IItemsCache)
-        vehInvIDs = vehInvIDs or []
-        for vehInvID in vehInvIDs:
-            vehicle = itemsCache.items.getVehicle(vehInvID)
-            LOG_DEBUG('vehicle[%s]=%r' % (vehInvID, vehicle))
-
-    def stopSearch(self):
-        self.__account.dequeueUnitAssembler()
-
-    def onSearchSuccess(self, unitMgrID, acceptDeadlineUTC):
-        LOG_DEBUG('onSearchSuccess: unitMgrID=%s, acceptDeadlineUTC=%s' % (unitMgrID, acceptDeadlineUTC))
-        self._acceptUnitMgrID = unitMgrID
-        self._acceptDeadlineUTC = acceptDeadlineUTC
-        self.onSearchSuccessReceived(unitMgrID, acceptDeadlineUTC)
-
-    def acceptSearch(self, unitMgrID=0):
-        if not unitMgrID:
-            unitMgrID = self._acceptUnitMgrID
-        LOG_DEBUG('unitBrowser.acceptSearch', unitMgrID)
-        self.__account.base.accountUnitAssembler_acceptAutoSearch(0, unitMgrID)
-
-    def declineSearch(self, unitMgrID=0):
-        if not unitMgrID:
-            unitMgrID = self._acceptUnitMgrID
-        LOG_DEBUG('unitBrowser.declineSearch', unitMgrID)
-        self.__account.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_UNIT_ASSEMBLER, unitMgrID, 0, 0)

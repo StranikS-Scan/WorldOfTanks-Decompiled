@@ -47,7 +47,17 @@ class DetachedTurret(BigWorld.Entity, ScriptGameObject):
         turretModel, gunModel = self.__getModels()
         assembler.addRootPart(turretModel, TankPartNames.TURRET)
         assembler.emplacePart(gunModel, TankNodeNames.GUN_JOINT, TankPartNames.GUN)
-        bspModels = ((TankPartNames.getIdx(TankPartNames.TURRET), self.__vehDescr.turret.hitTester.bspModelName), (TankPartNames.getIdx(TankPartNames.GUN), self.__vehDescr.gun.hitTester.bspModelName))
+        parts = {TankPartNames.TURRET: self.__vehDescr.turret,
+         TankPartNames.GUN: self.__vehDescr.gun}
+        bspModels = ()
+        for partName, part in parts.iteritems():
+            partID = TankPartNames.getIdx(partName)
+            crashedHT = part.hitTesterManager.crashedModelHitTester
+            modelHT = part.hitTesterManager.modelHitTester
+            hitTester = crashedHT if crashedHT is not None else modelHT
+            bspModel = (partID, hitTester.bspModelName)
+            bspModels = bspModels + (bspModel,)
+
         collisionAssembler = BigWorld.CollisionAssembler(bspModels, BigWorld.player().spaceID)
         return [assembler, collisionAssembler]
 

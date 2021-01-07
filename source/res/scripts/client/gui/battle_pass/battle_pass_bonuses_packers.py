@@ -24,7 +24,7 @@ if typing.TYPE_CHECKING:
     from gui.battle_pass.undefined_bonuses import UndefinedBonus
 _logger = logging.getLogger(__name__)
 
-def getBattlePassBonusPackersMap():
+def getBattlePassBonusPacker():
     mapping = getDefaultBonusPackersMap()
     mapping.update({'undefined': UndefinedBonusPacker(),
      'tmanToken': TmanTemplateBonusPacker(),
@@ -36,11 +36,6 @@ def getBattlePassBonusPackersMap():
      'items': ExtendedItemBonusUIPacker(),
      'crewBooks': ExtendedCrewBookBonusUIPacker(),
      Currency.CREDITS: ExtendedCreditsBonusUIPascker()})
-    return mapping
-
-
-def getBattlePassBonusPacker():
-    mapping = getBattlePassBonusPackersMap()
     return BonusUIPacker(mapping)
 
 
@@ -113,7 +108,7 @@ class TmanTemplateBonusPacker(_BattlePassFinalBonusPacker):
         result = []
         for tokenID in bonus.getTokens().iterkeys():
             if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
-                packed = cls._packTmanTemplateToken(tokenID, bonus)
+                packed = cls.__packTmanTemplateToken(tokenID, bonus)
                 if packed is None:
                     _logger.error('Received wrong tman_template token from server: %s', tokenID)
                 else:
@@ -122,7 +117,7 @@ class TmanTemplateBonusPacker(_BattlePassFinalBonusPacker):
         return result
 
     @classmethod
-    def _packTmanTemplateToken(cls, tokenID, bonus):
+    def __packTmanTemplateToken(cls, tokenID, bonus):
         recruitInfo = getRecruitInfo(tokenID)
         if recruitInfo is None:
             return

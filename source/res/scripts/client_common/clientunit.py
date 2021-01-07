@@ -1,12 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/ClientUnit.py
+from typing import TYPE_CHECKING
 import struct
 from collections import namedtuple
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG_DEV
 import Event
-from UnitBase import UnitBase, UNIT_OP, UNIT_ROLE, LEADER_SLOT
+from UnitBase import UnitBase, UNIT_OP, UNIT_ROLE, LEADER_SLOT, UNDEFINED_ESTIMATED_TIME
 from shared_utils import makeTupleByDict
+if TYPE_CHECKING:
+    from typing import Dict as TDict
+    from UnitBase import ProfileVehicle as TProfileVehicle
 PLAYER_ID_CHR = '<q'
 VEH_LEN_CHR = '<H'
 VEH_LEN_SIZE = struct.calcsize(VEH_LEN_CHR)
@@ -30,7 +34,9 @@ class ClientUnit(UnitBase):
         self.onUnitPlayerRemoved = Event.SuspendedEvent(self.__eManager)
         self.onUnitPlayersListChanged = Event.SuspendedEvent(self.__eManager)
         self.onUnitPlayerVehDictChanged = Event.SuspendedEvent(self.__eManager)
+        self.onUnitPlayerProfileVehicleChanged = Event.SuspendedEvent(self.__eManager)
         self.onUnitPlayerInfoChanged = Event.SuspendedEvent(self.__eManager)
+        self.onUnitEstimateInQueueChanged = Event.SuspendedEvent(self.__eManager)
         self.onUnitExtraChanged = Event.SuspendedEvent(self.__eManager)
         self.onUnitUpdated = Event.SuspendedEvent(self.__eManager)
         self._creatorDBID = 0
@@ -73,6 +79,9 @@ class ClientUnit(UnitBase):
     def getVehicles(self):
         return self._vehicles
 
+    def getProfiles(self):
+        return self._playerProfileVehicles
+
     def getSelectedVehicleLevels(self):
         lst = list(set([ vehInfo.vehLevel for vehicles in self._vehicles.itervalues() for vehInfo in vehicles ]))
         lst.sort()
@@ -114,6 +123,9 @@ class ClientUnit(UnitBase):
 
     def getModalTimestamp(self):
         return self._modalTimestamp
+
+    def getEstimatedTimeInQueue(self):
+        return self._estimatedTimeInQueue if self.isInQueue() or self.isInSearch() else UNDEFINED_ESTIMATED_TIME
 
     def isPlayerReadyInSlot(self, slotIdx, mask=None):
         if mask is None:
@@ -213,6 +225,18 @@ class ClientUnit(UnitBase):
     def _clearVehicle(self, accountDBID):
         UnitBase._clearVehicle(self, accountDBID)
         self.onUnitVehicleChanged(accountDBID, 0, 0)
+
+    def _setProfileVehicle(self, accountDBID, vehCompDescr, vehOutfitCD, seasonType, marksOnGun):
+        UnitBase._setProfileVehicle(self, accountDBID, vehCompDescr, vehOutfitCD, seasonType, marksOnGun)
+        self.onUnitPlayerProfileVehicleChanged(accountDBID)
+
+    def _delProfileVehicle(self, accountDBID):
+        UnitBase._delProfileVehicle(self, accountDBID)
+        self.onUnitPlayerProfileVehicleChanged(accountDBID)
+
+    def _setEstimatedTimeInQueue(self, estimatedTimeInQueue):
+        UnitBase._setEstimatedTimeInQueue(self, estimatedTimeInQueue)
+        self.onUnitEstimateInQueueChanged()
 
     def _unpackPlayer(self, packedOps):
         accountDBID, hasPlayer = 0, False

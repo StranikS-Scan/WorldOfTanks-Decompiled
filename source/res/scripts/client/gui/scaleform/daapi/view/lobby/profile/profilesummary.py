@@ -1,18 +1,32 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileSummary.py
+import WWISE
 from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils, getProfileCommonInfo
 from gui.Scaleform.daapi.view.meta.ProfileSummaryMeta import ProfileSummaryMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
+from gui.impl import backport
+from gui.impl.gen import R
 from helpers import dependency
 from PlayerEvents import g_playerEvents
 from helpers.i18n import makeString
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared.gui_items.dossier import dumpDossier
 from skeletons.gui.shared import IItemsCache
+from gui.battle_control.dog_tag_composer import layoutComposer as dogTagComposer
+from skeletons.gui.web import IWebController
 
 class ProfileSummary(ProfileSummaryMeta):
     itemsCache = dependency.descriptor(IItemsCache)
+    _webCtrl = dependency.descriptor(IWebController)
+
+    def __init__(self, *args):
+        super(ProfileSummary, self).__init__(*args)
+        self._isDTFlameEnabled = False
+
+    def setActive(self, value):
+        super(ProfileSummary, self).setActive(value)
+        self._triggerDogTagFlameSound(value)
 
     def _sendAccountData(self, targetData, accountDossier):
         super(ProfileSummary, self)._sendAccountData(targetData, accountDossier)
@@ -42,12 +56,16 @@ class ProfileSummary(ProfileSummaryMeta):
         if dossier is not None:
             info = getProfileCommonInfo(self._userName, dossier.getDossierDescr())
             info['name'] = makeString(PROFILE.PROFILE_TITLE, info['name'])
+            info['userID'] = str(self._userID)
             registrationDate = makeString(MENU.PROFILE_HEADER_REGISTRATIONDATETITLE) + ' ' + info['registrationDate']
             info['registrationDate'] = registrationDate
             if info['lastBattleDate'] is not None:
                 info['lastBattleDate'] = makeString(MENU.PROFILE_HEADER_LASTBATTLEDATETITLE) + ' ' + info['lastBattleDate']
             else:
                 info['lastBattleDate'] = ''
+            dogTag = self.itemsCache.items.getDogTag(self._userID)
+            clanProfile = self._webCtrl.getAccountProfile()
+            self._addDogTagInfo(info, dogTag, self._userName, clanProfile)
             self.as_setUserDataS(info)
         return
 
@@ -66,5 +84,24 @@ class ProfileSummary(ProfileSummaryMeta):
 
     def _dispose(self):
         g_playerEvents.onDossiersResync -= self.__dossierResyncHandler
+        self._triggerDogTagFlameSound(False)
         self._disposeRequester()
         super(ProfileSummary, self)._dispose()
+
+    def _addDogTagInfo(self, info, dogTag, playerName, clanProfile):
+        if not dogTag:
+            return
+        dogTag['playerName'] = playerName
+        dogTag['clanTag'] = clanProfile.getClanAbbrev()
+        info['dogTag'] = dogTagComposer.getModelFromDict(dogTag)
+        if info['dogTag']['isEngravingMaxLevel']:
+            self._isDTFlameEnabled = True
+            self._triggerDogTagFlameSound(True)
+
+    def _triggerDogTagFlameSound(self, active):
+        if not self._isDTFlameEnabled:
+            return
+        if active:
+            WWISE.WW_eventGlobal(backport.sound(R.sounds.dt_flame_start()))
+        else:
+            WWISE.WW_eventGlobal(backport.sound(R.sounds.dt_flame_stop()))

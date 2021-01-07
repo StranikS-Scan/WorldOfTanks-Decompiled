@@ -14,7 +14,7 @@ from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.customization_item_vo import buildCustomizationItemDataVO
-from gui.Scaleform.daapi.view.lobby.customization.shared import getEmptyRegions, checkSlotsFilling, CustomizationTabs, getItemTypesAvailableForVehicle
+from gui.Scaleform.daapi.view.lobby.customization.shared import getEmptyRegions, checkSlotsFilling, CustomizationTabs, getItemTypesAvailableForVehicle, getSlotDataFromSlot, ITEM_TYPE_TO_SLOT_TYPE
 from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS, C11N_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
 from gui.Scaleform.daapi.view.meta.CustomizationMainViewMeta import CustomizationMainViewMeta
@@ -272,8 +272,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         if self.__ctx.c11nCameraManager.vEntity is not None and self.__ctx.c11nCameraManager.vEntity.isVehicleLoaded:
             self.__ctx.c11nCameraManager.vEntity.appearance.updateAnchorsParams()
         self.__setAnchorsInitData()
-        if not self.__styleInfo.visible:
-            self.__locateCameraToCustomizationPreview(updateTankCentralPoint=True)
+        self.__locateCameraToCustomizationPreview(updateTankCentralPoint=True)
         return
 
     def __wrapSetCollisions(self):
@@ -557,7 +556,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             self.__ctx.vehicleAnchorsUpdater.onCameraLocated()
             return
 
-    def __onItemsBought(self, purchaseItems, results):
+    def __onItemsBought(self, originalOutfits, purchaseItems, results):
         errorCount = 0
         for result in results:
             if not result.success:
@@ -568,8 +567,8 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         if not errorCount:
             cart = getTotalPurchaseInfo(purchaseItems)
             if cart.totalPrice != ITEM_PRICE_EMPTY:
-                if cart.numBought == 1:
-                    item = next((purchaseItem for purchaseItem in purchaseItems if not purchaseItem.isFromInventory and not purchaseItem.isDismantling)).item
+                if cart.boughtCount == 1:
+                    item = next((purchaseItem for purchaseItem in purchaseItems if not purchaseItem.isFromInventory)).item
                     styleItemType = backport.text(R.strings.item_types.customization.style())
                     msgCtx = {'itemType': styleItemType if item.itemTypeID == GUI_ITEM_TYPE.STYLE else item.userType,
                      'itemName': item.userName,
@@ -581,11 +580,27 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
                      'money': formatPrice(cart.totalPrice.price)}
                     msgKey = R.strings.messenger.serviceChannelMessages.sysMsg.customization.buyMany()
                 SystemMessages.pushMessage(backport.text(msgKey, **msgCtx), type=CURRENCY_TO_SM_TYPE.get(cart.totalPrice.getCurrency(byWeight=True), SM_TYPE.PurchaseForGold))
-            elif cart.isAtLeastOneItemFromInventory:
-                SystemMessages.pushMessage(backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.customization.change()), type=SM_TYPE.Information)
-            elif cart.isAtLeastOneItemDismantled:
+            elif self.__isAnyItemDismantled(originalOutfits, modifiedOutfits=self.__ctx.mode.getModifiedOutfits()):
                 SystemMessages.pushMessage(backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.customization.remove()), type=SM_TYPE.Information)
+            else:
+                SystemMessages.pushMessage(backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.customization.change()), type=SM_TYPE.Information)
             self.__onCloseWindow()
+
+    def __isAnyItemDismantled(self, originalOutfits, modifiedOutfits):
+        if self.__ctx.modeId != CustomizationModes.CUSTOM:
+            return False
+        for season in SeasonType.COMMON_SEASONS:
+            originalOutfit = originalOutfits[season]
+            modifiedOutfit = modifiedOutfits[season]
+            for intCD, _, regionIdx, container, _ in originalOutfit.itemsFull():
+                item = self.service.getItemByCD(intCD)
+                slotType = ITEM_TYPE_TO_SLOT_TYPE.get(item.itemTypeID)
+                slotId = C11nId(container.getAreaID(), slotType, regionIdx)
+                modifiedSlotData = getSlotDataFromSlot(modifiedOutfit, slotId)
+                if not modifiedSlotData.intCD:
+                    return True
+
+        return False
 
     def onAnchorsShown(self, anchors):
         if self.__ctx.vehicleAnchorsUpdater is not None:
@@ -621,12 +636,9 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__ctx.events.onHideStyleInfo += self.__onHideStyleInfo
         self.__ctx.events.onEditModeEnabled += self.__onEditModeEnabled
         self.__ctx.events.onGetItemBackToHand += self.__onGetItemBackToHand
-        self.__ctx.events.onCloseWindow += self.onCloseWindow
         self.__ctx.events.onSlotSelected += self.__onSlotSelected
         self.__ctx.events.onSlotUnselected += self.__onSlotUnselected
         self.__ctx.events.onAnchorsStateChanged += self.__onAnchorsStateChanged
-        turretRotator = self.__ctx.c11nCameraManager.vEntity.appearance.turretRotator
-        turretRotator.onTurretRotated += self.__onTurretAndGunRotated
         g_currentVehicle.onChangeStarted += self.__onVehicleChangeStarted
         g_currentVehicle.onChanged += self.__onVehicleChanged
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
@@ -654,6 +666,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         entity = self.hangarSpace.getVehicleEntity()
         if entity and entity.appearance:
             entity.appearance.loadState.subscribe(self.__onVehicleLoadFinished, self.__onVehicleLoadStarted)
+            entity.appearance.turretRotator.onTurretRotated += self.__onTurretAndGunRotated
         self.__slotSelector = _VehicleSlotSelector()
         BigWorld.callback(0.0, self.__initAnchorsPositions)
         BigWorld.callback(0.0, self.__setNotificationCounters)
@@ -676,16 +689,13 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         entity = self.hangarSpace.getVehicleEntity()
         if entity and entity.appearance:
             entity.appearance.loadState.unsubscribe(self.__onVehicleLoadFinished, self.__onVehicleLoadStarted)
+            entity.appearance.turretRotator.onTurretRotated -= self.__onTurretAndGunRotated
         self.fireEvent(events.HangarCustomizationEvent(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM), scope=EVENT_BUS_SCOPE.LOBBY)
         self.fireEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': False}), EVENT_BUS_SCOPE.LOBBY)
         self.fireEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.ALL}), EVENT_BUS_SCOPE.LOBBY)
         self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': False}), scope=EVENT_BUS_SCOPE.LOBBY)
         if self.__ctx.c11nCameraManager is not None:
             self.__ctx.c11nCameraManager.locateCameraToStartState()
-            vEntity = self.__ctx.c11nCameraManager.vEntity
-            if vEntity is not None and vEntity.isVehicleLoaded:
-                turretRotator = vEntity.appearance.turretRotator
-                turretRotator.onTurretRotated -= self.__onTurretAndGunRotated
         if self.__styleInfo is not None:
             self.__styleInfo.disableBlur()
             self.__disableStyleInfoSound()
@@ -725,7 +735,8 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__ctx.events.onHideStyleInfo -= self.__onHideStyleInfo
         self.__ctx.events.onEditModeEnabled -= self.__onEditModeEnabled
         self.__ctx.events.onGetItemBackToHand -= self.__onGetItemBackToHand
-        self.__ctx.events.onCloseWindow -= self.onCloseWindow
+        self.__ctx.events.onSlotSelected -= self.__onSlotSelected
+        self.__ctx.events.onSlotUnselected -= self.__onSlotUnselected
         self.__ctx.events.onAnchorsStateChanged -= self.__onAnchorsStateChanged
         g_currentVehicle.onChangeStarted -= self.__onVehicleChangeStarted
         g_currentVehicle.onChanged -= self.__onVehicleChanged
@@ -736,9 +747,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         if self.__setCollisionsCallback is not None:
             BigWorld.cancelCallback(self.__setCollisionsCallback)
             self.__setCollisionsCallback = None
-        exitCallback = self.__ctx.getExitCallback()
-        if exitCallback is not None:
-            exitCallback.destroy()
         super(MainView, self)._dispose()
         self.__ctx = None
         self.service.closeCustomization()

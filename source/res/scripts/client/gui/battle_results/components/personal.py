@@ -137,12 +137,14 @@ class PremiumInfoBlock(base.StatsBlock):
         isEpic = reusable.common.arenaGuiType in ARENA_GUI_TYPE.EPIC_RANGE
         cases = PremiumInfoBlock.availableEpicCases if isEpic else PremiumInfoBlock.availableCases
         self.__adsCase = random.choice(cases)
-        cases.remove(self.__adsCase)
-        if not cases:
-            if isEpic:
-                PremiumInfoBlock.availableEpicCases = [ case for case in self.__epicPremiumPlusCases ]
-            else:
-                PremiumInfoBlock.availableCases = [ case for case in self.__allPremiumPlusCases ]
+        if self.__adsCase in PremiumInfoBlock.availableEpicCases:
+            PremiumInfoBlock.availableEpicCases.remove(self.__adsCase)
+        if self.__adsCase in PremiumInfoBlock.availableCases:
+            PremiumInfoBlock.availableCases.remove(self.__adsCase)
+        if not PremiumInfoBlock.availableEpicCases:
+            PremiumInfoBlock.availableEpicCases = [ case for case in self.__epicPremiumPlusCases ]
+        if not PremiumInfoBlock.availableCases:
+            PremiumInfoBlock.availableCases = [ case for case in self.__allPremiumPlusCases ]
 
     def getVO(self):
         stats = self.__itemsCache.items.stats

@@ -26,14 +26,18 @@ class UnitRequestProcessor(IUnitRequestProcessor):
         if unitMgr:
             unitMgr.onUnitResponseReceived -= self.unitMgr_onUnitResponseReceived
             unitMgr.onUnitErrorReceived -= self.unitMgr_onUnitErrorReceived
+        for _, (ctx, _) in sorted(self.__requests.items(), key=lambda x: x[0]):
+            if ctx is not None:
+                ctx.stopProcessing()
+
         self.__requests.clear()
         self.__entity = None
         return
 
     def doRequest(self, ctx, methodName, *args, **kwargs):
-        kwargs.pop('callback', None)
+        callback = kwargs.pop('callback', None)
         if self._sendRequest(ctx, methodName, [], *args, **kwargs):
-            ctx.startProcessing()
+            ctx.startProcessing(callback)
         return
 
     def doRequestChain(self, ctx, chain):
@@ -86,7 +90,7 @@ class UnitRequestProcessor(IUnitRequestProcessor):
                 ctx.stopProcessing(result)
         else:
             while self.__requests:
-                _, data = self.__requests.popitem()
-                data[0].stopProcessing(False)
+                _, (ctx, chain) = self.__requests.popitem()
+                ctx.stopProcessing(False)
 
         return

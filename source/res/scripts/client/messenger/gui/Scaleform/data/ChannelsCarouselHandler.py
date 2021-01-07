@@ -11,6 +11,8 @@ from gui.shared.events import ChannelManagementEvent, ChannelCarouselEvent, PreB
 from messenger.ext import channel_num_gen
 from messenger.gui import events_dispatcher
 from messenger.gui.Scaleform.data.ChannelsDataProvider import ChannelsDataProvider
+from skeletons.gui.game_control import IPlatoonController
+from helpers import dependency
 
 class ChannelFindCriteria(ExternalCriteria):
 
@@ -19,6 +21,7 @@ class ChannelFindCriteria(ExternalCriteria):
 
 
 class ChannelsCarouselHandler(object):
+    __platoonCtrl = dependency.descriptor(IPlatoonController)
 
     def __init__(self, guiEntry):
         super(ChannelsCarouselHandler, self).__init__()
@@ -121,11 +124,11 @@ class ChannelsCarouselHandler(object):
 
     def notifyChannel(self, channel, message):
         clientID = channel.getClientID()
+        self.__setItemField(clientID, 'isNotified', True)
         if clientID not in self.__notifiedMessages:
             self.__notifiedMessages[clientID] = []
         notifiedMessages = self.__notifiedMessages[clientID]
         notifiedMessages.append(message)
-        self.__setItemField(clientID, 'isNotified', True)
 
     def __setItemField(self, clientID, key, value):
         result = self.__preBattleChannelsDP.setItemField(clientID, key, value)

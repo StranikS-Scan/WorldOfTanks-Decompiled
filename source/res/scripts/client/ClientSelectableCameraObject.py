@@ -9,7 +9,7 @@ from ClientSelectableObject import ClientSelectableObject
 from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
 from AvatarInputHandler import cameras
 from gui.Scaleform.Waiting import Waiting
-from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraRelatedEvents
+from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraRelatedEvents, CameraDistanceStates
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from skeletons.account_helpers.settings_core import ISettingsCore
 from helpers import dependency
@@ -95,12 +95,12 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
         self.__p1 = Math.Vector3(0.0, 0.0, 0.0)
         self.__p2 = Math.Vector3(0.0, 0.0, 0.0)
         self.__wasPreviousUpdateSkipped = False
+        self.camDistState = CameraDistanceStates.DEFAULT
         return
 
     def onEnterWorld(self, prereqs):
         ClientSelectableCameraObject.allCameraObjects.add(self)
         ClientSelectableObject.onEnterWorld(self, prereqs)
-        g_eventBus.addListener(CameraRelatedEvents.CUSTOMIZATION_CAMERA_ACTIVATED, self.__forcedFinish)
 
     def onLeaveWorld(self):
         if self in ClientSelectableCameraObject.allCameraObjects:
@@ -110,7 +110,6 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
             BigWorld.worldDrawEnabled(False)
         self.__camera.destroy()
         self.__camera = None
-        g_eventBus.removeListener(CameraRelatedEvents.CUSTOMIZATION_CAMERA_ACTIVATED, self.__forcedFinish)
         ClientSelectableObject.onLeaveWorld(self)
         CallbackDelayer.destroy(self)
         return
@@ -134,6 +133,11 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
                 if cameraObject.state != CameraMovementStates.FROM_OBJECT:
                     cameraObject.onDeselect(clickedObject)
 
+            hangarCameraMgr = cls.hangarSpace.space.getCameraManager()
+            if clickedObject.camDistState == CameraDistanceStates.CUSTOM:
+                hangarCameraMgr.setAllowCustomCamDistance(enable=True)
+            else:
+                hangarCameraMgr.setAllowCustomCamDistance(enable=False)
             clickedObject.onSelect()
             return
 
@@ -242,6 +246,7 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
         self.__curTime += self.measureDeltaTime() / self.cameraUpcomingDuration
         isCameraDone = self.__curTime >= 1.0
         if isCameraDone:
+            self.stopCallback(self.__update)
             self._finishCameraMovement()
         else:
             self.__updateCameraLocation()
@@ -266,7 +271,6 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
         return math_utils.easeOutQuad(time, easedInValue - startValue, self.__easeInDuration) + startValue if time < self.__easeInDuration else angleCalculation(currentPosition, goalPosition)
 
     def _finishCameraMovement(self):
-        self.stopCallback(self.__update)
         self.setState(CameraMovementStates.ON_OBJECT)
         self.__camera.disable()
         BigWorld.camera(self.hangarSpace.space.camera)
@@ -274,7 +278,3 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
         self.__goalFov = None
         self.__curTime = None
         return
-
-    def __forcedFinish(self, _):
-        if self.__state == CameraMovementStates.MOVING_TO_OBJECT:
-            self._finishCameraMovement()

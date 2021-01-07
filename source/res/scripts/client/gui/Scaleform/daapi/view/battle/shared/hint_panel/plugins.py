@@ -1,7 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/hint_panel/plugins.py
-from collections import namedtuple
-from datetime import datetime
 import logging
 import BigWorld
 import CommandMapping
@@ -19,25 +17,19 @@ from gui.battle_control.controllers.radar_ctrl import IRadarListener
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent, ViewEventType, LoadViewEvent
 from gui.shared.utils.key_mapping import getReadableKey
-from gui.shared.utils.plugins import IPlugin
-from helpers import dependency, time_utils
+from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from items import makeIntCompactDescrByID
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
+from hint_panel_plugin import HintPanelPlugin, HintData, HintPriority
+from dyn_squad_hint_plugin import DynSquadHintPlugin
 _logger = logging.getLogger(__name__)
-HintData = namedtuple('HintData', ['key',
- 'messageLeft',
- 'messageRight',
- 'offsetX',
- 'offsetY',
- 'priority'])
 _HINT_MIN_VEHICLE_LEVEL = 4
 _HINT_TIMEOUT = 6
 _HINT_COOLDOWN = 4
-_HINT_DISPLAY_COUNT_AFTER_RESET = 1
 _TRAJECTORY_VIEW_HINT_POSITION = (0, 120)
 _TRAJECTORY_VIEW_HINT_CHECK_STATES = (VEHICLE_VIEW_STATE.DESTROY_TIMER,
  VEHICLE_VIEW_STATE.DEATHZONE_TIMER,
@@ -57,67 +49,9 @@ def createPlugins():
         result['prebattleHints'] = PreBattleHintPlugin
     if RadarHintPlugin.isSuitable():
         result['radarHint'] = RadarHintPlugin
+    if DynSquadHintPlugin.isSuitable():
+        result['dynSquadHints'] = DynSquadHintPlugin
     return result
-
-
-class HintPanelPlugin(IPlugin):
-
-    @classmethod
-    def isSuitable(cls):
-        raise NotImplementedError
-
-    def setPeriod(self, period):
-        pass
-
-    def updateMapping(self):
-        pass
-
-    def _getHint(self):
-        return None
-
-    @staticmethod
-    def _updateCounterOnUsed(settings):
-        if settings:
-            settings[LAST_DISPLAY_DAY] = datetime.now().timetuple().tm_yday
-            settings[NUM_BATTLES] = 0
-            settings[HINTS_LEFT] = max(0, settings[HINTS_LEFT] - 1)
-        return settings
-
-    @staticmethod
-    def _updateBattleCounterOnUsed(settings):
-        if settings:
-            settings[HINTS_LEFT] = max(0, settings[HINTS_LEFT] - 1)
-        return settings
-
-    @staticmethod
-    def _updateCounterOnStart(setting, dayCoolDown, battleCoolDown):
-        if not setting:
-            return
-        hintsLeft = setting[HINTS_LEFT]
-        numBattles = setting[NUM_BATTLES]
-        lastDayOfYear = setting[LAST_DISPLAY_DAY]
-        dayOfYear = datetime.now().timetuple().tm_yday
-        daysLeft = (dayOfYear - lastDayOfYear + time_utils.DAYS_IN_YEAR) % time_utils.DAYS_IN_YEAR
-        if hintsLeft == 0 and (daysLeft >= dayCoolDown or numBattles >= battleCoolDown):
-            setting[HINTS_LEFT] = _HINT_DISPLAY_COUNT_AFTER_RESET
-
-    @classmethod
-    def _updateCounterOnBattle(cls, setting):
-        if setting and not cls._haveHintsLeft(setting):
-            setting[NUM_BATTLES] = setting[NUM_BATTLES] + 1
-
-    @staticmethod
-    def _haveHintsLeft(setting):
-        return False if not setting else setting[HINTS_LEFT] > 0
-
-
-class HintPriority(object):
-    TRAJECTORY = 0
-    HELP = 1
-    BATTLE_COMMUNICATION = 2
-    QUESTS = 3
-    SIEGE = 4
-    RADAR = 4
 
 
 class PRBSettings(object):

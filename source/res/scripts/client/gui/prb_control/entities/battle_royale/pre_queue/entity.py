@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/battle_royale/pre_queue/entity.py
 import BigWorld
-from CurrentVehicle import g_currentVehicle
+from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from PlayerEvents import g_playerEvents
 from constants import QUEUE_TYPE
 from debug_utils import LOG_DEBUG
@@ -77,6 +77,10 @@ class BattleRoyaleEntity(PreQueueEntity):
             self.__watcher.stop()
             self.__watcher = None
         self.storage.suspend()
+        if g_currentPreviewVehicle.isPresent():
+            reqFlags = FUNCTIONAL_FLAG.LOAD_PAGE | FUNCTIONAL_FLAG.SWITCH | FUNCTIONAL_FLAG.TRAINING
+            if not ctx.hasFlags(reqFlags):
+                g_eventDispatcher.loadHangar()
         return super(BattleRoyaleEntity, self).fini(ctx, woEvents)
 
     @prequeue_storage_getter(QUEUE_TYPE.BATTLE_ROYALE)

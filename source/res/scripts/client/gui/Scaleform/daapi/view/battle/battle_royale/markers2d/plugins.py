@@ -11,6 +11,7 @@ from items.battle_royale import isSpawnedBot
 from skeletons.gui.battle_session import IBattleSessionProvider
 _logger = logging.getLogger(__name__)
 _BATTLE_ROYALE_STATUS_EFFECTS_PRIORITY = (BATTLE_MARKER_STATES.STUN_STATE,
+ BATTLE_MARKER_STATES.DEBUFF_STATE,
  BATTLE_MARKER_STATES.BERSERKER_STATE,
  BATTLE_MARKER_STATES.HEALING_STATE,
  BATTLE_MARKER_STATES.REPAIRING_STATE,

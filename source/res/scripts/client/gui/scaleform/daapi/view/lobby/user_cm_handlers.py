@@ -92,7 +92,14 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
         return None
 
     def canInvite(self):
-        return self.prbEntity.getPermissions().canSendInvite() if self.prbEntity is not None else False
+        if self.prbEntity is not None:
+            if hasattr(self.prbEntity, 'getFlags'):
+                flags = self.prbEntity.getFlags()
+                if flags.isInSearch():
+                    return False
+            return self.prbEntity.getPermissions().canSendInvite()
+        else:
+            return False
 
     def isSquadCreator(self):
         return False

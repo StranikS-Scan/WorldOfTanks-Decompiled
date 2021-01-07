@@ -3,16 +3,16 @@
 import account_helpers
 from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL, PREBATTLE_TYPE, QUEUE_TYPE, VEHICLE_CLASS_INDICES
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.prb_control.entities.base.squad.entity import SquadEntryPoint, SquadEntity
 from gui.prb_control.entities.random.pre_queue.vehicles_watcher import RandomVehiclesWatcher
 from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.prb_control.entities.base.squad.entity import SquadEntryPoint, SquadEntity
 from gui.prb_control.items import SelectResult
 from gui.prb_control.items.unit_items import DynamicRosterSettings
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
-from helpers import dependency
-from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.lobby_context import ILobbyContext
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
+from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.server_events import IEventsCache
 from .actions_handler import BalancedSquadActionsHandler, RandomSquadActionsHandler
 from .actions_validator import SPGForbiddenSquadActionsValidator, SPGForbiddenBalancedSquadActionsValidator
 

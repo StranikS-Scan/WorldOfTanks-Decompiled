@@ -186,151 +186,7 @@
     </eventHint2>
   </lesson_pages>
   <prebattle>	crewHint modulesHint hitpointsHint crosshairHint	</prebattle>
-  <primary_hints>
-    <hintMoveTurret>
-      <message>	#bootcamp:hint/move/turret	</message>
-      <timeout>	6.0	</timeout>
-      <time_completed>	1.0	</time_completed>
-      <angle>	60.0	</angle>
-      <cooldown_after>	5.0	</cooldown_after>
-      <voiceover>	vo_bc_tower_and_sight_control	</voiceover>
-    </hintMoveTurret>
-    <hintMove>
-      <message>	#bootcamp:hint/move	</message>
-      <timeout>	13.0	</timeout>
-      <time_completed>	1.0	</time_completed>
-      <distance>	30.0	</distance>
-      <cooldown_after>	5.0	</cooldown_after>
-      <voiceover>	vo_bc_vehicle_control	</voiceover>
-    </hintMove>
-    <hintShoot>
-      <message>	#bootcamp:hint/shoot	</message>
-      <timeout>	5.0	</timeout>
-      <time_completed>	1.0	</time_completed>
-      <cooldown_after>	3.0	</cooldown_after>
-      <voiceover>	vo_bc_aim_at_enemy	</voiceover>
-    </hintShoot>
-    <hintSniper>
-      <message>	#bootcamp:hint/sniper	</message>
-      <time_completed>	2.0	</time_completed>
-      <cooldown_after>	3.0	</cooldown_after>
-    </hintSniper>
-    <hintSniperLevel0>
-      <message>	#bootcamp:hint/sniper/on/distance/exit	</message>
-      <time_completed>	2.0	</time_completed>
-      <cooldown_after>	3.0	</cooldown_after>
-    </hintSniperLevel0>
-    <hintAdvancedSniper>
-      <enter_voiceover>	vo_bc_entering_sniper_mode	</enter_voiceover>
-      <exit_voiceover>	vo_bc_exiting_sniper_mode	</exit_voiceover>
-      <weak_points_voiceover>	vo_bc_weakness_in_armor	</weak_points_voiceover>
-      <message>	#bootcamp:hint/advanced/sniper/main	</message>
-      <message_sniper_before>	#bootcamp:hint/advanced/sniper/before	</message_sniper_before>
-      <message_sniper_exit>	#bootcamp:hint/sniper/on/distance/exit	</message_sniper_exit>
-      <angle>	15.0	</angle>
-      <target_name></target_name>
-      <time_completed>	0	</time_completed>
-      <cooldown_after>	5.0	</cooldown_after>
-      <time_between>	0.0	</time_between>
-    </hintAdvancedSniper>
-    <hintMessageAvoid>
-      <message>	#bootcamp:hint/message/avoid	</message>
-      <timeout>	120.0	</timeout>
-      <time_completed>	0	</time_completed>
-      <cooldown_after>	2.0	</cooldown_after>
-      <voiceover>	vo_bc_get_around_enemy	</voiceover>
-    </hintMessageAvoid>
-    <hintStartNarrative>
-      <message>	#bootcamp:hint/start/narrative	</message>
-      <timeout>	6.0	</timeout>
-      <time_completed>	0.0	</time_completed>
-      <cooldown_after>	1.0	</cooldown_after>
-      <time_before_shown>	3.0	</time_before_shown>
-    </hintStartNarrative>
-    <hintRepairTrack>
-      <message>	#bootcamp:hint/repair/track	</message>
-      <timeout>	8.0	</timeout>
-      <time_completed>	0	</time_completed>
-      <cooldown_after>	2.0	</cooldown_after>
-      <voiceover>	vo_bc_use_repair_kit	</voiceover>
-    </hintRepairTrack>
-    <hintUseExtinguisher>
-      <message>	#bootcamp:hint/use/extinguisher	</message>
-      <timeout>	8.0	</timeout>
-      <time_completed>	0	</time_completed>
-      <cooldown_after>	2.0	</cooldown_after>
-      <voiceover>	vo_bc_use_fire_extinguisher	</voiceover>
-    </hintUseExtinguisher>
-    <hintHealCrew>
-      <message>	#bootcamp:hint/heal/crew	</message>
-      <timeout>	8.0	</timeout>
-      <time_completed>	0	</time_completed>
-      <cooldown_after>	2.0	</cooldown_after>
-      <voiceover>	vo_bc_gunner_wounded	</voiceover>
-    </hintHealCrew>
-    <hintTargetLock>
-      <message>	#bootcamp:hint/target/lock	</message>
-      <timeout>	4.0	</timeout>
-      <time_completed>	2.0	</time_completed>
-      <cooldown_after>	2.0	</cooldown_after>
-    </hintTargetLock>
-    <hintTargetUnLock>
-      <message>	#bootcamp:hint/target/unlock	</message>
-      <timeout>	-1.0	</timeout>
-      <time_completed>	2.0	</time_completed>
-      <cooldown_after>	2.0	</cooldown_after>
-    </hintTargetUnLock>
-    <hintSniperOnDistance>
-      <enter_voiceover>	vo_bc_entering_sniper_mode	</enter_voiceover>
-      <exit_voiceover>	vo_bc_exiting_sniper_mode	</exit_voiceover>
-      <message>	#bootcamp:hint/sniper/on/distance/main	</message>
-      <exitHintText>	#bootcamp:hint/sniper/on/distance/exit	</exitHintText>
-      <exitHintDelay>	3.0	</exitHintDelay>
-      <timeout>	5.0	</timeout>
-      <time_completed>	0.0	</time_completed>
-      <cooldown_after>	2.0	</cooldown_after>
-      <angle>	15.0	</angle>
-      <distance>	100.0	</distance>
-    </hintSniperOnDistance>
-    <hintAim>
-      <message>	#bootcamp:hint/aim	</message>
-      <timeout>	4.0	</timeout>
-      <aimFactor>	3.0	</aimFactor>
-      <shootCount>	3	</shootCount>
-      <voiceover>	vo_bc_green_marker	</voiceover>
-    </hintAim>
-    <hintWeakPoints>
-      <voiceover>	vo_bc_weakness_in_armor	</voiceover>
-    </hintWeakPoints>
-    <hintPlayerSpotted>
-      <voiceover>	vo_bc_you_are_detected	</voiceover>
-    </hintPlayerSpotted>
-    <hintSectorClear>
-      <voiceover>	vo_bc_look_for_enemies	</voiceover>
-    </hintSectorClear>
-    <hintCaptureTheBase>
-      <voiceover>	vo_bc_capture_base	</voiceover>
-    </hintCaptureTheBase>
-    <hintResetProgress>
-      <voiceover>	vo_bc_progress_capturing	</voiceover>
-    </hintResetProgress>
-    <hintPlayerDetectEnemies>
-      <count>	0	</count>
-      <voiceover>	vo_bc_detect_enemy_vehicles	</voiceover>
-    </hintPlayerDetectEnemies>
-    <hintEnemyCanHide>
-      <voiceover>	vo_bc_enemy_can_hide_be_careful	</voiceover>
-    </hintEnemyCanHide>
-    <hintShootWhileMoving>
-      <maxShootErrorsCount>	0	</maxShootErrorsCount>
-      <voiceover>	vo_bc_do_not_shoot	</voiceover>
-    </hintShootWhileMoving>
-    <hintMoveToMarker>
-      <seconds>	0.0	</seconds>
-      <maxDistance>	0.0	</maxDistance>
-      <voiceover>	vo_bc_move_forward	</voiceover>
-    </hintMoveToMarker>
-  </primary_hints>
+  <primary_hints></primary_hints>
   <secondary_hints>
     <hintNoMove>
       <message>	#bootcamp:hint/no/move	</message>
@@ -346,6 +202,12 @@
       <seconds>	60.0	</seconds>
       <cooldown_after>	5.0	</cooldown_after>
     </hintNoMoveTurret>
+    <hintTargetUnLock>
+      <message>	#bootcamp:hint/target/unlock	</message>
+      <timeout>	-1.0	</timeout>
+      <time_completed>	2.0	</time_completed>
+      <cooldown_after>	2.0	</cooldown_after>
+    </hintTargetUnLock>
     <hintUselessConsumable>
       <message>	#bootcamp:hint/useless/consumables	</message>
       <timeout>	4.0	</timeout>

@@ -87,6 +87,7 @@ def getAcceptNotAllowedText(prbType, peripheryID, isInviteActive=True, isAlready
                 text = backport.text(_R_INVITES.prebattle.acceptNotAllowed.otherPeriphery(), host=host)
             else:
                 text = backport.text(_R_INVITES.prebattle.acceptNotAllowed.undefinedPeriphery())
+            text = ' '.join((text, backport.text(_R_INVITES.note.serverSelectionIsRemembered())))
     return text
 
 
@@ -104,10 +105,12 @@ def getLeaveOrChangeText(funcState, invitePrbType, peripheryID, lobbyContext=Non
             return text
         if isAnotherPeriphery:
             text = backport.text(_R_INVITES.note.change_and_leave.dyn(entityName)(), host=lobbyContext.getPeripheryName(peripheryID) or '')
+            text = ' '.join((text, backport.text(_R_INVITES.note.serverSelectionIsRemembered())))
         else:
             text = backport.text(_R_INVITES.note.leave.dyn(entityName)())
     elif isAnotherPeriphery:
         text = backport.text(_R_INVITES.note.server_change(), host=lobbyContext.getPeripheryName(peripheryID) or '')
+        text = ' '.join((text, backport.text(_R_INVITES.note.serverSelectionIsRemembered())))
     return text
 
 

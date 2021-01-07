@@ -4,25 +4,23 @@ import logging
 from CurrentVehicle import g_currentVehicle
 from Event import Event
 from frameworks.wulf import ViewFlags, ViewSettings, ViewStatus
-from gui import SystemMessages
 from gui.impl.backport import BackportTooltipWindow
 from gui.impl.backport.backport_context_menu import BackportContextMenuWindow
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.tank_setup.ammunition_panel_view_model import AmmunitionPanelViewModel
-from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
 from gui.impl.lobby.tank_setup.ammunition_panel.hangar import HangarAmmunitionPanel
 from gui.impl.lobby.tank_setup.backports.context_menu import getHangarContextMenuData
 from gui.impl.lobby.tank_setup.backports.tooltips import getSlotTooltipData
 from gui.impl.lobby.tank_setup.tank_setup_helper import setLastSlotAction, clearLastSlotAction
 from gui.impl.pub import ViewImpl
-from gui.shared.utils import decorators
 from helpers import dependency
-from new_year.vehicle_branch import ApplyVehicleBranchStyleProcessor
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.shared.utils import IHangarSpace
 _logger = logging.getLogger(__name__)
 
 class BaseAmmunitionPanelView(ViewImpl):
     _itemsCache = dependency.descriptor(IItemsCache)
+    _hangarSpace = dependency.descriptor(IHangarSpace)
     __slots__ = ('_ammunitionPanel', 'onSizeChanged', 'onPanelSectionSelected', 'onPanelSectionResized')
 
     def __init__(self, flags=ViewFlags.VIEW):
@@ -36,6 +34,9 @@ class BaseAmmunitionPanelView(ViewImpl):
 
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
+            if self._hangarSpace.spaceLoading():
+                _logger.warning('Failed to get slotData. HangarSpace is currently loading.')
+                return
             tooltipData = getSlotTooltipData(event, g_currentVehicle.item, self.viewModel.ammunitionPanel.getSelectedSlot())
             if tooltipData is not None:
                 window = BackportTooltipWindow(tooltipData, self.getParentWindow())
@@ -54,6 +55,9 @@ class BaseAmmunitionPanelView(ViewImpl):
 
     def setHangarSwitchAnimState(self, isComplete):
         self.viewModel.setIsReady(isComplete)
+
+    def setPrbSwitching(self, value):
+        self.viewModel.setIsDisabled(value)
 
     @property
     def viewModel(self):
@@ -115,12 +119,7 @@ class BaseAmmunitionPanelView(ViewImpl):
         self._itemsCache.onSyncCompleted -= self.__itemCacheChanged
 
     def _onPanelSectionSelected(self, args):
-        if self._getIsDisabled():
-            return
-        selectedSection = args['selectedSection']
-        if selectedSection == TankSetupConstants.TOGGLE_NY_STYLE:
-            self.__onSetNewYearStyle(args)
-        else:
+        if not self._getIsDisabled():
             clearLastSlotAction(self.viewModel)
             self.onPanelSectionSelected(**args)
 
@@ -148,9 +147,3 @@ class BaseAmmunitionPanelView(ViewImpl):
 
     def __onViewSizeInitialized(self, args=None):
         self.onSizeChanged(args.get('width', 0), args.get('height', 0), args.get('offsetY', 0))
-
-    @decorators.process('newYear/setNewYearStyle')
-    def __onSetNewYearStyle(self, args):
-        result = yield ApplyVehicleBranchStyleProcessor(g_currentVehicle.invID).request()
-        if result.userMsg:
-            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)

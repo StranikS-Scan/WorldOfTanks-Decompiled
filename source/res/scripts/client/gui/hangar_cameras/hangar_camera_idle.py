@@ -110,6 +110,8 @@ class HangarCameraIdle(HangarCameraIdleController, CallbackDelayer, TimeDeltaMet
         BigWorld.removeAllIdleCallbacks()
         if delay > 0:
             BigWorld.addIdleCallbackForDelay(delay, self.__startCameraIdle, self.__stopCameraIdle)
+        else:
+            self.__stopCameraIdle()
 
     def __startCameraIdle(self):
         g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.IDLE_CAMERA, ctx={'started': True}), scope=EVENT_BUS_SCOPE.DEFAULT)

@@ -3,12 +3,16 @@
 import BigWorld
 from visual_script import ASPECT
 from visual_script.block import Block
-from visual_script.block import SLOT_TYPE
+from visual_script.slot_types import SLOT_TYPE
 
 class GetSpaceId(Block):
 
     @classmethod
     def blockCategory(cls):
+        pass
+
+    @classmethod
+    def blockIcon(cls):
         pass
 
     def __init__(self, *args, **kwargs):

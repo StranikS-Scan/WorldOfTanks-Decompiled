@@ -58,8 +58,8 @@ class BCBattleResult(BCBattleResultMeta):
     def click(self):
         g_bootcampEvents.onResultScreenFinished()
 
-    def onVideoButtonClick(self):
-        g_bootcampEvents.onInterludeVideoStarted()
+    def onVideoButtonClick(self, index):
+        g_bootcampEvents.onInterludeVideoStarted(index)
         for sound in self.__awardSounds:
             sound.stop()
 
@@ -130,7 +130,7 @@ class BCBattleResult(BCBattleResultMeta):
     def __onResultScreenFinished(self):
         self.destroy()
 
-    def __onInterludeVideoStarted(self):
+    def __onInterludeVideoStarted(self, _):
         self.onFocusIn(alias='')
 
     def __onInterludeVideoFinished(self):

@@ -40,14 +40,14 @@ class VOIPChatProvider(bw2_provider.ResponseDictHandler, IVOIPChatProvider):
 
     def registerHandlers(self):
         register = self.provider().registerHandler
-        register(_ACTIONS.ENTER_VOIP_CHANNEL, self.__onChannelEntered)
-        register(_ACTIONS.LEAVE_VOIP_CHANNEL, self.__onChannelLeft)
+        register(_ACTIONS.ENTER_VOIP_CHANNEL, self.__onChannelAvailable)
+        register(_ACTIONS.LEAVE_VOIP_CHANNEL, self.__onChannelLost)
         super(VOIPChatProvider, self).registerHandlers()
 
     def unregisterHandlers(self):
         unregister = self.provider().unregisterHandler
-        unregister(_ACTIONS.ENTER_VOIP_CHANNEL, self.__onChannelEntered)
-        unregister(_ACTIONS.LEAVE_VOIP_CHANNEL, self.__onChannelLeft)
+        unregister(_ACTIONS.ENTER_VOIP_CHANNEL, self.__onChannelAvailable)
+        unregister(_ACTIONS.LEAVE_VOIP_CHANNEL, self.__onChannelLost)
         super(VOIPChatProvider, self).unregisterHandlers()
 
     def _onResponseSuccess(self, ids, args):
@@ -70,15 +70,15 @@ class VOIPChatProvider(bw2_provider.ResponseDictHandler, IVOIPChatProvider):
                 LOG_WARNING('Error is not resolved on the client to display in GUI', actionID, ids, args)
             return
 
-    def __onChannelEntered(self, _, args):
+    def __onChannelAvailable(self, _, args):
         url = args['strArg1']
         pwd = args['strArg2']
         isRejoin = args['int32Arg1']
         if not url or not pwd or self.__channelParams[0] == url:
             return
         self.__channelParams = (url, pwd)
-        g_messengerEvents.voip.onChannelEntered(url, pwd, isRejoin)
+        g_messengerEvents.voip.onChannelAvailable(url, pwd, isRejoin)
 
-    def __onChannelLeft(self, ids, args):
-        g_messengerEvents.voip.onChannelLeft()
+    def __onChannelLost(self, ids, args):
+        g_messengerEvents.voip.onChannelLost()
         self.__channelParams = _EMPTY_CHANNELS_PARAMS

@@ -390,7 +390,7 @@
     <description>	#gb_vehicles:GB31_Conqueror_Gun_descr	</description>
     <shortUserString>	#gb_vehicles:GB31_Conqueror_Gun_short	</shortUserString>
     <price>	6100000	</price>
-    <tags>	SPG HD heavySPG improvedVentilation_class1_user tankRammer_class1_user antifragmentationLining_heavy_user earn_crystals NY_style	</tags>
+    <tags>	SPG HD heavySPG improvedVentilation_class1_user tankRammer_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
     <level>	10	</level>
   </GB31_Conqueror_Gun>
   <GB50_Sherman_III>
@@ -465,6 +465,19 @@
     <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals	</tags>
     <level>	10	</level>
   </GB86_Centurion_Action_X>
+  <GB111_Charlemagne>
+    <id>	203	</id>
+    <userString>	#gb_vehicles:GB111_Charlemagne	</userString>
+    <shortUserString>	#gb_vehicles:GB111_Charlemagne_short	</shortUserString>
+    <description>	#gb_vehicles:GB111_Charlemagne_descr	</description>
+    <shortDescriptionSpecial>	#gb_vehicles:GB111_Charlemagne_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB111_Charlemagne_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user secret testTank	</tags>
+    <level>	8	</level>
+  </GB111_Charlemagne>
   <GB109_GSOR_1008>
     <id>	204	</id>
     <userString>	#gb_vehicles:GB109_GSOR_1008	</userString>
@@ -475,7 +488,7 @@
     <price>	9000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG mediumAT-SPG AT-SPG2 improvedVentilation_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user HD NY2021_video	</tags>
+    <tags>	AT-SPG mediumAT-SPG AT-SPG2 improvedVentilation_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user HD	</tags>
     <level>	8	</level>
   </GB109_GSOR_1008>
   <GB32_Tortoise>

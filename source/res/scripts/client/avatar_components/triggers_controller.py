@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/avatar_components/triggers_controller.py
 import Event
-from constants import ARENA_BONUS_TYPE
 
 class TriggersController(object):
 
@@ -10,7 +9,7 @@ class TriggersController(object):
         self.onTrigger = Event.Event()
 
     def onBecomePlayer(self):
-        self.__enabled = self.arenaBonusType == ARENA_BONUS_TYPE.EVENT_BATTLES
+        self.__enabled = True
 
     def onBecomeNonPlayer(self):
         self.__enabled = False

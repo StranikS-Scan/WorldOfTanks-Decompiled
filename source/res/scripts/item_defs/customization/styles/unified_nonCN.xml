@@ -14,7 +14,7 @@
     </vehicleFilter>
     <style>
       <id>	211	</id>
-      <texture>	gui/maps/vehicles/styles/ranked_3rd.png	</texture>
+      <texture>	gui/maps/vehicles/styles/ranked_1_3rd.png	</texture>
       <description>	#vehicle_customization:special_style/ranked_1_3rd_desc	</description>
       <userString>	#vehicle_customization:special_style/ranked_1_3rd	</userString>
       <tags>	progression_required addNationalEmblem	</tags>
@@ -67,7 +67,7 @@
     </vehicleFilter>
     <style>
       <id>	212	</id>
-      <texture>	gui/maps/vehicles/styles/ranked_3rd.png	</texture>
+      <texture>	gui/maps/vehicles/styles/ranked_2_3rd.png	</texture>
       <description>	#vehicle_customization:special_style/ranked_2_3rd_desc	</description>
       <userString>	#vehicle_customization:special_style/ranked_2_3rd	</userString>
       <tags>	progression_required addNationalEmblem	</tags>
@@ -120,7 +120,7 @@
     </vehicleFilter>
     <style>
       <id>	213	</id>
-      <texture>	gui/maps/vehicles/styles/ranked_3rd.png	</texture>
+      <texture>	gui/maps/vehicles/styles/ranked_3_3rd.png	</texture>
       <description>	#vehicle_customization:special_style/ranked_3_3rd_desc	</description>
       <userString>	#vehicle_customization:special_style/ranked_3_3rd	</userString>
       <tags>	progression_required addNationalEmblem	</tags>
@@ -420,6 +420,230 @@
             </item>
             <item>
               <id>	397	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 1750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	445	</id>
+      <texture>	gui/maps/vehicles/styles/maslenitsa.png	</texture>
+      <description>	#vehicle_customization:special_style/maslenitsa_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/maslenitsa_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/maslenitsa	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	216	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	82	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 1250g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	448	</id>
+      <texture>	gui/maps/vehicles/styles/valentines_day.png	</texture>
+      <userString>	#vehicle_customization:special_style/valentines_day	</userString>
+      <description>	#vehicle_customization:special_style/valentines_day_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/valentines_day_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	221	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	85	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 1750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	447	</id>
+      <texture>	gui/maps/vehicles/styles/roaring_waves.png	</texture>
+      <userString>	#vehicle_customization:special_style/roaring_waves	</userString>
+      <description>	#vehicle_customization:special_style/roaring_waves_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/roaring_waves_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	218	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	84	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	407	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 1250g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	453	</id>
+      <texture>	gui/maps/vehicles/styles/brazil_carnival.png	</texture>
+      <description>	#vehicle_customization:special_style/brazil_carnival_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/brazil_carnival_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/brazil_carnival	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	225	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	426	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	454	</id>
+      <texture>	gui/maps/vehicles/styles/tanker_carnival.png	</texture>
+      <description>	#vehicle_customization:special_style/tanker_carnival_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/tanker_carnival_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/tanker_carnival	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	226	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	427	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	428	</id>
               <appliedTo>	52416	</appliedTo>
             </item>
           </decals>

@@ -4,8 +4,6 @@ import weakref
 import math_utils
 import Math
 import BigWorld
-import TriggersManager
-from TriggersManager import TRIGGER_TYPE
 from svarog_script.auto_properties import AutoProperty
 from svarog_script.py_component import Component
 from vehicle_systems import model_assembler
@@ -22,7 +20,6 @@ class CrashedTrackController(Component):
         self.__modelsSet = modelsSet
         self.__baseTrackFashion = trackFashion
         self.baseTracksComponent = None
-        self.__triggerEvents = False
         self.__flags = 0
         self.__model = None
         self.__fashion = None
@@ -38,7 +35,6 @@ class CrashedTrackController(Component):
 
     def setVehicle(self, entity):
         self.__entity = weakref.proxy(entity)
-        self.__triggerEvents = entity.isPlayerVehicle and not IS_EDITOR
 
     def activate(self):
         if self.__entity is not None and self.__model is not None:
@@ -78,8 +74,6 @@ class CrashedTrackController(Component):
         if self.__entity is None:
             return
         else:
-            if self.__flags == 0 and self.__triggerEvents:
-                TriggersManager.g_manager.activateTrigger(TriggersManager.TRIGGER_TYPE.PLAYER_VEHICLE_TRACKS_DAMAGED)
             if isLeft:
                 self.__flags |= 1
             else:
@@ -115,8 +109,6 @@ class CrashedTrackController(Component):
                 self.__model = None
                 self.__fashion = None
             self.__setupTracksHiding()
-            if self.__flags == 0 and self.__triggerEvents:
-                TriggersManager.g_manager.deactivateTrigger(TRIGGER_TYPE.PLAYER_VEHICLE_TRACKS_DAMAGED)
             return
 
     def receiveShotImpulse(self, direction, impulse):

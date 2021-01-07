@@ -57,7 +57,6 @@ def _makeSettingsVO(arenaVisitor):
      'maxLinesCount': -1,
      'inactiveStateAlpha': settings.inactiveStateAlpha / 100.0,
      'maxMessageLength': CHAT_MESSAGE_MAX_LENGTH_IN_BATTLE,
-     'hintStr': settings.hintText,
      'toolTipStr': _getToolTipText(arenaVisitor),
      'numberOfMessagesInHistory': settings.numberOfMessagesInHistory,
      'lastMessageAlpha': settings.alphaForLastMessages / 100.0,

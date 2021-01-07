@@ -34,12 +34,10 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.shared import IItemsCache
-from .BootcampCombatSoundAssistant import BootcampCombatSoundAssistant
 from .BootcampGUI import BootcampGUI
 from .BootcampReplayController import BootcampReplayController
 from .BootcampConstants import BOOTCAMP_BATTLE_RESULT_MESSAGE
 from .BootCampEvents import g_bootcampEvents
-from .BootcampContext import Chapter
 from .BootcampSettings import getBattleSettings
 from .BootcampGarageLessons import GarageLessons
 from .ReloadLobbyHelper import ReloadLobbyHelper
@@ -88,7 +86,6 @@ class Bootcamp(EventSystemEntity):
         self.__isRecruit = False
         self.__isBattleLesson = False
         self.__context = {}
-        self.__chapter = None
         self.__gui = None
         self.__arenaUniqueID = None
         self.__lobbyReloader = ReloadLobbyHelper()
@@ -100,7 +97,6 @@ class Bootcamp(EventSystemEntity):
         self.__requestBootcampFinishFromBattle = False
         self.__isSniperModeUsed = False
         self.__showingWaitingActionWindow = False
-        self.__combatSoundAssistant = None
         self.__nation = 0
         self.__nationsData = {}
         self.__checkpoint = ''
@@ -223,7 +219,6 @@ class Bootcamp(EventSystemEntity):
         g_bootcampEvents.onBattleLessonFinished += self.onBattleLessonFinished
         g_bootcampEvents.onGarageLessonFinished += self.onGarageLessonFinished
         g_bootcampEvents.onBattleLoaded += self.onBattleLoaded
-        g_bootcampEvents.onResultScreenPopulated += self.onResultScreenPopulated
         g_bootcampEvents.onResultScreenFinished += self.onResultScreenFinished
         g_bootcampEvents.onRequestBootcampFinish += self.onRequestBootcampFinish
         g_bootcampEvents.onBootcampBecomeNonPlayer += self.onBootcampBecomeNonPlayer
@@ -289,12 +284,9 @@ class Bootcamp(EventSystemEntity):
             self.__currentState = StateBattlePreparing(self.__lessonId, BigWorld.player())
             self.__currentState.activate()
         BigWorld.overloadBorders(True)
-        if self.__chapter is None:
-            self.__chapter = Chapter()
         if self.__gui is None:
             self.__gui = BootcampGUI()
         WWISE.loadSoundPool(self.BOOTCAMP_SOUND_BANKS, 'Bootcamp')
-        self.__combatSoundAssistant = BootcampCombatSoundAssistant()
         self.sessionProvider.getCtx().setPlayerFullNameFormatter(_BCNameFormatter())
         return
 
@@ -305,14 +297,10 @@ class Bootcamp(EventSystemEntity):
         if self.__gui is not None:
             self.__gui.clear()
             self.__gui = None
-        if self.__chapter is not None:
-            self.__chapter.clear()
-            self.__chapter = None
         g_bootcampEvents.onInterludeVideoStarted -= self.onInterludeVideoStarted
         g_bootcampEvents.onBattleLessonFinished -= self.onBattleLessonFinished
         g_bootcampEvents.onGarageLessonFinished -= self.onGarageLessonFinished
         g_bootcampEvents.onBattleLoaded -= self.onBattleLoaded
-        g_bootcampEvents.onResultScreenPopulated -= self.onResultScreenPopulated
         g_bootcampEvents.onResultScreenFinished -= self.onResultScreenFinished
         g_bootcampEvents.onRequestBootcampFinish -= self.onRequestBootcampFinish
         g_playerEvents.onAvatarBecomeNonPlayer -= self.__onAvatarBecomeNonPlayer
@@ -331,9 +319,6 @@ class Bootcamp(EventSystemEntity):
             self.__replayController = None
         MC.g_musicController.stopAmbient(True)
         WWISE.unloadSoundPool()
-        if self.__combatSoundAssistant is not None:
-            self.__combatSoundAssistant.fini()
-            self.__combatSoundAssistant = None
         self.sessionProvider.getCtx().resetPlayerFullNameFormatter()
         return
 
@@ -347,6 +332,9 @@ class Bootcamp(EventSystemEntity):
         if self.isRunning() and self.__currentState is not None:
             self.__currentState.handleKeyEvent(event)
         return
+
+    def getGUI(self):
+        return self.__gui
 
     @property
     def replayCtrl(self):
@@ -378,7 +366,7 @@ class Bootcamp(EventSystemEntity):
             self.sessionProvider.exit()
         else:
             self.__avatar = BigWorld.player()
-            self.__currentState = StateInBattle(lessonId, self.__avatar, self.__chapter, self.__gui, self.__combatSoundAssistant)
+            self.__currentState = StateInBattle(lessonId, self.__avatar)
             self.__currentState.activate()
 
     def onBattleLessonFinished(self, lessonId, lessonResults):
@@ -391,8 +379,8 @@ class Bootcamp(EventSystemEntity):
         self.__currentState = StateResultScreen(lessonResults)
         self.__currentState.activate()
 
-    def onInterludeVideoStarted(self):
-        messageVO = self.getInterludeVideoPageData()
+    def onInterludeVideoStarted(self, index):
+        messageVO = self.getInterludeVideoPageData(index)
         player = BigWorld.player()
         if not player.spaFlags.getFlag(SPA_ATTRS.BOOTCAMP_VIDEO_DISABLED) and self.__battleResults.type == BOOTCAMP_BATTLE_RESULT_MESSAGE.VICTORY and messageVO:
             showInterludeVideoWindow(messageVO=messageVO)
@@ -421,10 +409,6 @@ class Bootcamp(EventSystemEntity):
 
     def isInBattleResultState(self):
         return isinstance(self.__currentState, StateResultScreen)
-
-    def onResultScreenPopulated(self):
-        if self.__combatSoundAssistant:
-            self.__combatSoundAssistant.fini()
 
     def onResultScreenFinished(self):
         self.__currentState.deactivate()
@@ -483,15 +467,23 @@ class Bootcamp(EventSystemEntity):
     def getBattleLoadingPages(self):
         return getBattleSettings(self.__lessonId).lessonPages
 
-    def getInterludeVideoPageData(self):
+    def getInterludeVideoPageData(self, index):
         messageVO = {}
         if self.__lessonId:
             extraData = self.getBattleResultsExtra(self.__lessonId - 1)
-            if extraData['video']:
-                messageVO['messages'] = [extraData['video']['messages']]
-                messageVO['voiceovers'] = [ voiceover for voiceover in extraData['video']['voiceovers'] ]
+            if extraData['videos']:
+                video = extraData['videos'][index]
+                messageVO['messages'] = [video['messages']]
+                messageVO['voiceovers'] = [ voiceover for voiceover in video['voiceovers'] ]
                 messageVO['exitEvent'] = g_bootcampEvents.onInterludeVideoFinished
         return messageVO
+
+    def getInterludeVideoButtons(self):
+        if self.__lessonId:
+            extraData = self.getBattleResultsExtra(self.__lessonId - 1)
+            if extraData['videos']:
+                return [ {'image': video['messages']['icon']} for video in extraData['videos'] ]
+        return []
 
     def getIntroPageData(self, isChoice=False):
         parameters = self.getParameters()

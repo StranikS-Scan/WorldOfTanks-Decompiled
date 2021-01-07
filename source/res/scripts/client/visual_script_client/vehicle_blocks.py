@@ -1,103 +1,138 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/visual_script_client/vehicle_blocks.py
+import weakref
 import BigWorld
-from visual_script.block import Block, SLOT_TYPE
+from visual_script.block import Block
+from visual_script.slot_types import SLOT_TYPE
 from visual_script.misc import ASPECT, errorVScript
+from visual_script.tunable_event_block import TunableEventBlock
 from visual_script.vehicle_blocks import VehicleMeta
-from visual_script.dependency import dependencyImporter
-vehicles, helpers = dependencyImporter('items.vehicles', 'helpers')
 
-class _ExtraDummy(object):
-
-    @staticmethod
-    def getDamageLevel(*args, **kwargs):
-        pass
-
-
-def _getPartNames(originalPartName):
-    edgeCases = {'track': ('leftTrack', 'rightTrack'),
-     'radioman': ('radioman1', 'radioman2'),
-     'gunner': ('gunner1', 'gunner2'),
-     'loader': ('loader1', 'loader2'),
-     'wheel': ('wheel0', 'wheel1', 'wheel2', 'wheel3', 'wheel4', 'wheel5', 'wheel6', 'wheel7')}
-    return edgeCases.get(originalPartName, (originalPartName,))
-
-
-def _getPartState(originalPartName):
-    available = _getPartNames(originalPartName)
-    deviceStates = BigWorld.player().deviceStates
-    states = [ deviceStates.get(name, 'normal') for name in available ]
-    if 'destroyed' in states:
-        return 2
-    return 1 if 'critical' in states else 0
-
-
-class PlayerVehicleDeviceState(Block, VehicleMeta):
+class GetVehicleLabel(Block, VehicleMeta):
 
     def __init__(self, *args, **kwargs):
-        super(PlayerVehicleDeviceState, self).__init__(*args, **kwargs)
-        self._device = self._makeDataInputSlot('device', SLOT_TYPE.E_VEHICLE_DEVICE)
-        self._state = self._makeDataOutputSlot('state', SLOT_TYPE.E_MODULE_STATE, self._execState)
-        self._hasDevice = self._makeDataOutputSlot('hasDevice', SLOT_TYPE.BOOL, self._execHasDevice)
+        super(GetVehicleLabel, self).__init__(*args, **kwargs)
+        self._vehicle = self._makeDataInputSlot('vehicle', SLOT_TYPE.VEHICLE)
+        self._label = self._makeDataOutputSlot('label', SLOT_TYPE.STR, self._getLabel)
 
-    def _execState(self):
-        if helpers.isPlayerAvatar():
-            deviceIdx = self._device.getValue()
-            if deviceIdx >= len(vehicles.VEHICLE_DEVICE_TYPE_NAMES):
-                errorVScript(self, 'unknown device identifier.')
-                return
-            state = _getPartState(vehicles.VEHICLE_DEVICE_TYPE_NAMES[deviceIdx])
-            self._state.setValue(state)
-        else:
-            errorVScript(self, 'BigWorld.player is not player avatar.')
-
-    def _execHasDevice(self):
-        if helpers.isPlayerAvatar():
-            deviceIdx = self._device.getValue()
-            if deviceIdx >= len(vehicles.VEHICLE_DEVICE_TYPE_NAMES):
-                errorVScript(self, 'unknown device identifier.')
-                return
-            deviceNames = [ pn + 'Health' for pn in _getPartNames(vehicles.VEHICLE_DEVICE_TYPE_NAMES[deviceIdx]) ]
-            isHas = any((te.name in deviceNames for te in BigWorld.player().vehicleTypeDescriptor.type.devices))
-            self._hasDevice.setValue(isHas)
-        else:
-            errorVScript(self, 'BigWorld.player is not player avatar.')
+    def _getLabel(self):
+        label = self._vehicle.getValue().label
+        if label is None:
+            label = ''
+        self._label.setValue(label)
+        return
 
     @classmethod
     def blockAspects(cls):
         return [ASPECT.CLIENT]
 
 
-class PlayerVehicleTankmanState(Block, VehicleMeta):
+class OnAnyVehicleDestroyed(TunableEventBlock, VehicleMeta):
+    _EVENT_SLOT_NAMES = ['onDestroyed']
 
     def __init__(self, *args, **kwargs):
-        super(PlayerVehicleTankmanState, self).__init__(*args, **kwargs)
-        self._tankman = self._makeDataInputSlot('tankman', SLOT_TYPE.E_VEHICLE_TANKMAN)
-        self._state = self._makeDataOutputSlot('state', SLOT_TYPE.E_MODULE_STATE, self._execState)
-        self._hasTankman = self._makeDataOutputSlot('hasTankman', SLOT_TYPE.BOOL, self._execHasTankman)
+        super(OnAnyVehicleDestroyed, self).__init__(*args, **kwargs)
+        self._target = self._makeDataOutputSlot('target', SLOT_TYPE.VEHICLE, None)
+        self._attacker = self._makeDataOutputSlot('attacker', SLOT_TYPE.VEHICLE, None)
+        return
 
-    def _execState(self):
-        if helpers.isPlayerAvatar():
-            tankmanIdx = self._tankman.getValue()
-            if tankmanIdx >= len(vehicles.VEHICLE_TANKMAN_TYPE_NAMES):
-                errorVScript(self, 'unknown tankman identifier.')
-                return
-            state = _getPartState(vehicles.VEHICLE_TANKMAN_TYPE_NAMES[tankmanIdx])
-            self._state.setValue(state)
-        else:
-            errorVScript(self, 'BigWorld.player is not player avatar.')
+    @classmethod
+    def blockIcon(cls):
+        pass
 
-    def _execHasTankman(self):
-        if helpers.isPlayerAvatar():
-            tankmanIdx = self._tankman.getValue()
-            if tankmanIdx >= len(vehicles.VEHICLE_TANKMAN_TYPE_NAMES):
-                errorVScript(self, 'unknown tankman identifier.')
-                return
-            tankmanName = [ pn + 'Health' for pn in _getPartNames(vehicles.VEHICLE_TANKMAN_TYPE_NAMES[tankmanIdx]) ]
-            isHas = any((te.name in tankmanName for te in BigWorld.player().vehicleTypeDescriptor.type.tankmen))
-            self._hasTankman.setValue(isHas)
+    def onStartScript(self):
+        if hasattr(BigWorld.player(), 'arena'):
+            BigWorld.player().arena.onVehicleKilled += self.__onVehicleKilled
         else:
-            errorVScript(self, 'BigWorld.player is not player avatar.')
+            errorVScript(self, 'can not subscribe on event')
+
+    def onFinishScript(self):
+        BigWorld.player().arena.onVehicleKilled -= self.__onVehicleKilled
+
+    @TunableEventBlock.eventProcessor
+    def __onVehicleKilled(self, targetID, attackerID, equipmentID, reason):
+        target = BigWorld.entities.get(targetID)
+        if target:
+            self._target.setValue(weakref.proxy(BigWorld.entities.get(targetID)))
+        else:
+            self._target.setValue(None)
+        if attackerID > 0:
+            attacker = BigWorld.entities.get(attackerID)
+            if attacker:
+                attacker = weakref.proxy(BigWorld.entities.get(attackerID))
+                self._attacker.setValue(attacker)
+            else:
+                self._attacker.setValue(None)
+        else:
+            self._attacker.setValue(None)
+        return
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]
+
+
+class OnAnyVehicleDamaged(TunableEventBlock, VehicleMeta):
+    _EVENT_SLOT_NAMES = ['onDamaged']
+
+    def __init__(self, *args, **kwargs):
+        super(OnAnyVehicleDamaged, self).__init__(*args, **kwargs)
+        self._target = self._makeDataOutputSlot('target', SLOT_TYPE.VEHICLE, None)
+        self._attacker = self._makeDataOutputSlot('attacker', SLOT_TYPE.VEHICLE, None)
+        self._damage = self._makeDataOutputSlot('damage', SLOT_TYPE.INT, None)
+        return
+
+    @classmethod
+    def blockIcon(cls):
+        pass
+
+    def onStartScript(self):
+        if hasattr(BigWorld.player(), 'arena'):
+            BigWorld.player().arena.onVehicleHealthChanged += self.__onDamageReceived
+        else:
+            errorVScript(self, 'can not subscribe on event')
+
+    def onFinishScript(self):
+        BigWorld.player().arena.onVehicleHealthChanged -= self.__onDamageReceived
+
+    @TunableEventBlock.eventProcessor
+    def __onDamageReceived(self, vehicleId, attackerId, damage):
+        self._damage.setValue(damage)
+        vehicle = BigWorld.entities.get(vehicleId)
+        if vehicle:
+            self._target.setValue(weakref.proxy(vehicle))
+        else:
+            self._damage.setValue(None)
+            self._target.setValue(None)
+        if attackerId > 0:
+            attacker = BigWorld.entities.get(attackerId)
+            if attacker:
+                attacker = weakref.proxy(BigWorld.entities.get(attackerId))
+                self._attacker.setValue(attacker)
+            else:
+                self._attacker.setValue(None)
+        else:
+            self._attacker.setValue(None)
+        return
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]
+
+
+class IsVehicleBurning(Block, VehicleMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(IsVehicleBurning, self).__init__(*args, **kwargs)
+        self._vehicle = self._makeDataInputSlot('vehicle', SLOT_TYPE.VEHICLE)
+        self._res = self._makeDataOutputSlot('res', SLOT_TYPE.BOOL, self._exec)
+
+    def _exec(self):
+        v = self._vehicle.getValue()
+        extra = v.typeDescriptor.extrasDict['fire']
+        res = extra is not None and extra.isRunningFor(v)
+        self._res.setValue(res)
+        return
 
     @classmethod
     def blockAspects(cls):

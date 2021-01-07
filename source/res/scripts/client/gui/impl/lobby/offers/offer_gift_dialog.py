@@ -41,9 +41,6 @@ class OffersDialogWindowMixin(object):
         self._offersProvider.onOffersUpdated -= self._onOffersUpdated
         self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
 
-    def _onClientDisconnected(self):
-        self.__close()
-
     def __close(self):
         from gui.shared import event_dispatcher
         event_dispatcher.showHangar()

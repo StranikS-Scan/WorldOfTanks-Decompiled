@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/readers/sound_readers.py
 import math
+import typing
 import ResMgr
 from constants import IS_DEVELOPMENT
 from debug_utils import LOG_DEBUG
@@ -29,9 +30,9 @@ def readHullAimingSound(xmlCtx, section, cache):
             sounds = []
             for actionName, actionSection in _xml.getChildren(xmlCtx, section, 'hullAiming/audio/sounds'):
                 ctx = (xmlCtx, 'hullAiming/audio/sounds')
-                underLimitSouns = sound_components.SoundPair(PC=intern(_xml.readNonEmptyString(ctx, actionSection, 'underLimitSounds/wwsoundPC')), NPC=intern(_xml.readNonEmptyString(ctx, actionSection, 'underLimitSounds/wwsoundNPC')))
+                underLimitSounds = sound_components.SoundPair(PC=intern(_xml.readNonEmptyString(ctx, actionSection, 'underLimitSounds/wwsoundPC')), NPC=intern(_xml.readNonEmptyString(ctx, actionSection, 'underLimitSounds/wwsoundNPC')))
                 overLimitSounds = sound_components.SoundPair(PC=intern(_xml.readNonEmptyString(ctx, actionSection, 'overLimitSounds/wwsoundPC')), NPC=intern(_xml.readNonEmptyString(ctx, actionSection, 'overLimitSounds/wwsoundNPC')))
-                sound = sound_components.StatedSounds(state=actionName, underLimitSounds=underLimitSouns, overLimitSounds=overLimitSounds)
+                sound = sound_components.StatedSounds(state=actionName, underLimitSounds=underLimitSounds, overLimitSounds=overLimitSounds)
                 sounds.append(sound)
 
             hullAimingSound = sound_components.HullAimingSound(lodDist=lodDist, angleLimitValue=_xml.cachedFloat(angleLimit), sounds=sounds)

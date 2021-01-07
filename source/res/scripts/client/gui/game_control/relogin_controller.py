@@ -21,7 +21,7 @@ class ReloginController(IReloginController):
     def doRelogin(self, peripheryID, onStoppedHandler=None, extraChainSteps=None):
         from gui.shared import actions
         LOG_DEBUG('Attempt to relogin to the another periphery', peripheryID)
-        chain = [actions.LeavePrbModalEntity(), actions.DisconnectFromPeriphery(), actions.ConnectToPeriphery(peripheryID)]
+        chain = [actions.LeavePrbModalEntity(), actions.DisconnectFromPeriphery(loginViewPreselectedPeriphery=peripheryID), actions.ConnectToPeriphery(peripheryID)]
         if extraChainSteps is not None:
             chain += extraChainSteps
         self.__reloginStoppedHandler = onStoppedHandler

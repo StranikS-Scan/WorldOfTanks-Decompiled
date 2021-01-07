@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_preview/vehicle_preview_buying_panel.py
-import math
 import time
 from collections import namedtuple
 import BigWorld
@@ -92,10 +91,6 @@ class _CouponData(object):
     @property
     def discount(self):
         return self.__discount
-
-
-def _buildRestoreButtonTooltip(key, timeLeft):
-    return makeTooltip(header=TOOLTIPS.vehiclepreview_buybutton_all(key, 'header'), body=backport.text(R.strings.tooltips.vehiclePreview.buyButton.dyn(key).dyn('body')(), days=int(math.ceil(timeLeft / 86400))))
 
 
 class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):

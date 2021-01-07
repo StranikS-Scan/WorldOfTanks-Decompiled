@@ -6,11 +6,10 @@ from gui.Scaleform.daapi.view.lobby.components.browser_view_page import BrowserP
 from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import BrowserView
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_battles_page import IResetablePage
 from gui.Scaleform.daapi.view.lobby.shared.web_view import WebView
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.shared import events, EVENT_BUS_SCOPE
 from gui.ranked_battles.constants import SeasonResultTokenPatterns
 from gui.ranked_battles.ranked_helpers import getRankedBattlesRatingUrl, getRankedBattlesInfoPageUrl, getRankedBattlesSeasonGapUrl, getRankedBattlesYearRatingUrl, getRankedBattlesShopUrl
 from gui.ranked_battles.ranked_helpers.sound_manager import RANKED_MAIN_PAGE_SOUND_SPACE, RANKED_OVERLAY_SOUND_SPACE, Sounds, AmbientType
+from gui.prb_control.events_dispatcher import g_eventDispatcher
 from skeletons.gui.game_control import IRankedBattlesController
 from web.web_client_api.ranked_battles import createRankedBattlesWebHandlers
 
@@ -183,10 +182,12 @@ class RankedWebOverlay(WebView):
         return createRankedBattlesWebHandlers()
 
     def onCloseBtnClick(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventDispatcher.loadHangar()
+        super(RankedWebOverlay, self).onCloseBtnClick()
 
     def onEscapePress(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventDispatcher.loadHangar()
+        super(RankedWebOverlay, self).onEscapePress()
 
     def _populate(self):
         super(RankedWebOverlay, self)._populate()

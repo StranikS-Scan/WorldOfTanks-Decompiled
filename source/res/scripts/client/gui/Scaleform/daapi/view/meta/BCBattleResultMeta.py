@@ -13,7 +13,7 @@ class BCBattleResultMeta(View):
     def onToolTipShow(self, rendererId):
         self._printOverrideError('onToolTipShow')
 
-    def onVideoButtonClick(self):
+    def onVideoButtonClick(self, index):
         self._printOverrideError('onVideoButtonClick')
 
     def as_setDataS(self, data):

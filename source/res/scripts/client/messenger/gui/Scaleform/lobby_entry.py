@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/lobby_entry.py
 import weakref
 from collections import defaultdict
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import DialogsInterface, SystemMessages
 from gui.Scaleform.daapi.view import dialogs
 from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData, TARGET_ID
@@ -216,7 +216,7 @@ class LobbyEntry(IGUIEntry):
         ctx = event.ctx
         prbType = ctx.get('prbType', 0)
         if not prbType:
-            LOG_ERROR('Prebattle type is not defined', ctx)
+            LOG_DEBUG('Prebattle type is not defined', ctx)
             return
         else:
             controller = ctx.get('controller')

@@ -509,7 +509,8 @@ _PYTHON_MACROS = {'p': 'BigWorld.player()',
  'resetEpic': 'BigWorld.player().epicMetaGame.resetEpicMetaGame',
  'setHero': 'from HeroTank import debugReloadHero; debugReloadHero',
  'switchNation': 'import Account; Account.g_accountRepository.inventory.switchNation()',
- 'plugins': 'from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import Ping3DPositionPlugin'}
+ 'plugins': 'from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import Ping3DPositionPlugin',
+ 'setPlatoonTanks': 'from gui.development.dev_platoon_tank_models import debugSetPlatoonTanks; debugSetPlatoonTanks'}
 
 def expandMacros(line):
     import re

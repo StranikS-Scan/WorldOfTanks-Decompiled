@@ -144,15 +144,23 @@ class SelectPrb(Action):
 
 class DisconnectFromPeriphery(Action):
     connectionMgr = dependency.descriptor(IConnectionManager)
+    loginManager = dependency.descriptor(ILoginManager)
     gameplay = dependency.descriptor(IGameplayLogic)
     appLoader = dependency.descriptor(IAppLoader)
+
+    def __init__(self, loginViewPreselectedPeriphery=None):
+        super(DisconnectFromPeriphery, self).__init__()
+        self.__peripheryId = loginViewPreselectedPeriphery
 
     def isInstantaneous(self):
         return False
 
     def invoke(self):
         self._running = True
+        if self.__peripheryId is not None:
+            self.loginManager.servers.setServerPreselection(self.__peripheryId)
         self.gameplay.goToLoginByRQ()
+        return
 
     def isRunning(self):
         app = self.appLoader.getApp()

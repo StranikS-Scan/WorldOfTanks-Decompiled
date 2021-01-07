@@ -10,16 +10,17 @@ from VehicleGunRotator import VehicleGunRotator, MatrixAnimator
 logger = logging.getLogger(__name__)
 
 class SimpleTurretRotator(object):
-    __slots__ = ('__isStarted', '__turretYaw', '__targetTurretYaw', '__rotationTime', '__timerID', '__turretMatrixAnimator', '__easingCls', '__easing', '_eventsManager', 'onTurretRotated', 'onTurretRotationStarted', '__turretTranslation')
+    __slots__ = ('__isStarted', '__turretYaw', '__targetTurretYaw', '__rotationTime', '__timerID', '__turretMatrixAnimator', '__easingCls', '__easing', '_eventsManager', 'onTurretRotated', 'onTurretRotationStarted', '__turretTranslation', '__turretPitch')
     __ROTATION_TICK_LENGTH = 0.05
     turretMatrix = property(lambda self: self.__turretMatrixAnimator.matrix)
     turretYaw = property(lambda self: self.__turretYaw)
     isStarted = property(lambda self: self.__isStarted)
 
-    def __init__(self, compoundModel=None, currTurretYaw=0.0, turretTranslation=Math.Vector3(0.0, 0.0, 0.0), easingCls=math_utils.Easing.linearEasing):
+    def __init__(self, compoundModel=None, currTurretYaw=0.0, turretTranslation=Math.Vector3(0.0, 0.0, 0.0), turretPitch=0.0, easingCls=math_utils.Easing.linearEasing):
         self.__isStarted = False
         self.__turretYaw = self.__targetTurretYaw = currTurretYaw
         self.__turretTranslation = turretTranslation
+        self.__turretPitch = turretPitch
         self.__rotationTime = 0.0
         self.__timerID = None
         self.__turretMatrixAnimator = MatrixAnimator()
@@ -93,5 +94,11 @@ class SimpleTurretRotator(object):
         self.__updateTurretMatrix(self.__turretYaw, self.__ROTATION_TICK_LENGTH)
 
     def __updateTurretMatrix(self, yaw, time):
-        m = math_utils.createRTMatrix((yaw, 0.0, 0.0), self.__turretTranslation)
+        m = Math.Matrix()
+        m.setRotateX(self.__turretPitch)
+        m.translation = self.__turretTranslation
+        yawMatrix = Math.Matrix()
+        yawMatrix.setRotateY(yaw)
+        m.preMultiply(yawMatrix)
         self.__turretMatrixAnimator.update(m, time)
+        self.__turretYaw = yaw

@@ -2,11 +2,12 @@
 # Embedded file name: scripts/common/items/components/component_constants.py
 import collections
 from soft_exception import SoftException
+from wrapped_reflection_framework import reflectedNamedTuple
 Autoreload = collections.namedtuple('Autoreload', ['reloadTime',
  'boostStartTime',
  'boostResidueTime',
  'boostFraction'])
-DualGun = collections.namedtuple('DualGun', ['chargeTime',
+DualGun = reflectedNamedTuple('DualGun', ['chargeTime',
  'shootImpulse',
  'reloadLockTime',
  'reloadTimes',

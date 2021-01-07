@@ -11,7 +11,6 @@ class TankSetupConstants(ViewModel):
     BATTLE_ABILITIES = 'battleAbilities'
     TOGGLE_SHELLS = 'toggleShells'
     TOGGLE_CAMOUFLAGE = 'toggleCamouflage'
-    TOGGLE_NY_STYLE = 'toggleNYStyle'
     EMPTY = ''
 
     def __init__(self, properties=0, commands=0):

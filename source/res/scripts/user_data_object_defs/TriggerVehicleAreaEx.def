@@ -1,6 +1,10 @@
 <TriggerVehicleAreaEx.def>
   <Parent>	TriggerVehicleArea	</Parent>
   <Properties>
+    <Shape>
+      <Type>	STRING	</Type>
+      <Editable>	True	</Editable>
+    </Shape>
     <EventID>
       <Type>	STRING	</Type>
       <Editable>	True	</Editable>
@@ -30,5 +34,9 @@
       <Editable>	True	</Editable>
       <Default>	0	</Default>
     </Cooldown>
+    <name>
+      <Type>	STRING	</Type>
+      <Editable>	True	</Editable>
+    </name>
   </Properties>
 </TriggerVehicleAreaEx.def>

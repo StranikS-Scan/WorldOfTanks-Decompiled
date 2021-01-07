@@ -32,6 +32,7 @@
     <priceFactor>	0.6	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
     <exclusionMask></exclusionMask>
+    <density>	0.90 0.90	</density>
   </camouflage>
   <hull>
     <armor>
@@ -1936,6 +1937,7 @@
             <collisionModelClient>	vehicles/russian/R161_T_116/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_small	</effects>
+          <shotOffset>	-0.015420 0.066884 0.000000	</shotOffset>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>

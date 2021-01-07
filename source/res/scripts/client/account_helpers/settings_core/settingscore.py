@@ -10,6 +10,7 @@ from debug_utils import LOG_DEBUG
 from gui.Scaleform.locale.SETTINGS import SETTINGS
 from skeletons.account_helpers.settings_core import ISettingsCore
 from helpers import dependency
+from PlayerEvents import g_playerEvents
 from skeletons.gui.lobby_context import ILobbyContext
 from InterfaceScaleManager import InterfaceScaleManager
 
@@ -120,6 +121,7 @@ class SettingsCore(ISettingsCore):
          (GAME.INCREASED_ZOOM, options.IncreasedZoomSetting(GAME.INCREASED_ZOOM, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.SNIPER_MODE_BY_SHIFT, options.SniperModeByShiftSetting(GAME.SNIPER_MODE_BY_SHIFT, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.ENABLE_SPEEDOMETER, options.StorageAccountSetting(GAME.ENABLE_SPEEDOMETER, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
+         (GAME.ENABLE_REPAIR_TIMER, options.StorageAccountSetting(GAME.ENABLE_REPAIR_TIMER, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.SNIPER_MODE_STABILIZATION, options.SniperModeStabilization(GAME.SNIPER_MODE_STABILIZATION, storage=GAME_SETTINGS_STORAGE)),
          (GAME.ENABLE_OL_FILTER, options.MessengerSetting(GAME.ENABLE_OL_FILTER, storage=MESSENGER_SETTINGS_STORAGE)),
          (GAME.ENABLE_SPAM_FILTER, options.MessengerSetting(GAME.ENABLE_SPAM_FILTER, storage=MESSENGER_SETTINGS_STORAGE)),
@@ -154,9 +156,10 @@ class SettingsCore(ISettingsCore):
          (GAME.DOUBLE_CAROUSEL_TYPE, options.DoubleCarouselTypeSetting(GAME.DOUBLE_CAROUSEL_TYPE, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.VEHICLE_CAROUSEL_STATS, options.VehicleCarouselStatsSetting(GAME.VEHICLE_CAROUSEL_STATS, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.C11N_HISTORICALLY_ACCURATE, options.C11nHistoricallyAccurateSetting(GAME.C11N_HISTORICALLY_ACCURATE, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
+         (GAME.DISPLAY_PLATOON_MEMBERS, options.SettingTrueByDefault(GAME.DISPLAY_PLATOON_MEMBERS, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.LOGIN_SERVER_SELECTION, options.LoginServerSelectionSetting(GAME.LOGIN_SERVER_SELECTION)),
          (GAME.MINIMAP_ALPHA_ENABLED, options.StorageAccountSetting(GAME.MINIMAP_ALPHA_ENABLED, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
-         (GAME.LOOT_BOX_VIDEO_OFF, options.StorageAccountSetting(GAME.LOOT_BOX_VIDEO_OFF, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
+         (GAME.MINIMAP_MIN_SPOTTING_RANGE, options.StorageAccountSetting(GAME.MINIMAP_MIN_SPOTTING_RANGE, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GRAPHICS.MONITOR, options.MonitorSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.WINDOW_SIZE, options.WindowSizeSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.RESOLUTION, options.ResolutionSetting(storage=VIDEO_SETTINGS_STORAGE)),
@@ -200,6 +203,7 @@ class SettingsCore(ISettingsCore):
          (SOUND.NATIONS_VOICES, options.AccountSetting('nationalVoices')),
          (SOUND.VOIP_MASTER_FADE, options.SoundSetting('masterFadeVivox')),
          (SOUND.VOIP_ENABLE, options.VOIPSetting(True)),
+         (SOUND.VOIP_ENABLE_CHANNEL, options.VOIPChannelSetting()),
          (SOUND.VOIP_MASTER, options.VOIPMasterSoundSetting()),
          (SOUND.VOIP_MIC, options.VOIPMicSoundSetting(True)),
          (SOUND.CAPTURE_DEVICES, options.VOIPCaptureDevicesSetting()),
@@ -294,6 +298,9 @@ class SettingsCore(ISettingsCore):
          (BATTLE_COMM.SHOW_LOCATION_MARKERS, options.SettingTrueByDefault(BATTLE_COMM.SHOW_LOCATION_MARKERS, storage=BATTLE_COMM_SETTINGS_STORAGE))))
         self.__options.init()
         AccountSettings.onSettingsChanging += self.__onAccountSettingsChanging
+        g_playerEvents.onDisconnected += self.revertSettings
+        g_playerEvents.onAvatarBecomeNonPlayer += self.revertSettings
+        g_playerEvents.onAccountBecomeNonPlayer += self.revertSettings
         self.interfaceScale.init()
         self.__isReady = True
         self.onSettingsReady()
@@ -309,6 +316,9 @@ class SettingsCore(ISettingsCore):
         if self.__interfaceScale is not None:
             self.__interfaceScale.fini()
             self.__interfaceScale = None
+        g_playerEvents.onDisconnected -= self.revertSettings
+        g_playerEvents.onAvatarBecomeNonPlayer -= self.revertSettings
+        g_playerEvents.onAccountBecomeNonPlayer -= self.revertSettings
         AccountSettings.onSettingsChanging -= self.__onAccountSettingsChanging
         AccountSettings.clearCache()
         LOG_DEBUG('SettingsCore is destroyed')
@@ -350,8 +360,6 @@ class SettingsCore(ISettingsCore):
             from account_helpers.settings_core import settings_constants
             if key in settings_constants.GRAPHICS.ALL():
                 LOG_DEBUG('Apply graphic settings: ', {key: value})
-                self.onSettingsChanged({key: value})
-            if key in settings_constants.GAME.LOOT_BOX_VIDEO_OFF:
                 self.onSettingsChanged({key: value})
             return result
         else:

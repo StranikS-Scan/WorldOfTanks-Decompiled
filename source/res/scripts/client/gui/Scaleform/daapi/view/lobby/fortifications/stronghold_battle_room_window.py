@@ -88,7 +88,7 @@ class StrongholdBattleRoomWindow(FortBattleRoomWindowMeta, IStrongholdListener):
 
     def onUnitPlayerRolesChanged(self, pInfo, pPermissions):
         if pInfo.isCurrentPlayer():
-            self.as_changeAutoSearchBtnsStateS(pPermissions.canInvokeAutoSearch(), pPermissions.canStopBattleQueue())
+            self.as_changeAutoSearchBtnsStateS(pPermissions.canStartAutoSearch(), pPermissions.canStopBattleQueue())
         self.prbEntity.strongholdDataChanged()
 
     def onUnitPlayerOnlineStatusChanged(self, pInfo):
@@ -220,7 +220,7 @@ class StrongholdBattleRoomWindow(FortBattleRoomWindowMeta, IStrongholdListener):
          'countDownSeconds': 0,
          'contextMessage': '',
          'playersReadiness': [],
-         'canInvokeAutoSearch': permissions.canInvokeAutoSearch(),
+         'canInvokeAutoSearch': permissions.canStartAutoSearch(),
          'canInvokeBattleQueue': permissions.canStopBattleQueue(),
          'timeDirection': -1}
         self.as_changeAutoSearchStateS(model)
@@ -237,7 +237,7 @@ class StrongholdBattleRoomWindow(FortBattleRoomWindowMeta, IStrongholdListener):
          'countDownSeconds': self.prbEntity.getSecondsCountInPlayersMatching(),
          'contextMessage': '',
          'playersReadiness': [],
-         'canInvokeAutoSearch': permissions.canInvokeAutoSearch(),
+         'canInvokeAutoSearch': permissions.canStartAutoSearch(),
          'canInvokeBattleQueue': permissions.canStopBattleQueue(),
          'timeDirection': 1}
         self.as_changeAutoSearchStateS(model)

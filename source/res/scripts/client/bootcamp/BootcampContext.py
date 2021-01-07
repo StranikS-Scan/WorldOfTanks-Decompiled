@@ -125,9 +125,9 @@ class AreaMarker(AimMarker):
 
 class Chapter:
 
-    def __init__(self):
+    def __init__(self, filePath):
         self.__entities = {}
-        self.__filePath = 'scripts/bootcamp_docs/entities.xml'
+        self.__filePath = filePath
         from BootcampParser import BootcampParser as parser
         parser.parse(self)
 

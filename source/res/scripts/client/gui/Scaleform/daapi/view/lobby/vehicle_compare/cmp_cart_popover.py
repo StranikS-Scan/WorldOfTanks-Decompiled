@@ -15,10 +15,12 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from nations import AVAILABLE_NAMES
 from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
 class VehicleCompareCartPopover(VehicleCompareCartPopoverMeta):
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def remove(self, vehId):
         self.comparisonBasket.removeVehicleByIdx(int(vehId))
@@ -40,12 +42,14 @@ class VehicleCompareCartPopover(VehicleCompareCartPopoverMeta):
         self._cartDP.rebuildList(self.comparisonBasket.getVehiclesCDs())
         self.comparisonBasket.onChange += self.__onBasketChange
         self.comparisonBasket.onSwitchChange += self.__onVehCmpBasketStateChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         self.__initControls()
 
     def _dispose(self):
         super(VehicleCompareCartPopover, self)._dispose()
         self.comparisonBasket.onChange -= self.__onBasketChange
         self.comparisonBasket.onSwitchChange -= self.__onVehCmpBasketStateChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         self._cartDP.fini()
         self._cartDP = None
         return
@@ -87,6 +91,13 @@ class VehicleCompareCartPopover(VehicleCompareCartPopoverMeta):
         self.as_updateClearBtnPropsS({'btnLabel': VEH_COMPARE.CARTPOPOVER_REMOVEALLBTN_LABEL,
          'btnTooltip': VEH_COMPARE.CARTPOPOVER_REMOVEBTNLOCKED_TOOLTIP if isBasketLocked else VEH_COMPARE.CARTPOPOVER_REMOVEALLBTN_TOOLTIP,
          'btnEnabled': buttonsEnabled and not isBasketLocked})
+        return
+
+    def __onServerSettingChanged(self, diff):
+        if 'sessionStats' in diff or ('sessionStats', '_r') in diff:
+            isSessionStatsEnabled = diff['sessionStats'].get('isSessionStatsEnabled')
+            if isSessionStatsEnabled is not None:
+                self.destroy()
         return
 
 

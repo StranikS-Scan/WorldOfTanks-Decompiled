@@ -2640,8 +2640,42 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	global_map_renaissance	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	101	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.108	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	13	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+        <item>
+          <name>	realm	</name>
+          <type>	dict	</type>
+          <value>
+            <item>
+              <name>	exclude	</name>
+              <type>	list	</type>
+              <value>
+                <item>	CN	</item>
+              </value>
+            </item>
+          </value>
         </item>
       </value>
     </badge>

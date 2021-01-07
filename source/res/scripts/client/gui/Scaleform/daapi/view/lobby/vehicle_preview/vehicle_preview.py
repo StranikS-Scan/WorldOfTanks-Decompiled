@@ -37,6 +37,7 @@ from gui.shared.money import MONEY_UNDEFINED
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from helpers import dependency
 from helpers.i18n import makeString as _ms
+from preview_selectable_logic import PreviewSelectableLogic
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IHeroTankController
 from skeletons.gui.game_control import IRestoreController
@@ -103,9 +104,9 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
     tradeIn = dependency.descriptor(ITradeInController)
     restores = dependency.descriptor(IRestoreController)
+    __heroTanksControl = dependency.descriptor(IHeroTankController)
     lobbyContext = dependency.descriptor(ILobbyContext)
     hangarSpace = dependency.descriptor(IHangarSpace)
-    __heroTanksControl = dependency.descriptor(IHeroTankController)
 
     def __init__(self, ctx=None):
         self._backAlias = ctx.get('previewAlias', VIEW_ALIAS.LOBBY_HANGAR)
@@ -133,7 +134,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.__endTime = ctx.get('endTime')
         self.__buyParams = ctx.get('buyParams')
         addBuiltInEquipment(self._itemsPack, self.itemsCache, self._vehicleCD)
-        self._heroInteractive = not (self._itemsPack or self.__offers or self._backAlias == VIEW_ALIAS.LOBBY_STORE)
+        self._heroInteractive = not (self._itemsPack or self.__offers or self._backAlias in (VIEW_ALIAS.LOBBY_STORE, VIEW_ALIAS.RANKED_BATTLE_PAGE))
         self.__haveCustomCrew = any((item.type == ItemPackType.CREW_CUSTOM for item in self._itemsPack)) if self._itemsPack else False
         if 'previewAppearance' in ctx:
             self.__vehAppearanceChanged = True
@@ -235,10 +236,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.as_hide3DSceneTooltipS()
 
     def _createSelectableLogic(self):
-        if self.__isHeroTank:
-            return super(VehiclePreview, self)._createSelectableLogic()
-        from new_year.custom_selectable_logic import WithoutNewYearObjectsSelectableLogic
-        return WithoutNewYearObjectsSelectableLogic()
+        return PreviewSelectableLogic()
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(VehiclePreview, self)._onRegisterFlashComponent(viewPy, alias)
@@ -381,6 +379,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
 
     def _processBackClick(self, ctx=None):
         if self._previewBackCb:
+            print 'self._previewBackCb', self._previewBackCb
             self._previewBackCb()
         elif self._backAlias == VIEW_ALIAS.LOBBY_RESEARCH and g_currentPreviewVehicle.isPresent():
             event_dispatcher.showResearchView(self._vehicleCD, exitEvent=events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_TECHTREE), ctx={'nation': g_currentPreviewVehicle.item.nationName}))
@@ -394,7 +393,9 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         elif self._backAlias == VIEW_ALIAS.LOBBY_STORE:
             showShop()
         else:
+            print 'self._backAlias', self._backAlias
             event = g_entitiesFactories.makeLoadEvent(SFViewLoadParams(self._backAlias), {'isBackEvent': True})
+            print 'event', event
             self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
         return
 

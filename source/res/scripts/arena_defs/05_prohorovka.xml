@@ -104,6 +104,14 @@
       <maxPlayersInTeam>	1	</maxPlayersInTeam>
       <runDelay>	7	</runDelay>
       <minimap>	spaces/05_prohorovka/mmap_bootcamp.dds	</minimap>
+      <visualScript>
+        <server>
+          <plan>	BootCamp/Lesson_3_arena_05_prohorovka	</plan>
+        </server>
+        <client>
+          <plan>	BootCamp/Lesson_3_hints_05_prohorovka	</plan>
+        </client>
+      </visualScript>
     </bootcamp>
   </gameplayTypes>
   <mapActivities>

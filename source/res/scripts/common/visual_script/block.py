@@ -3,51 +3,6 @@
 from typing import List, Any
 from misc import ASPECT
 
-class SLOT_TYPE(object):
-    BOOL = 'Bool'
-    STR = 'String'
-    INT = 'Int'
-    FLOAT = 'Float'
-    VECTOR2 = 'Vector2'
-    VECTOR3 = 'Vector3'
-    VECTOR4 = 'Vector4'
-    MATRIX4 = 'Matrix4'
-    ANGLE = 'Angle'
-    INT_ARRAY = 'IntArray'
-    FLOAT_ARRAY = 'FloatArray'
-    STR_ARRAY = 'StringArray'
-    BOOL_ARRAY = 'BoolArray'
-    VECTOR2_ARRAY = 'Vector2Array'
-    VECTOR3_ARRAY = 'Vector3Array'
-    VECTOR4_ARRAY = 'Vector4Array'
-    MATRIX4_ARRAY = 'Matrix4Array'
-    ANGLE_ARRAY = 'AngleArray'
-    ARENA = 'Arena'
-    ARENA_ARRAY = 'ArenaArray'
-    VEHICLE = 'Vehicle'
-    VEHICLE_ARRAY = 'VehicleArray'
-    PATROL_NODE = 'PatrolNode'
-    PATROL_NODE_ARRAY = 'PatrolNodeArray'
-    PVE_SPAWN_POINT = 'PVESpawnPoint'
-    PVE_SPAWN_POINT_ARRAY = 'PVESpawnPointArray'
-    SPAWN_POINT = 'SpawnPoint'
-    SPAWN_POINT_ARRAY = 'SpawnPointArray'
-    AI_ZONE_CENTER = 'AiZoneCenter'
-    AI_ZONE_CENTER_ARRAY = 'AiZoneCenterArray'
-    MARKER_POINT = 'MarkerPoint'
-    MARKER_POINT_ARRAY = 'MarkerPointArray'
-    AREA_TRIGGER = 'AreaTrigger'
-    AREA_TRIGGER_ARRAY = 'AreaTriggerArray'
-    TRIGGER_VEHICLE_AREA = 'TriggerVehicleArea'
-    TRIGGER_VEHICLE_AREA_ARRAY = 'TriggerVehicleAreaArray'
-    CONTROL_POINT = 'ControlPoint'
-    CONTROL_POINT_ARRAY = 'ControlPointArray'
-    E_MODULE_STATE = 'EModuleState'
-    E_VEHICLE_DEVICE = 'EVehicleDevice'
-    E_VEHICLE_TANKMAN = 'EVehicleTankman'
-    E_FINISH_REASON = 'EFinishReason'
-
-
 class EDITOR_TYPE(object):
     STR_KEY_SELECTOR = 1
     ENUM_SELECTOR = 2
@@ -70,6 +25,14 @@ class DataInputSlot(object):
 
     @staticmethod
     def getValue():
+        pass
+
+    @staticmethod
+    def hasValue():
+        return False
+
+    @staticmethod
+    def setDefaultValue(value):
         pass
 
     @staticmethod
@@ -135,15 +98,22 @@ class Block(Meta):
         pass
 
     @classmethod
+    def hasValidation(cls):
+        return cls.validate != Block.validate
+
+    def validate(self):
+        pass
+
+    @classmethod
     def isOnFinishScriptCallRequired(cls):
-        return cls.onFinishScript is not Block.onFinishScript
+        return cls.onFinishScript != Block.onFinishScript
 
     def onFinishScript(self):
         pass
 
     @classmethod
     def isOnStartScriptCallRequired(cls):
-        return cls.onStartScript is not Block.onStartScript
+        return cls.onStartScript != Block.onStartScript
 
     def onStartScript(self):
         pass

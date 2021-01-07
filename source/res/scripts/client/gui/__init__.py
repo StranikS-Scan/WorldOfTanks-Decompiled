@@ -7,12 +7,13 @@ from constants import IS_DEVELOPMENT, HAS_DEV_RESOURCES
 from gui import promo
 from gui.GuiSettings import GuiSettings as _GuiSettings
 from helpers.html.templates import XMLCollection
+from gui.active_vehicle import ActiveVehicleSeasonType
 _logger = logging.getLogger(__name__)
 g_guiResetters = set()
 g_repeatKeyHandlers = set()
 g_keyEventHandlers = set()
 g_mouseEventHandlers = set()
-g_tankActiveCamouflage = {'historical': {}}
+g_tankActiveCamouflage = ActiveVehicleSeasonType()
 GUI_SETTINGS = _GuiSettings()
 DEPTH_OF_BotsMenu = 0.05
 DEPTH_OF_Battle = 0.1

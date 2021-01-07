@@ -32,9 +32,6 @@ class TOOLTIPS(object):
     PRIVATEQUESTS_ACTIONPANNEL_RECEIVETHEAWARD = '#tooltips:privateQuests/actionPannel/receiveTheAward'
     PRIVATEQUESTS_ACTIONPANNEL_REPEAT = '#tooltips:privateQuests/actionPannel/repeat'
     PRIVATEQUESTS_QUESTCONTROL = '#tooltips:privateQuests/questControl'
-    SQUADWINDOW_BUTTONS_LEAVESQUAD = '#tooltips:squadWindow/buttons/leaveSquad'
-    SQUADWINDOW_BUTTONS_LEAVEEVENTSQUAD = '#tooltips:squadWindow/buttons/leaveEventSquad'
-    SQUADWINDOW_DOMINATION_VEHICLESINFOICON = '#tooltips:squadWindow/domination/vehiclesInfoIcon'
     LOBBYMENU_VERSIONINFOBUTTON = '#tooltips:lobbyMenu/versionInfoButton'
     CYBERSPORT_ROSTERSLOTSETTINGS_HEADERTEXT = '#tooltips:cyberSport/rosterSlotSettings/headerText'
     HANGAR_AMMO_PANEL_DEVICE_EMPTY = '#tooltips:hangar/ammo_panel/device/empty'
@@ -47,12 +44,6 @@ class TOOLTIPS(object):
     HANGAR_MAINTENANCE_DISABLED = '#tooltips:hangar/maintenance/disabled'
     HANGAR_AMMO_PANEL_BATTLEABILITY_EMPTY = '#tooltips:hangar/ammo_panel/battleAbility/empty'
     HEADER_ACCOUNT = '#tooltips:header/account'
-    HEADER_SQUAD = '#tooltips:header/squad'
-    HEADER_EVENTSQUAD = '#tooltips:header/eventSquad'
-    HEADER_DOMINATIONSQUAD = '#tooltips:header/dominationSquad'
-    HEADER_RANKEDSQUAD = '#tooltips:header/rankedSquad'
-    HEADER_SQUAD_MEMBER = '#tooltips:header/squad_member'
-    HEADER_BATTLEROYALESQUAD = '#tooltips:header/battleRoyaleSquad'
     HEADER_BATTLETYPE = '#tooltips:header/battleType'
     HEADER_INFO_PLAYERS_ONLINE_FULL = '#tooltips:header/info/players_online_full'
     HEADER_BUTTONS_HANGAR = '#tooltips:header/buttons/hangar'
@@ -121,7 +112,6 @@ class TOOLTIPS(object):
     RESEARCHPAGE_VEHICLE_STATUS_PARENTMODULEISLOCKED = '#tooltips:researchPage/vehicle/status/parentModuleIsLocked'
     RESEARCHPAGE_MODULE_STATUS_NOTENOUGHXP = '#tooltips:researchPage/module/status/notEnoughXP'
     MODULEFITS_OPERATION_ERROR = '#tooltips:moduleFits/operation_error'
-    SQUADWINDOW_INFOICON_TECH = '#tooltips:squadWindow/infoIcon/tech'
     VEHICLEPREVIEW_CREW = '#tooltips:vehiclePreview/crew'
     VEHICLEPREVIEW_VEHICLEPANEL_INFO = '#tooltips:vehiclePreview/vehiclePanel/info'
     HEADER_PREMSHOP = '#tooltips:header/premShop'
@@ -255,53 +245,6 @@ class TOOLTIPS(object):
     PRIVATEQUESTS_PARAMS_COLLECTEDSHEETS = '#tooltips:privateQuests/params/collectedSheets'
     PRIVATEQUESTS_PARAMS_COMPETEDTASKS = '#tooltips:privateQuests/params/competedTasks'
     PRIVATEQUESTS_PARAMS_RECRUITEDTANKMANFEMALE = '#tooltips:privateQuests/params/recruitedTankmanFemale'
-    SQUADWINDOW_SIMPLESLOTNOTIFICATION_ALERT_HEADER = '#tooltips:squadWindow/simpleSlotNotification/alert/header'
-    SQUADWINDOW_SIMPLESLOTNOTIFICATION_ALERT_BODY = '#tooltips:squadWindow/simpleSlotNotification/alert/body'
-    SQUADWINDOW_SIMPLESLOTNOTIFICATION_ALERT_ALERT = '#tooltips:squadWindow/simpleSlotNotification/alert/alert'
-    SQUADWINDOW_SIMPLESLOTNOTIFICATION_INFO_HEADER = '#tooltips:squadWindow/simpleSlotNotification/info/header'
-    SQUADWINDOW_SIMPLESLOTNOTIFICATION_INFO_BODY = '#tooltips:squadWindow/simpleSlotNotification/info/body'
-    SQUADWINDOW_BATTLETYPEINFO_HEADER = '#tooltips:squadWindow/battleTypeInfo/header'
-    SQUADWINDOW_BATTLETYPEINFO_BODY = '#tooltips:squadWindow/battleTypeInfo/body'
-    SQUADWINDOW_BUTTONS_BTNNOTREADY_HEADER = '#tooltips:squadWindow/buttons/btnNotReady/header'
-    SQUADWINDOW_BUTTONS_BTNNOTREADY_BODY = '#tooltips:squadWindow/buttons/btnNotReady/body'
-    SQUADWINDOW_BUTTONS_BTNFIGHT_HEADER = '#tooltips:squadWindow/buttons/btnFight/header'
-    SQUADWINDOW_BUTTONS_BTNFIGHT_BODY = '#tooltips:squadWindow/buttons/btnFight/body'
-    SQUADWINDOW_BUTTONS_INVITE_HEADER = '#tooltips:squadWindow/buttons/invite/header'
-    SQUADWINDOW_BUTTONS_INVITE_BODY = '#tooltips:squadWindow/buttons/invite/body'
-    SQUADWINDOW_BUTTONS_RECOMMEND_HEADER = '#tooltips:squadWindow/buttons/recommend/header'
-    SQUADWINDOW_BUTTONS_RECOMMEND_BODY = '#tooltips:squadWindow/buttons/recommend/body'
-    SQUADWINDOW_BUTTONS_LEAVESQUAD_HEADER = '#tooltips:squadWindow/buttons/leaveSquad/header'
-    SQUADWINDOW_BUTTONS_LEAVESQUAD_BODY = '#tooltips:squadWindow/buttons/leaveSquad/body'
-    SQUADWINDOW_BUTTONS_LEAVEEVENTSQUAD_HEADER = '#tooltips:squadWindow/buttons/leaveEventSquad/header'
-    SQUADWINDOW_BUTTONS_LEAVEEVENTSQUAD_BODY = '#tooltips:squadWindow/buttons/leaveEventSquad/body'
-    SQUADWINDOW_INFOICON_TECH_HEADER = '#tooltips:squadWindow/infoIcon/tech/header'
-    SQUADWINDOW_INFOICON_TECH_BODY = '#tooltips:squadWindow/infoIcon/tech/body'
-    SQUADWINDOW_INFOICON_BATTLEROYALE_HEADER = '#tooltips:squadWindow/infoIcon/battleRoyale/header'
-    SQUADWINDOW_INFOICON_BATTLEROYALE_BODY = '#tooltips:squadWindow/infoIcon/battleRoyale/body'
-    SQUADWINDOW_INFOICON_TECHRESTRICTIONS_HEADER = '#tooltips:squadWindow/infoIcon/techRestrictions/header'
-    SQUADWINDOW_INFOICON_TECHRESTRICTIONS_TITLE0 = '#tooltips:squadWindow/infoIcon/techRestrictions/title0'
-    SQUADWINDOW_INFOICON_TECHRESTRICTIONS_BODY0 = '#tooltips:squadWindow/infoIcon/techRestrictions/body0'
-    SQUADWINDOW_INFOICON_TECHRESTRICTIONS_TITLE1 = '#tooltips:squadWindow/infoIcon/techRestrictions/title1'
-    SQUADWINDOW_INFOICON_TECHRESTRICTIONS_BODY1 = '#tooltips:squadWindow/infoIcon/techRestrictions/body1'
-    SQUADWINDOW_INFOICON_TECHRESTRICTIONS_TITLE2 = '#tooltips:squadWindow/infoIcon/techRestrictions/title2'
-    SQUADWINDOW_INFOICON_TECHRESTRICTIONS_BODY2 = '#tooltips:squadWindow/infoIcon/techRestrictions/body2'
-    SQUADWINDOW_BUTTONS_SENDMESSAGE_HEADER = '#tooltips:squadWindow/buttons/sendMessage/header'
-    SQUADWINDOW_BUTTONS_SENDMESSAGE_BODY = '#tooltips:squadWindow/buttons/sendMessage/body'
-    SQUADWINDOW_STATUS_COMMANDER = '#tooltips:squadWindow/status/commander'
-    SQUADWINDOW_STATUS_NORMAL = '#tooltips:squadWindow/status/normal'
-    SQUADWINDOW_STATUS_CANCELED = '#tooltips:squadWindow/status/canceled'
-    SQUADWINDOW_STATUS_READY = '#tooltips:squadWindow/status/ready'
-    SQUADWINDOW_STATUS_INBATTLE = '#tooltips:squadWindow/status/inBattle'
-    SQUADWINDOW_STATUS_LOCKED = '#tooltips:squadWindow/status/locked'
-    SQUADWINDOW_STATUS_DISABLED = '#tooltips:squadWindow/status/disabled'
-    SQUADWINDOW_EVENT_DOMINATION = '#tooltips:squadWindow/event/domination'
-    SQUADWINDOW_EVENT_DOMINATION_NOTE = '#tooltips:squadWindow/event/domination/note'
-    SQUADWINDOW_TEAMMATE_NOTVALIDVEHICLE_HEADER = '#tooltips:squadWindow/teammate/notValidVehicle/header'
-    SQUADWINDOW_TEAMMATE_NOTVALIDVEHICLE_BODY = '#tooltips:squadWindow/teammate/notValidVehicle/body'
-    SQUADWINDOW_DEMANDFORVEHICLE_NOTVALIDVEHICLE_HEADER = '#tooltips:squadWindow/demandForVehicle/notValidVehicle/header'
-    SQUADWINDOW_DEMANDFORVEHICLE_NOTVALIDVEHICLE_BODY = '#tooltips:squadWindow/demandForVehicle/notValidVehicle/body'
-    SQUADWINDOW_DOMINATION_VEHICLESINFOICON_HEADER = '#tooltips:squadWindow/domination/vehiclesInfoIcon/header'
-    SQUADWINDOW_DOMINATION_VEHICLESINFOICON_BODY = '#tooltips:squadWindow/domination/vehiclesInfoIcon/body'
     LOGIN_REMEMBERPASSWORD_SIMPLE_HEADER = '#tooltips:login/rememberPassword/simple/header'
     LOGIN_REMEMBERPASSWORD_SIMPLE_BODY = '#tooltips:login/rememberPassword/simple/body'
     LOGIN_REMEMBERPASSWORD_SOCIAL_HEADER = '#tooltips:login/rememberPassword/social/header'
@@ -336,6 +279,8 @@ class TOOLTIPS(object):
     PREBATTLE_INVITATIONS_TOOLTIP_ISONLINE_BODY = '#tooltips:prebattle/invitations/tooltip/isOnline/body'
     SETTINGSCONTROL_RECOMMENDED = '#tooltips:settingsControl/recommended'
     SETTINGS_MINIMAPCIRCLES_TITLE = '#tooltips:settings/minimapCircles/title'
+    SETTINGS_MINIMAPCIRCLES_MINIMUMSPOTTINGRANGE_TITLE = '#tooltips:settings/minimapCircles/minimumSpottingRange/title'
+    SETTINGS_MINIMAPCIRCLES_MINIMUMSPOTTINGRANGE_BODY = '#tooltips:settings/minimapCircles/minimumSpottingRange/body'
     SETTINGS_MINIMAPCIRCLES_VIEWRANGE_TITLE = '#tooltips:settings/minimapCircles/viewRange/title'
     SETTINGS_MINIMAPCIRCLES_VIEWRANGE_BODY = '#tooltips:settings/minimapCircles/viewRange/body'
     SETTINGS_MINIMAPCIRCLES_MAXVIEWRANGE_TITLE = '#tooltips:settings/minimapCircles/maxViewRange/title'
@@ -423,6 +368,11 @@ class TOOLTIPS(object):
     ANONYMIZER_BATTLE_TEAMLIST_NOCLAN = '#tooltips:anonymizer/battle/teamList/noClan'
     C11NHISTORICALLYACCURATE_HEADER = '#tooltips:c11nHistoricallyAccurate/header'
     C11NHISTORICALLYACCURATE_BODY = '#tooltips:c11nHistoricallyAccurate/body'
+    DISPLAYPLATOONMEMBERS_HEADER = '#tooltips:displayPlatoonMembers/header'
+    DISPLAYPLATOONMEMBERS_BODY = '#tooltips:displayPlatoonMembers/body'
+    DISPLAYPLATOONMEMBERS_ATTENTION = '#tooltips:displayPlatoonMembers/attention'
+    LOGINSERVERSELECTION_HEADER = '#tooltips:loginServerSelection/header'
+    LOGINSERVERSELECTION_BODY = '#tooltips:loginServerSelection/body'
     SHOWVEHMODELSONMAP_HEADER = '#tooltips:showVehModelsOnMap/header'
     SHOWVEHMODELSONMAP_BODY = '#tooltips:showVehModelsOnMap/body'
     SHOWVEHMODELSONMAP_ATTENTION = '#tooltips:showVehModelsOnMap/attention'
@@ -703,18 +653,6 @@ class TOOLTIPS(object):
     HEADER_PREMIUM_EXTEND_BODY = '#tooltips:header/premium_extend/body'
     HEADER_PREMSHOP_HEADER = '#tooltips:header/premShop/header'
     HEADER_PREMSHOP_BODY = '#tooltips:header/premShop/body'
-    HEADER_SQUAD_MEMBER_HEADER = '#tooltips:header/squad_member/header'
-    HEADER_SQUAD_MEMBER_BODY = '#tooltips:header/squad_member/body'
-    HEADER_SQUAD_HEADER = '#tooltips:header/squad/header'
-    HEADER_SQUAD_BODY = '#tooltips:header/squad/body'
-    HEADER_EVENTSQUAD_HEADER = '#tooltips:header/eventSquad/header'
-    HEADER_EVENTSQUAD_BODY = '#tooltips:header/eventSquad/body'
-    HEADER_DOMINATIONSQUAD_HEADER = '#tooltips:header/dominationSquad/header'
-    HEADER_DOMINATIONSQUAD_BODY = '#tooltips:header/dominationSquad/body'
-    HEADER_BATTLEROYALESQUAD_HEADER = '#tooltips:header/battleRoyaleSquad/header'
-    HEADER_BATTLEROYALESQUAD_BODY = '#tooltips:header/battleRoyaleSquad/body'
-    HEADER_RANKEDSQUAD_HEADER = '#tooltips:header/rankedSquad/header'
-    HEADER_RANKEDSQUAD_BODY = '#tooltips:header/rankedSquad/body'
     HEADER_BATTLETYPE_HEADER = '#tooltips:header/battleType/header'
     HEADER_BATTLETYPE_BODY = '#tooltips:header/battleType/body'
     HEADER_REFILL_ACTION_ATTENTION = '#tooltips:header/refill_action/attention'
@@ -946,8 +884,6 @@ class TOOLTIPS(object):
     TANKCARUSEL_LOCK_CLAN = '#tooltips:tankCarusel/lock/CLAN'
     TANKCARUSEL_LOCK_TOURNAMENT = '#tooltips:tankCarusel/lock/TOURNAMENT'
     TANKCARUSEL_LOCK_ROTATION = '#tooltips:tankCarusel/lock/rotation'
-    TANKCARUSEL_NEWYEARSLOT_HEADER = '#tooltips:tankCarusel/newYearSlot/header'
-    TANKCARUSEL_NEWYEARSLOT_BODY = '#tooltips:tankCarusel/newYearSlot/body'
     TANKCARUSEL_LOCK_ROAMING = '#tooltips:tankCarusel/lock/ROAMING'
     MULTISELECTION_ALERT_HEADER = '#tooltips:multiselection/alert/header'
     MULTISELECTION_ALERT_BODY = '#tooltips:multiselection/alert/body'
@@ -1927,8 +1863,6 @@ class TOOLTIPS(object):
     AWARDITEM_RANKEDDAILYBATTLES_BODY = '#tooltips:awardItem/rankedDailyBattles/body'
     AWARDITEM_RANKEDBONUSBATTLES_HEADER = '#tooltips:awardItem/rankedBonusBattles/header'
     AWARDITEM_RANKEDBONUSBATTLES_BODY = '#tooltips:awardItem/rankedBonusBattles/body'
-    AWARDITEM_NY21FILLERS_HEADER = '#tooltips:awardItem/ny21Fillers/header'
-    AWARDITEM_NY21FILLERS_BODY = '#tooltips:awardItem/ny21Fillers/body'
     RANKEDBATTLEVIEW_SCOREPOINT_SHORT_HEADER = '#tooltips:rankedBattleView/scorePoint/short/header'
     RANKEDBATTLEVIEW_SCOREPOINT_HEADER = '#tooltips:rankedBattleView/scorePoint/header'
     RANKEDBATTLEVIEW_SCOREPOINT_BODY = '#tooltips:rankedBattleView/scorePoint/body'
@@ -2112,8 +2046,6 @@ class TOOLTIPS(object):
     VEHICLEPREVIEW_TANKMAN_NEWPERK_HEADER = '#tooltips:vehiclePreview/tankman/newPerk/header'
     VEHICLEPREVIEW_VEHICLEPANEL_INFO_BODY = '#tooltips:vehiclePreview/vehiclePanel/info/body'
     VEHICLEPREVIEW_BUYBUTTON_PARENTMODULEISLOCKED_HEADER = '#tooltips:vehiclePreview/buyButton/parentModuleIsLocked/header'
-    VEHICLEPREVIEW_BUYBUTTON_RESTOREREQUESTED_HEADER = '#tooltips:vehiclePreview/buyButton/restoreRequested/header'
-    VEHICLEPREVIEW_BUYBUTTON_RESTOREREQUESTED_BODY = '#tooltips:vehiclePreview/buyButton/restoreRequested/body'
     VEHICLEPREVIEW_BUYBUTTON_PARENTMODULEISLOCKED_BODY = '#tooltips:vehiclePreview/buyButton/parentModuleIsLocked/body'
     VEHICLEPREVIEW_BUYBUTTON_PARENTVEHICLEISLOCKED_HEADER = '#tooltips:vehiclePreview/buyButton/parentVehicleIsLocked/header'
     VEHICLEPREVIEW_BUYBUTTON_PARENTVEHICLEISLOCKED_BODY = '#tooltips:vehiclePreview/buyButton/parentVehicleIsLocked/body'
@@ -2163,7 +2095,6 @@ class TOOLTIPS(object):
     VEHICLEPREVIEW_BOXTOOLTIP_BATTLEBOOSTER_HEADER = '#tooltips:vehiclePreview/boxTooltip/battleBooster/header'
     CONTENTBUYVIEW_SLOTCHECKBOX_NOTENOUGHSLOTS_HEADER = '#tooltips:contentBuyView/slotCheckbox/notEnoughSlots/header'
     CONTENTBUYVIEW_SLOTCHECKBOX_NOTENOUGHSLOTS_BODY = '#tooltips:contentBuyView/slotCheckbox/notEnoughSlots/body'
-    SQUADWINDOW_EVENTVEHICLE = '#tooltips:squadWindow/eventVehicle'
     DISMISSTANKMANDIALOG_CANTRESTORALERT_HEADER = '#tooltips:dismissTankmanDialog/cantRestorAlert/header'
     DISMISSTANKMANDIALOG_CANTRESTORALERT_BODY = '#tooltips:dismissTankmanDialog/cantRestorAlert/body'
     DISMISSTANKMANDIALOG_BUFFERISFULL_HEADER = '#tooltips:dismissTankmanDialog/bufferIsFull/header'
@@ -2329,10 +2260,6 @@ class TOOLTIPS(object):
     QUESTS_BONUSES_TOKEN_RESOURCE_CLAN_PROMORESOURCE_BODY = '#tooltips:quests/bonuses/token/resource/clan_promoresource/body'
     QUESTS_BONUSES_TOKEN_BATTLE_BONUS_X5_HEADER = '#tooltips:quests/bonuses/token/battle_bonus_x5/header'
     QUESTS_BONUSES_TOKEN_BATTLE_BONUS_X5_BODY = '#tooltips:quests/bonuses/token/battle_bonus_x5/body'
-    QUESTS_BONUSES_LOOTBOXTOKEN_BODY = '#tooltips:quests/bonuses/lootBoxToken/body'
-    QUESTS_BONUSES_FREETALISMANTOKEN_HEADER = '#tooltips:quests/bonuses/freeTalismanToken/header'
-    QUESTS_BONUSES_TALISMANBONUSTOKEN_HEADER = '#tooltips:quests/bonuses/talismanBonusToken/header'
-    QUESTS_BONUSES_TALISMANBONUSTOKEN_BODY = '#tooltips:quests/bonuses/talismanBonusToken/body'
     HANGAR_HEADER_WGMONEYTOOLTIP_GOLDNAME = '#tooltips:hangar/header/wgmoneyTooltip/goldName'
     HANGAR_HEADER_WGMONEYTOOLTIP_CREDITSNAME = '#tooltips:hangar/header/wgmoneyTooltip/creditsName'
     HANGAR_HEADER_WGMONEYTOOLTIP_PURCHASEDVALUE = '#tooltips:hangar/header/wgmoneyTooltip/purchasedValue'
@@ -2918,11 +2845,10 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_COMMANDER_PATRICK_DESC = '#tooltips:notrecruitedtankman/commander_patrick/desc'
     NOTRECRUITEDTANKMAN_NY20WOMAN_LABEL = '#tooltips:notrecruitedtankman/ny20woman/label'
     NOTRECRUITEDTANKMAN_NY20WOMAN_DESC = '#tooltips:notrecruitedtankman/ny20woman/desc'
-    NOTRECRUITEDTANKMAN_NY21WOMAN_LABEL = '#tooltips:notrecruitedtankman/ny21woman/label'
-    NOTRECRUITEDTANKMAN_NY21WOMAN_DESC = '#tooltips:notrecruitedtankman/ny21woman/desc'
-    NOTRECRUITEDTANKMAN_NY21DEFAULTGIRL_LABEL = '#tooltips:notrecruitedtankman/ny21defaultGirl/label'
-    NOTRECRUITEDTANKMAN_NY21DEFAULTGIRL_DESC = '#tooltips:notrecruitedtankman/ny21defaultGirl/desc'
-    NOTRECRUITEDTANKMAN_NY21DEFAULTGIRL_HOWTOGETINFO = '#tooltips:notrecruitedtankman/ny21defaultGirl/howToGetInfo'
+    NOTRECRUITEDTANKMAN_NY20DEFAULTGIRL_LABEL = '#tooltips:notrecruitedtankman/ny20defaultGirl/label'
+    NOTRECRUITEDTANKMAN_NY20DEFAULTGIRL_DESC = '#tooltips:notrecruitedtankman/ny20defaultGirl/desc'
+    NOTRECRUITEDTANKMAN_NY20DEFAULTGIRL_HOWTOGETINFO = '#tooltips:notrecruitedtankman/ny20defaultGirl/howToGetInfo'
+    NOTRECRUITEDTANKMAN_NY20DEFAULTGIRL_ADDITIONALALERT = '#tooltips:notrecruitedtankman/ny20defaultGirl/additionalAlert'
     NOTRECRUITEDTANKMAN_NY20MEN_LABEL = '#tooltips:notrecruitedtankman/ny20men/label'
     NOTRECRUITEDTANKMAN_NY20MEN_DESC = '#tooltips:notrecruitedtankman/ny20men/desc'
     NOTRECRUITEDTANKMAN_NY20MEN_HOWTOGETINFO = '#tooltips:notrecruitedtankman/ny20men/howToGetInfo'
@@ -3330,8 +3256,7 @@ class TOOLTIPS(object):
      AWARDITEM_RANKED_2020_DISCOUNT_HEADER,
      AWARDITEM_RANKED_202010_ACCESS_HEADER,
      AWARDITEM_RANKEDDAILYBATTLES_HEADER,
-     AWARDITEM_RANKEDBONUSBATTLES_HEADER,
-     AWARDITEM_NY21FILLERS_HEADER)
+     AWARDITEM_RANKEDBONUSBATTLES_HEADER)
     AWARDITEM_ALL_BODY_ENUM = (AWARDITEM_GROUPS_BODY,
      AWARDITEM_CREDITS_BODY,
      AWARDITEM_CRYSTAL_BODY,
@@ -3397,8 +3322,7 @@ class TOOLTIPS(object):
      AWARDITEM_RANKED_2020_DISCOUNT_BODY,
      AWARDITEM_RANKED_202010_ACCESS_BODY,
      AWARDITEM_RANKEDDAILYBATTLES_BODY,
-     AWARDITEM_RANKEDBONUSBATTLES_BODY,
-     AWARDITEM_NY21FILLERS_BODY)
+     AWARDITEM_RANKEDBONUSBATTLES_BODY)
     TEMPLATE_ALL_SHORT_ENUM = (TEMPLATE_DAYS_SHORT, TEMPLATE_HOURS_SHORT, TEMPLATE_MINUTES_SHORT)
     VEHICLEPARAMS_BONUS_TANKMANLEVEL_ENUM = (VEHICLEPARAMS_BONUS_TANKMANLEVEL_COMMANDER,
      VEHICLEPARAMS_BONUS_TANKMANLEVEL_GUNNER,
@@ -3407,8 +3331,6 @@ class TOOLTIPS(object):
      VEHICLEPARAMS_BONUS_TANKMANLEVEL_RADIOMAN)
     VEHICLEPARAMS_BONUS_EXTRA_ENUM = (VEHICLEPARAMS_BONUS_EXTRA_CAMOUFLAGEEXTRAS,)
     VEHICLEPREVIEW_BUYBUTTON_ALL_ENUM = (VEHICLEPREVIEW_BUYBUTTON_PARENTMODULEISLOCKED_HEADER,
-     VEHICLEPREVIEW_BUYBUTTON_RESTOREREQUESTED_HEADER,
-     VEHICLEPREVIEW_BUYBUTTON_RESTOREREQUESTED_BODY,
      VEHICLEPREVIEW_BUYBUTTON_PARENTMODULEISLOCKED_BODY,
      VEHICLEPREVIEW_BUYBUTTON_PARENTVEHICLEISLOCKED_HEADER,
      VEHICLEPREVIEW_BUYBUTTON_PARENTVEHICLEISLOCKED_BODY,
@@ -3688,8 +3610,7 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_COMMANDER_MARINA_LABEL,
      NOTRECRUITEDTANKMAN_COMMANDER_PATRICK_LABEL,
      NOTRECRUITEDTANKMAN_NY20WOMAN_LABEL,
-     NOTRECRUITEDTANKMAN_NY21WOMAN_LABEL,
-     NOTRECRUITEDTANKMAN_NY21DEFAULTGIRL_LABEL,
+     NOTRECRUITEDTANKMAN_NY20DEFAULTGIRL_LABEL,
      NOTRECRUITEDTANKMAN_NY20MEN_LABEL,
      NOTRECRUITEDTANKMAN_NY20SNOWMEN_LABEL,
      NOTRECRUITEDTANKMAN_NY21MEN_LABEL,
@@ -3742,8 +3663,7 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_COMMANDER_MARINA_DESC,
      NOTRECRUITEDTANKMAN_COMMANDER_PATRICK_DESC,
      NOTRECRUITEDTANKMAN_NY20WOMAN_DESC,
-     NOTRECRUITEDTANKMAN_NY21WOMAN_DESC,
-     NOTRECRUITEDTANKMAN_NY21DEFAULTGIRL_DESC,
+     NOTRECRUITEDTANKMAN_NY20DEFAULTGIRL_DESC,
      NOTRECRUITEDTANKMAN_NY20MEN_DESC,
      NOTRECRUITEDTANKMAN_NY20SNOWMEN_DESC,
      NOTRECRUITEDTANKMAN_NY21MEN_DESC,
@@ -3771,7 +3691,7 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERB_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERC_HOWTOGETINFO,
-     NOTRECRUITEDTANKMAN_NY21DEFAULTGIRL_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_NY20DEFAULTGIRL_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_NY20MEN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_NY20SNOWMEN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_COMMANDER_BP1_HOWTOGETINFO,
@@ -3785,7 +3705,7 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERB_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERC_HOWTOGETINFO,
-     NOTRECRUITEDTANKMAN_NY21DEFAULTGIRL_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_NY20DEFAULTGIRL_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_NY20MEN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_NY20SNOWMEN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_COMMANDER_BP1_HOWTOGETINFO,

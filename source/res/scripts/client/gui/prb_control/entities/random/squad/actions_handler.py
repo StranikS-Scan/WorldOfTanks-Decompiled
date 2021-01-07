@@ -4,7 +4,9 @@ from CurrentVehicle import g_currentVehicle
 from constants import MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
+from gui.impl.gen import R
 from gui.prb_control.entities.base.squad.actions_handler import SquadActionsHandler
+from gui.shared.event_dispatcher import showPlatoonResourceDialog
 
 class RandomSquadActionsHandler(SquadActionsHandler):
     pass
@@ -20,23 +22,20 @@ class BalancedSquadActionsHandler(RandomSquadActionsHandler):
             for slot in fullData.slotsIterator:
                 slotPlayer = slot.player
                 if slotPlayer:
-                    if slotPlayer.isInArena() or fullData.playerInfo.isInSearch() or fullData.playerInfo.isInQueue():
+                    if slotPlayer.isInArena() or fullData.playerInfo.isInQueue():
                         DialogsInterface.showI18nInfoDialog('squadHavePlayersInBattle', lambda result: None)
-                        return True
+                        return
                     if not slotPlayer.isReady:
                         notReadyCount += 1
 
             if not fullData.playerInfo.isReady:
                 notReadyCount -= 1
             if fullData.stats.occupiedSlotsCount == 1:
-                DialogsInterface.showDialog(I18nConfirmDialogMeta('squadHaveNoPlayers'), self._confirmCallback)
-                return True
+                showPlatoonResourceDialog(R.strings.dialogs.squadHaveNoPlayers, self._confirmCallback)
+                return
             if notReadyCount > 0:
-                if notReadyCount == 1:
-                    DialogsInterface.showDialog(I18nConfirmDialogMeta('squadHaveNotReadyPlayer'), self._confirmCallback)
-                    return True
-                DialogsInterface.showDialog(I18nConfirmDialogMeta('squadHaveNotReadyPlayers'), self._confirmCallback)
-                return True
+                showPlatoonResourceDialog(R.strings.dialogs.squadHaveNotReadyPlayer, self._confirmCallback)
+                return
             if not g_currentVehicle.isLocked() and not fullData.playerInfo.isReady:
                 _, unit = self._entity.getUnit()
                 playerVehicles = unit.getVehicles()
@@ -50,9 +49,8 @@ class BalancedSquadActionsHandler(RandomSquadActionsHandler):
                         for vehicle in unitVehicles:
                             if vehicle.vehLevel not in levelRange:
                                 DialogsInterface.showDialog(I18nConfirmDialogMeta('squadHaveNoPlayers'), self._confirmCallback)
-                                return True
+                                return
 
             self._setCreatorReady()
         else:
             self._entity.togglePlayerReadyAction(True)
-        return True

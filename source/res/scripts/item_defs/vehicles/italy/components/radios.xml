@@ -9,7 +9,12 @@
     <R300>	6	</R300>
     <RV_4>	7	</RV_4>
     <R_19>	8	</R_19>
+    <SEM_25>	9	</SEM_25>
     <Selex_STR_633P>	10	</Selex_STR_633P>
+    <SEM_24>	11	</SEM_24>
+    <Selex_STR_70>	12	</Selex_STR_70>
+    <SEM_35>	13	</SEM_35>
+    <SEM_80>	14	</SEM_80>
     <SEM_90>	15	</SEM_90>
     <Development_Radio>	65000	</Development_Radio>
   </ids>
@@ -59,6 +64,17 @@
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	1.5	</repairCost>
     </R_F_3_M_2>
+    <SEM_35>
+      <userString>	#italy_vehicles:SEM_35	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	40000	</price>
+      <weight>	20	</weight>
+      <distance>	525	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </SEM_35>
     <Selex_STR_633P>
       <userString>	#italy_vehicles:Selex_STR_633P	</userString>
       <tags></tags>
@@ -82,6 +98,17 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </R_F_4_M>
+    <SEM_80>
+      <userString>	#italy_vehicles:SEM_80	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	43700	</price>
+      <weight>	8	</weight>
+      <distance>	710	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </SEM_80>
     <SEM_90>
       <userString>	#italy_vehicles:SEM_90	</userString>
       <tags></tags>
@@ -140,6 +167,40 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </R_19>
+    <SEM_25>
+      <userString>	#italy_vehicles:SEM_25	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54500	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	17	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </SEM_25>
+    <SEM_24>
+      <userString>	#italy_vehicles:SEM_24	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	50000	</price>
+      <weight>	23	</weight>
+      <distance>	710	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </SEM_24>
+    <Selex_STR_70>
+      <userString>	#italy_vehicles:Selex_STR_70	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54500	</price>
+      <weight>	50	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </Selex_STR_70>
     <Development_Radio>
       <userString>	Development Radio	</userString>
       <tags></tags>

@@ -36,9 +36,6 @@ class BaseAssistant(object):
     def onAction(self, actionId, actionParams):
         self._hintSystem.onAction(actionId, actionParams)
 
-    def getHintSystem(self):
-        return self._hintSystem
-
     def _update(self):
         try:
             self._hintSystem.update()
@@ -65,13 +62,12 @@ class BattleAssistant(BaseAssistant):
      'ConsumableSlot6': BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL,
      'ConsumablesAppear': BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL}
 
-    def __init__(self, avatar, lessonId, entities, bootcampGui, soundAssistant):
+    def __init__(self, avatar, lessonId):
         lessonSettings = getBattleSettings(lessonId)
         super(BattleAssistant, self).__init__(HintSystem(avatar, lessonSettings.hints))
         self.__idHighlight = None
         self.__lessonId = lessonId
         self.__idClosePrebattleTimer = None
-        self.__soundAssistant = soundAssistant
         self.__highlightedElements = set()
         for animationName, panelName in BattleAssistant.HIGHLIGHTED_GUI_DICT.iteritems():
             curPanels = lessonSettings.visiblePanels
@@ -82,33 +78,15 @@ class BattleAssistant(BaseAssistant):
             if panelName in curPanels:
                 self.__highlightedElements.add(animationName)
 
-        markers = {}
-        if hasattr(avatar, 'arenaExtraData'):
-            if 'markers' in avatar.arenaExtraData:
-                markers = avatar.arenaExtraData['markers']
-        from BootcampMarkers import BootcampMarkersManager
-        self._markerManager = BootcampMarkersManager()
-        self._markerManager.init(entities, markers, bootcampGui)
         g_bootcampEvents.onUIStateChanged += self._onUIStateChanged
         return
-
-    @property
-    def combatSound(self):
-        return self.__soundAssistant
-
-    def getMarkers(self):
-        return self._markerManager
 
     def _update(self):
         super(BattleAssistant, self)._update()
         try:
-            self._markerManager.update()
             g_bootcampEvents.onUIStateChanged(UI_STATE.UPDATE)
         except Exception:
             LOG_CURRENT_EXCEPTION_BOOTCAMP()
-
-    def _doStart(self):
-        self._markerManager.start()
 
     def __doHighlight(self):
         for name in self.__highlightedElements:
@@ -130,8 +108,6 @@ class BattleAssistant(BaseAssistant):
             self.stop()
 
     def _doStop(self):
-        self._markerManager.stop()
-        self._markerManager.clear()
         g_bootcampEvents.onUIStateChanged -= self._onUIStateChanged
         if self.__idHighlight is not None:
             BigWorld.cancelCallback(self.__idHighlight)

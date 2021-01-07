@@ -125,6 +125,14 @@
       </teamBasePositions>
       <maxPlayersInTeam>	1	</maxPlayersInTeam>
       <runDelay>	10	</runDelay>
+      <visualScript>
+        <server>
+          <plan>	BootCamp/Lesson_5_arena_10_hills	</plan>
+        </server>
+        <client>
+          <plan>	BootCamp/Lesson_5_client_10_hills	</plan>
+        </client>
+      </visualScript>
     </bootcamp>
   </gameplayTypes>
   <waypoints>	spaces/10_hills/paths.xml	</waypoints>

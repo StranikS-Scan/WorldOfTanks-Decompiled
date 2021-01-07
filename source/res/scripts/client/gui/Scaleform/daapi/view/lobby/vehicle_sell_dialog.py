@@ -435,7 +435,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         else:
             result = yield vehicleSeller.request()
             SystemMessages.pushMessages(result)
-            self.destroy()
+        self.destroy()
 
 
 def _getDialogSettings():

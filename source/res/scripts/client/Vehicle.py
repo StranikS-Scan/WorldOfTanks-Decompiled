@@ -322,8 +322,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             sessionProvider = self.guiSessionProvider
             isAlly = sessionProvider.getArenaDP().isAlly(attackerID)
             if isAlly:
-                friendlyFireBonusTypes = self.lobbyContext.getServerSettings().getFriendlyFireBonusTypes()
-                isFriendlyFireMode = sessionProvider.arenaVisitor.bonus.isFriendlyFireMode(friendlyFireBonusTypes)
+                isFriendlyFireMode = sessionProvider.arenaVisitor.bonus.isFriendlyFireMode()
                 hasCustomAllyDamageEffect = sessionProvider.arenaVisitor.bonus.hasCustomAllyDamageEffect()
                 showFriendlyFlashBang = isFriendlyFireMode and hasCustomAllyDamageEffect
             for shotPoint in decodedPoints:
@@ -558,7 +557,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
                 self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.DOT_EFFECT, self.dotEffect)
             return
 
-    def onHealthChanged(self, newHealth, attackerID, attackReasonID):
+    def onHealthChanged(self, newHealth, oldHealth, attackerID, attackReasonID):
         if newHealth > 0 and self.health <= 0:
             self.health = newHealth
             self.__prevHealth = newHealth
@@ -568,6 +567,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             if not self.isStarted:
                 self.__prevHealth = newHealth
                 return
+            BigWorld.player().arena.onVehicleHealthChanged(self.id, attackerID, oldHealth - newHealth)
             if not self.appearance.damageState.isCurrentModelDamaged:
                 self.appearance.onVehicleHealthChanged()
             if self.health <= 0 and self.isCrewActive:
@@ -762,7 +762,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.set_publicStateModifiers()
         self.set_damageStickers()
         if TriggersManager.g_manager:
-            TriggersManager.g_manager.activateTrigger(TriggersManager.TRIGGER_TYPE.VEHICLE_VISUAL_VISIBILITY_CHANGED, vehicleId=self.id, isVisible=True)
+            TriggersManager.g_manager.fireTrigger(TriggersManager.TRIGGER_TYPE.VEHICLE_VISUAL_VISIBILITY_CHANGED, vehicleId=self.id, isVisible=True)
         self.guiSessionProvider.startVehicleVisual(self.proxy, True)
         if self.stunInfo > 0.0:
             self.updateStunInfo()
@@ -801,7 +801,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             raise SoftException('Vehicle is already stopped')
         self.__stopExtras()
         if TriggersManager.g_manager:
-            TriggersManager.g_manager.activateTrigger(TriggersManager.TRIGGER_TYPE.VEHICLE_VISUAL_VISIBILITY_CHANGED, vehicleId=self.id, isVisible=False)
+            TriggersManager.g_manager.fireTriggerInstantly(TriggersManager.TRIGGER_TYPE.VEHICLE_VISUAL_VISIBILITY_CHANGED, vehicleId=self.id, isVisible=False)
         self.appearance.deactivate()
         self.guiSessionProvider.stopVehicleVisual(self.id, self.isPlayerVehicle)
         self.appearance = None
@@ -997,6 +997,10 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
 
     def onDynamicComponentCreated(self, component):
         LOG_DEBUG_DEV('Component created', component)
+
+    @property
+    def label(self):
+        return self.labelComponent.label if hasattr(self, 'labelComponent') else None
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)

@@ -5,7 +5,6 @@
 class HINT_COMMAND(object):
     SHOW = 0
     SHOW_COMPLETED = 1
-    SHOW_COMPLETED_WITH_HINT = 2
     HIDE = 3
 
 

@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/dyn_squad_functional.py
+from typing import TYPE_CHECKING
 import CommandMapping
 import Keys
-from account_helpers.settings_core.settings_constants import SOUND
+import Event
+import VOIP
 from constants import IS_CHINA
 from debug_utils import LOG_DEBUG
 from gui.app_loader import sf_battle
@@ -17,23 +19,26 @@ from messenger.m_constants import USER_TAG
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.shared_messages import ClientActionMessage
 from messenger.proto.shared_messages import ACTION_MESSAGE_TYPE
-from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.shared import g_eventBus
 from gui.shared import EVENT_BUS_SCOPE, events
 from skeletons.gui.game_control import IAnonymizerController
 from gui.impl.gen import R
 from gui.impl import backport
+if TYPE_CHECKING:
+    from typing import Sequence as TSequence, Tuple as TTuple
+    from gui.battle_control.arena_info.arena_vos import VehicleArenaInfoVO
+    from gui.battle_control.arena_info.arena_dp import ArenaDataProvider
 SQUAD_MEMBERS_COUNT = 2
 FULL_SQUAD_MEMBERS_COUNT = 3
 
 def _getVIOPState(key):
-    if IS_CHINA:
+    voipMgr = VOIP.getVOIPManager()
+    if IS_CHINA or not voipMgr.isVoiceSupported():
         return 'withoutVOIP'
     if key == Keys.KEY_NONE:
         return 'specifyVOIP'
-    settingsCore = dependency.instance(ISettingsCore)
-    return 'disableVOIP' if settingsCore.getSetting(SOUND.VOIP_ENABLE) else 'enableVOIP'
+    return 'disableVOIP' if voipMgr.isEnabled() and voipMgr.isCurrentChannelEnabled() else 'enableVOIP'
 
 
 class DynSquadArenaController(object):
@@ -269,14 +274,17 @@ class _DynSquadSoundsController(DynSquadArenaController):
 
 
 class DynSquadFunctional(IArenaVehiclesController):
-    __slots__ = ('__soundCtrl', '__msgsCtrl')
+    __slots__ = ('__soundCtrl', '__msgsCtrl', '__eManager', '__wasOwnSquadCreated', 'onDynSquadCreatedOrJoined')
 
     def __init__(self, setup):
         super(DynSquadFunctional, self).__init__()
         self.__soundCtrl = _DynSquadSoundsController()
         self.__msgsCtrl = DynSquadMessagesController()
+        self.__eManager = Event.EventManager()
         if setup.isReplayPlaying:
             g_messengerEvents.users.onUsersListReceived({USER_TAG.FRIEND, USER_TAG.IGNORED, USER_TAG.IGNORED_TMP})
+        self.__wasOwnSquadCreated = False
+        self.onDynSquadCreatedOrJoined = Event.Event(self.__eManager)
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.DYN_SQUADS
@@ -288,10 +296,22 @@ class DynSquadFunctional(IArenaVehiclesController):
         if self.__msgsCtrl is not None:
             self.__msgsCtrl.destroy()
             self.__msgsCtrl = None
+        self.__eManager.clear()
+        self.__wasOwnSquadCreated = False
         return
 
     def updateVehiclesInfo(self, updated, arenaDP):
         if updated:
-            first = updated[0][1]
-            self.__soundCtrl.process(first, arenaDP)
-            self.__msgsCtrl.process(first, arenaDP)
+            playerVehVO = updated[0][1]
+            self.__soundCtrl.process(playerVehVO, arenaDP)
+            self.__msgsCtrl.process(playerVehVO, arenaDP)
+            self.__checkIfAccountCreatedOrJoinedDynSquad(playerVehVO, arenaDP)
+
+    def __checkIfAccountCreatedOrJoinedDynSquad(self, playerVehVO, arenaDP):
+        voSquadIndex = playerVehVO.squadIndex
+        if voSquadIndex == 0 or self.__wasOwnSquadCreated:
+            return
+        myAvatarVehicle = arenaDP.getVehicleInfo(avatar_getter.getPlayerVehicleID())
+        if playerVehVO.prebattleID == myAvatarVehicle.prebattleID:
+            self.__wasOwnSquadCreated = True
+            self.onDynSquadCreatedOrJoined(myAvatarVehicle.player.isPrebattleCreator, myAvatarVehicle.prebattleID)

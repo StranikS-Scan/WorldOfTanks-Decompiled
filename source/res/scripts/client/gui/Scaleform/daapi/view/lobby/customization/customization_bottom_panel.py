@@ -320,8 +320,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         for item in purchaseItems:
             if item.isFromInventory:
                 fromStorageCount += 1
-            if not item.isDismantling:
-                toBuyCount += 1
+            toBuyCount += 1
 
         for pItem in purchaseItems:
             if pItem.item.itemTypeID != GUI_ITEM_TYPE.PERSONAL_NUMBER:
@@ -469,8 +468,6 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__setNotificationCounters()
 
     def __onVehicleChanged(self):
-        if self.__ctx.isOutfitApplying:
-            return
         self._carouselDP.invalidateItems()
         self.__updateTabs()
         self.resetFilter()

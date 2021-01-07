@@ -791,6 +791,8 @@ class StrongholdEntity(UnitEntity):
                     if self.__battleModeData.get(field) != gettersMapping[field]():
                         SystemMessages.pushI18nMessage(messages.getUnitWarningMessage(key), type=SystemMessages.SM_TYPE.Warning)
                         self.__slotVehicleFilters = {}
+                        if key == 'STRONGHOLDS_MODE_CHANGED':
+                            self.resetPlayerReadiness()
                         break
 
             for field, _ in battleModeFields:

@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/sound_components.py
 from collections import namedtuple
-from wrapped_reflection_framework import ReflectionMetaclass
+from wrapped_reflection_framework import ReflectionMetaclass, reflectedNamedTuple
 __all__ = ('SoundPair', 'StatedSounds', 'HullAimingSound', 'SoundSiegeModeStateChange', 'WWTripleSoundConfig')
-SoundPair = namedtuple('SoundPair', ('PC', 'NPC'))
-StatedSounds = namedtuple('StatedSound', ('state', 'underLimitSounds', 'overLimitSounds'))
-HullAimingSound = namedtuple('HullAimingSound', ('lodDist', 'angleLimitValue', 'sounds'))
+SoundPair = reflectedNamedTuple('SoundPair', ('PC', 'NPC'))
+StatedSounds = reflectedNamedTuple('StatedSounds', ('state', 'underLimitSounds', 'overLimitSounds'))
+HullAimingSound = reflectedNamedTuple('HullAimingSound', ('lodDist', 'angleLimitValue', 'sounds'))
 SoundSiegeModeStateChange = namedtuple('SoundSiegeModeStateChange', ['on',
  'off',
  'npcOn',

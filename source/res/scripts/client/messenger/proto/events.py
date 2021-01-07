@@ -50,18 +50,19 @@ class MemberEvents(object):
 
 
 class _VOIPSharedEvents(object):
-    __slots__ = ('__eventManager', 'onCredentialReceived', 'onChannelEntered', 'onChannelLeft', 'onVoiceChatInitSucceeded', 'onVoiceChatInitFailed', 'onPlayerSpeaking', 'onStateToggled')
+    __slots__ = ('__eventManager', 'onCredentialReceived', 'onChannelAvailable', 'onChannelLost', 'onChannelEntered', 'onChannelLeft', 'onVoiceChatInitSucceeded', 'onVoiceChatInitFailed', 'onPlayerSpeaking')
 
     def __init__(self):
         super(_VOIPSharedEvents, self).__init__()
         self.__eventManager = Event.EventManager()
         self.onCredentialReceived = Event.Event()
+        self.onChannelAvailable = Event.Event(self.__eventManager)
+        self.onChannelLost = Event.Event(self.__eventManager)
         self.onChannelEntered = Event.Event(self.__eventManager)
         self.onChannelLeft = Event.Event(self.__eventManager)
         self.onVoiceChatInitSucceeded = Event.Event(self.__eventManager)
         self.onVoiceChatInitFailed = Event.Event(self.__eventManager)
         self.onPlayerSpeaking = Event.Event(self.__eventManager)
-        self.onStateToggled = Event.Event(self.__eventManager)
 
     def clear(self):
         self.__eventManager.clear()

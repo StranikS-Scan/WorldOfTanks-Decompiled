@@ -68,6 +68,10 @@ class CustomizationPacker(object):
     def getRawComponent():
         raise NotImplementedError
 
+    @classmethod
+    def removePreview(cls, slot):
+        pass
+
 
 class PaintPacker(CustomizationPacker):
 
@@ -222,6 +226,13 @@ class ProjectionDecalPacker(CustomizationPacker):
     @staticmethod
     def getRawComponent():
         return ProjectionDecalComponent
+
+    @classmethod
+    def removePreview(cls, slot):
+        for idx in slot.order()[:]:
+            comp = slot.getComponent(idx)
+            if comp.preview:
+                slot.remove(idx)
 
 
 class InsigniaPacker(CustomizationPacker):

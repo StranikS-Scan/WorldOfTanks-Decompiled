@@ -47,10 +47,13 @@ class FeaturesCache(object):
             return False
         if feature not in self._data:
             self._requestsCounter[feature] += 1
-            BigWorld.fetchURL(url=loggingSettings.apiHost, callback=FeaturesCache.updateFeatureStatus, headers=loggingSettings.headers, timeout=loggingSettings.requestTimeout, method=loggingSettings.httpMethod, postdata=json.dumps({'feature': feature,
-             'spa_id': getPlayerDatabaseID()}))
+            self._sendRequest(feature)
             return STATUS_REQUESTED
         return self._data[feature]
+
+    def _sendRequest(self, feature):
+        BigWorld.fetchURL(url=loggingSettings.apiHost, callback=FeaturesCache.updateFeatureStatus, headers=loggingSettings.headers, timeout=loggingSettings.requestTimeout, method=loggingSettings.httpMethod, postdata=json.dumps({'feature': feature,
+         'spa_id': getPlayerDatabaseID()}))
 
 
 featuresCache = FeaturesCache()

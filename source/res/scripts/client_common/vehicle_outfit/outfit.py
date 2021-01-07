@@ -260,6 +260,12 @@ class Outfit(HasStrCD):
     def isEmpty(self):
         return isEmpty(self.items())
 
+    def removePreview(self):
+        for container in self._containers.itervalues():
+            container.removePreview()
+
+        self.invalidate()
+
     def clear(self):
         for container in self._containers.itervalues():
             container.clear()

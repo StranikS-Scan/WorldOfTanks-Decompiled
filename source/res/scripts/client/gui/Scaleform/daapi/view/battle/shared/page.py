@@ -75,6 +75,8 @@ class SharedPage(BattlePageMeta):
         self._isVisible = True
         self._blToggling = set()
         self._fsToggling = set()
+        self._destroyTimerToggling = set()
+        self._isDestroyTimerShown = False
         if external is None:
             external = (crosshair.CrosshairPanelContainer, markers2d.MarkersManager)
         self._external = [ item() for item in external ]
@@ -98,6 +100,8 @@ class SharedPage(BattlePageMeta):
         self.reloadComponents()
         for component in self._external:
             component.startPlugins()
+            if self.sessionProvider.isReplayPlaying:
+                component.invokeRegisterComponentForReplay()
 
     @uniprof.regionDecorator(label='avatar.show_gui', scope='enter')
     def _populate(self):
@@ -120,6 +124,7 @@ class SharedPage(BattlePageMeta):
         self.addListener(events.GameEvent.HIDE_BTN_HINT, self.__handleHideBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.CALLOUT_DISPLAY_EVENT, self.__handleCalloutDisplayEvent, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.ViewEventType.LOAD_VIEW, self.__handleLobbyEvent, scope=EVENT_BUS_SCOPE.BATTLE)
+        self.addListener(events.GameEvent.DESTROY_TIMERS_PANEL, self.__destroyTimersListener, scope=EVENT_BUS_SCOPE.BATTLE)
         self.gameplay.postStateEvent(PlayerEventID.AVATAR_SHOW_GUI)
 
     @uniprof.regionDecorator(label='avatar.show_gui', scope='exit')
@@ -141,6 +146,7 @@ class SharedPage(BattlePageMeta):
         self.removeListener(events.GameEvent.HIDE_BTN_HINT, self.__handleHideBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.CALLOUT_DISPLAY_EVENT, self.__handleCalloutDisplayEvent, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.ViewEventType.LOAD_VIEW, self.__handleLobbyEvent, scope=EVENT_BUS_SCOPE.BATTLE)
+        self.removeListener(events.GameEvent.DESTROY_TIMERS_PANEL, self.__destroyTimersListener, scope=EVENT_BUS_SCOPE.BATTLE)
         self._stopBattleSession()
         super(SharedPage, self)._dispose()
 
@@ -235,6 +241,18 @@ class SharedPage(BattlePageMeta):
 
         self.sessionProvider.shared.hitDirection.setVisible(True)
 
+    def _onDestroyTimerStart(self):
+        hintPanel = self.getComponent(_ALIASES.HINT_PANEL)
+        if hintPanel and hintPanel.getActiveHint():
+            self._destroyTimerToggling.add(_ALIASES.HINT_PANEL)
+        self._setComponentsVisibility(hidden=self._destroyTimerToggling)
+        self._isDestroyTimerShown = True
+
+    def _onDestroyTimerFinish(self):
+        self._setComponentsVisibility(visible=self._destroyTimerToggling)
+        self._destroyTimerToggling.clear()
+        self._isDestroyTimerShown = False
+
     def _changeCtrlMode(self, ctrlMode):
         if ctrlMode == ctrlMode == aih_constants.CTRL_MODE_NAME.VIDEO:
             self._setComponentsVisibility(hidden={_ALIASES.DAMAGE_PANEL})
@@ -251,6 +269,15 @@ class SharedPage(BattlePageMeta):
         else:
             self._onBattleLoadingFinish()
 
+    def __destroyTimersListener(self, event):
+        isShown = event.ctx['shown']
+        if isShown is not None:
+            if isShown:
+                self._onDestroyTimerStart()
+            else:
+                self._onDestroyTimerFinish()
+        return
+
     def _switchToPostmortem(self):
         alias = _ALIASES.CONSUMABLES_PANEL
         if self.as_isComponentVisibleS(alias):
@@ -266,10 +293,14 @@ class SharedPage(BattlePageMeta):
         if needShow:
             if self._isBattleLoading:
                 self._blToggling.add(alias)
+            elif self._isDestroyTimerShown:
+                self._destroyTimerToggling.add(alias)
             elif not self.as_isComponentVisibleS(alias):
                 self._setComponentsVisibility(visible={alias})
         elif self._isBattleLoading:
             self._blToggling.discard(alias)
+        elif self._isDestroyTimerShown:
+            self._destroyTimerToggling.discard(alias)
         elif self.as_isComponentVisibleS(alias):
             self._setComponentsVisibility(hidden={alias})
 

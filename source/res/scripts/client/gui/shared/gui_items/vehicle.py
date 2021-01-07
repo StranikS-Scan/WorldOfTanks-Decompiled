@@ -47,7 +47,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from nation_change.nation_change_helpers import hasNationGroup, iterVehTypeCDsInNationGroup
-from skeletons.new_year import INewYearController
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsRequester
     from items.components.c11n_components import StyleItem
@@ -215,7 +214,6 @@ class Vehicle(FittingItem):
     eventsCache = dependency.descriptor(IEventsCache)
     igrCtrl = dependency.descriptor(IIGRController)
     itemsCache = dependency.descriptor(IItemsCache)
-    nyController = dependency.descriptor(INewYearController)
 
     def __init__(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None):
         if strCompactDescr is not None:
@@ -261,7 +259,7 @@ class Vehicle(FittingItem):
         tradeInData = None
         personalTradeIn = None
         if proxy is not None and proxy.inventory.isSynced() and proxy.stats.isSynced() and proxy.shop.isSynced() and proxy.vehicleRotation.isSynced() and proxy.recycleBin.isSynced():
-            invDataTmp = proxy.inventory.getItems(GUI_ITEM_TYPE.VEHICLE, self._inventoryID)
+            invDataTmp = proxy.inventory.getItems(GUI_ITEM_TYPE.VEHICLE, inventoryID)
             if invDataTmp is not None:
                 invData = invDataTmp
             tradeInData = proxy.shop.tradeIn
@@ -569,10 +567,10 @@ class Vehicle(FittingItem):
         return outfits
 
     def _getOutfitComponent(self, proxy, style, season):
-        if style is not None and season != SeasonType.EVENT:
+        if style is not None:
             return self.__getStyledOutfitComponent(proxy, style, season)
         else:
-            return self.__getEmptyOutfitComponent() if self._isStyleInstalled and season != SeasonType.EVENT else self.__getCustomOutfitComponent(proxy, season)
+            return self.__getEmptyOutfitComponent() if self._isStyleInstalled else self.__getCustomOutfitComponent(proxy, season)
 
     @classmethod
     def _parserOptDevs(cls, layoutList, proxy):
@@ -598,10 +596,6 @@ class Vehicle(FittingItem):
     def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
         name = getNationLessName(self.name)
         return RES_SHOP_EXT.getVehicleIcon(size, name)
-
-    def getSnapshotIcon(self):
-        name = getIconResourceName(getNationLessName(self.name))
-        return RES_ICONS.getSnapshotIcon(name)
 
     @property
     def invID(self):
@@ -1030,7 +1024,7 @@ class Vehicle(FittingItem):
             ms = Vehicle.VEHICLE_STATE.SERVER_RESTRICTION
         elif self.isRotationGroupLocked:
             ms = Vehicle.VEHICLE_STATE.ROTATION_GROUP_LOCKED
-        ms = self.__checkUndamagedState(ms, isCurrentPlayer)
+        ms = self.checkUndamagedState(ms, isCurrentPlayer)
         ms = self.__getRentableState(ms, isCurrentPlayer)
         if ms in Vehicle.CAN_SELL_STATES and self.__customState:
             ms = self.__customState
@@ -1048,7 +1042,7 @@ class Vehicle(FittingItem):
     def isCustomStateSet(self):
         return self.__customState != ''
 
-    def __checkUndamagedState(self, state, isCurrnentPlayer=True):
+    def checkUndamagedState(self, state, isCurrnentPlayer=True):
         if state == Vehicle.VEHICLE_STATE.UNDAMAGED and isCurrnentPlayer:
             if self.isBroken:
                 return Vehicle.VEHICLE_STATE.DAMAGED
@@ -1209,7 +1203,7 @@ class Vehicle(FittingItem):
             if not self.rentalIsOver:
                 return False
             if st in (self.VEHICLE_STATE.RENTAL_IS_OVER, self.VEHICLE_STATE.IGR_RENTAL_IS_OVER, self.VEHICLE_STATE.RENTABLE_AGAIN):
-                st = self.__checkUndamagedState(self.modelState)
+                st = self.checkUndamagedState(self.modelState)
         return st in self.CAN_SELL_STATES and not checkForTags(self.tags, VEHICLE_TAGS.CANNOT_BE_SOLD)
 
     @property
@@ -1409,7 +1403,7 @@ class Vehicle(FittingItem):
             permission = self.__prbDispatcher.getGUIPermissions()
             if permission is not None:
                 locked = not permission.canChangeVehicle()
-        return not self.isOnlyForEventBattles and not self.isInBattle and self.isInInventory and not self.isLocked and not locked and not self.isBroken and not self.isOutfitLocked and not self.isDisabled and not self.isNewYearOutfitSet()
+        return not self.isOnlyForEventBattles and not self.isInBattle and self.isInInventory and not self.isLocked and not locked and not self.isBroken and not self.isOutfitLocked and not self.isDisabled
 
     def isAutoLoadFull(self):
         return self.shells.installed == self.shells.layout if self.isAutoLoad else True
@@ -1564,11 +1558,6 @@ class Vehicle(FittingItem):
             if intCD:
                 return getItemByCompactDescr(intCD)
 
-        outfit = self.getNewYearOutfit()
-        if outfit:
-            intCD = outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).getItemCD()
-            if intCD:
-                return getItemByCompactDescr(intCD)
         return None
 
     def getAnyOutfitSeason(self):
@@ -1593,23 +1582,6 @@ class Vehicle(FittingItem):
 
     def isRecentlyRestored(self):
         return self.isPurchased and self.restoreInfo.isInCooldown() if self.restoreInfo is not None else False
-
-    def getNewYearOutfit(self):
-        outfit = self._outfits.get(SeasonType.EVENT)
-        if self.nyController.checkNyOutfit(outfit):
-            styleIntCD = vehicles.makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, outfit.id)
-            style = vehicles.getItemByCompactDescr(styleIntCD)
-            outfitComp = style.outfits.get(SeasonType.EVENT)
-            nyOutfit = self.itemsFactory.createOutfit(component=outfitComp, vehicleCD=self.descriptor.makeCompactDescr())
-            return nyOutfit
-        else:
-            return None
-
-    def isNewYearOutfitSet(self):
-        return self.getNewYearOutfit() is not None
-
-    def isNewYearOutfitChangesLocked(self):
-        return self.isInBattle or self.isBroken or self.isInPrebattle
 
     def __cmp__(self, other):
         if self.isRestorePossible() and not other.isRestorePossible():

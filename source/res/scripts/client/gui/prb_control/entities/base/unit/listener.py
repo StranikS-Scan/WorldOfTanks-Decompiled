@@ -79,6 +79,9 @@ class IUnitListener(IUnitIntroListener):
     def onUnitCurfewChanged(self):
         pass
 
+    def onUnitPlayerProfileVehicleChanged(self, accountDBID):
+        pass
+
 
 class IStrongholdListener(IPrbListener):
 

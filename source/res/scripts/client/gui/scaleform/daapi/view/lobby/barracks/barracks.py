@@ -221,7 +221,6 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         self.as_setTankmenS({'tankmenCount': self.__getTankmenCountStr(self.__dataProvider.filteredCount, totalCount=self.__dataProvider.totalCount),
          'placesCount': self.__getPlaceCountStr(free=self.__dataProvider.placeCount, totalCount=self.itemsCache.items.stats.tankmenBerthsCount),
          'placesCountTooltip': None,
-         'tankmenData': self.__dataProvider.requestItemRangeHandler(0, self.__dataProvider.pyLength()),
          'hasNoInfoData': False})
         return
 

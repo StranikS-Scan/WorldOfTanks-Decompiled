@@ -493,11 +493,14 @@ class AdvancedChatComponent(ClientArenaComponent):
         if commandCreatorID == avatar_getter.getPlayerVehicleID() and commandName in AUTOCOMMIT_COMMAND_NAMES or isTemporarySticky:
             BigWorld.callback(0.1, partial(self.__setInFocusCB, commandID, commandTargetID, markerType, commandName in ONE_SHOT_COMMANDS_TO_REPLIES.keys(), isTemporarySticky))
 
+    def __addPositiveMarkerAboveCreator(self, vehicleMarkerID):
+        feedbackCtrl = self.sessionProvider.shared.feedback
+        if feedbackCtrl:
+            feedbackCtrl.showActionMarker(vehicleMarkerID, vMarker=MARKER_ACTION_POSITIVE, mMarker=MARKER_ACTION_POSITIVE, isPermanent=False)
+
     def __handleMark3DPosition(self, commandTargetID, creatorVehicleID, commandID, commandName, commandDuration, cmd):
         if commandName == BATTLE_CHAT_COMMAND_NAMES.GOING_THERE:
-            feedbackCtrl = self.sessionProvider.shared.feedback
-            if feedbackCtrl:
-                feedbackCtrl.showActionMarker(creatorVehicleID, vMarker=MARKER_ACTION_POSITIVE, mMarker=MARKER_ACTION_POSITIVE, isPermanent=False)
+            self.__addPositiveMarkerAboveCreator(creatorVehicleID)
         position = cmd.getMarkedPosition()
         markerType = _COMMAND_NAME_TRANSFORM_MARKER_TYPE[commandName]
         commandData = self._chatCommands[markerType][commandTargetID][commandID]
@@ -555,8 +558,18 @@ class AdvancedChatComponent(ClientArenaComponent):
             return
         else:
             if commandName in (BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE, BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE):
-                feedbackCtrl.showActionMarker(cmdCreatorID, vMarker=MARKER_ACTION_POSITIVE, mMarker=MARKER_ACTION_POSITIVE, isPermanent=False)
+                self.__addPositiveMarkerAboveCreator(cmdCreatorID)
             feedbackCtrl.onActionAddedToMarker(cmdCreatorID, cmdID, MarkerType.BASE_MARKER_TYPE, cmdTargetID)
+            return
+
+    def __handleObjectiveCommand(self, commandName, cmdCreatorID, cmd):
+        feedbackCtrl = self.sessionProvider.shared.feedback
+        if not feedbackCtrl or feedbackCtrl is None:
+            return
+        else:
+            if commandName in (BATTLE_CHAT_COMMAND_NAMES.ATTACKING_OBJECTIVE, BATTLE_CHAT_COMMAND_NAMES.DEFENDING_OBJECTIVE):
+                self.__addPositiveMarkerAboveCreator(cmdCreatorID)
+            feedbackCtrl.markObjectiveOnMinimap(cmdCreatorID, cmd.getMarkedObjective(), commandName)
             return
 
     def __handleRegularCommand(self, cmd):
@@ -582,15 +595,14 @@ class AdvancedChatComponent(ClientArenaComponent):
                 self.__addReplyToCommandList(cmdCreatorID, cmdTargetID, cmdID)
         elif cmdName not in (BATTLE_CHAT_COMMAND_NAMES.CONFIRM, BATTLE_CHAT_COMMAND_NAMES.POSITIVE):
             self.__addCommandToList(cmdID, cmdName, cmdCreatorID, cmdTargetID, cmd, cmdDuration)
-        feedbackCtrl = self.sessionProvider.shared.feedback
         if cmd.isLocationRelatedCommand():
             self.__handleMark3DPosition(cmdTargetID, cmdCreatorID, cmdID, cmdName, cmdDuration, cmd)
         elif cmd.isBaseRelatedCommand():
             self.__handleBaseCommand(cmdName, cmdCreatorID, cmdID, cmdTargetID)
         elif cmd.isVehicleRelatedCommand():
             self.__handleVehicleCommand(cmdTargetID, cmdCreatorID, cmdID, cmd)
-        if cmd.isMarkedObjective():
-            feedbackCtrl.markObjectiveOnMinimap(cmdCreatorID, cmd.getMarkedObjective(), cmdName)
+        elif cmd.isMarkedObjective():
+            self.__handleObjectiveCommand(cmdName, cmdCreatorID, cmd)
 
     def __addReplyToCommandList(self, replierVehicleID, targetID, repliedToCommandID):
         repliedToActionName = _ACTIONS.battleChatCommandFromActionID(repliedToCommandID).name
@@ -642,9 +654,7 @@ class AdvancedChatComponent(ClientArenaComponent):
         targetID = cmd.getFirstTargetID()
         replyToActionName = cmd.getCommandData()['strArg1']
         if replierVehicleID:
-            feedbackCtrl = self.sessionProvider.shared.feedback
-            if feedbackCtrl:
-                feedbackCtrl.showActionMarker(replierVehicleID, vMarker=MARKER_ACTION_POSITIVE, mMarker=MARKER_ACTION_POSITIVE, isPermanent=False)
+            self.__addPositiveMarkerAboveCreator(replierVehicleID)
         markerType = _COMMAND_NAME_TRANSFORM_MARKER_TYPE[replyToActionName]
         replyToActionName = self.__getCorrectReplyCommandName(targetID, replyToActionName)
         repliedToActionID = BATTLE_CHAT_COMMANDS_BY_NAMES[replyToActionName].id

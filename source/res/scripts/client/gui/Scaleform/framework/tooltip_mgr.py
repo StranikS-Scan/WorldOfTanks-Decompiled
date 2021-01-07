@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/tooltip_mgr.py
 import logging
 import Keys
+from Event import SafeEvent, EventManager
 from gui import InputHandler
 from gui.Scaleform.framework.entities.abstract.ToolTipMgrMeta import ToolTipMgrMeta
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -32,6 +33,9 @@ class ToolTip(ToolTipMgrMeta):
         self.__args = None
         self.__stateType = None
         self.__tooltipWindowId = 0
+        self.__em = EventManager()
+        self.onShow = SafeEvent(self.__em)
+        self.onHide = SafeEvent(self.__em)
         return
 
     def show(self, data, linkage):
@@ -71,6 +75,7 @@ class ToolTip(ToolTipMgrMeta):
                 _logger.warning('Tooltip can not be displayed: type "%s" is not found', tooltipType)
                 return
             self.__cacheTooltipData(False, tooltipType, args, stateType)
+            self.onShow(tooltipType, self.__isAdvancedKeyPressed)
             if data is not None and data.isDynamic():
                 data.changeVisibility(True)
                 if tooltipType not in self._dynamic:
@@ -91,6 +96,7 @@ class ToolTip(ToolTipMgrMeta):
             window.load()
             window.move(x, y)
             self.__tooltipWindowId = window.uniqueID
+            self.onShow(tooltipType, self.__isAdvancedKeyPressed)
             return
 
     def onCreateComplexTooltip(self, tooltipID, stateType):
@@ -98,13 +104,16 @@ class ToolTip(ToolTipMgrMeta):
             return
         self._complex.build(self, stateType, self.__isAdvancedKeyPressed, tooltipID)
         self.__cacheTooltipData(True, tooltipID, tuple(), stateType)
+        self.onShow(tooltipID, self.__isAdvancedKeyPressed)
 
     def onHideTooltip(self, tooltipId):
         if not self._areTooltipsDisabled and tooltipId in self._dynamic:
             self._dynamic[tooltipId].changeVisibility(False)
+        hideTooltipId = tooltipId or self.__tooltipID or ''
         self.__tooltipID = None
         self.__fastRedraw = False
         self.__destroyTooltipWindow()
+        self.onHide(hideTooltipId)
         return
 
     def _populate(self):
@@ -125,6 +134,7 @@ class ToolTip(ToolTipMgrMeta):
         InputHandler.g_instance.onKeyDown -= self.handleKeyEvent
         InputHandler.g_instance.onKeyUp -= self.handleKeyEvent
         self.__destroyTooltipWindow()
+        self.__em.clear()
         super(ToolTip, self)._dispose()
 
     def __onGUISpaceEntered(self, spaceID):

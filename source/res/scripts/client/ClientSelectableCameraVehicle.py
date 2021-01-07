@@ -20,7 +20,7 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         self.__onLoadedCallback = None
         self.__fakeShadowModel = None
         self.__shadowModelFashion = None
-        self.__isVehicleLoaded = False
+        self._isVehicleLoaded = False
         self.__vehicleTransform = None
         return
 
@@ -80,7 +80,7 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
 
     def _onVehicleLoaded(self):
         self.__updateFakeShadowAccordingToAppearance()
-        self.__isVehicleLoaded = True
+        self._isVehicleLoaded = True
         if self.__onLoadedCallback is not None:
             self.__onLoadedCallback()
             self.__onLoadedCallback = None
@@ -102,7 +102,7 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
 
     @property
     def isVehicleLoaded(self):
-        return self.__isVehicleLoaded
+        return self._isVehicleLoaded
 
     def setSelectable(self, flag):
         if flag:

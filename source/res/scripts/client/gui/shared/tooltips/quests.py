@@ -29,7 +29,6 @@ from helpers.i18n import makeString as _ms
 from shared_utils import findFirst
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.game_control import IQuestsController, IEventProgressionController, IRankedBattlesController
-from skeletons.new_year import INewYearController
 _MAX_AWARDS_PER_TOOLTIP = 5
 _MAX_QUESTS_PER_TOOLTIP = 4
 _MAX_BONUSES_PER_QUEST = 2
@@ -52,7 +51,6 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
     __eventProgression = dependency.descriptor(IEventProgressionController)
     _questController = dependency.descriptor(IQuestsController)
     _eventsCache = dependency.descriptor(IEventsCache)
-    _nyController = dependency.descriptor(INewYearController)
 
     def __init__(self, context):
         super(QuestsPreviewTooltipData, self).__init__(context, TOOLTIP_TYPE.QUESTS)
@@ -110,8 +108,7 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
         return items
 
     def _getHeader(self, count, vehicleName, description):
-        isNYEventEnabled = self._nyController.isEnabled()
-        return formatters.packImageTextBlockData(title=text_styles.highTitle(backport.text(R.strings.tooltips.hangar.header.quests.header(), count=count)), img=backport.image(R.images.gui.maps.icons.quests.nyQuestTooltipHeader() if isNYEventEnabled else R.images.gui.maps.icons.quests.questTooltipHeader()), txtPadding=formatters.packPadding(top=20), txtOffset=20, desc=text_styles.main(backport.text(description, vehicle=vehicleName)))
+        return formatters.packImageTextBlockData(title=text_styles.highTitle(backport.text(R.strings.tooltips.hangar.header.quests.header(), count=count)), img=backport.image(R.images.gui.maps.icons.quests.questTooltipHeader()), txtPadding=formatters.packPadding(top=20), txtOffset=20, desc=text_styles.main(backport.text(description, vehicle=vehicleName)))
 
     def _getBottom(self, value):
         if value > 0:

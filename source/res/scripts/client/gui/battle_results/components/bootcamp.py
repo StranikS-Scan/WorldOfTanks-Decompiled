@@ -166,15 +166,14 @@ class PlayerResultItem(base.StatsItem):
         return makeHtmlString('html_templates:bootcamp/player_status', 'killed', ctx=ctx)
 
 
-class VideoButtonItem(base.StatsItem):
+class VideoButtonsItem(base.StatsItem):
     __slots__ = ()
 
     def _convert(self, record, reusable):
         player = BigWorld.player()
         teamResult = reusable.getPersonalTeamResult()
-        messageVO = g_bootcamp.getInterludeVideoPageData()
-        return None if player.spaFlags.getFlag(SPA_ATTRS.BOOTCAMP_VIDEO_DISABLED) or teamResult != PLAYER_TEAM_RESULT.WIN or not messageVO else {'label': backport.text(R.strings.bootcamp.battle.result.videoButton()),
-         'image': backport.image(R.images.gui.maps.icons.bootcamp.battle_result.videoButton())}
+        buttons = g_bootcamp.getInterludeVideoButtons()
+        return None if player.spaFlags.getFlag(SPA_ATTRS.BOOTCAMP_VIDEO_DISABLED) or teamResult != PLAYER_TEAM_RESULT.WIN or not buttons else buttons
 
 
 class CreditsBlock(base.StatsBlock):

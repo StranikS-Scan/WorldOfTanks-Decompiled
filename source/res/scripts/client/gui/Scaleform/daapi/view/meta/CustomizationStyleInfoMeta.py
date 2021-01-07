@@ -19,6 +19,9 @@ class CustomizationStyleInfoMeta(BaseDAAPIComponent):
     def as_buttonUpdateS(self, data):
         return self.flashObject.as_buttonUpdate(data) if self._isDAAPIInited() else None
 
+    def as_setBackgroundAlphaS(self, alpha):
+        return self.flashObject.as_setBackgroundAlpha(alpha) if self._isDAAPIInited() else None
+
     def as_showS(self):
         return self.flashObject.as_show() if self._isDAAPIInited() else None
 

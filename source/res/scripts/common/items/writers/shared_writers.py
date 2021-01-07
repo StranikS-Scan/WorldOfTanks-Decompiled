@@ -141,7 +141,7 @@ def writeSwingingSettings(item, section):
 
 def writeLodDist(dist, section, subsectionName, cache):
     reversedLodLevels = {value:key for key, value in cache.commonConfig['lodLevels'].items()}
-    _xml.rewriteString(section, subsectionName, reversedLodLevels[dist])
+    return _xml.rewriteString(section, subsectionName, reversedLodLevels[dist])
 
 
 def writeBuilders(builders, section, subsectionName):

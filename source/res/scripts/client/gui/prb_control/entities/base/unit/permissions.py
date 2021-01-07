@@ -35,8 +35,11 @@ class IUnitPermissions(IPrbPermissions):
     def canChangeComment(self):
         return False
 
-    def canInvokeAutoSearch(self):
-        return True
+    def canStartAutoSearch(self):
+        return False
+
+    def canStopAutoSearch(self):
+        return False
 
     def canStartBattleQueue(self):
         return False
@@ -119,8 +122,11 @@ class UnitPermissions(IUnitPermissions):
     def canChangeComment(self):
         return self._roles & UNIT_ROLE.CHANGE_ROSTER > 0 and not self._flags.isInIdle()
 
-    def canInvokeAutoSearch(self):
-        return self._roles & UNIT_ROLE.START_STOP_BATTLE > 0 and not self._flags.isInArena()
+    def canStartAutoSearch(self):
+        return self._roles & UNIT_ROLE.START_STOP_BATTLE > 0
+
+    def canStopAutoSearch(self):
+        return self._roles & UNIT_ROLE.START_STOP_BATTLE > 0
 
     def canStartBattleQueue(self):
         return self._roles & UNIT_ROLE.START_STOP_BATTLE > 0

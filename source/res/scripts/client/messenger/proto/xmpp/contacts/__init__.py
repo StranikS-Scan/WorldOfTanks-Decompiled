@@ -134,14 +134,18 @@ class VoipHandler(object):
         events.onChannelEntered -= self.__voip_onChannelEntered
         events.onChannelLeft -= self.__voip_onChannelLeft
 
-    def __voip_onChannelEntered(self, uri, _, isRejoin):
+    def __voip_onChannelEntered(self, uri, isTestChannel, isRejoin):
+        if isTestChannel:
+            return
         if self.playerCtx.getCachedItem('lastVoipUri') != uri and not isRejoin:
             self.usersStorage.removeTags({USER_TAG.MUTED}, MutedOnlyFindCriteria())
             g_messengerEvents.users.onUsersListReceived({USER_TAG.MUTED})
         else:
             self.playerCtx.setCachedItem('lastVoipUri', uri)
 
-    def __voip_onChannelLeft(self):
+    def __voip_onChannelLeft(self, _, wasTest):
+        if wasTest:
+            return
         self.playerCtx.setCachedItem('lastVoipUri', '')
         self.usersStorage.removeTags({USER_TAG.MUTED}, MutedOnlyFindCriteria())
         g_messengerEvents.users.onUsersListReceived({USER_TAG.MUTED})

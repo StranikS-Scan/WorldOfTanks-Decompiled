@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/HangarPoster.py
+import BigWorld
 from ClientSelectableObject import ClientSelectableObject
 from gui.game_control import CalendarInvokeOrigin
 from gui.shared import g_eventBus
@@ -12,8 +13,17 @@ class HangarPoster(ClientSelectableObject):
     _hangarSpace = dependency.descriptor(IHangarSpace)
     _calendarController = dependency.descriptor(ICalendarController)
 
+    def __init__(self):
+        super(HangarPoster, self).__init__()
+        self.__alphaFadeFashion = None
+        return
+
     def onEnterWorld(self, prereqs):
         super(HangarPoster, self).onEnterWorld(prereqs)
+        self.__alphaFadeFashion = BigWorld.WGAlphaFadeFashion()
+        self.__alphaFadeFashion.minAlpha = self.minAlpha
+        self.__alphaFadeFashion.maxAlphaDist = self.maxAlphaDistance * self.maxAlphaDistance
+        self.model.fashion = self.__alphaFadeFashion
         g_eventBus.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__onCameraEntityUpdated)
 
     def onLeaveWorld(self):

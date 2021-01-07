@@ -9,39 +9,24 @@ from debug_utils_bootcamp import LOG_CURRENT_EXCEPTION_BOOTCAMP
 from HintControllers import createPrimaryHintController, createSecondaryHintController, createReplayPlayHintSystem
 from soft_exception import SoftException
 from HintsBase import HINT_COMMAND
-from HintsMove import HintMove, HintMoveTurret, HintNoMove, HintNoMoveTurret, HintMoveToMarker
-from HintsScenario import HintUselessConsumable, HintExitGameArea, HintAvoidAndDestroy, HintStartNarrative, HintSectorClear, HintSniperOnDistance, HintLowHP
-from HintsDamage import HintCompositeDetrack, HintCompositeHealCommander, HintCompositeBurn
+from HintsMove import HintNoMove, HintNoMoveTurret, HintMoveToMarker
+from HintsScenario import HintUselessConsumable, HintExitGameArea, HintLowHP
 from HintsLobby import HintLobbyRotate
-from HintsShoot import HintSniper, HintSniperLevel0, HintShoot, HintAdvancedSniper, HintAim, HintTargetLock, HintWaitReload, HintShootWhileMoving, HintSecondarySniper, HintTargetUnLock
+from HintsShoot import HintAim, HintWaitReload, HintShootWhileMoving, HintSecondarySniper, HintTargetUnLock
 _Voiceover = namedtuple('_Voiceover', ('name', 'sound'))
 
 class HintSystem(object):
-    hintsBattleClasses = {HINT_TYPE.HINT_MOVE: HintMove,
-     HINT_TYPE.HINT_NO_MOVE: HintNoMove,
-     HINT_TYPE.HINT_MOVE_TURRET: HintMoveTurret,
+    hintsBattleClasses = {HINT_TYPE.HINT_NO_MOVE: HintNoMove,
      HINT_TYPE.HINT_NO_MOVE_TURRET: HintNoMoveTurret,
-     HINT_TYPE.HINT_MESSAGE_AVOID: HintAvoidAndDestroy,
-     HINT_TYPE.HINT_SNIPER: HintSniper,
-     HINT_TYPE.HINT_SHOOT: HintShoot,
-     HINT_TYPE.HINT_ADVANCED_SNIPER: HintAdvancedSniper,
      HINT_TYPE.HINT_SHOT_WHILE_MOVING: HintShootWhileMoving,
-     HINT_TYPE.HINT_REPAIR_TRACK: HintCompositeDetrack,
-     HINT_TYPE.HINT_USE_EXTINGUISHER: HintCompositeBurn,
-     HINT_TYPE.HINT_HEAL_CREW: HintCompositeHealCommander,
      HINT_TYPE.HINT_EXIT_GAME_AREA: HintExitGameArea,
-     HINT_TYPE.HINT_SNIPER_ON_DISTANCE: HintSniperOnDistance,
      HINT_TYPE.HINT_AIM: HintAim,
-     HINT_TYPE.HINT_TARGET_LOCK: HintTargetLock,
      HINT_TYPE.HINT_WAIT_RELOAD: HintWaitReload,
-     HINT_TYPE.HINT_START_NARRATIVE: HintStartNarrative,
      HINT_TYPE.HINT_USELESS_CONSUMABLE: HintUselessConsumable,
      HINT_TYPE.HINT_MOVE_TO_MARKER: HintMoveToMarker,
-     HINT_TYPE.HINT_SECTOR_CLEAR: HintSectorClear,
      HINT_TYPE.HINT_SECONDARY_SNIPER: HintSecondarySniper,
      HINT_TYPE.HINT_LOW_HP: HintLowHP,
-     HINT_TYPE.HINT_UNLOCK_TARGET: HintTargetUnLock,
-     HINT_TYPE.HINT_SNIPER_LEVEL0: HintSniperLevel0}
+     HINT_TYPE.HINT_UNLOCK_TARGET: HintTargetUnLock}
     hintsLobbyClasses = {HINT_TYPE.HINT_ROTATE_LOBBY: HintLobbyRotate}
     highPriorityVoiceovers = ('vo_bc_weakness_in_armor',)
 
@@ -105,22 +90,16 @@ class HintSystem(object):
                 hintController = createPrimaryHintController(self, hintId, typeId, False, timeCompleted, cooldownTimeout, message, voiceover)
                 self.__hintsNotCompleted.append(hintController)
             if commandId == HINT_COMMAND.SHOW_COMPLETED:
-                hintController = createPrimaryHintController(self, hintId, typeId, True, timeCompleted, cooldownTimeout, message, voiceover)
-                self.__hintsCompleted.append(hintController)
-            if commandId == HINT_COMMAND.SHOW_COMPLETED_WITH_HINT:
                 if self.__currentHint is not None and self.__currentHint.id == hintId:
                     self.__currentHint.complete()
                 else:
-                    correspondedHint = None
                     for curHint in self.__hintsNotCompleted:
                         if curHint.id == hintId:
-                            correspondedHint = curHint
+                            self.__hintsNotCompleted.remove(curHint)
                             break
 
-                    if correspondedHint is None:
-                        raise SoftException('Not found corresponded hint')
-                    self.__hintsNotCompleted.remove(correspondedHint)
-                    self.__hintsCompleted.append(createPrimaryHintController(self, hintId, typeId, True, timeCompleted, cooldownTimeout, message, voiceover))
+                    hintController = createPrimaryHintController(self, hintId, typeId, True, timeCompleted, cooldownTimeout, message, voiceover)
+                    self.__hintsCompleted.append(hintController)
             if commandId == HINT_COMMAND.HIDE:
                 if self.__currentHint is not None and self.__currentHint.id == hintId:
                     self.__currentHint.hide()

@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/classic/players_panel.py
-from account_helpers.settings_core.settings_constants import GAME
+from account_helpers.settings_core.settings_constants import GAME, BattleCommStorageKeys
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.meta.PlayersPanelMeta import PlayersPanelMeta
 from gui.Scaleform.genConsts.PLAYERS_PANEL_STATE import PLAYERS_PANEL_STATE
@@ -34,6 +34,7 @@ class PlayerPanelStateSetting(object):
 
 class PlayersPanel(PlayersPanelMeta, IAbstractPeriodView):
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(PlayersPanel, self).__init__()
@@ -57,9 +58,15 @@ class PlayersPanel(PlayersPanelMeta, IAbstractPeriodView):
     def _populate(self):
         super(PlayersPanel, self)._populate()
         self.addListener(events.GameEvent.NEXT_PLAYERS_PANEL_MODE, self._handleNextMode, EVENT_BUS_SCOPE.BATTLE)
+        if self.settingsCore:
+            self.settingsCore.onSettingsChanged += self.__onSettingsChanged
+            isChatVisible = bool(self.settingsCore.getSetting(BattleCommStorageKeys.SHOW_COM_IN_PLAYER_LIST))
+            self.as_setChatCommandsVisibilityS(isChatVisible)
 
     def _dispose(self):
         self.removeListener(events.GameEvent.NEXT_PLAYERS_PANEL_MODE, self._handleNextMode, EVENT_BUS_SCOPE.BATTLE)
+        if self.settingsCore:
+            self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         super(PlayersPanel, self)._dispose()
 
     def _handleNextMode(self, _):
@@ -67,3 +74,11 @@ class PlayersPanel(PlayersPanelMeta, IAbstractPeriodView):
         if PlayerPanelStateSetting.write(mode):
             self._mode = mode
             self.as_setPanelModeS(mode)
+
+    def __onSettingsChanged(self, diff):
+        playersPanelCommEnabled = diff.get(BattleCommStorageKeys.SHOW_COM_IN_PLAYER_LIST)
+        if playersPanelCommEnabled is None:
+            return
+        else:
+            self.as_setChatCommandsVisibilityS(bool(playersPanelCommEnabled))
+            return

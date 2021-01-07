@@ -96,6 +96,10 @@ def toggleFullStatsQuestProgress(isDown):
     g_eventBus.handleEvent(GameEvent(GameEvent.FULL_STATS_QUEST_PROGRESS, _makeKeyCtx(isDown=isDown)), scope=_SCOPE)
 
 
+def toggleVoipChannelEnabled():
+    g_eventBus.handleEvent(GameEvent(GameEvent.TOGGLE_VOIP_CHANNEL_ENABLED), scope=_SCOPE)
+
+
 def setNextPlayerPanelMode():
     g_eventBus.handleEvent(GameEvent(GameEvent.NEXT_PLAYERS_PANEL_MODE), scope=_SCOPE)
 

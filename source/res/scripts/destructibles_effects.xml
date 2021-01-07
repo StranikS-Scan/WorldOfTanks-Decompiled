@@ -9705,25 +9705,6 @@
         </effects>
       </variant1>
     </hd_env_AS_020_BambooRaft_05>
-    <inf_env_101_01_Well_01>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <hasHavokVersion>	true	</hasHavokVersion>
-            <file>	particles/Environment/objects/inf_env101_01_Well_01.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_stone_crash_light	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_env_101_01_Well_01>
     <inf_env_101_09_WoodenFurniture_02>
       <variant1>
         <stages>
@@ -22430,24 +22411,6 @@
         </effects>
       </variant1>
     </inf_envAF_005_ClayJug_1_04_hit>
-    <inf_envAF_005_ClayJug_1_05>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_envAF_005_ClayJug_1.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_stone_crash_mid	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_envAF_005_ClayJug_1_05>
     <inf_envAF_005_ClayJug_1_05_01>
       <variant1>
         <stages>
@@ -24359,24 +24322,6 @@
         </effects>
       </variant1>
     </inf_env_EU_047_Lion_hit>
-    <inf_env427_ParkSculpture1>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_env427_ParkSculpture1.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_stone_crash_mid	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_env427_ParkSculpture1>
     <inf_env427_ParkSculpture1_01>
       <variant1>
         <stages>
@@ -29695,10 +29640,10 @@
             <startKey>	base	</startKey>
             <wwsound>	obj_generative	</wwsound>
             <params>
-              <wood_1>	77.99	</wood_1>
-              <glass>	23.51	</glass>
-              <debrisAmount>	56.6	</debrisAmount>
-              <weight>	6567.18	</weight>
+              <wood_1>	70.000000	</wood_1>
+              <debrisAmount>	30.000000	</debrisAmount>
+              <weight>	5250.000000	</weight>
+              <wood_2>	10.000000	</wood_2>
             </params>
           </destructionSound>
         </effects>
@@ -29719,10 +29664,10 @@
             <startKey>	base	</startKey>
             <wwsound>	obj_generative	</wwsound>
             <params>
-              <wood_1>	77.99	</wood_1>
-              <glass>	23.51	</glass>
-              <debrisAmount>	56.6	</debrisAmount>
+              <wood_1>	70.000000	</wood_1>
+              <debrisAmount>	30.000000	</debrisAmount>
               <weight>	6567.18	</weight>
+              <wood_2>	10.000000	</wood_2>
             </params>
           </destructionSound>
         </effects>
@@ -47800,24 +47745,6 @@
         </effects>
       </variant1>
     </inf_env_SU_023_MillPipe_hit_01_hit>
-    <inf_env_SU_023_MillPipe_01_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_env_SU_023_MillPipe.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_stone_building_mid	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_env_SU_023_MillPipe_01_ram>
     <inf_env_SU_023_MillPipe_hit>
       <variant1>
         <stages>

@@ -16,9 +16,10 @@ class TankRenderMode(object):
     CRASH = 1
     SERVER_COLLISION = 2
     CLIENT_COLLISION = 3
-    OVERLAY_COLLISION = 4
-    ARMOR_WIDTH_COLLISION = 5
-    DISABLE = 6
+    CRASH_COLLISION = 4
+    OVERLAY_COLLISION = 5
+    ARMOR_WIDTH_COLLISION = 6
+    DISABLE = 7
 
 
 class TankCollisionPartNames(object):
@@ -194,8 +195,13 @@ def getCollisionModelsFromDesc(vehicleDesc, state):
     for partName in TankPartNames.ALL:
         part = getattr(vehicleDesc, partName)
         if state == TankRenderMode.CLIENT_COLLISION:
-            paths.append(part.hitTester.edClientBspModel)
+            paths.append(part.hitTesterManager.edClientBspModel)
         if state in (TankRenderMode.SERVER_COLLISION, TankRenderMode.ARMOR_WIDTH_COLLISION):
-            paths.append(part.hitTester.edServerBspModel)
+            paths.append(part.hitTesterManager.edServerBspModel)
+        if state == TankRenderMode.CRASH_COLLISION:
+            if part.hitTesterManager.edCrashBspModel != '':
+                paths.append(part.hitTesterManager.edCrashBspModel)
+            else:
+                paths.append(part.hitTesterManager.edClientBspModel)
 
     return VehiclePartsTuple(*paths)

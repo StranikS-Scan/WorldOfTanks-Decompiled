@@ -65,6 +65,8 @@ class AvatarEpicData(object):
             VHF = VEHICLE_HIT_FLAGS
             if hitFlags & VHF.VEHICLE_KILLED:
                 return
+            if hitFlags & VHF.VEHICLE_WAS_DEAD_BEFORE_ATTACK:
+                return
             if self.team == destructibleObj.team:
                 return
             sound = None

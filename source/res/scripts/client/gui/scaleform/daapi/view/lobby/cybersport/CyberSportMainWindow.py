@@ -238,7 +238,7 @@ class CyberSportMainWindow(CyberSportMainWindowMeta):
          'countDownSeconds': countDownSeconds,
          'contextMessage': ctxMessage,
          'playersReadiness': playersReadiness,
-         'canInvokeAutoSearch': permissions.canInvokeAutoSearch(),
+         'canInvokeAutoSearch': permissions.canStartAutoSearch(),
          'canInvokeBattleQueue': permissions.canStopBattleQueue()}
         return model
 

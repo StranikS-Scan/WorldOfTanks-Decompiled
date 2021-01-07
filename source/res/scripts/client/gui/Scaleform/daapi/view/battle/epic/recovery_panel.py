@@ -98,6 +98,10 @@ class RecoveryPanel(RecoveryPanelMeta):
                     if not self.__cooldownTimerCallback:
                         self.__tick()
             self.__state = state
+        elif eventID == _EVENT_ID.VEHICLE_RECOVERY_KEY_PRESSED:
+            self.as_displayHintS(True, False)
+            self.__cancelHideCallback(_CALLBACK_HIDE.HINT)
+            self.__hideHintCB = BigWorld.callback(_SHOW_HINT_TIME, self.__hideHint)
 
     def __hideHint(self):
         self.as_displayHintS(False, True)

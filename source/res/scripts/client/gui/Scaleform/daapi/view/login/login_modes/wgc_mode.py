@@ -5,16 +5,13 @@ from constants import IS_CHINA
 from gui.Scaleform.locale.MENU import MENU
 from gui.impl import backport
 from gui.impl.gen import R
-from helpers import dependency
 from helpers.i18n import makeString as _ms
-from skeletons.account_helpers.settings_core import ISettingsCore
 from account_helpers.settings_core.settings_constants import GAME
 from base_mode import BaseMode
 from predefined_hosts import g_preDefinedHosts
 _g_firstEntry = True
 
 class WgcMode(BaseMode):
-    _settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, *args):
         super(WgcMode, self).__init__(*args)
@@ -26,11 +23,15 @@ class WgcMode(BaseMode):
     def login(self):
         return BigWorld.WGC_getUserName() if self.__wgcStoredUserSelected else ''
 
+    @property
+    def showRememberServerWarning(self):
+        return not self._loginManager.settingsCore.getSetting(GAME.LOGIN_SERVER_SELECTION) and self._loginManager.getPreference('serverSelectWasSet')
+
     def init(self):
         global _g_firstEntry
         self._loginManager.addOnWgcErrorListener(self.__onWgcError)
         if self.__wgcStoredUserSelected:
-            autoLogin = _g_firstEntry and not self._settingsCore.getSetting(GAME.LOGIN_SERVER_SELECTION)
+            autoLogin = _g_firstEntry and not self._loginManager.settingsCore.getSetting(GAME.LOGIN_SERVER_SELECTION) and not self._loginManager.getPreference('serverSelectWasSet')
             if autoLogin:
                 self._loginManager.tryWgcLogin()
             _g_firstEntry = False

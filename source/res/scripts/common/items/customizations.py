@@ -14,8 +14,10 @@ from constants import IS_CELLAPP, IS_BASEAPP, IS_EDITOR
 from items import decodeEnum, makeIntCompactDescrByID
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 import enum
-from typing import List, Dict, Type, Tuple, Any, TypeVar, Optional, MutableMapping
+from typing import List, Dict, Type, Tuple, Any, TypeVar, Optional, MutableMapping, TYPE_CHECKING
 from wrapped_reflection_framework import ReflectionMetaclass
+if TYPE_CHECKING:
+    from items.vehicles import VehicleDescrType
 
 class FieldTypes(object):
     VARINT = 2
@@ -1009,9 +1011,6 @@ def getOutfitType(arenaKind, bonusType):
 
 
 def getBattleOutfit(getter, vehType, arenaKind, bonusType):
-    styleOutfitDescr = getter(vehType, SeasonType.EVENT)
-    if styleOutfitDescr:
-        return parseOutfitDescr(styleOutfitDescr)
     season = getOutfitType(arenaKind, bonusType)
     seasonOutfitDescr = getter(vehType, season)
     if seasonOutfitDescr:

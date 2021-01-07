@@ -30,7 +30,7 @@ def writeWheelsAndGroups(wheelsConfig, section):
             _xml.rewriteBool(subsection, 'isLeading', wheel.isLeading)
             _xml.rewriteFloat(subsection, 'syncAngle', wheel.leadingSyncAngle, defSyncAngle)
             _xml.rewriteVector3(subsection, 'wheelPos', wheel.position, Vector3(0, 0, 0))
-            _writeHitTester(wheel.hitTester, None, subsection, 'hitTester')
+            _writeHitTester(wheel.hitTesterManager, None, subsection, 'hitTester')
             _writeArmor(wheel.materials, None, subsection, 'armor', optional=True, index=wheelId)
             wheelId += 1
 
@@ -169,3 +169,11 @@ def writeSplineDesc(splineDesc, section, cache):
                 writeOneSectionParams(splineDesc, node)
 
         return
+
+
+def writeMudEffect(effect, cache, section, subsectionName):
+    for n, e in cache._customEffects['slip'].iteritems():
+        if e is effect:
+            return _xml.rewriteString(section, subsectionName, n)
+
+    return False

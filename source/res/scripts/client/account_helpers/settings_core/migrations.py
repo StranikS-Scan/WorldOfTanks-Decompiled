@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/migrations.py
 import BigWorld
 import constants
-from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys, BattleCommStorageKeys
+from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys, BattleCommStorageKeys, OnceOnlyHints
 from adisp import process, async
 from debug_utils import LOG_DEBUG
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
@@ -525,6 +525,20 @@ def _migrateTo60(core, data, initialized):
         gameData[BattleCommStorageKeys.SHOW_LOCATION_MARKERS] = True
 
 
+def _migrateTo61(core, data, initialized):
+    data['gameExtData'][GAME.DISPLAY_PLATOON_MEMBERS] = True
+
+
+def _migrateTo62(core, data, initialized):
+    data['onceOnlyHints2'][OnceOnlyHints.PLATOON_BTN_HINT] = initialized
+
+
+def _migrateTo63(core, data, initialized):
+    gameData = data['gameExtData']
+    gameData[GAME.MINIMAP_MIN_SPOTTING_RANGE] = False
+    gameData[GAME.ENABLE_REPAIR_TIMER] = True
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -759,6 +773,18 @@ _versions = ((1,
   False),
  (60,
   _migrateTo60,
+  False,
+  False),
+ (61,
+  _migrateTo61,
+  False,
+  False),
+ (62,
+  _migrateTo62,
+  False,
+  False),
+ (63,
+  _migrateTo63,
   False,
   False))
 

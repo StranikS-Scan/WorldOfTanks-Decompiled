@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class BonusModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=5, commands=0):
+    def __init__(self, properties=6, commands=0):
         super(BonusModel, self).__init__(properties=properties, commands=commands)
 
     def getIndex(self):
@@ -38,6 +38,12 @@ class BonusModel(ViewModel):
     def setTooltipId(self, value):
         self._setString(4, value)
 
+    def getLabel(self):
+        return self._getString(5)
+
+    def setLabel(self, value):
+        self._setString(5, value)
+
     def _initialize(self):
         super(BonusModel, self)._initialize()
         self._addNumberProperty('index', 0)
@@ -45,3 +51,4 @@ class BonusModel(ViewModel):
         self._addStringProperty('value', '')
         self._addBoolProperty('isCompensation', False)
         self._addStringProperty('tooltipId', '')
+        self._addStringProperty('label', '')

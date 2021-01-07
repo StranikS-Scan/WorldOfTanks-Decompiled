@@ -66,7 +66,6 @@ class _CustomizationEvents(object):
         self.onEditModeEnabled = Event.Event(self._eventsManager)
         self.onPersonalNumberCleared = Event.Event(self._eventsManager)
         self.onProlongStyleRent = Event.Event(self._eventsManager)
-        self.onCloseWindow = Event.Event(self._eventsManager)
 
     def fini(self):
         self._eventsManager.clear()
@@ -92,8 +91,6 @@ class CustomizationContext(object):
         self.__c11nCameraManager = C11nHangarCameraManager()
         self.__stylesDiffsCache = StyleDiffsCache()
         self.__carouselItems = None
-        self.__outfitIsApplying = False
-        self.__exitCallback = None
         return
 
     @property
@@ -141,10 +138,6 @@ class CustomizationContext(object):
     @property
     def stylesDiffsCache(self):
         return self.__stylesDiffsCache
-
-    @property
-    def isOutfitApplying(self):
-        return self.__outfitIsApplying
 
     def setIsItemsOnAnotherVeh(self, value):
         self.__isItemsOnAnotherVeh = value
@@ -219,14 +212,6 @@ class CustomizationContext(object):
             self.changeMode(CustomizationModes.EDITABLE_STYLE, source=source)
             return
 
-    def getExitCallback(self):
-        return self.__exitCallback
-
-    def previewStyle(self, style, exitCallback=None, source=None):
-        self.__exitCallback = exitCallback
-        self.changeMode(CustomizationModes.STYLED, source=source)
-        self.events.onShowStyleInfo(style)
-
     def changeModeWithProgressionDecal(self, itemCD, scrollToItem=False):
         goToEditableStyle = False
         if self.__modeId in (CustomizationModes.STYLED, CustomizationModes.EDITABLE_STYLE):
@@ -244,7 +229,9 @@ class CustomizationContext(object):
         if season not in SeasonType.COMMON_SEASONS:
             _logger.warning('Wrong season: %s', season)
             return
+        oldSeason = self.__season
         self.__season = season
+        self.removeOldSeasonPreview(oldSeason)
         self.refreshOutfit()
         self.events.onSeasonChanged(season)
 
@@ -260,6 +247,10 @@ class CustomizationContext(object):
     def unselectItem(self):
         self.mode.unselectItem()
 
+    def removeOldSeasonPreview(self, season):
+        outfit = self.mode.getModifiedOutfit(season)
+        outfit.removePreview()
+
     def refreshOutfit(self, season=None):
         outfit = self.mode.getModifiedOutfit(season)
         if season is not None and season != self.season:
@@ -274,11 +265,9 @@ class CustomizationContext(object):
     @process('customizationApply')
     def applyItems(self, purchaseItems, callback):
         self._itemsCache.onSyncCompleted -= self.__onCacheResync
-        self.__outfitIsApplying = True
         isModeChanged = self.modeId != self.__startMode
         yield self.mode.applyItems(purchaseItems, isModeChanged)
         self.__onCacheResync()
-        self.__outfitIsApplying = False
         self._itemsCache.onSyncCompleted += self.__onCacheResync
         callback(None)
         return
@@ -298,7 +287,7 @@ class CustomizationContext(object):
 
         def _callback(resultID):
             if not isCodeValid(resultID):
-                _logger.error('Error occurred while trying to reset c11n items novelty, reason by resultId = %d: %s', resultID, code2str(resultID))
+                _logger.error('Error occurred while trying to reset c11n items=%s novelty, reason by resultId = %d: %s', itemsList, resultID, code2str(resultID))
 
         BigWorld.player().shop.resetC11nItemsNovelty([ (g_currentVehicle.item.intCD, intCD) for intCD in itemsList ], _callback)
 

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/AccountUnitAPI.py
+from typing import Optional as TOptional
 import constants
 from constants import PREBATTLE_TYPE
 from UnitBase import UNIT_SLOT, CLIENT_UNIT_CMD, INV_ID_CLEAR_VEHICLE
@@ -16,7 +17,7 @@ class UNIT_API:
 
 UNIT_API_NAMES = dict([ (v, k) for k, v in UNIT_API.__dict__.iteritems() if not k.startswith('_') ])
 
-def makeExternalRequestID(unitApiID, webRequestID):
+def makeServerRequestID(unitApiID, webRequestID):
     return unitApiID << 32 | webRequestID & 4294967295L
 
 
@@ -151,18 +152,18 @@ class UnitClientAPI(object):
     def setDevMode(self, isDevMode=True):
         return self._doUnitCmd(CLIENT_UNIT_CMD.SET_UNIT_DEV_MODE, int(isDevMode)) if constants.IS_DEVELOPMENT else None
 
-    def startBattle(self, vehInvID=0, gameplaysMask=None, arenaTypeID=0):
+    def startBattle(self, vehInvID=0, gameplaysMask=None, arenaTypeID=0, stopAutoSearch=False):
         if gameplaysMask is not None:
             self.setGameplaysMask(gameplaysMask)
         if arenaTypeID != 0:
             self.setArenaType(arenaTypeID)
-        return self._doUnitCmd(CLIENT_UNIT_CMD.START_UNIT_BATTLE, vehInvID)
+        return self._doUnitCmd(CLIENT_UNIT_CMD.START_UNIT_BATTLE, vehInvID, int(stopAutoSearch))
 
     def stopBattle(self):
         return self._doUnitCmd(CLIENT_UNIT_CMD.STOP_UNIT_BATTLE)
 
-    def startAutoSearch(self):
-        return self._doUnitCmd(CLIENT_UNIT_CMD.START_AUTO_SEARCH)
+    def startAutoSearch(self, userFilterFlags):
+        return self._doUnitCmd(CLIENT_UNIT_CMD.START_AUTO_SEARCH, userFilterFlags)
 
     def stopAutoSearch(self):
         return self._doUnitCmd(CLIENT_UNIT_CMD.STOP_AUTO_SEARCH)

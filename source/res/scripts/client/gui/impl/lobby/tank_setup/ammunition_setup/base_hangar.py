@@ -199,7 +199,6 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
             self.__closeWindow()
             return
         self._vehItem.getItem().settings = g_currentVehicle.item.settings
-        self._vehItem.getItem().setOutfits(g_currentVehicle.item)
         self._tankSetup.currentVehicleUpdated(g_currentVehicle.item)
         self._tankSetup.update(fullUpdate=True)
         self._updateAmmunitionPanel()

@@ -1,9 +1,14 @@
 <PVESpawnPoint.def>
   <Domain>	CELL	</Domain>
+  <NonChunk>	True	</NonChunk>
   <Properties>
     <defaultModelName>
       <Type>	STRING	</Type>
       <Default>	helpers/models/PVESpawnPoint_Tank.model	</Default>
     </defaultModelName>
+    <name>
+      <Type>	STRING	</Type>
+      <Editable>	True	</Editable>
+    </name>
   </Properties>
 </PVESpawnPoint.def>

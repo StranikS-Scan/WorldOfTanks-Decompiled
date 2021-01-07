@@ -44,7 +44,6 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.utils import IHangarSpace
-from skeletons.new_year import ITalismanSceneController
 from soft_exception import SoftException
 from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT_MIN
 StreamData = namedtuple('StreamData', ['data',
@@ -78,7 +77,6 @@ def _isStrList(l):
 class _ClientCommandProxy(object):
     _COMMAND_SIGNATURES = (('doCmdStr', lambda args: len(args) == 1 and _isStr(args[0])),
      ('doCmdIntStr', lambda args: len(args) == 2 and _isInt(args[0]) and _isStr(args[1])),
-     ('doCmdInt', lambda args: len(args) == 1 and all([ _isInt(arg) for arg in args ])),
      ('doCmdInt2', lambda args: len(args) == 2 and all([ _isInt(arg) for arg in args ])),
      ('doCmdInt3', lambda args: len(args) == 3 and all([ _isInt(arg) for arg in args ])),
      ('doCmdInt4', lambda args: len(args) == 4 and all([ _isInt(arg) for arg in args ])),
@@ -116,7 +114,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     lobbyContext = dependency.descriptor(ILobbyContext)
     connectionMgr = dependency.descriptor(IConnectionManager)
     hangarSpace = dependency.descriptor(IHangarSpace)
-    talismanCtrl = dependency.descriptor(ITalismanSceneController)
 
     def __init__(self):
         global g_accountRepository
@@ -206,7 +203,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInRandomQueue = False
         self.isInTutorialQueue = False
         self.isInBootcampQueue = False
-        self.isInUnitAssembler = False
         self.isInEventBattles = False
         self.isInSandboxQueue = False
         self.isInRankedQueue = False
@@ -400,7 +396,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             return
 
     def isInBattleQueue(self):
-        return self.isInRandomQueue or self.isInTutorialQueue or self.isInBootcampQueue or self.isInUnitAssembler or self.isInEventBattles or self.isInSandboxQueue or self.isInRankedQueue or self.isInEpicQueue
+        return self.isInRandomQueue or self.isInTutorialQueue or self.isInBootcampQueue or self.isInEventBattles or self.isInSandboxQueue or self.isInRankedQueue or self.isInEpicQueue
 
     def onEnqueued(self, queueType):
         LOG_DEBUG('onEnqueued', queueType)
@@ -411,9 +407,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             pass
         elif queueType == QUEUE_TYPE.BOOTCAMP:
             pass
-        elif queueType == QUEUE_TYPE.UNIT_ASSEMBLER:
-            self.isInUnitAssembler = True
-            events.onEnqueuedUnitAssembler()
         elif queueType == QUEUE_TYPE.EVENT_BATTLES:
             self.isInEventBattles = True
             events.onEnqueuedEventBattles()
@@ -439,8 +432,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             events.onTutorialEnqueueFailure(errorCode, errorStr)
         elif queueType == QUEUE_TYPE.BOOTCAMP:
             events.onBootcampEnqueueFailure(errorCode, errorStr)
-        elif queueType == QUEUE_TYPE.UNIT_ASSEMBLER:
-            events.onEnqueueUnitAssemblerFailure(errorCode, errorStr)
         elif queueType == QUEUE_TYPE.EVENT_BATTLES:
             events.onEnqueueEventBattlesFailure(errorCode, errorStr)
         elif queueType == QUEUE_TYPE.SANDBOX:
@@ -461,9 +452,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.TUTORIAL:
             self.isInTutorialQueue = False
             events.onTutorialDequeued()
-        elif queueType == QUEUE_TYPE.UNIT_ASSEMBLER:
-            self.isInUnitAssembler = False
-            events.onDequeuedUnitAssembler()
         elif queueType == QUEUE_TYPE.EVENT_BATTLES:
             self.isInEventBattles = False
             events.onDequeuedEventBattles()
@@ -518,9 +506,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.BOOTCAMP:
             self.isInBootcampQueue = False
             events.onKickedFromBootcampQueue()
-        elif queueType == QUEUE_TYPE.UNIT_ASSEMBLER:
-            self.isInUnitAssembler = False
-            events.onKickedFromUnitAssembler()
         elif queueType == QUEUE_TYPE.UNITS:
             events.onKickedFromUnitsQueue()
         elif queueType == QUEUE_TYPE.EVENT_BATTLES:
@@ -606,9 +591,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def onUnitBrowserResultsUpdate(self, *args):
         self.unitBrowser.onResultsUpdate(*args)
 
-    def onUnitAssemblerSuccess(self, *args):
-        self.unitBrowser.onSearchSuccess(*args)
-
     def onKickedFromArena(self, reasonCode):
         LOG_DEBUG('onKickedFromArena', reasonCode)
         self.isInRandomQueue = False
@@ -661,7 +643,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.prebattle = ClientPrebattle.ClientPrebattle(ctx['prebattleID'])
         self.isInRandomQueue = ctx.get('isInRandomQueue', False)
         self.isInTutorialQueue = ctx.get('isInTutorialQueue', False)
-        self.isInTutorialQueue = ctx.get('isInUnitAssembler', False)
         self._initTimeCorrection(ctx)
         if 'isLongDisconnectedFromCenter' in ctx:
             isLongDisconnectedFromCenter = ctx['isLongDisconnectedFromCenter']
@@ -750,7 +731,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def requestPlayerInfo(self, databaseID, callback):
         if events.isPlayerEntityChanging:
             return
-        proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, ext.get('databaseID', 0L), ext.get('dossier', ''), ext.get('clanDBID', 0), ext.get('clanInfo', None), ext.get('globalRating', 0), ext.get('eSportSeasons', {}), ext.get('ranked', {}))
+        proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, ext.get('databaseID', 0L), ext.get('dossier', ''), ext.get('clanDBID', 0), ext.get('clanInfo', None), ext.get('globalRating', 0), ext.get('eSportSeasons', {}), ext.get('ranked', {}), ext.get('dogTag', {}))
         self._doCmdInt3(AccountCommands.CMD_REQ_PLAYER_INFO, databaseID, 0, 0, proxy)
 
     def requestAccountDossier(self, accountID, callback):
@@ -843,16 +824,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def dequeueSandbox(self):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_SANDBOX, 0, 0, 0)
-
-    def enqueueUnitAssembler(self, compactDescrs):
-        if events.isPlayerEntityChanging:
-            return
-        args = list(compactDescrs)
-        self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_UNIT_ASSEMBLER, args)
-
-    def dequeueUnitAssembler(self):
-        if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_UNIT_ASSEMBLER, 0, 0, 0)
 
     def enqueueEventBattles(self, vehInvIDs):
         if not events.isPlayerEntityChanging:
@@ -1211,9 +1182,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def _doCmdIntArr(self, cmd, arr, callback):
         return self.__doCmd('doCmdIntArr', cmd, callback, arr)
-
-    def _doCmdIntArrStr(self, cmd, arr, s, callback):
-        return self.__doCmd('doCmdIntArrStr', cmd, callback, arr, s)
 
     def _doCmdIntStrArr(self, cmd, int1, strArr, callback):
         return self.__doCmd('doCmdIntStrArr', cmd, callback, int1, strArr)

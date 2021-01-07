@@ -27,6 +27,7 @@
     <A-220B_1_IGR>	60002	</A-220B_1_IGR>
     <_Type94_Hei_bootcamp>	64001	</_Type94_Hei_bootcamp>
     <Development_Radio>	65000	</Development_Radio>
+    <_9RM_shop_bootcamp>	4	</_9RM_shop_bootcamp>
   </ids>
   <shared>
     <_9RM>
@@ -343,5 +344,17 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	0	</repairCost>
     </Development_Radio>
+    <_9RM_shop_bootcamp>
+      <userString>	#china_vehicles:_9RM_shop	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	24240	</price>
+      <weight>	100	</weight>
+      <distance>	525	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+      <notInShop>	True	</notInShop>
+    </_9RM_shop_bootcamp>
   </shared>
 </radios.xml>

@@ -162,6 +162,8 @@ class PersonalEntriesPlugin(common.SimplePlugin):
                     self.__addMaxViewRangeCircle()
                 if self._canShowViewRangeCircle():
                     self.__addViewRangeCircle()
+                if self._canShowMinSpottingRangeCircle():
+                    self.__addMinSpottingRangeCircle()
                 self._updateCirlcesState()
             return
 
@@ -191,6 +193,11 @@ class PersonalEntriesPlugin(common.SimplePlugin):
                     self.__addMaxViewRangeCircle()
                 else:
                     self.__removeMaxViewRangeCircle()
+            if settings_constants.GAME.MINIMAP_MIN_SPOTTING_RANGE in diff:
+                if self._canShowMinSpottingRangeCircle():
+                    self.__addMinSpottingRangeCircle()
+                else:
+                    self.__removeMinSpottingRangeCircle()
             if settings_constants.GAME.MINIMAP_VIEW_RANGE in diff:
                 if self._canShowViewRangeCircle():
                     self.__addViewRangeCircle()
@@ -410,6 +417,10 @@ class PersonalEntriesPlugin(common.SimplePlugin):
                     self.__addViewRangeCircle()
                 else:
                     self.__removeViewRangeCircle()
+                if self._canShowMinSpottingRangeCircle():
+                    self.__addMinSpottingRangeCircle()
+                else:
+                    self.__removeMinSpottingRangeCircle()
                 self._setActive(self.__circlesID, True)
             elif self.__circlesID is not None:
                 self._setActive(self.__circlesID, False)
@@ -420,6 +431,9 @@ class PersonalEntriesPlugin(common.SimplePlugin):
 
     def _canShowMaxViewRangeCircle(self):
         return self.settingsCore.getSetting(settings_constants.GAME.MINIMAP_MAX_VIEW_RANGE)
+
+    def _canShowMinSpottingRangeCircle(self):
+        return self.settingsCore.getSetting(settings_constants.GAME.MINIMAP_MIN_SPOTTING_RANGE)
 
     def _canShowDrawRangeCircle(self):
         return self.settingsCore.getSetting(settings_constants.GAME.MINIMAP_DRAW_RANGE)
@@ -484,6 +498,16 @@ class PersonalEntriesPlugin(common.SimplePlugin):
     def __removeMaxViewRangeCircle(self):
         self.__circlesVisibilityState &= ~settings.CIRCLE_TYPE.MAX_VIEW_RANGE
         self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_DEL_MAX_VIEW_CIRCLE)
+
+    def __addMinSpottingRangeCircle(self):
+        if self.__circlesVisibilityState & settings.CIRCLE_TYPE.MIN_SPOTTING_RANGE:
+            return
+        self.__circlesVisibilityState |= settings.CIRCLE_TYPE.MIN_SPOTTING_RANGE
+        self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_ADD_MIN_SPOTTING_CIRCLE, settings.CIRCLE_STYLE.COLOR.MIN_SPOTTING_RANGE, settings.CIRCLE_STYLE.ALPHA, VISIBILITY.MIN_RADIUS)
+
+    def __removeMinSpottingRangeCircle(self):
+        self.__circlesVisibilityState &= ~settings.CIRCLE_TYPE.MIN_SPOTTING_RANGE
+        self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_DEL_MIN_SPOTTING_CIRCLE)
 
     def __addViewRangeCircle(self):
         if self.__circlesVisibilityState & settings.CIRCLE_TYPE.VIEW_RANGE:

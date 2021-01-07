@@ -185,6 +185,17 @@ def getDefaultChassisXPhysicsCfg():
      'roadWheelPositions': (-2.5, -1.25, 0.0, 1.25, 2.5)}
 
 
+def getDeafultVehicleModelXPhysicsCfg():
+    return {'hullSize': (0.0, 0.0, 0.0),
+     'hullBoxOffsetZ': 0.0,
+     'turretTopPos': (0.0, 0.0, 0.0),
+     'turretTopWidth': 0.0}
+
+
+def getDefaultWheeledVehicleModelXPhysicsCfg():
+    return dict(getDeafultVehicleModelXPhysicsCfg(), **{'wheelSize': (0.0, 0.0, 0.0)})
+
+
 def getDefaultWheeledChassisXPhysicsCfg():
     return dict(getDefaultChassisXPhysicsCfg(), **{'axleSteeringLockAngles': (0.0, 0.0, 0.0, 30.0),
      'axleSteeringAngles': (0.0, 0.0, 0.0, 15.0),
@@ -228,6 +239,20 @@ def getDefaultWheeledChassisXPhysicsCfg():
                  'impulse': 0.0}})
 
 
+def getDefaultTankVehicleXPhysicsShapeCfg():
+    return dict(getDefaultVehicleXPhysicsShapeCfg(), **{'modelShape': getDeafultVehicleModelXPhysicsCfg(),
+     'crashedModelShape': getDeafultVehicleModelXPhysicsCfg()})
+
+
+def getDefaultWheeledVehicleXPhysicsShapeCfg():
+    return dict(getDefaultVehicleXPhysicsShapeCfg(), **{'wheelZPenetration': 0.8,
+     'wheelXOffset': 0.0,
+     'terrBoardAngle': 20.0,
+     'terrFrontChamferFraction': 0.75,
+     'modelShape': getDefaultWheeledVehicleModelXPhysicsCfg(),
+     'crashedModelShape': getDefaultWheeledVehicleModelXPhysicsCfg()})
+
+
 def getDefaultVehicleXPhysicsShapeCfg():
     return {'useComplexForm': False,
      'isParametricShape': True,
@@ -240,14 +265,6 @@ def getDefaultVehicleXPhysicsShapeCfg():
      'auxClearance': 0.8}
 
 
-def getDefaultWheeledVehicleXPhysicsShapeCfg():
-    return dict(getDefaultVehicleXPhysicsShapeCfg(), **{'wheelZPenetration': 0.8,
-     'wheelSize': (0.0, 0.0, 0.0),
-     'wheelXOffset': 0.0,
-     'terrBoardAngle': 20.0,
-     'terrFrontChamferFraction': 0.75})
-
-
 def getDefaultVehicleXPhysicsCfg():
     return {'mode_index': 0,
      'gravity': 9.81,
@@ -256,6 +273,7 @@ def getDefaultVehicleXPhysicsCfg():
      'overspeedResistBaseFactor': 0.5,
      'allowedRPMExcessUnbounded': 1.4,
      'absoluteSpeedLimit': 25.0,
+     'hasCrashedModel': False,
      'engine': {'engineTorque': ((500.0, 2.0),
                                  (1000.0, 3.0),
                                  (2000.0, 2.5),
@@ -331,7 +349,7 @@ def getDefaultVehicleXPhysicsCfg():
 
 def getDefaultTankXPhysicsCfg():
     return dict(getDefaultVehicleXPhysicsCfg(), **{'vehiclePhysicsType': VEHICLE_PHYSICS_TYPE.TANK,
-     'shape': getDefaultVehicleXPhysicsShapeCfg(),
+     'shape': getDefaultTankVehicleXPhysicsShapeCfg(),
      'chassis': getDefaultChassisXPhysicsCfg()})
 
 
@@ -460,6 +478,61 @@ def configurePhysics(physics, baseCfg, typeDescr, gravityFactor, updateSiegeMode
     return cfg
 
 
+def __computeModelShape(cfg, modelShapeCfg, typeDesc, hitTesters):
+    bmin, bmax, _ = hitTesters['chassis'].bbox
+    sizeX = bmax[0] - bmin[0]
+    bminHull, bmaxHull, _ = hitTesters['hull'].bbox
+    if typeDesc.type.useHullZSize:
+        sizeZ = bmaxHull[2] - bminHull[2]
+    else:
+        sizeZ = bmax[2] - bmin[2]
+    if typeDesc.type.useHullZOffset:
+        offsZ = (bmaxHull[2] + bminHull[2]) * 0.5
+    else:
+        offsZ = (bmin[2] + bmax[2]) * 0.5
+    modelShapeCfg['hullSize'] = Math.Vector3((sizeX, cfg['bodyHeight'], sizeZ))
+    modelShapeCfg['hullBoxOffsetZ'] = offsZ
+    if typeDesc.isWheeledVehicle:
+        wheelBbMin, wheelBbMax, _ = typeDesc.chassis.wheels.wheels[0].hitTester.bbox
+        wheelSize = wheelBbMax - wheelBbMin
+        modelShapeCfg['wheelSize'] = wheelSize
+    turretMin, turretMax, _ = hitTesters['turret'].bbox
+    _, gunMax, _ = hitTesters['gun'].bbox
+    hullPos = typeDesc.chassis.hullPosition
+    turretPos = typeDesc.hull.turretPositions[0]
+    topPos = hullPos + turretPos
+    turretTopOffset = max(turretMax[1], typeDesc.turret.gunPosition[1] + gunMax[1])
+    topPos.y += turretTopOffset - cfg['clearance'] - cfg['bodyHeight']
+    topPos.y = max(0.1, topPos.y * 0.8)
+    topPos.y += cfg['bodyHeight'] * 0.5
+    modelShapeCfg['turretTopPos'] = topPos
+    modelShapeCfg['turretTopWidth'] = max(sizeX * 0.25, (turretMax[0] - turretMin[0]) * 0.7)
+
+
+def configureModelShapePhysics(cfg, typeDesc):
+    hitTesters = {'model': {'hull': typeDesc.hull.hitTesterManager.modelHitTester,
+               'chassis': typeDesc.chassis.hitTesterManager.modelHitTester,
+               'turret': typeDesc.turret.hitTesterManager.modelHitTester,
+               'gun': typeDesc.gun.hitTesterManager.modelHitTester},
+     'crashedModel': {'hull': typeDesc.hull.hitTesterManager.crashedModelHitTester,
+                      'chassis': typeDesc.chassis.hitTesterManager.crashedModelHitTester,
+                      'turret': typeDesc.turret.hitTesterManager.crashedModelHitTester,
+                      'gun': typeDesc.gun.hitTesterManager.crashedModelHitTester}}
+    if typeDesc.isWheeledVehicle:
+        hitTesters['model']['wheel'] = typeDesc.chassis.wheels.wheels[0].hitTesterManager.modelHitTester
+        hitTesters['crashedModel']['wheel'] = typeDesc.chassis.wheels.wheels[0].hitTesterManager.crashedModelHitTester
+    isCrashedModelValid = True
+    for _, hitTester in hitTesters['crashedModel'].iteritems():
+        if not hitTester:
+            isCrashedModelValid = False
+            break
+
+    cfg['hasCrashedModel'] = isCrashedModelValid
+    __computeModelShape(cfg, cfg['shape']['modelShape'], typeDesc, hitTesters['model'])
+    if isCrashedModelValid:
+        __computeModelShape(cfg, cfg['shape']['crashedModelShape'], typeDesc, hitTesters['crashedModel'])
+
+
 def updatePhysics(physics, typeDesc):
     baseCfg = typeDesc.type.xphysics['detailed']
     gravityFactor = baseCfg['gravityFactor']
@@ -548,38 +621,12 @@ def configurePhysicsMode(cfg, typeDesc, gravityFactor):
     cfg['allowedRPMExcess'] = max(1.0, speedLimit / selfDrivenMaxSpeed)
     cfg['overspeedResistFactor'] = cfg['overspeedResistBaseFactor'] / selfDrivenMaxSpeed
     cfg['useComplexForm'] = typeDesc.type.name == 'sweden:S11_Strv_103B'
-    bmin, bmax, _ = typeDesc.chassis.hitTester.bbox
-    sizeX = bmax[0] - bmin[0]
-    bminHull, bmaxHull, _ = typeDesc.hull.hitTester.bbox
-    if typeDesc.type.useHullZSize:
-        sizeZ = bmaxHull[2] - bminHull[2]
-    else:
-        sizeZ = bmax[2] - bmin[2]
-    if typeDesc.type.useHullZOffset:
-        offsZ = (bmaxHull[2] + bminHull[2]) * 0.5
-    else:
-        offsZ = (bmin[2] + bmax[2]) * 0.5
+    configureModelShapePhysics(cfg, typeDesc)
     if typeDesc.isWheeledVehicle:
-        wheelBbMin, wheelBbMax, _ = typeDesc.chassis.wheels.wheels[0].hitTester.bbox
         cfg['shape']['wheelXOffset'] = max((abs(wheel.position.x) for wheel in typeDesc.chassis.wheels.wheels))
-        wheelSize = wheelBbMax - wheelBbMin
-        cfg['shape']['wheelSize'] = wheelSize
-    cfg['hullSize'] = Math.Vector3((sizeX, cfg['bodyHeight'], sizeZ))
     cfg['shape']['useComplexForm'] = typeDesc.type.name == 'sweden:S11_Strv_103B'
     cfg['gravity'] = cfg['gravity'] * gravityFactor
     cfg['engine']['engineTorque'] = tuple(((arg, val * gravityFactor) for arg, val in cfg['engine']['engineTorque']))
-    cfg['hullBoxOffsetZ'] = offsZ
-    turretMin, turretMax, _ = typeDesc.turret.hitTester.bbox
-    _, gunMax, _ = typeDesc.gun.hitTester.bbox
-    hullPos = typeDesc.chassis.hullPosition
-    turretPos = typeDesc.hull.turretPositions[0]
-    topPos = hullPos + turretPos
-    turretTopOffset = max(turretMax[1], typeDesc.turret.gunPosition[1] + gunMax[1])
-    topPos.y += turretTopOffset - cfg['clearance'] - cfg['bodyHeight']
-    topPos.y = max(0.1, topPos.y * 0.8)
-    topPos.y += cfg['bodyHeight'] * 0.5
-    cfg['turretTopPos'] = topPos
-    cfg['turretTopWidth'] = max(sizeX * 0.25, (turretMax[0] - turretMin[0]) * 0.7)
     cfg['pushHB'] = cfg.get('gimletPushOnSpotFinal', 0.0)
     cfg['engine']['smplEngJoinRatio'] = 0.020000000000000004 / cfg['chassis']['wheelRadius']
     applyRotationAndPowerFactors(cfg)
@@ -621,7 +668,7 @@ def applyRotationAndPowerFactors(cfg):
     try:
         cfg['engine']['smplEnginePower'] = cfg['engine']['smplEnginePower'] * cfg['powerFactor']
         cfg['angVelocityFactor'] = cfg['angVelocityFactor'] * cfg['rotationFactor']
-        arm = cfg['hullSize'][0]
+        arm = cfg['shape']['modelShape']['hullSize'][0]
         cfg['smplRotSpeed'] = arm * cfg['angVelocityFactor0'] * cfg['rotationFactor']
         cfg['gimletGoalWOnSpot'] = cfg['gimletGoalWOnSpot'] * cfg['rotationFactor']
         cfg['gimletGoalWOnMove'] = cfg['gimletGoalWOnMove'] * cfg['rotationFactor']

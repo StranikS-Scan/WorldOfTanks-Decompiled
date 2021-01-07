@@ -359,6 +359,21 @@
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
     </hint>
+    <hint>	PlatoonBtnHint	  <item-id>	CreatePlatoonButton	</item-id>
+      <text>	_(#tutorial:platoon/openBtn)	</text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	enabled	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <ignore-outside-click>	True	</ignore-outside-click>
+    </hint>
     <hint>	CrystalsBtnHint	  <item-id>	CrystalsButton	</item-id>
       <text>	_(#tutorial:crystals/openBtn)	</text>
       <arrow>
@@ -514,17 +529,6 @@
       <update-runtime>	True	</update-runtime>
       <hide-immediately>	True	</hide-immediately>
       <ignore-outside-click>	True	</ignore-outside-click>
-    </hint>
-    <hint>	NyVehiclesExtraSlotBonusHint	  <item-id>	NyVehiclesExtraSlotBonusDD	</item-id>
-      <text>	_(#tutorial:newYear/vehicles/extraSlotBonus)	</text>
-      <arrow>
-        <direction>	T	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <update-runtime>	True	</update-runtime>
-      <ignore-outside-click>	True	</ignore-outside-click>
-      <hide-immediately>	True	</hide-immediately>
-      <equal-actions>	True	</equal-actions>
     </hint>
   </hints>
 </once-only-hints.xml>

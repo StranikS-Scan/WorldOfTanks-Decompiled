@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/progressive_reward/progressive_reward_view.py
 import logging
-from frameworks.wulf import ViewSettings
+from frameworks.wulf import ViewSettings, WindowFlags
 from gui.impl.auxiliary.rewards_helper import fillStepsModel
 from gui.impl.gen.view_models.views.lobby.progressive_reward.progressive_reward_view_model import ProgressiveRewardViewModel
 from gui.impl.lobby.progressive_reward.progressive_award_sounds import setSoundState, ProgressiveRewardSoundEvents
 from gui.impl.pub import ViewImpl
-from gui.impl.pub.lobby_window import LobbyOverlay
+from gui.impl.pub.lobby_window import LobbyWindow
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -77,9 +77,9 @@ class ProgressiveRewardView(ViewImpl):
                 self.__onWindowClose()
 
 
-class ProgressiveRewardWindow(LobbyOverlay):
+class ProgressiveRewardWindow(LobbyWindow):
     __slots__ = ()
 
     def __init__(self, contentResId, *args, **kwargs):
-        super(ProgressiveRewardWindow, self).__init__(decorator=None, content=ProgressiveRewardView(contentResId, *args, **kwargs), parent=None)
+        super(ProgressiveRewardWindow, self).__init__(wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, decorator=None, content=ProgressiveRewardView(contentResId, *args, **kwargs), parent=None)
         return

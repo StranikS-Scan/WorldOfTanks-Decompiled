@@ -81,16 +81,29 @@ class SessionStatsOverview(SessionStatsOverviewMeta):
         self.as_setButtonsStateS(self.__getButtonStates())
         self.__saveCurrentTab(tabAlias)
 
+    def updateData(self):
+        self._currentTabAlias = self.__getSavedTab()
+        if self.__sessionVehicleStatsView:
+            self.__sessionVehicleStatsView.updateData()
+        if self.__sessionBattleStatsView:
+            self.__sessionBattleStatsView.updateData()
+        self.__updateHeaderTooltip()
+        self.as_setDataS(self.__makeInitVO())
+        self._isHofAccessible = isHofEnabled() and self._lobbyContext.getServerSettings().isLinkWithHoFEnabled()
+        self.as_setButtonsStateS(self.__getButtonStates())
+
     def _populate(self):
         super(SessionStatsOverview, self)._populate()
         self._itemsCache.onSyncCompleted += self.__updateViewHandler
         self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+        self.__settingsController.onSettingsUpdated += self.updateData
         self.__settingsController.start()
         self.updateData()
 
     def _dispose(self):
         self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         self._itemsCache.onSyncCompleted -= self.__updateViewHandler
+        self.__settingsController.onSettingsUpdated -= self.updateData
         self.__sessionVehicleStatsView = None
         self.__sessionBattleStatsView = None
         self.__settingsController.stop()
@@ -252,14 +265,3 @@ class SessionStatsOverview(SessionStatsOverviewMeta):
                     return alias
 
         return SESSION_STATS_CONSTANTS.SESSION_BATTLE_STATS_VIEW_PY_ALIAS
-
-    def updateData(self):
-        self._currentTabAlias = self.__getSavedTab()
-        if self.__sessionVehicleStatsView:
-            self.__sessionVehicleStatsView.updateData()
-        if self.__sessionBattleStatsView:
-            self.__sessionBattleStatsView.updateData()
-        self.__updateHeaderTooltip()
-        self.as_setDataS(self.__makeInitVO())
-        self._isHofAccessible = isHofEnabled() and self._lobbyContext.getServerSettings().isLinkWithHoFEnabled()
-        self.as_setButtonsStateS(self.__getButtonStates())

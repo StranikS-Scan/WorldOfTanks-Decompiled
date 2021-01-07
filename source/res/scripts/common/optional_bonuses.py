@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/optional_bonuses.py
-import copy
 import random
+import copy
 import time
 from typing import Optional, Dict
 from account_shared import getCustomizationItem
-from items.components.ny_constants import CurrentNYConstants, PREV_NY_TOYS_COLLECTIONS, YEARS_INFO
 from soft_exception import SoftException
+from items import tankmen
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 
 def _packTrack(track):
     result = []
@@ -161,17 +162,6 @@ def __mergeDogTag(total, key, value, isLeaf=False, count=1, *args):
     total[key] = value
 
 
-def __mergeNYToys(total, key, value, isLeaf=False, count=1, *args):
-    result = total.setdefault(key, {})
-    for toyID, toysCount in value.iteritems():
-        result[toyID] = result.get(toyID, 0) + count * toysCount
-
-
-def __mergeNYAnyOf(total, key, value, isLeaf=False, count=1, *args):
-    result = total.setdefault(key, [])
-    result.extend(value if isinstance(value, list) else [value])
-
-
 BONUS_MERGERS = {'credits': __mergeValue,
  'gold': __mergeValue,
  'xp': __mergeValue,
@@ -205,16 +195,10 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'rankedDailyBattles': __mergeValue,
  'rankedBonusBattles': __mergeValue,
  'dogTagComponents': __mergeDogTag,
- 'meta': lambda *args, **kwargs: None,
- CurrentNYConstants.TOYS: __mergeNYToys,
- CurrentNYConstants.TOY_FRAGMENTS: __mergeValue,
- CurrentNYConstants.ANY_OF: __mergeNYAnyOf,
- CurrentNYConstants.FILLERS: __mergeValue}
-BONUS_MERGERS.update({k:__mergeNYToys for k in PREV_NY_TOYS_COLLECTIONS})
+ 'meta': lambda *args, **kwargs: None}
 ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._inventory.getVehicleInvID(key) != 0,
  'customizations': lambda account, key: account._customizations20.getItems((key,), 0)[key] > 0,
- 'tokens': lambda account, key: account._quests.hasToken(key),
- CurrentNYConstants.TOYS: lambda account, key: account._newYear.isToyPresentInCollection(key, YEARS_INFO.CURRENT_YEAR_STR)}
+ 'tokens': lambda account, key: account._quests.hasToken(key)}
 
 class BonusItemsCache(object):
 
@@ -337,7 +321,7 @@ class BonusNodeAcceptor(object):
 
     def updateBonusCache(self, bonusNode):
         cache = self.__bonusCache
-        for itemType in ('vehicles', 'tokens', CurrentNYConstants.TOYS):
+        for itemType in ('vehicles', 'tokens'):
             if itemType in bonusNode:
                 for itemID in bonusNode[itemType].iterkeys():
                     cache.onItemAccepted(itemType, itemID)
@@ -349,7 +333,7 @@ class BonusNodeAcceptor(object):
 
     def isBonusExists(self, bonusNode):
         cache = self.__bonusCache
-        for itemType in ('vehicles', 'tokens', CurrentNYConstants.TOYS):
+        for itemType in ('vehicles', 'tokens'):
             if itemType in bonusNode:
                 for itemID in bonusNode[itemType].iterkeys():
                     if cache.isItemExists(itemType, itemID):

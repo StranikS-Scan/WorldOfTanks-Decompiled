@@ -3,15 +3,17 @@
 import logging
 from frameworks.wulf import ViewSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.impl.auxiliary.rewards_helper import getRewardTooltipContent, getRewardRendererModelPresenter, BLUEPRINTS_CONGRAT_TYPES, fillStepsModel, getLastCongratsIndex, validateVehicleCD, getBackportTooltipData
+from gui.impl.auxiliary.rewards_helper import getRewardTooltipContent, getRewardRendererModelPresenter, BLUEPRINTS_CONGRAT_TYPES, fillStepsModel, getLastCongratsIndex
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.progressive_reward.progressive_reward_award_model import ProgressiveRewardAwardModel
 from gui.impl.gen.view_models.views.loot_box_view.loot_congrats_types import LootCongratsTypes
+from gui.impl.gen.view_models.views.lobby.blueprints.blueprint_screen_tooltips import BlueprintScreenTooltips
 from gui.impl.lobby.progressive_reward.progressive_award_sounds import setSoundState, ProgressiveRewardSoundEvents
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
-from gui.impl.backport import BackportTooltipWindow, TooltipData
+from gui.impl.backport import createTooltipData, BackportTooltipWindow, TooltipData
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.event_dispatcher import showBlueprintView
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
@@ -39,7 +41,7 @@ class ProgressiveRewardAwardView(ViewImpl):
 
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
-            tooltipData = getBackportTooltipData(event, self.__items)
+            tooltipData = self.__getBackportTooltipData(event)
             window = BackportTooltipWindow(tooltipData, self.getParentWindow()) if tooltipData is not None else None
             if window is not None:
                 window.load()
@@ -48,7 +50,7 @@ class ProgressiveRewardAwardView(ViewImpl):
             return super(ProgressiveRewardAwardView, self).createToolTip(event)
 
     def createToolTipContent(self, event, contentID):
-        tooltipData = getBackportTooltipData(event, self.__items)
+        tooltipData = self.__getBackportTooltipData(event)
         return getRewardTooltipContent(event, tooltipData)
 
     def _initialize(self, bonuses, specialRewardType, currentStep):
@@ -127,11 +129,28 @@ class ProgressiveRewardAwardView(ViewImpl):
     def __onSpecialActionButtonClick(self, responseDict):
         congratsType = responseDict.get('congratsType')
         if congratsType in BLUEPRINTS_CONGRAT_TYPES:
-            vehicleCD = validateVehicleCD(responseDict.get('congratsSourceId'))
+            vehicleCD = _getVehicleCD(responseDict.get('congratsSourceId'))
             if vehicleCD is not None:
                 self.__onWindowClose()
                 showBlueprintView(vehicleCD)
         return
+
+    def __getBackportTooltipData(self, event):
+        tooltipId = event.getArgument('tooltipId')
+        if tooltipId is None:
+            return
+        elif tooltipId in self.__items:
+            return self.__items[tooltipId]
+        else:
+            if tooltipId == BlueprintScreenTooltips.TOOLTIP_BLUEPRINT:
+                vehicleCD = _getVehicleCD(event.getArgument('vehicleCD'))
+                if vehicleCD is not None:
+                    return createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BLUEPRINT_INFO, specialArgs=(vehicleCD, True))
+            elif tooltipId == BlueprintScreenTooltips.TOOLTIP_BLUEPRINT_CONVERT_COUNT:
+                vehicleCD = _getVehicleCD(event.getArgument('vehicleCD'))
+                if vehicleCD is not None:
+                    return createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BLUEPRINT_CONVERT_INFO, specialArgs=[vehicleCD])
+            return
 
     def __isEpicReward(self):
         return self.__specialRewardType == LootCongratsTypes.INIT_CONGRAT_TYPE_EPIC_REWARDS
@@ -142,3 +161,14 @@ class ProgressiveRewardAwardWindow(LobbyNotificationWindow):
 
     def __init__(self, bonuses, specialRewardType, currentStep):
         super(ProgressiveRewardAwardWindow, self).__init__(content=ProgressiveRewardAwardView(R.views.lobby.progressive_reward.progressive_reward_award.ProgressiveRewardAward(), bonuses, specialRewardType, currentStep))
+
+
+def _getVehicleCD(value):
+    try:
+        vehicleCD = int(value)
+    except ValueError:
+        _logger.warning('Wrong vehicle compact descriptor: %s!', value)
+        return None
+
+    return vehicleCD
+    return None

@@ -39,6 +39,32 @@ def __getWheelsRiseTime(vehicleDesc):
     return wheelsRiseTime
 
 
+def prepareCollisionAssembler(vehicleDesc, isTurretDetached, worldID):
+    hitTestersByPart = {TankPartNames.CHASSIS: vehicleDesc.chassis.hitTester,
+     TankPartNames.HULL: vehicleDesc.hull.hitTester}
+    if not isTurretDetached:
+        hitTestersByPart[TankPartNames.TURRET] = vehicleDesc.turret.hitTester
+        hitTestersByPart[TankPartNames.GUN] = vehicleDesc.gun.hitTester
+    bspModels = ()
+    for partName, hitTester in hitTestersByPart.iteritems():
+        partId = TankPartNames.getIdx(partName)
+        bspModel = (partId, hitTester.bspModelName)
+        bspModels = bspModels + (bspModel,)
+
+    assembler = BigWorld.CollisionAssembler(bspModels, worldID)
+    return assembler
+
+
+def setupCollisions(vehicleDesc, collisions):
+    hitTestersByPart = {TankPartNames.CHASSIS: vehicleDesc.chassis.hitTester,
+     TankPartNames.HULL: vehicleDesc.hull.hitTester,
+     TankPartNames.TURRET: vehicleDesc.turret.hitTester,
+     TankPartNames.GUN: vehicleDesc.gun.hitTester}
+    for partName, hitTester in hitTestersByPart.iteritems():
+        partID = TankPartNames.getIdx(partName)
+        hitTester.bbox = collisions.getBoundingBox(partID)
+
+
 def prepareCompoundAssembler(vehicleDesc, modelsSetParams, spaceID, isTurretDetached=False, lodIdx=_DEFAULT_LOD_INDEX, skipMaterials=False, renderMode=None):
     if IS_DEVELOPMENT and modelsSetParams.state not in VehicleDamageState.MODEL_STATE_NAMES:
         raise SoftException('Invalid modelStateName %s, must be in %s' % (modelsSetParams.state, VehicleDamageState.MODEL_STATE_NAMES))
@@ -60,7 +86,10 @@ def prepareCompoundAssembler(vehicleDesc, modelsSetParams, spaceID, isTurretDeta
 
 
 def attachModels(assembler, vehicleDesc, modelsSetParams, isTurretDetached, renderMode=None, overlayCollision=False):
-    collisionState = renderMode in (TankRenderMode.CLIENT_COLLISION, TankRenderMode.SERVER_COLLISION, TankRenderMode.ARMOR_WIDTH_COLLISION)
+    collisionState = renderMode in (TankRenderMode.CLIENT_COLLISION,
+     TankRenderMode.SERVER_COLLISION,
+     TankRenderMode.CRASH_COLLISION,
+     TankRenderMode.ARMOR_WIDTH_COLLISION)
     if collisionState:
         partModels = getCollisionModelsFromDesc(vehicleDesc, renderMode)
     else:
@@ -77,9 +106,9 @@ def attachModels(assembler, vehicleDesc, modelsSetParams, isTurretDetached, rend
         for i, wheel in enumerate(vehicleDesc.chassis.wheels.wheels):
             bspPath = ''
             if renderMode == TankRenderMode.CLIENT_COLLISION:
-                bspPath = wheel.hitTester.edClientBspModel
+                bspPath = wheel.hitTesterManager.edClientBspModel
             elif renderMode in (TankRenderMode.SERVER_COLLISION, TankRenderMode.ARMOR_WIDTH_COLLISION):
-                bspPath = wheel.hitTester.edServerBspModel
+                bspPath = wheel.hitTesterManager.edServerBspModel
             if bspPath:
                 assembler.addNode(wheel.nodeName, partNames.CHASSIS, math_utils.createTranslationMatrix(wheel.position))
                 assembler.emplacePart(bspPath, wheel.nodeName, TankCollisionPartNames.WHEEL + str(i))
@@ -94,10 +123,10 @@ def attachModels(assembler, vehicleDesc, modelsSetParams, isTurretDetached, rend
     assembler.addNodeAlias(turretJointName, TankNodeNames.TURRET_JOINT)
     if not isTurretDetached:
         if collisionState and not overlayCollision:
-            assembler.addNode(turretJointName, 'V', math_utils.createTranslationMatrix(vehicleDesc.hull.turretPositions[0]))
+            assembler.addNode(turretJointName, 'V', math_utils.createRTMatrix(Math.Vector3(0, vehicleDesc.hull.turretPitches[0], 0), vehicleDesc.hull.turretPositions[0]))
         assembler.addPart(turret, turretJointName, partNames.TURRET)
         if collisionState and not overlayCollision:
-            assembler.addNode(TankNodeNames.GUN_JOINT, TankPartNames.TURRET, math_utils.createTranslationMatrix(vehicleDesc.turret.gunPosition))
+            assembler.addNode(TankNodeNames.GUN_JOINT, TankPartNames.TURRET, math_utils.createRTMatrix(Math.Vector3(0, vehicleDesc.turret.gunJointPitch, 0), vehicleDesc.turret.gunPosition))
         assembler.addPart(gun, TankNodeNames.GUN_JOINT, partNames.GUN)
         if modelsSetParams.state == 'undamaged':
             for attachment in modelsSetParams.attachments:
@@ -218,7 +247,7 @@ def createWheelsAnimator(appearance, colliderType, typeDescriptor, wheelsState, 
 
 def createGeneralWheelsAnimator(appearance, colliderType, typeDescriptor, wheelsState, wheelsScroll, wheelsSteering, lodStateLink=None):
     config = typeDescriptor.chassis.generalWheelsAnimatorConfig
-    generalWheelsAnimator = appearance.createComponent(Vehicular.GeneralWheelsAnimator, config, appearance.compoundModel, appearance.collisions, colliderType, wheelsState, wheelsScroll, wheelsSteering, appearance.id)
+    generalWheelsAnimator = appearance.createComponent(Vehicular.GeneralWheelsAnimator, config, appearance.compoundModel, colliderType, wheelsState, wheelsScroll, wheelsSteering, appearance.id)
     generalWheelsAnimator.setLodLink(lodStateLink)
     generalWheelsAnimator.setLodSettings(shared_components.LodSettings(typeDescriptor.chassis.chassisLodDistance, DEFAULT_MAX_LOD_PRIORITY))
     generalWheelsAnimator.connectVehicleFashion(appearance.fashion)

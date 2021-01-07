@@ -32,7 +32,7 @@
     <priceFactor>	1.6	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
     <exclusionMask></exclusionMask>
-    <density>	1 1	</density>
+    <density>	1.07 1.07	</density>
   </camouflage>
   <hull>
     <armor>
@@ -1964,6 +1964,7 @@
             <collisionModelServer>	vehicles/american/A127_TL_1_LPC/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A127_TL_1_LPC/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <shotOffset>	0.000329 -0.114700 0.000000	</shotOffset>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>

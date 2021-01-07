@@ -370,8 +370,8 @@ class _ArenaBonusTypeVisitor(IArenaVisitor):
     def hasDogTag(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.DOG_TAG)
 
-    def isFriendlyFireMode(self, enabledBonusTypes):
-        return self._bonusType in enabledBonusTypes
+    def isFriendlyFireMode(self):
+        return _CAPS.checkAny(self._bonusType, _CAPS.NO_ALLY_DAMAGE)
 
 
 class _ArenaExtraDataVisitor(IArenaVisitor):

@@ -426,9 +426,9 @@ class BootcampMarkersManager(object):
         self.__switchedToHiddenMode = False
         return
 
-    def init(self, entities, markers, bootcampGui):
+    def init(self, entitiesParams, markers, bootcampGui):
         LOG_DEBUG_DEV_BOOTCAMP('BootcampMarkers.init')
-        self.__entitiesParams = entities
+        self.__entitiesParams = entitiesParams
         self.__markersParams = markers
         self.__gui = bootcampGui
         if not BattleReplay.g_replayCtrl.isPlaying:
@@ -459,26 +459,6 @@ class BootcampMarkersManager(object):
         if self.__markerSoundShow is not None:
             self.__markerSoundShow.stop()
             self.__markerSoundShow = None
-        if self.__markersParams is not None:
-            for markerParams in self.__markersParams:
-                eventEnable = markerParams['eventEnable']
-                eventDisable = markerParams['eventDisable']
-                if eventEnable == '':
-                    self.__createMarker(markerParams)
-                markerName = markerParams['name']
-                if eventEnable.find('vehicleKilled') != -1 or eventDisable.find('vehicleKilled') != -1:
-                    self.__markerEvents[markerName] = {}
-                    markerEvents = self.__markerEvents[markerName]
-                    if eventEnable.find('vehicleKilled') != -1:
-                        markerEvents['eventEnable'] = eventEnable.split(':')[1].split(',')
-                    if eventDisable.find('vehicleKilled') != -1:
-                        markerEvents['eventDisable'] = eventDisable.split(':')[1].split(',')
-                    if self.__arena is None:
-                        self.__arena = self.sessionProvider.arenaVisitor.getArenaSubscription()
-                    if self.__arena is not None and self.__arenaSubscribed is False:
-                        self.__arena.onVehicleKilled += self.__onVehicleKilled
-                        self.__arenaSubscribed = True
-
         return
 
     def afterScenery(self):
@@ -491,7 +471,7 @@ class BootcampMarkersManager(object):
         for marker in self.__markers.itervalues():
             marker.detachGUI()
 
-        if BattleReplay.g_replayCtrl.isPlaying:
+        if BattleReplay.g_replayCtrl.isPlaying and self.bootcamp.replayCtrl:
             for eventName, callback in self.replayCallbacks:
                 self.bootcamp.replayCtrl.delDataCallback(eventName, callback)
 
@@ -507,20 +487,6 @@ class BootcampMarkersManager(object):
             self.__switchedToSniperMode = True
             for marker in self.__markers.itervalues():
                 marker.switchToSniperMode(self.__switchedToSniperMode)
-
-            return
-        else:
-            if 'name' in params:
-                self.serializeMethod(CallbackDataNames.BC_MARKERS_ONTRIGGERACTIVATED, (params,))
-                triggerName = params['name']
-                if self.__markersParams is not None:
-                    for markerParams in self.__markersParams:
-                        markerName = markerParams['name']
-                        if markerParams['eventEnable'] == triggerName and markerName not in self.__markers:
-                            self.__createMarker(markerParams)
-                        if markerParams['eventDisable'] == triggerName and markerName in self.__markers:
-                            self.__markers[markerName].clear()
-                            del self.__markers[markerName]
 
             return
 
@@ -540,6 +506,17 @@ class BootcampMarkersManager(object):
                     return markerParams
 
             return
+
+    def addMarker(self, params):
+        if self.__markersParams is None:
+            self.__markersParams = []
+        for markerParams in self.__markersParams:
+            if params['name'] == markerParams['name']:
+                break
+        else:
+            self.__markersParams.append(params)
+
+        return
 
     def showMarker(self, name):
         if self.__markersParams is None:
@@ -594,7 +571,8 @@ class BootcampMarkersManager(object):
 
     def replayMethodSubscribe(self, eventName, method):
         callback = partial(self.replayMethodCall, method, eventName)
-        self.bootcamp.replayCtrl.setDataCallback(eventName, callback)
+        if self.bootcamp.replayCtrl:
+            self.bootcamp.replayCtrl.setDataCallback(eventName, callback)
         self.replayCallbacks.append((eventName, callback))
 
     def replayMethodCall(self, callMethod, eventName, binData):
@@ -620,26 +598,6 @@ class BootcampMarkersManager(object):
 
         elif state == UI_STATE.STOP:
             self.stop()
-        return
-
-    def __onVehicleKilled(self, victimID, *args):
-        victimVehicle = BigWorld.entities.get(victimID)
-        if victimVehicle is not None:
-            victimName = victimVehicle.publicInfo['name']
-            if self.__markersParams is not None:
-                for markerParams in self.__markersParams:
-                    markerName = markerParams['name']
-                    markerEvents = self.__markerEvents[markerName]
-                    if 'eventEnable' in markerEvents and victimName in markerEvents['eventEnable']:
-                        if markerName not in self.__markers:
-                            markerEvents['eventEnable'].remove(victimName)
-                            if not markerEvents['eventEnable']:
-                                self.__createMarker(markerParams)
-                        if 'eventDisable' in markerEvents and victimName in markerEvents['eventDisable'] and markerName in self.__markers:
-                            markerEvents['eventDisable'].remove(victimName)
-                            markerEvents['eventDisable'] or self.__markers[markerName].clear()
-                            del self.__markers[markerName]
-
         return
 
     def __createMarker(self, markerParams):

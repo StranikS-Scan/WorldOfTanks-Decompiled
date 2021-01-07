@@ -607,6 +607,9 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
     def __onVehicleStateUpdated(self, state, value):
         if state == VEHICLE_VIEW_STATE.SWITCHING:
             self.__resetDevices()
+            if not value:
+                self._isEnabled = False
+                self.as_setVisibleS(self._isEnabled)
         else:
             if not self._isEnabled:
                 return

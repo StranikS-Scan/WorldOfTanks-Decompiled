@@ -11,6 +11,9 @@ from skeletons.gui.game_control import IBootcampController
 class AmmunitionPanelInject(AmmunitionPanelInjectMeta, IGlobalListener):
     __bootcampController = dependency.descriptor(IBootcampController)
 
+    def onPrbEntitySwitching(self):
+        self.getInjectView().setPrbSwitching(True)
+
     def onPrbEntitySwitched(self):
         self.getInjectView().update()
 

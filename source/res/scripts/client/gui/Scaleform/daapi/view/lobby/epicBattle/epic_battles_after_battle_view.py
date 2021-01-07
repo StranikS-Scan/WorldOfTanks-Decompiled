@@ -109,7 +109,7 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
     def __getBonuses(self, prevLevel, currentLevel):
         questsProgressData = self.__ctx['reusableInfo'].personal.getQuestsProgress()
         bonuses = after_battle_reward_view_helpers.getQuestBonuses(questsProgressData, (EVENT_PROGRESSION_FINISH_TOKEN, self.__epicMetaGameCtrl.TOKEN_QUEST_ID), self.__epicMetaGameCtrl.TOKEN_QUEST_ID + str(currentLevel))
-        for level in range(prevLevel, currentLevel + 1):
+        for level in range(prevLevel + 1, currentLevel + 1):
             bonuses.extend([self.__getAbilityPointsRewardBonus(level)])
 
         bonuses = after_battle_reward_view_helpers.formatBonuses(bonuses)

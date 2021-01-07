@@ -9,6 +9,7 @@ from gui.shared.tooltips import formatters
 from gui.shared.tooltips.common import BlocksTooltipData
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import IRankedBattlesController
+from items.writers.c11n_writers import natsorted
 _TOOLTIP_MIN_WIDTH = 200
 
 class RankedCalendarDayTooltip(BlocksTooltipData):
@@ -34,7 +35,7 @@ class RankedCalendarDayTooltip(BlocksTooltipData):
             blocks = [self.__packHeaderBlock()]
             serversPeriodsMapping = self.rankedController.getPrimeTimesForDay(selectedTime)
             frmt = backport.getShortTimeFormat
-            for serverName in sorted(serversPeriodsMapping.keys()):
+            for serverName in natsorted(serversPeriodsMapping.keys()):
                 periodsStr = []
                 dayPeriods = serversPeriodsMapping[serverName]
                 if dayPeriods:

@@ -865,7 +865,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             self.__update()
         return
 
-    def __onItemsBought(self, purchaseItems, results):
+    def __onItemsBought(self, *_, **__):
         self.__update()
 
     def __onItemSold(self, item, count):

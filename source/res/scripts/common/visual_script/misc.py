@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/misc.py
 import BigWorld
-from constants import IS_CLIENT
+from constants import IS_CLIENT, IS_BOT
 from debug_utils import LOG_ERROR
 VisualScriptTag = 'visualScript'
 
@@ -13,6 +13,7 @@ class DeferredQueue(object):
 class ASPECT(object):
     SERVER = 'SERVER'
     CLIENT = 'CLIENT'
+    ALL = [CLIENT, SERVER]
 
 
 def makePlanPath(planName):
@@ -22,13 +23,13 @@ def makePlanPath(planName):
 def preloadPlanXml(func):
 
     def wrapper(self, planName, *args, **kwargs):
-        if not IS_CLIENT:
+        if not IS_CLIENT and not IS_BOT:
 
             def onCallback(future):
                 try:
                     future.get()
                 except BigWorld.FutureNotReady:
-                    LOG_ERROR("Plan xml '%s' not pre-loaded." % planName)
+                    LOG_ERROR("[VScript] Plan xml '%s' not pre-loaded." % planName)
 
                 func(self, planName, *args, **kwargs)
 

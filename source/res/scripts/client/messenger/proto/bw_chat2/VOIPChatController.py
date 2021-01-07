@@ -8,6 +8,8 @@ from VOIP.voip_constants import VOIP_SUPPORTED_API
 from debug_utils import LOG_WARNING
 from adisp import async, process
 from gui import GUI_SETTINGS
+from gui.shared import g_eventBus, EVENT_BUS_SCOPE
+from gui.shared.events import GameEvent
 from helpers import dependency
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.interfaces import IVOIPChatController
@@ -28,8 +30,9 @@ class VOIPChatController(IVOIPChatController):
         voipMgr.onFailedToConnect += self.__failedResponse
         voipMgr.onCaptureDevicesUpdated += self.__captureDevicesResponse
         voipMgr.onPlayerSpeaking += self.__onPlayerSpeaking
-        voipMgr.onStateToggled += self.__onStateToggled
         voipMgr.onJoinedChannel += self.__onJoinedChannel
+        voipMgr.onLeftChannel += self.__onLeftChannel
+        g_eventBus.addListener(GameEvent.TOGGLE_VOIP_CHANNEL_ENABLED, self.__onToggleChannelEnabled, scope=EVENT_BUS_SCOPE.BATTLE)
         self.__initialize()
 
     def stop(self):
@@ -38,8 +41,9 @@ class VOIPChatController(IVOIPChatController):
         voipMgr.onFailedToConnect -= self.__failedResponse
         voipMgr.onCaptureDevicesUpdated -= self.__captureDevicesResponse
         voipMgr.onPlayerSpeaking -= self.__onPlayerSpeaking
-        voipMgr.onStateToggled -= self.__onStateToggled
         voipMgr.onJoinedChannel -= self.__onJoinedChannel
+        voipMgr.onLeftChannel -= self.__onLeftChannel
+        g_eventBus.removeListener(GameEvent.TOGGLE_VOIP_CHANNEL_ENABLED, self.__onToggleChannelEnabled, scope=EVENT_BUS_SCOPE.BATTLE)
         self.__callbacks = []
         self.__captureDevicesCallbacks = []
 
@@ -96,6 +100,12 @@ class VOIPChatController(IVOIPChatController):
         self.__captureDevicesCallbacks.append(resetCapturedDevice)
         voipMgr.requestCaptureDevices()
 
+    def isCurrentChannelEnabled(self):
+        return VOIP.getVOIPManager().isCurrentChannelEnabled()
+
+    def enableCurrentChannel(self, isEnableChannel):
+        VOIP.getVOIPManager().enableCurrentChannel(isEnableChannel)
+
     @process
     def __initialize(self):
         serverSettings = getattr(BigWorld.player(), 'serverSettings', {})
@@ -111,8 +121,7 @@ class VOIPChatController(IVOIPChatController):
     @async
     def __initializeSettings(self, domain, server, callback):
         if self.isReady():
-            vOIPSetting = self.settingsCore.options.getSetting('enableVoIP')
-            vOIPSetting.initFromPref()
+            self.__applyUserSettings()
             callback(True)
             return
         if domain == '':
@@ -122,8 +131,14 @@ class VOIPChatController(IVOIPChatController):
         voipMgr = VOIP.getVOIPManager()
         if voipMgr.isNotInitialized():
             voipMgr.initialize(domain, server)
-        vOIPSetting = self.settingsCore.options.getSetting('enableVoIP')
+        self.__applyUserSettings()
+
+    def __applyUserSettings(self):
+        options = self.settingsCore.options
+        vOIPSetting = options.getSetting('enableVoIP')
         vOIPSetting.initFromPref()
+        channelSettings = options.getSetting(SOUND.VOIP_ENABLE_CHANNEL)
+        channelSettings.initFromPref()
 
     def __initResponse(self, _):
         if self.isVOIPEnabled() and self.isReady():
@@ -143,12 +158,17 @@ class VOIPChatController(IVOIPChatController):
         if self.isVOIPEnabled():
             g_messengerEvents.voip.onPlayerSpeaking(accountDBID, bool(isSpeak))
 
-    def __onStateToggled(self, isEnabled, _):
-        if self.isVOIPEnabled():
-            g_messengerEvents.voip.onStateToggled(isEnabled)
-
-    def __onJoinedChannel(self, data):
+    def __onJoinedChannel(self, channel, isTestChannel, isRejoin):
         if self.isVOIPEnabled():
             keyCode = CommandMapping.g_instance.get('CMD_VOICECHAT_MUTE')
             if BigWorld.isKeyDown(keyCode):
                 VOIP.getVOIPManager().setMicMute(False)
+            g_messengerEvents.voip.onChannelEntered(channel, isTestChannel, isRejoin)
+
+    def __onLeftChannel(self, channel, wasTestChannel):
+        if self.isVOIPEnabled():
+            g_messengerEvents.voip.onChannelLeft(channel, wasTestChannel)
+
+    def __onToggleChannelEnabled(self, event):
+        voipMgr = VOIP.getVOIPManager()
+        voipMgr.enableCurrentChannel(not voipMgr.isCurrentChannelEnabled())

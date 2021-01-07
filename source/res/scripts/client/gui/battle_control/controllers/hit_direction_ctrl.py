@@ -265,8 +265,7 @@ class HitDirectionController(IViewComponentsController):
         return find
 
     def __isFriendlyFireMode(self):
-        friendlyFireBonusTypes = self.lobbyContext.getServerSettings().getFriendlyFireBonusTypes()
-        isFriendlyFireMode = self.sessionProvider.arenaVisitor.bonus.isFriendlyFireMode(friendlyFireBonusTypes)
+        isFriendlyFireMode = self.sessionProvider.arenaVisitor.bonus.isFriendlyFireMode()
         isCustomAllyDamageEffect = self.sessionProvider.arenaVisitor.bonus.hasCustomAllyDamageEffect()
         return isFriendlyFireMode and isCustomAllyDamageEffect
 

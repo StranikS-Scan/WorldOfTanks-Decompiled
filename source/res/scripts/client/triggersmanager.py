@@ -28,6 +28,8 @@ class TRIGGER_TYPE(object):
     PLAYER_SHOOT = 17
     PLAYER_DETECT_ENEMY = 18
     VEHICLE_VISUAL_VISIBILITY_CHANGED = 19
+    PLAYER_DEVICE_CRITICAL = 20
+    PLAYER_MOVE = 21
 
 
 class ITriggerListener(object):
@@ -123,16 +125,21 @@ class TriggersManager(object):
             del self.__autoTriggers[triggerID]
             self.__activeAutoTriggers.discard(triggerID)
 
-    def fireTrigger(self, tType, **args):
-        params = dict(args) if args is not None else {}
+    def fireTrigger(self, tType, **kwargs):
+        params = dict(kwargs) if kwargs is not None else {}
         params['type'] = tType
         if tType not in self.__pendingManualTriggers:
             self.__pendingManualTriggers[tType] = []
         self.__pendingManualTriggers[tType].append((False, params))
         return
 
-    def activateTrigger(self, triggerType, **args):
-        params = dict(args) if args is not None else {}
+    def fireTriggerInstantly(self, tType, **kwargs):
+        kwargs['type'] = tType
+        for listener in self.__listeners:
+            listener.onTriggerActivated(kwargs)
+
+    def activateTrigger(self, triggerType, **kwargs):
+        params = dict(kwargs) if kwargs is not None else {}
         params['type'] = triggerType
         if triggerType in self.__activeManualTriggers:
             self.deactivateTrigger(triggerType)

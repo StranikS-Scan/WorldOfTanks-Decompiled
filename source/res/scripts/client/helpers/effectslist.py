@@ -20,6 +20,7 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
 from vehicle_systems.tankStructure import TankSoundObjectsIndexes
 from constants import IS_EDITOR
+from wrapped_reflection_framework import reflectedNamedTuple
 if not IS_EDITOR:
     from gui.Scaleform.genConsts.EPIC_CONSTS import EPIC_CONSTS
 _logger = logging.getLogger(__name__)
@@ -27,7 +28,7 @@ COLOR_WHITE = 4294967295L
 _ALLOW_DYNAMIC_LIGHTS = True
 KeyPoint = namedtuple('KeyPoint', ('name', 'time'))
 EffectsTimeLine = namedtuple('EffectsTimeLine', ('keyPoints', 'effectsList'))
-EffectsTimeLinePrereqs = namedtuple('EffectsTimeLinePrereqs', ('keyPoints', 'effectsList', 'prereqs'))
+EffectsTimeLinePrereqs = reflectedNamedTuple('EffectsTimeLinePrereqs', ('keyPoints', 'effectsList', 'prereqs'))
 
 class SpecialKeyPointNames(object):
     START = 'start'
@@ -168,10 +169,6 @@ class EffectsListPlayer(object):
         self.__waitForKeyOff = False
         self.__data = dict()
         return
-
-    @property
-    def isStarted(self):
-        return self.__isStarted
 
     def play(self, model, startKeyPoint=None, callbackFunc=None, waitForKeyOff=False):
         needPlay, newKey = self.__isNeedToPlay(waitForKeyOff)
@@ -940,8 +937,7 @@ class _SoundEffectDesc(_EffectDesc):
                     isAlly = self.__sessionProvider.getArenaDP().isAlly(attackerID)
                     soundName = self._impactNames.impactNPC_PC
                     if isAlly:
-                        friendlyFireBonusTypes = self.__lobbyContext.getServerSettings().getFriendlyFireBonusTypes()
-                        isFriendlyFireMode = self.__sessionProvider.arenaVisitor.bonus.isFriendlyFireMode(friendlyFireBonusTypes)
+                        isFriendlyFireMode = self.__sessionProvider.arenaVisitor.bonus.isFriendlyFireMode()
                         isCustomAllyDamageEffect = self.__sessionProvider.arenaVisitor.bonus.hasCustomAllyDamageEffect()
                         if isFriendlyFireMode and isCustomAllyDamageEffect:
                             soundName = self._impactNames.impactFNPC_PC or self._impactNames.impactNPC_PC

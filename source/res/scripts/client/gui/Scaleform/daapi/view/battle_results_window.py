@@ -65,6 +65,10 @@ class BattleResultsWindow(BattleResultsMeta):
                     if not lobbyHeaderNavigationPossible:
                         return
                 self.soundManager.playInstantSound(SOUNDS.SELECT)
+            else:
+                lobbyHeaderNavigationPossible = yield self.__lobbyContext.isHeaderNavigationPossible()
+                if not lobbyHeaderNavigationPossible:
+                    return
             quests_events.showMission(eID, eventType)
             self.destroy()
         return
@@ -102,8 +106,9 @@ class BattleResultsWindow(BattleResultsMeta):
         self.__battleResults.applyAdditionalBonus(self.__arenaUniqueID)
 
     def onShowDetailsPremium(self):
-        BigWorld.callback(0.0, showTankPremiumAboutPage)
-        self.destroy()
+        if self.__canNavigate():
+            BigWorld.callback(0.0, showTankPremiumAboutPage)
+            self.destroy()
 
     def _populate(self):
         super(BattleResultsWindow, self)._populate()

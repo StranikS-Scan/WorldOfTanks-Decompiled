@@ -33,6 +33,7 @@ from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
 from gui.shop import canBuyGoldForVehicleThroughWeb
 from helpers import int2roman, dependency
+from helpers.blueprint_generator import g_blueprintGenerator
 from helpers.i18n import makeString as _ms
 from items import getTypeOfCompactDescr
 from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
@@ -289,6 +290,7 @@ class Research(ResearchMeta):
         self.as_setWalletStatusS(self._wallet.componentsStatuses)
         self.as_setFreeXPS(self._itemsCache.items.stats.actualFreeXP)
         self.addListener(events.VehicleBuyEvent.VEHICLE_SELECTED, self.__onTradeOffSelectedChanged)
+        g_blueprintGenerator.generate(self._data.getRootCD())
 
     def _dispose(self):
         self.removeListener(events.VehicleBuyEvent.VEHICLE_SELECTED, self.__onTradeOffSelectedChanged)

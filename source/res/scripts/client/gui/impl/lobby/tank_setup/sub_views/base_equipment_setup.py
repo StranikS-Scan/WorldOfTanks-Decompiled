@@ -1,12 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/sub_views/base_equipment_setup.py
 from functools import partial
+from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_setup_model import BaseSetupModel
 from gui.impl.lobby.tank_setup.sub_views.deal_base_setup import DealBaseSetupSubView
 from gui.shared.event_dispatcher import showModuleInfo
+from helpers import dependency
+from skeletons.gui.impl import IGuiLoader
 
 class BaseEquipmentSetupSubView(DealBaseSetupSubView):
     __slots__ = ()
+    __gui = dependency.descriptor(IGuiLoader)
 
     def _addListeners(self):
         super(BaseEquipmentSetupSubView, self)._addListeners()
@@ -20,7 +24,9 @@ class BaseEquipmentSetupSubView(DealBaseSetupSubView):
     def _onSelectItem(self, args):
         itemCD = args.get('intCD')
         currentSlotID = int(args.get('currentSlotId', self._curSlotID))
-        self._selectItem(currentSlotID, itemCD)
+        isAutoSelect = bool(args.get('isAutoSelect', False))
+        if not self.__confirmDialogInShowing() or isAutoSelect:
+            self._selectItem(currentSlotID, itemCD)
 
     def _selectItem(self, slotID, item):
         self._interactor.changeSlotItem(slotID, item)
@@ -43,3 +49,6 @@ class BaseEquipmentSetupSubView(DealBaseSetupSubView):
     def _onShowItemInfo(self, args):
         itemIntCD = int(args.get('intCD'))
         showModuleInfo(itemIntCD, self._interactor.getItem().descriptor)
+
+    def __confirmDialogInShowing(self):
+        return self.__gui.windowsManager.getViewByLayoutID(R.views.lobby.tanksetup.dialogs.Confirm()) is not None

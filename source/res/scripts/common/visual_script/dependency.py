@@ -9,10 +9,10 @@ if IS_EDITOR:
     class MockObjectMeta(type):
 
         def __getitem__(cls, item):
-            return MockObject()
+            return MockObject
 
         def __getattr__(cls, item):
-            return MockObject()
+            return MockObject
 
         def __iter__(cls):
             while False:
@@ -24,7 +24,7 @@ if IS_EDITOR:
     class MockObject(object):
         __metaclass__ = MockObjectMeta
 
-        def __int__(self, *args, **kwargs):
+        def __init__(self, *args, **kwargs):
             pass
 
         def __call__(self, *args, **kwargs):

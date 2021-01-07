@@ -1,15 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/multi_plan_provider.py
 import VSE
+from context import VScriptContext
 from misc import preloadPlanXml
 from typing import Iterable, Any
 from debug_utils import LOG_ERROR
+from plan_tags import PlanTags
+from constants import IS_DEVELOPMENT
+from soft_exception import SoftException
 
 class PlanHolder(object):
     __slots__ = ('plan', 'loadState', 'autoStart', '__inputParamCache')
     INACTIVE = 0
     LOADING = 1
     LOADED = 2
+    ERROR = 3
+    planTags = PlanTags()
 
     def __init__(self, plan, state, auto=False):
         self.plan = plan
@@ -21,13 +27,21 @@ class PlanHolder(object):
     def isLoaded(self):
         return self.loadState is PlanHolder.LOADED
 
+    @property
+    def isError(self):
+        return self.loadState is PlanHolder.ERROR
+
     @preloadPlanXml
     def load(self, planName, aspect):
         if self.loadState is PlanHolder.LOADING:
-            if self.plan.load(planName, aspect):
+            tags = PlanHolder.planTags.tags()
+            if self.plan.load(planName, aspect, tags):
                 self.loadState = PlanHolder.LOADED
+            elif self.plan.isLoadCanceled():
+                self.loadState = PlanHolder.INACTIVE
             else:
                 LOG_ERROR('[VScript] MultiPlanProvider: Can not load plan - %s', planName)
+                self.loadState = PlanHolder.ERROR
             if self.isLoaded:
                 for name, value in self.__inputParamCache.iteritems():
                     self.plan.setOptionalInputParam(name, value)
@@ -37,7 +51,7 @@ class PlanHolder(object):
                 self.plan.start()
 
     def setOptionalInputParam(self, name, value):
-        if self.loadState == PlanHolder.LOADED:
+        if self.isLoaded:
             self.plan.setOptionalInputParam(name, value)
             return
         self.__inputParamCache[name] = value
@@ -48,6 +62,9 @@ class MultiPlanProvider(object):
     def __init__(self, aspect):
         self._plans = {}
         self._aspect = aspect
+
+    def destroy(self):
+        pass
 
     def reset(self):
         self.stop()
@@ -83,6 +100,9 @@ class MultiPlanProvider(object):
     def isLoaded(self):
         return all((holder.isLoaded for holder in self._plans.itervalues()))
 
+    def isError(self):
+        return any((holder.isError for holder in self._plans.itervalues()))
+
     def load(self, planNames, autoStart=False):
         self.reset()
         for planName in planNames:
@@ -93,3 +113,65 @@ class MultiPlanProvider(object):
     def setOptionalInputParam(self, name, value):
         for holder in self._plans.itervalues():
             holder.setOptionalInputParam(name, value)
+
+    def setContext(self, context):
+        for holder in self._plans.itervalues():
+            holder.plan.setContext(context)
+
+
+class CallableProviderType:
+    ARENA = 'ARENA'
+
+
+if IS_DEVELOPMENT:
+
+    class CallablePlanProvider(MultiPlanProvider):
+        providers = {CallableProviderType.ARENA: set()}
+        plansOnLoad = dict()
+
+        def __init__(self, aspect, name):
+            super(CallablePlanProvider, self).__init__(aspect)
+            self._name = name
+            self._context = None
+            self.providers[name].add(self)
+            return
+
+        def destroy(self):
+            self.providers[self._name].remove(self)
+
+        def load(self, planNames, autoStart=False):
+            super(CallablePlanProvider, self).load(planNames, autoStart)
+            if self._name in self.plansOnLoad:
+                for planName in self.plansOnLoad[self._name]:
+                    self._loadPlan(planName, autoStart)
+
+        def startPlan(self, planName):
+            holder = self._loadPlan(planName, True)
+            if self._context is not None:
+                holder.plan.setContext(self._context)
+            return
+
+        def setContext(self, context):
+            super(CallablePlanProvider, self).setContext(context)
+            self._context = context
+
+        def _loadPlan(self, planName, autoStart=False):
+            holder = PlanHolder(VSE.Plan(), PlanHolder.LOADING, autoStart)
+            holder.load(planName, self._aspect)
+            self._plans[planName] = holder
+            return holder
+
+
+    def setPlansOnLoad(name, planNames):
+        CallablePlanProvider.plansOnLoad[name] = planNames
+
+
+    def startPlan(name, planName):
+        if name not in CallablePlanProvider.providers:
+            raise SoftException('Wrong provider name')
+        for provider in CallablePlanProvider.providers[name]:
+            provider.startPlan(planName)
+
+
+def makeMultiPlanProvider(aspect, name):
+    return CallablePlanProvider(aspect, name) if IS_DEVELOPMENT else MultiPlanProvider(aspect)

@@ -6,6 +6,9 @@ from soft_exception import SoftException
 from constants import SEASON_TYPE_BY_NAME, RentType, IS_BASEAPP, IS_EDITOR
 from debug_utils import LOG_ERROR
 import type_traits
+import collections
+if TYPE_CHECKING:
+    import ResMgr
 _g_floats = {'count': 0}
 _g_intTuples = {'count': 0}
 _g_floatTuples = {'count': 0}
@@ -517,6 +520,73 @@ def rewriteData(section, subsectionName, value, defaultValue, createNew, accessF
     return False
 
 
+def deleteAndCleanup(section, path):
+    changed = section.deleteSection(path)
+    while True:
+        sep = path.rfind('/')
+        if sep < 0:
+            break
+        path = path[:sep]
+        subSection = section[path]
+        if subSection is not None:
+            if len(subSection) > 0:
+                break
+            changed |= section.deleteSection(subSection)
+
+    return changed
+
+
+def removeSameSection(sectionA, sectionB):
+
+    def multidict(ordered_pairs):
+        mdict = collections.defaultdict(list)
+        for key, value in ordered_pairs:
+            mdict[key].append(value)
+
+        return dict(mdict)
+
+    dictChildA = multidict(sectionA.items())
+    dictChildB = multidict(sectionB.items())
+    childSectionsToRemove = []
+    isAllChildRemoved = True
+    for name, childSectionsA in dictChildA.iteritems():
+        childSectionsB = dictChildB.get(name)
+        if childSectionsB is not None:
+            for a, b in zip(childSectionsA, childSectionsB):
+                if removeSameSection(a, b):
+                    childSectionsToRemove.append(a)
+                isAllChildRemoved = False
+
+        isAllChildRemoved = False
+
+    for section in childSectionsToRemove:
+        sectionA.deleteSection(section)
+
+    if dictChildA:
+        if isAllChildRemoved:
+            return True
+        else:
+            return False
+    try:
+        floatListsA = [ float(item) for item in sectionA.asString.split() ]
+        floatListsB = [ float(item) for item in sectionB.asString.split() ]
+        if len(floatListsA) != len(floatListsB):
+            return False
+        for a, b in zip(floatListsA, floatListsB):
+            if abs(a - b) > 1e-05:
+                return False
+
+        return True
+    except ValueError:
+        pass
+
+    if sectionA.asBinary == sectionB.asBinary:
+        return True
+    else:
+        return False
+        return
+
+
 def listChildren(section, path):
     sep = path.find('/')
     if sep >= 0:
@@ -572,7 +642,7 @@ class ListRewriter(object):
     def __iter__(self):
         return self
 
-    def next(self, preferredPredicate=None, sectionPicker=None):
+    def next(self, preferredPredicate=None, sectionPicker=None, path=None):
         if preferredPredicate is not None and sectionPicker is not None:
             raise SoftException('You must pass ony one parameter into ListRewriter.next()')
         if sectionPicker is not None:
@@ -592,7 +662,9 @@ class ListRewriter(object):
                 pass
 
         self.__changed = True
-        return self.__section.createSection(self.__path)
+        if path is None:
+            path = self.__path
+        return self.__section.createSection(path)
 
     def flush(self):
         for s in self.__sections:

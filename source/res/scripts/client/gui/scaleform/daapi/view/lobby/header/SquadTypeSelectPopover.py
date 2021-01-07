@@ -4,7 +4,7 @@ from adisp import process
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.Scaleform.daapi.view.meta.BattleTypeSelectPopoverMeta import BattleTypeSelectPopoverMeta
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.locale.PLATOON import PLATOON
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.listener import IGlobalListener
 
@@ -22,9 +22,9 @@ class SquadTypeSelectPopover(BattleTypeSelectPopoverMeta, IGlobalListener):
     def getTooltipData(self, itemData, itemIsDisabled):
         tooltip = ''
         if itemData == 'eventSquad':
-            tooltip = TOOLTIPS.HEADER_EVENTSQUAD
+            tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_EVENTSQUAD
         elif itemData == 'squad':
-            tooltip = TOOLTIPS.HEADER_SQUAD
+            tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_CREATE
         return tooltip
 
     def demoClick(self):

@@ -10,9 +10,6 @@ class ChannelComponentMeta(BaseDAAPIComponent):
     def sendMessage(self, message):
         self._printOverrideError('sendMessage')
 
-    def getInfo(self):
-        self._printOverrideError('getInfo')
-
     def getHistory(self):
         self._printOverrideError('getHistory')
 

@@ -80,6 +80,7 @@ class CIRCLE_TYPE(object):
     DRAW_RANGE = 1
     MAX_VIEW_RANGE = 2
     VIEW_RANGE = 4
+    MIN_SPOTTING_RANGE = 8
 
 
 class CIRCLE_STYLE(object):
@@ -89,16 +90,19 @@ class CIRCLE_STYLE(object):
         DRAW_RANGE = 16776960
         MAX_VIEW_RANGE = 16777215
         VIEW_RANGE = 2621223
+        MIN_SPOTTING_RANGE = 4499630
 
 
 class VIEW_RANGE_CIRCLES_AS3_DESCR(object):
     AS_ADD_MAX_DRAW_CIRCLE = 'as_addDrawRange'
     AS_ADD_DYN_CIRCLE = 'as_addDynamicViewRange'
     AS_ADD_MAX_VIEW_CIRCLE = 'as_addMaxViewRage'
+    AS_ADD_MIN_SPOTTING_CIRCLE = 'as_addMinSpottingRange'
     AS_UPDATE_DYN_CIRCLE = 'as_updateDynRange'
     AS_DEL_MAX_DRAW_CIRCLE = 'as_delDrawRange'
     AS_DEL_DYN_CIRCLE = 'as_delDynRange'
     AS_DEL_MAX_VIEW_CIRCLE = 'as_delMaxViewRage'
+    AS_DEL_MIN_SPOTTING_CIRCLE = 'as_delMinSpottingRange'
     AS_INIT_ARENA_SIZE = 'as_initArenaSize'
     AS_REMOVE_ALL_CIRCLES = 'as_removeAllCircles'
 

@@ -249,7 +249,7 @@
     <shortUserString>	#germany_vehicles:Maus_short	</shortUserString>
     <description>	#germany_vehicles:Maus_descr	</description>
     <price>	6100000	</price>
-    <tags>	heavyTank HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals NY_style	</tags>
+    <tags>	heavyTank HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
     <level>	10	</level>
   </G42_Maus>
   <G27_VK3001P>
@@ -337,7 +337,7 @@
     <shortUserString>	#germany_vehicles:E-100_short	</shortUserString>
     <description>	#germany_vehicles:E-100_descr	</description>
     <price>	6100000	</price>
-    <tags>	heavyTank HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals NY_style	</tags>
+    <tags>	heavyTank HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
     <level>	10	</level>
   </G56_E-100>
   <G55_E-75>
@@ -427,7 +427,7 @@
     <description>	#germany_vehicles:JagdPz_E100_descr	</description>
     <shortUserString>	#germany_vehicles:JagdPz_E100_short	</shortUserString>
     <price>	6100000	</price>
-    <tags>	AT-SPG HD heavyAT-SPG AT-SPG2 improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals NY_style	</tags>
+    <tags>	AT-SPG HD heavyAT-SPG AT-SPG2 improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
     <level>	10	</level>
   </G72_JagdPz_E100>
   <G73_E50_Ausf_M>
@@ -507,6 +507,8 @@
     <userString>	#germany_vehicles:Auf_Panther	</userString>
     <shortUserString>	#germany_vehicles:Auf_Panther_short	</shortUserString>
     <description>	#germany_vehicles:Auf_Panther_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:Auf_Panther_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:Auf_Panther_long_special	</longDescriptionSpecial>
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -712,6 +714,19 @@
     <tags>	lightTank HD scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
     <level>	8	</level>
   </G126_HWK_12>
+  <G154_Kpz_07_RH>
+    <id>	179	</id>
+    <userString>	#germany_vehicles:G154_Kpz_07_RH	</userString>
+    <shortUserString>	#germany_vehicles:G154_Kpz_07_RH_short	</shortUserString>
+    <description>	#germany_vehicles:G154_Kpz_07_RH_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:G154_Kpz_07_RH_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:G154_Kpz_07_RH_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank HD mediumTank1 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
+    <level>	8	</level>
+  </G154_Kpz_07_RH>
   <G151_Pz_Sfl_IC>
     <id>	180	</id>
     <userString>	#germany_vehicles:G151_Pz_Sfl_IC	</userString>
@@ -725,6 +740,19 @@
     <tags>	AT-SPG HD lightAT-SPG extraHealthReserve_class3_user	</tags>
     <level>	4	</level>
   </G151_Pz_Sfl_IC>
+  <G147_mPanzer_64>
+    <id>	181	</id>
+    <userString>	#germany_vehicles:G147_mPanzer_64	</userString>
+    <shortUserString>	#germany_vehicles:G147_mPanzer_64_short	</shortUserString>
+    <description>	#germany_vehicles:G147_mPanzer_64_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:G147_mPanzer_64_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:G147_mPanzer_64_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank mediumTank1 HD siegeMode hydraulicChassis special secret testTank improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	9	</level>
+  </G147_mPanzer_64>
   <G142_M48RPz>
     <id>	182	</id>
     <userString>	#germany_vehicles:G142_M48RPz	</userString>

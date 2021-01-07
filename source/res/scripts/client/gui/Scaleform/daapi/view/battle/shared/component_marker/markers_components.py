@@ -158,6 +158,7 @@ class World2DMarkerComponent(_IMarkerComponentBase):
         if self._isMarkerExists and gui:
             gui.deleteMarker(self._componentID)
         self._isMarkerExists = False
+        self._isVisible = False
 
     def __createMarkerAndSetup(self, gui, objectID):
         if not gui.createMarker(objectID, self._matrixProduct, active=self._isVisible):
@@ -218,6 +219,7 @@ class MinimapMarkerComponent(_IMarkerComponentBase):
         if self._isMarkerExists and gui:
             gui.deleteMarker(self._componentID)
         self._isMarkerExists = False
+        self._isVisible = False
 
     def update(self, *args, **kwargs):
         gui = self._gui()

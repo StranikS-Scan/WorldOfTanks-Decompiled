@@ -190,10 +190,10 @@
   <HealPointVisual>
     <ally>
       <visual>	content/Interface/TargetPoint/inspire.model	</visual>
-      <color>	0xffffffff	</color>
-      <enableAccurateCollision>	False	</enableAccurateCollision>
-      <maxUpdateInterval>	0.04	</maxUpdateInterval>
-      <overTerrainHeight>	0.5	</overTerrainHeight>
+      <color>	0xffff00ff	</color>
+      <enableAccurateCollision>	true	</enableAccurateCollision>
+      <maxUpdateInterval>	0.06	</maxUpdateInterval>
+      <overTerrainHeight>	0.3	</overTerrainHeight>
     </ally>
   </HealPointVisual>
   <battleRoyaleHealpoint>
@@ -203,13 +203,15 @@
       <enableAccurateCollision>	False	</enableAccurateCollision>
       <maxUpdateInterval>	0.04	</maxUpdateInterval>
       <overTerrainHeight>	0.5	</overTerrainHeight>
+      <cutOffYDistance>	2.	</cutOffYDistance>
     </enemy>
     <ally>
       <visual>	content/Interface/TargetPoint/inspire.model	</visual>
       <color>	0xffffffff	</color>
-      <enableAccurateCollision>	False	</enableAccurateCollision>
+      <enableAccurateCollision>	True	</enableAccurateCollision>
       <maxUpdateInterval>	0.04	</maxUpdateInterval>
       <overTerrainHeight>	0.5	</overTerrainHeight>
+      <cutOffYDistance>	2.	</cutOffYDistance>
     </ally>
   </battleRoyaleHealpoint>
   <lootTypes>

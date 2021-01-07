@@ -1,6 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/battle_selector_items.py
 import logging
+from uilogging.decorators import loggerTarget, loggerEntry
+from uilogging.mode_selector.constants import MS_LOG_KEYS
+from uilogging.mode_selector.decorators import logChangeMode
+from uilogging.mode_selector.loggers import ModeSelectorUILogger
 from adisp import process
 from gui.prb_control.entities.base.ctx import PrbAction
 from account_helpers import isDemonstrator
@@ -300,10 +304,10 @@ class _SandboxItem(_SelectorItem):
         self._isVisible = self.lobbyContext.getServerSettings().isSandboxEnabled()
 
 
-class _BattleSelectorItems(object):
+class _BaseSelectorItems(object):
 
     def __init__(self, items, extraItems=None):
-        super(_BattleSelectorItems, self).__init__()
+        super(_BaseSelectorItems, self).__init__()
         self.__items = {item.getData():item for item in items}
         self.__extraItems = {item.getData():item for item in extraItems} if extraItems else dict()
         self.__isDemonstrator = False
@@ -317,6 +321,10 @@ class _BattleSelectorItems(object):
         self.__extraItems.clear()
         self.__isDemonstrator = False
         self.__isDemoButtonEnabled = False
+
+    @property
+    def allItems(self):
+        return self.__items.values() + self.__extraItems.values()
 
     def update(self, state):
         selected = self.__items[self._getDefaultPAN()]
@@ -383,7 +391,19 @@ class _BattleSelectorItems(object):
         return False
 
 
-class _SquadSelectorItems(_BattleSelectorItems):
+@loggerTarget(logKey=MS_LOG_KEYS.BATTLE_TYPES, loggerCls=ModeSelectorUILogger)
+class _BattleSelectorItems(_BaseSelectorItems):
+
+    @loggerEntry
+    def init(self):
+        return super(_BattleSelectorItems, self).init()
+
+    @logChangeMode
+    def update(self, state):
+        return super(_BattleSelectorItems, self).update(state)
+
+
+class _SquadSelectorItems(_BaseSelectorItems):
 
     def _getDefaultPAN(self):
         return _DEFAULT_SQUAD_PAN
@@ -703,10 +723,12 @@ def create():
     global _g_items
     if _g_items is None:
         _g_items = _createItems()
+        _g_items.init()
     else:
         _logger.warning('Item already is created')
     if _g_squadItems is None:
         _g_squadItems = _createSquadSelectorItems()
+        _g_squadItems.init()
     else:
         _logger.warning('Item already is created')
     return

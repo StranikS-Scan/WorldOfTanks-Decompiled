@@ -49,6 +49,8 @@ class CalloutPanel(CalloutPanelMeta):
         pressText = backport.text(R.strings.ingame_gui.quickReply.hint.press())
         if cmdName == BATTLE_CHAT_COMMAND_NAMES.HELPME:
             hintText = backport.text(R.strings.ingame_gui.quickReply.hint.toHelp())
+        elif cmdName == BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY:
+            hintText = backport.text(R.strings.ingame_gui.quickReply.hint.toThank())
         else:
             hintText = backport.text(R.strings.ingame_gui.quickReply.hint.toAcknowledge())
         keyName = getReadableKey(CommandMapping.CMD_RADIAL_MENU_SHOW)

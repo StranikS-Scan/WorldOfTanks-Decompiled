@@ -5,14 +5,14 @@ from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusMo
 class IconBonusModel(BonusModel):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=0):
+    def __init__(self, properties=7, commands=0):
         super(IconBonusModel, self).__init__(properties=properties, commands=commands)
 
     def getIcon(self):
-        return self._getString(5)
+        return self._getString(6)
 
     def setIcon(self, value):
-        self._setString(5, value)
+        self._setString(6, value)
 
     def _initialize(self):
         super(IconBonusModel, self)._initialize()

@@ -1073,7 +1073,7 @@ class InspireConfigReader(BuffConfigReader):
 
 
 class HealPointConfigReader(BuffConfigReader):
-    _HEAL_POINT_SLOTS = BuffConfigReader._BUFF_SLOTS + ('healPerTick', 'expireByDamageReceived', 'healGroup', 'tickInterval')
+    _HEAL_POINT_SLOTS = BuffConfigReader._BUFF_SLOTS + ('healPerTick', 'expireByDamageReceived', 'healGroup', 'tickInterval', 'height', 'depth')
 
     def initHealPointSlots(self):
         super(HealPointConfigReader, self).initBuffSlots()
@@ -1081,6 +1081,8 @@ class HealPointConfigReader(BuffConfigReader):
         self.expireByDamageReceived = False
         self.healGroup = None
         self.tickInterval = 1.0
+        self.height = 1.0
+        self.depth = 1.0
         return
 
     def readHealPointConfig(self, xmlCtx, section):
@@ -1089,6 +1091,8 @@ class HealPointConfigReader(BuffConfigReader):
         self.expireByDamageReceived = _xml.readBool(xmlCtx, section, 'expireByDamageReceived')
         self.healGroup = _xml.readIntOrNone(xmlCtx, section, 'healGroup')
         self.tickInterval = _xml.readPositiveFloat(xmlCtx, section, 'tickInterval', 1.0)
+        self.height = _xml.readPositiveFloat(xmlCtx, section, 'height', 1.0)
+        self.depth = _xml.readPositiveFloat(xmlCtx, section, 'depth', 1.0)
 
 
 class ArenaAimLimits(object):

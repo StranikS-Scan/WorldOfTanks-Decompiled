@@ -6,6 +6,7 @@ from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.customization.shared import getSuitableText
 from gui.Scaleform.daapi.view.meta.CustomizationStyleInfoMeta import CustomizationStyleInfoMeta
+from gui.shared.utils.graphics import isRendererPipelineDeferred
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.customization.shared import C11nId, getPurchaseMoneyState, isTransactionValid
 from gui.impl import backport
@@ -23,6 +24,8 @@ StyleInfoVO = namedtuple('StyleInfoVO', ('styleName', 'styleInfo', 'styleInfoBig
 ButtonVO = namedtuple('ButtonVO', ('enabled', 'label', 'disabledTooltip', 'visible'))
 ParamVO = namedtuple('ParamVO', ('iconSrc', 'paramText'))
 STYLE_INFO_BLUR_DELAY = 0.2
+BACKGROUND_ALPHA_FORWARD = 1.0
+BACKGROUND_ALPHA_DEFERRED = 0.5
 _INSERTION_OPEN_TAG = "<font size='16' face='$FieldFont' color='#E9E2BF'>"
 _INSERTION_OPEN_TAG_BIG = "<font size='18' face='$TitleFont' color='#E9E2BF'>"
 _INSERTION_CLOSE_TAG = '</font>'
@@ -55,6 +58,7 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
         g_currentVehicle.onChangeStarted += self.__onVehicleChangeStarted
         self.__ctx.events.onUpdateStyleInfoDOF += self.__onUpdateStyleInfoDOF
         self.service.onCustomizationHelperRecreated += self.__onCustomizationHelperRecreated
+        self.__setBackgroundAlpha()
 
     def _dispose(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -99,9 +103,6 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
         elif self.__prevStyle != self.__ctx.mode.modifiedStyle:
             self.__installStyle(self.__prevStyle)
         self.__prevStyle = None
-        exitCallback = self.__ctx.getExitCallback()
-        if exitCallback is not None:
-            exitCallback.close()
         return
 
     def onApply(self):
@@ -111,9 +112,6 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
             self.__blurRectId = None
         self.service.setDOFenabled(False)
         self.__visible = False
-        exitCallback = self.__ctx.getExitCallback()
-        if exitCallback is not None:
-            exitCallback.apply()
         return
 
     def hide(self):
@@ -243,3 +241,7 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
             self.__blur.changeRect(self.__blurRectId, blurRect)
         else:
             self.__blurRectId = self.__blur.addRect(blurRect)
+
+    def __setBackgroundAlpha(self):
+        alpha = BACKGROUND_ALPHA_DEFERRED if isRendererPipelineDeferred() else BACKGROUND_ALPHA_FORWARD
+        self.as_setBackgroundAlphaS(alpha)

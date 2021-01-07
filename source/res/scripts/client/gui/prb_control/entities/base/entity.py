@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/base/entity.py
+from adisp import process
 from constants import QUEUE_TYPE
 from debug_utils import LOG_ERROR
-from gui.prb_control.entities.base.actions_validator import NotSupportedActionsValidator, BaseActionsValidator
 from gui.prb_control.entities.base.actions_validator import IActionsValidator
+from gui.prb_control.entities.base.actions_validator import NotSupportedActionsValidator, BaseActionsValidator
 from gui.prb_control.entities.base.permissions import IPrbPermissions
 from gui.prb_control.entities.base.scheduler import BaseScheduler
 from gui.prb_control.items import SelectResult, ValidationResult
@@ -120,6 +121,9 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
     def getConfirmDialogMeta(self, ctx):
         return None
 
+    def showDialog(self, meta, callback):
+        self.__showDefaultDialog(meta, callback)
+
     def getID(self):
         pass
 
@@ -169,6 +173,14 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
 
     def _createCooldownManager(self):
         return None
+
+    @process
+    def __showDefaultDialog(self, meta, callback):
+        from gui import DialogsInterface
+        result = yield DialogsInterface.showDialog(meta)
+        if callback is not None:
+            callback(result)
+        return
 
 
 class NotSupportedEntryPoint(BasePrbEntryPoint):

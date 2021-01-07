@@ -6,6 +6,7 @@ import datetime
 import json
 import copy
 import cPickle as pickle
+import logging
 import Math
 import BigWorld
 import ArenaType
@@ -31,6 +32,7 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
+_logger = logging.getLogger(__name__)
 
 def _isVideoCameraCtrl(mode):
     from AvatarInputHandler.control_modes import VideoCameraControlMode
@@ -355,6 +357,10 @@ class BattleReplay(object):
         if currReplayTime > finishReplayTime:
             currReplayTime = finishReplayTime
         fastForwardStep = FAST_FORWARD_STEP * (2.0 if mods == 2 else 1.0)
+        if key == Keys.KEY_F11 and isDown:
+            if self.isPlaying:
+                self.__replayCtrl.onPutScreenshotMark()
+                return True
         if (key == Keys.KEY_LEFTMOUSE or cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key)) and isDown and not isCursorVisible:
             if self.isControllingCamera:
                 self.appLoader.detachCursor(settings.APP_NAME_SPACE.SF_BATTLE)
@@ -585,6 +591,8 @@ class BattleReplay(object):
             self.__replayCtrl.playerVehicleID = BigWorld.player().playerVehicleID
             self.__replayCtrl.onClientReady()
             if self.isPlaying:
+                if not BigWorld.IS_CONSUMER_CLIENT_BUILD:
+                    self.__logSVNInfo()
                 AreaDestructibles.g_destructiblesManager.onAfterReplayTimeWarp()
                 if isPlayerAvatar():
                     BigWorld.player().onVehicleEnterWorld += self.__onVehicleEnterWorld
@@ -624,6 +632,8 @@ class BattleReplay(object):
                  'regionCode': constants.AUTH_REALM,
                  'serverSettings': self.__serverSettings,
                  'hasMods': self.__replayCtrl.hasMods}
+                if not BigWorld.IS_CONSUMER_CLIENT_BUILD:
+                    arenaInfo['branchURL'], arenaInfo['lastChangedRevision'] = self.__getBranchAndRevision()
                 if BigWorld.player().arena.guiType == constants.ARENA_GUI_TYPE.BOOTCAMP:
                     from bootcamp.Bootcamp import g_bootcamp
                     arenaInfo['lessonId'] = g_bootcamp.getLessonNum()
@@ -637,6 +647,37 @@ class BattleReplay(object):
                     LOG_DEBUG('replayTimeout set for %.2f' % float(self.replayTimeout))
                     BigWorld.callback(float(self.replayTimeout), BigWorld.quit)
             return
+
+    @property
+    def isNormalSpeed(self):
+        return self.playbackSpeed == 1.0
+
+    def __getBranchAndRevision(self):
+        from wot_svn import svn
+        svnInstance = svn()
+        if not svnInstance.enabled():
+            return ('undefined', 'undefined')
+        else:
+            info = svnInstance.getInfo()
+            if info is None:
+                return ('undefined', 'undefined')
+            rootPath = info.workingCopyRootAbsPath
+            info = svnInstance.getInfo(rootPath)
+            return ('undefined', 'undefined') if info is None else (info.branchURL, info.lastChangedRevision)
+
+    def __logSVNInfo(self):
+        currentBranch, currentRevision = self.__getBranchAndRevision()
+        replayBranch = self.arenaInfo.get('branchURL')
+        if replayBranch is None:
+            replayBranch = 'undefined'
+        replayRevision = self.arenaInfo.get('lastChangedRevision')
+        if replayRevision is None:
+            replayRevision = 'undefined'
+        _logger.info('Current branch: ' + currentBranch)
+        _logger.info('Current revision: ' + str(currentRevision))
+        _logger.info('Replay branch: ' + replayBranch)
+        _logger.info('Replay revision: ' + str(replayRevision))
+        return
 
     def __showInfoMessages(self):
         self.__showInfoMessage('replayControlsHelp1')
@@ -859,7 +900,6 @@ class BattleReplay(object):
             if 'spgRedesignFeatures' in serverSettings:
                 self.__serverSettings['spgRedesignFeatures'] = serverSettings['spgRedesignFeatures']
             self.__serverSettings['ranked_config'] = serverSettings['ranked_config']
-            self.__serverSettings['isNoAllyDamage'] = serverSettings['isNoAllyDamage']
             if player.databaseID is None:
                 BigWorld.callback(0.1, self.__onAccountBecomePlayer)
             else:

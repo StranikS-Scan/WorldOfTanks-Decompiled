@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/premacc/squad_bonus_tooltip_content.py
-from frameworks.wulf import ViewFlags, View
+from frameworks.wulf import ViewFlags, View, ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.premacc.squad_bonus_tooltip_content_model import SquadBonusTooltipContentModel
 from helpers import dependency
@@ -16,8 +16,11 @@ class SquadBonusTooltipContent(View):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __eventsCache = dependency.descriptor(IEventsCache)
 
-    def __init__(self, *args, **kwargs):
-        super(SquadBonusTooltipContent, self).__init__(R.views.lobby.premacc.squad_bonus_tooltip_content.SquadBonusTooltipContent(), ViewFlags.COMPONENT, SquadBonusTooltipContentModel, *args, **kwargs)
+    def __init__(self):
+        settings = ViewSettings(R.views.lobby.premacc.squad_bonus_tooltip_content.SquadBonusTooltipContent())
+        settings.flags = ViewFlags.COMPONENT
+        settings.model = SquadBonusTooltipContentModel()
+        super(SquadBonusTooltipContent, self).__init__(settings)
 
     @property
     def viewModel(self):

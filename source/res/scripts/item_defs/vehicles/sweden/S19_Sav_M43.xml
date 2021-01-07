@@ -31,6 +31,7 @@
     <priceFactor>	0.8	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
     <exclusionMask></exclusionMask>
+    <density>	0.83 0.83	</density>
   </camouflage>
   <hull>
     <armor>
@@ -2657,6 +2658,7 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <shotOffset>	0.000000 0.147121 0.000000	</shotOffset>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -2784,6 +2786,7 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <shotOffset>	0.000000 -0.002612 0.000000	</shotOffset>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -2827,10 +2830,6 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 14 1 14	</maxPitch>
           </pitchLimits>
-          <unlocks>
-            <vehicle>	S14_Ikv_103	  <cost>	27350	</cost>
-            </vehicle>
-          </unlocks>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.56	</shotDispersionRadius>
           <reloadTime>	9.8	</reloadTime>
@@ -2855,6 +2854,7 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <shotOffset>	0.000001 -0.001214 0.000000	</shotOffset>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>

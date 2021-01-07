@@ -49,13 +49,16 @@ def getVehicleCollectorRequirements(inventoryVehicles, nationID=ALL_NATIONS_INDE
     return res
 
 
-def getAllCollectorVehicles():
+def getAllCollectorVehicles(nationID=ALL_NATIONS_INDEX):
     cache = getCache()
     collectorVehicles = set()
     collectorVehiclesByNations = cache['collectorVehiclesByNations']
-    for collectorVehiclesInNation in collectorVehiclesByNations.itervalues():
-        collectorVehicles.update(collectorVehiclesInNation)
+    if nationID == ALL_NATIONS_INDEX:
+        for collectorVehiclesInNation in collectorVehiclesByNations.itervalues():
+            collectorVehicles.update(collectorVehiclesInNation)
 
+    else:
+        collectorVehicles.update(collectorVehiclesByNations.get(nationID, set()))
     return collectorVehicles
 
 

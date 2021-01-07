@@ -116,12 +116,16 @@ class ClassicPage(SharedPage):
                 self._blToggling.add(alias)
             elif self._fsToggling:
                 self._fsToggling.add(alias)
+            elif self._isDestroyTimerShown:
+                self._destroyTimerToggling.add(alias)
             elif not self.as_isComponentVisibleS(alias):
                 self._setComponentsVisibility(visible={alias})
         elif self._isBattleLoading:
             self._blToggling.discard(alias)
         elif self._fsToggling:
             self._fsToggling.discard(alias)
+        elif self._isDestroyTimerShown:
+            self._destroyTimerToggling.discard(alias)
         elif self.as_isComponentVisibleS(alias):
             self._setComponentsVisibility(hidden={alias})
 

@@ -94,8 +94,6 @@ class StyleUnlockedView(ViewImpl):
         isEnabled = not lock and not currentHangarIsSteelHunter() and self.__isCustEnabledForActiveVehicle()
         if isEnabled:
             tooltipText = ''
-        elif self.__vehicle.isNewYearOutfitSet():
-            tooltipText = backport.text(R.strings.vehicle_customization.progressiveItemReward.gotoCustomizationButton.hasNyStyle.tooltip())
         else:
             tooltipText = backport.text(R.strings.vehicle_customization.progressiveItemReward.gotoCustomizationButton.disabled.tooltip())
         model.setSecondaryButtonTooltip(tooltipText)

@@ -1332,4 +1332,51 @@
       <devices>	17	</devices>
     </damage>
   </Development_Shell>
+  <_85mm_CJ_365_bootcamp>
+    <id>	13	</id>
+    <userString>	#china_vehicles:_85mm_CJ_365	</userString>
+    <icon>	ap	</icon>
+    <price>	109	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	85	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	160	</armor>
+      <devices>	115	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_85mm_CJ_365_bootcamp>
+  <_85mm_367_bootcamp>
+    <id>	14	</id>
+    <userString>	#china_vehicles:_85mm_367	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	2800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	85	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	160	</armor>
+      <devices>	115	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_85mm_367_bootcamp>
+  <_85mm_SB_365_bootcamp>
+    <id>	21	</id>
+    <userString>	#china_vehicles:_85mm_SB_365	</userString>
+    <icon>	he	</icon>
+    <price>	98	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	85	</caliber>
+    <explosionRadius>	1.32	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	220	</armor>
+      <devices>	115	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_85mm_SB_365_bootcamp>
 </shells.xml>

@@ -78,3 +78,6 @@ class DamagePanelMeta(BaseDAAPIComponent):
 
     def as_setSpeedModeS(self, value):
         return self.flashObject.as_setSpeedMode(value) if self._isDAAPIInited() else None
+
+    def as_setRepairTimesVisibleS(self, value):
+        return self.flashObject.as_setRepairTimesVisible(value) if self._isDAAPIInited() else None

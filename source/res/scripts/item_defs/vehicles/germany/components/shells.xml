@@ -1687,6 +1687,51 @@
       <devices>	122	</devices>
     </damage>
   </_90mm_HE_M71>
+  <_90mm_AP_M771>
+    <id>	300	</id>
+    <userString>	#germany_vehicles:_90mm_AP_M771	</userString>
+    <icon>	ap	</icon>
+    <price>	345	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	200	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_90mm_AP_M771>
+  <_90mm_M431a>
+    <id>	301	</id>
+    <userString>	#germany_vehicles:_90mm_M431a	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	200	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_90mm_M431a>
+  <_90mm_HE_M71a>
+    <id>	302	</id>
+    <userString>	#germany_vehicles:_90mm_HE_M71a	</userString>
+    <icon>	he	</icon>
+    <price>	490	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	90	</caliber>
+    <explosionRadius>	1.46	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_90mm_HE_M71a>
   <_100mm_BR-412D>
     <id>	125	</id>
     <userString>	#germany_vehicles:_100mm_BR-412D	</userString>
@@ -2176,6 +2221,51 @@
       <devices>	150	</devices>
     </damage>
   </_105mm_Exp_HE>
+  <_105mm_DM13_Kurz>
+    <id>	282	</id>
+    <userString>	#germany_vehicles:_105mm_DM13_Kurz	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1220	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_DM13_Kurz>
+  <_105mm_DM12_Kurz>
+    <id>	283	</id>
+    <userString>	#germany_vehicles:_105mm_DM12_Kurz	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_105mm_DM12_Kurz>
+  <_105mm_DM11_Kurz>
+    <id>	284	</id>
+    <userString>	#germany_vehicles:_105mm_DM11_Kurz	</userString>
+    <icon>	he	</icon>
+    <price>	870	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	480	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_DM11_Kurz>
   <_105mm_Pzgr_39_45>
     <id>	269	</id>
     <userString>	#germany_vehicles:_105mm_Pzgr_39_45	</userString>

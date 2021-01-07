@@ -406,7 +406,7 @@ class _PythonAutoReloadProxy(_ReloadingAnimationsProxy):
 
 
 class AmmoPlugin(CrosshairPlugin):
-    __slots__ = ('__guiSettings', '__burstSize', '__shellsInClip', '__autoReloadCallbackID', '__autoReloadSnapshot', '__scaledInterval', '__reloadAnimator')
+    __slots__ = ('__guiSettings', '__burstSize', '__shellsInClip', '__autoReloadCallbackID', '__autoReloadSnapshot', '__scaledInterval', '__reloadAnimator', '__isShowingAutoloadingBoost')
     bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self, parentObj):
@@ -416,6 +416,7 @@ class AmmoPlugin(CrosshairPlugin):
         self.__autoReloadCallbackID = None
         self.__autoReloadSnapshot = None
         self.__reloadAnimator = None
+        self.__isShowingAutoloadingBoost = True
         self.__scaledInterval = None
         return
 
@@ -432,6 +433,7 @@ class AmmoPlugin(CrosshairPlugin):
         ctrl.onShellsUpdated += self.__onShellsUpdated
         ctrl.onCurrentShellChanged += self.__onCurrentShellChanged
         vehStateCtrl.onVehicleControlling += self.__onVehicleControlling
+        g_replayEvents.onPause += self.__onReplayPaused
         return
 
     def __onVehicleControlling(self, _):
@@ -448,6 +450,7 @@ class AmmoPlugin(CrosshairPlugin):
             ctrl.onGunReloadTimeSet -= self.__onGunReloadTimeSet
             ctrl.onShellsUpdated -= self.__onShellsUpdated
             ctrl.onCurrentShellChanged -= self.__onCurrentShellChanged
+            g_replayEvents.onPause -= self.__onReplayPaused
         if vehStateCtrl is not None:
             vehStateCtrl.onVehicleControlling -= self.__onVehicleControlling
         return
@@ -538,7 +541,19 @@ class AmmoPlugin(CrosshairPlugin):
                 timeLeft = AUTOLOADERBOOSTVIEWSTATES.WAITING_TO_START
             else:
                 timeLeft = stateDuration
+            if not self.__isShowingAutoloadingBoost:
+                timeLeft = AUTOLOADERBOOSTVIEWSTATES.CHARGED
             self.__reloadAnimator.showAutoLoadingBoost(timeLeft, stateTotalTime)
+
+    def __onReplayPaused(self, _):
+        isReplay = BattleReplay.g_replayCtrl.isPlaying
+        isNormalSpeed = BattleReplay.g_replayCtrl.isNormalSpeed
+        if self.__isShowingAutoloadingBoost and isReplay and not isNormalSpeed:
+            self.__isShowingAutoloadingBoost = False
+            self.__reloadAnimator.showAutoLoadingBoost(AUTOLOADERBOOSTVIEWSTATES.WAITING_TO_START, 0.0)
+            self.__reloadAnimator.hideAutoLoadingBoost(showAnimation=False)
+        else:
+            self.__isShowingAutoloadingBoost = True
 
     def __reCalcFirstShellAutoReload(self, baseTime):
         if not self.__scaledInterval:

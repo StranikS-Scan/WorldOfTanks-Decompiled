@@ -4,7 +4,7 @@ import weakref
 from collections import namedtuple
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.migrations import migrateToVersion
-from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints, BattlePassStorageKeys, NYLootBoxesStorageKeys, NewYearStorageKeys
+from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints, BattlePassStorageKeys
 from adisp import process, async
 from constants import ROLES_COLLAPSE
 from debug_utils import LOG_ERROR, LOG_DEBUG
@@ -55,13 +55,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     BATTLE_PASS_STORAGE = 'BATTLE_PASS_STORAGE'
     BATTLE_COMM = 'BATTLE_COMM'
     DOG_TAGS = 'DOG_TAGS'
-    LOOT_BOX_VIEWED = 'LOOT_BOX_VIEWED'
-    LOOT_BOX_ORIENTAL = 'LOOT_BOX_ORIENTAL'
-    LOOT_BOX_NEW_YEAR = 'LOOT_BOX_NEW_YEAR'
-    LOOT_BOX_FAIRYTALE = 'LOOT_BOX_FAIRYTALE'
-    LOOT_BOX_CHRISTMAS = 'LOOT_BOX_CHRISTMAS'
-    LOOT_BOX_COMMON = 'LOOT_BOX_COMMON'
-    NEW_YEAR = 'NEW_YEAR'
+    UNIT_FILTER = 'UNIT_FILTER'
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2)
 
 
@@ -129,9 +123,9 @@ class ServerSettingsManager(object):
                                        GAME.HANGAR_CAM_PARALLAX_ENABLED: 16,
                                        GAME.C11N_HISTORICALLY_ACCURATE: 17,
                                        GAME.ENABLE_SPEEDOMETER: 23,
-                                       GAME.LOOT_BOX_VIDEO_OFF: 24,
-                                       GAME.NY_VEHICLES_PROGRESS_ENTRY: 25,
-                                       GAME.NY_VEHICLES_POST_EVENT_ENTRY: 26}, offsets={GAME.BATTLE_LOADING_INFO: Offset(4, 48),
+                                       GAME.DISPLAY_PLATOON_MEMBERS: 24,
+                                       GAME.MINIMAP_MIN_SPOTTING_RANGE: 25,
+                                       GAME.ENABLE_REPAIR_TIMER: 26}, offsets={GAME.BATTLE_LOADING_INFO: Offset(4, 48),
                                        GAME.BATTLE_LOADING_RANKED_INFO: Offset(21, 6291456),
                                        GAME.HANGAR_CAM_PERIOD: Offset(18, 1835008)}),
      SETTINGS_SECTIONS.GAMEPLAY: Section(masks={}, offsets={GAME.GAMEPLAY_MASK: Offset(0, 65535)}),
@@ -201,8 +195,7 @@ class ServerSettingsManager(object):
                                            'favorite': 5,
                                            'bonus': 6,
                                            'event': 7,
-                                           'crystals': 8,
-                                           'newYear': 9}, offsets={}),
+                                           'crystals': 8}, offsets={}),
      SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
                                                   'germany': 1,
                                                   'usa': 2,
@@ -250,8 +243,7 @@ class ServerSettingsManager(object):
                                                   'hashSupport1': 18,
                                                   'scout1': 19,
                                                   'scout2': 20,
-                                                  'SPG1': 21,
-                                                  'newYear': 22}, offsets={}),
+                                                  'SPG1': 21}, offsets={}),
      SETTINGS_SECTIONS.EPICBATTLE_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
                                                       'germany': 1,
                                                       'usa': 2,
@@ -286,8 +278,7 @@ class ServerSettingsManager(object):
                                                       'favorite': 5,
                                                       'bonus': 6,
                                                       'event': 7,
-                                                      'crystals': 8,
-                                                      'newYear': 9}, offsets={}),
+                                                      'crystals': 8}, offsets={}),
      SETTINGS_SECTIONS.BATTLEPASS_CAROUSEL_FILTER_1: Section(masks={'isCommonProgression': 0}, offsets={}),
      SETTINGS_SECTIONS.GUI_START_BEHAVIOR: Section(masks={GuiSettingsBehavior.FREE_XP_INFO_DIALOG_SHOWED: 0,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED: 1,
@@ -295,7 +286,8 @@ class ServerSettingsManager(object):
                                             GuiSettingsBehavior.EPIC_RANDOM_CHECKBOX_CLICKED: 3,
                                             GuiSettingsBehavior.EPIC_WELCOME_VIEW_SHOWED: 5,
                                             GuiSettingsBehavior.TECHTREE_INTRO_BLUEPRINTS_RECEIVED: 23,
-                                            GuiSettingsBehavior.TECHTREE_INTRO_SHOWED: 24}, offsets={GuiSettingsBehavior.LAST_SHOWN_EPIC_WELCOME_SCREEN: Offset(7, 8388480)}),
+                                            GuiSettingsBehavior.TECHTREE_INTRO_SHOWED: 24,
+                                            GuiSettingsBehavior.DISPLAY_PLATOON_MEMBER_CLICKED: 25}, offsets={GuiSettingsBehavior.LAST_SHOWN_EPIC_WELCOME_SCREEN: Offset(7, 8388480)}),
      SETTINGS_SECTIONS.EULA_VERSION: Section(masks={}, offsets={'version': Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.MARKS_ON_GUN: Section(masks={}, offsets={GAME.SHOW_MARKS_ON_GUN: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.CONTACTS: Section(masks={CONTACTS.SHOW_OFFLINE_USERS: 0,
@@ -348,7 +340,7 @@ class ServerSettingsManager(object):
                                            OnceOnlyHints.OPT_DEV_DRAG_AND_DROP_HINT: 2,
                                            OnceOnlyHints.DOGTAG_HANGAR_HINT: 3,
                                            OnceOnlyHints.DOGTAG_PROFILE_HINT: 4,
-                                           OnceOnlyHints.NY_VEHICLES_EXTRA_SLOT_BONUS_HINT: 5}, offsets={}),
+                                           OnceOnlyHints.PLATOON_BTN_HINT: 5}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESET_CRITS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -475,19 +467,7 @@ class ServerSettingsManager(object):
                                                   'event': 7,
                                                   'crystals': 8,
                                                   'battleRoyale': 9}, offsets={}),
-     SETTINGS_SECTIONS.LOOT_BOX_VIEWED: Section(masks={}, offsets={'count': Offset(0, 4294967295L)}),
-     SETTINGS_SECTIONS.LOOT_BOX_ORIENTAL: Section(masks={}, offsets={NYLootBoxesStorageKeys.NEW_COUNT: Offset(0, 65535),
-                                           NYLootBoxesStorageKeys.DELIVERED_COUNT: Offset(16, 4294901760L)}),
-     SETTINGS_SECTIONS.LOOT_BOX_NEW_YEAR: Section(masks={}, offsets={NYLootBoxesStorageKeys.NEW_COUNT: Offset(0, 65535),
-                                           NYLootBoxesStorageKeys.DELIVERED_COUNT: Offset(16, 4294901760L)}),
-     SETTINGS_SECTIONS.LOOT_BOX_FAIRYTALE: Section(masks={}, offsets={NYLootBoxesStorageKeys.NEW_COUNT: Offset(0, 65535),
-                                            NYLootBoxesStorageKeys.DELIVERED_COUNT: Offset(16, 4294901760L)}),
-     SETTINGS_SECTIONS.LOOT_BOX_CHRISTMAS: Section(masks={}, offsets={NYLootBoxesStorageKeys.NEW_COUNT: Offset(0, 65535),
-                                            NYLootBoxesStorageKeys.DELIVERED_COUNT: Offset(16, 4294901760L)}),
-     SETTINGS_SECTIONS.LOOT_BOX_COMMON: Section(masks={}, offsets={NYLootBoxesStorageKeys.NEW_COUNT: Offset(0, 65535)}),
-     SETTINGS_SECTIONS.NEW_YEAR: Section(masks={NewYearStorageKeys.IS_ICICLES_COMPLETED: 0,
-                                  NewYearStorageKeys.IS_TALISMAN_PROGRESS_HOVERED: 1,
-                                  NewYearStorageKeys.IS_TALISMAN_INTRO_SHOWED: 2}, offsets={})}
+     SETTINGS_SECTIONS.UNIT_FILTER: Section(masks={}, offsets={GAME.UNIT_FILTER: Offset(0, 2047)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -581,12 +561,6 @@ class ServerSettingsManager(object):
 
     def saveInBPStorage(self, settings):
         return self.setSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, settings)
-
-    def getNewYearStorage(self, defaults=None):
-        return self.getSection(SETTINGS_SECTIONS.NEW_YEAR, defaults)
-
-    def saveInNewYearStorage(self, settings):
-        return self.setSectionSettings(SETTINGS_SECTIONS.NEW_YEAR, settings)
 
     def checkAutoReloadHighlights(self, increase=False):
         return self.__checkUIHighlights(UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER, self._MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT, increase)
@@ -810,6 +784,7 @@ class ServerSettingsManager(object):
          'feedbackDamageLog': {},
          'feedbackBattleEvents': {},
          'onceOnlyHints': {},
+         'onceOnlyHints2': {},
          'uiStorage': {},
          'epicCarouselFilter2': {},
          'sessionStats': {},
@@ -879,6 +854,10 @@ class ServerSettingsManager(object):
         clearOnceOnlyHints = clear.get('onceOnlyHints', 0)
         if onceOnlyHints or clearOnceOnlyHints:
             settings[SETTINGS_SECTIONS.ONCE_ONLY_HINTS] = self._buildSectionSettings(SETTINGS_SECTIONS.ONCE_ONLY_HINTS, onceOnlyHints) ^ clearOnceOnlyHints
+        onceOnlyHints2 = data.get('onceOnlyHints2', {})
+        clearOnceOnlyHints2 = clear.get('onceOnlyHints2', 0)
+        if onceOnlyHints or clearOnceOnlyHints:
+            settings[SETTINGS_SECTIONS.ONCE_ONLY_HINTS_2] = self._buildSectionSettings(SETTINGS_SECTIONS.ONCE_ONLY_HINTS_2, onceOnlyHints2) ^ clearOnceOnlyHints2
         uiStorage = data.get('uiStorage', {})
         clearUIStorage = clear.get('uiStorage', 0)
         if uiStorage or clearUIStorage:

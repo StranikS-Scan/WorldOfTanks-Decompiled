@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/visual_script_client/client_perk_blocks.py
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
-from visual_script.block import SLOT_TYPE
+from visual_script.slot_types import SLOT_TYPE
 from visual_script.perk_blocks import PerkBlock
 
 class AddFactorModifier(PerkBlock):

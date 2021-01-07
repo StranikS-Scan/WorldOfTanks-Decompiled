@@ -32,7 +32,7 @@
     <priceFactor>	1.6	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
     <exclusionMask></exclusionMask>
-    <density>	1 1	</density>
+    <density>	0.99 0.99	</density>
   </camouflage>
   <hull>
     <armor>
@@ -80,7 +80,7 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.844698 0.427352	</turret>
+      <turret>	0.000000 0.571960 0.427352	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/british/GB109_GSOR_1008/collision/Hull.model	</collisionModelServer>
@@ -2571,7 +2571,7 @@
         <collisionModelServer>	vehicles/british/GB109_GSOR_1008/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB109_GSOR_1008/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000895 0.000000 0.000060	</gunPosition>
+      <gunPosition>	0.000895 0.272736 0.000060	</gunPosition>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	true	</showEmblemsOnGun>
       <physicsShape>	1.272 -0.393 0.878 0.004 1.594 0.187 0.095 0.131 0.154 0.329 0.000 0.500 0.000 0.500 0.000	</physicsShape>

@@ -3,7 +3,6 @@
 import typing
 import collections
 import weakref
-import logging
 from collections import defaultdict
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED, SENIORITY_AWARDS_COUNTER
@@ -21,13 +20,11 @@ from gui.clans.settings import CLAN_APPLICATION_STATES
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.premacc.premacc_helpers import PiggyBankConstants, getDeltaTimeHelper
-from gui.impl.new_year.new_year_helper import formatRomanNumber
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events.recruit_helper import getAllRecruitsInfo
 from gui.shared import g_eventBus, events
 from gui.shared.formatters import time_formatters, text_styles
-from gui.shared.gui_items.loot_box import NewYearLootBoxes
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import showInvitationInWindowsBar
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
@@ -35,16 +32,15 @@ from gui.wgcg.clan.contexts import GetClanInfoCtx
 from gui.wgnc import g_wgncProvider, g_wgncEvents, wgnc_settings
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
 from helpers import time_utils, i18n, dependency
-from items.components.ny_constants import MAX_TALISMAN_STAGE
 from messenger.m_constants import PROTO_TYPE, USER_ACTION_ID
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from messenger.formatters import TimeFormatter
-from new_year.ny_constants import SyncDataKeys
 from notification import tutorial_helper
 from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator, MissingEventsDecorator, RecruitReminderMessageDecorator
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
+from shared_utils import first
 from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -52,9 +48,6 @@ from skeletons.gui.login_manager import ILoginManager
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsBoxesCount
-from skeletons.new_year import INewYearController
-from shared_utils import first
-_logger = logging.getLogger(__name__)
 
 class _FeatureState(object):
     OFF = 0
@@ -1124,138 +1117,6 @@ class RecruitReminderlListener(_NotificationListener):
             model.removeNotification(NOTIFICATION_TYPE.RECRUIT_REMINDER, self.MSG_ID)
 
 
-class TalismanNotificationListener(_NotificationListener):
-    _itemsCache = dependency.descriptor(IItemsCache)
-    _nyController = dependency.descriptor(INewYearController)
-
-    def __init__(self):
-        super(TalismanNotificationListener, self).__init__()
-        self.__freeTalismans = 0
-
-    def start(self, model):
-        result = super(TalismanNotificationListener, self).start(model)
-        if self._nyController.getFreeTalisman():
-            SystemMessages.pushMessage(backport.text(R.strings.ny.notification.freeTalisman()), SystemMessages.SM_TYPE.TalismanFree)
-        if self._nyController.getTalismans(isInInventory=True) and not self._nyController.isTalismanToyTaken():
-            SystemMessages.pushMessage(backport.text(R.strings.ny.notification.giftTalisman()), SystemMessages.SM_TYPE.TalismanGift)
-        self.__freeTalismans = self._nyController.getFreeTalisman()
-        self.__addListeners()
-        return result
-
-    def stop(self):
-        super(TalismanNotificationListener, self).stop()
-        self.__removeListeners()
-
-    def __addListeners(self):
-        g_clientUpdateManager.addCallbacks({'tokens': self.__onTokensChanged})
-
-    def __removeListeners(self):
-        g_clientUpdateManager.removeCallback('tokens', self.__onTokensChanged)
-
-    def __onTokensChanged(self, _):
-        if self._nyController.getFreeTalisman() > self.__freeTalismans:
-            SystemMessages.pushMessage(backport.text(R.strings.ny.notification.freeTalisman()), SystemMessages.SM_TYPE.TalismanFree)
-        self.__freeTalismans = self._nyController.getFreeTalisman()
-
-
-class SnowMaidenRewardListener(_NotificationListener):
-    _nyController = dependency.descriptor(INewYearController)
-    _rKey = R.strings.ny.notification.talismanReward
-
-    def start(self, model):
-        result = super(SnowMaidenRewardListener, self).start(model)
-        g_clientUpdateManager.addCallbacks({'newYear21': self.__onNYChanged})
-        return result
-
-    def stop(self):
-        g_clientUpdateManager.removeCallback('newYear21', self.__onNYChanged)
-        super(SnowMaidenRewardListener, self).stop()
-
-    def __onNYChanged(self, diff):
-        if diff.get(SyncDataKeys.TALISMAN_TOY_TAKEN, False):
-            self.__prepareToyNotification(diff)
-        if SyncDataKeys.TALISMANS_SEQUENCE_STAGE in diff:
-            self.__prepareStageNotification(diff)
-
-    def __prepareToyNotification(self, diff):
-        if not diff.get(SyncDataKeys.INVENTORY_TOYS, {}):
-            return
-        else:
-            toyID = first(diff[SyncDataKeys.INVENTORY_TOYS].keys())
-            toy = self._nyController.getToyDescr(toyID)
-            if toy is None:
-                _logger.error('Invalid toyID received: %s. Cannot get toy with such toyID.', toyID)
-                return
-            maiden = backport.text(R.strings.ny.newYearTalisman.talisman.typeFrom.dyn(toy.setting)())
-            name = backport.text(R.strings.toys21.decorations.dyn('toy_{}'.format(toyID)).name())
-            level = formatRomanNumber(toy.rank)
-            count = len(self._nyController.getTalismans(True))
-            header = backport.text(self._rKey.gift.header())
-            body = backport.text(self._rKey.gift.body(), setting=maiden, toy=name, level=level, count=count)
-            self.__pushMessage(header, body)
-            return
-
-    def __prepareStageNotification(self, diff):
-        toysCount, newStage = diff[SyncDataKeys.TALISMANS_SEQUENCE_STAGE]
-        if toysCount > 0:
-            return
-        isAutoLevel = diff.get(SyncDataKeys.TALISMAN_TOY_TAKEN, False)
-        isMaxLevel = newStage == MAX_TALISMAN_STAGE
-        if isMaxLevel:
-            header = backport.text(self._rKey.levelUp.max.header())
-            body = backport.text(self._rKey.levelUp.max.body())
-        elif isAutoLevel:
-            header = backport.text(self._rKey.levelUp.auto.header())
-            body = backport.text(self._rKey.levelUp.auto.body(), level=formatRomanNumber(newStage + 1))
-        else:
-            header = backport.text(self._rKey.levelUp.default.header())
-            body = backport.text(self._rKey.levelUp.default.body(), level=formatRomanNumber(newStage + 1))
-        self.__pushMessage(header, body)
-
-    @staticmethod
-    def __pushMessage(header, body):
-        SystemMessages.pushMessage(text=body, type=SystemMessages.SM_TYPE.InformationHeader, messageData={'header': header})
-
-
-class LootBoxConfigListener(_NotificationListener):
-    __itemsCache = dependency.descriptor(IItemsCache)
-    __lobbyContext = dependency.descriptor(ILobbyContext)
-
-    def __init__(self):
-        super(LootBoxConfigListener, self).__init__()
-        self.__isAnyDisabled = False
-
-    def start(self, model):
-        result = super(LootBoxConfigListener, self).start(model)
-        self.__processSettings()
-        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
-        return result
-
-    def stop(self):
-        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
-        super(LootBoxConfigListener, self).stop()
-
-    def __onServerSettingsChange(self, _):
-        self.__processSettings(True)
-
-    def __processSettings(self, isNeedNotification=False):
-        isAnyDisabled = False
-        hasAny = False
-        for lootBox in self.__itemsCache.items.tokens.getLootBoxes().itervalues():
-            if lootBox.getType() in NewYearLootBoxes.ALL():
-                hasAny = True
-                if not self.__lobbyContext.getServerSettings().isLootBoxEnabled(lootBox.getID()):
-                    isAnyDisabled = True
-                    break
-
-        isAnyDisabled = isAnyDisabled or not hasAny
-        if isAnyDisabled != self.__isAnyDisabled and isNeedNotification:
-            if isAnyDisabled:
-                rKey = R.strings.ny.notification.lootBox.suspend
-                SystemMessages.pushMessage(priority=NotificationPriorityLevel.MEDIUM, text=backport.text(rKey.body()), type=SystemMessages.SM_TYPE.ErrorHeader, messageData={'header': backport.text(rKey.header())})
-        self.__isAnyDisabled = isAnyDisabled
-
-
 class NotificationsListeners(_NotificationListener):
 
     def __init__(self):
@@ -1269,13 +1130,10 @@ class NotificationsListeners(_NotificationListener):
          ProgressiveRewardListener(),
          SwitcherListener(),
          TankPremiumListener(),
-         TalismanNotificationListener(),
          BattlePassListener(),
          UpgradeTrophyDeviceListener(),
          ChoosingDeviceslListener(),
-         RecruitReminderlListener(),
-         SnowMaidenRewardListener(),
-         LootBoxConfigListener())
+         RecruitReminderlListener())
 
     def start(self, model):
         for listener in self.__listeners:

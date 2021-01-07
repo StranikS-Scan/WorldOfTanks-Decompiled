@@ -112,6 +112,9 @@ class BattleRoyalePersonalEntriesPlugin(CenteredPersonalEntriesPlugin):
     def _canShowViewRangeCircle(self):
         return True
 
+    def _canShowMinSpottingRangeCircle(self):
+        return False
+
     def _getViewRangeRadius(self):
         return VISIBILITY.MIN_RADIUS
 

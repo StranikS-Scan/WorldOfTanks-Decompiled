@@ -75,6 +75,7 @@ class ShowShooting(EntityExtra):
                 data['_timerID'] = BigWorld.callback(burstInterval, partial(self.__doShot, data))
                 effPlayer.play(gunModel)
                 withShot = 2
+            self.__doRecoil(vehicle, gunModel)
             if not IS_EDITOR:
                 avatar = BigWorld.player()
                 if data['entity'].isPlayerVehicle or vehicle is avatar.getVehicleAttached():
@@ -82,7 +83,6 @@ class ShowShooting(EntityExtra):
                 groundWaveEff = effPlayer.effectsList.relatedEffects.get('groundWave')
                 if groundWaveEff is not None:
                     self._doGroundWaveEffect(data['entity'], groundWaveEff, gunModel)
-                self.__doRecoil(vehicle, gunModel)
                 if vehicle.isPlayerVehicle:
                     appearance = vehicle.appearance
                     appearance.executeShootingVibrations(vehicle.typeDescriptor.shot.shell.caliber)
@@ -162,11 +162,11 @@ class ShowShootingMultiGun(ShowShooting):
                 self.stop(data)
                 return
             self.__doGunEffect(data)
+            self.__doRecoil(data)
             if not IS_EDITOR:
                 avatar = BigWorld.player()
                 if data['entity'].isPlayerVehicle or vehicle is avatar.getVehicleAttached():
                     avatar.getOwnVehicleShotDispersionAngle(avatar.gunRotator.turretRotationSpeed, withShot=1)
-                self.__doRecoil(data)
                 if vehicle.isPlayerVehicle:
                     appearance = vehicle.appearance
                     appearance.executeShootingVibrations(vehicle.typeDescriptor.shot.shell.caliber)

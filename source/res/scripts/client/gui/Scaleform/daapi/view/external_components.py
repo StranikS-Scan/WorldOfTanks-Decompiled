@@ -85,6 +85,9 @@ class ExternalFlashComponent(FlashComponentWrapper, IExternalFlashComponent):
         super(ExternalFlashComponent, self).afterCreate()
         self.__tryToInvokeRegisterEvent(_ExternalComponentState.CREATED)
 
+    def invokeRegisterComponentForReplay(self):
+        g_eventBus.handleEvent(events.ComponentEvent(events.ComponentEvent.COMPONENT_REGISTERED, self.owner, self, self.alias), scope=EVENT_BUS_SCOPE.GLOBAL)
+
     def __tryToInvokeRegisterEvent(self, step):
         prevSteps = self.__state
         self.__state |= step

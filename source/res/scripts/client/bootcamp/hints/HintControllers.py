@@ -223,8 +223,9 @@ class ReplayHintPlaySystem:
             hint.close()
 
         self.__hints.clear()
-        for eventName, callback in self.replayCallbacks:
-            self.bootcamp.replayCtrl.delDataCallback(eventName, callback)
+        if self.bootcamp.replayCtrl:
+            for eventName, callback in self.replayCallbacks:
+                self.bootcamp.replayCtrl.delDataCallback(eventName, callback)
 
         self.replayCallbacks = []
         self.__hintSystem = None
@@ -273,7 +274,8 @@ class ReplayHintPlaySystem:
 
     def replayMethodSubscribe(self, eventName, command):
         callback = partial(self.replayMethodCall, command, eventName)
-        self.bootcamp.replayCtrl.setDataCallback(eventName, callback)
+        if self.bootcamp.replayCtrl:
+            self.bootcamp.replayCtrl.setDataCallback(eventName, callback)
         self.replayCallbacks.append((eventName, callback))
 
     def replayMethodCall(self, command, eventName, binData):

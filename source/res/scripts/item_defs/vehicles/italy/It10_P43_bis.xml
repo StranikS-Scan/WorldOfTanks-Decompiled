@@ -31,6 +31,7 @@
     <priceFactor>	1.2	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
     <exclusionMask></exclusionMask>
+    <density>	1.02 1.02	</density>
   </camouflage>
   <hull>
     <armor>
@@ -3957,7 +3958,11 @@
         </engine>
       </unlocks>
     </SPA_343>
-    <V_2_34_modificato>	shared	</V_2_34_modificato>
+    <V_2_34_modificato>	shared	  <unlocks>
+        <vehicle>	It16_Carro_d_assalto_P88	  <cost>	57750	</cost>
+        </vehicle>
+      </unlocks>
+    </V_2_34_modificato>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>

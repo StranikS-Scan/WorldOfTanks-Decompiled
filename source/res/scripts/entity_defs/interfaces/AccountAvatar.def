@@ -56,5 +56,10 @@
       <Arg>	UINT64	</Arg>
       <Arg>	UINT8	</Arg>
     </accountAvatar_logClientSessionStats>
+    <accountAvatar_setActiveVehSeasonInBattle>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT64	</Arg>
+      <Arg>	UINT8	</Arg>
+    </accountAvatar_setActiveVehSeasonInBattle>
   </BaseMethods>
 </AccountAvatar.def>

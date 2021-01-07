@@ -15,7 +15,6 @@ from gui.battle_pass.battle_pass_helpers import isBattlePassActiveSeason
 from helpers import dependency
 from gui.shared.utils.functions import replaceHyphenToUnderscore
 from skeletons.gui.battle_session import IBattleSessionProvider
-from skeletons.gui.game_control import IFestivityController
 from skeletons.gui.game_control import IRankedBattlesController
 _logger = logging.getLogger(__name__)
 _SANDBOX_GEOMETRY_INDEX = ('100_thepit', '10_hills')
@@ -24,8 +23,6 @@ _EPIC_BATTLE_TIPS_PATTERN = '^(epicTip\\d+)'
 _EPIC_RANDOM_TIPS_PATTERN = '^(epicRandom\\d+)'
 _RANKED_BATTLES_TIPS_PATTERN = '^(ranked\\d+)'
 _BATTLE_ROYALE_TIPS_PATTERN = '^(battleRoyale\\d+$)'
-_NY_TIPS_PATTERN = '^(nyTip\\d+)'
-_NEW_YEAR_TIP_CHANCE = 0.25
 
 class _BattleLoadingTipPriority(object):
     GENERIC = 1
@@ -174,36 +171,7 @@ class BattleRoyaleTipsCriteria(_TipsCriteria):
         return ARENA_GUI_TYPE.BATTLE_ROYALE
 
 
-class _NewYearTipsCriteria(_RandomTipsCriteria):
-
-    def find(self):
-        suitableTips = filter(self._suitableTipPredicate, self._getTargetList())
-        precedingTips = [ tip for tip in suitableTips if tip.getPriority() == _BattleLoadingTipPriority.PRECEDING ]
-        foundTip = None
-        if precedingTips:
-            foundTip = random.choice(precedingTips)
-        elif random.random() <= _NEW_YEAR_TIP_CHANCE:
-            foundTip = random.choice(_nyTips)
-        elif suitableTips:
-            foundTip = random.choice(suitableTips)
-        if foundTip is not None:
-            foundTip.markWatched()
-            return foundTip.getData()
-        else:
-            return _TipData(R.invalid(), R.invalid(), R.invalid())
-
-
-class _NewYearEpicRandomTipsCriteria(_NewYearTipsCriteria):
-
-    def _getArenaGuiType(self):
-        return None
-
-    def _getTargetList(self):
-        return _epicRandomTips
-
-
 def getTipsCriteria(arenaVisitor):
-    isNewYear = dependency.instance(IFestivityController).isEnabled()
     if arenaVisitor.gui.isSandboxBattle():
         return _SandboxTipsCriteria()
     if arenaVisitor.gui.isEventBattle():
@@ -211,14 +179,10 @@ def getTipsCriteria(arenaVisitor):
     if arenaVisitor.gui.isRankedBattle():
         return _RankedTipsCriteria()
     if arenaVisitor.gui.isEpicRandomBattle():
-        if isNewYear:
-            return _NewYearEpicRandomTipsCriteria()
         return _EpicRandomTipsCriteria()
     if arenaVisitor.gui.isInEpicRange():
         return _EpicBattleTipsCriteria()
-    if arenaVisitor.gui.isBattleRoyale():
-        return BattleRoyaleTipsCriteria(arenaVisitor)
-    return _NewYearTipsCriteria() if isNewYear else _RandomTipsCriteria()
+    return BattleRoyaleTipsCriteria(arenaVisitor) if arenaVisitor.gui.isBattleRoyale() else _RandomTipsCriteria()
 
 
 def _readTips(pattern):
@@ -417,4 +381,3 @@ _rankedTips = _readTips(_RANKED_BATTLES_TIPS_PATTERN)
 _epicBattleTips = _readTips(_EPIC_BATTLE_TIPS_PATTERN)
 _epicRandomTips = _readTips(_EPIC_RANDOM_TIPS_PATTERN)
 _battleRoyaleTips = _readTips(_BATTLE_ROYALE_TIPS_PATTERN)
-_nyTips = _readTips(_NY_TIPS_PATTERN)

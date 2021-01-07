@@ -279,6 +279,8 @@ def _resourceLoaded(resNames, vId, resourceRefs):
 
 
 def _wholeVehicleResourcesLoaded(resNames, resourceRefs):
+    if not _g_cache.isArenaSet():
+        return
     _g_cache.saveWholeVehicleResources(resourceRefs)
 
 

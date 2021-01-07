@@ -1,30 +1,18 @@
 <AccountUnitAssembler.def>
+  <xmlns:xsi>	http://www.w3.org/2001/XMLSchema-instance	</xmlns:xsi>
+  <xsi:noNamespaceSchemaLocation>	../../../../tools/schema/entity_def.xsd	</xsi:noNamespaceSchemaLocation>
   <BaseMethods>
-    <accountUnitAssembler_acceptAutoSearch>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT64	</Arg>
-      <Exposed></Exposed>
-    </accountUnitAssembler_acceptAutoSearch>
-    <accountUnitAssembler_createEx>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	PYTHON	</Arg>
-    </accountUnitAssembler_createEx>
-    <accountUnitAssembler_joinEx>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	PYTHON	</Arg>
-    </accountUnitAssembler_joinEx>
     <accountUnitAssembler_onNeedToJoinToUnitMgr>
       <Arg>	MAILBOX	</Arg>
       <Arg>	INT8	</Arg>
-      <Arg>	UINT16	</Arg>
-      <Arg>	INT32	</Arg>
     </accountUnitAssembler_onNeedToJoinToUnitMgr>
-    <accountUnitAssembler_onAddAutoAssembledAccount>
-      <Arg>	UINT32	</Arg>
-      <Arg>	PYTHON	</Arg>
-      <Arg>	BOOL	</Arg>
-    </accountUnitAssembler_onAddAutoAssembledAccount>
+    <accountUnitAssembler_onAssemblerEnqueued>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT8	</Arg>
+    </accountUnitAssembler_onAssemblerEnqueued>
+    <accountUnitAssembler_onAssemblerDequeued>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT8	</Arg>
+    </accountUnitAssembler_onAssemblerDequeued>
   </BaseMethods>
 </AccountUnitAssembler.def>

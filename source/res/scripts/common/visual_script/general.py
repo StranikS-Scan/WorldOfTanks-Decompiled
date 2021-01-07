@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/general.py
-from block import Block, SLOT_TYPE
+from block import Block
+from slot_types import SLOT_TYPE
 
 class Assert(Block):
 
@@ -16,6 +17,10 @@ class Assert(Block):
 
     @classmethod
     def blockColor(cls):
+        pass
+
+    @classmethod
+    def blockIcon(cls):
         pass
 
 

@@ -10,11 +10,11 @@ from gui.battle_control.matrix_factory import makeVehicleEntityMP
 g_logger = logging.getLogger(__name__)
 MIN_OVER_TERRAIN_HEIGHT = 0
 MIN_UPDATE_INTERVAL = 0
-TerrainCircleSettings = namedtuple('TerrainCircleSettings', ('modelPath', 'color', 'enableAccurateCollision', 'maxUpdateInterval', 'overTerrainHeight'))
+TerrainCircleSettings = namedtuple('TerrainCircleSettings', ('modelPath', 'color', 'enableAccurateCollision', 'maxUpdateInterval', 'overTerrainHeight', 'cutOffYDistance'))
 
 def readTerrainCircleSettings(xmlSection, xmlCtx, xmlTag):
     settings = xmlSection[xmlTag]
-    return TerrainCircleSettings(modelPath=_xml.readString(xmlCtx, settings, 'visual'), color=int(_xml.readString(xmlCtx, settings, 'color'), 0), enableAccurateCollision=_xml.readBool(xmlCtx, settings, 'enableAccurateCollision'), maxUpdateInterval=max(MIN_UPDATE_INTERVAL, _xml.readFloat(xmlCtx, settings, 'maxUpdateInterval')), overTerrainHeight=max(MIN_OVER_TERRAIN_HEIGHT, _xml.readFloat(xmlCtx, settings, 'overTerrainHeight')))
+    return TerrainCircleSettings(modelPath=_xml.readString(xmlCtx, settings, 'visual'), color=int(_xml.readString(xmlCtx, settings, 'color'), 0), enableAccurateCollision=_xml.readBool(xmlCtx, settings, 'enableAccurateCollision'), maxUpdateInterval=max(MIN_UPDATE_INTERVAL, _xml.readFloat(xmlCtx, settings, 'maxUpdateInterval')), overTerrainHeight=max(MIN_OVER_TERRAIN_HEIGHT, _xml.readFloat(xmlCtx, settings, 'overTerrainHeight')), cutOffYDistance=_xml.readFloat(xmlCtx, settings, 'cutOffYDistance', -1.0))
 
 
 class TerrainCircleComponent(CallbackDelayer):
@@ -37,10 +37,12 @@ class TerrainCircleComponent(CallbackDelayer):
             g_logger.warning('The color of Terrain Circle is 0! Terrain circle will be invisible!')
         self.__maxUpdateInterval = terrainCircleSettings.maxUpdateInterval
         visual = self.__areaVisual
-        visual.setup(terrainCircleSettings.modelPath, Vector2(radius + radius, radius + radius), terrainCircleSettings.overTerrainHeight, terrainColor)
+        visual.setup(terrainCircleSettings.modelPath, Vector2(radius + radius, radius + radius), terrainCircleSettings.overTerrainHeight, terrainColor, True, terrainCircleSettings.cutOffYDistance)
         visual.enableAccurateCollision(terrainCircleSettings.enableAccurateCollision)
         if self.__isVisible:
             self.__update()
+        if terrainCircleSettings.cutOffYDistance > 0.0:
+            visual.doYCutOff(True)
         return
 
     def destroy(self):

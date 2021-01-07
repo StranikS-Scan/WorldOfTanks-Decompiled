@@ -122,6 +122,7 @@ class BCVideoPage(BCOutroVideoPageMeta):
             movie = self._message['video-path']
             self.soundManager.playInstantSound(self._message['event-start'])
             self.as_playVideoS({'source': movie,
+             'fitToScreen': self._message['video-fit-to-screen'] == 'true',
              'volume': self._DEFAULT_MASTER_VOLUME * SoundGroups.g_instance.getMasterVolume()})
             if self.content['voiceovers']:
                 self._keypoints = [ (float(point['keypoint']) if 'keypoint' in point and point['keypoint'] else 0.0) for point in self.content['voiceovers'] if point['voiceover'] ]

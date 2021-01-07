@@ -177,6 +177,12 @@ class IVOIPChatController(object):
     def requestCaptureDevices(self, firstTime=False, callback=None):
         raise NotImplementedError
 
+    def isCurrentChannelEnabled(self):
+        raise NotImplementedError
+
+    def enableCurrentChannel(self, enabled):
+        raise NotImplementedError
+
 
 class IUserSearchLimits(object):
 

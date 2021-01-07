@@ -219,31 +219,33 @@ class StyledMode(CustomizationMode):
         style = self.__modifiedStyle
         vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
         self._soundEventChecker.lockPlayingSounds()
+        originalOutfits = {season:outfit.copy() for season, outfit in self._originalOutfits.iteritems()}
+        diffs = self._ctx.stylesDiffsCache.getDiffs(style).copy() if style is not None else {}
         outfit = self._modifiedOutfits[self.season]
         result = yield OutfitApplier(g_currentVehicle.item, outfit, SeasonType.ALL).request()
         results.append(result)
         if style is not None:
-            if style.isRentable and self.__prolongRent:
-                self._service.buyItems(style, count=1, vehicle=g_currentVehicle.item)
-                self.__prolongRent = False
-            modifiedOutfits = {}
-            baseOutfits = {}
+            baseStyleOutfits = {}
+            modifiedStyleOutfits = {}
             for season in SeasonType.COMMON_SEASONS:
-                diff = self._ctx.stylesDiffsCache.getDiff(style, season)
-                modifiedOutfits[season] = style.getOutfit(season, vehicleCD=vehicleCD, diff=diff)
-                baseOutfits[season] = style.getOutfit(season, vehicleCD=vehicleCD)
+                diff = diffs.get(season)
+                baseStyleOutfits[season] = style.getOutfit(season, vehicleCD=vehicleCD)
+                modifiedStyleOutfits[season] = style.getOutfit(season, vehicleCD=vehicleCD, diff=diff)
 
-            removeUnselectedItemsFromEditableStyle(modifiedOutfits, baseOutfits, purchaseItems)
-            for season, outfit in modifiedOutfits.iteritems():
+            removeUnselectedItemsFromEditableStyle(modifiedStyleOutfits, baseStyleOutfits, purchaseItems)
+            for season, outfit in modifiedStyleOutfits.iteritems():
                 result = yield OutfitApplier(g_currentVehicle.item, outfit, season).request()
                 results.append(result)
 
+        if style is not None and style.isRentable and self.__prolongRent:
+            self._service.buyItems(style, count=1, vehicle=g_currentVehicle.item)
+            self.__prolongRent = False
         if self.__autoRentEnabled != g_currentVehicle.item.isAutoRentStyle:
             yield VehicleAutoStyleEquipProcessor(g_currentVehicle.item, self.__autoRentEnabled, self.__autoRentChangeSource).request()
             self.__autoRentChangeSource = CLIENT_COMMAND_SOURCES.UNDEFINED
         self._soundEventChecker.unlockPlayingSounds()
         if self.isInited:
-            self._events.onItemsBought(purchaseItems, results)
+            self._events.onItemsBought(originalOutfits, purchaseItems, results)
         callback(self)
         return
 

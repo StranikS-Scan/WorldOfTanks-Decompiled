@@ -120,7 +120,7 @@ class Manager(ILoginManager):
         if self.wgcAvailable and self.__wgcManager.onLoggedOn(responseData):
             self._preferences.clear()
             self._preferences['server_name'] = serverName
-            self._preferences['serverSelectWasSet'] = serverSelect
+            self._preferences['server_select_was_set'] = serverSelect
             self._preferences.writeLoginInfo()
             return
         loginCount = self._preferences.get('loginCount', 0)
@@ -138,7 +138,7 @@ class Manager(ILoginManager):
             self._preferences['server_name'] = serverName
             self._preferences['session'] = session
             self._preferences['loginCount'] = loginCount
-        self._preferences['serverSelectWasSet'] = serverSelect
+        self._preferences['server_select_was_set'] = serverSelect
         self._preferences.writeLoginInfo()
         self.__dumpUserName(name)
         self._showSecurityMessage(responseData)

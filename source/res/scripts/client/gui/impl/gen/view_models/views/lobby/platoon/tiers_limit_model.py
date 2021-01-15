@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.platoon.show_settings_button_model imp
 class TiersLimitModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=8, commands=0):
+    def __init__(self, properties=9, commands=0):
         super(TiersLimitModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -36,23 +36,29 @@ class TiersLimitModel(ViewModel):
     def setIsLight(self, value):
         self._setBool(4, value)
 
-    def getShowLookingForCaption(self):
+    def getHasSettingsButton(self):
         return self._getBool(5)
 
-    def setShowLookingForCaption(self, value):
+    def setHasSettingsButton(self, value):
         self._setBool(5, value)
 
-    def getShowTiersCaption(self):
+    def getHasLookingForCaption(self):
         return self._getBool(6)
 
-    def setShowTiersCaption(self, value):
+    def setHasLookingForCaption(self, value):
         self._setBool(6, value)
 
-    def getHideResetButton(self):
+    def getHasTiersCaption(self):
         return self._getBool(7)
 
-    def setHideResetButton(self, value):
+    def setHasTiersCaption(self, value):
         self._setBool(7, value)
+
+    def getHasResetButton(self):
+        return self._getBool(8)
+
+    def setHasResetButton(self, value):
+        self._setBool(8, value)
 
     def _initialize(self):
         super(TiersLimitModel, self)._initialize()
@@ -61,6 +67,7 @@ class TiersLimitModel(ViewModel):
         self._addStringProperty('tiers', '')
         self._addBoolProperty('isExpanded', False)
         self._addBoolProperty('isLight', False)
-        self._addBoolProperty('showLookingForCaption', False)
-        self._addBoolProperty('showTiersCaption', False)
-        self._addBoolProperty('hideResetButton', False)
+        self._addBoolProperty('hasSettingsButton', False)
+        self._addBoolProperty('hasLookingForCaption', False)
+        self._addBoolProperty('hasTiersCaption', False)
+        self._addBoolProperty('hasResetButton', False)

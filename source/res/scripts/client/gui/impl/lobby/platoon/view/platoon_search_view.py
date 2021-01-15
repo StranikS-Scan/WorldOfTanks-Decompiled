@@ -90,6 +90,7 @@ class SearchView(ViewImpl, CallbackDelayer):
         return self.QUEUE_INFO_UPDATE_TIME
 
     def __cancelSearch(self):
+        self.__platoonCtrl.cancelSearch()
         self.__platoonCtrl.leavePlatoon(ignoreConfirmation=True)
         TiersLimitSubview.resetState()
 

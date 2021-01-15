@@ -356,6 +356,7 @@ class IPlatoonController(IGameController):
     onPlatoonTankUpdated = None
     onPlatoonTankVisualizationChanged = None
     onChannelControllerChanged = None
+    onAutoSearchCooldownChanged = None
 
     def buildExtendedSquadInfoVo(self):
         raise NotImplementedError
@@ -402,6 +403,9 @@ class IPlatoonController(IGameController):
     def isVOIPEnabled(self):
         raise NotImplementedError
 
+    def isInCoolDown(self, requestType):
+        raise NotImplementedError
+
     def canStartSearch(self):
         raise NotImplementedError
 
@@ -411,7 +415,7 @@ class IPlatoonController(IGameController):
     def getQueueType(self):
         raise NotImplementedError
 
-    def hide(self):
+    def destroyUI(self, hideOnly=False):
         raise NotImplementedError
 
     def setNewTierFilter(self, newTierFilter, isExpanded):

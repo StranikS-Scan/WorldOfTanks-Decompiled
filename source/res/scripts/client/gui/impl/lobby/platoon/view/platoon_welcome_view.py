@@ -19,6 +19,7 @@ from skeletons.gui.shared import IItemsCache
 from gui.impl.lobby.platoon.tooltip.platoon_alert_tooltip import AlertTooltip
 from gui.shared import g_eventBus
 from gui.impl.lobby.platoon.platoon_helpers import PreloadableWindow
+from gui.prb_control.settings import REQUEST_TYPE
 _logger = logging.getLogger(__name__)
 strButtons = R.strings.platoon.buttons
 
@@ -53,8 +54,7 @@ class WelcomeView(ViewImpl):
         return self.getViewModel()
 
     def update(self, updateTiersLimitSubview=True):
-        with self.viewModel.transaction() as model:
-            model.btnFind.setIsEnabled(self.__platoonCtrl.canStartSearch())
+        self.__updateFindButton()
         self.__setBattleTypeRelatedProps()
         if updateTiersLimitSubview:
             self.__tiersLimitSubview.update()
@@ -64,6 +64,10 @@ class WelcomeView(ViewImpl):
         self.__showSettingsCallback(False)
         self.__tiersLimitSubview.hideSettings()
 
+    def __updateFindButton(self, *args):
+        with self.viewModel.transaction() as model:
+            model.btnFind.setIsEnabled(self.__platoonCtrl.canStartSearch() and not self.__platoonCtrl.isInCoolDown(REQUEST_TYPE.AUTO_SEARCH))
+
     def __addListerens(self):
         with self.viewModel.transaction() as model:
             model.btnFind.onClick += self.__onFind
@@ -71,6 +75,7 @@ class WelcomeView(ViewImpl):
             model.onOutsideClick += self.__onOutsideClick
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
         self.__itemsCache.onSyncCompleted += self.__onVehicleStateChanged
+        self.__platoonCtrl.onAutoSearchCooldownChanged += self.__updateFindButton
 
     def __removeListeners(self):
         with self.viewModel.transaction() as model:
@@ -79,6 +84,7 @@ class WelcomeView(ViewImpl):
             model.onOutsideClick -= self.__onOutsideClick
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
         self.__itemsCache.onSyncCompleted -= self.__onVehicleStateChanged
+        self.__platoonCtrl.onAutoSearchCooldownChanged -= self.__updateFindButton
 
     def __onServerSettingsChange(self, diff):
         if 'unit_assembler_config' in diff:
@@ -111,13 +117,16 @@ class WelcomeView(ViewImpl):
 
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.lobby.platoon.AlertTooltip():
+            if self.__platoonCtrl.isInCoolDown(REQUEST_TYPE.AUTO_SEARCH):
+                return None
             header = R.strings.platoon.buttons.findPlayers.tooltip.header()
             if not self.__platoonCtrl.isSearchingForPlayersEnabled():
                 body = R.strings.platoon.buttons.findPlayers.tooltip.noAssembling.body()
             else:
                 body = R.strings.platoon.buttons.findPlayers.tooltip.noSuitableTank.body()
             return AlertTooltip(header, body)
-        return SquadBonusTooltipContent() if contentID == R.views.lobby.premacc.squad_bonus_tooltip_content.SquadBonusTooltipContent() else super(WelcomeView, self).createToolTipContent(event=event, contentID=contentID)
+        else:
+            return SquadBonusTooltipContent() if contentID == R.views.lobby.premacc.squad_bonus_tooltip_content.SquadBonusTooltipContent() else super(WelcomeView, self).createToolTipContent(event=event, contentID=contentID)
 
     def __setBattleTypeRelatedProps(self):
         queueType = self.__platoonCtrl.getQueueType()

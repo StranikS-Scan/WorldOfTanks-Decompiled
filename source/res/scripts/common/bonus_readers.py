@@ -617,14 +617,17 @@ def __readBonus_tokens(bonus, _name, section, eventType):
 
 
 def __readBonus_goodies(bonus, _name, section, eventType):
-    id = section['id'].asInt
-    goodie = bonus.setdefault('goodies', {}).setdefault(id, {'count': 0})
+    goodieID = section['id'].asInt
+    goodies = bonus.setdefault('goodies', {})
+    if goodieID in goodies:
+        raise SoftException('Duplicated goodie with id {}'.format(goodieID))
+    goodie = goodies.setdefault(goodieID, {})
     if section.has_key('limit'):
         goodie['limit'] = max(goodie.get('limit', 0), section['limit'].asInt)
     if section.has_key('count'):
-        goodie['count'] += __readIntWithTokenExpansion(section['count'])
+        goodie['count'] = __readIntWithTokenExpansion(section['count'])
     else:
-        goodie['count'] += 1
+        goodie['count'] = 1
 
 
 def __readBonus_enhancement(bonus, _name, section, eventType):

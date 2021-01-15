@@ -70,7 +70,7 @@ class BCResearchItemsData(ResearchItemsData):
         return (oldCost, 0)
 
 
-@loggerTarget(logKey=BC_LOG_KEYS.BC_HANGAR_HINTS, loggerCls=BootcampUILogger)
+@loggerTarget(logKey=BC_LOG_KEYS.BC_RESEARCH_VEHICLES, loggerCls=BootcampUILogger)
 class BCResearch(Research):
 
     def __init__(self, ctx=None):

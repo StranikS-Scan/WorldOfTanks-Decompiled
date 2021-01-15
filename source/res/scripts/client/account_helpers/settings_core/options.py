@@ -1291,6 +1291,14 @@ class VehicleMarkerSetting(StorageAccountSetting):
     def pack(self):
         return self.__getMarkerSettings(forcePackingHP=True)
 
+    def _set(self, value):
+        totalValue = None
+        if value and BattleReplay.isPlaying():
+            totalValue = self._get()
+            totalValue.update(value)
+        super(VehicleMarkerSetting, self)._set(totalValue or value)
+        return
+
     def _get(self):
         return self.__getMarkerSettings(forcePackingHP=False)
 
@@ -1347,6 +1355,14 @@ class AimSetting(StorageAccountSetting):
             result[option] = value
 
         return result
+
+    def _set(self, value):
+        totalValue = None
+        if value and BattleReplay.isPlaying():
+            totalValue = self._get()
+            totalValue.update(value)
+        super(AimSetting, self)._set(totalValue or value)
+        return
 
     def pack(self):
         result = self._get()

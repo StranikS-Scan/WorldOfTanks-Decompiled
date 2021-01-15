@@ -112,20 +112,20 @@ class TiersLimitSubview(ViewImpl):
         hasTierPreferences = self.__platoonCtrl.isTankLevelPreferenceEnabled()
         tiersString = TiersLimitSubview.tiersString if self.__platoonCtrl.canStartSearch() else ''
         with self.viewModel.transaction() as model:
-            hideResetSettingsButton = not bool(tiersString) or layoutID == R.views.lobby.platoon.SearchingDropdown() or not self.__platoonCtrl.canStartSearch() or isInSearch
-            canShowLookingForCaption = hasTierPreferences and layoutID == R.views.lobby.platoon.SearchingDropdown() and bool(tiersString)
-            canShowTiersString = layoutID != R.views.lobby.platoon.MembersWindow() and bool(tiersString) and self.__platoonCtrl.canStartSearch()
+            hasResetSettingsButton = bool(tiersString) and layoutID != R.views.lobby.platoon.SearchingDropdown() and self.__platoonCtrl.canStartSearch() and not isInSearch
+            hasLookingForCaption = hasTierPreferences and layoutID == R.views.lobby.platoon.SearchingDropdown() and bool(tiersString)
+            hasTiersString = hasTierPreferences and layoutID != R.views.lobby.platoon.MembersWindow() and bool(tiersString) and self.__platoonCtrl.canStartSearch()
             hasFilterOptions = hasTierPreferences or self.__platoonCtrl.isVOIPEnabled()
-            isSettingsButtonVisible = layoutID != R.views.lobby.platoon.SearchingDropdown() and self.__platoonCtrl.canStartSearch() and hasFilterOptions
+            hasSettingsButton = layoutID != R.views.lobby.platoon.SearchingDropdown() and self.__platoonCtrl.canStartSearch() and hasFilterOptions
             isSettingsButtonEnabled = not isInSearch and self.__platoonCtrl.hasFreeSlot() or layoutID == R.views.lobby.platoon.PlatoonDropdown()
             usePopover = layoutID == R.views.lobby.platoon.MembersWindow()
             useLight = layoutID == R.views.lobby.platoon.SearchingDropdown()
-            model.setHideResetButton(hideResetSettingsButton)
-            model.setShowLookingForCaption(canShowLookingForCaption)
-            model.setShowTiersCaption(canShowTiersString)
-            model.btnShowSettings.setIsVisible(isSettingsButtonVisible)
+            model.setHasResetButton(hasResetSettingsButton)
+            model.setHasLookingForCaption(hasLookingForCaption)
+            model.setHasTiersCaption(hasTiersString)
             model.btnShowSettings.setIsEnabled(isSettingsButtonEnabled)
-            model.btnShowSettings.setShouldShowPopover(usePopover)
+            model.btnShowSettings.setHasPopover(usePopover)
+            model.setHasSettingsButton(hasSettingsButton)
             model.setIsLight(useLight)
             model.setTiers(tiersString)
             model.setIsExpanded(TiersLimitSubview.isExpanded)

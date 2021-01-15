@@ -25,13 +25,13 @@ class WgcMode(BaseMode):
 
     @property
     def showRememberServerWarning(self):
-        return not self._loginManager.settingsCore.getSetting(GAME.LOGIN_SERVER_SELECTION) and self._loginManager.getPreference('serverSelectWasSet')
+        return not self._loginManager.settingsCore.getSetting(GAME.LOGIN_SERVER_SELECTION) and self._loginManager.getPreference('server_select_was_set')
 
     def init(self):
         global _g_firstEntry
         self._loginManager.addOnWgcErrorListener(self.__onWgcError)
         if self.__wgcStoredUserSelected:
-            autoLogin = _g_firstEntry and not self._loginManager.settingsCore.getSetting(GAME.LOGIN_SERVER_SELECTION) and not self._loginManager.getPreference('serverSelectWasSet')
+            autoLogin = _g_firstEntry and not self._loginManager.settingsCore.getSetting(GAME.LOGIN_SERVER_SELECTION) and not self._loginManager.getPreference('server_select_was_set')
             if autoLogin:
                 self._loginManager.tryWgcLogin()
             _g_firstEntry = False

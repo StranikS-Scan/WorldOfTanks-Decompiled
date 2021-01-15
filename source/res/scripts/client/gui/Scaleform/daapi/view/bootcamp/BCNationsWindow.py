@@ -12,7 +12,7 @@ from gui.impl.gen import R
 from nations import INDICES as NATIONS_INDICES, MAP as NATIONS_MAP
 from PlayerEvents import g_playerEvents
 
-@loggerTarget(logKey=BC_LOG_KEYS.BC_HANGAR_HINTS, loggerCls=BootcampUILogger)
+@loggerTarget(logKey=BC_LOG_KEYS.BC_NATION_SELECT, loggerCls=BootcampUILogger)
 class BCNationsWindow(BCNationsWindowMeta):
 
     def onTryClosing(self):

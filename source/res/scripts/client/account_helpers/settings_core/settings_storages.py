@@ -233,24 +233,26 @@ class MessengerSettingsStorage(object):
 class AimSettingsStorage(ISettingsStorage):
 
     def apply(self, restartApproved):
-        if self._settings:
+        if self._settings and not BattleReplay.isPlaying():
             self._manager.setAimSettings(self._settings)
         return super(AimSettingsStorage, self).apply(restartApproved)
 
     def extract(self, settingOption, key=None, default=None):
-        default = self._manager.getAimSetting(settingOption, key, default)
+        if not BattleReplay.isPlaying():
+            default = self._manager.getAimSetting(settingOption, key, default)
         return self._settings.get(settingOption, {}).get(key, default)
 
 
 class MarkersSettingsStorage(ISettingsStorage):
 
     def apply(self, restartApproved):
-        if self._settings:
+        if self._settings and not BattleReplay.isPlaying():
             self._manager.setMarkersSettings(self._settings)
         return super(MarkersSettingsStorage, self).apply(restartApproved)
 
     def extract(self, settingOption, key=None, default=None):
-        default = self._manager.getMarkersSetting(settingOption, key, default)
+        if not BattleReplay.isPlaying():
+            default = self._manager.getMarkersSetting(settingOption, key, default)
         return self._settings.get(settingOption, {}).get(key, default)
 
 

@@ -379,6 +379,7 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
         super(BattleChatCommandHandler, self).clear()
         return
 
+    @loggerEntry
     def switch(self, scope):
         self.__targetIDs = []
         if scope != MESSENGER_SCOPE.BATTLE:
@@ -409,7 +410,6 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
         else:
             _logger.error('Battle command is not found %r', decorator)
 
-    @loggerEntry
     def registerHandlers(self):
         register = self.provider().registerHandler
         for command in BATTLE_CHAT_COMMANDS:

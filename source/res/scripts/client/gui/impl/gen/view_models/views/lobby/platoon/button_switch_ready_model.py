@@ -5,20 +5,20 @@ from gui.impl.gen.view_models.views.lobby.platoon.button_model import ButtonMode
 class ButtonSwitchReadyModel(ButtonModel):
     __slots__ = ()
 
-    def __init__(self, properties=5, commands=1):
+    def __init__(self, properties=6, commands=1):
         super(ButtonSwitchReadyModel, self).__init__(properties=properties, commands=commands)
 
     def getIsRed(self):
-        return self._getBool(3)
+        return self._getBool(4)
 
     def setIsRed(self, value):
-        self._setBool(3, value)
+        self._setBool(4, value)
 
     def getTooltipHeader(self):
-        return self._getString(4)
+        return self._getString(5)
 
     def setTooltipHeader(self, value):
-        self._setString(4, value)
+        self._setString(5, value)
 
     def _initialize(self):
         super(ButtonSwitchReadyModel, self)._initialize()

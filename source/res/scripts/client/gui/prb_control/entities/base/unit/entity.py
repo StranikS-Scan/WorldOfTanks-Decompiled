@@ -461,7 +461,7 @@ class UnitEntity(_UnitEntity):
     def _getRequestProcessor(self):
         return self._createRequestProcessor()
 
-    def init(self, ctx=None, loadToHangar=True):
+    def init(self, ctx=None):
         super(UnitEntity, self).init(ctx=ctx)
         flags = self.getFlags()
         self._requestsProcessor = self._getRequestProcessor()
@@ -480,8 +480,6 @@ class UnitEntity(_UnitEntity):
             if idle:
                 listener.onUnitFlagsChanged(flags, timeLeftInIdle)
 
-        if loadToHangar:
-            g_eventDispatcher.loadHangar()
         return initResult | FUNCTIONAL_FLAG.LOAD_WINDOW
 
     def fini(self, ctx=None, woEvents=False):
@@ -948,6 +946,8 @@ class UnitEntity(_UnitEntity):
             return
         flags = self.getFlags()
         if ctx.isRequestToStart():
+            if self._isInCoolDown(settings.REQUEST_TYPE.AUTO_SEARCH, coolDown=ctx.getCooldown()):
+                return
             if self.isParentControlActivated(callback=callback):
                 return
             if flags.isInSearch():
@@ -969,6 +969,7 @@ class UnitEntity(_UnitEntity):
                 callback(False)
         else:
             self._requestsProcessor.doRequest(ctx, 'stopAutoSearch', callback=callback)
+            self._cooldown.process(settings.REQUEST_TYPE.AUTO_SEARCH, coolDown=ctx.getCooldown())
 
     def doBattleQueue(self, ctx, callback=None):
         pPermissions = self.getPermissions()

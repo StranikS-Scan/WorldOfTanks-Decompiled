@@ -51,6 +51,7 @@ from gui.prb_control.entities.base.unit.permissions import UnitPermissions
 from gui.prb_control.entities.base.unit.entity import UnitEntity
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.gui_items.Vehicle import Vehicle
+from gui.prb_control.settings import REQUEST_TYPE
 if TYPE_CHECKING:
     from typing import Optional as TOptional
     from UnitBase import ProfileVehicle
@@ -130,7 +131,7 @@ class _FilterExpander(CallbackDelayer):
             lastDelay = nextDelay
 
 
-class PlatoonController(IPlatoonController, IGlobalListener):
+class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
     QUEUE_INFO_UPDATE_DELAY = 5
     DROPDOWN_HALF_WIDTH = 205
     DROPDOWN_Y_OFFSET = 6
@@ -143,6 +144,7 @@ class PlatoonController(IPlatoonController, IGlobalListener):
 
     def __init__(self):
         super(PlatoonController, self).__init__()
+        CallbackDelayer.__init__(self)
         self.__ePlatoonLayouts = {_EPlatoonLayout.WELCOME: _PlatoonLayout(R.views.lobby.platoon.PlatoonDropdown(), SelectionWindow),
          _EPlatoonLayout.SEARCH: _PlatoonLayout(R.views.lobby.platoon.SearchingDropdown(), SearchWindow),
          _EPlatoonLayout.MEMBER: _PlatoonLayout(R.views.lobby.platoon.MembersWindow(), MembersWindow)}
@@ -160,6 +162,7 @@ class PlatoonController(IPlatoonController, IGlobalListener):
         self.onChannelControllerChanged = Event.Event()
         self.onMembersUpdate = Event.Event()
         self.onPlatoonTankUpdated = Event.Event()
+        self.onAutoSearchCooldownChanged = Event.Event()
         return
 
     def onLobbyInited(self, event):
@@ -173,6 +176,7 @@ class PlatoonController(IPlatoonController, IGlobalListener):
         self.__stopListening()
         self.onPlatoonTankVisualizationChanged(False)
         self.destroyUI()
+        self.clearCallbacks()
         self.__isActiveSearchView = False
         self.__startAutoSearchOnUnitJoin = False
         self.__channelCtrl = None
@@ -225,7 +229,7 @@ class PlatoonController(IPlatoonController, IGlobalListener):
                     self.__startAutoSearchOnUnitJoin = startAutoSearchOnUnitJoin
                     self.__isActiveSearchView = startAutoSearchOnUnitJoin
                     self.__doSelect(_QUEUE_TYPE_TO_PREBATTLE_ACTION_NAME[queueType])
-                    self.hide()
+                    self.destroyUI(hideOnly=True)
                 else:
                     _logger.error('Prebattle dispatcher is not defined or navigation not possible')
         else:
@@ -294,6 +298,9 @@ class PlatoonController(IPlatoonController, IGlobalListener):
         voipMgr = VOIP.getVOIPManager()
         return voipMgr and voipMgr.isEnabled()
 
+    def isInCoolDown(self, requestType):
+        return self.hasDelayedCallback(self.__fireOnAutoSearchCooldownChanged) if requestType is REQUEST_TYPE.AUTO_SEARCH else self.prbEntity.isInCoolDown(requestType)
+
     def canStartSearch(self):
         return self.isSearchingForPlayersEnabled() and self.hasVehiclesForSearch()
 
@@ -305,7 +312,7 @@ class PlatoonController(IPlatoonController, IGlobalListener):
 
     def evaluateVisibility(self, xPopoverOffset=None, toggleUI=False):
         if self.isAnyPlatoonUIShown() and toggleUI:
-            self.hide()
+            self.destroyUI(hideOnly=True)
         elif isinstance(self.prbEntity, UnitEntity):
             if self.hasSearchSupport() and self.__isActiveSearchView:
                 if not (self.isInSearch() or self.__startAutoSearchOnUnitJoin):
@@ -328,11 +335,8 @@ class PlatoonController(IPlatoonController, IGlobalListener):
 
         return False
 
-    def hide(self):
-        self.__destroy(hideOnly=True)
-
-    def destroyUI(self):
-        self.__destroy(hideOnly=False)
+    def destroyUI(self, hideOnly=False):
+        self.__destroy(hideOnly)
 
     def setPlatoonPopoverPosition(self, xPopoverOffset):
         position = self.__calculateDropdownMove(xPopoverOffset)
@@ -504,7 +508,7 @@ class PlatoonController(IPlatoonController, IGlobalListener):
         if self.__isActiveSearchView:
             if not self.isInSearch():
                 self.__isActiveSearchView = False
-                self.hide()
+                self.destroyUI(hideOnly=True)
         self.__checkOtherPlatoonMembersReady(pInfo)
         self.__updatePlatoonTankInfo()
 
@@ -639,6 +643,7 @@ class PlatoonController(IPlatoonController, IGlobalListener):
                 return
             window.load()
             if ePlatoonLayout == _EPlatoonLayout.MEMBER:
+                window.center()
                 if self.__isPlatoonVisualizationEnabled:
                     self.onPlatoonTankVisualizationChanged(True)
                 from gui.prb_control.events_dispatcher import g_eventDispatcher
@@ -708,6 +713,7 @@ class PlatoonController(IPlatoonController, IGlobalListener):
         g_eventBus.addListener(events.HangarVehicleEvent.ON_PLATOON_TANK_LOADED, self.__platoonTankLoaded, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.HangarVehicleEvent.ON_PLATOON_TANK_DESTROY, self.__platoonTankDestroyed, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.MessengerEvent.PRB_CHANNEL_CTRL_INITED, self.__onChannelControllerInited, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __onChannelControllerInited(self, event):
         ctx = event.ctx
@@ -747,6 +753,15 @@ class PlatoonController(IPlatoonController, IGlobalListener):
         g_eventBus.removeListener(events.HangarVehicleEvent.ON_PLATOON_TANK_LOADED, self.__platoonTankLoaded, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.HangarVehicleEvent.ON_PLATOON_TANK_DESTROY, self.__platoonTankDestroyed, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.MessengerEvent.PRB_CHANNEL_CTRL_INITED, self.__onChannelControllerInited, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def __handleSetPrebattleCoolDown(self, event):
+        if event.requestID is REQUEST_TYPE.AUTO_SEARCH:
+            self.__fireOnAutoSearchCooldownChanged(isInCooldown=True)
+            self.delayCallback(event.coolDown, self.__fireOnAutoSearchCooldownChanged, isInCooldown=False)
+
+    def __fireOnAutoSearchCooldownChanged(self, isInCooldown):
+        self.onAutoSearchCooldownChanged(isInCooldown)
 
     def __unitMgrOnUnitJoined(self, unitMgrID, prbType):
         _logger.debug('PlatoonController: __unitMgrOnUnitJoined')

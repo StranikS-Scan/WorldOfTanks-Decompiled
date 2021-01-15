@@ -23,6 +23,7 @@ class ESportActionsHandler(UnitActionsHandler):
         g_eventDispatcher.loadUnit(prbType)
         if flags.isInIdle():
             g_eventDispatcher.setUnitProgressInCarousel(prbType, True)
+        g_eventDispatcher.loadHangar()
         return FUNCTIONAL_FLAG.LOAD_WINDOW
 
     @vehicleAmmoCheck

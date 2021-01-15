@@ -58,7 +58,7 @@ class BaseLogger(object):
         self._player = None
         self._isNewbie = None
         self._ready = False
-        self._enabled = isUILoggingEnabled(self._feature)
+        self._enabled = False
         self._avatar = None
         self._populateTime = None
         return
@@ -119,6 +119,7 @@ class BaseLogger(object):
             self._init()
             self._isNewbie = None
             self._ready = True
+            self._enabled = isUILoggingEnabled(self._feature)
             return
 
     def logStatistic(self, **kwargs):

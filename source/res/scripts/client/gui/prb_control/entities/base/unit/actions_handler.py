@@ -54,6 +54,10 @@ class AbstractActionsHandler(object):
 
 class UnitActionsHandler(AbstractActionsHandler):
 
+    def executeInit(self, ctx):
+        g_eventDispatcher.loadHangar()
+        return FUNCTIONAL_FLAG.UNDEFINED
+
     def executeFini(self):
         prbType = self._entity.getEntityType()
         g_eventDispatcher.removeUnitFromCarousel(prbType)

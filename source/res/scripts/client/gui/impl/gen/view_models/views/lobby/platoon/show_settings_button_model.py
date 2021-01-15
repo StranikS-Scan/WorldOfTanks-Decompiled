@@ -8,26 +8,19 @@ class ShowSettingsButtonModel(ButtonModel):
     def __init__(self, properties=6, commands=1):
         super(ShowSettingsButtonModel, self).__init__(properties=properties, commands=commands)
 
-    def getIsVisible(self):
-        return self._getBool(3)
-
-    def setIsVisible(self, value):
-        self._setBool(3, value)
-
     def getIsPressed(self):
         return self._getBool(4)
 
     def setIsPressed(self, value):
         self._setBool(4, value)
 
-    def getShouldShowPopover(self):
+    def getHasPopover(self):
         return self._getBool(5)
 
-    def setShouldShowPopover(self, value):
+    def setHasPopover(self, value):
         self._setBool(5, value)
 
     def _initialize(self):
         super(ShowSettingsButtonModel, self)._initialize()
-        self._addBoolProperty('isVisible', False)
         self._addBoolProperty('isPressed', False)
-        self._addBoolProperty('shouldShowPopover', False)
+        self._addBoolProperty('hasPopover', False)

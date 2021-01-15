@@ -8,7 +8,7 @@ from uilogging.decorators import loggerTarget, loggerEntry, simpleLog
 from uilogging.bootcamp.constants import BC_LOG_ACTIONS, BC_LOG_KEYS
 from uilogging.bootcamp.loggers import BootcampUILogger
 
-@loggerTarget(logKey=BC_LOG_KEYS.BC_HANGAR_HINTS, loggerCls=BootcampUILogger)
+@loggerTarget(logKey=BC_LOG_KEYS.BC_RESEARCH_VEHICLES, loggerCls=BootcampUILogger)
 class BCResearchPanel(ResearchPanel):
 
     @loggerEntry

@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/platoon/slot_model.py
+from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.lobby.platoon.player_model import PlayerModel
+from gui.impl.gen.view_models.views.lobby.platoon.slot_label_element_model import SlotLabelElementModel
 
 class SlotModel(ViewModel):
     __slots__ = ()
@@ -61,11 +63,11 @@ class SlotModel(ViewModel):
     def setEstimatedTime(self, value):
         self._setString(8, value)
 
-    def getSlotLabelHtml(self):
-        return self._getString(9)
+    def getSlotLabelElements(self):
+        return self._getArray(9)
 
-    def setSlotLabelHtml(self, value):
-        self._setString(9, value)
+    def setSlotLabelElements(self, value):
+        self._setArray(9, value)
 
     def _initialize(self):
         super(SlotModel, self)._initialize()
@@ -78,4 +80,4 @@ class SlotModel(ViewModel):
         self._addBoolProperty('isInBattle', False)
         self._addStringProperty('infoText', '')
         self._addStringProperty('estimatedTime', '')
-        self._addStringProperty('slotLabelHtml', '')
+        self._addArrayProperty('slotLabelElements', Array())

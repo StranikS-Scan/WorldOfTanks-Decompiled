@@ -59,7 +59,7 @@ def getSquadPlayerStatus(slotState, pInfo):
         return PLAYER_GUI_STATUS.NORMAL
 
 
-def makeSlotLabel(unitFlags, slotState, isCreator=False, vehCount=0, checkForVehicles=True, isRequired=False):
+def makeSlotLabel(unitFlags, slotState, isCreator=False, vehCount=0, checkForVehicles=True, isRequired=False, ignoreIfEmpty=False):
     slotLabel = SLOT_LABEL.DEFAULT
     if slotState.isFree:
         if unitFlags.isLocked():
@@ -69,6 +69,8 @@ def makeSlotLabel(unitFlags, slotState, isCreator=False, vehCount=0, checkForVeh
         elif isCreator and isRequired:
             template = SLOT_LABEL.REQUIRED
         else:
+            if ignoreIfEmpty:
+                return ''
             template = SLOT_LABEL.EMPTY
         slotLabel = makeHtmlString('html_templates:lobby/cyberSport/unit', template)
     elif slotState.isClosed:
@@ -306,7 +308,8 @@ def _getSlotsData(unitMgrID, fullData, levelsRange=None, checkForVehicles=True, 
         if unit is not None and unit.getPrebattleType() == PREBATTLE_TYPE.BATTLE_ROYALE:
             slotLabel = makeBattleRoyaleSlotLabel(slotState)
         else:
-            slotLabel = makeSlotLabel(unitState, slotState, isPlayerCreator, vehCount, checkForVehicles, isRequired=isRequired)
+            ignoreEmptySlot = unit is not None and unit.getPrebattleType() in PREBATTLE_TYPE.SQUAD_PREBATTLES
+            slotLabel = makeSlotLabel(unitState, slotState, isPlayerCreator, vehCount, checkForVehicles, isRequired=isRequired, ignoreIfEmpty=ignoreEmptySlot)
         if unit.isPrebattlesSquad():
             playerStatus = getSquadPlayerStatus(slotState, player)
         else:

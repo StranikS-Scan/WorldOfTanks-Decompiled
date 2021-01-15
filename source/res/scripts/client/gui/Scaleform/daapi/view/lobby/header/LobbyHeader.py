@@ -935,7 +935,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             elif isRoyale:
                 tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_BATTLEROYALESQUAD
             else:
-                tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_CREATE
+                tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_SQUAD
             if isRoyale:
                 iconSquad = backport.image(R.images.gui.maps.icons.battleTypes.c_40x40.royaleSquad())
             elif state.isInUnit(constants.PREBATTLE_TYPE.EVENT):

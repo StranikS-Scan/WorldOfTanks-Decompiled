@@ -24,7 +24,7 @@ class SquadTypeSelectPopover(BattleTypeSelectPopoverMeta, IGlobalListener):
         if itemData == 'eventSquad':
             tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_EVENTSQUAD
         elif itemData == 'squad':
-            tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_CREATE
+            tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_SQUAD
         return tooltip
 
     def demoClick(self):

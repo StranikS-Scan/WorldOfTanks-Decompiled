@@ -4,6 +4,7 @@ import logging
 from enum import Enum
 import BigWorld
 import AnimationSequence
+import Math
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
 from skeletons.gui.game_control import IPlatoonController
 from vehicle_systems.stricted_loading import makeCallbackWeak
@@ -63,17 +64,12 @@ class PlatoonLighting(ClientSelectableObject):
     def __onAnimatorLoaded(self, resourceList):
         if self.animationStateMachine in resourceList.failedIDs:
             return
-        elif self.model is None:
-            _logger.error('Could not spawn animation "%s", because model is not loaded: "%s"', self.animationStateMachine, self.modelName)
-            return
-        else:
-            self.__animator = resourceList[self.animationStateMachine]
-            self.__animator.bindTo(AnimationSequence.ModelWrapperContainer(self.model, self.spaceID))
-            self.__animator.start()
-            g_eventBus.addListener(events.HangarVehicleEvent.ON_PLATOON_TANK_LOADED, self.__onPlatoonTankEnter, scope=EVENT_BUS_SCOPE.LOBBY)
-            g_eventBus.addListener(events.HangarVehicleEvent.ON_PLATOON_TANK_DESTROY, self.__onPlatoonTankLeave, scope=EVENT_BUS_SCOPE.LOBBY)
-            self.__platoonController.onPlatoonTankVisualizationChanged += self.__enablePlatoonLighting
-            return
+        self.__animator = resourceList[self.animationStateMachine]
+        self.__animator.bindToWorld(Math.Matrix(self.matrix))
+        self.__animator.start()
+        g_eventBus.addListener(events.HangarVehicleEvent.ON_PLATOON_TANK_LOADED, self.__onPlatoonTankEnter, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(events.HangarVehicleEvent.ON_PLATOON_TANK_DESTROY, self.__onPlatoonTankLeave, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.__platoonController.onPlatoonTankVisualizationChanged += self.__enablePlatoonLighting
 
     def __onPlatoonTankEnter(self, event):
         name = self.__animator.getCurrNodeName()

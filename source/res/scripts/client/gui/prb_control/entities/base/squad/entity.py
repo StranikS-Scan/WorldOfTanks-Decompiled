@@ -29,7 +29,7 @@ class SquadEntity(UnitEntity):
 
     def init(self, ctx=None):
         self.invalidateVehicleStates()
-        return super(SquadEntity, self).init(ctx, False)
+        return super(SquadEntity, self).init(ctx)
 
     def fini(self, ctx=None, woEvents=False):
         self.__clearCustomVehicleStates()

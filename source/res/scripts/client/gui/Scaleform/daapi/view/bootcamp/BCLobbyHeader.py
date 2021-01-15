@@ -13,7 +13,7 @@ from uilogging.bootcamp.loggers import BootcampUILogger
 from bootcamp.aop.in_garage import PointcutBattleSelectorHintText
 _ALLOWED_ENABLED_BUTTONS = [LobbyHeader.BUTTONS.SETTINGS, LobbyHeader.BUTTONS.BATTLE_SELECTOR]
 
-@loggerTarget(logKey=BC_LOG_KEYS.BC_HANGAR_HINTS, loggerCls=BootcampUILogger)
+@loggerTarget(logKey=BC_LOG_KEYS.BC_HANGAR_MENU, loggerCls=BootcampUILogger)
 class BCLobbyHeader(LobbyHeader):
 
     def __init__(self):

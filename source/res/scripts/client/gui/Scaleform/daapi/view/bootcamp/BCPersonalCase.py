@@ -55,7 +55,7 @@ class BCPersonalCaseDataProvider(PersonalCaseDataProvider):
           'linkage': PERSONAL_CASE_SKILLS}]
 
 
-@loggerTarget(logKey=BC_LOG_KEYS.BC_HANGAR_HINTS, loggerCls=BootcampUILogger)
+@loggerTarget(logKey=BC_LOG_KEYS.BC_PERSONAL_CASE, loggerCls=BootcampUILogger)
 class BCPersonalCase(PersonalCase):
 
     def __init__(self, ctx=None):

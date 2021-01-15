@@ -3,7 +3,7 @@
 
 
 class PLATOON(object):
-    HEADERBUTTON_TOOLTIPS_CREATE = '#platoon:headerButton/tooltips/create'
+    HEADERBUTTON_TOOLTIPS_SQUAD = '#platoon:headerButton/tooltips/squad'
     HEADERBUTTON_TOOLTIPS_SEARCHING = '#platoon:headerButton/tooltips/searching'
     HEADERBUTTON_TOOLTIPS_INSQUAD = '#platoon:headerButton/tooltips/inSquad'
     HEADERBUTTON_TOOLTIPS_RANKEDSQUAD = '#platoon:headerButton/tooltips/rankedSquad'
@@ -11,9 +11,9 @@ class PLATOON(object):
     HEADERBUTTON_TOOLTIPS_EVENTSQUAD = '#platoon:headerButton/tooltips/eventSquad'
     HEADERBUTTON_TOOLTIPS_DOMINATIONSQUAD = '#platoon:headerButton/tooltips/dominationSquad'
     SQUAD = '#platoon:squad'
-    HEADERBUTTON_CREATE = '#platoon:headerButton/create'
-    HEADERBUTTON_TOOLTIPS_CREATE_HEADER = '#platoon:headerButton/tooltips/create/header'
-    HEADERBUTTON_TOOLTIPS_CREATE_BODY = '#platoon:headerButton/tooltips/create/body'
+    HEADERBUTTON_SQUAD = '#platoon:headerButton/squad'
+    HEADERBUTTON_TOOLTIPS_SQUAD_HEADER = '#platoon:headerButton/tooltips/squad/header'
+    HEADERBUTTON_TOOLTIPS_SQUAD_BODY = '#platoon:headerButton/tooltips/squad/body'
     HEADERBUTTON_SEARCHING = '#platoon:headerButton/searching'
     HEADERBUTTON_TOOLTIPS_SEARCHING_HEADER = '#platoon:headerButton/tooltips/searching/header'
     HEADERBUTTON_TOOLTIPS_SEARCHING_BODY = '#platoon:headerButton/tooltips/searching/body'

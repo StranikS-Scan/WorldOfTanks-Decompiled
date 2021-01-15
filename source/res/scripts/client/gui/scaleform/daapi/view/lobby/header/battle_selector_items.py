@@ -433,7 +433,7 @@ class _SquadItem(SelectorItem):
         return vo
 
     def _createTooltip(self):
-        return makeTooltip(backport.text(R.strings.tooltips.header.dyn(self._data).header()), backport.text(R.strings.tooltips.header.dyn(self._data).body()))
+        return makeTooltip(backport.text(R.strings.platoon.headerButton.tooltips.dyn(self._data).header()), backport.text(R.strings.platoon.headerButton.tooltips.dyn(self._data).body()))
 
     def getPrebattleType(self):
         return self._prebattleType

@@ -604,6 +604,27 @@ class _ReactiveCommunicationConfig(object):
         return self.__url
 
 
+class _BobConfig(namedtuple('_BobConfig', ('isEnabled', 'registration', 'url', 'peripheryIDs', 'primeTimes', 'seasons', 'cycleTimes', 'levels', 'teams', 'forbiddenClassTags', 'forbiddenVehTypes', 'teamTokens', 'leaderTokens', 'leaderTokenFirstType', 'pointsToken', 'addPersonalRewardToken', 'claimPersonalRewardToken', 'personalRewardQuest', 'teamRewardQuestPrefix', 'teamLevelToken', 'teamRewardTokenPrefix', 'teamsChannel', 'teamSkillsChannel'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, registration={}, url='', peripheryIDs={}, primeTimes={}, seasons={}, cycleTimes={}, levels=set(), teams={}, forbiddenVehTypes=set(), forbiddenClassTags=set(), teamTokens=set(), leaderTokens=set(), leaderTokenFirstType='', pointsToken='', addPersonalRewardToken='', claimPersonalRewardToken='', personalRewardQuest='', teamRewardQuestPrefix='', teamLevelToken='', teamRewardTokenPrefix='', teamsChannel='', teamSkillsChannel='')
+        defaults.update(kwargs)
+        return super(_BobConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -714,6 +735,11 @@ class ServerSettings(object):
             BONUS_CAPS.OVERRIDE_BONUS_CAPS = self.__serverSettings[BonusCapsConst.CONFIG_NAME]
         else:
             BONUS_CAPS.OVERRIDE_BONUS_CAPS = dict()
+        if 'bob_config' in self.__serverSettings:
+            LOG_DEBUG('bob_config', self.__serverSettings['bob_config'])
+            self.__bobSettings = makeTupleByDict(_BobConfig, self.__serverSettings['bob_config'])
+        else:
+            self.__bobSettings = _BobConfig.defaults()
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -742,6 +768,8 @@ class ServerSettings(object):
         if 'unit_assembler_config' in serverSettingsDiff:
             self.__updateUnitAssemblerConfig(serverSettingsDiff)
             self.__serverSettings['unit_assembler_config'] = serverSettingsDiff['unit_assembler_config']
+        if 'bob_config' in serverSettingsDiff:
+            self.__updateBob(serverSettingsDiff)
         if 'telecom_config' in serverSettingsDiff:
             self.__telecomConfig = _TelecomConfig(self.__serverSettings['telecom_config'])
         if 'disabledPMOperations' in serverSettingsDiff:
@@ -861,6 +889,10 @@ class ServerSettings(object):
     @property
     def unitAssemblerConfig(self):
         return self.__unitAssemblerConfig
+
+    @property
+    def bobConfig(self):
+        return self.__bobSettings
 
     @property
     def telecomConfig(self):
@@ -1141,6 +1173,9 @@ class ServerSettings(object):
 
     def __updateUnitAssemblerConfig(self, targetSettings):
         self.__unitAssemblerConfig = self.__unitAssemblerConfig.replace(targetSettings['unit_assembler_config'])
+
+    def __updateBob(self, targetSettings):
+        self.__bobSettings = self.__bobSettings.replace(targetSettings['bob_config'])
 
     def __updateSquadBonus(self, sourceSettings):
         self.__squadPremiumBonus = self.__squadPremiumBonus.replace(sourceSettings[PremiumConfigs.PREM_SQUAD])

@@ -84,6 +84,7 @@ class SYSTEM_MESSAGES(object):
     PREBATTLE_VEHICLEINVALID_NO_READYVEHICLE = '#system_messages:prebattle/vehicleInvalid/no_readyVehicle'
     PREBATTLE_VEHICLEINVALID_VEHICLENOTSUPPORTED = '#system_messages:prebattle/vehicleInvalid/vehicleNotSupported'
     PREBATTLE_VEHICLEINVALID_EPICONLY = '#system_messages:prebattle/vehicleInvalid/epicOnly'
+    PREBATTLE_VEHICLEINVALID_BOBONLY = '#system_messages:prebattle/vehicleInvalid/bobOnly'
     PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS = '#system_messages:prebattle/vehicleInvalid/notSetReadyStatus'
     PREBATTLE_VEHICLEINVALID_FALLOUTONLY = '#system_messages:prebattle/vehicleInvalid/falloutOnly'
     PREBATTLE_VEHICLEINVALID_LIMITS_NATIONS = '#system_messages:prebattle/vehicleInvalid/limits/nations'
@@ -1196,6 +1197,8 @@ class SYSTEM_MESSAGES(object):
     DOG_TAGS_SWITCH_OFF_BODY = '#system_messages:dog_tags/switch_off/body'
     DOG_TAGS_SWITCH_ON_TITLE = '#system_messages:dog_tags/switch_on/title'
     DOG_TAGS_SWITCH_ON_BODY = '#system_messages:dog_tags/switch_on/body'
+    BOB_CLAIMEREWARD_SERVER_ERROR_COOLDOWN = '#system_messages:bob/claimeReward/server_error/COOLDOWN'
+    BOB_CLAIMEREWARD_SERVER_ERROR = '#system_messages:bob/claimeReward/server_error'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1395,6 +1398,7 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_VEHICLEINVALID_NO_READYVEHICLE,
      PREBATTLE_VEHICLEINVALID_VEHICLENOTSUPPORTED,
      PREBATTLE_VEHICLEINVALID_EPICONLY,
+     PREBATTLE_VEHICLEINVALID_BOBONLY,
      PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS,
      PREBATTLE_VEHICLEINVALID_FALLOUTONLY,
      PREBATTLE_VEHICLEINVALID_LIMITS_NATIONS,
@@ -2506,7 +2510,9 @@ class SYSTEM_MESSAGES(object):
      DOG_TAGS_SWITCH_OFF_TITLE,
      DOG_TAGS_SWITCH_OFF_BODY,
      DOG_TAGS_SWITCH_ON_TITLE,
-     DOG_TAGS_SWITCH_ON_BODY)
+     DOG_TAGS_SWITCH_ON_BODY,
+     BOB_CLAIMEREWARD_SERVER_ERROR_COOLDOWN,
+     BOB_CLAIMEREWARD_SERVER_ERROR)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

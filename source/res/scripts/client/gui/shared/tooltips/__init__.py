@@ -75,6 +75,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     DEMOUNT_KIT = 'demountKit'
     VEHICLE_COLLECTOR = 'vehicleCollector'
     DEVICE_GIFT_TOKEN = 'deviceGiftToken'
+    BOB_SELECTOR_INFO = 'bobSelectorInfo'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -108,6 +109,7 @@ class TOOLTIP_COMPONENT(CONST_CONTAINER):
     DEMOUNT_KIT = 'demountKit'
     MODULE_INFO = 'moduleInfo'
     BATTLE_PASS = 'battlePass'
+    BOB = 'bob'
 
 
 class ACTION_TOOLTIPS_TYPE(CONST_CONTAINER):

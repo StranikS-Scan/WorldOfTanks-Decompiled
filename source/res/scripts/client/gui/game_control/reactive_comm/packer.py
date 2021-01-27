@@ -7,13 +7,14 @@ if typing.TYPE_CHECKING:
     from gui.game_control.reactive_comm.constants import SubscriptionCommand
 
 class ServiceMessage(object):
-    __slots__ = ('cid', 'channel', 'status', 'data')
+    __slots__ = ('cid', 'channel', 'status', 'seqid', 'data')
 
-    def __init__(self, cid=None, channel='', status='', data=None, **_):
+    def __init__(self, cid=None, channel='', status='', seqid=None, data=None, **_):
         super(ServiceMessage, self).__init__()
         self.cid = cid
         self.channel = channel
         self.status = SubscriptionServerStatus.fromString(status)
+        self.seqid = seqid
         self.data = data
 
     @property

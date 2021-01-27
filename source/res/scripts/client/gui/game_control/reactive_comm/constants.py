@@ -8,6 +8,7 @@ CHANNEL_UNSUBSCRIPTION_DELAY = 60
 class SubscriptionCommand(Enum):
     Subscribe = 'subscribe'
     Unsubscribe = 'unsubscribe'
+    GetLast = 'get_last'
 
 
 @unique
@@ -20,6 +21,8 @@ class SubscriptionServerStatus(Enum):
     ChannelDeleted = 'channel_deleted'
     UnknownCommand = 'unknown_command'
     NameNotAllowed = 'name_not_allowed'
+    CachedMessage = 'cached_message'
+    NoCachedMessage = 'no_cached_message'
 
     @classmethod
     def fromString(cls, value):

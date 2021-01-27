@@ -305,6 +305,24 @@ class EpicPrestigePointsExchange(Processor):
         BigWorld.player().epicMetaGame.exchangePrestigePoints(lambda code, errStr: self._response(code, callback, errStr=errStr))
 
 
+class BobRewardClaimer(Processor):
+
+    def __init__(self, token):
+        super(BobRewardClaimer, self).__init__()
+        self.__token = token
+
+    @staticmethod
+    def _getMessagePrefix():
+        pass
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError(sysMsgKey='{}/server_error/{}'.format(self._getMessagePrefix(), errStr), defaultSysMsgKey='{}/server_error'.format(self._getMessagePrefix()))
+
+    def _request(self, callback):
+        _logger.debug('Make server request to take BoB3 reward')
+        BigWorld.player().requestSingleToken(self.__token, lambda requestID, resultID, errStr: self._response(resultID, callback, errStr=errStr))
+
+
 class EpicRewardsClaimer(Processor):
 
     def _errorHandler(self, code, errStr='', ctx=None):

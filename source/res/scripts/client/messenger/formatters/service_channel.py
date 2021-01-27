@@ -1119,6 +1119,19 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             result.append(backport.text(rShortCut.daily(), count=count))
         return ', '.join(result)
 
+    @staticmethod
+    def getDogTagsString(dogTags):
+        result = []
+        viewTypeSource = {ComponentViewType.ENGRAVING: R.strings.messenger.serviceChannelMessages.dogTags.viewType.engraving(),
+         ComponentViewType.BACKGROUND: R.strings.messenger.serviceChannelMessages.dogTags.viewType.background()}
+        for dogTag in dogTags:
+            component = componentConfigAdapter.getComponentById(int(dogTag.get('id', 0)))
+            viewTypeText = backport.text(viewTypeSource[component.viewType])
+            name = dogTagComposer.getComponentTitle(component.componentId) or 'No name'
+            result.append('{} "{}"'.format(viewTypeText, name))
+
+        return '<br/>'.join(result)
+
     def _composeOperations(self, data):
         dataEx = data.get('data', {})
         if not dataEx:
@@ -2361,6 +2374,11 @@ class QuestAchievesFormatter(object):
             strEnhancements = InvoiceReceivedFormatter.getEnhancementsString(enhancements)
             if strEnhancements:
                 result.append(strEnhancements)
+        dogTags = data.get('dogTagComponents', [])
+        if dogTags:
+            strDogTags = InvoiceReceivedFormatter.getDogTagsString(dogTags)
+            if strDogTags:
+                result.append(strDogTags)
         if not asBattleFormatter:
             blueprints = data.get('blueprints', {})
             if blueprints:

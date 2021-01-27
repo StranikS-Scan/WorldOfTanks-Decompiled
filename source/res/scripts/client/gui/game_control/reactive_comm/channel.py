@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/game_control/reactive_comm/channel.py
 import logging
 import re
+import zlib
 from collections import deque
 import typing
 import Event
@@ -60,6 +61,10 @@ class Channel(object):
     def messages(self):
         return deque(self.__messages)
 
+    @property
+    def lastMessage(self):
+        return self.__messages[-1] if self.__messages else None
+
     def clear(self):
         self.__clientStatus = constants.SubscriptionClientStatus.Unsubscribed
         self.__clearSubscriptions(reason=constants.SubscriptionCloseReason.Cancel)
@@ -92,6 +97,14 @@ class Channel(object):
                 client.sendBinary(packer.packCommand(self.__name, constants.SubscriptionCommand.Unsubscribe))
         else:
             self.__clientStatus = constants.SubscriptionClientStatus.Unsubscribed
+
+    def getLastMessage(self, client):
+        if self.__clientStatus == constants.SubscriptionClientStatus.Unsubscribed:
+            _logger.warning('Client is unsubscribed from channel <%s>', self.__name)
+            return
+        if client.status == websocket.ConnectionStatus.Opened:
+            if self.__clientStatus == constants.SubscriptionClientStatus.Subscribed:
+                client.sendBinary(packer.packCommand(self.__name, constants.SubscriptionCommand.GetLast))
 
     def addSubscription(self, subscription):
         if isinstance(subscription, Subscription) and subscription not in self.__subscriptions and subscription.channel == self.__name:
@@ -134,21 +147,37 @@ class Channel(object):
                 self.__clientStatus = constants.SubscriptionClientStatus.Unsubscribed
                 self.__messages.clear()
             self.__clearSubscriptions(reason=constants.SubscriptionCloseReason.Request)
+        elif status == constants.SubscriptionServerStatus.CachedMessage:
+            _logger.debug('Request to get last message from channel <%s> is success', self.__name)
+        elif status == constants.SubscriptionServerStatus.NoCachedMessage:
+            _logger.debug('Channel <%s> doesnt have cached messages', self.__name)
         else:
             _logger.warning('Channel response <%s> is not handled: %r, %r', self.__name, self.__clientStatus, status)
         self.__serverStatus = status
 
     def addMessage(self, message):
         if self.__clientStatus == constants.SubscriptionClientStatus.Subscribed:
+            if message.seqid is not None and self.lastMessage and self.lastMessage.seqid > message.seqid:
+                return False
+            message.data = self.__tryDecompressZip(message.data)
             self.__messages.append(message)
             for subscription in self.__subscriptions:
-                subscription.onMessage(message)
+                subscription.onMessage(message.data)
 
             if self.__eventsSender is not None:
-                self.__eventsSender.onChannelMessage(self.__name, message)
+                self.__eventsSender.onChannelMessage(self.__name, message.data)
             return True
         else:
             return False
+
+    @staticmethod
+    def __tryDecompressZip(data):
+        try:
+            result = zlib.decompress(data)
+        except zlib.error:
+            result = data
+
+        return result
 
     def __clearSubscriptions(self, reason=constants.SubscriptionCloseReason.Cancel):
         for subscription in self.__subscriptions:

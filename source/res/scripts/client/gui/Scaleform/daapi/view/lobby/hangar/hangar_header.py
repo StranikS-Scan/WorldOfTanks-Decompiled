@@ -9,7 +9,6 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.event_boards.listener import IEventBoardsListener
 from gui.impl.gen import R
 from gui.impl import backport
-from gui.marathon.marathon_event_controller import DEFAULT_MARATHON_PREFIX
 from gui.prb_control import prb_getters
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.ranked_battles.ranked_helpers import isRankedQuestID
@@ -34,7 +33,7 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from personal_missions import PM_BRANCH
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IBattlePassController, IBootcampController
+from skeletons.gui.game_control import IBattlePassController, IBootcampController, IBobController
 from skeletons.gui.event_boards_controllers import IEventBoardController
 from skeletons.gui.game_control import IMarathonEventsController, IFestivityController, IEventProgressionController, IRankedBattlesController, IQuestsController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -204,6 +203,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     __battlePassController = dependency.descriptor(IBattlePassController)
     __bootcampController = dependency.descriptor(IBootcampController)
     __rankedController = dependency.descriptor(IRankedBattlesController)
+    __bobController = dependency.descriptor(IBobController)
 
     def __init__(self):
         super(HangarHeader, self).__init__()
@@ -229,10 +229,15 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         elif questType == HANGAR_HEADER_QUESTS.QUEST_TYPE_EVENT:
             showMissionsElen(questID)
         elif HANGAR_HEADER_QUESTS.QUEST_TYPE_MARATHON in questType:
-            marathonPrefix = questID or DEFAULT_MARATHON_PREFIX
-            showMissionsMarathon(marathonPrefix)
+            marathonPrefix = None
+            if not questID:
+                marathonEvent = self._marathonsCtrl.getPrimaryMarathon()
+                if marathonEvent is not None:
+                    marathonPrefix = marathonEvent.prefix
+            showMissionsMarathon(questID or marathonPrefix)
         elif questType == HANGAR_HEADER_QUESTS.QUEST_TYPE_SENIORITY:
             showSeniorityInfoWindow()
+        return
 
     def onUpdateHangarFlag(self):
         self.update()
@@ -241,6 +246,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         headerVO = self._makeHeaderVO()
         self.as_setDataS(headerVO)
         self.__updateBPWidget()
+        self.__updateBobWidget()
 
     def updateRankedHeader(self, *_):
         self.__updateRBWidget()
@@ -286,6 +292,9 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
          'quests': []}
         if not self.app.tutorialManager.hangarHeaderEnabled:
             return emptyHeaderVO
+        if self.__bobController.isValidBattleType():
+            return {'isVisible': True,
+             'quests': []}
         if self.__rankedController.isRankedPrbActive():
             return {'isVisible': True,
              'quests': self.__getRankedQuestsToHeaderVO()}
@@ -338,6 +347,15 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             self.getComponent(HANGAR_ALIASES.RANKED_WIDGET).update()
         else:
             self.as_removeRankedBattlesS()
+
+    def __updateBobWidget(self):
+        isBobActive = self.__bobController.isModeActive()
+        isBobPrbActive = self.__bobController.isValidBattleType()
+        isRegistered = self.__bobController.isRegistered()
+        if isBobActive and isBobPrbActive and isRegistered:
+            self.as_createBobS()
+        else:
+            self.as_removeBobS()
 
     def __showAvailablePMOperation(self, branch):
         for operationID in finders.BRANCH_TO_OPERATION_IDS[branch]:

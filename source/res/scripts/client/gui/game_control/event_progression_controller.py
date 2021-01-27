@@ -33,7 +33,7 @@ from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.shared.utils.functions import getRelativeUrl, getUniqueViewName
 from gui.shared.formatters import time_formatters
 from skeletons.connection_mgr import IConnectionManager
-from gui.ranked_battles.constants import PrimeTimeStatus
+from gui.shared.prime_time_constants import PrimeTimeStatus
 from predefined_hosts import g_preDefinedHosts
 from shared_utils import first
 EVENT_PROGRESSION_FINISH_TOKEN = 'epicmetagame:progression_finish'

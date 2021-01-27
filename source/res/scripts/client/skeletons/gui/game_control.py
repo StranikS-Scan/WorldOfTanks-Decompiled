@@ -4,6 +4,7 @@ import typing
 if typing.TYPE_CHECKING:
     from Event import Event
     from gui.battle_pass.battle_pass_bonuses_helper import DeviceTokensContainer
+    from gui.bob.bob_requesters import TeamsRequester, TeamSkillsRequester
     from gui.game_control.event_progression_controller import PlayerLevelInfo
     from gui.shared.gui_items import Vehicle, Tankman
     from gui.periodic_battles.models import PrimeTime
@@ -1835,6 +1836,9 @@ class IReactiveCommunicationService(IGameController):
     def unsubscribeFromChannel(self, subscription):
         raise NotImplementedError
 
+    def getLastMessageFromChannel(self, subscription):
+        raise NotImplementedError
+
     def getChannelHistory(self, name):
         raise NotImplementedError
 
@@ -1851,4 +1855,164 @@ class IUISpamController(IGameController):
         raise NotImplementedError
 
     def setVisited(self, aliasId):
+        raise NotImplementedError
+
+
+class IBobController(IGameController, ISeasonProvider):
+    onPrimeTimeStatusUpdated = None
+    onUpdated = None
+    onTokensUpdated = None
+
+    @property
+    def teamTokens(self):
+        raise NotImplementedError
+
+    @property
+    def leaderTokens(self):
+        raise NotImplementedError
+
+    @property
+    def pointsToken(self):
+        raise NotImplementedError
+
+    @property
+    def tokenToClaimPersonalReward(self):
+        raise NotImplementedError
+
+    @property
+    def personalRewardQuestName(self):
+        raise NotImplementedError
+
+    @property
+    def teamRewardQuestPrefix(self):
+        raise NotImplementedError
+
+    @property
+    def personalLevel(self):
+        raise NotImplementedError
+
+    @property
+    def lactOpenedBobUrl(self):
+        raise NotImplementedError
+
+    @lactOpenedBobUrl.setter
+    def lactOpenedBobUrl(self, value):
+        raise NotImplementedError
+
+    @property
+    def leaderTokenFirstType(self):
+        return NotImplementedError
+
+    @property
+    def teamsChannelName(self):
+        return NotImplementedError
+
+    @property
+    def teamSkillsChannelName(self):
+        return NotImplementedError
+
+    @property
+    def teamsRequester(self):
+        return NotImplementedError
+
+    @property
+    def teamSkillsRequester(self):
+        return NotImplementedError
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def isModeActive(self):
+        raise NotImplementedError
+
+    def isRegistrationEnabled(self):
+        raise NotImplementedError
+
+    def isRegistrationPeriodEnabled(self):
+        raise NotImplementedError
+
+    def isPostEventTime(self):
+        raise NotImplementedError
+
+    def isRegistered(self):
+        raise NotImplementedError
+
+    def isPlayerBlogger(self):
+        raise NotImplementedError
+
+    def isAvailable(self):
+        raise NotImplementedError
+
+    def isValidBattleType(self):
+        raise NotImplementedError
+
+    def isBobPointsToken(self, tokenID):
+        raise NotImplementedError
+
+    def isAllZeroScore(self):
+        raise NotImplementedError
+
+    def needShowEventTab(self):
+        raise NotImplementedError
+
+    def getConfig(self):
+        raise NotImplementedError
+
+    def getCurrentTeamID(self):
+        raise NotImplementedError
+
+    def getPrimeTimes(self):
+        raise NotImplementedError
+
+    def hasAvailablePrimeTimeServers(self):
+        raise NotImplementedError
+
+    def hasAnyPeripheryWithPrimeTime(self):
+        raise NotImplementedError
+
+    def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
+        raise NotImplementedError
+
+    def getPrimeTimeStatus(self, peripheryID=None):
+        raise NotImplementedError
+
+    def claimReward(self, token, callback=None):
+        raise NotImplementedError
+
+    def getAvailablePersonalRewardCount(self):
+        raise NotImplementedError
+
+    def getTeamLevelTokensCount(self):
+        raise NotImplementedError
+
+    def getPlayerPoints(self):
+        raise NotImplementedError
+
+    def getReceivedTeamRewards(self):
+        raise NotImplementedError
+
+    def isFrozen(self):
+        raise NotImplementedError
+
+    def getTimeTillRegistrationStartOrEnd(self):
+        raise NotImplementedError
+
+
+class IBobAnnouncementController(IGameController):
+    onAnnouncementUpdated = None
+
+    @property
+    def currentAnnouncement(self):
+        raise NotImplementedError
+
+    def clickAnnouncement(self):
+        raise NotImplementedError
+
+
+class IBobSoundController(IGameController):
+
+    def onStylePreviewOpen(self):
+        raise NotImplementedError
+
+    def onStylePreviewClose(self):
         raise NotImplementedError

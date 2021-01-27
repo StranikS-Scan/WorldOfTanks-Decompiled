@@ -57,7 +57,8 @@ class FUNCTIONAL_FLAG(BitmaskHelper):
     TOURNAMENT = 8388608
     EPIC = 16777216
     BATTLE_ROYALE = 33554432
-    DEFAULT = 67108864
+    BOB = 67108864
+    DEFAULT = 134217728
     LEGACY_BITMASK = LEGACY_INTRO | LEGACY
     UNIT_BITMASK = UNIT_INTRO | UNIT_BROWSER | UNIT
     PRE_QUEUE_BITMASK = PRE_QUEUE_INTRO | PRE_QUEUE
@@ -160,6 +161,9 @@ class PREBATTLE_ACTION_NAME(object):
     EVENT_PROGRESSION = 'eventProgression'
     BATTLE_ROYALE = 'battleRoyaleQueue'
     EVENT_BATTLE = 'eventBattle'
+    BOB = 'bob'
+    BOB_SQUAD = 'bobSquad'
+    BOB_FORCED = 'bobForced'
 
 
 class PREBATTLE_INIT_STEP(object):
@@ -176,6 +180,7 @@ class SELECTOR_BATTLE_TYPES(object):
     EPIC = 'epic'
     EVENT_PROGRESSION = 'eventProgression'
     BATTLE_ROYALE = 'battleRoyale'
+    BOB = 'bob'
 
 
 class REQUEST_TYPE(object):
@@ -251,6 +256,7 @@ class PREBATTLE_RESTRICTION(object):
     VEHICLE_IN_PREMIUM_IGR_ONLY = 'vehicle/inPremiumIgrOnly'
     VEHICLE_NOT_SUPPORTED = 'vehicle/not_supported'
     VEHICLE_EPIC_ONLY = 'vehicle/epic_only'
+    VEHICLE_BOB_ONLY = 'vehicle/bob_only'
     VEHICLE_ROTATION_GROUP_LOCKED = 'vehicle/rotationGroupLocked'
     UNSUITABLE_VEHICLE_FOR_BATTLE_ROYALE = 'vehicle/notForBattleRoyaleMode'
     VEHICLE_TOO_HEAVY = 'vehicle/tooHeavy'
@@ -346,6 +352,8 @@ class UNIT_RESTRICTION(object):
     UNSUITABLE_VEHICLE = 44
     VEHICLE_TOO_HEAVY = 45
     UNIT_WRONG_DATA = 46
+    BOB_TEAM_MISMATCH = 47
+    BOB_LEADER_FORBIDDEN = 48
 
 
 class PRE_QUEUE_RESTRICTION(object):

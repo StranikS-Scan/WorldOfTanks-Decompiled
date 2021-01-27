@@ -15,7 +15,7 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.impl import backport
 from gui.impl.gen.resources import R
 from gui.periodic_battles.models import CalendarStatusVO
-from gui.ranked_battles.constants import PrimeTimeStatus
+from gui.shared.prime_time_constants import PrimeTimeStatus
 from gui.server_events.events_dispatcher import showMissionsCategories
 from gui.shared import event_dispatcher
 from gui.shared.formatters import text_styles, icons

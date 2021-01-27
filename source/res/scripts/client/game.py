@@ -28,6 +28,7 @@ from helpers import dependency, log
 from messenger import MessengerEntry
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gameplay import IGameplayLogic
+PYTHON_RECURSION_LIMIT = 1100
 tutorialLoaderInit = lambda : None
 tutorialLoaderFini = lambda : None
 if constants.IS_TUTORIAL_ENABLED:
@@ -64,6 +65,7 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
     global g_onBeforeSendEvent
     try:
         log.config.setupFromXML()
+        sys.setrecursionlimit(PYTHON_RECURSION_LIMIT)
         if constants.IS_DEVELOPMENT:
             autoFlushPythonLog()
             from development_features import initDevBonusTypes

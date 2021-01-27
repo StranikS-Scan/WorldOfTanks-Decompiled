@@ -36,6 +36,58 @@ class RetrainCrewWindow(RetrainCrewWindowMeta):
     def _populate(self):
         super(RetrainCrewWindow, self)._populate()
         g_clientUpdateManager.addMoneyCallback(self.__updateDataCallBack)
+        g_currentVehicle.onChanged += self.__onCurrentVehicleChanged
+        self.__updateAllData()
+
+    def submit(self, operationId):
+        if operationId in self.AVAILABLE_OPERATIONS:
+            _, cost = self.getCrewTrainInfo(int(operationId))
+            currentGold = self.itemsCache.items.stats.gold
+            if currentGold < cost.get(Currency.GOLD, 0):
+                showBuyGoldForCrew(cost.get(Currency.GOLD))
+                return
+            self.__processCrewRetrianing(operationId)
+            self.destroy()
+
+    def onWindowClose(self):
+        self.destroy()
+
+    def changeRetrainType(self, operationId):
+        crew, cost = self.getCrewTrainInfo(int(operationId))
+        currentMoney = self.itemsCache.items.stats.money
+        enableSubmitButton = bool(crew and (cost <= currentMoney or cost.get(Currency.GOLD)))
+        self.as_setCrewDataS({'price': cost.toMoneyTuple(),
+         'crew': crew,
+         'crewMembersText': text_styles.concatStylesWithSpace(backport.text(R.strings.retrain_crew.label.crewMembers()), text_styles.middleTitle(len(crew))),
+         'enableSubmitButton': enableSubmitButton})
+
+    def getOperationCost(self, priceInfo, crewSize):
+        return Money(credits=priceInfo[Currency.CREDITS] or None, gold=priceInfo[Currency.GOLD] or None) * crewSize
+
+    def getCrewTrainInfo(self, operationID):
+        items = self.itemsCache.items
+        vehicle = g_currentVehicle.item
+        shopPrices = items.shop.tankmanCost
+        currentSelection = shopPrices[operationID]
+        crewInfo = []
+        for _, tMan in vehicle.crew:
+            if tMan is not None:
+                if tMan.vehicleNativeDescr.type.compactDescr != tMan.vehicleDescr.type.compactDescr:
+                    crewInfo.append(self.__getTankmanRoleInfo(tMan))
+                else:
+                    currentRoleLevel = currentSelection['roleLevel']
+                    if tMan.roleLevel != tankmen.MAX_SKILL_LEVEL and tMan.efficiencyRoleLevel < currentRoleLevel:
+                        crewInfo.append(self.__getTankmanRoleInfo(tMan))
+
+        cost = self.getOperationCost(currentSelection, len(crewInfo))
+        return (crewInfo, cost)
+
+    def _dispose(self):
+        g_clientUpdateManager.removeObjectCallbacks(self)
+        g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
+        super(RetrainCrewWindow, self)._dispose()
+
+    def __updateAllData(self):
         self.as_setVehicleDataS({'nationID': self.__vehicle.nationID,
          'vType': self.__vehicle.type,
          'vIntCD': self.__vehicle.intCD,
@@ -44,7 +96,7 @@ class RetrainCrewWindow(RetrainCrewWindowMeta):
          'vIconSmall': self.__vehicle.iconSmall})
         self.__updateDataCallBack()
 
-    def __updateDataCallBack(self, data=None):
+    def __updateDataCallBack(self, _=None):
         items = self.itemsCache.items
         shopPrices, _ = items.shop.getTankmanCostWithDefaults()
         skillValues = []
@@ -79,16 +131,6 @@ class RetrainCrewWindow(RetrainCrewWindowMeta):
          'nationID': tankman.nationID,
          'iconPath': '../maps/icons/tankmen/roles/medium/%s' % tankman.iconRole}
 
-    def submit(self, operationId):
-        if operationId in self.AVAILABLE_OPERATIONS:
-            _, cost = self.getCrewTrainInfo(int(operationId))
-            currentGold = self.itemsCache.items.stats.gold
-            if currentGold < cost.get(Currency.GOLD, 0):
-                showBuyGoldForCrew(cost.get(Currency.GOLD))
-                return
-            self.__processCrewRetrianing(operationId)
-            self.destroy()
-
     @decorators.process('crewRetraining')
     def __processCrewRetrianing(self, operationId):
         items = self.itemsCache.items
@@ -108,37 +150,9 @@ class RetrainCrewWindow(RetrainCrewWindowMeta):
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         return
 
-    def onWindowClose(self):
-        self.destroy()
-
-    def changeRetrainType(self, operationId):
-        crew, cost = self.getCrewTrainInfo(int(operationId))
-        currentMoney = self.itemsCache.items.stats.money
-        enableSubmitButton = bool(crew and (cost <= currentMoney or cost.get(Currency.GOLD)))
-        self.as_setCrewDataS({'price': cost.toMoneyTuple(),
-         'crew': crew,
-         'crewMembersText': text_styles.concatStylesWithSpace(backport.text(R.strings.retrain_crew.label.crewMembers()), text_styles.middleTitle(len(crew))),
-         'enableSubmitButton': enableSubmitButton})
-
-    def getOperationCost(self, priceInfo, crewSize):
-        return Money(credits=priceInfo[Currency.CREDITS] or None, gold=priceInfo[Currency.GOLD] or None) * crewSize
-
-    def getCrewTrainInfo(self, operationID):
-        items = self.itemsCache.items
-        vehicle = g_currentVehicle.item
-        shopPrices = items.shop.tankmanCost
-        currentSelection = shopPrices[operationID]
-        crewInfo = []
-        for _, tMan in vehicle.crew:
-            if tMan is not None:
-                if tMan.vehicleNativeDescr.type.compactDescr != tMan.vehicleDescr.type.compactDescr:
-                    crewInfo.append(self.__getTankmanRoleInfo(tMan))
-                elif tMan.roleLevel != tankmen.MAX_SKILL_LEVEL and tMan.efficiencyRoleLevel < currentSelection['roleLevel']:
-                    crewInfo.append(self.__getTankmanRoleInfo(tMan))
-
-        cost = self.getOperationCost(currentSelection, len(crewInfo))
-        return (crewInfo, cost)
-
-    def _dispose(self):
-        g_clientUpdateManager.removeObjectCallbacks(self)
-        super(RetrainCrewWindow, self)._dispose()
+    def __onCurrentVehicleChanged(self):
+        self.__vehicle = g_currentVehicle.item
+        if not self.__vehicle or self.__vehicle.isOnlyForBattleRoyaleBattles:
+            self.destroy()
+        else:
+            self.__updateAllData()

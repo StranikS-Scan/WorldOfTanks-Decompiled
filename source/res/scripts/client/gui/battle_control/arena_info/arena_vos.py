@@ -251,9 +251,9 @@ class VehicleTypeInfoVO(object):
 
 
 class VehicleArenaInfoVO(object):
-    __slots__ = ('vehicleID', 'team', 'player', 'playerStatus', 'vehicleType', 'vehicleStatus', 'prebattleID', 'events', 'squadIndex', 'invitationDeliveryStatus', 'ranked', 'gameModeSpecific', 'overriddenBadge', 'badges', '__prefixBadge', '__suffixBadge', 'dogTag')
+    __slots__ = ('vehicleID', 'team', 'player', 'playerStatus', 'vehicleType', 'vehicleStatus', 'prebattleID', 'events', 'squadIndex', 'invitationDeliveryStatus', 'ranked', 'gameModeSpecific', 'overriddenBadge', 'badges', '__prefixBadge', '__suffixBadge', 'dogTag', 'bobInfo')
 
-    def __init__(self, vehicleID, team=0, isAlive=None, isAvatarReady=None, isTeamKiller=None, prebattleID=None, events=None, forbidInBattleInvitations=False, ranked=None, badges=None, overriddenBadge=None, **kwargs):
+    def __init__(self, vehicleID, team=0, isAlive=None, isAvatarReady=None, isTeamKiller=None, prebattleID=None, events=None, forbidInBattleInvitations=False, ranked=None, badges=None, overriddenBadge=None, bobInfo=None, **kwargs):
         super(VehicleArenaInfoVO, self).__init__()
         self.vehicleID = vehicleID
         self.team = team
@@ -266,6 +266,7 @@ class VehicleArenaInfoVO(object):
         self.events = events or {}
         self.squadIndex = 0
         self.ranked = PlayerRankedInfoVO(ranked) if ranked is not None else PlayerRankedInfoVO()
+        self.bobInfo = PlayerBobInfoVO(*bobInfo) if bobInfo is not None else PlayerBobInfoVO()
         arena = avatar_getter.getArena()
         guiType = None if not arena else arena.guiType
         self.gameModeSpecific = GameModeDataVO(guiType, True)
@@ -351,6 +352,12 @@ class VehicleArenaInfoVO(object):
             invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.VEHICLE_INFO)
         return invalidate
 
+    def updateBob(self, invalidate=_INVALIDATE_OP.NONE, bobInfo=None, **kwargs):
+        if bobInfo is not None:
+            self.bobInfo = PlayerBobInfoVO(*bobInfo)
+            invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.VEHICLE_INFO)
+        return invalidate
+
     def updateEvents(self, invalidate=_INVALIDATE_OP.NONE, events=None, **kwargs):
         if events is not None:
             self.events.update(events)
@@ -379,6 +386,7 @@ class VehicleArenaInfoVO(object):
         invalidate = self.updateInvitationStatus(invalidate=invalidate, **kwargs)
         invalidate = self.updateRanked(invalidate=invalidate, **kwargs)
         invalidate = self.updateEvents(invalidate=invalidate, **kwargs)
+        invalidate = self.updateBob(invalidate=invalidate, **kwargs)
         return invalidate
 
     def getSquadID(self):
@@ -617,6 +625,16 @@ class PlayerRankedInfoVO(object):
     def __init__(self, rank=None):
         super(PlayerRankedInfoVO, self).__init__()
         self.rank, self.rankStep = rank or (0, 0)
+
+
+class PlayerBobInfoVO(object):
+    __slots__ = ('bloggerID', 'isBlogger')
+
+    def __init__(self, bloggerID=None, isBlogger=False):
+        super(PlayerBobInfoVO, self).__init__()
+        self.bloggerID = bloggerID if bloggerID is not None else -1
+        self.isBlogger = isBlogger
+        return
 
 
 class ChatCommandVO(object):

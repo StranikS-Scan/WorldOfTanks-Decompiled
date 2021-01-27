@@ -77,3 +77,10 @@ class PremContentPageOverlay(WebView):
     def webHandlers(self):
         from gui.Scaleform.daapi.view.lobby.shared.web_handlers import createPremAccWebHandlers
         return createPremAccWebHandlers()
+
+
+class BobPageOverlay(WebView):
+
+    def webHandlers(self):
+        from gui.Scaleform.daapi.view.lobby.shared.web_handlers import createBobOverlayWebHandlers
+        return createBobOverlayWebHandlers()

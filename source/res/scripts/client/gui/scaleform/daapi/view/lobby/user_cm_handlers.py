@@ -15,7 +15,7 @@ from gui.prb_control import prbDispatcherProperty, prbEntityProperty
 from gui.prb_control.entities.base.ctx import PrbAction, SendInvitesCtx
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared import event_dispatcher as shared_events, events, g_eventBus, utils
-from gui.ranked_battles.constants import PrimeTimeStatus
+from gui.shared.prime_time_constants import PrimeTimeStatus
 from gui.shared.ClanCache import ClanInfo
 from gui.shared.denunciator import LobbyDenunciator, DENUNCIATIONS, DENUNCIATIONS_MAP
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -30,7 +30,7 @@ from messenger.proto.entities import SharedUserEntity
 from messenger.proto.entities import ClanInfo as UserClanInfo
 from messenger.storage import storage_getter
 from nation_change_helpers.client_nation_change_helper import getValidVehicleCDForNationChange
-from skeletons.gui.game_control import IVehicleComparisonBasket, IEventProgressionController
+from skeletons.gui.game_control import IVehicleComparisonBasket, IEventProgressionController, IBobController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -56,6 +56,7 @@ class USER(object):
     CREATE_SQUAD = 'createSquad'
     CREATE_EVENT_SQUAD = 'createEventSquad'
     CREATE_BATTLE_ROYALE_SQUAD = 'createBattleRoyaleSquad'
+    CREATE_BOB_SQUAD = 'createBobSquad'
     INVITE = 'invite'
     REQUEST_FRIENDSHIP = 'requestFriendship'
     VEHICLE_INFO = 'vehicleInfoEx'
@@ -71,6 +72,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     clanCtrl = dependency.descriptor(IWebController)
     lobbyContext = dependency.descriptor(ILobbyContext)
     __eventProgression = dependency.descriptor(IEventProgressionController)
+    bobCtrl = dependency.descriptor(IBobController)
 
     def __init__(self, cmProxy, ctx=None):
         super(BaseUserCMHandler, self).__init__(cmProxy, ctx, handlers=self._getHandlers())
@@ -170,6 +172,9 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     def createBattleRoyaleSquad(self):
         self._doSelect(PREBATTLE_ACTION_NAME.BATTLE_ROYALE_SQUAD, (self.databaseID,))
 
+    def createBobSquad(self):
+        self._doSelect(PREBATTLE_ACTION_NAME.BOB_SQUAD, (self.databaseID,))
+
     def invite(self):
         user = self.usersStorage.getUser(self.databaseID)
         if self.prbEntity.getPermissions().canSendInvite():
@@ -190,6 +195,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
          USER.REMOVE_FROM_IGNORED: 'unsetIgnored',
          USER.COPY_TO_CLIPBOARD: 'copyToClipboard',
          USER.CREATE_SQUAD: 'createSquad',
+         USER.CREATE_BOB_SQUAD: 'createBobSquad',
          USER.CREATE_EVENT_SQUAD: 'createEventSquad',
          USER.CREATE_BATTLE_ROYALE_SQUAD: 'createBattleRoyaleSquad',
          USER.INVITE: 'invite',
@@ -275,6 +281,9 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
             if self.__eventProgression.modeIsAvailable() and self.__eventProgression.isSteelHunter:
                 primeTimeStatus, _, _ = self.__eventProgression.getPrimeTimeStatus()
                 options.append(self._makeItem(USER.CREATE_BATTLE_ROYALE_SQUAD, MENU.contextmenu(USER.CREATE_BATTLE_ROYALE_SQUAD), optInitData={'enabled': canCreate and primeTimeStatus == PrimeTimeStatus.AVAILABLE,
+                 'textColor': 13347959}))
+            if self.bobCtrl.isModeActive():
+                options.append(self._makeItem(USER.CREATE_BOB_SQUAD, MENU.contextmenu(USER.CREATE_BOB_SQUAD), optInitData={'enabled': canCreate,
                  'textColor': 13347959}))
         return options
 

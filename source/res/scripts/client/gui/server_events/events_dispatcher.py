@@ -8,7 +8,6 @@ from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionIn
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
-from gui.marathon.marathon_event_controller import DEFAULT_MARATHON_PREFIX
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.server_events import awards, events_helpers, recruit_helper, anniversary_helper
 from gui.server_events.events_helpers import getLootboxesFromBonuses
@@ -17,6 +16,7 @@ from gui.shared.event_dispatcher import showProgressiveItemsView
 from gui.shared.events import PersonalMissionsEvent
 from helpers import dependency
 from skeletons.gui.customization import ICustomizationService
+from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from gui.impl.lobby.reward_window import TwitchRewardWindow, GiveAwayRewardWindow, PiggyBankRewardWindow
@@ -118,8 +118,14 @@ def showMissionsGrouped(missionID=None, groupID=None, anchor=None):
     showMissions(tab=QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS, missionID=missionID, groupID=groupID, anchor=anchor)
 
 
-def showMissionsMarathon(marathonPrefix=DEFAULT_MARATHON_PREFIX):
+@dependency.replace_none_kwargs(marathonsCtrl=IMarathonEventsController)
+def showMissionsMarathon(marathonPrefix=None, marathonsCtrl=None):
+    if not marathonPrefix and marathonsCtrl is not None:
+        marathonEvent = marathonsCtrl.getPrimaryMarathon()
+        if marathonEvent is not None:
+            marathonPrefix = marathonEvent.prefix
     showMissions(tab=QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, marathonPrefix=marathonPrefix)
+    return
 
 
 def showMissionsCategories(missionID=None, groupID=None, anchor=None):

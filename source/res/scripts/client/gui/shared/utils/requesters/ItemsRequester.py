@@ -16,6 +16,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES, ItemsCollec
 from gui.shared.utils.requesters import vehicle_items_getter
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.utils.requesters.battle_pass_requester import BattlePassRequester
+from gui.shared.utils.requesters.bob_requester import BobRequester
 from helpers import dependency
 from items import vehicles, tankmen, getTypeOfCompactDescr, makeIntCompactDescrByID
 from items.components.c11n_constants import SeasonType
@@ -270,6 +271,7 @@ class REQ_CRITERIA(object):
         EVENT_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEventBattles))
         EPIC_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEpicBattles))
         BATTLE_ROYALE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForBattleRoyaleBattles))
+        BOB_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForBob))
         HAS_XP_FACTOR = RequestCriteria(PredicateCondition(lambda item: item.dailyXPFactor != -1))
         IS_RESTORE_POSSIBLE = RequestCriteria(PredicateCondition(lambda item: item.isRestorePossible()))
         CAN_TRADE_IN = RequestCriteria(PredicateCondition(lambda item: item.canTradeIn))
@@ -388,6 +390,7 @@ class ItemsRequester(IItemsRequester):
         self.__sessionStats = sessionStatsRequester
         self.__anonymizer = anonymizerRequester
         self.__battlePass = BattlePassRequester()
+        self.__bob = BobRequester()
         self.__itemsCache = defaultdict(dict)
         self.__brokenSyncAlreadyLoggedTypes = set()
         self.__fittingItemRequesters = {self.__inventory,
@@ -465,6 +468,10 @@ class ItemsRequester(IItemsRequester):
     def battlePass(self):
         return self.__battlePass
 
+    @property
+    def bob(self):
+        return self.__bob
+
     @async
     @process
     def request(self, callback=None):
@@ -514,6 +521,9 @@ class ItemsRequester(IItemsRequester):
         Waiting.show('download/festivity')
         yield self.__festivity.request()
         Waiting.hide('download/festivity')
+        Waiting.show('download/bob')
+        yield self.__bob.request()
+        Waiting.hide('download/bob')
         self.__brokenSyncAlreadyLoggedTypes.clear()
         callback(self)
 
@@ -573,6 +583,7 @@ class ItemsRequester(IItemsRequester):
         self.__blueprints.clear()
         self.__festivity.clear()
         self.__anonymizer.clear()
+        self.__bob.clear()
 
     def onDisconnected(self):
         self.__tokens.onDisconnected()
@@ -711,6 +722,11 @@ class ItemsRequester(IItemsRequester):
                 invalidate['battlePass'] = diff[('battlePass', '_r')]
             if 'battlePass' in diff:
                 synchronizeDicts(diff['battlePass'], invalidate.setdefault('battlePass', {}))
+        if ('bob', '_r') in diff or 'bob' in diff:
+            if ('bob', '_r') in diff:
+                invalidate['bob'] = diff[('bob', '_r')]
+            if 'bob' in diff:
+                synchronizeDicts(diff['bob'], invalidate.setdefault('bob', {}))
         if 'goodies' in diff:
             vehicleDiscounts = self.__shop.getVehicleDiscountDescriptions()
             for goodieID in diff['goodies'].iterkeys():

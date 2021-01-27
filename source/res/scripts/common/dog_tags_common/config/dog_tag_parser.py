@@ -5,6 +5,7 @@ import ResMgr
 import dog_tag_framework as dtf
 from constants import IS_CLIENT, IS_BASEAPP
 from dog_tags_common.config.common import ParseException, ParameterType, Visibility, ComponentPurpose, ComponentViewType, DOG_TAGS_FILE, ComponentNumberType
+from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from typing import List, Tuple
     from dog_tags_common.config.dog_tag_framework import StartingComponents, ComponentDefinition
@@ -108,9 +109,15 @@ def _parseSection(sectionName, section, *builderAttrs):
 def readDogTags(xmlPath=DOG_TAGS_FILE):
     xmlFile = ResMgr.openSection(xmlPath)
     components = []
+    componentsIds = set()
     for sectionName, section in xmlFile.items():
         if sectionName == 'component':
-            components.append(_parseSection(sectionName, section))
+            component = _parseSection(sectionName, section)
+            componentId = component.componentId
+            if componentId in componentsIds:
+                raise SoftException('Error in {}. Component id {} is not unique'.format(xmlPath, componentId))
+            componentsIds.add(componentId)
+            components.append(component)
 
     startingComponent = _parseSection('startingComponents', xmlFile['startingComponents'], components)
     return (startingComponent, components)

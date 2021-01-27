@@ -22,7 +22,7 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG, PRE_QUEUE_JOIN_ERRORS
 from gui.prb_control.storages import prequeue_storage_getter
-from gui.ranked_battles.constants import PrimeTimeStatus
+from gui.shared.prime_time_constants import PrimeTimeStatus
 from gui.shared import event_dispatcher
 from helpers import dependency, i18n
 from skeletons.account_helpers.settings_core import ISettingsCore

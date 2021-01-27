@@ -17,7 +17,7 @@ from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, FalloutClass
 from ops_pack import OpsUnpacker, packPascalString, unpackPascalString, initOpsFormatDef
 from unit_helpers.ExtrasHandler import EmptyExtrasHandler, ClanBattleExtrasHandler
 from unit_helpers.ExtrasHandler import SquadExtrasHandler, ExternalExtrasHandler
-from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, FalloutClassicRoster, FalloutMultiteamRoster, EventRoster, EpicRoster
+from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, FalloutClassicRoster, FalloutMultiteamRoster, EventRoster, EpicRoster, BobRoster
 if TYPE_CHECKING:
     from typing import List as TList, Tuple as TTuple, Dict as TDict, Optional as TOptional
 UnitVehicle = namedtuple('UnitVehicle', ('vehInvID', 'vehTypeCompDescr', 'vehLevel', 'vehClassIdx'))
@@ -349,6 +349,7 @@ class UNIT_MGR_FLAGS:
     EPIC = 4096
     TOURNAMENT = 8192
     BATTLE_ROYALE = 16384
+    BOB = 32768
 
 
 class UnitAssemblerSearchFlags(object):
@@ -430,6 +431,8 @@ def _prebattleTypeFromFlags(flags):
         return PREBATTLE_TYPE.EPIC
     elif flags & UNIT_MGR_FLAGS.BATTLE_ROYALE:
         return PREBATTLE_TYPE.BATTLE_ROYALE
+    elif flags & UNIT_MGR_FLAGS.BOB:
+        return PREBATTLE_TYPE.BOB
     elif flags & UNIT_MGR_FLAGS.SQUAD:
         return PREBATTLE_TYPE.SQUAD
     elif flags & UNIT_MGR_FLAGS.SPEC_BATTLE:
@@ -449,6 +452,8 @@ def _entityNameFromFlags(flags):
         return 'FalloutUnitMgr'
     elif flags & UNIT_MGR_FLAGS.EVENT:
         return 'EventUnitMgr'
+    elif flags & UNIT_MGR_FLAGS.BOB:
+        return 'BobUnitMgr'
     elif flags & UNIT_MGR_FLAGS.SQUAD:
         return 'SquadUnitMgr'
     elif flags & UNIT_MGR_FLAGS.STRONGHOLD:
@@ -464,6 +469,8 @@ def _invitationTypeFromFlags(flags):
         return INVITATION_TYPE.EVENT
     elif flags & UNIT_MGR_FLAGS.BATTLE_ROYALE:
         return INVITATION_TYPE.BATTLE_ROYALE
+    elif flags & UNIT_MGR_FLAGS.BOB:
+        return INVITATION_TYPE.BOB
     elif flags & UNIT_MGR_FLAGS.SQUAD:
         return INVITATION_TYPE.SQUAD
     else:
@@ -481,7 +488,8 @@ class ROSTER_TYPE:
     TOURNAMENT_ROSTER = UNIT_MGR_FLAGS.TOURNAMENT
     EPIC_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.EPIC
     BATTLE_ROYALE_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.BATTLE_ROYALE
-    _MASK = SQUAD_ROSTER | SPEC_ROSTER | UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM | UNIT_MGR_FLAGS.EVENT | STRONGHOLD_ROSTER | TOURNAMENT_ROSTER | UNIT_MGR_FLAGS.EPIC | UNIT_MGR_FLAGS.BATTLE_ROYALE
+    BOB_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.BOB
+    _MASK = SQUAD_ROSTER | SPEC_ROSTER | UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM | UNIT_MGR_FLAGS.EVENT | STRONGHOLD_ROSTER | TOURNAMENT_ROSTER | UNIT_MGR_FLAGS.EPIC | UNIT_MGR_FLAGS.BATTLE_ROYALE | UNIT_MGR_FLAGS.BOB
 
 
 class EXTRAS_HANDLER_TYPE:
@@ -515,6 +523,7 @@ class UnitPlayerDataKey(object):
     VEH_DICT = 'vehDict'
     VEH_BATTLES_COUNT = 'vehBattlesCount'
     EXTRA_DATA = 'extraData'
+    TOKENS = 'tokens'
 
 
 FALLOUT_QUEUE_TYPE_TO_ROSTER = {QUEUE_TYPE.FALLOUT_CLASSIC: ROSTER_TYPE.FALLOUT_CLASSIC_ROSTER,
@@ -528,7 +537,8 @@ ROSTER_TYPE_TO_CLASS = {ROSTER_TYPE.UNIT_ROSTER: UnitRoster,
  ROSTER_TYPE.STRONGHOLD_ROSTER: SpecRoster,
  ROSTER_TYPE.TOURNAMENT_ROSTER: SpecRoster,
  ROSTER_TYPE.EPIC_ROSTER: EpicRoster,
- ROSTER_TYPE.BATTLE_ROYALE_ROSTER: BattleRoyaleRoster}
+ ROSTER_TYPE.BATTLE_ROYALE_ROSTER: BattleRoyaleRoster,
+ ROSTER_TYPE.BOB_ROSTER: BobRoster}
 EXTRAS_HANDLER_TYPE_TO_HANDLER = {EXTRAS_HANDLER_TYPE.EMPTY: EmptyExtrasHandler,
  EXTRAS_HANDLER_TYPE.SQUAD: SquadExtrasHandler,
  EXTRAS_HANDLER_TYPE.SPEC_BATTLE: ClanBattleExtrasHandler,
@@ -849,7 +859,7 @@ class UnitBase(OpsUnpacker):
             unpacking = unpacking[self._SLOT_PLAYERS_SIZE:]
 
         for i in xrange(0, playerCount):
-            blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, accountWTR, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges, eventEnqueueData = self.__unpackPlayerData(unpacking)
+            blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, accountWTR, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges, eventEnqueueData, tokens = self.__unpackPlayerData(unpacking)
             unpacking = unpacking[blockLength:]
             playerData = {UnitPlayerDataKey.ACCOUNT_ID: accountID,
              UnitPlayerDataKey.TIME_JOIN: timeJoin,
@@ -863,7 +873,8 @@ class UnitBase(OpsUnpacker):
              UnitPlayerDataKey.IGRTYPE: igrType,
              UnitPlayerDataKey.BADGES: badges,
              UnitPlayerDataKey.IS_PREMIUM: isPremium,
-             UnitPlayerDataKey.EXTRA_DATA: dict(eventEnqueueData=eventEnqueueData)}
+             UnitPlayerDataKey.EXTRA_DATA: dict(eventEnqueueData=eventEnqueueData),
+             UnitPlayerDataKey.TOKENS: tokens}
             self._addPlayer(accountDBID, **playerData)
 
         for i in xrange(0, profilesCount):
@@ -1236,7 +1247,7 @@ class UnitBase(OpsUnpacker):
         return packedOps[opLen:]
 
     def _unpackPlayer(self, packedOps):
-        blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, accountWTR, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges, eventEnqueueData = self.__unpackPlayerData(packedOps)
+        blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, accountWTR, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges, eventEnqueueData, tokens = self.__unpackPlayerData(packedOps)
         playerData = {UnitPlayerDataKey.ACCOUNT_ID: accountID,
          UnitPlayerDataKey.TIME_JOIN: timeJoin,
          UnitPlayerDataKey.ROLE: role,
@@ -1249,7 +1260,8 @@ class UnitBase(OpsUnpacker):
          UnitPlayerDataKey.IGRTYPE: igrType,
          UnitPlayerDataKey.BADGES: badges,
          UnitPlayerDataKey.IS_PREMIUM: isPremium,
-         UnitPlayerDataKey.EXTRA_DATA: dict(eventEnqueueData=eventEnqueueData)}
+         UnitPlayerDataKey.EXTRA_DATA: dict(eventEnqueueData=eventEnqueueData),
+         UnitPlayerDataKey.TOKENS: tokens}
         self._addPlayer(accountDBID, **playerData)
         return packedOps[blockLength:]
 
@@ -1335,6 +1347,7 @@ class UnitBase(OpsUnpacker):
         badges = kwargs.get(UnitPlayerDataKey.BADGES, BadgesCommon.selectedBadgesEmpty())
         packed += BadgesCommon.packPlayerBadges(badges)
         packed += self.__packEventEnqueueContainerData(kwargs.get('extraData', {}).get('eventEnqueueData', {}))
+        packed += self.__packTokensData(kwargs.get('tokens', set()))
         return packed
 
     def __unpackPlayerData(self, packedData):
@@ -1349,6 +1362,8 @@ class UnitBase(OpsUnpacker):
         offset += lenBadgesInfo
         eventEnqueueData, lenEventDataInfo = self.__unpackEventEnqueueContainerData(packedData, offset)
         offset += lenEventDataInfo
+        tokens, lenTokensInfo = self.__unpackTokensData(packedData, offset)
+        offset += lenTokensInfo
         return (offset,
          accountDBID,
          accountID,
@@ -1363,7 +1378,8 @@ class UnitBase(OpsUnpacker):
          nickName,
          clanAbbrev,
          badges,
-         eventEnqueueData)
+         eventEnqueueData,
+         tokens)
 
     @staticmethod
     def __packEventEnqueueContainerData(packedData):
@@ -1410,3 +1426,24 @@ class UnitBase(OpsUnpacker):
         offset += lenString
         self._setProfileVehicle(accountDBID, profileVehCD, profileOutfitCD, seasonType, marksOnGun)
         return offset - initialOffset
+
+    @staticmethod
+    def __packTokensData(packedData):
+        packed = struct.pack('<B', len(packedData))
+        for token in packedData:
+            packed += packPascalString(token)
+
+        return packed
+
+    @staticmethod
+    def __unpackTokensData(packedData, initialOffset):
+        offset = initialOffset
+        tokensLength = struct.unpack_from('<B', packedData, offset)[0]
+        offset += struct.calcsize('<B')
+        tokens = set()
+        for _ in range(tokensLength):
+            token, lenBytes = unpackPascalString(packedData, offset)
+            tokens.add(token)
+            offset += lenBytes
+
+        return (tokens, offset - initialOffset)

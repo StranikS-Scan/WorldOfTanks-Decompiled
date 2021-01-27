@@ -39,7 +39,7 @@ class C2WHandler(object):
 
     @staticmethod
     def __hashedEvent(webEvent):
-        return (hash(json.dumps(webEvent[_TYPE])), hash(json.dumps(webEvent[_DATA])))
+        return (hash(json.dumps(webEvent[_TYPE])), hash(json.dumps(webEvent[_DATA], ensure_ascii=False)))
 
 
 def c2w(name):

@@ -6,7 +6,7 @@ from gui import SystemMessages
 from gui.prb_control.entities.base.pre_queue.ctx import LeavePreQueueCtx
 from gui.prb_control.entities.base.scheduler import BaseScheduler
 from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.ranked_battles.constants import PrimeTimeStatus
+from gui.shared.prime_time_constants import PrimeTimeStatus
 from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
 

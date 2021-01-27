@@ -42,6 +42,9 @@ RANKED_CAROUSEL_FILTER_CLIENT_1 = 'RANKED_CAROUSEL_FILTER_CLIENT_1'
 EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
 EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
 EPICBATTLE_CAROUSEL_FILTER_CLIENT_1 = 'EPICBATTLE_CAROUSEL_FILTER_CLIENT_1'
+BOB_CAROUSEL_FILTER_1 = 'BOB_CAROUSEL_FILTER_1'
+BOB_CAROUSEL_FILTER_2 = 'BOB_CAROUSEL_FILTER_2'
+BOB_CAROUSEL_FILTER_CLIENT_1 = 'BOB_CAROUSEL_FILTER_CLIENT_1'
 STORAGE_VEHICLES_CAROUSEL_FILTER_1 = 'STORAGE_CAROUSEL_FILTER_1'
 BATTLEPASS_CAROUSEL_FILTER_1 = 'BATTLEPASS_CAROUSEL_FILTER_1'
 BATTLEPASS_CAROUSEL_FILTER_CLIENT_1 = 'BATTLEPASS_CAROUSEL_FILTER_CLIENT_1'
@@ -72,6 +75,7 @@ PREVIEW_INFO_PANEL_IDX = 'previewInfoPanelIdx'
 NEW_SETTINGS_COUNTER = 'newSettingsCounter'
 NEW_HOF_COUNTER = 'newHofCounter'
 NEW_LOBBY_TAB_COUNTER = 'newLobbyTabCounter'
+BOB_BANNERS_VIEWED = 'bobBannersViewed'
 REFERRAL_COUNTER = 'referralButtonCounter'
 CLAN_NOTIFICATION_COUNTERS = 'ClanButtonNewsCounters'
 PROGRESSIVE_REWARD_VISITED = 'progressiveRewardVisited'
@@ -375,6 +379,42 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'crystals': False},
                EPICBATTLE_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                BATTLEPASS_CAROUSEL_FILTER_1: {'isCommonProgression': False},
+               BOB_CAROUSEL_FILTER_1: {'ussr': False,
+                                       'germany': False,
+                                       'usa': False,
+                                       'china': False,
+                                       'france': False,
+                                       'uk': False,
+                                       'japan': False,
+                                       'czech': False,
+                                       'sweden': False,
+                                       'poland': False,
+                                       'italy': False,
+                                       'lightTank': False,
+                                       'mediumTank': False,
+                                       'heavyTank': False,
+                                       'SPG': False,
+                                       'AT-SPG': False,
+                                       'level_1': False,
+                                       'level_2': False,
+                                       'level_3': False,
+                                       'level_4': False,
+                                       'level_5': False,
+                                       'level_6': False,
+                                       'level_7': False,
+                                       'level_8': False,
+                                       'level_9': False,
+                                       'level_10': True},
+               BOB_CAROUSEL_FILTER_2: {'premium': False,
+                                       'elite': False,
+                                       'igr': False,
+                                       'rented': True,
+                                       'event': True,
+                                       'gameMode': False,
+                                       'favorite': False,
+                                       'bonus': False,
+                                       'crystals': False},
+               BOB_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                MISSION_SELECTOR_FILTER: {'inventory': False},
                PM_SELECTOR_FILTER: {'inventory': False},
                BLUEPRINTS_STORAGE_FILTER: {'unlock_available': False,
@@ -701,7 +741,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 SUBTITLES: True,
                 RANKED_YEAR_POSITION: None,
                 TOP_OF_TREE_CONFIG: {},
-                NATION_CHANGE_VIEWED: False},
+                BOB_BANNERS_VIEWED: {}},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},

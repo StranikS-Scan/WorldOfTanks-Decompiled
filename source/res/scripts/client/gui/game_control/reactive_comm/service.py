@@ -12,6 +12,7 @@ from skeletons.gui.game_control import IReactiveCommunicationService
 from skeletons.gui.lobby_context import ILobbyContext
 if typing.TYPE_CHECKING:
     from gui.game_control.reactive_comm.channel import Subscription
+    from gui.game_control.reactive_comm.packer import ServiceMessage
 
 class ReactiveCommunicationService(IReactiveCommunicationService, ChannelsEventsSender):
     __lobbyContext = dependency.descriptor(ILobbyContext)
@@ -36,6 +37,9 @@ class ReactiveCommunicationService(IReactiveCommunicationService, ChannelsEvents
 
     def unsubscribeFromChannel(self, subscription):
         return self.__manager.unsubscribe(subscription) if self.__manager is not None else False
+
+    def getLastMessageFromChannel(self, subscription):
+        return self.__manager.getLastMessage(subscription) if self.__manager is not None else False
 
     def getChannelHistory(self, name):
         return self.__manager.getChannelHistory(name) if self.__manager is not None else deque()

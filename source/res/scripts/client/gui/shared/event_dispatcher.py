@@ -31,6 +31,7 @@ from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
+from gui.Scaleform.genConsts.BATTLE_OF_BLOGGERS_ALIASES import BATTLE_OF_BLOGGERS_ALIASES
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.game_control.links import URLMacros
 from gui.impl import backport
@@ -116,6 +117,10 @@ def showRankedPrimeTimeWindow():
 
 def showEpicBattlesPrimeTimeWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(EPICBATTLES_ALIASES.EPIC_BATTLES_PRIME_TIME_ALIAS), ctx={}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showBobPrimeTimeWindow():
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(BATTLE_OF_BLOGGERS_ALIASES.BOB_PRIME_TIME_ALIAS), ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showEpicBattlesWelcomeBackWindow():
@@ -816,6 +821,20 @@ def showBattleVotingResultWindow(isOverlay=False, parent=None):
     from gui.impl.lobby.battle_pass.battle_pass_voting_result_view import BattlePassVotingResultWindow
     window = BattlePassVotingResultWindow(isOverlay, parent)
     window.load()
+
+
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showBobPersonalRewardWindow(bonuses, notificationMgr=None):
+    from gui.impl.lobby.bob.bob_personal_rewards_view import BobPersonalRewardWindow
+    window = BobPersonalRewardWindow(bonuses)
+    notificationMgr.append(window)
+
+
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showBobTeamRewardWindow(bonuses, level, notificationMgr=None):
+    from gui.impl.lobby.bob.bob_team_rewards_view import BobTeamRewardWindow
+    window = BobTeamRewardWindow(bonuses, level)
+    notificationMgr.append(window)
 
 
 def showDedicationRewardWindow(bonuses, data, closeCallback=None):

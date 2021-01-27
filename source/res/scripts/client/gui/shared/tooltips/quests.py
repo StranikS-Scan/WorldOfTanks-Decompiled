@@ -29,6 +29,7 @@ from helpers.i18n import makeString as _ms
 from shared_utils import findFirst
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.game_control import IQuestsController, IEventProgressionController, IRankedBattlesController
+from skeletons.gui.game_control import IBobController
 _MAX_AWARDS_PER_TOOLTIP = 5
 _MAX_QUESTS_PER_TOOLTIP = 4
 _MAX_BONUSES_PER_QUEST = 2
@@ -167,7 +168,7 @@ class ScheduleQuestTooltipData(BlocksTooltipData):
         if weekDays:
             days = [ _ms(MENU.datetime_weekdays_full(idx)) for idx in event.getWeekDays() ]
             items.append(self._getSubBlock(TOOLTIPS.QUESTS_SCHEDULE_WEEKDAYS, days))
-        intervals = event.getActiveTimeIntervals()
+        intervals = event.getCollapsedActiveTimeIntervals()
         if intervals:
             times = []
             for low, high in intervals:
@@ -184,6 +185,7 @@ class UnavailableQuestTooltipData(BlocksTooltipData):
     _eventsCache = dependency.descriptor(IEventsCache)
     __eventProgressionController = dependency.descriptor(IEventProgressionController)
     __rankedController = dependency.descriptor(IRankedBattlesController)
+    __bobController = dependency.descriptor(IBobController)
 
     def __init__(self, context):
         super(UnavailableQuestTooltipData, self).__init__(context, TOOLTIP_TYPE.QUESTS)
@@ -203,6 +205,10 @@ class UnavailableQuestTooltipData(BlocksTooltipData):
             if rankedOverrides:
                 items.extend(rankedOverrides)
                 return items
+        requiredTokens = set([ token.getID() for token in quest.accountReqs.getTokens() if not token.isAvailable() ])
+        if self.__bobController.teamTokens <= requiredTokens:
+            msg = backport.text(R.strings.tooltips.quests.unavailable.bobRegistration())
+            return [formatters.packTextBlockData(text=text_styles.main(msg))]
         accountRequirementsFormatter = MissionsAccountRequirementsFormatter()
         requirements = accountRequirementsFormatter.format(quest.accountReqs, quest)
         reqList = self.__getList(requirements)

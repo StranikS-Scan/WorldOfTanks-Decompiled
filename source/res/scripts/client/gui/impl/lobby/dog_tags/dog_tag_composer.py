@@ -87,7 +87,11 @@ class DogTagComposerLobby(DogTagComposerClient):
 
     @staticmethod
     def _getVisibleComponents(unlockedComponents):
-        nonDeprecated = componentConfig.getAllComponents(SourceData.NON_DEPRECATED_ONLY)
+        nonDeprecated = {}
+        for compId, comp in componentConfig.getAllComponents(SourceData.NON_DEPRECATED_ONLY).iteritems():
+            if not comp.isSecret or compId in unlockedComponents:
+                nonDeprecated[compId] = comp
+
         unlockedBeforeDeprecation = {}
         for compId in unlockedComponents:
             comp = componentConfig.getComponentById(compId, SourceData.DEPRECATED_ONLY)

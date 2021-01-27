@@ -22,6 +22,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     BROWSER_OVERLAY = 'overlayBrowserFull'
     BATTLE_PASS_BROWSER_VIEW = 'battlePassBrowserView'
     OVERLAY_PREM_CONTENT_VIEW = 'overlayPremContentView'
+    BOB_OVERLAY_CONTENT_VIEW = 'bobOverlayContentView'
     WEB_VIEW_TRANSPARENT = 'webViewTransparent'
     LOBBY_PROFILE = 'profile'
     LOBBY_MISSIONS = 'missions'
@@ -181,6 +182,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     CLAN_NOTIFICATION_WINDOW = 'clanNotificationWindow'
     EPIC_RANDOM_PAGE = 'epicRandomPage'
     EPIC_BATTLE_PAGE = 'epicBattlePage'
+    BOB_BATTLE_PAGE = 'bobBattlePage'
     EVENT_BATTLE_PAGE = 'classicBattlePage'
     RANKED_BATTLE_PAGE = 'rankedBattlePage'
     BATTLE_ROYALE_PAGE = 'battleRoyalePage'
@@ -241,4 +243,5 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
      RANKED_BATTLE_PAGE,
      BOOTCAMP_BATTLE_PAGE,
      EPIC_BATTLE_PAGE,
-     BATTLE_ROYALE_PAGE)
+     BATTLE_ROYALE_PAGE,
+     BOB_BATTLE_PAGE)

@@ -161,6 +161,10 @@ class IDynamicControllersLocator(object):
     def dogTags(self):
         raise NotImplementedError
 
+    @property
+    def bob(self):
+        raise NotImplementedError
+
 
 class ISquadInvitationsHandler(object):
     __slots__ = ()
@@ -560,6 +564,9 @@ class IBattleContext(object):
         raise NotImplementedError
 
     def extractLastArenaWinStatus(self):
+        raise NotImplementedError
+
+    def areQuestsEnabledForArena(self):
         raise NotImplementedError
 
 

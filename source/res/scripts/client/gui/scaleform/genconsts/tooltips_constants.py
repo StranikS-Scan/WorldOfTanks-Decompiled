@@ -241,6 +241,10 @@ class TOOLTIPS_CONSTANTS(object):
     BLUEPRINT_EMPTY_SLOT_INFO = 'blueprintEmptySlotInfo'
     BLUEPRINT_RANDOM_INFO = 'blueprintRandomInfo'
     SENIORITY_FLAG = 'seniorityFlag'
+    BOB_SELECTOR_INFO = 'bobSelectorInfo'
+    BOB_SERVER_PRIMETIME = 'bobServerPrimeTime'
+    BOB_SKILL_INFO = 'bobDSkillInfo'
+    BOB_PROGRESSIVE_INFO = 'bobProgressiveInfo'
     BLOCKS_DEFAULT_UI = 'ToolTipInblocksDefaultUI'
     TANKMEN_UI = 'ToolTipTankmenUI'
     TANKMEN_SKILL_UI = 'ToolTipSkillUI'
@@ -556,3 +560,7 @@ class TOOLTIPS_CONSTANTS(object):
      BATTLE_ROYALE_PERF_SIMPLE,
      BATTLE_ROYALE_PERF_ADVANCED,
      BATTLE_ROYALE_SELECTOR_INFO]
+    BOB_SET = [BOB_SELECTOR_INFO,
+     BOB_SERVER_PRIMETIME,
+     BOB_SKILL_INFO,
+     BOB_PROGRESSIVE_INFO]

@@ -22,7 +22,7 @@ IS_CELLAPP = BigWorld.component == 'cell'
 IS_BASEAPP = BigWorld.component in ('base', 'service')
 IS_WEB = BigWorld.component == 'web'
 IS_DYNAPDATER = False
-CURRENT_REALM = 'CT'
+CURRENT_REALM = 'RU'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -179,6 +179,7 @@ class ARENA_GUI_TYPE:
     EPIC_BATTLE = 21
     EPIC_TRAINING = 22
     BATTLE_ROYALE = 23
+    BOB = 24
     RANGE = (UNKNOWN,
      RANDOM,
      TRAINING,
@@ -198,7 +199,8 @@ class ARENA_GUI_TYPE:
      EPIC_RANDOM_TRAINING,
      EPIC_BATTLE,
      EPIC_TRAINING,
-     BATTLE_ROYALE)
+     BATTLE_ROYALE,
+     BOB)
     RANDOM_RANGE = (RANDOM, EPIC_RANDOM)
     SANDBOX_RANGE = (SANDBOX, RATED_SANDBOX)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
@@ -224,7 +226,8 @@ class ARENA_GUI_TYPE_LABEL:
      ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING: 'epic_random_training',
      ARENA_GUI_TYPE.EPIC_BATTLE: 'epicbattle',
      ARENA_GUI_TYPE.EPIC_TRAINING: 'epicbattle',
-     ARENA_GUI_TYPE.BATTLE_ROYALE: 'battle_royale'}
+     ARENA_GUI_TYPE.BATTLE_ROYALE: 'battle_royale',
+     ARENA_GUI_TYPE.BOB: 'bob'}
 
 
 class ARENA_BONUS_TYPE:
@@ -447,6 +450,7 @@ class PREBATTLE_TYPE:
     EPIC = 15
     EPIC_TRAINING = 16
     BATTLE_ROYALE = 17
+    BOB = 18
     RANGE = (SQUAD,
      TRAINING,
      COMPANY,
@@ -460,7 +464,8 @@ class PREBATTLE_TYPE:
      E_SPORT_COMMON,
      EPIC,
      EPIC_TRAINING,
-     BATTLE_ROYALE)
+     BATTLE_ROYALE,
+     BOB)
     LEGACY_PREBATTLES = (TRAINING,
      TOURNAMENT,
      CLAN,
@@ -469,7 +474,8 @@ class PREBATTLE_TYPE:
      FALLOUT,
      EVENT,
      EPIC,
-     BATTLE_ROYALE)
+     BATTLE_ROYALE,
+     BOB)
     UNIT_MGR_PREBATTLES = (UNIT,
      SQUAD,
      CLAN,
@@ -478,13 +484,15 @@ class PREBATTLE_TYPE:
      STRONGHOLD,
      E_SPORT_COMMON,
      EPIC,
-     BATTLE_ROYALE)
+     BATTLE_ROYALE,
+     BOB)
     CREATE_FROM_CLIENT = (UNIT,
      SQUAD,
      EPIC,
      FALLOUT,
      EVENT,
-     BATTLE_ROYALE)
+     BATTLE_ROYALE,
+     BOB)
     CREATE_FROM_WEB = (UNIT, SQUAD, STRONGHOLD)
     TRAININGS = (TRAINING, EPIC_TRAINING)
     EXTERNAL_PREBATTLES = (STRONGHOLD, TOURNAMENT)
@@ -492,9 +500,13 @@ class PREBATTLE_TYPE:
      CLAN,
      EPIC,
      BATTLE_ROYALE,
-     EVENT)
+     EVENT,
+     BOB)
     CREATE_EX_FROM_WEB = (SQUAD, CLAN)
-    JOIN_EX = (SQUAD, EPIC, EVENT)
+    JOIN_EX = (SQUAD,
+     EPIC,
+     EVENT,
+     BOB)
     EPIC_PREBATTLES = (EPIC, EPIC_TRAINING)
     REMOVED = (COMPANY, CLUBS)
 
@@ -1225,6 +1237,7 @@ class QUEUE_TYPE:
     EPIC = 19
     TOURNAMENT_UNITS = 20
     BATTLE_ROYALE = 21
+    BOB = 22
     FALLOUT = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
     ALL = (RANDOMS,
      COMPANIES,
@@ -1243,7 +1256,8 @@ class QUEUE_TYPE:
      BOOTCAMP,
      EPIC,
      TOURNAMENT_UNITS,
-     BATTLE_ROYALE)
+     BATTLE_ROYALE,
+     BOB)
     REMOVED = (COMPANIES,)
 
 
@@ -1312,11 +1326,13 @@ class GameSeasonType(object):
     RANKED = 1
     EPIC = 2
     BATTLE_ROYALE = 3
+    BOB = 4
 
 
 SEASON_TYPE_BY_NAME = {'ranked': GameSeasonType.RANKED,
  'epic': GameSeasonType.EPIC,
- 'battle_royale': GameSeasonType.BATTLE_ROYALE}
+ 'battle_royale': GameSeasonType.BATTLE_ROYALE,
+ 'bob': GameSeasonType.BOB}
 SEASON_NAME_BY_TYPE = {val:key for key, val in SEASON_TYPE_BY_NAME.iteritems()}
 CHANNEL_SEARCH_RESULTS_LIMIT = 50
 USER_SEARCH_RESULTS_LIMIT = 50
@@ -1411,7 +1427,7 @@ class REQUEST_COOLDOWN:
     MAKE_DENUNCIATION = 1.0
     PREFERRED_MAPS = 1.0
     APPLY_ADDITIONAL_XP = 2.0
-    SINGLE_TOKEN = 5.0
+    SINGLE_TOKEN = 2.0
     CMD_BUY_VEHICLE = 5.0
     LOG_CLIENT_SESSION_STATS = 5.0
     LOG_CLIENT_SYSTEM = 5.0
@@ -1746,6 +1762,8 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.LINKEDSET_QUESTS: 'linkedset quests show reward info',
  USER_SERVER_SETTINGS.QUESTS_PROGRESS: 'feedback quests progress',
  91: 'Loot box last viewed count',
+ 92: 'Battle of Bloggers carousel filter',
+ 93: 'Battle of Bloggers carousel filter',
  USER_SERVER_SETTINGS.SESSION_STATS: 'sessiong statistics settings',
  97: 'BattlePass carouse filter 1',
  98: 'Battle Pass Storage',
@@ -1954,10 +1972,12 @@ class INVITATION_TYPE:
     EPIC = PREBATTLE_TYPE.EPIC
     EVENT = PREBATTLE_TYPE.EVENT
     BATTLE_ROYALE = PREBATTLE_TYPE.BATTLE_ROYALE
+    BOB = PREBATTLE_TYPE.BOB
     RANGE = (SQUAD,
      EVENT,
      EPIC,
-     BATTLE_ROYALE)
+     BATTLE_ROYALE,
+     BOB)
 
 
 class REPAIR_FLAGS:

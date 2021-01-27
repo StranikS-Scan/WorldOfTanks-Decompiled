@@ -220,6 +220,8 @@ CMD_UPDATE_SETTING = 10067
 CMD_CHANGE_EVENT_ENQUEUE_DATA = 10068
 CMD_BUY_FL_REWARD_STYLE = 10069
 CMD_VEHICLE_PERSONAL_TRADE_IN = 10070
+CMD_ENQUEUE_BOB = 10071
+CMD_DEQUEUE_BOB = 10072
 PLAYER_CMD_NAMES = dict([ (v, k) for k, v in globals().items() if k.startswith('CMD_') ])
 KEYS_ARE_UNIQUE = len(PLAYER_CMD_NAMES) == len(set((key for key in globals() if key.startswith('CMD_'))))
 

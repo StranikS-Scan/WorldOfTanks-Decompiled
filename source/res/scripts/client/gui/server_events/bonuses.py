@@ -57,9 +57,10 @@ from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from nations import NAMES
 from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
 from optional_bonuses import BONUS_MERGERS
+from rent_common import SeasonRentDuration
 from shared_utils import makeTupleByDict, CONST_CONTAINER
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IEventProgressionController, IBattlePassController
+from skeletons.gui.game_control import IEventProgressionController, IBattlePassController, IBobController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -582,6 +583,19 @@ class X5BattleTokensBonus(TokensBonus):
         return backport.image(bonusBattleTaskRes()) if bonusBattleTaskRes else None
 
 
+class BobTokensBonus(TokensBonus):
+    __bobController = dependency.descriptor(IBobController)
+
+    def __init__(self, value, isCompensation=False, ctx=None):
+        super(BobTokensBonus, self).__init__('bobTokens', value, isCompensation, ctx)
+
+    def isShowInGUI(self):
+        return True
+
+    def formatValue(self):
+        return str(self._value.get(self.__bobController.pointsToken, {}).get('count')) if self._value else None
+
+
 class EntitlementBonus(SimpleBonus):
     _ENTITLEMENT_RECORD = namedtuple('_ENTITLEMENT_RECORD', ['id', 'amount'])
     _FORMATTED_AMOUNT = ('ranked_202010_access',)
@@ -669,8 +683,8 @@ def createBonusFromTokens(result, prefix, bonusId, value):
         result.append(bonus[0])
 
 
-@dependency.replace_none_kwargs(eventProgressionController=IEventProgressionController)
-def tokensFactory(name, value, isCompensation=False, ctx=None, eventProgressionController=None):
+@dependency.replace_none_kwargs(eventProgressionController=IEventProgressionController, bobController=IBobController)
+def tokensFactory(name, value, isCompensation=False, ctx=None, eventProgressionController=None, bobController=None):
     result = []
     for tID, tValue in value.iteritems():
         if tID.startswith(LOOTBOX_TOKEN_PREFIX):
@@ -691,6 +705,8 @@ def tokensFactory(name, value, isCompensation=False, ctx=None, eventProgressionC
             result.append(ResourceBonus(name, {tID: tValue}, RESOURCE_TOKEN_PREFIX, isCompensation, ctx))
         if eventProgressionController.isAvailable() and eventProgressionController.getProgressionXPTokenID() and tID.startswith(eventProgressionController.getProgressionXPTokenID()):
             result.append(ProgressionXPToken(name, {tID: tValue}, isCompensation, ctx))
+        if bobController.isEnabled() and bobController.isBobPointsToken(tID):
+            result.append(BobTokensBonus({tID: tValue}, isCompensation, ctx))
         result.append(BattleTokensBonus(name, {tID: tValue}, isCompensation, ctx))
 
     return result
@@ -1113,7 +1129,13 @@ class VehiclesBonus(SimpleBonus):
 
     @staticmethod
     def getRentSeason(vehInfo):
-        return vehInfo.get('rent', {}).get('season')
+        rentSeason = {}
+        seasonTypeIDArray = vehInfo.get('rent', {}).get('season', [(None, 0)])
+        for seasonType, seasonID in seasonTypeIDArray:
+            if seasonType is not None and seasonID:
+                rentSeason.setdefault(seasonType, []).append((seasonID, SeasonRentDuration.ENTIRE_SEASON))
+
+        return rentSeason
 
     def __getVehicleVO(self, vehicle, vehicleInfo, iconGetter):
         tmanRoleLevel = self.getTmanRoleLevel(vehicleInfo)
@@ -1933,6 +1955,29 @@ class CrewSkinsBonusFactory(object):
         return bonuses
 
 
+class DogTagComponentBonus(SimpleBonus):
+    _DogTagComponentRecord = namedtuple('_DogTagComponentRecord', ['componentId',
+     'unlock',
+     'value',
+     'grade'])
+
+    def getDogTagComponents(self):
+        if self._value is not None:
+            return [ self.makeComponentRecord(dogTagInfo) for dogTagInfo in self._value ]
+        else:
+            return []
+
+    def getUnlockedComponents(self):
+        if self._value is not None:
+            return [ self.makeComponentRecord(dogTagInfo) for dogTagInfo in self._value if dogTagInfo.get('unlock') ]
+        else:
+            return []
+
+    @classmethod
+    def makeComponentRecord(cls, dogTagInfo):
+        return cls._DogTagComponentRecord(componentId=dogTagInfo['id'], unlock=dogTagInfo.get('unlock'), grade=dogTagInfo.get('grade', 0), value=dogTagInfo.get('value'))
+
+
 _BONUSES = {Currency.CREDITS: CreditsBonus,
  Currency.GOLD: GoldBonus,
  Currency.CRYSTAL: CrystalBonus,
@@ -1973,7 +2018,8 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  'crewSkins': CrewSkinsBonusFactory(),
  'entitlements': entitlementsFactory,
  'rankedDailyBattles': CountableIntegralBonus,
- 'rankedBonusBattles': CountableIntegralBonus}
+ 'rankedBonusBattles': CountableIntegralBonus,
+ 'dogTagComponents': DogTagComponentBonus}
 HIDDEN_BONUSES = (MetaBonus,)
 _BONUSES_PRIORITY = ('tokens', 'oneof')
 _BONUSES_ORDER = dict(((n, idx) for idx, n in enumerate(_BONUSES_PRIORITY)))

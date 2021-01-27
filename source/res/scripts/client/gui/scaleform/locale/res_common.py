@@ -13,6 +13,7 @@ class RES_COMMON(object):
     MAPS_ICONS_BATTLEPASS2020_PROGRESSION_BG = '../maps/icons/battlePass2020/progression/bg.png'
     MAPS_ICONS_BATTLEPASS2020_VOTING_BG = '../maps/icons/battlePass2020/voting/bg.png'
     MAPS_ICONS_BATTLEROYALE_BATTLERESULT_BG = '../maps/icons/battleRoyale/battleResult/bg.png'
+    MAPS_ICONS_BOB_HANGAR_PRIMETIMEVIEW_BG = '../maps/icons/bob/hangar/primeTimeView/bg.png'
     MAPS_ICONS_CRYSTALSINFO_BG = '../maps/icons/crystalsInfo/bg.png'
     MAPS_ICONS_DEDICATION_BG = '../maps/icons/dedication/bg.png'
     MAPS_ICONS_DEMOUNTKIT_BG = '../maps/icons/demountKit/bg.png'

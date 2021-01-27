@@ -25,4 +25,5 @@ class RankedVehiclesWatcher(BaseVehiclesWatcher):
         eventVehs = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EVENT_BATTLE).itervalues()
         epicVehs = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EPIC_BATTLE).itervalues()
         battleRoyaleVehs = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.BATTLE_ROYALE).itervalues()
-        return chain(vehs, classVehs, typeVehs, eventVehs, epicVehs, battleRoyaleVehs) if not onClear else allVehs
+        bobVehs = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.BOB_BATTLE).itervalues()
+        return chain(vehs, classVehs, typeVehs, eventVehs, epicVehs, battleRoyaleVehs, bobVehs) if not onClear else allVehs

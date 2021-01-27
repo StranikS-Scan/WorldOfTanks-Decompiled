@@ -9,7 +9,7 @@ from helpers import time_utils, dependency
 from shared_utils import collapseIntervals
 from season_common import GameSeason
 from gui.periodic_battles.models import PrimeTime
-from gui.ranked_battles.constants import PrimeTimeStatus
+from gui.shared.prime_time_constants import PrimeTimeStatus
 from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY
 from skeletons.connection_mgr import IConnectionManager
 

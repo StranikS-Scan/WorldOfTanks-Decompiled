@@ -61,6 +61,9 @@ def getGameControllersConfig(manager):
     from gui.game_control.craftmachine_controller import CraftmachineController
     from gui.game_control.reactive_comm import ReactiveCommunicationService
     from gui.ui_spam.ui_spam_controller import UISpamController
+    from gui.game_control.bob_controller import BobController as _BobCtrl
+    from gui.game_control.bob_sound_controller import BobSoundController as _BobSoundCtrl
+    from gui.game_control.bob_announcement_controller import BobAnnouncementController as _BobAnnouncementCtrl
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -112,6 +115,9 @@ def getGameControllersConfig(manager):
         _config(_interface.IChinaController, _China())
     else:
         _config(_interface.IChinaController, _NoChina())
+    _config(_interface.IBobController, _BobCtrl())
+    _config(_interface.IBobSoundController, _BobSoundCtrl())
+    _config(_interface.IBobAnnouncementController, _BobAnnouncementCtrl())
     _config(_interface.ISeasonsController, _Seasons())
     _config(_interface.IBadgesController, _Badges())
     _config(_interface.IAnonymizerController, _Anonymizer())

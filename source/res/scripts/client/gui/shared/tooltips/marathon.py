@@ -3,7 +3,7 @@
 from CurrentVehicle import g_currentVehicle
 from gui import makeHtmlString
 from gui.impl import backport
-from gui.marathon.marathon_constants import MarathonState, MarathonWarning, TIME_FORMAT_HOURS
+from gui.marathon.marathon_constants import MarathonState, MarathonWarning
 from gui.shared.formatters import text_styles, icons
 from gui.shared.tooltips import TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData
@@ -44,7 +44,7 @@ class MarathonEventTooltipData(BlocksTooltipData):
             if self._marathonEvent.isRewardObtained():
                 text = text_styles.main(backport.text(self.__tooltipData.bodyExtraSmart))
             else:
-                text = text_styles.main(backport.text(self.__tooltipData.bodyExtra, hours=self._marathonEvent.getExtraTimeToBuy(timeFormat=TIME_FORMAT_HOURS)))
+                text = text_styles.main(backport.text(self.__tooltipData.bodyExtra, hours=self._marathonEvent.getExtraTimeToBuy()))
         else:
             text = text_styles.main(backport.text(self.__tooltipData.body))
         return formatters.packTextBlockData(text=text, padding=formatters.packPadding(left=20, top=10, bottom=20, right=10))

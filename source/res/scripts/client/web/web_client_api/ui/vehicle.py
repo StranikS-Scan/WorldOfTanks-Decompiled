@@ -484,9 +484,9 @@ class VehiclePreviewWebApiMixin(object):
 
     def _openVehicleStylePreview(self, cmd):
         if cmd.vehicle_cd:
-            return self._showStylePreview(cmd.vehicle_cd, cmd)
+            return self.__showStylePreview(cmd.vehicle_cd, cmd)
         styledVehicleCD = self.__getStyledVehicleCD(cmd.style_id)
-        return False if not styledVehicleCD else self._showStylePreview(styledVehicleCD, cmd)
+        return False if not styledVehicleCD else self.__showStylePreview(styledVehicleCD, cmd)
 
     def __getStyledVehicleCD(self, styleId):
         styledVehicleCD = None
@@ -525,7 +525,7 @@ class VehiclePreviewWebApiMixin(object):
     def _getVehiclePreviewReturnAlias(self, cmd):
         return VIEW_ALIAS.LOBBY_HANGAR
 
-    def _showStylePreview(self, vehicleCD, cmd):
+    def __showStylePreview(self, vehicleCD, cmd):
         style = self.c11n.getItemByID(GUI_ITEM_TYPE.STYLE, cmd.style_id)
         vehicle = self.itemsCache.items.getItemByCD(vehicleCD)
         if vehicle is not None and not vehicle.isOutfitLocked and style.mayInstall(vehicle):
@@ -545,7 +545,7 @@ class VehiclePreviewWebApiMixin(object):
     def __validVehiclePreview(self, intCD):
         vehicle = None
         try:
-            vehicle = self.itemsCache.items.getStockVehicle(intCD, useInventory=True)
+            vehicle = self.itemsCache.items.getItemByCD(intCD)
         except Exception:
             pass
 

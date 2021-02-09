@@ -380,18 +380,19 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         return orderedSlots
 
     def buildExtendedSquadInfoVo(self):
-        squadManStates = []
-        count = 0
         commanderIndex = 0
-        slots = self.getPlatoonSlotsData()
-        for it in slots:
-            player = it['player']
-            role = it['role']
-            squadManStates.append(self.__getSquadManStates(player, role))
-            if player is not None:
-                if player['isCommander']:
-                    commanderIndex = count
-            count += 1
+        squadManStates = []
+        if self.isInPlatoon():
+            count = 0
+            slots = self.getPlatoonSlotsData()
+            for it in slots:
+                player = it['player']
+                role = it['role']
+                squadManStates.append(self.__getSquadManStates(player, role))
+                if player is not None:
+                    if player['isCommander']:
+                        commanderIndex = count
+                count += 1
 
         return SquadInfo(self.__getPlatoonStateForSquadVO().value, squadManStates, commanderIndex)
 
@@ -568,6 +569,9 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             playerAccId = slot['player']['accID'] if slot['player'] else -1
             for playerId, displayIndex in self.__tankDisplayPosition.items():
                 if playerAccId == playerId:
+                    if displayIndex >= len(orderedSlots):
+                        _logger.warning('The number %s of display slots in the platoon is invalid', displayIndex)
+                        return slots
                     orderedSlots[displayIndex] = slot
                     switch = True
                     break
@@ -767,6 +771,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
 
     def __unitMgrOnUnitJoined(self, unitMgrID, prbType):
         _logger.debug('PlatoonController: __unitMgrOnUnitJoined')
+        self.__tankDisplayPosition.clear()
         if self.__startAutoSearchOnUnitJoin:
             self.startSearch()
         else:

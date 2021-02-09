@@ -639,11 +639,11 @@ class _CurrentPreviewVehicle(_CachedVehicle):
 
     def __getPreviewVehicle(self, vehicleCD):
         if vehicleCD is not None:
-            vehicle = self.itemsCache.items.getStockVehicle(vehicleCD, useInventory=True)
-            if vehicle:
-                vehicle.crew = vehicle.getPerfectCrew()
-                return vehicle
-        return
+            vehicle = self.itemsCache.items.getVehicleCopyByCD(vehicleCD)
+            vehicle.crew = vehicle.getPerfectCrew()
+            return vehicle
+        else:
+            return
 
     def __makePreviewVehicleFromStrCD(self, vehicleStrCD):
         vehicle = Vehicle(strCompactDescr=vehicleStrCD, proxy=self.itemsCache.items)

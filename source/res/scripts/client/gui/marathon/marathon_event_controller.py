@@ -36,6 +36,7 @@ class MarathonEventsController(IMarathonEventsController, Notifiable):
         self.__isInHangar = False
         self.__eventManager = Event.EventManager()
         self.onFlagUpdateNotify = Event.Event(self.__eventManager)
+        self.onMarathonDataChanged = Event.Event(self.__eventManager)
         self.onVehicleReceived = Event.Event()
         self.__marathons = _events
 
@@ -139,6 +140,7 @@ class MarathonEventsController(IMarathonEventsController, Notifiable):
         for marathon in self.__marathons:
             marathon.updateQuestsData()
             marathon.setState()
+            self.onMarathonDataChanged(marathon.prefix)
 
     def __updateFlagState(self):
         self.__checkEvents()

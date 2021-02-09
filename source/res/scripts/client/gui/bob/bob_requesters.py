@@ -9,7 +9,6 @@ from adisp import process
 from bob_common import deserializeActivatedSkill, deserializeRecalculate
 from gui.bob.bob_data_containers import TeamSkillData, TeamData, RecalculationData
 from gui.game_control.reactive_comm import Subscription
-from gui.shared.utils.scheduled_notifications import SimpleNotifier
 from gui.wgcg.bob.contexts import BobGetTeamsCtx, BobGetTeamSkillsCtx
 from helpers import dependency, isPlayerAvatar
 from skeletons.gui.game_control import IReactiveCommunicationService
@@ -20,8 +19,7 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 
 class AbstractRequester(object):
-    __slots__ = ('onUpdated', '_bobController', '__cache', '__isStarted', '__repeatRequestNotifier', '__isAvailable', '__subscription', '_eventsManager')
-    REPEAT_CALLBACK_TIME = 60
+    __slots__ = ('onUpdated', '_bobController', '__cache', '__isStarted', '__subscription', '_eventsManager')
     __webController = dependency.descriptor(IWebController)
     __RCService = dependency.descriptor(IReactiveCommunicationService)
     _itemsCache = dependency.descriptor(IItemsCache)
@@ -29,21 +27,24 @@ class AbstractRequester(object):
     def __init__(self, bobController):
         super(AbstractRequester, self).__init__()
         self._bobController = weakref.proxy(bobController)
-        self.__repeatRequestNotifier = SimpleNotifier(self.__getTimeToRepeatRequest, self._request)
         self.__cache = dict()
         self.__isStarted = False
-        self.__isAvailable = True
         self.__subscription = None
         self._eventsManager = Event.EventManager()
         self.onUpdated = Event.Event(self._eventsManager)
         return
 
     @property
+    def isStarted(self):
+        return self.__isStarted
+
+    @property
     def dataType(self):
         raise NotImplementedError
 
     def start(self):
-        if not self.__isStarted and self._bobController.isRegistered():
+        isBobSeasonActive = self._bobController.isRegistrationPeriodEnabled() or bool(self._bobController.getCurrentSeason())
+        if not self.__isStarted and self._bobController.isRegistered() and isBobSeasonActive:
             self.__isStarted = True
             self._request()
             self._itemsCache.onSyncCompleted += self._onSyncCompleted
@@ -63,8 +64,6 @@ class AbstractRequester(object):
 
     def stop(self):
         self.__isStarted = False
-        self.__repeatRequestNotifier.stopNotification()
-        self.__repeatRequestNotifier.clear()
         self._itemsCache.onSyncCompleted -= self._onSyncCompleted
         self.__clearSubscription()
         self._eventsManager.clear()
@@ -80,13 +79,12 @@ class AbstractRequester(object):
     def _request(self):
         ctx = self._getCtx()
         response = yield self.__webController.sendRequest(ctx=ctx)
-        self.__isAvailable = response.isSuccess()
-        if self.__isAvailable:
+        getLastMessage = True
+        if response.isSuccess():
             data = ctx.getDataObj(response.getData())
             self._processingData(data)
-            self.__subscride(getLastMessage=False)
-        else:
-            self.__repeatRequestNotifier.startNotification()
+            getLastMessage = False
+        self.__subscride(getLastMessage=getLastMessage)
 
     def _getChannelName(self):
         raise NotImplementedError
@@ -126,9 +124,6 @@ class AbstractRequester(object):
         if isUpdated:
             self.onUpdated()
 
-    def __getTimeToRepeatRequest(self):
-        return self.REPEAT_CALLBACK_TIME
-
     def __onClosed(self, reason):
         self.__clearSubscription()
 
@@ -150,6 +145,7 @@ class AbstractRequester(object):
         if self.__subscription is not None:
             self.__subscription.onMessage -= self._onMessage
             self.__subscription.onClosed -= self.__onClosed
+            self.__RCService.unsubscribeFromChannel(self.__subscription)
             self.__subscription = None
         return
 

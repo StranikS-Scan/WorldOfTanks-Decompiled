@@ -746,15 +746,16 @@ class ItemsRequester(IItemsRequester):
         vehInvData = self.__inventory.getVehicleData(vehInvID)
         return self.__makeVehicle(vehInvData.descriptor.type.compactDescr, vehInvData) if vehInvData is not None else None
 
-    def getStockVehicle(self, typeCompDescr, useInventory=False):
-        if getTypeOfCompactDescr(typeCompDescr) == GUI_ITEM_TYPE.VEHICLE:
-            proxy = self if useInventory else None
-            return self.itemsFactory.createVehicle(typeCompDescr=typeCompDescr, proxy=proxy)
-        else:
-            return
+    def getStockVehicle(self, typeCompDescr):
+        return self.itemsFactory.createVehicle(typeCompDescr=typeCompDescr) if getTypeOfCompactDescr(typeCompDescr) == GUI_ITEM_TYPE.VEHICLE else None
 
     def getVehicleCopy(self, vehicle):
         return self.itemsFactory.createVehicle(typeCompDescr=vehicle.intCD, strCompactDescr=vehicle.descriptor.makeCompactDescr(), inventoryID=vehicle.invID, proxy=self)
+
+    def getVehicleCopyByCD(self, typeCompDescr):
+        vehicle = self.getItemByCD(typeCompDescr)
+        vehicleCopy = self.getVehicleCopy(vehicle)
+        return vehicleCopy
 
     def getLayoutsVehicleCopy(self, vehicle):
         copyVehicle = self.getVehicleCopy(vehicle)

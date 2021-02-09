@@ -38,7 +38,7 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import MissionsEvent
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.sounds.ambients import LobbySubViewEnv, BattlePassSoundEnv, BobPageSoundEnv
+from gui.sounds.ambients import LobbySubViewEnv, BattlePassSoundEnv, BobPageSoundEnv, MarathonPageSoundEnv
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.event_boards_controllers import IEventBoardController
@@ -47,6 +47,7 @@ from skeletons.gui.game_control import IMarathonEventsController, IGameSessionCo
 from skeletons.gui.linkedset import ILinkedSetController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from gui.marathon.bob_event import BobEvent
 if typing.TYPE_CHECKING:
     from typing import List, Union
     from gui.server_events.event_items import DailyEpicTokenQuest, DailyQuest, PremiumQuest
@@ -157,8 +158,12 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
             return BattlePassSoundEnv
         elif self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS:
             return None
+        elif self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS:
+            if self.__marathonPrefix == BobEvent.BOB_EVENT_PREFIX:
+                return BobPageSoundEnv
+            return MarathonPageSoundEnv
         else:
-            return BobPageSoundEnv if self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS else self.__sound_env__
+            return self.__sound_env__
 
     def _populate(self):
         super(MissionsPage, self)._populate()

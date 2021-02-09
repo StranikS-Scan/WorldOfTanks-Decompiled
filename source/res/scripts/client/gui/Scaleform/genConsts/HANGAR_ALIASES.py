@@ -39,3 +39,4 @@ class HANGAR_ALIASES(object):
     CRAFT_MACHINE_ENTRY_POINT = 'CraftMachineEntryPoint'
     BOB_ENTRY_POINT = 'BobEntryPoint'
     BOB_HANGAR_WIDGET = 'BobHangarWidhet'
+    MARATHON_ENTRY_POINT = 'MarathonEntryPoint'

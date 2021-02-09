@@ -28,25 +28,30 @@ _logger = logging.getLogger(__name__)
 _CUSTOM_OFFER_ACTION_PERCENT = 100
 
 def _createVehicleVO(rawItem, itemsCache):
-    vehicle = itemsCache.items.getStockVehicle(rawItem.id, useInventory=True)
+    intCD = int(rawItem.id)
+    vehicle = itemsCache.items.getItemByCD(intCD)
     if vehicle is not None:
         icon = func_utils.makeFlashPath(vehicle.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL))
         cd = vehicle.intCD
         label = vehicle.shortUserName
         nation = vehicle.nationID
+        level = RES_ICONS.getLevelIcon(vehicle.level)
+        tankType = Vehicle.getTypeSmallIconPath(vehicle.type, vehicle.isElite)
     else:
         icon = rawItem.iconSource
         cd = 0
         label = ''
         nation = nations.NONE_INDEX
+        level = ''
+        tankType = ''
     return {'icon': icon,
      'iconAlt': RES_ICONS.MAPS_ICONS_LIBRARY_VEHICLE_DEFAULT,
      'intCD': cd,
      'label': label,
      'nation': nation,
      'hasCompensation': getCompensateItemsCount(rawItem, itemsCache) > 0,
-     'level': RES_ICONS.getLevelIcon(vehicle.level),
-     'tankType': Vehicle.getTypeSmallIconPath(vehicle.type, vehicle.isElite)}
+     'level': level,
+     'tankType': tankType}
 
 
 def _createOfferVO(offer, setActive=False):
@@ -194,8 +199,8 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
             vehiclesVOs = []
             itemsVOs = getDataOneVehicle(items, vehicle, vehicleItems[0].groupID)
         else:
-            getVehicle = self.__itemsCache.items.getStockVehicle
-            vehicleItems = sorted(vehicleItems, key=lambda veh: _vehicleComparisonKey(getVehicle(veh.id, useInventory=True)), reverse=True)
+            getVehicle = self.__itemsCache.items.getVehicleCopyByCD
+            vehicleItems = sorted(vehicleItems, key=lambda veh: _vehicleComparisonKey(getVehicle(veh.id)), reverse=True)
             vehiclesVOs = [ _createVehicleVO(packedVeh, self.__itemsCache) for packedVeh in vehicleItems ]
             itemsVOs = collapsedItemsVOs
         return (vehiclesVOs, itemsVOs, collapsedItemsVOs)

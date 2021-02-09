@@ -1,13 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/marathon/marathon_resource_manager.py
+import time
 import typing
 from collections import namedtuple
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.marathon.marathon_constants import MarathonState, R_TITLE_TOOLTIP, R_BUYING_PANEL, BUYING_BUTTON_ICON_ALIGN, TIME_FORMAT_TO_TIME_UNIT, TIME_FORMAT_HOURS, MarathonFlagTooltip
+from gui.marathon.marathon_constants import MarathonState, R_TITLE_TOOLTIP, R_BUYING_PANEL, BUYING_BUTTON_ICON_ALIGN, MarathonFlagTooltip
 from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import makeTooltip
-from helpers.time_utils import getTimeStructInLocal
+from helpers.time_utils import ONE_DAY, getTimeStructInLocal, ONE_HOUR
 MarathonEventTooltipData = namedtuple('MarathonEventTooltipData', ('header', 'body', 'bodyExtra', 'bodyExtraSmart', 'errorBattleType', 'errorVehType', 'extraStateSteps', 'extraStateDiscount', 'extraStateCompleted', 'stateStart', 'stateEnd', 'stateProgress', 'stateComplete', 'daysShort', 'hoursShort', 'minutesShort', 'previewAnnounce', 'previewInProgress'))
 MarathonEventIconsData = namedtuple('MarathonEventIconsData', ('tooltipHeader', 'okIcon', 'timeIcon', 'timeIconGlow', 'alertIcon', 'iconFlag', 'saleIcon', 'mapFlagHeaderIcon'))
 
@@ -49,14 +50,16 @@ class MarathonResourceManager(object):
     def getEmptyTooltip(self):
         return makeTooltip()
 
-    def getExtraTimeToBuy(self, timeFormat):
+    def getExtraTimeToBuy(self):
         _, groupFinishTimeLeft = self._data.getGroupTimeInterval()
-        if timeFormat == TIME_FORMAT_HOURS:
-            templateKey = self._data.tooltips.hoursShort
+        gmtime = time.gmtime(groupFinishTimeLeft)
+        if groupFinishTimeLeft >= ONE_DAY:
+            text = backport.text(self._data.tooltips.daysShort, value=str(gmtime.tm_yday))
+        elif groupFinishTimeLeft >= ONE_HOUR:
+            text = backport.text(self._data.tooltips.hoursShort, value=str(gmtime.tm_hour + 1))
         else:
-            templateKey = self._data.tooltips.daysShort
-        res = int(groupFinishTimeLeft // TIME_FORMAT_TO_TIME_UNIT[timeFormat]) or 1
-        return text_styles.neutral(backport.text(templateKey, value=str(res)))
+            text = backport.text(self._data.tooltips.minutesShort, value=str(gmtime.tm_min + 1))
+        return text_styles.neutral(text)
 
     def getHangarFlagTooltip(self):
         return MarathonFlagTooltip.COUNTDOWN(self._data).create()

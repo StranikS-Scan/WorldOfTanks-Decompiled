@@ -218,9 +218,9 @@ class ChannelsManager(object):
             message = packer.unpackMessage(payload)
             if message.isStatusReceived:
                 self.__handleStatusReceived(message)
-            elif message.isMessageReceived:
+            if message.isMessageReceived:
                 self.__handleMessageReceived(message)
-            else:
+            if not message.isValid:
                 _logger.error('Unexpected format of message from subscription service: %r', message)
         else:
             _logger.error('Binary message is expected from subscription service: %r, %r', code, payload)

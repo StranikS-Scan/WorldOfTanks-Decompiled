@@ -12,7 +12,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.impl.lobby.marathon.marathon_reward_helper import showMarathonReward
 from gui.marathon.marathon_event_container import MarathonEventContainer
 from gui.marathon.marathon_resource_manager import MarathonResourceManager
-from gui.marathon.marathon_constants import MarathonState, MarathonWarning, ZERO_TIME, TIME_FORMAT_DAYS
+from gui.marathon.marathon_constants import MarathonState, MarathonWarning, ZERO_TIME
 from gui.prb_control import prbEntityProperty
 from gui.shared.event_dispatcher import showBrowserOverlayView
 from helpers import dependency
@@ -134,8 +134,8 @@ class MarathonEvent(object):
     def getMarathonQuests(self):
         return self._eventsCache.getHiddenQuests(self.__marathonFilterFunc)
 
-    def getExtraTimeToBuy(self, timeFormat=TIME_FORMAT_DAYS):
-        return '' if self._data.state != MarathonState.FINISHED else self._resource.getExtraTimeToBuy(timeFormat)
+    def getExtraTimeToBuy(self):
+        return '' if self._data.state != MarathonState.FINISHED else self._resource.getExtraTimeToBuy()
 
     def getMarathonDiscount(self):
         passQuests, allQuests = self.getMarathonProgress()
@@ -162,8 +162,8 @@ class MarathonEvent(object):
 
     def updateQuestsData(self):
         currentStep, _ = self.getMarathonProgress()
-        self._data.setQuest(self._eventsCache.getHiddenQuests(self.__marathonFilterFunc), currentStep)
         self._data.setGroup(self._eventsCache.getGroups(self.__marathonFilterFunc))
+        self._data.setQuest(self._eventsCache.getHiddenQuests(self.__marathonGroupFilterFunc), currentStep)
         self._data.setRewardObtained(self.getTokensData(prefix=self._data.tokenPrefix))
 
     def getClosestStatusUpdateTime(self):
@@ -218,6 +218,9 @@ class MarathonEvent(object):
 
     def __marathonFilterFunc(self, q):
         return q.getID().startswith(self._data.prefix)
+
+    def __marathonGroupFilterFunc(self, q):
+        return q.getID().startswith(self._data.prefix) and q.getGroupID() == self._data.group.getID()
 
     def __getProgress(self, progressType, prefix=None, postfix=None):
         progress = {}

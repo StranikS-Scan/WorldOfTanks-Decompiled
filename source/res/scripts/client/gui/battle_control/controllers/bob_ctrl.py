@@ -39,7 +39,7 @@ class BattleBobController(IArenaVehiclesController):
         return
 
     def invalidateArenaInfo(self):
-        if not self.bobCtrl.teamSkillsRequester.getCache():
+        if self.bobCtrl.teamSkillsRequester.isCacheEmpty() and not self.bobCtrl.teamSkillsRequester.isStarted:
             self.bobCtrl.teamSkillsRequester.doForcedRequest(self.__getArenaStartTime())
             self.bobCtrl.teamSkillsRequester.onUpdated += self.__skillUpdated
         self.__makeInitIfNeed()

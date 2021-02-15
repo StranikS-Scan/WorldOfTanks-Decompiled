@@ -645,6 +645,9 @@ class IShopRequester(IShopCommonStats, IRequester):
     def getTankmanCostItemPrices(self):
         raise NotImplementedError
 
+    def getNotInShopProgressionLvlItems(self):
+        raise NotImplementedError
+
 
 class IGoodiesRequester(IRequester):
 
@@ -749,6 +752,10 @@ class IBattleRoyaleRequester(IRequester):
 
     @property
     def killCount(self):
+        raise NotImplementedError
+
+    @property
+    def topCount(self):
         raise NotImplementedError
 
 

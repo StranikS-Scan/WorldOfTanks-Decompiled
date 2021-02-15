@@ -288,15 +288,16 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
                         slot.player.commonData.setColor('#' + '{0:06X}'.format(colors[1 if isOffline else 0]))
                     tags = playerData.get('tags', [])
                     slot.player.voice.setIsMutedByUser(USER_TAG.MUTED in tags)
+                    slot.player.setIsIgnored(USER_TAG.IGNORED in tags)
                     vehicle = it.get('selectedVehicle', {})
                     if vehicle:
-                        vehicle = self.__itemsCache.items.getItemByCD(vehicle.get('intCD', 0))
-                        slot.player.vehicle.setIsPremium(vehicle.isPremium or vehicle.isElite)
-                        slot.player.vehicle.setName(vehicle.shortUserName)
-                        slot.player.vehicle.setTechName(removeNationFromTechName(vehicle.name))
-                        slot.player.vehicle.setTier(vehicle.level)
-                        slot.player.vehicle.setType(vehicle.type)
-                        slot.player.vehicle.setNation(vehicle.nationName)
+                        vehicleItem = self.__itemsCache.items.getItemByCD(vehicle.get('intCD', 0))
+                        slot.player.vehicle.setIsPremium(vehicleItem.isPremium or vehicleItem.isElite)
+                        slot.player.vehicle.setName(vehicleItem.shortUserName)
+                        slot.player.vehicle.setTechName(removeNationFromTechName(vehicleItem.name))
+                        slot.player.vehicle.setTier(vehicleItem.level)
+                        slot.player.vehicle.setType(vehicleItem.type)
+                        slot.player.vehicle.setNation(vehicleItem.nationName)
                 else:
                     slot.setIsSearching(searching)
                     slot.setInfoText(backport.text(R.strings.platoon.members.card.empty()))
@@ -436,18 +437,25 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
         isInSearch = platoonCtrl.isInSearch()
         isEnabled = isCommander and not isInQueue and canStartAutoSearch and platoonCtrl.hasFreeSlot()
         isCooldown = self.__platoonCtrl.isInCoolDown(REQUEST_TYPE.AUTO_SEARCH)
+        hasSearchSupport = self.__platoonCtrl.hasSearchSupport()
         with self.viewModel.transaction() as model:
-            model.btnFindPlayers.setIsEnabled(isEnabled and platoonCtrl.canStartSearch() and not isCooldown)
-            model.btnFindPlayers.setHasTooltip(platoonCtrl.hasFreeSlot())
-            if isCommander:
-                if isInSearch:
-                    model.btnFindPlayers.setCaption(backport.text(_strButtons.cancelSearch.caption()))
-                    model.btnFindPlayers.setDescription(backport.text(_strButtons.cancelSearch.description()))
-                    model.btnFindPlayers.setSoundClickName(R.sounds.gui_platoon_2_cancel_search())
-                else:
-                    model.btnFindPlayers.setCaption(backport.text(_strButtons.findPlayers.caption()))
-                    model.btnFindPlayers.setDescription(backport.text(_strButtons.findPlayers.descriptionMembers()))
-                    model.btnFindPlayers.setSoundClickName(R.sounds.gui_platoon_2_find_players())
+            model.setShouldShowFindPlayersButton(hasSearchSupport)
+            if hasSearchSupport:
+                model.btnFindPlayers.setIsEnabled(isEnabled and platoonCtrl.canStartSearch() and not isCooldown)
+                model.btnFindPlayers.setHasTooltip(platoonCtrl.hasFreeSlot())
+                if isCommander:
+                    if isInSearch:
+                        cancelButton = _strButtons.cancelSearch
+                        model.btnFindPlayers.setCaption(backport.text(cancelButton.caption()))
+                        model.btnFindPlayers.setDescription(backport.text(cancelButton.description()))
+                        model.btnFindPlayers.setSoundClickName(R.sounds.gui_platoon_2_cancel_search())
+                        model.btnFindPlayers.setIsLight(False)
+                    else:
+                        findButton = _strButtons.findPlayers
+                        model.btnFindPlayers.setCaption(backport.text(findButton.caption()))
+                        model.btnFindPlayers.setDescription(backport.text(findButton.descriptionMembers()))
+                        model.btnFindPlayers.setSoundClickName(R.sounds.gui_platoon_2_find_players())
+                        model.btnFindPlayers.setIsLight(True)
 
     def _onInviteFriends(self):
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY), ctx={'prbName': 'unit',
@@ -476,7 +484,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
                 model.btnSwitchReady.setCaption(backport.text(_strButtons.ready.caption()))
             model.btnSwitchReady.setDescription(i18n.makeString(actionButtonStateVO['toolTipData'] + '/body'))
             model.setFooterMessage(simpleState)
-        model.setIsFooterMessageGrey(actionButtonStateVO['isEnabled'] or onlyReadinessText)
+        model.setIsFooterMessageGrey(actionButtonStateVO['isEnabled'] or onlyReadinessText or isInQueue)
 
     def __getLayoutStyle(self):
         maxSlotCount = self.__platoonCtrl.getMaxSlotCount()
@@ -673,24 +681,6 @@ class BattleRoyalMembersView(SquadMembersView):
         return None
 
 
-class BobMembersView(SquadMembersView):
-    _battleType = 'bob'
-
-    def _addSubviews(self):
-        self._addSubviewToLayout(ChatSubview())
-
-    def _onFindPlayers(self):
-        pass
-
-    def _getTitle(self):
-        title = ''.join((i18n.makeString(backport.text(R.strings.platoon.squad())), i18n.makeString(backport.text(R.strings.platoon.members.header.bob()))))
-        return title
-
-    def _updateFindPlayersButton(self, *args):
-        with self.viewModel.transaction() as model:
-            model.setShouldShowFindPlayersButton(False)
-
-
 class MembersWindow(PreloadableWindow):
     __platoonCtrl = dependency.descriptor(IPlatoonController)
 
@@ -705,8 +695,6 @@ class MembersWindow(PreloadableWindow):
             content = EpicMembersView()
         elif prbType == PREBATTLE_TYPE.BATTLE_ROYALE:
             content = BattleRoyalMembersView()
-        elif prbType == PREBATTLE_TYPE.BOB:
-            content = BobMembersView()
         if content is None:
             _logger.debug('PrbType is unknown %d', prbType)
         super(MembersWindow, self).__init__(wndFlags=WindowFlags.WINDOW, content=content)

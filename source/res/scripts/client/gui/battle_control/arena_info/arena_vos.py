@@ -9,6 +9,7 @@ from debug_utils import LOG_ERROR
 from gui import makeHtmlString
 from gui.battle_control import avatar_getter, vehicle_getter
 from gui.battle_control.arena_info import settings
+from gui.battle_control.arena_info.settings import VehicleSpottedStatus
 from gui.battle_control.dog_tag_composer import layoutComposer
 from gui.doc_loaders.badges_loader import getSelectedByLayout
 from gui.shared.gui_items import Vehicle
@@ -251,9 +252,9 @@ class VehicleTypeInfoVO(object):
 
 
 class VehicleArenaInfoVO(object):
-    __slots__ = ('vehicleID', 'team', 'player', 'playerStatus', 'vehicleType', 'vehicleStatus', 'prebattleID', 'events', 'squadIndex', 'invitationDeliveryStatus', 'ranked', 'gameModeSpecific', 'overriddenBadge', 'badges', '__prefixBadge', '__suffixBadge', 'dogTag', 'bobInfo')
+    __slots__ = ('vehicleID', 'team', 'player', 'playerStatus', 'vehicleType', 'vehicleStatus', 'prebattleID', 'events', 'squadIndex', 'invitationDeliveryStatus', 'ranked', 'gameModeSpecific', 'overriddenBadge', 'badges', '__prefixBadge', '__suffixBadge', 'dogTag')
 
-    def __init__(self, vehicleID, team=0, isAlive=None, isAvatarReady=None, isTeamKiller=None, prebattleID=None, events=None, forbidInBattleInvitations=False, ranked=None, badges=None, overriddenBadge=None, bobInfo=None, **kwargs):
+    def __init__(self, vehicleID, team=0, isAlive=None, isAvatarReady=None, isTeamKiller=None, prebattleID=None, events=None, forbidInBattleInvitations=False, ranked=None, badges=None, overriddenBadge=None, **kwargs):
         super(VehicleArenaInfoVO, self).__init__()
         self.vehicleID = vehicleID
         self.team = team
@@ -266,7 +267,6 @@ class VehicleArenaInfoVO(object):
         self.events = events or {}
         self.squadIndex = 0
         self.ranked = PlayerRankedInfoVO(ranked) if ranked is not None else PlayerRankedInfoVO()
-        self.bobInfo = PlayerBobInfoVO(*bobInfo) if bobInfo is not None else PlayerBobInfoVO()
         arena = avatar_getter.getArena()
         guiType = None if not arena else arena.guiType
         self.gameModeSpecific = GameModeDataVO(guiType, True)
@@ -352,12 +352,6 @@ class VehicleArenaInfoVO(object):
             invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.VEHICLE_INFO)
         return invalidate
 
-    def updateBob(self, invalidate=_INVALIDATE_OP.NONE, bobInfo=None, **kwargs):
-        if bobInfo is not None:
-            self.bobInfo = PlayerBobInfoVO(*bobInfo)
-            invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.VEHICLE_INFO)
-        return invalidate
-
     def updateEvents(self, invalidate=_INVALIDATE_OP.NONE, events=None, **kwargs):
         if events is not None:
             self.events.update(events)
@@ -386,7 +380,6 @@ class VehicleArenaInfoVO(object):
         invalidate = self.updateInvitationStatus(invalidate=invalidate, **kwargs)
         invalidate = self.updateRanked(invalidate=invalidate, **kwargs)
         invalidate = self.updateEvents(invalidate=invalidate, **kwargs)
-        invalidate = self.updateBob(invalidate=invalidate, **kwargs)
         return invalidate
 
     def getSquadID(self):
@@ -538,13 +531,14 @@ class VehicleArenaInteractiveStatsVO(object):
 
 
 class VehicleArenaStatsVO(object):
-    __slots__ = ('vehicleID', '__frags', '__interactive', '__gameModeSpecific', '__chatCommand')
+    __slots__ = ('vehicleID', '__frags', '__interactive', '__gameModeSpecific', '__chatCommand', '__spottedStatus')
 
     def __init__(self, vehicleID, frags=0, **kwargs):
         super(VehicleArenaStatsVO, self).__init__()
         self.vehicleID = vehicleID
         self.__frags = frags
         self.__chatCommand = ChatCommandVO()
+        self.__spottedStatus = VehicleSpottedStatus.DEFAULT
         self.__interactive = None
         self.__gameModeSpecific = None
         return
@@ -582,6 +576,10 @@ class VehicleArenaStatsVO(object):
     def chatCommandState(self):
         return self.__chatCommand
 
+    @property
+    def spottedStatus(self):
+        return self.__spottedStatus
+
     def clearInteractiveStats(self):
         if self.__interactive is not None:
             self.__interactive.clear()
@@ -611,6 +609,12 @@ class VehicleArenaStatsVO(object):
         self.__chatCommand = ChatCommandVO(chatCmd=chatCmd, chatCommandFlags=chatCommandFlags)
         return _INVALIDATE_OP.VEHICLE_STATS
 
+    def updateSpottedStatus(self, spottedStatus):
+        if self.__spottedStatus == spottedStatus or self.__spottedStatus == VehicleSpottedStatus.DEFAULT and spottedStatus == VehicleSpottedStatus.UNSPOTTED:
+            return _INVALIDATE_OP.NONE
+        self.__spottedStatus = spottedStatus
+        return _INVALIDATE_OP.VEHICLE_STATS
+
     def updateVehicleStats(self, frags=None, **kwargs):
         if frags is not None:
             self.__frags = frags
@@ -625,16 +629,6 @@ class PlayerRankedInfoVO(object):
     def __init__(self, rank=None):
         super(PlayerRankedInfoVO, self).__init__()
         self.rank, self.rankStep = rank or (0, 0)
-
-
-class PlayerBobInfoVO(object):
-    __slots__ = ('bloggerID', 'isBlogger')
-
-    def __init__(self, bloggerID=None, isBlogger=False):
-        super(PlayerBobInfoVO, self).__init__()
-        self.bloggerID = bloggerID if bloggerID is not None else -1
-        self.isBlogger = isBlogger
-        return
 
 
 class ChatCommandVO(object):

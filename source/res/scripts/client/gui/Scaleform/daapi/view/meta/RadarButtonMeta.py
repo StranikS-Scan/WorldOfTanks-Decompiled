@@ -15,3 +15,9 @@ class RadarButtonMeta(BaseDAAPIComponent):
 
     def as_updateEnableS(self, isEnabled):
         return self.flashObject.as_updateEnable(isEnabled) if self._isDAAPIInited() else None
+
+    def as_setCoolDownPosAsPercentS(self, percent):
+        return self.flashObject.as_setCoolDownPosAsPercent(percent) if self._isDAAPIInited() else None
+
+    def as_setCoolDownTimeSnapshotS(self, time):
+        return self.flashObject.as_setCoolDownTimeSnapshot(time) if self._isDAAPIInited() else None

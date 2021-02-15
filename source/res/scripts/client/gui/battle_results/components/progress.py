@@ -3,6 +3,7 @@
 import logging
 import math
 import operator
+import typing
 from collections import namedtuple
 import BigWorld
 import personal_missions
@@ -235,6 +236,20 @@ class VehicleProgressBlock(base.StatsBlock):
 
 PMComplete = namedtuple('PMComplete', ['isMainComplete', 'isAddComplete'])
 
+class BattlePassProgressBlock(base.StatsBlock):
+
+    def setRecord(self, result, reusable):
+        if reusable.battlePassProgress is not None:
+            bonusType = reusable.common.arenaVisitor.getArenaBonusType()
+            if BattlePassConsts.PROGRESSION_INFO_PREV in reusable.battlePassProgress:
+                info = reusable.battlePassProgress[BattlePassConsts.PROGRESSION_INFO_PREV]
+                self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', getBattlePassQuestInfo(info, bonusType)))
+            if BattlePassConsts.PROGRESSION_INFO in reusable.battlePassProgress:
+                info = reusable.battlePassProgress[BattlePassConsts.PROGRESSION_INFO]
+                self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', getBattlePassQuestInfo(info, bonusType)))
+        return
+
+
 class QuestsProgressBlock(base.StatsBlock):
     eventsCache = dependency.descriptor(IEventsCache)
     __slots__ = ()
@@ -279,13 +294,6 @@ class QuestsProgressBlock(base.StatsBlock):
                 progress = personalMissions.setdefault(quest, {})
                 progress.update(data)
 
-        if reusable.battlePassProgress is not None:
-            if BattlePassConsts.PROGRESSION_INFO_PREV in reusable.battlePassProgress:
-                info = reusable.battlePassProgress[BattlePassConsts.PROGRESSION_INFO_PREV]
-                self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', getBattlePassQuestInfo(info)))
-            if BattlePassConsts.PROGRESSION_INFO in reusable.battlePassProgress:
-                info = reusable.battlePassProgress[BattlePassConsts.PROGRESSION_INFO]
-                self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', getBattlePassQuestInfo(info)))
         for quest, data in sorted(personalMissions.items(), key=operator.itemgetter(0), cmp=self.__sortPersonalMissions):
             if data.get(quest.getAddQuestID(), False):
                 complete = PMComplete(True, True)

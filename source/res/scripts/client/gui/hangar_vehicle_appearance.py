@@ -21,7 +21,7 @@ from vehicle_outfit.outfit import Area, ANCHOR_TYPE_TO_SLOT_TYPE_MAP, SLOT_TYPES
 from gui.shared.gui_items.customization.slots import SLOT_ASPECT_RATIO, BaseCustomizationSlot, EmblemSlot, getProgectionDecalAspect
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from helpers import dependency
-from items.components.c11n_constants import ApplyArea, SeasonType
+from items.components.c11n_constants import ApplyArea
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
@@ -112,6 +112,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         return self.__vEntity.id
 
     fashion = property(lambda self: self.__fashions[0])
+    fashions = property(lambda self: self.__fashions)
 
     @property
     def filter(self):
@@ -220,7 +221,13 @@ class HangarVehicleAppearance(ScriptGameObject):
     def recreateRequired(self, newOutfit):
         shouldUpdateModelsSet = self.__outfit.modelsSet != newOutfit.modelsSet
         shouldUpdateAttachments = not self.__outfit.attachments.isEqual(newOutfit.attachments)
-        return shouldUpdateModelsSet or shouldUpdateAttachments
+        shouldUpdateProgressiveOutfit = False
+        if newOutfit.style and newOutfit.style.isProgression:
+            if self.__outfit.style and self.__outfit.style.isProgression is False:
+                shouldUpdateProgressiveOutfit = True
+            elif newOutfit.progressionLevel != self.__outfit.progressionLevel:
+                shouldUpdateProgressiveOutfit = True
+        return shouldUpdateModelsSet or shouldUpdateAttachments or shouldUpdateProgressiveOutfit
 
     def computeVehicleHeight(self):
         gunLength = 0.0
@@ -265,6 +272,8 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.tessellationCollisionSensor = None
         self.shadowManager = VehicleShadowManager()
         self.shadowManager.updatePlayerTarget(None)
+        if outfit.style and outfit.style.isProgression:
+            outfit = self.__getStyleProgressionOutfitData(outfit)
         self.__outfit = outfit
         self.__startBuild(vDesc, vState)
         return
@@ -422,9 +431,7 @@ class HangarVehicleAppearance(ScriptGameObject):
             return outfit
         else:
             vehicle = g_currentVehicle.item
-            season = g_tankActiveCamouflage.get(vehicle.intCD, SeasonType.UNDEFINED)
-            if season == SeasonType.UNDEFINED:
-                season = vehicle.getAnyOutfitSeason()
+            season = g_tankActiveCamouflage.get(vehicle.intCD, vehicle.getAnyOutfitSeason())
             g_tankActiveCamouflage[vehicle.intCD] = season
             outfit = vehicle.getOutfit(season)
             if not outfit:
@@ -470,6 +477,8 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.c11nComponent = self.createComponent(Vehicular.C11nEditComponent, self.__fashions, self.compoundModel, outfitData)
             self.__updateDecals(self.__outfit)
             self.__updateSequences(self.__outfit)
+            if self.__outfit.style and self.__outfit.style.isProgression:
+                self.__updateStyleProgression(self.__outfit)
         else:
             self.__fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion())
             self.__vEntity.model.setupFashions(self.__fashions)
@@ -507,18 +516,6 @@ class HangarVehicleAppearance(ScriptGameObject):
         if self.__vDesc:
             vehicleDossier = self.itemsCache.items.getVehicleDossier(self.__vDesc.type.compactDescr)
             return vehicleDossier.getRandomStats().getAchievement(MARK_ON_GUN_RECORD).getValue()
-
-    def __setupEmblems(self, outfit):
-        if self.__vehicleStickers is not None:
-            self.__vehicleStickers.detach()
-        insigniaRank = 0
-        if self.__showMarksOnGun:
-            insigniaRank = self._getThisVehicleDossierInsigniaRank()
-        self.__vehicleStickers = VehicleStickers.VehicleStickers(self.__vDesc, insigniaRank, outfit)
-        self.__vehicleStickers.alpha = self.__currentEmblemsAlpha
-        self.__vehicleStickers.attach(self.__vEntity.model, self.__isVehicleDestroyed, False)
-        self._requestClanDBIDForStickers(self.__onClanDBIDRetrieved)
-        return
 
     def _requestClanDBIDForStickers(self, callback):
         BigWorld.player().stats.get('clanDBID', callback)
@@ -663,11 +660,15 @@ class HangarVehicleAppearance(ScriptGameObject):
         if self.recreateRequired(outfit):
             self.refresh(outfit, callback)
             return
+        if outfit.style and outfit.style.isProgression:
+            outfit = self.__getStyleProgressionOutfitData(outfit)
         self.__updateCamouflage(outfit)
         self.__updatePaint(outfit)
         self.__updateDecals(outfit)
         self.__updateProjectionDecals(outfit)
         self.__updateSequences(outfit)
+        if outfit.style and outfit.style.isProgression:
+            self.__updateStyleProgression(outfit)
 
     def rotateTurretForAnchor(self, anchorId, duration=EASING_TRANSITION_DURATION):
         if self.compoundModel is None or self.__vDesc is None:
@@ -734,7 +735,16 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.c11nComponent.setPartCamo(fashionIdx, camo)
 
     def __updateDecals(self, outfit):
-        self.__setupEmblems(outfit)
+        if self.__vehicleStickers is not None:
+            self.__vehicleStickers.detach()
+        insigniaRank = 0
+        if self.__showMarksOnGun:
+            insigniaRank = self._getThisVehicleDossierInsigniaRank()
+        self.__vehicleStickers = VehicleStickers.VehicleStickers(self.__vDesc, insigniaRank, outfit)
+        self.__vehicleStickers.alpha = self.__currentEmblemsAlpha
+        self.__vehicleStickers.attach(self.__vEntity.model, self.__isVehicleDestroyed, False)
+        self._requestClanDBIDForStickers(self.__onClanDBIDRetrieved)
+        return
 
     def __updateProjectionDecals(self, outfit):
         decals = camouflages.getGenericProjectionDecals(outfit, self.__vDesc)
@@ -747,6 +757,9 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.__clearModelAnimators()
             return
         BigWorld.loadResourceListBG(tuple(resources), makeCallbackWeak(self.__onAnimatorsLoaded, self.__curBuildInd, outfit))
+
+    def __updateStyleProgression(self, outfit):
+        camouflages.changeStyleProgression(outfit.style, self, outfit.progressionLevel)
 
     def __clearModelAnimators(self):
         self.flagComponent = None
@@ -931,3 +944,20 @@ class HangarVehicleAppearance(ScriptGameObject):
     def __setGunMatrix(self, gunMatrix):
         gunNode = self.__getGunNode()
         gunNode.local = gunMatrix
+
+    @property
+    def outfit(self):
+        return self.__outfit
+
+    def __getStyleProgressionOutfitData(self, outfit):
+        vehicle = None
+        if g_currentVehicle.isPresent():
+            vehicle = g_currentVehicle.item
+        elif g_currentPreviewVehicle.isPresent():
+            vehicle = g_currentPreviewVehicle.item
+        if vehicle:
+            season = g_tankActiveCamouflage.get(vehicle.intCD, vehicle.getAnyOutfitSeason())
+            progressionOutfit = camouflages.getStyleProgressionOutfit(outfit, outfit.progressionLevel, season)
+            if progressionOutfit:
+                return progressionOutfit
+        return outfit

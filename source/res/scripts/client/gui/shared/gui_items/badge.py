@@ -7,6 +7,8 @@ from battle_pass_common import MAX_BADGE_LEVEL, BattlePassState
 from dossiers2.ui.achievements import BADGES_BLOCK
 from gui.Scaleform.locale.BADGE import BADGE
 from gui.Scaleform.settings import getBadgeIconPath, getAwardBadgeIconPath, getBadgeHighlightIconPath, BADGES_ICONS
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.gui_items.gui_item import GUIItem
 from helpers import i18n, dependency
 from shared_utils import CONST_CONTAINER, first
@@ -24,7 +26,7 @@ class BadgeLayouts(CONST_CONTAINER):
 
 
 class Badge(GUIItem):
-    __slots__ = ('badgeID', 'data', 'isSelected', 'isAchieved', 'achievedAt', 'group', 'isAchievable', 'isTemporary')
+    __slots__ = ('badgeID', 'data', 'isSelected', 'isAchieved', 'achievedAt', 'group', 'isAchievable', 'isTemporary', 'showCongratsView')
 
     def __init__(self, data, proxy=None):
         super(Badge, self).__init__(proxy)
@@ -33,6 +35,7 @@ class Badge(GUIItem):
         self.group = data.get('group')
         self.isAchievable = data.get('achievable', True)
         self.isTemporary = data.get('temporary', False)
+        self.showCongratsView = data.get('showCongratsView', False)
         self.isSelected = False
         self.isAchieved = False
         self.achievedAt = None
@@ -91,6 +94,9 @@ class Badge(GUIItem):
     def getIconX110(self):
         return self.__getIconPath(BADGES_ICONS.X110)
 
+    def getIconX320(self):
+        return self.__getIconPath(BADGES_ICONS.X320)
+
     def getSmallIcon(self):
         return self.getSmallIconById(self.badgeID)
 
@@ -126,6 +132,10 @@ class Badge(GUIItem):
     def getUserDescription(self):
         key = BADGE.badgeDescriptor(self.badgeID)
         return i18n.makeString(key)
+
+    def getLongUserDescription(self):
+        longDescription = R.strings.badge.dyn('badge_{}_descr_long'.format(self.badgeID))
+        return backport.text(longDescription()) if longDescription.exists() else ''
 
     def getHighlightIcon(self):
         highlight = self.data.get('highlight', '')

@@ -45,7 +45,6 @@ class WelcomeView(ViewImpl):
         TiersLimitSubview.resetState()
         self.setChildView(self.__tiersLimitSubview.layoutID, self.__tiersLimitSubview)
         self.setChildView(self.__tiersFilterSubview.layoutID, self.__tiersFilterSubview)
-        self.__showSettingsCallback(False)
         self.__initButtons()
         self.__setBattleTypeRelatedProps()
 

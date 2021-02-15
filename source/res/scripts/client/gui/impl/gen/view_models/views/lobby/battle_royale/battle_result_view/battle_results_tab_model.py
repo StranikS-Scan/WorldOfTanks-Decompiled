@@ -4,7 +4,7 @@ from frameworks.wulf import Array
 from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
 from gui.impl.gen.view_models.views.battle_royale.battle_results.personal.personal_results_model import PersonalResultsModel
 from gui.impl.gen.view_models.views.lobby.battle_royale.battle_result_view.achievement_model import AchievementModel
-from gui.impl.gen.view_models.views.lobby.battle_royale.battle_result_view.progress_model import ProgressModel
+from gui.impl.gen.view_models.views.lobby.battle_royale.battle_result_view.battle_pass_progress import BattlePassProgress
 
 class BattleResultsTabModel(PersonalResultsModel):
     __slots__ = ()
@@ -13,7 +13,7 @@ class BattleResultsTabModel(PersonalResultsModel):
         super(BattleResultsTabModel, self).__init__(properties=properties, commands=commands)
 
     @property
-    def progressModel(self):
+    def battlePassProgress(self):
         return self._getViewModel(3)
 
     def getPlace(self):
@@ -54,7 +54,7 @@ class BattleResultsTabModel(PersonalResultsModel):
 
     def _initialize(self):
         super(BattleResultsTabModel, self)._initialize()
-        self._addViewModelProperty('progressModel', ProgressModel())
+        self._addViewModelProperty('battlePassProgress', BattlePassProgress())
         self._addNumberProperty('place', 0)
         self._addStringProperty('nationName', '')
         self._addStringProperty('vehicleName', '')

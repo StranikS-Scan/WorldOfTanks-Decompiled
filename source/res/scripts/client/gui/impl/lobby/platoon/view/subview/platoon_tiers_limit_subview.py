@@ -51,6 +51,7 @@ class TiersLimitSubview(ViewImpl):
 
     def hideSettings(self):
         self.__isShowingSettings = False
+        self.__updateSettingsButtonIsPressedState()
 
     def setShowCallback(self, func):
         self.__showSettingsCallback = func
@@ -109,6 +110,7 @@ class TiersLimitSubview(ViewImpl):
     def __updateViewModel(self):
         layoutID = self.getParentView().layoutID
         isInSearch = self.__platoonCtrl.isInSearch()
+        isInQueue = self.__platoonCtrl.isInQueue()
         hasTierPreferences = self.__platoonCtrl.isTankLevelPreferenceEnabled()
         tiersString = TiersLimitSubview.tiersString if self.__platoonCtrl.canStartSearch() else ''
         with self.viewModel.transaction() as model:
@@ -117,7 +119,7 @@ class TiersLimitSubview(ViewImpl):
             hasTiersString = hasTierPreferences and layoutID != R.views.lobby.platoon.MembersWindow() and bool(tiersString) and self.__platoonCtrl.canStartSearch()
             hasFilterOptions = hasTierPreferences or self.__platoonCtrl.isVOIPEnabled()
             hasSettingsButton = layoutID != R.views.lobby.platoon.SearchingDropdown() and self.__platoonCtrl.canStartSearch() and hasFilterOptions
-            isSettingsButtonEnabled = not isInSearch and self.__platoonCtrl.hasFreeSlot() or layoutID == R.views.lobby.platoon.PlatoonDropdown()
+            isSettingsButtonEnabled = not isInQueue and not isInSearch and self.__platoonCtrl.hasFreeSlot() or layoutID == R.views.lobby.platoon.PlatoonDropdown()
             usePopover = layoutID == R.views.lobby.platoon.MembersWindow()
             useLight = layoutID == R.views.lobby.platoon.SearchingDropdown()
             model.setHasResetButton(hasResetSettingsButton)
@@ -153,7 +155,12 @@ class TiersLimitSubview(ViewImpl):
     def __onShow(self):
         if self.__showSettingsCallback:
             self.__isShowingSettings = not self.__isShowingSettings
+            self.__updateSettingsButtonIsPressedState()
             self.__showSettingsCallback(self.__isShowingSettings)
 
     def __onMembersUpdate(self):
         self.update()
+
+    def __updateSettingsButtonIsPressedState(self):
+        with self.viewModel.transaction() as model:
+            model.btnShowSettings.setIsPressed(self.__isShowingSettings)

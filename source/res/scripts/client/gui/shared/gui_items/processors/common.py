@@ -8,6 +8,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from items import makeIntCompactDescrByID
 from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, SeasonType
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.customization import ICustomizationService
 from gui import SystemMessages
 from gui.impl.gen import R
 from gui.impl import backport
@@ -158,10 +159,20 @@ class OutfitApplier(Processor):
 
     def _request(self, callback):
         _logger.debug('Make server request to put on outfit on vehicle %s, season %s', self.vehicle.invID, self.season)
-        component = self.outfit.pack()
+        c11nService = dependency.instance(ICustomizationService)
+        component = None
+        if self.outfit.style:
+            intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, self.outfit.style.id)
+            style = self.itemsCache.items.getItemByCD(intCD)
+            if style and style.isProgressive:
+                outfit = c11nService.removeAdditionalProgressionData(outfit=self.outfit, style=style, vehCD=self.vehicle.descriptor.makeCompactDescr())
+                component = outfit.pack()
+        if component is None:
+            component = self.outfit.pack()
         if self.season == SeasonType.ALL:
             component = CustomizationOutfit()
             component.styleId = self.outfit.id
+            component.styleProgressionLevel = self.outfit.progressionLevel
         elif component.styleId and isEditedStyle(component):
             intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, component.styleId)
             style = self.itemsCache.items.getItemByCD(intCD)
@@ -169,6 +180,7 @@ class OutfitApplier(Processor):
             component = component.getDiff(baseComponent.pack())
         self.__validateOutfitComponent(component)
         BigWorld.player().shop.buyAndEquipOutfit(self.vehicle.invID, self.season, component.makeCompDescr(), lambda code: self._response(code, callback))
+        return
 
     def __validateOutfitComponent(self, outfitComponent):
         for itemType in CustomizationType.STYLE_ONLY_RANGE:
@@ -303,24 +315,6 @@ class EpicPrestigePointsExchange(Processor):
     def _request(self, callback):
         _logger.debug('Make server request to exchange prestige points')
         BigWorld.player().epicMetaGame.exchangePrestigePoints(lambda code, errStr: self._response(code, callback, errStr=errStr))
-
-
-class BobRewardClaimer(Processor):
-
-    def __init__(self, token):
-        super(BobRewardClaimer, self).__init__()
-        self.__token = token
-
-    @staticmethod
-    def _getMessagePrefix():
-        pass
-
-    def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError(sysMsgKey='{}/server_error/{}'.format(self._getMessagePrefix(), errStr), defaultSysMsgKey='{}/server_error'.format(self._getMessagePrefix()))
-
-    def _request(self, callback):
-        _logger.debug('Make server request to take BoB3 reward')
-        BigWorld.player().requestSingleToken(self.__token, lambda requestID, resultID, errStr: self._response(resultID, callback, errStr=errStr))
 
 
 class EpicRewardsClaimer(Processor):

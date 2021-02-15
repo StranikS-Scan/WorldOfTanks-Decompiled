@@ -9,6 +9,8 @@ from gui.impl.pub import ViewImpl
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import IRankedBattlesController
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
+from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
+from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.views.lobby.ranked.ranked_season_model import RankedSeasonModel
     from season_common import GameSeason
@@ -127,3 +129,4 @@ class RankedEntryPoint(ViewImpl, Notifiable):
 
     def __onClick(self):
         self.__rankedController.doActionOnEntryPointClick()
+        selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.RANKED)

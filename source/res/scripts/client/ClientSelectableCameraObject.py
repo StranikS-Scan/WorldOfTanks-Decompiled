@@ -9,7 +9,7 @@ from ClientSelectableObject import ClientSelectableObject
 from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
 from AvatarInputHandler import cameras
 from gui.Scaleform.Waiting import Waiting
-from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraRelatedEvents, CameraDistanceStates
+from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraRelatedEvents, CameraDistanceModes
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from skeletons.account_helpers.settings_core import ISettingsCore
 from helpers import dependency
@@ -95,7 +95,7 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
         self.__p1 = Math.Vector3(0.0, 0.0, 0.0)
         self.__p2 = Math.Vector3(0.0, 0.0, 0.0)
         self.__wasPreviousUpdateSkipped = False
-        self.camDistState = CameraDistanceStates.DEFAULT
+        self.camDistState = CameraDistanceModes.DEFAULT
         return
 
     def onEnterWorld(self, prereqs):
@@ -134,10 +134,8 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
                     cameraObject.onDeselect(clickedObject)
 
             hangarCameraMgr = cls.hangarSpace.space.getCameraManager()
-            if clickedObject.camDistState == CameraDistanceStates.CUSTOM:
-                hangarCameraMgr.setAllowCustomCamDistance(enable=True)
-            else:
-                hangarCameraMgr.setAllowCustomCamDistance(enable=False)
+            isCustomDistance = clickedObject.camDistState == CameraDistanceModes.CUSTOM
+            hangarCameraMgr.setAllowCustomCamDistance(isCustomDistance)
             clickedObject.onSelect()
             return
 

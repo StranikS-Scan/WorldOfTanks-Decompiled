@@ -78,6 +78,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__updatePopoverBtnIcon()
         self.__c11nSettings = AccountSettings.getSettings(CUSTOMIZATION_SECTION)
         self.__serverSettings = self.settingsCore.serverSettings
+        self.__stageSwitcherVisibility = False
         BigWorld.callback(0.0, lambda : self.__onTabChanged(self.__ctx.mode.tabId))
 
     def _dispose(self):
@@ -600,6 +601,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self._carouselDP.selectItem(self._selectedItem)
         if self._selectedItem is not None and scroll:
             self.__scrollToItem(self._selectedItem.intCD, True)
+        self.__updateStageSwitcherVisibility()
         return
 
     def __updateHints(self):
@@ -691,3 +693,13 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
                 result.append(pItem)
 
         return result
+
+    def __updateStageSwitcherVisibility(self):
+        newVisibility = False
+        if self.__ctx.mode.modeId == CustomizationModes.STYLED:
+            styleItem = self.__ctx.mode.currentOutfit.style
+            if styleItem:
+                newVisibility = styleItem.isProgression
+        if self.__stageSwitcherVisibility != newVisibility:
+            self.__stageSwitcherVisibility = newVisibility
+            self.as_setStageSwitcherVisibilityS(self.__stageSwitcherVisibility)

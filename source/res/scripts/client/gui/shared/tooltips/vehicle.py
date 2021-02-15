@@ -51,6 +51,7 @@ _SKILL_BONUS_TYPE = 'skill'
 _PERK_BONUS_TYPE = 'perk'
 _ROLE_BONUS_TYPE = 'role'
 _EXTRA_BONUS_TYPE = 'extra'
+_CREW_TYPES = (_PERK_BONUS_TYPE, _SKILL_BONUS_TYPE)
 _TOOLTIP_MIN_WIDTH = 420
 _TOOLTIP_MAX_WIDTH = 460
 _TOOLTIP_ANNOUNCEMENT_MAX_WIDTH = 310
@@ -342,12 +343,14 @@ def _packBonusName(bnsType, bnsId, enabled=True, inactive=False):
         itemStr = textStyle(_ms(TOOLTIPS.VEHICLEPARAMS_BONUS_ROLE_TEMPLATE, name=_ms(TOOLTIPS.vehicleparams_bonus_extra(bnsId))))
     elif bnsType == _BATTLE_BOOSTER:
         itemStr = textStyle(_ms(TOOLTIPS.VEHICLEPARAMS_BONUS_BATTLEBOOSTER_TEMPLATE, name=_ms('#artefacts:{boosterId}/name'.format(boosterId=bnsId))))
-    if inactive:
-        itemStr += _ms(TOOLTIPS.VEHICLEPARAMS_BONUS_POSSIBLE_ISINACTIVE)
-        icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_TOOLTIP_ASTERISK_RED, 16, 16, 0, 2)
-        itemStr = param_formatter.packSituationalIcon(itemStr, icon)
-    elif not enabled and not bnsType == _PERK_BONUS_TYPE:
-        itemStr += _ms(TOOLTIPS.VEHICLEPARAMS_BONUS_POSSIBLE_NOTINSTALLED)
+    if not enabled:
+        if bnsType not in _CREW_TYPES:
+            itemStr += _ms(TOOLTIPS.VEHICLEPARAMS_BONUS_POSSIBLE_NOTINSTALLED)
+        else:
+            itemStr += _ms(TOOLTIPS.VEHICLEPARAMS_BONUS_POSSIBLE_ISINACTIVE)
+            if inactive:
+                icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_TOOLTIP_ASTERISK_RED, 16, 16, 0, 2)
+                itemStr = param_formatter.packSituationalIcon(itemStr, icon)
     return textStyle(itemStr)
 
 
@@ -429,8 +432,9 @@ class VehicleAdvancedParametersTooltipData(BaseVehicleAdvancedParametersTooltipD
                 if bnsType == constants.BonusTypes.PERK and not self._hasPerksBonuses:
                     continue
                 tirelessBnsId = _getBonusID(bnsType, bnsId)
+                isEnabled = (bnsId, bnsType) in bonuses if bnsType in _CREW_TYPES else False
                 isInactive = (bnsId, bnsType) in inactiveBonuses
-                result.append(self.__packBonusField(tirelessBnsId, _packBonusName(bnsType, tirelessBnsId, enabled=False, inactive=isInactive), isDisabled=True))
+                result.append(self.__packBonusField(tirelessBnsId, _packBonusName(bnsType, tirelessBnsId, enabled=isEnabled, inactive=isInactive), isDisabled=True))
 
             return (result, hasSituational)
 
@@ -768,11 +772,8 @@ class FrontlineRentBlockConstructor(VehicleTooltipBlockConstructor):
             else:
                 rentLeftKey = '#tooltips:vehicle/rentLeft/%s'
                 rentInfo = self.vehicle.rentInfo
-            if self.vehicle.isOnlyForEpicBattles or self.vehicle.isOnlyForBob:
-                nameId = backport.text(R.strings.tooltips.vehicle.deal.epic.main())
-                if self.vehicle.isOnlyForBob:
-                    nameId = backport.text(R.strings.tooltips.vehicle.deal.bob.main())
-                block.append(formatters.packTextParameterBlockData(name=text_styles.main(nameId), value='', valueWidth=self._valueWidth, padding=paddings))
+            if self.vehicle.isOnlyForEpicBattles:
+                block.append(formatters.packTextParameterBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_DEAL_EPIC_MAIN), value='', valueWidth=self._valueWidth, padding=paddings))
                 if rentInfo.getActiveSeasonRent() is not None:
                     rentFormatter = RentLeftFormatter(rentInfo)
                     rentLeftInfo = rentFormatter.getRentLeftStr(rentLeftKey)

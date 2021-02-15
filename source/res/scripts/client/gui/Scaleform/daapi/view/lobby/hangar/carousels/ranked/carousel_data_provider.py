@@ -4,15 +4,15 @@ from gui import GUI_NATIONS_ORDER_INDEX
 from gui.impl.gen import R
 from gui.impl import backport
 from gui.prb_control.settings import PRE_QUEUE_RESTRICTION
-from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.carousel_data_provider import HangarCarouselDataProvider
 from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES, getTypeUserName
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.ranges import toRomanRangeString
 from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
+from gui.Scaleform.daapi.view.lobby.hangar.carousels.battle_pass.carousel_data_provider import BattlePassCarouselDataProvider
 
-class RankedCarouselDataProvider(HangarCarouselDataProvider):
+class RankedCarouselDataProvider(BattlePassCarouselDataProvider):
     __rankedController = dependency.descriptor(IRankedBattlesController)
 
     @classmethod
@@ -55,3 +55,7 @@ class RankedCarouselDataProvider(HangarCarouselDataProvider):
             result['clickEnabled'] = True
             result['hasRankedBonus'] = False
         return result
+
+    @staticmethod
+    def _isSuitableForQueue(vehicle):
+        return True

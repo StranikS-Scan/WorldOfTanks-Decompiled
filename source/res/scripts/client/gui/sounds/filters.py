@@ -10,7 +10,6 @@ class StatesGroup(CONST_CONTAINER):
     HANGAR_PLACE_BATTLE_PASS = 'STATE_hangar_place_battle_pass'
     OVERLAY_HANGAR_GENERAL = 'STATE_overlay_hangar_general'
     VIDEO_OVERLAY = 'STATE_video_overlay'
-    BOB_PAGE = 'STATE_gamemode_progress_page'
 
 
 _ON_PATTERN = '{}_on'
@@ -23,13 +22,6 @@ class States(CONST_CONTAINER):
     HANGAR_FILTERED_OFF = _OFF_PATTERN.format(StatesGroup.HANGAR_FILTERED)
     VIDEO_OVERLAY_ON = _ON_PATTERN.format(StatesGroup.VIDEO_OVERLAY)
     VIDEO_OVERLAY_OFF = _OFF_PATTERN.format(StatesGroup.VIDEO_OVERLAY)
-
-
-class Events(CONST_CONTAINER):
-    BOB_ENTER = 'gui_bb_bloggers_progress_page_ambient_Entrance'
-    BOB_EXIT = 'gui_bb_bloggers_progress_page_ambient_Exit'
-    MARATHON_ENTER = 'ev_hangar_lunar_marathon_enter'
-    MARATHON_EXIT = 'ev_hangar_lunar_marathon_exit'
 
 
 def switchHangarFilteredFilter(on=True):
@@ -122,34 +114,6 @@ class WWISEBattlePassFilter(_WWISEStateAmbient):
         super(WWISEBattlePassFilter, self).__init__(StatesGroup.HANGAR_PLACE_BATTLE_PASS)
 
 
-class WWISEBobPageFilter(_WWISEStateAmbient):
-
-    def __init__(self):
-        _WWISEStateAmbient.__init__(self, StatesGroup.BOB_PAGE)
-
-    def start(self):
-        super(WWISEBobPageFilter, self).start()
-        WWISE.WW_eventGlobal(Events.BOB_ENTER)
-
-    def stop(self):
-        super(WWISEBobPageFilter, self).stop()
-        WWISE.WW_eventGlobal(Events.BOB_EXIT)
-
-
-class WWISEMarathonPageFilter(_WWISEStateAmbient):
-
-    def __init__(self):
-        _WWISEStateAmbient.__init__(self, StatesGroup.OVERLAY_HANGAR_GENERAL)
-
-    def start(self):
-        super(WWISEMarathonPageFilter, self).start()
-        WWISE.WW_eventGlobal(Events.MARATHON_ENTER)
-
-    def stop(self):
-        super(WWISEMarathonPageFilter, self).stop()
-        WWISE.WW_eventGlobal(Events.MARATHON_EXIT)
-
-
 def getEmptyFilter():
     return EmptySoundFilter()
 
@@ -163,9 +127,7 @@ def _selectFilter(wwise):
 
 
 _filters = {SoundFilters.FILTERED_HANGAR: _selectFilter(WWISEFilteredHangarFilter()),
- SoundFilters.BATTLE_PASS_FILTER: _selectFilter(WWISEBattlePassFilter()),
- SoundFilters.BOB_FILTER: _selectFilter(WWISEBobPageFilter()),
- SoundFilters.MARATHON_FILTER: _selectFilter(WWISEMarathonPageFilter())}
+ SoundFilters.BATTLE_PASS_FILTER: _selectFilter(WWISEBattlePassFilter())}
 
 def _setState(stateGroup, stateName):
     WWISE.WW_setState(stateGroup, stateName)

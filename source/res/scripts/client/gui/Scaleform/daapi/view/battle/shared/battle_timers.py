@@ -105,9 +105,9 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
         self.__state = COUNTDOWN_STATE.UNDEFINED
         self.__roundLength = self.arenaVisitor.type.getRoundLength()
         self.__endingSoonTime = self.arenaVisitor.type.getBattleEndingSoonTime()
+        self.__isDeathScreenShown = False
         self.__endWarningIsEnabled = self.__checkEndWarningStatus()
         self.__sounds = dict()
-        self.__isDeathScreenShown = False
 
     def destroy(self):
         for sound in self.__sounds.values():
@@ -121,8 +121,6 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
         return self.sessionProvider.arenaVisitor
 
     def setTotalTime(self, totalTime):
-        if self.__isDeathScreenShown:
-            return
         minutes, seconds = divmod(int(totalTime), 60)
         if self.__endWarningIsEnabled and self.__state == COUNTDOWN_STATE.STOP:
             if _BATTLE_END_TIME < totalTime <= self.__endingSoonTime:
@@ -187,11 +185,13 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
 
     def __checkEndWarningStatus(self):
         endingSoonTimeIsValid = self.__validateEndingSoonTime()
-        return self.arenaVisitor.isBattleEndWarningEnabled() and endingSoonTimeIsValid
+        return self.arenaVisitor.isBattleEndWarningEnabled() and endingSoonTimeIsValid and not self.__isDeathScreenShown
 
     def __onShowDeathScreen(self):
         self.__isDeathScreenShown = True
+        self.__endWarningIsEnabled = self.__checkEndWarningStatus()
         self.__stopTicking()
 
     def __onVehicleLeaveWorld(self):
         self.__isDeathScreenShown = False
+        self.__endWarningIsEnabled = self.__checkEndWarningStatus()

@@ -7,7 +7,7 @@ import SoundGroups
 import ScaleformFileLoader
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
 from gui.Scaleform.daapi.view.meta.BCOutroVideoPageMeta import BCOutroVideoPageMeta
-from gui.Scaleform.framework.entities.View import CommonSoundSpaceSettings
+from sound_gui_manager import CommonSoundSpaceSettings
 from bootcamp.subtitles.decorators import subtitleDecorator
 
 class _CallbackDelayer(object):

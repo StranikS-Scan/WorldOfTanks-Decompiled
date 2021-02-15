@@ -3,8 +3,8 @@
 import cPickle
 import math
 import zlib
-from functools import partial
-from typing import List, Dict, Union, TYPE_CHECKING
+from functools import partial, wraps
+from typing import TYPE_CHECKING
 import BigWorld
 import Keys
 import Math
@@ -83,7 +83,6 @@ from material_kinds import EFFECT_MATERIALS
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from physics_shared import computeBarrelLocalPoint
-from shared_utils import nextTick
 from shared_utils.avatar_helpers import DualGun
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
@@ -164,6 +163,37 @@ AVATAR_COMPONENTS = {CombatEquipmentManager,
  AvatarChatKeyHandling,
  TriggersController}
 
+class WaitOnEnterWorld(object):
+
+    def __init__(self):
+        self.vehicleID = 0
+        self.defferedMethods = []
+
+    def startWait(self, vehicleID):
+        self.vehicleID = vehicleID
+        self.defferedMethods = []
+
+    def callDefferedMethods(self, vehicleID):
+        if vehicleID != self.vehicleID:
+            return
+        for method in self.defferedMethods:
+            method()
+
+        self.defferedMethods = []
+        self.vehicleID = 0
+
+
+def waitOnEnterWorld(f):
+
+    @wraps(f)
+    def wrapper(self, vehicleID, *args, **kwargs):
+        if vehicleID != self.waitOnEnterWorld.vehicleID:
+            return f(self, vehicleID, *args, **kwargs)
+        self.waitOnEnterWorld.defferedMethods.append(partial(f, self, vehicleID, *args, **kwargs))
+
+    return wrapper
+
+
 class VehicleDeinitFailureException(SoftException):
 
     def __init__(self):
@@ -194,6 +224,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     __dynamicObjectsCache = dependency.descriptor(IBattleDynamicObjectsCache)
     canMakeDualShot = property(lambda self: self.__canMakeDualShot)
     magneticAutoAimTags = property(lambda self: self.__magneticAutoAimTags)
+    followTeamID = property(lambda self: self.observableTeamID if self.observableTeamID else self.team)
 
     def __init__(self):
         LOG_DEBUG('client Avatar.init')
@@ -259,8 +290,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__battleResults = None
         DecalMap.g_instance.initGroups(1.0)
         self.__gunDamagedShootSound = None
+        self.waitOnEnterWorld = WaitOnEnterWorld()
         if BattleReplay.g_replayCtrl.isPlaying:
             BattleReplay.g_replayCtrl.setDataCallback(CallbackDataNames.GUN_DAMAGE_SOUND, self.__gunDamagedSound)
+            self.__patchForReplay()
         self.__aimingBooster = None
         self.__canMakeDualShot = False
         self.__magneticAutoAimTags = self.lobbyContext.getServerSettings().getMagneticAutoAimConfig().get('enableForTags', set())
@@ -529,6 +562,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         LOG_DEBUG('[INIT_STEPS] Avatar.onLeaveWorld')
         self.__consistentMatrices.notifyLeaveWorld(self)
         self.__cancelWaitingForCharge()
+        AvatarObserver.onLeaveWorld(self)
 
     def onVehicleChanged(self):
         LOG_DEBUG('Avatar vehicle has changed to %s' % self.vehicle)
@@ -891,6 +925,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def set_ownVehicleGear(self, prev):
         pass
 
+    def set_observableTeamID(self, prev):
+        self.__isObserver = self.observableTeamID > 0
+
     def set_ownVehicleAuxPhysicsData(self, prev):
         self.__onSetOwnVehicleAuxPhysicsData(prev)
 
@@ -960,6 +997,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.__startVehicleVisual(vehicle, resetControllers=True)
         else:
             self.consistentMatrices.notifyVehicleLoaded(self, vehicle)
+        self.waitOnEnterWorld.callDefferedMethods(vehicle.id)
         return
 
     def __makeScreenShot(self, fileType='jpg', fileMask='./../screenshots/'):
@@ -1594,40 +1632,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def onRepairPointAction(self, repairPointIndex, action, nextActionTime):
         pass
 
-    def onLootAction(self, lootID, lootTypeID, action, serverTime):
-        LOG_DEBUG_DEV('onLootAction', lootID, lootTypeID, action, serverTime)
-        self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.LOOT, (lootID,
-         lootTypeID,
-         action,
-         serverTime))
-
-    def receiveAvailableSpawnKeyPoints(self, points):
-        spawnCtrl = self.guiSessionProvider.dynamic.spawn
-        if spawnCtrl:
-            spawnCtrl.showSpawnPoints(points)
-
-    def receiveTeamSpawnKeyPoints(self, pointsByVehicle):
-        spawnCtrl = self.guiSessionProvider.dynamic.spawn
-        if spawnCtrl:
-            spawnCtrl.updateTeamSpawnKeyPoints(pointsByVehicle)
-
-    def receiveSpawnKeyPointsCloseTime(self, serverTime):
-        spawnCtrl = self.guiSessionProvider.dynamic.spawn
-        if spawnCtrl:
-            spawnCtrl.setupCloseTime(serverTime)
-
-    def closeChooseSpawnKeyPointsWindow(self):
-        LOG_WARNING('closeChooseSpawnKeyPointsWindow')
-        spawnCtrl = self.guiSessionProvider.dynamic.spawn
-        if spawnCtrl:
-            spawnCtrl.closeSpawnPoints()
-        if self.getVehicleAttached() is not None:
-            controlMode = self.inputHandler.ctrl
-            if isinstance(controlMode, ArcadeControlMode):
-                camera = self.inputHandler.ctrl.camera
-                nextTick(camera.setToVehicleDirection)()
-        return
-
     def updateGasAttackState(self, state, activationTime, currentTime):
         pass
 
@@ -1673,6 +1677,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if self.__isObserver is None:
             self.__isObserver = self.guiSessionProvider.getCtx().isObserver(self.playerVehicleID)
         return self.__isObserver
+
+    def setIsObserver(self):
+        self.__isObserver = True
 
     def receiveAccountStats(self, requestID, stats):
         callback = self.__onCmdResponse.pop(requestID, None)
@@ -2713,7 +2720,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             return
 
     def __processVehicleAmmo(self, vehicleID, compactDescr, quantity, quantityInClip, _, __):
-        if not self.isObserver():
+        isObserver = BigWorld.player().isObserver()
+        if not isObserver:
             vehicle = BigWorld.entities.get(vehicleID)
             if vehicle is None or not vehicle.isAlive():
                 return
@@ -2873,6 +2881,14 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 ctrl.addMarker(ctrl.createMarker(vehicle.matrix, 0))
                 return True
         return False
+
+    def __patchForReplay(self):
+        PlayerAvatar.updateVehicleGunReloadTime = waitOnEnterWorld(PlayerAvatar.updateVehicleGunReloadTime)
+        PlayerAvatar.updateVehicleClipReloadTime = waitOnEnterWorld(PlayerAvatar.updateVehicleClipReloadTime)
+        PlayerAvatar.updateVehicleAmmo = waitOnEnterWorld(PlayerAvatar.updateVehicleAmmo)
+        PlayerAvatar.updateDualGunState = waitOnEnterWorld(PlayerAvatar.updateDualGunState)
+        PlayerAvatar.updateVehicleOptionalDeviceStatus = waitOnEnterWorld(PlayerAvatar.updateVehicleOptionalDeviceStatus)
+        PlayerAvatar.updateVehicleSetting = waitOnEnterWorld(PlayerAvatar.updateVehicleSetting)
 
 
 def preload(alist):

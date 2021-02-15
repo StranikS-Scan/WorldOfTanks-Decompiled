@@ -22,7 +22,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.server_events.events_dispatcher import showMissionsMarathon
 from gui.shared import event_dispatcher
-from gui.shared.event_dispatcher import showStylePreview, showEventProgressionStylePreview, showHangar, showEventProgressionPage
+from gui.shared.event_dispatcher import showStylePreview, showEventProgressionStylePreview, showHangar, showEventProgressionPage, showBlueprintsSalePage, showBlueprintsExchangeStylePreview
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -462,7 +462,7 @@ class VehiclePreviewWebApiMixin(object):
                 styledVehicleCD = vehiclesPool.pop(0)
                 vehiclesPool.append(styledVehicleCD)
                 AccountSettings.setSettings(STYLE_PREVIEW_VEHICLES_POOL, vehiclesPool)
-        self._showStylePreview(styledVehicleCD, cmd)
+        self.__showStylePreview(styledVehicleCD, cmd)
         return
 
     @w2c(_VehicleCustomizationPreviewSchema, 'vehicle_customization_preview')
@@ -517,7 +517,9 @@ class VehiclePreviewWebApiMixin(object):
         return sorted(vehs, key=lambda item: item.level, reverse=True)
 
     def _getVehicleStylePreviewCallback(self, cmd):
-        return partial(showEventProgressionPage, cmd.back_url) if cmd.back_btn_descr == 'eventProgression' else showHangar
+        if cmd.back_btn_descr == 'eventProgression':
+            return partial(showEventProgressionPage, cmd.back_url)
+        return partial(showBlueprintsSalePage, cmd.back_url) if cmd.back_btn_descr == 'blueprintsExchange' else showHangar
 
     def _getVehiclePreviewReturnCallback(self, cmd):
         return None
@@ -531,6 +533,8 @@ class VehiclePreviewWebApiMixin(object):
         if vehicle is not None and not vehicle.isOutfitLocked and style.mayInstall(vehicle):
             if (cmd.event_data or {}).get('type') == EventDataType.EVENT_PROGRESSION:
                 showStyle = showEventProgressionStylePreview
+            elif cmd.back_btn_descr == 'blueprintsExchange':
+                showStyle = showBlueprintsExchangeStylePreview
             else:
                 showStyle = showStylePreview
             showStyle(vehicleCD, style, style.getDescription(), cmd.back_url if isinstance(cmd.back_url, Callable) else self._getVehicleStylePreviewCallback(cmd), backBtnDescrLabel=backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(cmd.back_btn_descr)()))

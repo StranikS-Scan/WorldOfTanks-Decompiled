@@ -14,12 +14,12 @@ def createEquipmentById(equipmentId):
     return vehicles.g_cache.equipments()[equipmentId]
 
 
-class BattleRoyaleEquipmentController(equipment_ctrl.EquipmentsController):
+class SteelHunterEquipmentController(equipment_ctrl.EquipmentsController):
     __slots__ = ()
     __lobbyCtx = dependency.descriptor(ILobbyContext)
 
     def startControl(self, *args, **kwargs):
-        super(BattleRoyaleEquipmentController, self).startControl()
+        super(SteelHunterEquipmentController, self).startControl()
         avatar = BigWorld.player()
         playerVehicle = avatar.vehicle
         if playerVehicle is not None:
@@ -32,10 +32,10 @@ class BattleRoyaleEquipmentController(equipment_ctrl.EquipmentsController):
         avatar = BigWorld.player()
         if avatar:
             avatar.onVehicleEnterWorld -= self.__onVehicleEnterWorld
-        super(BattleRoyaleEquipmentController, self).stopControl()
+        super(SteelHunterEquipmentController, self).stopControl()
 
     def clear(self, leave=True):
-        super(BattleRoyaleEquipmentController, self).clear(leave)
+        super(SteelHunterEquipmentController, self).clear(leave)
         if not leave:
             self.__applyEmptyItems()
 
@@ -46,7 +46,14 @@ class BattleRoyaleEquipmentController(equipment_ctrl.EquipmentsController):
             self.__applyEmptyItems()
 
     def __applyEmptyItems(self):
-        vehicleDescriptor = avatar_getter.getVehicleTypeDescriptor()
+        vehicleDescriptor = None
+        observedVehicleId = BigWorld.player().observedVehicleID
+        if observedVehicleId:
+            vehicle = BigWorld.entities.get(observedVehicleId)
+            if vehicle:
+                vehicleDescriptor = vehicle.typeDescriptor
+        if vehicleDescriptor is None:
+            vehicleDescriptor = avatar_getter.getVehicleTypeDescriptor()
         vehiclesSlotsConfig = self.__lobbyCtx.getServerSettings().battleRoyale.vehiclesSlotsConfig
         vehicleDescriptorName = None
         if vehicleDescriptor:
@@ -62,3 +69,7 @@ class BattleRoyaleEquipmentController(equipment_ctrl.EquipmentsController):
                 return
         _logger.error('Vehicle config has not been found! %s, config: %s', vehicleDescriptorName, vehiclesSlotsConfig)
         return
+
+
+class SteelHunterReplayEquipmentController(equipment_ctrl.EquipmentsReplayPlayer, SteelHunterEquipmentController):
+    __slots__ = ()

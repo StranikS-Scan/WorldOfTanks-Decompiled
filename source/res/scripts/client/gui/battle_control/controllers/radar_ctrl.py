@@ -9,6 +9,7 @@ from gui.battle_control.arena_info.interfaces import IRadarController
 from gui.battle_control import avatar_getter
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
+from Event import EventsSubscriber
 _logger = logging.getLogger(__name__)
 
 class RadarResponseCode(object):
@@ -36,7 +37,14 @@ class IRadarListener(object):
         pass
 
 
-class RadarController(ViewComponentsController, IRadarController):
+class IReplayRadarListener(IRadarListener):
+
+    def setCoolDownTimeSnapshot(self, time):
+        pass
+
+
+class RadarController(ViewComponentsController, IRadarController, EventsSubscriber):
+    __slots__ = ('__dynamicViews', '__callbackID', '__radarReadinessTime')
     __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
     __INITIAL_VALUE = 0.0
 
@@ -54,31 +62,27 @@ class RadarController(ViewComponentsController, IRadarController):
         avatar = BigWorld.player()
         arena = avatar.arena
         if arena is not None:
-            arena.onRadarInfoReceived += self.__onRadarInfoReceived
+            self.subscribeToEvent(arena.onRadarInfoReceived, self.__onRadarInfoReceived)
         playerVehicle = avatar.vehicle
         if playerVehicle is not None:
             self.updateRadarReadinessTime(playerVehicle.radar.radarReadinessTime)
         else:
-            avatar.onVehicleEnterWorld += self.__onVehicleEnterWorld
+            self.subscribeToEvent(avatar.onVehicleEnterWorld, self.__onVehicleEnterWorld)
+        self.subscribeToEvent(self.__guiSessionProvider.onUpdateObservedVehicleData, self.__onUpdateObservedVehicleData)
         return
 
     def stopControl(self):
         self.__cancelCallback()
-        avatar = BigWorld.player()
-        arena = avatar.arena
-        if arena is not None:
-            arena.onRadarInfoReceived -= self.__onRadarInfoReceived
-        avatar.onVehicleEnterWorld -= self.__onVehicleEnterWorld
+        self.unsubscribeFromAllEvents()
         self.clearViewComponents()
-        return
 
     def activateRadar(self):
         avatar = BigWorld.player()
         responseCode = self.__canActivate(avatar)
-        allListeners = self._viewComponents + self.__dynamicViews
         if responseCode == RadarResponseCode.SUCCESS:
             avatar.vehicle.cell.radar.activateRadar()
         else:
+            allListeners = self._iterAllListeners()
             for listener in allListeners:
                 listener.radarActivationFailed(responseCode)
 
@@ -87,21 +91,17 @@ class RadarController(ViewComponentsController, IRadarController):
         if self.__radarReadinessTime != self.__INITIAL_VALUE:
             activatedUpdateRequired = True
         self.__radarReadinessTime = radarReadinessTime
-        actualTime = radarReadinessTime - BigWorld.serverTime()
+        actualTime = self._calcActualTime()
         if actualTime > 0:
-            duration = max(self.__getRadarCooldown(), actualTime)
-            radius = self.__getRadarRadius()
-            for listener in self._viewComponents + self.__dynamicViews:
-                if activatedUpdateRequired:
-                    listener.radarActivated(radius)
-                listener.startTimeOut(actualTime, duration)
-
-            self.__cancelCallback()
-            if self.__guiSessionProvider.shared.arenaPeriod.getPeriod() == ARENA_PERIOD.BATTLE:
-                self.__callbackID = BigWorld.callback(actualTime, self.__onRadarReloaded)
+            if activatedUpdateRequired:
+                self.__notifyRadarActivated()
+            self._notifyTimeOutStarted(actualTime)
+            self._launchReloadCallback(actualTime)
+        elif BigWorld.player().isObserver():
+            self.__clearRadarData()
 
     def updateRadarReadiness(self, isReady):
-        allListeners = self._viewComponents + self.__dynamicViews
+        allListeners = self._iterAllListeners()
         for listener in allListeners:
             listener.radarIsReady(isReady)
 
@@ -123,6 +123,42 @@ class RadarController(ViewComponentsController, IRadarController):
             self.__dynamicViews.remove(view)
         else:
             _logger.warning('View has not been found - %s', view)
+
+    @staticmethod
+    def _getRadarCooldownTotalTime():
+        avatar = BigWorld.player()
+        return avatar.vehicle.typeDescriptor.radio.radarCooldown
+
+    def _iterAllListeners(self):
+        for view in self._viewComponents:
+            yield view
+
+        for view in self.__dynamicViews:
+            yield view
+
+    def _launchReloadCallback(self, actualTime):
+        self.__cancelCallback()
+        if self.__guiSessionProvider.shared.arenaPeriod.getPeriod() == ARENA_PERIOD.BATTLE:
+            self.__callbackID = BigWorld.callback(actualTime, self._notifyRadarReloaded)
+
+    def _calcActualTime(self):
+        return self.__radarReadinessTime - BigWorld.serverTime()
+
+    def _notifyTimeOutStarted(self, actualTime):
+        duration = max(self._getRadarCooldownTotalTime(), actualTime)
+        for listener in self._iterAllListeners():
+            listener.startTimeOut(actualTime, duration)
+
+    def _notifyRadarReloaded(self):
+        self.__callbackID = None
+        for listener in self._iterAllListeners():
+            listener.timeOutDone()
+
+        return
+
+    def __notifyRadarActivated(self):
+        for listener in self._iterAllListeners():
+            listener.radarActivated(self.__getRadarRadius())
 
     def __canActivate(self, avatar):
         if avatar is not None:
@@ -146,16 +182,11 @@ class RadarController(ViewComponentsController, IRadarController):
         avatar = BigWorld.player()
         return avatar.vehicle.typeDescriptor.radio.radarRadius
 
-    @staticmethod
-    def __getRadarCooldown():
-        avatar = BigWorld.player()
-        return avatar.vehicle.typeDescriptor.radio.radarCooldown
-
     def __onRadarInfoReceived(self, radarInfo):
         if len(radarInfo) != 3:
             _logger.warning('Incorrect radar data in BigWorld.player().arena.onRadarInfoReceived')
             return
-        for listener in self._viewComponents + self.__dynamicViews:
+        for listener in self._iterAllListeners():
             listener.radarInfoReceived(radarInfo)
 
     def __onVehicleEnterWorld(self, vehicle):
@@ -169,9 +200,64 @@ class RadarController(ViewComponentsController, IRadarController):
             self.__callbackID = None
         return
 
-    def __onRadarReloaded(self):
-        self.__callbackID = None
-        for listener in self._viewComponents + self.__dynamicViews:
-            listener.timeOutDone()
+    def __clearRadarData(self):
+        for listener in self._iterAllListeners():
+            listener.startTimeOut(0.0, 0.0)
 
+    def __onUpdateObservedVehicleData(self, vID, extraData):
+        vehicle = BigWorld.entities.get(vID)
+        if vehicle:
+            vehicle.radar.refreshRadar()
+
+
+class RadarReplayController(RadarController):
+    __slots__ = ('__updateCbId', '__currentTime', '__ticksSinceLastUpdate')
+    _CB_UPDATE_TIMEOUT = 0.1
+    _CB_UPDATE_TICK_DELAY = 3
+
+    def __init__(self):
+        super(RadarReplayController, self).__init__()
+        self.__updateCbId = None
+        self.__currentTime = None
+        self.__ticksSinceLastUpdate = self._CB_UPDATE_TICK_DELAY
         return
+
+    def stopControl(self):
+        self.__cancelUpdateCB()
+        super(RadarReplayController, self).stopControl()
+
+    def _notifyTimeOutStarted(self, _):
+        self.__cancelUpdateCB()
+        actialTime = self._calcActualTime()
+        if actialTime > 0.0:
+            if self.__ticksSinceLastUpdate == self._CB_UPDATE_TICK_DELAY:
+                super(RadarReplayController, self)._notifyTimeOutStarted(actialTime)
+                self.__ticksSinceLastUpdate = 0
+            else:
+                self.__ticksSinceLastUpdate += 1
+            self._notifyCoolDowntTime()
+            self.__updateCbId = BigWorld.callback(self._CB_UPDATE_TIMEOUT, self.__updateTimeOut)
+        elif self.__currentTime >= 0.0:
+            self._notifyRadarReloaded()
+            self._notifyCoolDowntTime()
+            self.__ticksSinceLastUpdate = 0
+        self.__currentTime = actialTime
+
+    def _launchReloadCallback(self, actualTime):
+        pass
+
+    def __cancelUpdateCB(self):
+        if self.__updateCbId:
+            BigWorld.cancelCallback(self.__updateCbId)
+            self.__updateCbId = None
+        return
+
+    def __updateTimeOut(self):
+        self.__updateCbId = None
+        self._notifyTimeOutStarted(None)
+        return
+
+    def _notifyCoolDowntTime(self):
+        for listener in self._iterAllListeners():
+            if isinstance(listener, IReplayRadarListener):
+                listener.setCoolDownTimeSnapshot(self._calcActualTime())

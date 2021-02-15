@@ -18,7 +18,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.classic import full_stats
     from gui.Scaleform.daapi.view.battle.epic_random import players_panel
     from gui.Scaleform.daapi.view.battle.epic_random import stats_exchange
-    from gui.Scaleform.daapi.view.battle.epic_random import score_panel
+    from gui.Scaleform.daapi.view.battle.shared import frag_correlation_bar
     from gui.Scaleform.daapi.view.battle.epic_random import minimap_component
     from gui.Scaleform.daapi.view.battle.classic import battle_end_warning_panel
     from gui.Scaleform.daapi.view.battle.shared import battle_timers
@@ -33,7 +33,7 @@ def getViewSettings():
     return (ViewSettings(VIEW_ALIAS.EPIC_RANDOM_PAGE, EpicRandomPage, 'epicRandomPage.swf', WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_LOADING, battle_loading.EpicRandomBattleLoading, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_STATISTIC_DATA_CONTROLLER, stats_exchange.EpicRandomStatisticsDataController, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_RANDOM_SCORE_PANEL, score_panel.EpicRandomScorePanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.FRAG_CORRELATION_BAR, frag_correlation_bar.FragCorrelationBar, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, team_bases_panel.TeamBasesPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.FULL_STATS, full_stats.FullStatsComponent, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PLAYERS_PANEL, players_panel.EpicRandomPlayersPanel, ScopeTemplates.DEFAULT_SCOPE),

@@ -96,6 +96,7 @@ class PlayerDataComponent(ClientArenaComponent):
     def __onTeamRanksUpdated(self, args):
         arena = avatar_getter.getArena()
         playerVehicleId = avatar_getter.getPlayerVehicleID()
+        LOG_DEBUG_DEV('__onTeamRanksUpdated', args)
         if arena is not None:
             key = 'playerRank'
             for _, ranksPerTeam in args.iteritems():

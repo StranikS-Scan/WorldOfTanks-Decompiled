@@ -3,11 +3,13 @@
   <Components>
     <StaticComponents>
       <BattleRoyaleComponent></BattleRoyaleComponent>
+      <AccountBattleRoyaleComponent></AccountBattleRoyaleComponent>
     </StaticComponents>
     <DynamicComponents>
       <ArenaLootComponent></ArenaLootComponent>
       <ArenaMinesComponent></ArenaMinesComponent>
       <SpawnKeyPointController></SpawnKeyPointController>
+      <SpawnKeyPointAvatar></SpawnKeyPointAvatar>
       <BattleXP></BattleXP>
       <ConeVisibility></ConeVisibility>
       <Radar></Radar>
@@ -16,6 +18,10 @@
       <VehicleLoot></VehicleLoot>
       <VehicleDeathZoneEffect></VehicleDeathZoneEffect>
       <InBattleUpgradesAvatar></InBattleUpgradesAvatar>
+      <AvatarLoot></AvatarLoot>
+      <AvatarBattleRoyaleComponent></AvatarBattleRoyaleComponent>
+      <BattleXPArenaInfo></BattleXPArenaInfo>
+      <LootArenaInfo></LootArenaInfo>
     </DynamicComponents>
   </Components>
   <IsEnabled>	True	</IsEnabled>

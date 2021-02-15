@@ -31,6 +31,9 @@ class DualGunPanelMeta(BaseDAAPIComponent):
     def as_cancelChargeS(self):
         return self.flashObject.as_cancelCharge() if self._isDAAPIInited() else None
 
+    def as_disableChargeS(self):
+        return self.flashObject.as_disableCharge() if self._isDAAPIInited() else None
+
     def as_setCooldownS(self, timeLeft):
         return self.flashObject.as_setCooldown(timeLeft) if self._isDAAPIInited() else None
 

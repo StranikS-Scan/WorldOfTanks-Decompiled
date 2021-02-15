@@ -78,7 +78,7 @@ def getCellIdFromPosition(desiredShotPoint, boundingBox, dimensions):
     xOffset = -boundingBox[0][0]
     yOffset = -boundingBox[0][1]
     mapGridX = math.floor((xOffset + desiredShotPoint.x) / mapXLength * dimensions)
-    mapGridY = math.floor((yOffset - desiredShotPoint.z) / mapYLength * dimensions)
+    mapGridY = dimensions - (math.floor((yOffset + desiredShotPoint.z) / mapYLength * dimensions) + 1)
     return mapGridX * dimensions + mapGridY
 
 

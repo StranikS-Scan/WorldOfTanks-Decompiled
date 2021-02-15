@@ -30,6 +30,7 @@ from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, VEHICLE_LOCAT
 from gui.battle_control.controllers.radar_ctrl import IRadarListener
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from helpers import dependency
+from helpers.CallbackDelayer import CallbackDelayer
 from ids_generators import SequenceIDGenerator
 from shared_utils import findFirst
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -252,7 +253,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
             if entryID:
                 yield (entryID, name, active)
         if _CTRL_MODE.STRATEGIC in modes or _CTRL_MODE.ARTY in modes:
-            if self._isInStrategicMode():
+            if self._isInStrategicMode() or self._isInArtyMode():
                 matrix = matrix_factory.makeStrategicCameraMatrix()
                 active = True
             else:
@@ -277,10 +278,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
 
     def __updateCameraEntries(self):
         activateID = self.__cameraIDs[_S_NAME.ARCADE_CAMERA]
-        if self._isInArtyMode():
-            activateID = self.__cameraIDs[_S_NAME.STRATEGIC_CAMERA]
-            matrix = matrix_factory.makeArtyAimPointMatrix()
-        elif self._isInStrategicMode():
+        if self._isInStrategicMode() or self._isInArtyMode():
             activateID = self.__cameraIDs[_S_NAME.STRATEGIC_CAMERA]
             matrix = matrix_factory.makeStrategicCameraMatrix()
         elif self._isInArcadeMode():
@@ -1301,14 +1299,13 @@ RadarPluginParams = namedtuple('RadarPluginParams', 'fadeIn fadeOut lifetime veh
 
 class _RadarEntryData(object):
 
-    def __init__(self, entryId, destroyMeCallback, lifeTime, typeId=None):
+    def __init__(self, entryId, destroyMeCallback, params, typeId=None):
         super(_RadarEntryData, self).__init__()
         self.__entryId = entryId
-        self.__lifeTime = lifeTime
+        self.__lifeTime = params.lifetime
         self.__destroyMeCallback = destroyMeCallback
         self.__typeId = typeId
-        self.__timerId = None
-        return
+        self._callbackDelayer = CallbackDelayer()
 
     @property
     def entryId(self):
@@ -1319,18 +1316,16 @@ class _RadarEntryData(object):
 
     def destroy(self):
         self.stopTimer()
-        self.__timerId = None
         self.__destroyMeCallback = None
+        self._callbackDelayer = None
         return
 
     def upTimer(self):
         self.stopTimer()
-        self.__timerId = BigWorld.callback(self.__lifeTime, partial(self.__destroyMeCallback, self.__entryId))
+        self._callbackDelayer.delayCallback(self.__lifeTime, partial(self.__destroyMeCallback, self.__entryId))
 
     def stopTimer(self):
-        if self.__timerId is not None:
-            BigWorld.cancelCallback(self.__timerId)
-        return
+        self._callbackDelayer.destroy()
 
 
 class RadarPlugin(common.SimplePlugin, IRadarListener):
@@ -1364,6 +1359,9 @@ class RadarPlugin(common.SimplePlugin, IRadarListener):
         for typeId, lootXZPos in data[2]:
             self._addLootEntry(typeId, lootXZPos)
 
+    def _createEntryData(self, entryId, destroyMeCallback, params, typeId=None):
+        return _RadarEntryData(entryId, destroyMeCallback, params, typeId)
+
     def _addVehicleEntry(self, vehicleId, xzPosition):
         if self._arenaDP.getPlayerVehicleID() == vehicleId:
             return
@@ -1374,14 +1372,14 @@ class RadarPlugin(common.SimplePlugin, IRadarListener):
                 self._parentObj.setMatrix(vEntry.entryId, matrix)
             else:
                 entryId = self._addEntry(self._params.vehicleEntryParams.symbol, self._params.vehicleEntryParams.container, matrix=self.__getMatrixByXZ(xzPosition), active=True)
-                vEntry = _RadarEntryData(entryId, self.__destroyVehicleEntryByEntryID, self._params.lifetime)
+                vEntry = self._createEntryData(entryId, self.__destroyVehicleEntryByEntryID, self._params)
                 self._vehicleEntries[vehicleId] = vEntry
             vEntry.upTimer()
             return vEntry.entryId
 
     def _addLootEntry(self, typeId, xzPosition):
         entryId = self._addEntry(self._params.lootEntryParams.symbol, self._params.lootEntryParams.container, matrix=self.__getMatrixByXZ(xzPosition), active=True)
-        lEntry = _RadarEntryData(entryId, self.__destroyLootEntry, self._params.lifetime, typeId=typeId)
+        lEntry = self._createEntryData(entryId, self.__destroyLootEntry, self._params, typeId=typeId)
         lEntry.upTimer()
         self._lootEntries.append(lEntry)
         return lEntry.entryId

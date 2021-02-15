@@ -8,7 +8,7 @@ from visual_script.block import Block, InitParam
 from visual_script.dependency import dependencyImporter
 from visual_script.misc import ASPECT
 from visual_script.slot_types import SLOT_TYPE
-from visual_script.arena_blocks import ArenaMeta
+from visual_script.arena_blocks import ArenaMeta, GetUDOByNameBase
 from visual_script.tunable_event_block import TunableEventBlock
 from PlayerEvents import g_playerEvents
 helpers, clientArena = dependencyImporter('helpers', 'ClientArena')
@@ -289,3 +289,15 @@ class OnBattleRoundFinished(Block, ArenaMeta):
         self._winner.setValue(winnerTeam)
         self._reason.setValue(reason)
         self._out.call()
+
+
+class GetUDOByName(GetUDOByNameBase):
+    _UDOTypes = [SLOT_TYPE.MARKER_POINT, SLOT_TYPE.AREA_TRIGGER]
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]
+
+    def _getUDOsOfType(self, typeName):
+        allUDOs = BigWorld.userDataObjects.values()
+        return [ udo for udo in allUDOs if udo.__class__.__name__ == typeName ]

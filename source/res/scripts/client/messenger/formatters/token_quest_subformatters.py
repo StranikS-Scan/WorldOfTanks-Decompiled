@@ -28,7 +28,7 @@ from messenger.formatters.service_channel_helpers import getRewardsForQuests, EO
 from messenger.proto.bw.wrappers import ServiceChannelMessage
 from shared_utils import findFirst, first
 from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.game_control import IRankedBattlesController, IBobController
+from skeletons.gui.game_control import IRankedBattlesController
 from helpers import dependency
 from helpers import time_utils
 _logger = logging.getLogger(__name__)
@@ -716,44 +716,3 @@ class RankedYearLeaderFormatter(RankedTokenQuestFormatter):
     def __formatShortMessage(self):
         return g_settings.msgTemplates.format('rankedLeaderNegativeQuest', ctx={'title': backport.text(R.strings.system_messages.ranked.notification.yearLB.negative.title()),
          'body': backport.text(R.strings.system_messages.ranked.notification.yearLB.negative.body())}, data={'savedData': {'ctx': {'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID}}})
-
-
-class BobTokenQuestFormatter(AsyncTokenQuestsSubFormatter):
-    __TEMPLATE_MESSAGE = 'bobRewardMessage'
-    __bobController = dependency.descriptor(IBobController)
-
-    @async
-    @process
-    def format(self, message, callback):
-        isSynced = yield self._waitForSyncItems()
-        messageDataList = []
-        if isSynced:
-            data = message.data or {}
-            completedQuestIDs = self.getQuestOfThisGroup(data.get('completedQuestIDs', set()))
-            for qID in completedQuestIDs:
-                messageData = self.__buildMessage(qID, message)
-                if messageData is not None:
-                    messageDataList.append(messageData)
-
-        if messageDataList:
-            callback(messageDataList)
-        callback([MessageData(None, None)])
-        return
-
-    @classmethod
-    def _isQuestOfThisGroup(cls, questID):
-        return cls.__bobController.personalRewardQuestName == questID or questID.startswith(cls.__bobController.teamRewardQuestPrefix)
-
-    def __buildMessage(self, questID, message):
-        data = message.data or {}
-        questData = {}
-        rewards = data.get('detailedRewards', {}).get(questID, {})
-        questData.update(rewards)
-        fmt = self._achievesFormatter.formatQuestAchieves(questData, asBattleFormatter=False)
-        if fmt is not None:
-            templateParams = {'achieves': fmt}
-            settings = self._getGuiSettings(message, self.__TEMPLATE_MESSAGE)
-            formatted = g_settings.msgTemplates.format(self.__TEMPLATE_MESSAGE, templateParams)
-            return MessageData(formatted, settings)
-        else:
-            return

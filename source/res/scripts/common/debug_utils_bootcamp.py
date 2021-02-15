@@ -46,4 +46,4 @@ def LOG_CURRENT_EXCEPTION_BOOTCAMP():
 @_LogWrapper(LOG_LEVEL.RELEASE)
 def LOG_STATISTIC(msg, *kargs, **kwargs):
     kwargs.setdefault('tags', []).append(LOG_TAGS.STATISTIC)
-    _doLog('WARNING', msg, kargs, kwargs)
+    _doLog('DEBUG', msg, kargs, kwargs)

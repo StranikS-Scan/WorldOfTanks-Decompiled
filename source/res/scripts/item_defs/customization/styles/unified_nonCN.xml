@@ -2121,4 +2121,79 @@
       </alternateItems>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 1750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	488	</id>
+      <texture>	gui/maps/vehicles/styles/cosmonautics_day_2021.png	</texture>
+      <description>	#vehicle_customization:special_style/cosmonautics_day_2021_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/cosmonautics_day_2021_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/cosmonautics_day_2021	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	287	</id>
+              <appliedTo>	256	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	288	</id>
+              <appliedTo>	16	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	289	</id>
+              <appliedTo>	4096	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	93	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	486	</id>
+              <appliedTo>	8736	</appliedTo>
+            </item>
+            <item>
+              <id>	487	</id>
+              <appliedTo>	4368	</appliedTo>
+            </item>
+            <item>
+              <id>	488	</id>
+              <appliedTo>	17472	</appliedTo>
+            </item>
+            <item>
+              <id>	489	</id>
+              <appliedTo>	34944	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </unified_nonCN.xml>

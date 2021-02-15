@@ -121,8 +121,8 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
         return btn
 
     def __getEditStyleBtn(self, item):
-        enabled = item.canBeEditedForVehicle(g_currentVehicle.item.intCD)
-        btn = self._makeItem(optId=CustomizationOptions.EDIT_STYLE, optLabel=MENU.cst_item_ctx_menu(CustomizationOptions.EDIT_STYLE), optInitData={'enabled': enabled})
+        editingReason = item.canBeEditedForVehicle(g_currentVehicle.item.intCD)
+        btn = self._makeItem(optId=CustomizationOptions.EDIT_STYLE, optLabel=MENU.cst_item_ctx_menu(CustomizationOptions.EDIT_STYLE), optInitData={'enabled': bool(editingReason)})
         return btn
 
     def __getClearStyleBtn(self, item):

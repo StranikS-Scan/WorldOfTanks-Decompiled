@@ -308,9 +308,6 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
     def isBattleRoyale(self):
         return self._guiType == _GUI_TYPE.BATTLE_ROYALE
 
-    def isBobBattle(self):
-        return self._guiType == _GUI_TYPE.BOB
-
     def hasLabel(self):
         return self._guiType != _GUI_TYPE.UNKNOWN and self._guiType in _GUI_TYPE_LABEL.LABELS
 
@@ -375,6 +372,9 @@ class _ArenaBonusTypeVisitor(IArenaVisitor):
 
     def isFriendlyFireMode(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.NO_ALLY_DAMAGE)
+
+    def hasBattleNotifier(self):
+        return _CAPS.checkAny(self._bonusType, _CAPS.BATTLE_NOTIFIER)
 
 
 class _ArenaExtraDataVisitor(IArenaVisitor):
@@ -527,6 +527,9 @@ class _ClientArenaVisitor(IClientArenaVisitor):
 
     def hasDogTag(self):
         return self._bonus.hasDogTag()
+
+    def hasBattleNotifier(self):
+        return self._bonus.hasBattleNotifier()
 
     def isSoloTeam(self, team):
         return False

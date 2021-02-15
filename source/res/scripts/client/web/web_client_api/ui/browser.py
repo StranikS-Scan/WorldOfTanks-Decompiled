@@ -8,7 +8,7 @@ from helpers import dependency
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared.utils.functions import getViewName
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IBrowserController, IExternalLinksController, IBobController
+from skeletons.gui.game_control import IBrowserController, IExternalLinksController
 from web.web_client_api import WebCommandException, w2c, W2CSchema, Field
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 
@@ -30,12 +30,6 @@ class _OpenExternalBrowserSchema(W2CSchema):
 class _OpenBrowserOverlaySchema(W2CSchema):
     url = Field(required=True, type=basestring)
     blur_bg = Field(type=bool, default=False)
-
-
-class _OpenBobBrowserOverlaySchema(W2CSchema):
-    url = Field(required=True, type=basestring)
-    blur_bg = Field(type=bool, default=False)
-    back_url = Field(required=False, type=basestring)
 
 
 class _OpenBuyGoldOverlaySchema(W2CSchema):
@@ -124,12 +118,6 @@ class OpenBrowserOverlayWebApiMixin(object):
     @w2c(_OpenBrowserOverlaySchema, 'browser_overlay')
     def openBrowserOverlay(self, cmd):
         showBrowserOverlayView(cmd.url, alias=VIEW_ALIAS.WEB_VIEW_TRANSPARENT if cmd.blur_bg else VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW)
-
-    @w2c(_OpenBobBrowserOverlaySchema, 'bob_browser_overlay')
-    def opneBobBrowserOverlay(self, cmd):
-        showBrowserOverlayView(cmd.url, alias=VIEW_ALIAS.BOB_OVERLAY_CONTENT_VIEW)
-        bobController = dependency.instance(IBobController)
-        bobController.lactOpenedBobUrl = cmd.back_url
 
 
 class OpenBuyGoldWebApiMixin(object):

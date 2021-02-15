@@ -2,9 +2,9 @@
 # Embedded file name: scripts/client/gui/impl/lobby/demount_kit/selector_dialog.py
 import constants
 from frameworks.wulf import ViewSettings
-from goodies.goodie_constants import DEMOUNT_KIT_ID
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.game_control.wallet import WalletController
+from gui.goodies.demount_kit import getDemountKitForOptDevice
 from gui.goodies.goodie_items import DemountKit
 from gui.impl.backport import BackportTooltipWindow, createTooltipData
 from gui.impl.gen import R
@@ -37,7 +37,8 @@ class DemountOpDevDialog(BaseItemDialog):
             tooltipId = event.getArgument('tooltipId')
             args = []
             if tooltipId == TOOLTIPS_CONSTANTS.AWARD_DEMOUNT_KIT:
-                args = [DEMOUNT_KIT_ID]
+                demountKit, _ = getDemountKitForOptDevice(self._item)
+                args = [demountKit.goodieID]
             if tooltipId in (TOOLTIPS_CONSTANTS.GOLD_ALTERNATIVE_INFO, TOOLTIPS_CONSTANTS.GOLD_ALTERNATIVE_STATS, TOOLTIPS_CONSTANTS.AWARD_DEMOUNT_KIT):
                 window = BackportTooltipWindow(createTooltipData(isSpecial=True, specialAlias=tooltipId, specialArgs=args), self.getParentWindow())
                 window.load()
@@ -53,7 +54,7 @@ class DemountOpDevDialog(BaseItemDialog):
         super(DemountOpDevDialog, self)._finalize()
 
     def _onInventoryResync(self, *args, **kwargs):
-        dk = self._goodiesCache.getDemountKit()
+        dk, _ = getDemountKitForOptDevice(self._item)
         if not dk.enabled:
             self._onCancelClicked()
             return
@@ -107,7 +108,7 @@ class DemountOpDevDialog(BaseItemDialog):
         return self.viewModel.getSelectedItem() == SelectorDialogItemModel.DEMOUNT_KIT
 
     def _getAdditionalData(self):
-        dk = self._goodiesCache.getDemountKit()
+        dk, _ = getDemountKitForOptDevice(self._item)
         return {'useDemountKit': self._isUseDemountKit(),
          'openSingleDemountWindow': dk and not dk.enabled}
 
@@ -117,7 +118,7 @@ class DemountOpDevDialog(BaseItemDialog):
 
     def _setBaseParams(self, model):
         super(DemountOpDevDialog, self)._setBaseParams(model)
-        dk = self._goodiesCache.getDemountKit()
+        dk, _ = getDemountKitForOptDevice(self._item)
         goldEnought = self._isGoldEnought()
         if self.__forFitting:
             model.setTitleBody(R.strings.demount_kit.equipmentDemount.confirmationForFitting())
@@ -142,7 +143,7 @@ class DemountOpDevDialog(BaseItemDialog):
 
     def _onAcceptClicked(self):
         goldEnought = self._isGoldEnought()
-        dk = self._goodiesCache.getDemountKit()
+        dk, _ = getDemountKitForOptDevice(self._item)
         dkEnought = dk.inventoryCount > 0
         if not goldEnought and not dkEnought:
             showBuyGoldForEquipment(self.removalPrice.price.gold)

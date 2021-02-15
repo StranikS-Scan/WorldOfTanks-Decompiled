@@ -354,7 +354,7 @@ class Booster(BoosterUICommon):
         return _BOOSTER_TYPE_TEXT[self.boosterType]
 
     def getDescription(self, valueFormatter=None):
-        return _ms(MENU.boosterDescriptionLocale(self.boosterGuiType), effectValue=self.getFormattedValue(valueFormatter)) + _ms(MENU.BOOSTER_DESCRIPTION_EFFECTTIME, effectTime=self.getEffectTimeStr())
+        return _ms(MENU.boosterDescriptionLocale(self.boosterGuiType), effectValue=self.getFormattedValue(valueFormatter)) + _ms(MENU.BOOSTER_DESCRIPTION_EFFECTTIME, effectTime=self.getEffectTimeStr(True))
 
     def getBonusDescription(self, valueFormatter=None):
         return _ms(MENU.boosterBonusLocale(self.boosterGuiType), effectValue=self.getFormattedValue(valueFormatter), effectHours=self.getEffectTimeStr(hoursOnly=True))

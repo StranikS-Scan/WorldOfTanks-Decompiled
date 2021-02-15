@@ -21,6 +21,7 @@ from gui.Scaleform.daapi.view.lobby.techtree.settings import RequestState
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockStats
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.goodies.demount_kit import getDemountKitForOptDevice
 from gui.impl import backport
 from gui.impl.lobby.dialogs.auxiliary.buy_and_exchange_state_machine import BuyAndExchangeStateEnum
 from gui.shared import event_dispatcher as shared_events
@@ -764,7 +765,7 @@ class RemoveOptionalDevice(AsyncGUIItemAction):
             isOk, _ = yield future_async.await_callback(shared_events.showOptionalDeviceDestroy)(self.__device.intCD)
             callback(isOk)
         else:
-            demountKit = self.__goodiesCache.getDemountKit()
+            demountKit, _ = getDemountKitForOptDevice(self.__device)
             isDkEnabled = demountKit and demountKit.enabled
             if self.__device.isDeluxe or not isDkEnabled:
                 dialog = shared_events.showOptionalDeviceDemountSinglePrice

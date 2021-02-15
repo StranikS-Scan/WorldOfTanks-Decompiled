@@ -21,7 +21,7 @@ from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.base.ctx import PrbAction, LeavePrbAction
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
-from gui.shared import event_dispatcher, events, g_eventBus, EVENT_BUS_SCOPE
+from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
@@ -30,8 +30,7 @@ from helpers.statistics import HARDWARE_SCORE_PARAMS
 from season_provider import SeasonProvider
 from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.battle_results import IBattleResultsService
-from skeletons.gui.game_control import IBattleRoyaleController, IEventProgressionController
+from skeletons.gui.game_control import IBattleRoyaleController
 from skeletons.gui.game_control import IEventsNotificationsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -42,6 +41,15 @@ from skeletons.gui.shared.hangar_spaces_switcher import IHangarSpacesSwitcher
 from gui.ClientHangarSpace import SERVER_CMD_CHANGE_HANGAR, SERVER_CMD_CHANGE_HANGAR_PREM
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.customization import ICustomizationService
+from skeletons.connection_mgr import IConnectionManager
+from gui.game_control.links import URLMacros
+from web.web_client_api.battle_royale import createBattleRoyaleWebHanlders
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from gui.shared.utils.functions import getUniqueViewName
+from gui.ranked_battles.constants import PrimeTimeStatus
+from predefined_hosts import g_preDefinedHosts
+from gui.server_events.events_constants import BATTLE_ROYALE_GROUPS_ID
 _logger = logging.getLogger(__name__)
 
 class BATTLE_ROYALE_GAME_LIMIT_TYPE(object):
@@ -55,28 +63,27 @@ PERFORMANCE_GROUP_LIMITS = {BattleRoyalePerfProblems.HIGH_RISK: [{BATTLE_ROYALE_
  BattleRoyalePerfProblems.MEDIUM_RISK: [{BATTLE_ROYALE_GAME_LIMIT_TYPE.HARDWARE_PARAMS: {HARDWARE_SCORE_PARAMS.PARAM_GPU_SCORE: 150}}, {BATTLE_ROYALE_GAME_LIMIT_TYPE.HARDWARE_PARAMS: {HARDWARE_SCORE_PARAMS.PARAM_CPU_SCORE: 50000}}]}
 
 class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController, IGlobalListener):
+    __slots__ = ('onUpdated', 'onPrimeTimeStatusUpdated', 'onEquipmentReset', 'onGunUpdate', '__clientValuesInited', '__clientShields', '__performanceGroup', '__serverSettings', '__battleRoyaleSettings', '__wasInLobby', '__equipmentCount', '__equipmentSlots', '__voControl', '__defaultHangars', '__c11nVisible', '__isNeedToUpdateHeroTank')
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __eventsCache = dependency.descriptor(IEventsCache)
     __itemsCache = dependency.descriptor(IItemsCache)
     __hangarsSpace = dependency.descriptor(IHangarSpace)
     __settingsCore = dependency.descriptor(ISettingsCore)
-    __battleResultsService = dependency.descriptor(IBattleResultsService)
     __hangarSpacesSwitcher = dependency.descriptor(IHangarSpacesSwitcher)
     __hangarSpaceReloader = dependency.descriptor(IHangarSpaceReloader)
-    __eventProgression = dependency.descriptor(IEventProgressionController)
     __notificationsCtrl = dependency.descriptor(IEventsNotificationsController)
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     __c11nService = dependency.descriptor(ICustomizationService)
+    __connectionMgr = dependency.descriptor(IConnectionManager)
     TOKEN_QUEST_ID = 'token:br:title:'
-    DAILY_QUEST_ID = 'steel_hunter'
-    MODE_ALIAS = 'battleRoyale'
-    PROGRESSION_XP_TOKEN = 'token:br:point'
     MAX_STORED_ARENAS_RESULTS = 20
 
     def __init__(self):
         super(BattleRoyaleController, self).__init__()
         self.onUpdated = Event.Event()
         self.onPrimeTimeStatusUpdated = Event.Event()
+        self.onEquipmentReset = Event.Event()
+        self.onGunUpdate = Event.Event()
         self._setSeasonSettingsProvider(self.getModeSettings)
         self._setPrimeTimesIteratorGetter(self.getPrimeTimesIter)
         self.__clientValuesInited = False
@@ -88,17 +95,17 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.__equipmentCount = {}
         self.__equipmentSlots = tuple()
         self.__voControl = None
-        self.__playerMaxLevel = 0
-        self.__levelProgress = tuple()
-        self.__shownBattleResultsForArena = []
         self.__defaultHangars = {}
         self.__c11nVisible = False
+        self.__urlMacros = None
+        self.__isNeedToUpdateHeroTank = False
         return
 
     def init(self):
         super(BattleRoyaleController, self).init()
         self.__voControl = BRVoiceOverController()
         self.__voControl.init()
+        self.__urlMacros = URLMacros()
         self.addNotificator(SimpleNotifier(self.getTimer, self.__timerUpdate))
 
     def fini(self):
@@ -106,6 +113,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.__voControl = None
         self.__equipmentCount = None
         self.__defaultHangars = None
+        self.__urlMacros = None
         self.onUpdated.clear()
         self.onPrimeTimeStatusUpdated.clear()
         self.clearNotification()
@@ -124,17 +132,16 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.startGlobalListening()
         self.__hangarsSpace.onSpaceChangedByAction += self.__onSpaceChanged
         self.__hangarsSpace.onSpaceChanged += self.__onSpaceChanged
+        self.__hangarsSpace.onVehicleChanged += self.__onVehicleChanged
         self.__c11nService.onVisibilityChanged += self.__onC11nVisibilityChanged
         self.__notificationsCtrl.onEventNotificationsChanged += self.__onEventNotification
         self.__onEventNotification(self.__notificationsCtrl.getEventsNotifications())
         self.__updateMode()
         self.__wasInLobby = True
-        self.__updateMaxLevelAndProgress()
         if not self.__hangarsSpace.spaceInited or self.__hangarsSpace.spaceLoading():
             self.__hangarsSpace.onSpaceCreate += self.__onSpaceCreate
         else:
             self.__updateSpace()
-        self.__eventProgression.onUpdated += self.__eventAvailabilityUpdate
         nextTick(self.__eventAvailabilityUpdate)()
 
     def __onEventNotification(self, added, removed=()):
@@ -162,12 +169,10 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
 
     def onAccountBecomePlayer(self):
         self.__onServerSettingsChanged(self.__lobbyContext.getServerSettings())
-        self.__battleResultsService.onResultPosted += self.__showBattleResults
         super(BattleRoyaleController, self).onAccountBecomePlayer()
 
     def onAvatarBecomePlayer(self):
         self.__clear()
-        self.__battleResultsService.onResultPosted -= self.__showBattleResults
         if self.__sessionProvider.arenaVisitor.getArenaBonusType() in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
             self.__voControl.activate()
         else:
@@ -238,6 +243,9 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
 
         return result
 
+    def isActive(self):
+        return self.isEnabled() and self.getCurrentSeason() is not None and self.getCurrentCycleInfo()[1]
+
     def isBattleRoyaleMode(self):
         dispatcher = self.prbDispatcher
         if dispatcher is not None:
@@ -245,6 +253,10 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
             return state.isInPreQueue(queueType=QUEUE_TYPE.BATTLE_ROYALE) or state.isInUnit(PREBATTLE_TYPE.BATTLE_ROYALE)
         else:
             return False
+
+    def isBattlePassAvailable(self):
+        battlePassConfig = self.__lobbyContext.getServerSettings().getBattlePassConfig()
+        return battlePassConfig.isGameModeEnabled(ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO)
 
     def isInBattleRoyaleSquad(self):
         dispatcher = self.prbDispatcher
@@ -276,28 +288,95 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
             self.__doSelectRandomPrb(dispatcher)
             return
 
+    def hasAvailablePrimeTimeServers(self):
+        if self.__connectionMgr.isStandalone():
+            allPeripheryIDs = {self.__connectionMgr.peripheryID}
+        else:
+            allPeripheryIDs = set([ host.peripheryID for host in g_preDefinedHosts.hostsWithRoaming() ])
+        for peripheryID in allPeripheryIDs:
+            primeTimeStatus, _, _ = self.getPrimeTimeStatus(peripheryID)
+            if primeTimeStatus == PrimeTimeStatus.AVAILABLE:
+                return True
+
+        return False
+
     def getPlayerLevelInfo(self):
         return self.__itemsCache.items.battleRoyale.accTitle
 
-    def getMaxPlayerLevel(self):
-        return self.__playerMaxLevel
+    def isInPrimeTime(self):
+        _, _, isNow = self.getPrimeTimeStatus()
+        return isNow
 
-    def getPointsProgressForLevel(self, level):
-        if self.__playerMaxLevel == 0:
-            self.__updateMaxLevelAndProgress()
-        return self.__levelProgress[level]
+    def isFrozen(self):
+        for primeTime in self.getPrimeTimes().values():
+            if primeTime.hasAnyPeriods():
+                return False
+
+        return True
 
     def getStats(self):
         return self.__itemsCache.items.battleRoyale
 
+    @process
+    def openURL(self, url=None):
+        requestUrl = url or self.__battleRoyaleSettings.url
+        if requestUrl:
+            parsedUrl = yield self.__urlMacros.parse(requestUrl)
+            if parsedUrl:
+                self.__showBrowserView(parsedUrl)
+
+    def getQuests(self):
+        return {k:v for k, v in self.__eventsCache.getQuests().items() if v.getGroupID() == BATTLE_ROYALE_GROUPS_ID and self.__tokenIsValid(v)} if self.getCurrentCycleInfo()[1] else {}
+
+    def isDailyQuestsRefreshAvailable(self):
+        dayTimeLeft = time_utils.getDayTimeLeft()
+        cycleTimeLeft = self.getCurrentCycleTimeLeft()
+        currentPrimeTimeEnd = self.getCurrentPrimeTimeEnd()
+        if currentPrimeTimeEnd is None:
+            return False
+        else:
+            primeTimeTimeLeft = currentPrimeTimeEnd - time_utils.getCurrentLocalServerTimestamp()
+            state1 = self.hasPrimeTimesLeft() or primeTimeTimeLeft > dayTimeLeft
+            state2 = cycleTimeLeft > dayTimeLeft
+            return state1 and state2
+
+    def getCurrentCycleTimeLeft(self):
+        currentCycleEndTime, isCycleActive = self.getCurrentCycleInfo()
+        cycleTimeLeft = currentCycleEndTime - time_utils.getCurrentLocalServerTimestamp() if isCycleActive else None
+        return cycleTimeLeft
+
+    def getCurrentPrimeTimeEnd(self):
+        primeTimes = self.getPrimeTimes()
+        currentPrimeTimeEnd = None
+        for primeTime in primeTimes.values():
+            periods = primeTime.getPeriodsActiveForTime(time_utils.getCurrentLocalServerTimestamp())
+            for period in periods:
+                _, endTime = period
+                currentPrimeTimeEnd = max(endTime, currentPrimeTimeEnd)
+
+        return currentPrimeTimeEnd
+
+    def hasPrimeTimesLeft(self):
+        currentCycleEndTime, isCycleActive = self.getCurrentCycleInfo()
+        if not isCycleActive:
+            return False
+        primeTimes = self.getPrimeTimes()
+        return any([ primeTime.getNextPeriodStart(time_utils.getCurrentLocalServerTimestamp(), currentCycleEndTime) for primeTime in primeTimes.values() ])
+
+    def __showBrowserView(self, url):
+        webHandlers = createBattleRoyaleWebHanlders()
+        alias = VIEW_ALIAS.BROWSER_VIEW
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias, getUniqueViewName(alias)), ctx={'url': url,
+         'webHandlers': webHandlers,
+         'returnAlias': VIEW_ALIAS.LOBBY_HANGAR,
+         'onServerSettingsChange': self.__serverSettingsChangeBrowserHandler}), EVENT_BUS_SCOPE.LOBBY)
+
+    def __serverSettingsChangeBrowserHandler(self, browser, diff):
+        if not diff.get(Configs.BATTLE_ROYALE_CONFIG.value, {}).get('isEnabled'):
+            browser.onCloseView()
+
     def _createSeason(self, cycleInfo, seasonData):
         return BattleRoyaleSeason(cycleInfo, seasonData)
-
-    def __updateMaxLevelAndProgress(self):
-        eventProgression = self.getModeSettings().eventProgression
-        if eventProgression:
-            self.__levelProgress = eventProgression['brPointsByTitle'] + (0,)
-            self.__playerMaxLevel = len(self.__levelProgress) - 1
 
     def __onSpaceChanged(self):
         switchItems = self.__hangarSpacesSwitcher.itemsToSwitch
@@ -305,10 +384,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
             self.selectRandomBattle()
 
     def __eventAvailabilityUpdate(self, *_):
-        season = self.__eventProgression.getCurrentSeason()
-        isEnabled = self.__eventProgression.isSteelHunter and self.__eventProgression.modeIsEnabled()
-        isEnabledSeason = season is not None
-        battleRoyaleEnabled = isEnabled and isEnabledSeason
+        battleRoyaleEnabled = self.isEnabled() and self.getCurrentSeason() is not None
         if not battleRoyaleEnabled and self.isBattleRoyaleMode():
             self.selectRandomBattle()
         return
@@ -323,6 +399,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
             isBrMode = self.isBattleRoyaleMode()
             if isBrMode and not isBrSpace:
                 g_eventBus.handleEvent(events.HangarSpacesSwitcherEvent(events.HangarSpacesSwitcherEvent.SWITCH_TO_HANGAR_SPACE, ctx={'switchItemName': switchItems.BATTLE_ROYALE}), scope=EVENT_BUS_SCOPE.LOBBY)
+                self.__isNeedToUpdateHeroTank = True
             elif not isBrMode and isBrSpace:
                 defaultHangarPath = self.__defaultHangars.get(self.__hangarsSpace.isPremium)
                 if defaultHangarPath is not None:
@@ -345,7 +422,9 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
             royaleVehicle = first(sorted(vehicles(criteria=criteria).values(), key=lambda item: item.intCD))
             if royaleVehicle:
                 royaleVehicleID = royaleVehicle.invID
-        if royaleVehicleID:
+        if self.__c11nVisible:
+            pass
+        elif royaleVehicleID:
             g_currentVehicle.selectVehicle(royaleVehicleID)
         else:
             g_currentVehicle.selectNoVehicle()
@@ -447,7 +526,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.__hangarsSpace.onSpaceChangedByAction -= self.__onSpaceChanged
         self.__hangarsSpace.onSpaceChanged -= self.__onSpaceChanged
         self.__hangarsSpace.onSpaceCreate -= self.__onSpaceCreate
-        self.__eventProgression.onUpdated -= self.__eventAvailabilityUpdate
+        self.__hangarsSpace.onVehicleChanged -= self.__onVehicleChanged
         self.__notificationsCtrl.onEventNotificationsChanged -= self.__onEventNotification
         self.__c11nService.onVisibilityChanged -= self.__onC11nVisibilityChanged
         self.__defaultHangars = {}
@@ -500,24 +579,18 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
 
         return
 
-    def __showBattleResults(self, reusableInfo, _, resultsWindow):
-        battleRoyaleArenaTypes = (ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD)
-        if reusableInfo.common.arenaBonusType in battleRoyaleArenaTypes:
-            batleRoyaleInfo = reusableInfo.personal.getBattleRoyaleInfo()
-            title, _ = batleRoyaleInfo.get('accBRTitle', (None, None))
-            prevTitle, _ = batleRoyaleInfo.get('prevBRTitle', (None, None))
-            if title == prevTitle:
-                return None
-            arenaUniqueID = reusableInfo.arenaUniqueID
-            if arenaUniqueID not in self.__shownBattleResultsForArena:
-                self.__shownBattleResultsForArena.append(arenaUniqueID)
-                self.__shownBattleResultsForArena = self.__shownBattleResultsForArena[-self.MAX_STORED_ARENAS_RESULTS:]
-                event_dispatcher.showBattleRoyaleLevelUpWindow(reusableInfo, resultsWindow)
-        return None
-
     def __onC11nVisibilityChanged(self, isVisible):
         self.__c11nVisible = isVisible
         self.__updateSpace()
+
+    def __onVehicleChanged(self):
+        if self.__isNeedToUpdateHeroTank:
+            self.__hangarsSpace.onHeroTankReady()
+            self.__isNeedToUpdateHeroTank = False
+
+    def __tokenIsValid(self, quest):
+        tokens = quest.accountReqs.getTokens()
+        return False if tokens and not tokens[0].isAvailable() else True
 
     def getPrimeTimesIter(self, primeTimes):
         for primeTime in primeTimes.itervalues():

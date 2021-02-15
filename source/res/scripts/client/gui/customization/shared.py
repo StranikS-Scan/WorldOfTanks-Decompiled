@@ -54,9 +54,9 @@ EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES = {GUI_ITEM_TYPE.PAINT: C11nId(Area.HULL
  GUI_ITEM_TYPE.CAMOUFLAGE: C11nId(Area.HULL, GUI_ITEM_TYPE.CAMOUFLAGE, 0)}
 
 class PurchaseItem(object):
-    __slots__ = ('item', 'price', 'areaID', 'slotType', 'regionIdx', 'selected', 'group', 'isFromInventory', 'component', 'locked', 'isEdited')
+    __slots__ = ('item', 'price', 'areaID', 'slotType', 'regionIdx', 'selected', 'group', 'isFromInventory', 'component', 'locked', 'isEdited', 'progressionLevel')
 
-    def __init__(self, item, price, areaID, slotType, regionIdx, selected, group, isFromInventory=False, component=None, locked=False, isEdited=False):
+    def __init__(self, item, price, areaID, slotType, regionIdx, selected, group, isFromInventory=False, component=None, locked=False, isEdited=False, progressionLevel=-1):
         self.item = item
         self.price = price
         self.areaID = areaID
@@ -68,6 +68,7 @@ class PurchaseItem(object):
         self.component = component
         self.locked = locked
         self.isEdited = isEdited
+        self.progressionLevel = progressionLevel
 
     def getOrderKey(self):
         return self.item.itemTypeID if not self.isEdited else self.item.itemTypeID << _EDITED_ITEM_ORDER_SHIFT

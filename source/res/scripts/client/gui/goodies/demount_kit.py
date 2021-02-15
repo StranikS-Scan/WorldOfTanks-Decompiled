@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/gui/goodies/demount_kit.py
 import Event
 from account_helpers.AccountSettings import AccountSettings, DEMOUNT_KIT_SEEN
-from goodies.goodie_constants import DEMOUNT_KIT_ID
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.goodies.goodie_items import DemountKit
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
@@ -11,12 +11,19 @@ from skeletons.gui.demount_kit import IDemountKitNovelty
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
 
-def isDemountKitApplicableTo(module):
-    if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and not module.isRemovable and not module.isDeluxe:
-        goodiesCache = dependency.instance(IGoodiesCache)
-        demountKit = goodiesCache.getDemountKit(DEMOUNT_KIT_ID)
+def isDemountKitApplicableTo(optDevice):
+    if optDevice.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and not optDevice.isRemovable and not optDevice.isDeluxe:
+        demountKit, _ = getDemountKitForOptDevice(optDevice)
         return demountKit and demountKit.enabled
     return False
+
+
+def getDemountKitForOptDevice(optDevice):
+    itemsCache = dependency.instance(IItemsCache)
+    goodiesCache = dependency.instance(IGoodiesCache)
+    currency = optDevice.getRemovalPrice(itemsCache.items).getCurrency()
+    demountKit = goodiesCache.getDemountKit(currency=currency)
+    return (demountKit, currency)
 
 
 class DemountKitNovelty(IDemountKitNovelty):

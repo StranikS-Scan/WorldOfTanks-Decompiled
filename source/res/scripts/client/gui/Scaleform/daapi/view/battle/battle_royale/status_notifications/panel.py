@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/battle_royale/status_notifications/panel.py
 import logging
+from constants import IS_CHINA
 import BigWorld
 from helpers import dependency
 import BattleReplay
@@ -73,6 +74,8 @@ class StatusNotificationTimerPanel(StatusNotificationsPanelMeta, MethodsRules):
     def _dispose(self):
         self.__container.destroy()
         self.__container = None
+        if BattleReplay.isPlaying():
+            self.__onCollectionUpdated([])
         g_replayEvents.onPause -= self.__onReplayPaused
         crosshairCtrl = self._sessionProvider.shared.crosshair
         if crosshairCtrl is not None:
@@ -84,8 +87,14 @@ class StatusNotificationTimerPanel(StatusNotificationsPanelMeta, MethodsRules):
         data = []
         link = BATTLE_NOTIFICATIONS_TIMER_LINKAGES.DESTROY_TIMER_UI
         self._addNotificationTimerSetting(data, BATTLE_NOTIFICATIONS_TIMER_TYPES.DROWN, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.DROWN_ICON, link)
-        self._addNotificationTimerSetting(data, BATTLE_NOTIFICATIONS_TIMER_TYPES.DEATH_ZONE, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.DEATHZONE_ICON, link)
-        self._addNotificationTimerSetting(data, BATTLE_NOTIFICATIONS_TIMER_TYPES.DAMAGING_ZONE, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.DAMAGING_DEATHZONE_ICON, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.BATTLE_ROYALE_TIMER_UI, BATTLE_NOTIFICATIONS_TIMER_COLORS.RED, countdownVisible=False)
+        if IS_CHINA:
+            deathZoneIcon = BATTLE_NOTIFICATIONS_TIMER_LINKAGES.DEATHZONE_ICON_CN
+            damaginDeathZoneIcon = BATTLE_NOTIFICATIONS_TIMER_LINKAGES.DAMAGING_DEATHZONE_ICON_CN
+        else:
+            deathZoneIcon = BATTLE_NOTIFICATIONS_TIMER_LINKAGES.DEATHZONE_ICON
+            damaginDeathZoneIcon = BATTLE_NOTIFICATIONS_TIMER_LINKAGES.DAMAGING_DEATHZONE_ICON
+        self._addNotificationTimerSetting(data, BATTLE_NOTIFICATIONS_TIMER_TYPES.DEATH_ZONE, deathZoneIcon, link)
+        self._addNotificationTimerSetting(data, BATTLE_NOTIFICATIONS_TIMER_TYPES.DAMAGING_ZONE, damaginDeathZoneIcon, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.BATTLE_ROYALE_TIMER_UI, BATTLE_NOTIFICATIONS_TIMER_COLORS.RED, countdownVisible=False)
         self._addNotificationTimerSetting(data, BATTLE_NOTIFICATIONS_TIMER_TYPES.OVERTURNED, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.OVERTURNED_ICON, link)
         self._addNotificationTimerSetting(data, BATTLE_NOTIFICATIONS_TIMER_TYPES.FIRE, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.FIRE_ICON, link)
         self._addNotificationTimerSetting(data, BATTLE_NOTIFICATIONS_TIMER_TYPES.HALF_OVERTURNED, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.HALF_OVERTURNED_ICON, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.BATTLE_ROYALE_DESTROY_TIMER_UI, noiseVisible=False, pulseVisible=False, iconOffsetY=-10)

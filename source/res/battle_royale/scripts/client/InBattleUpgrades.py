@@ -2,6 +2,7 @@
 # Embedded file name: battle_royale/scripts/client/InBattleUpgrades.py
 import BigWorld
 from debug_utils import LOG_NOTE
+from wotdecorators import noexcept
 
 class InBattleUpgrades(BigWorld.DynamicScriptComponent):
 
@@ -22,15 +23,25 @@ class InBattleUpgrades(BigWorld.DynamicScriptComponent):
     def onVehicleUpgraded(self, newVehCompactDescr, newVehOutfitCompactDescr):
         vehicle = self.entity
         vehicle.isUpgrading = True
+        self.__onVehicleUpgraded(vehicle, newVehCompactDescr, newVehOutfitCompactDescr)
+        vehicle.isUpgrading = False
+
+    @noexcept
+    def __onVehicleUpgraded(self, vehicle, newVehCompactDescr, newVehOutfitCompactDescr):
+        vehicleID = vehicle.id
         if vehicle.isPlayerVehicle:
             inputHandler = BigWorld.player().inputHandler
             inputHandler.onControlModeChanged('arcade')
         progressionCtrl = vehicle.guiSessionProvider.dynamic.progression
         if progressionCtrl is not None:
-            progressionCtrl.vehicleVisualChangingStarted(vehicle.id)
-        vehicle.respawnVehicle(vehicle.id, newVehCompactDescr, newVehOutfitCompactDescr)
-        vehicle.isUpgrading = False
+            progressionCtrl.vehicleVisualChangingStarted(vehicleID)
+        if vehicle.isMyVehicle:
+            BigWorld.player().waitOnEnterWorld.startWait(vehicleID)
+        vehicle.respawnVehicle(vehicleID, newVehCompactDescr, newVehOutfitCompactDescr)
         return
+
+    def testClientMethod(self):
+        pass
 
     def set_upgradeReadinessTime(self, prev):
         LOG_NOTE('Vehicle upgrade readiness time changed')

@@ -6,10 +6,12 @@ from gui.shared.utils import graphics
 from gui.shared.utils.monitor_settings import g_monitorSettings
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.lobby_context import ILobbyContext
 _DEFERRED_RENDER_IDX = 0
 
 class SettingsParams(object):
     settingsCore = dependency.descriptor(ISettingsCore)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __settingsDiffPreprocessing(self, diff):
         for option in settings_constants.FEEDBACK.ALL():
@@ -36,7 +38,7 @@ class SettingsParams(object):
          settings_constants.FEEDBACK.DAMAGE_INDICATOR: self.getDamageIndicatorSettings(),
          settings_constants.FEEDBACK.BATTLE_EVENTS: self.getBattleEventsSettings(),
          settings_constants.FEEDBACK.BATTLE_BORDER_MAP: self.getBattleBorderMapSettings(),
-         settings_constants.FEEDBACK.QUESTS_PROGRESS: self.getQuestsProgressSettings()}
+         settings_constants.FEEDBACK.QUESTS_PROGRESS: self.getQuestsProgressAndScorePanelSettings()}
 
     def getOtherSettings(self):
         return self.settingsCore.packSettings(settings_constants.OTHER.ALL())
@@ -53,8 +55,10 @@ class SettingsParams(object):
     def getBattleBorderMapSettings(self):
         return self.settingsCore.packSettings(settings_constants.BATTLE_BORDER_MAP.ALL())
 
-    def getQuestsProgressSettings(self):
-        return self.settingsCore.packSettings(settings_constants.QUESTS_PROGRESS.ALL())
+    def getQuestsProgressAndScorePanelSettings(self):
+        settings = self.settingsCore.packSettings(settings_constants.QUESTS_PROGRESS.ALL() + settings_constants.ScorePanelStorageKeys.ALL())
+        settings['allowQuestProgress'] = self.lobbyContext.getServerSettings().isPMBattleProgressEnabled()
+        return settings
 
     def getAimSettings(self):
         return self.settingsCore.packSettings(settings_constants.AIM.ALL())

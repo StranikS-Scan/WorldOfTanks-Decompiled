@@ -38,3 +38,6 @@ class InBattleUpgradesAvatar(BigWorld.DynamicScriptComponent):
         player = self.entity
         if player.guiSessionProvider.shared.ammo:
             player.guiSessionProvider.shared.ammo.clear(leave=False)
+
+    def testAvatarMethod(self):
+        LOG_DEBUG('testAvatarMethod')

@@ -21,6 +21,10 @@ class SlotData(object):
         self.intCD = intCD
         self.component = component
 
+    def __str__(self):
+        result = '\n SlotData (intCD={}, component={}): '.format(self.intCD, self.component)
+        return result
+
     def isEqual(self, other):
         return self.intCD == other.intCD and self.component == other.component
 

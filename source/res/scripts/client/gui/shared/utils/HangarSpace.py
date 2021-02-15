@@ -228,7 +228,7 @@ class HangarSpace(IHangarSpace):
         self.__spaceDestroyedDuringLoad = False
         if not self.__spaceInited:
             LOG_DEBUG('HangarSpace::init')
-            Waiting.show('loadHangarSpace', overlapsUI=False)
+            Waiting.show('loadHangarSpace')
             self.__inited = True
             self.__isSpacePremium = isPremium
             self.__igrSpaceType = self.igrCtrl.getRoomType()
@@ -288,19 +288,19 @@ class HangarSpace(IHangarSpace):
 
     @g_execute_after_hangar_space_inited
     @uniprof.regionDecorator(label='hangar.vehicle.loading', scope='enter')
-    def updateVehicle(self, vehicle):
+    def updateVehicle(self, vehicle, outfit=None):
         if self.__inited:
             self.__isModelLoaded = False
             self.onVehicleChangeStarted()
             self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.START_LOADING_VEHICLE)
-            self.__space.recreateVehicle(vehicle.descriptor, vehicle.modelState)
+            self.__space.recreateVehicle(vehicle.descriptor, vehicle.modelState, outfit=outfit)
             self.__lastUpdatedVehicle = vehicle
         else:
             Waiting.hide('loadHangarSpaceVehicle')
 
-    def startToUpdateVehicle(self, vehicle):
-        Waiting.show('loadHangarSpaceVehicle', isSingle=True, overlapsUI=False)
-        self.updateVehicle(vehicle)
+    def startToUpdateVehicle(self, vehicle, outfit=None):
+        Waiting.show('loadHangarSpaceVehicle', isSingle=True)
+        self.updateVehicle(vehicle, outfit)
 
     def __handleKeyEvent(self, event):
         if event.key == Keys.KEY_LEFTMOUSE:
@@ -310,16 +310,20 @@ class HangarSpace(IHangarSpace):
                 self.onMouseUp()
 
     @g_execute_after_hangar_space_inited
-    def updatePreviewVehicle(self, vehicle):
+    def updatePreviewVehicle(self, vehicle, outfit=None):
         if self.__inited:
             self.__isModelLoaded = False
             self.onVehicleChangeStarted()
-            Waiting.show('loadHangarSpaceVehicle', isSingle=True, overlapsUI=False)
-            self.__space.recreateVehicle(vehicle.descriptor, vehicle.modelState)
+            Waiting.show('loadHangarSpaceVehicle', isSingle=True)
+            self.__space.recreateVehicle(vehicle.descriptor, vehicle.modelState, outfit=outfit)
             self.__lastUpdatedVehicle = vehicle
 
     def getVehicleEntity(self):
         return self.__space.getVehicleEntity() if self.__inited else None
+
+    def getVehicleEntityAppearance(self):
+        entity = self.getVehicleEntity()
+        return entity.appearance if entity is not None else None
 
     def updateVehicleOutfit(self, outfit):
         if self.__inited:
@@ -333,7 +337,7 @@ class HangarSpace(IHangarSpace):
         if self.__inited:
             self.__isModelLoaded = False
             self.onVehicleChangeStarted()
-            Waiting.show('loadHangarSpaceVehicle', isSingle=True, overlapsUI=False)
+            Waiting.show('loadHangarSpaceVehicle', isSingle=True)
             if self.__space is not None:
                 self.__space.removeVehicle()
             Waiting.hide('loadHangarSpaceVehicle')

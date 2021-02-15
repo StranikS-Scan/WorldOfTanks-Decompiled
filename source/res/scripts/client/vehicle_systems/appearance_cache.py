@@ -9,6 +9,7 @@ from items import vehicles
 from gui.shared.utils.MethodsRules import MethodsRules
 from vehicle_systems.CompoundAppearance import CompoundAppearance
 from vehicle_systems.stricted_loading import loadingPriority, makeCallbackWeak
+from ids_generators import Int32IDGenerator
 _ENABLE_CACHE_TRACKER = False
 _ENABLE_PRECACHE = True
 _VehicleInfo = namedtuple('_VehicleInfo', ['typeDescr',
@@ -17,6 +18,12 @@ _VehicleInfo = namedtuple('_VehicleInfo', ['typeDescr',
  'isTurretDetached',
  'outfitCD'])
 _AssemblerData = namedtuple('_AssemblerData', ['appearance', 'info', 'prereqsNames'])
+_loadingResourceId = 0
+_idGenerator = Int32IDGenerator()
+
+def isPrecacheEnabled():
+    return _ENABLE_PRECACHE
+
 
 class _AppearanceCache(MethodsRules):
     __slots__ = ('__arena', '__appearanceCache', '__assemblersCache', '__spaceLoaded', '__wholeVehResources', '__dCacheInfo')
@@ -224,7 +231,7 @@ class _AppearanceCache(MethodsRules):
             del self.__assemblersCache[vId]
         self.__assemblersCache[vId] = _AssemblerData(appearance, info, prereqs)
         if self.__spaceLoaded:
-            BigWorld.loadResourceListBG(prereqs, makeCallbackWeak(_resourceLoaded, prereqs, vId), loadingPriority(vId))
+            _loadResource(prereqs, vId)
         return prereqs
 
     def __validateAppearanceWithInfo(self, appearance, info):
@@ -267,7 +274,15 @@ class _AppearanceCache(MethodsRules):
 
 _g_cache = _AppearanceCache()
 
-def _resourceLoaded(resNames, vId, resourceRefs):
+def _loadResource(prereqs, vId):
+    global _loadingResourceId
+    _loadingResourceId = _idGenerator.next()
+    BigWorld.loadResourceListBG(prereqs, makeCallbackWeak(_resourceLoaded, prereqs, vId, _loadingResourceId), loadingPriority(vId))
+
+
+def _resourceLoaded(resNames, vId, loadedResourceId, resourceRefs):
+    if _loadingResourceId != loadedResourceId:
+        return
     if not _g_cache.isArenaSet():
         return
     failedRefs = resourceRefs.failedIDs

@@ -8,6 +8,7 @@ import BigWorld
 import Event
 import SoundGroups
 from AvatarInputHandler.AimingSystems import getShotTargetInfo
+from aih_constants import CTRL_MODE_NAME
 from constants import VEHICLE_SETTING, EQUIPMENT_STAGES, ARENA_BONUS_TYPE
 from gui.Scaleform.genConsts.ANIMATION_TYPES import ANIMATION_TYPES
 from gui.battle_control import avatar_getter, vehicle_getter
@@ -412,6 +413,7 @@ class _RepairCrewAndModules(_ExpandedItem):
 
 
 class _OrderItem(_TriggerItem):
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def deactivate(self):
         if self._descriptor is not None:
@@ -427,10 +429,13 @@ class _OrderItem(_TriggerItem):
 
     def update(self, quantity, stage, timeRemaining, totalTime):
         from AvatarInputHandler import MapCaseMode
-        if stage == EQUIPMENT_STAGES.PREPARING and self._stage != stage:
+        if stage == EQUIPMENT_STAGES.PREPARING and self._stage != stage and self._needActivateMapCase():
             MapCaseMode.activateMapCase(self.getEquipmentID(), partial(self.deactivate), self.isArcadeCamera())
         elif self._stage == EQUIPMENT_STAGES.PREPARING and self._stage != stage:
-            MapCaseMode.turnOffMapCase(self.getEquipmentID(), self.isArcadeCamera())
+            if self._needActivateMapCase():
+                MapCaseMode.turnOffMapCase(self.getEquipmentID(), self.isArcadeCamera())
+            else:
+                self.deactivate()
         super(_OrderItem, self).update(quantity, stage, timeRemaining, totalTime)
 
     def _getErrorMsg(self):
@@ -438,6 +443,11 @@ class _OrderItem(_TriggerItem):
 
     def isArcadeCamera(self):
         return False
+
+    def _needActivateMapCase(self):
+        inputHandler = avatar_getter.getInputHandler()
+        arenaVisitor = self.__sessionProvider.arenaVisitor
+        return not (inputHandler.ctrlModeName == CTRL_MODE_NAME.POSTMORTEM and arenaVisitor.getArenaBonusType() in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE) if inputHandler is not None and arenaVisitor is not None else True
 
 
 class _ArtilleryItem(_OrderItem):
@@ -1005,6 +1015,7 @@ class _ReplayRepairKitItem(_ReplayItem):
 
 
 class _ReplayOrderItem(_ReplayItem):
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def deactivate(self):
         if self._descriptor is not None:
@@ -1013,11 +1024,19 @@ class _ReplayOrderItem(_ReplayItem):
 
     def update(self, quantity, stage, timeRemaining, totalTime):
         from AvatarInputHandler import MapCaseMode
-        if stage == EQUIPMENT_STAGES.PREPARING and self._stage != stage:
+        if stage == EQUIPMENT_STAGES.PREPARING and self._stage != stage and self._needActivateMapCase():
             MapCaseMode.activateMapCase(self.getEquipmentID(), partial(self.deactivate))
         elif self._stage == EQUIPMENT_STAGES.PREPARING and self._stage != stage:
-            MapCaseMode.turnOffMapCase(self.getEquipmentID())
+            if self._needActivateMapCase():
+                MapCaseMode.turnOffMapCase(self.getEquipmentID())
+            else:
+                self.deactivate()
         super(_ReplayOrderItem, self).update(quantity, stage, timeRemaining, totalTime)
+
+    def _needActivateMapCase(self):
+        inputHandler = avatar_getter.getInputHandler()
+        arenaVisitor = self.__sessionProvider.arenaVisitor
+        return not (inputHandler.ctrlModeName == CTRL_MODE_NAME.POSTMORTEM and arenaVisitor.getArenaBonusType() in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE) if inputHandler is not None and arenaVisitor is not None else True
 
 
 class _ReplayArtilleryItem(_ReplayOrderItem):
@@ -1180,6 +1199,39 @@ class _ReplayAfterburningItem(_ReplayItem):
         self.__playingSoundObj.play()
 
 
+class _ReplayLargeRepairKitSteelHunterItem(_ReplayItem):
+    __slots__ = ('__totalCooldownTime',)
+
+    def __init__(self, descriptor, quantity, stage, timeRemaining, totalTime, tags=None):
+        self.__totalCooldownTime = descriptor.cooldownSeconds
+        super(_ReplayLargeRepairKitSteelHunterItem, self).__init__(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+
+    def update(self, quantity, stage, timeRemaining, totalTime):
+        super(_ReplayLargeRepairKitSteelHunterItem, self).update(quantity, stage, timeRemaining, totalTime)
+        if stage == EQUIPMENT_STAGES.COOLDOWN:
+            totalTime = self.__totalCooldownTime
+        self._totalTime = totalTime
+
+
+class _ReplayRegenerationKitSteelHunterItem(_ReplayItem):
+    __slots__ = ('__totalCooldownTime', '__healTime')
+
+    def __init__(self, descriptor, quantity, stage, timeRemaining, totalTime, tags=None):
+        self.__totalCooldownTime = descriptor.cooldownSeconds
+        self.__healTime = descriptor.healTime
+        super(_ReplayRegenerationKitSteelHunterItem, self).__init__(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+
+    def update(self, quantity, stage, timeRemaining, totalTime):
+        super(_ReplayRegenerationKitSteelHunterItem, self).update(quantity, stage, timeRemaining, totalTime)
+        if stage == EQUIPMENT_STAGES.COOLDOWN:
+            totalTime = self.__totalCooldownTime
+            self._animationType = ANIMATION_TYPES.MOVE_ORANGE_BAR_UP | ANIMATION_TYPES.SHOW_COUNTER_ORANGE | ANIMATION_TYPES.FILL_PARTIALLY
+        elif stage == EQUIPMENT_STAGES.ACTIVE:
+            totalTime = self.__healTime
+            self._animationType = ANIMATION_TYPES.MOVE_GREEN_BAR_DOWN | ANIMATION_TYPES.SHOW_COUNTER_GREEN | ANIMATION_TYPES.FILL_PARTIALLY
+        self._totalTime = totalTime
+
+
 def _replayTriggerItemFactory(descriptor, quantity, stage, timeRemaining, totalTime, tags=None):
     if descriptor.name.startswith('arcade_artillery'):
         return _ReplayArtilleryItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
@@ -1195,7 +1247,11 @@ def _replayTriggerItemFactory(descriptor, quantity, stage, timeRemaining, totalT
         return _ReplayReconItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
     if descriptor.name.startswith('smoke'):
         return _ReplaySmokeItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
-    return _ReplayAfterburningItem(descriptor, quantity, stage, timeRemaining, totalTime, tags) if descriptor.name.endswith('afterburning') else _ReplayItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+    if descriptor.name.endswith('afterburning'):
+        return _ReplayAfterburningItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+    if descriptor.name.startswith('large_repairkit_battle_royale'):
+        return _ReplayLargeRepairKitSteelHunterItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+    return _ReplayRegenerationKitSteelHunterItem(descriptor, quantity, stage, timeRemaining, totalTime, tags) if descriptor.name.startswith('regenerationKit') else _ReplayItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
 
 
 _REPLAY_EQUIPMENT_TAG_TO_ITEM = {('fuel',): _ReplayItem,
@@ -1204,8 +1260,8 @@ _REPLAY_EQUIPMENT_TAG_TO_ITEM = {('fuel',): _ReplayItem,
  ('extinguisher',): _ReplayItem,
  ('medkit',): _ReplayMedKitItem,
  ('repairkit',): _ReplayRepairKitItem,
- ('regenerationKit',): _ReplayItem,
- ('medkit', 'repairkit'): _ReplayItem}
+ ('regenerationKit',): _replayTriggerItemFactory,
+ ('medkit', 'repairkit'): _replayTriggerItemFactory}
 
 class EquipmentsReplayPlayer(EquipmentsController):
     __slots__ = ('__callbackID', '__callbackTimeID', '__percentGetters', '__percents', '__timeGetters', '__times')
@@ -1306,8 +1362,11 @@ class EquipmentsReplayPlayer(EquipmentsController):
             time = timeGetter()
             currentTime = self.__times.get(intCD)
             if currentTime != time:
+                isBaseTime = False
+                if self._equipments.has_key(intCD):
+                    isBaseTime = self._equipments[intCD].getStage() == EQUIPMENT_STAGES.ACTIVE
                 self.__times[intCD] = time
-                self.onEquipmentCooldownTime(intCD, time, time == 0, time == 0)
+                self.onEquipmentCooldownTime(intCD, time, isBaseTime, time == 0)
 
 
 __all__ = ('EquipmentsController', 'EquipmentsReplayPlayer')

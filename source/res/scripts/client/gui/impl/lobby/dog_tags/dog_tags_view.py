@@ -18,6 +18,7 @@ from gui.impl.gen.view_models.views.lobby.dog_tags.triumph_tooltip_model import 
 from gui.impl.gen.view_models.views.lobby.dog_tags.dedication_tooltip_model import DedicationTooltipModel
 from gui.impl.gen.view_models.views.lobby.dog_tags.three_months_tooltip_model import ThreeMonthsTooltipModel
 from gui.impl.gen import R
+from gui.impl.lobby.dog_tags.ranked_efficiency_tooltip import RankedEfficiencyTooltip
 import WWISE
 from gui.sounds.filters import switchHangarOverlaySoundFilter
 from gui.impl.gui_decorators import args2params
@@ -36,7 +37,7 @@ from skeletons.gui.web import IWebController
 if typing.TYPE_CHECKING:
     from typing import Dict, Callable, Optional, Union
     from account_helpers.dog_tags import DogTags as DogTagsAccountHelper
-    from frameworks.wulf import View, ViewEvent, ViewModel
+    from frameworks.wulf import View, ViewEvent
 _logger = logging.getLogger(__name__)
 DEFAULT_DOG_TAGS_TAB = ComponentViewType.ENGRAVING.getTabIdx()
 DOG_TAG_INFO_PAGE_KEY = 'infoPage'
@@ -55,9 +56,10 @@ class DogTagsView(ViewImpl):
         settings.model = DogTagsViewModel()
         self._dogTagsHelper = BigWorld.player().dogTags
         self._composer = DogTagComposerLobby(self._dogTagsHelper)
-        self._tooltipModelFactories = {R.views.lobby.dog_tags.DedicationTooltip(): self._gradesTooltipModelFactory(DedicationTooltipModel),
-         R.views.lobby.dog_tags.TriumphTooltip(): self._gradesTooltipModelFactory(TriumphTooltipModel),
-         R.views.lobby.dog_tags.ThreeMonthsTooltip(): self._threeMonthTooltipModelFactory}
+        self._tooltipModelFactories = {R.views.lobby.dog_tags.DedicationTooltip(): DedicationTooltip,
+         R.views.lobby.dog_tags.TriumphTooltip(): TriumphTooltip,
+         R.views.lobby.dog_tags.ThreeMonthsTooltip(): ThreeMonthsTooltip,
+         R.views.lobby.dog_tags.RankedEfficiencyTooltip(): RankedEfficiencyTooltip}
         super(DogTagsView, self).__init__(settings)
 
     def highlightComponent(self, highlightedComponentId):
@@ -75,9 +77,7 @@ class DogTagsView(ViewImpl):
             _logger.error('DogTags view tried creating invalid tooltip with contentID %d', contentID)
             return None
         else:
-            model = self._tooltipModelFactories[contentID](event.getArgument(compIdArgName))
-            settings = ViewSettings(contentID, model=model)
-            return ViewImpl(settings)
+            return self._tooltipModelFactories[contentID](event.getArgument(compIdArgName))
 
     @property
     def viewModel(self):
@@ -127,53 +127,6 @@ class DogTagsView(ViewImpl):
             self._composer.updateComponentModel(tx, compId)
             self.__updateNotificationCounters(tx)
         g_eventBus.handleEvent(events.DogTagsEvent(events.DogTagsEvent.COUNTERS_UPDATED), EVENT_BUS_SCOPE.LOBBY)
-
-    def _gradesTooltipModelFactory(self, modelCtor):
-
-        def _inner(engravingId):
-            engraving = self._dogTagsHelper.getDogTagComponentForAccount(engravingId)
-            viewModel = modelCtor()
-            with viewModel.transaction() as model:
-                model.setCurrentGrade(engraving.grade)
-                gradesArray = model.getGradeValues()
-                for grade in engraving.componentDefinition.grades:
-                    gradesArray.addReal(grade)
-
-                model.setComponentTitle(self._composer.getComponentTitleRes(engraving.compId))
-                model.setProgressNumberType(engraving.componentDefinition.numberType.value)
-            return viewModel
-
-        return _inner
-
-    def _threeMonthTooltipModelFactory(self, engravingId):
-        viewModel = ThreeMonthsTooltipModel()
-        with viewModel.transaction() as model:
-            engravingComponent = self._dogTagsHelper.getDogTagComponentForAccount(engravingId)
-            engravingId = engravingComponent.compId
-            skillRecords = sorted(self._dogTagsHelper.getSkillData(engravingId), key=lambda e: e.date)
-            indexMax = -1
-            if skillRecords:
-                maxValue = max(skillRecords[::-1], key=attrgetter('value'))
-                if maxValue.value >= engravingComponent.componentDefinition.grades[0]:
-                    indexMax = skillRecords.index(maxValue)
-            model.setHighlightedIndex(indexMax)
-            monthNames = model.getMonthNames()
-            monthlyValues = model.getMonthlyValues()
-            for date, value in skillRecords:
-                monthRes = self._getMonthRes(date[1])
-                monthNames.addResource(monthRes)
-                if value is not None:
-                    monthlyValues.addReal(value)
-
-            currentMonth = getTimeStructInLocal(getCurrentLocalServerTimestamp()).tm_mon
-            model.setCurrentMonth(self._getMonthRes(currentMonth))
-            model.setProgressNumberType(engravingComponent.componentDefinition.numberType.value)
-        return viewModel
-
-    @staticmethod
-    def _getMonthRes(monthNum):
-        monthRes = R.strings.menu.dateTime.months.full.num(monthNum)()
-        return monthRes
 
     def __update(self, highlightedComponentId=-1):
         _logger.debug('DogTags::Update')
@@ -283,3 +236,76 @@ class DogTagsView(ViewImpl):
 class SOUNDS(CONST_CONTAINER):
     STATE_PLACE = 'STATE_hangar_place'
     STATE_PLACE_DOG_TAGS = 'STATE_hangar_place_dog_tags'
+
+
+class GradesTooltip(ViewImpl):
+
+    def __init__(self, contentId, contentModel, *args, **kwargs):
+        settings = ViewSettings(contentId, model=contentModel)
+        settings.args = args
+        settings.kwargs = kwargs
+        super(GradesTooltip, self).__init__(settings, *args, **kwargs)
+
+    def _onLoading(self, engravingId):
+        engraving = BigWorld.player().dogTags.getDogTagComponentForAccount(engravingId)
+        viewModel = self.getViewModel()
+        with viewModel.transaction() as model:
+            model.setCurrentGrade(engraving.grade)
+            gradesArray = model.getGradeValues()
+            for grade in engraving.componentDefinition.grades:
+                gradesArray.addReal(grade)
+
+            model.setComponentTitle(DogTagComposerLobby.getComponentTitleRes(engraving.compId))
+            model.setProgressNumberType(engraving.componentDefinition.numberType.value)
+
+
+class DedicationTooltip(GradesTooltip):
+
+    def __init__(self, *args, **kwargs):
+        super(DedicationTooltip, self).__init__(R.views.lobby.dog_tags.DedicationTooltip(), DedicationTooltipModel(), *args, **kwargs)
+
+
+class TriumphTooltip(GradesTooltip):
+
+    def __init__(self, *args, **kwargs):
+        super(TriumphTooltip, self).__init__(R.views.lobby.dog_tags.TriumphTooltip(), TriumphTooltipModel(), *args, **kwargs)
+
+
+class ThreeMonthsTooltip(ViewImpl):
+
+    def __init__(self, *args, **kwargs):
+        settings = ViewSettings(R.views.lobby.dog_tags.ThreeMonthsTooltip(), model=ThreeMonthsTooltipModel())
+        settings.args = args
+        settings.kwargs = kwargs
+        super(ThreeMonthsTooltip, self).__init__(settings, *args, **kwargs)
+
+    def _onLoading(self, engravingId):
+        viewModel = self.getViewModel()
+        dtHelper = BigWorld.player().dogTags
+        with viewModel.transaction() as model:
+            engravingComponent = dtHelper.getDogTagComponentForAccount(engravingId)
+            engravingId = engravingComponent.compId
+            skillRecords = sorted(dtHelper.getSkillData(engravingId), key=lambda e: e.date)
+            indexMax = -1
+            if skillRecords:
+                maxValue = max(skillRecords[::-1], key=attrgetter('value'))
+                if maxValue.value >= engravingComponent.componentDefinition.grades[0]:
+                    indexMax = skillRecords.index(maxValue)
+            model.setHighlightedIndex(indexMax)
+            monthNames = model.getMonthNames()
+            monthlyValues = model.getMonthlyValues()
+            for date, value in skillRecords:
+                monthRes = self._getMonthRes(date[1])
+                monthNames.addResource(monthRes)
+                if value is not None:
+                    monthlyValues.addReal(value)
+
+            currentMonth = getTimeStructInLocal(getCurrentLocalServerTimestamp()).tm_mon
+            model.setCurrentMonth(self._getMonthRes(currentMonth))
+            model.setProgressNumberType(engravingComponent.componentDefinition.numberType.value)
+        return
+
+    @staticmethod
+    def _getMonthRes(monthNum):
+        monthRes = R.strings.menu.dateTime.months.full.num(monthNum)()
+        return monthRes

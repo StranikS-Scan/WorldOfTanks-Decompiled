@@ -16,7 +16,8 @@ class ActiveVehicleSeasonType(object):
         self._vehTypeDescrToSeason = {'historical': {}}
 
     def get(self, vehTypeDescr, defaultSeasonType):
-        return self._vehTypeDescrToSeason.get(vehTypeDescr, defaultSeasonType)
+        season = self._vehTypeDescrToSeason.get(vehTypeDescr, defaultSeasonType)
+        return defaultSeasonType if season == SeasonType.UNDEFINED else season
 
     def __setitem__(self, vehTypeDescr, seasonType):
         if seasonType not in SeasonType.RANGE and seasonType != SeasonType.UNDEFINED:

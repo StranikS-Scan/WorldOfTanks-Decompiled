@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/CurrentVehicle.py
 import BigWorld
 from constants import CustomizationInvData
+from items.components.c11n_constants import SeasonType
 from Event import Event, EventManager
 from adisp import process
 from gui import g_tankActiveCamouflage
@@ -70,7 +71,7 @@ class _CachedVehicle(object):
     def onInventoryUpdate(self, invDiff):
         raise NotImplementedError
 
-    def refreshModel(self):
+    def refreshModel(self, outfit=None):
         raise NotImplementedError
 
     @property
@@ -174,7 +175,7 @@ class _CurrentVehicle(_CachedVehicle):
                 season = g_tankActiveCamouflage.get(self.item.intCD, self.item.getAnyOutfitSeason())
                 vehicleOutfitDiff = customizationDiff[CustomizationInvData.OUTFITS].get(self.item.intCD, {})
                 if vehicleOutfitDiff is not None:
-                    isCustomizationChanged = season in vehicleOutfitDiff
+                    isCustomizationChanged = season in vehicleOutfitDiff or SeasonType.ALL in vehicleOutfitDiff
             isComponentsChanged = GUI_ITEM_TYPE.TURRET in invDiff or GUI_ITEM_TYPE.GUN in invDiff
             isVehicleChanged = any((self.__vehInvID in hive or (self.__vehInvID, '_r') in hive for hive in vehsDiff.itervalues()))
             if isComponentsChanged or isRepaired or isVehicleDescrChanged or isCustomizationChanged:
@@ -197,12 +198,12 @@ class _CurrentVehicle(_CachedVehicle):
             self.refreshModel()
             self._updateVehicle()
 
-    def refreshModel(self):
+    def refreshModel(self, outfit=None):
         if g_currentPreviewVehicle.item is not None and not g_currentPreviewVehicle.isHeroTank:
             return
         else:
             if self.isPresent() and self.isInHangar() and self.item.modelState:
-                self.hangarSpace.startToUpdateVehicle(self.item)
+                self.hangarSpace.startToUpdateVehicle(self.item, outfit)
             else:
                 self.hangarSpace.removeVehicle()
             return
@@ -272,9 +273,6 @@ class _CurrentVehicle(_CachedVehicle):
 
     def isOnlyForEpicBattles(self):
         return self.isPresent() and self.item.isOnlyForEpicBattles
-
-    def isOnlyForBob(self):
-        return self.isPresent() and self.item.isOnlyForBob
 
     def isOutfitLocked(self):
         return self.isPresent() and self.item.isOutfitLocked
@@ -442,11 +440,11 @@ class PreviewAppearance(object):
 class _RegularPreviewAppearance(PreviewAppearance):
     hangarSpace = dependency.descriptor(IHangarSpace)
 
-    def refreshVehicle(self, item):
+    def refreshVehicle(self, item, outfit=None):
         if item is not None:
-            self.hangarSpace.updatePreviewVehicle(item)
+            self.hangarSpace.updatePreviewVehicle(item, outfit)
         else:
-            g_currentVehicle.refreshModel()
+            g_currentVehicle.refreshModel(outfit)
         return
 
     @property
@@ -504,8 +502,8 @@ class _CurrentPreviewVehicle(_CachedVehicle):
     def refreshModel(self):
         pass
 
-    def selectVehicle(self, vehicleCD=None, vehicleStrCD=None):
-        self._selectVehicle(vehicleCD, vehicleStrCD)
+    def selectVehicle(self, vehicleCD=None, vehicleStrCD=None, style=None):
+        self._selectVehicle(vehicleCD, vehicleStrCD, style)
         self.onSelected()
 
     def selectNoVehicle(self):
@@ -587,10 +585,14 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         return self.isPresent() and self.item.hasModulesToSelect
 
     def previewStyle(self, style):
-        if self.isPresent() and not self.item.isOutfitLocked and style.mayInstall(self.item):
+        outfit = self.__getPreviewOutfitByStyle(style)
+        if outfit is None:
+            return
+        else:
             self._applyCamouflageTTC()
-            self.hangarSpace.updateVehicleOutfit(style.getOutfit(first(style.seasons), vehicleCD=self.item.descriptor.makeCompactDescr()))
+            self.hangarSpace.updateVehicleOutfit(outfit)
             self.onChanged()
+            return
 
     def previewCamouflage(self, camouflage):
         if self.isPresent() and not self.item.isOutfitLocked and camouflage.mayInstall(self.item):
@@ -616,7 +618,7 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         super(_CurrentPreviewVehicle, self)._addListeners()
         g_clientUpdateManager.addCallbacks({'stats.unlocks': self._onUpdateUnlocks})
 
-    def _selectVehicle(self, vehicleCD, vehicleStrCD=None):
+    def _selectVehicle(self, vehicleCD, vehicleStrCD=None, style=None):
         if self.isPresent() and self.item.intCD == vehicleCD:
             return
         else:
@@ -627,8 +629,11 @@ class _CurrentPreviewVehicle(_CachedVehicle):
                 self.__item = self.__makePreviewVehicleFromStrCD(vehicleStrCD)
             else:
                 self.__item = self.__getPreviewVehicle(vehicleCD)
+            outfit = None
+            if style is not None:
+                outfit = self.__getPreviewOutfitByStyle(style)
             if self.__vehAppearance is not None:
-                self.__vehAppearance.refreshVehicle(self.__item)
+                self.__vehAppearance.refreshVehicle(self.__item, outfit)
             self._setChangeCallback()
             return
 
@@ -644,6 +649,9 @@ class _CurrentPreviewVehicle(_CachedVehicle):
             return vehicle
         else:
             return
+
+    def __getPreviewOutfitByStyle(self, style):
+        return style.getOutfit(first(style.seasons), vehicleCD=self.item.descriptor.makeCompactDescr()) if self.isPresent() and not self.item.isOutfitLocked and style.mayInstall(self.item) else None
 
     def __makePreviewVehicleFromStrCD(self, vehicleStrCD):
         vehicle = Vehicle(strCompactDescr=vehicleStrCD, proxy=self.itemsCache.items)

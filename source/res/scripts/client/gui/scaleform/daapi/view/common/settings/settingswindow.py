@@ -142,10 +142,9 @@ class SettingsWindow(SettingsWindowMeta):
          {'label': SETTINGS.FEEDBACK_TAB_DAMAGELOGPANEL,
           'linkage': VIEW_ALIAS.FEEDBACK_DAMAGE_LOG},
          {'label': SETTINGS.FEEDBACK_TAB_BATTLEBORDERMAP,
-          'linkage': VIEW_ALIAS.FEEDBACK_BATTLE_BORDER_MAP}]
-        if self.lobbyContext.getServerSettings().isPMBattleProgressEnabled():
-            dataVO.append({'label': SETTINGS.FEEDBACK_TAB_QUESTSPROGRESS,
-             'linkage': VIEW_ALIAS.FEEDBACK_QUESTS_PROGRESS})
+          'linkage': VIEW_ALIAS.FEEDBACK_BATTLE_BORDER_MAP},
+         {'label': SETTINGS.FEEDBACK_TAB_QUESTSPROGRESS,
+          'linkage': VIEW_ALIAS.FEEDBACK_QUESTS_PROGRESS}]
         self.as_setFeedbackDataProviderS(dataVO)
         if self.__redefinedKeyModeEnabled:
             BigWorld.wg_setRedefineKeysMode(True)

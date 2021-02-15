@@ -87,6 +87,8 @@ class ClientChat(object):
         MessengerEntry.g_instance.protos.BW.onChatActionFailure(actionData)
 
     def onChatAction(self, chatActionData):
+        from debug_utils import LOG_DEBUG
+        LOG_DEBUG('onChatAction:%s' % (dict(chatActionData),))
         for processor in self.__dataProcessors:
             getattr(self, processor)(chatActionData)
 

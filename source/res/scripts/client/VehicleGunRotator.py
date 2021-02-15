@@ -10,7 +10,7 @@ import Math
 import math_utils
 from AvatarInputHandler import AimingSystems
 from constants import SERVER_TICK_LENGTH, AIMING_MODE, VEHICLE_SIEGE_STATE
-from gun_rotation_shared import calcPitchLimitsFromDesc, getLocalAimPoint
+from gun_rotation_shared import calcPitchLimitsFromDesc, calcGunPitchCorrection, getLocalAimPoint
 from helpers import dependency
 from projectile_trajectory import getShotAngles
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -206,7 +206,7 @@ class VehicleGunRotator(object):
     def getShotParams(self, targetPoint, ignoreYawLimits=False):
         descr = self._avatar.getVehicleAttached().typeDescriptor
         shotTurretYaw, shotGunPitch = getShotAngles(descr, self._avatar.getOwnVehicleStabilisedMatrix(), (self.__turretYaw, self.__gunPitch), targetPoint, overrideGunPosition=self.__gunPosition)
-        gunPitchLimits = calcPitchLimitsFromDesc(shotTurretYaw, self.__getGunPitchLimits())
+        gunPitchLimits = calcPitchLimitsFromDesc(shotTurretYaw, self.__getGunPitchLimits(), descr.hull.turretPitches[0], descr.turret.gunJointPitch)
         closestLimit = self.__isOutOfLimits(shotGunPitch, gunPitchLimits)
         if closestLimit is not None:
             shotGunPitch = closestLimit
@@ -399,7 +399,7 @@ class VehicleGunRotator(object):
                 self.estimatedTurretRotationTime = abs(turretYaw - shotTurretYaw) / maxTurretRotationSpeed
             else:
                 self.estimatedTurretRotationTime = 0
-            gunPitchLimits = calcPitchLimitsFromDesc(turretYaw, self.__getGunPitchLimits())
+            gunPitchLimits = calcPitchLimitsFromDesc(turretYaw, self.__getGunPitchLimits(), descr.hull.turretPitches[0], descr.turret.gunJointPitch)
             self.__gunPitch = self.getNextGunPitch(self.__gunPitch, shotGunPitch, timeDiff, gunPitchLimits)
             if replayCtrl.isPlaying and replayCtrl.isUpdateGunOnTimeWarp:
                 self.__updateTurretMatrix(turretYaw, 0.0)
@@ -624,6 +624,8 @@ class VehicleGunRotator(object):
 
     def __updateGunMatrix(self, pitch, time):
         replayPitch = pitch
+        descr = self._avatar.getVehicleDescriptor()
+        pitch -= calcGunPitchCorrection(self.__turretYaw, descr.hull.turretPitches[0], descr.turret.gunJointPitch)
         staticPitch = self.__getGunStaticPitch()
         if staticPitch is not None:
             pitch = staticPitch

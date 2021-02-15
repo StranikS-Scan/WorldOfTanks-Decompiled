@@ -4,9 +4,12 @@ import functools
 import logging
 import math
 from functools import partial
-import Keys
-import BattleReplay
 import BigWorld
+import Keys
+import Math
+import ResMgr
+from helpers.CallbackDelayer import CallbackDelayer
+import BattleReplay
 import CommandMapping
 import DynamicCameras.ArcadeCamera
 import DynamicCameras.ArtyCamera
@@ -14,8 +17,6 @@ import DynamicCameras.DualGunCamera
 import DynamicCameras.SniperCamera
 import DynamicCameras.StrategicCamera
 import MapCaseMode
-import Math
-import ResMgr
 import RespawnDeathMode
 import aih_constants
 import cameras
@@ -24,17 +25,19 @@ import control_modes
 import epic_battle_death_mode
 from AvatarInputHandler import AimingSystems
 from AvatarInputHandler import aih_global_binding, gun_marker_ctrl
+from AvatarInputHandler import steel_hunter_control_modes
 from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSystem
 from AvatarInputHandler.AimingSystems.steady_vehicle_matrix import SteadyVehicleMatrixCalculator
 from AvatarInputHandler.commands.bootcamp_mode_control import BootcampModeControl
 from AvatarInputHandler.commands.dualgun_control import DualGunController
-from AvatarInputHandler.commands.siege_mode_control import SiegeModeControl
-from AvatarInputHandler.remote_camera_sender import RemoteCameraSender
-from AvatarInputHandler.siege_mode_player_notifications import SiegeModeSoundNotifications, SiegeModeCameraShaker, TurboshaftModeSoundNotifications
 from AvatarInputHandler.commands.radar_control import RadarControl
+from AvatarInputHandler.commands.siege_mode_control import SiegeModeControl
 from AvatarInputHandler.commands.vehicle_upgrade_control import VehicleUpdateControl
 from AvatarInputHandler.commands.vehicle_upgrade_control import VehicleUpgradePanelControl
+from AvatarInputHandler.remote_camera_sender import RemoteCameraSender
+from AvatarInputHandler.siege_mode_player_notifications import SiegeModeSoundNotifications, SiegeModeCameraShaker, TurboshaftModeSoundNotifications
 from Event import Event
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import ARENA_PERIOD, AIMING_MODE
 from control_modes import _ARCADE_CAM_PIVOT_POS
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_WARNING
@@ -42,13 +45,10 @@ from gui import g_guiResetters, GUI_CTRL_MODE_FLAG, GUI_SETTINGS
 from gui.app_loader import settings
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
 from helpers import dependency
-from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBootcampController
-from skeletons.gui.lobby_context import ILobbyContext
 from svarog_script.script_game_object import ScriptGameObject, ComponentDescriptor
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 INPUT_HANDLER_CFG = 'gui/avatar_input_handler.xml'
 _logger = logging.getLogger(__name__)
 
@@ -66,25 +66,23 @@ _GUN_MARKER_FLAG = aih_constants.GUN_MARKER_FLAG
 _BINDING_ID = aih_global_binding.BINDING_ID
 _CTRL_MODES = aih_constants.CTRL_MODES
 _CTRLS_FIRST = _CTRL_MODE.DEFAULT
-_CTRL_MODULES = (control_modes,
- MapCaseMode,
- RespawnDeathMode,
- epic_battle_death_mode)
-_CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: ('ArcadeControlMode', 'arcadeMode', _CTRL_TYPE.USUAL),
- _CTRL_MODE.STRATEGIC: ('StrategicControlMode', 'strategicMode', _CTRL_TYPE.USUAL),
- _CTRL_MODE.ARTY: ('ArtyControlMode', 'artyMode', _ARTY_CTRL_TYPE),
- _CTRL_MODE.SNIPER: ('SniperControlMode', 'sniperMode', _CTRL_TYPE.USUAL),
- _CTRL_MODE.POSTMORTEM: ('PostMortemControlMode', 'postMortemMode', _CTRL_TYPE.USUAL),
- _CTRL_MODE.DEBUG: ('DebugControlMode', None, _CTRL_TYPE.DEVELOPMENT),
- _CTRL_MODE.CAT: ('CatControlMode', None, _CTRL_TYPE.DEVELOPMENT),
- _CTRL_MODE.VIDEO: ('VideoCameraControlMode', 'videoMode', _CTRL_TYPE.OPTIONAL),
- _CTRL_MODE.MAP_CASE: ('MapCaseControlMode', 'strategicMode', _CTRL_TYPE.USUAL),
- _CTRL_MODE.MAP_CASE_ARCADE: ('ArcadeMapCaseControlMode', 'arcadeMode', _CTRL_TYPE.USUAL),
- _CTRL_MODE.RESPAWN_DEATH: ('RespawnDeathMode', 'postMortemMode', _CTRL_TYPE.USUAL),
- _CTRL_MODE.DEATH_FREE_CAM: ('DeathFreeCamMode', 'epicVideoMode', _CTRL_TYPE.USUAL),
- _CTRL_MODE.DUAL_GUN: ('DualGunControlMode', 'dualGunMode', _CTRL_TYPE.USUAL)}
-_OVERWRITE_CTRLS_DESC_MAP = {constants.ARENA_BONUS_TYPE.EPIC_BATTLE: {_CTRL_MODE.POSTMORTEM: ('DeathTankFollowMode', 'postMortemMode', _CTRL_TYPE.USUAL)},
- constants.ARENA_BONUS_TYPE.EPIC_BATTLE_TRAINING: {_CTRL_MODE.POSTMORTEM: ('DeathTankFollowMode', 'postMortemMode', _CTRL_TYPE.USUAL)}}
+_CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: (control_modes.ArcadeControlMode, 'arcadeMode', _CTRL_TYPE.USUAL),
+ _CTRL_MODE.STRATEGIC: (control_modes.StrategicControlMode, 'strategicMode', _CTRL_TYPE.USUAL),
+ _CTRL_MODE.ARTY: (control_modes.ArtyControlMode, 'artyMode', _ARTY_CTRL_TYPE),
+ _CTRL_MODE.SNIPER: (control_modes.SniperControlMode, 'sniperMode', _CTRL_TYPE.USUAL),
+ _CTRL_MODE.POSTMORTEM: (control_modes.PostMortemControlMode, 'postMortemMode', _CTRL_TYPE.USUAL),
+ _CTRL_MODE.DEBUG: (control_modes.DebugControlMode, None, _CTRL_TYPE.DEVELOPMENT),
+ _CTRL_MODE.CAT: (control_modes.CatControlMode, None, _CTRL_TYPE.DEVELOPMENT),
+ _CTRL_MODE.VIDEO: (control_modes.VideoCameraControlMode, 'videoMode', _CTRL_TYPE.OPTIONAL),
+ _CTRL_MODE.MAP_CASE: (MapCaseMode.MapCaseControlMode, 'strategicMode', _CTRL_TYPE.USUAL),
+ _CTRL_MODE.MAP_CASE_ARCADE: (MapCaseMode.ArcadeMapCaseControlMode, 'arcadeMode', _CTRL_TYPE.USUAL),
+ _CTRL_MODE.RESPAWN_DEATH: (RespawnDeathMode.RespawnDeathMode, 'postMortemMode', _CTRL_TYPE.USUAL),
+ _CTRL_MODE.DEATH_FREE_CAM: (epic_battle_death_mode.DeathFreeCamMode, 'epicVideoMode', _CTRL_TYPE.USUAL),
+ _CTRL_MODE.DUAL_GUN: (control_modes.DualGunControlMode, 'dualGunMode', _CTRL_TYPE.USUAL)}
+_OVERWRITE_CTRLS_DESC_MAP = {constants.ARENA_BONUS_TYPE.EPIC_BATTLE: {_CTRL_MODE.POSTMORTEM: (epic_battle_death_mode.DeathTankFollowMode, 'postMortemMode', _CTRL_TYPE.USUAL)},
+ constants.ARENA_BONUS_TYPE.EPIC_BATTLE_TRAINING: {_CTRL_MODE.POSTMORTEM: (epic_battle_death_mode.DeathTankFollowMode, 'postMortemMode', _CTRL_TYPE.USUAL)},
+ constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO: {_CTRL_MODE.POSTMORTEM: (steel_hunter_control_modes.SHPostMortemControlMode, 'postMortemMode', _CTRL_TYPE.USUAL)},
+ constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD: {_CTRL_MODE.POSTMORTEM: (steel_hunter_control_modes.SHPostMortemControlMode, 'postMortemMode', _CTRL_TYPE.USUAL)}}
 _DYNAMIC_CAMERAS = (DynamicCameras.ArcadeCamera.ArcadeCamera,
  DynamicCameras.SniperCamera.SniperCamera,
  DynamicCameras.StrategicCamera.StrategicCamera,
@@ -791,20 +789,17 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         bonusType = BigWorld.player().arenaBonusType
         bonusTypeCtrlsMap = _OVERWRITE_CTRLS_DESC_MAP.get(bonusType, {})
         for name, desc in _CTRLS_DESC_MAP.items():
-            if bonusTypeCtrlsMap.has_key(name):
-                desc = bonusTypeCtrlsMap.get(name)
+            if name in bonusTypeCtrlsMap:
+                desc = bonusTypeCtrlsMap[name]
             try:
-                if desc[2] != _CTRL_TYPE.DEVELOPMENT or desc[2] == _CTRL_TYPE.DEVELOPMENT and constants.HAS_DEV_RESOURCES:
+                classType, modeName, ctrlType = desc
+                if ctrlType != _CTRL_TYPE.DEVELOPMENT or ctrlType == _CTRL_TYPE.DEVELOPMENT and constants.HAS_DEV_RESOURCES:
                     if name not in self.__ctrls:
-                        for module in _CTRL_MODULES:
-                            classType = getattr(module, desc[0], None)
-                            if classType is None:
-                                pass
-                            self.__ctrls[name] = classType(section[desc[1]] if desc[1] else None, self)
-                            break
-
+                        self.__ctrls[name] = classType(section[modeName] if modeName else None, self)
+                    else:
+                        _logger.warning('Control "%s" is already added to the list! Please check _OVERWRITE_CTRLS_DESC_MAP. %s is skipped!', name, classType)
             except Exception:
-                LOG_DEBUG('Error while setting ctrls', name, desc, constants.HAS_DEV_RESOURCES)
+                _logger.error('Error while setting ctrls %s %s %s', name, desc, constants.HAS_DEV_RESOURCES)
                 LOG_CURRENT_EXCEPTION()
 
         return

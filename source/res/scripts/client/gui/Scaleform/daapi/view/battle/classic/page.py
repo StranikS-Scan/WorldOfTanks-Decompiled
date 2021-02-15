@@ -32,7 +32,7 @@ class _ClassicComponentsConfig(ComponentsConfig):
          (BATTLE_CTRL_ID.CALLOUT, (BATTLE_VIEW_ALIASES.CALLOUT_PANEL,)),
          (BATTLE_CTRL_ID.MAPS, (BATTLE_VIEW_ALIASES.MINIMAP,)),
          (BATTLE_CTRL_ID.DEBUG, (BATTLE_VIEW_ALIASES.DEBUG_PANEL,)),
-         (BATTLE_CTRL_ID.BATTLE_FIELD_CTRL, (DynamicAliases.DRONE_MUSIC_PLAYER,)),
+         (BATTLE_CTRL_ID.BATTLE_FIELD_CTRL, (DynamicAliases.DRONE_MUSIC_PLAYER, BATTLE_VIEW_ALIASES.FRAG_CORRELATION_BAR)),
          (BATTLE_CTRL_ID.ARENA_LOAD_PROGRESS, (DynamicAliases.DRONE_MUSIC_PLAYER,)),
          (BATTLE_CTRL_ID.GAME_MESSAGES_PANEL, (BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,))), viewsConfig=((DynamicAliases.PERIOD_MUSIC_LISTENER, period_music_listener.PeriodMusicListener), (DynamicAliases.DRONE_MUSIC_PLAYER, drone_music_player.DroneMusicPlayer), (DynamicAliases.PREBATTLE_TIMER_SOUND_PLAYER, StartCountdownSoundPlayer)))
 
@@ -158,12 +158,18 @@ class ClassicPage(SharedPage):
     def _handleToggleFullStatsQuestProgress(self, event):
         self._toggleFullStats(event.ctx['isDown'], tabIndex=1)
 
+    def _handleBattleNotifierVisibility(self):
+        battleNotifierLinkage = BATTLE_VIEW_ALIASES.BATTLE_NOTIFIER
+        if self.getComponent(battleNotifierLinkage):
+            self._blToggling.add(battleNotifierLinkage)
+
     def _onBattleLoadingStart(self):
         self._toggleFullStats(isShown=False)
         super(ClassicPage, self)._onBattleLoadingStart()
 
     def _onBattleLoadingFinish(self):
         self._toggleFullStats(isShown=False)
+        self._handleBattleNotifierVisibility()
         super(ClassicPage, self)._onBattleLoadingFinish()
         battleCtx = self.sessionProvider.getCtx()
         periodCtrl = self.sessionProvider.shared.arenaPeriod

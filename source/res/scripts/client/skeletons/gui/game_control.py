@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/gui/game_control.py
 import typing
+from constants import ARENA_BONUS_TYPE
 if typing.TYPE_CHECKING:
     from Event import Event
     from gui.battle_pass.battle_pass_bonuses_helper import DeviceTokensContainer
-    from gui.bob.bob_requesters import TeamsRequester, TeamSkillsRequester
     from gui.game_control.event_progression_controller import PlayerLevelInfo
     from gui.shared.gui_items import Vehicle, Tankman
     from gui.periodic_battles.models import PrimeTime
@@ -756,6 +756,9 @@ class IQuestsController(IGameController):
     def getQuestGroups(self):
         raise NotImplementedError
 
+    def getCurrentModeQuestsForVehicle(self, vehicle):
+        raise NotImplementedError
+
 
 class ISpecialModeController(IGameController):
 
@@ -1080,7 +1083,6 @@ class IBootcampController(IGameController):
 
 class IMarathonEventsController(IGameController):
     onFlagUpdateNotify = None
-    onMarathonDataChanged = None
     onVehicleReceived = None
 
     def addMarathon(self, data):
@@ -1452,10 +1454,9 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
 class IBattleRoyaleController(IGameController, ISeasonProvider):
     onUpdated = None
     onPrimeTimeStatusUpdated = None
+    onEquipmentReset = None
+    onGunUpdate = None
     TOKEN_QUEST_ID = ''
-    DAILY_QUEST_ID = ''
-    MODE_ALIAS = ''
-    PROGRESSION_XP_TOKEN = ''
 
     def isEnabled(self):
         raise NotImplementedError
@@ -1472,7 +1473,13 @@ class IBattleRoyaleController(IGameController, ISeasonProvider):
     def fightClick(self):
         raise NotImplementedError
 
+    def isActive(self):
+        raise NotImplementedError
+
     def isBattleRoyaleMode(self):
+        raise NotImplementedError
+
+    def isBattlePassAvailable(self):
         raise NotImplementedError
 
     def isInBattleRoyaleSquad(self):
@@ -1493,17 +1500,35 @@ class IBattleRoyaleController(IGameController, ISeasonProvider):
     def getStats(self):
         raise NotImplementedError
 
+    def hasAvailablePrimeTimeServers(self):
+        raise NotImplementedError
+
     @staticmethod
     def getBrCommanderSkills():
         raise NotImplementedError
 
-    def getPlayerLevelInfo(self):
+    def isInPrimeTime(self):
         raise NotImplementedError
 
-    def getMaxPlayerLevel(self):
+    def isFrozen(self):
         raise NotImplementedError
 
-    def getPointsProgressForLevel(self, level):
+    def openURL(self, url=None):
+        raise NotImplementedError
+
+    def getQuests(self):
+        raise NotImplementedError
+
+    def isDailyQuestsRefreshAvailable(self):
+        raise NotImplementedError
+
+    def getCurrentCycleTimeLeft(self):
+        raise NotImplementedError
+
+    def getCurrentPrimeTimeEnd(self):
+        raise NotImplementedError
+
+    def hasPrimeTimesLeft(self):
         raise NotImplementedError
 
 
@@ -1676,6 +1701,12 @@ class IBattlePassController(IGameController):
     def isChooseDeviceEnabled(self):
         raise NotImplementedError
 
+    def isGameModeEnabled(self, arenaBonusType):
+        raise NotImplementedError
+
+    def getSupportedArenaBonusTypes(self):
+        raise NotImplementedError
+
     def getTrophySelectTokensCount(self):
         raise NotImplementedError
 
@@ -1733,7 +1764,7 @@ class IBattlePassController(IGameController):
     def getLevelProgression(self):
         raise NotImplementedError
 
-    def getPerBattlePoints(self, vehCompDesc=None):
+    def getPerBattlePoints(self, vehCompDesc=None, gameMode=ARENA_BONUS_TYPE.REGULAR):
         raise NotImplementedError
 
     def isSpecialVehicle(self, intCD):
@@ -1859,161 +1890,5 @@ class IUISpamController(IGameController):
         raise NotImplementedError
 
 
-class IBobController(IGameController, ISeasonProvider):
-    onPrimeTimeStatusUpdated = None
-    onUpdated = None
-    onTokensUpdated = None
-
-    @property
-    def teamTokens(self):
-        raise NotImplementedError
-
-    @property
-    def leaderTokens(self):
-        raise NotImplementedError
-
-    @property
-    def pointsToken(self):
-        raise NotImplementedError
-
-    @property
-    def tokenToClaimPersonalReward(self):
-        raise NotImplementedError
-
-    @property
-    def personalRewardQuestName(self):
-        raise NotImplementedError
-
-    @property
-    def teamRewardQuestPrefix(self):
-        raise NotImplementedError
-
-    @property
-    def personalLevel(self):
-        raise NotImplementedError
-
-    @property
-    def lactOpenedBobUrl(self):
-        raise NotImplementedError
-
-    @lactOpenedBobUrl.setter
-    def lactOpenedBobUrl(self, value):
-        raise NotImplementedError
-
-    @property
-    def leaderTokenFirstType(self):
-        return NotImplementedError
-
-    @property
-    def teamsChannelName(self):
-        return NotImplementedError
-
-    @property
-    def teamSkillsChannelName(self):
-        return NotImplementedError
-
-    @property
-    def teamsRequester(self):
-        return NotImplementedError
-
-    @property
-    def teamSkillsRequester(self):
-        return NotImplementedError
-
-    def isEnabled(self):
-        raise NotImplementedError
-
-    def isModeActive(self):
-        raise NotImplementedError
-
-    def isRegistrationEnabled(self):
-        raise NotImplementedError
-
-    def isRegistrationPeriodEnabled(self):
-        raise NotImplementedError
-
-    def isPostEventTime(self):
-        raise NotImplementedError
-
-    def isRegistered(self):
-        raise NotImplementedError
-
-    def isPlayerBlogger(self):
-        raise NotImplementedError
-
-    def isAvailable(self):
-        raise NotImplementedError
-
-    def isValidBattleType(self):
-        raise NotImplementedError
-
-    def isBobPointsToken(self, tokenID):
-        raise NotImplementedError
-
-    def isAllZeroScore(self):
-        raise NotImplementedError
-
-    def needShowEventTab(self):
-        raise NotImplementedError
-
-    def getConfig(self):
-        raise NotImplementedError
-
-    def getCurrentTeamID(self):
-        raise NotImplementedError
-
-    def getPrimeTimes(self):
-        raise NotImplementedError
-
-    def hasAvailablePrimeTimeServers(self):
-        raise NotImplementedError
-
-    def hasAnyPeripheryWithPrimeTime(self):
-        raise NotImplementedError
-
-    def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
-        raise NotImplementedError
-
-    def getPrimeTimeStatus(self, peripheryID=None):
-        raise NotImplementedError
-
-    def claimReward(self, token, callback=None):
-        raise NotImplementedError
-
-    def getAvailablePersonalRewardCount(self):
-        raise NotImplementedError
-
-    def getTeamLevelTokensCount(self):
-        raise NotImplementedError
-
-    def getPlayerPoints(self):
-        raise NotImplementedError
-
-    def getReceivedTeamRewards(self):
-        raise NotImplementedError
-
-    def isFrozen(self):
-        raise NotImplementedError
-
-    def getTimeTillRegistrationStartOrEnd(self):
-        raise NotImplementedError
-
-
-class IBobAnnouncementController(IGameController):
-    onAnnouncementUpdated = None
-
-    @property
-    def currentAnnouncement(self):
-        raise NotImplementedError
-
-    def clickAnnouncement(self):
-        raise NotImplementedError
-
-
-class IBobSoundController(IGameController):
-
-    def onStylePreviewOpen(self):
-        raise NotImplementedError
-
-    def onStylePreviewClose(self):
-        raise NotImplementedError
+class IBlueprintsConvertSaleController(IGameController):
+    pass

@@ -31,7 +31,7 @@ from items import vehicles
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES, EFFECT_MATERIALS
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.game_control import ISpecialSoundCtrl
+from skeletons.gui.game_control import ISpecialSoundCtrl, IBattleRoyaleController
 from soft_exception import SoftException
 from vehicle_systems import appearance_cache
 from vehicle_systems.entity_components.battle_abilities_component import BattleAbilitiesComponent
@@ -91,6 +91,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
     lobbyContext = dependency.descriptor(ILobbyContext)
     __specialSounds = dependency.descriptor(ISpecialSoundCtrl)
+    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     activeGunIndex = property(lambda self: self.__activeGunIndex)
 
     @property
@@ -204,7 +205,10 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
                     newModule = getattr(self.typeDescriptor, moduleName)
                     if oldModule.id != newModule.id:
                         forceReloading = True
-                        _logger.info('Battle royale force appearance reloading!')
+                        isObserver = BigWorld.player().isObserver()
+                        if isObserver:
+                            self.__battleRoyaleController.onGunUpdate()
+                            self.guiSessionProvider.shared.ammo.clearAmmo()
                         if moduleName == 'gun':
                             BigWorld.player().gunRotator.switchActiveGun(0)
                         self.isForceReloading = True

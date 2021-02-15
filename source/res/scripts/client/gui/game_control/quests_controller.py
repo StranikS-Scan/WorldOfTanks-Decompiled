@@ -7,11 +7,12 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from items import getTypeOfCompactDescr
-from skeletons.gui.game_control import IQuestsController
+from skeletons.gui.game_control import IQuestsController, IBattleRoyaleController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from gui.server_events.events_helpers import isLinkedSet, isPremium
+from gui.server_events.events_helpers import isLinkedSet, isPremium, isBattleRoyale, isDailyEpic, isDailyQuest
+from gui.ranked_battles.ranked_helpers import isRankedQuestID
 _MAX_LVL_FOR_TUTORIAL = 3
 
 class _QuestCache(object):
@@ -116,6 +117,7 @@ class QuestsController(IQuestsController):
     __slots__ = ('__quests', 'eventsCache')
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
 
     def __init__(self):
         super(QuestsController, self).__init__()
@@ -164,6 +166,14 @@ class QuestsController(IQuestsController):
 
     def getQuestGroups(self):
         return self._getGroups()
+
+    def getCurrentModeQuestsForVehicle(self, vehicle, notCompleted=False):
+        if self.__battleRoyaleController.isBattleRoyaleMode():
+            return list(self.__battleRoyaleController.getQuests().values())
+        if notCompleted:
+            quests = [ q for q in self.getQuestForVehicle(vehicle) if not isDailyEpic(q.getGroupID()) and not isDailyQuest(q.getID()) and not isPremium(q.getID()) and not isRankedQuestID(q.getID()) and not isBattleRoyale(q.getGroupID()) and not q.isCompleted() ]
+            return quests
+        return [ q for q in self.getQuestForVehicle(vehicle) if not isDailyEpic(q.getGroupID()) and not isDailyQuest(q.getID()) and not isPremium(q.getID()) and not isRankedQuestID(q.getID()) and not isBattleRoyale(q.getGroupID()) ]
 
     def __invalidateEventsData(self, *args):
         self.__quests.invalidate()

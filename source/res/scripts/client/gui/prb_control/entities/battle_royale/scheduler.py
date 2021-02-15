@@ -5,27 +5,27 @@ from gui.impl.gen import R
 from gui import SystemMessages
 from gui.prb_control.entities.base.scheduler import BaseScheduler
 from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.shared.prime_time_constants import PrimeTimeStatus
+from gui.ranked_battles.constants import PrimeTimeStatus
 from helpers import dependency
-from skeletons.gui.game_control import IEventProgressionController
+from skeletons.gui.game_control import IBattleRoyaleController
 
 class RoyaleScheduler(BaseScheduler):
-    __eventProgression = dependency.descriptor(IEventProgressionController)
+    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
 
     def __init__(self, entity):
         super(RoyaleScheduler, self).__init__(entity)
         self.__isPrimeTime = False
 
     def init(self):
-        status, _, _ = self.__eventProgression.getPrimeTimeStatus()
+        status, _, _ = self.__battleRoyaleController.getPrimeTimeStatus()
         self.__isPrimeTime = status == PrimeTimeStatus.AVAILABLE
-        self.__eventProgression.onPrimeTimeStatusUpdatedAddEvent(self.__update)
+        self.__battleRoyaleController.onPrimeTimeStatusUpdated += self.__update
 
     def fini(self):
-        self.__eventProgression.onPrimeTimeStatusUpdatedRemoveEvent(self.__update)
+        self.__battleRoyaleController.onPrimeTimeStatusUpdated -= self.__update
 
     def __update(self, status):
-        if not self.__eventProgression.modeIsEnabled():
+        if not self.__battleRoyaleController.isEnabled():
             return
         isPrimeTime = status == PrimeTimeStatus.AVAILABLE
         if isPrimeTime != self.__isPrimeTime:

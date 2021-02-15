@@ -22,19 +22,36 @@ if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.views.lobby.dog_tags.dt_dog_tag import DtDogTag
     from gui.impl.gen.view_models.views.lobby.dog_tags.dog_tags_view_model import DogTagsViewModel
     from gui.impl.gen.view_models.views.lobby.premacc.dashboard.prem_dashboard_dog_tags_card_model import PremDashboardDogTagsCardModel
-logger = logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
 
-class PurposeGroup(Enum):
+class TooltipPurposeGroup(Enum):
     TRIUMPH = 'TRIUMPH'
     DEDICATION = 'DEDICATION'
     SEASON = 'SEASON'
 
 
-PURPOSE_TO_PURPOSE_GROUP_MAP = {ComponentPurpose.SKILL: PurposeGroup.SEASON,
- ComponentPurpose.TRIUMPH: PurposeGroup.TRIUMPH,
- ComponentPurpose.DEDICATION: PurposeGroup.DEDICATION}
-SECTION_ORDER_MAP = {ComponentViewType.BACKGROUND: [ComponentPurpose.TRIUMPH_MEDAL],
- ComponentViewType.ENGRAVING: [ComponentPurpose.DEDICATION, ComponentPurpose.SKILL, ComponentPurpose.TRIUMPH]}
+class EngravingSection(Enum):
+    TRIUMPH = 'TRIUMPH'
+    DEDICATION = 'DEDICATION'
+    SKILL = 'SKILL'
+
+
+class BackgroundSection(Enum):
+    TRIUMPH_MEDAL = 'TRIUMPH_MEDAL'
+
+
+PURPOSE_TO_TOOLTIP_PURPOSE_GROUP_MAP = {EngravingSection.SKILL: TooltipPurposeGroup.SEASON,
+ EngravingSection.TRIUMPH: TooltipPurposeGroup.TRIUMPH,
+ EngravingSection.DEDICATION: TooltipPurposeGroup.DEDICATION}
+SECTION_ORDER_MAP = {ComponentViewType.BACKGROUND: [BackgroundSection.TRIUMPH_MEDAL],
+ ComponentViewType.ENGRAVING: [EngravingSection.DEDICATION, EngravingSection.SKILL, EngravingSection.TRIUMPH]}
+IN_SECTION_ORDER_WEIGHT = [ComponentPurpose.RANKED_SKILL, ComponentPurpose.SKILL]
+SECTION_BY_PURPOSE = {ComponentPurpose.TRIUMPH: EngravingSection.TRIUMPH,
+ ComponentPurpose.SKILL: EngravingSection.SKILL,
+ ComponentPurpose.RANKED_SKILL: EngravingSection.SKILL,
+ ComponentPurpose.DEDICATION: EngravingSection.DEDICATION,
+ ComponentPurpose.BASE: BackgroundSection.TRIUMPH_MEDAL,
+ ComponentPurpose.TRIUMPH_MEDAL: BackgroundSection.TRIUMPH_MEDAL}
 
 class DogTagComposerLobby(DogTagComposerClient):
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -66,7 +83,7 @@ class DogTagComposerLobby(DogTagComposerClient):
             model.setIsMaxLevel(True)
         else:
             model.setIsMaxLevel(False)
-        logger.debug('Dashboard dogtag images - engraving: %s, background: %s', engravingImage, bgImage)
+        _logger.debug('Dashboard dogtag images - engraving: %s, background: %s', engravingImage, bgImage)
 
     def fillGrid(self, viewModel):
         unlockedComponents = self._dtHelper.getUnlockedComps()
@@ -118,16 +135,18 @@ class DogTagComposerLobby(DogTagComposerClient):
                 purpose = comp.purpose
                 if purpose == ComponentPurpose.SKILL and not self.serverSettings().isSkillComponentsEnabled():
                     continue
-                if comp.purpose == ComponentPurpose.BASE:
-                    purpose = ComponentPurpose.TRIUMPH_MEDAL
-                sectionComponents[purpose][compId] = comp
+                if purpose not in SECTION_BY_PURPOSE:
+                    _logger.error('Not supported purpose "%s"', purpose)
+                    continue
+                sectionName = SECTION_BY_PURPOSE[purpose]
+                sectionComponents[sectionName][compId] = comp
 
-        for purpose in SECTION_ORDER_MAP[componentType]:
-            if not sectionComponents[purpose]:
+        for sectionName in SECTION_ORDER_MAP[componentType]:
+            if not sectionComponents[sectionName]:
                 continue
-            gridSection = self._createSection(sectionComponents[purpose], unlockedComponents, self.getPurposeRes(purpose))
-            if purpose in PURPOSE_TO_PURPOSE_GROUP_MAP:
-                purposeGroup = PURPOSE_TO_PURPOSE_GROUP_MAP[purpose]
+            gridSection = self._createSection(sectionComponents[sectionName], unlockedComponents, self.getPurposeRes(sectionName))
+            if sectionName in PURPOSE_TO_TOOLTIP_PURPOSE_GROUP_MAP:
+                purposeGroup = PURPOSE_TO_TOOLTIP_PURPOSE_GROUP_MAP[sectionName]
                 gridSection.setTooltipTitle(self.getPurposeGroupRes(purposeGroup.value))
                 gridSection.setTooltipDescription(self.getPurposeTooltipRes(purposeGroup.value))
             section.addViewModel(gridSection)
@@ -149,11 +168,17 @@ class DogTagComposerLobby(DogTagComposerClient):
         self._fillItems(locked, itemsArray, False)
         return gridSection
 
+    @staticmethod
+    def _getSortedKeys(item):
+        maxIdx = len(IN_SECTION_ORDER_WEIGHT)
+        purpose = item.purpose
+        itemOrderIdx = IN_SECTION_ORDER_WEIGHT.index(purpose) if purpose in IN_SECTION_ORDER_WEIGHT else maxIdx
+        return (itemOrderIdx, item.componentId)
+
     def _fillItems(self, components, itemsArray, unlocked):
-        componentIds = sorted(components.keys())
-        for componentId in componentIds:
+        for component in sorted(components.values(), key=self._getSortedKeys):
             componentModel = DtComponent()
-            self._fillComponentModel(components[componentId], componentModel, unlocked)
+            self._fillComponentModel(component, componentModel, unlocked)
             itemsArray.addViewModel(componentModel)
 
     def _fillComponentModel(self, componentDef, model, isUnlocked=True):

@@ -66,6 +66,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     BLUEPRINTS = 'blueprintsInfo'
     FRONTLINE = 'frontlineInfo'
     BATTLE_ROYALE_SELECTOR_INFO = 'battleRoyaleSelectorInfo'
+    BATTLE_ROYALE_WIDGET_INFO = 'battleRoyaleWidgetInfo'
     SQUAD_BONUS = 'squadBonus'
     SESSION_STATS = 'sessionStats'
     TRADE_IN_INFO = 'tradeInInfo'
@@ -75,7 +76,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     DEMOUNT_KIT = 'demountKit'
     VEHICLE_COLLECTOR = 'vehicleCollector'
     DEVICE_GIFT_TOKEN = 'deviceGiftToken'
-    BOB_SELECTOR_INFO = 'bobSelectorInfo'
+    BATTLE_PASS_POINTS = 'battlePassPoints'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -109,7 +110,6 @@ class TOOLTIP_COMPONENT(CONST_CONTAINER):
     DEMOUNT_KIT = 'demountKit'
     MODULE_INFO = 'moduleInfo'
     BATTLE_PASS = 'battlePass'
-    BOB = 'bob'
 
 
 class ACTION_TOOLTIPS_TYPE(CONST_CONTAINER):

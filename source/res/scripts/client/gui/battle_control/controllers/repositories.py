@@ -3,8 +3,7 @@
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_control.arena_info.interfaces import IArenaController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, REUSABLE_BATTLE_CTRL_IDS, getBattleCtrlName
-from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, bootcamp_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, team_health_bar_ctrl, vehicle_state_ctrl, view_points_ctrl, epic_respawn_ctrl, progress_circle_ctrl, epic_maps_ctrl, default_maps_ctrl, epic_spectator_ctrl, epic_missions_ctrl, game_notification_ctrl, epic_team_bases_ctrl, anonymizer_fakes_ctrl, korea_msgs_ctrl, callout_ctrl, deathzones_ctrl, progression_ctrl, death_ctrl, dog_tags_ctrl
-from gui.battle_control.controllers.bob_ctrl import BattleBobController
+from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, bootcamp_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, vehicle_state_ctrl, view_points_ctrl, epic_respawn_ctrl, progress_circle_ctrl, epic_maps_ctrl, default_maps_ctrl, epic_spectator_ctrl, epic_missions_ctrl, game_notification_ctrl, epic_team_bases_ctrl, anonymizer_fakes_ctrl, korea_msgs_ctrl, callout_ctrl, deathzones_ctrl, progression_ctrl, death_ctrl, dog_tags_ctrl, team_health_bar_ctrl, battle_notifier_ctrl
 from gui.battle_control.controllers.quest_progress import quest_progress_ctrl
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
 from gui.battle_control.controllers import battle_hints_ctrl
@@ -247,8 +246,8 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
         return self._repository.getController(BATTLE_CTRL_ID.DOG_TAGS)
 
     @property
-    def bob(self):
-        return self._repository.getController(BATTLE_CTRL_ID.BOB_CTRL)
+    def battleNotifier(self):
+        return self._repository.getController(BATTLE_CTRL_ID.BATTLE_NOTIFIER)
 
 
 class _EmptyRepository(interfaces.IBattleControllersRepository):
@@ -370,6 +369,8 @@ class _ControllersRepositoryByBonuses(_ControllersRepository):
             repository.addViewController(team_health_bar_ctrl.TeamHealthBarController(setup), setup)
         if arenaVisitor.hasDogTag():
             repository.addController(dog_tags_ctrl.DogTagsController(setup))
+        if arenaVisitor.hasBattleNotifier():
+            repository.addViewController(battle_notifier_ctrl.BattleNotifierController(setup), setup)
         return repository
 
 
@@ -413,22 +414,16 @@ class BattleRoyaleControllersRepository(_ControllersRepository):
         repository = super(BattleRoyaleControllersRepository, cls).create(setup)
         repository.addArenaViewController(progression_ctrl.ProgressionController(), setup)
         repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
-        repository.addViewController(radar_ctrl.RadarController(), setup)
         repository.addViewController(spawn_ctrl.SpawnController(), setup)
         repository.addViewController(debug_ctrl.DebugController(), setup)
-        repository.addArenaController(death_ctrl.DeathScreenController(), setup)
         repository.addArenaViewController(vehicles_count_ctrl.VehicleCountController(), setup)
         repository.addViewController(default_maps_ctrl.DefaultMapsController(setup), setup)
-        return repository
-
-
-class BobControllersRepository(ClassicControllersRepository):
-    __slots__ = ()
-
-    @classmethod
-    def create(cls, setup):
-        repository = super(BobControllersRepository, cls).create(setup)
-        repository.addArenaController(BattleBobController(setup), setup)
+        repository.addArenaController(death_ctrl.DeathScreenController(), setup)
+        if setup.isReplayPlaying:
+            radarCtrl = radar_ctrl.RadarReplayController()
+        else:
+            radarCtrl = radar_ctrl.RadarController()
+        repository.addViewController(radarCtrl, setup)
         return repository
 
 

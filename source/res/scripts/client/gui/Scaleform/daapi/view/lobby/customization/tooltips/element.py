@@ -15,7 +15,7 @@ from gui.Scaleform.daapi.view.lobby.customization.shared import getProgressionIt
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles, icons
-from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.customization import CustomizationTooltipContext
 from gui.shared.items_parameters import formatters as params_formatters
 from gui.shared.items_parameters.params_helper import SimplifiedBarVO
@@ -212,7 +212,8 @@ class ElementTooltip(BlocksTooltipData):
                 self._appliedCount = int(isApplied)
         if bonus and statsConfig.showBonus:
             camo = camo or self._item
-            items.append(self._packBonusBlock(bonus, camo, bonusEnabled))
+            bonusBlock = self._packBonusBlock(bonus, camo, bonusEnabled)
+            items.append(bonusBlock)
         if not self._item.isHistorical() or self._item.fullDescription:
             block = self._packDescriptionBlock()
             if block:
@@ -245,20 +246,21 @@ class ElementTooltip(BlocksTooltipData):
     def _packCharacteristicsBlock(self):
         blocks = []
         blocks.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_CHARACTERISTICS_TITLE)))
+        rCharacteristics = R.strings.vehicle_customization.customization.tooltip.characteristics
         mapType = None
         mapIcon = ''
         if not self._item.isAllSeason():
             if self._item.isSummer():
-                mapType = backport.text(R.strings.vehicle_customization.customization.tooltip.characteristics.map.summer())
+                mapType = backport.text(rCharacteristics.map.summer())
                 mapIcon = SEASONS_CONSTANTS.SUMMER
             elif self._item.isWinter():
-                mapType = backport.text(R.strings.vehicle_customization.customization.tooltip.characteristics.map.winter())
+                mapType = backport.text(rCharacteristics.map.winter())
                 mapIcon = SEASONS_CONSTANTS.WINTER
             elif self._item.isDesert():
-                mapType = backport.text(R.strings.vehicle_customization.customization.tooltip.characteristics.map.desert())
+                mapType = backport.text(rCharacteristics.map.desert())
                 mapIcon = SEASONS_CONSTANTS.DESERT
         else:
-            mapType = backport.text(R.strings.vehicle_customization.customization.tooltip.characteristics.map.all())
+            mapType = backport.text(rCharacteristics.map.all())
             mapIcon = self.ALL_SEASON_MAP_ICON
         isWideOffset = False
         if self._item.itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL:
@@ -267,19 +269,22 @@ class ElementTooltip(BlocksTooltipData):
         if mapType:
             blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(mapType), padding=formatters.packPadding(top=-2), icon=mapIcon, isWideOffset=isWideOffset))
         if self._item.isHistorical():
-            blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(backport.text(R.strings.vehicle_customization.customization.tooltip.characteristics.historicity.historical())), padding=formatters.packPadding(top=-2), icon=self.HISTORICAL_ICON, isWideOffset=isWideOffset))
+            blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(backport.text(rCharacteristics.historicity.historical())), padding=formatters.packPadding(top=-2), icon=self.HISTORICAL_ICON, isWideOffset=isWideOffset))
         else:
-            blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(backport.text(R.strings.vehicle_customization.customization.tooltip.characteristics.historicity.nonHistorical())), padding=formatters.packPadding(top=-2), icon=self.NON_HISTORICAL_ICON, isWideOffset=isWideOffset))
+            blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(backport.text(rCharacteristics.historicity.nonHistorical())), padding=formatters.packPadding(top=-2), icon=self.NON_HISTORICAL_ICON, isWideOffset=isWideOffset))
         if self._item.itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL:
-            blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(_ms(backport.text(R.strings.vehicle_customization.customization.tooltip.characteristics.form.text()), value=text_styles.stats(PROJECTION_DECAL_TEXT_FORM_TAG[self._item.formfactor]))), padding=formatters.packPadding(top=-2), icon='form_' + str(PROJECTION_DECAL_FORM_TO_UI_ID[self._item.formfactor]), isWideOffset=isWideOffset))
+            blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(_ms(backport.text(rCharacteristics.form.text()), value=text_styles.stats(PROJECTION_DECAL_TEXT_FORM_TAG[self._item.formfactor]))), padding=formatters.packPadding(top=-2), icon='form_' + str(PROJECTION_DECAL_FORM_TO_UI_ID[self._item.formfactor]), isWideOffset=isWideOffset))
         if self._item.isProgressive and self.__vehicle is not None:
             currentLevel = self._progressionLevel if self._progressionLevel > 0 else self._item.getLatestOpenedProgressionLevel(self.__vehicle)
             if currentLevel > 0:
-                blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(backport.text(R.strings.vehicle_customization.customization.tooltip.characteristics.level.text(), value=text_styles.stats(int2roman(currentLevel)))), padding=formatters.packPadding(top=-2), icon='progression_{}'.format(currentLevel), isWideOffset=isWideOffset))
+                icon = 'progression_{}'
+                if self._item.itemTypeID == GUI_ITEM_TYPE.STYLE:
+                    icon = 'style_progression_{}'
+                blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(backport.text(rCharacteristics.level.dyn(GUI_ITEM_TYPE_NAMES[self._item.itemTypeID]).text(), value=text_styles.stats(int2roman(currentLevel)))), padding=formatters.packPadding(top=-2), icon=icon.format(currentLevel), isWideOffset=isWideOffset))
         if self._item.isRentable:
             blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(backport.text(R.strings.vehicle_customization.customization.tooltip.characteristics.rentable())), padding=formatters.packPadding(top=-2), icon=self.RENTABLE_ICON, isWideOffset=isWideOffset))
         if self._item.itemTypeID == GUI_ITEM_TYPE.STYLE:
-            modifiedStrRoot = R.strings.vehicle_customization.customization.tooltip.characteristics.collapsible
+            modifiedStrRoot = rCharacteristics.collapsible
             if self._item.isEditable:
                 vehicleIntCD = self.__vehicle.intCD
                 if not self._item.canBeEditedForVehicle(vehicleIntCD):
@@ -513,7 +518,7 @@ class ElementTooltip(BlocksTooltipData):
             else:
                 titleDesc = backport.text(R.strings.vehicle_customization.customization.infotype.progression.achievementCondition(), level=int2roman(level))
             blocks.append(formatters.packTextBlockData(text=text_styles.middleTitle(titleDesc)))
-            conditions = self._item.progressionConditions.get(level, [])
+            conditions = self._item.progressionConditions.get(level, []).get('conditions')
             if not conditions:
                 return None
             if unlockedLevel > 0:

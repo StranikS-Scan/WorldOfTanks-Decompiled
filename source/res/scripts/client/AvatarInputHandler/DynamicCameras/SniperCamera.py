@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/SniperCamera.py
+import logging
 import math
 import BigWorld
 import GUI
@@ -18,6 +19,7 @@ from AvatarInputHandler.cameras import readFloat, readVec3, ImpulseReason, FovEx
 from BattleReplay import CallbackDataNames
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from helpers.CallbackDelayer import CallbackDelayer
+_logger = logging.getLogger(__name__)
 
 def getCameraAsSettingsHolder(settingsDataSec):
     return SniperCamera(settingsDataSec)
@@ -25,6 +27,7 @@ def getCameraAsSettingsHolder(settingsDataSec):
 
 class SniperCamera(CameraWithSettings, CallbackDelayer):
     _DYNAMIC_ENABLED = True
+    _SNIPER_ZOOM_LEVEL = -1
 
     @staticmethod
     def enableDynamicCamera(enable):
@@ -33,6 +36,10 @@ class SniperCamera(CameraWithSettings, CallbackDelayer):
     @staticmethod
     def isCameraDynamic():
         return SniperCamera._DYNAMIC_ENABLED
+
+    @staticmethod
+    def setSniperZoomSettings(value):
+        SniperCamera._SNIPER_ZOOM_LEVEL = value
 
     _FILTER_LENGTH = 5
     _DEFAULT_MAX_ACCELERATION_DURATION = 1.5
@@ -106,9 +113,15 @@ class SniperCamera(CameraWithSettings, CallbackDelayer):
     def enable(self, targetPos, saveZoom):
         self.__prevTime = BigWorld.time()
         player = BigWorld.player()
-        if saveZoom:
-            self.__zoom = self._cfg['zoom']
+        if SniperCamera._SNIPER_ZOOM_LEVEL == -1:
+            if saveZoom:
+                self.__zoom = self._cfg['zoom']
+            else:
+                self._cfg['zoom'] = self.__zoom = self._cfg['zooms'][0]
+        elif len(self._cfg['zooms']) > SniperCamera._SNIPER_ZOOM_LEVEL:
+            self.__zoom = self._cfg['zooms'][SniperCamera._SNIPER_ZOOM_LEVEL]
         else:
+            _logger.warning('zooms should always have enough length to use _SNIPER_ZOOM_LEVEL, using default now')
             self._cfg['zoom'] = self.__zoom = self._cfg['zooms'][0]
         self.__applyZoom(self.__zoom)
         self.__setupCamera(targetPos)

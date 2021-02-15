@@ -69,6 +69,10 @@ class _ShowCustomTooltipSchema(W2CSchema):
     body = Field(required=True, type=basestring)
 
 
+class _ShowSimpleTooltipSchema(W2CSchema):
+    body = Field(required=True, type=basestring)
+
+
 class _ShowItemTooltipSchema(W2CSchema):
     id = Field(required=True, type=(basestring, int))
     type = Field(required=True, type=basestring, validator=_itemTypeValidator)
@@ -170,6 +174,10 @@ class UtilWebApiMixin(object):
     @w2c(_ShowCustomTooltipSchema, 'show_custom_tooltip')
     def showCustomTooltip(self, cmd):
         self.__getTooltipMgr().onCreateComplexTooltip(makeTooltip(header=cmd.header, body=cmd.body), 'INFO')
+
+    @w2c(_ShowSimpleTooltipSchema, 'show_simple_tooltip')
+    def showSimpleTooltip(self, cmd):
+        self.__getTooltipMgr().onCreateComplexTooltip(makeTooltip(body=cmd.body), 'INFO')
 
     @w2c(W2CSchema, 'hide_tooltip')
     def hideToolTip(self, _):

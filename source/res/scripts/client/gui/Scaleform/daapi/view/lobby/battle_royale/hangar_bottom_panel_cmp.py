@@ -215,12 +215,12 @@ class HangarBottomPanelView(ViewImpl, IGlobalListener):
         isBasic = ShellParams(shell.descriptor, vehicle.descriptor).isBasic
         ammoType = AmmoTypes.BASIC_SHELL if isBasic else AmmoTypes.PREMIUM_SHELL
         count = self.__getEquipmentCount(ammoType) * vehicle.gun.maxAmmo
-        return _ArtefactData(intCD=shell.intCD, quantity=count, icon=self.__getIconPath(shell.type.lower()), tooltip=EquipmentPanelCmpTooltips.TOOLTIP_SHELL)
+        return _ArtefactData(intCD=shell.intCD, quantity=count, icon=R.images.gui.maps.icons.shell.small.dyn(shell.descriptor.iconName)(), tooltip=EquipmentPanelCmpTooltips.TOOLTIP_SHELL)
 
     def __getEquipmentData(self, equipment, vehicleName):
         intCD = equipment.id[1]
         count = self.__getEquipmentCount(AmmoTypes.ITEM, intCD, vehicleName)
-        return _ArtefactData(intCD=intCD, quantity=count, icon=self.__getIconPath(equipment.iconName), tooltip=EquipmentPanelCmpTooltips.TOOLTIP_EQUIPMENT)
+        return _ArtefactData(intCD=intCD, quantity=count, icon=R.images.gui.maps.icons.battleRoyale.artefact.dyn(equipment.iconName)(), tooltip=EquipmentPanelCmpTooltips.TOOLTIP_EQUIPMENT)
 
     def __getEquipmentCount(self, typeKey, intCD=None, vehicleName=None):
         return self.__battleRoyaleController.getDefaultAmmoCount(typeKey, intCD, vehicleName)
@@ -230,7 +230,3 @@ class HangarBottomPanelView(ViewImpl, IGlobalListener):
         tooltipType = event.getArgument('tooltipType')
         intCD = event.getArgument('intCD')
         return None if not tooltipType or not intCD else createTooltipData(isSpecial=True, specialAlias=tooltipType, specialArgs=(intCD, _DEFAULT_SLOT_VALUE))
-
-    @staticmethod
-    def __getIconPath(itemName):
-        return R.images.gui.maps.icons.battleRoyale.artefact.dyn(itemName)()

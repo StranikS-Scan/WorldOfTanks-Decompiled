@@ -22,7 +22,9 @@ class DeathZonesAs3Descr(object):
 class MarkersAs3Descr(object):
     AS_UPDATE_RADAR_RADIUS = 'updateRadarRadius'
     AS_PLAY_RADAR_ANIMATION = 'play'
+    AS_UPDATE_MARKER = 'updateIcon'
     AS_ADD_MARKER = 'show'
+    AS_REMOVE_MARKER = 'hide'
     AS_ADD_MARKER_LOOT_BY_TYPE_ID = {LOOT_TYPE.BASIC: 'loot',
      LOOT_TYPE.ADVANCED: 'improved_loot',
      LOOT_TYPE.AIRDROP: 'airdrop'}

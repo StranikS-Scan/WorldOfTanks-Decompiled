@@ -279,6 +279,9 @@ class ShopCommonStats(IShopCommonStats):
     def getCamouflagesHiddens(self, nationID):
         return self.getItemsData().get('notInShopCamouflages', [])[nationID]
 
+    def getNotInShopProgressionLvlItems(self):
+        return self.getItemsData().get('notInShopProgressionLvlItems', {})
+
     @property
     def premiumCost(self):
         return self.getValue('premiumCost', {})

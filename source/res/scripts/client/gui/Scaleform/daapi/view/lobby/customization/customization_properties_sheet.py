@@ -28,7 +28,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization.c11n_items import camoIconTemplate
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from items.components.c11n_constants import SeasonType, Options
+from items.components.c11n_constants import SeasonType, Options, EDITING_STYLE_REASONS
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
@@ -691,8 +691,11 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
          'enabled': True}
 
     def __makeEditStyleRendererVO(self):
-        enabled = self._currentStyle.canBeEditedForVehicle(g_currentVehicle.item.intCD)
-        disableTooltip = backport.text(R.strings.vehicle_customization.customization.slot.editBtn.disabled())
+        editingReason = self._currentStyle.canBeEditedForVehicle(g_currentVehicle.item.intCD)
+        if editingReason.reason == EDITING_STYLE_REASONS.NOT_REACHED_LEVEL:
+            disableTooltip = backport.text(R.strings.vehicle_customization.customization.slot.editBtn.disabled.notReachedLevel())
+        else:
+            disableTooltip = backport.text(R.strings.vehicle_customization.customization.slot.editBtn.disabled())
         return {'iconSrc': backport.image(R.images.gui.maps.icons.customization.property_sheet.idle.edit_style()),
          'iconHoverSrc': backport.image(R.images.gui.maps.icons.customization.property_sheet.idle.edit_style_hover()),
          'iconDisableSrc': backport.image(R.images.gui.maps.icons.customization.property_sheet.disable.edit_style_disable()),
@@ -701,7 +704,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
          'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI,
          'animatedTransition': True,
          'disableTooltip': disableTooltip,
-         'enabled': enabled}
+         'enabled': bool(editingReason)}
 
     def __makeCamoColorRendererVO(self):
         btnsBlockVO = []

@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -153,7 +153,7 @@
   </ParticleSystem>
   <cat_config>
     <isOnline>	true	</isOnline>
-    <clientUrl>	http://cat.wargaming.net	</clientUrl>
+    <clientUrl>	http://cat-st1.wargaming.net	</clientUrl>
     <botsUrl>	http://cat-st1.wargaming.net	</botsUrl>
     <fullDump>	false	</fullDump>
     <collectPersonalData>	true	</collectPersonalData>
@@ -191,6 +191,7 @@
     <wwmediaPath>	audioww	</wwmediaPath>
     <memoryLimit>	160	</memoryLimit>
     <highPriorityBankThread>	true	</highPriorityBankThread>
+    <useBankLoadPriority>	false	</useBankLoadPriority>
     <playbackPools>
       <pool>
         <event>	obj_generative	</event>
@@ -218,241 +219,229 @@
         <reverbs>	true	</reverbs>
       </soundRender>
       <voice_soundbanks>
-        <project>
+        <bank>
           <name>	voiceover.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	inbattle_communication_pc.bnk	</name>
-        </project>
+        </bank>
       </voice_soundbanks>
       <SFX_soundbanks_loadonce>
-        <project>
+        <bank>
           <name>	ambient.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	ambient_2D.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	hangar_places.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	combat_atmosphere.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	damage.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	epic_battle.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	engines.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	explosive_objects.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	objects.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	objects_generative.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	plane.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	streams.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	treads_pc.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	treads_npc.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	turret.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	gun_reload.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	wpn.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	gui.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	gui_ranked_battles.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	epic_battle.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	utility.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	music_interactive.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	music_interactive.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	wheel_vehicle_GUI.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	plugin_media.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	impacts_full.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	ev_battle_royale_2019_music.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	ev_battle_royale_2019_music.pck	</name>
-        </project>
+        </bank>
       </SFX_soundbanks_loadonce>
       <SFX_soundbanks_hangar>
-        <project>
+        <bank>
           <name>	fort_area.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	clans.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	gui_ranked_battles.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	Personal_missions.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	customization.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	shop.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	tasks.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	gui_hangar.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	gui_blueprints.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	researches.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	tasks.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	cons_hangar.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	dog_tags_hangar.bnk	</name>
-        </project>
-        <project>
-          <name>	battle_of_bloggers.bnk	</name>
-        </project>
-        <project>
-          <name>	battle_of_bloggers.pck	</name>
-        </project>
-        <project>
-          <name>	ev_lunar_marathon_2021.bnk	</name>
-        </project>
-        <project>
-          <name>	ev_lunar_marathon_2021.pck	</name>
-        </project>
+        </bank>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
-        <project>
+        <bank>
           <name>	loginscreen.bnk	</name>
-        </project>
+        </bank>
       </SFX_soundbanks_login>
       <SFX_soundbanks_arena>
-        <project>
+        <bank>
           <name>	ambient.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	ambient_2D.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	damage.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	explosive_objects.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	objects.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	objects_generative.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	plane.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	turret.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	combat_atmosphere.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	engines.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	treads_pc.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	treads_npc.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	expl.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	impacts_full.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	phys_coll.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	psb.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	damaged_modules.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	wpn.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	gun_reload.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	mechanisms.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	wheel_vehicle_GUI.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	consumables.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	inbattle_communication_npc.bnk	</name>
-        </project>
+        </bank>
       </SFX_soundbanks_arena>
       <SFX_soundbanks_editor>
-        <project>
+        <bank>
           <name>	fort_area.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	objects.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	objects_generative.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	explosive_objects.bnk	</name>
-        </project>
+        </bank>
       </SFX_soundbanks_editor>
     </WWISE_adv_profile>
     <WWISE_low_profile>
@@ -473,139 +462,139 @@
         <reverbs>	false	</reverbs>
       </soundRender>
       <voice_soundbanks>
-        <project>
+        <bank>
           <name>	voiceover.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	inbattle_communication_pc.bnk	</name>
-        </project>
+        </bank>
       </voice_soundbanks>
       <SFX_soundbanks_loadonce>
-        <project>
+        <bank>
           <name>	engines.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	explosive_objects.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	objects.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	objects_generative.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	plane.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	streams.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	treads_pc.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	treads_npc.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	turret.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	gun_reload.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	wpn.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	gui.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	gui_ranked_battles.pck	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	utility.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	plugin_media.bnk	</name>
-        </project>
+        </bank>
       </SFX_soundbanks_loadonce>
       <SFX_soundbanks_hangar>
-        <project>
+        <bank>
           <name>	fort_area.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	gui_ranked_battles.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	Personal_missions.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	customization.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	shop.bnk	</name>
-        </project>
+        </bank>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
-        <project>
+        <bank>
           <name>	loginscreen.bnk	</name>
-        </project>
+        </bank>
       </SFX_soundbanks_login>
       <SFX_soundbanks_arena>
-        <project>
+        <bank>
           <name>	damage.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	turret.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	engines.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	treads_pc.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	treads_npc.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	expl.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	impacts_full.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	psb.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	damaged_modules.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	wpn.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	gun_reload.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	mechanisms.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	inbattle_communication_npc.bnk	</name>
-        </project>
+        </bank>
       </SFX_soundbanks_arena>
       <SFX_soundbanks_editor>
-        <project>
+        <bank>
           <name>	hangar_v2.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	fort_area.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	objects.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	objects_generative.bnk	</name>
-        </project>
-        <project>
+        </bank>
+        <bank>
           <name>	explosive_objects.bnk	</name>
-        </project>
+        </bank>
       </SFX_soundbanks_editor>
     </WWISE_low_profile>
   </soundMgr>
@@ -627,8 +616,8 @@
       <source>	SCRIPT	</source>
       <source>	UI	</source>
       <openMode>	a	</openMode>
-      <maxSizeKB>	2048	</maxSizeKB>
-      <trimToKB>	512	</trimToKB>
+      <maxSizeKB>	512	</maxSizeKB>
+      <trimToKB>	0	</trimToKB>
       <showTime>	true	</showTime>
       <disableBuffering>	false	</disableBuffering>
       <messageLength>	8192	</messageLength>
@@ -636,8 +625,8 @@
     <file>	ui.log	  <enabled>	true	</enabled>
       <source>	UI	</source>
       <openMode>	a	</openMode>
-      <maxSizeKB>	2048	</maxSizeKB>
-      <trimToKB>	512	</trimToKB>
+      <maxSizeKB>	512	</maxSizeKB>
+      <trimToKB>	0	</trimToKB>
       <showTime>	true	</showTime>
       <disableBuffering>	false	</disableBuffering>
       <messageLength>	8192	</messageLength>

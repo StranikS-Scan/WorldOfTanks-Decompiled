@@ -272,13 +272,6 @@ class BattleRoyaleDescription(ArenaWithLabelDescription):
         return backport.text(R.strings.arenas.c_250_br_battle_city2_1.description())
 
 
-class BobDescription(ArenaWithLabelDescription):
-    __slots__ = ()
-
-    def getWinString(self, isInBattle=True):
-        return backport.text(R.strings.bob.battleLoading.winText())
-
-
 class EpicBattlesDescription(ArenaWithLabelDescription):
     __slots__ = ()
 
@@ -307,8 +300,6 @@ def createDescription(arenaVisitor):
         description = EpicBattlesDescription(arenaVisitor)
     elif guiVisitor.isBattleRoyale():
         description = BattleRoyaleDescription(arenaVisitor)
-    elif guiVisitor.isBobBattle():
-        description = BobDescription(arenaVisitor)
     elif guiVisitor.hasLabel():
         description = ArenaWithLabelDescription(arenaVisitor)
     else:

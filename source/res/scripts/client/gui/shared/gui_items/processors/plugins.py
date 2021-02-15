@@ -8,6 +8,7 @@ from adisp import process, async
 from account_helpers import isLongDisconnectedFromCenter
 from account_helpers.AccountSettings import AccountSettings
 from gui.Scaleform.daapi.view import dialogs
+from gui.goodies.demount_kit import getDemountKitForOptDevice
 from gui.shared.gui_items.artefacts import OptionalDevice
 from gui.shared.gui_items.vehicle_equipment import EMPTY_ITEM
 from items import tankmen
@@ -606,7 +607,7 @@ class DemountDeviceConfirmator(IconPriceMessageConfirmator):
 
     def _gfMakeMeta(self):
         from gui.shared import event_dispatcher
-        demountKit = self._goodiesCache.getDemountKit()
+        demountKit, _ = getDemountKitForOptDevice(self.item)
         isDkEnabled = demountKit and demountKit.enabled
         if self.item.isDeluxe or not isDkEnabled:
             showDialog = partial(event_dispatcher.showOptionalDeviceDemountSinglePrice, self.item.intCD)
@@ -972,19 +973,21 @@ class DismountForDemountKitValidator(SyncValidator):
         super(DismountForDemountKitValidator, self).__init__(isEnabled=bool(itemsForDemountKit))
         self.vehicle = vehicle
         self.itemsForDemountKit = itemsForDemountKit
-        self.demountKit = self.goodiesCache.getDemountKit()
 
     def _validate(self):
-        if not self.demountKit:
-            return makeError()
-        if not self.demountKit.enabled:
-            return makeError('demount_kit_disabled')
-        if self.demountKit.inventoryCount < len(self.itemsForDemountKit):
-            return makeError()
+        spentDemountKits = {}
         for opDev in self.itemsForDemountKit:
-            if opDev.itemTypeID != GUI_ITEM_TYPE.OPTIONALDEVICE:
+            if opDev.itemTypeID != GUI_ITEM_TYPE.OPTIONALDEVICE or opDev.isRemovable:
                 return makeError()
             if opDev.isDeluxe:
+                return makeError()
+            demountKit, _ = getDemountKitForOptDevice(opDev)
+            if demountKit is None:
+                return makeError()
+            if not demountKit.enabled:
+                return makeError('demount_kit_disabled')
+            spentDemountKits[demountKit.goodieID] = spentDemountKits.get(demountKit.goodieID, 0) + 1
+            if demountKit.inventoryCount < spentDemountKits[demountKit.goodieID]:
                 return makeError()
 
         return makeSuccess()

@@ -56,6 +56,7 @@ class SettingsCore(ISettingsCore):
         BATTLE_BORDER_MAP = settings_constants.BATTLE_BORDER_MAP
         QUESTS_PROGRESS = settings_constants.QUESTS_PROGRESS
         BATTLE_COMM = settings_constants.BattleCommStorageKeys
+        SCORE_PANEL = settings_constants.ScorePanelStorageKeys
         self.__serverSettings = ServerSettingsManager(self)
         self.__interfaceScale = InterfaceScaleManager(self)
         VIDEO_SETTINGS_STORAGE = settings_storages.VideoSettingsStorage(self.serverSettings, self)
@@ -77,6 +78,7 @@ class SettingsCore(ISettingsCore):
         QUESTS_PROGRESS_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.QUESTS_PROGRESS)
         BATTLE_COMM_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.BATTLE_COMM)
         DOG_TAGS_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.DOG_TAGS)
+        BATTLE_HUD_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.BATTLE_HUD)
         MESSENGER_SETTINGS_STORAGE = settings_storages.MessengerSettingsStorage(GAME_SETTINGS_STORAGE)
         EXTENDED_MESSENGER_SETTINGS_STORAGE = settings_storages.MessengerSettingsStorage(EXTENDED_GAME_SETTINGS_STORAGE)
         self.__storages = {'game': GAME_SETTINGS_STORAGE,
@@ -99,11 +101,13 @@ class SettingsCore(ISettingsCore):
          'battleBorderMap': BATTLE_BORDER_MAP_SETTINGS_STORAGE,
          'questsProgress': QUESTS_PROGRESS_SETTINGS_STORAGE,
          'battleComm': BATTLE_COMM_SETTINGS_STORAGE,
+         'battleHud': BATTLE_HUD_SETTINGS_STORAGE,
          'dogTags': DOG_TAGS_SETTINGS_STORAGE}
         self.isDeviseRecreated = False
         self.isChangesConfirmed = True
         graphicSettings = tuple(((settingName, options.GraphicSetting(settingName, settingName == GRAPHICS.COLOR_GRADING_TECHNIQUE)) for settingName in BigWorld.generateGfxSettings()))
         self.__options = options.SettingsContainer(graphicSettings + ((GAME.REPLAY_ENABLED, options.ReplaySetting(GAME.REPLAY_ENABLED, storage=GAME_SETTINGS_STORAGE)),
+         (GAME.SNIPER_ZOOM, options.SniperZoomSetting(GAME.SNIPER_ZOOM, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.HANGAR_CAM_PERIOD, options.HangarCamPeriodSetting(GAME.HANGAR_CAM_PERIOD, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.HANGAR_CAM_PARALLAX_ENABLED, options.HangarCamParallaxEnabledSetting(GAME.HANGAR_CAM_PARALLAX_ENABLED, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.ENABLE_SERVER_AIM, options.StorageAccountSetting(GAME.ENABLE_SERVER_AIM, storage=GAME_SETTINGS_STORAGE)),
@@ -122,6 +126,7 @@ class SettingsCore(ISettingsCore):
          (GAME.SNIPER_MODE_BY_SHIFT, options.SniperModeByShiftSetting(GAME.SNIPER_MODE_BY_SHIFT, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.ENABLE_SPEEDOMETER, options.StorageAccountSetting(GAME.ENABLE_SPEEDOMETER, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.ENABLE_REPAIR_TIMER, options.StorageAccountSetting(GAME.ENABLE_REPAIR_TIMER, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
+         (GAME.ENABLE_BATTLE_NOTIFIER, options.StorageAccountSetting(GAME.ENABLE_BATTLE_NOTIFIER, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.SNIPER_MODE_STABILIZATION, options.SniperModeStabilization(GAME.SNIPER_MODE_STABILIZATION, storage=GAME_SETTINGS_STORAGE)),
          (GAME.ENABLE_OL_FILTER, options.MessengerSetting(GAME.ENABLE_OL_FILTER, storage=MESSENGER_SETTINGS_STORAGE)),
          (GAME.ENABLE_SPAM_FILTER, options.MessengerSetting(GAME.ENABLE_SPAM_FILTER, storage=MESSENGER_SETTINGS_STORAGE)),
@@ -295,7 +300,11 @@ class SettingsCore(ISettingsCore):
          (BATTLE_COMM.SHOW_CALLOUT_MESSAGES, options.SettingTrueByDefault(BATTLE_COMM.SHOW_CALLOUT_MESSAGES, storage=BATTLE_COMM_SETTINGS_STORAGE)),
          (BATTLE_COMM.SHOW_COM_IN_PLAYER_LIST, options.SettingTrueByDefault(BATTLE_COMM.SHOW_COM_IN_PLAYER_LIST, storage=BATTLE_COMM_SETTINGS_STORAGE)),
          (BATTLE_COMM.SHOW_STICKY_MARKERS, options.SettingTrueByDefault(BATTLE_COMM.SHOW_STICKY_MARKERS, storage=BATTLE_COMM_SETTINGS_STORAGE)),
-         (BATTLE_COMM.SHOW_LOCATION_MARKERS, options.SettingTrueByDefault(BATTLE_COMM.SHOW_LOCATION_MARKERS, storage=BATTLE_COMM_SETTINGS_STORAGE))))
+         (BATTLE_COMM.SHOW_LOCATION_MARKERS, options.SettingTrueByDefault(BATTLE_COMM.SHOW_LOCATION_MARKERS, storage=BATTLE_COMM_SETTINGS_STORAGE)),
+         (SCORE_PANEL.SHOW_HP_VALUES, options.SettingFalseByDefault(SCORE_PANEL.SHOW_HP_VALUES, storage=BATTLE_HUD_SETTINGS_STORAGE)),
+         (SCORE_PANEL.SHOW_HP_DIFFERENCE, options.SettingFalseByDefault(SCORE_PANEL.SHOW_HP_DIFFERENCE, storage=BATTLE_HUD_SETTINGS_STORAGE)),
+         (SCORE_PANEL.ENABLE_TIER_GROUPING, options.SettingFalseByDefault(SCORE_PANEL.ENABLE_TIER_GROUPING, storage=BATTLE_HUD_SETTINGS_STORAGE)),
+         (SCORE_PANEL.SHOW_HP_BAR, options.SettingTrueByDefault(SCORE_PANEL.SHOW_HP_BAR, storage=BATTLE_HUD_SETTINGS_STORAGE))))
         self.__options.init()
         AccountSettings.onSettingsChanging += self.__onAccountSettingsChanging
         g_playerEvents.onDisconnected += self.revertSettings

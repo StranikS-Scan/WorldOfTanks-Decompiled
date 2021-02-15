@@ -354,10 +354,11 @@ class ShotPointCalculatorPlanar(object):
         currentFrameStamp = BigWorld.wg_getFrameTimestamp()
         if self.__cachedResult.frameStamp == currentFrameStamp and self.__cachedResult.scanStart == start and self.__cachedResult.scanDir == direction:
             return (self.__cachedResult.result, self.__cachedResult.isConvenient)
+        descr = self.__vehicleDesc
         closestPoint, isPointConvenient = self.__calculateClosestPoint(start, direction)
-        turretYaw, gunPitch = AimingSystems.getTurretYawGunPitch(self.__vehicleDesc, self.__vehicleMat, closestPoint, True)
+        turretYaw, gunPitch = AimingSystems.getTurretYawGunPitch(descr, self.__vehicleMat, closestPoint, True)
         if not isPointConvenient:
-            _, maxPitch = gun_rotation_shared.calcPitchLimitsFromDesc(turretYaw, self.__vehicleDesc.gun.pitchLimits)
+            _, maxPitch = gun_rotation_shared.calcPitchLimitsFromDesc(turretYaw, descr.gun.pitchLimits, descr.hull.turretPitches[0], descr.turret.gunJointPitch)
             pitchInBorders = gunPitch <= maxPitch + 0.001
             isPointConvenient = not pitchInBorders
         if isPointConvenient:

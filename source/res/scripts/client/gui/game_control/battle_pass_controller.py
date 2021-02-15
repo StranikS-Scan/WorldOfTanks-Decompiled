@@ -7,6 +7,7 @@ from operator import itemgetter
 import typing
 import constants
 from Event import Event, EventManager
+from battle_pass_integration import BattlePassByGameMode
 from battle_pass_common import BattlePassConsts, BattlePassState, getBattlePassPassTokenName, getBattlePassOnboardingGiftToken, getLevel, BATTLE_PASS_CONFIG_NAME, BattlePassConfig, BattlePassStatsCommon, BATTLE_PASS_TOKEN_TROPHY_GIFT_OFFER, BATTLE_PASS_TOKEN_NEW_DEVICE_GIFT_OFFER, getBattlePassOnboardingToken
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.battle_pass.battle_pass_award import awardsFactory, BattlePassAwardsManager
@@ -149,6 +150,12 @@ class BattlePassController(IBattlePassController):
 
     def isValidBattleType(self, prbEntity):
         return prbEntity.getEntityType() == constants.ARENA_GUI_TYPE.RANDOM
+
+    def isGameModeEnabled(self, arenaBonusType):
+        return self.__getConfig().isGameModeEnabled(arenaBonusType)
+
+    def getSupportedArenaBonusTypes(self):
+        return [ arenaBonusType for arenaBonusType in self.__getConfig().points ]
 
     def getMaxLevel(self, isBase=True):
         return len(self.getLevelsConfig(isBase))
@@ -350,9 +357,9 @@ class BattlePassController(IBattlePassController):
             levelPoints, fullLevelPoints = getLevelProgression(level, alignedPoints, levelsConfig)
         return (levelPoints, fullLevelPoints)
 
-    def getPerBattlePoints(self, vehCompDesc=None):
-        winList = self.__getPackedBonusPointsList(vehTypeCompDescr=vehCompDesc)
-        lostList = self.__getPackedBonusPointsList(vehTypeCompDescr=vehCompDesc, isWinner=False)
+    def getPerBattlePoints(self, vehCompDesc=None, gameMode=constants.ARENA_BONUS_TYPE.REGULAR):
+        winList = self.__getPackedBonusPointsList(vehTypeCompDescr=vehCompDesc, gameMode=gameMode)
+        lostList = self.__getPackedBonusPointsList(vehTypeCompDescr=vehCompDesc, isWinner=False, gameMode=gameMode)
         count = 0
         result = []
         for winInfo, lostInfo in zip(winList, lostList):
@@ -376,16 +383,16 @@ class BattlePassController(IBattlePassController):
     def getSpecialVehicles(self):
         return self.__getConfig().getSpecialVehicles()
 
-    def getPointsDiffForVehicle(self, intCD):
-        defaultWinList = self.__getPackedBonusPointsList()
-        diffWinList = self.__getPackedBonusPointsList(vehTypeCompDescr=intCD, isDiff=True)
+    def getPointsDiffForVehicle(self, intCD, gameMode=constants.ARENA_BONUS_TYPE.REGULAR):
+        defaultWinList = self.__getPackedBonusPointsList(gameMode=gameMode)
+        diffWinList = self.__getPackedBonusPointsList(vehTypeCompDescr=intCD, isDiff=True, gameMode=gameMode)
         if not defaultWinList or not diffWinList:
             _logger.error('Failed to get bonus points information! Check server settings are correct.')
             return PointsDifference(0, 0, 0)
         defaultBlock = defaultWinList[-1]
         diffBlock = diffWinList[0]
         bonus = diffBlock[0]
-        top = 0 if diffBlock[1] == BattlePassConfig.MAX_RANKS - defaultBlock[1] else diffBlock[1]
+        top = 0 if diffBlock[1] == BattlePassByGameMode[gameMode]['maxRanks'] - defaultBlock[1] else diffBlock[1]
         textID = getPointsInfoStringID(top != 0)
         return PointsDifference(bonus, top, textID)
 
@@ -551,11 +558,21 @@ class BattlePassController(IBattlePassController):
             self.__oldLevel = newLevel
             self.__oldVoteOption = newVoteOption
 
-    def __getPackedBonusPointsList(self, vehTypeCompDescr=None, isWinner=True, isDiff=False):
+    def bonusPointsDiffList(self, vehTypeCompDescr, config, gameMode):
+        defaultDiff = [0] * BattlePassByGameMode[gameMode]['maxRanks']
+        defaultPoints = config.points.get(gameMode, {})
+        if vehTypeCompDescr in defaultPoints:
+            specialPoints = defaultPoints[vehTypeCompDescr]
+            defaultPoints = defaultPoints.get('win', defaultDiff)
+            specialPoints = specialPoints.get('win', defaultDiff)
+            return [ a - b for a, b in zip(specialPoints, defaultPoints) ]
+        return defaultDiff
+
+    def __getPackedBonusPointsList(self, vehTypeCompDescr=None, isWinner=True, isDiff=False, gameMode=constants.ARENA_BONUS_TYPE.REGULAR):
         if isDiff:
-            pointsList = self.__getConfig().bonusPointsDiffList(vehTypeCompDescr=vehTypeCompDescr)
+            pointsList = self.bonusPointsDiffList(vehTypeCompDescr=vehTypeCompDescr, config=self.__getConfig(), gameMode=gameMode)
         else:
-            pointsList = self.__getConfig().bonusPointsList(vehTypeCompDescr=vehTypeCompDescr, isWinner=isWinner)
+            pointsList = self.__getConfig().bonusPointsList(vehTypeCompDescr=vehTypeCompDescr, isWinner=isWinner, gameMode=gameMode)
         return [ (key, len(list(group))) for key, group in groupby(pointsList) ]
 
     def __extractBadgeInfo(self):

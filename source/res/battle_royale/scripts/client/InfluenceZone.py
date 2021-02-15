@@ -36,7 +36,7 @@ class InfluenceZone(BigWorld.Entity):
     def onEnterWorld(self, prereqs):
         gameObject = Svarog.GameObject(self.spaceID)
         self.gameObject = gameObject
-        _logger.debug('onEnterWorld %s %s', self.id)
+        _logger.debug('onEnterWorld %s', self.id)
         pointDescr = _getTrapOrRepairPointDescr(self.equipmentID)
         self.__influenceZoneType = getInfluenceZoneType(pointDescr)
         dynObjCache = dependency.instance(IBattleDynamicObjectsCache)
@@ -84,5 +84,5 @@ class InfluenceZone(BigWorld.Entity):
 
     def __get_effect_config(self, config):
         pointEffect = getEffectConfig(self.__influenceZoneType, config)
-        resultConfig = pointEffect.enemy if self.team != BigWorld.player().team else pointEffect.ally
+        resultConfig = pointEffect.enemy if self.team != BigWorld.player().followTeamID else pointEffect.ally
         return resultConfig

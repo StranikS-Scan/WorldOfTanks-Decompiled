@@ -12,7 +12,6 @@ from goodies.goodie_constants import GOODIE_STATE
 from gui import g_htmlTemplates
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
@@ -22,7 +21,7 @@ from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.Scaleform.locale.STORAGE import STORAGE
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared.event_dispatcher import showVehiclePreview, showStorage
+from gui.shared.event_dispatcher import showStylePreview, showProgressionStylesStylePreview, showStorage
 from gui.shared.formatters import text_styles, getItemPricesVO, icons, getMoneyVO
 from gui.shared.gui_items.customization.c11n_items import Customization
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
@@ -301,9 +300,9 @@ def getAvailableForSellCustomizationCount(item, vehicleCD=None):
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def customizationPreview(itemCD, itemsCache=None, vehicleCD=None):
+    item = itemsCache.items.getItemByCD(itemCD)
     if vehicleCD is None:
         suitableVehicles = []
-        item = itemsCache.items.getItemByCD(itemCD)
         itemFilter = item.descriptor.filter
         nationsFilter = []
         if itemFilter is not None and itemFilter.include:
@@ -338,7 +337,10 @@ def customizationPreview(itemCD, itemsCache=None, vehicleCD=None):
                     suitableVehicles.append(vehCD)
 
         vehicleCD = random.choice(suitableVehicles)
-    showVehiclePreview(vehTypeCompDescr=vehicleCD, previewBackCb=partial(showStorage, defaultSection=STORAGE_CONSTANTS.CUSTOMIZATION), previewAlias=VIEW_ALIAS.LOBBY_STORAGE, vehParams={'styleCD': itemCD})
+    showStylePreviewFunc = showStylePreview
+    if item.isProgression:
+        showStylePreviewFunc = showProgressionStylesStylePreview
+    showStylePreviewFunc(vehicleCD, item, item.getDescription(), partial(showStorage, defaultSection=STORAGE_CONSTANTS.CUSTOMIZATION), backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.storage()))
     return
 
 

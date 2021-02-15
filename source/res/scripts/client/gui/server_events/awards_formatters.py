@@ -30,7 +30,7 @@ from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from personal_missions import PM_BRANCH
 from shared_utils import CONST_CONTAINER, findFirst
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IEventProgressionController, IBobController
+from skeletons.gui.game_control import IEventProgressionController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
@@ -159,7 +159,7 @@ def getDefaultFormattersMap():
      'rankedDailyBattles': countableIntegralBonusFormatter,
      'rankedBonusBattles': countableIntegralBonusFormatter,
      'tmanToken': TmanTemplateBonusFormatter(),
-     'bobTokens': tokenBonusFormatter}
+     'battlePassPoints': BattlePassBonusFormatter()}
 
 
 def getEpicFormattersMap():
@@ -672,8 +672,7 @@ class SeniorityPremiumDaysBonusFormatter(LinkedSetPremiumDaysBonusFormatter):
 class TokenBonusFormatter(SimpleBonusFormatter):
     eventsCache = dependency.descriptor(IEventsCache)
     itemsCache = dependency.descriptor(IItemsCache)
-    bobController = dependency.descriptor(IBobController)
-    eventProgressionController = dependency.descriptor(IEventProgressionController)
+    _eventProgressionController = dependency.descriptor(IEventProgressionController)
 
     @staticmethod
     def getBattleBonusX5Tooltip(*args):
@@ -685,7 +684,7 @@ class TokenBonusFormatter(SimpleBonusFormatter):
             formatted = self._getFormattedBonus(tokenID, token, bonus)
             if formatted is not None:
                 result.append(formatted)
-            if self.eventProgressionController.isAvailable() and self.eventProgressionController.getProgressionXPTokenID() and tokenID.startswith(self.eventProgressionController.getProgressionXPTokenID()):
+            if self._eventProgressionController.isAvailable() and self._eventProgressionController.getProgressionXPTokenID() and tokenID.startswith(self._eventProgressionController.getProgressionXPTokenID()):
                 formatted = self._formatProgressionXPToken(token, bonus)
                 if formatted is not None:
                     result.append(formatted)
@@ -703,8 +702,6 @@ class TokenBonusFormatter(SimpleBonusFormatter):
             formatted = self._formatBattleBonusToken(token, bonus)
         elif tokenID.startswith(RESOURCE_TOKEN_PREFIX):
             formatted = self._formatResource(token, bonus)
-        elif self.bobController.isBobPointsToken(tokenID) and self.bobController.isEnabled():
-            formatted = self._formatBobPointsToken(token, bonus)
         return formatted
 
     def _formatBonusLabel(self, count):
@@ -777,16 +774,6 @@ class TokenBonusFormatter(SimpleBonusFormatter):
 
         return images
 
-    def _formatBobPointsToken(self, token, bonus):
-        if token.count <= 0:
-            return None
-        else:
-            header = backport.text(R.strings.bob.quests.bonuses.token.bob_points.header())
-            body = backport.text(R.strings.bob.quests.bonuses.token.bob_points.body())
-            image = lambda size: R.images.gui.maps.icons.quests.bonuses.dyn(size).bob_points()
-            images = {size:backport.image(image(size)) for size in AWARDS_SIZES.ALL()}
-            return PreformattedBonus(bonusName=bonus.getName(), label=self._formatBonusLabel(token.count), userName=header, labelFormatter=self._getLabelFormatter(bonus), images=images, tooltip=makeTooltip(header=header, body=body), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))
-
 
 class RankedPointFormatter(TokenBonusFormatter):
 
@@ -822,11 +809,11 @@ class EpicTokensFormatter(TokenBonusFormatter):
     def _format(self, bonus):
         result = []
         for tokenID, token in bonus.getTokens().iteritems():
-            if tokenID.startswith(self.eventProgressionController.rewardPointsTokenID):
+            if tokenID.startswith(self._eventProgressionController.rewardPointsTokenID):
                 formatted = self.__formatRewardPointToken(tokenID, token, bonus)
                 if formatted is not None:
                     result.append(formatted)
-            if self.eventProgressionController.isAvailable() and self.eventProgressionController.getProgressionXPTokenID() and tokenID.startswith(self.eventProgressionController.getProgressionXPTokenID()):
+            if self._eventProgressionController.isAvailable() and self._eventProgressionController.getProgressionXPTokenID() and tokenID.startswith(self._eventProgressionController.getProgressionXPTokenID()):
                 formatted = self._formatProgressionXPToken(token, bonus)
                 if formatted is not None:
                     result.append(formatted)
@@ -1639,3 +1626,19 @@ class EntitlementFormatter(SimpleBonusFormatter):
         value = bonus.getValue()
         isFormattedAmount = bonus.isFormattedAmount(value.id)
         return PreformattedBonus(bonusName=bonus.getName(), userName=bonus.getUserName(value.id), label=formatCountLabel(value.amount) if isFormattedAmount else backport.getIntegralFormat(value.amount), labelFormatter=self._getLabelFormatter(bonus), images=self._getImages(bonus), tooltip=bonus.getTooltip(), align=LABEL_ALIGN.RIGHT if isFormattedAmount else LABEL_ALIGN.CENTER, isCompensation=self._isCompensation(bonus))
+
+
+class BattlePassBonusFormatter(SimpleBonusFormatter):
+
+    def _format(self, bonus):
+        return [PreformattedBonus(bonusName=bonus.getName(), label=self._getLabel(bonus), userName=self._getUserName(bonus), labelFormatter=self._getLabelFormatter(bonus), images=self._getImages(bonus), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus), compensationReason=self._getCompensationReason(bonus), isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BATTLE_PASS_POINTS)]
+
+    @classmethod
+    def _getImages(cls, bonus):
+        images = {}
+        for size in AWARDS_SIZES.ALL():
+            image = bonus.getIconBySize(size)
+            if image is not None:
+                images[size] = image
+
+        return images

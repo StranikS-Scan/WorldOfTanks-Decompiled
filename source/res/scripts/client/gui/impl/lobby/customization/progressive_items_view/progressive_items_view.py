@@ -30,6 +30,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from tutorial.hints_manager import HINT_SHOWN_STATUS
 from web.web_client_api import webApiCollection, ui as ui_web_api, sound as sound_web_api
 from gui.shared.utils.graphics import isRendererPipelineDeferred
+from items.components.c11n_constants import CustomizationType
 _logger = logging.getLogger(__name__)
 _PREVIEW_ICON_SIZE = (512, 512)
 _PREVIEW_ICON_INNER_SIZE_DEFAULT = (504, 504)
@@ -146,7 +147,7 @@ class ProgressiveItemsView(ViewImpl):
         customizationCache = vehicles.g_cache.customization20()
         vehicleType = self._vehicle.descriptor.type
         sortedItems = sorted(customizationCache.customizationWithProgression.itervalues(), key=lambda i: i.id)
-        return [ item.compactDescr for item in sortedItems if item.filter.matchVehicleType(vehicleType) ]
+        return [ item.compactDescr for item in sortedItems if item.filter.matchVehicleType(vehicleType) and item.itemType == CustomizationType.PROJECTION_DECAL ]
 
     def __setItems(self, model):
         for intCD in self._possibleItems:
@@ -169,12 +170,13 @@ class ProgressiveItemsView(ViewImpl):
             levelInfo.setUnlocked(level < model.getCurrentLevel())
             icon = item.iconUrlByProgressionLevel(level, _PREVIEW_ICON_SIZE, _PREVIEW_ICON_INNER_SIZE.get(item.formfactor))
             levelInfo.setIcon(icon)
-            if level == model.getCurrentLevel():
+            levelConditions = item.progressionConditions.get(level, {}).get('conditions')
+            if level == model.getCurrentLevel() and levelConditions:
                 levelInfo.setInProgress(True)
-                levelInfo.progressBlock.setUnlockCondition(_ms(item.progressionConditions.get(level, {})[0].get('description', '')))
+                levelInfo.progressBlock.setUnlockCondition(_ms(levelConditions[0].get('description', '')))
                 currProgress = int(item.getCurrentProgressOnCurrentLevel(self._vehicle))
                 currProgress = currProgress if currProgress > 0 else 0
-                maxProgress = int(item.progressionConditions.get(level, {})[0].get('value', '1'))
+                maxProgress = int(levelConditions[0].get('value', '1'))
                 if maxProgress > 1:
                     levelInfo.progressBlock.setProgressionVal(currProgress)
                     levelInfo.progressBlock.setMaxProgressionVal(maxProgress)

@@ -71,7 +71,7 @@ class InjectComponentAdaptor(BaseDAAPIComponent):
         if self.__injected is None:
             return
         else:
-            if wasAdded and self.flashObject is not None and self.__injected.content is not None:
+            if wasAdded and self.flashObject is not None:
                 self.flashObject.removeViewImpl(self.__injected.content.uniqueID)
             self.__injected.onStatusChanged -= self.__onStatusChanged
             self._removeInjectContentListeners()

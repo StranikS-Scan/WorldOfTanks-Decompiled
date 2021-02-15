@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/battle_field_ctrl.py
+import BigWorld
+import Event
 from gui.battle_control.arena_info import vos_collections
-from gui.battle_control.arena_info.interfaces import IBattleFieldController
-from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE as _SCOPE
+from gui.battle_control.arena_info.interfaces import IBattleFieldController, IVehiclesAndPositionsController
+from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE as _SCOPE, VehicleSpottedStatus, INVALIDATE_OP
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.view_components import ViewComponentsController
 
@@ -18,11 +20,10 @@ class IBattleFieldListener(object):
         pass
 
 
-class BattleFieldCtrl(IBattleFieldController, ViewComponentsController):
+class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, ViewComponentsController):
 
     def __init__(self):
         super(BattleFieldCtrl, self).__init__()
-        self.__isEnabled = True
         self.__battleCtx = None
         self._aliveAllies = {}
         self._aliveEnemies = {}
@@ -32,60 +33,88 @@ class BattleFieldCtrl(IBattleFieldController, ViewComponentsController):
         self.__totalEnemiesHealth = 0
         self.__deadAllies = set()
         self.__deadEnemies = set()
+        self.__eManager = Event.EventManager()
+        self.onSpottedStatusChanged = Event.Event(self.__eManager)
         return
 
     def getCtrlScope(self):
-        return _SCOPE.VEHICLES | _SCOPE.LOAD
+        return _SCOPE.VEHICLES | _SCOPE.LOAD | _SCOPE.POSITIONS
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.BATTLE_FIELD_CTRL
 
+    def getVehicleHealthInfo(self, vehicleID):
+        if vehicleID in self._aliveAllies:
+            healthInfo = self._aliveAllies[vehicleID]
+            return (healthInfo[0], healthInfo[1])
+        else:
+            return self._aliveEnemies.get(vehicleID, None)
+
     def startControl(self, battleCtx, arenaVisitor):
         self.__battleCtx = battleCtx
-        self.__isEnabled = not arenaVisitor.isArenaFogOfWarEnabled()
 
     def stopControl(self):
         super(BattleFieldCtrl, self).stopControl()
         self.clearViewComponents()
         self.__clear()
+        if self.__eManager is not None:
+            self.__eManager.clear()
+            self.__eManager = None
         self.__battleCtx = None
         return
 
     def setViewComponents(self, *components):
         super(BattleFieldCtrl, self).setViewComponents(*components)
-        if self.__isEnabled:
-            self.__initializeVehiclesInfo()
+        self.__initializeVehiclesInfo()
 
     def setVehicleHealth(self, vehicleID, newHealth):
-        if self.__isEnabled:
-            self.__changeVehicleHealth(vehicleID, newHealth)
-            self.__updateVehicleHealth(vehicleID)
+        self.__changeVehicleHealth(vehicleID, newHealth)
+        self.__updateVehicleHealth(vehicleID)
 
     def setVehicleVisible(self, vehicleID, health):
-        if self.__isEnabled:
-            self.__changeVehicleHealth(vehicleID, health)
-            self.__updateVehicleHealth(vehicleID)
+        self.__changeVehicleHealth(vehicleID, health)
+        self.__updateVehicleHealth(vehicleID)
+        self.__updateSpottedStatus(vehicleID, VehicleSpottedStatus.SPOTTED)
+
+    def updatePositions(self, iterator):
+        handled = set()
+        arenaDP = self.__battleCtx.getArenaDP()
+        for vInfo, _ in iterator():
+            vehicleID = vInfo.vehicleID
+            if vehicleID not in self._aliveEnemies or not vInfo.isAlive():
+                continue
+            handled.add(vehicleID)
+            vStats = arenaDP.getVehicleStats(vehicleID)
+            if vStats.spottedStatus in (VehicleSpottedStatus.DEFAULT, VehicleSpottedStatus.UNSPOTTED):
+                self.__updateSpottedStatus(vehicleID, VehicleSpottedStatus.SPOTTED)
+
+        for vehicleID in set(self._aliveEnemies).difference(handled):
+            vStats = arenaDP.getVehicleStats(vehicleID)
+            vehicle = BigWorld.entity(vehicleID)
+            if vehicle is None and vStats.spottedStatus == VehicleSpottedStatus.SPOTTED:
+                self.__updateSpottedStatus(vehicleID, VehicleSpottedStatus.UNSPOTTED)
+
+        return
+
+    def stopVehicleVisual(self, vehicleID):
+        self.__updateSpottedStatus(vehicleID, VehicleSpottedStatus.UNSPOTTED)
 
     def addVehicleInfo(self, vInfoVO, arenaDP):
-        if self.__isEnabled and vInfoVO.isAlive():
+        if vInfoVO.isAlive():
             self.__registerAliveVehicle(vInfoVO, arenaDP)
             self.__updateVehiclesHealth()
 
     def updateVehiclesInfo(self, updated, arenaDP):
-        if self.__isEnabled:
-            for _, vInfoVO in updated:
-                if vInfoVO.isAlive():
-                    self.__changeMaxVehicleHealth(vInfoVO.vehicleID, vInfoVO.vehicleType.maxHealth)
-
-    def invalidateFogOfWarEnabledFlag(self, flag):
-        self.__isEnabled = not flag
+        for _, vInfoVO in updated:
+            if vInfoVO.isAlive():
+                self.__changeMaxVehicleHealth(vInfoVO.vehicleID, vInfoVO.vehicleType.maxHealth)
 
     def invalidateArenaInfo(self):
-        if self.__isEnabled and self._viewComponents:
+        if self._viewComponents:
             self.__initializeVehiclesInfo()
 
     def invalidateVehicleStatus(self, flags, vInfoVO, arenaDP):
-        if self.__isEnabled and not vInfoVO.isAlive():
+        if not vInfoVO.isAlive():
             self.__registerDeadVehicle(vInfoVO, arenaDP)
             self.__updateDeadVehicles()
             vehicleId = vInfoVO.vehicleID
@@ -94,6 +123,9 @@ class BattleFieldCtrl(IBattleFieldController, ViewComponentsController):
                 self.__enemiesHealth -= currH
                 del self._aliveEnemies[vehicleId]
                 self.__updateVehiclesHealth()
+                vStats = arenaDP.getVehicleStats(vehicleId)
+                if vStats.spottedStatus != VehicleSpottedStatus.DEFAULT:
+                    self.__updateSpottedStatus(vehicleId, VehicleSpottedStatus.DEFAULT)
             elif vehicleId in self._aliveAllies:
                 currH, _ = self._aliveAllies[vehicleId]
                 self.__alliesHealth -= currH
@@ -190,6 +222,26 @@ class BattleFieldCtrl(IBattleFieldController, ViewComponentsController):
         self.__totalAlliesHealth -= currentMaxHealth
         self.__totalAlliesHealth += newMaxHealth
         self._aliveAllies[vehicleID][1] = newMaxHealth
+
+    def __updateSpottedStatus(self, vehicleID, vehicleSpottedStatus):
+        if vehicleID in self._aliveAllies or vehicleID in self.__deadAllies:
+            return
+        else:
+            vehicle = BigWorld.entity(vehicleID)
+            if vehicle is not None:
+                isAlive = vehicle.isAlive()
+            elif vehicleID in self._aliveEnemies:
+                isAlive = True
+            else:
+                isAlive = False
+            if isAlive:
+                spottedState = vehicleSpottedStatus
+            else:
+                spottedState = VehicleSpottedStatus.DEFAULT
+            flags, vo = self.__battleCtx.getArenaDP().updateVehicleSpottedStatus(vehicleID, spottedState)
+            if flags != INVALIDATE_OP.NONE:
+                self.onSpottedStatusChanged([(flags, vo)], self.__battleCtx.getArenaDP())
+            return
 
     def __clear(self):
         self.__deadAllies.clear()

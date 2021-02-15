@@ -36,7 +36,8 @@ class CallbackTruePythonTimer(PrecisePythonTimer):
         return
 
     def _hideView(self):
-        self._viewObject.endCallback()
+        if self._viewObject:
+            self._viewObject.endCallback()
 
     def getTimeLeft(self):
         return self.__timeLeft

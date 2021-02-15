@@ -20,6 +20,7 @@ from helpers import dependency
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from skeletons.account_helpers.settings_core import ISettingsCore
 from tutorial.hints_manager import HINT_SHOWN_STATUS
+from vehicle_systems.camouflages import getStyleProgressionOutfit
 if typing.TYPE_CHECKING:
     from items.customizations import SerializableComponent
     from gui.shared.gui_items.customization.c11n_items import Style, Customization
@@ -66,7 +67,7 @@ class StyledMode(CustomizationMode):
         return OutfitInfo(self.__originalStyle, self.__modifiedStyle)
 
     def getPurchaseItems(self):
-        return getStylePurchaseItems(self.__modifiedStyle, self.getModifiedOutfits(), prolongRent=self.__prolongRent) if self.__modifiedStyle is not None else []
+        return getStylePurchaseItems(self.__modifiedStyle, self.getModifiedOutfits(), prolongRent=self.__prolongRent, progressionLevel=self.getStyleProgressionLevel()) if self.__modifiedStyle is not None else []
 
     def removeStyle(self, intCD):
         if self.__modifiedStyle is not None and self.__modifiedStyle.intCD == intCD:
@@ -81,6 +82,21 @@ class StyledMode(CustomizationMode):
             self.installItem(style.intCD, self.STYLE_SLOT)
             self._events.onProlongStyleRent()
             return
+
+    def changeStyleProgressionLevel(self, toLevel):
+        vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
+        baseOutfit = self.__modifiedStyle.getOutfit(self.season, vehicleCD=vehicleCD)
+        for seasonID in SeasonType.COMMON_SEASONS:
+            self._modifiedOutfits[seasonID] = getStyleProgressionOutfit(self._modifiedOutfits[seasonID], toLevel, seasonID)
+            diff = getEditableStyleOutfitDiff(self._modifiedOutfits[seasonID], baseOutfit)
+            self._ctx.stylesDiffsCache.saveDiff(self.__modifiedStyle, seasonID, diff)
+
+        self._fitOutfits(modifiedOnly=True)
+        self._ctx.refreshOutfit()
+        self._events.onComponentChanged(self.STYLE_SLOT, True)
+
+    def getStyleProgressionLevel(self):
+        return self._modifiedOutfits[self.season].progressionLevel if self.__modifiedStyle and self.__modifiedStyle.isProgressive else -1
 
     def clearStyle(self):
         style = self.__modifiedStyle
@@ -271,6 +287,19 @@ class StyledMode(CustomizationMode):
     def _isOutfitsModified(self):
         isStyleChanged = any((not self._originalOutfits[season].isEqual(self._modifiedOutfits[season]) for season in SeasonType.COMMON_SEASONS))
         isAutoRentChanged = self.__autoRentEnabled != g_currentVehicle.item.isAutoRentStyle
+        if self.__modifiedStyle and self.__modifiedStyle.isProgressive:
+            modifiedOutfit = self._modifiedOutfits[self.season]
+            originalOutfit = self._originalOutfits[self.season]
+            isInstalled = originalOutfit.id == modifiedOutfit.id
+            modifiedProgression = modifiedOutfit.progressionLevel
+            if g_currentVehicle and g_currentVehicle.item:
+                originalProgression = self.__modifiedStyle.getLatestOpenedProgressionLevel(g_currentVehicle.item)
+            else:
+                originalProgression = originalOutfit.progressionLevel
+            isProgressionReachable = self.__modifiedStyle.isProgressionPurchasable(modifiedProgression)
+            isProgressionReachable = isProgressionReachable or modifiedProgression == originalProgression
+            if (not isInstalled or modifiedProgression != originalProgression) and not isProgressionReachable:
+                return False
         return isStyleChanged or isAutoRentChanged
 
     def _getAnchorVOs(self):

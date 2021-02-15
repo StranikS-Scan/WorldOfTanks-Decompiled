@@ -77,6 +77,13 @@
       <undamaged>	vehicles/american/A85_T110E3/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/american/A85_T110E3/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/american/A85_T110E3/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <ProgressionStyle>
+          <undamaged>	vehicles/american/A85_T110E3/_skins/ProgressionStyle/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A85_T110E3/_skins/ProgressionStyle/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A85_T110E3/_skins/ProgressionStyle/crash/lod0/Hull.model	</exploded>
+        </ProgressionStyle>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -1054,6 +1061,76 @@
         <anchorPosition>	-0.00662487 0.220488 2.80455	</anchorPosition>
         <anchorDirection>	0.0281265 0.907744 0.41858	</anchorDirection>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15067	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	ProgressionStyle	</compatibleModels>
+        <position>	1.40492 1.47886 2.68117	</position>
+        <rotation>	0.016254 -0.000181504 3.14158	</rotation>
+        <scale>	0.705935 0.05 0.705943	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.51128	</clipAngle>
+        <anchorPosition>	1.40492 0.37668 2.68159	</anchorPosition>
+        <anchorDirection>	0.000010 0.999868 0.0162533	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15068	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	ProgressionStyle	</compatibleModels>
+        <position>	1.01096 1.79541 1.69245	</position>
+        <rotation>	1.18223 0.562766 -3.0496	</rotation>
+        <scale>	0.614612 0.0999999 0.614618	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.37511	</clipAngle>
+        <anchorPosition>	1.04739 0.700915 1.76535	</anchorPosition>
+        <anchorDirection>	0.413972 0.377263 0.828432	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15069	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	ProgressionStyle	</compatibleModels>
+        <position>	-0.0407803 2.17461 1.66822	</position>
+        <rotation>	-0.0555248 0.000006 3.14157	</rotation>
+        <scale>	0.717043 0.393367 0.717072	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.3146	</clipAngle>
+        <anchorPosition>	-0.0407759 1.24621 1.65714	</anchorPosition>
+        <anchorDirection>	0.000022 0.998459 -0.0554963	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15070	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	ProgressionStyle	</compatibleModels>
+        <position>	-0.0279981 2.25897 0.346887	</position>
+        <rotation>	0.174533 0.000002 3.14158	</rotation>
+        <scale>	0.93194 0.511265 0.931948	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.948038	</clipAngle>
+        <anchorPosition>	-0.0279943 1.42027 0.397843	</anchorPosition>
+        <anchorDirection>	0.000013 0.984808 0.173648	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15071	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	ProgressionStyle	</compatibleModels>
+        <position>	0.277079 1.97873 -2.78217	</position>
+        <rotation>	-3.1379 -0.000182629 -0.000074	</rotation>
+        <scale>	0.542265 0.0499999 0.54225	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.840788	</clipAngle>
+        <anchorPosition>	0.277074 0.910976 -2.78195	</anchorPosition>
+        <anchorDirection>	-0.000075 0.999993 0.00369204	</anchorDirection>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1095,6 +1172,13 @@
         <undamaged>	vehicles/american/A85_T110E3/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A85_T110E3/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/american/A85_T110E3/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <ProgressionStyle>
+            <undamaged>	vehicles/american/A85_T110E3/_skins/ProgressionStyle/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A85_T110E3/_skins/ProgressionStyle/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A85_T110E3/_skins/ProgressionStyle/crash/lod0/Chassis.model	</exploded>
+          </ProgressionStyle>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1117,6 +1201,14 @@
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
+        <modelSets>
+          <ProgressionStyle>
+            <segmentModelLeft>	vehicles/american/A85_T110E3/_skins/ProgressionStyle/track/segment_01_L.model	</segmentModelLeft>
+            <segmentModelRight>	vehicles/american/A85_T110E3/_skins/ProgressionStyle/track/segment_01_R.model	</segmentModelRight>
+            <segment2ModelLeft>	vehicles/american/A85_T110E3/_skins/ProgressionStyle/track/segment_02_L.model	</segment2ModelLeft>
+            <segment2ModelRight>	vehicles/american/A85_T110E3/_skins/ProgressionStyle/track/segment_02_R.model	</segment2ModelRight>
+          </ProgressionStyle>
+        </modelSets>
       </splineDesc>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
@@ -1356,6 +1448,12 @@
             <model>	vehicles/american/A85_T110E3/track/segment2.model	</model>
             <length>	0.0860076	</length>
           </secSegment>
+          <modelSets>
+            <ProgressionStyle>
+              <mainSegmentModel>	vehicles/american/A85_T110E3/_skins/ProgressionStyle/track/segment_01_L.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/american/A85_T110E3/_skins/ProgressionStyle/track/segment_02_L.model	</secSegmentModel>
+            </ProgressionStyle>
+          </modelSets>
           <collisionHull>
             <bottom>
               <part>
@@ -1723,6 +1821,12 @@
             <model>	vehicles/american/A85_T110E3/track/segment2.model	</model>
             <length>	0.0864524	</length>
           </secSegment>
+          <modelSets>
+            <ProgressionStyle>
+              <mainSegmentModel>	vehicles/american/A85_T110E3/_skins/ProgressionStyle/track/segment_01_R.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/american/A85_T110E3/_skins/ProgressionStyle/track/segment_02_R.model	</secSegmentModel>
+            </ProgressionStyle>
+          </modelSets>
           <collisionHull>
             <bottom>
               <part>
@@ -2150,6 +2254,13 @@
             <undamaged>	vehicles/american/A85_T110E3/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/american/A85_T110E3/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/american/A85_T110E3/crash/lod0/Gun_04.model	</exploded>
+            <sets>
+              <ProgressionStyle>
+                <undamaged>	vehicles/american/A85_T110E3/_skins/ProgressionStyle/normal/lod0/Gun_04.model	</undamaged>
+                <destroyed>	vehicles/american/A85_T110E3/_skins/ProgressionStyle/crash/lod0/Gun_04.model	</destroyed>
+                <exploded>	vehicles/american/A85_T110E3/_skins/ProgressionStyle/crash/lod0/Gun_04.model	</exploded>
+              </ProgressionStyle>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A85_T110E3/collision/Gun_04.model	</collisionModelServer>
@@ -2207,6 +2318,13 @@
         <undamaged>	vehicles/american/A85_T110E3/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/american/A85_T110E3/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/american/A85_T110E3/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <ProgressionStyle>
+            <undamaged>	vehicles/american/A85_T110E3/_skins/ProgressionStyle/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A85_T110E3/_skins/ProgressionStyle/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A85_T110E3/_skins/ProgressionStyle/crash/lod0/Turret_01.model	</exploded>
+          </ProgressionStyle>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/american/A85_T110E3/collision/Turret_01.model	</collisionModelServer>

@@ -330,7 +330,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
     def __addListeners(self):
         vehicleCtrl = self.sessionProvider.shared.vehicleState
         if vehicleCtrl is not None:
-            vehicleCtrl.onPostMortemSwitched += self.__onPostMortemSwitched
+            vehicleCtrl.onPostMortemSwitched += self._onPostMortemSwitched
             vehicleCtrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
             vehicleCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
         ammoCtrl = self.sessionProvider.shared.ammo
@@ -364,7 +364,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         CommandMapping.g_instance.onMappingChanged -= self.__onMappingChanged
         vehicleCtrl = self.sessionProvider.shared.vehicleState
         if vehicleCtrl is not None:
-            vehicleCtrl.onPostMortemSwitched -= self.__onPostMortemSwitched
+            vehicleCtrl.onPostMortemSwitched -= self._onPostMortemSwitched
             vehicleCtrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
             vehicleCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
         ammoCtrl = self.sessionProvider.shared.ammo
@@ -592,7 +592,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         else:
             _logger.error('Optional device with cd=%d is not found in panel=%s', intCD, str(self._cds))
 
-    def __onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
+    def _onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
         self._reset()
         if noRespawnPossible:
             if not BigWorld.player().isObserver():

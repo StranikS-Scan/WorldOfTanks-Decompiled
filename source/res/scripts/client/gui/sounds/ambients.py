@@ -359,18 +359,6 @@ class BattlePassSoundEnv(SoundEnv):
         super(BattlePassSoundEnv, self).__init__(soundsCtrl, 'battlePass', filters=(SoundFilters.BATTLE_PASS_FILTER,))
 
 
-class BobPageSoundEnv(SoundEnv):
-
-    def __init__(self, soundsCtrl):
-        super(BobPageSoundEnv, self).__init__(soundsCtrl, 'bob', filters=(SoundFilters.BOB_FILTER,))
-
-
-class MarathonPageSoundEnv(SoundEnv):
-
-    def __init__(self, soundsCtrl):
-        super(MarathonPageSoundEnv, self).__init__(soundsCtrl, 'marathon', filters=(SoundFilters.MARATHON_FILTER,))
-
-
 class GuiAmbientsCtrl(object):
     _spaces = {GuiGlobalSpaceID.LOGIN: LoginSpaceEnv,
      GuiGlobalSpaceID.LOBBY: LobbySpaceEnv,

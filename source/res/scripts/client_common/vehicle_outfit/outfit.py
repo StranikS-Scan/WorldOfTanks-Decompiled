@@ -58,7 +58,7 @@ def scaffold():
 REGIONS_BY_SLOT_TYPE = {container.getAreaID():{slotType:slot.getRegions() for slot in container.slots() for slotType in slot.getTypes()} for container in scaffold()}
 
 class Outfit(HasStrCD):
-    __slots__ = ('_id', '_styleDescr', '_containers', '_vehicleCD', '__itemsCounter')
+    __slots__ = ('_id', '_styleDescr', '_containers', '_vehicleCD', '__itemsCounter', '__styleProgressionLevel')
 
     def __init__(self, strCompactDescr=None, component=None, vehicleCD='', vehicleType=None):
         super(Outfit, self).__init__(strCompactDescr)
@@ -71,6 +71,7 @@ class Outfit(HasStrCD):
         elif component is None:
             component = CustomizationOutfit()
         self._id = component.styleId
+        self.__styleProgressionLevel = component.styleProgressionLevel
         if self._id:
             intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, self._id)
             self._styleDescr = getItemByCompactDescr(intCD)
@@ -85,7 +86,7 @@ class Outfit(HasStrCD):
         return
 
     def __str__(self):
-        result = 'CustomizationOutfit (vehicleCD={}, strCD={}):'.format(self._vehicleCD, self.pack().makeCompDescr())
+        result = 'Outfit (vehicleCD={}, strCD={}):'.format(self._vehicleCD, self.pack().makeCompDescr())
         containers = '\n'.join(map(str, self.containers()))
         if containers:
             result += '\n' + containers
@@ -118,6 +119,7 @@ class Outfit(HasStrCD):
             container.pack(component)
 
         component.styleId = self._id
+        component.styleProgressionLevel = self.__styleProgressionLevel
         return component
 
     def copy(self):
@@ -153,6 +155,7 @@ class Outfit(HasStrCD):
     def adjust(self, other):
         self._validateVehicle(other)
         result = self.copy()
+        self.__styleProgressionLevel = other.progressionLevel
         for areaID in self._containers.iterkeys():
             acont = self.getContainer(areaID)
             bcont = other.getContainer(areaID)
@@ -162,7 +165,9 @@ class Outfit(HasStrCD):
         return result
 
     def isEqual(self, other):
-        return False if self.id != other.id else self.diff(other).isEmpty() and other.diff(self).isEmpty()
+        if self.id != other.id:
+            return False
+        return False if self.progressionLevel != other.progressionLevel else self.diff(other).isEmpty() and other.diff(self).isEmpty()
 
     def getContainer(self, areaID):
         return self._containers.get(areaID)
@@ -218,6 +223,13 @@ class Outfit(HasStrCD):
         if self.__itemsCounter is None:
             self.invalidateItemsCounter()
         return self.__itemsCounter
+
+    @property
+    def progressionLevel(self):
+        return self.__styleProgressionLevel
+
+    def setProgressionLevel(self, value):
+        self.__styleProgressionLevel = value
 
     def containers(self):
         for container in self._containers.itervalues():

@@ -193,6 +193,11 @@ def showBuyGoldForBundle(fullPrice, params=None):
     showBuyGoldWebOverlay(params)
 
 
+def showBluprintsExchangeOverlay(url=None, parent=None):
+    _url = url or helpers.getBlueprintsExchangeUrl()
+    _showBlurredWebOverlay(_url, parent=parent)
+
+
 @process
 def _showBlurredWebOverlay(url, params=None, parent=None):
     url = yield URLMacros().parse(url, params)

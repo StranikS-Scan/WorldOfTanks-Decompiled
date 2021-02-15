@@ -130,7 +130,6 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     CANNOT_BE_SOLD = 'cannot_be_sold'
     SECRET = 'secret'
     SPECIAL = 'special'
-    BOB = 'bob'
     OBSERVER = 'observer'
     DISABLED_IN_ROAMING = 'disabledInRoaming'
     EVENT = 'event_battles'
@@ -145,8 +144,6 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     BATTLE_ROYALE = 'battle_royale'
     RENT_PROMOTION = 'rent_promotion'
     EARN_CRYSTALS = 'earn_crystals'
-    LOW_TIER_EVENT = 'lowTierEvent'
-    BOB = 'bob'
 
 
 EPIC_ACTION_VEHICLE_CDS = (44033, 63265)
@@ -1259,10 +1256,6 @@ class Vehicle(FittingItem):
         return checkForTags(self.tags, VEHICLE_TAGS.EVENT)
 
     @property
-    def isLowTierEvent(self):
-        return checkForTags(self.tags, VEHICLE_TAGS.LOW_TIER_EVENT)
-
-    @property
     def isOnlyForEpicBattles(self):
         return checkForTags(self.tags, VEHICLE_TAGS.EPIC_BATTLES)
 
@@ -1273,10 +1266,6 @@ class Vehicle(FittingItem):
     @property
     def isOnlyForBattleRoyaleBattles(self):
         return checkForTags(self.tags, VEHICLE_TAGS.BATTLE_ROYALE)
-
-    @property
-    def isOnlyForBob(self):
-        return checkForTags(self.tags, VEHICLE_TAGS.BOB)
 
     @property
     def isTelecom(self):
@@ -1660,7 +1649,16 @@ class Vehicle(FittingItem):
         return customizations.parseCompDescr(customOutfitData) if customOutfitData is not None else self.__getEmptyOutfitComponent()
 
     def __getStyledOutfitComponent(self, proxy, style, season):
+        componentProgression = 0
+        if style.progression:
+            progressionData = self.itemsCache.items.inventory.getC11nProgressionDataForItem(style.compactDescr)
+            if progressionData is not None:
+                vehCD = self.intCD if style.progression.autobound else 0
+                vehProgressionData = progressionData.get(vehCD, None)
+                if vehProgressionData is not None:
+                    componentProgression = vehProgressionData.currentLevel
         component = deepcopy(style.outfits.get(season))
+        component.styleProgressionLevel = componentProgression
         if ItemTags.ADD_NATIONAL_EMBLEM in style.tags:
             emblems = createNationalEmblemComponents(self._descriptor)
             component.decals.extend(emblems)

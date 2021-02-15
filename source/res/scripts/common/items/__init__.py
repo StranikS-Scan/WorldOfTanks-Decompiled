@@ -151,6 +151,8 @@ def init(preloadEverything, pricesToCollect=None):
         pricesToCollect['playerEmblemGroupPriceFactors'] = {}
         pricesToCollect['notInShopPlayerEmblemGroups'] = set()
         pricesToCollect['operationPrices'] = {}
+        pricesToCollect['progressionLvlPrices'] = {}
+        pricesToCollect['notInShopProgressionLvlItems'] = {}
     from items import stun
     stun.init()
     from items import vehicles

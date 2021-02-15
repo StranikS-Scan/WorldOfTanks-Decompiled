@@ -1,8 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/func_utils.py
+from collections import namedtuple
 from functools import partial
 from time import sleep, time
+import typing
 import BigWorld
+from BWUtil import AsyncReturn
+from PlayerEvents import g_playerEvents
+from async import async, await, AsyncScope, AsyncEvent, BrokenPromiseError
 from debug_utils import LOG_DEBUG
 
 def callback(delay, obj, methodName, *args):
@@ -62,3 +67,89 @@ def oncePerPeriod(period):
         return caller
 
     return wrapper
+
+
+CallParams = namedtuple('CallParams', ('args', 'kwargs'))
+CallParams.__new__.__defaults__ = ((), {})
+
+class CooldownCaller(object):
+    __slots__ = ('__call', '__cooldown', '__paramsMerger', '__lock', '__delayedCalls')
+
+    class _Lock(object):
+        __slots__ = ('__locked',)
+
+        def __init__(self):
+            self.__locked = False
+
+        def __enter__(self):
+            self.__locked = True
+
+        def __exit__(self, *_, **__):
+            self.__locked = False
+
+        @property
+        def locked(self):
+            return self.__locked
+
+    def __init__(self, func, cooldown, paramsMerger):
+        self.__call = func
+        self.__cooldown = cooldown
+        self.__paramsMerger = paramsMerger
+        self.__lock = self._Lock()
+        self.__delayedCalls = []
+
+    def __call__(self, *args, **kwargs):
+        if self.__lock.locked:
+            self.__delayCall(*args, **kwargs)
+        else:
+            self.__doCall(*args, **kwargs)
+
+    def __delayCall(self, *args, **kwargs):
+        callParams = CallParams(args=args, kwargs=kwargs)
+        self.__delayedCalls.append(callParams)
+
+    @async
+    def __doCall(self, *args, **kwargs):
+        with self.__lock:
+            self.__call(*args, **kwargs)
+            result = yield await(self.__waitForCooldown())
+            if not result:
+                self.__delayedCalls = []
+        if self.__delayedCalls:
+            callParams = self.__mergeDelayedCalls()
+            self(*callParams.args, **callParams.kwargs)
+
+    @async
+    def __waitForCooldown(self):
+        scope = AsyncScope()
+        event = AsyncEvent(scope=scope)
+        callbackId = BigWorld.callback(self.__cooldown, event.set)
+        try:
+            try:
+                g_playerEvents.onDisconnected += scope.destroy
+                yield await(event.wait())
+                result = True
+            except BrokenPromiseError:
+                BigWorld.cancelCallback(callbackId)
+                result = False
+
+        finally:
+            g_playerEvents.onDisconnected -= scope.destroy
+
+        raise AsyncReturn(result)
+
+    def __mergeDelayedCalls(self):
+        merged = CallParams()
+        while self.__delayedCalls:
+            callParams = self.__delayedCalls.pop(0)
+            merged = self.__paramsMerger(merged, callParams)
+
+        return merged
+
+
+def cooldownCallerDecorator(cooldown, paramsMerger):
+
+    def decorator(func):
+        return CooldownCaller(func, cooldown, paramsMerger)
+
+    return decorator

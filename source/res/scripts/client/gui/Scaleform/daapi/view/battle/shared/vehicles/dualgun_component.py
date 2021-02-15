@@ -381,7 +381,10 @@ class DualGunComponent(DualGunPanelMeta):
             if self.__chargeState in (DUALGUN_CHARGER_STATUS.CANCELED, DUALGUN_CHARGER_STATUS.UNAVAILABLE):
                 self.__soundManager.onChargeCanceled()
                 self.__updateTimeUntilNextDoubleShot(increaseByDebuff=False)
-                self.as_cancelChargeS()
+                if self.__chargeState == DUALGUN_CHARGER_STATUS.CANCELED:
+                    self.as_cancelChargeS()
+                else:
+                    self.as_disableChargeS()
             if self.__deferredGunState:
                 self.__onDualGunStateUpdated(self.__deferredGunState)
                 self.__deferredGunState = None

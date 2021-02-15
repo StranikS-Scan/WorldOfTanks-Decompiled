@@ -20,7 +20,7 @@ def loadMines(ownerVehicleID, callback, dynamicObjectsCache=None, battleSession=
     isAlly = False
     ownerVehicleInfo = battleSession.getArenaDP().getVehicleInfo(ownerVehicleID)
     if ownerVehicleInfo is not None:
-        isAlly = ownerVehicleInfo.team == BigWorld.player().team
+        isAlly = ownerVehicleInfo.team == BigWorld.player().followTeamID
     idleEff = effDescr.idleEffect.ally if isAlly else effDescr.idleEffect.enemy
     spaceId = BigWorld.player().spaceID
     loaders['startEffectPlayer'] = Loader(AnimationSequence.Loader(effDescr.plantEffect.effectDescr.path, spaceId))

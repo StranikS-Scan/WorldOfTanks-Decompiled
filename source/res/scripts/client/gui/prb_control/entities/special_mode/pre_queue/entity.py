@@ -7,7 +7,7 @@ from gui.prb_control.entities.base.pre_queue.entity import PreQueueEntity, PreQu
 from gui.prb_control.entities.special_mode.pre_queue.ctx import SpecialModeQueueCtx
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.settings import FUNCTIONAL_FLAG
-from gui.shared.prime_time_constants import PrimeTimeStatus
+from gui.ranked_battles.constants import PrimeTimeStatus
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 

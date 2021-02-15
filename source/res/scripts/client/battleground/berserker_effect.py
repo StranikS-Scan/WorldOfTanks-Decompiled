@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/battleground/berserker_effect.py
+import logging
 import BigWorld
 import AnimationSequence
 import Math
@@ -15,6 +16,7 @@ from battleground.component_loading import loadComponentSystem, Loader
 from battleground.components import SequenceComponent, AvatarRelatedComponent
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
+_logger = logging.getLogger(__name__)
 
 class BerserkerEffectComponent(AvatarRelatedComponent):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -73,7 +75,11 @@ class BerserkerEffectComponent(AvatarRelatedComponent):
     def __onVehicleStateUpdated(self, state, value):
         if state == VEHICLE_VIEW_STATE.DOT_EFFECT:
             if value is not None and value.attackReasonID == ATTACK_REASONS.index(ATTACK_REASON.BERSERKER):
-                self.__addEffect(BigWorld.player().playerVehicleID, value.endTime)
+                vehicle = BigWorld.player().getVehicleAttached()
+                if vehicle and vehicle.isAlive():
+                    self.__addEffect(vehicle.id, value.endTime)
+                else:
+                    _logger.error('Can not start berserker effect, vehicle is not available.')
         return
 
     def __addEffect(self, vehicleId, endTime):

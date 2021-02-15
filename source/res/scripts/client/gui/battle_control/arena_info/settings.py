@@ -83,6 +83,12 @@ class INVALIDATE_OP(BitmaskHelper):
     INVITATION_DELIVERY_STATUS = 128
 
 
+class VehicleSpottedStatus(BitmaskHelper):
+    DEFAULT = 0
+    SPOTTED = 1
+    UNSPOTTED = 2
+
+
 def makeVehicleIconName(vName):
     return vName.replace(':', '-')
 

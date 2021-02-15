@@ -57,6 +57,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from vehicle_outfit.outfit import Area
+from constants import NC_MESSAGE_PRIORITY
 _logger = logging.getLogger(__name__)
 
 class _ModalWindowsPopupHandler(IViewLifecycleHandler):
@@ -183,7 +184,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__viewCtx = ctx or {}
         self.__renderEnv = None
         self.__initAnchorsPositionsCallback = None
-        self.__setCollisionsCallback = None
         self.__selectedSlot = C11nId()
         self.__locateCameraToStyleInfo = False
         self.__carouselArrowsHintShown = False
@@ -251,7 +251,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__setHeaderInitData()
         self.__setSeasonData()
         self.__initAnchorsPositionsCallback = BigWorld.callback(0.0, self.__initAnchorsPositions)
-        self.__setCollisionsCallback = BigWorld.callback(0.0, self.__wrapSetCollisions)
         return
 
     def __onVehicleLoadStarted(self):
@@ -273,15 +272,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             self.__ctx.c11nCameraManager.vEntity.appearance.updateAnchorsParams()
         self.__setAnchorsInitData()
         self.__locateCameraToCustomizationPreview(updateTankCentralPoint=True)
-        return
-
-    def __wrapSetCollisions(self):
-        entity = self.hangarSpace.getVehicleEntity()
-        if entity and entity.appearance and entity.appearance.isLoaded():
-            self.__setCollisionsCallback = None
-            self.__ctx.vehicleAnchorsUpdater.setCollisions()
-        else:
-            self.__setCollisionsCallback = BigWorld.callback(0.0, self.__wrapSetCollisions)
         return
 
     def onBuyConfirmed(self, isOk):
@@ -567,19 +557,26 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         if not errorCount:
             cart = getTotalPurchaseInfo(purchaseItems)
             if cart.totalPrice != ITEM_PRICE_EMPTY:
+                msgType = CURRENCY_TO_SM_TYPE.get(cart.totalPrice.getCurrency(byWeight=True), SM_TYPE.PurchaseForGold)
                 if cart.boughtCount == 1:
                     item = next((purchaseItem for purchaseItem in purchaseItems if not purchaseItem.isFromInventory)).item
-                    styleItemType = backport.text(R.strings.item_types.customization.style())
-                    msgCtx = {'itemType': styleItemType if item.itemTypeID == GUI_ITEM_TYPE.STYLE else item.userType,
-                     'itemName': item.userName,
-                     'money': formatPrice(cart.totalPrice.price)}
-                    msgKey = R.strings.messenger.serviceChannelMessages.sysMsg.customization.buyOne()
+                    if item.itemTypeID == GUI_ITEM_TYPE.STYLE and item.isProgression:
+                        msgCtx = {'name': item.userName,
+                         'level': int2roman(self.__ctx.mode.getStyleProgressionLevel()),
+                         'money': formatPrice(cart.totalPrice.price)}
+                        msgKey = R.strings.messenger.serviceChannelMessages.sysMsg.customization.buyProgressionStyle()
+                    else:
+                        styleItemType = backport.text(R.strings.item_types.customization.style())
+                        msgCtx = {'itemType': styleItemType if item.itemTypeID == GUI_ITEM_TYPE.STYLE else item.userType,
+                         'itemName': item.userName,
+                         'money': formatPrice(cart.totalPrice.price)}
+                        msgKey = R.strings.messenger.serviceChannelMessages.sysMsg.customization.buyOne()
                 else:
                     formattedItems = formatPurchaseItems(purchaseItems)
                     msgCtx = {'items': formattedItems,
                      'money': formatPrice(cart.totalPrice.price)}
                     msgKey = R.strings.messenger.serviceChannelMessages.sysMsg.customization.buyMany()
-                SystemMessages.pushMessage(backport.text(msgKey, **msgCtx), type=CURRENCY_TO_SM_TYPE.get(cart.totalPrice.getCurrency(byWeight=True), SM_TYPE.PurchaseForGold))
+                SystemMessages.pushMessage(backport.text(msgKey, **msgCtx), type=msgType, priority=NC_MESSAGE_PRIORITY.DEFAULT)
             elif self.__isAnyItemDismantled(originalOutfits, modifiedOutfits=self.__ctx.mode.getModifiedOutfits()):
                 SystemMessages.pushMessage(backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.customization.remove()), type=SM_TYPE.Information)
             else:
@@ -653,7 +650,9 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__setSeasonData()
         self.__ctx.refreshOutfit()
         self.as_selectSeasonS(SEASON_TYPE_TO_IDX[self.__ctx.season])
-        self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': True}), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': True,
+         'setIdle': True,
+         'setParallax': True}), scope=EVENT_BUS_SCOPE.LOBBY)
         self.fireEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': True}), EVENT_BUS_SCOPE.LOBBY)
         self.fireEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.ONLINE_COUNTER}), EVENT_BUS_SCOPE.LOBBY)
         if self.__ctx.c11nCameraManager is not None:
@@ -662,7 +661,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__renderEnv.enable(True)
         if self.__ctx.vehicleAnchorsUpdater is not None:
             self.__ctx.vehicleAnchorsUpdater.setMainView(self.flashObject)
-        self.__ctx.vehicleAnchorsUpdater.setCollisions()
         entity = self.hangarSpace.getVehicleEntity()
         if entity and entity.appearance:
             entity.appearance.loadState.subscribe(self.__onVehicleLoadFinished, self.__onVehicleLoadStarted)
@@ -693,7 +691,9 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.fireEvent(events.HangarCustomizationEvent(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM), scope=EVENT_BUS_SCOPE.LOBBY)
         self.fireEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': False}), EVENT_BUS_SCOPE.LOBBY)
         self.fireEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.ALL}), EVENT_BUS_SCOPE.LOBBY)
-        self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': False}), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': False,
+         'setIdle': True,
+         'setParallax': True}), scope=EVENT_BUS_SCOPE.LOBBY)
         if self.__ctx.c11nCameraManager is not None:
             self.__ctx.c11nCameraManager.locateCameraToStartState()
         if self.__styleInfo is not None:
@@ -744,9 +744,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         if self.__initAnchorsPositionsCallback is not None:
             BigWorld.cancelCallback(self.__initAnchorsPositionsCallback)
             self.__initAnchorsPositionsCallback = None
-        if self.__setCollisionsCallback is not None:
-            BigWorld.cancelCallback(self.__setCollisionsCallback)
-            self.__setCollisionsCallback = None
         super(MainView, self)._dispose()
         self.__ctx = None
         self.service.closeCustomization()

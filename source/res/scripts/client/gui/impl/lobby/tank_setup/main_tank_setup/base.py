@@ -23,7 +23,10 @@ class MainTankSetupView(BaseSubModelView):
         self._viewModel.setSelectedSetup(selectedSection)
         self._subViews = self._builder.configureBuild(self._viewModel)
         if selectedSection:
-            self._subViews[selectedSection].onLoading(int(selectedSlot))
+            if selectedSection in self._subViews:
+                self._subViews[selectedSection].onLoading(int(selectedSlot))
+            else:
+                _logger.error('There is not selectedSection=[%s] in subViews=[%s]', selectedSection, self._subViews)
 
     def initialize(self, *args, **kwargs):
         super(MainTankSetupView, self).initialize(*args, **kwargs)

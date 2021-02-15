@@ -314,11 +314,6 @@ class EventDispatcher(object):
         if not clientID:
             LOG_ERROR('Client ID not found', 'setSquadTeamReadyInCarousel', prbType)
             return
-        readyData = self.__getReadyPrbData(isTeamReady)
-        g_eventBus.handleEvent(events.ChannelManagementEvent(clientID, events.ChannelManagementEvent.REQUEST_TO_CHANGE, {'key': 'readyData',
-         'value': readyData,
-         'isShowByReq': False,
-         'showIfClosed': True}), scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.handleEvent(events.ChannelManagementEvent(clientID, events.ChannelManagementEvent.REQUEST_TO_CHANGE, {'key': 'tooltipData',
          'value': self.__getTooltipPrbData(CHAT.CHANNELS_SQUADREADY_TOOLTIP if isTeamReady else CHAT.CHANNELS_SQUADNOTREADY_TOOLTIP),
          'isShowByReq': False,
@@ -468,7 +463,7 @@ class EventDispatcher(object):
         if not clientID:
             LOG_ERROR('Client ID not found', 'addSquadToCarousel')
             return
-        currCarouselItemCtx = _defCarouselItemCtx._replace(label=CHAT.CHANNELS_SQUAD, icon=RES_ICONS.MAPS_ICONS_MESSENGER_SQUAD_ICON, criteria={}, openHandler=lambda : self.__showSquadWindow(prbType, toggleUI=True), readyData=self.__getReadyPrbData(isTeamReady), tooltipData=self.__getTooltipPrbData(CHAT.CHANNELS_SQUADREADY_TOOLTIP if isTeamReady else CHAT.CHANNELS_SQUADNOTREADY_TOOLTIP))
+        currCarouselItemCtx = _defCarouselItemCtx._replace(label=CHAT.CHANNELS_SQUAD, icon=RES_ICONS.MAPS_ICONS_MESSENGER_SQUAD_ICON, criteria={}, openHandler=lambda : self.__showSquadWindow(prbType, toggleUI=True), tooltipData=self.__getTooltipPrbData(CHAT.CHANNELS_SQUADREADY_TOOLTIP if isTeamReady else CHAT.CHANNELS_SQUADNOTREADY_TOOLTIP))
         self.__handleAddPreBattleRequest(clientID, currCarouselItemCtx._asdict())
 
 

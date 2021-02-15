@@ -82,7 +82,7 @@ def __makeAwardsVO(item, level, vehicleIntCD):
 
 def __makeProgressList(item, level, progressionData):
     progressList = []
-    conditions = item.progressionConditions[level + 1]
+    conditions = item.progressionConditions[level + 1].get('conditions', {})
     for path, (diff, progress) in progressionData['progress'].iteritems():
         idx = 1
         condition = None

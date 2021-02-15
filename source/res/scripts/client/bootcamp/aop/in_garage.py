@@ -100,7 +100,7 @@ class _PointcutNoFittingPopover(aop.Pointcut):
 class _PointcutDisableModuleClickSound(aop.Pointcut):
 
     def __init__(self):
-        super(_PointcutDisableModuleClickSound, self).__init__('gui.Scaleform.managers.SoundManager', 'SoundManager', 'playControlSound', aspects=(common.AspectDisableControlSound(('press', 'over'), ('ammunitionModule',)),))
+        super(_PointcutDisableModuleClickSound, self).__init__('gui.sounds.SoundManager', 'SoundManager', 'playControlSound', aspects=(common.AspectDisableControlSound(('press', 'over'), ('ammunitionModule',)),))
 
 
 class _PointcutSysMessagesClient(aop.Pointcut):

@@ -51,15 +51,16 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         super(ClientSelectableCameraVehicle, self).onLeaveWorld()
         return
 
-    def recreateVehicle(self, typeDescriptor=None, state=ModelStates.UNDAMAGED, callback=None):
+    def recreateVehicle(self, typeDescriptor=None, state=ModelStates.UNDAMAGED, callback=None, outfit=None):
         self.setHighlight(False)
         if typeDescriptor is not None:
             self.typeDescriptor = typeDescriptor
         self.__onLoadedCallback = callback
         if self.typeDescriptor is not None:
+            self._isVehicleLoaded = False
             if self.__vAppearance is None:
                 self.__vAppearance = self._createAppearance()
-            self.__vAppearance.recreate(self.typeDescriptor, state, self._onVehicleLoaded)
+            self.__vAppearance.recreate(self.typeDescriptor, state, self._onVehicleLoaded, outfit)
         self.__updateFakeShadowAccordingToAppearance()
         return
 
@@ -71,6 +72,7 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
     def updateVehicleCustomization(self, outfit):
         recreate = self.appearance.recreateRequired(outfit)
         if recreate:
+            self._isVehicleLoaded = False
             self.appearance.recreate(self.typeDescriptor, callback=self._onVehicleLoaded, outfit=outfit)
         else:
             self.appearance.updateCustomization(outfit, self._onVehicleRefreshed)

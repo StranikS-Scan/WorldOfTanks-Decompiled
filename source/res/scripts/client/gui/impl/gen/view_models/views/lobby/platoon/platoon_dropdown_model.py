@@ -46,7 +46,7 @@ class PlatoonDropdownModel(ViewModel):
         self._addViewModelProperty('btnFind', ButtonModel())
         self._addViewModelProperty('btnCreate', ButtonModel())
         self._addStringProperty('battleType', '')
-        self._addBoolProperty('isSettingsVisible', True)
+        self._addBoolProperty('isSettingsVisible', False)
         self._addBoolProperty('isRibbonVisible', False)
         self._addStringProperty('backgroundImage', '')
         self.onOutsideClick = self._addCommand('onOutsideClick')

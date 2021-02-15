@@ -23,7 +23,7 @@ from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, PRE_QUEUE_RESTRICTION
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.ranked_battles import ranked_helpers
-from gui.ranked_battles.constants import ZERO_RANK_ID, YEAR_POINTS_TOKEN, YEAR_AWARDS_ORDER, FINAL_QUEST_PATTERN, STANDARD_POINTS_COUNT, YEAR_STRIPE_SERVER_TOKEN, YEAR_STRIPE_CLIENT_TOKEN, MAX_GROUPS_IN_DIVISION, ENTITLEMENT_EVENT_TOKEN, FINAL_LEADER_QUEST, NOT_IN_LEAGUES_QUEST
+from gui.ranked_battles.constants import PrimeTimeStatus, ZERO_RANK_ID, YEAR_POINTS_TOKEN, YEAR_AWARDS_ORDER, FINAL_QUEST_PATTERN, STANDARD_POINTS_COUNT, YEAR_STRIPE_SERVER_TOKEN, YEAR_STRIPE_CLIENT_TOKEN, MAX_GROUPS_IN_DIVISION, ENTITLEMENT_EVENT_TOKEN, FINAL_LEADER_QUEST, NOT_IN_LEAGUES_QUEST
 from gui.ranked_battles.ranked_builders.postbattle_awards_vos import AwardBlock
 from gui.ranked_battles.ranked_formatters import getRankedAwardsFormatter
 from gui.ranked_battles.ranked_helpers.web_season_provider import RankedWebSeasonProvider, UNDEFINED_WEB_INFO, UNDEFINED_LEAGUE_ID
@@ -39,7 +39,6 @@ from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.money import Currency
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier, PeriodicNotifier
-from gui.shared.prime_time_constants import PrimeTimeStatus
 from helpers import dependency, time_utils
 from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY
 from season_provider import SeasonProvider
@@ -1133,11 +1132,13 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def __openWebPageByCtx(self, ctx):
         url = alias = None
         selectedItemID = ctx.get('selectedItemID', '')
+        clientParams = ctx.get('clientParams', {})
+        clientParams['isLobbySub'] = True
         if selectedItemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID and self.isYearLBEnabled():
-            url = ranked_helpers.getRankedBattlesYearRatingUrl(isLobbySub=True)
+            url = ranked_helpers.getRankedBattlesYearRatingUrl(**clientParams)
             alias = RANKEDBATTLES_ALIASES.RANKED_BATTLE_YEAR_RATING_LANDING
         elif selectedItemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_SHOP_ID and self.isRankedShopEnabled():
-            url = ranked_helpers.getRankedBattlesShopUrl(isLobbySub=True)
+            url = ranked_helpers.getRankedBattlesShopUrl(**clientParams)
             alias = RANKEDBATTLES_ALIASES.RANKED_BATTLE_SHOP_LANDING
         if url and alias is not None:
             _showSeparateWebView(url, alias)
@@ -1165,7 +1166,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def __saveWebOpenPageCtx(self, ctx):
         if self.__rankedWebOpenPageCtx is not None:
             logging.error("Previous open ranked page web ctx wasn't processed. Too frequent requests from web.")
-        self.__rankedWebOpenPageCtx = ctx if ctx.get('showedFromWeb', False) else None
+        self.__rankedWebOpenPageCtx = ctx if ctx.get('webParams', '') or ctx.get('clientParams', {}) else None
         return
 
     def __timerUpdate(self):

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/items/readers/c11n_readers.py
 import os
 from string import upper
+import re
 import items._xml as ix
 import items.components.c11n_components as cc
 import items.customizations as c11n
@@ -292,6 +293,25 @@ class StyleXmlReader(BaseCustomizationItemXmlReader):
     __slots__ = ()
     __outfitDeserializer = c11n.ComponentXmlDeserializer(c11n._CUSTOMIZATION_CLASSES)
 
+    def __readOutfitSection(self, targetId, section, xmlCtx):
+        outfits = {}
+        for i, (_, oSection) in enumerate(section['outfits'].items()):
+            oCtx = ((xmlCtx, 'outfits'), 'outfit {}'.format(i))
+            season = readFlagEnum(oCtx, oSection, 'season', SeasonType)
+            outfit = self.__outfitDeserializer.decode(c11n.CustomizationOutfit.customType, oCtx, oSection)
+            for s in SeasonType.SEASONS:
+                if s & season:
+                    outfits[s] = outfit
+
+            if IS_EDITOR:
+                for projectionDecal in outfit.projection_decals:
+                    if projectionDecal.tags is not None and len(projectionDecal.tags) > 0:
+                        projectionDecal.editorData.decalType = ProjectionDecalType.TAGS
+
+            outfit.styleId = targetId
+
+        return outfits
+
     def _readFromXml(self, target, xmlCtx, section, cache=None):
         super(StyleXmlReader, self)._readFromXml(target, xmlCtx, section)
         prototype = True
@@ -318,22 +338,7 @@ class StyleXmlReader(BaseCustomizationItemXmlReader):
             target.alternateItems = alternateItems
         if section.has_key('outfits'):
             prototype = False
-            outfits = {}
-            for i, (_, oSection) in enumerate(section['outfits'].items()):
-                oCtx = ((xmlCtx, 'outfits'), 'outfit {}'.format(i))
-                season = readFlagEnum(oCtx, oSection, 'season', SeasonType)
-                outfit = self.__outfitDeserializer.decode(c11n.CustomizationOutfit.customType, oCtx, oSection)
-                for s in SeasonType.SEASONS:
-                    if s & season:
-                        outfits[s] = outfit
-
-                if IS_EDITOR:
-                    for projectionDecal in outfit.projection_decals:
-                        if projectionDecal.tags is not None and len(projectionDecal.tags) > 0:
-                            projectionDecal.editorData.decalType = ProjectionDecalType.TAGS
-
-                outfit.styleId = target.id
-
+            outfits = self.__readOutfitSection(target.id, section, xmlCtx)
             target.outfits = outfits
         if section.has_key('isRent'):
             target.isRent = section.readBool('isRent')
@@ -343,7 +348,6 @@ class StyleXmlReader(BaseCustomizationItemXmlReader):
         totalSeason = sum(target.outfits)
         if totalSeason != target.season and not prototype:
             ix.raiseWrongXml(xmlCtx, 'outfits', 'style season must correspond to declared outfits')
-        return
 
     @staticmethod
     def _readItemsFilterFromXml(itemType, xmlCtx, section):
@@ -381,6 +385,18 @@ class StyleXmlReader(BaseCustomizationItemXmlReader):
         super(StyleXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section)
         if section.has_key('texture'):
             target.texture = section.readString('texture')
+        if section.has_key('styleProgressions'):
+            styleProgressions = {}
+            for i, (spSectionName, spSection) in enumerate(section['styleProgressions'].items()):
+                stageId = i + 1
+                styleProgressions[stageId] = {}
+                if spSection.has_key('materials'):
+                    styleProgressions[stageId]['materials'] = spSection['materials'].asString.split()
+                if spSection.has_key('outfits'):
+                    outfits = self.__readOutfitSection(target.id, spSection, xmlCtx)
+                    styleProgressions[stageId]['additionalOutfit'] = outfits
+
+            target.styleProgressions = styleProgressions
 
 
 class InsigniaXmlReader(BaseCustomizationItemXmlReader):
@@ -408,7 +424,7 @@ def readCustomizationCacheFromXml(cache, folder):
         progression = {}
         if dataSection:
             try:
-                _readProgression((None, itemName + 's/progression.xml'), dataSection, progression)
+                _readProgression(cache, (None, itemName + 's/progression.xml'), dataSection, progression)
             finally:
                 ResMgr.purge(progressionFileName)
 
@@ -469,20 +485,25 @@ def _readProhibitedNumbers(xmlCtx, section):
 
 
 def __readProgressLevel(xmlCtx, section):
-    conditions = list()
-    for subSections in section.values():
-        condition = {}
-        for subSection in subSections.values():
-            sectionName = subSection.name
-            if sectionName == 'description':
-                condition.update({'description': ix.readNonEmptyString(xmlCtx, subSection, '')})
-            condition.update(__readCondition((xmlCtx, subSection.name), subSection, [sectionName]))
+    level = {}
+    for sectionName, subSections in section.items():
+        if sectionName == 'price':
+            level.update({'price': ix.readPrice(xmlCtx, section, 'price'),
+             'notInShop': section.readBool('notInShop', False)})
+        if sectionName == 'condition':
+            conditions = level.setdefault('conditions', list())
+            condition = {}
+            for subSection in subSections.values():
+                sectionName = subSection.name
+                if sectionName == 'description':
+                    condition.update({'description': ix.readNonEmptyString(xmlCtx, subSection, '')})
+                condition.update(__readCondition((xmlCtx, subSection.name), subSection, [sectionName]))
 
-        conditions.append(condition)
+            if not condition:
+                ix.raiseWrongXml(xmlCtx, 'progression', "Customization don't have conditions")
+            conditions.append(condition)
 
-    if not conditions:
-        ix.raiseWrongXml(xmlCtx, 'progression', "Customization don't have conditions")
-    return conditions
+    return level
 
 
 def __readCondition(xmlCtx, section, path):
@@ -501,14 +522,20 @@ def __readProgress(xmlCtx, section):
     if section.has_key('autobound'):
         progress.autobound = True
     for sectionName, subSection in section.items():
-        if sectionName == 'level':
-            level = ix.readPositiveInt(xmlCtx, subSection, '')
-            progress.levels[level] = __readProgressLevel((xmlCtx, 'level'), subSection)
+        if sectionName == 'levels':
+            for levelSectionName, levelSection in subSection.items():
+                level = int(re.findall('\\d+', levelSectionName)[0])
+                if levelSection['default'] is not None:
+                    progress.defaultLvl = level if level > progress.defaultLvl else progress.defaultLvl
+                progress.levels[level] = __readProgressLevel((xmlCtx, levelSectionName), levelSection)
+
         if sectionName == 'autoGrantCount':
             progress.autoGrantCount = ix.readPositiveInt(xmlCtx, subSection, '')
         if sectionName == 'bonusType':
             bonusTypes = ix.readStringOrEmpty(xmlCtx, subSection, '').split()
             parseArenaBonusType(progress.bonusTypes, bonusTypes, ARENA_BONUS_TYPE_CAPS.CUSTOMIZATION_PROGRESSION)
+        if sectionName == 'priceGroup':
+            progress.priceGroup = ix.readStringOrEmpty(xmlCtx, subSection, '')
 
     if len(progress.levels) < 2:
         ix.raiseWrongXml(xmlCtx, 'tags', 'wrong progression. Minimum count progression = 2. Current count progression %i' % len(progress.levels))
@@ -516,14 +543,28 @@ def __readProgress(xmlCtx, section):
         if i not in progress.levels:
             ix.raiseWrongXml(xmlCtx, 'tags', 'wrong progression. Skipped level %i' % i)
 
+    if progress.levels[1].get('notInShop'):
+        ix.raiseWrongXml(xmlCtx, 'tags', 'wrong progression. First level should always be available for purchase.')
     return (itemId, progress)
 
 
-def _readProgression(xmlCtx, section, progression):
+def _readProgression(cache, xmlCtx, section, progression):
     for gname, gsection in section.items():
         if gname != 'progress':
             ix.raiseWrongSection(xmlCtx, gname)
         itemId, progress = __readProgress((xmlCtx, 'progress'), gsection)
+        if progress.priceGroup:
+            if progress.priceGroup not in cache.priceGroupNames:
+                ix.raiseWrongXml(xmlCtx, 'priceGroup', 'unknown price group %s for item %s' % (progress.priceGroup, itemId))
+            priceGroupId = cache.priceGroupNames[progress.priceGroup]
+            pgDescr = cache.priceGroups[priceGroupId].compactDescr
+            for num, level in progress.levels.iteritems():
+                if 'price' not in level and progress.defaultLvl != num:
+                    priceInfo = iv.getPriceForItemDescr(pgDescr)
+                    if priceInfo:
+                        level.update({'price': priceInfo[0],
+                         'notInShop': priceInfo[1]})
+
         progression[itemId] = progress
 
 
@@ -569,6 +610,11 @@ def _readItems(cache, itemCls, xmlCtx, section, itemSectionName, storage, progre
             item.progression = progression.get(item.id, None)
             if item.progression is not None:
                 cache.customizationWithProgression[item.compactDescr] = item
+                iv._readPriceForProgressionLvl(item.compactDescr, item.progression.levels)
+                for arenaTypeID, items in cache.itemGroupByProgressionBonusType.iteritems():
+                    if arenaTypeID in item.progression.bonusTypes:
+                        items.append(item)
+
             if isection.has_key('price'):
                 iv._readPriceForItem(iCtx, isection, item.compactDescr)
             if item.priceGroup:

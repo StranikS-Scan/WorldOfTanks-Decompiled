@@ -202,7 +202,7 @@ class ClientHangarSpace(object):
             self._vsePlans.start()
         return
 
-    def recreateVehicle(self, vDesc, vState, onVehicleLoadedCallback=None):
+    def recreateVehicle(self, vDesc, vState, onVehicleLoadedCallback=None, outfit=None):
         if not self.__vEntityId:
             return
         else:
@@ -213,7 +213,7 @@ class ClientHangarSpace(object):
                 return
             if onVehicleLoadedCallback is None:
                 onVehicleLoadedCallback = self.__onVehicleLoadedCallback
-            vehicle.recreateVehicle(vDesc, vState, onVehicleLoadedCallback)
+            vehicle.recreateVehicle(vDesc, vState, onVehicleLoadedCallback, outfit)
             return
 
     def removeVehicle(self):

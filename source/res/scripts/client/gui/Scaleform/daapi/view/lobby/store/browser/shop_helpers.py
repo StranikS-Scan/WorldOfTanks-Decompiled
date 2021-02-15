@@ -116,3 +116,7 @@ def getPremiumVehiclesUrl():
 
 def getBuyCollectibleVehiclesUrl():
     return _getUrl('buyCollectibleVehicle')
+
+
+def getBlueprintsExchangeUrl():
+    return _getUrl('blueprintsExchange')

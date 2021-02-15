@@ -64,10 +64,6 @@ class IItemsRequester(requesters.IRequester):
     def battlePass(self):
         raise NotImplementedError
 
-    @property
-    def bob(self):
-        raise NotImplementedError
-
     def requestUserDossier(self, databaseID, callback):
         raise NotImplementedError
 
@@ -221,10 +217,10 @@ class IHangarSpace(object):
     def updateVehicle(self, vehicle):
         raise NotImplementedError
 
-    def startToUpdateVehicle(self, vehicle):
+    def startToUpdateVehicle(self, vehicle, outfit=None):
         raise NotImplementedError
 
-    def updatePreviewVehicle(self, vehicle):
+    def updatePreviewVehicle(self, vehicle, outfit=None):
         raise NotImplementedError
 
     def removeVehicle(self):
@@ -240,6 +236,9 @@ class IHangarSpace(object):
         raise NotImplementedError
 
     def getVehicleEntity(self):
+        raise NotImplementedError
+
+    def getVehicleEntityAppearance(self):
         raise NotImplementedError
 
     def getCentralPointForArea(self, areaID):

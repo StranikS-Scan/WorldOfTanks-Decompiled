@@ -243,7 +243,8 @@ class C11nHangarCameraManager(TimeDeltaMeter):
                 else:
                     return
             self.__hangarCameraManager.setCameraLocation(targetPos=targetPos, pivotPos=pivotPos, yaw=yaw, pitch=pitch, dist=dist, camConstraints=camConstraints, ignoreConstraints=ignoreConstraints, movementMode=IMMEDIATE_CAMERA_MOVEMENT_MODE)
-            self.__hangarCameraManager.updateDynamicFov(dist=dist, rampTime=transitionDuration)
+            if dist is not None:
+                self.__hangarCameraManager.updateDynamicFov(dist=dist, rampTime=transitionDuration)
             return
 
     def __getDistConstraints(self, position, commonConstraints=None, startingPoint=None):

@@ -21,9 +21,10 @@ class BotAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
     __dynamicObjectsCache = dependency.descriptor(IBattleDynamicObjectsCache)
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     ALTITUDE_CORRECTING = 0.5
-    __slots__ = ('owner', '__deliveryPosition', '__markerArea', '__deliveryEffect', '__teamID', '__yawAxis', '__plannedAnimDuration')
+    END_ANIMATION_TIME_CORRECTING = 0.18
+    __slots__ = ('owner', '__deliveryPosition', '__markerArea', '__deliveryEffect', '__teamID', '__yawAxis', '__plannedAnimDuration', '__deliveryTime')
 
-    def __init__(self, dropID, deliveryPosition, teamID, yawAxis):
+    def __init__(self, dropID, deliveryPosition, teamID, yawAxis, deliveryTime):
         self.__spaceID = BigWorld.player().spaceID
         ScriptGameObject.__init__(self, self.__spaceID)
         CallbackDelayer.__init__(self)
@@ -31,6 +32,7 @@ class BotAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
         self.owner.activate()
         self.owner.addComponent(self)
         Svarog.addGameObject(self.__spaceID, self.owner)
+        self.__deliveryTime = deliveryTime
         self.__deliveryPosition = deliveryPosition
         self.__markerArea = None
         self.__deliveryEffect = None
@@ -45,9 +47,15 @@ class BotAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
         self.__markerArea = self.__createMarkerArea(config, equipmentDescr)
         deliveryAnimationStartDelay = equipmentDescr.clientVisuals.deliveringAnimationStartDelay
         self.__plannedAnimDuration = equipmentDescr.delay - deliveryAnimationStartDelay
+        timeToSpawn = self.__deliveryTime - BigWorld.serverTime()
+        plannedAnimDuration = equipmentDescr.delay - equipmentDescr.clientVisuals.deliveringAnimationStartDelay
+        timeToStartDeliveryAnim = timeToSpawn - plannedAnimDuration
         if self.__markerArea:
             self.delayCallback(equipmentDescr.delay, self.__removeMarkerArea)
-        self.delayCallback(deliveryAnimationStartDelay, partial(self.__createDeliveryEffect, config))
+        if timeToStartDeliveryAnim > 0:
+            self.delayCallback(timeToStartDeliveryAnim, partial(self.__createDeliveryEffect, config))
+        else:
+            _logger.error('Delivery animation of Kamikaze will not be playing, no time for it!')
         self.activate()
 
     def destroy(self):
@@ -61,7 +69,7 @@ class BotAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
     def __createMarkerArea(self, config, equipmentDescr):
         markerArea = Svarog.GameObject(self.__spaceID)
         trapPointEffects = config.getBotDeliveryMarker()
-        effect3D = trapPointEffects.enemy if self.__teamID != BigWorld.player().team else trapPointEffects.ally
+        effect3D = trapPointEffects.enemy if self.__teamID != BigWorld.player().followTeamID else trapPointEffects.ally
         if effect3D is not None:
             effectPath = effect3D.path
             markerTerrainPosition = self.__deliveryPosition - equipmentDescr.botSpawnPointOffset
@@ -84,13 +92,12 @@ class BotAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
 
     def __createDeliveryEffect(self, config):
         effectDescr = config.getBotDeliveryEffect()
-        effect = effectDescr.enemy if self.__teamID != BigWorld.player().team else effectDescr.ally
+        effect = effectDescr.enemy if self.__teamID != BigWorld.player().followTeamID else effectDescr.ally
         if effect is not None:
             effectPath = effect.path
             BigWorld.loadResourceListBG((AnimationSequence.Loader(effectPath, self.__spaceID),), makeCallbackWeak(self.__onDeliverEffectLoaded, effectPath, self.__deliveryPosition))
             return
         else:
-            _logger.error('Delivery Effect is not defined!')
             return
 
     def __onDeliverEffectLoaded(self, effectP, position, resourceRefs):
@@ -103,7 +110,8 @@ class BotAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
         sequenceComponent.createTerrainEffect(correctedPosition, loopCount=1, rotation=(self.__yawAxis, 0, 0))
         effectAnimation.activate()
         self.__deliveryEffect = effectAnimation
-        self.delayCallback(self.__plannedAnimDuration, self.__removeDeliveryEffect)
+        timeToSpawn = self.__deliveryTime - BigWorld.serverTime()
+        self.delayCallback(timeToSpawn + self.END_ANIMATION_TIME_CORRECTING, self.__removeDeliveryEffect)
 
     def __removeMarkerArea(self):
         if self.__markerArea is not None:

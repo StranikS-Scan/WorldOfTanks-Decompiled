@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.platoon.vehicle_model import VehicleMo
 class PlayerModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=8, commands=0):
+    def __init__(self, properties=9, commands=0):
         super(PlayerModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -53,6 +53,12 @@ class PlayerModel(ViewModel):
     def setAccID(self, value):
         self._setString(7, value)
 
+    def getIsIgnored(self):
+        return self._getBool(8)
+
+    def setIsIgnored(self, value):
+        self._setBool(8, value)
+
     def _initialize(self):
         super(PlayerModel, self)._initialize()
         self._addViewModelProperty('commonData', CommonPlayerDataModel())
@@ -63,3 +69,4 @@ class PlayerModel(ViewModel):
         self._addBoolProperty('isReady', False)
         self._addBoolProperty('isPrem', False)
         self._addStringProperty('accID', '')
+        self._addBoolProperty('isIgnored', False)

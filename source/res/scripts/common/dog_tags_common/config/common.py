@@ -20,6 +20,7 @@ class ComponentViewType(Enum):
 TRIUMPH_GRADES = 4
 DEDICATION_GRADES = 10
 SKILL_GRADES = 10
+RANKED_SKILL_GRADES = 10
 STARTING_COMPONENT_TYPES = (ComponentViewType.BACKGROUND, ComponentViewType.ENGRAVING)
 
 class ComponentPurpose(Enum):
@@ -28,6 +29,7 @@ class ComponentPurpose(Enum):
     TRIUMPH = 'TRIUMPH'
     DEDICATION = 'DEDICATION'
     SKILL = 'SKILL'
+    RANKED_SKILL = 'RANKED_SKILL'
 
 
 SEND_NEW_GRADING_NOTIFICATION = (ComponentPurpose.TRIUMPH, ComponentPurpose.DEDICATION)
@@ -78,6 +80,7 @@ class ValidateException(DogTagsException):
     STARTING_COMPONENT_NON_DEFAULT = 10
     SHOULD_BE_DEFAULT_OR_HAS_UNLOCK_KEY = 11
     DEFAULT_HIDDEN = 12
+    CANNOT_BE_DEFAULT = 13
     ERR_STR = {HAS_GRADES: PREFIX + 'Component with id = %s cannot have grades. Grades: %s',
      HAS_UNLOCK_KEY: PREFIX + 'Component with id = %s cannot have unlockKey. UnlockKey: %s',
      WRONG_NUMBER_OF_GRADES: PREFIX + 'Component with id = %s has wrong number of grades. It should have %s grades.',
@@ -87,7 +90,8 @@ class ValidateException(DogTagsException):
      STARTING_COMPONENT_WRONG_DATA: PREFIX + 'Starting components should contain only types: %s but contains: %s',
      STARTING_COMPONENT_NON_DEFAULT: PREFIX + 'Starting component with id=%s is not default.',
      SHOULD_BE_DEFAULT_OR_HAS_UNLOCK_KEY: PREFIX + 'Component with id = %s should be default or has unlock key',
-     DEFAULT_HIDDEN: PREFIX + 'Component with id=%s is default AND hidden. This is forbidden.'}
+     DEFAULT_HIDDEN: PREFIX + 'Component with id=%s is default AND hidden. This is forbidden.',
+     CANNOT_BE_DEFAULT: PREFIX + 'Component with id=%s is default but this is forbidden.'}
 
     def __str__(self):
         return ValidateException.ERR_STR[self.err] % ((self.err,) + self.args)

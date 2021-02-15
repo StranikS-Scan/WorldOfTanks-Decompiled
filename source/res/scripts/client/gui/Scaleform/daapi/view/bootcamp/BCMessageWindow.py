@@ -88,5 +88,7 @@ class BCMessageWindow(BCMessageWindowMeta):
         BigWorld.callback(0.1, partial(self.__setCameraDisabled, True))
 
     def __setCameraDisabled(self, disabled):
-        self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': disabled}), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': disabled,
+         'setIdle': True,
+         'setParallax': True}), EVENT_BUS_SCOPE.LOBBY)
         self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_CAMERA_MOVEMENT, ctx={'disable': disabled}), EVENT_BUS_SCOPE.LOBBY)

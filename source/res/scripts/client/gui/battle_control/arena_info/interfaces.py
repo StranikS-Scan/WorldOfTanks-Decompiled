@@ -157,6 +157,9 @@ class IBattleFieldController(IArenaVehiclesController):
     def setVehicleVisible(self, vehicleID, health):
         pass
 
+    def stopVehicleVisual(self, vehicleID):
+        pass
+
 
 class IProgressionController(IArenaLoadController):
     __slots__ = ()
@@ -169,7 +172,7 @@ class IProgressionController(IArenaLoadController):
     def getCurrentVehicleLevel(self):
         raise NotImplementedError
 
-    def updateXP(self, xp):
+    def updateXP(self, xp, observedVehicleID):
         raise NotImplementedError
 
     def mayInstallModule(self, moduleItem):
@@ -177,9 +180,6 @@ class IProgressionController(IArenaLoadController):
 
     def mayInstallModuleOnVehicle(self, moduleItem, vehicle):
         raise NotImplementedError
-
-    def updateLevel(self, level, minXP, maxXP):
-        pass
 
     def updateVehicleXP(self):
         pass

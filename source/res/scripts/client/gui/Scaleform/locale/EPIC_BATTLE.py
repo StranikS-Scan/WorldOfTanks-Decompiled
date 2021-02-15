@@ -290,6 +290,7 @@ class EPIC_BATTLE(object):
     SEASON_201902_NAME = '#epic_battle:season/201902/name'
     SEASON_202002_NAME = '#epic_battle:season/202002/name'
     SEASON_202008_NAME = '#epic_battle:season/202008/name'
+    SEASON_202103_NAME = '#epic_battle:season/202103/name'
     EPICBATTLEITEM_REWARDPOINTS_HEADER = '#epic_battle:epicBattleItem/rewardPoints/header'
     EPICBATTLEITEM_REWARDPOINTS_DESCRIPTION = '#epic_battle:epicBattleItem/rewardPoints/description'
     EPICBATTLEITEM_SUPPLYPOINTS_HEADER = '#epic_battle:epicBattleItem/supplyPoints/header'
@@ -300,7 +301,10 @@ class EPIC_BATTLE(object):
      RANK_RANK4,
      RANK_RANK5,
      RANK_RANK6)
-    SEASON_ALL_NAME_ENUM = (SEASON_201902_NAME, SEASON_202002_NAME, SEASON_202008_NAME)
+    SEASON_ALL_NAME_ENUM = (SEASON_201902_NAME,
+     SEASON_202002_NAME,
+     SEASON_202008_NAME,
+     SEASON_202103_NAME)
 
     @classmethod
     def getRankLabel(cls, key0):

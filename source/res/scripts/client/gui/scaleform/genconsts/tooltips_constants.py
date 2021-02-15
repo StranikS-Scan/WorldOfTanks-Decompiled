@@ -127,6 +127,7 @@ class TOOLTIPS_CONSTANTS(object):
     SPECIAL = 'special'
     SIMPLE = 'simple'
     COMPLEX = 'complex'
+    WULF = 'wulf'
     PRIVATE_QUESTS_TILE = 'privateQuestsTile'
     PRIVATE_QUESTS_FALLOUT_TILE = 'privateQuestsFalloutTile'
     PRIVATE_QUESTS_CHAIN = 'privateQuestsChain'
@@ -190,11 +191,12 @@ class TOOLTIPS_CONSTANTS(object):
     SQUAD_BONUS = 'squadBonus'
     GF_TEST_TOOLTIP = 'gfTestTooltip'
     BATTLE_PASS_VEHICLE_POINTS = 'battlePassVehiclePoints'
-    BATTLE_PASS_POINTS = 'battlePassPoints'
     BATTLE_PASS_NOT_STARTED = 'battlePassNotStarted'
     BATTLE_PASS_IN_PROGRESS = 'battlePassInProgress'
+    BATTLE_PASS_AS3_TOOLTIP_CALL = 'battlePassAS3TooltipCall'
     BATTLE_PASS_COMPLETED = 'battlePassCompleted'
     BATTLE_PASS_CHOSE_WINNER = 'battlePassChoseWinner'
+    BATTLE_PASS_POINTS = 'battlePassPoints'
     SINGAPORE_WALLET_STATS = 'Stats'
     GOLD_STATS = 'goldStats'
     CREDITS_STATS = 'creditsStats'
@@ -235,16 +237,13 @@ class TOOLTIPS_CONSTANTS(object):
     BATTLE_ROYALE_PERF_SIMPLE = 'battleRoyalePerfSimple'
     BATTLE_ROYALE_PERF_ADVANCED = 'battleRoyalePerfAdvanced'
     BATTLE_ROYALE_SELECTOR_INFO = 'battleRoyaleSelectorInfo'
+    BATTLE_ROYALE_WIDGET_INFO = 'battleRoyaleWidgetInfo'
     BLUEPRINT_INFO = 'blueprintInfo'
     BLUEPRINT_CONVERT_INFO = 'blueprintConvertInfo'
     BLUEPRINT_FRAGMENT_INFO = 'blueprintFragmentInfo'
     BLUEPRINT_EMPTY_SLOT_INFO = 'blueprintEmptySlotInfo'
     BLUEPRINT_RANDOM_INFO = 'blueprintRandomInfo'
     SENIORITY_FLAG = 'seniorityFlag'
-    BOB_SELECTOR_INFO = 'bobSelectorInfo'
-    BOB_SERVER_PRIMETIME = 'bobServerPrimeTime'
-    BOB_SKILL_INFO = 'bobDSkillInfo'
-    BOB_PROGRESSIVE_INFO = 'bobProgressiveInfo'
     BLOCKS_DEFAULT_UI = 'ToolTipInblocksDefaultUI'
     TANKMEN_UI = 'ToolTipTankmenUI'
     TANKMEN_SKILL_UI = 'ToolTipSkillUI'
@@ -337,6 +336,7 @@ class TOOLTIPS_CONSTANTS(object):
     DEVICE_GIFT_TOKEN = 'deviceGiftToken'
     DEVICE_GIFT_TOKEN_UI = 'ToolTipInblocksDefaultUI'
     EVENT_PROGRESSION_COMPLETED_QUESTS_INFO = 'EventProgressionQuestsTooltipData'
+    BATTLE_ROYALE_COMPLETED_QUESTS_INFO = 'BattleRoyaleQuestsTooltipData'
     ACHIEVEMENTS_SET = [BATTLE_STATS_ACHIEVS,
      BATTLE_STATS_MARKS_ON_GUN_ACHIEVEMENT,
      ACHIEVEMENT,
@@ -551,7 +551,7 @@ class TOOLTIPS_CONSTANTS(object):
     OPTDEV_SLOT_STATE_EMPTY = 'empty'
     OPTDEV_SLOT_STATE_EMPTY_SELECTED = 'emptySelected'
     OPTDEV_SLOT_STATE_ACTIVE_SELECTED = 'activeSelected'
-    BATTLE_PASS_SET = [DEVICE_GIFT_TOKEN]
+    BATTLE_PASS_SET = [DEVICE_GIFT_TOKEN, BATTLE_PASS_POINTS]
     ROYALE_BATTLE_SET = [BATTLE_ROYALE_WEAK_ZONES, BATTLE_ROYALE_MODULES]
     ROYALE_LOBBY_SET = [BATTLE_ROYALE_VEHICLE,
      BATTLE_ROYALE_MODULES_HANGAR,
@@ -559,8 +559,6 @@ class TOOLTIPS_CONSTANTS(object):
      BATTLE_ROYALE_EQUIPMENT,
      BATTLE_ROYALE_PERF_SIMPLE,
      BATTLE_ROYALE_PERF_ADVANCED,
-     BATTLE_ROYALE_SELECTOR_INFO]
-    BOB_SET = [BOB_SELECTOR_INFO,
-     BOB_SERVER_PRIMETIME,
-     BOB_SKILL_INFO,
-     BOB_PROGRESSIVE_INFO]
+     BATTLE_ROYALE_SELECTOR_INFO,
+     BATTLE_ROYALE_WIDGET_INFO,
+     BATTLE_ROYALE_COMPLETED_QUESTS_INFO]

@@ -11,13 +11,13 @@ class BattleXP(BigWorld.DynamicScriptComponent):
         pass
 
     def set_battleXP(self, _=None):
-        ctrl = self.entity.guiSessionProvider.dynamic.progression
-        if ctrl is not None and self.entity.id == BigWorld.player().playerVehicleID:
-            ctrl.updateXP(self.battleXP)
-        return
+        if self.battleXP < 0 or not self.entity.isAlive():
+            return
+        else:
+            ctrl = self.entity.guiSessionProvider.dynamic.progression
+            if ctrl is not None:
+                ctrl.updateXP(self.battleXP, self.entity.id)
+            return
 
     def set_battleXpLvlData(self, _=None):
-        ctrl = self.entity.guiSessionProvider.dynamic.progression
-        if ctrl is not None and self.entity.id == BigWorld.player().playerVehicleID:
-            ctrl.updateLevel(*self.battleXpLvlData)
-        return
+        pass

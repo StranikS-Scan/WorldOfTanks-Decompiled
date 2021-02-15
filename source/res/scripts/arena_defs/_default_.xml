@@ -259,4 +259,36 @@
       <battleEndingSoonTime>	60	</battleEndingSoonTime>
     </domination30x30>
   </gameplayTypes>
+  <extraSoundRemapping>
+    <bootcamp>
+      <soundRemapping>
+        <loadBanks>
+          <bank>
+            <name>	bootcamp.pck	</name>
+          </bank>
+          <bank>
+            <name>	bootcamp_gui.bnk	</name>
+          </bank>
+          <bank>
+            <name>	bootcamp_hangar.bnk	</name>
+          </bank>
+          <bank>
+            <name>	bootcamp_hangar_voiceover.bnk	</name>
+          </bank>
+          <bank>
+            <name>	bootcamp_voiceover.bnk	</name>
+          </bank>
+          <bank>
+            <name>	bootcamp_result_screen.bnk	</name>
+          </bank>
+          <bank>
+            <name>	bootcamp_video.pck	</name>
+          </bank>
+          <bank>
+            <name>	bootcamp_video.bnk	</name>
+          </bank>
+        </loadBanks>
+      </soundRemapping>
+    </bootcamp>
+  </extraSoundRemapping>
 </_default_.xml>

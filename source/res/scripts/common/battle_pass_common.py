@@ -4,7 +4,8 @@ import bisect
 import time
 import typing
 import struct
-from constants import MAX_VEHICLE_LEVEL, OFFER_TOKEN_PREFIX
+from battle_pass_integration import BattlePassByGameMode
+from constants import MAX_VEHICLE_LEVEL, OFFER_TOKEN_PREFIX, ARENA_BONUS_TYPE
 from collections import namedtuple
 from items import vehicles, parseIntCompactDescr
 BATTLE_PASS_TOKEN_PREFIX = 'battle_pass:'
@@ -201,12 +202,10 @@ def getLevel(curPoints, levelPoints, prevLevel=0):
 class BattlePassConfig(object):
     REWARD_IDX = 0
     TAGS_IDX = 1
-    MAX_RANKS = 15
 
     def __init__(self, config):
         self._config = config
         self._season = config.get('season', {})
-        self._points = self._season.get('points', {})
         self._rewards = config.get('rewards', {})
         self._freeRewards = config.get('rewards', {}).get(BattlePassConsts.REWARD_FREE, {})
         self._paidRewards = config.get('rewards', {}).get(BattlePassConsts.REWARD_PAID, {})
@@ -227,6 +226,10 @@ class BattlePassConfig(object):
     @property
     def seasonFinish(self):
         return self._season.get('seasonFinish', 0)
+
+    @property
+    def points(self):
+        return self._season.get('points', {})
 
     @property
     def basePoints(self):
@@ -326,6 +329,11 @@ class BattlePassConfig(object):
     def isEnabled(self):
         return self.mode == 'enabled'
 
+    def isGameModeEnabled(self, gameMode):
+        if not self._season or not self._season['points']:
+            return False
+        return self.points[gameMode]['enabled'] if gameMode in self._season['points'] else False
+
     def isPaused(self):
         return self.mode == 'paused'
 
@@ -375,26 +383,12 @@ class BattlePassConfig(object):
         else:
             return sumPoints
 
-    def bonusPointsList(self, vehTypeCompDescr=None, isWinner=True):
+    def bonusPointsList(self, vehTypeCompDescr=None, isWinner=True, gameMode=ARENA_BONUS_TYPE.REGULAR):
         teamKey = 'win' if isWinner else 'lose'
-        teamPoints = self._config.get('season', {}).get('points', {})
+        teamPoints = self._config.get('season', {}).get('points', {}).get(gameMode, {})
         if vehTypeCompDescr in teamPoints:
             teamPoints = teamPoints[vehTypeCompDescr]
-        return teamPoints.get(teamKey, [0] * BattlePassConfig.MAX_RANKS)
-
-    def bonusPointsDiffList(self, vehTypeCompDescr):
-        defaultDiff = [0] * BattlePassConfig.MAX_RANKS
-        defaultPoints = self._config.get('season', {}).get('points', {})
-        if vehTypeCompDescr in defaultPoints:
-            specialPoints = defaultPoints[vehTypeCompDescr]
-            defaultPoints = defaultPoints.get('win', defaultDiff)
-            specialPoints = specialPoints.get('win', defaultDiff)
-            return [ a - b for a, b in zip(specialPoints, defaultPoints) ]
-        return defaultDiff
-
-    def bonusPointsForBattle(self, vehTypeCompDescr, rank, isWinner=True):
-        bonusPoints = self.bonusPointsList(vehTypeCompDescr=vehTypeCompDescr, isWinner=isWinner)
-        return bonusPoints[rank - 1]
+        return teamPoints.get(teamKey, [0] * BattlePassByGameMode[gameMode]['maxRanks'])
 
     def getSeasonRewards(self):
         return self._config.get('rewards', {})

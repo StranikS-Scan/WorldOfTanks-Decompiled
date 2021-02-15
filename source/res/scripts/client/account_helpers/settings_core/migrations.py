@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/migrations.py
 import BigWorld
 import constants
-from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys, BattleCommStorageKeys, OnceOnlyHints
+from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys, BattleCommStorageKeys, OnceOnlyHints, ScorePanelStorageKeys
 from adisp import process, async
 from debug_utils import LOG_DEBUG
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
@@ -27,7 +27,8 @@ def _initializeDefaultSettings(core, data, initialized):
      GAME.SHOW_VEHICLES_COUNTER: core.getSetting(GAME.SHOW_VEHICLES_COUNTER),
      GAME.MINIMAP_ALPHA: core.getSetting(GAME.MINIMAP_ALPHA),
      GAME.PLAYERS_PANELS_SHOW_LEVELS: core.getSetting(GAME.PLAYERS_PANELS_SHOW_LEVELS)}
-    data['gameExtData'][GAME.CHAT_CONTACTS_LIST_ONLY] = options.getSetting(GAME.CHAT_CONTACTS_LIST_ONLY).getDefaultValue()
+    data['gameExtData'] = {GAME.CHAT_CONTACTS_LIST_ONLY: options.getSetting(GAME.CHAT_CONTACTS_LIST_ONLY).getDefaultValue(),
+     GAME.SNIPER_ZOOM: core.getSetting(GAME.SNIPER_ZOOM)}
     gameplayData = data['gameplayData'] = {GAME.GAMEPLAY_MASK: AccountSettings.getSettingsDefault('gameplayMask')}
     aimData = data['aimData'] = {'arcade': core.getSetting('arcade'),
      'sniper': core.getSetting('sniper')}
@@ -539,6 +540,16 @@ def _migrateTo63(core, data, initialized):
     gameData[GAME.ENABLE_REPAIR_TIMER] = True
 
 
+def _migrateTo64(core, data, initialized):
+    gameData = data['gameExtData']
+    gameData[GAME.ENABLE_BATTLE_NOTIFIER] = True
+
+
+def _migrateTo65(core, data, initialized):
+    battlehudData = data.get('battleHud', {})
+    battlehudData[ScorePanelStorageKeys.SHOW_HP_BAR] = True
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -785,6 +796,14 @@ _versions = ((1,
   False),
  (63,
   _migrateTo63,
+  False,
+  False),
+ (64,
+  _migrateTo64,
+  False,
+  False),
+ (65,
+  _migrateTo65,
   False,
   False))
 

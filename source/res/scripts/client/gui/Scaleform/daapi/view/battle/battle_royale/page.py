@@ -91,7 +91,7 @@ class _BattleRoyaleComponentsConfig(ComponentsConfig):
 _BATTLE_ROYALE_CFG = _BattleRoyaleComponentsConfig()
 
 class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
-    _PAGE_ALIAS = 'BattleRoyalePage'
+    __PANELS_FOR_SHOW_HIDE = [BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, BATTLE_VIEW_ALIASES.BATTLE_LEVEL_PANEL]
 
     def __init__(self, components=None):
         if components is None:
@@ -99,6 +99,7 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         self.__selectSpawnToggling = set()
         self.__brSoundControl = None
         self.__isFullStatsShown = False
+        self.__panelsIsVisible = False
         super(BattleRoyalePage, self).__init__(components, external=(crosshair.CrosshairPanelContainer, BattleRoyaleMarkersManager))
         return
 
@@ -149,18 +150,28 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         spawnCtrl = self.sessionProvider.dynamic.spawn
         if spawnCtrl:
             spawnCtrl.addRuntimeView(self)
-        deathScreenCtrl = self.sessionProvider.dynamic.deathScreen
-        if deathScreenCtrl:
-            deathScreenCtrl.onShowDeathScreen += self.__onShowDeathScreen
+        self.sessionProvider.getCtx().setPlayerFullNameFormatter(BattleRoyalePlayerFullNameFormatter())
+        self.__brSoundControl = BRBattleSoundController()
+        self.__brSoundControl.init()
+
+    def _startBattleSession(self):
+        super(BattleRoyalePage, self)._startBattleSession()
         vehStateCtrl = self.sessionProvider.shared.vehicleState
         if vehStateCtrl is not None:
             vehStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
         ammoCtrl = self.sessionProvider.shared.ammo
         if ammoCtrl is not None:
             ammoCtrl.onGunSettingsSet += self.__onGunSettingsSet
-        self.sessionProvider.getCtx().setPlayerFullNameFormatter(BattleRoyalePlayerFullNameFormatter())
-        self.__brSoundControl = BRBattleSoundController()
-        self.__brSoundControl.init()
+        return
+
+    def _stopBattleSession(self):
+        super(BattleRoyalePage, self)._stopBattleSession()
+        vehStateCtrl = self.sessionProvider.shared.vehicleState
+        if vehStateCtrl is not None:
+            vehStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+        ammoCtrl = self.sessionProvider.shared.ammo
+        if ammoCtrl is not None:
+            ammoCtrl.onGunSettingsSet -= self.__onGunSettingsSet
         return
 
     def _onRegisterFlashComponent(self, viewPy, alias):
@@ -181,22 +192,15 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         spawnCtrl = self.sessionProvider.dynamic.spawn
         if spawnCtrl:
             spawnCtrl.removeRuntimeView(self)
-        deathScreenCtrl = self.sessionProvider.dynamic.deathScreen
-        if deathScreenCtrl:
-            deathScreenCtrl.onShowDeathScreen -= self.__onShowDeathScreen
-        vehStateCtrl = self.sessionProvider.shared.vehicleState
-        if vehStateCtrl is not None:
-            vehStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
-        ammoCtrl = self.sessionProvider.shared.ammo
-        if ammoCtrl is not None:
-            ammoCtrl.onGunSettingsSet -= self.__onGunSettingsSet
         if self.__brSoundControl is not None:
             self.__brSoundControl.destroy()
             self.__brSoundControl = None
         self.__selectSpawnToggling.clear()
-        self.app.leaveGuiControlMode(self._PAGE_ALIAS)
         super(BattleRoyalePage, self)._dispose()
         return
+
+    def _switchToPostmortem(self):
+        BigWorld.player().setIsObserver()
 
     def __onConfWindowTriggered(self, isOpened):
         if isOpened:
@@ -217,13 +221,15 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
             self.as_updateDamageScreenS(value.isCausingDamage and isAlive)
         elif state in (VEHICLE_VIEW_STATE.SWITCHING, VEHICLE_VIEW_STATE.DESTROYED, VEHICLE_VIEW_STATE.CREW_DEACTIVATED):
             self.as_updateDamageScreenS(False)
-        if state == VEHICLE_VIEW_STATE.DESTROYED:
-            self._setComponentsVisibility(hidden=[BATTLE_VIEW_ALIASES.BATTLE_LEVEL_PANEL])
+        vehicle = BigWorld.player().getVehicleAttached()
+        if vehicle is None or not vehicle.isAlive() and BigWorld.player().isObserver():
+            if self.__panelsIsVisible:
+                self._setComponentsVisibility(hidden=self.__PANELS_FOR_SHOW_HIDE)
+                self.__panelsIsVisible = False
+        elif not self.__panelsIsVisible:
+            self._setComponentsVisibility(visible=self.__PANELS_FOR_SHOW_HIDE)
+            self.__panelsIsVisible = True
         return
-
-    def __onShowDeathScreen(self):
-        self.as_setPostmortemTipsVisibleS(False)
-        self.app.enterGuiControlMode(self._PAGE_ALIAS, cursorVisible=True, enableAiming=False)
 
     def __onGunSettingsSet(self, _):
         progressionWindowCtrl = self.__getProgressionWindowCtrl()

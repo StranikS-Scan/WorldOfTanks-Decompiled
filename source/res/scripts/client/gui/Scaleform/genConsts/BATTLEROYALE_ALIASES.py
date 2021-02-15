@@ -13,4 +13,5 @@ class BATTLEROYALE_ALIASES(object):
     VEHICLE_WEAK_ZONES_CMP = 'weakZonesComponent'
     BATTLE_ROYALE_SUMMARY_RESULTS_CMP = 'BattleRoyaleSummaryResultsCmp'
     BATTLE_ROYALE_SCORE_RESULTS_CMP = 'BattleRoyaleScoreResultsCmp'
+    BATTLE_ROYALE_PRIME_TIME = 'BattleRoyalePrimeTimeView'
     LEVEL_UP_UI = 'battleRoyaleLevelUpView.swf'

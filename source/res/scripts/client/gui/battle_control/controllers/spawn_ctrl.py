@@ -106,10 +106,10 @@ class SpawnController(ViewComponentsController, ISpawnController):
         for viewComponent in self._viewComponents:
             viewComponent.onSelectPoint(pointId)
 
-        BigWorld.player().cell.chooseSpawnKeyPoint(pointId)
+        BigWorld.player().cell.spawnKeyPointAvatar.chooseSpawnKeyPoint(pointId)
 
     def placeVehicle(self):
-        BigWorld.player().cell.placeVehicle()
+        BigWorld.player().cell.spawnKeyPointAvatar.placeVehicle()
         self.__closeSpawnPoints()
 
     def addRuntimeView(self, view):

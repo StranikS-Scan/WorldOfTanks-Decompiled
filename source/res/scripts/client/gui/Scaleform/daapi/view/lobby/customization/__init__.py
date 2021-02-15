@@ -27,6 +27,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.dialogs.confirm_customization_item_dialog import ConfirmCustomizationItemDialog
     from gui.Scaleform.daapi.view.lobby.customization.customization_style_info import CustomizationStyleInfo
     from gui.Scaleform.daapi.view.lobby.customization.progressive_items_browser_view import ProgressiveItemsBrowserView
+    from gui.Scaleform.daapi.view.lobby.customization.progression_styles.stage_switcher import StageSwitcher
     return (GroupedViewSettings(VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER, FilterPopover, 'customizationFiltersPopoverView.swf', WindowLayer.WINDOW, VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER, VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.CUSTOMIZATION_ITEMS_POPOVER, CustomPopover, 'customizationItemsPopover.swf', WindowLayer.WINDOW, VIEW_ALIAS.CUSTOMIZATION_ITEMS_POPOVER, VIEW_ALIAS.CUSTOMIZATION_ITEMS_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.CUSTOMIZATION_EDITED_KIT_POPOVER, EditableStylePopover, 'customizationEditedKitPopover.swf', WindowLayer.WINDOW, VIEW_ALIAS.CUSTOMIZATION_EDITED_KIT_POPOVER, VIEW_ALIAS.CUSTOMIZATION_EDITED_KIT_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
@@ -36,7 +37,8 @@ def getViewSettings():
      ComponentSettings(VIEW_ALIAS.CUSTOMIZATION_BOTTOM_PANEL, CustomizationBottomPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VIEW_ALIAS.CUSTOMIZATION_INSCRIPTION_CONTROLLER, CustomizationInscriptionController, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VIEW_ALIAS.CUSTOMIZATION_STYLE_INFO, CustomizationStyleInfo, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(CUSTOMIZATION_ALIASES.PROGRESSIVE_ITEMS_BROWSER_VIEW, ProgressiveItemsBrowserView, 'browserScreen.swf', WindowLayer.FULLSCREEN_WINDOW, CUSTOMIZATION_ALIASES.PROGRESSIVE_ITEMS_BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True))
+     ViewSettings(CUSTOMIZATION_ALIASES.PROGRESSIVE_ITEMS_BROWSER_VIEW, ProgressiveItemsBrowserView, 'browserScreen.swf', WindowLayer.FULLSCREEN_WINDOW, CUSTOMIZATION_ALIASES.PROGRESSIVE_ITEMS_BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True),
+     ComponentSettings(CUSTOMIZATION_ALIASES.PROGRESSION_STYLES_STAGE_SWITCHER, StageSwitcher, ScopeTemplates.DEFAULT_SCOPE))
 
 
 CAMOUFLAGES_KIND_TEXTS = [VEHICLE_CUSTOMIZATION.CAMOUFLAGE_WINTER, VEHICLE_CUSTOMIZATION.CAMOUFLAGE_SUMMER, VEHICLE_CUSTOMIZATION.CAMOUFLAGE_DESERT]

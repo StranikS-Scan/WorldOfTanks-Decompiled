@@ -391,6 +391,51 @@
       <devices>	119	</devices>
     </damage>
   </_88mm_HE_narazovy>
+  <_88mm_AP_PVs_PLK>
+    <id>	42	</id>
+    <userString>	#czech_vehicles:_88mm_AP_PVs_PLK	</userString>
+    <icon>	ap	</icon>
+    <price>	330	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	88	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	220	</armor>
+      <devices>	119	</devices>
+    </damage>
+  </_88mm_AP_PVs_PLK>
+  <_88mm_HEAT_Vz_44_prupalny>
+    <id>	43	</id>
+    <userString>	#czech_vehicles:_88mm_HEAT_Vz_44_prupalny	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	88	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	220	</armor>
+      <devices>	119	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_88mm_HEAT_Vz_44_prupalny>
+  <_88mm_HE_vz_44_narazovy>
+    <id>	44	</id>
+    <userString>	#czech_vehicles:_88mm_HE_vz_44_narazovy	</userString>
+    <icon>	he	</icon>
+    <price>	180	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	88	</caliber>
+    <explosionRadius>	1.4	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	270	</armor>
+      <devices>	119	</devices>
+    </damage>
+  </_88mm_HE_vz_44_narazovy>
   <_88mm_vz_41N_OPG>
     <id>	30	</id>
     <userString>	#czech_vehicles:_88mm_vz_41N_OPG	</userString>

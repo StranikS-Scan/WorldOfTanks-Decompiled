@@ -39,6 +39,7 @@ _ATTACK_REASON_CODE = {_AR_INDICES['shot']: 'DEATH_FROM_SHOT',
 _PLAYER_KILL_ENEMY_SOUND = 'enemy_killed_by_player'
 _PLAYER_KILL_ALLY_SOUND = 'ally_killed_by_player'
 _ALLY_KILLED_SOUND = 'ally_killed_by_enemy'
+_ENEMY_KILLED_SOUND = 'enemy_killed_by_ally'
 
 class BattleMessagesController(IBattleController):
     __slots__ = ('_battleCtx', '_arenaDP', '_arenaVisitor', '_eManager', '_buffer', '_isUIPopulated', 'onShowVehicleMessageByCode', 'onShowVehicleMessageByKey', 'onShowVehicleErrorByKey', 'onShowPlayerMessageByCode', 'onShowPlayerMessageByKey', 'onShowDestructibleEntityMessageByCode', '__weakref__')
@@ -157,6 +158,8 @@ class BattleMessagesController(IBattleController):
                 soundExt = _ALLY_KILLED_SOUND
         elif target == _ENTITY_TYPE.ALLY or target == _ENTITY_TYPE.SUICIDE and attacker == _ENTITY_TYPE.ALLY:
             soundExt = _ALLY_KILLED_SOUND
+        elif target == _ENTITY_TYPE.ENEMY or target == _ENTITY_TYPE.SUICIDE and attacker == _ENTITY_TYPE.ENEMY:
+            soundExt = _ENEMY_KILLED_SOUND
         return (code,
          '%s_%s' % (attacker.upper(), target.upper()),
          sound,

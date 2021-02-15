@@ -9,7 +9,6 @@ from gui.Scaleform.daapi.view.lobby.shared.web_view import WebView
 from gui.ranked_battles.constants import SeasonResultTokenPatterns
 from gui.ranked_battles.ranked_helpers import getRankedBattlesRatingUrl, getRankedBattlesInfoPageUrl, getRankedBattlesSeasonGapUrl, getRankedBattlesYearRatingUrl, getRankedBattlesShopUrl
 from gui.ranked_battles.ranked_helpers.sound_manager import RANKED_MAIN_PAGE_SOUND_SPACE, RANKED_OVERLAY_SOUND_SPACE, Sounds, AmbientType
-from gui.prb_control.events_dispatcher import g_eventDispatcher
 from skeletons.gui.game_control import IRankedBattlesController
 from web.web_client_api.ranked_battles import createRankedBattlesWebHandlers
 
@@ -25,10 +24,9 @@ class RankedBrowserPage(BrowserPageComponent, IResetablePage):
         self._updateSounds(self.__rankedController.getSoundManager())
         ctx = self.__rankedController.getWebOpenPageCtx()
         if self.__isInited:
-            if ctx is not None and ctx.get('webParams', ''):
+            if ctx is not None and (ctx.get('webParams', '') or ctx.get('clientParams', {})):
                 self.__ctx = ctx
                 self.invalidateUrl()
-                self.__ctx = None
             elif self._isForcedRefresh():
                 self.refreshUrl()
         return
@@ -40,15 +38,19 @@ class RankedBrowserPage(BrowserPageComponent, IResetablePage):
         return createRankedBattlesWebHandlers()
 
     def _getUrl(self):
-        url = self._getBaseUrl() + self.__patchUrlByCtx()
+        url = self._getBaseUrl(**self.__getClientParams()) + self.__patchUrlByCtx()
         self.__isInited = True
+        self.__ctx = None
         return url
 
-    def _getBaseUrl(self):
+    def _getBaseUrl(self, **kwargs):
         raise NotImplementedError
 
     def _updateSounds(self, soundManager):
         pass
+
+    def __getClientParams(self):
+        return self.__ctx.get('clientParams', {}) if self.__ctx is not None else {}
 
     def __patchUrlByCtx(self):
         return self.__ctx.get('webParams', '') if self.__ctx is not None else ''
@@ -73,8 +75,8 @@ class RankedSeasonGapPage(RankedBrowserPage):
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(RankedSeasonGapPage, self)._dispose()
 
-    def _getBaseUrl(self):
-        return getRankedBattlesSeasonGapUrl()
+    def _getBaseUrl(self, **kwargs):
+        return getRankedBattlesSeasonGapUrl(**kwargs)
 
     def __onTokensUpdate(self, diff):
         for pattern in SeasonResultTokenPatterns.ALL():
@@ -87,8 +89,8 @@ class RankedShopPage(RankedBrowserPage):
     def _isForcedRefresh(self):
         return True
 
-    def _getBaseUrl(self):
-        return getRankedBattlesShopUrl()
+    def _getBaseUrl(self, **kwargs):
+        return getRankedBattlesShopUrl(**kwargs)
 
     def _updateSounds(self, soundManager):
         soundManager.setCustomProgressSound(Sounds.PROGRESSION_STATE_SHOP)
@@ -97,8 +99,8 @@ class RankedShopPage(RankedBrowserPage):
 
 class RankedRatingPage(RankedBrowserPage):
 
-    def _getBaseUrl(self):
-        return getRankedBattlesRatingUrl()
+    def _getBaseUrl(self, **kwargs):
+        return getRankedBattlesRatingUrl(**kwargs)
 
     @classmethod
     def _isRightClickAllowed(cls):
@@ -107,8 +109,8 @@ class RankedRatingPage(RankedBrowserPage):
 
 class RankedYearRatingPage(RankedBrowserPage):
 
-    def _getBaseUrl(self):
-        return getRankedBattlesYearRatingUrl()
+    def _getBaseUrl(self, **kwargs):
+        return getRankedBattlesYearRatingUrl(**kwargs)
 
     def _updateSounds(self, soundManager):
         soundManager.setProgressSound()
@@ -116,8 +118,8 @@ class RankedYearRatingPage(RankedBrowserPage):
 
 class RankedBattlesInfoPage(RankedBrowserPage):
 
-    def _getBaseUrl(self):
-        return getRankedBattlesInfoPageUrl()
+    def _getBaseUrl(self, **kwargs):
+        return getRankedBattlesInfoPageUrl(**kwargs)
 
 
 class RankedLandingView(BrowserView):
@@ -180,14 +182,6 @@ class RankedWebOverlay(WebView):
 
     def webHandlers(self):
         return createRankedBattlesWebHandlers()
-
-    def onCloseBtnClick(self):
-        g_eventDispatcher.loadHangar()
-        super(RankedWebOverlay, self).onCloseBtnClick()
-
-    def onEscapePress(self):
-        g_eventDispatcher.loadHangar()
-        super(RankedWebOverlay, self).onEscapePress()
 
     def _populate(self):
         super(RankedWebOverlay, self)._populate()

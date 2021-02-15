@@ -162,7 +162,7 @@ class IDynamicControllersLocator(object):
         raise NotImplementedError
 
     @property
-    def bob(self):
+    def battleNotifier(self):
         raise NotImplementedError
 
 
@@ -293,6 +293,9 @@ class IClientArenaVisitor(object):
         raise NotImplementedError
 
     def hasDogTag(self):
+        raise NotImplementedError
+
+    def hasBattleNotifier(self):
         raise NotImplementedError
 
 
@@ -564,9 +567,6 @@ class IBattleContext(object):
         raise NotImplementedError
 
     def extractLastArenaWinStatus(self):
-        raise NotImplementedError
-
-    def areQuestsEnabledForArena(self):
         raise NotImplementedError
 
 

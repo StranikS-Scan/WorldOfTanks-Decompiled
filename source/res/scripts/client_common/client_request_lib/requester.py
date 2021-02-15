@@ -344,15 +344,6 @@ class BattlePassAccessor(BaseAccessor):
         return self._data_source.get_voting_data(callback, feature_id, seasons)
 
 
-class BobAccessor(BaseAccessor):
-
-    def get_teams(self, callback):
-        return self._data_source.get_teams(callback)
-
-    def get_team_skills(self, callback, timestamp):
-        return self._data_source.get_team_skills(callback, timestamp)
-
-
 class Requester(object):
     available_data_sources = {'stagings': StagingDataAccessor,
      'fake': FakeDataAccessor,
@@ -371,7 +362,6 @@ class Requester(object):
     promo_screens = RequestDescriptor(PromoScreensAccessor)
     freya = RequestDescriptor(FreyaAccessor)
     battle_pass = RequestDescriptor(BattlePassAccessor)
-    wgbob = RequestDescriptor(BobAccessor)
     craftmachine = RequestDescriptor(CrafmachineAccessor)
 
     @classmethod

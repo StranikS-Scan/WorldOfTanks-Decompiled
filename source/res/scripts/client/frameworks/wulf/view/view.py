@@ -4,6 +4,7 @@ import logging
 import typing
 import Event
 from soft_exception import SoftException
+from sound_gui_manager import ViewSoundExtension
 from .view_event import ViewEvent
 from .view_model import ViewModel
 from ..py_object_binder import PyObjectEntity, getProxy, getObject
@@ -61,7 +62,8 @@ class ViewSettings(object):
 
 
 class View(PyObjectEntity):
-    __slots__ = ('__viewStatus', '__viewModel', '__args', '__kwargs', 'onStatusChanged')
+    __slots__ = ('__viewStatus', '__viewModel', '__args', '__kwargs', 'onStatusChanged', '__soundExtension')
+    _COMMON_SOUND_SPACE = None
 
     def __init__(self, settings, wsFlags=ViewFlags.VIEW, viewModelClazz=ViewModel, *args, **kwargs):
         if not isinstance(settings, ViewSettings):
@@ -73,6 +75,8 @@ class View(PyObjectEntity):
             settings.kwargs = kwargs
         self._swapStates(ViewStatus.UNDEFINED, ViewStatus.CREATED)
         self.__viewModel = settings.model
+        self.__soundExtension = ViewSoundExtension(self._COMMON_SOUND_SPACE)
+        self.__soundExtension.initSoundManager()
         super(View, self).__init__(PyObjectView(settings.proxy))
         self.onStatusChanged = Event.Event()
         self.__viewStatus = ViewStatus.UNDEFINED if self.proxy is None else self.proxy.viewStatus
@@ -102,6 +106,10 @@ class View(PyObjectEntity):
     @property
     def viewStatus(self):
         return self.__viewStatus
+
+    @property
+    def soundManager(self):
+        return self.__soundExtension.soundManager
 
     def checkViewFlags(self, flags):
         return self.proxy.checkViewFlags(flags) if self.proxy is not None else False
@@ -177,6 +185,7 @@ class View(PyObjectEntity):
         if newStatus == ViewStatus.LOADING:
             self._onLoading(*self.__args, **self.__kwargs)
         elif newStatus == ViewStatus.LOADED:
+            self.__soundExtension.startSoundSpace()
             self._onLoaded(*self.__args, **self.__kwargs)
 
     def _cInit(self):
@@ -186,6 +195,7 @@ class View(PyObjectEntity):
         self._finalize()
         self._cViewStatusChanged(self.viewStatus, ViewStatus.DESTROYED)
         self.unbind()
+        self.__soundExtension.destroySoundManager()
 
     def _cViewStatusChanged(self, oldStatus, newStatus):
         self.__viewStatus = newStatus

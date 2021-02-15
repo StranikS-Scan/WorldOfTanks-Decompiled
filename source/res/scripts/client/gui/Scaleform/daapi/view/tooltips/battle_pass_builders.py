@@ -6,4 +6,4 @@ from gui.shared.tooltips.builders import DataBuilder
 __all__ = ('getTooltipBuilders',)
 
 def getTooltipBuilders():
-    return (DataBuilder(TOOLTIPS_CONSTANTS.DEVICE_GIFT_TOKEN, TOOLTIPS_CONSTANTS.DEVICE_GIFT_TOKEN_UI, battle_pass.DeviceGiftTokenTooltipData(contexts.DeviceGiftTokenContext())),)
+    return (DataBuilder(TOOLTIPS_CONSTANTS.DEVICE_GIFT_TOKEN, TOOLTIPS_CONSTANTS.DEVICE_GIFT_TOKEN_UI, battle_pass.DeviceGiftTokenTooltipData(contexts.DeviceGiftTokenContext())), DataBuilder(TOOLTIPS_CONSTANTS.BATTLE_PASS_POINTS, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, battle_pass.BattlePassPointsTooltipData(contexts.ToolTipContext(None))))

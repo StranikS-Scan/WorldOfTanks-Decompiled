@@ -28,6 +28,7 @@ from helpers import dependency
 from skeletons.gui.game_control import IBattleRoyaleController
 from skeletons.gui.shared import IItemsCache
 from gui.prb_control.entities.listener import IGlobalListener
+from gui.prb_control.settings import FUNCTIONAL_FLAG
 _logger = logging.getLogger(__name__)
 
 def _getTabData():
@@ -177,6 +178,16 @@ class HangarVehicleInfo(BattleRoyaleVehicleInfoMeta, IGlobalListener):
 
     def onShowIntro(self):
         self.__showIntroPage()
+
+    def onPrbEntitySwitching(self):
+        if self.prbEntity is None:
+            return
+        else:
+            switchedFromBR = bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.BATTLE_ROYALE)
+            if switchedFromBR and not self.isDisposed():
+                self.onClose()
+                self.destroy()
+            return
 
     def onPrbEntitySwitched(self):
         if not self.__battleRoyaleController.isBattleRoyaleMode():

@@ -5,7 +5,7 @@ import sys
 from functools import partial
 import typing
 from common import ParameterType, Visibility, ParseException, ComponentPurpose, ComponentViewType, ComponentNumberType
-from validators import validateTriumphMedal, validateTriumph, validateSkill, validateDedication, validateDedicationUnlock, validateBase, validateViewType, validateCommon, validateStartingComponent
+from validators import validateTriumphMedal, validateTriumph, validateSkill, validateDedication, validateDedicationUnlock, validateBase, validateRankedSkill, validateViewType, validateCommon, validateStartingComponent
 if typing.TYPE_CHECKING:
     from typing import List
 
@@ -14,7 +14,6 @@ class XMLObjBuilder(object):
     def __init__(self, componentCls):
         self.__componentCls = componentCls
         self._component = componentCls()
-        self.reset()
 
     def reset(self):
         self._component = self.__componentCls()
@@ -60,6 +59,7 @@ class ComponentBuilder(XMLObjBuilder):
                                    partial(validateViewType, viewType=ComponentViewType.ENGRAVING, purpose=ComponentPurpose.DEDICATION),
                                    validateDedication,
                                    validateDedicationUnlock],
+     ComponentPurpose.RANKED_SKILL: [validateCommon, partial(validateViewType, viewType=ComponentViewType.ENGRAVING, purpose=ComponentPurpose.RANKED_SKILL), validateRankedSkill],
      ComponentPurpose.BASE: [validateCommon, partial(validateViewType, viewType=ComponentViewType.BACKGROUND, purpose=ComponentPurpose.BASE), validateBase]}
 
     def __init__(self):

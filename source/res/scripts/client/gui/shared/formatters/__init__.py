@@ -12,10 +12,11 @@ from gui.shared.formatters import icons
 from gui.shared.formatters import text_styles
 from gui.shared.formatters import time_formatters
 from gui.shared.formatters.currency import getBWFormatter, getStyle
-from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE
+from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, GUI_ITEM_TYPE
 from gui.shared.money import Money, Currency
-from helpers import i18n, dependency
+from helpers import i18n, dependency, int2roman
 from helpers.i18n import makeString
+from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 __all__ = ('icons', 'text_styles', 'time_formatters')
@@ -217,10 +218,17 @@ def formatPurchaseItems(purchaseItems):
     items = set((purchaseItem.item for purchaseItem in purchaseItems if not purchaseItem.isFromInventory and purchaseItem.selected))
     for item in items:
         count = sum((purchaseItem.item.intCD == item.intCD and not purchaseItem.isFromInventory and purchaseItem.selected for purchaseItem in purchaseItems))
-        ctx = {'itemType': item.userType,
-         'itemName': item.userName,
-         'count': count}
-        formattedItem = backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.customization.item(), **ctx)
+        if item.itemTypeID == GUI_ITEM_TYPE.STYLE and item.isProgression:
+            c11nService = dependency.instance(ICustomizationService)
+            ctx = {'styleName': item.userName,
+             'level': int2roman(c11nService.getCurrentProgressionStyleLevel())}
+            resource = R.strings.messenger.serviceChannelMessages.sysMsg.customization.item.progressionStyle
+        else:
+            ctx = {'itemType': item.userType,
+             'itemName': item.userName,
+             'count': count}
+            resource = R.strings.messenger.serviceChannelMessages.sysMsg.customization.item
+        formattedItem = backport.text(resource(), **ctx)
         formattedItems.append(formattedItem)
 
     return ', \n'.join(formattedItems) + '.'

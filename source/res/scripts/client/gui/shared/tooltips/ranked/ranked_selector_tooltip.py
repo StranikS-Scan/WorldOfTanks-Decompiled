@@ -14,8 +14,8 @@ from skeletons.gui.game_control import IRankedBattlesController
 _TOOLTIP_MIN_WIDTH = 280
 
 class RankedSelectorTooltip(BlocksTooltipData):
-    connectionMgr = dependency.descriptor(IConnectionManager)
-    rankedController = dependency.descriptor(IRankedBattlesController)
+    __connectionMgr = dependency.descriptor(IConnectionManager)
+    _battleController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self, ctx):
         super(RankedSelectorTooltip, self).__init__(ctx, TOOLTIP_TYPE.RANKED_SELECTOR_INFO)
@@ -26,9 +26,17 @@ class RankedSelectorTooltip(BlocksTooltipData):
     def _packBlocks(self, *args):
         items = super(RankedSelectorTooltip, self)._packBlocks()
         items.append(self._packHeaderBlock())
+        items.append(self._packTimeTableBlock())
+        items.append(self._getTillEndBlock(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self._battleController.getCurrentSeason().getCycleEndDate()))))
+        return items
+
+    def _packHeaderBlock(self):
+        return formatters.packTitleDescBlock(title=text_styles.highTitle(backport.text(R.strings.ranked_battles.selectorTooltip.title())), desc=text_styles.main(backport.text(R.strings.ranked_battles.selectorTooltip.desc())))
+
+    def _packTimeTableBlock(self, leftPadding=0):
         timeTableBlocks = [self._packTimeTableHeaderBlock()]
-        primeTime = self.rankedController.getPrimeTimes().get(self.connectionMgr.peripheryID)
-        currentCycleEnd = self.rankedController.getCurrentSeason().getCycleEndDate()
+        primeTime = self._battleController.getPrimeTimes().get(self.__connectionMgr.peripheryID)
+        currentCycleEnd = self._battleController.getCurrentSeason().getCycleEndDate()
         todayStart, todayEnd = time_utils.getDayTimeBoundsForLocal()
         todayEnd += 1
         tomorrowStart, tomorrowEnd = todayStart + time_utils.ONE_DAY, todayEnd + time_utils.ONE_DAY
@@ -43,12 +51,7 @@ class RankedSelectorTooltip(BlocksTooltipData):
         timeTableBlocks.append(self._packTimeBlock(message=text_styles.main(backport.text(R.strings.ranked_battles.selectorTooltip.timeTable.today())), timeStr=text_styles.bonusPreviewText(todayStr)))
         tomorrowStr = self._packPeriods(tomorrowPeriods)
         timeTableBlocks.append(self._packTimeBlock(message=text_styles.main(backport.text(R.strings.ranked_battles.selectorTooltip.timeTable.tomorrow())), timeStr=text_styles.stats(tomorrowStr)))
-        items.append(formatters.packBuildUpBlockData(timeTableBlocks, 7, BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
-        items.append(self._getTillEndBlock(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(currentCycleEnd))))
-        return items
-
-    def _packHeaderBlock(self):
-        return formatters.packTitleDescBlock(title=text_styles.highTitle(backport.text(R.strings.ranked_battles.selectorTooltip.title())), desc=text_styles.main(backport.text(R.strings.ranked_battles.selectorTooltip.desc())))
+        return formatters.packBuildUpBlockData(timeTableBlocks, 7, BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(left=leftPadding))
 
     def _packTimeTableHeaderBlock(self):
         return formatters.packImageTextBlockData(title=text_styles.stats(backport.text(R.strings.ranked_battles.selectorTooltip.timeTable.title())), img=backport.image(R.images.gui.maps.icons.buttons.calendar()), imgPadding=formatters.packPadding(top=2), txtPadding=formatters.packPadding(left=5))

@@ -3470,7 +3470,7 @@
     <effects>	BRmainHollowCharge	</effects>
     <damage>
       <armor>	230	</armor>
-      <devices>	80	</devices>
+      <devices>	23	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_122mm_BP450SO_SH>
@@ -3487,7 +3487,7 @@
     <effects>	BRlargeAPCR	</effects>
     <damage>
       <armor>	170	</armor>
-      <devices>	80	</devices>
+      <devices>	23	</devices>
     </damage>
   </_122mm_UBR_472PM_SH>
   <_100mm_3UBK4M_SH>
@@ -3503,7 +3503,7 @@
     <effects>	BRmainHollowCharge	</effects>
     <damage>
       <armor>	320	</armor>
-      <devices>	80	</devices>
+      <devices>	32	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_100mm_3UBK4M_SH>
@@ -3520,7 +3520,7 @@
     <effects>	BRlargeAPCR	</effects>
     <damage>
       <armor>	220	</armor>
-      <devices>	80	</devices>
+      <devices>	32	</devices>
     </damage>
   </_100mm_3VBM2_SH>
   <_122mm_BP450S_SH>
@@ -3536,7 +3536,7 @@
     <effects>	BRmainHollowCharge	</effects>
     <damage>
       <armor>	410	</armor>
-      <devices>	80	</devices>
+      <devices>	41	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_122mm_BP450S_SH>
@@ -3553,23 +3553,24 @@
     <effects>	BRlargeAPCR	</effects>
     <damage>
       <armor>	290	</armor>
-      <devices>	80	</devices>
+      <devices>	41	</devices>
     </damage>
   </_122mm_VBR472B_SH>
   <_122mm_BR_471PM_SH>
     <id>	270	</id>
     <userString>	#ussr_vehicles:_122mm_BR_471PM_SH	</userString>
-    <icon>	ap_cr	</icon>
+    <improved>	true	</improved>
+    <icon>	hc_premium	</icon>
     <price>	0	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING_CR	</kind>
+    <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	122	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRmainAPCR	</effects>
+    <effects>	BRmainHollowCharge	</effects>
     <damage>
       <armor>	450	</armor>
-      <devices>	80	</devices>
+      <devices>	45	</devices>
     </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_122mm_BR_471PM_SH>
   <_122mm_UBR-472PBM_SH>
     <id>	271	</id>
@@ -3584,7 +3585,7 @@
     <effects>	BRlargeAPCR	</effects>
     <damage>
       <armor>	320	</armor>
-      <devices>	80	</devices>
+      <devices>	45	</devices>
     </damage>
   </_122mm_UBR-472PBM_SH>
   <_107mm_BP450M_SH>
@@ -3600,7 +3601,7 @@
     <effects>	BRmainHollowCharge	</effects>
     <damage>
       <armor>	550	</armor>
-      <devices>	80	</devices>
+      <devices>	55	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_107mm_BP450M_SH>
@@ -3617,7 +3618,7 @@
     <effects>	BRlargeAPCR	</effects>
     <damage>
       <armor>	390	</armor>
-      <devices>	80	</devices>
+      <devices>	55	</devices>
     </damage>
   </_107mm_UBR-420PM_SH>
   <_130mm_3VBK_SH>
@@ -3633,7 +3634,7 @@
     <effects>	BRmainHollowCharge	</effects>
     <damage>
       <armor>	650	</armor>
-      <devices>	80	</devices>
+      <devices>	65	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_130mm_3VBK_SH>
@@ -3650,7 +3651,7 @@
     <effects>	BRlargeAPCR	</effects>
     <damage>
       <armor>	450	</armor>
-      <devices>	80	</devices>
+      <devices>	65	</devices>
     </damage>
   </_130mm_3VBM_SH>
 </shells.xml>

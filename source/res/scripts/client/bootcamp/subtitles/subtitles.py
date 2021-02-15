@@ -5,15 +5,14 @@ from account_helpers.AccountSettings import AccountSettings, SUBTITLES
 from gui.Scaleform.framework.entities.View import View
 
 class SubtitlesBase(View):
-    __STANDARD_SUBTITLE_DURATION_SEC = 3.0
+    __STANDARD_DURATION_SEC = 3.0
+    __STANDARD_LENGTH_SYMBOLS = 30
     __DURATION_ON_TICK = 0.5
 
     def __init__(self, ctx=None):
         super(SubtitlesBase, self).__init__(ctx)
         self._content = ctx
         self.__subtitlesCallback = None
-        self.__wasShown = False
-        self.__totalTime = 0
         self.__currSound = {}
         return
 
@@ -23,52 +22,43 @@ class SubtitlesBase(View):
 
     def _dispose(self):
         self.stopSound()
+        self.__currSound = {}
         super(SubtitlesBase, self)._dispose()
 
     def playSound(self):
         self.stopSound()
-        if not self._content.get('voiceovers', False):
-            self.onWindowClose()
-            return
-        self.__currSound = self._content['voiceovers'].pop(0)
-        if self.__currSound.get('voiceover', ''):
-            self.soundManager.playSound(self.__currSound['voiceover'])
-            if self.__currSound.get('subtitle', '') and AccountSettings.getSettings(SUBTITLES):
-                self.__subtitlesCallback = BigWorld.callback(self.__DURATION_ON_TICK, self.__onTick)
+        if self._content.get('voiceovers', False):
+            self.__currSound = self._content['voiceovers'].pop(0)
+            if self.__currSound.get('voiceover', False):
+                self.soundManager.playSound(self.__currSound['voiceover'])
+                if self.__currSound.get('subtitle', False) and AccountSettings.getSettings(SUBTITLES):
+                    self._asShowSubtitle(self.__currSound['subtitle'])
+                self.__subtitlesCallback = BigWorld.callback(self.__STANDARD_DURATION_SEC, lambda : self._update(remainingTime=self.__calcMaxDuration(self.__currSound.get('subtitle', ''))))
+                return
+        self.onWindowClose()
 
     def stopSound(self):
+        self.__clearCallback()
+        if self.__currSound.get('subtitle', False):
+            self._asHideSubtitle()
+            if self.__currSound.get('voiceover', False):
+                self.soundManager.stopSound(self.__currSound['voiceover'])
+
+    def _update(self, remainingTime):
+        self.__clearCallback()
+        if remainingTime > 0.0 and self.soundManager.isSoundPlaying(self.__currSound.get('voiceover', '')):
+            self.__subtitlesCallback = BigWorld.callback(self.__DURATION_ON_TICK, lambda : self._update(remainingTime=max(0.0, remainingTime - self.__DURATION_ON_TICK)))
+            return
+        self.playSound()
+
+    def __clearCallback(self):
         if self.__subtitlesCallback is not None:
             BigWorld.cancelCallback(self.__subtitlesCallback)
             self.__subtitlesCallback = None
-        self._hideSubtitles()
-        if self.__currSound.get('voiceover', ''):
-            self.soundManager.stopSound(self.__currSound['voiceover'])
-        self.__currSound = {}
         return
 
-    def __onTick(self):
-        if self.__subtitlesCallback is not None:
-            BigWorld.cancelCallback(self.__subtitlesCallback)
-            self.__subtitlesCallback = None
-            isSoundPlaying = self.soundManager.isSoundPlaying(self.__currSound['voiceover'])
-            if not isSoundPlaying:
-                if self.__wasShown or self.__totalTime > self.__STANDARD_SUBTITLE_DURATION_SEC:
-                    self.playSound()
-                    return
-            elif not self.__wasShown:
-                self._showSubtitles()
-            self.__totalTime += self.__DURATION_ON_TICK
-            self.__subtitlesCallback = BigWorld.callback(self.__DURATION_ON_TICK, self.__onTick)
-        return
-
-    def _showSubtitles(self):
-        self.__wasShown = True
-        self._asShowSubtitle(self.__currSound['subtitle'])
-
-    def _hideSubtitles(self):
-        self.__totalTime = 0
-        self.__wasShown = False
-        self._asHideSubtitle()
+    def __calcMaxDuration(self, subtitle):
+        return max(self.__DURATION_ON_TICK, self.__STANDARD_DURATION_SEC * (len(subtitle) / self.__STANDARD_LENGTH_SYMBOLS - 1.0))
 
     def onWindowClose(self):
         raise NotImplementedError

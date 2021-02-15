@@ -5,7 +5,7 @@ import types
 from collections import namedtuple
 import logging
 from Event import Event
-from constants import IS_TUTORIAL_ENABLED, PremiumConfigs, DAILY_QUESTS_CONFIG, ClansConfig, MAGNETIC_AUTO_AIM_CONFIG, Configs, DOG_TAGS_CONFIG
+from constants import IS_TUTORIAL_ENABLED, PremiumConfigs, DAILY_QUESTS_CONFIG, ClansConfig, MAGNETIC_AUTO_AIM_CONFIG, Configs, DOG_TAGS_CONFIG, BATTLE_NOTIFIER_CONFIG
 from collector_vehicle import CollectorVehicleConsts
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from battle_pass_common import BattlePassConfig, BATTLE_PASS_CONFIG_NAME
@@ -429,11 +429,11 @@ class _SquadPremiumBonus(namedtuple('_SquadPremiumBonus', ('isEnabled', 'ownCred
         return result
 
 
-class _BattleRoyaleConfig(namedtuple('_BattleRoyaleConfig', ('isEnabled', 'peripheryIDs', 'unburnableTitles', 'eventProgression', 'primeTimes', 'seasons', 'cycleTimes', 'maps', 'battleXP', 'coneVisibility', 'loot', 'defaultAmmo', 'vehiclesSlotsConfig'))):
+class _BattleRoyaleConfig(namedtuple('_BattleRoyaleConfig', ('isEnabled', 'peripheryIDs', 'unburnableTitles', 'eventProgression', 'primeTimes', 'seasons', 'cycleTimes', 'maps', 'battleXP', 'coneVisibility', 'loot', 'defaultAmmo', 'vehiclesSlotsConfig', 'url'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, peripheryIDs={}, eventProgression={}, unburnableTitles=(), primeTimes={}, seasons={}, cycleTimes={}, maps=(), battleXP={}, coneVisibility={}, loot={}, defaultAmmo={}, vehiclesSlotsConfig={})
+        defaults = dict(isEnabled=False, peripheryIDs={}, eventProgression={}, unburnableTitles=(), primeTimes={}, seasons={}, cycleTimes={}, maps=(), battleXP={}, coneVisibility={}, loot={}, defaultAmmo={}, vehiclesSlotsConfig={}, url='')
         defaults.update(kwargs)
         return super(_BattleRoyaleConfig, cls).__new__(cls, **defaults)
 
@@ -604,13 +604,13 @@ class _ReactiveCommunicationConfig(object):
         return self.__url
 
 
-class _BobConfig(namedtuple('_BobConfig', ('isEnabled', 'registration', 'url', 'peripheryIDs', 'primeTimes', 'seasons', 'cycleTimes', 'levels', 'teams', 'forbiddenClassTags', 'forbiddenVehTypes', 'teamTokens', 'leaderTokens', 'leaderTokenFirstType', 'pointsToken', 'addPersonalRewardToken', 'claimPersonalRewardToken', 'personalRewardQuest', 'teamRewardQuestPrefix', 'teamLevelToken', 'teamRewardTokenPrefix', 'teamsChannel', 'teamSkillsChannel'))):
+class _BlueprintsConvertSaleConfig(namedtuple('_BlueprintsConvertSaleConfig', ('enabled', 'options'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, registration={}, url='', peripheryIDs={}, primeTimes={}, seasons={}, cycleTimes={}, levels=set(), teams={}, forbiddenVehTypes=set(), forbiddenClassTags=set(), teamTokens=set(), leaderTokens=set(), leaderTokenFirstType='', pointsToken='', addPersonalRewardToken='', claimPersonalRewardToken='', personalRewardQuest='', teamRewardQuestPrefix='', teamLevelToken='', teamRewardTokenPrefix='', teamsChannel='', teamSkillsChannel='')
+        defaults = dict(enabled=False, options={})
         defaults.update(kwargs)
-        return super(_BobConfig, cls).__new__(cls, **defaults)
+        return super(_BlueprintsConvertSaleConfig, cls).__new__(cls, **defaults)
 
     def asDict(self):
         return self._asdict()
@@ -620,9 +620,11 @@ class _BobConfig(namedtuple('_BobConfig', ('isEnabled', 'registration', 'url', '
         dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
         return self._replace(**dataToUpdate)
 
-    @classmethod
-    def defaults(cls):
-        return cls()
+    def isEnabled(self):
+        return self.enabled
+
+    def getOptions(self):
+        return self.options
 
 
 class ServerSettings(object):
@@ -654,6 +656,7 @@ class ServerSettings(object):
         self.__battlePassConfig = BattlePassConfig({})
         self.__crystalRewardsConfig = _crystalRewardsConfig()
         self.__reactiveCommunicationConfig = _ReactiveCommunicationConfig()
+        self.__blueprintsConvertSaleConfig = _BlueprintsConvertSaleConfig()
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -735,11 +738,10 @@ class ServerSettings(object):
             BONUS_CAPS.OVERRIDE_BONUS_CAPS = self.__serverSettings[BonusCapsConst.CONFIG_NAME]
         else:
             BONUS_CAPS.OVERRIDE_BONUS_CAPS = dict()
-        if 'bob_config' in self.__serverSettings:
-            LOG_DEBUG('bob_config', self.__serverSettings['bob_config'])
-            self.__bobSettings = makeTupleByDict(_BobConfig, self.__serverSettings['bob_config'])
+        if 'blueprints_convert_sale_config' in self.__serverSettings:
+            self.__blueprintsConvertSaleConfig = makeTupleByDict(_BlueprintsConvertSaleConfig, self.__serverSettings['blueprints_convert_sale_config'])
         else:
-            self.__bobSettings = _BobConfig.defaults()
+            self.__blueprintsConvertSaleConfig = _BlueprintsConvertSaleConfig()
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -768,8 +770,6 @@ class ServerSettings(object):
         if 'unit_assembler_config' in serverSettingsDiff:
             self.__updateUnitAssemblerConfig(serverSettingsDiff)
             self.__serverSettings['unit_assembler_config'] = serverSettingsDiff['unit_assembler_config']
-        if 'bob_config' in serverSettingsDiff:
-            self.__updateBob(serverSettingsDiff)
         if 'telecom_config' in serverSettingsDiff:
             self.__telecomConfig = _TelecomConfig(self.__serverSettings['telecom_config'])
         if 'disabledPMOperations' in serverSettingsDiff:
@@ -805,6 +805,7 @@ class ServerSettings(object):
             self.__serverSettings[CollectorVehicleConsts.CONFIG_NAME] = serverSettingsDiff[CollectorVehicleConsts.CONFIG_NAME]
         if _crystalRewardsConfig.CONFIG_NAME in serverSettingsDiff:
             self.__crystalRewardsConfig = makeTupleByDict(_crystalRewardsConfig, self.__serverSettings[_crystalRewardsConfig.CONFIG_NAME])
+        self.__updateBlueprintsConvertSaleConfig(serverSettingsDiff)
         self.__updateReactiveCommunicationConfig(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
@@ -889,10 +890,6 @@ class ServerSettings(object):
     @property
     def unitAssemblerConfig(self):
         return self.__unitAssemblerConfig
-
-    @property
-    def bobConfig(self):
-        return self.__bobSettings
 
     @property
     def telecomConfig(self):
@@ -1033,6 +1030,9 @@ class ServerSettings(object):
     def isDogTagComponentUnlockingEnabled(self):
         return self.isDogTagEnabled() and self.__getGlobalSetting(DOG_TAGS_CONFIG, {}).get('enableComponentUnlocking', True)
 
+    def isBattleNotifierEnabled(self):
+        return self.__getGlobalSetting(BATTLE_NOTIFIER_CONFIG, {}).get('enabled', False)
+
     def getMagneticAutoAimConfig(self):
         return self.__getGlobalSetting(MAGNETIC_AUTO_AIM_CONFIG, {})
 
@@ -1147,6 +1147,9 @@ class ServerSettings(object):
     def getReactiveCommunicationConfig(self):
         return self.__reactiveCommunicationConfig
 
+    def getBlueprintsConvertSaleConfig(self):
+        return self.__blueprintsConvertSaleConfig
+
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)
 
@@ -1173,9 +1176,6 @@ class ServerSettings(object):
 
     def __updateUnitAssemblerConfig(self, targetSettings):
         self.__unitAssemblerConfig = self.__unitAssemblerConfig.replace(targetSettings['unit_assembler_config'])
-
-    def __updateBob(self, targetSettings):
-        self.__bobSettings = self.__bobSettings.replace(targetSettings['bob_config'])
 
     def __updateSquadBonus(self, sourceSettings):
         self.__squadPremiumBonus = self.__squadPremiumBonus.replace(sourceSettings[PremiumConfigs.PREM_SQUAD])
@@ -1211,3 +1211,7 @@ class ServerSettings(object):
                 _logger.error('Unexpected format of subscriptions service config: %r', config)
                 self.__reactiveCommunicationConfig = _ReactiveCommunicationConfig()
         return
+
+    def __updateBlueprintsConvertSaleConfig(self, targetSettings):
+        if 'blueprints_convert_sale_config' in targetSettings:
+            self.__blueprintsConvertSaleConfig = self.__blueprintsConvertSaleConfig.replace(targetSettings['blueprints_convert_sale_config'])

@@ -87,6 +87,7 @@ class ItemTags(object):
     PROGRESSION_REQUIRED = 'progression_required'
     ADD_NATIONAL_EMBLEM = 'addNationalEmblem'
     DISABLE_VERTICAL_MIRROR = 'disableVerticalMirror'
+    STYLE_PROGRESSION = 'styleProgression'
 
 
 class ProjectionDecalType(object):
@@ -358,3 +359,12 @@ class SLOT_TYPE_NAMES(object):
      FIXED_EMBLEM,
      FIXED_INSCRIPTION,
      FIXED_PROJECTION_DECAL)
+
+
+class EDITING_STYLE_REASONS(object):
+    IS_EDITABLE = 'isEditable'
+    NOT_EDITABLE = 'notEditable'
+    NOT_REACHED_LEVEL = 'notReachedLevel'
+    NOT_HAVE_ANY_PROGRESIIVE_DECALS = 'notHaveAnyProgressiveDecals'
+    ENABLED = (IS_EDITABLE,)
+    DISABLED = (NOT_EDITABLE, NOT_REACHED_LEVEL, NOT_HAVE_ANY_PROGRESIIVE_DECALS)

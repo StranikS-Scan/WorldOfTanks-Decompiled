@@ -2,18 +2,9 @@
   <AppealRadius>	3000	</AppealRadius>
   <Implements>
     <Interface>	VehiclesAreaMarker	</Interface>
-    <Interface>	BattleXPArenaInfo	</Interface>
-    <Interface>	LootArenaInfo	</Interface>
   </Implements>
   <Volatile></Volatile>
-  <Properties>
-    <bonusByQuestID>
-      <Type>	STRING	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-      <AllowUnsafeData>	true	</AllowUnsafeData>
-      <VariableLengthHeaderSize>	2	</VariableLengthHeaderSize>
-    </bonusByQuestID>
-  </Properties>
+  <Properties></Properties>
   <TempProperties></TempProperties>
   <ClientMethods></ClientMethods>
   <CellMethods></CellMethods>

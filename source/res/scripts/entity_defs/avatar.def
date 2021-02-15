@@ -15,8 +15,6 @@
     <Interface>	VehiclesSpawnListStorage_Avatar	</Interface>
     <Interface>	VehicleRemovalController_Avatar	</Interface>
     <Interface>	VehicleHealthBroadcastListenerComponent_Avatar	</Interface>
-    <Interface>	AvatarLoot	</Interface>
-    <Interface>	AvatarSpawnKeyPoints	</Interface>
     <Interface>	TriggersController_Avatar	</Interface>
     <Interface>	AvatarEpic	</Interface>
   </Implements>
@@ -133,6 +131,10 @@
       <Type>	BOOL	</Type>
       <Flags>	OWN_CLIENT	</Flags>
     </isObserverBothTeams>
+    <observableTeamID>
+      <Type>	UINT8	</Type>
+      <Flags>	OWN_CLIENT	</Flags>
+    </observableTeamID>
     <isGunLocked>
       <Type>	BOOL	</Type>
       <Flags>	OWN_CLIENT	</Flags>
@@ -555,11 +557,6 @@
       <Arg>	ARRAY	  <of>	BOOL	</of>
       </Arg>
     </receivePositionsFromArena>
-    <receiveVehiclePositionFromArena>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	VECTOR3	</Arg>
-      <Arg>	UINT8	</Arg>
-    </receiveVehiclePositionFromArena>
     <receiveVehicleDamagedDevices>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	ARRAY	  <of>	EXTRA_ID	</of>
@@ -626,13 +623,6 @@
     <reportClientStats>
       <Arg>	CLIENT_STATUS_STATISTICS	</Arg>
     </reportClientStats>
-    <chooseSpawnKeyPoint>
-      <Exposed>	OWN_CLIENT	</Exposed>
-      <Arg>	STRING	</Arg>
-    </chooseSpawnKeyPoint>
-    <placeVehicle>
-      <Exposed>	OWN_CLIENT	</Exposed>
-    </placeVehicle>
   </CellMethods>
   <BaseMethods>
     <onCreateCellSuccess></onCreateCellSuccess>

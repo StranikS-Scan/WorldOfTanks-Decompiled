@@ -3381,7 +3381,7 @@
     <effects>	BRmainHollowCharge	</effects>
     <damage>
       <armor>	250	</armor>
-      <devices>	80	</devices>
+      <devices>	25	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_105mmGr39H1A_SH>
@@ -3398,7 +3398,7 @@
     <effects>	BRlargeAPCR	</effects>
     <damage>
       <armor>	190	</armor>
-      <devices>	80	</devices>
+      <devices>	25	</devices>
     </damage>
   </_105mm_AP_DM7_SH>
   <_105mm_Gr_39H1H_SH>
@@ -3414,7 +3414,7 @@
     <effects>	BRmainHollowCharge	</effects>
     <damage>
       <armor>	340	</armor>
-      <devices>	80	</devices>
+      <devices>	34	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_105mm_Gr_39H1H_SH>
@@ -3431,7 +3431,7 @@
     <effects>	BRlargeAPCR	</effects>
     <damage>
       <armor>	240	</armor>
-      <devices>	80	</devices>
+      <devices>	34	</devices>
     </damage>
   </_105mm_APDS_M_SH>
   <_128mm_PzGr.40E_SH>
@@ -3447,7 +3447,7 @@
     <effects>	BRmainHollowCharge	</effects>
     <damage>
       <armor>	490	</armor>
-      <devices>	80	</devices>
+      <devices>	49	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_128mm_PzGr.40E_SH>
@@ -3464,23 +3464,25 @@
     <effects>	BRlargeAPCR	</effects>
     <damage>
       <armor>	345	</armor>
-      <devices>	80	</devices>
+      <devices>	49	</devices>
     </damage>
   </_128mm_PzGr.43D1_SH>
   <_105mm_Pzgr.41L1_SH>
     <id>	321	</id>
     <userString>	#germany_vehicles:_105mm_Pzgr.41L1_SH	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	hc_premium	</icon>
     <price>	0	</price>
+    <improved>	true	</improved>
     <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING_CR	</kind>
+    <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	105	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRmainAPCR	</effects>
+    <effects>	BRmainHollowCharge	</effects>
     <damage>
       <armor>	375	</armor>
-      <devices>	80	</devices>
+      <devices>	37.5	</devices>
     </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_105mm_Pzgr.41L1_SH>
   <_105mm_AP_DS11_SH>
     <id>	322	</id>
@@ -3495,7 +3497,7 @@
     <effects>	BRlargeAPCR	</effects>
     <damage>
       <armor>	265	</armor>
-      <devices>	80	</devices>
+      <devices>	37.5	</devices>
     </damage>
   </_105mm_AP_DS11_SH>
   <_128mm_PzGr40E_HEAT_SH>
@@ -3511,7 +3513,7 @@
     <effects>	BRmainHollowCharge	</effects>
     <damage>
       <armor>	515	</armor>
-      <devices>	80	</devices>
+      <devices>	51.5	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_128mm_PzGr40E_HEAT_SH>
@@ -3528,7 +3530,7 @@
     <effects>	BRlargeAPCR	</effects>
     <damage>
       <armor>	360	</armor>
-      <devices>	80	</devices>
+      <devices>	51.5	</devices>
     </damage>
   </_128mm_PzGr44M_SH>
   <_150mm_PzGr39H2_SH>
@@ -3544,7 +3546,7 @@
     <effects>	BRmainHollowCharge	</effects>
     <damage>
       <armor>	765	</armor>
-      <devices>	80	</devices>
+      <devices>	76.5	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_150mm_PzGr39H2_SH>
@@ -3561,7 +3563,7 @@
     <effects>	BRlargeAPCR	</effects>
     <damage>
       <armor>	540	</armor>
-      <devices>	80	</devices>
+      <devices>	76.5	</devices>
     </damage>
   </_150mm_Exp_APDS_SH>
   <mine_shell>

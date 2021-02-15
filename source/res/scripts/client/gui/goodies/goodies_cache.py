@@ -2,7 +2,8 @@
 # Embedded file name: scripts/client/gui/goodies/goodies_cache.py
 from collections import defaultdict
 from debug_utils import LOG_WARNING
-from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_STATE, GOODIE_TARGET_TYPE, DEMOUNT_KIT_ID
+from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_STATE, GOODIE_TARGET_TYPE
+from goodies.goodie_helpers import CURRENCY_TO_RESOURCE_TYPE
 from gui.goodies.goodie_items import Booster, PersonalVehicleDiscount, ClanReservePresenter, DemountKit
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.money import Money
@@ -109,7 +110,10 @@ class GoodiesCache(IGoodiesCache):
         discountDescription = self._items.shop.discounts.get(discoutID, None)
         return self.__makeGoodie(discoutID, discountDescription)
 
-    def getDemountKit(self, demountKitID=DEMOUNT_KIT_ID):
+    def getDemountKit(self, demountKitID=None, currency=None):
+        resourceType = CURRENCY_TO_RESOURCE_TYPE.get(currency, None)
+        if demountKitID is None and resourceType is not None:
+            demountKitID = next((id_ for id_, def_ in self._items.shop.demountKits.iteritems() if def_.resource.resourceType == resourceType), None)
         description = self._items.shop.demountKits.get(demountKitID, None)
         return self.__makeGoodie(demountKitID, description)
 

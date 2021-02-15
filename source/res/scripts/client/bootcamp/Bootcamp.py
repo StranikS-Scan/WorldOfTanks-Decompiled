@@ -74,7 +74,6 @@ class Bootcamp(EventSystemEntity):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     itemsCache = dependency.descriptor(IItemsCache)
     appLoader = dependency.descriptor(IAppLoader)
-    BOOTCAMP_SOUND_BANKS = ('bootcamp.pck', 'bootcamp_gui.bnk', 'bootcamp_hangar.bnk', 'bootcamp_hangar_voiceover.bnk', 'bootcamp_voiceover.bnk', 'bootcamp_result_screen.bnk', 'bootcamp_video.pck', 'bootcamp_video.bnk')
 
     def __init__(self):
         super(Bootcamp, self).__init__()
@@ -286,7 +285,7 @@ class Bootcamp(EventSystemEntity):
         BigWorld.overloadBorders(True)
         if self.__gui is None:
             self.__gui = BootcampGUI()
-        WWISE.loadSoundPool(self.BOOTCAMP_SOUND_BANKS, 'Bootcamp')
+        WWISE.activateRemapping('bootcamp')
         self.sessionProvider.getCtx().setPlayerFullNameFormatter(_BCNameFormatter())
         return
 
@@ -318,7 +317,7 @@ class Bootcamp(EventSystemEntity):
             self.__replayController.fini()
             self.__replayController = None
         MC.g_musicController.stopAmbient(True)
-        WWISE.unloadSoundPool()
+        WWISE.deactivateRemapping('bootcamp')
         self.sessionProvider.getCtx().resetPlayerFullNameFormatter()
         return
 

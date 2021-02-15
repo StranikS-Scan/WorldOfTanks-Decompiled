@@ -45,10 +45,11 @@ class ClientUnitMgr(UnitClientAPI):
         if self.id != unitMgrID:
             prevMgrID = self.id
             self.id = unitMgrID
+            isFinishedAssembling = self.__unit.isFinishAssembling() if self.__unit is not None else False
             self.battleID = None
             self._clearUnit()
             if not self.id and prevMgrID:
-                self.onUnitLeft(prevMgrID)
+                self.onUnitLeft(prevMgrID, isFinishedAssembling)
         if packedUnit:
             unit = ClientUnit(packedUnit=packedUnit)
             self._clearUnit()
@@ -133,7 +134,7 @@ class ClientUnitMgr(UnitClientAPI):
         self.battleID = None
         self._clearUnit()
         if prevMgrID:
-            self.onUnitLeft(prevMgrID)
+            self.onUnitLeft(prevMgrID, isFinishedAssembling=False)
         return
 
 

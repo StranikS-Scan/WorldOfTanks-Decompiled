@@ -253,6 +253,11 @@
       <Type>	BATTLE_DOG_TAG	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </dogTag>
+    <isMyVehicle>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </isMyVehicle>
   </Properties>
   <TempProperties>
     <events></events>

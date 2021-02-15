@@ -16,7 +16,6 @@ from gui.server_events import events_helpers
 from gui.server_events.awards_formatters import TokenBonusFormatter, PreformattedBonus, LABEL_ALIGN
 from gui.server_events.bonuses import CustomizationsBonus
 from gui.server_events.cond_formatters.tooltips import MissionsAccountRequirementsFormatter
-from gui.server_events.events_helpers import isDailyQuest, isPremium
 from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import getTypeSmallIconPath
@@ -28,8 +27,8 @@ from helpers import dependency, time_utils
 from helpers.i18n import makeString as _ms
 from shared_utils import findFirst
 from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.game_control import IQuestsController, IEventProgressionController, IRankedBattlesController
-from skeletons.gui.game_control import IBobController
+from skeletons.gui.game_control import IQuestsController, IEventProgressionController, IRankedBattlesController, IBattleRoyaleController
+from gui.Scaleform.daapi.view.lobby.battle_royale.tooltips.battle_royale_tooltip_quest_helper import getQuestsDescriptionForHangarFlag, getQuestTooltipBlock
 _MAX_AWARDS_PER_TOOLTIP = 5
 _MAX_QUESTS_PER_TOOLTIP = 4
 _MAX_BONUSES_PER_QUEST = 2
@@ -52,6 +51,7 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
     __eventProgression = dependency.descriptor(IEventProgressionController)
     _questController = dependency.descriptor(IQuestsController)
     _eventsCache = dependency.descriptor(IEventsCache)
+    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
 
     def __init__(self, context):
         super(QuestsPreviewTooltipData, self).__init__(context, TOOLTIP_TYPE.QUESTS)
@@ -62,38 +62,18 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
     def _packBlocks(self, *args, **kwargs):
         items = super(QuestsPreviewTooltipData, self)._packBlocks()
         vehicle = g_currentVehicle.item
-        quests = sorted([ q for q in self._questController.getQuestForVehicle(vehicle) if not q.isCompleted() and self.__eventProgression.questPrefix not in q.getID() and not isDailyQuest(q.getID()) and not isPremium(q.getID()) and not isRankedQuestID(q.getID()) ], key=events_helpers.questsSortFunc)
+        quests = sorted(self._questController.getCurrentModeQuestsForVehicle(vehicle, True), key=events_helpers.questsSortFunc)
         if quests:
             items.append(self._getHeader(len(quests), vehicle.shortUserName, R.strings.tooltips.hangar.header.quests.description.vehicle()))
             for quest in quests:
-                bonusNames = []
-                for bonus in quest.getBonuses():
-                    if bonus.getName() == 'battleToken':
-                        bonusNames.extend(_StringTokenBonusFormatter().format(bonus))
-                    bonusFormat = bonus.format()
-                    if bonusFormat:
-                        if isinstance(bonus, CustomizationsBonus):
-                            for item in bonus.getCustomizations():
-                                itemTypeName = item.get('custType')
-                                if itemTypeName == 'projection_decal':
-                                    itemTypeName = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.PROJECTION_DECAL]
-                                elif itemTypeName == 'personal_number':
-                                    itemTypeName = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.PERSONAL_NUMBER]
-                                bonusFmt = _ms(ITEM_TYPES.customization(itemTypeName))
-                                bonusNames.append(bonusFmt)
-
-                        else:
-                            bonusNames.extend(bonusFormat.split(', '))
-
-                isAvailable, _ = quest.isAvailable()
-                items.append(self._packQuest(quest.getUserName(), bonusNames, isAvailable))
+                items.append(self.__getQuestItem(quest))
                 if len(items) > _MAX_QUESTS_PER_TOOLTIP:
                     break
 
             rest = len(quests) - len(items) + 1
             if rest > 0:
                 items.append(self._getBottom(rest))
-        else:
+        elif not self.__battleRoyaleController.isBattleRoyaleMode():
 
             def _filter(q):
                 return q.getType() not in constants.EVENT_TYPE.SHARED_QUESTS and not q.isCompleted()
@@ -108,8 +88,41 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
             items.append(self._getBottom(0))
         return items
 
+    def __getQuestItem(self, quest):
+        if self.__battleRoyaleController.isBattleRoyaleMode():
+            return getQuestTooltipBlock(quest)
+        bonusNames = []
+        for bonus in quest.getBonuses():
+            if bonus.getName() == 'battleToken':
+                bonusNames.extend(_StringTokenBonusFormatter().format(bonus))
+            bonusFormat = bonus.format()
+            if bonusFormat:
+                if isinstance(bonus, CustomizationsBonus):
+                    for item in bonus.getCustomizations():
+                        itemTypeName = item.get('custType')
+                        if itemTypeName == 'projection_decal':
+                            itemTypeName = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.PROJECTION_DECAL]
+                        elif itemTypeName == 'personal_number':
+                            itemTypeName = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.PERSONAL_NUMBER]
+                        bonusFmt = _ms(ITEM_TYPES.customization(itemTypeName))
+                        bonusNames.append(bonusFmt)
+
+                else:
+                    bonusNames.extend(bonusFormat.split(', '))
+
+        isAvailable, _ = quest.isAvailable()
+        return self._packQuest(quest.getUserName(), bonusNames, isAvailable)
+
     def _getHeader(self, count, vehicleName, description):
-        return formatters.packImageTextBlockData(title=text_styles.highTitle(backport.text(R.strings.tooltips.hangar.header.quests.header(), count=count)), img=backport.image(R.images.gui.maps.icons.quests.questTooltipHeader()), txtPadding=formatters.packPadding(top=20), txtOffset=20, desc=text_styles.main(backport.text(description, vehicle=vehicleName)))
+        if self.__battleRoyaleController.isBattleRoyaleMode():
+            questHeader = backport.text(R.strings.epic_battle.questsTooltip.epicBattle.steelhunter.header())
+            img = backport.image(R.images.gui.maps.icons.quests.epic_steelhunter_quests_infotip())
+            desc = getQuestsDescriptionForHangarFlag()
+        else:
+            questHeader = backport.text(R.strings.tooltips.hangar.header.quests.header(), count=count)
+            img = backport.image(R.images.gui.maps.icons.quests.questTooltipHeader())
+            desc = text_styles.main(backport.text(description, vehicle=vehicleName))
+        return formatters.packImageTextBlockData(title=text_styles.highTitle(questHeader), img=img, txtPadding=formatters.packPadding(top=20), txtOffset=20, desc=desc)
 
     def _getBottom(self, value):
         if value > 0:
@@ -168,7 +181,7 @@ class ScheduleQuestTooltipData(BlocksTooltipData):
         if weekDays:
             days = [ _ms(MENU.datetime_weekdays_full(idx)) for idx in event.getWeekDays() ]
             items.append(self._getSubBlock(TOOLTIPS.QUESTS_SCHEDULE_WEEKDAYS, days))
-        intervals = event.getCollapsedActiveTimeIntervals()
+        intervals = event.getActiveTimeIntervals()
         if intervals:
             times = []
             for low, high in intervals:
@@ -185,7 +198,6 @@ class UnavailableQuestTooltipData(BlocksTooltipData):
     _eventsCache = dependency.descriptor(IEventsCache)
     __eventProgressionController = dependency.descriptor(IEventProgressionController)
     __rankedController = dependency.descriptor(IRankedBattlesController)
-    __bobController = dependency.descriptor(IBobController)
 
     def __init__(self, context):
         super(UnavailableQuestTooltipData, self).__init__(context, TOOLTIP_TYPE.QUESTS)
@@ -205,10 +217,6 @@ class UnavailableQuestTooltipData(BlocksTooltipData):
             if rankedOverrides:
                 items.extend(rankedOverrides)
                 return items
-        requiredTokens = set([ token.getID() for token in quest.accountReqs.getTokens() if not token.isAvailable() ])
-        if self.__bobController.teamTokens <= requiredTokens:
-            msg = backport.text(R.strings.tooltips.quests.unavailable.bobRegistration())
-            return [formatters.packTextBlockData(text=text_styles.main(msg))]
         accountRequirementsFormatter = MissionsAccountRequirementsFormatter()
         requirements = accountRequirementsFormatter.format(quest.accountReqs, quest)
         reqList = self.__getList(requirements)

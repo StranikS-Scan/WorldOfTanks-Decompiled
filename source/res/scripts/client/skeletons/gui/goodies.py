@@ -35,7 +35,7 @@ class IGoodiesCache(object):
     def getDiscount(self, discoutID):
         raise NotImplementedError
 
-    def getDemountKit(self, demountKitID=None):
+    def getDemountKit(self, demountKitID=None, currency=None):
         raise NotImplementedError
 
     def getGoodieByID(self, goodieID):

@@ -24,7 +24,7 @@ from gui.Scaleform.managers.cursor_mgr import CursorManager
 from gui.Scaleform.managers.GameInputMgr import GameInputMgr
 from gui.Scaleform.managers.GlobalVarsManager import GlobalVarsManager
 from gui.Scaleform.managers.PopoverManager import PopoverManager
-from gui.Scaleform.managers.SoundManager import SoundManager
+from gui.sounds.SoundManager import SoundManager
 from gui.Scaleform.managers.TweenSystem import TweenManager
 from gui.Scaleform.managers.UtilsManager import UtilsManager
 from gui.Scaleform.managers.voice_chat import LobbyVoiceChatManager
@@ -40,7 +40,6 @@ LOBBY_OPTIMIZATION_CONFIG = {VIEW_ALIAS.LOBBY_HEADER: OptimizationSetting(),
  HANGAR_ALIASES.RANKED_TANK_CAROUSEL: OptimizationSetting(),
  HANGAR_ALIASES.BATTLEPASS_TANK_CAROUSEL: OptimizationSetting(),
  HANGAR_ALIASES.ROYALE_TANK_CAROUSEL: OptimizationSetting(),
- HANGAR_ALIASES.BOB_TANK_CAROUSEL: OptimizationSetting(),
  GRAPHICS_OPTIMIZATION_ALIASES.CUSTOMISATION_BOTTOM_PANEL: OptimizationSetting()}
 
 class LobbyEntry(AppEntry):

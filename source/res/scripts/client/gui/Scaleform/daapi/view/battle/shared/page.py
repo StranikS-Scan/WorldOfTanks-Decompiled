@@ -59,7 +59,7 @@ class ComponentsConfig(IComponentsConfig):
 class _SharedComponentsConfig(ComponentsConfig):
 
     def __init__(self):
-        super(_SharedComponentsConfig, self).__init__(((BATTLE_CTRL_ID.HIT_DIRECTION, (_ALIASES.HIT_DIRECTION,)),), ((_ALIASES.HIT_DIRECTION, indicators.createDamageIndicator),))
+        super(_SharedComponentsConfig, self).__init__(((BATTLE_CTRL_ID.HIT_DIRECTION, (_ALIASES.HIT_DIRECTION,)), (BATTLE_CTRL_ID.BATTLE_NOTIFIER, (_ALIASES.BATTLE_NOTIFIER,)), (BATTLE_CTRL_ID.ARENA_LOAD_PROGRESS, (_ALIASES.BATTLE_NOTIFIER,))), ((_ALIASES.HIT_DIRECTION, indicators.createDamageIndicator),))
 
 
 _SHARED_COMPONENTS_CONFIG = _SharedComponentsConfig()

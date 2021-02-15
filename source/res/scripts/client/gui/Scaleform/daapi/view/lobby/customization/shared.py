@@ -5,10 +5,13 @@ from collections import namedtuple, Counter
 import struct
 from itertools import ifilter
 import typing
+import BigWorld
 import Math
 import nations
+from AccountCommands import isCodeValid
 from CurrentVehicle import g_currentVehicle
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
+from constants import REQUEST_COOLDOWN
 from gui import GUI_NATIONS_ORDER_INDICES
 from gui.Scaleform import getNationsFilterAssetPath
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -23,7 +26,9 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER, VEHICLE_TAGS
 from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.money import Money
+from gui.shared.utils import code2str
 from helpers import dependency, int2roman
+from helpers.func_utils import CallParams, cooldownCallerDecorator
 from helpers.i18n import makeString as _ms
 from items.components.c11n_components import getItemSlotType
 from items.components.c11n_constants import SeasonType, ProjectionDecalFormTags, ProjectionDecalDirectionTags
@@ -35,10 +40,8 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from vehicle_outfit.containers import SlotData
-from vehicle_outfit.outfit import Area
+from vehicle_outfit.outfit import Area, Outfit
 from vehicle_outfit.packers import ProjectionDecalPacker
-if typing.TYPE_CHECKING:
-    from vehicle_outfit.outfit import Outfit
 _logger = logging.getLogger(__name__)
 EMPTY_PERSONAL_NUMBER = ''
 
@@ -135,18 +138,34 @@ def getCustomPurchaseItems(season, modifiedOutfits, c11nService=None):
 
 
 @dependency.replace_none_kwargs(c11nService=ICustomizationService)
-def getStylePurchaseItems(style, modifiedOutfits, c11nService=None, prolongRent=False):
+def getStylePurchaseItems(style, modifiedOutfits, c11nService=None, prolongRent=False, progressionLevel=-1):
     purchaseItems = []
     vehicle = g_currentVehicle.item
     vehicleCD = vehicle.descriptor.makeCompactDescr()
     isStyleInstalled = c11nService.getCurrentOutfit(SeasonType.SUMMER).id == style.id
     inventoryCounts = __getInventoryCounts(modifiedOutfits, vehicleCD)
     styleCount = style.fullInventoryCount(vehicle.intCD)
+    additionalOutfit = style.descriptor.styleProgressions.get(progressionLevel, {}).get('additionalOutfit', {})
     isFromInventory = not prolongRent and (styleCount > 0 or isStyleInstalled)
-    purchaseItem = PurchaseItem(style, style.getBuyPrice(), areaID=None, slotType=None, regionIdx=None, selected=True, group=AdditionalPurchaseGroups.STYLES_GROUP_ID, isFromInventory=isFromInventory, locked=True)
-    purchaseItems.append(purchaseItem)
+    if style.isProgressive:
+        isPurchasable = style.isProgressionPurchasable(progressionLevel)
+        if not isPurchasable:
+            return []
+        currentProgressionLvl = style.getLatestOpenedProgressionLevel(vehicle)
+        progressivePrice = style.getUpgradePrice(currentProgressionLvl, progressionLevel)
+        totalPrice = progressivePrice
+        if not style.isHidden and not isFromInventory:
+            totalPrice += style.getBuyPrice()
+        isFromInventory = False if progressionLevel > currentProgressionLvl else isFromInventory
+        purchaseItem = PurchaseItem(style, totalPrice, areaID=None, slotType=None, regionIdx=None, selected=True, group=AdditionalPurchaseGroups.STYLES_GROUP_ID, isFromInventory=isFromInventory, locked=True, progressionLevel=progressionLevel)
+        purchaseItems.append(purchaseItem)
+    else:
+        purchaseItem = PurchaseItem(style, style.getBuyPrice(), areaID=None, slotType=None, regionIdx=None, selected=True, group=AdditionalPurchaseGroups.STYLES_GROUP_ID, isFromInventory=isFromInventory, locked=True)
+        purchaseItems.append(purchaseItem)
     for season in SeasonType.COMMON_SEASONS:
         modifiedOutfit = modifiedOutfits[season]
+        if style.isProgressive:
+            modifiedOutfit = c11nService.removeAdditionalProgressionData(outfit=modifiedOutfit, style=style, vehCD=vehicleCD)
         baseOutfit = style.getOutfit(season, vehicleCD)
         for intCD, component, regionIdx, container, _ in modifiedOutfit.itemsFull():
             item = c11nService.getItemByCD(intCD)
@@ -580,6 +599,22 @@ def isStyleEditedForCurrentVehicle(outfits, style):
     return False
 
 
+def __resetC11nItemsNoveltyParamsMerger(merged, callParams):
+    items = callParams.kwargs.get('items', [])
+    items.extend(merged.kwargs.get('items', []))
+    return CallParams(kwargs={'items': items})
+
+
+@cooldownCallerDecorator(cooldown=REQUEST_COOLDOWN.CUSTOMIZATION_NOVELTY, paramsMerger=__resetC11nItemsNoveltyParamsMerger)
+def resetC11nItemsNovelty(items):
+
+    def _callback(resultID):
+        if not isCodeValid(resultID):
+            _logger.error('Error occurred while trying to reset c11n items=%s novelty, reason by resultId = %d: %s', items, resultID, code2str(resultID))
+
+    BigWorld.player().shop.resetC11nItemsNovelty(items, _callback)
+
+
 def removeUnselectedItemsFromEditableStyle(modifiedOutfits, baseOutfits, purchaseItems):
     for pItem in purchaseItems:
         if pItem.selected:
@@ -664,8 +699,12 @@ def __getStyleAppliedCount(item, outfits):
 
 
 def __isStyleInstalled(style):
-    currentOutfit = g_currentVehicle.item.getOutfit(SeasonType.SUMMER)
-    return False if currentOutfit is None else currentOutfit.id == style.id
+    vehicleItem = g_currentVehicle.item
+    if vehicleItem is None:
+        return False
+    else:
+        currentOutfit = vehicleItem.getOutfit(SeasonType.SUMMER)
+        return False if currentOutfit is None else currentOutfit.id == style.id
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache, c11nService=ICustomizationService)

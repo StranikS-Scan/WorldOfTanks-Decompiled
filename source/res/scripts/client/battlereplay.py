@@ -17,6 +17,7 @@ import Keys
 import Event
 import AreaDestructibles
 import TriggersManager
+from aih_constants import CTRL_MODE_NAME
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION
 from gui import GUI_CTRL_MODE_FLAG
 from helpers import EffectsList, isPlayerAvatar, isPlayerAccount, getFullClientVersion
@@ -178,7 +179,6 @@ class BattleReplay(object):
     def subscribe(self):
         g_playerEvents.onBattleResultsReceived += self.__onBattleResultsReceived
         g_playerEvents.onAccountBecomePlayer += self.__onAccountBecomePlayer
-        g_playerEvents.onAvatarBecomePlayer += self.__onAvatarBecomePlayer
         g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
         g_playerEvents.onBootcampAccountMigrationComplete += self.__onBootcampAccountMigrationComplete
         self.settingsCore.onSettingsChanged += self.__onSettingsChanging
@@ -186,7 +186,6 @@ class BattleReplay(object):
     def unsubscribe(self):
         g_playerEvents.onBattleResultsReceived -= self.__onBattleResultsReceived
         g_playerEvents.onAccountBecomePlayer -= self.__onAccountBecomePlayer
-        g_playerEvents.onAvatarBecomePlayer -= self.__onAvatarBecomePlayer
         g_playerEvents.onArenaPeriodChange -= self.__onArenaPeriodChange
         g_playerEvents.onBootcampAccountMigrationComplete -= self.__onBootcampAccountMigrationComplete
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanging
@@ -740,13 +739,15 @@ class BattleReplay(object):
             entity = BigWorld.entities.get(self.playerVehicleID)
             if (entity is None or not entity.isStarted) and forceControlMode is None:
                 controlMode = self.getControlMode()
-                if controlMode == 'sniper' or forceControlMode == 'strategic':
+                if controlMode == CTRL_MODE_NAME.SNIPER or forceControlMode == CTRL_MODE_NAME.STRATEGIC:
                     return
             if not self.isControllingCamera and forceControlMode is None:
                 return
             controlMode = self.getControlMode() if forceControlMode is None else forceControlMode
+            if self.__equipmentId is None and controlMode == CTRL_MODE_NAME.MAP_CASE_ARCADE:
+                return
             preferredPos = self.getGunRotatorTargetPoint()
-            if controlMode == 'mapcase':
+            if controlMode == CTRL_MODE_NAME.MAP_CASE:
                 _, preferredPos, _ = self.getGunMarkerParams(preferredPos, Math.Vector3(0.0, 0.0, 1.0))
             player.inputHandler.onControlModeChanged(controlMode, camMatrix=BigWorld.camera().matrix, preferredPos=preferredPos, saveZoom=False, saveDist=False, equipmentID=self.__equipmentId, curVehicleID=self.__replayCtrl.playerVehicleID)
             return
@@ -900,15 +901,12 @@ class BattleReplay(object):
             if 'spgRedesignFeatures' in serverSettings:
                 self.__serverSettings['spgRedesignFeatures'] = serverSettings['spgRedesignFeatures']
             self.__serverSettings['ranked_config'] = serverSettings['ranked_config']
+            self.__serverSettings['battle_royale_config'] = serverSettings['battle_royale_config']
             if player.databaseID is None:
                 BigWorld.callback(0.1, self.__onAccountBecomePlayer)
             else:
                 self.__playerDatabaseID = player.databaseID
             return
-
-    def __onAvatarBecomePlayer(self):
-        if self.sessionProvider.arenaVisitor.getArenaBonusType() in constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
-            self.enableAutoRecordingBattles(False, True)
 
     def __onSettingsChanging(self, *_):
         newSpeed = self.__playbackSpeedModifiers[self.__playbackSpeedIdx]
@@ -983,6 +981,7 @@ class BattleReplay(object):
                 mapCaseMode.activateEquipment(equipmentId)
         else:
             BigWorld.player().inputHandler.showGunMarker(True)
+            self.__equipmentId = None
         return
 
     def __onVehicleEnterWorld(self, vehicle):

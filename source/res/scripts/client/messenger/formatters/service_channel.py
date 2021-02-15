@@ -31,6 +31,7 @@ from gui import GUI_SETTINGS, GUI_NATIONS
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.SystemMessages import SM_TYPE
 from gui.clans.formatters import getClanFullName
+from gui.game_control.blueprints_convert_sale_controller import BCSActionState
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control.formatters import getPrebattleFullDescription
@@ -70,7 +71,7 @@ from messenger.formatters import TimeFormatter, NCContextItemFormatter
 from messenger.formatters.service_channel_helpers import EOL, getCustomizationItemData, MessageData, getRewardsForQuests
 from nations import NAMES
 from shared_utils import BoundMethodWeakref, first
-from skeletons.gui.game_control import IRankedBattlesController, IEventProgressionController, IBattlePassController
+from skeletons.gui.game_control import IRankedBattlesController, IEventProgressionController, IBattlePassController, IBattleRoyaleController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -90,7 +91,7 @@ _PREMIUM_MESSAGES = {PREMIUM_TYPE.BASIC: {str(SYS_MESSAGE_TYPE.premiumBought): R
                      str(SYS_MESSAGE_TYPE.premiumChanged): R.strings.messenger.serviceChannelMessages.premiumPlusChanged()}}
 _PREMIUM_TEMPLATES = {PREMIUM_ENTITLEMENTS.BASIC: 'battleQuestsPremium',
  PREMIUM_ENTITLEMENTS.PLUS: 'battleQuestsPremiumPlus'}
-_PROGRESSION_INVOICE_POSTFIX = ':progression'
+_PROGRESSION_INVOICE_POSTFIX = 'progression'
 BATTLE_BONUS_X5_TOKEN = 'battle_bonus_x5'
 
 def _getTimeStamp(message):
@@ -107,9 +108,10 @@ def _extendCustomizationData(newData, extendable, htmlTplPostfix):
     else:
         customizations = newData.get('customizations', [])
         for customizationItem in customizations:
-            custType = customizationItem['custType'].split(':')[0]
+            splittedCustType = customizationItem.get('custType', '').split(':')
+            custType = splittedCustType[0]
             custValue = customizationItem['value']
-            if _PROGRESSION_INVOICE_POSTFIX in custType:
+            if len(splittedCustType) == 2 and _PROGRESSION_INVOICE_POSTFIX in splittedCustType[1]:
                 continue
             if custValue > 0:
                 operation = 'added'
@@ -360,6 +362,7 @@ class FormatSpecialReward(object):
 
 class BattleResultsFormatter(WaitItemsSyncFormatter):
     __rankedController = dependency.descriptor(IRankedBattlesController)
+    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __battleResultKeys = {-1: 'battleDefeatResult',
      0: 'battleDrawGameResult',
      1: 'battleVictoryResult'}
@@ -416,9 +419,7 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                 ctx['achieves'], ctx['badges'] = self.__makeAchievementsAndBadgesStrings(battleResults)
                 ctx['rankedProgress'] = self.__makeRankedFlowStrings(battleResults)
                 ctx['rankedBonusBattles'] = self.__makeRankedBonusString(battleResults)
-                ctx['battlePassProgress'] = self.__makeBattlePassProgressionString(battleResults)
-                ctx['BRPoints'] = self.__makeBRPointsString(battleResults)
-                ctx['BRLevel'] = self.__makeBRLevelString(battleResults)
+                ctx['battlePassProgress'] = self.__makeBattlePassProgressionString(guiType, battleResults)
                 ctx['lock'] = self.__makeVehicleLockString(vehicleNames, battleResults)
                 ctx['quests'] = self.__makeQuestsAchieve(message)
                 team = battleResults.get('team', 0)
@@ -588,42 +589,20 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
             rankedBonusBattlesBlock = g_settings.htmlTemplates.format('battleResultRankedBonusBattles', {'rankedBonusBattles': bonusBattlesString})
         return rankedBonusBattlesBlock
 
-    def __makeBattlePassProgressionString(self, battleResults):
+    def __makeBattlePassProgressionString(self, guiType, battleResults):
         battlePassString = ''
-        if battleResults.get('basePointsDiff', 0) > 0:
-            battlePassString = backport.text(R.strings.messenger.serviceChannelMessages.battleResults.battlePass(), pointsDiff=text_styles.neutral(battleResults['basePointsDiff']))
+        value = sum((points for points in battleResults.get('battlePassPoints', {}).get('vehicles', {}).itervalues()))
+        value += battleResults.get('basePointsDiff', 0)
+        if value > 0:
+            if guiType == ARENA_GUI_TYPE.BATTLE_ROYALE:
+                if self.__battleRoyaleController.isBattlePassAvailable():
+                    battlePassString = backport.text(R.strings.messenger.serviceChannelMessages.BRbattleResults.battlePass(), pointsDiff=text_styles.neutral(value))
+            else:
+                battlePassString = backport.text(R.strings.messenger.serviceChannelMessages.battleResults.battlePass(), pointsDiff=text_styles.neutral(value))
         return '' if not battlePassString else g_settings.htmlTemplates.format('battlePass', ctx={'battlePassProgression': battlePassString})
 
     def __makePiggyBankString(self, credits_):
         return '' if not credits_ else g_settings.htmlTemplates.format('piggyBank', ctx={'credits': self.__makeCurrencyString(Currency.CREDITS, credits_)})
-
-    def __makeBRPointsString(self, battleResults):
-        __serviceChannelMessages = R.strings.messenger.serviceChannelMessages
-        brPointsBlock = ''
-        if battleResults.get('guiType', 0) == ARENA_GUI_TYPE.BATTLE_ROYALE:
-            points = battleResults.get('brPointsChanges', 0)
-            if points > 0:
-                brPointsValue = str(abs(points))
-                brPointsTitle = backport.text(__serviceChannelMessages.BRbattleResults.pointsEarned())
-                brPointsBlock = g_settings.htmlTemplates.format('battleResultBRProgression', {'brProgressionTitle': brPointsTitle,
-                 'brProgressionValue': brPointsValue})
-        return brPointsBlock
-
-    def __makeBRLevelString(self, battleResults):
-        brLevelsBlock = []
-        resultMsg = R.strings.messenger.serviceChannelMessages.BRbattleResults
-        if battleResults.get('guiType', 0) == ARENA_GUI_TYPE.BATTLE_ROYALE:
-            accTitleAndPoints = battleResults.get('accBRTitle', (1, 0))
-            brTitleChange = battleResults.get('brTitleChange', 0)
-            if brTitleChange > 0:
-                brTitleStr = backport.text(resultMsg.levelEarned())
-                currentTitle = accTitleAndPoints[0]
-                for brTitleValue in range(currentTitle - brTitleChange, currentTitle):
-                    brTitleValue += 1
-                    brLevelsBlock.append(g_settings.htmlTemplates.format('battleResultBRProgression', {'brProgressionTitle': brTitleStr,
-                     'brProgressionValue': brTitleValue}))
-
-        return ''.join(brLevelsBlock)
 
 
 class AutoMaintenanceFormatter(WaitItemsSyncFormatter):
@@ -1118,19 +1097,6 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             count = text_styles.neutral(backport.getIntegralFormat(dailyBattles))
             result.append(backport.text(rShortCut.daily(), count=count))
         return ', '.join(result)
-
-    @staticmethod
-    def getDogTagsString(dogTags):
-        result = []
-        viewTypeSource = {ComponentViewType.ENGRAVING: R.strings.messenger.serviceChannelMessages.dogTags.viewType.engraving(),
-         ComponentViewType.BACKGROUND: R.strings.messenger.serviceChannelMessages.dogTags.viewType.background()}
-        for dogTag in dogTags:
-            component = componentConfigAdapter.getComponentById(int(dogTag.get('id', 0)))
-            viewTypeText = backport.text(viewTypeSource[component.viewType])
-            name = dogTagComposer.getComponentTitle(component.componentId) or 'No name'
-            result.append('{} "{}"'.format(viewTypeText, name))
-
-        return '<br/>'.join(result)
 
     def _composeOperations(self, data):
         dataEx = data.get('data', {})
@@ -2374,11 +2340,6 @@ class QuestAchievesFormatter(object):
             strEnhancements = InvoiceReceivedFormatter.getEnhancementsString(enhancements)
             if strEnhancements:
                 result.append(strEnhancements)
-        dogTags = data.get('dogTagComponents', [])
-        if dogTags:
-            strDogTags = InvoiceReceivedFormatter.getDogTagsString(dogTags)
-            if strDogTags:
-                result.append(strDogTags)
         if not asBattleFormatter:
             blueprints = data.get('blueprints', {})
             if blueprints:
@@ -3602,6 +3563,23 @@ class TechTreeActionDiscountFormatter(ServiceChannelFormatter):
             return [MessageData(None, None)]
 
 
+class BlueprintsConvertSaleFormatter(ServiceChannelFormatter):
+    __templates = {BCSActionState.STARTED: 'BlueprintsConvertSaleStartMessage',
+     BCSActionState.PAUSED: 'BlueprintsConvertSalePauseMessage',
+     BCSActionState.RESTORE: 'BlueprintsConvertSaleRestoreMessage',
+     BCSActionState.END: 'BlueprintsConvertSaleEndMessage'}
+
+    def format(self, message, *args):
+        actionName = message.get('state', None)
+        if actionName is not None and actionName in self.__templates:
+            formatted = g_settings.msgTemplates.format(self.__templates[actionName], {'header': backport.text(R.strings.messenger.serviceChannelMessages.blueprintsConvertSale.header()),
+             'text': backport.text(R.strings.messenger.serviceChannelMessages.blueprintsConvertSale.dyn(actionName.value)()),
+             'button': backport.text(R.strings.messenger.serviceChannelMessages.blueprintsConvertSale.button())})
+            return [MessageData(formatted, self._getGuiSettings(message, self.__templates[actionName]))]
+        else:
+            return [MessageData(None, None)]
+
+
 class CustomizationProgressFormatter(WaitItemsSyncFormatter):
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -3661,6 +3639,41 @@ class CustomizationProgressFormatter(WaitItemsSyncFormatter):
         elif level > 1:
             text = backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.customizationProgress.itemUpdatedNotAutoBound(), level=level, itemName=itemName)
         return text
+
+
+class CustomizationProgressionChangedFormatter(ServiceChannelFormatter):
+    REQUIRED_KEYS = {'custType',
+     'id',
+     'prevLevel',
+     'actualLevel'}
+
+    def format(self, message, *args):
+        result = [MessageData(None, None)]
+        if not message:
+            return result
+        else:
+            data = message.data
+            if data and self.REQUIRED_KEYS == set(data.keys()):
+                guiItemType, itemUserName = getCustomizationItemData(data['id'], data['custType'])
+                prevLevel = data['prevLevel']
+                actualLevel = data['actualLevel']
+                if actualLevel == 0:
+                    return result
+                if actualLevel > prevLevel:
+                    operation = 'up'
+                elif actualLevel < prevLevel:
+                    operation = 'down'
+                else:
+                    return result
+                messageR = R.strings.system_messages.customization.progression.dyn(operation).dyn(guiItemType)
+                if messageR.exists():
+                    messageString = backport.text(messageR(), itemUserName, int2roman(actualLevel))
+                else:
+                    _logger.warning("CustomizationProgressionChangedFormatter doesn't have message for custType: %s", guiItemType)
+                    return result
+                formatted = g_settings.msgTemplates.format('CustomizationProgressionMessage', ctx={'message': messageString})
+                result = [MessageData(formatted, self._getGuiSettings(message))]
+            return result
 
 
 class PrbEventEnqueueDataFormatter(ServiceChannelFormatter):

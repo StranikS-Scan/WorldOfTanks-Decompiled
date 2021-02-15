@@ -4,34 +4,39 @@ from constants import EQUIPMENT_STAGES
 from gui.Scaleform.daapi.view.battle.shared.consumables_panel import ConsumablesPanel
 from gui.Scaleform.genConsts.CONSUMABLES_PANEL_SETTINGS import CONSUMABLES_PANEL_SETTINGS
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
+from helpers import dependency
+from skeletons.gui.game_control import IBattleRoyaleController
 
 class BattleRoyaleConsumablesPanel(ConsumablesPanel):
+    __slots__ = ('__quantityMap',)
     _PANEL_MAX_LENGTH = 10
     _AMMO_START_IDX = 0
     _AMMO_END_IDX = 1
     _EQUIPMENT_START_IDX = 2
     _EQUIPMENT_END_IDX = 9
     _EQUIPMENT_ICON_PATH = '../maps/icons/battleRoyale/artefact/%s.png'
+    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
 
     def __init__(self):
         super(BattleRoyaleConsumablesPanel, self).__init__()
         self.__quantityMap = [None] * self._PANEL_MAX_LENGTH
         return
 
-    def as_resetS(self):
-        pass
-
     def _populate(self):
         super(BattleRoyaleConsumablesPanel, self)._populate()
         vehStateCtrl = self.sessionProvider.shared.vehicleState
         if vehStateCtrl is not None:
             vehStateCtrl.onVehicleStateUpdated += self.__onVehicleLootAction
+        self.__battleRoyaleController.onEquipmentReset += self.__onEquipmentReset
+        self.__battleRoyaleController.onGunUpdate += self.__onGunUpdate
         return
 
     def _dispose(self):
         vehStateCtrl = self.sessionProvider.shared.vehicleState
         if vehStateCtrl is not None:
             vehStateCtrl.onVehicleStateUpdated -= self.__onVehicleLootAction
+        self.__battleRoyaleController.onEquipmentReset -= self.__onEquipmentReset
+        self.__battleRoyaleController.onGunUpdate -= self.__onGunUpdate
         super(BattleRoyaleConsumablesPanel, self)._dispose()
         return
 
@@ -63,6 +68,10 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel):
         if intCD not in self._cds:
             return
         super(BattleRoyaleConsumablesPanel, self)._onCurrentShellChanged(intCD)
+
+    def __onGunUpdate(self):
+        self.__resetShellSlots()
+        self._resetDelayedReload()
 
     def _onGunSettingsSet(self, _):
         self.__resetShellSlots()
@@ -120,6 +129,13 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel):
     def _showEquipmentGlow(self, equipmentIndex, glowType=CONSUMABLES_PANEL_SETTINGS.GLOW_ID_ORANGE):
         pass
 
+    def _onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
+        self._reset()
+
+    def __onEquipmentReset(self):
+        self.__resetEquipmentSlots()
+        self.as_resetS()
+
     def __getNewSlotIdx(self, startIdx=0, endIdx=_PANEL_MAX_LENGTH - 1):
         resultIdx = None
         for idx in range(startIdx, endIdx + 1):
@@ -131,6 +147,13 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel):
 
     def __resetShellSlots(self):
         for idx in range(self._AMMO_START_IDX, self._AMMO_END_IDX + 1):
+            self._mask &= ~(1 << idx)
+            self._cds[idx] = None
+
+        return
+
+    def __resetEquipmentSlots(self):
+        for idx in range(self._EQUIPMENT_START_IDX, self._EQUIPMENT_END_IDX + 1):
             self._mask &= ~(1 << idx)
             self._cds[idx] = None
 

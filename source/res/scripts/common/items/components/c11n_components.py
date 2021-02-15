@@ -4,16 +4,18 @@ import itertools
 from backports.functools_lru_cache import lru_cache
 import items
 import items.vehicles as iv
+import nations
 from debug_utils import LOG_CURRENT_EXCEPTION
 from items import vehicles
 from items.components import shared_components
 from soft_exception import SoftException
-from items.components.c11n_constants import ApplyArea, SeasonType, Options, ItemTags, CustomizationType, MAX_CAMOUFLAGE_PATTERN_SIZE, DecalType, HIDDEN_CAMOUFLAGE_ID, PROJECTION_DECALS_SCALE_ID_VALUES, MAX_USERS_PROJECTION_DECALS, CustomizationTypeNames, DecalTypeNames, ProjectionDecalFormTags, CUSTOMIZATION_SLOTS_VEHICLE_PARTS, CamouflageTilingType, HIDDEN_FOR_USER_TAG, SLOT_TYPE_NAMES, EMPTY_ITEM_ID, SLOT_DEFAULT_ALLOWED_MODEL
+from items.components.c11n_constants import ApplyArea, SeasonType, Options, ItemTags, CustomizationType, MAX_CAMOUFLAGE_PATTERN_SIZE, DecalType, HIDDEN_CAMOUFLAGE_ID, PROJECTION_DECALS_SCALE_ID_VALUES, MAX_USERS_PROJECTION_DECALS, CustomizationTypeNames, DecalTypeNames, ProjectionDecalFormTags, CUSTOMIZATION_SLOTS_VEHICLE_PARTS, CamouflageTilingType, HIDDEN_FOR_USER_TAG, SLOT_TYPE_NAMES, EMPTY_ITEM_ID, SLOT_DEFAULT_ALLOWED_MODEL, EDITING_STYLE_REASONS
 from typing import List, Dict, Type, Tuple, Optional, TypeVar, FrozenSet, Set
 from string import lower, upper
 from copy import deepcopy
 from wrapped_reflection_framework import ReflectionMetaclass
-from constants import IS_EDITOR
+from constants import IS_EDITOR, ARENA_BONUS_TYPE_NAMES
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 if IS_EDITOR:
     from editor_copy import edCopy
 Item = TypeVar('TypeVar')
@@ -270,7 +272,7 @@ class ModificationItem(BaseCustomizationItem):
 class StyleItem(BaseCustomizationItem):
     __metaclass__ = ReflectionMetaclass
     itemType = CustomizationType.STYLE
-    __slots__ = ('outfits', 'isRent', 'rentCount', 'modelsSet', 'isEditable', 'alternateItems', 'itemsFilters', '_changeableSlotTypes')
+    __slots__ = ('outfits', 'isRent', 'rentCount', 'modelsSet', 'isEditable', 'alternateItems', 'itemsFilters', '_changeableSlotTypes', 'styleProgressions')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
 
     def __init__(self, parentGroup=None):
@@ -282,6 +284,7 @@ class StyleItem(BaseCustomizationItem):
         self.alternateItems = {}
         self.itemsFilters = {}
         self._changeableSlotTypes = None
+        self.styleProgressions = {}
         super(StyleItem, self).__init__(parentGroup)
         return
 
@@ -328,6 +331,10 @@ class StyleItem(BaseCustomizationItem):
     @property
     def clearableSlotTypes(self):
         return set(SLOT_TYPE_NAMES.EDITABLE_STYLE_DELETABLE).intersection(self.changeableSlotTypes)
+
+    @property
+    def isProgression(self):
+        return ItemTags.STYLE_PROGRESSION in self.tags
 
 
 class InsigniaItem(BaseCustomizationItem):
@@ -543,7 +550,7 @@ class ItemsFilter(_Filter):
 
 
 class ProgressForCustomization(object):
-    __slots__ = ('autobound', 'levels', 'autoGrantCount', 'bonusTypes')
+    __slots__ = ('autobound', 'levels', 'autoGrantCount', 'bonusTypes', 'priceGroup', 'defaultLvl')
 
     def __init__(self):
         super(ProgressForCustomization, self).__init__()
@@ -551,25 +558,31 @@ class ProgressForCustomization(object):
         self.levels = {}
         self.autoGrantCount = 0
         self.bonusTypes = set()
+        self.priceGroup = ''
+        self.defaultLvl = 0
 
     def __deepcopy__(self, memodict={}):
         newItem = type(self)()
         newItem.autobound = self.autobound
         newItem.levels = deepcopy(self.levels)
         newItem.autoGrantCount = self.autoGrantCount
+        newItem.priceGroup = self.priceGroup
+        newItem.defaultLvl = self.defaultLvl
         return newItem
 
     def __str__(self):
         result = {'autobound': self.autobound,
          'levels': self.levels,
          'autoGrantCount': self.autoGrantCount,
-         'bonusTypes': self.bonusTypes}
+         'bonusTypes': self.bonusTypes,
+         'priceGroup': self.priceGroup,
+         'defaultLvl': self.defaultLvl}
         return str(result)
 
 
 class CustomizationCache(object):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('paints', 'camouflages', 'decals', 'projection_decals', 'modifications', 'levels', 'itemToPriceGroup', 'priceGroups', 'priceGroupNames', 'insignias', 'styles', 'defaultColors', 'defaultInsignias', 'itemTypes', 'priceGroupTags', '__victimStyles', 'personal_numbers', 'fonts', 'sequences', 'attachments', 'customizationWithProgression', 'topVehiclesByNation')
+    __slots__ = ('paints', 'camouflages', 'decals', 'projection_decals', 'modifications', 'levels', 'itemToPriceGroup', 'priceGroups', 'priceGroupNames', 'insignias', 'styles', 'defaultColors', 'defaultInsignias', 'itemTypes', 'priceGroupTags', '__victimStyles', 'personal_numbers', 'fonts', 'sequences', 'attachments', 'customizationWithProgression', 'itemGroupByProgressionBonusType', '__vehicleCanMayIncludeCustomization', 'topVehiclesByNation')
 
     def __init__(self):
         self.priceGroupTags = {}
@@ -591,6 +604,8 @@ class CustomizationCache(object):
         self.attachments = {}
         self.__victimStyles = {}
         self.customizationWithProgression = {}
+        self.itemGroupByProgressionBonusType = {arenaTypeID:list() for arenaTypeID in ARENA_BONUS_TYPE_NAMES.values() if ARENA_BONUS_TYPE_CAPS.checkAny(arenaTypeID, ARENA_BONUS_TYPE_CAPS.CUSTOMIZATION_PROGRESSION)}
+        self.__vehicleCanMayIncludeCustomization = {}
         self.topVehiclesByNation = {}
         self.itemTypes = {CustomizationType.MODIFICATION: self.modifications,
          CustomizationType.STYLE: self.styles,
@@ -603,6 +618,19 @@ class CustomizationCache(object):
          CustomizationType.SEQUENCE: self.sequences,
          CustomizationType.ATTACHMENT: self.attachments}
         super(CustomizationCache, self).__init__()
+
+    def getVehiclesCanMayInclude(self, item):
+        vehsCanUseItem = self.__vehicleCanMayIncludeCustomization.get(item.compactDescr)
+        if vehsCanUseItem is None:
+            vehsCanUseItem = []
+            for nationID in nations.INDICES.itervalues():
+                for descr in iv.g_list.getList(nationID).itervalues():
+                    vehCD = descr.compactDescr
+                    if item.matchVehicleType(iv.getVehicleType(vehCD)):
+                        vehsCanUseItem.append(vehCD)
+
+            self.__vehicleCanMayIncludeCustomization[item.compactDescr] = vehsCanUseItem
+        return vehsCanUseItem
 
     def isVehicleBound(self, itemId):
         if isinstance(itemId, int):
@@ -640,9 +668,11 @@ class CustomizationCache(object):
                     raise SoftException('Wrong styleId {} '.format(outfit.styleId))
                 if not usedStyle.matchVehicleType(vehType):
                     raise SoftException('style {} is incompatible with vehicle {}'.format(outfit.styleId, vehDescr.name))
-            projectionDecalsCount = len(outfit.projection_decals)
-            if projectionDecalsCount > MAX_USERS_PROJECTION_DECALS:
-                raise SoftException('projection decals quantity {} greater than acceptable'.format(projectionDecalsCount))
+                if usedStyle.isProgressive():
+                    if usedStyle.progression.defaultLvl > outfit.styleProgressionLevel > len(usedStyle.progression.levels):
+                        raise SoftException('Progression style {} level out of limits'.format(outfit.styleId))
+                projectionDecalsCount = len(outfit.projection_decals)
+                raise projectionDecalsCount > MAX_USERS_PROJECTION_DECALS and SoftException('projection decals quantity {} greater than acceptable'.format(projectionDecalsCount))
             for itemType in CustomizationType.FULL_RANGE:
                 typeName = lower(CustomizationTypeNames[itemType])
                 componentsAttrName = '{}s'.format(typeName)
@@ -684,44 +714,261 @@ class CustomizationCache(object):
 
         return (True, '')
 
-    def adjustProgression(self, vehTypeCompDescr, outfit, progressionStorage):
-        for itemType in CustomizationType.RANGE:
-            typeName = lower(CustomizationTypeNames[itemType])
-            componentsAttrName = '{}s'.format(typeName)
-            components = getattr(outfit, componentsAttrName, None)
-            if not components:
-                continue
-            storage = getattr(self, componentsAttrName)
-            for component in components:
-                if itemType == CustomizationType.CAMOUFLAGE and component.id == HIDDEN_CAMOUFLAGE_ID:
-                    continue
-                try:
-                    _adjustProgression(component, vehTypeCompDescr, storage, progressionStorage)
-                except SoftException:
-                    LOG_CURRENT_EXCEPTION()
+    def adjustProgression--- This code section failed: ---
 
-        return
+ 875       0	LOAD_GLOBAL       'False'
+           3	STORE_FAST        'force'
+
+ 876       6	LOAD_GLOBAL       'CustomizationType'
+           9	LOAD_ATTR         'RANGE'
+          12	STORE_FAST        'itemTypes'
+
+ 877      15	LOAD_FAST         'itemForce'
+          18	LOAD_CONST        ''
+          21	COMPARE_OP        'is not'
+          24	POP_JUMP_IF_FALSE '48'
+
+ 878      27	LOAD_GLOBAL       'True'
+          30	STORE_FAST        'force'
+
+ 879      33	LOAD_FAST         'itemForce'
+          36	LOAD_ATTR         'itemType'
+          39	BUILD_SET_1       ''
+          42	STORE_FAST        'itemTypes'
+          45	JUMP_FORWARD      '48'
+        48_0	COME_FROM         '45'
+
+ 881      48	SETUP_LOOP        '322'
+          51	LOAD_FAST         'itemTypes'
+          54	GET_ITER          ''
+          55	FOR_ITER          '321'
+          58	STORE_FAST        'itemType'
+
+ 882      61	LOAD_GLOBAL       'lower'
+          64	LOAD_GLOBAL       'CustomizationTypeNames'
+          67	LOAD_FAST         'itemType'
+          70	BINARY_SUBSCR     ''
+          71	CALL_FUNCTION_1   ''
+          74	STORE_FAST        'typeName'
+
+ 883      77	LOAD_CONST        '{}s'
+          80	LOAD_ATTR         'format'
+          83	LOAD_FAST         'typeName'
+          86	CALL_FUNCTION_1   ''
+          89	STORE_FAST        'componentsAttrName'
+
+ 884      92	LOAD_GLOBAL       'getattr'
+          95	LOAD_FAST         'outfit'
+          98	LOAD_FAST         'componentsAttrName'
+         101	LOAD_CONST        ''
+         104	CALL_FUNCTION_3   ''
+         107	STORE_FAST        'components'
+
+ 886     110	LOAD_FAST         'components'
+         113	POP_JUMP_IF_TRUE  '122'
+
+ 887     116	CONTINUE          '55'
+         119	JUMP_FORWARD      '122'
+       122_0	COME_FROM         '119'
+
+ 889     122	LOAD_GLOBAL       'getattr'
+         125	LOAD_FAST         'self'
+         128	LOAD_FAST         'componentsAttrName'
+         131	CALL_FUNCTION_2   ''
+         134	STORE_FAST        'storage'
+
+ 891     137	SETUP_LOOP        '318'
+         140	LOAD_FAST         'components'
+         143	GET_ITER          ''
+         144	FOR_ITER          '317'
+         147	STORE_FAST        'component'
+
+ 892     150	LOAD_FAST         'itemType'
+         153	LOAD_GLOBAL       'CustomizationType'
+         156	LOAD_ATTR         'CAMOUFLAGE'
+         159	COMPARE_OP        '=='
+         162	POP_JUMP_IF_FALSE '186'
+         165	LOAD_FAST         'component'
+         168	LOAD_ATTR         'id'
+         171	LOAD_GLOBAL       'HIDDEN_CAMOUFLAGE_ID'
+         174	COMPARE_OP        '=='
+       177_0	COME_FROM         '162'
+         177	POP_JUMP_IF_FALSE '186'
+
+ 893     180	CONTINUE          '144'
+         183	JUMP_FORWARD      '186'
+       186_0	COME_FROM         '183'
+
+ 895     186	SETUP_EXCEPT      '290'
+
+ 897     189	LOAD_GLOBAL       'isinstance'
+         192	LOAD_FAST         'component'
+         195	LOAD_GLOBAL       'int'
+         198	CALL_FUNCTION_2   ''
+         201	POP_JUMP_IF_FALSE '210'
+
+ 898     204	CONTINUE_LOOP     '144'
+         207	JUMP_FORWARD      '210'
+       210_0	COME_FROM         '207'
+
+ 900     210	LOAD_FAST         'force'
+         213	POP_JUMP_IF_FALSE '240'
+         216	LOAD_FAST         'itemForce'
+         219	LOAD_ATTR         'id'
+         222	LOAD_FAST         'component'
+         225	LOAD_ATTR         'id'
+         228	COMPARE_OP        '!='
+       231_0	COME_FROM         '213'
+         231	POP_JUMP_IF_FALSE '240'
+
+ 901     234	CONTINUE_LOOP     '144'
+         237	JUMP_FORWARD      '240'
+       240_0	COME_FROM         '237'
+
+ 903     240	LOAD_FAST         'storage'
+         243	LOAD_ATTR         'get'
+         246	LOAD_FAST         'component'
+         249	LOAD_ATTR         'id'
+         252	CALL_FUNCTION_1   ''
+         255	STORE_FAST        'item'
+
+ 904     258	LOAD_GLOBAL       '_adjustProgression'
+         261	LOAD_FAST         'component'
+         264	LOAD_FAST         'vehTypeCompDescr'
+         267	LOAD_FAST         'item'
+         270	LOAD_FAST         'progressionStorage'
+         273	LOAD_CONST        'progressionLevel'
+         276	LOAD_CONST        'force'
+
+ 905     279	LOAD_FAST         'force'
+         282	CALL_FUNCTION_261 ''
+         285	POP_TOP           ''
+         286	POP_BLOCK         ''
+         287	JUMP_BACK         '144'
+       290_0	COME_FROM         '186'
+
+ 906     290	DUP_TOP           ''
+         291	LOAD_GLOBAL       'SoftException'
+         294	COMPARE_OP        'exception match'
+         297	POP_JUMP_IF_FALSE '313'
+         300	POP_TOP           ''
+         301	POP_TOP           ''
+         302	POP_TOP           ''
+
+ 907     303	LOAD_GLOBAL       'LOG_CURRENT_EXCEPTION'
+         306	CALL_FUNCTION_0   ''
+         309	POP_TOP           ''
+         310	JUMP_BACK         '144'
+         313	END_FINALLY       ''
+       314_0	COME_FROM         '313'
+         314	JUMP_BACK         '144'
+         317	POP_BLOCK         ''
+       318_0	COME_FROM         '137'
+         318	JUMP_BACK         '55'
+         321	POP_BLOCK         ''
+       322_0	COME_FROM         '48'
+
+ 909     322	SETUP_EXCEPT      '445'
+
+ 910     325	LOAD_GLOBAL       'CustomizationType'
+         328	LOAD_ATTR         'STYLE'
+         331	LOAD_FAST         'itemTypes'
+         334	COMPARE_OP        'in'
+         337	POP_JUMP_IF_FALSE '441'
+
+ 911     340	LOAD_FAST         'outfit'
+         343	LOAD_ATTR         'styleId'
+         346	LOAD_CONST        0
+         349	COMPARE_OP        '!='
+         352	POP_JUMP_IF_FALSE '441'
+         355	LOAD_FAST         'force'
+         358	POP_JUMP_IF_FALSE '379'
+         361	LOAD_FAST         'outfit'
+         364	LOAD_ATTR         'styleId'
+         367	LOAD_FAST         'itemForce'
+         370	LOAD_ATTR         'id'
+         373	COMPARE_OP        '=='
+       376_0	COME_FROM         '358'
+         376	POP_JUMP_IF_TRUE  '386'
+         379	LOAD_FAST         'force'
+         382	UNARY_NOT         ''
+       383_0	COME_FROM         '337'
+       383_1	COME_FROM         '352'
+       383_2	COME_FROM         '376'
+         383	POP_JUMP_IF_FALSE '441'
+
+ 912     386	LOAD_FAST         'self'
+         389	LOAD_ATTR         'styles'
+         392	LOAD_ATTR         'get'
+         395	LOAD_FAST         'outfit'
+         398	LOAD_ATTR         'styleId'
+         401	CALL_FUNCTION_1   ''
+         404	STORE_FAST        'item'
+
+ 913     407	LOAD_GLOBAL       '_adjustProgression'
+         410	LOAD_FAST         'outfit'
+         413	LOAD_FAST         'vehTypeCompDescr'
+         416	LOAD_FAST         'item'
+         419	LOAD_FAST         'progressionStorage'
+         422	LOAD_CONST        'styleProgressionLevel'
+         425	LOAD_CONST        'force'
+
+ 914     428	LOAD_FAST         'force'
+         431	CALL_FUNCTION_261 ''
+         434	POP_TOP           ''
+         435	JUMP_ABSOLUTE     '441'
+         438	JUMP_FORWARD      '441'
+       441_0	COME_FROM         '438'
+         441	POP_BLOCK         ''
+         442	JUMP_FORWARD      '469'
+       445_0	COME_FROM         '322'
+
+ 915     445	DUP_TOP           ''
+         446	LOAD_GLOBAL       'SoftException'
+         449	COMPARE_OP        'exception match'
+         452	POP_JUMP_IF_FALSE '468'
+         455	POP_TOP           ''
+         456	POP_TOP           ''
+         457	POP_TOP           ''
+
+ 916     458	LOAD_GLOBAL       'LOG_CURRENT_EXCEPTION'
+         461	CALL_FUNCTION_0   ''
+         464	POP_TOP           ''
+         465	JUMP_FORWARD      '469'
+         468	END_FINALLY       ''
+       469_0	COME_FROM         '442'
+       469_1	COME_FROM         '468'
+         469	LOAD_CONST        ''
+         472	RETURN_VALUE      ''
+
+Syntax error at or near 'JUMP_FORWARD' token at offset 438
 
 
-def _adjustProgression(component, vehTypeCD, itemsStorage, progressionStorage):
-    if isinstance(component, int):
+class EditingStyleReason(object):
+
+    def __init__(self, reson):
+        self.reason = reson
+
+    def __nonzero__(self):
+        return self.reason in EDITING_STYLE_REASONS.ENABLED
+
+
+def _adjustProgression(component, vehTypeCD, item, progressionStorage, attr, force=False):
+    if item is None:
+        raise SoftException('Missing customization item for component: {}'.format(component))
+    if not item.isProgressive():
         return
     else:
-        item = itemsStorage.get(component.id)
-        if item is None:
-            raise SoftException('Missing customization item for component: {}'.format(component))
-        if not item.isProgressive():
-            return
-        if not hasattr(component, 'progressionLevel'):
+        if not hasattr(component, attr):
             raise SoftException('Missing progression level for component: {}'.format(component))
-        if component.progressionLevel:
+        if not force and getattr(component, attr):
             return
         if not item.progression.autobound:
             vehTypeCD = 0
         level = progressionStorage.get(item.itemType, {}).get(item.id, {}).get(vehTypeCD, {}).get('level')
         if level is None:
             raise SoftException('missing progression for item: {} at vehicle: {}'.format(item.id, vehTypeCD))
-        component.progressionLevel = level
+        setattr(component, attr, level)
         return
 
 
@@ -739,10 +986,10 @@ def _validateProgression(component, item, progressionStorage, vehType):
     if level is None:
         raise SoftException('missing progression level for component:'.format(component.id))
     vehTypeCD = vehType.compactDescr if item.progression.autobound else 0
-    acheavedLevel = progressionStorage.get(item.itemType, {}).get(item.id, {}).get(vehTypeCD, {}).get('level')
-    if acheavedLevel is None:
+    achievedLevel = progressionStorage.get(item.itemType, {}).get(item.id, {}).get(vehTypeCD, {}).get('level')
+    if achievedLevel is None:
         raise SoftException('missing progression for item: {} at vehicle: {}'.format(item.id, vehTypeCD))
-    if not 0 <= level <= acheavedLevel:
+    if not 0 <= level <= achievedLevel:
         raise SoftException('wrong progression level: {} for component: {} at vehicle: {}'.format(level, component.id, vehTypeCD))
     return
 

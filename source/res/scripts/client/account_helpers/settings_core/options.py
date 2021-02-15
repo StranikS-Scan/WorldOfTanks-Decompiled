@@ -2371,6 +2371,20 @@ class ReplaySetting(StorageAccountSetting):
         BattleReplay.g_replayCtrl.enableAutoRecordingBattles(value)
 
 
+class SniperZoomSetting(StorageAccountSetting):
+    SNIPER_TYPES = ['remember',
+     'double',
+     'quadruple',
+     'octuple']
+
+    def _getOptions(self):
+        settingsKey = '#settings:game/%s/%s'
+        return [ settingsKey % (self.settingName, rType) for rType in self.SNIPER_TYPES ]
+
+    def setSystemValue(self, value):
+        SniperCamera.SniperCamera.setSniperZoomSettings(value - 1)
+
+
 class HangarCamPeriodSetting(StorageAccountSetting):
 
     class OPTIONS(CONST_CONTAINER):

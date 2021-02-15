@@ -2061,7 +2061,7 @@
     <effects>	BRmainHollowCharge	</effects>
     <damage>
       <armor>	130	</armor>
-      <devices>	45	</devices>
+      <devices>	13	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_105mm_OCO_mle._1936_SH>
@@ -2078,7 +2078,7 @@
     <effects>	BRlargeAPCR	</effects>
     <damage>
       <armor>	95	</armor>
-      <devices>	45	</devices>
+      <devices>	13	</devices>
     </damage>
   </_105mm_APCR_OFL_SH>
   <_75mm_OCO_mle._1926_SH>
@@ -2094,7 +2094,7 @@
     <effects>	BRmainHollowCharge	</effects>
     <damage>
       <armor>	250	</armor>
-      <devices>	45	</devices>
+      <devices>	25	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_75mm_OCO_mle._1926_SH>
@@ -2111,7 +2111,7 @@
     <effects>	BRlargeAPCR	</effects>
     <damage>
       <armor>	170	</armor>
-      <devices>	45	</devices>
+      <devices>	25	</devices>
     </damage>
   </_75mm_FrtPrf1946_SH>
   <_90mm_OCC_90_SH>
@@ -2127,7 +2127,7 @@
     <effects>	BRmainHollowCharge	</effects>
     <damage>
       <armor>	190	</armor>
-      <devices>	45	</devices>
+      <devices>	19	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_90mm_OCC_90_SH>
@@ -2144,23 +2144,25 @@
     <effects>	BRlargeAPCR	</effects>
     <damage>
       <armor>	130	</armor>
-      <devices>	45	</devices>
+      <devices>	19	</devices>
     </damage>
   </_90mm_FrtPrf1945_SH>
   <_105mm_AP_OFL_SH>
     <id>	259	</id>
     <userString>	#france_vehicles:_105mm_AP_OFL_SH	</userString>
-    <icon>	ap_cr	</icon>
+    <icon>	hc_premium	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING_CR	</kind>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	105	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRmainAPCR	</effects>
+    <effects>	BRmainHollowCharge	</effects>
     <damage>
       <armor>	110	</armor>
-      <devices>	45	</devices>
+      <devices>	11	</devices>
     </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_105mm_AP_OFL_SH>
   <_105mm_OFL_105_D1_SH>
     <id>	260	</id>
@@ -2175,7 +2177,7 @@
     <effects>	BRlargeAPCR	</effects>
     <damage>
       <armor>	80	</armor>
-      <devices>	45	</devices>
+      <devices>	11	</devices>
     </damage>
   </_105mm_OFL_105_D1_SH>
   <_90mm_HEAT_OCC_F1_SH>
@@ -2191,7 +2193,7 @@
     <effects>	BRmainHollowCharge	</effects>
     <damage>
       <armor>	350	</armor>
-      <devices>	45	</devices>
+      <devices>	35	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_90mm_HEAT_OCC_F1_SH>
@@ -2208,7 +2210,7 @@
     <effects>	BRlargeAPCR	</effects>
     <damage>
       <armor>	250	</armor>
-      <devices>	45	</devices>
+      <devices>	35	</devices>
     </damage>
   </_90mm_OFL_90_DS2_SH>
   <_127mm_OE_127_Mle_55_SH>
@@ -2224,7 +2226,7 @@
     <effects>	BRlargeHighExplosive	</effects>
     <damage>
       <armor>	550	</armor>
-      <devices>	45	</devices>
+      <devices>	55	</devices>
     </damage>
   </_127mm_OE_127_Mle_55_SH>
   <_127mm_OE_127_D_700_SH>
@@ -2241,7 +2243,7 @@
     <effects>	BRlargeHighExplosive	</effects>
     <damage>
       <armor>	450	</armor>
-      <devices>	45	</devices>
+      <devices>	55	</devices>
     </damage>
   </_127mm_OE_127_D_700_SH>
 </shells.xml>

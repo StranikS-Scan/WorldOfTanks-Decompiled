@@ -18,8 +18,7 @@ from items.vehicles import makeIntCompactDescrByID, getItemByCompactDescr
 from items.customizations import parseOutfitDescr, CustomizationOutfit, createNationalEmblemComponents, isEditedStyle
 from vehicle_outfit.outfit import Outfit
 from vehicle_outfit.packers import ProjectionDecalPacker
-from vehicle_systems.tankStructure import VehiclePartsTuple
-from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes
+from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, VehiclePartsTuple
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.graphics import isRendererPipelineDeferred
 from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS, SeasonType, CustomizationType, EMPTY_ITEM_ID, DEFAULT_DECAL_CLIP_ANGLE, ApplyArea, MATCHING_TAGS_SUFFIX, MAX_PROJECTION_DECALS_PER_AREA, CamouflageTilingType, CustomizationTypeNames, SLOT_TYPE_NAMES, DEFAULT_DECAL_TINT_COLOR, Options, SLOT_DEFAULT_ALLOWED_MODEL, ItemTags
@@ -108,6 +107,8 @@ def updateFashions(appearance):
         vDesc = appearance.typeDescriptor
         outfit = appearance.outfit
         outfitData = getOutfitData(appearance, outfit, vDesc, isDamaged)
+        if outfit and outfit.style and outfit.style.isProgression:
+            changeStyleProgression(style=outfit.style, appearance=appearance, level=outfit.progressionLevel)
         appearance.c11nComponent = appearance.createComponent(Vehicular.C11nComponent, fashions, appearance.compoundModel, outfitData)
         return
 
@@ -133,9 +134,20 @@ def getOutfitComponent(outfitCD, vehicleDescriptor=None, seasonType=None):
             styleDescr = getItemByCompactDescr(intCD)
             if IS_EDITOR:
                 if hasattr(outfitComponent, 'edSeasonsMask'):
-                    anyOutfit = styleDescr.outfits[seasonType]
-                    seasonType = anyOutfit.edSeasonsMask
+                    if styleDescr.outfits is not None and bool(styleDescr.outfits):
+                        anyOutfit = styleDescr.outfits[styleDescr.outfits.keys()[0]]
+                        seasonType = anyOutfit.edSeasonsMask
+                    else:
+                        return outfitComponent
             baseOutfitComponent = deepcopy(styleDescr.outfits[seasonType])
+            if styleDescr.isProgression:
+                if IS_EDITOR:
+                    baseOutfitComponent.styleId = styleDescr.id
+                outfit = Outfit(component=baseOutfitComponent, vehicleCD=vehicleDescriptor.makeCompactDescr())
+                if outfit and outfit.style and outfit.style.styleProgressions:
+                    outfit = getStyleProgressionOutfit(outfit, outfitComponent.styleProgressionLevel, seasonType)
+                    baseOutfitComponent = outfit.pack()
+                baseOutfitComponent.styleProgressionLevel = outfitComponent.styleProgressionLevel
             if vehicleDescriptor and ItemTags.ADD_NATIONAL_EMBLEM in styleDescr.tags:
                 emblems = createNationalEmblemComponents(vehicleDescriptor)
                 baseOutfitComponent.decals.extend(emblems)
@@ -179,7 +191,72 @@ def prepareBattleOutfit(outfitCD, vehicleDescriptor, vehicleId):
     outfit = Outfit(component=outfitComponent, vehicleCD=vehicleCD)
     player = BigWorld.player()
     forceHistorical = player.isHistoricallyAccurate and player.playerVehicleID != vehicleId and not outfit.isHistorical()
+    if outfit.style and outfit.style.isProgression:
+        progressionOutfit = getStyleProgressionOutfit(outfit, toLevel=outfit.progressionLevel)
+        if progressionOutfit is not None:
+            outfit = progressionOutfit
     return Outfit(vehicleCD=vehicleCD) if forceHistorical else outfit
+
+
+def getStyleProgressionOutfit(outfit, toLevel=0, season=None):
+    styleProgression = outfit.style.styleProgressions
+    allLevels = styleProgression.keys()
+    if not season:
+        season = _currentMapSeason()
+    if toLevel not in allLevels:
+        _logger.error('Get style progression outfit: incorrect level given: %d', toLevel)
+        toLevel = 1
+    resOutfit = outfit.copy()
+    for levelId, outfitConfig in styleProgression.iteritems():
+        if 'additionalOutfit' not in outfitConfig.keys():
+            continue
+        if levelId != toLevel:
+            additionalOutfit = outfitConfig['additionalOutfit'].get(season)
+            if additionalOutfit:
+                tmpOutfitCompDescr = additionalOutfit.makeCompDescr()
+                tmpOutfit = Outfit(strCompactDescr=tmpOutfitCompDescr, vehicleCD=outfit.vehicleCD)
+                resOutfit = resOutfit.discard(tmpOutfit)
+
+    levelAdditionalOutfit = styleProgression.get(toLevel, {}).get('additionalOutfit', {})
+    compDescr = None
+    if levelAdditionalOutfit and levelAdditionalOutfit.get(season):
+        compDescr = levelAdditionalOutfit.get(season).makeCompDescr()
+    tmpOutfit = Outfit(strCompactDescr=compDescr, vehicleCD=outfit.vehicleCD)
+    tmpDiff = resOutfit.diff(tmpOutfit).copy()
+    resOutfit = resOutfit.adjust(tmpDiff)
+    baseOutfit = outfit.style.outfits.get(season)
+    if baseOutfit:
+        baseOutfit = Outfit(strCompactDescr=baseOutfit.makeCompDescr(), vehicleCD=outfit.vehicleCD)
+        resOutfit = baseOutfit.adjust(resOutfit)
+    resOutfit.setProgressionLevel(toLevel)
+    return resOutfit
+
+
+def changeStyleProgression(style, appearance, level=0):
+    if not style:
+        return
+
+    def __changeVisibility(materials, visibility):
+        appearance.fashions.hull.changeMaterialsVisibility(tuple(materials), visibility)
+        appearance.fashions.chassis.changeMaterialsVisibility(tuple(materials), visibility)
+        appearance.fashions.gun.changeMaterialsVisibility(tuple(materials), visibility)
+        appearance.fashions.turret.changeMaterialsVisibility(tuple(materials), visibility)
+
+    if not style.styleProgressions:
+        _logger.error('Could not find style progressions')
+        if IS_EDITOR:
+            __changeVisibility(style.editorData.availableListOfMaterials, False)
+        return
+    materialsToShow = style.styleProgressions.get(level, {}).get('materials', [])
+    materialsToHide = []
+    for levelId, levelConfig in style.styleProgressions.iteritems():
+        if levelId != level:
+            materialsToHide.extend(levelConfig.get('materials', []))
+
+    if IS_EDITOR:
+        materialsToHide = style.editorData.availableListOfMaterials
+    __changeVisibility(materialsToHide, False)
+    __changeVisibility(materialsToShow, True)
 
 
 def createSlotMap(vehDescr, slotTypeName):

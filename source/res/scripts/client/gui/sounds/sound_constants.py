@@ -29,8 +29,6 @@ class SoundFilters(CONST_CONTAINER):
     FILTERED_HANGAR = 2
     FORT_FILTER = 3
     BATTLE_PASS_FILTER = 4
-    BOB_FILTER = 5
-    MARATHON_FILTER = 6
 
 
 class SPEAKERS_CONFIG(object):

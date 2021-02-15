@@ -13,8 +13,8 @@ class Airdrops(object):
         planeObj = PlaneLootAirdrop(dropID, position, serverTime)
         planeObj.start()
 
-    def scheduleBot(self, dropID, position, teamID, yawAxis):
-        botObj = BotAirdrop(dropID, position, teamID, yawAxis)
+    def scheduleBot(self, dropID, position, teamID, yawAxis, serverTime):
+        botObj = BotAirdrop(dropID, position, teamID, yawAxis, serverTime)
         botObj.start()
 
 

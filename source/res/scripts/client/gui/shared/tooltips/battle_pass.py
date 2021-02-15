@@ -45,3 +45,20 @@ class DeviceGiftTokenTooltipData(BlocksTooltipData):
             blocks = [formatters.packImageTextBlockData(title=text_styles.main(backport.text(R.strings.tooltips.battlePassDeviceOffer.error.dyn(shortName)())), img=backport.image(R.images.gui.maps.icons.library.alertIcon1()))]
         blocks.append(formatters.packTextBlockData(text=text_styles.standard(backport.text(R.strings.tooltips.battlePassDeviceOffer.footer.dyn(shortName)())), padding=formatters.packPadding(top=8)))
         return formatters.packBuildUpBlockData(blocks, padding=formatters.packPadding(left=-1), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
+
+
+class BattlePassPointsTooltipData(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(BattlePassPointsTooltipData, self).__init__(context, TOOLTIP_TYPE.BATTLE_PASS_POINTS)
+        self._setWidth(360)
+
+    def _packBlocks(self, *args, **kwargs):
+        self._items = super(BattlePassPointsTooltipData, self)._packBlocks(*args, **kwargs)
+        titleBlock = formatters.packTitleDescBlock(title=text_styles.highTitle(backport.text(R.strings.battle_pass_2020.tooltips.battlePassPoints.title())))
+        imageBlock = formatters.packImageBlockData(img=backport.image(R.images.gui.maps.icons.battlePass2020.tooltips.battlePassPoints()), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER)
+        titleImageBlock = formatters.packBuildUpBlockData([titleBlock, imageBlock])
+        self._items.append(titleImageBlock)
+        descriptionBlock = text_styles.main(backport.text(R.strings.battle_pass_2020.tooltips.battlePassPoints.description()))
+        self._items.append(formatters.packTextBlockData(descriptionBlock))
+        return self._items

@@ -12,13 +12,16 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
 from gui.shared.gui_items.fitting_item import FittingItem, RentalInfoProvider
+from gui.shared.gui_items.gui_item_economics import ItemPrice, ITEM_PRICE_EMPTY
 from gui.shared.image_helper import getTextureLinkByID
+from gui.shared.money import Money
 from gui.shared.utils.functions import getImageResourceFromPath
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from helpers import dependency
 from items import makeIntCompactDescrByID
-from items.components.c11n_constants import SeasonType, ItemTags, ProjectionDecalDirectionTags, ProjectionDecalFormTags, UNBOUND_VEH_KEY, ImageOptions
+from items.components.c11n_components import EditingStyleReason
+from items.components.c11n_constants import SeasonType, ItemTags, ProjectionDecalDirectionTags, ProjectionDecalFormTags, UNBOUND_VEH_KEY, ImageOptions, EDITING_STYLE_REASONS
 from items.customizations import parseCompDescr, isEditedStyle, createNationalEmblemComponents
 from items.vehicles import VehicleDescr
 from shared_utils import first
@@ -26,6 +29,7 @@ from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from items.components import c11n_components as cc
+from vehicle_outfit.outfit import Outfit
 if typing.TYPE_CHECKING:
     from items.components.c11n_components import ProgressForCustomization
     from gui.shared.gui_items.Vehicle import Vehicle
@@ -467,12 +471,15 @@ class Customization(FittingItem):
         return len(self.descriptor.progression.levels) if self.isProgressive else -1
 
     def getLatestOpenedProgressionLevel(self, vehicle):
-        vehProgressData = self.__getCurrentProgressionDataForVehicle(vehicle)
-        return vehProgressData.currentLevel if vehProgressData is not None else -1
+        vehProgressData = self.getCurrentProgressionDataForVehicle(vehicle)
+        if vehProgressData is not None:
+            return vehProgressData.currentLevel
+        else:
+            return self.descriptor.progression.defaultLvl if self.isProgressive and self.descriptor.progression else -1
 
     def getCurrentProgressOnCurrentLevel(self, vehicle, conditionPath=None):
         if self.isProgressive:
-            vehProgressData = self.__getCurrentProgressionDataForVehicle(vehicle)
+            vehProgressData = self.getCurrentProgressionDataForVehicle(vehicle)
             if vehProgressData is not None:
                 if conditionPath is not None:
                     return vehProgressData.currentProgressOnLevel.get(conditionPath, 0)
@@ -483,7 +490,7 @@ class Customization(FittingItem):
             return -1
 
     def getMaxProgressOnCurrentLevel(self, vehicle, conditionPath=None):
-        vehProgressData = self.__getCurrentProgressionDataForVehicle(vehicle)
+        vehProgressData = self.getCurrentProgressionDataForVehicle(vehicle)
         if vehProgressData is not None:
             if conditionPath is not None:
                 return vehProgressData.maxProgressOnLevel.get(conditionPath, -1)
@@ -536,7 +543,18 @@ class Customization(FittingItem):
         else:
             return float('inf')
 
-    def __getCurrentProgressionDataForVehicle(self, vehicle):
+    def getProgressionLevel(self, vehicle=None):
+        progress = None
+        if self.isProgressive and self.__progressingData is not None:
+            vehicleCD = UNBOUND_VEH_KEY
+            if vehicle is not None:
+                if not self.mayInstall(vehicle):
+                    return -1
+                vehicleCD = vehicle.intCD if self.isProgressionAutoBound else vehicleCD
+            progress = self.__progressingData.get(vehicleCD)
+        return progress.currentLevel if progress is not None else -1
+
+    def getCurrentProgressionDataForVehicle(self, vehicle):
         if self.isProgressive and self.__progressingData is not None:
             if vehicle.intCD in self.__progressingData:
                 return self.__progressingData[vehicle.intCD]
@@ -876,6 +894,10 @@ class Style(Customization):
         return
 
     @property
+    def isProgressive(self):
+        return bool(self.descriptor.styleProgressions)
+
+    @property
     def isEditable(self):
         return self.descriptor.isEditable
 
@@ -890,6 +912,10 @@ class Style(Customization):
     @property
     def isProgressionRequired(self):
         return ItemTags.PROGRESSION_REQUIRED in self.tags
+
+    @property
+    def isProgression(self):
+        return ItemTags.STYLE_PROGRESSION in self.tags
 
     @property
     def rentCount(self):
@@ -924,6 +950,18 @@ class Style(Customization):
     def getDescription(self):
         return self.longDescriptionSpecial or self.fullDescription or self.shortDescriptionSpecial or self.shortDescription
 
+    def getUpgradePrice(self, currentLvl, targetLvl):
+
+        def _getLevelPrice(level):
+            levelDescr = self.descriptor.progression.levels.get(level)
+            if levelDescr is not None:
+                price = Money(**levelDescr['price'])
+                return ItemPrice(price=price, defPrice=price)
+            else:
+                return ITEM_PRICE_EMPTY
+
+        return sum((_getLevelPrice(lvl) for lvl in xrange(currentLvl + 1, targetLvl + 1)), ITEM_PRICE_EMPTY)
+
     def getRentInfo(self, vehicle):
         if not self.isRentable:
             return RentalInfoProvider()
@@ -941,20 +979,38 @@ class Style(Customization):
     def isWide(self):
         return True
 
+    def isProgressionPurchasable(self, progressionLevel):
+        styleDescr = self._descriptor.compactDescr
+        lockedLevels = self._service.itemsCache.items.shop.getNotInShopProgressionLvlItems().get(styleDescr, [])
+        return progressionLevel not in lockedLevels
+
     def canBeEditedForVehicle(self, vehicleIntCD):
         if not self.isEditable:
-            return False
-        if not self.isProgressionRequired:
-            return True
-        progressionStorage = self._itemsCache.items.inventory.getC11nProgressionDataForVehicle(vehicleIntCD)
-        for itemIntCD, progressionData in progressionStorage.iteritems():
-            if not progressionData.currentLevel:
-                continue
-            item = self._service.getItemByCD(itemIntCD)
-            if self.descriptor.isItemInstallable(item.descriptor):
-                return True
+            return EditingStyleReason(EDITING_STYLE_REASONS.NOT_EDITABLE)
+        else:
+            ctx = self._service.getCtx()
+            if ctx is not None and self.isProgression:
+                season = ctx.mode.season
+                diff = ctx.stylesDiffsCache.getDiff(self, season)
+                if diff is not None:
+                    vehicleItem = self._service.itemsCache.items.getItemByCD(vehicleIntCD)
+                    vehicleCD = vehicleItem.descriptor.makeCompactDescr()
+                    diffOutfit = Outfit(strCompactDescr=diff, vehicleCD=vehicleCD)
+                    modifiedProgression = diffOutfit.progressionLevel
+                    progressionChanged = modifiedProgression != self.getLatestOpenedProgressionLevel(vehicleItem)
+                    if progressionChanged and not self.isProgressionPurchasable(modifiedProgression):
+                        return EditingStyleReason(EDITING_STYLE_REASONS.NOT_REACHED_LEVEL)
+            if not self.isProgressionRequired:
+                return EditingStyleReason(EDITING_STYLE_REASONS.IS_EDITABLE)
+            progressionStorage = self._itemsCache.items.inventory.getC11nProgressionDataForVehicle(vehicleIntCD)
+            for itemIntCD, progressionData in progressionStorage.iteritems():
+                if not progressionData.currentLevel:
+                    continue
+                item = self._service.getItemByCD(itemIntCD)
+                if self.descriptor.isItemInstallable(item.descriptor):
+                    return EditingStyleReason(EDITING_STYLE_REASONS.IS_EDITABLE)
 
-        return False
+            return EditingStyleReason(EDITING_STYLE_REASONS.NOT_HAVE_ANY_PROGRESIIVE_DECALS)
 
     def isProgressionRequiredCanBeEdited(self, vehicleIntCD):
         return self.isProgressionRequired and self.canBeEditedForVehicle(vehicleIntCD)
@@ -978,12 +1034,23 @@ class Style(Customization):
 
         return False
 
+    def iconByProgressionLevel(self, _):
+        return self.getIconApplied(component=None)
+
+    def iconUrlByProgressionLevel(self, _):
+        return self.getIconApplied(component=None)
+
     def __createOutfit(self, season, vehicleCD='', diff=None):
         component = deepcopy(self.descriptor.outfits[season])
-        if vehicleCD and ItemTags.ADD_NATIONAL_EMBLEM in self.tags:
+        vehDescr = None
+        if vehicleCD:
             vehDescr = VehicleDescr(vehicleCD)
+        if vehDescr and ItemTags.ADD_NATIONAL_EMBLEM in self.tags:
             emblems = createNationalEmblemComponents(vehDescr)
             component.decals.extend(emblems)
+        if vehDescr and self.isProgressive:
+            vehicle = self._itemsCache.items.getItemByCD(vehDescr.type.compactDescr)
+            component.styleProgressionLevel = self.getLatestOpenedProgressionLevel(vehicle)
         if diff is not None:
             diffComponent = parseCompDescr(diff)
             if component.styleId != diffComponent.styleId:

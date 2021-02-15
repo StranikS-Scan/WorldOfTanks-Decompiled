@@ -50,9 +50,9 @@ class ProcessorSelector(object):
 
 
 class BasePurchaseDescription(object):
-    __slots__ = ('intCD', 'identificator', 'selected', 'item', 'component', 'quantity', 'purchaseIndices', '_uiDataPacker')
+    __slots__ = ('intCD', 'identificator', 'selected', 'item', 'component', 'quantity', 'purchaseIndices', 'progressionLevel', '_uiDataPacker')
 
-    def __init__(self, item, purchaseIdx=0, quantity=1, component=None):
+    def __init__(self, item, purchaseIdx=0, quantity=1, component=None, progressionLevel=-1):
         self._uiDataPacker = None
         self.intCD = item.intCD
         self.identificator = self.intCD
@@ -61,6 +61,7 @@ class BasePurchaseDescription(object):
         self.component = component
         self.quantity = quantity
         self.purchaseIndices = [purchaseIdx]
+        self.progressionLevel = progressionLevel
         return
 
     def getUIData(self):
@@ -87,17 +88,17 @@ class StubItemPurchaseDescription(BasePurchaseDescription):
 class SeparateItemPurchaseDescription(BasePurchaseDescription):
     __slots__ = ('intCD', 'identificator', 'selected', 'itemData', 'compoundPrice', 'quantity', 'isFromInventory', 'purchaseIndices', 'group', 'locked', 'isEdited')
 
-    def __init__(self, purchaseItem, purchaseIdx):
-        super(SeparateItemPurchaseDescription, self).__init__(purchaseItem.item, purchaseIdx, component=purchaseItem.component)
+    def __init__(self, purchaseItem, purchaseIdx, progressionLevel=-1):
+        super(SeparateItemPurchaseDescription, self).__init__(purchaseItem.item, purchaseIdx, component=purchaseItem.component, progressionLevel=progressionLevel)
         self.selected = purchaseItem.selected
         self.compoundPrice = purchaseItem.price
         self.isFromInventory = purchaseItem.isFromInventory
         self.group = purchaseItem.group
         self.locked = purchaseItem.locked
         self.isEdited = purchaseItem.isEdited
-        self.identificator = self.__generateID()
+        self.identificator = self._generateID()
 
-    def __generateID(self):
+    def _generateID(self):
         if self.item.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER and self.component is not None:
             number = int(self.component.number) if self.component.number else -1
             return hash((self.intCD,
@@ -220,11 +221,16 @@ class StyleItemsProcessor(ItemsProcessor):
                     seasonInfo.add(itemDescription, item.itemTypeID)
 
             if showStyleInsteadItems:
-                styleDescription = self._getItemDescription(style.item)
+                styleDescription = self._getItemDescription(style.item, progressionLevel=style.progressionLevel)
                 seasonInfo.add(styleDescription, GUI_ITEM_TYPE.STYLE)
                 seasonInfo.delete(nationalEmblemItem.intCD, GUI_ITEM_TYPE.EMBLEM)
 
         return itemsInfo
+
+    def _getItemDescription(self, item, idx=0, progressionLevel=-1):
+        desc = self._itemDescriptionClass(item, idx, progressionLevel=progressionLevel)
+        desc.setPacker(self._itemUiDataPacker)
+        return desc
 
 
 class EditableStyleItemsProcessor(SeparateItemsProcessor):
@@ -240,7 +246,7 @@ class EditableStyleItemsProcessor(SeparateItemsProcessor):
             if pItem.item.isHiddenInUI():
                 continue
             if pItem.group == AdditionalPurchaseGroups.STYLES_GROUP_ID:
-                styleDescription = self._getItemDescription(pItem)
+                styleDescription = self._getItemDescription(pItem, progressionLevel=pItem.progressionLevel)
                 continue
             if not pItem.isEdited and pItem.item.intCD != nationalEmblemItem.intCD:
                 showStyleInsteadItems = False
@@ -257,8 +263,11 @@ class EditableStyleItemsProcessor(SeparateItemsProcessor):
 
         return itemsInfo
 
-    def _getItemDescription(self, item, idx=0, descriptionClass=None, descriptionPacker=None):
-        desc = descriptionClass(item, idx) if descriptionClass is not None else self._itemDescriptionClass(item, idx)
+    def _getItemDescription(self, item, idx=0, descriptionClass=None, descriptionPacker=None, progressionLevel=-1):
+        if descriptionClass is not None:
+            desc = descriptionClass(item, idx)
+        else:
+            desc = self._itemDescriptionClass(item, idx, progressionLevel=progressionLevel)
         packer = descriptionPacker if descriptionPacker is not None else self._itemUiDataPacker
         desc.setPacker(packer)
         return desc

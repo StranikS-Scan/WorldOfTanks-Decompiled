@@ -54,14 +54,17 @@ class VehicleAnchorsUpdater(object):
             self.__ctx.events.onSeasonChanged += self.__onSeasonChanged
             self.__ctx.events.onAnchorHovered += self.__onAnchorHovered
             self.__ctx.events.onAnchorUnhovered += self.__onAnchorUnhovered
+            g_currentVehicle.onChangeStarted += self.__onVehicleChangeStarted
+            g_currentVehicle.onChanged += self.__onVehicleChanged
             self.__settingsCore.interfaceScale.onScaleExactlyChanged += self.__onInterfaceScaleChanged
-            entity = self.__hangarSpace.getVehicleEntity()
-            if entity is not None and entity.appearance is not None:
-                entity.appearance.loadState.subscribe(self.__onVehicleLoadFinished, self.__onVehicleLoadStarted)
+            self.__subscribeToAppearanceChange()
+            self.__setCollisions()
         return
 
     def stopUpdater(self):
         if self.__vehicleCustomizationAnchors is not None:
+            self.__resetCollisions()
+            self.__unsubscribeFromAppearanceChange()
             self.__ctx.events.onPropertySheetHidden -= self.__onPropertySheetHidden
             self.__ctx.events.onPropertySheetShown -= self.__onPropertySheetShown
             self.__ctx.events.onItemSelected -= self.__onCarouselItemSelected
@@ -72,10 +75,9 @@ class VehicleAnchorsUpdater(object):
             self.__ctx.events.onSeasonChanged -= self.__onSeasonChanged
             self.__ctx.events.onAnchorHovered -= self.__onAnchorHovered
             self.__ctx.events.onAnchorUnhovered -= self.__onAnchorUnhovered
+            g_currentVehicle.onChangeStarted -= self.__onVehicleChangeStarted
+            g_currentVehicle.onChanged -= self.__onVehicleChanged
             self.__settingsCore.interfaceScale.onScaleExactlyChanged -= self.__onInterfaceScaleChanged
-            entity = self.__hangarSpace.getVehicleEntity()
-            if entity is not None and entity.appearance is not None:
-                entity.appearance.loadState.unsubscribe(self.__onVehicleLoadFinished, self.__onVehicleLoadStarted)
             self.__delAllAnchors()
             self.__vehicleCustomizationAnchors = None
         return
@@ -128,18 +130,6 @@ class VehicleAnchorsUpdater(object):
             self.__changeAnchorsStates()
             self.__updateAnchorsVisability()
             return
-
-    def setCollisions(self):
-        entity = self.__hangarSpace.getVehicleEntity()
-        if entity and entity.appearance and entity.appearance.isLoaded():
-            collisions = entity.appearance.collisions
-            if collisions is not None:
-                self.__vehicleCustomizationAnchors.setCollisions(collisions)
-            else:
-                _logger.error('Collision component for current vehicle is missing.')
-        else:
-            _logger.error('Vehicle entity is not loaded/exist.')
-        return
 
     def updateAnchorPositionAndNormal(self, slotId, position, normal):
         if slotId in self.__processedAnchors:
@@ -367,20 +357,65 @@ class VehicleAnchorsUpdater(object):
             self.__ctx.events.onAnchorsStateChanged(self.__changedStates)
             self.__changedStates.clear()
 
-    def __onVehicleChanged(self):
-        self.setCollisions()
-
-    def __onVehicleLoadStarted(self):
-        pass
-
-    def __onVehicleLoadFinished(self):
-        self.setCollisions()
-
     def __onInterfaceScaleChanged(self, scale):
         self.__vehicleCustomizationAnchors.setInterfaceScale(scale)
 
     def getProcessedAnchor(self, slotId):
         return self.__processedAnchors[slotId] if slotId in self.__processedAnchors else None
+
+    def __subscribeToAppearanceChange(self):
+        appearance = self.__hangarSpace.getVehicleEntityAppearance()
+        if appearance is not None:
+            appearance.loadState.subscribe(self.__onVehicleLoadFinished, self.__onVehicleLoadStarted)
+        else:
+            _logger.error('Missing vehicle appearance.')
+        return
+
+    def __unsubscribeFromAppearanceChange(self):
+        appearance = self.__hangarSpace.getVehicleEntityAppearance()
+        if appearance is not None:
+            appearance.loadState.unsubscribe(self.__onVehicleLoadFinished, self.__onVehicleLoadStarted)
+        else:
+            _logger.error('Missing vehicle appearance.')
+        return
+
+    def __onVehicleChangeStarted(self):
+        self.__resetCollisions()
+        self.__unsubscribeFromAppearanceChange()
+
+    def __onVehicleChanged(self):
+        self.__subscribeToAppearanceChange()
+        self.__setCollisions()
+
+    def __onVehicleLoadStarted(self):
+        self.__resetCollisions()
+
+    def __onVehicleLoadFinished(self):
+        self.__setCollisions()
+
+    def __setCollisions(self):
+        if self.__vehicleCustomizationAnchors is None:
+            _logger.error('Missing WGVehicleCustomizationAnchors.')
+            return
+        else:
+            appearance = self.__hangarSpace.getVehicleEntityAppearance()
+            if appearance is None:
+                _logger.error('Missing vehicle appearance.')
+                return
+            if appearance.isLoaded():
+                collisions = appearance.collisions
+                if collisions is not None:
+                    self.__vehicleCustomizationAnchors.setCollisions(collisions)
+                else:
+                    _logger.error('Missing vehicle collisions.')
+            return
+
+    def __resetCollisions(self):
+        if self.__vehicleCustomizationAnchors is not None:
+            self.__vehicleCustomizationAnchors.resetCollisions()
+        else:
+            _logger.error('Missing WGVehicleCustomizationAnchors.')
+        return
 
 
 def getAnchorShiftParams(positionA, positionB, normal):

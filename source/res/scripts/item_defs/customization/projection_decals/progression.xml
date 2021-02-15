@@ -4,203 +4,239 @@
     <autobound></autobound>
     <autoGrantCount>	1	</autoGrantCount>
     <bonusType>	REGULAR	</bonusType>
-    <level>	1	  <condition>
-        <achievements>
-          <marksOfMasteryCount4>	1	</marksOfMasteryCount4>
-        </achievements>
-        <description>	#vehicle_customization:projection_decals/progression/progression_decal_01/progression_conditions/1	</description>
-      </condition>
-    </level>
-    <level>	2	  <condition>
-        <achievements>
-          <marksOfMasteryCount4>	2	</marksOfMasteryCount4>
-        </achievements>
-        <description>	#vehicle_customization:projection_decals/progression/progression_decal_01/progression_conditions/2	</description>
-      </condition>
-    </level>
-    <level>	3	  <condition>
-        <achievements>
-          <marksOfMasteryCount4>	5	</marksOfMasteryCount4>
-        </achievements>
-        <description>	#vehicle_customization:projection_decals/progression/progression_decal_01/progression_conditions/3	</description>
-      </condition>
-    </level>
+    <levels>
+      <level1>
+        <condition>
+          <achievements>
+            <marksOfMasteryCount4>	1	</marksOfMasteryCount4>
+          </achievements>
+          <description>	#vehicle_customization:projection_decals/progression/progression_decal_01/progression_conditions/1	</description>
+        </condition>
+      </level1>
+      <level2>
+        <condition>
+          <achievements>
+            <marksOfMasteryCount4>	2	</marksOfMasteryCount4>
+          </achievements>
+          <description>	#vehicle_customization:projection_decals/progression/progression_decal_01/progression_conditions/2	</description>
+        </condition>
+      </level2>
+      <level3>
+        <condition>
+          <achievements>
+            <marksOfMasteryCount4>	5	</marksOfMasteryCount4>
+          </achievements>
+          <description>	#vehicle_customization:projection_decals/progression/progression_decal_01/progression_conditions/3	</description>
+        </condition>
+      </level3>
+    </levels>
   </progress>
   <progress>
     <id>	502	</id>
     <autobound></autobound>
     <autoGrantCount>	1	</autoGrantCount>
     <bonusType>	REGULAR	</bonusType>
-    <level>	1	  <condition>
-        <a15x15>
-          <frags>	30	</frags>
-        </a15x15>
-        <description>	#vehicle_customization:projection_decals/progression/progression_decal_02/progression_conditions/1	</description>
-      </condition>
-    </level>
-    <level>	2	  <condition>
-        <a15x15>
-          <frags>	70	</frags>
-        </a15x15>
-        <description>	#vehicle_customization:projection_decals/progression/progression_decal_02/progression_conditions/2	</description>
-      </condition>
-    </level>
-    <level>	3	  <condition>
-        <a15x15>
-          <frags>	150	</frags>
-        </a15x15>
-        <description>	#vehicle_customization:projection_decals/progression/progression_decal_02/progression_conditions/3	</description>
-      </condition>
-    </level>
-    <level>	4	  <condition>
-        <a15x15>
-          <frags>	250	</frags>
-        </a15x15>
-        <description>	#vehicle_customization:projection_decals/progression/progression_decal_02/progression_conditions/4	</description>
-      </condition>
-    </level>
-    <level>	5	  <condition>
-        <a15x15>
-          <frags>	500	</frags>
-        </a15x15>
-        <description>	#vehicle_customization:projection_decals/progression/progression_decal_02/progression_conditions/5	</description>
-      </condition>
-    </level>
+    <levels>
+      <level1>
+        <condition>
+          <a15x15>
+            <frags>	30	</frags>
+          </a15x15>
+          <description>	#vehicle_customization:projection_decals/progression/progression_decal_02/progression_conditions/1	</description>
+        </condition>
+      </level1>
+      <level2>
+        <condition>
+          <a15x15>
+            <frags>	70	</frags>
+          </a15x15>
+          <description>	#vehicle_customization:projection_decals/progression/progression_decal_02/progression_conditions/2	</description>
+        </condition>
+      </level2>
+      <level3>
+        <condition>
+          <a15x15>
+            <frags>	150	</frags>
+          </a15x15>
+          <description>	#vehicle_customization:projection_decals/progression/progression_decal_02/progression_conditions/3	</description>
+        </condition>
+      </level3>
+      <level4>
+        <condition>
+          <a15x15>
+            <frags>	250	</frags>
+          </a15x15>
+          <description>	#vehicle_customization:projection_decals/progression/progression_decal_02/progression_conditions/4	</description>
+        </condition>
+      </level4>
+      <level5>
+        <condition>
+          <a15x15>
+            <frags>	500	</frags>
+          </a15x15>
+          <description>	#vehicle_customization:projection_decals/progression/progression_decal_02/progression_conditions/5	</description>
+        </condition>
+      </level5>
+    </levels>
   </progress>
   <progress>
     <id>	503	</id>
     <autobound></autobound>
     <autoGrantCount>	1	</autoGrantCount>
     <bonusType>	REGULAR	</bonusType>
-    <level>	1	  <condition>
-        <achievements>
-          <mainGun>	1	</mainGun>
-        </achievements>
-        <description>	#vehicle_customization:projection_decals/progression/progression_decal_03/progression_conditions/1	</description>
-      </condition>
-    </level>
-    <level>	2	  <condition>
-        <achievements>
-          <warrior>	1	</warrior>
-        </achievements>
-        <description>	#vehicle_customization:projection_decals/progression/progression_decal_03/progression_conditions/2	</description>
-      </condition>
-    </level>
-    <level>	3	  <condition>
-        <achievements>
-          <warrior>	2	</warrior>
-        </achievements>
-        <description>	#vehicle_customization:projection_decals/progression/progression_decal_03/progression_conditions/3	</description>
-      </condition>
-    </level>
+    <levels>
+      <level1>
+        <condition>
+          <achievements>
+            <mainGun>	1	</mainGun>
+          </achievements>
+          <description>	#vehicle_customization:projection_decals/progression/progression_decal_03/progression_conditions/1	</description>
+        </condition>
+      </level1>
+      <level2>
+        <condition>
+          <achievements>
+            <warrior>	1	</warrior>
+          </achievements>
+          <description>	#vehicle_customization:projection_decals/progression/progression_decal_03/progression_conditions/2	</description>
+        </condition>
+      </level2>
+      <level3>
+        <condition>
+          <achievements>
+            <warrior>	2	</warrior>
+          </achievements>
+          <description>	#vehicle_customization:projection_decals/progression/progression_decal_03/progression_conditions/3	</description>
+        </condition>
+      </level3>
+    </levels>
   </progress>
   <progress>
     <id>	504	</id>
     <autobound></autobound>
     <autoGrantCount>	1	</autoGrantCount>
     <bonusType>	REGULAR	</bonusType>
-    <level>	1	  <condition>
-        <achievements>
-          <medalBrothersInArms>	1	</medalBrothersInArms>
-        </achievements>
-        <description>	#vehicle_customization:projection_decals/progression/progression_decal_04/progression_conditions/1	</description>
-      </condition>
-    </level>
-    <level>	2	  <condition>
-        <achievements>
-          <medalCrucialContribution>	1	</medalCrucialContribution>
-        </achievements>
-        <description>	#vehicle_customization:projection_decals/progression/progression_decal_04/progression_conditions/2	</description>
-      </condition>
-    </level>
-    <level>	3	  <condition>
-        <achievements>
-          <medalCrucialContribution>	2	</medalCrucialContribution>
-        </achievements>
-        <description>	#vehicle_customization:projection_decals/progression/progression_decal_04/progression_conditions/3	</description>
-      </condition>
-    </level>
+    <levels>
+      <level1>
+        <condition>
+          <achievements>
+            <medalBrothersInArms>	1	</medalBrothersInArms>
+          </achievements>
+          <description>	#vehicle_customization:projection_decals/progression/progression_decal_04/progression_conditions/1	</description>
+        </condition>
+      </level1>
+      <level2>
+        <condition>
+          <achievements>
+            <medalCrucialContribution>	1	</medalCrucialContribution>
+          </achievements>
+          <description>	#vehicle_customization:projection_decals/progression/progression_decal_04/progression_conditions/2	</description>
+        </condition>
+      </level2>
+      <level3>
+        <condition>
+          <achievements>
+            <medalCrucialContribution>	2	</medalCrucialContribution>
+          </achievements>
+          <description>	#vehicle_customization:projection_decals/progression/progression_decal_04/progression_conditions/3	</description>
+        </condition>
+      </level3>
+    </levels>
   </progress>
   <progress>
     <id>	505	</id>
     <autobound></autobound>
     <autoGrantCount>	1	</autoGrantCount>
     <bonusType>	REGULAR	</bonusType>
-    <level>	1	  <condition>
-        <a15x15>
-          <battlesCount>	50	</battlesCount>
-        </a15x15>
-        <description>	#vehicle_customization:projection_decals/progression/progression_decal_05/progression_conditions/1	</description>
-      </condition>
-    </level>
-    <level>	2	  <condition>
-        <a15x15>
-          <battlesCount>	100	</battlesCount>
-        </a15x15>
-        <description>	#vehicle_customization:projection_decals/progression/progression_decal_05/progression_conditions/2	</description>
-      </condition>
-    </level>
-    <level>	3	  <condition>
-        <a15x15>
-          <battlesCount>	100	</battlesCount>
-        </a15x15>
-        <description>	#vehicle_customization:projection_decals/progression/progression_decal_05/progression_conditions/3	</description>
-      </condition>
-    </level>
-    <level>	4	  <condition>
-        <a15x15>
-          <battlesCount>	150	</battlesCount>
-        </a15x15>
-        <description>	#vehicle_customization:projection_decals/progression/progression_decal_05/progression_conditions/4	</description>
-      </condition>
-    </level>
-    <level>	5	  <condition>
-        <a15x15>
-          <battlesCount>	200	</battlesCount>
-        </a15x15>
-        <description>	#vehicle_customization:projection_decals/progression/progression_decal_05/progression_conditions/5	</description>
-      </condition>
-    </level>
+    <levels>
+      <level1>
+        <condition>
+          <a15x15>
+            <battlesCount>	50	</battlesCount>
+          </a15x15>
+          <description>	#vehicle_customization:projection_decals/progression/progression_decal_05/progression_conditions/1	</description>
+        </condition>
+      </level1>
+      <level2>
+        <condition>
+          <a15x15>
+            <battlesCount>	100	</battlesCount>
+          </a15x15>
+          <description>	#vehicle_customization:projection_decals/progression/progression_decal_05/progression_conditions/2	</description>
+        </condition>
+      </level2>
+      <level3>
+        <condition>
+          <a15x15>
+            <battlesCount>	100	</battlesCount>
+          </a15x15>
+          <description>	#vehicle_customization:projection_decals/progression/progression_decal_05/progression_conditions/3	</description>
+        </condition>
+      </level3>
+      <level4>
+        <condition>
+          <a15x15>
+            <battlesCount>	150	</battlesCount>
+          </a15x15>
+          <description>	#vehicle_customization:projection_decals/progression/progression_decal_05/progression_conditions/4	</description>
+        </condition>
+      </level4>
+      <level5>
+        <condition>
+          <a15x15>
+            <battlesCount>	200	</battlesCount>
+          </a15x15>
+          <description>	#vehicle_customization:projection_decals/progression/progression_decal_05/progression_conditions/5	</description>
+        </condition>
+      </level5>
+    </levels>
   </progress>
   <progress>
     <id>	506	</id>
     <autobound></autobound>
     <autoGrantCount>	3	</autoGrantCount>
     <bonusType>	RANKED	</bonusType>
-    <level>	1	  <condition>
-        <ranked>
-          <playedBonusBattles>	1	</playedBonusBattles>
-        </ranked>
-        <description>	#vehicle_customization:projection_decals/progression/progression_decal_06/progression_conditions/1	</description>
-      </condition>
-    </level>
-    <level>	2	  <condition>
-        <ranked>
-          <playedBonusBattles>	2	</playedBonusBattles>
-        </ranked>
-        <description>	#vehicle_customization:projection_decals/progression/progression_decal_06/progression_conditions/2	</description>
-      </condition>
-    </level>
-    <level>	3	  <condition>
-        <ranked>
-          <playedBonusBattles>	4	</playedBonusBattles>
-        </ranked>
-        <description>	#vehicle_customization:projection_decals/progression/progression_decal_06/progression_conditions/3	</description>
-      </condition>
-    </level>
-    <level>	4	  <condition>
-        <ranked>
-          <playedBonusBattles>	6	</playedBonusBattles>
-        </ranked>
-        <description>	#vehicle_customization:projection_decals/progression/progression_decal_06/progression_conditions/4	</description>
-      </condition>
-    </level>
-    <level>	5	  <condition>
-        <ranked>
-          <playedBonusBattles>	8	</playedBonusBattles>
-        </ranked>
-        <description>	#vehicle_customization:projection_decals/progression/progression_decal_06/progression_conditions/5	</description>
-      </condition>
-    </level>
+    <levels>
+      <level1>
+        <condition>
+          <ranked>
+            <playedBonusBattles>	1	</playedBonusBattles>
+          </ranked>
+          <description>	#vehicle_customization:projection_decals/progression/progression_decal_06/progression_conditions/1	</description>
+        </condition>
+      </level1>
+      <level2>
+        <condition>
+          <ranked>
+            <playedBonusBattles>	2	</playedBonusBattles>
+          </ranked>
+          <description>	#vehicle_customization:projection_decals/progression/progression_decal_06/progression_conditions/2	</description>
+        </condition>
+      </level2>
+      <level3>
+        <condition>
+          <ranked>
+            <playedBonusBattles>	4	</playedBonusBattles>
+          </ranked>
+          <description>	#vehicle_customization:projection_decals/progression/progression_decal_06/progression_conditions/3	</description>
+        </condition>
+      </level3>
+      <level4>
+        <condition>
+          <ranked>
+            <playedBonusBattles>	6	</playedBonusBattles>
+          </ranked>
+          <description>	#vehicle_customization:projection_decals/progression/progression_decal_06/progression_conditions/4	</description>
+        </condition>
+      </level4>
+      <level5>
+        <condition>
+          <ranked>
+            <playedBonusBattles>	8	</playedBonusBattles>
+          </ranked>
+          <description>	#vehicle_customization:projection_decals/progression/progression_decal_06/progression_conditions/5	</description>
+        </condition>
+      </level5>
+    </levels>
   </progress>
 </progression.xml>

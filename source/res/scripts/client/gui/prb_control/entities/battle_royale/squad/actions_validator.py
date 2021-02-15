@@ -6,8 +6,9 @@ from gui.prb_control.entities.base.unit.actions_validator import UnitSlotsValida
 from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import UNIT_RESTRICTION
 from helpers import dependency
-from skeletons.gui.game_control import IEventProgressionController
-from gui.shared.prime_time_constants import PrimeTimeStatus
+from skeletons.gui.game_control import IBattleRoyaleController
+from gui.ranked_battles.constants import PrimeTimeStatus
+from constants import IS_DEVELOPMENT
 
 class _BattleRoyaleVehiclesValidator(SquadVehiclesValidator):
 
@@ -28,15 +29,18 @@ class _UnitSlotsValidator(UnitSlotsValidator):
 class _BattleRoyaleValidator(CommanderValidator):
 
     def _validate(self):
-        epc = dependency.instance(IEventProgressionController)
-        status, _, _ = epc.getPrimeTimeStatus()
+        brController = dependency.instance(IBattleRoyaleController)
+        status, _, _ = brController.getPrimeTimeStatus()
         return ValidationResult(False, UNIT_RESTRICTION.CURFEW) if status != PrimeTimeStatus.AVAILABLE else super(_BattleRoyaleValidator, self)._validate()
 
 
 class BattleRoyaleSquadActionsValidator(SquadActionsValidator):
 
     def _createVehiclesValidator(self, entity):
-        return ActionsValidatorComposite(entity, validators=[_BattleRoyaleVehiclesValidator(entity), _UnitSlotsValidator(entity), _BattleRoyaleValidator(entity)])
+        validators = [_BattleRoyaleVehiclesValidator(entity), _UnitSlotsValidator(entity), _BattleRoyaleValidator(entity)]
+        if not IS_DEVELOPMENT:
+            validators.append(_UnitSlotsValidator(entity))
+        return ActionsValidatorComposite(entity, validators=validators)
 
     def _createSlotsValidator(self, entity):
         baseValidator = super(BattleRoyaleSquadActionsValidator, self)._createSlotsValidator(entity)

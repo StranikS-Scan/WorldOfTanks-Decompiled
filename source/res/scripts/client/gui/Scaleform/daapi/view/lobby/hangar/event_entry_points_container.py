@@ -7,9 +7,7 @@ from itertools import chain
 from constants import QUEUE_TYPE
 from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSenorityEntryPointIsActive
 from gui.Scaleform.daapi.view.meta.EventEntryPointsContainerMeta import EventEntryPointsContainerMeta
-from gui.bob.bob_announcement_helpers import getBobEntryPointIsActive
 from gui.impl.lobby.ranked.ranked_entry_point import isRankedEntryPointAvailable
-from gui.impl.lobby.marathon.marathon_entry_point import isMarathonEntryPointAvailable
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.prb_control.entities.listener import IGlobalListener
@@ -26,10 +24,8 @@ _SECONDS_BEFORE_UPDATE = 2
 _COUNT_VISIBLE_ENTRY_POINTS = 2
 _ADDITIONAL_SWFS_MAP = {HANGAR_ALIASES.SENIORITY_AWARDS_ENTRY_POINT_2020: 'seniorityAwardsComponents.swf'}
 _ENTRY_POINT_ENABLED_VALIDATOR = {HANGAR_ALIASES.CRAFT_MACHINE_ENTRY_POINT: getCraftMachineEntryPointIsActive,
- HANGAR_ALIASES.BOB_ENTRY_POINT: getBobEntryPointIsActive,
  HANGAR_ALIASES.SENIORITY_AWARDS_ENTRY_POINT_2020: getSenorityEntryPointIsActive,
- RANKEDBATTLES_ALIASES.ENTRY_POINT: isRankedEntryPointAvailable,
- HANGAR_ALIASES.MARATHON_ENTRY_POINT: isMarathonEntryPointAvailable}
+ RANKEDBATTLES_ALIASES.ENTRY_POINT: isRankedEntryPointAvailable}
 _logger = logging.getLogger(__name__)
 
 class _EntryPointData(object):

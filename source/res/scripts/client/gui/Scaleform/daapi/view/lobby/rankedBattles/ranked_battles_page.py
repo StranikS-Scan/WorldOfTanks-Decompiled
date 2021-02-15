@@ -47,6 +47,7 @@ class RankedMainPage(LobbySubView, RankedBattlesPageMeta):
     def __init__(self, ctx):
         super(RankedMainPage, self).__init__(ctx)
         self._selectedItemID = RANKEDBATTLES_CONSTS.RANKED_BATTLES_RANKS_ID
+        self._selectedAlias = RANKEDBATTLES_ALIASES.RANKED_BATTLES_LEAGUES_VIEW_UI
         self._processContext(ctx)
 
     def onClose(self):
@@ -57,6 +58,7 @@ class RankedMainPage(LobbySubView, RankedBattlesPageMeta):
         isOtherSelected = self._selectedItemID != newSelectedID
         if isOtherSelected or viewId in _RANKED_WEB_PAGES:
             self._selectedItemID = newSelectedID
+            self._selectedAlias = viewId
             self._updateSounds()
             self.__resetComponent(viewId)
         if isOtherSelected:
@@ -109,6 +111,8 @@ class RankedMainPage(LobbySubView, RankedBattlesPageMeta):
         self.__resetCounters(self._selectedItemID)
         self._updateSounds()
         self._update()
+        if _RANKED_BATTLES_VIEW_TO_ITEM_ID.get(self._selectedAlias) == self._selectedItemID:
+            self.onPageChanged(self._selectedAlias)
 
     def _update(self):
         self._checkOverlayDestroy()

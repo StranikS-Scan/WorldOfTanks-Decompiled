@@ -29,6 +29,7 @@ from personal_missions import PM_BRANCH
 from quest_xml_source import MAX_BONUS_LIMIT
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.game_control import IBattlePassController
 from battle_pass_common import BattlePassConsts, BattlePassState
 _AWARDS_PER_PAGE = 3
 FINISH_TIME_LEFT_TO_SHOW = time_utils.ONE_DAY
@@ -369,7 +370,8 @@ def getChainVehTypeAndLevelRestrictions(operation, chainID):
 
 _questBranchToTabMap = {PM_BRANCH.REGULAR: QUESTS_ALIASES.SEASON_VIEW_TAB_RANDOM}
 
-def getBattlePassQuestInfo(progress):
+@dependency.replace_none_kwargs(battlePassController=IBattlePassController)
+def getBattlePassQuestInfo(progress, arenaBonusType, battlePassController=None):
     postBattleR = R.strings.battle_pass_2020.reward.postBattle
     if progress.state == BattlePassState.BASE:
         questName = backport.text(postBattleR.title.base(), level=progress.level)
@@ -377,6 +379,7 @@ def getBattlePassQuestInfo(progress):
         questName = backport.text(postBattleR.title.post(), level=progress.level)
     progressDesc = backport.text(postBattleR.progress())
     progressDiffTooltip = backport.text(postBattleR.progress.tooltip(), points=progress.pointsBattleDiff)
+    battlePassEnabled = battlePassController.isGameModeEnabled(arenaBonusType)
     questInfo = {'status': 'done' if progress.isDone else '',
      'questID': BattlePassConsts.FAKE_QUEST_ID,
      'rendererType': QUESTS_ALIASES.RENDERER_TYPE_QUEST,
@@ -407,5 +410,7 @@ def getBattlePassQuestInfo(progress):
      'questInfo': questInfo,
      'questType': EVENT_TYPE.BATTLE_QUEST,
      'progressList': progressList,
-     'questState': {'statusState': 'done' if progress.isDone else 'inProgress'}}
+     'questState': {'statusState': 'done' if progress.isDone else 'inProgress'},
+     'linkBtnTooltip': '' if battlePassEnabled else backport.text(R.strings.battle_pass_2020.progression.error()),
+     'linkBtnEnabled': battlePassEnabled}
     return info

@@ -73,12 +73,12 @@ class HeroTank(ClientSelectableCameraVehicle):
             self._onVehicleDestroy()
             BigWorld.destroyEntity(self.id)
 
-    def recreateVehicle(self, typeDescriptor=None, state=ModelStates.UNDAMAGED, callback=None):
+    def recreateVehicle(self, typeDescriptor=None, state=ModelStates.UNDAMAGED, callback=None, outfit=None):
         if self.__isInPreview():
             return
         if self.__heroTankCD and not self.__isInPreview():
             self.typeDescriptor = HeroTank.__getVehicleDescriptorByIntCD(self.__heroTankCD)
-        super(HeroTank, self).recreateVehicle(typeDescriptor, state, callback)
+        super(HeroTank, self).recreateVehicle(typeDescriptor, state, callback, outfit)
 
     def _createAppearance(self):
         vehicleTurretYaw = math.radians(self.vehicleTurretYaw)

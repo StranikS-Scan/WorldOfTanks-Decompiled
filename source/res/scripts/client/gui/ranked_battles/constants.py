@@ -21,6 +21,16 @@ YEAR_AWARDS_ORDER = (YearAwardsNames.SMALL,
  YearAwardsNames.MEDIUM,
  YearAwardsNames.BIG,
  YearAwardsNames.LARGE)
+
+class PrimeTimeStatus(CONST_CONTAINER):
+    DISABLED = 0
+    NOT_SET = 1
+    FROZEN = 2
+    NO_SEASON = 3
+    NOT_AVAILABLE = 4
+    AVAILABLE = 5
+
+
 ZERO_RANK_ID = 0
 ZERO_DIVISION_ID = 0
 MAX_GROUPS_IN_DIVISION = 3
@@ -49,10 +59,10 @@ ARCHIVE_SEASON_ID = 0
 STANDARD_POINTS_COUNT = 1
 NOT_IN_LEAGUES_QUEST = 'ranked_{}_0_common'
 FINAL_QUEST_PATTERN = 'ranked_2020_{}_final'
-FINAL_LEADER_QUEST = 'ranked_final_leader'
+FINAL_LEADER_QUEST = 'ranked_2020_final_leader'
 RANKED_QUEST_ID_PREFIX = 'ranked'
 YEAR_POINTS_TOKEN = 'rb2020'
-YEAR_STRIPE_SERVER_TOKEN = 'ranked_final_top'
+YEAR_STRIPE_SERVER_TOKEN = 'ranked_2020_final_top'
 YEAR_STRIPE_CLIENT_TOKEN = 'ranked_final_ready'
 ENTITLEMENT_EVENT_TOKEN = 'ranked_entitlement_event'
 
@@ -92,8 +102,8 @@ class SeasonGapStates(CONST_CONTAINER):
 
 
 class LandingUrlParams(CONST_CONTAINER):
-    LOBBY_SUB = '/landing'
-    PAGE_TAB = ''
+    LOBBY_SUB = '/?is_landing='
+    SHOW_MY_POSITION = '&from_award_view='
 
 
 @unique

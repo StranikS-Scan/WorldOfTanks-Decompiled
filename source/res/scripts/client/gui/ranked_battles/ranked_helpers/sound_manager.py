@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/ranked_battles/ranked_helpers/sound_manager.py
 import WWISE
-from gui.Scaleform.framework.entities.View import CommonSoundSpaceSettings
+from sound_gui_manager import CommonSoundSpaceSettings
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from shared_utils import CONST_CONTAINER
 

@@ -4,6 +4,7 @@ import typing
 import collections
 import weakref
 from collections import defaultdict
+from constants import ARENA_BONUS_TYPE
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED, SENIORITY_AWARDS_COUNTER
 from adisp import process
@@ -927,33 +928,50 @@ class TankPremiumListener(_NotificationListener):
 
 
 class BattlePassListener(_NotificationListener):
-    __slots__ = ('__isStarted', '__isFinished')
+    __slots__ = ('__isStarted', '__isFinished', '__arenaBonusTypesEnabledState', '__arenaBonusTypesHandlers')
     __battlePassController = dependency.descriptor(IBattlePassController)
 
     def __init__(self):
         super(BattlePassListener, self).__init__()
         self.__isStarted = None
         self.__isFinished = None
+        self.__arenaBonusTypesEnabledState = None
         return
 
     def start(self, model):
         super(BattlePassListener, self).start(model)
         self.__isStarted = self.__battlePassController.isSeasonStarted()
         self.__isFinished = self.__battlePassController.isSeasonFinished()
+        self.__arenaBonusTypesHandlers = {ARENA_BONUS_TYPE.RANKED: self.__pushEnableChangeRanked,
+         ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO: self.__pushBattleRoyaleEnableChange}
         self.__battlePassController.onSeasonStateChange += self.__onSeasonStateChange
         self.__battlePassController.onBattlePassSettingsChange += self.__onBattlePassSettingsChange
+        self.__initArenaBonusTypeEnabledStates()
         return True
 
     def stop(self):
         self.__battlePassController.onSeasonStateChange -= self.__onSeasonStateChange
         self.__battlePassController.onBattlePassSettingsChange -= self.__onBattlePassSettingsChange
+        self.__arenaBonusTypesHandlers = None
         super(BattlePassListener, self).stop()
+        return
 
     def __onBattlePassSettingsChange(self, newMode, oldMode):
         self.__checkAndNotify(oldMode, newMode)
+        if self.__battlePassController.isEnabled() and newMode == oldMode:
+            self.__checkAndNotifyOtherBattleTypes()
 
     def __onSeasonStateChange(self):
         self.__checkAndNotify()
+
+    def __checkAndNotifyOtherBattleTypes(self):
+        supportedTypes = self.__battlePassController.getSupportedArenaBonusTypes()
+        for arenaBonusType in supportedTypes:
+            oldValue = self.__arenaBonusTypesEnabledState.get(arenaBonusType, False)
+            newValue = self.__battlePassController.isGameModeEnabled(arenaBonusType)
+            self.__arenaBonusTypesEnabledState[arenaBonusType] = newValue
+            if oldValue != newValue:
+                self.__pushEnableChangedForArenaBonusType(arenaBonusType, newValue)
 
     def __checkAndNotify(self, oldMode=None, newMode=None):
         isStarted = self.__battlePassController.isSeasonStarted()
@@ -984,6 +1002,29 @@ class BattlePassListener(_NotificationListener):
     def __pushEnabled(self):
         expiryTime = self.__battlePassController.getSeasonFinishTime()
         SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_enabled.body(), expiryTime=text_styles.titleFont(TimeFormatter.getLongDatetimeFormat(expiryTime))), type=SystemMessages.SM_TYPE.Warning)
+
+    def __pushBattleRoyaleEnableChange(self, isEnabled):
+        if not isEnabled:
+            SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_disable.battle_royale.body()), type=SystemMessages.SM_TYPE.Warning)
+
+    def __pushEnableChangedForArenaBonusType(self, arenaBonusType, newValue):
+        if arenaBonusType in self.__arenaBonusTypesHandlers:
+            self.__arenaBonusTypesHandlers[arenaBonusType](newValue)
+
+    def __pushEnableChangeRanked(self, isEnabled):
+        if isEnabled:
+            msg = backport.text(R.strings.system_messages.battlePass.ranked.enabled())
+            msgType = SystemMessages.SM_TYPE.Warning
+        else:
+            msg = backport.text(R.strings.system_messages.battlePass.ranked.disabled())
+            msgType = SystemMessages.SM_TYPE.ErrorSimple
+        SystemMessages.pushMessage(text=msg, type=msgType)
+
+    def __initArenaBonusTypeEnabledStates(self):
+        self.__arenaBonusTypesEnabledState = {}
+        supportedTypes = self.__battlePassController.getSupportedArenaBonusTypes()
+        for arenaBonusType in supportedTypes:
+            self.__arenaBonusTypesEnabledState[arenaBonusType] = self.__battlePassController.isGameModeEnabled(arenaBonusType)
 
 
 class UpgradeTrophyDeviceListener(_NotificationListener):

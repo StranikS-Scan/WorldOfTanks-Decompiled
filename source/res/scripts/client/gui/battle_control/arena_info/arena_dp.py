@@ -156,6 +156,11 @@ class ArenaDataProvider(IArenaDataProvider):
         flags = vStatsVO.updateChatCommandState(chatCommandState)
         return (flags, vStatsVO)
 
+    def updateVehicleSpottedStatus(self, vID, spottedStatus):
+        vStatsVO = self.__vStatsVOs[vID]
+        flags = vStatsVO.updateSpottedStatus(spottedStatus)
+        return (flags, vStatsVO)
+
     def updateVehicleDogTag(self, vID, vInfo):
         vInfoVO = self.__vInfoVOs[vID]
         flags = vInfoVO.updateVehicleDogTag(**vInfo)
@@ -227,6 +232,9 @@ class ArenaDataProvider(IArenaDataProvider):
         if forceUpdate and self.__playerVehicleID is None:
             self.__tryToGetRequiredData()
         return self.__playerVehicleID
+
+    def getAttachedVehicleID(self):
+        return avatar_getter.getVehicleIDAttached()
 
     def getVehicleInfo(self, vID=None):
         if vID is None:

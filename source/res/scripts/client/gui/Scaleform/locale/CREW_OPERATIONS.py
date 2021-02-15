@@ -24,6 +24,7 @@ class CREW_OPERATIONS(object):
     RETURN_ERROR_NOPREVIOUS = '#crew_operations:return/error/noPrevious'
     RETURN_ERROR_ALLDEMOBILIZED = '#crew_operations:return/error/allDemobilized'
     RETURN_ERROR_ALREADYONPLACES = '#crew_operations:return/error/alreadyOnPlaces'
+    RETURN_ERROR_VEHICLEINBATTLE = '#crew_operations:return/error/vehicleInBattle'
     RETURN_WARNING_MEMBERDEMOBILIZED_TOOLTIP_HEADER = '#crew_operations:return/warning/memberDemobilized/tooltip/header'
     RETURN_WARNING_MEMBERDEMOBILIZED_TOOLTIP_BODY = '#crew_operations:return/warning/memberDemobilized/tooltip/body'
     RETURN_WARNING_NOSPACE_TOOLTIP_HEADER = '#crew_operations:return/warning/noSpace/tooltip/header'

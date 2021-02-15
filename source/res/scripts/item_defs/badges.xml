@@ -2640,5 +2640,36 @@
         </item>
       </value>
     </badge>
+    <badge>
+      <name>	military_program	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	102	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	5.4	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+        <item>	True	  <name>	showCongratsView	</name>
+          <type>	bool	</type>
+        </item>
+        <item>
+          <name>	realm	</name>
+          <type>	dict	</type>
+          <value>
+            <item>
+              <name>	exclude	</name>
+              <type>	list	</type>
+              <value>
+                <item>	CN	</item>
+              </value>
+            </item>
+          </value>
+        </item>
+      </value>
+    </badge>
   </badges>
 </badges.xml>

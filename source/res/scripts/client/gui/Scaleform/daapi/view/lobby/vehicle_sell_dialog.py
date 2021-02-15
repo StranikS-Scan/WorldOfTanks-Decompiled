@@ -2,14 +2,14 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_sell_dialog.py
 import typing
 from account_helpers.AccountSettings import AccountSettings
-from goodies.goodie_constants import DEMOUNT_KIT_ID, GOODIE_VARIETY
+from goodies.goodie_constants import GOODIE_VARIETY
 from gui import SystemMessages, makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.customization.shared import TYPES_ORDER
 from gui.Scaleform.daapi.view.meta.VehicleSellDialogMeta import VehicleSellDialogMeta
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
-from gui.goodies.demount_kit import isDemountKitApplicableTo
+from gui.goodies.demount_kit import isDemountKitApplicableTo, getDemountKitForOptDevice
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shop import showBuyGoldForEquipment
@@ -131,8 +131,12 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         self.__vehicleSellPrice = self.__vehicle.sellPrices.itemPrice.price
         self.__accountMoney = _VSDMoney(self.__itemsCache.items.stats.money)
         if self.__getIsDemountKitEnabled():
-            demountKit = self.__goodiesCache.getDemountKit(DEMOUNT_KIT_ID)
-            self.__accountMoney[_DK_CURRENCY] = demountKit.inventoryCount
+            for optDevice in self.__vehicle.optDevices.installed.getItems():
+                if optDevice is not None and not optDevice.isRemovable:
+                    demountKit, currency = getDemountKitForOptDevice(optDevice)
+                    if demountKit is not None and currency == Currency.GOLD:
+                        self.__accountMoney[_DK_CURRENCY] = demountKit.inventoryCount
+
             self.__isDemountKitEnabled = True
         optionalDevicesOnVehicle = []
         shellsOnVehicle = []
@@ -161,6 +165,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         self.as_setDataS(data)
         self.__updateTotalCost()
         self.setCrewDismissal(self.__isCrewDismissal)
+        return
 
     def _dispose(self):
         super(VehicleSellDialog, self)._dispose()
@@ -336,10 +341,10 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         self.__updateMoney(Currency.CRYSTAL, crystals)
         self.__updateSubmitButton()
 
-    def __onSetGoodiesHandler(self, _):
-        demountKit = self.__goodiesCache.getDemountKit(DEMOUNT_KIT_ID)
-        if demountKit is not None and demountKit.enabled:
-            self.__updateMoney(_DK_CURRENCY, demountKit.inventoryCount)
+    def __onSetGoodiesHandler(self, goodies):
+        demountKitGold = self.__goodiesCache.getDemountKit(currency=Currency.GOLD)
+        if demountKitGold is not None and demountKitGold.enabled and demountKitGold.goodieID in goodies:
+            self.__updateMoney(_DK_CURRENCY, demountKitGold.inventoryCount)
             self.__updateSubmitButton()
         return
 
@@ -406,7 +411,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         return result
 
     def __getIsDemountKitEnabled(self):
-        demountKit = self.__goodiesCache.getDemountKit(DEMOUNT_KIT_ID)
+        demountKit = self.__goodiesCache.getDemountKit(currency=Currency.GOLD)
         return demountKit is not None and demountKit.enabled
 
     def __getNationGroupVehicles(self, vehicleCD):

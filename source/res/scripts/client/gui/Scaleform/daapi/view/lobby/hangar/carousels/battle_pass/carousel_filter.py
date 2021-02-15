@@ -15,7 +15,7 @@ class BattlePassCarouselFilter(CarouselFilter):
         super(BattlePassCarouselFilter, self).__init__()
         self._serverSections = (CAROUSEL_FILTER_1, CAROUSEL_FILTER_2, BATTLEPASS_CAROUSEL_FILTER_1)
         self._clientSections = (CAROUSEL_FILTER_CLIENT_1, BATTLEPASS_CAROUSEL_FILTER_CLIENT_1)
-        self._criteriesGroups = (EventCriteriesGroup(), _BattlePassCriteriesGroup())
+        self._criteriesGroups = (EventCriteriesGroup(), BattlePassCriteriesGroup())
         self.currentSeasonID = 0
 
     def save(self):
@@ -34,11 +34,11 @@ class BattlePassCarouselFilter(CarouselFilter):
         self.currentSeasonID = currentSeason
 
 
-class _BattlePassCriteriesGroup(BasicCriteriesGroup):
+class BattlePassCriteriesGroup(BasicCriteriesGroup):
     __battlePassController = dependency.descriptor(IBattlePassController)
 
     def update(self, filters):
-        super(_BattlePassCriteriesGroup, self).update(filters)
+        super(BattlePassCriteriesGroup, self).update(filters)
         if filters[BattlePassFilterConsts.FILTER_KEY_COMMON]:
             self.__addGeneralBattlePassCriteria()
             self._criteria |= REQ_CRITERIA.CUSTOM(self.__isCommonProgression)

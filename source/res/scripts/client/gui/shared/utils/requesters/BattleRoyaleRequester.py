@@ -19,6 +19,10 @@ class BattleRoyaleRequester(AbstractSyncDataRequester, IBattleRoyaleRequester):
     def killCount(self):
         return self.getCacheValue('BRTotalKills', 0)
 
+    @property
+    def topCount(self):
+        return self.getCacheValue('BRSoloTop1Count') + self.getCacheValue('BRSquadTop1Count')
+
     @async
     def _requestCache(self, callback):
         BigWorld.player().battleRoyale.getCache(lambda resID, value: self._response(resID, value, callback))

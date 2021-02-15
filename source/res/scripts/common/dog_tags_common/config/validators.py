@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dog_tags_common/config/validators.py
 import typing
-from dog_tags_common.config.common import ValidateException, TRIUMPH_GRADES, SKILL_GRADES, STARTING_COMPONENT_TYPES, DEDICATION_GRADES
+from dog_tags_common.config.common import ValidateException, TRIUMPH_GRADES, SKILL_GRADES, STARTING_COMPONENT_TYPES, DEDICATION_GRADES, RANKED_SKILL_GRADES
 if typing.TYPE_CHECKING:
     from dog_tag_framework import ComponentDefinition, StartingComponents
     from common import ComponentPurpose, ComponentViewType
@@ -44,6 +44,16 @@ def validateDedication(component):
 def validateDedicationUnlock(component):
     if bool(component.unlockKey) == component.isDefault:
         raise ValidateException(ValidateException.SHOULD_BE_DEFAULT_OR_HAS_UNLOCK_KEY, component.componentId, component.grades)
+
+
+def validateRankedSkill(component):
+    if component.unlockKey is not None and len(component.unlockKey) != 0:
+        raise ValidateException(ValidateException.HAS_UNLOCK_KEY, component.componentId, component.unlockKey)
+    if component.grades is None or len(component.grades) != RANKED_SKILL_GRADES:
+        raise ValidateException(ValidateException.WRONG_NUMBER_OF_GRADES, component.componentId, RANKED_SKILL_GRADES)
+    if component.isDefault:
+        raise ValidateException(ValidateException.CANNOT_BE_DEFAULT, component.componentId)
+    return
 
 
 def validateBase(component):

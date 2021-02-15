@@ -67,6 +67,7 @@ class ClientInvitations(object):
             return
         proxy = partial(self._onInvitationResponseReceived, INVITATION_STATUS.ACCEPTED, invitationID, senderID, callback)
         self.__proxy._doCmdInt3(AccountCommands.CMD_INVITATION_ACCEPT, invitationID, senderID, 0, proxy)
+        self.__playerEvents.onPrebattleInvitationAccepted(invitationID, senderID)
 
     def declineInvitation(self, invitationID, senderID, callback=None):
         if self.__playerEvents.isPlayerEntityChanging:

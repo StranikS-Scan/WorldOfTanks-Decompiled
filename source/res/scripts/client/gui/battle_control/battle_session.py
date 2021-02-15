@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_control/battle_session.py
 import weakref
 from collections import namedtuple
+import BigWorld
 import Event
 import BattleReplay
 from PlayerEvents import g_playerEvents
@@ -25,7 +26,7 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 BattleExitResult = namedtuple('BattleExitResult', 'isDeserter playerInfo')
 
 class BattleSessionProvider(IBattleSessionProvider):
-    __slots__ = ('__ctx', '__sharedRepo', '__dynamicRepo', '__requestsCtrl', '__arenaDP', '__arenaListeners', '__viewComponentsBridge', '__weakref__', '__arenaVisitor', '__invitations', '__isReplayPlaying', '__battleCache')
+    __slots__ = ('__ctx', '__sharedRepo', '__dynamicRepo', '__requestsCtrl', '__arenaDP', '__arenaListeners', '__viewComponentsBridge', '__weakref__', '__arenaVisitor', '__invitations', '__isReplayPlaying', '__battleCache', 'onUpdateObservedVehicleData')
 
     def __init__(self):
         super(BattleSessionProvider, self).__init__()
@@ -42,6 +43,7 @@ class BattleSessionProvider(IBattleSessionProvider):
         self.__battleCache = BattleClientCache()
         self.onBattleSessionStart = Event.Event()
         self.onBattleSessionStop = Event.Event()
+        self.onUpdateObservedVehicleData = Event.Event()
         return
 
     @property
@@ -94,9 +96,10 @@ class BattleSessionProvider(IBattleSessionProvider):
 
     def switchVehicle(self, vehicleID):
         repo = self.shared
-        for ctrl in (repo.ammo, repo.equipments, repo.optionalDevices):
-            if ctrl is not None:
-                ctrl.clear(False)
+        if repo.vehicleState is not None and repo.vehicleState.getControllingVehicleID() != vehicleID:
+            for ctrl in (repo.ammo, repo.equipments, repo.optionalDevices):
+                if ctrl is not None:
+                    ctrl.clear(False)
 
         repo.vehicleState.switchToOther(vehicleID)
         return
@@ -135,6 +138,7 @@ class BattleSessionProvider(IBattleSessionProvider):
                 if shotIdx > -1:
                     vehicle.typeDescriptor.activeGunShotIndex = shotIdx
         self.updateVehicleEffects()
+        self.onUpdateObservedVehicleData(vID, extraData)
         return
 
     def updateVehicleEffects(self):
@@ -335,6 +339,7 @@ class BattleSessionProvider(IBattleSessionProvider):
         return
 
     def startVehicleVisual(self, vProxy, isImmediate=False):
+        vehicleID = vProxy.id
         ctrl = self.__sharedRepo.optionalDevices
         if ctrl is not None:
             ctrl.startVehicleVisual(vProxy, isImmediate)
@@ -343,13 +348,19 @@ class BattleSessionProvider(IBattleSessionProvider):
             ctrl.startVehicleVisual(vProxy, isImmediate)
         ctrl = self.__dynamicRepo.battleField
         if ctrl is not None:
-            ctrl.setVehicleVisible(vProxy.id, vProxy.health)
+            ctrl.setVehicleVisible(vehicleID, vProxy.health)
+        ctrl = self.__sharedRepo.vehicleState
+        if ctrl is not None and BigWorld.player().observedVehicleID == vProxy.id:
+            ctrl.refreshObserverVehicleVisual()
         return
 
     def stopVehicleVisual(self, vehicleID, isPlayerVehicle):
         ctrl = self.__sharedRepo.feedback
         if ctrl is not None:
             ctrl.stopVehicleVisual(vehicleID, isPlayerVehicle)
+        ctrl = self.__dynamicRepo.battleField
+        if ctrl is not None:
+            ctrl.stopVehicleVisual(vehicleID)
         return
 
     def handleShortcutChatCommand(self, key):

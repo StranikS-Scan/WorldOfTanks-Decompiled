@@ -5,6 +5,8 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.battle.battle_royale.page import BattleRoyalePage
 from gui.Scaleform.daapi.view.battle.battle_royale.radar import RadarButton
 from gui.Scaleform.daapi.view.battle.battle_royale.status_notifications.panel import StatusNotificationTimerPanel
+from gui.Scaleform.daapi.view.battle.battle_royale.player_stats_in_battle import BattleRoyalePlayerStats
+from gui.Scaleform.daapi.view.battle.shared.page import BattlePageBusinessHandler
 from gui.Scaleform.framework import ViewSettings, ScopeTemplates, ComponentSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
@@ -53,18 +55,19 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.FRAG_PANEL, FragPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_LEVEL_PANEL, BattleLevelPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_TEAM_PANEL, battle_royale_players_panel.PlayersPanel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN, SelectRespawnComponent, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN, SelectRespawnComponent, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.BR_PLAYER_STATS_IN_BATTLE, BattleRoyalePlayerStats, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():
-    return (_BattleRoyaleBusinessHandler(),)
+    return (BattlePageBusinessHandler(VIEW_ALIAS.BATTLE_ROYALE_PAGE), _BattleRoyaleBusinessHandler())
 
 
 class _BattleRoyaleBusinessHandler(PackageBusinessHandler):
+    __slots__ = ()
 
     def __init__(self):
-        listeners = ((VIEW_ALIAS.BATTLE_ROYALE_PAGE, self.loadViewBySharedEvent), (BATTLE_VIEW_ALIASES.BATTLE_VEHICLE_CONFIGURATOR, self.__handleVehConfiguratorEvent))
-        super(_BattleRoyaleBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_BATTLE, EVENT_BUS_SCOPE.BATTLE)
+        super(_BattleRoyaleBusinessHandler, self).__init__(((BATTLE_VIEW_ALIASES.BATTLE_VEHICLE_CONFIGURATOR, self.__handleVehConfiguratorEvent),), app_settings.APP_NAME_SPACE.SF_BATTLE, EVENT_BUS_SCOPE.BATTLE)
 
     def __handleVehConfiguratorEvent(self, event):
         window = self.findViewByAlias(WindowLayer.TOP_WINDOW, BATTLE_VIEW_ALIASES.BATTLE_VEHICLE_CONFIGURATOR)

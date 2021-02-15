@@ -16,8 +16,9 @@ class VEHICLE_PREVIEW(object):
     HEADER_BACKBTN_DESCRLABEL_FRONTLINE = '#vehicle_preview:header/backBtn/descrLabel/frontline'
     HEADER_BACKBTN_DESCRLABEL_EVENTPROGRESSION = '#vehicle_preview:header/backBtn/descrLabel/eventProgression'
     HEADER_BACKBTN_DESCRLABEL_MARATHON = '#vehicle_preview:header/backBtn/descrLabel/marathon'
-    HEADER_BACKBTN_DESCRLABEL_MOON_MARATHON = '#vehicle_preview:header/backBtn/descrLabel/moon_marathon'
+    HEADER_BACKBTN_DESCRLABEL_WINTERMARATHON = '#vehicle_preview:header/backBtn/descrLabel/winterMarathon'
     HEADER_BACKBTN_DESCRLABEL_RANKED = '#vehicle_preview:header/backBtn/descrLabel/ranked'
+    HEADER_BACKBTN_DESCRLABEL_BLUEPRINTSEXCHANGE = '#vehicle_preview:header/backBtn/descrLabel/blueprintsExchange'
     HEADER_TITLE = '#vehicle_preview:header/title'
     HERO_HEADER_TITLE = '#vehicle_preview:hero/header/title'
     HEADER_CLOSEBTN_LABEL = '#vehicle_preview:header/closeBtn/label'
@@ -94,6 +95,8 @@ class VEHICLE_PREVIEW(object):
     BUYINGPANEL_FRONTLINEPACK_TITLELABEL_INACTIVE = '#vehicle_preview:buyingPanel/frontlinePack/titleLabel/inactive'
     BUYINGPANEL_FRONTLINEPACK_COUPONLABEL = '#vehicle_preview:buyingPanel/frontlinePack/couponLabel'
     BUYINGPANEL_PERSONALTRADEIN_TITLE = '#vehicle_preview:buyingPanel/personalTradeIn/title'
+    BUYINGPANEL_PROGRESSIONSTYLES_NOTIFICATION_TEXT = '#vehicle_preview:buyingPanel/progressionStyles/notification/text'
+    BUYINGPANEL_PROGRESSIONSTYLES_CURRENTLEVEL = '#vehicle_preview:buyingPanel/progressionStyles/currentLevel'
     HEADER_BACKBTN_DESCRLABEL_ENUM = (HEADER_BACKBTN_DESCRLABEL_RESEARCHTREE,
      HEADER_BACKBTN_DESCRLABEL_PERSONALAWARDS,
      HEADER_BACKBTN_DESCRLABEL_SHOP,
@@ -105,8 +108,9 @@ class VEHICLE_PREVIEW(object):
      HEADER_BACKBTN_DESCRLABEL_FRONTLINE,
      HEADER_BACKBTN_DESCRLABEL_EVENTPROGRESSION,
      HEADER_BACKBTN_DESCRLABEL_MARATHON,
-     HEADER_BACKBTN_DESCRLABEL_MOON_MARATHON,
-     HEADER_BACKBTN_DESCRLABEL_RANKED)
+     HEADER_BACKBTN_DESCRLABEL_WINTERMARATHON,
+     HEADER_BACKBTN_DESCRLABEL_RANKED,
+     HEADER_BACKBTN_DESCRLABEL_BLUEPRINTSEXCHANGE)
     BUYINGPANEL_OFFER_RENT_NAME_ENUM = (BUYINGPANEL_OFFER_RENT_NAME_CYCLE, BUYINGPANEL_OFFER_RENT_NAME_CYCLES, BUYINGPANEL_OFFER_RENT_NAME_SEASON)
     BUYINGPANEL_OFFER_RENT_LABEL_ENUM = (BUYINGPANEL_OFFER_RENT_LABEL_CYCLE, BUYINGPANEL_OFFER_RENT_LABEL_CYCLES, BUYINGPANEL_OFFER_RENT_LABEL_SEASON)
 

@@ -8,6 +8,7 @@ class BattleRewardItemModel(ViewModel):
     CREDITS = 'credits'
     CRYSTALS = 'crystal'
     PROGRESSION_POINTS = 'progression'
+    BATTLE_PASS_POINTS = 'battlePassPoints'
 
     def __init__(self, properties=2, commands=0):
         super(BattleRewardItemModel, self).__init__(properties=properties, commands=commands)

@@ -50,7 +50,7 @@ class _AirdropBotHandler(_AirDropCmpHandler):
     def onCreated(self, placement):
         acmp = self._getAirdropCmp()
         if acmp:
-            acmp.scheduleBot(placement.id, placement.position, placement.teamID, placement.yawAxis)
+            acmp.scheduleBot(placement.id, placement.position, placement.teamID, placement.yawAxis, placement.dropTime)
 
 
 _TYPE_TO_PLACEMENT = {AirdropType.LOOT: _AirdropLootHandler,

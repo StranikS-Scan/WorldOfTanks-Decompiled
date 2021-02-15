@@ -8,6 +8,7 @@ from account_shared import getCustomizationItem
 from soft_exception import SoftException
 from items import tankmen
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
+from battle_pass_common import NON_VEH_CD
 
 def _packTrack(track):
     result = []
@@ -162,6 +163,15 @@ def __mergeDogTag(total, key, value, isLeaf=False, count=1, *args):
     total[key] = value
 
 
+def __mergeBattlePassPoints(total, key, value, isLeaf=False, count=1, *args):
+    defaultBattlePassPoints = {'vehicles': {NON_VEH_CD: 0}}
+    seasonID = value.get('seasonID')
+    if seasonID:
+        defaultBattlePassPoints['seasonID'] = seasonID
+    battlePass = total.setdefault(key, defaultBattlePassPoints)
+    battlePass['vehicles'][NON_VEH_CD] += value['vehicles'][NON_VEH_CD] * count
+
+
 BONUS_MERGERS = {'credits': __mergeValue,
  'gold': __mergeValue,
  'xp': __mergeValue,
@@ -195,6 +205,7 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'rankedDailyBattles': __mergeValue,
  'rankedBonusBattles': __mergeValue,
  'dogTagComponents': __mergeDogTag,
+ 'battlePassPoints': __mergeBattlePassPoints,
  'meta': lambda *args, **kwargs: None}
 ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._inventory.getVehicleInvID(key) != 0,
  'customizations': lambda account, key: account._customizations20.getItems((key,), 0)[key] > 0,

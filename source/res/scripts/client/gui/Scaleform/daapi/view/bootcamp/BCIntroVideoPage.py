@@ -11,7 +11,7 @@ from uilogging.decorators import loggerTarget, loggerEntry, simpleLog
 from uilogging.bootcamp.constants import BC_LOG_ACTIONS, BC_LOG_KEYS
 from uilogging.bootcamp.loggers import BootcampUILogger
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
-from gui.Scaleform.framework.entities.View import CommonSoundSpaceSettings
+from sound_gui_manager import CommonSoundSpaceSettings
 _DEFAULT_VIDEO_BUFFERING_TIME = 0.0
 
 @loggerTarget(logKey=BC_LOG_KEYS.BC_INTRO_VIDEO, loggerCls=BootcampUILogger)

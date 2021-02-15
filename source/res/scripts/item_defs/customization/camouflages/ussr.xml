@@ -9631,4 +9631,44 @@
       </tilingSettings>
     </camouflage>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R145_Object_705_A	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	302	</id>
+      <texture>	vehicles/russian/Camouflage/Object_705_A_camo.dds	</texture>
+      <description>	#vehicle_customization:camouflage/R145_Object_705_A_progression/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/R145_Object_705_A_progression/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	161 161 161 255	</c0>
+          <c1>	63 71 84 255	</c1>
+          <c2>	107 120 128 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.0872665	</HULL>
+        <TURRET>	0.0872665	</TURRET>
+        <GUN>	0.0872665	</GUN>
+      </rotation>
+      <tiling>
+        <ussr:R06_T-286>	1.7 1.7 1.5 1.99	</ussr:R06_T-286>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.000000  1.000000	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
 </ussr.xml>

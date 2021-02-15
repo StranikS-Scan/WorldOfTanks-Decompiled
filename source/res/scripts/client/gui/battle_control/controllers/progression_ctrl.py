@@ -3,6 +3,7 @@
 import logging
 import BigWorld
 import Event
+import BattleReplay
 from adisp import process
 from constants import UpgradeProhibitionReason
 from debug_utils import LOG_ERROR, LOG_WARNING
@@ -21,6 +22,7 @@ from gui.shared.gui_items.processors.module import getPreviewInstallerProcessor
 from items.battle_royale import ModulesInstaller
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+from skeletons.gui.game_control import IBattleRoyaleController
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 _MAX_PERCENT_AMOUNT = 100
@@ -31,12 +33,6 @@ def createGuiVehicle(strCD):
 
 class IProgressionListener(object):
     MAX_PERCENT_AMOUNT = _MAX_PERCENT_AMOUNT
-
-    def setCurrentXP(self, xp, xpPercent):
-        pass
-
-    def setLevel(self, level, minXP, maxXP):
-        pass
 
     def selectVehicleModule(self, index):
         pass
@@ -67,6 +63,150 @@ class IProgressionListener(object):
 
     def setAverageBattleLevel(self, level):
         pass
+
+    def updateData(self, arenaLevelData):
+        pass
+
+
+class _BattleRoyaleArenaLevel(object):
+    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
+    __slots__ = ('__xp', '__level', '__percent', '__baseXP', '__targetXP', '__diffXp', '__diffXpAfterLevel', '__xpToLevel', '__maxLevel', '__levelIsChanged', '__xpIsChanged', '__isMaxLvlAchieved', '__currentObservedVehicleID', '__observedVehicleIsChanged')
+
+    def __init__(self):
+        self.__xp = 0
+        self.__level = 0
+        self.__percent = 0
+        self.__baseXP = 0
+        self.__targetXP = 0
+        self.__diffXp = 0
+        self.__diffXpAfterLevel = 0
+        self.__xpToLevel = None
+        self.__maxLevel = 0
+        self.__levelIsChanged = False
+        self.__xpIsChanged = False
+        self.__isMaxLvlAchieved = False
+        self.__currentObservedVehicleID = 0
+        self.__observedVehicleIsChanged = False
+        return
+
+    def updateXP(self, xp, observedVehicleID):
+        if not self.__xpToLevel:
+            battleXP = self.__battleRoyaleController.getModeSettings().battleXP
+            if battleXP and 'xpToLvl' in battleXP:
+                self.__xpToLevel = battleXP['xpToLvl']
+                self.__maxLevel = len(self.__xpToLevel)
+                self.__reInitData()
+        self.__observedVehicleIsChanged = observedVehicleID != self.__currentObservedVehicleID
+        self.__currentObservedVehicleID = observedVehicleID
+        if self.__observedVehicleIsChanged:
+            self.__reInitData()
+        if not self.__xpToLevel or self.__isMaxLvlAchieved:
+            self.__levelIsChanged = False
+            return
+        self.__levelIsChanged = self.__observedVehicleIsChanged
+        self.__xpIsChanged = xp > self.__xp
+        newLevel = self.__getLevelByXp(xp)
+        self.__isMaxLvlAchieved = newLevel >= self.__maxLevel
+        if self.__isMaxLvlAchieved:
+            self.__percent = IProgressionListener.MAX_PERCENT_AMOUNT
+            self.__diffXp = self.__targetXP - self.__xp
+            self.__diffXpAfterLevel = 0
+            self.__baseXP = self.__xpToLevel[self.__maxLevel - 1]
+            self.__targetXP = self.__xpToLevel[self.__maxLevel - 1]
+            self.__xp = xp
+            self.__level = self.__maxLevel
+            self.__levelIsChanged = True
+            return
+        if newLevel > self.__level:
+            self.__level = newLevel
+            self.__diffXp = self.__targetXP - self.__xp
+            self.__baseXP = self.__xpToLevel[self.__level - 1]
+            self.__targetXP = self.__xpToLevel[self.__level]
+            self.__xp = xp
+            self.__percent = self.__getPercent(self.__xp, self.__baseXP, self.__targetXP)
+            self.__diffXpAfterLevel = self.__xp - self.__baseXP
+            self.__levelIsChanged = True
+            return
+        if xp > self.__xp:
+            self.__diffXp = xp - self.__xp
+            self.__diffXpAfterLevel = 0
+            self.__xp = xp
+            self.__percent = self.__getPercent(self.__xp, self.__baseXP, self.__targetXP)
+
+    def resetXpChangedFlag(self):
+        self.__xpIsChanged = False
+
+    def __reInitData(self):
+        self.__xp = 0
+        self.__level = 0
+        self.__percent = 0
+        self.__baseXP = 0
+        self.__targetXP = self.__xpToLevel[0]
+        self.__diffXp = 0
+        self.__diffXpAfterLevel = 0
+        self.__levelIsChanged = False
+        self.__xpIsChanged = False
+        self.__isMaxLvlAchieved = False
+
+    @property
+    def diff(self):
+        return self.__diffXp
+
+    @property
+    def diffAfterLevel(self):
+        return self.__diffXpAfterLevel
+
+    @property
+    def level(self):
+        return self.__level + 1
+
+    @property
+    def percent(self):
+        return self.__percent
+
+    @property
+    def xp(self):
+        return self.__xp
+
+    @property
+    def baseXP(self):
+        return self.__baseXP
+
+    @property
+    def targetXP(self):
+        return self.__targetXP
+
+    @property
+    def xpIsChanged(self):
+        return self.__xpIsChanged
+
+    @property
+    def levelIsChanged(self):
+        return self.__levelIsChanged
+
+    @property
+    def isMaxLvlAchieved(self):
+        return self.__isMaxLvlAchieved
+
+    @property
+    def observedVehicleIsChanged(self):
+        return self.__observedVehicleIsChanged
+
+    @property
+    def maxLevel(self):
+        return self.__maxLevel
+
+    def __getPercent(self, xp, baseXP, targetXP):
+        total = targetXP - baseXP
+        percent = 0
+        if total > 0:
+            percent = IProgressionListener.MAX_PERCENT_AMOUNT * (xp - baseXP) / total
+        return percent
+
+    def __getLevelByXp(self, xp):
+        for idx, val in enumerate(reversed(self.__xpToLevel)):
+            if xp >= val:
+                return self.__maxLevel - idx
 
 
 class _SelectedModulesStorage(object):
@@ -208,7 +348,7 @@ class _ProgressionWindowCtrl(object):
 
 
 class _VehicleHolder(object):
-    __slots__ = ('__initialVehicle', '__vehicle', '__maxLevel', '__currentVehicleLevel', '__vehicleChangeCallback', '__modulesHolder')
+    __slots__ = ('__initialVehicle', '__vehicle', '__currentVehicleLevel', '__vehicleChangeCallback', '__modulesHolder')
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     __itemsFactory = dependency.descriptor(IGuiItemsFactory)
 
@@ -218,14 +358,9 @@ class _VehicleHolder(object):
         self.__initialVehicle = None
         self.__modulesHolder = modulesHolder
         self.__vehicleChangeCallback = vehicleChangeCallback
-        self.__maxLevel = 0
         self.__currentVehicleLevel = 0
         self.__initialize()
         return
-
-    @property
-    def maxLevel(self):
-        return self.__maxLevel
 
     def installModule(self, module):
         moduleLevel = module.level
@@ -286,13 +421,7 @@ class _VehicleHolder(object):
         self.__initialVehicle = createGuiVehicle(strCD)
         self.__vehicle = createGuiVehicle(strCD)
         self.__currentVehicleLevel = self.__getCurrentLvl(self.__vehicle)
-        if self.__maxLevel == 0:
-            self.__maxLevel = self.__calculateMaxLevel(self.__vehicle)
         self.__vehicleChangeCallback(vehicleRecreated=True)
-
-    def __calculateMaxLevel(self, vehicle):
-        level = max((self.__modulesHolder.getModule(intCD).level for _, _, intCD, _ in vehicle.getUnlocksDescrs()))
-        return level
 
     def __onVehicleEnterWorld(self, vehicle):
         avatar = BigWorld.player()
@@ -394,16 +523,12 @@ class _ModuleChangeRequester(object):
 
 
 class ProgressionController(IProgressionController, ViewComponentsController):
-    __slots__ = ('__currentXP', '__currentXpPercents', 'onPageTriggered', '__progressionWindowCtrl', '__currentLevel', '_viewComponents', '__minXP', '__maxXP', '__modulesStorage', '__averageLevel', '__enemiesAmount', '__vehicleModulesStorage', '__enemyTeamsAmount', '__isStarted', '__upgradesAvailability', '__tmpProgressionRecord', 'onVehicleUpgradeStarted', 'onVehicleUpgradeFinished', '__vehicleHolder', '__moduleChangeReq', '__initialModulesRecord')
+    __slots__ = ('onPageTriggered', '__progressionWindowCtrl', '_viewComponents', '__modulesStorage', '__averageLevel', '__enemiesAmount', '__vehicleModulesStorage', '__enemyTeamsAmount', '__isStarted', '__upgradesAvailability', '__tmpProgressionRecord', 'onVehicleUpgradeStarted', 'onVehicleUpgradeFinished', '__vehicleHolder', '__moduleChangeReq', '__initialModulesRecord', '__battleRoyaleArenaLevel')
     __itemsFactory = dependency.descriptor(IGuiItemsFactory)
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(ProgressionController, self).__init__()
-        self.__currentXP = 0
-        self.__currentXpPercents = 0
-        self.__currentLevel = 0
-        self.__minXP = 0
-        self.__maxXP = 0
         self.__modulesStorage = None
         self.__progressionWindowCtrl = None
         self.__upgradesAvailability = None
@@ -418,11 +543,12 @@ class ProgressionController(IProgressionController, ViewComponentsController):
         self.__initialModulesRecord = BRInitialModules.get()
         self.onVehicleUpgradeStarted = Event.Event()
         self.onVehicleUpgradeFinished = Event.Event()
+        self.__battleRoyaleArenaLevel = _BattleRoyaleArenaLevel()
         return
 
     @property
     def maxLevel(self):
-        return self.__vehicleHolder.maxLevel if self.__vehicleHolder else 0
+        return self.__battleRoyaleArenaLevel.maxLevel
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.PROGRESSION_CTRL
@@ -452,16 +578,18 @@ class ProgressionController(IProgressionController, ViewComponentsController):
         if pVehId != 0:
             vehicle = BigWorld.entities.get(pVehId)
             if vehicle:
-                level, minXP, maxXP = vehicle.battleXP.battleXpLvlData
-                self.updateLevel(level, minXP, maxXP)
-                self.updateXP(vehicle.battleXP.battleXP)
+                self.updateXP(vehicle.battleXP.battleXP, pVehId)
                 self.__isStarted = True
                 return
         avatar = BigWorld.player()
         avatar.onVehicleEnterWorld += self.__onVehicleEnterWorld
+        ctrl = self.__sessionProvider.shared.vehicleState
+        if ctrl is not None and BattleReplay.g_replayCtrl.isPlaying:
+            ctrl.onVehicleControlling += self.__onVehicleControlling
         self.__modulesStorage = _SelectedModulesStorage()
         self.__moduleChangeReq = _ModuleChangeRequester()
         self.__loadCachedProgress()
+        return
 
     def stopControl(self):
         if self.__moduleChangeReq:
@@ -485,6 +613,9 @@ class ProgressionController(IProgressionController, ViewComponentsController):
         avatar.onVehicleEnterWorld -= self.__onVehicleEnterWorld
         if avatar.inputHandler is not None:
             avatar.inputHandler.onCameraChanged -= self.__onCameraChanged
+        ctrl = self.__sessionProvider.shared.vehicleState
+        if ctrl is not None and BattleReplay.g_replayCtrl.isPlaying:
+            ctrl.onVehicleControlling -= self.__onVehicleControlling
         self.clearViewComponents()
         self.onVehicleUpgradeStarted.clear()
         self.onVehicleUpgradeFinished.clear()
@@ -493,24 +624,12 @@ class ProgressionController(IProgressionController, ViewComponentsController):
         super(ProgressionController, self).stopControl()
         return
 
-    def updateXP(self, xp):
-        if self.__currentXP != xp:
-            self.__currentXP = xp
-            self.__updatePercents()
-            for view in self._viewComponents:
-                view.setCurrentXP(self.__currentXP, self.__currentXpPercents)
-
-    def updateLevel(self, level, minXP, maxXP):
-        if self.__currentLevel != level:
-            self.__currentLevel = level
-            self.__minXP = minXP
-            self.__maxXP = maxXP
-            self.__updatePercents()
-            for view in self._viewComponents:
-                view.setCurrentXP(self.__currentXP, self.__currentXpPercents)
-                view.setLevel(self.__currentLevel, minXP, maxXP)
-                if self.__currentLevel == self.__vehicleHolder.maxLevel:
-                    view.onMaxLvlAchieved()
+    def updateXP(self, xp, observedVehicleID):
+        self.__battleRoyaleArenaLevel.updateXP(xp, observedVehicleID)
+        for view in self._viewComponents:
+            view.updateData(self.__battleRoyaleArenaLevel)
+            if self.__battleRoyaleArenaLevel.isMaxLvlAchieved and self.__battleRoyaleArenaLevel.levelIsChanged:
+                view.onMaxLvlAchieved()
 
     def setViewComponents(self, *components):
         self.__progressionWindowCtrl = _ProgressionWindowCtrl()
@@ -526,9 +645,8 @@ class ProgressionController(IProgressionController, ViewComponentsController):
             LOG_ERROR('View is already added! {}'.format(view))
         else:
             if self.__isStarted:
-                view.setLevel(self.__currentLevel, self.__minXP, self.__maxXP)
-                view.setCurrentXP(self.__currentXP, self.__currentXpPercents)
-                if self.__currentLevel == self.__vehicleHolder.maxLevel:
+                view.updateData(self.__battleRoyaleArenaLevel)
+                if self.__battleRoyaleArenaLevel.isMaxLvlAchieved and self.__battleRoyaleArenaLevel.levelIsChanged:
                     view.onMaxLvlAchieved()
                 if self.__averageLevel is not None:
                     view.setAverageBattleLevel(self.__averageLevel)
@@ -629,19 +747,11 @@ class ProgressionController(IProgressionController, ViewComponentsController):
     def __unregisterSelectedModule(self, intCD):
         self.__modulesStorage.removeIntCD(intCD)
 
-    def __updatePercents(self):
-        total = self.__maxXP - self.__minXP
-        if total > 0:
-            self.__currentXpPercents = min(_MAX_PERCENT_AMOUNT * (self.__currentXP - self.__minXP) / total, _MAX_PERCENT_AMOUNT)
-        else:
-            self.__currentXpPercents = 0
-
     def __onVehicleEnterWorld(self, vehicle):
         avatar = BigWorld.player()
         pVehId = avatar_getter.getPlayerVehicleID()
         if vehicle.id == pVehId:
-            self.updateLevel(*vehicle.battleXP.battleXpLvlData)
-            self.updateXP(vehicle.battleXP.battleXP)
+            self.updateXP(vehicle.battleXP.battleXP, vehicle.id)
             avatar.onVehicleEnterWorld -= self.__onVehicleEnterWorld
             self.__installInitialModules()
             self.__cacheInitialModules(vehicle)
@@ -677,3 +787,7 @@ class ProgressionController(IProgressionController, ViewComponentsController):
     def __notifyVehicleChanged(self, newModuleIntCD=None, vehicleRecreated=False):
         for view in self._viewComponents:
             view.setVehicleChanged(self.getCurrentVehicle(), newModuleIntCD, vehicleRecreated)
+
+    def __onVehicleControlling(self, vehicle):
+        if vehicle:
+            self.updateXP(vehicle.battleXP.battleXP, vehicle.id)

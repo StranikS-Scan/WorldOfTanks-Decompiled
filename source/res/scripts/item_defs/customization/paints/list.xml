@@ -475,6 +475,22 @@
       <metallic>	0.235	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_31	</userString>
     </paint>
+    <paint>
+      <id>	32	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_22.png	</texture>
+      <color>	16 16 33 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.222	</metallic>
+      <userString>	#vehicle_customization:repaint/cosmonautics_day_2020	</userString>
+    </paint>
+    <paint>
+      <id>	93	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_31.png	</texture>
+      <color>	32 33 35 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/cosmonautics_day_2021	</userString>
+    </paint>
     <usages>
       <item>
         <componentType>	ALL	</componentType>
@@ -1161,32 +1177,6 @@
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/75_years_victory_day	</userString>
       <tags>	hiddenInUI	</tags>
-    </paint>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
-  </itemGroup>
-  <itemGroup>
-    <name>	Cosmonautics Day 2020 paints	</name>
-    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
-    <season>	ALL	</season>
-    <historical>	false	</historical>
-    <priceGroup>	paints 20g notInShop	</priceGroup>
-    <vehicleFilter>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <paint>
-      <id>	32	</id>
-      <texture>	gui/maps/vehicles/repaints/custom_color_22.png	</texture>
-      <color>	16 16 33 255	</color>
-      <gloss>	0.6	</gloss>
-      <metallic>	0.222	</metallic>
-      <userString>	#vehicle_customization:repaint/cosmonautics_day_2020	</userString>
     </paint>
     <usages>
       <item>
@@ -1929,7 +1919,34 @@
     </usages>
   </itemGroup>
   <itemGroup>
-    <name>	Lunar Marathon	</name>
+    <name>	BB2021	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	88	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+      <color>	17 17 34 255	</color>
+      <gloss>	0.525	</gloss>
+      <metallic>	0.3	</metallic>
+      <userString>	#vehicle_customization:repaint/bb2021	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	Spartacus	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
@@ -1958,7 +1975,7 @@
     </usages>
   </itemGroup>
   <itemGroup>
-    <name>	BB2021	</name>
+    <name>	Dragon1	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
@@ -1969,13 +1986,54 @@
       </exclude>
     </vehicleFilter>
     <paint>
-      <id>	88	</id>
-      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
-      <color>	17 17 34 255	</color>
-      <gloss>	0.525	</gloss>
+      <id>	89	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_05.png	</texture>
+      <color>	10 45 45 255	</color>
+      <gloss>	0.5	</gloss>
       <metallic>	0.3	</metallic>
-      <userString>	#vehicle_customization:repaint/bb2021	</userString>
-      <tags>	hiddenInUI	</tags>
+      <userString>	#vehicle_customization:repaint/dragon	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	BP2021	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	90	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_03.png	</texture>
+      <color>	0 35 76 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.203	</metallic>
+      <userString>	#vehicle_customization:repaint/bp2021_1	</userString>
+    </paint>
+    <paint>
+      <id>	91	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_11.png	</texture>
+      <color>	169 183 198 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/bp2021_2	</userString>
+    </paint>
+    <paint>
+      <id>	92	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_11.png	</texture>
+      <color>	103 118 147 255	</color>
+      <gloss>	0.65	</gloss>
+      <metallic>	0.5	</metallic>
+      <userString>	#vehicle_customization:repaint/bp2021_3	</userString>
     </paint>
     <usages>
       <item>

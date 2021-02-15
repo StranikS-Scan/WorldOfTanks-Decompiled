@@ -93,24 +93,21 @@ def makeVehicleTurretMatrixMP():
 
 
 def makeStrategicCameraMatrix():
-    matrix = Math.WGStrategicAreaViewMP()
-    matrix.source = BigWorld.camera().invViewMatrix
-    matrix.baseScale = (1.0, 1.0)
-    return matrix
-
-
-def makeArtyAimPointMatrix():
     provider = Math.WGCombinedMP()
-    rotationMatrix = Math.WGStrategicAreaViewMP()
-    rotationMatrix.source = BigWorld.camera().invViewMatrix
-    rotationMatrix.baseScale = (1.0, 1.0)
     handler = getInputHandler()
+    aimMatrix = Math.Matrix()
     if handler is not None:
-        translationMatrix = handler.ctrl.camera.aimingSystem.aimMatrix
-    else:
-        translationMatrix = Math.Matrix()
-    provider.translationSrc = translationMatrix
-    provider.rotationSrc = rotationMatrix
+        aimingSystem = handler.ctrl.camera.aimingSystem
+        if aimingSystem is not None:
+            aimMatrix = handler.ctrl.camera.aimingSystem.aimMatrix
+    relativeMatrix = Math.WGRelatedToTargetMP()
+    relativeMatrix.source = BigWorld.camera().invViewMatrix
+    relativeMatrix.target = aimMatrix
+    cameraMatrix = Math.WGStrategicAreaViewMP()
+    cameraMatrix.source = relativeMatrix
+    cameraMatrix.baseScale = (1.0, 1.0)
+    provider.translationSrc = aimMatrix
+    provider.rotationSrc = cameraMatrix
     return provider
 
 

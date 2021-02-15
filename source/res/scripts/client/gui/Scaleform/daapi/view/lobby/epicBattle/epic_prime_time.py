@@ -11,6 +11,7 @@ from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared.formatters import text_styles
 from helpers import dependency
 from helpers import time_utils
+from gui.impl.gen import R
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IEventProgressionController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -44,8 +45,8 @@ class EpicBattlesPrimeTimeView(EpicPrimeTimeMeta):
     def _populate(self):
         super(EpicBattlesPrimeTimeView, self)._populate()
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
-        self.__setHeaderText()
-        self.__setBackground()
+        self._setHeaderText()
+        self._setBackground()
 
     def _dispose(self):
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
@@ -62,11 +63,9 @@ class EpicBattlesPrimeTimeView(EpicPrimeTimeMeta):
          'serversDDEnabled': not isSingleServer,
          'serverDDVisible': not isSingleServer,
          'timeText': text_styles.expText(self.__getTimeText(serverInfo)),
-         'showAlertBG': not self.__eventProgression.hasAvailablePrimeTimeServers()}
+         'showAlertBG': not self._getController().hasAvailablePrimeTimeServers()}
 
     def _getPrbActionName(self):
-        if self.__eventProgression.isSteelHunter:
-            return PREBATTLE_ACTION_NAME.BATTLE_ROYALE
         if self._hasAvailableServers():
             prbAction = PREBATTLE_ACTION_NAME.EPIC
         else:
@@ -74,15 +73,15 @@ class EpicBattlesPrimeTimeView(EpicPrimeTimeMeta):
         return prbAction
 
     def _getPrbForcedActionName(self):
-        return PREBATTLE_ACTION_NAME.BATTLE_ROYALE if self.__eventProgression.isSteelHunter else PREBATTLE_ACTION_NAME.EPIC_FORCED
+        return PREBATTLE_ACTION_NAME.EPIC_FORCED
 
     def __getStatusText(self):
-        if not self.__eventProgression.hasAvailablePrimeTimeServers():
+        if not self._getController().hasAvailablePrimeTimeServers():
             return EPIC_BATTLE.PRIMETIME_STATUS_NOPRIMETIMESONALLSERVERS
         else:
             currServerName = self._connectionMgr.serverUserName
-            primeTime = self.__eventProgression.getPrimeTimes().get(self._connectionMgr.peripheryID)
-            timestamp, status = self.__eventProgression.getCurrentCycleInfo()
+            primeTime = self._getController().getPrimeTimes().get(self._connectionMgr.peripheryID)
+            timestamp, status = self._getController().getCurrentCycleInfo()
             currTime = time_utils.getCurrentLocalServerTimestamp()
             if status and primeTime:
                 startTime = primeTime.getNextPeriodStart(currTime, timestamp)
@@ -92,11 +91,11 @@ class EpicBattlesPrimeTimeView(EpicPrimeTimeMeta):
                     else:
                         startTimeStr = backport.getShortTimeFormat(startTime)
                     return _ms(EPIC_BATTLE.PRIMETIME_STATUS_NOPRIMETIMEONTHISSERVER, startTime=startTimeStr, server=currServerName)
-            season = self.__eventProgression.getCurrentSeason()
+            season = self._getController().getCurrentSeason()
             if season is not None and primeTime is not None:
                 lastCycle = season.getLastActiveCycleInfo(currTime)
                 if lastCycle:
-                    return _ms(EPIC_BATTLE.PRIMETIME_STATUS_CYCLEFINISHEDONTHISSERVER, cycleNo=lastCycle.ordinalNumber, server=currServerName)
+                    return self._getCycleFinishedOnThisServerText(cycleNumber=lastCycle.ordinalNumber, serverName=currServerName)
             return _ms(EPIC_BATTLE.PRIMETIME_STATUS_DISABLEDONTHISSERVER, server=currServerName)
 
     def __getTimeText(self, serverInfo):
@@ -105,16 +104,16 @@ class EpicBattlesPrimeTimeView(EpicPrimeTimeMeta):
             isAvailable = serverInfo.isAvailable()
             serverName = serverInfo.getName()
         else:
-            _, timeLeft, isAvailable = self.__eventProgression.getPrimeTimeStatus()
+            _, timeLeft, isAvailable = self._getController().getPrimeTimeStatus()
             serverName = ''
-        currentSeason = self.__eventProgression.getCurrentSeason()
+        currentSeason = self._getController().getCurrentSeason()
         if currentSeason and not timeLeft:
             return _ms(EPIC_BATTLE.PRIMETIME_ENDOFCYCLE, server=serverName)
         if not timeLeft and not isAvailable and not currentSeason:
-            nextSeason = self.__eventProgression.getNextSeason()
+            nextSeason = self._getController().getNextSeason()
             if nextSeason:
                 currTime = time_utils.getCurrentLocalServerTimestamp()
-                primeTime = self.__eventProgression.getPrimeTimes().get(serverInfo.getPeripheryID())
+                primeTime = self._getController().getPrimeTimes().get(serverInfo.getPeripheryID())
                 startTime = primeTime.getNextPeriodStart(currTime, nextSeason.getEndDate())
                 if startTime:
                     timeLeft = startTime - currTime
@@ -125,11 +124,14 @@ class EpicBattlesPrimeTimeView(EpicPrimeTimeMeta):
         i18nKey = EPIC_BATTLE.PRIMETIME_PRIMEISAVAILABLE if isAvailable else EPIC_BATTLE.PRIMETIME_PRIMEWILLBEAVAILABLE
         return _ms(i18nKey, server=serverName, time=text_styles.neutral(timeLeftStr))
 
-    def __setHeaderText(self):
+    def _setHeaderText(self):
         self.as_setHeaderTextS(backport.text(self.__eventProgression.getPrimeTimeTitle()))
 
-    def __setBackground(self):
+    def _setBackground(self):
         self.as_setBackgroundSourceS(backport.image(self.__eventProgression.getPrimeTimeBg()))
+
+    def _getCycleFinishedOnThisServerText(self, cycleNumber, serverName):
+        return backport.text(R.strings.epic_battle.primeTime.status.cycleFinishedOnThisServer(), cycleNo=cycleNumber, server=serverName)
 
     def __onServerSettingsChange(self, diff):
         eventConfigKeys = (Configs.BATTLE_ROYALE_CONFIG.value, Configs.EVENT_PROGRESSION_CONFIG.value)

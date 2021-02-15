@@ -591,6 +591,7 @@ class StyleXmlWriter(BaseCustomizationItemXmlWriter):
         changed |= self.__writeOutfits(item.outfits, section)
         changed |= self.__writeFiltersItems(item.itemsFilters, section)
         changed |= self.__writeAlternateItems(item.alternateItems, section)
+        changed |= self.__write3dProgression(item.styleProgressions, section)
         return changed
 
     def __writeOutfits(self, outfits, section):
@@ -686,6 +687,41 @@ class StyleXmlWriter(BaseCustomizationItemXmlWriter):
                 changed |= saveItemFilter(filterValue, itemFiltersSection, filterName, ITEMS_FILTER_VALUE_DESCRIPTION)
 
         return changed
+
+    def __write3dProgression(self, progression, isection):
+        sectionName = 'styleProgressions'
+        if progression is None or len(progression) == 0:
+            if isection.has_key(sectionName):
+                isection.deleteSection(sectionName)
+                return True
+            return False
+        else:
+            changed = False
+            stagesCount = len(progression)
+            if stagesCount == 0:
+                if isection.has_key(sectionName):
+                    isection.deleteSection(sectionName)
+                    changed |= True
+            else:
+                progression3dSection = isection[sectionName]
+                if progression3dSection is None:
+                    progression3dSection = isection.createSection(sectionName)
+                    changed |= True
+                if stagesCount != len(progression3dSection):
+                    changed |= resizeSection(progression3dSection, stagesCount, lambda id: 'stage')
+                stageIndex = 0
+                for stageName, progressionValue in progression.iteritems():
+                    stageSection = progression3dSection.child(stageIndex)
+                    if 'materials' in progressionValue.keys():
+                        materialsList = progressionValue['materials']
+                        materialsStr = ' '.join(materialsList)
+                        changed |= _xml.rewriteString(stageSection, 'materials', materialsStr)
+                    if 'additionalOutfit' in progressionValue.keys():
+                        outfit = progressionValue['additionalOutfit']
+                        changed |= self.__writeOutfits(outfit, stageSection)
+                    stageIndex += 1
+
+            return changed
 
 
 class PersonalNumberXmlWriter(BaseCustomizationItemXmlWriter):

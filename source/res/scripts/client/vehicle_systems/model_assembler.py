@@ -764,12 +764,6 @@ def assembleCollisionObstaclesCollector(appearance, lodStateLink, desc, spaceID)
     if lodStateLink is not None:
         collisionObstaclesCollector.setLodLink(lodStateLink)
         collisionObstaclesCollector.setLodSettings(shared_components.LodSettings(appearance.typeDescriptor.chassis.chassisLodDistance, DEFAULT_MAX_LOD_PRIORITY))
-        groundNodesConfig = appearance.typeDescriptor.chassis.groundNodes
-        groundNodeGroups = groundNodesConfig.groups
-        groundNodes = groundNodesConfig.nodes
-        hasGroundNodes = len(groundNodeGroups) or len(groundNodes)
-        if not hasGroundNodes:
-            collisionObstaclesCollector.disable()
     appearance.collisionObstaclesCollector = collisionObstaclesCollector
     return
 
@@ -779,12 +773,6 @@ def assembleTessellationCollisionSensor(appearance, lodStateLink):
     if lodStateLink is not None:
         tessellationCollisionSensor.setLodLink(lodStateLink)
         tessellationCollisionSensor.setLodSettings(shared_components.LodSettings(appearance.typeDescriptor.chassis.chassisLodDistance, DEFAULT_MAX_LOD_PRIORITY))
-        groundNodesConfig = appearance.typeDescriptor.chassis.groundNodes
-        groundNodeGroups = groundNodesConfig.groups
-        groundNodes = groundNodesConfig.nodes
-        hasGroundNodes = len(groundNodeGroups) or len(groundNodes)
-        if not hasGroundNodes:
-            tessellationCollisionSensor.disable()
     appearance.tessellationCollisionSensor = tessellationCollisionSensor
     return
 

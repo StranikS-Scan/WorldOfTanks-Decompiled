@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/items/vehicles.py
 import typing
 from typing import List, Optional, TYPE_CHECKING, Dict, Union, Tuple, Generator
+from items import ItemsPrices
 from items.components.supply_slot_categories import LevelsFactor
 from math_common import ceilTo
 from soft_exception import SoftException
@@ -4710,6 +4711,27 @@ def _readPriceForOperation(xmlCtx, section, opType, opKey):
     return
 
 
+def _readPriceForProgressionLvl(compactDescr, lvls):
+    pricesDest = _g_prices
+    if pricesDest is not None:
+        itemprices = ItemsPrices()
+        notInShopItems = set()
+        for num, lvl in lvls.iteritems():
+            if lvl is not None:
+                price = lvl.get('price')
+                notInShop = lvl.get('notInShop')
+                if price:
+                    itemprices[num] = price
+                if notInShop:
+                    notInShopItems.add(num)
+
+        if itemprices:
+            pricesDest['progressionLvlPrices'][compactDescr] = itemprices
+        if notInShopItems:
+            pricesDest['notInShopProgressionLvlItems'][compactDescr] = notInShopItems
+    return
+
+
 def _copyPriceForItem(sourceCompactDescr, destCompactDescr, itemNotInShop):
     pricesDest = _g_prices
     if pricesDest is not None:
@@ -4717,6 +4739,16 @@ def _copyPriceForItem(sourceCompactDescr, destCompactDescr, itemNotInShop):
         if itemNotInShop or sourceCompactDescr in pricesDest['notInShopItems']:
             pricesDest['notInShopItems'].add(destCompactDescr)
     return
+
+
+def getPriceForItemDescr(itemDescr):
+    pricesDest = _g_prices
+    priceInfo = tuple()
+    if pricesDest is not None:
+        price = pricesDest['itemPrices'].getPrices(itemDescr)
+        notInShop = True if itemDescr in pricesDest['notInShopItems'] else False
+        priceInfo = (price, notInShop)
+    return priceInfo
 
 
 def _readUnlocks(xmlCtx, section, subsectionName, unlocksDescrs, *requiredItems):

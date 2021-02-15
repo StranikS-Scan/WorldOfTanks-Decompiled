@@ -13,10 +13,10 @@
     <backward>	20	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.19	</moving>
-    <still>	0.253	</still>
+    <moving>	0.2	</moving>
+    <still>	0.2	</still>
     <camouflageBonus>	0.03	</camouflageBonus>
-    <firePenalty>	0.38	</firePenalty>
+    <firePenalty>	0.4	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -59,10 +59,10 @@
         </armor>
         <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
         <weight>	16300	</weight>
-        <maxHealth>	1300	</maxHealth>
+        <maxHealth>	1200	</maxHealth>
         <ammoBayHealth>
-          <maxHealth>	200	</maxHealth>
-          <maxRegenHealth>	135	</maxRegenHealth>
+          <maxHealth>	103	</maxHealth>
+          <maxRegenHealth>	65	</maxRegenHealth>
           <repairCost>	0	</repairCost>
         </ammoBayHealth>
         <models>
@@ -109,7 +109,7 @@
       <hull3>
         <chassis>	Chassis_GB84_Chieftain_Mk6_SH	</chassis>
         <armor>
-          <armor_1>	100	</armor_1>
+          <armor_1>	45	</armor_1>
           <armor_2>	40	</armor_2>
           <armor_3>	80	</armor_3>
           <armor_4>	40	</armor_4>
@@ -130,13 +130,19 @@
           </armor_17>
           <armor_18>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
           </armor_18>
+          <armor_19>	60	</armor_19>
+          <armor_20>	85	</armor_20>
+          <armor_21>	60	</armor_21>
+          <armor_22>	55	</armor_22>
+          <armor_23>	75	</armor_23>
+          <armor_24>	50	</armor_24>
         </armor>
-        <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+        <primaryArmor>	armor_23 armor_3 armor_4	</primaryArmor>
         <weight>	20800	</weight>
-        <maxHealth>	1300	</maxHealth>
+        <maxHealth>	1200	</maxHealth>
         <ammoBayHealth>
-          <maxHealth>	200	</maxHealth>
-          <maxRegenHealth>	135	</maxRegenHealth>
+          <maxHealth>	103	</maxHealth>
+          <maxRegenHealth>	65	</maxRegenHealth>
           <repairCost>	0	</repairCost>
         </ammoBayHealth>
         <models>
@@ -207,10 +213,10 @@
     </armor>
     <primaryArmor>	armor_10 armor_7 armor_4	</primaryArmor>
     <weight>	9800	</weight>
-    <maxHealth>	780	</maxHealth>
+    <maxHealth>	800	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	135	</maxRegenHealth>
+      <maxHealth>	103	</maxHealth>
+      <maxRegenHealth>	65	</maxRegenHealth>
       <repairCost>	0	</repairCost>
     </ammoBayHealth>
     <models>
@@ -2488,20 +2494,26 @@
         <armor_12>	30	</armor_12>
         <armor_13>	25	</armor_13>
         <armor_14>	20	</armor_14>
+        <surveyingDevice>	0	  <chanceToHitByProjectile>	0.7	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0.7	</chanceToHitByExplosion>
+        </surveyingDevice>
+        <ammoBay>	0	  <chanceToHitByProjectile>	0.45	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0.45	</chanceToHitByExplosion>
+        </ammoBay>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5880	</weight>
-      <maxHealth>	420	</maxHealth>
+      <maxHealth>	400	</maxHealth>
       <rotationSpeed>	47	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	120	</maxHealth>
-        <maxRegenHealth>	60	</maxRegenHealth>
+        <maxHealth>	103	</maxHealth>
+        <maxRegenHealth>	65	</maxRegenHealth>
         <repairCost>	0	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	300	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	70	</maxHealth>
-        <maxRegenHealth>	35	</maxRegenHealth>
+        <maxHealth>	52	</maxHealth>
+        <maxRegenHealth>	33	</maxRegenHealth>
         <repairCost>	0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
@@ -2591,6 +2603,7 @@
           </clip>
           <autoreload>
             <reloadTime>	4 4.5 5	</reloadTime>
+            <revertFraction>	1.0	</revertFraction>
           </autoreload>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
@@ -2652,7 +2665,7 @@
           </unlocks>
           <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
-            <minPitch>	0 -18 1 -18	</minPitch>
+            <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.25 10 0.333333 8 0.416667 3 0.5 3 0.583333 3 0.666667 8 0.75 10.01 1 10	</maxPitch>
           </pitchLimits>
           <armor>
@@ -2785,20 +2798,26 @@
         <armor_14>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
         </armor_14>
         <armor_15>	90	</armor_15>
+        <surveyingDevice>	0	  <chanceToHitByProjectile>	0.7	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0.7	</chanceToHitByExplosion>
+        </surveyingDevice>
+        <ammoBay>	0	  <chanceToHitByProjectile>	0.45	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0.45	</chanceToHitByExplosion>
+        </ammoBay>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	9780	</weight>
       <maxHealth>	700	</maxHealth>
       <rotationSpeed>	52	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	140	</maxHealth>
-        <maxRegenHealth>	70	</maxRegenHealth>
+        <maxHealth>	103	</maxHealth>
+        <maxRegenHealth>	65	</maxRegenHealth>
         <repairCost>	0	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	350	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	90	</maxHealth>
-        <maxRegenHealth>	45	</maxRegenHealth>
+        <maxHealth>	52	</maxHealth>
+        <maxRegenHealth>	33	</maxRegenHealth>
         <repairCost>	0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
@@ -2827,6 +2846,7 @@
           </clip>
           <autoreload>
             <reloadTime>	4 4.5 5	</reloadTime>
+            <revertFraction>	1.0	</revertFraction>
           </autoreload>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
@@ -2881,7 +2901,7 @@
         </OQF_17pdr_Gun_Mk_VII_SH>
         <_32_pounder_Gun_OQF_SH>	shared	  <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
-            <minPitch>	0 -18 1 -18	</minPitch>
+            <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.333333 10 0.416667 5.5 0.5 4.5 0.583333 5.5 0.666667 10 1 10	</maxPitch>
           </pitchLimits>
           <armor>
@@ -2951,7 +2971,7 @@
         </_32_pounder_Gun_OQF_SH>
         <_20pdr_Gun_Type_B_SH>	shared	  <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
-            <minPitch>	0 -18 1 -18	</minPitch>
+            <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.333333 10 0.416667 5 0.5 4 0.583333 5 0.666667 10 1 10	</maxPitch>
           </pitchLimits>
           <armor>
@@ -3044,6 +3064,7 @@
           </clip>
           <autoreload>
             <reloadTime>	4 4.5 5	</reloadTime>
+            <revertFraction>	1.0	</revertFraction>
           </autoreload>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
@@ -3142,40 +3163,51 @@
       </unlocks>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	150	</armor_1>
-        <armor_2>	135	</armor_2>
+        <armor_1>	220	</armor_1>
+        <armor_2>	220	</armor_2>
         <armor_3>	100	</armor_3>
         <armor_4>	100	</armor_4>
         <armor_5>	25	</armor_5>
         <armor_6>	20	</armor_6>
-        <armor_7>	135	</armor_7>
+        <armor_7>	145	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	135	</armor_9>
-        <armor_10>	135	</armor_10>
-        <armor_11>	110	</armor_11>
+        <armor_9>	180	</armor_9>
+        <armor_10>	150	</armor_10>
+        <armor_11>	95	</armor_11>
         <armor_12>	40	</armor_12>
         <armor_13>	135	</armor_13>
         <armor_14>	100	</armor_14>
         <armor_15>	90	</armor_15>
-        <armor_16>	135	</armor_16>
+        <armor_16>	175	</armor_16>
         <armor_17>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
         </armor_17>
         <armor_18>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
         </armor_18>
+        <armor_19>	210	</armor_19>
+        <armor_20>	180	</armor_20>
+        <armor_21>	150	</armor_21>
+        <armor_22>	205	</armor_22>
+        <armor_23>	195	</armor_23>
+        <surveyingDevice>	0	  <chanceToHitByProjectile>	0.7	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0.7	</chanceToHitByExplosion>
+        </surveyingDevice>
+        <ammoBay>	0	  <chanceToHitByProjectile>	0.45	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0.45	</chanceToHitByExplosion>
+        </ammoBay>
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_12	</primaryArmor>
       <weight>	12480	</weight>
       <maxHealth>	700	</maxHealth>
       <rotationSpeed>	47	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	140	</maxHealth>
-        <maxRegenHealth>	70	</maxRegenHealth>
+        <maxHealth>	103	</maxHealth>
+        <maxRegenHealth>	65	</maxRegenHealth>
         <repairCost>	0	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	330	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
+        <maxHealth>	52	</maxHealth>
+        <maxRegenHealth>	33	</maxRegenHealth>
         <repairCost>	0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
@@ -3196,6 +3228,7 @@
           </clip>
           <autoreload>
             <reloadTime>	4 4.5 5	</reloadTime>
+            <revertFraction>	1.0	</revertFraction>
           </autoreload>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
@@ -3250,7 +3283,7 @@
         </OQF_17pdr_Gun_Mk_VII_SH>
         <_32_pounder_Gun_OQF_SH>	shared	  <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
-            <minPitch>	0 -18 1 -18	</minPitch>
+            <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.333333 10 0.416667 5.5 0.5 4.5 0.583333 5.5 0.666667 10 1 10	</maxPitch>
           </pitchLimits>
           <armor>
@@ -3327,6 +3360,7 @@
           </clip>
           <autoreload>
             <reloadTime>	4 4.5 5	</reloadTime>
+            <revertFraction>	1.0	</revertFraction>
           </autoreload>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
@@ -3377,15 +3411,15 @@
             <gun>	60	</gun>
           </armor>
           <pitchLimits>
-            <minPitch>	0 -10 1 -10	</minPitch>
+            <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.333333 10 0.416667 5.5 0.5 4.5 0.583333 5.5 0.666667 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.152	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	6	</reloadTime>
-          <aimingTime>	2.2	</aimingTime>
+          <reloadTime>	6.25	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>

@@ -59,20 +59,20 @@ _logger = logging.getLogger(__name__)
 _QUEUE_TYPE_TO_PREBATTLE_ACTION_NAME = {QUEUE_TYPE.EVENT_BATTLES: PREBATTLE_ACTION_NAME.SQUAD,
  QUEUE_TYPE.RANDOMS: PREBATTLE_ACTION_NAME.SQUAD,
  QUEUE_TYPE.EPIC: PREBATTLE_ACTION_NAME.SQUAD,
- QUEUE_TYPE.BATTLE_ROYALE: PREBATTLE_ACTION_NAME.BATTLE_ROYALE_SQUAD,
- QUEUE_TYPE.BOB: PREBATTLE_ACTION_NAME.BOB_SQUAD}
+ QUEUE_TYPE.BATTLE_ROYALE: PREBATTLE_ACTION_NAME.BATTLE_ROYALE_SQUAD}
 _QUEUE_TYPE_TO_PREBATTLE_TYPE = {QUEUE_TYPE.EVENT_BATTLES: PREBATTLE_TYPE.EVENT,
  QUEUE_TYPE.RANDOMS: PREBATTLE_TYPE.SQUAD,
  QUEUE_TYPE.EPIC: PREBATTLE_TYPE.EPIC,
- QUEUE_TYPE.BATTLE_ROYALE: PREBATTLE_TYPE.BATTLE_ROYALE,
- QUEUE_TYPE.BOB: PREBATTLE_TYPE.BOB}
+ QUEUE_TYPE.BATTLE_ROYALE: PREBATTLE_TYPE.BATTLE_ROYALE}
 _PREBATTLE_TYPE_TO_VEH_CRITERIA = {PREBATTLE_TYPE.SQUAD: ~(REQ_CRITERIA.VEHICLE.EPIC_BATTLE ^ REQ_CRITERIA.VEHICLE.BATTLE_ROYALE ^ REQ_CRITERIA.VEHICLE.EVENT_BATTLE),
  PREBATTLE_TYPE.EPIC: ~(REQ_CRITERIA.VEHICLE.BATTLE_ROYALE ^ REQ_CRITERIA.VEHICLE.EVENT_BATTLE),
  PREBATTLE_TYPE.BATTLE_ROYALE: REQ_CRITERIA.VEHICLE.BATTLE_ROYALE,
  PREBATTLE_TYPE.EVENT: REQ_CRITERIA.VEHICLE.EVENT_BATTLE}
+_MIN_PERF_PRESET_NAME = 'MIN'
 SquadInfo = namedtuple('SquadInfo', ['platoonState', 'squadManStates', 'commanderIndex'])
 Position = namedtuple('Position', ['x', 'y'])
 _PlatoonLayout = namedtuple('_PlatoonLayout', ('layoutID', 'windowClass'))
+_PrbEntityInfo = namedtuple('_PrbEntityInfo', ['queueType', 'prebattleType'])
 
 class _EPlatoonLayout(Enum):
     WELCOME = 0
@@ -158,6 +158,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.__isPlatoonVisualizationEnabled = False
         self.__availablePlatoonTanks = {}
         self.__tankDisplayPosition = {}
+        self.__executeQueue = False
         self.__areOtherMembersReady = False
         self.onFilterUpdate = Event.Event()
         self.onPlatoonTankVisualizationChanged = Event.Event()
@@ -165,14 +166,23 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.onMembersUpdate = Event.Event()
         self.onPlatoonTankUpdated = Event.Event()
         self.onAutoSearchCooldownChanged = Event.Event()
+        self.__prevPrbEntityInfo = _PrbEntityInfo(QUEUE_TYPE.UNKNOWN, PREBATTLE_TYPE.NONE)
         return
 
     def onLobbyInited(self, event):
+        validateDisplaySettings = self.__checkForSettingsModification()
+        if validateDisplaySettings:
+            self.__validateSystemReq()
         self.__isPlatoonVisualizationEnabled = bool(self.__settingsCore.getSetting(GAME.DISPLAY_PLATOON_MEMBERS))
         self.__startListening()
 
     def onLobbyStarted(self, ctx):
         self.resetUnitTierFilter()
+
+    def onPrbEntitySwitching(self):
+        queueType = self.getQueueType()
+        prebattleType = self.getPrbEntityType()
+        self.__prevPrbEntityInfo = _PrbEntityInfo(queueType, prebattleType)
 
     def onAccountBecomeNonPlayer(self):
         self.__stopListening()
@@ -209,9 +219,17 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             callback(False)
             return
         result = yield self.prbDispatcher.doLeaveAction(LeavePrbAction(isExit=True))
-        if result:
-            BigWorld.player().enqueueRandom(currentVehicle.invID, arenaTypeID=mapID)
+        self.__executeQueue = result
         callback(result)
+
+    def onPrbEntitySwitched(self):
+        prevQueueType = self.__prevPrbEntityInfo.queueType
+        if prevQueueType != self.getQueueType() and self.hasSearchSupport():
+            self.resetUnitTierFilter()
+        if not self.__executeQueue:
+            return
+        self.__executeQueue = False
+        self.prbDispatcher.doAction(PrbAction(''))
 
     def leavePlatoon(self, isExit=True, ignoreConfirmation=False):
         action = LeavePrbAction(isExit=isExit, ignoreConfirmation=ignoreConfirmation)
@@ -280,7 +298,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         return False
 
     def isInPlatoon(self):
-        return self.prbDispatcher.getFunctionalState().isInUnit() and self.prbEntity.getEntityType() in PREBATTLE_TYPE.SQUAD_PREBATTLES
+        return self.prbDispatcher.getFunctionalState().isInUnit() and self.prbEntity.getEntityType() in PREBATTLE_TYPE.SQUAD_PREBATTLES if self.prbDispatcher and self.prbEntity else False
 
     def isSearchingForPlayersEnabled(self):
         prebattleType = self.getPrbEntityType()
@@ -740,6 +758,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             return
 
     def __onHangarSpaceCreate(self):
+        self.__currentlyDisplayedTanks = 0
         if self.isInPlatoon() and self.__getNotReadyPlayersCount() < self.__getPlayerCount() - 1:
             self.__updatePlatoonTankInfo()
             cameraManager = self.__hangarSpace.space.getCameraManager()
@@ -772,15 +791,20 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
     def __unitMgrOnUnitJoined(self, unitMgrID, prbType):
         _logger.debug('PlatoonController: __unitMgrOnUnitJoined')
         self.__tankDisplayPosition.clear()
+        if self.hasDelayedCallback(self.destroyUI):
+            self.stopCallback(self.destroyUI)
         if self.__startAutoSearchOnUnitJoin:
             self.startSearch()
         else:
             self.__onUnitPlayersListChanged()
         self.__updatePlatoonTankInfo()
 
-    def __unitMgrOnUnitLeft(self, unitMgrID):
+    def __unitMgrOnUnitLeft(self, unitMgrID, isFinishedAssembling):
         _logger.debug('PlatoonController: __unitMgrOnUnitLeft')
-        self.destroyUI()
+        if isFinishedAssembling:
+            self.delayCallback(0.5, self.destroyUI)
+        else:
+            self.destroyUI()
         self.__tankDisplayPosition.clear()
         self.__isActiveSearchView = False
 
@@ -813,14 +837,18 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
     def __platoonTankLoaded(self, event):
         self.__currentlyDisplayedTanks += 1
         if self.__currentlyDisplayedTanks == 1:
-            g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': True}), EVENT_BUS_SCOPE.LOBBY)
+            g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': True,
+             'setIdle': True,
+             'setParallax': False}), EVENT_BUS_SCOPE.LOBBY)
             cameraManager = self.__hangarSpace.space.getCameraManager()
             cameraManager.setPlatoonCameraDistance(enable=True)
 
     def __platoonTankDestroyed(self, event):
         self.__currentlyDisplayedTanks = max(0, self.__currentlyDisplayedTanks - 1)
         if self.__currentlyDisplayedTanks <= 0:
-            g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': False}), EVENT_BUS_SCOPE.LOBBY)
+            g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': False,
+             'setIdle': True,
+             'setParallax': False}), EVENT_BUS_SCOPE.LOBBY)
             cameraManager = self.__hangarSpace.space.getCameraManager()
             cameraManager.setPlatoonCameraDistance(enable=False)
 
@@ -838,34 +866,40 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             isInPlatoon = self.prbDispatcher.getFunctionalState().isInUnit()
             self.onPlatoonTankVisualizationChanged(self.__isPlatoonVisualizationEnabled and isInPlatoon)
             self.__updatePlatoonTankInfo()
-
-            def __getFilters(self):
-                defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
-                return self.settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
-
-            def __checkForSettingsModification(self):
+            if displayPlatoonMembers and self.__checkForSettingsModification():
                 filters = self.__getFilters()
-                isDisplayPlatoonMembersClicked = filters[GuiSettingsBehavior.DISPLAY_PLATOON_MEMBER_CLICKED]
-                return not isDisplayPlatoonMembersClicked
-
-            def __validateSystemReq(self):
-                recomPreset = BigWorld.detectGraphicsPresetFromSystemSettings()
-                currentVirtualMemory = BigWorld.getAutoDetectGraphicsSettingsScore(HARDWARE_SCORE_PARAMS.PARAM_VIRTUAL_MEMORY)
-                epicCtfEnabled = self.settingsCore.getSetting(GAME.DISPLAY_PLATOON_MEMBERS)
-                restricted = False
-                for name in ['MIN']:
-                    presetId = BigWorld.getSystemPerformancePresetIdFromName(name)
-                    if presetId == recomPreset:
-                        restricted = True
-
-                if restricted or currentVirtualMemory <= 2048:
-                    if epicCtfEnabled:
-                        self.settingsCore.applySetting(GAME.DISPLAY_PLATOON_MEMBERS, False)
-                        confirmators = self.settingsCore.applyStorages(False)
-                        self.settingsCore.confirmChanges(confirmators)
-                        self.settingsCore.clearStorages()
-
+                filters[GuiSettingsBehavior.DISPLAY_PLATOON_MEMBER_CLICKED] = True
+                self.__settingsCore.serverSettings.setSectionSettings(GUI_START_BEHAVIOR, filters)
             return
+
+    def __getFilters(self):
+        defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
+        return self.__settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
+
+    def __checkForSettingsModification(self):
+        filters = self.__getFilters()
+        isDisplayPlatoonMembersClicked = filters[GuiSettingsBehavior.DISPLAY_PLATOON_MEMBER_CLICKED]
+        return not isDisplayPlatoonMembersClicked
+
+    def __validateSystemReq(self):
+        recomPreset = BigWorld.detectGraphicsPresetFromSystemSettings()
+        currentGpuMemory = BigWorld.getAutoDetectGraphicsSettingsScore(HARDWARE_SCORE_PARAMS.PARAM_GPU_MEMORY)
+        displayPlatoonMembersEnabled = self.__settingsCore.getSetting(GAME.DISPLAY_PLATOON_MEMBERS)
+        restricted = False
+        presetId = BigWorld.getSystemPerformancePresetIdFromName(_MIN_PERF_PRESET_NAME)
+        if presetId == recomPreset:
+            restricted = True
+        changeRequired = False
+        if restricted or currentGpuMemory < 500:
+            if displayPlatoonMembersEnabled:
+                changeRequired = True
+        elif not displayPlatoonMembersEnabled:
+            changeRequired = True
+        if changeRequired:
+            self.__settingsCore.applySetting(GAME.DISPLAY_PLATOON_MEMBERS, not displayPlatoonMembersEnabled)
+            confirmations = self.__settingsCore.applyStorages(False)
+            self.__settingsCore.confirmChanges(confirmations)
+            self.__settingsCore.clearStorages()
 
     def hsSpaceDestroy(self, inited):
         if inited:
@@ -886,7 +920,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             unitMgrID = entity.getID()
             for slot in entity.getSlotsIterator(*entity.getUnit(unitMgrID=unitMgrID)):
                 if slot.player is not None and not slot.player.isCurrentPlayer():
-                    canDisplayModel = slot.player.isReady
+                    canDisplayModel = slot.player.isReady and not slot.player.isInArena()
                     profileVehicle = slot.profileVehicle
                     player = slot.player
                     if profileVehicle and player:
@@ -950,5 +984,5 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
 
     def __onEventProgressionUpdated(self, _):
         entityType = self.getPrbEntityType()
-        if entityType == PREBATTLE_TYPE.EPIC and not self.__eventProgression.isFrontLine or entityType == PREBATTLE_TYPE.BATTLE_ROYALE and not self.__eventProgression.isSteelHunter or entityType in (PREBATTLE_TYPE.EPIC, PREBATTLE_TYPE.BATTLE_ROYALE) and not self.__eventProgression.modeIsAvailable():
+        if entityType == PREBATTLE_TYPE.EPIC and not self.__eventProgression.isFrontLine or entityType == PREBATTLE_TYPE.EPIC and not self.__eventProgression.modeIsAvailable():
             self.leavePlatoon()

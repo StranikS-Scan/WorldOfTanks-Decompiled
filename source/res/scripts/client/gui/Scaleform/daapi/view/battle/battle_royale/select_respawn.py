@@ -148,6 +148,7 @@ class SelectRespawnView(ViewImpl):
             vm.setDescription(R.strings.battle_royale.selectRespawn.description())
             vm.setBtnDescription(R.strings.battle_royale.selectRespawn.btnDescription())
             vm.setBackground(self.__background)
+            vm.setIsReplay(self.__sessionProvider.isReplayPlaying)
 
     def _finalize(self):
         super(SelectRespawnView, self)._finalize()

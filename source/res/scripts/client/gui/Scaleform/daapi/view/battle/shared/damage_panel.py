@@ -160,7 +160,7 @@ class DamagePanel(DamagePanelMeta):
         self.__tankIndicator = None
         self.__isShow = True
         self.__maxHealth = 0
-        self.__isAutoRotationOn = True
+        self.__isAutoRotationOff = False
         self.__isAutoRotationShown = False
         self.__statusAnimPlayers = {}
         self.__initialized = False
@@ -292,9 +292,10 @@ class DamagePanel(DamagePanelMeta):
             self.as_updateHealthS(healthStr, healthProgress)
 
     def _setAutoRotation(self, isOn):
-        if self.__isAutoRotationShown and self.__isAutoRotationOn != isOn:
-            self.__isAutoRotationOn = isOn
-            self.as_setAutoRotationS(isOn)
+        isAutoRotationOff = self.__isAutoRotationShown and not bool(isOn)
+        if isAutoRotationOff != self.__isAutoRotationOff:
+            self.__isAutoRotationOff = isAutoRotationOff
+            self.as_setAutoRotationS(not isAutoRotationOff)
 
     def _switching(self, _):
         self.as_resetS()
@@ -375,19 +376,18 @@ class DamagePanel(DamagePanelMeta):
             inDegrees = (math.degrees(-yawLimits[0]), math.degrees(yawLimits[1]))
         else:
             inDegrees = None
-        self.__isAutoRotationOn = True
         self.__isAutoRotationShown = False
         if vehicle.isPlayerVehicle or BigWorld.player().isObserver():
             flag = vehicle_getter.getAutoRotationFlag(vTypeDesc)
             if flag != AUTO_ROTATION_FLAG.IGNORE_IN_UI:
-                self.__isAutoRotationOn = flag == AUTO_ROTATION_FLAG.TURN_ON
+                self.__isAutoRotationOff = flag != AUTO_ROTATION_FLAG.TURN_ON
                 self.__isAutoRotationShown = True
         self.__isWheeledTech = vehicle.isWheeledTech
         self.__maxHealth = vehicle.maxHealth
         health = vehicle.health
         healthStr = formatHealthProgress(health, self.__maxHealth)
         healthProgress = normalizeHealthPercent(health, self.__maxHealth)
-        self.as_setupS(healthStr, healthProgress, vehicle_getter.getVehicleIndicatorType(vTypeDesc), vehicle_getter.getCrewMainRolesWithIndexes(vType.crewRoles), inDegrees, vehicle_getter.hasTurretRotator(vTypeDesc), self.__isWheeledTech, self.__isAutoRotationOn)
+        self.as_setupS(healthStr, healthProgress, vehicle_getter.getVehicleIndicatorType(vTypeDesc), vehicle_getter.getCrewMainRolesWithIndexes(vType.crewRoles), inDegrees, vehicle_getter.hasTurretRotator(vTypeDesc), self.__isWheeledTech, not self.__isAutoRotationOff)
         if self.__isWheeledTech:
             self.as_setupWheeledS(vTypeDesc.chassis.generalWheelsAnimatorConfig.getNonTrackWheelsCount())
         self._updatePlayerInfo(vehicle.id)

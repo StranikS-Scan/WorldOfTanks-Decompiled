@@ -98,6 +98,8 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
         return self.__getInitCrewOperationObject(OPERATION_RETRAIN, 'alreadyRetrained') if self.__isTopCrewForCurrentVehicle(crew, vehicle) else self.__getInitCrewOperationObject(OPERATION_RETRAIN)
 
     def __getReturnOperationData(self, vehicle):
+        if vehicle.isInBattle:
+            return self.__getInitCrewOperationObject(OPERATION_RETURN, 'vehicleInBattle')
         crew = vehicle.crew
         lastCrewIDs = vehicle.lastCrew
         tmen = self.itemsCache.items.getTankmen().values()
@@ -142,7 +144,7 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
         elif isCrewAlreadyInCurrentVehicle:
             return self.__getInitCrewOperationObject(OPERATION_RETURN, 'alreadyOnPlaces')
         else:
-            return self.__getInitCrewOperationObject(OPERATION_RETURN, None, CREW_OPERATIONS.RETURN_WARNING_MEMBERDEMOBILIZED_TOOLTIP, True) if demobilizedMembersCounter > 0 and demobilizedMembersCounter < len(lastCrewIDs) else self.__getInitCrewOperationObject(OPERATION_RETURN)
+            return self.__getInitCrewOperationObject(OPERATION_RETURN, None, CREW_OPERATIONS.RETURN_WARNING_MEMBERDEMOBILIZED_TOOLTIP, True) if 0 < demobilizedMembersCounter < len(lastCrewIDs) else self.__getInitCrewOperationObject(OPERATION_RETURN)
 
     def __getDropInBarrackOperationData(self, vehicle):
         crew = vehicle.crew
@@ -232,5 +234,5 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
 
         return count
 
-    def __unitMgrOnUnitLeft(self, _):
+    def __unitMgrOnUnitLeft(self, _, __):
         self._destroy()

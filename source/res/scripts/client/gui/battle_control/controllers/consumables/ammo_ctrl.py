@@ -18,6 +18,8 @@ from gui.shared.utils.decorators import ReprInjector
 from gui.Scaleform.genConsts.AUTOLOADERBOOSTVIEWSTATES import AUTOLOADERBOOSTVIEWSTATES
 from ReloadEffect import DualGunReload
 from items import vehicles
+from skeletons.gui.battle_session import IBattleSessionProvider
+from helpers import dependency
 __all__ = ('AmmoController', 'AmmoReplayPlayer')
 _ClipBurstSettings = namedtuple('_ClipBurstSettings', 'size interval')
 _HUNDRED_PERCENT = 100.0
@@ -359,6 +361,7 @@ class _AutoReloadingBoostStateCtrl(object):
 
 class AmmoController(MethodsRules, IBattleController):
     __slots__ = ('__eManager', 'onShellsAdded', 'onShellsUpdated', 'onNextShellChanged', 'onCurrentShellChanged', 'onGunSettingsSet', 'onGunReloadTimeSet', 'onGunAutoReloadTimeSet', 'onGunAutoReloadBoostUpdated', '_autoReloadingBoostState', '__ammo', '_order', '__currShellCD', '__nextShellCD', '__gunSettings', '_reloadingState', '_autoReloadingState', '__autoShoots', '__weakref__', 'onDebuffStarted')
+    __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, reloadingState=None):
         super(AmmoController, self).__init__()
@@ -396,7 +399,8 @@ class AmmoController(MethodsRules, IBattleController):
         self.clear(leave=True)
 
     def clear(self, leave=True):
-        super(AmmoController, self).clear(leave)
+        if not BigWorld.player().isObserver() and not self.__guiSessionProvider.isReplayPlaying:
+            super(AmmoController, self).clear(leave)
         if leave:
             self.__eManager.clear()
         self.__ammo.clear()
@@ -649,6 +653,10 @@ class AmmoController(MethodsRules, IBattleController):
         else:
             result, error = True, CANT_SHOOT_ERROR.UNDEFINED
         return (result, error)
+
+    def clearAmmo(self):
+        self.__ammo.clear()
+        self._order = []
 
     def __shotFail(self):
         if self.__gunSettings.reloadEffect is not None and self.__currShellCD in self.__ammo:

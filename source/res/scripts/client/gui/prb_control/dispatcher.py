@@ -422,7 +422,7 @@ class _PreBattleDispatcher(ListenersCollection):
         else:
             self.__setUnit(flags=self.__requestCtx.getFlags(), prbType=self.__requestCtx.getEntityType())
 
-    def unitMgr_onUnitLeft(self, unitMgrID):
+    def unitMgr_onUnitLeft(self, unitMgrID, isFinishedAssembling):
         flags = self.__requestCtx.getFlags()
         if flags & FUNCTIONAL_FLAG.SWITCH == 0:
             prbType = 0

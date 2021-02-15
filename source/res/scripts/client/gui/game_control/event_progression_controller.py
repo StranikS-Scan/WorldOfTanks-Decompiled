@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/game_control/event_progression_controller.py
 from collections import namedtuple
 from enum import Enum, unique
-from itertools import chain
 import Event
 from adisp import process
 from constants import Configs
@@ -20,7 +19,7 @@ from helpers import dependency, int2roman
 from gui.impl import backport
 from items import makeIntCompactDescrByID
 from items.components.c11n_constants import CustomizationType
-from skeletons.gui.game_control import IEventProgressionController, IEpicBattleMetaGameController, IBattleRoyaleController, IQuestsController
+from skeletons.gui.game_control import IEventProgressionController, IEpicBattleMetaGameController, IQuestsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.server_events import IEventsCache
@@ -33,7 +32,7 @@ from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.shared.utils.functions import getRelativeUrl, getUniqueViewName
 from gui.shared.formatters import time_formatters
 from skeletons.connection_mgr import IConnectionManager
-from gui.shared.prime_time_constants import PrimeTimeStatus
+from gui.ranked_battles.constants import PrimeTimeStatus
 from predefined_hosts import g_preDefinedHosts
 from shared_utils import first
 EVENT_PROGRESSION_FINISH_TOKEN = 'epicmetagame:progression_finish'
@@ -107,7 +106,6 @@ class EventProgressionController(IEventProgressionController):
         self.__urlMacros = URLMacros()
         self.__isEnabled = False
         self.__isFrontLine = False
-        self.__isSteelHunter = False
         self.__url = ''
         self.__actualRewardPoints = 0
         self.__seasonRewardPoints = 0
@@ -142,7 +140,7 @@ class EventProgressionController(IEventProgressionController):
 
     @property
     def isSteelHunter(self):
-        return self.__isEnabled and self.__isSteelHunter
+        return False
 
     @property
     def url(self):
@@ -159,8 +157,7 @@ class EventProgressionController(IEventProgressionController):
     @property
     def seasonRewardPoints(self):
         dossier = self.__itemsCache.items.getAccountDossier()
-        achievements = dossier.getDossierDescr().expand('epicSeasons')
-        achievements = chain(achievements.items(), dossier.getDossierDescr().expand('battleRoyaleSeasons').items())
+        achievements = dossier.getDossierDescr().expand('epicSeasons').items()
         seasonRewardPoints = self.__seasonRewardPoints
         for (seasonID, cycleID), cycleAchievements in achievements:
             if not self.validateSeasonData(seasonID, cycleID):
@@ -323,20 +320,23 @@ class EventProgressionController(IEventProgressionController):
         return {styleId:price for styleId, price in self.__rewardStyles}.get(styleID, 0)
 
     def getAllLevelAwards(self):
-        awardsData = dict()
-        abilityPts = None
-        if self.isFrontLine:
-            abilityPts = self.__lobbyContext.getServerSettings().epicMetaGame.metaLevel['abilityPointsForLevel']
-        allQuests = self.__eventsCache.getAllQuests()
-        for questKey, questData in allQuests.iteritems():
-            if self.__currentController.TOKEN_QUEST_ID in questKey:
-                _, _, questNum = questKey.partition(self.__currentController.TOKEN_QUEST_ID)
-                if questNum:
-                    questLvl = int(questNum)
-                    questBonuses = questData.getBonuses()
-                    awardsData[questLvl] = self.__packBonuses(questBonuses, questLvl, abilityPts)
+        if self.__currentController is None:
+            return {}
+        else:
+            awardsData = dict()
+            abilityPts = None
+            if self.isFrontLine:
+                abilityPts = self.__lobbyContext.getServerSettings().epicMetaGame.metaLevel['abilityPointsForLevel']
+            allQuests = self.__eventsCache.getAllQuests()
+            for questKey, questData in allQuests.iteritems():
+                if self.__currentController.TOKEN_QUEST_ID in questKey:
+                    _, _, questNum = questKey.partition(self.__currentController.TOKEN_QUEST_ID)
+                    if questNum:
+                        questLvl = int(questNum)
+                        questBonuses = questData.getBonuses()
+                        awardsData[questLvl] = self.__packBonuses(questBonuses, questLvl, abilityPts)
 
-        return awardsData
+            return awardsData
 
     def getLevelAwards(self, level):
         allAwards = self.getAllLevelAwards()
@@ -375,8 +375,7 @@ class EventProgressionController(IEventProgressionController):
     @classmethod
     def getMostRelevantSeasons(cls):
         epicMetaGameCtrl = dependency.instance(IEpicBattleMetaGameController)
-        battleRoyaleCtrl = dependency.instance(IBattleRoyaleController)
-        seasons = {key:value for key, value in zip(('frontline', 'battle_royale'), (first(filter(None, (mode.getCurrentSeason(), mode.getNextSeason(), mode.getPreviousSeason()))) for mode in (epicMetaGameCtrl, battleRoyaleCtrl)))}
+        seasons = {key:value for key, value in zip(('frontline',), (first(filter(None, (mode.getCurrentSeason(), mode.getNextSeason(), mode.getPreviousSeason()))) for mode in (epicMetaGameCtrl,)))}
         return seasons
 
     @classmethod
@@ -468,10 +467,10 @@ class EventProgressionController(IEventProgressionController):
         return any([ primeTime.getNextPeriodStart(time_utils.getCurrentLocalServerTimestamp(), currentCycleEndTime) for primeTime in primeTimes.values() ])
 
     def getStats(self):
-        return self.__currentController.getStats()
+        return self.__currentController.getStats() if self.__currentController else None
 
     def getPointsProgressForLevel(self, level):
-        return self.__currentController.getPointsProgressForLevel(level)
+        return self.__currentController.getPointsProgressForLevel(level) if self.__currentController else None
 
     def getEpicMetascreenData(self):
         if self.isFrontLine:
@@ -531,11 +530,12 @@ class EventProgressionController(IEventProgressionController):
                 if season.isSingleCycleSeason():
                     infoStrResID = R.strings.menu.headerButtons.battle.types.epic.extra.currentSeason()
                     seasonResID = R.strings.epic_battle.season.num(season.getSeasonID())
-                    name = backport.text(seasonResID.name()) if seasonResID else None
+                    seasonName = backport.text(seasonResID.name()) if seasonResID else None
+                    title = backport.text(infoStrResID, season=seasonName)
                 else:
                     infoStrResID = self.__progressionNameCycleTxtId
-                    name = self.getCurrentOrNextActiveCycleNumber(season)
-                title = backport.text(infoStrResID, season=name)
+                    cycleNumber = self.getCurrentOrNextActiveCycleNumber(season)
+                    title = backport.text(infoStrResID, season=int2roman(cycleNumber))
             else:
                 title = backport.text(self.__selectorLabelTxtId)
             description = getTimeToStr(getDate(cycle) - currentTime) if self.modeIsEnabled() else text_styles.error(backport.text(R.strings.tooltips.eventProgression.disabled()))
@@ -550,7 +550,7 @@ class EventProgressionController(IEventProgressionController):
         return formatters.packBuildUpBlockData([formatters.packImageTextBlockData(title=text_styles.middleTitle(title), txtPadding=formatters.packPadding(top=8, left=94), desc=text_styles.main(description), descPadding=formatters.packPadding(top=8, left=94), txtOffset=1, txtGap=-1, img=backport.image(self.__progressionIconId), imgPadding=formatters.packPadding(top=1, left=18))])
 
     def getCurrentModeAlias(self):
-        return self.__currentController.MODE_ALIAS
+        return self.__currentController.MODE_ALIAS if self.__currentController else None
 
     def getCycleStatusTooltipPack(self):
         items = []
@@ -602,13 +602,7 @@ class EventProgressionController(IEventProgressionController):
     def __isActiveQuest(self, q):
         if self.__questPrefix not in q.getID():
             return False
-        if self.__isFrontLine:
-            return True
-        if self.__isSteelHunter:
-            validationResult = q.isAvailable()
-            isReqsAvailable = q.accountReqs.isAvailable()
-            return (validationResult.isValid or validationResult.reason == 'dailyComplete') and isReqsAvailable
-        return False
+        return True if self.__isFrontLine else False
 
     def __packBonuses(self, bonuses, level, abilityPts):
         result = [{'id': 0,
@@ -645,10 +639,6 @@ class EventProgressionController(IEventProgressionController):
             marginTop = 0
             iconSrc = backport.image(R.images.gui.maps.icons.epicBattles.fame_point_tiny())
             icon = icons.makeImageTag(source=iconSrc, width=24, height=24)
-        elif self.isSteelHunter:
-            marginTop = 6
-            iconSrc = backport.image(R.images.gui.maps.icons.battleRoyale.progression_point())
-            icon = icons.makeImageTag(source=iconSrc, width=16, height=16)
         if icon is not None:
             text = text_styles.concatStylesWithSpace(text, icon)
         items.append(formatters.packAlignedTextBlockData(text=text, align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, padding=formatters.packPadding(left=20, right=20, top=-35)))
@@ -705,7 +695,6 @@ class EventProgressionController(IEventProgressionController):
         s = self.__lobbyContext.getServerSettings().eventProgression
         self.__isEnabled = s.isEnabled
         self.__isFrontLine = s.isFrontLine
-        self.__isSteelHunter = s.isSteelHunter
         self.__url = s.url
         self.__maxRewardPoints = s.maxRewardPoints
         self.__rewardPointsTokenID = s.rewardPointsTokenID
@@ -713,9 +702,7 @@ class EventProgressionController(IEventProgressionController):
         self.__rewardVehicles = s.rewardVehicles
         self.__rewardStyles = s.rewardStyles
         self.__questPrefix = s.questPrefix
-        if self.isSteelHunter is True:
-            self.__updateSteelHunterData()
-        elif self.isFrontLine is True:
+        if self.isFrontLine:
             self.__updateFrontLineData()
         else:
             self.__currentMode = None
@@ -737,23 +724,6 @@ class EventProgressionController(IEventProgressionController):
         self.__primeTimeTitle = R.strings.epic_battle.primeTime.title()
         self.__primeTimeBg = R.images.gui.maps.icons.epicBattles.primeTime.prime_time_back_default()
         self.__allCyclesWasEndedResId = R.strings.event_progression.selectorTooltip.eventProgression.waitNext()
-
-    def __updateSteelHunterData(self):
-        self.__currentMode = dependency.instance(IBattleRoyaleController)
-        self.__flagIconId = R.images.gui.maps.icons.library.hangarFlag.flag_epic_steelhunter()
-        self.__questTooltipHeaderIconId = R.images.gui.maps.icons.quests.epic_steelhunter_quests_infotip()
-        self.__questTooltipHeaderTxtId = R.strings.epic_battle.questsTooltip.epicBattle.steelhunter.header()
-        self.__questCardLevelTxtId = R.strings.event_progression.questsCard.steelHunter.getLevel()
-        self.__progressionNameCycleTxtId = R.strings.tooltips.eventProgression.steelHunter.season()
-        self.__progressionIconId = R.images.gui.maps.icons.battleTypes.c_64x64.steelhunt()
-        self.__selectorLabelTxtId = R.strings.menu.headerButtons.battle.types.battleRoyale()
-        self.__selectorRibbonResId = R.images.gui.maps.icons.battleRoyale.ribbon_small()
-        self.__selectorData = PREBATTLE_ACTION_NAME.BATTLE_ROYALE
-        self.__selectorType = SELECTOR_BATTLE_TYPES.BATTLE_ROYALE
-        self.__selectorQueueType = QUEUE_TYPE.BATTLE_ROYALE
-        self.__primeTimeTitle = R.strings.epic_battle.primeTime.steelhunter.title()
-        self.__primeTimeBg = R.images.gui.maps.icons.battleRoyale.primeTime.prime_time_back_default()
-        self.__allCyclesWasEndedResId = R.strings.event_progression.selectorTooltip.eventProgression.ended()
 
     def __updatePlayerData(self, *_):
         t = self.__itemsCache.items.tokens.getTokens()

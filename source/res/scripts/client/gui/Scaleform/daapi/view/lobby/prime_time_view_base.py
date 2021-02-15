@@ -13,7 +13,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.base.pre_queue.listener import IPreQueueListener
-from gui.shared.prime_time_constants import PrimeTimeStatus
+from gui.ranked_battles.constants import PrimeTimeStatus
 from gui.shared import actions, event_dispatcher
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE

@@ -3,7 +3,6 @@
 import functools
 import logging
 from collections import namedtuple
-from datetime import timedelta
 import BigWorld
 from account_helpers.AccountSettings import AccountSettings, LAST_CALENDAR_SHOW_TIMESTAMP
 from adisp import process
@@ -58,10 +57,6 @@ _BROWSER_SIZE = (1014, 654)
 _MIN_BROWSER_ID = 827709
 _logger = logging.getLogger(__name__)
 _browserIDGen = xrange(_MIN_BROWSER_ID, _MIN_BROWSER_ID + 10000).__iter__()
-_START_OF_DAY_OFFSET = {'EU': timedelta(hours=5),
- 'ASIA': timedelta(hours=6),
- 'NA': timedelta(hours=11),
- 'RU': timedelta(hours=6)}
 
 def calendarEnabledActionFilter(act):
     return any((isinstance(mod, CalendarSplashModifier) for mod in act.getModifiers()))
@@ -173,7 +168,7 @@ class CalendarController(GameWindowController, ICalendarController):
         if not lastShowTstamp or lastShowTstamp < 0:
             return True
         else:
-            now = time_utils.getServerRegionalTime()
+            now = time_utils.getServerUTCTime()
             if lastShowTstamp > now:
                 return True
             actions = self.eventsCache.getActions(calendarEnabledActionFilter).values()
@@ -229,7 +224,7 @@ class CalendarController(GameWindowController, ICalendarController):
                 return
 
             self.__openBrowser(self.__browserID, url, _BROWSER_SIZE, invokedFrom)
-            self.__setShowTimestamp(time_utils.getServerRegionalTime())
+            self.__setShowTimestamp(time_utils.getServerUTCTime())
             _logger.debug('Calendar opened in web browser (browserID=%d)', self.__browserID)
             return
 

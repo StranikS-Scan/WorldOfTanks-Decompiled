@@ -1,15 +1,15 @@
 <china.xml>
-  <china:Ch25_121_mod_1971B7>	ussr	</china:Ch25_121_mod_1971B7>
-  <china:Ch25_121_mod_1971B0>	germany	</china:Ch25_121_mod_1971B0>
-  <china:Ch25_121_mod_1971B6>	usa	</china:Ch25_121_mod_1971B6>
+  <china:Ch19_1218>	ussr	</china:Ch19_1218>
+  <china:Ch19_1211>	germany	</china:Ch19_1211>
+  <china:Ch19_1217>	usa	</china:Ch19_1217>
   <xmlns:china>	china	</xmlns:china>
-  <xmlns:france>	france	</xmlns:france>
-  <china:Ch25_121_mod_1971B5>	uk	</china:Ch25_121_mod_1971B5>
-  <china:Ch25_121_mod_1971B2>	japan	</china:Ch25_121_mod_1971B2>
+  <china:Ch19_1210>	france	</china:Ch19_1210>
+  <china:Ch19_1216>	uk	</china:Ch19_1216>
+  <china:Ch19_1213>	japan	</china:Ch19_1213>
   <xmlns:czech>	czech	</xmlns:czech>
-  <china:Ch25_121_mod_1971B4>	sweden	</china:Ch25_121_mod_1971B4>
-  <china:Ch25_121_mod_1971B3>	poland	</china:Ch25_121_mod_1971B3>
-  <china:Ch25_121_mod_1971B1>	italy	</china:Ch25_121_mod_1971B1>
+  <china:Ch19_1215>	sweden	</china:Ch19_1215>
+  <china:Ch19_1214>	poland	</china:Ch19_1214>
+  <china:Ch19_1212>	italy	</china:Ch19_1212>
   <itemGroup>
     <userString>	#vehicle_customization:camouflage/transparent	</userString>
     <season>	summer	</season>
@@ -3442,6 +3442,46 @@
       <tilingSettings>
         <type>	relative	</type>
         <factor>	3.217147  3.217454	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	china:Ch19_121	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	300	</id>
+      <texture>	vehicles/chinese/Camouflage/121.dds	</texture>
+      <description>	#vehicle_customization:camouflage/ch19_121_progression/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/ch19_121_progression/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	88 99 110 255	</c0>
+          <c1>	161 161 161 255	</c1>
+          <c2>	133 150 158 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.436332	</HULL>
+        <TURRET>	0.436332	</TURRET>
+        <GUN>	0.436332	</GUN>
+      </rotation>
+      <tiling>
+        <china:Ch19_121>	2.8 2.8 0.1 4.0	</china:Ch19_121>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.000000  1.000000	</factor>
         <offset>	0.000000 0.000000	</offset>
       </tilingSettings>
     </camouflage>

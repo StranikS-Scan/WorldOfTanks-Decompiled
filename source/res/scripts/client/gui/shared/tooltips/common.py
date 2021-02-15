@@ -1408,7 +1408,11 @@ class BattlePassInProgressTooltipContentWindowData(ToolTipBaseData):
         super(BattlePassInProgressTooltipContentWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.BATTLE_PASS_IN_PROGRESS)
 
     def getDisplayableData(self, *args, **kwargs):
-        return BattlePassInProgressTooltipView()
+        if TOOLTIPS_CONSTANTS.BATTLE_PASS_AS3_TOOLTIP_CALL in args:
+            diaplayableData = DecoratedTooltipWindow(BattlePassInProgressTooltipView(), useDecorator=False)
+        else:
+            diaplayableData = BattlePassInProgressTooltipView()
+        return diaplayableData
 
 
 class BattlePassCompletedTooltipContentWindowData(ToolTipBaseData):

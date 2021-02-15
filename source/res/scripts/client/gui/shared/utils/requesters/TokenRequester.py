@@ -94,17 +94,12 @@ class TokenRequester(object):
             delta = self.lastResponseDelta()
             if allowDelay and delta < self.getReqCoolDown():
                 yield wait(self.getReqCoolDown() - delta)
-                requester = getattr(BigWorld.player(), 'requestToken', None)
-                if not requester or not callable(requester):
-                    if callback:
-                        callback(None)
-                    return
             self.__callback = callback
             self.__requestID = self.__idsGen.next()
             if timeout:
                 self.__loadTimeout(self.__requestID, self.__tokenType, max(timeout, 0.0))
             repository = _getAccountRepository()
-            if repository:
+            if repository and self.canAllowRequest():
                 repository.onTokenReceived += self.__onTokenReceived
                 requester(self.__requestID, self.__tokenType)
             elif self.__callback:

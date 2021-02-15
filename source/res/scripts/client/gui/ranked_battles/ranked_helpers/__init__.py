@@ -6,13 +6,12 @@ from collections import namedtuple
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.periodic_battles.models import CalendarStatusVO
-from gui.ranked_battles.constants import RANKED_QUEST_ID_PREFIX, RankedTokenQuestPostfix, LandingUrlParams, AlertTypes
+from gui.ranked_battles.constants import RANKED_QUEST_ID_PREFIX, PrimeTimeStatus, RankedTokenQuestPostfix, LandingUrlParams, AlertTypes
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.ranges import toRomanRangeString
-from gui.shared.prime_time_constants import PrimeTimeStatus
 from helpers import dependency, time_utils
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IRankedBattlesController
@@ -125,16 +124,16 @@ def getRankedBattlesSeasonGapUrl(lobbyContext=None):
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
-def getRankedBattlesYearRatingUrl(lobbyContext=None, isLobbySub=False):
+def getRankedBattlesYearRatingUrl(lobbyContext=None, isLobbySub=False, showPosition=False):
     url = lobbyContext.getServerSettings().bwRankedBattles.yearRatingPageUrl
-    params = LandingUrlParams.LOBBY_SUB if isLobbySub else LandingUrlParams.PAGE_TAB
+    params = LandingUrlParams.LOBBY_SUB + str(isLobbySub).lower() + LandingUrlParams.SHOW_MY_POSITION + str(showPosition).lower()
     return url + params if url is not None else None
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def getRankedBattlesShopUrl(lobbyContext=None, isLobbySub=False):
     url = lobbyContext.getServerSettings().bwRankedBattles.shopPageUrl
-    params = LandingUrlParams.LOBBY_SUB if isLobbySub else LandingUrlParams.PAGE_TAB
+    params = LandingUrlParams.LOBBY_SUB + str(isLobbySub).lower()
     return url + params if url is not None else None
 
 

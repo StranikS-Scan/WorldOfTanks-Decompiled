@@ -18,10 +18,12 @@ class HangarCameraIdleController(HangarCameraSettingsListener):
         self.registerSettingHandler(GAME.HANGAR_CAM_PERIOD, self._onHangarCamPeriodChanged)
         self.__camPeriod = 0
         self.__isForcedDisabled = False
+        self.__disabledCount = 0
 
     def destroy(self):
         self.__camPeriod = None
         self.__isForcedDisabled = None
+        self.__disabledCount = 0
         self.unregisterSettingsHandler(GAME.HANGAR_CAM_PERIOD)
         super(HangarCameraIdleController, self).destroy()
         return
@@ -51,7 +53,14 @@ class HangarCameraIdleController(HangarCameraSettingsListener):
         self._setStartDelay(self.__camPeriod)
 
     def __onCameraForceDisable(self, event):
-        self.__isForcedDisabled = event.ctx['isDisable']
+        if not event.ctx['setIdle']:
+            return
+        isDisabled = event.ctx['isDisable']
+        if isDisabled:
+            self.__disabledCount += 1
+        elif self.__disabledCount > 0:
+            self.__disabledCount -= 1
+        self.__isForcedDisabled = self.__disabledCount != 0
         if self.__isForcedDisabled:
             self._setStartDelay(0.0)
         else:

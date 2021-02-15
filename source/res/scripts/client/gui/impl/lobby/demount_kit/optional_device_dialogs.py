@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/demount_kit/optional_device_dialogs.py
 from frameworks.wulf import ViewSettings
+from gui.goodies.demount_kit import getDemountKitForOptDevice
 from gui.goodies.goodie_items import DemountKit
 from gui.impl.gen.view_models.constants.item_highlight_types import ItemHighlightTypes
 from gui.impl.gen.view_models.views.lobby.demount_kit.optional_device_dialog_model import OptionalDeviceDialogModel
@@ -59,15 +60,17 @@ class DemountOpDevSinglePriceDialog(OpDevBaseDialog):
         self.__forFitting = forFitting
 
     def _onInventoryResync(self, *args, **kwargs):
-        dk = self._goodiesCache.getDemountKit()
-        if self.isPriceInGold() and dk.enabled:
+        dk, _ = getDemountKitForOptDevice(self._item)
+        if dk is not None and dk.enabled:
             self._onCancelClicked()
             return
-        super(DemountOpDevSinglePriceDialog, self)._onInventoryResync(args, kwargs)
+        else:
+            super(DemountOpDevSinglePriceDialog, self)._onInventoryResync(args, kwargs)
+            return
 
     def _getAdditionalData(self):
-        dk = self._goodiesCache.getDemountKit()
-        return {'openDemountSelectorWindow': self.isPriceInGold() and dk.enabled}
+        dk, _ = getDemountKitForOptDevice(self._item)
+        return {'openDemountSelectorWindow': dk is not None and dk.enabled}
 
     @property
     def _price(self):

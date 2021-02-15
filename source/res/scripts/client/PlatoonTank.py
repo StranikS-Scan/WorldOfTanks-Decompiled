@@ -114,12 +114,12 @@ class PlatoonTank(ClientSelectableCameraVehicle):
             self._isVehicleLoaded = False
         return
 
-    def recreateVehicle(self, typeDescriptor=None, state=ModelStates.UNDAMAGED, callback=None):
+    def recreateVehicle(self, typeDescriptor=None, state=ModelStates.UNDAMAGED, callback=None, outfit=None):
         if self.__tankInfo and self.__tankInfo.vehCompDescr != '':
             self.typeDescriptor = vehicles.VehicleDescr(compactDescr=self.__tankInfo.vehCompDescr)
         if self.appearance is not None:
             self.appearance.updateTankInfo(self.__tankInfo)
-        super(PlatoonTank, self).recreateVehicle(typeDescriptor, state, callback)
+        super(PlatoonTank, self).recreateVehicle(typeDescriptor, state, callback, outfit)
         return
 
     if IS_DEVELOPMENT:

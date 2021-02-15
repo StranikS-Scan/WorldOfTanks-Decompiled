@@ -15,3 +15,12 @@ class BattleLevelPanelMeta(BaseDAAPIComponent):
 
     def as_setMaxLevelReachedS(self, levelReached):
         return self.flashObject.as_setMaxLevelReached(levelReached) if self._isDAAPIInited() else None
+
+    def as_resetS(self):
+        return self.flashObject.as_reset() if self._isDAAPIInited() else None
+
+    def as_setIsPausedS(self, value):
+        return self.flashObject.as_setIsPaused(value) if self._isDAAPIInited() else None
+
+    def as_setAnimationS(self, enable):
+        return self.flashObject.as_setAnimation(enable) if self._isDAAPIInited() else None

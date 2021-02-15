@@ -414,6 +414,12 @@ class _ItemUIDataPacker(_BaseUIDataPacker):
             model.setProgressionLevel(progressionLevel)
         elif item.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER and component:
             model.setIcon(item.numberIconUrl(component.number))
+        elif item.itemTypeID == GUI_ITEM_TYPE.STYLE and item.isProgressive:
+            currentProgression = item.getLatestOpenedProgressionLevel(g_currentVehicle.item)
+            model.setTypeId(item.itemTypeID)
+            model.setProgressionLevel(desc.progressionLevel)
+            model.price.assign(item.getUpgradePrice(currentProgression, desc.progressionLevel))
+            model.setIcon(item.iconUrl)
         else:
             model.setIcon(item.iconUrl)
         if item.itemTypeID == GUI_ITEM_TYPE.MODIFICATION:

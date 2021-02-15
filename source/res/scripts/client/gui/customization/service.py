@@ -13,13 +13,13 @@ from gui.shared.event_dispatcher import hideVehiclePreview
 from helpers import dependency
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.customization.context.context import CustomizationContext
-from gui.customization.shared import C11N_ITEM_TYPE_MAP, HighlightingMode
+from gui.customization.shared import C11N_ITEM_TYPE_MAP, HighlightingMode, C11nId
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.gui_items import GUI_ITEM_TYPE, ItemsCollection
 from gui.shared.gui_items.customization.c11n_items import Customization
 from items.customizations import CustomizationOutfit, createNationalEmblemComponents
 from skeletons.gui.lobby_context import ILobbyContext
-from vehicle_outfit.outfit import Outfit
+from vehicle_outfit.outfit import Outfit, Area
 from gui.shared.gui_items.processors.common import OutfitApplier, CustomizationsBuyer, CustomizationsSeller
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.decorators import process
@@ -513,3 +513,42 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
 
     def __onShowCustomization(self, event):
         self.showCustomization(**event.ctx)
+
+    def changeStyleProgressionLevelPreview(self, level):
+        entity = self.hangarSpace.getVehicleEntity()
+        if not entity or not level:
+            return 1
+        else:
+            outfit = entity.appearance.outfit
+            if not outfit.style or not outfit.style.isProgression:
+                return 1
+            outfit.setProgressionLevel(level)
+            self.tryOnOutfit(outfit)
+            if self.__customizationCtx is not None:
+                slotID = C11nId(areaId=Area.MISC, slotType=GUI_ITEM_TYPE.STYLE, regionIdx=0)
+                self.__customizationCtx.events.onComponentChanged(slotID, True)
+            return outfit.progressionLevel
+
+    def getCurrentProgressionStyleLevel(self):
+        entity = self.hangarSpace.getVehicleEntity()
+        if not entity:
+            return None
+        else:
+            outfit = entity.appearance.outfit
+            if not outfit.style or not outfit.style.isProgression:
+                _logger.error('Could not find style progressions')
+                return None
+            return outfit.progressionLevel
+
+    def removeAdditionalProgressionData(self, outfit, style, vehCD):
+        progressionLevel = outfit.progressionLevel
+        additionalOutfit = style.descriptor.styleProgressions.get(progressionLevel, {}).get('additionalOutfit', {})
+        resultOutfit = outfit
+        if additionalOutfit and progressionLevel and vehCD and outfit:
+            for season in SeasonType.COMMON_SEASONS:
+                modifiedOutfit = outfit
+                if additionalOutfit and additionalOutfit.get(season):
+                    tmpOutfit = Outfit(strCompactDescr=additionalOutfit.get(season).makeCompDescr(), vehicleCD=vehCD)
+                    resultOutfit = modifiedOutfit.discard(tmpOutfit)
+
+        return resultOutfit

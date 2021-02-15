@@ -26,6 +26,7 @@ from constants import EQUIPMENT_STAGES
 from gui.battle_control.battle_constants import PERSONAL_EFFICIENCY_TYPE
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE
 from gui.battle_royale.constants import SteelHunterEquipmentNames
+import BattleReplay
 _logger = logging.getLogger(__name__)
 
 class BREvents(object):
@@ -97,10 +98,14 @@ class BREvents(object):
 
     @staticmethod
     def playSound(eventName):
+        if BattleReplay.g_replayCtrl.isPlaying and BattleReplay.g_replayCtrl.isTimeWarpInProgress:
+            return
         WWISE.WW_eventGlobal(eventName)
 
     @staticmethod
     def playSoundPos(eventName, pos):
+        if BattleReplay.g_replayCtrl.isPlaying and BattleReplay.g_replayCtrl.isTimeWarpInProgress:
+            return
         WWISE.WW_eventGlobalPos(eventName, pos)
 
 
@@ -302,12 +307,12 @@ class LevelSoundPlayer(IProgressionListener):
         self.__level = None
         return
 
-    def setLevel(self, level, *args):
+    def updateData(self, arenaLevelData):
         progressionCtrl = self.__sessionProvider.dynamic.progression
-        if self.__level != level:
-            if self.__level is not None and level < progressionCtrl.maxLevel:
+        if self.__level != arenaLevelData.level:
+            if self.__level is not None and arenaLevelData.level < progressionCtrl.maxLevel:
                 BREvents.playSound(BREvents.LEVEL_UP)
-            self.__level = level
+            self.__level = arenaLevelData.level
         return
 
 

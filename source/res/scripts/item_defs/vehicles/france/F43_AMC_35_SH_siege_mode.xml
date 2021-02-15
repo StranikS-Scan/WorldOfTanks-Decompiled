@@ -65,10 +65,10 @@
         </armor>
         <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
         <weight>	7800	</weight>
-        <maxHealth>	975	</maxHealth>
+        <maxHealth>	1000	</maxHealth>
         <ammoBayHealth>
-          <maxHealth>	200	</maxHealth>
-          <maxRegenHealth>	135	</maxRegenHealth>
+          <maxHealth>	103	</maxHealth>
+          <maxRegenHealth>	65	</maxRegenHealth>
           <repairCost>	0	</repairCost>
         </ammoBayHealth>
         <turretHardPoints>
@@ -149,8 +149,8 @@
         <weight>	11300	</weight>
         <maxHealth>	1300	</maxHealth>
         <ammoBayHealth>
-          <maxHealth>	200	</maxHealth>
-          <maxRegenHealth>	135	</maxRegenHealth>
+          <maxHealth>	103	</maxHealth>
+          <maxRegenHealth>	65	</maxRegenHealth>
           <repairCost>	0	</repairCost>
         </ammoBayHealth>
         <turretHardPoints>
@@ -217,10 +217,10 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	6300	</weight>
-    <maxHealth>	650	</maxHealth>
+    <maxHealth>	700	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	135	</maxRegenHealth>
+      <maxHealth>	103	</maxHealth>
+      <maxRegenHealth>	65	</maxRegenHealth>
       <repairCost>	0	</repairCost>
     </ammoBayHealth>
     <models>
@@ -2586,20 +2586,26 @@
         <armor_12>	15	</armor_12>
         <armor_13>	10	</armor_13>
         <armor_14>	8	</armor_14>
+        <surveyingDevice>	0	  <chanceToHitByProjectile>	0.7	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0.7	</chanceToHitByExplosion>
+        </surveyingDevice>
+        <ammoBay>	0	  <chanceToHitByProjectile>	0.45	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0.45	</chanceToHitByExplosion>
+        </ammoBay>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3780	</weight>
-      <maxHealth>	350	</maxHealth>
+      <maxHealth>	300	</maxHealth>
       <rotationSpeed>	55	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	130	</maxHealth>
+        <maxHealth>	103	</maxHealth>
         <maxRegenHealth>	65	</maxRegenHealth>
         <repairCost>	0	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	320	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	80	</maxHealth>
-        <maxRegenHealth>	40	</maxRegenHealth>
+        <maxHealth>	52	</maxHealth>
+        <maxRegenHealth>	33	</maxRegenHealth>
         <repairCost>	0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
@@ -2946,20 +2952,26 @@
         <armor_13>	20	</armor_13>
         <armor_14>	20	</armor_14>
         <armor_15>	10	</armor_15>
+        <surveyingDevice>	0	  <chanceToHitByProjectile>	0.7	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0.7	</chanceToHitByExplosion>
+        </surveyingDevice>
+        <ammoBay>	0	  <chanceToHitByProjectile>	0.45	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0.45	</chanceToHitByExplosion>
+        </ammoBay>
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
       <weight>	4680	</weight>
-      <maxHealth>	525	</maxHealth>
+      <maxHealth>	500	</maxHealth>
       <rotationSpeed>	60	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	150	</maxHealth>
-        <maxRegenHealth>	75	</maxRegenHealth>
+        <maxHealth>	103	</maxHealth>
+        <maxRegenHealth>	65	</maxRegenHealth>
         <repairCost>	0	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	370	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	110	</maxHealth>
-        <maxRegenHealth>	55	</maxRegenHealth>
+        <maxHealth>	52	</maxHealth>
+        <maxRegenHealth>	33	</maxRegenHealth>
         <repairCost>	0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
@@ -3351,20 +3363,26 @@
         <armor_10>	35	</armor_10>
         <armor_11>	50	</armor_11>
         <armor_12>	20	</armor_12>
+        <surveyingDevice>	0	  <chanceToHitByProjectile>	0.7	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0.7	</chanceToHitByExplosion>
+        </surveyingDevice>
+        <ammoBay>	0	  <chanceToHitByProjectile>	0.45	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0.45	</chanceToHitByExplosion>
+        </ammoBay>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	6780	</weight>
       <maxHealth>	700	</maxHealth>
       <rotationSpeed>	55	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	160	</maxHealth>
-        <maxRegenHealth>	80	</maxRegenHealth>
+        <maxHealth>	103	</maxHealth>
+        <maxRegenHealth>	65	</maxRegenHealth>
         <repairCost>	0	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	350	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	110	</maxHealth>
-        <maxRegenHealth>	55	</maxRegenHealth>
+        <maxHealth>	52	</maxHealth>
+        <maxRegenHealth>	33	</maxRegenHealth>
         <repairCost>	0	</repairCost>
       </surveyingDeviceHealth>
       <guns>

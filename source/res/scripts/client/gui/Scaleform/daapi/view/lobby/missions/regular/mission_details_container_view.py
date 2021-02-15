@@ -8,15 +8,16 @@ from gui.Scaleform.daapi.view.meta.MissionDetailsContainerViewMeta import Missio
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.server_events.events_helpers import isDailyQuest, isPremium
 from gui.server_events.formatters import parseComplexToken
-from gui.server_events.events_constants import EVENT_PROGRESSION_GROUPS_ID
+from gui.server_events.events_constants import EVENT_PROGRESSION_GROUPS_ID, BATTLE_ROYALE_GROUPS_ID
 from gui.shared import events, event_bus_handlers, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.game_control import IEventProgressionController
+from skeletons.gui.game_control import IEventProgressionController, IBattleRoyaleController
 
 class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta):
     eventsCache = dependency.descriptor(IEventsCache)
     __eventProgression = dependency.descriptor(IEventProgressionController)
+    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __showDQInMissionsTab = False
     __metaclass__ = event_bus_handlers.EventBusListener
 
@@ -92,6 +93,8 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
         self.__datailedList = []
         if groupID in EVENT_PROGRESSION_GROUPS_ID:
             self.__quests = self.__eventProgression.getActiveQuestsAsDict()
+        elif groupID == BATTLE_ROYALE_GROUPS_ID:
+            self.__quests = self.__battleRoyaleController.getQuests()
         else:
             self.__quests = self.eventsCache.getQuests(missionsFilter)
         if self.__groupPacker is not None:

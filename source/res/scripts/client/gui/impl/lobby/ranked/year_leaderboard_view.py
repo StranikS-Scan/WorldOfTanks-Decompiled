@@ -68,7 +68,8 @@ class YearLeaderboardView(ViewImpl):
         return backport.text(R.strings.ranked_battles.yearLeaderboard.rewardView.clanDescr(), clan=clanAbbrev) if clanAbbrev is not None else ''
 
     def __onLeaderboardBtnClick(self):
-        self.__rankedController.showRankedBattlePage(ctx={'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID})
+        self.__rankedController.showRankedBattlePage(ctx={'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID,
+         'clientParams': {'showPosition': True}})
         self.destroyWindow()
 
 

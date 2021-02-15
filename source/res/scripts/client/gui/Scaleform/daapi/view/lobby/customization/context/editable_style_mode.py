@@ -48,7 +48,7 @@ class EditableStyleMode(CustomMode):
         return self.__baseOutfits
 
     def getPurchaseItems(self):
-        purchaseItems = getStylePurchaseItems(self.__style, self.getModifiedOutfits())
+        purchaseItems = getStylePurchaseItems(self.__style, self.getModifiedOutfits(), progressionLevel=self.getStyleProgressionLevel())
         return purchaseItems
 
     def changeCamouflageColor(self, slotId, paletteIdx):
@@ -179,6 +179,9 @@ class EditableStyleMode(CustomMode):
         self._fitOutfits(modifiedOnly=True)
         self._ctx.refreshOutfit()
         self._ctx.events.onItemsRemoved()
+
+    def getStyleProgressionLevel(self):
+        return self._modifiedOutfits[self.season].progressionLevel if self.__style and self.__style.isProgressive else -1
 
     def _onStart(self):
         if self._ctx.modeId != CustomizationModes.STYLED:

@@ -1,9 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/goodies/Goodies.py
 import collections
+from typing import Union, Type
 from WeakMethod import WeakMethod
-from goodie_constants import GOODIE_STATE, MAX_ACTIVE_GOODIES, GOODIE_NOTIFICATION_TYPE, DEMOUNT_KIT_ID
+from goodie_constants import GOODIE_STATE, MAX_ACTIVE_GOODIES, GOODIE_NOTIFICATION_TYPE
 from soft_exception import SoftException
+from GoodieResources import GoodieResource
+from GoodieTargets import GoodieTarget
 
 class GoodieException(SoftException):
     pass
@@ -179,13 +182,20 @@ class Goodies(object):
     def actualIds(self):
         return set(self.actualGoodies.iterkeys())
 
-    def getDemountKitCount(self):
-        demountKit = self.actualGoodies.get(DEMOUNT_KIT_ID)
-        return demountKit.counter if demountKit else 0
+    def getFirstGoodie(self, target, resource):
+        for goodie in self.actualGoodies.itervalues():
+            goodieDefinition = self.definedGoodies[goodie.uid]
+            if goodieDefinition.target == target and goodieDefinition.resource == resource:
+                return goodie
 
-    def isDemountKitAllowed(self):
-        dkDefinition = self.definedGoodies.get(DEMOUNT_KIT_ID)
-        return dkDefinition.enabled if dkDefinition else False
+        return None
+
+    def isGoodieEnabled(self, target, resource):
+        for goodieDefinition in self.definedGoodies.itervalues():
+            if goodieDefinition.target == target and goodieDefinition.resource == resource:
+                return goodieDefinition.enabled
+
+        return False
 
     def load(self, goodieID, state, expiration, counter):
         try:

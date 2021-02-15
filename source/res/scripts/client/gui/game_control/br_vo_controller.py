@@ -3,7 +3,7 @@
 import BigWorld
 import WWISE
 import nations
-from constants import CURRENT_REALM
+from constants import CURRENT_REALM, IS_CHINA
 from gui.battle_control import avatar_getter
 from items import vehicles
 from helpers import dependency, isPlayerAvatar
@@ -12,6 +12,7 @@ _RU_REALMS = ('DEV', 'QA', 'RU')
 _SWITCH_RU = 'SWITCH_ext_BR_vo_language'
 _SWITCH_RU_ON = 'SWITCH_ext_BR_vo_language_RU'
 _SWITCH_RU_OFF = 'SWITCH_ext_BR_vo_language_nonRU'
+_SWITCH_CN = 'SWITCH_ext_BR_vo_language_CN'
 _SWITCH_CHAR = 'SWITCH_ext_BR_vo_char'
 _SWITCH_CHAR_FOR_NATIONS = {'ussr': 'SWITCH_ext_BR_vo_char_RU',
  'usa': 'SWITCH_ext_BR_vo_char_US',
@@ -76,4 +77,6 @@ class BRVoiceOverController(object):
 
     @property
     def __switchRuValue(self):
+        if IS_CHINA:
+            return _SWITCH_CN
         return _SWITCH_RU_ON if self.__isRuRealm else _SWITCH_RU_OFF

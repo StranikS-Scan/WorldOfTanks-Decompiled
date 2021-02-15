@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/web/client_web_api/common.py
 import logging
 from Event import Event
-from web.client_web_api.bob import BobTokensUpdateHandler, BobTeamsUpdateHandler
 from web.client_web_api.shop.stats import BalanceEventHandler
 from web.client_web_api.shop.trade import TradeEventHandler
 from web.client_web_api.reactive_comm import ReactiveCommunicationEventHandler
@@ -35,6 +34,4 @@ class WebEventSender(object):
          TradeEventHandler(self),
          VehicleCompareEventHandler(self),
          VehicleStateEventHandler(self),
-         ReactiveCommunicationEventHandler(self),
-         BobTokensUpdateHandler(self),
-         BobTeamsUpdateHandler(self))
+         ReactiveCommunicationEventHandler(self))

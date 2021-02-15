@@ -18,35 +18,38 @@ class AppearanceCacheController(object):
         pass
 
     def onBecomePlayer(self):
-        if getattr(self, 'onSpawnListUpdated'):
+        if hasattr(self, 'onSpawnListUpdated'):
             self.onSpawnListUpdated += self.updateAppearanceCache
 
     def onBecomeNonPlayer(self):
-        if getattr(self, 'onSpawnListUpdated'):
+        if hasattr(self, 'onSpawnListUpdated'):
             self.onSpawnListUpdated -= self.updateAppearanceCache
 
     @uniprof.regionDecorator(label='AppearanceCacheController.updateAppearanceCache', scope='wrap')
     def updateAppearanceCache(self, spawnList):
-        toAdd = spawnList.difference(self.__appearanceCache)
-        toRemove = self.__appearanceCache.difference(spawnList)
-        for data in toAdd:
-            self.__idCounter += 1
-            appearanceId = -self.__idCounter
-            self.__idMap[data] = appearanceId
-            AppearanceCacheController._cacheAppearance(appearanceId, {'vehicleCD': data.vehicleCD,
-             'outfitCD': data.outfitCD,
-             'isAlive': True})
+        if not appearance_cache.isPrecacheEnabled():
+            return
+        else:
+            toAdd = spawnList.difference(self.__appearanceCache)
+            toRemove = self.__appearanceCache.difference(spawnList)
+            for data in toAdd:
+                self.__idCounter += 1
+                appearanceId = -self.__idCounter
+                self.__idMap[data] = appearanceId
+                AppearanceCacheController._cacheAppearance(appearanceId, {'vehicleCD': data.vehicleCD,
+                 'outfitCD': data.outfitCD,
+                 'isAlive': True})
 
-        for data in toRemove:
-            appearanceId = self.__idMap.get(data)
-            if id is None:
-                continue
-            del self.__idMap[data]
-            AppearanceCacheController._removeAppearance(appearanceId)
+            for data in toRemove:
+                appearanceId = self.__idMap.get(data)
+                if id is None:
+                    continue
+                del self.__idMap[data]
+                AppearanceCacheController._removeAppearance(appearanceId)
 
-        self.__appearanceCache = spawnList
-        _logger.debug('[AppearanceCacheController] Cache updated=%s', spawnList)
-        return
+            self.__appearanceCache = spawnList
+            _logger.debug('[AppearanceCacheController] Cache updated=%s', spawnList)
+            return
 
     @staticmethod
     def _cacheAppearance(vId, vInfo):

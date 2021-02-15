@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_pass/battle_pass_helpers.py
 import logging
 from collections import namedtuple
+from constants import ARENA_BONUS_TYPE, QUEUE_TYPE
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from battle_pass_common import BattlePassConsts, BattlePassState, BattlePassInBattleProgress, BattlePassRewardReason, BATTLE_PASS_TOKEN_TROPHY_OFFER, BATTLE_PASS_TOKEN_NEW_DEVICE_OFFER
 from gui import GUI_SETTINGS
@@ -120,8 +121,20 @@ def getIntroVideoURL():
     return GUI_SETTINGS.battlePass.get('introVideo')
 
 
-def setInBattleProgress(section, basePoints, sumPoints, hasBattlePass):
-    if basePoints <= 0 or sumPoints <= 0 or BattlePassConsts.PROGRESSION_INFO in section or BattlePassConsts.PROGRESSION_INFO_PREV in section:
+def getSupportedArenaBonusTypeFor(queueType, isInUnit):
+    if queueType == QUEUE_TYPE.BATTLE_ROYALE:
+        arenaBonusType = ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD if isInUnit else ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO
+    else:
+        arenaBonusTypeByQueueType = {QUEUE_TYPE.RANDOMS: ARENA_BONUS_TYPE.REGULAR,
+         QUEUE_TYPE.RANKED: ARENA_BONUS_TYPE.RANKED}
+        arenaBonusType = arenaBonusTypeByQueueType.get(queueType, ARENA_BONUS_TYPE.UNKNOWN)
+    return arenaBonusType
+
+
+def setInBattleProgress(section, basePoints, sumPoints, hasBattlePass, setIfEmpty):
+    if BattlePassConsts.PROGRESSION_INFO in section or BattlePassConsts.PROGRESSION_INFO_PREV in section:
+        return
+    if not setIfEmpty and (basePoints <= 0 or sumPoints <= 0):
         return
     battlePassController = dependency.instance(IBattlePassController)
     if not battlePassController.isEnabled():
@@ -144,8 +157,10 @@ def setInBattleProgress(section, basePoints, sumPoints, hasBattlePass):
         awards.extend(battlePassController.getSingleAward(oldLevel + 1, awardType))
         prevInfo = BattlePassInBattleProgress(oldState, oldLevel + 1, 0, 0, 0, True, basePoints, awards)
         section[BattlePassConsts.PROGRESSION_INFO_PREV] = prevInfo
-    if curNewPoints > 0 and curLevel < battlePassController.getMaxLevel(curState == BattlePassState.BASE):
-        progressInfo = BattlePassInBattleProgress(curState, curLevel + 1, curNewPoints, curMaxPoints, pointsDiff, False, basePoints, [])
+    maxLevel = curLevel == battlePassController.getMaxLevel(curState == BattlePassState.BASE)
+    hasProgress = curNewPoints > 0 and not maxLevel
+    if hasProgress or setIfEmpty:
+        progressInfo = BattlePassInBattleProgress(curState, curLevel + 1, curNewPoints, curMaxPoints, pointsDiff, maxLevel, basePoints, [])
         section[BattlePassConsts.PROGRESSION_INFO] = progressInfo
 
 
@@ -229,3 +244,21 @@ def getNotificationStorageKey(bonusName):
     if bonusName == TROPHY_GIFT_TOKEN_BONUS_NAME:
         return BattlePassStorageKeys.TROPHY_NOTIFICATION_SHOWN
     return BattlePassStorageKeys.NEW_DEVICE_NOTIFICATION_SHOWN if bonusName == NEW_DEVICE_GIFT_TOKEN_BONUS_NAME else ''
+
+
+def getCurrentLevel():
+    battlePassController = dependency.instance(IBattlePassController)
+    if battlePassController.isOffSeasonEnable():
+        prevSeasonStats = battlePassController.getLastFinishedSeasonStats()
+        if prevSeasonStats is None:
+            return (BattlePassState.BASE, 0)
+        prevOtherStats = prevSeasonStats.otherStats
+        prevSeasonHistory = getSeasonHistory(prevSeasonStats.seasonID)
+        if prevSeasonHistory is None:
+            return (BattlePassState.BASE, 0)
+        state, currentLevel = getLevelFromStats(prevOtherStats, prevSeasonHistory)
+    else:
+        state = battlePassController.getState()
+        currentLevel = battlePassController.getCurrentLevel()
+    currentLevel = min(currentLevel + 1, battlePassController.getMaxLevel(state == BattlePassState.BASE))
+    return currentLevel

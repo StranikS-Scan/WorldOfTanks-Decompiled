@@ -5,9 +5,7 @@ from visual_script.registrar import VSBlockRegistrar
 import example
 import general
 import vehicle_blocks
-import arena_blocks
 g_blockRegistrar = VSBlockRegistrar(ASPECT.CLIENT, ASPECT.SERVER)
 g_blockRegistrar.regBlocksFromModule(example)
 g_blockRegistrar.regBlocksFromModule(general)
 g_blockRegistrar.regBlocksFromModule(vehicle_blocks)
-g_blockRegistrar.regBlocksFromModule(arena_blocks)

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/battle_royale/battle_upgrade_panel.py
 import logging
 import BigWorld
+from ReplayEvents import g_replayEvents
 from gui.battle_control import avatar_getter
 from helpers import dependency
 import BattleReplay
@@ -86,12 +87,14 @@ class BattleUpgradePanel(BattleUpgradePanelMeta, IArenaVehiclesController, IProg
         self.__textInited = False
 
     def onSelectItem(self, itemID):
+        if self.__sessionProvider.isReplayPlaying:
+            return
         if self.__upgrades and itemID in self.__upgrades:
             self.as_showSelectAnimS(self.__upgrades.index(itemID))
         self._selectVehicleItem(itemID)
 
-    def setLevel(self, level, minXP, maxXP):
-        self.__level = level
+    def updateData(self, arenaLevelData):
+        self.__level = arenaLevelData.level
         self.__updateUpgrades()
 
     def setUpgradeDisabled(self, cooldownTime, reason):
@@ -129,12 +132,16 @@ class BattleUpgradePanel(BattleUpgradePanelMeta, IArenaVehiclesController, IProg
         vehicleStateCtrl = self.__getVehicleStateCtrl()
         if vehicleStateCtrl is not None:
             vehicleStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+        if BattleReplay.g_replayCtrl.isPlaying:
+            g_replayEvents.onTimeWarpStart += self.__onReplayTimeWarpStart
         return
 
     def _dispose(self):
         vehicleStateCtrl = self.__getVehicleStateCtrl()
         if vehicleStateCtrl is not None:
             vehicleStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+        if BattleReplay.g_replayCtrl.isPlaying:
+            g_replayEvents.onTimeWarpStart -= self.__onReplayTimeWarpStart
         self.__sessionProvider.removeArenaCtrl(self)
         self.__attentionEffect.destroy()
         self.__attentionEffect = None
@@ -151,6 +158,11 @@ class BattleUpgradePanel(BattleUpgradePanelMeta, IArenaVehiclesController, IProg
 
     def _setVisible(self, isVisible):
         self.__localVisible = isVisible
+
+    def __onReplayTimeWarpStart(self):
+        if self.__localVisible:
+            self.as_setVisibleS(False)
+            self.__localVisible = False
 
     def __updateVisibility(self, isVisible):
         if self.__localVisible != isVisible:

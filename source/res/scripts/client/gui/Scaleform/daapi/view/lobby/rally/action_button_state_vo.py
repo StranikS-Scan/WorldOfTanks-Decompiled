@@ -51,7 +51,7 @@ class ActionButtonStateVO(dict):
          UNIT_RESTRICTION.ZERO_TOTAL_LEVEL: ('', {}),
          UNIT_RESTRICTION.IS_IN_PRE_ARENA: (CYBERSPORT.WINDOW_UNIT_MESSAGE_WAITCOMMANDER, {}),
          UNIT_RESTRICTION.NOT_IN_SLOT: BoundMethodWeakref(self._notInSlotMessage),
-         UNIT_RESTRICTION.VEHICLE_NOT_VALID_FOR_EVENT: (CYBERSPORT.WINDOW_UNIT_MESSAGE_VEHICLENOTVALIDFOREVENT, {}),
+         UNIT_RESTRICTION.VEHICLE_NOT_VALID_FOR_EVENT: (CYBERSPORT.WINDOW_UNIT_MESSAGE_VEHICLENOTVALID, {}),
          UNIT_RESTRICTION.CURFEW: (CYBERSPORT.WINDOW_UNIT_MESSAGE_CURFEW, {}),
          UNIT_RESTRICTION.VEHICLE_WRONG_MODE: (CYBERSPORT.WINDOW_UNIT_MESSAGE_VEHICLEINNOTREADY_WRONGMODE, {}),
          UNIT_RESTRICTION.UNIT_WRONG_DATA: (CYBERSPORT.WINDOW_UNIT_MESSAGE_VEHICLEINNOTREADY_WRONGUNITDATA, {}),
@@ -69,9 +69,7 @@ class ActionButtonStateVO(dict):
          UNIT_RESTRICTION.UNIT_IS_IN_PLAYERS_MATCHING: (CYBERSPORT.WINDOW_UNIT_MESSAGE_IN_PLAYERS_MATCHING, {}),
          UNIT_RESTRICTION.UNIT_NOT_FULL: ('', {}),
          UNIT_RESTRICTION.UNSUITABLE_VEHICLE: (self.__getNotAvailableIcon() + backport.text(R.strings.system_messages.prebattle.vehicleInvalid.vehicleNotSupported()), {}),
-         UNIT_RESTRICTION.VEHICLE_TOO_HEAVY: (backport.text(R.strings.cyberSport.window.unit.message.vehicleInNotReady.tooHeavy()), {}),
-         UNIT_RESTRICTION.BOB_TEAM_MISMATCH: (backport.text(R.strings.bob.prebattle.playerInvalid.teamMismatch()), {}),
-         UNIT_RESTRICTION.BOB_LEADER_FORBIDDEN: (backport.text(R.strings.bob.prebattle.playerInvalid.leaderForbidden()), {})}
+         UNIT_RESTRICTION.VEHICLE_TOO_HEAVY: (backport.text(R.strings.cyberSport.window.unit.message.vehicleInNotReady.tooHeavy()), {})}
         self.__WARNING_UNIT_MESSAGES = {UNIT_RESTRICTION.XP_PENALTY_VEHICLE_LEVELS: (PLATOON.MEMBERS_FOOTER_VEHICLES_DIFFERENTLEVELS, {})}
         self.__NEUTRAL_UNIT_MESSAGES = {UNIT_RESTRICTION.UNIT_WILL_SEARCH_PLAYERS: (FORTIFICATIONS.UNIT_WINDOW_WILLSEARCHPLAYERS, {})}
         stateKey, stateCtx = self.__getState()

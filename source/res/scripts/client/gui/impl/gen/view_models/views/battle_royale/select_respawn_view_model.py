@@ -7,7 +7,7 @@ from frameworks.wulf import ViewModel
 class SelectRespawnViewModel(ViewModel):
     __slots__ = ('onCompleteBtnClick', 'onSelectPoint')
 
-    def __init__(self, properties=11, commands=2):
+    def __init__(self, properties=12, commands=2):
         super(SelectRespawnViewModel, self).__init__(properties=properties, commands=commands)
 
     def getHeader(self):
@@ -76,6 +76,12 @@ class SelectRespawnViewModel(ViewModel):
     def setIsWaitingPlayers(self, value):
         self._setBool(10, value)
 
+    def getIsReplay(self):
+        return self._getBool(11)
+
+    def setIsReplay(self, value):
+        self._setBool(11, value)
+
     def _initialize(self):
         super(SelectRespawnViewModel, self)._initialize()
         self._addResourceProperty('header', R.invalid())
@@ -89,5 +95,6 @@ class SelectRespawnViewModel(ViewModel):
         self._addStringProperty('selectedPointID', '')
         self._addBoolProperty('isTimeRunningOut', False)
         self._addBoolProperty('isWaitingPlayers', False)
+        self._addBoolProperty('isReplay', False)
         self.onCompleteBtnClick = self._addCommand('onCompleteBtnClick')
         self.onSelectPoint = self._addCommand('onSelectPoint')

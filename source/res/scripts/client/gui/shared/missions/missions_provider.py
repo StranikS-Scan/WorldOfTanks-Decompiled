@@ -63,7 +63,7 @@ class ClientMissionsProvider(IGlobalListener):
         self.__formActive = False
 
     def __onMissionsTabChanged(self, event):
-        self.__elenActive = event.ctx.get('alias') == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS
+        self.__elenActive = event.ctx == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS
 
     def __startEventboardsTimer(self):
         if self.__elenTimerID is not None or self.__elenFlagTimerID is not None:

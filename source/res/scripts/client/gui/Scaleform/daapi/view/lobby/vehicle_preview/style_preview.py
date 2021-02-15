@@ -50,7 +50,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
 
     def _populate(self):
         super(VehicleStylePreview, self)._populate()
-        g_currentPreviewVehicle.selectVehicle(self.__vehicleCD)
+        g_currentPreviewVehicle.selectVehicle(self.__vehicleCD, style=self._style)
         self.__selectedVehicleEntityId = g_currentPreviewVehicle.vehicleEntityID
         if not g_currentPreviewVehicle.isPresent() or self._style is None:
             event_dispatcher.showHangar()
@@ -97,11 +97,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         else:
             self.removeListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading, EVENT_BUS_SCOPE.DEFAULT)
             self.__selectedVehicleEntityId = None
-            self.__onVehicleLoaded()
             return
-
-    def __onVehicleLoaded(self):
-        g_currentPreviewVehicle.previewStyle(self._style)
 
     def __onHangarCreateOrRefresh(self):
         self.__handleWindowClose()

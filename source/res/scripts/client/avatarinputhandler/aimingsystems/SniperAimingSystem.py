@@ -162,9 +162,10 @@ class SniperAimingSystem(IAimingSystem):
             self.__pitchCompensating = 0.0
 
     def __clampToLimits(self, turretYaw, gunPitch):
+        descr = self._vehicleTypeDescriptor
         if self.__yawLimits is not None:
             turretYaw = math_utils.clamp(self.__yawLimits[0], self.__yawLimits[1], turretYaw)
-        pitchLimits = calcPitchLimitsFromDesc(turretYaw, self.getPitchLimits(turretYaw))
+        pitchLimits = calcPitchLimitsFromDesc(turretYaw, self.getPitchLimits(turretYaw), descr.hull.turretPitches[0], descr.turret.gunJointPitch)
         adjustment = max(0, self.__returningOscillator.deviation.y)
         pitchLimits[0] -= adjustment
         pitchLimits[1] += adjustment
@@ -182,9 +183,10 @@ class SniperAimingSystem(IAimingSystem):
         self.__returningOscillator.deviation = extension
 
     def __calcPitchExcess(self, turretYaw, gunPitch):
+        descr = self._vehicleTypeDescriptor
         if self.__yawLimits is not None:
             turretYaw = math_utils.clamp(self.__yawLimits[0], self.__yawLimits[1], turretYaw)
-        pitchLimits = calcPitchLimitsFromDesc(turretYaw, self.getPitchLimits(turretYaw))
+        pitchLimits = calcPitchLimitsFromDesc(turretYaw, self.getPitchLimits(turretYaw), descr.hull.turretPitches[0], descr.turret.gunJointPitch)
         if pitchLimits[0] > gunPitch:
             return pitchLimits[0] - gunPitch
         else:

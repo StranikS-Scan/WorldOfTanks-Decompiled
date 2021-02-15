@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/battle_royale/minimap/plugins.py
 import logging
 from collections import namedtuple
+from functools import partial
 import typing
 import BigWorld
 import Math
@@ -21,7 +22,7 @@ from gui.Scaleform.daapi.view.battle.battle_royale.minimap.settings import Marke
 from gui.Scaleform.daapi.view.battle.epic.minimap import CenteredPersonalEntriesPlugin, MINIMAP_SCALE_TYPES, makeMousePositionToEpicWorldPosition
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings
 from gui.Scaleform.daapi.view.battle.shared.minimap.common import SimplePlugin, EntriesPlugin, IntervalPlugin
-from gui.Scaleform.daapi.view.battle.shared.minimap.plugins import RadarPlugin, RadarEntryParams, RadarPluginParams, ArenaVehiclesPlugin, SimpleMinimapPingPlugin
+from gui.Scaleform.daapi.view.battle.shared.minimap.plugins import RadarPlugin, RadarEntryParams, RadarPluginParams, ArenaVehiclesPlugin, SimpleMinimapPingPlugin, _RadarEntryData
 from gui.Scaleform.daapi.view.battle.shared.minimap.settings import ENTRY_SYMBOL_NAME
 from gui.battle_control import matrix_factory, minimap_utils, avatar_getter
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
@@ -260,6 +261,24 @@ class DeathZonesPlugin(SimplePlugin):
 
 _TimeParamsForAs = namedtuple('_TimeParamsForAs', 'fadeIn fadeOut lifetime')
 
+class _BattleRoyaleRadarEntryData(_RadarEntryData):
+
+    def __init__(self, entryId, hideMeCallback, destroyMeCallback, params, typeId=None):
+        super(_BattleRoyaleRadarEntryData, self).__init__(entryId, destroyMeCallback, params, typeId)
+        self.__entryId = entryId
+        self.__hideTime = params.lifetime - params.fadeOut - params.fadeIn
+        self.__hideMeCallback = hideMeCallback
+
+    def destroy(self):
+        super(_BattleRoyaleRadarEntryData, self).destroy()
+        self.__hideMeCallback = None
+        return
+
+    def upTimer(self):
+        super(_BattleRoyaleRadarEntryData, self).upTimer()
+        self._callbackDelayer.delayCallback(self.__hideTime, partial(self.__hideMeCallback, self.__entryId))
+
+
 class BattleRoyaleRadarPlugin(RadarPlugin):
 
     def __init__(self, parent):
@@ -312,6 +331,9 @@ class BattleRoyaleRadarPlugin(RadarPlugin):
     def removeVisibilitySysSpottedVeh(self, vehId):
         self.__visibilitySystemSpottedVehicles.remove(vehId)
 
+    def _createEntryData(self, entryId, destroyMeCallback, params, typeId=None):
+        return _BattleRoyaleRadarEntryData(entryId, self.__hideEntryByEntryID, destroyMeCallback, params, typeId)
+
     def _addVehicleEntry(self, vehicleId, xzPosition):
         if vehicleId in self.__visibilitySystemSpottedVehicles:
             _logger.debug('Vehicle marker spotted by radar is not displayeddue to vehicle marker spotted by visibility system is still visible!')
@@ -320,7 +342,7 @@ class BattleRoyaleRadarPlugin(RadarPlugin):
             vEntryId = super(BattleRoyaleRadarPlugin, self)._addVehicleEntry(vehicleId, xzPosition)
             if vEntryId is not None:
                 self._parentObj.setEntryParameters(vEntryId, doClip=False, scaleType=MINIMAP_SCALE_TYPES.NO_SCALE)
-                self._invoke(vEntryId, MarkersAs3Descr.AS_ADD_MARKER, self.__getVehicleMarker(), self.__timeParamsForAS.fadeIn, self.__timeParamsForAS.lifetime, self.__timeParamsForAS.fadeOut)
+                self._invoke(vEntryId, MarkersAs3Descr.AS_ADD_MARKER, self.__getVehicleMarker(), self.__timeParamsForAS.fadeIn)
             return vEntryId
 
     def _addLootEntry(self, typeId, xzPosition):
@@ -331,8 +353,11 @@ class BattleRoyaleRadarPlugin(RadarPlugin):
                 _logger.warning('Error in loot entry creation, typeId = %s', str(typeId))
             else:
                 self._parentObj.setEntryParameters(lEntryId, doClip=False, scaleType=MINIMAP_SCALE_TYPES.NO_SCALE)
-                self._invoke(lEntryId, MarkersAs3Descr.AS_ADD_MARKER, lootTypeParam, self.__timeParamsForAS.fadeIn, self.__timeParamsForAS.lifetime, self.__timeParamsForAS.fadeOut)
+                self._invoke(lEntryId, MarkersAs3Descr.AS_ADD_MARKER, lootTypeParam, self.__timeParamsForAS.fadeIn)
         return lEntryId
+
+    def __hideEntryByEntryID(self, entryId):
+        self._invoke(entryId, MarkersAs3Descr.AS_REMOVE_MARKER, self.__timeParamsForAS.fadeOut)
 
     def __destroyVehicleEntryByVehId(self, vehId):
         if vehId in self._vehicleEntries:
@@ -341,12 +366,12 @@ class BattleRoyaleRadarPlugin(RadarPlugin):
     def __updateVehicleEntries(self):
         for entry in self._vehicleEntries.itervalues():
             markerType = self.__getVehicleMarker()
-            self._invoke(entry.entryId, MarkersAs3Descr.AS_ADD_MARKER, markerType, self.__timeParamsForAS.fadeIn, self.__timeParamsForAS.lifetime, self.__timeParamsForAS.fadeOut)
+            self._invoke(entry.entryId, MarkersAs3Descr.AS_UPDATE_MARKER, markerType)
 
     def __updateLootEntries(self):
         for entry in self._lootEntries:
             markerType = self.__getLootMarkerByTypeId(entry.getTypeId())
-            self._invoke(entry.entryId, MarkersAs3Descr.AS_ADD_MARKER, markerType, self.__timeParamsForAS.fadeIn, self.__timeParamsForAS.lifetime, self.__timeParamsForAS.fadeOut)
+            self._invoke(entry.entryId, MarkersAs3Descr.AS_UPDATE_MARKER, markerType)
 
     def __getVehicleMarker(self):
         conf = MarkersAs3Descr
@@ -399,7 +424,7 @@ class AirDropPlugin(EntriesPlugin):
             if isinstance(v, Placement.Placement):
                 self.__showMarker(v.id, v.position)
             if isinstance(v, ArenaInfo.ArenaInfo):
-                for item in v.lootPositions:
+                for item in v.lootArenaInfo.lootPositions:
                     self.__showMarker(item.id, item.position)
 
     def __onAirDropSpawned(self, event):

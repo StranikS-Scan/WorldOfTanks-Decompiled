@@ -25,7 +25,9 @@
   <wwambientSound>	ambient_wind_spring_01	</wwambientSound>
   <soundRemapping>
     <loadBanks>
-      <bank>	env_Forest.bnk	</bank>
+      <bank>
+        <name>	env_Forest.bnk	</name>
+      </bank>
     </loadBanks>
   </soundRemapping>
   <water>
@@ -63,71 +65,5 @@
   </gameplayTypes>
   <useAdvancedPhysics>	true	</useAdvancedPhysics>
   <roadMap></roadMap>
-  <mapActivities>
-    <scenario>
-      <startTime>	0.000000 0.000000	</startTime>
-      <possibility>	100.000000	</possibility>
-      <interval>	0.000000	</interval>
-      <arenaPeriod>	3	</arenaPeriod>
-      <name>	malina_bird_wedge_1	</name>
-      <trajectories>
-        <warplane>
-          <preset>	malina_bird_wedge_1	</preset>
-          <position>	0.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	1.000000	</possibility>
-          <startTime>	0.000000 0.000000	</startTime>
-          <interval>	360.000000	</interval>
-        </warplane>
-        <warplane>
-          <preset>	malina_bird_wedge_2	</preset>
-          <position>	0.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	1.000000	</possibility>
-          <startTime>	0.000000 0.000000	</startTime>
-          <interval>	400.000000	</interval>
-        </warplane>
-        <warplane>
-          <preset>	malina_bird_wedge_3	</preset>
-          <position>	0.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	1.000000	</possibility>
-          <startTime>	0.000000 0.000000	</startTime>
-          <interval>	340.000000	</interval>
-        </warplane>
-        <warplane>
-          <preset>	malina_bird_wedge_4	</preset>
-          <position>	0.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	1.000000	</possibility>
-          <startTime>	0.000000 0.000000	</startTime>
-          <interval>	560.015015	</interval>
-        </warplane>
-        <warplane>
-          <preset>	malina_bird_wedge_5	</preset>
-          <position>	0.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	1.000000	</possibility>
-          <startTime>	0.000000 0.000000	</startTime>
-          <interval>	300.000000	</interval>
-        </warplane>
-        <warplane>
-          <preset>	malina_bird_wedge_6	</preset>
-          <position>	0.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	1.000000	</possibility>
-          <startTime>	0.000000 0.000000	</startTime>
-          <interval>	320.000000	</interval>
-        </warplane>
-        <warplane>
-          <preset>	malina_bird_wedge_7	</preset>
-          <position>	0.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	1.000000	</possibility>
-          <startTime>	0.000000 0.000000	</startTime>
-          <interval>	440.000000	</interval>
-        </warplane>
-      </trajectories>
-    </scenario>
-  </mapActivities>
+  <mapActivities></mapActivities>
 </02_malinovka.xml>

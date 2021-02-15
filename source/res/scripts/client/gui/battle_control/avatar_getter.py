@@ -377,12 +377,18 @@ def getVehicleIDAttached(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
     try:
-        result = avatar.getVehicleAttached().id
+        vehicle = avatar.getVehicleAttached()
     except AttributeError:
         _logger.exception('Attribute "getVehicleAttached" is not found')
-        result = None
+        return
 
-    return result
+    if vehicle is not None:
+        try:
+            return vehicle.id
+        except AttributeError:
+            _logger.exception('Object does not have attribute "id": %r', vehicle)
+
+    return
 
 
 def setClientReady(avatar=None):

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/battle_royale/full_stats.py
 from helpers import dependency
+from constants import IS_CHINA
 from gui.impl.gen.resources import R
 from gui.impl import backport
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
@@ -49,6 +50,8 @@ class FullStatsComponent(BattleRoyaleFullStatsMeta, IArenaVehiclesController, IF
         nationsVehicles = []
         for nation, data in vehicles.items():
             sortedVehicles = sorted(data.items(), key=lambda (_, isDead): isDead)
+            if IS_CHINA:
+                nation = '{}{}'.format(nation, 'CN')
             nationsVehicles.append({'nation': nation,
              'platoons': []})
             for vehInfo in sortedVehicles:
@@ -60,6 +63,9 @@ class FullStatsComponent(BattleRoyaleFullStatsMeta, IArenaVehiclesController, IF
                 nationsVehicles[-1]['platoons'].insert(0, data)
 
         self.as_updateNationsVehiclesCounterS({'nationsVehicles': nationsVehicles})
+
+    def setFrags(self, frags, isPlayerVehicle):
+        self.__updateScore(frags)
 
     def _populate(self):
         super(FullStatsComponent, self)._populate()
@@ -106,14 +112,17 @@ class FullStatsComponent(BattleRoyaleFullStatsMeta, IArenaVehiclesController, IF
          'description': description,
          'blendMode': blendMode}
 
-    def __updateScore(self):
+    def __updateScore(self, frags=None):
         arenaDP = self.sessionProvider.getArenaDP()
         playersCount = len(set(self.__vehicleTeams.keys()))
-        frags = arenaDP.getVehicleStats().frags
+        if frags is None:
+            vehicleID = arenaDP.getAttachedVehicleID()
+            frags = arenaDP.getVehicleStats(vehicleID).frags
         squads = ''
         if self.__isSquadMode:
             squads = backport.text(R.strings.battle_royale.fragPanel.squadsCount(), squadsCount=str(self.__teamsCount))
         self.as_updateScoreS(playersCount, frags, squads)
+        return
 
     def __initTeamsCount(self):
         arenaDP = self.sessionProvider.getArenaDP()

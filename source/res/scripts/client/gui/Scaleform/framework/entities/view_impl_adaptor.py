@@ -59,7 +59,7 @@ class ViewImplAdaptor(DisposableEntity, ViewInterface):
 
     @property
     def soundManager(self):
-        return None
+        return self.view.soundManager
 
     def isViewModal(self):
         return False

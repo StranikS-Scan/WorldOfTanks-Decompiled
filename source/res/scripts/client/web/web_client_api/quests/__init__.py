@@ -87,21 +87,9 @@ class QuestsWebApi(W2CSchema):
 
     @w2c(_QuestsSchema, 'get_quests_old')
     def handleGetQuestsOld(self, command):
-
-        def _processQuest(progressData, questData):
-            data = {}
-            if questData is not None:
-                data.update({'startTime': questData.getStartTime(),
-                 'startTimeLeft': questData.getStartTimeLeft(),
-                 'finishTime': questData.getFinishTime(),
-                 'finishTimeLeft': questData.getFinishTimeLeft()})
-            data.update(progressData)
-            return data
-
         quests = self._eventsCache.questsProgress.getQuestsData()
         if hasattr(command, 'ids') and command.ids:
             quests = {k:v for k, v in quests.iteritems() if k in command.ids}
-        quests = {k:_processQuest(v, self._eventsCache.getHiddenQuests().get(k)) for k, v in quests.items()}
         return {'quest_list': quests,
          'action': 'get_quests'}
 

@@ -93,3 +93,6 @@ class CustomizationBottomPanelMeta(BaseDAAPIComponent):
 
     def as_carouselFilterMessageS(self, value):
         return self.flashObject.as_carouselFilterMessage(value) if self._isDAAPIInited() else None
+
+    def as_setStageSwitcherVisibilityS(self, value):
+        return self.flashObject.as_setStageSwitcherVisibility(value) if self._isDAAPIInited() else None

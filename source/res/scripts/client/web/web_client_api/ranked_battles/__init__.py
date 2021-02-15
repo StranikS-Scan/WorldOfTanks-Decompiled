@@ -69,8 +69,9 @@ class RankedBattlesWebApi(OpenRankedPagesMixin):
                 dossier = self.__getRankedSeasonDossier(RankedDossierKeys.SEASON % season.getNumber(), seasonID)
                 banToken = tokens.get(SeasonResultTokenPatterns.RANKED_OFF_BANNED.format(seasonID))
                 rollToken = tokens.get(SeasonResultTokenPatterns.RANKED_OFF_ROLLED.format(seasonID))
+                stepsEfficiency = dossier.getStepsEfficiency()
                 result[seasonID] = {'maxRank': dossier.getAchievedRank(),
-                 'efficiency': dossier.getStepsEfficiency(),
+                 'efficiency': stepsEfficiency * 100.0 if stepsEfficiency is not None else None,
                  'isBanned': banToken is not None and banToken[1] > 0,
                  'isRolled': rollToken is not None and rollToken[1] > 0}
 
@@ -93,8 +94,7 @@ class _OpenTabWebApi(OpenTabWebApi):
         return self.__getRankedShopCallback(cmd)
 
     def __getRankedShopCallback(self, cmd):
-        ctx = {'showedFromWeb': True,
-         'webParams': cmd.back_url if cmd.back_url is not None else '',
+        ctx = {'webParams': cmd.back_url if cmd.back_url is not None else '',
          'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_SHOP_ID}
         return partial(self.__rankedController.showRankedBattlePage, ctx)
 

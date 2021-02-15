@@ -2,9 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/context/context.py
 import logging
 import typing
-import BigWorld
 import Event
-from AccountCommands import isCodeValid
 from CurrentVehicle import g_currentVehicle
 import adisp
 from gui import g_tankActiveCamouflage
@@ -12,11 +10,10 @@ from gui.Scaleform.daapi.view.lobby.customization.context.custom_mode import Cus
 from gui.Scaleform.daapi.view.lobby.customization.context.editable_style_mode import EditableStyleMode
 from gui.Scaleform.daapi.view.lobby.customization.context.styled_diffs_cache import StyleDiffsCache
 from gui.Scaleform.daapi.view.lobby.customization.context.styled_mode import StyledMode
-from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs
+from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs, resetC11nItemsNovelty
 from gui.Scaleform.daapi.view.lobby.customization.vehicle_anchors_updater import VehicleAnchorsUpdater
 from gui.customization.constants import CustomizationModes
 from gui.hangar_cameras.c11n_hangar_camera_manager import C11nHangarCameraManager
-from gui.shared.utils import code2str
 from gui.shared.utils.decorators import process
 from helpers import dependency
 from items.components.c11n_constants import SeasonType
@@ -280,16 +277,16 @@ class CustomizationContext(object):
             if startMode.modeId == CustomizationModes.STYLED and self.modeId == CustomizationModes.EDITABLE_STYLE:
                 if not startMode.isOutfitsModified() and not self.mode.isOutfitsModified():
                     return startMode.originalStyle != self.mode.style
+            if startMode.modeId == CustomizationModes.CUSTOM and self.modeId == CustomizationModes.STYLED:
+                if self.mode.getStyleProgressionLevel() > 0:
+                    return self.mode.isOutfitsModified()
             return True
         return self.mode.isOutfitsModified()
 
-    def resetItemsNovelty(self, itemsList):
-
-        def _callback(resultID):
-            if not isCodeValid(resultID):
-                _logger.error('Error occurred while trying to reset c11n items=%s novelty, reason by resultId = %d: %s', itemsList, resultID, code2str(resultID))
-
-        BigWorld.player().shop.resetC11nItemsNovelty([ (g_currentVehicle.item.intCD, intCD) for intCD in itemsList ], _callback)
+    @staticmethod
+    def resetItemsNovelty(items):
+        items = [ (g_currentVehicle.item.intCD, intCD) for intCD in items ]
+        resetC11nItemsNovelty(items=items)
 
     def __onCacheResync(self, *_):
         if g_currentVehicle.isPresent():

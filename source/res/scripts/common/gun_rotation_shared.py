@@ -2,13 +2,17 @@
 # Embedded file name: scripts/common/gun_rotation_shared.py
 import BigWorld
 import Math
-from math import pi
+from math import pi, fabs
 from debug_utils import *
 
-def calcPitchLimitsFromDesc(turretYaw, pitchLimitsDesc):
+def calcPitchLimitsFromDesc(turretYaw, pitchLimitsDesc, turretPitch=0.0, gunJointPitch=0.0):
     minPitch = pitchLimitsDesc['minPitch']
     maxPitch = pitchLimitsDesc['maxPitch']
-    return BigWorld.wg_calcGunPitchLimits(turretYaw, minPitch, maxPitch)
+    return BigWorld.wg_calcGunPitchLimits(turretYaw, minPitch, maxPitch, turretPitch, gunJointPitch)
+
+
+def calcGunPitchCorrection(turretYaw, turretPitch, gunJointPitch):
+    return turretPitch * (1.0 - 2.0 * (fabs(turretYaw) / pi)) + gunJointPitch
 
 
 def encodeAngleToUint(angle, bits):

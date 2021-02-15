@@ -52,6 +52,8 @@ from gui.Scaleform.daapi.view.lobby.vehicle_preview.hero_tank_preview_constants 
 from web.web_client_api.common import ItemPackTypeGroup, ItemPackEntry, ItemPackType
 import SoundGroups
 from tutorial.control.context import GLOBAL_FLAG
+from gui.prb_control.dispatcher import g_prbLoader
+from constants import QUEUE_TYPE
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
  VIEW_ALIAS.LOBBY_STORAGE: 'storage',
@@ -363,7 +365,18 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
     def _getBackBtnLabel(self):
         return VEHICLE_PREVIEW.getBackBtnLabel(_BACK_BTN_LABELS[self._backAlias]) if self._backAlias and self._backAlias in _BACK_BTN_LABELS else VEHICLE_PREVIEW.HEADER_BACKBTN_DESCRLABEL_HANGAR
 
+    def _getPrbEntityType(self):
+        prbDispatcher = g_prbLoader.getDispatcher()
+        if not prbDispatcher:
+            return QUEUE_TYPE.UNKNOWN
+        else:
+            entity = prbDispatcher.getEntity()
+            return entity.getQueueType() if entity is not None else QUEUE_TYPE.UNKNOWN
+
     def __onHangarCreateOrRefresh(self):
+        if self._getPrbEntityType() == QUEUE_TYPE.BATTLE_ROYALE:
+            self.closeView()
+            return
         self.__keepVehicleSelectionEnabled = True
         self.__handleWindowClose()
 

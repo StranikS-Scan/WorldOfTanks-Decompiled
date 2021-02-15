@@ -37,6 +37,7 @@ class StatsComposer(IStatsComposer):
         self._registerTabs(reusable)
         self._block.addNextComponent(text)
         self._block.addNextComponent(templates.VEHICLE_PROGRESS_STATS_BLOCK.clone())
+        self._block.addNextComponent(templates.BATTLE_PASS_PROGRESS_STATS_BLOCK.clone())
         self._block.addNextComponent(templates.QUESTS_PROGRESS_STATS_BLOCK.clone())
         self._block.addNextComponent(templates.DOG_TAGS_PROGRESS_STATS_BLOCK.clone())
         self._block.addNextComponent(common)

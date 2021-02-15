@@ -71,6 +71,11 @@
           <destroyed>	vehicles/russian/R145_Object_705_A/_skin/R145_Object_705_A_3Dst/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/russian/R145_Object_705_A/_skin/R145_Object_705_A_3Dst/crash/lod0/Hull.model	</exploded>
         </R145_Object_705_A_3Dst>
+        <ProgressionStyle>
+          <undamaged>	vehicles/russian/R145_Object_705_A/_skin/ProgressionStyle/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R145_Object_705_A/_skin/ProgressionStyle/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R145_Object_705_A/_skin/ProgressionStyle/crash/lod0/Hull.model	</exploded>
+        </ProgressionStyle>
       </sets>
     </models>
     <swinging>
@@ -95,8 +100,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.58955 0.273275 3.08223	</rayStart>
-        <rayEnd>	0.58955 0.261151 3.07523	</rayEnd>
+        <rayStart>	0.460389 0.427459 2.81525	</rayStart>
+        <rayEnd>	0.460389 0.415335 2.80825	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
@@ -672,6 +677,75 @@
         <anchorPosition>	1.41309 0.274659 3.57904	</anchorPosition>
         <anchorDirection>	0.000020 0.929719 0.36827	</anchorDirection>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15042	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	ProgressionStyle	</compatibleModels>
+        <position>	-1.41329 1.18049 3.5518	</position>
+        <rotation>	0.377148 -0.000008 3.14157	</rotation>
+        <scale>	0.466267 0.08 0.466264	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.23179	</clipAngle>
+        <anchorPosition>	-1.41329 0.254516 3.57097	</anchorPosition>
+        <anchorDirection>	0.000020 0.929719 0.36827	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15043	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	ProgressionStyle	</compatibleModels>
+        <position>	-0.774571 1.65652 1.59541	</position>
+        <rotation>	-0.0110671 -0.0107652 3.14151	</rotation>
+        <scale>	0.596326 0.0555296 0.596335	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.56071	</clipAngle>
+        <anchorPosition>	-0.774559 0.73831 1.59479	</anchorPosition>
+        <anchorDirection>	0.000204158 0.999939 -0.0110653	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15044	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	ProgressionStyle	</compatibleModels>
+        <position>	0.774585 1.65651 1.59541	</position>
+        <rotation>	-0.011067 0.010821 3.14159	</rotation>
+        <scale>	0.596325 0.0555295 0.596335	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.56071	</clipAngle>
+        <anchorPosition>	0.774578 0.738302 1.59479	</anchorPosition>
+        <anchorDirection>	-0.000114334 0.999939 -0.0110662	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15045	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	ProgressionStyle	</compatibleModels>
+        <position>	-1.8089 1.30362 0.547351	</position>
+        <rotation>	1.62294 1.52505 -0.0467472	</rotation>
+        <scale>	0.453499 0.0699329 0.453505	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.00148	</clipAngle>
+        <anchorPosition>	-1.87798 0.332843 0.547424	</anchorPosition>
+        <anchorDirection>	-0.998643 0.0520585 0.00105953	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15046	</slotId>
+        <tags>	formfactor_square	</tags>
+        <position>	-0.169854 1.30341 -3.25343	</position>
+        <rotation>	2.47678 -0.000159264 -0.000030	</rotation>
+        <scale>	0.449886 0.152513 0.449893	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.39483	</clipAngle>
+        <anchorPosition>	-0.169853 0.340163 -3.26216	</anchorPosition>
+        <anchorDirection>	0.000068 0.787031 -0.616913	</anchorDirection>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -719,6 +793,11 @@
             <destroyed>	vehicles/russian/R145_Object_705_A/_skin/R145_Object_705_A_3Dst/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/russian/R145_Object_705_A/_skin/R145_Object_705_A_3Dst/crash/lod0/Chassis.model	</exploded>
           </R145_Object_705_A_3Dst>
+          <ProgressionStyle>
+            <undamaged>	vehicles/russian/R145_Object_705_A/_skin/ProgressionStyle/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R145_Object_705_A/_skin/ProgressionStyle/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R145_Object_705_A/_skin/ProgressionStyle/crash/lod0/Chassis.model	</exploded>
+          </ProgressionStyle>
         </sets>
       </models>
       <traces>
@@ -815,6 +894,12 @@
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
+        <modelSets>
+          <ProgressionStyle>
+            <segmentModelLeft>	vehicles/russian/R145_Object_705_A/_skin/ProgressionStyle/track/segment_L.model	</segmentModelLeft>
+            <segmentModelRight>	vehicles/russian/R145_Object_705_A/_skin/ProgressionStyle/track/segment_R.model	</segmentModelRight>
+          </ProgressionStyle>
+        </modelSets>
       </splineDesc>
       <groundNodes>
         <group>
@@ -1194,6 +1279,11 @@
             <model>	vehicles/russian/R145_Object_705_A/track/segment.model	</model>
             <length>	0.149954	</length>
           </mainSegment>
+          <modelSets>
+            <ProgressionStyle>
+              <mainSegmentModel>	vehicles/russian/R145_Object_705_A/_skin/ProgressionStyle/track/segment_L.model	</mainSegmentModel>
+            </ProgressionStyle>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1391,6 +1481,11 @@
             <model>	vehicles/russian/R145_Object_705_A/track/segment.model	</model>
             <length>	0.149958	</length>
           </mainSegment>
+          <modelSets>
+            <ProgressionStyle>
+              <mainSegmentModel>	vehicles/russian/R145_Object_705_A/_skin/ProgressionStyle/track/segment_R.model	</mainSegmentModel>
+            </ProgressionStyle>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1678,6 +1773,11 @@
                 <destroyed>	vehicles/russian/R145_Object_705_A/_skin/R145_Object_705_A_3Dst/crash/lod0/Gun_03.model	</destroyed>
                 <exploded>	vehicles/russian/R145_Object_705_A/_skin/R145_Object_705_A_3Dst/crash/lod0/Gun_03.model	</exploded>
               </R145_Object_705_A_3Dst>
+              <ProgressionStyle>
+                <undamaged>	vehicles/russian/R145_Object_705_A/_skin/ProgressionStyle/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/russian/R145_Object_705_A/_skin/ProgressionStyle/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/russian/R145_Object_705_A/_skin/ProgressionStyle/crash/lod0/Gun_03.model	</exploded>
+              </ProgressionStyle>
             </sets>
           </models>
           <hitTester>
@@ -1786,6 +1886,11 @@
             <destroyed>	vehicles/russian/R145_Object_705_A/_skin/R145_Object_705_A_3Dst/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/russian/R145_Object_705_A/_skin/R145_Object_705_A_3Dst/crash/lod0/Turret_01.model	</exploded>
           </R145_Object_705_A_3Dst>
+          <ProgressionStyle>
+            <undamaged>	vehicles/russian/R145_Object_705_A/_skin/ProgressionStyle/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R145_Object_705_A/_skin/ProgressionStyle/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R145_Object_705_A/_skin/ProgressionStyle/crash/lod0/Turret_01.model	</exploded>
+          </ProgressionStyle>
         </sets>
       </models>
       <hitTester>
@@ -2329,6 +2434,76 @@
           <anchorPosition>	-1.24391 0.540615 -1.16156	</anchorPosition>
           <anchorDirection>	-0.594461 0.778015 -0.203246	</anchorDirection>
           <compatibleModels>	R145_Object_705_A_3Dst	</compatibleModels>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35036	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	ProgressionStyle	</compatibleModels>
+          <position>	0.000057 2.36555 -0.293956	</position>
+          <rotation>	0.153981 0.000044 3.14153	</rotation>
+          <scale>	1.28847 0.878679 1.28849	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.27476	</clipAngle>
+          <anchorPosition>	-0.00890092 0.869191 0.433633	</anchorPosition>
+          <anchorDirection>	0.000069 0.988168 0.153373	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35037	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	ProgressionStyle	</compatibleModels>
+          <position>	0.284048 2.33745 -1.56663	</position>
+          <rotation>	3.14138 -0.000001 -0.000023	</rotation>
+          <scale>	0.482642 0.329139 0.48265	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.0376991	</clipAngle>
+          <anchorPosition>	0.275076 0.900417 -0.858727	</anchorPosition>
+          <anchorDirection>	-0.000023 1 -0.000216397	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35038	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	ProgressionStyle	</compatibleModels>
+          <position>	-0.200382 1.99386 -3.64273	</position>
+          <rotation>	3.14138 -0.000140429 -0.000023	</rotation>
+          <scale>	0.589963 0.0547923 0.589973	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.55786	</clipAngle>
+          <anchorPosition>	-0.209351 0.445062 -2.9348	</anchorPosition>
+          <anchorDirection>	-0.000023 1 -0.0002164	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35039	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	ProgressionStyle	</compatibleModels>
+          <position>	1.23234 1.92709 0.188856	</position>
+          <rotation>	0.86028 0.944882 3.03758	</rotation>
+          <scale>	0.664613 0.1 0.664623	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.813539	</clipAngle>
+          <anchorPosition>	1.27342 0.352478 0.923432	</anchorPosition>
+          <anchorDirection>	0.67183 0.6487 0.357536	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35040	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	ProgressionStyle	</compatibleModels>
+          <position>	-1.32886 1.91454 0.0304723	</position>
+          <rotation>	0.864584 -1.04551 -3.03586	</rotation>
+          <scale>	0.664614 0.1 0.664623	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.813539	</clipAngle>
+          <anchorPosition>	-1.39053 0.339671 0.759875	</anchorPosition>
+          <anchorDirection>	-0.707497 0.645332 0.288087	</anchorDirection>
         </slot>
       </customizationSlots>
       <customization>

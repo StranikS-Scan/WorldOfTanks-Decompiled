@@ -133,3 +133,19 @@ class SuspendedEventManager(EventManager):
         self.__isSuspended = False
         self.__suspendedEvents = []
         super(SuspendedEventManager, self).clear()
+
+
+class EventsSubscriber(object):
+
+    def __init__(self):
+        self.__subscribeList = []
+
+    def subscribeToEvent(self, event, delegate):
+        event += delegate
+        self.__subscribeList.append((event, delegate))
+
+    def unsubscribeFromAllEvents(self):
+        for event, delegate in self.__subscribeList:
+            event -= delegate
+
+        self.__subscribeList = []

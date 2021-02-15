@@ -24,8 +24,8 @@ class BRUpgradeEffectPlayer(IProgressionListener, IViewComponentsCtrlListener):
         self.__effectConfig = None
         return
 
-    def setLevel(self, level, minXP, maxXP):
-        self.__currentLevel = level
+    def updateData(self, arenaLevelData):
+        self.__currentLevel = arenaLevelData.level
 
     def setVehicleVisualChangingFinished(self, vehicleID):
         self.__playEffect(vehicleID)

@@ -6,6 +6,8 @@ from adisp import process
 from gui.Scaleform.daapi.view.common.battle_royale import br_helpers
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
+import BattleReplay
+from ReplayEvents import g_replayEvents
 from gui.Scaleform.daapi.view.common.battle_royale.params import getShortListParameters
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import getHotKeyListByIndex
 from gui.Scaleform.daapi.view.common.veh_modules_config_cmp import VehicleModulesConfiguratorCmp, getVehicleNationIcon
@@ -49,8 +51,8 @@ class BattleVehicleConfiguratorCmp(VehicleModulesConfiguratorCmp, IProgressionLi
     def setVehicle(self, vehicle):
         super(BattleVehicleConfiguratorCmp, self).setVehicle(createGuiVehicle(vehicle.descriptor.makeCompactDescr()))
 
-    def setLevel(self, level, minXp, maxXp):
-        self.setAvailableLevel(level)
+    def updateData(self, arenaLevelData):
+        self.setAvailableLevel(arenaLevelData.level)
 
     def setModuleChangeCallback(self, callback):
         self.__moduleChangeCallback = callback
@@ -64,6 +66,8 @@ class BattleVehicleConfiguratorCmp(VehicleModulesConfiguratorCmp, IProgressionLi
         self.__sendHighlightedModulesUpdate()
 
     def onClick(self, intCD, columnIdx, moduleIdx):
+        if self.__sessionProvider.isReplayPlaying:
+            return
         intCD = int(intCD)
         columnIdx = int(columnIdx)
         moduleIdx = int(moduleIdx)
@@ -125,20 +129,8 @@ class BattleVehicleConfiguratorCmp(VehicleModulesConfiguratorCmp, IProgressionLi
         yield getPreviewInstallerProcessor(self._vehicle, module).request()
 
 
-class _XpAndLevelData(object):
-
-    def __init__(self):
-        super(_XpAndLevelData, self).__init__()
-        self.xp = 0
-        self.xpPercent = 0
-        self.level = 0
-        self.minXp = 0
-        self.maxXp = 0
-        self.isMaxLevel = False
-
-
 class BattleVehicleConfigurator(BattleVehicleConfiguratorMeta, IProgressionListener, BattleGUIKeyHandler):
-    __slots__ = ('__cmpAliases', '__configuratorCmp', '__blur', '__xpLevelData')
+    __slots__ = ('__cmpAliases', '__configuratorCmp', '__blur', '__isActive')
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
     _MAX_SELECTED_HIGHLIGHTED_MODULES = 2
@@ -148,23 +140,12 @@ class BattleVehicleConfigurator(BattleVehicleConfiguratorMeta, IProgressionListe
         self.__cmpAliases = {BATTLE_VIEW_ALIASES.BATTLE_VEH_MODULES_CONFIGURATOR_CMP, BATTLE_VIEW_ALIASES.BATTLE_LEVEL_PANEL}
         self.__configuratorCmp = None
         self.__blur = GUI.WGUIBackgroundBlur()
-        self.__xpLevelData = _XpAndLevelData()
+        self.__isActive = False
         return
 
-    def setCurrentXP(self, xp, xpPercent):
+    def updateData(self, arenaLevelData):
         for cmpnt in self.components.values():
-            cmpnt.setCurrentXP(xp, xpPercent)
-
-        self.__xpLevelData.xp = xp
-        self.__xpLevelData.xpPercent = xpPercent
-
-    def setLevel(self, level, minXp, maxXp):
-        for cmpnt in self.components.values():
-            cmpnt.setLevel(level, minXp, maxXp)
-
-        self.__xpLevelData.level = level
-        self.__xpLevelData.minXp = minXp
-        self.__xpLevelData.maxXp = maxXp
+            cmpnt.updateData(arenaLevelData)
 
     def setVehicleChanged(self, vehicle, moduleIntCD, vehicleRecreated):
         for cmpnt in self.components.values():
@@ -173,8 +154,6 @@ class BattleVehicleConfigurator(BattleVehicleConfiguratorMeta, IProgressionListe
     def onMaxLvlAchieved(self):
         for cmpnt in self.components.values():
             cmpnt.onMaxLvlAchieved()
-
-        self.__xpLevelData.isMaxLevel = True
 
     def setUpgradeDisabled(self, *args):
         self.destroy()
@@ -198,7 +177,10 @@ class BattleVehicleConfigurator(BattleVehicleConfiguratorMeta, IProgressionListe
         vehicleStateCtrl = self.__getVehicleStateCtrl()
         if vehicleStateCtrl is not None:
             vehicleStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+        if BattleReplay.g_replayCtrl.isPlaying:
+            g_replayEvents.onTimeWarpStart += self.__onReplayTimeWarpStart
         BREvents.playSound(BREvents.VEH_CONFIGURATOR_SHOW)
+        self.__isActive = True
         return
 
     def onModuleMouseOver(self, intCD):
@@ -211,6 +193,8 @@ class BattleVehicleConfigurator(BattleVehicleConfiguratorMeta, IProgressionListe
         vehicleStateCtrl = self.__getVehicleStateCtrl()
         if vehicleStateCtrl is not None:
             vehicleStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+        if BattleReplay.g_replayCtrl.isPlaying:
+            g_replayEvents.onTimeWarpStart -= self.__onReplayTimeWarpStart
         self.__configuratorCmp = None
         ctrl = self.__getProgressionCtrl()
         if ctrl is not None:
@@ -219,7 +203,7 @@ class BattleVehicleConfigurator(BattleVehicleConfiguratorMeta, IProgressionListe
             self.app.unregisterGuiKeyHandler(self)
         self.removeListener(GameEvent.HIDE_VEHICLE_UPGRADE, self.__handleHide, EVENT_BUS_SCOPE.BATTLE)
         self.__blur.enable = False
-        self.__xpLevelData = None
+        self.__isActive = False
         BREvents.playSound(BREvents.VEH_CONFIGURATOR_HIDE)
         super(BattleVehicleConfigurator, self)._dispose()
         return
@@ -234,6 +218,10 @@ class BattleVehicleConfigurator(BattleVehicleConfiguratorMeta, IProgressionListe
             self.__cmpAliases.remove(alias)
             if not self.__cmpAliases:
                 self.__getProgressionCtrl().addRuntimeView(self)
+
+    def __onReplayTimeWarpStart(self):
+        if self.__isActive:
+            self.destroy()
 
     def __onVehicleStateUpdated(self, stateID, _):
         if stateID == VEHICLE_VIEW_STATE.DEATH_INFO:

@@ -1,15 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/avatar_components/AvatarObserver.py
 from collections import defaultdict
+import logging
 import BigWorld
 import Vehicle
 import Math
 from constants import VEHICLE_SETTING
 from aih_constants import CTRL_MODE_NAME, CTRL_MODES
 from AvatarInputHandler.subfilters_constants import AVATAR_SUBFILTERS, FILTER_INTERPOLATION_TYPE
-from debug_utils import LOG_DEBUG_DEV
 from helpers.CallbackDelayer import CallbackDelayer
 from soft_exception import SoftException
+from helpers import dependency
+from skeletons.gui.game_control import IBattleRoyaleController
+_logger = logging.getLogger(__name__)
 _OBSERVABLE_VIEWS = (CTRL_MODE_NAME.ARCADE,
  CTRL_MODE_NAME.SNIPER,
  CTRL_MODE_NAME.DUAL_GUN,
@@ -18,6 +21,7 @@ _OBSERVABLE_VIEWS = (CTRL_MODE_NAME.ARCADE,
 _STRATEGIC_VIEW = (CTRL_MODE_NAME.STRATEGIC, CTRL_MODE_NAME.ARTY)
 
 class ObservedVehicleData(CallbackDelayer):
+    __slots__ = ('dispAngle', 'gunSettings', 'currentShellCD', 'nextShellCD', '__reloadTimeLeft', '__reloadBaseTime', '__ammo', '__ammoOrder', '__equipment', '__equipmentOrder', '__optionalDevices', '__optionalDevicesOrder')
     RELOAD_UPDATE_FREQUENCY = 1.0
     reloadTimeLeft = property(lambda self: self.__reloadTimeLeft)
     reloadBaseTime = property(lambda self: self.__reloadBaseTime)
@@ -56,6 +60,10 @@ class ObservedVehicleData(CallbackDelayer):
             self.__ammoOrder.append(intCD)
         self.__ammo[intCD] = (quantity, quantityInClip)
 
+    def clearAmmo(self):
+        self.__ammo.clear()
+        self.__ammoOrder = []
+
     def setEquipment(self, intCD, quantity, stage, timeRemaining, totalTime):
         if not intCD:
             if len(self.__equipmentOrder) < 3:
@@ -78,6 +86,7 @@ class ObservedVehicleData(CallbackDelayer):
 class AvatarObserver(CallbackDelayer):
     observedVehicleID = property(lambda self: self.__observedVehicleID)
     observedVehicleData = property(lambda self: self.__observedVehicleData)
+    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
 
     def __init__(self):
         CallbackDelayer.__init__(self)
@@ -109,25 +118,37 @@ class AvatarObserver(CallbackDelayer):
         if self.isObserver():
             self.__filterSetInterpolationType(AVATAR_SUBFILTERS.CAMERA_SHOT_POINT, FILTER_INTERPOLATION_TYPE.LINEAR)
             self.__filterResetVector3(AVATAR_SUBFILTERS.CAMERA_SHOT_POINT)
+        self.__battleRoyaleController.onGunUpdate += self.__reloadCurrentVehicleGunSettings
+
+    def onLeaveWorld(self):
+        self.__battleRoyaleController.onGunUpdate -= self.__reloadCurrentVehicleGunSettings
+
+    def __reloadCurrentVehicleGunSettings(self):
+        extraData = self.observedVehicleData[self.vehicle.id]
+        self.observedVehicleData[self.vehicle.id].clearAmmo()
+        extraData.gunSettings = self.vehicle.typeDescriptor.gun
+        self.guiSessionProvider.shared.ammo.setGunSettings(extraData.gunSettings)
+
+    def getObservedVehicleID(self):
+        return self.__observedVehicleID if self.isObserver() else self.playerVehicleID
 
     def onVehicleChanged(self):
-        LOG_DEBUG_DEV('Avatar vehicle has changed to %s' % self.vehicle)
+        _logger.debug('Avatar vehicle has changed to %r', self.vehicle)
         if self.vehicle is not None:
             typeofveh = 'observed' if self.__observedVehicleID == self.vehicle.id else 'players'
-            LOG_DEBUG_DEV('Vehicle ID is ' + str(self.vehicle.id) + ' and is ' + typeofveh)
-        isInPostmortem = self.guiSessionProvider.shared.vehicleState.isInPostmortem
-        isObserving = self.isObserver() or isInPostmortem
+            _logger.debug('Vehicle ID is %r and is %r', self.vehicle.id, typeofveh)
+        isObserving = self.isObserver()
         if isObserving and self.vehicle is not None:
             self.__observedVehicleID = self.vehicle.id
-            if not isInPostmortem:
-                self.guiSessionProvider.getArenaDP().switchCurrentTeam(self.vehicle.publicInfo['team'])
+            self.__battleRoyaleController.onEquipmentReset()
+            self.guiSessionProvider.getArenaDP().switchCurrentTeam(self.vehicle.publicInfo['team'])
             extraData = self.observedVehicleData[self.__observedVehicleID]
             extraData.gunSettings = self.vehicle.typeDescriptor.gun
             self.inputHandler.setObservedVehicle(self.__observedVehicleID)
             if self.gunRotator is not None:
                 self.gunRotator.start()
             self.updateObservedVehicleData()
-            if not isInPostmortem:
+            if not self.guiSessionProvider.shared.vehicleState.isInPostmortem:
                 if hasattr(self.vehicle.filter, 'enableStabilisedMatrix'):
                     self.vehicle.filter.enableStabilisedMatrix(True)
                 BigWorld.target.exclude = self.vehicle
@@ -230,7 +251,7 @@ class AvatarObserver(CallbackDelayer):
             self.observedVehicleData[vehicleID].setEquipment(compactDescr, quantity, stage, timeRemaining, totalTime)
 
     def set_isObserverFPV(self, prev):
-        LOG_DEBUG_DEV('AvatarObserver.set_isObserverFPV()', self.isObserverFPV)
+        _logger.debug('AvatarObserver.set_isObserverFPV() %r', self.isObserverFPV)
         self.__applyObserverModeChange()
 
     def __applyObserverModeChange(self):
@@ -257,7 +278,7 @@ class AvatarObserver(CallbackDelayer):
             eMode = CTRL_MODES[self.observerFPVControlMode]
             if self.isObserverFPV:
                 if eMode not in _OBSERVABLE_VIEWS:
-                    LOG_DEBUG_DEV("AvatarObserver.set_observerFPVControlMode() requested control mode '{0}' is not supported, switching out of FPV".format(eMode))
+                    _logger.debug("AvatarObserver.set_observerFPVControlMode() requested control mode '%r' is not supported, switching out of FPV", eMode)
                     self.cell.switchObserverFPV(False)
                 else:
                     self.__switchToObservedControlMode()
@@ -265,13 +286,13 @@ class AvatarObserver(CallbackDelayer):
 
     def __switchToObservedControlMode(self):
         eMode = CTRL_MODES[self.observerFPVControlMode]
-        LOG_DEBUG_DEV('AvatarObserver.__switchToObservedControlMode():', self.observerFPVControlMode, eMode)
+        _logger.debug('AvatarObserver.__switchToObservedControlMode(): %r, %r', self.observerFPVControlMode, eMode)
         filteredValue = None
         time = BigWorld.serverTime()
         if eMode in _OBSERVABLE_VIEWS:
             filteredValue = self.__filterGetVector3(AVATAR_SUBFILTERS.CAMERA_SHOT_POINT, time)
         if filteredValue is None or filteredValue == Math.Vector3(0, 0, 0):
-            LOG_DEBUG_DEV('AvatarObserver.__switchToObservedControlMode(): no filtered value yet.Rescheduling switch...', filteredValue)
+            _logger.debug('AvatarObserver.__switchToObservedControlMode(): no filtered value yet.Rescheduling switch... %r', filteredValue)
             self.delayCallback(0.0, self.__switchToObservedControlMode)
             return
         else:

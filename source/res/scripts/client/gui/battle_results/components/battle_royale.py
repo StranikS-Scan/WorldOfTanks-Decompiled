@@ -12,10 +12,12 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.server_events import IEventsCache
 from gui.server_events.battle_royale_formatters import StatsItemType, SOLO_ITEMS_ORDER, SQUAD_ITEMS_ORDER
+from gui.server_events.events_helpers import isBattleRoyale
 from gui.shared.utils.functions import replaceHyphenToUnderscore
-from helpers import dependency, int2roman
-from skeletons.gui.game_control import IBattleRoyaleController
+from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.game_control import IBattleRoyaleController, IBattlePassController
+from battle_pass_common import BattlePassConsts
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 _THE_BEST_RANK = 1
@@ -120,22 +122,19 @@ class BattleRoyaleVehicleStatusBlock(base.StatsBlock):
 
 
 class BattleRoyaleFinancialBlock(base.StatsBlock):
-    __slots__ = ('credits', 'xp', 'crystal', 'progression')
+    __slots__ = ('credits', 'xp', 'crystal')
 
     def __init__(self, meta=None, field='', *path):
         super(BattleRoyaleFinancialBlock, self).__init__(meta, field, *path)
         self.credits = 0
         self.xp = 0
         self.crystal = 0
-        self.progression = 0
 
     def setRecord(self, result, reusable):
-        brInfo = reusable.personal.getBattleRoyaleInfo()
         avatarInfo = result['personal']['avatar']
         self.credits = avatarInfo['credits']
         self.xp = avatarInfo['xp']
         self.crystal = avatarInfo['crystal']
-        self.progression = brInfo.get('brPointsChanges', 0)
 
 
 class BattleRoyaleStatsItemBlock(base.StatsBlock):
@@ -247,8 +246,8 @@ class BattleRoyaleStatsBlock(base.StatsBlock):
 
 class BattleRoyaleRewardsBlock(base.StatsBlock):
     __slots__ = ('achievements', 'bonuses', 'completedQuestsCount', 'completedQuests')
-    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __eventsCache = dependency.descriptor(IEventsCache)
+    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __QUESTS_WITH_MEDALS = frozenset(['br_battle_result_solo_1', 'br_battle_result_squad_1'])
 
     def __init__(self, meta=None, field='', *path):
@@ -262,87 +261,59 @@ class BattleRoyaleRewardsBlock(base.StatsBlock):
         questProgress = reusable.personal.getQuestsProgress()
         allQuests = self.__eventsCache.getAllQuests()
         self.achievements = self.__getAchievements(questProgress, allQuests)
-        self.completedQuests = self.__getCompletedQuests(questProgress, self.__getDailyQuestsCondition)
+        self.completedQuests = self.__getCompletedQuests(questProgress, self.__getDailyQuestsCondition, allQuests)
         self.completedQuestsCount = len(self.completedQuests)
         self.bonuses = self.__getBonuses(allQuests, self.completedQuests)
 
     def __getAchievements(self, questProgress, allQuests):
-        completedQuestsWithMedals = self.__getCompletedQuests(questProgress, self.__getAchievementQuestsCondition)
+        completedQuestsWithMedals = self.__getCompletedQuests(questProgress, self.__getAchievementQuestsCondition, allQuests)
         if completedQuestsWithMedals:
             allBonuses = self.__getBonuses(allQuests, completedQuestsWithMedals)
             allAchievements = [ bonus.getAchievements() for bonuses in allBonuses for bonus in bonuses if bonus.getName() == 'dossier' ]
             return [ achievement.getName() for achievementList in allAchievements for achievement in achievementList ]
         return []
 
-    def __getDailyQuestsCondition(self, qID):
-        return qID.startswith(self.__battleRoyaleController.DAILY_QUEST_ID)
-
-    def __getAchievementQuestsCondition(self, qID):
+    def __getAchievementQuestsCondition(self, qID, _):
         return qID in self.__QUESTS_WITH_MEDALS
 
+    def __getDailyQuestsCondition(self, qID, allQuests):
+        return isBattleRoyale(allQuests.get(qID).getGroupID())
+
     @staticmethod
-    def __getCompletedQuests(questProgress, condition):
-        return {qID:qProgress for qID, qProgress in questProgress.iteritems() if condition(qID) and isQuestCompleted(*qProgress)}
+    def __getCompletedQuests(questProgress, condition, allQuests):
+        return {qID:qProgress for qID, qProgress in questProgress.iteritems() if condition(qID, allQuests) and isQuestCompleted(*qProgress)}
 
     @staticmethod
     def __getBonuses(allQuests, completedQuests):
         return [ allQuests.get(qID).getBonuses() for qID in completedQuests ]
 
 
-class BattleRoyaleEventProgressionBlock(base.StatsBlock):
-    __slots__ = ('currentLevel', 'nextLevel', 'earnedPoints', 'progressValue', 'progressDelta', 'progressStage')
-    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
+class BattlePassBlock(base.StatsBlock):
+    __slots__ = ('currentLevel', 'maxPoints', 'earnedPoints', 'currentLevelPoints', 'isDone')
+    __battlePassController = dependency.descriptor(IBattlePassController)
 
     def __init__(self, meta=None, field='', *path):
-        super(BattleRoyaleEventProgressionBlock, self).__init__(meta, field, *path)
-        self.currentLevel = 1
-        self.nextLevel = 1
+        super(BattlePassBlock, self).__init__(meta, field, *path)
+        self.currentLevel = 0
+        self.maxPoints = 0
         self.earnedPoints = 0
-        self.progressDelta = 0
-        self.progressValue = 0
-        self.progressStage = ''
+        self.currentLevelPoints = 0
+        self.isDone = False
 
     def setRecord(self, result, reusable):
-        info = reusable.personal.getBattleRoyaleInfo()
-        earnedPoints = info.get('brPointsChanges', 0)
-        maxLevel = self.__battleRoyaleController.getMaxPlayerLevel()
-        prevLevel, prevPoints = info.get('prevBRTitle', (1, 0))
-        if earnedPoints == 0 or prevLevel == maxLevel:
-            return
-        self.progressStage = self.__getSeason()
-        self.earnedPoints = earnedPoints
-        currentLevel, currentPoints = info.get('accBRTitle', (1, 0))
-        pointsByLevel = float(self.__battleRoyaleController.getPointsProgressForLevel(currentLevel))
-        if currentLevel - prevLevel >= 1:
-            self.__fillPointsForSomeLevels(currentLevel, currentPoints, maxLevel, pointsByLevel)
-        else:
-            self.__fillPointsForOneLevel(prevLevel, prevPoints, currentLevel, earnedPoints, pointsByLevel)
-
-    def __fillPointsForOneLevel(self, prevLevel, prevPoints, currentLevel, earnedPoints, pointsByLevel):
-        self.currentLevel = prevLevel
-        self.nextLevel = currentLevel + 1
-        self.progressValue = prevPoints / pointsByLevel * 100 if pointsByLevel > 0.0 else 0
-        self.progressDelta = earnedPoints / pointsByLevel * 100 if pointsByLevel > 0.0 else 0
-
-    def __fillPointsForSomeLevels(self, currentLevel, currentPoints, maxLevel, pointsByLevel):
-        self.progressValue = 0
-        if currentLevel == maxLevel:
-            self.currentLevel = maxLevel - 1
-            self.nextLevel = maxLevel
-            self.progressDelta = 100
-        else:
-            self.currentLevel = currentLevel
-            self.nextLevel = currentLevel + 1
-            self.progressDelta = currentPoints / pointsByLevel * 100
-
-    def __getSeason(self):
-        season = self.__battleRoyaleController.getCurrentSeason()
-        cycle = self.__battleRoyaleController.getCurrentOrNextActiveCycleNumber(season)
-        return int2roman(cycle) if cycle is not None else ''
+        if reusable.battlePassProgress is not None:
+            progressionInfo = reusable.battlePassProgress.get(BattlePassConsts.PROGRESSION_INFO, reusable.battlePassProgress.get(BattlePassConsts.PROGRESSION_INFO_PREV))
+            if progressionInfo is not None:
+                self.currentLevel = progressionInfo.level
+                self.maxPoints = progressionInfo.pointsTotal
+                self.earnedPoints = progressionInfo.pointsBattleDiff
+                self.currentLevelPoints = progressionInfo.pointsNew
+                self.isDone = progressionInfo.isDone
+        return
 
 
 class BattleRoyalePlayerBlock(base.StatsBlock):
-    __slots__ = ('isPersonal', 'userName', 'clanAbbrev', 'place', 'isPersonalSquad', 'squadIdx', 'hiddenName')
+    __slots__ = ('isPersonal', 'userName', 'clanAbbrev', 'place', 'isPersonalSquad', 'squadIdx', 'hiddenName', 'achievedLevel', 'kills', 'damage', 'vehicleName', 'nationName')
 
     def __init__(self, meta=None, field='', *path):
         super(BattleRoyalePlayerBlock, self).__init__(meta, field, *path)
@@ -353,6 +324,11 @@ class BattleRoyalePlayerBlock(base.StatsBlock):
         self.place = 0
         self.squadIdx = 0
         self.isPersonalSquad = False
+        self.achievedLevel = 0
+        self.kills = 0
+        self.damage = 0
+        self.vehicleName = ''
+        self.nationName = ''
 
     def setRecord(self, vehicleSummarizeInfo, reusable):
         player = vehicleSummarizeInfo.player
@@ -366,6 +342,7 @@ class BattleRoyalePlayerBlock(base.StatsBlock):
             self.hiddenName = player.fakeName
         else:
             self.userName = player.fakeName
+            self.hiddenName = player.realName
             self.clanAbbrev = ''
         avatarInfo = reusable.avatars.getAvatarInfo(dbID)
         if avatarInfo is not None and avatarInfo.extensionInfo is not None:
@@ -389,6 +366,11 @@ class BattleRoyaleTeamStatsBlock(base.StatsBlock):
             block.isPersonal = player.dbID == personalDBID
             block.squadIdx = player.prebattleID
             block.isPersonalSquad = personalPrebattleID != 0 and personalPrebattleID == player.prebattleID
+            block.achievedLevel = item.vehicles[0].achievedLevel
+            block.damage = item.damageDealt
+            block.kills = item.kills
+            block.nationName = item.vehicle.nationName
+            block.vehicleName = item.vehicle.shortUserName
             block.setRecord(item, reusable)
             self.addComponent(self.getNextComponentIndex(), block)
 

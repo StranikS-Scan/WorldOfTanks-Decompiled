@@ -3,6 +3,7 @@
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewSettings, ScopeTemplates, GroupedViewSettings, ComponentSettings
+from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.app_loader.settings import APP_NAME_SPACE
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.shared import EVENT_BUS_SCOPE
@@ -68,13 +69,12 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.HINT_PANEL, component.BattleHintPanel, ScopeTemplates.DEFAULT_SCOPE))
 
 
-class EpicBattlePageBusinessHandler(BattlePageBusinessHandler):
+class EpicBattlePageBusinessHandler(PackageBusinessHandler):
     __slots__ = ()
 
     def __init__(self):
-        listeners = [(VIEW_ALIAS.EPIC_BATTLE_PAGE, self._loadPage), (BATTLE_VIEW_ALIASES.BATTLE_TANK_CAROUSEL_FILTER_POPOVER, self.loadViewByCtxEvent)]
-        super(BattlePageBusinessHandler, self).__init__(listeners, APP_NAME_SPACE.SF_BATTLE, EVENT_BUS_SCOPE.BATTLE)
+        super(EpicBattlePageBusinessHandler, self).__init__(((BATTLE_VIEW_ALIASES.BATTLE_TANK_CAROUSEL_FILTER_POPOVER, self.loadViewByCtxEvent),), APP_NAME_SPACE.SF_BATTLE, EVENT_BUS_SCOPE.BATTLE)
 
 
 def getBusinessHandlers():
-    return (EpicBattlePageBusinessHandler(),)
+    return (BattlePageBusinessHandler(VIEW_ALIAS.EPIC_BATTLE_PAGE), EpicBattlePageBusinessHandler())

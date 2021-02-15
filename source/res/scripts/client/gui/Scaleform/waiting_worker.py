@@ -105,7 +105,7 @@ class WaitingWorker(IWaitingWorker):
         if self.__appFactory is not None:
             lobby = self.__appFactory.getApp(APP_NAME_SPACE.SF_LOBBY)
             if lobby is not None and lobby.loaderManager is not None:
-                lobby.loaderManager.onViewLoaded += self.__onViewLoaded
+                lobby.loaderManager.onViewLoaded -= self.__onViewLoaded
             self.__appFactory = None
         if self.__nonBlocking is not None:
             self.__nonBlocking.onDispose -= self.__onNonBlockingWaitingDisposed

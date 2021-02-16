@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/miniclient/lobby/hangar/aspects.py
 from gui.Scaleform.locale.MINICLIENT import MINICLIENT
+from gui.shared.formatters import text_styles
 from helpers import aop, dependency
 from helpers.i18n import makeString as _ms
 from CurrentVehicle import g_currentVehicle
@@ -8,6 +9,7 @@ from gui.shared.utils.functions import makeTooltip
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from skeletons.gui.game_control import IBootcampController
+from gui import makeHtmlString
 
 class ShowMiniclientInfo(aop.Aspect):
     bootcampController = dependency.descriptor(IBootcampController)
@@ -84,3 +86,22 @@ class ChangeLobbyMenuTooltip(aop.Aspect):
         original = cd.returned
         original['tooltip'] = makeTooltip(TOOLTIPS.LOBBYMENU_VERSIONINFOBUTTON_MINICLIENT_HEADER, TOOLTIPS.LOBBYMENU_VERSIONINFOBUTTON_MINICLIENT_BODY)
         return original
+
+
+class ChangeBattleQueueTypeInfoAspect(aop.Aspect):
+
+    def atCall(self, cd):
+        templateLabel = 'html_templates:lobby/queue/sandbox'
+        cd.change()
+        cd.args[0]['additional'] = makeHtmlString(templateLabel, 'additionalInfo')
+        return (cd.args, cd.kwargs)
+
+
+class ChangeBattleQueueTimeLabelAspect(aop.Aspect):
+
+    def atCall(self, cd):
+        cd.change()
+        text, timeLabel = cd.args
+        if timeLabel and timeLabel[-1] != '*':
+            timeLabel = text_styles.concatStylesToSingleLine(timeLabel, '*')
+        return ((text, timeLabel), cd.kwargs)

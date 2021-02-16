@@ -950,7 +950,8 @@ __BONUS_READERS = {'meta': __readMetaSection,
  'dogTagComponent': __readBonus_dogTag,
  'vehicleChoice': __readBonus_vehicleChoice,
  'blueprint': __readBonus_blueprint,
- 'blueprintAny': __readBonus_blueprintAny}
+ 'blueprintAny': __readBonus_blueprintAny,
+ 'tankmenFreeXP': __readBonus_int}
 __PROBABILITY_READERS = {'optional': __readBonus_optional,
  'oneof': __readBonus_oneof,
  'group': __readBonus_group}

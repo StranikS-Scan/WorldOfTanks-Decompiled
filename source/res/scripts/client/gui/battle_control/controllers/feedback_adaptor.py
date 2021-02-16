@@ -6,10 +6,15 @@ import BigWorld
 import Event
 import TriggersManager
 import feedback_events
+from account_helpers.settings_core.settings_constants import GAME
+from constants import VEHICLE_HIT_EFFECT
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _FET, BATTLE_CTRL_ID
 from gui.battle_control.controllers.interfaces import IBattleController
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
+from vehicle_systems.tankStructure import TankPartNames
 FEEDBACK_TO_TRIGGER_ID = {_FET.VEHICLE_VISIBILITY_CHANGED: TriggersManager.TRIGGER_TYPE.PLAYER_DETECT_ENEMY}
 EntityInFocusData = namedtuple('EntityInFocusData', ['isInFocus', 'entityTypeInFocus'])
 _CELL_BLINKING_DURATION = 3.0
@@ -45,6 +50,7 @@ class _DamagedDevicesExtraFetcher(object):
 
 class BattleFeedbackAdaptor(IBattleController):
     __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onRoundFinished', 'onDevelopmentInfoSet', 'onStaticMarkerAdded', 'onStaticMarkerRemoved', 'onReplyFeedbackReceived', 'onRemoveCommandReceived', 'setInFocusForPlayer', 'onMinimapFeedbackReceived', 'onVehicleDetected', 'onActionAddedToMarkerReceived', 'onShotDone', 'onAddCommandReceived', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache', '__eManager')
+    __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, setup):
         super(BattleFeedbackAdaptor, self).__init__()
@@ -286,6 +292,14 @@ class BattleFeedbackAdaptor(IBattleController):
         self.onVehicleFeedbackReceived(_FET.VEHICLE_RECOVERY_KEY_PRESSED, vehicleID, None)
         return
 
+    def updateMarkerHitState(self, vehicleID, maxDamagedComponent, maxHitEffectCode, damageFactor, lastMaterialIsArmorScreen, hasPiercedHit):
+        armorScreenNotificationEnabled = self.__settingsCore.getSetting(GAME.SHOW_SPACED_ARMOR_HIT_ICON)
+        if lastMaterialIsArmorScreen and not damageFactor and armorScreenNotificationEnabled and maxHitEffectCode not in VEHICLE_HIT_EFFECT.RICOCHETS:
+            eventID = self.__getArmorScreenHitResultEventID(vehicleID, maxDamagedComponent, hasPiercedHit)
+        else:
+            eventID = self.__getHitResultEventID(maxDamagedComponent, maxHitEffectCode, hasPiercedHit, damageFactor)
+        self.setVehicleState(vehicleID, eventID)
+
     def _setVehicleHealthChanged(self, vehicleID, newHealth, attackerID, attackReasonID):
         if attackerID:
             aInfo = self.__arenaDP.getVehicleInfo(attackerID)
@@ -293,6 +307,42 @@ class BattleFeedbackAdaptor(IBattleController):
             aInfo = None
         self.onVehicleFeedbackReceived(_FET.VEHICLE_HEALTH, vehicleID, (newHealth, aInfo, attackReasonID))
         return
+
+    def __getArmorScreenHitResultEventID(self, vehicleID, maxDamagedComponent, hasPiercedHit):
+        if not hasPiercedHit:
+            vInfo = self.getVehicleProxy(vehicleID)
+            isWheeledTech = vInfo is not None and vInfo.isWheeledTech
+            if vInfo.isWheeledTech:
+                wheelsConfig = vInfo.appearance.typeDescriptor.chassis.generalWheelsAnimatorConfig
+            else:
+                wheelsConfig = None
+            if maxDamagedComponent == TankPartNames.CHASSIS and not isWheeledTech:
+                eventID = _FET.VEHICLE_TRACK_BLOCKED
+            elif wheelsConfig and maxDamagedComponent in wheelsConfig.getWheelNodeNames():
+                eventID = _FET.VEHICLE_WHEEL_BLOCKED
+            else:
+                eventID = _FET.VEHICLE_ARMOR_SCREEN_BLOCKED
+        else:
+            eventID = _FET.VEHICLE_ARMOR_MISSED
+        return eventID
+
+    def __getHitResultEventID(self, maxDamagedComponent, maxHitEffectCode, hasPiercedHit, damageFactor):
+        if maxHitEffectCode in VEHICLE_HIT_EFFECT.RICOCHETS:
+            eventID = _FET.VEHICLE_RICOCHET
+        elif maxHitEffectCode == VEHICLE_HIT_EFFECT.CRITICAL_HIT:
+            if maxDamagedComponent == TankPartNames.CHASSIS and damageFactor:
+                eventID = _FET.VEHICLE_CRITICAL_HIT_CHASSIS_PIERCED
+            elif maxDamagedComponent == TankPartNames.CHASSIS and not damageFactor:
+                eventID = _FET.VEHICLE_CRITICAL_HIT_CHASSIS
+            else:
+                eventID = _FET.VEHICLE_CRITICAL_HIT
+        elif maxHitEffectCode == VEHICLE_HIT_EFFECT.ARMOR_PIERCED_DEVICE_DAMAGED:
+            eventID = _FET.VEHICLE_CRITICAL_HIT
+        elif hasPiercedHit:
+            eventID = _FET.VEHICLE_ARMOR_PIERCED
+        else:
+            eventID = _FET.VEHICLE_HIT
+        return eventID
 
 
 def createFeedbackAdaptor(setup):

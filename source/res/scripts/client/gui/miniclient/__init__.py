@@ -35,8 +35,6 @@ def _get_config(is_miniclient, is_tutorial, is_sandbox):
             max_vehicle_level = 1
         else:
             extraCondition = True
-        if is_sandbox:
-            extraCondition = not vehicle_item.isHidden
         return min_vehicle_level <= vehicle_item.level <= max_vehicle_level and extraCondition
 
     config = {'vehicle_is_available': vehicle_filter}
@@ -96,7 +94,7 @@ def _enable_sandbox_platform_pointcuts(config):
     from .lobby.header.battle_type_selector.pointcuts import CommandBattle
     from .lobby.profile.pointcuts import MakeClanBtnUnavailable, MakeClubProfileButtonUnavailable
     from .lobby.tank_carousel import configure_pointcuts as _configure_carousel_pointcuts
-    from .lobby.hangar.pointcuts import DisableTankServiceButtons, TankModelHangarVisibility, TankHangarStatus, EnableCrew
+    from .lobby.hangar.pointcuts import DisableTankServiceButtons, TankModelHangarVisibility, TankHangarStatus, EnableCrew, ChangeBattleQueueTypeInfo, ChangeBattleQueueTimeLabel
     DisableFightButtonPointcut(config)
     DisableTrainingFightButtonPointcut(config)
     DisableBattlesForHiddenVehicles(config)
@@ -109,6 +107,8 @@ def _enable_sandbox_platform_pointcuts(config):
     _configure_carousel_pointcuts(config)
     _preview.ChangeVehicleIsPreviewAllowed(config)
     EnableCrew(config)
+    ChangeBattleQueueTypeInfo()
+    ChangeBattleQueueTimeLabel()
 
 
 __all__ = ('configure_state',)

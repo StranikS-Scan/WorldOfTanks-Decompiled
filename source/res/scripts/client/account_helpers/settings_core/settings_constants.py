@@ -82,6 +82,7 @@ class GAME(CONST_CONTAINER):
     REPLAY_ENABLED = 'replayEnabled'
     ENABLE_SERVER_AIM = 'useServerAim'
     SHOW_DAMAGE_ICON = 'showDamageIcon'
+    SHOW_SPACED_ARMOR_HIT_ICON = 'showSpacedArmorHitIcon'
     SHOW_VEHICLES_COUNTER = 'showVehiclesCounter'
     SHOW_MARKS_ON_GUN = 'showMarksOnGun'
     ANONYMIZER = 'anonymizer'

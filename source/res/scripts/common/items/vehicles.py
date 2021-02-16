@@ -36,7 +36,7 @@ from items import vehicle_items
 from items._xml import cachedFloat
 from constants import IS_BOT, IS_WEB, ITEM_DEFS_PATH, SHELL_TYPES, VEHICLE_SIEGE_STATE, VEHICLE_MODE
 from constants import IGR_TYPE, IS_RENTALS_ENABLED, IS_CELLAPP, IS_BASEAPP, IS_CLIENT, IS_EDITOR
-from constants import ACTION_LABEL_TO_TYPE, ACTIONS_GROUP_LABEL_TO_TYPE, ROLE_LABEL_TO_TYPE, ACTIONS_GROUP_TYPE_TO_LABEL, ROLE_TYPE_TO_LABEL, ROLE_TYPE, ACTIONS_GROUP_TYPE
+from constants import ACTION_LABEL_TO_TYPE, ACTIONS_GROUP_LABEL_TO_TYPE, ROLE_LABEL_TO_TYPE, ACTIONS_GROUP_TYPE_TO_LABEL, ROLE_TYPE_TO_LABEL, ROLE_TYPE, ACTIONS_GROUP_TYPE, DamageAbsorptionLabelToType
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from items.stun import g_cfg as stunConfig
 from items import common_extras, decodeEnum
@@ -4397,9 +4397,12 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
     if kind == 'HIGH_EXPLOSIVE':
         if isModernHighExplosive:
             shellType.isModernMechanics = True
+            shellType.obstaclePenetration = _xml.readBool(xmlCtx, section, 'obstaclePenetration', component_constants.DEFAULT_MODERN_HE_OBSTACLE_PENETRATION)
+            shellType.shieldPenetration = _xml.readBool(xmlCtx, section, 'shieldPenetration', component_constants.DEFAULT_MODERN_HE_SHIELD_PENETRATION)
             shellType.blastWave = _readImpactParams(xmlCtx, section, 'blastWave')
             shellType.shellFragments = _readImpactParams(xmlCtx, section, 'shellFragments')
             shellType.armorSpalls = _readImpactParams(xmlCtx, section, 'armorSpalls')
+            shellType.maxDamage = max(shellType.shellFragments.damages[0], shellType.shellFragments.damages[1], shellType.armorSpalls.damages[0], shellType.armorSpalls.damages[1], shellType.blastWave.damages[0], shellType.blastWave.damages[1])
         shellType.explosionRadius = cachedFloat(section.readFloat('explosionRadius'))
         if shellType.explosionRadius <= 0.0:
             shellType.explosionRadius = cachedFloat(shell.caliber * shell.caliber / 5555.0)
@@ -4412,6 +4415,9 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
 
         if shellType.explosionEdgeDamageFactor > 1.0:
             _xml.raiseWrongXml(xmlCtx, 'explosionEdgeDamageFactor', 'explosionEdgeDamageFactor must be < 1')
+    defaultDamageRandomization = component_constants.DEFAULT_DAMAGE_RANDOMIZATION if not isModernHighExplosive else component_constants.DEFAULT_MODERN_HE_DAMAGE_RANDOMIZATION
+    shell.damageRandomization = _xml.readNonNegativeFloat(xmlCtx, section, 'damageRandomization', defaultDamageRandomization)
+    shell.piercingPowerRandomization = _xml.readNonNegativeFloat(xmlCtx, section, 'piercingPowerRandomization', component_constants.DEFAULT_PIERCING_POWER_RANDOMIZATION)
     hasStun = section.readBool('hasStun', False)
     if hasStun:
         stun = shell_components.Stun()
@@ -5970,9 +5976,14 @@ def _readImpactParams(xmlCtx, section, paramName):
     subXmlCtx, subsection = _xml.getSubSectionWithContext(xmlCtx, section, paramName)
     params = HighExplosiveImpactParams()
     params.radius = _xml.readNonNegativeFloat(subXmlCtx, subsection, 'impactRadius', 0.0)
-    if paramName == 'armorSpalls':
-        params.angleCos = _xml.readNonNegativeFloat(subXmlCtx, subsection, 'coneAngleCos')
     params.damages = (_xml.readNonNegativeFloat(subXmlCtx, subsection, 'damage/armor', 0.0), _xml.readNonNegativeFloat(subXmlCtx, subsection, 'damage/devices', 0.0))
+    if paramName == 'armorSpalls':
+        params.coneAngleCos = cos(radians(_xml.readNonNegativeFloat(subXmlCtx, subsection, 'coneAngle')))
+        params.piercingSpalls = _xml.readBool(subXmlCtx, subsection, 'piercingSpalls', component_constants.DEFAULT_PIERCING_SPALLS)
+    if subsection.has_key('damageAbsorption'):
+        label = _xml.readNonEmptyString(subXmlCtx, subsection, 'damageAbsorption')
+        params.damageAbsorptionType = DamageAbsorptionLabelToType.get(label)
+    params.isActive = params.radius and (params.damages[0] or params.damages[1])
     return params
 
 

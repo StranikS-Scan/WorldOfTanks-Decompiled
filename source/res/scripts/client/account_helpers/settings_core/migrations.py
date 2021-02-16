@@ -28,6 +28,7 @@ def _initializeDefaultSettings(core, data, initialized):
      GAME.MINIMAP_ALPHA: core.getSetting(GAME.MINIMAP_ALPHA),
      GAME.PLAYERS_PANELS_SHOW_LEVELS: core.getSetting(GAME.PLAYERS_PANELS_SHOW_LEVELS)}
     data['gameExtData'][GAME.CHAT_CONTACTS_LIST_ONLY] = options.getSetting(GAME.CHAT_CONTACTS_LIST_ONLY).getDefaultValue()
+    data['gameExtData'][GAME.SHOW_SPACED_ARMOR_HIT_ICON] = core.getSetting(GAME.SHOW_SPACED_ARMOR_HIT_ICON)
     gameplayData = data['gameplayData'] = {GAME.GAMEPLAY_MASK: AccountSettings.getSettingsDefault('gameplayMask')}
     aimData = data['aimData'] = {'arcade': core.getSetting('arcade'),
      'sniper': core.getSetting('sniper')}
@@ -539,6 +540,19 @@ def _migrateTo63(core, data, initialized):
     gameData[GAME.ENABLE_REPAIR_TIMER] = True
 
 
+def _migrateTo64(core, data, initialized):
+    aimData = data['aimData']
+    for settingName in ('arcade', 'sniper'):
+        if settingName not in aimData:
+            data['aimData'].update({settingName: core.getSetting(settingName)})
+
+    aimData['arcade']['armorScreenIndicator'] = 100
+    aimData['sniper']['armorScreenIndicator'] = 100
+    aimData['arcade']['armorScreenIndicatorType'] = 0
+    aimData['sniper']['armorScreenIndicatorType'] = 0
+    data['gameExtData'][GAME.SHOW_SPACED_ARMOR_HIT_ICON] = True
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -785,6 +799,10 @@ _versions = ((1,
   False),
  (63,
   _migrateTo63,
+  False,
+  False),
+ (64,
+  _migrateTo64,
   False,
   False))
 

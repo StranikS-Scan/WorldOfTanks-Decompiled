@@ -37,3 +37,15 @@ class ChangeLobbyMenuTooltip(aop.Pointcut):
 
     def __init__(self):
         aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby', 'LobbyMenu', '_getVersionMessage', aspects=(aspects.ChangeLobbyMenuTooltip,))
+
+
+class ChangeBattleQueueTypeInfo(aop.Pointcut):
+
+    def __init__(self):
+        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.battle_queue', 'BattleQueue', 'as_setTypeInfoS', aspects=(aspects.ChangeBattleQueueTypeInfoAspect(),))
+
+
+class ChangeBattleQueueTimeLabel(aop.Pointcut):
+
+    def __init__(self):
+        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.battle_queue', 'BattleQueue', 'as_setTimerS', aspects=(aspects.ChangeBattleQueueTimeLabelAspect(),))

@@ -140,6 +140,15 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
                 self.as_setGunMarkerColorS(component.getName(), color)
             return True
 
+    def setIsArmorScreen(self, markerType, value):
+        if self.__gunMarkers is not None:
+            component = self.__gunMarkers.getComponentByType(markerType, isActive=True)
+            if component is not None:
+                self.as_setIsArmorScreenS(component.getName(), value)
+            return True
+        else:
+            return False
+
     def startPlugins(self):
         self.__plugins.start()
 

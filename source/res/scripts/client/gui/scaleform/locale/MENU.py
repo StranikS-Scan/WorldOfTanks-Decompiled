@@ -413,6 +413,7 @@ class MENU(object):
     PREBATTLE_TITLE = '#menu:prebattle/title'
     PREBATTLE_DESCRIPTION = '#menu:prebattle/description'
     PREBATTLE_WAITINGTIMEWARNING = '#menu:prebattle/waitingTimeWarning'
+    PREBATTLE_WAITINGTIMEWARNINGSANDBOX = '#menu:prebattle/waitingTimeWarningSandbox'
     PREBATTLE_COMPANIESTITLE_JUNIOR = '#menu:prebattle/CompaniesTitle/JUNIOR'
     PREBATTLE_COMPANIESTITLE_MIDDLE = '#menu:prebattle/CompaniesTitle/MIDDLE'
     PREBATTLE_COMPANIESTITLE_CHAMPION = '#menu:prebattle/CompaniesTitle/CHAMPION'

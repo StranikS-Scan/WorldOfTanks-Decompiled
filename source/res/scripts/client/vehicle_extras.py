@@ -210,6 +210,10 @@ class DamageMarker(EntityExtra):
             if sound:
                 self.sounds[state] = sound
 
+    @property
+    def isTankman(self):
+        return False
+
 
 def wheelHealths(name, index, containerName, dataSection, vehType):
     extras = []
@@ -323,3 +327,10 @@ class Fire(EntityExtra):
         if not isVehicleUnderwater:
             self.__playEffect(data)
         return
+
+
+class TankmanHealth(DamageMarker):
+
+    @property
+    def isTankman(self):
+        return True

@@ -22,7 +22,7 @@ IS_CELLAPP = BigWorld.component == 'cell'
 IS_BASEAPP = BigWorld.component in ('base', 'service')
 IS_WEB = BigWorld.component == 'web'
 IS_DYNAPDATER = False
-CURRENT_REALM = 'RU'
+CURRENT_REALM = 'SB'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -1029,15 +1029,19 @@ class REPAIR_TYPE:
 
 
 class VEHICLE_HIT_EFFECT:
-    INTERMEDIATE_RICOCHET = 0
-    FINAL_RICOCHET = 1
-    ARMOR_NOT_PIERCED = 2
-    ARMOR_PIERCED_NO_DAMAGE = 3
+    ARMOR_PIERCED_NO_DAMAGE = 0
+    INTERMEDIATE_RICOCHET = 1
+    FINAL_RICOCHET = 2
+    ARMOR_NOT_PIERCED = 3
     ARMOR_PIERCED = 4
     CRITICAL_HIT = 5
     ARMOR_PIERCED_DEVICE_DAMAGED = 6
     MAX_CODE = ARMOR_PIERCED_DEVICE_DAMAGED
     RICOCHETS = (INTERMEDIATE_RICOCHET, FINAL_RICOCHET)
+    PIERCED_HITS = (ARMOR_PIERCED_NO_DAMAGE,
+     ARMOR_PIERCED,
+     CRITICAL_HIT,
+     ARMOR_PIERCED_DEVICE_DAMAGED)
 
 
 class VEHICLE_HIT_FLAGS:
@@ -2624,3 +2628,15 @@ class EPlatoonButtonState(enum.Enum):
     SEARCHING_STATE = 'SEARCHING'
     IN_PLATOON_STATE = 'IN_PLATOON'
     CREATE_STATE = 'CREATE'
+
+
+class DamageAbsorptionTypes(object):
+    FRAGMENTS = 0
+    BLAST = 1
+    SPALLS = 2
+
+
+DamageAbsorptionLabelToType = {'FRAGMENTS': DamageAbsorptionTypes.FRAGMENTS,
+ 'BLAST': DamageAbsorptionTypes.BLAST,
+ 'SPALLS': DamageAbsorptionTypes.SPALLS}
+DamageAbsorptionTypeToLabel = dict(((type, label) for label, type in DamageAbsorptionLabelToType.items()))

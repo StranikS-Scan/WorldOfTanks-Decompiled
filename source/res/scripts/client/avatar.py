@@ -1440,10 +1440,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 elif flags & (VHF.CHASSIS_DAMAGED_BY_PROJECTILE | VHF.CHASSIS_DAMAGED_BY_EXPLOSION):
                     sound = 'enemy_no_hp_damage_at_no_attempt_and_chassis_damaged_by_player'
                 else:
-                    if flags & VHF.IS_ANY_PIERCING_MASK:
-                        sound = 'enemy_no_hp_damage_at_no_attempt_by_player'
-                    else:
+                    if flags & (VHF.ARMOR_WITH_ZERO_DF_NOT_PIERCED_BY_PROJECTILE | VHF.DEVICE_NOT_PIERCED_BY_PROJECTILE) or not flags & VHF.IS_ANY_PIERCING_MASK:
                         sound = 'enemy_no_piercing_by_player'
+                    else:
+                        sound = 'enemy_no_hp_damage_at_no_attempt_by_player'
                     if len(enemies) == 1:
                         TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_SHOT_NOT_PIERCED, targetId=enemyVehID)
                 if sound is not None:

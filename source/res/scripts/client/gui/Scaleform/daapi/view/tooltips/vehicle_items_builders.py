@@ -16,6 +16,24 @@ def _advancedBlockCondition(context):
     return advancedTooltipExist
 
 
+def _shellAdvancedBlockCondition(context):
+
+    def advancedTooltipExist(intCD, *_):
+        item = context.buildItem(intCD)
+        return (item.type, item.isModernMechanics) in advanced.SHELL_MOVIES
+
+    return advancedTooltipExist
+
+
+def _nationChangeShellAdvancedBlockCondition(context):
+
+    def advancedTooltipExist(vehCD, intCD, *_):
+        item = context.buildItem(vehCD, intCD)
+        return (item.type, item.isModernMechanics) in advanced.SHELL_MOVIES
+
+    return advancedTooltipExist
+
+
 class InventoryModuleBuilder(AdvancedDataBuilder):
     __slots__ = ()
 
@@ -88,10 +106,10 @@ def getTooltipBuilders():
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.AWARD_MODULE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, module.ModuleBlockTooltipData(contexts.AwardContext()), advanced.HangarModuleAdvanced(contexts.AwardContext()), condition=_advancedBlockCondition(contexts.AwardContext())),
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.SHOP_MODULE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, module.ModuleBlockTooltipData(contexts.ShopContext()), advanced.HangarModuleAdvanced(contexts.ShopContext()), condition=_advancedBlockCondition(contexts.ShopContext())),
      ShellBuilder(TOOLTIPS_CONSTANTS.SHOP_SHELL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, shell.ShellBlockToolTipData(contexts.ShopContext())),
-     AdvancedShellBuilder(TOOLTIPS_CONSTANTS.DEFAULT_SHELL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, shell.ShellBlockToolTipData(contexts.DefaultContext()), advanced.HangarShellAdvanced(contexts.DefaultContext())),
+     AdvancedShellBuilder(TOOLTIPS_CONSTANTS.DEFAULT_SHELL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, shell.ShellBlockToolTipData(contexts.DefaultContext()), advanced.HangarShellAdvanced(contexts.DefaultContext()), condition=_shellAdvancedBlockCondition(contexts.DefaultContext())),
      ShellBuilder(TOOLTIPS_CONSTANTS.AWARD_SHELL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, shell.ShellBlockToolTipData(contexts.AwardContext())),
-     AdvancedDataBuilder(TOOLTIPS_CONSTANTS.HANGAR_SHELL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, shell.ShellBlockToolTipData(contexts.HangarContext()), advanced.HangarShellAdvanced(contexts.HangarContext())),
-     AdvancedDataBuilder(TOOLTIPS_CONSTANTS.NATION_CHANGE_HANGAR_SHELL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, shell.ShellBlockToolTipData(contexts.NationChangeHangarContext()), advanced.HangarShellAdvanced(contexts.NationChangeHangarContext())),
-     AdvancedShellBuilder(TOOLTIPS_CONSTANTS.COMPARE_SHELL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, shell.ShellBlockToolTipData(contexts.VehCmpConfigurationContext()), advanced.HangarShellAdvanced(contexts.VehCmpConfigurationContext())),
-     AdvancedShellBuilder(TOOLTIPS_CONSTANTS.INVENTORY_SHELL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, shell.ShellBlockToolTipData(contexts.InventoryContext()), advanced.HangarShellAdvanced(contexts.TechMainContext())),
-     AdvancedShellBuilder(TOOLTIPS_CONSTANTS.TECH_MAIN_SHELL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, shell.ShellBlockToolTipData(contexts.TechMainContext()), advanced.HangarShellAdvanced(contexts.TechMainContext())))
+     AdvancedDataBuilder(TOOLTIPS_CONSTANTS.HANGAR_SHELL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, shell.ShellBlockToolTipData(contexts.HangarContext()), advanced.HangarShellAdvanced(contexts.HangarContext()), condition=_shellAdvancedBlockCondition(contexts.HangarContext())),
+     AdvancedDataBuilder(TOOLTIPS_CONSTANTS.NATION_CHANGE_HANGAR_SHELL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, shell.ShellBlockToolTipData(contexts.NationChangeHangarContext()), advanced.HangarShellAdvanced(contexts.NationChangeHangarContext()), condition=_nationChangeShellAdvancedBlockCondition(contexts.NationChangeHangarContext())),
+     AdvancedShellBuilder(TOOLTIPS_CONSTANTS.COMPARE_SHELL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, shell.ShellBlockToolTipData(contexts.VehCmpConfigurationContext()), advanced.HangarShellAdvanced(contexts.VehCmpConfigurationContext()), condition=_shellAdvancedBlockCondition(contexts.VehCmpConfigurationContext())),
+     AdvancedShellBuilder(TOOLTIPS_CONSTANTS.INVENTORY_SHELL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, shell.ShellBlockToolTipData(contexts.InventoryContext()), advanced.HangarShellAdvanced(contexts.TechMainContext()), condition=_shellAdvancedBlockCondition(contexts.TechMainContext())),
+     AdvancedShellBuilder(TOOLTIPS_CONSTANTS.TECH_MAIN_SHELL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, shell.ShellBlockToolTipData(contexts.TechMainContext()), advanced.HangarShellAdvanced(contexts.TechMainContext()), condition=_shellAdvancedBlockCondition(contexts.TechMainContext())))

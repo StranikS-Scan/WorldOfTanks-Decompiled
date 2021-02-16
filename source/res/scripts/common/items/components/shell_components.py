@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/shell_components.py
-from constants import SHELL_TYPES
+from constants import SHELL_TYPES, DamageAbsorptionTypeToLabel
 from items.components import component_constants
 
 class ShellType(object):
@@ -39,20 +39,23 @@ class HollowChargeType(ShellType):
 
 
 class HighExplosiveImpactParams(object):
-    __slots__ = ('angleCos', 'radius', 'damages')
+    __slots__ = ('radius', 'damages', 'coneAngleCos', 'piercingSpalls', 'damageAbsorptionType', 'isActive')
 
     def __init__(self):
-        self.angleCos = None
         self.radius = component_constants.ZERO_FLOAT
         self.damages = component_constants.EMPTY_TUPLE
+        self.coneAngleCos = None
+        self.piercingSpalls = None
+        self.damageAbsorptionType = None
+        self.isActive = True
         return
 
     def __repr__(self):
-        return 'HighExplosiveImpactParams(angleCos={}, radius={}, damages={})'.format(self.angleCos, self.radius, self.damages)
+        return 'HighExplosiveImpactParams(radius={}, damages={}, coneAngleCos={}, piersingSpalls={}, damageAbsorption={})'.format(self.radius, self.damages, self.coneAngleCos, self.piercingSpalls, DamageAbsorptionTypeToLabel[self.damageAbsorptionType] if self.damageAbsorptionType else None)
 
 
 class HighExplosiveType(ShellType):
-    __slots__ = ('explosionRadius', 'explosionDamageFactor', 'explosionDamageAbsorptionFactor', 'explosionEdgeDamageFactor', 'isModernMechanics', 'blastWave', 'shellFragments', 'armorSpalls', 'shellFragmentsDamageAbsorptionFactor')
+    __slots__ = ('explosionRadius', 'explosionDamageFactor', 'explosionDamageAbsorptionFactor', 'explosionEdgeDamageFactor', 'isModernMechanics', 'blastWave', 'shellFragments', 'armorSpalls', 'shellFragmentsDamageAbsorptionFactor', 'obstaclePenetration', 'shieldPenetration', 'maxDamage')
 
     def __init__(self, name):
         super(HighExplosiveType, self).__init__(name)
@@ -62,13 +65,16 @@ class HighExplosiveType(ShellType):
         self.explosionEdgeDamageFactor = component_constants.ZERO_FLOAT
         self.shellFragmentsDamageAbsorptionFactor = component_constants.ZERO_FLOAT
         self.isModernMechanics = False
+        self.obstaclePenetration = None
+        self.shieldPenetration = None
         self.blastWave = None
         self.shellFragments = None
         self.armorSpalls = None
+        self.maxDamage = None
         return
 
     def __repr__(self):
-        return 'HighExplosiveType(explosionRadius={}, explosionDamageFactor={}, explosionDamageAbsorptionFactor={}, explosionEdgeDamageFactor={}, blastWave={}, shellFragments={}, armorSpalls={}, shellFragmentsDamageAbsorptionFactor={})'.format(self.explosionRadius, self.explosionDamageFactor, self.explosionDamageAbsorptionFactor, self.explosionEdgeDamageFactor, self.blastWave, self.shellFragments, self.armorSpalls, self.shellFragmentsDamageAbsorptionFactor)
+        return 'HighExplosiveType(explosionRadius={}, explosionDamageFactor={}, explosionDamageAbsorptionFactor={}, explosionEdgeDamageFactor={}, isModernMechanics={}, obstaclePenetration={}, shieldPenetration={}, blastWave={}, shellFragments={}, armorSpalls={}, shellFragmentsDamageAbsorptionFactor={})'.format(self.explosionRadius, self.explosionDamageFactor, self.explosionDamageAbsorptionFactor, self.explosionEdgeDamageFactor, self.isModernMechanics, self.obstaclePenetration, self.shieldPenetration, self.blastWave, self.shellFragments, self.armorSpalls, self.shellFragmentsDamageAbsorptionFactor)
 
 
 class SmokeType(ShellType):

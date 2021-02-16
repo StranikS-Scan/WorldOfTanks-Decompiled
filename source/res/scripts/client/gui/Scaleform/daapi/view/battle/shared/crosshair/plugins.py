@@ -8,11 +8,10 @@ import BigWorld
 from AvatarInputHandler import gun_marker_ctrl, aih_global_binding
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
-from account_helpers.settings_core.settings_constants import GRAPHICS, AIM, GAME
-from aih_constants import CHARGE_MARKER_STATE
+from aih_constants import CHARGE_MARKER_STATE, GUN_MARKER_TYPE
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, DUALGUN_CHARGER_STATUS, SERVER_TICK_LENGTH
 from debug_utils import LOG_WARNING
-from gui import makeHtmlString
+from gui import makeHtmlString, GUI_SETTINGS
 from gui.Scaleform.daapi.view.battle.shared.crosshair.settings import SHOT_RESULT_TO_ALT_COLOR
 from gui.Scaleform.daapi.view.battle.shared.crosshair.settings import SHOT_RESULT_TO_DEFAULT_COLOR
 from gui.Scaleform.daapi.view.battle.shared.formatters import getHealthPercent
@@ -32,14 +31,16 @@ from gui.shared.events import GameEvent
 from gui.shared.utils.TimeInterval import TimeInterval
 from gui.shared.utils.plugins import IPlugin
 from helpers import dependency
-from helpers.time_utils import MS_IN_SECOND
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IBootcampController
 from soft_exception import SoftException
+from account_helpers.settings_core.settings_constants import GRAPHICS, AIM, GAME
+from helpers.time_utils import MS_IN_SECOND
 _logger = logging.getLogger(__name__)
 _SETTINGS_KEY_TO_VIEW_ID = {AIM.ARCADE: CROSSHAIR_VIEW_ID.ARCADE,
  AIM.SNIPER: CROSSHAIR_VIEW_ID.SNIPER}
+_VIEW_ID_TO_SETTINGS_KEY = {v:k for k, v in _SETTINGS_KEY_TO_VIEW_ID.iteritems()}
 _SETTINGS_KEYS = set(_SETTINGS_KEY_TO_VIEW_ID.keys())
 _SETTINGS_VIEWS = set(_SETTINGS_KEY_TO_VIEW_ID.values())
 _DEVICE_ENGINE_NAME = 'engine'
@@ -63,7 +64,8 @@ def createPlugins():
      'shotDone': ShotDonePlugin,
      'speedometerWheeledTech': SpeedometerWheeledTech,
      'siegeMode': SiegeModePlugin,
-     'dualgun': DualGunPlugin}
+     'dualgun': DualGunPlugin,
+     'armorScreen': ArmorScreenIndicatorPlugin}
     return resultPlugins
 
 
@@ -90,6 +92,12 @@ def _makeSettingsVO(settingsCore, *keys):
              'gunTagType': settings['gunTagType'],
              'mixingAlpha': settings['mixing'] / 100.0,
              'mixingType': settings['mixingType']}
+            if GUI_SETTINGS.armorScreenIndicatorSettings.get('useUserSettings', False):
+                data[_SETTINGS_KEY_TO_VIEW_ID[mode]].update({'armorScreenIndicatorAlpha': settings['armorScreenIndicator'] / 100.0,
+                 'armorScreenIndicatorType': settings['armorScreenIndicatorType']})
+            else:
+                data[_SETTINGS_KEY_TO_VIEW_ID[mode]].update({'armorScreenIndicatorAlpha': 1.0,
+                 'armorScreenIndicatorType': GUI_SETTINGS.armorScreenIndicatorSettings.get('armorScreenIndicatorType', 0)})
 
     return data
 
@@ -1308,3 +1316,87 @@ class DualGunPlugin(CrosshairPlugin):
         transitionTimeInSeconds = event.ctx.get('transitionTime')
         gunIndex = event.ctx.get('currentGunIndex')
         self.parentObj.as_runCameraTransitionFxS(gunIndex, transitionTimeInSeconds * MS_IN_SECOND)
+
+
+class ArmorScreenIndicatorPlugin(CrosshairPlugin):
+    _ENABLED_FOR_MARKER_TYPES = {GUN_MARKER_TYPE.CLIENT}
+    ARMOR_SCREEN_INDICATOR_TYPE_SETTING = 'armorScreenIndicatorType'
+    ARMOR_SCREEN_INDICATOR_GUI_SETTINGS = 'armorScreenIndicatorSettings'
+    __slots__ = ('__cache', '__shotResultResolver', '__isEnabled')
+
+    def __init__(self, parentObj):
+        super(ArmorScreenIndicatorPlugin, self).__init__(parentObj)
+        self.__cache = defaultdict(bool)
+        self.__shotResultResolver = gun_marker_ctrl.createShotResultResolver()
+        self.__isEnabled = False
+
+    def start(self):
+        ctrl = self.sessionProvider.shared.crosshair
+        if ctrl is not None:
+            ctrl.onGunMarkerStateChanged += self.__onGunMarkerStateChanged
+            ctrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
+        vehicleCtrl = self.sessionProvider.shared.vehicleState
+        if vehicleCtrl is not None:
+            vehicleCtrl.onVehicleControlling += self.__onVehicleChanged
+        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
+        self.settingsCore.onSettingsReady += self.__onSettingsReady
+        self.__setEnabled(self._parentObj.getViewID())
+        return
+
+    def stop(self):
+        self.__cache.clear()
+        self.settingsCore.onSettingsReady -= self.__onSettingsReady
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        vehicleCtrl = self.sessionProvider.shared.vehicleState
+        if vehicleCtrl is not None:
+            vehicleCtrl.onVehicleControlling -= self.__onVehicleChanged
+        ctrl = self.sessionProvider.shared.crosshair
+        if ctrl is not None:
+            ctrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
+            ctrl.onGunMarkerStateChanged -= self.__onGunMarkerStateChanged
+        return
+
+    def __onGunMarkerStateChanged(self, markerType, position, direction, collision):
+        if self.__isEnabled:
+            self.__updateArmorScreenIndicator(markerType, position, direction, collision)
+
+    def __updateArmorScreenIndicator(self, markerType, position, direction, collision):
+        result = self.__shotResultResolver.isArmorScreenOnHit(position, direction, collision, excludeTeam=self.sessionProvider.getArenaDP().getNumberOfTeam())
+        if markerType in self._ENABLED_FOR_MARKER_TYPES and self.__cache[markerType] != result and self._parentObj.setIsArmorScreen(markerType, result):
+            self.__cache[markerType] = result
+
+    def __onCrosshairViewChanged(self, viewID):
+        self.__setEnabled(viewID)
+
+    def __setEnabled(self, viewID):
+        self.__isEnabled = self.__checkEnabled(viewID)
+        for markerType, value in self.__cache.iteritems():
+            self._parentObj.setIsArmorScreen(markerType, value and self.__isEnabled)
+
+        if not self.__isEnabled:
+            self.__cache.clear()
+
+    def __checkEnabled(self, viewID):
+        if viewID not in (CROSSHAIR_VIEW_ID.ARCADE, CROSSHAIR_VIEW_ID.SNIPER) or not self.settingsCore.isReady:
+            return False
+        else:
+            vehicleCtrl = self.sessionProvider.shared.vehicleState
+            vehicle = vehicleCtrl.getControllingVehicle() if vehicleCtrl is not None else None
+            if GUI_SETTINGS.armorScreenIndicatorSettings.get('useUserSettings', False):
+                settings = self.settingsCore.getSetting(_VIEW_ID_TO_SETTINGS_KEY[viewID])
+            else:
+                settings = GUI_SETTINGS.armorScreenIndicatorSettings
+            if self.ARMOR_SCREEN_INDICATOR_TYPE_SETTING in settings:
+                settingEnabled = settings[self.ARMOR_SCREEN_INDICATOR_TYPE_SETTING] != 0
+            else:
+                settingEnabled = False
+            return vehicle is not None and 'SPG' not in vehicle.typeDescriptor.type.tags and settingEnabled
+
+    def __onSettingsChanged(self, _):
+        self.__setEnabled(self._parentObj.getViewID())
+
+    def __onVehicleChanged(self, _):
+        self.__setEnabled(self._parentObj.getViewID())
+
+    def __onSettingsReady(self):
+        self.__setEnabled(self._parentObj.getViewID())

@@ -296,7 +296,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
                 BigWorld.player().cancelWaitingForShot()
             return
 
-    def showDamageFromShot(self, attackerID, points, effectsIndex, damageFactor):
+    def showDamageFromShot(self, attackerID, points, effectsIndex, damageFactor, lastMaterialIsShield):
         if not self.isStarted:
             return
         else:
@@ -306,7 +306,8 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             if wheelsConfig:
                 maxComponentIdx = maxComponentIdx + wheelsConfig.getNonTrackWheelsCount()
             maxHitEffectCode, decodedPoints, maxDamagedComponent = DamageFromShotDecoder.decodeHitPoints(points, self.appearance.collisions, maxComponentIdx)
-            hasPiercedHit = DamageFromShotDecoder.hasDamaged(maxHitEffectCode)
+            hasDamageHit = DamageFromShotDecoder.hasDamaged(maxHitEffectCode)
+            hasPiercedHit = maxHitEffectCode in VEHICLE_HIT_EFFECT.PIERCED_HITS
             firstHitDir = Math.Vector3(0)
             if decodedPoints:
                 firstHitPoint = decodedPoints[0]
@@ -317,7 +318,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
                 self.appearance.receiveShotImpulse(firstHitDir, effectsDescr['targetImpulse'])
                 self.appearance.executeHitVibrations(maxHitEffectCode)
                 player = BigWorld.player()
-                player.inputHandler.onVehicleShaken(self, compMatrix.translation, firstHitDir, effectsDescr['caliber'], ShakeReason.HIT if hasPiercedHit else ShakeReason.HIT_NO_DAMAGE)
+                player.inputHandler.onVehicleShaken(self, compMatrix.translation, firstHitDir, effectsDescr['caliber'], ShakeReason.HIT if hasDamageHit else ShakeReason.HIT_NO_DAMAGE)
             showFriendlyFlashBang = False
             sessionProvider = self.guiSessionProvider
             isAlly = sessionProvider.getArenaDP().isAlly(attackerID)
@@ -332,26 +333,10 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
 
             if not self.isAlive():
                 return
-            if attackerID == BigWorld.player().playerVehicleID:
-                if maxHitEffectCode is not None and not self.isPlayerVehicle:
-                    if maxHitEffectCode in VEHICLE_HIT_EFFECT.RICOCHETS:
-                        eventID = _GUI_EVENT_ID.VEHICLE_RICOCHET
-                    elif maxHitEffectCode == VEHICLE_HIT_EFFECT.CRITICAL_HIT:
-                        if maxDamagedComponent == TankPartNames.CHASSIS:
-                            if damageFactor:
-                                eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT_CHASSIS_PIERCED
-                            else:
-                                eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT_CHASSIS
-                        else:
-                            eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT
-                    elif maxHitEffectCode == VEHICLE_HIT_EFFECT.ARMOR_PIERCED_DEVICE_DAMAGED:
-                        eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT
-                    elif hasPiercedHit:
-                        eventID = _GUI_EVENT_ID.VEHICLE_ARMOR_PIERCED
-                    else:
-                        eventID = _GUI_EVENT_ID.VEHICLE_HIT
-                    ctrl = self.guiSessionProvider.shared.feedback
-                    ctrl is not None and ctrl.setVehicleState(self.id, eventID)
+            if attackerID == BigWorld.player().playerVehicleID and maxHitEffectCode is not None and not self.isPlayerVehicle:
+                ctrl = self.guiSessionProvider.shared.feedback
+                if ctrl is not None:
+                    ctrl.updateMarkerHitState(self.id, maxDamagedComponent, maxHitEffectCode, damageFactor, lastMaterialIsShield, hasPiercedHit)
             return
 
     def showDamageFromExplosion(self, attackerID, center, effectsIndex, damageFactor):
@@ -726,6 +711,9 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             matInfo = self.typeDescriptor.turret.materials.get(matKind)
         elif parIndex == TankPartIndexes.GUN:
             matInfo = self.typeDescriptor.gun.materials.get(matKind)
+        if matInfo is None:
+            commonMaterialsInfo = vehicles.g_cache.commonConfig['materials']
+            matInfo = commonMaterialsInfo.get(matKind)
         return matInfo
 
     def isAlive(self):

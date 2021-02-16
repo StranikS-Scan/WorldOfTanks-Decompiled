@@ -132,3 +132,6 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
 
     def as_runCameraTransitionFxS(self, activeGunId, animationDuration):
         return self.flashObject.as_runCameraTransitionFx(activeGunId, animationDuration) if self._isDAAPIInited() else None
+
+    def as_setIsArmorScreenS(self, name, value):
+        return self.flashObject.as_setIsArmorScreen(name, value) if self._isDAAPIInited() else None

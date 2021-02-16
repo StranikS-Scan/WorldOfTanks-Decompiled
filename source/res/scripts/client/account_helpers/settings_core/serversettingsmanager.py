@@ -127,7 +127,8 @@ class ServerSettingsManager(object):
                                        GAME.ENABLE_SPEEDOMETER: 23,
                                        GAME.DISPLAY_PLATOON_MEMBERS: 24,
                                        GAME.MINIMAP_MIN_SPOTTING_RANGE: 25,
-                                       GAME.ENABLE_REPAIR_TIMER: 26}, offsets={GAME.BATTLE_LOADING_INFO: Offset(4, 48),
+                                       GAME.ENABLE_REPAIR_TIMER: 26,
+                                       GAME.SHOW_SPACED_ARMOR_HIT_ICON: 27}, offsets={GAME.BATTLE_LOADING_INFO: Offset(4, 48),
                                        GAME.BATTLE_LOADING_RANKED_INFO: Offset(21, 6291456),
                                        GAME.HANGAR_CAM_PERIOD: Offset(18, 1835008)}),
      SETTINGS_SECTIONS.GAMEPLAY: Section(masks={}, offsets={GAME.GAMEPLAY_MASK: Offset(0, 65535)}),
@@ -148,7 +149,9 @@ class ServerSettingsManager(object):
                                'gunTag': Offset(8, 65280),
                                'gunTagType': Offset(16, 16711680),
                                'reloaderTimer': Offset(24, 4278190080L)}),
-     SETTINGS_SECTIONS.AIM_4: Section(masks={}, offsets={'zoomIndicator': Offset(0, 255)}),
+     SETTINGS_SECTIONS.AIM_4: Section(masks={}, offsets={'zoomIndicator': Offset(0, 255),
+                               'armorScreenIndicator': Offset(8, 65280),
+                               'armorScreenIndicatorType': Offset(16, 983040)}),
      SETTINGS_SECTIONS.MARKERS: Section(masks={'markerBaseIcon': 0,
                                  'markerBaseLevel': 1,
                                  'markerBaseHpIndicator': 2,
@@ -517,7 +520,9 @@ class ServerSettingsManager(object):
      'gunTag': 3,
      'gunTagType': 3,
      'reloaderTimer': 3,
-     'zoomIndicator': 4}
+     'zoomIndicator': 4,
+     'armorScreenIndicator': 4,
+     'armorScreenIndicatorType': 4}
     _MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT = 5
     _MAX_DUAL_GUN_HIGHLIGHTS_COUNT = 5
     _MAX_TURBOSHAFT_HIGHLIGHTS_COUNT = 5

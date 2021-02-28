@@ -550,6 +550,20 @@ def _migrateTo65(core, data, initialized):
     battlehudData[ScorePanelStorageKeys.SHOW_HP_BAR] = True
 
 
+def _migrateTo66(core, data, initialized):
+    data['battlePassStorage'][BattlePassStorageKeys.DAILY_QUESTS_INTRO_SHOWN] = False
+
+
+def _migrateTo67(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, 0)
+    clear = data['clear']
+    for position in range(2, 16) + range(18, 20):
+        settingOffset = 1 << position
+        if storedValue & settingOffset:
+            clear['battlePassStorage'] = clear.get('battlePassStorage', 0) | settingOffset
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -804,6 +818,14 @@ _versions = ((1,
   False),
  (65,
   _migrateTo65,
+  False,
+  False),
+ (66,
+  _migrateTo66,
+  False,
+  False),
+ (67,
+  _migrateTo67,
   False,
   False))
 

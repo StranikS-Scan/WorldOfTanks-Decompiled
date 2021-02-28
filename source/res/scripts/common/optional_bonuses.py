@@ -169,7 +169,7 @@ def __mergeBattlePassPoints(total, key, value, isLeaf=False, count=1, *args):
     if seasonID:
         defaultBattlePassPoints['seasonID'] = seasonID
     battlePass = total.setdefault(key, defaultBattlePassPoints)
-    battlePass['vehicles'][NON_VEH_CD] += value['vehicles'][NON_VEH_CD] * count
+    battlePass['vehicles'][NON_VEH_CD] += value.get('vehicles', {}).get(NON_VEH_CD, 0) * count
 
 
 BONUS_MERGERS = {'credits': __mergeValue,
@@ -177,6 +177,7 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'xp': __mergeValue,
  'crystal': __mergeValue,
  'eventCoin': __mergeValue,
+ 'bpcoin': __mergeValue,
  'freeXP': __mergeValue,
  'tankmenXP': __mergeValue,
  'vehicleXP': __mergeValue,

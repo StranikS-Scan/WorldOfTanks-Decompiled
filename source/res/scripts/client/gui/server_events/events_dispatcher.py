@@ -321,3 +321,8 @@ def showPersonalMissionFirstEntryAwardView(ctx):
 def showActions(tab=None, anchor=None):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_STORE), ctx={'tab': tab,
      'anchor': anchor}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showBattlePass3dStyleChoiceWindow():
+    from gui.battle_pass.battle_pass_helpers import BattlePassProgressionSubTabs
+    showMissionsBattlePassCommonProgression(subTab=BattlePassProgressionSubTabs.SELECT_STYLE_TAB)

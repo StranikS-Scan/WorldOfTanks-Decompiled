@@ -325,7 +325,7 @@ class BattleResultsService(IBattleResultsService):
         sumPoints = battlePass.get('sumPoints', 0)
         hasBattlePass = battlePass.get('hasBattlePass', False)
         setIfEmpty = reusableInfo.common.arenaBonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE
-        setInBattleProgress(reusableInfo.battlePassProgress, basePoints, sumPoints, hasBattlePass, setIfEmpty)
+        setInBattleProgress(reusableInfo.battlePassProgress, basePoints, sumPoints, hasBattlePass, setIfEmpty, reusableInfo.common.arenaBonusType)
 
     def __onPremiumBought(self, event):
         ctx = event.ctx

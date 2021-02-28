@@ -16,8 +16,8 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.server_events.awards_formatters import QuestsBonusComposer
 from gui.server_events import formatters, conditions, settings as quest_settings
+from gui.server_events.awards_formatters import QuestsBonusComposer
 from gui.server_events.events_helpers import EventInfoModel, MISSIONS_STATES, QuestInfoModel, isLinkedSet, isDailyQuest
 from gui.server_events.events_helpers import getLocalizedMissionNameForLinkedSetQuest, getLocalizedQuestNameForLinkedSetQuest, getLocalizedQuestDescForLinkedSetQuest
 from gui.server_events.personal_progress.formatters import PostBattleConditionsFormatter
@@ -29,8 +29,7 @@ from personal_missions import PM_BRANCH
 from quest_xml_source import MAX_BONUS_LIMIT
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.game_control import IBattlePassController
-from battle_pass_common import BattlePassConsts, BattlePassState
+from battle_pass_common import BattlePassConsts
 _AWARDS_PER_PAGE = 3
 FINISH_TIME_LEFT_TO_SHOW = time_utils.ONE_DAY
 START_TIME_LIMIT = 5 * time_utils.ONE_DAY
@@ -370,16 +369,12 @@ def getChainVehTypeAndLevelRestrictions(operation, chainID):
 
 _questBranchToTabMap = {PM_BRANCH.REGULAR: QUESTS_ALIASES.SEASON_VIEW_TAB_RANDOM}
 
-@dependency.replace_none_kwargs(battlePassController=IBattlePassController)
-def getBattlePassQuestInfo(progress, arenaBonusType, battlePassController=None):
+def getBattlePassQuestInfo(progress):
     postBattleR = R.strings.battle_pass_2020.reward.postBattle
-    if progress.state == BattlePassState.BASE:
-        questName = backport.text(postBattleR.title.base(), level=progress.level)
-    else:
-        questName = backport.text(postBattleR.title.post(), level=progress.level)
+    chapterName = backport.text(R.strings.battle_pass_2020.chapter.name.num(progress.chapter)())
+    questName = backport.text(postBattleR.title(), level=progress.level, chapter=chapterName)
     progressDesc = backport.text(postBattleR.progress())
     progressDiffTooltip = backport.text(postBattleR.progress.tooltip(), points=progress.pointsBattleDiff)
-    battlePassEnabled = battlePassController.isGameModeEnabled(arenaBonusType)
     questInfo = {'status': 'done' if progress.isDone else '',
      'questID': BattlePassConsts.FAKE_QUEST_ID,
      'rendererType': QUESTS_ALIASES.RENDERER_TYPE_QUEST,
@@ -411,6 +406,6 @@ def getBattlePassQuestInfo(progress, arenaBonusType, battlePassController=None):
      'questType': EVENT_TYPE.BATTLE_QUEST,
      'progressList': progressList,
      'questState': {'statusState': 'done' if progress.isDone else 'inProgress'},
-     'linkBtnTooltip': '' if battlePassEnabled else backport.text(R.strings.battle_pass_2020.progression.error()),
-     'linkBtnEnabled': battlePassEnabled}
+     'linkBtnTooltip': '' if progress.isEnabled else backport.text(R.strings.battle_pass_2020.progression.error()),
+     'linkBtnEnabled': progress.isEnabled}
     return info

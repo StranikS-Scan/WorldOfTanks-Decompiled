@@ -494,6 +494,15 @@ class CLANS(object):
     FORT_HEADER_CLANPROFILEBTNLBL = '#clans:fort/header/clanProfileBtnLbl'
     CLANINVITE_NOTIFICATION_USERNAMEERROR = '#clans:clanInvite/notification/userNameError'
     GLOBALMAP_DISABLED = '#clans:globalMap/disabled'
+    CLANLANDING_NOTIFICATION_COMMONERROR = '#clans:clanLanding/notification/commonError'
+    CLANLANDING_NOTIFICATION_NOPERMISSION = '#clans:clanLanding/notification/noPermission'
+    CLANLANDING_NOTIFICATION_LIMITREACHED = '#clans:clanLanding/notification/limitReached'
+    CLANLANDING_NOTIFICATION_NOTEXIST = '#clans:clanLanding/notification/notExist'
+    CLANLANDING_NOTIFICATION_LENGTHEXCEEDED = '#clans:clanLanding/notification/lengthExceeded'
+    CLANLANDING_NOTIFICATION_RULESVIOLATED = '#clans:clanLanding/notification/rulesViolated'
+    CLANLANDING_NOTIFICATION_EDITED = '#clans:clanLanding/notification/edited'
+    CLANLANDING_NOTIFICATION_ARCHIVED = '#clans:clanLanding/notification/archived'
+    CLANLANDING_NOTIFICATION_DELETED = '#clans:clanLanding/notification/deleted'
     CLANPROFILE_SUMMARYVIEW_BLOCKLBL_ENUM = (CLANPROFILE_SUMMARYVIEW_BLOCKLBL_RAGELEVEL10,
      CLANPROFILE_SUMMARYVIEW_BLOCKLBL_RAGELEVEL8,
      CLANPROFILE_SUMMARYVIEW_BLOCKLBL_RAGELEVEL6,

@@ -13,11 +13,10 @@ from gui.impl.lobby.dialogs.exchange_with_items import ExchangeToBuyItems, Excha
 from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
 from gui.impl.lobby.dialogs.quit_game_dialog import QuitGameDialogWindow
 from gui.impl.lobby.premacc.maps_blacklist_confirm_view import MapsBlacklistConfirmView
-from gui.impl.lobby.battle_pass.battle_pass_voting_confirm_view import BattlePassVotingConfirmView
 from gui.impl.pub.dialog_window import DialogButtons, DialogWindow
 if typing.TYPE_CHECKING:
     from typing import Any, Optional, Iterable, Union
-    from frameworks.wulf import View, Window
+    from frameworks.wulf import View
 SingleDialogResult = namedtuple('SingleDialogResult', ('busy', 'result'))
 
 @async
@@ -81,13 +80,6 @@ def useCrewBook(parent, crewBookCD, vehicleIntCD, tankmanInvId):
 @async
 def buyCrewBook(parent, crewBookCD):
     dialog = CrewBooksBuyDialog(parent.getParentWindow(), crewBookCD)
-    result = yield await(showSimple(dialog))
-    raise AsyncReturn(result)
-
-
-@async
-def chooseFinalRewardBattlePass(parent, data):
-    dialog = FullScreenDialogWindowWrapper(BattlePassVotingConfirmView(data), parent)
     result = yield await(showSimple(dialog))
     raise AsyncReturn(result)
 

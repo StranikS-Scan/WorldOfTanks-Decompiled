@@ -1,22 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_pass/battle_pass_bonuses_helper.py
 import logging
-import weakref
 import typing
-from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
-from battle_pass_common import BattlePassConsts, BattlePassState
-from helpers import i18n, dependency
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.server_events.recruit_helper import getRecruitInfo
+from helpers import i18n
 from gui import makeHtmlString
 from gui.server_events.bonuses import IntelligenceBlueprintBonus, NationalBlueprintBonus, DossierBonus
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from items import vehicles
 from gui.shared.utils.requesters.blueprints_requester import getVehicleCDForIntelligence, getVehicleCDForNational
 from gui.battle_pass.battle_pass_consts import BonusesLayoutConsts
+from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from shared_utils import first
-from skeletons.account_helpers.settings_core import ISettingsCore
 if typing.TYPE_CHECKING:
-    from gui.server_events.bonuses import SimpleBonus, VehicleBlueprintBonus, CustomizationsBonus
-    from skeletons.gui.game_control import IBattlePassController
+    from gui.server_events.bonuses import SimpleBonus, VehicleBlueprintBonus, ItemsBonus, CustomizationsBonus, BattlePassSelectTokensBonus, BattlePassStyleProgressTokenBonus
 _logger = logging.getLogger(__name__)
 TROPHY_GIFT_TOKEN_BONUS_NAME = 'battlePassTrophyGiftToken'
 NEW_DEVICE_GIFT_TOKEN_BONUS_NAME = 'battlePassNewDeviceGiftToken'
@@ -78,12 +76,11 @@ class _ItemsSubTypeGetter(_BaseSubTypeGetter):
     @staticmethod
     def getSubType(bonus):
         subType = ''
-        keys = bonus.getValue().keys()
-        intCD = first(keys)
-        itemTypeID, _, _ = vehicles.parseIntCompactDescr(intCD)
-        if itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
-            subType = _HelperConsts.OPTIONAL_DEVICE_TYPE
-        elif itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
+        items = bonus.getItems().keys()
+        item = first(items)
+        if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
+            subType = _HelperConsts.TROPHY_DEVICE_TYPE if item.isTrophy else _HelperConsts.OPTIONAL_DEVICE_TYPE
+        elif item.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
             subType = _HelperConsts.EQUIPMENT_TYPE
         return subType
 
@@ -97,9 +94,17 @@ class _CustomizationSubTypeGetter(_BaseSubTypeGetter):
         return itemData.get('custType', '')
 
 
+class _RewardSelectSubTypeGetter(_BaseSubTypeGetter):
+
+    @staticmethod
+    def getSubType(bonus):
+        return bonus.getType()
+
+
 _SUB_TYPE_GETTERS_MAP = {'default': _BaseSubTypeGetter,
  'items': _ItemsSubTypeGetter,
- 'customizations': _CustomizationSubTypeGetter}
+ 'customizations': _CustomizationSubTypeGetter,
+ 'battlePassSelectToken': _RewardSelectSubTypeGetter}
 
 class _BaseValueGetter(object):
 
@@ -149,12 +154,21 @@ class _CustomizationValueGetter(_BaseValueGetter):
         return str(itemData.get('id', ''))
 
 
+class _StyleProgressTokenValueGetter(_BaseValueGetter):
+
+    @classmethod
+    def getValue(cls, bonus, _):
+        level = bonus.getLevel()
+        return str(level)
+
+
 _VALUE_GETTERS_MAP = {'default': _BaseValueGetter,
  'blueprints': _BlueprintValueGetter,
  'items': _IntCDValueGetter,
  'goodies': _IntCDValueGetter,
  'crewBooks': _IntCDValueGetter,
- 'customizations': _CustomizationValueGetter}
+ 'customizations': _CustomizationValueGetter,
+ 'styleProgressToken': _StyleProgressTokenValueGetter}
 
 class _BaseTextGetter(object):
 
@@ -258,10 +272,49 @@ class _DossierTextGetter(_HtmlTextGetter):
         return {'name': achive.getUserName()}
 
 
+class _SelectTokenTextGetter(_BaseTextGetter):
+
+    @classmethod
+    def getText(cls, item):
+        nameRes = R.strings.battle_pass_2020.chosenBonuses.bonus.dyn(item.getType())
+        return backport.text(nameRes()) if nameRes.exists() else ''
+
+
+class _StyleProgressTokenTextGetter(_BaseTextGetter):
+
+    @classmethod
+    def getText(cls, item):
+        from gui.battle_pass.battle_pass_helpers import getStyleForChapter
+        chapter = item.getChapter()
+        level = item.getLevel()
+        style = getStyleForChapter(chapter)
+        if style is not None:
+            text = backport.text(R.strings.battle_pass_2020.styleProgressBonus(), styleName=style.userName, level=level)
+        else:
+            text = backport.text(R.strings.battle_pass_2020.styleProgressBonus.notChosen(), level=level)
+        return text
+
+
+class _TankmanTokenTextGetter(_BaseTextGetter):
+
+    @classmethod
+    def getText(cls, item):
+        for tokenID in item.getTokens().iterkeys():
+            if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
+                recruitInfo = getRecruitInfo(tokenID)
+                if recruitInfo is not None:
+                    return backport.text(R.strings.battle_pass_2020.universalTankmanBonus(), name=recruitInfo.getFullUserName())
+
+        return ''
+
+
 _TEXT_GETTERS_MAP = {'default': _BaseTextGetter,
  'crewBooks': _CrewBookTextGetter,
  'crewSkins': _CrewSkinTextGetter,
- 'dossier': _DossierTextGetter}
+ 'dossier': _DossierTextGetter,
+ 'battlePassSelectToken': _SelectTokenTextGetter,
+ 'styleProgressToken': _StyleProgressTokenTextGetter,
+ 'tmanToken': _TankmanTokenTextGetter}
 
 class _HelperConsts(object):
     HTML_BONUS_PATH = 'html_templates:lobby/quests/bonuses'
@@ -272,99 +325,5 @@ class _HelperConsts(object):
     ACHIVE_TYPE = 'achive'
     BADGE_TYPE = 'badge'
     OPTIONAL_DEVICE_TYPE = 'optionalDevice'
+    TROPHY_DEVICE_TYPE = 'trophyDevice'
     EQUIPMENT_TYPE = 'equipment'
-
-
-class DeviceTokensContainer(object):
-
-    def __init__(self, battlePassController, bonusName):
-        self.__battlePassController = weakref.proxy(battlePassController)
-        self.__bonusName = bonusName
-        self.__freeTokenPositions = []
-        self.__paidTokenPositions = []
-
-    @property
-    def freeTokenPositions(self):
-        return self.__freeTokenPositions
-
-    @property
-    def paidTokenPositions(self):
-        return self.__paidTokenPositions
-
-    @property
-    def isEmpty(self):
-        return not bool(self.__freeTokenPositions or self.__paidTokenPositions)
-
-    def addFreeTokenPos(self, position):
-        self.__freeTokenPositions.append(position)
-
-    def addPaidTokenPos(self, position):
-        self.__paidTokenPositions.append(position)
-
-    def getFreeAvailableTokens(self):
-        currentLevel = self.__getBaseProgressionCurrentLevel()
-        return [ 0 <= pos <= currentLevel for pos in self.__freeTokenPositions ]
-
-    def getPaidAvailableTokens(self):
-        currentLevel = self.__getBaseProgressionCurrentLevel()
-        if not self.__battlePassController.isBought():
-            return [False] * len(self.__paidTokenPositions)
-        return [ 0 <= pos <= currentLevel for pos in self.__paidTokenPositions ]
-
-    def saveChosenToken(self):
-        settingsCore = dependency.instance(ISettingsCore)
-        freeAvailableTokens = self.getFreeAvailableTokens()
-        paidAvailableTokens = self.getPaidAvailableTokens()
-        savedUsedTokens = settingsCore.serverSettings.getBPStorage().get(_getStorageKey(self.__bonusName))
-        usedToken = 0
-        for offset, isTokenAvailable in enumerate(freeAvailableTokens + paidAvailableTokens):
-            if not isTokenAvailable:
-                continue
-            usedToken = 1 << offset
-            if savedUsedTokens & usedToken == 0:
-                if BattlePassStorageKeys.MASK_CHOSEN_DEVICES & usedToken == 0:
-                    _logger.error('[Battle Pass] Base reward config has more "%s" tokens than storage')
-                    return
-                break
-
-        settingsCore.serverSettings.saveInBPStorage({_getStorageKey(self.__bonusName): savedUsedTokens | usedToken})
-
-    def isTokenUsed(self, level, awardType):
-        settingsCore = dependency.instance(ISettingsCore)
-        savedUsedTokens = settingsCore.serverSettings.getBPStorage().get(_getStorageKey(self.__bonusName))
-        if awardType == BattlePassConsts.REWARD_PAID and level in self.__paidTokenPositions:
-            offset = self.__paidTokenPositions.index(level) + len(self.__freeTokenPositions)
-            return savedUsedTokens & 1 << offset > 0
-        if awardType == BattlePassConsts.REWARD_FREE and level in self.__freeTokenPositions:
-            offset = self.__freeTokenPositions.index(level)
-            return savedUsedTokens & 1 << offset > 0
-        _logger.warning('%s must not be in awardType=%s.', self.__bonusName, awardType)
-        return False
-
-    def getUnusedTokensCount(self):
-        settingsCore = dependency.instance(ISettingsCore)
-        freeAvailableTokens = self.getFreeAvailableTokens()
-        paidAvailableTokens = self.getPaidAvailableTokens()
-        savedUsedTokens = settingsCore.serverSettings.getBPStorage().get(_getStorageKey(self.__bonusName))
-        count = 0
-        for offset, isTokenAvailable in enumerate(freeAvailableTokens + paidAvailableTokens):
-            if not isTokenAvailable:
-                continue
-            usedToken = 1 << offset
-            if savedUsedTokens & usedToken == 0:
-                count += 1
-
-        return count
-
-    def clear(self):
-        self.__freeTokenPositions = []
-        self.__paidTokenPositions = []
-
-    def __getBaseProgressionCurrentLevel(self):
-        return self.__battlePassController.getMaxLevel() if not self.__battlePassController.getState() == BattlePassState.BASE else self.__battlePassController.getCurrentLevel()
-
-
-def _getStorageKey(bonusName):
-    if bonusName == TROPHY_GIFT_TOKEN_BONUS_NAME:
-        return BattlePassStorageKeys.CHOSEN_TROPHY_DEVICES
-    return BattlePassStorageKeys.CHOSEN_NEW_DEVICES if bonusName == NEW_DEVICE_GIFT_TOKEN_BONUS_NAME else ''

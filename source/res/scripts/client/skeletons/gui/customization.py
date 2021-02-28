@@ -135,5 +135,6 @@ class ICustomizationService(object):
     def getCurrentProgressionStyleLevel(self):
         raise NotImplementedError
 
-    def removeAdditionalProgressionData(self, outfit, style, vehCD):
+    @staticmethod
+    def removeAdditionalProgressionData(outfit, style, vehCD, season):
         raise NotImplementedError

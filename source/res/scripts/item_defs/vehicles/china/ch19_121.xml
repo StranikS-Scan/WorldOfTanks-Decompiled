@@ -725,6 +725,13 @@
         <anchorPosition>	-1.27272 0.416539 3.11697	</anchorPosition>
         <anchorDirection>	0.000005 0.806601 0.591096	</anchorDirection>
       </slot>
+      <slot>
+        <slotType>	sequence	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0.000000 0.000000 0.000000	</position>
+        <rotation>	0.000000 0.000000 0.000000	</rotation>
+        <attachNode>	V	</attachNode>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -794,28 +801,28 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.267662	</radius>
-          <syncAngle>	27.6923	</syncAngle>
+          <syncAngle>	72	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_L1	</name>
           <radius>	0.348369	</radius>
-          <syncAngle>	27.6923	</syncAngle>
+          <syncAngle>	55.3846	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.267662	</radius>
-          <syncAngle>	27.6923	</syncAngle>
+          <syncAngle>	72	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_R1	</name>
           <radius>	0.348369	</radius>
-          <syncAngle>	27.6923	</syncAngle>
+          <syncAngle>	55.3846	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>

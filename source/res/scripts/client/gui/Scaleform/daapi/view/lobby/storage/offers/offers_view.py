@@ -3,7 +3,8 @@
 import ResMgr
 from account_helpers.offers.cache import CachePrefetchResult
 from adisp import process, async
-from gui.battle_pass.battle_pass_helpers import BATTLE_PASS_TOKEN_TROPHY_OFFER, showOfferTrophyDevices, BATTLE_PASS_TOKEN_NEW_DEVICE_OFFER, showOfferNewDevices
+from battle_pass_common import BATTLE_PASS_TOKEN_TROPHY_OFFER_2020, BATTLE_PASS_TOKEN_NEW_DEVICE_OFFER_2020
+from gui.battle_pass.battle_pass_helpers import showOfferTrophyDevices, showOfferNewDevices
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import createStorageDefVO
 from gui.Scaleform.daapi.view.meta.StorageCategoryOffersViewMeta import StorageCategoryOffersViewMeta
 from gui.Scaleform.Waiting import Waiting
@@ -43,7 +44,7 @@ class StorageCategoryOffersView(StorageCategoryOffersViewMeta):
     def _syncOffers(self, callback=None):
         result = CachePrefetchResult.SUCCESS
         currentIDs = {offerVO['id'] for offerVO in self._dataProvider.collection}
-        newIDs = {offer.id for offer in self._offersProvider.getAvailableOffers()}
+        newIDs = {offer.id for offer in self._offersProvider.getAvailableOffers(onlyVisible=True)}
         if currentIDs != newIDs:
             Waiting.show('loadContent')
             result = yield self._offersProvider.isCdnResourcesReady()
@@ -53,7 +54,7 @@ class StorageCategoryOffersView(StorageCategoryOffersViewMeta):
     @process
     def _updateData(self):
         result = yield self._syncOffers()
-        if not self._offersProvider.getAvailableOffers():
+        if not self._offersProvider.getAvailableOffers(onlyVisible=True):
             return
         if result != CachePrefetchResult.SUCCESS:
             self.as_showDummyScreenS(True)
@@ -65,12 +66,12 @@ class StorageCategoryOffersView(StorageCategoryOffersViewMeta):
             self._dataProvider.buildList(currentOffersVo)
 
     def _getTotalClicksText(self):
-        clicksCount = sum([ o.clicksCount for o in self._offersProvider.iAvailableOffers() ])
+        clicksCount = sum([ o.clicksCount for o in self._offersProvider.iAvailableOffers(onlyVisible=True) ])
         clicksText = backport.text(R.strings.storage.offers.giftsTitle(), gifts=text_styles.stats(clicksCount))
         return clicksText
 
     def _getVoList(self):
-        sortedOffers = sorted(self._offersProvider.iAvailableOffers(), key=lambda o: o.priority)
+        sortedOffers = sorted(self._offersProvider.iAvailableOffers(onlyVisible=True), key=lambda o: o.priority)
         return [ self._getVO(offer) for offer in sortedOffers ]
 
     def _getVO(self, offer):
@@ -89,10 +90,10 @@ class StorageCategoryOffersView(StorageCategoryOffersViewMeta):
 
     def openOfferWindow(self, offerID):
         offer = self._offersProvider.getOffer(offerID)
-        if offer is not None and offer.token == BATTLE_PASS_TOKEN_TROPHY_OFFER:
+        if offer is not None and offer.token == BATTLE_PASS_TOKEN_TROPHY_OFFER_2020:
             showOfferTrophyDevices()
             return
-        elif offer is not None and offer.token == BATTLE_PASS_TOKEN_NEW_DEVICE_OFFER:
+        elif offer is not None and offer.token == BATTLE_PASS_TOKEN_NEW_DEVICE_OFFER_2020:
             showOfferNewDevices()
             return
         else:

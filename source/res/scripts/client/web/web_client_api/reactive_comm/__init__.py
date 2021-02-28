@@ -28,11 +28,10 @@ class ReactiveCommunicationWebApi(object):
         name = cmd.channel_name.encode('utf-8')
         if name not in self.__subscriptions:
             self.__subscriptions[name] = subscription = Subscription(name)
+            self.__service.onSubscriptionClosed += self.__onSubscriptionClosed
             status = yield self.__doSubscribe(subscription)
-            if status:
-                self.__service.onSubscriptionClosed += self.__onSubscriptionClosed
-            else:
-                self.__subscriptions.pop(name)
+            if not status:
+                self.__subscriptions.pop(name, None)
             yield {'channel_name': name,
              'subscription_id': id(subscription),
              'status': {'client': status.client.value,
@@ -41,6 +40,7 @@ class ReactiveCommunicationWebApi(object):
             yield {'channel_name': name,
              'status': {'client': SubscriptionClientStatus.AlreadySubscribed.value,
                         'server': SubscriptionServerStatus.Subscribed.value}}
+        return
 
     @w2c(_SubscriptionSchema, 'unsubscribe_from_channel')
     def unsubscribe(self, cmd):
@@ -57,7 +57,7 @@ class ReactiveCommunicationWebApi(object):
 
     def _finiSubscriptionsHandler(self):
         self.__service.onSubscriptionClosed -= self.__onSubscriptionClosed
-        for subscription in self.__subscriptions.itervalues():
+        for subscription in self.__subscriptions.values():
             self.__service.unsubscribeFromChannel(subscription)
 
         self.__subscriptions.clear()

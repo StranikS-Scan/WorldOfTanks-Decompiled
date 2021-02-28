@@ -287,7 +287,7 @@ class ElementTooltip(BlocksTooltipData):
             modifiedStrRoot = rCharacteristics.collapsible
             if self._item.isEditable:
                 vehicleIntCD = self.__vehicle.intCD
-                if not self._item.canBeEditedForVehicle(vehicleIntCD):
+                if not self._item.canBeEditedForVehicle(vehicleIntCD) and self._progressionLevel == 0:
                     modifiedStr = modifiedStrRoot.mutableWithDecal()
                     modifiedIcon = self.EDITABLE_DISABLE_ICON
                 elif self._item.isEditedForVehicle(vehicleIntCD):

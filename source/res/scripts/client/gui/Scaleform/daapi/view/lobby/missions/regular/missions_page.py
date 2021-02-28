@@ -6,6 +6,7 @@ import typing
 from adisp import process, async as adispasync
 from async import async, await
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from gui.battle_pass.battle_pass_helpers import isBattlePassDailyQuestsIntroShown
 from items import getTypeOfCompactDescr
 import BigWorld
 import Windowing
@@ -354,16 +355,18 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
              QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS,
              QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS,
              QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS):
-                newEvents = []
+                newEventsCount = 0
                 if alias == QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS:
                     availableDailyQuests = []
                     availableDailyQuests.extend(self.eventsCache.getDailyQuests(includeEpic=True).values())
                     availableDailyQuests.extend(self.eventsCache.getPremiumQuests(lambda q: q.isAvailable().isValid).values())
                     if availableDailyQuests:
-                        newEvents = settings.getNewCommonEvents(availableDailyQuests)
+                        newEventsCount = len(settings.getNewCommonEvents(availableDailyQuests))
+                        if self.battlePassCtrl.isActive() and not isBattlePassDailyQuestsIntroShown():
+                            newEventsCount += 1
                 elif self.currentTab is not None and self.__currentTabAlias == alias:
                     suitableEvents = [ quest for quest in self.currentTab.getSuitableEvents() if not isLinkedSet(quest.getGroupID()) or quest.isAvailable().isValid ]
-                    newEvents = settings.getNewCommonEvents(suitableEvents)
+                    newEventsCount = len(settings.getNewCommonEvents(suitableEvents))
                 else:
                     if alias == QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS:
                         from gui.Scaleform.daapi.view.lobby.missions.regular.missions_views import MissionsCategoriesView
@@ -371,8 +374,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
                     else:
                         advisableQuests = self.eventsCache.getAdvisableQuests()
                     advisableEvents = self.__builders[alias].getBlocksAdvisableEvents(advisableQuests)
-                    newEvents = settings.getNewCommonEvents(advisableEvents)
-                tab['value'] = len(newEvents)
+                    newEventsCount = len(settings.getNewCommonEvents(advisableEvents))
+                tab['value'] = newEventsCount
             return (headerTab, tab)
 
     def __elenHasEvents(self):

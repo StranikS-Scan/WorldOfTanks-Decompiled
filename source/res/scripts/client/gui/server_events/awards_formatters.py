@@ -64,6 +64,7 @@ AWARD_IMAGES = {AWARDS_SIZES.SMALL: {Currency.CREDITS: RES_ICONS.MAPS_ICONS_QUES
                       Currency.GOLD: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_GOLD,
                       Currency.CRYSTAL: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_CRYSTAL,
                       Currency.EVENT_COIN: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_EVENTCOIN,
+                      Currency.BPCOIN: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_BPCOIN,
                       'creditsFactor': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_CREDITS,
                       'freeXP': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_FREEEXP,
                       'freeXPFactor': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_FREEEXP,
@@ -76,6 +77,7 @@ AWARD_IMAGES = {AWARDS_SIZES.SMALL: {Currency.CREDITS: RES_ICONS.MAPS_ICONS_QUES
                     Currency.GOLD: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_GOLD,
                     Currency.CRYSTAL: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_CRYSTAL,
                     Currency.EVENT_COIN: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_EVENTCOIN,
+                    Currency.BPCOIN: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_BPCOIN,
                     'creditsFactor': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_CREDITS,
                     'freeXP': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_FREEXP,
                     'freeXPFactor': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_FREEXP,
@@ -97,6 +99,7 @@ TEXT_FORMATTERS = {Currency.CREDITS: text_styles.credits,
  Currency.GOLD: text_styles.gold,
  Currency.CRYSTAL: text_styles.crystal,
  Currency.EVENT_COIN: text_styles.eventCoin,
+ Currency.BPCOIN: text_styles.bpcoin,
  'creditsFactor': _getMultiplierFormatter(text_styles.credits),
  'freeXP': text_styles.expText,
  'freeXPFactor': _getMultiplierFormatter(text_styles.expText),
@@ -127,6 +130,7 @@ def getDefaultFormattersMap():
      Currency.CREDITS: simpleBonusFormatter,
      Currency.CRYSTAL: simpleBonusFormatter,
      Currency.EVENT_COIN: simpleBonusFormatter,
+     Currency.BPCOIN: simpleBonusFormatter,
      'freeXP': simpleBonusFormatter,
      'xp': simpleBonusFormatter,
      'tankmenXP': simpleBonusFormatter,
@@ -168,7 +172,8 @@ def getEpicFormattersMap():
      'crewBooks': CrewBooksEpicBonusFormatter(),
      PREMIUM_ENTITLEMENTS.PLUS: PremiumDaysEpicBonusFormatter(),
      'items': ItemsEpicBonusFormatter(),
-     'blueprints': BlueprintGroupEpicBonusFormatter()}
+     'blueprints': BlueprintGroupEpicBonusFormatter(),
+     'battlePassPoints': BattlePassEpicBonusFormatter()}
 
 
 def getEventBoardsFormattersMap():
@@ -1631,7 +1636,7 @@ class EntitlementFormatter(SimpleBonusFormatter):
 class BattlePassBonusFormatter(SimpleBonusFormatter):
 
     def _format(self, bonus):
-        return [PreformattedBonus(bonusName=bonus.getName(), label=self._getLabel(bonus), userName=self._getUserName(bonus), labelFormatter=self._getLabelFormatter(bonus), images=self._getImages(bonus), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus), compensationReason=self._getCompensationReason(bonus), isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BATTLE_PASS_POINTS)]
+        return [PreformattedBonus(bonusName=bonus.getName(), label=self._getLabel(bonus), userName=self._getUserName(bonus), labelFormatter=self._getLabelFormatter(bonus), images=self._getImages(bonus), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus), compensationReason=self._getCompensationReason(bonus), isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BATTLE_PASS_POINTS, specialArgs=[])]
 
     @classmethod
     def _getImages(cls, bonus):
@@ -1641,4 +1646,20 @@ class BattlePassBonusFormatter(SimpleBonusFormatter):
             if image is not None:
                 images[size] = image
 
+        return images
+
+
+class BattlePassEpicBonusFormatter(BattlePassBonusFormatter):
+
+    @classmethod
+    def _getLabelFormatter(cls, bonus):
+        return text_styles.textEpic
+
+    @classmethod
+    def _getImages(cls, bonus):
+        images = {}
+        size = EPIC_AWARD_SIZE
+        image = bonus.getIconBySize(size)
+        if image is not None:
+            images[size] = image
         return images

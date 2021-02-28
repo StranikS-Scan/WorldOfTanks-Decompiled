@@ -88,12 +88,16 @@ class StyledMode(CustomizationMode):
         baseOutfit = self.__modifiedStyle.getOutfit(self.season, vehicleCD=vehicleCD)
         for seasonID in SeasonType.COMMON_SEASONS:
             self._modifiedOutfits[seasonID] = getStyleProgressionOutfit(self._modifiedOutfits[seasonID], toLevel, seasonID)
+            addOutfit = self.__modifiedStyle.getAdditionalOutfit(toLevel, seasonID, vehicleCD)
+            if addOutfit is not None:
+                baseOutfit = baseOutfit.patch(addOutfit)
             diff = getEditableStyleOutfitDiff(self._modifiedOutfits[seasonID], baseOutfit)
             self._ctx.stylesDiffsCache.saveDiff(self.__modifiedStyle, seasonID, diff)
 
         self._fitOutfits(modifiedOnly=True)
         self._ctx.refreshOutfit()
         self._events.onComponentChanged(self.STYLE_SLOT, True)
+        return
 
     def getStyleProgressionLevel(self):
         return self._modifiedOutfits[self.season].progressionLevel if self.__modifiedStyle and self.__modifiedStyle.isProgressive else -1
@@ -290,7 +294,7 @@ class StyledMode(CustomizationMode):
         if self.__modifiedStyle and self.__modifiedStyle.isProgressive:
             modifiedOutfit = self._modifiedOutfits[self.season]
             originalOutfit = self._originalOutfits[self.season]
-            isInstalled = originalOutfit.id == modifiedOutfit.id
+            isInstalled = originalOutfit.id == modifiedOutfit.id and self._service.isStyleInstalled()
             modifiedProgression = modifiedOutfit.progressionLevel
             if g_currentVehicle and g_currentVehicle.item:
                 originalProgression = self.__modifiedStyle.getLatestOpenedProgressionLevel(g_currentVehicle.item)
@@ -300,6 +304,8 @@ class StyledMode(CustomizationMode):
             isProgressionReachable = isProgressionReachable or modifiedProgression == originalProgression
             if (not isInstalled or modifiedProgression != originalProgression) and not isProgressionReachable:
                 return False
+            if not isInstalled:
+                return True
         return isStyleChanged or isAutoRentChanged
 
     def _getAnchorVOs(self):

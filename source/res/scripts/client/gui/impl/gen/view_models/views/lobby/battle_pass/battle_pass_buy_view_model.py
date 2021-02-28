@@ -8,13 +8,13 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_buy_rewards_vi
 from gui.impl.gen.view_models.views.lobby.battle_pass.package_item import PackageItem
 
 class BattlePassBuyViewModel(ViewModel):
-    __slots__ = ('onBackClick', 'choosePackage', 'showConfirm', 'showConfirmAny', 'showRewards', 'showBuy')
+    __slots__ = ('onBackClick', 'choosePackage', 'showConfirm', 'showConfirmAny', 'showRewards', 'onShopOfferClick')
     BUY_STATE = 'buyState'
     CONFIRM_STATE = 'confirmState'
     CONFIRM_ANY_NUMBER_STATE = 'confirmAnyNumberState'
     REWARDS_STATE = 'rewardsState'
 
-    def __init__(self, properties=7, commands=6):
+    def __init__(self, properties=8, commands=6):
         super(BattlePassBuyViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -39,17 +39,23 @@ class BattlePassBuyViewModel(ViewModel):
     def setState(self, value):
         self._setString(4, value)
 
-    def getIsBattlePassBought(self):
+    def getIsWalletAvailable(self):
         return self._getBool(5)
 
-    def setIsBattlePassBought(self, value):
+    def setIsWalletAvailable(self, value):
         self._setBool(5, value)
 
-    def getIsWalletAvailable(self):
+    def getIsShopOfferAvailable(self):
         return self._getBool(6)
 
-    def setIsWalletAvailable(self, value):
+    def setIsShopOfferAvailable(self, value):
         self._setBool(6, value)
+
+    def getShopOfferDiscount(self):
+        return self._getNumber(7)
+
+    def setShopOfferDiscount(self, value):
+        self._setNumber(7, value)
 
     def _initialize(self):
         super(BattlePassBuyViewModel, self)._initialize()
@@ -58,11 +64,12 @@ class BattlePassBuyViewModel(ViewModel):
         self._addViewModelProperty('confirmAnyNumber', BattlePassBuyConfirmAnyNumberViewModel())
         self._addViewModelProperty('rewards', BattlePassBuyRewardsViewModel())
         self._addStringProperty('state', 'buyState')
-        self._addBoolProperty('isBattlePassBought', False)
         self._addBoolProperty('isWalletAvailable', False)
+        self._addBoolProperty('isShopOfferAvailable', False)
+        self._addNumberProperty('shopOfferDiscount', 0)
         self.onBackClick = self._addCommand('onBackClick')
         self.choosePackage = self._addCommand('choosePackage')
         self.showConfirm = self._addCommand('showConfirm')
         self.showConfirmAny = self._addCommand('showConfirmAny')
         self.showRewards = self._addCommand('showRewards')
-        self.showBuy = self._addCommand('showBuy')
+        self.onShopOfferClick = self._addCommand('onShopOfferClick')

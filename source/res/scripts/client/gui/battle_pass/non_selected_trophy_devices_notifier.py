@@ -16,14 +16,14 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 if typing.TYPE_CHECKING:
     from skeletons.gui.game_control import IBattlePassController
 
-class NonSelectedTrophyDeviceNotifier(object):
+class NonSelectedOldTrophyDeviceNotifier(object):
     __slots__ = ('__battlePassController', '__isStarted')
     TROPHY_DEVICES_MSG_ID = 0
     NEW_DEVICES_MSG_ID = 1
     __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, battlePassController):
-        super(NonSelectedTrophyDeviceNotifier, self).__init__()
+        super(NonSelectedOldTrophyDeviceNotifier, self).__init__()
         self.__battlePassController = weakref.proxy(battlePassController)
         self.__isStarted = False
 
@@ -62,7 +62,7 @@ class NonSelectedTrophyDeviceNotifier(object):
                 self.__resetNotificationShown(bonusName)
                 self.__removeNotification(bonusName)
                 continue
-            if (self.__hasTokensFromPrevSeason(bonusName) or seasonNotActive) and self.__battlePassController.isChooseDeviceEnabled():
+            if (self.__hasTokensFromPrevSeason(bonusName) or seasonNotActive) and self.__battlePassController.isOfferEnabled():
                 self.__notify(bonusName)
 
     def __removeNotification(self, bonusName):
@@ -70,7 +70,6 @@ class NonSelectedTrophyDeviceNotifier(object):
 
     def __hasTokensFromPrevSeason(self, bonusName):
         totalCount = self.__getTokensCount(bonusName)
-        totalCount -= self.__battlePassController.getDeviceTokensContainer(bonusName).getUnusedTokensCount()
         return totalCount > 0
 
     def __isNotificationShown(self, bonusName):
@@ -84,8 +83,8 @@ class NonSelectedTrophyDeviceNotifier(object):
 
     def __getTokensCount(self, bonusName):
         if bonusName == TROPHY_GIFT_TOKEN_BONUS_NAME:
-            return self.__battlePassController.getTrophySelectTokensCount()
-        return self.__battlePassController.getNewDeviceSelectTokensCount() if bonusName == NEW_DEVICE_GIFT_TOKEN_BONUS_NAME else 0
+            return self.__battlePassController.getOldTrophySelectTokensCount()
+        return self.__battlePassController.getOldNewDeviceSelectTokensCount() if bonusName == NEW_DEVICE_GIFT_TOKEN_BONUS_NAME else 0
 
     @classmethod
     def __getMassageID(cls, bonusName):

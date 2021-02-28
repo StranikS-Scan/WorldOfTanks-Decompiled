@@ -335,15 +335,6 @@ class PromoScreensAccessor(BaseAccessor):
         return self._data_source.client_promo_log(callback, data)
 
 
-class BattlePassAccessor(BaseAccessor):
-
-    def get_video_data(self, callback, season_id, level, has_bp, vote_id):
-        return self._data_source.get_video_data(callback, season_id, level, has_bp, vote_id)
-
-    def get_voting_data(self, callback, feature_id, seasons):
-        return self._data_source.get_voting_data(callback, feature_id, seasons)
-
-
 class Requester(object):
     available_data_sources = {'stagings': StagingDataAccessor,
      'fake': FakeDataAccessor,
@@ -361,7 +352,6 @@ class Requester(object):
     wgrms = RequestDescriptor(WgrmsAccessor)
     promo_screens = RequestDescriptor(PromoScreensAccessor)
     freya = RequestDescriptor(FreyaAccessor)
-    battle_pass = RequestDescriptor(BattlePassAccessor)
     craftmachine = RequestDescriptor(CrafmachineAccessor)
 
     @classmethod

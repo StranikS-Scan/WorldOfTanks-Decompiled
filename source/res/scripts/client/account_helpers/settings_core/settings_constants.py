@@ -429,14 +429,11 @@ class BattlePassStorageKeys(CONST_CONTAINER):
     INTRO_SHOWN = 'introShown'
     INTRO_VIDEO_SHOWN = 'introVideoShown'
     BUY_BUTTON_HINT_IS_SHOWN = 'buyButtonHintIsShown'
-    VOTED_WITH_BOUGHT_BP = 'votedWithBoughtBP'
-    SHOWN_VIDEOS_FLAGS = 'shownVideosFlags'
-    CHOSEN_TROPHY_DEVICES = 'chosenTrophyDevices'
-    CHOSEN_NEW_DEVICES = 'chosenNewDevices'
     BUY_ANIMATION_WAS_SHOWN = 'buyAnimationWasShown'
     FLAGS_VERSION = 'flagsVersion'
     TROPHY_NOTIFICATION_SHOWN = 'trophyNotificationShown'
     NEW_DEVICE_NOTIFICATION_SHOWN = 'newDeviceNotificationShown'
+    DAILY_QUESTS_INTRO_SHOWN = 'dailyQuestsIntroShown'
     MASK_CHOSEN_DEVICES = 15
 
 

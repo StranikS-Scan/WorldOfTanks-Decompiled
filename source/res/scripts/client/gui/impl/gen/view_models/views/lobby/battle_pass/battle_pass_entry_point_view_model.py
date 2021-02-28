@@ -1,26 +1,29 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/battle_pass/battle_pass_entry_point_view_model.py
+from enum import Enum
 from frameworks.wulf import ViewModel
+
+class AnimationState(Enum):
+    NORMAL = 'normal'
+    SHOW_NEW_LEVEL = 'showNewLevel'
+    SHOW_BUY_BP = 'showBuyBP'
+    SHOW_NOT_TAKEN_REWARDS = 'showNotTakenRewards'
+    SHOW_PROGRESSION_COMPLETED = 'showProgressionCompleted'
+    SHOW_NEW_CHAPTER = 'showNewChapter'
+    SHOW_CHANGE_PROGRESS = 'showChangeProgress'
+
+
+class BPState(Enum):
+    DISABLED = 'disabled'
+    SEASON_WAITING = 'seasonWaiting'
+    NORMAL = 'normal'
+    ATTENTION = 'attention'
+
 
 class BattlePassEntryPointViewModel(ViewModel):
     __slots__ = ('onClick',)
-    STATE_DISABLED = 'disabled'
-    STATE_SEASON_WAITING = 'seasonWaiting'
-    STATE_NORMAL = 'normal'
-    STATE_ATTENTION = 'attention'
-    ANIM_STATE_NORMAL = 'normal'
-    ANIM_STATE_SHOW_NEW_LEVEL = 'showNewLevel'
-    ANIM_STATE_SHOW_BUY_BATTLEPASS = 'showBuyBP'
-    ANIM_STATE_SHOW_ATTENTION = 'showAttention'
-    ANIM_STATE_SHOW_POST_PROGRESSION_COMPLETED = 'showPostProgressionCompleted'
-    ANIM_STATE_SHOW_SWITCH_TO_POST_PROGRESSION = 'showSwitchToPostProgression'
-    ANIM_STATE_CHANGE_PROGRESS = 'showChangeProgress'
-    ANIM_STATE_SHOW_BUY_AND_SWITCH_TO_POST = 'showBuyAndSwitchToPost'
-    PROGRESSION_BASE = 'base'
-    PROGRESSION_POST = 'post'
-    PROGRESSION_COMPLETED = 'completed'
 
-    def __init__(self, properties=13, commands=1):
+    def __init__(self, properties=15, commands=1):
         super(BattlePassEntryPointViewModel, self).__init__(properties=properties, commands=commands)
 
     def getPrevLevel(self):
@@ -48,10 +51,10 @@ class BattlePassEntryPointViewModel(ViewModel):
         self._setReal(3, value)
 
     def getBattlePassState(self):
-        return self._getString(4)
+        return BPState(self._getString(4))
 
     def setBattlePassState(self, value):
-        self._setString(4, value)
+        self._setString(4, value.value)
 
     def getIsSmall(self):
         return self._getBool(5)
@@ -72,10 +75,10 @@ class BattlePassEntryPointViewModel(ViewModel):
         self._setBool(7, value)
 
     def getAnimState(self):
-        return self._getString(8)
+        return AnimationState(self._getString(8))
 
     def setAnimState(self, value):
-        self._setString(8, value)
+        self._setString(8, value.value)
 
     def getAnimStateKey(self):
         return self._getNumber(9)
@@ -83,11 +86,11 @@ class BattlePassEntryPointViewModel(ViewModel):
     def setAnimStateKey(self, value):
         self._setNumber(9, value)
 
-    def getProgressionState(self):
-        return self._getString(10)
+    def getIsProgressionCompleted(self):
+        return self._getBool(10)
 
-    def setProgressionState(self, value):
-        self._setString(10, value)
+    def setIsProgressionCompleted(self, value):
+        self._setBool(10, value)
 
     def getHasBattlePass(self):
         return self._getBool(11)
@@ -95,11 +98,23 @@ class BattlePassEntryPointViewModel(ViewModel):
     def setHasBattlePass(self, value):
         self._setBool(11, value)
 
-    def getShowWarning(self):
+    def getIs3DStyleChosen(self):
         return self._getBool(12)
 
-    def setShowWarning(self, value):
+    def setIs3DStyleChosen(self, value):
         self._setBool(12, value)
+
+    def getNotChosenRewardCount(self):
+        return self._getNumber(13)
+
+    def setNotChosenRewardCount(self, value):
+        self._setNumber(13, value)
+
+    def getChapterNumber(self):
+        return self._getNumber(14)
+
+    def setChapterNumber(self, value):
+        self._setNumber(14, value)
 
     def _initialize(self):
         super(BattlePassEntryPointViewModel, self)._initialize()
@@ -107,13 +122,15 @@ class BattlePassEntryPointViewModel(ViewModel):
         self._addNumberProperty('level', 0)
         self._addRealProperty('prevProgression', 0.0)
         self._addRealProperty('progression', -1)
-        self._addStringProperty('battlePassState', '')
+        self._addStringProperty('battlePassState')
         self._addBoolProperty('isSmall', False)
         self._addNumberProperty('tooltipID', 0)
         self._addBoolProperty('isFirstShow', False)
-        self._addStringProperty('animState', '')
+        self._addStringProperty('animState')
         self._addNumberProperty('animStateKey', 0)
-        self._addStringProperty('progressionState', '')
+        self._addBoolProperty('isProgressionCompleted', False)
         self._addBoolProperty('hasBattlePass', False)
-        self._addBoolProperty('showWarning', False)
+        self._addBoolProperty('is3DStyleChosen', False)
+        self._addNumberProperty('notChosenRewardCount', 0)
+        self._addNumberProperty('chapterNumber', 0)
         self.onClick = self._addCommand('onClick')

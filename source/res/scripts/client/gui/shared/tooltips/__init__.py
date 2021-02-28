@@ -75,7 +75,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     TRADE_IN_STATE_NOT_AVAILABLE = 'tradeInStateNotAvailable'
     DEMOUNT_KIT = 'demountKit'
     VEHICLE_COLLECTOR = 'vehicleCollector'
-    DEVICE_GIFT_TOKEN = 'deviceGiftToken'
+    BATTLE_PASS_GIFT_TOKEN = 'battlePassGiftToken'
     BATTLE_PASS_POINTS = 'battlePassPoints'
 
 

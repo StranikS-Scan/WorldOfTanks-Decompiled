@@ -32,6 +32,7 @@ class BattlePassNotStartedTooltipView(ViewImpl):
                 month = backport.text(R.strings.menu.dateTime.months.num(smonth)())
                 date = backport.text(R.strings.battle_pass_2020.tooltips.notStarted.date(), day=day, month=month)
             model.setDate(date)
+            model.setSeasonNum(self.__battlePassController.getSeasonNum())
 
     @staticmethod
     def __getDayMonth(timeStamp):

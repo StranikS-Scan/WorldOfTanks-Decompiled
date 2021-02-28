@@ -122,7 +122,7 @@ class OfferGiftVehiclePreview(VehiclePreview):
     def __onOffersUpdated(self):
         offer = self._offersProvider.getOffer(self._offer.id)
         if offer is None or not offer.isOfferAvailable:
-            if self._offersProvider.getAvailableOffers():
+            if self._offersProvider.getAvailableOffers(onlyVisible=True):
                 event_dispatcher.showStorage(defaultSection=STORAGE_CONSTANTS.OFFERS)
             else:
                 event_dispatcher.showHangar()

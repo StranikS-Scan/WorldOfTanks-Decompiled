@@ -1608,7 +1608,7 @@
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	9000	</weight>
       <maxHealth>	380	</maxHealth>
-      <rotationSpeed>	30	</rotationSpeed>
+      <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
         <maxRegenHealth>	85	</maxRegenHealth>
@@ -1648,13 +1648,13 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	8.1	</reloadTime>
+          <reloadTime>	7.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.4	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <models>
             <undamaged>	vehicles/russian/R120_T22SR_A22/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R120_T22SR_A22/crash/lod0/Gun_01.model	</destroyed>

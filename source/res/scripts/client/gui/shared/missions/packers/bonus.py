@@ -27,10 +27,11 @@ DOSSIER_BADGE_ICON_PREFIX = 'badge_'
 DOSSIER_ACHIEVEMENT_POSTFIX = '_achievement'
 DOSSIER_BADGE_POSTFIX = '_badge'
 VEHICLE_RENT_ICON_POSTFIX = '_rent'
+BACKPORT_TOOLTIP_CONTENT_ID = R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent()
 if typing.TYPE_CHECKING:
     from frameworks.wulf.view.array import Array
     from gui.goodies.goodie_items import BoosterUICommon
-    from gui.server_events.bonuses import CustomizationsBonus, CrewSkinsBonus, TokensBonus, SimpleBonus, ItemsBonus, DossierBonus, VehicleBlueprintBonus, CrewBooksBonus, GoodiesBonus, TankmenBonus, VehiclesBonus, DogTagComponentBonus
+    from gui.server_events.bonuses import CustomizationsBonus, CrewSkinsBonus, TokensBonus, SimpleBonus, ItemsBonus, DossierBonus, VehicleBlueprintBonus, CrewBooksBonus, GoodiesBonus, TankmenBonus, VehiclesBonus, DogTagComponentBonus, BattlePassPointsBonus
     from gui.shared.gui_items.fitting_item import FittingItem
     from gui.shared.gui_items.Vehicle import Vehicle
 _logger = logging.getLogger(__name__)
@@ -39,7 +40,8 @@ def getDefaultBonusPackersMap():
     simpleBonusPacker = SimpleBonusUIPacker()
     tokenBonusPacker = TokenBonusUIPacker()
     blueprintBonusPacker = BlueprintBonusUIPacker()
-    return {'battleToken': tokenBonusPacker,
+    return {'battlePassPoints': BattlePassPointsBonusPacker(),
+     'battleToken': tokenBonusPacker,
      'berths': simpleBonusPacker,
      'blueprints': blueprintBonusPacker,
      'blueprintsAny': blueprintBonusPacker,
@@ -70,6 +72,7 @@ def getDefaultBonusPackersMap():
      Currency.CREDITS: simpleBonusPacker,
      Currency.CRYSTAL: simpleBonusPacker,
      Currency.GOLD: simpleBonusPacker,
+     Currency.BPCOIN: simpleBonusPacker,
      constants.PREMIUM_ENTITLEMENTS.BASIC: simpleBonusPacker,
      constants.PREMIUM_ENTITLEMENTS.PLUS: simpleBonusPacker}
 
@@ -95,6 +98,10 @@ class BaseBonusUIPacker(object):
         return cls._getToolTip(bonus)
 
     @classmethod
+    def getContentId(cls, bonus):
+        return cls._getContentId(bonus)
+
+    @classmethod
     def _pack(cls, bonus):
         return []
 
@@ -107,6 +114,10 @@ class BaseBonusUIPacker(object):
     @classmethod
     def _getToolTip(cls, bonus):
         return [createTooltipData(bonus.getTooltip())]
+
+    @classmethod
+    def _getContentId(cls, bonus):
+        return [BACKPORT_TOOLTIP_CONTENT_ID]
 
 
 class SimpleBonusUIPacker(BaseBonusUIPacker):
@@ -602,6 +613,13 @@ class GroupsBonusUIPacker(BaseBonusUIPacker):
         return [createTooltipData(makeTooltip(TOOLTIPS.getAwardHeader(bonus.getName()), TOOLTIPS.getAwardBody(bonus.getName())))]
 
 
+class BattlePassPointsBonusPacker(SimpleBonusUIPacker):
+
+    @classmethod
+    def _getToolTip(cls, bonus):
+        return [TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BATTLE_PASS_POINTS, specialArgs=[])]
+
+
 class BonusUIPacker(object):
 
     def __init__(self, packers=None):
@@ -624,6 +642,13 @@ class BonusUIPacker(object):
         packer = self._getBonusPacker(bonus.getName())
         if packer:
             return packer.getToolTip(bonus)
+        _logger.error('Bonus packer for bonus type %s was not implemented yet.', bonus.getName())
+        return []
+
+    def getContentId(self, bonus):
+        packer = self._getBonusPacker(bonus.getName())
+        if packer:
+            return packer.getContentId(bonus)
         _logger.error('Bonus packer for bonus type %s was not implemented yet.', bonus.getName())
         return []
 

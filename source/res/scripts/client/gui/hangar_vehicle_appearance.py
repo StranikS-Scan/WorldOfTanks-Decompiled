@@ -655,7 +655,10 @@ class HangarVehicleAppearance(ScriptGameObject):
     def updateCustomization(self, outfit=None, callback=None):
         if self.__isVehicleDestroyed:
             return
-        vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
+        if g_currentVehicle.item:
+            vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
+        else:
+            vehicleCD = g_currentPreviewVehicle.item.descriptor.makeCompactDescr()
         outfit = outfit or self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehicleCD)
         if self.recreateRequired(outfit):
             self.refresh(outfit, callback)

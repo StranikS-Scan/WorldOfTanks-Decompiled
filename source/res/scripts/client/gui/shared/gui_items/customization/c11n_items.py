@@ -22,7 +22,7 @@ from helpers import dependency
 from items import makeIntCompactDescrByID
 from items.components.c11n_components import EditingStyleReason
 from items.components.c11n_constants import SeasonType, ItemTags, ProjectionDecalDirectionTags, ProjectionDecalFormTags, UNBOUND_VEH_KEY, ImageOptions, EDITING_STYLE_REASONS
-from items.customizations import parseCompDescr, isEditedStyle, createNationalEmblemComponents
+from items.customizations import parseCompDescr, isEditedStyle, createNationalEmblemComponents, parseOutfitDescr
 from items.vehicles import VehicleDescr
 from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
@@ -994,9 +994,8 @@ class Style(Customization):
                 diff = ctx.stylesDiffsCache.getDiff(self, season)
                 if diff is not None:
                     vehicleItem = self._service.itemsCache.items.getItemByCD(vehicleIntCD)
-                    vehicleCD = vehicleItem.descriptor.makeCompactDescr()
-                    diffOutfit = Outfit(strCompactDescr=diff, vehicleCD=vehicleCD)
-                    modifiedProgression = diffOutfit.progressionLevel
+                    diffOutfit = parseOutfitDescr(outfitDescr=diff)
+                    modifiedProgression = diffOutfit.styleProgressionLevel
                     progressionChanged = modifiedProgression != self.getLatestOpenedProgressionLevel(vehicleItem)
                     if progressionChanged and not self.isProgressionPurchasable(modifiedProgression):
                         return EditingStyleReason(EDITING_STYLE_REASONS.NOT_REACHED_LEVEL)
@@ -1039,6 +1038,10 @@ class Style(Customization):
 
     def iconUrlByProgressionLevel(self, _):
         return self.getIconApplied(component=None)
+
+    def getAdditionalOutfit(self, level, season, vehicleCD):
+        additionalOutfit = self.descriptor.styleProgressions.get(level, {}).get('additionalOutfit', {})
+        return Outfit(strCompactDescr=additionalOutfit.get(season).makeCompDescr(), vehicleCD=vehicleCD) if additionalOutfit and additionalOutfit.get(season) else None
 
     def __createOutfit(self, season, vehicleCD='', diff=None):
         component = deepcopy(self.descriptor.outfits[season])

@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/goodies/GoodieTargets.py
-
+from abc import ABCMeta
 
 class GoodieTarget(object):
+    __metaclass__ = ABCMeta
 
     def __init__(self, targetID, limit=None):
         self._targetID = targetID
@@ -23,47 +24,63 @@ class GoodieTarget(object):
         return hash(self._targetID)
 
 
-class BuyPremiumAccount(GoodieTarget):
+class GoodieTargetAvatar(GoodieTarget):
+    __metaclass__ = ABCMeta
+
+
+class GoodieTargetVehicle(GoodieTarget):
+    __metaclass__ = ABCMeta
+
+
+class HangarTarget(GoodieTarget):
+    __metaclass__ = ABCMeta
+
+
+class BuyPremiumAccount(HangarTarget):
 
     def __init__(self, targetID, limit=None):
         super(BuyPremiumAccount, self).__init__(targetID, limit)
 
 
-class BuySlot(GoodieTarget):
+class BuySlot(HangarTarget):
 
     def __init__(self, targetID=None, limit=None):
         super(BuySlot, self).__init__(targetID, limit)
 
 
-class PostBattle(GoodieTarget):
+class PostBattle(GoodieTargetVehicle):
 
     def __init__(self, targetID=None, limit=None):
         super(PostBattle, self).__init__(targetID, limit)
 
 
-class BuyGoldTankmen(GoodieTarget):
+class BuyGoldTankmen(HangarTarget):
 
     def __init__(self, targetID=None, limit=None):
         super(BuyGoldTankmen, self).__init__(targetID, limit)
 
 
-class FreeExperienceConversion(GoodieTarget):
+class FreeExperienceConversion(HangarTarget):
 
     def __init__(self, targetID=None, limit=None):
         super(FreeExperienceConversion, self).__init__(targetID, limit)
 
 
-class BuyVehicle(GoodieTarget):
+class BuyVehicle(HangarTarget):
 
     def __init__(self, targetID, limit=None):
         super(BuyVehicle, self).__init__(targetID, limit)
 
 
-class EpicMeta(GoodieTarget):
+class EpicMeta(GoodieTargetAvatar):
 
     def __init__(self, targetID=None, limit=None):
         super(EpicMeta, self).__init__(targetID, limit)
 
 
-class DemountOptionalDevice(GoodieTarget):
+class EpicPostBattle(PostBattle):
+    pass
+
+
+class DemountOptionalDevice(HangarTarget):
     pass

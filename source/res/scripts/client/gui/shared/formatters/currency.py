@@ -8,11 +8,13 @@ _logger = logging.getLogger(__name__)
 _CURRENCY_TO_BW_FORMATTER = {Currency.CREDITS: backport.getIntegralFormat,
  Currency.GOLD: backport.getGoldFormat,
  Currency.CRYSTAL: backport.getIntegralFormat,
- Currency.EVENT_COIN: backport.getIntegralFormat}
+ Currency.EVENT_COIN: backport.getIntegralFormat,
+ Currency.BPCOIN: backport.getIntegralFormat}
 _CURRENCY_TO_TEXT_STYLE = {Currency.CREDITS: text_styles.credits,
  Currency.GOLD: text_styles.gold,
  Currency.CRYSTAL: text_styles.crystal,
- Currency.EVENT_COIN: text_styles.eventCoin}
+ Currency.EVENT_COIN: text_styles.eventCoin,
+ Currency.BPCOIN: text_styles.bpcoin}
 
 def getBWFormatter(currency):
     if currency in _CURRENCY_TO_BW_FORMATTER:

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/base/legacy/ctx.py
 from CurrentVehicle import g_currentVehicle
-from constants import PREBATTLE_COMMENT_MAX_LENGTH
+from constants import ARENA_BONUS_TYPE, PREBATTLE_COMMENT_MAX_LENGTH
 from external_strings_utils import truncate_utf8
 from gui.prb_control import prb_getters
 from gui.prb_control import settings as prb_settings
@@ -70,6 +70,9 @@ class JoinLegacyCtx(LegacyRequestCtx):
 
     def getRequestType(self):
         return _REQUEST_TYPE.JOIN
+
+    def getBonusType(self):
+        return ARENA_BONUS_TYPE.UNKNOWN
 
 
 @ReprInjector.withParent(('getID', 'prbID'), ('getPrbTypeName', 'prbType'), ('getWaitingID', 'waitingID'), ('getFlagsToStrings', 'flags'))
@@ -332,3 +335,6 @@ class JoinLegacyModeCtx(LegacyRequestCtx):
 
     def getID(self):
         pass
+
+    def getBonusType(self):
+        return ARENA_BONUS_TYPE.UNKNOWN

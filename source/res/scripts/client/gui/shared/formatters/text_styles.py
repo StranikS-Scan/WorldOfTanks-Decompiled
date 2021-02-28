@@ -270,6 +270,10 @@ def eventCoin(text):
     return _formatText('eventCoinText', text)
 
 
+def bpcoin(text):
+    return _formatText('bpcoinText', text)
+
+
 def defRes(text):
     return _formatText('defresText', text)
 

@@ -47,6 +47,15 @@ class INotificationWindowController(IGameController):
     def releasePostponed(self):
         raise NotImplementedError
 
+    def lock(self, key):
+        raise NotImplementedError
+
+    def unlock(self, key):
+        raise NotImplementedError
+
+    def hasLock(self, key):
+        raise NotImplementedError
+
     def clear(self):
         raise NotImplementedError
 

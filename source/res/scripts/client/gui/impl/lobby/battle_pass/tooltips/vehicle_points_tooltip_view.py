@@ -12,28 +12,28 @@ from skeletons.gui.shared import IItemsCache
 class VehiclePointsTooltipView(ViewImpl):
     __battlePassController = dependency.descriptor(IBattlePassController)
     __itemsCache = dependency.descriptor(IItemsCache)
-    __slots__ = ('__intCD',)
+    __slots__ = ()
 
-    def __init__(self, intCD):
+    def __init__(self, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.battle_pass.tooltips.VehiclePointsTooltipView())
         settings.model = VehiclePointsTooltipViewModel()
+        settings.args = args
+        settings.kwargs = kwargs
         super(VehiclePointsTooltipView, self).__init__(settings)
-        self.__intCD = intCD
 
     @property
     def viewModel(self):
         return super(VehiclePointsTooltipView, self).getViewModel()
 
-    def _onLoading(self, *args, **kwargs):
-        super(VehiclePointsTooltipView, self)._onLoaded(*args, **kwargs)
+    def _onLoading(self, intCD, *args, **kwargs):
         with self.viewModel.transaction() as model:
-            vehicle = self.__itemsCache.items.getItemByCD(self.__intCD)
-            isSpecial = self.__battlePassController.isSpecialVehicle(self.__intCD)
-            currentPoints, limitPoints = self.__battlePassController.getVehicleProgression(self.__intCD)
-            pointsReward = self.__battlePassController.getVehicleCapBonus(self.__intCD)
+            vehicle = self.__itemsCache.items.getItemByCD(intCD)
+            isSpecial = self.__battlePassController.isSpecialVehicle(intCD)
+            currentPoints, limitPoints = self.__battlePassController.getVehicleProgression(intCD)
+            pointsReward = self.__battlePassController.getVehicleCapBonus(intCD)
             commonPerBattlePoints = {points.label:(points.winPoint, points.losePoint) for points in self.__battlePassController.getPerBattlePoints()}
             items = model.rewardPoints.getItems()
-            for points in self.__battlePassController.getPerBattlePoints(self.__intCD):
+            for points in self.__battlePassController.getPerBattlePoints(vehCompDesc=intCD):
                 isHighlighted = True
                 if points.label in commonPerBattlePoints:
                     commonWinPoint, commonLosePoint = commonPerBattlePoints[points.label]

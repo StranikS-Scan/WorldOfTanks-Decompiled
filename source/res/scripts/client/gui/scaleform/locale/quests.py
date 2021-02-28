@@ -64,6 +64,7 @@ class QUESTS(object):
     BONUSES_GOLD_DESCRIPTION = '#quests:bonuses/gold/description'
     BONUSES_CRYSTAL_DESCRIPTION = '#quests:bonuses/crystal/description'
     BONUSES_EVENTCOIN_DESCRIPTION = '#quests:bonuses/eventCoin/description'
+    BONUSES_BPCOIN_DESCRIPTION = '#quests:bonuses/bpcoin/description'
     BONUSES_FREEXP_DESCRIPTION = '#quests:bonuses/freeXP/description'
     BONUSES_PREMIUM_PLUS_DESCRIPTION = '#quests:bonuses/premium_plus/description'
     BONUSES_TANKMEN_DESCRIPTION = '#quests:bonuses/tankmen/description'
@@ -1175,6 +1176,7 @@ class QUESTS(object):
     BONUSNAME_GOLD = '#quests:bonusName/gold'
     BONUSNAME_CRYSTAL = '#quests:bonusName/crystal'
     BONUSNAME_EVENTCOIN = '#quests:bonusName/eventCoin'
+    BONUSNAME_BPCOIN = '#quests:bonusName/bpcoin'
     BONUSNAME_XP = '#quests:bonusName/xp'
     BONUSNAME_FREEXP = '#quests:bonusName/freeXP'
     BONUSNAME_TANKMENXP = '#quests:bonusName/tankmenXP'
@@ -1638,6 +1640,8 @@ class QUESTS(object):
     GENERAL_INFO_BACK_GOTO = '#quests:general/info/back/goto'
     DAILYQUESTS_INFO_DAILYMISSIONS = '#quests:dailyQuests/info/dailyMissions'
     DAILYQUESTS_INFO_DAILYMISSIONTITLE = '#quests:dailyQuests/info/dailyMissionTitle'
+    DAILYQUESTS_INFO_BATTLEPASSDAILYMISSIONS = '#quests:dailyQuests/info/battlePassDailyMissions'
+    DAILYQUESTS_INFO_BATTLEPASSDAILYMISSIONTITLE = '#quests:dailyQuests/info/battlePassDailyMissionTitle'
     PREMIUMQUESTS_INFO_PREMIUMMISSIONS = '#quests:premiumQuests/info/premiumMissions'
     PREMIUMQUESTS_INFO_PREMIUMMISSIONSTITLE = '#quests:premiumQuests/info/premiumMissionsTitle'
     PREMIUMQUESTS_INFO_CONDITIONS = '#quests:premiumQuests/info/conditions'
@@ -1710,6 +1714,7 @@ class QUESTS(object):
      BONUSNAME_GOLD,
      BONUSNAME_CRYSTAL,
      BONUSNAME_EVENTCOIN,
+     BONUSNAME_BPCOIN,
      BONUSNAME_XP,
      BONUSNAME_FREEXP,
      BONUSNAME_TANKMENXP,

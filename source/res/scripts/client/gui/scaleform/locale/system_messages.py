@@ -1170,12 +1170,12 @@ class SYSTEM_MESSAGES(object):
     DAILY_QUESTS_REROLL_UNKNOWN_ERROR = '#system_messages:daily_quests/reroll/unknown_error'
     BATTLEPASS_BUY_SERVER_ERROR = '#system_messages:battlePass_buy/server_error'
     BATTLEPASSLEVELS_BUY_SERVER_ERROR = '#system_messages:battlePassLevels_buy/server_error'
-    CHOOSE_BATTLEPASS_REWARD_SERVER_ERROR = '#system_messages:choose_battlePass_reward/server_error'
     BATTLEPASS_SWITCH_STARTED_TITLE = '#system_messages:battlePass/switch_started/title'
     BATTLEPASS_SWITCH_STARTED_BODY = '#system_messages:battlePass/switch_started/body'
     BATTLEPASS_SWITCH_PAUSE_BODY = '#system_messages:battlePass/switch_pause/body'
     BATTLEPASS_SWITCH_DISABLE_TITLE = '#system_messages:battlePass/switch_disable/title'
     BATTLEPASS_SWITCH_DISABLE_BODY = '#system_messages:battlePass/switch_disable/body'
+    BATTLEPASS_SWITCH_DISABLE_BODY_INCOMPLETESTYLE = '#system_messages:battlePass/switch_disable/body/incompleteStyle'
     BATTLEPASS_SWITCH_ENABLED_BODY = '#system_messages:battlePass/switch_enabled/body'
     BATTLEPASS_SWITCH_DISABLE_BATTLE_ROYALE_BODY = '#system_messages:battlePass/switch_disable/battle_royale/body'
     BATTLEPASS_RANKED_ENABLED = '#system_messages:battlePass/ranked/enabled'
@@ -1183,6 +1183,7 @@ class SYSTEM_MESSAGES(object):
     UPGRADETROPHYDEVICE_SWITCH_ON_BODY = '#system_messages:upgradeTrophyDevice/switch_on/body'
     UPGRADETROPHYDEVICE_SWITCH_OFF_BODY = '#system_messages:upgradeTrophyDevice/switch_off/body'
     BATTLEPASS_BADGEREMOVED_TEXT = '#system_messages:battlePass/badgeRemoved/text'
+    BATTLEPASS_REWARDCHOICE_ERROR = '#system_messages:battlePass/rewardChoice/error'
     COLLECTORVEHICLE_SWITCH_OFF_TITLE = '#system_messages:collectorVehicle/switch_off/title'
     COLLECTORVEHICLE_SWITCH_OFF_BODY = '#system_messages:collectorVehicle/switch_off/body'
     COLLECTORVEHICLE_SWITCH_ON_TITLE = '#system_messages:collectorVehicle/switch_on/title'
@@ -2486,12 +2487,12 @@ class SYSTEM_MESSAGES(object):
      DAILY_QUESTS_REROLL_UNKNOWN_ERROR,
      BATTLEPASS_BUY_SERVER_ERROR,
      BATTLEPASSLEVELS_BUY_SERVER_ERROR,
-     CHOOSE_BATTLEPASS_REWARD_SERVER_ERROR,
      BATTLEPASS_SWITCH_STARTED_TITLE,
      BATTLEPASS_SWITCH_STARTED_BODY,
      BATTLEPASS_SWITCH_PAUSE_BODY,
      BATTLEPASS_SWITCH_DISABLE_TITLE,
      BATTLEPASS_SWITCH_DISABLE_BODY,
+     BATTLEPASS_SWITCH_DISABLE_BODY_INCOMPLETESTYLE,
      BATTLEPASS_SWITCH_ENABLED_BODY,
      BATTLEPASS_SWITCH_DISABLE_BATTLE_ROYALE_BODY,
      BATTLEPASS_RANKED_ENABLED,
@@ -2499,6 +2500,7 @@ class SYSTEM_MESSAGES(object):
      UPGRADETROPHYDEVICE_SWITCH_ON_BODY,
      UPGRADETROPHYDEVICE_SWITCH_OFF_BODY,
      BATTLEPASS_BADGEREMOVED_TEXT,
+     BATTLEPASS_REWARDCHOICE_ERROR,
      COLLECTORVEHICLE_SWITCH_OFF_TITLE,
      COLLECTORVEHICLE_SWITCH_OFF_BODY,
      COLLECTORVEHICLE_SWITCH_ON_TITLE,

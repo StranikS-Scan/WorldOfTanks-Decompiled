@@ -309,19 +309,21 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             wheelsConfig = self.appearance.typeDescriptor.chassis.generalWheelsAnimatorConfig
             if wheelsConfig:
                 maxComponentIdx = maxComponentIdx + wheelsConfig.getNonTrackWheelsCount()
-            maxHitEffectCode, decodedPoints, maxDamagedComponent = DamageFromShotDecoder.decodeHitPoints(points, self.appearance.collisions, maxComponentIdx)
+            decodedPoints = DamageFromShotDecoder.decodeHitPoints(points, self.appearance.collisions, maxComponentIdx)
+            if not decodedPoints:
+                return
+            firstHitPoint = decodedPoints[0]
+            maxPriorityHitPoint = decodedPoints[-1]
+            maxHitEffectCode = maxPriorityHitPoint.hitEffectCode
             hasPiercedHit = DamageFromShotDecoder.hasDamaged(maxHitEffectCode)
-            firstHitDir = Math.Vector3(0)
-            if decodedPoints:
-                firstHitPoint = decodedPoints[0]
-                compoundModel = self.appearance.compoundModel
-                compMatrix = Math.Matrix(compoundModel.node(firstHitPoint.componentName))
-                firstHitDirLocal = firstHitPoint.matrix.applyToAxis(2)
-                firstHitDir = compMatrix.applyVector(firstHitDirLocal)
-                self.appearance.receiveShotImpulse(firstHitDir, effectsDescr['targetImpulse'])
-                self.appearance.executeHitVibrations(maxHitEffectCode)
-                player = BigWorld.player()
-                player.inputHandler.onVehicleShaken(self, compMatrix.translation, firstHitDir, effectsDescr['caliber'], ShakeReason.HIT if hasPiercedHit else ShakeReason.HIT_NO_DAMAGE)
+            compoundModel = self.appearance.compoundModel
+            compMatrix = Math.Matrix(compoundModel.node(firstHitPoint.componentName))
+            firstHitDirLocal = firstHitPoint.matrix.applyToAxis(2)
+            firstHitDir = compMatrix.applyVector(firstHitDirLocal)
+            self.appearance.receiveShotImpulse(firstHitDir, effectsDescr['targetImpulse'])
+            player = BigWorld.player()
+            player.inputHandler.onVehicleShaken(self, compMatrix.translation, firstHitDir, effectsDescr['caliber'], ShakeReason.HIT if hasPiercedHit else ShakeReason.HIT_NO_DAMAGE)
+            self.appearance.executeHitVibrations(maxHitEffectCode)
             showFriendlyFlashBang = False
             sessionProvider = self.guiSessionProvider
             isAlly = sessionProvider.getArenaDP().isAlly(attackerID)
@@ -329,11 +331,9 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
                 isFriendlyFireMode = sessionProvider.arenaVisitor.bonus.isFriendlyFireMode()
                 hasCustomAllyDamageEffect = sessionProvider.arenaVisitor.bonus.hasCustomAllyDamageEffect()
                 showFriendlyFlashBang = isFriendlyFireMode and hasCustomAllyDamageEffect
-            for shotPoint in decodedPoints:
-                showFullscreenEffs = self.isPlayerVehicle and self.isAlive()
-                keyPoints, effects, _ = effectsDescr[shotPoint.hitEffectGroup]
-                self.appearance.boundEffects.addNewToNode(shotPoint.componentName, shotPoint.matrix, effects, keyPoints, isPlayerVehicle=self.isPlayerVehicle, showShockWave=showFullscreenEffs, showFlashBang=showFullscreenEffs and not showFriendlyFlashBang, showFriendlyFlashBang=showFullscreenEffs and showFriendlyFlashBang, entity_id=self.id, damageFactor=damageFactor, attackerID=attackerID, hitdir=firstHitDir)
-
+            showFullscreenEffs = self.isPlayerVehicle and self.isAlive()
+            keyPoints, effects, _ = effectsDescr[maxPriorityHitPoint.hitEffectGroup]
+            self.appearance.boundEffects.addNewToNode(maxPriorityHitPoint.componentName, maxPriorityHitPoint.matrix, effects, keyPoints, isPlayerVehicle=self.isPlayerVehicle, showShockWave=showFullscreenEffs, showFlashBang=showFullscreenEffs and not showFriendlyFlashBang, showFriendlyFlashBang=showFullscreenEffs and showFriendlyFlashBang, entity_id=self.id, damageFactor=damageFactor, attackerID=attackerID, hitdir=firstHitDir)
             if not self.isAlive():
                 return
             if attackerID == BigWorld.player().playerVehicleID:
@@ -341,7 +341,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
                     if maxHitEffectCode in VEHICLE_HIT_EFFECT.RICOCHETS:
                         eventID = _GUI_EVENT_ID.VEHICLE_RICOCHET
                     elif maxHitEffectCode == VEHICLE_HIT_EFFECT.CRITICAL_HIT:
-                        if maxDamagedComponent == TankPartNames.CHASSIS:
+                        if maxPriorityHitPoint.componentName == TankPartNames.CHASSIS:
                             if damageFactor:
                                 eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT_CHASSIS_PIERCED
                             else:

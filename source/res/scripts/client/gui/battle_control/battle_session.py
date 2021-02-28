@@ -350,7 +350,7 @@ class BattleSessionProvider(IBattleSessionProvider):
         if ctrl is not None:
             ctrl.setVehicleVisible(vehicleID, vProxy.health)
         ctrl = self.__sharedRepo.vehicleState
-        if ctrl is not None and BigWorld.player().observedVehicleID == vProxy.id:
+        if ctrl is not None and BigWorld.player().observedVehicleID == vehicleID:
             ctrl.refreshObserverVehicleVisual()
         return
 

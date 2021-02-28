@@ -73,6 +73,10 @@ class MissionsWebApiMixin(object):
     def openBattlePassMainWithBuy(self, _):
         server_events.showMissionsBattlePassCommonProgression(subTab=BattlePassProgressionSubTabs.BUY_TAB_FOR_SHOP)
 
+    @w2c(W2CSchema, 'battle_pass_levels_buy:')
+    def openBattlePassMainWithBuyLevels(self, _):
+        server_events.showMissionsBattlePassCommonProgression(subTab=BattlePassProgressionSubTabs.BUY_LEVELS_TAB_FROM_SHOP)
+
 
 class PersonalMissionsWebApiMixin(object):
 

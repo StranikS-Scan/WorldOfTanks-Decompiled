@@ -137,8 +137,8 @@ class Outfit(HasStrCD):
         return result
 
     def patch(self, diff):
-        result = self.discard(diff.removed)
-        result = result.adjust(diff.applied)
+        result = self.discard(diff)
+        result = result.adjust(diff)
         return result
 
     def discard(self, other):

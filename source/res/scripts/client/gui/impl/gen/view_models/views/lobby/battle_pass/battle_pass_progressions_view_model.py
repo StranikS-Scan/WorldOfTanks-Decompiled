@@ -3,203 +3,213 @@
 from gui.impl.wrappers.user_list_model import UserListModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_intro_view_model import BattlePassIntroViewModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_off_season_view_model import BattlePassOffSeasonViewModel
+from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_widget_3d_style_view_model import BattlePassWidget3DStyleViewModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.buy_button_model import BuyButtonModel
+from gui.impl.gen.view_models.views.lobby.battle_pass.character_widget_view_model import CharacterWidgetViewModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.common_view_model import CommonViewModel
-from gui.impl.gen.view_models.views.lobby.battle_pass.reward_item_model import RewardItemModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.reward_level_model import RewardLevelModel
 
 class BattlePassProgressionsViewModel(CommonViewModel):
-    __slots__ = ('onClose', 'onAboutClick', 'onInfoBtnClick', 'onBuyClick', 'onBuyBtnClick', 'onExtrasClick', 'onVotingResultClick', 'onBuyVehicleClick', 'onTrophySelectClick', 'onNewDeviceSelectClick', 'onViewLoaded')
-    LACK_OF_VEHICLES = 'lackOfVehiclesState'
-    NORMAL = 'normalState'
-    ONBOARDING = 'onboardingState'
+    __slots__ = ('onClose', 'onAboutClick', 'onBuyClick', 'onTakeClick', 'onTakeAllClick', 'onOpenShopClick', 'onPointsInfoClick', 'onFinishedAnimation', 'onGoToChapter', 'onViewLoaded')
 
-    def __init__(self, properties=40, commands=12):
+    def __init__(self, properties=39, commands=11):
         super(BattlePassProgressionsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
     def intro(self):
-        return self._getViewModel(7)
+        return self._getViewModel(4)
 
     @property
     def offSeason(self):
-        return self._getViewModel(8)
+        return self._getViewModel(5)
 
     @property
     def buyButton(self):
-        return self._getViewModel(9)
+        return self._getViewModel(6)
 
     @property
     def freeRewards(self):
-        return self._getViewModel(10)
+        return self._getViewModel(7)
 
     @property
     def paidRewards(self):
-        return self._getViewModel(11)
+        return self._getViewModel(8)
 
     @property
-    def postRewards(self):
-        return self._getViewModel(12)
+    def chapterCharacter(self):
+        return self._getViewModel(9)
 
     @property
-    def medalReward(self):
-        return self._getViewModel(13)
+    def widget3dStyle(self):
+        return self._getViewModel(10)
 
     def getShowIntro(self):
-        return self._getBool(14)
+        return self._getBool(11)
 
     def setShowIntro(self, value):
-        self._setBool(14, value)
+        self._setBool(11, value)
 
     def getShowOffSeason(self):
-        return self._getBool(15)
+        return self._getBool(12)
 
     def setShowOffSeason(self, value):
-        self._setBool(15, value)
+        self._setBool(12, value)
 
-    def getHasNewExtras(self):
-        return self._getBool(16)
+    def getSeasonText(self):
+        return self._getString(13)
 
-    def setHasNewExtras(self, value):
-        self._setBool(16, value)
+    def setSeasonText(self, value):
+        self._setString(13, value)
 
-    def getExtrasOpened(self):
-        return self._getNumber(17)
+    def getChapterText(self):
+        return self._getString(14)
 
-    def setExtrasOpened(self, value):
-        self._setNumber(17, value)
-
-    def getExtrasTotal(self):
-        return self._getNumber(18)
-
-    def setExtrasTotal(self, value):
-        self._setNumber(18, value)
-
-    def getHighlightVoting(self):
-        return self._getBool(19)
-
-    def setHighlightVoting(self, value):
-        self._setBool(19, value)
-
-    def getSeasonTime(self):
-        return self._getString(20)
-
-    def setSeasonTime(self, value):
-        self._setString(20, value)
+    def setChapterText(self, value):
+        self._setString(14, value)
 
     def getCurrentPoints(self):
-        return self._getNumber(21)
+        return self._getNumber(15)
 
     def setCurrentPoints(self, value):
-        self._setNumber(21, value)
+        self._setNumber(15, value)
 
     def getTotalPoints(self):
-        return self._getNumber(22)
+        return self._getNumber(16)
 
     def setTotalPoints(self, value):
-        self._setNumber(22, value)
+        self._setNumber(16, value)
 
     def getPreviousAllPoints(self):
-        return self._getNumber(23)
+        return self._getNumber(17)
 
     def setPreviousAllPoints(self, value):
-        self._setNumber(23, value)
+        self._setNumber(17, value)
 
     def getPreviousPoints(self):
-        return self._getNumber(24)
+        return self._getNumber(18)
 
     def setPreviousPoints(self, value):
-        self._setNumber(24, value)
+        self._setNumber(18, value)
 
     def getPreviousLevel(self):
-        return self._getNumber(25)
+        return self._getNumber(19)
 
     def setPreviousLevel(self, value):
-        self._setNumber(25, value)
+        self._setNumber(19, value)
 
     def getCurrentAllPoints(self):
-        return self._getNumber(26)
+        return self._getNumber(20)
 
     def setCurrentAllPoints(self, value):
-        self._setNumber(26, value)
+        self._setNumber(20, value)
+
+    def getPointsBeforeStart(self):
+        return self._getNumber(21)
+
+    def setPointsBeforeStart(self, value):
+        self._setNumber(21, value)
 
     def getIsPaused(self):
-        return self._getBool(27)
+        return self._getBool(22)
 
     def setIsPaused(self, value):
-        self._setBool(27, value)
+        self._setBool(22, value)
 
     def getSeasonTimeLeft(self):
-        return self._getString(28)
+        return self._getString(23)
 
     def setSeasonTimeLeft(self, value):
-        self._setString(28, value)
+        self._setString(23, value)
 
     def getIsVisibleBuyButton(self):
-        return self._getBool(29)
+        return self._getBool(24)
 
     def setIsVisibleBuyButton(self, value):
-        self._setBool(29, value)
+        self._setBool(24, value)
 
     def getShowBuyAnimations(self):
-        return self._getBool(30)
+        return self._getBool(25)
 
     def setShowBuyAnimations(self, value):
-        self._setBool(30, value)
+        self._setBool(25, value)
 
     def getShowLevelsAnimations(self):
-        return self._getBool(31)
+        return self._getBool(26)
 
     def setShowLevelsAnimations(self, value):
-        self._setBool(31, value)
-
-    def getIsPlayerVoted(self):
-        return self._getBool(32)
-
-    def setIsPlayerVoted(self, value):
-        self._setBool(32, value)
-
-    def getHaveMedalReward(self):
-        return self._getBool(33)
-
-    def setHaveMedalReward(self, value):
-        self._setBool(33, value)
-
-    def getCanPlayerParticipate(self):
-        return self._getBool(34)
-
-    def setCanPlayerParticipate(self, value):
-        self._setBool(34, value)
+        self._setBool(26, value)
 
     def getProgressionState(self):
-        return self._getString(35)
+        return self._getString(27)
 
     def setProgressionState(self, value):
-        self._setString(35, value)
-
-    def getTrophySelectCount(self):
-        return self._getNumber(36)
-
-    def setTrophySelectCount(self, value):
-        self._setNumber(36, value)
-
-    def getNewDeviceSelectCount(self):
-        return self._getNumber(37)
-
-    def setNewDeviceSelectCount(self, value):
-        self._setNumber(37, value)
+        self._setString(27, value)
 
     def getIsChooseDeviceEnabled(self):
-        return self._getBool(38)
+        return self._getBool(28)
 
     def setIsChooseDeviceEnabled(self, value):
-        self._setBool(38, value)
+        self._setBool(28, value)
 
     def getAreSoundsAllowed(self):
-        return self._getBool(39)
+        return self._getBool(29)
 
     def setAreSoundsAllowed(self, value):
-        self._setBool(39, value)
+        self._setBool(29, value)
+
+    def getChapterCount(self):
+        return self._getNumber(30)
+
+    def setChapterCount(self, value):
+        self._setNumber(30, value)
+
+    def getChapterStep(self):
+        return self._getNumber(31)
+
+    def setChapterStep(self, value):
+        self._setNumber(31, value)
+
+    def getCurrentChapter(self):
+        return self._getNumber(32)
+
+    def setCurrentChapter(self, value):
+        self._setNumber(32, value)
+
+    def getChosenChapter(self):
+        return self._getNumber(33)
+
+    def setChosenChapter(self, value):
+        self._setNumber(33, value)
+
+    def getIsTakeAllButtonVisible(self):
+        return self._getBool(34)
+
+    def setIsTakeAllButtonVisible(self, value):
+        self._setBool(34, value)
+
+    def getNotChosenRewardCount(self):
+        return self._getNumber(35)
+
+    def setNotChosenRewardCount(self, value):
+        self._setNumber(35, value)
+
+    def getBpcoinCount(self):
+        return self._getNumber(36)
+
+    def setBpcoinCount(self, value):
+        self._setNumber(36, value)
+
+    def getIsWalletAvailable(self):
+        return self._getBool(37)
+
+    def setIsWalletAvailable(self, value):
+        self._setBool(37, value)
+
+    def getShowReplaceRewardsAnimations(self):
+        return self._getBool(38)
+
+    def setShowReplaceRewardsAnimations(self, value):
+        self._setBool(38, value)
 
     def _initialize(self):
         super(BattlePassProgressionsViewModel, self)._initialize()
@@ -208,42 +218,43 @@ class BattlePassProgressionsViewModel(CommonViewModel):
         self._addViewModelProperty('buyButton', BuyButtonModel())
         self._addViewModelProperty('freeRewards', UserListModel())
         self._addViewModelProperty('paidRewards', UserListModel())
-        self._addViewModelProperty('postRewards', UserListModel())
-        self._addViewModelProperty('medalReward', UserListModel())
+        self._addViewModelProperty('chapterCharacter', CharacterWidgetViewModel())
+        self._addViewModelProperty('widget3dStyle', BattlePassWidget3DStyleViewModel())
         self._addBoolProperty('showIntro', False)
         self._addBoolProperty('showOffSeason', False)
-        self._addBoolProperty('hasNewExtras', False)
-        self._addNumberProperty('extrasOpened', 0)
-        self._addNumberProperty('extrasTotal', 0)
-        self._addBoolProperty('highlightVoting', False)
-        self._addStringProperty('seasonTime', '')
+        self._addStringProperty('seasonText', '')
+        self._addStringProperty('chapterText', '')
         self._addNumberProperty('currentPoints', 0)
         self._addNumberProperty('totalPoints', 0)
         self._addNumberProperty('previousAllPoints', 0)
         self._addNumberProperty('previousPoints', 0)
         self._addNumberProperty('previousLevel', 0)
         self._addNumberProperty('currentAllPoints', 0)
+        self._addNumberProperty('pointsBeforeStart', 0)
         self._addBoolProperty('isPaused', False)
         self._addStringProperty('seasonTimeLeft', '')
         self._addBoolProperty('isVisibleBuyButton', False)
         self._addBoolProperty('showBuyAnimations', False)
         self._addBoolProperty('showLevelsAnimations', False)
-        self._addBoolProperty('isPlayerVoted', False)
-        self._addBoolProperty('haveMedalReward', False)
-        self._addBoolProperty('canPlayerParticipate', True)
         self._addStringProperty('progressionState', 'normalState')
-        self._addNumberProperty('trophySelectCount', 0)
-        self._addNumberProperty('newDeviceSelectCount', 0)
         self._addBoolProperty('isChooseDeviceEnabled', True)
         self._addBoolProperty('areSoundsAllowed', True)
+        self._addNumberProperty('chapterCount', 1)
+        self._addNumberProperty('chapterStep', 1)
+        self._addNumberProperty('currentChapter', 1)
+        self._addNumberProperty('chosenChapter', 1)
+        self._addBoolProperty('isTakeAllButtonVisible', False)
+        self._addNumberProperty('notChosenRewardCount', 0)
+        self._addNumberProperty('bpcoinCount', 0)
+        self._addBoolProperty('isWalletAvailable', True)
+        self._addBoolProperty('showReplaceRewardsAnimations', False)
         self.onClose = self._addCommand('onClose')
         self.onAboutClick = self._addCommand('onAboutClick')
-        self.onInfoBtnClick = self._addCommand('onInfoBtnClick')
         self.onBuyClick = self._addCommand('onBuyClick')
-        self.onBuyBtnClick = self._addCommand('onBuyBtnClick')
-        self.onExtrasClick = self._addCommand('onExtrasClick')
-        self.onVotingResultClick = self._addCommand('onVotingResultClick')
-        self.onBuyVehicleClick = self._addCommand('onBuyVehicleClick')
-        self.onTrophySelectClick = self._addCommand('onTrophySelectClick')
-        self.onNewDeviceSelectClick = self._addCommand('onNewDeviceSelectClick')
+        self.onTakeClick = self._addCommand('onTakeClick')
+        self.onTakeAllClick = self._addCommand('onTakeAllClick')
+        self.onOpenShopClick = self._addCommand('onOpenShopClick')
+        self.onPointsInfoClick = self._addCommand('onPointsInfoClick')
+        self.onFinishedAnimation = self._addCommand('onFinishedAnimation')
+        self.onGoToChapter = self._addCommand('onGoToChapter')
         self.onViewLoaded = self._addCommand('onViewLoaded')

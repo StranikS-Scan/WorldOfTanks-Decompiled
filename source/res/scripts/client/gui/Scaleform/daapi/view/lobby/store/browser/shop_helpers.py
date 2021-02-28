@@ -114,6 +114,14 @@ def getPremiumVehiclesUrl():
     return _getUrl('premiumVehicles')
 
 
+def getBuyBattlePassUrl():
+    return _getUrl('buyBattlePass')
+
+
+def getBattlePassCoinProductsUrl():
+    return _getUrl('bpcoinProducts')
+
+
 def getBuyCollectibleVehiclesUrl():
     return _getUrl('buyCollectibleVehicle')
 

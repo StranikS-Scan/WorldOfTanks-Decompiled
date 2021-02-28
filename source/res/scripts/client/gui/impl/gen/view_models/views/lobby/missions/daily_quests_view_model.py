@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.missions.premium_missions_model import
 class DailyQuestsViewModel(ViewModel):
     __slots__ = ('onClose', 'onReroll', 'onTabClick', 'onInfoToggle', 'onBuyPremiumBtnClick', 'onRerollEnabled')
 
-    def __init__(self, properties=7, commands=6):
+    def __init__(self, properties=8, commands=6):
         super(DailyQuestsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -47,6 +47,12 @@ class DailyQuestsViewModel(ViewModel):
     def setPremMissionsTabDiscovered(self, value):
         self._setBool(6, value)
 
+    def getIsBattlePassActive(self):
+        return self._getBool(7)
+
+    def setIsBattlePassActive(self, value):
+        self._setBool(7, value)
+
     def _initialize(self):
         super(DailyQuestsViewModel, self)._initialize()
         self._addViewModelProperty('dailyQuests', DailyQuestsModel())
@@ -56,6 +62,7 @@ class DailyQuestsViewModel(ViewModel):
         self._addNumberProperty('countDown', 0)
         self._addBoolProperty('infoVisible', False)
         self._addBoolProperty('premMissionsTabDiscovered', False)
+        self._addBoolProperty('isBattlePassActive', False)
         self.onClose = self._addCommand('onClose')
         self.onReroll = self._addCommand('onReroll')
         self.onTabClick = self._addCommand('onTabClick')

@@ -68,6 +68,7 @@ class ItemPackType(CONST_CONTAINER):
     CUSTOM_CREDITS = 'custom/credits'
     CUSTOM_EVENT_COIN = 'custom/eventCoin'
     CUSTOM_EVENT_COIN_EXTERNAL = 'custom/event_coin'
+    CUSTOM_BPCOIN = 'custom/bpcoin'
     CUSTOM_SLOT = 'custom/slot'
     CUSTOM_REFERRAL_CREW = 'custom/crew'
     CUSTOM_REWARD_POINT = 'custom/reward_point'

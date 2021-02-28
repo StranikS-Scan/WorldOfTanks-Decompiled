@@ -5,14 +5,14 @@ from gui.impl.gen.view_models.common.missions.bonuses.icon_bonus_model import Ic
 class BlueprintBonusModel(IconBonusModel):
     __slots__ = ()
 
-    def __init__(self, properties=8, commands=0):
+    def __init__(self, properties=9, commands=0):
         super(BlueprintBonusModel, self).__init__(properties=properties, commands=commands)
 
     def getType(self):
-        return self._getString(7)
+        return self._getString(8)
 
     def setType(self, value):
-        self._setString(7, value)
+        self._setString(8, value)
 
     def _initialize(self):
         super(BlueprintBonusModel, self)._initialize()

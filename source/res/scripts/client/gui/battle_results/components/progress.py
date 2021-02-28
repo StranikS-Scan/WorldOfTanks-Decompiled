@@ -240,13 +240,12 @@ class BattlePassProgressBlock(base.StatsBlock):
 
     def setRecord(self, result, reusable):
         if reusable.battlePassProgress is not None:
-            bonusType = reusable.common.arenaVisitor.getArenaBonusType()
             if BattlePassConsts.PROGRESSION_INFO_PREV in reusable.battlePassProgress:
                 info = reusable.battlePassProgress[BattlePassConsts.PROGRESSION_INFO_PREV]
-                self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', getBattlePassQuestInfo(info, bonusType)))
+                self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', getBattlePassQuestInfo(info)))
             if BattlePassConsts.PROGRESSION_INFO in reusable.battlePassProgress:
                 info = reusable.battlePassProgress[BattlePassConsts.PROGRESSION_INFO]
-                self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', getBattlePassQuestInfo(info, bonusType)))
+                self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', getBattlePassQuestInfo(info)))
         return
 
 

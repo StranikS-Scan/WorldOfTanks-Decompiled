@@ -261,12 +261,13 @@ def packTextBlock(label, value=None, relation=None, questID=None, isAvailable=Tr
     return UiElement(blockData, 'label')
 
 
-def packSimpleBonusesBlock(bonusesList, endlineSymbol=''):
+def packSimpleBonusesBlock(bonusesList, endlineSymbol='', complexTooltip=''):
     data = {'linkage': 'QuestTextAwardBlockUI',
      'items': bonusesList,
      'separator': ', ',
      'ellipsis': '..',
-     'endline': endlineSymbol}
+     'endline': endlineSymbol,
+     'complexTooltip': complexTooltip}
     return UiElement(data)
 
 

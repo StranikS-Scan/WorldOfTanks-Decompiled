@@ -145,15 +145,13 @@ def getStylePurchaseItems(style, modifiedOutfits, c11nService=None, prolongRent=
     isStyleInstalled = c11nService.getCurrentOutfit(SeasonType.SUMMER).id == style.id
     inventoryCounts = __getInventoryCounts(modifiedOutfits, vehicleCD)
     styleCount = style.fullInventoryCount(vehicle.intCD)
-    additionalOutfit = style.descriptor.styleProgressions.get(progressionLevel, {}).get('additionalOutfit', {})
     isFromInventory = not prolongRent and (styleCount > 0 or isStyleInstalled)
     if style.isProgressive:
-        isPurchasable = style.isProgressionPurchasable(progressionLevel)
-        if not isPurchasable:
-            return []
+        totalPrice = ItemPrice(Money(), Money())
         currentProgressionLvl = style.getLatestOpenedProgressionLevel(vehicle)
         progressivePrice = style.getUpgradePrice(currentProgressionLvl, progressionLevel)
-        totalPrice = progressivePrice
+        if style.isProgressionPurchasable(progressionLevel):
+            totalPrice = progressivePrice
         if not style.isHidden and not isFromInventory:
             totalPrice += style.getBuyPrice()
         isFromInventory = False if progressionLevel > currentProgressionLvl else isFromInventory
@@ -165,7 +163,7 @@ def getStylePurchaseItems(style, modifiedOutfits, c11nService=None, prolongRent=
     for season in SeasonType.COMMON_SEASONS:
         modifiedOutfit = modifiedOutfits[season]
         if style.isProgressive:
-            modifiedOutfit = c11nService.removeAdditionalProgressionData(outfit=modifiedOutfit, style=style, vehCD=vehicleCD)
+            modifiedOutfit = c11nService.removeAdditionalProgressionData(outfit=modifiedOutfit, style=style, vehCD=vehicleCD, season=season)
         baseOutfit = style.getOutfit(season, vehicleCD)
         for intCD, component, regionIdx, container, _ in modifiedOutfit.itemsFull():
             item = c11nService.getItemByCD(intCD)

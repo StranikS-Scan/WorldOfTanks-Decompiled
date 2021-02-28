@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/server_events/bonuses.py
 import copy
 import logging
-import math
 import typing
 from collections import namedtuple
 from functools import partial
@@ -49,7 +48,6 @@ from helpers import dependency
 from helpers import getLocalizedData, i18n
 from helpers import time_utils
 from helpers.i18n import makeString as _ms
-from helpers.time_utils import ONE_DAY
 from items import vehicles, tankmen
 from items.components import c11n_components as cc
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
@@ -59,12 +57,12 @@ from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
 from optional_bonuses import BONUS_MERGERS
 from shared_utils import makeTupleByDict, CONST_CONTAINER
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IEventProgressionController, IBattlePassController
+from skeletons.gui.game_control import IEventProgressionController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from gui.server_events.awards_formatters import BATTLE_BONUS_X5_TOKEN
-from battle_pass_common import BATTLE_PASS_TOKEN_PREFIX, BATTLE_PASS_TOKEN_TROPHY_GIFT_OFFER, BATTLE_PASS_TOKEN_NEW_DEVICE_GIFT_OFFER
+from battle_pass_common import BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_TOKEN_3D_STYLE, BATTLE_PASS_TOKEN_PREFIX, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME
 DEFAULT_CREW_LVL = 50
 _CUSTOMIZATIONS_SCALE = 44.0 / 128
 _EPIC_AWARD_STATIC_VO_ENTRIES = {'compensationTooltip': QUESTS.BONUSES_COMPENSATION,
@@ -303,6 +301,23 @@ class EventCoinBonus(IntegralBonus):
         return text_styles.eventCoin(self.getValue())
 
 
+class BpcoinBonus(IntegralBonus):
+
+    def getIcon(self):
+        return backport.image(R.images.gui.maps.icons.library.bpcoinIcon_1())
+
+    def getList(self):
+        return [{'value': self.formatValue(),
+          'itemSource': self.getIcon(),
+          'tooltip': TOOLTIPS.AWARDITEM_BPCOIN}]
+
+    def hasIconFormat(self):
+        return True
+
+    def getIconLabel(self):
+        return text_styles.bpcoin(self.getValue())
+
+
 class FreeXpBonus(IntegralBonus):
 
     def getList(self):
@@ -500,20 +515,44 @@ class BattleTokensBonus(TokensBonus):
 class BattlePassTokensBonus(TokensBonus):
 
     def __init__(self, name, value, isCompensation=False, ctx=None):
-        super(TokensBonus, self).__init__(name, value, isCompensation, ctx)
+        super(BattlePassTokensBonus, self).__init__(name, value, isCompensation, ctx)
         self._name = 'battlePassToken'
 
     def isShowInGUI(self):
         return False
 
 
-class BattlePassDeviceSelectTokensBonus(TokensBonus):
+class BattlePassSelectTokensBonus(TokensBonus):
+
+    def __init__(self, value, isCompensation=False, ctx=None):
+        super(BattlePassSelectTokensBonus, self).__init__(BATTLE_PASS_SELECT_BONUS_NAME, value, isCompensation, ctx)
+
+    def getType(self):
+        tID = self._value.keys()[0]
+        bonusType = tID.split(':')[2]
+        return bonusType
 
     def isShowInGUI(self):
         return True
 
-    def formatValue(self):
-        return backport.text(R.strings.battle_pass_2020.battlePassAwardsView.mainReward.dyn(self.getName())())
+
+class BattlePassStyleProgressTokenBonus(TokensBonus):
+
+    def __init__(self, value, isCompensation=False, ctx=None):
+        super(BattlePassStyleProgressTokenBonus, self).__init__(BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME, value, isCompensation, ctx)
+
+    def isShowInGUI(self):
+        return True
+
+    def getChapter(self):
+        tID = self._value.keys()[0]
+        chapter = tID.split(':')[3]
+        return int(chapter)
+
+    def getLevel(self):
+        tID = self._value.keys()[0]
+        level = tID.split(':')[4]
+        return int(level)
 
 
 class LootBoxTokensBonus(TokensBonus):
@@ -679,12 +718,12 @@ def tokensFactory(name, value, isCompensation=False, ctx=None, eventProgressionC
             result.append(TmanTemplateTokensBonus({tID: tValue}, isCompensation, ctx))
         if tID.startswith(BATTLE_BONUS_X5_TOKEN):
             result.append(X5BattleTokensBonus({tID: tValue}, isCompensation, ctx))
+        if tID.startswith(BATTLE_PASS_TOKEN_3D_STYLE):
+            result.append(BattlePassStyleProgressTokenBonus({tID: tValue}, isCompensation, ctx))
+        if tID.startswith(BATTLE_PASS_OFFER_TOKEN_PREFIX):
+            result.append(BattlePassSelectTokensBonus({tID: tValue}, isCompensation, ctx))
         if tID.startswith(BATTLE_PASS_TOKEN_PREFIX):
             result.append(BattlePassTokensBonus(name, {tID: tValue}, isCompensation, ctx))
-        if tID.startswith(BATTLE_PASS_TOKEN_TROPHY_GIFT_OFFER):
-            result.append(BattlePassDeviceSelectTokensBonus('battlePassTrophyGiftToken', {tID: tValue}, isCompensation, ctx))
-        if tID.startswith(BATTLE_PASS_TOKEN_NEW_DEVICE_GIFT_OFFER):
-            result.append(BattlePassDeviceSelectTokensBonus('battlePassNewDeviceGiftToken', {tID: tValue}, isCompensation, ctx))
         if tID.startswith(CURRENCY_TOKEN_PREFIX):
             createBonusFromTokens(result, CURRENCY_TOKEN_PREFIX, tID, tValue)
         if tID.startswith(RESOURCE_TOKEN_PREFIX):
@@ -1087,20 +1126,14 @@ class VehiclesBonus(SimpleBonus):
     def getRentDays(vehInfo):
         if 'rent' not in vehInfo:
             return None
-        time = vehInfo.get('rent', {}).get('time')
-        forBattlePass = vehInfo.get('rent', {}).get('battlePass')
-        if forBattlePass:
-            controller = dependency.instance(IBattlePassController)
-            daysTillBattlePassEnd = int(math.ceil(controller.getSeasonTimeLeft() / ONE_DAY))
-            if time and daysTillBattlePassEnd < time:
-                return daysTillBattlePassEnd
-        if time:
-            if time == float('inf'):
-                return None
-            if time <= time_utils.DAYS_IN_YEAR:
-                return int(time)
-            return None
         else:
+            time = vehInfo.get('rent', {}).get('time')
+            if time:
+                if time == float('inf'):
+                    return None
+                if time <= time_utils.DAYS_IN_YEAR:
+                    return int(time)
+                return None
             return None
 
     @staticmethod
@@ -2001,6 +2034,7 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  Currency.GOLD: GoldBonus,
  Currency.CRYSTAL: CrystalBonus,
  Currency.EVENT_COIN: EventCoinBonus,
+ Currency.BPCOIN: BpcoinBonus,
  'strBonus': SimpleBonus,
  'groups': SimpleBonus,
  'xp': IntegralBonus,

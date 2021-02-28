@@ -118,7 +118,8 @@ class BlueprintsConvertSaleWebApi(object):
     def getExchangeEndTime(self, _):
         actions = self._eventsCache.getActions()
         for aName, aData in actions.iteritems():
-            if aName.endswith(_BCS_ACTION_POSTFIX):
+            actionName = aName.split('!')[0]
+            if _BCS_ACTION_POSTFIX in actionName:
                 milliseconds = round(aData.getFinishTimeLeft(), 3) * 1000
                 return int(milliseconds)
 

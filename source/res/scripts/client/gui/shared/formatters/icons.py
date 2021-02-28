@@ -125,6 +125,14 @@ def eventCoinBig():
     return _getIcon('eventCoinBig')
 
 
+def bpcoin():
+    return _getIcon(Currency.BPCOIN)
+
+
+def bpcoinBig():
+    return _getIcon('bpcoinBig')
+
+
 def demountKit():
     return _getIcon('demountKit')
 

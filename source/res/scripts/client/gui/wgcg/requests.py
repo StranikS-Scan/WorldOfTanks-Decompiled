@@ -11,7 +11,6 @@ from gui.shared.utils.requesters.RequestsController import RequestsController
 from gui.shared.utils.requesters.abstract import Response, ClientRequestsByIDProcessor
 from gui.wgcg.advent_calendar.handlers import AdventCalendarRequestHandlers
 from gui.wgcg.base.handlers import BaseRequestHandlers
-from gui.wgcg.battle_pass.handlers import BattlePassRequestHandlers
 from gui.wgcg.clan.handlers import ClanRequestHandlers
 from gui.wgcg.elen.handlers import ElenRequestHandlers
 from gui.wgcg.utils.handlers import UtilsRequestHandlers
@@ -93,7 +92,6 @@ class WgcgRequestsController(RequestsController):
         self.__handlers = dict()
         self.__handlers.update(AdventCalendarRequestHandlers(requester).get())
         self.__handlers.update(BaseRequestHandlers(requester).get())
-        self.__handlers.update(BattlePassRequestHandlers(requester).get())
         self.__handlers.update(ClanRequestHandlers(requester, self.__webCtrl).get())
         self.__handlers.update(BaseExternalBattleUnitRequestHandlers(requester).get())
         self.__handlers.update(ElenRequestHandlers(requester).get())

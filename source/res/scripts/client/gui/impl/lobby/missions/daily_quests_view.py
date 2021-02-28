@@ -6,6 +6,7 @@ from constants import PREMIUM_TYPE, PremiumConfigs, DAILY_QUESTS_CONFIG
 from frameworks.wulf import Array, ViewFlags, ViewSettings
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyPremiumUrl
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from gui.battle_pass.battle_pass_helpers import showBattlePassDailyQuestsIntro
 from gui.impl.lobby.missions.missions_helpers import needToUpdateQuestsInModel
 from gui.shared.event_dispatcher import showShop
 from shared_utils import first
@@ -28,7 +29,7 @@ from gui.shared.utils import decorators
 from helpers import dependency, time_utils
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.game_control import IGameSessionController
+from skeletons.gui.game_control import IGameSessionController, IBattlePassController
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import Optional, List
@@ -56,6 +57,7 @@ class DailyQuestsView(ViewImpl):
     gameSession = dependency.descriptor(IGameSessionController)
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    battlePassController = dependency.descriptor(IBattlePassController)
     __slots__ = ('__tooltipData', '__proxyMissionsPage')
 
     def __init__(self, layoutID=R.views.lobby.missions.Daily()):
@@ -126,11 +128,13 @@ class DailyQuestsView(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         _logger.info('DailyQuestsView::_onLoading')
+        showBattlePassDailyQuestsIntro()
         with self.viewModel.transaction() as tx:
             self._updateQuestsTitles(tx)
             self._updateModel(tx)
             self._updateCountDowns(tx)
             tx.setPremMissionsTabDiscovered(settings.getDQSettings().premMissionsTabDiscovered)
+            tx.setIsBattlePassActive(self.battlePassController.isActive())
 
     def _initialize(self, *args, **kwargs):
         super(DailyQuestsView, self)._initialize()

@@ -165,7 +165,7 @@ class OutfitApplier(Processor):
             intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, self.outfit.style.id)
             style = self.itemsCache.items.getItemByCD(intCD)
             if style and style.isProgressive:
-                outfit = c11nService.removeAdditionalProgressionData(outfit=self.outfit, style=style, vehCD=self.vehicle.descriptor.makeCompactDescr())
+                outfit = c11nService.removeAdditionalProgressionData(outfit=self.outfit, style=style, vehCD=self.vehicle.descriptor.makeCompactDescr(), season=self.season)
                 component = outfit.pack()
         if component is None:
             component = self.outfit.pack()
@@ -457,9 +457,10 @@ class VehicleChangeNation(Processor):
 
 class BuyBattlePass(Processor):
 
-    def __init__(self, seasonID):
+    def __init__(self, seasonID, chapter):
         super(BuyBattlePass, self).__init__()
         self.__seasonID = seasonID
+        self.__chapter = chapter
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError(sysMsgKey='battlePass_buy/server_error')
@@ -467,7 +468,7 @@ class BuyBattlePass(Processor):
     def _successHandler(self, code, ctx=None):
         itemsCache = dependency.instance(IItemsCache)
         return makeSuccess(msgType=SM_TYPE.BattlePassReward, userMsg='', auxData={'header': backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.buyBP()),
-         'description': backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyWithoutRewards.text()),
+         'description': backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyWithoutRewards.text(), chapter=backport.text(R.strings.battle_pass_2020.chapter.name.num(self.__chapter)())),
          'additionalText': self.__makeGoldString(itemsCache.items.shop.getBattlePassCost().get(Currency.GOLD, 0))})
 
     @staticmethod
@@ -478,8 +479,8 @@ class BuyBattlePass(Processor):
         return g_settings.htmlTemplates.format('battlePassGold', {Currency.GOLD: formatter(gold)})
 
     def _request(self, callback):
-        _logger.debug('Make server request to buy battle pass %d', self.__seasonID)
-        BigWorld.player().shop.buyBattlePass(self.__seasonID, lambda resID, code, errStr: self._response(code, callback, errStr))
+        _logger.debug('Make server request to buy battle pass %d for chapter %d', self.__seasonID, self.__chapter)
+        BigWorld.player().shop.buyBattlePass(self.__seasonID, self.__chapter, lambda resID, code, errStr: self._response(code, callback, errStr))
 
 
 class BuyBattlePassLevels(Processor):
@@ -495,18 +496,3 @@ class BuyBattlePassLevels(Processor):
     def _request(self, callback):
         _logger.debug('Make server request to buy battle pass levels: %d season %d', self.__levels, self.__seasonID)
         BigWorld.player().shop.buyBattlePassLevels(self.__seasonID, self.__levels, lambda resID, code, errStr: self._response(code, callback, errStr))
-
-
-class ChooseFinalBattlePassReward(Processor):
-
-    def __init__(self, rewardID, seasonID):
-        super(ChooseFinalBattlePassReward, self).__init__()
-        self.__seasonID = seasonID
-        self.__rewardID = rewardID
-
-    def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError(sysMsgKey='choose_battlePass_reward/server_error')
-
-    def _request(self, callback):
-        _logger.debug('Make server request to choose final battle pass reward %d season %d', self.__rewardID, self.__seasonID)
-        BigWorld.player().battlePass.chooseBattlePassReward(self.__rewardID, self.__seasonID, lambda resID, code, errStr: self._response(code, callback, errStr))

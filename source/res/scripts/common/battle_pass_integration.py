@@ -5,7 +5,8 @@ from functools import partial
 from constants import ARENA_BONUS_TYPE, ARENA_BONUS_TYPE_NAMES
 from items import vehicles
 from soft_exception import SoftException
-from debug_utils import LOG_DEBUG_DEV
+from debug_utils import LOG_WARNING, LOG_DEBUG_DEV
+CHECK_POINTS_LIMIT = True
 
 def _makePointsPerLevel(progression):
     result = copy(progression)
@@ -20,7 +21,7 @@ def validatePoints(season, bonusTypeName='regular'):
     capBonuses = season['capBonuses']
     bonusType = ARENA_BONUS_TYPE_NAMES.get(bonusTypeName.upper())
     points = season['points'][bonusType]
-    pointsLimit = min(min(_makePointsPerLevel(season['base'])), min(_makePointsPerLevel(season['post'])))
+    pointsLimit = min(_makePointsPerLevel(season['base']))
     maxCapBonus = max(capBonuses)
     winPoints = points['win']
     losePoints = points['lose']
@@ -29,7 +30,11 @@ def validatePoints(season, bonusTypeName='regular'):
         if len(pointsList) != TEAM_SIZE_REGULAR:
             raise SoftException('BattlePass len(season/points/{}) {} != {}'.format(path, len(pointsList), TEAM_SIZE_REGULAR))
         if max(pointsList) + capBonusPoints > pointsLimit:
-            raise SoftException('BattlePass season/points/{} max valid points + capBonus={} is {}'.format(path, maxCapBonus, pointsLimit))
+            msg = 'BattlePass season/points/{} max valid points + capBonus={} is {}'.format(path, maxCapBonus, pointsLimit)
+            if CHECK_POINTS_LIMIT:
+                raise SoftException(msg)
+            else:
+                LOG_WARNING(msg)
 
     checkPointsList(winPoints, pointsLimit, maxCapBonus, '{}/win'.format(bonusTypeName))
     checkPointsList(losePoints, pointsLimit, maxCapBonus, '{}/lose'.format(bonusTypeName))
@@ -103,6 +108,9 @@ def validatePointsRanked(season):
 BattlePassByGameMode = {ARENA_BONUS_TYPE.REGULAR: {'validatePoints': validatePoints,
                             'calculatePointsSettings': calculatePointsSettingsRegular,
                             'maxRanks': 15},
+ ARENA_BONUS_TYPE.RANKED: {'validatePoints': lambda x: x,
+                           'calculatePointsSettings': calculatePointsSettingsRegular,
+                           'maxRanks': 15},
  ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO: {'validatePoints': partial(validatePointsBattleRoyale, ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, 20),
                                        'calculatePointsSettings': calculatePointsSettingsBattleRoyale,
                                        'maxRanks': 20},

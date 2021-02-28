@@ -429,7 +429,7 @@ g_currentVehicle = _CurrentVehicle()
 
 class PreviewAppearance(object):
 
-    def refreshVehicle(self, item):
+    def refreshVehicle(self, item, outfit=None):
         raise NotImplementedError
 
     @property
@@ -455,7 +455,7 @@ class _RegularPreviewAppearance(PreviewAppearance):
 
 class HeroTankPreviewAppearance(PreviewAppearance):
 
-    def refreshVehicle(self, item):
+    def refreshVehicle(self, item, outfit=None):
         if item is None:
             from ClientSelectableCameraObject import ClientSelectableCameraObject
             ClientSelectableCameraObject.switchCamera()

@@ -3,6 +3,7 @@
 import logging
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.daapi.view.meta.StageSwitcherMeta import StageSwitcherMeta
+from gui.customization.constants import CustomizationModes
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.customization.progression_styles.stage_switcher_model import StageSwitcherModel
 from gui.impl.pub import ViewImpl
@@ -53,15 +54,17 @@ class StageSwitcherView(ViewImpl):
         return
 
     def __onItemsRemoved(self, *_, **__):
-        with self.viewModel.transaction() as tx:
-            tx.setSelectedLevel(self.__ctx.mode.getStyleProgressionLevel())
+        if self.__ctx is not None and self.__ctx.modeId == CustomizationModes.STYLED:
+            with self.viewModel.transaction() as tx:
+                tx.setSelectedLevel(self.__ctx.mode.getStyleProgressionLevel())
+        return
 
     def __onChange(self, *args):
         if args and args[0]['selectedLevel'] is not None:
             selectedLevel = int(args[0]['selectedLevel'])
             with self.viewModel.transaction() as tx:
                 tx.setSelectedLevel(args[0]['selectedLevel'])
-            if self.__ctx is not None:
+            if self.__ctx is not None and self.__ctx.modeId == CustomizationModes.STYLED:
                 self.__ctx.mode.changeStyleProgressionLevel(selectedLevel)
             else:
                 self.__customizationService.changeStyleProgressionLevelPreview(selectedLevel)

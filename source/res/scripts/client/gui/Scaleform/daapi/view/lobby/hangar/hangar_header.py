@@ -646,9 +646,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         currentArenaBonusType = self.__getCurentArenaBonusType()
         secondaryPointCanBeAvailable = currentArenaBonusType != constants.ARENA_BONUS_TYPE.REGULAR and currentArenaBonusType != constants.ARENA_BONUS_TYPE.UNKNOWN
         self.__updateVisibilityPersonalMission(not secondaryPointCanBeAvailable)
-        secondaryEntryPointAvailable = secondaryPointCanBeAvailable
-        if currentArenaBonusType not in ALWAYS_VISIBLE_SECONDARY_ENTRY_POINT_FOR_TYPES:
-            secondaryEntryPointAvailable &= self.__battlePassController.isActive() and self.__battlePassController.isGameModeEnabled(currentArenaBonusType)
+        secondaryEntryPointAvailable = secondaryPointCanBeAvailable and not self.__battlePassController.isDisabled()
         self.as_setSecondaryEntryPointVisibleS(secondaryEntryPointAvailable)
         if secondaryEntryPointAvailable:
             self.getComponent(HANGAR_ALIASES.SECONDARY_ENTRY_POINT).update(currentArenaBonusType)

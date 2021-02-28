@@ -1,7 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_pass/battle_pass_award.py
+import typing
+from battle_pass_common import BATTLE_PASS_SELECT_BONUS_NAME
 from gui.server_events.bonuses import getNonQuestBonuses, mergeBonuses, splitBonuses
 from gui.battle_pass.bonuses_layout_controller import BonusesLayoutController
+from shared_utils import findFirst
+if typing.TYPE_CHECKING:
+    from gui.server_events.bonuses import BattlePassSelectTokensBonus
 
 def awardsFactory(items):
     bonuses = []
@@ -42,9 +47,23 @@ class BattlePassAwardsManager(object):
         return bonuses
 
     @classmethod
-    def getVehicleBackgroundPosition(cls, vehCD):
-        return cls.__bonusesLayoutController.getVehiclePosition(vehCD)
-
-    @classmethod
     def getBigIcon(cls, bonus):
         return cls.__bonusesLayoutController.getBigIcon(bonus)
+
+    @classmethod
+    def uniteTokenBonuses(cls, bonuses):
+        keys = []
+        splitKey = ''
+        for bonus in bonuses:
+            if bonus.getName() == BATTLE_PASS_SELECT_BONUS_NAME:
+                result = {}
+                for key, value in bonus.getValue().iteritems():
+                    splitKey = key.rsplit(':', 2)[0]
+                    newKey = findFirst(lambda x: x.startswith(splitKey), keys, key)
+                    result[newKey] = value
+                    if newKey not in keys:
+                        keys.append(newKey)
+
+                bonus.setValue(result)
+
+        return bonuses

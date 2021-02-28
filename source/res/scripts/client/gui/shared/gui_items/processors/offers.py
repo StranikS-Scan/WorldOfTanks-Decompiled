@@ -12,10 +12,10 @@ _logger = logging.getLogger(__name__)
 
 class ReceiveOfferGiftProcessor(Processor):
 
-    def __init__(self, offerID, giftID, cdnTitle=''):
+    def __init__(self, offerID, giftID, cdnTitle='', skipConfirm=False):
         self.__offerID = offerID
         self.__giftID = giftID
-        plugins = [ReceiveGiftConfirmator(offerID, giftID, cdnTitle)]
+        plugins = [ReceiveGiftConfirmator(offerID, giftID, cdnTitle, isEnabled=not skipConfirm)]
         super(ReceiveOfferGiftProcessor, self).__init__(plugins)
 
     def _errorHandler(self, code, errStr='', ctx=None):

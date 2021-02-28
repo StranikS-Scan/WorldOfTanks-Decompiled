@@ -30,9 +30,6 @@ class BaseVehiclesWatcher(object):
     def _update(self, *_):
         if self.__isWatching:
             self.__setUnsuitableState()
-            _logger.info("BaseVehiclesWatcher:_update() self = '%r'", self)
-        else:
-            _logger.info('BaseVehiclesWatcher:_update() watcher was stopped, update of states ignored')
 
     def __setUnsuitableState(self):
         vehicles = self._getUnsuitableVehicles()
@@ -41,7 +38,6 @@ class BaseVehiclesWatcher(object):
             vehicle.setCustomState(Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE)
             intCDs.add(vehicle.intCD)
 
-        _logger.info("BaseVehiclesWatcher: 'unsuitableToQueue' state was changed for '%r' vehicles, self = '%r'", len(intCDs), self)
         if intCDs:
             g_prbCtrlEvents.onVehicleClientStateChanged(intCDs)
 
@@ -52,6 +48,5 @@ class BaseVehiclesWatcher(object):
             vehicle.clearCustomState()
             intCDs.add(vehicle.intCD)
 
-        _logger.info("BaseVehiclesWatcher: Custom state was cleared for '%r' vehicles, self = '%r'", len(intCDs), self)
         if intCDs:
             g_prbCtrlEvents.onVehicleClientStateChanged(intCDs)

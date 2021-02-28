@@ -487,6 +487,7 @@ class Source(object):
          'blueprintAny',
          'enhancement',
          'eventCoin',
+         'bpcoin',
          'entitlement',
          'rankedDailyBattles',
          'rankedBonusBattles',

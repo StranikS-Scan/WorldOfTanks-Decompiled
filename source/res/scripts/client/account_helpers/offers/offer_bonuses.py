@@ -1,17 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/offers/offer_bonuses.py
+from operator import itemgetter
 import typing
+from blueprints.BlueprintTypes import BlueprintTypes
+from blueprints.FragmentTypes import getFragmentType
 from constants import PREMIUM_ENTITLEMENTS, RentType
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.server_events.bonuses import CreditsBonus, GoldBonus, CrystalBonus, FreeXpBonus, PlusPremiumDaysBonus, VehiclesBonus, CrewBooksBonus, ItemsBonus, CustomizationsBonus, CrewSkinsBonus, ItemsBonusFactory, CrewSkinsBonusFactory
+from gui.server_events.bonuses import CreditsBonus, GoldBonus, CrystalBonus, FreeXpBonus, PlusPremiumDaysBonus, VehiclesBonus, CrewBooksBonus, ItemsBonus, CustomizationsBonus, CrewSkinsBonus, ItemsBonusFactory, CrewSkinsBonusFactory, VehicleBlueprintBonus, IntelligenceBlueprintBonus, NationalBlueprintBonus
 from gui.server_events.formatters import tagText
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import getTypeUserName
 from gui.shared.money import Currency
+from gui.shared.utils.requesters.blueprints_requester import getVehicleCDForIntelligence, getVehicleCDForNational
 from helpers import int2roman, dependency
 from skeletons.gui.customization import ICustomizationService
 
@@ -256,6 +260,13 @@ class CrewSkinsOfferBonus(OfferBonusMixin, CrewSkinsBonus):
         return True if crewSkinItem.getFreeCount() + count > crewSkinItem.getMaxCount() else False
 
 
+class NationalBlueprintOfferBonus(OfferBonusMixin, NationalBlueprintBonus):
+
+    def getOfferName(self):
+        nationName = self._localizedNationName()
+        return backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.converter.nationalBlueprintReceived(), nationName=nationName)
+
+
 class ItemsOfferBonusFactory(ItemsBonusFactory):
     CREW_BOOKS_BONUS_CLASS = CrewBooksOfferBonus
     ITEMS_BONUS_CLASS = ItemsOfferBonus
@@ -263,6 +274,22 @@ class ItemsOfferBonusFactory(ItemsBonusFactory):
 
 class CrewSkinsOfferBonusFactory(CrewSkinsBonusFactory):
     CREW_SKINS_BONUS_CLASS = CrewSkinsOfferBonus
+
+
+def blueprintsOfferBonusFactory(name, value, isCompensation=False, ctx=None):
+    blueprintBonuses = []
+    for fragmentCD, fragmentCount in sorted(value.iteritems(), key=itemgetter(0)):
+        fragmentType = getFragmentType(fragmentCD)
+        if fragmentType == BlueprintTypes.VEHICLE:
+            blueprintBonuses.append(VehicleBlueprintBonus(name, (fragmentCD, fragmentCount), isCompensation, ctx))
+        if fragmentType == BlueprintTypes.INTELLIGENCE_DATA:
+            vehicleCD = getVehicleCDForIntelligence(fragmentCD)
+            blueprintBonuses.append(IntelligenceBlueprintBonus(name, (vehicleCD, fragmentCount), isCompensation, ctx))
+        if fragmentType == BlueprintTypes.NATIONAL:
+            vehicleCD = getVehicleCDForNational(fragmentCD)
+            blueprintBonuses.append(NationalBlueprintOfferBonus(name, (vehicleCD, fragmentCount), isCompensation, ctx))
+
+    return blueprintBonuses
 
 
 class OfferBonusAdapter(OfferBonusMixin):
@@ -283,4 +310,5 @@ OFFER_BONUSES = {Currency.CREDITS: CreditsOfferBonus,
  'vehicles': VehiclesOfferBonus,
  'items': ItemsOfferBonusFactory(),
  'customizations': CustomizationsOfferBonus,
- 'crewSkins': CrewSkinsOfferBonusFactory()}
+ 'crewSkins': CrewSkinsOfferBonusFactory(),
+ 'blueprints': blueprintsOfferBonusFactory}

@@ -6,10 +6,10 @@ class BuyButtonModel(ViewModel):
     __slots__ = ()
     BUY_BP = 'buyBPState'
     BUY_LEVELS = 'buyLevelsState'
-    DISABLE = 'disableState'
-    ONBOARDING = 'onboardingState'
+    DISABLE_BP = 'disableBPState'
+    DISABLE_LEVELS = 'disableLevelsState'
 
-    def __init__(self, properties=5, commands=0):
+    def __init__(self, properties=4, commands=0):
         super(BuyButtonModel, self).__init__(properties=properties, commands=commands)
 
     def getState(self):
@@ -18,34 +18,27 @@ class BuyButtonModel(ViewModel):
     def setState(self, value):
         self._setString(0, value)
 
-    def getSellAnyLevelsUnlockTimeLeft(self):
+    def getSeasonTimeLeft(self):
         return self._getString(1)
 
-    def setSellAnyLevelsUnlockTimeLeft(self, value):
+    def setSeasonTimeLeft(self, value):
         self._setString(1, value)
 
-    def getSeasonTimeLeft(self):
-        return self._getString(2)
-
-    def setSeasonTimeLeft(self, value):
-        self._setString(2, value)
-
     def getIsHighlightOn(self):
-        return self._getBool(3)
+        return self._getBool(2)
 
     def setIsHighlightOn(self, value):
-        self._setBool(3, value)
+        self._setBool(2, value)
 
     def getShowBuyButtonBubble(self):
-        return self._getBool(4)
+        return self._getBool(3)
 
     def setShowBuyButtonBubble(self, value):
-        self._setBool(4, value)
+        self._setBool(3, value)
 
     def _initialize(self):
         super(BuyButtonModel, self)._initialize()
         self._addStringProperty('state', 'buyBPState')
-        self._addStringProperty('sellAnyLevelsUnlockTimeLeft', '')
         self._addStringProperty('seasonTimeLeft', '')
         self._addBoolProperty('isHighlightOn', False)
         self._addBoolProperty('showBuyButtonBubble', False)

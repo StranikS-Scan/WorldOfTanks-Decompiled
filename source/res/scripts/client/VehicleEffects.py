@@ -12,7 +12,7 @@ MAX_FALLBACK_CHECK_DISTANCE = 10000.0
 HitEffectMapping = namedtuple('HitEffectMapping', ('componentName', 'hitTester'))
 
 class DamageFromShotDecoder(object):
-    ShotPoint = namedtuple('ShotPoint', ('componentName', 'matrix', 'hitEffectGroup'))
+    ShotPoint = namedtuple('ShotPoint', ('componentName', 'matrix', 'hitEffectCode', 'hitEffectGroup'))
     __hitEffectCodeToEffectGroup = ('armorBasicRicochet', 'armorRicochet', 'armorResisted', 'armorResisted', 'armorHit', 'armorCriticalHit', 'armorCriticalHit')
 
     @staticmethod
@@ -22,18 +22,11 @@ class DamageFromShotDecoder(object):
     @staticmethod
     def decodeHitPoints(encodedPoints, collisionComponent, maxComponentIdx=TankPartIndexes.ALL[-1]):
         resultPoints = []
-        maxHitEffectCode = None
-        maxDamagedComponentName = None
         for encodedPoint in encodedPoints:
             compIdx, hitEffectCode, startPoint, endPoint = DamageFromShotDecoder.decodeSegment(encodedPoint, collisionComponent, maxComponentIdx)
             if startPoint == endPoint or compIdx < 0:
                 continue
             convertedCompIdx = DamageFromShotDecoder.convertComponentIndex(compIdx)
-            if hitEffectCode > maxHitEffectCode:
-                maxHitEffectCode = hitEffectCode
-                maxDamagedComponentName = TankPartIndexes.getName(compIdx)
-                if not maxDamagedComponentName:
-                    maxDamagedComponentName = collisionComponent.getPartName(convertedCompIdx)
             hitTestRes = collisionComponent.collideLocal(convertedCompIdx, startPoint, endPoint)
             bbox = collisionComponent.getBoundingBox(convertedCompIdx)
             if not hitTestRes or hitTestRes < 0.0:
@@ -70,9 +63,9 @@ class DamageFromShotDecoder(object):
             componentName = TankPartIndexes.getName(compIdx)
             if not componentName:
                 componentName = collisionComponent.getPartName(convertedCompIdx)
-            resultPoints.append(DamageFromShotDecoder.ShotPoint(componentName, matrix, effectGroup))
+            resultPoints.append(DamageFromShotDecoder.ShotPoint(componentName, matrix, hitEffectCode, effectGroup))
 
-        return (maxHitEffectCode, resultPoints, maxDamagedComponentName)
+        return resultPoints
 
     @staticmethod
     def convertComponentIndex(compIdx):

@@ -236,3 +236,4 @@ class BATTLE_ROYALE(object):
     WIDGETALERTMESSAGEBLOCK_STARTIN_MULTI = '#battle_royale:widgetAlertMessageBlock/startIn/multi'
     WIDGETALERTMESSAGEBLOCK_STARTIN_SINGLE = '#battle_royale:widgetAlertMessageBlock/startIn/single'
     PRIMETIME_STATUS_CYCLEFINISHEDONTHISSERVER = '#battle_royale:primeTime/status/cycleFinishedOnThisServer'
+    QUESTSTOOLTIP_MISSION_INFO_TIMELEFT = '#battle_royale:questsTooltip/mission_info/timeLeft'

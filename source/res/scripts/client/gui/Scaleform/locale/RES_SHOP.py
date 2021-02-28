@@ -252,6 +252,7 @@ class RES_SHOP(object):
     MAPS_SHOP_REWARDS_48X48_ICON_BATTLE_MISSIONS_PRIZE_PREMTANKRENT = '../maps/shop/rewards/48x48/icon_battle_missions_prize_premtankrent.png'
     MAPS_SHOP_REWARDS_48X48_MILITARYEXERCISES = '../maps/shop/rewards/48x48/militaryExercises.png'
     MAPS_SHOP_REWARDS_48X48_MONEY_BONDS = '../maps/shop/rewards/48x48/money_bonds.png'
+    MAPS_SHOP_REWARDS_48X48_MONEY_BPCOIN = '../maps/shop/rewards/48x48/money_bpcoin.png'
     MAPS_SHOP_REWARDS_48X48_MONEY_EVENT_COIN = '../maps/shop/rewards/48x48/money_event_coin.png'
     MAPS_SHOP_REWARDS_48X48_MONEY_GOLD = '../maps/shop/rewards/48x48/money_gold.png'
     MAPS_SHOP_REWARDS_48X48_MONEY_SILVER = '../maps/shop/rewards/48x48/money_silver.png'

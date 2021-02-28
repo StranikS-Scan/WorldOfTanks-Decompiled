@@ -1,78 +1,98 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_pass/state_machine/delegator.py
-import weakref
 import typing
-from frameworks.state_machine import StringEvent
-from gui.battle_pass.state_machine.observers import FinalStateMachineObserver
-from gui.battle_pass.state_machine.states import FinalRewardEventID
+from battle_pass_common import BattlePassRewardReason as BPReason
+from frameworks.state_machine import StringEvent, StateEvent
+from gui.battle_pass.state_machine.state_machine_helpers import separateRewards, getStylesToChooseUntilChapter
+from gui.battle_pass.state_machine.states import StateMachineEventID
+from helpers import dependency
+from skeletons.gui.game_control import IBattlePassController
+from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from frameworks.state_machine import BaseStateObserver
-    from frameworks.state_machine import StateMachine
-    from skeletons.gui.game_control import IBattlePassController
+    from gui.battle_pass.state_machine.machine import BattlePassStateMachine
 
-class FinalRewardLogic(object):
-    __slots__ = ('__battlePassController', '__machine', '__observers', '__startAfterTurningOnMachine')
+class BattlePassRewardLogic(object):
+    __slots__ = ('__machine', '__startAfterTurningOnMachine')
+    __battlePassController = dependency.descriptor(IBattlePassController)
+    __itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, battlePassController, machine):
-        super(FinalRewardLogic, self).__init__()
-        self.__battlePassController = weakref.proxy(battlePassController)
+    def __init__(self, machine):
+        super(BattlePassRewardLogic, self).__init__()
         self.__machine = machine
-        self.__observers = None
         self.__startAfterTurningOnMachine = False
-        return
 
     def start(self):
         if self.__machine.isRunning():
             return
         self.__machine.configure()
-        self.__observers = FinalStateMachineObserver()
-        self.addStateObserver(self.__observers)
         self.__machine.start()
         if self.__startAfterTurningOnMachine:
-            self.postStateEvent(FinalRewardEventID.PROGRESSION_COMPLETE)
+            self.postStateEvent()
             self.__startAfterTurningOnMachine = False
 
     def stop(self):
         self.__machine.stop()
-        if self.__observers is not None:
-            self.removeStateObserver(self.__observers)
-        self.__observers = None
         self.__startAfterTurningOnMachine = False
-        return
 
-    def startFinalFlow(self, rewards, data):
+    def startRewardFlow(self, rewards, data):
+        newLevel = data.get('newLevel', 0) if data is not None else 0
+        reason = data.get('reason', BPReason.DEFAULT) if data is not None else BPReason.DEFAULT
+        if self.__battlePassController.isFinalLevel(newLevel) and reason not in (BPReason.PURCHASE_BATTLE_PASS, BPReason.PURCHASE_BATTLE_PASS_MULTIPLE):
+            chapter = self.__battlePassController.getChapterByLevel(newLevel)
+            stylesToChoose = getStylesToChooseUntilChapter(chapter)
+        else:
+            stylesToChoose = []
+        rewardsToChoose, defaultRewards, chosenStyle = separateRewards(rewards, battlePass=self.__battlePassController)
+        self.__machine.saveRewards(rewardsToChoose, stylesToChoose, defaultRewards, chosenStyle, data)
         if not self.__machine.isRunning():
             self.__startAfterTurningOnMachine = True
-        self.__machine.saveRewards(rewards, data)
-        self.postStateEvent(FinalRewardEventID.PROGRESSION_COMPLETE)
+        else:
+            self.postStateEvent()
+        return
 
-    def postVotingOpened(self, **kwargs):
-        self.postStateEvent(FinalRewardEventID.VOTING_OPENED, **kwargs)
+    def startManualFlow(self, rewardsToChoose, stylesToChoose):
+        self.__machine.saveRewards(rewardsToChoose, stylesToChoose, None, None, None)
+        self.__machine.setManualFlow()
+        if not self.__machine.isRunning():
+            self.__startAfterTurningOnMachine = True
+        else:
+            self.postStateEvent()
+        return
+
+    def hasActiveFlow(self):
+        return self.__machine.hasActiveFlow()
+
+    def hasRewardToChoose(self):
+        return self.__machine.hasRewardToChoose()
+
+    def getNextRewardToChoose(self):
+        return self.__machine.getNextRewardToChoose()
+
+    def removeRewardToChoose(self, tokenID, isTaken):
+        self.__machine.removeRewardToChoose(tokenID, isTaken)
+
+    def addRewards(self, rewards):
+        self.__machine.addRewards(rewards)
+
+    def getChosenStyleChapter(self):
+        self.__machine.getChosenStyleChapter()
+
+    def markStyleChosen(self, chapter):
+        self.__machine.markStyleChosen(chapter)
+
+    def addStyleToChoose(self, chapter):
+        self.__machine.addStyleToChoose(chapter)
 
     def postPreviewOpen(self):
-        self.postStateEvent(FinalRewardEventID.OPEN_PREVIEW)
+        self.postStringEvent(StateMachineEventID.OPEN_PREVIEW)
 
     def postClosePreview(self):
-        self.postStateEvent(FinalRewardEventID.CLOSE_PREVIEW)
+        self.postStringEvent(StateMachineEventID.CLOSE_PREVIEW)
 
-    def postNextState(self, **kwargs):
-        self.postStateEvent(FinalRewardEventID.NEXT, **kwargs)
-
-    def postEscape(self):
-        self.postStateEvent(FinalRewardEventID.ESCAPE)
-
-    def getRewardsData(self):
-        return self.__machine.getRewardsData()
-
-    def clearRewardsData(self):
-        self.__machine.clearRewardsData()
-
-    def addStateObserver(self, observer):
-        self.__machine.connect(observer)
-
-    def removeStateObserver(self, observer):
-        self.__machine.disconnect(observer)
-
-    def postStateEvent(self, eventID, **kwargs):
+    def postStringEvent(self, eventID, **kwargs):
         if self.__machine.isRunning():
             self.__machine.post(StringEvent(eventID, **kwargs))
+
+    def postStateEvent(self, **kwargs):
+        if self.__machine.isRunning():
+            self.__machine.post(StateEvent(**kwargs))

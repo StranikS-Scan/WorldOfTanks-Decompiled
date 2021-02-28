@@ -256,7 +256,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
 
     def isBattlePassAvailable(self):
         battlePassConfig = self.__lobbyContext.getServerSettings().getBattlePassConfig()
-        return battlePassConfig.isGameModeEnabled(ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO)
+        return battlePassConfig.isEnabled() and battlePassConfig.isGameModeEnabled(ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO)
 
     def isInBattleRoyaleSquad(self):
         dispatcher = self.prbDispatcher

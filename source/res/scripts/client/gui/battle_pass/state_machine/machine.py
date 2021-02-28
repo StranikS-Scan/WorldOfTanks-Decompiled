@@ -1,101 +1,157 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_pass/state_machine/machine.py
+import typing
 import logging
-from battle_pass_common import BattlePassRewardReason as RewardReason
-from frameworks.state_machine import ConditionTransition, StringEventTransition
-from frameworks.state_machine import State
+from frameworks.state_machine import ConditionTransition
 from frameworks.state_machine import StateMachine
-from gui.battle_pass.state_machine import states
-from gui.battle_pass.state_machine.states import FinalRewardStateID, FinalRewardEventID
+from gui.battle_pass.state_machine import states, lockNotificationManager
+from gui.battle_pass.state_machine.state_machine_helpers import isProgressionComplete, packToken
+from shared_utils import first
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 
-class FinalRewardStateMachine(StateMachine):
-    __slots__ = ('__rewards', '__data')
+class BattlePassStateMachine(StateMachine):
+    __slots__ = ('__rewards', '__data', '__rewardsToChoose', '__stylesToChoose', '__chosenStyle', '__manualFlow')
 
     def __init__(self):
-        super(FinalRewardStateMachine, self).__init__()
+        super(BattlePassStateMachine, self).__init__()
         self.__rewards = None
         self.__data = None
+        self.__rewardsToChoose = []
+        self.__stylesToChoose = []
+        self.__chosenStyle = None
+        self.__manualFlow = False
         return
+
+    def stop(self):
+        self.clearSelf()
+        lockNotificationManager(False)
+        super(BattlePassStateMachine, self).stop()
 
     @property
     def lobby(self):
         return self.getChildByIndex(0)
 
     @property
-    def beforeVideo(self):
+    def video(self):
         return self.getChildByIndex(1)
 
     @property
-    def voting(self):
+    def choice(self):
         return self.getChildByIndex(2)
 
     @property
-    def votedVideo(self):
-        return self.getChildByIndex(3)
-
-    @property
     def reward(self):
-        return self.getChildByIndex(4)
+        return self.getChildByIndex(3)
 
     def configure(self):
         lobbyState = states.LobbyState()
-        votingState = states.VotingState()
+        choiceState = states.ChoiceState()
         rewardState = states.RewardState()
-        beforeVideoState = State(stateID=FinalRewardStateID.VIDEO_BEFORE)
-        votedVideoState = State(stateID=FinalRewardStateID.VIDEO_VOTED)
+        videoState = states.VideoState()
         lobbyState.configure()
-        votingState.configure()
+        choiceState.configure()
         rewardState.configure()
-        lobbyState.waitState.addTransition(StringEventTransition(FinalRewardEventID.PROGRESSION_COMPLETE), target=beforeVideoState)
-        lobbyState.waitState.addTransition(StringEventTransition(FinalRewardEventID.VOTING_OPENED), target=votingState.votingScreen)
-        beforeVideoState.addTransition(StringEventTransition(FinalRewardEventID.NEXT), target=votingState.votingScreen)
-        votingState.votingScreen.addTransition(ConditionTransition(self.__hasVoteOption, priority=2), target=votedVideoState)
-        votingState.votingScreen.addTransition(ConditionTransition(self.__hasRewardsAfterPurchase, priority=1), target=rewardState.rewardPartial)
-        votingState.votingScreen.addTransition(StringEventTransition(FinalRewardEventID.ESCAPE), target=lobbyState.waitState)
-        votingState.previewScreen.addTransition(StringEventTransition(FinalRewardEventID.OPEN_HANGAR), target=lobbyState.waitState)
-        votingState.previewScreen.addTransition(ConditionTransition(self.__hasRewardsAfterPurchase, priority=1), target=rewardState.rewardPartial)
-        votedVideoState.addTransition(StringEventTransition(FinalRewardEventID.NEXT), target=rewardState.rewardFinal)
-        rewardState.rewardPartial.addTransition(StringEventTransition(FinalRewardEventID.ESCAPE), target=lobbyState.waitState)
-        rewardState.rewardFinal.addTransition(StringEventTransition(FinalRewardEventID.ESCAPE), target=lobbyState.finalState)
+        lobbyState.lobbyWait.addTransition(ConditionTransition(self.__hasChoiceOption, priority=2), target=choiceState.choiceItem)
+        lobbyState.lobbyWait.addTransition(ConditionTransition(self.__hasStyleReward, priority=1), target=videoState)
+        lobbyState.lobbyWait.addTransition(ConditionTransition(self.__hasAnyReward, priority=0), target=rewardState.rewardAny)
+        choiceState.choiceItem.addTransition(ConditionTransition(self.__hasStyleOption, priority=2), target=choiceState.choiceStyle)
+        choiceState.choiceItem.addTransition(ConditionTransition(self.__hasStyleReward, priority=1), target=videoState)
+        choiceState.choiceItem.addTransition(ConditionTransition(lambda _: True, priority=0), target=rewardState.rewardAny)
+        choiceState.choiceStyle.addTransition(ConditionTransition(self.__hasStyleReward, priority=1), target=videoState)
+        choiceState.choiceStyle.addTransition(ConditionTransition(lambda _: True, priority=0), target=rewardState.rewardAny)
+        choiceState.previewScreen.addTransition(ConditionTransition(lambda _: True, priority=0), target=rewardState.rewardAny)
+        videoState.addTransition(ConditionTransition(lambda _: True, priority=0), target=rewardState.rewardStyle)
+        rewardState.rewardStyle.addTransition(ConditionTransition(self.__hasStyleOption, priority=1), target=choiceState.choiceStyle)
+        rewardState.rewardAny.addTransition(ConditionTransition(self.__hasStyleOption, priority=2), target=choiceState.choiceStyle)
+        rewardState.rewardAny.addTransition(ConditionTransition(isProgressionComplete, priority=1), target=lobbyState.lobbyFinal)
+        rewardState.rewardAny.addTransition(ConditionTransition(lambda _: True, priority=0), target=lobbyState.lobbyWait)
         self.addState(lobbyState)
-        self.addState(beforeVideoState)
-        self.addState(votingState)
-        self.addState(votedVideoState)
+        self.addState(videoState)
+        self.addState(choiceState)
         self.addState(rewardState)
 
-    def saveRewards(self, rewards, data):
-        self.__rewards = rewards
+    def hasActiveFlow(self):
+        return not self.isStateEntered(states.BattlePassRewardStateID.LOBBY)
+
+    def saveRewards(self, rewardsToChoose, stylesToChoose, defaultRewards, chosenStyle, data):
+        self.__rewardsToChoose = rewardsToChoose
+        self.__stylesToChoose = stylesToChoose
+        self.__rewards = defaultRewards
+        self.__chosenStyle = chosenStyle
         self.__data = data
+
+    def setManualFlow(self):
+        self.__manualFlow = True
 
     def getRewardsData(self):
         return (self.__rewards, self.__data)
 
-    def clearRewardsData(self):
-        self.__rewards = None
-        self.__data = None
+    def addRewards(self, rewards):
+        if self.__rewards:
+            self.__rewards.append(rewards)
+        else:
+            self.__rewards = [rewards]
+
+    def getNextRewardToChoose(self):
+        return first(self.__rewardsToChoose)
+
+    def hasRewardToChoose(self):
+        return bool(self.__rewardsToChoose)
+
+    def removeRewardToChoose(self, tokenID, isTaken):
+        if isTaken:
+            self.__rewardsToChoose.remove(tokenID)
+        else:
+            if self.__rewards is None:
+                self.__rewards = []
+            prefix = tokenID.rsplit(':', 2)[0]
+            tokensToRemove = [ value for value in self.__rewardsToChoose if value.startswith(prefix) ]
+            for token in tokensToRemove:
+                self.__rewardsToChoose.remove(token)
+                if not self.__manualFlow:
+                    self.__rewards.append(packToken(token))
+
         return
 
-    def __hasRewardsAfterPurchase(self, _):
-        if self.__data:
-            startingMachineAfterPurchase = self.__data.get('reason') == RewardReason.PURCHASE_BATTLE_PASS_LEVELS
-        else:
-            startingMachineAfterPurchase = False
-        return startingMachineAfterPurchase and self.__isEnoughDataForAwardsScreen(self.__rewards)
+    def getChosenStyleChapter(self):
+        return self.__chosenStyle
 
-    @staticmethod
-    def __hasVoteOption(event):
-        return event and event.getArgument('voteOption')
+    def addStyleToChoose(self, chapter):
+        self.__stylesToChoose.append(chapter)
 
-    @staticmethod
-    def __isEnoughDataForAwardsScreen(rewards=None):
-        if rewards is None:
-            return False
-        else:
-            for reward in rewards:
-                for bonus in reward.iterkeys():
-                    if bonus != 'dossier':
-                        return True
+    def markStyleChosen(self, chapter):
+        self.__chosenStyle = chapter
+        if chapter in self.__stylesToChoose:
+            self.__stylesToChoose.remove(chapter)
 
-            return False
+    def hasStyleToChoose(self):
+        return bool(self.__stylesToChoose)
+
+    def clearStylesToChoose(self):
+        self.__stylesToChoose = []
+
+    def clearChosenStyle(self):
+        self.__chosenStyle = None
+        return
+
+    def clearSelf(self):
+        self.__rewards = None
+        self.__data = None
+        self.__rewardsToChoose = []
+        self.__stylesToChoose = []
+        self.__chosenStyle = None
+        self.__manualFlow = False
+        return
+
+    def __hasStyleReward(self, *_):
+        return self.__chosenStyle is not None
+
+    def __hasChoiceOption(self, *_):
+        return bool(self.__rewardsToChoose) or bool(self.__stylesToChoose)
+
+    def __hasStyleOption(self, *_):
+        return bool(self.__stylesToChoose) and not bool(self.__rewardsToChoose)
+
+    def __hasAnyReward(self, *_):
+        return bool(self.__rewards)

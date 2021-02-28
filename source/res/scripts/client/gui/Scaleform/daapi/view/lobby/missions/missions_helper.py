@@ -44,7 +44,7 @@ from skeletons.gui.game_control import IEventProgressionController, IRankedBattl
 from helpers.dependency import replace_none_kwargs
 CARD_AWARDS_COUNT = 6
 CARD_AWARDS_BIG_COUNT = 5
-CARD_AWARDS_EPIC_COUNT = 3
+CARD_AWARDS_EPIC_COUNT = 4
 LINKED_SET_CARD_AWARDS_COUNT = 8
 DETAILED_CARD_AWARDS_COUNT = 10
 _preBattleConditionFormatter = MissionsPreBattleConditionsFormatter()
@@ -493,6 +493,29 @@ class _EventProgressionDailyMissionInfo(_MissionInfo):
 
 class _BattleRoyaleDailyMissionInfo(_EventProgressionDailyMissionInfo):
     _eventController = dependency.descriptor(IBattleRoyaleController)
+
+    def _getCompleteKey(self):
+        return backport.text(R.strings.battle_royale.questsTooltip.mission_info.timeLeft()) if not self._eventController.isDailyQuestsRefreshAvailable() else super(_BattleRoyaleDailyMissionInfo, self)._getCompleteKey()
+
+    def _getCompleteDailyStatus(self, completeKey):
+        season = self._eventController.getCurrentSeason() or self._eventController.getNextSeason()
+        if season is None:
+            return ''
+        else:
+            cycle = season.getCycleInfo()
+            if cycle is None:
+                return ''
+            if self._eventController.isDailyQuestsRefreshAvailable():
+                timeLeftString = i18n.makeString(completeKey, time=self._getTillTimeString(time_utils.getDayTimeLeft()))
+            else:
+                currentTime = time_utils.getCurrentLocalServerTimestamp()
+                if cycle.endDate - currentTime < time_utils.ONE_DAY:
+                    timeLeft = backport.text(R.strings.epic_battle.questsTooltip.epicBattle.lessThanDay())
+                else:
+                    cycleTimeLeft = self._eventController.getCurrentCycleTimeLeft()
+                    timeLeft = time_formatters.getTillTimeByResource(cycleTimeLeft, R.strings.menu.headerButtons.battle.types.ranked.availability, removeLeadingZeros=True)
+                timeLeftString = i18n.makeString(completeKey, cycle=int2roman(cycle.ordinalNumber), time=timeLeft)
+            return timeLeftString
 
 
 class _RankedMissionInfo(_MissionInfo):

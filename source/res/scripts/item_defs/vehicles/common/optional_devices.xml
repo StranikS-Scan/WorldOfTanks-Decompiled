@@ -858,6 +858,88 @@
       </mul>
     </kpi>
   </trophyUpgradedImprovedRotationMechanism>
+  <trophyBasicImprovedSights>
+    <id>	109	</id>
+    <userString>	#artefacts:trophyBasicImprovedSights/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:trophyBasicImprovedSights/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:trophyBasicImprovedSights/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/improvedSights.png 0 0	</icon>
+    <groupName>	improvedSights	</groupName>
+    <price>	100000	</price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	lightTank mediumTank heavyTank AT-SPG	</tags>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <tags>	improvedSights trophyBasic firepower	</tags>
+    <incompatibleTags>
+      <installed>	improvedSights	</installed>
+    </incompatibleTags>
+    <script>	UpgradableStaticDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/multShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.95	</valueByLevel>
+        </factor>
+      </factors>
+      <upgradeInfo>
+        <upgradedCompDescr>	28409	</upgradedCompDescr>
+        <price>	3000000	</price>
+      </upgradeInfo>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotFullDispersion	</name>
+        <value>	0.95	</value>
+      </mul>
+    </kpi>
+  </trophyBasicImprovedSights>
+  <trophyUpgradedImprovedSights>
+    <id>	110	</id>
+    <userString>	#artefacts:trophyUpgradedImprovedSights/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:trophyBasicImprovedSights/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:trophyBasicImprovedSights/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/improvedSights.png 0 0	</icon>
+    <groupName>	improvedSights	</groupName>
+    <price>	100000	</price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	lightTank mediumTank heavyTank AT-SPG	</tags>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <tags>	improvedSights trophyUpgraded firepower	</tags>
+    <incompatibleTags>
+      <installed>	improvedSights	</installed>
+    </incompatibleTags>
+    <script>	UpgradedStaticDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/multShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.92	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotFullDispersion	</name>
+        <value>	0.92	</value>
+      </mul>
+    </kpi>
+  </trophyUpgradedImprovedSights>
   <improvedConfiguration_tier2>
     <id>	61	</id>
     <userString>	#artefacts:improvedConfiguration_tier2/name	</userString>

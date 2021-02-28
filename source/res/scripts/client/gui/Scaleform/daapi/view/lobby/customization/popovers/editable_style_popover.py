@@ -199,6 +199,9 @@ class EditableStylePopover(CustomizationEditedKitPopoverMeta):
         disabledLabel = backport.text(R.strings.vehicle_customization.popover.style.removed())
         disabledLabel = text_styles.bonusPreviewText(disabledLabel)
         isApplied = itemData.isBase
+        progressionLevel = 0
+        if item.itemTypeID == GUI_ITEM_TYPE.STYLE:
+            progressionLevel = self.__ctx.mode.currentOutfit.progressionLevel
         itemDataVO = {'id': item.intCD,
          'icon': icon,
          'userName': name,
@@ -214,7 +217,7 @@ class EditableStylePopover(CustomizationEditedKitPopoverMeta):
          'disabledLabel': disabledLabel,
          'isRemovable': itemData.isRemovable,
          'seasonType': itemData.season,
-         'progressionLevel': self.__ctx.mode.currentOutfit.progressionLevel}
+         'progressionLevel': progressionLevel}
         return itemDataVO
 
     @staticmethod

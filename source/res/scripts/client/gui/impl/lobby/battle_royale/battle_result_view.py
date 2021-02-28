@@ -25,7 +25,7 @@ from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibili
 from gui.Scaleform.daapi.view.lobby.event_progression.after_battle_reward_view_helpers import formatBonuses
 from helpers import dependency
 from skeletons.gui.battle_results import IBattleResultsService
-from skeletons.gui.game_control import IBattleRoyaleController
+from skeletons.gui.game_control import IBattleRoyaleController, IBattlePassController
 from skeletons.gui.lobby_context import ILobbyContext
 from shared_utils import first
 from soft_exception import SoftException
@@ -63,6 +63,7 @@ class BrBattleResultsViewInLobby(ViewImpl):
     __battleResults = dependency.descriptor(IBattleResultsService)
     __brController = dependency.descriptor(IBattleRoyaleController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
+    __battlePassController = dependency.descriptor(IBattlePassController)
     __sound_env__ = BattleResultsEnv
 
     def __init__(self, *args, **kwargs):
@@ -174,10 +175,10 @@ class BrBattleResultsViewInLobby(ViewImpl):
             battlePassModel.setProgressionState(BattlePassProgress.PROGRESSION_COMPLETED)
         else:
             battlePassModel.setProgressionState(BattlePassProgress.PROGRESSION_IN_PROGRESS)
+        state = BattlePassProgress.BP_STATE_DISABLED
         if self.__brController.isBattlePassAvailable():
-            battlePassModel.setBattlePassState(BattlePassProgress.BP_STATE_NORMAL)
-        else:
-            battlePassModel.setBattlePassState(BattlePassProgress.BP_STATE_DISABLED)
+            state = BattlePassProgress.BP_STATE_BOUGHT if self.__battlePassController.isBought() else BattlePassProgress.BP_STATE_NORMAL
+        battlePassModel.setBattlePassState(state)
 
     def __setLeaderboard(self, leaderboardModel):
         leaderboard = self.__data.get(BRSections.LEADERBOARD)

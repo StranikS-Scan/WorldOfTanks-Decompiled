@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class BattlePassCompletedTooltipViewModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=2, commands=0):
+    def __init__(self, properties=3, commands=0):
         super(BattlePassCompletedTooltipViewModel, self).__init__(properties=properties, commands=commands)
 
     def getLevel(self):
@@ -20,7 +20,14 @@ class BattlePassCompletedTooltipViewModel(ViewModel):
     def setIsBattlePassPurchased(self, value):
         self._setBool(1, value)
 
+    def getNotChosenRewardCount(self):
+        return self._getNumber(2)
+
+    def setNotChosenRewardCount(self, value):
+        self._setNumber(2, value)
+
     def _initialize(self):
         super(BattlePassCompletedTooltipViewModel, self)._initialize()
         self._addNumberProperty('level', 0)
         self._addBoolProperty('isBattlePassPurchased', False)
+        self._addNumberProperty('notChosenRewardCount', 0)

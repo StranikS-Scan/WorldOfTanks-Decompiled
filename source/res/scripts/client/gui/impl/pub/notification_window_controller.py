@@ -7,8 +7,7 @@ import Event
 from PlayerEvents import g_playerEvents
 from bootcamp.BootCampEvents import g_bootcampEvents
 from frameworks.wulf import WindowStatus, WindowLayer
-from gui.Scaleform.framework.entities.sf_window import SFWindow
-from gui.impl.pub.lobby_window import LobbyNotificationWindow
+from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import LobbySimpleEvent
@@ -18,10 +17,11 @@ from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Window
+    from gui.impl.pub.notification_commands import NotificationCommand
 _logger = logging.getLogger(__name__)
 
 class NotificationWindowController(INotificationWindowController, IGlobalListener):
-    __slots__ = ('__accountID', '__activeQueue', '__postponedQueue', '__currentWindow', '__callbackID', '__isWaitingShown', '__processAfterWaiting', '__isInBootcamp', '__isLobbyLoaded')
+    __slots__ = ('__accountID', '__activeQueue', '__postponedQueue', '__currentWindow', '__callbackID', '__isWaitingShown', '__processAfterWaiting', '__isInBootcamp', '__isLobbyLoaded', '__locks')
     __gui = dependency.descriptor(IGuiLoader)
     __gameplay = dependency.descriptor(IGameplayLogic)
     __bootcamp = dependency.descriptor(IBootcampController)
@@ -30,6 +30,7 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
         super(NotificationWindowController, self).__init__()
         self.__activeQueue = []
         self.__postponedQueue = []
+        self.__locks = set()
         self.__currentWindow = None
         self.__callbackID = None
         self.__isWaitingShown = False
@@ -107,23 +108,22 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
         _logger.debug('Clear queues.')
         self.__clearCallback()
         self.__processAfterWaiting = False
-        for window in self.__activeQueue:
-            window.destroy()
+        for command in self.__activeQueue:
+            command.fini()
 
-        for window in self.__postponedQueue:
-            window.destroy()
+        for command in self.__postponedQueue:
+            command.fini()
 
         del self.__activeQueue[:]
         del self.__postponedQueue[:]
+        self.__locks.clear()
 
-    def append(self, window):
-        _logger.debug('Append %r', window)
-        self.__removeWindowInstance(window)
-        self.__activeQueue.append(window)
-        if self.isEnabled():
-            self.__processNext()
-        elif self.__isLobbyLoaded:
-            self.postponeActive()
+    def append(self, command):
+        _logger.debug('Append %r', command)
+        command.init()
+        self.__removeSameInstance(command)
+        self.__activeQueue.append(command)
+        self.__tryProcess()
 
     def releasePostponed(self):
         _logger.debug('Releasing the postponed queue.')
@@ -146,10 +146,27 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
         self.__notifyWithPostponedQueueCount()
 
     def isEnabled(self):
-        return False if not self.__isLobbyLoaded or self.__isInBootcamp else not self.prbDispatcher.getFunctionalState().isNavigationDisabled()
+        return False if not self.__isLobbyLoaded or self.__isInBootcamp or self.__locks else not self.prbDispatcher.getFunctionalState().isNavigationDisabled()
 
     def hasWindow(self, window):
-        return window == self.__currentWindow or window in self.__activeQueue or window in self.__postponedQueue
+        command = WindowNotificationCommand(window)
+        return window == self.__currentWindow or command in self.__activeQueue or command in self.__postponedQueue
+
+    def lock(self, key):
+        self.__locks.add(key)
+
+    def unlock(self, key):
+        self.__locks.remove(key)
+        self.__tryProcess()
+
+    def hasLock(self, key):
+        return key in self.__locks
+
+    def __tryProcess(self):
+        if self.isEnabled():
+            self.__processNext()
+        elif self.__isLobbyLoaded:
+            self.postponeActive()
 
     def __onEnterBootcamp(self):
         self.__isInBootcamp = True
@@ -174,7 +191,7 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
     def __onWindowStatusChanged(self, uniqueID, newState):
         window = self.__gui.windowsManager.getWindow(uniqueID)
         if newState == WindowStatus.LOADING:
-            self.__removeWindowInstance(window)
+            self.__removeSameInstance(WindowNotificationCommand(window))
         elif newState == WindowStatus.DESTROYING:
             if self.__currentWindow == window:
                 self.__currentWindow = None
@@ -195,10 +212,10 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
         else:
             self.__processAfterWaiting = False
             if self.isEnabled() and not self.__gui.windowsManager.findWindows(self.__overlappingWindowsPredicate):
-                nextWindow = self.__activeQueue.pop(0)
-                _logger.debug('Loading next window: %r', nextWindow)
-                self.__currentWindow = nextWindow
-                nextWindow.load()
+                command = self.__activeQueue.pop(0)
+                _logger.debug('Executing next command: %r', command)
+                self.__currentWindow = command.getWindow()
+                command.execute()
             return
 
     def __destroyCurrentWindow(self):
@@ -206,11 +223,11 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
             self.__currentWindow.destroy()
         return
 
-    def __removeWindowInstance(self, window):
-        if window in self.__activeQueue:
-            self.__activeQueue.remove(window)
-        if window in self.__postponedQueue:
-            self.__postponedQueue.remove(window)
+    def __removeSameInstance(self, command):
+        if command in self.__activeQueue:
+            self.__activeQueue.remove(command)
+        if command in self.__postponedQueue:
+            self.__postponedQueue.remove(command)
 
     def __showWaiting(self, _):
         self.__isWaitingShown = True

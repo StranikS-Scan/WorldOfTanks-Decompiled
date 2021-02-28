@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.reward_item_model import R
 class BattlePassBuyRewardsViewModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=5, commands=0):
+    def __init__(self, properties=6, commands=0):
         super(BattlePassBuyRewardsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -36,6 +36,12 @@ class BattlePassBuyRewardsViewModel(ViewModel):
     def setStatePackage(self, value):
         self._setString(4, value)
 
+    def getChapter(self):
+        return self._getNumber(5)
+
+    def setChapter(self, value):
+        self._setNumber(5, value)
+
     def _initialize(self):
         super(BattlePassBuyRewardsViewModel, self)._initialize()
         self._addViewModelProperty('nowRewards', UserListModel())
@@ -43,3 +49,4 @@ class BattlePassBuyRewardsViewModel(ViewModel):
         self._addNumberProperty('fromLevel', 0)
         self._addNumberProperty('toLevel', 0)
         self._addStringProperty('statePackage', 'buyState')
+        self._addNumberProperty('chapter', 0)

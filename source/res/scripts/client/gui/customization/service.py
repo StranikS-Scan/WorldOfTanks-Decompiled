@@ -35,6 +35,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 if typing.TYPE_CHECKING:
     from gui.customization.constants import CustomizationModeSource
     from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationModes, CustomizationTabs
+    from gui.shared.gui_items.customization.c11n_items import Style
 _logger = logging.getLogger(__name__)
 
 class _ServiceItemShopMixin(object):
@@ -194,6 +195,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         g_eventBus.addListener(events.LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self.__onNotifyCursorOver3dScene)
         g_eventBus.addListener(events.LobbySimpleEvent.NOTIFY_CURSOR_DRAGGING, self.__onNotifyCursorDragging)
         g_eventBus.addListener(events.CustomizationEvent.SHOW, self.__onShowCustomization, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_currentVehicle.onChanged += self.__onVehicleChanged
         self.hangarSpace.onSpaceDestroy += self.__onSpaceDestroy
         self.hangarSpace.onSpaceCreate += self.__onSpaceCreate
         Windowing.addWindowAccessibilitynHandler(self.__onWindowAccessibilityChanged)
@@ -205,6 +207,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         g_eventBus.removeListener(events.LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self.__onNotifyCursorOver3dScene)
         g_eventBus.removeListener(events.LobbySimpleEvent.NOTIFY_CURSOR_DRAGGING, self.__onNotifyCursorDragging)
         g_eventBus.removeListener(events.CustomizationEvent.SHOW, self.__onShowCustomization, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_currentVehicle.onChanged -= self.__onVehicleChanged
         self.hangarSpace.onSpaceDestroy -= self.__onSpaceDestroy
         self.hangarSpace.onSpaceCreate -= self.__onSpaceCreate
         Windowing.removeWindowAccessibilityHandler(self.__onWindowAccessibilityChanged)
@@ -499,17 +502,19 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         if entity and entity.appearance and entity.appearance.isLoaded():
             self._helper = BigWorld.PyCustomizationHelper(entity.model, self._mode, self._isOver3dScene, self.__onRegionHighlighted)
             self.onCustomizationHelperRecreated()
-            self.selectRegions(self._selectedRegion)
             self._isHighlighterActive = True
+            self.selectRegions(self._selectedRegion)
             if self.__customizationCtx is not None and self.__customizationCtx.c11nCameraManager.isStyleInfo():
                 self.suspendHighlighter()
         return
 
     def __onVehicleLoadStarted(self):
-        self._selectedRegion = ApplyArea.NONE
         self._isHighlighterActive = False
         self._helper = None
         return
+
+    def __onVehicleChanged(self):
+        self._selectedRegion = ApplyArea.NONE
 
     def __onShowCustomization(self, event):
         self.showCustomization(**event.ctx)
@@ -540,15 +545,10 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
                 return None
             return outfit.progressionLevel
 
-    def removeAdditionalProgressionData(self, outfit, style, vehCD):
-        progressionLevel = outfit.progressionLevel
-        additionalOutfit = style.descriptor.styleProgressions.get(progressionLevel, {}).get('additionalOutfit', {})
-        resultOutfit = outfit
-        if additionalOutfit and progressionLevel and vehCD and outfit:
-            for season in SeasonType.COMMON_SEASONS:
-                modifiedOutfit = outfit
-                if additionalOutfit and additionalOutfit.get(season):
-                    tmpOutfit = Outfit(strCompactDescr=additionalOutfit.get(season).makeCompDescr(), vehicleCD=vehCD)
-                    resultOutfit = modifiedOutfit.discard(tmpOutfit)
-
-        return resultOutfit
+    @staticmethod
+    def removeAdditionalProgressionData(outfit, style, vehCD, season):
+        if outfit and outfit.progressionLevel and style and vehCD:
+            additionalOutfit = style.getAdditionalOutfit(outfit.progressionLevel, season, vehCD)
+            if additionalOutfit is not None:
+                return outfit.discard(additionalOutfit)
+        return outfit

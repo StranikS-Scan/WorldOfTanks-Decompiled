@@ -3,6 +3,7 @@
 from collections import defaultdict
 import BigWorld
 from CurrentVehicle import g_currentVehicle
+from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from adisp import process
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import DialogsInterface, makeHtmlString, SystemMessages
@@ -20,13 +21,14 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
 from gui.ranked_battles import ranked_helpers
-from gui.server_events.events_dispatcher import showPersonalMission, showMissionsBattlePassCommonProgression
+from gui.server_events.events_dispatcher import showPersonalMission, showMissionsBattlePassCommonProgression, showBattlePass3dStyleChoiceWindow
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events
 from gui.shared.event_dispatcher import showProgressiveRewardWindow, showRankedYearAwardWindow, showBlueprintsSalePage
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import decorators
 from gui.wgcg.clan import contexts as clan_ctxs
 from gui.wgnc import g_wgncProvider
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.impl import INotificationWindowController
 from web.web_client_api import webApiCollection
 from web.web_client_api.sound import HangarSoundWebApi
@@ -646,6 +648,20 @@ class SecurityLinkHandler(_ActionHandler):
         g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.SECURITY_SETTINGS))
 
 
+class ClanRulesHandler(_ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.CLAN_RULES))
+
+
 class OpenCustomizationHandler(_ActionHandler):
     service = dependency.descriptor(ICustomizationService)
 
@@ -670,17 +686,14 @@ class OpenCustomizationHandler(_ActionHandler):
                 ctx.changeMode(CustomizationModes.STYLED, source=CustomizationModeSource.NOTIFICATION)
             elif savedData.get('toProjectionDecals'):
                 itemCD = savedData.get('itemIntCD', 0)
-                if ctx.modeId in (CustomizationModes.STYLED, CustomizationModes.EDITABLE_STYLE):
+                goToEditableStyle = ctx.canEditStyle(itemCD)
+                style = None
+                if ctx.modeId is CustomizationModes.STYLED:
                     style = ctx.mode.modifiedStyle
-                    goToEditableStyle = False
-                    if style is not None:
-                        item = self.service.getItemByCD(itemCD)
-                        isInstallable = style.descriptor.isItemInstallable(item.descriptor)
-                        goToEditableStyle = style.isEditable and isInstallable
-                    if goToEditableStyle:
-                        ctx.editStyle(style.intCD, source=CustomizationModeSource.NOTIFICATION)
-                    else:
-                        ctx.changeMode(CustomizationModes.CUSTOM, source=CustomizationModeSource.NOTIFICATION)
+                if goToEditableStyle and style is not None:
+                    ctx.editStyle(style.intCD, source=CustomizationModeSource.NOTIFICATION)
+                else:
+                    ctx.changeMode(CustomizationModes.CUSTOM, source=CustomizationModeSource.NOTIFICATION)
                 ctx.mode.changeTab(tabId=CustomizationTabs.PROJECTION_DECALS, itemCD=itemCD)
             return
 
@@ -882,6 +895,24 @@ class _OpentBlueprintsConvertSale(_NavigationDisabledActionHandler):
         showBlueprintsSalePage()
 
 
+class _OpenBattlePassStyleChoiceView(_NavigationDisabledActionHandler):
+    __settingsCore = dependency.descriptor(ISettingsCore)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        if self.__settingsCore.serverSettings.getBPStorage().get(BattlePassStorageKeys.INTRO_SHOWN):
+            showBattlePass3dStyleChoiceWindow()
+        else:
+            showMissionsBattlePassCommonProgression()
+
+
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowTutorialBattleHistoryHandler,
  ShowFortBattleResultsHandler,
@@ -892,6 +923,7 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  CancelFriendshipHandler,
  WGNCActionsHandler,
  SecurityLinkHandler,
+ ClanRulesHandler,
  ShowRankedSeasonCompleteHandler,
  ShowRankedFinalYearHandler,
  ShowRankedYearPositionHandler,
@@ -917,6 +949,7 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ProlongStyleRent,
  _OpenBattlePassProgressionView,
  _OpenSelectDevicesHandler,
+ _OpenBattlePassStyleChoiceView,
  _OpenMissingEventsHandler,
  _OpenNotrecruitedSysMessageHandler,
  _OpentBlueprintsConvertSale)

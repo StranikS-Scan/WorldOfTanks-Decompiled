@@ -70,7 +70,7 @@ class OffersNovelty(IOffersNovelty):
 
     def __updateNewOffers(self):
         viewedOffers = self.__getViewedOffers()
-        newOffers = set((offer.id for offer in self._offersProvider.iAvailableOffers() if offer.id not in viewedOffers))
+        newOffers = set((offer.id for offer in self._offersProvider.iAvailableOffers(onlyVisible=True) if offer.id not in viewedOffers))
         if newOffers != self.__newOffers:
             self.__newOffers = newOffers
             self.onUpdated()
@@ -78,7 +78,7 @@ class OffersNovelty(IOffersNovelty):
     def __clearNotActiveOffers(self):
         if self._offersProvider.isSynced:
             viewedOffers = self.__getViewedOffers()
-            availableOffers = [ offer.id for offer in self._offersProvider.getAvailableOffers() ]
+            availableOffers = [ offer.id for offer in self._offersProvider.getAvailableOffers(onlyVisible=True) ]
             activeViewedOffers = set((offerID for offerID in viewedOffers if offerID in availableOffers))
             if activeViewedOffers != viewedOffers:
                 self.__setViewedOffers(activeViewedOffers)

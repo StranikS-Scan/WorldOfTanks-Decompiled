@@ -670,8 +670,7 @@ class BattleRoyalMembersView(SquadMembersView):
     def _setBonusInformation(self, bonusState):
         with self.viewModel.header.transaction() as model:
             model.setShowInfoIcon(False)
-            model.setShowNoBonusPlaceholder(True)
-            model.noBonusPlaceholder.setText(R.strings.messenger.dialogs.squadChannel.headerMsg.battleRoyaleHint())
+            model.setShowNoBonusPlaceholder(False)
         self._currentBonusState = bonusState
 
     def _getBonusState(self):

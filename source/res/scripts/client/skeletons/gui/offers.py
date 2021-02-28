@@ -66,10 +66,10 @@ class IOffersDataProvider(object):
     def getOfferByToken(self, token):
         raise NotImplementedError
 
-    def iAvailableOffers(self):
+    def iAvailableOffers(self, onlyVisible=True):
         raise NotImplementedError
 
-    def getAvailableOffers(self):
+    def getAvailableOffers(self, onlyVisible=True):
         raise NotImplementedError
 
     def getAvailableOffersByToken(self, token):

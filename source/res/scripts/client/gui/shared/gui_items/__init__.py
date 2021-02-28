@@ -106,10 +106,12 @@ class GUI_ITEM_ECONOMY_CODE(CONST_CONTAINER):
     NOT_ENOUGH_CREDITS = _formatMoneyError(Currency.CREDITS)
     NOT_ENOUGH_CRYSTAL = _formatMoneyError(Currency.CRYSTAL)
     NOT_ENOUGH_EVENT_COIN = _formatMoneyError(Currency.EVENT_COIN)
+    NOT_ENOUGH_BPCOIN = _formatMoneyError(Currency.BPCOIN)
     _NOT_ENOUGH_CURRENCIES = (NOT_ENOUGH_GOLD,
      NOT_ENOUGH_CRYSTAL,
      NOT_ENOUGH_CREDITS,
-     NOT_ENOUGH_EVENT_COIN)
+     NOT_ENOUGH_EVENT_COIN,
+     NOT_ENOUGH_BPCOIN)
     NOT_ENOUGH_MONEY = 'not_enough_money'
 
     @classmethod

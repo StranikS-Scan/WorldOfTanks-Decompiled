@@ -209,15 +209,20 @@ class CustomizationContext(object):
             self.changeMode(CustomizationModes.EDITABLE_STYLE, source=source)
             return
 
-    def changeModeWithProgressionDecal(self, itemCD, scrollToItem=False):
-        goToEditableStyle = False
+    def canEditStyle(self, itemCD):
         if self.__modeId in (CustomizationModes.STYLED, CustomizationModes.EDITABLE_STYLE):
             outfit = self.mode.getModifiedOutfit()
-            if outfit is not None:
-                currentStyle = outfit.style
-                if currentStyle is not None:
-                    item = self._itemsCache.items.getItemByCD(itemCD)
-                    goToEditableStyle = currentStyle.isEditable and currentStyle.isItemInstallable(item.descriptor)
+            if outfit is not None and outfit.style is not None:
+                currentStyle = self._itemsCache.items.getItemByCD(outfit.style.compactDescr)
+                item = self._itemsCache.items.getItemByCD(itemCD)
+                isCurrentLevelEditable = True
+                if outfit.progressionLevel != currentStyle.getProgressionLevel():
+                    isCurrentLevelEditable = currentStyle.isProgressionPurchasable(outfit.progressionLevel)
+                return currentStyle.isEditable and isCurrentLevelEditable and currentStyle.isItemInstallable(item)
+        return False
+
+    def changeModeWithProgressionDecal(self, itemCD, scrollToItem=False):
+        goToEditableStyle = self.canEditStyle(itemCD)
         self.changeMode(CustomizationModes.EDITABLE_STYLE if goToEditableStyle else CustomizationModes.CUSTOM)
         self.mode.changeTab(CustomizationTabs.PROJECTION_DECALS, itemCD=itemCD if scrollToItem else None)
         return

@@ -12,6 +12,7 @@ import WWISE
 import game_mode_emulator
 _logger = logging.getLogger(__name__)
 g_offlineModeEnabled = False
+g_offlineModeSpaceLoaded = False
 g_currentMoveRate = 0.5
 g_gui = None
 MOVE_SPEED_MAX = 200.0
@@ -90,6 +91,11 @@ def enabled():
     return g_offlineModeEnabled
 
 
+def isSpaceLoaded():
+    global g_offlineModeSpaceLoaded
+    return g_offlineModeSpaceLoaded
+
+
 def onStartup():
     try:
         idx = sys.argv.index('offline')
@@ -118,10 +124,12 @@ def _displayGUI(spaceName):
 
 
 def _offlineLoadCheck():
+    global g_offlineModeSpaceLoaded
     if BigWorld.spaceLoadStatus() > 1.0 - SPACE_LOAD_EPS:
         BigWorld.worldDrawEnabled(True)
         BigWorld.uniprofSceneStart()
         _clearGUI()
+        g_offlineModeSpaceLoaded = True
     else:
         BigWorld.callback(0.5, _offlineLoadCheck)
 

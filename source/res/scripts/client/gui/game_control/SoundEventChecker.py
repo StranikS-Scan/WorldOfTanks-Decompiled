@@ -10,11 +10,13 @@ from skeletons.gui.shared import IItemsCache
 _SPEND_SINGLE_SOUNDS = {Currency.CREDITS: SoundEffectsId.SPEND_CREDITS,
  Currency.GOLD: SoundEffectsId.SPEND_CREDITS,
  Currency.CRYSTAL: SoundEffectsId.SPEND_CRYSTAL,
- Currency.EVENT_COIN: SoundEffectsId.SPEND_EVENT_COIN}
+ Currency.EVENT_COIN: SoundEffectsId.SPEND_EVENT_COIN,
+ Currency.BPCOIN: SoundEffectsId.SPEND_DEFAULT_SOUND}
 _EARN_SINGLE_SOUNDS = {Currency.CREDITS: SoundEffectsId.EARN_CREDITS,
  Currency.GOLD: SoundEffectsId.EARN_CREDITS,
  Currency.CRYSTAL: SoundEffectsId.EARN_CRYSTAL,
- Currency.EVENT_COIN: SoundEffectsId.EARN_EVENT_COIN}
+ Currency.EVENT_COIN: SoundEffectsId.EARN_EVENT_COIN,
+ Currency.BPCOIN: SoundEffectsId.EARN_DEFAULT_SOUND}
 _SPEND_MULTI_SOUNDS = {(Currency.CREDITS, Currency.GOLD): SoundEffectsId.SPEND_CREDITS_GOLD}
 _EARN_MULTI_SOUNDS = {(Currency.CREDITS, Currency.GOLD): SoundEffectsId.EARN_CREDITS_GOLD}
 

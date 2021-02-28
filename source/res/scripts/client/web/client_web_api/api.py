@@ -31,6 +31,9 @@ class C2WHandler(object):
 
         return
 
+    def getSender(self):
+        return self.__sender
+
     def __isDuplicate(self, eType, eData):
         return self.__previous.get(eType) == eData
 

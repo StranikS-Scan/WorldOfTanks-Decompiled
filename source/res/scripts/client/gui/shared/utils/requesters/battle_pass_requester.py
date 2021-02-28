@@ -21,14 +21,14 @@ class BattlePassRequester(AbstractSyncDataRequester):
     def getBoughtLevels(self):
         return self.getCacheValue('boughtLevels', 0)
 
-    def getVoteOption(self):
-        return self.getCacheValue('voteOption', 0)
-
     def getPointsForVehicle(self, vehicleID, default=0):
         return self.getCacheValue('vehiclePoints', {}).get(vehicleID, default)
 
     def getPackedStats(self):
         return self.getCacheValue('packedStats', '')
+
+    def getChosenItems(self):
+        return self.getCacheValue('seasonStats', {}).get('chosenItems', {})
 
     def _preprocessValidData(self, data):
         return dict(data.get('battlePass', {}))

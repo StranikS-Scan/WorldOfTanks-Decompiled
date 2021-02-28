@@ -421,11 +421,8 @@ class ServerSettingsManager(object):
                                              BATTLE_PASS.TROPHY_NOTIFICATION_SHOWN: 1,
                                              BATTLE_PASS.INTRO_SHOWN: 16,
                                              BATTLE_PASS.BUY_BUTTON_HINT_IS_SHOWN: 17,
-                                             BATTLE_PASS.VOTED_WITH_BOUGHT_BP: 18,
-                                             BATTLE_PASS.BUY_ANIMATION_WAS_SHOWN: 19,
-                                             BATTLE_PASS.INTRO_VIDEO_SHOWN: 20}, offsets={BATTLE_PASS.CHOSEN_TROPHY_DEVICES: Offset(2, BATTLE_PASS.MASK_CHOSEN_DEVICES << 2),
-                                             BATTLE_PASS.CHOSEN_NEW_DEVICES: Offset(6, BATTLE_PASS.MASK_CHOSEN_DEVICES << 6),
-                                             BATTLE_PASS.SHOWN_VIDEOS_FLAGS: Offset(10, 64512),
+                                             BATTLE_PASS.INTRO_VIDEO_SHOWN: 20,
+                                             BATTLE_PASS.DAILY_QUESTS_INTRO_SHOWN: 27}, offsets={BATTLE_PASS.BUY_ANIMATION_WAS_SHOWN: Offset(10, 7168),
                                              BATTLE_PASS.FLAGS_VERSION: Offset(21, 132120576)}),
      SETTINGS_SECTIONS.BATTLE_COMM: Section(masks={BATTLE_COMM.ENABLE_BATTLE_COMMUNICATION: 0,
                                      BATTLE_COMM.SHOW_COM_IN_PLAYER_LIST: 1,
@@ -912,15 +909,11 @@ class ServerSettingsManager(object):
 
 
 def _updateBattlePassVersion(data):
-    version = 3
+    version = 4
     if data[BattlePassStorageKeys.FLAGS_VERSION] < version:
         data[BattlePassStorageKeys.FLAGS_VERSION] = version
-        data[BattlePassStorageKeys.SHOWN_VIDEOS_FLAGS] = 0
         data[BattlePassStorageKeys.INTRO_VIDEO_SHOWN] = False
-        data[BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN] = False
+        data[BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN] = 0
         data[BattlePassStorageKeys.BUY_BUTTON_HINT_IS_SHOWN] = False
-        if version != 3:
-            data[BattlePassStorageKeys.CHOSEN_TROPHY_DEVICES] = 0
-            data[BattlePassStorageKeys.CHOSEN_NEW_DEVICES] = 0
         return True
     return False

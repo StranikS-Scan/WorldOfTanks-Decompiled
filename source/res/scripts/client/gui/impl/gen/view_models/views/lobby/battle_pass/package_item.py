@@ -5,10 +5,10 @@ from frameworks.wulf import ViewModel
 class PackageItem(ViewModel):
     __slots__ = ()
     BATTLE_PASS_TYPE = 'battlePassType'
-    LIMITED_LEVELS_TYPE = 'limitedLevelsType'
     ANY_LEVELS_TYPE = 'anyLevelsType'
+    SHOP_OFFER_TYPE = 'shopOfferType'
 
-    def __init__(self, properties=7, commands=0):
+    def __init__(self, properties=6, commands=0):
         super(PackageItem, self).__init__(properties=properties, commands=commands)
 
     def getPackageID(self):
@@ -23,42 +23,35 @@ class PackageItem(ViewModel):
     def setPrice(self, value):
         self._setNumber(1, value)
 
-    def getLevels(self):
-        return self._getNumber(2)
-
-    def setLevels(self, value):
-        self._setNumber(2, value)
-
-    def getTimeToUnlock(self):
-        return self._getString(3)
-
-    def setTimeToUnlock(self, value):
-        self._setString(3, value)
-
     def getIsLocked(self):
-        return self._getBool(4)
+        return self._getBool(2)
 
     def setIsLocked(self, value):
-        self._setBool(4, value)
+        self._setBool(2, value)
 
     def getIsBought(self):
-        return self._getBool(5)
+        return self._getBool(3)
 
     def setIsBought(self, value):
-        self._setBool(5, value)
+        self._setBool(3, value)
 
     def getType(self):
-        return self._getString(6)
+        return self._getString(4)
 
     def setType(self, value):
-        self._setString(6, value)
+        self._setString(4, value)
+
+    def getChapter(self):
+        return self._getNumber(5)
+
+    def setChapter(self, value):
+        self._setNumber(5, value)
 
     def _initialize(self):
         super(PackageItem, self)._initialize()
         self._addNumberProperty('packageID', 0)
         self._addNumberProperty('price', 0)
-        self._addNumberProperty('levels', 0)
-        self._addStringProperty('timeToUnlock', '')
         self._addBoolProperty('isLocked', False)
         self._addBoolProperty('isBought', False)
         self._addStringProperty('type', '')
+        self._addNumberProperty('chapter', 0)

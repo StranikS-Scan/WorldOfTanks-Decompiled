@@ -152,13 +152,15 @@ class OffersDataProvider(IOffersDataProvider):
 
     @_ifFeatureDisabled(())
     @_ifNotSynced(())
-    def iAvailableOffers(self):
+    def iAvailableOffers(self, onlyVisible=True):
         for offer in self._ioffers():
             if offer.isOfferAvailable:
+                if onlyVisible and not offer.showInGUI:
+                    continue
                 yield offer
 
-    def getAvailableOffers(self):
-        return list(self.iAvailableOffers())
+    def getAvailableOffers(self, onlyVisible=True):
+        return list(self.iAvailableOffers(onlyVisible))
 
     def getAvailableOffersByToken(self, token):
         return list(self.__iAvailableOffersByToken(token))

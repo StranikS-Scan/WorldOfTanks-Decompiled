@@ -6,7 +6,6 @@ from gui.shop import showBuyGoldForBattlePass, showBuyGoldForBattlePassLevels
 from gui.shared.gui_items.processors.common import BuyBattlePass, BuyBattlePassLevels
 from gui.shared.utils import decorators
 from gui.shared.money import Currency
-from gui.battle_pass.battle_pass_helpers import isCurrentBattlePassStateBase
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController, ISoundEventChecker
 from skeletons.gui.shared import IItemsCache
@@ -18,17 +17,20 @@ class BattlePassBuyer(object):
 
     @classmethod
     @decorators.process('buyBattlePass')
-    def buyBP(cls, seasonID, onBuyCallback=None):
+    def buyBP(cls, seasonID, chapter=None, onBuyCallback=None):
         spendMoneyGold = 0
+        if chapter is None:
+            chapter = 0
         if not cls.__battlePassController.isBought():
             spendMoneyGold += cls.__itemsCache.items.shop.getBattlePassCost().get(Currency.GOLD, 0)
         result = False
         if cls.__itemsCache.items.stats.actualGold < spendMoneyGold:
             showBuyGoldForBattlePass(spendMoneyGold)
         else:
-            result = yield cls.__buyBattlePass(seasonID)
+            result = yield cls.__buyBattlePass(seasonID, chapter)
         if onBuyCallback:
             onBuyCallback(result)
+        return
 
     @classmethod
     @decorators.process('buyBattlePassLevels')
@@ -49,9 +51,10 @@ class BattlePassBuyer(object):
     @classmethod
     @async
     @process
-    def __buyBattlePass(cls, seasonID, callback):
-        result = yield BuyBattlePass(seasonID).request()
-        if cls.__battlePassController.getCurrentLevel() != 0 or not isCurrentBattlePassStateBase():
+    def __buyBattlePass(cls, seasonID, chapter, callback):
+        result = yield BuyBattlePass(seasonID, chapter).request()
+        startLevel, _ = cls.__battlePassController.getChapterLevelInterval(chapter)
+        if cls.__battlePassController.getCurrentLevel() != startLevel - 1:
             callback(result.success)
             return
         else:

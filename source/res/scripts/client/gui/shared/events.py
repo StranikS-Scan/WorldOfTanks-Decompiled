@@ -289,7 +289,6 @@ class LobbySimpleEvent(HasCtxEvent):
     BATTLE_RESULTS_POSTED = 'battleResultsPosted'
     BATTLE_RESULTS_SHOW_QUEST = 'battleResultsWindowShowQuest'
     CHANGE_SOUND_ENVIRONMENT = 'changeSoundEnvironment'
-    LOCK_OVERLAY_SCREEN = 'lockOverlayScreen'
     VEHICLE_PREVIEW_HIDDEN = 'vehiclePreviewHidden'
 
 
@@ -517,6 +516,7 @@ class OpenLinkEvent(SharedEvent):
     RECOVERY_PASSWORD = 'openRecoveryPasswordURL'
     PAYMENT = 'openPaymentURL'
     SECURITY_SETTINGS = 'openSecuritySettingsURL'
+    CLAN_RULES = 'openClanRulesURL'
     SUPPORT = 'openSupportURL'
     MIGRATION = 'openMigrationURL'
     FORT_DESC = 'fortDescription'

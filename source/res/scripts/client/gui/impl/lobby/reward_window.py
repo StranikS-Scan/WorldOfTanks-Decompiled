@@ -49,7 +49,8 @@ class BaseRewardWindowContent(ViewImpl):
      'customizations',
      'tokens',
      'goodies',
-     Currency.EVENT_COIN)
+     Currency.EVENT_COIN,
+     Currency.BPCOIN)
 
     def __init__(self, settings, ctx=None):
         super(BaseRewardWindowContent, self).__init__(settings)
@@ -204,7 +205,7 @@ class TwitchRewardWindowContent(QuestRewardWindowContent):
                     hasCommander = True
                     break
                 if tID.startswith(OFFER_TOKEN_PREFIX):
-                    for offer in self._offersProvider.getAvailableOffers():
+                    for offer in self._offersProvider.getAvailableOffers(onlyVisible=True):
                         if offer.token == tID:
                             offerID = offer.id
 

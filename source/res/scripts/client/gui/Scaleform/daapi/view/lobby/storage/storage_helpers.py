@@ -299,44 +299,49 @@ def getAvailableForSellCustomizationCount(item, vehicleCD=None):
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def getVehicleCDForStyle(item, itemsCache=None):
+    suitableVehicles = []
+    itemFilter = item.descriptor.filter
+    nationsFilter = []
+    if itemFilter is not None and itemFilter.include:
+        for node in itemFilter.include:
+            if node.nations:
+                nationsFilter += node.nations
+            if node.vehicles:
+                suitableVehicles += node.vehicles
+
+        if not suitableVehicles and nationsFilter:
+            nationName = nations.NAMES[nationsFilter[0]]
+            topVehicle = getTopVehicleByNation(nationName)
+            if topVehicle:
+                try:
+                    vehicleCD = makeVehicleTypeCompDescrByName(topVehicle)
+                    vehicle = itemsCache.items.getItemByCD(vehicleCD)
+                    if item.mayInstall(vehicle):
+                        suitableVehicles.append(vehicleCD)
+                except SoftException as e:
+                    _logger.warning(e)
+
+    if not suitableVehicles:
+        req = _CUSTOMIZATION_VEHICLE_CRITERIA | ~REQ_CRITERIA.SECRET
+        for vehCD, vehicle in itemsCache.items.getVehicles(req).iteritems():
+            if not vehicle.isOutfitLocked and item.mayInstall(vehicle):
+                suitableVehicles.append(vehCD)
+
+    if not suitableVehicles:
+        secretReq = _CUSTOMIZATION_VEHICLE_CRITERIA | REQ_CRITERIA.SECRET
+        for vehCD, vehicle in itemsCache.items.getVehicles(secretReq).iteritems():
+            if not vehicle.isOutfitLocked and item.mayInstall(vehicle):
+                suitableVehicles.append(vehCD)
+
+    return random.choice(suitableVehicles)
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def customizationPreview(itemCD, itemsCache=None, vehicleCD=None):
     item = itemsCache.items.getItemByCD(itemCD)
     if vehicleCD is None:
-        suitableVehicles = []
-        itemFilter = item.descriptor.filter
-        nationsFilter = []
-        if itemFilter is not None and itemFilter.include:
-            for node in itemFilter.include:
-                if node.nations:
-                    nationsFilter += node.nations
-                if node.vehicles:
-                    suitableVehicles += node.vehicles
-
-            if not suitableVehicles and nationsFilter:
-                nationName = nations.NAMES[nationsFilter[0]]
-                topVehicle = getTopVehicleByNation(nationName)
-                if topVehicle:
-                    try:
-                        vehicleCD = makeVehicleTypeCompDescrByName(topVehicle)
-                        vehicle = itemsCache.items.getItemByCD(vehicleCD)
-                        if item.mayInstall(vehicle):
-                            suitableVehicles.append(vehicleCD)
-                    except SoftException as e:
-                        _logger.warning(e)
-
-        if not suitableVehicles:
-            req = _CUSTOMIZATION_VEHICLE_CRITERIA | ~REQ_CRITERIA.SECRET
-            for vehCD, vehicle in itemsCache.items.getVehicles(req).iteritems():
-                if not vehicle.isOutfitLocked and item.mayInstall(vehicle):
-                    suitableVehicles.append(vehCD)
-
-        if not suitableVehicles:
-            secretReq = _CUSTOMIZATION_VEHICLE_CRITERIA | REQ_CRITERIA.SECRET
-            for vehCD, vehicle in itemsCache.items.getVehicles(secretReq).iteritems():
-                if not vehicle.isOutfitLocked and item.mayInstall(vehicle):
-                    suitableVehicles.append(vehCD)
-
-        vehicleCD = random.choice(suitableVehicles)
+        vehicleCD = getVehicleCDForStyle(item, itemsCache=itemsCache)
     showStylePreviewFunc = showStylePreview
     if item.isProgression:
         showStylePreviewFunc = showProgressionStylesStylePreview

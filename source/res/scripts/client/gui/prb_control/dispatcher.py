@@ -612,13 +612,15 @@ class _PreBattleDispatcher(ListenersCollection):
             self.__prevEntity = self.__entity
             self.__entity = NotSupportedEntity()
             self.__requestCtx.stopProcessing(result=True)
-            _logger.info("__unsetEntity() entity '%r' was destroyed", self.__prevEntity)
 
     def __setEntity(self, ctx):
         created = self.__factories.createEntity(ctx)
         if created is not None:
             if created.getEntityFlags() & FUNCTIONAL_FLAG.SET_GLOBAL_LISTENERS > 0:
                 created.addMutualListeners(self)
+            if self.__entity is not None and not isinstance(self.__entity, NotSupportedEntity):
+                _logger.info("__setEntity() new entity '%r' was created, previous entity '%r' was stopped", created, self.__entity)
+                self.__entity.fini()
             self.__entity = created
             if self.__prevEntity is not None and self.__prevEntity.isActive():
                 self.__prevEntity.fini()
@@ -627,7 +629,6 @@ class _PreBattleDispatcher(ListenersCollection):
             self.notifyPrbEntitySwitched()
             ctx.clearFlags()
             ctx.addFlags(flag | created.getFunctionalFlags())
-            _logger.info("__setEntity() new entity '%r' created", self.__entity)
         LOG_DEBUG('Entity have been updated', ctx.getFlagsToStrings())
         ctx.clear()
         currentCtx = self.__requestCtx

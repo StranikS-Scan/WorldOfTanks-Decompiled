@@ -12,7 +12,7 @@
     <backward>	15	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.061	</moving>
+    <moving>	0.062	</moving>
     <still>	0.124	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
     <firePenalty>	0.186	</firePenalty>
@@ -2033,8 +2033,8 @@
       <maxHealth>	300	</maxHealth>
       <rotationSpeed>	28	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	120	</maxHealth>
-        <maxRegenHealth>	74	</maxRegenHealth>
+        <maxHealth>	150	</maxHealth>
+        <maxRegenHealth>	75	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	380	</circularVisionRadius>
@@ -2044,7 +2044,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_120mm_Gun_LV>	shared	  <maxAmmo>	53	</maxAmmo>
+        <_120mm_Gun_LV>	shared	  <maxAmmo>	60	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 10 0.386667 10 0.444444 0.5 0.555556 0.5 0.613333 10 1 10	</maxPitch>
@@ -2065,14 +2065,14 @@
             <gun>	50	</gun>
           </armor>
           <shotDispersionRadius>	0.44	</shotDispersionRadius>
-          <reloadTime>	16	</reloadTime>
+          <reloadTime>	16.7	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	6.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	3.5	</aimingTime>
-          <invisibilityFactorAtShot>	0.2	</invisibilityFactorAtShot>
+          <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB111_Charlemagne/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/british/GB111_Charlemagne/crash/lod0/Gun_01.model	</destroyed>

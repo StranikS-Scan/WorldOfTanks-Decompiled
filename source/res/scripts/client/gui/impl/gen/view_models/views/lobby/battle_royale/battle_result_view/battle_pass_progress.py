@@ -5,6 +5,7 @@ from frameworks.wulf import ViewModel
 class BattlePassProgress(ViewModel):
     __slots__ = ('onSubmitClick',)
     BP_STATE_NORMAL = 'normal'
+    BP_STATE_BOUGHT = 'bought'
     BP_STATE_DISABLED = 'disabled'
     PROGRESSION_IN_PROGRESS = 'progressionInProgress'
     PROGRESSION_COMPLETED = 'progressionCompleted'

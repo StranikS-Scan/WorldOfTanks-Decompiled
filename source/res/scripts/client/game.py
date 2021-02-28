@@ -52,7 +52,6 @@ class ServiceLocator(object):
 
 g_replayCtrl = None
 g_onBeforeSendEvent = None
-g_scenario = None
 
 def autoFlushPythonLog():
     BigWorld.flushPythonLog()
@@ -147,6 +146,7 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
 
 def start():
     LOG_DEBUG('start')
+    checkBotNet()
     if OfflineMode.onStartup():
         LOG_DEBUG('OfflineMode')
         return
@@ -189,17 +189,6 @@ def start():
                     LOG_DEBUG('Game start FAILED with:')
                     LOG_CURRENT_EXCEPTION()
 
-            elif sys.argv[1] == 'spinTest':
-                try:
-                    from Cat.Tasks.TestArena2 import TestArena2Object
-                    LOG_DEBUG(sys.argv)
-                    targetDirectory = sys.argv[4] if len(sys.argv) > 4 else 'SpinTestResult'
-                    LOG_DEBUG('starting offline test: %s %s %s', sys.argv[2], sys.argv[3], targetDirectory)
-                    TestArena2Object.startOffline(sys.argv[2], mapName=sys.argv[3], targetDirectory=targetDirectory)
-                except Exception:
-                    LOG_DEBUG('Game start FAILED with:')
-                    LOG_CURRENT_EXCEPTION()
-
             elif sys.argv[1] == 'hangarOverride':
                 try:
                     LOG_DEBUG(sys.argv)
@@ -213,18 +202,6 @@ def start():
                     LOG_CURRENT_EXCEPTION()
 
                 ServiceLocator.gameplay.start()
-            elif sys.argv[1] == 'replayTimeout':
-                try:
-                    g_replayCtrl.replayTimeout = float(sys.argv[2])
-                except Exception:
-                    LOG_DEBUG('Game start FAILED with:')
-                    LOG_CURRENT_EXCEPTION()
-
-                ServiceLocator.gameplay.start()
-            elif sys.argv[1] == 'botExecute':
-                ServiceLocator.gameplay.start()
-                LOG_DEBUG('BOTNET: Start clientPlayer')
-                initBotNet().setRpycConection(sys.argv[2])
             else:
                 ServiceLocator.gameplay.start()
         else:
@@ -256,7 +233,6 @@ def abort():
 def fini():
     global g_replayCtrl
     global g_onBeforeSendEvent
-    global g_scenario
     LOG_DEBUG('fini')
     if OfflineMode.enabled():
         dependency.clear()
@@ -314,8 +290,6 @@ def fini():
             voipRespHandler.destroy()
         SoundGroups.g_instance.destroy()
         Settings.g_instance.save()
-        if g_scenario is not None:
-            g_scenario.stopAllBots()
         g_onBeforeSendEvent = None
         WebBrowser.destroyExternalCache()
         if constants.HAS_DEV_RESOURCES:
@@ -563,14 +537,16 @@ def onMemoryCritical():
     g_critMemHandler()
 
 
-def initBotNet():
-    global g_scenario
-    if g_scenario is None:
-        sys.path.append('test_libs')
-        from path_manager import g_pathManager
-        g_pathManager.setPathes()
-        from bigworld_reactor import installBWReactor
-        installBWReactor()
-        from scenario_player import g_scenarioPlayer
-        g_scenario = g_scenarioPlayer
-    return g_scenario
+def checkBotNet():
+    botArg = 'botExecute'
+    if botArg not in sys.argv:
+        return
+    LOG_DEBUG('Init Bot-net ClientBot')
+    sys.path.append('test_libs')
+    from path_manager import g_pathManager
+    g_pathManager.setPathes()
+    from bigworld_reactor import installBWReactor
+    installBWReactor()
+    from scenario_player import g_scenarioPlayer
+    rpycPort = sys.argv[sys.argv.index(botArg) + 1]
+    g_scenarioPlayer.setRpycConection(rpycPort)

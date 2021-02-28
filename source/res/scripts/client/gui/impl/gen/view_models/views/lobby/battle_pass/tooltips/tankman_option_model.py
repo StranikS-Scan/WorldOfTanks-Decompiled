@@ -6,7 +6,7 @@ from frameworks.wulf import ViewModel
 class TankmanOptionModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=3, commands=0):
+    def __init__(self, properties=4, commands=0):
         super(TankmanOptionModel, self).__init__(properties=properties, commands=commands)
 
     def getTankman(self):
@@ -27,8 +27,15 @@ class TankmanOptionModel(ViewModel):
     def setSkills(self, value):
         self._setArray(2, value)
 
+    def getTooltipId(self):
+        return self._getString(3)
+
+    def setTooltipId(self, value):
+        self._setString(3, value)
+
     def _initialize(self):
         super(TankmanOptionModel, self)._initialize()
         self._addStringProperty('tankman', '')
         self._addStringProperty('icon', '')
         self._addArrayProperty('skills', Array())
+        self._addStringProperty('tooltipId', '')

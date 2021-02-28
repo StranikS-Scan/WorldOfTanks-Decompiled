@@ -376,7 +376,7 @@ class VehicleAnchorsUpdater(object):
         if appearance is not None:
             appearance.loadState.unsubscribe(self.__onVehicleLoadFinished, self.__onVehicleLoadStarted)
         else:
-            _logger.error('Missing vehicle appearance.')
+            _logger.info('Missing vehicle appearance.')
         return
 
     def __onVehicleChangeStarted(self):

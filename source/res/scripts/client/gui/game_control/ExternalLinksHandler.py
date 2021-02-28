@@ -14,6 +14,7 @@ _LISTENERS = {OpenLinkEvent.SPECIFIED: '_handleSpecifiedURL',
  OpenLinkEvent.RECOVERY_PASSWORD: '_handleOpenRecoveryPasswordURL',
  OpenLinkEvent.PAYMENT: '_handleOpenPaymentURL',
  OpenLinkEvent.SECURITY_SETTINGS: '_handleSecuritySettingsURL',
+ OpenLinkEvent.CLAN_RULES: '_handleClanRulesURL',
  OpenLinkEvent.SUPPORT: '_handleSupportURL',
  OpenLinkEvent.MIGRATION: '_handleMigrationURL',
  OpenLinkEvent.FORT_DESC: '_handleFortDescription',
@@ -106,6 +107,9 @@ class ExternalLinksHandler(IExternalLinksController):
 
     def _handleSecuritySettingsURL(self, _):
         self.__openParsedUrl('securitySettingsURL')
+
+    def _handleClanRulesURL(self, _):
+        self.__openParsedUrl('clanRulesURL')
 
     def _handleSupportURL(self, _):
         self.__openParsedUrl('supportURL')

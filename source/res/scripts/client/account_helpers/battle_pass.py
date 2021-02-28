@@ -3,8 +3,13 @@
 import logging
 from functools import partial
 import AccountCommands
+import BigWorld
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
 _logger = logging.getLogger()
+
+def selectProgressionStyle(styleID, callback):
+    BigWorld.player()._doCmdInt(AccountCommands.CMD_ADD_BATTLE_PASS_PROGRESSION_STYLE, styleID, callback)
+
 
 class BattlePassManager(object):
     __DATA_KEY = 'battlePass'
@@ -37,19 +42,6 @@ class BattlePassManager(object):
             return
         else:
             self.__syncData.waitForSync(partial(self.__onGetCacheResponse, callback))
-            return
-
-    def chooseBattlePassReward(self, rewardID, seasonID, callback):
-        if self.__ignore:
-            if callback is not None:
-                callback(AccountCommands.RES_NON_PLAYER, {})
-            return
-        else:
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(requestID, resultID, errorStr)
-            else:
-                proxy = None
-            self.__commandsProxy.perform(AccountCommands.CMD_BATTLE_PASS_VOTE, seasonID, rewardID, proxy)
             return
 
     def __onGetCacheResponse(self, callback, resultID):

@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/contexts.py
 from collections import namedtuple
+import typing
 import constants
 import gui
 import nations
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
-from battle_pass_common import GIFT_TO_MAIN_TOKEN
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE
@@ -15,6 +15,7 @@ from gui.Scaleform.daapi.view.lobby.tank_setup.ammunition_setup_vehicle import g
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift
 from gui.server_events import recruit_helper
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -26,13 +27,15 @@ from gui.shared.tooltips import TOOLTIP_COMPONENT
 from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID
 from helpers import dependency
 from helpers.i18n import makeString
-from shared_utils import findFirst
+from shared_utils import findFirst, first
 from skeletons.gui.game_control import IRankedBattlesController, IBattlePassController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+if typing.TYPE_CHECKING:
+    from account_helpers.offers.events_data import OfferGift, OfferEventData
 
 def _getCmpVehicle():
     return cmp_helpers.getCmpConfiguratorMainView().getCurrentVehicle()
@@ -1227,23 +1230,33 @@ class DogTagInfoContext(ToolTipContext):
         super(DogTagInfoContext, self).__init__(TOOLTIP_COMPONENT.FINAL_STATISTIC, fieldsToExclude)
 
 
-class DeviceGiftTokenContext(ToolTipContext):
+class BattlePassGiftTokenContext(ToolTipContext):
+    __slots__ = ('__hasOffer',)
     __offersProvider = dependency.descriptor(IOffersDataProvider)
     __battlePassController = dependency.descriptor(IBattlePassController)
 
     def __init__(self):
-        super(DeviceGiftTokenContext, self).__init__(TOOLTIP_COMPONENT.BATTLE_PASS)
+        super(BattlePassGiftTokenContext, self).__init__(TOOLTIP_COMPONENT.BATTLE_PASS)
+        self.__hasOffer = True
 
     def buildItem(self, tokenID, **kwargs):
         result = []
-        offer = self.__offersProvider.getOfferByToken(GIFT_TO_MAIN_TOKEN.get(tokenID))
+        shortName = tokenID.split(':')[2]
+        offerToken = getOfferTokenByGift(tokenID)
+        offer = self.__offersProvider.getOfferByToken(offerToken)
         if offer is None:
+            self.__hasOffer = False
             return result
         else:
-            for gift in offer.getAllGifts():
-                result.append(gift.title)
+            if shortName in ('brochure_gift', 'guide_gift'):
+                gift = first(offer.getAllGifts())
+                if gift is not None:
+                    result.append(gift.bonus.displayedItem.getXP())
+            else:
+                for gift in offer.getAllGifts():
+                    result.append(gift.title)
 
             return result
 
     def getParams(self):
-        return {'isChooseDeviceEnabled': self.__battlePassController.isChooseDeviceEnabled()}
+        return {'isOfferEnabled': self.__battlePassController.isOfferEnabled() and self.__hasOffer}

@@ -127,6 +127,10 @@ class IStatsRequester(IRequester):
         raise NotImplementedError
 
     @property
+    def bpcoin(self):
+        raise NotImplementedError
+
+    @property
     def money(self):
         raise NotImplementedError
 
@@ -144,6 +148,10 @@ class IStatsRequester(IRequester):
 
     @property
     def actualEventCoin(self):
+        raise NotImplementedError
+
+    @property
+    def actualBpcoin(self):
         raise NotImplementedError
 
     @property

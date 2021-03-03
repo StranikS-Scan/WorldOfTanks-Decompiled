@@ -64,6 +64,8 @@ _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.EPIC_BATTLE_PAGE: 'frontline',
  VIEW_ALIAS.RANKED_BATTLE_PAGE: 'ranked',
  VIEW_ALIAS.ADVENT_CALENDAR: 'adventCalendar',
+ VIEW_ALIAS.BLACK_MARKET_ITEM_OPEN_SCREEN: 'blackMarketItemOpenScreen',
+ VIEW_ALIAS.BLACK_MARKET_VEHICLE_LIST_SCREEN: 'blackMarketVehicleListScreen',
  PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS: 'personalAwards'}
 _TABS_DATA = ({'id': VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE,
   'label': VEHICLE_PREVIEW.INFOPANEL_TAB_BROWSE_NAME,
@@ -113,12 +115,13 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
     def __init__(self, ctx=None):
         self._backAlias = ctx.get('previewAlias', VIEW_ALIAS.LOBBY_HANGAR)
         self._itemsPack = ctx.get('itemsPack')
-        if self._backAlias == VIEW_ALIAS.LOBBY_STORE or self._itemsPack is not None:
-            self._COMMON_SOUND_SPACE = SHOP_PREVIEW_SOUND_SPACE
-        elif self._backAlias in (VIEW_ALIAS.LOBBY_TECHTREE, VIEW_ALIAS.LOBBY_RESEARCH):
-            self._COMMON_SOUND_SPACE = RESEARCH_PREVIEW_SOUND_SPACE
-        elif self._backAlias == VIEW_ALIAS.RANKED_BATTLE_PAGE:
-            self._COMMON_SOUND_SPACE = VEHICLE_PREVIEW_SOUND_SPACE
+        if self._COMMON_SOUND_SPACE is None:
+            if self._backAlias == VIEW_ALIAS.LOBBY_STORE or self._itemsPack is not None:
+                self._COMMON_SOUND_SPACE = SHOP_PREVIEW_SOUND_SPACE
+            elif self._backAlias in (VIEW_ALIAS.LOBBY_TECHTREE, VIEW_ALIAS.LOBBY_RESEARCH):
+                self._COMMON_SOUND_SPACE = RESEARCH_PREVIEW_SOUND_SPACE
+            elif self._backAlias == VIEW_ALIAS.RANKED_BATTLE_PAGE:
+                self._COMMON_SOUND_SPACE = VEHICLE_PREVIEW_SOUND_SPACE
         super(VehiclePreview, self).__init__(ctx)
         self.__currentOffer = None
         self._vehicleCD = ctx['itemCD']

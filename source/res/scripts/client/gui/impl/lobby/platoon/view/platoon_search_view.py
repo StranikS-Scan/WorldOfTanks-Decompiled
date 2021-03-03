@@ -18,7 +18,7 @@ from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltip
 from gui.impl.lobby.platoon.platoon_helpers import formatSearchEstimatedTime, getQueueInfoByQueueType, Position
 from PlayerEvents import g_playerEvents
 from UnitBase import UNDEFINED_ESTIMATED_TIME
-from frameworks.wulf.gui_constants import ViewStatus
+from frameworks.wulf.gui_constants import ViewStatus, WindowLayer
 from gui.impl.lobby.platoon.platoon_helpers import PreloadableWindow
 from constants import QUEUE_TYPE
 _logger = logging.getLogger(__name__)
@@ -126,7 +126,7 @@ class SearchWindow(PreloadableWindow):
     previousPosition = None
 
     def __init__(self, initialPosition=None):
-        super(SearchWindow, self).__init__(wndFlags=WindowFlags.POP_OVER, content=SearchView())
+        super(SearchWindow, self).__init__(wndFlags=WindowFlags.POP_OVER, content=SearchView(), layer=WindowLayer.WINDOW)
         if initialPosition:
             SearchWindow.previousPosition = initialPosition
         if SearchWindow.previousPosition:

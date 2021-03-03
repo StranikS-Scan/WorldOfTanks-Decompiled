@@ -197,11 +197,11 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
 
     def showVehicleExchange(self):
         self._tradeInController.setActiveTradeOffVehicleCD(self.vehCD)
-        showShop(getTradeInVehiclesUrl())
+        showShop(getTradeInVehiclesUrl(), isClientCloseControl=True)
 
     def showVehiclePersonalExchange(self):
         self._personalTradeInController.setActiveTradeInSaleVehicleCD(self.vehCD)
-        showShop(getPersonalTradeInVehiclesUrl())
+        showShop(getPersonalTradeInVehiclesUrl(), isClientCloseControl=True)
 
     def checkFavoriteVehicle(self):
         self.__favoriteVehicle(True)

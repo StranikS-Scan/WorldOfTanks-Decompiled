@@ -267,6 +267,14 @@ class NationalBlueprintOfferBonus(OfferBonusMixin, NationalBlueprintBonus):
         return backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.converter.nationalBlueprintReceived(), nationName=nationName)
 
 
+class IntelligenceBlueprintOfferBonus(OfferBonusMixin, IntelligenceBlueprintBonus):
+    CAN_BE_SHOWN = False
+
+
+class VehicleBlueprintOfferBonus(OfferBonusMixin, VehicleBlueprintBonus):
+    CAN_BE_SHOWN = False
+
+
 class ItemsOfferBonusFactory(ItemsBonusFactory):
     CREW_BOOKS_BONUS_CLASS = CrewBooksOfferBonus
     ITEMS_BONUS_CLASS = ItemsOfferBonus
@@ -281,10 +289,10 @@ def blueprintsOfferBonusFactory(name, value, isCompensation=False, ctx=None):
     for fragmentCD, fragmentCount in sorted(value.iteritems(), key=itemgetter(0)):
         fragmentType = getFragmentType(fragmentCD)
         if fragmentType == BlueprintTypes.VEHICLE:
-            blueprintBonuses.append(VehicleBlueprintBonus(name, (fragmentCD, fragmentCount), isCompensation, ctx))
+            blueprintBonuses.append(VehicleBlueprintOfferBonus(name, (fragmentCD, fragmentCount), isCompensation, ctx))
         if fragmentType == BlueprintTypes.INTELLIGENCE_DATA:
             vehicleCD = getVehicleCDForIntelligence(fragmentCD)
-            blueprintBonuses.append(IntelligenceBlueprintBonus(name, (vehicleCD, fragmentCount), isCompensation, ctx))
+            blueprintBonuses.append(IntelligenceBlueprintOfferBonus(name, (vehicleCD, fragmentCount), isCompensation, ctx))
         if fragmentType == BlueprintTypes.NATIONAL:
             vehicleCD = getVehicleCDForNational(fragmentCD)
             blueprintBonuses.append(NationalBlueprintOfferBonus(name, (vehicleCD, fragmentCount), isCompensation, ctx))

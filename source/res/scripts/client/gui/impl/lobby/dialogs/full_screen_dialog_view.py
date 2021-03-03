@@ -11,6 +11,7 @@ from gui.impl.pub import ViewImpl
 from gui.impl.pub.dialog_window import DialogResult, DialogButtons, DialogFlags
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.shared.money import Currency
+from frameworks.wulf.gui_constants import WindowLayer
 from helpers import dependency
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
@@ -118,8 +119,8 @@ class FullScreenDialogWindowWrapper(LobbyWindow):
     __slots__ = ('__wrappedView', '__blur')
     __gui = dependency.descriptor(IGuiLoader)
 
-    def __init__(self, wrappedView, parent=None):
-        super(FullScreenDialogWindowWrapper, self).__init__(DialogFlags.TOP_FULLSCREEN_WINDOW, None, content=wrappedView, parent=parent)
+    def __init__(self, wrappedView, parent=None, layer=WindowLayer.UNDEFINED):
+        super(FullScreenDialogWindowWrapper, self).__init__(DialogFlags.TOP_FULLSCREEN_WINDOW, None, content=wrappedView, parent=parent, layer=layer)
         self.__wrappedView = wrappedView
         self.__blur = None
         return
@@ -132,9 +133,9 @@ class FullScreenDialogWindowWrapper(LobbyWindow):
         return self.__wrappedView.wait()
 
     @classmethod
-    def createIfNotExist(cls, layoutID, wrappedViewClass, parent=None, *args, **kwargs):
+    def createIfNotExist(cls, layoutID, wrappedViewClass, parent=None, layer=WindowLayer.UNDEFINED, *args, **kwargs):
         currentView = cls.__gui.windowsManager.getViewByLayoutID(layoutID)
-        return FullScreenDialogWindowWrapper(wrappedViewClass(*args, **kwargs), parent) if currentView is None else None
+        return FullScreenDialogWindowWrapper(wrappedViewClass(*args, **kwargs), parent, layer=layer) if currentView is None else None
 
     def _finalize(self):
         self.__blur.fini()

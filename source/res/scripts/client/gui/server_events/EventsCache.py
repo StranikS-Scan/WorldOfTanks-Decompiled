@@ -541,6 +541,19 @@ class EventsCache(IEventsCache):
 
         return result
 
+    def getLobbyHeaderTabCounter(self):
+        counterValue = None
+        alias = None
+
+        def containsLobbyHeaderTabCounter(a):
+            return any((step.get('name') == 'LobbyHeaderTabCounterModification' for step in a.getData().get('steps', [])))
+
+        action = first(self.getActions(containsLobbyHeaderTabCounter).values())
+        if action is not None:
+            counterValue = first((m.getCounterValue() for m in action.getModifiers()))
+            alias = first((m.getAlias() for m in action.getModifiers()))
+        return (alias, counterValue)
+
     def _getQuests(self, filterFunc=None, includePersonalMissions=False):
         result = {}
         groups = {}

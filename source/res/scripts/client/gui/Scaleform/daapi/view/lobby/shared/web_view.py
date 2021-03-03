@@ -129,7 +129,8 @@ class WebViewTransparent(WebView):
 
     def __init__(self, ctx=None):
         super(WebViewTransparent, self).__init__(ctx)
-        self._browserParams = (ctx or {}).get('browserParams', makeBrowserParams(bgAlpha=0.67))
+        self._browserParams = makeBrowserParams(bgAlpha=0.67)
+        self._browserParams.update((ctx or {}).get('browserParams', {}))
         self.__blur = None
         return
 

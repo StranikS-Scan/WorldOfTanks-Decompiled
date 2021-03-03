@@ -19,7 +19,7 @@ from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsW
 from gui.Scaleform.daapi.view.dialogs.rent_confirm_dialog import RentConfirmDialogMeta
 from gui.Scaleform.daapi.view.lobby.clans.clan_helpers import getClanQuestURL
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL
-from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL, getBuyCollectibleVehiclesUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL, getBuyCollectibleVehiclesUrl, getClientControlledCloseCtx
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.framework.entities.sf_window import SFWindow
@@ -35,6 +35,8 @@ from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.game_control.links import URLMacros
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.lobby.bm2021.dialogs.black_market_exchange_currency import BlackMarketExchangeCurrency
+from gui.impl.lobby.bm2021.sound import BLACK_MARKET_ITEM_SOUND_SPACE
 from gui.impl.lobby.common.congrats.common_congrats_view import CongratsWindow
 from gui.impl.lobby.demount_kit.optional_device_dialogs import BuyAndInstallOpDevDialog, BuyAndStorageOpDevDialog, DemountOpDevSinglePriceDialog, DestroyOpDevDialog, InstallOpDevDialog
 from gui.impl.lobby.demount_kit.selector_dialog import DemountOpDevDialog
@@ -54,6 +56,7 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import getUserName
 from gui.shared.gui_items.processors.goodies import BoosterActivator
+from gui.shared.gui_items.loot_box import BLACK_MARKET_ITEM_TYPE
 from gui.shared.money import Currency
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.functions import getViewName, getUniqueViewName
@@ -69,7 +72,7 @@ from items import vehicles as vehicles_core, parseIntCompactDescr, ITEM_TYPES
 from nations import NAMES
 from shared_utils import first
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IHeroTankController, IReferralProgramController, IEpicBattleMetaGameController, IClanNotificationController, IEventProgressionController, IBrowserController
+from skeletons.gui.game_control import IHeroTankController, IReferralProgramController, IEpicBattleMetaGameController, IClanNotificationController, IEventProgressionController, IBrowserController, IEventItemsController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -394,7 +397,7 @@ def openManualPage(chapterIndex):
 
 
 @adisp.process
-def showShop(url='', path='', params=None):
+def showShop(url='', path='', params=None, isClientCloseControl=False):
     parse = URLMacros().parse
     if path:
         path = yield parse(path, params)
@@ -418,7 +421,10 @@ def showShop(url='', path='', params=None):
             browser = browserWindow.getBrowser()
             browser.navigate(url)
             return
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_STORE), ctx={'url': url}), scope=EVENT_BUS_SCOPE.LOBBY)
+    ctx = {'url': url}
+    if isClientCloseControl:
+        ctx.update(getClientControlledCloseCtx())
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_STORE), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
     return
 
 
@@ -449,12 +455,13 @@ def showMarathonVehiclePreview(vehTypeCompDescr, itemsPack=None, title='', marat
      'marathonPrefix': marathonPrefix}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showConfigurableVehiclePreview(vehTypeCompDescr, previewAlias, previewBackCb, hiddenBlocks, itemPack):
+def showConfigurableVehiclePreview(vehTypeCompDescr, previewAlias='', previewBackCb=None, hiddenBlocks=(), itemPack=None, customHangarAlias=''):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW), ctx={'itemCD': vehTypeCompDescr,
      'previewAlias': previewAlias,
      'previewBackCb': previewBackCb,
      'hiddenBlocks': hiddenBlocks,
-     'itemsPack': itemPack}), scope=EVENT_BUS_SCOPE.LOBBY)
+     'itemsPack': itemPack,
+     'customHangarAlias': customHangarAlias}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showEventProgressionVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previewBackCb=None):
@@ -740,14 +747,17 @@ def showTankPremiumAboutPage():
 
 
 @adisp.process
-def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=None, callbackOnLoad=None, webHandlers=None, forcedSkipEscape=False):
+def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=None, callbackOnLoad=None, webHandlers=None, forcedSkipEscape=False, browserParams=None):
     if url:
         url = yield URLMacros().parse(url, params=params)
-        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias), ctx={'url': url,
+        ctx = {'url': url,
          'allowRightClick': False,
          'callbackOnLoad': callbackOnLoad,
          'webHandlers': webHandlers,
-         'forcedSkipEscape': forcedSkipEscape}), EVENT_BUS_SCOPE.LOBBY)
+         'forcedSkipEscape': forcedSkipEscape}
+        if browserParams:
+            ctx.update({'browserParams': browserParams})
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias), ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showSeniorityRewardWindow():
@@ -783,6 +793,33 @@ def showProgressiveRewardWindow():
             window = ProgressiveRewardWindow(contentResId)
             window.load()
         return
+
+
+@dependency.replace_none_kwargs(eventItemsCtrl=IEventItemsController)
+def showBlackMarketOpenItemWindow(soundSpace=BLACK_MARKET_ITEM_SOUND_SPACE, isRestored=False, eventItemsCtrl=None):
+    from gui.impl.lobby.bm2021.black_market_open_item_screen import BlackMarketOpenItemScreenWindow
+    contentResId = R.views.lobby.bm2021.BlackMarketOpenItemScreen()
+    item = eventItemsCtrl.getOwnedItemsByType(BLACK_MARKET_ITEM_TYPE)
+    if not BlackMarketOpenItemScreenWindow.getInstances() and item is not None:
+        window = BlackMarketOpenItemScreenWindow(item, soundSpace, contentResId, isRestored=isRestored)
+        window.load()
+    return
+
+
+def showBlackMarketAwardWindow(vehCD):
+    from gui.impl.lobby.bm2021.black_market_award_screen import BlackMarketAwardScreenWindow
+    contentResId = R.views.lobby.bm2021.BlackMarketAwardScreen()
+    if not BlackMarketAwardScreenWindow.getInstances():
+        window = BlackMarketAwardScreenWindow(contentResId, vehCD)
+        window.load()
+
+
+def showBlackMarketVehicleListWindow(restoreCallback=None, parent=None):
+    from gui.impl.lobby.bm2021.black_market_vehicle_list import BlackMarketVehicleListWindow
+    contentResId = R.views.lobby.bm2021.BlackMarketVehicleList()
+    if not BlackMarketVehicleListWindow.getInstances():
+        window = BlackMarketVehicleListWindow(contentResId, restoreCallback, parent)
+        window.load()
 
 
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
@@ -835,20 +872,21 @@ def isViewLoaded(layoutID):
         return view is not None
 
 
-def showEventProgressionStylePreview(vehCD, style, styleDescr, backCallback, backBtnDescrLabel=''):
-    showStylePreview(vehCD, style, styleDescr, backCallback, backBtnDescrLabel, VIEW_ALIAS.EVENT_PROGRESSION_STYLE_PREVIEW)
+def showEventProgressionStylePreview(vehCD, style, styleDescr, backCallback, backBtnDescrLabel='', customHangarAlias=''):
+    showStylePreview(vehCD, style, styleDescr, backCallback, backBtnDescrLabel, VIEW_ALIAS.EVENT_PROGRESSION_STYLE_PREVIEW, customHangarAlias)
 
 
 def showProgressionStylesStylePreview(vehCD, style, styleDescr, backCallback, backBtnDescrLabel=''):
     showStylePreview(vehCD, style, styleDescr, backCallback, backBtnDescrLabel, VIEW_ALIAS.PROGRESSION_STYLES_STYLE_PREVIEW)
 
 
-def showStylePreview(vehCD, style, styleDescr, backCallback, backBtnDescrLabel='', alias=VIEW_ALIAS.STYLE_PREVIEW):
+def showStylePreview(vehCD, style, styleDescr, backCallback, backBtnDescrLabel='', alias=VIEW_ALIAS.STYLE_PREVIEW, customHangarAlias=''):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias), ctx={'itemCD': vehCD,
      'style': style,
      'styleDescr': styleDescr,
      'backCallback': backCallback,
-     'backBtnDescrLabel': backBtnDescrLabel}), scope=EVENT_BUS_SCOPE.LOBBY)
+     'backBtnDescrLabel': backBtnDescrLabel,
+     'customHangarAlias': customHangarAlias}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showTechTreeIntro(parent=None, blueprints=None):
@@ -900,6 +938,13 @@ def showPreformattedDialog(preset, title, message, buttons, focusedButton, btnDo
     builder = FormattedSimpleDialogBuilder()
     builder.setMessagesAndButtons(preset, title, message, buttons, focusedButton, btnDownSounds)
     result = yield await(dialogs.show(builder.build()))
+    raise AsyncReturn(result)
+
+
+@async
+def showCurrencyExchangeDialog(price, titleResId=R.strings.bm2021.dialog.exchangeGold.title(), productName='', productsAmount=0, parent=None):
+    from gui.impl.dialogs.dialogs import showSingleDialogWithResultData
+    result = yield await(showSingleDialogWithResultData(BlackMarketExchangeCurrency, R.views.lobby.bm2021.dialogs.BlackMarketExchangeCurrency(), price=price, titleResId=titleResId, productName=productName, productsAmount=productsAmount, parent=parent))
     raise AsyncReturn(result)
 
 

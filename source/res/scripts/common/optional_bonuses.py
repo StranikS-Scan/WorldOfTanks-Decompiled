@@ -53,12 +53,16 @@ def __mergeItems(total, key, value, isLeaf=False, count=1, *args):
         items[itemCompDescr] = items.get(itemCompDescr, 0) + count * itemCount
 
 
+def __mergeMeta(total, key, value, isLeaf=False, count=1, *args):
+    total[key] = value
+
+
 def __mergeList(total, key, value, count):
     items = total.setdefault(key, [])
     items.extend((value if isinstance(value, list) else [value]) * count)
 
 
-def __mergeVehicles(total, key, value, isLeaf, count, *args):
+def __mergeVehicles(total, key, value, isLeaf, count=1, *args):
     __mergeList(total, key, value, count)
 
 
@@ -207,8 +211,8 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'rankedBonusBattles': __mergeValue,
  'dogTagComponents': __mergeDogTag,
  'battlePassPoints': __mergeBattlePassPoints,
- 'meta': lambda *args, **kwargs: None}
-ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._inventory.getVehicleInvID(key) != 0,
+ 'meta': __mergeMeta}
+ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._inventory.getVehicleInvID(key) != 0 or account._recycleBin.canRestoreVehicle(key, time.time()),
  'customizations': lambda account, key: account._customizations20.getItems((key,), 0)[key] > 0,
  'tokens': lambda account, key: account._quests.hasToken(key)}
 
@@ -456,13 +460,13 @@ class NodeVisitor(object):
         self._mergersArgs = args
 
     def onOneOf(self, storage, values):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def onAllOf(self, storage, values):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def onGroup(self, storage, values):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def onMergeValue(self, storage, name, value, isLeaf):
         self._mergers[name](storage, name, value, isLeaf, *self._mergersArgs)
@@ -520,7 +524,7 @@ class ProbabilityVisitor(NodeVisitor):
     def __init__(self, nodeAcceptor, *args):
         super(ProbabilityVisitor, self).__init__(BONUS_MERGERS, args)
         self.__bonusTrack = []
-        self.__nodeAcceptor = nodeAcceptor
+        self._nodeAcceptor = nodeAcceptor
 
     def getBonusTrack(self):
         return _packTrack(self.__bonusTrack)
@@ -528,7 +532,7 @@ class ProbabilityVisitor(NodeVisitor):
     def onOneOf(self, storage, values):
         rand = random.random()
         limitIDs, bonusNodes = values
-        acceptor = self.__nodeAcceptor
+        acceptor = self._nodeAcceptor
         shouldVisitNodes = acceptor.getNodesForVisit(limitIDs)
         probablitiesStage = acceptor.getCurrentProbabilityStage()
         useBonusProbability = acceptor.getUseBonusProbability()
@@ -572,7 +576,7 @@ class ProbabilityVisitor(NodeVisitor):
         self._walkSubsection(storage, selectedValue)
 
     def onAllOf(self, storage, values):
-        acceptor = self.__nodeAcceptor
+        acceptor = self._nodeAcceptor
         probabilityStage = acceptor.getCurrentProbabilityStage()
         useBonusProbability = acceptor.getUseBonusProbability()
         for probabilities, bonusProbability, nodeLimitIDs, bonusValue in values:
@@ -580,7 +584,7 @@ class ProbabilityVisitor(NodeVisitor):
             shouldVisitNodes = acceptor.getNodesForVisit(nodeLimitIDs)
             if shouldVisitNodes or probability > random.random() and acceptor.isAcceptable(bonusValue, False):
                 self.__trackChoice(True)
-                self.__nodeAcceptor.accept(bonusValue)
+                self._nodeAcceptor.accept(bonusValue)
                 self._walkSubsection(storage, bonusValue)
             self.__trackChoice(False)
 
@@ -589,7 +593,7 @@ class ProbabilityVisitor(NodeVisitor):
             self._walkSubsection(storage, bonusValue)
 
     def beforeWalk(self, storage, bonusSection):
-        acceptor = self.__nodeAcceptor
+        acceptor = self._nodeAcceptor
         acceptor.reuse()
 
     def __trackChoice(self, choice):
@@ -645,3 +649,31 @@ class StripVisitor(NodeVisitor):
             strippedValues.append(stippedValue)
 
         storage['groups'] = strippedValues
+
+
+class CollectorVisitor(ProbabilityVisitor):
+
+    def __init__(self, nodeAcceptor, *args):
+        super(CollectorVisitor, self).__init__(nodeAcceptor, *args)
+
+    def onOneOf(self, storage, values):
+        limitIDs, bonusNodes = values
+        shouldVisitNodes = self._nodeAcceptor.getNodesForVisit(limitIDs)
+        if shouldVisitNodes:
+            check = lambda nodeLimitIDs: nodeLimitIDs and nodeLimitIDs.intersection(shouldVisitNodes)
+        else:
+            check = lambda _: True
+        for i, (probabilities, bonusProbability, nodeLimitIDs, bonusValue) in enumerate(bonusNodes):
+            if check(nodeLimitIDs) and self._nodeAcceptor.isAcceptable(bonusValue):
+                self._walkSubsection(storage, bonusValue)
+
+    def onAllOf(self, storage, values):
+        acceptor = self._nodeAcceptor
+        for probabilities, bonusProbability, nodeLimitIDs, bonusValue in values:
+            shouldVisitNodes = acceptor.getNodesForVisit(nodeLimitIDs)
+            if shouldVisitNodes or acceptor.isAcceptable(bonusValue, False):
+                self._walkSubsection(storage, bonusValue)
+
+    def onGroup(self, storage, values):
+        for bonusValue in values:
+            self._walkSubsection(storage, bonusValue)

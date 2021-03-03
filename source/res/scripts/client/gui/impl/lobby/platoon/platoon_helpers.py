@@ -7,14 +7,14 @@ from UnitBase import BitfieldHelper
 from items import vehicles
 from gui.Scaleform.locale.PLATOON import PLATOON
 from gui.impl.pub import WindowImpl
-from frameworks.wulf import WindowFlags
+from frameworks.wulf import WindowFlags, WindowLayer
 _logger = logging.getLogger(__name__)
 Position = namedtuple('Position', ['x', 'y'])
 
 class PreloadableWindow(WindowImpl):
 
-    def __init__(self, wndFlags=WindowFlags.UNDEFINED, content=None):
-        super(PreloadableWindow, self).__init__(wndFlags, content=content)
+    def __init__(self, wndFlags=WindowFlags.UNDEFINED, content=None, layer=WindowLayer.UNDEFINED):
+        super(PreloadableWindow, self).__init__(wndFlags, content=content, layer=layer)
         self.__preload = False
 
     def preload(self):

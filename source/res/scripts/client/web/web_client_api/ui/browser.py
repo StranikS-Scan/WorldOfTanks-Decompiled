@@ -30,6 +30,7 @@ class _OpenExternalBrowserSchema(W2CSchema):
 class _OpenBrowserOverlaySchema(W2CSchema):
     url = Field(required=True, type=basestring)
     blur_bg = Field(type=bool, default=False)
+    is_client_close_control = Field(type=bool, default=False)
 
 
 class _OpenBuyGoldOverlaySchema(W2CSchema):
@@ -117,7 +118,7 @@ class OpenBrowserOverlayWebApiMixin(object):
 
     @w2c(_OpenBrowserOverlaySchema, 'browser_overlay')
     def openBrowserOverlay(self, cmd):
-        showBrowserOverlayView(cmd.url, alias=VIEW_ALIAS.WEB_VIEW_TRANSPARENT if cmd.blur_bg else VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW)
+        showBrowserOverlayView(cmd.url, alias=VIEW_ALIAS.WEB_VIEW_TRANSPARENT if cmd.blur_bg else VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW, browserParams={'isCloseBtnVisible': cmd.is_client_close_control}, forcedSkipEscape=cmd.is_client_close_control)
 
 
 class OpenBuyGoldWebApiMixin(object):

@@ -137,6 +137,8 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     OPT_DEVICES_SELECT_POPOVER = 'optDevicesSelectPopover'
     BATTLE_ABILITY_SELECT_POPOVER = 'battleAbilitySelectPopover'
     PACK_ITEM_POPOVER = 'packItemPopover'
+    BLACK_MARKET_ITEM_OPEN_SCREEN = 'blackMarketItemOpenScreen'
+    BLACK_MARKET_VEHICLE_LIST_SCREEN = 'blackMarketVehicleListScreen'
     MINIMAP_LOBBY = 'minimapLobby'
     MINIMAP_GRID = 'minimapGridLobby'
     MINIMAP_ON_BATTLE_LOADING = 'minimapOnBattleLoading'

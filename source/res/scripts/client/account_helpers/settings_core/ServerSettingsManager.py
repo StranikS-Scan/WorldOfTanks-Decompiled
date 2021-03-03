@@ -795,6 +795,7 @@ class ServerSettingsManager(object):
          'sessionStats': {},
          'battleComm': {},
          'dogTags': {},
+         'battleHud': {},
          GUI_START_BEHAVIOR: {},
          'battlePassStorage': {},
          'clear': {},

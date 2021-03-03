@@ -11,11 +11,13 @@ from adisp import process
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from constants import EVENT_TYPE as _ET, DOSSIER_TYPE, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, CURRENCY_TOKEN_PREFIX, RESOURCE_TOKEN_PREFIX
+from external_strings_utils import strtobool
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
 from frameworks.wulf import WindowLayer
 from gui import makeHtmlString
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.app_loader.decorators import sf_lobby
 from gui.game_control.links import URLMacros
 from gui.impl import backport
@@ -53,6 +55,7 @@ from items.components import c11n_components as cc
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from nations import NAMES
+from optional_bonuses import TrackVisitor
 from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
 from optional_bonuses import BONUS_MERGERS
 from shared_utils import makeTupleByDict, CONST_CONTAINER
@@ -76,6 +79,8 @@ _CUSTOMIZATION_BONUSES = frozenset(['camouflage',
  'modification',
  'projection_decal',
  'personal_number'])
+_META_BONUS_BROWSER_VIEW_TYPE = {'internal': VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB,
+ 'overlay': VIEW_ALIAS.WEB_VIEW_TRANSPARENT}
 _logger = logging.getLogger(__name__)
 
 def _getAchievement(block, record, value):
@@ -374,7 +379,7 @@ class MetaBonus(SimpleBonus):
     def formatValue(self):
         return getLocalizedData({'value': self._value}, 'value')
 
-    def getActions(self):
+    def getActions(self, trackID='00'):
         return self._value.get('actions', {}).iteritems()
 
     def handleAction(self, action, params):
@@ -385,6 +390,7 @@ class MetaBonus(SimpleBonus):
 
     @process
     def __handleBrowseAction(self, params):
+        from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getClientControlledCloseCtx
         from gui.shared.event_dispatcher import showBrowserOverlayView
         url = params.get('url')
         if url is None:
@@ -396,12 +402,16 @@ class MetaBonus(SimpleBonus):
             if target is None:
                 _logger.warning('Browse target is empty')
                 return
-            if target == 'internal':
+            if target in _META_BONUS_BROWSER_VIEW_TYPE:
+                viewType = _META_BONUS_BROWSER_VIEW_TYPE[target]
+                kwargs = {}
+                if strtobool(params.get('isClientCloseControl', 'False')):
+                    kwargs.update(getClientControlledCloseCtx())
                 if self.__isLobbyLoaded():
-                    showBrowserOverlayView(url)
+                    showBrowserOverlayView(url, viewType, **kwargs)
                 else:
                     self.__app.loaderManager.onViewLoaded += self.__onViewLoaded
-                    self.__onLobbyLoadedCallbacks.append(partial(showBrowserOverlayView, url))
+                    self.__onLobbyLoadedCallbacks.append(partial(showBrowserOverlayView, url, viewType, **kwargs))
             elif target == 'external':
                 BigWorld.wg_openWebBrowser(url)
             else:
@@ -1566,6 +1576,32 @@ class BoxBonus(SimpleBonus):
         return _getItemTooltip(name)
 
 
+class AllOfBoxBonus(MetaBonus):
+
+    def __init__(self, name, value, isCompensation=False, ctx=None):
+        super(AllOfBoxBonus, self).__init__(name, value, isCompensation)
+
+    def getActions(self, trackID='00'):
+        return self.getBonus(trackID).get('meta', {}).get('actions', {}).iteritems()
+
+    def getBonus(self, trackID):
+        return TrackVisitor(trackID).walkBonuses({self._name: self._value})
+
+    def getBonusList(self):
+        result = []
+        for item in self._value:
+            _, _, data = item
+            groups = data.get('groups', [])
+            for group in groups:
+                oneOf = group.get('oneof', [])
+                _, bonuses = oneOf
+                for bonus in bonuses:
+                    _, _, bonusData = bonus
+                    result.append(bonusData)
+
+        return result
+
+
 def randomBlueprintBonusFactory(name, value, isCompensation=False, ctx=None):
     blueprintBonuses = []
     for params, fragmentCount in value.iteritems():
@@ -2065,6 +2101,7 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  'goodies': GoodiesBonus,
  'items': ItemsBonusFactory(),
  'oneof': BoxBonus,
+ 'allof': AllOfBoxBonus,
  'badgesGroup': BadgesGroupBonus,
  'blueprints': blueprintBonusFactory,
  'blueprintsAny': randomBlueprintBonusFactory,

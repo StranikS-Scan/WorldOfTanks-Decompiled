@@ -51,7 +51,7 @@ from gui.shared.gui_items.Vehicle import getUserName, getShortUserName
 from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.gui_items.fitting_item import RentalInfoProvider
-from gui.shared.gui_items.loot_box import SENIORITY_AWARDS_LOOT_BOXES_TYPE, EventLootBoxes
+from gui.shared.gui_items.loot_box import SENIORITY_AWARDS_LOOT_BOXES_TYPE, EventLootBoxes, BLACK_MARKET_ITEM_TYPE
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency, ZERO_MONEY
 from gui.shared.notifications import NotificationPriorityLevel, NotificationGuiSettings, NotificationGroup
 from gui.shared.utils.requesters.ShopRequester import _NamedGoodieData
@@ -239,7 +239,7 @@ class ServiceChannelFormatter(object):
     def isAsync(self):
         return False
 
-    def _getGuiSettings(self, data, key=None, priorityLevel=None, messageType=None, messageSubtype=None):
+    def _getGuiSettings(self, data, key=None, priorityLevel=None, messageType=None, messageSubtype=None, auxData=None):
         try:
             isAlert = data.isHighImportance and data.active
         except AttributeError:
@@ -247,7 +247,7 @@ class ServiceChannelFormatter(object):
 
         if priorityLevel is None:
             priorityLevel = g_settings.msgTemplates.priority(key)
-        return NotificationGuiSettings(self.isNotify(), priorityLevel, isAlert, messageType=messageType, messageSubtype=messageSubtype)
+        return NotificationGuiSettings(self.isNotify(), priorityLevel, isAlert, messageType=messageType, messageSubtype=messageSubtype, auxData=auxData)
 
     def canBeEmpty(self):
         return False
@@ -2433,7 +2433,8 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
             completedQuestIDs.update(data.get('rewardsGottenQuestIDs', set()))
             popUps = set(data.get('popUpRecords', set()))
             for qID in completedQuestIDs:
-                self.__processMetaActions(qID)
+                bonusTrackID = data.get('detailedRewards', {}).get(qID, {}).get('bonusTrack', '00')
+                self.__processMetaActions(qID, bonusTrackID)
 
             for subFormatter in self.__subFormatters:
                 subTokenQuestIDs = subFormatter.getQuestOfThisGroup(completedQuestIDs)
@@ -2459,7 +2460,7 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
             return
 
     @classmethod
-    def __processMetaActions(cls, questID):
+    def __processMetaActions(cls, questID, trackID):
         quest = cls.__eventsCache.getAllQuests().get(questID)
         if quest is None:
             _logger.debug('Could not find quest with ID: %s', questID)
@@ -2468,7 +2469,7 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
             for bonus in quest.getBonuses():
                 if not isinstance(bonus, MetaBonus):
                     continue
-                for action, params in bonus.getActions():
+                for action, params in bonus.getActions(trackID):
                     bonus.handleAction(action, params)
 
             return
@@ -3242,6 +3243,7 @@ class LootBoxAutoOpenFormatter(WaitItemsSyncFormatter):
     _template = 'LootBoxesAutoOpenMessage'
     _eventTemplate = 'EventLootBoxesAutoOpenMessage'
     _templateRewards = 'LootBoxRewardsSysMessage'
+    _blackMarketItemTemplate = 'BlackMarketItemAutoOpenMessage'
 
     @async
     @process
@@ -3253,10 +3255,13 @@ class LootBoxAutoOpenFormatter(WaitItemsSyncFormatter):
                 boxes = self.__getBoxes(data)
                 hasSeniorityBoxes = any((box.getType() == SENIORITY_AWARDS_LOOT_BOXES_TYPE for box in boxes))
                 hasEventBoxes = any((box.getType() in EventLootBoxes.ALL() for box in boxes))
+                hasBlackMarketEventItems = any((box.getType() == BLACK_MARKET_ITEM_TYPE for box in boxes))
                 if hasEventBoxes:
                     callback([self.__formatEventBoxes(message, data)])
                 elif hasSeniorityBoxes:
                     callback([self.__formatBoxes(message, data)])
+                elif hasBlackMarketEventItems:
+                    callback([self.__formatBlackMarketItems(message, data)])
                 else:
                     callback([self.__formatNY(message, data), self.__formatBoxes(message, data)])
             else:
@@ -3314,6 +3319,13 @@ class LootBoxAutoOpenFormatter(WaitItemsSyncFormatter):
     def __formatBoxes(self, message, data):
         fmt = self.formatAchieves(data)
         formattedRewards = g_settings.msgTemplates.format(self._templateRewards, ctx={'text': fmt})
+        settingsRewards = self._getGuiSettings(message, self._templateRewards)
+        settingsRewards.showAt = BigWorld.time()
+        return MessageData(formattedRewards, settingsRewards)
+
+    def __formatBlackMarketItems(self, message, data):
+        fmt = self.formatAchieves(data)
+        formattedRewards = g_settings.msgTemplates.format(self._blackMarketItemTemplate, ctx={'text': fmt})
         settingsRewards = self._getGuiSettings(message, self._templateRewards)
         settingsRewards.showAt = BigWorld.time()
         return MessageData(formattedRewards, settingsRewards)
@@ -3862,3 +3874,30 @@ class DedicationRewardFormatter(ServiceChannelFormatter):
                     formatted = g_settings.msgTemplates.format(self._template, {'text': text})
                     result = [MessageData(formatted, self._getGuiSettings(message, self._template))]
         return result
+
+
+class MarketItemReceivedFormatter(ServiceChannelFormatter):
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self):
+        super(MarketItemReceivedFormatter, self).__init__()
+        self.__itemTypeToProcessor = {BLACK_MARKET_ITEM_TYPE: self._processBlackMarketItem}
+
+    def format(self, message, *args):
+        item = self.__itemsCache.items.tokens.getLootBoxByTokenID(message.data['id'])
+        processor = self.__itemTypeToProcessor.get(item.getType())
+        return processor(message) if processor else [MessageData(None, None)]
+
+    def _processBlackMarketItem(self, message):
+        data = message.data
+        key = SM_TYPE.BlackMarketItemReceived.name()
+        text = backport.text(R.strings.messenger.serviceChannelMessages.blackMarketItemReceived.text(), date=TimeFormatter.getLongDatetimeFormat(data['receivedAt']))
+        formatted = g_settings.msgTemplates.format(key, {'text': text})
+        return [MessageData(formatted, self._getGuiSettings(message, key))]
+
+    def _getGuiSettings(self, data, key=None, priorityLevel=None, messageType=None, messageSubtype=None, auxData=None):
+        auxData = auxData or [key,
+         None,
+         None,
+         None]
+        return super(MarketItemReceivedFormatter, self)._getGuiSettings(data, key, priorityLevel, messageType, messageSubtype, auxData)

@@ -22,7 +22,7 @@ IS_CELLAPP = BigWorld.component == 'cell'
 IS_BASEAPP = BigWorld.component in ('base', 'service')
 IS_WEB = BigWorld.component == 'web'
 IS_DYNAPDATER = False
-CURRENT_REALM = 'CT'
+CURRENT_REALM = 'RU'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -765,6 +765,7 @@ META_GAME_SETTINGS = 'meta_game_settings'
 class Configs(enum.Enum):
     BATTLE_ROYALE_CONFIG = 'battle_royale_config'
     EVENT_PROGRESSION_CONFIG = 'event_progression_config'
+    LOOT_BOXES_CONFIG = 'lootBoxes_config'
 
 
 class RESTRICTION_TYPE:
@@ -1405,6 +1406,7 @@ class REQUEST_COOLDOWN:
     RUN_QUEST = 1.0
     PAWN_FREE_AWARD_LIST = 1.0
     LOOTBOX = 1.0
+    LOOTBOX_RECORDS = 1.0
     BADGES = 2.0
     CREW_SKINS = 0.3
     BPF_COMMAND = 1.0

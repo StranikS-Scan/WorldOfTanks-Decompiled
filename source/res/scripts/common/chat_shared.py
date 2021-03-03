@@ -1256,6 +1256,7 @@ SYS_MESSAGE_TYPE = Enumeration('systemMessageType', ['serverReboot',
  'royaleQuests',
  'premiumChanged',
  'customizationProgressionChanged',
+ 'marketItemReceived',
  'battlePassStyleChoiceAvailable',
  'battlePassStyleChosen'])
 SYS_MESSAGE_IMPORTANCE = Enumeration('systemMessageImportance', ['normal', 'high'])

@@ -546,7 +546,7 @@ def _migrateTo64(core, data, initialized):
 
 
 def _migrateTo65(core, data, initialized):
-    battlehudData = data.get('battleHud', {})
+    battlehudData = data['battleHud']
     battlehudData[ScorePanelStorageKeys.SHOW_HP_BAR] = True
 
 

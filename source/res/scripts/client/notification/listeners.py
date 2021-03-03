@@ -30,6 +30,7 @@ from gui.shared.formatters import time_formatters, text_styles
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import showInvitationInWindowsBar
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
+from gui.SystemMessages import SM_TYPE
 from gui.wgcg.clan.contexts import GetClanInfoCtx
 from gui.wgnc import g_wgncProvider, g_wgncEvents, wgnc_settings
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
@@ -43,7 +44,7 @@ from notification import tutorial_helper
 from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator, MissingEventsDecorator, RecruitReminderMessageDecorator
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from shared_utils import first
-from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController
+from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController, IEventItemsController
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
@@ -1167,6 +1168,33 @@ class RecruitReminderlListener(_NotificationListener):
             model.removeNotification(NOTIFICATION_TYPE.RECRUIT_REMINDER, self.MSG_ID)
 
 
+class BlackMarketItemListener(_NotificationListener):
+    __eventItemsController = dependency.descriptor(IEventItemsController)
+
+    def start(self, model):
+        if super(BlackMarketItemListener, self).start(model):
+            self.__eventItemsController.onUpdated += self.__onMarketItemUpdated
+
+    def stop(self):
+        super(BlackMarketItemListener, self).stop()
+        self.__eventItemsController.onUpdated -= self.__onMarketItemUpdated
+
+    def __onMarketItemUpdated(self):
+        if not self.__eventItemsController.getEventItemsCount():
+            model = self._model()
+            for message in model.collection.getListIterator([NOTIFICATION_TYPE.MESSAGE]):
+                msgType = first(message.getSettings().auxData)
+                if msgType in (SM_TYPE.BlackMarketItem.name(), SM_TYPE.BlackMarketItemReceived.name()):
+                    entity = message.getEntity()
+                    if entity is None or not entity.get('buttonsLayout'):
+                        return
+                    entity['buttonsStates'].update({'submit': NOTIFICATION_BUTTON_STATE.HIDDEN})
+                    if model is not None:
+                        model.updateNotification(message.getType(), message.getID(), entity, False)
+
+        return
+
+
 class NotificationsListeners(_NotificationListener):
 
     def __init__(self):
@@ -1183,7 +1211,8 @@ class NotificationsListeners(_NotificationListener):
          BattlePassListener(),
          UpgradeTrophyDeviceListener(),
          ChoosingDeviceslListener(),
-         RecruitReminderlListener())
+         RecruitReminderlListener(),
+         BlackMarketItemListener())
 
     def start(self, model):
         for listener in self.__listeners:

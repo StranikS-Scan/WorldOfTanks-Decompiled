@@ -13,6 +13,8 @@ from gui.Scaleform.daapi.view.common.filter_contexts import FilterSetupContext, 
 from gui.Scaleform.daapi.view.meta.TankCarouselFilterPopoverMeta import TankCarouselFilterPopoverMeta
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.prb_control.settings import VEHICLE_LEVELS
+from gui.shared import g_eventBus, EVENT_BUS_SCOPE
+from gui.shared.events import HasCtxEvent
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER, VEHICLE_ACTION_GROUPS_LABELS_BY_CLASS, VEHICLE_ACTION_GROUPS_LABELS
 from gui.shared.utils.functions import makeTooltip
@@ -23,6 +25,7 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.game_control import IBattlePassController
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.battle_pass import BattlePassFilterConsts
 _logger = logging.getLogger(__name__)
+CAROUSEL_TYPE_SWITCHED_EVENT = 'carouselTypeSwitched'
 
 class _SECTION(CONST_CONTAINER):
     NATIONS, VEHICLE_TYPES, LEVELS, SPECIALS, HIDDEN, PROGRESSIONS, TEXT_SEARCH, ROLES, ROLES_WITH_EXTRA = range(0, 9)
@@ -231,8 +234,10 @@ class TankCarouselFilterPopover(VehiclesFilterPopover):
 
     def switchCarouselType(self, selected):
         setting = self.__settingsCore.options.getSetting(settings_constants.GAME.CAROUSEL_TYPE)
-        self.__carouselRowCount = setting.CAROUSEL_TYPES.index(setting.OPTIONS.DOUBLE if selected else setting.OPTIONS.SINGLE)
+        selectedOption = setting.OPTIONS.DOUBLE if selected else setting.OPTIONS.SINGLE
+        self.__carouselRowCount = setting.CAROUSEL_TYPES.index(selectedOption)
         self._carousel.setRowCount(self.__carouselRowCount + 1)
+        g_eventBus.handleEvent(HasCtxEvent(eventType=CAROUSEL_TYPE_SWITCHED_EVENT, ctx={'selectedOption': selectedOption}), EVENT_BUS_SCOPE.LOBBY)
 
     def _getInitialVO(self, filters, xpRateMultiplier):
         dataVO = super(TankCarouselFilterPopover, self)._getInitialVO(filters, xpRateMultiplier)

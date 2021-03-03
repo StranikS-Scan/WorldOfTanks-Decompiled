@@ -80,7 +80,8 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.enhancementsWipedOnVehicles.index(): _sc.EnhancementsWipedOnVehiclesFormatter(),
  _SM_TYPE.prbWrongEnqueueDataKick.index(): _sc.PrbEventEnqueueDataFormatter(),
  _SM_TYPE.dedicationReward.index(): _sc.DedicationRewardFormatter(),
- _SM_TYPE.customizationProgressionChanged.index(): _sc.CustomizationProgressionChangedFormatter()}
+ _SM_TYPE.customizationProgressionChanged.index(): _sc.CustomizationProgressionChangedFormatter(),
+ _SM_TYPE.marketItemReceived.index(): _sc.MarketItemReceivedFormatter()}
 CLIENT_FORMATTERS = {SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE: _sc.ClientSysMessageFormatter(),
  SCH_CLIENT_MSG_TYPE.PREMIUM_ACCOUNT_EXPIRY_MSG: _sc.PremiumAccountExpiryFormatter(),
  SCH_CLIENT_MSG_TYPE.AOGAS_NOTIFY_TYPE: _sc.AOGASNotifyFormatter(),

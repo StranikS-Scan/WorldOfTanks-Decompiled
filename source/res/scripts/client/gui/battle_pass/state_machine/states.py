@@ -258,23 +258,21 @@ class RewardAnyState(State):
             data['callback'] = partial(machine.post, StateEvent())
             chapter = machine.getChosenStyleChapter()
             _, level = getStyleInfoForChapter(chapter)
-            chosenStyleLevel = level
             if chapter is None:
                 chapter = self.__battlePass.getChapterByLevel(data['prevLevel'])
                 if 'newLevel' in data:
                     newLevel = data['newLevel'] + 1
-                    if chosenStyleLevel is None and newLevel > self.__battlePass.getChapterLevelInterval(chapter)[1]:
+                    if level is None and newLevel > self.__battlePass.getChapterLevelInterval(chapter)[1]:
                         level = self.__battlePass.getChapterStyleProgress(chapter)
             if level is not None:
                 styleToken = get3DStyleProgressToken(self.__battlePass.getSeasonID(), chapter, level)
                 rewards.append(packToken(styleToken))
-                if chosenStyleLevel is not None:
-                    machine.clearChosenStyle()
+                machine.clearChosenStyle()
             if not rewards:
                 machine.clearSelf()
                 machine.post(StateEvent())
                 return
-            if chapter and chosenStyleLevel is not None and self.__battlePass.isFinalLevel(data.get('newLevel', 0)) and chapter < len(self.__battlePass.getChapterConfig()):
+            if chapter and self.__battlePass.isFinalLevel(data.get('newLevel', 0)) and chapter < len(self.__battlePass.getChapterConfig()):
                 machine.clearSelf()
                 machine.addStyleToChoose(chapter + 1)
             showBattlePassAwardsWindow(rewards, data)

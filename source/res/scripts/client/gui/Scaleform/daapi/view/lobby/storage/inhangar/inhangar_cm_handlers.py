@@ -29,12 +29,12 @@ class VehiclesRegularCMHandler(ContextMenu):
     @option(__sqGen.next(), CMLabel.EXCHANGE)
     def exchange(self):
         self.__tradeInController.setActiveTradeOffVehicleCD(self._id)
-        showShop(getTradeInVehiclesUrl())
+        showShop(getTradeInVehiclesUrl(), isClientCloseControl=True)
 
     @option(__sqGen.next(), CMLabel.PERSONAL_EXCHANGE)
     def personalTradeExchange(self):
         self.__personalTradeInController.setActiveTradeInSaleVehicleCD(self._id)
-        showShop(getPersonalTradeInVehiclesUrl())
+        showShop(getPersonalTradeInVehiclesUrl(), isClientCloseControl=True)
 
     @option(__sqGen.next(), CMLabel.INFORMATION)
     def showInfo(self):

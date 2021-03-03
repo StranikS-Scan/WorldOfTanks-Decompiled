@@ -140,11 +140,11 @@ def showBuyOptionalDeviceOverlay(itemId, source=None, origin=None, alias=VIEW_AL
 
 
 def showTradeOffOverlay(targetLevel, parent=None):
-    _showBlurredWebOverlay(helpers.getTradeOffOverlayUrl(), _getTradeOffParams(targetLevel), parent)
+    _showBlurredWebOverlay(helpers.getTradeOffOverlayUrl(), _getTradeOffParams(targetLevel), parent, isClientCloseControl=True)
 
 
 def showPersonalTradeOffOverlay(parent=None):
-    _showBlurredWebOverlay(helpers.getPersonalTradeOffOverlayUrl(), parent=parent)
+    _showBlurredWebOverlay(helpers.getPersonalTradeOffOverlayUrl(), parent=parent, isClientCloseControl=True)
 
 
 def showBuyGoldForVehicleWebOverlay(fullPrice, intCD, parent=None):
@@ -199,10 +199,13 @@ def showBluprintsExchangeOverlay(url=None, parent=None):
 
 
 @process
-def _showBlurredWebOverlay(url, params=None, parent=None):
+def _showBlurredWebOverlay(url, params=None, parent=None, isClientCloseControl=False):
     url = yield URLMacros().parse(url, params)
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.WEB_VIEW_TRANSPARENT, parent=parent), ctx={'url': url,
-     'allowRightClick': False}), EVENT_BUS_SCOPE.LOBBY)
+    ctx = {'url': url,
+     'allowRightClick': False}
+    if isClientCloseControl:
+        ctx.update(helpers.getClientControlledCloseCtx())
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.WEB_VIEW_TRANSPARENT, parent=parent), ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
 
 
 @process

@@ -6,7 +6,7 @@ import BigWorld
 from CurrentVehicle import g_currentVehicle
 from HeroTank import HeroTank
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-from constants import QUEUE_TYPE, PREBATTLE_TYPE, Configs, DOG_TAGS_CONFIG
+from constants import QUEUE_TYPE, PREBATTLE_TYPE, Configs, DOG_TAGS_CONFIG, LOOTBOX_TOKEN_PREFIX
 from frameworks.wulf import WindowFlags, WindowLayer, WindowStatus
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
@@ -35,6 +35,7 @@ from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showRankedPrimeTimeWindow, showAmmunitionSetupView
 from gui.shared.events import LobbySimpleEvent, AmmunitionSetupViewEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.loot_box import BLACK_MARKET_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.shared.utils.functions import makeTooltip
@@ -47,7 +48,7 @@ from helpers.statistics import HANGAR_LOADING_STATE
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IIGRController
-from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController, IBattlePassController, IBattleRoyaleController
+from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController, IBattlePassController, IBattleRoyaleController, IEventItemsController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersBannerController
@@ -98,6 +99,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     _promoController = dependency.descriptor(IPromoController)
     _connectionMgr = dependency.descriptor(IConnectionManager)
     _offersBannerController = dependency.descriptor(IOffersBannerController)
+    __itemsCtrl = dependency.descriptor(IEventItemsController)
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 
     def __init__(self, _=None):
@@ -165,7 +167,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         unitMgr = prb_getters.getClientUnitMgr()
         if unitMgr:
             unitMgr.onUnitJoined += self.__onUnitJoined
-        g_clientUpdateManager.addCallbacks({'inventory': self.__updateAlertMessage})
+        g_clientUpdateManager.addCallbacks({'inventory': self.__updateAlertMessage,
+         'tokens': self.__onTokensUpdate})
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         self._settingsCore.onSettingsChanged += self.__onSettingsChanged
         self.battlePassController.onSeasonStateChange += self.__switchCarousels
@@ -183,6 +186,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__timer = CallbackDelayer()
         self.as_setNotificationEnabledS(crewBooksViewedCache().haveNewCrewBooks())
         self._offersBannerController.showBanners()
+        self.__updateMarketItemState()
         self.fireEvent(events.HangarCustomizationEvent(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM), scope=EVENT_BUS_SCOPE.LOBBY)
         if g_currentVehicle.isPresent():
             g_currentVehicle.refreshModel()
@@ -591,6 +595,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             self.__switchCarousels(force=True)
         if DOG_TAGS_CONFIG in diff:
             self.__updateDogTagsState()
+        if Configs.LOOT_BOXES_CONFIG.value in diff:
+            self.__updateMarketItemState()
 
     def __onSettingsChanged(self, diff):
         if SETTINGS_SECTIONS.UI_STORAGE in diff:
@@ -621,6 +627,22 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         ctx = event.ctx
         if ctx.get('hintName') in self._ENABLED_GF_HINTS:
             self.as_removeHintAreaS(ctx.get('hintName'))
+
+    def __onTokensUpdate(self, diff):
+        for tokenID in diff:
+            if tokenID.startswith(LOOTBOX_TOKEN_PREFIX):
+                item = self.itemsCache.items.tokens.getLootBoxByTokenID(tokenID)
+                itemType = item.getType() if item else None
+                if itemType == BLACK_MARKET_ITEM_TYPE:
+                    self.__updateMarketItemState(item)
+
+        return
+
+    def __updateMarketItemState(self, item=None):
+        if not item:
+            item = self.__itemsCtrl.getOwnedItemsByType(BLACK_MARKET_ITEM_TYPE)
+        marketItemVisible = item and item.getInventoryCount() > 0
+        self.as_setMarketItemVisibleS(marketItemVisible)
 
     def __onUnitJoined(self, _, __):
         self.__isUnitJoiningInProgress = False

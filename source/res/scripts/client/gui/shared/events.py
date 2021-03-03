@@ -738,3 +738,7 @@ class DogTagsEvent(SharedEvent):
 
 class PlatoonDropdownEvent(HasCtxEvent):
     NAME = 'DropdownEvent'
+
+
+class EventItemEvents(HasCtxEvent):
+    EVENT_ITEM_OPENED = 'onEventItemOpened'

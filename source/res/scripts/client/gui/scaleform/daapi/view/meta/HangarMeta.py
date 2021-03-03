@@ -87,3 +87,6 @@ class HangarMeta(GFTutorialViewMeta):
 
     def as_toggleBattleRoyaleS(self, isBattleRoyale):
         return self.flashObject.as_toggleBattleRoyale(isBattleRoyale) if self._isDAAPIInited() else None
+
+    def as_setMarketItemVisibleS(self, value):
+        return self.flashObject.as_setMarketItemVisible(value) if self._isDAAPIInited() else None

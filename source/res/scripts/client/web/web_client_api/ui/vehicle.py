@@ -13,6 +13,7 @@ from constants import NC_MESSAGE_PRIORITY
 from debug_utils import LOG_ERROR
 from gui import SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.vehicle_preview.hangar_switchers import CustomHangars
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.configurable_vehicle_preview import OptionalBlocks
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import getCDFromId, canInstallStyle, EventDataType
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import checkIfVehicleIsHidden
@@ -285,11 +286,16 @@ def _validateHiddenBlocks(hiddenBlocks):
     return all((block in OptionalBlocks.ALL for block in hiddenBlocks))
 
 
+def _validateCustomHangarAlias(customHangarAlias):
+    return CustomHangars.hasValue(customHangarAlias)
+
+
 class _VehiclePreviewSchema(W2CSchema):
     vehicle_id = Field(required=True, type=int)
     back_url = Field(required=False, type=basestring)
     items = Field(required=False, type=list, validator=lambda value, _: _validateItemsPack(value))
-    hidden_blocks = Field(required=False, type=list, default=None, validator=lambda hiddenBlocks, _: _validateHiddenBlocks(hiddenBlocks))
+    hidden_blocks = Field(required=False, type=list, default=[], validator=lambda hiddenBlocks, _: _validateHiddenBlocks(hiddenBlocks))
+    custom_hangar = Field(required=False, type=basestring, default='', validator=lambda customHangarAlias, _: _validateCustomHangarAlias(customHangarAlias))
 
 
 class _VehicleOffersPreviewSchema(W2CSchema):
@@ -320,6 +326,7 @@ class _VehicleStylePreviewSchema(W2CSchema):
     event_data = Field(required=False, type=dict, validator=lambda value, _: EventDataType.hasValue(value.get('type')))
     back_btn_descr = Field(required=True, type=basestring)
     back_url = Field(required=False, type=basestring)
+    custom_hangar = Field(required=False, type=basestring, default='', validator=lambda customHangarAlias, _: _validateCustomHangarAlias(customHangarAlias))
 
 
 class _VehicleMarathonStylePreviewSchema(W2CSchema):
@@ -383,8 +390,8 @@ class VehiclePreviewWebApiMixin(object):
 
     @w2c(_VehiclePreviewSchema, 'vehicle_preview')
     def openVehiclePreview(self, cmd):
-        if cmd.hidden_blocks is not None:
-            showPreviewFunc = partial(event_dispatcher.showConfigurableVehiclePreview, hiddenBlocks=cmd.hidden_blocks, itemPack=_parseItemsPack(cmd.items))
+        if cmd.hidden_blocks or cmd.custom_hangar:
+            showPreviewFunc = partial(event_dispatcher.showConfigurableVehiclePreview, hiddenBlocks=cmd.hidden_blocks, itemPack=_parseItemsPack(cmd.items), customHangarAlias=cmd.custom_hangar)
         else:
             showPreviewFunc = event_dispatcher.showVehiclePreview
         vehicleID = cmd.vehicle_id
@@ -392,7 +399,6 @@ class VehiclePreviewWebApiMixin(object):
             showPreviewFunc(vehTypeCompDescr=vehicleID, previewAlias=self._getVehiclePreviewReturnAlias(cmd), previewBackCb=self._getVehiclePreviewReturnCallback(cmd))
         else:
             _pushInvalidPreviewMessage()
-        return
 
     @w2c(_VehiclePreviewSchema, 'vehicle_event_progression_preview')
     def openEventProgressionVehiclePreview(self, cmd):
@@ -537,7 +543,7 @@ class VehiclePreviewWebApiMixin(object):
                 showStyle = showBlueprintsExchangeStylePreview
             else:
                 showStyle = showStylePreview
-            showStyle(vehicleCD, style, style.getDescription(), cmd.back_url if isinstance(cmd.back_url, Callable) else self._getVehicleStylePreviewCallback(cmd), backBtnDescrLabel=backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(cmd.back_btn_descr)()))
+            showStyle(vehicleCD, style, style.getDescription(), cmd.back_url if isinstance(cmd.back_url, Callable) else self._getVehicleStylePreviewCallback(cmd), backBtnDescrLabel=backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(cmd.back_btn_descr)()), customHangarAlias=cmd.custom_hangar)
             return True
         else:
             return False

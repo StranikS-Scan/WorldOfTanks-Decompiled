@@ -5,7 +5,7 @@ from helpers import dependency
 from gui.impl import backport
 from gui.impl.gen import R
 from skeletons.gui.game_control import IPlatoonController
-from frameworks.wulf import ViewSettings, WindowFlags
+from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
 from gui.impl.pub import ViewImpl
 from gui.impl.lobby.platoon.view.platoon_search_view import SearchView
 from gui.impl.gen.view_models.views.lobby.platoon.platoon_dropdown_model import PlatoonDropdownModel
@@ -153,7 +153,7 @@ class SelectionWindow(PreloadableWindow):
     previousPosition = None
 
     def __init__(self, initialPosition=None):
-        super(SelectionWindow, self).__init__(wndFlags=WindowFlags.POP_OVER, content=WelcomeView())
+        super(SelectionWindow, self).__init__(wndFlags=WindowFlags.POP_OVER, content=WelcomeView(), layer=WindowLayer.WINDOW)
         if initialPosition:
             SelectionWindow.previousPosition = initialPosition
         if SelectionWindow.previousPosition:

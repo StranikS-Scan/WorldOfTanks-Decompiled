@@ -93,6 +93,8 @@ SPEAKERS_DEVICE = 'speakersDevice'
 SESSION_STATS_PREV_BATTLE_COUNT = 'sessionStatsPrevBattleCnt'
 UNIT_FILTER = 'UNIT_FILTER'
 BLUEPRINTS_CONVERT_SALE_STARTED_SEEN = 'bcsStartedSeen'
+LAST_SHOP_ACTION_COUNTER_MODIFICATION = 'lastShopActionCounterModification'
+OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES = 'overridenHeaderCounterActionAliases'
 DEFAULT_QUEUE = 'defaultQueue'
 STORE_TAB = 'store_tab'
 STATS_REGULAR_SORTING = 'statsSorting'
@@ -777,7 +779,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                         'storage_opt_devices': {'filterMask': 0,
                                                 'vehicleCD': None},
                         LAST_STORAGE_VISITED_TIMESTAMP: -1,
-                        SESSION_STATS_PREV_BATTLE_COUNT: 0},
+                        SESSION_STATS_PREV_BATTLE_COUNT: 0,
+                        LAST_SHOP_ACTION_COUNTER_MODIFICATION: None,
+                        OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES: set()},
  KEY_UI_FLAGS: {}}
 
 def _filterAccountSection(dataSec):

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/browser/shop_helpers.py
 from gui import GUI_SETTINGS
+from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import makeBrowserParams
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -114,6 +115,10 @@ def getPremiumVehiclesUrl():
     return _getUrl('premiumVehicles')
 
 
+def getBlackMarketUrl():
+    return _getUrl('blackMarket')
+
+
 def getBuyBattlePassUrl():
     return _getUrl('buyBattlePass')
 
@@ -128,3 +133,8 @@ def getBuyCollectibleVehiclesUrl():
 
 def getBlueprintsExchangeUrl():
     return _getUrl('blueprintsExchange')
+
+
+def getClientControlledCloseCtx():
+    return {'browserParams': makeBrowserParams(isCloseBtnVisible=True),
+     'forcedSkipEscape': True}

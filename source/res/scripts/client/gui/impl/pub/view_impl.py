@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/pub/view_impl.py
 import typing
-from frameworks.wulf import View, ViewEvent, Window
+from frameworks.wulf import View, ViewEvent, Window, WindowLayer
 from gui.impl.gen.resources import R
 from gui.impl.pub.context_menu_window import ContextMenuWindow, ContextMenuContent
 from gui.impl.pub.pop_over_window import PopOverWindow
@@ -46,7 +46,10 @@ class ViewImpl(View):
         if content is not None:
             if not isinstance(content, PopOverViewImpl):
                 raise SoftException('PopOver content should be derived from PopOverViewImpl.')
-            window = PopOverWindow(event, content, self.getParentWindow())
+            layer = WindowLayer.UNDEFINED
+            if self.getParentWindow() and self.getParentWindow().layer >= 0:
+                layer = self.getParentWindow().layer
+            window = PopOverWindow(event, content, self.getParentWindow(), layer)
             window.load()
         return window
 

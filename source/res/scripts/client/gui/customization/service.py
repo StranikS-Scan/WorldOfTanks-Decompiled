@@ -242,10 +242,11 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
                     return
                 if g_currentVehicle.invID != vehInvID:
                     shouldSelectVehicle = True
+        if g_currentPreviewVehicle.isPresent():
+            hideVehiclePreview(back=False, close=False)
         if not self.hangarSpace.spaceInited or not self.hangarSpace.isModelLoaded or shouldSelectVehicle:
             if shouldSelectVehicle:
                 if g_currentPreviewVehicle.isPresent():
-                    hideVehiclePreview(back=False, close=True)
                     g_currentPreviewVehicle.selectNoVehicle()
                 BigWorld.callback(0.0, makeCallbackWeak(g_currentVehicle.selectVehicle, vehInvID=vehInvID))
             _logger.info('Space or vehicle is not presented, customization view loading delayed')
@@ -271,7 +272,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         callback = self.__showCustomizationKwargs.get('callback', None)
         loadCallback = lambda : self.__loadCustomization(vehInvID, callback, season, modeId, tabId)
         if self.__showCustomizationCallbackId is None:
-            self.__moveHangarVehicleToCustomizationRoom()
+            self.moveHangarVehicleToCustomizationRoom()
             self.__showCustomizationCallbackId = BigWorld.callback(0.0, lambda : self.__showCustomization(loadCallback))
         self.onVisibilityChanged(True)
         return
@@ -387,7 +388,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
     def getHightlighter(self):
         return self._helper
 
-    def __moveHangarVehicleToCustomizationRoom(self):
+    def moveHangarVehicleToCustomizationRoom(self):
         from gui.ClientHangarSpace import customizationHangarCFG
         cfg = customizationHangarCFG()
         targetPos = cfg['v_start_pos']

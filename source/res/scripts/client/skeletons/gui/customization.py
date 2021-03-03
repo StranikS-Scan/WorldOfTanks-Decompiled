@@ -21,6 +21,9 @@ class ICustomizationService(object):
     def showCustomization(self, vehInvId=None, callback=None):
         raise NotImplementedError
 
+    def moveHangarVehicleToCustomizationRoom(self):
+        raise NotImplementedError
+
     def closeCustomization(self):
         raise NotImplementedError
 

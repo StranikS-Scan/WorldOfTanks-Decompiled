@@ -15,13 +15,14 @@ from skeletons.gui.game_control import IBrowserController
 from skeletons.gui.lobby_context import ILobbyContext
 from sound_constants import BROWSER_VIEW_SOUND_SPACES
 
-def makeBrowserParams(waitingMessage=R.invalid(), isModal=False, isHidden=False, bgAlpha=1.0):
+def makeBrowserParams(waitingMessage=R.invalid(), isModal=False, isHidden=False, bgAlpha=1.0, isCloseBtnVisible=False):
     if not waitingMessage:
         waitingMessage = R.strings.waiting.loadContent()
     return {'waitingMessage': backport.msgid(waitingMessage),
      'isModal': isModal,
      'isHidden': isHidden,
-     'bgAlpha': bgAlpha}
+     'bgAlpha': bgAlpha,
+     'isCloseBtnVisible': isCloseBtnVisible}
 
 
 class BrowserView(LobbySubView, BrowserScreenMeta):

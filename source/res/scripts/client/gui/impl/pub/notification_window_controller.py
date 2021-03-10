@@ -146,7 +146,7 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
         self.__notifyWithPostponedQueueCount()
 
     def isEnabled(self):
-        return False if not self.__isLobbyLoaded or self.__isInBootcamp or self.__locks else not self.prbDispatcher.getFunctionalState().isNavigationDisabled()
+        return False if not self.__isLobbyLoaded or self.__isInBootcamp or self.__locks or self.prbDispatcher is None else not self.prbDispatcher.getFunctionalState().isNavigationDisabled()
 
     def hasWindow(self, window):
         command = WindowNotificationCommand(window)

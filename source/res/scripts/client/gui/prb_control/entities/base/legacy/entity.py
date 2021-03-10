@@ -4,7 +4,7 @@ import BigWorld
 import account_helpers
 from soft_exception import SoftException
 from PlayerEvents import g_playerEvents
-from constants import PREBATTLE_ACCOUNT_STATE, REQUEST_COOLDOWN, PREBATTLE_ERRORS
+from constants import ARENA_BONUS_TYPE, PREBATTLE_ACCOUNT_STATE, REQUEST_COOLDOWN, PREBATTLE_ERRORS
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.dialogs import rally_dialog_meta
@@ -283,7 +283,7 @@ class LegacyEntity(_LegacyEntity):
         return result
 
     def isPlayerJoined(self, ctx):
-        return ctx.getCtrlType() is CTRL_ENTITY_TYPE.LEGACY and ctx.getEntityType() == self.getEntityType() and ctx.getID() == self.getID() and ctx.getBonusType() == self.getBonusType()
+        return ctx.getCtrlType() is CTRL_ENTITY_TYPE.LEGACY and ctx.getEntityType() == self.getEntityType() and ctx.getID() == self.getID() and (ctx.getBonusType() == ARENA_BONUS_TYPE.UNKNOWN or ctx.getBonusType() == self.getBonusType())
 
     def getID(self):
         return prb_getters.getPrebattleID()

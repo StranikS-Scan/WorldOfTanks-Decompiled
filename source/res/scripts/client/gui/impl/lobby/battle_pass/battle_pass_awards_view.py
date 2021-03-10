@@ -129,8 +129,8 @@ class BattlePassAwardsView(ViewImpl):
         rewards = BattlePassAwardsManager.sortBonuses(BattlePassAwardsManager.uniteTokenBonuses(rewards))
         if not rewards:
             return
-        mainRewardsCount = self.__setMainRewards(rewards, isFinalReward=isFinalReward)
-        rewards = rewards[mainRewardsCount:]
+        mainRewards = self.__setMainRewards(rewards, isFinalReward=isFinalReward)
+        rewards = [ reward for reward in rewards if reward not in mainRewards ]
         packBonusModelAndTooltipData(rewards, self.viewModel.additionalRewards, self.__tooltipItems)
 
     def __setMainRewards(self, rewards, isFinalReward):
@@ -143,11 +143,12 @@ class BattlePassAwardsView(ViewImpl):
                 limit -= weight
                 if weight == WIDE_REWARD_SIZE:
                     self.viewModel.getWideRewardsIDs().addNumber(len(mainRewards) - 1)
-            break
+            if limit <= 0:
+                break
 
         with useBigAwardInjection():
             packBonusModelAndTooltipData(mainRewards, self.viewModel.mainRewards, self.__tooltipItems)
-        return len(mainRewards)
+        return mainRewards
 
     @staticmethod
     def __getRewardWeight(bonus):

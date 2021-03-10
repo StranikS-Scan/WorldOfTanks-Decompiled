@@ -28,5 +28,6 @@ class DogTagComponent(BigWorld.DynamicScriptComponent):
                 dogTagsCtrl.setVictimsDogTags(newVictimsDogTags)
             return
 
-    def _isObserving(self):
-        return BigWorld.player().observedVehicleID is not None
+    @staticmethod
+    def _isObserving():
+        return not BigWorld.player().vehicle.isPlayerVehicle

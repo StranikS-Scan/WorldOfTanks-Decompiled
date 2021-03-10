@@ -27,7 +27,7 @@ from gui.shared.gui_items.processors.loot_boxes import LootBoxOpenProcessor
 from gui.shared.gui_items.processors.market_items import MarketItemNextOpenProcessor, MarketItemNextOpenRecordsProcessor
 from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.money import Currency, Money
-from helpers import dependency, statistics
+from helpers import dependency, statistics, time_utils
 from shared_utils import first
 from skeletons.gui.game_control import IEventItemsController
 from skeletons.gui.impl import IGuiLoader
@@ -135,7 +135,7 @@ class BlackMarketOpenItemScreen(ViewImpl):
     def onNextOpenVehicle(self):
         nextOpenPriceType, nextOpenPrice = self.__item.getReRollPrice(len(self.__rolledRewards))
         obtainableVehicles = getObtainableVehicles(self.__item)
-        result = yield await(showSingleDialogWithResultData(BlackMarketNextOpenConfirmDialog, R.views.lobby.bm2021.dialogs.ConfirmNextOpen(), endDate=self.__item.getAutoOpenTime(), nextOpenPrice=nextOpenPrice, nextOpenPriceType=nextOpenPriceType, slotsNumber=min((len(obtainableVehicles), self.__item.getReRollCount())), parent=self.getParentWindow(), restoreCb=self.__confirmationRestoreCallback))
+        result = yield await(showSingleDialogWithResultData(BlackMarketNextOpenConfirmDialog, R.views.lobby.bm2021.dialogs.ConfirmNextOpen(), endDate=self.__getTimeLeftTillAutoopen(), nextOpenPrice=nextOpenPrice, nextOpenPriceType=nextOpenPriceType, slotsNumber=min((len(obtainableVehicles), self.__item.getReRollCount())), parent=self.getParentWindow(), restoreCb=self.__confirmationRestoreCallback))
         if not result.busy and result.result[0]:
             self.__processNextOpenVehicle()
 
@@ -158,7 +158,7 @@ class BlackMarketOpenItemScreen(ViewImpl):
             vehCD = self.viewModel.getChosenVehicleId()
         else:
             vehCD = int(args.get('vehicleId'))
-        result = yield await(showSingleDialogWithResultData(BlackMarketConfirmVehicle, R.views.lobby.bm2021.dialogs.BlackMarketConfirmVehicle(), vehicles=[ first(vehicle.keys()) for rewardID in self.__rolledRewards.keys() for vehicle in self.__rolledRewards[rewardID].get('vehicles') ], endDate=self.__item.getAutoOpenTime(), chosenVehicleId=vehCD, parent=self.getParentWindow()))
+        result = yield await(showSingleDialogWithResultData(BlackMarketConfirmVehicle, R.views.lobby.bm2021.dialogs.BlackMarketConfirmVehicle(), vehicles=[ first(vehicle.keys()) for rewardID in self.__rolledRewards.keys() for vehicle in self.__rolledRewards[rewardID].get('vehicles') ], endDate=self.__getTimeLeftTillAutoopen(), chosenVehicleId=vehCD, parent=self.getParentWindow()))
         if not result.busy and result.result[0]:
             self.__processPickVehicle(vehCD)
         return
@@ -197,7 +197,7 @@ class BlackMarketOpenItemScreen(ViewImpl):
             rolledVehicles = [ first(vehicle.keys()) for rewardID in self.__rolledRewards.keys() for vehicle in self.__rolledRewards[rewardID].get('vehicles') ]
             self.__setRolledVehicles(rolledVehicles, vm)
             vm.setSlotsNumber(min((len(obtainableVehicles), self.__item.getReRollCount())))
-            vm.setEndDate(self.__item.getAutoOpenTime())
+            vm.setEndDate(self.__getTimeLeftTillAutoopen())
             self.__setStats(vm)
             serverSettings = self.__lobbyContext.getServerSettings()
             vm.setIsItemEnabled(serverSettings.isLootBoxesEnabled() and serverSettings.getLootBoxConfig().get(self.__item.getID(), {}).get('enabled', False))
@@ -215,7 +215,8 @@ class BlackMarketOpenItemScreen(ViewImpl):
 
     @async
     def __onClose(self):
-        result = yield await(showSingleDialogWithResultData(BlackMarketExitConfirmDialog, R.views.lobby.bm2021.dialogs.ConfirmExit(), endDate=self.__item.getAutoOpenTime(), parent=self.getParentWindow()))
+        localDelta = time_utils.getCurrentTimestamp() - time_utils.getCurrentLocalServerTimestamp()
+        result = yield await(showSingleDialogWithResultData(BlackMarketExitConfirmDialog, R.views.lobby.bm2021.dialogs.ConfirmExit(), endDate=self.__item.getAutoOpenTime() + localDelta, parent=self.getParentWindow()))
         if not result.busy and not result.result[0]:
             return
         self.destroyWindow()
@@ -263,6 +264,9 @@ class BlackMarketOpenItemScreen(ViewImpl):
         if view is not None:
             view.onNextOpenVehicle()
         return view
+
+    def __getTimeLeftTillAutoopen(self):
+        return self.__item.getAutoOpenTime() - time_utils.getServerUTCTime()
 
 
 class BlackMarketOpenItemScreenWindow(LobbyWindow):

@@ -87,6 +87,13 @@
       <undamaged>	vehicles/american/A122_TS-5/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/american/A122_TS-5/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/american/A122_TS-5/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <A122_TS-5_3Dst>
+          <undamaged>	vehicles/american/A122_TS-5/_skins/A122_TS-5_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A122_TS-5/_skins/A122_TS-5_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A122_TS-5/_skins/A122_TS-5_3Dst/crash/lod0/Hull.model	</exploded>
+        </A122_TS-5_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -1172,6 +1179,118 @@
         <anchorPosition>	1.36928 0.87243 -0.115782	</anchorPosition>
         <anchorDirection>	0.998156 -0.00420803 0.0605558	</anchorDirection>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15075	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A122_TS-5_3Dst	</compatibleModels>
+        <position>	-0.585887 1.68089 2.30718	</position>
+        <rotation>	1.13781 -0.821323 3.08736	</rotation>
+        <scale>	0.678853 0.678853 0.678858	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.15276	</clipAngle>
+        <anchorPosition>	-0.693201 0.830047 2.41974	</anchorPosition>
+        <anchorDirection>	-0.626583 0.418966 0.657161	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15076	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A122_TS-5_3Dst	</compatibleModels>
+        <position>	-0.181459 2.18036 -0.495978	</position>
+        <rotation>	-3.14072 -0.000090 -0.000246525	</rotation>
+        <scale>	0.713775 0.479126 0.713758	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.40439	</clipAngle>
+        <anchorPosition>	-0.181521 1.50975 -0.495758	</anchorPosition>
+        <anchorDirection>	-0.000246603 1 0.000872741	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15077	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A122_TS-5_3Dst	</compatibleModels>
+        <position>	0.927276 1.75441 1.69811	</position>
+        <rotation>	1.21897 1.3298 -3.08779	</rotation>
+        <scale>	0.777943 0.219016 0.77795	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.905162	</clipAngle>
+        <anchorPosition>	0.965737 0.846563 1.70994	</anchorPosition>
+        <anchorDirection>	0.897461 0.344115 0.275948	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15078	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A122_TS-5_3Dst	</compatibleModels>
+        <position>	0.0702718 2.22328 0.796349	</position>
+        <rotation>	0.0586889 -0.00675046 3.14071	</rotation>
+        <scale>	0.581214 0.390144 0.581199	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.14789	</clipAngle>
+        <anchorPosition>	0.0703713 1.50417 0.808306	</anchorPosition>
+        <anchorDirection>	0.00048824 0.998278 0.0586599	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15079	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A122_TS-5_3Dst	</compatibleModels>
+        <position>	-1.28501 1.17378 2.8048	</position>
+        <rotation>	0.04423 -0.000107629 3.14121	</rotation>
+        <scale>	0.556119 0.373305 0.556107	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.114039	</clipAngle>
+        <anchorPosition>	-1.28496 0.382686 2.81062	</anchorPosition>
+        <anchorDirection>	0.000377816 0.999022 0.0442156	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15080	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A122_TS-5_3Dst	</compatibleModels>
+        <position>	1.28495 1.17383 2.80479	</position>
+        <rotation>	0.0442301 -0.000107629 3.14121	</rotation>
+        <scale>	0.556119 0.373305 0.556105	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.114039	</clipAngle>
+        <anchorPosition>	1.285 0.382737 2.81061	</anchorPosition>
+        <anchorDirection>	0.000377816 0.999022 0.0442157	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15081	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A122_TS-5_3Dst	</compatibleModels>
+        <position>	-0.310262 2.26158 0.147627	</position>
+        <rotation>	0.0586888 -0.00675045 3.14071	</rotation>
+        <scale>	0.661183 0.443824 0.661168	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.14789	</clipAngle>
+        <anchorPosition>	-0.310178 1.51253 0.157824	</anchorPosition>
+        <anchorDirection>	0.000486573 0.998278 0.0586597	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15082	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A122_TS-5_3Dst	</compatibleModels>
+        <position>	1.27551 1.5421 0.576137	</position>
+        <rotation>	1.18337 1.45632 -3.10737	</rotation>
+        <scale>	0.548034 0.2 0.548033	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.48255	</clipAngle>
+        <anchorPosition>	1.2809 0.621722 0.57696	</anchorPosition>
+        <anchorDirection>	0.915376 0.377585 0.139697	</anchorDirection>
+      </slot>
     </customizationSlots>
     <camouflage>
       <density>	101.384 101.61	</density>
@@ -1207,6 +1326,13 @@
         <undamaged>	vehicles/american/A122_TS-5/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A122_TS-5/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/american/A122_TS-5/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <A122_TS-5_3Dst>
+            <undamaged>	vehicles/american/A122_TS-5/_skins/A122_TS-5_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A122_TS-5/_skins/A122_TS-5_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A122_TS-5/_skins/A122_TS-5_3Dst/crash/lod0/Chassis.model	</exploded>
+          </A122_TS-5_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -2224,6 +2350,13 @@
             <undamaged>	vehicles/american/A122_TS-5/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A122_TS-5/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A122_TS-5/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <A122_TS-5_3Dst>
+                <undamaged>	vehicles/american/A122_TS-5/_skins/A122_TS-5_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A122_TS-5/_skins/A122_TS-5_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A122_TS-5/_skins/A122_TS-5_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </A122_TS-5_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A122_TS-5/collision/Gun_01.model	</collisionModelServer>
@@ -2295,6 +2428,13 @@
         <undamaged>	vehicles/american/A122_TS-5/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/american/A122_TS-5/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/american/A122_TS-5/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <A122_TS-5_3Dst>
+            <undamaged>	vehicles/american/A122_TS-5/_skins/A122_TS-5_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A122_TS-5/_skins/A122_TS-5_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A122_TS-5/_skins/A122_TS-5_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </A122_TS-5_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/american/A122_TS-5/collision/Turret_01.model	</collisionModelServer>

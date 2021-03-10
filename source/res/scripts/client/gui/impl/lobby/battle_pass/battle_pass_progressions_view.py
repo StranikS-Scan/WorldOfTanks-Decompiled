@@ -6,7 +6,7 @@ import typing
 from account_helpers.AccountSettings import AccountSettings, LAST_BATTLE_PASS_POINTS_SEEN
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from battle_pass_common import BattlePassConsts, BattlePassState
-from frameworks.wulf import ViewSettings, ViewFlags, Array
+from frameworks.wulf import ViewSettings, ViewFlags, Array, ViewStatus
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
@@ -585,7 +585,11 @@ class BattlePassProgressionsView(ViewImpl):
         self.__viewActive = viewActive
 
     def __clearSubViews(self):
-        views = self.__gui.windowsManager.findViews(lambda view: view.viewFlags & ViewFlags.VIEW_TYPE_MASK == ViewFlags.LOBBY_TOP_SUB_VIEW)
+
+        def __lobbyTopSubViewPredicate(view):
+            return view.viewFlags & ViewFlags.VIEW_TYPE_MASK == ViewFlags.LOBBY_TOP_SUB_VIEW and view.viewStatus in (ViewStatus.LOADED, ViewStatus.LOADING)
+
+        views = self.__gui.windowsManager.findViews(__lobbyTopSubViewPredicate)
         for view in views:
             view.destroyWindow()
 

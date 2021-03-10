@@ -28,6 +28,10 @@ class BattlePassStateMachine(StateMachine):
         lockNotificationManager(False)
         super(BattlePassStateMachine, self).stop()
 
+    def post(self, event):
+        if self.isRunning():
+            super(BattlePassStateMachine, self).post(event)
+
     @property
     def lobby(self):
         return self.getChildByIndex(0)

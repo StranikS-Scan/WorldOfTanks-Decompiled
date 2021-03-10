@@ -44,6 +44,8 @@ _EVENTS_REWARD_WINDOW = {recruit_helper.RecruitSourceID.TWITCH_0: TwitchRewardWi
  recruit_helper.RecruitSourceID.TWITCH_17: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.TWITCH_18: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.TWITCH_19: TwitchRewardWindow,
+ recruit_helper.RecruitSourceID.TWITCH_20: TwitchRewardWindow,
+ recruit_helper.RecruitSourceID.TWITCH_21: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.COMMANDER_MARINA: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.COMMANDER_PATRICK: TwitchRewardWindow,
  anniversary_helper.ANNIVERSARY_EVENT_PREFIX: GiveAwayRewardWindow}

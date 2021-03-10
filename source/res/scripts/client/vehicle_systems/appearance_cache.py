@@ -9,7 +9,6 @@ from items import vehicles
 from gui.shared.utils.MethodsRules import MethodsRules
 from vehicle_systems.CompoundAppearance import CompoundAppearance
 from vehicle_systems.stricted_loading import loadingPriority, makeCallbackWeak
-from ids_generators import Int32IDGenerator
 _ENABLE_CACHE_TRACKER = False
 _ENABLE_PRECACHE = True
 _VehicleInfo = namedtuple('_VehicleInfo', ['typeDescr',
@@ -18,15 +17,13 @@ _VehicleInfo = namedtuple('_VehicleInfo', ['typeDescr',
  'isTurretDetached',
  'outfitCD'])
 _AssemblerData = namedtuple('_AssemblerData', ['appearance', 'info', 'prereqsNames'])
-_loadingResourceId = 0
-_idGenerator = Int32IDGenerator()
 
 def isPrecacheEnabled():
     return _ENABLE_PRECACHE
 
 
 class _AppearanceCache(MethodsRules):
-    __slots__ = ('__arena', '__appearanceCache', '__assemblersCache', '__spaceLoaded', '__wholeVehResources', '__dCacheInfo')
+    __slots__ = ('__arena', '__appearanceCache', '__assemblersCache', '__spaceLoaded', '__wholeVehResources', '__dCacheInfo', '__currentLoadingVehicles')
 
     @property
     def cache(self):
@@ -44,10 +41,19 @@ class _AppearanceCache(MethodsRules):
         self.__dCacheInfo = {}
         self.__spaceLoaded = False
         self.__wholeVehResources = None
+        self.__currentLoadingVehicles = {}
         return
 
     def isArenaSet(self):
         return self.__arena is not None
+
+    def nextLoadingID(self, vehicleID):
+        nextID = self.__currentLoadingVehicles.get(vehicleID, 0) + 1
+        self.__currentLoadingVehicles[vehicleID] = nextID
+        return nextID
+
+    def currentLoadingID(self, vehicleID):
+        return self.__currentLoadingVehicles.get(vehicleID, 0)
 
     @MethodsRules.delayable()
     def setArena(self, arena):
@@ -82,6 +88,7 @@ class _AppearanceCache(MethodsRules):
         self.__assemblersCache.clear()
         self.__wholeVehResources = None
         self.__spaceLoaded = False
+        self.__currentLoadingVehicles.clear()
         return
 
     def onVehicleListReceived(self):
@@ -275,15 +282,13 @@ class _AppearanceCache(MethodsRules):
 _g_cache = _AppearanceCache()
 
 def _loadResource(prereqs, vId):
-    global _loadingResourceId
-    _loadingResourceId = _idGenerator.next()
-    BigWorld.loadResourceListBG(prereqs, makeCallbackWeak(_resourceLoaded, prereqs, vId, _loadingResourceId), loadingPriority(vId))
+    BigWorld.loadResourceListBG(prereqs, makeCallbackWeak(_resourceLoaded, prereqs, vId, _g_cache.nextLoadingID(vId)), loadingPriority(vId))
 
 
 def _resourceLoaded(resNames, vId, loadedResourceId, resourceRefs):
-    if _loadingResourceId != loadedResourceId:
-        return
     if not _g_cache.isArenaSet():
+        return
+    if _g_cache.currentLoadingID(vId) != loadedResourceId:
         return
     failedRefs = resourceRefs.failedIDs
     for resName in resNames:

@@ -5831,14 +5831,14 @@
         <whileGunDamaged>	2.0	</whileGunDamaged>
       </shotDispersionFactors>
       <shots>
-        <_105mm_Sprg_K>
+        <_105mm_Sprg_K_spg>
           <defaultPortion>	1.0	</defaultPortion>
           <speed>	410	</speed>
           <gravity>	170	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	26 26	</piercingPower>
           <maxHeight>	310	</maxHeight>
-        </_105mm_Sprg_K>
+        </_105mm_Sprg_K_spg>
       </shots>
     </_105mm_leFH18_L28>
     <_105mm_leFH16_L22>
@@ -5875,14 +5875,14 @@
         <whileGunDamaged>	2.0	</whileGunDamaged>
       </shotDispersionFactors>
       <shots>
-        <_105mm_Sprg_K>
+        <_105mm_Sprg_K_spg>
           <defaultPortion>	1.0	</defaultPortion>
           <speed>	380	</speed>
           <gravity>	170	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	27 27	</piercingPower>
           <maxHeight>	269	</maxHeight>
-        </_105mm_Sprg_K>
+        </_105mm_Sprg_K_spg>
       </shots>
     </_105mm_leFH16_L22>
     <_105mm_KwK45_L52>
@@ -7641,13 +7641,29 @@
       </shotDispersionFactors>
       <shots>
         <_150mm_Sprg>
-          <defaultPortion>	1.0	</defaultPortion>
+          <defaultPortion>	0.5	</defaultPortion>
           <speed>	355	</speed>
           <gravity>	150	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	38 38	</piercingPower>
-          <maxHeight>	267	</maxHeight>
+          <maxHeight>	263	</maxHeight>
         </_150mm_Sprg>
+        <_150mm_Gr_19_Stg>
+          <defaultPortion>	0.3	</defaultPortion>
+          <speed>	380	</speed>
+          <gravity>	150	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	48 48	</piercingPower>
+          <maxHeight>	301	</maxHeight>
+        </_150mm_Gr_19_Stg>
+        <_150mmGr_39H1A>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	426	</speed>
+          <gravity>	150	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	154 154	</piercingPower>
+          <maxHeight>	379	</maxHeight>
+        </_150mmGr_39H1A>
       </shots>
     </_150mm_sFH13_L17>
     <_150mm_sFH18_L30>
@@ -7685,13 +7701,29 @@
       </shotDispersionFactors>
       <shots>
         <_150mm_SprgG>
-          <defaultPortion>	1.0	</defaultPortion>
+          <defaultPortion>	0.5	</defaultPortion>
           <speed>	420	</speed>
           <gravity>	140	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	39 39	</piercingPower>
-          <maxHeight>	390	</maxHeight>
+          <maxHeight>	394	</maxHeight>
         </_150mm_SprgG>
+        <_150mm_Gr_19_Stg_FES>
+          <defaultPortion>	0.3	</defaultPortion>
+          <speed>	449	</speed>
+          <gravity>	140	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	49 49	</piercingPower>
+          <maxHeight>	451	</maxHeight>
+        </_150mm_Gr_19_Stg_FES>
+        <_150mmGr_39H1A_G>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	504	</speed>
+          <gravity>	140	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	188 188	</piercingPower>
+          <maxHeight>	567	</maxHeight>
+        </_150mmGr_39H1A_G>
       </shots>
     </_150mm_sFH18_L30>
     <Gun_Env_Artillery>
@@ -7782,21 +7814,29 @@
       </shotDispersionFactors>
       <shots>
         <_150mm_SprgG31>
-          <defaultPortion>	1.0	</defaultPortion>
+          <defaultPortion>	0.5	</defaultPortion>
           <speed>	440	</speed>
           <gravity>	149	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	39 39	</piercingPower>
-          <maxHeight>	401	</maxHeight>
+          <maxHeight>	407	</maxHeight>
         </_150mm_SprgG31>
         <_150mm_SprgG36>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	440	</speed>
+          <defaultPortion>	0.3	</defaultPortion>
+          <speed>	471	</speed>
           <gravity>	149	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	39 39	</piercingPower>
-          <maxHeight>	401	</maxHeight>
+          <piercingPower>	49 49	</piercingPower>
+          <maxHeight>	465	</maxHeight>
         </_150mm_SprgG36>
+        <_150mmGr_39H2A_G>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	528	</speed>
+          <gravity>	149	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	224 224	</piercingPower>
+          <maxHeight>	585	</maxHeight>
+        </_150mmGr_39H2A_G>
       </shots>
     </_150mm_sFH36_L43>
     <_150mm_sIG33L11>
@@ -7834,13 +7874,29 @@
       </shotDispersionFactors>
       <shots>
         <_150mm_Sprg_L>
-          <defaultPortion>	1.0	</defaultPortion>
+          <defaultPortion>	0.5	</defaultPortion>
           <speed>	275	</speed>
           <gravity>	125	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	35 35	</piercingPower>
-          <maxHeight>	198	</maxHeight>
+          <maxHeight>	190	</maxHeight>
         </_150mm_Sprg_L>
+        <_150mm_Sprg_L.erz>
+          <defaultPortion>	0.3	</defaultPortion>
+          <speed>	294	</speed>
+          <gravity>	125	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	44 44	</piercingPower>
+          <maxHeight>	217	</maxHeight>
+        </_150mm_Sprg_L.erz>
+        <_150mmGr_39H1A_L>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	330	</speed>
+          <gravity>	125	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	98 98	</piercingPower>
+          <maxHeight>	273	</maxHeight>
+        </_150mmGr_39H1A_L>
       </shots>
     </_150mm_sIG33L11>
     <_170mm_K72_Sf_>
@@ -7878,21 +7934,29 @@
       </shotDispersionFactors>
       <shots>
         <_170mm_Sprg18>
-          <defaultPortion>	1.00	</defaultPortion>
+          <defaultPortion>	0.5	</defaultPortion>
           <speed>	510	</speed>
           <gravity>	180	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	44 44	</piercingPower>
-          <maxHeight>	444	</maxHeight>
+          <maxHeight>	452	</maxHeight>
         </_170mm_Sprg18>
         <_170mm_Sprg18_Ausf_G>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	510	</speed>
+          <defaultPortion>	0.3	</defaultPortion>
+          <speed>	546	</speed>
           <gravity>	180	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	44 44	</piercingPower>
-          <maxHeight>	444	</maxHeight>
+          <piercingPower>	55 55	</piercingPower>
+          <maxHeight>	517	</maxHeight>
         </_170mm_Sprg18_Ausf_G>
+        <_170mm_Pzgr_73>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	612	</speed>
+          <gravity>	180	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	268 252	</piercingPower>
+          <maxHeight>	651	</maxHeight>
+        </_170mm_Pzgr_73>
       </shots>
     </_170mm_K72_Sf_>
     <_210mm_Morser_21>
@@ -7930,21 +7994,29 @@
       </shotDispersionFactors>
       <shots>
         <_210mm_Sprg18>
-          <defaultPortion>	1.00	</defaultPortion>
+          <defaultPortion>	0.5	</defaultPortion>
           <speed>	435	</speed>
           <gravity>	142	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	53 53	</piercingPower>
-          <maxHeight>	411	</maxHeight>
+          <maxHeight>	417	</maxHeight>
         </_210mm_Sprg18>
         <_210mm_Sprg18_Ausf_G>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	435	</speed>
+          <defaultPortion>	0.3	</defaultPortion>
+          <speed>	465	</speed>
           <gravity>	142	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	53 53	</piercingPower>
-          <maxHeight>	411	</maxHeight>
+          <piercingPower>	66 66	</piercingPower>
+          <maxHeight>	477	</maxHeight>
         </_210mm_Sprg18_Ausf_G>
+        <_210mm_Gr.18Be>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	522	</speed>
+          <gravity>	142	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	296 278	</piercingPower>
+          <maxHeight>	600	</maxHeight>
+        </_210mm_Gr.18Be>
       </shots>
     </_210mm_Morser_21>
     <_210mm_Morser_18>
@@ -7983,21 +8055,29 @@
       </shotDispersionFactors>
       <shots>
         <_210mm_Sprg18>
-          <defaultPortion>	1.00	</defaultPortion>
+          <defaultPortion>	0.5	</defaultPortion>
           <speed>	435	</speed>
           <gravity>	142	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	53 53	</piercingPower>
-          <maxHeight>	411	</maxHeight>
+          <maxHeight>	417	</maxHeight>
         </_210mm_Sprg18>
         <_210mm_Sprg18_Ausf_G>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	435	</speed>
+          <defaultPortion>	0.3	</defaultPortion>
+          <speed>	465	</speed>
           <gravity>	142	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	53 53	</piercingPower>
-          <maxHeight>	411	</maxHeight>
+          <piercingPower>	66 66	</piercingPower>
+          <maxHeight>	477	</maxHeight>
         </_210mm_Sprg18_Ausf_G>
+        <_210mm_Gr.18Be>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	522	</speed>
+          <gravity>	142	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	372 350	</piercingPower>
+          <maxHeight>	600	</maxHeight>
+        </_210mm_Gr.18Be>
       </shots>
     </_210mm_Morser_18>
     <_150mm_KwK44_L38>

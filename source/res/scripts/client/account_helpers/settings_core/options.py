@@ -1335,15 +1335,20 @@ class AimSetting(StorageAccountSetting):
         GUN_TAG = 'gunTag'
         GUN_TAG_TYPE = 'gunTagType'
         ZOOM_INDICATOR = 'zoomIndicator'
+        ARMOR_SCREEN_INDICATOR = 'armorScreenIndicator'
+        ARMOR_SCREEN_INDICATOR_TYPE = 'armorScreenIndicatorType'
 
     VIRTUAL_OPTIONS = {OPTIONS.MIXING_TYPE: (OPTIONS.MIXING, 4),
      OPTIONS.GUN_TAG_TYPE: (OPTIONS.GUN_TAG, 15),
      OPTIONS.CENTRAL_TAG_TYPE: (OPTIONS.CENTRAL_TAG, 14),
-     OPTIONS.NET_TYPE: (OPTIONS.NET, 4)}
+     OPTIONS.NET_TYPE: (OPTIONS.NET, 4),
+     OPTIONS.ARMOR_SCREEN_INDICATOR_TYPE: (OPTIONS.ARMOR_SCREEN_INDICATOR, 3)}
 
     def _get(self):
         result = {}
         for option in self.OPTIONS.ALL():
+            if not GUI_SETTINGS.armorScreenIndicatorSettings.get('useUserSettings', False) and option in (self.OPTIONS.ARMOR_SCREEN_INDICATOR, self.OPTIONS.ARMOR_SCREEN_INDICATOR_TYPE):
+                continue
             if option in self.VIRTUAL_OPTIONS:
                 default = self._default[self.VIRTUAL_OPTIONS[option][0]]['type']
             else:
@@ -1367,30 +1372,15 @@ class AimSetting(StorageAccountSetting):
     def pack(self):
         result = self._get()
         for vname, (name, optsLen) in self.VIRTUAL_OPTIONS.iteritems():
-            types = [ {'loc': makeString('#settings:aim/%s/type%d' % (name, i)),
-             'label': '#settings:aim/%s/type%d' % (name, i),
-             'index': i} for i in xrange(int(optsLen)) ]
-            types = sorted(types, key=itemgetter('loc'))
-            for item in types:
-                item.pop('loc', None)
+            if vname in result:
+                types = [ {'loc': makeString('#settings:aim/%s/type%d' % (name, i)),
+                 'label': '#settings:aim/%s/type%d' % (name, i),
+                 'index': i} for i in xrange(int(optsLen)) ]
+                types = sorted(types, key=itemgetter('loc'))
+                for item in types:
+                    item.pop('loc', None)
 
-            result[vname] = self.PackStruct(result[vname], types)._asdict()
-
-        return result
-
-    def toAccountSettings(self):
-        result = {}
-        value = self._get()
-        for option in self.OPTIONS.ALL():
-            if option not in self.VIRTUAL_OPTIONS:
-                alpha = value[option]
-                optType = 0
-                for k, v in self.VIRTUAL_OPTIONS.items():
-                    if v[0] == option:
-                        optType = value[k]
-
-                result[option] = {'alpha': alpha,
-                 'type': optType}
+                result[vname] = self.PackStruct(result[vname], types)._asdict()
 
         return result
 
@@ -1404,6 +1394,53 @@ class AimSetting(StorageAccountSetting):
                         result[k] = value['type']
 
         return result
+
+
+class SPGAimSetting(StorageDumpSetting):
+
+    def getExtraData(self):
+        labelR = R.strings.settings.aim.spg.dyn(self.settingName)
+        tooltipR = labelR.dyn('tooltip') if labelR else None
+        data = {'checkBoxLabel': backport.text(labelR()) if labelR else ''}
+        if tooltipR:
+            data['tooltip'] = makeTooltip(backport.text(tooltipR.header()), backport.text(tooltipR.body()))
+        return data
+
+    def pack(self):
+        return {'current': self._get(),
+         'options': self._getOptions(),
+         'extraData': self.getExtraData()}
+
+    def getDefaultValue(self):
+        return AccountSettings.getSettingsDefault('spgAim').get(self.settingName, None)
+
+
+class SPGStrategicCamMode(StorageDumpSetting):
+
+    class OPTIONS(CONST_CONTAINER):
+        BASE = 'base'
+        ALT = 'alt'
+
+    ARTY_CAM_OPTIONS = [OPTIONS.BASE, OPTIONS.ALT]
+
+    def getDefaultValue(self):
+        return self.ARTY_CAM_OPTIONS.index(self.OPTIONS.BASE)
+
+    def getExtraData(self):
+        tooltipR = R.strings.settings.aim.spg.spgStrategicCamMode.tooltip
+        data = {'label': backport.text(R.strings.settings.aim.spg.spgStrategicCamMode())}
+        if tooltipR:
+            data['tooltip'] = makeTooltip(backport.text(tooltipR.header()), backport.text(tooltipR.body()))
+        return data
+
+    def pack(self):
+        return {'current': self._get(),
+         'options': self._getOptions(),
+         'extraData': self.getExtraData()}
+
+    def _getOptions(self):
+        settingsKey = '#settings:aim/spg/{}/{}'
+        return [ settingsKey.format(self.settingName, mType) for mType in self.ARTY_CAM_OPTIONS ]
 
 
 class MinimapSetting(StorageDumpSetting):
@@ -1427,6 +1464,23 @@ class MinimapVehModelsSetting(StorageDumpSetting):
 
     def getDefaultValue(self):
         return self.VEHICLE_MODELS_TYPES.index(self.OPTIONS.ALWAYS)
+
+
+class MinimapArtyHitSetting(StorageDumpSetting):
+
+    class OPTIONS(CONST_CONTAINER):
+        HIDE = 'hide'
+        DOT = 'dot'
+        SQUARE = 'square'
+
+    ARTY_HIT_OPTIONS = [OPTIONS.HIDE, OPTIONS.DOT, OPTIONS.SQUARE]
+
+    def _getOptions(self):
+        settingsKey = '#settings:game/%s/%s'
+        return [ settingsKey % (self.settingName, mType) for mType in self.ARTY_HIT_OPTIONS ]
+
+    def getDefaultValue(self):
+        return self.ARTY_HIT_OPTIONS.index(self.OPTIONS.DOT)
 
 
 class CarouselTypeSetting(StorageDumpSetting):
@@ -2545,11 +2599,31 @@ class ShowDamageIconSetting(StorageAccountSetting):
         showDamageIconTooltipContent += makeHtmlString(templateName, 'trackDamage') + lineBreak
         showDamageIconTooltipContent += makeHtmlString(templateName, 'criticalDamage') + lineBreak
         showDamageIconTooltipContent += makeHtmlString(templateName, 'blocked')
-        return {'checkBoxLabel': i18n.makeString(SETTINGS.GAME_SHOWDAMAGEICON),
-         'tooltip': makeTooltip(i18n.makeString(TOOLTIPS.SHOWDAMAGEICON_HEADER), showDamageIconTooltipContent)}
+        return {'checkBoxLabel': backport.text(R.strings.settings.game.showDamageIcon()),
+         'tooltip': makeTooltip(backport.text(R.strings.tooltips.showDamageIcon.header()), showDamageIconTooltipContent)}
 
     def pack(self):
         res = self.ShowDamageIconPackStruct(self._get(), self._getOptions(), self.getExtraData())._asdict()
+        return res
+
+    def getDefaultValue(self):
+        return True
+
+
+class ShowSpacedArmorHitIconSetting(StorageAccountSetting):
+    ShowSpacedArmorHitIconPackStruct = namedtuple('ShowSpacedArmorHitIconPackStruct', 'current options extraData')
+
+    def getExtraData(self):
+        templateName = 'html_templates:lobby/tooltips/settings_show_spaced_armor_hit_icon'
+        showDamageIconTooltipContent = (makeHtmlString(templateName, 'spacedArmorBlocked'),
+         makeHtmlString(templateName, 'trackBlocked'),
+         makeHtmlString(templateName, 'wheelBlocked'),
+         makeHtmlString(templateName, 'missArmor'))
+        return {'checkBoxLabel': backport.text(R.strings.settings.game.showSpacedArmorHitIcon()),
+         'tooltip': makeTooltip(backport.text(R.strings.tooltips.showSpacedArmorHitIcon.header()), '<br/>'.join(showDamageIconTooltipContent))}
+
+    def pack(self):
+        res = self.ShowSpacedArmorHitIconPackStruct(self._get(), self._getOptions(), self.getExtraData())._asdict()
         return res
 
     def getDefaultValue(self):

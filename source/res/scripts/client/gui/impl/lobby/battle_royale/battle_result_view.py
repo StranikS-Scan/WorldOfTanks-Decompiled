@@ -2,8 +2,10 @@
 # Embedded file name: scripts/client/gui/impl/lobby/battle_royale/battle_result_view.py
 import typing
 from collections import OrderedDict
+import SoundGroups
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData
+from gui.impl import backport
 from gui.impl.backport import BackportTooltipWindow, createTooltipData
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_royale.battle_result_view.battle_result_view_model import BattleResultViewModel
@@ -117,6 +119,7 @@ class BrBattleResultsViewInLobby(ViewImpl):
 
     def _finalize(self):
         BREvents.playSound(BREvents.BR_RESULT_PROGRESS_BAR_STOP)
+        SoundGroups.g_instance.playSound2D(backport.sound(R.sounds.bp_progress_bar_stop()))
         self.__tooltipsData = None
         self.__tooltipParametersCreator = None
         self.__data = None

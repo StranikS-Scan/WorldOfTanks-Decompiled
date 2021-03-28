@@ -2038,4 +2038,10 @@ BATTLE_RESULTS = [('health',
   0,
   None,
   'skip',
-  ENTRY_TYPE.ACCOUNT_ALL)]
+  ENTRY_TYPE.ACCOUNT_ALL),
+ ('quickShellChangerUsageCount',
+  int,
+  0,
+  None,
+  'skip',
+  ENTRY_TYPE.SERVER)]

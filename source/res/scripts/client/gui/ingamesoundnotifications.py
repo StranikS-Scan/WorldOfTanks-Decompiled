@@ -1,14 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/IngameSoundNotifications.py
+import logging
 from collections import namedtuple
 from functools import partial
 import BigWorld
+import Math
 import ResMgr
 import BattleReplay
 import SoundGroups
 import WWISE
 from debug_utils import LOG_WARNING
 from Math import Matrix
+_logger = logging.getLogger(__name__)
 
 class IngameSoundNotifications(object):
     __CFG_SECTION_PATH = 'gui/sound_notifications.xml'
@@ -99,7 +102,7 @@ class IngameSoundNotifications(object):
                             else:
                                 SoundGroups.g_instance.playSound2D(soundDesc['sound'])
                         except Exception:
-                            pass
+                            _logger.exception('play sound exception: %s', soundPath)
 
                         continue
                     else:
@@ -241,14 +244,23 @@ class IngameSoundNotifications(object):
         return
 
 
+class ComplexSoundConstants(object):
+    SPG_DISTANT_THREAT_SOUND = 'wpn_artillery_distant_threat'
+    RTPC_EXT_SPG_SIGHT = 'RTPC_ext_artillery_sight'
+
+
 class ComplexSoundNotifications(object):
 
     def __init__(self, ingameSoundNotifications):
         self.__isAimingEnded = False
         self.__ingameSoundNotifications = ingameSoundNotifications
+        self.__activeSounds = {}
 
     def destroy(self):
-        pass
+        for sound, hasMatrix in self.__activeSounds.values():
+            self.__soundStop(sound, hasMatrix)
+
+        self.__activeSounds.clear()
 
     def setAimingEnded(self, isEnded, isReloading):
         if not self.__isAimingEnded and isEnded and not isReloading:
@@ -261,3 +273,31 @@ class ComplexSoundNotifications(object):
             self.__ingameSoundNotifications.play('enemies_sighted')
         else:
             self.__ingameSoundNotifications.play('enemy_sighted')
+
+    def notifyEnemySPGShotSound(self, distToTarget, shooterPosition):
+        soundMatrix = Math.Matrix()
+        soundMatrix.translation = shooterPosition
+        try:
+            sound = SoundGroups.g_instance.getSound3D(soundMatrix, ComplexSoundConstants.SPG_DISTANT_THREAT_SOUND)
+            if sound is not None:
+                soundId = id(sound)
+                self.__activeSounds[soundId] = (sound, True)
+                sound.setRTPC(ComplexSoundConstants.RTPC_EXT_SPG_SIGHT, distToTarget)
+                sound.setCallback(lambda s: self.__endSoundCallback(soundId, s, True))
+                sound.play()
+        except Exception:
+            _logger.exception('play wpn_artillery_distant_threat sound exception')
+
+        return
+
+    def __endSoundCallback(self, soundID, sound, hasMatrix=False):
+        self.__soundStop(sound, hasMatrix)
+        self.__activeSounds.pop(soundID, None)
+        return
+
+    def __soundStop(self, sound, hasMatrix=False):
+        if sound is not None:
+            sound.stop()
+            if hasMatrix:
+                sound.releaseMatrix()
+        return

@@ -15,6 +15,7 @@ from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import MINIMAP_IBC_HINT_SECTION, HINTS_LEFT
 from account_helpers.settings_core import settings_constants
+from account_helpers.settings_core.options import MinimapArtyHitSetting
 from battleground.location_point_manager import g_locationPointManager
 from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES, ReplyState, MarkerType, LocationMarkerSubType, ONE_SHOT_COMMANDS_TO_REPLIES, INVALID_VEHICLE_POSITION
 from constants import VISIBILITY, AOI
@@ -23,6 +24,7 @@ from gui import GUI_SETTINGS, InputHandler
 from gui.Scaleform.daapi.view.battle.shared.minimap import common
 from gui.Scaleform.daapi.view.battle.shared.minimap import entries
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings
+from gui.Scaleform.daapi.view.battle.shared.minimap.settings import ENTRY_SYMBOL_NAME
 from gui.battle_control import avatar_getter, minimap_utils, matrix_factory
 from gui.battle_control.arena_info.interfaces import IVehiclesAndPositionsController
 from gui.battle_control.arena_info.settings import INVALIDATE_OP
@@ -1459,3 +1461,130 @@ class DeathZonesMinimapPlugin(common.EntriesPlugin):
         arenaSize = BigWorld.player().arena.arenaType.boundingBox[1]
         self._scaleCoefX = minimap_utils.MINIMAP_SIZE[0] / arenaSize[0]
         self._scaleCoefY = minimap_utils.MINIMAP_SIZE[1] / arenaSize[1]
+
+
+class _BaseEnemySPGImpl(object):
+
+    @staticmethod
+    def getOptionName():
+        raise NotImplementedError
+
+    def getSymbolName(self):
+        raise NotImplementedError
+
+    def getIdAndPosition(self, position):
+        raise NotImplementedError
+
+
+class _EmptyEnemySPGImpl(_BaseEnemySPGImpl):
+
+    @staticmethod
+    def getOptionName():
+        return MinimapArtyHitSetting.OPTIONS.HIDE
+
+    def getSymbolName(self):
+        return None
+
+    def getIdAndPosition(self, position):
+        return (None, None)
+
+
+class _SquareEnemySPGImpl(_BaseEnemySPGImpl):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+
+    @staticmethod
+    def getOptionName():
+        return MinimapArtyHitSetting.OPTIONS.SQUARE
+
+    def getSymbolName(self):
+        return ENTRY_SYMBOL_NAME.ARTY_HIT_BOX_MARKER
+
+    def getIdAndPosition(self, position):
+        mapsCtrl = self.sessionProvider.dynamic.maps
+        if mapsCtrl and mapsCtrl.hasMinimapGrid():
+            cellId = mapsCtrl.getMinimapCellIdByPosition(Math.Vector3(*position))
+            if cellId is not None:
+                cellPosition = minimap_utils.makePositionMatrix(mapsCtrl.getMinimapPositionById(cellId))
+                return (cellId, cellPosition)
+        return (None, None)
+
+
+class _DotEnemySPGImpl(_BaseEnemySPGImpl):
+    __slots__ = ('__generator',)
+
+    def __init__(self):
+        super(_DotEnemySPGImpl, self).__init__()
+        self.__generator = SequenceIDGenerator()
+
+    @staticmethod
+    def getOptionName():
+        return MinimapArtyHitSetting.OPTIONS.DOT
+
+    def getSymbolName(self):
+        return ENTRY_SYMBOL_NAME.ARTY_HIT_DOT_MARKER
+
+    def getIdAndPosition(self, position):
+        matrix = minimap_utils.makePositionMatrix(position)
+        uniqueID = self.__generator.next()
+        return (uniqueID, matrix)
+
+
+class EnemySPGShotPlugin(common.IntervalPlugin):
+    __slots__ = ('__hitImpl',)
+    _DISPLAY_TIME = 10
+    _IMPL_LIST = (_EmptyEnemySPGImpl, _SquareEnemySPGImpl, _DotEnemySPGImpl)
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+
+    def __init__(self, parent):
+        super(EnemySPGShotPlugin, self).__init__(parent)
+        self.__hitImpl = _EmptyEnemySPGImpl()
+
+    def start(self):
+        super(EnemySPGShotPlugin, self).start()
+        ctrl = self.sessionProvider.shared.feedback
+        if ctrl is not None:
+            ctrl.onEnemySPGShotReceived += self.__onEnemySPGShotReceived
+        return
+
+    def stop(self):
+        ctrl = self.sessionProvider.shared.feedback
+        if ctrl is not None:
+            ctrl.onEnemySPGShotReceived -= self.__onEnemySPGShotReceived
+        super(EnemySPGShotPlugin, self).stop()
+        return
+
+    def setSettings(self):
+        value = self.settingsCore.getSetting(settings_constants.GAME.SHOW_ARTY_HIT_ON_MAP)
+        self.__setHitImpl(value)
+
+    def updateSettings(self, diff):
+        if settings_constants.GAME.SHOW_ARTY_HIT_ON_MAP in diff:
+            value = diff[settings_constants.GAME.SHOW_ARTY_HIT_ON_MAP]
+            self.__setHitImpl(value)
+
+    def __setHitImpl(self, value):
+        options = MinimapArtyHitSetting.ARTY_HIT_OPTIONS
+        if value >= len(options):
+            return
+        option = options[value]
+        if option == self.__hitImpl.getOptionName():
+            return
+        for implClazz in self._IMPL_LIST:
+            if option == implClazz.getOptionName():
+                self.__hitImpl = implClazz()
+                self._clearAllCallbacks()
+                break
+
+    def __onEnemySPGShotReceived(self, position):
+        symbolName = self.__hitImpl.getSymbolName()
+        if symbolName is None:
+            return
+        else:
+            uniqueID, matrix = self.__hitImpl.getIdAndPosition(position)
+            if uniqueID is None:
+                return
+            model = self._addEntryEx(uniqueID, symbolName, _C_NAME.PERSONAL, matrix=matrix, active=True)
+            if model is not None:
+                self._invoke(model.getID(), 'show', self._DISPLAY_TIME)
+                self._setCallback(uniqueID, self._DISPLAY_TIME)
+            return

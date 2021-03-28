@@ -1,14 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ProjectileMover.py
+import logging
 import BigWorld
 import Math
 import constants
 import TriggersManager
 from TriggersManager import TRIGGER_TYPE
 import FlockManager
+from debug_utils import LOG_NOTE
 from vehicle_systems.tankStructure import TankPartNames, ColliderTypes
 from helpers import gEffectsDisabled
 from helpers.trajectory_drawer import TrajectoryDrawer
+_logger = logging.getLogger(__name__)
 
 def ownVehicleGunShotPositionGetter():
     ownVehicle = BigWorld.entities.get(BigWorld.player().playerVehicleID, None)
@@ -58,13 +61,15 @@ class ProjectileMover(object):
                 startPoint = refStartPoint
             artID = effectsDescr.get('artilleryID')
             if artID is not None:
+                _logger.warning('Add salvo projectile shotId=%s', shotID)
                 self.salvo.addProjectile(artID, gravity, refStartPoint, refVelocity)
                 return
             isOwnShoot = attackerID == BigWorld.player().playerVehicleID
-            projectileMotor = self.__ballistics.addProjectile(shotID, gravity, refStartPoint, refVelocity, startPoint, maxDistance, isOwnShoot, attackerID, ownVehicleGunShotPositionGetter(), tracerCameraPos)
+            projectileMotor, collisionTime, _ = self.__ballistics.addProjectile(shotID, gravity, refStartPoint, refVelocity, startPoint, maxDistance, isOwnShoot, attackerID, ownVehicleGunShotPositionGetter(), tracerCameraPos)
             if self.__debugDrawer is not None:
                 self.__debugDrawer.addProjectile(shotID, attackerID, refStartPoint, refVelocity, Math.Vector3(0.0, -gravity, 0.0), maxDistance, isOwnShoot)
             if projectileMotor is None:
+                _logger.warning('Projectile Motor is None shotID =%s', shotID)
                 return
             projModelName, projModelOwnShotName, projEffects = effectsDescr['projectile']
             model = BigWorld.Model(projModelOwnShotName if isOwnShoot else projModelName)
@@ -81,7 +86,9 @@ class ProjectileMover(object):
                 model.addMotor(projectileMotor)
                 model.visible = False
                 model.visibleAttachments = True
-                projEffects.attachTo(proj['model'], proj['effectsData'], 'flying', isPlayerVehicle=isOwnShoot, isArtillery=False, attackerID=attackerID)
+                projEffects.attachTo(proj['model'], proj['effectsData'], 'flying', isPlayerVehicle=isOwnShoot, isArtillery=False, attackerID=attackerID, collisionTime=collisionTime)
+            else:
+                _logger.warning('ProjectileMover gEffectsDisabled ')
             self.__projectiles[shotID] = proj
             FlockManager.getManager().onProjectile(startPoint)
             return
@@ -89,8 +96,12 @@ class ProjectileMover(object):
     def hide(self, shotID, endPoint):
         proj = self.__projectiles.pop(shotID, None)
         if proj is None:
+            _logger.warning('Hide None projectile shotID=%s', shotID)
             return
         else:
+            attackerID = proj.get('attackerID', 0)
+            if BigWorld.player().playerVehicleID == attackerID:
+                LOG_NOTE('Hide my projectile', shotID, endPoint)
             if -shotID in self.__projectiles:
                 self.__delProjectile(-shotID)
             self.__projectiles[-shotID] = proj
@@ -137,7 +148,10 @@ class ProjectileMover(object):
     def __notifyProjectileHit(self, hitPosition, proj):
         caliber = proj['effectsDescr']['caliber']
         isOwnShot = proj['autoScaleProjectile']
+        attackerID = proj.get('attackerID', 0)
         BigWorld.player().inputHandler.onProjectileHit(hitPosition, caliber, isOwnShot)
+        if BigWorld.player().playerVehicleID == attackerID:
+            LOG_NOTE('Notify my projectile hit', hitPosition)
         FlockManager.getManager().onProjectile(hitPosition)
 
     def __addExplosionEffect(self, position, proj, velocityDir):
@@ -158,6 +172,9 @@ class ProjectileMover(object):
                 position = Math.Vector3(position.x, waterY, position.z)
                 self.__addWaterRipples(position, rippleDiameter, 5)
         keyPoints, effects, _ = proj['effectsDescr'][effectTypeStr]
+        attackerID = proj.get('attackerID', 0)
+        if BigWorld.player().playerVehicleID == attackerID:
+            LOG_NOTE('Add Explosion Effect my projectile', position, velocityDir)
         BigWorld.player().terrainEffects.addNew(position, effects, keyPoints, None, dir=velocityDir, start=position + velocityDir.scale(-1.0), end=position + velocityDir.scale(1.0), attackerID=proj['attackerID'])
         return
 
@@ -169,6 +186,9 @@ class ProjectileMover(object):
             effectsDescr = proj['effectsDescr']
             projEffects = effectsDescr['projectile'][2]
             projEffects.detachFrom(proj['effectsData'], 'stopFlying', deathType)
+            attackerID = proj.get('attackerID', 0)
+            if BigWorld.player().playerVehicleID == attackerID:
+                LOG_NOTE('Kill my projectile', shotID, position, impactVelDir, deathType)
             if proj['showExplosion']:
                 self.__addExplosionEffect(position, proj, impactVelDir)
             return
@@ -199,6 +219,9 @@ class ProjectileMover(object):
             projEffects.detachAllFrom(proj['effectsData'])
             proj['model'].delMotor(proj['motor'])
             BigWorld.player().delModel(proj['model'])
+            attackerID = proj.get('attackerID', 0)
+            if BigWorld.player().playerVehicleID == attackerID:
+                LOG_NOTE('Del my projectile', shotID)
             return
 
     def __onCameraChanged(self, cameraName, currentVehicleId=None):
@@ -214,7 +237,7 @@ class EntityCollisionData(object):
         if isVehicle:
             self.entity = BigWorld.entity(entityID)
             matInfo = self.entity.getMatinfo(partIndex, matKind)
-            self.armor = matInfo.armor if matInfo is not None else 0.0
+            self.armor = matInfo.armor if matInfo is not None and matInfo.armor is not None else 0.0
         else:
             self.entity = None
         return

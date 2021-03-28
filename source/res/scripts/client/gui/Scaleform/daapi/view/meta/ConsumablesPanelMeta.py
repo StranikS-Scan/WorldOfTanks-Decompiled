@@ -78,3 +78,6 @@ class ConsumablesPanelMeta(BaseDAAPIComponent):
 
     def as_setPanelSettingsS(self, settingsId):
         return self.flashObject.as_setPanelSettings(settingsId) if self._isDAAPIInited() else None
+
+    def as_setSPGShotResultS(self, shellIdx, shotResult):
+        return self.flashObject.as_setSPGShotResult(shellIdx, shotResult) if self._isDAAPIInited() else None

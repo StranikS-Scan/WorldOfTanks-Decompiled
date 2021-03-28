@@ -15,6 +15,7 @@ import DestructiblesCache
 import TriggersManager
 import constants
 import physics_shared
+from account_helpers.settings_core.settings_constants import GAME
 from aih_constants import ShakeReason
 from TriggersManager import TRIGGER_TYPE
 from VehicleEffects import DamageFromShotDecoder
@@ -22,6 +23,7 @@ from constants import SPT_MATKIND
 from constants import VEHICLE_HIT_EFFECT, VEHICLE_SIEGE_STATE, ATTACK_REASON_INDICES, ATTACK_REASON
 from debug_utils import LOG_WARNING, LOG_DEBUG_DEV
 from gui.battle_control import vehicle_getter
+from gui.battle_control.avatar_getter import getSoundNotifications
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _GUI_EVENT_ID, VEHICLE_VIEW_STATE
 from gun_rotation_shared import decodeGunAngles
 from helpers import dependency
@@ -29,6 +31,8 @@ from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
 from helpers.EffectsList import SoundStartParam
 from items import vehicles
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES, EFFECT_MATERIALS
+from math_utils import almostZero
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.game_control import ISpecialSoundCtrl, IBattleRoyaleController
@@ -81,6 +85,7 @@ StunInfo = namedtuple('StunInfo', ('startTime',
  'totalTime'))
 DebuffInfo = namedtuple('DebuffInfo', ('duration', 'animated'))
 VEHICLE_COMPONENTS = {BattleAbilitiesComponent}
+_PROPERTY_TIME_DELTA = 1.0
 
 class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
     isEnteringWorld = property(lambda self: self.__isEnteringWorld)
@@ -92,6 +97,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
     lobbyContext = dependency.descriptor(ILobbyContext)
     __specialSounds = dependency.descriptor(ISpecialSoundCtrl)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
+    __settingsCore = dependency.descriptor(ISettingsCore)
     activeGunIndex = property(lambda self: self.__activeGunIndex)
 
     @property
@@ -300,7 +306,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
                 BigWorld.player().cancelWaitingForShot()
             return
 
-    def showDamageFromShot(self, attackerID, points, effectsIndex, damageFactor):
+    def showDamageFromShot(self, attackerID, points, effectsIndex, damageFactor, lastMaterialIsShield):
         if not self.isStarted:
             return
         else:
@@ -315,14 +321,15 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             firstHitPoint = decodedPoints[0]
             maxPriorityHitPoint = decodedPoints[-1]
             maxHitEffectCode = maxPriorityHitPoint.hitEffectCode
-            hasPiercedHit = DamageFromShotDecoder.hasDamaged(maxHitEffectCode)
+            hasDamageHit = DamageFromShotDecoder.hasDamaged(maxHitEffectCode)
+            hasPiercedHit = maxHitEffectCode in VEHICLE_HIT_EFFECT.PIERCED_HITS
             compoundModel = self.appearance.compoundModel
             compMatrix = Math.Matrix(compoundModel.node(firstHitPoint.componentName))
             firstHitDirLocal = firstHitPoint.matrix.applyToAxis(2)
             firstHitDir = compMatrix.applyVector(firstHitDirLocal)
             self.appearance.receiveShotImpulse(firstHitDir, effectsDescr['targetImpulse'])
             player = BigWorld.player()
-            player.inputHandler.onVehicleShaken(self, compMatrix.translation, firstHitDir, effectsDescr['caliber'], ShakeReason.HIT if hasPiercedHit else ShakeReason.HIT_NO_DAMAGE)
+            player.inputHandler.onVehicleShaken(self, compMatrix.translation, firstHitDir, effectsDescr['caliber'], ShakeReason.HIT if hasDamageHit else ShakeReason.HIT_NO_DAMAGE)
             self.appearance.executeHitVibrations(maxHitEffectCode)
             showFriendlyFlashBang = False
             sessionProvider = self.guiSessionProvider
@@ -336,26 +343,18 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             self.appearance.boundEffects.addNewToNode(maxPriorityHitPoint.componentName, maxPriorityHitPoint.matrix, effects, keyPoints, isPlayerVehicle=self.isPlayerVehicle, showShockWave=showFullscreenEffs, showFlashBang=showFullscreenEffs and not showFriendlyFlashBang, showFriendlyFlashBang=showFullscreenEffs and showFriendlyFlashBang, entity_id=self.id, damageFactor=damageFactor, attackerID=attackerID, hitdir=firstHitDir)
             if not self.isAlive():
                 return
-            if attackerID == BigWorld.player().playerVehicleID:
-                if maxHitEffectCode is not None and not self.isPlayerVehicle:
-                    if maxHitEffectCode in VEHICLE_HIT_EFFECT.RICOCHETS:
-                        eventID = _GUI_EVENT_ID.VEHICLE_RICOCHET
-                    elif maxHitEffectCode == VEHICLE_HIT_EFFECT.CRITICAL_HIT:
-                        if maxPriorityHitPoint.componentName == TankPartNames.CHASSIS:
-                            if damageFactor:
-                                eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT_CHASSIS_PIERCED
-                            else:
-                                eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT_CHASSIS
-                        else:
-                            eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT
-                    elif maxHitEffectCode == VEHICLE_HIT_EFFECT.ARMOR_PIERCED_DEVICE_DAMAGED:
-                        eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT
-                    elif hasPiercedHit:
-                        eventID = _GUI_EVENT_ID.VEHICLE_ARMOR_PIERCED
-                    else:
-                        eventID = _GUI_EVENT_ID.VEHICLE_HIT
-                    ctrl = self.guiSessionProvider.shared.feedback
-                    ctrl is not None and ctrl.setVehicleState(self.id, eventID)
+            soundNotifications = getSoundNotifications()
+            needArmorScreenNotDamageSound = soundNotifications is not None and lastMaterialIsShield and not damageFactor and maxHitEffectCode not in VEHICLE_HIT_EFFECT.RICOCHETS and self.__settingsCore.getSetting(GAME.SHOW_SPACED_ARMOR_HIT_ICON)
+            vehicleCtrl = self.guiSessionProvider.shared.vehicleState
+            controllingVehicleID = vehicleCtrl.getControllingVehicleID() if vehicleCtrl is not None else -1
+            if attackerID == controllingVehicleID and maxHitEffectCode is not None and self.id != controllingVehicleID:
+                ctrl = sessionProvider.shared.feedback
+                if ctrl is not None:
+                    ctrl.updateMarkerHitState(self.id, maxPriorityHitPoint.componentName, maxHitEffectCode, damageFactor, lastMaterialIsShield, hasPiercedHit)
+                if needArmorScreenNotDamageSound:
+                    soundNotifications.play('ui_armor_screen_not_damage_PC_NPC')
+            elif self.id == controllingVehicleID and attackerID != self.id and needArmorScreenNotDamageSound:
+                soundNotifications.play('ui_armor_screen_not_damage_NPC_PC')
             return
 
     def showDamageFromExplosion(self, attackerID, center, effectsIndex, damageFactor):
@@ -730,6 +729,9 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             matInfo = self.typeDescriptor.turret.materials.get(matKind)
         elif parIndex == TankPartIndexes.GUN:
             matInfo = self.typeDescriptor.gun.materials.get(matKind)
+        if matInfo is None:
+            commonMaterialsInfo = vehicles.g_cache.commonConfig['materials']
+            matInfo = commonMaterialsInfo.get(matKind)
         return matInfo
 
     def isAlive(self):
@@ -791,6 +793,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             _logger.debug('respawn compact descr is still valid, request reloading of tank resources %s', self.id)
             BigWorld.callback(0.0, lambda : Vehicle.respawnVehicle(self.id, self.respawnCompactDescr))
         self.refreshNationalVoice()
+        self.set_quickShellChangerFactor()
         return
 
     def refreshNationalVoice(self):
@@ -1005,6 +1008,23 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
     @property
     def label(self):
         return self.labelComponent.label if hasattr(self, 'labelComponent') else None
+
+    def set_quickShellChangerFactor(self, _=None):
+        ammoCtrl = self.guiSessionProvider.shared.ammo
+        if ammoCtrl is not None and self.isMyVehicle and self.isAlive():
+            shellChangefactor = self.quickShellChangerFactor
+            ammoCtrl.setQuickChangerFactor(isActive=0 < shellChangefactor < 1.0, factor=shellChangefactor)
+        return
+
+    def set_quickShellChangerUseTime(self, _=None):
+        notificationTime = self.quickShellChangerUseTime
+        if almostZero(notificationTime) or not self.isMyVehicle or not self.isAlive() or almostZero(self.quickShellChangerFactor - 1.0):
+            return
+        if BigWorld.serverTime() < notificationTime + _PROPERTY_TIME_DELTA:
+            soundNotifications = getSoundNotifications()
+            if soundNotifications:
+                soundNotifications.play('gun_intuition')
+            self.guiSessionProvider.useLoaderIntuition()
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)

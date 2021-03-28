@@ -8,7 +8,7 @@ from uilogging.mode_selector.loggers import ModeSelectorUILogger
 from adisp import process
 from gui.prb_control.entities.base.ctx import PrbAction
 from account_helpers import isDemonstrator
-from constants import PREBATTLE_TYPE, QUEUE_TYPE, ACCOUNT_ATTR, IS_CHINA
+from constants import PREBATTLE_TYPE, QUEUE_TYPE, ACCOUNT_ATTR, IS_CHINA, IS_SANDBOX
 from gui import GUI_SETTINGS
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.battle_royale.constants import BattleRoyalePerfProblems
@@ -653,21 +653,26 @@ _DEFAULT_SQUAD_PAN = PREBATTLE_ACTION_NAME.SQUAD
 def _createItems(lobbyContext=None):
     settings = lobbyContext.getServerSettings()
     isInRoaming = settings.roaming.isInRoaming()
-    items = []
-    _addRandomBattleType(items)
-    _addRankedBattleType(items, settings)
-    _addCommandBattleType(items, settings)
-    _addStrongholdsBattleType(items, isInRoaming)
-    _addTrainingBattleType(items)
-    _addEpicTrainingBattleType(items, settings)
-    _addRoyaleBattleType(items)
-    if GUI_SETTINGS.specPrebatlesVisible:
-        _addSpecialBattleType(items)
-    if settings is not None and settings.isSandboxEnabled() and not isInRoaming:
-        _addSandboxType(items)
-    extraItems = []
-    _addEventProgressionItems(extraItems)
-    return _BattleSelectorItems(items, extraItems)
+    if IS_SANDBOX:
+        items = []
+        _addRandomBattleType(items)
+        return _BattleSelectorItems(items, [])
+    else:
+        items = []
+        _addRandomBattleType(items)
+        _addRankedBattleType(items, settings)
+        _addCommandBattleType(items, settings)
+        _addStrongholdsBattleType(items, isInRoaming)
+        _addTrainingBattleType(items)
+        _addEpicTrainingBattleType(items, settings)
+        _addRoyaleBattleType(items)
+        if GUI_SETTINGS.specPrebatlesVisible:
+            _addSpecialBattleType(items)
+        if settings is not None and settings.isSandboxEnabled() and not isInRoaming:
+            _addSandboxType(items)
+        extraItems = []
+        _addEventProgressionItems(extraItems)
+        return _BattleSelectorItems(items, extraItems)
 
 
 def _addEventProgressionItems(extraItems):
@@ -677,8 +682,9 @@ def _addEventProgressionItems(extraItems):
 def _createSquadSelectorItems():
     items = []
     _addSimpleSquadType(items)
-    _addBattleRoyaleSquadType(items)
-    _addEventSquadType(items)
+    if not IS_SANDBOX:
+        _addBattleRoyaleSquadType(items)
+        _addEventSquadType(items)
     return _SquadSelectorItems(items)
 
 

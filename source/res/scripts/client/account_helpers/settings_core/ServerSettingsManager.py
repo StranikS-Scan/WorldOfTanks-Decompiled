@@ -4,7 +4,7 @@ import weakref
 from collections import namedtuple
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.migrations import migrateToVersion
-from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints, BattlePassStorageKeys
+from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints, BattlePassStorageKeys, SPGAim
 from adisp import process, async
 from constants import ROLES_COLLAPSE
 from debug_utils import LOG_ERROR, LOG_DEBUG
@@ -17,6 +17,7 @@ GUI_START_BEHAVIOR = 'guiStartBehavior'
 class SETTINGS_SECTIONS(CONST_CONTAINER):
     GAME = 'GAME'
     GAME_EXTENDED = 'GAME_EXTENDED'
+    GAME_EXTENDED_2 = 'GAME_EXTENDED_2'
     GAMEPLAY = 'GAMEPLAY'
     GRAPHICS = 'GRAPHICS'
     SOUND = 'SOUND'
@@ -57,6 +58,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     DOG_TAGS = 'DOG_TAGS'
     UNIT_FILTER = 'UNIT_FILTER'
     BATTLE_HUD = 'BATTLE_HUD'
+    SPG_AIM = 'SPG_AIM'
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2)
 
 
@@ -128,10 +130,12 @@ class ServerSettingsManager(object):
                                        GAME.DISPLAY_PLATOON_MEMBERS: 24,
                                        GAME.MINIMAP_MIN_SPOTTING_RANGE: 25,
                                        GAME.ENABLE_REPAIR_TIMER: 26,
-                                       GAME.ENABLE_BATTLE_NOTIFIER: 29}, offsets={GAME.BATTLE_LOADING_INFO: Offset(4, 48),
+                                       GAME.ENABLE_BATTLE_NOTIFIER: 29,
+                                       GAME.SHOW_SPACED_ARMOR_HIT_ICON: 30}, offsets={GAME.BATTLE_LOADING_INFO: Offset(4, 48),
                                        GAME.BATTLE_LOADING_RANKED_INFO: Offset(21, 6291456),
                                        GAME.HANGAR_CAM_PERIOD: Offset(18, 1835008),
                                        GAME.SNIPER_ZOOM: Offset(27, 402653184)}),
+     SETTINGS_SECTIONS.GAME_EXTENDED_2: Section(masks={}, offsets={GAME.SHOW_ARTY_HIT_ON_MAP: Offset(0, 3)}),
      SETTINGS_SECTIONS.GAMEPLAY: Section(masks={}, offsets={GAME.GAMEPLAY_MASK: Offset(0, 65535)}),
      SETTINGS_SECTIONS.GRAPHICS: Section(masks={GAME.LENS_EFFECT: 1}, offsets={}),
      SETTINGS_SECTIONS.SOUND: Section(masks={}, offsets={SOUND.ALT_VOICES: Offset(0, 255)}),
@@ -150,7 +154,13 @@ class ServerSettingsManager(object):
                                'gunTag': Offset(8, 65280),
                                'gunTagType': Offset(16, 16711680),
                                'reloaderTimer': Offset(24, 4278190080L)}),
-     SETTINGS_SECTIONS.AIM_4: Section(masks={}, offsets={'zoomIndicator': Offset(0, 255)}),
+     SETTINGS_SECTIONS.AIM_4: Section(masks={}, offsets={'zoomIndicator': Offset(0, 255),
+                               'armorScreenIndicator': Offset(8, 65280),
+                               'armorScreenIndicatorType': Offset(16, 983040)}),
+     SETTINGS_SECTIONS.SPG_AIM: Section(masks={SPGAim.SHOTS_RESULT_INDICATOR: 0,
+                                 SPGAim.SPG_SCALE_WIDGET: 1,
+                                 SPGAim.SPG_STRATEGIC_CAM_MODE: 2,
+                                 SPGAim.AUTO_CHANGE_AIM_MODE: 3}, offsets={}),
      SETTINGS_SECTIONS.MARKERS: Section(masks={'markerBaseIcon': 0,
                                  'markerBaseLevel': 1,
                                  'markerBaseHpIndicator': 2,
@@ -485,7 +495,9 @@ class ServerSettingsManager(object):
      'gunTag': 3,
      'gunTagType': 3,
      'reloaderTimer': 3,
-     'zoomIndicator': 4}
+     'zoomIndicator': 4,
+     'armorScreenIndicator': 4,
+     'armorScreenIndicatorType': 4}
     _MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT = 5
     _MAX_DUAL_GUN_HIGHLIGHTS_COUNT = 5
     _MAX_TURBOSHAFT_HIGHLIGHTS_COUNT = 5
@@ -777,6 +789,7 @@ class ServerSettingsManager(object):
         currentVersion = self.settingsCache.getVersion()
         data = {'gameData': {},
          'gameExtData': {},
+         'gameExtData2': {},
          'gameplayData': {},
          'controlsData': {},
          'aimData': {},
@@ -796,6 +809,7 @@ class ServerSettingsManager(object):
          'battleComm': {},
          'dogTags': {},
          'battleHud': {},
+         'spgAim': {},
          GUI_START_BEHAVIOR: {},
          'battlePassStorage': {},
          'clear': {},
@@ -815,6 +829,10 @@ class ServerSettingsManager(object):
         clearGameExt = clear.get(SETTINGS_SECTIONS.GAME_EXTENDED, 0)
         if gameExtData or clearGameExt:
             settings[SETTINGS_SECTIONS.GAME_EXTENDED] = self._buildSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED, gameExtData) ^ clearGameExt
+        gameExtData = data.get('gameExtData2', {})
+        clearGameExt = clear.get(SETTINGS_SECTIONS.GAME_EXTENDED_2, 0)
+        if gameExtData or clearGameExt:
+            settings[SETTINGS_SECTIONS.GAME_EXTENDED_2] = self._buildSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED_2, gameExtData) ^ clearGameExt
         gameplayData = data.get('gameplayData', {})
         clearGameplay = clear.get(SETTINGS_SECTIONS.GAMEPLAY, 0)
         if gameplayData or clearGameplay:
@@ -892,6 +910,10 @@ class ServerSettingsManager(object):
         clearBPStorage = clear.get('battlePassStorage', 0)
         if BPStorage or clearBPStorage:
             settings[SETTINGS_SECTIONS.BATTLE_PASS_STORAGE] = self._buildSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, BPStorage) ^ clearBPStorage
+        spgAimData = data.get('spgAim', {})
+        clearSpgAimData = clear.get(SETTINGS_SECTIONS.SPG_AIM, 0)
+        if spgAimData or clearSpgAimData:
+            settings[SETTINGS_SECTIONS.SPG_AIM] = self._buildSectionSettings(SETTINGS_SECTIONS.SPG_AIM, spgAimData) ^ clearSpgAimData
         version = data.get(VERSION)
         if version is not None:
             settings[VERSION] = version

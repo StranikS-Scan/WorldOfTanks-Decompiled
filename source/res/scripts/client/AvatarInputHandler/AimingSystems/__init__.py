@@ -11,6 +11,8 @@ from math_utils import MatrixProviders
 from ProjectileMover import collideDynamicAndStatic, collideVehiclesAndStaticScene, EntityCollisionData
 from vehicle_systems.tankStructure import TankPartNames
 _logger = logging.getLogger(__name__)
+SPG_MINIMAL_AIMING_RADIUS = 15.0
+SPG_MINIMAL_AIMING_RADIUS_SQ = SPG_MINIMAL_AIMING_RADIUS * SPG_MINIMAL_AIMING_RADIUS
 
 class CollisionStrategy(object):
     COLLIDE_DYNAMIC_AND_STATIC = 0

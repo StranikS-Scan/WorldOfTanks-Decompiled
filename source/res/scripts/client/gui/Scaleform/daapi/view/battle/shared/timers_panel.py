@@ -6,6 +6,7 @@ from collections import defaultdict
 import logging
 import BigWorld
 import BattleReplay
+import SoundGroups
 from AvatarInputHandler import AvatarInputHandler
 from ReplayEvents import g_replayEvents
 from gui.Scaleform.daapi.view.battle.shared import destroy_times_mapping as _mapping
@@ -391,6 +392,7 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
             self._mapping = _mapping.FrontendMapping()
         self._timers = _createTimersCollection(self)
         self.__sound = None
+        self.__stunSoundPlaying = None
         self.__vehicleID = None
         self.__viewID = CROSSHAIR_VIEW_ID.UNDEFINED
         self.__equipmentCtrl = None
@@ -471,6 +473,9 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
 
     def __hideAll(self):
         self._timers.removeTimers()
+        if self.__stunSoundPlaying:
+            SoundGroups.g_instance.playSound2D('artillery_stun_effect_end')
+            self.__stunSoundPlaying = False
 
     def __setFireInVehicle(self, isInFire):
         if isInFire:
@@ -555,8 +560,24 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
             self.__sound.play()
         return
 
+    def __playStunSoundIfNeed(self, isVisible):
+        vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
+        if vehicle is None or not vehicle.isPlayerVehicle:
+            return
+        else:
+            hasActiveSecondaryTimer = self._timers.hasActiveSecondaryTimer(_TIMER_STATES.STUN)
+            if isVisible:
+                SoundGroups.g_instance.playSound2D('artillery_stun_effect_start')
+                self.__stunSoundPlaying = True
+            elif not isVisible and hasActiveSecondaryTimer and self.__stunSoundPlaying:
+                SoundGroups.g_instance.playSound2D('artillery_stun_effect_end')
+                self.__stunSoundPlaying = False
+            return
+
     def __showStunTimer(self, value):
-        if value.duration > 0.0:
+        isVisible = value.duration > 0.0
+        self.__playStunSoundIfNeed(isVisible=isVisible)
+        if isVisible:
             self._showTimer(_TIMER_STATES.STUN, value.totalTime, _TIMER_STATES.WARNING_VIEW, value.endTime, value.startTime)
         else:
             self._hideTimer(_TIMER_STATES.STUN)

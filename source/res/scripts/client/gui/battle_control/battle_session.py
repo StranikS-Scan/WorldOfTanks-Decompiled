@@ -271,9 +271,6 @@ class BattleSessionProvider(IBattleSessionProvider):
         ctrl = self.__sharedRepo.messages
         if ctrl is not None:
             ctrl.showVehicleMessage('LOADER_INTUITION_WAS_USED')
-        ctrl = self.__sharedRepo.ammo
-        if ctrl is not None:
-            ctrl.useLoaderIntuition()
         return
 
     def movingToRespawnBase(self):

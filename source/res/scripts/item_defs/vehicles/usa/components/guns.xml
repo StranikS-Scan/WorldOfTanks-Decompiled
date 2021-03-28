@@ -1716,14 +1716,14 @@
         <whileGunDamaged>	2.0	</whileGunDamaged>
       </shotDispersionFactors>
       <shots>
-        <_75mm_M48>
+        <_75mm_M48_spg>
           <defaultPortion>	1.0	</defaultPortion>
           <speed>	380	</speed>
           <gravity>	145	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	19 19	</piercingPower>
           <maxHeight>	312	</maxHeight>
-        </_75mm_M48>
+        </_75mm_M48_spg>
       </shots>
     </_75mm_Howitzer_M1A1_SPG>
     <_75mm_Pack_Howitzer_M1>
@@ -1761,14 +1761,14 @@
         <whileGunDamaged>	2.0	</whileGunDamaged>
       </shotDispersionFactors>
       <shots>
-        <_75mm_M48>
+        <_75mm_M48_spg>
           <defaultPortion>	1.0	</defaultPortion>
           <speed>	380	</speed>
           <gravity>	145	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	19 19	</piercingPower>
           <maxHeight>	312	</maxHeight>
-        </_75mm_M48>
+        </_75mm_M48_spg>
       </shots>
     </_75mm_Pack_Howitzer_M1>
     <_75mm_Gun_M3_L37A>
@@ -5648,14 +5648,14 @@
         <whileGunDamaged>	2.0	</whileGunDamaged>
       </shotDispersionFactors>
       <shots>
-        <_105mm_HE_M1>
+        <_105mm_HE_M1_spg>
           <defaultPortion>	1.0	</defaultPortion>
           <speed>	315	</speed>
           <gravity>	155	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	27 27	</piercingPower>
           <maxHeight>	208	</maxHeight>
-        </_105mm_HE_M1>
+        </_105mm_HE_M1_spg>
       </shots>
     </_105mm_Howitzer_M3>
     <_105mm_Howitzer_M2A1>
@@ -5692,14 +5692,14 @@
         <whileGunDamaged>	2.0	</whileGunDamaged>
       </shotDispersionFactors>
       <shots>
-        <_105mm_HE_M1>
+        <_105mm_HE_M1_spg>
           <defaultPortion>	1.0	</defaultPortion>
           <speed>	410	</speed>
           <gravity>	170	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	27 27	</piercingPower>
           <maxHeight>	310	</maxHeight>
-        </_105mm_HE_M1>
+        </_105mm_HE_M1_spg>
       </shots>
     </_105mm_Howitzer_M2A1>
     <_105mm_AT_Howitzer_M3>
@@ -5786,14 +5786,14 @@
         <whileGunDamaged>	2.0	</whileGunDamaged>
       </shotDispersionFactors>
       <shots>
-        <_105mm_HE_M1>
+        <_105mm_HE_M1_spg>
           <defaultPortion>	1.0	</defaultPortion>
           <speed>	410	</speed>
           <gravity>	170	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	27 27	</piercingPower>
           <maxHeight>	310	</maxHeight>
-        </_105mm_HE_M1>
+        </_105mm_HE_M1_spg>
       </shots>
     </_105mm_Howitzer_M4>
     <_105mm_Lightweight_Gun>
@@ -6695,13 +6695,29 @@
       </shotDispersionFactors>
       <shots>
         <_155mm_HE_M102>
-          <defaultPortion>	1.0	</defaultPortion>
+          <defaultPortion>	0.5	</defaultPortion>
           <speed>	430	</speed>
           <gravity>	143	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	38 38	</piercingPower>
-          <maxHeight>	399	</maxHeight>
+          <maxHeight>	405	</maxHeight>
         </_155mm_HE_M102>
+        <_155mm_HE_M107>
+          <defaultPortion>	0.3	</defaultPortion>
+          <speed>	460	</speed>
+          <gravity>	143	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	48 48	</piercingPower>
+          <maxHeight>	463	</maxHeight>
+        </_155mm_HE_M107>
+        <_155mm_HEAT_M167>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	516	</speed>
+          <gravity>	143	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	150 150	</piercingPower>
+          <maxHeight>	582	</maxHeight>
+        </_155mm_HEAT_M167>
       </shots>
     </_155mm_Howitzer_M1>
     <_155mm_Gun_M1918M1>
@@ -6739,21 +6755,29 @@
       </shotDispersionFactors>
       <shots>
         <_155mm_HE_M101A1>
-          <defaultPortion>	1.0	</defaultPortion>
+          <defaultPortion>	0.5	</defaultPortion>
           <speed>	475	</speed>
           <gravity>	165	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	39 39	</piercingPower>
-          <maxHeight>	421	</maxHeight>
+          <maxHeight>	428	</maxHeight>
         </_155mm_HE_M101A1>
         <_155mm_HE_M101M2>
-          <defaultPortion>	0.00	</defaultPortion>
-          <speed>	475	</speed>
+          <defaultPortion>	0.3	</defaultPortion>
+          <speed>	508	</speed>
           <gravity>	165	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	39 39	</piercingPower>
-          <maxHeight>	421	</maxHeight>
+          <piercingPower>	49 49	</piercingPower>
+          <maxHeight>	490	</maxHeight>
         </_155mm_HE_M101M2>
+        <_155mm_AP_M111_SPG>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	570	</speed>
+          <gravity>	165	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	206 194	</piercingPower>
+          <maxHeight>	616	</maxHeight>
+        </_155mm_AP_M111_SPG>
       </shots>
     </_155mm_Gun_M1918M1>
     <_155mm_Gun_M1A1>
@@ -6791,21 +6815,29 @@
       </shotDispersionFactors>
       <shots>
         <_155mm_HE_M101M4>
-          <defaultPortion>	1.00	</defaultPortion>
+          <defaultPortion>	0.5	</defaultPortion>
           <speed>	490	</speed>
           <gravity>	170	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	39 39	</piercingPower>
-          <maxHeight>	434	</maxHeight>
+          <maxHeight>	442	</maxHeight>
         </_155mm_HE_M101M4>
         <_155mm_HE_M101M6>
-          <defaultPortion>	0.00	</defaultPortion>
-          <speed>	490	</speed>
+          <defaultPortion>	0.3	</defaultPortion>
+          <speed>	524	</speed>
           <gravity>	170	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	39 39	</piercingPower>
-          <maxHeight>	434	</maxHeight>
+          <piercingPower>	49 49	</piercingPower>
+          <maxHeight>	506	</maxHeight>
         </_155mm_HE_M101M6>
+        <_155mm_AP_M112_SPG>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	588	</speed>
+          <gravity>	170	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	218 205	</piercingPower>
+          <maxHeight>	636	</maxHeight>
+        </_155mm_AP_M112_SPG>
       </shots>
     </_155mm_Gun_M1A1>
     <_155mm_Howitzer_M45>
@@ -6843,13 +6875,29 @@
       </shotDispersionFactors>
       <shots>
         <_155mm_HE_M102>
-          <defaultPortion>	1.0	</defaultPortion>
+          <defaultPortion>	0.5	</defaultPortion>
           <speed>	430	</speed>
           <gravity>	143	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	39 39	</piercingPower>
-          <maxHeight>	399	</maxHeight>
+          <maxHeight>	405	</maxHeight>
         </_155mm_HE_M102>
+        <_155mm_HE_M107>
+          <defaultPortion>	0.3	</defaultPortion>
+          <speed>	460	</speed>
+          <gravity>	143	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	49 49	</piercingPower>
+          <maxHeight>	463	</maxHeight>
+        </_155mm_HE_M107>
+        <_155mm_HEAT_M167>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	516	</speed>
+          <gravity>	143	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	182 182	</piercingPower>
+          <maxHeight>	582	</maxHeight>
+        </_155mm_HEAT_M167>
       </shots>
     </_155mm_Howitzer_M45>
     <_155mm_Gun_M46>
@@ -6887,21 +6935,29 @@
       </shotDispersionFactors>
       <shots>
         <_155mm_HE_M101M4>
-          <defaultPortion>	1.00	</defaultPortion>
+          <defaultPortion>	0.5	</defaultPortion>
           <speed>	490	</speed>
           <gravity>	170	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	39 39	</piercingPower>
-          <maxHeight>	434	</maxHeight>
+          <maxHeight>	442	</maxHeight>
         </_155mm_HE_M101M4>
         <_155mm_HE_M101M6>
-          <defaultPortion>	0.00	</defaultPortion>
-          <speed>	490	</speed>
+          <defaultPortion>	0.3	</defaultPortion>
+          <speed>	524	</speed>
           <gravity>	170	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	39 39	</piercingPower>
-          <maxHeight>	434	</maxHeight>
+          <piercingPower>	49 49	</piercingPower>
+          <maxHeight>	506	</maxHeight>
         </_155mm_HE_M101M6>
+        <_155mm_AP_M112_SPG>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	588	</speed>
+          <gravity>	170	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	282 265	</piercingPower>
+          <maxHeight>	636	</maxHeight>
+        </_155mm_AP_M112_SPG>
       </shots>
     </_155mm_Gun_M46>
     <_203mm_Howitzer_M1>
@@ -6939,21 +6995,29 @@
       </shotDispersionFactors>
       <shots>
         <_203mm_HE_M106>
-          <defaultPortion>	1.0	</defaultPortion>
+          <defaultPortion>	0.5	</defaultPortion>
           <speed>	440	</speed>
           <gravity>	145	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	52 52	</piercingPower>
-          <maxHeight>	412	</maxHeight>
+          <maxHeight>	418	</maxHeight>
         </_203mm_HE_M106>
         <_203mm_HE_A1M1>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	440	</speed>
+          <defaultPortion>	0.3	</defaultPortion>
+          <speed>	471	</speed>
           <gravity>	145	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	52 52	</piercingPower>
-          <maxHeight>	412	</maxHeight>
+          <piercingPower>	65 65	</piercingPower>
+          <maxHeight>	478	</maxHeight>
         </_203mm_HE_A1M1>
+        <_203mm_M106_M78>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	528	</speed>
+          <gravity>	145	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	272 256	</piercingPower>
+          <maxHeight>	601	</maxHeight>
+        </_203mm_M106_M78>
       </shots>
     </_203mm_Howitzer_M1>
     <_203mm_Howitzer_M47>
@@ -6991,21 +7055,29 @@
       </shotDispersionFactors>
       <shots>
         <_203mm_HE_M106>
-          <defaultPortion>	1.0	</defaultPortion>
+          <defaultPortion>	0.5	</defaultPortion>
           <speed>	440	</speed>
           <gravity>	150	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	52 52	</piercingPower>
-          <maxHeight>	399	</maxHeight>
+          <maxHeight>	404	</maxHeight>
         </_203mm_HE_M106>
         <_203mm_HE_A1M1>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	440	</speed>
+          <defaultPortion>	0.3	</defaultPortion>
+          <speed>	471	</speed>
           <gravity>	150	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	52 52	</piercingPower>
-          <maxHeight>	399	</maxHeight>
+          <piercingPower>	65 65	</piercingPower>
+          <maxHeight>	462	</maxHeight>
         </_203mm_HE_A1M1>
+        <_203mm_M106_M78>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	528	</speed>
+          <gravity>	150	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	314 295	</piercingPower>
+          <maxHeight>	581	</maxHeight>
+        </_203mm_M106_M78>
       </shots>
     </_203mm_Howitzer_M47>
     <_240mm_Howitzer_M1>
@@ -7044,21 +7116,29 @@
       </shotDispersionFactors>
       <shots>
         <_240mm_HE_M146>
-          <defaultPortion>	1.0	</defaultPortion>
+          <defaultPortion>	0.5	</defaultPortion>
           <speed>	460	</speed>
           <gravity>	150	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	60 60	</piercingPower>
-          <maxHeight>	434	</maxHeight>
+          <maxHeight>	441	</maxHeight>
         </_240mm_HE_M146>
         <_240mm_HE_M160>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	460	</speed>
+          <defaultPortion>	0.3	</defaultPortion>
+          <speed>	492	</speed>
           <gravity>	150	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	60 60	</piercingPower>
-          <maxHeight>	434	</maxHeight>
+          <piercingPower>	75 75	</piercingPower>
+          <maxHeight>	505	</maxHeight>
         </_240mm_HE_M160>
+        <_240mm_M114_M78>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	552	</speed>
+          <gravity>	150	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	372 350	</piercingPower>
+          <maxHeight>	635	</maxHeight>
+        </_240mm_M114_M78>
       </shots>
     </_240mm_Howitzer_M1>
     <_76mm_Gun_T185E_IGR>

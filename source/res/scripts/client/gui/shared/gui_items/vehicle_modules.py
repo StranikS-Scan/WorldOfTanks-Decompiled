@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/vehicle_modules.py
 import logging
-from constants import SHELL_TYPES
+from constants import SHELL_TYPES, SHELL_MECHANICS_TYPE
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -316,6 +316,10 @@ class Shell(FittingItem):
     def level(self):
         pass
 
+    @property
+    def isModernMechanics(self):
+        return self.type in (SHELL_TYPES.HIGH_EXPLOSIVE,) and self.descriptor.type.mechanics == SHELL_MECHANICS_TYPE.MODERN
+
     def _getAltPrice(self, buyPrice, proxy):
         return buyPrice.exchange(Currency.GOLD, Currency.CREDITS, proxy.exchangeRateForShellsAndEqs) if Currency.GOLD in buyPrice else super(Shell, self)._getAltPrice(buyPrice, proxy)
 
@@ -368,7 +372,7 @@ class Shell(FittingItem):
         return RES_SHOP_EXT.getShellIcon(size, self.descriptor.iconName)
 
     def getGUIEmblemID(self):
-        return self.type
+        return self.descriptor.iconName
 
     @property
     def defaultLayoutValue(self):

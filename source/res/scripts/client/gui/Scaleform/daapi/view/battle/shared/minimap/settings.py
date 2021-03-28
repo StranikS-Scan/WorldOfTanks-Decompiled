@@ -47,6 +47,8 @@ class ENTRY_SYMBOL_NAME(object):
     MARK_OBJECTIVE_REPLY_ATK = 'PositionAttackReplyEntry'
     MARK_POSITION = 'PositionFlashEntry'
     ARTY_MARKER = 'ArtyMarkerMinimapEntry'
+    ARTY_HIT_DOT_MARKER = 'ArtyHitDotMarkerUI'
+    ARTY_HIT_BOX_MARKER = 'ArtyHitBoxMarkerUI'
     LOCATION_MARKER = 'MarkGoingToPositionEntryUI'
     ATTENTION_MARKER = 'MarkAttentionEntryUI'
     EPIC_SECTOR_ENEMY_BASE = 'SectorBaseEnemyEntry'

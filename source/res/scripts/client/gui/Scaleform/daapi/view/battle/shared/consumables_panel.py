@@ -16,7 +16,7 @@ from gui.Scaleform.genConsts.CONSUMABLES_PANEL_SETTINGS import CONSUMABLES_PANEL
 from gui.Scaleform.genConsts.ANIMATION_TYPES import ANIMATION_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
-from gui.battle_control.battle_constants import VEHICLE_DEVICE_IN_COMPLEX_ITEM
+from gui.battle_control.battle_constants import VEHICLE_DEVICE_IN_COMPLEX_ITEM, CROSSHAIR_VIEW_ID
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, DEVICE_STATE_DESTROYED
 from gui.battle_control.controllers.consumables.equipment_ctrl import IgnoreEntitySelection
 from gui.battle_control.controllers.consumables.equipment_ctrl import NeedEntitySelection, InCooldownError
@@ -355,6 +355,13 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
             self.__fillOptionalDevices(optDevicesCtrl)
             optDevicesCtrl.onOptionalDeviceAdded += self.__onOptionalDeviceAdded
             optDevicesCtrl.onOptionalDeviceUpdated += self.__onOptionalDeviceUpdated
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if crosshairCtrl is not None:
+            currentSpgShotsState = self.sessionProvider.shared.crosshair.getSPGShotsIndicatorState()
+            if vehicleCtrl is not None and ammoCtrl is not None and currentSpgShotsState:
+                self.__onSPGShotsIndicatorStateChanged(currentSpgShotsState)
+            crosshairCtrl.onSPGShotsIndicatorStateChanged += self.__onSPGShotsIndicatorStateChanged
+            crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
         CommandMapping.g_instance.onMappingChanged += self.__onMappingChanged
         g_eventBus.addListener(GameEvent.CHOICE_CONSUMABLE, self.__handleConsumableChoice, scope=EVENT_BUS_SCOPE.BATTLE)
         return
@@ -362,6 +369,10 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
     def __removeListeners(self):
         g_eventBus.removeListener(GameEvent.CHOICE_CONSUMABLE, self.__handleConsumableChoice, scope=EVENT_BUS_SCOPE.BATTLE)
         CommandMapping.g_instance.onMappingChanged -= self.__onMappingChanged
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if crosshairCtrl is not None:
+            crosshairCtrl.onSPGShotsIndicatorStateChanged -= self.__onSPGShotsIndicatorStateChanged
+            crosshairCtrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
         vehicleCtrl = self.sessionProvider.shared.vehicleState
         if vehicleCtrl is not None:
             vehicleCtrl.onPostMortemSwitched -= self._onPostMortemSwitched
@@ -729,3 +740,29 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
 
     def __fillOptionalDevices(self, ctrl):
         forEach(lambda args: self.__onOptionalDeviceAdded(*args), ctrl.getOrderedOptionalDevicesLayout())
+
+    def __onSPGShotsIndicatorStateChanged(self, shotStates):
+        vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
+        ammoCtrl = self.sessionProvider.shared.ammo
+        if vehicle is not None:
+            vehicleDescriptor = vehicle.typeDescriptor
+            for i, shotDescr in enumerate(vehicleDescriptor.gun.shots):
+                intCD = shotDescr.shell.compactDescr
+                if intCD in self._cds:
+                    quantity, _ = ammoCtrl.getShells(intCD)
+                    shotState, _ = shotStates.get(i, (-1, None)) if quantity > 0 else (-1, None)
+                    self.as_setSPGShotResultS(self._cds.index(intCD), int(shotState))
+
+        return
+
+    def __onCrosshairViewChanged(self, viewID):
+        vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
+        needClear = viewID not in (CROSSHAIR_VIEW_ID.STRATEGIC,)
+        if vehicle is not None and needClear:
+            vehicleDescriptor = vehicle.typeDescriptor
+            for shotDescr in vehicleDescriptor.gun.shots:
+                intCD = shotDescr.shell.compactDescr
+                if intCD in self._cds:
+                    self.as_setSPGShotResultS(self._cds.index(intCD), -1)
+
+        return

@@ -4,7 +4,7 @@ import logging
 import BigWorld
 import CommandMapping
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import TRAJECTORY_VIEW_HINT_SECTION, PRE_BATTLE_HINT_SECTION, QUEST_PROGRESS_HINT_SECTION, HELP_SCREEN_HINT_SECTION, SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY, IBC_HINT_SECTION, RADAR_HINT_SECTION, TURBO_SHAFT_ENGINE_MODE_HINT_SECTION
+from account_helpers.AccountSettings import TRAJECTORY_VIEW_HINT_SECTION, PRE_BATTLE_HINT_SECTION, QUEST_PROGRESS_HINT_SECTION, HELP_SCREEN_HINT_SECTION, SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY, IBC_HINT_SECTION, RADAR_HINT_SECTION, TURBO_SHAFT_ENGINE_MODE_HINT_SECTION, SPG_HELP_SCREEN_HINT_SECTION, IN_GAME_HELP_PAGE_SECTION, SPG_HELP_PAGES_LEFT_TO_SHOW
 from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ARENA_PERIOD, ARENA_GUI_TYPE
 from debug_utils import LOG_DEBUG
@@ -16,6 +16,7 @@ from gui.impl.gen import R
 from gui.battle_control.controllers.radar_ctrl import IRadarListener
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent, ViewEventType, LoadViewEvent
+from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from gui.shared.utils.key_mapping import getReadableKey
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
@@ -549,6 +550,7 @@ class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
 
 
 class PreBattleHintPlugin(HintPanelPlugin):
+    __slots__ = ('__isActive', '__hintInQueue', '__callbackDelayer', '__questHintSettings', '__helpHintSettings', '__battleComHintSettings', '__spgHelpHintSettings', '__isInDisplayPeriod', '__haveReqLevel', '__vehicleId', '__hasTempSPGScreens', '__isSPG')
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
@@ -560,9 +562,12 @@ class PreBattleHintPlugin(HintPanelPlugin):
         self.__questHintSettings = {}
         self.__helpHintSettings = {}
         self.__battleComHintSettings = {}
+        self.__spgHelpHintSettings = {}
         self.__isInDisplayPeriod = False
         self.__haveReqLevel = False
         self.__vehicleId = None
+        self.__hasTempSPGScreens = False
+        self.__isSPG = False
         return
 
     @classmethod
@@ -574,7 +579,9 @@ class PreBattleHintPlugin(HintPanelPlugin):
         prbSettings = dict(AccountSettings.getSettings(PRE_BATTLE_HINT_SECTION))
         self.__questHintSettings = prbSettings[QUEST_PROGRESS_HINT_SECTION]
         self.__helpHintSettings = prbSettings[HELP_SCREEN_HINT_SECTION]
+        self.__spgHelpHintSettings = prbSettings[SPG_HELP_SCREEN_HINT_SECTION]
         self.__battleComHintSettings = prbSettings[IBC_HINT_SECTION]
+        self.__hasTempSPGScreens = AccountSettings.getSettings(IN_GAME_HELP_PAGE_SECTION)[SPG_HELP_PAGES_LEFT_TO_SHOW] > 0
         HintPanelPlugin._updateCounterOnStart(self.__questHintSettings, PRBSettings.HINT_DAY_COOLDOWN, PRBSettings.HINT_BATTLES_COOLDOWN)
         self.__isActive = True
         g_eventBus.addListener(GameEvent.SHOW_BTN_HINT, self.__handleShowBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
@@ -601,6 +608,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
             prbHintSettings[QUEST_PROGRESS_HINT_SECTION] = self.__questHintSettings
             prbHintSettings[HELP_SCREEN_HINT_SECTION] = self.__helpHintSettings
             prbHintSettings[IBC_HINT_SECTION] = self.__battleComHintSettings
+            prbHintSettings[SPG_HELP_SCREEN_HINT_SECTION] = self.__spgHelpHintSettings
             AccountSettings.setSettings(PRE_BATTLE_HINT_SECTION, prbHintSettings)
             return
 
@@ -621,7 +629,10 @@ class PreBattleHintPlugin(HintPanelPlugin):
         if self.__hintInQueue is CommandMapping.CMD_SHOW_HELP:
             keyName = getReadableKey(CommandMapping.CMD_SHOW_HELP)
             pressText = backport.text(R.strings.ingame_gui.helpScreen.hint.press())
-            hintText = backport.text(R.strings.ingame_gui.helpScreen.hint.description())
+            if self.__canDisplaySPGHelpHint() and not self.__isSPG:
+                hintText = backport.text(R.strings.ingame_gui.helpScreen.spgHint.description())
+            else:
+                hintText = backport.text(R.strings.ingame_gui.helpScreen.hint.description())
             return HintData(keyName, pressText, hintText, 0, 0, HintPriority.HELP)
         if self.__hintInQueue is CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND:
             keyName = getReadableKey(CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND)
@@ -646,9 +657,12 @@ class PreBattleHintPlugin(HintPanelPlugin):
             vehicleType = vTypeDesc.type.id
             self.__vehicleId = makeIntCompactDescrByID('vehicle', vehicleType[0], vehicleType[1])
             self.__haveReqLevel = vTypeDesc.level >= _HINT_MIN_VEHICLE_LEVEL
+            self.__isSPG = vTypeDesc.type.getVehicleClass() == VEHICLE_CLASS_NAME.SPG
             if vTypeDesc.isWheeledVehicle or vTypeDesc.type.isDualgunVehicleType or vTypeDesc.hasTurboshaftEngine:
                 self.__updateHintCounterOnStart(self.__vehicleId, vehicle, self.__helpHintSettings)
-            if self.__canDisplayHelpHint(vTypeDesc):
+            if self.__needSPGHelpHintShow():
+                self.__updateHintCounterOnStart(self.__getSPGHintSection(), vehicle, self.__spgHelpHintSettings)
+            if self.__canDisplayVehicleHelpHint(vTypeDesc) or self.__canDisplaySPGHelpHint():
                 self.__displayHint(CommandMapping.CMD_SHOW_HELP)
                 return
             if self.__canDisplayBattleCommunicationHint():
@@ -666,14 +680,14 @@ class PreBattleHintPlugin(HintPanelPlugin):
                 self.__callbackDelayer.destroy()
             return
 
-    def __updateHintCounterOnStart(self, vehicleId, vehicle, setting):
-        if vehicleId not in setting:
-            setting[vehicleId] = {HINTS_LEFT: 1,
+    def __updateHintCounterOnStart(self, section, vehicle, setting):
+        if section not in setting:
+            setting[section] = {HINTS_LEFT: 1,
              LAST_DISPLAY_DAY: 0,
              NUM_BATTLES: 0}
         if vehicle.isAlive() and vehicle.isPlayerVehicle:
-            self._updateCounterOnBattle(setting[vehicleId])
-            HintPanelPlugin._updateCounterOnStart(setting[vehicleId], PRBSettings.HINT_DAY_COOLDOWN, PRBSettings.HINT_BATTLES_COOLDOWN)
+            self._updateCounterOnBattle(setting[section])
+            HintPanelPlugin._updateCounterOnStart(setting[section], PRBSettings.HINT_DAY_COOLDOWN, PRBSettings.HINT_BATTLES_COOLDOWN)
 
     def __onHintTimeOut(self):
         self._parentObj.removeBtnHint(self.__hintInQueue)
@@ -682,8 +696,11 @@ class PreBattleHintPlugin(HintPanelPlugin):
         self.__hintInQueue = None
         return
 
-    def __canDisplayHelpHint(self, typeDescriptor):
+    def __canDisplayVehicleHelpHint(self, typeDescriptor):
         return (typeDescriptor.isWheeledVehicle or typeDescriptor.type.isDualgunVehicleType or typeDescriptor.hasTurboshaftEngine) and self.__isInDisplayPeriod and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])
+
+    def __canDisplaySPGHelpHint(self):
+        return self.__needSPGHelpHintShow() and self.__isInDisplayPeriod and self._haveHintsLeft(self.__spgHelpHintSettings[self.__getSPGHintSection()])
 
     def __canDisplayBattleCommunicationHint(self):
         settingsCore = dependency.instance(ISettingsCore)
@@ -720,8 +737,15 @@ class PreBattleHintPlugin(HintPanelPlugin):
                 self._parentObj.removeBtnHint(CommandMapping.CMD_SHOW_HELP)
                 self.__callbackDelayer.delayCallback(_HINT_COOLDOWN, self.__onHintTimeCooldown, self.__hintInQueue)
                 self.__hintInQueue = None
-            hintStats = self.__helpHintSettings[self.__vehicleId]
-            self.__helpHintSettings[self.__vehicleId] = self._updateCounterOnUsed(hintStats)
+            viewCtx = event.kwargs.get('ctx', {})
+            if self.__needSPGHelpHintShow():
+                section = self.__getSPGHintSection()
+                hintStats = self.__spgHelpHintSettings[section]
+                self.__spgHelpHintSettings[section] = self._updateCounterOnUsed(hintStats)
+                self.__hasTempSPGScreens = AccountSettings.getSettings(IN_GAME_HELP_PAGE_SECTION)[SPG_HELP_PAGES_LEFT_TO_SHOW] > 0
+            if viewCtx.get('hasUniqueVehicleHelpScreen', False):
+                hintStats = self.__helpHintSettings[self.__vehicleId]
+                self.__helpHintSettings[self.__vehicleId] = self._updateCounterOnUsed(hintStats)
         return
 
     def __handlePressQuestBtn(self, _):
@@ -730,3 +754,11 @@ class PreBattleHintPlugin(HintPanelPlugin):
             self.__hintInQueue = None
         self.__questHintSettings = self._updateCounterOnUsed(self.__questHintSettings)
         return
+
+    def __needSPGHelpHintShow(self):
+        guiType = self.sessionProvider.arenaVisitor.getArenaGuiType()
+        isRandomOrTraining = guiType in (ARENA_GUI_TYPE.TRAINING,) + ARENA_GUI_TYPE.RANDOM_RANGE
+        return (self.__isSPG or self.__hasTempSPGScreens) and isRandomOrTraining
+
+    def __getSPGHintSection(self):
+        return 'SPG' if self.__isSPG else 'other'

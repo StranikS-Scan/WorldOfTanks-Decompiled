@@ -5,6 +5,7 @@ import Event
 from Vibroeffects import VibroManager
 from account_helpers.AccountSettings import AccountSettings
 from account_helpers.settings_core.ServerSettingsManager import ServerSettingsManager, SETTINGS_SECTIONS
+from account_helpers.settings_core.settings_constants import SPGAim
 from adisp import process
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.locale.SETTINGS import SETTINGS
@@ -62,6 +63,7 @@ class SettingsCore(ISettingsCore):
         VIDEO_SETTINGS_STORAGE = settings_storages.VideoSettingsStorage(self.serverSettings, self)
         GAME_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.GAME)
         EXTENDED_GAME_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.GAME_EXTENDED)
+        SECOND_EXTENDED_GAME_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.GAME_EXTENDED_2)
         TUTORIAL_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.TUTORIAL)
         GAMEPLAY_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.GAMEPLAY)
         GRAPHICS_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.GRAPHICS)
@@ -79,10 +81,12 @@ class SettingsCore(ISettingsCore):
         BATTLE_COMM_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.BATTLE_COMM)
         DOG_TAGS_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.DOG_TAGS)
         BATTLE_HUD_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.BATTLE_HUD)
+        SPG_AIM_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.SPG_AIM)
         MESSENGER_SETTINGS_STORAGE = settings_storages.MessengerSettingsStorage(GAME_SETTINGS_STORAGE)
         EXTENDED_MESSENGER_SETTINGS_STORAGE = settings_storages.MessengerSettingsStorage(EXTENDED_GAME_SETTINGS_STORAGE)
         self.__storages = {'game': GAME_SETTINGS_STORAGE,
          'extendedGame': EXTENDED_GAME_SETTINGS_STORAGE,
+         'extendedGame2': SECOND_EXTENDED_GAME_SETTINGS_STORAGE,
          'gameplay': GAMEPLAY_SETTINGS_STORAGE,
          'sound': SOUND_SETTINGS_STORAGE,
          'controls': CONTROLS_SETTINGS_STORAGE,
@@ -102,7 +106,8 @@ class SettingsCore(ISettingsCore):
          'questsProgress': QUESTS_PROGRESS_SETTINGS_STORAGE,
          'battleComm': BATTLE_COMM_SETTINGS_STORAGE,
          'battleHud': BATTLE_HUD_SETTINGS_STORAGE,
-         'dogTags': DOG_TAGS_SETTINGS_STORAGE}
+         'dogTags': DOG_TAGS_SETTINGS_STORAGE,
+         'spgAim': SPG_AIM_SETTINGS_STORAGE}
         self.isDeviseRecreated = False
         self.isChangesConfirmed = True
         graphicSettings = tuple(((settingName, options.GraphicSetting(settingName, settingName == GRAPHICS.COLOR_GRADING_TECHNIQUE)) for settingName in BigWorld.generateGfxSettings()))
@@ -112,6 +117,7 @@ class SettingsCore(ISettingsCore):
          (GAME.HANGAR_CAM_PARALLAX_ENABLED, options.HangarCamParallaxEnabledSetting(GAME.HANGAR_CAM_PARALLAX_ENABLED, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.ENABLE_SERVER_AIM, options.StorageAccountSetting(GAME.ENABLE_SERVER_AIM, storage=GAME_SETTINGS_STORAGE)),
          (GAME.SHOW_DAMAGE_ICON, options.ShowDamageIconSetting(GAME.SHOW_DAMAGE_ICON, storage=GAME_SETTINGS_STORAGE)),
+         (GAME.SHOW_SPACED_ARMOR_HIT_ICON, options.ShowSpacedArmorHitIconSetting(GAME.SHOW_SPACED_ARMOR_HIT_ICON, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.MINIMAP_ALPHA, options.StorageAccountSetting(GAME.MINIMAP_ALPHA, storage=GAME_SETTINGS_STORAGE)),
          (GAME.ENABLE_POSTMORTEM_DELAY, options.PostMortemDelaySetting(GAME.ENABLE_POSTMORTEM_DELAY, storage=GAME_SETTINGS_STORAGE)),
          (GAME.SHOW_VEHICLES_COUNTER, options.StorageAccountSetting(GAME.SHOW_VEHICLES_COUNTER, storage=GAME_SETTINGS_STORAGE)),
@@ -154,6 +160,7 @@ class SettingsCore(ISettingsCore):
          (GAME.SHOW_VECTOR_ON_MAP, options.MinimapSetting(GAME.SHOW_VECTOR_ON_MAP, storage=GAME_SETTINGS_STORAGE)),
          (GAME.SHOW_SECTOR_ON_MAP, options.MinimapSetting(GAME.SHOW_SECTOR_ON_MAP, storage=GAME_SETTINGS_STORAGE)),
          (GAME.SHOW_VEH_MODELS_ON_MAP, options.MinimapVehModelsSetting(GAME.SHOW_VEH_MODELS_ON_MAP, storage=GAME_SETTINGS_STORAGE)),
+         (GAME.SHOW_ARTY_HIT_ON_MAP, options.MinimapArtyHitSetting(GAME.SHOW_ARTY_HIT_ON_MAP, storage=SECOND_EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.MINIMAP_VIEW_RANGE, options.StorageAccountSetting(GAME.MINIMAP_VIEW_RANGE, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.MINIMAP_MAX_VIEW_RANGE, options.StorageAccountSetting(GAME.MINIMAP_MAX_VIEW_RANGE, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.MINIMAP_DRAW_RANGE, options.StorageAccountSetting(GAME.MINIMAP_DRAW_RANGE, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
@@ -235,8 +242,12 @@ class SettingsCore(ISettingsCore):
          (CONTROLS.BACK_DRAFT_INVERSION, options.BackDraftInversionSetting(storage=CONTROLS_SETTINGS_STORAGE)),
          (CONTROLS.KEYBOARD, options.KeyboardSettings()),
          (CONTROLS.KEYBOARD_IMPORTANT_BINDS, options.ReadOnlySetting(options.KeyboardSettings.getKeyboardImportantBinds)),
-         (AIM.ARCADE, options.AimSetting('arcade', storage=AIM_SETTINGS_STORAGE)),
-         (AIM.SNIPER, options.AimSetting('sniper', storage=AIM_SETTINGS_STORAGE)),
+         (AIM.ARCADE, options.AimSetting(AIM.ARCADE, storage=AIM_SETTINGS_STORAGE)),
+         (AIM.SNIPER, options.AimSetting(AIM.SNIPER, storage=AIM_SETTINGS_STORAGE)),
+         (SPGAim.SHOTS_RESULT_INDICATOR, options.SPGAimSetting(SPGAim.SHOTS_RESULT_INDICATOR, storage=SPG_AIM_SETTINGS_STORAGE)),
+         (SPGAim.SPG_SCALE_WIDGET, options.SPGAimSetting(SPGAim.SPG_SCALE_WIDGET, storage=SPG_AIM_SETTINGS_STORAGE)),
+         (SPGAim.SPG_STRATEGIC_CAM_MODE, options.SPGStrategicCamMode(SPGAim.SPG_STRATEGIC_CAM_MODE, storage=SPG_AIM_SETTINGS_STORAGE)),
+         (SPGAim.AUTO_CHANGE_AIM_MODE, options.SPGAimSetting(SPGAim.AUTO_CHANGE_AIM_MODE, storage=SPG_AIM_SETTINGS_STORAGE)),
          (MARKERS.ENEMY, options.VehicleMarkerSetting(MARKERS.ENEMY, storage=MARKERS_SETTINGS_STORAGE)),
          (MARKERS.DEAD, options.VehicleMarkerSetting(MARKERS.DEAD, storage=MARKERS_SETTINGS_STORAGE)),
          (MARKERS.ALLY, options.VehicleMarkerSetting(MARKERS.ALLY, storage=MARKERS_SETTINGS_STORAGE)),

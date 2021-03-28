@@ -45,13 +45,12 @@ TYPES_ORDERED = (('heavyTank', ITEM_TYPES.VEHICLE_TAGS_HEAVY_TANK_NAME),
  ('lightTank', ITEM_TYPES.VEHICLE_TAGS_LIGHT_TANK_NAME),
  ('AT-SPG', ITEM_TYPES.VEHICLE_TAGS_AT_SPG_NAME),
  ('SPG', ITEM_TYPES.VEHICLE_TAGS_SPG_NAME))
-_LONG_WAITING_LEVELS = (9, 10)
 _HTMLTEMP_PLAYERSLABEL = 'html_templates:lobby/queue/playersLabel'
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def _needShowLongWaitingWarning(lobbyContext=None):
     vehicle = g_currentVehicle.item
-    return lobbyContext is not None and vehicle is not None and vehicle.type == VEHICLE_CLASS_NAME.SPG and vehicle.level in _LONG_WAITING_LEVELS
+    return lobbyContext is not None and vehicle is not None
 
 
 class _QueueProvider(object):
@@ -146,7 +145,8 @@ class _RandomQueueProvider(_QueueProvider):
         return self._needAdditionalInfo
 
     def additionalInfo(self):
-        return text_styles.main(makeString(MENU.PREBATTLE_WAITINGTIMEWARNING))
+        warning = text_styles.concatStylesToSingleLine('*', makeString(MENU.PREBATTLE_WAITINGTIMEWARNING))
+        return text_styles.alert(warning)
 
     @staticmethod
     def _isStartButtonDisplayed(vClasses):

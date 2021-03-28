@@ -43,7 +43,8 @@ from OfflineMapCreator import g_offlineMapCreator
 from PlayerEvents import g_playerEvents
 from TriggersManager import TRIGGER_TYPE
 from Vibroeffects.Controllers.ReloadController import ReloadController as VibroReloadController
-from account_helpers import BattleResultsCache, ClientInvitations
+from account_helpers import BattleResultsCache, ClientInvitations, AccountSettings
+from account_helpers.AccountSettings import IN_GAME_HELP_PAGE_SECTION, SPG_HELP_PAGES_LEFT_TO_SHOW
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from avatar_components.AppearanceCacheController import AppearanceCacheController
 from avatar_components.AvatarObserver import AvatarObserver
@@ -73,6 +74,7 @@ from gui.battle_control import BattleSessionSetup
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CANT_SHOOT_ERROR, DestroyTimerViewState, DeathZoneTimerViewState, TIMER_VIEW_STATE, ENTITY_IN_FOCUS_TYPE
 from gui.prb_control.formatters import messages
+from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from gui.sounds.epic_sound_constants import EPIC_SOUND
 from gui.wgnc import g_wgncProvider
 from gun_rotation_shared import decodeGunAngles
@@ -840,19 +842,28 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         return True
                     vehicle = self.getVehicleAttached()
                     if vehicle is not None:
-                        ctx = None
+                        ctx = {}
                         vTypeDesc = vehicle.typeDescriptor
+                        isSPG = vTypeDesc.type.getVehicleClass() == VEHICLE_CLASS_NAME.SPG
+                        hasTempPage = AccountSettings.getSettings(IN_GAME_HELP_PAGE_SECTION).get(SPG_HELP_PAGES_LEFT_TO_SHOW, 0) > 0
+                        spgHelpGuiTypes = (constants.ARENA_GUI_TYPE.TRAINING,) + constants.ARENA_GUI_TYPE.RANDOM_RANGE
+                        spgHintNeedShow = self.arenaGuiType in spgHelpGuiTypes and hasTempPage
                         if vTypeDesc.isWheeledVehicle or vTypeDesc.isDualgunVehicle or vTypeDesc.hasTurboshaftEngine:
                             ctx = {'vehName': vehicle.typeDescriptor.type.userString,
                              'isWheeled': vTypeDesc.isWheeledVehicle,
                              'isDualGun': vTypeDesc.isDualgunVehicle,
                              'hasBurnout': vTypeDesc.hasBurnout,
                              'hasSiegeMode': vTypeDesc.hasSiegeMode,
-                             'hasTurboshaftEngine': vTypeDesc.hasTurboshaftEngine}
+                             'hasTurboshaftEngine': vTypeDesc.hasTurboshaftEngine,
+                             'hasUniqueVehicleHelpScreen': True}
+                        if isSPG:
+                            ctx['isSPG'] = isSPG
                         if self.arenaBonusType in constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
                             ctx = {'battleRoyale': True,
-                             'mapGeometryName': self.arena.arenaType.geometryName}
-                        if ctx:
+                             'mapGeometryName': self.arena.arenaType.geometryName,
+                             'hasUniqueVehicleHelpScreen': True}
+                        if ctx or spgHintNeedShow:
+                            ctx['arenaGuiType'] = self.arenaGuiType
                             gui_event_dispatcher.toggleHelpDetailed(ctx)
                             return True
                     gui_event_dispatcher.toggleHelp()
@@ -1002,6 +1013,12 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
     def __makeScreenShot(self, fileType='jpg', fileMask='./../screenshots/'):
         BigWorld.screenShot(fileType, fileMask)
+
+    def enemySPGHit(self, hitPoint):
+        self.guiSessionProvider.shared.feedback.setEnemySPGHit(hitPoint)
+
+    def enemySPGShotSound(self, shooterPosition, targetPosition):
+        self.complexSoundNotifications.notifyEnemySPGShotSound((self.getOwnVehiclePosition() - targetPosition).length, shooterPosition)
 
     def __startVehicleVisual(self, vehicle, resetControllers=False):
         vehicle.startVisual()
@@ -1180,8 +1197,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             timeLeft = -1
         self.guiSessionProvider.shared.ammo.setGunReloadTime(timeLeft, baseTime)
 
-    def updateVehicleClipReloadTime(self, vehicleID, timeLeft, baseTime, stunned, isBoostApplicable):
-        self.guiSessionProvider.shared.ammo.setGunAutoReloadTime(timeLeft, baseTime, stunned, isBoostApplicable)
+    def updateVehicleClipReloadTime(self, vehicleID, timeLeft, baseTime, firstClipBaseTime, stunned, isBoostApplicable):
+        self.guiSessionProvider.shared.ammo.setGunAutoReloadTime(timeLeft, baseTime, firstClipBaseTime, stunned, isBoostApplicable)
 
     def updateDualGunState(self, vehicleID, activeGun, gunStates, cooldownTimes):
         vehicle = BigWorld.entity(vehicleID)
@@ -1193,6 +1210,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if self.__dualGunHelper is not None:
             self.__dualGunHelper.updateGunReloadTime(self, vehicleID, activeGun, gunStates, cooldownTimes, self.guiSessionProvider.shared.ammo)
         self.__canMakeDualShot = all((state == DUAL_GUN.GUN_STATE.READY for state in gunStates))
+        self.guiSessionProvider.shared.ammo.setDualGunQuickChangeReady(self.__canMakeDualShot)
         LOG_DEBUG_DEV('updateDualGunState', vehicleID, activeGun, gunStates, cooldownTimes)
         return
 
@@ -1266,9 +1284,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             elif code == STATUS.IS_OBSERVED_BY_ENEMY:
                 if intArg == 0:
                     self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.OBSERVED_BY_ENEMY, True)
-            elif code == STATUS.LOADER_INTUITION_WAS_USED:
-                self.soundNotifications.play('gun_intuition')
-                self.guiSessionProvider.useLoaderIntuition()
             elif code == STATUS.SIEGE_MODE_STATE_CHANGED:
                 if intArg in (constants.VEHICLE_SIEGE_STATE.SWITCHING_ON, constants.VEHICLE_SIEGE_STATE.SWITCHING_OFF):
                     if 'autoSiege' not in typeDescr.type.tags:
@@ -1478,10 +1493,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 elif flags & (VHF.CHASSIS_DAMAGED_BY_PROJECTILE | VHF.CHASSIS_DAMAGED_BY_EXPLOSION):
                     sound = 'enemy_no_hp_damage_at_no_attempt_and_chassis_damaged_by_player'
                 else:
-                    if flags & VHF.IS_ANY_PIERCING_MASK:
-                        sound = 'enemy_no_hp_damage_at_no_attempt_by_player'
-                    else:
+                    if flags & (VHF.ARMOR_WITH_ZERO_DF_NOT_PIERCED_BY_PROJECTILE | VHF.DEVICE_NOT_PIERCED_BY_PROJECTILE) or not flags & VHF.IS_ANY_PIERCING_MASK:
                         sound = 'enemy_no_piercing_by_player'
+                    else:
+                        sound = 'enemy_no_hp_damage_at_no_attempt_by_player'
                     if len(enemies) == 1:
                         TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_SHOT_NOT_PIERCED, targetId=enemyVehID)
                 if sound is not None:
@@ -1563,6 +1578,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     replayCtrl = BattleReplay.g_replayCtrl
                     if (gunFirePos - refStartPoint).length > 50.0 and (gunFirePos - BigWorld.camera().position).length < 50.0 and replayCtrl.isPlaying:
                         velocity = velocity.length * gunMatrix.applyVector((0, 0, 1))
+            if self.playerVehicleID == shooterID:
+                LOG_NOTE('Show my tracer', shotID, effectsIndex, refStartPoint, startPoint, velocity, gravity, maxShotDist, gunIndex)
             self.__projectileMover.add(shotID, effectsDescr, gravity, refStartPoint, velocity, startPoint, maxShotDist, shooterID, BigWorld.camera().position)
             if isRicochet:
                 self.__projectileMover.hold(shotID)
@@ -1574,6 +1591,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         return
 
     def explodeProjectile(self, shotID, effectsIndex, effectMaterialIndex, endPoint, velocityDir, damagedDestructibles):
+        LOG_NOTE('Explode projectile', shotID, effectsIndex, effectMaterialIndex, velocityDir, damagedDestructibles)
         if self.userSeesWorld() and self.__projectileMover is not None:
             effectsDescr = vehicles.g_cache.shotEffects[effectsIndex]
             effectMaterial = EFFECT_MATERIALS[effectMaterialIndex]

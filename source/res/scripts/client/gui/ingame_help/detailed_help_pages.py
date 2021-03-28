@@ -2,6 +2,9 @@
 # Embedded file name: scripts/client/gui/ingame_help/detailed_help_pages.py
 import logging
 import CommandMapping
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import IN_GAME_HELP_PAGE_SECTION, SPG_HELP_PAGES_LEFT_TO_SHOW
+from constants import ARENA_GUI_TYPE
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.utils.functions import replaceHyphenToUnderscore
@@ -11,6 +14,12 @@ _logger = logging.getLogger(__name__)
 
 def buildPagesData(ctx):
     datailedList = []
+    tempPagesSettings = AccountSettings.getSettings(IN_GAME_HELP_PAGE_SECTION).copy()
+    spgHelpScreenGuiTypes = (ARENA_GUI_TYPE.TRAINING,) + ARENA_GUI_TYPE.RANDOM_RANGE
+    if ctx.get('isSPG') and ctx.get('arenaGuiType') in spgHelpScreenGuiTypes:
+        datailedList.extend(buildSPGPages(tempPagesSettings))
+    elif tempPagesSettings.get(SPG_HELP_PAGES_LEFT_TO_SHOW, 0) > 0 and ctx.get('arenaGuiType') in spgHelpScreenGuiTypes:
+        datailedList.extend(buildSPGPagesForOtherVehicle(tempPagesSettings))
     if ctx.get('isWheeled') and ctx.get('hasSiegeMode'):
         datailedList.extend(buildSiegeModePages())
     if ctx.get('hasBurnout'):
@@ -27,11 +36,14 @@ def buildPagesData(ctx):
 
 
 def buildTitle(ctx):
-    title = backport.text(R.strings.ingame_help.detailsHelp.default.title())
-    vehName = ctx.get('vehName')
-    if vehName is not None:
-        title = vehName
-    return title
+    if ctx.get('isSPG'):
+        return backport.text(R.strings.ingame_help.detailsHelp.spgReworkTitle())
+    else:
+        title = backport.text(R.strings.ingame_help.detailsHelp.default.title())
+        vehName = ctx.get('vehName')
+        if vehName is not None:
+            title = vehName
+        return title
 
 
 def buildSiegeModePages():
@@ -91,9 +103,49 @@ def buildTurboshaftEnginePages():
     return pages
 
 
-def _addPage(datailedList, title, descr, buttons, image):
+def buildSPGPages(tempPagesSettings):
+    pages = []
+    spgTempPages = ['differentTrajectories',
+     'miniMap',
+     'tracers',
+     'intuition']
+    spgConstantPages = ['lamp', 'shotsResultIndicator']
+    tempPagesLeftToShow = tempPagesSettings.get(SPG_HELP_PAGES_LEFT_TO_SHOW, 0)
+    if tempPagesLeftToShow > 0:
+        _addSimplePages(pagesPathName='spgRework', pages=pages, pageNames=spgTempPages)
+    _addSimplePages(pagesPathName='spgRework', pages=pages, pageNames=spgConstantPages)
+    tempPagesSettings[SPG_HELP_PAGES_LEFT_TO_SHOW] = max(0, tempPagesLeftToShow - 1)
+    AccountSettings.setSettings(IN_GAME_HELP_PAGE_SECTION, tempPagesSettings)
+    return pages
+
+
+def buildSPGPagesForOtherVehicle(tempPagesSettings):
+    pages = []
+    tempPagesLeftToShow = tempPagesSettings.get(SPG_HELP_PAGES_LEFT_TO_SHOW, 0)
+    pageNames = ['miniMap',
+     'tracers',
+     'lamp',
+     'intuition']
+    _addSimplePages(pagesPathName='spgRework', pages=pages, pageNames=pageNames, mainTitle=backport.text(R.strings.ingame_help.detailsHelp.spgReworkTitle()))
+    tempPagesSettings[SPG_HELP_PAGES_LEFT_TO_SHOW] = max(0, tempPagesLeftToShow - 1)
+    AccountSettings.setSettings(IN_GAME_HELP_PAGE_SECTION, tempPagesSettings)
+    return pages
+
+
+def _addPage(datailedList, title, descr, buttons, image, mainTitle=None):
     data = {'title': title,
      'descr': descr,
      'buttons': buttons,
-     'image': image}
+     'image': image,
+     'overrideMainTitle': mainTitle is not None,
+     'mainTitle': mainTitle if mainTitle is not None else ''}
     datailedList.append(data)
+    return
+
+
+def _addSimplePages(pagesPathName, pages, pageNames, mainTitle=None):
+    textPath = R.strings.ingame_help.detailsHelp.dyn(pagesPathName)
+    imagePath = R.images.gui.maps.icons.battleHelp.dyn(pagesPathName)
+    if textPath and imagePath:
+        for pageName in pageNames:
+            _addPage(pages, backport.text(textPath.dyn(pageName).title()), backport.text(textPath.dyn(pageName).description()), [], backport.image(imagePath.dyn(pageName)()), mainTitle=mainTitle)

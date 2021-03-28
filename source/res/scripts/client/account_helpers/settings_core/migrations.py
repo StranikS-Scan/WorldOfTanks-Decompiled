@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/migrations.py
 import BigWorld
 import constants
-from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys, BattleCommStorageKeys, OnceOnlyHints, ScorePanelStorageKeys
+from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys, BattleCommStorageKeys, OnceOnlyHints, ScorePanelStorageKeys, SPGAim
 from adisp import process, async
 from debug_utils import LOG_DEBUG
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
@@ -29,6 +29,7 @@ def _initializeDefaultSettings(core, data, initialized):
      GAME.PLAYERS_PANELS_SHOW_LEVELS: core.getSetting(GAME.PLAYERS_PANELS_SHOW_LEVELS)}
     data['gameExtData'] = {GAME.CHAT_CONTACTS_LIST_ONLY: options.getSetting(GAME.CHAT_CONTACTS_LIST_ONLY).getDefaultValue(),
      GAME.SNIPER_ZOOM: core.getSetting(GAME.SNIPER_ZOOM)}
+    data['gameExtData'][GAME.SHOW_SPACED_ARMOR_HIT_ICON] = core.getSetting(GAME.SHOW_SPACED_ARMOR_HIT_ICON)
     gameplayData = data['gameplayData'] = {GAME.GAMEPLAY_MASK: AccountSettings.getSettingsDefault('gameplayMask')}
     aimData = data['aimData'] = {'arcade': core.getSetting('arcade'),
      'sniper': core.getSetting('sniper')}
@@ -564,6 +565,33 @@ def _migrateTo67(core, data, initialized):
             clear['battlePassStorage'] = clear.get('battlePassStorage', 0) | settingOffset
 
 
+def _migrateTo68(core, data, initialized):
+    gameData = data['gameExtData2']
+    gameData[GAME.SHOW_ARTY_HIT_ON_MAP] = 1
+    spgAim = data['spgAim']
+    spgAim[SPGAim.SHOTS_RESULT_INDICATOR] = True
+    spgAim[SPGAim.SPG_SCALE_WIDGET] = True
+    spgAim[SPGAim.SPG_STRATEGIC_CAM_MODE] = 0
+    spgAim[SPGAim.AUTO_CHANGE_AIM_MODE] = True
+
+
+def _migrateTo69(core, data, initialized):
+    aimData = data['aimData']
+    for settingName in ('arcade', 'sniper'):
+        if settingName not in aimData:
+            data['aimData'].update({settingName: core.getSetting(settingName)})
+
+    aimData['arcade']['armorScreenIndicator'] = 100
+    aimData['sniper']['armorScreenIndicator'] = 100
+    aimData['arcade']['armorScreenIndicatorType'] = 0
+    aimData['sniper']['armorScreenIndicatorType'] = 0
+    data['gameExtData'][GAME.SHOW_SPACED_ARMOR_HIT_ICON] = True
+
+
+def _migrateTo70(core, data, initialized):
+    data['gameData'][GAME.REPLAY_ENABLED] = 2
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -826,6 +854,18 @@ _versions = ((1,
   False),
  (67,
   _migrateTo67,
+  False,
+  False),
+ (68,
+  _migrateTo68,
+  False,
+  False),
+ (69,
+  _migrateTo69,
+  False,
+  False),
+ (70,
+  _migrateTo70,
   False,
   False))
 

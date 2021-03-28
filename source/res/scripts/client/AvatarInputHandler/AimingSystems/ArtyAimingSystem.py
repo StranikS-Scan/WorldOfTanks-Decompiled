@@ -1,14 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/AimingSystems/ArtyAimingSystem.py
 import BigWorld
+from AvatarInputHandler.AimingSystems import SPG_MINIMAL_AIMING_RADIUS_SQ, SPG_MINIMAL_AIMING_RADIUS
 from Math import Vector3, Matrix
 import math_utils
-from AvatarInputHandler.AimingSystems.StrategicAimingSystem import StrategicAimingSystem
+from AvatarInputHandler.AimingSystems.StrategicAimingSystem import BaseStrategicAimingSystem
 from constants import SERVER_TICK_LENGTH, SHELL_TRAJECTORY_EPSILON_CLIENT
-_MINIMAL_AIMING_RADIUS = 2.0
-_MINIMAL_AIMING_RADIUS_SQ = _MINIMAL_AIMING_RADIUS * _MINIMAL_AIMING_RADIUS
 
-class ArtyAimingSystem(StrategicAimingSystem):
+class ArtyAimingSystem(BaseStrategicAimingSystem):
 
     def __init__(self):
         super(ArtyAimingSystem, self).__init__(0.0, 0.0)
@@ -42,9 +41,9 @@ class ArtyAimingSystem(StrategicAimingSystem):
         vehiclePosition = Vector3(BigWorld.player().getVehicleAttached().position)
         vehiclePosition.y = self._planePosition.y
         diff = self._planePosition - vehiclePosition
-        if diff.lengthSquared < _MINIMAL_AIMING_RADIUS_SQ:
+        if diff.lengthSquared < SPG_MINIMAL_AIMING_RADIUS_SQ:
             diff.normalise()
-            self._planePosition = vehiclePosition + diff * _MINIMAL_AIMING_RADIUS
+            self._planePosition = vehiclePosition + diff * SPG_MINIMAL_AIMING_RADIUS
         self._clampToArenaBB()
         hitPoint = BigWorld.wg_collideSegment(BigWorld.player().spaceID, self._planePosition + Vector3(0.0, 1000.0, 0.0), self._planePosition + Vector3(0.0, -250.0, 0.0), 128, 8)
         aimPoint = Vector3(self._planePosition)

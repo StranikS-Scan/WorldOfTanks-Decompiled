@@ -143,22 +143,43 @@ def generateSkills(role, skillsMask):
     return skills
 
 
-def generateTankmen(nationID, vehicleTypeID, roles, isPremium, roleLevel, skillsMask, isPreview=False):
+def generateSkillsFromSkillsMap(roles, skillsMap):
+    skills = []
+    for role in roles:
+        if role in skillsMap:
+            skills.extend(skillsMap[role])
+
+    return skills
+
+
+def generateTankmen(nationID, vehicleTypeID, roles, isPremium, roleLevel, skills, isPreview=False, freeSkills=None):
     tankmenList = []
     prevPassports = PassportCache()
+    useSkillsMask = type(skills) == int
+    tankmenFreeSkills, skilledTankmenFreeSkills = freeSkills if freeSkills else (0, 0)
     for i in xrange(len(roles)):
         role = roles[i]
         pg = passport_generator(nationID, isPremium, partial(crewMemberPreviewProducer, vehicleTypeID=vehicleTypeID, role=role[0]) if isPreview else passportProducer, maxAttempts(10), distinctFrom(prevPassports), acceptOn('roles', role[0]))
         passport = next(pg)
         prevPassports.append(passport)
-        skills = generateSkills(role, skillsMask)
-        tmanCompDescr = generateCompactDescr(passport, vehicleTypeID, role[0], roleLevel, skills)
+        if useSkillsMask:
+            tankmanSkills = generateSkills(role, skills)
+        elif skills:
+            tankmanSkills = generateSkillsFromSkillsMap(role, skills)
+        else:
+            tankmanSkills = []
+        skillsCount = len(tankmanSkills)
+        freeSkillsCount = skilledTankmenFreeSkills if skillsCount else tankmenFreeSkills
+        freeXP = 0
+        if freeSkillsCount:
+            freeXP += TankmanDescr.skillsXpCost(skillsCount + 1, freeSkillsCount)
+        tmanCompDescr = generateCompactDescr(passport, vehicleTypeID, role[0], roleLevel, skills=tankmanSkills, freeXP=freeXP)
         tankmenList.append(tmanCompDescr)
 
     return tankmenList if len(tankmenList) == len(roles) else []
 
 
-def generateCompactDescr(passport, vehicleTypeID, role, roleLevel, skills=(), lastSkillLevel=MAX_SKILL_LEVEL, dossierCompactDescr='', freeSkills=()):
+def generateCompactDescr(passport, vehicleTypeID, role, roleLevel, skills=(), lastSkillLevel=MAX_SKILL_LEVEL, dossierCompactDescr='', freeSkills=(), freeXP=0):
     pack = struct.pack
     nationID, isPremium, isFemale, firstNameID, lastNameID, iconID = passport
     header = ITEM_TYPES.tankman + (nationID << 4)
@@ -184,7 +205,7 @@ def generateCompactDescr(passport, vehicleTypeID, role, roleLevel, skills=(), la
     isFemale = 1 if isFemale else 0
     isPremium = 1 if isPremium else 0
     flags = isFemale | isPremium << 1 | len(freeSkills) << 2
-    cd += pack('<B4Hi', flags, firstNameID, lastNameID, iconID, rank | levelsToNextRank << 5, 0)
+    cd += pack('<B4Hi', flags, firstNameID, lastNameID, iconID, rank | levelsToNextRank << 5, freeXP)
     cd += dossierCompactDescr
     return cd
 
@@ -354,6 +375,10 @@ class TankmanDescr(object):
     def levelUpXpCost(fromSkillLevel, skillSeqNum):
         costs = _g_levelXpCosts
         return 2 ** skillSeqNum * (costs[fromSkillLevel + 1] - costs[fromSkillLevel])
+
+    @staticmethod
+    def skillsXpCost(skillSeqNum, skillsCount=1):
+        return _g_levelXpCosts[MAX_SKILL_LEVEL] * sum([ 2 ** (skillSeqNum + i) for i in xrange(skillsCount) ])
 
     def skillLevel(self, skillName):
         if skillName not in self.skills:

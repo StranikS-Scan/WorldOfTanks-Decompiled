@@ -83,6 +83,7 @@ class GAME(CONST_CONTAINER):
     SNIPER_ZOOM = 'sniperZoom'
     ENABLE_SERVER_AIM = 'useServerAim'
     SHOW_DAMAGE_ICON = 'showDamageIcon'
+    SHOW_SPACED_ARMOR_HIT_ICON = 'showSpacedArmorHitIcon'
     SHOW_VEHICLES_COUNTER = 'showVehiclesCounter'
     SHOW_MARKS_ON_GUN = 'showMarksOnGun'
     ANONYMIZER = 'anonymizer'
@@ -111,6 +112,7 @@ class GAME(CONST_CONTAINER):
     SHOW_VECTOR_ON_MAP = 'showVectorOnMap'
     SHOW_SECTOR_ON_MAP = 'showSectorOnMap'
     SHOW_VEH_MODELS_ON_MAP = 'showVehModelsOnMap'
+    SHOW_ARTY_HIT_ON_MAP = 'showArtyHitOnMap'
     MINIMAP_VIEW_RANGE = 'minimapViewRange'
     MINIMAP_MAX_VIEW_RANGE = 'minimapMaxViewRange'
     MINIMAP_DRAW_RANGE = 'minimapDrawRange'
@@ -192,6 +194,14 @@ class CONTROLS(CONST_CONTAINER):
 class AIM(CONST_CONTAINER):
     ARCADE = 'arcade'
     SNIPER = 'sniper'
+    SPG = 'spg'
+
+
+class SPGAim(CONST_CONTAINER):
+    SHOTS_RESULT_INDICATOR = 'shotsResultIndicator'
+    SPG_SCALE_WIDGET = 'spgScaleWidget'
+    SPG_STRATEGIC_CAM_MODE = 'spgStrategicCamMode'
+    AUTO_CHANGE_AIM_MODE = 'autoChangeAimMode'
 
 
 class MARKERS(CONST_CONTAINER):

@@ -13,11 +13,15 @@ from AvatarInputHandler import cameras, aih_global_binding
 from AvatarInputHandler.AimingSystems.StrategicAimingSystem import StrategicAimingSystem
 from AvatarInputHandler.AimingSystems.StrategicAimingSystemRemote import StrategicAimingSystemRemote
 from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig, CameraWithSettings
+from AvatarInputHandler.DynamicCameras.camera_switcher import CameraSwitcher, SWITCH_TYPES, CameraSwitcherCollection
 from AvatarInputHandler.cameras import getWorldRayAndPoint, readFloat, readVec2, ImpulseReason, FovExtended
 from ClientArena import Plane
+from account_helpers.settings_core import settings_constants
+from aih_constants import CTRL_MODE_NAME
 from debug_utils import LOG_WARNING
 from helpers.CallbackDelayer import CallbackDelayer
 _DistRangeSetting = namedtuple('_DistRangeSetting', ['minArenaSize', 'distRange', 'acceleration'])
+_CAM_YAW_ROUND = 4
 
 def getCameraAsSettingsHolder(settingsDataSec):
     return StrategicCamera(settingsDataSec)
@@ -48,6 +52,7 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         self.__activeDistRangeSettings = None
         self.__dynamicCfg = CameraDynamicConfig()
         self.__cameraYaw = 0.0
+        self.__switchers = CameraSwitcherCollection(cameraSwitchers=[CameraSwitcher(switchType=SWITCH_TYPES.FROM_MIN_DIST, switchToName=CTRL_MODE_NAME.ARTY, switchToPos=1.0)], isEnabled=True)
         self._readConfigs(dataSec)
         self.__cam = BigWorld.CursorCamera()
         self.__cam.isHangar = False
@@ -66,6 +71,8 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         return StrategicCamera.__name__
 
     def create(self, onChangeControlMode=None):
+        aimingSystemClass = StrategicAimingSystemRemote if BigWorld.player().isObserver() else StrategicAimingSystem
+        self.__aimingSystem = aimingSystemClass(self._cfg['distRange'][0], self.__cameraYaw)
         super(StrategicCamera, self).create()
         self.__onChangeControlMode = onChangeControlMode
         self.__camDist = self._cfg['camDist']
@@ -74,8 +81,8 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         self.__cam.movementHalfLife = 0.0
         self.__cam.turningHalfLife = -1
         self.__cam.pivotPosition = Math.Vector3(0.0, self.__camDist, 0.0)
-        aimingSystemClass = StrategicAimingSystemRemote if BigWorld.player().isObserver() else StrategicAimingSystem
-        self.__aimingSystem = aimingSystemClass(self._cfg['distRange'][0], self.__cameraYaw)
+        if self.settingsCore.isReady:
+            self.__switchers.setIsEnabled(self.settingsCore.getSetting(settings_constants.SPGAim.AUTO_CHANGE_AIM_MODE))
 
     def destroy(self):
         self.disable()
@@ -88,15 +95,17 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         CameraWithSettings.destroy(self)
         return
 
-    def enable(self, targetPos, saveDist):
+    def enable(self, targetPos, saveDist, switchToPos=None):
         self.__prevTime = BigWorld.time()
         self.__aimingSystem.enable(targetPos)
         self.__activeDistRangeSettings = self.__getActiveDistRangeForArena()
         if self.__activeDistRangeSettings is not None:
             self.__aimingSystem.height = self.__getDistRange()[0]
-        srcMat = math_utils.createRotationMatrix((self.__cameraYaw, -math.pi * 0.499, 0.0))
-        self.__cam.source = srcMat
-        if not saveDist:
+        self.__updateCameraYaw()
+        if switchToPos is not None:
+            maxPivotHeight = self._cfg['distRange'][1] - self._cfg['distRange'][0]
+            self.__camDist = maxPivotHeight * switchToPos
+        elif not saveDist:
             self.__updateCamDistCfg()
             self.__camDist = self._cfg['camDist']
         self.__cam.pivotPosition = Math.Vector3(0.0, self.__camDist, 0.0)
@@ -117,6 +126,7 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
     def disable(self):
         if self.__aimingSystem is not None:
             self.__aimingSystem.disable()
+        self.__switchers.clear()
         self.stopCallback(self.__cameraUpdate)
         positionControl = BigWorld.player().positionControl
         if positionControl is not None:
@@ -133,6 +143,11 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         distRange = self.__getDistRange()
         if len(distRange) > 1:
             self.__camDist = distRange[1]
+
+    def getDistRatio(self):
+        distRange = self.__getDistRange()
+        maxPivotHeight = distRange[1] - distRange[0]
+        return self.__camDist / maxPivotHeight
 
     def update(self, dx, dy, dz, updatedByKeyboard=False):
         self.__curSense = self._cfg['keySensitivity'] if updatedByKeyboard else self._cfg['sensitivity']
@@ -223,6 +238,7 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
             if replayCtrl.isRecording:
                 replayCtrl.setAimClipPosition(aimOffset)
         self.__aimOffset = aimOffset
+        self.__updateCameraYaw()
         shotDescr = BigWorld.player().getVehicleDescriptor().shot
         BigWorld.wg_trajectory_drawer().setParams(shotDescr.maxDistance, Math.Vector3(0, -shotDescr.gravity, 0), aimOffset)
         curTime = BigWorld.time()
@@ -258,12 +274,25 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         self._cfg['camDist'] = self.__camDist
         camDistWithSmoothing = self.__camDist + self.__smoothingPivotDelta - self.__aimingSystem.heightFromPlane
         self.__cam.pivotPosition = Math.Vector3(0.0, camDistWithSmoothing, 0.0)
-        if self.__dxdydz.z != 0 and self.__onChangeControlMode is not None and math_utils.almostZero(self.__camDist - maxPivotHeight):
-            self.__onChangeControlMode()
+        if self.__onChangeControlMode is not None and self.__switchers.needToSwitch(self.__dxdydz.z, self.__camDist, 0, maxPivotHeight):
+            self.__onChangeControlMode(*self.__switchers.getSwitchParams())
         self.__updateOscillator(deltaTime)
         if not self.__autoUpdatePosition:
             self.__dxdydz = Vector3(0, 0, 0)
         return 0.0
+
+    def _handleSettingsChange(self, diff):
+        if settings_constants.SPGAim.SPG_STRATEGIC_CAM_MODE in diff:
+            self.__aimingSystem.setParallaxModeEnabled(diff[settings_constants.SPGAim.SPG_STRATEGIC_CAM_MODE] == 1)
+        if settings_constants.SPGAim.AUTO_CHANGE_AIM_MODE in diff:
+            self.__switchers.setIsEnabled(self.settingsCore.getSetting(settings_constants.SPGAim.AUTO_CHANGE_AIM_MODE))
+
+    def _updateSettingsFromServer(self):
+        if self.settingsCore.isReady:
+            if self.__aimingSystem is not None:
+                self.__aimingSystem.setParallaxModeEnabled(self.settingsCore.getSetting(settings_constants.SPGAim.SPG_STRATEGIC_CAM_MODE) == 1)
+            self.__switchers.setIsEnabled(self.settingsCore.getSetting(settings_constants.SPGAim.AUTO_CHANGE_AIM_MODE))
+        return
 
     def __calcSmoothingPivotDelta(self, deltaTime):
         heightsDy = self.__aimingSystem.heightFromPlane - self.__smoothingPivotDelta
@@ -284,6 +313,13 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
             self.__positionOscillator.reset()
             self.__positionNoiseOscillator.reset()
         self.__cam.target.a = math_utils.createTranslationMatrix(self.__positionOscillator.deviation + self.__positionNoiseOscillator.deviation)
+
+    def __updateCameraYaw(self):
+        altModeEnabled = self.settingsCore.getSetting(settings_constants.SPGAim.SPG_STRATEGIC_CAM_MODE) == 1
+        pitch = -math.pi * 0.499 if not altModeEnabled else math.radians(-88.0)
+        self.__cameraYaw = round(self.aimingSystem.getCamYaw(), _CAM_YAW_ROUND)
+        srcMat = math_utils.createRotationMatrix((self.__cameraYaw, pitch, 0.0))
+        self.__cam.source = srcMat
 
     def reload(self):
         if not constants.IS_DEVELOPMENT:

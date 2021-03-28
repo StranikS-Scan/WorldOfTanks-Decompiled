@@ -20,6 +20,7 @@ class BATTLE_VIEW_ALIASES(object):
     BATTLE_TUTORIAL = 'battleTutorial'
     CONSUMABLES_PANEL = 'consumablesPanel'
     DAMAGE_INDICATOR = 'damageIndicator'
+    PREDICTION_INDICATOR = 'predictionIndicator'
     TIMERS_PANEL = 'timersPanel'
     STATUS_NOTIFICATIONS_PANEL = 'statusNotificationsPanel'
     DUAL_GUN_PANEL = 'dualGunPanel'

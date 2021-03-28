@@ -12,7 +12,7 @@ import WWISE
 import constants
 import nations
 from account_helpers import gameplay_ctx
-from account_helpers.settings_core.settings_constants import GAME, BattleCommStorageKeys, ScorePanelStorageKeys
+from account_helpers.settings_core.settings_constants import GAME, BattleCommStorageKeys, ScorePanelStorageKeys, SPGAim
 from constants import VEHICLE_CLASSES, MAX_VEHICLE_LEVEL
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.Scaleform.genConsts.MISSIONS_CONSTANTS import MISSIONS_CONSTANTS
@@ -131,6 +131,9 @@ PRE_BATTLE_HINT_SECTION = 'preBattleHintSection'
 QUEST_PROGRESS_HINT_SECTION = 'questProgressHint'
 HELP_SCREEN_HINT_SECTION = 'helpScreenHint'
 IBC_HINT_SECTION = 'battleCommunicationHint'
+SPG_HELP_SCREEN_HINT_SECTION = 'spgHelpScreenHint'
+IN_GAME_HELP_PAGE_SECTION = 'ingameHelpPage'
+SPG_HELP_PAGES_LEFT_TO_SHOW = 'spgHelpPagesLeftToShow'
 MINIMAP_IBC_HINT_SECTION = 'minimapHintSection'
 WATCHED_PRE_BATTLE_TIPS_SECTION = 'watchedPreBattleTipsSection'
 LAST_DISPLAY_DAY = 'lastDisplayDay'
@@ -469,7 +472,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                            'reloaderTimer': {'alpha': 100,
                                              'type': 0},
                            'zoomIndicator': {'alpha': 100,
-                                             'type': 0}},
+                                             'type': 0},
+                           'armorScreenIndicator': {'alpha': 100,
+                                                    'type': 0}},
                 'sniper': {'mixing': {'alpha': 90,
                                       'type': 0},
                            'gunTag': {'alpha': 90,
@@ -487,7 +492,12 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                            'reloaderTimer': {'alpha': 100,
                                              'type': 0},
                            'zoomIndicator': {'alpha': 100,
-                                             'type': 0}},
+                                             'type': 0},
+                           'armorScreenIndicator': {'alpha': 100,
+                                                    'type': 0}},
+                'spgAim': {SPGAim.SHOTS_RESULT_INDICATOR: True,
+                           SPGAim.SPG_SCALE_WIDGET: True,
+                           SPGAim.AUTO_CHANGE_AIM_MODE: True},
                 'markers': {'ally': {'markerBaseIcon': False,
                                      'markerBaseLevel': False,
                                      'markerBaseHpIndicator': False,
@@ -543,6 +553,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'isColorBlind': False,
                 'useServerAim': False,
                 'showDamageIcon': True,
+                'showSpacedArmorHitIcon': True,
                 'showVehiclesCounter': True,
                 'minimapAlpha': 0,
                 'minimapSize': 1,
@@ -627,6 +638,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                         'hangarCamParallaxEnabled': True,
                                                         'hangarCamPeriod': True,
                                                         'showDamageIcon': True,
+                                                        GAME.SHOW_SPACED_ARMOR_HIT_ICON: True,
                                                         ANONYMIZER: True,
                                                         GAME.SHOW_VICTIMS_DOGTAG: True},
                                        'GraphicSettings': {'ScreenSettings': {'gammaSetting': True,
@@ -670,8 +682,15 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                                         LAST_DISPLAY_DAY: 0,
                                                                         NUM_BATTLES: 0},
                                           HELP_SCREEN_HINT_SECTION: {},
+                                          SPG_HELP_SCREEN_HINT_SECTION: {'SPG': {HINTS_LEFT: 3,
+                                                                                 LAST_DISPLAY_DAY: 0,
+                                                                                 NUM_BATTLES: 0},
+                                                                         'other': {HINTS_LEFT: 3,
+                                                                                   LAST_DISPLAY_DAY: 0,
+                                                                                   NUM_BATTLES: 0}},
                                           IBC_HINT_SECTION: {HINTS_LEFT: 10}},
                 MINIMAP_IBC_HINT_SECTION: {HINTS_LEFT: 10},
+                IN_GAME_HELP_PAGE_SECTION: {SPG_HELP_PAGES_LEFT_TO_SHOW: 3},
                 WATCHED_PRE_BATTLE_TIPS_SECTION: {},
                 SIEGE_HINT_SECTION: {HINTS_LEFT: 3,
                                      LAST_DISPLAY_DAY: 0,
@@ -817,7 +836,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 44
+    version = 45
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -1270,6 +1289,21 @@ class AccountSettings(object):
                 AccountSettings.checkAndResetFireKeyIfInUse(expectedCommand='CMD_CHAT_SHORTCUT_NEGATIVE', expectedKey='KEY_F6')
                 AccountSettings.removeOldCommandAndReuseFireKey(oldCommand='CMD_CHAT_SHORTCUT_POSITIVE', newCommand='CMD_CHAT_SHORTCUT_AFFIRMATIVE')
                 CommandMapping.g_instance.restoreUserConfig()
+            if currVersion < 45:
+                for key, section in _filterAccountSection(ads):
+                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    if PRE_BATTLE_HINT_SECTION in accSettings.keys():
+                        preBattleSection = DEFAULT_VALUES[KEY_SETTINGS][PRE_BATTLE_HINT_SECTION].copy()
+                        defPre = preBattleSection[SPG_HELP_SCREEN_HINT_SECTION].copy()
+                        for key1, section1 in accSettings.items()[:]:
+                            if key1 == PRE_BATTLE_HINT_SECTION:
+                                preBattleSection = _unpack(section1.asString)
+                                preBattleSection[SPG_HELP_SCREEN_HINT_SECTION] = defPre
+                                accSettings.deleteSection(key1)
+                                break
+
+                        accSettings.write('preBattleHintSection', _pack(preBattleSection))
+
         return
 
     @staticmethod

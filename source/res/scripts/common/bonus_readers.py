@@ -412,42 +412,55 @@ def __readBonus_item(bonus, _name, section, eventType):
 
 
 def __readBonus_vehicle(bonus, _name, section, eventType):
-    vehCompDescr = None
-    if section.has_key('vehCompDescr'):
-        vehCompDescr = section['vehCompDescr'].asString.decode('base64')
-        vehTypeCompDescr = vehicles.VehicleDescr(vehCompDescr).type.compactDescr
-    elif section.has_key('vehTypeCompDescr'):
-        vehTypeCompDescr = section['vehTypeCompDescr'].asInt
+    if eventType == EVENT_TYPE.ACCOUNT_BONUSES:
+        __readAccountBonusVehicle(bonus, section)
+        return
     else:
-        nationID, innationID = vehicles.g_list.getIDsByName(section.asString)
-        vehTypeCompDescr = vehicles.makeIntCompactDescrByID('vehicle', nationID, innationID)
-    extra = {}
-    if section.has_key('tankmen'):
-        __readBonus_tankmen(extra, vehTypeCompDescr, section['tankmen'], eventType)
-    else:
-        if section.has_key('noCrew'):
-            extra['noCrew'] = True
-        if section.has_key('crewLvl'):
-            extra['crewLvl'] = section['crewLvl'].asInt
-        if section.has_key('crewFreeXP'):
-            extra['crewFreeXP'] = section['crewFreeXP'].asInt
-    if section.has_key('rent'):
-        __readBonus_rent(extra, None, section['rent'])
-    if section.has_key('customization'):
-        __readBonus_vehicleCustomizations(extra, None, section['customization'])
-    if section.has_key('customCompensation'):
-        __readBonus_customCompensation(extra, None, section['customCompensation'])
-    if section.has_key('outfits'):
-        __readBonus_outfits(extra, None, section['outfits'])
-    if section.has_key('ammo'):
-        ammo = section['ammo'].asString
-        extra['ammo'] = [ int(item) for item in ammo.split(' ') ]
-    vehicleBonuses = bonus.setdefault('vehicles', {})
-    vehKey = vehCompDescr if vehCompDescr else vehTypeCompDescr
-    if vehKey in vehicleBonuses:
-        raise SoftException('Duplicate vehicle', vehKey)
-    vehicleBonuses[vehKey] = extra
-    return
+        vehCompDescr = None
+        if section.has_key('vehCompDescr'):
+            vehCompDescr = section['vehCompDescr'].asString.decode('base64')
+            vehTypeCompDescr = vehicles.VehicleDescr(vehCompDescr).type.compactDescr
+        elif section.has_key('vehTypeCompDescr'):
+            vehTypeCompDescr = section['vehTypeCompDescr'].asInt
+        else:
+            nationID, innationID = vehicles.g_list.getIDsByName(section.asString)
+            vehTypeCompDescr = vehicles.makeIntCompactDescrByID('vehicle', nationID, innationID)
+        extra = {}
+        if section.has_key('tankmen'):
+            __readBonus_tankmen(extra, vehTypeCompDescr, section['tankmen'], eventType)
+        else:
+            if section.has_key('noCrew'):
+                extra['noCrew'] = True
+            if section.has_key('crewLvl'):
+                extra['crewLvl'] = section['crewLvl'].asInt
+            if section.has_key('crewFreeXP'):
+                extra['crewFreeXP'] = section['crewFreeXP'].asInt
+        if section.has_key('rent'):
+            __readBonus_rent(extra, None, section['rent'])
+        if section.has_key('customization'):
+            __readBonus_vehicleCustomizations(extra, None, section['customization'])
+        if section.has_key('customCompensation'):
+            __readBonus_customCompensation(extra, None, section['customCompensation'])
+        if section.has_key('outfits'):
+            __readBonus_outfits(extra, None, section['outfits'])
+        if section.has_key('ammo'):
+            ammo = section['ammo'].asString
+            extra['ammo'] = [ int(item) for item in ammo.split(' ') ]
+        vehicleBonuses = bonus.setdefault('vehicles', {})
+        vehKey = vehCompDescr if vehCompDescr else vehTypeCompDescr
+        if vehKey in vehicleBonuses:
+            raise SoftException('Duplicate vehicle', vehKey)
+        vehicleBonuses[vehKey] = extra
+        return
+
+
+def __readAccountBonusVehicle(bonus, section):
+    nationID, innationID = vehicles.g_list.getIDsByName(section.asString)
+    vehTypeCompDescr = vehicles.makeIntCompactDescrByID('vehicle', nationID, innationID)
+    vehicleBonuses = bonus.setdefault('vehicles', set())
+    if vehTypeCompDescr in vehicleBonuses:
+        raise SoftException('Duplicate vehicle', vehTypeCompDescr)
+    vehicleBonuses.add(vehTypeCompDescr)
 
 
 def __readBonus_customCompensation(bonus, _name, section):
@@ -518,6 +531,14 @@ def __readBonus_tankmen(bonus, vehTypeCompDescr, section, eventType):
 
     bonus['tankmen'] = lst
     return
+
+
+def __readBonus_tankmenSkills(bonus, _name, section, _eventType):
+    tankmen = {}
+    for role, subsection in section.items():
+        tankmen[role] = subsection.asString.split()
+
+    bonus['tankmenSkills'] = tankmen
 
 
 def __readBonus_seasonRent(outRent, section):
@@ -958,7 +979,10 @@ __BONUS_READERS = {'meta': __readMetaSection,
  'battlePassPoints': __readBonus_battlePassPoints,
  'vehicleChoice': __readBonus_vehicleChoice,
  'blueprint': __readBonus_blueprint,
- 'blueprintAny': __readBonus_blueprintAny}
+ 'blueprintAny': __readBonus_blueprintAny,
+ 'tankmenFreeSkills': __readBonus_int,
+ 'skilledTankmenFreeSkills': __readBonus_int,
+ 'tankmenSkills': __readBonus_tankmenSkills}
 __PROBABILITY_READERS = {'optional': __readBonus_optional,
  'oneof': __readBonus_oneof,
  'group': __readBonus_group}

@@ -10,8 +10,11 @@ from AvatarInputHandler import aih_global_binding, cameras
 from AvatarInputHandler.AimingSystems.ArtyAimingSystem import ArtyAimingSystem
 from AvatarInputHandler.AimingSystems.ArtyAimingSystemRemote import ArtyAimingSystemRemote
 from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig, CameraWithSettings
+from AvatarInputHandler.DynamicCameras.camera_switcher import CameraSwitcher, SWITCH_TYPES, CameraSwitcherCollection
 from AvatarInputHandler.cameras import readFloat, readVec2, ImpulseReason
 from ProjectileMover import collideDynamicAndStatic
+from account_helpers.settings_core.settings_constants import SPGAim
+from aih_constants import CTRL_MODE_NAME
 from debug_utils import LOG_WARNING
 from helpers.CallbackDelayer import CallbackDelayer
 
@@ -74,6 +77,7 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         CallbackDelayer.__init__(self)
         self.__positionOscillator = None
         self.__positionNoiseOscillator = None
+        self.__switchers = CameraSwitcherCollection(cameraSwitchers=[CameraSwitcher(switchType=SWITCH_TYPES.FROM_MAX_DIST, switchToName=CTRL_MODE_NAME.STRATEGIC, switchToPos=0.0)], isEnabled=True)
         self.__dynamicCfg = CameraDynamicConfig()
         self._readConfigs(dataSec)
         self.__cam = BigWorld.CursorCamera()
@@ -115,6 +119,8 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         self.__sourceMatrix = Matrix()
         self.__targetMatrix = Matrix()
         self.__rotation = 0.0
+        if self.settingsCore.isReady:
+            self.__switchers.setIsEnabled(self.settingsCore.getSetting(SPGAim.AUTO_CHANGE_AIM_MODE))
 
     def destroy(self):
         self.disable()
@@ -127,8 +133,12 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         CameraWithSettings.destroy(self)
         return
 
-    def enable(self, targetPos, saveDist):
+    def enable(self, targetPos, saveDist, switchToPos=None):
         self.__prevTime = 0.0
+        if switchToPos is not None:
+            minDist, maxDist = self._cfg['distRange']
+            self.__camDist = (maxDist - minDist) * switchToPos + minDist
+            self.__desiredCamDist = self.__camDist
         self.__aimingSystem.enable(targetPos)
         self.__positionHysteresis.update(Vector3(0.0, 0.0, 0.0))
         self.__timeHysteresis.update(BigWorld.timeExact())
@@ -143,17 +153,23 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         self.__cameraUpdate()
         self.delayCallback(0.01, self.__cameraUpdate)
         self.__needReset = 1
+        return
 
     def disable(self):
         if self.__aimingSystem is not None:
             self.__aimingSystem.disable()
         self.stopCallback(self.__cameraUpdate)
+        self.__switchers.clear()
         self.__positionOscillator.reset()
         return
 
     def teleport(self, pos):
         self.__aimingSystem.updateTargetPos(pos)
         self.update(0.0, 0.0, 0.0)
+
+    def getDistRatio(self):
+        minDist, maxDist = self._cfg['distRange']
+        return (self.__desiredCamDist - minDist) / (maxDist - minDist)
 
     def update(self, dx, dy, dz, updateByKeyboard=False):
         self.__curSense = self._cfg['keySensitivity'] if updateByKeyboard else self._cfg['sensitivity']
@@ -350,8 +366,11 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
             self.__prevAimPoint = aimPoint
         self.__updateOscillator(deltaTime)
         self.__aimingSystem.update(deltaTime)
+        if self.__onChangeControlMode is not None and self.__switchers.needToSwitch(self.__dxdydz.z, self.__desiredCamDist, *self._cfg['distRange']):
+            self.__onChangeControlMode(*self.__switchers.getSwitchParams())
         if not self.__autoUpdatePosition:
             self.__dxdydz = Vector3(0, 0, 0)
+        return 0.01
 
     def __updateOscillator(self, deltaTime):
         if ArtyCamera.isCameraDynamic():
@@ -419,3 +438,13 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         cfg['camDist'] = ucfg['camDist']
         cfg['horzInvert'] = ucfg['horzInvert']
         cfg['vertInvert'] = ucfg['vertInvert']
+
+    def _handleSettingsChange(self, diff):
+        super(ArtyCamera, self)._handleSettingsChange(diff)
+        if SPGAim.AUTO_CHANGE_AIM_MODE in diff:
+            self.__switchers.setIsEnabled(self.settingsCore.getSetting(SPGAim.AUTO_CHANGE_AIM_MODE))
+
+    def _updateSettingsFromServer(self):
+        super(ArtyCamera, self)._updateSettingsFromServer()
+        if self.settingsCore.isReady:
+            self.__switchers.setIsEnabled(self.settingsCore.getSetting(SPGAim.AUTO_CHANGE_AIM_MODE))

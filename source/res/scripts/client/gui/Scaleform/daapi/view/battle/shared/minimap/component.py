@@ -147,7 +147,8 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
          'vehicles': plugins.ArenaVehiclesPlugin,
          'personal': plugins.PersonalEntriesPlugin,
          'area': plugins.AreaStaticMarkerPlugin,
-         'area_markers': plugins.AreaMarkerEntriesPlugin}
+         'area_markers': plugins.AreaMarkerEntriesPlugin,
+         'spgShot': plugins.EnemySPGShotPlugin}
         arenaBonusType = BigWorld.player().arenaBonusType
         if arenaBonusType and BONUS_CAPS.checkAny(arenaBonusType, BONUS_CAPS.DEATHZONES):
             setup['deathzones'] = plugins.DeathZonesMinimapPlugin

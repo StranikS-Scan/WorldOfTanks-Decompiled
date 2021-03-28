@@ -266,6 +266,7 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
       <Arg>	BOOL	</Arg>
       <Arg>	BOOL	</Arg>
     </updateVehicleClipReloadTime>
@@ -500,6 +501,13 @@
       <Arg>	PYTHON	</Arg>
       <AllowUnsafeData>	true	</AllowUnsafeData>
     </updateQuestProgress>
+    <enemySPGHit>
+      <Arg>	VECTOR3	</Arg>
+    </enemySPGHit>
+    <enemySPGShotSound>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	VECTOR3	</Arg>
+    </enemySPGShotSound>
   </ClientMethods>
   <CellMethods>
     <autoAim>

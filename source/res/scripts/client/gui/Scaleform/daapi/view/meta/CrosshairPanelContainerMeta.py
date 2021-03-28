@@ -132,3 +132,18 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
 
     def as_runCameraTransitionFxS(self, activeGunId, animationDuration):
         return self.flashObject.as_runCameraTransitionFx(activeGunId, animationDuration) if self._isDAAPIInited() else None
+
+    def as_setIsArmorScreenS(self, name, value):
+        return self.flashObject.as_setIsArmorScreen(name, value) if self._isDAAPIInited() else None
+
+    def as_updateScaleWidgetS(self, minValue, midValue, maxValue, currentValue):
+        return self.flashObject.as_updateScaleWidget(minValue, midValue, maxValue, currentValue) if self._isDAAPIInited() else None
+
+    def as_setGunMarkersIndicatorsS(self, indicators):
+        return self.flashObject.as_setGunMarkersIndicators(indicators) if self._isDAAPIInited() else None
+
+    def as_setShotFlyTimesS(self, shotFlyTimes):
+        return self.flashObject.as_setShotFlyTimes(shotFlyTimes) if self._isDAAPIInited() else None
+
+    def as_setShellChangeTimeS(self, quickChangerIsActive, shellChangeTime):
+        return self.flashObject.as_setShellChangeTime(quickChangerIsActive, shellChangeTime) if self._isDAAPIInited() else None

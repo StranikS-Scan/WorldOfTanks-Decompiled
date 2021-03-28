@@ -53,211 +53,219 @@ class BasicSkill(legacy_stuff.LegacyStuff):
         raise NotImplementedError
 
 
-class SingleNumberSkill(BasicSkill):
-    __slots__ = ('_value',)
+class ExtendedSkill(BasicSkill):
+    __slots__ = ('_setOfParameters',)
 
-    def __init__(self, basicSkill, value):
-        super(SingleNumberSkill, self).__init__(basicSkill.name, i18n=basicSkill.i18n, icon=basicSkill.icon)
-        self._value = value
+    def __init__(self, basicSkill, *args):
+        super(ExtendedSkill, self).__init__(basicSkill.name, i18n=basicSkill.i18n, icon=basicSkill.icon)
+        self._setOfParameters = args
 
-    def recreate(self, value):
-        return self.__class__(BasicSkill(self.name, self.i18n, self.icon), value)
-
-
-class DualNumberSkill(BasicSkill):
-    __slots__ = ('_first', '_second')
-
-    def __init__(self, basicSkill, left, right):
-        super(DualNumberSkill, self).__init__(basicSkill.name, i18n=basicSkill.i18n, icon=basicSkill.icon)
-        self._first = left
-        self._second = right
-
-    def recreate(self, left, right):
-        return self.__class__(BasicSkill(self.name, self.i18n, self.icon), left, right)
+    def recreate(self, *args):
+        return self.__class__(BasicSkill(self.name, self.i18n, self.icon), *args)
 
 
-class BrotherhoodSkill(SingleNumberSkill):
+class BrotherhoodSkill(ExtendedSkill):
     __slots__ = ()
 
     @property
     def crewLevelIncrease(self):
-        return self._value
+        return self._setOfParameters[0]
 
 
-class CommanderTutorSkill(SingleNumberSkill):
+class CommanderTutorSkill(ExtendedSkill):
     __slots__ = ()
 
     @property
     def xpBonusFactorPerLevel(self):
-        return self._value
+        return self._setOfParameters[0]
 
 
-class CommanderUniversalistSkill(SingleNumberSkill):
+class CommanderUniversalistSkill(ExtendedSkill):
     __slots__ = ()
 
     @property
     def efficiency(self):
-        return self._value
+        return self._setOfParameters[0]
 
 
-class CommanderSkillWithDelay(SingleNumberSkill):
+class CommanderSkillWithDelay(ExtendedSkill):
     __slots__ = ()
 
     @property
     def delay(self):
-        return self._value
+        return self._setOfParameters[0]
 
 
-class CommanderEagleEyeSkill(DualNumberSkill):
+class CommanderEagleEyeSkill(ExtendedSkill):
     __slots__ = ()
 
     @property
     def distanceFactorPerLevelWhenDeviceWorking(self):
-        return self._first
+        return self._setOfParameters[0]
 
     @property
     def distanceFactorPerLevelWhenDeviceDestroyed(self):
-        return self._second
+        return self._setOfParameters[1]
 
 
-class DriverTidyPersonSkill(SingleNumberSkill):
+class CommanderEnemyShotPredictor(ExtendedSkill):
+    __slots__ = ()
+
+    @property
+    def minExplosionRadius(self):
+        return self._setOfParameters[0]
+
+    @property
+    def explosionMultiplier(self):
+        return self._setOfParameters[1]
+
+    @property
+    def recalculatingHeight(self):
+        return self._setOfParameters[2]
+
+    @property
+    def targetRadius(self):
+        return self._setOfParameters[3]
+
+
+class DriverTidyPersonSkill(ExtendedSkill):
     __slots__ = ()
 
     @property
     def fireStartingChanceFactor(self):
-        return self._value
+        return self._setOfParameters[0]
 
 
-class DriverSmoothDrivingSkill(SingleNumberSkill):
+class DriverSmoothDrivingSkill(ExtendedSkill):
     __slots__ = ()
 
     @property
     def shotDispersionFactorPerLevel(self):
-        return self._value
+        return self._setOfParameters[0]
 
 
-class DriverVirtuosoSkill(SingleNumberSkill):
+class DriverVirtuosoSkill(ExtendedSkill):
     __slots__ = ()
 
     @property
     def rotationSpeedFactorPerLevel(self):
-        return self._value
+        return self._setOfParameters[0]
 
 
-class DriverRammingMasterSkill(SingleNumberSkill):
+class DriverRammingMasterSkill(ExtendedSkill):
     __slots__ = ()
 
     @property
     def rammingBonusFactorPerLevel(self):
-        return self._value
+        return self._setOfParameters[0]
 
 
-class DriverBadRoadsKingSkill(DualNumberSkill):
+class DriverBadRoadsKingSkill(ExtendedSkill):
     __slots__ = ()
 
     @property
     def softGroundResistanceFactorPerLevel(self):
-        return self._first
+        return self._setOfParameters[0]
 
     @property
     def mediumGroundResistanceFactorPerLevel(self):
-        return self._second
+        return self._setOfParameters[1]
 
 
-class GunnerSmoothTurretSkill(SingleNumberSkill):
+class GunnerSmoothTurretSkill(ExtendedSkill):
     __slots__ = ()
 
     @property
     def shotDispersionFactorPerLevel(self):
-        return self._value
+        return self._setOfParameters[0]
 
 
-class GunnerGunsmithSkill(SingleNumberSkill):
+class GunnerGunsmithSkill(ExtendedSkill):
     __slots__ = ()
 
     @property
     def shotDispersionFactorPerLevel(self):
-        return self._value
+        return self._setOfParameters[0]
 
 
-class GunnerSniperSkill(SingleNumberSkill):
+class GunnerSniperSkill(ExtendedSkill):
     __slots__ = ()
 
     @property
     def deviceChanceToHitBoost(self):
-        return self._value
+        return self._setOfParameters[0]
 
 
-class GunnerRancorousSkill(DualNumberSkill):
+class GunnerRancorousSkill(ExtendedSkill):
     __slots__ = ()
 
     @property
     def duration(self):
-        return self._first
+        return self._setOfParameters[0]
 
     @property
     def sectorHalfAngle(self):
-        return self._second
+        return self._setOfParameters[1]
 
 
-class LoaderPedantSkill(SingleNumberSkill):
+class LoaderPedantSkill(ExtendedSkill):
     __slots__ = ()
 
     @property
     def ammoBayHealthFactor(self):
-        return self._value
+        return self._setOfParameters[0]
 
 
-class LoaderIntuitionSkill(SingleNumberSkill):
+class LoaderIntuitionSkill(ExtendedSkill):
     __slots__ = ()
 
     @property
-    def chance(self):
-        return self._value
+    def quickShellChangerFactorPerPercent(self):
+        return self._setOfParameters[0]
 
 
-class LoaderDesperadoSkill(DualNumberSkill):
+class LoaderDesperadoSkill(ExtendedSkill):
     __slots__ = ()
 
     @property
     def vehicleHealthFraction(self):
-        return self._first
+        return self._setOfParameters[0]
 
     @property
     def gunReloadTimeFactor(self):
-        return self._second
+        return self._setOfParameters[1]
 
 
-class RadiomanFinderSkill(SingleNumberSkill):
+class RadiomanFinderSkill(ExtendedSkill):
     __slots__ = ()
 
     @property
     def visionRadiusFactorPerLevel(self):
-        return self._value
+        return self._setOfParameters[0]
 
 
-class RadiomanInventorSkill(SingleNumberSkill):
+class RadiomanInventorSkill(ExtendedSkill):
     __slots__ = ()
 
     @property
     def radioDistanceFactorPerLevel(self):
-        return self._value
+        return self._setOfParameters[0]
 
 
-class RadiomanLastEffortSkill(SingleNumberSkill):
+class RadiomanLastEffortSkill(ExtendedSkill):
     __slots__ = ()
 
     @property
     def duration(self):
-        return self._value
+        return self._setOfParameters[0]
 
 
-class RadiomanRetransmitterSkill(SingleNumberSkill):
+class RadiomanRetransmitterSkill(ExtendedSkill):
     __slots__ = ()
 
     @property
     def distanceFactorPerLevel(self):
-        return self._value
+        return self._setOfParameters[0]
 
 
 class SkillsConfig(legacy_stuff.LegacyStuff):

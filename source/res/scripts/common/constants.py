@@ -22,7 +22,7 @@ IS_CELLAPP = BigWorld.component == 'cell'
 IS_BASEAPP = BigWorld.component in ('base', 'service')
 IS_WEB = BigWorld.component == 'web'
 IS_DYNAPDATER = False
-CURRENT_REALM = 'RU'
+CURRENT_REALM = 'SB'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -854,7 +854,7 @@ class VEHICLE_TTC_ASPECTS:
 class VEHICLE_MISC_STATUS:
     OTHER_VEHICLE_DAMAGED_DEVICES_VISIBLE = 0
     IS_OBSERVED_BY_ENEMY = 1
-    LOADER_INTUITION_WAS_USED = 2
+    _NOT_USED = 2
     VEHICLE_IS_OVERTURNED = 3
     VEHICLE_DROWN_WARNING = 4
     IN_DEATH_ZONE = 5
@@ -1019,15 +1019,19 @@ class REPAIR_TYPE:
 
 
 class VEHICLE_HIT_EFFECT:
-    INTERMEDIATE_RICOCHET = 0
-    FINAL_RICOCHET = 1
-    ARMOR_NOT_PIERCED = 2
-    ARMOR_PIERCED_NO_DAMAGE = 3
+    ARMOR_PIERCED_NO_DAMAGE = 0
+    INTERMEDIATE_RICOCHET = 1
+    FINAL_RICOCHET = 2
+    ARMOR_NOT_PIERCED = 3
     ARMOR_PIERCED = 4
     CRITICAL_HIT = 5
     ARMOR_PIERCED_DEVICE_DAMAGED = 6
     MAX_CODE = ARMOR_PIERCED_DEVICE_DAMAGED
     RICOCHETS = (INTERMEDIATE_RICOCHET, FINAL_RICOCHET)
+    PIERCED_HITS = (ARMOR_PIERCED_NO_DAMAGE,
+     ARMOR_PIERCED,
+     CRITICAL_HIT,
+     ARMOR_PIERCED_DEVICE_DAMAGED)
 
 
 class VEHICLE_HIT_FLAGS:
@@ -1084,7 +1088,8 @@ class EVENT_TYPE:
     HANGAR_QUEST = 15
     NT_QUEST = 16
     C11N_PROGRESSION = 17
-    LAST = 17
+    ACCOUNT_BONUSES = 18
+    LAST = 18
     NAME_TO_TYPE = {'battleQuest': BATTLE_QUEST,
      'tokenQuest': TOKEN_QUEST,
      'personalQuest': PERSONAL_QUEST,
@@ -1096,7 +1101,8 @@ class EVENT_TYPE:
      'elenQuest': ELEN_QUEST,
      'hangarQuest': HANGAR_QUEST,
      'NTQuest': NT_QUEST,
-     'c11nProgression': C11N_PROGRESSION}
+     'c11nProgression': C11N_PROGRESSION,
+     'accountBonuses': ACCOUNT_BONUSES}
     TYPE_TO_NAME = dict(zip(NAME_TO_TYPE.values(), NAME_TO_TYPE.keys()))
     QUEST_RANGE = (BATTLE_QUEST,
      TOKEN_QUEST,
@@ -1198,6 +1204,7 @@ class PROMO_CUTOUT:
 
 VEHICLE_CLASSES = ('lightTank', 'mediumTank', 'heavyTank', 'SPG', 'AT-SPG')
 VEHICLE_CLASS_INDICES = dict(((x[1], x[0]) for x in enumerate(VEHICLE_CLASSES)))
+VEHICLE_CLASSES_DETECTED_BY_ENEMY_SHOT_PREDICTOR = {'SPG'}
 MIN_VEHICLE_LEVEL = 1
 MAX_VEHICLE_LEVEL = 10
 VEHICLE_NO_INV_ID = -1
@@ -1635,6 +1642,7 @@ class USER_SERVER_SETTINGS:
     VERSION = 0
     HIDE_MARKS_ON_GUN = 500
     GAME_EXTENDED = 59
+    GAME_EXTENDED_2 = 102
     EULA_VERSION = 54
     ARCADE_AIM_1 = 43
     ARCADE_AIM_2 = 44
@@ -1644,6 +1652,7 @@ class USER_SERVER_SETTINGS:
     SNIPER_AIM_2 = 47
     SNIPER_AIM_3 = 48
     SNIPER_AIM_4 = 64
+    SPG_AIM = 65
     DOG_TAGS = 68
     BATTLE_COMM = 69
     BATTLE_HUD = 71
@@ -1655,7 +1664,8 @@ class USER_SERVER_SETTINGS:
      GAME_EXTENDED,
      LINKEDSET_QUESTS,
      SESSION_STATS,
-     DOG_TAGS)
+     DOG_TAGS,
+     GAME_EXTENDED_2)
 
     @classmethod
     def isBattleInvitesForbidden(cls, settings):
@@ -1727,7 +1737,7 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  62: '[Free]',
  USER_SERVER_SETTINGS.ARCADE_AIM_4: 'Arcade aim setting',
  USER_SERVER_SETTINGS.SNIPER_AIM_4: 'Sniper aim setting',
- 65: '[Free]',
+ USER_SERVER_SETTINGS.SPG_AIM: 'SPG aim setting',
  66: '[Free]',
  67: '[Free]',
  USER_SERVER_SETTINGS.DOG_TAGS: 'Dog tags',
@@ -1757,7 +1767,8 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  98: 'Battle Pass Storage',
  99: 'Once only hints',
  100: 'Battle Royale carousel filter 1',
- 101: 'Battle Royale carousel filter 2'}
+ 101: 'Battle Royale carousel filter 2',
+ USER_SERVER_SETTINGS.GAME_EXTENDED_2: 'Game extended section settings'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -2112,6 +2123,11 @@ SHELL_TYPES_LIST = (SHELL_TYPES.HOLLOW_CHARGE,
  SHELL_TYPES.SMOKE)
 BATTLE_RESULT_WAITING_TIMEOUT = 0.1
 SHELL_TYPES_INDICES = dict(((value, index) for index, value in enumerate(SHELL_TYPES_LIST)))
+
+class SHELL_MECHANICS_TYPE:
+    LEGACY = 'LEGACY'
+    MODERN = 'MODERN'
+
 
 class HIT_INDIRECTION:
     DIRECT_HIT = 0
@@ -2612,3 +2628,15 @@ class EPlatoonButtonState(enum.Enum):
     SEARCHING_STATE = 'SEARCHING'
     IN_PLATOON_STATE = 'IN_PLATOON'
     CREATE_STATE = 'CREATE'
+
+
+class DamageAbsorptionTypes(object):
+    FRAGMENTS = 0
+    BLAST = 1
+    SPALLS = 2
+
+
+DamageAbsorptionLabelToType = {'FRAGMENTS': DamageAbsorptionTypes.FRAGMENTS,
+ 'BLAST': DamageAbsorptionTypes.BLAST,
+ 'SPALLS': DamageAbsorptionTypes.SPALLS}
+DamageAbsorptionTypeToLabel = dict(((type, label) for label, type in DamageAbsorptionLabelToType.items()))

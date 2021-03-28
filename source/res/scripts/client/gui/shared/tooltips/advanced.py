@@ -8,6 +8,8 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.goodies.goodie_items import DemountKit
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.artefacts import OptionalDevice
@@ -16,7 +18,6 @@ from gui.shared.tooltips import formatters
 from gui.shared.tooltips.common import BlocksTooltipData
 from helpers import dependency
 from helpers import i18n
-from helpers.i18n import makeString
 from skeletons.account_helpers.settings_core import ISettingsCore
 DISABLED_ITEMS_ID = 12793
 
@@ -73,10 +74,15 @@ class BaseAdvancedTooltip(BlocksTooltipData):
         pass
 
     def _packAdvancedBlocks(self, movie, header, description):
-        descrText = TOOLTIPS.getAdvancedDescription(description)
-        if descrText is None:
+        descrTextR = R.strings.tooltips.advanced.dyn(description)
+        if descrTextR is None:
             descrText = '#advanced/' + description
-        items = [formatters.packTextBlockData(text=text_styles.highTitle(header), padding=formatters.packPadding(left=20, top=20)), formatters.packImageBlockData(BaseAdvancedTooltip.getMovieAnimationPath(movie), BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, padding=5, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_ADVANCED_CLIP_BLOCK_LINKAGE), formatters.packTextBlockData(text=text_styles.main(descrText), padding=formatters.packPadding(left=20, top=10, bottom=20))]
+        else:
+            descrText = backport.text(descrTextR())
+        if movie is None:
+            items = [formatters.packTextBlockData(text=text_styles.highTitle(header), padding=formatters.packPadding(left=20, top=20)), formatters.packTextBlockData(text=text_styles.main(descrText), padding=formatters.packPadding(left=20, top=10, bottom=20))]
+        else:
+            items = [formatters.packTextBlockData(text=text_styles.highTitle(header), padding=formatters.packPadding(left=20, top=20)), formatters.packImageBlockData(BaseAdvancedTooltip.getMovieAnimationPath(movie), BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, padding=5, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_ADVANCED_CLIP_BLOCK_LINKAGE), formatters.packTextBlockData(text=text_styles.main(descrText), padding=formatters.packPadding(left=20, top=10, bottom=20))]
         return items
 
 
@@ -99,14 +105,11 @@ class ComplexAdvanced(BaseAdvancedTooltip):
 
 
 class HangarShellAdvanced(BaseAdvancedTooltip):
-    _shellMovies = {SHELL_TYPES.ARMOR_PIERCING: 'bulletAP',
-     SHELL_TYPES.HOLLOW_CHARGE: 'bulletHEAT',
-     SHELL_TYPES.HIGH_EXPLOSIVE: 'bulletHE',
-     SHELL_TYPES.ARMOR_PIERCING_CR: 'bulletAPCR'}
 
     def _getBlocksList(self, *args, **kwargs):
-        header = makeString(TOOLTIPS.getAdvancedHeaderShellType(self._item.type))
-        return self._packAdvancedBlocks(HangarShellAdvanced._shellMovies[self._item.type], header, self._item.type)
+        movie = SHELL_MOVIES.get((self._item.type, self._item.isModernMechanics), None)
+        header = backport.text(R.strings.tooltips.advanced.header.shellType.dyn(self._item.type, default=R.invalid)())
+        return self._packAdvancedBlocks(movie, header, self._item.type)
 
 
 class HangarBoosterAdvanced(BaseAdvancedTooltip):
@@ -244,7 +247,6 @@ SKILL_MOVIES = {'repair': 'skillRepairs',
  'radioman_lastEffort': 'skillCallForVengeance',
  'radioman_inventor': 'skillSignalBoosting',
  'radioman_retransmitter': 'skillRelaying',
- 'loader_intuition': 'skillIntuition',
  'loader_desperado': 'skillAdrenalineRush',
  'loader_pedant': 'skillSafeStowage'}
 MODULE_MOVIES = {'largeRepairkit': 'consumablesRepairKitBig',
@@ -290,3 +292,7 @@ _TANKMAN_MOVIES = {'commander': 'crewCommander',
  'gunner': 'crewGunner',
  'loader': 'crewLoader',
  'radioman': 'crewRadioOperator'}
+SHELL_MOVIES = {(SHELL_TYPES.ARMOR_PIERCING, False): 'bulletAP',
+ (SHELL_TYPES.HOLLOW_CHARGE, False): 'bulletHEAT',
+ (SHELL_TYPES.HIGH_EXPLOSIVE, False): 'bulletHE',
+ (SHELL_TYPES.ARMOR_PIERCING_CR, False): 'bulletAPCR'}

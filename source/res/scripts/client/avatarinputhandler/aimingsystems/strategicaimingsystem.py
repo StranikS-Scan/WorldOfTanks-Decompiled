@@ -9,13 +9,13 @@ from AvatarInputHandler import AimingSystems
 from AvatarInputHandler.AimingSystems import IAimingSystem
 from AvatarInputHandler.cameras import _clampPoint2DInBox2D
 
-class StrategicAimingSystem(IAimingSystem):
+class BaseStrategicAimingSystem(IAimingSystem):
     _LOOK_DIR = Vector3(0, -math.cos(0.001), math.sin(0.001))
     heightFromPlane = property(lambda self: self.__heightFromPlane)
     planePosition = property(lambda self: self._planePosition)
 
     def __init__(self, height, yaw):
-        super(StrategicAimingSystem, self).__init__()
+        super(BaseStrategicAimingSystem, self).__init__()
         self._matrix = math_utils.createRotationMatrix((yaw, 0, 0))
         self._planePosition = Vector3(0, 0, 0)
         self.__camDist = 0.0
@@ -81,4 +81,43 @@ class StrategicAimingSystem(IAimingSystem):
         collPoint = BigWorld.wg_collideSegment(BigWorld.player().spaceID, self._planePosition + Math.Vector3(0, 1000.0, 0), self._planePosition + Math.Vector3(0, -250.0, 0), 3)
         self.__heightFromPlane = 0.0 if collPoint is None else collPoint.closestPoint[1]
         self._matrix.translation = self._planePosition + Vector3(0, self.__heightFromPlane + self.__height, 0)
+        return
+
+
+class StrategicAimingSystem(BaseStrategicAimingSystem):
+
+    def __init__(self, height, yaw):
+        super(StrategicAimingSystem, self).__init__(height, yaw)
+        self.__defaultYaw = yaw
+        self.__parallaxModeEnabled = False
+
+    def setParallaxModeEnabled(self, isEnabled):
+        self.__parallaxModeEnabled = isEnabled
+        if not isEnabled:
+            self._matrix.setRotateYPR((self.__defaultYaw, 0, 0))
+
+    def handleMovement(self, dx, dy):
+        self._updateYaw()
+        super(StrategicAimingSystem, self).handleMovement(dx, dy)
+
+    def updateTargetPos(self, targetPos):
+        self._updateYaw()
+        super(StrategicAimingSystem, self).updateTargetPos(targetPos)
+
+    def getCamYaw(self):
+        return self._matrix.yaw
+
+    def _updateYaw(self):
+        if self.__parallaxModeEnabled:
+            vehicle = BigWorld.player().getVehicleAttached()
+            vehiclePosition = Vector3(vehicle.position) if vehicle is not None else None
+            if vehiclePosition is not None:
+                vehiclePosition.y = self._planePosition.y
+                direction = self._planePosition - vehiclePosition
+                if direction.lengthSquared < AimingSystems.SPG_MINIMAL_AIMING_RADIUS_SQ:
+                    direction.normalise()
+                    self._planePosition = vehiclePosition + direction * AimingSystems.SPG_MINIMAL_AIMING_RADIUS
+                else:
+                    direction.normalise()
+                self._matrix.setRotateYPR((direction.yaw, 0, 0))
         return

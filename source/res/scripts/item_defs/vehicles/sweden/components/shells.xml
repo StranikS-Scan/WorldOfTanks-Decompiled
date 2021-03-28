@@ -6,8 +6,12 @@
     <ap_cr_premium>	ARMOR_PIERCING_CR_PREMIUM.png 0 0	</ap_cr_premium>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
+    <he_modern>	HIGH_EXPLOSIVE_MODERN.png 0 0	</he_modern>
+    <he_modern_premium>	HIGH_EXPLOSIVE_MODERN_PREMIUM.png 0 0	</he_modern_premium>
     <hc>	HOLLOW_CHARGE.png 0 0	</hc>
     <hc_premium>	HOLLOW_CHARGE_PREMIUM.png 0 0	</hc_premium>
+    <he_spg>	HIGH_EXPLOSIVE_SPG.png 0 0	</he_spg>
+    <he_spg_stun>	HIGH_EXPLOSIVE_SPG_STUN.png 0 0	</he_spg_stun>
   </icons>
   <_20mm_slpprj_m_Madsen>
     <id>	3	</id>
@@ -41,9 +45,10 @@
   <_20mm_slsgr_m_Madsen>
     <id>	5	</id>
     <userString>	#sweden_vehicles:_20mm_slsgr_m_Madsen	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	2	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	20	</caliber>
     <explosionRadius>	0.1	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -52,6 +57,28 @@
       <armor>	16	</armor>
       <devices>	27	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	0.1	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	10	</armor>
+        <devices>	15	</devices>
+      </damage>
+    </armorSpalls>
   </_20mm_slsgr_m_Madsen>
   <_20mm_slpprj_m_40>
     <id>	6	</id>
@@ -85,9 +112,10 @@
   <_20mm_slsgr_m_42>
     <id>	8	</id>
     <userString>	#sweden_vehicles:_20mm_slsgr_m_42	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	3	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	20	</caliber>
     <explosionRadius>	0.1	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -96,6 +124,28 @@
       <armor>	18	</armor>
       <devices>	27	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	0.1	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	10	</armor>
+        <devices>	15	</devices>
+      </damage>
+    </armorSpalls>
   </_20mm_slsgr_m_42>
   <_37mm_pgr_m_Skoda>
     <id>	17	</id>
@@ -129,9 +179,10 @@
   <_37mm_sgr_m_Skoda>
     <id>	19	</id>
     <userString>	#sweden_vehicles:_37mm_sgr_m_Skoda	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	7	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	37	</caliber>
     <explosionRadius>	0.31	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -140,6 +191,28 @@
       <armor>	45	</armor>
       <devices>	50	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	0.31	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	25	</armor>
+        <devices>	25	</devices>
+      </damage>
+    </armorSpalls>
   </_37mm_sgr_m_Skoda>
   <_37mm_slpprj_m_38>
     <id>	9	</id>
@@ -202,9 +275,10 @@
   <_37mm_sgr_m_34>
     <id>	11	</id>
     <userString>	#sweden_vehicles:_37mm_sgr_m_34	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	10	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	37	</caliber>
     <explosionRadius>	0.31	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -213,6 +287,28 @@
       <armor>	50	</armor>
       <devices>	50	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	0.31	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	25	</armor>
+        <devices>	25	</devices>
+      </damage>
+    </armorSpalls>
   </_37mm_sgr_m_34>
   <_47mm_slpprj_m_38>
     <id>	20	</id>
@@ -246,9 +342,10 @@
   <_47mm_sgr_m_38>
     <id>	22	</id>
     <userString>	#sweden_vehicles:_47mm_sgr_m_38	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	20	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	47	</caliber>
     <explosionRadius>	0.47	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -257,6 +354,28 @@
       <armor>	75	</armor>
       <devices>	64	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	0.47	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	40	</armor>
+        <devices>	30	</devices>
+      </damage>
+    </armorSpalls>
   </_47mm_sgr_m_38>
   <_57mm_slpprj_m_43>
     <id>	23	</id>
@@ -290,9 +409,10 @@
   <_57mm_sgr_m_43>
     <id>	25	</id>
     <userString>	#sweden_vehicles:_57mm_sgr_m_43	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	33	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	57	</caliber>
     <explosionRadius>	0.66	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -301,6 +421,28 @@
       <armor>	100	</armor>
       <devices>	76	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	0.66	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	50	</armor>
+        <devices>	40	</devices>
+      </damage>
+    </armorSpalls>
   </_57mm_sgr_m_43>
   <_75mm_slpprj_m_40>
     <id>	65	</id>
@@ -349,9 +491,10 @@
   <_75mm_sgr_m_22_38>
     <id>	66	</id>
     <userString>	#sweden_vehicles:_75mm_sgr_m_22_38	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	74	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	75	</caliber>
     <explosionRadius>	1.06	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -360,13 +503,36 @@
       <armor>	175	</armor>
       <devices>	100	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.06	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	90	</armor>
+        <devices>	50	</devices>
+      </damage>
+    </armorSpalls>
   </_75mm_sgr_m_22_38>
   <_75mm_sgr_m_40>
     <id>	28	</id>
     <userString>	#sweden_vehicles:_75mm_sgr_m_40	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	75	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	75	</caliber>
     <explosionRadius>	1.06	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -375,6 +541,28 @@
       <armor>	175	</armor>
       <devices>	100	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.06	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	90	</armor>
+        <devices>	50	</devices>
+      </damage>
+    </armorSpalls>
   </_75mm_sgr_m_40>
   <_75mm_slpprj_m_40_C>
     <id>	29	</id>
@@ -466,9 +654,10 @@
   <_75mm_sgr_m_38>
     <id>	2	</id>
     <userString>	#sweden_vehicles:_75mm_sgr_m_38	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	90	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	75	</caliber>
     <explosionRadius>	1.06	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -477,6 +666,28 @@
       <armor>	185	</armor>
       <devices>	105	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.06	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	95	</armor>
+        <devices>	55	</devices>
+      </damage>
+    </armorSpalls>
   </_75mm_sgr_m_38>
   <_84mm_slpprj_m_53>
     <id>	71	</id>
@@ -510,9 +721,10 @@
   <_84mm_slsgr_m_53>
     <id>	73	</id>
     <userString>	#sweden_vehicles:_84mm_slsgr_m_53	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	170	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	83.4	</caliber>
     <explosionRadius>	1.28	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -521,6 +733,28 @@
       <armor>	280	</armor>
       <devices>	118	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.28	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	140	</armor>
+        <devices>	60	</devices>
+      </damage>
+    </armorSpalls>
   </_84mm_slsgr_m_53>
   <_90mm_slpprj_typ_I>
     <id>	35	</id>
@@ -555,9 +789,10 @@
   <_90mm_slsgr_m_72>
     <id>	37	</id>
     <userString>	#sweden_vehicles:_90mm_slsgr_m_72	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	195	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	90	</caliber>
     <explosionRadius>	1.46	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -566,6 +801,28 @@
       <armor>	320	</armor>
       <devices>	122	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.46	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	160	</armor>
+        <devices>	60	</devices>
+      </damage>
+    </armorSpalls>
   </_90mm_slsgr_m_72>
   <_90mm_slpprj_typ_II>
     <id>	38	</id>
@@ -614,9 +871,10 @@
   <_105mm_lt_sgr_m_34>
     <id>	42	</id>
     <userString>	#sweden_vehicles:_105mm_lt_sgr_m_34	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	240	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	105	</caliber>
     <explosionRadius>	1.91	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -625,13 +883,36 @@
       <armor>	370	</armor>
       <devices>	150	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	185	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
   </_105mm_lt_sgr_m_34>
   <_105mm_tung_sgr_m_34>
     <id>	70	</id>
     <userString>	#sweden_vehicles:_105mm_tung_sgr_m_34	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	300	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	105	</caliber>
     <explosionRadius>	1.91	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -640,6 +921,28 @@
       <armor>	410	</armor>
       <devices>	150	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	205	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
   </_105mm_tung_sgr_m_34>
   <_105mm_slpprj_m_44>
     <id>	43	</id>
@@ -793,9 +1096,10 @@
   <_105mm_sgr_m_40_B>
     <id>	52	</id>
     <userString>	#sweden_vehicles:_105mm_sgr_m_40_B	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	325	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	105	</caliber>
     <explosionRadius>	1.91	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -804,6 +1108,28 @@
       <armor>	420	</armor>
       <devices>	150	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	210	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
   </_105mm_sgr_m_40_B>
   <_105mm_slpprj_m_52>
     <id>	54	</id>
@@ -837,9 +1163,10 @@
   <_105mm_sgr_m_52>
     <id>	56	</id>
     <userString>	#sweden_vehicles:_105mm_sgr_m_52	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	440	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	105	</caliber>
     <explosionRadius>	1.91	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -848,13 +1175,36 @@
       <armor>	460	</armor>
       <devices>	150	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	230	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
   </_105mm_sgr_m_52>
   <_90mm_sgr_m_F>
     <id>	69	</id>
     <userString>	#sweden_vehicles:_90mm_sgr_m_F	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	210	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	90	</caliber>
     <explosionRadius>	1.46	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -863,6 +1213,28 @@
       <armor>	320	</armor>
       <devices>	122	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.46	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	160	</armor>
+        <devices>	60	</devices>
+      </damage>
+    </armorSpalls>
   </_90mm_sgr_m_F>
   <_105mm_slpprj_m_61>
     <id>	12	</id>
@@ -910,9 +1282,10 @@
   <_105mm_slsgr_m_61S>
     <id>	85	</id>
     <userString>	#sweden_vehicles:_105mm_slsgr_m_61S	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	790	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	105	</caliber>
     <explosionRadius>	1.91	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -921,6 +1294,28 @@
       <armor>	480	</armor>
       <devices>	150	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	240	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
   </_105mm_slsgr_m_61S>
   <_105mm_slpprj_m_ny>
     <id>	57	</id>
@@ -955,9 +1350,10 @@
   <_105mm_slsgr_m_61A>
     <id>	14	</id>
     <userString>	#sweden_vehicles:_105mm_slsgr_m_61A	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	810	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	105	</caliber>
     <explosionRadius>	1.91	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -966,6 +1362,28 @@
       <armor>	480	</armor>
       <devices>	150	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	240	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
   </_105mm_slsgr_m_61A>
   <_105mm_slpprj_m_61B>
     <id>	80	</id>
@@ -999,9 +1417,10 @@
   <_105mm_slsgr_m_61B>
     <id>	82	</id>
     <userString>	#sweden_vehicles:_105mm_slsgr_m_61B	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	430	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	105	</caliber>
     <explosionRadius>	1.91	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -1010,6 +1429,28 @@
       <armor>	460	</armor>
       <devices>	150	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	230	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
   </_105mm_slsgr_m_61B>
   <_120mm_slpprj_m_51>
     <id>	58	</id>
@@ -1044,9 +1485,10 @@
   <_120mm_sgr_m_51>
     <id>	60	</id>
     <userString>	#sweden_vehicles:_120mm_sgr_m_51	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	870	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	120	</caliber>
     <explosionRadius>	2.42	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -1055,6 +1497,28 @@
       <armor>	530	</armor>
       <devices>	165	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	2.42	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	265	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
   </_120mm_sgr_m_51>
   <_120mm_slpprj_m_ny>
     <id>	77	</id>
@@ -1089,9 +1553,10 @@
   <_120mm_sgr_m_ny>
     <id>	79	</id>
     <userString>	#sweden_vehicles:_120mm_sgr_m_ny	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	875	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	120	</caliber>
     <explosionRadius>	2.42	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -1100,6 +1565,28 @@
       <armor>	530	</armor>
       <devices>	165	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	2.42	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	265	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
   </_120mm_sgr_m_ny>
   <_105mm_slpprj_L_67>
     <id>	61	</id>
@@ -1133,9 +1620,10 @@
   <_105mm_sgr_L_67>
     <id>	63	</id>
     <userString>	#sweden_vehicles:_105mm_sgr_L_67	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	420	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	105	</caliber>
     <explosionRadius>	1.91	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -1144,6 +1632,28 @@
       <armor>	460	</armor>
       <devices>	150	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	230	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
   </_105mm_sgr_L_67>
   <_105mm_slpprj_L_53>
     <id>	74	</id>
@@ -1177,9 +1687,10 @@
   <_105mm_sgr_L_53>
     <id>	76	</id>
     <userString>	#sweden_vehicles:_105mm_sgr_L_53	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	380	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	105	</caliber>
     <explosionRadius>	1.91	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -1188,6 +1699,28 @@
       <armor>	420	</armor>
       <devices>	150	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	210	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
   </_105mm_sgr_L_53>
   <Development_Shell>
     <id>	65000	</id>

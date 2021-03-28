@@ -60,6 +60,15 @@
       <icon>	commander_expert.png	</icon>
       <delay>	4.0	</delay>
     </commander_expert>
+    <commander_enemyShotPredictor>
+      <userString>	#item_types:tankman/skills/commander_enemyShotPredictor	</userString>
+      <description>	#item_types:tankman/skills/commander_enemyShotPredictor_descr	</description>
+      <icon>	commander_enemyShotPredictor.png	</icon>
+      <targetRadius>	30.0	</targetRadius>
+      <explosionMultiplier>	1.3	</explosionMultiplier>
+      <minExplosionRadius>	3.0	</minExplosionRadius>
+      <recalculatingHeight>	75.0	</recalculatingHeight>
+    </commander_enemyShotPredictor>
     <commander_universalist>
       <userString>	#item_types:tankman/skills/commander_universalist	</userString>
       <description>	#item_types:tankman/skills/commander_universalist_descr	</description>
@@ -152,7 +161,7 @@
       <userString>	#item_types:tankman/skills/loader_intuition	</userString>
       <description>	#item_types:tankman/skills/loader_intuition_descr	</description>
       <icon>	loader_intuition.png	</icon>
-      <chance>	0.17	</chance>
+      <quickShellChangerFactorPerPercent>	0.6	</quickShellChangerFactorPerPercent>
     </loader_intuition>
     <radioman_finder>
       <userString>	#item_types:tankman/skills/radioman_finder	</userString>

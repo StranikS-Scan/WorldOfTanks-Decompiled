@@ -179,7 +179,7 @@ class AvatarObserver(CallbackDelayer):
         if self.isObserver():
             self.observedVehicleData[vehicleID].setReload(timeLeft, baseTime)
 
-    def updateVehicleClipReloadTime(self, vehicleID, timeLeft, baseTime, stunned, isBoostApplicable):
+    def updateVehicleClipReloadTime(self, vehicleID, timeLeft, baseTime, firstClipBaseTime, stunned, isBoostApplicable):
         pass
 
     def updateDualGunState(self, vehicleID, activeGun, gunStates, cooldownTimes):

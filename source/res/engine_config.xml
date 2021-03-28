@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_sb.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -153,7 +153,7 @@
   </ParticleSystem>
   <cat_config>
     <isOnline>	true	</isOnline>
-    <clientUrl>	http://cat.wargaming.net	</clientUrl>
+    <clientUrl>	http://cat-st1.wargaming.net	</clientUrl>
     <botsUrl>	http://cat-st1.wargaming.net	</botsUrl>
     <fullDump>	false	</fullDump>
     <collectPersonalData>	true	</collectPersonalData>
@@ -412,6 +412,12 @@
         </bank>
         <bank>
           <name>	wpn.bnk	</name>
+        </bank>
+        <bank>
+          <name>	arty.bnk	</name>
+        </bank>
+        <bank>
+          <name>	sandbox.bnk	</name>
         </bank>
         <bank>
           <name>	gun_reload.bnk	</name>

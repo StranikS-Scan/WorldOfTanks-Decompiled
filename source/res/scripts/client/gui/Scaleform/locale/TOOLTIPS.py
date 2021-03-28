@@ -388,6 +388,8 @@ class TOOLTIPS(object):
     SHOWVECTORONMAP_BODY = '#tooltips:showVectorOnMap/body'
     SHOWSECTORONMAP_HEADER = '#tooltips:showSectorOnMap/header'
     SHOWSECTORONMAP_BODY = '#tooltips:showSectorOnMap/body'
+    SHOWARTYHITONMAP_HEADER = '#tooltips:showArtyHitOnMap/header'
+    SHOWARTYHITONMAP_BODY = '#tooltips:showArtyHitOnMap/body'
     INCREASEDZOOM_HEADER = '#tooltips:increasedZoom/header'
     INCREASEDZOOM_BODY = '#tooltips:increasedZoom/body'
     MASTERVOLUMETOGGLEOFF_HEADER = '#tooltips:masterVolumeToggleOff/header'
@@ -2331,6 +2333,7 @@ class TOOLTIPS(object):
     ADVANCED_COMMANDER_UNIVERSALIST = '#tooltips:advanced/commander_universalist'
     ADVANCED_COMMANDER_EXPERT = '#tooltips:advanced/commander_expert'
     ADVANCED_COMMANDER_SIXTHSENSE = '#tooltips:advanced/commander_sixthSense'
+    ADVANCED_COMMANDER_ENEMYSHOTPREDICTOR = '#tooltips:advanced/commander_enemyShotPredictor'
     ADVANCED_GUNNER_RANCOROUS = '#tooltips:advanced/gunner_rancorous'
     ADVANCED_GUNNER_GUNSMITH = '#tooltips:advanced/gunner_gunsmith'
     ADVANCED_GUNNER_SNIPER = '#tooltips:advanced/gunner_sniper'
@@ -2739,6 +2742,11 @@ class TOOLTIPS(object):
     SHOWDAMAGEICON_CRITICALDAMAGE = '#tooltips:showDamageIcon/criticalDamage'
     SHOWDAMAGEICON_TRACKDAMAGE = '#tooltips:showDamageIcon/trackDamage'
     SHOWDAMAGEICON_BLOCKED = '#tooltips:showDamageIcon/blocked'
+    SHOWSPACEDARMORHITICON_HEADER = '#tooltips:showSpacedArmorHitIcon/header'
+    SHOWSPACEDARMORHITICON_SPACEDARMORBLOCKED = '#tooltips:showSpacedArmorHitIcon/spacedArmorBlocked'
+    SHOWSPACEDARMORHITICON_TRACKBLOCKED = '#tooltips:showSpacedArmorHitIcon/trackBlocked'
+    SHOWSPACEDARMORHITICON_WHEELBLOCKED = '#tooltips:showSpacedArmorHitIcon/wheelBlocked'
+    SHOWSPACEDARMORHITICON_MISSARMOR = '#tooltips:showSpacedArmorHitIcon/missArmor'
     MARATHON_SUBTITLE = '#tooltips:marathon/subtitle'
     MARATHON_DATE = '#tooltips:marathon/date'
     KURSK_HEADER = '#tooltips:kursk/header'
@@ -3584,6 +3592,7 @@ class TOOLTIPS(object):
      ADVANCED_COMMANDER_UNIVERSALIST,
      ADVANCED_COMMANDER_EXPERT,
      ADVANCED_COMMANDER_SIXTHSENSE,
+     ADVANCED_COMMANDER_ENEMYSHOTPREDICTOR,
      ADVANCED_GUNNER_RANCOROUS,
      ADVANCED_GUNNER_GUNSMITH,
      ADVANCED_GUNNER_SNIPER,

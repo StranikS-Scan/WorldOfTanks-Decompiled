@@ -35,7 +35,6 @@ from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.PLATOON import PLATOON
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.settings import ICONS_SIZES
 from gui.clans.clan_helpers import isStrongholdsEnabled, isClansTabReplaceStrongholds
@@ -170,7 +169,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         SETTINGS = 'settings'
         ACCOUNT = 'account'
         PREM = 'prem'
-        PREMSHOP = 'premShop'
         SQUAD = 'squad'
         GOLD = Currency.GOLD
         CREDITS = Currency.CREDITS
@@ -178,13 +176,20 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         FREE_XP = 'freeXP'
         BATTLE_SELECTOR = 'battleSelector'
 
-    PRB_NAVIGATION_DISABLE_BUTTONS = (BUTTONS.PREM,
-     BUTTONS.CREDITS,
-     BUTTONS.GOLD,
-     BUTTONS.CRYSTAL,
-     BUTTONS.FREE_XP,
-     BUTTONS.ACCOUNT,
-     BUTTONS.PREMSHOP)
+    SANDBOX_DISABLED_BUTTONS = {BUTTONS.ACCOUNT}
+    if constants.IS_SANDBOX:
+        PRB_NAVIGATION_DISABLE_BUTTONS = (BUTTONS.PREM,
+         BUTTONS.CREDITS,
+         BUTTONS.GOLD,
+         BUTTONS.CRYSTAL,
+         BUTTONS.FREE_XP)
+    else:
+        PRB_NAVIGATION_DISABLE_BUTTONS = (BUTTONS.PREM,
+         BUTTONS.CREDITS,
+         BUTTONS.GOLD,
+         BUTTONS.CRYSTAL,
+         BUTTONS.FREE_XP,
+         BUTTONS.ACCOUNT)
 
     class TABS(CONST_CONTAINER):
         HANGAR = VIEW_ALIAS.LOBBY_HANGAR
@@ -201,6 +206,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         PERSONAL_MISSIONS_PAGE = VIEW_ALIAS.PERSONAL_MISSIONS_PAGE
 
     RANKED_WELCOME_VIEW_DISABLE_CONTROLS = BUTTONS.ALL()
+    if constants.IS_SANDBOX:
+        RANKED_WELCOME_VIEW_DISABLE_CONTROLS = set(RANKED_WELCOME_VIEW_DISABLE_CONTROLS).difference_update(SANDBOX_DISABLED_BUTTONS)
     ACCOUNT_SETTINGS_COUNTERS = (TABS.STORE,)
     anonymizerController = dependency.descriptor(IAnonymizerController)
     badgesController = dependency.descriptor(IBadgesController)
@@ -368,6 +375,10 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         if self.app.tutorialManager.lastHeaderMenuButtonsOverride is not None:
             self.__onOverrideHeaderMenuButtons()
         self._addListeners()
+        if constants.IS_SANDBOX:
+            for buttonDisabled in self.SANDBOX_DISABLED_BUTTONS:
+                self.as_doDisableHeaderButtonS(buttonDisabled, False)
+
         Waiting.hide('enter')
         self._isLobbyHeaderControlsDisabled = False
         self.__viewLifecycleWatcher.start(self.app.containerManager, [_RankedBattlesWelcomeViewLifecycleHandler(self)])
@@ -449,7 +460,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
          'cache.SPA': self.__onSPAUpdated})
         self.as_setFightButtonS(i18n.makeString('#menu:headerButtons/battle'))
         self.as_setWalletStatusS(self.wallet.componentsStatuses)
-        self.as_setPremShopDataS(RES_ICONS.MAPS_ICONS_LOBBY_ICON_PREMSHOP, MENU.HEADERBUTTONS_BTNLABEL_PREMSHOP, TOOLTIPS.HEADER_PREMSHOP, TOOLTIP_TYPES.COMPLEX)
         self.as_initOnlineCounterS(constants.IS_SHOW_SERVER_STATS)
         if constants.IS_SHOW_SERVER_STATS:
             self.serverStats.onStatsReceived += self.__onStatsReceived
@@ -995,6 +1005,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         else:
             self.as_setScreenS(self.__currentScreen)
         self.__updateAccountAttrs()
+        self._updateHangarMenuData()
 
     def __onHangarSpaceCreated(self):
         if self.bootcampController.isInBootcamp():

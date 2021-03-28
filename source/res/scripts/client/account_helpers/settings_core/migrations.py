@@ -564,6 +564,11 @@ def _migrateTo67(core, data, initialized):
             clear['battlePassStorage'] = clear.get('battlePassStorage', 0) | settingOffset
 
 
+def _migrateTo68(core, data, initialized):
+    data['battlePassStorage'][BattlePassStorageKeys.INTRO_SHOWN] = False
+    data['battlePassStorage'][BattlePassStorageKeys.INTRO_VIDEO_SHOWN] = False
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -826,6 +831,10 @@ _versions = ((1,
   False),
  (67,
   _migrateTo67,
+  False,
+  False),
+ (68,
+  _migrateTo68,
   False,
   False))
 

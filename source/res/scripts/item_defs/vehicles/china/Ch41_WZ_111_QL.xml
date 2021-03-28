@@ -1104,7 +1104,19 @@
             <amplitude>	0.5	</amplitude>
           </recoil>
           <effects>	shot_ch41	</effects>
-          <animateEmblemSlots>	false	</animateEmblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49000	</slotId>
+              <rayStart>	0.000065 -0.026 1.48338	</rayStart>
+              <rayEnd>	0.006286 0.0459363 1.48259	</rayEnd>
+              <rayUp>	0.126 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.75	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </slot>
+          </customizationSlots>
           <customization>
             <customizableVehicleAreas>
               <paint></paint>

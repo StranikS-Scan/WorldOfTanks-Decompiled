@@ -7,7 +7,7 @@ import typing
 import constants
 from Event import Event, EventManager
 from battle_pass_integration import BattlePassByGameMode
-from battle_pass_common import BattlePassConsts, getBattlePassPassTokenName, getLevel, BATTLE_PASS_CONFIG_NAME, BattlePassConfig, BattlePassStatsCommon, BATTLE_PASS_TOKEN_TROPHY_GIFT_OFFER_2020, BATTLE_PASS_TOKEN_NEW_DEVICE_GIFT_OFFER_2020, BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME, getMaxAvalable3DStyleProgressInChapter
+from battle_pass_common import BattlePassConsts, getBattlePassPassTokenName, getLevel, BATTLE_PASS_CONFIG_NAME, BattlePassConfig, BattlePassStatsCommon, BATTLE_PASS_TOKEN_TROPHY_GIFT_OFFER_2020, BATTLE_PASS_TOKEN_NEW_DEVICE_GIFT_OFFER_2020, BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME, getMaxAvalable3DStyleProgressInChapter, BATTLE_PASS_OFFER_TOKEN_PREFIX
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.battle_pass.battle_pass_award import awardsFactory, BattlePassAwardsManager
 from gui.battle_pass.battle_pass_helpers import getLevelProgression, getPointsInfoStringID, getOfferTokenByGift
@@ -523,7 +523,7 @@ class BattlePassController(IBattlePassController):
                 self.__currentMode = newMode
             self.onBattlePassSettingsChange(newMode, oldMode)
         if 'isOffersEnabled' in diff:
-            self.onOffersUpdated()
+            self.__onOffersUpdated()
             self.onDeviceSelectChange()
         return
 
@@ -539,7 +539,16 @@ class BattlePassController(IBattlePassController):
             self.__oldLevel = newLevel
 
     def __onOffersUpdated(self):
+        self.__validateOffers()
         self.onOffersUpdated()
+
+    def __validateOffers(self):
+        for offer in self.__offersProvider.iAvailableOffers(False):
+            if not offer.token.startswith(BATTLE_PASS_OFFER_TOKEN_PREFIX):
+                continue
+            counts = {gift.giftCount for gift in offer.getAllGifts()}
+            if len(counts) > 1:
+                _logger.error('Wrong bonus count in gifts. Offer token %s', offer.token)
 
     @staticmethod
     def __bonusPointsDiffList(vehTypeCompDescr, config, gameMode):

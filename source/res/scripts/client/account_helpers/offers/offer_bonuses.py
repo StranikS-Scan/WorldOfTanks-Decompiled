@@ -266,6 +266,9 @@ class NationalBlueprintOfferBonus(OfferBonusMixin, NationalBlueprintBonus):
         nationName = self._localizedNationName()
         return backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.converter.nationalBlueprintReceived(), nationName=nationName)
 
+    def getGiftCount(self):
+        return self.getCount()
+
 
 class IntelligenceBlueprintOfferBonus(OfferBonusMixin, IntelligenceBlueprintBonus):
     CAN_BE_SHOWN = False

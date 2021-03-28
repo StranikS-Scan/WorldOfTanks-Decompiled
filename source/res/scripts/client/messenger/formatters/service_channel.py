@@ -14,7 +14,7 @@ import constants
 import nations
 import personal_missions
 from adisp import async, process
-from battle_pass_common import BattlePassRewardReason, BATTLE_PASS_BADGE_ID, BATTLE_PASS_TOKEN_NEW_DEVICE_GIFT_OFFER, BATTLE_PASS_TOKEN_TROPHY_GIFT_OFFER, BATTLE_PASS_TOKEN_BLUEPRINT_GIFT_OFFER, BATTLE_PASS_TOKEN_BROCHURE_GIFT_OFFER, BATTLE_PASS_TOKEN_GUIDE_GIFT_OFFER, BATTLE_PASS_TOKEN_3D_STYLE
+from battle_pass_common import BattlePassRewardReason, BATTLE_PASS_BADGE_ID, BATTLE_PASS_TOKEN_NEW_DEVICE_GIFT_OFFER, BATTLE_PASS_TOKEN_TROPHY_GIFT_OFFER, BATTLE_PASS_TOKEN_BLUEPRINT_GIFT_OFFER, BATTLE_PASS_TOKEN_BROCHURE_GIFT_OFFER, BATTLE_PASS_TOKEN_GUIDE_GIFT_OFFER, BATTLE_PASS_TOKEN_3D_STYLE, BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from cache import cached_property
@@ -74,8 +74,11 @@ from shared_utils import BoundMethodWeakref, first
 from skeletons.gui.game_control import IRankedBattlesController, IEventProgressionController, IBattlePassController, IBattleRoyaleController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+if typing.TYPE_CHECKING:
+    from account_helpers.offers.events_data import OfferEventData, OfferGift
 _logger = logging.getLogger(__name__)
 _TEMPLATE = 'template'
 _RENT_TYPE_NAMES = {RentDurationKeys.DAYS: 'rentDays',
@@ -2698,28 +2701,40 @@ class PersonalMissionsQuestAchievesFormatter(QuestAchievesFormatter):
 
 
 class BattlePassQuestAchievesFormatter(QuestAchievesFormatter):
+    __offersProvider = dependency.descriptor(IOffersDataProvider)
 
     @classmethod
     def _processTokens(cls, data):
+        from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift
         result = []
         rewardSelectTemplate = 'battlePassRewardSelectToken'
         rBattlePass = R.strings.battle_pass_2020
         for token, _ in data.get('tokens', {}).iteritems():
+            count = 1
+            if token.startswith(BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS):
+                offer = cls.__offersProvider.getOfferByToken(getOfferTokenByGift(token))
+                gift = first(offer.getAllGifts())
+                count = gift.giftCount
             if token.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
                 tankmanInfo = getRecruitInfo(token)
                 if tankmanInfo is not None:
                     text = backport.text(rBattlePass.universalTankmanBonus(), name=tankmanInfo.getFullUserName())
                     result.append(g_settings.htmlTemplates.format('battlePassTMan', {'text': text}))
             if token.startswith(BATTLE_PASS_TOKEN_TROPHY_GIFT_OFFER):
-                result.append(g_settings.htmlTemplates.format(rewardSelectTemplate, {'text': backport.text(rBattlePass.chosenBonuses.bonus.trophy_gift())}))
+                result.append(g_settings.htmlTemplates.format(rewardSelectTemplate, {'text': backport.text(rBattlePass.chosenBonuses.bonus.trophy_gift()),
+                 'count': count}))
             if token.startswith(BATTLE_PASS_TOKEN_NEW_DEVICE_GIFT_OFFER):
-                result.append(g_settings.htmlTemplates.format(rewardSelectTemplate, {'text': backport.text(rBattlePass.chosenBonuses.bonus.new_device_gift())}))
+                result.append(g_settings.htmlTemplates.format(rewardSelectTemplate, {'text': backport.text(rBattlePass.chosenBonuses.bonus.new_device_gift()),
+                 'count': count}))
             if token.startswith(BATTLE_PASS_TOKEN_BLUEPRINT_GIFT_OFFER):
-                result.append(g_settings.htmlTemplates.format(rewardSelectTemplate, {'text': backport.text(rBattlePass.chosenBonuses.bonus.blueprint_gift())}))
+                result.append(g_settings.htmlTemplates.format(rewardSelectTemplate, {'text': backport.text(rBattlePass.chosenBonuses.bonus.blueprint_gift()),
+                 'count': count}))
             if token.startswith(BATTLE_PASS_TOKEN_BROCHURE_GIFT_OFFER):
-                result.append(g_settings.htmlTemplates.format(rewardSelectTemplate, {'text': backport.text(rBattlePass.chosenBonuses.bonus.brochure_gift())}))
+                result.append(g_settings.htmlTemplates.format(rewardSelectTemplate, {'text': backport.text(rBattlePass.chosenBonuses.bonus.brochure_gift()),
+                 'count': count}))
             if token.startswith(BATTLE_PASS_TOKEN_GUIDE_GIFT_OFFER):
-                result.append(g_settings.htmlTemplates.format(rewardSelectTemplate, {'text': backport.text(rBattlePass.chosenBonuses.bonus.guide_gift())}))
+                result.append(g_settings.htmlTemplates.format(rewardSelectTemplate, {'text': backport.text(rBattlePass.chosenBonuses.bonus.guide_gift()),
+                 'count': count}))
             if token.startswith(BATTLE_PASS_TOKEN_3D_STYLE):
                 result.append(cls.__getFormattedStyleProgress(token))
 

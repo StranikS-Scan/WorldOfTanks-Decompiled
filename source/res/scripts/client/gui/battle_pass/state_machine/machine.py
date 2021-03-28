@@ -105,7 +105,8 @@ class BattlePassStateMachine(StateMachine):
 
     def removeRewardToChoose(self, tokenID, isTaken):
         if isTaken:
-            self.__rewardsToChoose.remove(tokenID)
+            if tokenID in self.__rewardsToChoose:
+                self.__rewardsToChoose.remove(tokenID)
         else:
             if self.__rewards is None:
                 self.__rewards = []

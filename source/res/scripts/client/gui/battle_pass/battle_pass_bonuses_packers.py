@@ -4,7 +4,7 @@ import logging
 import typing
 from contextlib import contextmanager
 from battle_pass_common import BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME
-from gui.battle_pass.battle_pass_helpers import getStyleForChapter
+from gui.battle_pass.battle_pass_helpers import getStyleForChapter, getOfferTokenByGift
 from gui.impl import backport
 from gui.impl.backport import TooltipData
 from gui.impl.gen import R
@@ -20,10 +20,13 @@ from gui.shared.gui_items.customization import CustomizationTooltipContext
 from gui.shared.missions.packers.bonus import BonusUIPacker, getDefaultBonusPackersMap, BaseBonusUIPacker, DossierBonusUIPacker, ItemBonusUIPacker, CrewBookBonusUIPacker, SimpleBonusUIPacker
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.money import Currency
+from helpers import dependency
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from shared_utils import first
+from skeletons.gui.offers import IOffersDataProvider
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import SimpleBonus, TmanTemplateTokensBonus, CustomizationsBonus, PlusPremiumDaysBonus, DossierBonus, BattlePassSelectTokensBonus, BattlePassStyleProgressTokenBonus
+    from account_helpers.offers.events_data import OfferEventData, OfferGift
 _logger = logging.getLogger(__name__)
 
 def getBattlePassBonusPacker():
@@ -224,6 +227,7 @@ class BattlePassDossierBonusPacker(DossierBonusUIPacker):
 
 
 class SelectBonusPacker(BaseBonusUIPacker):
+    __offersProvider = dependency.descriptor(IOffersDataProvider)
 
     @classmethod
     def _pack(cls, bonus):
@@ -233,9 +237,16 @@ class SelectBonusPacker(BaseBonusUIPacker):
     def _packSingleBonus(cls, bonus):
         model = IconBonusModel()
         model.setName(bonus.getName())
-        model.setValue(str(bonus.getCount()))
+        model.setValue(str(cls.getValue(bonus)))
         model.setIcon(bonus.getType())
         return model
+
+    @classmethod
+    def getValue(cls, bonus):
+        giftTokenName = first(bonus.getTokens().keys())
+        offer = cls.__offersProvider.getOfferByToken(getOfferTokenByGift(giftTokenName))
+        gift = first(offer.getAllGifts())
+        return gift.giftCount * bonus.getCount()
 
     @classmethod
     def _getToolTip(cls, bonus):

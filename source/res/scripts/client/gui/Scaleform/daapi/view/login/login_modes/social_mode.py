@@ -37,9 +37,9 @@ class SocialMode(BaseMode):
     def rememberPassVisible(self):
         return self._fallbackMode.rememberPassVisible
 
-    def init(self):
+    def onPopulate(self):
         self._connectionMgr.onRejected += self.__onLoginRejected
-        self._fallbackMode.init()
+        self._fallbackMode.onPopulate()
 
     def destroy(self):
         self._connectionMgr.onRejected -= self.__onLoginRejected

@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/sounds/SoundManager.py
 import logging
-from Vibroeffects import VibroManager
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.framework.entities.abstract.SoundManagerMeta import SoundManagerMeta
 from gui.doc_loaders.GuiSoundsLoader import GuiSoundsLoader
@@ -29,8 +28,6 @@ class SoundManager(SoundManagerMeta):
         sound = self.sounds.getControlSound(eventType, state, eventID)
         if sound is not None:
             SoundGroups.g_instance.playSound2D(sound)
-            if state == 'press':
-                VibroManager.g_instance.playButtonClickEffect(eventType)
         return
 
     def playEffectSound(self, effectName):

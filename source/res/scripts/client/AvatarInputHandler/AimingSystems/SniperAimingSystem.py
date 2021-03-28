@@ -13,10 +13,12 @@ from gun_rotation_shared import calcPitchLimitsFromDesc
 class SniperAimingSystem(IAimingSystem):
     turretYaw = property(lambda self: self.__idealTurretYaw + self.__oscillator.deviation.x)
     gunPitch = property(lambda self: self.__idealGunPitch + self.__oscillator.deviation.y)
+    hullLockSetting = property(lambda self: self.__hullLockSetting)
     __CONSTRAINTS_MULTIPLIERS = Vector3(1.0, 1.0, 1.0)
     __activeSystem = None
     __STABILIZED_CONSTRAINTS = Vector3(math.pi * 2.1, math.pi / 2.0 * 0.95, 0.0)
     __BEYOND_LIMITS_DELAY = 0.5
+    __hullLockSetting = True
 
     @staticmethod
     def setStabilizerSettings(useHorizontalStabilizer, useVerticalStabilizer):
@@ -46,8 +48,10 @@ class SniperAimingSystem(IAimingSystem):
         self.__pitchCompensating = 0.0
         self.__yawLimits = None
         self.__forceFullStabilization = False
+        self.__wasAutoRotationEnabled = False
         self.__timeBeyondLimits = 0.0
         self.__playerGunMatFunction = AimingSystems.getPlayerGunMat
+        self.__autoRotationEnabled = False
         return
 
     def destroy(self):
@@ -58,6 +62,14 @@ class SniperAimingSystem(IAimingSystem):
     def enableHorizontalStabilizerRuntime(self, enable):
         yawConstraint = math.pi * 2.1 if enable else 0.0
         self.__yprDeviationConstraints.x = yawConstraint
+
+    def enableAutoRotation(self, enable=None):
+        if not enable and self.__autoRotationEnabled != enable:
+            self.__wasAutoRotationEnabled = True
+        else:
+            self.__wasAutoRotationEnabled = False
+            self.__forceFullStabilization = enable
+        self.__autoRotationEnabled = enable
 
     def forceFullStabilization(self, enable):
         self.__forceFullStabilization = enable
@@ -106,6 +118,7 @@ class SniperAimingSystem(IAimingSystem):
         self.__oscillator.reset()
         SniperAimingSystem.__activeSystem = self
         self.__timeBeyondLimits = 0.0
+        self.__wasAutoRotationEnabled = False
         return
 
     def disable(self):
@@ -162,9 +175,12 @@ class SniperAimingSystem(IAimingSystem):
             self.__pitchCompensating = 0.0
 
     def __clampToLimits(self, turretYaw, gunPitch):
-        descr = self._vehicleTypeDescriptor
-        if self.__yawLimits is not None:
+        if self.__yawLimits is not None and self.__wasAutoRotationEnabled and turretYaw > self.__yawLimits[0] and turretYaw < self.__yawLimits[1]:
+            self.__forceFullStabilization = False
+            self.__wasAutoRotationEnabled = False
+        if self.__yawLimits is not None and not self.__autoRotationEnabled and not self.__wasAutoRotationEnabled:
             turretYaw = math_utils.clamp(self.__yawLimits[0], self.__yawLimits[1], turretYaw)
+        descr = self._vehicleTypeDescriptor
         pitchLimits = calcPitchLimitsFromDesc(turretYaw, self.getPitchLimits(turretYaw), descr.hull.turretPitches[0], descr.turret.gunJointPitch)
         adjustment = max(0, self.__returningOscillator.deviation.y)
         pitchLimits[0] -= adjustment

@@ -10,9 +10,9 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.common_view_model import C
 from gui.impl.gen.view_models.views.lobby.battle_pass.reward_level_model import RewardLevelModel
 
 class BattlePassProgressionsViewModel(CommonViewModel):
-    __slots__ = ('onClose', 'onAboutClick', 'onBuyClick', 'onTakeClick', 'onTakeAllClick', 'onOpenShopClick', 'onPointsInfoClick', 'onFinishedAnimation', 'onGoToChapter', 'onViewLoaded')
+    __slots__ = ('onClose', 'onAboutClick', 'onBuyClick', 'onTakeClick', 'onTakeAllClick', 'onOpenShopClick', 'onPointsInfoClick', 'onFinishedAnimation', 'onLevelsAnimationFinished', 'onGoToChapter', 'onViewLoaded')
 
-    def __init__(self, properties=39, commands=11):
+    def __init__(self, properties=38, commands=12):
         super(BattlePassProgressionsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -151,65 +151,59 @@ class BattlePassProgressionsViewModel(CommonViewModel):
     def setIsChooseDeviceEnabled(self, value):
         self._setBool(28, value)
 
-    def getAreSoundsAllowed(self):
-        return self._getBool(29)
-
-    def setAreSoundsAllowed(self, value):
-        self._setBool(29, value)
-
     def getChapterCount(self):
-        return self._getNumber(30)
+        return self._getNumber(29)
 
     def setChapterCount(self, value):
-        self._setNumber(30, value)
+        self._setNumber(29, value)
 
     def getChapterStep(self):
-        return self._getNumber(31)
+        return self._getNumber(30)
 
     def setChapterStep(self, value):
-        self._setNumber(31, value)
+        self._setNumber(30, value)
 
     def getCurrentChapter(self):
-        return self._getNumber(32)
+        return self._getNumber(31)
 
     def setCurrentChapter(self, value):
-        self._setNumber(32, value)
+        self._setNumber(31, value)
 
     def getChosenChapter(self):
-        return self._getNumber(33)
+        return self._getNumber(32)
 
     def setChosenChapter(self, value):
-        self._setNumber(33, value)
+        self._setNumber(32, value)
 
     def getIsTakeAllButtonVisible(self):
-        return self._getBool(34)
+        return self._getBool(33)
 
     def setIsTakeAllButtonVisible(self, value):
-        self._setBool(34, value)
+        self._setBool(33, value)
 
     def getNotChosenRewardCount(self):
-        return self._getNumber(35)
+        return self._getNumber(34)
 
     def setNotChosenRewardCount(self, value):
-        self._setNumber(35, value)
+        self._setNumber(34, value)
 
     def getBpcoinCount(self):
-        return self._getNumber(36)
+        return self._getNumber(35)
 
     def setBpcoinCount(self, value):
-        self._setNumber(36, value)
+        self._setNumber(35, value)
 
     def getIsWalletAvailable(self):
-        return self._getBool(37)
+        return self._getBool(36)
 
     def setIsWalletAvailable(self, value):
-        self._setBool(37, value)
+        self._setBool(36, value)
 
     def getShowReplaceRewardsAnimations(self):
-        return self._getBool(38)
+        return self._getBool(37)
 
     def setShowReplaceRewardsAnimations(self, value):
-        self._setBool(38, value)
+        self._setBool(37, value)
 
     def _initialize(self):
         super(BattlePassProgressionsViewModel, self)._initialize()
@@ -238,7 +232,6 @@ class BattlePassProgressionsViewModel(CommonViewModel):
         self._addBoolProperty('showLevelsAnimations', False)
         self._addStringProperty('progressionState', 'normalState')
         self._addBoolProperty('isChooseDeviceEnabled', True)
-        self._addBoolProperty('areSoundsAllowed', True)
         self._addNumberProperty('chapterCount', 1)
         self._addNumberProperty('chapterStep', 1)
         self._addNumberProperty('currentChapter', 1)
@@ -256,5 +249,6 @@ class BattlePassProgressionsViewModel(CommonViewModel):
         self.onOpenShopClick = self._addCommand('onOpenShopClick')
         self.onPointsInfoClick = self._addCommand('onPointsInfoClick')
         self.onFinishedAnimation = self._addCommand('onFinishedAnimation')
+        self.onLevelsAnimationFinished = self._addCommand('onLevelsAnimationFinished')
         self.onGoToChapter = self._addCommand('onGoToChapter')
         self.onViewLoaded = self._addCommand('onViewLoaded')

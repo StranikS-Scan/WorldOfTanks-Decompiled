@@ -4,7 +4,7 @@ import logging
 import NetworkComponents
 import BigWorld
 import Math
-import Svarog
+import CGF
 import Vehicle
 from helpers import dependency
 from items import vehicles
@@ -34,7 +34,7 @@ class InfluenceZone(BigWorld.Entity):
         return
 
     def onEnterWorld(self, prereqs):
-        gameObject = Svarog.GameObject(self.spaceID)
+        gameObject = CGF.GameObject(self.spaceID)
         self.gameObject = gameObject
         _logger.debug('onEnterWorld %s', self.id)
         pointDescr = _getTrapOrRepairPointDescr(self.equipmentID)
@@ -75,7 +75,7 @@ class InfluenceZone(BigWorld.Entity):
                 zoneHeight = pointDescr.height
                 zoneDepth = pointDescr.depth
             scale = (x, zoneHeight + zoneDepth, z)
-            from battleground.loot_object import SequenceComponent
+            from battleground.components import SequenceComponent
             sequenceComponent = gameObject.createComponent(SequenceComponent, resourceRefs[effectP])
             yShift = -zoneDepth
             position = position + Math.Vector3(0, yShift, 0)

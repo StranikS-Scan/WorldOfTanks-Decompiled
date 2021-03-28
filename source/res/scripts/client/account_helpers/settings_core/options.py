@@ -42,7 +42,6 @@ from AvatarInputHandler.DynamicCameras import ArcadeCamera, SniperCamera, Strate
 from AvatarInputHandler.control_modes import PostMortemControlMode, SniperControlMode
 from debug_utils import LOG_NOTE, LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData
-from Vibroeffects import VibroManager
 from messenger import g_settings as messenger_settings
 from account_helpers.AccountSettings import AccountSettings, SPEAKERS_DEVICE
 from account_helpers.settings_core.settings_constants import SOUND
@@ -342,29 +341,6 @@ class VOIPMicSoundSetting(SoundSetting):
     def _set(self, value):
         super(VOIPMicSoundSetting, self)._set(value)
         VOIP.getVOIPManager().setMicrophoneVolume(value)
-
-
-class VibroSetting(SettingAbstract):
-    GAIN_MULT = 100
-    DEFAULT_GAIN = 0
-
-    def __init__(self, vibroGroup, isPreview=False):
-        super(VibroSetting, self).__init__(isPreview)
-        self.group = vibroGroup
-
-    def __toGuiVolume(self, volume):
-        return round(volume * self.GAIN_MULT)
-
-    def __toSysVolume(self, volume):
-        return float(volume) / self.GAIN_MULT
-
-    def _get(self):
-        vm = VibroManager.g_instance
-        return self.__toGuiVolume(vm.getGain()) if self.group == 'master' else self.__toGuiVolume(vm.getGroupGain(self.group, self.DEFAULT_GAIN))
-
-    def _set(self, value):
-        vm = VibroManager.g_instance
-        return vm.setGain(self.__toSysVolume(value)) if self.group == 'master' else vm.setGroupGain(self.group, self.__toSysVolume(value))
 
 
 class RegularSetting(SettingAbstract):
@@ -2383,6 +2359,12 @@ class SniperZoomSetting(StorageAccountSetting):
 
     def setSystemValue(self, value):
         SniperCamera.SniperCamera.setSniperZoomSettings(value - 1)
+
+
+class HullLockSetting(StorageAccountSetting):
+
+    def getDefaultValue(self):
+        return True
 
 
 class HangarCamPeriodSetting(StorageAccountSetting):

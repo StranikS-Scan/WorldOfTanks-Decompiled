@@ -6,10 +6,11 @@ import Math
 import ResMgr
 import typing
 import re
+from string import lower, upper
 import items.vehicles as iv
 from items import _xml, parseIntCompactDescr
 from soft_exception import SoftException
-from items.components.c11n_constants import SeasonType, DecalType, CamouflageTilingType, CustomizationType, RENT_DEFAULT_BATTLES, EMPTY_ITEM_ID, ProjectionDecalType
+from items.components.c11n_constants import SeasonType, DecalType, CamouflageTilingType, CustomizationType, RENT_DEFAULT_BATTLES, EMPTY_ITEM_ID, ProjectionDecalType, CustomizationTypeNames
 from items.components.c11n_components import StyleItem, ApplyArea
 from items.customizations import FieldTypes, FieldFlags, FieldType, SerializableComponent, SerializationException
 from items.type_traits import equalComparator
@@ -451,6 +452,7 @@ class CamouflageXmlWriter(BaseCustomizationItemXmlWriter):
         changed |= rewriteCamouflageScales(section, item)
         changed |= rewriteCamouflageTiling(section, item)
         changed |= rewriteCamouflageTilingSettings(section, item)
+        changed |= rewriteCamouflageGlossMetallicSettings(section, item)
         return changed
 
 
@@ -587,10 +589,11 @@ class StyleXmlWriter(BaseCustomizationItemXmlWriter):
             changed |= rewriteInt(section, 'rentCount', item, 'rentCount', RENT_DEFAULT_BATTLES)
         else:
             changed |= section.deleteSection('rentCount')
-        changed |= rewriteString(section, 'modelsSet', item, 'modelsSet')
+        changed |= rewriteString(section, 'modelsSet', item, 'modelsSet', 'default')
         changed |= self.__writeOutfits(item.outfits, section)
         changed |= self.__writeFiltersItems(item.itemsFilters, section)
         changed |= self.__writeAlternateItems(item.alternateItems, section)
+        changed |= self.__writeDependencies(item.dependencies, section)
         changed |= self.__write3dProgression(item.styleProgressions, section)
         return changed
 
@@ -668,6 +671,30 @@ class StyleXmlWriter(BaseCustomizationItemXmlWriter):
                 changed |= True
             itemsValue = ' '.join(map(str, sorted(itemValues)))
             changed |= _xml.rewriteString(oSection, 'id', itemsValue)
+
+        return changed
+
+    def __writeDependencies(self, dependencies, isection):
+        changed = False
+        collection = dependencies
+        camouflagesCount = len(collection)
+        if camouflagesCount == 0:
+            if isection.has_key('dependencies'):
+                isection.deleteSection('dependencies')
+                changed |= True
+        else:
+            dependenciesSection = findOrCreate(isection, 'dependencies')
+            changed |= resizeSection(dependenciesSection, camouflagesCount, lambda id: 'camouflage')
+            sectionIndex = 0
+            for camoId, items in collection.iteritems():
+                camoSection = dependenciesSection.child(sectionIndex)
+                changed |= _xml.rewriteInt(camoSection, 'id', camoId)
+                for childKey, idsList in items.iteritems():
+                    childName = '{}'.format(lower(CustomizationTypeNames[childKey]))
+                    idsStr = ' '.join(map(str, idsList))
+                    changed |= _xml.rewriteString(camoSection, childName, idsStr)
+
+                sectionIndex += 1
 
         return changed
 
@@ -876,11 +903,10 @@ def rewriteCamouflageRotation(section, camouflageItem):
     def rewritePartRotation(section, partName, value):
         return _xml.rewriteFloat(section, partName, value)
 
-    if hullRotation > 0 or gunRotation > 0 or turretRotation > 0:
-        rotationSection = findOrCreate(section, 'rotation')
-        changed |= rewritePartRotation(rotationSection, 'HULL', hullRotation)
-        changed |= rewritePartRotation(rotationSection, 'TURRET', turretRotation)
-        changed |= rewritePartRotation(rotationSection, 'GUN', gunRotation)
+    rotationSection = findOrCreate(section, 'rotation')
+    changed |= rewritePartRotation(rotationSection, 'HULL', hullRotation)
+    changed |= rewritePartRotation(rotationSection, 'TURRET', turretRotation)
+    changed |= rewritePartRotation(rotationSection, 'GUN', gunRotation)
     return changed
 
 
@@ -946,6 +972,19 @@ def rewriteCamouflageTilingSettings(section, camouflageItem):
             offset = Math.Vector2(tilingSettings[2][0], tilingSettings[2][1])
             changed |= _xml.rewriteVector2(tilingSettingsSection, 'offset', offset)
         return changed
+
+
+def rewriteCamouflageGlossMetallicSettings(section, camouflageItem):
+    changed = False
+    if camouflageItem.editorData.glossMetallicSettingsType == 0:
+        changed |= section.deleteSection('glossMetallicMap')
+        changed |= _xml.rewriteVector4(section, 'gloss', camouflageItem.glossMetallicSettings['gloss'])
+        changed |= _xml.rewriteVector4(section, 'metallic', camouflageItem.glossMetallicSettings['metallic'])
+    elif camouflageItem.editorData.glossMetallicSettingsType == 1:
+        changed |= section.deleteSection('gloss')
+        changed |= section.deleteSection('metallic')
+        changed |= _xml.rewriteString(section, 'glossMetallicMap', camouflageItem.glossMetallicSettings['glossMetallicMap'])
+    return changed
 
 
 def encodeFlagEnum(enumClass, intValue):

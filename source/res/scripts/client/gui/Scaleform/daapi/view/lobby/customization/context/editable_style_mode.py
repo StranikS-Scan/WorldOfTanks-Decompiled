@@ -9,18 +9,20 @@ from gui.shared.gui_items.processors.common import OutfitApplier, Customizations
 from gui.Scaleform.daapi.view.lobby.customization.context.custom_mode import CustomMode
 from gui.Scaleform.daapi.view.lobby.customization.context.styled_mode import StyledMode
 from gui.Scaleform.daapi.view.lobby.customization import shared
-from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs, customizationSlotIdToUid, CustomizationSlotUpdateVO, getStylePurchaseItems, correctSlot, getCurrentVehicleAvailableRegionsMap, fitOutfit, removeItemFromEditableStyle, getEditableStyleOutfitDiff, getItemInventoryCount, getOutfitWithoutItemsNoDiff, getOutfitWithoutItems, ITEM_TYPE_TO_SLOT_TYPE, removeUnselectedItemsFromEditableStyle
+from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs, customizationSlotIdToUid, CustomizationSlotUpdateVO, getStylePurchaseItems, correctSlot, getCurrentVehicleAvailableRegionsMap, fitOutfit, removeItemFromEditableStyle, getEditableStyleOutfitDiff, getItemInventoryCount, getOutfitWithoutItemsNoDiff, getOutfitWithoutItems, ITEM_TYPE_TO_SLOT_TYPE, removeUnselectedItemsFromEditableStyle, getUnsuitableDependentData
 from gui.customization.constants import CustomizationModes
 from gui.customization.shared import PurchaseItem, getAvailableRegions, EDITABLE_STYLE_IRREMOVABLE_TYPES, EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES, C11nId
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.decorators import process as wrapperdProcess
-from items.components.c11n_constants import SeasonType, MAX_USERS_PROJECTION_DECALS
+from items import makeIntCompactDescrByID
+from items.components.c11n_constants import SeasonType, MAX_USERS_PROJECTION_DECALS, CustomizationType
 from vehicle_outfit.containers import SlotData
 from vehicle_outfit.outfit import Area, Outfit
 from helpers import dependency
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from skeletons.account_helpers.settings_core import ISettingsCore
 from tutorial.hints_manager import HINT_SHOWN_STATUS
+from items.customizations import CustomizationOutfit
 if typing.TYPE_CHECKING:
     from items.customizations import SerializableComponent
     from gui.hangar_vehicle_appearance import AnchorParams
@@ -50,6 +52,9 @@ class EditableStyleMode(CustomMode):
     def getPurchaseItems(self):
         purchaseItems = getStylePurchaseItems(self.__style, self.getModifiedOutfits(), progressionLevel=self.getStyleProgressionLevel())
         return purchaseItems
+
+    def getDependenciesData(self):
+        return self.style.getDependenciesIntCDs()
 
     def changeCamouflageColor(self, slotId, paletteIdx):
         super(EditableStyleMode, self).changeCamouflageColor(slotId, paletteIdx)
@@ -120,10 +125,13 @@ class EditableStyleMode(CustomMode):
         additionallyAppliedItems = 0
         installToAllAreas = slotId.slotType in EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES
         item = self._service.getItemByCD(slotData.intCD)
+        itemTypeID = item.itemTypeID
+        itemID = item.id
         for season in SeasonType.COMMON_SEASONS:
             otherSlotData = self.getSlotDataFromSlot(slotId, season)
             df = slotData.weakDiff(otherSlotData)
             if not otherSlotData.intCD or df.intCD:
+                self.__processDependentTypes(itemTypeID, itemID, season)
                 if installToAllAreas:
                     res = self.__installItemToAllAreas(item, season)
                 else:
@@ -240,20 +248,23 @@ class EditableStyleMode(CustomMode):
         modifiedOutfits = {season:outfit.copy() for season, outfit in self._modifiedOutfits.iteritems()}
         originalOutfits = {season:outfit.copy() for season, outfit in self._originalOutfits.iteritems()}
         removeUnselectedItemsFromEditableStyle(modifiedOutfits, self.__baseOutfits, purchaseItems)
-        self._soundEventChecker.lockPlayingSounds()
-        outfit = self._modifiedOutfits[self.season]
-        result = yield OutfitApplier(g_currentVehicle.item, outfit, SeasonType.ALL).request()
-        results.append(result)
+        requestData = []
         for season in SeasonType.COMMON_SEASONS:
             outfit = modifiedOutfits[season]
             baseOutfit = self.__baseOutfits[season]
             if outfit.vehicleCD != baseOutfit.vehicleCD or not outfit.isEqual(baseOutfit):
                 diff = getEditableStyleOutfitDiff(outfit, baseOutfit)
                 outfit = self.__style.getOutfit(season, vehicleCD=vehicleCD, diff=diff)
-                result = yield OutfitApplier(g_currentVehicle.item, outfit, season).request()
-                results.append(result)
+                requestData.append((outfit, season))
 
-        self._soundEventChecker.unlockPlayingSounds()
+        if not requestData:
+            emptyComponent = CustomizationOutfit()
+            outfit = self._modifiedOutfits[self.season]
+            emptyComponent.styleId = outfit.id
+            outfit = Outfit(component=emptyComponent)
+            requestData.append((outfit, SeasonType.ALL))
+        result = yield OutfitApplier(g_currentVehicle.item, requestData).request()
+        results.append(result)
         if self.isInited:
             self._events.onItemsBought(originalOutfits, purchaseItems, results)
         callback(self)
@@ -282,8 +293,10 @@ class EditableStyleMode(CustomMode):
 
     def _selectItem(self, intCD, progressionLevel=0):
         item = self._service.getItemByCD(intCD)
-        if item.itemTypeID in EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES:
-            slotId = EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES[item.itemTypeID]
+        selItemTypeID = item.itemTypeID
+        self.__processDependentTypes(selItemTypeID, item.id, self.season)
+        if selItemTypeID in EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES:
+            slotId = EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES[selItemTypeID]
             slotData = self.getSlotDataFromSlot(slotId)
             if slotData is None or slotData.intCD != intCD:
                 self.__installItemToAllAreas(item)
@@ -315,7 +328,7 @@ class EditableStyleMode(CustomMode):
     def _sellItem(self, item, count):
         if item.fullInventoryCount(g_currentVehicle.item.intCD) < count:
             for season, outfit in self._iterOutfitsWithoutItem(item, count):
-                yield OutfitApplier(g_currentVehicle.item, outfit, season).request()
+                yield OutfitApplier(g_currentVehicle.item, ((outfit, season),)).request()
 
         yield CustomizationsSeller(g_currentVehicle.item, item, count).request()
 
@@ -368,3 +381,38 @@ class EditableStyleMode(CustomMode):
         else:
             _logger.warning('Failed to apply item: %s to all tank areas', item)
             return False
+
+    def __processDependentTypes(self, selItemTypeID, selItemID, season):
+        if selItemTypeID == GUI_ITEM_TYPE.CAMOUFLAGE:
+            styleDependencies = self.style.descriptor.dependencies
+            camoDependencies = styleDependencies.get(selItemID)
+            if camoDependencies:
+                currentOutfit = self.getModifiedOutfit(season)
+                if not currentOutfit:
+                    _logger.error('Could not find outfit for required season "%d"', season)
+                    return
+                camoDependencies = styleDependencies.get(selItemID, {})
+                for uItem, uSlotId in getUnsuitableDependentData(currentOutfit, selItemID, styleDependencies):
+                    suitableItemIntCD = self.__getSuitableIntCD(uItem, camoDependencies.get(uItem.descriptor.itemType, tuple()))
+                    if suitableItemIntCD is not None:
+                        self.installItem(intCD=suitableItemIntCD, slotId=uSlotId, season=season, refresh=False)
+                    self.removeItem(uSlotId, season, refresh=False)
+
+        return
+
+    def __getSuitableIntCD(self, unsuitableItem, dependentByType):
+        suitableItemIntCD = None
+        posUnsuitType = unsuitableItem.descriptor.itemType
+        if posUnsuitType == CustomizationType.DECAL:
+            originalDecalType = unsuitableItem.descriptor.type
+            getItemByCD = self._service.getItemByCD
+            for suitableID in dependentByType:
+                posiblySuitableIntCD = makeIntCompactDescrByID('customizationItem', posUnsuitType, suitableID)
+                suitableItem = getItemByCD(posiblySuitableIntCD)
+                if suitableItem.descriptor.type == originalDecalType:
+                    suitableItemIntCD = posiblySuitableIntCD
+                    break
+
+        else:
+            suitableItemIntCD = makeIntCompactDescrByID('customizationItem', posUnsuitType, dependentByType[0])
+        return suitableItemIntCD

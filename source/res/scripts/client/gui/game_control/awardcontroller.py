@@ -43,9 +43,6 @@ from gui.impl.auxiliary.rewards_helper import getProgressiveRewardBonuses
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.loot_box_view.loot_congrats_types import LootCongratsTypes
 from gui.impl.lobby.battle_pass.battle_pass_awards_view import BattlePassAwardWindow
-from gui.impl.lobby.bm2021.black_market_award_screen import BlackMarketAwardScreenWindow
-from gui.impl.lobby.bm2021.black_market_open_item_screen import BlackMarketOpenItemScreenWindow
-from gui.impl.lobby.bm2021.black_market_vehicle_list import BlackMarketVehicleListWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
@@ -57,7 +54,6 @@ from gui.server_events.finders import PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, 
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
 from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow, showSeniorityRewardAwardWindow, showRankedSeasonCompleteView, showRankedYearAwardWindow, showBattlePassVehicleAwardWindow, showProgressiveItemsRewardWindow, showProgressionRequiredStyleUnlockedWindow, showRankedYearLBAwardWindow, showDedicationRewardWindow, showBadgeInvoiceAwardWindow
 from gui.shared.events import PersonalMissionsEvent
-from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.functions import getViewName
@@ -71,13 +67,11 @@ from messenger.formatters import TimeFormatter
 from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
 from messenger.proto.events import g_messengerEvents
 from nations import NAMES
-from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IAwardController, IRankedBattlesController, IBootcampController, IBattlePassController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
-from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
@@ -173,8 +167,7 @@ class AwardController(IAwardController, IGlobalListener):
          DynamicBonusHandler(self),
          ProgressiveItemsRewardHandler(self),
          DedicationReward(self),
-         BadgesInvoiceHandler(self),
-         BlackMarketItemAutoOpenHandler(self)]
+         BadgesInvoiceHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -1574,61 +1567,3 @@ class BadgesInvoiceHandler(ServiceChannelHandler):
     @staticmethod
     def _showWindow(badge):
         showBadgeInvoiceAwardWindow(badge)
-
-
-class BlackMarketItemAutoOpenHandler(ServiceChannelHandler):
-    __lobbyContext = dependency.descriptor(ILobbyContext)
-    __itemsCache = dependency.descriptor(IItemsCache)
-    __notificationMgr = dependency.descriptor(INotificationWindowController)
-    __blackMarketWindows = (BlackMarketOpenItemScreenWindow, BlackMarketVehicleListWindow)
-
-    def __init__(self, awardCtrl):
-        super(BlackMarketItemAutoOpenHandler, self).__init__(SYS_MESSAGE_TYPE.lootBoxesAutoOpenReward.index(), awardCtrl)
-        self.__awardVehCD = None
-        return
-
-    def fini(self):
-        self.__awardVehCD = None
-        g_clientUpdateManager.removeObjectCallbacks(self)
-        super(BlackMarketItemAutoOpenHandler, self).fini()
-        return
-
-    def _showAward(self, ctx):
-        _, message = ctx
-        vehicleCD = first([ vehCD for vehReward in message.data.get('rewards', {}).get('vehicles') for vehCD in vehReward.keys() ])
-        invVehicles = self.__itemsCache.items.getItems(GUI_ITEM_TYPE.VEHICLE, REQ_CRITERIA.INVENTORY, nationID=None)
-        if vehicleCD not in invVehicles:
-            self.__awardVehCD = vehicleCD
-            g_clientUpdateManager.addCallback('inventory', self.__onInventoryUpdate)
-        else:
-            self.__closeBlackMarketWindows()
-            window = BlackMarketAwardScreenWindow(R.views.lobby.bm2021.BlackMarketAwardScreen(), vehicleCD)
-            self.__notificationMgr.append(WindowNotificationCommand(window))
-        return
-
-    def _needToShowAward(self, ctx):
-        if super(BlackMarketItemAutoOpenHandler, self)._needToShowAward(ctx):
-            _, message = ctx
-            lootboxConfig = self.__lobbyContext.getServerSettings().getLootBoxConfig()
-            vehicles = message.data.get('rewards', {}).get('vehicles')
-            return not set(lootboxConfig).isdisjoint(message.data.get('boxIDs', {})) and vehicles
-        return False
-
-    def __onInventoryUpdate(self, invDiff):
-        vehsDiff = invDiff.get(GUI_ITEM_TYPE.VEHICLE, {})
-        for vehCompDescr in vehsDiff.get('compDescr', {}).itervalues():
-            parsedVehCompDescr = vehicles_core.getVehicleTypeCompactDescr(vehCompDescr)
-            if parsedVehCompDescr == self.__awardVehCD:
-                self.__closeBlackMarketWindows()
-                g_clientUpdateManager.removeCallback('inventory', self.__onInventoryUpdate)
-                window = BlackMarketAwardScreenWindow(R.views.lobby.bm2021.BlackMarketAwardScreen(), parsedVehCompDescr)
-                self.__notificationMgr.append(WindowNotificationCommand(window))
-                self.__awardVehCD = None
-                break
-
-        return
-
-    def __closeBlackMarketWindows(self):
-        for windowClass in self.__blackMarketWindows:
-            for window in windowClass.getInstances():
-                window.destroy()

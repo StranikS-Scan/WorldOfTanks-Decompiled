@@ -26,7 +26,7 @@ _OFFER_MAIN_TOKEN_TO_REWARD_TYPE = {BATTLE_PASS_TOKEN_BLUEPRINT_OFFER: BattlePas
  BATTLE_PASS_TOKEN_TROPHY_OFFER: BattlePassRewardOptionType.TROPHY_DEVICE}
 
 class BattlePassRewardChoiceView(ViewImpl):
-    __slots__ = ('__offer', '__tooltips', '__rewardType')
+    __slots__ = ('__offer', '__tooltips', '__rewardType', '__processingStarted')
     __battlePassController = dependency.descriptor(IBattlePassController)
     __offersProvider = dependency.descriptor(IOffersDataProvider)
 
@@ -37,6 +37,7 @@ class BattlePassRewardChoiceView(ViewImpl):
         settings.kwargs = kwargs
         self.__offer = None
         self.__tooltips = {}
+        self.__processingStarted = False
         super(BattlePassRewardChoiceView, self).__init__(settings)
         return
 
@@ -58,6 +59,8 @@ class BattlePassRewardChoiceView(ViewImpl):
         self.__setMainData()
 
     def _finalize(self):
+        if not self.__processingStarted:
+            self.__processNext(False, True)
         switchHangarOverlaySoundFilter(on=False)
         self.__removeListeners()
         super(BattlePassRewardChoiceView, self)._finalize()
@@ -71,7 +74,7 @@ class BattlePassRewardChoiceView(ViewImpl):
         with self.viewModel.transaction() as model:
             model.setRewardType(backport.text(R.strings.battle_pass_2020.rewardChoice.rewardType.dyn(self.__rewardType.value)()))
             model.setLevel(level)
-            chapter = self.__battlePassController.getChapterByLevel(level)
+            chapter = self.__battlePassController.getChapterByLevel(level - 1)
             model.setChapter(backport.text(R.strings.battle_pass_2020.chapter.name.num(chapter)()))
             model.setChapterNumber(chapter)
             model.setIsOptionsSequence(self.__battlePassController.getRewardLogic().hasRewardToChoose())
@@ -97,7 +100,7 @@ class BattlePassRewardChoiceView(ViewImpl):
         packRewardOptionModel(self.__rewardType, gifts, model.rewards, self.__tooltips)
 
     def __onCloseClick(self):
-        self.__processNext(False)
+        self.__processNext(False, False)
 
     @process
     def __onTakeClick(self, args):
@@ -116,15 +119,17 @@ class BattlePassRewardChoiceView(ViewImpl):
             return
 
     def __onAnimationFinished(self):
-        self.__processNext(True)
+        self.__processNext(True, False)
 
-    def __processNext(self, isRewardTaken):
+    def __processNext(self, isRewardTaken, isFromFinalize):
+        self.__processingStarted = True
         self.__battlePassController.getRewardLogic().removeRewardToChoose(self.__offer.giftToken, isRewardTaken)
         if self.__battlePassController.getRewardLogic().hasRewardToChoose():
             showBattlePassRewardChoiceWindow()
         else:
             self.__battlePassController.getRewardLogic().postStateEvent()
-        self.destroyWindow()
+        if not isFromFinalize:
+            self.destroyWindow()
 
 
 class BattlePassRewardChoiceWindow(LobbyWindow):

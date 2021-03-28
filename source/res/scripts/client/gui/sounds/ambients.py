@@ -316,12 +316,6 @@ class ModalWindowEnv(SoundEnv):
         super(ModalWindowEnv, self).__init__(soundsCtrl, 'modal', filters=(SoundFilters.FILTERED_HANGAR,))
 
 
-class StrongholdEnv(SoundEnv):
-
-    def __init__(self, soundsCtrl):
-        super(StrongholdEnv, self).__init__(soundsCtrl, 'stronghold', filters=(SoundFilters.FILTERED_HANGAR,))
-
-
 class BattleResultsEnv(SoundEnv):
     _sounds = {WinStatus.WIN: SoundEvent(_MC.MUSIC_EVENT_COMBAT_VICTORY, checkFinish=True),
      WinStatus.DRAW: SoundEvent(_MC.MUSIC_EVENT_COMBAT_DRAW, checkFinish=True),

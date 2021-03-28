@@ -1159,7 +1159,7 @@
     </usages>
   </itemGroup>
   <itemGroup>
-    <name>	75 Years Victory Day	</name>
+    <name>	Victory Day	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
@@ -1177,6 +1177,14 @@
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/75_years_victory_day	</userString>
       <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	105	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_18.png	</texture>
+      <color>	140 19 19 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.4	</metallic>
+      <userString>	#vehicle_customization:repaint/victory_day_2021	</userString>
     </paint>
     <usages>
       <item>
@@ -1885,6 +1893,30 @@
       <metallic>	0.3	</metallic>
       <userString>	#vehicle_customization:repaint/valentines_day	</userString>
     </paint>
+    <paint>
+      <id>	106	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_29.png	</texture>
+      <color>	198 198 198 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/cis_tournament_1	</userString>
+    </paint>
+    <paint>
+      <id>	107	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_29.png	</texture>
+      <color>	198 198 198 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/cis_tournament_2	</userString>
+    </paint>
+    <paint>
+      <id>	108	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_29.png	</texture>
+      <color>	198 198 198 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/cis_tournament_3	</userString>
+    </paint>
     <usages>
       <item>
         <componentType>	ALL	</componentType>
@@ -2034,6 +2066,32 @@
       <gloss>	0.65	</gloss>
       <metallic>	0.5	</metallic>
       <userString>	#vehicle_customization:repaint/bp2021_3	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	flavor of asia	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	110	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+      <color>	17 17 20 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.225	</metallic>
+      <userString>	#vehicle_customization:repaint/flavour_asia	</userString>
     </paint>
     <usages>
       <item>

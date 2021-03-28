@@ -2,9 +2,13 @@
 # Embedded file name: scripts/client/tutorial/loader.py
 import logging
 import weakref
+import typing
 import BigWorld
 import account_helpers
-from constants import IS_TUTORIAL_ENABLED
+from skeletons.tutorial import ITutorialLoader
+from tutorial.gui.Scaleform.gui_impl import ScaleformGuiImpl
+from tutorial.gui.controller import GuiController
+from tutorial.gui.impl import WulfGuiImpl
 from helpers import dependency
 from tutorial import core
 from tutorial import settings as _settings
@@ -15,10 +19,21 @@ from tutorial.doc_loader import loadDescriptorData
 from tutorial.hints_manager import HintsManager
 from skeletons.gui.game_control import IBootcampController
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from tutorial.core import Tutorial
+    from skeletons.tutorial import IGuiController
 _SETTINGS = _settings.TUTORIAL_SETTINGS
 _LOBBY_DISPATCHER = _settings.TUTORIAL_LOBBY_DISPATCHER
 _BATTLE_DISPATCHER = _settings.TUTORIAL_BATTLE_DISPATCHER
+_LOBBY_GUI_CONFIG = 'gui/tutorial-lobby-gui.xml'
+_BATTLE_GUI_CONFIG = ''
 _logger = logging.getLogger(__name__)
+
+def _getGuiImplementations():
+    sfTutorialGui = ScaleformGuiImpl()
+    wulfTutorialGui = WulfGuiImpl(sfTutorialGui)
+    return (wulfTutorialGui, sfTutorialGui)
+
 
 class RunCtx(object):
     __slots__ = ('cache', 'isFirstStart', 'databaseID', 'isAfterBattle', 'restart', 'bonusCompleted', 'battlesCount', 'newbieBattlesCount', 'initialChapter', 'globalFlags', 'canResolveChapterOnStart', 'byRequest')
@@ -44,7 +59,7 @@ class RunCtx(object):
         return 'RunCtx(databaseID={}, restart={}, first={}, battle={}, bonuses={}, battles={}, newbie={}, chapter={}, flags={} cache={})'.format(self.databaseID, self.restart, self.isFirstStart, self.isAfterBattle, self.bonusCompleted, self.battlesCount, self.newbieBattlesCount, self.initialChapter, self.globalFlags, self.cache)
 
 
-class TutorialLoader(object):
+class TutorialLoader(ITutorialLoader):
 
     def __init__(self):
         super(TutorialLoader, self).__init__()
@@ -56,9 +71,11 @@ class TutorialLoader(object):
         self.__settings = _settings.createSettingsCollection()
         self.__hintsManager = None
         self.__listener = None
+        self.__guiController = GuiController()
         return
 
     def init(self):
+        self.__guiController.init(_getGuiImplementations())
         self.__listener = AppLoaderListener()
         self.__listener.start(weakref.proxy(self))
 
@@ -93,6 +110,10 @@ class TutorialLoader(object):
         if self.__tutorial is not None:
             result = not self.__tutorial.isStopped()
         return result
+
+    @property
+    def gui(self):
+        return self.__guiController
 
     def isTutorialStopped(self):
         result = True
@@ -138,6 +159,7 @@ class TutorialLoader(object):
     def stop(self, restore=True):
         self.__doStop()
         self.__doStopHints()
+        self.__guiController.clear()
         if restore:
             self.__doRestore()
         else:
@@ -189,6 +211,12 @@ class TutorialLoader(object):
     def goToLogin(self):
         self.__afterBattle = False
         self.__doClear()
+
+    def beforeEnterLobby(self):
+        self.__guiController.setup(True, _LOBBY_GUI_CONFIG)
+
+    def beforeEnterBattle(self):
+        self.__guiController.setup(False, _BATTLE_GUI_CONFIG)
 
     def __doAutoRun(self, seq, state):
         for settings in seq:
@@ -267,31 +295,3 @@ class TutorialLoader(object):
 
     def __onTutorialStopped(self):
         self.__doRestore()
-
-
-g_loader = None
-
-def init():
-    global g_loader
-    if IS_TUTORIAL_ENABLED:
-        g_loader = TutorialLoader()
-        _logger.debug('g_loader init')
-        g_loader.init()
-
-
-def fini():
-    global g_loader
-    if IS_TUTORIAL_ENABLED:
-        if g_loader is not None:
-            g_loader.fini()
-            g_loader = None
-            _logger.debug('g_loader deinit')
-    return
-
-
-def isTutorialRunning(tutorialID):
-    isRunning = False
-    if IS_TUTORIAL_ENABLED:
-        if g_loader is not None:
-            isRunning = g_loader.isRunning and g_loader.tutorialID == tutorialID
-    return isRunning

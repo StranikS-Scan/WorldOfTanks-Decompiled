@@ -312,6 +312,8 @@ class StrongholdEntity(UnitEntity):
             self.requestSlotVehicleFilters()
         if flags.isExternalLegionariesMatchingChanged():
             self.__onExternalLegionariesMatchingToggle(flags.isInExternalLegionariesMatching())
+            if not flags.isInExternalLegionariesMatching() and not self.isCommander() and self.getSlotsInPlayersMatching():
+                self.requestUpdateStronghold()
         super(StrongholdEntity, self).unit_onUnitFlagsChanged(prevFlags, nextFlags)
         self.__doClockworkLogic(invokeListeners=True, forceUpdateBuildings=True)
         if not self.hasLockedState():

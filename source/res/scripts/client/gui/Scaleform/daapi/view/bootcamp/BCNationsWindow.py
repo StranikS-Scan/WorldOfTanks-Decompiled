@@ -3,9 +3,9 @@
 from constants import IS_CHINA
 from gui.Scaleform.daapi.view.meta.BCNationsWindowMeta import BCNationsWindowMeta
 from bootcamp.Bootcamp import g_bootcamp
-from uilogging.decorators import loggerTarget, loggerEntry, simpleLog
-from uilogging.bootcamp.constants import BC_LOG_KEYS
-from uilogging.bootcamp.loggers import BootcampUILogger
+from uilogging.deprecated.decorators import loggerTarget, loggerEntry, simpleLog
+from uilogging.deprecated.bootcamp.constants import BC_LOG_KEYS
+from uilogging.deprecated.bootcamp.loggers import BootcampUILogger
 from debug_utils import LOG_ERROR
 from gui.impl import backport
 from gui.impl.gen import R

@@ -1766,6 +1766,10 @@ class VehicleType(object):
         return 'lockOutfit' in self.tags
 
     @property
+    def progressionDecalsOnly(self):
+        return 'lockExceptProgression' in self.tags
+
+    @property
     def isEquipmentLocked(self):
         return 'lockEquipment' in self.tags
 
@@ -4891,8 +4895,7 @@ def _writeDrivenJoints(items, section, subsectionName):
                     for k in xrange(1, len(table)):
                         row = degrees(table[k])
                         rowSection = createOrTake(rowsSection, k - 1, 'row')
-                        if abs(row - rowSection.asFloat) > 1e-05:
-                            rowSection.asFloat = row
+                        rowSection.asFloat = row
 
                 if slavesSection:
                     children = slavesSection.values()
@@ -6042,7 +6045,7 @@ def _descrByID(descrList, id):
         if descr.id[1] == id:
             return descr
 
-    raise SoftException
+    raise SoftException('ID={} not found in descriptor list - {}'.format(id, descrList))
 
 
 def _findDescrByID(descrList, id):

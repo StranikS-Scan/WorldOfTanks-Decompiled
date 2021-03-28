@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/AffectComponent.py
 import logging
 import BigWorld
+import CGF
 import GenericComponents
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.battle_control.controllers.vehicles_count_ctrl import IVehicleCountListener
@@ -51,12 +52,16 @@ class AffectComponent(IVehicleCountListener):
 
     def _createParticles(self):
         if self.__vehicleEffectConfig is not None:
-            self.__particle = self.__gameObject.createComponent(GenericComponents.ParticleComponent, self.__vehicleEffectConfig.path, self.__vehicleEffectConfig.rate, self.__spaceID, self.__vehicleEffectConfig.offset)
+            self.__particle = gameObject = CGF.GameObject(self.__gameObject.spaceID)
+            gameObject.createComponent(GenericComponents.HierarchyComponent, self.__gameObject)
+            gameObject.createComponent(GenericComponents.ParticleComponent, self.__vehicleEffectConfig.path, self.__vehicleEffectConfig.rate)
+            gameObject.createComponent(GenericComponents.TransformComponent, self.__vehicleEffectConfig.offset)
+            gameObject.activate()
         return
 
     def _removeParticles(self):
         if self.__particle is not None:
-            self.__gameObject.removeComponent(self.__particle)
+            CGF.removeGameObject(self.__particle)
             self.__particle = None
         return
 

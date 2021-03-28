@@ -15,6 +15,7 @@ from helpers.statistics import HANGAR_LOADING_STATE
 from messenger.m_constants import PROTO_TYPE, SCH_CLIENT_MSG_TYPE
 from messenger.proto import proto_getter
 from skeletons.helpers.statistics import IStatisticsCollector
+from skeletons.tutorial import ITutorialLoader
 from tutorial.data.events import ClickEvent, ClickOutsideEvent, EscEvent, EnableEvent, DisableEvent
 from tutorial.data.events import EnabledChangeEvent, VisibleChangeEvent
 from tutorial.doc_loader import gui_config
@@ -38,6 +39,7 @@ CLIENT_CHECKED_TRIGGERS = frozenset([TUTORIAL_TRIGGER_TYPES.VISIBLE_CHANGE, TUTO
 
 class SfLobbyProxy(GUIProxy):
     statsCollector = dependency.descriptor(IStatisticsCollector)
+    __tutorialLoader = dependency.descriptor(ITutorialLoader)
 
     def __init__(self, effectPlayer):
         super(SfLobbyProxy, self).__init__()
@@ -188,7 +190,7 @@ class SfLobbyProxy(GUIProxy):
             self.app.loadView(SFViewLoadParams(alias, windowID), content)
 
     def getItemsOnScene(self):
-        return self.app.tutorialManager.getFoundComponentsIDs() if self.app is not None and self.app.tutorialManager is not None else set()
+        return self.__tutorialLoader.gui.getFoundComponentsIDs()
 
     def clearScene(self):
         app = self.app

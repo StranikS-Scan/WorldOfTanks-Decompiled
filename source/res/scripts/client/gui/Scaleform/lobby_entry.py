@@ -6,11 +6,12 @@ from gui.Scaleform import SCALEFORM_SWF_PATH_V3
 from gui.Scaleform.daapi.settings.config import LOBBY_TOOLTIPS_BUILDERS_PATHS, ADVANCED_COMPLEX_TOOLTIPS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.tooltip_mgr import ToolTip
+from gui.Scaleform.framework.ui_logging_manager import UILoggerManager
 from gui.Scaleform.framework.application import AppEntry
 from gui.Scaleform.framework.managers import LoaderManager, ContainerManager
 from gui.Scaleform.framework.managers.CacheManager import CacheManager
 from gui.Scaleform.framework.managers.ImageManager import ImageManager
-from gui.Scaleform.framework.managers.TutorialManager import TutorialManager
+from gui.Scaleform.framework.managers.TutorialManager import ScaleformTutorialManager
 from gui.Scaleform.framework.managers.containers import DefaultContainer
 from gui.Scaleform.framework.managers.containers import PopUpContainer
 from gui.Scaleform.framework.managers.context_menu import ContextMenuManager
@@ -114,8 +115,11 @@ class LobbyEntry(AppEntry):
     def _createImageManager(self):
         return ImageManager()
 
+    def _createUILoggerManager(self):
+        return UILoggerManager()
+
     def _createTutorialManager(self):
-        return TutorialManager(self.proxy, True, 'gui/tutorial-lobby-gui.xml')
+        return ScaleformTutorialManager()
 
     def _createGraphicsOptimizationManager(self):
         return GraphicsOptimizationManager(config=LOBBY_OPTIMIZATION_CONFIG)

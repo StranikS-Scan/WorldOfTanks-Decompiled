@@ -300,6 +300,9 @@ class IExternalLinksController(IGameController):
     def getURL(self, name, params, callback):
         raise NotImplementedError
 
+    def externalAllowed(self, url):
+        raise NotImplementedError
+
 
 class IInternalLinksController(IGameController):
 
@@ -1059,9 +1062,6 @@ class IBootcampController(IGameController):
     def getCheckpoint(self):
         raise NotImplementedError
 
-    def getSkipDialogConstants(self):
-        raise NotImplementedError
-
     def saveCheckpoint(self, checkpoint):
         raise NotImplementedError
 
@@ -1736,7 +1736,7 @@ class IBattlePassController(IGameController):
     def isChooseRewardEnabled(self, awardType, level):
         raise NotImplementedError
 
-    def isChooseRewardsEnabled(self):
+    def canChooseAnyReward(self):
         raise NotImplementedError
 
     def getLevelsConfig(self):
@@ -1844,6 +1844,9 @@ class IBattlePassController(IGameController):
     def takeAllRewards(self):
         raise NotImplementedError
 
+    def hasAnyOfferGiftToken(self):
+        raise NotImplementedError
+
     def getChapterStyleProgress(self, chapter):
         raise NotImplementedError
 
@@ -1891,228 +1894,3 @@ class IUISpamController(IGameController):
 
 class IBlueprintsConvertSaleController(IGameController):
     pass
-
-
-class IGameEventController(IGameController, ISeasonProvider):
-    onUpdated = None
-    onProgressUpdated = None
-    onEventPrbChanged = None
-    onEventUpdated = None
-
-    def isEnabled(self):
-        raise NotImplementedError
-
-    def isAvailable(self):
-        raise NotImplementedError
-
-    def isActive(self):
-        raise NotImplementedError
-
-    def isInPrimeTime(self):
-        raise NotImplementedError
-
-    def isEventPrbActive(self):
-        raise NotImplementedError
-
-    def isInWTEventSquad(self):
-        raise NotImplementedError
-
-    def getPrimeTimes(self):
-        raise NotImplementedError
-
-    def getPrimeTimeStatus(self, peripheryID=None):
-        raise NotImplementedError
-
-    def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
-        raise NotImplementedError
-
-    def getTimer(self):
-        raise NotImplementedError
-
-    def hasAvailablePrimeTimeServers(self):
-        raise NotImplementedError
-
-    def hasConfiguredPrimeTimeServers(self):
-        raise NotImplementedError
-
-    def hasPrimeTimesLeft(self):
-        raise NotImplementedError
-
-    def hasEnoughTickets(self):
-        raise NotImplementedError
-
-    def hasSpecialBoss(self):
-        raise NotImplementedError
-
-    def getWtEventTokensCount(self):
-        raise NotImplementedError
-
-    def getWtEventQuickTokensCount(self):
-        raise NotImplementedError
-
-    def getWtEventTokenName(self):
-        raise NotImplementedError
-
-    def getWtEventQuickTokenName(self):
-        raise NotImplementedError
-
-    def getWtEventHunterProgressTokenName(self):
-        raise NotImplementedError
-
-    def getWtEventBossProgressTokenName(self):
-        raise NotImplementedError
-
-    def getTokensToDraw(self):
-        raise NotImplementedError
-
-    def getWtEventQuestPrefix(self):
-        raise NotImplementedError
-
-    def runEventQueue(self):
-        raise NotImplementedError
-
-    def runStandardHangarMode(self):
-        raise NotImplementedError
-
-    def getHunter(self):
-        raise NotImplementedError
-
-    def getHunterCD(self):
-        raise NotImplementedError
-
-    def getBoss(self):
-        raise NotImplementedError
-
-    def selectBoss(self):
-        raise NotImplementedError
-
-    def getSpecialBoss(self):
-        raise NotImplementedError
-
-    def getHunterCollectionSize(self):
-        raise NotImplementedError
-
-    def getBossCollectionSize(self):
-        raise NotImplementedError
-
-    def getTotalCollectionSize(self):
-        raise NotImplementedError
-
-    def getHunterCollection(self):
-        raise NotImplementedError
-
-    def getBossCollection(self):
-        raise NotImplementedError
-
-    def getHunterCollectedCount(self):
-        raise NotImplementedError
-
-    def getBossCollectedCount(self):
-        raise NotImplementedError
-
-    def getTotalCollectedCount(self):
-        raise NotImplementedError
-
-    def getNextRewardItemsLeft(self):
-        raise NotImplementedError
-
-    def getItemProgression(self):
-        raise NotImplementedError
-
-    def getProgressionConfig(self):
-        raise NotImplementedError
-
-    def isSpecialBoss(self):
-        raise NotImplementedError
-
-    def getDataByQuestName(self, questId):
-        raise NotImplementedError
-
-    def getLootBoxRewards(self, boxType):
-        raise NotImplementedError
-
-    def getLootBoxDetailedRewards(self, boxType):
-        raise NotImplementedError
-
-    def getLootBoxReRollRecords(self):
-        raise NotImplementedError
-
-    def updateLootBoxReRollRecords(self):
-        raise NotImplementedError
-
-    def getIdAndCollectionByIntCD(self, intCD):
-        raise NotImplementedError
-
-    def hasItem(self, bonusItem):
-        raise NotImplementedError
-
-    def showEventMetaPage(self):
-        raise NotImplementedError
-
-    def showEventHangar(self):
-        raise NotImplementedError
-
-    def getVehicleEquipmentIDs(self, vehDescr):
-        raise NotImplementedError
-
-    def getEventVehiclesCarouselSorted(self):
-        raise NotImplementedError
-
-    def isLastSeasonDay(self):
-        raise NotImplementedError
-
-    def vehiclePreviewOpenRandom(self):
-        raise NotImplementedError
-
-    def onEventWelcomeCollectionScreensClosed(self):
-        raise NotImplementedError
-
-
-class IEventItemsController(IGameController):
-    onUpdated = None
-
-    def setSelectedOption(self, itemType, option):
-        raise NotImplementedError
-
-    def getSelectedOption(self, itemType):
-        raise NotImplementedError
-
-    def isEnabled(self):
-        raise NotImplementedError
-
-    def isDisabled(self):
-        raise NotImplementedError
-
-    def getAllAvailableEventItems(self):
-        raise NotImplementedError
-
-    def getAllEventItems(self):
-        raise NotImplementedError
-
-    def getEventItemsCount(self):
-        raise NotImplementedError
-
-    def getEventItemsCountByType(self, itemType):
-        raise NotImplementedError
-
-    def getOwnedItemsByType(self, itemType=None):
-        raise NotImplementedError
-
-    def getEventItemsByType(self, itemType=None, onlyOwned=False):
-        raise NotImplementedError
-
-    def getItemByID(self, itemId=None, ignoreCount=False):
-        raise NotImplementedError
-
-    def getItemTypeByID(self, itemId=None):
-        raise NotImplementedError
-
-
-class IEventSettingsController(IGameController):
-
-    @property
-    def disabledSettings(self):
-        raise NotImplementedError
-
-    def getSetting(self, key, default=None):
-        raise NotImplementedError

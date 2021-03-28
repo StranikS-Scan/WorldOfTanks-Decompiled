@@ -424,6 +424,8 @@ class BootcampMarkersManager(object):
         self.__markerSoundShow = None
         self.__switchedToSniperMode = False
         self.__switchedToHiddenMode = False
+        if BattleReplay.g_replayCtrl.isPlaying:
+            self.replayCallbacks = []
         return
 
     def init(self, entitiesParams, markers, bootcampGui):

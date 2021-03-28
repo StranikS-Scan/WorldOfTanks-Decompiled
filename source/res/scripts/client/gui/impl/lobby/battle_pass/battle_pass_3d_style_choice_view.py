@@ -17,6 +17,7 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.tank_style_model import Ta
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.server_events.events_dispatcher import showBattlePass3dStyleChoiceWindow
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import hideVehiclePreview, showProgressionStylesStylePreview
 from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
@@ -24,6 +25,36 @@ from shared_utils import first
 from skeletons.gui.game_control import IBattlePassController
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_style_info_tooltip_view import BattlePassStyleInfoTooltipView
 from skeletons.gui.shared import IItemsCache
+
+class _BattlePassViewStates(object):
+
+    def __init__(self):
+        self.wasOpenChoiceView = False
+        self.isGoingToOpenChoiceView = False
+        self.currentLevelStyle = 1
+
+    def prepareToOpenPreview(self):
+        self.reset()
+        self.wasOpenChoiceView = True
+        g_eventBus.addListener(events.BattlePassEvent.ON_PREVIEW_PROGRESSION_STYLE_CLOSE, self.__onPreviewProgressionStyleClose, scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def getLevel(self):
+        return self.currentLevelStyle if self.wasOpenChoiceView and self.isGoingToOpenChoiceView else 1
+
+    def reset(self):
+        self.wasOpenChoiceView = False
+        self.isGoingToOpenChoiceView = False
+        self.currentLevelStyle = 1
+
+    def __onPreviewProgressionStyleClose(self, event):
+        if self.wasOpenChoiceView:
+            self.currentLevelStyle = event.ctx.get('level')
+        else:
+            self.currentLevelStyle = 1
+        g_eventBus.removeListener(events.BattlePassEvent.ON_PREVIEW_PROGRESSION_STYLE_CLOSE, self.__onPreviewProgressionStyleClose, scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+_BPViewStates = _BattlePassViewStates()
 _rBattlePass = R.strings.battle_pass_2020
 _logger = logging.getLogger(__name__)
 
@@ -38,7 +69,7 @@ class BattlePass3dStyleChoiceView(ViewImpl):
         settings.model = BattlePass3DStyleChoiceViewModel()
         settings.args = args
         settings.kwargs = kwargs
-        self.__level = 1
+        self.__level = _BPViewStates.getLevel()
         self.__previewOpened = False
         super(BattlePass3dStyleChoiceView, self).__init__(settings)
 
@@ -83,6 +114,7 @@ class BattlePass3dStyleChoiceView(ViewImpl):
         self.__removeListeners()
         switchHangarOverlaySoundFilter(on=False)
         if not self.__previewOpened:
+            _BPViewStates.reset()
             self.__battlePassController.getRewardLogic().postStateEvent()
         self.__previewOpened = False
         super(BattlePass3dStyleChoiceView, self)._finalize()
@@ -125,12 +157,14 @@ class BattlePass3dStyleChoiceView(ViewImpl):
             hideVehiclePreview(back=False)
             vehicleCD = getVehicleCDForStyle(styleInfo)
             self.__battlePassController.getRewardLogic().postPreviewOpen()
-            showProgressionStylesStylePreview(vehicleCD, styleInfo, styleInfo.getDescription(), self.__previewCallback, backport.text(_rBattlePass.choose3dStyle.preview.backLabel()))
+            _BPViewStates.prepareToOpenPreview()
+            showProgressionStylesStylePreview(vehicleCD, styleInfo, styleInfo.getDescription(), self.__previewCallback, backport.text(_rBattlePass.choose3dStyle.preview.backLabel()), self.__level)
             return
 
     def __previewCallback(self):
         self.__previewOpened = False
         self.__battlePassController.getRewardLogic().postClosePreview()
+        _BPViewStates.isGoingToOpenChoiceView = True
         showBattlePass3dStyleChoiceWindow()
 
     def __onConfirmStyle(self, args):

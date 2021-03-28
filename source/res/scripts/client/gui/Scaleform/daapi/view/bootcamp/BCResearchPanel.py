@@ -4,9 +4,9 @@ from gui.Scaleform.daapi.view.lobby.hangar.ResearchPanel import ResearchPanel
 from CurrentVehicle import g_currentVehicle
 from gui.shared import event_dispatcher as shared_events
 from debug_utils import LOG_ERROR
-from uilogging.decorators import loggerTarget, loggerEntry, simpleLog
-from uilogging.bootcamp.constants import BC_LOG_ACTIONS, BC_LOG_KEYS
-from uilogging.bootcamp.loggers import BootcampUILogger
+from uilogging.deprecated.decorators import loggerTarget, loggerEntry, simpleLog
+from uilogging.deprecated.bootcamp.constants import BC_LOG_ACTIONS, BC_LOG_KEYS
+from uilogging.deprecated.bootcamp.loggers import BootcampUILogger
 
 @loggerTarget(logKey=BC_LOG_KEYS.BC_RESEARCH_VEHICLES, loggerCls=BootcampUILogger)
 class BCResearchPanel(ResearchPanel):

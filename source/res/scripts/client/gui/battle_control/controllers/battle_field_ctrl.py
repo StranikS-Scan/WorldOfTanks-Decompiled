@@ -106,8 +106,12 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
 
     def updateVehiclesInfo(self, updated, arenaDP):
         for _, vInfoVO in updated:
-            if vInfoVO.isAlive():
-                self.__changeMaxVehicleHealth(vInfoVO.vehicleID, vInfoVO.vehicleType.maxHealth)
+            if not vInfoVO.isAlive():
+                continue
+            vehicleID = vInfoVO.vehicleID
+            if vehicleID in self._aliveEnemies or vehicleID in self._aliveAllies:
+                self.__changeMaxVehicleHealth(vehicleID, vInfoVO.vehicleType.maxHealth)
+            self.addVehicleInfo(vInfoVO, arenaDP)
 
     def invalidateArenaInfo(self):
         if self._viewComponents:

@@ -196,6 +196,7 @@ class IAppFactory(object):
 
 class IAppLoader(object):
     onGUISpaceLeft = None
+    onGUISpaceBeforeEnter = None
     onGUISpaceEntered = None
 
     def init(self, appFactory):

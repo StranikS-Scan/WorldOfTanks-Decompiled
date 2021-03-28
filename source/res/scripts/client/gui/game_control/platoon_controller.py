@@ -731,6 +731,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             unitMgr.onUnitLeft += self.__unitMgrOnUnitLeft
         self.startGlobalListening()
         self.__settingsCore.onSettingsChanged += self.__onSettingsChanged
+        self.__settingsCore.onSettingsApplied += self.__onSettingsApplied
         self.__hangarSpace.onSpaceCreate += self.__onHangarSpaceCreate
         self.__hangarSpace.onSpaceDestroy += self.hsSpaceDestroy
         self.__eventProgression.onUpdated += self.__onEventProgressionUpdated
@@ -772,6 +773,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             unitMgr.onUnitLeft -= self.__unitMgrOnUnitLeft
         self.stopGlobalListening()
         self.__settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self.__settingsCore.onSettingsApplied -= self.__onSettingsApplied
         self.__hangarSpace.onSpaceCreate -= self.__onHangarSpaceCreate
         self.__hangarSpace.onSpaceDestroy -= self.hsSpaceDestroy
         self.__eventProgression.onUpdated -= self.__onEventProgressionUpdated
@@ -866,11 +868,14 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             isInPlatoon = self.prbDispatcher.getFunctionalState().isInUnit()
             self.onPlatoonTankVisualizationChanged(self.__isPlatoonVisualizationEnabled and isInPlatoon)
             self.__updatePlatoonTankInfo()
-            if displayPlatoonMembers and self.__checkForSettingsModification():
-                filters = self.__getFilters()
-                filters[GuiSettingsBehavior.DISPLAY_PLATOON_MEMBER_CLICKED] = True
-                self.__settingsCore.serverSettings.setSectionSettings(GUI_START_BEHAVIOR, filters)
             return
+
+    def __onSettingsApplied(self, diff):
+        isDisplayMemberChanged = GAME.DISPLAY_PLATOON_MEMBERS in diff
+        if isDisplayMemberChanged and self.__checkForSettingsModification():
+            filters = self.__getFilters()
+            filters[GuiSettingsBehavior.DISPLAY_PLATOON_MEMBER_CLICKED] = True
+            self.__settingsCore.serverSettings.setSectionSettings(GUI_START_BEHAVIOR, filters)
 
     def __getFilters(self):
         defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)

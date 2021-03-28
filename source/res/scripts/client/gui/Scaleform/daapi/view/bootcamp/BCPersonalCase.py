@@ -6,9 +6,9 @@ from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.locale.MENU import MENU
 from bootcamp.Bootcamp import g_bootcamp
-from uilogging.decorators import loggerTarget, loggerEntry, simpleLog
-from uilogging.bootcamp.constants import BC_LOG_ACTIONS, BC_LOG_KEYS
-from uilogging.bootcamp.loggers import BootcampUILogger
+from uilogging.deprecated.decorators import loggerTarget, loggerEntry, simpleLog
+from uilogging.deprecated.bootcamp.constants import BC_LOG_ACTIONS, BC_LOG_KEYS
+from uilogging.deprecated.bootcamp.loggers import BootcampUILogger
 SKILLS_TAB_INDEX = 2
 PERSONAL_CASE_SKILLS = 'PersonalCaseSkills'
 

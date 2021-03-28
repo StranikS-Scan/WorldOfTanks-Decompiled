@@ -4,13 +4,19 @@ import BigWorld
 import Math
 import AnimationSequence
 from helpers import dependency
-from battleground.component_loading import loadComponentSystem, Loader
-from battleground.components import TerrainAreaGameObject, SequenceComponent, EffectPlayer
-from svarog_script.auto_properties import AutoPropertyInitMetaclass
-from svarog_script.script_game_object import ComponentDescriptorTyped
+from battleground.component_loading import loadComponentSystem, Loader, CompositeLoaderMixin
+from battleground.components import TerrainAreaGameObject, EffectPlayerObject, SequenceObject, SmartSequenceObject
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 from skeletons.gui.battle_session import IBattleSessionProvider
 _CONFIG_PATH = 'scripts/dynamic_objects.xml'
+
+def _getSequenceResourceMapping(path, spaceId):
+    return {'sequence': Loader(AnimationSequence.Loader(path, spaceId))}
+
+
+def _getEffectResourceMapping(name):
+    return {'effectList': Loader(_CONFIG_PATH, effectsListName=name)}
+
 
 @dependency.replace_none_kwargs(dynamicObjectsCache=IBattleDynamicObjectsCache, battleSession=IBattleSessionProvider)
 def loadMines(ownerVehicleID, callback, dynamicObjectsCache=None, battleSession=None):
@@ -22,27 +28,32 @@ def loadMines(ownerVehicleID, callback, dynamicObjectsCache=None, battleSession=
     if ownerVehicleInfo is not None:
         isAlly = ownerVehicleInfo.team == BigWorld.player().followTeamID
     idleEff = effDescr.idleEffect.ally if isAlly else effDescr.idleEffect.enemy
+    gameObject.prepareCompositeLoader(callback)
     spaceId = BigWorld.player().spaceID
-    loaders['startEffectPlayer'] = Loader(AnimationSequence.Loader(effDescr.plantEffect.effectDescr.path, spaceId))
-    loaders['destroyEffectPlayer'] = Loader(AnimationSequence.Loader(effDescr.destroyEffect.effectDescr.path, spaceId))
-    loaders['idleEffectPlayer'] = Loader(AnimationSequence.Loader(idleEff.path, spaceId))
-    loaders['blowUpEffectPlayer'] = Loader(_CONFIG_PATH, effectsListName='minesBlowUpEffect')
-    loaders['decalEffectPlayer'] = Loader(_CONFIG_PATH, effectsListName='minesDecalEffect')
-    loadComponentSystem(gameObject, callback, loaders)
+    loadComponentSystem(gameObject.startEffectPlayer, gameObject.appendPiece, _getSequenceResourceMapping(effDescr.plantEffect.effectDescr.path, spaceId))
+    loadComponentSystem(gameObject.destroyEffectPlayer, gameObject.appendPiece, _getSequenceResourceMapping(effDescr.destroyEffect.effectDescr.path, spaceId))
+    loadComponentSystem(gameObject.idleEffectPlayer, gameObject.appendPiece, _getSequenceResourceMapping(idleEff.path, spaceId))
+    loadComponentSystem(gameObject.blowUpEffectPlayer, gameObject.appendPiece, _getEffectResourceMapping('minesBlowUpEffect'))
+    loadComponentSystem(gameObject.decalEffectPlayer, gameObject.appendPiece, _getEffectResourceMapping('minesDecalEffect'))
+    loadComponentSystem(gameObject, gameObject.appendPiece, loaders)
     return gameObject
 
 
-class MinesObject(TerrainAreaGameObject):
-    __metaclass__ = AutoPropertyInitMetaclass
-    startEffectPlayer = ComponentDescriptorTyped(SequenceComponent)
-    idleEffectPlayer = ComponentDescriptorTyped(SequenceComponent)
-    destroyEffectPlayer = ComponentDescriptorTyped(SequenceComponent)
-    blowUpEffectPlayer = ComponentDescriptorTyped(EffectPlayer)
-    decalEffectPlayer = ComponentDescriptorTyped(EffectPlayer)
+class MinesObject(TerrainAreaGameObject, CompositeLoaderMixin):
 
     def __init__(self):
         super(MinesObject, self).__init__(BigWorld.player().spaceID)
         self.__position = Math.Vector3()
+        self.startEffectPlayer = SmartSequenceObject()
+        self.idleEffectPlayer = SequenceObject()
+        self.destroyEffectPlayer = SmartSequenceObject()
+        self.blowUpEffectPlayer = EffectPlayerObject()
+        self.decalEffectPlayer = EffectPlayerObject()
+        self.__children = (self.startEffectPlayer,
+         self.idleEffectPlayer,
+         self.destroyEffectPlayer,
+         self.blowUpEffectPlayer,
+         self.decalEffectPlayer)
 
     def setPosition(self, position):
         super(MinesObject, self).setPosition(position)
@@ -50,28 +61,24 @@ class MinesObject(TerrainAreaGameObject):
 
     def activate(self):
         super(MinesObject, self).activate()
-        if self.startEffectPlayer is not None:
-            self.startEffectPlayer.bindAsTerrainEffect(self.__position, self._nativeSystem.worldID)
-            self.startEffectPlayer.start()
-        if self.idleEffectPlayer is not None:
-            self.idleEffectPlayer.createTerrainEffect(self.__position, None, -1)
-            self.idleEffectPlayer.start()
-        if self.decalEffectPlayer is not None:
-            self.decalEffectPlayer.play(self.__position)
-        return
+        for child in self.__children:
+            child.activate()
+
+        self.startEffectPlayer.bindAndStart(self.__position, self._nativeSystem.spaceID)
+        self.idleEffectPlayer.bindAndStart(self.__position)
+        self.decalEffectPlayer.start(self.__position)
 
     def deactivate(self):
         super(MinesObject, self).deactivate()
-        if self.destroyEffectPlayer is not None:
-            self.destroyEffectPlayer.bindAsTerrainEffect(self.__position, self._nativeSystem.worldID)
-            self.destroyEffectPlayer.start()
-        if self.idleEffectPlayer is not None:
-            self.idleEffectPlayer.stop()
-        if self.decalEffectPlayer is not None:
-            self.decalEffectPlayer.stop()
-        return
+        for child in self.__children:
+            child.deactivate()
+
+        self.destroyEffectPlayer.bindAndStart(self.__position, self._nativeSystem.spaceID)
+        self.idleEffectPlayer.stop()
+        self.decalEffectPlayer.stop()
 
     def detonate(self):
-        if self.blowUpEffectPlayer is not None:
-            self.blowUpEffectPlayer.play(self.__position)
-        return
+        self.blowUpEffectPlayer.start(self.__position)
+
+    def _piecesNum(self):
+        return len(self.__children) + 1

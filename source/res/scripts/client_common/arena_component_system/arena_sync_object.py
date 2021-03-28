@@ -39,6 +39,14 @@ class ArenaSyncObject(object):
             self.__callbacks[callback] = []
         if syncEntryID not in self.__callbacks[callback]:
             self.__callbacks[callback].append(syncEntryID)
+        if not syncEntryID:
+            if self.__cache:
+                callback(self.__cache)
+        else:
+            entry = self.__cache.get(syncEntryID)
+            if entry is not None:
+                callback(entry)
+        return
 
     def removeCallback(self, syncEntryID, callback):
         if callback in self.__callbacks:

@@ -22,7 +22,14 @@ class _HangarSoundSchema(W2CSchema):
 @w2capi()
 class SoundWebApi(object):
     _ENTER_EXIT_SOUND_MAPPING = {'eb_ambient_progress_page_enter': 'eb_ambient_progress_page_exit',
+     'main_unit_enter': 'main_unit_exit',
      'clans_quests_enter': 'clans_quests_exit',
+     'fa_enter': 'fa_exit',
+     'ads_enter': 'ads_exit',
+     'global_map_enter': 'global_map_exit',
+     'craft_machine_enter': 'craft_machine_exit',
+     'clans_battles_global_map_enter': 'clans_battles_global_map_exit',
+     'clans_winner_reward_enter': 'clans_winner_reward_exit',
      'gui_cq_progress_bar_start': 'gui_cq_progress_bar_stop',
      'gui_cq_progression_start': 'gui_cq_progression_stop'}
 
@@ -36,6 +43,7 @@ class SoundWebApi(object):
         app = appLoader.getApp()
         if app and app.soundManager:
             app.soundManager.playEffectSound(cmd.sound_id)
+            self.__exitSounds.discard(cmd.sound_id)
             exitSound = self._ENTER_EXIT_SOUND_MAPPING.get(cmd.sound_id)
             if exitSound:
                 self.__exitSounds.add(exitSound)

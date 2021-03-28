@@ -6,6 +6,7 @@ import base64
 import copy
 import varint
 import ResMgr
+import Math
 from collections import namedtuple, OrderedDict, defaultdict
 from soft_exception import SoftException
 from items.components.c11n_constants import ApplyArea, SeasonType, Options, CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID, StyleFlags, MAX_USERS_PROJECTION_DECALS, CUSTOMIZATION_SLOTS_VEHICLE_PARTS, DEFAULT_SCALE_FACTOR_ID, EMPTY_ITEM_ID, DEFAULT_SCALE, DEFAULT_ROTATION, DEFAULT_POSITION, DEFAULT_DECAL_TINT_COLOR
@@ -151,6 +152,8 @@ class SerializableComponent(object):
                 continue
             v1 = getattr(self, name)
             if isinstance(v1, list):
+                v1 = tuple(v1)
+            if isinstance(v1, Math.Vector2) or isinstance(v1, Math.Vector3) or isinstance(v1, Math.Vector4):
                 v1 = tuple(v1)
             result = (result * 31 + hash(v1)) % 18446744073709551616L
 

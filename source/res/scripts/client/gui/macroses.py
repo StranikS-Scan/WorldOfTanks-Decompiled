@@ -85,6 +85,10 @@ def getAuthRealm(args=None):
     return constants.AUTH_REALM
 
 
+def getCurrentRealm(args=None):
+    return constants.CURRENT_REALM
+
+
 def getClanDBID(args=None):
     clansCtrl = dependency.instance(IWebController)
     return str(clansCtrl.getClanDbID())
@@ -99,7 +103,8 @@ def getSyncMacroses():
      'PERIPHERY_ID': getPeripheryID,
      'AUTH_REALM': getAuthRealm,
      'UNIT_SERVER_ID': getUnitServerID,
-     'CLAN_DBID': getClanDBID}
+     'CLAN_DBID': getClanDBID,
+     'CURRENT_REALM': getCurrentRealm}
 
 
 @async

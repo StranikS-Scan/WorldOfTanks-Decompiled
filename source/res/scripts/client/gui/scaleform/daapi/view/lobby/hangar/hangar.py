@@ -6,7 +6,7 @@ import BigWorld
 from CurrentVehicle import g_currentVehicle
 from HeroTank import HeroTank
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-from constants import QUEUE_TYPE, PREBATTLE_TYPE, Configs, DOG_TAGS_CONFIG, LOOTBOX_TOKEN_PREFIX
+from constants import QUEUE_TYPE, PREBATTLE_TYPE, Configs, DOG_TAGS_CONFIG
 from frameworks.wulf import WindowFlags, WindowLayer, WindowStatus
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
@@ -18,10 +18,10 @@ from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.Scaleform.genConsts.DAILY_QUESTS_WIDGET_CONSTANTS import DAILY_QUESTS_WIDGET_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control.links import URLMacros
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
-from gui.impl.gen.view_models.constants.tutorial_hint_consts import TutorialHintConsts
 from gui.impl.auxiliary.crew_books_helper import crewBooksViewedCache
 from gui.prb_control import prb_getters
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
@@ -30,12 +30,11 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.promo.hangar_teaser_widget import TeaserViewer
 from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import PrimeTimeStatus
-from gui.shared import event_dispatcher as shared_events, g_eventBus
+from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showRankedPrimeTimeWindow, showAmmunitionSetupView
-from gui.shared.events import LobbySimpleEvent, AmmunitionSetupViewEvent
+from gui.shared.events import LobbySimpleEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.loot_box import BLACK_MARKET_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.shared.utils.functions import makeTooltip
@@ -48,7 +47,7 @@ from helpers.statistics import HANGAR_LOADING_STATE
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IIGRController
-from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController, IBattlePassController, IBattleRoyaleController, IEventItemsController
+from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController, IBattlePassController, IBattleRoyaleController, IBootcampController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersBannerController
@@ -71,17 +70,12 @@ _HELP_LAYOUT_RESTRICTED_LAYERS = (WindowLayer.TOP_SUB_VIEW,
  WindowLayer.TOP_WINDOW)
 
 def predicateHelpLayoutAllowedWindow(window):
-    return window.typeFlag != WindowFlags.TOOLTIP and window.typeFlag != WindowFlags.CONTEXT_MENU and window.layer in _HELP_LAYOUT_RESTRICTED_LAYERS and window.windowStatus in (WindowStatus.LOADING, WindowStatus.LOADED)
+    return window.typeFlag != WindowFlags.TOOLTIP and window.typeFlag != WindowFlags.CONTEXT_MENU and window.layer in _HELP_LAYOUT_RESTRICTED_LAYERS and window.windowStatus in (WindowStatus.LOADING, WindowStatus.LOADED) and not window.isHidden()
 
 
 class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     _SOUND_STATE_PLACE = 'STATE_hangar_place'
     _SOUND_STATE_PLACE_GARAGE = 'STATE_hangar_place_garage'
-    _ENABLED_GF_HINTS = frozenset([TutorialHintConsts.AMMUNITION_PANEL_HINT_MC,
-     TutorialHintConsts.BOOTCAMP_PANEL_EQUIPMENT_MC,
-     TutorialHintConsts.BOOTCAMP_PANEL_OPT_DEVICE_MC,
-     TutorialHintConsts.HANGAR_PANEL_OPT_DEVICE_MC,
-     TutorialHintConsts.HANGAR_PANEL_SHELLS_MC])
     __background_alpha__ = 0.0
     __SOUND_SETTINGS = CommonSoundSpaceSettings(name='hangar', entranceStates={_SOUND_STATE_PLACE: _SOUND_STATE_PLACE_GARAGE,
      StatesGroup.HANGAR_FILTERED: States.HANGAR_FILTERED_OFF}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
@@ -89,6 +83,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     epicController = dependency.descriptor(IEpicBattleMetaGameController)
     battlePassController = dependency.descriptor(IBattlePassController)
     battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
+    bootcampController = dependency.descriptor(IBootcampController)
     itemsCache = dependency.descriptor(IItemsCache)
     igrCtrl = dependency.descriptor(IIGRController)
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -99,7 +94,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     _promoController = dependency.descriptor(IPromoController)
     _connectionMgr = dependency.descriptor(IConnectionManager)
     _offersBannerController = dependency.descriptor(IOffersBannerController)
-    __itemsCtrl = dependency.descriptor(IEventItemsController)
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 
     def __init__(self, _=None):
@@ -167,14 +161,11 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         unitMgr = prb_getters.getClientUnitMgr()
         if unitMgr:
             unitMgr.onUnitJoined += self.__onUnitJoined
-        g_clientUpdateManager.addCallbacks({'inventory': self.__updateAlertMessage,
-         'tokens': self.__onTokensUpdate})
+        g_clientUpdateManager.addCallbacks({'inventory': self.__updateAlertMessage})
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         self._settingsCore.onSettingsChanged += self.__onSettingsChanged
         self.battlePassController.onSeasonStateChange += self.__switchCarousels
         self.startGlobalListening()
-        g_eventBus.addListener(AmmunitionSetupViewEvent.HINT_ZONE_ADD, self.__onHintZoneAdded, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.addListener(AmmunitionSetupViewEvent.HINT_ZONE_HIDE, self.__onHintZoneHide, EVENT_BUS_SCOPE.LOBBY)
         self.__updateAll()
         self.addListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -186,10 +177,11 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__timer = CallbackDelayer()
         self.as_setNotificationEnabledS(crewBooksViewedCache().haveNewCrewBooks())
         self._offersBannerController.showBanners()
-        self.__updateMarketItemState()
         self.fireEvent(events.HangarCustomizationEvent(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM), scope=EVENT_BUS_SCOPE.LOBBY)
         if g_currentVehicle.isPresent():
             g_currentVehicle.refreshModel()
+        if self.bootcampController.isInBootcamp():
+            self.as_setDQWidgetLayoutS(DAILY_QUESTS_WIDGET_CONSTANTS.WIDGET_LAYOUT_SINGLE)
 
     def _dispose(self):
         self.removeListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
@@ -225,8 +217,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__timer = None
         self.closeHelpLayout()
         self.stopGlobalListening()
-        g_eventBus.removeListener(AmmunitionSetupViewEvent.HINT_ZONE_ADD, self.__onHintZoneAdded, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.removeListener(AmmunitionSetupViewEvent.HINT_ZONE_HIDE, self.__onHintZoneHide, EVENT_BUS_SCOPE.LOBBY)
         self._offersBannerController.hideBanners()
         LobbySelectableView._dispose(self)
         return
@@ -595,8 +585,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             self.__switchCarousels(force=True)
         if DOG_TAGS_CONFIG in diff:
             self.__updateDogTagsState()
-        if Configs.LOOT_BOXES_CONFIG.value in diff:
-            self.__updateMarketItemState()
 
     def __onSettingsChanged(self, diff):
         if SETTINGS_SECTIONS.UI_STORAGE in diff:
@@ -617,32 +605,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         elif not self.__isUnitJoiningInProgress:
             self.as_showSwitchToAmmunitionS()
             showAmmunitionSetupView(**kwargs)
-
-    def __onHintZoneAdded(self, event):
-        ctx = event.ctx
-        if ctx.get('hintName') in self._ENABLED_GF_HINTS:
-            self.as_createHintAreaInComponentS(TutorialHintConsts.HANGAR_AMMUNITION_PANEL_COMPONENT, ctx.get('hintName'), ctx.get('posX'), ctx.get('posY'), ctx.get('width'), ctx.get('height'))
-
-    def __onHintZoneHide(self, event):
-        ctx = event.ctx
-        if ctx.get('hintName') in self._ENABLED_GF_HINTS:
-            self.as_removeHintAreaS(ctx.get('hintName'))
-
-    def __onTokensUpdate(self, diff):
-        for tokenID in diff:
-            if tokenID.startswith(LOOTBOX_TOKEN_PREFIX):
-                item = self.itemsCache.items.tokens.getLootBoxByTokenID(tokenID)
-                itemType = item.getType() if item else None
-                if itemType == BLACK_MARKET_ITEM_TYPE:
-                    self.__updateMarketItemState(item)
-
-        return
-
-    def __updateMarketItemState(self, item=None):
-        if not item:
-            item = self.__itemsCtrl.getOwnedItemsByType(BLACK_MARKET_ITEM_TYPE)
-        marketItemVisible = item and item.getInventoryCount() > 0
-        self.as_setMarketItemVisibleS(marketItemVisible)
 
     def __onUnitJoined(self, _, __):
         self.__isUnitJoiningInProgress = False

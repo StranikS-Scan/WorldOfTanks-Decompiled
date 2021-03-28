@@ -48,7 +48,7 @@ from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBootcampController
-from svarog_script.script_game_object import ScriptGameObject, ComponentDescriptor
+from cgf_obsolete_script.script_game_object import ScriptGameObject, ComponentDescriptor
 INPUT_HANDLER_CFG = 'gui/avatar_input_handler.xml'
 _logger = logging.getLogger(__name__)
 
@@ -167,6 +167,10 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         SniperAimingSystem.setStabilizerSettings(useHorizontalStabilizer, True)
 
     @staticmethod
+    def enableHullLock(enable):
+        SniperAimingSystem.hullLockSetting = enable
+
+    @staticmethod
     def isCameraDynamic():
         for dynamicCameraClass in _DYNAMIC_CAMERAS:
             if not dynamicCameraClass.isCameraDynamic():
@@ -178,6 +182,10 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     def isSniperStabilized():
         return SniperAimingSystem.getStabilizerSettings()
 
+    @staticmethod
+    def isHullLockEnabled():
+        return SniperAimingSystem.hullLockSetting
+
     @property
     def ctrlModeName(self):
         return self.__ctrlModeName
@@ -187,9 +195,9 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     siegeModeSoundNotifications = ComponentDescriptor()
     steadyVehicleMatrixCalculator = ComponentDescriptor()
 
-    def __init__(self):
+    def __init__(self, spaceID):
         CallbackDelayer.__init__(self)
-        ScriptGameObject.__init__(self, BigWorld.player().spaceID)
+        ScriptGameObject.__init__(self, spaceID, 'AvatarInputHandler')
         self.__alwaysShowAimKey = None
         self.__showMarkersKey = None
         sec = self._readCfg()
@@ -368,23 +376,24 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     def getAimingMode(self, mode):
         return self.__curCtrl.getAimingMode(mode)
 
-    def setAutorotation(self, bValue):
-        if not self.__curCtrl.enableSwitchAutorotationMode():
+    def setAutorotation(self, bValue, triggeredByKey=False):
+        if not self.__curCtrl.enableSwitchAutorotationMode(triggeredByKey):
             return
         elif not BigWorld.player().isOnArena:
             return
         else:
             if self.__isAutorotation != bValue:
                 self.__isAutorotation = bValue
-                BigWorld.player().enableOwnVehicleAutorotation(self.__isAutorotation)
+                BigWorld.player().enableOwnVehicleAutorotation(self.__isAutorotation, triggeredByKey)
+                self.__curCtrl.onAutorotationChanged(bValue)
             self.__prevModeAutorotation = None
             return
 
     def getAutorotation(self):
         return self.__isAutorotation
 
-    def switchAutorotation(self):
-        self.setAutorotation(not self.__isAutorotation)
+    def switchAutorotation(self, triggeredByKey=False):
+        self.setAutorotation(not self.__isAutorotation, triggeredByKey)
 
     def activatePostmortem(self, isRespawn):
         if self.siegeModeSoundNotifications is not None:
@@ -828,6 +837,9 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             dynamicCamera = self.settingsCore.getSetting('dynamicCamera')
             horStabilizationSnp = self.settingsCore.getSetting('horStabilizationSnp')
             self.enableDynamicCamera(dynamicCamera, horStabilizationSnp)
+        if 'hullLockEnabled' in diff:
+            hullLock = self.settingsCore.getSetting('hullLockEnabled')
+            self.enableHullLock(hullLock)
 
     def __onRequestFail(self):
         player = BigWorld.player()

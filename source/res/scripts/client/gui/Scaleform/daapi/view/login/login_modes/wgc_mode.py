@@ -1,17 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/login_modes/wgc_mode.py
-import BigWorld
+import WGC
 from constants import IS_CHINA
 from gui.Scaleform.locale.MENU import MENU
 from gui.impl import backport
 from gui.impl.gen import R
 from helpers.i18n import makeString as _ms
-from account_helpers.settings_core.settings_constants import GAME
-from base_mode import BaseMode
+from base_wgc_mode import BaseWgcMode
 from predefined_hosts import g_preDefinedHosts
-_g_firstEntry = True
 
-class WgcMode(BaseMode):
+class WgcMode(BaseWgcMode):
 
     def __init__(self, *args):
         super(WgcMode, self).__init__(*args)
@@ -21,25 +19,15 @@ class WgcMode(BaseMode):
 
     @property
     def login(self):
-        return BigWorld.WGC_getUserName() if self.__wgcStoredUserSelected else ''
+        return super(WgcMode, self).login if self.__wgcStoredUserSelected else ''
 
-    @property
-    def showRememberServerWarning(self):
-        return not self._loginManager.settingsCore.getSetting(GAME.LOGIN_SERVER_SELECTION) and self._loginManager.getPreference('server_select_was_set')
-
-    def init(self):
-        global _g_firstEntry
-        self._loginManager.addOnWgcErrorListener(self.__onWgcError)
+    def onPopulate(self):
         if self.__wgcStoredUserSelected:
-            autoLogin = _g_firstEntry and not self._loginManager.settingsCore.getSetting(GAME.LOGIN_SERVER_SELECTION) and not self._loginManager.getPreference('server_select_was_set')
-            if autoLogin:
-                self._loginManager.tryWgcLogin()
-            _g_firstEntry = False
+            super(WgcMode, self).onPopulate()
         else:
-            self._fallbackMode.init()
+            self._fallbackMode.onPopulate()
 
     def destroy(self):
-        self._loginManager.removeOnWgcErrorListener(self.__onWgcError)
         self._fallbackMode.destroy()
         super(WgcMode, self).destroy()
 
@@ -48,7 +36,7 @@ class WgcMode(BaseMode):
             if IS_CHINA:
                 self._view.as_showHealthNoticeS(backport.text(R.strings.menu.login.healthNotice()))
             self._view.as_showFilledLoginFormS({'haveToken': True,
-             'userName': BigWorld.WGC_getUserName(),
+             'userName': WGC.getUserName(),
              'icoPath': '',
              'socialId': ''})
         else:
@@ -64,7 +52,7 @@ class WgcMode(BaseMode):
 
     def doLogin(self, userName, password, serverName, isSocialToken2Login):
         if self.__wgcStoredUserSelected:
-            self._loginManager.tryWgcLogin(serverName)
+            super(WgcMode, self).doLogin(userName, password, serverName, isSocialToken2Login)
         else:
             self._fallbackMode.doLogin(userName, password, serverName, isSocialToken2Login)
 
@@ -72,9 +60,9 @@ class WgcMode(BaseMode):
         self._fallbackMode.doSocialLogin(*args)
 
     def skipRejectionError(self, loginStatus):
-        return self._loginManager.checkWgcCouldRetry(loginStatus) if self.__wgcStoredUserSelected else self._fallbackMode.skipRejectionError(loginStatus)
+        return super(WgcMode, self).skipRejectionError(loginStatus) if self.__wgcStoredUserSelected else self._fallbackMode.skipRejectionError(loginStatus)
 
-    def __onWgcError(self):
+    def _onWgcError(self):
         self.__stop()
         self._view.as_setLoginWarningS(_ms(MENU.LOGIN_SOCIAL_STATUS_WGC_ERROR))
         g_preDefinedHosts.requestPing()

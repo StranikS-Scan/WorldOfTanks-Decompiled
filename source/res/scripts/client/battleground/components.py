@@ -3,11 +3,12 @@
 import BigWorld
 import Math
 import AnimationSequence
-import Svarog
+import CGF
 import math_utils
-from svarog_script.py_component import Component
+from cgf_script.component_meta_class import CGFComponent, ComponentProperty, CGFMetaTypes
+from cgf_obsolete_script.py_component import Component
 from battleground.iself_assembler import ISelfAssembler
-from svarog_script.script_game_object import ScriptGameObject, ComponentDescriptorTyped
+from cgf_obsolete_script.script_game_object import ScriptGameObject, ComponentDescriptorTyped
 from arena_component_system.client_arena_component_system import ClientArenaComponent
 from helpers import EffectsList, isPlayerAvatar
 from PlayerEvents import g_playerEvents
@@ -77,6 +78,7 @@ class SequenceComponent(Component):
         else:
             if self.__sequenceAnimator is not None and not self.__sequenceAnimator.isBound():
                 self.__sequenceAnimator.bindTo(AnimationSequence.CompoundWrapperContainer(compound))
+                self.__startUnchecked()
             return
 
     def unbind(self):
@@ -98,11 +100,10 @@ class SequenceComponent(Component):
 
     def bindAsTerrainEffect(self, position, spaceId, scale=None, loopCount=1):
         if self.createTerrainEffect(position, scale, loopCount):
-            effectHandler = Svarog.GameObject(spaceId)
-            timerComponent = _SequenceAnimatorTimer(self.__sequenceAnimator, lambda : Svarog.removeGameObject(spaceId, effectHandler))
-            effectHandler.addComponent(timerComponent)
-            Svarog.addGameObject(BigWorld.player().spaceID, effectHandler)
+            effectHandler = CGF.GameObject(spaceId)
+            effectHandler.createComponent(_SequenceAnimatorTimer, self.__sequenceAnimator, effectHandler)
             effectHandler.activate()
+            effectHandler.transferOwnershipToWorld()
             self.__sequenceAnimator = None
         return
 
@@ -112,19 +113,19 @@ class SequenceComponent(Component):
             matrix = math_utils.createSRTMatrix(scale, rotation, position)
             self.__sequenceAnimator.bindToWorld(matrix)
             self.__sequenceAnimator.loopCount = loopCount
-            self.__sequenceAnimator.start()
+            self.__startUnchecked()
             return True
         else:
             return False
 
     def start(self):
         if self.__sequenceAnimator is not None:
-            self.__sequenceAnimator.start()
+            self.__startUnchecked()
         return
 
     def stop(self):
         if self.__sequenceAnimator is not None:
-            self.__sequenceAnimator.stop()
+            self.__stopUnchecked()
         return
 
     def enable(self):
@@ -149,22 +150,37 @@ class SequenceComponent(Component):
         self.__sequenceAnimator = None
         return
 
+    def __startUnchecked(self):
+        self.__sequenceAnimator.setEnabled(True)
+        self.__sequenceAnimator.start()
 
-class _SequenceAnimatorTimer(Component):
+    def __stopUnchecked(self):
+        self.__sequenceAnimator.stop()
+        self.__sequenceAnimator.setEnabled(False)
 
-    def __init__(self, sequenceAnimator, doneCallback):
+
+class _SequenceAnimatorTimer(CGFComponent):
+    parent = ComponentProperty(type=CGFMetaTypes.LINK, value=CGF.GameObject)
+
+    def __init__(self, sequenceAnimator, parent):
+        super(_SequenceAnimatorTimer, self).__init__()
         self.__sequenceAnimator = sequenceAnimator
-        self.__doneCallback = doneCallback
+        self.parent = parent
 
     def tick(self):
-        if self.__doneCallback is not None and not self.__sequenceAnimator.isPlaying():
-            self.__doneCallback()
-            self.__doneCallback = None
+        if not self.__sequenceAnimator.isPlaying():
+            self.__sequenceAnimator.stop()
+            self.__sequenceAnimator.setEnabled(False)
+            self.__sequenceAnimator = None
+            CGF.removeGameObject(self.parent)
         return
 
     def destroy(self):
+        if self.__sequenceAnimator is not None:
+            self.__sequenceAnimator.stop()
+            self.__sequenceAnimator.setEnabled(False)
         self.__sequenceAnimator = None
-        self.__doneCallback = None
+        self.parent = None
         return
 
 
@@ -231,3 +247,71 @@ class AvatarRelatedComponent(ClientArenaComponent):
 
     def _initialize(self):
         g_playerEvents.onAvatarBecomePlayer -= self._initialize
+
+
+class SequenceObject(ScriptGameObject):
+    sequence = ComponentDescriptorTyped(SequenceComponent)
+
+    def __init__(self):
+        super(SequenceObject, self).__init__(BigWorld.player().spaceID)
+
+    def enable(self, enabled):
+        if self.sequence is not None:
+            if enabled:
+                self.sequence.enable()
+            else:
+                self.sequence.disable()
+        return
+
+    def bindAndStart(self, *args):
+        if self.sequence is not None:
+            self.sequence.createTerrainEffect(args[0], loopCount=-1)
+        return
+
+    def start(self):
+        if self.sequence is not None:
+            self.sequence.start()
+        return
+
+    def stop(self):
+        if self.sequence is not None:
+            self.sequence.stop()
+        return
+
+    def unbind(self):
+        if self.sequence is not None:
+            self.sequence.unbind()
+        return
+
+
+class SmartSequenceObject(SequenceObject):
+
+    def bindAndStart(self, *args):
+        if self.sequence is not None:
+            self.sequence.bindAsTerrainEffect(args[0], args[1])
+        return
+
+
+class CompoundSequenceObject(SequenceObject):
+
+    def bindAndStart(self, *args):
+        if self.sequence is not None:
+            self.sequence.bindToCompound(args[0])
+        return
+
+
+class EffectPlayerObject(ScriptGameObject):
+    effectList = ComponentDescriptorTyped(EffectPlayer)
+
+    def __init__(self):
+        super(EffectPlayerObject, self).__init__(BigWorld.player().spaceID)
+
+    def start(self, position):
+        if self.effectList is not None:
+            self.effectList.play(position)
+        return
+
+    def stop(self):
+        if self.effectList is not None:
+            self.effectList.stop()
+        return

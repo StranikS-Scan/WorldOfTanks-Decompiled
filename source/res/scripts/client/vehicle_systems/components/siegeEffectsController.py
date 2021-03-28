@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/components/siegeEffectsController.py
 import Math
-import svarog_script.py_component
+import cgf_obsolete_script.py_component
 from constants import VEHICLE_SIEGE_STATE
 
-class SiegeEffectsController(svarog_script.py_component.Component):
+class SiegeEffectsController(cgf_obsolete_script.py_component.Component):
     SIEGE_TIMEOUT = 0.5
     SIEGE_IMPULSE = 0.1
     HIGH_PRIORITY_TICK_RATE = 0.1

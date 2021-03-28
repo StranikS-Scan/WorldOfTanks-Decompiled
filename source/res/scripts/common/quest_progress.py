@@ -707,4 +707,4 @@ class BaseQuestProgress(object):
 
 
 def hasCorrespondedCamouflage(vehDescr, outfit):
-    return bool(outfit and outfit.camouflages or vehDescr.type.hasCustomDefaultCamouflage)
+    return bool(outfit and outfit.getInvisibilityCamouflageId() or vehDescr.type.hasCustomDefaultCamouflage)

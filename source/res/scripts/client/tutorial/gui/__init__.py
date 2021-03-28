@@ -1,7 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/__init__.py
+import typing
+from enum import unique, IntEnum
 import Event
 from debug_utils import LOG_ERROR
+if typing.TYPE_CHECKING:
+    from skeletons.tutorial import ComponentID
 
 class GUI_EFFECT_NAME(object):
     SHOW_DIALOG = 'ShowDialog'
@@ -199,3 +203,58 @@ class GUIDispatcher(object):
 
     def setDisabled(self, disabled):
         self._isDisabled = disabled
+
+
+@unique
+class GuiType(IntEnum):
+    UNDEFINED = 0
+    SCALEFORM = 1
+    WULF = 2
+
+
+ComponentDescr = typing.NamedTuple('ComponentDescr', (('ID', str),
+ ('viewType', GuiType),
+ ('viewId', str),
+ ('path', str)))
+
+class IGuiImpl(object):
+    __slots__ = ('onComponentFound', 'onTriggerActivated', 'onComponentDisposed', 'onEffectCompleted', 'onInit')
+    if typing.TYPE_CHECKING:
+        onComponentFound = None
+        onComponentDisposed = None
+        onTriggerActivated = None
+        onEffectCompleted = None
+        onInit = None
+
+    def clear(self):
+        raise NotImplementedError
+
+    def fini(self):
+        raise NotImplementedError
+
+    def showEffect(self, componentID, viewID, effectType, effectData, effectBuilder=''):
+        raise NotImplementedError
+
+    def hideEffect(self, componentID, viewID, effectType, effectBuilder=''):
+        raise NotImplementedError
+
+    def setDescriptions(self, items):
+        raise NotImplementedError
+
+    def setSystemEnabled(self, enabled):
+        raise NotImplementedError
+
+    def setCriteria(self, name, value):
+        raise NotImplementedError
+
+    def setViewCriteria(self, componentID, viewUniqueName):
+        raise NotImplementedError
+
+    def setTriggers(self, componentID, triggers):
+        raise NotImplementedError
+
+    def supportedViewTypes(self):
+        raise NotImplementedError
+
+    def isInited(self):
+        raise NotImplementedError

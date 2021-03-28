@@ -152,6 +152,10 @@ class StatisticsCollector(IStatisticsCollector):
     def needCollectSessionData(self, value):
         self.__needCollectSessionData = value
 
+    def getSessionData(self):
+        stat = BigWorld.wg_getClientStatistics()
+        return self.__getSessionData(stat) if stat else None
+
     def getStatistics(self, andStop=True):
         result = {'system': None,
          'session': None}

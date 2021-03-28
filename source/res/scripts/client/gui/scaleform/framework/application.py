@@ -13,7 +13,6 @@ from gui.shared.events import AppLifeCycleEvent, GameEvent, LoadViewEvent
 from gui.shared import EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.impl import IGuiLoader
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
@@ -58,7 +57,6 @@ class DAAPIRootBridge(object):
 
 class AppEntry(FlashComponentWrapper, ApplicationMeta):
     settingsCore = dependency.descriptor(ISettingsCore)
-    connectionMgr = dependency.descriptor(IConnectionManager)
     guiApp = dependency.descriptor(IGuiLoader)
 
     def __init__(self, entryID, appNS, ctrlModeFlag, daapiBridge=None):
@@ -79,6 +77,7 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
         self._gameInputMgr = None
         self._cacheMgr = None
         self._tutorialMgr = None
+        self._uiLoggerMgr = None
         self._imageManager = None
         self._graphicsOptimizationMgr = None
         self._cursorMgr = None
@@ -208,7 +207,6 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
         self.updateScale()
         self.__viewEventsListener.handleWaitingEvents()
         self._loadWaiting()
-        self.connectionMgr.onDisconnected += self.__cm_onDisconnected
 
     def beforeDelete(self):
         _logger.debug('AppEntry.beforeDelete: %s', self.__ns)
@@ -263,6 +261,9 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
         if self._tutorialMgr is not None:
             self._tutorialMgr.destroy()
             self._tutorialMgr = None
+        if self._uiLoggerMgr is not None:
+            self._uiLoggerMgr.destroy()
+            self._uiLoggerMgr = None
         if self.__daapiBridge is not None:
             self.__daapiBridge.clear()
             self.__daapiBridge = None
@@ -279,7 +280,6 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
         super(AppEntry, self).beforeDelete()
         self.proxy = None
         self.fireEvent(AppLifeCycleEvent(self.__ns, AppLifeCycleEvent.DESTROYED))
-        self.connectionMgr.onDisconnected -= self.__cm_onDisconnected
         return
 
     def loadView(self, loadParams, *args, **kwargs):
@@ -380,6 +380,10 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
     def setTutorialMgr(self, flashObject):
         self._tutorialMgr.setFlashObject(flashObject)
 
+    def setUILoggerMgr(self, flashObject):
+        if self._uiLoggerMgr and flashObject:
+            self._uiLoggerMgr.setFlashObject(flashObject)
+
     def setImageManager(self, flashObject):
         if self._imageManager and flashObject:
             self._imageManager.setFlashObject(flashObject)
@@ -442,6 +446,7 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
         self._gameInputMgr = self._createGameInputManager()
         self._cacheMgr = self._createCacheManager()
         self._tutorialMgr = self._createTutorialManager()
+        self._uiLoggerMgr = self._createUILoggerManager()
         self._imageManager = self._createImageManager()
         self._graphicsOptimizationMgr = self._createGraphicsOptimizationManager()
 
@@ -509,6 +514,9 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
     def _createTutorialManager(self):
         return None
 
+    def _createUILoggerManager(self):
+        return None
+
     def _createGraphicsOptimizationManager(self):
         return None
 
@@ -539,8 +547,3 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
             _logger.error('Application scale is not found: %r', ctx)
             return
         self.updateStage(ctx['width'], ctx['height'], ctx['scale'])
-
-    def __cm_onDisconnected(self):
-        if self._tutorialMgr is not None:
-            self._tutorialMgr.clear()
-        return

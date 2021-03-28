@@ -5,6 +5,7 @@ import zlib
 from collections import namedtuple, defaultdict
 import ArenaType
 import BigWorld
+import CGF
 import Event
 import Math
 import arena_component_system.client_arena_component_assembler as assembler
@@ -41,7 +42,7 @@ class ClientArena(object):
      ARENA_UPDATE.FOG_OF_WAR: '_ClientArena__onFogOfWar',
      ARENA_UPDATE.RADAR_INFO_RECEIVED: '_ClientArena__onRadarInfoReceived'}
 
-    def __init__(self, arenaUniqueID, arenaTypeID, arenaBonusType, arenaGuiType, arenaExtraData):
+    def __init__(self, arenaUniqueID, arenaTypeID, arenaBonusType, arenaGuiType, arenaExtraData, spaceID):
         self.__vehicles = {}
         self.__vehicleIndexToId = {}
         self.__positions = {}
@@ -90,6 +91,7 @@ class ClientArena(object):
         self.extraData = arenaExtraData
         self.__arenaBBCollider = None
         self.__spaceBBCollider = None
+        self.gameSpace = CGF.World(spaceID)
         self.componentSystem = assembler.createComponentSystem(self, self.bonusType, self.arenaType)
         return
 

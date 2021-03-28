@@ -13,6 +13,7 @@ from AvatarInputHandler import AimingSystems
 from AvatarInputHandler import aih_global_binding
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
+from math_utils import almostZero
 from skeletons.account_helpers.settings_core import ISettingsCore
 _MARKER_TYPE = aih_constants.GUN_MARKER_TYPE
 _MARKER_FLAG = aih_constants.GUN_MARKER_FLAG
@@ -641,6 +642,7 @@ class _DefaultGunMarkerController(_GunMarkerController):
 
 
 class _SPGGunMarkerController(_GunMarkerController):
+    _BIG_RELAX_TIME = 9999
 
     def __init__(self, gunMakerType, dataProvider, enabledFlag=_MARKER_FLAG.UNDEFINED):
         super(_SPGGunMarkerController, self).__init__(gunMakerType, dataProvider, enabledFlag=enabledFlag)
@@ -648,6 +650,7 @@ class _SPGGunMarkerController(_GunMarkerController):
         self._gunRotator = None
         self._shotSpeed = 0
         self._shotGravity = 0
+        self.__defaultRelaxTime = constants.SERVER_TICK_LENGTH
         return
 
     def enable(self):
@@ -657,8 +660,11 @@ class _SPGGunMarkerController(_GunMarkerController):
         shotDescr = player.getVehicleDescriptor().shot
         self._shotSpeed = shotDescr.speed
         self._shotGravity = shotDescr.gravity
+        self.__defaultRelaxTime = self.__getCurrentRelaxTime()
 
     def disable(self):
+        if not almostZero(self.__getCurrentRelaxTime() - self.__defaultRelaxTime):
+            self._dataProvider.setRelaxTime(self.__defaultRelaxTime)
         self._gunRotator = None
         self._shotSpeed = 0.0
         self._shotGravity = 0.0
@@ -700,8 +706,26 @@ class _SPGGunMarkerController(_GunMarkerController):
 
     def _update(self):
         pos3d, vel3d, gravity3d = self._getCurrentShotInfo()
+        replayCtrl = BattleReplay.g_replayCtrl
+        if replayCtrl.isPlaying and replayCtrl.isClientReady:
+            self.__updateRelaxTime()
         self._updateDispersionData()
         self._dataProvider.update(pos3d, vel3d, gravity3d, self._size)
+
+    def __updateRelaxTime(self):
+        currentRelaxTime = self.__getCurrentRelaxTime()
+        relaxTime = self.__defaultRelaxTime
+        replayCtrl = BattleReplay.g_replayCtrl
+        if replayCtrl.isPlaying and replayCtrl.isClientReady:
+            replaySpeed = replayCtrl.playbackSpeed
+            if 0.0 < replaySpeed < 1.0:
+                relaxTime = relaxTime / replaySpeed
+            if not almostZero(relaxTime - currentRelaxTime):
+                self._dataProvider.setRelaxTime(relaxTime)
+
+    def __getCurrentRelaxTime(self):
+        relaxTime = self._dataProvider.relaxTime
+        return 1.0 / relaxTime if not almostZero(relaxTime) else self._BIG_RELAX_TIME
 
 
 class _ArtyHitMarkerController(_SPGGunMarkerController):

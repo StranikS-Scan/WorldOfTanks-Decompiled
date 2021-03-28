@@ -75,6 +75,7 @@ class AppLoader(IAppLoader):
         self.__appFactory = _EmptyFactory()
         self.__observer = GameplayStatesObserver(self)
         self.onGUISpaceLeft = Event.Event()
+        self.onGUISpaceBeforeEnter = Event.Event()
         self.onGUISpaceEntered = Event.Event()
 
     def init(self, appFactory):
@@ -174,6 +175,7 @@ class AppLoader(IAppLoader):
             self.__space.hideGUI(self.__appFactory, newSpace)
             self.__space = newSpace
             self.__space.init()
+            self.onGUISpaceBeforeEnter(self.__space.getSpaceID())
             for appNS, appState in self.__getCreatedApps():
                 self.__space.showGUI(self.__appFactory, appNS, appState)
 

@@ -28,7 +28,7 @@ class BrowserMeta(BaseDAAPIComponent):
     def invalidateView(self):
         self._printOverrideError('invalidateView')
 
-    def setBrowserSize(self, width, height):
+    def setBrowserSize(self, width, height, scale):
         self._printOverrideError('setBrowserSize')
 
     def as_loadBitmapS(self, url):

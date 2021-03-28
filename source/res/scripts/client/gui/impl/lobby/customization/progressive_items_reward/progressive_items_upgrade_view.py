@@ -200,9 +200,7 @@ class ProgressiveItemsUpgradeView(ViewImpl):
             if outfit is not None:
                 modifiedOutfits.update({season: outfit.copy()})
 
-        for season, outfit in modifiedOutfits.iteritems():
-            yield OutfitApplier(vehicle, outfit, season).request()
-
+        yield OutfitApplier(vehicle, [ (outfit, season) for season, outfit in modifiedOutfits.iteritems() ]).request()
         return
 
     def __resetItemNovelty(self):

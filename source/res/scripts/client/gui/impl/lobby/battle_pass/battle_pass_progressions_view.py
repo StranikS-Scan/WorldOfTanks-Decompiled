@@ -3,6 +3,7 @@
 import logging
 from operator import itemgetter
 import typing
+import SoundGroups
 from account_helpers.AccountSettings import AccountSettings, LAST_BATTLE_PASS_POINTS_SEEN
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from battle_pass_common import BattlePassConsts, BattlePassState
@@ -153,6 +154,7 @@ class BattlePassProgressionsView(ViewImpl):
 
     def _finalize(self):
         super(BattlePassProgressionsView, self)._finalize()
+        SoundGroups.g_instance.playSound2D(backport.sound(R.sounds.bp_progress_bar_stop()))
         self.__removeListeners()
         self.__showDummyCallback = None
         self.__showViewCallback = None
@@ -355,6 +357,7 @@ class BattlePassProgressionsView(ViewImpl):
         isNeedToTake = self.__battlePassController.isNeedToTakeReward(awardType, level)
         if isNeedToTake:
             isChooseRewardEnabled = self.__battlePassController.isChooseRewardEnabled(awardType, level)
+            levelState = RewardLevelModel.NOT_CHOSEN
         else:
             isChooseRewardEnabled = False
         return (levelState, isNeedToTake, isChooseRewardEnabled)
@@ -479,11 +482,11 @@ class BattlePassProgressionsView(ViewImpl):
     def __updateRewardSelectButton(self, model=None):
         model.setIsChooseDeviceEnabled(False)
         model.setIsTakeAllButtonVisible(False)
+        notChosenStylesCount = getNotChosen3DStylesCount(battlePass=self.__battlePassController, itemsCache=self.__itemsCache)
         notChosenRewardCount = self.__battlePassController.getNotChosenRewardCount()
-        if notChosenRewardCount:
+        if self.__battlePassController.hasAnyOfferGiftToken() or notChosenStylesCount:
             model.setIsTakeAllButtonVisible(True)
-            notChosenStylesCount = getNotChosen3DStylesCount(battlePass=self.__battlePassController, itemsCache=self.__itemsCache)
-            model.setIsChooseDeviceEnabled(self.__battlePassController.isChooseRewardsEnabled() or notChosenStylesCount > 0)
+            model.setIsChooseDeviceEnabled(self.__battlePassController.canChooseAnyReward() or notChosenStylesCount)
             notChosenRewardCount += notChosenStylesCount
             model.setNotChosenRewardCount(notChosenRewardCount)
 
@@ -533,6 +536,7 @@ class BattlePassProgressionsView(ViewImpl):
         model.onOpenShopClick += self.__onOpenShopClick
         model.onPointsInfoClick += self.__onPointsInfoClick
         model.onFinishedAnimation += self.__resetReplaceRewardAnimations
+        model.onLevelsAnimationFinished += self.__resetLevelAnimations
         self.__battlePassController.onPointsUpdated += self.__onPointsUpdated
         self.__battlePassController.onBattlePassIsBought += self.__onBattlePassBought
         self.__battlePassController.onBattlePassSettingsChange += self.__onBattlePassSettingsChange
@@ -561,6 +565,7 @@ class BattlePassProgressionsView(ViewImpl):
         model.onTakeAllClick -= self.__onTakeAllClick
         model.onPointsInfoClick -= self.__onPointsInfoClick
         model.onFinishedAnimation -= self.__resetReplaceRewardAnimations
+        model.onLevelsAnimationFinished -= self.__resetLevelAnimations
         self.__battlePassController.onPointsUpdated -= self.__onPointsUpdated
         self.__battlePassController.onBattlePassIsBought -= self.__onBattlePassBought
         self.__battlePassController.onBattlePassSettingsChange -= self.__onBattlePassSettingsChange
@@ -690,7 +695,6 @@ class BattlePassProgressionsView(ViewImpl):
                 showAnimations = True
                 settings.saveInBPStorage({BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN: shownChapters | chapter})
         model.setShowBuyAnimations(showAnimations)
-        model.setAreSoundsAllowed(True)
         model.setShowLevelsAnimations(self.ANIMATIONS[self.ANIMATION_PURCHASE_LEVELS])
         self.ANIMATIONS[self.ANIMATION_PURCHASE_LEVELS] = False
 
@@ -720,7 +724,6 @@ class BattlePassProgressionsView(ViewImpl):
         ctx = {'backCallback': backCallback}
         view = self.__gui.windowsManager.getViewByLayoutID(R.views.lobby.battle_pass.BattlePassBuyView())
         if view is None:
-            self.viewModel.setAreSoundsAllowed(False)
             window = BattlePassBuyWindow(ctx, self.getParentWindow())
             window.load()
         return
@@ -730,7 +733,6 @@ class BattlePassProgressionsView(ViewImpl):
         ctx = {'backCallback': backCallback}
         view = self.__gui.windowsManager.getViewByLayoutID(R.views.lobby.battle_pass.BattlePassBuyView())
         if view is None:
-            self.viewModel.setAreSoundsAllowed(False)
             window = BattlePassBuyLevelWindow(ctx, self.getParentWindow())
             window.load()
         return
@@ -739,7 +741,6 @@ class BattlePassProgressionsView(ViewImpl):
         from gui.impl.lobby.battle_pass.battle_pass_3d_style_choice_view import BattlePass3dStyleChoiceWindow
         view = self.__gui.windowsManager.getViewByLayoutID(R.views.lobby.battle_pass.BattlePass3dStyleChoiceView())
         if view is None:
-            self.viewModel.setAreSoundsAllowed(False)
             window = BattlePass3dStyleChoiceWindow(self.getParentWindow())
             window.load()
         return
@@ -771,3 +772,8 @@ class BattlePassProgressionsView(ViewImpl):
     def __resetReplaceRewardAnimations(self, model=None):
         self.__showReplaceRewardAnimations = False
         model.setShowReplaceRewardsAnimations(self.__showReplaceRewardAnimations)
+
+    @replaceNoneKwargsModel
+    def __resetLevelAnimations(self, model=None):
+        self.ANIMATIONS[self.ANIMATION_PURCHASE_LEVELS] = False
+        model.setShowLevelsAnimations(self.ANIMATIONS[self.ANIMATION_PURCHASE_LEVELS])

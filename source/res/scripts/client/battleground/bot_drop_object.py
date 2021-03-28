@@ -5,7 +5,7 @@ from functools import partial
 import AnimationSequence
 import BigWorld
 import Math
-import Svarog
+import CGF
 from helpers import dependency
 from battleground import getKamikazeEquipmentDescr
 from battleground.components import SequenceComponent
@@ -13,7 +13,7 @@ from battleground.iself_assembler import ISelfAssembler
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 from skeletons.gui.battle_session import IBattleSessionProvider
-from svarog_script.script_game_object import ScriptGameObject
+from cgf_obsolete_script.script_game_object import ScriptGameObject
 from vehicle_systems.stricted_loading import makeCallbackWeak
 _logger = logging.getLogger(__name__)
 
@@ -28,10 +28,6 @@ class BotAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
         self.__spaceID = BigWorld.player().spaceID
         ScriptGameObject.__init__(self, self.__spaceID)
         CallbackDelayer.__init__(self)
-        self.owner = Svarog.GameObject(self.__spaceID)
-        self.owner.activate()
-        self.owner.addComponent(self)
-        Svarog.addGameObject(self.__spaceID, self.owner)
         self.__deliveryTime = deliveryTime
         self.__deliveryPosition = deliveryPosition
         self.__markerArea = None
@@ -57,6 +53,7 @@ class BotAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
         else:
             _logger.error('Delivery animation of Kamikaze will not be playing, no time for it!')
         self.activate()
+        self.transferOwnershipToWorld()
 
     def destroy(self):
         super(BotAirdrop, self).destroy()
@@ -67,7 +64,7 @@ class BotAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
         CallbackDelayer.destroy(self)
 
     def __createMarkerArea(self, config, equipmentDescr):
-        markerArea = Svarog.GameObject(self.__spaceID)
+        markerArea = CGF.GameObject(self.__spaceID)
         trapPointEffects = config.getBotDeliveryMarker()
         effect3D = trapPointEffects.enemy if self.__teamID != BigWorld.player().followTeamID else trapPointEffects.ally
         if effect3D is not None:
@@ -104,7 +101,7 @@ class BotAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
         if effectP in resourceRefs.failedIDs:
             _logger.error('Effect %s has not been loaded!', effectP)
             return
-        effectAnimation = Svarog.GameObject(self.__spaceID)
+        effectAnimation = CGF.GameObject(self.__spaceID)
         sequenceComponent = effectAnimation.createComponent(SequenceComponent, resourceRefs[effectP])
         correctedPosition = position + Math.Vector3(0, self.ALTITUDE_CORRECTING, 0)
         sequenceComponent.createTerrainEffect(correctedPosition, loopCount=1, rotation=(self.__yawAxis, 0, 0))

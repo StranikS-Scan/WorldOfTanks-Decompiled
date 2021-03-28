@@ -7,6 +7,7 @@ from helpers import getClientOverride, dependency
 from skeletons.gui.game_control import IWalletController, ITradeInController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from skeletons.tutorial import ITutorialLoader
 
 class GlobalVarsManager(GlobalVarsMgrMeta):
     _isLoginLoadInfoRequested = False
@@ -14,6 +15,7 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
     wallet = dependency.descriptor(IWalletController)
     tradeIn = dependency.descriptor(ITradeInController)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    __tutorialLoader = dependency.descriptor(ITutorialLoader)
 
     def isDevelopment(self):
         return constants.IS_DEVELOPMENT
@@ -31,14 +33,7 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
         return constants.IS_KOREA
 
     def isTutorialRunning(self, tutorialID):
-        try:
-            from tutorial.loader import isTutorialRunning
-        except Exception:
-
-            def isTutorialRunning(_):
-                return False
-
-        return isTutorialRunning(tutorialID)
+        return self.__tutorialLoader.isRunning and self.__tutorialLoader.tutorialID == tutorialID
 
     def isFreeXpToTankman(self):
         return self.itemsCache.items.shop.freeXPToTManXPRate > 0

@@ -194,7 +194,7 @@ class _BattleRoyaleArenaLevel(object):
 
     @property
     def maxLevel(self):
-        return self.__maxLevel
+        return self.__maxLevel + 1
 
     def __getPercent(self, xp, baseXP, targetXP):
         total = targetXP - baseXP

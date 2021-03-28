@@ -81,6 +81,7 @@ class GAME(CONST_CONTAINER):
     ENABLE_POSTMORTEM_DELAY = 'enablePostMortemDelay'
     REPLAY_ENABLED = 'replayEnabled'
     SNIPER_ZOOM = 'sniperZoom'
+    HULLLOCK_ENABLED = 'hullLockEnabled'
     ENABLE_SERVER_AIM = 'useServerAim'
     SHOW_DAMAGE_ICON = 'showDamageIcon'
     SHOW_VEHICLES_COUNTER = 'showVehiclesCounter'
@@ -200,18 +201,6 @@ class MARKERS(CONST_CONTAINER):
     DEAD = 'dead'
 
 
-class OTHER(CONST_CONTAINER):
-    VIBRO_CONNECTED = 'vibroIsConnected'
-    VIBRO_GAIN = 'vibroGain'
-    VIBRO_ENGINE = 'vibroEngine'
-    VIBRO_ACCELERATION = 'vibroAcceleration'
-    VIBRO_SHOTS = 'vibroShots'
-    VIBRO_HITS = 'vibroHits'
-    VIBRO_COLLISIONS = 'vibroCollisions'
-    VIBRO_DAMAGE = 'vibroDamage'
-    VIBRO_GUI = 'vibroGUI'
-
-
 class FEEDBACK(CONST_CONTAINER):
     DAMAGE_INDICATOR = 'feedbackDamageIndicator'
     DAMAGE_LOG = 'feedbackDamageLog'
@@ -285,7 +274,6 @@ class SETTINGS_GROUP(CONST_CONTAINER):
     CONTROLS_SETTINGS = 'ControlsSettings'
     AIM_SETTINGS = 'AimSettings'
     MARKERS_SETTINGS = 'MarkerSettings'
-    OTHER_SETTINGS = 'OtherSettings'
     FEEDBACK_SETTINGS = 'FeedbackSettings'
 
 

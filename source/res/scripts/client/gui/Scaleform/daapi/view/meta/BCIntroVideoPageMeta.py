@@ -28,8 +28,8 @@ class BCIntroVideoPageMeta(View):
     def as_loadedS(self):
         return self.flashObject.as_loaded() if self._isDAAPIInited() else None
 
-    def as_showIntroPageS(self, value):
-        return self.flashObject.as_showIntroPage(value) if self._isDAAPIInited() else None
+    def as_showIntroPageS(self, value, showRewards=False):
+        return self.flashObject.as_showIntroPage(value, showRewards) if self._isDAAPIInited() else None
 
     def as_pausePlaybackS(self):
         return self.flashObject.as_pausePlayback() if self._isDAAPIInited() else None

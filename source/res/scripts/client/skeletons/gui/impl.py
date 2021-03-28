@@ -4,6 +4,9 @@ import typing
 from skeletons.gui.game_control import IGameController
 if typing.TYPE_CHECKING:
     from Event import Event
+    from frameworks.wulf import ViewModel
+    from frameworks.wulf.tutorial import Tutorial
+    from frameworks.wulf.ui_logger import UILogger
 
 class IGuiLoader(object):
     __slots__ = ()
@@ -20,7 +23,15 @@ class IGuiLoader(object):
     def systemLocale(self):
         raise NotImplementedError
 
-    def init(self):
+    @property
+    def tutorial(self):
+        raise NotImplementedError
+
+    @property
+    def uiLogger(self):
+        raise NotImplementedError
+
+    def init(self, tutorialModel, uiLoggerModel):
         raise NotImplementedError
 
     def fini(self):

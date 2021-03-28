@@ -24,9 +24,9 @@ from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from messenger_common_chat2 import MESSENGER_LIMITS as _LIMITS
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
-from uilogging.decorators import loggerTarget, loggerEntry, simpleLog
-from uilogging.ibc.constants import IBC_LOG_KEYS
-from uilogging.ibc.loggers import IBCLogger
+from uilogging.deprecated.decorators import loggerTarget, loggerEntry, simpleLog
+from uilogging.deprecated.ibc.constants import IBC_LOG_KEYS
+from uilogging.deprecated.ibc.loggers import IBCLogger
 _ActionsCollection = namedtuple('_ActionsCollection', 'initID deInitID onBroadcastID broadcastID')
 _logger = logging.getLogger(__name__)
 

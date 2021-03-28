@@ -4,7 +4,8 @@ from collections import namedtuple
 import logging
 import typing
 from CurrentVehicle import g_currentVehicle
-from gui.customization.shared import AdditionalPurchaseGroups, PurchaseItem, PURCHASE_ITEMS_ORDER
+from gui.customization.constants import CustomizationModes
+from gui.customization.shared import AdditionalPurchaseGroups, PurchaseItem, PURCHASE_ITEMS_ORDER, getAncestors
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from items.components.c11n_constants import SeasonType
 from shared_utils import CONST_CONTAINER
@@ -50,7 +51,7 @@ class ProcessorSelector(object):
 
 
 class BasePurchaseDescription(object):
-    __slots__ = ('intCD', 'identificator', 'selected', 'item', 'component', 'quantity', 'purchaseIndices', 'progressionLevel', '_uiDataPacker')
+    __slots__ = ('intCD', 'identificator', 'selected', 'item', 'component', 'quantity', 'purchaseIndices', 'progressionLevel', '_uiDataPacker', 'dependents', 'dependentOn')
 
     def __init__(self, item, purchaseIdx=0, quantity=1, component=None, progressionLevel=-1):
         self._uiDataPacker = None
@@ -62,6 +63,8 @@ class BasePurchaseDescription(object):
         self.quantity = quantity
         self.purchaseIndices = [purchaseIdx]
         self.progressionLevel = progressionLevel
+        self.dependents = None
+        self.dependentOn = None
         return
 
     def getUIData(self):
@@ -169,10 +172,12 @@ class SeparateItemsProcessor(ItemsProcessor):
 
     def _process(self, items):
         itemsInfo = {}
-        for idx, item in enumerate(items):
-            itemDescription = self._getItemDescription(item, idx)
-            seasonInfo = itemsInfo.setdefault(item.group, _SeasonPurchaseInfo(self._getKey))
-            seasonInfo.add(itemDescription, item.item.itemTypeID)
+        for idx, pItem in enumerate(items):
+            if pItem.item.isHiddenInUI():
+                continue
+            itemDescription = self._getItemDescription(pItem, idx)
+            seasonInfo = itemsInfo.setdefault(pItem.group, _SeasonPurchaseInfo(self._getKey))
+            seasonInfo.add(itemDescription, pItem.item.itemTypeID)
 
         return itemsInfo
 
@@ -263,6 +268,11 @@ class EditableStyleItemsProcessor(SeparateItemsProcessor):
 
         return itemsInfo
 
+    def _postProcess(self, itemsInfo):
+        descriptorsBySeasons = super(EditableStyleItemsProcessor, self)._postProcess(itemsInfo)
+        self.__updateStrictDependencies(descriptorsBySeasons)
+        return descriptorsBySeasons
+
     def _getItemDescription(self, item, idx=0, descriptionClass=None, descriptionPacker=None, progressionLevel=-1):
         if descriptionClass is not None:
             desc = descriptionClass(item, idx)
@@ -271,6 +281,43 @@ class EditableStyleItemsProcessor(SeparateItemsProcessor):
         packer = descriptionPacker if descriptionPacker is not None else self._itemUiDataPacker
         desc.setPacker(packer)
         return desc
+
+    def __updateStrictDependencies(self, descriptorsBySeasons):
+        editableStyleMode = self.__service.getCtx().mode
+        if editableStyleMode.modeId != CustomizationModes.EDITABLE_STYLE:
+            return
+        else:
+            styleDependencies = editableStyleMode.getDependenciesData()
+            if styleDependencies:
+                for season, descriptors in descriptorsBySeasons.iteritems():
+                    baseItemsSet = set(editableStyleMode.baseOutfits[season].items())
+                    baseCamoIntCD = None
+                    for baseItemIntCD in baseItemsSet:
+                        item = self.__service.getItemByCD(baseItemIntCD)
+                        if item.itemTypeID == GUI_ITEM_TYPE.CAMOUFLAGE:
+                            baseCamoIntCD = baseItemIntCD
+                            break
+
+                    camoDescriptor = None
+                    strictlyDependentItems = []
+                    for descriptor in descriptors:
+                        item = descriptor.item
+                        itemTypeId = item.itemTypeID
+                        if itemTypeId == GUI_ITEM_TYPE.CAMOUFLAGE:
+                            camoDescriptor = descriptor
+                        if itemTypeId != GUI_ITEM_TYPE.PAINT:
+                            ancestors = getAncestors(item.intCD, styleDependencies)
+                            if ancestors:
+                                if baseCamoIntCD not in ancestors:
+                                    strictlyDependentItems.append(descriptor)
+
+                    if camoDescriptor and strictlyDependentItems:
+                        camoDescriptor.dependents = set()
+                        for dependentOnCamo in strictlyDependentItems:
+                            camoDescriptor.dependents.add(dependentOnCamo.item.intCD)
+                            dependentOnCamo.dependentOn = camoDescriptor.item.intCD
+
+            return
 
 
 class _SeasonPurchaseInfo(object):

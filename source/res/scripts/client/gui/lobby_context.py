@@ -30,6 +30,7 @@ class LobbyContext(ILobbyContext):
         self.__headerNavigationConfirmators = set()
         self.__fightButtonConfirmators = set()
         self.__changeListener = LobbyContextChangeListener(self)
+        self.__isAccountComplete = True
         self.__em = EventManager()
         self.onServerSettingsChanged = Event(self.__em)
         return
@@ -69,6 +70,12 @@ class LobbyContext(ILobbyContext):
 
     def getCredentials(self):
         return self.__credentials
+
+    def isAccountComplete(self):
+        return self.__isAccountComplete
+
+    def setAccountComplete(self, isComplete):
+        self.__isAccountComplete = isComplete
 
     def getBattlesCount(self):
         return self.__battlesCount

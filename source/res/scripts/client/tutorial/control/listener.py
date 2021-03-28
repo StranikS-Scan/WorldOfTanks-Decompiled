@@ -15,10 +15,12 @@ class AppLoaderListener(object):
         self.__loader = loader
         self.appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
         self.appLoader.onGUISpaceLeft += self.__onGUISpaceLeft
+        self.appLoader.onGUISpaceBeforeEnter += self.__onGUISpaceBeforeEnter
 
     def stop(self):
         self.appLoader.onGUISpaceEntered -= self.__onGUISpaceEntered
         self.appLoader.onGUISpaceLeft -= self.__onGUISpaceLeft
+        self.appLoader.onGUISpaceBeforeEnter -= self.__onGUISpaceBeforeEnter
 
     def __onGUISpaceEntered(self, spaceID):
         if spaceID == GuiGlobalSpaceID.LOGIN:
@@ -35,3 +37,9 @@ class AppLoaderListener(object):
             self.__loader.leaveLobby()
         elif spaceID == GuiGlobalSpaceID.BATTLE:
             self.__loader.leaveBattle()
+
+    def __onGUISpaceBeforeEnter(self, spaceID):
+        if spaceID == GuiGlobalSpaceID.LOBBY:
+            self.__loader.beforeEnterLobby()
+        elif spaceID == GuiGlobalSpaceID.BATTLE:
+            self.__loader.beforeEnterBattle()

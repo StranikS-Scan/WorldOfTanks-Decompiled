@@ -8,7 +8,7 @@ from cache import cached_property
 from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs, TYPES_ORDER, isItemLimitReached, isItemUsedUp, vehicleHasSlot, ITEM_TYPE_TO_TAB
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.customization.constants import CustomizationModes
-from gui.customization.shared import getBaseStyleItems, createCustomizationBaseRequestCriteria, C11N_ITEM_TYPE_MAP
+from gui.customization.shared import getBaseStyleItems, createCustomizationBaseRequestCriteria, C11N_ITEM_TYPE_MAP, getInheritors, getAncestors
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -68,10 +68,11 @@ class CarouselCache(object):
     __service = dependency.descriptor(ICustomizationService)
     __eventsCache = dependency.descriptor(IEventsCache)
 
-    def __init__(self, createFilterCriteria):
+    def __init__(self, createFilterCriteria, createSortCriteria):
         self.__itemsData = defaultdict(lambda : defaultdict(OrderedDict))
         self.__carouselData = {}
         self.__createFilterCriteria = createFilterCriteria
+        self.__createSortCriteria = createSortCriteria
         self.__cachedEditableStyleId = 0
         self.__ctx = self.__service.getCtx()
 
@@ -79,6 +80,7 @@ class CarouselCache(object):
         self.invalidateItemsData()
         self.invalidateCarouselData()
         self.__createFilterCriteria = None
+        self.__createSortCriteria = None
         self.__cachedEditableStyleId = 0
         self.__ctx = None
         return
@@ -126,10 +128,15 @@ class CarouselCache(object):
     def __getCarouselData(self, season=None, modeId=None, tabId=None):
         itemsData = self.getItemsData(season, modeId, tabId)
         filteredItems = filter(self.__createFilterCriteria(), itemsData.items)
+        sortCriteria = self.__createSortCriteria()
+        showBookmarks = True
+        if sortCriteria:
+            filteredItems.sort(key=sortCriteria)
+            showBookmarks = False
         carouselData = CarouselData()
         lastGroupID = None
         for item in filteredItems:
-            if item.groupID != lastGroupID:
+            if showBookmarks and item.groupID != lastGroupID:
                 lastGroupID = item.groupID
                 bookmarkVO = CustomizationBookmarkVO(item.groupUserName, len(carouselData.items))
                 carouselData.bookmarks.append(bookmarkVO._asdict())
@@ -232,8 +239,9 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         self.__carouselFilters = {}
         self.__appliedItems = set()
         self.__baseStyleItems = set()
+        self.__dependentItems = tuple()
         self.__carouselData = CarouselData()
-        self.__carouselCache = CarouselCache(createFilterCriteria=self.__createFilterCriteria)
+        self.__carouselCache = CarouselCache(createFilterCriteria=self.__createFilterCriteria, createSortCriteria=self.__createSortCriteria)
         self.setItemWrapper(carouselItemWrapper)
         self.__initFilters()
 
@@ -260,10 +268,17 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         if not g_currentVehicle.isPresent():
             return
         super(CustomizationCarouselDataProvider, self).refresh()
-        self.__appliedItems = self.__ctx.mode.getAppliedItems(isOriginal=False)
-        self.__baseStyleItems = self.__getBaseStyleItems()
+        self.__baseStyleItems = getBaseStyleItems()
 
     def buildList(self):
+        self.__appliedItems = self.__ctx.mode.getAppliedItems(isOriginal=False)
+        for camoIntCD, dependentItems in self.__ctx.mode.getDependenciesData().iteritems():
+            if camoIntCD in self.__appliedItems:
+                self.__dependentItems = dependentItems
+                break
+        else:
+            self.__dependentItems = tuple()
+
         self.__updateCarouselData()
 
     def getVisibleTabs(self):
@@ -287,14 +302,42 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
     def getBookmarskData(self):
         return self.__carouselData.bookmarks
 
+    def getDependentItems(self):
+        return self.__dependentItems
+
+    def processDependentParams(self, item):
+        isMarkedAsDependent = False
+        isUnsuitable = False
+        styleDependencies = self.__ctx.mode.getDependenciesData()
+        if styleDependencies:
+            itemCD = item.intCD
+            isApplied = itemCD in self.getAppliedItems()
+            if item.itemTypeID == GUI_ITEM_TYPE.CAMOUFLAGE:
+                if isApplied:
+                    isMarkedAsDependent = bool(getInheritors(itemCD, styleDependencies))
+            else:
+                selectedDependentItems = self.getDependentItems()
+                if selectedDependentItems:
+                    if itemCD in selectedDependentItems:
+                        isMarkedAsDependent = isApplied
+                    elif getAncestors(itemCD, styleDependencies):
+                        isUnsuitable = True
+        return (isMarkedAsDependent, isUnsuitable)
+
     def onModeChanged(self, modeId, prevModeId):
+        visibleTabs = self.getVisibleTabs()
+        tabId = visibleTabs[0]
         if CustomizationModes.EDITABLE_STYLE in (modeId, prevModeId):
             self.clearFilter()
             self.__selectedGroup.clear()
             self.invalidateFilteredItems()
-        visibleTabs = self.getVisibleTabs()
+            if self.__ctx.mode.getDependenciesData():
+                if CustomizationTabs.CAMOUFLAGES in visibleTabs:
+                    tabId = CustomizationTabs.CAMOUFLAGES
+                else:
+                    _logger.warning('Style with dependencies have to open Camouflages tab, but this tab is not found!')
         if visibleTabs:
-            self.__ctx.mode.changeTab(visibleTabs[0])
+            self.__ctx.mode.changeTab(tabId)
 
     def hasAppliedFilter(self):
         isGroupSelected = self.__getSelectedGroupIdx() is not None
@@ -320,7 +363,7 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
             while 0 <= idx < itemsCount:
                 intCD = self.collection[idx]
                 item = self.__service.getItemByCD(intCD)
-                if not isItemLimitReached(item, outfits) or item.isStyleOnly:
+                if not isItemLimitReached(item, outfits) or item.isStyleOnly and not self.processDependentParams(item)[1]:
                     return item
                 idx += shift
 
@@ -419,7 +462,7 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
     def __createFilterCriteria(self):
         requirement = REQ_CRITERIA.EMPTY
         groupIdx = self.__getSelectedGroupIdx()
-        if groupIdx is not None:
+        if groupIdx is not None and groupIdx != -1:
             itemsData = self.__carouselCache.getItemsData()
             groupId = itemsData.groups.keys()[groupIdx]
             groupName = itemsData.groups[groupId]
@@ -432,7 +475,14 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         if slotId is not None and slotId.slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
             slot = g_currentVehicle.item.getAnchorBySlotId(slotId.slotType, slotId.areaId, slotId.regionIdx)
             requirement |= REQ_CRITERIA.CUSTOM(lambda item: item.formfactor in slot.formfactors)
+        if self.__dependentItems:
+            requirement |= REQ_CRITERIA.CUSTOM(lambda item: not (ItemTags.HIDE_IF_INCOMPATIBLE in item.tags and item.intCD not in self.__dependentItems))
+        if self.__ctx.mode.modeId == CustomizationModes.CUSTOM:
+            requirement |= REQ_CRITERIA.CUSTOM(lambda item: not item.isStyleOnly)
         return requirement
+
+    def __createSortCriteria(self):
+        return (lambda item: self.processDependentParams(item)[1]) if self.__dependentItems else None
 
     def __updateCarouselData(self):
         itemsData = self.__carouselCache.getItemsData()
@@ -451,9 +501,6 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         idx = self.collection.index(intCD) if intCD in self.collection else -1
         self.__selectedItem = SelectedItem(intCD, idx)
         self.__updateSwitchers()
-
-    def __getBaseStyleItems(self):
-        return getBaseStyleItems()
 
 
 class FilterTypes(object):

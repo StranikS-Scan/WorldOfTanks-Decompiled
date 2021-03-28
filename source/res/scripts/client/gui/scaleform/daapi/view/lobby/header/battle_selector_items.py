@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/battle_selector_items.py
 import logging
-from uilogging.decorators import loggerTarget, loggerEntry
-from uilogging.mode_selector.constants import MS_LOG_KEYS
-from uilogging.mode_selector.decorators import logChangeMode
-from uilogging.mode_selector.loggers import ModeSelectorUILogger
+from uilogging.deprecated.decorators import loggerTarget, loggerEntry
+from uilogging.deprecated.mode_selector.constants import MS_LOG_KEYS
+from uilogging.deprecated.mode_selector.decorators import logChangeMode
+from uilogging.deprecated.mode_selector.loggers import ModeSelectorUILogger
 from adisp import process
 from gui.prb_control.entities.base.ctx import PrbAction
 from account_helpers import isDemonstrator

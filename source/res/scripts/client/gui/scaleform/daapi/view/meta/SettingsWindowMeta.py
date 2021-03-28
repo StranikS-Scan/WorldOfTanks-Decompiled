@@ -55,9 +55,6 @@ class SettingsWindowMeta(AbstractWindowView):
     def as_setCaptureDevicesS(self, captureDeviceIdx, devicesData):
         return self.flashObject.as_setCaptureDevices(captureDeviceIdx, devicesData) if self._isDAAPIInited() else None
 
-    def as_onVibroManagerConnectS(self, isConnect):
-        return self.flashObject.as_onVibroManagerConnect(isConnect) if self._isDAAPIInited() else None
-
     def as_updateVideoSettingsS(self, videoSettings):
         return self.flashObject.as_updateVideoSettings(videoSettings) if self._isDAAPIInited() else None
 

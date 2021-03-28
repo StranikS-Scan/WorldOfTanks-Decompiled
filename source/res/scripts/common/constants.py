@@ -22,7 +22,7 @@ IS_CELLAPP = BigWorld.component == 'cell'
 IS_BASEAPP = BigWorld.component in ('base', 'service')
 IS_WEB = BigWorld.component == 'web'
 IS_DYNAPDATER = False
-CURRENT_REALM = 'RU'
+CURRENT_REALM = 'CT'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -765,7 +765,6 @@ META_GAME_SETTINGS = 'meta_game_settings'
 class Configs(enum.Enum):
     BATTLE_ROYALE_CONFIG = 'battle_royale_config'
     EVENT_PROGRESSION_CONFIG = 'event_progression_config'
-    LOOT_BOXES_CONFIG = 'lootBoxes_config'
 
 
 class RESTRICTION_TYPE:
@@ -795,6 +794,7 @@ class SPA_ATTRS:
     BOOTCAMP_DISABLED = '/wot/game/bootcamp_disabled/'
     LOGGING_ENABLED = '/wot/game/logging_enabled/'
     BOOTCAMP_VIDEO_DISABLED = '/wot/game/bc_video_disabled/'
+    STEAM_ALLOW = '/wot/steam/allow/'
 
     @staticmethod
     def toClientAttrs():
@@ -1406,7 +1406,6 @@ class REQUEST_COOLDOWN:
     RUN_QUEST = 1.0
     PAWN_FREE_AWARD_LIST = 1.0
     LOOTBOX = 1.0
-    LOOTBOX_RECORDS = 1.0
     BADGES = 2.0
     CREW_SKINS = 0.3
     BPF_COMMAND = 1.0
@@ -1427,7 +1426,6 @@ class REQUEST_COOLDOWN:
     DISMOUNT_ENHANCEMENT = 1.0
     BUY_BATTLE_PASS = 1.0
     BUY_BATTLE_PASS_LEVELS = 1.0
-    BATTLE_PASS_VOTE = 2.0
     ABILITIES = 1.0
     CREW_BOOKS = 0.5
     CUSTOMIZATION_NOVELTY = 0.5
@@ -2161,6 +2159,21 @@ class WGC_STATE:
     DISABLED = 4
     ERROR = 5
     LOGGEDIN = 6
+
+
+class WGC_PUBLICATION:
+    WGC_UNKNOWN = -1
+    WGC_PC = 0
+    WGC_360 = 1
+    WGC_STEAM = 2
+
+
+class DISTRIBUTION_PLATFORM(enum.Enum):
+    WG = 'wg_platform'
+    CHINA_360 = 'china_360'
+    STEAM = 'steam'
+    WIN_STORE = 'winstore'
+    EPIC = 'epic'
 
 
 class TARGET_LOST_FLAGS:

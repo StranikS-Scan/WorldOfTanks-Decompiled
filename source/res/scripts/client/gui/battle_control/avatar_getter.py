@@ -396,8 +396,8 @@ def setClientReady(avatar=None):
         avatar = BigWorld.player()
     try:
         avatar.setClientReady()
-    except AttributeError:
-        _logger.exception('Attribute "setClientReady" not found')
+    except AttributeError as error:
+        _logger.exception('Attribute "setClientReady" not found, exception %s', error.message)
 
     return
 

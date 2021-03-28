@@ -26,25 +26,40 @@ class BattlePassSecondaryEntryPointWidget(SecondaryEntryPointMeta, BaseBattlePas
         self._onClick()
 
     def update(self, currentArenaBonusType):
-        self._updateData()
-        currentLevel = ''
-        if not self._isCompleted():
-            currentLevel = min(self._widgetLevel + 1, self._battlePassController.getMaxLevel())
         self.__arenaBonusType = currentArenaBonusType
-        flagIcon = backport.image(R.images.gui.maps.icons.library.hangarEntryPoints.dyn('chapter_{}'.format(self._widgetChapter), R.images.gui.maps.icons.library.hangarEntryPoints.chapter_1)())
-        gameModeIsEnabled = self.__battlePassController.isGameModeEnabled(currentArenaBonusType)
-        isEnabled = gameModeIsEnabled and self.__battlePassController.isActive() and self.__battlePassController.isEnabled()
-        data = {'flagIcon': flagIcon,
-         'icon': self.__getIcon(),
-         'altIcon': self.__getAltIcon(isEnabled),
-         'text': str(currentLevel),
-         'isEnabled': isEnabled,
-         'isBought': self._isBought(),
-         'is3DStyleChosen': self._is3DStyleChosen()}
-        self.__updateTooltipData(data, currentArenaBonusType, gameModeIsEnabled)
-        self.as_setDataS(data)
-        if isEnabled:
-            self.as_setCountS(self._getNotChosenRewardCountWith3d())
+        self._updateData()
+
+    def _populate(self):
+        super(BattlePassSecondaryEntryPointWidget, self)._populate()
+        self._start()
+
+    def _dispose(self):
+        self._stop()
+        super(BattlePassSecondaryEntryPointWidget, self)._dispose()
+
+    def _updateData(self, *_):
+        super(BattlePassSecondaryEntryPointWidget, self)._updateData()
+        if self.__arenaBonusType is None:
+            return
+        else:
+            currentLevel = ''
+            if not self._isCompleted():
+                currentLevel = min(self._widgetLevel + 1, self._battlePassController.getMaxLevel())
+            flagIcon = backport.image(R.images.gui.maps.icons.library.hangarEntryPoints.dyn('chapter_{}'.format(self._widgetChapter), R.images.gui.maps.icons.library.hangarEntryPoints.chapter_1)())
+            gameModeIsEnabled = self.__battlePassController.isGameModeEnabled(self.__arenaBonusType)
+            isEnabled = gameModeIsEnabled and self.__battlePassController.isActive() and self.__battlePassController.isEnabled()
+            data = {'flagIcon': flagIcon,
+             'icon': self.__getIcon(),
+             'altIcon': self.__getAltIcon(isEnabled),
+             'text': str(currentLevel),
+             'isEnabled': isEnabled,
+             'isBought': self._isBought(),
+             'is3DStyleChosen': self._is3DStyleChosen()}
+            self.__updateTooltipData(data, self.__arenaBonusType, gameModeIsEnabled)
+            self.as_setDataS(data)
+            if isEnabled:
+                self.as_setCountS(self._getNotChosenRewardCountWith3d())
+            return
 
     def __getIcon(self):
         hangarEntryPoints = R.images.gui.maps.icons.library.hangarEntryPoints
@@ -78,7 +93,3 @@ class BattlePassSecondaryEntryPointWidget(SecondaryEntryPointMeta, BaseBattlePas
                 tooltipType = TOOLTIPS_CONSTANTS.COMPLEX
         data['tooltip'] = str(tooltip)
         data['tooltipType'] = tooltipType
-
-    def __battlePassSettingsChanged(self, *args):
-        if self.__arenaBonusType:
-            self.update(self.__arenaBonusType)

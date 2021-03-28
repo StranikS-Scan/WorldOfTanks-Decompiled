@@ -20,7 +20,7 @@ import services_config
 from MemoryCriticalController import g_critMemHandler
 from bootcamp.Bootcamp import g_bootcamp
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR, LOG_NOTE
-from gui import CLIENT_ENCODING, onRepeatKeyEvent, g_keyEventHandlers, g_mouseEventHandlers, InputHandler, GUI_SETTINGS
+from gui import CLIENT_ENCODING, onRepeatKeyEvent, g_keyEventHandlers, g_mouseEventHandlers, InputHandler
 from gui.Scaleform.game_loading import GameLoading
 from gui.shared import personality as gui_personality
 from helpers import RSSDownloader, OfflineMode, LightingGenerationMode
@@ -28,16 +28,8 @@ from helpers import dependency, log
 from messenger import MessengerEntry
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gameplay import IGameplayLogic
-tutorialLoaderInit = lambda : None
-tutorialLoaderFini = lambda : None
-if constants.IS_TUTORIAL_ENABLED:
-    if GUI_SETTINGS.isGuiEnabled():
-        try:
-            from tutorial.loader import init as tutorialLoaderInit
-            from tutorial.loader import fini as tutorialLoaderFini
-        except ImportError:
-            LOG_ERROR('Module tutorial not found')
-
+from async import async, await
+from gui.impl.dialogs import dialogs
 loadingScreenClass = GameLoading
 __import__('__main__').GameLoading = loadingScreenClass
 try:
@@ -81,13 +73,6 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         g_replayCtrl = BattleReplay.g_replayCtrl = BattleReplay.BattleReplay()
         g_replayCtrl.registerWotReplayFileExtension()
         g_bootcamp.replayCallbackSubscribe()
-        try:
-            from Vibroeffects import VibroManager
-            VibroManager.g_instance = VibroManager.VibroManager()
-            VibroManager.g_instance.connect()
-        except Exception:
-            LOG_CURRENT_EXCEPTION()
-
         import nation_change
         nation_change.init()
         import items
@@ -108,7 +93,6 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         motivation_quests.init()
         BigWorld.worldDrawEnabled(False)
         dependency.configure(services_config.getClientServicesConfig)
-        tutorialLoaderInit()
         SoundGroups.g_instance.startListeningGUISpaceChanges()
         gui_personality.init(loadingScreenGUI=loadingScreenGUI)
         EdgeDetectColorController.g_instance.create()
@@ -123,14 +107,6 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         player_ranks.init()
         import destructible_entities
         destructible_entities.init()
-        try:
-            from LightFx import LightManager
-            LightManager.g_instance = LightManager.LightManager()
-            import AuxiliaryFx
-            AuxiliaryFx.g_instance = AuxiliaryFx.AuxiliaryFxManager()
-        except Exception:
-            LOG_CURRENT_EXCEPTION()
-
         from AvatarInputHandler.cameras import FovExtended
         FovExtended.instance().resetFov()
         BigWorld.pauseDRRAutoscaling(True)
@@ -206,22 +182,6 @@ def start():
                 ServiceLocator.gameplay.start()
         else:
             ServiceLocator.gameplay.start()
-        try:
-            import Vibroeffects
-            Vibroeffects.VibroManager.g_instance.start()
-        except Exception:
-            LOG_CURRENT_EXCEPTION()
-
-        try:
-            from LightFx import LightManager
-            if LightManager.g_instance is not None:
-                LightManager.g_instance.start()
-            from AuxiliaryFx import g_instance
-            if g_instance is not None:
-                g_instance.start()
-        except Exception:
-            LOG_CURRENT_EXCEPTION()
-
         WebBrowser.initExternalCache()
         return
 
@@ -264,19 +224,6 @@ def fini():
         if g_replayCtrl is not None:
             g_replayCtrl.unsubscribe()
         gui_personality.fini()
-        tutorialLoaderFini()
-        import Vibroeffects
-        if Vibroeffects.VibroManager.g_instance is not None:
-            Vibroeffects.VibroManager.g_instance.destroy()
-            Vibroeffects.VibroManager.g_instance = None
-        from LightFx import LightManager
-        if LightManager.g_instance is not None:
-            LightManager.g_instance.destroy()
-            LightManager.g_instance = None
-        import AuxiliaryFx
-        if AuxiliaryFx.g_instance is not None:
-            AuxiliaryFx.g_instance.destroy()
-            AuxiliaryFx.g_instance = None
         from predefined_hosts import g_preDefinedHosts
         if g_preDefinedHosts is not None:
             g_preDefinedHosts.fini()
@@ -448,6 +395,14 @@ def handleInputLangChangeEvent():
 
 def getAuthRealm():
     return constants.AUTH_REALM
+
+
+@async
+def requestQuit():
+    BigWorld.WGWindowsNotifier.onBattleBeginning()
+    isOk = yield await(dialogs.quitGame())
+    if isOk:
+        BigWorld.quit()
 
 
 def addChatMsg(*msg):

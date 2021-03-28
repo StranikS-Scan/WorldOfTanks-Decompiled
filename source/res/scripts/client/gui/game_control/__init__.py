@@ -19,10 +19,10 @@ def getGameControllersConfig(manager):
     from gui.game_control.BrowserController import BrowserController as _Browser
     from gui.game_control.ChinaController import ChinaController as _China
     from gui.game_control.ChinaController import NoChinaController as _NoChina
-    from gui.game_control.ExternalLinksHandler import ExternalLinksHandler as _ExternalLinks
+    from gui.game_control.links_handlers import ExternalLinksHandler as _ExternalLinks
     from gui.game_control.GameSessionController import GameSessionController as _GameSessions
     from gui.game_control.IGR import IGRController as _IGR
-    from gui.game_control.InternalLinksHandler import InternalLinksHandler as _InternalLinks
+    from gui.game_control.links_handlers import InternalLinksHandler as _InternalLinks
     from gui.game_control.NotifyController import NotifyController as _Notify
     from gui.game_control.PromoController import PromoController as _Promos
     from gui.game_control.RentalsController import RentalsController as _Rentals
@@ -57,7 +57,6 @@ def getGameControllersConfig(manager):
     from gui.game_control.badges_controller import BadgesController as _Badges
     from gui.game_control.special_sound_ctrl import SpecialSoundCtrl as _SpecialSoundCtrl
     from gui.game_control.battle_pass_controller import BattlePassController
-    from gui.game_control.event_items_controller import EventItemsController
     from gui.game_control.clan_notification_controller import ClanNotificationController as _ClanNotification
     from gui.game_control.craftmachine_controller import CraftmachineController
     from gui.game_control.reactive_comm import ReactiveCommunicationService
@@ -123,4 +122,3 @@ def getGameControllersConfig(manager):
     _config(_interface.IEventProgressionController, _EventProgression())
     _config(_interface.IUISpamController, UISpamController())
     _config(_interface.IBlueprintsConvertSaleController, BlueprintsConvertSaleController())
-    _config(_interface.IEventItemsController, EventItemsController())

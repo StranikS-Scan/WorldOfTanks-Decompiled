@@ -1,10 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/loot_box.py
-import typing
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.gui_items.gui_item import GUIItem
-from gui.shared.money import Currency
 from shared_utils import CONST_CONTAINER
 
 class NewYearLootBoxes(CONST_CONTAINER):
@@ -29,7 +27,6 @@ class EventLootBoxes(CONST_CONTAINER):
     WT_SPECIAL = 'wt_special'
 
 
-BLACK_MARKET_ITEM_TYPE = 'blackMarket'
 SENIORITY_AWARDS_LOOT_BOXES_TYPE = 'seniorityAwards'
 GUI_ORDER = (NewYearLootBoxes.COMMON, NewYearLootBoxes.PREMIUM)
 CATEGORIES_GUI_ORDER = (NewYearCategories.NEWYEAR,
@@ -38,7 +35,7 @@ CATEGORIES_GUI_ORDER = (NewYearCategories.NEWYEAR,
  NewYearCategories.FAIRYTALE)
 
 class LootBox(GUIItem):
-    __slots__ = ('__id', '__invCount', '__type', '__category', '__historyName', '__guaranteedFrequency', '__guaranteedFrequencyName', '__rerollSettings', '__autoOpenTime', '__isReroll', '__bonus')
+    __slots__ = ('__id', '__invCount', '__type', '__category', '__historyName', '__guaranteedFrequency', '__guaranteedFrequencyName')
 
     def __init__(self, lootBoxID, lootBoxConfig, invCount):
         super(LootBox, self).__init__()
@@ -47,12 +44,10 @@ class LootBox(GUIItem):
         self.__updateByConfig(lootBoxConfig)
 
     def __repr__(self):
-        return 'LootBox(id=%d, type=%s, category=%s, count=%d, isReroll=%s, rerollAttempts=%s)' % (self.getID(),
+        return 'LootBox(id=%d, type=%s, category=%s, count=%d)' % (self.getID(),
          self.getType(),
          self.getCategory(),
-         self.getInventoryCount(),
-         self.isReroll(),
-         self.getReRollCount())
+         self.getInventoryCount())
 
     def __cmp__(self, other):
         return cmp(self.getID(), other.getID())
@@ -81,41 +76,6 @@ class LootBox(GUIItem):
     def isFree(self):
         return self.__type == NewYearLootBoxes.COMMON
 
-    def isEvent(self):
-        return self.__category == EventCategories.EVENT
-
-    def isReroll(self):
-        return self.__isReroll
-
-    def getReRollCount(self):
-        return self.__rerollSettings.get('maxAttempts', 0)
-
-    def getAutoOpenTime(self):
-        return self.__autoOpenTime
-
-    def getReRollPrice(self, reRolledAttempts=0):
-        priceType = self.__rerollSettings.get('priceType', Currency.CREDITS)
-        if reRolledAttempts > 0:
-            reRolledAttempts -= 1
-        if priceType == 'gold':
-            priceType = Currency.GOLD
-        reRollPrice = 0
-        reRollPrices = self.__rerollSettings.get('prices', ())
-        reRollPricesLen = len(reRollPrices)
-        if 0 <= reRolledAttempts < reRollPricesLen:
-            reRollPrice = reRollPrices[reRolledAttempts]
-        return (priceType, reRollPrice)
-
-    def getBonusVehicles(self):
-        vehs = []
-        for bonusesGroup in self.__bonus.get('groups'):
-            for bonuses in bonusesGroup.get('oneof'):
-                if bonuses:
-                    for bonus in bonuses:
-                        vehs += [ veh for veh in bonus[3].get('vehicles', {}).keys() ]
-
-        return vehs
-
     def getGuaranteedFrequency(self):
         return self.__guaranteedFrequency
 
@@ -129,10 +89,6 @@ class LootBox(GUIItem):
         self.__type = lootBoxConfig.get('type')
         self.__category = lootBoxConfig.get('category')
         self.__historyName = lootBoxConfig.get('historyName')
-        self.__rerollSettings = lootBoxConfig.get('reRoll')
-        self.__bonus = lootBoxConfig.get('bonus')
-        self.__autoOpenTime = lootBoxConfig.get('autoOpenTime')
-        self.__isReroll = True if self.__rerollSettings else False
         self.__guaranteedFrequencyName, self.__guaranteedFrequency = self.__readLimits(lootBoxConfig.get('limits', {}))
 
     @staticmethod

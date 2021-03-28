@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/CustomEffectManager.py
+import weakref
 import math
 import Math
 import material_kinds
 from helpers.PixieNode import PixieCache
 from CustomEffect import EffectSettings
-from svarog_script.py_component import Component
+from cgf_obsolete_script.py_component import Component
 from vehicle_systems.tankStructure import TankNodeNames
 import math_utils
 _ENABLE_VALUE_TRACKER = False
@@ -85,6 +86,7 @@ class CustomEffectManager(Component):
         self.__engineState = None
         self.__appearance = None
         self.__variableArgs = None
+        self.__vehicle = None
         if _ENABLE_PIXIE_TRACKER:
             self.__vt.addValue2('Pixie Count', PixieCache.pixiesCount)
         if _ENABLE_VALUE_TRACKER or _ENABLE_VALUE_TRACKER_ENGINE or _ENABLE_PIXIE_TRACKER:
@@ -100,7 +102,7 @@ class CustomEffectManager(Component):
                     effectSelector.stop()
 
     def setVehicle(self, vehicle):
-        self.__vehicle = vehicle
+        self.__vehicle = weakref.proxy(vehicle)
 
     def activate(self):
         super(CustomEffectManager, self).activate()
@@ -111,9 +113,7 @@ class CustomEffectManager(Component):
         for effectSelector in self.__selectors:
             effectSelector.stop()
 
-        self.__vehicle = None
         super(CustomEffectManager, self).deactivate()
-        return
 
     def __createChassisCenterNodes(self):
         compoundModel = self.__appearance.compoundModel

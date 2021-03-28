@@ -14,4 +14,7 @@ class SocialLoginView(LoginView):
         self._loginMode.doSocialLogin(socialNetworkName, serverName, False)
 
     def onTextLinkClick(self, socialNetworkName):
-        BigWorld.wg_openWebBrowser(SOCIAL_NETWORK_TO_DOMAIN_MAPPING[socialNetworkName])
+        if socialNetworkName in SOCIAL_NETWORK_TO_DOMAIN_MAPPING:
+            BigWorld.wg_openWebBrowser(SOCIAL_NETWORK_TO_DOMAIN_MAPPING[socialNetworkName])
+            return
+        super(SocialLoginView, self).onTextLinkClick(socialNetworkName)

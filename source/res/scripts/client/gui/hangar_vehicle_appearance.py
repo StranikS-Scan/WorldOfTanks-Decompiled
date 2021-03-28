@@ -5,6 +5,7 @@ import weakref
 import math
 from collections import namedtuple
 from typing import TYPE_CHECKING
+from functools import partial
 import BigWorld
 import Event
 import Math
@@ -30,7 +31,7 @@ from vehicle_systems import camouflages
 from vehicle_systems.components.vehicle_shadow_manager import VehicleShadowManager
 from vehicle_systems.tankStructure import ModelsSetParams, TankPartNames, ColliderTypes, TankPartIndexes
 from vehicle_systems.tankStructure import VehiclePartsTuple, TankNodeNames
-from svarog_script.script_game_object import ComponentDescriptor, ScriptGameObject
+from cgf_obsolete_script.script_game_object import ComponentDescriptor, ScriptGameObject
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraRelatedEvents
@@ -121,7 +122,7 @@ class HangarVehicleAppearance(ScriptGameObject):
     isVehicleDestroyed = property(lambda self: self.__isVehicleDestroyed)
 
     def __init__(self, spaceId, vEntity):
-        ScriptGameObject.__init__(self, vEntity.spaceID)
+        ScriptGameObject.__init__(self, vEntity.spaceID, 'HangarVehicleAppearance')
         self.__loadState = _LoadStateNotifier()
         self.__curBuildInd = 0
         self.__vDesc = None
@@ -165,12 +166,14 @@ class HangarVehicleAppearance(ScriptGameObject):
     def remove(self):
         self.__clearModelAnimators()
         self.__loadState.unload()
+        if self.shadowManager is not None:
+            self.shadowManager.updatePlayerTarget(None)
+            if self.__vEntity.model is not None:
+                self.shadowManager.unregisterCompoundModel(self.__vEntity.model)
         self.__vDesc = None
         self.__vState = None
         self.__isVehicleDestroyed = False
         self.__vEntity.model = None
-        if self.shadowManager is not None:
-            self.shadowManager.updatePlayerTarget(None)
         if self.collisions:
             BigWorld.removeCameraCollider(self.collisions.getColliderID())
             self.collisions = None
@@ -188,6 +191,10 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.fashion.removePhysicalTracks()
         if self.shadowManager is not None:
             self.shadowManager.updatePlayerTarget(None)
+        if self.tracks is not None:
+            self.tracks.reset()
+        if self.shadowManager is not None and self.__vEntity.model is not None:
+            self.shadowManager.unregisterCompoundModel(self.__vEntity.model)
         self.__clearModelAnimators()
         ScriptGameObject.deactivate(self)
         ScriptGameObject.destroy(self)
@@ -266,10 +273,12 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__loadState.unload()
         if self.fashion is not None:
             self.fashion.removePhysicalTracks()
-        ScriptGameObject.deactivate(self)
-        self.tracks = None
-        self.collisionObstaclesCollector = None
-        self.tessellationCollisionSensor = None
+        if self.tracks is not None:
+            self.tracks.reset()
+        if self.__vEntity.model is not None and self.__vEntity.model is not None:
+            self.shadowManager.unregisterCompoundModel(self.__vEntity.model)
+        self.shadowManager = None
+        self.reset()
         self.shadowManager = VehicleShadowManager()
         self.shadowManager.updatePlayerTarget(None)
         if outfit.style and outfit.style.isProgression:
@@ -381,9 +390,9 @@ class HangarVehicleAppearance(ScriptGameObject):
         if hasCrashedCollisions:
             self._crashedModelCollisions = resourceRefs['CrashedModelCollisions']
         if self.__isVehicleDestroyed and hasCrashedCollisions:
-            self.collisions = self._crashedModelCollisions
+            self.collisions = self.createComponent(BigWorld.CollisionComponent, self._crashedModelCollisions)
         else:
-            self.collisions = self._modelCollisions
+            self.collisions = self.createComponent(BigWorld.CollisionComponent, self._modelCollisions)
         if succesLoaded:
             self.__setupModel(buildInd)
         self.turretRotator = SimpleTurretRotator(self.compoundModel, self.__staticTurretYaw, self.__vDesc.hull.turretPositions[0], self.__vDesc.hull.turretPitches[0], easingCls=math_utils.Easing.squareEasing)
@@ -447,7 +456,7 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.__fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion())
             model_assembler.setupTracksFashion(self.__vDesc, self.__fashions.chassis)
             self.__vEntity.model.setupFashions(self.__fashions)
-            model_assembler.assembleCollisionObstaclesCollector(self, None, self.__vDesc, BigWorld.player().spaceID)
+            model_assembler.assembleCollisionObstaclesCollector(self, None, self.__vDesc)
             model_assembler.assembleTessellationCollisionSensor(self, None)
             wheelsScroll = None
             wheelsSteering = None
@@ -532,9 +541,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         typeDescr = self.__vDesc
         wheelConfig = typeDescr.chassis.generalWheelsAnimatorConfig
         if self.wheelsAnimator is not None and wheelConfig is not None:
-            self.wheelsAnimator.createCollision(wheelConfig, self._modelCollisions)
-            if self._crashedModelCollisions is not None:
-                self.wheelsAnimator.createCollision(wheelConfig, self._crashedModelCollisions)
+            self.wheelsAnimator.createCollision(wheelConfig, self.collisions)
         gunColBox = self.collisions.getBoundingBox(TankPartNames.getIdx(TankPartNames.GUN) + 3)
         center = 0.5 * (gunColBox[1] - gunColBox[0])
         gunoffset = Math.Matrix()
@@ -571,6 +578,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         if not self.shadowManager or not self.__vEntity.model:
             return
         else:
+            self.shadowManager.registerCompoundModel(self.__vEntity.model)
             if state == CameraMovementStates.ON_OBJECT:
                 self.shadowManager.updatePlayerTarget(self.__vEntity.model)
             elif state == CameraMovementStates.MOVING_TO_OBJECT:
@@ -652,17 +660,7 @@ class HangarVehicleAppearance(ScriptGameObject):
             position = _getBBCenter(TankPartNames.CHASSIS)
         return position
 
-    def updateCustomization(self, outfit=None, callback=None):
-        if self.__isVehicleDestroyed:
-            return
-        if g_currentVehicle.item:
-            vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
-        else:
-            vehicleCD = g_currentPreviewVehicle.item.descriptor.makeCompactDescr()
-        outfit = outfit or self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehicleCD)
-        if self.recreateRequired(outfit):
-            self.refresh(outfit, callback)
-            return
+    def __applyCustomization(self, outfit, callback):
         if outfit.style and outfit.style.isProgression:
             outfit = self.__getStyleProgressionOutfitData(outfit)
         self.__updateCamouflage(outfit)
@@ -672,6 +670,27 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__updateSequences(outfit)
         if outfit.style and outfit.style.isProgression:
             self.__updateStyleProgression(outfit)
+        if callback is not None:
+            callback()
+        return
+
+    def updateCustomization(self, outfit=None, callback=None):
+        if self.__isVehicleDestroyed:
+            return
+        else:
+            if g_currentVehicle.item:
+                vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
+            else:
+                vehicleCD = g_currentPreviewVehicle.item.descriptor.makeCompactDescr()
+            outfit = outfit or self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehicleCD)
+            if self.recreateRequired(outfit):
+                self.refresh(outfit, callback)
+                return
+            if self.c11nComponent is None:
+                self.__onLoadedAfterRefreshCallback = partial(self.__applyCustomization, outfit, callback)
+                return
+            self.__applyCustomization(outfit, None)
+            return
 
     def rotateTurretForAnchor(self, anchorId, duration=EASING_TRANSITION_DURATION):
         if self.compoundModel is None or self.__vDesc is None:

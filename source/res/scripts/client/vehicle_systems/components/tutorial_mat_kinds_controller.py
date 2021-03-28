@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/vehicle_systems/components/tutorial_mat_kinds_controller.py
 import BigWorld
 import TriggersManager
-from svarog_script.py_component import Component
-from svarog_script.auto_properties import LinkDescriptor
+from cgf_obsolete_script.py_component import Component
+from cgf_obsolete_script.auto_properties import LinkDescriptor
 from helpers.CallbackDelayer import CallbackDelayer
 from constants import GROUND_TYPE_NAME_BY_INDEX
 _PERIODIC_TIME = 0.25

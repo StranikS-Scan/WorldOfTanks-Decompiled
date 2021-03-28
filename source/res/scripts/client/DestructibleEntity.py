@@ -11,6 +11,7 @@ from helpers.EffectsList import effectsFromSection, EffectsListPlayer
 from constants import VEHICLE_HIT_EFFECT
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _GUI_EVENT_ID
 from vehicle_systems.tankStructure import ColliderTypes
+from cgf_obsolete_script.script_game_object import ComponentDescriptor, ScriptGameObject
 import helpers
 COLLISION_SEGMENT_LENGTH = 2
 
@@ -42,7 +43,7 @@ class DestructibleEntity(BigWorld.Entity):
         self.__prevDamageStickers = None
         self.__stateResources = {}
         for stateName, stateProperties in self.__properties.states.iteritems():
-            self.__stateResources[stateName] = DestructibleEntityState(stateName, stateProperties, self.id, self.__stateTriggers[stateName])
+            self.__stateResources[stateName] = DestructibleEntityState(stateName, stateProperties, self.id, self.__stateTriggers[stateName], self.spaceID)
 
         return
 
@@ -200,19 +201,19 @@ class DestructibleEntity(BigWorld.Entity):
         self.targetCaps = [1] if enable else [0]
 
 
-class DestructibleEntityState(object):
+class DestructibleEntityState(ScriptGameObject):
     guiNode = property(lambda self: self.__guiNode)
     damageStickers = property(lambda self: self.__damageStickers)
-    collisionComponent = property(lambda self: self.__collisionComponent)
+    collisionComponent = ComponentDescriptor()
     name = property(lambda self: self.__stateName)
 
-    def __init__(self, stateName, stateProperties, entityId, trigger):
+    def __init__(self, stateName, stateProperties, entityId, trigger, spaceID):
+        ScriptGameObject.__init__(self, spaceID, 'DestructibleEntityState')
         self.__entityId = entityId
         self.__stateName = stateName
         self.__stateProperties = stateProperties
         self.__guiNode = None
         self.__active = False
-        self.__collisionComponent = None
         self.__visualModel = None
         self.__damageStickers = dict()
         self.__effectsPlayer = None
@@ -223,7 +224,7 @@ class DestructibleEntityState(object):
         return self.__trigger() and not self.__active
 
     def reduceSegmentLength(self, hitCompIndx, segStart, segEnd):
-        hitDist = self.__collisionComponent.collideLocal(hitCompIndx, segStart, segEnd)
+        hitDist = self.collisionComponent.collideLocal(hitCompIndx, segStart, segEnd)
         if hitDist is None:
             return (segStart, segEnd)
         else:
@@ -242,14 +243,14 @@ class DestructibleEntityState(object):
                 visualModel.emplacePart(component.visualModel, 'root', componentId)
             bspModels.append((componentIdx, component.physicsModel))
 
-        collisionComponent = BigWorld.CollisionAssembler(tuple(bspModels), spaceId)
-        collisionComponent.name = self.__stateName + ASSEMBLER_NAME_SUFFIXES.PHYSICS
-        return [visualModel, collisionComponent]
+        collisionAssembler = BigWorld.CollisionAssembler(tuple(bspModels), self.spaceID)
+        collisionAssembler.name = self.__stateName + ASSEMBLER_NAME_SUFFIXES.PHYSICS
+        return [visualModel, collisionAssembler]
 
     def onResourcesLoaded(self, prereqs):
         assemblerName = self.__stateName + ASSEMBLER_NAME_SUFFIXES.PHYSICS
         if assemblerName not in prereqs.failedIDs:
-            self.__collisionComponent = prereqs[assemblerName]
+            self.collisionComponent = self.createComponent(BigWorld.CollisionComponent, prereqs[assemblerName])
         assemblerName = self.__stateName + ASSEMBLER_NAME_SUFFIXES.VISUAL
         if assemblerName not in prereqs.failedIDs:
             self.__visualModel = prereqs[assemblerName]
@@ -268,26 +269,26 @@ class DestructibleEntityState(object):
         for componentIdx, _ in enumerate(self.__stateProperties.components):
             payload.append((componentIdx, self.__visualModel.node('root')))
 
-        self.__collisionComponent.connect(self.__entityId, ColliderTypes.VEHICLE_COLLIDER, tuple(payload))
-        self.__collisionComponent.activate()
+        self.collisionComponent.connect(self.__entityId, ColliderTypes.VEHICLE_COLLIDER, tuple(payload))
         self.__visualModel.matrix = matrix
         self.__playEffect(self.__stateProperties.effect, self.__visualModel)
         self.__active = True
+        super(DestructibleEntityState, self).activate()
         return self.__visualModel
 
     def deactivate(self):
-        self.__collisionComponent.deactivate()
-        self.__stopEffect()
         for componentIdx in range(len(self.__stateProperties.components)):
-            self.__collisionComponent.removeAttachment(componentIdx)
+            self.collisionComponent.removeAttachment(componentIdx)
 
+        super(DestructibleEntityState, self).deactivate()
+        self.__stopEffect()
         self.__active = False
 
     def destroy(self):
+        super(DestructibleEntityState, self).destroy()
         self.__effectsPlayer = None
         self.__damageStickers = None
         self.__visualModel = None
-        self.__collisionComponent = None
         self.__guiNode = None
         self.__stateProperties = None
         self.__stateName = None

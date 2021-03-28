@@ -10,6 +10,8 @@ import BigWorld
 import Math
 import WoT
 import material_kinds
+import CGF
+import GenericComponents
 from constants import IS_DEVELOPMENT, IS_EDITOR
 from soft_exception import SoftException
 import math_utils
@@ -365,9 +367,11 @@ def createMultiGunRecoils(appearance, lodLink, gunNodes):
         gunNodeName = gunInstance.node
         gunAnimatorNode = appearance.compoundModel.node(gunNodeName)
         if gunAnimatorNode is not None:
+            gameObject = CGF.GameObject(appearance.spaceID, 'Multigun recoil ' + gunNodeName)
+            gameObject.createComponent(GenericComponents.HierarchyComponent, appearance.gameObject)
             localGunMatrix = gunAnimatorNode.localMatrix
-            gunRecoil = createGunAnimator(appearance, appearance.typeDescriptor, localGunMatrix, lodLink)
-            animators.append(gunRecoil)
+            gunRecoil = createGunAnimator(gameObject, appearance.typeDescriptor, localGunMatrix, lodLink)
+            animators.append(gameObject)
             gunRecoilMProv = gunRecoil.animatedMProv
             appearance.compoundModel.node(gunNodeName, gunRecoilMProv)
 
@@ -442,7 +446,7 @@ def assembleTerrainMatKindSensor(appearance, lodStateLink, spaceID):
     scanLength = 4.0
     offset = Math.Vector3(0.0, scanLength * 0.5, 0.0)
     localPoints = (leftNodeMatrix.translation + offset, rightNodeMatrix.translation + offset, Math.Vector3(0.0, 0.0, 0.0) + offset)
-    sensor = appearance.terrainMatKindSensor = appearance.createComponent(Vehicular.TerrainMatKindSensor, compoundModel.root, localPoints, scanLength, spaceID)
+    sensor = appearance.terrainMatKindSensor = appearance.createComponent(Vehicular.TerrainMatKindSensor, compoundModel.root, localPoints, scanLength)
     sensor.setLodLink(lodStateLink)
     sensor.setLodSettings(shared_components.LodSettings(TERRAIN_MAT_KIND_SENSOR_LOD_DIST, TERRAIN_MAT_KIND_SENSOR_MAX_PRIORITY))
 
@@ -655,7 +659,7 @@ def setupTracksFashion(vehicleDesc, fashion):
     return
 
 
-def assembleSimpleTracks(appearance, vehicleDesc, fashion, wheelsDataProvider, tracks):
+def assembleSimpleTracks(vehicleDesc, fashion, wheelsDataProvider, tracks):
     tracksCfg = vehicleDesc.chassis.tracks
     if tracksCfg is None:
         return
@@ -663,11 +667,20 @@ def assembleSimpleTracks(appearance, vehicleDesc, fashion, wheelsDataProvider, t
         leftTracks = []
         rightTracks = []
         for i in xrange(tracksCfg.pairsCount):
-            left = Vehicular.SimpleTrack(appearance.worldID, True, i, tracksCfg.leftMaterial, fashion, wheelsDataProvider)
-            right = Vehicular.SimpleTrack(appearance.worldID, False, i, tracksCfg.rightMaterial, fashion, wheelsDataProvider)
-            meterToTexScale = tracksCfg.textureScale
-            left.meterToTexScale = meterToTexScale
-            right.meterToTexScale = meterToTexScale
+            left = (Vehicular.SimpleTrack,
+             True,
+             i,
+             tracksCfg.leftMaterial,
+             fashion,
+             wheelsDataProvider,
+             tracksCfg.textureScale)
+            right = (Vehicular.SimpleTrack,
+             False,
+             i,
+             tracksCfg.rightMaterial,
+             fashion,
+             wheelsDataProvider,
+             tracksCfg.textureScale)
             leftTracks.append(left)
             rightTracks.append(right)
 
@@ -677,42 +690,37 @@ def assembleSimpleTracks(appearance, vehicleDesc, fashion, wheelsDataProvider, t
         return
 
 
-def assemblePhysicalTracks(resourceRefs, trackPairsCount, appearance, tracks, instantWarmup):
+def assembleSizePhysicalTrack(resourceRefs, resourceFormat, isLeft, trackPairsCount, appearance, tracks, instantWarmup):
     if appearance.wheelsAnimator is None:
         return False
     else:
         inited = True
         allTracks = []
         for i in xrange(trackPairsCount):
-            name = 'left{0}PhysicalTrack'.format(i)
-            track = resourceRefs[name].constructComponent() if resourceRefs.has_key(name) else None
-            if track is not None:
-                track.init(appearance.compoundModel, appearance.wheelsAnimator, appearance.collisionObstaclesCollector, appearance.tessellationCollisionSensor, instantWarmup)
-                if track.inited:
-                    allTracks.append(track)
-                else:
-                    inited = False
+            name = resourceFormat.format(i)
+            trackBuilder = resourceRefs[name] if resourceRefs.has_key(name) else None
+            if trackBuilder is not None and trackBuilder.isValid():
+                trackData = (Vehicular.PhysicalTrack,
+                 trackBuilder,
+                 appearance.compoundModel,
+                 appearance.wheelsAnimator,
+                 appearance.collisionObstaclesCollector,
+                 appearance.tessellationCollisionSensor,
+                 appearance.fashion,
+                 instantWarmup)
+                allTracks.append(trackData)
             inited = False
 
         if allTracks:
-            tracks.addTrackComponent(True, allTracks, _PHYSICAL_TRACKS_LOD_SETTINGS)
-            appearance.fashion.setPhysicalTracks(allTracks)
-        allTracks = []
-        for i in xrange(trackPairsCount):
-            name = 'right{0}PhysicalTrack'.format(i)
-            track = resourceRefs[name].constructComponent() if resourceRefs.has_key(name) else None
-            if track is not None:
-                track.init(appearance.compoundModel, appearance.wheelsAnimator, appearance.collisionObstaclesCollector, appearance.tessellationCollisionSensor, instantWarmup)
-                if track.inited:
-                    allTracks.append(track)
-                else:
-                    inited = False
-            inited = False
-
-        if allTracks:
-            tracks.addTrackComponent(False, allTracks, _PHYSICAL_TRACKS_LOD_SETTINGS)
-            appearance.fashion.setPhysicalTracks(allTracks)
+            tracks.addTrackComponent(isLeft, allTracks, _PHYSICAL_TRACKS_LOD_SETTINGS)
         return inited
+
+
+def assemblePhysicalTracks(resourceRefs, trackPairsCount, appearance, tracks, instantWarmup):
+    inited = True
+    inited = inited and assembleSizePhysicalTrack(resourceRefs, 'left{0}PhysicalTrack', True, trackPairsCount, appearance, tracks, instantWarmup)
+    inited = inited and assembleSizePhysicalTrack(resourceRefs, 'right{0}PhysicalTrack', False, trackPairsCount, appearance, tracks, instantWarmup)
+    return inited
 
 
 def assembleSplineTracks(vehicleDesc, appearance, splineTracksImpl, tracks):
@@ -724,8 +732,14 @@ def assembleSplineTracks(vehicleDesc, appearance, splineTracksImpl, tracks):
         leftSplineTracks = []
         rightSplineTracks = []
         for left, right in zip(splineTracksImpl[0], splineTracksImpl[1]):
-            leftSplineTracks.append(Vehicular.SplineTrack(appearance.worldID, left, appearance.compoundModel, appearance.wheelsAnimator))
-            rightSplineTracks.append(Vehicular.SplineTrack(appearance.worldID, right, appearance.compoundModel, appearance.wheelsAnimator))
+            leftSplineTracks.append((Vehicular.SplineTrack,
+             left,
+             appearance.compoundModel,
+             appearance.wheelsAnimator))
+            rightSplineTracks.append((Vehicular.SplineTrack,
+             right,
+             appearance.compoundModel,
+             appearance.wheelsAnimator))
 
         if leftSplineTracks:
             tracks.addTrackComponent(True, leftSplineTracks, lodSettings)
@@ -739,11 +753,11 @@ def assembleTracks(resourceRefs, vehicleDesc, appearance, splineTracksImpl, inst
     tracksCfg = vehicleDesc.chassis.tracks
     if tracksCfg is not None:
         trackPairsCount = tracksCfg.pairsCount
-    tracks = Vehicular.VehicleTracks(appearance.worldID, appearance.compoundModel, TankPartIndexes.CHASSIS, _AREA_LOD_FOR_NONSIMPLE_TRACKS, trackPairsCount)
+    tracks = Vehicular.VehicleTracks(appearance.gameObject, appearance.compoundModel, TankPartIndexes.CHASSIS, _AREA_LOD_FOR_NONSIMPLE_TRACKS, trackPairsCount)
     appearance.tracks = tracks
     assemblePhysicalTracks(resourceRefs, trackPairsCount, appearance, tracks, instantWarmup)
     assembleSplineTracks(vehicleDesc, appearance, splineTracksImpl, tracks)
-    assembleSimpleTracks(appearance, vehicleDesc, appearance.fashion, appearance.wheelsAnimator, tracks)
+    assembleSimpleTracks(vehicleDesc, appearance.fashion, appearance.wheelsAnimator, tracks)
     vehicleFilter = getattr(appearance, 'filter', None)
     if vehicleFilter is not None:
         tracks.setTrackScrollLink(DataLinks.createFloatLink(vehicleFilter, 'leftTrackScroll'), DataLinks.createFloatLink(vehicleFilter, 'rightTrackScroll'))
@@ -758,9 +772,9 @@ def assembleTracks(resourceRefs, vehicleDesc, appearance, splineTracksImpl, inst
     return
 
 
-def assembleCollisionObstaclesCollector(appearance, lodStateLink, desc, spaceID):
+def assembleCollisionObstaclesCollector(appearance, lodStateLink, desc):
     isWheeledVehicle = 'wheeledVehicle' in desc.type.tags
-    collisionObstaclesCollector = appearance.createComponent(Vehicular.CollisionObstaclesCollector, appearance.compoundModel, spaceID, isWheeledVehicle)
+    collisionObstaclesCollector = appearance.createComponent(Vehicular.CollisionObstaclesCollector, appearance.compoundModel, isWheeledVehicle)
     if lodStateLink is not None:
         collisionObstaclesCollector.setLodLink(lodStateLink)
         collisionObstaclesCollector.setLodSettings(shared_components.LodSettings(appearance.typeDescriptor.chassis.chassisLodDistance, DEFAULT_MAX_LOD_PRIORITY))

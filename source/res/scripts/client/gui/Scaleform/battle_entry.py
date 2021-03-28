@@ -7,10 +7,11 @@ from gui import DEPTH_OF_Battle
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
 from gui.Scaleform.daapi.settings.config import BATTLE_TOOLTIPS_BUILDERS_PATHS
 from gui.Scaleform.flash_wrapper import InputKeyMode
+from gui.Scaleform.framework.managers.TutorialManager import ScaleformTutorialManager
 from gui.Scaleform.framework.tooltip_mgr import ToolTip
+from gui.Scaleform.framework.ui_logging_manager import UILoggerManager
 from gui.Scaleform.framework.application import AppEntry, DAAPIRootBridge
 from gui.Scaleform.framework.managers import LoaderManager, ContainerManager
-from gui.Scaleform.framework.managers.TutorialManager import TutorialManager
 from gui.Scaleform.framework.managers.containers import DefaultContainer
 from gui.Scaleform.framework.managers.containers import PopUpContainer
 from gui.Scaleform.framework.managers.context_menu import ContextMenuManager
@@ -140,7 +141,10 @@ class BattleEntry(AppEntry):
         return ContextMenuManager(self.proxy)
 
     def _createTutorialManager(self):
-        return TutorialManager(None, False, {})
+        return ScaleformTutorialManager()
+
+    def _createUILoggerManager(self):
+        return UILoggerManager()
 
     def _createImageManager(self):
         return ImageManager()

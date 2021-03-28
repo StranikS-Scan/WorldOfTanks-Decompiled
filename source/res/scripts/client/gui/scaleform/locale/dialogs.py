@@ -564,6 +564,9 @@ class DIALOGS(object):
     UPDATENEEDED_MESSAGE = '#dialogs:updateNeeded/message'
     UPDATENEEDED_SUBMIT = '#dialogs:updateNeeded/submit'
     UPDATENEEDED_CANCEL = '#dialogs:updateNeeded/cancel'
+    STEAMSTARTNEEDED_TITLE = '#dialogs:steamStartNeeded/title'
+    STEAMSTARTNEEDED_MESSAGE = '#dialogs:steamStartNeeded/message'
+    STEAMSTARTNEEDED_CANCEL = '#dialogs:steamStartNeeded/cancel'
     REPLAYNOTIFICATION_TITLE = '#dialogs:replayNotification/title'
     REPLAYNOTIFICATION_MESSAGE = '#dialogs:replayNotification/message'
     REPLAYNOTIFICATION_SUBMIT = '#dialogs:replayNotification/submit'
@@ -1578,6 +1581,9 @@ class DIALOGS(object):
      UPDATENEEDED_MESSAGE,
      UPDATENEEDED_SUBMIT,
      UPDATENEEDED_CANCEL,
+     STEAMSTARTNEEDED_TITLE,
+     STEAMSTARTNEEDED_MESSAGE,
+     STEAMSTARTNEEDED_CANCEL,
      REPLAYNOTIFICATION_TITLE,
      REPLAYNOTIFICATION_MESSAGE,
      REPLAYNOTIFICATION_SUBMIT,

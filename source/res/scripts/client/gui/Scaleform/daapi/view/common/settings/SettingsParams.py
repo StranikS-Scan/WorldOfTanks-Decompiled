@@ -40,9 +40,6 @@ class SettingsParams(object):
          settings_constants.FEEDBACK.BATTLE_BORDER_MAP: self.getBattleBorderMapSettings(),
          settings_constants.FEEDBACK.QUESTS_PROGRESS: self.getQuestsProgressAndScorePanelSettings()}
 
-    def getOtherSettings(self):
-        return self.settingsCore.packSettings(settings_constants.OTHER.ALL())
-
     def getDamageLogSettings(self):
         return self.settingsCore.packSettings(settings_constants.DAMAGE_LOG.ALL())
 

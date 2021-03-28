@@ -1,5 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/json/scanner.py
+# Compiled at: 2101-05-02 08:36:56
+"""JSON token scanner
+"""
 import re
 try:
     from _json import make_scanner as c_make_scanner

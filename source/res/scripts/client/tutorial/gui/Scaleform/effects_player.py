@@ -2,10 +2,12 @@
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/effects_player.py
 import logging
 from collections import defaultdict
+from helpers import dependency
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.TUTORIAL_TRIGGER_TYPES import TUTORIAL_TRIGGER_TYPES
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from skeletons.tutorial import ITutorialLoader
 from tutorial.data.events import GuiEventType
 from shared_utils import first
 _logger = logging.getLogger(__name__)
@@ -35,6 +37,7 @@ class GUIEffect(object):
 
 
 class ApplicationEffect(GUIEffect):
+    __tutorialLoader = dependency.descriptor(ITutorialLoader)
     __slots__ = ('_app',)
 
     def __init__(self):
@@ -58,7 +61,7 @@ class ApplicationEffect(GUIEffect):
             return None if manager is None else manager.getContainer(layer)
 
     def _getTutorialLayout(self):
-        return None if self._app is None else self._app.tutorialManager
+        return self.__tutorialLoader.gui
 
 
 class ComponentEffect(GUIEffect):

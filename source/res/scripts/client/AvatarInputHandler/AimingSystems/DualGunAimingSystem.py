@@ -335,6 +335,9 @@ class DualGunAimingSystem(IAimingSystem):
 
         return zoom
 
+    def enableAutoRotation(self, enable):
+        pass
+
     def __turretYaw(self):
         return self.__activeAim.turretYaw
 

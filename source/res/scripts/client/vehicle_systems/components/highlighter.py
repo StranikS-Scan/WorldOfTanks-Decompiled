@@ -3,9 +3,9 @@
 import BigWorld
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
-import svarog_script.py_component
+import cgf_obsolete_script.py_component
 
-class Highlighter(svarog_script.py_component.Component):
+class Highlighter(cgf_obsolete_script.py_component.Component):
     HIGHLIGHT_OFF = 0
     HIGHLIGHT_SIMPLE = 1
     HIGHLIGHT_ON = 2
@@ -33,8 +33,6 @@ class Highlighter(svarog_script.py_component.Component):
         return
 
     def setVehicle(self, vehicle):
-        if self.isDisabled:
-            return
         self.__vehicle = vehicle
         self.__isPlayersVehicle = vehicle.isPlayerVehicle
 
@@ -50,17 +48,11 @@ class Highlighter(svarog_script.py_component.Component):
             self.highlight(self.__isPlayersVehicle)
 
     def activate(self):
-        pass
+        self.__highlightStatus &= ~self.HIGHLIGHT_DISABLED
 
     def deactivate(self):
-        if self.isDisabled:
-            return
-        else:
-            if self.isOn:
-                BigWorld.wgDelEdgeDetectEntity(self.__vehicle)
-                self.__highlightStatus &= ~self.HIGHLIGHT_ON
-            self.__vehicle = None
-            return
+        self.removeHighlight()
+        self.__highlightStatus |= self.HIGHLIGHT_DISABLED
 
     def destroy(self):
         self.deactivate()
@@ -69,13 +61,15 @@ class Highlighter(svarog_script.py_component.Component):
         return
 
     def removeHighlight(self):
-        if self.isOn and self.__vehicle is not None:
+        if self.isOn and self.__vehicle is not None and not self.isDisabled:
             self.__highlightStatus &= ~self.HIGHLIGHT_ON
             BigWorld.wgDelEdgeDetectEntity(self.__vehicle)
         return
 
     def highlight(self, enable, forceSimpleEdge=False):
-        if self.isDisabled or self.__vehicle is None:
+        if bool(enable) == bool(self.isOn):
+            return
+        elif self.isDisabled or self.__vehicle is None:
             return
         else:
             vehicle = self.__vehicle

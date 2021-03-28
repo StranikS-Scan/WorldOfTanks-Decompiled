@@ -3,6 +3,7 @@
 import functools
 import BattleReplay
 import BigWorld
+import WGC
 import VOIP
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import COLOR_SETTINGS_TAB_IDX
@@ -13,7 +14,6 @@ from account_helpers.counter_settings import getNewSettings, invalidateSettings
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SETTINGS import SETTINGS
-from Vibroeffects import VibroManager
 from gui import DialogsInterface, g_guiResetters
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.utils import flashObject2Dict, decorators, graphics
@@ -29,9 +29,9 @@ from gui.shared.formatters import icons
 from gui import makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
-from uilogging.decorators import loggerTarget, loggerEntry, settingsLog
-from uilogging.ibc.constants import IBC_LOG_KEYS, IBC_SETTINGS_MAP
-from uilogging.ibc.loggers import IBCLogger
+from uilogging.deprecated.decorators import loggerTarget, loggerEntry, settingsLog
+from uilogging.deprecated.ibc.constants import IBC_LOG_KEYS, IBC_SETTINGS_MAP
+from uilogging.deprecated.ibc.loggers import IBCLogger
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IAnonymizerController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -89,7 +89,6 @@ class SettingsWindow(SettingsWindowMeta):
          SETTINGS_GROUP.CONTROLS_SETTINGS: self.params.getControlsSettings(),
          SETTINGS_GROUP.AIM_SETTINGS: self.params.getAimSettings(),
          SETTINGS_GROUP.MARKERS_SETTINGS: self.params.getMarkersSettings(),
-         SETTINGS_GROUP.OTHER_SETTINGS: self.params.getOtherSettings(),
          SETTINGS_GROUP.FEEDBACK_SETTINGS: self.params.getFeedbackSettings()}
         return settings
 
@@ -129,6 +128,7 @@ class SettingsWindow(SettingsWindowMeta):
 
     def __restartGame(self):
         BigWorld.savePreferences()
+        WGC.notifyRestart()
         BigWorld.worldDrawEnabled(False)
         BigWorld.restartGame()
 
@@ -150,8 +150,6 @@ class SettingsWindow(SettingsWindowMeta):
             BigWorld.wg_setRedefineKeysMode(True)
         self.__currentSettings = self.params.getMonitorSettings()
         self._update()
-        VibroManager.g_instance.onConnect += self.onVibroManagerConnect
-        VibroManager.g_instance.onDisconnect += self.onVibroManagerDisconnect
         self.settingsCore.onSettingsChanged += self.__onColorSettingsChange
         self.anonymizerController.onStateChanged += self.__refreshSettings
         g_guiResetters.add(self.onRecreateDevice)
@@ -174,17 +172,9 @@ class SettingsWindow(SettingsWindowMeta):
         self.stopVoicesPreview()
         self.stopAltBulbPreview()
         self.anonymizerController.onStateChanged -= self.__refreshSettings
-        VibroManager.g_instance.onConnect -= self.onVibroManagerConnect
-        VibroManager.g_instance.onDisconnect -= self.onVibroManagerDisconnect
         self.settingsCore.onSettingsChanged -= self.__onColorSettingsChange
         super(SettingsWindow, self)._dispose()
         return
-
-    def onVibroManagerConnect(self):
-        self.as_onVibroManagerConnectS(True)
-
-    def onVibroManagerDisconnect(self):
-        self.as_onVibroManagerConnectS(False)
 
     def onTabSelected(self, tabId):
         if tabId == SETTINGS.SOUNDTITLE:

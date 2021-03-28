@@ -13,7 +13,6 @@
             <active>	WrongVehicle	</active>
           </condition>
           <effects>
-            <global-inactivate>	BootcampPanelEquipmentMC	</global-inactivate>
             <set-visible>	HangarEquipmentSlots	  <val>	False	</val>
             </set-visible>
           </effects>
@@ -24,7 +23,6 @@
             <active>	IntroFinished	</active>
           </condition>
           <effects>
-            <global-activate>	BootcampPanelEquipmentMC	</global-activate>
             <set-visible>	HangarEquipmentSlots	  <val>	True	</val>
             </set-visible>
           </effects>
@@ -39,7 +37,6 @@
                 <active>	WrongVehicle	</active>
               </condition>
               <effects>
-                <global-inactivate>	BootcampPanelOptDeviceMC	</global-inactivate>
                 <set-visible>	HangarOptionalDeviceSlots	  <val>	False	</val>
                 </set-visible>
               </effects>
@@ -49,7 +46,6 @@
                 <inactive>	WrongVehicle	</inactive>
               </condition>
               <effects>
-                <global-activate>	BootcampPanelOptDeviceMC	</global-activate>
                 <set-visible>	HangarOptionalDeviceSlots	  <val>	True	</val>
                 </set-visible>
               </effects>
@@ -70,14 +66,14 @@
             <checkpoint-not-reached>	QuestsOpenedCheckpoint	</checkpoint-not-reached>
           </condition>
         </request-exclusive-hint>
-        <request-exclusive-hint>	AmmunitionSetupEquipmentApplyBtn	  <condition>
+        <request-exclusive-hint>	AmmunitionSetupApplyBtn	  <condition>
             <checkpoint-not-reached>	EquipmentSelectedCheckpoint	</checkpoint-not-reached>
-            <component-on-scene>	AmmunitionSetupEquipmentApplyBtn	</component-on-scene>
+            <component-on-scene>	AmmunitionSetupApplyBtn	</component-on-scene>
           </condition>
         </request-exclusive-hint>
-        <request-exclusive-hint>	AmmunitionSetupOptionalDeviceApplyBtn	  <condition>
+        <request-exclusive-hint>	AmmunitionSetupApplyBtn	  <condition>
             <checkpoint-not-reached>	OptionalDeviceSelectedCheckpoint	</checkpoint-not-reached>
-            <component-on-scene>	AmmunitionSetupOptionalDeviceApplyBtn	</component-on-scene>
+            <component-on-scene>	AmmunitionSetupApplyBtn	</component-on-scene>
           </condition>
         </request-exclusive-hint>
         <request-exclusive-hint>	AmmunitionSetupOptionalDeviceSlots	  <condition>
@@ -407,8 +403,6 @@
             <checkpoint-not-reached>	EquipmentSelectedCheckpoint	</checkpoint-not-reached>
           </condition>
         </show-window>
-        <global-activate>	BootcampPanelEquipmentMC	</global-activate>
-        <global-inactivate>	BootcampPanelOptDeviceMC	</global-inactivate>
         <set-visible>	AmmunitionPanel	  <val>	True	</val>
         </set-visible>
         <set-visible>	HangarEquipmentSlots	  <val>	True	</val>
@@ -431,8 +425,6 @@
         </game-item>
       </condition>
       <effects>
-        <global-activate>	BootcampPanelOptDeviceMC	</global-activate>
-        <global-activate>	SetupViewSlotsOptDeviceMC	</global-activate>
         <set-visible>	HangarOptionalDeviceSlots	  <val>	True	</val>
         </set-visible>
         <set-visible>	AmmunitionSetupOptionalDeviceSlots	  <val>	True	</val>

@@ -10,6 +10,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.BCIntroVideoPageMeta import BCIntroVideoPageMeta
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.app_loader.settings import APP_NAME_SPACE
 from bootcamp.BootCampEvents import g_bootcampEvents
 from bootcamp.BootcampSettings import getBattleDefaults
@@ -57,7 +58,7 @@ class BCIntroPage(BCIntroVideoPageMeta):
 
     def videoFinished(self):
         self._onFinish()
-        self.as_showIntroPageS(len(self._tutorialPages) == 0)
+        self.as_showIntroPageS(len(self._tutorialPages) == 0, self.bootcampCtrl.needAwarding())
 
     def videoStarted(self):
         if self._movieFile and self._backgroundMusicStartEvent:
@@ -151,7 +152,17 @@ class BCIntroPage(BCIntroVideoPageMeta):
          'videoPlayerVisible': self._videoPlayerVisible,
          'allowSkipButton': self._showSkipOption,
          'selectButtonLabel': label,
-         'bufferTime': self._backgroundVideoBufferTime})
+         'bufferTime': self._backgroundVideoBufferTime,
+         'rewards': [self._getReward(BOOTCAMP.WELLCOME_BOOTCAMP_REWARDS_TANKS, RES_ICONS.MAPS_ICONS_BOOTCAMP_REWARDS_VEHICLES_176X102, [BOOTCAMP.WELLCOME_BOOTCAMP_REWARDS_TOOLTIP_TANK,
+                      BOOTCAMP.TOOLTIP_PROGRESSION_DESCRIPTION_VEHICLE,
+                      RES_ICONS.MAPS_ICONS_BOOTCAMP_REWARDS_TOOLTIPS_BCVEHICLESHINE,
+                      50]), self._getReward(BOOTCAMP.WELLCOME_BOOTCAMP_REWARDS_PREMIUM, RES_ICONS.MAPS_ICONS_BOOTCAMP_REWARDS_PREM_BIG_176X102, [BOOTCAMP.TOOLTIP_PROGRESSION_LABEL_AWARD,
+                      BOOTCAMP.TOOLTIP_PROGRESSION_DESCRIPTION_PREMIUM,
+                      RES_ICONS.MAPS_ICONS_BOOTCAMP_REWARDS_TOOLTIPS_BCPREMIUMPLUS,
+                      50]), self._getReward(BOOTCAMP.WELLCOME_BOOTCAMP_REWARDS_GOLD, RES_ICONS.MAPS_ICONS_BOOTCAMP_REWARDS_GOLD_BIG_176X102, [BOOTCAMP.TOOLTIP_PROGRESSION_LABEL_GOLD,
+                      BOOTCAMP.TOOLTIP_PROGRESSION_DESCRIPTION_GOLD,
+                      RES_ICONS.MAPS_ICONS_BOOTCAMP_REWARDS_TOOLTIPS_BCGOLD,
+                      50])]})
 
     def _onDisconnected(self):
         self.destroy()
@@ -212,3 +223,11 @@ class BCIntroPage(BCIntroVideoPageMeta):
         self.as_resumePlaybackS()
         if self._backgroundMusicResumeEvent:
             WWISE.WW_eventGlobal(self._backgroundMusicResumeEvent)
+
+    def _getReward(self, label, icon, specialArgs):
+        specialArgs[3:3] = [None, None]
+        return {'label': label,
+         'icon': icon,
+         'isSpecial': True,
+         'specialAlias': TOOLTIPS_CONSTANTS.BOOTCAMP_REWARD_PROGRESS,
+         'specialArgs': specialArgs}

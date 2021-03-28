@@ -139,6 +139,9 @@ class ServerEventAbstract(object):
     def getDescription(self):
         return getLocalizedData(self._data, 'description')
 
+    def getNotificationText(self):
+        return getLocalizedData(self._data, 'notificationText')
+
     def getTimeFromStartTillNow(self):
         return time_utils.getTimeDeltaTillNow(self.getStartTime())
 

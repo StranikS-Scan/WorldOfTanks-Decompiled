@@ -2,10 +2,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/BattleTypeSelectPopover.py
 from adisp import process
 from frameworks.wulf import WindowLayer
-from uilogging.decorators import loggerTarget, loggerEntry, simpleLog
-from uilogging.mode_selector.constants import MS_LOG_KEYS, MS_LOG_ACTIONS
-from uilogging.mode_selector.decorators import logSelectMode, logCloseView, markTooltipOpened, logTooltipClosed
-from uilogging.mode_selector.loggers import ModeSelectorUILogger
+from uilogging.deprecated.decorators import loggerTarget, loggerEntry, simpleLog
+from uilogging.deprecated.mode_selector.constants import MS_LOG_KEYS, MS_LOG_ACTIONS
+from uilogging.deprecated.mode_selector.decorators import logSelectMode, logCloseView, markTooltipOpened, logTooltipClosed
+from uilogging.deprecated.mode_selector.loggers import ModeSelectorUILogger
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.Scaleform.daapi.view.meta.BattleTypeSelectPopoverMeta import BattleTypeSelectPopoverMeta

@@ -4,9 +4,11 @@ import weakref
 import urlparse
 import functools
 import logging
+from enum import Enum
 import BigWorld
 import Keys
 import SoundGroups
+import Settings
 from gui.Scaleform.managers.cursor_mgr import CursorManager
 from gui.shared import event_dispatcher
 from Event import Event, EventManager
@@ -14,6 +16,7 @@ from debug_utils import LOG_CURRENT_EXCEPTION
 from gui import GUI_SETTINGS
 from web.cache.web_cache import WebExternalCache
 _logger = logging.getLogger(__name__)
+_webAppLogger = logging.getLogger('{} (webapp)'.format(__name__))
 _BROWSER_KEY_LOGGING = False
 _WOT_CLIENT_PARAM_NAME = 'wot_client_param'
 _WOT_RESOURCE_CUSTOM_SCHEME = 'wotdata'
@@ -39,6 +42,20 @@ def destroyExternalCache():
         _logger.info('WebExternalCache destroyed')
     return
 
+
+class LogSeverity(Enum):
+    disable = 0
+    verbose = 1
+    info = 2
+    warning = 3
+    error = 4
+
+
+_LOG_SEVERITY_TO_LOG_LEVEL_MAP = {LogSeverity.disable: logging.NOTSET,
+ LogSeverity.verbose: logging.DEBUG,
+ LogSeverity.info: logging.INFO,
+ LogSeverity.warning: logging.WARNING,
+ LogSeverity.error: logging.ERROR}
 
 class WebBrowser(object):
     hasBrowser = property(lambda self: self.__browser is not None)
@@ -113,7 +130,7 @@ class WebBrowser(object):
         self.__cbID = None
         self.__baseUrl = url
         self.__uiObj = uiObj
-        self.__browserSize = size
+        self.__browserSize = size + (1.0,)
         self.__startFocused = isFocused
         self.__browser = None
         self.__isNavigationComplete = False
@@ -150,10 +167,13 @@ class WebBrowser(object):
         self.onUserRequestToClose = Event(self.__eventMgr)
         self.onAudioStatusChanged = Event(self.__eventMgr)
         _logger.info('INIT %s size %s, id: %s', self.__baseUrl, size, self.__browserID)
+        levelSetting = Settings.g_instance.engineConfig['webBrowser']['logVerbosity'].asString
+        levelSettingEnum = LogSeverity[levelSetting]
+        _webAppLogger.setLevel(_LOG_SEVERITY_TO_LOG_LEVEL_MAP[levelSettingEnum])
         return
 
     def create(self):
-        _logger.info('CREATE %s - %r', self.__baseUrl, self.__browserID)
+        _logger.info('CREATE %s id: %s', self.__baseUrl, self.__browserID)
         self.__browser = BigWorld.createWebView(self.__browserID)
         if self.__browser is None:
             _logger.error('create() NO BROWSER WAS CREATED: %s', self.__baseUrl)
@@ -170,6 +190,7 @@ class WebBrowser(object):
             self.__browser.script.onTitleChange += self.__onTitleChange
             self.__browser.script.onDestroy += self.__onDestroy
             self.__browser.script.onAudioStatusChanged += self.__onAudioStatusChanged
+            self.__browser.script.onConsoleMessage += self.__onConsoleMessage
             self.__browser.script.isBrowserPlayingAudio = False
 
             def injectBrowserKeyEvent(me, e):
@@ -256,7 +277,7 @@ class WebBrowser(object):
              lambda me, e: None))
 
     def ready(self, success):
-        _logger.info('READY %r %s %r', success, self.__baseUrl, self.__browserID)
+        _logger.info('READY success: %r %s id: %s', success, self.__baseUrl, self.__browserID)
         self.__ui = weakref.ref(self.__uiObj)
         self.__readyToShow = False
         self.__successfulLoad = False
@@ -266,20 +287,19 @@ class WebBrowser(object):
         self.__isWaitingForUnfocus = False
         if success:
             browserSize = self.__browserSize
-            self.__textureUrl = self.__browser.setScaleformRender(str(self.__browserID), browserSize[0], browserSize[1])
+            self.__textureUrl = self.__browser.setScaleformRender(str(self.__browserID), browserSize[0], browserSize[1], browserSize[2])
             _logger.info('READY scaleform texture url: %s', self.__textureUrl)
             self.__browser.activate(True)
             self.__browser.focus()
             self.__browser.loadURL(self.__baseUrl)
             if self.__startFocused:
                 self.focus()
-            self.update()
             g_mgr.addBrowser(self)
             self.onReady(self.__browser.url, success)
             self.onCanCreateNewBrowser()
         else:
             self.__isNavigationComplete = True
-            _logger.error(' FAILED %s - %r', self.__baseUrl, self.__browserID)
+            _logger.error(' FAILED %s id: %s', self.__baseUrl, self.__browserID)
             self.onFailedCreation(self.__baseUrl)
 
     def invalidateView(self):
@@ -289,14 +309,14 @@ class WebBrowser(object):
     def updateSize(self, size):
         self.__browserSize = size
         if self.hasBrowser:
-            self.__browser.resize(size[0], size[1])
+            self.__browser.resize(size[0], size[1], size[2])
 
     def destroy(self):
         if self.__eventMgr is not None:
             self.__eventMgr.clear()
             self.__eventMgr = None
         if self.__browser is not None:
-            _logger.info('DESTROYED %s - %r', self.__baseUrl, self.__browserID)
+            _logger.info('DESTROYED %s id: %s', self.__baseUrl, self.__browserID)
             self.__onAudioStatusChanged(isPlaying=False)
             self.__browser.script.clear()
             self.__browser.script = None
@@ -367,9 +387,6 @@ class WebBrowser(object):
                 self.__browser.stop()
                 self.__onLoadEnd(self.__browser.url)
             return
-
-    def update(self):
-        self.__cbID = BigWorld.callback(self.updateInterval, self.update)
 
     def __getBrowserKeyHandler(self, key, isKeyDown, isAltDown, isShiftDown, isCtrlDown):
         from itertools import izip
@@ -548,11 +565,11 @@ class WebBrowser(object):
             self.__isNavigationComplete = True
             self.__successfulLoad = isLoaded
             if not isLoaded or httpStatusCode and httpStatusCode >= 400 or errorDesc:
-                _logger.error('FAILED Url: %s, Http code: %r, Browser error:%s', self.__browser.url, httpStatusCode, errorDesc)
+                _logger.error('FAILED Url: %s, Http code: %r, Browser error: %s', self.__browser.url, httpStatusCode, errorDesc)
             self.onLoadEnd(self.__browser.url, isLoaded, httpStatusCode)
 
     def __onLoadingStateChange(self, isLoading):
-        _logger.debug('onLoadingStateChange %r - %r', isLoading, self.__allowAutoLoadingScreenChange)
+        _logger.debug('onLoadingStateChange %r %r', isLoading, self.__allowAutoLoadingScreenChange)
         self.onLoadingStateChange(isLoading, self.__allowAutoLoadingScreenChange)
         if self.__isCloseTriggered:
             event_dispatcher.hideWebBrowser(self.__browserID)
@@ -582,7 +599,7 @@ class WebBrowser(object):
 
     def __onTitleChange(self, title):
         if self.__isValidTitle(title):
-            _logger.debug('onTitleChange %s : %s', title, self.__browser.url)
+            _logger.debug('onTitleChange title: %s %s', title, self.__browser.url)
             self.onTitleChange(title)
 
     def __onCursorUpdated(self):
@@ -598,6 +615,15 @@ class WebBrowser(object):
 
     def __onJsHostQuery(self, command):
         self.onJsHostQuery(command)
+
+    def __onConsoleMessage(self, level, message, lineNumber, source, viewId):
+        try:
+            levelEnum = [ l for l in LogSeverity if l.value == level ][0]
+        except IndexError:
+            levelEnum = LogSeverity.disable
+
+        if levelEnum != LogSeverity.disable:
+            _webAppLogger.log(_LOG_SEVERITY_TO_LOG_LEVEL_MAP[levelEnum], '%s, line %s, viewId %s: %s', source, lineNumber, viewId, message)
 
     def __onAudioStatusChanged(self, isPlaying):
         if self.__isAudioMutable:
@@ -632,6 +658,7 @@ class EventListener(object):
         self.onTitleChange = Event(self.__eventMgr)
         self.onDestroy = Event(self.__eventMgr)
         self.onAudioStatusChanged = Event(self.__eventMgr)
+        self.onConsoleMessage = Event(self.__eventMgr)
         self.__urlFailed = False
         self.__browserProxy = weakref.proxy(browser)
         return
@@ -665,25 +692,25 @@ class EventListener(object):
 
     def onFailLoadingFrame(self, frameId, isMainFrame, url, errorCode, errorDesc):
         if isMainFrame:
-            _logger.debug('onFailLoadingFrame(isMainFrame) %s, %r, %r', url, errorCode, errorDesc)
+            _logger.debug('onFailLoadingFrame(isMainFrame) %s, error: %r, text: %r', url, errorCode, errorDesc)
             self.__urlFailed = True
             self.onLoadEnd(url, not self.__urlFailed, errorDesc=errorDesc)
 
     def onFinishLoadingFrame(self, frameId, isMainFrame, url, httpStatusCode):
         if isMainFrame:
-            _logger.debug('onFinishLoadingFrame(isMainFrame) %s, %r', url, httpStatusCode)
+            _logger.debug('onFinishLoadingFrame(isMainFrame) %s, httpStatusCode: %r', url, httpStatusCode)
             self.onLoadEnd(url, not self.__urlFailed, httpStatusCode)
 
     def onBrowserLoadingStateChange(self, isLoading):
-        _logger.debug('onBrowserLoadingStateChange() %r', isLoading)
+        _logger.debug('onBrowserLoadingStateChange isLoading: %r', isLoading)
         self.onLoadingStateChange(isLoading)
 
     def onDocumentReady(self, url):
         _logger.debug('onDocumentReady %s', url)
         self.onDOMReady(url)
 
-    def onAddConsoleMessage(self, message, lineNumber, source):
-        pass
+    def onAddConsoleMessage(self, level, message, lineNumber, source, viewId):
+        self.onConsoleMessage(level, message, lineNumber, source, viewId)
 
     def onFilterNavigation(self, url):
         return self.__browserProxy.filterNavigation(url)
@@ -704,7 +731,7 @@ class EventListener(object):
             self.onLoadEnd(failedURL, False, httpStatusCode)
 
     def onShowCreatedWebView(self, url, isPopup):
-        _logger.debug('onShowCreatedWebView %s %r', url, isPopup)
+        _logger.debug('onShowCreatedWebView %s isPopup: %r', url, isPopup)
 
 
 class WebBrowserManager(object):

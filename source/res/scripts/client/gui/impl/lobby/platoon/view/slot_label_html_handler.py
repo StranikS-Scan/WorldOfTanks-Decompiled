@@ -19,7 +19,7 @@ def getStyle(attrs):
     if attrs.get('src'):
         result['background'] = 'url({}) center / contain no-repeat'.format(attrs.get('src'))
     if attrs.get('size'):
-        result['font-size'] = '{}rem'.format(attrs.get('size'))
+        result['fontSize'] = '{}rem'.format(attrs.get('size'))
     if attrs.get('color'):
         result['color'] = attrs.get('color')
     return json.dumps(result)

@@ -79,7 +79,7 @@ class BattleRoyaleEntity(PreQueueEntity):
         self.storage.suspend()
         if g_currentPreviewVehicle.isPresent():
             reqFlags = FUNCTIONAL_FLAG.LOAD_PAGE | FUNCTIONAL_FLAG.SWITCH | FUNCTIONAL_FLAG.TRAINING
-            if not ctx.hasFlags(reqFlags):
+            if ctx and not ctx.hasFlags(reqFlags):
                 g_eventDispatcher.loadHangar()
         return super(BattleRoyaleEntity, self).fini(ctx, woEvents)
 

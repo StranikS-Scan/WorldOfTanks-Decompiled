@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.common.setup_tabs_model imp
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_slot_model import BaseSlotModel
 
 class BaseSetupModel(ViewModel):
-    __slots__ = ('onSlotAction', 'onDealConfirmed', 'onDealCancelled', 'onAutoRenewalChanged', 'onTabChanged', 'onFilterChanged', 'onFilterReset', 'onHintZoneAdded')
+    __slots__ = ('onSlotAction', 'onDealConfirmed', 'onDealCancelled', 'onAutoRenewalChanged', 'onTabChanged', 'onFilterChanged', 'onFilterReset')
     SELECT_SLOT_ACTION = 'select'
     REVERT_SLOT_ACTION = 'undo'
     RETURN_TO_STORAGE_ACTION = 'cancel'
@@ -20,7 +20,7 @@ class BaseSetupModel(ViewModel):
     ADD_ONE_SLOT_ACTION = 'add_one'
     DRAG_AND_DROP_SLOT_ACTION = 'drag_drop'
 
-    def __init__(self, properties=5, commands=8):
+    def __init__(self, properties=5, commands=7):
         super(BaseSetupModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -61,4 +61,3 @@ class BaseSetupModel(ViewModel):
         self.onTabChanged = self._addCommand('onTabChanged')
         self.onFilterChanged = self._addCommand('onFilterChanged')
         self.onFilterReset = self._addCommand('onFilterReset')
-        self.onHintZoneAdded = self._addCommand('onHintZoneAdded')

@@ -375,7 +375,7 @@ class Shop(object):
             self.__account._doCmdInt4(AccountCommands.CMD_BUY_GOODIE, self.__getCacheRevision(), goodieID, count, forGold, proxy)
             return
 
-    def buyAndEquipOutfit(self, vehInvID, season, outfitDescr, callback):
+    def buyAndEquipOutfit(self, vehInvID, outfitData, callback):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER)
@@ -385,8 +385,12 @@ class Shop(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
                 proxy = None
-            intArr = [self.__getCacheRevision(), vehInvID, season]
-            strArr = [outfitDescr]
+            intArr = [self.__getCacheRevision(), vehInvID]
+            strArr = []
+            for outfitDescr, season in outfitData:
+                intArr.append(season)
+                strArr.append(outfitDescr)
+
             self.__account._doCmdIntArrStrArr(AccountCommands.CMD_VEH_APPLY_OUTFIT, intArr, strArr, proxy)
             return
 

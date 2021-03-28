@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/http/url_formatters.py
+import typing
 import urllib
 import urlparse
 
@@ -12,9 +13,9 @@ class URL_PARTS_IDS(object):
     FRAGMENT = 5
 
 
-def addParamsToUrlQuery(url, params):
+def addParamsToUrlQuery(url, params, keepBlankValues=False):
     urlParts = list(urlparse.urlparse(url))
-    query = urlparse.parse_qs(urlParts[URL_PARTS_IDS.QUERY])
+    query = urlparse.parse_qs(urlParts[URL_PARTS_IDS.QUERY], keep_blank_values=keepBlankValues)
     query.update(params)
     urlParts[URL_PARTS_IDS.QUERY] = urllib.urlencode(query, True)
     return urlparse.urlunparse(urlParts)

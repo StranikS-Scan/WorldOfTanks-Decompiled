@@ -550,4 +550,4 @@ class TankmanRestore(ItemProcessor):
 
     def _request(self, callback):
         _logger.debug('Make server request to restore tankman: %s', self.item)
-        BigWorld.player().recycleBin.restoreTankman(abs(self.item.invID), lambda code, errStr: self._response(code, callback, errStr=errStr))
+        BigWorld.player().recycleBin.restoreTankman(self.item.invID, lambda code, errStr: self._response(code, callback, errStr=errStr))

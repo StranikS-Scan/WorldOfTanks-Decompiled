@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/components/hull_aiming_controller.py
-import svarog_script.py_component
+import cgf_obsolete_script.py_component
 from constants import VEHICLE_SIEGE_STATE
 
-class HullAimingController(svarog_script.py_component.Component):
+class HullAimingController(cgf_obsolete_script.py_component.Component):
 
     def __init__(self):
         self.__vehicleFilter = None

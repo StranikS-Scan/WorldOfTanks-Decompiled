@@ -351,7 +351,9 @@ def isVehicleCanBeCustomized(vehicle, itemTypeID, itemsFilter=None):
 
         customizationService = dependency.instance(ICustomizationService)
         eventsCache = dependency.instance(IEventsCache)
-        requirement = createCustomizationBaseRequestCriteria(vehicle, eventsCache.questsProgress, set(), itemTypeID=itemTypeID)
+        customizationCtx = customizationService.getCtx()
+        appliedItems = customizationCtx.mode.getAppliedItems() if customizationCtx is not None else set()
+        requirement = createCustomizationBaseRequestCriteria(vehicle, eventsCache.questsProgress, appliedItems, itemTypeID=itemTypeID)
         if itemsFilter is not None:
             requirement |= REQ_CRITERIA.CUSTOM(itemsFilter)
         for itemID in customizationCache[cType]:
@@ -379,6 +381,23 @@ def getBaseStyleItems():
                 items.update(outfit.items())
 
         return items
+
+
+def getInheritors(intCD, styleDependencies):
+    for ancestorIntCD in styleDependencies.keys():
+        if intCD == ancestorIntCD:
+            return styleDependencies[intCD]
+
+    return tuple()
+
+
+def getAncestors(intCD, styleDependencies):
+    ancestors = []
+    for ancestorIntCD, inheritors in styleDependencies.iteritems():
+        if intCD in inheritors:
+            ancestors.append(ancestorIntCD)
+
+    return ancestors
 
 
 def checkIsFirstProgressionDecalOnVehicle(vehicleCD, newItemsCDs):

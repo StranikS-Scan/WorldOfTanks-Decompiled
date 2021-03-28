@@ -4,6 +4,7 @@ from collections import namedtuple
 import typing
 from BWUtil import AsyncReturn
 from async import async, await
+from helpers import dependency
 from gui.impl.gen import R
 from gui.impl.lobby.battle_pass.trophy_device_confirm_view import TrophyDeviceUpgradeConfirmView
 from gui.impl.lobby.blueprints.blueprints_conversion_view import BlueprintsConversionView
@@ -14,6 +15,8 @@ from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindo
 from gui.impl.lobby.dialogs.quit_game_dialog import QuitGameDialogWindow
 from gui.impl.lobby.premacc.maps_blacklist_confirm_view import MapsBlacklistConfirmView
 from gui.impl.pub.dialog_window import DialogButtons, DialogWindow
+from skeletons.gui.impl import IGuiLoader
+from frameworks.wulf import WindowStatus
 if typing.TYPE_CHECKING:
     from typing import Any, Optional, Iterable, Union
     from frameworks.wulf import View
@@ -40,8 +43,15 @@ def showSimple(dialog, submitResult=DialogButtons.SUBMIT):
 
 
 @async
-def quitGame(parent):
-    dialog = QuitGameDialogWindow(parent.getParentWindow())
+@dependency.replace_none_kwargs(guiLoader=IGuiLoader)
+def quitGame(parent=None, guiLoader=None):
+
+    def predicate(w):
+        return isinstance(w, QuitGameDialogWindow) and w.windowStatus in (WindowStatus.LOADED, WindowStatus.LOADING)
+
+    if guiLoader.windowsManager.findWindows(predicate):
+        raise AsyncReturn(False)
+    dialog = QuitGameDialogWindow(parent)
     result = yield await(showSimple(dialog))
     raise AsyncReturn(result)
 

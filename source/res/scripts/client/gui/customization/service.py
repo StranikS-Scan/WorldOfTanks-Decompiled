@@ -20,7 +20,7 @@ from gui.shared.gui_items.customization.c11n_items import Customization
 from items.customizations import CustomizationOutfit, createNationalEmblemComponents
 from skeletons.gui.lobby_context import ILobbyContext
 from vehicle_outfit.outfit import Outfit, Area
-from gui.shared.gui_items.processors.common import OutfitApplier, CustomizationsBuyer, CustomizationsSeller
+from gui.shared.gui_items.processors.common import CustomizationsBuyer, CustomizationsSeller
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.decorators import process
 from gui.shared.utils.requesters import REQ_CRITERIA, RequestCriteria
@@ -140,12 +140,6 @@ class _ServiceHelpersMixin(object):
         if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
-    @process('buyAndInstall')
-    def buyAndEquipOutfit(self, outfit, season, vehicle=None):
-        result = yield OutfitApplier(vehicle or g_currentVehicle.item, outfit, season).request()
-        if result.userMsg:
-            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-
     def _getVehicleCD(self):
         if g_currentVehicle.isPresent():
             vehicleData = self.itemsCache.items.inventory.getItemData(g_currentVehicle.item.intCD)
@@ -242,11 +236,10 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
                     return
                 if g_currentVehicle.invID != vehInvID:
                     shouldSelectVehicle = True
-        if g_currentPreviewVehicle.isPresent():
-            hideVehiclePreview(back=False, close=False)
         if not self.hangarSpace.spaceInited or not self.hangarSpace.isModelLoaded or shouldSelectVehicle:
             if shouldSelectVehicle:
                 if g_currentPreviewVehicle.isPresent():
+                    hideVehiclePreview(back=False, close=True)
                     g_currentPreviewVehicle.selectNoVehicle()
                 BigWorld.callback(0.0, makeCallbackWeak(g_currentVehicle.selectVehicle, vehInvID=vehInvID))
             _logger.info('Space or vehicle is not presented, customization view loading delayed')
@@ -272,7 +265,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         callback = self.__showCustomizationKwargs.get('callback', None)
         loadCallback = lambda : self.__loadCustomization(vehInvID, callback, season, modeId, tabId)
         if self.__showCustomizationCallbackId is None:
-            self.moveHangarVehicleToCustomizationRoom()
+            self.__moveHangarVehicleToCustomizationRoom()
             self.__showCustomizationCallbackId = BigWorld.callback(0.0, lambda : self.__showCustomization(loadCallback))
         self.onVisibilityChanged(True)
         return
@@ -388,7 +381,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
     def getHightlighter(self):
         return self._helper
 
-    def moveHangarVehicleToCustomizationRoom(self):
+    def __moveHangarVehicleToCustomizationRoom(self):
         from gui.ClientHangarSpace import customizationHangarCFG
         cfg = customizationHangarCFG()
         targetPos = cfg['v_start_pos']

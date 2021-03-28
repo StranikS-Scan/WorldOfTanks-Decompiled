@@ -38,22 +38,6 @@
         </click>
       </actions>
     </window>
-    <dialog>	MissionAccomplishedDialog	  <type>	bootcampMessage	</type>
-      <sequence>
-        <message>
-          <data>
-            <preset>	ORANGE	</preset>
-            <icon>	../maps/icons/bootcamp/lines/bcMission.png	</icon>
-            <label>	#bootcamp:message/mission/accomplished/label	</label>
-            <text>	#bootcamp:message/mission/accomplished/text	</text>
-            <subtitle>	SubtitleMissionAccomplished	</subtitle>
-            <voiceover>	bc_info_line_universal	</voiceover>
-          </data>
-        </message>
-      </sequence>
-      <buttons></buttons>
-      <actions></actions>
-    </dialog>
     <window>	SubtitleMissionAccomplishedRepeat	  <type>	bootcampSubtitle	</type>
       <sequence>
         <message>
@@ -73,22 +57,6 @@
         </click>
       </actions>
     </window>
-    <dialog>	MissionAccomplishedDialogRepeat	  <type>	bootcampMessage	</type>
-      <sequence>
-        <message>
-          <data>
-            <preset>	ORANGE	</preset>
-            <icon>	../maps/icons/bootcamp/lines/bcMission.png	</icon>
-            <label>	#bootcamp:message/mission/accomplished/label	</label>
-            <text>	#bootcamp:message/mission/accomplished/text	</text>
-            <subtitle>	SubtitleMissionAccomplishedRepeat	</subtitle>
-            <voiceover>	bc_info_line_universal	</voiceover>
-          </data>
-        </message>
-      </sequence>
-      <buttons></buttons>
-      <actions></actions>
-    </dialog>
     <dialog>	GoldReceivedDialog	  <type>	bootcampMessage	</type>
       <sequence>
         <message>
@@ -273,8 +241,6 @@
         </set-visible>
         <set-visible>	CrewPanel	  <val>	True	</val>
         </set-visible>
-        <global-activate>	BootcampPanelEquipmentMC	</global-activate>
-        <global-activate>	BootcampPanelOptDeviceMC	</global-activate>
         <set-visible>	AmmunitionPanel	  <val>	True	</val>
         </set-visible>
         <set-visible>	HangarEquipmentSlots	  <val>	True	</val>
@@ -283,17 +249,12 @@
         </set-visible>
         <set-var>	SecondVehicleSetter	</set-var>
         <select-in-hangar>	SecondVehicleCD	</select-in-hangar>
-        <show-dialog>	MissionAccomplishedDialog	</show-dialog>
         <show-dialog>	GoldReceivedDialog	</show-dialog>
         <show-dialog>	PremiumAccountReceivedDialog	</show-dialog>
       </effects>
     </checkpoint>
     <checkpoint>	VideoCheckpoint	  <condition></condition>
       <effects>
-        <show-dialog>	MissionAccomplishedDialogRepeat	  <condition>
-            <effect-not-triggered>	MissionAccomplishedDialog	</effect-not-triggered>
-          </condition>
-        </show-dialog>
         <show-dialog>	OutroVideo	</show-dialog>
       </effects>
     </checkpoint>

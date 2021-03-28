@@ -4,8 +4,8 @@ import weakref
 import math_utils
 import Math
 import BigWorld
-from svarog_script.auto_properties import AutoProperty
-from svarog_script.py_component import Component
+from cgf_obsolete_script.auto_properties import AutoProperty
+from cgf_obsolete_script.py_component import Component
 from vehicle_systems import model_assembler
 from vehicle_systems.tankStructure import getPartModelsFromDesc, TankPartNames, ModelsSetParams
 from vehicle_systems.stricted_loading import loadingPriority, makeCallbackWeak
@@ -24,6 +24,7 @@ class CrashedTrackController(Component):
         self.__model = None
         self.__fashion = None
         self.__loading = False
+        self.__isActive = False
         self.__visibilityMask = 15
         return
 
@@ -39,11 +40,14 @@ class CrashedTrackController(Component):
     def activate(self):
         if self.__entity is not None and self.__model is not None:
             self.__entity.addModel(self.__model)
+            self.__applyVisibilityMask()
+        self.__isActive = True
         return
 
     def deactivate(self):
         if self.__entity is not None and self.__model is not None:
             self.__entity.delModel(self.__model)
+        self.__isActive = False
         self.__loading = False
         return
 
@@ -105,7 +109,8 @@ class CrashedTrackController(Component):
             return
         else:
             if self.__flags == 0 and self.__model is not None:
-                self.__entity.delModel(self.__model)
+                if self.__model.isInWorld:
+                    self.__entity.delModel(self.__model)
                 self.__model = None
                 self.__fashion = None
             self.__setupTracksHiding()
@@ -134,7 +139,7 @@ class CrashedTrackController(Component):
             hideRightTrack = True
         else:
             hideLeftTrack, hideRightTrack = self.__flags & 1, self.__flags & 2
-        if self.baseTracksComponent is not None:
+        if self.baseTracksComponent is not None and self.baseTracksComponent.valid:
             self.baseTracksComponent.disableTrack(hideLeftTrack, hideRightTrack)
         if self.__fashion is not None:
             self.__fashion.changeTrackVisibility(True, hideLeftTrack)
@@ -143,7 +148,7 @@ class CrashedTrackController(Component):
 
     def __applyVisibilityMask(self):
         colorPassEnabled = self.__visibilityMask & BigWorld.ColorPassBit != 0
-        if self.__model is not None:
+        if self.__model is not None and self.__model.isValid and self.__model.isInWorld:
             self.__model.visible = self.__visibilityMask
             self.__model.skipColorPass = not colorPassEnabled
         return
@@ -170,6 +175,7 @@ class CrashedTrackController(Component):
             rotationMProv = math_utils.MatrixProviders.product(self.__entity.model.node('hull'), Math.MatrixInverse(self.__model.node('Tank')))
             self.__model.node('V', rotationMProv)
             self.__setupTracksHiding()
-            self.__entity.addModel(self.__model)
-            self.__applyVisibilityMask()
+            if self.__isActive:
+                self.__entity.addModel(self.__model)
+                self.__applyVisibilityMask()
             return

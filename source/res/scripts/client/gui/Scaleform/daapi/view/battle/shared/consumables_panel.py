@@ -267,6 +267,8 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         self.as_setCoolDownTimeS(self._cds.index(intCD), duration, duration, 0)
 
     def _showEquipmentGlow(self, equipmentIndex, glowType=CONSUMABLES_PANEL_SETTINGS.GLOW_ID_ORANGE):
+        if BigWorld.player().isObserver():
+            return
         if equipmentIndex in self.__equipmentsGlowCallbacks:
             BigWorld.cancelCallback(self.__equipmentsGlowCallbacks[equipmentIndex])
             del self.__equipmentsGlowCallbacks[equipmentIndex]

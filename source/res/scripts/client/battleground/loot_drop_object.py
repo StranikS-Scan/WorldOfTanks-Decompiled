@@ -5,22 +5,22 @@ import math
 from collections import namedtuple
 import Math
 import BigWorld
+import CGF
 import AnimationSequence
 import math_utils
-from battleground.components import ModelComponent
+from battleground.components import ModelComponent, SequenceComponent
 from math_utils import Easing
 from BombersWing import CompoundBomber, BomberDesc, CurveControlPoint
 from Event import Event
-from battleground.loot_object import SequenceComponent
 from battleground.component_loading import loadComponentSystem, Loader
 from battleground.iself_assembler import ISelfAssembler
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 from skeletons.gui.battle_session import IBattleSessionProvider
-from svarog_script.py_component import Component
-from svarog_script.script_game_object import ScriptGameObject, ComponentDescriptorTyped, ComponentDescriptor
-import Svarog
+from cgf_obsolete_script.py_component import Component
+from cgf_obsolete_script.script_game_object import ScriptGameObject, ComponentDescriptorTyped, ComponentDescriptor
+from cgf_script.component_meta_class import CGFComponent, ComponentProperty, CGFMetaTypes
 
 class DescendSimulator(Component):
     matrix = property(lambda self: self.__matrix)
@@ -54,10 +54,10 @@ class ParachuteCargo(ScriptGameObject, CallbackDelayer):
 
     def activate(self):
         ScriptGameObject.activate(self)
+        self.model.activate()
         self.model.compoundModel.position = self.__dropPoint
         self.model.compoundModel.matrix = self.descendSimulator.matrix
         self.landingAnimation.bindToCompound(self.model.compoundModel)
-        self.landingAnimation.start()
         self.delayCallback(self.__descendTime + self.LANDING_ANIMATION_TRIGGER_OFFSET, self.__animateLanding)
 
     def deactivate(self):
@@ -142,7 +142,8 @@ class DropPlane(Component, CallbackDelayer):
         self.prevTime = curTime
 
 
-class PlaneLootAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
+class PlaneLootAirdrop(CGFComponent, CallbackDelayer, ISelfAssembler):
+    parent = ComponentProperty(type=CGFMetaTypes.LINK, value=CGF.GameObject)
     __dynamicObjectsCache = dependency.descriptor(IBattleDynamicObjectsCache)
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     FLY_TIME_BEFORE_DROP = DropPlane.FLY_TIME_BEFORE_DROP
@@ -150,20 +151,22 @@ class PlaneLootAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
     DESCEND_TIME = 7
     DROP_ALTITUDE = 50
     POST_DELIVERY_CARGO_LIFETIME = 12.0
-    cargo = ComponentDescriptor()
-    plane = ComponentDescriptor()
 
     def __init__(self, dropID, deliveryPosition, deliveryTime):
-        ScriptGameObject.__init__(self, BigWorld.player().spaceID)
+        CGFComponent.__init__(self)
         CallbackDelayer.__init__(self)
-        self.owner = Svarog.GameObject(BigWorld.player().spaceID)
-        self.owner.activate()
-        self.owner.addComponent(self)
-        Svarog.addGameObject(BigWorld.player().spaceID, self.owner)
+        owner = CGF.GameObject(BigWorld.player().spaceID)
+        owner.addComponent(self)
+        owner.activate()
+        owner.transferOwnershipToWorld()
+        self.parent = owner
+        self.plane = None
+        self.cargo = None
         self.id = dropID
         self.deliveryPosition = deliveryPosition
         self.deliveryTime = deliveryTime + BigWorld.time() - BigWorld.serverTime()
         self.onFlightEnd = Event()
+        return
 
     def start(self, *args, **kwargs):
         planeStartTime = self.deliveryTime - self.FLY_TIME_BEFORE_DROP
@@ -171,7 +174,6 @@ class PlaneLootAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
         dropStartTime = self.deliveryTime - self.DESCEND_TIME
         self.delayCallback(dropStartTime - BigWorld.time(), self.__dropCrate)
         self.inactiveCargo = None
-        self.activate()
         return
 
     def destroy(self):
@@ -181,13 +183,16 @@ class PlaneLootAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
         self.inactiveCargo = None
         if self.cargo:
             self.cargo.stopLoading = True
-        ScriptGameObject.destroy(self)
+        self.plane = None
         CallbackDelayer.destroy(self)
         return
 
     def __launchPlane(self):
-        self.plane = DropPlane(self.deliveryPosition, self.DROP_ALTITUDE, self.deliveryTime - self.DESCEND_TIME)
+        if self.parent is not None:
+            self.plane = DropPlane(self.deliveryPosition, self.DROP_ALTITUDE, self.deliveryTime - self.DESCEND_TIME)
+            self.parent.addComponent(self.plane)
         self.delayCallback(self.deliveryTime + self.FLY_TIME_AFTER_DROP - BigWorld.time(), self.__processFlightEnd)
+        return
 
     def __dropCrate(self):
         airDropConfig = self.__dynamicObjectsCache.getConfig(self.__sessionProvider.arenaVisitor.getArenaGuiType()).getAirDrop()
@@ -215,10 +220,15 @@ class PlaneLootAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
 
     def __killCargo(self):
         self.cargo = None
+        if self.plane is None and self.parent is not None:
+            CGF.removeGameObject(self.parent)
         return
 
     def __processFlightEnd(self):
         self.onFlightEnd(self)
-        self.plane = None
-        Svarog.removeGameObject(self.owner.worldID, self.owner)
+        if self.parent is not None:
+            self.parent.removeComponent(self.plane)
+            self.plane = None
+            if self.cargo is None:
+                CGF.removeGameObject(self.parent)
         return

@@ -132,7 +132,7 @@ class CustomizationMode(object):
         if self._unselectItem():
             self._events.onItemUnselected()
 
-    def installItem(self, intCD, slotId, season=None, component=None):
+    def installItem(self, intCD, slotId, season=None, component=None, refresh=True):
         item = self._service.getItemByCD(intCD)
         errors = self._validateItem(item, slotId, season)
         if errors:
@@ -143,12 +143,13 @@ class CustomizationMode(object):
         elif not self._installItem(intCD, slotId, season, component):
             return False
         else:
-            self._ctx.refreshOutfit(season)
             component = self.getComponentFromSlot(slotId, season)
+            if refresh:
+                self._ctx.refreshOutfit(season)
+                self._events.onItemInstalled(item, slotId, season, component)
             if isItemLimitReached(item, self._modifiedOutfits, self):
                 if component is None or component.isFilled():
                     self._events.onItemLimitReached(item)
-            self._events.onItemInstalled(item, slotId, season, component)
             return True
 
     def removeItem(self, slotId, season=None, refresh=True):
@@ -257,6 +258,9 @@ class CustomizationMode(object):
 
     def getAppliedItems(self, isOriginal=True):
         return self._getAppliedItems(isOriginal)
+
+    def getDependenciesData(self):
+        return {}
 
     def isOutfitsEmpty(self):
         return self._isOutfitsEmpty()

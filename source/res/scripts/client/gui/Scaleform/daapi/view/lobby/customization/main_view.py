@@ -5,6 +5,7 @@ from collections import namedtuple
 import BigWorld
 from BWUtil import AsyncReturn
 from CurrentVehicle import g_currentVehicle
+from Event import Event
 from Math import Matrix
 from account_helpers.AccountSettings import AccountSettings, CUSTOMIZATION_SECTION, CAROUSEL_ARROWS_HINT_SHOWN_FIELD
 import adisp
@@ -33,19 +34,19 @@ from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.impl import backport
 from gui.impl.dialogs import dialogs
 from gui.impl.dialogs.builders import ResPureDialogBuilder, ResSimpleDialogBuilder
-from gui.impl.pub.dialog_window import DialogButtons
 from gui.impl.gen import R
 from gui.impl.gen.view_models.constants.dialog_presets import DialogPresets
 from gui.impl.lobby.customization.customization_cart.customization_cart_view import CustomizationCartView
+from gui.impl.pub.dialog_window import DialogButtons
 from gui.shared import events
 from gui.shared.close_confiramtor_helper import CloseConfirmatorsHelper
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showProgressiveItemsView
+from gui.shared.event_dispatcher import tryToShowReplaceExistingStyleDialog
 from gui.shared.formatters import formatPrice, formatPurchaseItems, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.utils.functions import makeTooltip
-from gui.shared.event_dispatcher import tryToShowReplaceExistingStyleDialog
 from helpers import dependency, int2roman
 from helpers.i18n import makeString as _ms
 from items.components.c11n_constants import SeasonType, ApplyArea
@@ -257,6 +258,8 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         pass
 
     def __onVehicleLoadFinished(self):
+        self.__onVehicleLoadFinishedEvent()
+        self.__onVehicleLoadFinishedEvent = Event()
         if self.__ctx.c11nCameraManager is None:
             _logger.warning('Missing customization camera manager')
             return
@@ -267,11 +270,16 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             return
 
     def __initAnchorsPositions(self):
+        entity = self.__ctx.c11nCameraManager.vEntity
         self.__initAnchorsPositionsCallback = None
-        if self.__ctx.c11nCameraManager.vEntity is not None and self.__ctx.c11nCameraManager.vEntity.isVehicleLoaded:
-            self.__ctx.c11nCameraManager.vEntity.appearance.updateAnchorsParams()
+        if entity is not None:
+            if entity.isVehicleLoaded:
+                entity.appearance.updateAnchorsParams()
+            else:
+                self.__initAnchorsPositionsCallback = BigWorld.callback(0.0, self.__initAnchorsPositions)
+                return
         self.__setAnchorsInitData()
-        self.__locateCameraToCustomizationPreview(updateTankCentralPoint=True)
+        self.__locateCameraToCustomizationPreview(updateTankCentralPoint=True, forceLocate=True)
         return
 
     def onBuyConfirmed(self, isOk):
@@ -351,6 +359,9 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         if self.__styleInfo.visible:
             return
         else:
+            if item is not None and self.__bottomPanel.isItemUnsuitable(item):
+                self.__ctx.mode.unselectItem()
+                needToKeepSelect = False
             if item is not None and needToKeepSelect:
                 itemDataVO = buildCustomizationItemDataVO(item=item, progressionLevel=self.__ctx.mode.storedProgressionLevel, vehicle=g_currentVehicle.item)
                 self.as_reselectS(itemDataVO)
@@ -600,6 +611,13 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         return False
 
     def onAnchorsShown(self, anchors):
+        entity = self.hangarSpace.getVehicleEntity()
+        if entity and entity.isVehicleLoaded:
+            self.__setAnchors(anchors)
+        else:
+            self.__onVehicleLoadFinishedEvent += lambda : self.__setAnchors(anchors)
+
+    def __setAnchors(self, anchors):
         if self.__ctx.vehicleAnchorsUpdater is not None:
             self.__ctx.vehicleAnchorsUpdater.setAnchors(anchors)
         return
@@ -649,6 +667,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__setHeaderInitData()
         self.__setSeasonData()
         self.__ctx.refreshOutfit()
+        self.__onVehicleLoadFinishedEvent = Event()
         self.as_selectSeasonS(SEASON_TYPE_TO_IDX[self.__ctx.season])
         self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': True,
          'setIdle': True,
@@ -671,8 +690,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         if self.__ctx.mode.isRegion:
             highlightingMode = chooseMode(self.__ctx.mode.slotType, self.__ctx.modeId, g_currentVehicle.item)
             self.service.startHighlighter(highlightingMode)
-        progressionEntryPointVisible = isVehicleCanBeCustomized(g_currentVehicle.item, GUI_ITEM_TYPE.PROJECTION_DECAL)
-        self.as_progressionEntryPointVisibleS(progressionEntryPointVisible)
+        self.as_progressionEntryPointVisibleS(any((g_currentVehicle.item.getAnchors(GUI_ITEM_TYPE.PROJECTION_DECAL, areaId) for areaId in Area.ALL)))
         self.__closeConfirmatorHelper.start(self.__closeConfirmator)
         return
 
@@ -766,7 +784,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         if visibleTabs:
             self.__ctx.mode.changeTab(visibleTabs[0])
         else:
-            _logger.error('There is no visible customization tabs for current vehicle: %s', g_currentVehicle.item)
+            _logger.info('There is no visible customization tabs for current vehicle: %s', g_currentVehicle.item)
 
     def __updateAnchorsData(self):
         self.as_setAnchorsDataS(self._getUpdatedAnchorsData())
@@ -849,6 +867,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         if self.__itemsGrabMode:
             self.__clearGrabModeCallback()
             self.__finishGrabModeCallback = BigWorld.callback(0.5, self.__finishGrabMode)
+            self.as_releaseItemS()
         if self.__ctx.mode.isRegion:
             self.service.highlightRegions(ApplyArea.NONE)
         self.__updateDnd()
@@ -989,6 +1008,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
 
     def __setHeaderInitData(self):
         vehicle = g_currentVehicle.item
+        slotType = self.__ctx.mode.slotType
         if self.__ctx.modeId == CustomizationModes.STYLED:
             if self.__ctx.mode.modifiedStyle is not None:
                 itemsCounter = text_styles.bonusPreviewText(backport.text(R.strings.vehicle_customization.customization.header.counter.style.installed()))
@@ -996,14 +1016,15 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
                 itemsCounter = text_styles.stats(backport.text(R.strings.vehicle_customization.customization.header.counter.style.notInstalled()))
         elif self.__ctx.modeId == CustomizationModes.EDITABLE_STYLE:
             itemsCounter = text_styles.bonusPreviewText(backport.text(R.strings.vehicle_customization.customization.header.counter.editablestyle.installed(), name=self.__ctx.mode.style.userName))
-        else:
-            slotType = self.__ctx.mode.slotType
+        elif isVehicleCanBeCustomized(g_currentVehicle.item, slotType):
             typeName = GUI_ITEM_TYPE_NAMES[slotType]
             outfit = self.__ctx.mode.currentOutfit
             slotsCount, filledSlotsCount = checkSlotsFilling(outfit, slotType)
             textStyle = text_styles.bonusPreviewText if slotsCount == filledSlotsCount else text_styles.stats
             template = '#vehicle_customization:customization/header/counter/' + typeName
             itemsCounter = textStyle(_ms(template, filled=filledSlotsCount, available=slotsCount))
+        else:
+            itemsCounter = ''
         self.as_setHeaderDataS({'tankTier': str(int2roman(vehicle.level)),
          'tankName': vehicle.shortUserName,
          'tankInfo': itemsCounter,

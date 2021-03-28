@@ -116,6 +116,9 @@ class LoginView(LoginPageMeta):
     def onRecovery(self):
         self.fireEvent(OpenLinkEvent(OpenLinkEvent.RECOVERY_PASSWORD))
 
+    def onTextLinkClick(self, linkId):
+        self.fireEvent(OpenLinkEvent(linkId))
+
     def isToken(self):
         return self._loginMode.isToken2()
 
@@ -162,7 +165,7 @@ class LoginView(LoginPageMeta):
         self.as_setCopyrightS(backport.text(R.strings.menu.copy()), backport.text(R.strings.menu.legal()))
         self.sessionProvider.getCtx().lastArenaUniqueID = None
         self.sessionProvider.getCtx().lastArenaBonusType = None
-        self._loginMode.init()
+        self._loginMode.onPopulate()
         self.update()
         if self.__capsLockCallbackID is None:
             self.__capsLockCallbackID = BigWorld.callback(0.0, self.__checkUserInputState)
@@ -373,7 +376,7 @@ class LoginView(LoginPageMeta):
 
     @async
     def __showExitDialog(self):
-        isOk = yield await(dialogs.quitGame(self))
+        isOk = yield await(dialogs.quitGame(self.getParentWindow()))
         if isOk:
             self.destroy()
             BigWorld.quit()

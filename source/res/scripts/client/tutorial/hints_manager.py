@@ -4,6 +4,7 @@ import logging
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
+from skeletons.tutorial import ITutorialLoader
 from tutorial import settings
 from tutorial.control.functional import FunctionalConditions
 from tutorial.data.hints import HintProps
@@ -16,6 +17,7 @@ _DESCRIPTOR_PATH = '{0:>s}/once-only-hints.xml'.format(settings.DOC_DIRECTORY)
 
 class HintsManager(object):
     __settingsCore = dependency.descriptor(ISettingsCore)
+    __tutorialLoader = dependency.descriptor(ITutorialLoader)
     __slots__ = ('_data', '_gui', '__activeHints', '__hintsWithClientTriggers')
 
     def __init__(self):
@@ -67,9 +69,7 @@ class HintsManager(object):
     def __setTriggeredComponents(self):
         self.__hintsWithClientTriggers = ClientTriggers()
         self.__hintsWithClientTriggers.setStates(self._data.getHints())
-        if self._gui.app is not None and self._gui.app.tutorialManager is not None:
-            self._gui.app.tutorialManager.setHintsWithClientTriggers(self.__hintsWithClientTriggers)
-        return
+        self.__tutorialLoader.gui.setHintsWithClientTriggers(self.__hintsWithClientTriggers)
 
     def __showHint(self, hint):
         text = hint['text']

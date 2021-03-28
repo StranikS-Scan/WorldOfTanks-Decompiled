@@ -1,24 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/bootcamp_controller.py
 from collections import namedtuple
+from functools import partial
 import AccountCommands
 import BigWorld
 from async import async, await
-from adisp import process
 from account_helpers.AccountSettings import CURRENT_VEHICLE, AccountSettings
 from account_helpers import isLongDisconnectedFromCenter
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.lobby.bootcamp.bootcamp_exit_view import BootcampExitWindow
 from helpers import dependency
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.bootcamp.disabled_settings import BCDisabledSettings
-from gui.Scaleform.daapi.view.dialogs.bootcamp_dialogs_meta import ExecutionChooserDialogMeta
-from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID, BCConfirmDialogMeta
 from bootcamp.BootCampEvents import g_bootcampEvents
-from bootcamp.Bootcamp import g_bootcamp, LESSON_COUNT
+from bootcamp.Bootcamp import g_bootcamp
 from PlayerEvents import g_playerEvents
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -29,6 +28,7 @@ from gui import DialogsInterface, makeHtmlString
 from debug_utils import LOG_ERROR
 from gui.shared.event_dispatcher import showResSimpleDialog
 BootcampDialogConstants = namedtuple('BootcampDialogConstants', 'dialogType dialogKey focusedID needAwarding premiumType')
+_GREEN = 'green'
 _YELLOW = 'yellow'
 _GRAY = 'gray'
 _REWARD = '\n{}'
@@ -201,21 +201,6 @@ class BootcampController(IBootcampController):
     def prbDispatcher(self):
         return None
 
-    def getSkipDialogConstants(self, isSkip=True):
-        bootcampLiteral = 'bootcamp/'
-        needAwarding = self.needAwarding()
-        isReferralEnabled = self.isReferralEnabled()
-        if isSkip:
-            dialogType, focusedID = ExecutionChooserDialogMeta.SKIP, DIALOG_BUTTON_ID.CLOSE
-        else:
-            dialogType, focusedID = ExecutionChooserDialogMeta.RETRY, DIALOG_BUTTON_ID.SUBMIT
-        dialogKey = bootcampLiteral + dialogType
-        if isReferralEnabled and dialogType == ExecutionChooserDialogMeta.SKIP:
-            dialogKey = bootcampLiteral + ExecutionChooserDialogMeta.SKIP_REFERRAL
-        if not isSkip and needAwarding:
-            dialogKey = bootcampLiteral + ExecutionChooserDialogMeta.START
-        return BootcampDialogConstants(dialogType=dialogType, dialogKey=dialogKey, focusedID=focusedID, needAwarding=needAwarding, premiumType=g_bootcamp.getPremiumType(LESSON_COUNT))
-
     @async
     def __doBootcamp(self, isSkip):
         g_eventBus.handleEvent(events.DestroyViewEvent(VIEW_ALIAS.LOBBY_MENU))
@@ -227,42 +212,21 @@ class BootcampController(IBootcampController):
             iconAcc = R.images.gui.maps.icons.bootcamp.dialog
             icon = iconAcc.bc_enter_small() if needAwarding else iconAcc.bc_enter_1_small()
             if needAwarding:
-                messageSkipAcc = R.strings.bootcamp.message.skip.message
-                premiumStr = self.__format(messageSkipAcc.premium(), _YELLOW)
-                goldStr = self.__format(messageSkipAcc.gold(), _YELLOW)
-                crewStr = self.__format(messageSkipAcc.crew(), _YELLOW)
+                messageStartAcc = R.strings.bootcamp.message.start.message
+                premiumStr = self.__format(messageStartAcc.premium(), _YELLOW)
+                goldStr = self.__format(messageStartAcc.gold(), _YELLOW)
+                crewStr = self.__format(messageStartAcc.crew(), _YELLOW)
                 message = self.__format(startAcc.message(), _GRAY, premium=premiumStr, gold=goldStr, crew=crewStr)
             else:
-                rewardStr = _REWARD.format(self.__format(startAcc.reward(), _YELLOW))
+                rewardStr = _REWARD.format(self.__format(startAcc.reward(), _GREEN))
                 message = self.__format(startAcc.message(), _GRAY, reward=rewardStr)
             result = yield await(showResSimpleDialog(startAcc, icon, message))
             if result:
                 self.__goBootcamp()
 
-    @process
     def __skipBootcamp(self):
-        skipAcc = R.strings.bootcamp.message.skip
-        iconAcc = R.images.gui.maps.icons.bootcamp.dialog
-        if self.needAwarding():
-            icon = backport.image(iconAcc.bc_leave())
-            messageAcc = skipAcc.message
-            premiumStr = self.__format(messageAcc.premium(), _YELLOW)
-            goldStr = self.__format(messageAcc.gold(), _YELLOW)
-            crewStr = self.__format(messageAcc.crew(), _YELLOW)
-            if self.isReferralEnabled():
-                message = self.__format(skipAcc.referral.message(), _GRAY, premium=premiumStr, gold=goldStr, crew=crewStr)
-            else:
-                message = self.__format(messageAcc(), _GRAY, premium=premiumStr, gold=goldStr, crew=crewStr)
-        else:
-            icon = backport.image(iconAcc.bc_leave_noreward())
-            message = self.__format(skipAcc.completed.message(), _GRAY)
-        result = yield DialogsInterface.showBCConfirmationDialog(BCConfirmDialogMeta({'label': backport.text(skipAcc.label()),
-         'labelExecute': backport.text(skipAcc.labelExecute()),
-         'icon': icon,
-         'message': message,
-         'isTraining': True}))
-        if result:
-            self.stopBootcamp(inBattle=not self.isInBootcampAccount())
+        window = BootcampExitWindow(partial(self.stopBootcamp, not self.isInBootcampAccount()))
+        window.load()
 
     def __goBootcamp(self):
         action = PrbAction(PREBATTLE_ACTION_NAME.BOOTCAMP)

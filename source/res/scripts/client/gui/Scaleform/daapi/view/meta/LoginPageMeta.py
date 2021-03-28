@@ -118,6 +118,9 @@ class LoginPageMeta(View):
     def as_showFilledLoginFormS(self, data):
         return self.flashObject.as_showFilledLoginForm(data) if self._isDAAPIInited() else None
 
+    def as_showSteamLoginFormS(self, data):
+        return self.flashObject.as_showSteamLoginForm(data) if self._isDAAPIInited() else None
+
     def as_resetPasswordS(self):
         return self.flashObject.as_resetPassword() if self._isDAAPIInited() else None
 

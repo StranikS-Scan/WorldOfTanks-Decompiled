@@ -61,7 +61,7 @@ class RecycleBinRequester(AbstractSyncDataRequester, IRecycleBinRequester):
             if time_utils.getTimeDeltaTillNow(dismissedAt) < maxDuration:
                 filteredBuffer[tankmanId] = (strCD, dismissedAt)
 
-        return dict(((k * -1, v) for k, v in filteredBuffer.iteritems()))
+        return filteredBuffer
 
     def getTankman(self, invID, maxDuration):
         return self.getTankmen(maxDuration).get(invID)

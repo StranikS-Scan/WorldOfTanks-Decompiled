@@ -1240,6 +1240,7 @@ class BattlePassGiftTokenContext(ToolTipContext):
         self.__hasOffer = True
 
     def buildItem(self, tokenID, **kwargs):
+        self.__hasOffer = True
         result = []
         shortName = tokenID.split(':')[2]
         offerToken = getOfferTokenByGift(tokenID)

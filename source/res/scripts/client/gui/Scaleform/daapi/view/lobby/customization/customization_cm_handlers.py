@@ -198,9 +198,12 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
             seasonName = SEASON_TYPE_TO_NAME.get(self.__ctx.season)
             textKey = '/'.join((CustomizationOptions.REMOVE_FROM_TANK, seasonName))
         if self.__ctx.modeId == CustomizationModes.EDITABLE_STYLE and itemType in EDITABLE_STYLE_IRREMOVABLE_TYPES:
-            baseOutfit = self.__ctx.mode.baseOutfits[self.__ctx.season]
-            isBase = baseOutfit.has(item)
-            enabled = isInstalled and not isBase
+            if self.__ctx.mode.getDependenciesData() and itemType != GUI_ITEM_TYPE.CAMOUFLAGE:
+                enabled = False
+            else:
+                baseOutfit = self.__ctx.mode.baseOutfits[self.__ctx.season]
+                isBase = baseOutfit.has(item)
+                enabled = isInstalled and not isBase
         else:
             enabled = isInstalled
         btn = self._makeItem(optId=CustomizationOptions.REMOVE_FROM_TANK, optLabel=MENU.cst_item_ctx_menu(textKey), optInitData={'enabled': enabled})

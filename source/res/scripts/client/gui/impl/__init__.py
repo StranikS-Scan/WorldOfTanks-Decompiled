@@ -12,8 +12,10 @@ def getGuiImplConfig(manager):
     from gui.impl.gui_loader import GuiLoader
     from gui.impl.pub.fullscreen_manager import FullscreenManager
     from gui.impl.pub.notification_window_controller import NotificationWindowController
+    from gui.impl.gen.view_models.common.tutorial.tutorial_model import TutorialModel
+    from gui.impl.gen.view_models.common.ui_logger_model import UiLoggerModel
     loader = GuiLoader()
-    loader.init()
+    loader.init(TutorialModel(), UiLoggerModel())
     manager.addInstance(IGuiLoader, loader, finalizer='fini')
     notifications = NotificationWindowController()
     tracker = manager.getService(IGameStateTracker)

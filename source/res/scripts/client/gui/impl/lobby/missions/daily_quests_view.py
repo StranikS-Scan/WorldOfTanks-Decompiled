@@ -128,13 +128,15 @@ class DailyQuestsView(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         _logger.info('DailyQuestsView::_onLoading')
-        showBattlePassDailyQuestsIntro()
         with self.viewModel.transaction() as tx:
             self._updateQuestsTitles(tx)
             self._updateModel(tx)
             self._updateCountDowns(tx)
             tx.setPremMissionsTabDiscovered(settings.getDQSettings().premMissionsTabDiscovered)
             tx.setIsBattlePassActive(self.battlePassController.isActive())
+
+    def _onLoaded(self, *args, **kwargs):
+        showBattlePassDailyQuestsIntro()
 
     def _initialize(self, *args, **kwargs):
         super(DailyQuestsView, self)._initialize()

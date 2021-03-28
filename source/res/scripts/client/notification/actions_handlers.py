@@ -23,7 +23,7 @@ from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
 from gui.ranked_battles import ranked_helpers
 from gui.server_events.events_dispatcher import showPersonalMission, showMissionsBattlePassCommonProgression, showBattlePass3dStyleChoiceWindow
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events
-from gui.shared.event_dispatcher import showProgressiveRewardWindow, showRankedYearAwardWindow, showBlueprintsSalePage, showBlackMarketOpenItemWindow
+from gui.shared.event_dispatcher import showProgressiveRewardWindow, showRankedYearAwardWindow, showBlueprintsSalePage
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import decorators
 from gui.wgcg.clan import contexts as clan_ctxs
@@ -817,20 +817,6 @@ class _OpenLootBoxesHandler(_NavigationDisabledActionHandler):
         return
 
 
-class _OpenBlackMarketItemScreenHandler(_NavigationDisabledActionHandler):
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def doAction(self, model, entityID, action):
-        showBlackMarketOpenItemWindow()
-
-
 class _LootBoxesAutoOpenHandler(_NavigationDisabledActionHandler):
 
     @classmethod
@@ -966,8 +952,7 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenBattlePassStyleChoiceView,
  _OpenMissingEventsHandler,
  _OpenNotrecruitedSysMessageHandler,
- _OpentBlueprintsConvertSale,
- _OpenBlackMarketItemScreenHandler)
+ _OpentBlueprintsConvertSale)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

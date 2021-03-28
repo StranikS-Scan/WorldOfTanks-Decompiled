@@ -115,10 +115,10 @@ class BattlePassController(IBattlePassController):
         return self.isSeasonStarted() and not self.isDisabled() and not self.isSeasonFinished()
 
     def isOffSeasonEnable(self):
-        return (not self.isSeasonStarted() or self.isSeasonFinished()) and not self.isDisabled()
+        return False
 
     def isDisabled(self):
-        return self.__getConfig().isDisabled()
+        return not self.isActive() and not self.isPaused()
 
     def isPaused(self):
         return self.__getConfig().isPaused()
@@ -238,8 +238,8 @@ class BattlePassController(IBattlePassController):
 
             return False
 
-    def isChooseRewardsEnabled(self):
-        return False if not self.isOfferEnabled() else any((token.startswith(BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS) and self.__offersProvider.getOfferByToken(getOfferTokenByGift(token)) is not None for token in self.__itemsCache.items.tokens.getTokens().iterkeys()))
+    def canChooseAnyReward(self):
+        return False if not self.isOfferEnabled() else any((token.startswith(BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS) for token in self.__itemsCache.items.tokens.getTokens().iterkeys() if self.__offersProvider.getOfferByToken(getOfferTokenByGift(token)) is not None))
 
     def getLevelsConfig(self):
         return self.__getConfig().basePoints
@@ -443,18 +443,22 @@ class BattlePassController(IBattlePassController):
         return BattlePassAwardsManager.composeBonuses([rewards]) if rewards else BattlePassAwardsManager.composeBonuses([])
 
     def getNotChosenRewardCount(self):
-        return sum((token.startswith(BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS) for token in self.__itemsCache.items.tokens.getTokens().iterkeys()))
+        return sum((token.startswith(BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS) for token in self.__itemsCache.items.tokens.getTokens().iterkeys() if self.__offersProvider.getOfferByToken(getOfferTokenByGift(token)) is not None))
+
+    def hasAnyOfferGiftToken(self):
+        return any((token.startswith(BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS) for token in self.__itemsCache.items.tokens.getTokens().iterkeys()))
 
     def takeRewardForLevel(self, level):
         chapter = self.getChapterByLevel(level - 1)
         isBought = self.isBought(chapter=chapter)
         awardType = BattlePassConsts.REWARD_BOTH if isBought else BattlePassConsts.REWARD_FREE
+        isOfferEnabled = self.isOfferEnabled()
         bonuses = self.getSingleAward(level, awardType)
         rewardsToChoose = []
         stylesToChoose = []
         for bonus in bonuses:
             bonusName = bonus.getName()
-            if bonusName == BATTLE_PASS_SELECT_BONUS_NAME:
+            if bonusName == BATTLE_PASS_SELECT_BONUS_NAME and isOfferEnabled:
                 for tokenID in bonus.getTokens().iterkeys():
                     if self.__itemsCache.items.tokens.getToken(tokenID) is not None and self.__offersProvider.getOfferByToken(getOfferTokenByGift(tokenID)) is not None:
                         rewardsToChoose.append(tokenID)
@@ -471,10 +475,13 @@ class BattlePassController(IBattlePassController):
         return
 
     def takeAllRewards(self):
-        rewardsToChoose = [ token for token in self.__itemsCache.items.tokens.getTokens().iterkeys() if token.startswith(BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS) and self.__offersProvider.getOfferByToken(getOfferTokenByGift(token)) is not None ]
+        if self.isOfferEnabled():
+            rewardsToChoose = [ token for token in self.__itemsCache.items.tokens.getTokens().iterkeys() if token.startswith(BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS) and self.__offersProvider.getOfferByToken(getOfferTokenByGift(token)) is not None ]
+            rewardsToChoose.sort(key=lambda x: (int(x.split(':')[-1]), x.split(':')[-2]))
+        else:
+            rewardsToChoose = []
         chapter = self.getCurrentChapter()
-        stylesToChoose = getStylesToChooseUntilChapter(chapter)
-        rewardsToChoose.sort(key=lambda x: (int(x.split(':')[-1]), x.split(':')[-2]))
+        stylesToChoose = getStylesToChooseUntilChapter(chapter + 1)
         self.getRewardLogic().startManualFlow(rewardsToChoose, stylesToChoose)
         return
 

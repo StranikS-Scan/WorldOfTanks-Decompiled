@@ -35,8 +35,6 @@ class InBattleUpgrades(BigWorld.DynamicScriptComponent):
         progressionCtrl = vehicle.guiSessionProvider.dynamic.progression
         if progressionCtrl is not None:
             progressionCtrl.vehicleVisualChangingStarted(vehicleID)
-        if vehicle.isMyVehicle:
-            BigWorld.player().waitOnEnterWorld.startWait(vehicleID)
         vehicle.respawnVehicle(vehicleID, newVehCompactDescr, newVehOutfitCompactDescr)
         return
 

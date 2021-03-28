@@ -28,6 +28,8 @@ OUTFIT_POOL_EMPTY_STUB = (None, None)
 DEFAULT_POSITION = (0, 0, 0)
 DEFAULT_ROTATION = (0, 0, 0)
 DEFAULT_SCALE = (1, 1, 1)
+DEFAULT_GLOSS = 0.509
+DEFAULT_METALLIC = 0.23
 
 class CustomizationType(object):
     PAINT = 1
@@ -69,6 +71,11 @@ class CustomizationType(object):
      PERSONAL_NUMBER,
      MODIFICATION,
      PROJECTION_DECAL)
+    TYPES_FOR_EDITABLE_STYLE = (PAINT,
+     DECAL,
+     PERSONAL_NUMBER,
+     MODIFICATION,
+     PROJECTION_DECAL)
 
 
 CustomizationTypeNames = {getattr(CustomizationType, k):k for k in dir(CustomizationType) if isinstance(getattr(CustomizationType, k), int)}
@@ -88,6 +95,8 @@ class ItemTags(object):
     ADD_NATIONAL_EMBLEM = 'addNationalEmblem'
     DISABLE_VERTICAL_MIRROR = 'disableVerticalMirror'
     STYLE_PROGRESSION = 'styleProgression'
+    ONLY_VERTICAL_MIRROR = 'onlyVerticalMirror'
+    HIDE_IF_INCOMPATIBLE = 'hideIfIncompatible'
 
 
 class ProjectionDecalType(object):

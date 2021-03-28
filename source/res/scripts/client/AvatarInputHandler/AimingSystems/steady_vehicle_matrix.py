@@ -3,7 +3,7 @@
 import math_utils
 import BigWorld
 import Math
-from svarog_script.py_component import Component
+from cgf_obsolete_script.py_component import Component
 
 class SteadyVehicleMatrixCalculator(Component):
     outputMProv = property(lambda self: self.__outputMProv)

@@ -630,7 +630,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         self.as_updateLayoutS(*scaledPosition)
 
     def __onCrosshairViewChanged(self, viewID):
-        if viewID in (CROSSHAIR_VIEW_ID.UNDEFINED, CROSSHAIR_VIEW_ID.POSTMORTEM):
+        if viewID == CROSSHAIR_VIEW_ID.UNDEFINED:
             self.as_setVisibleS(False)
         else:
             self.as_setVisibleS(self._isEnabled)

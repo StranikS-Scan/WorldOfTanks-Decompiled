@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ui/util.py
+import typing
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NEW_LOBBY_TAB_COUNTER
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
@@ -20,6 +21,7 @@ from helpers import time_utils
 from helpers import dependency
 from messenger.storage import storage_getter
 from skeletons.gui.app_loader import IAppLoader
+from skeletons.gui.game_control import IExternalLinksController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
@@ -103,10 +105,15 @@ class _SelectBattleTypeSchema(W2CSchema):
     battle_type = Field(required=True, type=basestring)
 
 
+class _UrlInfoSchema(W2CSchema):
+    url = Field(required=True, type=basestring)
+
+
 class UtilWebApiMixin(object):
     itemsCache = dependency.descriptor(IItemsCache)
     goodiesCache = dependency.descriptor(IGoodiesCache)
     _webCtrl = dependency.descriptor(IWebController)
+    _lnkCtrl = dependency.descriptor(IExternalLinksController)
 
     def __init__(self):
         super(UtilWebApiMixin, self).__init__()
@@ -243,3 +250,8 @@ class UtilWebApiMixin(object):
     @w2c(_SelectBattleTypeSchema, 'select_battle_type')
     def selectBattleType(self, cmd):
         battle_selector_items.getItems().select(cmd.battle_type, onlyActive=True)
+
+    @w2c(_UrlInfoSchema, 'get_url_info')
+    def getUrlInfo(self, cmd):
+        external = self._lnkCtrl.externalAllowed(cmd.url)
+        return {'external_allowed': external}

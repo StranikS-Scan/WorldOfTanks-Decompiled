@@ -1,34 +1,32 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/bootcamp/lobby/commands.py
 from helpers import dependency
-from skeletons.gui.app_loader import IAppLoader
-from tutorial.loader import g_loader
+from skeletons.tutorial import ITutorialLoader
 from tutorial.logger import LOG_ERROR
 
-def overrideHangarMenuButtons(buttonsListVarID=None):
-    _getTutorialManager().overrideHangarMenuButtons(_getListByVarID(buttonsListVarID))
+@dependency.replace_none_kwargs(tutorialLoader=ITutorialLoader)
+def overrideHangarMenuButtons(buttonsListVarID=None, tutorialLoader=None):
+    tutorialLoader.gui.overrideHangarMenuButtons(_getListByVarID(buttonsListVarID, tutorialLoader))
 
 
-def overrideHeaderMenuButtons(buttonsListVarID=None):
-    _getTutorialManager().overrideHeaderMenuButtons(_getListByVarID(buttonsListVarID))
+@dependency.replace_none_kwargs(tutorialLoader=ITutorialLoader)
+def overrideHeaderMenuButtons(buttonsListVarID=None, tutorialLoader=None):
+    tutorialLoader.gui.overrideHeaderMenuButtons(_getListByVarID(buttonsListVarID, tutorialLoader))
 
 
-def setHangarHeaderEnabled(enabled):
-    _getTutorialManager().setHangarHeaderEnabled(enabled)
+@dependency.replace_none_kwargs(tutorialLoader=ITutorialLoader)
+def setHangarHeaderEnabled(enabled, tutorialLoader=None):
+    tutorialLoader.gui.setHangarHeaderEnabled(enabled)
 
 
-def overrideBattleSelectorHint(overrideType=None):
-    _getTutorialManager().overrideBattleSelectorHint(overrideType)
+@dependency.replace_none_kwargs(tutorialLoader=ITutorialLoader)
+def overrideBattleSelectorHint(overrideType=None, tutorialLoader=None):
+    tutorialLoader.gui.overrideBattleSelectorHint(overrideType)
 
 
-@dependency.replace_none_kwargs(appLoader=IAppLoader)
-def _getTutorialManager(appLoader=None):
-    return appLoader.getApp().tutorialManager
-
-
-def _getListByVarID(varID):
+def _getListByVarID(varID, tutorialLoader):
     if varID is not None:
-        tutorial = g_loader.tutorial
+        tutorial = tutorialLoader.tutorial
         varVal = tutorial.getVars().get(varID)
         if varVal is None:
             LOG_ERROR('variable not found', varID)

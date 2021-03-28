@@ -11,7 +11,7 @@ from constants import ATTACK_REASON, ATTACK_REASONS
 from vehicle_systems.tankStructure import TankPartIndexes
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, VEHICLE_VIEW_STATE
 from gui.battle_royale.constants import SteelHunterEquipmentNames
-from svarog_script.script_game_object import ScriptGameObject, ComponentDescriptorTyped
+from cgf_obsolete_script.script_game_object import ScriptGameObject, ComponentDescriptorTyped
 from battleground.component_loading import loadComponentSystem, Loader
 from battleground.components import SequenceComponent, AvatarRelatedComponent
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -132,6 +132,7 @@ class _VehicleNodeEffect(SequenceComponent):
 
     def __init__(self, sequenceAnimator):
         super(_VehicleNodeEffect, self).__init__(sequenceAnimator)
+        self.__node = None
         self.__fakeModel = None
         self.__vehicleId = None
         return
@@ -148,8 +149,8 @@ class _VehicleNodeEffect(SequenceComponent):
         vehicle = BigWorld.entities.get(self.__vehicleId)
         if vehicle is not None and vehicle.model is not None and vehicle.appearance is not None:
             self.__fakeModel = newFakeModel()
-            node = vehicle.model.node(TankPartIndexes.getName(self._TANK_PART_INDEX))
-            node.attach(self.__fakeModel, self.__getTransform(vehicle))
+            self.__node = vehicle.model.node(TankPartIndexes.getName(self._TANK_PART_INDEX))
+            self.__node.attach(self.__fakeModel, self.__getTransform(vehicle))
             self.bindToModel(self.__fakeModel, BigWorld.player().spaceID)
             self.start()
         return
@@ -158,11 +159,9 @@ class _VehicleNodeEffect(SequenceComponent):
         super(_VehicleNodeEffect, self).deactivate()
         self.stop()
         if self.__vehicleId is not None and self.__fakeModel is not None:
-            vehicle = BigWorld.entities.get(self.__vehicleId)
-            if vehicle is not None and vehicle.model is not None:
-                node = vehicle.model.node(TankPartIndexes.getName(self._TANK_PART_INDEX))
-                if node is not None:
-                    node.detach(self.__fakeModel)
+            if self.__node is not None and not self.__node.isDangling:
+                self.__node.detach(self.__fakeModel)
+        self.__node = None
         self.__fakeModel = None
         return
 

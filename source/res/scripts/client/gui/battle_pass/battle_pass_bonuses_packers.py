@@ -245,8 +245,11 @@ class SelectBonusPacker(BaseBonusUIPacker):
     def getValue(cls, bonus):
         giftTokenName = first(bonus.getTokens().keys())
         offer = cls.__offersProvider.getOfferByToken(getOfferTokenByGift(giftTokenName))
-        gift = first(offer.getAllGifts())
-        return gift.giftCount * bonus.getCount()
+        if offer is None:
+            return bonus.getCount()
+        else:
+            gift = first(offer.getAllGifts())
+            return bonus.getCount() if gift is None else gift.giftCount * bonus.getCount()
 
     @classmethod
     def _getToolTip(cls, bonus):

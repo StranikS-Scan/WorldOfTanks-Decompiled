@@ -39,7 +39,6 @@ TIME_FORMAT_TO_TIME_UNIT = {TIME_FORMAT_DAYS: ONE_DAY,
  TIME_FORMAT_HOURS: ONE_HOUR}
 _R_BUYING_PANEL = R.strings.marathon.vehiclePreview.buyingPanel
 _R_TITLE_TOOLTIP = R.strings.marathon.vehiclePreview.title.tooltip
-_BUYING_BUTTON_ICON_ALIGN = 'right'
 _TOKEN_COUNT_INDEX = 1
 _MISSION_TAB_FORMAT = 'MISSIONS_TAB_{}'
 
@@ -445,7 +444,6 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
         return makeTooltip()
 
     def getPreviewBuyBtnData(self):
-        buyImage = backport.image(R.images.gui.maps.icons.library.buyInWeb())
         label = backport.text(_R_BUYING_PANEL.buyBtn.label.buy())
         enabled = False
         questStartTime, _ = self.__getQuestStartFinishTime()
@@ -463,8 +461,6 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
                 customOffer = ''.join((discountText, discountValue))
         return {'enabled': enabled,
          'label': label,
-         'btnIcon': buyImage,
-         'btnIconAlign': _BUYING_BUTTON_ICON_ALIGN,
          'btnTooltip': tooltip,
          'customOffer': customOffer}
 

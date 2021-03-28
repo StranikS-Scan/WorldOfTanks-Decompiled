@@ -150,7 +150,7 @@ class BrowserController(IBrowserController):
         return self.__creatingBrowserID is not None
 
     def __createDone(self, ctx):
-        _logger.info('CTRL: Finished creating a browser: %s', self.__creatingBrowserID)
+        _logger.info('CTRL: Finished creating a browser: %r', self.__creatingBrowserID)
         if ctx['showCreateWaiting']:
             Waiting.hide('browser/init')
 
@@ -175,7 +175,7 @@ class BrowserController(IBrowserController):
             self.onBrowserAdded(browserID)
 
             def createNextBrowser():
-                _logger.info('CTRL: Triggering create of next browser from: %s', browserID)
+                _logger.info('CTRL: Triggering create of next browser from: %r', browserID)
                 creation = self.__browserCreationCallbacks.pop(browserID, None)
                 if creation is not None:
                     self.__browsers[browserID].onCanCreateNewBrowser -= creation
@@ -188,7 +188,7 @@ class BrowserController(IBrowserController):
                 self.delBrowser(browserID)
 
             def successfulCreationCallback(url, isLoaded, httpStatusCode=None):
-                _logger.info('CTRL: Ready to show: %r - %r - %s', browserID, isLoaded, url)
+                _logger.info('CTRL: Ready to show: %r isLoaded: %r %s', browserID, isLoaded, url)
                 self.__clearCallbacks(browserID, self.__browsers[browserID], False)
                 if isLoaded:
                     self.__showBrowser(browserID, ctx)

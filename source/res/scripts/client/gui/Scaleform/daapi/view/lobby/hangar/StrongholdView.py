@@ -7,17 +7,16 @@ from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from helpers import dependency
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.clans.clan_helpers import getStrongholdUrl
-from gui.sounds.ambients import StrongholdEnv
 from gui.Scaleform.daapi import LobbySubView
+from gui.Scaleform.daapi.view.lobby.shared.web_view import WebView
 from gui.Scaleform.daapi.view.meta.StrongholdViewMeta import StrongholdViewMeta
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.strongholds.web_handlers import createStrongholdsWebHandlers
-from gui.Scaleform.daapi.view.lobby.strongholds.sound_constants import STRONGHOLD_SOUND_SPACE
+from gui.Scaleform.daapi.view.lobby.strongholds.sound_constants import STRONGHOLD_SOUND_SPACE, STRONGHOLD_ADS_SOUND_SPACE
 from skeletons.gui.game_control import IBrowserController
 
 class StrongholdView(LobbySubView, StrongholdViewMeta):
     __background_alpha__ = 1.0
-    __sound_env__ = StrongholdEnv
     _COMMON_SOUND_SPACE = STRONGHOLD_SOUND_SPACE
     browserCtrl = dependency.descriptor(IBrowserController)
 
@@ -88,3 +87,10 @@ class StrongholdView(LobbySubView, StrongholdViewMeta):
     def __showBrowser(self):
         BigWorld.callback(0.01, self.as_loadBrowserS)
         self.fireEvent(events.StrongholdEvent(events.StrongholdEvent.STRONGHOLD_LOADED, {'browserID': self.__browserId}), scope=EVENT_BUS_SCOPE.STRONGHOLD)
+
+
+class StrongholdAdsView(WebView):
+    _COMMON_SOUND_SPACE = STRONGHOLD_ADS_SOUND_SPACE
+
+    def webHandlers(self):
+        return createStrongholdsWebHandlers()

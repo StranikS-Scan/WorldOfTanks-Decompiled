@@ -140,7 +140,15 @@ class EditableStylePopover(CustomizationEditedKitPopoverMeta):
                 if item.itemTypeID == GUI_ITEM_TYPE.STYLE:
                     isRemovable = False
                 elif sType in self.__style.changeableSlotTypes:
-                    isRemovable = not isBase or item.itemTypeID not in EDITABLE_STYLE_IRREMOVABLE_TYPES
+                    if isBase:
+                        isRemovable = False
+                    elif item.itemTypeID in EDITABLE_STYLE_IRREMOVABLE_TYPES:
+                        if bool(self.__style.getDependenciesIntCDs()) and item.itemTypeID != GUI_ITEM_TYPE.CAMOUFLAGE:
+                            isRemovable = False
+                        else:
+                            isRemovable = True
+                    else:
+                        isRemovable = True
                 else:
                     isRemovable = False
                 itemData[key] = C11nPopoverItemData(item=item, season=season, isBase=isBase, isRemovable=isRemovable, isRemoved=False, isFromInventory=pItem.isFromInventory)

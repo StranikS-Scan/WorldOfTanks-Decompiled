@@ -31,11 +31,11 @@ class TutorialManagerMeta(BaseDAAPIComponent):
     def as_setTriggersS(self, componentId, triggers):
         return self.flashObject.as_setTriggers(componentId, triggers) if self._isDAAPIInited() else None
 
-    def as_showEffectS(self, viewTutorialId, componentId, builderData):
-        return self.flashObject.as_showEffect(viewTutorialId, componentId, builderData) if self._isDAAPIInited() else None
+    def as_showEffectS(self, viewTutorialId, componentId, effType, builderData):
+        return self.flashObject.as_showEffect(viewTutorialId, componentId, effType, builderData) if self._isDAAPIInited() else None
 
-    def as_hideEffectS(self, viewTutorialId, componentId, builderLnk):
-        return self.flashObject.as_hideEffect(viewTutorialId, componentId, builderLnk) if self._isDAAPIInited() else None
+    def as_hideEffectS(self, viewTutorialId, componentId, effType, builder):
+        return self.flashObject.as_hideEffect(viewTutorialId, componentId, effType, builder) if self._isDAAPIInited() else None
 
     def as_setComponentViewCriteriaS(self, componentId, viewTutorialId):
         return self.flashObject.as_setComponentViewCriteria(componentId, viewTutorialId) if self._isDAAPIInited() else None
@@ -48,3 +48,12 @@ class TutorialManagerMeta(BaseDAAPIComponent):
 
     def as_setConditionsS(self, conditions):
         return self.flashObject.as_setConditions(conditions) if self._isDAAPIInited() else None
+
+    def as_externalComponentFoundS(self, componentID, viewTutorialId, data):
+        return self.flashObject.as_externalComponentFound(componentID, viewTutorialId, data) if self._isDAAPIInited() else None
+
+    def as_updateExternalComponentS(self, componentID, viewTutorialId, data):
+        return self.flashObject.as_updateExternalComponent(componentID, viewTutorialId, data) if self._isDAAPIInited() else None
+
+    def as_disposeExternalComponentS(self, componentID, viewTutorialId):
+        return self.flashObject.as_disposeExternalComponent(componentID, viewTutorialId) if self._isDAAPIInited() else None

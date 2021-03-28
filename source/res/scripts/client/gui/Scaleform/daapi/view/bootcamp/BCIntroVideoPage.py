@@ -7,9 +7,9 @@ from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from bootcamp.BootCampEvents import g_bootcampEvents
-from uilogging.decorators import loggerTarget, loggerEntry, simpleLog
-from uilogging.bootcamp.constants import BC_LOG_ACTIONS, BC_LOG_KEYS
-from uilogging.bootcamp.loggers import BootcampUILogger
+from uilogging.deprecated.decorators import loggerTarget, loggerEntry, simpleLog
+from uilogging.deprecated.bootcamp.constants import BC_LOG_ACTIONS, BC_LOG_KEYS
+from uilogging.deprecated.bootcamp.loggers import BootcampUILogger
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
 from sound_gui_manager import CommonSoundSpaceSettings
 _DEFAULT_VIDEO_BUFFERING_TIME = 0.0

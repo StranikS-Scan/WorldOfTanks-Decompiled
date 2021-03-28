@@ -6,7 +6,6 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.Scaleform.daapi.view.lobby.vehicle_preview.hangar_switchers import getHangarSwitcher
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.sound_constants import STYLE_PREVIEW_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
 from gui.Scaleform.daapi.view.meta.VehicleBasePreviewMeta import VehicleBasePreviewMeta
@@ -41,7 +40,6 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         self.__backBtnDescrLabel = ctx.get('backBtnDescrLabel', backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.personalAwards()))
         self.__selectedVehicleEntityId = None
         g_currentPreviewVehicle.selectHeroTank(ctx.get('isHeroTank', False))
-        self.__hangarSwitcher = getHangarSwitcher(ctx.get('customHangarAlias'))
         return
 
     def closeView(self):
@@ -68,8 +66,6 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
          'objectTitle': self._style.userName,
          'descriptionTitle': backport.text(R.strings.tooltips.vehiclePreview.historicalReference.title()),
          'descriptionText': self.__styleDescr})
-        if self.__hangarSwitcher:
-            self.__hangarSwitcher.switchToHangar()
         return
 
     def _dispose(self):
@@ -82,9 +78,6 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         g_currentPreviewVehicle.resetAppearance()
         g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.VEHICLE_PREVIEW_HIDDEN), scope=EVENT_BUS_SCOPE.LOBBY)
         super(VehicleStylePreview, self)._dispose()
-        if self.__hangarSwitcher:
-            self.__hangarSwitcher.returnFromHangar()
-            self.__hangarSwitcher = None
         return
 
     def _createSelectableLogic(self):

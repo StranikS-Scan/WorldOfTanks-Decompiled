@@ -2,11 +2,11 @@
 # Embedded file name: scripts/client/web/client_web_api/common.py
 import logging
 from Event import Event
+from web.client_web_api.platform import getPlatformEventHandler
 from web.client_web_api.shop.stats import BalanceEventHandler
 from web.client_web_api.shop.trade import TradeEventHandler
 from web.client_web_api.reactive_comm import ReactiveCommunicationEventHandler
 from web.client_web_api.util.vehicle import VehicleCompareEventHandler, VehicleStateEventHandler
-from web.client_web_api.util.token import TokenEventHandler
 _logger = logging.getLogger(__name__)
 
 class WebEventSender(object):
@@ -36,4 +36,4 @@ class WebEventSender(object):
          VehicleCompareEventHandler(self),
          VehicleStateEventHandler(self),
          ReactiveCommunicationEventHandler(self),
-         TokenEventHandler(self))
+         getPlatformEventHandler(self))

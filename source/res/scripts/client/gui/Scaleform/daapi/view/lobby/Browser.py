@@ -95,8 +95,8 @@ class Browser(BrowserMeta):
             self.__browser.invalidateView()
         return
 
-    def setBrowserSize(self, width, height):
-        self.__size = (width, height)
+    def setBrowserSize(self, width, height, scale):
+        self.__size = (width, height, scale)
         if self.__browser is not None:
             self.__browser.updateSize(self.__size)
         return
@@ -137,7 +137,6 @@ class Browser(BrowserMeta):
             self.__browser.onNavigate -= self.__onNavigate
             self.__browser.onJsHostQuery -= self.__onJsHostQuery
             self.__browser.onTitleChange -= self.__onTitleChange
-            self.__browser.onReady -= self.__onReady
         if self.__webEventSender:
             self.__webEventSender.onCallback -= self.__onWebEventCallback
         self.removeListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/gui/login_manager.py
-
+import typing
+if typing.TYPE_CHECKING:
+    from constants import WGC_PUBLICATION
 
 class ILoginManager(object):
 
@@ -10,6 +12,13 @@ class ILoginManager(object):
 
     @property
     def wgcAvailable(self):
+        raise NotImplementedError
+
+    def getWgcPublication(self):
+        raise NotImplementedError
+
+    @property
+    def isWgcSteam(self):
         raise NotImplementedError
 
     def tryPrepareWGCLogin(self):

@@ -1320,6 +1320,50 @@
       <devices>	203	</devices>
     </damage>
   </_152mm_Sha_bao_547>
+  <_152mm_GM_45AP>
+    <id>	102	</id>
+    <userString>	#china_vehicles:_152mm_GM_45AP	</userString>
+    <icon>	ap	</icon>
+    <price>	1690	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	152	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	650	</armor>
+      <devices>	203	</devices>
+    </damage>
+  </_152mm_GM_45AP>
+  <_152mm_GM_45CR>
+    <id>	103	</id>
+    <userString>	#china_vehicles:_152mm_GM_45CR	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	6000	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	152	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	650	</armor>
+      <devices>	203	</devices>
+    </damage>
+  </_152mm_GM_45CR>
+  <_152mm_GM_45HE>
+    <id>	104	</id>
+    <userString>	#china_vehicles:_152mm_GM_45HE	</userString>
+    <icon>	he	</icon>
+    <price>	1170	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	152	</caliber>
+    <explosionRadius>	3.66	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	840	</armor>
+      <devices>	203	</devices>
+    </damage>
+  </_152mm_GM_45HE>
   <Development_Shell>
     <id>	65000	</id>
     <userString>	Development_Shell	</userString>

@@ -21,7 +21,7 @@ from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from helpers import dependency
 from items import makeIntCompactDescrByID
 from items.components.c11n_components import EditingStyleReason
-from items.components.c11n_constants import SeasonType, ItemTags, ProjectionDecalDirectionTags, ProjectionDecalFormTags, UNBOUND_VEH_KEY, ImageOptions, EDITING_STYLE_REASONS
+from items.components.c11n_constants import SeasonType, ItemTags, ProjectionDecalDirectionTags, ProjectionDecalFormTags, UNBOUND_VEH_KEY, ImageOptions, EDITING_STYLE_REASONS, CustomizationType
 from items.customizations import parseCompDescr, isEditedStyle, createNationalEmblemComponents, parseOutfitDescr
 from items.vehicles import VehicleDescr
 from shared_utils import first
@@ -437,8 +437,11 @@ class Customization(FittingItem):
         return self.season & SeasonType.EVENT
 
     def mayInstall(self, vehicle, _=None):
-        itemFilter = self._descriptor.filter
-        return itemFilter is None or itemFilter.matchVehicleType(vehicle.descriptor.type)
+        if not self._matchVehicleTags(vehicle):
+            return False
+        else:
+            itemFilter = self._descriptor.filter
+            return itemFilter is None or itemFilter.matchVehicleType(vehicle.descriptor.type)
 
     def isWide(self):
         return False
@@ -450,7 +453,7 @@ class Customization(FittingItem):
         return self.descriptor.isRare()
 
     def isHiddenInUI(self):
-        return self.descriptor.isHiddenInUI()
+        return not self._matchVehicleTags(g_currentVehicle.item) or self.descriptor.isHiddenInUI()
 
     def getGUIEmblemID(self):
         pass
@@ -561,6 +564,9 @@ class Customization(FittingItem):
             if UNBOUND_VEH_KEY in self.__progressingData and self.mayInstall(vehicle):
                 return self.__progressingData[UNBOUND_VEH_KEY]
         return
+
+    def _matchVehicleTags(self, vehicle):
+        return not (vehicle and vehicle.isProgressionDecalsOnly)
 
 
 class Paint(Customization):
@@ -729,11 +735,15 @@ class ProjectionDecal(Decal):
 
     @property
     def canBeMirroredHorizontally(self):
-        return self.descriptor.canBeMirroredHorizontally
+        return self.descriptor.canBeMirroredHorizontally and not self.descriptor.canBeMirroredOnlyVertically
 
     @property
     def canBeMirroredVertically(self):
         return self.descriptor.canBeMirroredVertically
+
+    @property
+    def canBeMirroredOnlyVertically(self):
+        return self.descriptor.canBeMirroredOnlyVertically
 
     @property
     def previewIcon(self):
@@ -791,6 +801,9 @@ class ProjectionDecal(Decal):
 
     def isWide(self):
         return True
+
+    def _matchVehicleTags(self, vehicle):
+        return self.isProgressive if vehicle and vehicle.isProgressionDecalsOnly else super(ProjectionDecal, self)._matchVehicleTags(vehicle)
 
     def __getPreviewParams(self, level=None, size=None, innerSize=None):
         texture = self.getTextureByProgressionLevel(self.texture, level) if level is not None else self.texture
@@ -882,7 +895,7 @@ class Attachment(Customization):
 
 
 class Style(Customization):
-    __slots__ = ('_changableTypes', '_service', '_itemsCache', '__outfits')
+    __slots__ = ('_changableTypes', '_service', '_itemsCache', '__outfits', '__dependenciesByIntCD')
     _service = dependency.descriptor(ICustomizationService)
     _itemsCache = dependency.descriptor(IItemsCache)
 
@@ -891,6 +904,7 @@ class Style(Customization):
         self.itemTypeID = GUI_ITEM_TYPE.STYLE
         self._changableTypes = None
         self.__outfits = {}
+        self.__dependenciesByIntCD = None
         return
 
     @property
@@ -975,6 +989,20 @@ class Style(Customization):
             if season not in self.__outfits or self.__outfits[season].vehicleCD != vehicleCD:
                 self.__outfits[season] = self.__createOutfit(season, vehicleCD)
             return self.__outfits[season].copy()
+
+    def getDependenciesIntCDs(self):
+        if self.__dependenciesByIntCD is None:
+            self.__dependenciesByIntCD = {}
+            makeCD = makeIntCompactDescrByID
+            for ancestorID, dependentData in self.descriptor.dependencies.iteritems():
+                dependentIntCDs = []
+                for iType, iIds in dependentData.iteritems():
+                    dependentIntCDs.extend([ makeCD('customizationItem', iType, iId) for iId in iIds ])
+
+                dependentIntCDs = tuple(dependentIntCDs)
+                self.__dependenciesByIntCD[makeCD('customizationItem', CustomizationType.CAMOUFLAGE, ancestorID)] = dependentIntCDs
+
+        return self.__dependenciesByIntCD
 
     def isWide(self):
         return True

@@ -3,7 +3,7 @@
 import BigWorld
 import SoundGroups
 from vehicle_systems.tankStructure import ColliderTypes
-from svarog_script.script_game_object import ScriptGameObject, ComponentDescriptor
+from cgf_obsolete_script.script_game_object import ScriptGameObject, ComponentDescriptor
 from hangar_selectable_objects import ISelectableObject
 
 class ClientSelectableObject(BigWorld.Entity, ScriptGameObject, ISelectableObject):
@@ -15,7 +15,7 @@ class ClientSelectableObject(BigWorld.Entity, ScriptGameObject, ISelectableObjec
 
     def __init__(self):
         BigWorld.Entity.__init__(self)
-        ScriptGameObject.__init__(self, self.spaceID)
+        ScriptGameObject.__init__(self, self.spaceID, 'ClientSelectableObject')
         ISelectableObject.__init__(self)
         self.__enabled = True
         self.__edged = False
@@ -38,7 +38,7 @@ class ClientSelectableObject(BigWorld.Entity, ScriptGameObject, ISelectableObjec
             self.model = model
             self.filter = BigWorld.DumbFilter()
             self.model.addMotor(BigWorld.Servo(self.matrix))
-            self.collisions = prereqs['collisionAssembler']
+            self.collisions = self.createComponent(BigWorld.CollisionComponent, prereqs['collisionAssembler'])
             collisionData = ((0, self.model.matrix),)
             self.collisions.connect(self.id, ColliderTypes.DYNAMIC_COLLIDER, collisionData)
         ScriptGameObject.activate(self)

@@ -30,7 +30,6 @@ class HANGAR_ALIASES(object):
     VEH_PARAM_RENDERER_STATE_EXTRA = 'extra'
     PROGRESSIVE_REWARD_WIDGET = 'progressiveRewardWdgt'
     DAILY_QUEST_WIDGET = 'dqWidget'
-    MARKET_ENTRY_POINT = 'marketEntryPoint'
     BATTLE_PASSS_ENTRY_POINT = 'battlePassEntryPoint'
     BATTLE_ROYALE_ENTRY_POINT = 'battleRoyaleEntryPoint'
     SECONDARY_ENTRY_POINT = 'secondaryEntryPoint'

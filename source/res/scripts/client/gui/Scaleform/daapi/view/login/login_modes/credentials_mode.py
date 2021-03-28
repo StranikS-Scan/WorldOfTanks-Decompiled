@@ -33,7 +33,7 @@ class CredentialsMode(BaseMode):
     def rememberPassVisible(self):
         return GUI_SETTINGS.rememberPassVisible
 
-    def init(self):
+    def onPopulate(self):
         self._initViewBackground()
 
     def setRememberPassword(self, rememberUser):

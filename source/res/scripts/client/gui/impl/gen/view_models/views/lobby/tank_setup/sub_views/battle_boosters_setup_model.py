@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.battle_booster_sl
 class BattleBoostersSetupModel(BaseSetupModel):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=8):
+    def __init__(self, properties=6, commands=7):
         super(BattleBoostersSetupModel, self).__init__(properties=properties, commands=commands)
 
     def getSlots(self):

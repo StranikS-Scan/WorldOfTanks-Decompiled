@@ -35,28 +35,12 @@ class Tokens(object):
     def getCache(self, callback=None):
         self.__syncData.waitForSync(partial(self.__onGetCacheResponse, callback))
 
-    def openLootBox(self, boxID, count, specificRollNumber, callback):
+    def openLootBox(self, boxID, count, callback):
         if callback is not None:
             proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)
         else:
             proxy = None
-        self.__account._doCmdInt3(AccountCommands.CMD_LOOTBOX_OPEN, boxID, count, specificRollNumber, proxy)
-        return
-
-    def marketItemNext(self, boxID, callback=None):
-        if callback is not None:
-            proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)
-        else:
-            proxy = None
-        self.__account._doCmdInt(AccountCommands.CMD_MARKET_ITEM_NEXT, boxID, proxy)
-        return
-
-    def getMarketItemNextRecords(self, callback=None):
-        if callback is not None:
-            proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)
-        else:
-            proxy = None
-        self.__account._doCmdInt(AccountCommands.CMD_MARKET_ITEM_NEXT_RECORDS, 0, proxy)
+        self.__account._doCmdInt2(AccountCommands.CMD_LOOTBOX_OPEN, boxID, count, proxy)
         return
 
     def getInfoLootBox(self, boxIDs, fullInfo, callback):

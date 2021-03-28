@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/battleground/kamikaze_effect.py
 import logging
 import BigWorld
-import Svarog
+import CGF
 import AnimationSequence
 from helpers import dependency
 from battleground import getKamikazeEquipmentDescr
@@ -57,10 +57,9 @@ class KamikazeActivationEffect(AvatarRelatedComponent, CallbackDelayer):
             vehicle = BigWorld.entities.get(vehicleID)
             if vehicle is not None:
                 spaceID = BigWorld.player().spaceID
-                effectCmp = Svarog.GameObject(spaceID)
+                effectCmp = CGF.GameObject(spaceID)
                 sequenceComponent = effectCmp.createComponent(SequenceComponent, resourceRefs[effectP])
                 sequenceComponent.bindToCompound(vehicle.model)
-                sequenceComponent.start()
                 _logger.info('Kamikaze Animation Started!')
                 effectCmp.activate()
                 vehicle.appearance.addTempGameObject(effectCmp, 'kamikaze')

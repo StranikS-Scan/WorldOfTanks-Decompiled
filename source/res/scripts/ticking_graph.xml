@@ -1,0 +1,15 @@
+<ticking_graph.xml>
+  <Init>
+    <preInitGroup>
+      <before>	true	</before>
+    </preInitGroup>
+  </Init>
+  <Simulation>
+    <NetworkFilter>
+      <before>	true	</before>
+    </NetworkFilter>
+    <Sensor></Sensor>
+  </Simulation>
+  <PostHierarchy></PostHierarchy>
+  <Finalize></Finalize>
+</ticking_graph.xml>

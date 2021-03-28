@@ -83,9 +83,6 @@ class ShowShooting(EntityExtra):
                 groundWaveEff = effPlayer.effectsList.relatedEffects.get('groundWave')
                 if groundWaveEff is not None:
                     self._doGroundWaveEffect(data['entity'], groundWaveEff, gunModel)
-                if vehicle.isPlayerVehicle:
-                    appearance = vehicle.appearance
-                    appearance.executeShootingVibrations(vehicle.typeDescriptor.shot.shell.caliber)
         except Exception:
             LOG_CURRENT_EXCEPTION()
             self.stop(data)
@@ -167,9 +164,6 @@ class ShowShootingMultiGun(ShowShooting):
                 avatar = BigWorld.player()
                 if data['entity'].isPlayerVehicle or vehicle is avatar.getVehicleAttached():
                     avatar.getOwnVehicleShotDispersionAngle(avatar.gunRotator.turretRotationSpeed, withShot=1)
-                if vehicle.isPlayerVehicle:
-                    appearance = vehicle.appearance
-                    appearance.executeShootingVibrations(vehicle.typeDescriptor.shot.shell.caliber)
         except Exception:
             LOG_CURRENT_EXCEPTION()
             self.stop(data)
@@ -264,7 +258,6 @@ class Fire(EntityExtra):
             self.__playEffect(data)
         data['_isStarted'] = True
         data['_invokeTime'] = BigWorld.time()
-        vehicle.appearance.switchFireVibrations(True)
 
     def _update(self, data, args):
         if not data['_isStarted']:
@@ -291,7 +284,6 @@ class Fire(EntityExtra):
             return
         else:
             vehicle = data['entity']
-            vehicle.appearance.switchFireVibrations(False)
             effectsListPlayer = self.__getEffectsListPlayer(data)
             if effectsListPlayer is not None:
                 if vehicle.health <= 0:

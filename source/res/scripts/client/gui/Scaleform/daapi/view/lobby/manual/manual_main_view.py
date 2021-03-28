@@ -10,7 +10,6 @@ from gui.Scaleform.daapi.view.lobby.manual.manual_view_base import ManualViewBas
 _logger = logging.getLogger(__name__)
 
 class ManualMainView(ManualViewBase, ManualMainViewMeta):
-    __background_alpha__ = 1
 
     def closeView(self):
         self._close()

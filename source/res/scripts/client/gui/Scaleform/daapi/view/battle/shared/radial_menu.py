@@ -20,9 +20,9 @@ from gui.shared.utils.key_mapping import getScaleformKey, BW_TO_SCALEFORM
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.gui.battle_session import IBattleSessionProvider
-from uilogging.decorators import loggerTarget, loggerEntry, simpleLog
-from uilogging.ibc.constants import IBC_LOG_KEYS
-from uilogging.ibc.loggers import IBCLogger
+from uilogging.deprecated.decorators import loggerTarget, loggerEntry, simpleLog
+from uilogging.deprecated.ibc.constants import IBC_LOG_KEYS
+from uilogging.deprecated.ibc.loggers import IBCLogger
 _logger = logging.getLogger(__name__)
 _SHORTCUTS_IN_GROUP = 6
 Shortcut = namedtuple('Shortcut', ('title', 'action', 'icon', 'groups', 'bState', 'indexInGroup'))

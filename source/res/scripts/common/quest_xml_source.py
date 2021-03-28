@@ -288,8 +288,7 @@ class Source(object):
          'peripheryIDs': {int(p) for p in onlyForPeripheriesList.split()} if onlyForPeripheriesList else set(),
          'runFlags': runFlags,
          'showPostBattleStat': questSection.readBool('showPostBattleStat', False),
-         'saveBonusHistory': questSection.readBool('saveBonusHistory', False),
-         'sendBonusHistory': questSection.readBool('sendBonusHistory', False)}
+         'saveBonusHistory': questSection.readBool('saveBonusHistory', False)}
         if eventType == EVENT_TYPE.MOTIVE_QUEST:
             extraSubsectionsNames = ('advice', 'requirements', 'congratulation')
             for subsectionName in extraSubsectionsNames:

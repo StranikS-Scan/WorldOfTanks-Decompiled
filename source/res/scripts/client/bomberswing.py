@@ -128,6 +128,7 @@ class CompoundBomber(Bomber):
 
     def _loadRes(self):
         BigWorld.loadResourceListBG((self._desc.modelName, self._desc.flyAnimation), makeCallbackWeak(self._onModelLoaded))
+        self._desc = BomberDesc(self._desc.modelName.name, self._desc.soundEvent, self._desc.initPointA, self._desc.initPointB, self._desc.flyAnimation.name)
 
     def _onAttackEnded(self, position, velocity):
         self.startAttack(False)
@@ -138,14 +139,14 @@ class CompoundBomber(Bomber):
         if self._destroyed:
             return
         if self._desc.flyAnimation not in resourceRefs.failedIDs:
-            self.__flyAnimation = resourceRefs[self._desc.flyAnimation.name]
+            self.__flyAnimation = resourceRefs[self._desc.flyAnimation]
         else:
-            LOG_ERROR('Could not load animation %s' % self._desc.flyAnimation.name)
+            LOG_ERROR('Could not load animation %s' % self._desc.flyAnimation)
         if self._desc.modelName not in resourceRefs.failedIDs:
-            self._model = resourceRefs[self._desc.modelName.name]
+            self._model = resourceRefs[self._desc.modelName]
             self.__onFlightStarted()
         else:
-            LOG_ERROR('Could not load model %s' % self._desc.modelName.name)
+            LOG_ERROR('Could not load model %s' % self._desc.modelName)
 
     def __onFlightStarted(self):
         if self._model:

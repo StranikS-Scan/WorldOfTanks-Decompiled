@@ -10,7 +10,7 @@
         </show-hint>
       </runtime-effects>
       <gui-items>
-        <gui-item>	HangarPanelOptDevice	  <on-scene-effects>
+        <gui-item>	HangarOptionalDeviceSlots	  <on-scene-effects>
             <activate>	AmmunitionPanelOnScene	</activate>
           </on-scene-effects>
           <not-on-scene-effects>
@@ -27,7 +27,7 @@
     </scene>
   </scenes>
   <has-id>
-    <hint>	AmmunitionPanelHint	  <item-id>	HangarPanelOptDevice	</item-id>
+    <hint>	AmmunitionPanelHint	  <item-id>	HangarOptionalDeviceSlots	</item-id>
       <text>	#quests:action/chain/hint/removalCost	</text>
       <arrow>
         <direction>	T	</direction>
@@ -40,15 +40,15 @@
         <bottom>	0	</bottom>
       </padding>
       <actions>
-        <click>	HangarPanelOptDevice	  <effects>
+        <click>	HangarOptionalDeviceSlots	  <effects>
             <refuse-training></refuse-training>
           </effects>
         </click>
-        <click-outside>	HangarPanelOptDevice	  <effects>
+        <click-outside>	HangarOptionalDeviceSlots	  <effects>
             <refuse-training></refuse-training>
           </effects>
         </click-outside>
-        <esc>	HangarPanelOptDevice	  <effects>
+        <esc>	HangarOptionalDeviceSlots	  <effects>
             <refuse-training></refuse-training>
           </effects>
         </esc>

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_royale/br_effect_player.py
 import logging
 import BigWorld
+import CGF
 import GenericComponents
 from helpers import dependency
 from gui.battle_control.controllers.progression_ctrl import IProgressionListener
@@ -35,6 +36,11 @@ class BRUpgradeEffectPlayer(IProgressionListener, IViewComponentsCtrlListener):
             vehicle = BigWorld.entities.get(vehicleID)
             if vehicle:
                 config = self.__dynObjectsCache.getConfig(self.__sessionProvider.arenaVisitor.getArenaGuiType()).getVehicleUpgradeEffect().effectDescr
-                vehicle.appearance.createComponent(GenericComponents.ParticleComponent, config.path, config.rate, BigWorld.player().spaceID, config.offset)
+                gameObject = CGF.GameObject(vehicle.appearance.spaceID)
+                gameObject.createComponent(GenericComponents.HierarchyComponent, vehicle.appearance.gameObject)
+                gameObject.createComponent(GenericComponents.ParticleComponent, config.path, config.rate)
+                gameObject.createComponent(GenericComponents.TransformComponent, config.offset)
+                gameObject.activate()
+                gameObject.transferOwnershipToWorld()
             else:
                 _logger.warning('Unable to get vehicle by id %s', vehicleID)

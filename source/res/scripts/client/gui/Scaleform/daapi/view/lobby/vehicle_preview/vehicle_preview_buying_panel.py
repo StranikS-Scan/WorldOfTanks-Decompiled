@@ -3,7 +3,7 @@
 import time
 from collections import namedtuple
 import BigWorld
-from adisp import process
+from adisp import process, async
 from CurrentVehicle import g_currentPreviewVehicle
 from collector_vehicle import CollectorVehicleConsts
 from constants import RentType, GameSeasonType
@@ -48,7 +48,7 @@ from helpers.i18n import makeString as _ms
 from items_kit_helper import lookupItem, BOX_TYPE, showItemTooltip
 from items_kit_helper import OFFER_CHANGED_EVENT, getActiveOffer, mayObtainForMoney, mayObtainWithMoneyExchange
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IVehicleComparisonBasket, ICalendarController, IMarathonEventsController
+from skeletons.gui.game_control import IVehicleComparisonBasket, ICalendarController, IMarathonEventsController, IExternalLinksController
 from skeletons.gui.game_control import ITradeInController, IRestoreController, IHeroTankController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
@@ -104,6 +104,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
     _lobbyContext = dependency.descriptor(ILobbyContext)
     _marathonsCtrl = dependency.descriptor(IMarathonEventsController)
     __calendarController = dependency.descriptor(ICalendarController)
+    __linksCtrl = dependency.descriptor(IExternalLinksController)
 
     def __init__(self, skipConfirm=False):
         super(VehiclePreviewBuyingPanel, self).__init__()
@@ -342,6 +343,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
                     g_currentPreviewVehicle.previewStyle(style)
             return
 
+    @process
     def __updateBtnState(self, *_):
         item = g_currentPreviewVehicle.item
         if item is None:
@@ -356,6 +358,11 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
             else:
                 buyingPanelData = self.__previewDP.getBuyingPanelData(item, btnData, self.__isHeroTank)
             buyingPanelData.update({'isReferralEnabled': self.__isReferralWindow()})
+            hasExternalLink = yield self.__hasExternalLink()
+            if hasExternalLink:
+                btnIcon = backport.image(R.images.gui.maps.icons.library.buyInWeb())
+                buyingPanelData.update({'buyButtonIcon': btnIcon,
+                 'buyButtonIconAlign': 'right'})
             self.as_setBuyDataS(buyingPanelData)
             return
 
@@ -624,6 +631,17 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         else:
             url = self._heroTanks.getCurrentRelatedURL()
             self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.SPECIFIED, url=url))
+
+    @async
+    @process
+    def __hasExternalLink(self, callback=None):
+        url = ''
+        if self._marathonEvent:
+            url = yield self._marathonEvent.getMarathonVehicleUrl()
+        elif self.__isHeroTank:
+            if not self._heroTanks.isAdventHero() and not self._heroTanks.getCurrentShopUrl():
+                url = self._heroTanks.getCurrentRelatedURL()
+        callback(self.__linksCtrl.externalAllowed(url) if url else False)
 
     @process
     def __purchaseMarathonPackage(self):

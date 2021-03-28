@@ -26,6 +26,12 @@ class ILobbyContext(object):
     def getCredentials(self):
         raise NotImplementedError
 
+    def isAccountComplete(self):
+        raise NotImplementedError
+
+    def setAccountComplete(self, isComplete):
+        raise NotImplementedError
+
     def getBattlesCount(self):
         raise NotImplementedError
 

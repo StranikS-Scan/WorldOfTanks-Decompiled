@@ -150,7 +150,10 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
             self._isInit = False
 
     def updateDefaultButton(self):
-        defaultGroup = self._selectedGroup == self._groupCount - 1
+        if self._groupCount > 0:
+            defaultGroup = self._selectedGroup == self._groupCount - 1
+        else:
+            defaultGroup = True
         defaultFormfactorGroups = any(self._formfactorTypes.values())
         notDefault = not defaultGroup or defaultFormfactorGroups or self._historicToggleEnabled or self._nonHistoricToggleEnabled or self._purchasedToggleEnabled or self._hideOnAnotherVehEnabled or self._showOnlyProgressionDecalsEnabled or self._showOnlyEditableStylesEnabled or self._showOnlyNonEditableStylesEnabled or self._appliedToggleEnabled
         self.as_enableDefBtnS(notDefault)

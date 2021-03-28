@@ -53,7 +53,9 @@ _SelectItemData = namedtuple('_SelectItemData', ('season',
  'quantity',
  'purchaseIndices',
  'idx',
- 'intCD'))
+ 'intCD',
+ 'dependents',
+ 'dependentOn'))
 
 def _getSeasonModel(seasonType, seasons):
     if seasonType not in SEASON_TYPE_TO_NAME:
@@ -241,6 +243,7 @@ class CustomizationCartView(ViewImpl):
         selected = args.get('selected')
         itemData = self.__items[itemId]
         self.__refreshPurchaseItems(itemData.purchaseIndices, selected)
+        self.__refreshStrictlyDependantItems(itemData, selected)
         with self.getViewModel().transaction() as model:
             processorSelector = ProcessorSelector(_getProcessorsMap())
             result = processorSelector.process(self.__purchaseItems)
@@ -261,12 +264,27 @@ class CustomizationCartView(ViewImpl):
                         anotherPItem.isFromInventory = not anotherPItem.isFromInventory
                         break
 
+    def __refreshStrictlyDependantItems(self, targetItemData, selected):
+        dependants = targetItemData.dependents
+        targetSeason = targetItemData.season
+        if dependants:
+            for itemData in self.__items.values():
+                if itemData.season == targetSeason and itemData.intCD in dependants:
+                    self.__refreshPurchaseItems(itemData.purchaseIndices, selected)
+
+        elif targetItemData.dependentOn:
+            if selected:
+                for itemData in self.__items.values():
+                    if itemData.season == targetSeason and itemData.intCD == targetItemData.dependentOn:
+                        self.__refreshPurchaseItems(itemData.purchaseIndices, selected)
+                        break
+
     def __setItemsNCounters(self, itemDescriptors):
         self.__items = {}
         self.__counters = {season:[0, 0] for season in SeasonType.COMMON_SEASONS}
         for season in SeasonType.COMMON_SEASONS:
             for idx, item in enumerate(itemDescriptors[season]):
-                self.__items[item.identificator] = _SelectItemData(season, item.quantity, item.purchaseIndices, idx, item.intCD)
+                self.__items[item.identificator] = _SelectItemData(season, item.quantity, item.purchaseIndices, idx, item.intCD, item.dependents, item.dependentOn)
                 if self.__mode == ItemsType.DEFAULT:
                     self.__counters[season][int(item.isFromInventory)] += item.quantity * item.selected
 

@@ -6,7 +6,7 @@ import BigWorld
 from constants import EMPTY_GEOMETRY_ID
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from items import makeIntCompactDescrByID
-from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, SeasonType
+from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.customization import ICustomizationService
 from gui import SystemMessages
@@ -20,7 +20,7 @@ from gui.shared.gui_items.processors import Processor, makeError, makeSuccess, m
 from gui.shared.money import Money, Currency
 from messenger import g_settings
 from helpers import dependency
-from items.customizations import isEditedStyle, CustomizationOutfit
+from items.customizations import isEditedStyle
 from skeletons.gui.game_control import IVehicleComparisonBasket
 _logger = logging.getLogger(__name__)
 
@@ -148,38 +148,37 @@ class BattleResultsGetter(Processor):
 
 class OutfitApplier(Processor):
 
-    def __init__(self, vehicle, outfit, season):
-        super(OutfitApplier, self).__init__()
+    def __init__(self, vehicle, outfitData):
+        super(OutfitApplier, self).__init__((plugins.CustomizationPurchaseValidator(outfitData),))
         self.vehicle = vehicle
-        self.outfit = outfit
-        self.season = season
+        self.outfitData = outfitData
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError('customization/{}'.format(errStr or 'server_error'))
 
     def _request(self, callback):
-        _logger.debug('Make server request to put on outfit on vehicle %s, season %s', self.vehicle.invID, self.season)
+        _logger.debug('Make server request to put on outfit on vehicle %s, outfitData %s', self.vehicle.invID, self.outfitData)
+        requestData = []
         c11nService = dependency.instance(ICustomizationService)
-        component = None
-        if self.outfit.style:
-            intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, self.outfit.style.id)
-            style = self.itemsCache.items.getItemByCD(intCD)
-            if style and style.isProgressive:
-                outfit = c11nService.removeAdditionalProgressionData(outfit=self.outfit, style=style, vehCD=self.vehicle.descriptor.makeCompactDescr(), season=self.season)
+        for outfit, season in self.outfitData:
+            component = None
+            if outfit.style:
+                intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, outfit.style.id)
+                style = self.itemsCache.items.getItemByCD(intCD)
+                if style and style.isProgressive:
+                    outfit = c11nService.removeAdditionalProgressionData(outfit=outfit, style=style, vehCD=self.vehicle.descriptor.makeCompactDescr(), season=season)
+                    component = outfit.pack()
+            if component is None:
                 component = outfit.pack()
-        if component is None:
-            component = self.outfit.pack()
-        if self.season == SeasonType.ALL:
-            component = CustomizationOutfit()
-            component.styleId = self.outfit.id
-            component.styleProgressionLevel = self.outfit.progressionLevel
-        elif component.styleId and isEditedStyle(component):
-            intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, component.styleId)
-            style = self.itemsCache.items.getItemByCD(intCD)
-            baseComponent = style.getOutfit(self.season, self.vehicle.descriptor.makeCompactDescr())
-            component = component.getDiff(baseComponent.pack())
-        self.__validateOutfitComponent(component)
-        BigWorld.player().shop.buyAndEquipOutfit(self.vehicle.invID, self.season, component.makeCompDescr(), lambda code: self._response(code, callback))
+            if component.styleId and isEditedStyle(component):
+                intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, component.styleId)
+                style = self.itemsCache.items.getItemByCD(intCD)
+                baseComponent = style.getOutfit(season, self.vehicle.descriptor.makeCompactDescr())
+                component = component.getDiff(baseComponent.pack())
+            self.__validateOutfitComponent(component)
+            requestData.append((component.makeCompDescr(), season))
+
+        BigWorld.player().shop.buyAndEquipOutfit(self.vehicle.invID, requestData, lambda code: self._response(code, callback))
         return
 
     def __validateOutfitComponent(self, outfitComponent):
@@ -192,6 +191,13 @@ class OutfitApplier(Processor):
                 itemsComponents = []
             setattr(outfitComponent, componentsAttrName, itemsComponents)
 
+        camouflages = []
+        for camoComponent in outfitComponent.camouflages:
+            if camoComponent.id != HIDDEN_CAMOUFLAGE_ID:
+                camouflages.append(camoComponent)
+            _logger.error('Hidden Camouflage cannot be installed manually. %s removed.', camoComponent)
+
+        outfitComponent.camouflages = camouflages
         return
 
 

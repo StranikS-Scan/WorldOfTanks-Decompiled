@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/services_config.py
+import logging
 import festivity
 __all__ = ('getClientServicesConfig',)
+_logger = logging.getLogger(__name__)
 
 def getClientServicesConfig(manager):
     import account_helpers
@@ -11,6 +13,7 @@ def getClientServicesConfig(manager):
     import gui
     import gameplay
     import helpers
+    import uilogging
     from skeletons.connection_mgr import IConnectionManager
     from skeletons.map_activities import IMapActivities
     from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
@@ -21,4 +24,17 @@ def getClientServicesConfig(manager):
     manager.addConfig(gameplay.getGameplayConfig)
     manager.addConfig(festivity.getFestivityConfig)
     manager.addConfig(gui.getGuiServicesConfig)
+    manager.addConfig(uilogging.getUILoggingConfig)
     manager.addConfig(helpers.getHelperServicesConfig)
+    import constants
+    from gui import GUI_SETTINGS
+    if constants.IS_TUTORIAL_ENABLED and GUI_SETTINGS.isGuiEnabled():
+        try:
+            import tutorial
+        except ImportError:
+            _logger.exception('Module tutorial not found')
+            from helpers import tutorial
+
+    else:
+        from helpers import tutorial
+    manager.addConfig(tutorial.getTutorialConfig)

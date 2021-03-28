@@ -8,7 +8,6 @@ from gui.Scaleform.daapi.view.lobby.manual.manual_view_base import ManualViewBas
 _logger = logging.getLogger(__name__)
 
 class ManualChapterView(ManualViewBase, ManualChapterViewMeta):
-    __background_alpha__ = 1
 
     def __init__(self, ctx=None):
         super(ManualChapterView, self).__init__(ctx)

@@ -224,17 +224,17 @@ class ArenaEquipmentComponent(ClientArenaComponent):
     def __checkAffectComponent(self, vehicleID, affectComponent, isInfluenceZone):
         vehicle = BigWorld.entities.get(vehicleID)
         if vehicle and vehicle.isAlive():
-            gameObject = vehicle.appearance
-            if gameObject.findComponentByType(affectComponent) is not None:
+            appearance = vehicle.appearance
+            if appearance.findComponentByType(affectComponent) is not None:
                 if not isInfluenceZone:
-                    curAffectComponent = gameObject.findComponentByType(affectComponent)
-                    gameObject.removeComponent(curAffectComponent)
+                    curAffectComponent = appearance.findComponentByType(affectComponent)
+                    appearance.removeComponent(curAffectComponent)
                     if curAffectComponent.hasDebuff:
                         vehicle.onDebuffEffectApplied(False)
                 return
             if isInfluenceZone:
-                gameObject.createComponent(affectComponent, gameObject, vehicle.isPlayerVehicle, BigWorld.player().spaceID)
-                curAffectComponent = gameObject.findComponentByType(affectComponent)
+                appearance.createComponent(affectComponent, appearance.gameObject, vehicle.isPlayerVehicle, BigWorld.player().spaceID)
+                curAffectComponent = appearance.findComponentByType(affectComponent)
                 if curAffectComponent.hasDebuff:
                     vehicle.onDebuffEffectApplied(True)
         return

@@ -5,8 +5,6 @@ from operator import getitem
 import resource_helper
 from debug_utils import LOG_ERROR
 from gui.Scaleform.genConsts.TWEEN_EFFECT_TYPES import TWEEN_EFFECT_TYPES
-from gui.Scaleform.genConsts.TUTORIAL_EFFECT_TYPES import TUTORIAL_EFFECT_TYPES
-from gui.Scaleform.genConsts.TUTORIAL_EFFECT_BUILDERS import TUTORIAL_EFFECT_BUILDERS
 __all__ = ('readConfig', 'clearConfig')
 _cache = {}
 
@@ -65,7 +63,7 @@ class _ItemConfig(object):
         self.__padding = self._defaultPadding()
         self.__anim = self._defaultAnimConfig()
         self.__bootcampHint = self._defaultBootcampHintConfig()
-        self.__effectBuilders = self._defaultEffectBuilders()
+        self.__effectBuilders = effectBuilders.copy() if effectBuilders is not None else {}
         if padding is not None:
             self.__padding.update(padding)
         if anim is not None:
@@ -74,11 +72,6 @@ class _ItemConfig(object):
             self.__anim.update(anim)
         if bootcampHint is not None:
             self.__bootcampHint.update(bootcampHint)
-        if effectBuilders is not None:
-            for key, value in effectBuilders.iteritems():
-                effectBuilders[key] = _getEnumValueByName(value, TUTORIAL_EFFECT_BUILDERS)
-
-            self.__effectBuilders.update(effectBuilders)
         return
 
     @property
@@ -129,17 +122,6 @@ class _ItemConfig(object):
         return {'padding': _ItemConfig._defaultPadding(),
          'hideBorder': False,
          'customLinkage': ''}
-
-    @staticmethod
-    def _defaultEffectBuilders():
-        return {TUTORIAL_EFFECT_TYPES.HINT: TUTORIAL_EFFECT_BUILDERS.DEFAULT_HINT,
-         TUTORIAL_EFFECT_TYPES.BOOTCAMP_HINT: TUTORIAL_EFFECT_BUILDERS.HIGHLIGHT,
-         TUTORIAL_EFFECT_TYPES.DISPLAY: TUTORIAL_EFFECT_BUILDERS.DISPLAY,
-         TUTORIAL_EFFECT_TYPES.TWEEN: TUTORIAL_EFFECT_BUILDERS.TWEEN,
-         TUTORIAL_EFFECT_TYPES.CLIP: TUTORIAL_EFFECT_BUILDERS.CLIP,
-         TUTORIAL_EFFECT_TYPES.ENABLED: TUTORIAL_EFFECT_BUILDERS.ENABLED,
-         TUTORIAL_EFFECT_TYPES.OVERLAY: TUTORIAL_EFFECT_BUILDERS.OVERLAY,
-         TUTORIAL_EFFECT_TYPES.LAYOUT: TUTORIAL_EFFECT_BUILDERS.AMMO_PANEL}
 
 
 _SceneConfig = namedtuple('_SceneConfig', ('sceneID', 'event'))

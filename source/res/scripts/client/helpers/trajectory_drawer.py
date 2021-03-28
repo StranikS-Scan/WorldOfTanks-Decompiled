@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/trajectory_drawer.py
 import BigWorld
-import Svarog
+import CGF
 from debug_utils import LOG_CURRENT_EXCEPTION
 try:
     import BallisticsDebug
@@ -71,7 +71,7 @@ class _TrajectoryDrawerImpl(object):
         self.__isEnabled = self.__castBool(value)
         if self.__isEnabled:
             if self.__gameObject is None:
-                self.__gameObject = Svarog.GameObject(self.__spaceID)
+                self.__gameObject = CGF.GameObject(self.__spaceID, 'TrajectoryDrawer')
             if self.__drawer is None:
                 self.__drawer = self.__gameObject.createComponent(BallisticsDebug.TrajectoryDrawer)
             self.__gameObject.activate()

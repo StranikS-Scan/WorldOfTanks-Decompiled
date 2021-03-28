@@ -2,8 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/browser/shop_view.py
 import logging
 from PlayerEvents import g_playerEvents
-from gui.impl.gen.resources import R
-from gui.impl import backport
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL
@@ -39,10 +37,6 @@ class ShopBase(_ShopOverlayBase):
         if 'url' not in ctx:
             ctx['url'] = getShopURL()
         super(ShopBase, self).__init__(ctx)
-
-    def _dispose(self):
-        super(ShopBase, self)._dispose()
-        self.soundManager.playSound(backport.sound(R.sounds.black_market_exit()))
 
     def webHandlers(self):
         from gui.Scaleform.daapi.view.lobby.store.browser.web_handlers import createShopWebHandlers

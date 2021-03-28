@@ -22,7 +22,7 @@ class BaseMode(object):
         self._viewBackground = None
         return
 
-    def init(self):
+    def onPopulate(self):
         pass
 
     def destroy(self):

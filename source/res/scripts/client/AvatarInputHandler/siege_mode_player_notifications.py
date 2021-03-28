@@ -4,7 +4,7 @@ import BigWorld
 import Math
 import SoundGroups
 from constants import VEHICLE_SIEGE_STATE
-from svarog_script.py_component import Component
+from cgf_obsolete_script.py_component import Component
 from vehicle_systems.tankStructure import TankNodeNames
 
 class SOUND_NOTIFICATIONS(object):

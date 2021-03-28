@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/vehicle_systems/components/vehicle_shadow_manager.py
 import BigWorld
 from aih_constants import CTRL_MODE_NAME
-from svarog_script.py_component import Component
+from cgf_obsolete_script.py_component import Component
 
 class VehicleShadowManager(Component):
 

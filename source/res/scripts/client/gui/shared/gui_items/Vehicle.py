@@ -46,6 +46,7 @@ from skeletons.gui.game_control import IIGRController, IRentalsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.customization import ICustomizationService
 from nation_change.nation_change_helpers import hasNationGroup, iterVehTypeCDsInNationGroup
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsRequester
@@ -138,6 +139,7 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     UNRECOVERABLE = 'unrecoverable'
     CREW_LOCKED = 'lockCrew'
     OUTFIT_LOCKED = 'lockOutfit'
+    PROGRESSION_DECALS_ONLY = 'lockExceptProgression'
     OPTIONAL_DEVICES_LOCKED = 'lockOptionalDevices'
     EQUIPMENT_LOCKED = 'lockEquipment'
     EPIC_BATTLES = 'epic_battles'
@@ -214,6 +216,7 @@ class Vehicle(FittingItem):
     eventsCache = dependency.descriptor(IEventsCache)
     igrCtrl = dependency.descriptor(IIGRController)
     itemsCache = dependency.descriptor(IItemsCache)
+    __customizationService = dependency.descriptor(ICustomizationService)
 
     def __init__(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None):
         if strCompactDescr is not None:
@@ -988,6 +991,8 @@ class Vehicle(FittingItem):
         newItems = proxy.inventory.getC11nItemsNoveltyCounters(self._descriptor.type)
         for itemCD, qtyItems in newItems.iteritems():
             item = proxy.getItemByCD(itemCD)
+            if not item.mayInstall(self):
+                continue
             if itemFilter is not None and not itemFilter(item):
                 continue
             if (itemTypes is None or item.itemTypeID in itemTypes) and (season is None or item.season & season):
@@ -1144,6 +1149,10 @@ class Vehicle(FittingItem):
     @property
     def isOutfitLocked(self):
         return checkForTags(self.tags, VEHICLE_TAGS.OUTFIT_LOCKED)
+
+    @property
+    def isProgressionDecalsOnly(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.PROGRESSION_DECALS_ONLY)
 
     @property
     def isDisabledInPremIGR(self):
@@ -1544,7 +1553,14 @@ class Vehicle(FittingItem):
 
     def hasOutfitWithItems(self, season):
         outfit = self.getOutfit(season)
-        return outfit is not None and not outfit.isEmpty()
+        if outfit is not None:
+            for intCD in outfit.items():
+                item = self.__customizationService.getItemByCD(intCD)
+                isNationalEmblem = ItemTags.NATIONAL_EMBLEM in item.tags
+                if not isNationalEmblem:
+                    return True
+
+        return False
 
     def getBuiltInEquipmentIDs(self):
         return vehicles.getBuiltinEqsForVehicle(self._descriptor.type)

@@ -179,6 +179,3 @@ class IEventsCache(object):
 
     def getProgressiveReward(self):
         raise NotImplementedError
-
-    def getLobbyHeaderTabCounter(self):
-        raise NotImplementedError

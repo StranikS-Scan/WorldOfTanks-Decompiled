@@ -172,12 +172,9 @@ class WaitingWorker(IWaitingWorker):
     def suspend(self, lockerID=None):
         if lockerID is not None:
             self.__resumeLockers.add(lockerID)
-        if self.isSuspended():
-            return
-        else:
-            self.__suspendStack = self.__waitingStack[:]
-            self.close()
-            return
+        self.__suspendStack.extend(self.__waitingStack[:])
+        self.close()
+        return
 
     def isResumeLocked(self):
         return bool(self.__resumeLockers)

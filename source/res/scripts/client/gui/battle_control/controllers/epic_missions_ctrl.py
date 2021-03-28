@@ -376,10 +376,12 @@ class EpicMissionsController(IViewComponentsController):
                     endTime = 0
                 else:
                     criticalEndTimes = []
-                    hqIdInPlayerGroup = sectorComp.getSectorById(playerDataComp.hqSectorID).IDInPlayerGroup
-                    for sector in sectorComp.sectors:
-                        if sector.state == SECTOR_STATE.TRANSITION and sector.IDInPlayerGroup == hqIdInPlayerGroup - 1:
-                            criticalEndTimes.append(sector.endOfTransitionPeriod)
+                    sector = sectorComp.getSectorById(playerDataComp.hqSectorID)
+                    if sector is not None:
+                        hqIdInPlayerGroup = sector.IDInPlayerGroup
+                        for sector in sectorComp.sectors:
+                            if sector.state == SECTOR_STATE.TRANSITION and sector.IDInPlayerGroup == hqIdInPlayerGroup - 1:
+                                criticalEndTimes.append(sector.endOfTransitionPeriod)
 
                     endTime = min(criticalEndTimes) if criticalEndTimes else 0
             else:

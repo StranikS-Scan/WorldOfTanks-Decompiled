@@ -4,9 +4,12 @@ import typing
 import logging
 import Event
 from gui.impl.gen.view_models.ui_kit.list_model import ListModel
+if typing.TYPE_CHECKING:
+    from frameworks.wulf import Array
 _logger = logging.getLogger(__name__)
+T = typing.TypeVar('T')
 
-class UserListModel(ListModel):
+class UserListModel(ListModel[T]):
     __slots__ = ('onUserSelectionChanged', 'onUserItemClicked')
 
     def __init__(self):
@@ -55,6 +58,9 @@ class UserListModel(ListModel):
 
     def findItems(self, predicate):
         return [ item for item in self.getItems() if predicate(item) ]
+
+    def findIndexes(self, predicate):
+        return [ idx for idx, item in enumerate(self.getItems()) if predicate(item) ]
 
     def clearItems(self):
         self.getItems().clear()

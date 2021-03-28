@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/dis.py
+# Compiled at: 2101-05-02 08:36:56
+"""Disassembler of Python byte code into mnemonics."""
 import sys
 import types
 from opcode import *
@@ -18,6 +20,11 @@ _have_code = (types.MethodType,
  type)
 
 def dis(x=None):
+    """Disassemble classes, methods, functions, or code.
+    
+    With no argument, disassemble the last traceback.
+    
+    """
     if x is None:
         distb()
         return
@@ -51,6 +58,7 @@ def dis(x=None):
 
 
 def distb(tb=None):
+    """Disassemble a traceback (default: last traceback)."""
     if tb is None:
         try:
             tb = sys.last_traceback
@@ -65,6 +73,7 @@ def distb(tb=None):
 
 
 def disassemble(co, lasti=-1):
+    """Disassemble a code object."""
     code = co.co_code
     labels = findlabels(code)
     linestarts = dict(findlinestarts(co))
@@ -167,6 +176,11 @@ def disassemble_string(code, lasti=-1, varnames=None, names=None, constants=None
 disco = disassemble
 
 def findlabels(code):
+    """Detect all offsets in a byte code which are jump targets.
+    
+    Return the list of offsets.
+    
+    """
     labels = []
     n = len(code)
     i = 0
@@ -190,6 +204,11 @@ def findlabels(code):
 
 
 def findlinestarts(code):
+    """Find the offsets in a byte code which are start of lines in the source.
+    
+    Generate pairs (offset, lineno) as described in Python/compile.c.
+    
+    """
     byte_increments = [ ord(c) for c in code.co_lnotab[0::2] ]
     line_increments = [ ord(c) for c in code.co_lnotab[1::2] ]
     lastlineno = None
@@ -209,6 +228,7 @@ def findlinestarts(code):
 
 
 def _test():
+    """Simple test program to disassemble a file."""
     if sys.argv[1:]:
         if sys.argv[2:]:
             sys.stderr.write('usage: python dis.py [-|file]\n')

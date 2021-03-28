@@ -39,6 +39,8 @@ class BattlePassRewardLogic(object):
         reason = data.get('reason', BPReason.DEFAULT) if data is not None else BPReason.DEFAULT
         if self.__battlePassController.isFinalLevel(newLevel) and reason not in (BPReason.PURCHASE_BATTLE_PASS, BPReason.PURCHASE_BATTLE_PASS_MULTIPLE):
             chapter = self.__battlePassController.getChapterByLevel(newLevel)
+            if newLevel == self.__battlePassController.getMaxLevel():
+                chapter += 1
             stylesToChoose = getStylesToChooseUntilChapter(chapter)
         else:
             stylesToChoose = []

@@ -2,8 +2,10 @@
 # Embedded file name: scripts/client/gui/login/Manager.py
 import pickle
 import time
+import typing
 import logging
 import BigWorld
+import WGC
 import Settings
 import constants
 from account_helpers.settings_core.settings_constants import GAME
@@ -38,6 +40,7 @@ class Manager(ILoginManager):
     def __init__(self):
         self._preferences = None
         self.__servers = None
+        self.__wgcPublication = constants.WGC_PUBLICATION.WGC_UNKNOWN
         self.__wgcManager = None
         self.__triedToInitWGC = False
         return
@@ -46,7 +49,18 @@ class Manager(ILoginManager):
     def wgcAvailable(self):
         return self.__wgcManager is not None
 
+    def getWgcPublication(self):
+        return self.__wgcPublication
+
+    @property
+    def isWgcSteam(self):
+        return self.__wgcPublication == constants.WGC_PUBLICATION.WGC_STEAM
+
     def init(self):
+        if WGC.prepare():
+            self.__wgcPublication = WGC.getPublication()
+        else:
+            _logger.error('WGC API initialization failed')
         self.tryPrepareWGCLogin()
         self._preferences = Preferences()
         if constants.IS_DEVELOPMENT:
@@ -75,7 +89,8 @@ class Manager(ILoginManager):
         loginParams = {'login': self._preferences['login'],
          'session': self._preferences['session'],
          'temporary': str(int(not rememberUser)),
-         'auth_method': authMethod}
+         'auth_method': authMethod,
+         'publication': str(self.__wgcPublication)}
         if isToken2Login:
             loginParams['token2'] = self._preferences['token2']
         if not isSocialToken2Login:
@@ -227,11 +242,14 @@ class Manager(ILoginManager):
 
     def tryPrepareWGCLogin(self):
         if self.wgcAvailable:
-            if not BigWorld.WGC_prepareLogin():
+            if not WGC.prepareLogin():
                 self.stopWgc()
+                WGC.printLastError()
         elif not self.__triedToInitWGC:
-            if BigWorld.WGC_prepareLogin():
+            if WGC.prepareLogin():
                 self.__wgcManager = _WgcModeManager()
+            else:
+                WGC.printLastError()
         self.__triedToInitWGC = True
 
     def checkWgcCouldRetry(self, status):
@@ -240,6 +258,7 @@ class Manager(ILoginManager):
 
 class _WgcModeManager(object):
     connectionMgr = dependency.descriptor(IConnectionManager)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         self.onWgcError = Event()
@@ -257,13 +276,14 @@ class _WgcModeManager(object):
 
     def login(self, selectedServer):
         self.__selectedServer = selectedServer
-        BigWorld.WGC_prepareToken()
+        self.__lobbyContext.setAccountComplete(WGC.isAccountComplete())
+        WGC.prepareToken()
         Waiting.show('login')
         self.__wgcCheck()
 
     def relogin(self, token2, selectedServer):
         self.__selectedServer = selectedServer
-        loginParams = BigWorld.WGC_loginData()
+        loginParams = WGC.loginData()
         loginParams['token2'] = token2
         loginParams['auth_method'] = CONNECTION_METHOD.TOKEN2
         loginParams['auth_realm'] = constants.AUTH_REALM
@@ -274,34 +294,34 @@ class _WgcModeManager(object):
 
     def onLoggedOn(self, responseData):
         self.__token2ToStore = responseData['token2']
-        if BigWorld.WGC_processingState() == constants.WGC_STATE.LOGIN_IN_PROGRESS:
-            BigWorld.WGC_onServerResponse(True)
+        if WGC.processingState() == constants.WGC_STATE.LOGIN_IN_PROGRESS:
+            WGC.onServerResponse(True)
             return True
         return False
 
     def __wgcCheck(self):
-        state = BigWorld.WGC_processingState()
+        state = WGC.processingState()
         if state == constants.WGC_STATE.WAITING_TOKEN_1:
             BigWorld.callback(0.0, self.__wgcCheck)
         elif state == constants.WGC_STATE.LOGIN_IN_PROGRESS:
             self.__wgcConnect()
         else:
-            BigWorld.WGC_printLastError()
+            WGC.printLastError()
             Waiting.hide('login')
             self.onWgcError()
 
     def __wgcConnect(self):
         if self.__selectedServer is not None:
-            state = BigWorld.WGC_processingState()
+            state = WGC.processingState()
             if state == constants.WGC_STATE.LOGIN_IN_PROGRESS:
-                loginParams = BigWorld.WGC_loginData()
+                loginParams = WGC.loginData()
                 if loginParams is not None:
                     self.connectionMgr.initiateConnection(loginParams, '', self.__selectedServer)
                     self.connectionMgr.setLastLogin('')
                     return
                 _logger.warning('No login params for WGC login, so return')
             else:
-                _logger.warning('Could not login via WGC because wrong WGC_processingState (%d), so return', state)
+                _logger.warning('Could not login via WGC because wrong processingState (%d), so return', state)
         else:
             _logger.warning('No server was selected when WGC connect happened, so return')
         Waiting.hide('login')
@@ -309,17 +329,17 @@ class _WgcModeManager(object):
 
     def __onRejected(self, status, _):
         if self.checkWgcCouldRetry(status):
-            BigWorld.WGC_onToken2Expired()
+            WGC.onToken2Expired()
             self.login(self.__selectedServer)
         else:
-            BigWorld.WGC_onServerResponse(False)
+            WGC.onServerResponse(False)
 
     def __onDisconnected(self):
-        BigWorld.WGC_onServerResponse(False)
+        WGC.onServerResponse(False)
 
     def __onAccountDone(self, *args):
         if self.__token2ToStore:
-            if BigWorld.WGC_processingState() == constants.WGC_STATE.LOGGEDIN and BigWorld.WGC_getUserId() == BigWorld.player().databaseID:
-                BigWorld.WGC_storeToken2(self.__token2ToStore, BigWorld.player().databaseID)
+            if WGC.processingState() == constants.WGC_STATE.LOGGEDIN and WGC.getUserId() == BigWorld.player().databaseID:
+                WGC.storeToken2(self.__token2ToStore, BigWorld.player().databaseID)
             self.__token2ToStore = None
         return

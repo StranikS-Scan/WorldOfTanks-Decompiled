@@ -21,7 +21,7 @@ from vehicle_outfit.packers import ProjectionDecalPacker
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, VehiclePartsTuple
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.graphics import isRendererPipelineDeferred
-from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS, SeasonType, CustomizationType, EMPTY_ITEM_ID, DEFAULT_DECAL_CLIP_ANGLE, ApplyArea, MATCHING_TAGS_SUFFIX, MAX_PROJECTION_DECALS_PER_AREA, CamouflageTilingType, CustomizationTypeNames, SLOT_TYPE_NAMES, DEFAULT_DECAL_TINT_COLOR, Options, SLOT_DEFAULT_ALLOWED_MODEL, ItemTags
+from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS, SeasonType, CustomizationType, EMPTY_ITEM_ID, DEFAULT_DECAL_CLIP_ANGLE, ApplyArea, MATCHING_TAGS_SUFFIX, MAX_PROJECTION_DECALS_PER_AREA, CamouflageTilingType, CustomizationTypeNames, SLOT_TYPE_NAMES, DEFAULT_DECAL_TINT_COLOR, Options, SLOT_DEFAULT_ALLOWED_MODEL, ItemTags, DEFAULT_GLOSS, DEFAULT_METALLIC
 from gui.shared.gui_items.customization.c11n_items import Customization
 import math_utils
 from helpers import newFakeModel
@@ -31,6 +31,8 @@ if typing.TYPE_CHECKING:
     from items.components.shared_components import ProjectionDecalSlotDescription
     from vehicle_outfit.containers import MultiSlot
     from items.vehicles import VehicleDescrType
+_DEAD_VEH_WEIGHT_COEFF = 0.1
+_PROJECTION_DECAL_PREVIEW_ALPHA = 0.5
 _logger = logging.getLogger(__name__)
 RepaintParams = namedtuple('PaintParams', ('enabled', 'baseColor', 'color', 'metallic', 'gloss', 'fading', 'strength'))
 RepaintParams.__new__.__defaults__ = (False,
@@ -40,7 +42,7 @@ RepaintParams.__new__.__defaults__ = (False,
  Math.Vector4(0.0),
  0.0,
  0.0)
-CamoParams = namedtuple('CamoParams', ('mask', 'excludeMap', 'tiling', 'rotation', 'weights', 'c0', 'c1', 'c2', 'c3'))
+CamoParams = namedtuple('CamoParams', ('mask', 'excludeMap', 'tiling', 'rotation', 'weights', 'c0', 'c1', 'c2', 'c3', 'gloss', 'metallic', 'useGMTexture', 'glossMetallicMap'))
 CamoParams.__new__.__defaults__ = ('',
  '',
  Math.Vector4(0.0),
@@ -49,7 +51,11 @@ CamoParams.__new__.__defaults__ = ('',
  0,
  0,
  0,
- 0)
+ 0,
+ Math.Vector4(DEFAULT_GLOSS),
+ Math.Vector4(DEFAULT_METALLIC),
+ False,
+ '')
 ProjectionDecalGenericParams = namedtuple('ProjectionDecalGenericParams', ('tintColor', 'position', 'rotation', 'scale', 'decalMap', 'glossDecalMap', 'applyAreas', 'clipAngle', 'mirroredHorizontally', 'mirroredVertically', 'doubleSided', 'scaleBySlotSize'))
 ProjectionDecalGenericParams.__new__.__defaults__ = (Math.Vector4(0.0),
  Math.Vector3(0.0),
@@ -75,10 +81,6 @@ AttachmentParams.__new__.__defaults__ = (math_utils.createIdentityMatrix(),
  True,
  '')
 _isDeferredRenderer = isRendererPipelineDeferred()
-_DEFAULT_GLOSS = 0.509
-_DEFAULT_METALLIC = 0.23
-_DEAD_VEH_WEIGHT_COEFF = 0.1
-_PROJECTION_DECAL_PREVIEW_ALPHA = 0.5
 
 def prepareFashions(isDamaged):
     if isDamaged:
@@ -104,11 +106,17 @@ def updateFashions(appearance):
             _logger.warning('Skipping attempt to create C11nComponent for appearance with a missing fashion.')
             appearance.c11nComponent = None
             return
+        if IS_EDITOR:
+            setMaterialsVisibility(appearance, appearance.availableMaterials, False)
         vDesc = appearance.typeDescriptor
         outfit = appearance.outfit
         outfitData = getOutfitData(appearance, outfit, vDesc, isDamaged)
+        appearance.c11nComponent = None
         if outfit and outfit.style and outfit.style.isProgression:
             changeStyleProgression(style=outfit.style, appearance=appearance, level=outfit.progressionLevel)
+        if IS_EDITOR:
+            if outfit.style.modelsSet != appearance.currentModelsSet:
+                setMaterialsVisibility(appearance, appearance.availableMaterials, False)
         appearance.c11nComponent = appearance.createComponent(Vehicular.C11nComponent, fashions, appearance.compoundModel, outfitData)
         return
 
@@ -140,7 +148,7 @@ def getOutfitComponent(outfitCD, vehicleDescriptor=None, seasonType=None):
                     else:
                         return outfitComponent
             baseOutfitComponent = deepcopy(styleDescr.outfits[seasonType])
-            if styleDescr.isProgression:
+            if styleDescr.isProgression or IS_EDITOR:
                 if IS_EDITOR:
                     baseOutfitComponent.styleId = styleDescr.id
                 outfit = Outfit(component=baseOutfitComponent, vehicleCD=vehicleDescriptor.makeCompactDescr())
@@ -191,7 +199,7 @@ def prepareBattleOutfit(outfitCD, vehicleDescriptor, vehicleId):
     outfit = Outfit(component=outfitComponent, vehicleCD=vehicleCD)
     player = BigWorld.player()
     forceHistorical = player.isHistoricallyAccurate and player.playerVehicleID != vehicleId and not outfit.isHistorical()
-    if outfit.style and outfit.style.isProgression:
+    if outfit.style and (outfit.style.isProgression or IS_EDITOR):
         progressionOutfit = getStyleProgressionOutfit(outfit, toLevel=outfit.progressionLevel)
         if progressionOutfit is not None:
             outfit = progressionOutfit
@@ -232,20 +240,18 @@ def getStyleProgressionOutfit(outfit, toLevel=0, season=None):
     return resOutfit
 
 
+def setMaterialsVisibility(appearance, materials, visibility):
+    appearance.fashions.hull.changeMaterialsVisibility(tuple(materials), visibility)
+    appearance.fashions.chassis.changeMaterialsVisibility(tuple(materials), visibility)
+    appearance.fashions.gun.changeMaterialsVisibility(tuple(materials), visibility)
+    appearance.fashions.turret.changeMaterialsVisibility(tuple(materials), visibility)
+
+
 def changeStyleProgression(style, appearance, level=0):
     if not style:
         return
-
-    def __changeVisibility(materials, visibility):
-        appearance.fashions.hull.changeMaterialsVisibility(tuple(materials), visibility)
-        appearance.fashions.chassis.changeMaterialsVisibility(tuple(materials), visibility)
-        appearance.fashions.gun.changeMaterialsVisibility(tuple(materials), visibility)
-        appearance.fashions.turret.changeMaterialsVisibility(tuple(materials), visibility)
-
     if not style.styleProgressions:
         _logger.error('Could not find style progressions')
-        if IS_EDITOR:
-            __changeVisibility(style.editorData.availableListOfMaterials, False)
         return
     materialsToShow = style.styleProgressions.get(level, {}).get('materials', [])
     materialsToHide = []
@@ -253,10 +259,8 @@ def changeStyleProgression(style, appearance, level=0):
         if levelId != level:
             materialsToHide.extend(levelConfig.get('materials', []))
 
-    if IS_EDITOR:
-        materialsToHide = style.editorData.availableListOfMaterials
-    __changeVisibility(materialsToHide, False)
-    __changeVisibility(materialsToShow, True)
+    setMaterialsVisibility(appearance, materialsToHide, False)
+    setMaterialsVisibility(appearance, materialsToShow, True)
 
 
 def createSlotMap(vehDescr, slotTypeName):
@@ -324,8 +328,12 @@ def getCamo(appearance, outfit, containerId, vDesc, descId, isDamaged, default=N
             if not area:
                 return result
             tiling, exclusionMap = processTiling(appearance, vDesc, descId, camouflage, component)
+            glossMetallicMap = camouflage.glossMetallicSettings['glossMetallicMap']
+            useGMTexture = bool(glossMetallicMap)
+            gloss = camouflage.glossMetallicSettings['gloss']
+            metallic = camouflage.glossMetallicSettings['metallic']
             camoAngle = camouflage.rotation[descId]
-            result = CamoParams(camouflage.texture, exclusionMap or '', tiling, camoAngle, weights, palette[0], palette[1], palette[2], palette[3])
+            result = CamoParams(camouflage.texture, exclusionMap or '', tiling, camoAngle, weights, palette[0], palette[1], palette[2], palette[3], gloss, metallic, useGMTexture, glossMetallicMap)
         return result
 
 
@@ -440,8 +448,8 @@ def getRepaint(outfit, containerId, vDesc):
         if camoSlot.getItemCD():
             enabled = True
     colors = [defaultColor] * capacity
-    metallics = [overlapMetallic or _DEFAULT_METALLIC] * (capacity + 1)
-    glosses = [overlapGloss or _DEFAULT_GLOSS] * (capacity + 1)
+    metallics = [overlapMetallic or DEFAULT_METALLIC] * (capacity + 1)
+    glosses = [overlapGloss or DEFAULT_GLOSS] * (capacity + 1)
     for idx in range(capacity):
         intCD = paintSlot.getItemCD(idx)
         if intCD:

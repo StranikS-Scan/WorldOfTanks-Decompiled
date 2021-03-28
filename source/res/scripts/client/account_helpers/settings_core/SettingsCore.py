@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/SettingsCore.py
 import BigWorld
 import Event
-from Vibroeffects import VibroManager
 from account_helpers.AccountSettings import AccountSettings
 from account_helpers.settings_core.ServerSettingsManager import ServerSettingsManager, SETTINGS_SECTIONS
 from adisp import process
@@ -49,7 +48,6 @@ class SettingsCore(ISettingsCore):
         CONTROLS = settings_constants.CONTROLS
         AIM = settings_constants.AIM
         MARKERS = settings_constants.MARKERS
-        OTHER = settings_constants.OTHER
         DAMAGE_INDICATOR = settings_constants.DAMAGE_INDICATOR
         DAMAGE_LOG = settings_constants.DAMAGE_LOG
         BATTLE_EVENTS = settings_constants.BATTLE_EVENTS
@@ -108,6 +106,7 @@ class SettingsCore(ISettingsCore):
         graphicSettings = tuple(((settingName, options.GraphicSetting(settingName, settingName == GRAPHICS.COLOR_GRADING_TECHNIQUE)) for settingName in BigWorld.generateGfxSettings()))
         self.__options = options.SettingsContainer(graphicSettings + ((GAME.REPLAY_ENABLED, options.ReplaySetting(GAME.REPLAY_ENABLED, storage=GAME_SETTINGS_STORAGE)),
          (GAME.SNIPER_ZOOM, options.SniperZoomSetting(GAME.SNIPER_ZOOM, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
+         (GAME.HULLLOCK_ENABLED, options.HullLockSetting(GAME.HULLLOCK_ENABLED, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.HANGAR_CAM_PERIOD, options.HangarCamPeriodSetting(GAME.HANGAR_CAM_PERIOD, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.HANGAR_CAM_PARALLAX_ENABLED, options.HangarCamParallaxEnabledSetting(GAME.HANGAR_CAM_PARALLAX_ENABLED, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.ENABLE_SERVER_AIM, options.StorageAccountSetting(GAME.ENABLE_SERVER_AIM, storage=GAME_SETTINGS_STORAGE)),
@@ -240,15 +239,6 @@ class SettingsCore(ISettingsCore):
          (MARKERS.ENEMY, options.VehicleMarkerSetting(MARKERS.ENEMY, storage=MARKERS_SETTINGS_STORAGE)),
          (MARKERS.DEAD, options.VehicleMarkerSetting(MARKERS.DEAD, storage=MARKERS_SETTINGS_STORAGE)),
          (MARKERS.ALLY, options.VehicleMarkerSetting(MARKERS.ALLY, storage=MARKERS_SETTINGS_STORAGE)),
-         (OTHER.VIBRO_CONNECTED, options.ReadOnlySetting(VibroManager.g_instance.connect)),
-         (OTHER.VIBRO_GAIN, options.VibroSetting('master')),
-         (OTHER.VIBRO_ENGINE, options.VibroSetting('engine')),
-         (OTHER.VIBRO_ACCELERATION, options.VibroSetting('acceleration')),
-         (OTHER.VIBRO_SHOTS, options.VibroSetting('shots')),
-         (OTHER.VIBRO_HITS, options.VibroSetting('hits')),
-         (OTHER.VIBRO_COLLISIONS, options.VibroSetting('collisions')),
-         (OTHER.VIBRO_DAMAGE, options.VibroSetting('damage')),
-         (OTHER.VIBRO_GUI, options.VibroSetting('gui')),
          (TUTORIAL.CUSTOMIZATION, options.TutorialSetting(TUTORIAL.CUSTOMIZATION, storage=TUTORIAL_SETTINGS_STORAGE)),
          (TUTORIAL.TECHNICAL_MAINTENANCE, options.TutorialSetting(TUTORIAL.TECHNICAL_MAINTENANCE, storage=TUTORIAL_SETTINGS_STORAGE)),
          (TUTORIAL.PERSONAL_CASE, options.TutorialSetting(TUTORIAL.PERSONAL_CASE, storage=TUTORIAL_SETTINGS_STORAGE)),

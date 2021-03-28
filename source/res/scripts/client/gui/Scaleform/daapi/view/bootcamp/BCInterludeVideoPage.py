@@ -3,9 +3,9 @@
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from gui.Scaleform.daapi.view.bootcamp.BCVideoPage import BCVideoPage
-from uilogging.decorators import loggerTarget, loggerEntry, simpleLog
-from uilogging.bootcamp.constants import BC_LOG_ACTIONS, BC_LOG_KEYS
-from uilogging.bootcamp.loggers import BootcampUILogger
+from uilogging.deprecated.decorators import loggerTarget, loggerEntry, simpleLog
+from uilogging.deprecated.bootcamp.constants import BC_LOG_ACTIONS, BC_LOG_KEYS
+from uilogging.deprecated.bootcamp.loggers import BootcampUILogger
 
 @loggerTarget(logKey=BC_LOG_KEYS.BC_INTERLUDE_VIDEO, loggerCls=BootcampUILogger)
 class BCInterludeVideoPage(BCVideoPage):

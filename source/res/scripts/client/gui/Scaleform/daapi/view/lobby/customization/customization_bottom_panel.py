@@ -10,14 +10,14 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.customization_carousel import CustomizationCarouselDataProvider, comparisonKey, FilterTypes, FilterAliases
 from gui.Scaleform.daapi.view.lobby.customization.customization_item_vo import buildCustomizationItemDataVO
-from gui.Scaleform.daapi.view.lobby.customization.shared import checkSlotsFilling, isItemUsedUp, getEditableStylesExtraNotificationCounter, getItemTypesAvailableForVehicle, CustomizationTabs
+from gui.Scaleform.daapi.view.lobby.customization.shared import checkSlotsFilling, isItemUsedUp, getEditableStylesExtraNotificationCounter, getItemTypesAvailableForVehicle, CustomizationTabs, getMultiSlot
 from gui.Scaleform.daapi.view.meta.CustomizationBottomPanelMeta import CustomizationBottomPanelMeta
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.customization.constants import CustomizationModes, CustomizationModeSource
-from gui.customization.shared import SEASON_TYPE_TO_NAME, getTotalPurchaseInfo
+from gui.customization.shared import SEASON_TYPE_TO_NAME, getTotalPurchaseInfo, isVehicleCanBeCustomized, C11nId
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles, icons, getItemPricesVO, getMoneyVO
@@ -45,7 +45,6 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         super(CustomizationBottomPanel, self).__init__()
         self.__ctx = None
         self._carouselDP = None
-        self._projectionDecalOnlyOnceHintShow = False
         self._selectedItem = None
         return
 
@@ -158,6 +157,9 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     def getVisibleTabs(self):
         return self._carouselDP.getVisibleTabs()
 
+    def isItemUnsuitable(self, item):
+        return self._carouselDP.processDependentParams(item)[1]
+
     def __changeMode(self, modeId):
         self.__ctx.changeMode(modeId, source=CustomizationModeSource.BOTTOM_PANEL)
         self.__updatePopoverBtnIcon()
@@ -248,7 +250,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
 
     def __updateTabs(self):
         tabsData, pluses = self.__getItemTabsData()
-        if self.__ctx.modeId == CustomizationModes.STYLED:
+        if self.__ctx.modeId == CustomizationModes.STYLED or not tabsData:
             selectedTab = -1
         else:
             selectedTab = self.__ctx.mode.tabId
@@ -271,12 +273,17 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__updateFilterMessage()
 
     def __updateFilterMessage(self):
-        message = backport.text(R.strings.vehicle_customization.carousel.message.description())
+        self.as_carouselFilterMessageS('{}{}\n{}'.format(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICONFILLED, vSpace=-3), text_styles.neutral(VEHICLE_CUSTOMIZATION.CAROUSEL_MESSAGE_HEADER), text_styles.main(self.__getFilterMessage())))
+
+    def __getFilterMessage(self):
         selectedSlot = self.__ctx.mode.selectedSlot
         if selectedSlot is not None and selectedSlot.slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
-            message = backport.text(R.strings.vehicle_customization.carousel.message.propertysheet())
-        self.as_carouselFilterMessageS('{}{}\n{}'.format(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICONFILLED, vSpace=-3), text_styles.neutral(VEHICLE_CUSTOMIZATION.CAROUSEL_MESSAGE_HEADER), text_styles.main(message)))
-        return
+            return backport.text(R.strings.vehicle_customization.carousel.message.propertysheet())
+        else:
+            if g_currentVehicle.item.isProgressionDecalsOnly:
+                if not isVehicleCanBeCustomized(g_currentVehicle.item, GUI_ITEM_TYPE.PROJECTION_DECAL):
+                    return backport.text(R.strings.vehicle_customization.carousel.message.noProgressionDecals())
+            return backport.text(R.strings.vehicle_customization.carousel.message.description())
 
     def __updateSetSwitcherData(self):
         switchersData = self.__getSwitcherInitData()
@@ -318,10 +325,12 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         label = _ms(VEHICLE_CUSTOMIZATION.COMMIT_APPLY)
         fromStorageCount = 0
         toBuyCount = 0
-        for item in purchaseItems:
-            if item.isFromInventory:
-                fromStorageCount += 1
-            toBuyCount += 1
+        for pItem in purchaseItems:
+            if not pItem.item.isHiddenInUI():
+                if pItem.isFromInventory:
+                    fromStorageCount += 1
+                else:
+                    toBuyCount += 1
 
         for pItem in purchaseItems:
             if pItem.item.itemTypeID != GUI_ITEM_TYPE.PERSONAL_NUMBER:
@@ -361,8 +370,11 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
                     'isEnoughStatuses': getMoneyVO(Money(True, True, True)),
                     'pricePanel': totalPriceVO[0]}})
         itemsPopoverBtnEnabled = False
-        for _, component, _, _, _ in self.__ctx.mode.currentOutfit.itemsFull():
+        for intCD, component, _, _, _ in self.__ctx.mode.currentOutfit.itemsFull():
             if component.isFilled():
+                item = self.service.getItemByCD(intCD)
+                if item.isHiddenInUI():
+                    continue
                 itemsPopoverBtnEnabled = True
                 break
 
@@ -411,7 +423,8 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
                 showEditBtnHint = not bool(self.__serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_EDITABLE_STYLE_SLOT_BUTTON_HINT))
         else:
             autoRentEnabled = False
-        return buildCustomizationItemDataVO(item=item, count=inventoryCount, isApplied=isApplied, isDarked=isDarked, isUsedUp=isUsedUp, autoRentEnabled=autoRentEnabled, vehicle=g_currentVehicle.item, showEditableHint=showEditableHint, showEditBtnHint=showEditBtnHint)
+        isChained, isUnsuitable = self._carouselDP.processDependentParams(item)
+        return buildCustomizationItemDataVO(item=item, count=inventoryCount, isApplied=isApplied, isDarked=isDarked, isUsedUp=isUsedUp, autoRentEnabled=autoRentEnabled, vehicle=g_currentVehicle.item, showEditableHint=showEditableHint, showEditBtnHint=showEditBtnHint, isChained=isChained, isUnsuitable=isUnsuitable)
 
     def __getItemTabsData(self):
         tabsData = []
@@ -617,17 +630,22 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         return intCD
 
     def __onProjectionDecalOnlyOnceHintShown(self):
-        if not self.__c11nSettings.get(PROJECTION_DECAL_HINT_SHOWN_FIELD, False):
-            if self.__ctx.mode.currentOutfit.getContainer(Area.MISC).slotFor(GUI_ITEM_TYPE.PROJECTION_DECAL).isEmpty():
-                self._projectionDecalOnlyOnceHintShow = True
-                self.as_setProjectionDecalHintVisibilityS(self._projectionDecalOnlyOnceHintShow)
+        if self.__c11nSettings.get(PROJECTION_DECAL_HINT_SHOWN_FIELD, False):
+            return
+        else:
+            isCarouselEmpty = not self._carouselDP.collection
+            slotId = C11nId(Area.MISC, GUI_ITEM_TYPE.PROJECTION_DECAL, -1)
+            multiSlot = getMultiSlot(self.__ctx.mode.currentOutfit, slotId)
+            isSlotEmpty = multiSlot is not None and multiSlot.isEmpty()
+            visible = isSlotEmpty and not isCarouselEmpty
+            self.as_setProjectionDecalHintVisibilityS(visible)
+            return
 
     def __onProjectionDecalOnlyOnceHintHidden(self, record=False):
         if record and not self.__c11nSettings.get(PROJECTION_DECAL_HINT_SHOWN_FIELD, False):
             self.__c11nSettings[PROJECTION_DECAL_HINT_SHOWN_FIELD] = True
             AccountSettings.setSettings(CUSTOMIZATION_SECTION, self.__c11nSettings)
-        self._projectionDecalOnlyOnceHintShow = False
-        self.as_setProjectionDecalHintVisibilityS(self._projectionDecalOnlyOnceHintShow)
+        self.as_setProjectionDecalHintVisibilityS(False)
 
     def __onEditableStylesHintsShown(self):
         if not self.__serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_EDITABLE_STYLES_HINT):

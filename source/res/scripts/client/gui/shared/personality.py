@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/personality.py
 import logging
+import weakref
 import BigWorld
 import SoundGroups
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
@@ -97,7 +98,11 @@ def onAccountShowGUI(ctx):
     global onCenterIsLongDisconnected
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.SHOW_GUI)
     ServicesLocator.lobbyContext.onAccountShowGUI(ctx)
+    playerRef = weakref.ref(BigWorld.player())
     yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI, notify=False)
+    if not playerRef():
+        _logger.warn('onAccountShowGUI(): the item cache update callback has been called for an already deleted PlayerAccount object.')
+        return
     Waiting.show('enter')
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.QUESTS_SYNC)
     ServicesLocator.eventsCache.start()

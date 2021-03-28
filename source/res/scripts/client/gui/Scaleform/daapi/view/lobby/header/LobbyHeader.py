@@ -11,7 +11,7 @@ from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from SoundGroups import g_instance as SoundGroupsInstance
 from account_helpers.AccountSettings import AccountSettings, QUESTS, QUEST_DELTAS, QUEST_DELTAS_COMPLETION
 from account_helpers.AccountSettings import KNOWN_SELECTOR_BATTLES
-from account_helpers.AccountSettings import NEW_LOBBY_TAB_COUNTER, RECRUIT_NOTIFICATIONS, NEW_SHOP_TABS, LAST_SHOP_ACTION_COUNTER_MODIFICATION, OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES
+from account_helpers.AccountSettings import NEW_LOBBY_TAB_COUNTER, RECRUIT_NOTIFICATIONS, NEW_SHOP_TABS
 from adisp import process
 from constants import PREMIUM_TYPE, EPlatoonButtonState
 from debug_utils import LOG_ERROR
@@ -77,12 +77,14 @@ from skeletons.gui.game_control import IAnonymizerController, IBadgesController,
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.linkedset import ILinkedSetController
+from skeletons.gui.login_manager import ILoginManager
 from skeletons.gui.offers import IOffersNovelty
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.techtree_events import ITechTreeEventsListener
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
+from skeletons.tutorial import ITutorialLoader
 _MAX_HEADER_SERVER_NAME_LEN = 6
 _SERVER_NAME_PREFIX = '%s..'
 _SHORT_VALUE_DIVIDER = 1000000
@@ -229,6 +231,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     uiSpamController = dependency.descriptor(IUISpamController)
     platoonCtrl = dependency.descriptor(IPlatoonController)
+    __tutorialLoader = dependency.descriptor(ITutorialLoader)
+    __loginManager = dependency.descriptor(ILoginManager)
 
     def __init__(self):
         super(LobbyHeader, self).__init__()
@@ -365,8 +369,13 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self._updateHangarMenuData()
         battle_selector_items.create()
         super(LobbyHeader, self)._populate()
-        if self.app.tutorialManager.lastHeaderMenuButtonsOverride is not None:
+        if self.__tutorialLoader.gui.lastHeaderMenuButtonsOverride is not None:
             self.__onOverrideHeaderMenuButtons()
+        elif self.__loginManager.isWgcSteam:
+            steamButtons = tuple((v for v in self.BUTTONS.ALL() if v != self.BUTTONS.PREMSHOP))
+            self.as_setHeaderButtonsS(steamButtons)
+        else:
+            self.as_setHeaderButtonsS(self.BUTTONS.ALL())
         self._addListeners()
         Waiting.hide('enter')
         self._isLobbyHeaderControlsDisabled = False
@@ -867,6 +876,9 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         elif state == PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED:
             header = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.unsutableToBattleRoyale.header())
             body = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.unsutableToBattleRoyale.body())
+        elif state == UNIT_RESTRICTION.COMMANDER_VEHICLE_NOT_SELECTED:
+            header = backport.text(R.strings.tooltips.hangar.startBtn.squadNotReady.header())
+            body = backport.text(R.strings.tooltips.hangar.startBtn.squadNotReady.body())
         else:
             return ''
         return makeTooltip(header, body)
@@ -957,7 +969,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                 tooltipData = makeTooltip(body=backport.text(R.strings.tooltips.hangar.startBtn.vehicleToHeavy.body()))
             elif g_currentVehicle.isOnlyForEpicBattles() and (g_currentVehicle.isUnsuitableToQueue() or g_currentVehicle.isDisabledInRent()):
                 tooltipData = self.__getUnsuitableToQueueTooltipData(result)
-            elif (isEpic or isRoyale) and iseventProgressionControllerEnabled:
+            elif isEpic and iseventProgressionControllerEnabled or isRoyale and self.__battleRoyaleController.isEnabled():
                 tooltipData = self.__getEpicFightBtnTooltipData(result)
             elif isInSquad:
                 tooltipData = self.__getSquadFightBtnTooltipData(canDoMsg)
@@ -995,6 +1007,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         else:
             self.as_setScreenS(self.__currentScreen)
         self.__updateAccountAttrs()
+        self._updateHangarMenuData()
 
     def __onHangarSpaceCreated(self):
         if self.bootcampController.isInBootcamp():
@@ -1191,7 +1204,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
           'value': self.TABS.BARRACKS,
           'tooltip': TOOLTIPS.HEADER_BUTTONS_BARRACKS}])
         tabDataProvider.append(self._updateStrongholdsSelector())
-        override = self.app.tutorialManager.lastHangarMenuButtonsOverride
+        override = self.__tutorialLoader.gui.lastHangarMenuButtonsOverride
         if override is not None:
             tabDataProvider[:] = ifilter(lambda item: item['value'] in override, tabDataProvider)
         return tabDataProvider
@@ -1205,7 +1218,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self._updateHangarMenuData()
 
     def __onOverrideHeaderMenuButtons(self, _=None):
-        menuOverride = self.app.tutorialManager.lastHeaderMenuButtonsOverride
+        menuOverride = self.__tutorialLoader.gui.lastHeaderMenuButtonsOverride
         self.as_setHeaderButtonsS(menuOverride)
         if LobbyHeader.BUTTONS.BATTLE_SELECTOR in menuOverride:
             self._updatePrebattleControls()
@@ -1285,19 +1298,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self.__hideCounter(alias)
 
     def __updateShopTabCounter(self):
-        if self.uiSpamController.shouldBeHidden(self.TABS.STORE):
-            return
-        actionCounterAlias, actionCounterValue = self.eventsCache.getLobbyHeaderTabCounter()
-        lastActionValue = AccountSettings.getSessionSettings(LAST_SHOP_ACTION_COUNTER_MODIFICATION)
-        overridenActionAliases = AccountSettings.getSessionSettings(OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES)
-        isActionDisabled = actionCounterAlias in overridenActionAliases
-        if actionCounterAlias == self.TABS.STORE and (actionCounterValue != lastActionValue or not isActionDisabled):
-            self.__setCounter(self.TABS.STORE, actionCounterValue)
-            overridenActionAliases.discard(actionCounterAlias)
-            AccountSettings.setSessionSettings(OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES, overridenActionAliases)
-        else:
-            self.__updateTabCounter(self.TABS.STORE)
-        AccountSettings.setSessionSettings(LAST_SHOP_ACTION_COUNTER_MODIFICATION, actionCounterValue)
+        self.__updateTabCounter(self.TABS.STORE)
 
     def __updateStorageTabCounter(self):
         self.__updateTabCounter(self.TABS.STORAGE, self.demountKitNovelty.noveltyCount + self.offersNovelty.noveltyCount)
@@ -1313,17 +1314,13 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         else:
             if alias in self.ACCOUNT_SETTINGS_COUNTERS:
                 counters = AccountSettings.getCounters(NEW_LOBBY_TAB_COUNTER)
-                if counter is not None:
-                    counters[alias] = counter
-                    overridenActionAliases = AccountSettings.getSessionSettings(OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES)
-                    overridenActionAliases.add(alias)
-                    AccountSettings.setSessionSettings(OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES, overridenActionAliases)
-                elif alias not in counters or _isActiveShopNewCounters():
-                    counter = backport.text(R.strings.menu.headerButtons.defaultCounter())
+                if alias not in counters or _isActiveShopNewCounters():
+                    counters[alias] = backport.text(R.strings.menu.headerButtons.defaultCounter())
                     _updateShopNewCounters()
-                else:
-                    counter = counters[alias]
+                elif counter is not None:
+                    counters[alias] = counter
                 AccountSettings.setCounters(NEW_LOBBY_TAB_COUNTER, counters)
+                counter = counters[alias]
             if counter:
                 self.__setCounter(alias, counter)
             else:
@@ -1399,18 +1396,12 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.as_doDisableNavigationS()
 
     def __isTabPresent(self, tabID):
-        if self.app is not None and self.app.tutorialManager is not None:
-            override = self.app.tutorialManager.lastHangarMenuButtonsOverride
-            if override is not None:
-                return tabID in override
-        return True
+        override = self.__tutorialLoader.gui.lastHangarMenuButtonsOverride
+        return tabID in override if override is not None else True
 
     def __isHeaderButtonPresent(self, buttonID):
-        if self.app is not None and self.app.tutorialManager is not None:
-            override = self.app.tutorialManager.lastHeaderMenuButtonsOverride
-            if override is not None:
-                return buttonID in override
-        return True
+        override = self.__tutorialLoader.gui.lastHeaderMenuButtonsOverride
+        return buttonID in override if override is not None else True
 
     def __hideDisabledTabCounters(self):
         for tabID in self.__shownCounters.copy():

@@ -9,8 +9,10 @@ from gui.Scaleform.framework.entities.abstract.AbstractViewMeta import AbstractV
 from gui.Scaleform.framework.entities.view_interface import ViewInterface
 from gui.doc_loaders import hints_layout
 from gui.shared.events import FocusEvent
+from skeletons.tutorial import ITutorialLoader
 from soft_exception import SoftException
 from sound_gui_manager import ViewSoundExtension
+from helpers import dependency
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Window
 _logger = logging.getLogger(__name__)
@@ -39,6 +41,7 @@ class ViewKeyDynamic(ViewKey):
 
 class View(AbstractViewMeta, ViewInterface):
     _COMMON_SOUND_SPACE = None
+    __tutorialLoader = dependency.descriptor(ITutorialLoader)
 
     def __init__(self, *args, **kwargs):
         super(View, self).__init__()
@@ -138,10 +141,8 @@ class View(AbstractViewMeta, ViewInterface):
         if hintID is not None:
             hintsData = hints_layout.getLayout(hintID)
             if hintsData is not None:
-                tutorialManager = self.app.tutorialManager if self.app is not None else None
-                if tutorialManager is not None:
-                    viewTutorialID = tutorialManager.getViewTutorialID(self.__key.name)
-                    tutorialManager.setupViewContextHints(viewTutorialID, hintsData)
+                viewTutorialID = self.__tutorialLoader.gui.getViewTutorialID(self.__key.name)
+                self.__tutorialLoader.gui.setupViewContextHints(viewTutorialID, hintsData)
             else:
                 _logger.error('Hint layout is not defined %r', hintID)
         return

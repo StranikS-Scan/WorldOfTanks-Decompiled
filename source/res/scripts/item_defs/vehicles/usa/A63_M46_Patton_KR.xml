@@ -93,6 +93,34 @@
         <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15000	</slotId>
+        <tags>	formfactor_square	</tags>
+        <position>	-1.35046 1.70551 -1.97787	</position>
+        <rotation>	3.08923 -0.0112648 -0.0174632	</rotation>
+        <scale>	0.550662 0.352915 0.590989	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.445466	</clipAngle>
+        <anchorPosition>	-1.34966 0.544126 -1.97538	</anchorPosition>
+        <anchorDirection>	-0.0168717 0.998477 -0.0525237	</anchorDirection>
+        <compatibleModels>	default	</compatibleModels>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15001	</slotId>
+        <tags>	formfactor_square	</tags>
+        <position>	1.35016 1.70548 -1.9781	</position>
+        <rotation>	3.08923 -0.0112648 -0.0174632	</rotation>
+        <scale>	0.550662 0.352915 0.590989	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.445466	</clipAngle>
+        <anchorPosition>	1.35096 0.544102 -1.97561	</anchorPosition>
+        <anchorDirection>	-0.0168717 0.998477 -0.0525241	</anchorDirection>
+        <compatibleModels>	default	</compatibleModels>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1100,6 +1128,64 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <physicsShape>	0.931 -0.071 1.000 0.000 0.607 0.080 0.697 0.649 0.394 0.553 0.104 0.500 0.056 0.100 0.000	</physicsShape>
+      <customizationSlots>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35000	</slotId>
+          <tags>	formfactor_square	</tags>
+          <position>	0.849273 2.09447 0.973497	</position>
+          <rotation>	1.5451 -1.98454 0.227221	</rotation>
+          <scale>	0.640022 0.274033 0.612194	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.17961	</clipAngle>
+          <anchorPosition>	0.937628 0.45859 0.549654	</anchorPosition>
+          <anchorDirection>	0.801223 -0.0250314 0.597842	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35001	</slotId>
+          <tags>	formfactor_square	</tags>
+          <position>	-0.170452 2.60297 -0.860436	</position>
+          <rotation>	3.13155 -0.000010 -0.000198126	</rotation>
+          <scale>	0.560659 0.268226 0.560659	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.20962	</clipAngle>
+          <anchorPosition>	-0.17045 0.958672 -1.35009	</anchorPosition>
+          <anchorDirection>	-0.000198026 0.99995 -0.0100424	</anchorDirection>
+          <verticalMirror>	true	</verticalMirror>
+          <compatibleModels>	default	</compatibleModels>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35002	</slotId>
+          <tags>	formfactor_square	</tags>
+          <position>	-0.837012 2.10861 0.993036	</position>
+          <rotation>	1.53767 2.92107 0.701873	</rotation>
+          <scale>	0.640021 0.274032 0.612193	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.17961	</clipAngle>
+          <anchorPosition>	-0.924896 0.472703 0.569817	</anchorPosition>
+          <anchorDirection>	-0.796957 -0.0252885 0.603506	</anchorDirection>
+          <compatibleModels>	default	</compatibleModels>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35003	</slotId>
+          <tags>	formfactor_square	</tags>
+          <position>	-0.366888 2.59299 0.636259	</position>
+          <rotation>	0.132071 -0.000009 3.14159	</rotation>
+          <scale>	0.43417 0.101211 0.434164	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.00326	</clipAngle>
+          <anchorPosition>	-0.366887 0.999018 0.151689	</anchorPosition>
+          <anchorDirection>	0.000001 0.991291 0.131687	</anchorDirection>
+          <compatibleModels>	default	</compatibleModels>
+        </slot>
+      </customizationSlots>
       <customization>
         <customizableVehicleAreas>
           <paint></paint>

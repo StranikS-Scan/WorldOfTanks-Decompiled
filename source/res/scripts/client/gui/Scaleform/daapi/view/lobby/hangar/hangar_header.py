@@ -44,6 +44,7 @@ from skeletons.gui.shared import IItemsCache
 from helpers import time_utils
 from helpers.time_utils import ONE_DAY
 from gui.server_events.events_constants import BATTLE_ROYALE_GROUPS_ID
+from skeletons.tutorial import ITutorialLoader
 
 class WIDGET_PM_STATE(object):
     DISABLED = 0
@@ -113,7 +114,6 @@ TOOLTIPS_HANGAR_HEADER_PM2 = {WIDGET_PM_STATE.BRANCH_DISABLED: TOOLTIPS.HANGAR_H
  WIDGET_PM_STATE.UNAVAILABLE: TOOLTIPS.HANGAR_HEADER_PERSONALMISSIONS2_UNAVAILABLEFULL,
  WIDGET_PM_STATE.OPERATION_DISABLED: TOOLTIPS.HANGAR_HEADER_PERSONALMISSIONS_OPERATION_DISABLED,
  WIDGET_PM_STATE.DISABLED: None}
-ALWAYS_VISIBLE_SECONDARY_ENTRY_POINT_FOR_TYPES = [constants.ARENA_BONUS_TYPE.RANKED]
 _SCREEN_WIDTH_FOR_MARATHON_GROUP = 1300
 
 def _findPersonalMissionsState(eventsCache, vehicle, branch):
@@ -211,6 +211,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     __bootcampController = dependency.descriptor(IBootcampController)
     __rankedController = dependency.descriptor(IRankedBattlesController)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
+    __tutorialLoader = dependency.descriptor(ITutorialLoader)
 
     def __init__(self):
         super(HangarHeader, self).__init__()
@@ -299,7 +300,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     def _makeHeaderVO(self):
         emptyHeaderVO = {'isVisible': False,
          'quests': []}
-        if not self.app.tutorialManager.hangarHeaderEnabled:
+        if not self.__tutorialLoader.gui.hangarHeaderEnabled:
             return emptyHeaderVO
         if self.__rankedController.isRankedPrbActive():
             return {'isVisible': True,

@@ -5,9 +5,9 @@ from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.Scaleform.genConsts.BATTLE_TOP_HINT_CONSTS import BATTLE_TOP_HINT_CONSTS
 from bootcamp.BootCampEvents import g_bootcampEvents
 from bootcamp.BootcampConstants import HINT_TYPE
-from uilogging.decorators import loggerTarget, loggerEntry, logOnMatch
-from uilogging.bootcamp.constants import BC_LOG_KEYS, BATTLE_HINTS_TO_LOG_ON_COMPLETE, BATTLE_HINTS_TO_LOG_ON_HIDE, BATTLE_HINTS_TO_LOG_ON_ANIMATION_FINISH
-from uilogging.bootcamp.loggers import BootcampUILogger
+from uilogging.deprecated.decorators import loggerTarget, loggerEntry, logOnMatch
+from uilogging.deprecated.bootcamp.constants import BC_LOG_KEYS, BATTLE_HINTS_TO_LOG_ON_COMPLETE, BATTLE_HINTS_TO_LOG_ON_HIDE, BATTLE_HINTS_TO_LOG_ON_ANIMATION_FINISH
+from uilogging.deprecated.bootcamp.loggers import BootcampUILogger
 HINT_TYPE_TO_FRAME = {HINT_TYPE.HINT_MOVE: BATTLE_TOP_HINT_CONSTS.FRAME_WASD,
  HINT_TYPE.HINT_MOVE_TURRET: BATTLE_TOP_HINT_CONSTS.FRAME_MOUSE_MOVE,
  HINT_TYPE.HINT_SHOOT: BATTLE_TOP_HINT_CONSTS.FRAME_MOUSE_CLICK,

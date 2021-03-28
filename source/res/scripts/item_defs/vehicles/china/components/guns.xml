@@ -60,6 +60,7 @@
     <_122_mm_371_122JTX>	62	</_122_mm_371_122JTX>
     <_122mm_60_122T_113>	254	</_122mm_60_122T_113>
     <_120mm_TG>	255	</_120mm_TG>
+    <_152mm_GM_45>	256	</_152mm_GM_45>
     <_100mm_60-100TA_IGR>	60001	</_100mm_60-100TA_IGR>
     <_100mm_62-100T_IGR>	60002	</_100mm_62-100T_IGR>
     <_122-mm_60-122TG_IGR>	60003	</_122-mm_60-122TG_IGR>
@@ -3494,6 +3495,64 @@
         </_152mm_Sha_bao_547>
       </shots>
     </_152mm_59_152JG_FT>
+    <_152mm_GM_45>
+      <userString>	#china_vehicles:_152mm_GM_45	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	300000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.62	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.4	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_huge_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	24	</rotationSpeed>
+      <reloadTime>	16.5	</reloadTime>
+      <maxAmmo>	20	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <weight>	4370	</weight>
+      <maxHealth>	252	</maxHealth>
+      <maxRegenHealth>	126	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_152mm_GM_45AP>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1050	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	273 263	</piercingPower>
+        </_152mm_GM_45AP>
+        <_152mm_GM_45CR>
+          <defaultPortion>	0.00	</defaultPortion>
+          <speed>	1250	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	329 289	</piercingPower>
+        </_152mm_GM_45CR>
+        <_152mm_GM_45HE>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	760	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	90 90	</piercingPower>
+        </_152mm_GM_45HE>
+      </shots>
+    </_152mm_GM_45>
     <_100mm_44-100JTtraining>
       <userString>	#china_vehicles:_100mm_44-100JT	</userString>
       <tags></tags>

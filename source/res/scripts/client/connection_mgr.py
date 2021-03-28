@@ -170,7 +170,8 @@ class ConnectionManager(IConnectionManager):
         self.__connectionData.username = username_
         self.__connectionData.password = password
         self.__connectionData.inactivityTimeout = constants.CLIENT_INACTIVITY_TIMEOUT
-        self.__connectionData.clientContext = json.dumps({'lang_id': getClientLanguage()})
+        self.__connectionData.clientContext = json.dumps({'lang_id': getClientLanguage(),
+         'publication': params.get('publication')})
         if constants.IS_DEVELOPMENT and params['auth_method'] == CONNECTION_METHOD.BASIC and params['login'][0] == '@':
             try:
                 self.__connectionData.username = params['login'][1:]

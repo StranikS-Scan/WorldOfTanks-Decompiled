@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/tooltips/element.py
 from CurrentVehicle import g_currentVehicle
-from gui.Scaleform.daapi.view.lobby.customization.shared import getItemInventoryCount, makeVehiclesShortNamesString, getSuitableText
+from gui.Scaleform.daapi.view.lobby.customization.shared import getItemInventoryCount, makeVehiclesShortNamesString, getSuitableText, ITEM_TYPE_TO_TAB, CustomizationTabs
+from gui.Scaleform.daapi.view.lobby.customization.shared import getProgressionItemStatusText
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.SEASONS_CONSTANTS import SEASONS_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -10,8 +11,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.customization.constants import CustomizationModes
-from gui.customization.shared import PROJECTION_DECAL_TEXT_FORM_TAG, SEASON_TYPE_TO_NAME, PROJECTION_DECAL_FORM_TO_UI_ID, getBaseStyleItems
-from gui.Scaleform.daapi.view.lobby.customization.shared import getProgressionItemStatusText
+from gui.customization.shared import PROJECTION_DECAL_TEXT_FORM_TAG, SEASON_TYPE_TO_NAME, PROJECTION_DECAL_FORM_TO_UI_ID, getBaseStyleItems, getAncestors, getInheritors
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles, icons
@@ -79,6 +79,22 @@ class NonHistoricTooltip(SimpleCustomizationTooltip):
 
     def _packItemBlocks(self):
         return self._packNonHistoricBlock(topPadding=0)
+
+
+class ChainedTooltip(SimpleCustomizationTooltip):
+
+    def _packItemBlocks(self):
+        return self._packChainedBlock()
+
+    @staticmethod
+    def _packChainedBlock():
+        img = R.images.gui.maps.icons.customization.chained_ico
+        title = R.strings.vehicle_customization.carousel.chained.header
+        desc = R.strings.vehicle_customization.carousel.chained.description
+        blocks = [formatters.packImageTextBlockData(title=text_styles.middleTitle(backport.text(title())), img=backport.image(img()), imgPadding={'left': 4,
+          'right': 6,
+          'top': 4}, padding={'bottom': 10}), formatters.packTextBlockData(text=text_styles.main(backport.text(desc())))]
+        return blocks
 
 
 class PopoverTooltip(SimpleCustomizationTooltip):
@@ -164,7 +180,8 @@ class ElementTooltip(BlocksTooltipData):
         self.boundVehs = self._item.getBoundVehicles()
         self.installedVehs = self._item.getInstalledVehicles()
         self.installedCount = self._item.installedCount(vehIntCD) if vehIntCD else 0
-        isItemInStyle = self._item.isStyleOnly or self._item.intCD in getBaseStyleItems()
+        itemCD = self._item.intCD
+        isItemInStyle = self._item.isStyleOnly or itemCD in getBaseStyleItems()
         if self._item.isProgressive:
             progressBlock = self._packProgressBlock()
             if progressBlock is not None:
@@ -192,7 +209,7 @@ class ElementTooltip(BlocksTooltipData):
             if self.__ctx is not None:
                 self._appliedCount = self.__ctx.mode.getItemAppliedCount(self._item)
                 hullContainer = self.__ctx.mode.currentOutfit.hull
-                bonusEnabled = hullContainer.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).getItemCD() == self._item.intCD
+                bonusEnabled = hullContainer.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).getItemCD() == itemCD
         elif self.__vehicle is not None:
             self.bonusDescription = VEHICLE_CUSTOMIZATION.BONUS_STYLE
             vehicleCD = self.__vehicle.descriptor.makeCompactDescr()
@@ -221,6 +238,16 @@ class ElementTooltip(BlocksTooltipData):
         block = self._packCharacteristicsBlock()
         if block:
             items.append(block)
+        styleDependencies = self.__ctx.mode.getDependenciesData()
+        if styleDependencies:
+            if self._item.itemTypeID == GUI_ITEM_TYPE.CAMOUFLAGE:
+                inheritors = getInheritors(itemCD, styleDependencies)
+                if inheritors:
+                    items.append(self.__packAncestorBlock(inheritors))
+            else:
+                ancestors = getAncestors(itemCD, styleDependencies)
+                if ancestors:
+                    items.append(self.__packInheritorBlock(ancestors))
         if statsConfig.buyPrice or statsConfig.sellPrice or statsConfig.inventoryCount:
             inventoryBlocks = self._packInventoryBlock(statsConfig.buyPrice, statsConfig.sellPrice, statsConfig.inventoryCount)
             if inventoryBlocks['data']['blocksData']:
@@ -553,6 +580,43 @@ class ElementTooltip(BlocksTooltipData):
                 desc = text_styles.concatStylesToSingleLine(icons.markerBlocked(), text_styles.error(backport.text(R.strings.vehicle_customization.customization.infotype.progression.notAvailableState.title())))
                 desc = text_styles.concatStylesToMultiLine(desc, text_styles.main(backport.text(R.strings.vehicle_customization.customization.infotype.progression.notAvailableState.desc())))
             return formatters.packAlignedTextBlockData(text=desc, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER)
+
+    def __packInheritorBlock(self, ancestors):
+        getItemByCD = self.itemsCache.items.getItemByCD
+        quotedText = R.strings.vehicle_customization.quotedText
+        blocks = [self.__packChainedBlockTitle(R.strings.vehicle_customization.customization.tooltip.chained.suitable()), self.__packDependentContentFormat(text=', '.join([ backport.text(quotedText(), getItemByCD(intCD).userName) for intCD in ancestors ]), icon=backport.image(R.images.gui.maps.icons.customization.customization_icon.c_16x16.camouflage()))]
+        return formatters.packBuildUpBlockData(blocks=blocks, padding=formatters.packPadding(top=-3))
+
+    def __packAncestorBlock(self, dependentItems):
+        blocks = [self.__packChainedBlockTitle(R.strings.vehicle_customization.customization.tooltip.chained.default())]
+        getItemByCD = self.itemsCache.items.getItemByCD
+        quotedText = R.strings.vehicle_customization.quotedText
+        itemsBySlot = {}
+        for intCD in dependentItems:
+            item = getItemByCD(intCD)
+            itemTabID = ITEM_TYPE_TO_TAB[item.itemTypeID]
+            itemSlotType = CustomizationTabs.SLOT_TYPES[itemTabID]
+            itemSlotName = GUI_ITEM_TYPE_NAMES[itemSlotType]
+            if itemSlotName not in itemsBySlot.keys():
+                itemsBySlot[itemSlotName] = [item.userName]
+            itemsBySlot[itemSlotName].append(item.userName)
+
+        image = R.images.gui.maps.icons.customization.customization_icon.c_16x16
+        for key, value in itemsBySlot.iteritems():
+            blocks.append(self.__packDependentContentFormat(text=', '.join([ backport.text(quotedText(), slotTypeName) for slotTypeName in value ]), icon=backport.image(image.dyn(key)())))
+
+        return formatters.packBuildUpBlockData(blocks=blocks, padding=formatters.packPadding(top=-3))
+
+    @staticmethod
+    def __packChainedBlockTitle(title):
+        icon = backport.image(R.images.gui.maps.icons.customization.chained_ico())
+        titleText = text_styles.middleTitle(backport.text(title))
+        return formatters.packImageTextBlockData(img=icon, title=titleText, imgPadding=formatters.packPadding(top=3, right=4))
+
+    @staticmethod
+    def __packDependentContentFormat(text, icon):
+        titleText = text_styles.main(text)
+        return formatters.packImageTextBlockData(img=icon, title=titleText, imgPadding=formatters.packPadding(top=3, right=4), ignoreImageSize=True, padding=formatters.packPadding(left=88, bottom=4))
 
 
 class ElementIconTooltip(ElementTooltip):

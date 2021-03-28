@@ -17,7 +17,7 @@ from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
 from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames
-_DEFAULT_VERTICAL_OFFSET = 0.2
+_VERTICAL_OFFSET = 0.2
 _WORLD_UP = Math.Vector3(0, 1, 0)
 _STYLE_INFO_YAW = math.radians(-135)
 _STYLE_INFO_PITCH = math.radians(-5)
@@ -44,9 +44,8 @@ class C11nHangarCameraManager(TimeDeltaMeter):
     _service = dependency.descriptor(ICustomizationService)
     _hangarSpace = dependency.descriptor(IHangarSpace)
 
-    def __init__(self, verticalOffset=_DEFAULT_VERTICAL_OFFSET):
+    def __init__(self):
         TimeDeltaMeter.__init__(self)
-        self.__verticalOffset = verticalOffset
         self._prevCameraPosition = 0
         self.__hangarCameraManager = None
         self.__currentMode = C11nCameraModes.START_STATE
@@ -58,7 +57,6 @@ class C11nHangarCameraManager(TimeDeltaMeter):
         return
 
     def init(self):
-        self.__projectionChangedCbId = None
         if self._hangarSpace.spaceInited:
             if self._hangarSpace.space.getCameraManager() is not None:
                 self.__hangarCameraManager = self._hangarSpace.space.getCameraManager()
@@ -258,7 +256,7 @@ class C11nHangarCameraManager(TimeDeltaMeter):
         return (commonConstraints[0], commonConstraints[1] - (position[1] - startingPoint[1]))
 
     def __getTankCentralPoint(self):
-        if self.vEntity is not None and self.vEntity.appearance is not None and self.vEntity.appearance.compoundModel is not None:
+        if self.vEntity is not None and self.vEntity.appearance is not None and self.vEntity.appearance.compoundModel is not None and self.vEntity.appearance.collisions is not None:
             appearance = self.vEntity.appearance
             hullAABB = appearance.collisions.getBoundingBox(TankPartIndexes.HULL)
             position = Math.Vector3((hullAABB[1].x + hullAABB[0].x) / 2.0, hullAABB[1].y / 2.0, (hullAABB[1].z + hullAABB[0].z) / 2.0)
@@ -278,16 +276,12 @@ class C11nHangarCameraManager(TimeDeltaMeter):
             return
 
     def __projectionChangeHandler(self, *args, **kwargs):
-        if self.__c11nCamera is not None:
-            self.__projectionChangedCbId = BigWorld.callback(0.0, self.__onProjectionChanged)
-        return
+        BigWorld.callback(0.0, self.__onProjectionChanged)
 
     def __onProjectionChanged(self):
-        self.__projectionChangedCbId = None
         if self.__currentMode == C11nCameraModes.STYLE_INFO:
             self.locateCameraToStyleInfoPreview(forceLocate=True)
         self.__c11nCamera.updateProjection()
-        return
 
     def __updateScreenSpaceOffset(self, val):
         if self.__screenSpaceOffset != val:
@@ -320,7 +314,7 @@ class C11nHangarCameraManager(TimeDeltaMeter):
             hangarCamera = self.__hangarCameraManager.camera
             if hangarCamera is None:
                 return
-            self.__c11nCamera = BigWorld.SphericalTransitionCamera(hangarCamera, self.__verticalOffset)
+            self.__c11nCamera = BigWorld.SphericalTransitionCamera(hangarCamera, _VERTICAL_OFFSET)
             targetPos = Math.Matrix(hangarCamera.target).translation
             self.__c11nCamera.moveTo(targetPos, 0.0)
             BigWorld.camera(self.__c11nCamera)
@@ -330,12 +324,10 @@ class C11nHangarCameraManager(TimeDeltaMeter):
             hangarCamera.turningHalfLife = customCfg['cam_fluency']
             hangarCamera.movementHalfLife = customCfg['cam_fluency']
             self.__hangarCameraManager.handleInactiveCamera = True
-            self.__updateScreenSpaceOffset(self.__verticalOffset)
+            self.__updateScreenSpaceOffset(_VERTICAL_OFFSET)
             return
 
     def __destroyCameras(self):
-        if self.__projectionChangedCbId is not None:
-            BigWorld.cancelCallback(self.__projectionChangedCbId)
         if self.__c11nCamera is not None:
             self.__c11nCamera.stop()
         if self.__hangarCameraManager is not None and self.__hangarCameraManager.camera is not None:

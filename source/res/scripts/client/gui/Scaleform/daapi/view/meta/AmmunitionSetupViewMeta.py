@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/AmmunitionSetupViewMeta.py
-from gui.Scaleform.daapi.view.meta.GFTutorialViewMeta import GFTutorialViewMeta
+from gui.Scaleform.framework.entities.View import View
 
-class AmmunitionSetupViewMeta(GFTutorialViewMeta):
+class AmmunitionSetupViewMeta(View):
 
     def onClose(self):
         self._printOverrideError('onClose')

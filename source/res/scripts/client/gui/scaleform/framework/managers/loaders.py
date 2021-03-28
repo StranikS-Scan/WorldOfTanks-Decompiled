@@ -13,6 +13,7 @@ from gui.Scaleform.framework.settings import UIFrameworkImpl
 from helpers import dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.impl import IGuiLoader
+from skeletons.tutorial import ITutorialLoader
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Window
@@ -123,6 +124,7 @@ class GuiImplViewLoadParams(ViewLoadParams):
 
 class LoaderManager(LoaderManagerMeta):
     uiLoader = dependency.descriptor(IGuiLoader)
+    __tutorialLoader = dependency.descriptor(ITutorialLoader)
 
     def __init__(self, app):
         super(LoaderManager, self).__init__()
@@ -258,7 +260,7 @@ class LoaderManager(LoaderManagerMeta):
 
     def __doLoadSFView(self, loadParams, *args, **kwargs):
         key = loadParams.viewKey
-        viewTutorialID = self.__app.tutorialManager.getViewTutorialID(key.name)
+        viewTutorialID = self.__tutorialLoader.gui.getViewTutorialID(key.name)
         window = loadParams.window
         if window is None:
             window = SFWindow(loadParams, fireEvent=False)

@@ -5,7 +5,8 @@ import weakref
 from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
 from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import PREBATTLE_RESTRICTION
-import tutorial.loader as tutorialLoader
+from helpers import dependency
+from skeletons.tutorial import ITutorialLoader
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 
@@ -67,13 +68,11 @@ class CurrentVehicleActionsValidator(BaseActionsValidator):
 
 
 class TutorialActionsValidator(BaseActionsValidator):
+    __tutorialLoader = dependency.descriptor(ITutorialLoader)
 
     def _validate(self):
-        if tutorialLoader.g_loader is not None:
-            tutorial = tutorialLoader.g_loader.tutorial
-            if tutorial is not None and not tutorial.isAllowedToFight():
-                return ValidationResult(False, PREBATTLE_RESTRICTION.TUTORIAL_NOT_FINISHED)
-        return super(TutorialActionsValidator, self)._validate()
+        tutorial = self.__tutorialLoader.tutorial
+        return ValidationResult(False, PREBATTLE_RESTRICTION.TUTORIAL_NOT_FINISHED) if tutorial is not None and not tutorial.isAllowedToFight() else super(TutorialActionsValidator, self)._validate()
 
 
 class ActionsValidatorComposite(BaseActionsValidator):

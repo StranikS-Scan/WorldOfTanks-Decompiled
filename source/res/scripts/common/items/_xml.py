@@ -200,6 +200,18 @@ def readFloat(xmlCtx, section, subsectionName, defaultValue=None):
 
 
 @cacheFloat
+def readFloatOrNone(xmlCtx, section, subsectionName):
+    if not section.has_key(subsectionName):
+        return None
+    else:
+        wrongVal = -1000000.0
+        v = section.readFloat(subsectionName, wrongVal)
+        if v < wrongVal + 1.0:
+            raiseWrongSection(xmlCtx, subsectionName)
+        return v
+
+
+@cacheFloat
 def readPositiveFloat(xmlCtx, section, subsectionName, defaultValue=None):
     if defaultValue is not None and not section.has_key(subsectionName):
         return defaultValue

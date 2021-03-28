@@ -479,6 +479,9 @@ class BattleReplay(object):
     def setArcadeGunMarkerSize(self, size):
         self.__replayCtrl.setArcadeGunMarkerSize(size)
 
+    def useSyncroniusResourceLoading(self, use):
+        self.__replayCtrl.useSyncroniusResourceLoading = use
+
     def getArcadeGunMarkerSize(self):
         return self.__replayCtrl.getArcadeGunMarkerSize()
 
@@ -1027,7 +1030,6 @@ class BattleReplay(object):
         if self.__wasVideoBeforeRewind:
             BigWorld.player().inputHandler.onControlModeChanged('video', prevModeName='arcade', camMatrix=self.__videoCameraMatrix)
             self.__wasVideoBeforeRewind = False
-        BigWorld.restartSoundZoneManager()
         g_replayEvents.onTimeWarpFinish()
 
     def onRespawnMode(self, enabled):

@@ -125,10 +125,13 @@ class IControlMode(object):
     def getPreferredAutorotationMode(self):
         return None
 
-    def enableSwitchAutorotationMode(self):
+    def enableSwitchAutorotationMode(self, triggeredByKey=False):
         return True
 
     def setForcedGuiControlMode(self, enable):
+        pass
+
+    def onAutorotationChanged(self, value):
         pass
 
 
@@ -549,7 +552,7 @@ class ArcadeControlMode(_GunControlMode):
             BigWorld.player().autoAim(None)
             return True
         elif cmdMap.isFired(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, key) and isDown:
-            self._aih.switchAutorotation()
+            self._aih.switchAutorotation(True)
             return True
         elif cmdMap.isFiredList((CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT,
          CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT,
@@ -709,7 +712,7 @@ class _TrajectoryControlMode(_GunControlMode):
             BigWorld.player().shoot()
             return True
         elif cmdMap.isFired(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, key) and isDown:
-            self._aih.switchAutorotation()
+            self._aih.switchAutorotation(True)
             return True
         elif cmdMap.isFired(CommandMapping.CMD_CM_ALTERNATE_MODE, key) and isDown:
             self.__interpolator.disable()
@@ -885,6 +888,11 @@ class SniperControlMode(_GunControlMode):
     def enable(self, **args):
         super(SniperControlMode, self).enable(**args)
         SoundGroups.g_instance.changePlayMode(1)
+        desc = BigWorld.player().getVehicleDescriptor()
+        isHorizontalStabilizerAllowed = desc.gun.turretYawLimits is None
+        self._cam.aimingSystem.enableHorizontalStabilizerRuntime(isHorizontalStabilizerAllowed)
+        self._cam.aimingSystem.forceFullStabilization(self.__isFullStabilizationRequired())
+        self._cam.aimingSystem.enableAutoRotation(self._aih.getAutorotation())
         self._cam.enable(args['preferredPos'], args['saveZoom'])
         self._binoculars.setEnabled(True)
         self._binoculars.setEnableLensEffects(SniperControlMode._LENS_EFFECTS_ENABLED)
@@ -895,10 +903,6 @@ class SniperControlMode(_GunControlMode):
             TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.SNIPER_MODE)
         if BattleReplay.g_replayCtrl.isRecording:
             BattleReplay.g_replayCtrl.onSniperModeChanged(True)
-        desc = BigWorld.player().getVehicleDescriptor()
-        isHorizontalStabilizerAllowed = desc.gun.turretYawLimits is None
-        self._cam.aimingSystem.enableHorizontalStabilizerRuntime(isHorizontalStabilizerAllowed)
-        self._cam.aimingSystem.forceFullStabilization(self.__isFullStabilizationRequired())
         if self._aih.siegeModeControl is not None:
             self._aih.siegeModeControl.onSiegeStateChanged += self.__siegeModeStateChanged
         return
@@ -955,7 +959,7 @@ class SniperControlMode(_GunControlMode):
             self._aih.onControlModeChanged(CTRL_MODE_NAME.ARCADE, preferredPos=self.camera.aimingSystem.getDesiredShotPoint(), turretYaw=self._cam.aimingSystem.turretYaw, gunPitch=self._cam.aimingSystem.gunPitch, aimingMode=self._aimingMode, closesDist=False)
             return True
         elif cmdMap.isFired(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, key) and isDown:
-            self._aih.switchAutorotation()
+            self._aih.switchAutorotation(True)
             return True
         elif cmdMap.isFiredList((CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT,
          CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT,
@@ -1003,10 +1007,26 @@ class SniperControlMode(_GunControlMode):
             isRotationAroundCenter = desc.chassis.rotationIsAroundCenter
             turretHasYawLimits = desc.gun.turretYawLimits is not None
             yawHullAimingAvailable = desc.isYawHullAimingAvailable
-            return yawHullAimingAvailable or isRotationAroundCenter and not turretHasYawLimits
+            return turretHasYawLimits and not self._aih.isHullLockEnabled() or yawHullAimingAvailable or isRotationAroundCenter and not turretHasYawLimits
 
-    def enableSwitchAutorotationMode(self):
-        return self.getPreferredAutorotationMode() is not False
+    def enableSwitchAutorotationMode(self, triggeredByKey=False):
+        vehicle = BigWorld.entities.get(BigWorld.player().playerVehicleID)
+        if vehicle is None:
+            return
+        else:
+            desc = vehicle.typeDescriptor
+            isRotationAroundCenter = desc.chassis.rotationIsAroundCenter
+            turretHasYawLimits = desc.gun.turretYawLimits is not None
+            yawHullAimingAvailable = desc.isYawHullAimingAvailable
+            return turretHasYawLimits and triggeredByKey or yawHullAimingAvailable or isRotationAroundCenter and not turretHasYawLimits
+
+    def onAutorotationChanged(self, value):
+        vehicle = BigWorld.entities.get(BigWorld.player().playerVehicleID)
+        if vehicle is None or vehicle.typeDescriptor.gun.turretYawLimits is None:
+            return
+        else:
+            self._cam.aimingSystem.enableAutoRotation(self._aih.getAutorotation())
+            return
 
     def onChangeControlModeByScroll(self, switchToClosestDist=True):
         if not _isEnabledChangeModeByScroll(self._cam, self._aih):

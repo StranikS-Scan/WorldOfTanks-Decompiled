@@ -72,7 +72,7 @@ class LobbyMenu(LobbyMenuMeta):
 
     @async
     def quitClick(self):
-        isOk = yield await(dialogs.quitGame(self))
+        isOk = yield await(dialogs.quitGame(self.getParentWindow()))
         if isOk:
             self.gameplay.quitFromGame()
 

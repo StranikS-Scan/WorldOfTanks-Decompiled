@@ -26,6 +26,7 @@ from gui.shared.money import Currency
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, PMConfirmationDialogMeta, TankmanOperationDialogMeta, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, CheckBoxDialogMeta, CrewSkinsRemovalCompensationDialogMeta, CrewSkinsRemovalDialogMeta
 from helpers import dependency
 from items.components import skills_constants
+from items.components.c11n_constants import SeasonType
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
@@ -1079,3 +1080,31 @@ class BattleBoostersInstallValidator(LayoutInstallValidator):
 
     def _getItemType(self):
         return GUI_ITEM_TYPE.BATTLE_BOOSTER
+
+
+class CustomizationPurchaseValidator(SyncValidator):
+
+    def __init__(self, outfitData):
+        super(CustomizationPurchaseValidator, self).__init__()
+        self.outfitData = outfitData
+
+    def _validate(self):
+        seasons = []
+        styleID = None
+        if not self.outfitData:
+            return makeError('empty_request')
+        else:
+            for outfit, season in self.outfitData:
+                if season not in SeasonType.RANGE:
+                    return makeError('unsupported_season_type')
+                if season not in seasons:
+                    seasons.append(season)
+                else:
+                    return makeError('seasons_must_be_different')
+                outfitId = outfit.id
+                if styleID is None:
+                    styleID = outfitId
+                if styleID != outfitId:
+                    return makeError('outfits_must_have_same_style')
+
+            return makeSuccess()

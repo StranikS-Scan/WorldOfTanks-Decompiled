@@ -28,7 +28,8 @@ def _initializeDefaultSettings(core, data, initialized):
      GAME.MINIMAP_ALPHA: core.getSetting(GAME.MINIMAP_ALPHA),
      GAME.PLAYERS_PANELS_SHOW_LEVELS: core.getSetting(GAME.PLAYERS_PANELS_SHOW_LEVELS)}
     data['gameExtData'] = {GAME.CHAT_CONTACTS_LIST_ONLY: options.getSetting(GAME.CHAT_CONTACTS_LIST_ONLY).getDefaultValue(),
-     GAME.SNIPER_ZOOM: core.getSetting(GAME.SNIPER_ZOOM)}
+     GAME.SNIPER_ZOOM: core.getSetting(GAME.SNIPER_ZOOM),
+     GAME.HULLLOCK_ENABLED: core.getSetting(GAME.HULLLOCK_ENABLED)}
     gameplayData = data['gameplayData'] = {GAME.GAMEPLAY_MASK: AccountSettings.getSettingsDefault('gameplayMask')}
     aimData = data['aimData'] = {'arcade': core.getSetting('arcade'),
      'sniper': core.getSetting('sniper')}
@@ -569,6 +570,10 @@ def _migrateTo68(core, data, initialized):
     data['battlePassStorage'][BattlePassStorageKeys.INTRO_VIDEO_SHOWN] = False
 
 
+def _migrateTo69(core, data, initialized):
+    data['gameExtData'][GAME.HULLLOCK_ENABLED] = True
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -835,6 +840,10 @@ _versions = ((1,
   False),
  (68,
   _migrateTo68,
+  False,
+  False),
+ (69,
+  _migrateTo69,
   False,
   False))
 

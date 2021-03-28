@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/ingame_menu.py
+from functools import partial
 import constants
 import BattleReplay
 from adisp import process
+from bootcamp.Bootcamp import g_bootcamp
 from gui import DialogsInterface, GUI_SETTINGS
 from gui import makeHtmlString
 from account_helpers.counter_settings import getCountNewSettings
@@ -14,8 +16,8 @@ from gui.Scaleform.genConsts.GLOBAL_VARS_MGR_CONSTS import GLOBAL_VARS_MGR_CONST
 from gui.Scaleform.genConsts.INTERFACE_STATES import INTERFACE_STATES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
-from gui.Scaleform.daapi.view.dialogs.bootcamp_dialogs_meta import ExecutionChooserDialogMeta
 from gui.battle_control import event_dispatcher as battle_event_dispatcher
+from gui.impl.lobby.bootcamp.bootcamp_exit_view import BootcampExitWindow
 from gui.shared import event_dispatcher as shared_event_dispatcher
 from gui.shared import events
 from gui.shared.utils.functions import makeTooltip
@@ -65,12 +67,9 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
 
     def bootcampClick(self):
         if self.bootcampController.isInBootcamp():
-            if self.bootcampController.needAwarding():
-                self.__doLeaveBootcamp()
-            else:
-                self.__doLeaveArena(True)
+            self.__doLeaveBootcamp()
         else:
-            self.__doLeaveArena(False)
+            self.__doLeaveArena()
 
     def _populate(self):
         super(IngameMenu, self)._populate()
@@ -143,38 +142,40 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
             self.destroy()
 
     @process
-    def __doLeaveArena(self, needToStopBootcamp=False):
+    def __doLeaveArena(self):
         exitResult = self.sessionProvider.getExitResult()
-        if exitResult.playerInfo is not None:
-            igrType = exitResult.playerInfo.igrType
-        else:
-            igrType = constants.IGR_TYPE.NONE
-        if constants.IS_KOREA and GUI_SETTINGS.igrEnabled and igrType != constants.IGR_TYPE.NONE:
-            i18nKey = 'quitBattleIGR'
-        else:
-            i18nKey = 'quitBattle'
         arenaType = self.sessionProvider.arenaVisitor.getArenaGuiType()
         if exitResult.isDeserter and arenaType not in _ARENAS_WITHOUT_DEZERTER_PUNISHMENTS:
-            result = yield DialogsInterface.showDialog(IngameDeserterDialogMeta(i18nKey + '/deserter', focusedID=DIALOG_BUTTON_ID.CLOSE))
+            quitBattleKey = self.__getQuitBattleKey(exitResult.playerInfo)
+            result = yield DialogsInterface.showDialog(IngameDeserterDialogMeta(quitBattleKey + '/deserter', focusedID=DIALOG_BUTTON_ID.CLOSE))
         elif BattleReplay.isPlaying():
             result = yield DialogsInterface.showDialog(I18nConfirmDialogMeta('quitReplay', focusedID=DIALOG_BUTTON_ID.CLOSE))
         else:
             result = yield DialogsInterface.showDialog(I18nConfirmDialogMeta('quitBattle', focusedID=DIALOG_BUTTON_ID.CLOSE))
         if result:
-            if needToStopBootcamp:
-                self.bootcampController.stopBootcamp(True)
-                self.destroy()
-            else:
-                self.__doExit()
-        return
+            self.__doExit()
 
     def __doExit(self):
         self.sessionProvider.exit()
         self.destroy()
 
+    @staticmethod
+    def __getQuitBattleKey(playerInfo):
+        igrType = playerInfo.igrType if playerInfo else constants.IGR_TYPE.NONE
+        return 'quitBattleIGR' if constants.IS_KOREA and GUI_SETTINGS.igrEnabled and igrType != constants.IGR_TYPE.NONE else 'quitBattle'
+
+    def showBootcampExitWindow(self):
+        window = BootcampExitWindow(partial(self.bootcampController.stopBootcamp, True), True)
+        window.load()
+
     @process
     def __doLeaveBootcamp(self):
-        dialogConstants = self.bootcampController.getSkipDialogConstants()
-        result = yield DialogsInterface.showDialog(ExecutionChooserDialogMeta(dialogConstants.dialogType, dialogConstants.dialogKey, dialogConstants.focusedID, not dialogConstants.needAwarding, dialogConstants.premiumType))
-        if result:
-            self.__doLeaveArena(True)
+        if g_bootcamp.getLessonNum() == g_bootcamp.getContextIntParameter('lastLessonNum') - 1:
+            exitResult = self.sessionProvider.getExitResult()
+            quitBattleKey = self.__getQuitBattleKey(exitResult.playerInfo)
+            result = yield DialogsInterface.showDialog(IngameDeserterDialogMeta(quitBattleKey + '/deserter', focusedID=DIALOG_BUTTON_ID.CLOSE))
+            if result:
+                self.showBootcampExitWindow()
+        else:
+            self.showBootcampExitWindow()
+        self.destroy()

@@ -32,6 +32,9 @@ class IStatisticsCollector(object):
     def getStatistics(self, andStop=True):
         raise NotImplementedError
 
+    def getSessionData(self):
+        raise NotImplementedError
+
     def noteHangarLoadingState(self, state, initialState=False, showSummaryNow=False):
         raise NotImplementedError
 

@@ -380,7 +380,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         self.__followingIgnoredTank = vehicleID
 
     def __addMarkerToPool(self, vehicleID, vInfo, vProxy=None):
-        if not vInfo.isAlive() and isSpawnedBot(vInfo.vehicleType.tags):
+        if not self.__needsMarker(vInfo):
             return
         else:
             if vProxy is not None:
@@ -444,6 +444,10 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
     def __setupHealth(self, marker):
         self._invokeMarker(marker.getMarkerID(), 'setHealth', marker.getHealth())
 
+    @staticmethod
+    def __needsMarker(vInfo):
+        return vInfo.isAlive() or not isSpawnedBot(vInfo.vehicleType.tags)
+
     def __setEntityName(self, vInfo, arenaDP):
         vehicleID = vInfo.vehicleID
         if vehicleID not in self._markers:
@@ -452,24 +456,27 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         self._invokeMarker(handle, 'setEntityName', arenaDP.getPlayerGuiProps(vehicleID, vInfo.team).name())
 
     def __onVehicleMarkerAdded(self, vProxy, vInfo, guiProps):
-        vehicleID = vInfo.vehicleID
-        accountDBID = vInfo.player.accountDBID
-        if vehicleID in self._markers:
-            marker = self._markers[vInfo.vehicleID]
-            if marker.setActive(True):
-                marker.attach(vProxy)
-                self._setMarkerMatrix(marker.getMarkerID(), marker.getMatrixProvider())
-                self._setMarkerActive(marker.getMarkerID(), True)
-                self._setMarkerInitialState(marker, accountDBID=accountDBID)
+        if not self.__needsMarker(vInfo):
+            return
         else:
-            if vInfo.isObserver():
-                return
-            marker = self.__addMarkerToPool(vehicleID, vInfo=vInfo, vProxy=vProxy)
-            if marker is None:
-                return
-            self.__setVehicleInfo(marker, vInfo, guiProps, self.sessionProvider.getCtx().getPlayerFullNameParts(vehicleID))
-            self._setMarkerInitialState(marker, accountDBID=accountDBID)
-        return
+            vehicleID = vInfo.vehicleID
+            accountDBID = vInfo.player.accountDBID
+            if vehicleID in self._markers:
+                marker = self._markers[vInfo.vehicleID]
+                if marker.setActive(True):
+                    marker.attach(vProxy)
+                    self._setMarkerMatrix(marker.getMarkerID(), marker.getMatrixProvider())
+                    self._setMarkerActive(marker.getMarkerID(), True)
+                    self._setMarkerInitialState(marker, accountDBID=accountDBID)
+            else:
+                if vInfo.isObserver():
+                    return
+                marker = self.__addMarkerToPool(vehicleID, vInfo=vInfo, vProxy=vProxy)
+                if marker is None:
+                    return
+                self.__setVehicleInfo(marker, vInfo, guiProps, self.sessionProvider.getCtx().getPlayerFullNameParts(vehicleID))
+                self._setMarkerInitialState(marker, accountDBID=accountDBID)
+            return
 
     def __onVehicleMarkerRemoved(self, vehicleID):
         self._hideVehicleMarker(vehicleID)

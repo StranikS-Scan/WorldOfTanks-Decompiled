@@ -52,6 +52,7 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         return
 
     def recreateVehicle(self, typeDescriptor=None, state=ModelStates.UNDAMAGED, callback=None, outfit=None):
+        self._isVehicleLoaded = False
         self.setHighlight(False)
         if typeDescriptor is not None:
             self.typeDescriptor = typeDescriptor
@@ -65,6 +66,7 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         return
 
     def removeVehicle(self):
+        self._isVehicleLoaded = False
         if self.__vAppearance:
             self.__vAppearance.remove()
         self.__updateFakeShadowAccordingToAppearance()

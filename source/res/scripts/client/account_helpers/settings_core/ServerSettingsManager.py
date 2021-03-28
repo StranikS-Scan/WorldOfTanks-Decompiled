@@ -128,7 +128,8 @@ class ServerSettingsManager(object):
                                        GAME.DISPLAY_PLATOON_MEMBERS: 24,
                                        GAME.MINIMAP_MIN_SPOTTING_RANGE: 25,
                                        GAME.ENABLE_REPAIR_TIMER: 26,
-                                       GAME.ENABLE_BATTLE_NOTIFIER: 29}, offsets={GAME.BATTLE_LOADING_INFO: Offset(4, 48),
+                                       GAME.ENABLE_BATTLE_NOTIFIER: 29,
+                                       GAME.HULLLOCK_ENABLED: 30}, offsets={GAME.BATTLE_LOADING_INFO: Offset(4, 48),
                                        GAME.BATTLE_LOADING_RANKED_INFO: Offset(21, 6291456),
                                        GAME.HANGAR_CAM_PERIOD: Offset(18, 1835008),
                                        GAME.SNIPER_ZOOM: Offset(27, 402653184)}),
@@ -503,8 +504,11 @@ class ServerSettingsManager(object):
         enableDynamicCameraValue = enableDynamicCamera.get()
         enableSniperStabilization = self._core.options.getSetting(self.GAME.SNIPER_MODE_STABILIZATION)
         enableSniperStabilizationValue = enableSniperStabilization.get()
+        enableSniperHullLock = self._core.options.getSetting(self.GAME.HULLLOCK_ENABLED)
+        enableSniperHullLockValue = enableSniperHullLock.get()
         from AvatarInputHandler import AvatarInputHandler
         AvatarInputHandler.enableDynamicCamera(enableDynamicCameraValue, enableSniperStabilizationValue)
+        AvatarInputHandler.enableHullLock(enableSniperHullLockValue)
         if not BattleReplay.isPlaying():
             from messenger.doc_loaders import user_prefs
             from messenger import g_settings as messenger_settings

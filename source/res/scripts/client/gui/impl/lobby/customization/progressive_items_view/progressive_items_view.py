@@ -147,7 +147,7 @@ class ProgressiveItemsView(ViewImpl):
         customizationCache = vehicles.g_cache.customization20()
         vehicleType = self._vehicle.descriptor.type
         sortedItems = sorted(customizationCache.customizationWithProgression.itervalues(), key=lambda i: i.id)
-        return [ item.compactDescr for item in sortedItems if item.filter.matchVehicleType(vehicleType) and item.itemType == CustomizationType.PROJECTION_DECAL ]
+        return [ item.compactDescr for item in sortedItems if (item.filter is None or item.filter.matchVehicleType(vehicleType)) and item.itemType == CustomizationType.PROJECTION_DECAL ]
 
     def __setItems(self, model):
         for intCD in self._possibleItems:

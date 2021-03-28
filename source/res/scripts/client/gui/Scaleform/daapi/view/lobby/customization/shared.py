@@ -30,6 +30,7 @@ from gui.shared.utils import code2str
 from helpers import dependency, int2roman
 from helpers.func_utils import CallParams, cooldownCallerDecorator
 from helpers.i18n import makeString as _ms
+from items import parseIntCompactDescr
 from items.components.c11n_components import getItemSlotType
 from items.components.c11n_constants import SeasonType, ProjectionDecalFormTags, ProjectionDecalDirectionTags
 from items.vehicles import VEHICLE_CLASS_TAGS
@@ -167,7 +168,8 @@ def getStylePurchaseItems(style, modifiedOutfits, c11nService=None, prolongRent=
         baseOutfit = style.getOutfit(season, vehicleCD)
         for intCD, component, regionIdx, container, _ in modifiedOutfit.itemsFull():
             item = c11nService.getItemByCD(intCD)
-            slotType = ITEM_TYPE_TO_SLOT_TYPE.get(item.itemTypeID)
+            itemTypeID = item.itemTypeID
+            slotType = ITEM_TYPE_TO_SLOT_TYPE.get(itemTypeID)
             if slotType is None:
                 continue
             slotId = C11nId(container.getAreaID(), slotType, regionIdx)
@@ -179,7 +181,7 @@ def getStylePurchaseItems(style, modifiedOutfits, c11nService=None, prolongRent=
                     continue
                 price = item.getBuyPrice()
                 isFromInventory = inventoryCounts[intCD] > 0 or item.isStyleOnly
-                locked = False
+                locked = bool(style.getDependenciesIntCDs()) and itemTypeID in EDITABLE_STYLE_IRREMOVABLE_TYPES and itemTypeID != GUI_ITEM_TYPE.CAMOUFLAGE
             else:
                 price = ItemPrice(Money(credits=0), Money())
                 isFromInventory = True
@@ -597,6 +599,32 @@ def isStyleEditedForCurrentVehicle(outfits, style):
     return False
 
 
+@dependency.replace_none_kwargs(service=ICustomizationService)
+def getUnsuitableDependentData(outfit, selCamoItemID, styleDependencies, service=None):
+    result = []
+    styleDependencies = styleDependencies
+    outfitItemsList = tuple(((cIntCD, regionIdx, container) for cIntCD, _, regionIdx, container, _ in outfit.itemsFull()))
+    getItemByCD = service.getItemByCD
+    camoDependencies = styleDependencies.get(selCamoItemID)
+    if camoDependencies:
+        for cIntCD, regionIdx, container in outfitItemsList:
+            possiblyUnsuitable = getItemByCD(cIntCD)
+            posUnsuitTypeId = possiblyUnsuitable.itemTypeID
+            posUnsuitType = possiblyUnsuitable.descriptor.itemType
+            posUnsuitId = possiblyUnsuitable.id
+            dependentByType = camoDependencies.get(posUnsuitType)
+            if dependentByType and posUnsuitId not in dependentByType:
+                for dependent in styleDependencies.itervalues():
+                    dItemIds = dependent.get(posUnsuitType)
+                    if dItemIds and posUnsuitId in dItemIds:
+                        slotType = ITEM_TYPE_TO_SLOT_TYPE[posUnsuitTypeId]
+                        slotIdToChange = C11nId(container.getAreaID(), slotType, regionIdx)
+                        result.append((possiblyUnsuitable, slotIdToChange))
+                        break
+
+    return result
+
+
 def __resetC11nItemsNoveltyParamsMerger(merged, callParams):
     items = callParams.kwargs.get('items', [])
     items.extend(merged.kwargs.get('items', []))
@@ -628,6 +656,12 @@ def removeItemFromEditableStyle(outfit, baseOutfit, slotId):
     slotType = slotId.slotType
     if slotType in EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES:
         __removeItemFromEditableStyleAllAreas(outfit, baseOutfit, slotType)
+        if slotType == GUI_ITEM_TYPE.CAMOUFLAGE:
+            slotData = getSlotDataFromSlot(outfit, slotId)
+            parsedData = parseIntCompactDescr(compactDescr=slotData.intCD)
+            for _, uSlotId in getUnsuitableDependentData(outfit, parsedData[2], outfit.style.dependencies):
+                __doItemRemoveFromEditableStyleOutfit(outfit, baseOutfit, uSlotId, True)
+
     else:
         __removeItemFromEditableStyleOutfit(outfit, baseOutfit, slotId)
 
@@ -655,9 +689,13 @@ def __removeItemFromEditableStyleAllAreas(outfit, baseOutfit, slotType):
 
 
 def __removeItemFromEditableStyleOutfit(outfit, baseOutfit, slotId):
+    __doItemRemoveFromEditableStyleOutfit(outfit, baseOutfit, slotId, slotId.slotType in EDITABLE_STYLE_IRREMOVABLE_TYPES)
+
+
+def __doItemRemoveFromEditableStyleOutfit(outfit, baseOutfit, slotId, isSetToDefault):
     multiSlot = outfit.getContainer(slotId.areaId).slotFor(slotId.slotType)
     multiSlot.remove(slotId.regionIdx)
-    if slotId.slotType in EDITABLE_STYLE_IRREMOVABLE_TYPES:
+    if isSetToDefault:
         slotData = getSlotDataFromSlot(baseOutfit, slotId)
         if slotData is not None and not slotData.isEmpty():
             multiSlot.set(slotData.intCD, slotId.regionIdx, slotData.component)

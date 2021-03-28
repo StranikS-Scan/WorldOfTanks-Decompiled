@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/readers/c11n_readers.py
 import os
-from string import upper
+import Math
+from string import lower, upper
 import re
 import items._xml as ix
 import items.components.c11n_components as cc
@@ -11,7 +12,7 @@ import nations
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS, parseArenaBonusType
 from constants import IS_CLIENT, IS_EDITOR, IS_WEB
 from items.components import shared_components
-from items.components.c11n_constants import CustomizationType, ProjectionDecalFormTags, CustomizationNamesToTypes, EMPTY_ITEM_ID, SeasonType, ApplyArea, DecalType, ModificationType, RENT_DEFAULT_BATTLES, ItemTags, ProjectionDecalType
+from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, ProjectionDecalFormTags, CustomizationNamesToTypes, EMPTY_ITEM_ID, SeasonType, ApplyArea, DecalType, ModificationType, RENT_DEFAULT_BATTLES, ItemTags, ProjectionDecalType, DEFAULT_GLOSS, DEFAULT_METALLIC
 from realm_utils import ResMgr
 from typing import Dict, Type, Tuple, Any, TypeVar
 from contextlib import contextmanager
@@ -168,6 +169,11 @@ class ProjectionDecalXmlReader(BaseCustomizationItemXmlReader):
         super(ProjectionDecalXmlReader, self)._readFromXml(target, xmlCtx, section)
         if 'mirror' in section.keys():
             target.canBeMirroredHorizontally = ix.readBool(xmlCtx, section, 'mirror')
+        if 'onlyVerticalMirror' in target.tags:
+            if target.canBeMirroredHorizontally:
+                ix.raiseWrongXml(xmlCtx, 'tags', 'mirror must be false when onlyVerticalMirror set')
+            if 'disableVerticalMirror' in target.tags:
+                ix.raiseWrongXml(xmlCtx, 'tags', 'disableVerticalMirror and onlyVerticalMirror cannot be set at the same time')
 
     def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
         super(ProjectionDecalXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section)
@@ -253,6 +259,13 @@ class CamouflageXmlReader(BaseCustomizationItemXmlReader):
         target.compatibleParts = readFlagEnum(xmlCtx, section, 'compatibleParts', ApplyArea, target.compatibleParts)
         target.componentsCovering = readFlagEnum(xmlCtx, section, 'componentsCovering', ApplyArea, target.componentsCovering)
         target.invisibilityFactor = section.readFloat('invisibilityFactor', 1.0)
+        target.glossMetallicSettings = {'glossMetallicMap': section.readString('glossMetallicMap', ''),
+         'gloss': section.readVector4('gloss', Math.Vector4(DEFAULT_GLOSS)),
+         'metallic': section.readVector4('metallic', Math.Vector4(DEFAULT_METALLIC))}
+        if IS_EDITOR:
+            target.editorData.glossMetallicSettingsType = 0
+            if target.glossMetallicSettings['glossMetallicMap'] != '':
+                target.editorData.glossMetallicSettingsType = 1
         if section.has_key('palettes'):
             palettes = []
             spalettes = section['palettes']
@@ -336,6 +349,27 @@ class StyleXmlReader(BaseCustomizationItemXmlReader):
                     alternateItems[c11nType] = ix.readTupleOfPositiveInts(xmlCtx, oSection, 'id')
 
             target.alternateItems = alternateItems
+        if section.has_key('dependencies'):
+            target.isEditable = True
+            dependencies = {}
+            dependenciesAncestors = {}
+            for _, camouflageSection in section['dependencies'].items():
+                camouflageDependencies = {}
+                for sectionName in camouflageSection.keys():
+                    if sectionName == 'id':
+                        camouflageIDs = ix.readTupleOfPositiveInts(xmlCtx, camouflageSection, 'id')
+                    c11nType = CustomizationNamesToTypes[upper(sectionName)]
+                    camouflageDependencies[c11nType] = ix.readTupleOfPositiveInts(xmlCtx, camouflageSection, sectionName)
+
+                for camouflageID in camouflageIDs:
+                    dependencies[camouflageID] = camouflageDependencies
+                    for itemType, itemIDs in camouflageDependencies.iteritems():
+                        itemTypeAncestors = dependenciesAncestors.setdefault(itemType, {})
+                        for customizationItemID in itemIDs:
+                            itemTypeAncestors.setdefault(customizationItemID, []).append(camouflageID)
+
+            target.dependencies = dependencies
+            target.dependenciesAncestors = dependenciesAncestors
         if section.has_key('outfits'):
             prototype = False
             outfits = self.__readOutfitSection(target.id, section, xmlCtx)
@@ -464,12 +498,43 @@ def readCustomizationCacheFromXml(cache, folder):
 
 
 def _validateStyles(cache):
+
+    def customizationItemInOutfits(style, itemID, itemType):
+        for season in SeasonType.RANGE:
+            outfit = style.outfits.get(season)
+            if outfit:
+                customizationItems = getattr(outfit, '{}s'.format(lower(CustomizationTypeNames[itemType])))
+                for customizationItem in customizationItems:
+                    if itemID == customizationItem.id:
+                        return True
+
+        return False
+
     styleOnlyItemsFromStyles = set()
     for style in cache.styles.itervalues():
-        if style.isEditable and style.alternateItems:
-            for itemType, ids in style.alternateItems.iteritems():
-                items = map(cache.itemTypes[itemType].get, ids)
-                styleOnlyItemsFromStyles.update(items)
+        if style.isEditable:
+            alternateItemsIDs = {}
+            if style.alternateItems:
+                for itemType, ids in style.alternateItems.iteritems():
+                    alternateItemsIDs[itemType] = ids
+                    items = map(cache.itemTypes[itemType].get, ids)
+                    styleOnlyItemsFromStyles.update(items)
+
+            if style.dependencies:
+                for camouflageID, camouflageDependencies in style.dependencies.iteritems():
+                    if camouflageID not in alternateItemsIDs.get(CustomizationType.CAMOUFLAGE, {}) and not customizationItemInOutfits(style, camouflageID, CustomizationType.CAMOUFLAGE):
+                        raise SoftException('Items {} itemType {} from dependencies must be included in alternateItems or outfits'.format(camouflageID, 2))
+                    for itemType, ids in camouflageDependencies.iteritems():
+                        inStyle = False
+                        idsDiff = set(ids).difference(set(alternateItemsIDs.get(itemType, {})))
+                        for itemID in idsDiff:
+                            if not customizationItemInOutfits(style, itemID, itemType):
+                                break
+                        else:
+                            inStyle = True
+
+                        if not inStyle:
+                            raise SoftException('Items {} itemType {} from dependencies must be included in alternateItems or outfits'.format(ids, itemType))
 
     if any((item is None or not item.isStyleOnly for item in styleOnlyItemsFromStyles)):
         raise SoftException('Items shall contain styleOnly tag in tags to be used in alternateItems')

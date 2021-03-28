@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_pass/battle_pass_reward_option_packers.py
 import typing
 from enum import Enum
+from gui import GUI_NATIONS_ORDER_INDEX
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl import backport
 from gui.impl.backport import createTooltipData, TooltipData, getNiceNumberFormat
@@ -45,12 +46,20 @@ class RewardOptionPacker(object):
         return cls._getTooltip(bonus)
 
     @classmethod
+    def sort(cls, gifts):
+        return cls._sort(gifts)
+
+    @classmethod
     def _pack(cls, bonus):
         return RewardOptionModel()
 
     @classmethod
     def _getTooltip(cls, bonus):
         return createTooltipData(bonus.getTooltip())
+
+    @classmethod
+    def _sort(cls, gifts):
+        return [ (giftId, bonus) for giftId, bonus in gifts.iteritems() ]
 
 
 class DeviceRewardOptionPacker(RewardOptionPacker):
@@ -107,6 +116,10 @@ class CrewBookRewardOptionPacker(RewardOptionPacker):
     def _getTooltip(cls, bonus):
         return TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.CREW_BOOK, specialArgs=[bonus.displayedItem.intCD, bonus.getGiftCount()])
 
+    @classmethod
+    def _sort(cls, gifts):
+        return sorted(gifts.items(), key=lambda gift: GUI_NATIONS_ORDER_INDEX[gift[1].displayedItem.getNation()])
+
 
 class NationalBlueprintRewardOptionPacker(RewardOptionPacker):
 
@@ -123,11 +136,15 @@ class NationalBlueprintRewardOptionPacker(RewardOptionPacker):
     def _getTooltip(cls, bonus):
         return TooltipData(tooltip=None, isSpecial=True, specialAlias=bonus.getBlueprintSpecialAlias(), specialArgs=[bonus.getBlueprintSpecialArgs()])
 
+    @classmethod
+    def _sort(cls, gifts):
+        return sorted(gifts.items(), key=lambda gift: GUI_NATIONS_ORDER_INDEX[gift[1].getImageCategory()])
+
 
 def packRewardOptionModel(rewardType, gifts, rewardsModel, tooltips):
     packer = _getPacker().get(rewardType)
     if packer is not None:
-        for giftId, bonus in gifts.iteritems():
+        for giftId, bonus in packer.sort(gifts):
             model = packer.pack(bonus)
             model.setGiftId(giftId)
             tooltip = packer.getTooltip(bonus)

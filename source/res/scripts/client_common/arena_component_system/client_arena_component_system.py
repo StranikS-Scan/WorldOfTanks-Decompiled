@@ -6,8 +6,8 @@ from constants import ARENA_UPDATE, ARENA_SYNC_OBJECT_NAMES
 from debug_utils import LOG_ERROR
 import Event
 from arena_sync_object import ArenaSyncObject
-from svarog_script.py_component import Component
-from svarog_script.script_game_object import ScriptGameObject
+from cgf_obsolete_script.py_component import Component
+from cgf_obsolete_script.script_game_object import ScriptGameObject
 
 class ClientArenaComponent(Component):
 
@@ -45,7 +45,7 @@ class ClientArenaComponent(Component):
 class ClientArenaComponentSystem(ScriptGameObject):
 
     def __init__(self, arena, bonusType, arenaType):
-        ScriptGameObject.__init__(self, 0)
+        ScriptGameObject.__init__(self, arena.gameSpace.spaceID, 'ClientArenaComponentSystem')
         self.bonusType = bonusType
         self.arenaType = arenaType
         self.arena = weakref.ref(arena)

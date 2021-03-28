@@ -70,6 +70,13 @@
       <undamaged>	vehicles/russian/R180_Object_274_A/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/russian/R180_Object_274_A/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/russian/R180_Object_274_A/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <R180_Object_274_A_3Dst_CIS_PANV>
+          <undamaged>	vehicles/russian/R180_Object_274_A/_skins/R180_Object_274_A_3Dst_CIS_PANV/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R180_Object_274_A/_skins/R180_Object_274_A_3Dst_CIS_PANV/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R180_Object_274_A/_skins/R180_Object_274_A_3Dst_CIS_PANV/crash/lod0/Hull.model	</exploded>
+        </R180_Object_274_A_3Dst_CIS_PANV>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -99,8 +106,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.010538 0.463435 2.84863	</rayStart>
-        <rayEnd>	0.0112563 0.277355 2.77533	</rayEnd>
+        <rayStart>	-0.514024 0.653179 2.13496	</rayStart>
+        <rayEnd>	-0.513856 0.453248 2.12981	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
@@ -1068,6 +1075,20 @@
         <anchorPosition>	-0.000105924 0.26845 3.2157	</anchorPosition>
         <anchorDirection>	-0.00105755 0.791273 0.611462	</anchorDirection>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15071	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R180_Object_274_A_3Dst_CIS_PANV	</compatibleModels>
+        <position>	-0.944122 1.43301 1.81121	</position>
+        <rotation>	0.0565473 -0.00370348 3.12445	</rotation>
+        <scale>	0.556396 0.17772 0.556396	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.0975159	</clipAngle>
+        <anchorPosition>	-0.943357 0.621174 1.81377	</anchorPosition>
+        <anchorDirection>	0.016932 0.998255 0.056572	</anchorDirection>
+      </slot>
     </customizationSlots>
     <camouflage>
       <tiling>	1 1 4.97 0.000000	</tiling>
@@ -1104,6 +1125,13 @@
         <undamaged>	vehicles/russian/R180_Object_274_A/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R180_Object_274_A/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R180_Object_274_A/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <R180_Object_274_A_3Dst_CIS_PANV>
+            <undamaged>	vehicles/russian/R180_Object_274_A/_skins/R180_Object_274_A_3Dst_CIS_PANV/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R180_Object_274_A/_skins/R180_Object_274_A_3Dst_CIS_PANV/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R180_Object_274_A/_skins/R180_Object_274_A_3Dst_CIS_PANV/crash/lod0/Chassis.model	</exploded>
+          </R180_Object_274_A_3Dst_CIS_PANV>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1847,6 +1875,13 @@
             <undamaged>	vehicles/russian/R180_Object_274_A/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R180_Object_274_A/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R180_Object_274_A/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <R180_Object_274_A_3Dst_CIS_PANV>
+                <undamaged>	vehicles/russian/R180_Object_274_A/_skins/R180_Object_274_A_3Dst_CIS_PANV/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R180_Object_274_A/_skins/R180_Object_274_A_3Dst_CIS_PANV/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R180_Object_274_A/_skins/R180_Object_274_A_3Dst_CIS_PANV/crash/lod0/Gun_01.model	</exploded>
+              </R180_Object_274_A_3Dst_CIS_PANV>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R180_Object_274_A/collision/Gun_01.model	</collisionModelServer>
@@ -1904,6 +1939,13 @@
         <undamaged>	vehicles/russian/R180_Object_274_A/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/russian/R180_Object_274_A/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/russian/R180_Object_274_A/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <R180_Object_274_A_3Dst_CIS_PANV>
+            <undamaged>	vehicles/russian/R180_Object_274_A/_skins/R180_Object_274_A_3Dst_CIS_PANV/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R180_Object_274_A/_skins/R180_Object_274_A_3Dst_CIS_PANV/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R180_Object_274_A/_skins/R180_Object_274_A_3Dst_CIS_PANV/crash/lod0/Turret_01.model	</exploded>
+          </R180_Object_274_A_3Dst_CIS_PANV>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R180_Object_274_A/collision/Turret_01.model	</collisionModelServer>
@@ -2464,6 +2506,62 @@
           <anchorPosition>	0.00813161 0.706976 -1.48542	</anchorPosition>
           <anchorDirection>	0.00212893 0.798938 -0.60141	</anchorDirection>
           <verticalMirror>	true	</verticalMirror>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35037	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R180_Object_274_A_3Dst_CIS_PANV	</compatibleModels>
+          <position>	0.000116798 2.28307 0.617732	</position>
+          <rotation>	0.0384119 -0.0017451 3.14158	</rotation>
+          <scale>	0.489763 0.600003 0.489759	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.445102	</clipAngle>
+          <anchorPosition>	0.000119684 0.876625 0.483198	</anchorPosition>
+          <anchorDirection>	-0.000056 0.999262 0.0384024	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35038	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R180_Object_274_A_3Dst_CIS_PANV	</compatibleModels>
+          <position>	-1.03813 1.71795 0.788491	</position>
+          <rotation>	0.997972 -0.997407 3.13127	</rotation>
+          <scale>	0.375837 0.5 0.375835	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.954074	</clipAngle>
+          <anchorPosition>	-1.10772 0.418303 0.702148	</anchorPosition>
+          <anchorDirection>	-0.700336 0.541979 0.464531	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35039	</slotId>
+          <tags>	formfactor_square	</tags>
+          <position>	1.08519 1.75339 0.816997	</position>
+          <rotation>	0.997985 0.997448 3.11767	</rotation>
+          <scale>	0.375837 0.5 0.375834	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.954074	</clipAngle>
+          <anchorPosition>	1.1207 0.426653 0.706014	</anchorPosition>
+          <anchorDirection>	0.718767 0.541842 0.435639	</anchorDirection>
+          <compatibleModels>	R180_Object_274_A_3Dst_CIS_PANV	</compatibleModels>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35040	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R180_Object_274_A_3Dst_CIS_PANV	</compatibleModels>
+          <position>	0.00921251 1.76077 -1.96785	</position>
+          <rotation>	1.24951 -0.000028 -0.000029	</rotation>
+          <scale>	0.4502 0.193879 0.450195	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.954074	</clipAngle>
+          <anchorPosition>	0.00921332 0.383124 -2.17298	</anchorPosition>
+          <anchorDirection>	-0.000002 -0.315787 -0.94883	</anchorDirection>
         </slot>
       </customizationSlots>
       <camouflage>

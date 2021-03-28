@@ -28,7 +28,7 @@ _PROJECTION_DECAL_FORM_TO_IMAGE_SCALE = {ProjectionDecalFormTags.SQUARE: 0.725,
  ProjectionDecalFormTags.RECT1X6: 1}
 _DEFAULT_IMAGE_SCALE = 1
 
-def buildCustomizationItemDataVO(item, count=None, isApplied=False, isDarked=False, isUsedUp=False, autoRentEnabled=False, vehicle=None, progressionLevel=None, icon=None, showDetailItems=True, plainView=False, showEditableHint=False, showEditBtnHint=False):
+def buildCustomizationItemDataVO(item, count=None, isApplied=False, isDarked=False, isUsedUp=False, autoRentEnabled=False, vehicle=None, progressionLevel=None, icon=None, showDetailItems=True, plainView=False, showEditableHint=False, showEditBtnHint=False, isChained=False, isUnsuitable=False):
     if plainView:
         hasBonus = False
         locked = False
@@ -37,6 +37,8 @@ def buildCustomizationItemDataVO(item, count=None, isApplied=False, isDarked=Fal
         hasBonus = item.bonus is not None
         locked = isUsedUp or not item.isUnlocked
         buyPrice = ITEM_PRICE_EMPTY if item.isHidden or item.buyCount <= 0 else item.getBuyPrice()
+    if isUnsuitable:
+        locked = True
     if item.itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL:
         formFactor = PROJECTION_DECAL_FORM_TO_UI_ID[item.formfactor]
         formIconSource = PROJECTION_DECAL_IMAGE_FORM_TAG[item.formfactor]
@@ -56,6 +58,8 @@ def buildCustomizationItemDataVO(item, count=None, isApplied=False, isDarked=Fal
         extraNames = None
     if isUsedUp:
         lockText = backport.text(R.strings.vehicle_customization.customization.limited.onOther())
+    elif isUnsuitable:
+        lockText = backport.text(R.strings.vehicle_customization.customization.unsuitable())
     else:
         lockText = backport.text(R.strings.vehicle_customization.customization.UnsupportedForm())
     showAlert = __isNeedToShowAlert(item)
@@ -78,13 +82,13 @@ def buildCustomizationItemDataVO(item, count=None, isApplied=False, isDarked=Fal
         tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_SLOT_EDITBTN_DISABLED_NOTREACHEDLEVEL
     elif not editingReason:
         tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_SLOT_EDITBTN_DISABLED
-    return CustomizationCarouselRendererVO(item=item, icon=icon, hasBonus=hasBonus, locked=locked, buyPrice=buyPrice, quantity=count, showDetailItems=showDetailItems, isSpecial=isSpecial, isDarked=isDarked, isAlreadyUsed=isUsedUp, showAlert=showAlert, extraNames=extraNames, isEquipped=isApplied, rentalInfoText=rentalInfoText, imageCached=imageCached, autoRentEnabled=autoRentEnabled, noveltyCounter=noveltyCounter, formIconSource=formIconSource, defaultIconAlpha=iconAlpha, lockText=lockText, formFactor=formFactor, progressionLevel=progressionLevel, editableIcon=editableIcon, editBtnEnabled=editBtnEnabled, showEditableHint=showEditableHint, showEditBtnHint=showEditBtnHint, imageScale=scale, tooltip=tooltip).asDict()
+    return CustomizationCarouselRendererVO(item=item, icon=icon, hasBonus=hasBonus, locked=locked, buyPrice=buyPrice, quantity=count, showDetailItems=showDetailItems, isSpecial=isSpecial, isDarked=isDarked, isAlreadyUsed=isUsedUp, showAlert=showAlert, extraNames=extraNames, isEquipped=isApplied, rentalInfoText=rentalInfoText, imageCached=imageCached, autoRentEnabled=autoRentEnabled, noveltyCounter=noveltyCounter, formIconSource=formIconSource, defaultIconAlpha=iconAlpha, lockText=lockText, formFactor=formFactor, progressionLevel=progressionLevel, editableIcon=editableIcon, editBtnEnabled=editBtnEnabled, showEditableHint=showEditableHint, showEditBtnHint=showEditBtnHint, imageScale=scale, tooltip=tooltip, isChained=isChained, isUnsuitable=isUnsuitable).asDict()
 
 
 class CustomizationCarouselRendererVO(object):
-    __slots__ = ('intCD', 'typeId', 'isWide', 'icon', 'hasBonus', 'locked', 'buyPrice', 'quantity', 'isRental', 'autoRentEnabled', 'showDetailItems', 'isNonHistoric', 'isSpecial', 'isDarked', 'isAlreadyUsed', 'showAlert', 'buyOperationAllowed', 'extraNames', 'showRareIcon', 'isEquipped', 'rentalInfoText', 'imageCached', 'isAllSeasons', 'noveltyCounter', 'formIconSource', 'defaultIconAlpha', 'lockText', 'isDim', 'formFactor', 'progressionLevel', 'editableIcon', 'editBtnEnabled', 'showEditableHint', 'showEditBtnHint', 'imageScale', 'tooltip')
+    __slots__ = ('intCD', 'typeId', 'isWide', 'icon', 'hasBonus', 'locked', 'buyPrice', 'quantity', 'isRental', 'autoRentEnabled', 'showDetailItems', 'isNonHistoric', 'isSpecial', 'isDarked', 'isAlreadyUsed', 'showAlert', 'buyOperationAllowed', 'extraNames', 'showRareIcon', 'isEquipped', 'rentalInfoText', 'imageCached', 'isAllSeasons', 'noveltyCounter', 'formIconSource', 'defaultIconAlpha', 'lockText', 'isDim', 'formFactor', 'progressionLevel', 'editableIcon', 'editBtnEnabled', 'showEditableHint', 'showEditBtnHint', 'imageScale', 'tooltip', 'isChained', 'isUnsuitable')
 
-    def __init__(self, item, icon, hasBonus, locked, buyPrice, quantity=None, showDetailItems=True, isSpecial=False, isDarked=False, isAlreadyUsed=False, showAlert=False, buyOperationAllowed=True, extraNames=None, isEquipped=False, rentalInfoText='', imageCached=True, noveltyCounter=0, autoRentEnabled=False, formIconSource='', defaultIconAlpha=1, lockText='', formFactor=-1, progressionLevel=-1, imageScale=1, editableIcon='', editBtnEnabled=False, showEditableHint=False, showEditBtnHint=False, tooltip=''):
+    def __init__(self, item, icon, hasBonus, locked, buyPrice, quantity=None, showDetailItems=True, isSpecial=False, isDarked=False, isAlreadyUsed=False, showAlert=False, buyOperationAllowed=True, extraNames=None, isEquipped=False, rentalInfoText='', imageCached=True, noveltyCounter=0, autoRentEnabled=False, formIconSource='', defaultIconAlpha=1, lockText='', formFactor=-1, progressionLevel=-1, imageScale=1, editableIcon='', editBtnEnabled=False, showEditableHint=False, showEditBtnHint=False, tooltip='', isChained=False, isUnsuitable=False):
         self.intCD = item.intCD
         self.typeId = item.itemTypeID
         self.isWide = item.isWide()
@@ -121,6 +125,8 @@ class CustomizationCarouselRendererVO(object):
         self.showEditBtnHint = showEditBtnHint
         self.imageScale = imageScale
         self.tooltip = tooltip
+        self.isChained = isChained
+        self.isUnsuitable = isUnsuitable
 
     def asDict(self):
         ret = {'intCD': self.intCD,
@@ -155,7 +161,9 @@ class CustomizationCarouselRendererVO(object):
          'showEditableHint': self.showEditableHint,
          'showEditBtnHint': self.showEditBtnHint,
          'scale': self.imageScale,
-         'tooltip': self.tooltip}
+         'tooltip': self.tooltip,
+         'isChained': self.isChained,
+         'isUnsuitable': self.isUnsuitable}
         if self.extraNames is not None:
             ret.update(styleName=self.extraNames[0], styleNameSmall=self.extraNames[1])
         if self.quantity:

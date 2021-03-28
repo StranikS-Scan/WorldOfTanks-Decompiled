@@ -30,16 +30,18 @@ class ConfirmExchangeDialog(ConfirmExchangeDialogMeta):
     def exchange(self, goldValue):
         if self.__exchangeMutex:
             return
-        self.__exchangeMutex = True
-        exchangedValue = goldValue * self.meta.getExchangeRate()
-        result = yield self.meta.submit(goldValue, exchangedValue)
-        if result.userMsg:
-            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-        if result.success:
-            self._callHandler(True, self.meta.getTypeCompDescr())
-            self.destroy()
         else:
-            self.__exchangeMutex = False
+            self.__exchangeMutex = True
+            exchangedValue = goldValue * self.meta.getExchangeRate()
+            result = yield self.meta.submit(goldValue, exchangedValue)
+            if result.userMsg:
+                SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            if result.success and self.meta is not None:
+                self._callHandler(True, self.meta.getTypeCompDescr())
+                self.destroy()
+            else:
+                self.__exchangeMutex = False
+            return
 
     def _populate(self):
         super(ConfirmExchangeDialog, self)._populate()

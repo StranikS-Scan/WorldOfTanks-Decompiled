@@ -16,7 +16,7 @@ from gui.Scaleform.genConsts.CUSTOMIZATION_ALIASES import CUSTOMIZATION_ALIASES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.customization.constants import CustomizationModes, CustomizationModeSource
-from gui.customization.shared import getAvailableRegions, C11nId, getCustomizationTankPartName, EDITABLE_STYLE_IRREMOVABLE_TYPES
+from gui.customization.shared import getAvailableRegions, C11nId, getCustomizationTankPartName, EDITABLE_STYLE_IRREMOVABLE_TYPES, getAncestors
 from gui.impl import backport
 from gui.impl.dialogs import dialogs
 from gui.impl.dialogs.builders import WarningDialogBuilder
@@ -637,7 +637,10 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         forCurrentItemText = backport.text(forCurrentItemText()) if forCurrentItemText.exists() else ''
         disableTooltip = backport.text(R.strings.vehicle_customization.propertySheet.actionBtn.removeDisabled(), itemType=forCurrentItemText)
         if isEditableStyle and item.itemTypeID in EDITABLE_STYLE_IRREMOVABLE_TYPES:
-            enabled = not self.__ctx.mode.isBaseItem(self._attachedAnchor)
+            if self.__ctx.mode.getDependenciesData() and item.itemTypeID != GUI_ITEM_TYPE.CAMOUFLAGE:
+                enabled = False
+            else:
+                enabled = not self.__ctx.mode.isBaseItem(self._attachedAnchor)
         else:
             enabled = True
         return {'iconSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_DEL,
@@ -759,6 +762,32 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         needNotify = False
         forCurrentItemText = R.strings.vehicle_customization.propertySheet.actionBtn.forCurrentItem.dyn(self._currentItem.itemTypeName)
         forCurrentItemText = backport.text(forCurrentItemText()) if forCurrentItemText.exists() else ''
+        isSuitableForOtherAppliedItems = True
+        currentMode = self.__ctx.mode
+        if self._isItemAppliedToAll:
+            currItemTypeID = self._currentItem.itemTypeID
+            if self.__isEditableStyle() and currItemTypeID in EDITABLE_STYLE_IRREMOVABLE_TYPES:
+                if currentMode.getDependenciesData() and currItemTypeID == GUI_ITEM_TYPE.PAINT:
+                    enabled = False
+                else:
+                    enabled = not currentMode.isBaseItem(self._attachedAnchor)
+            else:
+                enabled = True
+        else:
+            intCD = self._currentItem.intCD
+            ancestors = getAncestors(intCD, currentMode.getDependenciesData())
+            if ancestors:
+                for season in SeasonType.COMMON_SEASONS:
+                    if season != currentMode.season:
+                        if not self.__isAncestorAppliedForOutfit(season, ancestors):
+                            enabled = False
+                            isSuitableForOtherAppliedItems = False
+                            break
+                else:
+                    enabled = True
+
+            else:
+                enabled = currentMode.isPossibleToInstallItemForAllSeasons(self._attachedAnchor, intCD)
         if self._isItemAppliedToAll:
             icon = R.images.gui.maps.icons.customization.property_sheet.remove.icon_del_all_season()
             iconDisable = R.images.gui.maps.icons.customization.property_sheet.disable.icon_season_del_disable()
@@ -770,18 +799,14 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             iconDisable = R.images.gui.maps.icons.customization.property_sheet.disable.icon_season_disable()
             hoverIcon = R.images.gui.maps.icons.customization.property_sheet.idle.icon_season_hover()
             actionBtnLabel = backport.text(R.strings.vehicle_customization.propertySheet.actionBtn.applyToAllMaps())
-            disableTooltip = backport.text(R.strings.vehicle_customization.propertySheet.actionBtn.applyToAllMapsDisabled(), itemType=forCurrentItemText)
-        if self._isItemAppliedToAll:
-            if self.__isEditableStyle() and self._currentItem.itemTypeID in EDITABLE_STYLE_IRREMOVABLE_TYPES:
-                enabled = not self.__ctx.mode.isBaseItem(self._attachedAnchor)
+            if isSuitableForOtherAppliedItems:
+                disableTooltip = backport.text(R.strings.vehicle_customization.propertySheet.actionBtn.applyToAllMapsDisabled(), itemType=forCurrentItemText)
             else:
-                enabled = True
-        else:
-            enabled = self.__ctx.mode.isPossibleToInstallItemForAllSeasons(self._attachedAnchor, self._currentItem.intCD)
+                disableTooltip = backport.text(R.strings.vehicle_customization.propertySheet.actionBtn.unsuitableForAppliedDisabled())
         if self._attachedAnchor.slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
             lockedSeasons = []
             for season in SeasonType.COMMON_SEASONS:
-                outfit = self.__ctx.mode.getModifiedOutfit(season)
+                outfit = currentMode.getModifiedOutfit(season)
                 if isSlotLocked(outfit, self._attachedAnchor):
                     lockedSeasons.append(season)
 
@@ -896,3 +921,12 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
 
     def __isEditableStyle(self):
         return self.__ctx.modeId == CustomizationModes.EDITABLE_STYLE
+
+    def __isAncestorAppliedForOutfit(self, season, ancestors):
+        outfit = self.__ctx.mode.getModifiedOutfit(season)
+        for ancestorIntCD in ancestors:
+            for itemIntCD in outfit.items():
+                if ancestorIntCD == itemIntCD:
+                    return True
+
+        return False

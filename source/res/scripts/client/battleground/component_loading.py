@@ -4,7 +4,7 @@ import functools
 import weakref
 import BigWorld
 from battleground.iself_assembler import ISelfAssembler
-from svarog_script.script_game_object import ComponentDescriptorTyped
+from cgf_obsolete_script.script_game_object import ComponentDescriptorTyped, ScriptGameObject
 from vehicle_systems import stricted_loading
 
 class Loader(object):
@@ -13,6 +13,31 @@ class Loader(object):
         self.resourceLoader = resourceLoader
         self.args = args
         self.kwargs = kwargs
+
+
+class CompositeLoaderMixin(object):
+
+    def __init__(self):
+        self.__pieces = 1
+        self.__callback = None
+        return
+
+    def prepareCompositeLoader(self, callback):
+        self.__pieces = self._piecesNum()
+        self.__callback = stricted_loading.makeCallbackWeak(callback)
+
+    def appendPiece(self, *_):
+        self.__pieces -= 1
+        if self.__pieces == 0:
+            self.__invoke()
+
+    def __invoke(self):
+        if self.__callback is not None:
+            self.__callback(self)
+        return
+
+    def _piecesNum(self):
+        pass
 
 
 def loadComponentSystem(componentSystem, callback, resourceMapping=None):

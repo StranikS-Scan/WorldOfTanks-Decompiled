@@ -61,6 +61,9 @@ class ApplicationMeta(BaseDAAPIComponent):
     def setGraphicsOptimizationManager(self, mgr):
         self._printOverrideError('setGraphicsOptimizationManager')
 
+    def setUILoggerMgr(self, mgr):
+        self._printOverrideError('setUILoggerMgr')
+
     def handleGlobalKeyEvent(self, command):
         self._printOverrideError('handleGlobalKeyEvent')
 

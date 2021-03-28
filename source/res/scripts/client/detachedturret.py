@@ -8,8 +8,8 @@ from debug_utils import LOG_ERROR
 import material_kinds
 from VehicleEffects import DamageFromShotDecoder
 from VehicleStickers import VehicleStickers
-from svarog_script.py_component import Component
-from svarog_script.script_game_object import ScriptGameObject, ComponentDescriptor
+from cgf_obsolete_script.py_component import Component
+from cgf_obsolete_script.script_game_object import ScriptGameObject, ComponentDescriptor
 from vehicle_systems.camouflages import prepareBattleOutfit
 from vehicle_systems.tankStructure import TankPartNames, TankNodeNames, ColliderTypes, getPartModelsFromDesc, ModelsSetParams, ModelStates
 from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
@@ -25,7 +25,7 @@ class DetachedTurret(BigWorld.Entity, ScriptGameObject):
     collisions = ComponentDescriptor()
 
     def __init__(self):
-        ScriptGameObject.__init__(self, self.spaceID)
+        ScriptGameObject.__init__(self, self.spaceID, 'DetachedTurret')
         self.__vehDescr = vehicles.VehicleDescr(compactDescr=self.vehicleCompDescr)
         self.filter = BigWorld.WGTurretFilter()
         self.__detachConfirmationTimer = SynchronousDetachment(self)
@@ -58,7 +58,7 @@ class DetachedTurret(BigWorld.Entity, ScriptGameObject):
             bspModel = (partID, hitTester.bspModelName)
             bspModels = bspModels + (bspModel,)
 
-        collisionAssembler = BigWorld.CollisionAssembler(bspModels, BigWorld.player().spaceID)
+        collisionAssembler = BigWorld.CollisionAssembler(bspModels, self.spaceID)
         return [assembler, collisionAssembler]
 
     def __getModels(self):
@@ -81,7 +81,7 @@ class DetachedTurret(BigWorld.Entity, ScriptGameObject):
         LOG_DEBUG('onEnterWorld', self.__vehDescr.name, self.spaceID)
         self.model = prereqs[self.__vehDescr.name]
         self.model.matrix = self.matrix
-        self.collisions = prereqs['collisionAssembler']
+        self.collisions = self.createComponent(BigWorld.CollisionComponent, prereqs['collisionAssembler'])
         self.__detachConfirmationTimer.onEnterWorld()
         self.__vehDescr.keepPrereqs(prereqs)
         turretDescr = self.__vehDescr.turret

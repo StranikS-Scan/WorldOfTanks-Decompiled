@@ -23,6 +23,9 @@ class AvatarBattleRoyaleComponent(BigWorld.DynamicScriptComponent, EventsSubscri
     def set_playerPlace(self, _prev):
         self.sessionProvider.arenaVisitor.getComponentSystem().battleRoyaleComponent.setBattleRoyalePlace(self.playerPlace)
 
+    def set_defeatedTeams(self, _prev):
+        self.sessionProvider.arenaVisitor.getComponentSystem().battleRoyaleComponent.setDefeatedTeams(self.defeatedTeams)
+
     def __onTimeWarpStart(self):
         BigWorld.worldDrawEnabled(False)
 

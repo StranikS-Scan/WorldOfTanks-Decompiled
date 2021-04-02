@@ -11,13 +11,13 @@ from gui.battle_control.controllers.battle_field_ctrl import IBattleFieldListene
 from gui.clans.formatters import getClanAbbrevString
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.Scaleform.daapi.view.meta.BattleRoyalePlayersPanelMeta import BattleRoyalePlayersPanelMeta
+from gui.Scaleform.daapi.view.meta.BattleRoyaleTeamPanelMeta import BattleRoyaleTeamPanelMeta
 from items.battle_royale import isSpawnedBot
 from items.vehicles import VehicleDescr
 from nations import NAMES
 from skeletons.gui.battle_session import IBattleSessionProvider
 
-class PlayersPanel(IBattleFieldListener, IArenaVehiclesController, BattleRoyalePlayersPanelMeta):
+class PlayersPanel(IBattleFieldListener, IArenaVehiclesController, BattleRoyaleTeamPanelMeta):
     __slots__ = ('__vehicleIDs',)
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     _HEALTH_PERCENT = 100

@@ -693,7 +693,7 @@ class _NodeSoundEffectDesc(_BaseSoundEvent):
 
 
 class _TracerSoundEffectDesc(_NodeSoundEffectDesc):
-    __slots__ = ('_parameters',)
+    __slots__ = ('_parameters', '__stopSoundEventName')
     TYPE = '_TracerSoundEffectDesc'
     shellTypesMap = {'AP': 0,
      'HE': 1,
@@ -705,16 +705,22 @@ class _TracerSoundEffectDesc(_NodeSoundEffectDesc):
         shellType = dataSection.readString('type', '').split()[0]
         shellType = _TracerSoundEffectDesc.shellTypesMap.get(shellType, 0)
         self._parameters = [SoundStartParam('psb_shell_type', shellType)]
+        self.__stopSoundEventName = ''
 
     def _getName(self, args):
         isPlayer, id = self._isPlayer(args)
         return (self._soundName[0 if isPlayer else 1], id)
 
+    def create(self, model, effects, args):
+        isPlayer, _ = self._isPlayer(args)
+        self.__stopSoundEventName = 'psb_pc_stop' if isPlayer else 'psb_npc_stop'
+        return super(_TracerSoundEffectDesc, self).create(model, effects, args)
+
     def delete(self, elem, reason):
         if reason != 0:
             soundObject = elem.get('sound', None)
             if soundObject is not None:
-                soundObject.play('psb_npc_stop')
+                soundObject.play(self.__stopSoundEventName)
         super(_TracerSoundEffectDesc, self).delete(elem, 0)
         return
 

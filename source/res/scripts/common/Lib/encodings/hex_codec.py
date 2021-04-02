@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/hex_codec.py
-# Compiled at: 2101-05-02 08:36:56
+# Compiled at: 2081-10-23 11:26:11
 """ Python 'hex_codec' Codec - 2-digit hex content transfer encoding
 
     Unlike most of the other codecs which target Unicode, this codec

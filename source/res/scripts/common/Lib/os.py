@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/os.py
-# Compiled at: 2101-05-02 08:36:56
+# Compiled at: 2082-01-21 00:15:23
 r"""OS routines for Mac, NT, or Posix depending on what system we're on.
 
 This exports:

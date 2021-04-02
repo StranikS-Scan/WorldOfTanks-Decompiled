@@ -2,7 +2,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/battle_royale/page.py
 import BigWorld
 from shared_utils import CONST_CONTAINER
+from aih_constants import CTRL_MODE_NAME
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
+from gui.battle_control import avatar_getter
+from Event import EventsSubscriber
 from gui.Scaleform.daapi.view.battle.battle_royale.markers2d.manager import BattleRoyaleMarkersManager
 from gui.Scaleform.daapi.view.battle.battle_royale.player_format import BattleRoyalePlayerFullNameFormatter
 from gui.Scaleform.daapi.view.battle.battle_royale.spawned_bot_msg import SpawnedBotMsgPlayerMsgs
@@ -48,7 +51,7 @@ class _BattleRoyaleComponentsConfig(ComponentsConfig):
            BATTLE_VIEW_ALIASES.RADAR_BUTTON,
            _DynamicAliases.ARENA_PERIOD_SOUND_PLAYER,
            _DynamicAliases.SELECT_RESPAWN_SOUND_PLAYER)),
-         (BATTLE_CTRL_ID.TEAM_BASES, (BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, DynamicAliases.DRONE_MUSIC_PLAYER)),
+         (BATTLE_CTRL_ID.TEAM_BASES, (BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, DynamicAliases.DRONE_MUSIC_PLAYER, BATTLE_VIEW_ALIASES.PLAYERS_PANEL)),
          (BATTLE_CTRL_ID.DEBUG, (BATTLE_VIEW_ALIASES.DEBUG_PANEL,)),
          (BATTLE_CTRL_ID.BATTLE_FIELD_CTRL, (BATTLE_VIEW_ALIASES.BATTLE_TEAM_PANEL, DynamicAliases.DRONE_MUSIC_PLAYER)),
          (BATTLE_CTRL_ID.PROGRESSION_CTRL, (BATTLE_VIEW_ALIASES.BATTLE_LEVEL_PANEL,
@@ -100,6 +103,7 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         self.__brSoundControl = None
         self.__isFullStatsShown = False
         self.__panelsIsVisible = False
+        self.__es = EventsSubscriber()
         super(BattleRoyalePage, self).__init__(components, external=(crosshair.CrosshairPanelContainer, BattleRoyaleMarkersManager))
         return
 
@@ -122,7 +126,7 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         return self.__isFullStatsShown
 
     def _canShowPostmortemTips(self):
-        return not self.__isFullStatsShown and super(BattleRoyalePage, self)._canShowPostmortemTips()
+        return not self.__isFullStatsShown and super(BattleRoyalePage, self)._canShowPostmortemTips() and BigWorld.player().isFollowWinner()
 
     def _toggleFullStats(self, isShown, permanent=None, tabIndex=None):
         manager = self.app.containerManager
@@ -146,11 +150,13 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         super(BattleRoyalePage, self)._populate()
         progressionWindowCtrl = self.__getProgressionWindowCtrl()
         if progressionWindowCtrl:
-            progressionWindowCtrl.onTriggered += self.__onConfWindowTriggered
+            self.__es.subscribeToEvent(progressionWindowCtrl.onTriggered, self.__onConfWindowTriggered)
         spawnCtrl = self.sessionProvider.dynamic.spawn
         if spawnCtrl:
             spawnCtrl.addRuntimeView(self)
         self.sessionProvider.getCtx().setPlayerFullNameFormatter(BattleRoyalePlayerFullNameFormatter())
+        if avatar_getter.isObserverSeesAll():
+            self.__es.subscribeToEvent(avatar_getter.getInputHandler().onCameraChanged, self.__onCameraChanged)
         self.__brSoundControl = BRBattleSoundController()
         self.__brSoundControl.init()
 
@@ -178,6 +184,12 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         super(BattleRoyalePage, self)._onRegisterFlashComponent(viewPy, alias)
         if alias == BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN:
             self._setComponentsVisibility(hidden=[alias])
+            return
+        if avatar_getter.isObserverSeesAll():
+            if alias == BATTLE_VIEW_ALIASES.BATTLE_MESSENGER:
+                self._setComponentsVisibility(hidden=[alias])
+        elif alias == BATTLE_VIEW_ALIASES.PLAYERS_PANEL:
+            self._setComponentsVisibility(hidden=[alias])
 
     def _toggleGuiVisible(self):
         componentsVisibility = self.as_getComponentsVisibilityS()
@@ -186,9 +198,6 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         super(BattleRoyalePage, self)._toggleGuiVisible()
 
     def _dispose(self):
-        progressionWindowCtrl = self.__getProgressionWindowCtrl()
-        if progressionWindowCtrl:
-            progressionWindowCtrl.onTriggered -= self.__onConfWindowTriggered
         spawnCtrl = self.sessionProvider.dynamic.spawn
         if spawnCtrl:
             spawnCtrl.removeRuntimeView(self)
@@ -196,11 +205,19 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
             self.__brSoundControl.destroy()
             self.__brSoundControl = None
         self.__selectSpawnToggling.clear()
+        self.__es.unsubscribeFromAllEvents()
         super(BattleRoyalePage, self)._dispose()
         return
 
     def _switchToPostmortem(self):
         BigWorld.player().setIsObserver()
+
+    def __onCameraChanged(self, ctrlMode, _=None):
+        teamPanelAliases = (CTRL_MODE_NAME.POSTMORTEM, CTRL_MODE_NAME.VIDEO)
+        if ctrlMode in teamPanelAliases:
+            self._setComponentsVisibility(hidden={BATTLE_VIEW_ALIASES.BATTLE_TEAM_PANEL}, visible={BATTLE_VIEW_ALIASES.PLAYERS_PANEL})
+        else:
+            self._setComponentsVisibility(hidden={BATTLE_VIEW_ALIASES.PLAYERS_PANEL}, visible={BATTLE_VIEW_ALIASES.BATTLE_TEAM_PANEL})
 
     def __onConfWindowTriggered(self, isOpened):
         if isOpened:

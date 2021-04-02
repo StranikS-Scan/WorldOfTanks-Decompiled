@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/shared/web_handlers.py
 from web.web_client_api import webApiCollection
+from web.web_client_api.platform import PlatformWebApi
 from web.web_client_api.request import RequestWebApi
 from web.web_client_api.rewards import RewardsWebApi
 from web.web_client_api.shop import ShopWebApi
@@ -24,7 +25,8 @@ _DEFAULT_WEB_API_COLLECTION = (CloseWindowWebApi,
  VehiclesWebApi,
  RewardsWebApi,
  SocialWebApi,
- BlueprintsConvertSaleWebApi)
+ BlueprintsConvertSaleWebApi,
+ PlatformWebApi)
 
 def createBrowserOverlayWebHandlers():
     return webApiCollection(*_DEFAULT_WEB_API_COLLECTION)

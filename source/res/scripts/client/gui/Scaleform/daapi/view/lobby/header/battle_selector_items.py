@@ -21,7 +21,7 @@ from gui.shared.formatters import text_styles, icons
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from helpers import time_utils, dependency, int2roman
 from gui.shared.utils.functions import makeTooltip
-from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController
+from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IBattleRoyaleTournamentController
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.clans.clan_helpers import isStrongholdsEnabled
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
@@ -31,11 +31,13 @@ from skeletons.gui.server_events import IEventsCache
 from battle_selector_item import SelectorItem
 from battle_selector_event_progression_providers import EventProgressionDataProvider
 from battle_selector_event_progression_item import EventProgressionItem
+from gui.prb_control import prbEntityProperty
 _logger = logging.getLogger(__name__)
 _R_HEADER_BUTTONS = R.strings.menu.headerButtons
 _R_BATTLE_TYPES = R.strings.menu.headerButtons.battle.types
 _R_BATTLE_MENU = R.strings.menu.headerButtons.battle.menu
 _R_ICONS = R.images.gui.maps.icons
+_R_BR_TOURNAMENT_BUTTON = R.strings.battle_royale.tournament.fightButton
 
 class _SelectorItem(object):
     __slots__ = ('_label', '_data', '_order', '_selectorType', '_isVisible', '_isExtra', '_isSelected', '_isNew', '_isDisabled', '_isLocked')
@@ -240,11 +242,28 @@ class _StrongholdsItem(_SelectorItem):
 
 
 class _SpecBattleItem(_SelectorItem):
+    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
+    __battleRoyaleTournamentController = dependency.descriptor(IBattleRoyaleTournamentController)
+
+    @prbEntityProperty
+    def prbEntity(self):
+        return None
+
+    def getFightButtonLabel(self, state, playerInfo):
+        if self.__battleRoyaleTournamentController.isSelected():
+            label = _R_BR_TOURNAMENT_BUTTON.ready
+            if self.prbEntity.isInQueue():
+                label = _R_BR_TOURNAMENT_BUTTON.notReady
+            return backport.text(label())
+        return super(_SpecBattleItem, self).getFightButtonLabel(state, playerInfo)
 
     def _update(self, state):
         if state.isInSpecialPrebattle():
             self._isSelected = True
             self._isDisabled = state.hasLockedState
+        elif self.__battleRoyaleTournamentController.isSelected():
+            self._isDisabled = False
+            self._isSelected = True
         else:
             self._isSelected = False
             self._isDisabled = areSpecBattlesHidden()
@@ -437,6 +456,10 @@ class _SquadItem(SelectorItem):
     def getPrebattleType(self):
         return self._prebattleType
 
+    @property
+    def squadIcon(self):
+        return backport.image(_R_ICONS.battleTypes.c_40x40.squad())
+
 
 class _SimpleSquadItem(_SquadItem):
 
@@ -476,6 +499,10 @@ class _EventSquadItem(_SpecialSquadItem):
         self._isSpecialBgIcon = True
         self._isDescription = False
 
+    @property
+    def squadIcon(self):
+        return backport.image(_R_ICONS.battleTypes.c_40x40.eventSquad())
+
 
 class _BattleRoyaleSquadItem(_SpecialSquadItem):
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
@@ -489,12 +516,17 @@ class _BattleRoyaleSquadItem(_SpecialSquadItem):
 
     def _update(self, state):
         super(_BattleRoyaleSquadItem, self)._update(state)
+        self._isSelected = state.isQueueSelected(QUEUE_TYPE.BATTLE_ROYALE)
         primeTimeStatus, _, _ = self.__battleRoyaleController.getPrimeTimeStatus()
         self._isVisible = self.__battleRoyaleController.isEnabled() and self.__battleRoyaleController.isInPrimeTime() and state.isInPreQueue(queueType=QUEUE_TYPE.BATTLE_ROYALE)
         self._isDisabled = self._isDisabled or primeTimeStatus != PrimeTimeStatus.AVAILABLE
 
     def getSpecialBGIcon(self):
         return backport.image(_R_ICONS.lobby.eventPopoverBtnBG())
+
+    @property
+    def squadIcon(self):
+        return backport.image(_R_ICONS.battleTypes.c_40x40.royaleSquad())
 
 
 class _RankedItem(_SelectorItem):
@@ -588,6 +620,7 @@ class _BattleRoyaleItem(SelectorItem):
             isActiveCycle = self.__battleRoyaleController.getCurrentCycleInfo()[1]
             nextCycle = currentSeason.getNextByTimeCycle(time_utils.getCurrentLocalServerTimestamp())
             if isActiveCycle or nextCycle:
+                self.__battleRoyaleController.setDefaultHangarEntryPoint()
                 isSuccess = yield dispatcher.doSelectAction(PrbAction(self._data))
                 if isSuccess and self._isNew:
                     selectorUtils.setBattleTypeAsKnown(self._selectorType)

@@ -9,14 +9,25 @@ class BattleRoyaleComponent(ClientArenaComponent):
     def __init__(self, componentSystem):
         ClientArenaComponent.__init__(self, componentSystem)
         self.__place = None
+        self.__defeatedTeams = []
         self.onBattleRoyalePlaceUpdated = Event.Event(self._eventManager)
+        self.onBattleRoyaleDefeatedTeamsUpdate = Event.Event(self._eventManager)
         return
 
     def setBattleRoyalePlace(self, place):
-        LOG_DEBUG_DEV('__setBattleRoyalePlace', place)
+        LOG_DEBUG_DEV('setBattleRoyalePlace', place)
         self.__place = place
         self.onBattleRoyalePlaceUpdated(place)
+
+    def setDefeatedTeams(self, defeatedTeams):
+        LOG_DEBUG_DEV('setDefeatedTeams', defeatedTeams)
+        self.__defeatedTeams = defeatedTeams
+        self.onBattleRoyaleDefeatedTeamsUpdate(defeatedTeams)
 
     @property
     def place(self):
         return self.__place
+
+    @property
+    def defeatedTeams(self):
+        return self.__defeatedTeams

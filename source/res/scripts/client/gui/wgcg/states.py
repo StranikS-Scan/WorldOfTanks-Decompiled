@@ -390,12 +390,14 @@ class AvailableState(_WebState):
                 LOG_DEBUG('Trying to login to the wgcg lib...')
                 responseTime = time_utils.getServerUTCTime()
                 result = yield self.sendRequest(LogInCtx(pDbID, response.getToken()))
+                nextLoginState = LOGIN_STATE.LOGGED_OFF
                 if result.isSuccess():
-                    nextLoginState = LOGIN_STATE.LOGGED_ON
                     data = result.getData()
-                    self.__accessTokenData = AccessTokenData(data['access_token'], responseTime + float(data['expires_in']))
-                else:
-                    nextLoginState = LOGIN_STATE.LOGGED_OFF
+                    if data:
+                        nextLoginState = LOGIN_STATE.LOGGED_ON
+                        self.__accessTokenData = AccessTokenData(data['access_token'], responseTime + float(data['expires_in']))
+                    else:
+                        LOG_DEBUG("Response of login to the wgcg doesn't contain data")
         else:
             LOG_WARNING('There is error while getting spa token for wgcg gate', response)
         self.__loginState = nextLoginState

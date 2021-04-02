@@ -426,6 +426,8 @@ class InvitesManager(UsersInfoHelper):
                     return False
                 if dispatcher.getEntity().hasLockedState():
                     return False
+                if not dispatcher.getEntity().canInvite(invite.type):
+                    return False
             another = invite.anotherPeriphery
             if another:
                 if g_preDefinedHosts.periphery(invite.peripheryID) is None:

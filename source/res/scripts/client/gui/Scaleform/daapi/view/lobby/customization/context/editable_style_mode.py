@@ -246,7 +246,7 @@ class EditableStyleMode(CustomMode):
         results = []
         vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
         modifiedOutfits = {season:outfit.copy() for season, outfit in self._modifiedOutfits.iteritems()}
-        originalOutfits = {season:outfit.copy() for season, outfit in self._originalOutfits.iteritems()}
+        originalOutfits = self._ctx.startMode.getOriginalOutfits()
         removeUnselectedItemsFromEditableStyle(modifiedOutfits, self.__baseOutfits, purchaseItems)
         requestData = []
         for season in SeasonType.COMMON_SEASONS:

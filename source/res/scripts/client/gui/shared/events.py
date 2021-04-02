@@ -265,6 +265,7 @@ class HideWindowEvent(HasCtxEvent):
     HIDE_VEHICLE_PREVIEW = 'hideVehiclePreview'
     HIDE_OVERLAY_BROWSER_VIEW = 'hideOverlayBrowserView'
     HIDE_MISSIONS_PAGE_VIEW = 'hideMissionsPageView'
+    HIDE_SPECIAL_BATTLE_WINDOW = 'hideSpecialBattleWindow'
 
 
 class HidePopoverEvent(HasCtxEvent):

@@ -28,7 +28,7 @@ from skeletons.gui.game_control import IIGRController, IRentalsController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.gui.shared.utils import IHangarSpace
-from skeletons.gui.game_control import IBattleRoyaleController
+from skeletons.gui.game_control import IBattleRoyaleController, IBattleRoyaleTournamentController
 from skeletons.gui.game_control import IBootcampController
 _MODULES_NAMES = ('turret',
  'chassis',
@@ -127,6 +127,7 @@ class _CurrentVehicle(_CachedVehicle):
     igrCtrl = dependency.descriptor(IIGRController)
     rentals = dependency.descriptor(IRentalsController)
     battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
+    battleRoyaleTounamentController = dependency.descriptor(IBattleRoyaleTournamentController)
     bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self):
@@ -417,7 +418,7 @@ class _CurrentVehicle(_CachedVehicle):
         if vehicle is None:
             return
         else:
-            if not self.battleRoyaleController.isEnabled() and vehicle.isOnlyForBattleRoyaleBattles:
+            if not self.battleRoyaleController.isEnabled() and vehicle.isOnlyForBattleRoyaleBattles and not self.battleRoyaleTounamentController.isActive():
                 self.selectVehicle()
             return
 

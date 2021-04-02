@@ -43,7 +43,7 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.event_boards_controllers import IEventBoardController
 from skeletons.gui.game_control import IBattlePassController, IUISpamController
-from skeletons.gui.game_control import IMarathonEventsController, IGameSessionController, IRankedBattlesController
+from skeletons.gui.game_control import IMarathonEventsController, IGameSessionController, IRankedBattlesController, IBattleRoyaleController
 from skeletons.gui.linkedset import ILinkedSetController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -482,6 +482,7 @@ class MissionView(MissionViewBase):
     linkedSetController = dependency.descriptor(ILinkedSetController)
     gameSession = dependency.descriptor(IGameSessionController)
     __rankedController = dependency.descriptor(IRankedBattlesController)
+    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
 
     def __init__(self):
         super(MissionView, self).__init__()
@@ -515,6 +516,7 @@ class MissionView(MissionViewBase):
         self.gameSession.onPremiumTypeChanged += self.__onPremiumTypeChanged
         self.__rankedController.onUpdated += self._onEventsUpdate
         self.__rankedController.onGameModeStatusUpdated += self._onEventsUpdate
+        self.__battleRoyaleController.onSpaceUpdated += self._onEventsUpdate
         g_clientUpdateManager.addCallbacks({'inventory.1': self._onEventsUpdate,
          'stats.unlocks': self.__onUnlocksUpdate})
 
@@ -524,6 +526,7 @@ class MissionView(MissionViewBase):
         self.gameSession.onPremiumTypeChanged -= self.__onPremiumTypeChanged
         self.__rankedController.onUpdated -= self._onEventsUpdate
         self.__rankedController.onGameModeStatusUpdated -= self._onEventsUpdate
+        self.__battleRoyaleController.onSpaceUpdated -= self._onEventsUpdate
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(MissionView, self)._dispose()
 

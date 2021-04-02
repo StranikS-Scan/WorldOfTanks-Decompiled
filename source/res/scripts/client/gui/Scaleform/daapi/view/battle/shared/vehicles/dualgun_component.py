@@ -122,6 +122,7 @@ class DualGunComponent(DualGunPanelMeta):
          VEHICLE_VIEW_STATE.DESTROY_TIMER: DestroyStateAffectPolicy(self.__reloadingState, VEHICLE_VIEW_STATE.DESTROY_TIMER)}
         self.__isEnabled = False
         self.__chargeState = DUALGUN_CHARGER_STATUS.BEFORE_PREPARING
+        self.__prevChargeState = DUALGUN_CHARGER_STATUS.BEFORE_PREPARING
         self.__deferredGunState = None
         self.__bulletCollapsed = False
         self.__debuffInProgress = False
@@ -338,6 +339,10 @@ class DualGunComponent(DualGunPanelMeta):
         self.__debuffInProgress = False
         if states[DUAL_GUN.ACTIVE_GUN.LEFT] == DUAL_GUN.GUN_STATE.READY and states[DUAL_GUN.ACTIVE_GUN.RIGHT] == DUAL_GUN.GUN_STATE.READY:
             self.as_readyForChargeS()
+        elif BigWorld.player().isObserver() and self.__inBattle and self.__chargeState == DUALGUN_CHARGER_STATUS.APPLIED:
+            if self.__prevChargeState == DUALGUN_CHARGER_STATUS.PREPARING:
+                self.__prevChargeState = DUALGUN_CHARGER_STATUS.BEFORE_PREPARING
+                self.as_expandPanelS()
 
     def __onPreCharge(self, _):
         if self.__inBattle:
@@ -370,6 +375,7 @@ class DualGunComponent(DualGunPanelMeta):
         return
 
     def __onDualGunChargeStateUpdated(self, value):
+        self.__prevChargeState = self.__chargeState
         self.__chargeState, time = value
         if self.__chargeState == DUALGUN_CHARGER_STATUS.PREPARING:
             baseTime, timeLeft = time

@@ -61,7 +61,7 @@ _CURRENCIES = [BattleRewardItemModel.XP,
 _HIDDEN_BONUSES_WITH_ZERO_VALUES = frozenset([BattleRewardItemModel.CRYSTALS, BattleRewardItemModel.BATTLE_PASS_POINTS])
 
 class BrBattleResultsViewInLobby(ViewImpl):
-    __slots__ = ('__arenaUniqueID', '__tooltipsData', '__tooltipParametersCreator', '__data')
+    __slots__ = ('__arenaUniqueID', '__tooltipsData', '__tooltipParametersCreator', '__data', '__isObserverResult', '__arenaBonusType')
     __battleResults = dependency.descriptor(IBattleResultsService)
     __brController = dependency.descriptor(IBattleRoyaleController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
@@ -81,6 +81,12 @@ class BrBattleResultsViewInLobby(ViewImpl):
         self.__data = self.__battleResults.getResultsVO(self.__arenaUniqueID)
         if not self.__data:
             raise SoftException('There is not battleResults')
+        commonData = self.__data.get(BRSections.COMMON)
+        if commonData is None:
+            raise SoftException('There is no common info in battle results')
+        vehicleInfo = first(commonData.get('playerVehicles', []))
+        self.__isObserverResult = vehicleInfo.get('isObserver', False) if vehicleInfo else False
+        self.__arenaBonusType = self.__data[BRSections.COMMON].get('arenaBonusType', 0)
         self.__tooltipsData = {}
         self.__tooltipParametersCreator = self.__getTooltipParametersCreator()
         return
@@ -149,22 +155,24 @@ class BrBattleResultsViewInLobby(ViewImpl):
             raise SoftException('There is no vehicle status info in battle results')
         statusInfo = commonInfo['vehicleStatus']
         self.__setUserName(statusModel.user, commonInfo)
-        killerInfo = statusInfo['killer']
-        hasKiller = killerInfo and not statusInfo['isSelfDestroyer']
-        statusModel.setReason(_getAttackReason(statusInfo.get('vehicleState', ''), hasKiller))
-        if hasKiller:
-            self.__setUserName(statusModel.killer, killerInfo)
+        if not self.__isObserverResult:
+            killerInfo = statusInfo['killer']
+            hasKiller = killerInfo and not statusInfo['isSelfDestroyer']
+            statusModel.setReason(_getAttackReason(statusInfo.get('vehicleState', ''), hasKiller))
+            if hasKiller:
+                self.__setUserName(statusModel.killer, killerInfo)
         return
 
     def __setPersonalResult(self, personalModel):
         self.__setMapName()
         self.__setCommonInfo()
-        self.__setFinishResult(personalModel)
-        self.__setStats(personalModel)
-        self.__setBattleRewards(personalModel)
-        self.__setBonuses(personalModel)
-        self.__setAchievements(personalModel)
-        self.__setCompletedQuests(personalModel)
+        if not self.__isObserverResult:
+            self.__setFinishResult(personalModel)
+            self.__setStats(personalModel)
+            self.__setBattleRewards(personalModel)
+            self.__setBonuses(personalModel)
+            self.__setAchievements(personalModel)
+            self.__setCompletedQuests(personalModel)
         self.__setBattlePass(personalModel.battlePassProgress)
 
     def __setBattlePass(self, battlePassModel):
@@ -179,7 +187,7 @@ class BrBattleResultsViewInLobby(ViewImpl):
         else:
             battlePassModel.setProgressionState(BattlePassProgress.PROGRESSION_IN_PROGRESS)
         state = BattlePassProgress.BP_STATE_DISABLED
-        if self.__brController.isBattlePassAvailable():
+        if self.__brController.isBattlePassAvailable(self.__arenaBonusType) and not self.__isObserverResult:
             state = BattlePassProgress.BP_STATE_BOUGHT if self.__battlePassController.isBought() else BattlePassProgress.BP_STATE_NORMAL
         battlePassModel.setBattlePassState(state)
 
@@ -249,7 +257,7 @@ class BrBattleResultsViewInLobby(ViewImpl):
 
     def __getFinancialData(self):
         financialData = self.__data.get(BRSections.PERSONAL, {}).get(BRSections.FINANCE, {})
-        if self.__brController.isBattlePassAvailable():
+        if self.__brController.isBattlePassAvailable(self.__arenaBonusType):
             financialData.update({BattleRewardItemModel.BATTLE_PASS_POINTS: self.__getBattlePassPointsTotal()})
         return financialData
 

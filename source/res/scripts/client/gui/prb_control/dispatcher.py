@@ -506,6 +506,7 @@ class _PreBattleDispatcher(ListenersCollection):
         g_playerEvents.onKickedFromArena += self.pe_onKickedFromArena
         g_playerEvents.onPrebattleAutoInvitesChanged += self.pe_onPrebattleAutoInvitesChanged
         g_playerEvents.onPrebattleInvitationsError += self.pe_onPrebattleInviteError
+        g_playerEvents.onUpdateSpecBattlesWindow += self.pe_onPrebattleAutoInvitesChanged
         if self.gameSession.lastBanMsg is not None:
             self.gs_onTillBanNotification(*self.gameSession.lastBanMsg)
         self.gameSession.onTimeTillBan += self.gs_onTillBanNotification
@@ -548,6 +549,7 @@ class _PreBattleDispatcher(ListenersCollection):
         g_playerEvents.onKickedFromArena -= self.pe_onKickedFromArena
         g_playerEvents.onPrebattleAutoInvitesChanged -= self.pe_onPrebattleAutoInvitesChanged
         g_playerEvents.onPrebattleInvitationsError -= self.pe_onPrebattleInviteError
+        g_playerEvents.onUpdateSpecBattlesWindow -= self.pe_onPrebattleAutoInvitesChanged
         self.gameSession.onTimeTillBan -= self.gs_onTillBanNotification
         self.rentals.onRentChangeNotify -= self.rc_onRentChange
         self.igrCtrl.onIgrTypeChanged -= self.igr_onRoomChange

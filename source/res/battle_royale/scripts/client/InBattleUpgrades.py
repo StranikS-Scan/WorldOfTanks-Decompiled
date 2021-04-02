@@ -48,3 +48,25 @@ class InBattleUpgrades(BigWorld.DynamicScriptComponent):
         if ctrl is not None and vehicle.id == BigWorld.player().playerVehicleID:
             ctrl.updateVehicleReadinessTime(self.upgradeReadinessTime.time, self.upgradeReadinessTime.reason)
         return
+
+
+def onBattleRoyalePrerequisites(vehicle, oldTypeDescriptor):
+    if 'battle_royale' not in vehicle.typeDescriptor.type.tags:
+        return False
+    if not oldTypeDescriptor:
+        return True
+    forceReloding = False
+    for moduleName in ('gun', 'turret', 'chassis'):
+        oldModule = getattr(oldTypeDescriptor, moduleName)
+        newModule = getattr(vehicle.typeDescriptor, moduleName)
+        if oldModule.id != newModule.id:
+            forceReloding = True
+            vehicle.isForceReloading = True
+            if moduleName == 'gun' and vehicle.id == BigWorld.player().getObservedVehicleID():
+                player = BigWorld.player()
+                if player.isObserver():
+                    player.reloadCurrentVehicleGunSettings()
+                    vehicle.guiSessionProvider.shared.ammo.clearAmmo()
+                player.gunRotator.switchActiveGun(0)
+
+    return forceReloding

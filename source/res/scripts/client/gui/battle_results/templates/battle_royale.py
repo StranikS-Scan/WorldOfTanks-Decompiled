@@ -22,7 +22,8 @@ _COMMON_VO_META = base.DictMeta({'arenaStr': '',
  'playerVehicles': [],
  'playerPlace': 0,
  'isSquadMode': False,
- 'vehicleStatus': {}})
+ 'vehicleStatus': {},
+ 'arenaBonusType': 0})
 _PERSONAL_PLAYER_NAME_VO_META = base.PropertyMeta((('userName', '', 'userName'), ('clanAbbrev', '', 'clanAbbrev')))
 _PERSONAL_PLAYER_NAME_VO_META.bind(battle_royale.PersonalPlayerNameBlock)
 _VEHICLE_STATUS_BLOCK_VO_META = base.PropertyMeta((('killer', {}, 'killer'), ('vehicleState', -1, 'vehicleState'), ('isSelfDestroyer', False, 'isSelfDestroyer')))
@@ -30,6 +31,7 @@ _VEHICLE_STATUS_BLOCK_VO_META.bind(battle_royale.BattleRoyaleVehicleStatusBlock)
 BR_COMMON_STATS_BLOCK = base.StatsBlock(_COMMON_VO_META, 'common')
 BR_COMMON_STATS_BLOCK.addNextComponent(battle_royale.PersonalPlayerNameBlock(_PERSONAL_PLAYER_NAME_VO_META))
 BR_COMMON_STATS_BLOCK.addNextComponent(battle_royale.BattleRoyaleArenaNameBlock('arenaStr'))
+BR_COMMON_STATS_BLOCK.addNextComponent(battle_royale.ArenaBonusTypeNameBlock('arenaBonusType'))
 BR_COMMON_STATS_BLOCK.addNextComponent(battle_royale.BattleRoyalePlayerPlaceBlock('playerPlace'))
 BR_COMMON_STATS_BLOCK.addNextComponent(battle_royale.BattleRoyaleIsSquadModeBlock('isSquadMode'))
 BR_COMMON_STATS_BLOCK.addNextComponent(battle_royale.BattleRoyaleVehicleStatusBlock(_VEHICLE_STATUS_BLOCK_VO_META, 'vehicleStatus', _RECORD.PERSONAL))
@@ -38,7 +40,7 @@ _PERSONAL_VO_META = base.DictMeta({'financialBalance': {},
  'stats': [],
  'rewards': {},
  'battlePass': {}})
-_PERSONAL_VEHICLE_VO_META = base.PropertyMeta((('nationName', '', 'nationName'), ('vehicleName', '', 'vehicleName')))
+_PERSONAL_VEHICLE_VO_META = base.PropertyMeta((('nationName', '', 'nationName'), ('vehicleName', '', 'vehicleName'), ('isObserver', '', 'isObserver')))
 _PERSONAL_VEHICLE_VO_META.bind(battle_royale.BattleRoyalePersonalVehicleBlock)
 _FINANCIAL_BLOCK_VO_META = base.PropertyMeta((('credits', 0, 'credits'), ('xp', 0, 'xp'), ('crystal', 0, 'crystal')))
 _FINANCIAL_BLOCK_VO_META.bind(battle_royale.BattleRoyaleFinancialBlock)

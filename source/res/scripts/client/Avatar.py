@@ -296,7 +296,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.onVehicleEnterWorld = Event.Event()
             self.onVehicleLeaveWorld = Event.Event()
             self.onGunShotChanged = Event.Event()
+            self.onObserverVehicleChanged = Event.Event()
             self.invRotationOnBackMovement = False
+            self.onSwitchingViewPoint = Event.Event()
             self.__isVehicleAlive = True
             self.__firstHealthUpdate = True
             self.__deadOnLoading = False
@@ -528,7 +530,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         LOG_DEBUG('[INIT_STEPS] Avatar.onLeaveWorld')
         self.__consistentMatrices.notifyLeaveWorld(self)
         self.__cancelWaitingForCharge()
-        AvatarObserver.onLeaveWorld(self)
 
     def onVehicleChanged(self):
         LOG_DEBUG('Avatar vehicle has changed to %s' % self.vehicle)
@@ -1056,6 +1057,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
     def onSwitchViewpoint(self, vehicleID, position):
         LOG_DEBUG('onSwitchViewpoint', vehicleID, position)
+        self.onSwitchingViewPoint()
+        self.processObservedSwitchViewpoint(vehicleID)
         self.inputHandler.ctrl.onSwitchViewpoint(vehicleID, position)
         staticPosition = position
         if vehicleID != -1:
@@ -1641,6 +1644,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
     def setIsObserver(self):
         self.__isObserver = True
+
+    def isVehiclesColorized(self):
+        return self.observerSeesAll()
 
     def receiveAccountStats(self, requestID, stats):
         callback = self.__onCmdResponse.pop(requestID, None)

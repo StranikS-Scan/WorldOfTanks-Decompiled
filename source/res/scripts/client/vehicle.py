@@ -199,23 +199,8 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.typeDescriptor = self.getDescr(respawnCompactDescr)
         forceReloading = respawnCompactDescr is not None
         if 'battle_royale' in self.typeDescriptor.type.tags:
-            if oldTypeDescriptor:
-                forceReloading = False
-                for moduleName in ('gun', 'turret', 'chassis'):
-                    oldModule = getattr(oldTypeDescriptor, moduleName)
-                    newModule = getattr(self.typeDescriptor, moduleName)
-                    if oldModule.id != newModule.id:
-                        forceReloading = True
-                        isObserver = BigWorld.player().isObserver()
-                        if isObserver:
-                            self.__battleRoyaleController.onGunUpdate()
-                            self.guiSessionProvider.shared.ammo.clearAmmo()
-                        if moduleName == 'gun':
-                            BigWorld.player().gunRotator.switchActiveGun(0)
-                        self.isForceReloading = True
-                        break
-
-            else:
+            from InBattleUpgrades import onBattleRoyalePrerequisites
+            if onBattleRoyalePrerequisites(self, oldTypeDescriptor):
                 forceReloading = True
         self.appearance, prereqs = appearance_cache.createAppearance(self.id, self.typeDescriptor, self.health, self.isCrewActive, self.isTurretDetached, outfitDescr, forceReloading)
         self.prereqsCompDescr = self.respawnCompactDescr if self.respawnCompactDescr else self.publicInfo.compDescr

@@ -259,6 +259,7 @@ class VideoCameraControlMode(_GunControlMode):
         super(VideoCameraControlMode, self).enable(**args)
         self.__previousArgs = args
         self.__prevModeName = args.get('prevModeName')
+        gui_event_dispatcher.hideAutoAimMarker()
         self._cam.enable(**args)
 
     def getDesiredShotPoint(self, ignoreAimingMode=False):
@@ -1121,6 +1122,10 @@ class PostMortemControlMode(IControlMode):
     _POSTMORTEM_DELAY_ENABLED = True
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
     __aimOffset = aih_global_binding.bindRO(aih_global_binding.BINDING_ID.AIM_OFFSET)
+
+    @property
+    def aimingMode(self):
+        pass
 
     @staticmethod
     def getIsPostmortemDelayEnabled():

@@ -1,15 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/battle_royale/pre_queue/entity.py
+import logging
 import BigWorld
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from PlayerEvents import g_playerEvents
 from constants import QUEUE_TYPE
-from debug_utils import LOG_DEBUG
 from gui.prb_control import prb_getters
+from helpers import dependency
+from gui.ranked_battles.constants import PrimeTimeStatus
+from skeletons.gui.game_control import IBattleRoyaleController
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueEntity, PreQueueEntryPoint
 from gui.prb_control.entities.battle_royale.pre_queue.actions_validator import BattleRoyaleActionsValidator
 from gui.prb_control.entities.battle_royale.pre_queue.vehicles_watcher import BattleRoyaleVehiclesWatcher
+from gui.prb_control.entities.battle_royale.pre_queue.permissions import BattleRoyalePermissions
 from gui.prb_control.entities.battle_royale.scheduler import RoyaleScheduler
 from gui.prb_control.entities.special_mode.pre_queue import entity as spec_entry
 from gui.prb_control.entities.special_mode.pre_queue.ctx import SpecialModeQueueCtx
@@ -17,9 +21,7 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, PRE_QUEUE_JOIN_ERRORS
 from gui.prb_control.storages import prequeue_storage_getter
-from gui.ranked_battles.constants import PrimeTimeStatus
-from helpers import dependency
-from skeletons.gui.game_control import IBattleRoyaleController
+_logger = logging.getLogger(__name__)
 
 class _BattleRoyaleSubscriber(spec_entry.SpecialModeSubscriber):
 
@@ -28,6 +30,8 @@ class _BattleRoyaleSubscriber(spec_entry.SpecialModeSubscriber):
         g_playerEvents.onDequeuedBattleRoyale += entity.onDequeued
         g_playerEvents.onEnqueuedBattleRoyaleFailure += entity.onEnqueueError
         g_playerEvents.onKickedFromBattleRoyaleQueue += entity.onKickedFromQueue
+        g_playerEvents.onKickedFromArena += entity.onKickedFromArena
+        g_playerEvents.onArenaJoinFailure += entity.onArenaJoinFailure
         super(_BattleRoyaleSubscriber, self).subscribe(entity)
 
     def unsubscribe(self, entity):
@@ -35,6 +39,8 @@ class _BattleRoyaleSubscriber(spec_entry.SpecialModeSubscriber):
         g_playerEvents.onDequeuedBattleRoyale -= entity.onDequeued
         g_playerEvents.onEnqueuedBattleRoyaleFailure -= entity.onEnqueueError
         g_playerEvents.onKickedFromBattleRoyaleQueue -= entity.onKickedFromQueue
+        g_playerEvents.onKickedFromArena -= entity.onKickedFromArena
+        g_playerEvents.onArenaJoinFailure -= entity.onArenaJoinFailure
         super(_BattleRoyaleSubscriber, self).unsubscribe(entity)
 
 
@@ -83,6 +89,10 @@ class BattleRoyaleEntity(PreQueueEntity):
                 g_eventDispatcher.loadHangar()
         return super(BattleRoyaleEntity, self).fini(ctx, woEvents)
 
+    def resetPlayerState(self):
+        super(BattleRoyaleEntity, self).resetPlayerState()
+        g_eventDispatcher.loadHangar()
+
     @prequeue_storage_getter(QUEUE_TYPE.BATTLE_ROYALE)
     def storage(self):
         return None
@@ -98,6 +108,9 @@ class BattleRoyaleEntity(PreQueueEntity):
     def isInQueue(self):
         return prb_getters.isInBattleRoyaleQueue()
 
+    def getPermissions(self, pID=None, **kwargs):
+        return BattleRoyalePermissions(self.isInQueue())
+
     def _createActionsValidator(self):
         return BattleRoyaleActionsValidator(self)
 
@@ -106,11 +119,11 @@ class BattleRoyaleEntity(PreQueueEntity):
 
     def _doQueue(self, ctx):
         BigWorld.player().enqueueBattleRoyale(ctx.getVehicleInventoryID())
-        LOG_DEBUG('Sends request on queuing to the Battle Royale', ctx)
+        _logger.debug('Sends request on queuing to the Battle Royale - %r', ctx)
 
     def _doDequeue(self, ctx):
         BigWorld.player().dequeueBattleRoyale()
-        LOG_DEBUG('Sends request on dequeuing from the Battle Royale')
+        _logger.debug('Sends request on dequeuing from the Battle Royale')
 
     def _goToQueueUI(self):
         g_eventDispatcher.loadBattleQueue()

@@ -338,7 +338,7 @@ class ArenaDataProvider(IArenaDataProvider):
 
     def getActiveVehiclesGenerator(self):
         for vInfo in self.__vInfoVOs.itervalues():
-            if not isSpawnedBot(vInfo.vehicleType.tags):
+            if not isSpawnedBot(vInfo.vehicleType.tags) and not vInfo.isObserver():
                 yield (vInfo, self.__vStatsVOs[vInfo.vehicleID])
 
     def getAlliesVehiclesNumber(self):

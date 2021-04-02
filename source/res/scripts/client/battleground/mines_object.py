@@ -26,7 +26,7 @@ def loadMines(ownerVehicleID, callback, dynamicObjectsCache=None, battleSession=
     isAlly = False
     ownerVehicleInfo = battleSession.getArenaDP().getVehicleInfo(ownerVehicleID)
     if ownerVehicleInfo is not None:
-        isAlly = ownerVehicleInfo.team == BigWorld.player().followTeamID
+        isAlly = battleSession.getArenaDP().isAllyTeam(ownerVehicleInfo.team)
     idleEff = effDescr.idleEffect.ally if isAlly else effDescr.idleEffect.enemy
     gameObject.prepareCompositeLoader(callback)
     spaceId = BigWorld.player().spaceID

@@ -301,7 +301,7 @@ class RecruitParamsComponent(RecruitParametersMeta):
                 selectedNationsIds.append(nId)
 
         criteria |= REQ_CRITERIA.NATIONS(selectedNationsIds)
-        criteria |= REQ_CRITERIA.CUSTOM(lambda i: not i.isCollectible or i.level <= maxResLevels.get(i.nationID, constants.MIN_VEHICLE_LEVEL))
+        criteria |= REQ_CRITERIA.CUSTOM(lambda i: not i.isCollectible or i.level <= maxResLevels.get(i.nationID, constants.MIN_VEHICLE_LEVEL) or i.inventoryCount > 0)
         if not constants.IS_IGR_ENABLED:
             criteria |= ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
         if constants.IS_DEVELOPMENT:

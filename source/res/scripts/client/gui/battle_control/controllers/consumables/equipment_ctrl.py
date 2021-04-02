@@ -181,7 +181,7 @@ class _EquipmentItem(object):
 
     @property
     def isReusable(self):
-        return self._descriptor.reuseCount != 0
+        return self._descriptor and self._descriptor.reuseCount != 0
 
     @property
     def isReady(self):
@@ -228,7 +228,7 @@ class _EquipmentItem(object):
         return innationID
 
     def isAvatar(self):
-        return 'avatar' in self._descriptor.tags
+        return self._descriptor and 'avatar' in self._descriptor.tags
 
     def _soundUpdate(self, prevQuantity, quantity):
         if prevQuantity > quantity:
@@ -428,14 +428,15 @@ class _OrderItem(_TriggerItem):
         return super(_OrderItem, self).canActivate(entityName, avatar)
 
     def update(self, quantity, stage, timeRemaining, totalTime):
-        from AvatarInputHandler import MapCaseMode
-        if stage == EQUIPMENT_STAGES.PREPARING and self._stage != stage and self._needActivateMapCase():
-            MapCaseMode.activateMapCase(self.getEquipmentID(), partial(self.deactivate), self.isArcadeCamera())
-        elif self._stage == EQUIPMENT_STAGES.PREPARING and self._stage != stage:
-            if self._needActivateMapCase():
-                MapCaseMode.turnOffMapCase(self.getEquipmentID(), self.isArcadeCamera())
-            else:
-                self.deactivate()
+        if not BigWorld.player().isObserver() or BigWorld.player().isObserverFPV:
+            from AvatarInputHandler import MapCaseMode
+            if stage == EQUIPMENT_STAGES.PREPARING and self._stage != stage and self._needActivateMapCase():
+                MapCaseMode.activateMapCase(self.getEquipmentID(), partial(self.deactivate), self.isArcadeCamera())
+            elif self._stage == EQUIPMENT_STAGES.PREPARING and self._stage != stage:
+                if self._needActivateMapCase():
+                    MapCaseMode.turnOffMapCase(self.getEquipmentID(), self.isArcadeCamera())
+                else:
+                    self.deactivate()
         super(_OrderItem, self).update(quantity, stage, timeRemaining, totalTime)
 
     def _getErrorMsg(self):

@@ -96,33 +96,28 @@ class FragCorrelationBar(FragCorrelationBarMeta, IBattleFieldListener):
         else:
             mask = self.__viewSettings
             arenaType = self.__getArenaTypeBehaviour()
-            if arenaType.allowHPBar and showBar is not None:
-                mask = self.__changeSetting(mask, showBar, _FragBarViewState.SHOW_HP_BAR)
-                if showBar:
-                    showHp = bool(self.settingsCore.getSetting(ScorePanelStorageKeys.SHOW_HP_VALUES))
+            if showBar is not None or showDiff is not None or showHp is not None:
+                if showBar is None:
+                    showBar = bool(self.settingsCore.getSetting(ScorePanelStorageKeys.SHOW_HP_BAR))
+                if showDiff is None:
                     showDiff = bool(self.settingsCore.getSetting(ScorePanelStorageKeys.SHOW_HP_DIFFERENCE))
-                    mask = self.__changeSetting(mask, showHp, _FragBarViewState.SHOW_HP_VALUES)
-                    mask = self.__changeSetting(mask, showDiff, _FragBarViewState.SHOW_HP_DIFFERENCE)
-                else:
-                    mask = self.__changeSetting(mask, False, _FragBarViewState.SHOW_HP_VALUES)
-                    mask = self.__changeSetting(mask, False, _FragBarViewState.SHOW_HP_DIFFERENCE)
-            else:
-                if arenaType.allowHPVal and showHp is not None:
-                    mask = self.__changeSetting(mask, showHp, _FragBarViewState.SHOW_HP_VALUES)
-                if arenaType.allowDiff and showDiff is not None:
-                    mask = self.__changeSetting(mask, showDiff, _FragBarViewState.SHOW_HP_DIFFERENCE)
-            if arenaType.allowVehIcons and showVeh is not None:
-                mask = self.__changeSetting(mask, showVeh, _FragBarViewState.SHOW_VEHICLES_COUNTER)
-                if showVeh:
-                    showTiers = bool(self.settingsCore.getSetting(ScorePanelStorageKeys.ENABLE_TIER_GROUPING))
-                    mask = self.__changeSetting(mask, showTiers, _FragBarViewState.SHOW_TIER_GROUPING)
-                else:
-                    mask = self.__changeSetting(mask, False, _FragBarViewState.SHOW_TIER_GROUPING)
-            else:
+                if showHp is None:
+                    showHp = bool(self.settingsCore.getSetting(ScorePanelStorageKeys.SHOW_HP_VALUES))
+                activateHPBar = arenaType.allowHPBar and showBar
+                mask = self.__changeSetting(mask, activateHPBar, _FragBarViewState.SHOW_HP_BAR)
+                activateHPVal = activateHPBar and arenaType.allowHPVal and showHp
+                mask = self.__changeSetting(mask, activateHPVal, _FragBarViewState.SHOW_HP_VALUES)
+                activateHPDiff = activateHPBar and arenaType.allowDiff and showDiff
+                mask = self.__changeSetting(mask, activateHPDiff, _FragBarViewState.SHOW_HP_DIFFERENCE)
+            if showVeh is not None or showTiers is not None:
                 if showVeh is None:
                     showVeh = bool(self.settingsCore.getSetting(GAME.SHOW_VEHICLES_COUNTER))
-                if arenaType.allowTierGrp and showTiers is not None:
-                    mask = self.__changeSetting(mask, showTiers and showVeh, _FragBarViewState.SHOW_TIER_GROUPING)
+                if showTiers is None:
+                    showTiers = bool(self.settingsCore.getSetting(ScorePanelStorageKeys.ENABLE_TIER_GROUPING))
+                activateVehIcons = arenaType.allowVehIcons and showVeh
+                mask = self.__changeSetting(mask, activateVehIcons, _FragBarViewState.SHOW_VEHICLES_COUNTER)
+                activateTierGroup = activateVehIcons and arenaType.allowTierGrp and showTiers
+                mask = self.__changeSetting(mask, activateTierGroup, _FragBarViewState.SHOW_TIER_GROUPING)
             if mask != self.__viewSettings:
                 self.__viewSettings = mask
                 self.as_updateViewSettingS(self.__viewSettings)

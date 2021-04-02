@@ -93,9 +93,9 @@ class ArcadeAimingSystem(IAimingSystem):
             self.focusOnPos(targetPos)
             if turretYaw is not None and gunPitch is not None:
                 self.__adjustFocus((turretYaw, gunPitch))
-        player = BigWorld.player()
-        if player.vehicle is not None:
-            self._vehicleTypeDescriptor = player.vehicle.typeDescriptor
+        playerV = BigWorld.player().getVehicleAttached()
+        if playerV is not None:
+            self._vehicleTypeDescriptor = playerV.typeDescriptor
         if self.__shotPointCalculator is not None:
             self.__shotPointCalculator.updateVehicleDescr(self._vehicleTypeDescriptor)
         return
@@ -127,6 +127,8 @@ class ArcadeAimingSystem(IAimingSystem):
         self.__cursor.addVolumeGroup(group)
 
     def focusOnPos(self, preferredPos):
+        if self.__worldSpaceAimingWithLimits.isEnabled:
+            self.__worldSpaceAimingWithLimits.focusOnPos(preferredPos)
         vehPos = Matrix(self.__vehicleMProv).translation
         posOnVehicle = vehPos + Vector3(0.0, self.__cursor.heightAboveBase, 0.0)
         self.yaw = (preferredPos - vehPos).yaw
@@ -421,14 +423,18 @@ class _WorldSpaceAimingWithLimits(object):
         currentFrameStamp = BigWorld.wg_getFrameTimestamp()
         if self.__lastCachedFrame != currentFrameStamp:
             wsAimPoint = self.getAimPoint()
-            groundIntersection = BigWorld.wg_collideSegment(BigWorld.player().spaceID, wsAimPoint + Vector3(0, 200, 0), wsAimPoint - Vector3(0, 200, 0), CollisionFlags.TRIANGLE_PROJECTILENOCOLLIDE)
-            if groundIntersection is None:
-                LOG_WARNING('Cannot determine on-ground target, point: ', wsAimPoint, ' not over or under ground')
-                self.__cachedShotPoint = wsAimPoint
-            else:
-                self.__cachedShotPoint = groundIntersection.closestPoint
+            self.__cachedShotPoint = wsAimPoint
+            if not (BigWorld.player().isObserver() and BigWorld.player().isObserverFPV):
+                groundIntersection = BigWorld.wg_collideSegment(BigWorld.player().spaceID, wsAimPoint + Vector3(0, 200, 0), wsAimPoint - Vector3(0, 200, 0), CollisionFlags.TRIANGLE_PROJECTILENOCOLLIDE)
+                if groundIntersection is None:
+                    LOG_WARNING('Cannot determine on-ground target, point: ', wsAimPoint, ' not over or under ground')
+                else:
+                    self.__cachedShotPoint = groundIntersection.closestPoint
             self.__lastCachedFrame = currentFrameStamp
         return self.__cachedShotPoint
+
+    def focusOnPos(self, pos):
+        self.__aimingPoint = pos - Matrix(self.__basis).translation
 
     def move(self, dx, dy):
         forward = Vector3(self.__aimingPoint)

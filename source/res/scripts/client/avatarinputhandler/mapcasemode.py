@@ -441,9 +441,12 @@ class _ArcadeBomberStrikeSelector(_ArenaBoundsAreaStrikeSelector, _VehiclesSelec
         self.highlightVehicles()
 
     def __updateDirection(self, position):
-        self.direction = position - BigWorld.player().vehicle.position
-        if self.direction.lengthSquared <= 0.001:
-            self.direction = Vector3(0, 0, 1)
+        attachedV = BigWorld.player().getVehicleAttached()
+        if attachedV is not None:
+            self.direction = position - attachedV.position
+            if self.direction.lengthSquared <= 0.001:
+                self.direction = Vector3(0, 0, 1)
+        return
 
     def __intersected(self, vehicles):
         for v in vehicles:

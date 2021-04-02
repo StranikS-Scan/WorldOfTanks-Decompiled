@@ -444,12 +444,15 @@ class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
         if self._sessionProvider.dynamic.radar:
             self._sessionProvider.dynamic.radar.removeRuntimeView(self)
         vStateCtrl = self._sessionProvider.shared.vehicleState
-        self.__clearRadarCooldown()
+        if self.__cbOnRadarCooldown is not None:
+            BigWorld.cancelCallback(self.__cbOnRadarCooldown)
+            self.__cbOnRadarCooldown = None
         if vStateCtrl:
             vStateCtrl.onPostMortemSwitched -= self.__onPostMortemSwitched
             vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
         AccountSettings.setSettings(RADAR_HINT_SECTION, self.__settings)
         self.destroy()
+        return
 
     def updateMapping(self):
         if not self.__isEnabled:
@@ -503,13 +506,15 @@ class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
 
     def __updateHint(self):
         _logger.debug('Updating radar hint. isInPostmortem=%r, isObserver=%r, isEnabled=%r', self.__isInPostmortem, self.__isObserver, self.__isEnabled)
+        self.__cbOnRadarCooldown = None
         if self.__isInPostmortem or self.__isObserver or not self.__isEnabled:
             return
-        if self.__isInDisplayPeriod and self._haveHintsLeft(self.__settings) and not self.__areOtherIndicatorsShown():
-            self.__showHint()
         else:
-            self.__hideHint()
-        self.__clearRadarCooldown()
+            if self.__isInDisplayPeriod and self._haveHintsLeft(self.__settings) and not self.__areOtherIndicatorsShown():
+                self.__showHint()
+            else:
+                self.__hideHint()
+            return
 
     def __onVehicleStateUpdated(self, state, value):
         if not self.__isEnabled:

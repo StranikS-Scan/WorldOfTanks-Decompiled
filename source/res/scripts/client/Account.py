@@ -208,6 +208,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInRankedQueue = False
         self.isInEpicQueue = False
         self.isInBattleRoyaleQueue = False
+        self.isInBattleRoyaleTournamentQueue = False
         self.platformBlueprintsConvertSaleLimits = g_accountRepository.platformBlueprintsConvertSaleLimits
         self.__onCmdResponse = {}
         self.__onStreamComplete = {}
@@ -423,6 +424,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.BATTLE_ROYALE:
             self.isInBattleRoyaleQueue = True
             events.onEnqueuedBattleRoyale()
+        elif queueType == QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT:
+            self.isInBattleRoyaleTournamentQueue = True
+            events.onEnqueuedBattleRoyaleTournament()
         events.onEnqueued(queueType)
 
     def onEnqueueFailure(self, queueType, errorCode, errorStr):
@@ -443,6 +447,8 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             events.onEnqueuedEpicFailure(errorCode, errorStr)
         elif queueType == QUEUE_TYPE.BATTLE_ROYALE:
             events.onEnqueuedBattleRoyaleFailure(errorCode, errorStr)
+        elif queueType == QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT:
+            events.onEnqueuedBattleRoyaleTournamentFailure(errorCode, errorStr)
         events.onEnqueueFailure(queueType, errorCode, errorStr)
 
     def onDequeued(self, queueType):
@@ -471,6 +477,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.BATTLE_ROYALE:
             self.isInBattleRoyaleQueue = False
             events.onDequeuedBattleRoyale()
+        elif queueType == QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT:
+            self.isInBattleRoyaleTournamentQueue = False
+            events.onDequeuedBattleRoyaleTournament()
         events.onDequeued(queueType)
 
     def onTutorialEnqueued(self, number, queueLen, avgWaitingTime):
@@ -527,6 +536,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.BATTLE_ROYALE:
             self.isInBattleRoyaleQueue = False
             events.onKickedFromBattleRoyaleQueue()
+        elif queueType == QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT:
+            self.isInBattleRoyaleTournamentQueue = False
+            events.onKickedFromBattleRoyaleTournamentQueue()
         events.onKickedFromQueue(queueType)
 
     def onArenaCreated(self):
@@ -547,6 +559,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInBootcampQueue = False
         self.isInEpicQueue = False
         self.isInBattleRoyaleQueue = False
+        self.isInBattleRoyaleTournamentQueue = False
         events.isPlayerEntityChanging = False
         events.onPlayerEntityChangeCanceled()
         events.onArenaJoinFailure(errorCode, errorStr)
@@ -601,6 +614,8 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInSandboxQueue = False
         self.isInRankedQueue = False
         self.isInEpicQueue = False
+        self.isInBattleRoyaleQueue = False
+        self.isInBattleRoyaleTournamentQueue = False
         events.isPlayerEntityChanging = False
         events.onPlayerEntityChangeCanceled()
         events.onKickedFromArena(reasonCode)

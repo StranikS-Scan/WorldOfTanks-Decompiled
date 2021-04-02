@@ -169,7 +169,8 @@ class QuestsController(IQuestsController):
 
     def getCurrentModeQuestsForVehicle(self, vehicle, notCompleted=False):
         if self.__battleRoyaleController.isBattleRoyaleMode():
-            return list(self.__battleRoyaleController.getQuests().values())
+            if vehicle.isOnlyForBattleRoyaleBattles:
+                return list(self.__battleRoyaleController.getQuests().values())
         if notCompleted:
             quests = [ q for q in self.getQuestForVehicle(vehicle) if not isDailyEpic(q.getGroupID()) and not isDailyQuest(q.getID()) and not isPremium(q.getID()) and not isRankedQuestID(q.getID()) and not isBattleRoyale(q.getGroupID()) and not q.isCompleted() ]
             return quests

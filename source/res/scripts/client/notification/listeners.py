@@ -40,7 +40,7 @@ from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from messenger.formatters import TimeFormatter
 from notification import tutorial_helper
-from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator, MissingEventsDecorator, RecruitReminderMessageDecorator
+from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator, MissingEventsDecorator, RecruitReminderMessageDecorator, LockButtonMessageDecorator
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from shared_utils import first
 from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController
@@ -188,6 +188,8 @@ class ServiceChannelListener(_NotificationListener):
                 return C11nMessageDecorator
             if messageType == SYS_MESSAGE_TYPE.customizationProgress.index():
                 return C11nMessageDecorator
+            if messageType == SYS_MESSAGE_TYPE.personalMissionFailed.index():
+                return LockButtonMessageDecorator
         return MessageDecorator
 
 

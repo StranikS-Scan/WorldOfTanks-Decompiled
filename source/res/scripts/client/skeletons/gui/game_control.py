@@ -1454,8 +1454,7 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
 class IBattleRoyaleController(IGameController, ISeasonProvider):
     onUpdated = None
     onPrimeTimeStatusUpdated = None
-    onEquipmentReset = None
-    onGunUpdate = None
+    onSpaceUpdated = None
     TOKEN_QUEST_ID = ''
 
     def isEnabled(self):
@@ -1479,13 +1478,19 @@ class IBattleRoyaleController(IGameController, ISeasonProvider):
     def isBattleRoyaleMode(self):
         raise NotImplementedError
 
-    def isBattlePassAvailable(self):
+    def isBattlePassAvailable(self, bonusType):
         raise NotImplementedError
 
     def isInBattleRoyaleSquad(self):
         raise NotImplementedError
 
     def selectRoyaleBattle(self):
+        raise NotImplementedError
+
+    def isGeneralHangarEntryPoint(self):
+        raise NotImplementedError
+
+    def setDefaultHangarEntryPoint(self):
         raise NotImplementedError
 
     def selectRandomBattle(self):
@@ -1529,6 +1534,53 @@ class IBattleRoyaleController(IGameController, ISeasonProvider):
         raise NotImplementedError
 
     def hasPrimeTimesLeft(self):
+        raise NotImplementedError
+
+
+class IBattleRoyaleTournamentController(IGameController):
+    onUpdatedParticipants = None
+    onSelectBattleRoyaleTournament = None
+
+    def isAvailable(self):
+        raise NotImplementedError
+
+    def getTournamentID(self):
+        raise NotImplementedError
+
+    def getSelectedToken(self):
+        raise NotImplementedError
+
+    def getTokens(self):
+        raise NotImplementedError
+
+    def updateParticipants(self, participants):
+        raise NotImplementedError
+
+    def getParticipants(self):
+        raise NotImplementedError
+
+    def selectBattleRoyaleTournament(self, token):
+        raise NotImplementedError
+
+    def join(self, tokenStr):
+        raise NotImplementedError
+
+    def leave(self):
+        raise NotImplementedError
+
+    def ready(self, vehicleID):
+        raise NotImplementedError
+
+    def notReady(self):
+        raise NotImplementedError
+
+    def leaveCurrentAndJoinToAnotherTournament(self, newTournamentID):
+        raise NotImplementedError
+
+    def leaveBattleRoyaleTournament(self, isChangingToBattleRoyaleHangar=False):
+        raise NotImplementedError
+
+    def isSelected(self):
         raise NotImplementedError
 
 

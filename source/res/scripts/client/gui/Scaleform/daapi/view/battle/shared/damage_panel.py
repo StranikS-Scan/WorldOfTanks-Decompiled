@@ -24,6 +24,7 @@ from ReplayEvents import g_replayEvents
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
+from gui.battle_control import avatar_getter
 _logger = logging.getLogger(__name__)
 _STATE_HANDLERS = {VEHICLE_VIEW_STATE.HEALTH: '_updateHealth',
  VEHICLE_VIEW_STATE.SPEED: 'as_updateSpeedS',
@@ -145,10 +146,15 @@ class _TankIndicatorCtrl(object):
 
     def vehicleRemoved(self, vId):
         if vId == self.__vId:
+            if avatar_getter.isObserver():
+                vehicle = BigWorld.entities.get(vId)
+                if vehicle is not None and vehicle.isAlive():
+                    return
             staticHullMatrix = Math.Matrix(self.__component.wg_hullMatProv)
             staticTurretMatrix = Math.Matrix(self.__component.wg_turretMatProv)
             self.__component.wg_hullMatProv = staticHullMatrix
             self.__component.wg_turretMatProv = staticTurretMatrix
+        return
 
 
 class DamagePanel(DamagePanelMeta):
@@ -377,7 +383,7 @@ class DamagePanel(DamagePanelMeta):
         else:
             inDegrees = None
         self.__isAutoRotationShown = False
-        if vehicle.isPlayerVehicle or BigWorld.player().isObserver():
+        if vehicle.isPlayerVehicle or avatar_getter.isObserver():
             flag = vehicle_getter.getAutoRotationFlag(vTypeDesc)
             if flag != AUTO_ROTATION_FLAG.IGNORE_IN_UI:
                 self.__isAutoRotationOff = flag != AUTO_ROTATION_FLAG.TURN_ON

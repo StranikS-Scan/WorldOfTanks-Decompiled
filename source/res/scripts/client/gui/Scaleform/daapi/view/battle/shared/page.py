@@ -226,7 +226,8 @@ class SharedPage(BattlePageMeta):
         if not self._blToggling:
             self._blToggling = set(self.as_getComponentsVisibilityS())
         self._blToggling.difference_update([_ALIASES.BATTLE_LOADING])
-        self._blToggling.add(_ALIASES.BATTLE_MESSENGER)
+        if not avatar_getter.isObserverSeesAll():
+            self._blToggling.add(_ALIASES.BATTLE_MESSENGER)
         hintPanel = self.getComponent(_ALIASES.HINT_PANEL)
         if hintPanel and hintPanel.getActiveHint():
             self._blToggling.add(_ALIASES.HINT_PANEL)

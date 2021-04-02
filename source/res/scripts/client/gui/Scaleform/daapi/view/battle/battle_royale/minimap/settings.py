@@ -32,18 +32,6 @@ class MarkersAs3Descr(object):
      LOOT_TYPE.ADVANCED: 'improved_loot_big',
      LOOT_TYPE.AIRDROP: 'airdrop_big'}
     AS_ADD_MARKER_ENEMY_VEHICLE = 'enemyVehicle'
-    AS_ADD_MARKER_ENEMY_VEHICLE_BLIND = 'enemyVehicle_blind'
     AS_ADD_MARKER_ENEMY_VEHICLE_BIG = 'enemyVehicle_big'
-    AS_ADD_MARKER_ENEMY_VEHICLE_BIG_BLIND = 'enemyVehicle_big_blind'
     AS_ADD_MARKER_SQUAD_VEHICLE = 'squadVehicle'
-    AS_ADD_MARKER_SQUAD_VEHICLE_BLIND = 'squadVehicle_blind'
-    AS_ADD_MARKER_SQUAD_VEHICLE_BIG = 'squadVehicle_big'
-    AS_ADD_MARKER_SQUAD_VEHICLE_BIG_BLIND = 'squadVehicle_big_blind'
     AS_ADD_MARKER_BOT_VEHICLE = 'ally_bot_vehicle'
-    AS_ADD_MARKER_BOT_VEHICLE_BLIND = 'ally_bot_vehicle_blind'
-    AS_ADD_MARKER_BOT_VEHICLE_BIG = 'ally_bot_vehicle_big'
-    AS_ADD_MARKER_BOT_VEHICLE_BIG_BLIND = 'ally_bot_vehicle_big_blind'
-    AS_ADD_MARKER_ENEMY_BOT_VEHICLE = 'enemy_bot_vehicle'
-    AS_ADD_MARKER_ENEMY_BOT_VEHICLE_BLIND = 'enemy_bot_vehicle_blind'
-    AS_ADD_MARKER_ENEMY_BOT_VEHICLE_BIG = 'enemy_bot_vehicle_big'
-    AS_ADD_MARKER_ENEMY_BOT_VEHICLE_BIG_BLIND = 'enemy_bot_vehicle_big_blind'

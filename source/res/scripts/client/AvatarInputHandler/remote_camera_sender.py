@@ -12,6 +12,7 @@ from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSyst
 from AvatarInputHandler.AimingSystems.DualGunAimingSystem import DualGunAimingSystem
 from AvatarInputHandler.AimingSystems.StrategicAimingSystem import StrategicAimingSystem
 from AvatarInputHandler.AimingSystems.ArtyAimingSystem import ArtyAimingSystem
+from AvatarInputHandler.MapCaseMode import MapCaseControlModeBase
 
 class RemoteCameraSender(InputHandlerCommand):
 
@@ -39,7 +40,8 @@ class RemoteCameraSender(InputHandlerCommand):
             if vehicle is None:
                 return
             ctrl = self.__aih.ctrl
-            if isinstance(ctrl, ArcadeControlMode) and isinstance(ctrl.camera.aimingSystem, ArcadeAimingSystem) or isinstance(ctrl, SniperControlMode) and isinstance(ctrl.camera.aimingSystem, SniperAimingSystem) or isinstance(ctrl, ArtyControlMode) and isinstance(ctrl.camera.aimingSystem, ArtyAimingSystem) or isinstance(ctrl, DualGunControlMode) and isinstance(ctrl.camera.aimingSystem, DualGunAimingSystem) or isinstance(ctrl, StrategicControlMode) and isinstance(ctrl.camera.aimingSystem, StrategicAimingSystem):
+            aimSystem = ctrl.camera.aimingSystem
+            if isinstance(ctrl, ArcadeControlMode) and isinstance(aimSystem, ArcadeAimingSystem) or isinstance(ctrl, SniperControlMode) and isinstance(aimSystem, SniperAimingSystem) or isinstance(ctrl, ArtyControlMode) and isinstance(aimSystem, ArtyAimingSystem) or isinstance(ctrl, DualGunControlMode) and isinstance(aimSystem, DualGunAimingSystem) or isinstance(ctrl, StrategicControlMode) and isinstance(aimSystem, StrategicAimingSystem) or isinstance(ctrl, MapCaseControlModeBase) and isinstance(aimSystem, ArcadeAimingSystem):
                 aimingSystem = ctrl.camera.aimingSystem
                 shotPoint = aimingSystem.getShotPoint()
                 zoom = aimingSystem.getZoom()

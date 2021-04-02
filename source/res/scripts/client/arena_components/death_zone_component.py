@@ -4,7 +4,9 @@ import logging
 import BigWorld
 import Math
 import Event
+from Event import EventsSubscriber
 import death_zones_mapping
+from gui.battle_control import avatar_getter
 from arena_component_system.client_arena_component_system import ClientArenaComponent
 from constants import ARENA_SYNC_OBJECTS, DEATH_ZONES
 from soft_exception import SoftException
@@ -43,13 +45,17 @@ class BRDeathZoneComponent(ClientArenaComponent):
         self.__updatedZones = []
         self.__zoneStates = [ [ (BRDeathZoneComponent.ZONE_FREE, 0, 0) for _ in range(death_zones_mapping.ZONES_X) ] for _ in range(death_zones_mapping.ZONES_Y) ]
         self.onDeathZoneUpdate = Event.Event(self._eventManager)
+        self.__es = EventsSubscriber()
         return
 
     def activate(self):
         super(BRDeathZoneComponent, self).activate()
         self.addSyncDataCallback(ARENA_SYNC_OBJECTS.BR_DEATH_ZONE, _SYNC_DATA_CB_KEY, self.__deathZoneUpdateCallback)
+        if avatar_getter.isObserverSeesAll():
+            self.__es.subscribeToEvent(BigWorld.player().onObserverVehicleChanged, self.__onObserverVehicleChanged)
 
     def deactivate(self):
+        self.__es.unsubscribeFromAllEvents()
         self.removeSyncDataCallback(ARENA_SYNC_OBJECTS.BR_DEATH_ZONE, _SYNC_DATA_CB_KEY, self.__deathZoneUpdateCallback)
         self.__stopTick()
         self.__inited = False
@@ -230,4 +236,8 @@ class BRDeathZoneComponent(ClientArenaComponent):
         self.__zonePositionOffset = Math.Vector3(halfSizeX, 0, halfSizeY)
         self.__zoneScale = Math.Vector4(-halfSizeX, -halfSizeY, halfSizeX, halfSizeY)
         self.__callbackID = BigWorld.callback(_UPDATE_INTERVAL, self.__tick)
+        return
+
+    def __onObserverVehicleChanged(self):
+        self.__currentZoneState = None
         return

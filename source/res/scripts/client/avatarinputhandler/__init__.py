@@ -534,16 +534,15 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                     player.positionControl.bindToVehicle(True, self.__observerVehicle)
                     return
             if isObserverMode and self.__ctrlModeName == _CTRL_MODE.POSTMORTEM:
-                player = BigWorld.player()
                 self.__observerVehicle = None
                 if player.vehicle and player.vehicle.id != player.playerVehicleID:
                     self.__observerVehicle = player.vehicle.id
-                self.__observerIsSwitching = False
             replayCtrl = BattleReplay.g_replayCtrl
             if replayCtrl.isRecording:
                 replayCtrl.setControlMode(eMode)
             self.__curCtrl.disable()
             prevCtrl = self.__curCtrl
+            prevCtrlModeName = self.__ctrlModeName
             self.__curCtrl = self.__ctrls[eMode]
             self.__ctrlModeName = eMode
             if player is not None:
@@ -558,8 +557,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                         player.positionControl.bindToVehicle(True, self.__observerVehicle)
                     else:
                         player.positionControl.bindToVehicle(True)
-                elif not prevCtrl.isManualBind() and not self.__curCtrl.isManualBind():
-                    if isObserverMode and not self.isObserverFPV:
+                elif not prevCtrl.isManualBind() and not self.__curCtrl.isManualBind() and isObserverMode and not self.isObserverFPV:
+                    if not (prevCtrlModeName == _CTRL_MODE.VIDEO and self.__observerIsSwitching):
                         player.positionControl.bindToVehicle(True)
                 newAutoRotationMode = self.__curCtrl.getPreferredAutorotationMode()
                 if newAutoRotationMode is not None:

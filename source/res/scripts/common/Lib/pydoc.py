@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/pydoc.py
-# Compiled at: 2080-08-27 20:44:28
+# Compiled at: 2082-04-27 12:26:16
 """Generate Python documentation in HTML or text for interactive use.
 
 In the Python interpreter, do "from pydoc import help" to provide online

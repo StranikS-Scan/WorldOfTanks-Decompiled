@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/battle_royale/consumables_panel.py
+import BigWorld
 from constants import EQUIPMENT_STAGES
+from Event import EventsSubscriber
 from gui.Scaleform.daapi.view.battle.shared.consumables_panel import ConsumablesPanel
 from gui.Scaleform.genConsts.CONSUMABLES_PANEL_SETTINGS import CONSUMABLES_PANEL_SETTINGS
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
-from helpers import dependency
-from skeletons.gui.game_control import IBattleRoyaleController
 
 class BattleRoyaleConsumablesPanel(ConsumablesPanel):
     __slots__ = ('__quantityMap',)
@@ -15,30 +15,22 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel):
     _EQUIPMENT_START_IDX = 2
     _EQUIPMENT_END_IDX = 9
     _EQUIPMENT_ICON_PATH = '../maps/icons/battleRoyale/artefact/%s.png'
-    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
 
     def __init__(self):
         super(BattleRoyaleConsumablesPanel, self).__init__()
         self.__quantityMap = [None] * self._PANEL_MAX_LENGTH
+        self.__es = EventsSubscriber()
         return
 
     def _populate(self):
         super(BattleRoyaleConsumablesPanel, self)._populate()
         vehStateCtrl = self.sessionProvider.shared.vehicleState
-        if vehStateCtrl is not None:
-            vehStateCtrl.onVehicleStateUpdated += self.__onVehicleLootAction
-        self.__battleRoyaleController.onEquipmentReset += self.__onEquipmentReset
-        self.__battleRoyaleController.onGunUpdate += self.__onGunUpdate
-        return
+        self.__es.subscribeToEvent(vehStateCtrl.onVehicleStateUpdated, self.__onVehicleLootAction)
+        self.__es.subscribeToEvent(BigWorld.player().onObserverVehicleChanged, self.__onEquipmentReset)
 
     def _dispose(self):
-        vehStateCtrl = self.sessionProvider.shared.vehicleState
-        if vehStateCtrl is not None:
-            vehStateCtrl.onVehicleStateUpdated -= self.__onVehicleLootAction
-        self.__battleRoyaleController.onEquipmentReset -= self.__onEquipmentReset
-        self.__battleRoyaleController.onGunUpdate -= self.__onGunUpdate
+        self.__es.unsubscribeFromAllEvents()
         super(BattleRoyaleConsumablesPanel, self)._dispose()
-        return
 
     def _getPanelSettings(self):
         return CONSUMABLES_PANEL_SETTINGS.BATTLE_ROYALE_SETTINGS_ID
@@ -68,10 +60,6 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel):
         if intCD not in self._cds:
             return
         super(BattleRoyaleConsumablesPanel, self)._onCurrentShellChanged(intCD)
-
-    def __onGunUpdate(self):
-        self.__resetShellSlots()
-        self._resetDelayedReload()
 
     def _onGunSettingsSet(self, _):
         self.__resetShellSlots()

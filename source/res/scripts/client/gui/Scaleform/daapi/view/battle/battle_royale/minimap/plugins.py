@@ -341,8 +341,12 @@ class BattleRoyaleRadarPlugin(RadarPlugin):
         else:
             vEntryId = super(BattleRoyaleRadarPlugin, self)._addVehicleEntry(vehicleId, xzPosition)
             if vEntryId is not None:
+                entryName = 'enemy'
+                if avatar_getter.isVehiclesColorized():
+                    vInfo = self._arenaDP.getVehicleInfo(vehicleId)
+                    entryName = 'team{}'.format(vInfo.team)
                 self._parentObj.setEntryParameters(vEntryId, doClip=False, scaleType=MINIMAP_SCALE_TYPES.NO_SCALE)
-                self._invoke(vEntryId, MarkersAs3Descr.AS_ADD_MARKER, self.__getVehicleMarker(), self.__timeParamsForAS.fadeIn)
+                self._invoke(vEntryId, MarkersAs3Descr.AS_ADD_MARKER, self.__getVehicleMarker(), self.__timeParamsForAS.fadeIn, entryName)
             return vEntryId
 
     def _addLootEntry(self, typeId, xzPosition):
@@ -374,12 +378,7 @@ class BattleRoyaleRadarPlugin(RadarPlugin):
             self._invoke(entry.entryId, MarkersAs3Descr.AS_UPDATE_MARKER, markerType)
 
     def __getVehicleMarker(self):
-        conf = MarkersAs3Descr
-        if self.__isMinimapSmall:
-            if self.__isColorBlind:
-                return conf.AS_ADD_MARKER_ENEMY_VEHICLE_BLIND
-            return conf.AS_ADD_MARKER_ENEMY_VEHICLE
-        return conf.AS_ADD_MARKER_ENEMY_VEHICLE_BIG_BLIND if self.__isColorBlind else conf.AS_ADD_MARKER_ENEMY_VEHICLE_BIG
+        return MarkersAs3Descr.AS_ADD_MARKER_ENEMY_VEHICLE if self.__isMinimapSmall else MarkersAs3Descr.AS_ADD_MARKER_ENEMY_VEHICLE_BIG
 
     def __getLootMarkerByTypeId(self, typeId):
         return MarkersAs3Descr.AS_ADD_MARKER_LOOT_BY_TYPE_ID.get(typeId) if self.__isMinimapSmall else MarkersAs3Descr.AS_ADD_MARKER_LOOT_BIG_BY_TYPE_ID.get(typeId)
@@ -576,7 +575,7 @@ class BattleRoyaleVehiclePlugin(ArenaVehiclesPlugin):
         isSpawnedBotVehicle = isSpawnedBot(vInfo.vehicleType.tags)
         if guiProps.isFriend:
             if isSpawnedBotVehicle:
-                marker = self.__getSquadBotVehMarker()
+                marker = self.__getBotVehMarker()
             else:
                 marker = self.__getSquadVehMarker()
                 playerName = playerInfoVO.name
@@ -585,10 +584,14 @@ class BattleRoyaleVehiclePlugin(ArenaVehiclesPlugin):
             entryName = 'squadman'
         else:
             if isSpawnedBotVehicle:
-                marker = self.__getEnemyBotVehMarker()
+                marker = self.__getBotVehMarker()
             else:
                 marker = self.__getEnemyVehMarker()
             entryName = 'enemy'
+        if not self.__isMinimapSmall and not isSpawnedBotVehicle:
+            marker = '_'.join((marker, 'big'))
+        if avatar_getter.isVehiclesColorized():
+            entryName = 'team{}'.format(vInfo.team)
         self.parentObj.invoke(entry.getID(), 'show', marker, playerName, playerFakeName, playerClan, entryName)
 
     def _hideVehicle(self, entry):
@@ -597,33 +600,10 @@ class BattleRoyaleVehiclePlugin(ArenaVehiclesPlugin):
             self._setActive(entry.getID(), False)
 
     def __getEnemyVehMarker(self):
-        conf = MarkersAs3Descr
-        if self.__isMinimapSmall:
-            if self.__isColorBlind:
-                return conf.AS_ADD_MARKER_ENEMY_VEHICLE_BLIND
-            return conf.AS_ADD_MARKER_ENEMY_VEHICLE
-        return conf.AS_ADD_MARKER_ENEMY_VEHICLE_BIG_BLIND if self.__isColorBlind else conf.AS_ADD_MARKER_ENEMY_VEHICLE_BIG
+        return MarkersAs3Descr.AS_ADD_MARKER_ENEMY_VEHICLE
 
     def __getSquadVehMarker(self):
-        conf = MarkersAs3Descr
-        if self.__isMinimapSmall:
-            if self.__isColorBlind:
-                return conf.AS_ADD_MARKER_SQUAD_VEHICLE_BLIND
-            return conf.AS_ADD_MARKER_SQUAD_VEHICLE
-        return conf.AS_ADD_MARKER_SQUAD_VEHICLE_BIG_BLIND if self.__isColorBlind else conf.AS_ADD_MARKER_SQUAD_VEHICLE_BIG
+        return MarkersAs3Descr.AS_ADD_MARKER_SQUAD_VEHICLE
 
-    def __getSquadBotVehMarker(self):
-        conf = MarkersAs3Descr
-        if self.__isMinimapSmall:
-            if self.__isColorBlind:
-                return conf.AS_ADD_MARKER_BOT_VEHICLE_BLIND
-            return conf.AS_ADD_MARKER_BOT_VEHICLE
-        return conf.AS_ADD_MARKER_BOT_VEHICLE_BIG_BLIND if self.__isColorBlind else conf.AS_ADD_MARKER_BOT_VEHICLE_BIG
-
-    def __getEnemyBotVehMarker(self):
-        conf = MarkersAs3Descr
-        if self.__isMinimapSmall:
-            if self.__isColorBlind:
-                return conf.AS_ADD_MARKER_ENEMY_BOT_VEHICLE_BLIND
-            return conf.AS_ADD_MARKER_ENEMY_BOT_VEHICLE
-        return conf.AS_ADD_MARKER_ENEMY_BOT_VEHICLE_BIG_BLIND if self.__isColorBlind else conf.AS_ADD_MARKER_ENEMY_BOT_VEHICLE_BIG
+    def __getBotVehMarker(self):
+        return MarkersAs3Descr.AS_ADD_MARKER_BOT_VEHICLE

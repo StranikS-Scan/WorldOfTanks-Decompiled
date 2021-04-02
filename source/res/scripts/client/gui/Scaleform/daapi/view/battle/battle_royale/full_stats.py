@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/battle_royale/full_stats.py
 from helpers import dependency
-from constants import IS_CHINA
+from constants import IS_CHINA, ARENA_BONUS_TYPE
 from gui.impl.gen.resources import R
 from gui.impl import backport
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
@@ -79,6 +79,8 @@ class FullStatsComponent(BattleRoyaleFullStatsMeta, IArenaVehiclesController, IF
     def __initPanel(self):
         arenaDP = self.sessionProvider.getArenaDP()
         self.__initTeamsCount()
+        bonusType = self.sessionProvider.arenaVisitor.getArenaBonusType()
+        self.__isSquadMode = bonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD_RANGE
         squads = ''
         if self.__isSquadMode:
             squads = backport.text(R.strings.battle_royale.fragPanel.squadsCount(), squadsCount=str(self.__teamsCount))
@@ -131,7 +133,5 @@ class FullStatsComponent(BattleRoyaleFullStatsMeta, IArenaVehiclesController, IF
             isObserver = vInfoVO.isObserver()
             if not isObserver and isAlive:
                 self.__vehicleTeams[vInfoVO.vehicleID] = vInfoVO.team
-            if arenaDP.isAllyTeam(vInfoVO.team) and vInfoVO.vehicleID != arenaDP.getPlayerVehicleID():
-                self.__isSquadMode = True
 
         self.__teamsCount = len(set(self.__vehicleTeams.values()))

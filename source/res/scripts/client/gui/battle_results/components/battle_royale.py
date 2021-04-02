@@ -23,7 +23,7 @@ _logger.addHandler(logging.NullHandler())
 _THE_BEST_RANK = 1
 
 def _isSquadMode(reusable):
-    return reusable.common.arenaBonusType == ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD
+    return reusable.common.arenaBonusType in (ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD, ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SQUAD)
 
 
 class BattleRoyaleArenaNameBlock(base.StatsItem):
@@ -32,6 +32,14 @@ class BattleRoyaleArenaNameBlock(base.StatsItem):
     def _convert(self, record, reusable):
         geometryName = replaceHyphenToUnderscore(reusable.common.arenaType.getGeometryName())
         return backport.text(R.strings.arenas.num(geometryName).name())
+
+
+class ArenaBonusTypeNameBlock(base.StatsItem):
+    __slots__ = ()
+
+    def _convert(self, record, reusable):
+        arenaBonusType = reusable.common.arenaVisitor.getArenaBonusType()
+        return arenaBonusType
 
 
 class PersonalPlayerNameBlock(base.StatsBlock):
@@ -68,17 +76,19 @@ class BattleRoyaleIsSquadModeBlock(base.StatsItem):
 
 
 class BattleRoyalePersonalVehicleBlock(base.StatsBlock):
-    __slots__ = ('nationName', 'vehicleName')
+    __slots__ = ('nationName', 'vehicleName', 'isObserver')
 
     def __init__(self, meta=None, field='', *path):
         super(BattleRoyalePersonalVehicleBlock, self).__init__(meta, field, *path)
         self.nationName = ''
         self.vehicleName = ''
+        self.isObserver = False
 
     def setVehicle(self, item):
         if item is not None:
             self.nationName = item.nationName
             self.vehicleName = item.shortUserName
+            self.isObserver = item.isObserver
         return
 
     def setRecord(self, result, reusable):
@@ -194,10 +204,12 @@ class PlaceParameter(BattleRoyaleStatsItemBlock):
         return avatar.extensionInfo.get('playerRank', 0)
 
     def _getMaxValue(self, result, reusable):
-        if _isSquadMode(reusable):
-            allPlayers = reusable.getAllPlayersIterator(result['vehicles'])
-            return len(set(list((item.player.prebattleID for item in allPlayers))))
-        return len(list(reusable.getAllPlayersIterator(result['personal'])))
+
+        def observerFilter(player):
+            return not player.vehicle.isObserver
+
+        allPlayers = filter(observerFilter, list(reusable.getAllPlayersIterator(result['vehicles'])))
+        return len(set((item.player.team for item in allPlayers))) if _isSquadMode(reusable) else len(allPlayers)
 
     def _getWreathImage(self, result, reusable):
         return self._ICON_PATH.wreath_gold() if self.value == _THE_BEST_RANK else self._DEFAULT_ICON()
@@ -208,16 +220,16 @@ class KilledBySquadParameter(BattleRoyaleStatsItemBlock):
 
     def _getValue(self, result, reusable):
         allPlayers = reusable.getAllPlayersIterator(result['vehicles'])
-        personalPrebattleID = reusable.getPlayerInfo().prebattleID
-        return sum(list((item.kills for item in allPlayers if personalPrebattleID != 0 and personalPrebattleID == item.player.prebattleID)))
+        team = reusable.getPlayerInfo().team
+        return sum(list((item.kills for item in allPlayers if team != 0 and team == item.player.team)))
 
     def _isTop(self, result, reusable):
         if self.value == 0:
             return False
         killesBySquads = defaultdict(int)
         for item in reusable.getAllPlayersIterator(result['vehicles']):
-            killesBySquads[item.player.prebattleID] += item.kills
-            if killesBySquads[item.player.prebattleID] > self.value:
+            killesBySquads[item.player.team] += item.kills
+            if killesBySquads[item.player.team] > self.value:
                 return False
 
         return True
@@ -357,15 +369,15 @@ class BattleRoyaleTeamStatsBlock(base.StatsBlock):
         allPlayers = reusable.getAllPlayersIterator(result, sortKey=sort_keys.placeSortKey)
         personalInfo = reusable.getPlayerInfo()
         personalDBID = personalInfo.dbID
-        personalPrebattleID = personalInfo.prebattleID if personalInfo.squadIndex else 0
+        team = personalInfo.team if personalInfo.squadIndex else 0
         for item in allPlayers:
             if item.vehicle is not None and item.vehicle.isObserver:
                 continue
             block = BattleRoyalePlayerBlock()
             player = item.player
             block.isPersonal = player.dbID == personalDBID
-            block.squadIdx = player.prebattleID
-            block.isPersonalSquad = personalPrebattleID != 0 and personalPrebattleID == player.prebattleID
+            block.squadIdx = player.team
+            block.isPersonalSquad = team != 0 and team == player.team
             block.achievedLevel = item.vehicles[0].achievedLevel
             block.damage = item.damageDealt
             block.kills = item.kills

@@ -252,7 +252,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         headerVO = self._makeHeaderVO()
         self.as_setDataS(headerVO)
         self.__updateBPWidget()
-        self.__updateBattlePassSecondaryEntryPoint()
         self.__updateBattleRoyaleWidget()
 
     def updateRankedHeader(self, *_):
@@ -310,8 +309,9 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
 
     def _getCommonQuestsToHeaderVO(self, vehicle):
         quests = []
-        if self.__battleRoyaleController.isBattleRoyaleMode() and not self.__battleRoyaleController.isInPrimeTime():
-            return quests
+        if self.__battleRoyaleController.isBattleRoyaleMode():
+            if not (self.__battleRoyaleController.isInPrimeTime() and self.__isShowPersonalMission):
+                return []
         if self._lobbyContext.getServerSettings().isPersonalMissionsEnabled():
             personalMissions = self.__getPersonalMissionsVO(vehicle)
             if personalMissions:
@@ -358,11 +358,21 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             self.as_removeRankedBattlesS()
 
     def __updateBattleRoyaleWidget(self):
-        if self.__battleRoyaleController.isBattleRoyaleMode():
-            self.as_createBattleRoyaleS()
-            self.getComponent(HANGAR_ALIASES.BATTLE_ROYALE_ENTRY_POINT).update()
-        else:
+        if self.__battleRoyaleController.isGeneralHangarEntryPoint():
+            if self.__battleRoyaleController.isBattleRoyaleMode() and self.__battleRoyaleController.isEnabled():
+                self.__updateVisibilityPersonalMission(True)
+                self.as_createBattleRoyaleS()
+                self.getComponent(HANGAR_ALIASES.BATTLE_ROYALE_ENTRY_POINT).update()
+            else:
+                self.as_removeBattleRoyaleS()
+            self.as_removeBattleRoyaleTournamentS()
+            self.__updateBattlePassSecondaryEntryPoint()
+            return
+        if not self.__battleRoyaleController.isGeneralHangarEntryPoint():
+            self.__updateVisibilityPersonalMission(False)
+            self.as_setSecondaryEntryPointVisibleS(False)
             self.as_removeBattleRoyaleS()
+            self.as_createBattleRoyaleTournamentS()
 
     def __showAvailablePMOperation(self, branch):
         for operationID in finders.BRANCH_TO_OPERATION_IDS[branch]:
@@ -381,9 +391,8 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     def __getPersonalMissionsVO(self, vehicle):
         result = []
         states = []
-        if not self.__isShowPersonalMission:
-            self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_PERSONAL, RES_ICONS.MAPS_ICONS_QUESTS_HEADERFLAGICONS_PERSONAL, result, True)
-            return
+        if vehicle.isOnlyForBattleRoyaleBattles:
+            return []
         for branch in reversed(PM_BRANCH.ACTIVE_BRANCHES):
             questType = QUEST_TYPE_BY_PM_BRANCH[branch]
             if not self._lobbyContext.getServerSettings().isPersonalMissionsEnabled(branch):
@@ -646,7 +655,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     def __updateBattlePassSecondaryEntryPoint(self):
         currentArenaBonusType = self.__getCurentArenaBonusType()
         secondaryPointCanBeAvailable = currentArenaBonusType != constants.ARENA_BONUS_TYPE.REGULAR and currentArenaBonusType != constants.ARENA_BONUS_TYPE.UNKNOWN
-        self.__updateVisibilityPersonalMission(not secondaryPointCanBeAvailable)
         secondaryEntryPointAvailable = secondaryPointCanBeAvailable and not self.__battlePassController.isDisabled()
         self.as_setSecondaryEntryPointVisibleS(secondaryEntryPointAvailable)
         if secondaryEntryPointAvailable:

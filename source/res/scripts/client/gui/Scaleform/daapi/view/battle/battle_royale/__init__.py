@@ -35,6 +35,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.battle_royale.frag_panel import FragPanel
     from gui.Scaleform.daapi.view.battle.battle_royale.full_stats import FullStatsComponent
     from gui.Scaleform.daapi.view.battle.battle_royale.select_respawn import SelectRespawnComponent
+    from gui.Scaleform.daapi.view.battle.battle_royale import observer_players_panel
     return (ViewSettings(VIEW_ALIAS.BATTLE_ROYALE_PAGE, BattleRoyalePage, 'battleRoyalePage.swf', WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_LOADING, battle_loading.BattleLoading, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_STATISTIC_DATA_CONTROLLER, stats_exchange.ClassicStatisticsDataController, ScopeTemplates.DEFAULT_SCOPE),
@@ -56,7 +57,8 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_LEVEL_PANEL, BattleLevelPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_TEAM_PANEL, battle_royale_players_panel.PlayersPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN, SelectRespawnComponent, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.BR_PLAYER_STATS_IN_BATTLE, BattleRoyalePlayerStats, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(BATTLE_VIEW_ALIASES.BR_PLAYER_STATS_IN_BATTLE, BattleRoyalePlayerStats, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.PLAYERS_PANEL, observer_players_panel.ObserverPlayersPanel, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

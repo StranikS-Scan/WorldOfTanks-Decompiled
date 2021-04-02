@@ -182,7 +182,8 @@ def start():
                 ServiceLocator.gameplay.start()
         else:
             ServiceLocator.gameplay.start()
-        WebBrowser.initExternalCache()
+        if not g_replayCtrl.isPlaying:
+            WebBrowser.initExternalCache()
         return
 
 

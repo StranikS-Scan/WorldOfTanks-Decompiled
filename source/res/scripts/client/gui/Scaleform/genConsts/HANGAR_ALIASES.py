@@ -32,6 +32,7 @@ class HANGAR_ALIASES(object):
     DAILY_QUEST_WIDGET = 'dqWidget'
     BATTLE_PASSS_ENTRY_POINT = 'battlePassEntryPoint'
     BATTLE_ROYALE_ENTRY_POINT = 'battleRoyaleEntryPoint'
+    BATTLE_ROYALE_TOURNAMENT = 'battleRoyaleTournament'
     SECONDARY_ENTRY_POINT = 'secondaryEntryPoint'
     AMMUNITION_SETUP_VIEW_VEHICLE_PARAMS = 'ammunitionSetupViewVehicleParams'
     AMMUNITION_PANEL_INJECT = 'ammunitionPanelInject'

@@ -316,7 +316,7 @@ class CustomMode(CustomizationMode):
     @process
     def _applyItems(self, purchaseItems, isModeChanged, callback):
         modifiedOutfits = {season:outfit.copy() for season, outfit in self._modifiedOutfits.iteritems()}
-        originalOutfits = {season:outfit.copy() for season, outfit in self._originalOutfits.iteritems()}
+        originalOutfits = self._ctx.startMode.getOriginalOutfits()
         for pItem in purchaseItems:
             if not pItem.selected:
                 if pItem.slotType:

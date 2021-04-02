@@ -15,7 +15,7 @@ from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.customization_item_vo import buildCustomizationItemDataVO
-from gui.Scaleform.daapi.view.lobby.customization.shared import getEmptyRegions, checkSlotsFilling, CustomizationTabs, getItemTypesAvailableForVehicle, getSlotDataFromSlot, ITEM_TYPE_TO_SLOT_TYPE
+from gui.Scaleform.daapi.view.lobby.customization.shared import getEmptyRegions, checkSlotsFilling, CustomizationTabs, getItemTypesAvailableForVehicle
 from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS, C11N_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
 from gui.Scaleform.daapi.view.meta.CustomizationMainViewMeta import CustomizationMainViewMeta
@@ -46,10 +46,12 @@ from gui.shared.event_dispatcher import tryToShowReplaceExistingStyleDialog
 from gui.shared.formatters import formatPrice, formatPurchaseItems, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
+from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency, int2roman
 from helpers.i18n import makeString as _ms
 from items.components.c11n_constants import SeasonType, ApplyArea
+from shared_utils import findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.customization import ICustomizationService
@@ -558,57 +560,82 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             return
 
     def __onItemsBought(self, originalOutfits, purchaseItems, results):
-        errorCount = 0
+        if results:
+            if not self.__checkPurchaseSuccess(results):
+                _logger.error('Failed to purchase customization outfits.')
+                return
+            cart = getTotalPurchaseInfo(purchaseItems)
+            if cart.totalPrice != ITEM_PRICE_EMPTY:
+                currency = cart.totalPrice.getCurrency(byWeight=True)
+                msgText = self.__getPurchaseMessage(cart, purchaseItems)
+                msgType = CURRENCY_TO_SM_TYPE.get(currency, SM_TYPE.PurchaseForGold)
+                priority = NC_MESSAGE_PRIORITY.DEFAULT if currency != Currency.CREDITS else None
+            else:
+                modifiedOutfits = self.__ctx.mode.getModifiedOutfits()
+                msgText = self.__getModifyMessage(originalOutfits, modifiedOutfits)
+                msgType = SM_TYPE.Information
+                priority = None
+            if msgText is not None:
+                SystemMessages.pushMessage(text=msgText, type=msgType, priority=priority)
+        self.__onCloseWindow()
+        return
+
+    def __checkPurchaseSuccess(self, results):
+        success = True
         for result in results:
-            if not result.success:
-                errorCount += 1
+            success &= result.success
             if result.userMsg:
                 SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
-        if not errorCount:
-            cart = getTotalPurchaseInfo(purchaseItems)
-            if cart.totalPrice != ITEM_PRICE_EMPTY:
-                msgType = CURRENCY_TO_SM_TYPE.get(cart.totalPrice.getCurrency(byWeight=True), SM_TYPE.PurchaseForGold)
-                if cart.boughtCount == 1:
-                    item = next((purchaseItem for purchaseItem in purchaseItems if not purchaseItem.isFromInventory)).item
-                    if item.itemTypeID == GUI_ITEM_TYPE.STYLE and item.isProgression:
-                        msgCtx = {'name': item.userName,
-                         'level': int2roman(self.__ctx.mode.getStyleProgressionLevel()),
-                         'money': formatPrice(cart.totalPrice.price)}
-                        msgKey = R.strings.messenger.serviceChannelMessages.sysMsg.customization.buyProgressionStyle()
-                    else:
-                        styleItemType = backport.text(R.strings.item_types.customization.style())
-                        msgCtx = {'itemType': styleItemType if item.itemTypeID == GUI_ITEM_TYPE.STYLE else item.userType,
-                         'itemName': item.userName,
-                         'money': formatPrice(cart.totalPrice.price)}
-                        msgKey = R.strings.messenger.serviceChannelMessages.sysMsg.customization.buyOne()
-                else:
-                    formattedItems = formatPurchaseItems(purchaseItems)
-                    msgCtx = {'items': formattedItems,
-                     'money': formatPrice(cart.totalPrice.price)}
-                    msgKey = R.strings.messenger.serviceChannelMessages.sysMsg.customization.buyMany()
-                SystemMessages.pushMessage(backport.text(msgKey, **msgCtx), type=msgType, priority=NC_MESSAGE_PRIORITY.DEFAULT)
-            elif self.__isAnyItemDismantled(originalOutfits, modifiedOutfits=self.__ctx.mode.getModifiedOutfits()):
-                SystemMessages.pushMessage(backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.customization.remove()), type=SM_TYPE.Information)
-            else:
-                SystemMessages.pushMessage(backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.customization.change()), type=SM_TYPE.Information)
-            self.__onCloseWindow()
+        return success
 
-    def __isAnyItemDismantled(self, originalOutfits, modifiedOutfits):
-        if self.__ctx.modeId != CustomizationModes.CUSTOM:
-            return False
+    def __getPurchaseMessage(self, cart, purchaseItems):
+        msgKey = R.strings.messenger.serviceChannelMessages.sysMsg.customization
+        money = formatPrice(cart.totalPrice.price)
+        if cart.boughtCount == 1:
+            pItem = findFirst(lambda i: not i.isFromInventory, purchaseItems)
+            if pItem is None:
+                _logger.error('Failed to construct customization purchase system message. Missing purchase item.')
+                return
+            item = pItem.item
+            isStyle = item.itemTypeID == GUI_ITEM_TYPE.STYLE
+            if isStyle and item.isProgression:
+                msgKey = msgKey.buyProgressionStyle()
+                msgCtx = {'name': item.userName,
+                 'level': int2roman(self.__ctx.mode.getStyleProgressionLevel()),
+                 'money': money}
+            else:
+                msgKey = msgKey.buyOne()
+                itemTypeName = backport.text(R.strings.item_types.customization.style()) if isStyle else item.userType
+                msgCtx = {'itemType': itemTypeName,
+                 'itemName': item.userName,
+                 'money': money}
+        else:
+            msgKey = msgKey.buyMany()
+            msgCtx = {'items': formatPurchaseItems(purchaseItems),
+             'money': money}
+        return backport.text(msgKey, **msgCtx)
+
+    def __getModifyMessage(self, originalOutfits, modifiedOutfits):
+        forwardDiffs = False
+        backwardDiffs = False
         for season in SeasonType.COMMON_SEASONS:
             originalOutfit = originalOutfits[season]
             modifiedOutfit = modifiedOutfits[season]
-            for intCD, _, regionIdx, container, _ in originalOutfit.itemsFull():
-                item = self.service.getItemByCD(intCD)
-                slotType = ITEM_TYPE_TO_SLOT_TYPE.get(item.itemTypeID)
-                slotId = C11nId(container.getAreaID(), slotType, regionIdx)
-                modifiedSlotData = getSlotDataFromSlot(modifiedOutfit, slotId)
-                if not modifiedSlotData.intCD:
-                    return True
+            forwardDiffs |= not originalOutfit.diff(modifiedOutfit).isEmpty()
+            backwardDiffs |= not modifiedOutfit.diff(originalOutfit).isEmpty()
 
-        return False
+        hasModifications = forwardDiffs
+        hasRemovalsOnly = not hasModifications and backwardDiffs
+        msgKey = R.strings.messenger.serviceChannelMessages.sysMsg.customization
+        if hasModifications:
+            msgText = backport.text(msgKey.change())
+        elif hasRemovalsOnly:
+            msgText = backport.text(msgKey.remove())
+        else:
+            _logger.error('Failed to construct customization purchase system message. Missing outfits diff.')
+            msgText = None
+        return msgText
 
     def onAnchorsShown(self, anchors):
         entity = self.hangarSpace.getVehicleEntity()

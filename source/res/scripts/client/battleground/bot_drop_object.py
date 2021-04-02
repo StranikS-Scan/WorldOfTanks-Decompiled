@@ -63,10 +63,12 @@ class BotAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
         ScriptGameObject.destroy(self)
         CallbackDelayer.destroy(self)
 
+    def __getEffect(self, effects):
+        return effects.ally if self.__sessionProvider.getArenaDP().isAllyTeam(self.__teamID) else effects.enemy
+
     def __createMarkerArea(self, config, equipmentDescr):
         markerArea = CGF.GameObject(self.__spaceID)
-        trapPointEffects = config.getBotDeliveryMarker()
-        effect3D = trapPointEffects.enemy if self.__teamID != BigWorld.player().followTeamID else trapPointEffects.ally
+        effect3D = self.__getEffect(config.getBotDeliveryMarker())
         if effect3D is not None:
             effectPath = effect3D.path
             markerTerrainPosition = self.__deliveryPosition - equipmentDescr.botSpawnPointOffset
@@ -88,8 +90,7 @@ class BotAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
             return
 
     def __createDeliveryEffect(self, config):
-        effectDescr = config.getBotDeliveryEffect()
-        effect = effectDescr.enemy if self.__teamID != BigWorld.player().followTeamID else effectDescr.ally
+        effect = self.__getEffect(config.getBotDeliveryEffect())
         if effect is not None:
             effectPath = effect.path
             BigWorld.loadResourceListBG((AnimationSequence.Loader(effectPath, self.__spaceID),), makeCallbackWeak(self.__onDeliverEffectLoaded, effectPath, self.__deliveryPosition))

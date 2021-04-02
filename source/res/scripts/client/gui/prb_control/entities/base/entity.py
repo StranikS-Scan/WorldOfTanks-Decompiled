@@ -97,6 +97,9 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
     def isPlayerJoined(self, ctx):
         return False
 
+    def canInvite(self, prbType):
+        return True
+
     def isInQueue(self):
         return False
 

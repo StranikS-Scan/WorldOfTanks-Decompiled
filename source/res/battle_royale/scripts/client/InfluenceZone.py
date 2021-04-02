@@ -9,6 +9,7 @@ import Vehicle
 from helpers import dependency
 from items import vehicles
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
+from skeletons.gui.battle_session import IBattleSessionProvider
 from AffectComponent import getInfluenceZoneType, getEffectConfig
 from vehicle_systems.stricted_loading import makeCallbackWeak
 _logger = logging.getLogger(__name__)
@@ -27,6 +28,7 @@ def _getPlayerVehicleImpl(who):
 
 
 class InfluenceZone(BigWorld.Entity):
+    guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(InfluenceZone, self).__init__()
@@ -84,5 +86,4 @@ class InfluenceZone(BigWorld.Entity):
 
     def __get_effect_config(self, config):
         pointEffect = getEffectConfig(self.__influenceZoneType, config)
-        resultConfig = pointEffect.enemy if self.team != BigWorld.player().followTeamID else pointEffect.ally
-        return resultConfig
+        return pointEffect.ally if self.guiSessionProvider.getArenaDP().isAllyTeam(self.team) else pointEffect.enemy

@@ -1169,6 +1169,7 @@ class RES_ICONS(object):
     MAPS_ICONS_BATTLEROYALE_HANGAR_VEHICLE_PROPS_GOOD_RADAR = '../maps/icons/battleRoyale/hangar/vehicle_props/good_radar.png'
     MAPS_ICONS_BATTLEROYALE_HANGAR_VEHICLE_PROPS_GOOD_REVOLVER = '../maps/icons/battleRoyale/hangar/vehicle_props/good_revolver.png'
     MAPS_ICONS_BATTLEROYALE_HANGAR_VEHICLE_PROPS_GOOD_SPEED = '../maps/icons/battleRoyale/hangar/vehicle_props/good_speed.png'
+    MAPS_ICONS_BATTLEROYALE_PREBATTLE_PRE_BATTLE_BACKGROUND = '../maps/icons/battleRoyale/preBattle/pre_battle_background.png'
     MAPS_ICONS_BATTLEROYALE_PRIMETIME_PRIME_TIME_BACK_DEFAULT = '../maps/icons/battleRoyale/primeTime/prime_time_back_default.png'
     MAPS_ICONS_BATTLEROYALE_SPAWNBG_250_BR_BATTLE_CITY2_1 = '../maps/icons/battleRoyale/spawnBg/250_br_battle_city2-1.png'
     MAPS_ICONS_BATTLEROYALE_SPAWNBG_251_BR_BATTLE_CITY3 = '../maps/icons/battleRoyale/spawnBg/251_br_battle_city3.png'

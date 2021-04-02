@@ -4,6 +4,11 @@
       <Type>	UINT8	</Type>
       <Flags>	OWN_CLIENT	</Flags>
     </playerPlace>
+    <defeatedTeams>
+      <Type>	ARRAY	  <of>	UINT8	</of>
+      </Type>
+      <Flags>	OWN_CLIENT	</Flags>
+    </defeatedTeams>
   </Properties>
   <DefaultKeyName>	avatarBattleRoyaleComponent	</DefaultKeyName>
 </AvatarBattleRoyaleComponent.def>

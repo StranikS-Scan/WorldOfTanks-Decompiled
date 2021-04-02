@@ -1517,4 +1517,24 @@
       </reason>
     </Properties>
   </TIME_WITH_REASON>
+  <TOURNAMEMT_PARTICIPANT>	FIXED_DICT	  <Properties>
+      <databaseID>
+        <Type>	DB_ID	</Type>
+      </databaseID>
+      <name>
+        <Type>	STRING	</Type>
+      </name>
+      <role>
+        <Type>	UINT8	</Type>
+      </role>
+      <teamID>
+        <Type>	UINT8	</Type>
+      </teamID>
+      <typeCD>
+        <Type>	INT32	</Type>
+      </typeCD>
+    </Properties>
+  </TOURNAMEMT_PARTICIPANT>
+  <LIST_OF_TOURNAMEMT_PARTICIPANTS>	ARRAY	  <of>	TOURNAMEMT_PARTICIPANT	</of>
+  </LIST_OF_TOURNAMEMT_PARTICIPANTS>
 </alias.xml>

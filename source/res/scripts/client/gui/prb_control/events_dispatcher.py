@@ -226,7 +226,7 @@ class EventDispatcher(object):
         if not clientID:
             LOG_ERROR('Client ID not found', 'addSpecBattlesToCarousel')
             return
-        currCarouselItemCtx = _defCarouselItemCtx._replace(label=LAZY_CHANNEL.SPECIAL_BATTLES, order=channel_num_gen.getOrder4LazyChannel(LAZY_CHANNEL.SPECIAL_BATTLES), isNotified=True, criteria={POP_UP_CRITERIA.VIEW_ALIAS: PREBATTLE_ALIASES.BATTLE_SESSION_LIST_WINDOW_PY}, openHandler=self.loadBattleSessionList)
+        currCarouselItemCtx = _defCarouselItemCtx._replace(label=LAZY_CHANNEL.SPECIAL_BATTLES, order=channel_num_gen.getOrder4LazyChannel(LAZY_CHANNEL.SPECIAL_BATTLES), isNotified=False, criteria={POP_UP_CRITERIA.VIEW_ALIAS: PREBATTLE_ALIASES.BATTLE_SESSION_LIST_WINDOW_PY}, openHandler=self.loadBattleSessionList)
         self.__fireEvent(ChannelManagementEvent(clientID, PreBattleChannelEvent.REQUEST_TO_ADD, currCarouselItemCtx._asdict()))
 
     def removeSpecBattleFromCarousel(self, prbType, closeWindow=True):
@@ -242,6 +242,19 @@ class EventDispatcher(object):
             LOG_ERROR('Client ID not found', 'removeSpecBattlesFromCarousel')
             return
         self.__fireEvent(ChannelManagementEvent(clientID, PreBattleChannelEvent.REQUEST_TO_REMOVE))
+
+    def hideSpecialBattleWindow(self):
+        self.__fireHideEvent(events.HideWindowEvent.HIDE_SPECIAL_BATTLE_WINDOW)
+
+    def notifySpecialBattleWindow(self):
+        clientID = channel_num_gen.getClientID4LazyChannel(LAZY_CHANNEL.SPECIAL_BATTLES)
+        if not clientID:
+            LOG_ERROR('Client ID not found', 'notifySpecialBattleWindow')
+            return
+        self.__fireEvent(events.ChannelManagementEvent(clientID, events.ChannelManagementEvent.REQUEST_TO_CHANGE, {'key': 'isNotified',
+         'value': True,
+         'isShowByReq': True,
+         'showIfClosed': True}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def showUnitWindow(self, prbType):
         if prbType in PREBATTLE_TYPE.SQUAD_PREBATTLES:

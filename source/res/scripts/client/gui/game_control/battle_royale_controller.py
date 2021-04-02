@@ -30,7 +30,7 @@ from helpers.statistics import HARDWARE_SCORE_PARAMS
 from season_provider import SeasonProvider
 from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IBattleRoyaleController
+from skeletons.gui.game_control import IBattleRoyaleController, IBattleRoyaleTournamentController
 from skeletons.gui.game_control import IEventsNotificationsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -63,7 +63,6 @@ PERFORMANCE_GROUP_LIMITS = {BattleRoyalePerfProblems.HIGH_RISK: [{BATTLE_ROYALE_
  BattleRoyalePerfProblems.MEDIUM_RISK: [{BATTLE_ROYALE_GAME_LIMIT_TYPE.HARDWARE_PARAMS: {HARDWARE_SCORE_PARAMS.PARAM_GPU_SCORE: 150}}, {BATTLE_ROYALE_GAME_LIMIT_TYPE.HARDWARE_PARAMS: {HARDWARE_SCORE_PARAMS.PARAM_CPU_SCORE: 50000}}]}
 
 class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController, IGlobalListener):
-    __slots__ = ('onUpdated', 'onPrimeTimeStatusUpdated', 'onEquipmentReset', 'onGunUpdate', '__clientValuesInited', '__clientShields', '__performanceGroup', '__serverSettings', '__battleRoyaleSettings', '__wasInLobby', '__equipmentCount', '__equipmentSlots', '__voControl', '__defaultHangars', '__c11nVisible', '__isNeedToUpdateHeroTank')
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __eventsCache = dependency.descriptor(IEventsCache)
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -75,6 +74,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     __c11nService = dependency.descriptor(ICustomizationService)
     __connectionMgr = dependency.descriptor(IConnectionManager)
+    __battleRoyaleTournamentController = dependency.descriptor(IBattleRoyaleTournamentController)
     TOKEN_QUEST_ID = 'token:br:title:'
     MAX_STORED_ARENAS_RESULTS = 20
 
@@ -82,8 +82,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         super(BattleRoyaleController, self).__init__()
         self.onUpdated = Event.Event()
         self.onPrimeTimeStatusUpdated = Event.Event()
-        self.onEquipmentReset = Event.Event()
-        self.onGunUpdate = Event.Event()
+        self.onSpaceUpdated = Event.Event()
         self._setSeasonSettingsProvider(self.getModeSettings)
         self._setPrimeTimesIteratorGetter(self.getPrimeTimesIter)
         self.__clientValuesInited = False
@@ -136,6 +135,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.__c11nService.onVisibilityChanged += self.__onC11nVisibilityChanged
         self.__notificationsCtrl.onEventNotificationsChanged += self.__onEventNotification
         self.__onEventNotification(self.__notificationsCtrl.getEventsNotifications())
+        self.__battleRoyaleTournamentController.onSelectBattleRoyaleTournament += self.__selectBattleRoyaleTournament
         self.__updateMode()
         self.__wasInLobby = True
         if not self.__hangarsSpace.spaceInited or self.__hangarsSpace.spaceLoading():
@@ -244,19 +244,25 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         return result
 
     def isActive(self):
-        return self.isEnabled() and self.getCurrentSeason() is not None and self.getCurrentCycleInfo()[1]
+        _, isCycleActive = self.getCurrentCycleInfo()
+        return self.isEnabled() and self.getCurrentSeason() is not None and isCycleActive
 
     def isBattleRoyaleMode(self):
-        dispatcher = self.prbDispatcher
-        if dispatcher is not None:
-            state = dispatcher.getFunctionalState()
-            return state.isInPreQueue(queueType=QUEUE_TYPE.BATTLE_ROYALE) or state.isInUnit(PREBATTLE_TYPE.BATTLE_ROYALE)
-        else:
+        if self.prbDispatcher is None:
             return False
+        else:
+            state = self.prbDispatcher.getFunctionalState()
+            return self.__isBattleRoyaleMode(state) or self.__isBattleRoyaleTournamentMode(state)
 
-    def isBattlePassAvailable(self):
+    def __isBattleRoyaleMode(self, state):
+        return state.isInPreQueue(queueType=QUEUE_TYPE.BATTLE_ROYALE) or state.isInUnit(PREBATTLE_TYPE.BATTLE_ROYALE)
+
+    def __isBattleRoyaleTournamentMode(self, state):
+        return state.isInPreQueue(queueType=QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT) or state.isInUnit(PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT)
+
+    def isBattlePassAvailable(self, bonusType):
         battlePassConfig = self.__lobbyContext.getServerSettings().getBattlePassConfig()
-        return battlePassConfig.isEnabled() and battlePassConfig.isGameModeEnabled(ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO)
+        return battlePassConfig.isEnabled() and battlePassConfig.isGameModeEnabled(bonusType)
 
     def isInBattleRoyaleSquad(self):
         dispatcher = self.prbDispatcher
@@ -271,13 +277,16 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.__updateSpace()
 
     def selectRoyaleBattle(self):
-        if self.isEnabled():
-            dispatcher = g_prbLoader.getDispatcher()
-            if dispatcher is None:
-                _logger.error('Prebattle dispatcher is not defined')
-                return
-            self.__doSelectBattleRoyalePrb(dispatcher)
-        return
+        if not self.isEnabled():
+            return
+        self.__selectRoyaleBattle()
+
+    def setDefaultHangarEntryPoint(self):
+        if self.__battleRoyaleTournamentController.isSelected():
+            self.__battleRoyaleTournamentController.leaveBattleRoyaleTournament(isChangingToBattleRoyaleHangar=True)
+
+    def isGeneralHangarEntryPoint(self):
+        return not self.__battleRoyaleTournamentController.isSelected()
 
     def selectRandomBattle(self):
         dispatcher = g_prbLoader.getDispatcher()
@@ -326,7 +335,8 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
                 self.__showBrowserView(parsedUrl)
 
     def getQuests(self):
-        return {k:v for k, v in self.__eventsCache.getQuests().items() if v.getGroupID() == BATTLE_ROYALE_GROUPS_ID and self.__tokenIsValid(v)} if self.getCurrentCycleInfo()[1] else {}
+        _, isCycleActive = self.getCurrentCycleInfo()
+        return {k:v for k, v in self.__eventsCache.getQuests().items() if v.getGroupID() == BATTLE_ROYALE_GROUPS_ID and self.__tokenIsValid(v)} if self.isGeneralHangarEntryPoint() and isCycleActive else {}
 
     def isDailyQuestsRefreshAvailable(self):
         dayTimeLeft = time_utils.getDayTimeLeft()
@@ -363,6 +373,24 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         primeTimes = self.getPrimeTimes()
         return any([ primeTime.getNextPeriodStart(time_utils.getCurrentLocalServerTimestamp(), currentCycleEndTime) for primeTime in primeTimes.values() ])
 
+    def __selectRoyaleBattle(self):
+        dispatcher = g_prbLoader.getDispatcher()
+        if dispatcher is None:
+            _logger.error('Prebattle dispatcher is not defined')
+            return
+        else:
+            self.__doSelectBattleRoyalePrb(dispatcher)
+            return
+
+    def __selectBattleRoyaleTournament(self):
+        dispatcher = g_prbLoader.getDispatcher()
+        if dispatcher is None:
+            _logger.error('Prebattle dispatcher is not defined')
+            return
+        else:
+            self.__doSelectBattleRoyaleTournamentPrb(dispatcher)
+            return
+
     def __showBrowserView(self, url):
         webHandlers = createBattleRoyaleWebHanlders()
         alias = VIEW_ALIAS.BROWSER_VIEW
@@ -385,7 +413,9 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
 
     def __eventAvailabilityUpdate(self, *_):
         battleRoyaleEnabled = self.isEnabled() and self.getCurrentSeason() is not None
-        if not battleRoyaleEnabled and self.isBattleRoyaleMode():
+        isSelectRandom = not battleRoyaleEnabled and self.isBattleRoyaleMode()
+        isSelectRandom = isSelectRandom and not self.__battleRoyaleTournamentController.isAvailable()
+        if isSelectRandom:
             self.selectRandomBattle()
         return
 
@@ -406,6 +436,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
                     self.__hangarSpaceReloader.changeHangarSpace(defaultHangarPath)
                 else:
                     g_eventBus.handleEvent(events.HangarSpacesSwitcherEvent(events.HangarSpacesSwitcherEvent.SWITCH_TO_HANGAR_SPACE, ctx={'switchItemName': switchItems.DEFAULT}), scope=EVENT_BUS_SCOPE.LOBBY)
+            self.onSpaceUpdated()
         return
 
     def __updateMode(self):
@@ -443,6 +474,10 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         else:
             g_currentVehicle.selectNoVehicle()
         self.__voControl.deactivate()
+
+    @process
+    def __doSelectBattleRoyaleTournamentPrb(self, dispatcher):
+        yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.BATTLE_ROYALE_TOURNAMENT))
 
     @process
     def __doSelectBattleRoyalePrb(self, dispatcher):
@@ -529,6 +564,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.__hangarsSpace.onVehicleChanged -= self.__onVehicleChanged
         self.__notificationsCtrl.onEventNotificationsChanged -= self.__onEventNotification
         self.__c11nService.onVisibilityChanged -= self.__onC11nVisibilityChanged
+        self.__battleRoyaleTournamentController.onSelectBattleRoyaleTournament -= self.__selectBattleRoyaleTournament
         self.__defaultHangars = {}
         g_clientUpdateManager.removeObjectCallbacks(self)
 

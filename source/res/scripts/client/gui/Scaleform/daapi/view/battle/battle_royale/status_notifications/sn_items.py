@@ -89,8 +89,7 @@ class TimeSnapshotHandler(object):
 
     def __init__(self, updateHandler):
         self._updateHandler = updateHandler
-        self._startTime = None
-        return
+        self._startTime = 0
 
     def setTimeParams(self, totalTime, finishTime):
         if finishTime:

@@ -374,7 +374,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             return entity.getQueueType() if entity is not None else QUEUE_TYPE.UNKNOWN
 
     def __onHangarCreateOrRefresh(self):
-        if self._getPrbEntityType() == QUEUE_TYPE.BATTLE_ROYALE:
+        if self._getPrbEntityType() in (QUEUE_TYPE.BATTLE_ROYALE, QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT):
             self.closeView()
             return
         self.__keepVehicleSelectionEnabled = True

@@ -8,6 +8,7 @@ from skeletons.gui.game_control import IGameSessionController
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
+from PlayerEvents import g_playerEvents
 
 def isInRandomQueue():
     return getattr(BigWorld.player(), 'isInRandomQueue', False)
@@ -46,6 +47,10 @@ def isInBattleRoyaleQueue():
     return getattr(BigWorld.player(), 'isInBattleRoyaleQueue', False)
 
 
+def isInBattleRoyaleTournamentQueue():
+    return getattr(BigWorld.player(), 'isInBattleRoyaleTournamentQueue', False)
+
+
 def getQueueType():
     queueType = 0
     if isInRandomQueue():
@@ -62,6 +67,8 @@ def getQueueType():
         queueType = QUEUE_TYPE.EPIC
     elif isInBattleRoyaleQueue():
         queueType = QUEUE_TYPE.BATTLE_ROYALE
+    elif isInBattleRoyaleTournamentQueue():
+        queueType = QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT
     return queueType
 
 
@@ -116,6 +123,7 @@ def getPrebattleAutoInvites():
     player = BigWorld.player()
     if hasattr(player, 'prebattleAutoInvites'):
         autoInvites = player.prebattleAutoInvites
+    g_playerEvents.onCollectPrebattleInvites(autoInvites)
     return autoInvites
 
 
@@ -147,7 +155,8 @@ _ARENA_GUI_TYPE_BY_QUEUE_TYPE = {QUEUE_TYPE.RANDOMS: ARENA_GUI_TYPE.RANDOM,
  QUEUE_TYPE.EVENT_BATTLES: ARENA_GUI_TYPE.EVENT_BATTLES,
  QUEUE_TYPE.RANKED: ARENA_GUI_TYPE.RANKED,
  QUEUE_TYPE.EPIC: ARENA_GUI_TYPE.EPIC_BATTLE,
- QUEUE_TYPE.BATTLE_ROYALE: ARENA_GUI_TYPE.BATTLE_ROYALE}
+ QUEUE_TYPE.BATTLE_ROYALE: ARENA_GUI_TYPE.BATTLE_ROYALE,
+ QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT: ARENA_GUI_TYPE.BATTLE_ROYALE}
 
 def getArenaGUIType(prbType=None, queueType=None):
     if prbType is None:
@@ -212,6 +221,8 @@ def getPrebattleLocalizedData(extraData=None):
                 sortedItems = ld.items()
                 sortedItems.sort()
                 led = sortedItems[0][1]
+        else:
+            return extraData.get('descr', {})
     return led
 
 

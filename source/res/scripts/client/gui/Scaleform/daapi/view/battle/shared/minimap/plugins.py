@@ -291,6 +291,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         elif self._isInVideoMode():
             activateID = self.__cameraIDs[_S_NAME.VIDEO_CAMERA]
             matrix = matrix_factory.makeDefaultCameraMatrix()
+            self._hideMarkup()
         else:
             matrix = matrix_factory.makeDefaultCameraMatrix()
         enableCameraEntry = self._enableCameraEntryInCtrlMode(self._ctrlMode)
@@ -380,6 +381,9 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         if not self.__isObserver and not forceInvalidate:
             return
         elif (self._ctrlVehicleID is None or not BigWorld.entities.has_key(self._ctrlVehicleID)) and not forceInvalidate:
+            self._hideMarkup()
+            return
+        elif self._isInVideoMode():
             self._hideMarkup()
             return
         else:
@@ -847,7 +851,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             entry = self._entries[prevCtrlID]
             if entry.isAlive() and entry.getLocation() != VEHICLE_LOCATION.UNDEFINED:
                 self.__setActive(entry, True)
-        if self._ctrlVehicleID and self._ctrlVehicleID != self.__playerVehicleID and self._ctrlVehicleID in self._entries:
+        if self._ctrlVehicleID and self._ctrlVehicleID != self.__playerVehicleID and self._ctrlVehicleID in self._entries and self._ctrlMode != _CTRL_MODE.VIDEO:
             self.__setActive(self._entries[self._ctrlVehicleID], False)
 
     def __showFeatures(self, flag):
@@ -1225,7 +1229,7 @@ class MinimapPingPlugin(SimpleMinimapPingPlugin):
     def _getNearestLocationIDForPosition(self, position, pRange):
 
         def getDistance(entity):
-            return Math.Vector3(entity.position).flatDistTo(position)
+            return Math.Vector3(entity.position).flatDistTo(Math.Vector3(position.x, position.y, position.z - pRange * 0.5))
 
         if not g_locationPointManager.markedAreas:
             return None

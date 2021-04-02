@@ -603,7 +603,8 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
         value += battleResults.get('basePointsDiff', 0)
         if value > 0:
             if guiType == ARENA_GUI_TYPE.BATTLE_ROYALE:
-                if self.__battleRoyaleController.isBattlePassAvailable():
+                bonusType = battleResults.get('bonusType', 0)
+                if self.__battleRoyaleController.isBattlePassAvailable(bonusType):
                     battlePassString = backport.text(R.strings.messenger.serviceChannelMessages.BRbattleResults.battlePass(), pointsDiff=text_styles.neutral(value))
             else:
                 battlePassString = backport.text(R.strings.messenger.serviceChannelMessages.battleResults.battlePass(), pointsDiff=text_styles.neutral(value))
@@ -3207,7 +3208,7 @@ class PersonalMissionFailedFormatter(WaitItemsSyncFormatter):
                      'missionShortName': quest.getShortUserName(),
                      'missionName': quest.getUserName()}
                     formatted = g_settings.msgTemplates.format(self._template, ctx=ctx, data={'savedData': {'questID': questID}})
-                    settings = self._getGuiSettings(message, self._template)
+                    settings = self._getGuiSettings(message, self._template, messageType=message.type)
                     settings.showAt = BigWorld.time()
                     callback([MessageData(formatted, settings)])
 

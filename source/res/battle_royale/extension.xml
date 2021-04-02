@@ -4,6 +4,7 @@
     <StaticComponents>
       <BattleRoyaleComponent></BattleRoyaleComponent>
       <AccountBattleRoyaleComponent></AccountBattleRoyaleComponent>
+      <AccountBattleRoyaleTournamentComponent></AccountBattleRoyaleTournamentComponent>
     </StaticComponents>
     <DynamicComponents>
       <ArenaLootComponent></ArenaLootComponent>
@@ -25,6 +26,7 @@
     </DynamicComponents>
   </Components>
   <IsEnabled>	True	</IsEnabled>
+  <Personality>	BattleRoyalePersonality	</Personality>
   <Entities>
     <ClientServerEntities>
       <Mine></Mine>
@@ -33,7 +35,9 @@
       <InfluenceZone></InfluenceZone>
       <BattleRoyaleRadio></BattleRoyaleRadio>
     </ClientServerEntities>
-    <ServerOnlyEntities></ServerOnlyEntities>
+    <ServerOnlyEntities>
+      <BattleRoyaleTournamentMgr></BattleRoyaleTournamentMgr>
+    </ServerOnlyEntities>
   </Entities>
   <ExternalComponents></ExternalComponents>
 </extension.xml>

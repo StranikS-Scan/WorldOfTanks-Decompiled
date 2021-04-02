@@ -77,7 +77,7 @@ class CustomizationContext(object):
         self._vehicle = None
         self.__season = None
         self.__modeId = None
-        self.__startMode = None
+        self.__startModeId = None
         self.__modes = {CustomizationModes.CUSTOM: CustomMode(self),
          CustomizationModes.STYLED: StyledMode(self),
          CustomizationModes.EDITABLE_STYLE: EditableStyleMode(self)}
@@ -121,8 +121,20 @@ class CustomizationContext(object):
         return self.__modeId
 
     @property
+    def startModeId(self):
+        return self.__startModeId
+
+    @property
     def mode(self):
         return self.__modes[self.modeId]
+
+    @property
+    def startMode(self):
+        return self.__modes[self.startModeId]
+
+    @property
+    def isModeChanged(self):
+        return self.modeId != self.startModeId
 
     @property
     def vehicleAnchorsUpdater(self):
@@ -149,7 +161,7 @@ class CustomizationContext(object):
         g_currentVehicle.onChanged += self.__onVehicleChanged
         self.__season = season or self.__getStartSeason()
         self.__modeId = modeId or self.__getStartMode()
-        self.__startMode = self.modeId
+        self.__startModeId = self.modeId
         self.mode.start(tabId)
         self.__events = _CustomizationEvents()
         self.__vehicleAnchorsUpdater.startUpdater()
@@ -267,16 +279,15 @@ class CustomizationContext(object):
     @process('customizationApply')
     def applyItems(self, purchaseItems, callback):
         self._itemsCache.onSyncCompleted -= self.__onCacheResync
-        isModeChanged = self.modeId != self.__startMode
-        yield self.mode.applyItems(purchaseItems, isModeChanged)
+        yield self.mode.applyItems(purchaseItems, self.isModeChanged)
         self.__onCacheResync()
         self._itemsCache.onSyncCompleted += self.__onCacheResync
         callback(None)
         return
 
     def isOutfitsModified(self):
-        if self.modeId != self.__startMode:
-            startMode = self.__modes[self.__startMode]
+        if self.isModeChanged:
+            startMode = self.startMode
             if not startMode.isOutfitsModified() and startMode.isOutfitsEmpty() and self.mode.isOutfitsEmpty():
                 return False
             if startMode.modeId == CustomizationModes.STYLED and self.modeId == CustomizationModes.EDITABLE_STYLE:

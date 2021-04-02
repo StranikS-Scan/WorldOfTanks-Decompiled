@@ -412,3 +412,27 @@ def isObserver(avatar=None):
         result = False
 
     return result
+
+
+def isVehiclesColorized(avatar=None):
+    if avatar is None:
+        avatar = BigWorld.player()
+    try:
+        result = avatar.isVehiclesColorized()
+    except AttributeError as error:
+        _logger.exception('Attribute "isVehiclesColorized" not found, exception %s', error.message)
+        result = False
+
+    return result
+
+
+def isObserverSeesAll(avatar=None):
+    if avatar is None:
+        avatar = BigWorld.player()
+    try:
+        result = avatar.observerSeesAll()
+    except AttributeError as error:
+        _logger.exception('Attribute "isObserverSeesAll" not found, exception %s', error.message)
+        result = False
+
+    return result

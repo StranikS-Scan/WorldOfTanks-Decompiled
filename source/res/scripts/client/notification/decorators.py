@@ -243,45 +243,68 @@ class RecruitReminderMessageDecorator(MessageDecorator):
         return self._vo['message'].get('savedData', {})
 
 
-class C11nMessageDecorator(MessageDecorator):
-    itemsCache = dependency.descriptor(IItemsCache)
+class LockButtonMessageDecorator(MessageDecorator):
 
     def __init__(self, entityID, entity=None, settings=None, model=None):
-        super(C11nMessageDecorator, self).__init__(entityID, entity, settings, model)
-        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self.__viewLoaded, EVENT_BUS_SCOPE.LOBBY)
-        g_clientUpdateManager.addCallbacks({'inventory': self.__updateButtons})
-        g_clientUpdateManager.addCallbacks({'cache.vehsLock': self.__updateButtons})
-        g_eventBus.addListener(HangarSpacesSwitcherEvent.SWITCH_TO_HANGAR_SPACE, self.__updateButtons, EVENT_BUS_SCOPE.LOBBY)
+        super(LockButtonMessageDecorator, self).__init__(entityID, entity, settings, model)
+        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self._viewLoaded, EVENT_BUS_SCOPE.LOBBY)
+
+    def clear(self):
+        super(LockButtonMessageDecorator, self).clear()
+        g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self._viewLoaded, EVENT_BUS_SCOPE.LOBBY)
 
     def update(self, formatted):
         _NotificationDecorator.update(self, formatted)
 
     def _make(self, formatted=None, settings=None):
-        super(C11nMessageDecorator, self)._make(formatted, settings)
-        self.__updateButtonsState()
+        super(LockButtonMessageDecorator, self)._make(formatted, settings)
+        self._updateButtons(None)
+        return
 
-    def __updateButtonsState(self, lock=False):
+    def _getLockAliases(self):
+        return (VIEW_ALIAS.BATTLE_QUEUE,)
+
+    def _updateButtons(self, _):
+        self._updateButtonsState(lock=False)
+
+    def _viewLoaded(self, event):
+        if event.alias in self._getLockAliases():
+            self._updateButtonsState(lock=True)
+        elif VIEW_ALIAS.LOBBY_HANGAR == event.alias:
+            self._updateButtons(event)
+
+    def _updateButtonsState(self, lock=False):
         if self._entity is None or not self._entity.get('buttonsLayout'):
             return
         else:
-            state = NOTIFICATION_BUTTON_STATE.VISIBLE
-            if self.__vehicle is not None:
-                if not lock and self.__vehicle.isCustomizationEnabled():
-                    state = NOTIFICATION_BUTTON_STATE.DEFAULT
+            state = NOTIFICATION_BUTTON_STATE.VISIBLE if lock else NOTIFICATION_BUTTON_STATE.DEFAULT
             self._entity['buttonsStates'].update({'submit': state})
             if self._model is not None:
                 self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
             return
 
-    def __updateButtons(self, _):
-        isLocked = currentHangarIsSteelHunter()
-        self.__updateButtonsState(lock=isLocked)
 
-    def __viewLoaded(self, event):
-        if event.alias in (VIEW_ALIAS.HERO_VEHICLE_PREVIEW, VIEW_ALIAS.BATTLE_QUEUE):
-            self.__updateButtonsState(lock=True)
-        elif VIEW_ALIAS.LOBBY_HANGAR == event.alias:
-            self.__updateButtons(event)
+class C11nMessageDecorator(LockButtonMessageDecorator):
+    itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, entityID, entity=None, settings=None, model=None):
+        super(C11nMessageDecorator, self).__init__(entityID, entity, settings, model)
+        g_clientUpdateManager.addCallbacks({'inventory': self._updateButtons})
+        g_clientUpdateManager.addCallbacks({'cache.vehsLock': self._updateButtons})
+        g_eventBus.addListener(HangarSpacesSwitcherEvent.SWITCH_TO_HANGAR_SPACE, self._updateButtons, EVENT_BUS_SCOPE.LOBBY)
+
+    def clear(self):
+        super(C11nMessageDecorator, self).clear()
+        g_clientUpdateManager.removeObjectCallbacks(self)
+        g_eventBus.removeListener(HangarSpacesSwitcherEvent.SWITCH_TO_HANGAR_SPACE, self._updateButtons, EVENT_BUS_SCOPE.LOBBY)
+
+    def _updateButtons(self, _):
+        isLocked = currentHangarIsSteelHunter() or self.__vehicle is not None and not self.__vehicle.isCustomizationEnabled()
+        self._updateButtonsState(lock=isLocked)
+        return
+
+    def _getLockAliases(self):
+        return (VIEW_ALIAS.HERO_VEHICLE_PREVIEW,) + super(C11nMessageDecorator, self)._getLockAliases()
 
     @property
     def __vehicle(self):
@@ -293,11 +316,6 @@ class C11nMessageDecorator(MessageDecorator):
                 if vehicleIntCD is not None:
                     vehicle = self.itemsCache.items.getItemByCD(vehicleIntCD)
         return vehicle
-
-    def clear(self):
-        super(C11nMessageDecorator, self).clear()
-        g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self.__viewLoaded, EVENT_BUS_SCOPE.LOBBY)
-        g_clientUpdateManager.removeObjectCallbacks(self)
 
 
 class PrbInviteDecorator(_NotificationDecorator):

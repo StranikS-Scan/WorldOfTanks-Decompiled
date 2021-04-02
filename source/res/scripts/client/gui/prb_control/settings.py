@@ -159,6 +159,7 @@ class PREBATTLE_ACTION_NAME(object):
     EPIC_FORCED = 'epicForced'
     EVENT_PROGRESSION = 'eventProgression'
     BATTLE_ROYALE = 'battleRoyaleQueue'
+    BATTLE_ROYALE_TOURNAMENT = 'battleRoyaleTournamentQueue'
     EVENT_BATTLE = 'eventBattle'
 
 

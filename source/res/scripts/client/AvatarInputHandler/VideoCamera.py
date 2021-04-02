@@ -318,8 +318,9 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self._cam.speedTreeTarget = self._cam.invViewMatrix
         self.resetMovement()
         if isPlayerAvatar() and self.guiSessionProvider.getCtx().isPlayerObserver():
-            BigWorld.player().positionControl.moveTo(self.__position)
-            BigWorld.player().positionControl.followCamera(True)
+            if not BigWorld.player().observerSeesAll():
+                BigWorld.player().positionControl.moveTo(self.__position)
+                BigWorld.player().positionControl.followCamera(True)
         return
 
     def disable(self):

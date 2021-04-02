@@ -64,6 +64,8 @@ def getPrebattleOpponentsString(extraData, escapeHtml=False):
     result = ''
     if first and second:
         result = i18n.makeString('#menu:opponents', firstOpponent=first, secondOpponent=second)
+    elif 'type' in extraData:
+        result = extraData['type']
     return result
 
 

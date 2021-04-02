@@ -40,12 +40,17 @@ class BattleSessionList(PrebattlesListWindow, BattleSessionListMeta):
 
     def _populate(self):
         super(BattleSessionList, self)._populate()
+        self.addListener(events.HideWindowEvent.HIDE_SPECIAL_BATTLE_WINDOW, self.__hideWindow, scope=EVENT_BUS_SCOPE.LOBBY)
         self.__listRequester.start(self.__onBSListReceived)
         self.__listRequester.request()
 
     def _dispose(self):
         self.__listRequester.stop()
+        self.removeListener(events.HideWindowEvent.HIDE_SPECIAL_BATTLE_WINDOW, self.__hideWindow, scope=EVENT_BUS_SCOPE.LOBBY)
         super(BattleSessionList, self)._dispose()
+
+    def __hideWindow(self, _):
+        self.destroy()
 
     @process
     def __requestToJoin(self, prbID, prbType):

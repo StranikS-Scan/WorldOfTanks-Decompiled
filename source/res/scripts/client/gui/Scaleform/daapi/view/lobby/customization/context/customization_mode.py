@@ -240,6 +240,9 @@ class CustomizationMode(object):
     def getModifiedOutfits(self):
         return deepcopy(self._modifiedOutfits)
 
+    def getOriginalOutfits(self):
+        return deepcopy(self._originalOutfits)
+
     def getOutfitsInfo(self):
         outfitsInfo = {}
         for season in SeasonType.COMMON_SEASONS:

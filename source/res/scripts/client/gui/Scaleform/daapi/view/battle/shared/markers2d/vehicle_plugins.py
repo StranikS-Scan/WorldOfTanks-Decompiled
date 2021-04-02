@@ -419,18 +419,22 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
     def __setVehicleInfo(self, marker, vInfo, guiProps, nameParts):
         markerID = marker.getMarkerID()
         vType = vInfo.vehicleType
-        if avatar_getter.isObserver():
-            arenaDP = self.sessionProvider.getArenaDP()
-            obsVehId = BigWorld.player().observedVehicleID
-            vehId = vInfo.vehicleID
-            if vehId == obsVehId or arenaDP.isSquadMan(vehId, arenaDP.getVehicleInfo(obsVehId).prebattleID):
-                guiProps = PLAYER_GUI_PROPS.squadman
+        if avatar_getter.isVehiclesColorized():
+            guiPropsName = 'team{}'.format(vInfo.team)
+        else:
+            if avatar_getter.isObserver():
+                arenaDP = self.sessionProvider.getArenaDP()
+                obsVehId = BigWorld.player().observedVehicleID
+                vehId = vInfo.vehicleID
+                if vehId == obsVehId or arenaDP.isSquadMan(vehId, arenaDP.getVehicleInfo(obsVehId).prebattleID):
+                    guiProps = PLAYER_GUI_PROPS.squadman
+            guiPropsName = guiProps.name()
         if self._isSquadIndicatorEnabled and vInfo.squadIndex:
             squadIndex = vInfo.squadIndex
         else:
             squadIndex = 0
         hunting = VehicleActions.isHunting(vInfo.events)
-        self._invokeMarker(markerID, 'setVehicleInfo', vType.classTag, vType.iconPath, nameParts.vehicleName, vType.level, nameParts.playerFullName, nameParts.playerName, nameParts.clanAbbrev, nameParts.regionCode, vType.maxHealth, guiProps.name(), hunting, squadIndex, i18n.makeString(INGAME_GUI.STUN_SECONDS))
+        self._invokeMarker(markerID, 'setVehicleInfo', vType.classTag, vType.iconPath, nameParts.vehicleName, vType.level, nameParts.playerFullName, nameParts.playerName, nameParts.clanAbbrev, nameParts.regionCode, vType.maxHealth, guiPropsName, hunting, squadIndex, i18n.makeString(INGAME_GUI.STUN_SECONDS))
         self._invokeMarker(markerID, 'update')
 
     def __setupDynamic(self, marker, accountDBID=0):

@@ -241,7 +241,7 @@ class StyledMode(CustomizationMode):
         results = []
         style = self.__modifiedStyle
         vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
-        originalOutfits = {season:outfit.copy() for season, outfit in self._originalOutfits.iteritems()}
+        originalOutfits = self._ctx.startMode.getOriginalOutfits()
         if style is not None:
             baseStyleOutfits = {}
             modifiedStyleOutfits = {}

@@ -54,21 +54,24 @@ class SteelHunterEquipmentController(equipment_ctrl.EquipmentsController):
                 vehicleDescriptor = vehicle.typeDescriptor
         if vehicleDescriptor is None:
             vehicleDescriptor = avatar_getter.getVehicleTypeDescriptor()
-        vehiclesSlotsConfig = self.__lobbyCtx.getServerSettings().battleRoyale.vehiclesSlotsConfig
-        vehicleDescriptorName = None
-        if vehicleDescriptor:
-            vehicleDescriptorName = vehicleDescriptor.name
-            vehConfig = vehiclesSlotsConfig.get(vehicleDescriptorName)
-            if vehConfig:
-                for chargeName in AmmoTypes.CHARGES:
-                    equipmentID = vehConfig.get(chargeName)
-                    if equipmentID:
-                        equipment = createEquipmentById(equipmentID)
-                        self.setEquipment(equipment.compactDescr, 0, 0, 0, 0)
+        if vehicleDescriptor and 'observer' in vehicleDescriptor.type.tags:
+            return
+        else:
+            vehiclesSlotsConfig = self.__lobbyCtx.getServerSettings().battleRoyale.vehiclesSlotsConfig
+            vehicleDescriptorName = None
+            if vehicleDescriptor:
+                vehicleDescriptorName = vehicleDescriptor.name
+                vehConfig = vehiclesSlotsConfig.get(vehicleDescriptorName)
+                if vehConfig:
+                    for chargeName in AmmoTypes.CHARGES:
+                        equipmentID = vehConfig.get(chargeName)
+                        if equipmentID:
+                            equipment = createEquipmentById(equipmentID)
+                            self.setEquipment(equipment.compactDescr, 0, 0, 0, 0)
 
-                return
-        _logger.error('Vehicle config has not been found! %s, config: %s', vehicleDescriptorName, vehiclesSlotsConfig)
-        return
+                    return
+            _logger.error('Vehicle config has not been found! %s, config: %s', vehicleDescriptorName, vehiclesSlotsConfig)
+            return
 
 
 class SteelHunterReplayEquipmentController(equipment_ctrl.EquipmentsReplayPlayer, SteelHunterEquipmentController):

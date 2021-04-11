@@ -28,11 +28,11 @@ class ContainerManagerMeta(BaseDAAPIComponent):
     def as_bringToFrontS(self, layer, windowName):
         return self.flashObject.as_bringToFront(layer, windowName) if self._isDAAPIInited() else None
 
-    def as_showContainersS(self, layers):
-        return self.flashObject.as_showContainers(layers) if self._isDAAPIInited() else None
+    def as_showContainersS(self, layers, time=0):
+        return self.flashObject.as_showContainers(layers, time) if self._isDAAPIInited() else None
 
-    def as_hideContainersS(self, layers):
-        return self.flashObject.as_hideContainers(layers) if self._isDAAPIInited() else None
+    def as_hideContainersS(self, layers, time=0):
+        return self.flashObject.as_hideContainers(layers, time) if self._isDAAPIInited() else None
 
     def as_isContainerShownS(self, layer):
         return self.flashObject.as_isContainerShown(layer) if self._isDAAPIInited() else None

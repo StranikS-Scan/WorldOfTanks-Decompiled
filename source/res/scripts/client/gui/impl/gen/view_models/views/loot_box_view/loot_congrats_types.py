@@ -14,6 +14,7 @@ class LootCongratsTypes(ViewModel):
     INIT_CONGRAT_TYPE_CREW_BOOKS = 'CrewBookCongrats'
     INIT_CONGRAT_TYPE_EPIC_REWARDS = 'EpicRewardCongrats'
     INIT_CONGRAT_TYPE_BATTLE_PASS = 'BattlePassCongrats'
+    INIT_CONGRAT_TYPE_AC_EMAIL_CONFIRMATION = 'ACEmailConfirmation'
 
     def __init__(self, properties=0, commands=0):
         super(LootCongratsTypes, self).__init__(properties=properties, commands=commands)

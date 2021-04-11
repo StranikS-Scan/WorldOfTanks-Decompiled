@@ -625,7 +625,10 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             forwardDiffs |= not originalOutfit.diff(modifiedOutfit).isEmpty()
             backwardDiffs |= not modifiedOutfit.diff(originalOutfit).isEmpty()
 
-        hasModifications = forwardDiffs
+        originalProgression = originalOutfits[SeasonType.SUMMER].progressionLevel
+        modifiedProgression = modifiedOutfits[SeasonType.SUMMER].progressionLevel
+        isStyleProgressionLevelChanged = originalProgression != modifiedProgression
+        hasModifications = forwardDiffs or isStyleProgressionLevelChanged
         hasRemovalsOnly = not hasModifications and backwardDiffs
         msgKey = R.strings.messenger.serviceChannelMessages.sysMsg.customization
         if hasModifications:

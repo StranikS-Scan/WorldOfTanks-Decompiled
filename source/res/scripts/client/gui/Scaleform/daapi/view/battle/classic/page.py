@@ -3,7 +3,7 @@
 from aih_constants import CTRL_MODE_NAME
 from constants import ARENA_PERIOD
 from debug_utils import LOG_DEBUG
-from gui.Scaleform.daapi.view.battle.shared import SharedPage, finish_sound_player, drone_music_player, period_music_listener
+from gui.Scaleform.daapi.view.battle.shared import SharedPage, finish_sound_player, drone_music_player
 from gui.Scaleform.daapi.view.battle.shared.page import ComponentsConfig
 from gui.Scaleform.daapi.view.battle.shared.start_countdown_sound_player import StartCountdownSoundPlayer
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
@@ -14,7 +14,6 @@ class DynamicAliases(CONST_CONTAINER):
     PREBATTLE_TIMER_SOUND_PLAYER = 'prebattleTimerSoundPlayer'
     FINISH_SOUND_PLAYER = 'finishSoundPlayer'
     DRONE_MUSIC_PLAYER = 'droneMusicPlayer'
-    PERIOD_MUSIC_LISTENER = 'periodMusicListener'
 
 
 class _ClassicComponentsConfig(ComponentsConfig):
@@ -26,15 +25,14 @@ class _ClassicComponentsConfig(ComponentsConfig):
            BATTLE_VIEW_ALIASES.PLAYERS_PANEL,
            BATTLE_VIEW_ALIASES.BATTLE_END_WARNING_PANEL,
            BATTLE_VIEW_ALIASES.HINT_PANEL,
-           DynamicAliases.DRONE_MUSIC_PLAYER,
-           DynamicAliases.PERIOD_MUSIC_LISTENER)),
+           DynamicAliases.DRONE_MUSIC_PLAYER)),
          (BATTLE_CTRL_ID.TEAM_BASES, (BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, DynamicAliases.DRONE_MUSIC_PLAYER)),
          (BATTLE_CTRL_ID.CALLOUT, (BATTLE_VIEW_ALIASES.CALLOUT_PANEL,)),
          (BATTLE_CTRL_ID.MAPS, (BATTLE_VIEW_ALIASES.MINIMAP,)),
          (BATTLE_CTRL_ID.DEBUG, (BATTLE_VIEW_ALIASES.DEBUG_PANEL,)),
          (BATTLE_CTRL_ID.BATTLE_FIELD_CTRL, (DynamicAliases.DRONE_MUSIC_PLAYER, BATTLE_VIEW_ALIASES.FRAG_CORRELATION_BAR)),
          (BATTLE_CTRL_ID.ARENA_LOAD_PROGRESS, (DynamicAliases.DRONE_MUSIC_PLAYER,)),
-         (BATTLE_CTRL_ID.GAME_MESSAGES_PANEL, (BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,))), viewsConfig=((DynamicAliases.PERIOD_MUSIC_LISTENER, period_music_listener.PeriodMusicListener), (DynamicAliases.DRONE_MUSIC_PLAYER, drone_music_player.DroneMusicPlayer), (DynamicAliases.PREBATTLE_TIMER_SOUND_PLAYER, StartCountdownSoundPlayer)))
+         (BATTLE_CTRL_ID.GAME_MESSAGES_PANEL, (BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,))), viewsConfig=((DynamicAliases.DRONE_MUSIC_PLAYER, drone_music_player.DroneMusicPlayer), (DynamicAliases.PREBATTLE_TIMER_SOUND_PLAYER, StartCountdownSoundPlayer)))
 
 
 COMMON_CLASSIC_CONFIG = _ClassicComponentsConfig()

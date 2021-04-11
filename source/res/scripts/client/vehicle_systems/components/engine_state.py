@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/components/engine_state.py
 from random import uniform
+import BigWorld
 from constants import ARENA_PERIOD
 
 class EngineState(object):
@@ -27,15 +28,17 @@ def getEngineStateFromName(stateName):
 
 
 def checkEngineStart(detailedEngineState, period):
-    if period == ARENA_PERIOD.BATTLE:
+    if period == ARENA_PERIOD.PREBATTLE:
+        notifyEngineOnArenaPeriodChange(detailedEngineState, period)
+    elif period == ARENA_PERIOD.BATTLE:
         detailedEngineState.startEngineWithDelay(0.1)
 
 
-def notifyEngineOnArenaPeriodChange(detailedEngineState, period, periodEndTime, serverTime):
+def notifyEngineOnArenaPeriodChange(detailedEngineState, period):
     if period == ARENA_PERIOD.PREBATTLE:
+        periodEndTime = BigWorld.player().arena.periodEndTime
+        serverTime = BigWorld.serverTime()
         maxTime = periodEndTime - serverTime
         maxTime = maxTime * 0.7 if maxTime > 0.0 else 1.0
         time = uniform(0.0, maxTime)
         detailedEngineState.startEngineWithDelay(time)
-    elif period == ARENA_PERIOD.BATTLE:
-        detailedEngineState.notifyBattleStarted()

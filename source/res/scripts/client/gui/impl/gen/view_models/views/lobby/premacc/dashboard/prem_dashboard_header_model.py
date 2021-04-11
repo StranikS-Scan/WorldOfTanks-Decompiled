@@ -1,14 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/premacc/dashboard/prem_dashboard_header_model.py
+from gui.impl.gen import R
 from frameworks.wulf import ViewModel
 from gui.impl.wrappers.user_list_model import UserListModel
 from gui.impl.gen.view_models.common.user_name_model import UserNameModel
 from gui.impl.gen.view_models.views.lobby.premacc.dashboard.prem_dashboard_header_clan_info_model import PremDashboardHeaderClanInfoModel
 
 class PremDashboardHeaderModel(ViewModel):
-    __slots__ = ('onShowBadges',)
+    __slots__ = ('onShowBadges', 'onEmailButtonClicked')
 
-    def __init__(self, properties=10, commands=1):
+    def __init__(self, properties=13, commands=2):
         super(PremDashboardHeaderModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -63,6 +64,24 @@ class PremDashboardHeaderModel(ViewModel):
     def setHasClanReserves(self, value):
         self._setBool(9, value)
 
+    def getIsWarningIconVisible(self):
+        return self._getBool(10)
+
+    def setIsWarningIconVisible(self, value):
+        self._setBool(10, value)
+
+    def getEmailButtonLabel(self):
+        return self._getResource(11)
+
+    def setEmailButtonLabel(self, value):
+        self._setResource(11, value)
+
+    def getShowEmailActionTooltip(self):
+        return self._getBool(12)
+
+    def setShowEmailActionTooltip(self, value):
+        self._setBool(12, value)
+
     def _initialize(self):
         super(PremDashboardHeaderModel, self)._initialize()
         self._addViewModelProperty('userName', UserNameModel())
@@ -75,4 +94,8 @@ class PremDashboardHeaderModel(ViewModel):
         self._addBoolProperty('isDynamicBadge', False)
         self._addBoolProperty('isInClan', False)
         self._addBoolProperty('hasClanReserves', False)
+        self._addBoolProperty('isWarningIconVisible', False)
+        self._addResourceProperty('emailButtonLabel', R.invalid())
+        self._addBoolProperty('showEmailActionTooltip', False)
         self.onShowBadges = self._addCommand('onShowBadges')
+        self.onEmailButtonClicked = self._addCommand('onEmailButtonClicked')

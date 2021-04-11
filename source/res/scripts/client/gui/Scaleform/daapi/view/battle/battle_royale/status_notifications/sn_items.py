@@ -31,17 +31,17 @@ class _VehicleStateSN(StatusNotificationItem):
 
     def _subscribeOnVehControlling(self):
         ctrl = self._sessionProvider.shared.vehicleState
-        ctrl.onVehicleControlling += self.__onVehicleControlling
+        ctrl.onVehicleControlling += self._onVehicleControlling
         vehicle = ctrl.getControllingVehicle()
         if vehicle is not None:
-            self.__onVehicleControlling(vehicle)
+            self._onVehicleControlling(vehicle)
         return
 
     def destroy(self):
         ctrl = self._sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
-            ctrl.onVehicleControlling -= self.__onVehicleControlling
+            ctrl.onVehicleControlling -= self._onVehicleControlling
         handler = avatar_getter.getInputHandler()
         if handler is not None:
             if isinstance(handler, AvatarInputHandler):
@@ -62,7 +62,7 @@ class _VehicleStateSN(StatusNotificationItem):
         elif state == self.getItemID():
             self._update(value)
 
-    def __onVehicleControlling(self, vehicle):
+    def _onVehicleControlling(self, vehicle):
         ctrl = self._sessionProvider.shared.vehicleState
         stateValue = ctrl.getStateValue(self.getItemID())
         if stateValue:
@@ -321,6 +321,7 @@ class LootPickUpSN(TimerSN):
     def __init__(self, updateCallback):
         super(LootPickUpSN, self).__init__(updateCallback)
         self.__loots = {}
+        self._subscribeOnVehControlling()
 
     def destroy(self):
         self.__loots = None
@@ -339,6 +340,10 @@ class LootPickUpSN(TimerSN):
             self.__showLootTimer(lootID, lootType, serverTime)
         else:
             self.__hideLootTimer(lootID)
+
+    def _onVehicleControlling(self, vehicle):
+        self.__loots.clear()
+        super(LootPickUpSN, self)._onVehicleControlling(vehicle)
 
     def __showLootTimer(self, lootID, lootTypeID, pickupTime):
         time = BigWorld.serverTime()

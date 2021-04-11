@@ -689,6 +689,8 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_RECRUITGIFT_TEXT = '#messenger:serviceChannelMessages/recruitGift/text'
     SERVICECHANNELMESSAGES_RECRUITREMINDER_TEXT = '#messenger:serviceChannelMessages/recruitReminder/text'
     SERVICECHANNELMESSAGES_RECRUITREMINDERTERMLESS_TEXT = '#messenger:serviceChannelMessages/recruitReminderTermless/text'
+    SERVICECHANNELMESSAGES_EMAILCONFIRMATIONREMINDER_TEXT = '#messenger:serviceChannelMessages/emailConfirmationReminder/text'
+    SERVICECHANNELMESSAGES_EMAILCONFIRMATIONREMINDER_BUTTON = '#messenger:serviceChannelMessages/emailConfirmationReminder/button'
     COMMAND_SUCCESS_USERBAN = '#messenger:command/success/USERBAN'
     COMMAND_SUCCESS_USERUNBAN = '#messenger:command/success/USERUNBAN'
     CHAT_ERROR_NOT_ALLOWED = '#messenger:chat_error/NOT_ALLOWED'

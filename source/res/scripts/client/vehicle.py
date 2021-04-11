@@ -21,7 +21,7 @@ from VehicleEffects import DamageFromShotDecoder
 from constants import SPT_MATKIND
 from constants import VEHICLE_HIT_EFFECT, VEHICLE_SIEGE_STATE, ATTACK_REASON_INDICES, ATTACK_REASON
 from debug_utils import LOG_WARNING, LOG_DEBUG_DEV
-from gui.battle_control import vehicle_getter
+from gui.battle_control import vehicle_getter, avatar_getter
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _GUI_EVENT_ID, VEHICLE_VIEW_STATE
 from gun_rotation_shared import decodeGunAngles
 from helpers import dependency
@@ -321,26 +321,28 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             self.appearance.boundEffects.addNewToNode(maxPriorityHitPoint.componentName, maxPriorityHitPoint.matrix, effects, keyPoints, isPlayerVehicle=self.isPlayerVehicle, showShockWave=showFullscreenEffs, showFlashBang=showFullscreenEffs and not showFriendlyFlashBang, showFriendlyFlashBang=showFullscreenEffs and showFriendlyFlashBang, entity_id=self.id, damageFactor=damageFactor, attackerID=attackerID, hitdir=firstHitDir)
             if not self.isAlive():
                 return
-            if attackerID == BigWorld.player().playerVehicleID:
-                if maxHitEffectCode is not None and not self.isPlayerVehicle:
-                    if maxHitEffectCode in VEHICLE_HIT_EFFECT.RICOCHETS:
-                        eventID = _GUI_EVENT_ID.VEHICLE_RICOCHET
-                    elif maxHitEffectCode == VEHICLE_HIT_EFFECT.CRITICAL_HIT:
-                        if maxPriorityHitPoint.componentName == TankPartNames.CHASSIS:
-                            if damageFactor:
-                                eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT_CHASSIS_PIERCED
-                            else:
-                                eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT_CHASSIS
+            isAttacker = attackerID == BigWorld.player().playerVehicleID and maxHitEffectCode is not None and not self.isPlayerVehicle
+            isObserverFPV = avatar_getter.isObserverSeesAll() and BigWorld.player().isObserverFPV
+            if isAttacker or isObserverFPV:
+                if maxHitEffectCode in VEHICLE_HIT_EFFECT.RICOCHETS:
+                    eventID = _GUI_EVENT_ID.VEHICLE_RICOCHET
+                elif maxHitEffectCode == VEHICLE_HIT_EFFECT.CRITICAL_HIT:
+                    if maxPriorityHitPoint.componentName == TankPartNames.CHASSIS:
+                        if damageFactor:
+                            eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT_CHASSIS_PIERCED
                         else:
-                            eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT
-                    elif maxHitEffectCode == VEHICLE_HIT_EFFECT.ARMOR_PIERCED_DEVICE_DAMAGED:
-                        eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT
-                    elif hasPiercedHit:
-                        eventID = _GUI_EVENT_ID.VEHICLE_ARMOR_PIERCED
+                            eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT_CHASSIS
                     else:
-                        eventID = _GUI_EVENT_ID.VEHICLE_HIT
-                    ctrl = self.guiSessionProvider.shared.feedback
-                    ctrl is not None and ctrl.setVehicleState(self.id, eventID)
+                        eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT
+                elif maxHitEffectCode == VEHICLE_HIT_EFFECT.ARMOR_PIERCED_DEVICE_DAMAGED:
+                    eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT
+                elif hasPiercedHit:
+                    eventID = _GUI_EVENT_ID.VEHICLE_ARMOR_PIERCED
+                else:
+                    eventID = _GUI_EVENT_ID.VEHICLE_HIT
+                ctrl = self.guiSessionProvider.shared.feedback
+                if ctrl is not None:
+                    ctrl.setVehicleState(self.id, eventID)
             return
 
     def showDamageFromExplosion(self, attackerID, center, effectsIndex, damageFactor):

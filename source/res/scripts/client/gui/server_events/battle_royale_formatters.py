@@ -2,12 +2,12 @@
 # Embedded file name: scripts/client/gui/server_events/battle_royale_formatters.py
 import logging
 from collections import namedtuple
+from constants import ARENA_BONUS_TYPE
 from gui.Scaleform.locale.BATTLE_ROYALE import BATTLE_ROYALE
 from gui.battle_control.arena_info import vos_collections
 from gui.battle_control.battle_constants import PERSONAL_EFFICIENCY_TYPE as _ETYPE
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.battle_session import IBattleSessionProvider
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 _StatsItemValues = namedtuple('_StatsItemValues', ('value', 'maxValue'))
@@ -50,14 +50,15 @@ class IngameBattleRoyaleResultsViewDataFormatter(object):
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, sessionProvider, bonusQuestById):
+        self.__sessionProvider = sessionProvider
         self.__arenaDP = sessionProvider.getArenaDP()
         self.__playerVehicleID = self.__arenaDP.getPlayerVehicleID()
         self.__efficiencyCtrl = sessionProvider.shared.personalEfficiencyCtrl
 
     @property
     def isInSquad(self):
-        vInfoVO = self.__arenaDP.getVehicleInfo()
-        return vInfoVO.isSquadMan()
+        bonusType = self.__sessionProvider.arenaVisitor.getArenaBonusType()
+        return bonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD_RANGE
 
     @property
     def playersCount(self):
@@ -70,10 +71,14 @@ class IngameBattleRoyaleResultsViewDataFormatter(object):
          self.__getBlockedDamage()]
 
     def __getPlace(self):
-        maxValue = self.__arenaDP.getNumberOfSquads() if self.isInSquad else self.playersCount
-        sessionProvider = dependency.instance(IBattleSessionProvider)
-        place = sessionProvider.arenaVisitor.getComponentSystem().battleRoyaleComponent.place
-        return self.__createStatItem('{}/{}'.format(place, maxValue), BATTLE_ROYALE.PLAYERSTATS_PLACESTAT_NAME, StatsItemType.PLACE)
+        place = self.__sessionProvider.arenaVisitor.getComponentSystem().battleRoyaleComponent.place
+        return self.__createStatItem('{}/{}'.format(place, self.__maxPlaceValue()), BATTLE_ROYALE.PLAYERSTATS_PLACESTAT_NAME, StatsItemType.PLACE)
+
+    def __maxPlaceValue(self):
+        if self.isInSquad:
+            vehicles = self.__arenaDP.getVehiclesItemsGenerator()
+            return len({vinfo.team for vinfo, _ in vehicles if not vinfo.isObserver()})
+        return self.playersCount
 
     def __getKilled(self):
         return self.__createStatItem(self.__arenaDP.getVehicleStats().frags, BATTLE_ROYALE.PLAYERSTATS_KILLSSTAT_NAME, StatsItemType.KILLS_SOLO)

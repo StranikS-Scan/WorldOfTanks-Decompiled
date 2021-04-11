@@ -799,8 +799,8 @@
         <segment2ModelRight>	vehicles/american/A67_T57_58/track/segment2.model	</segment2ModelRight>
         <left>	vehicles/american/A67_T57_58/track/left.track	</left>
         <right>	vehicles/american/A67_T57_58/track/right.track	</right>
-        <segmentLength>	0.178	</segmentLength>
-        <segmentOffset>	0.321	</segmentOffset>
+        <segmentLength>	0.18	</segmentLength>
+        <segmentOffset>	0.428	</segmentOffset>
         <segment2Offset>	0.081	</segment2Offset>
         <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
@@ -818,15 +818,35 @@
         <elasticity>	1200	</elasticity>
         <damping>	2	</damping>
         <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.55	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.55	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.5	</backwardElastK>
+        </node>
+        <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
           <forwardElastK>	0.75	</forwardElastK>
           <backwardElastK>	1.4	</backwardElastK>
           <offset>	-0.054	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R0	</name>
         </node>
         <node>
           <isLeft>	true	</isLeft>
@@ -869,18 +889,6 @@
           <forwardElastK>	0.75	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
           <offset>	-0.054	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L0	</name>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L1	</name>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R1	</name>
         </node>
         <node>
           <isLeft>	false	</isLeft>
@@ -952,31 +960,31 @@
       </groundNodes>
       <physicalTracks>
         <left>
-          <segmentsCount>	166	</segmentsCount>
-          <segmentsOuterThickness>	0.0288433	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.0706323	</segmentsInnerThickness>
-          <segmentsPlaneOffset>	-1.47351	</segmentsPlaneOffset>
+          <segmentsCount>	164	</segmentsCount>
+          <segmentsOuterThickness>	0.0534227	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.0706333	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	-1.474	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.0878718	</back>
-              <top>	0.0764251	</top>
-              <front>	0.0816986	</front>
+              <back>	0.0900162	</back>
+              <top>	0.08368	</top>
+              <front>	0.0829481	</front>
               <bottom>	0.0655122	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.0821806	</back>
-              <top>	0.0860789	</top>
-              <front>	0.0878718	</front>
+              <back>	0.0845105	</back>
+              <top>	0.0885844	</top>
+              <front>	0.0891981	</front>
               <bottom>	0.0655122	</bottom>
             </forwardMovement>
           </springsLength>
           <mainSegment>
             <model>	vehicles/american/A67_T57_58/track/segment1.model	</model>
-            <length>	0.0807891	</length>
+            <length>	0.0839737	</length>
           </mainSegment>
           <secSegment>
             <model>	vehicles/american/A67_T57_58/track/segment2.model	</model>
-            <length>	0.0813053	</length>
+            <length>	0.0821146	</length>
           </secSegment>
           <collisionHull>
             <bottom></bottom>
@@ -1003,49 +1011,49 @@
             <topFront>
               <wheelName>	WD_L0	</wheelName>
               <basePos>	3.0133 0.907203	</basePos>
-              <shiftVec>	0.379576 0.0832439	</shiftVec>
-              <jointIdx>	19	</jointIdx>
+              <shiftVec>	0.380759 0.076234	</shiftVec>
+              <jointIdx>	18	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_L7	</wheelName>
               <basePos>	-2.9741 0.987992	</basePos>
-              <shiftVec>	-0.291185 0.0789809	</shiftVec>
-              <jointIdx>	98	</jointIdx>
+              <shiftVec>	-0.300285 0.0948159	</shiftVec>
+              <jointIdx>	96	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_L6	</wheelName>
-              <basePos>	-2.24519 0.426101	</basePos>
-              <shiftVec>	0.0389783 -0.397258	</shiftVec>
-              <jointIdx>	116	</jointIdx>
+              <basePos>	-2.24519 0.426112	</basePos>
+              <shiftVec>	0.0339894 -0.397259	</shiftVec>
+              <jointIdx>	114	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_L0	</wheelName>
-              <basePos>	2.15018 0.426104	</basePos>
-              <shiftVec>	0.0112991 -0.397098	</shiftVec>
+              <basePos>	2.15018 0.42611	</basePos>
+              <shiftVec>	0.0677602 -0.391438	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
           <radiusOverrides>
             <wheel>
               <name>	WD_L7	</name>
-              <radius>	0.29996	</radius>
+              <radius>	0.313141	</radius>
             </wheel>
             <wheel>
               <name>	WD_L0	</name>
-              <radius>	0.387242	</radius>
+              <radius>	0.386892	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
             <syncWithMainModel>	true	</syncWithMainModel>
-            <segmentSyncPivotOffset>	-1.474	</segmentSyncPivotOffset>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L7	</name>
-              <startAngle>	-38.7865	</startAngle>
+              <startAngle>	2.89081	</startAngle>
               <teethCount>	11	</teethCount>
             </sync>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	-41.5887	</startAngle>
+              <startAngle>	-0.154792	</startAngle>
               <teethCount>	11	</teethCount>
             </sync>
           </teethSyncs>
@@ -1226,31 +1234,31 @@
           </sourceCollisionHullPoints>
         </left>
         <right>
-          <segmentsCount>	166	</segmentsCount>
-          <segmentsOuterThickness>	0.0288224	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.0706304	</segmentsInnerThickness>
-          <segmentsPlaneOffset>	1.47351	</segmentsPlaneOffset>
+          <segmentsCount>	164	</segmentsCount>
+          <segmentsOuterThickness>	0.0534227	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.0706343	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	1.474	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.0878718	</back>
-              <top>	0.0764251	</top>
-              <front>	0.0816986	</front>
+              <back>	0.0902676	</back>
+              <top>	0.0839363	</top>
+              <front>	0.0845047	</front>
               <bottom>	0.0655122	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.0821806	</back>
-              <top>	0.0860789	</top>
-              <front>	0.0878718	</front>
+              <back>	0.0829422	</back>
+              <top>	0.0885379	</top>
+              <front>	0.0895829	</front>
               <bottom>	0.0655122	</bottom>
             </forwardMovement>
           </springsLength>
           <mainSegment>
             <model>	vehicles/american/A67_T57_58/track/segment1.model	</model>
-            <length>	0.0810465	</length>
+            <length>	0.0837697	</length>
           </mainSegment>
           <secSegment>
             <model>	vehicles/american/A67_T57_58/track/segment2.model	</model>
-            <length>	0.0811013	</length>
+            <length>	0.0837177	</length>
           </secSegment>
           <collisionHull>
             <bottom></bottom>
@@ -1277,49 +1285,49 @@
             <topFront>
               <wheelName>	WD_R0	</wheelName>
               <basePos>	3.0133 0.907205	</basePos>
-              <shiftVec>	0.378704 0.0875633	</shiftVec>
-              <jointIdx>	18	</jointIdx>
+              <shiftVec>	0.380005 0.0798497	</shiftVec>
+              <jointIdx>	17	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_R7	</wheelName>
               <basePos>	-2.97463 0.987595	</basePos>
-              <shiftVec>	-0.29044 0.0795169	</shiftVec>
-              <jointIdx>	97	</jointIdx>
+              <shiftVec>	-0.299988 0.0953625	</shiftVec>
+              <jointIdx>	95	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_R6	</wheelName>
-              <basePos>	-2.15017 0.426077	</basePos>
-              <shiftVec>	-0.0325642 -0.395919	</shiftVec>
-              <jointIdx>	115	</jointIdx>
+              <basePos>	-2.15017 0.426071	</basePos>
+              <shiftVec>	-0.0389819 -0.395343	</shiftVec>
+              <jointIdx>	113	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_R0	</wheelName>
-              <basePos>	2.2452 0.426084	</basePos>
-              <shiftVec>	0.0242758 -0.396514	</shiftVec>
+              <basePos>	2.2452 0.426073	</basePos>
+              <shiftVec>	0.0807967 -0.388957	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
           <radiusOverrides>
             <wheel>
               <name>	WD_R7	</name>
-              <radius>	0.299377	</radius>
+              <radius>	0.312993	</radius>
             </wheel>
             <wheel>
               <name>	WD_R0	</name>
-              <radius>	0.38734	</radius>
+              <radius>	0.386856	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
             <syncWithMainModel>	true	</syncWithMainModel>
-            <segmentSyncPivotOffset>	1.474	</segmentSyncPivotOffset>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R7	</name>
-              <startAngle>	-38.8045	</startAngle>
+              <startAngle>	2.875	</startAngle>
               <teethCount>	11	</teethCount>
             </sync>
             <sync>
               <name>	WD_R0	</name>
-              <startAngle>	-41.5955	</startAngle>
+              <startAngle>	-0.155773	</startAngle>
               <teethCount>	11	</teethCount>
             </sync>
           </teethSyncs>

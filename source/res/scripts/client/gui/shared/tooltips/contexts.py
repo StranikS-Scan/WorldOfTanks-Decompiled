@@ -36,6 +36,7 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 if typing.TYPE_CHECKING:
     from account_helpers.offers.events_data import OfferGift, OfferEventData
+    from gui.shared.gui_items.dossier.stats import AccountTotalStatsBlock
 
 def _getCmpVehicle():
     return cmp_helpers.getCmpConfiguratorMainView().getCurrentVehicle()
@@ -920,6 +921,7 @@ class ProfileContext(ToolTipContext):
 
 
 class BattleResultContext(ProfileContext):
+    __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, fieldsToExclude=None):
         super(BattleResultContext, self).__init__(fieldsToExclude)
@@ -928,6 +930,11 @@ class BattleResultContext(ProfileContext):
     def buildItem(self, block, name, value=0, customData=None, vehicleLevel=0, arenaType=ARENA_GUI_TYPE.RANDOM):
         self._vehicleLevel = vehicleLevel
         self._arenaType = arenaType
+        totalStats = self.__itemsCache.items.getAccountDossier().getTotalStats()
+        if totalStats.isAchievementInLayout((block, name)):
+            item = totalStats.getAchievement((block, name))
+            if item is not None:
+                return item
         factory = factories.getAchievementFactory((block, name))
         return factory.create(value=value) if factory is not None else None
 

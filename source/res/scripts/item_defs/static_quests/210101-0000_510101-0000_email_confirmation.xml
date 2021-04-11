@@ -1,0 +1,28 @@
+<210101-0000_510101-0000_email_confirmation.xml>
+  <quests>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	email_confirmation	</id>
+      <hidden>	true	</hidden>
+      <showCongrats>	true	</showCongrats>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	acc_completion:email_confirm	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </token>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <gold>	300	</gold>
+        <freeXP>	2000	</freeXP>
+        <credits>	150000	</credits>
+      </bonus>
+    </tokenQuest>
+  </quests>
+</210101-0000_510101-0000_email_confirmation.xml>

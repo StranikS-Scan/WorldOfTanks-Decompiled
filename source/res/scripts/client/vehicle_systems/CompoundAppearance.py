@@ -94,9 +94,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         if self.detailedEngineState is None:
             return
         else:
-            periodEndTime = BigWorld.player().arena.periodEndTime
-            serverTime = BigWorld.serverTime()
-            engine_state.notifyEngineOnArenaPeriodChange(self.detailedEngineState, period, periodEndTime, serverTime)
+            engine_state.notifyEngineOnArenaPeriodChange(self.detailedEngineState, period)
             return
 
     @property

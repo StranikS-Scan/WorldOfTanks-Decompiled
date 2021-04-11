@@ -80,9 +80,10 @@ _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: (control_modes.ArcadeControlMode, 'arcadeM
  _CTRL_MODE.DEATH_FREE_CAM: (epic_battle_death_mode.DeathFreeCamMode, 'epicVideoMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.DUAL_GUN: (control_modes.DualGunControlMode, 'dualGunMode', _CTRL_TYPE.USUAL)}
 _OVERWRITE_CTRLS_DESC_MAP = {constants.ARENA_BONUS_TYPE.EPIC_BATTLE: {_CTRL_MODE.POSTMORTEM: (epic_battle_death_mode.DeathTankFollowMode, 'postMortemMode', _CTRL_TYPE.USUAL)},
- constants.ARENA_BONUS_TYPE.EPIC_BATTLE_TRAINING: {_CTRL_MODE.POSTMORTEM: (epic_battle_death_mode.DeathTankFollowMode, 'postMortemMode', _CTRL_TYPE.USUAL)},
- constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO: {_CTRL_MODE.POSTMORTEM: (steel_hunter_control_modes.SHPostMortemControlMode, 'postMortemMode', _CTRL_TYPE.USUAL)},
- constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD: {_CTRL_MODE.POSTMORTEM: (steel_hunter_control_modes.SHPostMortemControlMode, 'postMortemMode', _CTRL_TYPE.USUAL)}}
+ constants.ARENA_BONUS_TYPE.EPIC_BATTLE_TRAINING: {_CTRL_MODE.POSTMORTEM: (epic_battle_death_mode.DeathTankFollowMode, 'postMortemMode', _CTRL_TYPE.USUAL)}}
+for royaleBonusCap in constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
+    _OVERWRITE_CTRLS_DESC_MAP[royaleBonusCap] = {_CTRL_MODE.POSTMORTEM: (steel_hunter_control_modes.SHPostMortemControlMode, 'postMortemMode', _CTRL_TYPE.USUAL)}
+
 _DYNAMIC_CAMERAS = (DynamicCameras.ArcadeCamera.ArcadeCamera,
  DynamicCameras.SniperCamera.SniperCamera,
  DynamicCameras.StrategicCamera.StrategicCamera,

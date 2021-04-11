@@ -87,11 +87,7 @@ class BattleRoyaleTournamentEntity(PreQueueEntity):
         return result
 
     def isPlayerJoined(self, ctx):
-        if ctx.getEntityType() != PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT:
-            return False
-        if ctx.getID() != self.__battleRoyaleTournamentController.getTournamentID():
-            self.__battleRoyaleTournamentController.leaveCurrentAndJoinToAnotherTournament(ctx.getID())
-        return True
+        return False if ctx.getEntityType() != PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT else True
 
     def canInvite(self, prbType):
         return prbType in PREBATTLE_TYPE.SQUAD_PREBATTLES
@@ -104,7 +100,7 @@ class BattleRoyaleTournamentEntity(PreQueueEntity):
         return prb_getters.isInBattleRoyaleTournamentQueue()
 
     def showGUI(self, ctx=None):
-        pass
+        self.__battleRoyaleTournamentController.leaveCurrentAndJoinToAnotherTournament(ctx.getID())
 
     def fini(self, ctx=None, woEvents=False):
         if ctx and self.__battleRoyaleTournamentController.isSelected():

@@ -243,6 +243,20 @@ class RecruitReminderMessageDecorator(MessageDecorator):
         return self._vo['message'].get('savedData', {})
 
 
+class EmailConfirmationReminderMessageDecorator(MessageDecorator):
+
+    def __init__(self, entityID, message):
+        entity = g_settings.msgTemplates.format('EmailConfirmationReminder', ctx={'text': message})
+        settings = NotificationGuiSettings(isNotify=True)
+        super(EmailConfirmationReminderMessageDecorator, self).__init__(entityID, entity, settings)
+
+    def getType(self):
+        return NOTIFICATION_TYPE.EMAIL_CONFIRMATION_REMINDER
+
+    def getGroup(self):
+        return NotificationGroup.OFFER
+
+
 class LockButtonMessageDecorator(MessageDecorator):
 
     def __init__(self, entityID, entity=None, settings=None, model=None):

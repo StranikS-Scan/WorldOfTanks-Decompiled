@@ -128,20 +128,17 @@ class PackageImporter(object):
     def unload(self, seq=None):
         if seq is None:
             seq = self._handlers.keys()
-        isLoaded = self.isPackageLoaded
-        clearSettings = g_entitiesFactories.clearSettings
         for path in seq:
-            if not isLoaded(path):
-                continue
             _logger.debug('Tries to unload GUI package "%s"', path)
-            handlers = self._handlers.pop(path)
-            for handler in handlers:
-                handler.fini()
+            if path in self._handlers:
+                handlers = self._handlers.pop(path)
+                for handler in handlers:
+                    handler.fini()
 
-            aliases = self._aliases.pop(path)
+            aliases = self._aliases.pop(path, None)
             if aliases:
-                clearSettings(aliases)
-            contextMenuTypes = self._contextMenuTypes.pop(path)
+                g_entitiesFactories.clearSettings(aliases)
+            contextMenuTypes = self._contextMenuTypes.pop(path, None)
             if contextMenuTypes:
                 context_menu.unregisterHandlers(*contextMenuTypes)
 
@@ -159,6 +156,7 @@ class PackageImporter(object):
             raise SoftException('Package {0} does not have method getViewSettings'.format(path))
 
         aliases = g_entitiesFactories.initSettings(settings)
+        self._aliases[path] = aliases
         try:
             handlers = imported.getContextMenuHandlers()
         except AttributeError:
@@ -166,6 +164,7 @@ class PackageImporter(object):
             raise SoftException('Package {0} does not have method getContextMenuHandlers'.format(path))
 
         contextMenuTypes = context_menu.registerHandlers(*handlers)
+        self._contextMenuTypes[path] = contextMenuTypes
         try:
             handlers = imported.getBusinessHandlers()
         except AttributeError:
@@ -182,6 +181,4 @@ class PackageImporter(object):
             handler.init()
             processed.add(handler)
 
-        self._aliases[path] = aliases
         self._handlers[path] = processed
-        self._contextMenuTypes[path] = contextMenuTypes

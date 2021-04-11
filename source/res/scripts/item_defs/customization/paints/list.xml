@@ -1097,6 +1097,30 @@
       <metallic>	0.203	</metallic>
       <userString>	#vehicle_customization:repaint/roaring_waves	</userString>
     </paint>
+    <paint>
+      <id>	111	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+      <color>	28 33 28 255	</color>
+      <gloss>	0.3	</gloss>
+      <metallic>	0.25	</metallic>
+      <userString>	#vehicle_customization:repaint/traditional_beauty_green	</userString>
+    </paint>
+    <paint>
+      <id>	112	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_29.png	</texture>
+      <color>	179 184 198 255	</color>
+      <gloss>	0.8	</gloss>
+      <metallic>	0.4	</metallic>
+      <userString>	#vehicle_customization:repaint/traditional_beauty_blue	</userString>
+    </paint>
+    <paint>
+      <id>	113	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_03.png	</texture>
+      <color>	19 30 61 255	</color>
+      <gloss>	0.5	</gloss>
+      <metallic>	0.2	</metallic>
+      <userString>	#vehicle_customization:repaint/traditional_beauty_kimono	</userString>
+    </paint>
     <usages>
       <item>
         <componentType>	ALL	</componentType>
@@ -2091,6 +2115,32 @@
       <gloss>	0.6	</gloss>
       <metallic>	0.225	</metallic>
       <userString>	#vehicle_customization:repaint/flavour_asia	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	Gagarin	</name>
+    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	109	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+      <color>	26 34 53 255	</color>
+      <gloss>	0.01	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/gagarin	</userString>
     </paint>
     <usages>
       <item>

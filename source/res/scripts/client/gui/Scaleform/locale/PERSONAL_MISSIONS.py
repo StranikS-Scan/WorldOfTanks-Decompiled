@@ -255,6 +255,7 @@ class PERSONAL_MISSIONS(object):
     AWARDSSCREEN_HEADER_FULLYCOMPLETED = '#personal_missions:awardsScreen/header/fullyCompleted'
     AWARDSSCREEN_HEADEREXTRA = '#personal_missions:awardsScreen/headerExtra'
     AWARDSSCREEN_ACCEPTBTN_LABEL = '#personal_missions:awardsScreen/acceptBtn/label'
+    AWARDSSCREEN_DESCRIPTION_EMAILCONFIRMATION = '#personal_missions:awardsScreen/description/emailConfirmation'
     CONDITIONS_UNLIMITED_LABEL_MAIN = '#personal_missions:conditions/unlimited/label/main'
     CONDITIONS_UNLIMITED_LABEL_ADD = '#personal_missions:conditions/unlimited/label/add'
     CONDITIONS_LIMITED_LABEL_MAIN = '#personal_missions:conditions/limited/label/main'

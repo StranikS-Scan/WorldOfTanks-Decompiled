@@ -179,6 +179,20 @@ class _Wgcg(namedtuple('_Wgcg', ('enabled', 'url', 'type', 'loginOnStart'))):
         return cls(False, '', '', False)
 
 
+class _Wgnp(namedtuple('_Wgnp', ('enabled', 'url'))):
+    __slots__ = ()
+
+    def isEnabled(self):
+        return self.enabled
+
+    def getUrl(self):
+        return self.url
+
+    @classmethod
+    def defaults(cls):
+        return cls(False, '')
+
+
 class _ClanProfile(namedtuple('_ClanProfile', ('enabled',))):
     __slots__ = ()
 
@@ -637,6 +651,7 @@ class ServerSettings(object):
         self.__regionalSettings = _RegionalSettings.defaults()
         self.__eSportCurrentSeason = _ESportCurrentSeason.defaults()
         self.__wgcg = _Wgcg.defaults()
+        self.__wgnp = _Wgnp.defaults()
         self.__clanProfile = _ClanProfile.defaults()
         self.__spgRedesignFeatures = _SpgRedesignFeatures.defaults()
         self.__strongholdSettings = _StrongholdSettings.defaults()
@@ -675,6 +690,8 @@ class ServerSettings(object):
 
         if 'wgcg' in self.__serverSettings:
             self.__updateWgcg(self.__serverSettings)
+        if 'wgnp' in self.__serverSettings:
+            self.__updateWgnp(self.__serverSettings)
         if 'clanProfile' in self.__serverSettings:
             self.__updateClanProfile(self.__serverSettings)
         if 'spgRedesignFeatures' in self.__serverSettings:
@@ -756,6 +773,8 @@ class ServerSettings(object):
             self.__bwHallOfFame = makeTupleByDict(_BwHallOfFame, serverSettingsDiff['hallOfFame'])
         if 'wgcg' in serverSettingsDiff:
             self.__updateWgcg(serverSettingsDiff)
+        if 'wgnp' in serverSettingsDiff:
+            self.__updateWgnp(serverSettingsDiff)
         if 'event_progression_config' in serverSettingsDiff:
             self.__updateEventProgression(serverSettingsDiff)
             self.__serverSettings['event_progression_config'] = serverSettingsDiff['event_progression_config']
@@ -838,6 +857,10 @@ class ServerSettings(object):
     @property
     def wgcg(self):
         return self.__wgcg
+
+    @property
+    def wgnp(self):
+        return self.__wgnp
 
     @property
     def spgRedesignFeatures(self):
@@ -1160,6 +1183,10 @@ class ServerSettings(object):
     def __updateWgcg(self, targetSettings):
         cProfile = targetSettings['wgcg']
         self.__wgcg = _Wgcg(cProfile.get('isEnabled', False), cProfile.get('gateUrl', ''), cProfile.get('type', 'gateway'), cProfile.get('loginOnStart', False))
+
+    def __updateWgnp(self, targetSettings):
+        cProfile = targetSettings['wgnp']
+        self.__wgnp = _Wgnp(cProfile.get('enabled', False), cProfile.get('url', ''))
 
     def __updateEventProgression(self, targetSettings):
         self.__eventProgressionSettings = self.__eventProgressionSettings.replace(targetSettings['event_progression_config'])

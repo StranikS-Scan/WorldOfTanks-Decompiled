@@ -670,6 +670,7 @@ class VehicleDescriptor(object):
         else:
             device = g_cache.optionalDevices()[deviceID]
             prevDevices = self.optionalDevices
+            prevOptDevSlotMap = self._optDevSlotsMap
             if device in prevDevices:
                 return (False, 'already installed')
             if slotIdx >= self.type.supplySlots.getAmountForType(ITEM_TYPES.optionalDevice):
@@ -687,10 +688,12 @@ class VehicleDescriptor(object):
                 if not res[0]:
                     return res
                 devices[slotIdx] = device
+                self._rebuildOptDevSlotsMap()
                 if not _isWeightAllowedToChange(self.__computeWeight(), prevWeight):
                     return (False, 'too heavy')
             finally:
                 self.optionalDevices = prevDevices
+                self._optDevSlotsMap = prevOptDevSlotMap
 
             return (True, None)
 
@@ -700,6 +703,7 @@ class VehicleDescriptor(object):
             return (False, errorStr)
         else:
             prevDevices = self.optionalDevices
+            prevOptDevSlotMap = self._optDevSlotsMap
             optDevs = [ (getItemByCompactDescr(cd) if cd != 0 else None) for cd in optDevSequence ]
             prevWeights = self.__computeWeight()
             try:
@@ -717,10 +721,12 @@ class VehicleDescriptor(object):
                             return (False, 'Similar devices in sequence')
 
                 self.optionalDevices = optDevs
+                self._rebuildOptDevSlotsMap()
                 if not _isWeightAllowedToChange(self.__computeWeight(), prevWeights):
                     return (False, 'Devices are too heavy for vehicle')
             finally:
                 self.optionalDevices = prevDevices
+                self._optDevSlotsMap = prevOptDevSlotMap
 
             return (True, None)
 

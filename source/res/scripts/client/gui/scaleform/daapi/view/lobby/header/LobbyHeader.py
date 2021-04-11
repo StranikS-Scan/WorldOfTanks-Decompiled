@@ -9,10 +9,12 @@ import WWISE
 import constants
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from SoundGroups import g_instance as SoundGroupsInstance
+from account_helpers import account_completion
 from account_helpers.AccountSettings import AccountSettings, QUESTS, QUEST_DELTAS, QUEST_DELTAS_COMPLETION
 from account_helpers.AccountSettings import KNOWN_SELECTOR_BATTLES
 from account_helpers.AccountSettings import NEW_LOBBY_TAB_COUNTER, RECRUIT_NOTIFICATIONS, NEW_SHOP_TABS
 from adisp import process
+from async import async, await
 from constants import PREMIUM_TYPE, EPlatoonButtonState
 from debug_utils import LOG_ERROR
 from frameworks.wulf import ViewFlags, WindowLayer
@@ -44,6 +46,7 @@ from gui.game_control.wallet import WalletController
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.platform.wgnp.controller import isEmailConfirmationNeeded, getEmail, isEmailAddingNeeded
 from gui.shared.events import PlatoonDropdownEvent
 from gui.prb_control import prb_getters
 from gui.prb_control.entities.base.ctx import PrbAction
@@ -79,6 +82,7 @@ from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.linkedset import ILinkedSetController
 from skeletons.gui.login_manager import ILoginManager
 from skeletons.gui.offers import IOffersNovelty
+from skeletons.gui.platform.wgnp_controller import IWGNPRequestController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
@@ -113,6 +117,7 @@ def _updateShopNewCounters():
 class TOOLTIP_TYPES(object):
     COMPLEX = 'complex'
     SPECIAL = 'special'
+    WULF = 'wulf'
     NONE = 'none'
 
 
@@ -234,6 +239,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     platoonCtrl = dependency.descriptor(IPlatoonController)
     __tutorialLoader = dependency.descriptor(ITutorialLoader)
     __loginManager = dependency.descriptor(ILoginManager)
+    wgnpController = dependency.descriptor(IWGNPRequestController)
 
     def __init__(self):
         super(LobbyHeader, self).__init__()
@@ -491,6 +497,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             unitMgr.onUnitLeft += self.__unitMgr_onUnitLeft
             unitMgr.onUnitJoined += self.__unitMgr_onUnitJoined
         self.addListener(PlatoonDropdownEvent.NAME, self.__platoonDropdown)
+        if not self.bootcampController.isInBootcamp():
+            self._addWGNPListeners()
 
     def _removeListeners(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -549,6 +557,17 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             unitMgr.onUnitLeft -= self.__unitMgr_onUnitLeft
             unitMgr.onUnitJoined -= self.__unitMgr_onUnitJoined
         self.removeListener(PlatoonDropdownEvent.NAME, self.__platoonDropdown)
+        self._removeWGNPListeners()
+
+    def _addWGNPListeners(self):
+        self.wgnpController.onEmailConfirmed += self.__onEmailConfirmed
+        self.wgnpController.onEmailAdded += self.__onEmailAdded
+        self.wgnpController.onEmailAddNeeded += self.__onEmailAddNeeded
+
+    def _removeWGNPListeners(self):
+        self.wgnpController.onEmailConfirmed -= self.__onEmailConfirmed
+        self.wgnpController.onEmailAdded -= self.__onEmailAdded
+        self.wgnpController.onEmailAddNeeded -= self.__onEmailAddNeeded
 
     def __platoonDropdown(self, event):
         if event:
@@ -580,12 +599,10 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                 clanAbbrev = clanInfo[1]
             else:
                 clanAbbrev = None
-            self.as_nameResponseS({'userVO': {'fullName': self.lobbyContext.getPlayerFullName(name, clanInfo=clanInfo),
-                        'userName': name,
-                        'clanAbbrev': clanAbbrev},
-             'isTeamKiller': self.itemsCache.items.stats.isTeamKiller,
-             'tooltip': TOOLTIPS.HEADER_ACCOUNT,
-             'tooltipType': TOOLTIP_TYPES.COMPLEX})
+            self.__setPlayerInfo(TOOLTIPS.HEADER_ACCOUNT, TOOLTIP_TYPES.COMPLEX, userVO={'fullName': self.lobbyContext.getPlayerFullName(name, clanInfo=clanInfo),
+             'userName': name,
+             'clanAbbrev': clanAbbrev})
+            self.__updateAccountCompletionStatus()
             self.__updateBoostersStatus()
             self.__removeClanIconFromMemory()
             if g_clanCache.clanDBID:
@@ -595,6 +612,37 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             if diff is not None and any((self.goodiesCache.haveBooster(itemId) for itemId in diff.keys())):
                 SoundGroupsInstance.playSound2D('warehouse_booster')
             return
+
+    def __setPlayerInfo(self, tooltip, tooltipType, tooltipArgs=None, warningIcon=False, userVO=None):
+        data = {'isTeamKiller': self.itemsCache.items.stats.isTeamKiller,
+         'tooltip': tooltip,
+         'tooltipType': tooltipType,
+         'tooltipArgs': tooltipArgs,
+         'isWarningIconVisible': warningIcon}
+        if userVO:
+            data['userVO'] = userVO
+        self.as_nameResponseS(data)
+
+    def __onEmailConfirmed(self):
+        self.__setPlayerInfo(TOOLTIPS.HEADER_ACCOUNT, TOOLTIP_TYPES.COMPLEX, warningIcon=False)
+
+    def __onEmailAdded(self, email):
+        self.__setPlayerInfo(TOOLTIPS_CONSTANTS.ACCOUNT_COMPLETION, TOOLTIP_TYPES.WULF, warningIcon=True, tooltipArgs=[email])
+
+    def __onEmailAddNeeded(self):
+        self.__setPlayerInfo(TOOLTIPS_CONSTANTS.ACCOUNT_COMPLETION, TOOLTIP_TYPES.WULF, warningIcon=True)
+
+    @async
+    def __updateAccountCompletionStatus(self):
+        if not account_completion.isEnabled() or self.bootcampController.isInBootcamp():
+            return
+        response = yield await(self.wgnpController.getEmailStatus())
+        if not response.isSuccess() or self.isDisposed():
+            return
+        if isEmailAddingNeeded(response):
+            self.__onEmailAddNeeded()
+        elif isEmailConfirmationNeeded(response):
+            self.__onEmailAdded(getEmail(response))
 
     def __updateAnonymizedState(self, **_):
         self.as_updateAnonymizedStateS(self.anonymizerController.isAnonymized)

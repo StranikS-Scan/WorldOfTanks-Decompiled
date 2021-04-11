@@ -9,7 +9,6 @@ from gui.shared import EVENT_BUS_SCOPE, events
 from gui.Scaleform.genConsts.EPIC_CONSTS import EPIC_CONSTS
 from gui.Scaleform.daapi.view.battle.epic import markers2d
 from gui.Scaleform.daapi.view.battle.shared import crosshair
-from gui.Scaleform.daapi.view.battle.shared import period_music_listener
 from gui.Scaleform.daapi.view.battle.epic import finish_sound_player, drone_music_player
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
 import CommandMapping
@@ -21,7 +20,6 @@ from shared_utils import CONST_CONTAINER
 class DynamicAliases(CONST_CONTAINER):
     EPIC_FINISH_SOUND_PLAYER = 'epicFinishSoundPlayer'
     EPIC_DRONE_MUSIC_PLAYER = 'epicDroneMusicPlayer'
-    PERIOD_MUSIC_LISTENER = 'periodMusicListener'
 
 
 class _EpicBattleComponentsConfig(ComponentsConfig):
@@ -30,7 +28,6 @@ class _EpicBattleComponentsConfig(ComponentsConfig):
         super(_EpicBattleComponentsConfig, self).__init__(((BATTLE_CTRL_ID.ARENA_PERIOD, (BATTLE_VIEW_ALIASES.BATTLE_TIMER,
            BATTLE_VIEW_ALIASES.PREBATTLE_TIMER,
            DynamicAliases.EPIC_DRONE_MUSIC_PLAYER,
-           DynamicAliases.PERIOD_MUSIC_LISTENER,
            ClassicDynAliases.PREBATTLE_TIMER_SOUND_PLAYER)),
          (BATTLE_CTRL_ID.CALLOUT, (BATTLE_VIEW_ALIASES.CALLOUT_PANEL,)),
          (BATTLE_CTRL_ID.DEBUG, (BATTLE_VIEW_ALIASES.DEBUG_PANEL,)),
@@ -42,7 +39,7 @@ class _EpicBattleComponentsConfig(ComponentsConfig):
          (BATTLE_CTRL_ID.TEAM_BASES, (BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, DynamicAliases.EPIC_DRONE_MUSIC_PLAYER)),
          (BATTLE_CTRL_ID.BATTLE_FIELD_CTRL, (DynamicAliases.EPIC_DRONE_MUSIC_PLAYER,)),
          (BATTLE_CTRL_ID.ARENA_LOAD_PROGRESS, (DynamicAliases.EPIC_DRONE_MUSIC_PLAYER,)),
-         (BATTLE_CTRL_ID.GAME_MESSAGES_PANEL, (BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,))), viewsConfig=((DynamicAliases.PERIOD_MUSIC_LISTENER, period_music_listener.PeriodMusicListener), (DynamicAliases.EPIC_DRONE_MUSIC_PLAYER, drone_music_player.EpicDroneMusicPlayer), (ClassicDynAliases.PREBATTLE_TIMER_SOUND_PLAYER, StartCountdownSoundPlayer)))
+         (BATTLE_CTRL_ID.GAME_MESSAGES_PANEL, (BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,))), viewsConfig=((DynamicAliases.EPIC_DRONE_MUSIC_PLAYER, drone_music_player.EpicDroneMusicPlayer), (ClassicDynAliases.PREBATTLE_TIMER_SOUND_PLAYER, StartCountdownSoundPlayer)))
 
 
 EPIC_BATTLE_CLASSIC_CONFIG = _EpicBattleComponentsConfig()

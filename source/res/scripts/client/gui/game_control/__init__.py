@@ -63,6 +63,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.reactive_comm import ReactiveCommunicationService
     from gui.ui_spam.ui_spam_controller import UISpamController
     from gui.game_control.blueprints_convert_sale_controller import BlueprintsConvertSaleController
+    from gui.game_control.overlay import SteamRegistrationOverlay as _SteamRegistrationOverlay
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -124,3 +125,4 @@ def getGameControllersConfig(manager):
     _config(_interface.IEventProgressionController, _EventProgression())
     _config(_interface.IUISpamController, UISpamController())
     _config(_interface.IBlueprintsConvertSaleController, BlueprintsConvertSaleController())
+    _config(_interface.ISteamRegistrationOverlay, _SteamRegistrationOverlay())

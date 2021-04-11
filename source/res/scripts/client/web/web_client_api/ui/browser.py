@@ -5,6 +5,7 @@ from frameworks.wulf import WindowLayer
 from gui.shop import showBuyGoldWebOverlay
 from gui.shared.event_dispatcher import showBrowserOverlayView
 from helpers import dependency
+from gui.game_control.links import URLMacros
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared.utils.functions import getViewName
 from skeletons.gui.app_loader import IAppLoader
@@ -109,9 +110,11 @@ class CloseBrowserViewWebApiMixin(object):
 class OpenExternalBrowserWebApiMixin(object):
 
     @w2c(_OpenExternalBrowserSchema, 'external_browser')
-    def externalBrowser(self, cmd, ctx):
+    def externalBrowser(self, cmd):
         linkCtrl = dependency.instance(IExternalLinksController)
-        linkCtrl.open(cmd.url)
+        urlParser = URLMacros(allowedMacroses=['DB_ID'])
+        url = yield urlParser.parse(url=cmd.url)
+        linkCtrl.open(url)
 
 
 class OpenBrowserOverlayWebApiMixin(object):

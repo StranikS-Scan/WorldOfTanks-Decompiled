@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/game_control/battle_royale_tournament_controller.py
 import logging
 import calendar
+from collections import Counter
 import BigWorld
 from gui.prb_control.items import prb_seqs
 import AccountCommands
@@ -23,6 +24,7 @@ from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from BattleRoyaleTournament import BattleRoyaleTourmanentToken
 _logger = logging.getLogger(__name__)
 _R_BR_TOURNAMENT_TYPE = R.strings.battle_royale.tournament.type
+_INVITE_START_ID = 1000000000
 
 class BattleRoyaleTournamentController(IBattleRoyaleTournamentController):
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -32,7 +34,6 @@ class BattleRoyaleTournamentController(IBattleRoyaleTournamentController):
         self.__isAvailable = False
         self.__prbType = PREBATTLE_TYPE.BATTLE_ROYALE
         self.__tokens = {}
-        self.__notAvailableTokens = set()
         self.__currentToken = None
         self.__participants = None
         self.__isReJoin = False
@@ -58,9 +59,6 @@ class BattleRoyaleTournamentController(IBattleRoyaleTournamentController):
     def onDisconnected(self):
         self.__clearInternalData()
         self.__clear()
-
-    def getTournamentID(self):
-        return self.__currentToken.tournamentID if self.__currentToken else ''
 
     def getSelectedToken(self):
         return self.__currentToken
@@ -102,12 +100,11 @@ class BattleRoyaleTournamentController(IBattleRoyaleTournamentController):
     def notReady(self):
         self.__tournamentComponent.tournamentNotReady(str(self.__currentToken.tournamentID), self.__notReadyResult)
 
-    def leaveCurrentAndJoinToAnotherTournament(self, newTournamentID):
+    def leaveCurrentAndJoinToAnotherTournament(self, internalTournamentID):
         self.__isReJoin = True
         self.__isChangingInternalState = True
-        self.__currentToken = self.__tokens.get(newTournamentID, None)
+        self.__currentToken = self.__tokens.get(internalTournamentID)
         self.leave()
-        return
 
     def leaveBattleRoyaleTournament(self, isChangingToBattleRoyaleHangar=False):
         if self.__currentToken:
@@ -146,22 +143,16 @@ class BattleRoyaleTournamentController(IBattleRoyaleTournamentController):
         self.__currentToken = None
         self.__tokens = {}
         self.__participants = []
-        self.__notAvailableTokens = set()
         self.__isReJoin = False
         return
 
     def __onClientUpdated(self, diff, _):
         if 'tokens' not in diff:
             return
-        self.__notAvailableTokens = set()
-        isTokenAvailable = self.__itemsCache.items.tokens.isTokenAvailable
         for token in diff['tokens']:
-            if not isTokenAvailable(token):
-                tokenData = BattleRoyaleTourmanentToken(token)
-                if tokenData.isValid:
-                    self.__notAvailableTokens.add(tokenData.tournamentID)
-
-        g_playerEvents.onPrebattleAutoInvitesChanged()
+            if BattleRoyaleTourmanentToken(token).isValid:
+                g_playerEvents.onPrebattleAutoInvitesChanged()
+                return
 
     def __onPrebattleAutoInvitesChanged(self):
         inviteIDs = {invite.prbID for invite in prb_seqs.AutoInvitesIterator()}
@@ -172,37 +163,43 @@ class BattleRoyaleTournamentController(IBattleRoyaleTournamentController):
 
     def __onCollectPrebattleInvites(self, autoInvites):
         self.__isAvailable = False
-        for na in self.__notAvailableTokens:
-            autoInvites.pop(na, None)
+        for key, invite in autoInvites.items():
+            if invite['type'] == PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT:
+                autoInvites.pop(key)
 
         tokens = self.__itemsCache.items.tokens
-        for token in tokens.getTokens():
-            isAvailable = tokens.isTokenAvailable(token)
-            if isAvailable and token.startswith('br_trn'):
-                tokenData = BattleRoyaleTourmanentToken(token)
-                if tokenData.isValid:
-                    if self.__lobbyContext.isAnotherPeriphery(tokenData.peripheryID):
-                        continue
-                    typeLabel = _R_BR_TOURNAMENT_TYPE.solo if tokenData.isSolo else _R_BR_TOURNAMENT_TYPE.squad
-                    descr = {'localized_data': '',
-                     'descr': {'event_name': backport.text(R.strings.battle_royale.tournament.description()),
-                               'session_name': str(tokenData.tournamentID)},
-                     'type': backport.text(typeLabel())}
-                    startTimeTimeStamp = calendar.timegm(tokenData.startTime.utctimetuple())
-                    self.__tokens[tokenData.tournamentID] = tokenData
-                    autoInvites[tokenData.tournamentID] = {'peripheryID': tokenData.peripheryID,
-                     'type': PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT,
-                     'startTime': startTimeTimeStamp,
-                     'description': descr,
-                     'isValid': True,
-                     'addInfo': token}
-                    self.__isAvailable = True
+        parsedTokens = [ BattleRoyaleTourmanentToken(token) for token in tokens.getTokens() if token.startswith('br_trn') and tokens.isTokenAvailable(token) ]
+        availableTokens = [ tokenData for tokenData in parsedTokens if tokenData.isValid and not self.__lobbyContext.isAnotherPeriphery(tokenData.peripheryID) ]
+        key = lambda v: (v.tournamentID, v.type)
+        counts = Counter((key(tokenData) for tokenData in availableTokens))
+        currentInviteID = _INVITE_START_ID
+        for tokenData in availableTokens:
+            if counts[key(tokenData)] > 1:
+                sessionName = '{} [{}]'.format(tokenData.tournamentID, tokenData.participantShortDescr)
+            else:
+                sessionName = str(tokenData.tournamentID)
+            typeLabel = _R_BR_TOURNAMENT_TYPE.solo if tokenData.isSolo else _R_BR_TOURNAMENT_TYPE.squad
+            descr = {'localized_data': '',
+             'descr': {'event_name': backport.text(R.strings.battle_royale.tournament.description()),
+                       'session_name': sessionName},
+             'type': backport.text(typeLabel())}
+            startTimeTimeStamp = calendar.timegm(tokenData.startTime.utctimetuple())
+            while currentInviteID in autoInvites:
+                currentInviteID += 1
+
+            self.__tokens[currentInviteID] = tokenData
+            autoInvites[currentInviteID] = {'peripheryID': tokenData.peripheryID,
+             'type': PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT,
+             'startTime': startTimeTimeStamp,
+             'description': descr,
+             'isValid': True,
+             'addInfo': tokenData.data}
+            self.__isAvailable = True
 
         if not self.__isAvailable:
             self.leaveBattleRoyaleTournament()
             self.__clearInternalData()
             g_playerEvents.onUpdateSpecBattlesWindow()
-        return
 
     def __joinResult(self, requestID, resultID, errorStr):
         if resultID == AccountCommands.RES_SUCCESS:

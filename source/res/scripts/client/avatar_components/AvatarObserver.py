@@ -135,32 +135,36 @@ class AvatarObserver(CallbackDelayer):
 
     def onVehicleChanged(self):
         _logger.debug('Avatar vehicle has changed to %r', self.vehicle)
-        if self.vehicle is not None:
-            typeofveh = 'observed' if self.__observedVehicleID == self.vehicle.id else 'players'
-            _logger.debug('Vehicle ID is %r and is %r', self.vehicle.id, typeofveh)
-        isObserving = self.isObserver()
-        if isObserving and self.vehicle is not None:
-            self.__observedVehicleID = self.vehicle.id
-            self.onObserverVehicleChanged()
-            self.guiSessionProvider.getArenaDP().switchCurrentTeam(self.vehicle.publicInfo['team'])
-            extraData = self.observedVehicleData[self.__observedVehicleID]
-            extraData.gunSettings = self.vehicle.typeDescriptor.gun
-            self.inputHandler.setObservedVehicle(self.__observedVehicleID)
-            if self.gunRotator is not None:
-                self.gunRotator.start()
-            self.updateObservedVehicleData()
-            self.vehicle.set_dotEffect()
-            if not self.guiSessionProvider.shared.vehicleState.isInPostmortem:
-                if hasattr(self.vehicle.filter, 'enableStabilisedMatrix'):
-                    self.vehicle.filter.enableStabilisedMatrix(True)
-                BigWorld.target.exclude = self.vehicle
-                for v in BigWorld.entities.values():
-                    if isinstance(v, Vehicle.Vehicle) and v.appearance is not None:
-                        v.appearance.highlighter.setVehicleOwnership()
-                        self.guiSessionProvider.stopVehicleVisual(v.id, False)
-                        self.guiSessionProvider.startVehicleVisual(v, True)
+        if not self.vehicle and self.observerSeesAll():
+            self.__observedVehicleID = 0
+            return
+        else:
+            if self.vehicle is not None:
+                typeofveh = 'observed' if self.__observedVehicleID == self.vehicle.id else 'players'
+                _logger.debug('Vehicle ID is %r and is %r', self.vehicle.id, typeofveh)
+            isObserving = self.isObserver()
+            if isObserving and self.vehicle is not None:
+                self.__observedVehicleID = self.vehicle.id
+                self.onObserverVehicleChanged()
+                self.guiSessionProvider.getArenaDP().switchCurrentTeam(self.vehicle.publicInfo['team'])
+                extraData = self.observedVehicleData[self.__observedVehicleID]
+                extraData.gunSettings = self.vehicle.typeDescriptor.gun
+                self.inputHandler.setObservedVehicle(self.__observedVehicleID)
+                if self.gunRotator is not None:
+                    self.gunRotator.start()
+                self.updateObservedVehicleData()
+                self.vehicle.set_dotEffect()
+                if not self.guiSessionProvider.shared.vehicleState.isInPostmortem:
+                    if hasattr(self.vehicle.filter, 'enableStabilisedMatrix'):
+                        self.vehicle.filter.enableStabilisedMatrix(True)
+                    BigWorld.target.exclude = self.vehicle
+                    for v in BigWorld.entities.values():
+                        if isinstance(v, Vehicle.Vehicle) and v.appearance is not None:
+                            v.appearance.highlighter.setVehicleOwnership()
+                            self.guiSessionProvider.stopVehicleVisual(v.id, False)
+                            self.guiSessionProvider.startVehicleVisual(v, True)
 
-        return
+            return
 
     def updateObservedVehicleData(self):
         vehicle = self.getVehicleAttached()

@@ -77,10 +77,13 @@ class ProgressiveRewardAwardView(ViewImpl):
         super(ProgressiveRewardAwardView, self)._finalize()
 
     def __update(self, _=None):
-        if self.__specialRewardType != LootCongratsTypes.INIT_CONGRAT_TYPE_CREW_BOOKS and self.__specialRewardType != LootCongratsTypes.INIT_CONGRAT_TYPE_EPIC_REWARDS:
+        unique = (LootCongratsTypes.INIT_CONGRAT_TYPE_CREW_BOOKS, LootCongratsTypes.INIT_CONGRAT_TYPE_EPIC_REWARDS, LootCongratsTypes.INIT_CONGRAT_TYPE_AC_EMAIL_CONFIRMATION)
+        if self.__specialRewardType in unique:
+            deferred = (LootCongratsTypes.INIT_CONGRAT_TYPE_CREW_BOOKS,)
+            if self.__specialRewardType not in deferred:
+                self.viewModel.setInitialCongratsType(self.__specialRewardType)
+        else:
             self.__setSteps(self.__currentStep)
-        if self.__isEpicReward():
-            self.viewModel.setInitialCongratsType(self.__specialRewardType)
         self.__setBonuses(self.__bonuses)
 
     def __onWindowClose(self, _=None):

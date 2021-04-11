@@ -98,6 +98,9 @@ class GraphicsOptimizationManager(GraphicsOptimizationManagerMeta):
     def switchOptimizationEnabled(self, value):
         self.__optimizer.setEnable(value)
 
+    def getEnable(self):
+        return self.__optimizer.getEnable()
+
     def _populate(self):
         super(GraphicsOptimizationManager, self)._populate()
         self.as_switchOptimizationEnabledS(self.__optimizer.getEnable())

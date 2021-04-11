@@ -65,6 +65,8 @@ def setupCollisions(vehicleDesc, collisions):
     for partName, hitTester in hitTestersByPart.iteritems():
         partID = TankPartNames.getIdx(partName)
         hitTester.bbox = collisions.getBoundingBox(partID)
+        if not hitTester.bbox:
+            _logger.error("Couldn't find bounding box for the part '%s' (collisions=%s)", partName, collisions)
 
 
 def prepareCompoundAssembler(vehicleDesc, modelsSetParams, spaceID, isTurretDetached=False, lodIdx=_DEFAULT_LOD_INDEX, skipMaterials=False, renderMode=None):

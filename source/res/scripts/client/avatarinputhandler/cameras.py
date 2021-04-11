@@ -95,6 +95,9 @@ class FreeCamera(object):
     def resetMovement(self):
         self.__cam.resetKeys()
 
+    def set(self, matrix):
+        self.__cam.set(matrix)
+
 
 def readBool(dataSec, name, defaultVal):
     return defaultVal if dataSec is None else dataSec.readBool(name, defaultVal)

@@ -7,7 +7,7 @@ from soft_exception import SoftException
 import BigWorld
 from BWUtil import AsyncReturn
 from functools import wraps, partial
-from constants import IS_DEVELOPMENT
+from constants import IS_DEVELOPMENT, IS_CLIENT
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING, LOG_DEBUG, LOG_DEBUG_DEV
 
 def async(func):
@@ -106,8 +106,12 @@ def delay(timeout):
         promise.set_value(None)
         return
 
-    timerID = BigWorld.addTimer(onDelayTimer, timeout)
-    promise.set_cancel_handler(partial(BigWorld.delTimer, timerID))
+    if IS_CLIENT:
+        from shared_utils import safeCancelCallback
+        timerID, handler = BigWorld.callback(timeout, onDelayTimer), safeCancelCallback
+    else:
+        timerID, handler = BigWorld.addTimer(onDelayTimer, timeout), BigWorld.delTimer
+    promise.set_cancel_handler(partial(handler, timerID))
     return promise.get_future()
 
 
@@ -249,15 +253,22 @@ class _Future(object):
 
     def set_timeout(self, timeout):
         if not self.__result_set:
-            self.__timerID = BigWorld.addTimer(self.__expire, timeout)
+            if IS_CLIENT:
+                self.__timerID = BigWorld.callback(timeout, self.__expire)
+            else:
+                self.__timerID = BigWorld.addTimer(self.__expire, timeout)
 
     def __cancel_timeout(self):
         if self.__timerID is not None:
-            BigWorld.delTimer(self.__timerID)
+            if IS_CLIENT:
+                from shared_utils import safeCancelCallback
+                safeCancelCallback(self.__timerID)
+            else:
+                BigWorld.delTimer(self.__timerID)
             self.__timerID = None
         return
 
-    def __expire(self, timerID, userArg):
+    def __expire(self, *args):
         try:
             self.set_result(_ExpiredPromiseResult())
         finally:

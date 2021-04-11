@@ -1544,9 +1544,6 @@ class IBattleRoyaleTournamentController(IGameController):
     def isAvailable(self):
         raise NotImplementedError
 
-    def getTournamentID(self):
-        raise NotImplementedError
-
     def getSelectedToken(self):
         raise NotImplementedError
 
@@ -1946,3 +1943,27 @@ class IUISpamController(IGameController):
 
 class IBlueprintsConvertSaleController(IGameController):
     pass
+
+
+class IOverlayController(IGameController):
+
+    def switchOverlay(self):
+        raise NotImplementedError
+
+    def setOverlayState(self, state):
+        raise NotImplementedError
+
+    def waitShow(self):
+        raise NotImplementedError
+
+
+class ISteamRegistrationOverlay(IOverlayController):
+
+    def switchOverlay(self):
+        raise NotImplementedError
+
+    def setOverlayState(self, state):
+        raise NotImplementedError
+
+    def waitShow(self):
+        raise NotImplementedError

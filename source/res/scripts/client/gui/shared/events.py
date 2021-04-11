@@ -369,6 +369,7 @@ class CoolDownEvent(SharedEvent):
     WGCG = 'wgcg'
     STRONGHOLD = 'stronghold'
     BATTLE_ACTION = 'battleAction'
+    WGNP = 'wgnp'
 
     def __init__(self, eventType=None, requestID=0, coolDown=5.0):
         super(CoolDownEvent, self).__init__(eventType)

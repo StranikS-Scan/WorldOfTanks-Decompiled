@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class KpiDescriptionModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=2, commands=0):
+    def __init__(self, properties=3, commands=0):
         super(KpiDescriptionModel, self).__init__(properties=properties, commands=commands)
 
     def getValue(self):
@@ -20,7 +20,14 @@ class KpiDescriptionModel(ViewModel):
     def setDescription(self, value):
         self._setString(1, value)
 
+    def getName(self):
+        return self._getString(2)
+
+    def setName(self, value):
+        self._setString(2, value)
+
     def _initialize(self):
         super(KpiDescriptionModel, self)._initialize()
         self._addStringProperty('value', '')
         self._addStringProperty('description', '')
+        self._addStringProperty('name', '')

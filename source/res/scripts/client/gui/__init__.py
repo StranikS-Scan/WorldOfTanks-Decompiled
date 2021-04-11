@@ -132,6 +132,7 @@ def getGuiServicesConfig(manager):
     from gui import hangar_cameras
     from gui import impl
     from gui import offers
+    from gui.platform import wgnp
     from skeletons.gui.lobby_context import ILobbyContext
     manager.addConfig(app_loader.getAppLoaderConfig)
     manager.addConfig(shared.getSharedServices)
@@ -153,6 +154,7 @@ def getGuiServicesConfig(manager):
     manager.addInstance(ILobbyContext, lobby_context.LobbyContext(), finalizer='clear')
     manager.addConfig(offers.getOffersConfig)
     manager.addConfig(server_events.getLinkedSetController)
+    manager.addConfig(wgnp.getWGNPRequestController)
     if HAS_DEV_RESOURCES:
         try:
             from gui.development import getDevelopmentServicesConfig

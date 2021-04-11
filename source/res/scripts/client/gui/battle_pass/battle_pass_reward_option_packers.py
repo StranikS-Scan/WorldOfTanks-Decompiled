@@ -79,6 +79,7 @@ class DeviceRewardOptionPacker(RewardOptionPacker):
             value = cls.__packKpiValue(kpi)
             kpiModel.setValue(value)
             kpiModel.setDescription(backport.text(R.strings.tank_setup.kpi.bonus.dyn(kpi.name)()))
+            kpiModel.setName(kpi.name)
             model.kpiDescriptions.addViewModel(kpiModel)
 
         return model

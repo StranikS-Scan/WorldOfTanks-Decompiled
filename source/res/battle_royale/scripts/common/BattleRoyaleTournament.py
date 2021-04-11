@@ -98,6 +98,10 @@ class BattleRoyaleTourmanentToken(object):
     def isCommander(self):
         return self.isValid and self.role == ROLE.PLAYER_COMMANDER
 
+    @property
+    def participantShortDescr(self):
+        return 'O' if self.role == ROLE.OBSERVER else ('P' if self.role == ROLE.PLAYER else 'C') + str(self.teamID)
+
     def __repr__(self):
         return '{} {}'.format(self.data, self.isValid)
 

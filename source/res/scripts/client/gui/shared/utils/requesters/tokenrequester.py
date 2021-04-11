@@ -81,7 +81,7 @@ class TokenRequester(object):
             BigWorld.callback(t, lambda : callback(None))
 
         yield lambda callback: callback(True)
-        requester = getattr(BigWorld.player(), 'requestToken', None)
+        requester = self._getRequester()
         if not requester or not callable(requester):
             if callback:
                 callback(None)
@@ -105,6 +105,9 @@ class TokenRequester(object):
             elif self.__callback:
                 self.__callback(None)
             return
+
+    def _getRequester(self):
+        return getattr(BigWorld.player(), 'requestToken', None)
 
     def __onTokenReceived(self, requestID, tokenType, data):
         if self.__requestID != requestID or tokenType != self.__tokenType:

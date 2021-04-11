@@ -238,7 +238,9 @@ class ElementTooltip(BlocksTooltipData):
         block = self._packCharacteristicsBlock()
         if block:
             items.append(block)
-        styleDependencies = self.__ctx.mode.getDependenciesData()
+        styleDependencies = None
+        if self.__ctx is not None:
+            styleDependencies = self.__ctx.mode.getDependenciesData()
         if styleDependencies:
             if self._item.itemTypeID == GUI_ITEM_TYPE.CAMOUFLAGE:
                 inheritors = getInheritors(itemCD, styleDependencies)

@@ -77,6 +77,8 @@ class SessionStatsSettings(SessionStatsSettingsMeta):
         self.onShowStats()
 
     def onClickBackBtn(self):
+        self.__currentSettings = self.__sessionStatsSettings.getSettings()
+        self.__setSettings()
         self.onShowStats()
 
     def onSettingsInputChanged(self, identifier, value):

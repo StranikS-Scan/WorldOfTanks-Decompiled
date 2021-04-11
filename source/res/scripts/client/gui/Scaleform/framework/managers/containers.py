@@ -765,11 +765,11 @@ class ContainerManager(ContainerManagerMeta, IContainerManager):
         container = self.__globalContainer.findContainer(layer)
         return container.getView(criteria=criteria) is not None if container is not None else False
 
-    def showContainers(self, *layers):
-        self.as_showContainersS(layers)
+    def showContainers(self, layers, time=0):
+        self.as_showContainersS(layers, time)
 
-    def hideContainers(self, *layers):
-        self.as_hideContainersS(layers)
+    def hideContainers(self, layers, time=0):
+        self.as_hideContainersS(layers, time)
 
     def isContainerShown(self, layer):
         return self.as_isContainerShownS(layer)

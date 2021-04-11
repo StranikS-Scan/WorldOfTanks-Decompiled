@@ -8,7 +8,7 @@ from uilogging.deprecated.mode_selector.loggers import ModeSelectorUILogger
 from adisp import process
 from gui.prb_control.entities.base.ctx import PrbAction
 from account_helpers import isDemonstrator
-from constants import PREBATTLE_TYPE, QUEUE_TYPE, ACCOUNT_ATTR, IS_CHINA
+from constants import PREBATTLE_TYPE, QUEUE_TYPE, ACCOUNT_ATTR
 from gui import GUI_SETTINGS
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.battle_royale.constants import BattleRoyalePerfProblems
@@ -751,7 +751,7 @@ def _addEpicTrainingBattleType(items, settings=None):
 
 
 def _addSpecialBattleType(items):
-    items.append(_SpecBattleItem(backport.text(_R_BATTLE_TYPES.spec()), PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST, 6, isVisible=not IS_CHINA))
+    items.append(_SpecBattleItem(backport.text(_R_BATTLE_TYPES.spec()), PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST, 6))
 
 
 def _addTutorialBattleType(items, isInRoaming):

@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/UserDict.py
-# Compiled at: 2081-06-27 01:38:15
+# Compiled at: 2098-03-08 17:08:18
 """A more or less complete user-defined wrapper around dictionary objects."""
 
 class UserDict:

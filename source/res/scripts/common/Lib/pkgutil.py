@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/pkgutil.py
-# Compiled at: 2082-02-15 22:00:04
+# Compiled at: 2099-09-27 06:29:10
 """Utilities to support packages."""
 import os
 import sys

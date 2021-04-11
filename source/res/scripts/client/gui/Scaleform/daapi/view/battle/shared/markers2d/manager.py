@@ -18,7 +18,7 @@ from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.Scaleform.genConsts.ROOT_SWF_CONSTANTS import ROOT_SWF_CONSTANTS
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.utils.plugins import PluginsCollection
-from helpers import dependency
+from helpers import dependency, isPlayerAvatar
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
@@ -133,15 +133,20 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         return self.__plugins.getPlugin(name) if self.__plugins is not None else None
 
     def startPlugins(self):
-        sessionProvider = dependency.instance(IBattleSessionProvider)
-        if sessionProvider is not None:
-            arenaVisitor = sessionProvider.arenaVisitor
-            self.__addCanvas(sessionProvider, arenaVisitor)
-            self.__setMarkerDuration()
-            self.__createPlugins(arenaVisitor)
+        if not isPlayerAvatar():
+            log = _logger.warning if BattleReplay.g_replayCtrl.isPlaying else _logger.error
+            log('Failed to start plugins for %s', self.__class__.__name__)
+            return
         else:
-            _logger.error('Could not create component due to data missing')
-        return
+            sessionProvider = dependency.instance(IBattleSessionProvider)
+            if sessionProvider is not None:
+                arenaVisitor = sessionProvider.arenaVisitor
+                self.__addCanvas(sessionProvider, arenaVisitor)
+                self.__setMarkerDuration()
+                self.__createPlugins(arenaVisitor)
+            else:
+                _logger.error('Could not create component due to data missing')
+            return
 
     def stopPlugins(self):
         self.__destroyPlugins()

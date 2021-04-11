@@ -19,7 +19,7 @@ class SpawnedBotMsgPlayerMsgs(IProgressionListener, IViewComponentsCtrlListener)
         self.__started = False
 
     def setVehicleChanged(self, vehicle, newModuleIntCD, vehicleRecreated):
-        if not self.__initialized:
+        if not self.__initialized and 'observer' not in vehicle.descriptor.type.tags:
             self.__initialized = True
             self.__started = canVehicleSpawnBot(vehicle.name)
             if self.__started:

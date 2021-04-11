@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/crosshair/container.py
 import logging
+import BattleReplay
 import WWISE
 from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR
 from gui import DEPTH_OF_Aim
@@ -15,8 +16,8 @@ from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control.battle_constants import CROSSHAIR_VIEW_ID
 from gui.shared.utils.plugins import PluginsCollection
 from skeletons.gui.battle_session import IBattleSessionProvider
-from helpers import dependency, i18n
-_logger = _logger = logging.getLogger(__name__)
+from helpers import dependency, i18n, isPlayerAvatar
+_logger = logging.getLogger(__name__)
 
 class AutoloaderBoostSoundEvents(object):
     __slots__ = ()
@@ -141,6 +142,10 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
             return True
 
     def startPlugins(self):
+        if not isPlayerAvatar():
+            log = _logger.warning if BattleReplay.g_replayCtrl.isPlaying else _logger.error
+            log('Failed to start plugins for %s', self.__class__.__name__)
+            return
         self.__plugins.start()
 
     def stopPlugins(self):

@@ -91,9 +91,9 @@ class AS3_AppFactory(IAppFactory):
         lobby = self.__apps[_SPACE.SF_LOBBY]
         if lobby is None:
             lobby = LobbyEntry(_SPACE.SF_LOBBY, self.__ctrlModeFlags[_SPACE.SF_LOBBY])
+            self.__apps[_SPACE.SF_LOBBY] = lobby
             self.__packages[_SPACE.SF_LOBBY] = sf_config.LOBBY_PACKAGES
             self.__importer.load(lobby.proxy, sf_config.COMMON_PACKAGES + self.__packages[_SPACE.SF_LOBBY])
-            self.__apps[_SPACE.SF_LOBBY] = lobby
         lobby.active(True)
         g_windowsStoredData.start()
         return
@@ -139,6 +139,7 @@ class AS3_AppFactory(IAppFactory):
         battle = self.__apps[_SPACE.SF_BATTLE]
         if not battle:
             battle = BattleEntry(_SPACE.SF_BATTLE, self.__ctrlModeFlags[_SPACE.SF_BATTLE])
+            self.__apps[_SPACE.SF_BATTLE] = battle
             packages = sf_config.BATTLE_PACKAGES
             if arenaGuiType in sf_config.BATTLE_PACKAGES_BY_ARENA_TYPE:
                 packages += sf_config.BATTLE_PACKAGES_BY_ARENA_TYPE[arenaGuiType]
@@ -146,7 +147,6 @@ class AS3_AppFactory(IAppFactory):
                 packages += sf_config.BATTLE_PACKAGES_BY_DEFAULT
             self.__packages[_SPACE.SF_BATTLE] = packages
             self.__importer.load(battle.proxy, sf_config.COMMON_PACKAGES + packages)
-            self.__apps[_SPACE.SF_BATTLE] = battle
         BattleReplay.g_replayCtrl.enableTimeWrap()
         BattleReplay.g_replayCtrl.loadServerSettings()
         battle.active(True)

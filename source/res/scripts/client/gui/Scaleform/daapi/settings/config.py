@@ -58,7 +58,8 @@ LOBBY_TOOLTIPS_BUILDERS_PATHS = (('gui.Scaleform.daapi.view.tooltips.achievement
  ('gui.Scaleform.daapi.view.tooltips.vehicle_collector_builders', _TOOLTIPS.VEHICLE_COLLECTOR_SET),
  ('gui.Scaleform.daapi.view.tooltips.badges_builders', _TOOLTIPS.BADGES_SET),
  ('gui.Scaleform.daapi.view.tooltips.battle_pass_builders', _TOOLTIPS.BATTLE_PASS_SET),
- ('gui.Scaleform.daapi.view.tooltips.seniority_builders', _TOOLTIPS.SENIORITY_SET))
+ ('gui.Scaleform.daapi.view.tooltips.seniority_builders', _TOOLTIPS.SENIORITY_SET),
+ ('gui.Scaleform.daapi.view.tooltips.account_completion_builders', _TOOLTIPS.ACCOUNT_COMPLETION_SET))
 ADVANCED_COMPLEX_TOOLTIPS = {'#tooltips:hangar/ammo_panel/device/empty': 'equipment',
  '#tooltips:hangar/ammo_panel/equipment/empty': 'service',
  '#tooltips:equipment/empty': 'service',

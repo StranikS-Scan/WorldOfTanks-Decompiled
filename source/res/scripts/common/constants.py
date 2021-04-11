@@ -1183,6 +1183,8 @@ ENDLESS_TOKEN_TIME_STRING = '28.01.2100 00:01'
 ENDLESS_TOKEN_TIME = int(calendar.timegm(time.strptime(ENDLESS_TOKEN_TIME_STRING, '%d.%m.%Y %H:%M')))
 LOOTBOX_TOKEN_PREFIX = 'lootBox:'
 TWITCH_TOKEN_PREFIX = 'token:twitch'
+EMAIL_CONFIRMATION_QUEST_ID = 'email_confirmation'
+EMAIL_CONFIRMATION_TOKEN_NAME = 'acc_completion:email_confirm'
 
 def personalMissionFreeTokenName(branch):
     return PERSONAL_MISSION_FREE_TOKEN_NAME if branch <= 1 else '_'.join([PERSONAL_MISSION_FREE_TOKEN_NAME, str(branch)])

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/ModelHitTester.py
 from collections import namedtuple
 import math
+import logging
 import BigWorld
 from Math import Vector2, Matrix
 from constants import IS_DEVELOPMENT, IS_CLIENT, IS_BOT
@@ -9,6 +10,7 @@ from soft_exception import SoftException
 from constants import IS_EDITOR
 from wrapped_reflection_framework import ReflectionMetaclass
 from items import _xml
+_logger = logging.getLogger(__name__)
 
 class HitTesterManager(object):
     __metaclass__ = ReflectionMetaclass
@@ -119,7 +121,11 @@ class ModelHitTester(object):
         return self.__bspModel is not None
 
     def loadBspModel(self):
-        if self.__bspModel is not None or self.bspModelName is None:
+        if self.__bspModel is not None:
+            _logger.error('Can not load bsp model, because it is already loaded!')
+            return
+        elif self.bspModelName is None:
+            _logger.error('Can not load bsp model, bspModelName is None')
             return
         else:
             bspModel = BigWorld.WGBspCollisionModel()
@@ -127,6 +133,8 @@ class ModelHitTester(object):
                 raise SoftException("wrong collision model '%s'" % self.bspModelName)
             self.__bspModel = bspModel
             self.bbox = bspModel.getBoundingBox()
+            if not self.bbox:
+                _logger.error("Couldn't find bounding box for the part the name '%s'", self.bspModelName)
             if self.__bspModelNameDown:
                 bspModel = BigWorld.WGBspCollisionModel()
                 if not bspModel.setModelName(self.__bspModelNameDown):

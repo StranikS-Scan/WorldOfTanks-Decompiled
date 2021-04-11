@@ -1545,8 +1545,8 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             if tokenName == constants.PERSONAL_MISSION_FREE_TOKEN_NAME:
                 count += tokenData.get('count', 0)
             quests = self.__eventsCache.getQuestsByTokenRequirement(tokenName)
-            if quests:
-                text = quests[0].getNotificationText().format(count=tokenData.get('count', 0))
+            for quest in quests:
+                text = quest.getNotificationText().format(count=tokenData.get('count', 0))
                 if text:
                     tokenStrings.append(g_settings.htmlTemplates.format('questTokenInvoiceReceived', {'text': text}))
 
@@ -3488,9 +3488,9 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
                 template = self.__TEMPLATE
                 header = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.default())
                 priorityLevel = None
-                if reason == BattlePassRewardReason.BATTLE:
-                    description, template, priorityLevel = self.__makeAfterBattle(ctx)
-                elif reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS:
+                maxLevel = self.__battlePassController.getMaxLevel()
+                currentLevel = ctx.get('newLevel', 0)
+                if reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS:
                     if not rewards:
                         callback([])
                     level = ctx.get('newLevel')
@@ -3504,7 +3504,7 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
                     template = 'BattlePassBuyMultipleMessage'
                     header = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyMultiple.text())
                     description = ''
-                elif reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS:
+                elif reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS and currentLevel < maxLevel:
                     header = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.buyProgress())
                     currentLevel = ctx.get('newLevel')
                     chapter = self.__battlePassController.getChapterByLevel(currentLevel)
@@ -3513,7 +3513,7 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
                     description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyProgress.text(), levelCount=text_styles.credits(levelCount), currentLevel=text_styles.credits(currentLevel + 1), chapter=backport.text(R.strings.battle_pass_2020.chapter.name.num(chapter)()))
                     price = self.__itemsCache.items.shop.getBattlePassLevelCost().get(Currency.GOLD, 0) * levelCount
                     additionalText = self.__makeGoldString(price)
-                elif reason == BattlePassRewardReason.INVOICE:
+                elif reason in (BattlePassRewardReason.INVOICE, BattlePassRewardReason.BATTLE, BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS):
                     description, template, priorityLevel = self.__makeAfterBattle(ctx)
                 formattedBonuses = BattlePassQuestAchievesFormatter.formatQuestAchieves(rewards, False)
                 if formattedBonuses is None:

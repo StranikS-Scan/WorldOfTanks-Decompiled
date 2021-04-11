@@ -8,18 +8,21 @@ from adisp import process, async
 class URLMacros(object):
     __MACROS_PREFIX = '$'
 
-    def __init__(self):
+    def __init__(self, allowedMacroses=None):
         super(URLMacros, self).__init__()
         self.__asyncMacroses = macroses.getAsyncMacroses()
         self.__syncMacroses = macroses.getSyncMacroses()
         macrosKeys = self.__syncMacroses.keys()
         macrosKeys.extend(self.__asyncMacroses.keys())
+        if allowedMacroses is not None:
+            macrosKeys = [ key for key in macrosKeys if key in allowedMacroses ]
         patterns = []
         for macro in macrosKeys:
             patterns.append('\\%(macro)s\\(.*\\)|\\%(macro)s' % {'macro': self._getUserMacrosName(macro)})
 
         self.__filter = re.compile('|'.join(patterns))
         self.__argsFilter = re.compile('\\$(\\w*)(\\((.*)\\))?')
+        return
 
     def clear(self):
         self.__asyncMacroses = None

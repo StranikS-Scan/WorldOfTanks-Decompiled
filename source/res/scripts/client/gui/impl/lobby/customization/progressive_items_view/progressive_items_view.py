@@ -140,7 +140,8 @@ class ProgressiveItemsView(ViewImpl):
         url = yield self.__urlMacros.parse(self.__guiSettings.get('url'))
         webHandlers = webApiCollection(ui_web_api.CloseViewWebApi, sound_web_api.SoundWebApi, sound_web_api.HangarSoundWebApi)
         ctx = {'url': url,
-         'webHandlers': webHandlers}
+         'webHandlers': webHandlers,
+         'allowRightClick': False}
         showProgressiveItemsBrowserView(ctx)
 
     def _getPossibleItemsForVehicle(self):

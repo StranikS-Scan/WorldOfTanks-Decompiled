@@ -468,7 +468,7 @@ class ArenaPeriodSoundPlayer(IAbstractPeriodView, IViewComponentsCtrlListener, I
 
     def setPeriod(self, period):
         self.__period = period
-        if period == ARENA_PERIOD.PREBATTLE:
+        if period == ARENA_PERIOD.PREBATTLE and not BigWorld.player().isObserver():
             BREvents.playSound(BREvents.BATTLE_STARTED)
         else:
             self.__checkBattleEnd()
@@ -478,21 +478,25 @@ class ArenaPeriodSoundPlayer(IAbstractPeriodView, IViewComponentsCtrlListener, I
         self.__checkBattleEnd()
 
     def setPlayerVehicleAlive(self, isAlive):
-        if self.__isAlive and not isAlive:
+        if self.__isAlive and not isAlive and not BigWorld.player().isObserver():
             BREvents.playSound(BREvents.BATTLE_DEFEAT)
         self.__isAlive = isAlive
 
     def __checkBattleEnd(self):
-        if self.__period == ARENA_PERIOD.AFTERBATTLE and self.__winStatus is not None and self.__isAlive:
-            eventName = BREvents.BATTLE_WIN if self.__winStatus.isWin() else BREvents.BATTLE_DEFEAT
-            BREvents.playSound(eventName)
-        return
+        if BigWorld.player().isObserver():
+            return
+        else:
+            if self.__period == ARENA_PERIOD.AFTERBATTLE and self.__winStatus is not None and self.__isAlive:
+                eventName = BREvents.BATTLE_WIN if self.__winStatus.isWin() else BREvents.BATTLE_DEFEAT
+                BREvents.playSound(eventName)
+            return
 
 
 class PostmortemSoundPlayer(IVehicleCountListener):
 
     def setPlayerVehicleAlive(self, isAlive):
-        stateValue = BRStates.STATE_POSTMORTEM_OFF if isAlive else BRStates.STATE_POSTMORTEM_ON
+        isOff = isAlive and not BigWorld.player().isObserver()
+        stateValue = BRStates.STATE_POSTMORTEM_OFF if isOff else BRStates.STATE_POSTMORTEM_ON
         BRStates.setState(BRStates.STATE_POSTMORTEM, stateValue)
 
 
@@ -606,45 +610,43 @@ class EquipmentSoundPlayer(IVehicleCountListener, IViewComponentsCtrlListener):
         return
 
 
-class BerserkerSoundPlayer(_VehicleStateSoundPlayer):
-    __slots__ = ('__effectIsWorking', '__delayer')
+class BerserkerSoundPlayer(_VehicleStateSoundPlayer, CallbackDelayer):
 
     def __init__(self):
-        self.__effectIsWorking = False
-        self.__delayer = None
+        CallbackDelayer.__init__(self)
+        self.__period = None
         return
 
     def destroy(self):
-        self.__stopEvent()
+        self.__stopEffect()
+        CallbackDelayer.destroy(self)
         super(BerserkerSoundPlayer, self).destroy()
 
     def _onVehicleStateUpdated(self, state, value):
         if state == VEHICLE_VIEW_STATE.DOT_EFFECT:
-            if value is not None:
-                if value.attackReasonID == ATTACK_REASONS.index(ATTACK_REASON.BERSERKER):
-                    self.__effectIsWorking = True
-                    BREvents.playSound(BREvents.BERSERKER_ACTIVATION)
-                    self.__delayer = CallbackDelayer()
-                    self.__delayer.delayCallback(value.period, self.__updateShowDotEffect, value.period)
-            elif self.__effectIsWorking:
-                self.__stopEvent()
+            if value is None:
+                self.__stopEffect()
+                return
+            if value.attackReasonID == ATTACK_REASONS.index(ATTACK_REASON.BERSERKER):
+                BREvents.playSound(BREvents.BERSERKER_ACTIVATION)
+                self.__stopEffect()
+                self.__period = value.period
+                self.delayCallback(value.period, self.__updateEffect)
         return
+
+    def __updateEffect(self):
+        BREvents.playSound(BREvents.BERSERKER_PULSE_RED)
+        return self.__period
 
     def _onSwitchViewPoint(self):
-        self.__stopEvent()
+        self.__stopEffect()
 
-    def __stopEvent(self):
-        if self.__delayer is not None:
-            self.__delayer.stopCallback(self.__updateShowDotEffect)
-            self.__delayer = None
-        if self.__effectIsWorking:
+    def __stopEffect(self):
+        if self.__period is not None:
+            self.stopCallback(self.__updateEffect)
+            self.__period = None
             BREvents.playSound(BREvents.BERSERKER_DEACTIVATION)
-            self.__effectIsWorking = False
         return
-
-    def __updateShowDotEffect(self, period):
-        BREvents.playSound(BREvents.BERSERKER_PULSE_RED)
-        return period
 
 
 class BaseEfficiencySoundPlayer(object):

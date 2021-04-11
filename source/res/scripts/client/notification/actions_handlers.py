@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/actions_handlers.py
 from collections import defaultdict
+import typing
 import BigWorld
 from CurrentVehicle import g_currentVehicle
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from adisp import process
+from async import async, await
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import DialogsInterface, makeHtmlString, SystemMessages
 from gui.battle_pass.battle_pass_helpers import showOfferByBonusName
@@ -19,17 +21,19 @@ from gui.clans.clan_helpers import showAcceptClanInviteDialog
 from gui.customization.constants import CustomizationModes, CustomizationModeSource
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.platform.wgnp.controller import isEmailConfirmationNeeded, getEmail
 from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
 from gui.ranked_battles import ranked_helpers
 from gui.server_events.events_dispatcher import showPersonalMission, showMissionsBattlePassCommonProgression, showBattlePass3dStyleChoiceWindow
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events
-from gui.shared.event_dispatcher import showProgressiveRewardWindow, showRankedYearAwardWindow, showBlueprintsSalePage
+from gui.shared.event_dispatcher import showProgressiveRewardWindow, showRankedYearAwardWindow, showBlueprintsSalePage, showConfirmEmailOverlay
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import decorators
 from gui.wgcg.clan import contexts as clan_ctxs
 from gui.wgnc import g_wgncProvider
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.impl import INotificationWindowController
+from skeletons.gui.platform.wgnp_controller import IWGNPRequestController
 from web.web_client_api import webApiCollection
 from web.web_client_api.sound import HangarSoundWebApi
 from helpers import dependency
@@ -43,6 +47,8 @@ from skeletons.gui.game_control import IBrowserController, IRankedBattlesControl
 from skeletons.gui.web import IWebController
 from soft_exception import SoftException
 from skeletons.gui.customization import ICustomizationService
+if typing.TYPE_CHECKING:
+    from notification.NotificationsModel import NotificationsModel
 
 class _ActionHandler(object):
 
@@ -781,6 +787,24 @@ class _OpenNotrecruitedSysMessageHandler(_OpenNotrecruitedHandler):
         return NOTIFICATION_TYPE.MESSAGE
 
 
+class _OpenConfirmEmailHandler(_NavigationDisabledActionHandler):
+    __wgnpCtrl = dependency.descriptor(IWGNPRequestController)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.EMAIL_CONFIRMATION_REMINDER
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    @async
+    def doAction(self, model, entityID, action):
+        emailStatus = yield await(self.__wgnpCtrl.getEmailStatus())
+        if emailStatus.isSuccess() and isEmailConfirmationNeeded(emailStatus):
+            showConfirmEmailOverlay(email=getEmail(emailStatus))
+
+
 class OpenPersonalMissionHandler(_ActionHandler):
 
     @classmethod
@@ -952,7 +976,8 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenBattlePassStyleChoiceView,
  _OpenMissingEventsHandler,
  _OpenNotrecruitedSysMessageHandler,
- _OpentBlueprintsConvertSale)
+ _OpentBlueprintsConvertSale,
+ _OpenConfirmEmailHandler)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

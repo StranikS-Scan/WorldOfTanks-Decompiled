@@ -4,52 +4,52 @@ from gui.impl.gen_utils import DynAccessor
 
 class Videos(DynAccessor):
     __slots__ = ()
-    _bootcampLesson1 = DynAccessor(54470)
-    _bootcampLesson2 = DynAccessor(54471)
-    _bootcampLesson3_1 = DynAccessor(54472)
-    _bootcampLesson3_2 = DynAccessor(54473)
-    _bootcampLesson4 = DynAccessor(54474)
-    _bootcampOutro = DynAccessor(54475)
-    _login = DynAccessor(54476)
-    _tutorialInitial = DynAccessor(54477)
-    _tutorialInitialLoop = DynAccessor(54478)
+    _bootcampLesson1 = DynAccessor(54595)
+    _bootcampLesson2 = DynAccessor(54596)
+    _bootcampLesson3_1 = DynAccessor(54597)
+    _bootcampLesson3_2 = DynAccessor(54598)
+    _bootcampLesson4 = DynAccessor(54599)
+    _bootcampOutro = DynAccessor(54600)
+    _login = DynAccessor(54601)
+    _tutorialInitial = DynAccessor(54602)
+    _tutorialInitialLoop = DynAccessor(54603)
 
     class _battle_pass(DynAccessor):
         __slots__ = ()
-        c_65612_2 = DynAccessor(54479)
-        c_65612_3 = DynAccessor(54480)
-        c_65612_4 = DynAccessor(54481)
-        c_65868_2 = DynAccessor(54482)
-        c_65868_3 = DynAccessor(54483)
-        c_65868_4 = DynAccessor(54484)
-        c_66124_2 = DynAccessor(54485)
-        c_66124_3 = DynAccessor(54486)
-        c_66124_4 = DynAccessor(54487)
+        c_65612_2 = DynAccessor(54604)
+        c_65612_3 = DynAccessor(54605)
+        c_65612_4 = DynAccessor(54606)
+        c_65868_2 = DynAccessor(54607)
+        c_65868_3 = DynAccessor(54608)
+        c_65868_4 = DynAccessor(54609)
+        c_66124_2 = DynAccessor(54610)
+        c_66124_3 = DynAccessor(54611)
+        c_66124_4 = DynAccessor(54612)
 
     battle_pass = _battle_pass()
 
     class _development(DynAccessor):
         __slots__ = ()
-        example = DynAccessor(54488)
-        example_2 = DynAccessor(54489)
+        example = DynAccessor(54613)
+        example_2 = DynAccessor(54614)
 
     development = _development()
 
     class _platoon(DynAccessor):
         __slots__ = ()
-        VoiceChat = DynAccessor(54490)
+        VoiceChat = DynAccessor(54615)
 
     platoon = _platoon()
 
     class _startup(DynAccessor):
         __slots__ = ()
-        ESRB = DynAccessor(54491)
-        Logo_All = DynAccessor(54492)
+        ESRB = DynAccessor(54616)
+        Logo_All = DynAccessor(54617)
 
     startup = _startup()
 
     class _vehicle(DynAccessor):
         __slots__ = ()
-        A122_TS_5 = DynAccessor(54493)
+        A122_TS_5 = DynAccessor(54618)
 
     vehicle = _vehicle()

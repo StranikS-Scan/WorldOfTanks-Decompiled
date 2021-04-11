@@ -49,7 +49,7 @@ from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.ranked_battles import ranked_helpers
 from gui.server_events import events_dispatcher as quests_events, recruit_helper, awards
 from gui.server_events.events_dispatcher import showLootboxesAward, showPiggyBankRewardWindow, showMissionsBattlePassCommonProgression
-from gui.server_events.events_helpers import isDailyQuest
+from gui.server_events.events_helpers import isDailyQuest, isACEmailConfirmationQuest
 from gui.server_events.finders import PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
 from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow, showSeniorityRewardAwardWindow, showRankedSeasonCompleteView, showRankedYearAwardWindow, showBattlePassVehicleAwardWindow, showProgressiveItemsRewardWindow, showProgressionRequiredStyleUnlockedWindow, showRankedYearLBAwardWindow, showDedicationRewardWindow, showBadgeInvoiceAwardWindow
@@ -110,6 +110,15 @@ def _showDailyQuestEpicRewardScreen(quest, context):
     bonusesFromMissionAward = awards.EpicAward(quest, context, None).getAwards()
     if bonusesFromMissionAward:
         showProgressiveRewardAwardWindow(bonusesFromMissionAward, LootCongratsTypes.INIT_CONGRAT_TYPE_EPIC_REWARDS, 0)
+    return
+
+
+def _showACEmailConfirmedRewardScreen(quest, context):
+    missionAwards = awards.MissionAward(quest, context, None).getAwards()
+    if missionAwards:
+        showProgressiveRewardAwardWindow(missionAwards, LootCongratsTypes.INIT_CONGRAT_TYPE_AC_EMAIL_CONFIRMATION, 0)
+    else:
+        _logger.warning('Empty mission [%s] awards.', quest.getID())
     return
 
 
@@ -445,6 +454,8 @@ class TokenQuestsWindowHandler(ServiceChannelHandler):
         for quest, context in completedQuests.itervalues():
             if isDailyQuest(str(quest.getID())):
                 _showDailyQuestEpicRewardScreen(quest, context)
+            if isACEmailConfirmationQuest(quest.getID()):
+                _showACEmailConfirmedRewardScreen(quest, context)
             self._showWindow(quest, context)
 
     @staticmethod

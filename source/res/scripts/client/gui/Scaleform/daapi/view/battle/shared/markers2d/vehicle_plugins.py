@@ -522,6 +522,14 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
                     if marker.isAlive():
                         self._setMarkerBoundEnabled(marker.getMarkerID(), True)
 
+        elif state == VEHICLE_VIEW_STATE.DEBUFF:
+            vehicle = BigWorld.player().getVehicleAttached()
+            if vehicle is not None:
+                vehicleID = vehicle.id
+                if vehicleID in self._markers:
+                    self.__updateDebuffMarker(vehicleID, self._markers[vehicleID].getMarkerID(), value)
+        return
+
     def __makeMarkerSticky(self, targetID, setSticky, isOneShot):
         marker = self._markers[targetID]
         markerID = marker.getMarkerID()

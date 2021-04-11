@@ -13,7 +13,7 @@ from account_helpers.settings_core import settings_constants
 from Avatar import PlayerAvatar
 from arena_components.death_zone_component import BRDeathZoneComponent
 from chat_commands_consts import LocationMarkerSubType
-from constants import VISIBILITY, LOOT_TYPE
+from constants import VISIBILITY, LOOT_TYPE, ARENA_BONUS_TYPE
 from debug_utils import LOG_ERROR
 from battleground.location_point_manager import g_locationPointManager
 from gui.Scaleform.daapi.view.battle.battle_royale.minimap.settings import DeathZonesAs3Descr, BattleRoyaleEntries
@@ -502,6 +502,7 @@ class BattleRoyalMinimapPingPlugin(SimpleMinimapPingPlugin):
 
 
 class BattleRoyaleVehiclePlugin(ArenaVehiclesPlugin):
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, parent):
         super(BattleRoyaleVehiclePlugin, self).__init__(parent)
@@ -591,6 +592,8 @@ class BattleRoyaleVehiclePlugin(ArenaVehiclesPlugin):
         if not self.__isMinimapSmall and not isSpawnedBotVehicle:
             marker = '_'.join((marker, 'big'))
         if avatar_getter.isVehiclesColorized():
+            if self.__sessionProvider.arenaVisitor.getArenaBonusType() == ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SOLO:
+                playerName = ''
             entryName = 'team{}'.format(vInfo.team)
         self.parentObj.invoke(entry.getID(), 'show', marker, playerName, playerFakeName, playerClan, entryName)
 

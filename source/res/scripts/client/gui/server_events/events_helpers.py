@@ -3,7 +3,7 @@
 import operator
 import time
 import BigWorld
-from constants import EVENT_TYPE
+from constants import EVENT_TYPE, EMAIL_CONFIRMATION_QUEST_ID
 from gui import makeHtmlString
 from gui.Scaleform.genConsts.MISSIONS_STATES import MISSIONS_STATES
 from gui.Scaleform.locale.MENU import MENU
@@ -285,6 +285,10 @@ def isRankedPlatform(eventID):
 
 def isDailyQuest(eventID):
     return eventID.startswith(DAILY_QUEST_ID_PREFIX) if eventID else False
+
+
+def isACEmailConfirmationQuest(eventID):
+    return eventID == EMAIL_CONFIRMATION_QUEST_ID if eventID else False
 
 
 def isRegularQuest(eventID):

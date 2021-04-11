@@ -35,6 +35,7 @@ from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.game_control.links import URLMacros
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.lobby.account_completion.decorators import waitShowOverlay
 from gui.impl.lobby.common.congrats.common_congrats_view import CongratsWindow
 from gui.impl.lobby.demount_kit.optional_device_dialogs import BuyAndInstallOpDevDialog, BuyAndStorageOpDevDialog, DemountOpDevSinglePriceDialog, DestroyOpDevDialog, InstallOpDevDialog
 from gui.impl.lobby.demount_kit.selector_dialog import DemountOpDevDialog
@@ -408,7 +409,7 @@ def showShop(url='', path='', params=None, isClientCloseControl=False):
             url = yield parse(url, params)
         else:
             url = getShopURL()
-    url = '/'.join((node.strip('/') for node in (url, path)))
+    url = '/'.join((node.strip('/') for node in (url, path) if node))
     appLoader = dependency.instance(IAppLoader)
     app = appLoader.getApp()
     if app is not None and app.containerManager is not None:
@@ -1249,3 +1250,21 @@ def getParentWindow():
     guiLoader = dependency.instance(IGuiLoader)
     windows = guiLoader.windowsManager.findWindows(lambda w: w.layer == WindowLayer.SUB_VIEW)
     return first(windows)
+
+
+@waitShowOverlay
+def showAddEmailOverlay(initialEmail='', fadeAnimation=False):
+    if isViewLoaded(R.views.lobby.account_completion.EmailConfirmationCurtainView()):
+        return
+    from gui.impl.lobby.account_completion.add_email_overlay_view import AddEmailOverlayWindow
+    wnd = AddEmailOverlayWindow(initialEmail, fadeAnimation)
+    wnd.load()
+
+
+@waitShowOverlay
+def showConfirmEmailOverlay(email='', fadeAnimation=False):
+    if isViewLoaded(R.views.lobby.account_completion.EmailActivateCurtainView()):
+        return
+    from gui.impl.lobby.account_completion.confirm_email_overlay_view import ConfirmEmailOverlayWindow
+    wnd = ConfirmEmailOverlayWindow(email, fadeAnimation)
+    wnd.load()

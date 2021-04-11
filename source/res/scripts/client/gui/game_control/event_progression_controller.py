@@ -501,10 +501,13 @@ class EventProgressionController(IEventProgressionController):
             isAvailable = self.modeIsAvailable()
             return isInPrime and isEnable and not isAvailable and season.getCycleInfo()
 
+    def isReward(self):
+        return self.__rewardStyles or self.__rewardVehicles
+
     def getHeaderTooltipPack(self):
         items = [self.__getTopBackgroundTooltipWithTextData()]
         bottom = -30
-        if not self.isCurrentSeasonInPrimeTime() and not self.modeIsAvailable():
+        if not self.isCurrentSeasonInPrimeTime() and not self.modeIsAvailable() and self.isReward():
             items.append(self.__getRewardStylesData() if self.__rewardStyles else self.__getRewardVehiclesData())
             bottom = 0
         return formatters.packBuildUpBlockData(items, padding=formatters.packPadding(bottom=bottom))

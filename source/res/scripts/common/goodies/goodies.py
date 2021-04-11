@@ -160,19 +160,16 @@ class Goodies(object):
         return False
 
     def __show(self, target, resources, returnDeltas, applyToZero):
-        allResourcesByType = set()
+        if not isinstance(resources, set):
+            resources = {resources}
         toUpdate = {}
-        for goodie in self.actualGoodies.itervalues():
-            goodieDefinition = self.definedGoodies[goodie.uid]
-            if goodieDefinition.isActivatable() and not goodie.isActive():
-                continue
-            if goodieDefinition.target == target:
+        for resource in resources:
+            bestGoodieDef = self.getBestAvailableGoodie(target, resource, applyToZero)
+            if bestGoodieDef is not None:
                 if returnDeltas:
-                    affectedResource = goodieDefinition.apply_delta(resources, applyToZero)
+                    toUpdate[bestGoodieDef.uid] = bestGoodieDef.apply_delta(resource, applyToZero)
                 else:
-                    affectedResource = goodieDefinition.apply(resources, applyToZero)
-                if affectedResource is not None and not self.__checkDuplicateResources(allResourcesByType, affectedResource):
-                    toUpdate[goodie.uid] = affectedResource
+                    toUpdate[bestGoodieDef.uid] = bestGoodieDef.apply(resources, applyToZero)
 
         return toUpdate
 
@@ -181,6 +178,19 @@ class Goodies(object):
 
     def actualIds(self):
         return set(self.actualGoodies.iterkeys())
+
+    def getBestAvailableGoodie(self, target, resource, applyToZero):
+        bestGoodieDef, bestDeltaValue = (None, 0)
+        for goodie in self.actualGoodies.itervalues():
+            goodieDefinition = self.definedGoodies[goodie.uid]
+            if goodieDefinition.isActivatable() and not goodie.isActive():
+                continue
+            if goodieDefinition.target == target and goodieDefinition.resource == resource.__class__:
+                delta = goodieDefinition.apply_delta(resource, applyToZero)
+                if delta is not None and (bestGoodieDef is None or bestDeltaValue < delta.value):
+                    bestGoodieDef, bestDeltaValue = goodieDefinition, delta.value
+
+        return bestGoodieDef
 
     def getFirstGoodie(self, target, resource):
         for goodie in self.actualGoodies.itervalues():

@@ -631,7 +631,7 @@ def __resetC11nItemsNoveltyParamsMerger(merged, callParams):
     return CallParams(kwargs={'items': items})
 
 
-@cooldownCallerDecorator(cooldown=REQUEST_COOLDOWN.CUSTOMIZATION_NOVELTY, paramsMerger=__resetC11nItemsNoveltyParamsMerger)
+@cooldownCallerDecorator(cooldown=REQUEST_COOLDOWN.CUSTOMIZATION_NOVELTY + 0.1, paramsMerger=__resetC11nItemsNoveltyParamsMerger)
 def resetC11nItemsNovelty(items):
 
     def _callback(resultID):

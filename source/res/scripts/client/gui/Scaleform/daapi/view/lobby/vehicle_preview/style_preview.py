@@ -35,7 +35,8 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         super(VehicleStylePreview, self).__init__(ctx)
         self._style = ctx['style']
         self.__vehicleCD = ctx['itemCD']
-        self.__styleDescr = ctx.get('styleDescr')
+        self.__styleDescr = ctx.get('styleDescr') % {'insertion_open': '',
+         'insertion_close': ''}
         self.__backCallback = ctx.get('backCallback', event_dispatcher.showHangar)
         self.__backBtnDescrLabel = ctx.get('backBtnDescrLabel', backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.personalAwards()))
         self.__selectedVehicleEntityId = None

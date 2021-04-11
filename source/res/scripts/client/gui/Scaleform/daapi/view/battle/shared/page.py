@@ -153,9 +153,9 @@ class SharedPage(BattlePageMeta):
     def _toggleGuiVisible(self):
         self._isVisible = not self._isVisible
         if self._isVisible:
-            self.app.containerManager.showContainers(WindowLayer.VIEW)
+            self.app.containerManager.showContainers((WindowLayer.VIEW,))
         else:
-            self.app.containerManager.hideContainers(WindowLayer.VIEW)
+            self.app.containerManager.hideContainers((WindowLayer.VIEW,))
         self.fireEvent(events.GameEvent(events.GameEvent.GUI_VISIBILITY, {'visible': self._isVisible}), scope=EVENT_BUS_SCOPE.BATTLE)
         avatar_getter.setComponentsVisibility(self._isVisible)
 

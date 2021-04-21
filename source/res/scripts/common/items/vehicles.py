@@ -1607,9 +1607,9 @@ class VehicleType(object):
              'track': collisionVelCfg['track'][1],
              'waterContact': collisionVelCfg['waterContact'][1]}
             if not IS_EDITOR:
-                self.effects = _readVehicleEffects(xmlCtx, section, 'effects', commonConfig['defaultVehicleEffects'])
+                self.effects = _readVehicleEffects(xmlCtx, section, 'effects', commonConfig['defaultVehicleEffects'], useOverride=True)
             else:
-                self.effects, self.editorData.damagedStateGroup = _readVehicleEffects(xmlCtx, section, 'effects', commonConfig['defaultVehicleEffects'][0])
+                self.effects, self.editorData.damagedStateGroup = _readVehicleEffects(xmlCtx, section, 'effects', commonConfig['defaultVehicleEffects'][0], useOverride=True)
                 if self.editorData.damagedStateGroup is None:
                     self.editorData.damagedStateGroup = commonConfig['defaultDamagedStateGroup']
             self.camouflage = shared_readers.readCamouflage(xmlCtx, section, 'camouflage')
@@ -4802,30 +4802,25 @@ def __readEffectsTimeLine(xmlCtx, section):
 
 
 def _readEffectGroups(xmlPath, withSubgroups=False):
-    res = {}
     section = ResMgr.openSection(xmlPath)
     if section is None:
         _xml.raiseWrongXml(None, xmlPath, 'can not open or read')
     xmlCtx = (None, xmlPath)
-    if not withSubgroups:
-        for sname, subsection in section.items():
-            if sname in ('xmlns:xmlref',):
-                continue
-            sname = intern(sname)
-            ctx = (xmlCtx, sname)
-            res[sname] = __readEffectsTimeLine(ctx, subsection)
-
-    else:
-        for sname, subsection in section.items():
-            if sname in ('xmlns:xmlref',):
-                continue
-            sname = intern(sname)
-            res[sname] = []
-            for subgroupName, subgroupSection in subsection.items():
-                ctx = (xmlCtx, sname + '/' + subgroupName)
-                res[sname].append(__readEffectsTimeLine(ctx, subgroupSection))
-
+    res = __readEffectGroupsFromSection(section, xmlCtx, withSubgroups)
     ResMgr.purge(xmlPath, True)
+    return res
+
+
+def __readEffectGroupsFromSection(section, xmlCtx, withSubgroups=False):
+    res = {}
+    for sname, subsection in section.items():
+        if sname in ('xmlns:xmlref',):
+            continue
+        sname = intern(sname)
+        if withSubgroups:
+            res[sname] = [ __readEffectsTimeLine((xmlCtx, sname + '/' + subgroupName), subgroupSection) for subgroupName, subgroupSection in subsection.items() ]
+        res[sname] = __readEffectsTimeLine((xmlCtx, sname), subsection)
+
     return res
 
 
@@ -5781,50 +5776,53 @@ def _readPlayerInscriptions(xmlCtx, section, subsectionName, priceFactors, notIn
     return (groups, inscrs)
 
 
-def _readVehicleEffects(xmlCtx, section, subsectionName, defaultEffects=None):
-    res = {}
+def _readVehicleEffects(xmlCtx, section, subsectionName, defaultEffects=None, useOverride=False):
     section = _xml.getSubsection(xmlCtx, section, subsectionName)
-    xmlCtx = (xmlCtx, subsectionName)
     cachedEffects = g_cache._vehicleEffects
-    for effectKind in _vehicleEffectKindNames:
-        subsection = section[effectKind]
-        if subsection is not None:
-            effectName = subsection.asString
-            effect = cachedEffects.get(effectName)
-            if effect is None:
-                _xml.raiseWrongXml(xmlCtx, effectKind, 'missing or wrong effect name')
-        elif defaultEffects is not None and effectKind in defaultEffects:
-            effect = defaultEffects[effectKind]
-        else:
-            effect = None
-        if effect:
-            res[effectKind] = effect
-
+    personalEffects = __readEffectGroupsFromSection(section, (xmlCtx, subsectionName), withSubgroups=True) if useOverride else None
     damagedStateGroupPath = 'damagedStateGroup'
     damagedStateGroupName = _xml.readStringOrNone(xmlCtx, section, damagedStateGroupPath)
-    if damagedStateGroupName is None:
-        if defaultEffects is None:
-            _xml.raiseWrongXml(xmlCtx, '', "subsection effect group '%s' is missing" % damagedStateGroupPath)
-        else:
-            for effectKind in _damagedStateGroupEffectKindNames:
-                res[effectKind] = defaultEffects[effectKind]
+    res = __readDamagedStateEffects(xmlCtx, damagedStateGroupName, personalEffects, cachedEffects, defaultEffects)
+    res.update(__readNormalEffects(xmlCtx, section, personalEffects, cachedEffects, defaultEffects))
+    res['explosion'] = res['ammoBayExplosion']
+    return (res, damagedStateGroupName) if IS_EDITOR else res
 
-    else:
-        xmlCtx = (xmlCtx, damagedStateGroupPath)
-        for effectKind in _damagedStateGroupEffectKindNames:
-            effectName = damagedStateGroupName + effectKind[0].upper() + effectKind[1:]
-            effect = cachedEffects.get(effectName)
-            if effect is None:
-                _xml.raiseWrongXml(xmlCtx, '', 'missing effect or mismatching effect group name (%s is not found)' % effectKind)
+
+def __readDamagedStateEffects(xmlCtx, damagedStateGroupName, personalEffects, cachedEffects, defaultEffects):
+    res = {}
+    for effectKind in _damagedStateGroupEffectKindNames:
+        effect = personalEffects.get(effectKind) if personalEffects is not None and len(personalEffects) > 0 else None
+        if effect is None:
+            if damagedStateGroupName is not None:
+                effect = cachedEffects.get(damagedStateGroupName + effectKind[0].upper() + effectKind[1:])
+            elif defaultEffects is not None:
+                effect = defaultEffects.get(effectKind)
+            else:
+                _xml.raiseWrongXml((xmlCtx, damagedStateGroupName), '', "subsection effect group '%s' is missing" % damagedStateGroupName)
+        if effect is None:
+            _xml.raiseWrongXml((xmlCtx, damagedStateGroupName), '', 'missing effect or mismatching effect group name (%s is not found)' % effectKind)
+        res[effectKind] = effect
+
+    return res
+
+
+def __readNormalEffects(xmlCtx, section, personalEffects, cachedEffects, defaultEffects):
+    res = {}
+    for effectKind in _vehicleEffectKindNames:
+        effect = personalEffects.get(effectKind) if personalEffects is not None and len(personalEffects) > 0 else None
+        if effect is None:
+            subsection = section[effectKind]
+            if subsection is not None:
+                effectName = subsection.asString
+                effect = cachedEffects.get(effectName)
+                if effect is None:
+                    _xml.raiseWrongXml((xmlCtx, section.asString), effectKind, 'missing or wrong effect name')
+            elif defaultEffects is not None:
+                effect = defaultEffects.get(effectKind)
+        if effect is not None:
             res[effectKind] = effect
 
-        xmlCtx = xmlCtx[0]
-    res['explosion'] = res['ammoBayExplosion']
-    if not IS_EDITOR:
-        return res
-    else:
-        return (res, damagedStateGroupName)
-        return
+    return res
 
 
 def _readTurretDetachmentEffects(xmlCtx, section, subsectionName, defaultEffects=None):

@@ -5,6 +5,7 @@ import types
 import sre_compile
 import ResMgr
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
+from helpers import html
 _defaultReplacementFunction = lambda word: '*' * len(word)
 
 class ObsceneLanguageDictionary(object):
@@ -158,6 +159,7 @@ class ChinaOLDictionary(SpecialOLDictionary):
                         badWordWS = badWordSet.asWideString
                         if not isinstance(badWordWS, types.UnicodeType):
                             badWordWS = unicode(badWordWS, 'utf-8')
+                        badWordWS = html.escape(badWordWS)
                         badWordC = re.compile(badWordWS, re.M | re.S | re.U | re.I)
                         obj.__badWordPatterns.append(badWordC)
                     except sre_compile.error:

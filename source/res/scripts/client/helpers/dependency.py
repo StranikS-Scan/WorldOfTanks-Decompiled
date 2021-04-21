@@ -177,7 +177,11 @@ class _DependencyItem(object):
             else:
                 finalizer = getattr(self._service, self._finalizer, None)
                 if finalizer is not None and callable(finalizer):
-                    finalizer()
+                    try:
+                        finalizer()
+                    except Exception:
+                        _logger.exception('Error finalizing %r', self._service)
+
                 else:
                     raise DependencyError('Finalizer {} is not found'.format(self._finalizer))
             return

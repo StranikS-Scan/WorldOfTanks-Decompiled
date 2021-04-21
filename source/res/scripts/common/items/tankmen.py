@@ -759,6 +759,11 @@ def getCommanderGroup(crewDescrs):
     return getTankmanGroup(commanderDecr)
 
 
+def getCrewGroups(crewDescrs):
+    crewDescrs = sorted([ TankmanDescr(descr, battleOnly=True) for descr, invID in izip(crewDescrs, [None] * len(crewDescrs)) ], key=lambda descr: skills_constants.ORDERED_ROLES.index(descr.role))
+    return [ getTankmanGroup(crewDescr) for crewDescr in crewDescrs ]
+
+
 def getTankmanGroup(tankmanDescr):
     return tankmanDescr.group if tankmanDescr is not None else 0
 

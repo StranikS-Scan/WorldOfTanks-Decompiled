@@ -1118,7 +1118,9 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             return
 
     def __onViewDestroyedCallback(self):
-        if self.__styleInfo is not None and self.__styleInfo.visible:
+        if not g_currentVehicle.isPresent():
+            return
+        elif self.__styleInfo is not None and self.__styleInfo.visible:
             return
         else:
             self.__ctx.mode.unselectItem()

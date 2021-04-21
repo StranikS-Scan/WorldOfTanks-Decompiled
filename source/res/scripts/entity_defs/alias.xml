@@ -383,9 +383,10 @@
       <marksOnGun>
         <Type>	UINT8	</Type>
       </marksOnGun>
-      <crewGroup>
-        <Type>	UINT16	</Type>
-      </crewGroup>
+      <crewGroups>
+        <Type>	ARRAY	  <of>	UINT16	</of>
+        </Type>
+      </crewGroups>
       <commanderSkinID>
         <Type>	UINT16	</Type>
       </commanderSkinID>

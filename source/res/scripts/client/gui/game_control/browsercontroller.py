@@ -87,7 +87,7 @@ class BrowserController(IBrowserController):
         if browserID is None:
             browserID = self.__browserIDGenerator.next()
             webBrowserID = browserID
-        elif type(browserID) is not int:
+        elif not isinstance(browserID, int):
             webBrowserID = self.__browserIDGenerator.next()
         ctx = {'url': url,
          'title': title,

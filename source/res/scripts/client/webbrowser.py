@@ -59,7 +59,7 @@ _LOG_SEVERITY_TO_LOG_LEVEL_MAP = {LogSeverity.disable: logging.NOTSET,
 
 class WebBrowser(object):
     hasBrowser = property(lambda self: self.__browser is not None)
-    intializationUrl = property(lambda self: self.__baseUrl)
+    initializationUrl = property(lambda self: self.__baseUrl)
     baseUrl = property(lambda self: '' if self.__browser is None else self.__baseUrl)
     url = property(lambda self: '' if self.__browser is None else self.__browser.url)
     width = property(lambda self: 0 if self.__browser is None else self.__browser.width)

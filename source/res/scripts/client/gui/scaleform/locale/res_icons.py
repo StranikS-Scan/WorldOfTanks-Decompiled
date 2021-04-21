@@ -4631,6 +4631,7 @@ class RES_ICONS(object):
     MAPS_ICONS_LIBRARY_MARK_ON_GUN_ICON = '../maps/icons/library/mark_on_gun_icon.png'
     MAPS_ICONS_LIBRARY_MESSAGEICON_1 = '../maps/icons/library/MessageIcon-1.png'
     MAPS_ICONS_LIBRARY_MISSION_ICON = '../maps/icons/library/mission_icon.png'
+    MAPS_ICONS_LIBRARY_MONEYICON_1 = '../maps/icons/library/MoneyIcon-1.png'
     MAPS_ICONS_LIBRARY_MULTYXP = '../maps/icons/library/multyXp.png'
     MAPS_ICONS_LIBRARY_NEW = '../maps/icons/library/new.png'
     MAPS_ICONS_LIBRARY_NORMALXPICON = '../maps/icons/library/NormalXpIcon.png'

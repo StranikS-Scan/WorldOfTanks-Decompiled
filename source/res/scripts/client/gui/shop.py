@@ -125,9 +125,9 @@ def showBuyBonBattleBoosterOverlay(itemId, source=None, origin=None, alias=VIEW_
 def showBattleBoosterOverlay(itemId, source=None, origin=None, alias=VIEW_ALIAS.OVERLAY_WEB_STORE, itemsCache=None):
     item = itemsCache.items.getItemByCD(itemId)
     if item.getBuyPrice().price.isCurrencyDefined(Currency.CRYSTAL):
-        showBuyMethod = showBuyCreditsBattleBoosterOverlay
-    else:
         showBuyMethod = showBuyBonBattleBoosterOverlay
+    else:
+        showBuyMethod = showBuyCreditsBattleBoosterOverlay
     showBuyMethod(itemId, source, origin, alias)
 
 

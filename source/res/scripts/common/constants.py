@@ -22,7 +22,7 @@ IS_CELLAPP = BigWorld.component == 'cell'
 IS_BASEAPP = BigWorld.component in ('base', 'service')
 IS_WEB = BigWorld.component == 'web'
 IS_DYNAPDATER = False
-CURRENT_REALM = 'CT'
+CURRENT_REALM = 'RU'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -2184,6 +2184,10 @@ class WGC_PUBLICATION:
     WGC_PC = 0
     WGC_360 = 1
     WGC_STEAM = 2
+    NAMES = {WGC_UNKNOWN: 'Unknown',
+     WGC_PC: 'PC',
+     WGC_360: '360',
+     WGC_STEAM: 'Steam'}
 
 
 class DISTRIBUTION_PLATFORM(enum.Enum):

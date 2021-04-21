@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/re.py
-# Compiled at: 2100-01-13 02:25:41
+# Compiled at: 2080-08-27 20:44:28
 r"""Support for regular expressions (RE).
 
 This module provides regular expression matching operations similar to

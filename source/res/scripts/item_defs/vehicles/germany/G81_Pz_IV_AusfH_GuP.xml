@@ -1,0 +1,1797 @@
+<G81_Pz_IV_AusfH_GuP.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <supplySlots>	1 1 1 6 6 6 7 8 8 8	</supplySlots>
+  <speedLimits>
+    <forward>	40	</forward>
+    <backward>	18	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.196	</moving>
+    <still>	0.262	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <firePenalty>	0.393	</firePenalty>
+  </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.1 0.125	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+  </optDevsOverrides>
+  <repairCost>	2.674	</repairCost>
+  <premiumVehicleXPFactor>	0.4	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.0	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+    <density>	0.95 0.95	</density>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	80	</armor_1>
+      <armor_2>	80	</armor_2>
+      <armor_3>	30	</armor_3>
+      <armor_4>	20	</armor_4>
+      <armor_5>	11	</armor_5>
+      <armor_6>	10	</armor_6>
+      <armor_7>	20	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_9>
+      <armor_10>	30	</armor_10>
+      <armor_11>	8	</armor_11>
+      <armor_12>	14.5	</armor_12>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	12290	</weight>
+    <maxHealth>	504	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G81_Pz_IV_AusfH_GuP/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G81_Pz_IV_AusfH_GuP/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G81_Pz_IV_AusfH_GuP/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.34 38.00 0.36 1.00 0.05 0.34	</pitchParams>
+      <rollParams>	1.00 0.34 38.00 0.36 1.00 0.06 0.40	</rollParams>
+      <sensitivityToImpulse>	0.48	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.0163 0.724223 -0.2693	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/german/G81_Pz_IV_AusfH_GuP/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G81_Pz_IV_AusfH_GuP/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <hangarShadowTexture>	vehicles/german/G81_Pz_IV_AusfH_GuP/Pz_IV_AusfH_GuP_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage></camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10000	</slotId>
+        <rayStart>	-0.769876 0.490867 1.82646	</rayStart>
+        <rayEnd>	-0.770685 0.427969 1.43144	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.21	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15000	</slotId>
+        <tags>	formfactor_square	</tags>
+        <position>	0.13886 1.07446 2.08585	</position>
+        <rotation>	0.328296 -0.000005 3.14158	</rotation>
+        <scale>	0.557808 0.100135 0.557819	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	0.138861 0.163154 2.11295	</anchorPosition>
+        <anchorDirection>	0.000011 0.946593 0.32243	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15001	</slotId>
+        <tags>	formfactor_square	</tags>
+        <position>	1.54853 1.15108 1.73498	</position>
+        <rotation>	1.45694 -1.56731 -0.000002	</rotation>
+        <scale>	0.808006 0.136636 0.808022	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.906288	</clipAngle>
+        <anchorPosition>	1.61373 0.15275 1.73476	</anchorPosition>
+        <anchorDirection>	0.993519 -0.113609 -0.00346683	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15002	</slotId>
+        <tags>	formfactor_square	</tags>
+        <position>	-1.54852 1.15113 1.73498	</position>
+        <rotation>	1.45698 1.56731 0.000003	</rotation>
+        <scale>	0.808006 0.136636 0.808022	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.906288	</clipAngle>
+        <anchorPosition>	-1.61372 0.1528 1.73475	</anchorPosition>
+        <anchorDirection>	-0.993524 -0.113571 -0.00346684	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15003	</slotId>
+        <tags>	formfactor_square	</tags>
+        <position>	-1.54121 1.14651 -0.20875	</position>
+        <rotation>	1.45698 1.56731 0.000003	</rotation>
+        <scale>	0.861708 0.145717 0.861725	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.906288	</clipAngle>
+        <anchorPosition>	-1.58654 0.150449 -0.208908	</anchorPosition>
+        <anchorDirection>	-0.993524 -0.113572 -0.00346893	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15004	</slotId>
+        <tags>	formfactor_square	</tags>
+        <position>	1.54133 1.14646 -0.176609	</position>
+        <rotation>	1.45695 -1.56731 -0.000001	</rotation>
+        <scale>	0.861708 0.145717 0.861725	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.906288	</clipAngle>
+        <anchorPosition>	1.58666 0.1504 -0.176767	</anchorPosition>
+        <anchorDirection>	0.99352 -0.1136 -0.00346452	</anchorDirection>
+      </slot>
+    </customizationSlots>
+    <turretPitches>
+      <turret>	0.000000	</turret>
+    </turretPitches>
+    <camouflage>
+      <tiling>	1.36 1.36 0.000000 0.000000	</tiling>
+      <density>	92.5578 92.8382	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_G81_Pz_IV_AusfH_GuP>
+      <userString>	#germany_vehicles:Chassis_G81_Pz_IV_AusfH_GuP	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	7910	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	7800	</weight>
+      <maxLoad>	28000	</maxLoad>
+      <terrainResistance>	1 1.1 2.4	</terrainResistance>
+      <brakeForce>	28000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	32	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G81_Pz_IV_AusfH_GuP/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G81_Pz_IV_AusfH_GuP/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G81_Pz_IV_AusfH_GuP/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	MEDIUM	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.44 0.4	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.5	</textureScale>
+      </tracks>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.430480 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.342020 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.652850	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.398838	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.25	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.4	</radius>
+          <syncAngle>	21	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.35	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.398838	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.25	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.4	</radius>
+          <syncAngle>	21	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.35	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.990877 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G81_Pz_IV_AusfH_GuP/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G81_Pz_IV_AusfH_GuP/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.22177 1.77227	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	-0.0251046	</trackThickness>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G81_Pz_IV_AusfH_GuP/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G81_Pz_IV_AusfH_GuP/track/segment.model	</segmentModelRight>
+        <left>	vehicles/german/G81_Pz_IV_AusfH_GuP/track/left.track	</left>
+        <right>	vehicles/german/G81_Pz_IV_AusfH_GuP/track/right.track	</right>
+        <segmentLength>	0.122601	</segmentLength>
+        <segmentOffset>	0.0984849	</segmentOffset>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.000000	</maxAmplitude>
+        <maxOffset>	0.000000	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1300	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.388771	</forwardElastK>
+          <backwardElastK>	0.665254	</backwardElastK>
+          <offset>	-0.0995763	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.388771	</forwardElastK>
+          <backwardElastK>	0.665254	</backwardElastK>
+          <offset>	-0.0995763	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	0.738983	</forwardElastK>
+          <backwardElastK>	0.499364	</backwardElastK>
+          <offset>	-0.0720339	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	0.738983	</forwardElastK>
+          <backwardElastK>	0.499364	</backwardElastK>
+          <offset>	-0.0720339	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2.26886	</forwardElastK>
+          <backwardElastK>	1.45169	</backwardElastK>
+          <offset>	-0.167373	</offset>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	2.27	</forwardElastK>
+          <backwardElastK>	1.45	</backwardElastK>
+          <offset>	-0.180085	</offset>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	2.27	</forwardElastK>
+          <backwardElastK>	1.45	</backwardElastK>
+          <offset>	-0.161017	</offset>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	2.27	</forwardElastK>
+          <backwardElastK>	1.45	</backwardElastK>
+          <offset>	-0.177966	</offset>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+          <rightSibling>	Track_VT_L4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	2.27	</forwardElastK>
+          <backwardElastK>	1.45	</backwardElastK>
+          <offset>	-0.133475	</offset>
+          <leftSibling>	Track_VT_L3	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2.26886	</forwardElastK>
+          <backwardElastK>	1.45169	</backwardElastK>
+          <offset>	-0.167373	</offset>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	2.27	</forwardElastK>
+          <backwardElastK>	1.45	</backwardElastK>
+          <offset>	-0.180085	</offset>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	2.27	</forwardElastK>
+          <backwardElastK>	1.45	</backwardElastK>
+          <offset>	-0.161017	</offset>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	2.27	</forwardElastK>
+          <backwardElastK>	1.45	</backwardElastK>
+          <offset>	-0.177966	</offset>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+          <rightSibling>	Track_VT_R4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	2.27	</forwardElastK>
+          <backwardElastK>	1.45	</backwardElastK>
+          <offset>	-0.133475	</offset>
+          <leftSibling>	Track_VT_R3	</leftSibling>
+        </node>
+      </trackNodes>
+      <physicalTracks>
+        <left>
+          <segmentsCount>	99	</segmentsCount>
+          <segmentsOuterThickness>	0.0346776	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.102876	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	-1.222	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.123789	</back>
+              <top>	0.119921	</top>
+              <front>	0.119055	</front>
+              <bottom>	0.056213	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.110368	</back>
+              <top>	0.11615	</top>
+              <front>	0.123352	</front>
+              <bottom>	0.056213	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/german/G81_Pz_IV_AusfH_GuP/track/segment.model	</model>
+            <length>	0.124334	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom>
+              <part>
+                <xStart>	-2.69655	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.28577 0.278499 0.271738 0.265455 0.259619 0.254206 0.249195	</ySamples>
+              </part>
+              <part>
+                <xStart>	-2.63655	</xStart>
+                <xStep>	0.271572	</xStep>
+                <ySamples>	0.249195 0.233404 0.827979 0.543223 0.577304 1.03366 0.658381 0.828548 0.664483 1.09102 0.656544 0.77529 0.660174 0.984669 0.850729 0.771405 1.05369 0.551505 0.380806 0.453232	</ySamples>
+              </part>
+              <part>
+                <xStart>	2.52332	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.453232 0.460986 0.4693 0.478225 0.487822 0.498167 0.509352	</ySamples>
+              </part>
+            </bottom>
+            <top>
+              <part>
+                <xStart>	-2.82305	</xStart>
+                <xStep>	0.0621671	</xStep>
+                <ySamples>	1.06619 1.11579 1.1591 1.18299 1.15253 1.15671 1.15954 1.16106 1.16101 1.16095 1.1609 1.16085 1.16081 1.16064 1.16033 1.15986 1.15909 1.15832 1.15755 1.15678 1.15626 1.15576 1.15538 1.15499 1.1545 1.15415 1.15371 1.15327 1.15291 1.15243 1.15203 1.15167 1.15115 1.1508 1.15039 1.1736 1.18729 1.18271 1.15855 1.14867 1.14848 1.1483 1.14812 1.14793 1.14812 1.15111 1.15542 1.15827 1.15827 1.15827 1.15827 1.16292 1.18431 1.18658 1.17041 1.15802 1.15751 1.157 1.15649 1.15598 1.15547 1.15496 1.15445 1.15393 1.15342 1.15291 1.17721 1.18793 1.18052 1.15278 1.15035 1.14984 1.14933 1.14882 1.14831 1.1478 1.14729 1.14678 1.14634 1.14598 1.14561 1.14957 1.15394 1.15826 1.15735 1.15706 1.14898 1.13335 1.12527	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_L5	</wheel>
+            <wheel>	W_L7	</wheel>
+            <wheel>	W_L6	</wheel>
+            <wheel>	W_L5	</wheel>
+            <wheel>	W_L4	</wheel>
+            <wheel>	W_L3	</wheel>
+            <wheel>	W_L2	</wheel>
+            <wheel>	W_L1	</wheel>
+            <wheel>	W_L0	</wheel>
+            <wheel>	WD_L0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_L0	</wheelName>
+              <basePos>	2.29744 0.754866	</basePos>
+              <shiftVec>	0.32594 0.151685	</shiftVec>
+              <jointIdx>	11	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_L5	</wheelName>
+              <basePos>	-2.4816 0.570883	</basePos>
+              <shiftVec>	-0.331112 0.0754198	</shiftVec>
+              <jointIdx>	58	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_L7	</wheelName>
+              <basePos>	-1.76881 0.267517	</basePos>
+              <shiftVec>	-0.0200524 -0.246309	</shiftVec>
+              <jointIdx>	69	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_L0	</wheelName>
+              <basePos>	1.77069 0.267519	</basePos>
+              <shiftVec>	0.0344938 -0.244705	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_L5	</name>
+              <radius>	0.338681	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L0	</name>
+              <radius>	0.358646	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_L5	</name>
+              <startAngle>	-3.04102	</startAngle>
+              <teethCount>	17	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_L0	</name>
+              <startAngle>	0.124562	</startAngle>
+              <teethCount>	19	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	-1.2952 1.13609 -2.82298	</point>
+                <point>	-1.2952 1.18569 -2.76082	</point>
+                <point>	-1.2952 1.229 -2.69865	</point>
+                <point>	-1.2152 1.25289 -2.63648	</point>
+                <point>	-1.2952 1.22243 -2.57431	</point>
+                <point>	-1.2952 1.22661 -2.51215	</point>
+                <point>	-1.29519 1.22944 -2.44998	</point>
+                <point>	-1.29519 1.23096 -2.38781	</point>
+                <point>	-1.29519 1.23091 -2.32565	</point>
+                <point>	-1.29519 1.23086 -2.26348	</point>
+                <point>	-1.29519 1.2308 -2.20131	</point>
+                <point>	-1.29519 1.23075 -2.13914	</point>
+                <point>	-1.29519 1.23072 -2.07698	</point>
+                <point>	-1.29519 1.23055 -2.01481	</point>
+                <point>	-1.29519 1.23023 -1.95264	</point>
+                <point>	-1.29519 1.22976 -1.89048	</point>
+                <point>	-1.29519 1.22899 -1.82831	</point>
+                <point>	-1.29519 1.22822 -1.76614	</point>
+                <point>	-1.29519 1.22745 -1.70397	</point>
+                <point>	-1.29519 1.22668 -1.64181	</point>
+                <point>	-1.29519 1.22616 -1.57964	</point>
+                <point>	-1.27519 1.22566 -1.51747	</point>
+                <point>	-1.26519 1.22528 -1.45531	</point>
+                <point>	-1.24519 1.22489 -1.39314	</point>
+                <point>	-1.23518 1.2244 -1.33097	</point>
+                <point>	-1.22518 1.22405 -1.26881	</point>
+                <point>	-1.20518 1.22362 -1.20664	</point>
+                <point>	-1.19518 1.22317 -1.14447	</point>
+                <point>	-1.18518 1.22282 -1.0823	</point>
+                <point>	-1.16518 1.22234 -1.02014	</point>
+                <point>	-1.15518 1.22194 -0.957971	</point>
+                <point>	-1.13518 1.22157 -0.895804	</point>
+                <point>	-1.12518 1.22106 -0.833637	</point>
+                <point>	-1.11518 1.2207 -0.77147	</point>
+                <point>	-1.09518 1.22029 -0.709303	</point>
+                <point>	-1.08518 1.21982 -0.647136	</point>
+                <point>	-1.07518 1.21947 -0.584969	</point>
+                <point>	-1.05518 1.21901 -0.522802	</point>
+                <point>	-1.05518 1.21876 -0.460635	</point>
+                <point>	-1.05518 1.21858 -0.398468	</point>
+                <point>	-1.05518 1.21839 -0.336301	</point>
+                <point>	-1.05518 1.21821 -0.274133	</point>
+                <point>	-1.05517 1.21802 -0.211966	</point>
+                <point>	-1.05517 1.21784 -0.149799	</point>
+                <point>	-1.05517 1.21803 -0.087632	</point>
+                <point>	-1.05517 1.22102 -0.0254648	</point>
+                <point>	-1.12517 1.22533 0.036703	</point>
+                <point>	-1.29517 1.22817 0.0988717	</point>
+                <point>	-1.29517 1.22817 0.161038	</point>
+                <point>	-1.29517 1.22817 0.223206	</point>
+                <point>	-1.29517 1.22817 0.285373	</point>
+                <point>	-1.29517 1.22817 0.34754	</point>
+                <point>	-1.29517 1.22817 0.409707	</point>
+                <point>	-1.29517 1.22817 0.471874	</point>
+                <point>	-1.28517 1.22817 0.534041	</point>
+                <point>	-1.29517 1.22792 0.596209	</point>
+                <point>	-1.29517 1.22741 0.658376	</point>
+                <point>	-1.29517 1.2269 0.720542	</point>
+                <point>	-1.29517 1.22639 0.78271	</point>
+                <point>	-1.29517 1.22588 0.844877	</point>
+                <point>	-1.29516 1.22537 0.907044	</point>
+                <point>	-1.29516 1.22486 0.969211	</point>
+                <point>	-1.29516 1.22435 1.03138	</point>
+                <point>	-1.29516 1.22383 1.09355	</point>
+                <point>	-1.29516 1.22332 1.15571	</point>
+                <point>	-1.29516 1.22281 1.21788	</point>
+                <point>	-1.29516 1.2223 1.28005	</point>
+                <point>	-1.29516 1.22179 1.34221	</point>
+                <point>	-1.29516 1.22128 1.40438	</point>
+                <point>	-1.29516 1.22077 1.46655	</point>
+                <point>	-1.29516 1.22025 1.52872	</point>
+                <point>	-1.29516 1.21974 1.59088	</point>
+                <point>	-1.29516 1.21923 1.65305	</point>
+                <point>	-1.29516 1.21872 1.71522	</point>
+                <point>	-1.29516 1.21821 1.77738	</point>
+                <point>	-1.29516 1.2177 1.83955	</point>
+                <point>	-1.29516 1.21719 1.90172	</point>
+                <point>	-1.29516 1.21668 1.96388	</point>
+                <point>	-1.29515 1.21624 2.02605	</point>
+                <point>	-1.29515 1.21588 2.08822	</point>
+                <point>	-1.29515 1.21551 2.15039	</point>
+                <point>	-1.18515 1.21947 2.21255	</point>
+                <point>	-1.06515 1.22385 2.27472	</point>
+                <point>	-1.05515 1.22816 2.33689	</point>
+                <point>	-1.29515 1.22725 2.39906	</point>
+                <point>	-1.29515 1.22696 2.46122	</point>
+                <point>	-1.29515 1.21888 2.52339	</point>
+                <point>	-1.29515 1.20325 2.58556	</point>
+                <point>	-1.13515 1.19517 2.64772	</point>
+              </range>
+            </top>
+            <bottom></bottom>
+          </sourceCollisionHullPoints>
+        </left>
+        <right>
+          <segmentsCount>	99	</segmentsCount>
+          <segmentsOuterThickness>	0.0346776	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.102876	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	1.222	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.123789	</back>
+              <top>	0.119921	</top>
+              <front>	0.119055	</front>
+              <bottom>	0.056213	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.110368	</back>
+              <top>	0.11615	</top>
+              <front>	0.123352	</front>
+              <bottom>	0.056213	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/german/G81_Pz_IV_AusfH_GuP/track/segment.model	</model>
+            <length>	0.124335	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom>
+              <part>
+                <xStart>	-2.69653	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.285763 0.278493 0.271733 0.26545 0.259614 0.254202 0.249191	</ySamples>
+              </part>
+              <part>
+                <xStart>	-2.63653	</xStart>
+                <xStep>	0.214995	</xStep>
+                <ySamples>	0.249191 0.218911 0.343205 0.910947 0.582162 0.700466 0.663228 1.09034 0.669333 0.796452 0.655485 0.661388 1.09494 0.665019 0.765465 0.802816 1.03043 1.01759 0.784657 0.776903 1.05125 1.05125 0.438066 0.378185 0.453256	</ySamples>
+              </part>
+              <part>
+                <xStart>	2.52336	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.453255 0.461011 0.469327 0.478255 0.487854 0.498201 0.509389	</ySamples>
+              </part>
+            </bottom>
+            <top>
+              <part>
+                <xStart>	-2.82304	</xStart>
+                <xStep>	0.0621674	</xStep>
+                <ySamples>	1.06389 1.10666 1.14938 1.19239 1.16424 1.16162 1.16062 1.16047 1.16032 1.16017 1.16002 1.15987 1.15972 1.15957 1.15942 1.15926 1.15911 1.15896 1.15881 1.15866 1.15851 1.15836 1.15821 1.15833 1.15844 1.15823 1.15834 1.15844 1.15825 1.15882 1.15938 1.15995 1.16051 1.16107 1.16164 1.17361 1.18729 1.18271 1.1639 1.16446 1.16503 1.16558 1.1661 1.16662 1.16714 1.16766 1.16818 1.1687 1.16922 1.16974 1.17026 1.17078 1.18431 1.18658 1.17234 1.17286 1.17184 1.17017 1.16798 1.16576 1.16363 1.1615 1.15926 1.15709 1.15526 1.15344 1.17722 1.18793 1.18052 1.15277 1.14598 1.14591 1.14584 1.14577 1.1457 1.14563 1.14556 1.14549 1.14542 1.14535 1.1458 1.14663 1.14745 1.14821 1.14972 1.14549 1.13711 1.1243 1.15561	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_R5	</wheel>
+            <wheel>	W_R7	</wheel>
+            <wheel>	W_R6	</wheel>
+            <wheel>	W_R5	</wheel>
+            <wheel>	W_R4	</wheel>
+            <wheel>	W_R3	</wheel>
+            <wheel>	W_R2	</wheel>
+            <wheel>	W_R1	</wheel>
+            <wheel>	W_R0	</wheel>
+            <wheel>	WD_R0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_R0	</wheelName>
+              <basePos>	2.29744 0.754866	</basePos>
+              <shiftVec>	0.325952 0.151659	</shiftVec>
+              <jointIdx>	11	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_R5	</wheelName>
+              <basePos>	-2.4816 0.570886	</basePos>
+              <shiftVec>	-0.331111 0.075426	</shiftVec>
+              <jointIdx>	58	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_R7	</wheelName>
+              <basePos>	-1.76902 0.267469	</basePos>
+              <shiftVec>	-0.0198721 -0.246323	</shiftVec>
+              <jointIdx>	69	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_R0	</wheelName>
+              <basePos>	1.77069 0.26747	</basePos>
+              <shiftVec>	0.0344865 -0.244706	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_R5	</name>
+              <radius>	0.338682	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R0	</name>
+              <radius>	0.358646	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_R5	</name>
+              <startAngle>	-3.04101	</startAngle>
+              <teethCount>	17	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_R0	</name>
+              <startAngle>	0.124563	</startAngle>
+              <teethCount>	19	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	1.2952 1.13609 -2.82298	</point>
+                <point>	1.2952 1.18569 -2.76082	</point>
+                <point>	1.2952 1.229 -2.69865	</point>
+                <point>	1.2152 1.25289 -2.63648	</point>
+                <point>	1.2952 1.22243 -2.57431	</point>
+                <point>	1.2952 1.22661 -2.51215	</point>
+                <point>	1.29519 1.22944 -2.44998	</point>
+                <point>	1.29519 1.23096 -2.38781	</point>
+                <point>	1.29519 1.23091 -2.32565	</point>
+                <point>	1.29519 1.23086 -2.26348	</point>
+                <point>	1.29519 1.2308 -2.20131	</point>
+                <point>	1.29519 1.23075 -2.13914	</point>
+                <point>	1.29519 1.23072 -2.07698	</point>
+                <point>	1.29519 1.23055 -2.01481	</point>
+                <point>	1.29519 1.23023 -1.95264	</point>
+                <point>	1.29519 1.22976 -1.89048	</point>
+                <point>	1.29519 1.22899 -1.82831	</point>
+                <point>	1.29519 1.22822 -1.76614	</point>
+                <point>	1.29519 1.22745 -1.70397	</point>
+                <point>	1.29519 1.22668 -1.64181	</point>
+                <point>	1.29519 1.22616 -1.57964	</point>
+                <point>	1.27519 1.22566 -1.51747	</point>
+                <point>	1.26519 1.22528 -1.45531	</point>
+                <point>	1.24519 1.22489 -1.39314	</point>
+                <point>	1.23518 1.2244 -1.33097	</point>
+                <point>	1.22518 1.22405 -1.26881	</point>
+                <point>	1.20518 1.22362 -1.20664	</point>
+                <point>	1.19518 1.22317 -1.14447	</point>
+                <point>	1.18518 1.22282 -1.0823	</point>
+                <point>	1.16518 1.22234 -1.02014	</point>
+                <point>	1.15518 1.22194 -0.957971	</point>
+                <point>	1.13518 1.22157 -0.895804	</point>
+                <point>	1.12518 1.22106 -0.833637	</point>
+                <point>	1.11518 1.2207 -0.77147	</point>
+                <point>	1.09518 1.22029 -0.709303	</point>
+                <point>	1.08518 1.21982 -0.647136	</point>
+                <point>	1.07518 1.21947 -0.584969	</point>
+                <point>	1.05518 1.21901 -0.522802	</point>
+                <point>	1.05518 1.21876 -0.460635	</point>
+                <point>	1.05518 1.21858 -0.398468	</point>
+                <point>	1.05518 1.21839 -0.336301	</point>
+                <point>	1.05518 1.21821 -0.274133	</point>
+                <point>	1.05517 1.21802 -0.211966	</point>
+                <point>	1.05517 1.21784 -0.149799	</point>
+                <point>	1.05517 1.21803 -0.087632	</point>
+                <point>	1.05517 1.22102 -0.0254648	</point>
+                <point>	1.12517 1.22533 0.036703	</point>
+                <point>	1.29517 1.22817 0.0988717	</point>
+                <point>	1.29517 1.22817 0.161038	</point>
+                <point>	1.29517 1.22817 0.223206	</point>
+                <point>	1.29517 1.22817 0.285373	</point>
+                <point>	1.29517 1.22817 0.34754	</point>
+                <point>	1.29517 1.22817 0.409707	</point>
+                <point>	1.29517 1.22817 0.471874	</point>
+                <point>	1.28517 1.22817 0.534041	</point>
+                <point>	1.29517 1.22792 0.596209	</point>
+                <point>	1.29517 1.22741 0.658376	</point>
+                <point>	1.29517 1.2269 0.720542	</point>
+                <point>	1.29517 1.22639 0.78271	</point>
+                <point>	1.29517 1.22588 0.844877	</point>
+                <point>	1.29516 1.22537 0.907044	</point>
+                <point>	1.29516 1.22486 0.969211	</point>
+                <point>	1.29516 1.22435 1.03138	</point>
+                <point>	1.29516 1.22383 1.09355	</point>
+                <point>	1.29516 1.22332 1.15571	</point>
+                <point>	1.29516 1.22281 1.21788	</point>
+                <point>	1.29516 1.2223 1.28005	</point>
+                <point>	1.29516 1.22179 1.34221	</point>
+                <point>	1.29516 1.22128 1.40438	</point>
+                <point>	1.29516 1.22077 1.46655	</point>
+                <point>	1.29516 1.22025 1.52872	</point>
+                <point>	1.29516 1.21974 1.59088	</point>
+                <point>	1.29516 1.21923 1.65305	</point>
+                <point>	1.29516 1.21872 1.71522	</point>
+                <point>	1.29516 1.21821 1.77738	</point>
+                <point>	1.29516 1.2177 1.83955	</point>
+                <point>	1.29516 1.21719 1.90172	</point>
+                <point>	1.29516 1.21668 1.96388	</point>
+                <point>	1.29515 1.21624 2.02605	</point>
+                <point>	1.29515 1.21588 2.08822	</point>
+                <point>	1.29515 1.21551 2.15039	</point>
+                <point>	1.18515 1.21947 2.21255	</point>
+                <point>	1.06515 1.22385 2.27472	</point>
+                <point>	1.05515 1.22816 2.33689	</point>
+                <point>	1.29515 1.22725 2.39906	</point>
+                <point>	1.29515 1.22696 2.46122	</point>
+                <point>	1.29515 1.21888 2.52339	</point>
+                <point>	1.29515 1.20325 2.58556	</point>
+                <point>	1.13515 1.19517 2.64772	</point>
+              </range>
+            </top>
+            <bottom></bottom>
+          </sourceCollisionHullPoints>
+        </right>
+      </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+    </Chassis_G81_Pz_IV_AusfH_GuP>
+  </chassis>
+  <turrets0>
+    <Turret_1_G81_Pz_IV_AusfH_GuP>
+      <userString>	#germany_vehicles:Turret_1_G81_Pz_IV_AusfH_GuP	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	5	</level>
+      <price>	9200	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	50	</armor_1>
+        <armor_2>	30	</armor_2>
+        <armor_3>	30	</armor_3>
+        <armor_4>	30	</armor_4>
+        <armor_5>	25	</armor_5>
+        <armor_6>	10	</armor_6>
+        <armor_7>	16	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_9>
+        <armor_10>	50	</armor_10>
+        <armor_11>	95	</armor_11>
+        <armor_12>	30	</armor_12>
+        <armor_13>	8	</armor_13>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	3600	</weight>
+      <maxHealth>	126	</maxHealth>
+      <rotationSpeed>	44	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	350	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_KwK_40_L48A>	shared	  <reloadTime>	4	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <maxAmmo>	105	</maxAmmo>
+          <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_7>
+            <gun>	20	</gun>
+          </armor>
+          <aimingTime>	2.3	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/german/G81_Pz_IV_AusfH_GuP/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G81_Pz_IV_AusfH_GuP/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G81_Pz_IV_AusfH_GuP/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G81_Pz_IV_AusfH_GuP/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G81_Pz_IV_AusfH_GuP/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage></camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49000	</slotId>
+              <rayStart>	0.011662 0.000000 2.60251	</rayStart>
+              <rayEnd>	0.00676937 0.0221841 2.60208	</rayEnd>
+              <rayUp>	0.056 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.4	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+          </customizationSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.49 0.49 0.000000 0.000000	</tiling>
+            <density>	158.29 158.148	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
+          </camouflage>
+        </_75mm_KwK_40_L48A>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G81_Pz_IV_AusfH_GuP/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G81_Pz_IV_AusfH_GuP/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G81_Pz_IV_AusfH_GuP/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G81_Pz_IV_AusfH_GuP/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G81_Pz_IV_AusfH_GuP/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	-0.0022 0.369881 0.87771	</gunPosition>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.932 0.000 0.915 0.000 0.444 0.116 0.500 0.696 0.266 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35000	</slotId>
+          <tags>	formfactor_square	</tags>
+          <position>	-0.213486 2.30268 0.172642	</position>
+          <rotation>	0.108785 -0.000008 3.14155	</rotation>
+          <scale>	0.812308 0.145822 0.812317	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.000000	</clipAngle>
+          <anchorPosition>	-0.197184 0.629953 0.446569	</anchorPosition>
+          <anchorDirection>	0.000042 0.994089 0.108571	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35001	</slotId>
+          <tags>	formfactor_square	</tags>
+          <position>	-0.014607 2.06019 -1.84754	</position>
+          <rotation>	1.56716 -0.00314128 -0.00314231	</rotation>
+          <scale>	0.492817 0.0884679 0.492824	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.738586	</clipAngle>
+          <anchorPosition>	0.00169294 0.344892 -1.63272	</anchorPosition>
+          <anchorDirection>	-0.000001 -0.00363636 -0.999993	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35002	</slotId>
+          <tags>	formfactor_square	</tags>
+          <position>	-1.32158 2.07367 -0.486672	</position>
+          <rotation>	1.5647 2.0006 0.575664	</rotation>
+          <scale>	0.353377 0.218785 0.353381	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.929694	</clipAngle>
+          <anchorPosition>	-1.25531 0.358829 -0.210031	</anchorPosition>
+          <anchorDirection>	-0.989368 -0.00511581 -0.145342	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35003	</slotId>
+          <tags>	formfactor_square	</tags>
+          <position>	1.26369 2.07395 -0.486362	</position>
+          <rotation>	1.56466 -1.99836 -0.573527	</rotation>
+          <scale>	0.365089 0.226036 0.365093	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.929694	</clipAngle>
+          <anchorPosition>	1.22798 0.35912 -0.209417	</anchorPosition>
+          <anchorDirection>	0.989353 -0.00516391 -0.145443	</anchorDirection>
+        </slot>
+      </customizationSlots>
+      <camouflage>
+        <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
+        <density>	108.422 105.967	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
+    </Turret_1_G81_Pz_IV_AusfH_GuP>
+  </turrets0>
+  <engines>
+    <Maybach_HL_120_TRM_A>	shared	</Maybach_HL_120_TRM_A>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <FuG5A>	shared	</FuG5A>
+  </radios>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_120_TRM_A>
+          <smplEnginePower>	465.2037	</smplEnginePower>
+          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
+        </Maybach_HL_120_TRM_A>
+      </engines>
+      <chassis>
+        <Chassis_G81_Pz_IV_AusfH_GuP>
+          <axleCount>	5	</axleCount>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.1932	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.08855	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0805	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_G81_Pz_IV_AusfH_GuP>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors>
+    <armour>	0.874009205	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <destruction>
+      <variant1>
+        <timeline>
+          <death>	0.01	</death>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	20.0	</waitChangeBurnSound>
+          <stopDeath>	36000	</stopDeath>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+              </stage>
+              <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+              </stage>
+              <stage>	0.0	  <color>	0 0 0 0	</color>
+              </stage>
+            </stages>
+          </flashBang>
+          <pixie>
+            <startKey>	death	</startKey>
+            <endKey>	stopDeath	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_destruction.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	death	</startKey>
+            <wwsound>	expl_crew_death_l_PC	</wwsound>
+            <wwsoundPC>	expl_crew_death_l_PC	</wwsoundPC>
+            <wwsoundNPC>	expl_crew_death_l_NPC	</wwsoundNPC>
+          </sound>
+          <decal>
+            <startKey>	static	</startKey>
+            <groupName>	slow	</groupName>
+            <texName>	explosion_ground_AM	</texName>
+            <bumpTexName>	explosion_ground_NM	</bumpTexName>
+            <smTexName>	explosion_stone_NO_GMM	</smTexName>
+            <size>	12 12	</size>
+            <randomYaw>	true	</randomYaw>
+          </decal>
+          <pixie>
+            <startKey>	static	</startKey>
+            <endKey>	stopDeath	</endKey>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_smoke_post.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <sound>
+            <startKey>	flaming	</startKey>
+            <wwsound>	burning_tank_medium	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </destruction>
+    <flaming>
+      <variant1>
+        <stages>
+          <fire>	1.0	</fire>
+          <noEmission>	4.0	</noEmission>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	fire	</startKey>
+            <file>	particles/Tank/destruction/flaming_medium_01.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <sound>
+            <startKey>	fire	</startKey>
+            <endKey>	noEmission	</endKey>
+            <stopSyncVisual>	true	</stopSyncVisual>
+            <wwsoundPC>	flaming_engine_medium_pc	</wwsoundPC>
+            <wwsoundNPC>	flaming_engine_medium_npc	</wwsoundNPC>
+          </sound>
+          <stopEmission>
+            <startKey>	noEmission	</startKey>
+          </stopEmission>
+        </effects>
+      </variant1>
+      <variant2>
+        <stages>
+          <fire>	1.0	</fire>
+          <noEmission>	4.0	</noEmission>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	fire	</startKey>
+            <file>	particles/Tank/destruction/flaming_medium_02.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <sound>
+            <startKey>	fire	</startKey>
+            <endKey>	noEmission	</endKey>
+            <stopSyncVisual>	true	</stopSyncVisual>
+            <wwsoundPC>	flaming_engine_medium_pc	</wwsoundPC>
+            <wwsoundNPC>	flaming_engine_medium_npc	</wwsoundNPC>
+          </sound>
+          <stopEmission>
+            <startKey>	noEmission	</startKey>
+          </stopEmission>
+        </effects>
+      </variant2>
+    </flaming>
+    <ammoBayExplosion>
+      <variant1>
+        <timeline>
+          <explosion>	0.01	</explosion>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+          <stopExplosion>	36000	</stopExplosion>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+              </stage>
+              <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+              </stage>
+              <stage>	0.0	  <color>	0 0 0 0	</color>
+              </stage>
+            </stages>
+          </flashBang>
+          <pixie>
+            <startKey>	explosion	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_destruction.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	explosion	</startKey>
+            <wwsound>	expl_crew_death_l_PC	</wwsound>
+            <wwsoundPC>	expl_crew_death_l_PC	</wwsoundPC>
+            <wwsoundNPC>	expl_crew_death_l_NPC	</wwsoundNPC>
+          </sound>
+          <decal>
+            <startKey>	static	</startKey>
+            <groupName>	slow	</groupName>
+            <texName>	explosion_ground_AM	</texName>
+            <bumpTexName>	explosion_ground_NM	</bumpTexName>
+            <smTexName>	explosion_stone_NO_GMM	</smTexName>
+            <size>	12 12	</size>
+            <randomYaw>	true	</randomYaw>
+          </decal>
+          <pixie>
+            <startKey>	static	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_smoke_post.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <sound>
+            <startKey>	flaming	</startKey>
+            <wwsound>	burning_tank_medium	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </ammoBayExplosion>
+    <instantExplosion>
+      <variant1>
+        <timeline>
+          <explosion>	0.01	</explosion>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+          <stopExplosion>	36000	</stopExplosion>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+              </stage>
+              <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+              </stage>
+              <stage>	0.0	  <color>	0 0 0 0	</color>
+              </stage>
+            </stages>
+          </flashBang>
+          <pixie>
+            <startKey>	explosion	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_destruction.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	explosion	</startKey>
+            <wwsoundPC>	expl_crew_death_l_PC	</wwsoundPC>
+            <wwsoundNPC>	expl_crew_death_l_NPC	</wwsoundNPC>
+          </sound>
+          <decal>
+            <startKey>	static	</startKey>
+            <groupName>	slow	</groupName>
+            <texName>	explosion_ground_AM	</texName>
+            <bumpTexName>	explosion_ground_NM	</bumpTexName>
+            <smTexName>	explosion_stone_NO_GMM	</smTexName>
+            <size>	12 12	</size>
+            <randomYaw>	true	</randomYaw>
+          </decal>
+          <sound>
+            <startKey>	flaming	</startKey>
+            <wwsound>	burning_tank_medium	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </instantExplosion>
+    <ammoBayBurnOff>
+      <variant1>
+        <timeline>
+          <explosion>	0.01	</explosion>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+          <stopExplosion>	36000	</stopExplosion>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+              </stage>
+              <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+              </stage>
+              <stage>	0.0	  <color>	0 0 0 0	</color>
+              </stage>
+            </stages>
+          </flashBang>
+          <pixie>
+            <startKey>	explosion	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_destruction.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	explosion	</startKey>
+            <wwsound>	expl_crew_death_l_PC	</wwsound>
+            <wwsoundPC>	expl_crew_death_l_PC	</wwsoundPC>
+            <wwsoundNPC>	expl_crew_death_l_NPC	</wwsoundNPC>
+          </sound>
+          <decal>
+            <startKey>	static	</startKey>
+            <groupName>	slow	</groupName>
+            <texName>	explosion_ground_AM	</texName>
+            <bumpTexName>	explosion_ground_NM	</bumpTexName>
+            <smTexName>	explosion_stone_NO_GMM	</smTexName>
+            <size>	12 12	</size>
+            <randomYaw>	true	</randomYaw>
+          </decal>
+          <pixie>
+            <startKey>	static	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_smoke_post.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <sound>
+            <startKey>	flaming	</startKey>
+            <wwsound>	burning_tank_medium	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </ammoBayBurnOff>
+    <fuelExplosion>
+      <variant1>
+        <timeline>
+          <explosion>	0.01	</explosion>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+          <stopExplosion>	36000	</stopExplosion>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+              </stage>
+              <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+              </stage>
+              <stage>	0.0	  <color>	0 0 0 0	</color>
+              </stage>
+            </stages>
+          </flashBang>
+          <pixie>
+            <startKey>	explosion	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_destruction.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	explosion	</startKey>
+            <wwsound>	expl_crew_death_l_PC	</wwsound>
+            <wwsoundPC>	expl_crew_death_l_PC	</wwsoundPC>
+            <wwsoundNPC>	expl_crew_death_l_NPC	</wwsoundNPC>
+          </sound>
+          <decal>
+            <startKey>	static	</startKey>
+            <groupName>	slow	</groupName>
+            <texName>	explosion_ground_AM	</texName>
+            <bumpTexName>	explosion_ground_NM	</bumpTexName>
+            <smTexName>	explosion_stone_NO_GMM	</smTexName>
+            <size>	12 12	</size>
+            <randomYaw>	true	</randomYaw>
+          </decal>
+          <pixie>
+            <startKey>	static	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_smoke_post.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <sound>
+            <startKey>	flaming	</startKey>
+            <wwsound>	burning_tank_medium	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </fuelExplosion>
+    <crewDeath>
+      <variant1>
+        <timeline>
+          <explosion>	0.01	</explosion>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+          <stopExplosion>	36000	</stopExplosion>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+              </stage>
+              <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+              </stage>
+              <stage>	0.0	  <color>	0 0 0 0	</color>
+              </stage>
+            </stages>
+          </flashBang>
+          <pixie>
+            <startKey>	explosion	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/death_crew_medium.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	explosion	</startKey>
+            <wwsound>	expl_crew_death_m	</wwsound>
+            <wwsoundPC>	expl_crew_death_m_PC	</wwsoundPC>
+            <wwsoundNPC>	expl_crew_death_m_NPC	</wwsoundNPC>
+          </sound>
+          <pixie>
+            <startKey>	static	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <file>	particles/Tank/destruction/smoke_dead_white_small.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+        </effects>
+      </variant1>
+    </crewDeath>
+    <rammingDestruction>
+      <variant1>
+        <timeline>
+          <death>	0.01	</death>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	20.0	</waitChangeBurnSound>
+          <stopDeath>	36000	</stopDeath>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+              </stage>
+              <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+              </stage>
+              <stage>	0.0	  <color>	0 0 0 0	</color>
+              </stage>
+            </stages>
+          </flashBang>
+          <pixie>
+            <startKey>	death	</startKey>
+            <endKey>	stopDeath	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_destruction.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	death	</startKey>
+            <wwsound>	expl_crew_death_l_PC	</wwsound>
+            <wwsoundPC>	expl_crew_death_l_PC	</wwsoundPC>
+            <wwsoundNPC>	expl_crew_death_l_NPC	</wwsoundNPC>
+          </sound>
+          <decal>
+            <startKey>	static	</startKey>
+            <groupName>	slow	</groupName>
+            <texName>	explosion_ground_AM	</texName>
+            <bumpTexName>	explosion_ground_NM	</bumpTexName>
+            <smTexName>	explosion_stone_NO_GMM	</smTexName>
+            <size>	12 12	</size>
+            <randomYaw>	true	</randomYaw>
+          </decal>
+          <pixie>
+            <startKey>	static	</startKey>
+            <endKey>	stopDeath	</endKey>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_smoke_post.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <sound>
+            <startKey>	flaming	</startKey>
+            <wwsound>	burning_tank_medium	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </rammingDestruction>
+    <submersionDeath>
+      <variant1>
+        <timeline>
+          <explosion>	0.01	</explosion>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+          <stopExplosion>	36000	</stopExplosion>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	explosion	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/sink_medium.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	explosion	</startKey>
+            <wwsound>	expl_submersion_death	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </submersionDeath>
+    <explosionCandle1>
+      <variant1>
+        <timeline>
+          <explosion>	0.01	</explosion>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+          <stopExplosion>	36000	</stopExplosion>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+              </stage>
+              <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+              </stage>
+              <stage>	0.0	  <color>	0 0 0 0	</color>
+              </stage>
+            </stages>
+          </flashBang>
+          <pixie>
+            <startKey>	explosion	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_destruction.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	explosion	</startKey>
+            <wwsound>	expl_crew_death_l_PC	</wwsound>
+            <wwsoundPC>	expl_crew_death_l_PC	</wwsoundPC>
+            <wwsoundNPC>	expl_crew_death_l_NPC	</wwsoundNPC>
+          </sound>
+          <decal>
+            <startKey>	static	</startKey>
+            <groupName>	slow	</groupName>
+            <texName>	explosion_ground_AM	</texName>
+            <bumpTexName>	explosion_ground_NM	</bumpTexName>
+            <smTexName>	explosion_stone_NO_GMM	</smTexName>
+            <size>	12 12	</size>
+            <randomYaw>	true	</randomYaw>
+          </decal>
+          <pixie>
+            <startKey>	static	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_smoke_post.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <sound>
+            <startKey>	flaming	</startKey>
+            <wwsound>	burning_tank_medium	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </explosionCandle1>
+    <explosionCandle2>
+      <variant1>
+        <timeline>
+          <explosion>	0.01	</explosion>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+          <stopExplosion>	36000	</stopExplosion>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+              </stage>
+              <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+              </stage>
+              <stage>	0.0	  <color>	0 0 0 0	</color>
+              </stage>
+            </stages>
+          </flashBang>
+          <pixie>
+            <startKey>	explosion	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_destruction.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	explosion	</startKey>
+            <wwsound>	expl_crew_death_l_PC	</wwsound>
+            <wwsoundPC>	expl_crew_death_l_PC	</wwsoundPC>
+            <wwsoundNPC>	expl_crew_death_l_NPC	</wwsoundNPC>
+          </sound>
+          <decal>
+            <startKey>	static	</startKey>
+            <groupName>	slow	</groupName>
+            <texName>	explosion_ground_AM	</texName>
+            <bumpTexName>	explosion_ground_NM	</bumpTexName>
+            <smTexName>	explosion_stone_NO_GMM	</smTexName>
+            <size>	12 12	</size>
+            <randomYaw>	true	</randomYaw>
+          </decal>
+          <pixie>
+            <startKey>	static	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_smoke_post.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <sound>
+            <startKey>	flaming	</startKey>
+            <wwsound>	burning_tank_medium	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </explosionCandle2>
+    <explosionCandle3>
+      <variant1>
+        <timeline>
+          <explosion>	0.01	</explosion>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+          <stopExplosion>	36000	</stopExplosion>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+              </stage>
+              <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+              </stage>
+              <stage>	0.0	  <color>	0 0 0 0	</color>
+              </stage>
+            </stages>
+          </flashBang>
+          <pixie>
+            <startKey>	explosion	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_destruction.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	explosion	</startKey>
+            <wwsound>	expl_crew_death_l_PC	</wwsound>
+            <wwsoundPC>	expl_crew_death_l_PC	</wwsoundPC>
+            <wwsoundNPC>	expl_crew_death_l_NPC	</wwsoundNPC>
+          </sound>
+          <decal>
+            <startKey>	static	</startKey>
+            <groupName>	slow	</groupName>
+            <texName>	explosion_ground_AM	</texName>
+            <bumpTexName>	explosion_ground_NM	</bumpTexName>
+            <smTexName>	explosion_stone_NO_GMM	</smTexName>
+            <size>	12 12	</size>
+            <randomYaw>	true	</randomYaw>
+          </decal>
+          <pixie>
+            <startKey>	static	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_smoke_post.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <sound>
+            <startKey>	flaming	</startKey>
+            <wwsound>	burning_tank_medium	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </explosionCandle3>
+    <explosionCandle4>
+      <variant1>
+        <timeline>
+          <explosion>	0.01	</explosion>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+          <stopExplosion>	36000	</stopExplosion>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+              </stage>
+              <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+              </stage>
+              <stage>	0.0	  <color>	0 0 0 0	</color>
+              </stage>
+            </stages>
+          </flashBang>
+          <pixie>
+            <startKey>	explosion	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_destruction.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	explosion	</startKey>
+            <wwsound>	expl_crew_death_l_PC	</wwsound>
+            <wwsoundPC>	expl_crew_death_l_PC	</wwsoundPC>
+            <wwsoundNPC>	expl_crew_death_l_NPC	</wwsoundNPC>
+          </sound>
+          <decal>
+            <startKey>	static	</startKey>
+            <groupName>	slow	</groupName>
+            <texName>	explosion_ground_AM	</texName>
+            <bumpTexName>	explosion_ground_NM	</bumpTexName>
+            <smTexName>	explosion_stone_NO_GMM	</smTexName>
+            <size>	12 12	</size>
+            <randomYaw>	true	</randomYaw>
+          </decal>
+          <pixie>
+            <startKey>	static	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_smoke_post.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <sound>
+            <startKey>	flaming	</startKey>
+            <wwsound>	burning_tank_medium	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </explosionCandle4>
+  </effects>
+  <emblems>
+    <default>	15502	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.8	</alpha>
+  </emblems>
+  <customDefaultCamouflage>	true	</customDefaultCamouflage>
+</G81_Pz_IV_AusfH_GuP.xml>

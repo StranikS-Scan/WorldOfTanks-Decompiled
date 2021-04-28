@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/battle_royale/battle_upgrade_panel.py
 import logging
-import BigWorld
 from ReplayEvents import g_replayEvents
 from gui.battle_control import avatar_getter
 from helpers import dependency
 import BattleReplay
 import CommandMapping
+from gui.Scaleform.daapi.view.battle.shared.attention_effect_player import AttentionEffectPlayer
 from gui.Scaleform.daapi.view.common.battle_royale import br_helpers
 from gui.Scaleform.daapi.view.common.battle_royale.params import getShortListParameters
 from gui.Scaleform.daapi.view.meta.BattleUpgradePanelMeta import BattleUpgradePanelMeta
@@ -21,56 +21,16 @@ from gui.shared.gui_items import isItemVehicleHull
 from skeletons.gui.battle_session import IBattleSessionProvider
 logger = logging.getLogger(__name__)
 
-class _AttentionEffectPlayer(object):
-    __slots__ = ('__viewRef', '__callbackID', '__delayTime', '__isPlaying')
-
-    def __init__(self, viewRef):
-        super(_AttentionEffectPlayer, self).__init__()
-        self.__viewRef = viewRef
-        self.__callbackID = None
-        self.__delayTime = getBattleRoyaleSettings().upgradeAttentionTime
-        self.__isPlaying = False
-        return
+class _UpgradePanelAttentionPlayer(AttentionEffectPlayer):
+    __slots__ = ()
 
     def setVisible(self, visible):
         eventName = BREvents.UPGRADE_PANEL_SHOW if visible else BREvents.UPGRADE_PANEL_HIDE
         BREvents.playSound(eventName)
-        if visible:
-            if self.__callbackID is not None or self.__isPlaying:
-                self.__stopEffect()
-            self.__startTimer()
-        else:
-            self.__stopEffect()
-        return
+        super(_UpgradePanelAttentionPlayer, self).setVisible(visible)
 
-    def destroy(self):
-        self.__viewRef = None
-        self.__disposeTimer()
-        return
-
-    def __startTimer(self):
-        self.__callbackID = BigWorld.callback(self.__delayTime, self.__onDelayFinished)
-
-    def __disposeTimer(self):
-        if self.__callbackID is not None:
-            BigWorld.cancelCallback(self.__callbackID)
-            self.__callbackID = None
-        return
-
-    def __stopAnimation(self):
-        if self.__isPlaying:
-            self.__viewRef.as_hideNotificationAnimS()
-            self.__isPlaying = False
-
-    def __stopEffect(self):
-        self.__disposeTimer()
-        self.__stopAnimation()
-
-    def __onDelayFinished(self):
-        self.__callbackID = None
-        self.__isPlaying = True
-        self.__viewRef.as_showNotificationAnimS()
-        return
+    def _setDelayTime(self):
+        return getBattleRoyaleSettings().upgradeAttentionTime
 
 
 class BattleUpgradePanel(BattleUpgradePanelMeta, IArenaVehiclesController, IProgressionListener):
@@ -79,7 +39,7 @@ class BattleUpgradePanel(BattleUpgradePanelMeta, IArenaVehiclesController, IProg
 
     def __init__(self):
         super(BattleUpgradePanel, self).__init__()
-        self.__attentionEffect = _AttentionEffectPlayer(self)
+        self.__attentionEffect = _UpgradePanelAttentionPlayer(self)
         self.__level = 0
         self.__upgrades = []
         self.__localVisible = False
@@ -125,6 +85,12 @@ class BattleUpgradePanel(BattleUpgradePanelMeta, IArenaVehiclesController, IProg
         if index < len(self.__upgrades):
             self.as_showSelectAnimS(index)
             self._selectVehicleItem(self.__upgrades[index])
+
+    def showNotificationAnim(self):
+        self.as_showNotificationAnimS()
+
+    def hideNotificationAnim(self):
+        self.as_hideNotificationAnimS()
 
     def _populate(self):
         super(BattleUpgradePanel, self)._populate()

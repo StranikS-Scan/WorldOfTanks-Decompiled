@@ -48,10 +48,6 @@ _CMD_SERVER_CHANGE_HANGAR_MUSIC = 'cmd_change_hangar_music'
 _ON_VEHICLE_KILLED_EVENT = 'music_stinger'
 _SERVER_OVERRIDDEN = 0
 _CLIENT_OVERRIDDEN = 1
-_ARENA_PERIOD_STATE_NAME = 'STATE_arenastate'
-_ARENA_PERIOD_STATE = {ARENA_PERIOD.WAITING: 'STATE_arenastate_waiting',
- ARENA_PERIOD.PREBATTLE: 'STATE_arenastate_counter',
- ARENA_PERIOD.BATTLE: 'STATE_arenastate_battle'}
 g_musicController = None
 
 def create():
@@ -72,12 +68,6 @@ def init(arenaName):
 def destroy():
     if g_musicController is not None:
         g_musicController.destroy()
-    return
-
-
-def onBecomePlayer():
-    if g_musicController is not None:
-        g_musicController.onBecomePlayer()
     return
 
 
@@ -239,9 +229,6 @@ class MusicController(object):
     def setEventParam(self, paramName, paramValue):
         WWISE.WW_setRTCPGlobal(paramName, paramValue)
 
-    def onBecomePlayer(self):
-        WWISE.WW_setState(_ARENA_PERIOD_STATE_NAME, _ARENA_PERIOD_STATE[ARENA_PERIOD.WAITING])
-
     def onEnterArena(self):
         BigWorld.player().arena.onPeriodChange += self.__onArenaStateChanged
         BigWorld.player().arena.onVehicleKilled += self.__onArenaVehicleKilled
@@ -276,17 +263,13 @@ class MusicController(object):
         return soundEvent
 
     def __onArenaStateChanged(self, *args):
-        from BattleReplay import g_replayCtrl
         if self._skipArenaChanges:
             return
         else:
             arena = BigWorld.player().arena
             period = arena.period
-            if not g_replayCtrl.isTimeWarpInProgress or period == ARENA_PERIOD.BATTLE:
-                stateValue = _ARENA_PERIOD_STATE.get(period, None)
-                if stateValue is not None:
-                    WWISE.WW_setState(_ARENA_PERIOD_STATE_NAME, stateValue)
             if period == ARENA_PERIOD.PREBATTLE or period == ARENA_PERIOD.BATTLE:
+                from BattleReplay import g_replayCtrl
                 if self.__isOnArena and not g_replayCtrl.isTimeWarpInProgress:
                     if not self.isPlaying(AMBIENT_EVENT_COMBAT):
                         self.play(AMBIENT_EVENT_COMBAT)

@@ -12,6 +12,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
+from gui.Scaleform.daapi.view.lobby.weekend_brawl import weekend_brawl_helpers
 from gui.Scaleform.daapi.view.meta.HangarMeta import HangarMeta
 from sound_gui_manager import CommonSoundSpaceSettings
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
@@ -46,8 +47,7 @@ from helpers.CallbackDelayer import CallbackDelayer
 from helpers.statistics import HANGAR_LOADING_STATE
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IIGRController
-from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController, IBattlePassController, IBattleRoyaleController, IBootcampController
+from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController, IIGRController, IBattlePassController, IBattleRoyaleController, IBootcampController, IWeekendBrawlController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersBannerController
@@ -94,6 +94,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     _promoController = dependency.descriptor(IPromoController)
     _connectionMgr = dependency.descriptor(IConnectionManager)
     _offersBannerController = dependency.descriptor(IOffersBannerController)
+    _wBrawlController = dependency.descriptor(IWeekendBrawlController)
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 
     def __init__(self, _=None):
@@ -155,6 +156,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.epicController.onUpdated += self.__onEpicSkillsUpdate
         self.epicController.onPrimeTimeStatusUpdated += self.__onEpicSkillsUpdate
         self._promoController.onNewTeaserReceived += self.__onTeaserReceived
+        self._wBrawlController.onUpdated += self.__onWeekendBrawlUpdate
+        self._wBrawlController.onPrimeTimeStatusUpdated += self.__updateAlertMessage
         self.hangarSpace.setVehicleSelectable(True)
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
         g_playerEvents.onPrebattleInvitationAccepted += self.__onPrebattleInvitationAccepted
@@ -200,6 +203,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.epicController.onUpdated -= self.__onEpicSkillsUpdate
         self.epicController.onPrimeTimeStatusUpdated -= self.__onEpicSkillsUpdate
         self._promoController.onNewTeaserReceived -= self.__onTeaserReceived
+        self._wBrawlController.onUpdated -= self.__onWeekendBrawlUpdate
+        self._wBrawlController.onPrimeTimeStatusUpdated -= self.__updateAlertMessage
         if self.__teaser is not None:
             self.__teaser.stop()
             self.__teaser = None
@@ -246,6 +251,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
                 newCarouselAlias = HANGAR_ALIASES.EPICBATTLE_TANK_CAROUSEL
             elif self.battleRoyaleController.isBattleRoyaleMode():
                 newCarouselAlias = HANGAR_ALIASES.ROYALE_TANK_CAROUSEL
+            elif self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.WEEKEND_BRAWL) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.WEEKEND_BRAWL):
+                newCarouselAlias = HANGAR_ALIASES.WEEKEND_BRAWL_TANK_CAROUSEL
         if prevCarouselAlias != newCarouselAlias or force:
             self.as_setCarouselS(linkage, newCarouselAlias)
             self.__currentCarouselAlias = newCarouselAlias
@@ -305,8 +312,12 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def __updateAlertMessage(self, *_):
         if self.prbDispatcher is not None:
-            if self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
+            state = self.prbDispatcher.getFunctionalState()
+            if state.isInPreQueue(QUEUE_TYPE.RANKED):
                 self.__updateRankedAlertMsg()
+                return
+            if state.isInPreQueue(QUEUE_TYPE.WEEKEND_BRAWL):
+                self.__updateWeekendBrawlAlertMsg()
                 return
         self.as_setAlertMessageBlockVisibleS(False)
         return
@@ -318,6 +329,12 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         buttonCallback = showRankedPrimeTimeWindow if hasSuitVehs else g_eventDispatcher.loadRankedUnreachable
         data = ranked_helpers.getAlertStatusVO()
         self.__updateAlertBlock(buttonCallback, data, isBlockedStatus or not hasSuitVehs)
+
+    def __updateWeekendBrawlAlertMsg(self):
+        status, _, _ = self._wBrawlController.getPrimeTimeStatus()
+        visible = status in (PrimeTimeStatus.NOT_AVAILABLE, PrimeTimeStatus.NOT_SET, PrimeTimeStatus.FROZEN)
+        data = weekend_brawl_helpers.getPrimeTimeStatusVO(status, self._wBrawlController.hasAnyPeripheryWithPrimeTime())
+        self.__updateAlertBlock(shared_events.showWeekendBrawlPrimeTimeWindow, data, visible)
 
     def __updateAlertBlock(self, callback, data, visible):
         self.as_setAlertMessageBlockVisibleS(visible)
@@ -441,6 +458,11 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateHeader()
         self.__updateHeaderComponent()
         self.__updateBattleRoyaleHeaderComponent()
+
+    def __onWeekendBrawlUpdate(self):
+        self.__updateHeader()
+        self.__updateHeaderComponent()
+        self.__updateAlertMessage()
 
     def __onEpicSkillsUpdate(self, *_):
         self.__updateHeader()

@@ -147,3 +147,8 @@ def controlModeChange(mode):
 def sniperCameraTransition(transitionTime, currentGunIndex):
     g_eventBus.handleEvent(GameEvent(GameEvent.SNIPER_CAMERA_TRANSITION, {'transitionTime': transitionTime,
      'currentGunIndex': currentGunIndex}), scope=_SCOPE)
+
+
+def toggleWeekendBrawlAbilityOverlay():
+    if isVehicleAlive():
+        g_eventBus.handleEvent(GameEvent(GameEvent.ABILITY_CHOICE_OVERLAY), scope=_SCOPE)

@@ -297,9 +297,16 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         return
 
     def _makeHeaderVO(self):
+        if self.prbDispatcher:
+            state = self.prbDispatcher.getFunctionalState()
+            isWeekendBrawl = state.isInPreQueue(constants.QUEUE_TYPE.WEEKEND_BRAWL) or state.isInUnit(constants.PREBATTLE_TYPE.WEEKEND_BRAWL)
+        else:
+            isWeekendBrawl = False
         emptyHeaderVO = {'isVisible': False,
          'quests': []}
         if not self.__tutorialLoader.gui.hangarHeaderEnabled:
+            return emptyHeaderVO
+        if isWeekendBrawl:
             return emptyHeaderVO
         if self.__rankedController.isRankedPrbActive():
             return {'isVisible': True,

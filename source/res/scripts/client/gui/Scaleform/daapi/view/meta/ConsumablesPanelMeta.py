@@ -37,8 +37,11 @@ class ConsumablesPanelMeta(BaseDAAPIComponent):
     def as_setCurrentShellS(self, idx):
         return self.flashObject.as_setCurrentShell(idx) if self._isDAAPIInited() else None
 
-    def as_addEquipmentSlotS(self, idx, keyCode, sfKeyCode, quantity, timeRemaining, reloadingTime, iconPath, tooltipText, animation):
-        return self.flashObject.as_addEquipmentSlot(idx, keyCode, sfKeyCode, quantity, timeRemaining, reloadingTime, iconPath, tooltipText, animation) if self._isDAAPIInited() else None
+    def as_addEquipmentSlotS(self, idx, keyCode, sfKeyCode, quantity, timeRemaining, reloadingTime, iconPath, tooltipText, animation, isAlwaysVisible=False):
+        return self.flashObject.as_addEquipmentSlot(idx, keyCode, sfKeyCode, quantity, timeRemaining, reloadingTime, iconPath, tooltipText, animation, isAlwaysVisible) if self._isDAAPIInited() else None
+
+    def as_updateEquipmentSlotS(self, idx, keyCode, sfKeyCode, quantity, timeRemaining, reloadingTime, iconPath, tooltipText, animation):
+        return self.flashObject.as_updateEquipmentSlot(idx, keyCode, sfKeyCode, quantity, timeRemaining, reloadingTime, iconPath, tooltipText, animation) if self._isDAAPIInited() else None
 
     def as_showEquipmentSlotsS(self, show):
         return self.flashObject.as_showEquipmentSlots(show) if self._isDAAPIInited() else None

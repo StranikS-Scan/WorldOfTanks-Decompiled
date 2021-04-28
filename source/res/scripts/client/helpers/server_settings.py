@@ -5,7 +5,7 @@ import types
 from collections import namedtuple
 import logging
 from Event import Event
-from constants import IS_TUTORIAL_ENABLED, PremiumConfigs, DAILY_QUESTS_CONFIG, ClansConfig, MAGNETIC_AUTO_AIM_CONFIG, Configs, DOG_TAGS_CONFIG, BATTLE_NOTIFIER_CONFIG
+from constants import IS_TUTORIAL_ENABLED, PremiumConfigs, DAILY_QUESTS_CONFIG, ClansConfig, MAGNETIC_AUTO_AIM_CONFIG, Configs, DOG_TAGS_CONFIG, BATTLE_NOTIFIER_CONFIG, WEEKEND_BRAWL_CONFIG
 from collector_vehicle import CollectorVehicleConsts
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from battle_pass_common import BattlePassConfig, BATTLE_PASS_CONFIG_NAME
@@ -641,6 +641,27 @@ class _BlueprintsConvertSaleConfig(namedtuple('_BlueprintsConvertSaleConfig', ('
         return self.options
 
 
+class _WeekendBrawlConfig(namedtuple('_WeekendBrawlConfig', ('isEnabled', 'peripheryIDs', 'primeTimes', 'seasons', 'cycleTimes', 'levels', 'forbiddenClassTags', 'forbiddenVehTypes'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, peripheryIDs={}, primeTimes={}, seasons={}, cycleTimes={}, levels=set(), forbiddenClassTags=set(), forbiddenVehTypes=set())
+        defaults.update(kwargs)
+        return super(_WeekendBrawlConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -759,6 +780,10 @@ class ServerSettings(object):
             self.__blueprintsConvertSaleConfig = makeTupleByDict(_BlueprintsConvertSaleConfig, self.__serverSettings['blueprints_convert_sale_config'])
         else:
             self.__blueprintsConvertSaleConfig = _BlueprintsConvertSaleConfig()
+        if WEEKEND_BRAWL_CONFIG in self.__serverSettings:
+            self.__weekendBrawlSettings = makeTupleByDict(_WeekendBrawlConfig, self.__serverSettings[WEEKEND_BRAWL_CONFIG])
+        else:
+            self.__weekendBrawlSettings = _WeekendBrawlConfig.defaults()
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -789,6 +814,8 @@ class ServerSettings(object):
         if 'unit_assembler_config' in serverSettingsDiff:
             self.__updateUnitAssemblerConfig(serverSettingsDiff)
             self.__serverSettings['unit_assembler_config'] = serverSettingsDiff['unit_assembler_config']
+        if WEEKEND_BRAWL_CONFIG in serverSettingsDiff:
+            self.__updateWeekendBrawl(serverSettingsDiff)
         if 'telecom_config' in serverSettingsDiff:
             self.__telecomConfig = _TelecomConfig(self.__serverSettings['telecom_config'])
         if 'disabledPMOperations' in serverSettingsDiff:
@@ -913,6 +940,10 @@ class ServerSettings(object):
     @property
     def unitAssemblerConfig(self):
         return self.__unitAssemblerConfig
+
+    @property
+    def weekendBrawl(self):
+        return self.__weekendBrawlSettings
 
     @property
     def telecomConfig(self):
@@ -1203,6 +1234,9 @@ class ServerSettings(object):
 
     def __updateUnitAssemblerConfig(self, targetSettings):
         self.__unitAssemblerConfig = self.__unitAssemblerConfig.replace(targetSettings['unit_assembler_config'])
+
+    def __updateWeekendBrawl(self, targetSettings):
+        self.__weekendBrawlSettings = self.__weekendBrawlSettings.replace(targetSettings[WEEKEND_BRAWL_CONFIG])
 
     def __updateSquadBonus(self, sourceSettings):
         self.__squadPremiumBonus = self.__squadPremiumBonus.replace(sourceSettings[PremiumConfigs.PREM_SQUAD])

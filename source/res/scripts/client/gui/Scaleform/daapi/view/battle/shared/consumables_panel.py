@@ -141,11 +141,11 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         super(ConsumablesPanel, self)._populate()
         if self.sessionProvider.isReplayPlaying:
             self.as_handleAsReplayS()
-        self.__addListeners()
+        self._addListeners()
 
     def _dispose(self):
         self.__clearAllEquipmentGlow()
-        self.__removeListeners()
+        self._removeListeners()
         self.__keys.clear()
         self.__extraKeys.clear()
         super(ConsumablesPanel, self)._dispose()
@@ -162,6 +162,10 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         self.__delayedNextShellID = None
         return
 
+    def _resetBwKey(self, bwKey):
+        self.__keys.pop(bwKey, None)
+        return
+
     def _reset(self):
         self._resetCds()
         self._mask = 0
@@ -173,7 +177,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
 
     def _addShellSlot(self, idx, intCD, descriptor, quantity, gunSettings):
         self._cds[idx] = intCD
-        keyCode, sfKeyCode = self.__genKey(idx)
+        keyCode, sfKeyCode = self._genKey(idx)
         self.__extraKeys[idx] = self.__keys[keyCode] = partial(self.__handleAmmoPressed, intCD)
         tooltipText = self.__makeShellTooltip(descriptor, int(gunSettings.getPiercingPower(intCD)), gunSettings.getShotSpeed(intCD))
         icon = descriptor.icon[0]
@@ -184,7 +188,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
     def _addEquipmentSlot(self, idx, intCD, item):
         self._cds[idx] = intCD
         if item is None:
-            bwKey, sfKey = self.__genKey(idx)
+            bwKey, sfKey = self._genKey(idx)
             self.as_addEquipmentSlotS(idx, bwKey, sfKey, 0, 0, 0, None, EMPTY_EQUIPMENT_TOOLTIP, ANIMATION_TYPES.NONE)
             snap = self._cds[self._EQUIPMENT_START_IDX:self._EQUIPMENT_END_IDX + 1]
             if snap == self.__emptyEquipmentsSlice:
@@ -192,7 +196,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         else:
             tags = item.getTags()
             if tags:
-                bwKey, sfKey = self.__genKey(idx)
+                bwKey, sfKey = self._genKey(idx)
                 if item.isEntityRequired():
                     handler = partial(self.__handleEquipmentExpanded, intCD)
                 else:
@@ -218,8 +222,11 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
                 paramsString = backport.text(tooltipStr, cooldownSeconds=cooldownSeconds)
                 body = '\n\n'.join((body, paramsString))
             toolTip = TOOLTIP_FORMAT.format(descriptor.userString, body)
-            self.as_addEquipmentSlotS(idx, bwKey, sfKey, quantity, timeRemaining, reloadingTime, iconPath, toolTip, animationType)
+            self._setEquipmentData(item, idx, bwKey, sfKey, quantity, timeRemaining, reloadingTime, iconPath, toolTip, animationType)
         return
+
+    def _setEquipmentData(self, item, idx, bwKey, sfKey, quantity, timeRemaining, reloadingTime, iconPath, toolTip, animationType):
+        self.as_addEquipmentSlotS(idx, bwKey, sfKey, quantity, timeRemaining, reloadingTime, iconPath, toolTip, animationType)
 
     def _addOptionalDeviceSlot(self, idx, optDeviceInBattle):
         self._cds[idx] = optDeviceInBattle.getIntCD()
@@ -235,7 +242,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         currentTime = item.getTimeRemaining()
         maxTime = item.getTotalTime()
         self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime, item.getAnimationType())
-        bwKey, _ = self.__genKey(idx)
+        bwKey, _ = self._genKey(idx)
         if item.getQuantity() > 0 and bwKey not in self.__keys:
             if item.isEntityRequired():
                 handler = partial(self.__handleEquipmentExpanded, self._cds[idx])
@@ -277,7 +284,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         self.__equipmentsGlowCallbacks[equipmentIndex] = BigWorld.callback(_EQUIPMENT_GLOW_TIME, partial(self.__hideEquipmentGlowCallback, equipmentIndex))
 
     def _onShellsAdded(self, intCD, descriptor, quantity, _, gunSettings):
-        idx = self.__genNextIdx(self.__ammoFullMask, self._AMMO_START_IDX)
+        idx = self._genNextIdx(self.__ammoFullMask, self._AMMO_START_IDX)
         self._addShellSlot(idx, intCD, descriptor, quantity, gunSettings)
 
     def _onShellsUpdated(self, intCD, quantity, *args):
@@ -315,13 +322,19 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
 
     def _onEquipmentAdded(self, intCD, item):
         if item is None:
-            idx = self.__genNextIdx(self.__equipmentFullMask + self.__ordersFullMask, self._EQUIPMENT_START_IDX)
+            idx = self._genNextIdx(self.__equipmentFullMask + self.__ordersFullMask, self._EQUIPMENT_START_IDX)
         elif self._isAvatarEquipment(item):
-            idx = self.__genNextIdx(self.__ordersFullMask, self._ORDERS_START_IDX)
+            idx = self._genNextIdx(self.__ordersFullMask, self._ORDERS_START_IDX)
         else:
-            idx = self.__genNextIdx(self.__equipmentFullMask, self._EQUIPMENT_START_IDX)
+            idx = self._genNextIdx(self.__equipmentFullMask, self._EQUIPMENT_START_IDX)
         self._addEquipmentSlot(idx, intCD, item)
         return
+
+    def _onEquipmentUpdated(self, intCD, item):
+        if intCD in self._cds:
+            self._updateEquipmentSlot(self._cds.index(intCD), item)
+        else:
+            _logger.error('Equipment with cd=%d is not found in panel=%s', intCD, str(self._cds))
 
     def _isAvatarEquipment(self, item):
         return item.isAvatar()
@@ -329,7 +342,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
     def _getEquipmentIconPath(self):
         return self._EQUIPMENT_ICON_PATH
 
-    def __addListeners(self):
+    def _addListeners(self):
         vehicleCtrl = self.sessionProvider.shared.vehicleState
         if vehicleCtrl is not None:
             vehicleCtrl.onPostMortemSwitched += self._onPostMortemSwitched
@@ -349,7 +362,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         if eqCtrl is not None:
             self.__fillEquipments(eqCtrl)
             eqCtrl.onEquipmentAdded += self._onEquipmentAdded
-            eqCtrl.onEquipmentUpdated += self.__onEquipmentUpdated
+            eqCtrl.onEquipmentUpdated += self._onEquipmentUpdated
             eqCtrl.onEquipmentCooldownInPercent += self.__onEquipmentCooldownInPercent
             eqCtrl.onEquipmentCooldownTime += self.__onEquipmentCooldownTime
         optDevicesCtrl = self.sessionProvider.shared.optionalDevices
@@ -357,13 +370,13 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
             self.__fillOptionalDevices(optDevicesCtrl)
             optDevicesCtrl.onOptionalDeviceAdded += self.__onOptionalDeviceAdded
             optDevicesCtrl.onOptionalDeviceUpdated += self.__onOptionalDeviceUpdated
-        CommandMapping.g_instance.onMappingChanged += self.__onMappingChanged
+        CommandMapping.g_instance.onMappingChanged += self._onMappingChanged
         g_eventBus.addListener(GameEvent.CHOICE_CONSUMABLE, self.__handleConsumableChoice, scope=EVENT_BUS_SCOPE.BATTLE)
         return
 
-    def __removeListeners(self):
+    def _removeListeners(self):
         g_eventBus.removeListener(GameEvent.CHOICE_CONSUMABLE, self.__handleConsumableChoice, scope=EVENT_BUS_SCOPE.BATTLE)
-        CommandMapping.g_instance.onMappingChanged -= self.__onMappingChanged
+        CommandMapping.g_instance.onMappingChanged -= self._onMappingChanged
         vehicleCtrl = self.sessionProvider.shared.vehicleState
         if vehicleCtrl is not None:
             vehicleCtrl.onPostMortemSwitched -= self._onPostMortemSwitched
@@ -381,7 +394,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         eqCtrl = self.sessionProvider.shared.equipments
         if eqCtrl is not None:
             eqCtrl.onEquipmentAdded -= self._onEquipmentAdded
-            eqCtrl.onEquipmentUpdated -= self.__onEquipmentUpdated
+            eqCtrl.onEquipmentUpdated -= self._onEquipmentUpdated
             eqCtrl.onEquipmentCooldownInPercent -= self.__onEquipmentCooldownInPercent
             eqCtrl.onEquipmentCooldownTime -= self.__onEquipmentCooldownTime
         optDevicesCtrl = self.sessionProvider.shared.optionalDevices
@@ -390,7 +403,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
             optDevicesCtrl.onOptionalDeviceUpdated -= self.__onOptionalDeviceUpdated
         return
 
-    def __genNextIdx(self, full, start):
+    def _genNextIdx(self, full, start):
         bits = self._mask & full
         if not bits:
             idx = start
@@ -399,13 +412,16 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         self._mask |= 1 << idx
         return idx
 
-    def __genKey(self, idx):
+    def _genKey(self, idx):
         cmdMappingKey = COMMAND_AMMO_CHOICE_MASK.format(idx + 1 if idx < 9 else 0)
         bwKey = CommandMapping.g_instance.get(cmdMappingKey)
         sfKey = 0
         if bwKey is not None:
             sfKey = getScaleformKey(bwKey)
         return (bwKey, sfKey)
+
+    def _isEquipmentWithKey(self, idx):
+        return idx in self.__equipmentRange or idx in self.__ordersRange
 
     def __makeShellTooltip(self, descriptor, piercingPower, shotSpeed):
         kind = descriptor.kind
@@ -437,11 +453,11 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
                  None,
                  None,
                  None)
-            bwKey, sfKey = self.__genKey(idx)
+            bwKey, sfKey = self._genKey(idx)
             handler = None
             if idx in self.__ammoRange:
                 handler = partial(self.__handleAmmoPressed, intCD)
-            elif (idx in self.__equipmentRange or idx in self.__ordersRange) and hasEquipment(intCD):
+            elif self._isEquipmentWithKey(idx) and hasEquipment(intCD):
                 item = getEquipment(intCD)
                 if item is not None and item.getTags():
                     if item.isEntityRequired():
@@ -455,7 +471,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
 
         return
 
-    def __onMappingChanged(self, *args):
+    def _onMappingChanged(self, *args):
         keys = {}
         extraKeys = {}
         slots = []
@@ -530,7 +546,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
             keys = {}
             extraKeys = {}
             for entityIdx, (itemName, entityName, entityState) in enumerate(item.getGuiIterator()):
-                bwKey, sfKey = self.__genKey(entityIdx)
+                bwKey, sfKey = self._genKey(entityIdx)
                 extraKeys[entityIdx] = keys[bwKey] = partial(self.__handleEquipmentPressed, intCD, entityName)
                 slots.append({'bwKeyCode': bwKey,
                  'sfKeyCode': sfKey,
@@ -568,12 +584,6 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         else:
             self.as_setCoolDownTimeS(shellIndex, state.getActualValue(), state.getBaseValue(), state.getTimePassed())
 
-    def __onEquipmentUpdated(self, intCD, item):
-        if intCD in self._cds:
-            self._updateEquipmentSlot(self._cds.index(intCD), item)
-        else:
-            _logger.error('Equipment with cd=%d is not found in panel=%s', intCD, str(self._cds))
-
     def __onEquipmentCooldownInPercent(self, intCD, percent):
         if intCD in self._cds:
             self.as_setCoolDownPosAsPercentS(self._cds.index(intCD), percent)
@@ -584,7 +594,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
 
     def __onOptionalDeviceAdded(self, optDeviceInBattle):
         if optDeviceInBattle.getIntCD() not in self._cds:
-            idx = self.__genNextIdx(self.__optDeviceFullMask, self._OPT_DEVICE_START_IDX)
+            idx = self._genNextIdx(self.__optDeviceFullMask, self._OPT_DEVICE_START_IDX)
             self._addOptionalDeviceSlot(idx, optDeviceInBattle)
 
     def __onOptionalDeviceUpdated(self, optDeviceInBattle):
@@ -598,7 +608,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         self._reset()
         if noRespawnPossible:
             if not BigWorld.player().isObserver():
-                self.__removeListeners()
+                self._removeListeners()
 
     def __onRespawnBaseMoving(self):
         self._reset()
@@ -669,6 +679,9 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
                             self.__clearEquipmentGlow(self._cds.index(intCD))
 
             return
+
+    def _clearEquipmentGlowCallback(self, equipmentIndex):
+        return self.__clearEquipmentGlow(equipmentIndex, cancelCallback=True)
 
     def __replaceEquipmentKeyHandler(self, keysContainer, intCD, deviceName):
         tempDeviceName = VEHICLE_DEVICE_IN_COMPLEX_ITEM.get(deviceName, deviceName)

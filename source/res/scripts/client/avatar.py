@@ -361,7 +361,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.loadPrerequisites(self.__initGUI())
             self.__projectileMover = ProjectileMover.ProjectileMover()
             SoundGroups.g_instance.enableArenaSounds(False)
-            MusicControllerWWISE.onBecomePlayer()
             self.__flockMangager.start(self)
             self.__gunDamagedShootSound = SoundGroups.g_instance.getSound2D('gun_damaged')
             if not g_offlineMapCreator.Active():

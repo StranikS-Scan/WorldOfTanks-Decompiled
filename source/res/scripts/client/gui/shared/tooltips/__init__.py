@@ -77,6 +77,8 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     VEHICLE_COLLECTOR = 'vehicleCollector'
     BATTLE_PASS_GIFT_TOKEN = 'battlePassGiftToken'
     BATTLE_PASS_POINTS = 'battlePassPoints'
+    WEEKEND_BRAWL_SELECTOR_INFO = 'weekendBrawlSelectorInfo'
+    WEEKEND_BRAWL_CALENDAR_DAY = 'weekendBrawlCalendarDay'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):

@@ -21,7 +21,7 @@ _LAYERS = (WindowLayer.MARKER,
  WindowLayer.VIEW,
  WindowLayer.WINDOW,
  WindowLayer.WAITING,
- WindowLayer.SYSTEM_MESSAGE)
+ WindowLayer.FULLSCREEN_WINDOW)
 
 class Overlay(IOverlayController):
     _hangarSpace = dependency.descriptor(IHangarSpace)
@@ -70,6 +70,7 @@ class Overlay(IOverlayController):
         lobby = self._appLoader.getDefLobbyApp()
         if self._guiState:
             lobby.containerManager.showContainers(_LAYERS, _ANIMATION_DURATION)
+            lobby.containerManager.showContainers((WindowLayer.SYSTEM_MESSAGE,), 0)
             if self._wasBlurEnabled:
                 self._globalBlur.enable = True
                 self._wasBlurEnabled = False
@@ -81,6 +82,7 @@ class Overlay(IOverlayController):
             self._backgroundAlpha = lobby.getBackgroundAlpha()
             lobby.setBackgroundAlpha(0)
             lobby.containerManager.hideContainers(_LAYERS, _ANIMATION_DURATION)
+            lobby.containerManager.hideContainers((WindowLayer.SYSTEM_MESSAGE,), 0)
             if self._globalBlur.enable:
                 self._globalBlur.enable = False
                 self._wasBlurEnabled = True

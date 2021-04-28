@@ -31,6 +31,10 @@ class VehicleIsValid(IVehicleLimit):
             return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED)
         if g_currentVehicle.isOnlyForEpicBattles():
             return (False, PREBATTLE_RESTRICTION.VEHICLE_EPIC_ONLY)
+        if g_currentVehicle.isOnlyForBob():
+            return (False, PREBATTLE_RESTRICTION.VEHICLE_BOB_ONLY)
+        if g_currentVehicle.isOnlyForWeekendBrawlBattles():
+            return (False, PREBATTLE_RESTRICTION.VEHICLE_WEEKEND_BRAWL_ONLY)
         if g_currentVehicle.isRotationGroupLocked():
             return (False, PREBATTLE_RESTRICTION.VEHICLE_ROTATION_GROUP_LOCKED)
         if not g_currentVehicle.isReadyToPrebattle():

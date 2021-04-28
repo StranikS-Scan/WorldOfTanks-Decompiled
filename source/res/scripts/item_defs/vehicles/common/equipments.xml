@@ -4114,4 +4114,150 @@
       </dotParams>
     </script>
   </arcade_smoke_battle_royale_with_damage>
+  <bomber_weekend_brawl>
+    <id>	250	</id>
+    <userString>	#artefacts:bomber/name	</userString>
+    <description>	#artefacts:bomber/shortDescr	</description>
+    <icon>	bomber 0 0	</icon>
+    <soundNotification>	eb_ability_bomber	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger weekend_brawl	</tags>
+    <type>	battleAbilities	</type>
+    <script>	WeekendBrawlBomber	  <shortDescription>	#artefacts:bomber/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:bomber/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
+      <cooldownTime>	0.0	</cooldownTime>
+      <deployTime>	0.0	</deployTime>
+      <consumeAmmo>	true	</consumeAmmo>
+      <delay>	2.0	</delay>
+      <speed>	80	</speed>
+      <heights>	100 60	</heights>
+      <areaLength>	45	</areaLength>
+      <areaWidth>	45	</areaWidth>
+      <antepositions>	0	</antepositions>
+      <lateropositions>	0	</lateropositions>
+      <bombingMask>	1	</bombingMask>
+      <waveFraction>	1	</waveFraction>
+      <bombsNumber>	5	</bombsNumber>
+      <shellCompactDescr>	102426	</shellCompactDescr>
+      <tracerKind>	1	</tracerKind>
+      <piercingPower>	10 10	</piercingPower>
+      <gravity>	10000	</gravity>
+      <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+      <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
+      <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
+      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <wwsoundEquipmentUsed>	eb_ability_airStrike_apply	</wwsoundEquipmentUsed>
+    </script>
+  </bomber_weekend_brawl>
+  <inspire_weekend_brawl>
+    <id>	251	</id>
+    <userString>	#artefacts:inspire/name	</userString>
+    <description>	#artefacts:inspire/shortDescr	</description>
+    <icon>	inspire 0 0	</icon>
+    <soundNotification>	eb_ability_inspire	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger weekend_brawl	</tags>
+    <type>	battleAbilities	</type>
+    <script>	WeekendBrawlInspire	  <shortDescription>	#artefacts:inspire/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:inspire/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime radius duration-inspire increaseFactors[crewRolesFactor] inactivationDelay	</tooltips>
+      <consumeAmmo>	true	</consumeAmmo>
+      <increaseFactors>
+        <crewRolesFactor>	1.2	</crewRolesFactor>
+      </increaseFactors>
+      <duration>	40	</duration>
+      <inactivationDelay>	5	</inactivationDelay>
+      <radius>	40	</radius>
+      <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
+    </script>
+  </inspire_weekend_brawl>
+  <recon_weekend_brawl>
+    <id>	252	</id>
+    <userString>	#artefacts:recon/name	</userString>
+    <description>	#artefacts:recon/shortDescr	</description>
+    <icon>	recon 0 0	</icon>
+    <soundNotification>	eb_ability_recon	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger weekend_brawl	</tags>
+    <type>	battleAbilities	</type>
+    <script>	WeekendBrawlRecon	  <shortDescription>	#artefacts:recon/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:recon/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay #epic_battle:abilityInfo/params/recon/revealedArea/value spottingDuration	</tooltips>
+      <cooldownTime>	0	</cooldownTime>
+      <deployTime>	0.0	</deployTime>
+      <consumeAmmo>	true	</consumeAmmo>
+      <spottingDuration>	10.0	</spottingDuration>
+      <delay>	1	</delay>
+      <speed>	130	</speed>
+      <areaRadius>	65	</areaRadius>
+      <scanPointsAmount>	2	</scanPointsAmount>
+      <antepositions>	0	</antepositions>
+      <lateropositions>	0	</lateropositions>
+      <heights>	170 120	</heights>
+      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
+      <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
+      <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
+      <areaVisual>	content/Interface/TargetPoint/ReconFlight.visual	</areaVisual>
+      <wwsoundEquipmentUsed>	eb_ability_airScout_apply	</wwsoundEquipmentUsed>
+    </script>
+  </recon_weekend_brawl>
+  <smokes_weekend_brawl>
+    <id>	253	</id>
+    <userString>	#artefacts:smoke/name	</userString>
+    <description>	#artefacts:smoke/shortDescr	</description>
+    <icon>	smoke 0 0	</icon>
+    <soundNotification>	eb_ability_smoke_screen	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger weekend_brawl	</tags>
+    <type>	battleAbilities	</type>
+    <script>	WeekendBrawlSmoke	  <shortDescription>	#artefacts:smoke/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:smoke/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime minDelay areaLength_areaWidth-targetedArea projectilesNumber totalDuration	</tooltips>
+      <deployTime>	0.0	</deployTime>
+      <cooldownTime>	0.0	</cooldownTime>
+      <consumeAmmo>	true	</consumeAmmo>
+      <minDelay>	5.0	</minDelay>
+      <deltaDelayRange>	0.1 0.3	</deltaDelayRange>
+      <smokeModelName>	objects/misc/server_smoke/cylinder1.model	</smokeModelName>
+      <smokeEffectName>	SmokeScreenEffect_lev1	</smokeEffectName>
+      <startRadius>	5.	</startRadius>
+      <expandedRadius>	25.	</expandedRadius>
+      <startHeight>	40.	</startHeight>
+      <expandedHeight>	40.	</expandedHeight>
+      <heightUpFraction>	0.7	</heightUpFraction>
+      <expansionDuration>	5.	</expansionDuration>
+      <dispersionRadius>	5.	</dispersionRadius>
+      <totalDuration>	40.	</totalDuration>
+      <smokeOpacity>	10.	</smokeOpacity>
+      <visionRadiusFactor>	0.66	</visionRadiusFactor>
+      <areaLength>	200	</areaLength>
+      <areaWidth>	50	</areaWidth>
+      <projectilesNumber>	5	</projectilesNumber>
+      <shellCompactDescr>	64538	</shellCompactDescr>
+      <areaVisual>	content/Interface/TargetPoint/SmokeScreen.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <shotSoundPreDelay>	2	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_smoke_firing	</wwsoundShot>
+      <vignetteColor>	200 200 200	</vignetteColor>
+      <vignetteIntensity>	0.08	</vignetteIntensity>
+    </script>
+  </smokes_weekend_brawl>
 </equipments.xml>

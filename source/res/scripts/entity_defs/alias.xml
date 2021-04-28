@@ -1538,4 +1538,40 @@
   </TOURNAMEMT_PARTICIPANT>
   <LIST_OF_TOURNAMEMT_PARTICIPANTS>	ARRAY	  <of>	TOURNAMEMT_PARTICIPANT	</of>
   </LIST_OF_TOURNAMEMT_PARTICIPANTS>
+  <STATUS_WITH_END_TIME>	FIXED_DICT	  <Properties>
+      <statusID>
+        <Type>	UINT8	</Type>
+      </statusID>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+    </Properties>
+  </STATUS_WITH_END_TIME>
+  <STATUS_WITH_TIMES>	FIXED_DICT	  <Properties>
+      <statusID>
+        <Type>	UINT8	</Type>
+      </statusID>
+      <startTime>
+        <Type>	FLOAT32	</Type>
+      </startTime>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+    </Properties>
+  </STATUS_WITH_TIMES>
+  <POI_CAPTURING_INFO>	FIXED_DICT	  <Properties>
+      <vehicleID>
+        <Type>	OBJECT_ID	</Type>
+      </vehicleID>
+      <startTime>
+        <Type>	FLOAT32	</Type>
+      </startTime>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+      <status>
+        <Type>	UINT8	</Type>
+      </status>
+    </Properties>
+  </POI_CAPTURING_INFO>
 </alias.xml>

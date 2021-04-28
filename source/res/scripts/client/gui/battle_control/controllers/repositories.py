@@ -7,6 +7,7 @@ from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, b
 from gui.battle_control.controllers.quest_progress import quest_progress_ctrl
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
 from gui.battle_control.controllers import battle_hints_ctrl
+from gui.battle_control.controllers import points_of_interest_ctrl
 from gui.battle_control.controllers import radar_ctrl
 from gui.battle_control.controllers import spawn_ctrl
 from gui.battle_control.controllers import vehicles_count_ctrl
@@ -249,6 +250,10 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
     def battleNotifier(self):
         return self._repository.getController(BATTLE_CTRL_ID.BATTLE_NOTIFIER)
 
+    @property
+    def pointsOfInterest(self):
+        return self._repository.getController(BATTLE_CTRL_ID.POINTS_OF_INTEREST_CTRL)
+
 
 class _EmptyRepository(interfaces.IBattleControllersRepository):
     __slots__ = ()
@@ -434,4 +439,14 @@ class EventControllerRepository(ClassicControllersRepository):
     def create(cls, setup):
         repository = super(EventControllerRepository, cls).create(setup)
         repository.addViewController(battle_hints_ctrl.createBattleHintsController(), setup)
+        return repository
+
+
+class WeekendBrawlControllerRepository(ClassicControllersRepository):
+    __slots__ = ()
+
+    @classmethod
+    def create(cls, setup):
+        repository = super(WeekendBrawlControllerRepository, cls).create(setup)
+        repository.addViewController(points_of_interest_ctrl.PointsOfInterestController(setup), setup)
         return repository

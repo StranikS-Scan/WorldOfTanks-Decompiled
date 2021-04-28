@@ -184,6 +184,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     CLAN_NOTIFICATION_WINDOW = 'clanNotificationWindow'
     EPIC_RANDOM_PAGE = 'epicRandomPage'
     EPIC_BATTLE_PAGE = 'epicBattlePage'
+    WEEKEND_BRAWL_BATTLE_PAGE = 'weekendBrawlBattlePage'
     EVENT_BATTLE_PAGE = 'classicBattlePage'
     RANKED_BATTLE_PAGE = 'rankedBattlePage'
     BATTLE_ROYALE_PAGE = 'battleRoyalePage'

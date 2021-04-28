@@ -13,11 +13,13 @@ class SteamPlatformEventHandler(C2WHandler):
         super(SteamPlatformEventHandler, self).init()
         if Steam.isInited():
             Steam.microTxnAuthorizationResponse(self.__onMicroTxnAuthorizationResponse)
+            Steam.gameOverlayActivated(self.__onGameOverlayActivated)
         else:
             _logger.error('Steam is not inited')
 
     def fini(self):
         Steam.microTxnAuthorizationResponse(None)
+        Steam.gameOverlayActivated(None)
         super(SteamPlatformEventHandler, self).fini()
         return
 
@@ -25,3 +27,7 @@ class SteamPlatformEventHandler(C2WHandler):
     def __onMicroTxnAuthorizationResponse(self, appID, orderID, authorized):
         return {'orderID': orderID,
          'authorized': bool(authorized)}
+
+    @c2w(name='on_overlay_activated')
+    def __onGameOverlayActivated(self, active):
+        return {'isActive': bool(active)}

@@ -269,6 +269,7 @@ class HangarSpace(IHangarSpace):
         self.onSpaceDestroy(self.__spaceInited and not self.__spaceDestroyedDuringLoad)
         self.__videoCameraController.destroy()
         self.__isModelLoaded = False
+        self.__isCursorOver3DScene = False
         if self.__spaceInited:
             LOG_DEBUG('HangarSpace::destroy')
             self.__inited = False

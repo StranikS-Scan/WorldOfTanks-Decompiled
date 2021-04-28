@@ -135,6 +135,7 @@
     <_90mm_AT_Gun_T15E2_SH>	342	</_90mm_AT_Gun_T15E2_SH>
     <_105mm_Gun_M68_SH>	343	</_105mm_Gun_M68_SH>
     <_120mm_Gun_M58_SH>	344	</_120mm_Gun_M58_SH>
+    <_155mm_AT_Gun_T7E2_WB>	400	</_155mm_AT_Gun_T7E2_WB>
     <_20mm_Hispano_Suiza_Birgikt_gun_bootcamp>	64001	</_20mm_Hispano_Suiza_Birgikt_gun_bootcamp>
     <_37mm_M-6_L53_bootcamp>	64002	</_37mm_M-6_L53_bootcamp>
     <_37mm_M-5_bootcamp>	64003	</_37mm_M-5_bootcamp>
@@ -6660,6 +6661,64 @@
         </_155mm_HE_M101E1>
       </shots>
     </_155mm_AT_Gun_T7E2>
+    <_155mm_AT_Gun_T7E2_WB>
+      <userString>	#usa_vehicles:_155mm_AT_Gun_T7E2	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	335000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.68	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.4	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_huge_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	23.625	</rotationSpeed>
+      <reloadTime>	18.2857142857143	</reloadTime>
+      <maxAmmo>	30	</maxAmmo>
+      <aimingTime>	2.51428571428571	</aimingTime>
+      <weight>	3371	</weight>
+      <maxHealth>	230	</maxHealth>
+      <maxRegenHealth>	115	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.377142857142857	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_155mm_AP_M111E1>
+          <defaultPortion>	0.20	</defaultPortion>
+          <speed>	870	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	295 285	</piercingPower>
+        </_155mm_AP_M111E1>
+        <_155mm_AP_M112E1>
+          <defaultPortion>	0.00	</defaultPortion>
+          <speed>	1088	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	375 365	</piercingPower>
+        </_155mm_AP_M112E1>
+        <_155mm_HE_M101E1>
+          <defaultPortion>	0.80	</defaultPortion>
+          <speed>	870	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	90 90	</piercingPower>
+        </_155mm_HE_M101E1>
+      </shots>
+    </_155mm_AT_Gun_T7E2_WB>
     <_155mm_Howitzer_M1>
       <userString>	#usa_vehicles:_155mm_Howitzer_M1	</userString>
       <tags></tags>

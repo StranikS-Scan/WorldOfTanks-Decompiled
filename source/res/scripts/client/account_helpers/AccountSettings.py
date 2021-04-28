@@ -42,6 +42,9 @@ RANKED_CAROUSEL_FILTER_CLIENT_1 = 'RANKED_CAROUSEL_FILTER_CLIENT_1'
 EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
 EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
 EPICBATTLE_CAROUSEL_FILTER_CLIENT_1 = 'EPICBATTLE_CAROUSEL_FILTER_CLIENT_1'
+WEEKENDBRAWL_CAROUSEL_FILTER_1 = 'WEEKENDBRAWL_CAROUSEL_FILTER_1'
+WEEKENDBRAWL_CAROUSEL_FILTER_2 = 'WEEKENDBRAWL_CAROUSEL_FILTER_2'
+WEEKENDBRAWL_CAROUSEL_FILTER_CLIENT_1 = 'WEEKENDBRAWL_CAROUSEL_FILTER_CLIENT_1'
 STORAGE_VEHICLES_CAROUSEL_FILTER_1 = 'STORAGE_CAROUSEL_FILTER_1'
 BATTLEPASS_CAROUSEL_FILTER_1 = 'BATTLEPASS_CAROUSEL_FILTER_1'
 BATTLEPASS_CAROUSEL_FILTER_CLIENT_1 = 'BATTLEPASS_CAROUSEL_FILTER_CLIENT_1'
@@ -375,6 +378,42 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'crystals': False},
                EPICBATTLE_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                BATTLEPASS_CAROUSEL_FILTER_1: {'isCommonProgression': False},
+               WEEKENDBRAWL_CAROUSEL_FILTER_1: {'ussr': False,
+                                                'germany': False,
+                                                'usa': False,
+                                                'china': False,
+                                                'france': False,
+                                                'uk': False,
+                                                'japan': False,
+                                                'czech': False,
+                                                'sweden': False,
+                                                'poland': False,
+                                                'italy': False,
+                                                'lightTank': False,
+                                                'mediumTank': False,
+                                                'heavyTank': False,
+                                                'SPG': False,
+                                                'AT-SPG': False,
+                                                'level_1': False,
+                                                'level_2': False,
+                                                'level_3': False,
+                                                'level_4': False,
+                                                'level_5': False,
+                                                'level_6': False,
+                                                'level_7': False,
+                                                'level_8': False,
+                                                'level_9': False,
+                                                'level_10': True},
+               WEEKENDBRAWL_CAROUSEL_FILTER_2: {'premium': False,
+                                                'elite': False,
+                                                'igr': False,
+                                                'rented': True,
+                                                'event': True,
+                                                'gameMode': False,
+                                                'favorite': False,
+                                                'bonus': False,
+                                                'crystals': False},
+               WEEKENDBRAWL_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                MISSION_SELECTOR_FILTER: {'inventory': False},
                PM_SELECTOR_FILTER: {'inventory': False},
                BLUEPRINTS_STORAGE_FILTER: {'unlock_available': False,

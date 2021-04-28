@@ -210,6 +210,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInBattleRoyaleQueue = False
         self.isInBattleRoyaleTournamentQueue = False
         self.platformBlueprintsConvertSaleLimits = g_accountRepository.platformBlueprintsConvertSaleLimits
+        self.isInWeekendBrawlQueue = False
         self.__onCmdResponse = {}
         self.__onStreamComplete = {}
         self.__objectsSelectionEnabled = True
@@ -427,6 +428,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT:
             self.isInBattleRoyaleTournamentQueue = True
             events.onEnqueuedBattleRoyaleTournament()
+        elif queueType == QUEUE_TYPE.WEEKEND_BRAWL:
+            self.isInWeekendBrawlQueue = True
+            events.onEnqueuedWeekendBrawl()
         events.onEnqueued(queueType)
 
     def onEnqueueFailure(self, queueType, errorCode, errorStr):
@@ -449,6 +453,8 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             events.onEnqueuedBattleRoyaleFailure(errorCode, errorStr)
         elif queueType == QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT:
             events.onEnqueuedBattleRoyaleTournamentFailure(errorCode, errorStr)
+        elif queueType == QUEUE_TYPE.WEEKEND_BRAWL:
+            events.onEnqueuedWeekendBrawlFailure(errorCode, errorStr)
         events.onEnqueueFailure(queueType, errorCode, errorStr)
 
     def onDequeued(self, queueType):
@@ -480,6 +486,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT:
             self.isInBattleRoyaleTournamentQueue = False
             events.onDequeuedBattleRoyaleTournament()
+        elif queueType == QUEUE_TYPE.WEEKEND_BRAWL:
+            self.isInWeekendBrawlQueue = False
+            events.onDequeuedWeekendBrawl()
         events.onDequeued(queueType)
 
     def onTutorialEnqueued(self, number, queueLen, avgWaitingTime):
@@ -539,6 +548,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT:
             self.isInBattleRoyaleTournamentQueue = False
             events.onKickedFromBattleRoyaleTournamentQueue()
+        elif queueType == QUEUE_TYPE.WEEKEND_BRAWL:
+            self.isInWeekendBrawlQueue = False
+            events.onKickedFromWeekendBrawlQueue()
         events.onKickedFromQueue(queueType)
 
     def onArenaCreated(self):
@@ -560,6 +572,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInEpicQueue = False
         self.isInBattleRoyaleQueue = False
         self.isInBattleRoyaleTournamentQueue = False
+        self.isInWeekendBrawlQueue = False
         events.isPlayerEntityChanging = False
         events.onPlayerEntityChangeCanceled()
         events.onArenaJoinFailure(errorCode, errorStr)
@@ -874,6 +887,14 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def dequeueBattleRoyale(self):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_BATTLE_ROYALE, 0, 0, 0)
+
+    def enqueueWeekendBrawl(self, vehInvID):
+        if not events.isPlayerEntityChanging:
+            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_WEEKEND_BRAWL, vehInvID, 0, 0)
+
+    def dequeueWeekendBrawl(self):
+        if not events.isPlayerEntityChanging:
+            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_WEEKEND_BRAWL, 0, 0, 0)
 
     def forceEpicDevStart(self):
         if not events.isPlayerEntityChanging:

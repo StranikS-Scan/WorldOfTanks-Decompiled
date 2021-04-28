@@ -238,7 +238,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         return
 
     def __fireTabChangedEvent(self):
-        self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_TAB_CHANGED, ctx=self.__currentTabAlias), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_TAB_CHANGED, ctx={'alias': self.__currentTabAlias,
+         'marathonPrefix': self.__marathonPrefix}), EVENT_BUS_SCOPE.LOBBY)
         if self.currentTab:
             self.currentTab.markVisited()
 

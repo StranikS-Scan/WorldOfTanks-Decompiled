@@ -20,6 +20,7 @@ if typing.TYPE_CHECKING:
     from gui.ranked_battles.ranked_models import BattleRankInfo
     from gui.server_events.bonuses import SimpleBonus
     from gui.battle_pass.state_machine.delegator import BattlePassRewardLogic
+    from gui.shared.gui_items import ItemsCollection
 
 class IGameController(object):
 
@@ -1967,3 +1968,54 @@ class ISteamRegistrationOverlay(IOverlayController):
 
     def waitShow(self):
         raise NotImplementedError
+
+
+class IWeekendBrawlController(IGameController, ISeasonProvider):
+    onPrimeTimeStatusUpdated = None
+    onUpdated = None
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def isModeActive(self):
+        raise NotImplementedError
+
+    def isAvailable(self):
+        raise NotImplementedError
+
+    def getConfig(self):
+        raise NotImplementedError
+
+    def getPrimeTimes(self):
+        raise NotImplementedError
+
+    def hasAvailablePrimeTimeServers(self):
+        raise NotImplementedError
+
+    def hasAnyPeripheryWithPrimeTime(self):
+        raise NotImplementedError
+
+    def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
+        raise NotImplementedError
+
+    def getPrimeTimeStatus(self, peripheryID=None):
+        raise NotImplementedError
+
+    def getSuitableVehicles(self):
+        raise NotImplementedError
+
+    def hasSuitableVehicles(self):
+        raise NotImplementedError
+
+    def isSuitableVehicle(self):
+        raise NotImplementedError
+
+    def isFrozen(self):
+        raise NotImplementedError
+
+    def getCurrentRealm(self):
+        raise NotImplementedError
+
+
+class IWeekendBrawlSoundController(IGameController):
+    pass

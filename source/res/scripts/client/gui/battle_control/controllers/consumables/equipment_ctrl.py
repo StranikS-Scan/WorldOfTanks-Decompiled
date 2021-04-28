@@ -12,7 +12,7 @@ from aih_constants import CTRL_MODE_NAME
 from constants import VEHICLE_SETTING, EQUIPMENT_STAGES, ARENA_BONUS_TYPE
 from gui.Scaleform.genConsts.ANIMATION_TYPES import ANIMATION_TYPES
 from gui.battle_control import avatar_getter, vehicle_getter
-from gui.battle_control.battle_constants import makeExtraName, VEHICLE_COMPLEX_ITEMS, BATTLE_CTRL_ID
+from gui.battle_control.battle_constants import makeExtraName, VEHICLE_COMPLEX_ITEMS, BATTLE_CTRL_ID, WEEKEND_BRAWL_EQUIPMENT_TAG
 from gui.battle_control.controllers.interfaces import IBattleController
 from gui.game_control.br_battle_sounds import BREvents
 from gui.shared.utils.MethodsRules import MethodsRules
@@ -24,6 +24,10 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
 _ActivationError = namedtuple('_ActivationError', 'key ctx')
 _logger = logging.getLogger(__name__)
+
+def isDynamicEquipment(item):
+    return WEEKEND_BRAWL_EQUIPMENT_TAG in item.getDescriptor().tags
+
 
 class NotApplyingError(_ActivationError):
     pass
@@ -782,13 +786,14 @@ def _getInitialTagsAndClass(descriptor, tagsToItems):
 
 
 class EquipmentsController(MethodsRules, IBattleController):
-    __slots__ = ('__eManager', '__arena', '_order', '_equipments', '__preferredPosition', '__equipmentCount', 'onEquipmentAdded', 'onEquipmentUpdated', 'onEquipmentMarkerShown', 'onEquipmentCooldownInPercent', 'onEquipmentCooldownTime', 'onCombatEquipmentUsed')
+    __slots__ = ('__eManager', '__arena', '_order', '_equipments', '__preferredPosition', '__equipmentCount', 'onEquipmentAdded', 'onEquipmentUpdated', 'onEquipmentRemoved', 'onEquipmentMarkerShown', 'onEquipmentCooldownInPercent', 'onEquipmentCooldownTime', 'onCombatEquipmentUsed')
 
     def __init__(self, setup):
         super(EquipmentsController, self).__init__()
         self.__eManager = Event.EventManager()
         self.onEquipmentAdded = Event.Event(self.__eManager)
         self.onEquipmentUpdated = Event.Event(self.__eManager)
+        self.onEquipmentRemoved = Event.Event(self.__eManager)
         self.onEquipmentMarkerShown = Event.Event(self.__eManager)
         self.onEquipmentCooldownInPercent = Event.Event(self.__eManager)
         self.onEquipmentCooldownTime = Event.Event(self.__eManager)
@@ -887,6 +892,11 @@ class EquipmentsController(MethodsRules, IBattleController):
             item = self._equipments[intCD]
             item.update(quantity, stage, timeRemaining, totalTime)
             self.onEquipmentUpdated(intCD, item)
+            if isDynamicEquipment(item) and quantity == 0:
+                _logger.debug('Removed from equipment controller dynamic equipment with intCD=%d', intCD)
+                self.onEquipmentRemoved(intCD, item)
+                del self._equipments[intCD]
+                self._order.remove(intCD)
         else:
             descriptor = vehicles.getItemByCompactDescr(intCD)
             if descriptor.equipmentType in (EQUIPMENT_TYPES.regular, EQUIPMENT_TYPES.battleAbilities):
@@ -1299,23 +1309,27 @@ class EquipmentsReplayPlayer(EquipmentsController):
         self.__percentGetters.pop(intCD, None)
         self.__times.pop(intCD, None)
         self.__timeGetters.pop(intCD, None)
-        if stage in (EQUIPMENT_STAGES.DEPLOYING,
-         EQUIPMENT_STAGES.COOLDOWN,
-         EQUIPMENT_STAGES.SHARED_COOLDOWN,
-         EQUIPMENT_STAGES.ACTIVE) or stage == EQUIPMENT_STAGES.READY and self.getEquipment(intCD).getTimeRemaining():
-            equipment = self._equipments[intCD]
-            self.__percentGetters[intCD] = equipment.getCooldownPercents
-            if self.__callbackID is not None:
-                BigWorld.cancelCallback(self.__callbackID)
-                self.__callbackID = None
-            if equipment.getTotalTime() > 0:
-                self.__timeGetters[intCD] = equipment.getReplayTimeRemaining
-                if self.__callbackTimeID is not None:
-                    BigWorld.cancelCallback(self.__callbackTimeID)
-                    self.__callbackTimeID = None
-            self.__timeLoop()
-            self.__timeLoopInSeconds()
-        return
+        if intCD not in self._equipments:
+            self.__clearCallbacks()
+            return
+        else:
+            if stage in (EQUIPMENT_STAGES.DEPLOYING,
+             EQUIPMENT_STAGES.COOLDOWN,
+             EQUIPMENT_STAGES.SHARED_COOLDOWN,
+             EQUIPMENT_STAGES.ACTIVE) or stage == EQUIPMENT_STAGES.READY and self.getEquipment(intCD).getTimeRemaining():
+                equipment = self._equipments[intCD]
+                self.__percentGetters[intCD] = equipment.getCooldownPercents
+                if self.__callbackID is not None:
+                    BigWorld.cancelCallback(self.__callbackID)
+                    self.__callbackID = None
+                if equipment.getTotalTime() > 0:
+                    self.__timeGetters[intCD] = equipment.getReplayTimeRemaining
+                    if self.__callbackTimeID is not None:
+                        BigWorld.cancelCallback(self.__callbackTimeID)
+                        self.__callbackTimeID = None
+                self.__timeLoop()
+                self.__timeLoopInSeconds()
+            return
 
     @classmethod
     def createItem(cls, descriptor, quantity, stage, timeRemaining, totalTime):
@@ -1368,6 +1382,15 @@ class EquipmentsReplayPlayer(EquipmentsController):
                     isBaseTime = self._equipments[intCD].getStage() == EQUIPMENT_STAGES.ACTIVE
                 self.__times[intCD] = time
                 self.onEquipmentCooldownTime(intCD, time, isBaseTime, time == 0)
+
+    def __clearCallbacks(self):
+        if self.__callbackID is not None:
+            BigWorld.cancelCallback(self.__callbackID)
+            self.__callbackID = None
+        if self.__callbackTimeID is not None:
+            BigWorld.cancelCallback(self.__callbackTimeID)
+            self.__callbackTimeID = None
+        return
 
 
 __all__ = ('EquipmentsController', 'EquipmentsReplayPlayer')

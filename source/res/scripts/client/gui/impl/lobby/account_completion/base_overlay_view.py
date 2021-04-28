@@ -39,9 +39,12 @@ class BaseOverlayView(BaseView, IGlobalListener):
 
     def _initialize(self, *args, **kwargs):
         self.startGlobalListening()
+        super(BaseOverlayView, self)._initialize(*args, **kwargs)
+
+    def _onLoaded(self, *args, **kwargs):
         if not self._fadeAnimation:
             self._overlay.setOverlayState(True)
-        super(BaseOverlayView, self)._initialize(*args, **kwargs)
+        return super(BaseOverlayView, self)._onLoaded(*args, **kwargs)
 
     def _finalize(self):
         super(BaseOverlayView, self)._finalize()

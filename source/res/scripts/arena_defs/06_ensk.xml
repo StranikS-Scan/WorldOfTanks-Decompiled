@@ -45,6 +45,18 @@
         </team2>
       </teamSpawnPoints>
       <controlPoint>	-82.768745 0.675798	</controlPoint>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 -1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
     </domination>
   </gameplayTypes>
   <mapActivities>

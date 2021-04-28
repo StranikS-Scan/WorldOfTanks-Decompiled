@@ -53,49 +53,61 @@ class ModulesShellsNoSaleCMHandler(ContextMenu):
         return optionData
 
 
-class EquipmentCMHandler(ContextMenu):
-    __sqGen = SequenceIDGenerator()
+class _ArmingCMHandler(ContextMenu):
+    _sqGen = SequenceIDGenerator()
     _itemsCache = dependency.descriptor(IItemsCache)
 
-    @option(__sqGen.next(), CMLabel.INFORMATION)
+    @option(_sqGen.next(), CMLabel.INFORMATION)
     def showInfo(self):
         shared_events.showStorageModuleInfo(self._id)
 
-    @option(__sqGen.next(), CMLabel.SELL)
+    @option(_sqGen.next(), CMLabel.SELL)
     @process
     def sell(self):
         yield DialogsInterface.showDialog(SellModuleMeta(self._id))
 
-    @option(__sqGen.next(), CMLabel.BUY_MORE)
     def buy(self):
-        typeID = self._itemsCache.items.getItemByCD(self._id).itemTypeID if self._id else UNDEFINED_ITEM_CD
-        if typeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
-            shop.showBuyOptionalDeviceOverlay(self._id, source=_SOURCE, origin=_ORIGIN, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB)
-        elif typeID == GUI_ITEM_TYPE.EQUIPMENT:
-            shop.showBuyEquipmentOverlay(self._id, source=_SOURCE, origin=_ORIGIN, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB)
-        else:
-            shared_events.showShop()
+        shared_events.showShop()
+
+    def _getHighlightedLabels(self):
+        return tuple()
 
     def _generateOptions(self, ctx=None):
-        options = super(EquipmentCMHandler, self)._generateOptions(ctx)
+        options = super(_ArmingCMHandler, self)._generateOptions(ctx)
         module = self._itemsCache.items.getItemByCD(int(self._id))
         if module.isHidden:
             return [ item for item in options if item['id'] != CMLabel.BUY_MORE ]
         return options
 
     def _getOptionCustomData(self, label):
-        optionData = super(EquipmentCMHandler, self)._getOptionCustomData(label)
-        if label == CMLabel.BUY_MORE:
+        optionData = super(_ArmingCMHandler, self)._getOptionCustomData(label)
+        if label in self._getHighlightedLabels():
             optionData.textColor = CM_BUY_COLOR
         return optionData
 
 
-class OptionalDeviceCMHandler(EquipmentCMHandler):
-    _sqGen = SequenceIDGenerator()
-    _itemsCache = dependency.descriptor(IItemsCache)
+class EquipmentCMHandler(_ArmingCMHandler):
+
+    @option(_ArmingCMHandler._sqGen.next(), CMLabel.BUY_MORE)
+    def buy(self):
+        typeID = self._itemsCache.items.getItemByCD(self._id).itemTypeID if self._id else UNDEFINED_ITEM_CD
+        if typeID == GUI_ITEM_TYPE.EQUIPMENT:
+            shop.showBuyEquipmentOverlay(self._id, source=_SOURCE, origin=_ORIGIN, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB)
+        else:
+            super(EquipmentCMHandler, self).buy()
+
+    def _getHighlightedLabels(self):
+        return (CMLabel.BUY_MORE,)
+
+
+class OptionalDeviceCMHandler(_ArmingCMHandler):
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
-    @option(_sqGen.next(), CMLabel.UPGRADE)
+    @option(_ArmingCMHandler._sqGen.next(), CMLabel.BUY_MORE)
+    def buy(self):
+        shop.showBuyOptionalDeviceOverlay(self._id, source=_SOURCE, origin=_ORIGIN, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB)
+
+    @option(_ArmingCMHandler._sqGen.next(), CMLabel.UPGRADE)
     def upgrade(self):
         module = self._itemsCache.items.getItemByCD(int(self._id))
         ItemsActionsFactory.doAction(ItemsActionsFactory.UPGRADE_OPT_DEVICE, module, None, None)
@@ -108,11 +120,8 @@ class OptionalDeviceCMHandler(EquipmentCMHandler):
             options = [ item for item in options if item['id'] != CMLabel.UPGRADE ]
         return options
 
-    def _getOptionCustomData(self, label):
-        optionData = super(OptionalDeviceCMHandler, self)._getOptionCustomData(label)
-        if label == CMLabel.BUY_MORE:
-            optionData.textColor = CM_BUY_COLOR
-        return optionData
+    def _getHighlightedLabels(self):
+        return (CMLabel.BUY_MORE, CMLabel.UPGRADE)
 
 
 class BattleBoostersCMHandler(ContextMenu):

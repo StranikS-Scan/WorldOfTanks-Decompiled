@@ -76,6 +76,7 @@ class GameEvent(HasCtxEvent):
     RESPOND_TO_CALLOUT = 'game/respondToCallout'
     ARENA_BORDER_TYPE_CHANGED = 'game/arenaBorderTypeChanged'
     TOGGLE_VOIP_CHANNEL_ENABLED = 'game/voip/toggleEnabled'
+    ABILITY_CHOICE_OVERLAY = 'game/weekend_brawl/AbilityChoicePanel'
 
 
 class GUICommonEvent(SharedEvent):
@@ -674,6 +675,13 @@ class BattlePassEvent(HasCtxEvent):
 class ChoosingDevicesEvent(HasCtxEvent):
     DEVICE_ADDED = 'deviceAdded'
     DEVICE_REMOVED = 'deviceRemoved'
+
+
+class PointOfInterestEvent(HasCtxEvent):
+    ENTER_INTO_POINT = 'onEnterIntoPoint'
+    LEAVE_POINT = 'onLeavePoint'
+    START_COOLDOWN = 'onStartCooldown'
+    END_COOLDOWN = 'onEndCooldown'
 
 
 class ItemRemovalByDemountKitEvent(HasCtxEvent):

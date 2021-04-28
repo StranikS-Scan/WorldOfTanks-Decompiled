@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/vehicles.py
 import typing
-from typing import List, Optional, TYPE_CHECKING, Dict, Union, Tuple, Generator
+from backports.functools_lru_cache import lru_cache
+from typing import List, Optional, TYPE_CHECKING, Dict, Union, Tuple, Generator, Set, FrozenSet
 from items import ItemsPrices
 from items.components.supply_slot_categories import LevelsFactor
 from math_common import ceilTo
@@ -13,7 +14,6 @@ import struct
 import itertools
 import copy
 import os
-from typing import List, Optional, Tuple, Dict, Any, TYPE_CHECKING
 import BigWorld
 from Math import Vector2, Vector3
 import nation_change
@@ -83,10 +83,11 @@ VEHICLE_CLASS_TAGS = frozenset(('lightTank',
  'SPG',
  'AT-SPG'))
 VEHICLE_LEVEL_EARN_CRYSTAL = 10
-MODES_WITHOUT_CRYSTAL_EARNINGS = set(('bob',
+MODES_WITHOUT_CRYSTAL_EARNINGS = {'bob',
  'fallout',
  'event_battles',
- 'battle_royale'))
+ 'battle_royale',
+ 'weekend_brawl'}
 
 class VEHICLE_PHYSICS_TYPE():
     TANK = 0
@@ -2182,6 +2183,16 @@ class Cache(object):
             self.__equipments, self.__equipmentIDs = _readArtefacts(_VEHICLE_TYPE_XML_PATH + 'common/equipments.xml')
             descr = self.__equipmentIDs
         return descr
+
+    @lru_cache(maxsize=10)
+    def equipmentCDsByTags(self, requiredTags=frozenset(), forbiddenTags=frozenset()):
+        equipmentCDs = set()
+        for eqID, equipment in g_cache.equipments().iteritems():
+            eqTags = equipment.tags
+            if requiredTags.issubset(eqTags) and not eqTags & forbiddenTags:
+                equipmentCDs.add(equipment.compactDescr)
+
+        return frozenset(equipmentCDs)
 
     def rolesTags(self):
         rolesTags = self.__rolesTags

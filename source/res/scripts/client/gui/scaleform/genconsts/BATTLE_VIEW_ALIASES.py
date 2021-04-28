@@ -79,3 +79,5 @@ class BATTLE_VIEW_ALIASES(object):
     BR_SELECT_RESPAWN = 'BRSelectRespawn'
     FRAG_PANEL = 'fragPanel'
     BR_PLAYER_STATS_IN_BATTLE = 'brPlayerStatsInBattle'
+    ABILITY_CHOICE_PANEL = 'abilityChoicePanel'
+    INTEREST_POINT_NOTIFICATION_PANEL = 'interestPointNotificationPanel'

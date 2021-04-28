@@ -680,6 +680,24 @@ class BattleRoyalMembersView(SquadMembersView):
         return None
 
 
+class WeekendBrawlMembersView(SquadMembersView):
+    _battleType = 'weekend_brawl'
+
+    def _addSubviews(self):
+        self._addSubviewToLayout(ChatSubview())
+
+    def _onFindPlayers(self):
+        pass
+
+    def _getTitle(self):
+        title = ''.join((i18n.makeString(backport.text(R.strings.platoon.squad())), i18n.makeString(backport.text(R.strings.platoon.members.header.weekendBrawl()))))
+        return title
+
+    def _updateFindPlayersButton(self, *args):
+        with self.viewModel.transaction() as model:
+            model.setShouldShowFindPlayersButton(value=False)
+
+
 class MembersWindow(PreloadableWindow):
     __platoonCtrl = dependency.descriptor(IPlatoonController)
 
@@ -694,6 +712,8 @@ class MembersWindow(PreloadableWindow):
             content = EpicMembersView()
         elif prbType == PREBATTLE_TYPE.BATTLE_ROYALE:
             content = BattleRoyalMembersView()
+        elif prbType == PREBATTLE_TYPE.WEEKEND_BRAWL:
+            content = WeekendBrawlMembersView()
         if content is None:
             _logger.debug('PrbType is unknown %d', prbType)
         super(MembersWindow, self).__init__(wndFlags=WindowFlags.WINDOW, content=content)

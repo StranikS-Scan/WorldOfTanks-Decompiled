@@ -300,6 +300,9 @@
           <name>	wheel_vehicle_GUI.pck	</name>
         </bank>
         <bank>
+          <name>	weekend_brawl.pck	</name>
+        </bank>
+        <bank>
           <name>	plugin_media.bnk	</name>
         </bank>
         <bank>
@@ -342,6 +345,9 @@
         </bank>
         <bank>
           <name>	researches.bnk	</name>
+        </bank>
+        <bank>
+          <name>	weekend_brawl.bnk	</name>
         </bank>
         <bank>
           <name>	tasks.bnk	</name>
@@ -636,7 +642,7 @@
     <processExe>	cef_browser_process	</processExe>
     <cachePath>	profile/cef_cache	</cachePath>
     <resourcePath>	cef	</resourcePath>
-    <hardwareAcceleration>	true	</hardwareAcceleration>
+    <hardwareAcceleration>	false	</hardwareAcceleration>
     <logFile>	cef.log	</logFile>
     <logVerbosity>	disable	</logVerbosity>
     <enableFlash>	true	</enableFlash>

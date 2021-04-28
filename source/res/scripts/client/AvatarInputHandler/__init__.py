@@ -34,6 +34,7 @@ from AvatarInputHandler.commands.radar_control import RadarControl
 from AvatarInputHandler.commands.siege_mode_control import SiegeModeControl
 from AvatarInputHandler.commands.vehicle_upgrade_control import VehicleUpdateControl
 from AvatarInputHandler.commands.vehicle_upgrade_control import VehicleUpgradePanelControl
+from AvatarInputHandler.commands.ability_panel_control import AbilityPanelControl, ChoiceAbilityControl
 from AvatarInputHandler.remote_camera_sender import RemoteCameraSender
 from AvatarInputHandler.siege_mode_player_notifications import SiegeModeSoundNotifications, SiegeModeCameraShaker, TurboshaftModeSoundNotifications
 from Event import Event
@@ -273,6 +274,10 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                 self.__commands.append(VehicleUpdateControl())
                 self.__commands.append(VehicleUpgradePanelControl())
                 self.__detachedCommands.append(VehicleUpgradePanelControl())
+            if ARENA_BONUS_TYPE_CAPS.checkAny(player.arena.bonusType, ARENA_BONUS_TYPE_CAPS.WEEKEND_BRAWL):
+                self.__commands.append(AbilityPanelControl())
+                self.__commands.append(ChoiceAbilityControl())
+                self.__detachedCommands.append(ChoiceAbilityControl())
             return
 
     def prerequisites(self):

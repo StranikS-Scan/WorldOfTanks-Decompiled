@@ -265,7 +265,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                     isNavigationEnabled = not self.prbDispatcher.getFunctionalState().isNavigationDisabled()
                 else:
                     isNavigationEnabled = True
-                if not vehicle.isOnlyForEpicBattles:
+                if not vehicle.isOnlyForEpicBattles and not vehicle.isOnlyForWeekendBrawlBattles and not vehicle.isOnlyForBob:
                     options.append(self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH), {'enabled': isNavigationEnabled}))
                 if vehicle.isCollectible:
                     options.append(self._makeItem(VEHICLE.GO_TO_COLLECTION, MENU.contextmenu(VEHICLE.GO_TO_COLLECTION), {'enabled': self._lobbyContext.getServerSettings().isCollectorVehicleEnabled()}))
@@ -280,7 +280,8 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                         label = MENU.CONTEXTMENU_RESTORE if vehicle.isRestoreAvailable() else MENU.CONTEXTMENU_BUY
                         options.append(self._makeItem(VEHICLE.BUY, label, {'enabled': enabled}))
                     options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.REMOVE), {'enabled': vehicle.canSell and vehicle.rentalIsOver}))
-                    options.append(self._makeItem(VEHICLE.RENEW, MENU.contextmenu(VEHICLE.RENEW), {'enabled': vehicle.isOnlyForEpicBattles and vehicle.rentInfo.canCycleRentRenewForSeason(GameSeasonType.EPIC)}))
+                    rentRenewEnabled = vehicle.isOnlyForEpicBattles and vehicle.rentInfo.canCycleRentRenewForSeason(GameSeasonType.EPIC) or vehicle.isOnlyForWeekendBrawlBattles and vehicle.rentInfo.canCycleRentRenewForSeason(GameSeasonType.WEEKEND_BRAWL)
+                    options.append(self._makeItem(VEHICLE.RENEW, MENU.contextmenu(VEHICLE.RENEW), {'enabled': rentRenewEnabled}))
                 else:
                     options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.SELL), {'enabled': vehicle.canSell and not isEventVehicle}))
                 if vehicle.isFavorite:

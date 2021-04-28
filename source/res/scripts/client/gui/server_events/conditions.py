@@ -1557,6 +1557,27 @@ class MultiStunEvent(_Condition, _Negatable):
         return self._relation
 
 
+class UsedEquipment(_Condition):
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, path, data, isCompleted):
+        super(UsedEquipment, self).__init__('usedEquipment', dict(data), path)
+        self.__equipmentCD = _getNodeValue(self._data, 'compDescr')
+        self.__isCompleted = isCompleted
+
+    def __repr__(self):
+        return 'Used equipment<value=%d>' % str(self.__equipmentCD)
+
+    def getValue(self):
+        return self.__equipmentCD
+
+    def getEquipment(self):
+        return self.__itemsCache.items.getItemByCD(self.__equipmentCD)
+
+    def isCompleted(self):
+        return self.__isCompleted
+
+
 def getProgressFromQuestWithSingleAccumulative(quest):
     conditions = quest.bonusCond.getConditions()
     if conditions and len(conditions.items) == 1:

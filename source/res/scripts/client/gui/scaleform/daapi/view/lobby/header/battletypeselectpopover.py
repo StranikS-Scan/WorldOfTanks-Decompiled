@@ -72,6 +72,9 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
             elif itemData == PREBATTLE_ACTION_NAME.BATTLE_ROYALE:
                 tooltip = TOOLTIPS_CONSTANTS.BATTLE_ROYALE_SELECTOR_INFO
                 isSpecial = True
+            elif itemData == PREBATTLE_ACTION_NAME.WEEKEND_BRAWL or itemData == PREBATTLE_ACTION_NAME.WEEKEND_BRAWL_SQUAD:
+                isSpecial = True
+                tooltip = TOOLTIPS_CONSTANTS.WEEKEND_BRAWL_SELECTOR_INFO
             result = {'isSpecial': isSpecial,
              'tooltip': tooltip}
             self._tooltip = tooltip

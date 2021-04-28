@@ -35,6 +35,8 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
     EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
     BATTLEPASS_CAROUSEL_FILTER_1 = 'BATTLEPASS_CAROUSEL_FILTER_1'
+    WEEKENDBRAWL_CAROUSEL_FILTER_1 = 'WEEKENDBRAWL_CAROUSEL_FILTER_1'
+    WEEKENDBRAWL_CAROUSEL_FILTER_2 = 'WEEKENDBRAWL_CAROUSEL_FILTER_2'
     GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
     EULA_VERSION = 'EULA_VERSION'
     MARKS_ON_GUN = 'MARKS_ON_GUN'
@@ -285,6 +287,41 @@ class ServerSettingsManager(object):
                                                       'event': 7,
                                                       'crystals': 8}, offsets={}),
      SETTINGS_SECTIONS.BATTLEPASS_CAROUSEL_FILTER_1: Section(masks={'isCommonProgression': 0}, offsets={}),
+     SETTINGS_SECTIONS.WEEKENDBRAWL_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
+                                                        'germany': 1,
+                                                        'usa': 2,
+                                                        'china': 3,
+                                                        'france': 4,
+                                                        'uk': 5,
+                                                        'japan': 6,
+                                                        'czech': 7,
+                                                        'sweden': 8,
+                                                        'poland': 9,
+                                                        'italy': 10,
+                                                        'lightTank': 15,
+                                                        'mediumTank': 16,
+                                                        'heavyTank': 17,
+                                                        'SPG': 18,
+                                                        'AT-SPG': 19,
+                                                        'level_1': 20,
+                                                        'level_2': 21,
+                                                        'level_3': 22,
+                                                        'level_4': 23,
+                                                        'level_5': 24,
+                                                        'level_6': 25,
+                                                        'level_7': 26,
+                                                        'level_8': 27,
+                                                        'level_9': 28,
+                                                        'level_10': 29}, offsets={}),
+     SETTINGS_SECTIONS.WEEKENDBRAWL_CAROUSEL_FILTER_2: Section(masks={'premium': 0,
+                                                        'elite': 1,
+                                                        'rented': 2,
+                                                        'igr': 3,
+                                                        'gameMode': 4,
+                                                        'favorite': 5,
+                                                        'bonus': 6,
+                                                        'event': 7,
+                                                        'crystals': 8}, offsets={}),
      SETTINGS_SECTIONS.GUI_START_BEHAVIOR: Section(masks={GuiSettingsBehavior.FREE_XP_INFO_DIALOG_SHOWED: 0,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED: 1,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_STARTED: 2,

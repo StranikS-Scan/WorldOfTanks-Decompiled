@@ -65,6 +65,7 @@ class ENTRY_SYMBOL_NAME(object):
     EPIC_DEPLOY_HQ_ENEMY = 'HeadquarterEntryDeploymentEnemy'
     RADAR_ANIM = 'RadarUI'
     DISCOVERED_ITEM_MARKER = 'net.wg.gui.battle.views.minimap.components.entries.battleRoyale.DiscoveredItemMarker'
+    INTEREST_POINT = 'InterestPointEntry'
 
 
 class TRANSFORM_FLAG(object):

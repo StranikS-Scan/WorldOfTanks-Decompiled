@@ -21,7 +21,7 @@ from gui.shared.formatters import text_styles, icons
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from helpers import time_utils, dependency, int2roman
 from gui.shared.utils.functions import makeTooltip
-from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IBattleRoyaleTournamentController
+from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IBattleRoyaleTournamentController, IWeekendBrawlController
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.clans.clan_helpers import isStrongholdsEnabled
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
@@ -105,7 +105,7 @@ class _SelectorItem(object):
         return False
 
     def isInSquad(self, state):
-        return state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInUnit(PREBATTLE_TYPE.EPIC)
+        return state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInUnit(PREBATTLE_TYPE.EPIC) or state.isInUnit(PREBATTLE_TYPE.WEEKEND_BRAWL)
 
     def setLocked(self, value):
         self._isLocked = value
@@ -320,6 +320,25 @@ class _SandboxItem(_SelectorItem):
         self._isDisabled = state.hasLockedState
         self._isSelected = state.isQueueSelected(queueType=QUEUE_TYPE.SANDBOX)
         self._isVisible = self.lobbyContext.getServerSettings().isSandboxEnabled()
+
+
+class _WeekendBrawlItem(_SelectorItem):
+    wBrawlController = dependency.descriptor(IWeekendBrawlController)
+
+    def isRandomBattle(self):
+        return True
+
+    def getSpecialBGIcon(self):
+        return backport.image(_R_ICONS.buttons.selectorRendererBGEvent()) if self.wBrawlController.isModeActive() else ''
+
+    def select(self):
+        super(_WeekendBrawlItem, self).select()
+        selectorUtils.setBattleTypeAsKnown(self._selectorType)
+
+    def _update(self, state):
+        self._isSelected = state.isQueueSelected(QUEUE_TYPE.WEEKEND_BRAWL)
+        self._isDisabled = state.hasLockedState
+        self._isVisible = self.wBrawlController.isModeActive()
 
 
 class _BaseSelectorItems(object):
@@ -688,6 +707,7 @@ def _createItems(lobbyContext=None):
     isInRoaming = settings.roaming.isInRoaming()
     items = []
     _addRandomBattleType(items)
+    _addWeekendBrawlBattleType(items)
     _addRankedBattleType(items, settings)
     _addCommandBattleType(items, settings)
     _addStrongholdsBattleType(items, isInRoaming)
@@ -760,6 +780,10 @@ def _addTutorialBattleType(items, isInRoaming):
 
 def _addSandboxType(items):
     items.append(_SandboxItem(backport.text(_R_BATTLE_TYPES.battleTeaching()), PREBATTLE_ACTION_NAME.SANDBOX, 9))
+
+
+def _addWeekendBrawlBattleType(items):
+    items.append(_WeekendBrawlItem(backport.text(_R_BATTLE_TYPES.weekendBrawl()), PREBATTLE_ACTION_NAME.WEEKEND_BRAWL, 2, SELECTOR_BATTLE_TYPES.WEEKEND_BRAWL))
 
 
 def _addSimpleSquadType(items):

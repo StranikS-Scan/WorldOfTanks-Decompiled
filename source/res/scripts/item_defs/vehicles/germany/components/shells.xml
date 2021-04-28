@@ -3605,4 +3605,26 @@
       <devices>	61	</devices>
     </damage>
   </G00_Bomber_SH_AP>
+  <bomber_weekend_brawl_shell>
+    <id>	400	</id>
+    <userString>	#germany_vehicles:bomber_shell_epic_level1	</userString>
+    <icon>	he	</icon>
+    <price>	1170	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	100	</caliber>
+    <explosionRadius>	25	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	20	</stunDuration>
+    <guaranteedStunDuration>	1	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.01	</damageDurationCoeff>
+    <isTracer>	true	</isTracer>
+    <effects>	epicAirbombStrike	</effects>
+    <damage>
+      <armor>	140	</armor>
+      <devices>	10	</devices>
+    </damage>
+    <explosionDamageFactor>	1.0	</explosionDamageFactor>
+    <explosionEdgeDamageFactor>	1.0	</explosionEdgeDamageFactor>
+  </bomber_weekend_brawl_shell>
 </shells.xml>

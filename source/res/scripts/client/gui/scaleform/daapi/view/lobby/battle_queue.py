@@ -196,11 +196,16 @@ class _BattleRoyaleQueueProvider(_RandomQueueProvider):
         pass
 
 
+class _WeekendBrawlQueueProvider(_RandomQueueProvider):
+    pass
+
+
 _PROVIDER_BY_QUEUE_TYPE = {constants.QUEUE_TYPE.RANDOMS: _RandomQueueProvider,
  constants.QUEUE_TYPE.EVENT_BATTLES: _EventQueueProvider,
  constants.QUEUE_TYPE.RANKED: _RankedQueueProvider,
  constants.QUEUE_TYPE.EPIC: _EpicQueueProvider,
- constants.QUEUE_TYPE.BATTLE_ROYALE: _BattleRoyaleQueueProvider}
+ constants.QUEUE_TYPE.BATTLE_ROYALE: _BattleRoyaleQueueProvider,
+ constants.QUEUE_TYPE.WEEKEND_BRAWL: _WeekendBrawlQueueProvider}
 
 def _providerFactory(proxy, qType):
     return _PROVIDER_BY_QUEUE_TYPE.get(qType, _QueueProvider)(proxy, qType)

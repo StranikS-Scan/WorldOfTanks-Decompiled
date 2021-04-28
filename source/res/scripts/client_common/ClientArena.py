@@ -56,6 +56,7 @@ class ClientArena(object):
         self.__isFogOfWarEnabled = False
         self.__hasFogOfWarHiddenVehicles = False
         self.__arenaInfo = None
+        self.__teamInfo = None
         self.__eventManager = Event.EventManager()
         em = self.__eventManager
         self.onNewVehicleListReceived = Event.Event(em)
@@ -108,6 +109,7 @@ class ClientArena(object):
     hasObservers = property(lambda self: any(('observer' in v['vehicleType'].type.tags for v in self.__vehicles.itervalues() if v['vehicleType'] is not None)))
     teamBasesData = property(lambda self: self.__teamBasesData)
     arenaInfo = property(lambda self: self.__arenaInfo)
+    teamInfo = property(lambda self: self.__teamInfo)
 
     def destroy(self):
         self.__eventManager.clear()
@@ -162,6 +164,13 @@ class ClientArena(object):
 
     def unregisterArenaInfo(self, arenaInfo):
         self.__arenaInfo = None
+        return
+
+    def registerTeamInfo(self, teamInfo):
+        self.__teamInfo = teamInfo
+
+    def unregisterTeamInfo(self, teamInfo):
+        self.__teamInfo = None
         return
 
     def __setupBBColliders(self):

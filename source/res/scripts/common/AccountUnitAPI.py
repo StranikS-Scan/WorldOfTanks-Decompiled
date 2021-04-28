@@ -89,6 +89,9 @@ class UnitClientAPI(object):
     def createEventSquad(self):
         return self._doCreate(PREBATTLE_TYPE.EVENT)
 
+    def createWeekendBrawlSquad(self):
+        return self._doCreate(PREBATTLE_TYPE.WEEKEND_BRAWL)
+
     def join(self, unitMgrID, slotIdx=UNIT_SLOT.ANY):
         self._callAPI('join', unitMgrID, slotIdx)
 

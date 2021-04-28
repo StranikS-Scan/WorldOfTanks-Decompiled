@@ -74,7 +74,7 @@ class Crew(CrewMeta):
                  'slot': slotIdx,
                  'vehicleType': vehicle.shortUserName,
                  'tankType': vehicle.type,
-                 'vehicleElite': vehicle.isPremium or vehicle.isPremiumIGR,
+                 'vehicleElite': vehicle.isPremium or vehicle.isPremiumIGR or vehicle.isOnlyForWeekendBrawlBattles,
                  'roles': list(vehicle.descriptor.type.crewRoles[slotIdx])})
 
             tankmenData = []

@@ -51,6 +51,10 @@ def isInBattleRoyaleTournamentQueue():
     return getattr(BigWorld.player(), 'isInBattleRoyaleTournamentQueue', False)
 
 
+def isInWeekendBrawlQueue():
+    return getattr(BigWorld.player(), 'isInWeekendBrawlQueue', False)
+
+
 def getQueueType():
     queueType = 0
     if isInRandomQueue():
@@ -69,6 +73,8 @@ def getQueueType():
         queueType = QUEUE_TYPE.BATTLE_ROYALE
     elif isInBattleRoyaleTournamentQueue():
         queueType = QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT
+    elif isInWeekendBrawlQueue():
+        queueType = QUEUE_TYPE.WEEKEND_BRAWL
     return queueType
 
 
@@ -156,7 +162,8 @@ _ARENA_GUI_TYPE_BY_QUEUE_TYPE = {QUEUE_TYPE.RANDOMS: ARENA_GUI_TYPE.RANDOM,
  QUEUE_TYPE.RANKED: ARENA_GUI_TYPE.RANKED,
  QUEUE_TYPE.EPIC: ARENA_GUI_TYPE.EPIC_BATTLE,
  QUEUE_TYPE.BATTLE_ROYALE: ARENA_GUI_TYPE.BATTLE_ROYALE,
- QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT: ARENA_GUI_TYPE.BATTLE_ROYALE}
+ QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT: ARENA_GUI_TYPE.BATTLE_ROYALE,
+ QUEUE_TYPE.WEEKEND_BRAWL: ARENA_GUI_TYPE.WEEKEND_BRAWL}
 
 def getArenaGUIType(prbType=None, queueType=None):
     if prbType is None:

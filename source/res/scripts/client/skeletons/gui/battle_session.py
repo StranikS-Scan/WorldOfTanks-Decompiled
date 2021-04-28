@@ -165,6 +165,10 @@ class IDynamicControllersLocator(object):
     def battleNotifier(self):
         raise NotImplementedError
 
+    @property
+    def pointsOfInterest(self):
+        raise NotImplementedError
+
 
 class ISquadInvitationsHandler(object):
     __slots__ = ()
@@ -567,6 +571,9 @@ class IBattleContext(object):
         raise NotImplementedError
 
     def extractLastArenaWinStatus(self):
+        raise NotImplementedError
+
+    def areQuestsEnabledForArena(self):
         raise NotImplementedError
 
 

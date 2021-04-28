@@ -1910,6 +1910,71 @@ class SpawnKamikaze(ConsumableSpawnKamikaze):
     pass
 
 
+class WeekendBrawlInspire(Equipment, TooltipConfigReader, InspireConfigReader, CountableConsumableConfigReader, CooldownConsumableConfigReader):
+    __slots__ = TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + InspireConfigReader._INSPIRE_SLOTS + CountableConsumableConfigReader._CONSUMABLE_SLOTS + CooldownConsumableConfigReader._CONSUMABLE_SLOTS
+
+    def __init__(self):
+        super(WeekendBrawlInspire, self).__init__()
+        self.initTooltipInformation()
+        self.initCountableConsumableSlots()
+        self.initConsumableWithDeployTimeSlots()
+        self.initInspireSlots()
+
+    def _readConfig(self, xmlCtx, scriptSection):
+        self.readTooltipInformation(xmlCtx, scriptSection)
+        self.readCountableConsumableConfig(xmlCtx, scriptSection)
+        self.readInspireConfig(xmlCtx, scriptSection)
+
+
+class WeekendBrawlSmoke(Equipment, TooltipConfigReader, SmokeConfigReader, CountableConsumableConfigReader, CooldownConsumableConfigReader):
+    __slots__ = TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + SmokeConfigReader._SMOKE_SLOTS + CountableConsumableConfigReader._CONSUMABLE_SLOTS + CooldownConsumableConfigReader._CONSUMABLE_SLOTS
+
+    def __init__(self):
+        super(WeekendBrawlSmoke, self).__init__()
+        self.initTooltipInformation()
+        self.initCountableConsumableSlots()
+        self.initConsumableWithDeployTimeSlots()
+        self.initSmokeSlots()
+
+    def _readConfig(self, xmlCtx, scriptSection):
+        self.readTooltipInformation(xmlCtx, scriptSection)
+        self.readCountableConsumableConfig(xmlCtx, scriptSection)
+        self.readSmokeConfig(xmlCtx, scriptSection)
+        self.readConsumableWithDeployTimeConfig(xmlCtx, scriptSection)
+
+
+class WeekendBrawlRecon(Equipment, TooltipConfigReader, ReconConfigReader, CountableConsumableConfigReader, CooldownConsumableConfigReader):
+
+    def __init__(self):
+        super(WeekendBrawlRecon, self).__init__()
+        self.initTooltipInformation()
+        self.initCountableConsumableSlots()
+        self.initConsumableWithDeployTimeSlots()
+        self.initReconSlots()
+
+    def _readConfig(self, xmlCtx, scriptSection):
+        self.readTooltipInformation(xmlCtx, scriptSection)
+        self.readCountableConsumableConfig(xmlCtx, scriptSection)
+        self.readConsumableWithDeployTimeConfig(xmlCtx, scriptSection)
+        self.readReconConfig(xmlCtx, scriptSection)
+
+
+class WeekendBrawlBomber(Equipment, TooltipConfigReader, BomberConfigReader, CountableConsumableConfigReader, CooldownConsumableConfigReader):
+
+    def __init__(self):
+        super(WeekendBrawlBomber, self).__init__()
+        self.initTooltipInformation()
+        self.initCountableConsumableSlots()
+        self.initConsumableWithDeployTimeSlots()
+        self.initBomberSlots()
+
+    def _readConfig(self, xmlCtx, scriptSection):
+        self.readTooltipInformation(xmlCtx, scriptSection)
+        self.readCountableConsumableConfig(xmlCtx, scriptSection)
+        self.readConsumableWithDeployTimeConfig(xmlCtx, scriptSection)
+        self.readBomberConfig(xmlCtx, scriptSection)
+
+
 def _readKpi(xmlCtx, section):
     from gui.shared.gui_items import KPI
     kpi = []

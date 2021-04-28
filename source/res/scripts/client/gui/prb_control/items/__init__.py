@@ -58,7 +58,9 @@ class FunctionalState(object):
             return True
         if self.isInUnit(PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT) and queueType == QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT:
             return True
-        return True if self.isInUnit(PREBATTLE_TYPE.EVENT) and queueType == QUEUE_TYPE.EVENT_BATTLES else False
+        if self.isInUnit(PREBATTLE_TYPE.EVENT) and queueType == QUEUE_TYPE.EVENT_BATTLES:
+            return True
+        return True if self.isInUnit(PREBATTLE_TYPE.WEEKEND_BRAWL) and queueType == QUEUE_TYPE.WEEKEND_BRAWL else False
 
     def doLeaveToAcceptInvite(self, prbType=0):
         if not self.hasModalEntity:

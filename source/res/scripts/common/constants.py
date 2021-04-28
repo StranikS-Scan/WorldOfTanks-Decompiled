@@ -98,6 +98,7 @@ IS_SHOW_SERVER_STATS = not IS_CHINA
 IS_CAT_LOADED = False
 IS_TUTORIAL_ENABLED = True
 LEAKS_DETECTOR_MAX_EXECUTION_TIME = 2.0
+UNKNOWN_TIME_ON_ARENA = -1
 IS_IGR_ENABLED = IS_KOREA or IS_CHINA
 SERVER_TICK_LENGTH = 0.1
 NULL_ENTITY_ID = 0
@@ -179,6 +180,7 @@ class ARENA_GUI_TYPE:
     EPIC_BATTLE = 21
     EPIC_TRAINING = 22
     BATTLE_ROYALE = 23
+    WEEKEND_BRAWL = 24
     RANGE = (UNKNOWN,
      RANDOM,
      TRAINING,
@@ -198,7 +200,8 @@ class ARENA_GUI_TYPE:
      EPIC_RANDOM_TRAINING,
      EPIC_BATTLE,
      EPIC_TRAINING,
-     BATTLE_ROYALE)
+     BATTLE_ROYALE,
+     WEEKEND_BRAWL)
     RANDOM_RANGE = (RANDOM, EPIC_RANDOM)
     SANDBOX_RANGE = (SANDBOX, RATED_SANDBOX)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
@@ -224,7 +227,8 @@ class ARENA_GUI_TYPE_LABEL:
      ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING: 'epic_random_training',
      ARENA_GUI_TYPE.EPIC_BATTLE: 'epicbattle',
      ARENA_GUI_TYPE.EPIC_TRAINING: 'epicbattle',
-     ARENA_GUI_TYPE.BATTLE_ROYALE: 'battle_royale'}
+     ARENA_GUI_TYPE.BATTLE_ROYALE: 'battle_royale',
+     ARENA_GUI_TYPE.WEEKEND_BRAWL: 'weekendBrawl'}
 
 
 class ARENA_BONUS_TYPE:
@@ -259,6 +263,7 @@ class ARENA_BONUS_TYPE:
     EVENT_RANDOM = 33
     BATTLE_ROYALE_TRN_SOLO = 34
     BATTLE_ROYALE_TRN_SQUAD = 35
+    WEEKEND_BRAWL = 36
     RANGE = (UNKNOWN,
      REGULAR,
      TRAINING,
@@ -289,7 +294,8 @@ class ARENA_BONUS_TYPE:
      BATTLE_ROYALE_SQUAD,
      BOB,
      BATTLE_ROYALE_TRN_SOLO,
-     BATTLE_ROYALE_TRN_SQUAD)
+     BATTLE_ROYALE_TRN_SQUAD,
+     WEEKEND_BRAWL)
     RANDOM_RANGE = (REGULAR, EPIC_RANDOM)
     SANDBOX_RANGE = (RATED_SANDBOX, SANDBOX)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
@@ -457,6 +463,7 @@ class PREBATTLE_TYPE:
     EPIC_TRAINING = 16
     BATTLE_ROYALE = 17
     BATTLE_ROYALE_TOURNAMENT = 18
+    WEEKEND_BRAWL = 19
     RANGE = (SQUAD,
      TRAINING,
      COMPANY,
@@ -471,7 +478,8 @@ class PREBATTLE_TYPE:
      EPIC,
      EPIC_TRAINING,
      BATTLE_ROYALE,
-     BATTLE_ROYALE_TOURNAMENT)
+     BATTLE_ROYALE_TOURNAMENT,
+     WEEKEND_BRAWL)
     LEGACY_PREBATTLES = (TRAINING,
      TOURNAMENT,
      CLAN,
@@ -480,7 +488,8 @@ class PREBATTLE_TYPE:
      FALLOUT,
      EVENT,
      EPIC,
-     BATTLE_ROYALE)
+     BATTLE_ROYALE,
+     WEEKEND_BRAWL)
     UNIT_MGR_PREBATTLES = (UNIT,
      SQUAD,
      CLAN,
@@ -490,14 +499,16 @@ class PREBATTLE_TYPE:
      E_SPORT_COMMON,
      EPIC,
      BATTLE_ROYALE,
-     BATTLE_ROYALE_TOURNAMENT)
+     BATTLE_ROYALE_TOURNAMENT,
+     WEEKEND_BRAWL)
     CREATE_FROM_CLIENT = (UNIT,
      SQUAD,
      EPIC,
      FALLOUT,
      EVENT,
      BATTLE_ROYALE,
-     BATTLE_ROYALE_TOURNAMENT)
+     BATTLE_ROYALE_TOURNAMENT,
+     WEEKEND_BRAWL)
     CREATE_FROM_WEB = (UNIT, SQUAD, STRONGHOLD)
     TRAININGS = (TRAINING, EPIC_TRAINING)
     EXTERNAL_PREBATTLES = (STRONGHOLD, TOURNAMENT)
@@ -506,9 +517,13 @@ class PREBATTLE_TYPE:
      EPIC,
      BATTLE_ROYALE,
      EVENT,
-     BATTLE_ROYALE_TOURNAMENT)
+     BATTLE_ROYALE_TOURNAMENT,
+     WEEKEND_BRAWL)
     CREATE_EX_FROM_WEB = (SQUAD, CLAN)
-    JOIN_EX = (SQUAD, EPIC, EVENT)
+    JOIN_EX = (SQUAD,
+     EPIC,
+     EVENT,
+     WEEKEND_BRAWL)
     EPIC_PREBATTLES = (EPIC, EPIC_TRAINING)
     REMOVED = (COMPANY, CLUBS)
 
@@ -774,6 +789,7 @@ IS_LOOT_BOXES_ENABLED = 'isLootBoxesEnabled'
 SENIORITY_AWARDS_CONFIG = 'seniority_awards_config'
 MAGNETIC_AUTO_AIM_CONFIG = 'magnetic_auto_aim_config'
 BATTLE_NOTIFIER_CONFIG = 'battle_notifier_config'
+WEEKEND_BRAWL_CONFIG = 'weekend_brawl_config'
 META_GAME_SETTINGS = 'meta_game_settings'
 
 class Configs(enum.Enum):
@@ -1244,6 +1260,7 @@ class QUEUE_TYPE:
     TOURNAMENT_UNITS = 20
     BATTLE_ROYALE = 21
     BATTLE_ROYALE_TOURNAMENT = 22
+    WEEKEND_BRAWL = 23
     FALLOUT = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
     ALL = (RANDOMS,
      COMPANIES,
@@ -1263,7 +1280,8 @@ class QUEUE_TYPE:
      EPIC,
      TOURNAMENT_UNITS,
      BATTLE_ROYALE,
-     BATTLE_ROYALE_TOURNAMENT)
+     BATTLE_ROYALE_TOURNAMENT,
+     WEEKEND_BRAWL)
     REMOVED = (COMPANIES,)
 
 
@@ -1333,11 +1351,13 @@ class GameSeasonType(object):
     RANKED = 1
     EPIC = 2
     BATTLE_ROYALE = 3
+    WEEKEND_BRAWL = 4
 
 
 SEASON_TYPE_BY_NAME = {'ranked': GameSeasonType.RANKED,
  'epic': GameSeasonType.EPIC,
- 'battle_royale': GameSeasonType.BATTLE_ROYALE}
+ 'battle_royale': GameSeasonType.BATTLE_ROYALE,
+ 'weekend_brawl': GameSeasonType.WEEKEND_BRAWL}
 SEASON_NAME_BY_TYPE = {val:key for key, val in SEASON_TYPE_BY_NAME.iteritems()}
 CHANNEL_SEARCH_RESULTS_LIMIT = 50
 USER_SEARCH_RESULTS_LIMIT = 50
@@ -1768,12 +1788,16 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.LINKEDSET_QUESTS: 'linkedset quests show reward info',
  USER_SERVER_SETTINGS.QUESTS_PROGRESS: 'feedback quests progress',
  91: 'Loot box last viewed count',
+ 92: 'Battle of Bloggers carousel filter',
+ 93: 'Battle of Bloggers carousel filter',
  USER_SERVER_SETTINGS.SESSION_STATS: 'sessiong statistics settings',
  97: 'BattlePass carouse filter 1',
  98: 'Battle Pass Storage',
  99: 'Once only hints',
  100: 'Battle Royale carousel filter 1',
- 101: 'Battle Royale carousel filter 2'}
+ 101: 'Battle Royale carousel filter 2',
+ 102: 'Weekend Brawl carousel filter',
+ 103: 'Weekend Brawl carousel filter'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -1976,10 +2000,12 @@ class INVITATION_TYPE:
     EPIC = PREBATTLE_TYPE.EPIC
     EVENT = PREBATTLE_TYPE.EVENT
     BATTLE_ROYALE = PREBATTLE_TYPE.BATTLE_ROYALE
+    WEEKEND_BRAWL = PREBATTLE_TYPE.WEEKEND_BRAWL
     RANGE = (SQUAD,
      EVENT,
      EPIC,
-     BATTLE_ROYALE)
+     BATTLE_ROYALE,
+     WEEKEND_BRAWL)
 
 
 class REPAIR_FLAGS:
@@ -2150,6 +2176,10 @@ def getArenaStartTime(arenaUniqueID):
 
 def getTimeOnArena(arenaUniqueID):
     return int(timestamp() - getArenaStartTime(arenaUniqueID))
+
+
+def getTimeOnArenaOf(arenaUniqueID, eventTime):
+    return UNKNOWN_TIME_ON_ARENA if eventTime == UNKNOWN_TIME_ON_ARENA else int(eventTime - getArenaStartTime(arenaUniqueID))
 
 
 class PIERCING_POWER(object):

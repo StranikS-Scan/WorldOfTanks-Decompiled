@@ -135,8 +135,13 @@ def showBuyEquipmentOverlay(itemId, source=None, origin=None, alias=VIEW_ALIAS.O
     showBuyItemWebView(helpers.getBuyEquipmentUrl(), itemId, source, origin, alias)
 
 
-def showBuyOptionalDeviceOverlay(itemId, source=None, origin=None, alias=VIEW_ALIAS.OVERLAY_WEB_STORE):
-    showBuyItemWebView(helpers.getBuyOptionalDevicesUrl(), itemId, source, origin, alias)
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def showBuyOptionalDeviceOverlay(itemId, source=None, origin=None, alias=VIEW_ALIAS.OVERLAY_WEB_STORE, itemsCache=None):
+    item = itemsCache.items.getItemByCD(itemId)
+    if item.getBuyPrice().price.isCurrencyDefined(Currency.CRYSTAL):
+        showBuyItemWebView(helpers.getBonsDevicesUrl(), itemId, source, origin, alias)
+    else:
+        showBuyItemWebView(helpers.getBuyOptionalDevicesUrl(), itemId, source, origin, alias)
 
 
 def showTradeOffOverlay(targetLevel, parent=None):

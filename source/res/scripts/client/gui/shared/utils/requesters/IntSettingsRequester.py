@@ -72,7 +72,9 @@ class IntSettingsRequester(object):
      'BATTLE_PASS_STORAGE': 98,
      'ONCE_ONLY_HINTS_2': 99,
      'ROYALE_CAROUSEL_FILTER_1': 100,
-     'ROYALE_CAROUSEL_FILTER_2': 101}
+     'ROYALE_CAROUSEL_FILTER_2': 101,
+     'WEEKENDBRAWL_CAROUSEL_FILTER_1': 102,
+     'WEEKENDBRAWL_CAROUSEL_FILTER_2': 103}
 
     def __init__(self):
         self.__isSynced = False

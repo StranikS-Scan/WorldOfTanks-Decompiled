@@ -72,4 +72,4 @@ class WgcMode(BaseWgcMode):
         if self.__wgcStoredUserSelected:
             self.__wgcStoredUserSelected = False
             self._view.update()
-            self._fallbackMode.init()
+            self._fallbackMode.onPopulate()

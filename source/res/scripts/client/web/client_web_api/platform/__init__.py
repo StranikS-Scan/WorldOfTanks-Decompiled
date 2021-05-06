@@ -1,16 +1,28 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/client_web_api/platform/__init__.py
 import typing
-from constants import WGC_PUBLICATION
 from helpers import dependency
-from skeletons.gui.login_manager import ILoginManager
-from web.client_web_api.api import C2WHandler
-from web.client_web_api.platform.steam import SteamPlatformEventHandler
-if typing.TYPE_CHECKING:
-    from web.client_web_api.common import WebEventSender
-_MAPPING = {WGC_PUBLICATION.WGC_STEAM: SteamPlatformEventHandler}
+from skeletons.helpers.platform import IPublishPlatform
+from web.client_web_api.api import C2WHandler, c2w
 
-@dependency.replace_none_kwargs(loginManager=ILoginManager)
-def getPlatformEventHandler(sender, loginManager=None):
-    pub = loginManager.getWgcPublication()
-    return _MAPPING[pub](sender) if pub in _MAPPING else C2WHandler(sender)
+class PlatformEventHandler(C2WHandler):
+    __platform = dependency.descriptor(IPublishPlatform)
+
+    def init(self):
+        super(PlatformEventHandler, self).init()
+        self.__platform.onPayment += self.__onPayment
+        self.__platform.onOverlay += self.__onOverlay
+
+    def fini(self):
+        self.__platform.onPayment -= self.__onPayment
+        self.__platform.onOverlay -= self.__onOverlay
+        super(PlatformEventHandler, self).fini()
+
+    @c2w(name='on_platform_payment')
+    def __onPayment(self, orderID, authorized):
+        return {'orderID': orderID,
+         'authorized': bool(authorized)}
+
+    @c2w(name='on_overlay_activated')
+    def __onOverlay(self, active):
+        return {'isActive': active}

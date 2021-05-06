@@ -173,10 +173,15 @@ def setHangarVisibility(isVisible):
 
 def getHelperServicesConfig(manager):
     from helpers.statistics import StatisticsCollector
+    from helpers.platform import getPublishPlatform
     from skeletons.helpers.statistics import IStatisticsCollector
+    from skeletons.helpers.platform import IPublishPlatform
     collector = StatisticsCollector()
     collector.init()
     manager.addInstance(IStatisticsCollector, collector, finalizer='fini')
+    platform = getPublishPlatform()
+    platform.init()
+    manager.addInstance(IPublishPlatform, platform, finalizer='fini')
 
 
 class ReferralButtonHandler(object):

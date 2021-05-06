@@ -178,5 +178,7 @@ class ExternalLinksHandler(IExternalLinksController):
             if self.__loginManager.isWgcSteam:
                 self.__linksHandlers.append(external.PremShopLinksHandler())
                 self.__linksHandlers.append(external.AddPlatformTagLinksHandler())
+                self.__linksHandlers.append(external.PremShopLinksForArgsUrlHandler())
+                self.__linksHandlers.append(external.AddPlatformTagLinksToArgsUrlHandler())
             self.__linksHandlers.append(external.OpenBrowserHandler())
         return self.__linksHandlers

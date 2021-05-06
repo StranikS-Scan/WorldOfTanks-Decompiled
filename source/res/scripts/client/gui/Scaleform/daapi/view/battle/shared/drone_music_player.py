@@ -9,7 +9,7 @@ import SoundGroups
 from constants import ARENA_GUI_TYPE_LABEL, ARENA_PERIOD
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.battle_control.controllers import team_bases_ctrl
-from gui.battle_control.controllers.arena_load_ctrl import IArenaLoadCtrlListener
+from gui.battle_control.arena_info.interfaces import IArenaLoadController
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
 from gui.battle_control.controllers.battle_field_ctrl import IBattleFieldListener
 from gui.battle_control.controllers.team_bases_ctrl import ITeamBasesListener
@@ -329,7 +329,7 @@ class _EnemyBaseCaptureCondition(_BaseCaptureCondition):
         return _RtpcEvents.ENEMIES_INVADERS_COUNT
 
 
-class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesListener, IViewComponentsCtrlListener, IArenaLoadCtrlListener):
+class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesListener, IViewComponentsCtrlListener, IArenaLoadController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     __specialSounds = dependency.descriptor(ISpecialSoundCtrl)
     _SETTING_TO_CONDITION_MAPPING = {'vehiclesRemained': (lambda player: not player.sessionProvider.arenaVisitor.isArenaFogOfWarEnabled(), (_DeadAlliesCondition, _DeadEnemiesCondition), lambda name, key, data: data[name][key]),
@@ -353,6 +353,7 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
 
         self.__playingMusicID = None
         self._initialized = False
+        self.sessionProvider.addArenaCtrl(self)
         return
 
     @_delegate
@@ -404,6 +405,8 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
             condition = self._conditions.pop()
             condition.onValidChangedInternally -= self.__onConditionChangedItself
             condition.dispose()
+
+        self.sessionProvider.removeArenaCtrl(self)
 
     def _initializeMusicData(self):
         wwSetup = self.__specialSounds.arenaMusicSetup
